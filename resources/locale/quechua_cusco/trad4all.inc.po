@@ -1,0 +1,2073 @@
+msgid "Title"
+msgstr "Sutinchaynin"
+
+msgid "By"
+msgstr "Pi churarun"
+
+msgid "UsersOnline"
+msgstr "Haykan kashanku"
+
+msgid "Remove"
+msgstr "Wañuchiy"
+
+msgid "langEnter"
+msgstr "Kutiy yachachinakuna sinriyman"
+
+msgid "Description"
+msgstr "Nisqasqa"
+
+msgid "Links"
+msgstr "Waskhanakuna"
+
+msgid "langWorks"
+msgstr "Llank\'aykuna"
+
+msgid "Forums"
+msgstr "Rimarinakuykuna"
+
+msgid "langExercices"
+msgstr "Llank\'anapaqkuna"
+
+msgid "langCreateDir"
+msgstr "Wayaqata kamariy"
+
+msgid "Name"
+msgstr "Suti"
+
+msgid "langComment"
+msgstr "Ima nisqakuna"
+
+msgid "langVisible"
+msgstr "Rikurisqa"
+
+msgid "langDirCr"
+msgstr "Wayaqa kamarisqa"
+
+msgid "Download"
+msgstr "Urayachiy"
+
+msgid "langGroup"
+msgstr "Huñusqakuna"
+
+msgid "langEdit"
+msgstr "Ruwapay"
+
+msgid "langGroupForum"
+msgstr "Huñusqamanta k\'itirimanan"
+
+msgid "Language"
+msgstr "Simi"
+
+msgid "LoginName"
+msgstr "Haykuqmasi"
+
+msgid "AutostartMp3"
+msgstr "Chaskiy nisqata q\'apiy, pachanmanta uyariyta munaspaqa"
+
+msgid "Assignments"
+msgstr "Llank\'aykuna"
+
+msgid "Forum"
+msgstr "Rimarinakuykuna"
+
+msgid "langDelImage"
+msgstr "Wankita horqoy"
+
+msgid "langCode"
+msgstr "Yachachinaq chinpun"
+
+msgid "langUp"
+msgstr "Wichaypi"
+
+msgid "Down"
+msgstr "Urayachiy"
+
+msgid "Up"
+msgstr "Wichachiy"
+
+msgid "Theme"
+msgstr "Imamanta"
+
+msgid "TheListIsEmpty"
+msgstr "Yupaychasqaqa chinmi kashan"
+
+msgid "langUniqueSelect"
+msgstr "Sapa kutichiy"
+
+msgid "CreateCategory"
+msgstr "Kamay mitata"
+
+msgid "SendFile"
+msgstr "Apachiy khiputa"
+
+msgid "SaveChanges"
+msgstr "Allachay t\'jrasqaykunata"
+
+msgid "SearchTerm"
+msgstr "Simi maskhanapaq"
+
+msgid "TooShort"
+msgstr "Demasiado corto"
+
+msgid "langCourseCreate"
+msgstr "Kamachiy huy yachachinata"
+
+msgid "langTodo"
+msgstr "Ima rimariykuna"
+
+msgid "UserName"
+msgstr "Haykuqmasi"
+
+msgid "lang_show_hide"
+msgstr "Qhawarichiy / pakay"
+
+msgid "langCategoryMod"
+msgstr "T\'ijrapay mitata"
+
+msgid "Hide"
+msgstr "Pakay"
+
+msgid "langDear"
+msgstr "Munasqa"
+
+msgid "langArchive"
+msgstr "khipu"
+
+msgid "langCourseCode"
+msgstr "Yachachinaq chinpun"
+
+msgid "langNoDescription"
+msgstr "Mana nisqasqawan"
+
+msgid "langOfficialCode"
+msgstr "Chinpu kamachisqa"
+
+msgid "FirstName"
+msgstr "Suti"
+
+msgid "LastName"
+msgstr "Mamatayta suti"
+
+msgid "Status"
+msgstr "Ima kay"
+
+msgid "langEmail"
+msgstr "E-chaski"
+
+msgid "SlideshowConversion"
+msgstr "Rikuchinapa t\'ijraynin"
+
+msgid "UploadFile"
+msgstr "Apachiy khiputa"
+
+msgid "AvailableFrom"
+msgstr "Maykanmanta kashan"
+
+msgid "AvailableTill"
+msgstr "Maymankama kashan"
+
+msgid "Preview"
+msgstr "Ñaupaq qhawariy"
+
+msgid "Type"
+msgstr "Ima niraq"
+
+msgid "EmailAddress"
+msgstr "E-chaski"
+
+msgid "Organisation"
+msgstr "May wasi"
+
+msgid "Reporting"
+msgstr "Willaykuna"
+
+msgid "Code"
+msgstr "Chinpu"
+
+msgid "Update"
+msgstr "Kunanyachiy"
+
+msgid "CurrentCourse"
+msgstr "Kunan yachachina"
+
+msgid "Back"
+msgstr "Volver"
+
+msgid "Info"
+msgstr "Información"
+
+msgid "Search"
+msgstr "Maskhay"
+
+msgid "AdvancedSearch"
+msgstr "Askha maskhay"
+
+msgid "Open"
+msgstr "Kichasqa kutichikuy"
+
+msgid "Import"
+msgstr "Apachimuy"
+
+msgid "AddAnother"
+msgstr "Hoqta yapay"
+
+msgid "Author"
+msgstr "Ruwaq"
+
+msgid "TrueFalse"
+msgstr "Cheqay / Llulla"
+
+msgid "QuestionType"
+msgstr "Ima kay tapu"
+
+msgid "NoSearchResults"
+msgstr "No se han encontrado resultados"
+
+msgid "SelectQuestion"
+msgstr "Ajllay huy tapuyta"
+
+msgid "AddNewQuestionType"
+msgstr "Yapay hoqniraq tapukuyta"
+
+msgid "Numbered"
+msgstr "Yupachasqa"
+
+msgid "iso639_2_code"
+msgstr "es"
+
+msgid "iso639_1_code"
+msgstr "spa"
+
+msgid "charset"
+msgstr "iso-8859-1"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr "."
+
+msgid "number_decimal_separator"
+msgstr ","
+
+msgid "dateFormatShort"
+msgstr "%d %b %y"
+
+msgid "dateFormatLong"
+msgstr "%A %d %B de %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%d %B %Y, %I:%M %p"
+
+msgid "timeNoSecFormat"
+msgstr "%I:%M %p"
+
+msgid "langYes"
+msgstr "arí"
+
+msgid "langNo"
+msgstr "Mana"
+
+msgid "Next"
+msgstr "Qatiq"
+
+msgid "langAllowed"
+msgstr "Saqellanapaq"
+
+msgid "langBackHome"
+msgstr "Kutiy kaypa raphi qallariyninman"
+
+msgid "langPropositions"
+msgstr "Allinyanachipaq"
+
+msgid "langMaj"
+msgstr "Kunanyachiy"
+
+msgid "langModify"
+msgstr "t\'ijrapay"
+
+msgid "langDelete"
+msgstr "Pichay"
+
+msgid "langInvisible"
+msgstr "mana rikuriq"
+
+msgid "langSave"
+msgstr "Allchay"
+
+msgid "langMove"
+msgstr "Kuyuchiy"
+
+msgid "Help"
+msgstr "Yanapay"
+
+msgid "langOk"
+msgstr "Chaskiy"
+
+msgid "langAdd"
+msgstr "yapay"
+
+msgid "langAddIntro"
+msgstr "Yapay hoq qelqa qallariyta"
+
+msgid "langBackList"
+msgstr "Kutiy sinriman"
+
+msgid "langText"
+msgstr "Qelqa"
+
+msgid "langEmpty"
+msgstr "Manan hunt\'achinkichu llapan kanchakunata.<br>wanp\'uqninkipi kutispa hoqmanta qallariy.<br> Sichus mana reqsinki yachachiyniykiq chinp\'unta, chayqa tapurikuy yachachinaq programanta"
+
+msgid "langConfirmYourChoice"
+msgstr "Ama hina kaychu, cheqaychay ajllasqaykita"
+
+msgid "langAnd"
+msgstr "chaymantari"
+
+msgid "langChoice"
+msgstr "Ajllasqayki"
+
+msgid "langFinish"
+msgstr "Tukuy"
+
+msgid "langCancel"
+msgstr "Pichay"
+
+msgid "langNotAllowed"
+msgstr "Mana reqsisqachu kashanki manuchakuq hina kay yachachinapiqa"
+
+msgid "langNotLogged"
+msgstr "Mana haykunkichu yachachinaman haykuqmasi hina"
+
+msgid "langManager"
+msgstr "Manuchakuq"
+
+msgid "langOptional"
+msgstr "Munaspapas"
+
+msgid "NextPage"
+msgstr "Qatiqnin raphi"
+
+msgid "PreviousPage"
+msgstr "Ñaupaqnin raphi"
+
+msgid "langUse"
+msgstr "Hapipay"
+
+msgid "langTotal"
+msgstr "Llipin"
+
+msgid "langTake"
+msgstr "tomar"
+
+msgid "langOne"
+msgstr "Huj"
+
+msgid "langSeveral"
+msgstr "Askha"
+
+msgid "langNotice"
+msgstr "Willay"
+
+msgid "langDate"
+msgstr "Ima pacha"
+
+msgid "langAmong"
+msgstr "entre"
+
+msgid "langShow"
+msgstr "Whawachiy"
+
+msgid "langMyCourses"
+msgstr "Noqapaq yachachiykuna"
+
+msgid "langModifyProfile"
+msgstr "Noqamanta"
+
+msgid "langMyStats"
+msgstr "Qhawariy yupanaykunata"
+
+msgid "langLogout"
+msgstr "Lloqsiy"
+
+msgid "langMyAgenda"
+msgstr "Ruwanay"
+
+msgid "langCourseHomepage"
+msgstr "Yachachinamanta raphi qallariy"
+
+msgid "langCourseManagerview"
+msgstr "Yachachiq qhawariynin"
+
+msgid "langStudentView"
+msgstr "Yachaqe qhawariynin"
+
+msgid "AddResource"
+msgstr "Yapay yanapaysinata"
+
+msgid "AddedResources"
+msgstr "Yanapaysikuna yapasqa"
+
+msgid "lang_modify_resource"
+msgstr "Ti\'rachiy / yapay yanapaysikunata"
+
+msgid "lang_resource"
+msgstr "Yanapaysina"
+
+msgid "lang_resources"
+msgstr "Yanapaysinakuna"
+
+msgid "Close"
+msgstr "wisqay"
+
+msgid "langPlatform"
+msgstr "Hanp\'ara"
+
+msgid "localLangName"
+msgstr "simi"
+
+msgid "email"
+msgstr "e-chaski"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "kay chinpuqa kashanña. Hoqta ajllaspa malliy."
+
+msgid "Statistics"
+msgstr "Yupanakuna"
+
+msgid "langGrouplist"
+msgstr "huñusqakunaq sinrin"
+
+msgid "langPrevious"
+msgstr "Ñaupaq"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "Wayaqepi allchanapaqqa mana kanchu"
+
+msgid "Courses"
+msgstr "yachachinakuna"
+
+msgid "In"
+msgstr "kaypi"
+
+msgid "langShowAll"
+msgstr "Llapanta qhawachiy"
+
+msgid "langPage"
+msgstr "Raphi"
+
+msgid "englishLangName"
+msgstr "Inglés simipi"
+
+msgid "Home"
+msgstr "Qallariq"
+
+msgid "langAreYouSureToDelete"
+msgstr " Cheqaychu wañuchinki ?"
+
+msgid "SelectAll"
+msgstr "Ajllay llipinta"
+
+msgid "UnSelectAll"
+msgstr "Wañuchiy ajllay llapanta nisqa"
+
+msgid "WithSelected"
+msgstr "Ajllasqawan"
+
+msgid "langOnLine"
+msgstr "Haykan kashanku"
+
+msgid "langUsers"
+msgstr "Haykuqmasikuna"
+
+msgid "langPlatformAdmin"
+msgstr "Hanp\'araq kamachina"
+
+msgid "UserInfo"
+msgstr "haykuqmasimanta willay"
+
+msgid "langModifyQuestion"
+msgstr "T\'ijrapay taputa"
+
+msgid "langCheckAll"
+msgstr "cheqaqchay"
+
+msgid "langNbAnnoucement"
+msgstr "Willaykuna"
+
+msgid "lang_no_access_here"
+msgstr "Manan kayman haykuwaqchu"
+
+msgid "langOtherCourses"
+msgstr "hoq yachachinakuna"
+
+msgid "Doc"
+msgstr "qelqa khipu"
+
+msgid "PlataformAdmin"
+msgstr "Hanp\'araq kamachina"
+
+msgid "Groups"
+msgstr "Huñusqakuna"
+
+msgid "GroupManagement"
+msgstr "Huñusqakunaq kamachiy"
+
+msgid "All"
+msgstr "Llapan"
+
+msgid "None"
+msgstr "Ch\'usaq"
+
+msgid "langSorry"
+msgstr "Ñaupaqqa ajllay huj yachachiyta"
+
+msgid "langDenied"
+msgstr "Kay ruwayqa manan kashanchu yachachina kamaqkunapaqqa"
+
+msgid "Today"
+msgstr "kunan"
+
+msgid "langCourseHomepageLink"
+msgstr "Yachachinamanta raphi qallariy"
+
+msgid "Attachment"
+msgstr "Yapay"
+
+msgid "User"
+msgstr "Haykuqmasikuna"
+
+msgid "MondayInit"
+msgstr "k"
+
+msgid "TuesdayInit"
+msgstr "A"
+
+msgid "WednesdayInit"
+msgstr "Q"
+
+msgid "ThursdayInit"
+msgstr "I"
+
+msgid "FridayInit"
+msgstr "Ch"
+
+msgid "SaturdayInit"
+msgstr "k"
+
+msgid "SundayInit"
+msgstr "I"
+
+msgid "MondayShort"
+msgstr "Killa"
+
+msgid "TuesdayShort"
+msgstr "Anti"
+
+msgid "WednesdayShort"
+msgstr "Qouyllur"
+
+msgid "ThursdayShort"
+msgstr "Illapa"
+
+msgid "FridayShort"
+msgstr "Ch\'aska"
+
+msgid "SaturdayShort"
+msgstr "K\'uychi"
+
+msgid "SundayShort"
+msgstr "Inti"
+
+msgid "MondayLong"
+msgstr "Killachay"
+
+msgid "TuesdayLong"
+msgstr "Antichay"
+
+msgid "WednesdayLong"
+msgstr "Qoyllurchay"
+
+msgid "ThursdayLong"
+msgstr "Illapachay"
+
+msgid "FridayLong"
+msgstr "Ch\'askachay"
+
+msgid "SaturdayLong"
+msgstr "K\'uychichay"
+
+msgid "SundayLong"
+msgstr "Intichay"
+
+msgid "JanuaryInit"
+msgstr "E"
+
+msgid "FebruaryInit"
+msgstr "F"
+
+msgid "MarchInit"
+msgstr "M"
+
+msgid "AprilInit"
+msgstr "A"
+
+msgid "MayInit"
+msgstr "M"
+
+msgid "JuneInit"
+msgstr "J"
+
+msgid "JulyInit"
+msgstr "J"
+
+msgid "AugustInit"
+msgstr "A"
+
+msgid "SeptemberInit"
+msgstr "S"
+
+msgid "OctoberInit"
+msgstr "O"
+
+msgid "NovemberInit"
+msgstr "N"
+
+msgid "DecemberInit"
+msgstr "D"
+
+msgid "JanuaryShort"
+msgstr "Ene"
+
+msgid "FebruaryShort"
+msgstr "Feb"
+
+msgid "MarchShort"
+msgstr "Mar"
+
+msgid "AprilShort"
+msgstr "Abr"
+
+msgid "MayShort"
+msgstr "May"
+
+msgid "JuneShort"
+msgstr "Jun"
+
+msgid "JulyShort"
+msgstr "Jul"
+
+msgid "AugustShort"
+msgstr "Ago"
+
+msgid "SeptemberShort"
+msgstr "Sep"
+
+msgid "OctoberShort"
+msgstr "Oct"
+
+msgid "NovemberShort"
+msgstr "Nov"
+
+msgid "DecemberShort"
+msgstr "Dic"
+
+msgid "JanuaryLong"
+msgstr "Enero"
+
+msgid "FebruaryLong"
+msgstr "Febrero"
+
+msgid "MarchLong"
+msgstr "Marzo"
+
+msgid "AprilLong"
+msgstr "Abril"
+
+msgid "MayLong"
+msgstr "Mayo"
+
+msgid "JuneLong"
+msgstr "Junio"
+
+msgid "JulyLong"
+msgstr "Julio"
+
+msgid "AugustLong"
+msgstr "Agosto"
+
+msgid "SeptemberLong"
+msgstr "Septiembre"
+
+msgid "OctoberLong"
+msgstr "Octubre"
+
+msgid "NovemberLong"
+msgstr "Noviembre"
+
+msgid "DecemberLong"
+msgstr "Diciembre"
+
+msgid "langMyCompetences"
+msgstr "Atipanaykuna"
+
+msgid "langMyDiplomas"
+msgstr "Sutinchachiykuna"
+
+msgid "langMyPersonalOpenArea"
+msgstr "Runakunapaq k\'itiy"
+
+msgid "langMyTeach"
+msgstr "Imata yachachiyman"
+
+msgid "Agenda"
+msgstr "Ima ruway"
+
+msgid "HourShort"
+msgstr "h"
+
+msgid "PleaseTryAgain"
+msgstr "¡ Ama hina kaychu, hoqmanta ruwaruy !"
+
+msgid "UplNoFileUploaded"
+msgstr "Ni hoq khipupas apachikunchu."
+
+msgid "UplSelectFileFirst"
+msgstr "Ama hina kaychu, amaraq apachiy nisqata q\'apispa, ajllariyraq khiputa."
+
+msgid "UplNotAZip"
+msgstr "Archivo ajllasqaqa manan archivo zip. nisqachu"
+
+msgid "UplUploadSucceeded"
+msgstr "Khipuqa apachisqaña !"
+
+msgid "ExportAsCSV"
+msgstr "Apachiy CSV khipuman"
+
+msgid "ExportAsXLS"
+msgstr "Apachiy XLS khipuman"
+
+msgid "langOpenarea"
+msgstr "Llapan runakunapaq kancha"
+
+msgid "Done"
+msgstr "Ruwasqa"
+
+msgid "Documents"
+msgstr "Qelqa khipukuna"
+
+msgid "DocumentAdded"
+msgstr "Qelqa khipu yapasqa"
+
+msgid "DocumentUpdated"
+msgstr "Qelqa khipu kunanyachisqa"
+
+msgid "DocumentInFolderUpdated"
+msgstr "Wayaqapi qelqa khipu kunanyachisqa"
+
+msgid "Course_description"
+msgstr "Yachachiymanta"
+
+msgid "Document"
+msgstr "Qelqa khipu"
+
+msgid "Learnpath"
+msgstr "Yachanakuna"
+
+msgid "Link"
+msgstr "Waskhana"
+
+msgid "Announcement"
+msgstr "Willaykuna"
+
+msgid "Dropbox"
+msgstr "Qelqa khipukunata t\'aqapay"
+
+msgid "Quiz"
+msgstr "Llank\'aynakuna"
+
+msgid "langChat"
+msgstr "Chat"
+
+msgid "Conference"
+msgstr "Huñurinakuy internetpi"
+
+msgid "Student_publication"
+msgstr "Llank\'aykuna"
+
+msgid "Tracking"
+msgstr "Willakuna"
+
+msgid "langhomepage_link"
+msgstr "Yapay hoq waskhanata yachachinaq raphi qallariyninman"
+
+msgid "Course_setting"
+msgstr "Yachachinaq kamachiynin"
+
+msgid "langbackup"
+msgstr "Yachachinaq Kikinchaynin waqaychasqa"
+
+msgid "langcopy_course_content"
+msgstr "Yachachinaq kaqkunamanata Kikinchan waqaychasqa"
+
+msgid "langrecycle_course"
+msgstr "Waqaychay kay yachachinata"
+
+msgid "StartDate"
+msgstr "P\'unchay qallariy"
+
+msgid "EndDate"
+msgstr "P\'unchay tukukuy"
+
+msgid "StartTime"
+msgstr "Tuy qallariy"
+
+msgid "EndTime"
+msgstr "Tuy tukukuy"
+
+msgid "langYouWereCalled"
+msgstr "Waqhashasunki hoqwan  rimakunaykipaq"
+
+msgid "langDoYouAccept"
+msgstr "Chaskinkichu?"
+
+msgid "Everybody"
+msgstr "yachachinaq llapan haykuqmasikuna"
+
+msgid "SentTo"
+msgstr "Pipaqman apachikunqa"
+
+msgid "Export"
+msgstr "Apachiy"
+
+msgid "Tools"
+msgstr "Llank\'anakuna"
+
+msgid "Everyone"
+msgstr "Sapanka"
+
+msgid "SelectGroupsUsers"
+msgstr "Ajllay huñusqakunata/haykuqmasikunata"
+
+msgid "Student"
+msgstr "Yachaqe"
+
+msgid "Teacher"
+msgstr "Yachachiq"
+
+msgid "Send2All"
+msgstr "Mana ajllankichu mayqen haykuqmasitapas / huñusqatapas. Kay item nisqaqa llapan haykuqmasikunan qhawanqaku."
+
+msgid "Wiki"
+msgstr "Huñusmanta wikin"
+
+msgid "Complete"
+msgstr "Tukusqa"
+
+msgid "Incomplete"
+msgstr "Mana tukusqa"
+
+msgid "reservation"
+msgstr "waqaychay"
+
+msgid "StartTimeWindow"
+msgstr "Qallariy"
+
+msgid "EndTimeWindow"
+msgstr "Tukukuy"
+
+msgid "AccessNotAllowed"
+msgstr "Kay raphiman haykuyqa manan kashanchu"
+
+msgid "InThisCourse"
+msgstr "kay yachachinapi"
+
+msgid "ThisFieldIsRequired"
+msgstr "kancha ruwanapaqpuni"
+
+msgid "AllowedHTMLTags"
+msgstr "Etiquetas HTML nisqa chaskinallapaq"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "Kaypi imaymana qelqasqaykiqa mana allichu utaq mana hunt\'achisqa kashan. Aman hina kaychu, qhawaruy qelqasqaykita."
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "P\'unchay tukukunamantaqa ñaupaqninpi kanqapuni p\'unchay qallarina"
+
+msgid "InvalidDate"
+msgstr "Pacha mana allin churasqa"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "Seq\'ekunallata yupaykunallatawan chaskin"
+
+msgid "langBasicOverview"
+msgstr "Organizar"
+
+msgid "CourseAdminRole"
+msgstr "Yachachina kamachiq"
+
+msgid "UserRole"
+msgstr "Ruwaynin"
+
+msgid "OnlyImagesAllowed"
+msgstr "Wankikunataqa kay hinallapi churanaqa PNG, JPG, GIF nisqakunapi"
+
+msgid "ViewRight"
+msgstr "Qhawariy"
+
+msgid "EditRight"
+msgstr "Ruwapay"
+
+msgid "DeleteRight"
+msgstr "Pichay"
+
+msgid "OverviewCourseRights"
+msgstr "Ruwayninmanta huñichaymantawan nisqaynin"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "Ruwaynin"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Ver todos los perfiles y lugares para un permiso específico"
+
+msgid "langAdvanced"
+msgstr "Avanzado"
+
+msgid "RightValueModified"
+msgstr "Este valor ha sido modificado."
+
+msgid "course_rights"
+msgstr "Ruwayninmanta huñichaymantawan kamachiynin"
+
+msgid "Visio_conference"
+msgstr "Huñunakuy video-rimarinakuypi"
+
+msgid "CourseAdminRoleDescription"
+msgstr "Yachachina kamachiq"
+
+msgid "Move"
+msgstr "Kuyurichiy"
+
+msgid "MoveTo"
+msgstr "Kuyuchiy kayman"
+
+msgid "Delete"
+msgstr "Pichay"
+
+msgid "MoveFileTo"
+msgstr "Kuyuchiy khiputa kayman"
+
+msgid "Save"
+msgstr "Allchay"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Anonymous"
+msgstr "Mana sutiyuq"
+
+msgid "h"
+msgstr "h"
+
+msgid "CreateNewGlobalRole"
+msgstr "Kamay musuq lliw ruwayninta"
+
+msgid "CreateNewLocalRole"
+msgstr "Kamay musuq kayllapi ruwayninta"
+
+msgid "Actions"
+msgstr "Ruwarparina"
+
+msgid "Inbox"
+msgstr "Willana ch\'askiq"
+
+msgid "ComposeMessage"
+msgstr "Qelqay"
+
+msgid "Other"
+msgstr "Hoq"
+
+msgid "AddRight"
+msgstr "Yapay"
+
+msgid "CampusHomepage"
+msgstr "Raphi qallariy"
+
+msgid "YouHaveNewMessage"
+msgstr "Musuq willanaykin kashan"
+
+msgid "myActiveSessions"
+msgstr "Sesiones nisqaykuna hap\'ichisqa"
+
+msgid "myInactiveSessions"
+msgstr "Sesiones nisqaykuna mana hap\'ichisqa"
+
+msgid "FileUpload"
+msgstr "Khipu apachiy"
+
+msgid "langMyActiveSessions"
+msgstr "Sesiones nisqaykuna hap\'ichisqa"
+
+msgid "langMyInActiveSessions"
+msgstr "Sesiones nisqaykuna mana hap\'ichisqa"
+
+msgid "langMySpace"
+msgstr "Willakuna"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "Kay extensión nisqaqa hap\'ichisqañan, ichaqa kunanqa manaraq kanqachu hap\'ichasqa."
+
+msgid "MyStudents"
+msgstr "Yachaqeykuna"
+
+msgid "Progress"
+msgstr "Purisqa"
+
+msgid "Or"
+msgstr "utaq"
+
+msgid "Uploading"
+msgstr "Apachisqa..."
+
+msgid "AccountExpired"
+msgstr "Cuenta caducada"
+
+msgid "AccountInactive"
+msgstr "Cuenta sin activar"
+
+msgid "ActionNotAllowed"
+msgstr "Ruwarparina mana ruwanapaq"
+
+msgid "SubTitle"
+msgstr "Sullk\'a sutinchaynin"
+
+msgid "NoResourcesToRecycle"
+msgstr "Mana kanchu yanapaysinakuna waqaychanapaq"
+
+msgid "noOpen"
+msgstr "Mana kichakunchu"
+
+msgid "TempsFrequentation"
+msgstr "Tiempo de frecuenciación"
+
+msgid "Progression"
+msgstr "Purisqa"
+
+msgid "NoCourse"
+msgstr "Yachachinaqa mana tarikunchu"
+
+msgid "Teachers"
+msgstr "Yachachiqkuna"
+
+msgid "Session"
+msgstr "Sesión nisqa"
+
+msgid "Sessions"
+msgstr "Sesiones nisqakuna"
+
+msgid "NoSession"
+msgstr "Sesión mana atikunchu tarichikuyta"
+
+msgid "NoStudent"
+msgstr "Yachaqeqa manan tarikunchu"
+
+msgid "Students"
+msgstr "Yachaqekuna"
+
+msgid "NoResults"
+msgstr "Mana tarikunchu maskhasqakunaqa"
+
+msgid "Tutors"
+msgstr "Pusaqkuna"
+
+msgid "Tel"
+msgstr "Teléf."
+
+msgid "NoTel"
+msgstr "Mana teléfonoyuq"
+
+msgid "SendMail"
+msgstr "Apachiy e-chaskita"
+
+msgid "RdvAgenda"
+msgstr "Ruwanapi ima ruwaypi tupanapaq"
+
+msgid "VideoConf"
+msgstr "Video-rimarinakuy"
+
+msgid "MyProgress"
+msgstr "Purisqay"
+
+msgid "NoOnlineStudents"
+msgstr "Mana yachaqekuna kashankuchu"
+
+msgid "InCourse"
+msgstr "yachachinapi"
+
+msgid "UserOnlineListSession"
+msgstr "Lista de usuarios en línea - Sesión"
+
+msgid "From"
+msgstr "Pimanta"
+
+msgid "To"
+msgstr "Pipaq"
+
+msgid "Content"
+msgstr "Contenido"
+
+msgid "year"
+msgstr "wata"
+
+msgid "Years"
+msgstr "watakuna"
+
+msgid "Day"
+msgstr "P\'unchay"
+
+msgid "Days"
+msgstr "p\'unchaykuna"
+
+msgid "PleaseStandBy"
+msgstr "Ama hina kaychu, suyaruy..."
+
+msgid "AvailableUntil"
+msgstr "Kaykama kashan"
+
+msgid "HourMinuteDivider"
+msgstr "h"
+
+msgid "Visio_classroom"
+msgstr "Video-rimarinakuyta utichiy"
+
+msgid "Survey"
+msgstr "Tapukuy"
+
+msgid "More"
+msgstr "Aswan"
+
+msgid "ClickHere"
+msgstr "Q\'apiy kaypi"
+
+msgid "Here"
+msgstr "kaypi"
+
+msgid "SaveQuestion"
+msgstr "Allchay taputa"
+
+msgid "ReturnTo"
+msgstr "Kunaqa kutiwaq kayman"
+
+msgid "Horizontal"
+msgstr "Horizontal"
+
+msgid "Vertical"
+msgstr "Vertical"
+
+msgid "DisplaySearchResults"
+msgstr "Qhawarichiy maskhasqamanta tarisqakunata"
+
+msgid "DisplayAll"
+msgstr "Llanta qhawarichiy"
+
+msgid "File_upload"
+msgstr "Khiputa apachiy"
+
+msgid "NoUsersInCourse"
+msgstr "Kay yachachinaqa mana haykuqmasikunayuqchu"
+
+msgid "Percentage"
+msgstr "Porcentaje"
+
+msgid "Information"
+msgstr "Willa"
+
+msgid "EmailDestination"
+msgstr "Chayana"
+
+msgid "SendEmail"
+msgstr "Apachiy e-chakita"
+
+msgid "EmailTitle"
+msgstr "Willanaq sutinchaynin"
+
+msgid "EmailText"
+msgstr "E-chakipi kaq"
+
+msgid "Send"
+msgstr "Apachiy"
+
+msgid "Comments"
+msgstr "Rimayrikuna"
+
+msgid "ModifyRecipientList"
+msgstr "T\'ijrapay chayanakunaq sinrinta"
+
+msgid "Line"
+msgstr "Seq\'e"
+
+msgid "NoLinkVisited"
+msgstr "Mana watukunchu ima waskhanapas"
+
+msgid "NoDocumentDownloaded"
+msgstr "Mana uraychikunchu ima qelqa khipupas"
+
+msgid "Clicks"
+msgstr "clics"
+
+msgid "SearchResults"
+msgstr "Maskhay tarisqakunata"
+
+msgid "SessionPast"
+msgstr "Pasada"
+
+msgid "SessionActive"
+msgstr "Activa"
+
+msgid "SessionFuture"
+msgstr "Manaraq qallarinraqchu"
+
+msgid "DateFormatLongWithoutDay"
+msgstr "%d %B %Y"
+
+msgid "InvalidDirectoryPleaseCreateAnImagesFolder"
+msgstr "Carpeta no válida: por favor cree una carpeta que se llame <i>images</i> en la herramienta documentos, para poder enviar a ella las imagenes que suba."
+
+msgid "UsersConnectedToMySessions"
+msgstr "Usuarios conectados a mis sesiones"
+
+msgid "Category"
+msgstr "Mita"
+
+msgid "DearUser"
+msgstr "Estimado usuario"
+
+msgid "YourRegistrationData"
+msgstr "Estos son sus datos de acceso"
+
+msgid "ResetLink"
+msgstr "Pulse en el siguiente enlace para regenerar su contraseña"
+
+msgid "VisibilityChanged"
+msgstr "La visibilidad ha sido cambiada."
+
+msgid "MainNavigation"
+msgstr "Navegación principal"
+
+msgid "SeeDetail"
+msgstr "Ver detalles"
+
+msgid "GroupSingle"
+msgstr "Huñusqa"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "Por favor, pruebe a identificarse de nuevo desde la página principal de la plataforma"
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "Por favor, pruebe a identificarse de nuevo usando el formulario inferior"
+
+msgid "AccessToFaq"
+msgstr "Acceder a las preguntas más frecuentes (FAQ)"
+
+msgid "Faq"
+msgstr "Preguntas más frecuentes (FAQ)"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "Recordatorio para los usuarios que han permanecido inactivos durante más de"
+
+msgid "RemindInactiveLearnersMailSubject"
+msgstr "Falta de actividad en %s"
+
+msgid "RemindInactiveLearnersMailContent"
+msgstr "Estimado usuario, <br /><br /> no ha tenido actividad en %s desde hace más de %s días."
+
+msgid "OpenIdAuthentication"
+msgstr "Autentificación OpenID"
+
+msgid "UploadMaxSize"
+msgstr "Tamaño máximo de los envíos"
+
+msgid "Unknown"
+msgstr "Mana reqsisqa"
+
+msgid "MoveUp"
+msgstr "Kuyurichiy wichayman"
+
+msgid "MoveDown"
+msgstr "Kuyurichiy urayman"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "Envío de archivo no completado: este tipo de archivo o su extensión no están permitidos"
+
+msgid "OpenIDURL"
+msgstr "URL OpenID"
+
+msgid "UplFileTooBig"
+msgstr " Khipu apachisqaqa sinchi hatunmi !"
+
+msgid "UplGenericError"
+msgstr "El envío del archivo no se ha podido realizar. Por favor, inténtelo de nuevo más tarde o póngase en contacto con el administrador de la plataforma."
+
+msgid "MyGradebook"
+msgstr "Mis calificaciones"
+
+msgid "Gradebook"
+msgstr "Cuaderno de calificaciones"
+
+msgid "OpenIDWhatIs"
+msgstr "¿ Imataq OpenID nisqari ?"
+
+msgid "OpenIDDescription"
+msgstr "OpenID elimina la necesidad de tener varios nombres de usuario en distintos sitios web, simplificando la experiencia del usuario en la Red. Vd. puede escoger el proveedor de OpenID que mejor satisfaga sus necesidades y, lo que es más importante, aquel en el que tenga más confianza. También, aunque cambie de proveedor, podrá conservar su OpenID. Y lo mejor de todo, OpenID es una tecnología no propietaria y completamente gratuita. Para las empresas, esto significa un menor costo de administración de cuentas y contraseñas. OpenID reduce la frustración del usuario permitiendo que los usuarios tengan el control de su acceso.<br /><br /><a href=\"http://openid.net/what/\">Para saber más...</a>"
+
+msgid "NoManager"
+msgstr "Sin responsable"
+
+msgid "ExportiCal"
+msgstr "Exportar en formato iCal"
+
+msgid "ExportiCalPublic"
+msgstr "Exportar en formato iCal como evento público"
+
+msgid "ExportiCalPrivate"
+msgstr "Exportar en formato iCal como evento privado"
+
+msgid "ExportiCalConfidential"
+msgstr "Exportar en formato iCal como evento confidencial"
+
+msgid "MoreStats"
+msgstr "Aswan yupanakuna"
+
+msgid "Drh"
+msgstr "Responsable de Recursos Humanos"
+
+msgid "MinDecade"
+msgstr "chunka wata"
+
+msgid "MinYear"
+msgstr "wata"
+
+msgid "MinMonth"
+msgstr "killa"
+
+msgid "MinWeek"
+msgstr "qanchis p\'unchayniyuq"
+
+msgid "MinDay"
+msgstr "p\'unchay"
+
+msgid "MinHour"
+msgstr "tuy"
+
+msgid "MinMinute"
+msgstr "minuto"
+
+msgid "MinDecades"
+msgstr "chunka watakunayuqkuna"
+
+msgid "MinYears"
+msgstr "watakuna"
+
+msgid "MinMonths"
+msgstr "killakuna"
+
+msgid "MinWeeks"
+msgstr "qanchis p\'unchayniyuqkuna"
+
+msgid "MinDays"
+msgstr "p\'unchaykuna"
+
+msgid "MinHours"
+msgstr "horas"
+
+msgid "MinMinutes"
+msgstr "minutos"
+
+msgid "HomeDirectory"
+msgstr "Principal"
+
+msgid "DocumentCreated"
+msgstr "Qelqa khipu kamarisqa"
+
+msgid "ForumAdded"
+msgstr "Musuq k\'itirimana yapasqaña"
+
+msgid "ForumThreadAdded"
+msgstr "Tema de discusión añadido al foro"
+
+msgid "ForumAttachmentAdded"
+msgstr "Archivo adjunto añadido al foro"
+
+msgid "directory"
+msgstr "wayaqa"
+
+msgid "Directories"
+msgstr "wayaqakuna"
+
+msgid "UserAge"
+msgstr "Watan"
+
+msgid "UserBirthday"
+msgstr "Paqariq pacha"
+
+msgid "Course"
+msgstr "Yachachina"
+
+msgid "FilesUpload"
+msgstr "qelqa khipukuna"
+
+msgid "ExerciseFinished"
+msgstr "Llank\'ayna tukusqa"
+
+msgid "UserSex"
+msgstr "Qhari-warmichu"
+
+msgid "UserNativeLanguage"
+msgstr "Mama simi"
+
+msgid "UserResidenceCountry"
+msgstr "Suyu tiyaqnin"
+
+msgid "AddAnAttachment"
+msgstr "Yapachiy hoq khiputa"
+
+msgid "FileComment"
+msgstr "Khipumanta rimariy"
+
+msgid "FileName"
+msgstr "Khipuq sutin"
+
+msgid "SessionsAdmin"
+msgstr "Sesiones nisqaqpa kamachiq"
+
+msgid "MakeChangeable"
+msgstr "T\'ijrachiy t\'ijrapanachinaman"
+
+msgid "MakeUnchangeable"
+msgstr "T\'ijrachiy mana t\'ijrapanachinaman"
+
+msgid "UserFields"
+msgstr "Campos de usuario"
+
+msgid "FieldShown"
+msgstr "Kanchaqa kunan qhawachikun haykuqmasiwan"
+
+msgid "CannotShowField"
+msgstr "Mana qhawachikunchu kanchaqa"
+
+msgid "FieldHidden"
+msgstr "Kanchaqa kunan mana qhawachikunchu haykuqmasiwanqa"
+
+msgid "CannotHideField"
+msgstr "Mana atikunchu kancha pakakuyqa"
+
+msgid "FieldMadeChangeable"
+msgstr "El campo ahora es modificable por el usuario: el usuario puede rellenar o modificar el campo"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "El campo no se puede convertir en modificable"
+
+msgid "FieldMadeUnchangeable"
+msgstr "El campo ahora es fijo: el usuario no puede rellenar o modificar el campo"
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "No se puede convertir el campo en fijo"
+
+msgid "Folder"
+msgstr "Wayaqa"
+
+msgid "CloseOtherSession"
+msgstr "Chatqa manan kashanchu haykunapaqqa yachachinaq hoq raphi kichasqarayku, ama hina kaychu hoqmanta haykuy chat nisqaman"
+
+msgid "FileUploadSucces"
+msgstr "Khipuqa apachikunña"
+
+msgid "Yesterday"
+msgstr "Qayna p\'unchay"
+
+msgid "Submit"
+msgstr "Apachiy"
+
+msgid "Department"
+msgstr "Departamento"
+
+msgid "BackToNewSearch"
+msgstr "Kutiy musuq maskhayta ruwanapaq"
+
+msgid "Step"
+msgstr "Paso"
+
+msgid "SomethingFemininAddedSuccessfully"
+msgstr "yapachikunña"
+
+msgid "SomethingMasculinAddedSuccessfully"
+msgstr "yapachikunña"
+
+msgid "DeleteError"
+msgstr "Pichayqa pantarun"
+
+msgid "StepsList"
+msgstr "Lista de etapas"
+
+msgid "AddStep"
+msgstr "Añadir etapa"
+
+msgid "StepCode"
+msgstr "Código de la etapa"
+
+msgid "Label"
+msgstr "Etiqueta nisqa"
+
+msgid "UnableToConnectTo"
+msgstr "Imposible conectar con"
+
+msgid "NoUser"
+msgstr "Mana haykuqmasikunayuq"
+
+msgid "SearchResultsFor"
+msgstr "Maskhaymanta kutichisqakuna:"
+
+msgid "SelectFile"
+msgstr "Ajllay hoq khiputa"
+
+msgid "WarningFaqFileNonWriteable"
+msgstr "Atención - El archivo FAQ localizado en el directorio  /home/ de su plataforma, no es un archivo en el que se pueda escribir. Su texto no será guardado hasta que no cambie los permisos del archivo."
+
+msgid "AddCategory"
+msgstr "Yapay mitata"
+
+msgid "NoExercises"
+msgstr "Manan kashanchu llank\'aynakuna hap\'ipanapaq"
+
+msgid "NotAllowedClickBack"
+msgstr "Lo sentimos, no le está permitido acceder a esta página. Para volver a la página anterior pulse el enlace inferior o haga clic en el botón \"Atrás\" de su navegador."
+
+msgid "Exercise"
+msgstr "Llank\'aynakuna"
+
+msgid "Result"
+msgstr "Resultado"
+
+msgid "AttemptingToLoginAs"
+msgstr "Intentar identificarse como %s %s (id %s)"
+
+msgid "LoginSuccessfulGoToX"
+msgstr "Reqsipakuy ruwasqañan. Riy kayman %s"
+
+msgid "FckMp3Autostart"
+msgstr "Qallarichiy uyarinataqa kikinllamanta"
+
+msgid "Learner"
+msgstr "Yachaqe"
+
+msgid "IntroductionTextUpdated"
+msgstr "Qelqa haykuyqa kunanchisqaña"
+
+msgid "Align"
+msgstr "Alineación"
+
+msgid "Width"
+msgstr "Kinraynin"
+
+msgid "VSpace"
+msgstr "Espacio V"
+
+msgid "HSpace"
+msgstr "Espacio H"
+
+msgid "Border"
+msgstr "Borde"
+
+msgid "Alt"
+msgstr "Sayay"
+
+msgid "Height"
+msgstr "Sayaynin"
+
+msgid "ImageManager"
+msgstr "Wanki kamachiq"
+
+msgid "ImageFile"
+msgstr "Wanki"
+
+msgid "ConstrainProportions"
+msgstr "Sayayninta hap\'ipayay"
+
+msgid "InsertImage"
+msgstr "Apachimuy wankita"
+
+msgid "AccountActive"
+msgstr "Cuenta activa"
+
+msgid "GroupSpace"
+msgstr "Huñusqaq k\'itin"
+
+msgid "GroupWiki"
+msgstr "Wiki"
+
+msgid "ExportToPDF"
+msgstr "Apachiy PDF nisqaman"
+
+msgid "CommentAdded"
+msgstr "Rimariy yapasqa"
+
+msgid "BackToPreviousPage"
+msgstr "Kutiy ñaupa raphiman"
+
+msgid "ListView"
+msgstr "Qhawarichiy sinri hinata"
+
+msgid "NoOfficialCode"
+msgstr "No Código oficial"
+
+msgid "Owner"
+msgstr "Propietario"
+
+msgid "DisplayOrder"
+msgstr "Orden"
+
+msgid "SearchFeatureDoIndexDocument"
+msgstr "¿ Indexankinchu qelqa khipu imaymaninta ?"
+
+msgid "SearchFeatureDocumentLanguage"
+msgstr "Indexanapaq qelqa khipuq simin"
+
+msgid "With"
+msgstr "con"
+
+msgid "GeneralCoach"
+msgstr "Lliw pusaq"
+
+msgid "SaveDocument"
+msgstr "Allchay qelqa khiputa"
+
+msgid "CategoryDeleted"
+msgstr "Mitaqa wañuchisqaña."
+
+msgid "CategoryAdded"
+msgstr "Mita yapasqa"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Qualify"
+msgstr "Chaninchay"
+
+msgid "Words"
+msgstr "Rimaykuna"
+
+msgid "GoBack"
+msgstr "Kutiy"
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "EditLink"
+msgstr "Ruwapay wayaqta"
+
+msgid "LinkEdited"
+msgstr "Waskhanaqa t\'ijrapachisqañan"
+
+msgid "ForumThreads"
+msgstr "K\'itirimanaq rimanankunan"
+
+msgid "GradebookVisible"
+msgstr "Qhawakuq"
+
+msgid "GradebookInvisible"
+msgstr "Pakasqa"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "InfoMessage"
+msgstr "Willamanta willana"
+
+msgid "ConfirmationMessage"
+msgstr "Cheqaqchanamanta willana"
+
+msgid "WarningMessage"
+msgstr "Willaymanta willana"
+
+msgid "ErrorMessage"
+msgstr "Pantaymanta willana"
+
+msgid "Glossary"
+msgstr "Glosario nisqa"
+
+msgid "Coach"
+msgstr "Pusaq"
+
+msgid "Condition"
+msgstr "Ima kay"
+
+msgid "CourseSettings"
+msgstr "Configuración de la lección"
+
+msgid "EmailNotifications"
+msgstr "E-chaskipi willanakuykuna"
+
+msgid "UserRights"
+msgstr "Derechos de usuario"
+
+msgid "Theming"
+msgstr "Rimana"
+
+msgid "Qualification"
+msgstr "Chaninchana"
+
+msgid "OnlyNumbers"
+msgstr "Yupakunallata"
+
+msgid "ReorderOptions"
+msgstr "Allichayay imaymanakunata"
+
+msgid "EditUserFields"
+msgstr "Ruwapay haykuqmasiq kanchanta"
+
+msgid "OptionText"
+msgstr "Qelqan imaymankunan"
+
+msgid "FieldTypeDoubleSelect"
+msgstr "Kancha iskhaymanta ajllaq"
+
+msgid "FieldTypeDivider"
+msgstr "Kancha t\'aqapaqmanta"
+
+msgid "ScormUnknownPackageFormat"
+msgstr "Formato desconocido de paquete"
+
+msgid "ResourceDeleted"
+msgstr "Yanapaysinaqa pichasqañan"
+
+msgid "AdvancedParameters"
+msgstr "Parámetros avanzados"
+
+msgid "GoTo"
+msgstr "Riy kayman"
+
+msgid "SessionNameAndCourseTitle"
+msgstr "Yachachinaq sutinchaynin sesiónpa sutinpas"
+
+msgid "CreationDate"
+msgstr "Pacha kamarichisqa"
+
+msgid "LastUpdateDate"
+msgstr "Qepa kunanyachisqa"
+
+msgid "ViewHistoryChange"
+msgstr "Ver historial de cambios"
+
+msgid "SearchGoToLearningPath"
+msgstr "Riy yachanaman"
+
+msgid "SearchLectureLibrary"
+msgstr "Biblioteca de lecciones"
+
+msgid "SearchImagePreview"
+msgstr "Ñaupaq qhawariy"
+
+msgid "SearchAdvancedOptions"
+msgstr "Opciones de búsqueda avanzadas"
+
+msgid "SearchResetKeywords"
+msgstr "Pichay ancha rimaykunata"
+
+msgid "SearchKeywords"
+msgstr "Ancha simikuna"
+
+msgid "IntroductionTextDeleted"
+msgstr "Qelqa haykuyqa chinkachisqaña"
+
+msgid "SearchKeywordsHelpTitle"
+msgstr "Ayuda búsqueda por palabras clave"
+
+msgid "SearchKeywordsHelpComment"
+msgstr "Selecciona las palabras clave en uno o más de los campos y haz clic por el botón de búsqueda.<br /><br />Para seleccionar más de una palabra clave en un campo, usa Ctrl+Clic"
+
+msgid "Validate"
+msgstr "Validar"
+
+msgid "SearchCombineSearchWith"
+msgstr "Combinar palabras clave con"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "La funcionalidad de búsqueda de texto completo no está habilitada en Chamilo. Por favor, contacte con el administrador de Chamilo."
+
+msgid "Top"
+msgstr "Qallarina"
+
+msgid "YourTextHere"
+msgstr "Qelqanayki kaypi"
+
+msgid "OrderBy"
+msgstr "Pipuwan allichasqa"
+
+msgid "Notebook"
+msgstr "Notas personales"
+
+msgid "FieldRequired"
+msgstr "Kancha ruwanallapaqpuni"
+
+msgid "BookingSystem"
+msgstr "Waqaychanakunaq sisteman"
+
+msgid "Any"
+msgstr "Mayqenpas"
+
+msgid "SpecificSearchFields"
+msgstr "Campos específicos de búsqueda"
+
+msgid "SpecificSearchFieldsIntro"
+msgstr "Aquí usted puede definir los campos que quiere usar para indexar el contenido. Cuando esté indexando un elemento podrá agregar uno o más términos en cada campo separados por comas."
+
+msgid "AddSpecificSearchField"
+msgstr "Agregar un campo espefífico de búsqueda"
+
+msgid "SaveSettings"
+msgstr "Ima ajllasqakunata allchay"
+
+msgid "NoParticipation"
+msgstr "Manan kanshanchu haykuqmasikuna"
+
+msgid "Subscribers"
+msgstr "Qelqachaqkuna"
+
+msgid "Accept"
+msgstr "Chaskiy"
+
+msgid "Reserved"
+msgstr "Waqaychasqa"
+
+msgid "SharedDocumentsDirectory"
+msgstr "Wayaqa qelqa khipukuna t\'aqapasqamanta"
+
+msgid "Gallery"
+msgstr "Galería"
+
+msgid "Audio"
+msgstr "Uyarina"
+
+msgid "GoToQuestion"
+msgstr "Riy rapuyman"
+
+msgid "Level"
+msgstr "T\'aqa"
+
+msgid "Duration"
+msgstr "Unayñin"
+
+msgid "SearchPrefilterPrefix"
+msgstr "Campo específico para prefiltrado"
+
+msgid "SearchPrefilterPrefixComment"
+msgstr "Esta opción le permite elegir el campo específico que va a ser usado en el tipo de búsqueda prefiltrado."
+
+msgid "MaxTimeAllowed"
+msgstr "Tiempo máximo permitido (min)"
+
+msgid "Class"
+msgstr "Clase"
+
+msgid "Select"
+msgstr "Ajllay"
+
+msgid "Booking"
+msgstr "Waqaychanakuna"
+
+msgid "ManageReservations"
+msgstr "Kamachiy waqaychanakunata"
+
+msgid "DestinationUsers"
+msgstr "Haykuqmasikunaman chayana"
+
+msgid "AttachmentFileDeleteSuccess"
+msgstr "Khipu yapachasqaqa pichasqañan"
+
+msgid "AccountURLInactive"
+msgstr "Cuenta no activada en esta URL"
+
+msgid "MaxFileSize"
+msgstr "Tamaño máximo de archivo"
+
+msgid "SendFileError"
+msgstr "Patay khipu apachisqapi"
+
+msgid "Expired"
+msgstr "Vencido"
+
+msgid "InvitationHasBeenSent"
+msgstr "Miyk\'aqa apachikunñan"
+
+msgid "InvitationHasBeenNotSent"
+msgstr "Miyk\'aqa manan apachikunchu"
+
+msgid "Outbox"
+msgstr "Willana chaskiq"
+
+msgid "Overview"
+msgstr "Lliw qhawariy"
+
+msgid "ApiKeys"
+msgstr "Llaves API"
+
+msgid "GenerateApiKey"
+msgstr "Generar API key"
+
+msgid "MyApiKey"
+msgstr "Mi API key"
+
+msgid "DateSend"
+msgstr "Ima pachapi apachisqa"
+
+msgid "Deny"
+msgstr "Denegar"
+
+msgid "ThereIsNotQualifiedLearners"
+msgstr "Mana kanchu yachaqekuna chaninchasqa"
+
+msgid "ThereIsNotUnqualifiedLearners"
+msgstr "Mana kanchu yachaqekuna mana chaninchasqa"
+
+msgid "SocialNetwork"
+msgstr "Muyu reqsisqa"
+
+msgid "BackToOutbox"
+msgstr "Kutiy k\'uchu lloqsinaman"
+
+msgid "Invitation"
+msgstr "Mink\'a"
+
+msgid "SeeMoreOptions"
+msgstr "Qhawariy aswan imaymanakunata"
+
+msgid "TemplatePreview"
+msgstr "Yupimanta ñaupaq qhawariy"
+
+msgid "NoTemplatePreview"
+msgstr "Ñaupaq qhawariy mana kashanchu"
+
+msgid "ModifyCategory"
+msgstr "T\'ijrapay mitata"
+
+msgid "Photo"
+msgstr "Wanki"
+
+msgid "MoveFile"
+msgstr "Kuyuchiy khiputa"
+
+msgid "Filter"
+msgstr "Suysuy"
+
+msgid "Subject"
+msgstr "Imamanta"
+
+msgid "Message"
+msgstr "willana"
+
+msgid "MoreInformation"
+msgstr "Aswan willa"
+
+msgid "MakeInvisible"
+msgstr "Churay ama rikuchikunanpaq"
+
+msgid "MakeVisible"
+msgstr "Churay rikuchikunanpaq"
+
+msgid "Image"
+msgstr "Wanki"
+
+msgid "CourseName"
+msgstr "Yachachinaq sutin"
+
+msgid "SendAMessage"
+msgstr "Enviar mensaje"
+
+msgid "Menu"
+msgstr "Menú"
+
+msgid "BackToUserList"
+msgstr "Regresar a lista de usurios"
+
+msgid "GraphicNotAvailable"
+msgstr "Gráfico no disponible"
+
+msgid "GeneralDescription"
+msgstr "Llipin nisqasqay"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "Iman yachachinaq ruwaynin kay programapi ? Munakunchu ñaupaq ruwanakunata ? Ima masichay kan kay yachachinawan hoqkunawan ?"
+
+msgid "GeneralDescriptionInformation"
+msgstr "Yachachinamanta nisqasqakuna (hayka pacha, chinpu, may k\'itipi ruwakuynin...). Yachachiq (suti, mamataytamanta suti, kamachiynin, telÃ©fono nisqa, e-chaski...)."
+
+msgid "Objectives"
+msgstr "Aypanakuna"
+
+msgid "ObjectivesInformation"
+msgstr "Yachachinaq lliw aypanakunamanta rak\'i aypanamantawan rikuchiy"
+
+msgid "ObjectivesQuestions"
+msgstr "Imatan munashanki yachanqaku yachaqekuna kay yachachina tukukusqanpi? Hinallataq ima aypanakunata  hapinqaku kay llank\'aypi ?"
+
+msgid "Topics"
+msgstr "Rimanakuna"
+
+msgid "TopicsInformation"
+msgstr "Yachachinapi iman kaqkuna. Sapa kaqkunamnata chaninchasqa. Sasa t\'aqakuna. Ima ruwakuqninmanta masichakuyninmantawan."
+
+msgid "TopicsQuestions"
+msgstr "Iman kanqa yachachinaq ruwaynin ? Maypi yachaqe sinchi qhawariyta ruranman ? Kashanku  sasa umanchay mayqan sutichakusqakunapipas? Haykata llank\'anman sapanqa yachachinapi ?"
+
+msgid "Methodology"
+msgstr "Yachay-kamay"
+
+msgid "MethodologyQuestions"
+msgstr "Ima yachay-kamaykunawan llank\'aykunawan yanapanqa kay yachachinapi aypanakunata tarinapaq? Mayqanmi ima ruwariykuna ?"
+
+msgid "MethodologyInformation"
+msgstr "Llank\'aynakuna rikuchiy (huñunakuykuna, hamut\'aykuna, huñukuspa k\'uskiykuna,  t\'aqwinakuna...)."
+
+msgid "CourseMaterial"
+msgstr "Llank\'anakuna"
+
+msgid "CourseMaterialQuestions"
+msgstr "Yachachinamanta kashanku pusaqnin, qelqa khipu khipukunan, bibliografia nisqan, yupachasqa internetmanta wataqkunan ?"
+
+msgid "CourseMaterialInformation"
+msgstr "Yachachinaq llank\'anakunamanta pisi nisqasqay."
+
+msgid "HumanAndTechnicalResources"
+msgstr "Runakunamanta mana runakunamanta yachaypas yanapaysinakuna"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "Pikunan yachachiqkuna, pusaqkuna, yanapakuy técnica nisqa, yanapakuy social, hoqkunawan ? Yachachinamantari  manqan yanapay hapinapaq kan: wasi computadora nisqakunawan, hoqkunapas ?"
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "Yanapaysinakuna hapinapaq técnicos nisqamanta  runa sispamasikunamantawan pisi nisqayta."
+
+msgid "Assessment"
+msgstr "Chaninchana"
+
+msgid "AssessmentQuestions"
+msgstr "Imaynatan yachaqekunapaq chaninchay kanqa ? Iman kashan paykuna yachachinata atinankupaq ?"
+
+msgid "AssessmentInformation"
+msgstr "Tapukunamanta qhawarichina. Imakunamanta chaninchay. Ima yupipaykuna."
+
+msgid "langNameOfLang[\'dutch_corporate\']"
+msgstr ""
+
+msgid "TitleColumnGradebook"
+msgstr "Patara chaninchanapaq sutinchaynin"
+
+msgid "QualifyWeight"
+msgstr "Chaninchaymanta llasaynin"
+

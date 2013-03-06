@@ -1,0 +1,138 @@
+msgid "BackList"
+msgstr "กลับไปที่กล่องรับส่งงาน"
+
+msgid "ShowFeedback"
+msgstr "แสดงความเห็นที่ตอบกลับ"
+
+msgid "GiveFeedback"
+msgstr "ชื่อภาษาอังกฤษ / แก้ไข การตอบกลับ"
+
+msgid "JustUploadInSelect"
+msgstr "ส่งเข้ามาล่าสุด"
+
+msgid "MailingNothingFor"
+msgstr "ไม่มีเจ้าของ"
+
+msgid "MailingFileNotRegistered"
+msgstr "ไม่ได้สมัครเรียนในวิชานี้"
+
+msgid "MailingFileSentTo"
+msgstr "ส่งถึง"
+
+msgid "MailingFileIsFor"
+msgstr "สำหรับ"
+
+msgid "MailingFileRecipDup"
+msgstr "multiple users have"
+
+msgid "MailingFileNoRecip"
+msgstr "name does not contain any recipient-id"
+
+msgid "MailingFileNoPostfix"
+msgstr "ชื่อต้องไม่ลงท้ายด้วย"
+
+msgid "MailingFileNoPrefix"
+msgstr "ชื่อต้องไม่เริ่มด้วย"
+
+msgid "MailingFileFunny"
+msgstr "no name, or extension not 1-4 letters or digits"
+
+msgid "MailingZipDups"
+msgstr "Mailing zipfile must not contain duplicate files - it will not be sent"
+
+msgid "MailingZipPhp"
+msgstr "Mailing zipfile must not contain php files - it will not be sent"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "Mailing zipfile is empty or not a valid zipfile"
+
+msgid "MailingWrongZipfile"
+msgstr "Mailing must be zipfile with STUDENTID or LOGINNAME"
+
+msgid "MailingConfirmSend"
+msgstr "ส่งไฟล์เนื้อหาให้แต่ละคน Send content files to individual destinations ?"
+
+msgid "MailingSend"
+msgstr "ส่งไฟล์เนื้อหา Send content files"
+
+msgid "MailingNotYetSent"
+msgstr "Mailing content files have not yet been sent out..."
+
+msgid "MailingInSelect"
+msgstr "---ส่งอีเมล---"
+
+msgid "MailingAsUsername"
+msgstr "ส่งอีเมล Mailing"
+
+msgid "FileDeleted"
+msgstr "ไฟล์ที่เลือกไว้ ได้เอาออกจากกล่องรับส่งงานแล้ว"
+
+msgid "DocAdd"
+msgstr "ส่งรายงานเข้าเรียบร้อยแล้ว"
+
+msgid "Sender"
+msgstr "ผู้ส่ง"
+
+msgid "Author"
+msgstr "เจ้าของงาน"
+
+msgid "FileSize"
+msgstr "ขนาดไฟล์"
+
+msgid "Title"
+msgstr "ชื่อเรื่อง"
+
+msgid "OverwriteFile"
+msgstr "บันทึกทับไฟล์ที่ส่งไปให้ก่อนหน้านี้"
+
+msgid "Ok"
+msgstr "ตกลง"
+
+msgid "Unknown"
+msgstr "ไม่รู้จัก"
+
+msgid "SentOn"
+msgstr "บน"
+
+msgid "SentTo"
+msgstr "ส่งถึง"
+
+msgid "ConfirmDelete"
+msgstr "จะเอาออกจากรายการของคุณเท่านั้น"
+
+msgid "SendTo"
+msgstr "ส่งถึง"
+
+msgid "Description"
+msgstr "คำอธิบายไฟล์งาน"
+
+msgid "UploadFile"
+msgstr "โอนย้ายไฟล์ข้อมูลขึ้น"
+
+msgid "ErrorCreatingDir"
+msgstr "ไมสามารถสร้างแฟ้มเก็บงานให้ได้ โปรดติดต่อผู้บริหารระบบของคุณ."
+
+msgid "UploadError"
+msgstr "มีข้อผิดพลาดในการโอนย้ายไฟล์ โปรดติดต่อผู้บริหารระบบของคุณ."
+
+msgid "TooBig"
+msgstr "คุณไม่ได้เลือกไฟล์หรือเลือกไฟล์ใหญ่เกินพิกัด"
+
+msgid "NoFileSpecified"
+msgstr "คุณไม่ได้ระบุไฟล์ที่จะโอนย้าย"
+
+msgid "NoUserSelected"
+msgstr "โปรดเลือกชื่อผู้ใช้ที่ต้องการส่งไฟล์ถึง"
+
+msgid "BadFormData"
+msgstr "การรับค่าล้มเหลว:ข้อมูลเสียหาย โปรดติดต่อผู้บริหารระบบของคุณ."
+
+msgid "GeneralError"
+msgstr "มีข้อผิดพลาด. โปรดติดต่อผู้บริหารระบบของคุณ."
+
+msgid "Dropbox"
+msgstr "กล่องรับส่งงาน"
+
+msgid "Help"
+msgstr "ระบบช่วยเหลือ Help"
+

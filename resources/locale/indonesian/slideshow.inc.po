@@ -1,0 +1,42 @@
+msgid "Height"
+msgstr "Tinggi"
+
+msgid "ResizingComment"
+msgstr "ubah ukuran gambar ke dimensi berikut ini (dalam pixel)"
+
+msgid "Width"
+msgstr "Lebar"
+
+msgid "Resizing"
+msgstr "UBAH UKURAN"
+
+msgid "NoResizingComment"
+msgstr "Tampilkan semua image dalam ukuran aslinya. Tidak ada perubahan ukuran. Scrollbars akan otomatis tampil jika gambar lebih besar dari ukuran monitor anda."
+
+msgid "ShowThumbnails"
+msgstr "Tampilkan Thumbnails"
+
+msgid "SetSlideshowOptions"
+msgstr "Set opsi Slideshow"
+
+msgid "SlideshowOptions"
+msgstr "Opsi Slideshow"
+
+msgid "NoResizing"
+msgstr "TANPA PERUBAHAN UKURAN (default)"
+
+msgid "ExitSlideshow"
+msgstr "Keluar dari Slideshow"
+
+msgid "SlideShow"
+msgstr "Slideshow"
+
+msgid "PreviousSlide"
+msgstr "Slide Sebelumnya"
+
+msgid "NextSlide"
+msgstr "Slide Berikutnya"
+
+msgid "ViewSlideshow"
+msgstr "Lihat Slideshow"
+

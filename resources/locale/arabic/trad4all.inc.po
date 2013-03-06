@@ -1,0 +1,1476 @@
+msgid "Title"
+msgstr "العنوان"
+
+msgid "By"
+msgstr "بواسطة"
+
+msgid "UsersOnline"
+msgstr "الأعضاء المتصلون"
+
+msgid "Remove"
+msgstr "إزالة"
+
+msgid "langEnter"
+msgstr " الرجوع إلى قائمة مقرراتي"
+
+msgid "Description"
+msgstr "وصف"
+
+msgid "Links"
+msgstr " روابط"
+
+msgid "langWorks"
+msgstr " نشرات الطلاب"
+
+msgid "Forums"
+msgstr "منتديات"
+
+msgid "langExercices"
+msgstr "اختبارات"
+
+msgid "langCreateDir"
+msgstr "إنشاء مجلد"
+
+msgid "Name"
+msgstr "الإسم"
+
+msgid "langComment"
+msgstr "تعليق"
+
+msgid "langVisible"
+msgstr "ظاهر / مخفي"
+
+msgid "langNewDir"
+msgstr "اسم المجلد الجديد (بالإنجليزي)"
+
+msgid "langDirCr"
+msgstr "تم إنشاء مجلد"
+
+msgid "Download"
+msgstr "تنزيل"
+
+msgid "langGroup"
+msgstr "مجموعات"
+
+msgid "langEdit"
+msgstr "تحرير"
+
+msgid "langGroupForum"
+msgstr "منتدى المجموعة"
+
+msgid "Language"
+msgstr "اللغة"
+
+msgid "LoginName"
+msgstr " التسجيل"
+
+msgid "AutostartMp3"
+msgstr "اضغط على موافق إذا كنت ترغب في تشغيل الملف الصوتي تلقائياً"
+
+msgid "Assignments"
+msgstr "نشرات الطلاب"
+
+msgid "Forum"
+msgstr " المنتديات"
+
+msgid "langDelImage"
+msgstr "إزالة صورة"
+
+msgid "langCode"
+msgstr "رمز المقرر"
+
+msgid "langUp"
+msgstr "أعلى"
+
+msgid "Down"
+msgstr "أسفل"
+
+msgid "Up"
+msgstr "أعلى"
+
+msgid "Theme"
+msgstr "موضوع/شكل"
+
+msgid "TheListIsEmpty"
+msgstr "القائمة فارغة"
+
+msgid "langUniqueSelect"
+msgstr "( اختيارات متعددة (جواب واحد فقط"
+
+msgid "langCourseCreate"
+msgstr " إنشاء مقرر"
+
+msgid "langTodo"
+msgstr "مهام"
+
+msgid "UserName"
+msgstr "اسم المستخدم"
+
+msgid "lang_show_hide"
+msgstr "إظهار / إخفاء"
+
+msgid "langCategoryMod"
+msgstr "تعديل التصنيف"
+
+msgid "Hide"
+msgstr "إخفاء"
+
+msgid "langDear"
+msgstr "عزيزي"
+
+msgid "langArchive"
+msgstr "الأرشيف"
+
+msgid "langCourseCode"
+msgstr "رمز المقرر"
+
+msgid "langNoDescription"
+msgstr "لا يوجد وصف"
+
+msgid "langOfficialCode"
+msgstr "الرمز الرسمي"
+
+msgid "FirstName"
+msgstr "الإسم الأول"
+
+msgid "LastName"
+msgstr "اللقب"
+
+msgid "Status"
+msgstr "الحالة"
+
+msgid "langEmail"
+msgstr "البريد الإلكتروني"
+
+msgid "SlideshowConversion"
+msgstr "محول شرائح العرض"
+
+msgid "UploadFile"
+msgstr "تحميل الملف"
+
+msgid "AvailableFrom"
+msgstr "متوفر من"
+
+msgid "AvailableTill"
+msgstr "متوفر حتى"
+
+msgid "Preview"
+msgstr "معاينة"
+
+msgid "Type"
+msgstr "النوع"
+
+msgid "EmailAddress"
+msgstr "عنوان البريد الإلكتروني"
+
+msgid "Organisation"
+msgstr "المؤسسة"
+
+msgid "Reporting"
+msgstr "التقرير"
+
+msgid "Code"
+msgstr "الرمز"
+
+msgid "Update"
+msgstr "تحديث"
+
+msgid "CurrentCourse"
+msgstr "المقرر الحالي"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Info"
+msgstr " معلومات"
+
+msgid "Search"
+msgstr "بحث"
+
+msgid "AdvancedSearch"
+msgstr "بحث متقدم"
+
+msgid "Open"
+msgstr " افتح"
+
+msgid "Import"
+msgstr "استيراد"
+
+msgid "AddAnother"
+msgstr "أضف أخر"
+
+msgid "Author"
+msgstr "الكاتب"
+
+msgid "TrueFalse"
+msgstr "صح / خطأ"
+
+msgid "QuestionType"
+msgstr "نوع السؤال"
+
+msgid "NoSearchResults"
+msgstr " لم يتم العثور على نتائج للبحث"
+
+msgid "SelectQuestion"
+msgstr "حدد سؤال"
+
+msgid "AddNewQuestionType"
+msgstr "أضف نوع سؤال جديد"
+
+msgid "Numbered"
+msgstr "Numbered"
+
+msgid "iso639_2_code"
+msgstr "ar"
+
+msgid "iso639_1_code"
+msgstr "ar"
+
+msgid "charset"
+msgstr "utf-8"
+
+msgid "text_dir"
+msgstr "rtl"
+
+msgid "left_font_family"
+msgstr "tahoma, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "tahoma, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr ","
+
+msgid "number_decimal_separator"
+msgstr "."
+
+msgid "dateFormatShort"
+msgstr "%b %d, %y"
+
+msgid "dateFormatLong"
+msgstr "%A %B %d, %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%B %d, %Y at %I:%M %p"
+
+msgid "timeNoSecFormat"
+msgstr "%I:%M %p"
+
+msgid "langYes"
+msgstr "نعم"
+
+msgid "langNo"
+msgstr "لا"
+
+msgid "Next"
+msgstr "التالي"
+
+msgid "langAllowed"
+msgstr "متاح"
+
+msgid "langBackHome"
+msgstr "عودة إلى الصفحة الرئيسية لـ"
+
+msgid "langPropositions"
+msgstr "اقتراحات من أجل تطوير الـ"
+
+msgid "langMaj"
+msgstr "تحديث"
+
+msgid "langModify"
+msgstr "تعديل"
+
+msgid "langDelete"
+msgstr "حذف"
+
+msgid "langInvisible"
+msgstr "إخفاء"
+
+msgid "langSave"
+msgstr "حفظ"
+
+msgid "langMove"
+msgstr "نقل"
+
+msgid "Help"
+msgstr "مساعدة"
+
+msgid "langOk"
+msgstr "موافق"
+
+msgid "langAdd"
+msgstr "  أضف"
+
+msgid "langAddIntro"
+msgstr "أضف نص توضيحي"
+
+msgid "langBackList"
+msgstr "الرجوع للقائمة"
+
+msgid "langText"
+msgstr "نص"
+
+msgid "langEmpty"
+msgstr " لقد قمت بترك بعض الحقوق فارغة. <br /> استخدم <b> زر الرجوع </b> في المتصفح وحاول مرة أخرى. <br /> اذا قمت بتجاهل رمز المقرر , انظر الى برنامج المقرر"
+
+msgid "langConfirmYourChoice"
+msgstr "فضلا أكد اختيارك"
+
+msgid "langAnd"
+msgstr "و"
+
+msgid "langChoice"
+msgstr "اختيارك"
+
+msgid "langFinish"
+msgstr "إنتهاء"
+
+msgid "langCancel"
+msgstr "إلغاء"
+
+msgid "langNotAllowed"
+msgstr "غير مسموح"
+
+msgid "langNotLogged"
+msgstr "لم تسجل دخولك لمقرر"
+
+msgid "langManager"
+msgstr "المدير"
+
+msgid "langOptional"
+msgstr "اختياري"
+
+msgid "NextPage"
+msgstr "الصفحة التالية"
+
+msgid "PreviousPage"
+msgstr "الصفحة السابقة"
+
+msgid "langUse"
+msgstr "استخدم"
+
+msgid "langTotal"
+msgstr "الإجمالي"
+
+msgid "langTake"
+msgstr "خذ"
+
+msgid "langOne"
+msgstr "واحد"
+
+msgid "langSeveral"
+msgstr "بعض"
+
+msgid "langNotice"
+msgstr "بلاغ"
+
+msgid "langDate"
+msgstr "التاريخ"
+
+msgid "langAmong"
+msgstr "من بين"
+
+msgid "langShow"
+msgstr "أظهر"
+
+msgid "langMyCourses"
+msgstr "مقرراتي"
+
+msgid "langModifyProfile"
+msgstr "الملف الشخصي"
+
+msgid "langMyStats"
+msgstr "معاينة إحصائياتي"
+
+msgid "langLogout"
+msgstr "تسجيل خروج"
+
+msgid "langMyAgenda"
+msgstr "أجندتي"
+
+msgid "langCourseHomepage"
+msgstr "صفحة المقرر"
+
+msgid "langCourseManagerview"
+msgstr "معاينة واجهة المدرب"
+
+msgid "langStudentView"
+msgstr " معاينة واجهة الطلاب"
+
+msgid "AddResource"
+msgstr "أضفه"
+
+msgid "AddedResources"
+msgstr "مرفقات"
+
+msgid "lang_modify_resource"
+msgstr "تعديل / إضافة مصادر"
+
+msgid "lang_resource"
+msgstr "المصدر"
+
+msgid "lang_resources"
+msgstr "المصادر"
+
+msgid "langNameOfLang[\'arabic\']"
+msgstr ""
+
+msgid "langNameOfLang[\'brazilian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'bulgarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'catalan\']"
+msgstr ""
+
+msgid "langNameOfLang[\'croatian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'danish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english\']"
+msgstr ""
+
+msgid "langNameOfLang[\'finnish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_KM\']"
+msgstr ""
+
+msgid "langNameOfLang[\'galician\']"
+msgstr ""
+
+msgid "langNameOfLang[\'german\']"
+msgstr ""
+
+msgid "langNameOfLang[\'greek\']"
+msgstr ""
+
+msgid "langNameOfLang[\'italian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'japanese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'polish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'portuguese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'russian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'simpl_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish\']"
+msgstr ""
+
+msgid "Close"
+msgstr "اغلق"
+
+msgid "langPlatform"
+msgstr "النظام"
+
+msgid "localLangName"
+msgstr "اللغة"
+
+msgid "email"
+msgstr "البريد الإلكتروني"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "عفوا ! رمز المقرر مستخدم مسبقا, فضلا اختر واحدا أخر."
+
+msgid "Statistics"
+msgstr "احصائيات"
+
+msgid "langGrouplist"
+msgstr "قائمة المجموعات"
+
+msgid "langPrevious"
+msgstr "السابق"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "المجلد المقصود غير موجود"
+
+msgid "Courses"
+msgstr "مقررات"
+
+msgid "In"
+msgstr "في"
+
+msgid "langShowAll"
+msgstr "أظهر الجميع"
+
+msgid "langPage"
+msgstr "الصفحة"
+
+msgid "englishLangName"
+msgstr "English"
+
+msgid "Home"
+msgstr "البداية"
+
+msgid "langAreYouSureToDelete"
+msgstr "هل تريد الحذف حقا؟"
+
+msgid "SelectAll"
+msgstr "تحديد الكل"
+
+msgid "UnSelectAll"
+msgstr "إلغاء تحديد الكل"
+
+msgid "WithSelected"
+msgstr "With selected"
+
+msgid "langOnLine"
+msgstr "متصل"
+
+msgid "langUsers"
+msgstr "المستخدمين"
+
+msgid "langPlatformAdmin"
+msgstr "لوحة تحكم الإدارة"
+
+msgid "langNameOfLang[\'hungarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'indonesian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'malay\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovenian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish_latin\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swedish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'thai\']"
+msgstr ""
+
+msgid "langNameOfLang[\'turkce\']"
+msgstr ""
+
+msgid "langNameOfLang[\'vietnamese\']"
+msgstr ""
+
+msgid "UserInfo"
+msgstr "معلومات المستخدم"
+
+msgid "langModifyQuestion"
+msgstr "تعديل السؤال"
+
+msgid "langCheckAll"
+msgstr "اختر الجميع"
+
+msgid "langNbAnnoucement"
+msgstr "إعلان"
+
+msgid "lang_no_access_here"
+msgstr " لا يسمح بالوصول إلى هنا"
+
+msgid "langOtherCourses"
+msgstr " مقررات أخرى"
+
+msgid "Doc"
+msgstr "مسار التعلم"
+
+msgid "PlataformAdmin"
+msgstr "مدير المنصة"
+
+msgid "Groups"
+msgstr "مجموعات"
+
+msgid "GroupManagement"
+msgstr "إدارة المجموعات"
+
+msgid "All"
+msgstr "الكل"
+
+msgid "None"
+msgstr "none"
+
+msgid "langSorry"
+msgstr "اختر المقرر الأول"
+
+msgid "langDenied"
+msgstr "غير متاح"
+
+msgid "Today"
+msgstr "اليوم"
+
+msgid "langCourseHomepageLink"
+msgstr "صفحة المقرر"
+
+msgid "Attachment"
+msgstr "مرفق"
+
+msgid "User"
+msgstr "اسم المستخدم"
+
+msgid "MondayInit"
+msgstr "M"
+
+msgid "TuesdayInit"
+msgstr "T"
+
+msgid "WednesdayInit"
+msgstr "W"
+
+msgid "ThursdayInit"
+msgstr "T"
+
+msgid "FridayInit"
+msgstr "F"
+
+msgid "SaturdayInit"
+msgstr "S"
+
+msgid "SundayInit"
+msgstr "S"
+
+msgid "MondayShort"
+msgstr "الإثنين"
+
+msgid "TuesdayShort"
+msgstr "الثلاثاء"
+
+msgid "WednesdayShort"
+msgstr "الأربعاء"
+
+msgid "ThursdayShort"
+msgstr "الخميس"
+
+msgid "FridayShort"
+msgstr "الجمعة"
+
+msgid "SaturdayShort"
+msgstr "السبت"
+
+msgid "SundayShort"
+msgstr "الأحد"
+
+msgid "MondayLong"
+msgstr "الإثنين"
+
+msgid "TuesdayLong"
+msgstr "الثلاثاء"
+
+msgid "WednesdayLong"
+msgstr "الأربعاء"
+
+msgid "ThursdayLong"
+msgstr "الخميس"
+
+msgid "FridayLong"
+msgstr "الجمعة"
+
+msgid "SaturdayLong"
+msgstr "السبت"
+
+msgid "SundayLong"
+msgstr "الأحد"
+
+msgid "JanuaryInit"
+msgstr "J"
+
+msgid "FebruaryInit"
+msgstr "F"
+
+msgid "MarchInit"
+msgstr "M"
+
+msgid "AprilInit"
+msgstr "A"
+
+msgid "MayInit"
+msgstr "M"
+
+msgid "JuneInit"
+msgstr "J"
+
+msgid "JulyInit"
+msgstr "J"
+
+msgid "AugustInit"
+msgstr "A"
+
+msgid "SeptemberInit"
+msgstr "S"
+
+msgid "OctoberInit"
+msgstr "O"
+
+msgid "NovemberInit"
+msgstr "N"
+
+msgid "DecemberInit"
+msgstr "D"
+
+msgid "JanuaryShort"
+msgstr "Jan"
+
+msgid "FebruaryShort"
+msgstr "Feb"
+
+msgid "MarchShort"
+msgstr "Mar"
+
+msgid "AprilShort"
+msgstr "Apr"
+
+msgid "MayShort"
+msgstr "May"
+
+msgid "JuneShort"
+msgstr "Jun"
+
+msgid "JulyShort"
+msgstr "Jul"
+
+msgid "AugustShort"
+msgstr "Aug"
+
+msgid "SeptemberShort"
+msgstr "Sep"
+
+msgid "OctoberShort"
+msgstr "Oct"
+
+msgid "NovemberShort"
+msgstr "Nov"
+
+msgid "DecemberShort"
+msgstr "Dec"
+
+msgid "JanuaryLong"
+msgstr "يناير"
+
+msgid "FebruaryLong"
+msgstr "فبراير"
+
+msgid "MarchLong"
+msgstr "مارس"
+
+msgid "AprilLong"
+msgstr "أبريل"
+
+msgid "MayLong"
+msgstr "مايو"
+
+msgid "JuneLong"
+msgstr "يونيو"
+
+msgid "JulyLong"
+msgstr "يوليو"
+
+msgid "AugustLong"
+msgstr "أغسطس"
+
+msgid "SeptemberLong"
+msgstr "سبتمبر"
+
+msgid "OctoberLong"
+msgstr "أكتوبر"
+
+msgid "NovemberLong"
+msgstr "نوفمبر"
+
+msgid "DecemberLong"
+msgstr "ديسمبر"
+
+msgid "langMyCompetences"
+msgstr "قدراتي"
+
+msgid "langMyDiplomas"
+msgstr "دبلوماتي"
+
+msgid "langMyPersonalOpenArea"
+msgstr "مساحتي الشخصية المفتوحة"
+
+msgid "langMyTeach"
+msgstr "ما أنا قادرة على تدريسه"
+
+msgid "Agenda"
+msgstr "أجندة"
+
+msgid "HourShort"
+msgstr "h"
+
+msgid "PleaseTryAgain"
+msgstr "فضلا كرر المحاولة"
+
+msgid "UplNoFileUploaded"
+msgstr "لم يتم تحميل الملف."
+
+msgid "UplSelectFileFirst"
+msgstr "فضلا حدد الملف قبل النقر على زر التحميل"
+
+msgid "UplNotAZip"
+msgstr "الملف الذي اخترته ليس ملف مضغوط zip"
+
+msgid "UplUploadSucceeded"
+msgstr "تم تحميل الملف بنجاح"
+
+msgid "ExportAsCSV"
+msgstr "تصدير كملف CSV"
+
+msgid "ExportAsXLS"
+msgstr " تصدير كملف  XLS"
+
+msgid "langOpenarea"
+msgstr "المنطقة الشخصية المفتوحة"
+
+msgid "Done"
+msgstr "تم"
+
+msgid "Documents"
+msgstr " مستندات"
+
+msgid "DocumentAdded"
+msgstr "لقد تم إضافة المستند بنجاح"
+
+msgid "DocumentUpdated"
+msgstr "لقد تم تحديث المستند بنجاح"
+
+msgid "DocumentInFolderUpdated"
+msgstr "تم تحميل المستند  في المجلد"
+
+msgid "Course_description"
+msgstr "وصف المقرر"
+
+msgid "Document"
+msgstr "مستند"
+
+msgid "Learnpath"
+msgstr " مسار تعليمي"
+
+msgid "Link"
+msgstr "رابط"
+
+msgid "Announcement"
+msgstr "الإعلانات"
+
+msgid "Dropbox"
+msgstr "صندوق المشاركات"
+
+msgid "Quiz"
+msgstr " تمارين"
+
+msgid "langChat"
+msgstr "محادثة"
+
+msgid "Conference"
+msgstr "إجتماع"
+
+msgid "Student_publication"
+msgstr "الواجبات"
+
+msgid "Tracking"
+msgstr "التقرير"
+
+msgid "langhomepage_link"
+msgstr "إضافة رابط لهذه الصفحة"
+
+msgid "Course_setting"
+msgstr "إعدادات المقرر"
+
+msgid "langbackup"
+msgstr "نسخ إحتياطي للمقرر"
+
+msgid "langcopy_course_content"
+msgstr "انسخ محتويات هذا المقرر"
+
+msgid "langrecycle_course"
+msgstr "إعادة استخدام هذا المقرر"
+
+msgid "StartDate"
+msgstr "تاريخ البداية"
+
+msgid "EndDate"
+msgstr "تاريخ النهاية"
+
+msgid "StartTime"
+msgstr "وقت البداية"
+
+msgid "EndTime"
+msgstr "وقت النهاية"
+
+msgid "langYouWereCalled"
+msgstr "تم استدعاؤك للمحادثة مع"
+
+msgid "langDoYouAccept"
+msgstr "هل توافق؟"
+
+msgid "Everybody"
+msgstr "الجميع"
+
+msgid "SentTo"
+msgstr "ظاهر ل"
+
+msgid "Export"
+msgstr "تصدير"
+
+msgid "Tools"
+msgstr "أدوات"
+
+msgid "Everyone"
+msgstr "أي شخص"
+
+msgid "SelectGroupsUsers"
+msgstr "حدد مجموعات / مستخدمين"
+
+msgid "Student"
+msgstr "طالب"
+
+msgid "Teacher"
+msgstr "مدرس"
+
+msgid "Send2All"
+msgstr "لم تقم بتحديد مستخدم / مجموعة. العنصر  ظاهر لجميع المستخدمين"
+
+msgid "Wiki"
+msgstr "ويكي"
+
+msgid "Complete"
+msgstr "اكتمل"
+
+msgid "Incomplete"
+msgstr "غير مكتمل"
+
+msgid "reservation"
+msgstr "حجز"
+
+msgid "StartTimeWindow"
+msgstr "البداية"
+
+msgid "EndTimeWindow"
+msgstr "النهاية"
+
+msgid "AccessNotAllowed"
+msgstr "الوصول إلى هذه الصفحة غير متاج"
+
+msgid "InThisCourse"
+msgstr "في هذا المقرر"
+
+msgid "ThisFieldIsRequired"
+msgstr "هذا الحقل مطلوب"
+
+msgid "AllowedHTMLTags"
+msgstr "مسموح بشفرة HTML"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "النموذج يحتوي على أخطاء أو بيانات غير مكتملة , فضلا افحص مدخلاتك"
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "التاريخ الأول يجب أن يكون قبل تاريخ النهاية"
+
+msgid "InvalidDate"
+msgstr "تاريخ غير صالح"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "مسموح فقط بالحروف والأرقام"
+
+msgid "langBasicOverview"
+msgstr "قم بتنظيم"
+
+msgid "CourseAdminRole"
+msgstr "مدير المقرر"
+
+msgid "UserRole"
+msgstr "الدور"
+
+msgid "OnlyImagesAllowed"
+msgstr "فقط PNG, JPG or GIF الصور المسموح بها هي"
+
+msgid "ViewRight"
+msgstr "معاينة"
+
+msgid "EditRight"
+msgstr "تحرير"
+
+msgid "DeleteRight"
+msgstr "حذف"
+
+msgid "OverviewCourseRights"
+msgstr "نظرة عامة عن الأدوار و الحقوق"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "التركيز على الدور"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr " تركيز على الصلاحيات"
+
+msgid "langAdvanced"
+msgstr "قم ببناء"
+
+msgid "RightValueModified"
+msgstr " تم تعدبل القيمة"
+
+msgid "course_rights"
+msgstr "نظرة عامة على الأدوار و الحقوق"
+
+msgid "Visio_conference"
+msgstr "إجتماع افتراضي (تخيلي)"
+
+msgid "CourseAdminRoleDescription"
+msgstr "مدير المقرر"
+
+msgid "Move"
+msgstr "حرك"
+
+msgid "MoveTo"
+msgstr "انقل إلى"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "MoveFileTo"
+msgstr "حرك الملف إلى"
+
+msgid "Save"
+msgstr "حفظ"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Anonymous"
+msgstr "مجهول"
+
+msgid "h"
+msgstr "h"
+
+msgid "CreateNewGlobalRole"
+msgstr "Create new global role"
+
+msgid "CreateNewLocalRole"
+msgstr "Create new local role"
+
+msgid "Actions"
+msgstr "العملية"
+
+msgid "Inbox"
+msgstr "الوارد"
+
+msgid "ComposeMessage"
+msgstr "اكتب رسالة"
+
+msgid "Other"
+msgstr "اخر"
+
+msgid "AddRight"
+msgstr "أضف"
+
+msgid "CampusHomepage"
+msgstr "الصفحة الرئيسية للنظام"
+
+msgid "YouHaveNewMessage"
+msgstr "لديك رسالة جديدة"
+
+msgid "myActiveSessions"
+msgstr "جلساتي النشطة"
+
+msgid "myInactiveSessions"
+msgstr "جلساتي غير النشطة"
+
+msgid "FileUpload"
+msgstr "تحميل ملف"
+
+msgid "langMyActiveSessions"
+msgstr "جلساتي النشطة"
+
+msgid "langMyInActiveSessions"
+msgstr "جلساتي غير النشطة"
+
+msgid "langMySpace"
+msgstr "التقرير"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "لقد تم تنشيط الإمتداد لكن لا يمكن تشغيله حاليا"
+
+msgid "MyStudents"
+msgstr "طلابي"
+
+msgid "Progress"
+msgstr "الإجراء"
+
+msgid "Or"
+msgstr "أو"
+
+msgid "Uploading"
+msgstr "يتم التحميل ..."
+
+msgid "AccountExpired"
+msgstr "انتهت صلاحية الحساب"
+
+msgid "AccountInactive"
+msgstr "الحساب غير نشط"
+
+msgid "ActionNotAllowed"
+msgstr "العملية غير مسموح بها"
+
+msgid "SubTitle"
+msgstr "العنوان الفرعي"
+
+msgid "NoResourcesToRecycle"
+msgstr "لا يوجد مصادر لإعادة استخدامها"
+
+msgid "noOpen"
+msgstr "لا يمكن الفتح"
+
+msgid "TempsFrequentation"
+msgstr "Frequentation time"
+
+msgid "Progression"
+msgstr "التقدم"
+
+msgid "NoCourse"
+msgstr "لم يتم العثور على المقرر"
+
+msgid "Teachers"
+msgstr "المدرسين"
+
+msgid "Session"
+msgstr "الجلسة"
+
+msgid "Sessions"
+msgstr "الجلسات"
+
+msgid "NoSession"
+msgstr "لم يتم العثور على الجلسة"
+
+msgid "NoStudent"
+msgstr "لم يتم العثور على الطالب"
+
+msgid "Students"
+msgstr "الطلبة"
+
+msgid "NoResults"
+msgstr "لم يتم العثور على نتائج"
+
+msgid "Tutors"
+msgstr "Coaches"
+
+msgid "Tel"
+msgstr "الهاتف"
+
+msgid "NoTel"
+msgstr "رقم الهاتف"
+
+msgid "SendMail"
+msgstr "ارسل بريد"
+
+msgid "RdvAgenda"
+msgstr "Agenda appointment"
+
+msgid "VideoConf"
+msgstr "الإجتماع المرئي"
+
+msgid "MyProgress"
+msgstr "التقدم"
+
+msgid "NoOnlineStudents"
+msgstr "لا يوجد طلبة على متصلين"
+
+msgid "InCourse"
+msgstr "في المقرر"
+
+msgid "UserOnlineListSession"
+msgstr "قائمة المستخدمين المتصلين - الجلسة"
+
+msgid "From"
+msgstr "من"
+
+msgid "To"
+msgstr "إلى"
+
+msgid "Content"
+msgstr "المحتوى"
+
+msgid "year"
+msgstr "السنة"
+
+msgid "Years"
+msgstr "السنوات"
+
+msgid "Day"
+msgstr "اليوم"
+
+msgid "Days"
+msgstr "الأيام"
+
+msgid "PleaseStandBy"
+msgstr "فضلا انتظر .."
+
+msgid "AvailableUntil"
+msgstr "متوفر حتى"
+
+msgid "HourMinuteDivider"
+msgstr "h"
+
+msgid "Visio_classroom"
+msgstr "قاعات الدرس التخيلية"
+
+msgid "Survey"
+msgstr "استطلاع"
+
+msgid "More"
+msgstr "أكثر"
+
+msgid "ClickHere"
+msgstr "انقر هنا"
+
+msgid "Here"
+msgstr "هنا"
+
+msgid "SaveQuestion"
+msgstr "احفظ السؤال"
+
+msgid "ReturnTo"
+msgstr "يمكنك الرجوع الأن إلى"
+
+msgid "Horizontal"
+msgstr "أفقي"
+
+msgid "Vertical"
+msgstr "عمودي"
+
+msgid "DisplaySearchResults"
+msgstr "عرض نتائج البحث"
+
+msgid "DisplayAll"
+msgstr "عرض الكل"
+
+msgid "File_upload"
+msgstr "رفع ملف"
+
+msgid "NoUsersInCourse"
+msgstr "لا يوجد مستخدمين في المقرر"
+
+msgid "Percentage"
+msgstr "النسبة المؤوية"
+
+msgid "Information"
+msgstr "المعلومات"
+
+msgid "EmailDestination"
+msgstr "المستلم"
+
+msgid "SendEmail"
+msgstr "أرسل بريد إلكتروني"
+
+msgid "EmailTitle"
+msgstr "عنوان هذا البريد"
+
+msgid "EmailText"
+msgstr "نص البريد الإلكتروني"
+
+msgid "Send"
+msgstr "أرسل"
+
+msgid "Comments"
+msgstr "تعليقات"
+
+msgid "ModifyRecipientList"
+msgstr "تعديل قائمة المستلمين"
+
+msgid "Line"
+msgstr "الخط"
+
+msgid "NoLinkVisited"
+msgstr "لم يتم زيارة أي رابط"
+
+msgid "NoDocumentDownloaded"
+msgstr "لم يتم تنزيل أي مستند"
+
+msgid "Clicks"
+msgstr "نقرات"
+
+msgid "SearchResults"
+msgstr "نتائج البحث"
+
+msgid "SessionPast"
+msgstr "لصق"
+
+msgid "SessionActive"
+msgstr "نشط"
+
+msgid "SessionFuture"
+msgstr "لم يبدأ بعد"
+
+msgid "DateFormatLongWithoutDay"
+msgstr "%B %d, %Y"
+
+msgid "InvalidDirectoryPleaseCreateAnImagesFolder"
+msgstr "مجلد غير صالح : فضلا قم بإنشاء مجلد باسم images في أداة المستندات حتى يتم تحميل الصور إلى هذا المجلد"
+
+msgid "UsersConnectedToMySessions"
+msgstr "مشاهدة جميع المستخدمين المتصلين بجلستي"
+
+msgid "Category"
+msgstr "الفئة"
+
+msgid "DearUser"
+msgstr "عزيزي المستخدم"
+
+msgid "YourRegistrationData"
+msgstr "بيانات التسجيل الخاصة بك"
+
+msgid "ResetLink"
+msgstr "اضغط هنا لاستعادة كلمة المرور الخاصة بك"
+
+msgid "VisibilityChanged"
+msgstr "تغيرت الرؤية"
+
+msgid "MainNavigation"
+msgstr "الدليل الرئيسي"
+
+msgid "SeeDetail"
+msgstr "انظر التفاصيل"
+
+msgid "GroupSingle"
+msgstr "مجموعة"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "من فضلك حاول تسجيل الدخول مرة أخرى من خلال الصفحة الرئيسية"
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "من فضلك حاول تسجيل الدخول مرة أخرى باستخدام النموذج أدناه"
+
+msgid "AccessToFaq"
+msgstr "الوصول للأسئلة المتكررة"
+
+msgid "Faq"
+msgstr "الوصول للأسئلة المتكررة"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "اذكر المستخدمين غير النشطين منذ زمن بعيد"
+
+msgid "RemindInactiveLearnersMailSubject"
+msgstr "غير مفعّل على  %s"
+
+msgid "RemindInactiveLearnersMailContent"
+msgstr "عزيزي المستخدم ،أنت غير مفعّل على %s منذ أكثر من %s أيام"
+
+msgid "OpenIdAuthentication"
+msgstr "توثيق الهوية المفتوحة"
+
+msgid "UploadMaxSize"
+msgstr "تحميل اكبر حجم"
+
+msgid "Unknown"
+msgstr "غير معروف"
+
+msgid "MoveUp"
+msgstr "تحرك لأعلى"
+
+msgid "MoveDown"
+msgstr "تحرك لأسفل"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "فشل تحميل الملف : إن تمديد هذا الملف أو نوعه ممنوع"
+
+msgid "OpenIDURL"
+msgstr "رابط الهوية المفتوحة"
+
+msgid "UplFileTooBig"
+msgstr "حجم الملف كبير جدا من أجل التحميل"
+
+msgid "UplGenericError"
+msgstr "إن الملف الذي حمّلته لم يستلم بنجاح . يرجى إعادة المحاولة لاحقًا أو الاتصال بمدير إدارة البوابة ."
+
+msgid "MyGradebook"
+msgstr "كتاب درجاتي"
+
+msgid "Gradebook"
+msgstr "كتاب الدرجات"
+
+msgid "OpenIDWhatIs"
+msgstr "ماهي الهوية المفتوحة ؟"
+
+msgid "OpenIDDescription"
+msgstr "تقنية الهوية المفتوحة المسمّاة بـ \" OpenID\" تلغي  الحاجة إلى تعدد أسماء المستخدمين عبر المواقع الإلكترونية المختلفة ، كما تبسّط  لك تجربتك الخاصة بالإنترنت .و لك أن تختار \" موفر الهوية المفتوحة \" الذي يعتبر في الأساس أفضل مايلبي لك احتياجاتك ، ومن المهم أن تثق به .وفي الوقت نفسه ، يمكن أن يبقى حساب موفر الهوية المفتوحة الخاص بك معك ، مهما انتقلت.ومن أجل الأفضل للجميع ، فأن تقنية الهوية المفتوحة ليست ملكية خاصة ، كما أنها مجانية تمامًا .أما بالنسبة للأعمال التجارية ، فأن هذا يعني بالمجمل انخفاضًا في تكلفة إدارة الحساب وكلمة المرور ، في حين سيرسم شبكة مرور عالمية .كما ستخفض هذه التقنية وهي الهوية المفتوحة ، الشعور بالإحباط عند المستخدم ، بالسماح للمستخدمين لها بالسيطرة على الدخول ."
+
+msgid "NoManager"
+msgstr "بدون مدير"
+
+msgid "GeneralDescription"
+msgstr "نبذة عامة"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "ما هي أهمية هذا المقرر؟  هل هناك متطلبات مسبقة ؟ كيف هو حال هذا المقرر  مع المقررات الأخرى؟"
+
+msgid "GeneralDescriptionInformation"
+msgstr "وصف مختصر (عدد الساعات الرسمية المدونه الغرفة...) والمعلمين (الاسم واسم مكتب الهاتف البريد الالكتروني..."
+
+msgid "Objectives"
+msgstr "الأهداف"
+
+msgid "ObjectivesInformation"
+msgstr "عرض عام والاهداف التفصيليه للدورة"
+
+msgid "ObjectivesQuestions"
+msgstr "مالذي يمكن للطالب القيام به بعد الإنتهاء من هذا المقر؟ ماهو الشيئ الذي يتم دعوة الطلبة لفعله أثناء المقرر؟"
+
+msgid "Topics"
+msgstr "المواضيع"
+
+msgid "TopicsInformation"
+msgstr "قائمة المواضيع المدرجه في المقرر. أهمية كل موضوع. مستوى الصعوبه. البنية والاعتماد المتبادل في مختلف النواحي"
+
+msgid "TopicsQuestions"
+msgstr "كيفيه تقدم اجراءات المقرر؟ متى يجب على الطلبة الإهتمام؟ هل هناك مشاكل في طريقة الفهم؟"
+
+msgid "Methodology"
+msgstr "المصطلحات"
+
+msgid "MethodologyQuestions"
+msgstr "الأساليب والانشطه التي تساعد على بلوغ اهداف الدورة؟ على اي جدول؟"
+
+msgid "MethodologyInformation"
+msgstr "عرض لانشطه المؤتمر ، ومذكرات, البحث ، مختبرات..."
+
+msgid "CourseMaterial"
+msgstr "مواد المقرر"
+
+msgid "CourseMaterialQuestions"
+msgstr "هل هناك كتاب للمقرر، مذكرة ملزمة،  روابط   على الانترنت؟"
+
+msgid "CourseMaterialInformation"
+msgstr "نبذة عن المواد الدراسيه."
+
+msgid "HumanAndTechnicalResources"
+msgstr "الموارد البشرة والتقنية"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "هل هناك اساتذة و معلمين ودعم فني ومساعدين اجتماعيين وقاعات حاسب؟"
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "نبذة مختصرة عن هوية مختلف الأطراف وكذلك الخدمات التقنية المتوفرة."
+
+msgid "Assessment"
+msgstr "الواجبات"
+
+msgid "AssessmentQuestions"
+msgstr "كيف يمكن تقييم المستخدمين؟ هناك وضع استراتيجيات من أجل التحكم في الموضوع؟"
+
+msgid "AssessmentInformation"
+msgstr "مثال اسئله الامتحان. معايير النجاح. النصائح والأفكار."
+

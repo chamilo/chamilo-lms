@@ -1,0 +1,769 @@
+msgid "NewForumCreated"
+msgstr "Tikko tika izveidota jauna diskusiju telpa"
+
+msgid "NewThreadCreated"
+msgstr "Tikko tika izveidota jauna diskusiju virkne"
+
+msgid "AddHotpotatoes"
+msgstr "Pievienot \"Hotpotatoes\" testus"
+
+msgid "HideAttemptView"
+msgstr "Slēpt mēģinājumu skatu"
+
+msgid "ExtendAttemptView"
+msgstr "Paplašināt mēģinājumu skatu"
+
+msgid "LearnPathAddedTitle"
+msgstr "Augstāk izvietoto, satura veidošanas instrumentu pielietojumu, iepazīstiet zemāk:<br><br>"
+
+msgid "BuildComment"
+msgstr "- pašlaik jau atrodamies šajā instrumentā"
+
+msgid "BasicOverviewComment"
+msgstr "- <b>Mainiet</b> satura <b>elementu</b> atrašanās <b>secību</b>.   Pievienojiet tiem audio komentārus, vai muzikālu pavadījumu."
+
+msgid "DisplayComment"
+msgstr "- <b>Skatiet</b> izveidotā mācību satura kvalitāti <b>no Kursanta skata punkta</b> <br><br><br>Ar rīku joslā esošajiem papildus instrumentiem : <br><br>a) <b>Tēmas iestatījumi</b> : <br>- <b>Pievienojiet</b> tēmas satura rādītāja daļai <b> Lektora attēlu,</b><br> - <b>Publicējiet</b> ( padariet redzamu Lietotājiem !) izstrādāto saturu, <b><br>- Konvertējiet PowerPoint prezentācijas</b> slaidu secīgā mācību saturā, <b><br>- Augšupielādējiet</b> ārējus SCORM resursus<br><br>b) <b>Pievienot audio</b><br>- Pievienojiet satura daļai mutisku skaņas paskaidrojumu, jeb vienkārši patīkamu, atbilstošu fona mūziku"
+
+msgid "NewChapterComment"
+msgstr "- <b>Organizējiet</b> mācību saturu, izmantojot dalījumu nodaļās. Piem. Nodaļa 1, Nodaļa 2 ..."
+
+msgid "NewStepComment"
+msgstr "- <b>Pievienojiet</b> Mācību tēmai : <br> ___<b>satura elementus</b> -- tekstus,dokumentus, foto, audio, video, hipersaites …<br>___<b> praktiskās aktivitātes</b> – testus, patstāvīgi veicamus mājas darbus,<br>"
+
+msgid "lang_learning_path"
+msgstr "Mācību kursa tēmas"
+
+msgid "lang_learning_path_builder"
+msgstr "Mācību kursa veidotājprogramma"
+
+msgid "lang_description"
+msgstr "Kursa tēmas iestatījumi"
+
+msgid "LearnpathTitle"
+msgstr "Virsraksts"
+
+msgid "LearnpathPrerequisites"
+msgstr "Priekšnosacījumi mācību procesā"
+
+msgid "LearnpathMoveUp"
+msgstr "Augšup"
+
+msgid "LearnpathMoveDown"
+msgstr "Lejup"
+
+msgid "langThisItem"
+msgstr "šo mācību kursa elementu"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Virsraksts un apraksts"
+
+msgid "LearnpathChangeOrder"
+msgstr "Mainīt secību"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Pievienot priekšnosacījumus"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Labot virsrakstu un aprakstu"
+
+msgid "lang_delete"
+msgstr "Dzēst"
+
+msgid "lang_add_chapter"
+msgstr "Pievienot moduli"
+
+msgid "langLearnpathMystatus"
+msgstr "Mans padarītais šajā kursā"
+
+msgid "langLearnpathCompstatus"
+msgstr "pabeigts"
+
+msgid "langLearnpathIncomplete"
+msgstr "nepabeigts"
+
+msgid "langLearnpathPassed"
+msgstr "nokārtots"
+
+msgid "langLearnpathFailed"
+msgstr "neizdevās"
+
+msgid "langLearnpathPrevious"
+msgstr "Iepriekšējais mācību elements"
+
+msgid "langLearnpathNext"
+msgstr "Nākošais mācību elements"
+
+msgid "langLearnpathRestart"
+msgstr "Sākt no jauna"
+
+msgid "langLearnpathThisStatus"
+msgstr "Šis mācību elements pašreiz ir"
+
+msgid "langLearnpathToEnter"
+msgstr "Lai pieslēgtos,"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "Jums vispirms vajadzētu"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Posma nosaukums"
+
+msgid "langLearnpathStatus"
+msgstr "Statuss"
+
+msgid "langLearnpathScore"
+msgstr "Rezultāts"
+
+msgid "langLearnpathTime"
+msgstr "Laiks"
+
+msgid "langLearnpathVersion"
+msgstr "versija"
+
+msgid "langLearnpathRestarted"
+msgstr "Mācību elements nav pabeigts"
+
+msgid "langLearnpathNoNext"
+msgstr "Šis ir pēdējais mācību elements"
+
+msgid "langLearnpathNoPrev"
+msgstr "Šis ir pirmais mācību elements"
+
+msgid "LearnpathAddLearnpath"
+msgstr "Veidot jaunu Tēmu un tās saturu. (Tēmu skaits  - neierobežots!)"
+
+msgid "lang_learnpath_added"
+msgstr "Jauna mācību kursa tēma tika veiksmīgi izveidota. Jūs tagad varat tai pievienot nodaļas, apgūstama mācību satura elementus, klikšķinot uz ikonām ar uzzīmētu \"plusiņu\"<b>+</b>."
+
+msgid "LearnpathEditLearnpath"
+msgstr "Labot mācību kursa saturu"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "Izdzēst mācību tēmu"
+
+msgid "lang_learnpath_edited"
+msgstr "Mācību tēma tika labota"
+
+msgid "lang_learnpath_deleted"
+msgstr "Mācību tēma tika izdzēsta"
+
+msgid "LearnpathDoNotPublish"
+msgstr "Kursu nepublicēt"
+
+msgid "LearnpathPublish"
+msgstr "Publicēt tēmu kursa mājaslapā"
+
+msgid "LearnpathNotPublished"
+msgstr "nav publicēts"
+
+msgid "LearnpathPublished"
+msgstr "publicēts"
+
+msgid "lang_add_learnpath_module"
+msgstr "Pievienot jaunu moduli"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Pievienot jaunu moduli šim mācību kursam"
+
+msgid "lang_learnpath_module_added"
+msgstr "Jauns mācību temata modulis tika veiksmīgi izveidots. Jūs varat sākt tā posmu izveidi, klikšķinot uz ikonas ar attēlotu \"plusiņu\"<b>+</b>."
+
+msgid "LearnpathEditModule"
+msgstr "Labot moduļa aprakstu/virsrakstu"
+
+msgid "LearnpathDeleteModule"
+msgstr "Dzēst moduli"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Mācību plāna modulis tika veiksmīgi labots"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Mācību plāna modulis un visi posmi tajā tika dzēsti"
+
+msgid "LearnpathNoChapters"
+msgstr "Pagaidām neviens modulis nav pievienots."
+
+msgid "LearnpathAddItem"
+msgstr "Pievienot posmus šim modulim"
+
+msgid "LearnpathItemDeleted"
+msgstr "Mācību plāna posms tika izdzēsts"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "Lūdzu, pievienojiet šo(s) mācību plāna posmus modulim:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Labot posma papildus aprakstu/virsrakstu"
+
+msgid "lang_add_prereq"
+msgstr "Pievienot / labot šī posma priekšnoteikumus"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Dzēst posmu"
+
+msgid "LearnpathItemEdited"
+msgstr "Mācību plāna posms tika labots"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Tika izdzēsts!"
+
+msgid "lang_none"
+msgstr "NEVIENS"
+
+msgid "lang_forum_opened"
+msgstr "Iezīmētā diskusija tika atvērta jaunā logā."
+
+msgid "lang_link_opened"
+msgstr "Iezīmētā hipersaite tika atvērta jaunā logā."
+
+msgid "lang_short_help"
+msgstr "Lai pievienotu posmu, klikšķieniet uz \"plusiņa\"; lai pievienotu jaunu virsrakstu/aprakstu, klikšķiniet uz ikonas ar attēlotiem diviem dokumentiem. Jūs varat pārslēgties uz \"Kursanta skatu\", noklikšķinot uz attiecīgās hipersaites lapas augšdaļā."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "Šo mācību materiālu Jums nevar parādīt, jo Jūs neesiet izpildījis iepriekš apgūstamo zināšanu kontroles priekšnosacījumus. Tēmā paredzēts, ka Jums jāapgūst zināšanas soli pa solim. Lai turpinātu apmācības procesu, Jums veicot kontroles testus un parādot savas zināšanas, ir jāsaņem vismaz minimālo noteikto vērtējumu. Ja ir dota iespēja testus veikt vairākkārtīgi, atgriezieties mācību satura sākumā, apgūstiet to un izpildiet pārbaudes testu pilnvērtīgi."
+
+msgid "lang_author"
+msgstr "Autors"
+
+msgid "lang_date"
+msgstr "Datums"
+
+msgid "langBasicOverview"
+msgstr "Organizēt"
+
+msgid "langAdvanced"
+msgstr "Lektora instrumenti"
+
+msgid "langDisplay"
+msgstr "Kursanta skats"
+
+msgid "langNewChapter"
+msgstr "Pievienot satura nodaļu"
+
+msgid "langNewStep"
+msgstr "Pievienot mācību tēmai satura daļu vai aktivitāti"
+
+msgid "langEditPrerequisites"
+msgstr "Rediģēt priekšnosacījumus konkrētajā LO"
+
+msgid "langTitleManipulateChapter"
+msgstr "Rediģēt nodaļu"
+
+msgid "langTitleManipulateModule"
+msgstr "Rediģēt nodaļu"
+
+msgid "langTitleManipulateDocument"
+msgstr "Rediģēt dokumentu"
+
+msgid "langTitleManipulateLink"
+msgstr "Rediģēt hipersaiti"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Rediģēt testa struktūru"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Rediģēt mājas darbu"
+
+msgid "langEnterDataNewChapter"
+msgstr "Pievienot tēmai nodaļu"
+
+msgid "langEnterDataNewModule"
+msgstr "Ievadīt informāciju par nodaļu"
+
+msgid "langCreateNewStep"
+msgstr "Veidojiet mācību tēmas saturu pakāpeniski.<br>Pievienojiet saturam:<br><br>___jaunu interaktīvu mācību satura lapu ar teksta un mēdiju elementiem:"
+
+msgid "langNewDocument"
+msgstr "- Pievienot jaunu mācību satura lapu,<br>-- jeb, materiālu no mapes  Dokumenti, zemāk"
+
+msgid "langUseAnExistingResource"
+msgstr "___ jau iepriekš sagatavotus resursus :"
+
+msgid "langParent"
+msgstr "Nodaļa"
+
+msgid "langPosition"
+msgstr "Vieta satura rādītājā"
+
+msgid "langNewChapterCreated"
+msgstr "Jauna tēmas nodaļa ir izveidota. Jūs variet pievienot jaunu apakšnodaļu vai apgūstamu mācību elementu"
+
+msgid "langNewLinksCreated"
+msgstr "Jauna hipersaite tika pievienota"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "Jauns mājas darbs ir izveidots"
+
+msgid "langNewModuleCreated"
+msgstr "Jauna nodaļa ir izveidota. Jūs variet pievienot jaunu apakšnodaļu vai mācību elementu"
+
+msgid "langNewExerciseCreated"
+msgstr "Tests / kontroldarbs tika pievienots tēmas saturam"
+
+msgid "langItemRemoved"
+msgstr "Mācību objekts ir pārvietots"
+
+msgid "langConverting"
+msgstr "Konvertēt ..."
+
+msgid "langPpt2lpError"
+msgstr "PowerPoint. Kļūda PowerPoint konvertācijas laikā! Lūdzu pārbaudiet, vai PowerPoint faila nosaukumā, nav lietotas speciālas rakstu zīmes"
+
+msgid "langBuild"
+msgstr "Veidot"
+
+msgid "langViewModeEmbedded"
+msgstr "Skata veids: apvienotais"
+
+msgid "langViewModeFullScreen"
+msgstr "Skata veids: pilns ekrāns"
+
+msgid "langShowDebug"
+msgstr "Rādīt atkļūdošanu"
+
+msgid "langHideDebug"
+msgstr "Apslēpt atkļūdošanu"
+
+msgid "langCantEditDocument"
+msgstr "Šis dokuments nav rediģējams"
+
+msgid "langAfter"
+msgstr "Pēc"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Priekšnoteikumi (limits)"
+
+msgid "lang_loading"
+msgstr "Lapa tiek ielādēta, lūdzu uzgaidiet ..."
+
+msgid "lang_empty"
+msgstr "Šis temats nesatur nekādus mācību objektus."
+
+msgid "langHotPotatoesFinished"
+msgstr "Šis \"HotPotatoes\" tests ir noslēgts."
+
+msgid "langCompletionLimit"
+msgstr "Rādītāja \"Ieskaitīts\" slieksnis (minimāli nepieciešamie punkti)"
+
+msgid "langPrereqToEnter"
+msgstr "Lai piekļūtu"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "Jums vispirms jāpaveic"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Kā minimums, viens solis iztrūkst līdz"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "kas ir uzstādīts kā priekšnoteikums."
+
+msgid "langPrereqTestLimit1"
+msgstr "Jums ir jāsasniedz, kā minimums, vismaz"
+
+msgid "langPrereqTestLimit2"
+msgstr "punkti"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Patlaban Jūs esat ieguvuši:"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "atgriezties pie normāla ekrāna"
+
+msgid "langLearnpathFullScreen"
+msgstr "izmantot visu datorekrānu"
+
+msgid "langItemMissing1"
+msgstr "Te bija"
+
+msgid "langItemMissing2"
+msgstr "lapa (posms) oriģinālajā Chamilo mācību plānā."
+
+msgid "langDone"
+msgstr "Darīts!"
+
+msgid "langNoItemSelected"
+msgstr "Lai šeit būtu redzams apgūstams mācību materiāls, lūdzu, izvēlieties kādu tematu no satura rādītāja lapas kreisajā pusē"
+
+msgid "langNewDocumentCreated"
+msgstr "Mācību satura elements, mācību tēmas saturam, tika pievienots"
+
+msgid "langEditCurrentChapter"
+msgstr "Rediģēt konkrēto nodaļu"
+
+msgid "langditCurrentModule"
+msgstr "Rediģēt konkrēto nodaļu"
+
+msgid "langCreateTheDocument"
+msgstr "====<b>UZMANĪBU !</b>====    Ja lapai <b>nebūs virsraksta</b>, tad tā, pēc pievienošanas, <b>netiks saglabāta !</b>"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Pārvietot konkrēto dokumentu"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Rediģēt konkrēto dokumentu"
+
+msgid "langWarning"
+msgstr "<b>UZMANĪBU</b> !"
+
+msgid "langWarningEditingDocument"
+msgstr "Kad rediģējat tēmā esošu dokumentu, jaunā dokumenta saturs netiks izmainīts vecajā versijā, bet tas tiks saglabāts, kā jauns dokuments. Ja vēlaties veikt tēmai pievienota konkrēta dokumenta redakciju, variet to darīt izmantojot <b>Dokumentu instrumentu</b>."
+
+msgid "langDirectory"
+msgstr "Mape"
+
+msgid "langCreateTheExercise"
+msgstr "Pievienot tēmai testu / kontroldarbu"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Pārvietot konkrēto testu"
+
+msgid "langEditCurrentExecice"
+msgstr "Rediģēt konkrēto testu"
+
+msgid "langUploadScorm"
+msgstr "Importēt SCORM kursa tēmu"
+
+msgid "langPowerPointConvert"
+msgstr "Atvērt Chamilo RAPID = PowerPoint prezentāciju konvertētāju"
+
+msgid "langLPCreatedToContinue"
+msgstr "Lai turpinātu, pievienojiet kursa tēmai mācību objektu vai aktivitāti."
+
+msgid "langLPCreatedAddChapterStep"
+msgstr " <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Laipni lūdzam Chamilo mācību lektora darba telpā !</big></p>        <ul>            <li><b>Veidot</b> : Pievienojiet mācību objektus, elementus un aktivitātes Jūsu mācību kursa tēmai </li>            <li><b>Padariet tēmu vieglāk uztveramu</b> : Pievienojiet audio komentārus mācību tēmas satura sarakstā redzmajām sadaļām</li>            <li><b>Sekojiet sava darba kvalitātei</b> : Aplūkojiet izveidoto tēmas saturu no kursanta skata punkta</li>            <li><b>Lietojiet sadalījumu nodaļās</b> : Nodaļa 1, Nodaļa 2, vai savādāk, pēc jūsu ieskatiem....</li>            <li><b>Pievienojiet interaktīvos mācību elementus</b> : aktivitātes, testus,kontroldarbus, video, fleš un citas multimediju lapas</li>        </ul></html></body>"
+
+msgid "langPrerequisitesAdded"
+msgstr "Priekšnosacījumi konkrētajam mācību elementam tika pievienoti"
+
+msgid "langAddEditPrerequisites"
+msgstr "Pievienot / Rediģēt priekšnosacījumus"
+
+msgid "langMinimum"
+msgstr "Minimālais ieskaites punktu skaits testā"
+
+msgid "langMaximum"
+msgstr "Maksimālais ieskaites punktu skaits testā"
+
+msgid "langNoDocuments"
+msgstr "Dokumentu nav"
+
+msgid "langNoExercisesAvailable"
+msgstr "Testi nav pieejami"
+
+msgid "langNoLinksAvailable"
+msgstr "Hipersaite nav pieejama"
+
+msgid "langNoItemsInLp"
+msgstr "Tēma nesatur mācību elementus. Spiediet \"Veidot\" , lai aktivizētu tēmas izveides darba instrumentus"
+
+msgid "FirstPosition"
+msgstr "Pirmā pozīcija / sākums"
+
+msgid "NewQuiz"
+msgstr "Jauns tests"
+
+msgid "CreateTheForum"
+msgstr "Pievienot tēmai diskusiju forumu"
+
+msgid "AddLpIntro"
+msgstr "<strong>Laipni lūdzam</strong> Chamilo mācību kursa tēmas satura veidošanas instrumentā ! <br><br><b>Soli pa solim, veidojiet kursa tēmas saturu.</b> <br><br>Izveidotie <b>mācību materiāli</b> -  teksts, video, foto u.t.t , tiks attēloti ekrāna <b>labajā pusē</b>.<br> Mācību <b>satura  rādītājs</b> tiks novietots ekrāna <b>kreisajā</b> pusē."
+
+msgid "AddLpToStart"
+msgstr "Lai sāktu, piešķiriet Jūsu tēmai nosaukumu"
+
+msgid "CreateTheLink"
+msgstr "Pievienot kursa tēmai hipersaiti"
+
+msgid "MoveCurrentLink"
+msgstr "Pārvietot konkrēto hipersaiti"
+
+msgid "EditCurrentLink"
+msgstr "Rediģēt konkrēto hipersaiti"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "MoveCurrentStudentPublication"
+msgstr "Pārvietot konkrēto mājas darbu"
+
+msgid "EditCurrentStudentPublication"
+msgstr "Rediģēt konkrēto mājas darbu"
+
+msgid "AllowMultipleAttempts"
+msgstr "Atļaut vairākkārtējus testa mēģinājumus"
+
+msgid "PreventMultipleAttempts"
+msgstr "Neatļaut vairākkārtējus testa mēģinājumus"
+
+msgid "MakeScormRecordingExtra"
+msgstr "Veikt papildus SCORM ierakstus"
+
+msgid "MakeScormRecordingNormal"
+msgstr "Veikt SCORM ierakstus parasti"
+
+msgid "DocumentHasBeenDeleted"
+msgstr "Dokumentu nevar parādīt, jo tas ir izdzēsts"
+
+msgid "EditCurrentForum"
+msgstr "Rediģēt šo diskusiju"
+
+msgid "NoPrerequisites"
+msgstr "Nav priekšnosacījumu"
+
+msgid "NewExercise"
+msgstr "Jauns tests / kontroldarbs"
+
+msgid "CreateANewLink"
+msgstr "Pievienot jaunu hipersaiti"
+
+msgid "CreateANewForum"
+msgstr "Veidot jaunu diskusiju"
+
+msgid "LinkAdd"
+msgstr "Pievienot hipersaiti"
+
+msgid "WoogieConversionPowerPoint"
+msgstr "<b>Woogie</b> : Word dokumentu konvertētājs"
+
+msgid "WelcomeWoogieSubtitle"
+msgstr "Konvertētājs no MS Word uz tēmas saturu"
+
+msgid "WelcomeWoogieConverter"
+msgstr "Laipni lūdzam <b>Woogie Rapid Learning</b><ul type=\"1\"><li>Izvēleities datu bāzē tādu faila tipu kā .doc, .sxw, .odt<li>Augšuplādējiet to uz  Woogie. Tas tiks pārveidots SCORM kursā <li>Pēc konvertācijas Jūs variet pievienot audio komentārus katrā tēmas daļā, kā arī ievietot starp tēmas daļām jebkuru mācību objektu un aktivitāti</ul>"
+
+msgid "WoogieError"
+msgstr "Kļūda Word dokumenta konvertācijas laikā! Lūdzu pārbaudiet vai Word faila nosaukumā nav lietotas speciālas rakstu zīmes"
+
+msgid "WordConvert"
+msgstr "MS Word konvertētājs"
+
+msgid "Order"
+msgstr "Secība"
+
+msgid "InteractionID"
+msgstr "Mijiedarbības ID"
+
+msgid "TimeFinished"
+msgstr "Laiks ( pabeigts ...)"
+
+msgid "CorrectAnswers"
+msgstr "Pareizās atbildes"
+
+msgid "StudentResponse"
+msgstr "Kursantu atbildes"
+
+msgid "LatencyTimeSpent"
+msgstr "Mācībām patērētais laiks"
+
+msgid "Result"
+msgstr "Rezultāts"
+
+msgid "SplitStepsPerPage"
+msgstr "Lapa, mācību objekts"
+
+msgid "SplitStepsPerChapter"
+msgstr "Nodaļa, mācību objekts"
+
+msgid "TakeSlideName"
+msgstr "Lietot prezentācijas slaida nosaukumu, kā mācību satura lapas nosaukumu, satura rādītājā"
+
+msgid "CannotConnectToOpenOffice"
+msgstr "Dokumenta pievienošana konvertētājam ir atcelta. Lūdzu sazinieties ar platformas administratoru, lai fiksētu šo problēmu."
+
+msgid "OogieConversionFailed"
+msgstr "Konversija neizdevās.   <br />  Daži dokumenti ir pārāk sarežģīti, lai bez traucējumiem automātiski pārveidotu dokumentu. Mēs cenšamies to uzlabot."
+
+msgid "OogieUnknownError"
+msgstr "Konvertācija nezināma iemesla dēļ ir atcelta. <br>Lūdzu sazinieties ar administratoru lai iegūtu vairāk informācijas."
+
+msgid "OogieBadExtension"
+msgstr "Lūdzu augšupielādējiet tikai prezentācijas. Faila beigu paplašinājumam ir jābūt .ppt vai .odp"
+
+msgid "WoogieBadExtension"
+msgstr "Lūdzu augšupielādējiet tikai dokumentus. <br>Faila beigu paplašinājumam ir jābūt .doc, .docx vai .odt"
+
+msgid "ShowAudioRecorder"
+msgstr "Rādīt audio rakstītāju"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "Pilna teksta meklēšanas funkcija Chamilo nav pieejama. Lūdzu sazinieties ar Chamilo Administratoru"
+
+msgid "SearchFeatureSearchExplanation"
+msgstr "Lai atrastu kursa datubāzi, lūdzu lietojiet sekojošu sintaksi:
+termina pazīme:pazīme_nosaukums -exclude +include \"exact phrase\" <br>Piemēram: car pazīme:vilcējs -ferrari +ford \"high consumption\". This will show all the results for the word \\\'car\\\' tagged as \\\'truck\\\', not including the word \\\'ferrari\\\' but including the word \\\'ford\\\' and the exact phrase \\\'high consumption\\\'."
+
+msgid "ViewLearningPath"
+msgstr "Skatīt tēmu"
+
+msgid "SearchFeatureDocumentTagsIfIndexing"
+msgstr "Pazīmes, lai pievienotu dokumentam, ja ir indeksēts"
+
+msgid "ReturnToLearningPaths"
+msgstr "Tēmu iestatījumu / satura redakcija"
+
+msgid "UploadMp3audio"
+msgstr "Augšupielādēt Mp3 audio"
+
+msgid "UpdateAllAudioFragments"
+msgstr "Pievienot audio"
+
+msgid "LeaveEmptyToKeepCurrentFile"
+msgstr "Lai pievienotu uz datora esošu audio pavadījumu mācību lapas saturam, lietojiet pogu <b>Pārlūkot...</b>. <br><br>Lai saglabātu mācību lapu neizmainītu,  atstājiet importa lauka formu tukšu."
+
+msgid "RemoveAudio"
+msgstr "Noņemt audio"
+
+msgid "SaveAudio"
+msgstr "Apstiprināt"
+
+msgid "ChangesStored"
+msgstr "Audio ir pievienots"
+
+msgid "ViewScoreChangeHistory"
+msgstr "Rādīt sasniegumu izmaiņu vēsturi"
+
+msgid "ImageWillResizeMsg"
+msgstr "Ja nepieciešams, Lektora ģīmetnes izmērus var mainīt"
+
+msgid "ImagePreview"
+msgstr "Ģīmetnes priekšskatījums"
+
+msgid "UplAlreadyExists"
+msgstr "Fails jau eksitē"
+
+msgid "UplUnableToSaveFile"
+msgstr "Failu saglabāt nav iespējams"
+
+msgid "UnknownPackageFormat"
+msgstr "Šīs pakotnes formāts netika atpazīts. Pārbaudiet pakotnes formāta atbilstību"
+
+msgid "MoveDocument"
+msgstr "Pārvietot dokumentu"
+
+msgid "EditLPSettings"
+msgstr "Rediģēt tēmas iestatījumus"
+
+msgid "SaveLPSettings"
+msgstr "Saglabāt tēmas iestatījumus"
+
+msgid "ShowAllAttempts"
+msgstr "Rādīt visus izpildes mēģinājumus"
+
+msgid "HideAllAttempts"
+msgstr "Slēpt testa izpildes mēģinājumus"
+
+msgid "ShowAllAttemptsByExercise"
+msgstr "Rādīt visus testa izpildes mēģinājumus"
+
+msgid "ShowAttempt"
+msgstr "Rādīt testa izpildes mēģinājumus"
+
+msgid "ShowAndQualifyAttempt"
+msgstr "Rādīt un atzīmēt testa izpildes mēģinājums"
+
+msgid "langAddEdit"
+msgstr "Pievienot / Rediģēt"
+
+msgid "ModifyPrerequisites"
+msgstr "Saglabāt priekšnosacījumu iestatījumus"
+
+msgid "CreateLearningPath"
+msgstr "Turpināt >"
+
+msgid "AddExercise"
+msgstr "Pievienot tēmai testu / kontroldarbu"
+
+msgid "AddForum"
+msgstr "Pievienot diskusiju"
+
+msgid "LPCreateDocument"
+msgstr "Pievienot šo mācību lapu"
+
+msgid "ObjectiveID"
+msgstr "Mērķa ID"
+
+msgid "ObjectiveStatus"
+msgstr "Mērķa status"
+
+msgid "ObjectiveRawScore"
+msgstr "Mērķa neapstrādātie punkti"
+
+msgid "ObjectiveMaxScore"
+msgstr "Max. punkti mērķa sasniegšanā"
+
+msgid "ObjectiveMinScore"
+msgstr "Min. punkti mērķa sasniegšanā"
+
+msgid "LPName"
+msgstr "Tēmas nosaukums"
+
+msgid "AuthoringOptions"
+msgstr "Tēmas lietošanas iestatījumi"
+
+msgid "CourseSettings"
+msgstr "Tēmas iestatījumi"
+
+msgid "SaveSection"
+msgstr "Saglabāt izmaiņas"
+
+msgid "AddLinkToCourse"
+msgstr "Pievienot tēmai hipersaiti"
+
+msgid "AddAssignmentToCourse"
+msgstr "Pievienot tēmai mājas darbu"
+
+msgid "AddForumToCourse"
+msgstr "Pievienot tēmai diskusiju telpu."
+
+msgid "SaveAudioAndOrganization"
+msgstr "Saglabāt audio un izvietojumu."
+
+msgid "UploadOnlyMp3Files"
+msgstr "Lūdzu, augšupielādējiet tikai <b>mp3</b> failus"
+
+msgid "ModifyHotPotatoes"
+msgstr "Modificēt Hotpotatoes"
+
+msgid "SaveHotpotatoes"
+msgstr "Saglabāt Hotpotatoes"
+
+msgid "ReturnToLPList"
+msgstr "Uz-><b>Kursa tēmas</b>"
+
+msgid "LpPrerequisiteDescription"
+msgstr "Ja izvēlēsities citas  tēmas apguvi, kā priekšnoteikumu šīs temas apguves uzsākšanai, tad šī <b>tēma</b> Kursantam <b>nebūs redzama</b>, kamēr iepriekšējā, nebūs pilnībā (100%) izpildīta"
+
+msgid "ExerciseCantBeEditedAfterAddingToTheLP"
+msgstr "Uzdevumus nevar rediģēt pēc tam, kad tie ir pievienoti mācību saturam."
+
+msgid "EnableTimeLimits"
+msgstr "Aktivizēt pieejas limitus"
+
+msgid "PublicationDate"
+msgstr "Publicēšanas datums"
+
+msgid "UseMaxScore100"
+msgstr "Lietot, kā noklusējumu, <b>maksimālo punktu skaitu 100</b>"
+
+msgid "EnableLPAutoLaunch"
+msgstr "Atļaut Mācību kursa auto-palaišanu"
+
+msgid "DisableLPAutoLaunch"
+msgstr "Atslēgt Mācību kursa auto-palaišanu"
+
+msgid "ViewModeEmbedFrame"
+msgstr "Patreizējais skata veids: ārēji ievietots (embed). Lietot tikai ārējo saišu ievietošanai"
+
+msgid "LPNotVisibleToStudent"
+msgstr "Kursanti nevar redzēt šī Mācību kursa saturu"
+
+msgid "EditCurrentModule"
+msgstr "Rediģēt konkrēto moduli"
+
+msgid "SearchFeatureTerms"
+msgstr "Noteikumi par meklēšanas funkciju"
+
+msgid "PrerequisiteDeletedError"
+msgstr "Kļūda: Elements, kas definēts, kā priekšnosacījums ir izdzēsts"
+

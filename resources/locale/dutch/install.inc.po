@@ -1,0 +1,342 @@
+msgid "langStatDB"
+msgstr "Statistiekendatabank"
+
+msgid "langEnableTracking"
+msgstr "Statistieken inschakelen"
+
+msgid "langInstituteShortName"
+msgstr "De korte naam van uw organisatie"
+
+msgid "langWarningResponsible"
+msgstr "Gebruik dit script enkel na een back-up. Het Chamiloteam is niet verantwoordelijk indien u data verliest of data corrupt wordt."
+
+msgid "langAllowSelfRegProf"
+msgstr "Zelfregistratie als cursusbeheerder toelaten"
+
+msgid "langEG"
+msgstr "bv."
+
+msgid "langDBHost"
+msgstr "Databankserver"
+
+msgid "langDBLogin"
+msgstr "Gebruikersnaam voor de databank"
+
+msgid "langDBPassword"
+msgstr "Wachtwoord voor de databank"
+
+msgid "langMainDB"
+msgstr "Centrale Chamilodatabank"
+
+msgid "langAllFieldsRequired"
+msgstr "alle velden vereist"
+
+msgid "langPrintVers"
+msgstr "Afdrukbare versie"
+
+msgid "langLocalPath"
+msgstr "Corresponderend lokaal pad"
+
+msgid "langAdminEmail"
+msgstr "E-mailadres administrator"
+
+msgid "langAdminName"
+msgstr "Naam administrator"
+
+msgid "langAdminSurname"
+msgstr "Familienaam administrator"
+
+msgid "langAdminLogin"
+msgstr "Inlognaam administrator"
+
+msgid "langAdminPass"
+msgstr "Wachtwoord administrator (<font color=\"red\">aangewezen te wijzigen</font>)"
+
+msgid "langEducationManager"
+msgstr "Projectleider"
+
+msgid "langCampusName"
+msgstr "Campustitel"
+
+msgid "langDBSettingIntro"
+msgstr "Het installatiescript zal de Chamilodatabank(en) aanmaken. Merk op dat Chamilo standaard meerdere databanken aanmaakt. Als u enkel gebruik kan maken van één databank bij uw hosting provider, dan zal Chamilo niet kunnen werken met meerdere databanken en moet u de optie \"Eén databank\" aanduiden."
+
+msgid "langStep1"
+msgstr "Welkom bij de assistent voor de aanmaak van meerkeuzevragen.            U wordt verder geleid.						Druk op volgende om door te gaan."
+
+msgid "langStep2"
+msgstr "Titel van de oefening en beschrijving toevoegen/wijzigen. Druk op volgende wanneer u klaar bent."
+
+msgid "langStep3"
+msgstr "Stap 3 van 6"
+
+msgid "langStep4"
+msgstr "Stap 4 van 6"
+
+msgid "langStep5"
+msgstr "Stap 5 van 6"
+
+msgid "langStep6"
+msgstr "Stap 6 van 6"
+
+msgid "langCfgSetting"
+msgstr "Configuratieinstellingen"
+
+msgid "langDBSetting"
+msgstr "Instellingen MySQL-databank"
+
+msgid "langMainLang"
+msgstr "Standaardtaal"
+
+msgid "langLicence"
+msgstr "Licentie"
+
+msgid "langLastCheck"
+msgstr "Laatste controle voor installatie"
+
+msgid "langRequirements"
+msgstr "Vereisten"
+
+msgid "langDbPrefixForm"
+msgstr "MySQL database prefix"
+
+msgid "langDbPrefixCom"
+msgstr "Leeg laten indien niet vereist"
+
+msgid "langEncryptUserPass"
+msgstr "Encrypteer de gebruikerswachtwoorden in de databank"
+
+msgid "langSingleDb"
+msgstr "Gebruik een of meerdere databanken voor Chamilo"
+
+msgid "langAllowSelfReg"
+msgstr "Zelfregistratie als gebruiker toelaten"
+
+msgid "langRecommended"
+msgstr "(aanbevolen)"
+
+msgid "langScormDB"
+msgstr "Scormdatabank"
+
+msgid "langAdminLastName"
+msgstr "Naam administrator"
+
+msgid "langAdminPhone"
+msgstr "Telefoonnummer administrator"
+
+msgid "OK"
+msgstr "Oké"
+
+msgid "langAdminFirstName"
+msgstr "Voornaam administrator"
+
+msgid "langInstituteURL"
+msgstr "URL van de organisatie"
+
+msgid "langDokeosURL"
+msgstr "URL van Chamilo"
+
+msgid "langUserDB"
+msgstr "Gebruikersdatabank"
+
+msgid "PleaseWait"
+msgstr "Even geduld"
+
+msgid "PleaseCheckTheseValues"
+msgstr "Gelieve deze waarden te controleren"
+
+msgid "PleasGoBackToStep1"
+msgstr "Gelieve terug te gaan naar stap 1"
+
+msgid "langInstallationLanguage"
+msgstr "Installatie taal"
+
+msgid "ReadThoroughly"
+msgstr "Grondig lezen a.u.b."
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "Voor de goede werking van Chamilo, heeft u het volgende nodig op uw server"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "Opgelet!<br />Er is een bestaande Chamiloinstallatie aanwezig op uw systeem."
+
+msgid "NewInstallation"
+msgstr "Nieuwe installatie"
+
+msgid "CheckDatabaseConnection"
+msgstr "Controleer databankverbinding"
+
+msgid "PrintOverview"
+msgstr "Overzicht weergeven"
+
+msgid "Installing"
+msgstr "Installeer"
+
+msgid "of"
+msgstr "van"
+
+msgid "Step"
+msgstr "Stap"
+
+msgid "MoreDetails"
+msgstr "Voor meer details"
+
+msgid "ServerRequirements"
+msgstr "Server vereisten"
+
+msgid "ServerRequirementsInfo"
+msgstr "Functiebibliotheken en functionaliteiten die de server moet voorzien om Chamilo ten volle te kunnen benutten"
+
+msgid "PHPVersion"
+msgstr "PHP versie"
+
+msgid "support"
+msgstr "ondersteuning"
+
+msgid "PHPVersionOK"
+msgstr "PHP versie is oké"
+
+msgid "RecommendedSettings"
+msgstr "Aanbevolen instellingen"
+
+msgid "RecommendedSettingsInfo"
+msgstr "Aanbevolen instellingen voor uw server configuratie. Deze instellingen kunnen aangepast worden in het php.ini configuratiebestand op uw server."
+
+msgid "Setting"
+msgstr "Instelling"
+
+msgid "Actual"
+msgstr "Momenteel"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "Permissies van mappen en bestanden"
+
+msgid "DirectoryAndFilePermissionsInfo"
+msgstr "Sommige mappen en de bestanden erin moeten overschrijfbaar zijn door de web server opdat Chamilo zou kunnen werken (door studenten geüploade bestanden, HTML-bestanden voor de startpagina,...). Dit vraagt mogelijk een manuele wijziging op uw server (buiten deze interface)."
+
+msgid "NotWritable"
+msgstr "Niet schrijfbaar"
+
+msgid "Writable"
+msgstr "Schrijfbaar"
+
+msgid "ExtensionLDAPNotAvailable"
+msgstr "LDAP extensie niet beschikbaar"
+
+msgid "ExtensionGDNotAvailable"
+msgstr "GD extensie niet beschikbaar"
+
+msgid "DokeosLicenseInfo"
+msgstr "Chamilo is vrije software die verdeeld wordt onder de GNU Algemene Publieke Licentie (GPL)."
+
+msgid "IAccept"
+msgstr "Ik ga akkoord"
+
+msgid "ConfigSettingsInfo"
+msgstr "De volgende waarden worden in uw configuratiebestand (<b>main/inc/conf/configuration.php</b>) bewaard:"
+
+msgid "DokeosInstallation"
+msgstr "Chamilo installatie"
+
+msgid "InstallDokeos"
+msgstr "Installeer Chamilo"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "Ga naar uw geïnstalleerde portaal."
+
+msgid "FirstUseTip"
+msgstr "Wanneer u de campus voor het eerst gebruikt, is de beste werkwijze om de werking te begrijpen een nieuwe cursus aan te maken en de opties te verkennen."
+
+msgid "Version_"
+msgstr "Versie"
+
+msgid "UpdateFromDokeosVersion"
+msgstr "Update van Chamilo"
+
+msgid "WelcomToTheDokeosInstaller"
+msgstr "Welkom in de Chamilo installatie"
+
+msgid "PleaseSelectInstallationProcessLanguage"
+msgstr "Selecteer de taal die u wil gebruiken tijdens de installaties"
+
+msgid "ReadTheInstallGuide"
+msgstr "Lees de installatiehandleiding"
+
+msgid "HereAreTheValuesYouEntered"
+msgstr "Dit zijn de waarden die u heeft ingevoerd"
+
+msgid "PrintThisPageToRememberPassAndOthers"
+msgstr "Druk deze pagina af om uw paswoord en andere instellingen te helpen onthouden"
+
+msgid "TheInstallScriptWillEraseAllTables"
+msgstr "Het installatiescript zal alle tabellen van de geselecteerde databank verwijderen. Het is heel belangrijk om eerst een volledige backup van de tabellen/databank te maken vooraleer de laatste stap te bevestigen."
+
+msgid "Warning"
+msgstr "Waarschuwing"
+
+msgid "ReadWarningBelow"
+msgstr "lees onderstaande waarschuwing"
+
+msgid "SecurityAdvice"
+msgstr "Beveiligingsadvies"
+
+msgid "YouHaveMoreThanXCourses"
+msgstr "U heeft %d cursussen op het Chamilo platform. Er zijn %d cursussen geüpdated. Om de overige cursussen te updaten, %sklik hier %s"
+
+msgid "ToProtectYourSiteMakeXAndYReadOnly"
+msgstr "Om uw site te beveiligen, maak %s en %s enkel leesbaar (CHMOD 444)."
+
+msgid "Error"
+msgstr "Fout"
+
+msgid "Back"
+msgstr "Terug"
+
+msgid "HasNotBeenFound"
+msgstr "is niet gevonden"
+
+msgid "PleaseGoBackToStep1"
+msgstr "Gelieve terug te gaan naar stap 1"
+
+msgid "HasNotBeenFoundInThatDir"
+msgstr "is niet gevonden in die folder"
+
+msgid "OldVersionRootPath"
+msgstr "Basispad van de oudere versies"
+
+msgid "NoWritePermissionPleaseReadInstallGuide"
+msgstr "Sommige bestanden en mappen hebben geen schrijfrechten. Om Chamilo te kunnen installeren zullen de rechten gewiizigd moeten worden (gebruik CHMOD). Lees eerst de %s handleiding voor de installatie %s"
+
+msgid "DBServerDoesntWorkOrLoginPassIsWrong"
+msgstr "De databaseserver werkt niet of de combinatie login / paswoord is niet correct"
+
+msgid "PleaseGoBackToStep"
+msgstr "Gelieve terug te gaan naar stap"
+
+msgid "DBSettingUpgradeIntro"
+msgstr "Het upgradescript zal de Chamilo database(s) recupereren en updaten. Het script zal hiervoor onderstaande instellingen gebruiken. Aangezien deze software op een grote reeks verschillende systemen draait en niet alle systemen getest zijn, is het aangewezen een backup te maken van de database alvorens een upgrade uit te voeren."
+
+msgid "ExtensionMBStringNotAvailable"
+msgstr "MBString extensie is niet beschikbaar"
+
+msgid "ExtensionMySQLNotAvailable"
+msgstr "De MySQL extensie is niet beschikbaar"
+
+msgid "DokeosArtLicense"
+msgstr "De afbeelding en media gallerijen in Chamilo gebruiken afbeelding die afkomstig zijn van Nuvalo, Crystal Clear en Tango. Andere afbeeldingen en media zoals de diagrammen en Flash animaties zijn afkomstig van Wikimedia en van de cursus van Ali Pakdel en Denis Hoa die hiermee instemden en hun materiaal beschikbaar stellen onder de BY-SA Creative Commons licentie. U kunt meer informatie vinden over deze licentie op <a href=\"http://creativecommons.org/licenses/by-sa/3.0/deed.nl\">le de site van Creative Commons</a> waar u de integrale tekst van deze licentie kunt nalezen via een link onderaan de pagina."
+
+msgid "OptionalParameters"
+msgstr "Optionele parameters"
+
+msgid "FailedConectionDatabase"
+msgstr "De verbinding met de databank is mislukt. Meestal is dit te wijten aan een foute gebruik, een fout wahctwoord of een foutief databasevoorvoegsel. Verifieer deze instelling en probeer het dan opnieuw."
+
+msgid "EncryptMethodUserPass"
+msgstr "Encryptie methode"
+
+msgid "UpgradeFromDokeos16x"
+msgstr "Upgrade vanaf Chamilo 1.6.x"
+
+msgid "UpgradeFromDokeos18x"
+msgstr "Upgrade vanaf Chamilo 1.8.x"
+

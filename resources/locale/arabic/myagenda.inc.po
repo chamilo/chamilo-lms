@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "أجندتي"
+
+msgid "langToday"
+msgstr "اليوم"
+

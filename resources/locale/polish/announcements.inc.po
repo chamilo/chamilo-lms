@@ -1,0 +1,153 @@
+msgid "Announcement"
+msgstr "Ogłoszenia"
+
+msgid "langAnnEmpty"
+msgstr "Lista ogłoszeń została wyczyszczona"
+
+msgid "AnnouncementModified"
+msgstr "Ogłoszenie zostało zmodyfikowane"
+
+msgid "AnnouncementAdded"
+msgstr "Ogłoszenie zostało dodane"
+
+msgid "AnnouncementDeleted"
+msgstr "Ogłoszenie zostało usunięte"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Opublikowane"
+
+msgid "AddAnnouncement"
+msgstr "Dodaj jako ogłoszenie"
+
+msgid "langContent"
+msgstr "Zawartość"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Wyczy¶ć listę ogłoszeń"
+
+msgid "professorMessage"
+msgstr "Wiadomosc od prowadzącego"
+
+msgid "langEmailSent"
+msgstr " i wysłać email do zarejestrowanych studentów"
+
+msgid "EmailOption"
+msgstr "Wyślij to ogłoszenie do zarejestrowanych użytkowników"
+
+msgid "langOn"
+msgstr "Włączone"
+
+msgid "langRegUser"
+msgstr "zarejestrowani użytkownicy kursu"
+
+msgid "langUnvalid"
+msgstr "brak adresu e-mail lub niewściwy adres"
+
+msgid "langModifAnn"
+msgstr "Modyfikuj ogłoszenie"
+
+msgid "langModify"
+msgstr "modyfikuj"
+
+msgid "langDelete"
+msgstr "usuń"
+
+msgid "langTitle"
+msgstr "Tytuł"
+
+msgid "langHelp"
+msgstr "Pomoc"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAddIntro"
+msgstr "Dodaj tekst"
+
+msgid "langBackList"
+msgstr "Powrót do listy"
+
+msgid "langSelMess"
+msgstr "Ostrzeżenia dla pewnych użytkowników"
+
+msgid "EmailTitle"
+msgstr "Temat ogłoszenia"
+
+msgid "langUserlist"
+msgstr "Lista użytkowników"
+
+msgid "langSelectedUsers"
+msgstr "Wybrani użytkownicy"
+
+msgid "langSubmit"
+msgstr "Wyślij"
+
+msgid "langPleaseEnterMessage"
+msgstr "Musisz wprowadzić treść wiadomości."
+
+msgid "langPleaseSelectUsers"
+msgstr "Musisz wybrać użytkowników."
+
+msgid "Teachersubject"
+msgstr "Wiadomo¶ć wysłana do studentów"
+
+msgid "langMessages"
+msgstr "Wiadomosci"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Ogłoszenie do wybranych użytkowników (przez e-mail)"
+
+msgid "langIntroText"
+msgstr "Żeby przesłać wiadomość, wybieraj grupy użytkowników (oznaczone literą G) lub pojedynczych użytkowników (oznaczeni literą U)."
+
+msgid "langDown"
+msgstr "dół"
+
+msgid "langMsgSent"
+msgstr "Wiadomość została wysłana do wybranych użytkowników"
+
+msgid "langSelUser"
+msgstr "wybranych użytkowników kursu"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Wiadomość do wybranych grup"
+
+msgid "langSelectedGroups"
+msgstr "wybrane grupy"
+
+msgid "langMsg"
+msgstr "Widomości"
+
+msgid "langYes"
+msgstr "tak"
+
+msgid "MsgText"
+msgstr "Wiadomość"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Wszystkie ogłoszenia zostały usunięte"
+
+msgid "AnnouncementMoved"
+msgstr "Ogłoszenia zostały przeniesione"
+
+msgid "NoAnnouncements"
+msgstr "Brak og&#322;osze&#324;"
+
+msgid "SelectEverybody"
+msgstr "Zaznacz wszystkich"
+
+msgid "SelectedUsersGroups"
+msgstr "wybrane grupy użytkowników"
+
+msgid "LearnerMessage"
+msgstr "Wiadomość od studenta"
+
+msgid "TitleIsRequired"
+msgstr "Tytuł jest wymagany"
+
+msgid "AnnounceSentByEmail"
+msgstr "Ogłoszenie wysłane przez e-mail"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Ogłoszenie wysłane do wybranych użytkowników"
+

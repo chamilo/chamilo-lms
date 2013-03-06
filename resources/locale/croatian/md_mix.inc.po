@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Definicijski podatci dokumenta"
+
+msgid "langClickKw"
+msgstr "Kliknite na ključnu riječ u strukturi kako biste je odabrali ili poništili odabir."
+
+msgid "langKwHelp"
+msgstr "<br/> Pritisnite tipku \'+\' za otvaranje, tipku \'-\' za zatvaranje, tipku \'++\' za otvaranje svega, tipku \'--\' za zatvaranje svega.<br/> <br/> Uklonite sve odabrane ključne riječi zatvaranjem strukture i ponovnim otvaranjem iste pritiskom na tipku \'+\'.<br/> Istovremenim pritiskom tipki Alt i \'+\' pretražujete izvorne ključne riječi u strukturi.<br/> <br/> Istovremenim pritiskom na Alt i ključnu riječ odabirete ključnu riječ bez širih termina ili poništavate odabir ključne riječi sa širim terminima.<br/> <br/> Promijenite li jezik opisa, nemojte istovremeno dodavati ključne riječi.<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Napredni način"
+
+msgid "langSearch"
+msgstr "Traži"
+
+msgid "langSearchCrit"
+msgstr "Jedna riječ po retku!"
+
+msgid "langNoKeywords"
+msgstr "Kolegij nema ključnih riječi"
+
+msgid "langKwCacheProblem"
+msgstr "Memorijski uređaj s ključnim riječima ne može se otvoriti"
+
+msgid "langCourseKwds"
+msgstr "Dokument sadrži ključne riječi kolegija"
+
+msgid "langKwdsInMD"
+msgstr "ključne riječi upotrijebljene u definicijskim podatcima"
+
+msgid "langKwdRefs"
+msgstr "reference ključnih riječi"
+
+msgid "langNonCourseKwds"
+msgstr "Ključne riječi koje ne pripadaju kolegiju"
+
+msgid "langKwdsUse"
+msgstr "Ključne riječi kolegija (masno = nisu u uporabi)"
+
+msgid "langTotalMDEs"
+msgstr "Ukupan broj unosa MD za poveznice:"
+

@@ -1,0 +1,258 @@
+msgid "WikiSearchResults"
+msgstr "Wiki haun tulokset"
+
+msgid "Wiki"
+msgstr "Wiki"
+
+msgid "StartPage"
+msgstr "Pääsivu"
+
+msgid "EditThisPage"
+msgstr "Muokkaa tätä sivua"
+
+msgid "ShowPageHistory"
+msgstr "Historia"
+
+msgid "RecentChanges"
+msgstr "Uusimmat muutokset"
+
+msgid "AllPages"
+msgstr "Kaikki sivut"
+
+msgid "AddNew"
+msgstr "Lisää uusi sivu"
+
+msgid "ChangesStored"
+msgstr "Ääni lisätty"
+
+msgid "NewWikiSaved"
+msgstr "Uusi Wiki-kotisivu on tallennettu. Klikkaa tästä nähdäksesi:"
+
+msgid "DefaultContent"
+msgstr "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Aloita muokkaamalla tätä sivua</p>"
+
+msgid "CourseWikiPages"
+msgstr "Kurssin Wiki sivut"
+
+msgid "GroupWikiPages"
+msgstr "Ryhmän Wiki sivut"
+
+msgid "NoWikiPageTitle"
+msgstr "Muutoksesi on tallennettu. Sivulle täytyy antaa vielä otsikko."
+
+msgid "WikiPageTitleExist"
+msgstr "Tällä otsikolla on jo aiemmin tehty sivu, muokkaa sivua klikkaamalla:"
+
+msgid "WikiDiffAddedLine"
+msgstr "Rivi lisätty"
+
+msgid "WikiDiffDeletedLine"
+msgstr "Rivi poistettu"
+
+msgid "WikiDiffMovedLine"
+msgstr "Rivi siirretty"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "Muuttumaton rivi"
+
+msgid "DifferencesNew"
+msgstr "muutokset versiossa"
+
+msgid "DifferencesOld"
+msgstr "vanha versio"
+
+msgid "Differences"
+msgstr "Erot"
+
+msgid "MostRecentVersion"
+msgstr "Viimeisin versio"
+
+msgid "Legend"
+msgstr "Sisällys"
+
+msgid "ShowDifferences"
+msgstr "Vertaa valittuja versioita"
+
+msgid "SearchPages"
+msgstr "Etsi sivuilta"
+
+msgid "Discuss"
+msgstr "Keskustele"
+
+msgid "History"
+msgstr "Historia"
+
+msgid "ShowThisPage"
+msgstr "Näytä tämä sivu"
+
+msgid "DeleteThisPage"
+msgstr "Poista tämä sivu"
+
+msgid "DiscussThisPage"
+msgstr "Keskustele tästä sivusta"
+
+msgid "HomeWiki"
+msgstr "Wiki:n etusivu"
+
+msgid "DeleteWiki"
+msgstr "Poista kaikki Wiki:n sisältö"
+
+msgid "WikiDeleted"
+msgstr "Wiki on poistettu"
+
+msgid "WikiPageDeleted"
+msgstr "Sivu ja kaikki siihen liittyvä historia on poistettu"
+
+msgid "NumLine"
+msgstr "rivinumero"
+
+msgid "DeletePageHistory"
+msgstr "Poista sivu kaikkine versioineen"
+
+msgid "OnlyAdminDeleteWiki"
+msgstr "Ohjaaajat vain voivat poistaa Wikejä"
+
+msgid "OnlyAdminDeletePageWiki"
+msgstr "Vain kurssiylläpitäjät voivat poistaa sivuja"
+
+msgid "OnlyAddPagesGroupMembers"
+msgstr "Vain kurssiylläpitäjät ja tämän ryhmän jäsenet voivat lisätä sivuja ryhmän Wiki:in"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "Vain kurssiylläpitäjät ja tämän ryhmän jäsenet voivat muokata ryhmän Wiki:n sivuja"
+
+msgid "ConfirmDeleteWiki"
+msgstr "Haluatko varmasti poistaa tämän Wiki:n ?"
+
+msgid "ConfirmDeletePage"
+msgstr "Haluatko varmasti poistaa tämän sivun ja kaiken siihen liittyvän historian?"
+
+msgid "AlsoSearchContent"
+msgstr "Etsi myös sisällöstä"
+
+msgid "PageLocked"
+msgstr "Sivu on suojattu"
+
+msgid "PageUnlocked"
+msgstr "Sivu on ei suojattu"
+
+msgid "PageLockedExtra"
+msgstr "Tämä sivu on suojattu. Vain kurssiylläpitäjät voivat muuttaa sitä."
+
+msgid "PageUnlockedExtra"
+msgstr "Tätä sivua ei ole suojattu. Kaikki kurssin käyttäjät ja ryhmän jäsenet voivat muokata sitä."
+
+msgid "ShowAddOption"
+msgstr "Näytää lisää vaihtoehto"
+
+msgid "HideAddOption"
+msgstr "Piilota lisää optio"
+
+msgid "AddOptionProtected"
+msgstr "Lisää toiminto on estetty. Vain ohjaajat voivat lisätä sivuja tähän Wikiin. Mutta opiskelijat ja ryhmän jäsenet voivat silti muokata niitä."
+
+msgid "AddOptionUnprotected"
+msgstr "Lisää toiminto on sallittu kaikille kurssin opiskelijoille."
+
+msgid "NotifyChanges"
+msgstr "Ilmoita minulle muutoksista"
+
+msgid "NotNotifyChanges"
+msgstr "Älä ilmoita minulle muutoksista"
+
+msgid "NotifyByEmail"
+msgstr "Ilmoita vastauksesta sähköpostilla"
+
+msgid "CancelNotifyByEmail"
+msgstr "Älä ilmoita minulle sähköpostilla kun tätä sivua on muutettu"
+
+msgid "MostRecentVersionBy"
+msgstr "Viimeisintä versiota muokkasi"
+
+msgid "NumComments"
+msgstr "Kommentteja tästä sivusta"
+
+msgid "NumCommentsScore"
+msgstr "Kommenttejen määrä tästä sivusta:"
+
+msgid "LinksPages"
+msgstr "Lähteet"
+
+msgid "ShowLinksPages"
+msgstr "Näytä sivut joilta on linkki tähän sivuun"
+
+msgid "MoreWikiOptions"
+msgstr "Lisää Wiki asetuksia"
+
+msgid "DefaultTitle"
+msgstr "Etusivu"
+
+msgid "DiscussNotAvailable"
+msgstr "Keskustelu ei saatavilla"
+
+msgid "Print"
+msgstr "Tulosta"
+
+msgid "Version"
+msgstr "Versio"
+
+msgid "EditPage"
+msgstr "Muokkaa"
+
+msgid "AddedBy"
+msgstr "Lisääjä:"
+
+msgid "EditedBy"
+msgstr "Muokkaaja:"
+
+msgid "DeletedBy"
+msgstr "poistaja:"
+
+msgid "GroupStandardMember"
+msgstr "Ryhmän jäsen"
+
+msgid "ConfigDefault"
+msgstr "Oletus asetukset"
+
+msgid "UnlockPage"
+msgstr "Suojaamaton"
+
+msgid "LockPage"
+msgstr "Suojaa"
+
+msgid "WikiDiffAddedTex"
+msgstr "Teksti lisätty"
+
+msgid "WikiDiffDeletedTex"
+msgstr "Teksti poistettu"
+
+msgid "WordsDiff"
+msgstr "sana sanalta"
+
+msgid "LinesDiff"
+msgstr "rivi riviltä"
+
+msgid "MustSelectPage"
+msgstr "Valitse ensin sivu"
+
+msgid "Export2ZIP"
+msgstr "Vie ZIP-tiedostoon"
+
+msgid "HidePage"
+msgstr "Piilota sivu"
+
+msgid "ShowPage"
+msgstr "Näytä sivu"
+
+msgid "GoAndEditMainPage"
+msgstr "Aloittaaksesi Wiki mene ja muokkaa pääsivua"
+
+msgid "LinksPagesFrom"
+msgstr "Sivut jotka linkittävät tähän sivuun"
+
+msgid "OnlyEditPagesCourseManager"
+msgstr "Pääsivua voi muokata vain ohjaaja"
+
+msgid "CurrentVersion"
+msgstr "Nykyinen versio"
+

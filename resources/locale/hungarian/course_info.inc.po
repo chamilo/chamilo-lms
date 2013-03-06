@@ -1,0 +1,333 @@
+msgid "ModifInfo"
+msgstr "Kurzusbeállítások"
+
+msgid "langModifDone"
+msgstr "Az információ megváltoztatva"
+
+msgid "langDelCourse"
+msgstr "Az teljes kurzus törlése"
+
+msgid "langProfessors"
+msgstr "Oktatók"
+
+msgid "langFaculty"
+msgstr "Kategória"
+
+msgid "langConfidentiality"
+msgstr "Engedélyek"
+
+msgid "langPublic"
+msgstr "Nyilvános elérhetőség a portál főoldaláról bejelentkezés nélkül"
+
+msgid "langUnsubscription"
+msgstr "Leiratkozás"
+
+msgid "langPrivOpen"
+msgstr "Csak privát belépés, de szabad regisztráció"
+
+msgid "langPrivate"
+msgstr "Zártkörű hozzáférés (az oldalt csak azok tekinthetik meg, akik a felhasználói listán szerepelnek)"
+
+msgid "langForbidden"
+msgstr "Nem engedélyezett"
+
+msgid "CourseAccessConfigTip"
+msgstr "Alapértelmezésként a kurzus nyilvános, de ezt korlátozhatja az alábbi opciókkal."
+
+msgid "langOpenToTheWorld"
+msgstr "Nyitott - elérhető az egész világ számára"
+
+msgid "OpenToThePlatform"
+msgstr "Nyitott - regisztrált felhasználók számára elérhető"
+
+msgid "langOpenToThePlatform"
+msgstr "Nyitva - csak regisztrált tagok számára elérhető."
+
+msgid "langTipLang"
+msgstr "A kurzus website-ot látogató minden felhasználó ezt a nyelvet fogja látni."
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Hozzájárulások"
+
+msgid "langProgramMenu"
+msgstr "Kurzus program"
+
+msgid "langAnnouncement"
+msgstr "Hirdetmények"
+
+msgid "langExercise"
+msgstr "Tesztek"
+
+msgid "langStats"
+msgstr "Statisztikák"
+
+msgid "langUplPage"
+msgstr "Oldal feltöltése és a főoldalhoz csatlakoztatása"
+
+msgid "langLinkSite"
+msgstr "A link hozzáadása a főoldalhoz"
+
+msgid "langCourse"
+msgstr "A kurzus"
+
+msgid "langHasDel"
+msgstr "törölve"
+
+msgid "langBackHome"
+msgstr "Vissza a főoldalra"
+
+msgid "langByDel"
+msgstr "A kurzus teljes törlése véglegesen etávolítja az összes hozzá tartozó tartalmat (dokumentumokat, publikációkat, hivatkozásokat, stb.), valamint véglegesen törli az összes feliratkozást (ez nem érint más kurzusokat). Szintén eltávolításra kerül minden olyan virtuális kurzus, amely ehhez a kurzusra hivatkozik. <p>Valóban ki akarja törölni?"
+
+msgid "langY"
+msgstr "IGEN"
+
+msgid "langN"
+msgstr "NEM"
+
+msgid "langDepartmentUrl"
+msgstr "A részleg URL-je"
+
+msgid "langDepartmentUrlName"
+msgstr "Részleg"
+
+msgid "langBackupCourse"
+msgstr "Ennek a kurzusnak az archiválása"
+
+msgid "langModifGroups"
+msgstr "Csoportok"
+
+msgid "langProfessor"
+msgstr "Vezető"
+
+msgid "langGroups"
+msgstr "Csoportok"
+
+msgid "langDescriptionCours"
+msgstr "Kurzus leírás"
+
+msgid "langArchiveCourse"
+msgstr "Biztonsági másolat készítése"
+
+msgid "langRestoreCourse"
+msgstr "Kurzus visszaállítása"
+
+msgid "langRestore"
+msgstr "Visszaállít"
+
+msgid "langCreatedIn"
+msgstr "elkészítve itt:"
+
+msgid "langCreateMissingDirectories"
+msgstr "Hiányzó könyvtárak létrehozása"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Kurzus fájljainak másolása"
+
+msgid "langDisk_free_space"
+msgstr "Szabad lemezterület"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Biztonsági másolat file készítése"
+
+msgid "langFileCopied"
+msgstr "file átmásolva"
+
+msgid "langArchiveLocation"
+msgstr "Archív helye"
+
+msgid "langSizeOf"
+msgstr "Mérete ennek :"
+
+msgid "langArchiveName"
+msgstr "Archív neve"
+
+msgid "langBackupSuccesfull"
+msgstr "Sikeres biztonsági másolat készítés"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Kurzus adatok biztonsági másolata a fő adatbázisban"
+
+msgid "langBUUsersInMainBase"
+msgstr "Felhasználói adatok biztonsági másolata a fő adatbázisban"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Hirdetményi adatok biztonsági másolata a fő adatbázisban"
+
+msgid "langBackupOfDataBase"
+msgstr "Adatbázis biztonsági másolat"
+
+msgid "langCreationDate"
+msgstr "Létrehozva"
+
+msgid "langExpirationDate"
+msgstr "Lejárat dátuma"
+
+msgid "langPostPone"
+msgstr "Elhalaszt"
+
+msgid "langLastEdit"
+msgstr "Legutolsó szerkesztés"
+
+msgid "langLastVisit"
+msgstr "Legutolsó látogatás"
+
+msgid "langSubscription"
+msgstr "Beiratkozás"
+
+msgid "langCourseAccess"
+msgstr "Kurzus elérés"
+
+msgid "langConfirmBackup"
+msgstr "Valóban akar biztonsági másolatot készíteni a kurzusról ?"
+
+msgid "langCreateSite"
+msgstr "Kurzus létrehozása"
+
+msgid "langRestoreDescription"
+msgstr "A kurzus egy acrhív file-ban található, lenn tudja kiválasztani.<br><br>Ha a \"Visszaállít\"-ra kattint, az archív kicsomagolódik és a kurzus vissza lesz állítva."
+
+msgid "langRestoreNotice"
+msgstr "A szkript jelenleg nem támogatja a felhasználók visszaállítását, de a\"users.csv\"-ben elmentett adatok elegendőek ahhoz, hogy az adminisztrátor kézzel visszaállítsa őket."
+
+msgid "langAvailableArchives"
+msgstr "Elérhető archívumok listája"
+
+msgid "langNoArchive"
+msgstr "Nincs archív kiválasztva"
+
+msgid "langArchiveNotFound"
+msgstr "Az archív nem található"
+
+msgid "langArchiveUncompressed"
+msgstr "Az archív kicsomagolva és installálva."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "A \"users.csv\" file a Dokumentumok eszközbe került."
+
+msgid "langBackH"
+msgstr "vissza a Főoldalra"
+
+msgid "langOtherCategory"
+msgstr "Egyéb kategória"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "A hallgatók megtehetik, hogy leiratkozzanak erről a kurzusról."
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "A hallgatók nem tehetik meg, hogy leiratkozzanak erről a kurzusról."
+
+msgid "langCourseVisibilityClosed"
+msgstr "Teljesen zárt; a kurzus csak a kurzus adminisztrátora számára elérhető."
+
+msgid "CourseVisibilityClosed"
+msgstr "Zárt - nem lehet hozzáférni ehhez a kurzushoz."
+
+msgid "CourseVisibilityModified"
+msgstr "Módosított (további beállítások megadása a szerepek/jogosultságok részben lehetséges)"
+
+msgid "WorkEmailAlert"
+msgstr "Értesítés emilben ha elektronikus beadás történt"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Email értesítés kérése ha új elektronikus beadás történt"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Email értesítés letiltása új beadás esetén"
+
+msgid "DropboxEmailAlert"
+msgstr "Email értesítés új hallgatói leadás éesetén"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Email értesítés aktiválása új hallgatói leadás esetén"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Email értesítés küldésének letiltása új hallgatói beadáskor"
+
+msgid "AllowUserEditAgenda"
+msgstr "Kurzusnaptár szerkesztésének engedélyezése felhasználók számára"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Kurzusnaptár szerkesztésének aktiválása felhasználók számára"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Kurzusnaptár szerkesztésének letiltása felhasználók számára"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Kurzus hirdetmények szerkesztésének engedélyezése felhasználók számára"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Felhasználói módosítások engedélyezése"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Felhasználói módosítások letiltása"
+
+msgid "OrInTime"
+msgstr "vagy itt"
+
+msgid "CourseRegistrationPassword"
+msgstr "Kurzus regisztráció jelszava"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Kattintson erre a hivatkozásra ha a szerverről a kurzust (tárgyat) nyomtalanul törölni kívánja.<br><br> Figyelem! Ezt a funkciót csak rendkívüli körültekintéssel használja!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "A Dokoes lehetővé teszi, hogy a teljes kuzust (tárgyat), illetve annak egyes kiválsztott részeit egy másik, adott esetben akár üres kurzusba (tárgyba) átmásolja.br><br>A funkció használatának előfeltétele, hogy rendelkezzen egy dokumentumokat, hirdetményeket, fórumokat, stb. tartalmazó kurzussal, illetve egy másikkal, amely az előbbi felsorolt elemeit nem tartalmazza!"
+
+msgid "DescriptionRecycleCourse"
+msgstr "Ez az eszköz a kurzus kiválasztott elemeinek vagy teljes tartalmának törlését teszi lehetővé. Eltávolítja a dokumentumokat, fórumokat, likeket, stb... A törlésre egy félév vagy a képzés végén kerülhet sor. Erősen ajánlott, hogy a törlés előtt gondoskodjon kell a teljes kurzus biztonsági mentéséről !"
+
+msgid "QuizEmailAlert"
+msgstr "Email figyelemeztetés küldése elkészült kérdőívnél"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Email figyelemeztetés küldésének bekapcsolása, ha egy résztvevő elkészült kérdőívet küld be."
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Email figyelemeztetés küldésének kikapcsolása elkészült kérdőívnél"
+
+msgid "AllowUserImageForum"
+msgstr "Felhasználói kép a fórumban"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Felhasználói kép megjelenítése a fórumban"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Felhasználók képeinek elrejtése a fórumban"
+
+msgid "AllowLearningPathTheme"
+msgstr "Tanösvény téma engedélyezése"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "Engedélyezve"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Letiltva"
+
+msgid "ConfigChat"
+msgstr "Csevegés beállításai"
+
+msgid "AllowOpenchatWindow"
+msgstr "Csevegés megnyitása új ablakban"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "Csevegés megnyitása új ablakban engedélyezése"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "Csevegés megnyitása új ablakban kikapcsolása"
+
+msgid "NewUserEmailAlert"
+msgstr "A kurzus oktatója kapjon email-értesítést új résztvevő automatikus feliratkozásáról"
+
+msgid "NewUserEmailAlertEnable"
+msgstr "A kurzus oktatójának emailben értesítése új résztvevőről funkció bekapcsolása"
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "A kurzus oktatójának vagy tutorjának emailben értesítése új résztvevőről funkció bekapcsolása"
+
+msgid "NewUserEmailAlertDisable"
+msgstr "A kurzus oktatójának emailben értesítése új résztvevőről funkció kikapcsolása"
+

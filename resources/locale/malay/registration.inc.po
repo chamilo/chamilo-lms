@@ -1,0 +1,265 @@
+msgid "langCourseManager"
+msgstr "Pentadbir Subjek"
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Katalaluan telah diemaillkan kepada anda."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Nyatakan alamat email(yang diisi semasa pendaftaran)dan Pentadbir Sistem akan menghantar katalaluan anda secepat mungkin."
+
+msgid "langLogin"
+msgstr "Melog Masuk"
+
+msgid "langAction"
+msgstr "Tindakan"
+
+msgid "langPreserved"
+msgstr "Pra Layan"
+
+msgid "langDeleted"
+msgstr "Telah dipadam"
+
+msgid "langAdded"
+msgstr "Tambahan"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Sahkan Pengguna Yang Tidak Melanggan"
+
+msgid "langCourseName"
+msgstr "Nama of subjek"
+
+msgid "langSubscribe"
+msgstr "Melanggan"
+
+msgid "langSee"
+msgstr "Pergi ke"
+
+msgid "langLastVisits"
+msgstr "Lawatan terakhir"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Jika anda ingin mendaftarkan ramai Pengguna 			untuk mengikuti Subjek anda,sila hubungi Pentadbir Sistem."
+
+msgid "langPassTooEasy"
+msgstr "Katalaluan terlalu ringkas.Gunakan katalaluan seperti berikut"
+
+msgid "langGroupUserManagement"
+msgstr "Alat Bantu Kumpulan"
+
+msgid "langAddedToCourse"
+msgstr "telah didaftarkan dalam Subjek anda"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Pengguna dengan nama yang sama telah mendaftar dalam Subjek ini."
+
+msgid "langBackUser"
+msgstr "Kembali ke Senarai Pengguna"
+
+msgid "langUserOneByOneExplanation"
+msgstr "Para Pelajar akan menerima email pengesahan ID Pengguna dan Katalaluan"
+
+msgid "langGiveTutor"
+msgstr "Jadikan sebagai tutor"
+
+msgid "langRemoveRight"
+msgstr "Buang hak tersebut"
+
+msgid "langGiveAdmin"
+msgstr "Jadikan sebagai Pentadbir"
+
+msgid "langUserNumber"
+msgstr "Bilangan"
+
+msgid "langDownloadUserList"
+msgstr "Senarai Muatnaik"
+
+msgid "langSend"
+msgstr "Hantar"
+
+msgid "langUserAddExplanation"
+msgstr "setiap baris fail yang ingin dihantar hanya memerlukan 5 medan iaitu: <b>Nama Bapa   Nama Anda   		ID Pengguna   Katalaluan 		  Email</b> dipisahkan dengan tab mengikut turutan ini..		Pengguna akan menerima email pengesahan beserta ID Pengguna dan Katalaluan."
+
+msgid "langUserMany"
+msgstr "Import senarai Pengguna menggunakan fail teks"
+
+msgid "langOneByOne"
+msgstr "Tambah Pengguna secara manual"
+
+msgid "langNow"
+msgstr "sekarang"
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langTitular"
+msgstr "Titular"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>Ubahsuai Senarai Subjek</big><br><br>Pilih Subjek yang ingin diikuti.<br>Tanda Subjek yang anda tidak ingin ikuti.<br> Kemudian klik OK pada bahagian bawah senarainya tersebut"
+
+msgid "langStudent"
+msgstr "Pelajar"
+
+msgid "langAddAU"
+msgstr "Tambah Ahli"
+
+msgid "langAddedU"
+msgstr "telah ditambah. Email akan dihantar untuk memberikan ID Pengguna kepada Pelajar tersebut"
+
+msgid "langTheU"
+msgstr "Pengguna"
+
+msgid "langRegYou"
+msgstr "telah mendaftarkan anda untuk mengikuti subjek ini"
+
+msgid "langOneResp"
+msgstr "Satu daripada Subjek Pentadbir Subjek"
+
+msgid "langTaken"
+msgstr "telah dugunakan oleh Pengguna lain. Sila pilih ID Pengguna yang lain"
+
+msgid "langUserNo"
+msgstr "IP Pengguna yang anda pilih"
+
+msgid "langFilled"
+msgstr "Anda telah meninggalkan."
+
+msgid "langInC"
+msgstr "dalam subjek ini"
+
+msgid "langRole"
+msgstr "Peranan"
+
+msgid "langProfileReg"
+msgstr "Butir Peribadi anda telah disimpan"
+
+msgid "langEmailWrong"
+msgstr "Alamat email anda tidak sah"
+
+msgid "langUserTaken"
+msgstr "ID Pengguna ini telah digunakan oleh Pengguna lain"
+
+msgid "langFields"
+msgstr "Terdapat ruang kosong yang tidak diisi"
+
+msgid "langAgain"
+msgstr "Daftar Semula"
+
+msgid "langPassTwo"
+msgstr "Anda telah memasukkan katalaluan yang berbeza"
+
+msgid "langModifProfile"
+msgstr "Ubahsuai Butir Peribadi"
+
+msgid "langIsReg"
+msgstr "Perubahan anda telah didaftarkan"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Sekarang anda boleh membina Laman Subjek"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Sekarang anda boleh memilih Subjek yang anda ingin ikuti."
+
+msgid "langPersonalSettings"
+msgstr "Proses pendaftaran anda berjaya dilaksanakan. Maklumat Login (ID Pengguna & Katalaluan) akan dihantar kepada anda melalui e-mail</p>"
+
+msgid "langManager"
+msgstr "Pentadbir Sistem"
+
+msgid "langFormula"
+msgstr "Yours sincerely, your professor"
+
+msgid "langProblem"
+msgstr "Sebarang kesulitan, sila hubungi."
+
+msgid "langIs"
+msgstr "ialah"
+
+msgid "langAddress"
+msgstr "Alamat"
+
+msgid "langSettings"
+msgstr "dengan maklumat seperti beriku:
+Username:"
+
+msgid "langYouAreReg"
+msgstr "Anda telah berdaftar pada"
+
+msgid "langYourReg"
+msgstr "Pendaftaran anda pada"
+
+msgid "langUserFree"
+msgstr "ID Pengguna telah wujud. Sila daftar dengan ID Pengguna yang lain."
+
+msgid "langEmptyFields"
+msgstr "Terdapat ruang kosong yang tidak diisi.Sila penuhkan dan cuba sekali lagi"
+
+msgid "langPassTwice"
+msgstr "Anda telah menaip dua katalaluan yang berbeza. Sila cuba sekali lagi"
+
+msgid "langRegAdmin"
+msgstr "Pensyarah"
+
+msgid "langRegStudent"
+msgstr "Pelajar"
+
+msgid "langConfirmation"
+msgstr "Taip Semula"
+
+msgid "langPass"
+msgstr "Katalaluan"
+
+msgid "langSurname"
+msgstr "Nama Anda"
+
+msgid "langRegistration"
+msgstr "Pendaftaran Pengguna Baru"
+
+msgid "langYourAccountParam"
+msgstr "Berikut ialah Maklumat Login anda:"
+
+msgid "langLoginRequest"
+msgstr "Permintaan untuk Login"
+
+msgid "langAdminOfCourse"
+msgstr "Pentadbir"
+
+msgid "langSimpleUserOfCourse"
+msgstr "normal"
+
+msgid "langIsTutor"
+msgstr "tutor"
+
+msgid "langParamInTheCourse"
+msgstr "Status"
+
+msgid "langMember"
+msgstr "berdaftar"
+
+msgid "langLock"
+msgstr "kunci"
+
+msgid "langUnlock"
+msgstr "buka kunci"
+
+msgid "langHaveNoCourse"
+msgstr "tiada subjek"
+
+msgid "langManage"
+msgstr "Menguruskan Kampus"
+
+msgid "langAdministrationTools"
+msgstr "Alat Bantu Pentadbiran"
+
+msgid "langUserProfileReg"
+msgstr "telah dikemaskini"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Tiada Akaun Pengguna yang menggunakan alamat email berikut."
+
+msgid "langCourses4User"
+msgstr "Subjek yang diikuti oleh Pelajar ini"
+
+msgid "langCoursesByUser"
+msgstr "Subjek mengikut Pelajar"
+

@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Gönderilecek dosyayı seçmediniz veya dosya boyutu çok büyük"
+
+msgid "langLinkTarget"
+msgstr "Bağlantı hedefi"
+
+msgid "langSameWindow"
+msgstr "Aynı pencerede"
+
+msgid "langNewWindow"
+msgstr "Yeni bir pencerede"
+
+msgid "langAdded"
+msgstr "Eklendi"
+
+msgid "langAddLink"
+msgstr "Bağlantı ekle"
+
+msgid "langEditLink"
+msgstr "Ders AnaSayfa bağlantısını düzenle"
+

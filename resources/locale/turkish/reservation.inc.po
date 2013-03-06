@@ -1,0 +1,66 @@
+msgid "ReservationPeriodToSmall"
+msgstr "Rezervasyon süresi çok kısa"
+
+msgid "BookingSystem"
+msgstr "Rezervasyon Sistemi"
+
+msgid "BookingPeriodList"
+msgstr "Rezervasyın süreleri listesi"
+
+msgid "BookingListView"
+msgstr "Rezervasyon listesi"
+
+msgid "BookingCalendarView"
+msgstr "Rezervasyon takvim görüntüsü"
+
+msgid "BookingPeriods"
+msgstr "İş Programı"
+
+msgid "ResourceList"
+msgstr "Kaynak Listesi"
+
+msgid "GoToCalendarView"
+msgstr "Takvim görünümü"
+
+msgid "GoToListView"
+msgstr "Liste görüntüsü"
+
+msgid "ManageResources"
+msgstr "Kaynak yönetimi"
+
+msgid "EditResource"
+msgstr "Kaynak düzenle"
+
+msgid "BookIt"
+msgstr "Bir kaynak rezerve et"
+
+msgid "GoTo"
+msgstr "Git"
+
+msgid "NoTimePicker"
+msgstr "Zaman seçici yok"
+
+msgid "TimePicker"
+msgstr "Zaman seçici"
+
+msgid "ManageBookingPeriods"
+msgstr "Rezervasyon sürelerini yönet"
+
+msgid "BookingPeriodToSmall"
+msgstr "Rezervasyon süresi çok kısa"
+
+msgid "BookingPeriodToBig"
+msgstr "Rezervasyon süresi çok büyük"
+
+msgid "DeleteSelectedBookingPeriod"
+msgstr "Seçili rezervasyon sürelerini sil"
+
+msgid "EditNewBookingPeriod"
+msgstr "Rezervasyon süresini düzenle"
+
+msgid "BookingPeriodAdded"
+msgstr "Rezervasyon eklendi"
+
+msgid "BookingPeriodDeleted"
+msgstr "Rezervasyon silindi"
+

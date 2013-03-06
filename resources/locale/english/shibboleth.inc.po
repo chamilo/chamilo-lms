@@ -1,0 +1,45 @@
+msgid "no_login"
+msgstr "The system was unable to log you in. Please contact your administrator."
+
+msgid "page_title"
+msgstr "Shibboleth Login"
+
+msgid "email"
+msgstr "email"
+
+msgid "submit"
+msgstr "submit"
+
+msgid "status"
+msgstr "status"
+
+msgid "new_status"
+msgstr "New status"
+
+msgid "reason"
+msgstr "reason"
+
+msgid "request_status"
+msgstr "Request new status"
+
+msgid "status_request_message"
+msgstr "You have been logged-in with default rights. If you can request more rights by submitting the following request."
+
+msgid "reason_is_mandatory"
+msgstr "You reason field is mandatory. Please fill it in before submitting."
+
+msgid "request_submitted"
+msgstr "Your request has been submitted."
+
+msgid "request_failed"
+msgstr "We appologize but we are not ableto fulfill your request at this time. Please contact your administrator."
+
+msgid "internal_login"
+msgstr "Internal login"
+
+msgid "already_logged_in"
+msgstr "You are already logged in"
+
+msgid "Pass"
+msgstr "Password"
+

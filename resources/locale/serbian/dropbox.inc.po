@@ -1,0 +1,222 @@
+msgid "Upload"
+msgstr "Snimi na server"
+
+msgid "BackList"
+msgstr "Idi nazad u moj dropbox"
+
+msgid "ShowFeedback"
+msgstr "Prikaži odgovor"
+
+msgid "GiveFeedback"
+msgstr "Daj/Izmeni odgovor"
+
+msgid "JustUploadInSelect"
+msgstr "---SamoUčitavanje---"
+
+msgid "MailingNothingFor"
+msgstr "Ništa za"
+
+msgid "MailingFileNotRegistered"
+msgstr "(nije registovan za ovaj kurs)"
+
+msgid "MailingFileSentTo"
+msgstr "poslato na"
+
+msgid "MailingFileIsFor"
+msgstr "je za"
+
+msgid "MailingFileRecipDup"
+msgstr "višestruka korisnička imena imaju"
+
+msgid "MailingFileRecipNotFound"
+msgstr "nema polaznika sa"
+
+msgid "MailingFileNoRecip"
+msgstr "ime ne sadrži bilo kakvu identifikaciju primaoca"
+
+msgid "MailingFileNoPostfix"
+msgstr "ime se završava sa"
+
+msgid "MailingFileNoPrefix"
+msgstr "ime ne počinje sa"
+
+msgid "MailingFileFunny"
+msgstr "nema imena ili ekstenzija nije od 1 do 4 slova ili cifara."
+
+msgid "MailingZipDups"
+msgstr "Zip fajl za slanje ne sme da sadrži duplikate – neće biti poslat."
+
+msgid "MailingZipPhp"
+msgstr "Zip fajl za slanje ne sme da sadrži php fajlove – neće biti poslat."
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "Zip fajl za slanje je prazan ili nije ispravan"
+
+msgid "MailingWrongZipfile"
+msgstr "Mailing mora da bude zip fajl sa šifrom polaznika ili korisničkim imenom."
+
+msgid "MailingConfirmSend"
+msgstr "Pošalji fajlove sa sadržajem na individualna odredišta?"
+
+msgid "MailingSend"
+msgstr "Pošalji fajl sa sadržajem"
+
+msgid "MailingNotYetSent"
+msgstr "Fajlovi sa sadržajem još nisu poslati..."
+
+msgid "MailingInSelect"
+msgstr "---Mailing---"
+
+msgid "MailingAsUsername"
+msgstr "Mailing"
+
+msgid "FileDeleted"
+msgstr "Selektovani fajl je uklonjen iz dropbox."
+
+msgid "DocAdd"
+msgstr "Papir je uspešno dodat"
+
+msgid "Sender"
+msgstr "pošiljalac"
+
+msgid "Author"
+msgstr "autor"
+
+msgid "FileSize"
+msgstr "veličina fajla"
+
+msgid "Title"
+msgstr "naslov"
+
+msgid "OverwriteFile"
+msgstr "Da pišem preko prethodno poslatog fajla?"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Unknown"
+msgstr "nepoznato"
+
+msgid "SentOn"
+msgstr "uključeno"
+
+msgid "SentTo"
+msgstr "Primalac"
+
+msgid "ConfirmDelete"
+msgstr "Ovo će ukloniti stavku samo sa vaše liste"
+
+msgid "SendTo"
+msgstr "Pošalji"
+
+msgid "Description"
+msgstr "Opis dokumenta"
+
+msgid "UploadFile"
+msgstr "Učitaj dokument na server"
+
+msgid "ErrorCreatingDir"
+msgstr "Nemogu da kreiram dropbox direktorijum. Molim Vas kontaktirajte vašeg sistem administratora."
+
+msgid "UploadError"
+msgstr "Greška u učitavanju fajla. Molim Vas, kontaktirajte vašeg sistem administratora."
+
+msgid "TooBig"
+msgstr "Niste odabrali fajl ili je fajl prevelik."
+
+msgid "NoFileSpecified"
+msgstr "Niste odredili koji fajl želite da učitate na server."
+
+msgid "NoUserSelected"
+msgstr "Selektujte korisnika kome želite da pošaljete fajl."
+
+msgid "BadFormData"
+msgstr "Slanje podataka nije uspelo: pogrešna forma podataka. Molim Vas, kontaktirajte vašeg sistem administratora."
+
+msgid "GeneralError"
+msgstr "Došlo je do greške. Molim Vas, kontaktirajte vašeg sistem administratora."
+
+msgid "Dropbox"
+msgstr "Dropbox"
+
+msgid "Help"
+msgstr "Pomoć"
+
+msgid "ReceivedFiles"
+msgstr "Primljeni fajlovi"
+
+msgid "SentFiles"
+msgstr "Poslati fajlovi"
+
+msgid "ReceivedTitle"
+msgstr "Naslov"
+
+msgid "SentTitle"
+msgstr "Poslati fajlovi"
+
+msgid "Authors"
+msgstr "Autori"
+
+msgid "Size"
+msgstr "Veličina"
+
+msgid "LastResent"
+msgstr "Poslednji put ponovo poslato"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Osnovni"
+
+msgid "UploadNewFile"
+msgstr "Pošalji novu datoteku"
+
+msgid "AreYouSureToDelete"
+msgstr "Jeste li sigurni da želite da obrišete"
+
+msgid "Feedback"
+msgstr "Povratna informacija"
+
+msgid "CloseFeedback"
+msgstr "Zatvori povratnu informaciju"
+
+msgid "AddNewFeedback"
+msgstr "Dodaj povratnu informaciju"
+
+msgid "DropboxFeedbackStored"
+msgstr "Poruka povratne informacije je snimljena"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Svi korisnici su obrisali datoteku zato niko neće videti povratnu informaciju koju dodajete."
+
+msgid "PleaseTypeText"
+msgstr "Molim unesite neki tekst."
+
+msgid "DropboxFileTooBig"
+msgstr "Datoteka je prevelika."
+
+msgid "TheFileIsNotUploaded"
+msgstr "Fajl nije uspešno snimljen na server"
+
+msgid "FileUploadSucces"
+msgstr "Fajl je uspešno snimljen na server"
+
+msgid "MailingNonMailingError"
+msgstr "Mailing ne moe da zameni ne mailing i obrnuto"
+
+msgid "MailingSelectNoOther"
+msgstr "Mailing ne moe da se kombinuje sa drugim primaocima"
+
+msgid "langAddEdit"
+msgstr "Dodaj / Ažuriraj"
+
+msgid "AddComment"
+msgstr "Snimi povratnu informaciju"
+
+msgid "SentCatgoryDeleted"
+msgstr "Direktorijum je obrisan"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "Direktorijum je obrisan"
+

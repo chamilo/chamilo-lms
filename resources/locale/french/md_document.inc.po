@@ -1,0 +1,129 @@
+msgid "langMdCallingTool"
+msgstr "Documents"
+
+msgid "langMdTitle"
+msgstr "Titre de l\'objet"
+
+msgid "langMdDescription"
+msgstr "Pour enregistrer les données, poussez sur Enregistrer"
+
+msgid "langMdCoverage"
+msgstr "p.e. Baccalauréat en ..."
+
+msgid "langMdCopyright"
+msgstr "p.e. moyennant mention de la source"
+
+msgid "langTool"
+msgstr "Métadonnées document"
+
+msgid "langNoScript"
+msgstr "Script n\'est pas disponible dans le navigateur, la partie ci-dessous de l\'écran ne marchera pas..."
+
+msgid "langPressAgain"
+msgstr "Poussez de nouveau sur \'Enregistrer\'..."
+
+msgid "langLanguageTip"
+msgstr "la langue dans laquelle cet objet a été construit"
+
+msgid "langIdentifier"
+msgstr "Identification"
+
+msgid "langIdentifierTip"
+msgstr "identification unique pour cet objet, lettres, chiffres, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "titre ou nom, et langue du titre ou nom"
+
+msgid "langDescriptionTip"
+msgstr "description ou commentaire, et langue utilisée pour décrire l\'objet"
+
+msgid "langKeyword"
+msgstr "Mot-clé"
+
+msgid "langKeywordTip"
+msgstr "séparez-les par des virgules (lettres, chiffres, -.)"
+
+msgid "langCoverage"
+msgstr "Objectif"
+
+msgid "langCoverageTip"
+msgstr "p.e. Baccalauréat en ..."
+
+msgid "langKwNote"
+msgstr "Si vous changez la langue de la description, n\'ajoutez pas de nouveaux mots clé en même temps."
+
+msgid "langClickKw"
+msgstr "Clic pour sélectionner ou annuler un mot clé."
+
+msgid "langKwHelp"
+msgstr "<br />Clic \'+\' pour ouvrir, \'-\' pour fermer, \'++\' pour ouvrir tout, \'--\' pour tout fermer.<br /><br />Pour annuler les choix précédents, fermez l\'arborescence et ré-ouvrez-là avec \'+\'.<br />Pour remettre les mots clé originaux, ouvrez-là avec Alt-clic \'+\'.<br /><br />Alt-clic mot clé sélectionne un mot clé sans termes plus large etannulle avec termes plus larges.<br /><br />Si vous changez la langue de la description, n\'ajoutez pas de nouveaux mots clé en même temps.<br /><br />"
+
+msgid "langRights"
+msgstr "Conditions d\'utilisation"
+
+msgid "langRightsTip"
+msgstr "description"
+
+msgid "langVersion"
+msgstr "Version"
+
+msgid "langVersionTip"
+msgstr "nombre ou description"
+
+msgid "langStatusTip"
+msgstr "choisissez dans la liste"
+
+msgid "langCreatedSize"
+msgstr "Créé le, taille"
+
+msgid "langCreatedSizeTip"
+msgstr "créé le AAAA-MM-JJ, taille en octets (bytes)"
+
+msgid "langAuthorTip"
+msgstr "format VCARD"
+
+msgid "langFormat"
+msgstr "Format"
+
+msgid "langFormatTip"
+msgstr "choisissez dans la liste"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "clickez pour ouvrir l\'objet"
+
+msgid "langStore"
+msgstr "Enregistrer"
+
+msgid "langDeleteAll"
+msgstr "Enlever toutes les métadonnées"
+
+msgid "langConfirmDelete"
+msgstr "Enlever *vraiment* toutes les métadonnées?"
+
+msgid "langCourseKwds"
+msgstr "Ce document contient les mots clé du cours"
+
+msgid "langSearch"
+msgstr "Cherchez"
+
+msgid "langSearchCrit"
+msgstr "Un mot par ligne!"
+
+msgid "langStatuses"
+msgstr ":draft:brouillon,,      final:version finale,,      revised:version révisée,,      unavailable:non disponible"
+
+msgid "langCosts"
+msgstr ":no:gratuit,, yes:moyennant payement"
+
+msgid "langCopyrights"
+msgstr ":yes:copyright,, no:sans copyright"
+
+msgid "langFormats"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+
+msgid "langLngResTypes"
+msgstr ":exercise:exercice,,      simulation:simulation,,      questionnaire:enquête,,      diagram:diagramme,,      figure:figure,,      graph:graphe,,      index:index,,      slide:diapo,,      table:table,,      narrative text:texte narratif,,      exam:examen,,      experiment:expérience,,      problem statement:problème,,      self assessment:auto-évaluation,,      lecture:présentation"
+

@@ -1,0 +1,600 @@
+msgid "langLineNumber"
+msgstr "Lijnnummer"
+
+msgid "langLine"
+msgstr "lijn"
+
+msgid "langLines"
+msgstr "lijnen"
+
+msgid "langLineOrLines"
+msgstr "lijn(en)"
+
+msgid "langMoveUp"
+msgstr "Omhoog"
+
+msgid "langMoveDown"
+msgstr "Omlaag"
+
+msgid "langAddNewHeading"
+msgstr "Voeg nieuwe hoofding toe"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Enkel voor cursusbeheerders"
+
+msgid "langDefineHeadings"
+msgstr "Definieer aanvullende informatie"
+
+msgid "langBackToUsersList"
+msgstr "Terug naar gebruikerslijst"
+
+msgid "langTracking"
+msgstr "Statistieken"
+
+msgid "langCourseManager"
+msgstr "Cursusbeheerder"
+
+msgid "langModRight"
+msgstr "Beheersrechten wijzigen van"
+
+msgid "langNoAdmin"
+msgstr "heeft vanaf nu <b>geen</b> beheersrecht op deze pagina."
+
+msgid "langAllAdmin"
+msgstr "heeft vanaf nu <b>alle</b> beheersrechten op deze pagina."
+
+msgid "langModRole"
+msgstr "Rol wijzigen van"
+
+msgid "langRole"
+msgstr "Rol (facultatief)"
+
+msgid "langIsNow"
+msgstr "is vanaf nu"
+
+msgid "langInC"
+msgstr "in deze cursus"
+
+msgid "langFilled"
+msgstr "U hebt niet alle velden ingevuld."
+
+msgid "langUserNo"
+msgstr "De gekozen gebruikersnaam"
+
+msgid "langTaken"
+msgstr "is al in gebruik. Kies een ander."
+
+msgid "langTutor"
+msgstr "Begeleider (groepen)"
+
+msgid "langUnreg"
+msgstr "Uitschrijven"
+
+msgid "langGroupUserManagement"
+msgstr "Groepenbeheer"
+
+msgid "langUnregister"
+msgstr "Uitschrijven"
+
+msgid "langAddAUser"
+msgstr "gebruikers toevoegen"
+
+msgid "UsersUnsubscribed"
+msgstr "De geselecteerde gebruikers zijn uitgeschreven uit de cursus"
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "De student is ingeschreven in deze cursus via een sessie. U kan deze informatie niet wijzigen"
+
+msgid "NoDataAvailable"
+msgstr "Geen gegevens beschikbaar"
+
+msgid "AddToFriends"
+msgstr "Bent u zeker dat u deze contactpersoon wilt toevoegen aan uw vriendenlijst?"
+
+msgid "AddPersonalMessage"
+msgstr "Voeg een persoonlijk bericht toe"
+
+msgid "Friends"
+msgstr "Vrienden"
+
+msgid "PersonalData"
+msgstr "Persoonlijke gegevens"
+
+msgid "Contacts"
+msgstr "Contacten"
+
+msgid "SocialInformationComment"
+msgstr "In dit scherm kunt u uw contacten organiseren"
+
+msgid "AttachContactsToGroup"
+msgstr "Voeg contactpersonen toe aan de groep"
+
+msgid "ContactsList"
+msgstr "Contactenlijst"
+
+msgid "AttachToGroup"
+msgstr "Toevoegen aan een groep"
+
+msgid "SelectOneContact"
+msgstr "Selecteer een contactpersoon"
+
+msgid "SelectOneGroup"
+msgstr "Selecteer een groep"
+
+msgid "AttachContactsPersonal"
+msgstr "Persoonlijke contacten toevoegen"
+
+msgid "AttachContactsToGroupSuccesfuly"
+msgstr "De contacten zijn met succes aan de groep toegevoegd"
+
+msgid "InvitationDenied"
+msgstr "Uw uitnodiging is geweigerd"
+
+msgid "AddedContactToList"
+msgstr "U hebt contacten toegevoegd aan de lijst"
+
+msgid "ContactsGroupsComment"
+msgstr "Dit scherm is een lijst van contacten gesorteerd per groep"
+
+msgid "YouDontHaveContactsInThisGroup"
+msgstr "Geen contacten gevonden"
+
+msgid "SelectTheCheckbox"
+msgstr "Selecteer het keuzevak"
+
+msgid "YouDontHaveInvites"
+msgstr "Leeg"
+
+msgid "SocialInvitesComment"
+msgstr "Wachtende invitaties"
+
+msgid "InvitationSentBy"
+msgstr "Invitatie verzonden door"
+
+msgid "RequestContact"
+msgstr "Verzoek tot contact"
+
+msgid "SocialUnknow"
+msgstr "Onbekend"
+
+msgid "SocialParent"
+msgstr "Mijn ouders"
+
+msgid "SocialFriend"
+msgstr "Mijn vrienden"
+
+msgid "SocialGoodFriend"
+msgstr "Mijn goede vrienden"
+
+msgid "SocialEnemy"
+msgstr "Mijn vijanden"
+
+msgid "SocialDeleted"
+msgstr "Contact verwijderd"
+
+msgid "MessageOutboxComment"
+msgstr "Verstuurde berichten"
+
+msgid "MyPersonalData"
+msgstr "Mijn persoonlijke gegevens"
+
+msgid "AlterPersonalData"
+msgstr "Persoonlijke gegevens wijzigen"
+
+msgid "Invites"
+msgstr "Uitnodigingen"
+
+msgid "ContactsGroups"
+msgstr "Contactgroepen"
+
+msgid "ErrorSendingMessage"
+msgstr "Er heeft zich een fout voorgedaan bij het verzenden van de boodschap"
+
+msgid "PendingInvitations"
+msgstr "Wachtende invitaties"
+
+msgid "MyInbox"
+msgstr "Mijn inbox"
+
+msgid "ViewSharedProfile"
+msgstr "Gedeeld profiel bekijken"
+
+msgid "SeeAll"
+msgstr "Alles weergeven"
+
+msgid "ImagesUploaded"
+msgstr "Geüploade afbeeldingen"
+
+msgid "ExtraInformation"
+msgstr "Extra informatie"
+
+msgid "SearchContacts"
+msgstr "Contacten zoeken"
+
+msgid "SocialSeeContacts"
+msgstr "Contacten bekijken"
+
+msgid "SocialUserInformationAttach"
+msgstr "Gelieve eerst een bericht in te vullen vooraleer het te verzenden"
+
+msgid "MessageInvitationNotSent"
+msgstr "Uw uitnodigingsbericht is niet verstuurd"
+
+msgid "SocialAddToFriends"
+msgstr "Toevoegen aan mijn contacten"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "Deze gebruiker is niet geregistreerd in deze training"
+
+msgid "ChangeContactGroup"
+msgstr "Wijzig contact groep"
+
+msgid "Friend"
+msgstr "Vriend"
+
+msgid "ViewMySharedProfile"
+msgstr "Mijn gedeeld profiel"
+
+msgid "UserStatistics"
+msgstr "Statistieken van deze gebruiker"
+
+msgid "EditUser"
+msgstr "Wijzig deze gebruiker"
+
+msgid "ViewUser"
+msgstr "Bekijk deze gebruiker"
+
+msgid "RSSFeeds"
+msgstr "RSS feed"
+
+msgid "NoFriendsInYourContactList"
+msgstr "Geen vrienden in uw contactenlijst"
+
+msgid "TryAndFindSomeFriends"
+msgstr "Probeer vrienden te vinden"
+
+msgid "ClearSearchResults"
+msgstr "Zoekresultaten wissen"
+
+msgid "SendInvitation"
+msgstr "Invitatie versturen"
+
+msgid "SocialInvitationToFriends"
+msgstr "Uitnodigen tot mijn vriendengroep"
+
+msgid "MyCertificates"
+msgstr "Mijn certificaten"
+
+msgid "UnsubscribeFromPlatformSuccess"
+msgstr "Uw account %s werd volledig verwijderd van het systeem. Bedankt voor uw bijdrage. Hopelijk tot weerziens."
+
+msgid "ToChangeYourEmailMustTypeYourPassword"
+msgstr "Om uw e-mailadres te kunnen wijzigen, moet u uw wachtwoord bevestigen"
+
+msgid "Invitations"
+msgstr "Invitaties"
+
+msgid "MyGroups"
+msgstr "Mijn groepen"
+
+msgid "EditProfile"
+msgstr "Profiel wijzigen"
+
+msgid "Social"
+msgstr "Sociaal"
+
+msgid "Profile"
+msgstr "Profiel"
+
+msgid "MyFriends"
+msgstr "Mijn vrienden"
+
+msgid "Messages"
+msgstr "Berichten"
+
+msgid "CreateAgroup"
+msgstr "Een groep maken"
+
+msgid "UsersGroups"
+msgstr "Gebruikers, Groepen"
+
+msgid "SorryNoResults"
+msgstr "Sorry, geen resultaten"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "AddPicture"
+msgstr "Afbeelding toevoegen"
+
+msgid "GroupPermissions"
+msgstr "Groepsrechten"
+
+msgid "Closed"
+msgstr "Gesloten"
+
+msgid "AddGroup"
+msgstr "Groep toevoegen"
+
+msgid "Privacy"
+msgstr "Privacy"
+
+msgid "ThisIsAnOpenGroup"
+msgstr "Dit is een open groep"
+
+msgid "YouShouldCreateATopic"
+msgstr "U moet een onderwerp maken"
+
+msgid "IAmAnAdmin"
+msgstr "Ik ben een beheerder"
+
+msgid "NewTopic"
+msgstr "Bijdrage toevoegen"
+
+msgid "MessageList"
+msgstr "Berichtenlijst"
+
+msgid "EditGroup"
+msgstr "Wijzig groep"
+
+msgid "MemberList"
+msgstr "Gebruikerslijst"
+
+msgid "WaitingList"
+msgstr "Wachtlijst"
+
+msgid "InviteFriends"
+msgstr "Vrienden inviteren"
+
+msgid "Members"
+msgstr "Leden"
+
+msgid "Admin"
+msgstr "Beheerder"
+
+msgid "AttachmentFiles"
+msgstr "Bijlagen"
+
+msgid "AddOneMoreFile"
+msgstr "Voeg één of meerdere bestanden toe"
+
+msgid "MaximunFileSizeX"
+msgstr "Maximale bestandsgrootte: %s"
+
+msgid "ModifyInformation"
+msgstr "Informatie wijzigen"
+
+msgid "GroupList"
+msgstr "Groepslijst"
+
+msgid "GroupEdit"
+msgstr "Groep wijzigen"
+
+msgid "ThereAreNotUsersInTheWaitingList"
+msgstr "Er zijn geen gebruikers in de wachtlijst"
+
+msgid "SendInvitationTo"
+msgstr "Verzend invitatie aan"
+
+msgid "InviteUsersToGroup"
+msgstr "Inviteer gebruikers tot groep"
+
+msgid "PostIn"
+msgstr "Het verzond"
+
+msgid "Reply"
+msgstr "Antwoorden"
+
+msgid "Newest"
+msgstr "Nieuwste"
+
+msgid "Popular"
+msgstr "Populair"
+
+msgid "Moderator"
+msgstr "Leider"
+
+msgid "DeleteModerator"
+msgstr "Leider verwijderen"
+
+msgid "UserChangeToModerator"
+msgstr "Gebruiker gepromoveerd naar leider"
+
+msgid "IAmAModerator"
+msgstr "Ik ben een leider"
+
+msgid "ThisIsACloseGroup"
+msgstr "Dit is een gesloten groep"
+
+msgid "IAmAReader"
+msgstr "Ik ben een lezer"
+
+msgid "UserChangeToReader"
+msgstr "Gebruiker gewijzigd naar lezer"
+
+msgid "AddModerator"
+msgstr "Toevoegen als leider"
+
+msgid "UserDeleted"
+msgstr "De gebruiker werd verwijderd"
+
+msgid "JoinGroup"
+msgstr "Lid worden van groep"
+
+msgid "YouShouldJoinTheGroup"
+msgstr "U moet lid worden van de groep"
+
+msgid "WaitingForAdminResponse"
+msgstr "Wachtend op een antwoord van de beheerder"
+
+msgid "Member"
+msgstr "Lid"
+
+msgid "Re"
+msgstr "Antw"
+
+msgid "FilesAttachment"
+msgstr "Bestandsbijlagen"
+
+msgid "GroupWaitingList"
+msgstr "Groep wachtlijst"
+
+msgid "Open"
+msgstr "Open"
+
+msgid "UsersAlreadyInvited"
+msgstr "Gebruikers reeds geïnviteerd"
+
+msgid "SubscribeUsersToGroup"
+msgstr "Voeg gebruikers aan groep toe"
+
+msgid "YouHaveBeenInvitedJoinNow"
+msgstr "U bent uitgenodigd om nu deel te nemen"
+
+msgid "DenyInvitation"
+msgstr "Uitnodiging negeren"
+
+msgid "AcceptInvitation"
+msgstr "Uitnodiging aanvaarden"
+
+msgid "GroupsWaitingApproval"
+msgstr "Groepen wachtend op goedkeuring"
+
+msgid "GroupInvitationWasDeny"
+msgstr "Groepsuitnodiging werd afgewezen"
+
+msgid "UserIsSubscribedToThisGroup"
+msgstr "De gebruiker in deze groep ingeschreven"
+
+msgid "DeleteFromGroup"
+msgstr "Verwijderen uit groep"
+
+msgid "GroupMembers"
+msgstr "Groepsleden"
+
+msgid "Subscribe"
+msgstr "Inschrijven"
+
+msgid "YouAreInvitedToGroupContent"
+msgstr "U bent uitgenodigd om inhoud van de groep te bekijken"
+
+msgid "YouAreInvitedToGroup"
+msgstr "U bent uitgenodigd bij een groep"
+
+msgid "ToSubscribeClickInTheLinkBelow"
+msgstr "Om in te schrijven, klik onderstaande link"
+
+msgid "ReturnToInbox"
+msgstr "Keer terug naar inbox"
+
+msgid "View"
+msgstr "Toon"
+
+msgid "Me"
+msgstr "Ik"
+
+msgid "ReturnToOutbox"
+msgstr "Terug naar verzonden items"
+
+msgid "EditNormalProfile"
+msgstr "Wijzig normaal profiel"
+
+msgid "GroupPendingInvitations"
+msgstr "Wachtende groepsinvitaties"
+
+msgid "LeaveGroup"
+msgstr "Groep verlaten"
+
+msgid "UserIsNotSubscribedToThisGroup"
+msgstr "De gebruiker is niet ingeschreven bij deze groep"
+
+msgid "InvitationReceived"
+msgstr "Uitnodiging ontvangen"
+
+msgid "InvitationSent"
+msgstr "Uitnodiging verzonden"
+
+msgid "YouAlreadySentAnInvitation"
+msgstr "U hebt reeds een uitnodiging verzonden"
+
+msgid "UserAdded"
+msgstr "De gebruiker werd toegevoegd"
+
+msgid "FilesSizeExceedsX"
+msgstr "Bestandsgrootte overschreden"
+
+msgid "YouShouldWriteASubject"
+msgstr "U moet een onderwerp invullen"
+
+msgid "Topics"
+msgstr "Onderwerpen"
+
+msgid "StatusInThisGroup"
+msgstr "Status in deze groep"
+
+msgid "FriendsOnline"
+msgstr "Online vrienden"
+
+msgid "GroupDescription"
+msgstr "Groepsomschrijving"
+
+msgid "MyProductions"
+msgstr "Mijn producten"
+
+msgid "YouHaveReceivedANewMessageInTheGroupX"
+msgstr "U hebt een nieuw bericht ontvangen in de groep %s"
+
+msgid "ClickHereToSeeMessageGroup"
+msgstr "Klik hier om het groepsbericht te zien"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "of kopieër en plak de volgende url :"
+
+msgid "ThereIsANewMessageInTheGroupX"
+msgstr "Er is een nieuw bericht in de groep %s"
+
+msgid "UserIsAlreadySubscribedToThisGroup"
+msgstr "De gebruiker is reeds ingeschreven in deze groep"
+
+msgid "AddNormalUser"
+msgstr "Voeg een eenvoudige gebruiker toe"
+
+msgid "DenyEntry"
+msgstr "Toegang verbieden"
+
+msgid "YouNeedToHaveFriendsInYourSocialNetwork"
+msgstr "U hebt vrienden nodig in uw sociaal netwerk"
+
+msgid "SeeAllMyGroups"
+msgstr "Toon al mijn groepen"
+
+msgid "YouAlreadyInviteAllYourContacts"
+msgstr "U hebt reeds al uw contacten uitgenodigd"
+
+msgid "YouShouldCreateAGroup"
+msgstr "U moet een groep aanmaken"
+
+msgid "MyFiles"
+msgstr "Mijn bestanden"
+
+msgid "MySocialGroups"
+msgstr "Mijn sociale groepen"
+
+msgid "SocialGroups"
+msgstr "Sociale groepen"
+
+msgid "CreateASocialGroup"
+msgstr "Sociale groep maken"
+
+msgid "EditMembersList"
+msgstr "Wijzig gebruikerslijst"
+
+msgid "IAmAHRM"
+msgstr "Ik ben een human resources manager"
+
+msgid "UnsubscribeFromPlatform"
+msgstr "Indien u zich volledig wenst uit te schrijven van dit leerplatform en al uw gegevens wenst te verwijderen uit onze database, klik dan op onderstaande knop om dit te bevestigen."
+
+msgid "UnsubscribeFromPlatformConfirm"
+msgstr "Ja, ik wil mijn account volledig verwijderen. Er zal geen data op de server achterblijven en ik zal niet opnieuw kunnen aanmelden, tenzij ik opnieuw registreer."
+

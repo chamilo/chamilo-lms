@@ -1,0 +1,123 @@
+msgid "langSelectOptionForBackup"
+msgstr "Elektu opcion por la restaŭro. XX"
+
+msgid "langLetMeSelectItems"
+msgstr "Lasi min elekti la kurserojn."
+
+msgid "langCreateFullBackup"
+msgstr "Fari kompletan restaŭrkopion de ĉi-kurso."
+
+msgid "langCreateBackup"
+msgstr "Krei restaŭrkopion"
+
+msgid "langBackupCreated"
+msgstr "Restarŭrkopio de ĉi-kurso estas farita. Elŝuto de tiu dosiero tuj komenciĝos. Se tio ne okazus, provu jenan ligilon."
+
+msgid "langSelectBackupFile"
+msgstr "Elektu restaŭrkopion."
+
+msgid "langImportBackup"
+msgstr "Importi restaŭrkopion"
+
+msgid "langImportFullBackup"
+msgstr "Importu ĉiujn kurserojn de la restaŭrkopio."
+
+msgid "langImportFinished"
+msgstr "La importado de la restaŭrkopio finiĝis."
+
+msgid "langEvents"
+msgstr "Aktivecoj XX"
+
+msgid "langAnnouncements"
+msgstr "Anoncoj"
+
+msgid "langDocuments"
+msgstr "Dokumentoj"
+
+msgid "langTests"
+msgstr "Ekzercoj XX"
+
+msgid "langLearnpaths"
+msgstr "Lernopadoj"
+
+msgid "langCopyCourse"
+msgstr "Kopii kurson"
+
+msgid "langSelectItemsToCopy"
+msgstr "Elektu la kopiotajn kurserojn."
+
+msgid "langCopyFinished"
+msgstr "La elektitaj kurseroj estas kopiitaj."
+
+msgid "langFullRecycle"
+msgstr "Forigu ĉiujn kurserojn de la kurso."
+
+msgid "langRecycleCourse"
+msgstr "Malplenigi kurson."
+
+msgid "langRecycleFinished"
+msgstr "Via kurso estas malplenigita."
+
+msgid "langRecycleWarning"
+msgstr "Averto: per ĉi-funkcio iuj partoj de via kurso estos forigataj. Ne eblos malfari tion. Ni konsilas unue fari <a href=\"create_backup.php\">restaŭrkopion</a>"
+
+msgid "langSameFilename"
+msgstr "Kio okazu pri la importitaj dosieroj kun sama nomo kiel la ekzistataj dosieroj?"
+
+msgid "langSameFilenameSkip"
+msgstr "Transsalti dosierojn"
+
+msgid "langSameFilenameRename"
+msgstr "Renomi dosierojn (ekz. dosiero.pdf iĝu dosiero_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Anstataŭigi dosierojn"
+
+msgid "langSelectDestinationCourse"
+msgstr "Elektu celkurson"
+
+msgid "langFullCopy"
+msgstr "Kopii ĉiujn erojn de la aktuala kurso."
+
+msgid "langCourseDescription"
+msgstr "Kurspriskribo"
+
+msgid "langNoResourcesToBackup"
+msgstr "Ne disponeblas kurseroj por krei restaŭrkopion"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Ne disponeblas kurseroj en ĉi-restaŭrkopio."
+
+msgid "langSelectResources"
+msgstr "Elektu la deziratajn kurserojn."
+
+msgid "langNoResourcesToRecycles"
+msgstr "Ne estas kurseroj forigeblaj."
+
+msgid "langIncludeQuestionPool"
+msgstr "Aldoni ĉiujn disponeblajn demandojn."
+
+msgid "langLocalFile"
+msgstr "Ŝargi dosieron de el via komputilo"
+
+msgid "langServerFile"
+msgstr "Uzi restaŭrkopion de el la servilo"
+
+msgid "langNoBackupsAvailable"
+msgstr "Ne disponeblas restaŭrkopioj en la servilo."
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "Ne estas aliaj kursoj, kies mastrumanto vi estas. Vi do ne povas kopii enhavon al alia kurso."
+
+msgid "langBackup"
+msgstr "Restaŭri XX"
+
+msgid "langImportBackupInfo"
+msgstr "Importi antaŭe faritan restaŭrkopion. Vi povas ŝargi restaŭrkopiojn de el via loka PK aŭ elekti restaŭrkopion ĉe ĉi-servilo."
+
+msgid "langCreateBackupInfo"
+msgstr "Krei restaŭrkopion de ĉi-kurso. Vi povas mem indiki kiuj kurseroj eniru en la restaŭrkopion."
+
+msgid "ToolIntro"
+msgstr "Enkonduka teksto"
+

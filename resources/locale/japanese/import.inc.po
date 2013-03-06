@@ -1,0 +1,24 @@
+msgid "langExplanation"
+msgstr "办搀OKをクリックすると、柴的技や徒年、矢今マネ〖ジャ〖烧のサイトが叫丸ます。サイト侯喇荚としてログインすると、サイトを饯赖することが叫丸ます。"
+
+msgid "langTooBig"
+msgstr "ファイルが络きすぎるので、联买できません。"
+
+msgid "langCouldNot"
+msgstr "ファイルが流れませんでした。"
+
+msgid "langAddPageToSite"
+msgstr "ペ〖ジを裁える"
+
+msgid "langCouldNotSendPage"
+msgstr "このファイルは HTMLフォ〖マットではないので、觅れませんでした。PDF, Word, Power Point, Video, などの矢今を流りたいのであれば肌のリンクを网脱布さい<a href"
+
+msgid "langSendPage"
+msgstr "ペ〖ジを流る"
+
+msgid "langPageTitleModified"
+msgstr "兜徽がペ〖ジタイトルを恃构しました"
+
+msgid "langPageAdded"
+msgstr "ペ〖ジを裁えました"
+

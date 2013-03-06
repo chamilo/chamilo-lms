@@ -1,0 +1,138 @@
+msgid "Announcement"
+msgstr "Anoncoj"
+
+msgid "langAnnEmpty"
+msgstr "La anoncoj estas forigitaj"
+
+msgid "AnnouncementModified"
+msgstr "La anonco estas ŝanĝita"
+
+msgid "AnnouncementAdded"
+msgstr "La anonco estas aldonita"
+
+msgid "AnnouncementDeleted"
+msgstr "La anonco estas viŝita"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Anonco publikigita je"
+
+msgid "AddAnnouncement"
+msgstr "Aldoni anoncon"
+
+msgid "langContent"
+msgstr "Anonca enhavo"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Forigi ĉiujn anoncojn"
+
+msgid "professorMessage"
+msgstr "Mesaĝo de via instruisto"
+
+msgid "langEmailSent"
+msgstr "kaj retpoŝte sendita al la aliĝintaj studentoj"
+
+msgid "EmailOption"
+msgstr "Sendi ĉi tiun komunikon retpoŝte al ĉiuj elektitaj grupoj/uzantoj"
+
+msgid "langOn"
+msgstr "Je"
+
+msgid "langRegUser"
+msgstr "Aliĝintaj uzuloj"
+
+msgid "langUnvalid"
+msgstr "havas nevalidan retpoŝtadreson aŭ ne havas adreson"
+
+msgid "langModifAnn"
+msgstr "Ŝanĝi la anoncon"
+
+msgid "langModify"
+msgstr "Ŝanĝi"
+
+msgid "langDelete"
+msgstr "Forigi"
+
+msgid "langTitle"
+msgstr "Titolo"
+
+msgid "langHelp"
+msgstr "Helpo"
+
+msgid "langOk"
+msgstr "En ordo"
+
+msgid "langAddIntro"
+msgstr "ALDONI ENKONDUKON"
+
+msgid "langBackList"
+msgstr "Reiri al la listo"
+
+msgid "langSelMess"
+msgstr "Averto al kelkaj uzuloj"
+
+msgid "EmailTitle"
+msgstr "Temo"
+
+msgid "langUserlist"
+msgstr "Listo de uzuloj kaj grupoj"
+
+msgid "langSelectedUsers"
+msgstr "Elektitaj uzuloj"
+
+msgid "langSubmit"
+msgstr "Sendi"
+
+msgid "langPleaseEnterMessage"
+msgstr "Bonvolu enigi sendotan mesaĝon"
+
+msgid "langPleaseSelectUsers"
+msgstr "Unue elektu uzulojn, al kiuj la mesaĝo estu sendita."
+
+msgid "Teachersubject"
+msgstr "Anonco sendita al studentoj"
+
+msgid "langMessages"
+msgstr "Mesaĝoj"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Mesaĝoj al specifaj uzuloj aŭ grupoj"
+
+msgid "langIntroText"
+msgstr "Unue el la maldekstraflanka listo elektu grupojn (kun komenclitero G) aŭ uzulojn, al kiuj la mesaĝo estas sendota. Uzu la stirklavon por samtempe indiki plurajn uzulojn. Sekve klaku sur la butonon \'>>\'."
+
+msgid "langDown"
+msgstr "Malsupren"
+
+msgid "langMsgSent"
+msgstr "La mesaĝo estas sendita."
+
+msgid "langSelUser"
+msgstr "uzuloj"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Mesaĝoj al specifaj grupoj"
+
+msgid "langSelectedGroups"
+msgstr "Elektitaj grupoj"
+
+msgid "langMsg"
+msgstr "Mesaĝoj"
+
+msgid "langYes"
+msgstr "Jes"
+
+msgid "MsgText"
+msgstr "Mesaĝo"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Ĉiuj anoncoj estas forigitaj"
+
+msgid "AnnouncementMoved"
+msgstr "La anoncoj estas translokitaj"
+
+msgid "NoAnnouncements"
+msgstr "Ne estas anoncoj"
+
+msgid "SelectEverybody"
+msgstr "Elekti ĉiujn"
+

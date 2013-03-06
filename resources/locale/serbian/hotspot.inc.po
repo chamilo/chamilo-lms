@@ -1,0 +1,30 @@
+msgid "select"
+msgstr "Potvrdi"
+
+msgid "square"
+msgstr "Kvadrat"
+
+msgid "circle"
+msgstr "Elipsa"
+
+msgid "poly"
+msgstr "Poligon"
+
+msgid "status2_poly"
+msgstr "Koristi desni klik da zatvoriš poligon"
+
+msgid "status2_other"
+msgstr "Pusti dugme miša da sačuvaš hotspot"
+
+msgid "status3"
+msgstr "Hotspot sačuvan"
+
+msgid "exercise_status_1"
+msgstr "Odgovori klikom na sliku ispod"
+
+msgid "exercise_status_2"
+msgstr "Potvrdi odgovore"
+
+msgid "labelPolyMenu"
+msgstr "Zatvori poligon"
+

@@ -1,0 +1,42 @@
+msgid "Height"
+msgstr "Aukštis"
+
+msgid "ResizingComment"
+msgstr "resize the image to the following dimensions (in pixels)"
+
+msgid "Width"
+msgstr "Plotis"
+
+msgid "Resizing"
+msgstr "Keisti dydį"
+
+msgid "NoResizingComment"
+msgstr "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size."
+
+msgid "ShowThumbnails"
+msgstr "Show Thumbnails"
+
+msgid "SetSlideshowOptions"
+msgstr "Set Slideshow Options"
+
+msgid "SlideshowOptions"
+msgstr "Skaidrių nustatymai"
+
+msgid "NoResizing"
+msgstr "Nekeisti dydžio (default)"
+
+msgid "ExitSlideshow"
+msgstr "Išeiti"
+
+msgid "SlideShow"
+msgstr "Skaidrės"
+
+msgid "PreviousSlide"
+msgstr "Buvusi skaidrė"
+
+msgid "NextSlide"
+msgstr "Kita skaidrė"
+
+msgid "ViewSlideshow"
+msgstr "Rodyti skaidres"
+

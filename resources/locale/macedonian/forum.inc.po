@@ -1,0 +1,231 @@
+msgid "ForumDeleted"
+msgstr "Форумот е избришан"
+
+msgid "ForumCategoryDeleted"
+msgstr "Категоријата на форуми е избришана"
+
+msgid "ForumLocked"
+msgstr "Форумот е блокиран"
+
+msgid "Forum"
+msgstr "Форуми"
+
+msgid "AddForumCategory"
+msgstr "Додај нова категорија на форумот"
+
+msgid "AddForum"
+msgstr "Додај нов форум"
+
+msgid "Topics"
+msgstr "Теми"
+
+msgid "Posts"
+msgstr "Написи"
+
+msgid "LastPosts"
+msgstr "Последен напис"
+
+msgid "Message"
+msgstr "порака"
+
+msgid "NoForumInThisCategory"
+msgstr "Нема форуми во оваа категорија"
+
+msgid "InForumCategory"
+msgstr "Креирај категорија"
+
+msgid "AllowAnonymousPosts"
+msgstr "Дали да бидат допуштени знонимни написи?"
+
+msgid "StudentsCanEdit"
+msgstr "Можат ли курсистите да уредуваат свои написи?"
+
+msgid "ApprovalDirect"
+msgstr "Одобрени/Директни написи"
+
+msgid "AllowNewThreads"
+msgstr "Допушти на курсистите да почнат нови тематски низи"
+
+msgid "DefaultViewType"
+msgstr "Поставен вид на приказ"
+
+msgid "GroupSettings"
+msgstr "Поставки на групата"
+
+msgid "NotAGroupForum"
+msgstr "Не е групен форум"
+
+msgid "PublicPrivateGroupForum"
+msgstr "Јавен или приватен групен форум?"
+
+msgid "Public"
+msgstr "За сите членови на курсот"
+
+msgid "Private"
+msgstr "Само за групите членови"
+
+msgid "NewPostStored"
+msgstr "Вашата порака е снимена"
+
+msgid "ReturnTo"
+msgstr "Можете да се вратите на"
+
+msgid "Or"
+msgstr "или"
+
+msgid "ReplyToThread"
+msgstr "Одговори на оваа тематска низа"
+
+msgid "ReplyToMessage"
+msgstr "Одговори на оваа порака"
+
+msgid "QuoteMessage"
+msgstr "Квота на оваа порака"
+
+msgid "NewTopic"
+msgstr "Нова тематска низа"
+
+msgid "Replies"
+msgstr "Одговори"
+
+msgid "Views"
+msgstr "Прикази"
+
+msgid "LastPost"
+msgstr "Последен напис"
+
+msgid "Quoting"
+msgstr "Квоти"
+
+msgid "NotifyByEmail"
+msgstr "Извести ме по e-mail кога некој реплицира"
+
+msgid "StickyPost"
+msgstr "Ова е леплива порака (секогаш се појавува на врвот и има посебна леплива икона)"
+
+msgid "ReplyShort"
+msgstr "Одг:"
+
+msgid "DeletePost"
+msgstr "Сигурно ли сакате да го избришете овој напис? Бришејќи го написот, ќе ги избришете и сите реплики на тој напис. Ве молиме проверете ја тематската низа, за да видите кои други написи ќе бидат избришани исто така."
+
+msgid "Locked"
+msgstr "Заклучено: курсистите не можат да објавуваат нови пораки во оваа категорија на форумот, форумот или тематска низа, но тие може да ги читаат пораките што се веќе објавени."
+
+msgid "Unlocked"
+msgstr "Отклучено: курсистите можат да објавуваат нови пораки во оваа категориј, форум или тематска низа."
+
+msgid "Flat"
+msgstr "Рамно"
+
+msgid "Threaded"
+msgstr "Тематска низа"
+
+msgid "Nested"
+msgstr "Вгнездено"
+
+msgid "FlatView"
+msgstr "Рамен приказ"
+
+msgid "ThreadedView"
+msgstr "Приказ на тематска низа"
+
+msgid "NestedView"
+msgstr "Вгнезден приказ"
+
+msgid "Structure"
+msgstr "Структура"
+
+msgid "ForumCategoryAdded"
+msgstr "Категоријата на форум е додадена"
+
+msgid "ForumCategoryEdited"
+msgstr "Категоријата на форум е изменета"
+
+msgid "ForumAdded"
+msgstr "Форумот е додаден"
+
+msgid "ForumEdited"
+msgstr "Форумот е менуван"
+
+msgid "NewThreadStored"
+msgstr "Додадена е нова тематска низа"
+
+msgid "Approval"
+msgstr "Одобрено"
+
+msgid "Direct"
+msgstr "Директно"
+
+msgid "ForGroup"
+msgstr "За Група"
+
+msgid "ThreadLocked"
+msgstr "Тематската низа е заклучена"
+
+msgid "NotAllowedHere"
+msgstr "Не Ви е допуштен приод тука."
+
+msgid "ReplyAdded"
+msgstr "Репликата беше додадена"
+
+msgid "EditPost"
+msgstr "Уреди ја објавата"
+
+msgid "EditPostStored"
+msgstr "Написот е менуван"
+
+msgid "NewForumPost"
+msgstr "Нов напис во форумот"
+
+msgid "YouWantedToStayInformed"
+msgstr "Се изјаснивте дека сакате да бидете информирани по e-mail секогаш кога некој реплицира на тематската низа."
+
+msgid "MessageHasToBeApproved"
+msgstr "Вашата порака мора да биде одобрена пред луѓето да можат да ја видат."
+
+msgid "AllowAttachments"
+msgstr "Допушти прикачувања"
+
+msgid "EditForumCategory"
+msgstr "Уреди ја категоријата на форуми"
+
+msgid "MovePost"
+msgstr "Премести напис"
+
+msgid "MoveToThread"
+msgstr "Премести во тематска низа"
+
+msgid "ANewThread"
+msgstr "Нова тематска низа"
+
+msgid "Reply"
+msgstr "Реплицирај"
+
+msgid "DeleteForum"
+msgstr "Бришење на форумот?"
+
+msgid "DeleteForumCategory"
+msgstr "Бришење на категоријата на форуми?"
+
+msgid "Lock"
+msgstr "Заклучи"
+
+msgid "Unlock"
+msgstr "Отклучи"
+
+msgid "MoveThread"
+msgstr "Премести Тематска низа"
+
+msgid "PostVisibilityChanged"
+msgstr "Видливоста на написот е променета"
+
+msgid "PostDeleted"
+msgstr "Написот беше избришан"
+
+msgid "MakeInvisible"
+msgstr "Направи невидливо"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "Низата не може да биде пронајдена овде"
+

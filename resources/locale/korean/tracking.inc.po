@@ -1,0 +1,375 @@
+msgid "langToolName"
+msgstr "Blackboard 과정 가져오기"
+
+msgid "TrackingDisabled"
+msgstr "관리자가 Tracking을 비활성화 하였습니다."
+
+msgid "langShowNone"
+msgstr "아무것도 보여주지 않기"
+
+msgid "langCourseStats"
+msgstr "과정 통계"
+
+msgid "langToolsAccess"
+msgstr "도구에 접속"
+
+msgid "langCourseAccess"
+msgstr "과정 접근"
+
+msgid "langLinksAccess"
+msgstr "링크"
+
+msgid "langDocumentsAccess"
+msgstr "문서"
+
+msgid "langScormAccess"
+msgstr "Learning path - Scorm 형식 과정"
+
+msgid "langLinksDetails"
+msgstr "유저가 접속한 링크"
+
+msgid "langWorksDetails"
+msgstr "\"저자\"가 업로드 한 작업"
+
+msgid "langLoginsDetails"
+msgstr "자세한 사항을 보려면 월을 클릭하십시오."
+
+msgid "langDocumentsDetails"
+msgstr "유저가 다운로드한 문서"
+
+msgid "langExercicesDetails"
+msgstr "종료한 테스트 점수"
+
+msgid "langBackToList"
+msgstr "유저 목록으로 돌아가기"
+
+msgid "langDetails"
+msgstr "세부사항"
+
+msgid "langStatsOfCourse"
+msgstr "과정 통계"
+
+msgid "langStatsOfUser"
+msgstr "유저 통계"
+
+msgid "langStatsOfCampus"
+msgstr "포털 통계"
+
+msgid "langCountUsers"
+msgstr "유저 수"
+
+msgid "langCountToolAccess"
+msgstr "이 과정의 총 접속 수"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "달"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "로그인 수"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "도구 이름"
+
+msgid "langToolTitleUsersColumn"
+msgstr "유저 클릭"
+
+msgid "langToolTitleCountColumn"
+msgstr "전체 클릭"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "링크"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "유저 클릭"
+
+msgid "langLinksTitleCountColumn"
+msgstr "전체 클릭"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "테스트"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "점수"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "문서"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "유저 다운로드"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "전체 다운로드"
+
+msgid "langScormContentColumn"
+msgstr "제목"
+
+msgid "langScormStudentColumn"
+msgstr "유저"
+
+msgid "langScormTitleColumn"
+msgstr "레슨/단계"
+
+msgid "langScormStatusColumn"
+msgstr "상태"
+
+msgid "langScormScoreColumn"
+msgstr "점수"
+
+msgid "langScormTimeColumn"
+msgstr "시간"
+
+msgid "langScormNeverOpened"
+msgstr "이 과정은 유저에게 오픈되지 않았습니다."
+
+msgid "langWorkTitle"
+msgstr "제목"
+
+msgid "langWorkAuthors"
+msgstr "저자"
+
+msgid "informationsAbout"
+msgstr "Tracking of"
+
+msgid "langNoEmail"
+msgstr "이메일 주소가 지정되지 않았습니다"
+
+msgid "langNoResult"
+msgstr "아직 결과가 나오지 않았습니다"
+
+msgid "langCourse"
+msgstr "영역"
+
+msgid "langHits"
+msgstr "히트 수"
+
+msgid "langTotal"
+msgstr "전체"
+
+msgid "langHour"
+msgstr "시각"
+
+msgid "langDay"
+msgstr "날"
+
+msgid "langLast31days"
+msgstr "지난 한 달"
+
+msgid "langLast7days"
+msgstr "지난 일주일"
+
+msgid "langThisday"
+msgstr "오늘"
+
+msgid "langLogins"
+msgstr "로그인"
+
+msgid "langLoginsExplaination"
+msgstr "이 세션이 유지되는 동안 도구에 접속한 로그인 목록이 있습니다."
+
+msgid "langExercicesResults"
+msgstr "종료된 테스트의 점수"
+
+msgid "langVisits"
+msgstr "방문"
+
+msgid "langAt"
+msgstr "at"
+
+msgid "langLoginsAndAccessTools"
+msgstr "도구에 로그인과 접속"
+
+msgid "langWorkUploads"
+msgstr "업로드에 공헌"
+
+msgid "langErrorUserNotInGroup"
+msgstr "확인되지 않은 유저: 이 유저는 그룹에 존재하지 않습니다"
+
+msgid "langListStudents"
+msgstr "이 그룹의 유저 목록"
+
+msgid "langPeriodHour"
+msgstr "시"
+
+msgid "langPeriodDay"
+msgstr "일"
+
+msgid "langPeriodWeek"
+msgstr "주"
+
+msgid "langPeriodMonth"
+msgstr "달"
+
+msgid "langPeriodYear"
+msgstr "해"
+
+msgid "langNextDay"
+msgstr "하루 후"
+
+msgid "langPreviousDay"
+msgstr "하루 전"
+
+msgid "langNextWeek"
+msgstr "다음 주"
+
+msgid "langPreviousWeek"
+msgstr "이전 주"
+
+msgid "langNextMonth"
+msgstr "다음 달"
+
+msgid "langPreviousMonth"
+msgstr "이전 달"
+
+msgid "langNextYear"
+msgstr "내년"
+
+msgid "langPreviousYear"
+msgstr "작년"
+
+msgid "langViewToolList"
+msgstr "모든 도구의 목록 보기"
+
+msgid "langToolList"
+msgstr "모든 도구 목록"
+
+msgid "langFrom"
+msgstr "From"
+
+msgid "langTo"
+msgstr "to"
+
+msgid "langPeriodToDisplay"
+msgstr "기간"
+
+msgid "langDetailView"
+msgstr "보기"
+
+msgid "langBredCrumpGroups"
+msgstr "그룹"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "그룹 영역"
+
+msgid "langBredCrumpUsers"
+msgstr "유저"
+
+msgid "langPlatformStats"
+msgstr "플랫폼 통계"
+
+msgid "langStatsDatabase"
+msgstr "통계 데이터베이스"
+
+msgid "langPlatformAccess"
+msgstr "포털에 접속"
+
+msgid "langPlatformCoursesAccess"
+msgstr "과정에 접속"
+
+msgid "langPlatformToolAccess"
+msgstr "도구에 접속"
+
+msgid "langHardAndSoftUsed"
+msgstr "Countries Providers Browsers Os Referers"
+
+msgid "langStrangeCases"
+msgstr "문제 사례"
+
+msgid "langStatsDatabaseLink"
+msgstr "여기를 클릭"
+
+msgid "langCountCours"
+msgstr "과정 수"
+
+msgid "langCountCourseByFaculte"
+msgstr "카테고리별 과정 수"
+
+msgid "langCountCourseByLanguage"
+msgstr "언어별 과정 수"
+
+msgid "langCountCourseByVisibility"
+msgstr "공개여부에 의한 과정 수"
+
+msgid "langCountUsersByCourse"
+msgstr "과정별 유저 수"
+
+msgid "langCountUsersByFaculte"
+msgstr "카테고리별 유저 수"
+
+msgid "langCountUsersByStatus"
+msgstr "상태별 유저 수"
+
+msgid "langAccess"
+msgstr "접속"
+
+msgid "langCountries"
+msgstr "국가"
+
+msgid "langProviders"
+msgstr "공급자"
+
+msgid "langOS"
+msgstr "OS"
+
+msgid "langBrowsers"
+msgstr "브라우저"
+
+msgid "langReferers"
+msgstr "Referers"
+
+msgid "langAccessExplain"
+msgstr "(유저가 포털의 인덱스를 오픈할 때)"
+
+msgid "langTotalPlatformAccess"
+msgstr "전체"
+
+msgid "langTotalPlatformLogin"
+msgstr "전체"
+
+msgid "langMultipleLogins"
+msgstr "동일한 <i>유저명</i>의 계정"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "동일한 <i>유저명</i>과 <i>패스워드</i>의 계정"
+
+msgid "langMultipleEmails"
+msgstr "동일한  <i>이메일</i>의 계정"
+
+msgid "langCourseWithoutProf"
+msgstr "리더가 없는 과정"
+
+msgid "langCourseWithoutAccess"
+msgstr "과정이 사용되지 않습니다"
+
+msgid "langLoginWithoutAccess"
+msgstr "로그인이 사용되지 않음"
+
+msgid "langAllRight"
+msgstr "이상한 사례가 없습니다"
+
+msgid "langDefcon"
+msgstr "문제 상황이 발생되었습니다 !"
+
+msgid "langNULLValue"
+msgstr "비었음"
+
+msgid "langTrafficDetails"
+msgstr "트래픽 세부정보"
+
+msgid "langSeeIndividualTracking"
+msgstr "개별 tracking을 이해 <a href=../user/user.php>Users</a> 도구를 보십시오."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "이  path를 아무도 열어보지 않았습니다."
+
+msgid "SynthesisView"
+msgstr "종합적으로 보기"
+
+msgid "Visited"
+msgstr "방문함"
+
+msgid "FirstAccess"
+msgstr "첫번째 접속"
+
+msgid "LastAccess"
+msgstr "마지막 접속"
+

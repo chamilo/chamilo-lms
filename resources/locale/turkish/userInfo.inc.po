@@ -1,0 +1,81 @@
+msgid "langLineNumber"
+msgstr "Satır sayısı"
+
+msgid "langLine"
+msgstr "satır"
+
+msgid "langLines"
+msgstr "satır"
+
+msgid "langLineOrLines"
+msgstr "satır(lar)"
+
+msgid "langMoveUp"
+msgstr "Yukarı taşı"
+
+msgid "langMoveDown"
+msgstr "Aşağı taşı"
+
+msgid "langAddNewHeading"
+msgstr "Yeni başlık ekle"
+
+msgid "langCourseAdministratorOnly"
+msgstr "sadece öğretmen"
+
+msgid "langDefineHeadings"
+msgstr "Başlıkları Tanımla"
+
+msgid "langBackToUsersList"
+msgstr "Kullanıcı listesine dön"
+
+msgid "langTracking"
+msgstr "İzleme"
+
+msgid "langCourseManager"
+msgstr "Öğretmen"
+
+msgid "langModRight"
+msgstr "hakları değiştir"
+
+msgid "langNoAdmin"
+msgstr "bundan sonra bu sayfada haklar <b>yok</b>"
+
+msgid "langAllAdmin"
+msgstr "bundan sonra bu sayfadaki <b>tüm</b> haklar var"
+
+msgid "langModRole"
+msgstr "rolünü değiştir"
+
+msgid "langRole"
+msgstr "Rolü"
+
+msgid "langIsNow"
+msgstr "bundan sonra"
+
+msgid "langInC"
+msgstr "bu derste"
+
+msgid "langFilled"
+msgstr "Bazı alanları boş bıraktınız."
+
+msgid "langUserNo"
+msgstr "Seçtiğiniz kullanıcı adı"
+
+msgid "langTaken"
+msgstr " daha önce alınmıştır. Başka bir ad yazınız."
+
+msgid "langTutor"
+msgstr "Eğitmen"
+
+msgid "langUnreg"
+msgstr "Kayıt sil"
+
+msgid "langGroupUserManagement"
+msgstr "Grup yönetimi"
+
+msgid "langUnregister"
+msgstr "Kayıt İptal Et"
+
+msgid "langAddAUser"
+msgstr "Kullanıcı ekle"
+

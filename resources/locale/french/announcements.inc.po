@@ -1,0 +1,173 @@
+msgid "Announcement"
+msgstr "Annonces"
+
+msgid "langAnnEmpty"
+msgstr "Toutes les annonces ont été supprimées"
+
+msgid "AnnouncementModified"
+msgstr "L\'annonce a été modifiée"
+
+msgid "AnnouncementAdded"
+msgstr "L\'annonce a été ajoutée"
+
+msgid "AnnouncementDeleted"
+msgstr "L\'annonce a été effacée"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Publiée le"
+
+msgid "AddAnnouncement"
+msgstr "Ajouter une annonce"
+
+msgid "langContent"
+msgstr "Contenu"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Supprimer toutes les annonces"
+
+msgid "professorMessage"
+msgstr "Message du responsable"
+
+msgid "langEmailSent"
+msgstr " et envoyée par mail aux utilisateurs"
+
+msgid "EmailOption"
+msgstr "Envoyer cette annonce par mail aux groupes/utilisateurs sélectionnés"
+
+msgid "langOn"
+msgstr "Sur"
+
+msgid "langRegUser"
+msgstr "utilisateurs inscrits"
+
+msgid "langUnvalid"
+msgstr "ont une adresse mail non valide ou n\'en ont pas fournie"
+
+msgid "langModifAnn"
+msgstr "Modifier cette annonce"
+
+msgid "langModify"
+msgstr "modifier"
+
+msgid "langDelete"
+msgstr "supprimer"
+
+msgid "langTitle"
+msgstr "Titre"
+
+msgid "langHelp"
+msgstr "Aide"
+
+msgid "langOk"
+msgstr "Valider"
+
+msgid "langAddIntro"
+msgstr "Ajouter un texte d\'introduction"
+
+msgid "langBackList"
+msgstr "Retour à la liste"
+
+msgid "langSelMess"
+msgstr "Avertissements à certains utilisateurs"
+
+msgid "EmailTitle"
+msgstr "Sujet du mail"
+
+msgid "langUserlist"
+msgstr "Liste des utilisateurs"
+
+msgid "langSelectedUsers"
+msgstr "Utilisateurs sélectionnés"
+
+msgid "langSubmit"
+msgstr "Envoyer"
+
+msgid "langPleaseEnterMessage"
+msgstr "Tapez le message à envoyer."
+
+msgid "langPleaseSelectUsers"
+msgstr "Sélectionnez des utilisateurs."
+
+msgid "Teachersubject"
+msgstr "Message envoyé aux utilisateurs"
+
+msgid "langMessages"
+msgstr "Messages"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Message pour certains utilisateurs"
+
+msgid "langIntroText"
+msgstr "Pour envoyer un message, sélectionnez des groupes (précédés de G) et/ou des utilisateurs dans la liste de gauche. CTRL+clic pour sélectionner plusieurs éléments. Puis cliquez sur la flèche \"droite\" entre les deux listes, introduisez votre message et validez."
+
+msgid "langDown"
+msgstr "descendre"
+
+msgid "langMsgSent"
+msgstr "le message est envoyé aux membres sélectionnés."
+
+msgid "langSelUser"
+msgstr "Utilisateurs"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Message aux groupes sélectionnés"
+
+msgid "langSelectedGroups"
+msgstr "groupes sélectionnés"
+
+msgid "langMsg"
+msgstr "Messages"
+
+msgid "langYes"
+msgstr "oui"
+
+msgid "MsgText"
+msgstr "Message"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Toutes les annonces ont été supprimées"
+
+msgid "AnnouncementMoved"
+msgstr "L\'annonce a été déplacée"
+
+msgid "NoAnnouncements"
+msgstr "Il n\'y a aucune annonce"
+
+msgid "SelectEverybody"
+msgstr "Sélectionner tous"
+
+msgid "SelectedUsersGroups"
+msgstr "utilisateurs des groupes sélectionnés"
+
+msgid "LearnerMessage"
+msgstr "Message d\'un apprenant"
+
+msgid "TitleIsRequired"
+msgstr "Le titre est obligatoire"
+
+msgid "AnnounceSentByEmail"
+msgstr "Annonce envoyée par e-mail"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Annonce envoyée aux utilisateurs sélectionnés"
+
+msgid "SendAnnouncement"
+msgstr "Envoyer annonce"
+
+msgid "ModifyAnnouncement"
+msgstr "Modifier annonce"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Publier annonce"
+
+msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
+msgstr "Cher utilisateur,
+
+Votre compte a été activé. Vous pouvez à présent vous connecter et consulter vos cours."
+
+msgid "AddAsAnnouncement"
+msgstr "Ajouter une annonce"
+
+msgid "AnnouncementForGroup"
+msgstr "Annonce pour un groupe"
+

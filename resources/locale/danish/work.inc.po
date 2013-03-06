@@ -1,0 +1,93 @@
+msgid "Tools"
+msgstr "Værktøjer"
+
+msgid "SendWork"
+msgstr "Læg dokument ud"
+
+msgid "langTooBig"
+msgstr "Du valgte enten ikke en fil, eller filen er for stor til at blive sendt"
+
+msgid "langListDeleted"
+msgstr "Listen er slettet"
+
+msgid "langDocModif"
+msgstr "dokumentets titel er blevet ændret"
+
+msgid "langDocAdd"
+msgstr "Dokumentet er tilføjet"
+
+msgid "langDocDel"
+msgstr "Dokumentet er slettet"
+
+msgid "langTitleWork"
+msgstr "Dokumentets titel"
+
+msgid "langAuthors"
+msgstr "Forfattere"
+
+msgid "langDelList"
+msgstr "Slet hele listen"
+
+msgid "langWorkDelete"
+msgstr "Slet"
+
+msgid "langWorkModify"
+msgstr "Rediger"
+
+msgid "langWorkConfirmDelete"
+msgstr "Ønsker du at slette denne fil"
+
+msgid "langAllFiles"
+msgstr "Alle filer"
+
+msgid "DefaultUpload"
+msgstr "Standardindstilling for filers/dokumenters synligheden"
+
+msgid "NewVisible"
+msgstr "Nye dokumenter er synlige for alle brugere"
+
+msgid "NewUnvisible"
+msgstr "Nye dokumenter er kun synlige for underviseren"
+
+msgid "lang_doc_unvisible"
+msgstr "Din fil er kun synlig for undervisere på dette kursus og vil derfor heller ikke være synlig for dig."
+
+msgid "langDelLk"
+msgstr "Er du sikkert på, at du vil slettet dette link?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Kun registrerede brugere af dette kursus kan publicere dokumenter."
+
+msgid "langListDel"
+msgstr "Slet liste"
+
+msgid "langNameDir"
+msgstr "Navn på den nye mappe"
+
+msgid "langFileExists"
+msgstr "Udlægningen kan ikke gennemføres.<br>Der er allerede en fil med samme navn."
+
+msgid "CreateDirectory"
+msgstr "Opret mappe"
+
+msgid "langCurrentDir"
+msgstr "nuværende mappe"
+
+msgid "UploadADocument"
+msgstr "Upload et dokument"
+
+msgid "EditToolOptions"
+msgstr "Rediger værktøjsindstillinger"
+
+msgid "DocumentDeleted"
+msgstr "Dokumentet er slettet"
+
+msgid "SendMailBody"
+msgstr "En bruger har lagt et dokument ud under Afleveringer på din kursusside"
+
+msgid "DirDelete"
+msgstr "Slet register/sti"
+
+msgid "ValidateChanges"
+msgstr "Bekræft ændringer"
+

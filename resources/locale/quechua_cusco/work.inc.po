@@ -1,0 +1,207 @@
+msgid "Tools"
+msgstr "Llank\'anakuna"
+
+msgid "SendWork"
+msgstr "Apachiy qelqa khiputa"
+
+msgid "langTooBig"
+msgstr "Manan ajllankichu khipu apachinapaq utan sinchi hatunmi khipuqa"
+
+msgid "langListDeleted"
+msgstr "Yupachasqaqa pichachikunpuni"
+
+msgid "langDocModif"
+msgstr "Qelqa khipuqa t\'ijrachisqaña"
+
+msgid "langDocAdd"
+msgstr "Qelqa khipuqa apachisqaña."
+
+msgid "langDocDel"
+msgstr "Llank\'aynaqa wañuchisqaña"
+
+msgid "langTitleWork"
+msgstr "Llank\'aypa sutinchaynin"
+
+msgid "langAuthors"
+msgstr "Ruwaq"
+
+msgid "langDelList"
+msgstr "Pichay yupachasqat"
+
+msgid "langWorkDelete"
+msgstr "Pichay"
+
+msgid "langWorkModify"
+msgstr "T\'ijray"
+
+msgid "langWorkConfirmDelete"
+msgstr "Cheqaychu munanki kay qelqa khiputa pichachiyta ?"
+
+msgid "langAllFiles"
+msgstr "Llipin khipukuna"
+
+msgid "DefaultUpload"
+msgstr "Kikinmanta kamachikushan musuq qelqa khipukuna qhawachikunanpaq"
+
+msgid "NewVisible"
+msgstr "Musuq qelqa khipukunataqa llipin haykuqmasikuna qhawanqaku"
+
+msgid "NewUnvisible"
+msgstr "Musuq qelqa khipukunaqa yachachiq(kuna)llapaq qhawana kanqa."
+
+msgid "lang_doc_unvisible"
+msgstr "Kay qelqa khipuqa yachachiq(kuna)llapaq qhawana kanqa."
+
+msgid "langDelLk"
+msgstr " Cheqaychu munanki wañuchiyta kay llank\'anata ?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Kay yachachinapi haykuqmasikuna qelqachikusqalla apachinqaku qelqa khipukunataqa."
+
+msgid "langListDel"
+msgstr "Pichay yupachasqata"
+
+msgid "langNameDir"
+msgstr "Musuq wayaqaq sutin"
+
+msgid "langFileExists"
+msgstr "Mana ruwanapuni, manan kanchu khipu kikin sutiyuq."
+
+msgid "CreateDirectory"
+msgstr "Kamay wayaqata"
+
+msgid "langCurrentDir"
+msgstr "kunan kaq wayaqa"
+
+msgid "UploadADocument"
+msgstr "Apachiy qelqa khiputa"
+
+msgid "EditToolOptions"
+msgstr "T\'ijrapachiy ima ajllaykunata"
+
+msgid "DocumentDeleted"
+msgstr "Qelqa khipukuna wañuchisqa"
+
+msgid "SendMailBody"
+msgstr "Hoq haykuqmasin apachirun qelqa khiputa llamk\'ana llank\'aynamanta."
+
+msgid "DirDelete"
+msgstr "Pichay wayaqata"
+
+msgid "ValidateChanges"
+msgstr "Cheqaqchay t\'ijrapasqata"
+
+msgid "FolderUpdated"
+msgstr "Wayaqa kunanyachisqa"
+
+msgid "EndsAt"
+msgstr "Tukunqa kay pachapi (wisqasqapuni kanqa)"
+
+msgid "QualificationOfAssignment"
+msgstr "Llank\'aypa chaninchana"
+
+msgid "MakeQualifiable"
+msgstr "Huñichay chaninchanapaq"
+
+msgid "QualificationNumberOver"
+msgstr "Kay patamanta chaninchana"
+
+msgid "WeightInTheGradebook"
+msgstr "Llasa patara chaninchanapi"
+
+msgid "DatesAvailables"
+msgstr "Ima pachakuna hap\'ipanapaq"
+
+msgid "ExpiresAt"
+msgstr "Tukukunqa kay pachapi"
+
+msgid "AddToCalendar"
+msgstr "Yapay ruwanaman"
+
+msgid "DirectoryCreated"
+msgstr "Wayaqa kamarisqa"
+
+msgid "Assignment"
+msgstr "Llank\'ayna"
+
+msgid "AdvancedParameters"
+msgstr "Parámetros avanzados"
+
+msgid "ExpiryDateToSendWorkIs"
+msgstr "Llank\'aynakunata apachinapaq, tukukuy pacha"
+
+msgid "EnableExpiryDate"
+msgstr "K\'anchachiy pacha tukukuyta"
+
+msgid "EnableEndDate"
+msgstr "K\'anchachiy pacha tukunata"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "Qelqa khipuqa mana atikunchu allchayta"
+
+msgid "EndDateCannotBeBeforeTheExpireDate"
+msgstr "Pacha tukunaqa manan kanamanchu pacha tukukuy ñaupaqqa"
+
+msgid "SelectAFilter"
+msgstr "Ajllay suysunata"
+
+msgid "FilterByNotExpired"
+msgstr "Suysuy mana mauk\'asqakunamanta"
+
+msgid "FilterAssignments"
+msgstr "Suysuy llank\'aykunata"
+
+msgid "WeightNecessary"
+msgstr "Llasay munasqa"
+
+msgid "QualificationOver"
+msgstr "Kay patamanta chaninchana"
+
+msgid "ExpiryDateAlreadyPassed"
+msgstr "Tukukuy pachaqa ña pasanña"
+
+msgid "EndDateAlreadyPassed"
+msgstr "Tukukuy pachaqa ña pasanña"
+
+msgid "MoveXTo"
+msgstr "Kuyurichiy %s kayman"
+
+msgid "QualificationMustNotBeMoreThanQualificationOver"
+msgstr "Chaninchanaqa manan kanmanchu aska kaq yupacha churasqamanta"
+
+msgid "ModifyDirectory"
+msgstr "T\'ijrapay wayaqata"
+
+msgid "DeleteAllFiles"
+msgstr "Eliminar todos los trabajos"
+
+msgid "BackToWorksList"
+msgstr "Regresar a la lista de Tareas"
+
+msgid "EditMedia"
+msgstr "Editar y marcar el trabajo"
+
+msgid "AllFilesInvisible"
+msgstr "Ahora no se muestra ningún trabajo"
+
+msgid "FileInvisible"
+msgstr "Ahora el trabajo ya no se muestra"
+
+msgid "AllFilesVisible"
+msgstr "Ahora se muestran todos los trabajos"
+
+msgid "FileVisible"
+msgstr "El archivo ahora es visible"
+
+msgid "ButtonCreateAssignment"
+msgstr "Crear"
+
+msgid "AssignmentName"
+msgstr "Nombre de la tarea"
+
+msgid "CreateAssignment"
+msgstr "Crear una tarea"
+
+msgid "FolderEdited"
+msgstr "Tarea modificada"
+

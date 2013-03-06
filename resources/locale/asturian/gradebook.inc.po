@@ -1,0 +1,577 @@
+msgid "ModifyEvaluation"
+msgstr "Guardar"
+
+msgid "CreateLink"
+msgstr "Criar"
+
+msgid "AddResultNoStudents"
+msgstr "Nun hai estudiantes p\'amestar resultaos"
+
+msgid "FlatView"
+msgstr "Vista plana"
+
+msgid "ScoreEdit"
+msgstr "Editar regles de puntuación"
+
+msgid "ScoreColor"
+msgstr "Color de los puntos"
+
+msgid "ScoringSystem"
+msgstr "Sistema de puntos"
+
+msgid "EnableScoreColor"
+msgstr "Activar coloreáu de los puntos"
+
+msgid "Below"
+msgstr "Per embaxu de"
+
+msgid "WillColorRed"
+msgstr "va colorease en bermeyu"
+
+msgid "EnableScoringSystem"
+msgstr "Activar sistema de puntos"
+
+msgid "IncludeUpperLimit"
+msgstr "Incluir la llende superior"
+
+msgid "ScoreInfo"
+msgstr "Información sobre los puntos"
+
+msgid "Between"
+msgstr "Ente"
+
+msgid "CurrentCategory"
+msgstr "Categoría actual"
+
+msgid "RootCat"
+msgstr "Categoría primera"
+
+msgid "NewCategory"
+msgstr "Categoría nueva"
+
+msgid "NewEvaluation"
+msgstr "Evaluación nueva"
+
+msgid "Weight"
+msgstr "Pesu"
+
+msgid "PickACourse"
+msgstr "Escoyer un cursu"
+
+msgid "CategoryName"
+msgstr "Nome de la categoría"
+
+msgid "CourseIndependent"
+msgstr "Cursu independiente"
+
+msgid "CourseIndependentEvaluation"
+msgstr "Cursu con evaluación independiente"
+
+msgid "EvaluationName"
+msgstr "Nome de la evaluación"
+
+msgid "Max"
+msgstr "Másimu"
+
+msgid "DateEval"
+msgstr "Fecha d\'evaluación"
+
+msgid "AddUserToEval"
+msgstr "Amestar alumnos a la evaluación"
+
+msgid "NewSubCategory"
+msgstr "Socategoría nueva"
+
+msgid "MakeLink"
+msgstr "Crear un enllaz"
+
+msgid "DeleteSelected"
+msgstr "Esborrar seleición"
+
+msgid "SetVisible"
+msgstr "Facer visible"
+
+msgid "SetInvisible"
+msgstr "Esconder"
+
+msgid "ChooseLink"
+msgstr "Escoyer el tipu d\'enllaz"
+
+msgid "DokeosExercises"
+msgstr "Exercicios"
+
+msgid "DokeosDropbox"
+msgstr "Buzón de llabores / deberes"
+
+msgid "DokeosStudentPublications"
+msgstr "Trabayos de los estudiantes"
+
+msgid "DokeosLearningPaths"
+msgstr "Itinerarios d\'aprendizaxe"
+
+msgid "ChooseExercise"
+msgstr "Escoyer un exerciciu"
+
+msgid "AddResult"
+msgstr "Amestar resultaos"
+
+msgid "BackToOverview"
+msgstr "Tornar a Vista xeneral"
+
+msgid "ExportPDF"
+msgstr "Esportar a PDF"
+
+msgid "Print"
+msgstr "Emprentar"
+
+msgid "ChooseOrientation"
+msgstr "Escoyer orientación"
+
+msgid "Portrait"
+msgstr "Vertical"
+
+msgid "Landscape"
+msgstr "Horizontal"
+
+msgid "FilterCategory"
+msgstr "Filtrar por categoría"
+
+msgid "DeleteAll"
+msgstr "Esborrar too"
+
+msgid "ScoringUpdated"
+msgstr "Puntos actualizaos"
+
+msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
+msgstr "%s certifica que
+
+ %s 
+
+ acabó\'l cursu 
+
+ \'%s\' 
+
+ cola calificación que vien darréu: 
+
+ \'%s\'"
+
+msgid "CertificateMinScore"
+msgstr "Puntos mínimos pa la certificación"
+
+msgid "CategoryAdded"
+msgstr "Categoría amestada"
+
+msgid "InViMod"
+msgstr "Esti apartáu yá nun ta visible"
+
+msgid "ViMod"
+msgstr "L\'apartáu volvióse visible"
+
+msgid "ViewResult"
+msgstr "Ver resultaos"
+
+msgid "NoUser"
+msgstr "Ensin usuarios"
+
+msgid "NoResultsInEvaluation"
+msgstr "Entá nun hai resultaos na evaluación"
+
+msgid "AddStudent"
+msgstr "Amestar usuarios"
+
+msgid "ImportResult"
+msgstr "Importar resultaos"
+
+msgid "Score"
+msgstr "Puntos"
+
+msgid "ImportFileLocation"
+msgstr "Llugar nel que s\'atopa\'l ficheru que se quier importar"
+
+msgid "Location"
+msgstr "Llocalización"
+
+msgid "FileType"
+msgstr "Tipu de ficheru"
+
+msgid "ExampleCSVFile"
+msgstr "Ficheru CSV d\'exemplu"
+
+msgid "ExampleXMLFile"
+msgstr "Ficheru XML d\'exemplu"
+
+msgid "OverwriteScores"
+msgstr "Escribir enriba les puntuaciones"
+
+msgid "IgnoreErrors"
+msgstr "Nun facer casu a los errores"
+
+msgid "ItemsVisible"
+msgstr "Los elementos tornaron visibles"
+
+msgid "ItemsInVisible"
+msgstr "Los elementos tornaron invisibles"
+
+msgid "NoItemsSelected"
+msgstr "Nun hai nengún elementu escoyíu"
+
+msgid "DeletedCategories"
+msgstr "Categoríes esborraes"
+
+msgid "DeletedEvaluations"
+msgstr "Evaluaciones esborraes"
+
+msgid "DeletedLinks"
+msgstr "Enllaces esborraos"
+
+msgid "TotalItems"
+msgstr "Total d\'elementos"
+
+msgid "LinkAdded"
+msgstr "Enllaz amestáu"
+
+msgid "LinkDeleted"
+msgstr "Enllaz esborráu"
+
+msgid "EditEvaluation"
+msgstr "Editar evaluación"
+
+msgid "DeleteResult"
+msgstr "Esborrar resultáu"
+
+msgid "Display"
+msgstr "Nivel"
+
+msgid "Average"
+msgstr "Media"
+
+msgid "ViewStatistics"
+msgstr "Ver estadístiques"
+
+msgid "ResultAdded"
+msgstr "Resultáu amestáu"
+
+msgid "EvaluationStatistics"
+msgstr "Estadístiques d\'evaluación"
+
+msgid "ExportResult"
+msgstr "Esportar resultaos"
+
+msgid "EditResult"
+msgstr "Editar resultaos"
+
+msgid "GradebookWelcomeMessage"
+msgstr "Bienveníu a la utilidá Cuadernu de calificaciones. Esta ferramienta permite establecer los oxetivos que se quieren algamar nun cursu o un conxuntu de cursos. Tamién poner puntos esternes nel sistema."
+
+msgid "CreateAllCat"
+msgstr "Xenerar calificaciones pa tolos mios cursos"
+
+msgid "AddAllCat"
+msgstr "Amestárense toles categoríes"
+
+msgid "StatsStudent"
+msgstr "Estadístiques de"
+
+msgid "Results"
+msgstr "Resultaos"
+
+msgid "Certificates"
+msgstr "Certificaos"
+
+msgid "Certificate"
+msgstr "Certificáu"
+
+msgid "ChooseUser"
+msgstr "Escoyer usuarios pa esta evaluación"
+
+msgid "FirstLetter"
+msgstr "Primer lletra del apellíu"
+
+msgid "UserAdded"
+msgstr "Añadióse l\'usuariu"
+
+msgid "ResultEdited"
+msgstr "Resultáu actualizáu"
+
+msgid "ChooseFormat"
+msgstr "Escoyer formatu"
+
+msgid "OutputFileType"
+msgstr "Tipu de ficheru de salida"
+
+msgid "OverMax"
+msgstr "El valor que quier guardar ye más grande que la llende másima establecida pa esta evaluación."
+
+msgid "MoreInfo"
+msgstr "Más información"
+
+msgid "ResultsPerUser"
+msgstr "Resultaos por usuariu"
+
+msgid "TotalUser"
+msgstr "Total por usuariu"
+
+msgid "AverageTotal"
+msgstr "Media total"
+
+msgid "Evaluation"
+msgstr "Evaluación"
+
+msgid "EvaluationAverage"
+msgstr "Media de la evaluación"
+
+msgid "EditCategory"
+msgstr "Editar esta categoría"
+
+msgid "EditAllWeights"
+msgstr "Editar tolos tamaños de ficheru"
+
+msgid "GradebookQualificationTotal"
+msgstr "Total"
+
+msgid "GradebookEvaluationDeleted"
+msgstr "La evaluación esborróse"
+
+msgid "GradebookQualifyLog"
+msgstr "Historial de tamañu de ficheru del cuadernu"
+
+msgid "GradebookNameLog"
+msgstr "Nome del cuadernu"
+
+msgid "GradebookDescriptionLog"
+msgstr "Descripción del cuadernu"
+
+msgid "GradebookVisibilityLog"
+msgstr "Visibilidá del cuadernu"
+
+msgid "ResourceType"
+msgstr "Tipu de recursu"
+
+msgid "GradebookWhoChangedItLog"
+msgstr "Quién lu modificó"
+
+msgid "EvaluationEdited"
+msgstr "La evaluación modificóse"
+
+msgid "CategoryEdited"
+msgstr "Categoría actualizada"
+
+msgid "OnlyNumbers"
+msgstr "Namás númberos"
+
+msgid "IncorrectData"
+msgstr "Datu incorreutu"
+
+msgid "Resource"
+msgstr "Recursu"
+
+msgid "PleaseEnableScoringSystem"
+msgstr "Por favor, active\'l sistema de notes"
+
+msgid "AllResultDeleted"
+msgstr "Tolos resultaos esborrárense"
+
+msgid "ImportNoFile"
+msgstr "Nun s\'importó nengún archivu"
+
+msgid "ProblemUploadingFile"
+msgstr "Hubo un erru de la que se mandaba\'l so archivu. Nun se mandó nada"
+
+msgid "AllResultsEdited"
+msgstr "Tolos resultaos modificárense"
+
+msgid "UserInfoDoesNotMatch"
+msgstr "Nun coincide cola información del usuariu"
+
+msgid "ScoreDoesNotMatch"
+msgstr "La puntuación nun taxa / coincide"
+
+msgid "FileUploadComplete"
+msgstr "Cargóse bien l\'archivu"
+
+msgid "NoResultsAvailable"
+msgstr "Nun hai resultaos a disposición"
+
+msgid "CannotChangeTheMaxNote"
+msgstr "Nun se pue cambiar la nota más alta"
+
+msgid "GradebookWeightUpdated"
+msgstr "Pesu(os) modificáu(os) correutamente"
+
+msgid "ChooseItem"
+msgstr "Seleiciona un elementu"
+
+msgid "AverageResultsVsResource"
+msgstr "Media de resultaos por componenete d\'evaluación"
+
+msgid "ToViewGraphScoreRuleMustBeEnabled"
+msgstr "Pa ver el gráficu tienen que definise les regles de puntuación"
+
+msgid "GradebookPreviousWeight"
+msgstr "Pesu anterior de los recursos"
+
+msgid "AddAssessment"
+msgstr "Criar"
+
+msgid "FolderView"
+msgstr "Volver a evaluaciones"
+
+msgid "GradebookSkillsRanking"
+msgstr "Evaluación"
+
+msgid "SaveScoringRules"
+msgstr "Guardar regles de puntuación"
+
+msgid "AttachCertificate"
+msgstr "Axuntar certificáu"
+
+msgid "GradebookSeeListOfStudentsCertificates"
+msgstr "Ver la llista de certificaos d\'escolinos"
+
+msgid "CreateCertificate"
+msgstr "Criar un certificáu"
+
+msgid "UploadCertificate"
+msgstr "Unviar un certificáu"
+
+msgid "CertificateName"
+msgstr "Nome del certificáu"
+
+msgid "CertificateOverview"
+msgstr "Vista de certificáu"
+
+msgid "CreateCertificateWithTags"
+msgstr "Criar certificáu con estes etiquetes"
+
+msgid "ViewPresenceSheets"
+msgstr "Vista de fueyes d\'asistencia"
+
+msgid "ViewEvaluations"
+msgstr "Vista d\'evaluaciones"
+
+msgid "NewPresenceSheet"
+msgstr "Fueya d\'asistencia nueva"
+
+msgid "NewPresenceStep1"
+msgstr "Nueva fueya d\'asistencia: Pasu 1/2 : llenar los datos de la fueya d\'asistencia"
+
+msgid "TitlePresenceSheet"
+msgstr "Títulu de l\'actividá"
+
+msgid "Trainer"
+msgstr "Mayestru"
+
+msgid "PresenceSheetCreatedBy"
+msgstr "Fueya d\'asistencia criada por"
+
+msgid "SavePresence"
+msgstr "Guardar fueya d\'asistencia y siguir col pasu 2"
+
+msgid "NewPresenceStep2"
+msgstr "Nueva fueya d\'asistencia: Pasu 2/2 : verificar que los escolinos ten presentes"
+
+msgid "NoCertificateAvailable"
+msgstr "Nun hai certificáu disponible"
+
+msgid "SaveCertificate"
+msgstr "Guardar certificáu"
+
+msgid "CertificateNotRemoved"
+msgstr "Certificáu nun puede desaniciase"
+
+msgid "CertificateRemoved"
+msgstr "Certificáu desaniciáu"
+
+msgid "NoDefaultCertificate"
+msgstr "Nun hai certificáu predetermináu"
+
+msgid "DefaultCertificate"
+msgstr "Certificáu perdetermináu"
+
+msgid "PreviewCertificate"
+msgstr "Vista previa de certificáu"
+
+msgid "IsDefaultCertificate"
+msgstr "Certificáu ta como predetermináu"
+
+msgid "ImportPresences"
+msgstr "Importar asistencia"
+
+msgid "AddPresences"
+msgstr "Amestar asistencies"
+
+msgid "DeletePresences"
+msgstr "Desaniciar asistencia"
+
+msgid "GradebookListOfStudentsCertificates"
+msgstr "Llista de certificaos d\'escolinos n\'evaluaciones"
+
+msgid "NewPresence"
+msgstr "Asistencia nueva"
+
+msgid "EditPresence"
+msgstr "Editar asistencia"
+
+msgid "SavedEditPresence"
+msgstr "Guardar asistencia camudada"
+
+msgid "PresenceSheetFormatExplanation"
+msgstr "Tienes qu\'usar la fueya d\'asistencia que puede descargase enrriba. Esta fueya d\'asistencia caltien una llista de tolos participantes n\'esta capacitación. La primer columna del ficheru XLS ye\'l códigu oficial del candidatu, seguíu pol apellíu y el nomatu. Sólo debes camudar la columna 4 y la nota 0 = ausente, 1 = presente"
+
+msgid "ValidatePresenceSheet"
+msgstr "Valiadr fueya d\'asistencia"
+
+msgid "BackTo"
+msgstr "Volver a"
+
+msgid "PresenceSheet"
+msgstr "Fueya d\'asistencia"
+
+msgid "PresenceSheets"
+msgstr "Fueyes d\'asistencia"
+
+msgid "Evaluations"
+msgstr "Evaluaciones"
+
+msgid "SaveEditPresence"
+msgstr "Guardar cambeos en fueya d\'asistencia"
+
+msgid "Training"
+msgstr "Cursu"
+
+msgid "Present"
+msgstr "Asistencia"
+
+msgid "Numero"
+msgstr "N"
+
+msgid "PresentAbsent"
+msgstr "0 = ausente, 1 = asistencia"
+
+msgid "ExampleXLSFile"
+msgstr "Exemplu de ficheru Excel (XLS)"
+
+msgid "NoResultsInPresenceSheet"
+msgstr "Nun ahi asistencia rexistrada"
+
+msgid "EditPresences"
+msgstr "Asistencies camudaes"
+
+msgid "TotalWeightMustNotBeMoreThan"
+msgstr "Pesu total nun tien que ser mayor que"
+
+msgid "ThereIsNotACertificateAvailableByDefault"
+msgstr "Nun hai un certificáu disponible por defeutu"
+
+msgid "CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan"
+msgstr "La puntuación mínima pa certificáu ye requerida y nun tien que ser mayor que"
+
+msgid "LinkMod"
+msgstr "Guardar"
+
+msgid "EditLink"
+msgstr "Editar enllaz"
+
+msgid "CategoryDeleted"
+msgstr "La categoría esborróse."
+

@@ -1,0 +1,42 @@
+msgid "Height"
+msgstr "Висина"
+
+msgid "ResizingComment"
+msgstr "промени ја големината на сликата до следните димензии (во пиксели)"
+
+msgid "Width"
+msgstr "Ширина"
+
+msgid "Resizing"
+msgstr "Промени_големина"
+
+msgid "NoResizingComment"
+msgstr "Покажи ги сите слики во нивната оригинална големина. Никаква промена на големината не е направена. Лизгачите автоматски ќе се појават ако сликата е поголема од големината на Вашиот монитор."
+
+msgid "ShowThumbnails"
+msgstr "Покажи ги сликите како икони"
+
+msgid "SetSlideshowOptions"
+msgstr "Поставување на Опции за СлајдШоу"
+
+msgid "SlideshowOptions"
+msgstr "Опции за СлајдШоу"
+
+msgid "NoResizing"
+msgstr "НЕМА ПРОМЕНА НА ГОЛЕМИНАТА (поставено)"
+
+msgid "ExitSlideshow"
+msgstr "Излези од СлајдШоу"
+
+msgid "SlideShow"
+msgstr "СлајдШоу"
+
+msgid "PreviousSlide"
+msgstr "Претходен слајд"
+
+msgid "NextSlide"
+msgstr "Нареден слајд"
+
+msgid "ViewSlideshow"
+msgstr "Поглед на СлајдШоу"
+

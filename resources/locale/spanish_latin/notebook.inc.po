@@ -1,0 +1,72 @@
+msgid "NewNote"
+msgstr "Nueva nota"
+
+msgid "Note"
+msgstr "Nota"
+
+msgid "NoteDeleted"
+msgstr "Nota eliminada"
+
+msgid "NoteUpdated"
+msgstr "Nota actualizada"
+
+msgid "NoteCreated"
+msgstr "Nota creada"
+
+msgid "YouMustWriteANote"
+msgstr "Por favor, escriba una nota"
+
+msgid "SaveNote"
+msgstr "Guardar nota"
+
+msgid "WriteYourNoteHere"
+msgstr "Cliquee aquí para escribir una nueva nota"
+
+msgid "SearchByTitle"
+msgstr "Búsqueda por título"
+
+msgid "WriteTheTitleHere"
+msgstr "Escriba el título aquí"
+
+msgid "UpdateDate"
+msgstr "Fecha de actualización"
+
+msgid "NoteAddNew"
+msgstr "Añadir una nota en mi agenda personal"
+
+msgid "OrderByCreationDate"
+msgstr "Ordenar por fecha de creación"
+
+msgid "OrderByModificationDate"
+msgstr "Ordenar por fecha de la última modificación"
+
+msgid "OrderByTitle"
+msgstr "Ordenar por título"
+
+msgid "NoteTitle"
+msgstr "Título de nota"
+
+msgid "NoteComment"
+msgstr "Detalles de nota"
+
+msgid "NoteAdded"
+msgstr "Nota añadida"
+
+msgid "NoteConfirmDelete"
+msgstr "¿Realmente desea eliminar esta nota?"
+
+msgid "AddNote"
+msgstr "Crear nota"
+
+msgid "ModifyNote"
+msgstr "Editar mi agenda personal"
+
+msgid "BackToNoteList"
+msgstr "Regresar a la lista de notas"
+
+msgid "NotebookManagement"
+msgstr "Administración de la agenda"
+
+msgid "NotesSortedByTitleAsc"
+msgstr "Notas en orden ascendente por título"
+

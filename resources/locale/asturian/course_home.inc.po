@@ -1,0 +1,81 @@
+msgid "langActivate"
+msgstr "Activar"
+
+msgid "langDeactivate"
+msgstr "Desactivar"
+
+msgid "langInLnk"
+msgstr "Enllaces desactivaos"
+
+msgid "langDelLk"
+msgstr "¿ Ta seguru de querer desactivar esta ferramienta ?"
+
+msgid "langCourseCreate"
+msgstr "Crear un cursu"
+
+msgid "langNameOfTheLink"
+msgstr "Nome del enllaz"
+
+msgid "lang_main_categories_list"
+msgstr "Llistáu de categoríes princpales"
+
+msgid "langCourseAdminOnly"
+msgstr "Namás profesores"
+
+msgid "PlatformAdminOnly"
+msgstr "Namás alministradores de la plataforma"
+
+msgid "langCombinedCourse"
+msgstr "Cursu combináu"
+
+msgid "ToolIsNowVisible"
+msgstr "Agora pue vese la ferramienta"
+
+msgid "ToolIsNowHidden"
+msgstr "Agora nun se pue ver la ferramienta"
+
+msgid "EditLink"
+msgstr "Editar enllaz"
+
+msgid "Blog_management"
+msgstr "Xestión de blogs"
+
+msgid "Forum"
+msgstr "Foros"
+
+msgid "Course_maintenance"
+msgstr "Caltenimientu del cursu"
+
+msgid "TOOL_SURVEY"
+msgstr "Encuestes"
+
+msgid "GreyIcons"
+msgstr "Caxa de ferramientes"
+
+msgid "Interaction"
+msgstr "Interaición"
+
+msgid "Authoring"
+msgstr "Crear conteníos"
+
+msgid "Administration"
+msgstr "Alministración"
+
+msgid "IntroductionTextUpdated"
+msgstr "El testu d\'entamu actualizóse"
+
+msgid "IntroductionTextDeleted"
+msgstr "Testu d\'entamu esborráu"
+
+msgid "SessionIdentifier"
+msgstr "Identificador de la sesión"
+
+msgid "SessionName"
+msgstr "Nome de la sesión"
+
+msgid "SessionCategory"
+msgstr "Categoría de la sesión"
+
+msgid "SessionData"
+msgstr "Datos de la sesión"
+

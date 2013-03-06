@@ -1,0 +1,222 @@
+msgid "langInvalidId"
+msgstr "Identificativo non valido"
+
+msgid "langWelcome"
+msgstr "Benvenuti!"
+
+msgid "langPass"
+msgstr "Password"
+
+msgid "langEnter"
+msgstr "<< elenco dei corsi"
+
+msgid "langReg"
+msgstr "Registrazione"
+
+msgid "langMenu"
+msgstr "Menu"
+
+msgid "langAdvises"
+msgstr "Annunci"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Attenzione!</b> Il corso non esiste"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "clicca qui per prelevare il corso dal vecchio portale"
+
+msgid "langOtherCourses"
+msgstr "altri corsi"
+
+msgid "langSupportForum"
+msgstr "Forum della piattaforma"
+
+msgid "langCategories"
+msgstr "categorie"
+
+msgid "langBackToHomePage"
+msgstr "categorie"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Accesso riservato agli iscritti"
+
+msgid "langLostPassword"
+msgstr "Recupera la password"
+
+msgid "lang_edit_my_course_list"
+msgstr "Elenco dei corsi"
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langValvas"
+msgstr "Novità"
+
+msgid "langUp"
+msgstr "Su"
+
+msgid "langCatList"
+msgstr "Categorie"
+
+msgid "langCourseList"
+msgstr "Elenco dei  Corsi"
+
+msgid "langHelptwo"
+msgstr "Aiuto"
+
+msgid "langRegAll"
+msgstr "Iscrivi"
+
+msgid "EussMenu"
+msgstr "Menù"
+
+msgid "Opinio"
+msgstr "Opinione"
+
+msgid "Intranet"
+msgstr "Intranet"
+
+msgid "Englin"
+msgstr "Inglese"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Login fallito - se non sei registrato, puoi farlo usando il <a href=claroline/auth/inscription.php>modulo di registrazione</a>"
+
+msgid "langSubCat"
+msgstr "sotto-categorie"
+
+msgid "langMenuGeneral"
+msgstr "In evidenza"
+
+msgid "langMenuUser"
+msgstr "Utente"
+
+msgid "langMenuAdmin"
+msgstr "Amministratore della piattaforma"
+
+msgid "langUsersOnLineList"
+msgstr "Elenco degli utenti on-line"
+
+msgid "langTotalOnLine"
+msgstr "On-line in totale"
+
+msgid "langRefresh"
+msgstr "Aggiorna"
+
+msgid "langMe"
+msgstr "me stesso"
+
+msgid "langSystemAnnouncements"
+msgstr "Avvisi di sistema"
+
+msgid "langHelpMaj"
+msgstr "Aiuto"
+
+msgid "langNotRegistered"
+msgstr "Non sei ancora iscritto"
+
+msgid "langAdmin"
+msgstr "Amministratore della piattaforma"
+
+msgid "Login"
+msgstr "Nome utente"
+
+msgid "langRegisterForCourse"
+msgstr "Iscriviti a un corso"
+
+msgid "langUnregisterForCourse"
+msgstr "Cancellati da un corso"
+
+msgid "langCombinedCourse"
+msgstr "Corso combinato"
+
+msgid "Platform"
+msgstr "Piattaforma"
+
+msgid "Refresh"
+msgstr "Aggiorna"
+
+msgid "TotalOnLine"
+msgstr "totale utenti collegati"
+
+msgid "langCourseClosed"
+msgstr "(il corso è temporaneamente chiuso)"
+
+msgid "ViewOpenCourses"
+msgstr "Vedi i corsi aperti"
+
+msgid "langCompetences"
+msgstr "Competenze"
+
+msgid "langDiplomas"
+msgstr "Certificati e diplomi"
+
+msgid "langTeach"
+msgstr "Cosa sa insegnare"
+
+msgid "langProductions"
+msgstr "Prodotti"
+
+msgid "langSendChatRequest"
+msgstr "Richiedi una chat con questa persona"
+
+msgid "langRequestDenied"
+msgstr "Consenso negato"
+
+msgid "UsageDatacreated"
+msgstr "Dati d\'impiego creati"
+
+msgid "SessionView"
+msgstr "Mostra i corsi ordinandoli per sessione"
+
+msgid "CourseView"
+msgstr "Mostra l\'elenco completo dei corsi"
+
+msgid "DropboxFileAdded"
+msgstr "Aggiunto un file alla sezione Scambio files"
+
+msgid "NewMessageInForum"
+msgstr "Nuovo messaggio inviato nel forum"
+
+msgid "FolderCreated"
+msgstr "Nuova cartella creata"
+
+msgid "LinkAdded"
+msgstr "Collegamento aggiunto"
+
+msgid "AnnouncementAdded"
+msgstr "L\'avviso è stato aggiunto"
+
+msgid "AgendaAdded"
+msgstr "Voce nell\'agenda aggiunta"
+
+msgid "LoginEnter"
+msgstr "Accedi"
+
+msgid "Messages"
+msgstr "Messaggi"
+
+msgid "Inbox"
+msgstr "Posta in entrata"
+
+msgid "Comppose"
+msgstr "Componi"
+
+msgid "PendingInvitations"
+msgstr "Inviti in attesa"
+
+msgid "YouDoNotHaveAnySessionInItsHistory"
+msgstr "Non ci sono tue sessioni nello storico"
+
+msgid "PortalHomepageDefaultIntroduction"
+msgstr "<p>&nbsp;</p>
+<p><span class=\"Apple-style-span\" style=\"font-family: arial, verdana, helvetica, sans-serif; \">
+<h2 style=\"font-size: 18px; \">Congratulazioni! Hai installato con successo il tuo portale per l\'e-learning!</h2>
+<p style=\"font-size: 12px; \">"
+
+msgid "Username"
+msgstr "Nome utente"
+
+msgid "Profile"
+msgstr "Profilo"
+

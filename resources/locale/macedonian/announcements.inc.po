@@ -1,0 +1,141 @@
+msgid "Announcement"
+msgstr "Известување"
+
+msgid "langAnnEmpty"
+msgstr "Списокот со Известувања бил избришан"
+
+msgid "AnnouncementModified"
+msgstr "Известувањето било изменето"
+
+msgid "AnnouncementAdded"
+msgstr "Известувањето е додадено"
+
+msgid "AnnouncementDeleted"
+msgstr "Известувањето беше избришано"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Објави"
+
+msgid "AddAnnouncement"
+msgstr "Додај известување"
+
+msgid "langContent"
+msgstr "Содржина"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Избриши го списокот со Известувања"
+
+msgid "professorMessage"
+msgstr "Порака од учителот"
+
+msgid "langEmailSent"
+msgstr "и испратено по e-mail на регистрираните курсисти"
+
+msgid "EmailOption"
+msgstr "Испрати го ова известување по e-mail на селектираните групи/корисници"
+
+msgid "langOn"
+msgstr "На"
+
+msgid "langRegUser"
+msgstr "регистрирани корисници на сајтот"
+
+msgid "langUnvalid"
+msgstr "има невалидна или воопшто нема e-mail адреса"
+
+msgid "langModifAnn"
+msgstr "Измени на ова известување"
+
+msgid "langModify"
+msgstr "измени"
+
+msgid "langDelete"
+msgstr "избриши"
+
+msgid "langTitle"
+msgstr "Наслов"
+
+msgid "langHelp"
+msgstr "помош"
+
+msgid "langOk"
+msgstr "Добро"
+
+msgid "langAddIntro"
+msgstr "Додај воведен текст"
+
+msgid "langBackList"
+msgstr "Врати се на списокот"
+
+msgid "langSelMess"
+msgstr "Предупредувања на некои корисници"
+
+msgid "EmailTitle"
+msgstr "Предмет на оваа пошта"
+
+msgid "langUserlist"
+msgstr "Список на групи и корисници"
+
+msgid "langSelectedUsers"
+msgstr "Селектирани корисници"
+
+msgid "langSubmit"
+msgstr "Поднеси"
+
+msgid "langPleaseEnterMessage"
+msgstr "Морате да вметнете текст на пораката"
+
+msgid "langPleaseSelectUsers"
+msgstr "Морате да селектирате корисник/ци"
+
+msgid "Teachersubject"
+msgstr "Порака испратена на Вашите курсисти"
+
+msgid "langMessages"
+msgstr "Пораки"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Пораки до селектираните корисници"
+
+msgid "langIntroText"
+msgstr "За да испратите порака, селектирајте групи од корисници (означени со Г напред) или корисници од списокот лево."
+
+msgid "langDown"
+msgstr "долу"
+
+msgid "langMsgSent"
+msgstr "Поракате беше испратена на селектираните курсисти"
+
+msgid "langSelUser"
+msgstr "селектирани корисници на сајтот"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Порака до селектираните групи"
+
+msgid "langSelectedGroups"
+msgstr "селектирани групи"
+
+msgid "langMsg"
+msgstr "Пораки"
+
+msgid "langYes"
+msgstr "да"
+
+msgid "MsgText"
+msgstr "Порака"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Сите известувања ба избришани"
+
+msgid "AnnouncementMoved"
+msgstr "Известувањето е преместено"
+
+msgid "NoAnnouncements"
+msgstr "&#1053;&#1077; &#1087;&#1086;&#1089;&#1090;&#1086;&#1112;&#1072;&#1090; &#1080;&#1079;&#1074;&#1077;&#1089;&#1090;&#1091;&#1074;&#1072;&#1114;&#1072;"
+
+msgid "SelectEverybody"
+msgstr "Селектирај ги Сите"
+
+msgid "SelectedUsersGroups"
+msgstr "селектирани групи од корисници"
+

@@ -1,0 +1,84 @@
+msgid "langActivate"
+msgstr "公开"
+
+msgid "langDeactivate"
+msgstr "隐藏"
+
+msgid "langInLnk"
+msgstr "隐藏的工具"
+
+msgid "langDelLk"
+msgstr "确定要移除该工具吗?"
+
+msgid "langCourseCreate"
+msgstr "创建课程"
+
+msgid "langNameOfTheLink"
+msgstr "链接名称"
+
+msgid "lang_main_categories_list"
+msgstr "主分类列表"
+
+msgid "langCourseAdminOnly"
+msgstr "教师"
+
+msgid "PlatformAdminOnly"
+msgstr "仅平台管理员"
+
+msgid "langCombinedCourse"
+msgstr "合并的课程"
+
+msgid "ToolIsNowVisible"
+msgstr "工具当前可用."
+
+msgid "ToolIsNowHidden"
+msgstr "工具当前不可用."
+
+msgid "EditLink"
+msgstr "链接编辑"
+
+msgid "Blog_management"
+msgstr "博客管理"
+
+msgid "Forum"
+msgstr "论坛"
+
+msgid "Course_maintenance"
+msgstr "课程维护"
+
+msgid "TOOL_SURVEY"
+msgstr "调查"
+
+msgid "GreyIcons"
+msgstr "工具箱"
+
+msgid "Interaction"
+msgstr "互动"
+
+msgid "Authoring"
+msgstr "写作"
+
+msgid "Administration"
+msgstr "管理"
+
+msgid "IntroductionTextUpdated"
+msgstr "简介更新完成"
+
+msgid "IntroductionTextDeleted"
+msgstr "简介已删除"
+
+msgid "SessionIdentifier"
+msgstr "会话识别符"
+
+msgid "SessionName"
+msgstr "会话名称"
+
+msgid "SessionCategory"
+msgstr "会话分类"
+
+msgid "SessionData"
+msgstr "会话数据"
+
+msgid "ToolSearch"
+msgstr "搜索"
+

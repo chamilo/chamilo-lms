@@ -1,0 +1,36 @@
+msgid "langLineNumber"
+msgstr "Bilangan baris"
+
+msgid "langLine"
+msgstr "baris"
+
+msgid "langLines"
+msgstr "baris"
+
+msgid "langLineOrLines"
+msgstr "baris"
+
+msgid "langMoveUp"
+msgstr "Ke atas"
+
+msgid "langMoveDown"
+msgstr "Ke bawah"
+
+msgid "langAddNewHeading"
+msgstr "Tambah Tajuk Utama baru"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Untuk Pentadbir Subjek (Pensyarah) Sahaja"
+
+msgid "langDefineHeadings"
+msgstr "Bina Borang Cadangan"
+
+msgid "langBackToUsersList"
+msgstr "Kembali ke Senarai Ahli"
+
+msgid "langTracking"
+msgstr "Pengesanan"
+
+msgid "langCourseManager"
+msgstr "Pentadbir Subjek"
+

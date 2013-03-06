@@ -1,0 +1,60 @@
+msgid "select"
+msgstr "Seleccionar"
+
+msgid "square"
+msgstr "Rectángulo"
+
+msgid "circle"
+msgstr "Elipse"
+
+msgid "poly"
+msgstr "Polígono"
+
+msgid "status1"
+msgstr "Debuxar un hotspot."
+
+msgid "status2_poly"
+msgstr "Use o botón dereito do rato para pechar o polígono."
+
+msgid "status2_other"
+msgstr "Solte o botón do rato para gardar o hotspot."
+
+msgid "status3"
+msgstr "Hotspot gardado"
+
+msgid "exercise_status_1"
+msgstr "Estatus: Pregunta aínda sen terminar"
+
+msgid "exercise_status_2"
+msgstr "Pulse aquí para enviar as súas respostas á pregunta"
+
+msgid "exercise_status_3"
+msgstr "Estatus: Pregunta terminada"
+
+msgid "showUserPoints"
+msgstr "Mostrar/Ocultar os clics"
+
+msgid "showHotspots"
+msgstr "Mostrar/Ocultar hotspots"
+
+msgid "labelPolyMenu"
+msgstr " 	Pechar polígono"
+
+msgid "triesleft"
+msgstr "Intentos restantes"
+
+msgid "exeFinished"
+msgstr "Identificáronse todas as respostas. Agora pode reasignar as súas respostas ou pulsar para enviar."
+
+msgid "nextAnswer"
+msgstr "Agora faga clic en: &done=done"
+
+msgid "delineation"
+msgstr "Delimitación"
+
+msgid "labelDelineationMenu"
+msgstr "Cerrar delimitación"
+
+msgid "oar"
+msgstr "Area en perigo"
+

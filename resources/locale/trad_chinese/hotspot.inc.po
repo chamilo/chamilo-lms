@@ -1,0 +1,24 @@
+msgid "select"
+msgstr "選擇"
+
+msgid "square"
+msgstr "正方形"
+
+msgid "circle"
+msgstr "橢圓形"
+
+msgid "poly"
+msgstr "多邊形"
+
+msgid "status2_poly"
+msgstr "點擊滑鼠右鍵以封閉多邊形"
+
+msgid "exercise_status_1"
+msgstr "狀態：問題仍未結束"
+
+msgid "exercise_status_2"
+msgstr "按下以提交你的答案"
+
+msgid "exercise_status_3"
+msgstr "狀態：問題已結束"
+

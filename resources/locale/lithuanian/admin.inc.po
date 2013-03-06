@@ -1,0 +1,1953 @@
+msgid "AdminBy"
+msgstr "Administruojama"
+
+msgid "AdministrationTools"
+msgstr "Administravimo įrankiai"
+
+msgid "State"
+msgstr "Sistemos būsena"
+
+msgid "Statistiques"
+msgstr "Statistika"
+
+msgid "VisioHostLocal"
+msgstr "Video konferencijos adresas"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Ar video konferencijos protokolas webinis? (dažniausiai false)"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Show a link to go back in the course hierarchy. A link is available at the bottom of the list anyway."
+
+msgid "langUsed"
+msgstr "naudojamas"
+
+msgid "langPresent"
+msgstr "Ok"
+
+msgid "langMissing"
+msgstr "prarasta"
+
+msgid "langExist"
+msgstr "esamas"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Show back link on to of categories/courses tree"
+
+msgid "ShowNumberOfCourses"
+msgstr "Show number of courses"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Rodyti dėstytojo vardą kurso pavadinime"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Rodyti dėstytojo vardą kurso komentarų sąraše"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Rodyti kurso kodą kurso komentarų sąraše"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Rodyti kurso kodą kurso pavadinime"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "Sistemoje virtualių kursų nėra."
+
+msgid "ConfigureHomePage"
+msgstr "Redaguoti pagrindinį puslapį"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Active modules upon course creation"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Kurie moduliai turi būti aktyvuoti (matomi), kai sukuriamas naujas kursas?"
+
+msgid "langCourseBackup"
+msgstr "Pagaryti kurso atsarginę kopiją (archyvuoti)"
+
+msgid "langCourseTitular"
+msgstr "Dėstytojas"
+
+msgid "langCourseTitle"
+msgstr "Kurso pavadinimas"
+
+msgid "langCourseFaculty"
+msgstr "Kurso kategorija"
+
+msgid "langCourseDepartment"
+msgstr "Kurso katedra"
+
+msgid "langCourseDepartmentURL"
+msgstr "Katedros internetinis puslapis"
+
+msgid "langCourseLanguage"
+msgstr "Kurso kalba"
+
+msgid "langCourseAccess"
+msgstr "Priėjimas prie kurso"
+
+msgid "langCourseSubscription"
+msgstr "Užsirašymas į kursą"
+
+msgid "langPublicAccess"
+msgstr "Viešai prieinamas"
+
+msgid "langPrivateAccess"
+msgstr "Privačiai prieinamas"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Duomenų bazės administravimas prieinamas tik serverio administratoriui"
+
+msgid "langShowUsersOfCourse"
+msgstr "Rodyti užsirašiusius į kursą studentus"
+
+msgid "langShowClassesOfCourse"
+msgstr "Rodyti užsirašiusias į kursą klases"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Rodyti šio kurso grupes"
+
+msgid "langPhone"
+msgstr "Telefonas"
+
+msgid "langPhoneNumber"
+msgstr "Telefono numeris"
+
+msgid "langActions"
+msgstr "Veiksmai"
+
+msgid "langAddToCourse"
+msgstr "Įdėti į kursą"
+
+msgid "langDeleteFromPlatform"
+msgstr "Pašalinti iš sistemos"
+
+msgid "langDeleteCourse"
+msgstr "Ištrinti išrinktą kursą/kursus"
+
+msgid "langDeleteFromCourse"
+msgstr "Atsirašyti iš kurso/kursų"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Ištrinti pažymėtas klases"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Ištrinti pažymėtas grupes"
+
+msgid "langAdministrator"
+msgstr "Administratorius"
+
+msgid "langAddPicture"
+msgstr "Įdėti nuotrauką"
+
+msgid "langChangePicture"
+msgstr "Pakeisti paveiksliuką"
+
+msgid "langDeletePicture"
+msgstr "Ištrinti paveiksliuką"
+
+msgid "langAddUsers"
+msgstr "Įrašyti vartotojus"
+
+msgid "langAddGroups"
+msgstr "Sukurti grupes"
+
+msgid "langAddClasses"
+msgstr "Sukurti klases"
+
+msgid "langExportUsers"
+msgstr "Eksportuoti vartotojų sąrašą"
+
+msgid "langKeyword"
+msgstr "Raktinis žodis"
+
+msgid "langGroupName"
+msgstr "Grupės pavadinimas"
+
+msgid "langGroupTutor"
+msgstr "Grupės kuratorius"
+
+msgid "langGroupDescription"
+msgstr "Grupės apibūdinimas"
+
+msgid "langNumberOfParticipants"
+msgstr "Dalyvių skaičius"
+
+msgid "langNumberOfUsers"
+msgstr "Vartotojų skaičius"
+
+msgid "langMaximum"
+msgstr "maksimalus"
+
+msgid "langMaximumOfParticipants"
+msgstr "Maksimalus dalyvių skaičius"
+
+msgid "langParticipants"
+msgstr "dalyviai"
+
+msgid "langFirstLetterClass"
+msgstr "Pirmoji raidė (klasės pavadinimas)"
+
+msgid "langFirstLetterUser"
+msgstr "Pirmoji raidė (pavardė)"
+
+msgid "langFirstLetterCourse"
+msgstr "Pirmoji raidė (kodas)"
+
+msgid "langModifyUserInfo"
+msgstr "Redaguoti vartotojo informaciją"
+
+msgid "langModifyClassInfo"
+msgstr "Redaguoti klasės informaciją"
+
+msgid "langModifyGroupInfo"
+msgstr "Redaguoti grupės informaciją"
+
+msgid "langModifyCourseInfo"
+msgstr "Redaguoti kurso informaciją"
+
+msgid "langPleaseEnterClassName"
+msgstr "Prašome įrašyti klasės pavadinimą!"
+
+msgid "langPleaseEnterLastName"
+msgstr "Prašome įrašyti vartotojo pavardę!"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Prašome įrašyti vartotojo vardą!"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Prašome įrašyti teisingą el. pašto adresą!"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Prašome įrašyti teisingą prisijungimo vardą!"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Prašome įrašyti kurso kodą!"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Prašome įrašyti dėstytojo vardą ir pavardę!"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Prašome įrašyti kurso pavadinimą!"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Leidžiami formatai yra JPG, PNG ir GIF !"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Šis prisijungimas jau įvykdytas!"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Importuoti vartotojų sąrašą iš XML/CSV failo"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Eksportuoti vartotojų sąrašą į XML/CSV failą"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Tiktai kurso vartotojams"
+
+msgid "langAddClassesToACourse"
+msgstr "Prijungti klases prie kurso"
+
+msgid "langAddUsersToACourse"
+msgstr "Pridėti vartotojus į kursą"
+
+msgid "langAddUsersToAClass"
+msgstr "Pridėti vartotojus į klasę"
+
+msgid "langAddUsersToAGroup"
+msgstr "Pridėti vartotojus į grupę"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Turite išrinkti mažiausiai vieną klasę ir vieną kursą!"
+
+msgid "AtLeastOneUser"
+msgstr "Turite išrinkti mažiausiai vieną vartotoją!"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Turite išrinkti mažiausiai vieną vartotoją ir vieną kursą!"
+
+msgid "langClassList"
+msgstr "Klasių sąrašas"
+
+msgid "langUserList"
+msgstr "Vartotojų sąrašas"
+
+msgid "langCourseList"
+msgstr "Kursų sąrašas"
+
+msgid "langAddToThatCourse"
+msgstr "Pridėti prie šio(šių) kurso(kursų)"
+
+msgid "langAddToClass"
+msgstr "Įtraukti į klasę"
+
+msgid "langRemoveFromClass"
+msgstr "Pašalinti iš klasės"
+
+msgid "langAddToGroup"
+msgstr "Įtraukti į grupę"
+
+msgid "langRemoveFromGroup"
+msgstr "Pašalinti iš grupės"
+
+msgid "langUsersOutsideClass"
+msgstr "Ne klasėje esantys vartotojai"
+
+msgid "langUsersInsideClass"
+msgstr "Klasėje esantys vartotojai"
+
+msgid "langUsersOutsideGroup"
+msgstr "Ne grupėje esantys vartotojai"
+
+msgid "langUsersInsideGroup"
+msgstr "Grupėje esantys vartotojai"
+
+msgid "langImportFileLocation"
+msgstr "CSV / XML failo vieta"
+
+msgid "langFileType"
+msgstr "Failo tipas"
+
+msgid "langOutputFileType"
+msgstr "Išsaugomo failo tipas"
+
+msgid "langMustUseSeparator"
+msgstr "būtina naudoti \';\' ženklą kaip skyriklį"
+
+msgid "langCSVMustLookLike"
+msgstr "CSV failas turi atrodyti taip"
+
+msgid "langXMLMustLookLike"
+msgstr "XML failas turi atrodyti taip"
+
+msgid "langMandatoryFields"
+msgstr "<strong>Pastorinti</strong> laukai būtini."
+
+msgid "langNotXML"
+msgstr "Nurodytas failas nėra XML formato!"
+
+msgid "langNotCSV"
+msgstr "Nurodytas failas nėra CSV formato!"
+
+msgid "langNoNeededData"
+msgstr "Nurodytame faile nėra reikalingų duomenų!"
+
+msgid "langMaxImportUsers"
+msgstr "Negalite importuoti daugiau nei 500 vartotojų vienu metu!"
+
+msgid "langAdminDatabases"
+msgstr "Duomenų bazės (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Vartotojai"
+
+msgid "langAdminClasses"
+msgstr "Vartotojų klasės"
+
+msgid "langAdminGroups"
+msgstr "Vartotojų grupės"
+
+msgid "langAdminCourses"
+msgstr "Kursai"
+
+msgid "langAdminCategories"
+msgstr "Kursų kategorijos"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Priregistruoti vartotoją/grupę į kursą"
+
+msgid "AddACategory"
+msgstr "Įrašyti kategoriją"
+
+msgid "langInto"
+msgstr "į"
+
+msgid "langNoCategories"
+msgstr "Čia kategorijų nėra"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Leisti kurti kursus šioje kategorijoje?"
+
+msgid "langGoToForum"
+msgstr "Į forumą"
+
+msgid "langCategoryCode"
+msgstr "Kategorijos kodas"
+
+msgid "langCategoryName"
+msgstr "Kategorijos pavadinimas"
+
+msgid "langCategories"
+msgstr "kategorijos"
+
+msgid "langEditNode"
+msgstr "Redaguoti šią kategoriją"
+
+msgid "langOpenNode"
+msgstr "Atidaryti šią kategoriją"
+
+msgid "langDeleteNode"
+msgstr "Ištrinti šią kategoriją"
+
+msgid "langAddChildNode"
+msgstr "Įtraukti subkategoriją"
+
+msgid "langViewChildren"
+msgstr "Peržiūrėti"
+
+msgid "langTreeRebuildedIn"
+msgstr "Medis pergeneruotas"
+
+msgid "langTreeRecountedIn"
+msgstr "Medis perskaičiuotas"
+
+msgid "langRebuildTree"
+msgstr "Pertvarkyti medį"
+
+msgid "langRefreshNbChildren"
+msgstr "Perkrauti šakos numerį"
+
+msgid "langShowTree"
+msgstr "Rodyti medį"
+
+msgid "langBack"
+msgstr "Grįžti į ankstesnį puslapį"
+
+msgid "langLogDeleteCat"
+msgstr "Kategorija ištrinta"
+
+msgid "langRecountChildren"
+msgstr "Perskaičiuoti vaikus medyje"
+
+msgid "langUpInSameLevel"
+msgstr "Aukštyn tame pačiame lygyje"
+
+msgid "langSeconds"
+msgstr "sekundės"
+
+msgid "langMailTo"
+msgstr "Siūsti laišką :"
+
+msgid "lang_no_access_here"
+msgstr "Nėra priėjimo"
+
+msgid "lang_php_info"
+msgstr "informacija apie sistemą"
+
+msgid "langAddAdminInApache"
+msgstr "Sukurti administratorių"
+
+msgid "langAddFaculties"
+msgstr "Sukurti kategorijas"
+
+msgid "langSearchACourse"
+msgstr "Kurso paieška"
+
+msgid "langSearchAUser"
+msgstr "Vartotojo paieška"
+
+msgid "langTechnicalTools"
+msgstr "Techninis"
+
+msgid "langConfig"
+msgstr "Sistemos nustatymai"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Prisijungimų sąrašas (išplėstas)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Maksimalus vartotojų skaičius, rodomas sąraše"
+
+msgid "NoTimeLimits"
+msgstr "Laiko apribojimų nėra"
+
+msgid "GeneralCoach"
+msgstr "Generalinis kuratorius"
+
+msgid "GeneralProperties"
+msgstr "Pagrindinės savybės"
+
+msgid "CourseCoach"
+msgstr "Kurso kuratorius"
+
+msgid "UsersNumber"
+msgstr "Vartotojų numeriai"
+
+msgid "PageAfterLoginTitle"
+msgstr "Puslapis po prisijungimo"
+
+msgid "PageAfterLoginComment"
+msgstr "Puslapis, kuris matomas vartotojo prisijungimo metu"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Chamilo nuorodos"
+
+msgid "TabsMyProfile"
+msgstr "My Profile tab"
+
+msgid "GlobalRole"
+msgstr "Globalus vaidmuo"
+
+msgid "langNomOutilTodo"
+msgstr "Todo sąrašo valdymas"
+
+msgid "langNomPageAdmin"
+msgstr "Administravimas"
+
+msgid "langSysInfo"
+msgstr "Infomacija apie sistemą"
+
+msgid "langDiffTranslation"
+msgstr "Palyginti vertimus"
+
+msgid "langStatOf"
+msgstr "Statistika"
+
+msgid "langSpeeSubscribe"
+msgstr "Greita kurso testuotojo registracija"
+
+msgid "langLogIdentLogout"
+msgstr "Prisijungimų sąrašas"
+
+msgid "langServerStatus"
+msgstr "MySQL serverio būsena :"
+
+msgid "langDataBase"
+msgstr "Duomenų bazė"
+
+msgid "langRun"
+msgstr "vykdoma"
+
+msgid "langClient"
+msgstr "MySql klientas"
+
+msgid "langServer"
+msgstr "MySql severis"
+
+msgid "langtitulary"
+msgstr "Savininkas"
+
+msgid "langUpgradeBase"
+msgstr "Atnaujinti duomenų bazę"
+
+msgid "langManage"
+msgstr "Portalo valdymas"
+
+msgid "langErrorsFound"
+msgstr "rasta klaidų"
+
+msgid "langMaintenance"
+msgstr "Kurso aptarnavimas"
+
+msgid "langUpgrade"
+msgstr "Atnaujinti Chamilo"
+
+msgid "langWebsite"
+msgstr "Chamilo namų puslapis"
+
+msgid "langDocumentation"
+msgstr "Dokumentacija"
+
+msgid "langContribute"
+msgstr "Bendradarbiauti"
+
+msgid "langInfoServer"
+msgstr "Serverio informacija"
+
+msgid "langOtherCategory"
+msgstr "Kita kategorija"
+
+msgid "langSendMailToUsers"
+msgstr "Siūsti el. laišką vartotojams"
+
+msgid "langExampleXMLFile"
+msgstr "XML failo pavyzdys"
+
+msgid "langExampleCSVFile"
+msgstr "CSV failo pavyzdys"
+
+msgid "langCourseSystemCode"
+msgstr "Sistemos kodas"
+
+msgid "langCourseVisualCode"
+msgstr "Matomas kodas"
+
+msgid "langSystemCode"
+msgstr "Sistemos kodas"
+
+msgid "langVisualCode"
+msgstr "Matomas kodas"
+
+msgid "langAddCourse"
+msgstr "Sukurti kursą"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Virtualių kursų valdymas"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Sukurti virtualų kursą"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "Virtualus kursas naudoja tuos pačią disko erdvę (katalogus ir duomenų bazę kaip ir \'realus\' kursas."
+
+msgid "langRealCourseCode"
+msgstr "Realaus kurso kodas"
+
+msgid "langCourseCreationSucceeded"
+msgstr "Kursas sėkmingai sukurtas."
+
+msgid "langYourDokeosUses"
+msgstr "Your Chamilo installation uses presently"
+
+msgid "langOnTheHardDisk"
+msgstr "standžiajame diske"
+
+msgid "langIsVirtualCourse"
+msgstr "Virtualus kursas"
+
+msgid "langSystemAnnouncements"
+msgstr "Sistemos pranešimai"
+
+msgid "langAddAnnouncement"
+msgstr "Sukurti naują pranešimą"
+
+msgid "langAnnouncementAdded"
+msgstr "Pranešimas sukurtas"
+
+msgid "langAnnouncementUpdated"
+msgstr "Pranešimas atnaujintas"
+
+msgid "langAnnouncementDeleted"
+msgstr "Pranešimas ištrintas"
+
+msgid "langContent"
+msgstr "Turinys"
+
+msgid "PermissionsForNewFiles"
+msgstr "Permissions for new files"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "The ability to define the permissions settings to assign to every newly created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions.If you use Oogie, take care that the user who launch OpenOffice can write files in the course folder."
+
+msgid "langStudent"
+msgstr "Studentas"
+
+msgid "Guest"
+msgstr "Svečias"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Prisijungti kaip"
+
+msgid "langLoginAsThisUser"
+msgstr "Prisijungti"
+
+msgid "SelectPicture"
+msgstr "Pasirinkti paveikslėlį..."
+
+msgid "DontResetPassword"
+msgstr "Neatšaukti slaptažodžio"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Dalyvauti kūrime"
+
+msgid "langCourseAdmin"
+msgstr "Kursų kūrėjas"
+
+msgid "langOtherCourses"
+msgstr "kiti kursai"
+
+msgid "PlatformLanguageTitle"
+msgstr "Sistemos kalba"
+
+msgid "ServerStatusComment"
+msgstr "Serverio tipas. Įjungiami arba išjungiami specifiniai nustatymai."
+
+msgid "ServerStatusTitle"
+msgstr "Serverio tipas"
+
+msgid "PlatformLanguages"
+msgstr "Chamilo sistemos kalbos"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Šis įrankis valdo kalbos pasirinkimo meniu prisijungimo puslapyje. Galite parinkti kalbas, kurios bus pateiktos vartotojams pasirinkimui"
+
+msgid "OriginalName"
+msgstr "Originalus vardas"
+
+msgid "EnglishName"
+msgstr "Vardas angliškai"
+
+msgid "DokeosFolder"
+msgstr "Chamilo katalogas"
+
+msgid "Properties"
+msgstr "Savybės"
+
+msgid "PlatformConfigSettings"
+msgstr "Chamilo konfigūracijos nustatymai"
+
+msgid "SettingsStored"
+msgstr "Nustatymai išsaugoti"
+
+msgid "InstitutionTitle"
+msgstr "Mokymo institucijos pavadinimas"
+
+msgid "InstitutionComment"
+msgstr "Mokymo institucijos pavadinimas (bus rodomas viršuje dešinėje)"
+
+msgid "InstitutionUrlTitle"
+msgstr "Nuoroda į mokymo institucijos puslapį"
+
+msgid "InstitutionUrlComment"
+msgstr "Nuoroda į mokymo institucijos puslapį (bus rodomas viršuje dešinėje)"
+
+msgid "SiteNameTitle"
+msgstr "Chamilo portalo antraštė"
+
+msgid "SiteNameComment"
+msgstr "Tinklapio pavadinimas (rodomas viršuje puslapio)"
+
+msgid "emailAdministratorTitle"
+msgstr "Sistemos administratorius: El. paštas"
+
+msgid "emailAdministratorComment"
+msgstr "Sistemos administratoriaus el. pašto adresas (matomas puslapio apačioje)"
+
+msgid "administratorSurnameTitle"
+msgstr "Sistemos administratorius: Pavardė"
+
+msgid "administratorSurnameComment"
+msgstr "Sistemos administratoriaus pavardė (matomas puslapio apačioje kairėje)"
+
+msgid "administratorNameTitle"
+msgstr "Sistemos administratorius: Vardas"
+
+msgid "administratorNameComment"
+msgstr "Sistemos administratoriaus vardas (matomas puslapio apačioje kairėje)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Sistemos administratoriaus informacija (matoma puslapio apačioje)"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Rodyti sistemos administratoriaus informaciją puslapio apačioje?"
+
+msgid "HomepageViewTitle"
+msgstr "Namų puslapio peržiūra"
+
+msgid "HomepageViewComment"
+msgstr "Kaip turėtų atrodyti šio kurso namų puslapis?"
+
+msgid "HomepageViewDefault"
+msgstr "Dviejų stulpelių išdėstymas. Neaktyvūs įrankiai nematomi"
+
+msgid "HomepageViewFixed"
+msgstr "Trijų stulpelių išdėstymas. Neaktyvūs įrankiai pilkos spalvos (ikonos savo vietose)"
+
+msgid "Yes"
+msgstr "Taip"
+
+msgid "No"
+msgstr "Ne"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Įrankių nuorodos"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Rodyti įrankių nuorodas viršutiniame meniu?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Studento aplinka"
+
+msgid "ShowStudentViewComment"
+msgstr "Įjungti studento aplinką?<br>Ši savybė leidžia dėstytojui matyti tai, ką mato studentas."
+
+msgid "AllowGroupCategories"
+msgstr "Grupių kategorijos"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Leisti kursų valdytojams kurti kategorijas grupių modulyje?"
+
+msgid "PlatformLanguageComment"
+msgstr "Jūs galite nustatyti sistemos kalbą skirtingose sistemos administravimo dalyse tokiu būdu: <a href=\"languages.php\">Dokeos Sistemos Kalbos</a>"
+
+msgid "ProductionServer"
+msgstr "Gamybinis serveris"
+
+msgid "TestServer"
+msgstr "Testavimo severis"
+
+msgid "ShowOnlineTitle"
+msgstr "Kas yra prisijungęs"
+
+msgid "AsPlatformLanguage"
+msgstr "kaip sistemos kalba"
+
+msgid "ShowOnlineComment"
+msgstr "Rodyti prisijungusių prie sistemos asmenų skaičių?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Leisti vardo pakeitimą profilyje?"
+
+msgid "AllowNameChangeComment"
+msgstr "Leisti vartotojui pasikeisti savo vardą ir pavardę?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Dokumentų kvota pagal nutylėjimą"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Kokia dokumentų įrankio kvota pagal nutylėjimą? Jūs galite atskirai nurodyti kvotą atskiriems kursams tokiu būdu: Sistemos administravimas > Kursai > Redaguoti"
+
+msgid "ProfileChangesTitle"
+msgstr "Profilis"
+
+msgid "ProfileChangesComment"
+msgstr "Kurios profilio dalys gali būti keičiamos?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Registracija: reikalaujami laukeliai"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Kurie laukeliai privalomi (be vardo, pavardės, prisijungimo vardo ir prisijungimo slaptažodžio)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Grupės kvota pagal nutylėjimą"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Kokia grupės dokumentų kvota pagal nutylėjimą?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Prarastas slaptažodis"
+
+msgid "AllowLostPasswordComment"
+msgstr "Ar vartotojui leidžiama reikalauti prarasto slaptažodžio?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Registracija"
+
+msgid "AllowRegistrationComment"
+msgstr "Ar naujų vartotojų registracija leidžiama? Ar gali vartotojai kurti naujas sąskaitas?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Dėstytojo registracija"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Ar leidžiama registruotis kaip dėstytojui (su kursų kūrimo teise)?"
+
+msgid "PlatformLanguage"
+msgstr "Sistemos kalba"
+
+msgid "Tuning"
+msgstr "Tuning"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "Split users\' upload directory"
+
+msgid "SplitUsersUploadDirectoryComment"
+msgstr "On very high-usage portals, where a lot of users are registered and send their pictures, the upload directory (main/upload/users/) might contain too many files for the filesystem to handle (it has been reported with more than 36000 files on a Debian server). Changing this option will enable a one-level splitting of the directories in the upload directory. 9 directories will be used in the base directory and all subsequent users\' directories will be stored into one of these 9 directories. The change of this option will not affect the directories structure on disk, but will affect the behaviour of the Chamilo code, so if you change this option, you have to create the new directories and move the existing directories by yourself on te server. Be aware that when creating and moving those directories, you will have to move the directories of users 1 to 9 into subdirectories of the same name. If you are not sure about this option, it is best not to activate it."
+
+msgid "CourseQuota"
+msgstr "Kurso kvota"
+
+msgid "EditNotice"
+msgstr "Redaguoti įspėjimą"
+
+msgid "General"
+msgstr "bendras"
+
+msgid "LostPassword"
+msgstr "Prarastas slaptažodis"
+
+msgid "Registration"
+msgstr "registracija"
+
+msgid "Password"
+msgstr "Prisijungimo slaptažodis"
+
+msgid "InsertLink"
+msgstr "įterpti nuorodą"
+
+msgid "EditNews"
+msgstr "Redaguoti naujienas"
+
+msgid "EditCategories"
+msgstr "redaguoti kategorijas"
+
+msgid "EditHomePage"
+msgstr "Redaguoti namų puslapį"
+
+msgid "AllowUserHeadingsComment"
+msgstr "Ar gali kurso valdytojas nurodyti papildomus formų laukelius, kad galėtų gauti papildomos informacijos iš studentų?"
+
+msgid "Platform"
+msgstr "Sistema"
+
+msgid "Course"
+msgstr "Kursai"
+
+msgid "Languages"
+msgstr "Kalbos"
+
+msgid "Privacy"
+msgstr "Slaptumas"
+
+msgid "NoticeTitle"
+msgstr "Įspėjimo pavadinimas"
+
+msgid "NoticeText"
+msgstr "Įspėjimo tekstas"
+
+msgid "LinkName"
+msgstr "Nuorodos tekstas"
+
+msgid "LinkURL"
+msgstr "Nuorodos URL"
+
+msgid "OpenInNewWindow"
+msgstr "Atidaryti naujame lange"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "In the screens allowing addition of users to courses or classes, if the first non-filtered list contains more than this number of users, then default to the first letter (A)"
+
+msgid "Plugins"
+msgstr "Įskiepiai"
+
+msgid "HideDLTTMarkupComment"
+msgstr "Hide the [= ... =] markup when a language variable is not translated"
+
+msgid "Info"
+msgstr "informacija"
+
+msgid "UserAdded"
+msgstr "Vartotojas įtrauktas"
+
+msgid "NoSearchResults"
+msgstr "Paieškos rezultatų nėra"
+
+msgid "UserDeleted"
+msgstr "Vartotojas ištrintas"
+
+msgid "NoClassesForThisCourse"
+msgstr "Šiame kurse nėra priregistruotų klasių"
+
+msgid "CourseUsage"
+msgstr "Kurso naudojimas"
+
+msgid "NoCoursesForThisUser"
+msgstr "Šis vartotojas nepriregistruotas prie kurso"
+
+msgid "NoClassesForThisUser"
+msgstr "Šis vartotojas nepriregistruotas prie klasės"
+
+msgid "NoCoursesForThisClass"
+msgstr "Ši klasė nepriregistruota prie kurso"
+
+msgid "langOpenToTheWorld"
+msgstr "Viešas priėjimas visiems lankytojams"
+
+msgid "OpenToThePlatform"
+msgstr " Atviras priėjimas vartotojams, priregistruotiems sistemoje"
+
+msgid "langPrivate"
+msgstr " Privatus priėjimas vartotojams, esantiems vartotojų sąraše"
+
+msgid "langCourseVisibilityClosed"
+msgstr " Priėjimas uždarytas; gali prieiti tik kurso vadovas."
+
+msgid "langSubscription"
+msgstr "Prenumeruotis"
+
+msgid "langUnsubscription"
+msgstr "Išsiprenumeruoti"
+
+msgid "CourseAccessConfigTip"
+msgstr " Pagal nutylėjimą jūsų kursas yra viešas, bet galite nurodyti saugumo lygius aukščiau."
+
+msgid "Tool"
+msgstr "įrankis"
+
+msgid "NumberOfItems"
+msgstr "elementų skaičius"
+
+msgid "DocumentsAndFolders"
+msgstr "Dokumentai ir katalogai"
+
+msgid "Learnpath"
+msgstr "Teorinė medžiaga"
+
+msgid "Exercises"
+msgstr "Pratimai"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Asmeninė darbotvarkė"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "Ar gali vartotojas įrašyti savo asmeninės darbotvarkės įrašą \"Mano kalendorius\" puslapyje?"
+
+msgid "CurrentValue"
+msgstr "Esama parinktoji reikšmė"
+
+msgid "CourseDescription"
+msgstr "Kurso aprašymas"
+
+msgid "OnlineConference"
+msgstr "Konferencija"
+
+msgid "Chat"
+msgstr "Pokalbių kambarys"
+
+msgid "Quiz"
+msgstr "Testai"
+
+msgid "Announcements"
+msgstr "Pranešimai"
+
+msgid "Links"
+msgstr "Nuorodos"
+
+msgid "LearningPath"
+msgstr "Teorinė kurso medžiaga"
+
+msgid "Documents"
+msgstr "Dokumentai"
+
+msgid "UserPicture"
+msgstr "Paveikslėliai"
+
+msgid "officialcode"
+msgstr "Oficialus kodas"
+
+msgid "Login"
+msgstr "Prisijungimo vardas"
+
+msgid "UserPassword"
+msgstr "Slaptažodis"
+
+msgid "SubscriptionAllowed"
+msgstr "Registravimas prie kurso leidžiamas"
+
+msgid "UnsubscriptionAllowed"
+msgstr "Išregistravimas iš kurso leidžiamas"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Praleista"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Uždrausta"
+
+msgid "AddDummyContentToCourse"
+msgstr "Įrašyti pavyzdinį tekstą į kursą"
+
+msgid "DummyCourseCreator"
+msgstr "Sukurti pavyzdinį turinį kurse"
+
+msgid "DummyCourseDescription"
+msgstr "Tai įterpia pavyzdinį turinį į kursą. Tai naudojama testavimui."
+
+msgid "AvailablePlugins"
+msgstr "Čia yra sistemos įskiepiai. Galite parsisiųsti papildomus įskiepius: <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
+
+msgid "CreateVirtualCourse"
+msgstr "Sukurti virtualų kursą"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Rodyti virtualių kursų sąrašą"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Susieta su realaus kurso kodu"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Kuriamas virtualus kursas..."
+
+msgid "WantedCourseCode"
+msgstr "Reikalaujamas kurso kodas"
+
+msgid "ResetPassword"
+msgstr "Atnaujinti slaptažodį"
+
+msgid "CheckToSendNewPassword"
+msgstr "Patikrinti naują slaptažodį"
+
+msgid "AutoGeneratePassword"
+msgstr "Automatiškai generuoti naują slaptažodį"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Naudoti antraštę dokumento vardui"
+
+msgid "UseDocumentTitleComment"
+msgstr "Tai leidžia naudoti antraštę dokumeno vardui vietoj document_name.ext"
+
+msgid "StudentPublications"
+msgstr "Studentų publikacijos"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "Ištrinti failai negali būti atkuriami"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Trinamas failas visiškai panaikinamas ir negali būti atstatytas"
+
+msgid "ClassName"
+msgstr "Klasės vardas"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Failų saugykla: Maksimalus dokumento dydis failų saugykloje"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Kokio dydžio (baitais) gali būti dokumentas failų saugykloje?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Failų saugykla: Ar gali būti užrašoma ant dokumento viršaus"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "Ar gali būti užrašoma ant viršaus originalaus dokumento, kai įkeliamas dokumentas tuo pačiu vardu?"
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Failų saugykla: Įkrauti failą į savo saugyklą?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Leidžia dėstytojams ar studentams įkelti dokumentus tik sau"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Failų saugykla: Studentas <-> Studentas"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Leidžia studentui siųsti dokumentus kitiems studentams (peer 2 peer, P2P). Studentai tai gali naudoti ir kitiems dokumentams sųsti (mp3, sprendimai, ...). Jei tai išjungsite, studentas galės sųsti savo dokumentus tik dėstytojui"
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Failų saugykla: Leisti privačius siuntimus"
+
+msgid "DropboxAllowMailingComment"
+msgstr "Galite siųsti kiekvienam studentui tik jam skirtus dokumentus"
+
+msgid "PermissionsForNewDirs"
+msgstr "Permissions for new directories"
+
+msgid "PermissionsForNewDirsComment"
+msgstr "The ability to define the permissions settings to assign to every newly created directory lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0770) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions."
+
+msgid "UserListHasBeenExported"
+msgstr "Vartotojų sąrašas eksportuotas."
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Spausti čia, kad parsisiųsti failą."
+
+msgid "administratorTelephoneTitle"
+msgstr "Sistemos administratorius: Telefonas"
+
+msgid "administratorTelephoneComment"
+msgstr "Sistemos administratoriaus telefono numeris"
+
+msgid "SendMailToNewUser"
+msgstr "Siūsti laišką naujam vartotojui"
+
+msgid "ExtendedProfileTitle"
+msgstr "Išplėstinis profilis"
+
+msgid "ExtendedProfileComment"
+msgstr "Šis nustatymas leidžia vartotojui užpildyti šiuos nebūtinus laukelius: \'Mano kompetencijos\', \'Mano diplomai\', \'Ką aš galėčiau išmokti\' ir \'Mano privati informacija\'"
+
+msgid "Classes"
+msgstr "Klasės"
+
+msgid "UserUnsubscribed"
+msgstr "Vartotojas išsiregistravo"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "Vartotojas negali būti išregistruojamas iš kurso. Šis vartotojas yra kurso valdytojas."
+
+msgid "InvalidStartDate"
+msgstr "Įrašyta neteisinga pradžios data."
+
+msgid "InvalidEndDate"
+msgstr "Įrašyta neteisinga pabaigos data."
+
+msgid "DateFormatLabel"
+msgstr "(d/m/y h:m)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "Namų puslapio failas nėra įrašomi!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Prašome pateikti įspėjimo tekstą"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Prašome pateikti įspėjimo pavadinimą"
+
+msgid "PleaseEnterLinkName"
+msgstr "Prašome pateikti nuorodos tekstą"
+
+msgid "InsertThisLink"
+msgstr "Įterpti šią nuorodą"
+
+msgid "FirstPlace"
+msgstr "Pirma vieta"
+
+msgid "After"
+msgstr "po"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Failų saugykla: leisti grupę"
+
+msgid "DropboxAllowGroupComment"
+msgstr "Vartotojai gali siūsti failus grupėms"
+
+msgid "ClassDeleted"
+msgstr "Klasė ištrinta"
+
+msgid "ClassesDeleted"
+msgstr "Klasės ištrintos"
+
+msgid "NoUsersInClass"
+msgstr "Klasėje nėra vartotojų"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "Išrinti vartotojai užregistruoti išrinktuose kursuose"
+
+msgid "InvalidTitle"
+msgstr "Prašome įrašyti pavadinimą"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Ši kategorija jau naudojama"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Prašome įrašyti kategorijos kodą ir pavadinimą"
+
+msgid "DokeosHomepage"
+msgstr "Chamilo namų puslapis"
+
+msgid "DokeosForum"
+msgstr "Chamilo Forumas"
+
+msgid "RegisterYourPortal"
+msgstr "Registruoti jūsų portalą"
+
+msgid "DokeosExtensions"
+msgstr "Chamilo išplėtimai"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Rodyti kurso navigacijos meniu"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Parodo navigacijos meniu, kuris leidžia greitai pasiekti visas kurso sritis."
+
+msgid "LoginAs"
+msgstr "Prisijungti kaip"
+
+msgid "ImportClassListCSV"
+msgstr "Importuoti klasės sąrašą kaip CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "Rodyti prisijungusių vartotojų skaičių prisijungimo puslapyje (matomas visiems)"
+
+msgid "ShowOnlineUsers"
+msgstr "Rodyti prisijungusių vartotojų skaičių visuose puslapiuose (matomas prisijungusiems)"
+
+msgid "ShowOnlineCourse"
+msgstr "Rodyti prisijungusių vartotojų skaičių šiame kurse"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Rodyti ikonas navigacijos meniu?"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Atkreipti dėmesį į dešinę"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Atkreipti dėmesį į vietą"
+
+msgid "ClassesUnsubscribed"
+msgstr "Išrinktos klasės buvo išregistruotos iš išrinkto kurso"
+
+msgid "ClassesSubscribed"
+msgstr "Išrinktos klasės buvo įregistruotos į išrinktą kursą"
+
+msgid "RoleId"
+msgstr "Vaidmens ID"
+
+msgid "RoleName"
+msgstr "Vaidmens pavadinimas"
+
+msgid "RoleType"
+msgstr "Tipas"
+
+msgid "RightValueModified"
+msgstr "Reikšmė buvo modifikuota."
+
+msgid "MakeAvailable"
+msgstr "Padaryti prieinamu"
+
+msgid "MakeUnavailable"
+msgstr "Padaryti neprieinamu"
+
+msgid "Stylesheets"
+msgstr "Kaskadiniai stiliai"
+
+msgid "DefaultDokeosStyle"
+msgstr "Chamilo stilius pagal nutylėjimą"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Ar navigacijos meniu turėtų būti rodomos ikonos?"
+
+msgid "Plugin"
+msgstr "Įskiepis"
+
+msgid "MainMenu"
+msgstr "Pagrindinis meniu"
+
+msgid "MainMenuLogged"
+msgstr "Pagrindinis meniu po prisijungimo"
+
+msgid "Banner"
+msgstr "Baneris"
+
+msgid "ImageResizeTitle"
+msgstr "Keisti įkraunamų paveikslėlių dydį"
+
+msgid "ImageResizeComment"
+msgstr "Įkeliamiems paveikslėliams gali būti keičiamas dydis, jei PHP turi <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD biblioteką</a>."
+
+msgid "MaxImageWidthTitle"
+msgstr "Vartotojo nuotraukos maksimalus plotis"
+
+msgid "MaxImageWidthComment"
+msgstr "Maksimalus paveikslėlio plotis pikseliais. Šis nustatymas veikia tik tuomet, jei įkeliant keičiamas paveikslėlio dydis."
+
+msgid "MaxImageHeightTitle"
+msgstr "Vartotojo nuotraukos maksimalus aukštis"
+
+msgid "MaxImageHeightComment"
+msgstr "Maksimalus paveikslėlio aukštis pikseliais. Šis nustatymas veikia tik tuomet, jei įkeliant keičiamas paveikslėlio dydis."
+
+msgid "YourVersionNotUpToDate"
+msgstr "Jūsų sena versija"
+
+msgid "YourVersionIs"
+msgstr "Jūsų versija"
+
+msgid "PleaseVisitDokeos"
+msgstr "Aplankykite Chamilo"
+
+msgid "VersionUpToDate"
+msgstr "Jūsų sena versija"
+
+msgid "ConnectSocketError"
+msgstr "Socket Connection Error"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Socket connections are disabled"
+
+msgid "ShowEmailAddresses"
+msgstr "Rodyti el. pašto adresus"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Rodyti el. pašto adresus vartotojams"
+
+msgid "LatestVersionIs"
+msgstr "Paskutinė versija yra"
+
+msgid "langConfigureExtensions"
+msgstr "Konfigūruoti servisus"
+
+msgid "langActiveExtensions"
+msgstr "Aktyvuoti šią paslaugą"
+
+msgid "langVisioconf"
+msgstr "Vaizdo konferencija"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo Live Conferencing® siūlo : pašnekovo rodymas, lenta piešimui ir rašymui, audio/video duplex, chat."
+
+msgid "langPpt2lp"
+msgstr "oogie"
+
+msgid "langPpt2lpDescription"
+msgstr "PowerPoint2LearningPath leidžia transformuoti Powerpoint prezentacijas į Teorinę kurso medžiagą."
+
+msgid "langBandWidthStatistics"
+msgstr "Duomenų persiuntimo statistika"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG leidžia sekti serverio statistiką ištisą parą."
+
+msgid "ServerStatistics"
+msgstr "Serverio statistika"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats leidžia sekti sistemos statistiką: lankytojai, puslapių peržiūros..."
+
+msgid "SearchEngine"
+msgstr "Pilna teksto paieška"
+
+msgid "langSearchEngineDescription"
+msgstr "Pilna teksto paieška leidžia ieškoti žodžio visoje sistemoje. Kasdienė turinio indeksacija garantuoja gerus paieškos rezultatus."
+
+msgid "langListSession"
+msgstr "Sesijų sąrašas"
+
+msgid "AddSession"
+msgstr "Įrašyti sesiją"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Importuoti sesijas į XML/CSV formatą"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Eksportuoti sesijas į XML/CSV formatą"
+
+msgid "SessionName"
+msgstr "Sesijos vardas"
+
+msgid "langNbCourses"
+msgstr "Kursų skaičius"
+
+msgid "DateStart"
+msgstr "Pradžios data"
+
+msgid "DateEnd"
+msgstr "Pabaigos data"
+
+msgid "CoachName"
+msgstr "Instruktoriaus vardas"
+
+msgid "SessionList"
+msgstr "Sesijų vardas"
+
+msgid "SessionNameIsRequired"
+msgstr "Sesijai reikalingas vardas"
+
+msgid "NextStep"
+msgstr "Kitas žingsnis"
+
+msgid "keyword"
+msgstr "Raktažodis"
+
+msgid "Confirm"
+msgstr "Patvirtinti"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Išregistruoti vartotojus iš kurso"
+
+msgid "MissingClassName"
+msgstr "Klasės vardo nėra"
+
+msgid "ClassNameExists"
+msgstr "Toks klasės vardas egzistuoja"
+
+msgid "ImportCSVFileLocation"
+msgstr "Importuojamas CSV failas"
+
+msgid "ClassesCreated"
+msgstr "Klasės sukurtos"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Klaidos importuojant failą"
+
+msgid "ServiceActivated"
+msgstr "Paslauga aktyvuota"
+
+msgid "ActivateExtension"
+msgstr "Aktyvuoti paslaugas"
+
+msgid "InvalidExtension"
+msgstr "Neteisingas išplėtimas"
+
+msgid "VersionCheckExplanation"
+msgstr "In order to enable the automatic version checking you have to register your campus on chamilo.com. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of campusses, total number of chamilo courses, total number of chamilo students, ...) (see <a href=\"see http://www.chamilo.org/stats/\">see http://www.chamilo.org/stats/</a>. When registering you will also appear on the worldwide list (<a href=\"http://www.chamilo.org/community.php.\">http://www.chamilo.org/community.php.</a>. If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button: <br />"
+
+msgid "AfterApproval"
+msgstr "Po patvirtinimo"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Studento aplinkos peržiūros įjungimas"
+
+msgid "StudentViewEnabledComment"
+msgstr "Nustatymas leidžia kursų vadovui ar dėstytojui matyti, kaip atrodo jo kursai studentams"
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Laiko limitas online"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Šis laiko limitas nurodo, po kiek sekundžių vartotojas bus užregistruotas *online* po prisijungimo"
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Pavyzdinė kursų kūrimo medžiaga"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Automatiškai sukuria pavyzdinę medžiagą kai sukuriamas naujas kursas"
+
+msgid "AccountValidDurationTitle"
+msgstr "Sąskaitos galiojimo limitas"
+
+msgid "AccountValidDurationComment"
+msgstr "Vartotojo sąskaita yra galiojanti tiek dienų po sąskaitos sukūrimo"
+
+msgid "UseSessionModeTitle"
+msgstr "Naudoti sesijas"
+
+msgid "UseSessionModeComment"
+msgstr "Sesijos suteikia teisę kitaip valdyti kursus. Sesijų režime kursas turi kūrėją, kuratorių ir studentus. Kiekvienas kuratorius prieina prie kurso nustatytą laiko tarpą, vadinamu sesija."
+
+msgid "HomepageViewActivity"
+msgstr "Aktyvumo peržiūra"
+
+msgid "HomepageView2column"
+msgstr "Peržiūra dviem stulpeliais"
+
+msgid "HomepageView3column"
+msgstr "Peržiūra trimis stulpeliais"
+
+msgid "AllowUserHeadings"
+msgstr "Vartotojų papildoma informacija"
+
+msgid "IconsOnly"
+msgstr "tik ikonos"
+
+msgid "TextOnly"
+msgstr "Tik tekstas"
+
+msgid "IconsText"
+msgstr "Ikonos ir tekstas"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Įjungti įrankio aprašymą"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Įjungti aprašymus kiekvieno įrankio namų puslapyje"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Kurso pagrindinio puslapio viršutinis horizontalus meniu"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "Viršutinis horizontalus navigacijos meniu. Šis nustatymas leidžia parinkti tai, ką turėtų rodyti šis viršutinis navigacijos meniu"
+
+msgid "Comment"
+msgstr "Komentaras"
+
+msgid "Version"
+msgstr "Versija"
+
+msgid "LoginPageMainArea"
+msgstr "Prisijungimo puslapio pagrindinė sritis"
+
+msgid "LoginPageMenu"
+msgstr "Prisijungimo puslapio meniu"
+
+msgid "CampusHomepageMainArea"
+msgstr "Pagrindinio puslapio pagrindinė sritis"
+
+msgid "CampusHomepageMenu"
+msgstr "Pagrindinio puslapio meniu"
+
+msgid "MyCoursesMainArea"
+msgstr "Kursų pagrindinė sritis"
+
+msgid "MyCoursesMenu"
+msgstr "Kursų meniu"
+
+msgid "Header"
+msgstr "Viršutinė dalis"
+
+msgid "Footer"
+msgstr "Apatinė dalis"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "Suderinamumas su WAI"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Web Accessibility Initiative). Suteikia galimybę supaprastintai pateikti informaciją sistemoje"
+
+msgid "VersionCheck"
+msgstr "Versijos patikrinimas"
+
+msgid "Active"
+msgstr "Aktyvus"
+
+msgid "Inactive"
+msgstr "Neaktyvus"
+
+msgid "SessionOverview"
+msgstr "Sesijos peržiūra"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Užregistruoti vartotoją, jei jis dar neužregistruotas"
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Išregistruoti vartotoją"
+
+msgid "DeleteSelectedSessions"
+msgstr "Delete selected sessions"
+
+msgid "CourseListInSession"
+msgstr "Kursų sąrašas šioje sesijoje"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Išregistruoti išrinktus kursus iš šios sesijos"
+
+msgid "NbUsers"
+msgstr "Vartotojai"
+
+msgid "SubscribeUsersToSession"
+msgstr "Užregistruoti vartotojus šioje sesijoje"
+
+msgid "UserListInPlatform"
+msgstr "Vartotojų sąrašas sistemoje"
+
+msgid "UserListInSession"
+msgstr "Užregistruotų šioje sesijoje vartotojų sąrašas"
+
+msgid "CourseListInPlatform"
+msgstr "Kursų sąrašas"
+
+msgid "Host"
+msgstr "Serverio adresas"
+
+msgid "UserOnHost"
+msgstr "Vartotojo vardas"
+
+msgid "FtpPassword"
+msgstr "FTP slaptažodis"
+
+msgid "PathToLzx"
+msgstr "Kelias iki LZX failų"
+
+msgid "WCAGContent"
+msgstr "Tekstas"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Užregistruoti kursus šioje sesijoje"
+
+msgid "DateStartSession"
+msgstr "Sesijos pradžios data"
+
+msgid "DateEndSession"
+msgstr "Sesijos pabaigos data"
+
+msgid "EditSession"
+msgstr "Redaguoti šią sesiją"
+
+msgid "VideoConferenceUrl"
+msgstr "Kelias iki video konferencijos"
+
+msgid "VideoClassroomUrl"
+msgstr "Kelias iki klasės video konferencijos"
+
+msgid "ReconfigureExtension"
+msgstr "Perkonfigūruoti plėtinį"
+
+msgid "ServiceReconfigured"
+msgstr "Paslauga perkonfigūruota"
+
+msgid "ChooseNewsLanguage"
+msgstr "Parinkti naujienų kalbą"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "Sumuoti laiką, praleistą mokymo kurse"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Šis nustatymas leidžia skaičiuoti laiką, kurį vartotojas praleidžia mokymo kurse. Skaičius laukelyje yra perkrovimo laiko intervalas. Kad išjungti šį nustatymą, įrašykite 0."
+
+msgid "EditLink"
+msgstr "Redaguoti nuorodą"
+
+msgid "FinishSessionCreation"
+msgstr "Užbaigti sesijo sukūrimą"
+
+msgid "VisioRTMPPort"
+msgstr "Videoconference RTMTP protocol port"
+
+msgid "SessionNameAlreadyExists"
+msgstr "Sesijos vardas egzistuoja"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "Jokia klasė nesukurta"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Šis laukelyje turi būti skaičius"
+
+msgid "UserLocked"
+msgstr "Vartotojas užrakintas"
+
+msgid "UserUnlocked"
+msgstr "Vartotojas atrakintas"
+
+msgid "CannotDeleteUser"
+msgstr "Jūs negalite ištrinti šio vartotojo"
+
+msgid "SelectedUsersDeleted"
+msgstr "Išrinkti vartotojai ištrinti"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Kai kurie vartotojai neištrinti"
+
+msgid "ExternalAuthentication"
+msgstr "Išorinė autentifikacija"
+
+msgid "RegistrationDate"
+msgstr "Registracijos data"
+
+msgid "UserUpdated"
+msgstr "Vartotojas atnaujintas"
+
+msgid "HomePageFilesNotReadable"
+msgstr "Pagrindinio puslapio failai nenuskaitomi"
+
+msgid "Choose"
+msgstr "Pasirinkti"
+
+msgid "ModifySessionCourse"
+msgstr "Redaguoti sesijos kursą"
+
+msgid "CourseSessionList"
+msgstr "Sesijos kursų sąrašas"
+
+msgid "SelectACoach"
+msgstr "Parinkti kuratorių"
+
+msgid "UserNameUsedTwice"
+msgstr "Šis varototojo vardas jau naudojamas"
+
+msgid "UserNameNotAvailable"
+msgstr "Tokio vartotojo vardo nėra"
+
+msgid "UserNameTooLong"
+msgstr "Šis vartotojo vardas per ilgas"
+
+msgid "WrongStatus"
+msgstr "Ši būsena neegzistuoja"
+
+msgid "ClassNameNotAvailable"
+msgstr "Klasės tokiu vardu nėra"
+
+msgid "FileImported"
+msgstr "Failas importuotas"
+
+msgid "WhichSessionToExport"
+msgstr "Pasirinkite sesiją eksportui"
+
+msgid "AllSessions"
+msgstr "Visos sesijos"
+
+msgid "CodeDoesNotExists"
+msgstr "Šis kodas neegzistuoja"
+
+msgid "UnknownUser"
+msgstr "Nežinomas vartotojas"
+
+msgid "UnknownStatus"
+msgstr "Nežinoma būsena"
+
+msgid "SessionDeleted"
+msgstr "Sesija ištrinta"
+
+msgid "CourseDoesNotExist"
+msgstr "Šis kursas neegzistuoja"
+
+msgid "UserDoesNotExist"
+msgstr "Šis vartotojas neegzistuoja"
+
+msgid "ButProblemsOccured"
+msgstr "bet atsirado problemos"
+
+msgid "UsernameTooLongWasCut"
+msgstr "This username was cut"
+
+msgid "NoInputFile"
+msgstr "Failas neišsiųstas"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "Studento būsena pateikta"
+
+msgid "WrongDate"
+msgstr "Blogas datos formatas (yyyy-mm-dd)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "This is an automatic email message. Please do not reply to it."
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "You will soon receive an email from your coach."
+
+msgid "SlideSize"
+msgstr "Skaidrių dydis"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Ephorus plagiarism prevention"
+
+msgid "CourseTeachers"
+msgstr "Kurso dėstytojai"
+
+msgid "UnknownTeacher"
+msgstr "Unknown teacher"
+
+msgid "HideDLTTMarkup"
+msgstr "Hide DLTT Markup"
+
+msgid "ListOfCoursesOfSession"
+msgstr "List of courses for the session"
+
+msgid "UnsubscribeSelectedUsersFromSession"
+msgstr "Unsubscribe selected users from session"
+
+msgid "ShowDifferentCourseLanguageComment"
+msgstr "Show the language each course is in, next to the course title, on the homepage courses list"
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "Show the categories of courses on the homepage, even if they\'re empty"
+
+msgid "ShowEmptyCourseCategories"
+msgstr "Show empty courses categories"
+
+msgid "XMLNotValid"
+msgstr "Blogas XML dokumentas"
+
+msgid "ForTheSession"
+msgstr "for the session"
+
+msgid "AllowEmailEditorTitle"
+msgstr "Aktyvuoti \"online\" el. pašto redaktorių"
+
+msgid "AllowEmailEditorComment"
+msgstr "Jei šis nustatymas įjungtas, paspaudus ant el. pašto adreso, bus atidarytas \"online\" el. pašto redaktorius."
+
+msgid "AddCSVHeader"
+msgstr "Add the CSV header line?"
+
+msgid "YesAddCSVHeader"
+msgstr "Yes, add the CSV header<br />This line defines the fields and is necessary when you want to import the file in a different Chamilo campus"
+
+msgid "ListOfUsersSubscribedToCourse"
+msgstr "List of users subscribed to course"
+
+msgid "NumberOfCourses"
+msgstr "Number of Courses"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Show course languages"
+
+msgid "VisioRTMPTunnelPort"
+msgstr "Videoconference RTMTP protocol tunnel port"
+
+msgid "name"
+msgstr "Name"
+
+msgid "Security"
+msgstr "Security"
+
+msgid "UploadExtensionsListType"
+msgstr "Type of filtering on document uploads"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "Whether you want to use the blacklist or whitelist filtering. See blacklist or whitelist description below for more details."
+
+msgid "Blacklist"
+msgstr "Blacklist"
+
+msgid "Whitelist"
+msgstr "Whitelist"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "Blacklist - setting"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "Whitelist - setting"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "The blacklist is used to filter the files extensions by removing (or renaming) any file which extension figures in the blacklist below. The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following:  exe;com;bat;scr;php. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn\'t matter."
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "The whitelist is used to filter the files extensions by removing (or renaming) any file which extension does *NOT* figure in the whitelist below. It is generally considered as a safer but more restrictive approach to filtering. The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following:  htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw . Files without extension are accepted. Letter casing (uppercase/lowercase) doesn\'t matter."
+
+msgid "UploadExtensionsSkip"
+msgstr "Filtering behaviour (skip/rename)"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "If you choose to skip, the files filtered through the blacklist or whitelist will not be uploaded to the system. If you choose to rename them, their extension will be replaced by the one defined in the extension replacement setting. Beware that renaming doesn\'t really protect you, and may cause name collision if several files of the same name but different extensions exist."
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "Replacement extension"
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "Enter the extension that you want to use to replace the dangerous extensions detected by the filter. Only needed if you have selected a filter by replacement."
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Rename"
+msgstr "Rename"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "Show the number of courses in each category in the course categories on the homepage"
+
+msgid "EphorusDescription"
+msgstr "Start using the Ephorus anti plagiarism service in Chamilo.<br /> 														<STRONG>With Ephorus, you will prevent internet plagiarism without any additional effort.</STRONG><br /> 														 You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
+
+msgid "EphorusLeadersInAntiPlagiarism"
+msgstr "<STRONG>Leaders in <BR>anti plagiarism </STRONG>				"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "Click here for more information and prices			"
+
+msgid "NameOfTheSession"
+msgstr "Name of the session"
+
+msgid "NoSessionsForThisUser"
+msgstr "This user isn\'t subscribed in a session"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "Display categories on home page"
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "This option will display or hide course categories on the portal home page"
+
+msgid "ShowTabsTitle"
+msgstr "Tabs in the header"
+
+msgid "ShowTabsComment"
+msgstr "Check the tabs you want to see appear in the header. The unchecked tabs will appear on the right hand menu on the campus homepage and my courses page if these need to appear"
+
+msgid "DefaultForumViewTitle"
+msgstr "Default forum view"
+
+msgid "DefaultForumViewComment"
+msgstr "What should be the default option when creating a new forum. Any course administrator can however choose a different view for every individual forum"
+
+msgid "TabsMyCourses"
+msgstr "My courses tab"
+
+msgid "TabsCampusHomepage"
+msgstr "Campus homepage tab"
+
+msgid "TabsReporting"
+msgstr "Reporting tab"
+
+msgid "TabsPlatformAdministration"
+msgstr "Platform Administration tab"
+
+msgid "NoCoursesForThisSession"
+msgstr "No courses for this session"
+
+msgid "NoUsersForThisSession"
+msgstr "No Users for this session"
+
+msgid "LastNameMandatory"
+msgstr "The last name cannot be empty"
+
+msgid "FirstNameMandatory"
+msgstr "The first name cannot be empty"
+
+msgid "EmailMandatory"
+msgstr "The email cannot be empty"
+
+msgid "TabsMyAgenda"
+msgstr "My Agenda tab"
+
+msgid "NoticeWillBeNotDisplayed"
+msgstr "The notice will be not displayed on the homepage"
+
+msgid "LetThoseFieldsEmptyToHideTheNotice"
+msgstr "Let those fields empty to hide the notice"
+
+msgid "Ppt2lpVoiceRecordingNeedsRed5"
+msgstr "The voice recording feature in the learning path editor relies on a Red5 streaming server. This server\'s parameters can be configured in the videoconference section on the current page."
+
+msgid "PlatformCharsetTitle"
+msgstr "Character set"
+
+msgid "PlatformCharsetComment"
+msgstr "The character set is what pilots the way specific languages can be displayed in Chamilo. If you use Russian or Japanese characters, for example, you might want to change this. For all english, latin and west-european characters, the default UTF-8 should be alright."
+

@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "No ha escollit cap arxiu a enviar, o és massa gran"
+
+msgid "langLinkTarget"
+msgstr "Destinació de l\'enllaç"
+
+msgid "langSameWindow"
+msgstr "A la mateixa finestra"
+
+msgid "langNewWindow"
+msgstr "En una nova finestra"
+
+msgid "langAdded"
+msgstr "Afegit"
+
+msgid "langAddLink"
+msgstr "Afegir un enllaç"
+
+msgid "langEditLink"
+msgstr "Editar l\'enllaç de la pàgina d\'inici del curs"
+

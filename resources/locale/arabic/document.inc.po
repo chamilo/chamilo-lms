@@ -1,0 +1,342 @@
+msgid "MoveTo"
+msgstr "انقل إلى"
+
+msgid "langDownloadFile"
+msgstr "تحميل الملف إلى الجهاز الخادم"
+
+msgid "langNameDir"
+msgstr "اسم المجلد الجديد (بالإنجليزي)"
+
+msgid "langSize"
+msgstr "الحجم"
+
+msgid "langRename"
+msgstr "إعادة تسمية"
+
+msgid "langCopy"
+msgstr " نسخ محتويات المقرر"
+
+msgid "langTo"
+msgstr "إلى"
+
+msgid "langNoSpace"
+msgstr "لقد فشلت عملية التحميل. إما بسبب إستهلاكك للحجم المسموح به, أو بسبب عدم توفر المساحة الكافية على القرص"
+
+msgid "langDownloadEnd"
+msgstr " لقد تمت عملية التحميل"
+
+msgid "langFileExists"
+msgstr "العملية غير ممكنة , هناك ملف بنفس الإسم موجود مسبقا"
+
+msgid "langImpossible"
+msgstr "عملية غير ممكنة"
+
+msgid "langAddComment"
+msgstr "أضف / حرر تعليق إلى"
+
+msgid "langDocCopied"
+msgstr "تم نسخ المستند بنجاح"
+
+msgid "langDocDeleted"
+msgstr "تم حذف المستند بنجاح"
+
+msgid "langElRen"
+msgstr "تمت عملية إعادة تسمية العنصر"
+
+msgid "langDirMv"
+msgstr "تم نقل العنصر"
+
+msgid "langComMod"
+msgstr "تم تعديل التعليق"
+
+msgid "langViMod"
+msgstr "تم تعديل خاصية الظهور"
+
+msgid "langGroupSpace"
+msgstr "منطقة المجموعة"
+
+msgid "langGroupSpaceLink"
+msgstr "منطقة المحموعة"
+
+msgid "langGroupForumLink"
+msgstr "منتدى المجموعة"
+
+msgid "langZipNoPhp"
+msgstr "لا يمكن للملف المضغوط أن يحتوي على ملفات PHP"
+
+msgid "langUncompress"
+msgstr "فك ضغط zip"
+
+msgid "langDownloadAndZipEnd"
+msgstr " لقد تم تحميل الملف المضغوط كما تم فك ضغطه"
+
+msgid "langRoot"
+msgstr "الجذر"
+
+msgid "CreateDoc"
+msgstr "إنشاء مستند"
+
+msgid "langDown"
+msgstr "للأسفل"
+
+msgid "langFileError"
+msgstr "الملف الذي تريد تحميله غير صالح 	"
+
+msgid "langMaxFileSize"
+msgstr "أقصى حجم مسموح به هو"
+
+msgid "langFileName"
+msgstr "اسم الملف (بالإنجليزي)"
+
+msgid "langNoFileName"
+msgstr "فضلا أدخل اسم الملف"
+
+msgid "langNoText"
+msgstr "فضلا ادخل النص  الخاص بك بتنسيق - text / HTML"
+
+msgid "langAreYouSureToDelete"
+msgstr "هل تريد الحذف حقا؟"
+
+msgid "langScormcontent"
+msgstr "هذه محتويات Scorm <br /><input type=button name=scormbutton value=\' ! أطلقه \' onclick=\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr " هذا مقرر على هيئة sCORM. لتشغيله, أنقر هنا : <input type=button name=scormbutton value=\'! أطلقه \' onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr " نشر"
+
+msgid "langMissingImagesDetected"
+msgstr "لقد تم إكتشاف بعض الصور المفقودة"
+
+msgid "langCreateDocument"
+msgstr "إنشاء مستند"
+
+msgid "langEditDocument"
+msgstr "حرر"
+
+msgid "langDocuments"
+msgstr " المستندات"
+
+msgid "langOrganiseDocuments"
+msgstr "انشئ جدول المحتويات"
+
+msgid "langEditTOC"
+msgstr "حرر جدول المحتويات"
+
+msgid "langChapter"
+msgstr "الجزء"
+
+msgid "langDocumentList"
+msgstr "قائمة بجميع المستندات"
+
+msgid "langOrganisationList"
+msgstr "جدول المحنويات"
+
+msgid "langCreationSucces"
+msgstr "لقد تم إنشاء جدول المحتويات بنجاح"
+
+msgid "langCanViewOrganisation"
+msgstr " يمكنك معاينة ترتيباتك"
+
+msgid "langHere"
+msgstr "هنا"
+
+msgid "langViewDocument"
+msgstr "عرض"
+
+msgid "langHtmlTitle"
+msgstr "جدول المحتويات"
+
+msgid "langAddToTOC"
+msgstr "أَضف للمحتويات"
+
+msgid "langAddChapter"
+msgstr "أضف باب/ فصل"
+
+msgid "langReady"
+msgstr "قم بتوليد جدول المحتويات"
+
+msgid "langStoreDocuments"
+msgstr "خزن المستندات"
+
+msgid "langTocDown"
+msgstr "أسفل"
+
+msgid "langTocUp"
+msgstr "أعلى"
+
+msgid "CutPasteLink"
+msgstr "من غير إطار"
+
+msgid "langCreatePath"
+msgstr "إنشاء مسار"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "أووجيز : محول ملفات باور بونت"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "أداة تحويل ملفات باوربونت إلى مسار التعلم"
+
+msgid "langAddMetadata"
+msgstr "معاينة / تحرير Metadata"
+
+msgid "langGoMetadata"
+msgstr "اذهب"
+
+msgid "langQuotaForThisCourseIs"
+msgstr " حجم هذا المقرر"
+
+msgid "langDel"
+msgstr "حذف"
+
+msgid "langUp"
+msgstr "أعلى"
+
+msgid "langDate"
+msgstr "التاريخ"
+
+msgid "ShowCourseQuotaUse"
+msgstr "إظهار حجم مستندات المقرر"
+
+msgid "CourseCurrentlyUses"
+msgstr "الحجم الحالي لهذا المقرر"
+
+msgid "MaximumAllowedQuota"
+msgstr "الحجم الأقصى المسموح به"
+
+msgid "PercentageQuotaInUse"
+msgstr "النسبة المؤوية لحجم الملفات المستخدمة"
+
+msgid "PercentageQuotaFree"
+msgstr "النسبة المؤوية للمساحة المتبقية"
+
+msgid "CurrentDirectory"
+msgstr "المسار الحالي"
+
+msgid "UplUploadDocument"
+msgstr "تحميل مستند"
+
+msgid "UplPartialUpload"
+msgstr "الملفات المرفوعة تم رفعها جزئيا فقط"
+
+msgid "UplExceedMaxPostSize"
+msgstr " لقد تعدى حجم هذا الملف الحجم المسموح به :"
+
+msgid "UplExceedMaxServerUpload"
+msgstr " لقد  تعدى حجم الملف  المرفوع الحجم المسموح به من قبل الخادم :"
+
+msgid "UplFileTooBig"
+msgstr "حجم الملف كبير جدا من أجل التحميل"
+
+msgid "UplUploadFailed"
+msgstr "لقد فشلت عملية تحميل الملف"
+
+msgid "UplUnableToSaveFile"
+msgstr "لم تتم عملية حفظ الملف الذي تم رفعه (من المحتمل أن يكون السبب خصائص التصريح)"
+
+msgid "UplNotEnoughSpace"
+msgstr "لا توجد مساحة كافية لتحميل هذا الملف"
+
+msgid "UplNoSCORMContent"
+msgstr "لم يتم العثور على اي محتويات - SCORM"
+
+msgid "UplZipExtractSuccess"
+msgstr "لقد تم  فك ضغط الملف بنجاح"
+
+msgid "UplZipCorrupt"
+msgstr "غير قادر على فك ضغط الملف"
+
+msgid "UplAlreadyExists"
+msgstr " موجود مسبقا"
+
+msgid "UplFileSavedAs"
+msgstr " لقد تم حفظ الملف كـ"
+
+msgid "UplFileOverwritten"
+msgstr " تمت عملية إعادة الكتابة عليه"
+
+msgid "CannotCreateDir"
+msgstr "غير قادر على إنشاء مجلد"
+
+msgid "UplUpload"
+msgstr "تحميل"
+
+msgid "UplWhatIfFileExists"
+msgstr "إذا كان نفس مسمى الملف موجود مسبقا:"
+
+msgid "UplDoNothing"
+msgstr "لا تفعل شيئ"
+
+msgid "UplDoNothingLong"
+msgstr "لا تقم بعملية التحميل إذا كان الملف موجود مسبقا"
+
+msgid "UplOverwrite"
+msgstr "مسح وإعادة الحفظ فوقه"
+
+msgid "UplOverwriteLong"
+msgstr " أعد الكتابة على الملف الموجود مسبقا"
+
+msgid "UplRename"
+msgstr "إعادة التسمية"
+
+msgid "UplRenameLong"
+msgstr "أعد تسمية الملف المرفوع إذا كان موجودا مسبقا"
+
+msgid "Metadata"
+msgstr "Metadata"
+
+msgid "DocumentQuota"
+msgstr "حجم الملفات"
+
+msgid "NoDocsInFolder"
+msgstr "لا يوجد ملفات للعرض."
+
+msgid "UploadTo"
+msgstr "ارفع إلى"
+
+msgid "fileModified"
+msgstr "لقد تم تعديل الملف"
+
+msgid "DocumentsOverview"
+msgstr " المستندات"
+
+msgid "ViewSlideshow"
+msgstr "عرض شرائح الصورة"
+
+msgid "Options"
+msgstr "خيارات"
+
+msgid "WelcomeOogieConverter"
+msgstr " مرحبا في أووجيز محول ملفات باوربونت <ul type=\"1\"><li> قم بتصفح القرص الصلب على جهازك للبحث عن ملفات بامتداد .ppt أو .odp <li> قم بتحميلها على أووجيز. سيتم تحويلها إلى تنسيق سكورم مسار التعلم. <li> ستتمكن عندها  من إدراج تعليقات صوتية على كل شريحة عرض كما يمكنك إدراج تمارين و إختبارات بين الشرائح"
+
+msgid "ConvertToLP"
+msgstr "تحويل إلى مسار تعلم"
+
+msgid "AdvancedSettings"
+msgstr "إعدادات متقدمة"
+
+msgid "File"
+msgstr "ملف"
+
+msgid "DocDeleteError"
+msgstr "خطأ أثناء حذف المستند"
+
+msgid "ViModProb"
+msgstr "حدثت مشكلة أثناء تحديث خاصية الظهور"
+
+msgid "DirDeleted"
+msgstr "لقد تم حذف المجلد"
+
+msgid "TemplateName"
+msgstr "اسم القالب"
+
+msgid "TemplateDescription"
+msgstr "وصف القالب"
+
+msgid "DocumentSetAsTemplate"
+msgstr "حفظ المستند كقالب جديد"
+
+msgid "DocumentUnsetAsTemplate"
+msgstr "ازالة المستند من القوالب"
+

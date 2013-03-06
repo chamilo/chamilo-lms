@@ -1,0 +1,246 @@
+msgid "langLineNumber"
+msgstr "Hayka seq\'ekuna"
+
+msgid "langLine"
+msgstr "seq\'e"
+
+msgid "langLines"
+msgstr "seq\'ekuna"
+
+msgid "langLineOrLines"
+msgstr "seq\'e (kuna)"
+
+msgid "langMoveUp"
+msgstr "Wichachiy"
+
+msgid "langMoveDown"
+msgstr "Urachiy"
+
+msgid "langAddNewHeading"
+msgstr "Yapay musuq umanchasqata"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Yachacheqkunalla"
+
+msgid "langDefineHeadings"
+msgstr "Ajllapay umachasqakunata"
+
+msgid "langBackToUsersList"
+msgstr "Kutiy reqsisqaykikuna yupachasqaman"
+
+msgid "langTracking"
+msgstr "Qatikuy"
+
+msgid "langCourseManager"
+msgstr "Yachachiq"
+
+msgid "langModRight"
+msgstr "t\'ijrachiy kaykunaq huñinkunata"
+
+msgid "langNoAdmin"
+msgstr "kunanmantaqa <b>mana</b> kanqa huñiykuna, kay k\'iti kamachinaykipaq"
+
+msgid "langAllAdmin"
+msgstr "kunanmantaqa kanqa <b>llipin</b>huñiykuna, kay k\'iti kamachinaykipaq"
+
+msgid "langModRole"
+msgstr "T\'ijrachiy kaypa llank\'ayninta"
+
+msgid "langRole"
+msgstr "Nisqaynin"
+
+msgid "langIsNow"
+msgstr "kunanqa wichaypin kashan"
+
+msgid "langInC"
+msgstr "kay yachachinapi"
+
+msgid "langFilled"
+msgstr "Mana llipin kanchakunatachu hunt\'achinki."
+
+msgid "langUserNo"
+msgstr "Haykuqmasi suti ajllasqayki"
+
+msgid "langTaken"
+msgstr "Ña kashan. Hoqta ajllay."
+
+msgid "langTutor"
+msgstr "Pusaq"
+
+msgid "langUnreg"
+msgstr "Chinkachiy qelqachikuyta"
+
+msgid "langGroupUserManagement"
+msgstr "Huñusqakunaq kamachinan"
+
+msgid "langUnregister"
+msgstr "Mana qelqachasqa"
+
+msgid "langAddAUser"
+msgstr "Yapay haykuqkunata"
+
+msgid "UsersUnsubscribed"
+msgstr "Haykuqmasikuna ajllasqaqa hoqochisqaña yachichinamanta"
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "Kay yachaqeqa ñaupaqtaraq haykuspa ña qelqachasqa kashan. Mana qelqapayawaqchu imaymananta"
+
+msgid "NoDataAvailable"
+msgstr "Información no disponible"
+
+msgid "AddToFriends"
+msgstr "Cheqaqchu yapayta munanki ima kunpaykikunaman?"
+
+msgid "AddPersonalMessage"
+msgstr "Añadir un mensaje personal"
+
+msgid "Friends"
+msgstr "Amigos"
+
+msgid "PersonalData"
+msgstr "Runa kaymanta imaymana"
+
+msgid "Contacts"
+msgstr "Sispamasikuna"
+
+msgid "SocialInformationComment"
+msgstr "Kaymantaqa kuraqyachiwaq reqsisqaykikunataqa"
+
+msgid "AttachContactsToGroup"
+msgstr "Huñuy reqsisqaykikunata"
+
+msgid "ContactsList"
+msgstr "Reqsisqakunamanta yupaynin"
+
+msgid "AttachToGroup"
+msgstr "Yapay kay huñusqa reqsisqakunaman"
+
+msgid "SelectOneContact"
+msgstr "Ajllay hoq sispamasita"
+
+msgid "SelectOneGroup"
+msgstr "Ajllay hoq huñusqata"
+
+msgid "AttachContactsPersonal"
+msgstr "Yapankipunichu kay reqsisqata huñusqa ajllasqakunaman"
+
+msgid "AttachContactsToGroupSuccesfuly"
+msgstr "Reqsisqaykiqa allinmi huñuchikun"
+
+msgid "InvitationDenied"
+msgstr "Mink\'a mana chaskisqa"
+
+msgid "AddedContactToList"
+msgstr "Haykuqmasi yapasqa sispaykikunaq sinrinman"
+
+msgid "ContactsGroupsComment"
+msgstr "Kaymantaqa qhawayta atinki reqsisqaykikuna huñukusqankuta"
+
+msgid "YouDontHaveContactsInThisGroup"
+msgstr "Kay huñusqapiqa manan sispamasiykikuna kanchu"
+
+msgid "SelectTheCheckbox"
+msgstr "Ajllay ujtapas utaq askha ajllanakunata"
+
+msgid "YouDontHaveInvites"
+msgstr "Kunanqa manaraq kanchu mink\'ayki"
+
+msgid "SocialInvitesComment"
+msgstr "Kaymantaqa chaskiwaq utaq mana mink\'aykuna haykuqtaqa"
+
+msgid "InvitationSentBy"
+msgstr "Pin apachimun mink\'ayta"
+
+msgid "RequestContact"
+msgstr "Sispamasi kanaykipaq mañakushanku"
+
+msgid "SocialUnknow"
+msgstr "Sispamasi mana reqsisqa"
+
+msgid "SocialParent"
+msgstr "Ayllumasi"
+
+msgid "SocialFriend"
+msgstr "Kunpaykuna"
+
+msgid "SocialGoodFriend"
+msgstr "Ancha kunpaykuna"
+
+msgid "SocialEnemy"
+msgstr "Auqaykuna"
+
+msgid "SocialDeleted"
+msgstr "Sispamasi horqosqa"
+
+msgid "MessageOutboxComment"
+msgstr "Kaymantaqa qhawawaq willaykuna apachisqaykita"
+
+msgid "MyPersonalData"
+msgstr "Kaymantaqa qhawawaq hinallataq t\'\'ijrachiwaq runaykimanta imaykikunata"
+
+msgid "AlterPersonalData"
+msgstr "Kaymanta t\'ijrachiy runaykimanta"
+
+msgid "Invites"
+msgstr "Mink\'asqaykuna"
+
+msgid "ContactsGroups"
+msgstr "Sispamasiykunamanta huñusqaykuna"
+
+msgid "ErrorSendingMessage"
+msgstr "Pantarun willana apachikushaqtin."
+
+msgid "PendingInvitations"
+msgstr "Mink\'akuna suyaychaq"
+
+msgid "MyInbox"
+msgstr "K\'uchu ch\'askiq"
+
+msgid "ViewSharedProfile"
+msgstr "Ima kay t\'aqapasqa"
+
+msgid "SeeAll"
+msgstr "Llapanta qhawariy"
+
+msgid "ImagesUploaded"
+msgstr "Wankiykuna"
+
+msgid "ExtraInformation"
+msgstr "Hoq willay"
+
+msgid "SearchContacts"
+msgstr "Kaymantaqa yapaway sispamasikunata muyu reqsisqaykiman"
+
+msgid "SocialSeeContacts"
+msgstr "Qhawariy muyu sispamasiykunata"
+
+msgid "SocialUserInformationAttach"
+msgstr "Willaytaraq qelqay haykuypa mañakunaykipaq."
+
+msgid "MessageInvitationNotSent"
+msgstr "Willayta mink\'akusqayki manaraq apachikunchu"
+
+msgid "SocialAddToFriends"
+msgstr "Yapay muyu kunpaykunaman"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "Haykuqmasi manaraqaq qelqachasqa yachachinapi"
+
+msgid "ChangeContactGroup"
+msgstr "Cambiar el grupo de mi contacto"
+
+msgid "Friend"
+msgstr "Amigo"
+
+msgid "ViewMySharedProfile"
+msgstr "Mi perfil compartido"
+
+msgid "UserStatistics"
+msgstr "Presentación de informes para este usuario"
+
+msgid "EditUser"
+msgstr "Editar usuario"
+
+msgid "ViewUser"
+msgstr "Ver usuario"
+

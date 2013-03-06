@@ -1,0 +1,87 @@
+msgid "langActivate"
+msgstr "Anzeigen"
+
+msgid "langDeactivate"
+msgstr "Verstecken"
+
+msgid "langInLnk"
+msgstr "Versteckte Werkzeuge und Links"
+
+msgid "langDelLk"
+msgstr "Wollen Sie diesen Link wirklich löschen?"
+
+msgid "langCourseCreate"
+msgstr "Einen Kurs erstellen"
+
+msgid "langNameOfTheLink"
+msgstr "Name des Links"
+
+msgid "lang_main_categories_list"
+msgstr "Haupt-Kategorieliste"
+
+msgid "langCourseAdminOnly"
+msgstr "Nur Kursleiter"
+
+msgid "PlatformAdminOnly"
+msgstr "Nur Administratoren"
+
+msgid "langCombinedCourse"
+msgstr "Kombinierter Kurs"
+
+msgid "ToolIsNowVisible"
+msgstr "Werkzeug ist nun sichtbar"
+
+msgid "ToolIsNowHidden"
+msgstr "Werkzeug ist nun unsichtbar"
+
+msgid "EditLink"
+msgstr "Link bearbeiten"
+
+msgid "Blog_management"
+msgstr "Projekte verwalten"
+
+msgid "Forum"
+msgstr "Foren"
+
+msgid "Course_maintenance"
+msgstr "Kurssicherung (Backup)"
+
+msgid "TOOL_SURVEY"
+msgstr "Umfrage"
+
+msgid "GreyIcons"
+msgstr "Werkzeuge"
+
+msgid "Interaction"
+msgstr "Interaktion"
+
+msgid "Authoring"
+msgstr "Erstellen"
+
+msgid "Administration"
+msgstr "Verwaltung"
+
+msgid "IntroductionTextUpdated"
+msgstr "Der Einleitungstext wurde aktualisiert"
+
+msgid "IntroductionTextDeleted"
+msgstr "Einleitungstext wurde gelöscht"
+
+msgid "SessionIdentifier"
+msgstr "ID der Kurs-Session"
+
+msgid "SessionName"
+msgstr "Name der Kurs-Session"
+
+msgid "SessionCategory"
+msgstr "Kategorien der Kurs-Sessions"
+
+msgid "SessionData"
+msgstr "Daten der Kurs-Session"
+
+msgid "TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP"
+msgstr "Die Einstellung des Lernpfad-Umleitung ist ON. Falls Kursteilnehmer den Kurs betreten, werden diese zum genannten Lernpfad weitergeleitet."
+
+msgid "ToolSearch"
+msgstr "Suche"
+

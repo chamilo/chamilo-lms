@@ -1,0 +1,27 @@
+msgid "langExplanation"
+msgstr "Tiklīdz nospiedīsiet OK, tiks izveidota kursa mājas lapa ar Forumu, Plānotāju, Dokumentu, u.t.t. veidošanas instrumentiem.<br> Atkārtoti piesakoties sistēmā ar savu lietotājvārdu un paroli, Tu varēsi veidot un labot šo Kursu."
+
+msgid "langTooBig"
+msgstr "Jūs neizvēlējāties nevienu failu, ko nosūtīt, vai arī tas ir pārāk liela izmēra"
+
+msgid "langCouldNot"
+msgstr "Failu nebija iespējams augšupielādēt."
+
+msgid "langAddPageToSite"
+msgstr "Pievienot vēl vienu lapu"
+
+msgid "langCouldNotSendPage"
+msgstr "Šis fails nav HTML formātā un netika augšupielādēts. Ja Jūs vēlaties nosūtīt ne-HTML dokumentus (PDF, Word, Power Point, Video, u.t.t.), izmantojiet <a href=../document/document.php>Dokumentu</a> sadaļu"
+
+msgid "langSendPage"
+msgstr "Lapa, kas augšupjāielādē"
+
+msgid "langPageTitleModified"
+msgstr "Lapas virsraksts tika mainīts"
+
+msgid "langPageAdded"
+msgstr "Lapa pievienota"
+
+msgid "Choose"
+msgstr "Pārlūkot"
+

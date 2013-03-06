@@ -1,0 +1,2148 @@
+msgid "AdminBy"
+msgstr "Mastrumado fare de"
+
+msgid "AdministrationTools"
+msgstr "Mastrumilaro"
+
+msgid "State"
+msgstr "Superrigardo"
+
+msgid "Statistiques"
+msgstr "Statistikoj"
+
+msgid "VisioHostLocal"
+msgstr "Gastiganto de videokonferenco"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Ĉu la videokonferenca protokolo estas retbaza (plejofte ne)"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Montri ligilon por retroiri al la kursa hierarĥio. La ligilo tutprete disponeblas fine de la listo."
+
+msgid "langUsed"
+msgstr "uzata lingvo"
+
+msgid "langPresent"
+msgstr "En ordo"
+
+msgid "langMissing"
+msgstr "mankas"
+
+msgid "langExist"
+msgstr "ekzistas"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Montri retroan ligilon supre en la kategoria/ kursa hierarĥio"
+
+msgid "ShowNumberOfCourses"
+msgstr "Montri la nombron da kursoj"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Montri instruiston en kurstitolo"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Montri instruiston en kurslisto"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Montri kurskodon en kurslisto"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Montri kurskodon en kurstitolo"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "Ne estas virtualaj kursoj."
+
+msgid "ConfigureHomePage"
+msgstr "Adapti startpaĝon"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Moduloj aktivaj dum kreo de kurso"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Kiuj moduloj aŭtomate videblas dum kreo de nova kurso?"
+
+msgid "langCourseBackup"
+msgstr "Fari restaŭrkopion de ĉi tiu kurso"
+
+msgid "langCourseTitular"
+msgstr "Kursmastrumanto"
+
+msgid "langCourseTitle"
+msgstr "Kurstitolo"
+
+msgid "langCourseFaculty"
+msgstr "Kurskategorio"
+
+msgid "langCourseDepartment"
+msgstr "Kursdepartemento"
+
+msgid "langCourseDepartmentURL"
+msgstr "Departementa URL"
+
+msgid "langCourseLanguage"
+msgstr "Lingvo"
+
+msgid "langCourseAccess"
+msgstr "Aliro"
+
+msgid "langCourseSubscription"
+msgstr "Aliĝoj"
+
+msgid "langPublicAccess"
+msgstr "Publika aliro"
+
+msgid "langPrivateAccess"
+msgstr "Privata aliro"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Datumbazo alirebla nur por servila mastrumanto"
+
+msgid "langShowUsersOfCourse"
+msgstr "Vidigi uzulojn en ĉi-kurso"
+
+msgid "langShowClassesOfCourse"
+msgstr "Vidigi klasojn aliĝintajn al ĉi-kurso"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Vidigi grupojn de ĉi-kurso"
+
+msgid "langPhone"
+msgstr "Telefono"
+
+msgid "langPhoneNumber"
+msgstr "Telefonnumero"
+
+msgid "langActions"
+msgstr "Agadoj"
+
+msgid "langAddToCourse"
+msgstr "Aldoni al kurso"
+
+msgid "langDeleteFromPlatform"
+msgstr "Forigi de la platformo"
+
+msgid "langDeleteCourse"
+msgstr "Forigi elektitajn kursojn"
+
+msgid "langDeleteFromCourse"
+msgstr "Forigi el kurso(j)"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Forigi elektitajn klasojn."
+
+msgid "langDeleteSelectedGroups"
+msgstr "Forigi elektitajn grupojn"
+
+msgid "langAdministrator"
+msgstr "Mastrumanto"
+
+msgid "langAddPicture"
+msgstr "Aldoni bildon"
+
+msgid "langChangePicture"
+msgstr "Ŝanĝi bildon"
+
+msgid "langDeletePicture"
+msgstr "Forigi bildon"
+
+msgid "langAddUsers"
+msgstr "Aldoni uzulojn"
+
+msgid "langAddGroups"
+msgstr "Aldoni novajn grupojn"
+
+msgid "langAddClasses"
+msgstr "Aldoni novajn klasojn"
+
+msgid "langExportUsers"
+msgstr "Eksporti uzulan liston"
+
+msgid "langKeyword"
+msgstr "Kaptovorto"
+
+msgid "langGroupName"
+msgstr "Grupa nomo"
+
+msgid "langGroupTutor"
+msgstr "Grupa mentoro"
+
+msgid "langGroupDescription"
+msgstr "Grupa priskribo"
+
+msgid "langNumberOfParticipants"
+msgstr "Nombro da partoprenantoj"
+
+msgid "langNumberOfUsers"
+msgstr "Nombro da uzuloj"
+
+msgid "langMaximum"
+msgstr "maksimumo"
+
+msgid "langMaximumOfParticipants"
+msgstr "Maksimuma nombro da partoprenantoj"
+
+msgid "langParticipants"
+msgstr "partoprenantoj"
+
+msgid "langFirstLetterClass"
+msgstr "Unua litero (klasnomo)"
+
+msgid "langFirstLetterUser"
+msgstr "Unua litero (familinoma)"
+
+msgid "langFirstLetterCourse"
+msgstr "Unua litero (koda)"
+
+msgid "langModifyUserInfo"
+msgstr "Ŝanĝi uzulan informon"
+
+msgid "langModifyClassInfo"
+msgstr "Ŝanĝi klasan informon"
+
+msgid "langModifyGroupInfo"
+msgstr "Ŝanĝi grupan informon"
+
+msgid "langModifyCourseInfo"
+msgstr "Ŝanĝi kursan informon"
+
+msgid "langPleaseEnterClassName"
+msgstr "Tajpu nomon de klaso!"
+
+msgid "langPleaseEnterLastName"
+msgstr "Tajpu nomon de la uzulo!"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Tajpu la personan nomon de la uzulo!"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Tajpu validan retpoŝtan adreson!"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Tajpu validan uzulan nomon!"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Tajpu kurskodon!"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Tajpu nomon kaj antaŭnomon de la instruisto!"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Tajpu la kurstitolon!"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Akceptataj estas nur la dosierformoj JPG, PNG kaj GIF!"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Tiu salutonomo estas jam okupata !"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Importi uzulan liston el XMLa aŭ CSVa dosiero"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Eksporti la uzulan liston al XMLa aŭ CSVa dosiero"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Nur uzuloj de la kurso"
+
+msgid "langAddClassesToACourse"
+msgstr "Aldoni klasojn al kurso"
+
+msgid "langAddUsersToACourse"
+msgstr "Aldoni uzulojn al kursoj"
+
+msgid "langAddUsersToAClass"
+msgstr "Aldoni uzulojn al klaso"
+
+msgid "langAddUsersToAGroup"
+msgstr "Aldoni uzulojn al grupo"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Vi elektu almenaŭ unu klason kaj unu kurson !"
+
+msgid "AtLeastOneUser"
+msgstr "Vi elektu almenaŭ unu uzulon !"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Vi elektu almenaŭ unu uzulon kaj unu kurson !"
+
+msgid "langClassList"
+msgstr "Klasa listo"
+
+msgid "langUserList"
+msgstr "Uzula listo"
+
+msgid "langCourseList"
+msgstr "Kurslisto"
+
+msgid "langAddToThatCourse"
+msgstr "Aldoni uzulo(j)n al kurso(j)"
+
+msgid "langAddToClass"
+msgstr "Aldoni al klaso"
+
+msgid "langRemoveFromClass"
+msgstr "Forigi el klaso"
+
+msgid "langAddToGroup"
+msgstr "Aldoni al grupo"
+
+msgid "langRemoveFromGroup"
+msgstr "Forigi el la grupo"
+
+msgid "langUsersOutsideClass"
+msgstr "Uzuloj ekster la klaso"
+
+msgid "langUsersInsideClass"
+msgstr "Uzuloj ene de la klaso"
+
+msgid "langUsersOutsideGroup"
+msgstr "Uzuloj ekster la grupo"
+
+msgid "langUsersInsideGroup"
+msgstr "Uzuloj ene de la grupo"
+
+msgid "langImportFileLocation"
+msgstr "Lokigo de la CSVa aŭ XMLa dosiero"
+
+msgid "langFileType"
+msgstr "Dosiera formato"
+
+msgid "langOutputFileType"
+msgstr "Dosiera formato"
+
+msgid "langMustUseSeparator"
+msgstr "vi uzu la signon \';\' kiel apartigilo"
+
+msgid "langCSVMustLookLike"
+msgstr "La CSVa dosiero aspektu jene"
+
+msgid "langXMLMustLookLike"
+msgstr "La XMLa dosiero aspektu jene"
+
+msgid "langMandatoryFields"
+msgstr "kampoj en <b>grase</b> necesas"
+
+msgid "langNotXML"
+msgstr "La specifita dosiero ne estas XML-formata !"
+
+msgid "langNotCSV"
+msgstr "La specifita dosiero ne estas CSV-formata !"
+
+msgid "langNoNeededData"
+msgstr "La specifita dosiero ne enhavas ĉiujn necesajn datenojn !"
+
+msgid "langMaxImportUsers"
+msgstr "Vi ne rajtas importi pli ol 500 uzulojn samtempe !"
+
+msgid "langAdminDatabases"
+msgstr "Datumbazoj (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Uzuloj"
+
+msgid "langAdminClasses"
+msgstr "Uzulaj klasoj"
+
+msgid "langAdminGroups"
+msgstr "Uzulagrupoj (po en kurso)"
+
+msgid "langAdminCourses"
+msgstr "Kursoj"
+
+msgid "langAdminCategories"
+msgstr "Kursaj kategorioj"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Aligi uzulon / grupon al kurso"
+
+msgid "AddACategory"
+msgstr "Aldoni novan kategorion"
+
+msgid "langInto"
+msgstr "en"
+
+msgid "langNoCategories"
+msgstr "Ne estas kategorioj en ĉi-nivelo"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Ĉu permesiĝas aldoni kursojn en ĉi-kategorion?"
+
+msgid "langGoToForum"
+msgstr "Iri al la forumo"
+
+msgid "langCategoryCode"
+msgstr "Kategoria kodo"
+
+msgid "langCategoryName"
+msgstr "Kategoria nomo"
+
+msgid "langCategories"
+msgstr "kategorioj"
+
+msgid "langEditNode"
+msgstr "Ŝanĝi ĉi-kategorion"
+
+msgid "langOpenNode"
+msgstr "Malfermi ĉi-kategorion"
+
+msgid "langDeleteNode"
+msgstr "Forigi ĉi-kategorion"
+
+msgid "langAddChildNode"
+msgstr "Aldoni subkategorion"
+
+msgid "langViewChildren"
+msgstr "Montri idojn"
+
+msgid "langTreeRebuildedIn"
+msgstr "Strukturo rekonstruita en"
+
+msgid "langTreeRecountedIn"
+msgstr "Strukturo renombrita en"
+
+msgid "langRebuildTree"
+msgstr "Rekonstrui la strukturon"
+
+msgid "langRefreshNbChildren"
+msgstr "Refreŝigi nombron da idoj"
+
+msgid "langShowTree"
+msgstr "Montri strukturon"
+
+msgid "langBack"
+msgstr "Reiri al antaŭa paĝo"
+
+msgid "langLogDeleteCat"
+msgstr "Kategorio forigita"
+
+msgid "langRecountChildren"
+msgstr "Rekalkulu idojn"
+
+msgid "langUpInSameLevel"
+msgstr "Supren samnivele"
+
+msgid "langSeconds"
+msgstr "sekundoj"
+
+msgid "langMailTo"
+msgstr "Sendi mesaĝon al :"
+
+msgid "lang_no_access_here"
+msgstr "Ne aliro ĉi-tien"
+
+msgid "lang_php_info"
+msgstr "Informo pri la sistemo"
+
+msgid "langAddAdminInApache"
+msgstr "Aldoni mastrumanton"
+
+msgid "langAddFaculties"
+msgstr "Aldoni kategoriojn"
+
+msgid "langSearchACourse"
+msgstr "Serĉi kurson"
+
+msgid "langSearchAUser"
+msgstr "Serĉi uzulon"
+
+msgid "langTechnicalTools"
+msgstr "Teknika"
+
+msgid "langConfig"
+msgstr "Sistema konfiguro"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Ensaluti liston (etende)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Maksimuma nombro da uzantoj montrataj en la rullisto"
+
+msgid "NoTimeLimits"
+msgstr "Sen templimo"
+
+msgid "GeneralCoach"
+msgstr "Ĝenerala gvidanto"
+
+msgid "GeneralProperties"
+msgstr "Ĝeneralaj ecoj"
+
+msgid "CourseCoach"
+msgstr "Kursgvidanto"
+
+msgid "UsersNumber"
+msgstr "Uzanta numero"
+
+msgid "PageAfterLoginTitle"
+msgstr "Bonveniga paĝo"
+
+msgid "PageAfterLoginComment"
+msgstr "Paĝo montrata al la konektinta uzanto"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Retejo de Chamilo"
+
+msgid "TabsMyProfile"
+msgstr "Etiketi mian profilon"
+
+msgid "GlobalRole"
+msgstr "Tuta rolo"
+
+msgid "langNomOutilTodo"
+msgstr "Mastrumi Todo-liston"
+
+msgid "langNomPageAdmin"
+msgstr "Mastrumado"
+
+msgid "langSysInfo"
+msgstr "Sistema informo"
+
+msgid "langDiffTranslation"
+msgstr "Komparo inter la tradukoj"
+
+msgid "langStatOf"
+msgstr "Statistikoj de"
+
+msgid "langSpeeSubscribe"
+msgstr "Portempa aliĝo por testi kurson"
+
+msgid "langLogIdentLogout"
+msgstr "Logo de salutoj kaj adiaŭoj"
+
+msgid "langServerStatus"
+msgstr "Statuso de MySQLa Servilo"
+
+msgid "langDataBase"
+msgstr "Datumbazo"
+
+msgid "langRun"
+msgstr "ruli"
+
+msgid "langClient"
+msgstr "MySQI-a Kliento"
+
+msgid "langServer"
+msgstr "MySQL-a Servilo"
+
+msgid "langtitulary"
+msgstr "Titolulo"
+
+msgid "langUpgradeBase"
+msgstr "Promocii datumbankon"
+
+msgid "langManage"
+msgstr "Mastrumi Portalon"
+
+msgid "langErrorsFound"
+msgstr "eraroj trovitaj"
+
+msgid "langMaintenance"
+msgstr "Flegado"
+
+msgid "langUpgrade"
+msgstr "Promocii Chamilo-on"
+
+msgid "langWebsite"
+msgstr "Retejo de Chamilo"
+
+msgid "langDocumentation"
+msgstr "Dokumenti"
+
+msgid "langContribute"
+msgstr "Kontribui"
+
+msgid "langInfoServer"
+msgstr "Informo pri Servilo"
+
+msgid "langOtherCategory"
+msgstr "Alia kategorio"
+
+msgid "langSendMailToUsers"
+msgstr "Sendi mesaĝon al la uzuloj"
+
+msgid "langExampleXMLFile"
+msgstr "Ekzemplo de XML-a dosiero"
+
+msgid "langExampleCSVFile"
+msgstr "Ekzemplo de CVS-a dosiero"
+
+msgid "langCourseSystemCode"
+msgstr "Sistemkodo"
+
+msgid "langCourseVisualCode"
+msgstr "Videbla kodo"
+
+msgid "langSystemCode"
+msgstr "Sistemkodo"
+
+msgid "langVisualCode"
+msgstr "Videbla kodo"
+
+msgid "langAddCourse"
+msgstr "Krei novan kurson"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Mastrumi virtualajn kursojn"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Krei virtualan kurson"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "La virtuala kurso kunekzistos kun \'reala\' en sama tenejo (dosieroj kaj datumaro)."
+
+msgid "langRealCourseCode"
+msgstr "Kodo de la reala kurso"
+
+msgid "langCourseCreationSucceeded"
+msgstr "La kurso sukcese kreiĝis."
+
+msgid "langYourDokeosUses"
+msgstr "Via Chamilo-instalaĵo momente uzas"
+
+msgid "langOnTheHardDisk"
+msgstr "sur la dura disko"
+
+msgid "langIsVirtualCourse"
+msgstr "Virtuala kurso"
+
+msgid "langSystemAnnouncements"
+msgstr "Platformaj anoncoj"
+
+msgid "langAddAnnouncement"
+msgstr "Nova anonco"
+
+msgid "langAnnouncementAdded"
+msgstr "Anonco estas aldonita"
+
+msgid "langAnnouncementUpdated"
+msgstr "Anonco estas ŝanĝita"
+
+msgid "langAnnouncementDeleted"
+msgstr "Anonco estas forigita"
+
+msgid "langContent"
+msgstr "Anonca enhavo"
+
+msgid "PermissionsForNewFiles"
+msgstr "Permesoj por novaj dosieroj"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "La eblo atribui permesojn al ĉiu nova dosiero povas plialtigi la sekuron kontraŭ fientrudiĝantoj, kiuj alŝutas danĝerajn dosierojn en vian portalon. La origina agordo (0550) sufiĉe protektas vian servilon je akceptebla nivelo. La permesoj estu enigataj laŭ UNIXa maniero de Posedanto-Grupo_Aliaj kun Skrib-Leg-Ruligaj rajtoj. Uzantoj de Oogie atentu, ke lanĉinte OpenOffice-n iu povos meti dosierojn en la kursan dosierujon."
+
+msgid "langStudent"
+msgstr "Studento"
+
+msgid "Guest"
+msgstr "Gasto"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Ensaluti kiel"
+
+msgid "langLoginAsThisUser"
+msgstr "Ensaluti"
+
+msgid "SelectPicture"
+msgstr "Elekti bildon..."
+
+msgid "DontResetPassword"
+msgstr "Ne ŝanĝi pasvorton"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Partopreni en disvolvado"
+
+msgid "langCourseAdmin"
+msgstr "Kursmastrumanto"
+
+msgid "langOtherCourses"
+msgstr "Aliaj kursoj"
+
+msgid "PlatformLanguageTitle"
+msgstr "Platforma lingvo"
+
+msgid "ServerStatusComment"
+msgstr "Kia servilo estas tiu ĉi? Tio difinas kelkajn specifajn opciojn, ekz. sur disvolva servilo estas funkcio montranta netradukitajn tekstojn anstataŭ la anglaj terminoj."
+
+msgid "ServerStatusTitle"
+msgstr "Serviltipo"
+
+msgid "PlatformLanguages"
+msgstr "Chamilo-aj lingvovariabloj"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Ĉi-modulo temas pri la lingvelekta menuo sur la startpaĝo. Kiel platforma mastrumanto vi rajtas decidi kiujn lingvojn disponigi al la uzuloj."
+
+msgid "OriginalName"
+msgstr "Originala nomo"
+
+msgid "EnglishName"
+msgstr "Angla nomo"
+
+msgid "DokeosFolder"
+msgstr "Chamilo-dosierujo"
+
+msgid "Properties"
+msgstr "Ecoj"
+
+msgid "PlatformConfigSettings"
+msgstr "Chamilo-agordoj"
+
+msgid "SettingsStored"
+msgstr "Tiuj agordoj estas konservitaj."
+
+msgid "InstitutionTitle"
+msgstr "Nomo de la organizaĵo"
+
+msgid "InstitutionComment"
+msgstr "La nomo de la institucio (aperas dekstre en la surskribo)"
+
+msgid "InstitutionUrlTitle"
+msgstr "URL de la organizaĵo"
+
+msgid "InstitutionUrlComment"
+msgstr "La URL de la institucio (tiu ligilo aperas en la surskribo)"
+
+msgid "SiteNameTitle"
+msgstr "Chamilo-Kampa Titolo"
+
+msgid "SiteNameComment"
+msgstr "La nomo de via Chamilo-Kampo (aperos en la surskribo)"
+
+msgid "emailAdministratorTitle"
+msgstr "Retpoŝta adreso de platforma mastrumanto"
+
+msgid "emailAdministratorComment"
+msgstr "La retpoŝta adreso de la platforma mastrumanto (aperas malsupre sur via kampo)"
+
+msgid "administratorSurnameTitle"
+msgstr "Platforma mastrumanto: familinomo"
+
+msgid "administratorSurnameComment"
+msgstr "La familinomo de la platforma mastrumanto (aperas maldekstre malsupre)"
+
+msgid "administratorNameTitle"
+msgstr "Platforma mastrumanto: antaŭnomo"
+
+msgid "administratorNameComment"
+msgstr "La antaŭnomo de la platforma mastrumanto (aperas maldekstre malsupre)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Informo de platforma mastrumanto"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Vidigi la informon de la platforma mastrumanto malsupre?"
+
+msgid "HomepageViewTitle"
+msgstr "Enpaĝigo de startpaĝo"
+
+msgid "HomepageViewComment"
+msgstr "Kiun enpaĝigon vi deziras por la startpaĝo de kurso?"
+
+msgid "HomepageViewDefault"
+msgstr "Enpaĝigo kun du kolumnoj, neaktiva ilaro ne vidiĝas"
+
+msgid "HomepageViewFixed"
+msgstr "Enpaĝigo kun tri kolumnoj, neaktiva ilaro vidiĝas grize."
+
+msgid "Yes"
+msgstr "Jes"
+
+msgid "No"
+msgstr "Ne"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Montru ilaran bildosimbolon"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Ĉu montri fulmoklavojn en la surskribo?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Studenta vidaĵo"
+
+msgid "ShowStudentViewComment"
+msgstr "Kiam vi enŝaltas \'studentan vidaĵon\', kursmastrumanto povas vidi tion, kio videblas al studentoj"
+
+msgid "AllowGroupCategories"
+msgstr "Grupaj kategorioj"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Ĉu permesi al kursmastrumantoj krei kategoriojn en la grupa modulo?"
+
+msgid "PlatformLanguageComment"
+msgstr "Vi povas mastrumi la platformajn lingvojn en alia parto de la mastruma modulo: <ahref=\"languages.php\">Dokeos-aj Lingvovariabloj</a>"
+
+msgid "ProductionServer"
+msgstr "Produkta servilo"
+
+msgid "TestServer"
+msgstr "Testa servilo"
+
+msgid "ShowOnlineTitle"
+msgstr "Konektitaj uzuloj"
+
+msgid "AsPlatformLanguage"
+msgstr "kiel platforma lingvo"
+
+msgid "ShowOnlineComment"
+msgstr "Montru la nombron da konektitaj uzuloj"
+
+msgid "AllowNameChangeTitle"
+msgstr "Ĉu permesi nomoŝanĝon en profilo?"
+
+msgid "AllowNameChangeComment"
+msgstr "Ĉu uzuloj rajtas ŝanĝi sian antaŭnomon kaj nomon?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Norma kursodokumenta kvoto"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Kiu estas la norma kvoto pri la dokumenta ilaro en ĉiu kurso? Vi povas adapti ĝin por specifaj kursoj per platforma mastrumado > kursoj > ŝanĝi."
+
+msgid "ProfileChangesTitle"
+msgstr "Profilo"
+
+msgid "ProfileChangesComment"
+msgstr "Kiuj eroj de la profilo povas esti modifataj?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Registrado: necesaj kampoj"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Kiuj kampoj estas devige plenumotaj (apud nomo, antaŭnomo, salutnomo kaj pasvorto)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Defaŭlta kvoto por grupoj"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Kiu estas la defaŭlta kvoto por grupaj dokumentoj?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Forgesita pasvorto"
+
+msgid "AllowLostPasswordComment"
+msgstr "Ĉu estas permesite al uzuloj demandi sian forgesitan pasvorton?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Registrado"
+
+msgid "AllowRegistrationComment"
+msgstr "Ĉu registrado kiel nova uzulo estas permesite? Ĉu uzuloj rajtas krei novan konton?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Registri kiel kursmastrumanto"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Ĉu oni rajtas registri kiel kursmastrumanto?"
+
+msgid "PlatformLanguage"
+msgstr "Platforma lingvo"
+
+msgid "Tuning"
+msgstr "Agordi"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "Dividi la uzantan alŝutan dosierujon"
+
+msgid "SplitUsersUploadDirectoryComment"
+msgstr "En multokupitaj portaloj kun multaj registritaj uzantoj alŝutantaj bildojn en la alŝutan dosierujon, povas okazi, ke la dosiersistemo ne plu kapablas malstrumi la nombron da dosieroj (tiu eraro estas anoncita ĉe Debian-servilo kun pli ol 36000 dosieroj en unu dosierujo). La ŝanĝo de ĉi tiu opcio disigas la uzantajn dosierujojn en 9 subdosierujojn. Tiu opcio ne influas la uzantajn dosierujojn surdiskigitajn, nur influas la Chamilo-kodon. Se vi ŝanĝas ĉi tiun opcion, vi devas prepari novajn dosierujojn kaj permane translokigi la nunajn. Atentu, ke ĉe la preparo kaj translokigo vi metu la uzantajn dosierujojn en la samnomajn dosierujojn. Se vi ne certas pri ĉi tiu opcio, prefere ne aktivigu ĝin."
+
+msgid "CourseQuota"
+msgstr "Kursa kvoto"
+
+msgid "EditNotice"
+msgstr "Ŝanĝi anoncon"
+
+msgid "General"
+msgstr "ĝenerale"
+
+msgid "LostPassword"
+msgstr "Pasvorto forgesita"
+
+msgid "Registration"
+msgstr "registrado"
+
+msgid "Password"
+msgstr "pasvorto"
+
+msgid "InsertLink"
+msgstr "Aldoni hipertekstan ligilon"
+
+msgid "EditNews"
+msgstr "Ŝanĝi novaĵon"
+
+msgid "EditCategories"
+msgstr "Ŝanĝi kategoriojn"
+
+msgid "EditHomePage"
+msgstr "Ŝanĝi startpaĝon"
+
+msgid "AllowUserHeadingsComment"
+msgstr "Ĉu kursmastrumanto rajtas difini ekstrajn kampojn por kolekti pliajn uzulajn donitaĵojn pri la kurso?"
+
+msgid "Platform"
+msgstr "Platformo"
+
+msgid "Course"
+msgstr "Kurso"
+
+msgid "Languages"
+msgstr "Lingvoj"
+
+msgid "Privacy"
+msgstr "Privateco"
+
+msgid "NoticeTitle"
+msgstr "Titolo"
+
+msgid "NoticeText"
+msgstr "Sciigo"
+
+msgid "LinkName"
+msgstr "Nomo de la hiperteksta ligilo"
+
+msgid "LinkURL"
+msgstr "URL de la hiperteksta ligilo"
+
+msgid "OpenInNewWindow"
+msgstr "malfermi en nova fenestro"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "Ekranaĵoj kun eblo aldoni uzantojn al kursoj aŭ klasoj normale estas filtrataj laŭ la unua litero (A), se la unua nefiltrita listo enhavas nombron superantan tiun ĉi"
+
+msgid "Plugins"
+msgstr "Kromaĵoj"
+
+msgid "HideDLTTMarkupComment"
+msgstr "Kaŝi la [=...=] aranĝon, se la lingva varieblo ne estas tradukita"
+
+msgid "Info"
+msgstr "Informo"
+
+msgid "UserAdded"
+msgstr "La uzulo estas aldonita"
+
+msgid "NoSearchResults"
+msgstr "Neniu serĉrezulto"
+
+msgid "UserDeleted"
+msgstr "La uzulo estas forigita"
+
+msgid "NoClassesForThisCourse"
+msgstr "Ne estas klasoj aliĝintaj al ĉi-kurso"
+
+msgid "CourseUsage"
+msgstr "Kursa uzado"
+
+msgid "NoCoursesForThisUser"
+msgstr "Ĉi tiu uzulo aliĝis al neniu kurso"
+
+msgid "NoClassesForThisUser"
+msgstr "Ĉi tiu uzulo aliĝis al neniu klaso"
+
+msgid "NoCoursesForThisClass"
+msgstr "Tiu ĉi klaso aliĝis al neniu kurso"
+
+msgid "langOpenToTheWorld"
+msgstr "Malferma - aliro permesita al la tuta mondo"
+
+msgid "OpenToThePlatform"
+msgstr "Malferma - aliro permesita al registritaj uzuloj"
+
+msgid "langPrivate"
+msgstr "Limigita aliro, fermita registrado (ejo rezervita al personoj menciataj uzulo)"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Tute fermita; la kurso alireblas nur por kursmastrumanto."
+
+msgid "langSubscription"
+msgstr "Aliĝo"
+
+msgid "langUnsubscription"
+msgstr "Malaliĝo"
+
+msgid "CourseAccessConfigTip"
+msgstr "Defaŭlte via kurso estas publike alirebla. Vi povas ŝanĝi la alireblecon ĉi-supre."
+
+msgid "Tool"
+msgstr "modulo"
+
+msgid "NumberOfItems"
+msgstr "nombro da eroj"
+
+msgid "DocumentsAndFolders"
+msgstr "Dosieroj kaj dosierujoj"
+
+msgid "Learnpath"
+msgstr "Lernopado"
+
+msgid "Exercises"
+msgstr "Ekzercoj"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Persona agendo"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "Ĉu la uzulo rajtas aldoni personajn agendojn al la paĝo Mia Agendo?"
+
+msgid "CurrentValue"
+msgstr "aktuala valoro"
+
+msgid "CourseDescription"
+msgstr "Kursa priskribo"
+
+msgid "OnlineConference"
+msgstr "Konektita konferenco"
+
+msgid "Chat"
+msgstr "Babilado"
+
+msgid "Quiz"
+msgstr "Ekzercoj"
+
+msgid "Announcements"
+msgstr "Publikiĝo"
+
+msgid "Links"
+msgstr "Ligiloj"
+
+msgid "LearningPath"
+msgstr "Lernopado"
+
+msgid "Documents"
+msgstr "Dokumentoj"
+
+msgid "UserPicture"
+msgstr "Bildo"
+
+msgid "officialcode"
+msgstr "Oficiala kodo"
+
+msgid "Login"
+msgstr "Ensaluto"
+
+msgid "UserPassword"
+msgstr "Pasvorto"
+
+msgid "SubscriptionAllowed"
+msgstr "Aliĝo permesita"
+
+msgid "UnsubscriptionAllowed"
+msgstr "malaliĝo permesita"
+
+msgid "AllowedToUnsubscribe"
+msgstr "permesite"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "ne permesite"
+
+msgid "AddDummyContentToCourse"
+msgstr "Aldonu enhavon al ĉi-kurso laŭ hazardo"
+
+msgid "DummyCourseCreator"
+msgstr "Krei kursenhavon laŭ hazardo"
+
+msgid "DummyCourseDescription"
+msgstr "Per tio vi povas aldoni laŭhazardan enhavon al la kurso. Ĉi-ilo estas celita nur por testado."
+
+msgid "AvailablePlugins"
+msgstr "Jen la kromaĵoj disponeblaj en via sistemo. Vi povas elŝuti pliajn kromaĵojn ĉe <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>."
+
+msgid "CreateVirtualCourse"
+msgstr "Krei virtualan kurson"
+
+msgid "DisplayListVirtualCourses"
+msgstr "listo de virtualaj kursoj"
+
+msgid "LinkedToRealCourseCode"
+msgstr "ligite al reala kurskodo"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Krei virtualan kurson..."
+
+msgid "WantedCourseCode"
+msgstr "Petita kurskodo"
+
+msgid "ResetPassword"
+msgstr "Reŝargi pasvorton"
+
+msgid "CheckToSendNewPassword"
+msgstr "Marku tion ĉi por sendi novan pasvorton"
+
+msgid "AutoGeneratePassword"
+msgstr "Aŭtomate generi novan pasvorton"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Uzi titolon kiel dosiernomon"
+
+msgid "UseDocumentTitleComment"
+msgstr "Per tio ĉi eblas doni titolojn al dosieroj anstataŭ dosiernomo.suf"
+
+msgid "StudentPublications"
+msgstr "Studentaj publikaĵoj"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "Ne eblas rehavi forigitajn dosierojn"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Forigo de dosieroj in la dokumenta ilaro definitive forigas ilin el la servilo. Ne eblas rehavi ilin."
+
+msgid "ClassName"
+msgstr "Klasnomo"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Demetujo: Maksimuma dosiergrando de demetuja dokumento"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Kiom da bajtoj povas enhavi demetuja dokumento?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Demetujo: ĉu dokumentoj povas esti anstataŭigataj?"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "Ĉu originala dokumento povas esti anstataŭigata kiam studento aŭ instruisto ŝargas dokumenton kun nomo jam uzita de alia dokumento? Se vi jesas, vi ja perdas la versio-mekanismon"
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Demetujo: Ĉu ŝargi en propran demetujon?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Ĉu instruistoj kaj studentoj rajtas ŝargi en sian propran demetujon (=sendi dokumentojn al si mem)?"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Demetujo: Studento <-> Studento"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Studentoj rajtas sendi dokumentojn al aliaj studentoj (samtavola komunikado). Studentoj rajtas ankaŭ uzi tion por malpli aferkoncernaj dokumentoj (mp3, solvoj, ...). Se vi malŝaltas tion, studentoj povas sendi dokumentojn nur al la instruistoj."
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Demetujo: ĉu ebligi mesaĝojn?"
+
+msgid "DropboxAllowMailingComment"
+msgstr "Per la mesaĝa funkciaro vi povas sendi al ĉiu studento personan dokumenton"
+
+msgid "PermissionsForNewDirs"
+msgstr "Permesoj por novaj dosierujoj"
+
+msgid "PermissionsForNewDirsComment"
+msgstr "La eblo atribui permesojn al ĉiu nova dosierujo povas plialtigi la sekuron kontra atakoj de fientrudiĝantoj alŝutantaj dosierojn en vian portalon. La origina agordo (0770) protektas vian servilon je sufiĉe akceptebla nivelo. La permesoj estas enigataj laŭ la UNIX-metodo de Posedanto_Grupo_Aliuloj kun Skrib-Leg-Ruligaj rajtoj."
+
+msgid "UserListHasBeenExported"
+msgstr "La uzula listo estas eksportita"
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Klaku ĉi tien por elŝuti la dosieron."
+
+msgid "administratorTelephoneTitle"
+msgstr "Telefonnumero de la platforma mastrumanto"
+
+msgid "administratorTelephoneComment"
+msgstr "Telefonnumero de la platforma mastrumanto"
+
+msgid "SendMailToNewUser"
+msgstr "Sendu retpoŝtaĵon al la nova uzulo"
+
+msgid "ExtendedProfileTitle"
+msgstr "Etenda profilo"
+
+msgid "ExtendedProfileComment"
+msgstr "Se tiu agordo estas markita, uzulo povas plenigi jenajn (opciajn) kampojn: \'Miaj kompetentecoj\', \'Miaj diplomoj\', \'Pri kio mi povas instrui\' kaj \'Mia persona spaco\'"
+
+msgid "Classes"
+msgstr "Klasoj"
+
+msgid "UserUnsubscribed"
+msgstr "La uzulo nun estas malaliĝinta"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "La uzulo ne povas malaliĝi el la kurso. Tiu uzulo estas kursmastrumanto."
+
+msgid "InvalidStartDate"
+msgstr "Vi entajpis malvalidan startodaton."
+
+msgid "InvalidEndDate"
+msgstr "Vi enigis malvalidan findaton."
+
+msgid "DateFormatLabel"
+msgstr "(t/m/j h:m)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "Startpaĝaj dosieroj ne estas skribeblaj!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Bonvolu enigi anoncon"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Bonvolu enigi titolon"
+
+msgid "PleaseEnterLinkName"
+msgstr "Bonvolu enigi nomon de la ligilo"
+
+msgid "InsertThisLink"
+msgstr "Aldonu ĉi-ligilon"
+
+msgid "FirstPlace"
+msgstr "Unua loko"
+
+msgid "After"
+msgstr "post"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Demetujo: grupoj permesitaj"
+
+msgid "DropboxAllowGroupComment"
+msgstr "Uzuloj rajtas sendi dosierojn al grupoj"
+
+msgid "ClassDeleted"
+msgstr "La klaso estas forigita"
+
+msgid "ClassesDeleted"
+msgstr "La klasoj estas forigitaj"
+
+msgid "NoUsersInClass"
+msgstr "Neniu uzulo en ĉi-klaso"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "La elektitaj uzuloj estas aliĝintaj al la elektitaj kursoj."
+
+msgid "InvalidTitle"
+msgstr "Bonvolu enigi titolon"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Jam ekzistas kategorio kun tiu nomo"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Bonvolu enigi kodon kaj nomon por la kategorio"
+
+msgid "DokeosHomepage"
+msgstr "Chamilo-hejmpaĝo"
+
+msgid "DokeosForum"
+msgstr "Chamilo-forumo"
+
+msgid "RegisterYourPortal"
+msgstr "Registru vian portalon"
+
+msgid "DokeosExtensions"
+msgstr "Chamilo-sufiksoj"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Montri la kursan navigan menuon"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Montri navigan menuon faciligantan la navigon al diversaj partoj de la kurso"
+
+msgid "LoginAs"
+msgstr "Ensaluti kiel"
+
+msgid "ImportClassListCSV"
+msgstr "Importi liston de lernantoj per CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "Montri la nombron da konektitaj uzantoj sur la ensalutpaĝo (videbla por la mondo)"
+
+msgid "ShowOnlineUsers"
+msgstr "Montri la nombron da konektitaj uzantoj sur ĉi paĝo (videblaj ensalutintaj uzantoj)"
+
+msgid "ShowOnlineCourse"
+msgstr "Montri la nombron da konektitaj uzantoj en ĉi-kurso"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Ĉu montri ikonojn en la naviga menuo?"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Vidi ĉiujn rolojn kaj lokiĝojn pri specifa rajto"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Vidi ĉiujn rolojn kaj rajtojn de specifa lokiĝo"
+
+msgid "ClassesUnsubscribed"
+msgstr "La elektitaj klasoj estas eligitaj el la elektitaj grupoj"
+
+msgid "ClassesSubscribed"
+msgstr "La elektitaj klasoj estas enigitaj en la elektitaj grupoj"
+
+msgid "RoleId"
+msgstr "Rola identigilo"
+
+msgid "RoleName"
+msgstr "Rola nomo"
+
+msgid "RoleType"
+msgstr "Rola speco"
+
+msgid "RightValueModified"
+msgstr "La valoro estas modifita"
+
+msgid "MakeAvailable"
+msgstr "Disponebligi"
+
+msgid "MakeUnavailable"
+msgstr "Maldisponebligi"
+
+msgid "Stylesheets"
+msgstr "Stilpaĝoj"
+
+msgid "DefaultDokeosStyle"
+msgstr "Defaŭlta Chamilo-stilo"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Ĉu la navigadmenuo montru la ilarajn ikonojn?"
+
+msgid "Plugin"
+msgstr "Kromaĵo"
+
+msgid "MainMenu"
+msgstr "Ĉefmenuo"
+
+msgid "MainMenuLogged"
+msgstr "Ĉefmenuo post ensaluto"
+
+msgid "Banner"
+msgstr "Standardo"
+
+msgid "ImageResizeTitle"
+msgstr "Malpligrandigi alŝutitajn uzantajn bildojn"
+
+msgid "ImageResizeComment"
+msgstr "Bildoj de uzantoj estas malpligrandigeblaj ĉe alŝuto, se PHP estas kompilita per <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD-bibliotheek</a>. Se GD ne disponeblas, tiu komando estas ignorata sen averto."
+
+msgid "MaxImageWidthTitle"
+msgstr "Maksimuma bildlarĝo de uzanto"
+
+msgid "MaxImageWidthComment"
+msgstr "Maksimuma bildlarĝo en bilderoj de bildo de uzanto. Tiu aranĝo validas nur, se bildoj estas malpligrandigendaj dum alŝutado."
+
+msgid "MaxImageHeightTitle"
+msgstr "Maksimuma alto de bildo de uzanto"
+
+msgid "MaxImageHeightComment"
+msgstr "Maksimuma alto en bilderoj de bildo de uzanto. Tiu aranĝo validas nur, se bildoj estas malgrandigendaj dum alŝutado."
+
+msgid "YourVersionNotUpToDate"
+msgstr "Via versio estas nefreŝdata"
+
+msgid "YourVersionIs"
+msgstr "Via versio estas"
+
+msgid "PleaseVisitDokeos"
+msgstr "Vizitu Chamilo-on"
+
+msgid "VersionUpToDate"
+msgstr "Via versio estas freŝdata"
+
+msgid "ConnectSocketError"
+msgstr "Eraro dum konektado al servilo"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Konekto al eksterna servilo ne eblas"
+
+msgid "ShowEmailAddresses"
+msgstr "Montri retpoŝtajn adresojn"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Montri retpoŝtajn adresojn al uzantoj"
+
+msgid "LatestVersionIs"
+msgstr "La lasta versio estas"
+
+msgid "langConfigureExtensions"
+msgstr "Konfiguri la sufiksojn"
+
+msgid "langActiveExtensions"
+msgstr "Aktivaj sufiksoj"
+
+msgid "langVisioconf"
+msgstr "Videokonferenco"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo Live Conferencing? estas videokonferenca ilo kun funkcioj kiaj: montrado de diapozitivaroj, blanktabuloj por skizi kaj skribi, aŭdo-vida duopo, babilado. Ĝi necesigas nur la Flash?-aparaton kaj ebligas tri labormanierojn: 1 al 1, 1 al pluraj kaj pluraj al pluraj."
+
+msgid "langPpt2lp"
+msgstr "Powerpoint2-lernopado"
+
+msgid "langPpt2lpDescription"
+msgstr "Powerpoint2-lernopado ebligas onin per kelkaj musklakoj transformi Powerpoint-prezentaĵon en lernopadon"
+
+msgid "langBandWidthStatistics"
+msgstr "Bendlarĝaj statistikoj"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG ebligas vin vidi evoluintajn servilajn statistikojn de la pasintaj 24 horoj"
+
+msgid "ServerStatistics"
+msgstr "Servilaj statistikoj"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats ebligas vin vidi retajn statistikojn pri: vizitantojn, paĝvizitoj, vizitantodevenoj"
+
+msgid "SearchEngine"
+msgstr "Plenteksta serĉmaŝino"
+
+msgid "langSearchEngineDescription"
+msgstr "Plenteksta serĉmaŝino ofertas la eblon serĉi vorton tra la tuta platformo. La ĉiutaga indeksado de ĉiu enhavo prizorgas la necesan kvaliton de viaj serĉtaskoj."
+
+msgid "langListSession"
+msgstr "Sesia listo"
+
+msgid "AddSession"
+msgstr "Aldoni sesion"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Importi sesiojn en XML/CSV-formato"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Eksporti sesiojn en XML/CSV-formato"
+
+msgid "SessionName"
+msgstr "Sesinomo"
+
+msgid "langNbCourses"
+msgstr "Nombro da kursoj"
+
+msgid "DateStart"
+msgstr "Startodato"
+
+msgid "DateEnd"
+msgstr "Fina dato"
+
+msgid "CoachName"
+msgstr "Nomo de la trejnisto"
+
+msgid "SessionList"
+msgstr "Sesiolisto"
+
+msgid "SessionNameIsRequired"
+msgstr "Vi devas doni nomon al la sesio"
+
+msgid "NextStep"
+msgstr "Sekva paŝo"
+
+msgid "keyword"
+msgstr "Ŝlosilvorto"
+
+msgid "Confirm"
+msgstr "Konfirmi"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Forigi uzantojn el la kurso"
+
+msgid "MissingClassName"
+msgstr "Mankas klasnomo"
+
+msgid "ClassNameExists"
+msgstr "Klasnomo jam ekzistas"
+
+msgid "ImportCSVFileLocation"
+msgstr "Lokigo de CSV-dosiero"
+
+msgid "ClassesCreated"
+msgstr "Klasoj kreitaj"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Eraroj dum importado de la dosiero"
+
+msgid "ServiceActivated"
+msgstr "Servo aktivas"
+
+msgid "ActivateExtension"
+msgstr "Aktivaj servoj"
+
+msgid "InvalidExtension"
+msgstr "Nevalida finaĵo"
+
+msgid "VersionCheckExplanation"
+msgstr "Por aktivigi la aŭtomatan versian kontrolon vi registru vian terenon ĉe chamilo.com. La ricevita informo estas nur por interna uzo kaj nur agregita informo estos publike disponebla (entuta nombro da terenoj, entuta nombro da Dokeo-kursoj de ĉiuj terenoj kune, entuta nombro da studentoj uzantaj Chamilo-kursojn, ...) por tio vidu see <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>.  Kiam vi registras vian terenon ankaŭ tiu informo aperos en la listo de terenoj (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>. Se vi ne deziras tion, vi marku tion en la markobutonon. La registrado estas tre facila: vi nur musklaku sur la ĉi-suban butonon."
+
+msgid "AfterApproval"
+msgstr "Post aprobo"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Ebligi studentan vidon"
+
+msgid "StudentViewEnabledComment"
+msgstr "Kiam studenta vido estas ŝaltata, kursestro aŭ platformestro povas vidi la kursan enhavon tiel, kiel studenta vidan ĝin."
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Templimigo de ŝaltitaj uzantoj"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "La templimigo difinas dum kiom da sekundoj uzanto konsideriĝas enŝaltata post ŝlia lasta ago."
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Enhava ekzemplo pri kurspreparo"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Krei aron da ekzemploj dum preparo de nova kurso"
+
+msgid "AccountValidDurationTitle"
+msgstr "Tempodaŭro de konta valideco"
+
+msgid "AccountValidDurationComment"
+msgstr "Uzanta konto validas dum tiom da tagoj post sia kreiĝo"
+
+msgid "UseSessionModeTitle"
+msgstr "Utiligi sesian modon"
+
+msgid "UseSessionModeComment"
+msgstr "Sesio ebligas alian manieron de kursmastrumado, per kiu kursoj havas kurspreparanton, kursgvidanton kaj studentojn. Ĉiu kursgvidanto gvidas kurson dum difinita tempo, nomata sesio, al difinita grupo da studentoj."
+
+msgid "HomepageViewActivity"
+msgstr "Vidigi aktivecojn"
+
+msgid "HomepageView2column"
+msgstr "dukolumna prezentado"
+
+msgid "HomepageView3column"
+msgstr "trikolumna prezentado"
+
+msgid "AllowUserHeadings"
+msgstr "Permesi uzantajn titolojn"
+
+msgid "IconsOnly"
+msgstr "Kelkaj ikonoj"
+
+msgid "TextOnly"
+msgstr "nur teksto"
+
+msgid "IconsText"
+msgstr "Ikonoj kaj teksto"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Ebligi enkondukon de moduloj"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Aldoni enkondukan tekston al la hejmpaĝo de ĉiu ilo"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Panero al la startpaĝo de la kurso"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "\"Panero\" estas la horizontala breto kutime je la maldekstra supro de la paĝo. Per ĉi tiu opcio vi povas elekti, kio aperu en la \"panero\" de la  kursa startpaĝo."
+
+msgid "Comment"
+msgstr "komentario"
+
+msgid "Version"
+msgstr "Versio"
+
+msgid "LoginPageMainArea"
+msgstr "Ĉefareo de la ensalutpaĝo"
+
+msgid "LoginPageMenu"
+msgstr "Menuo de la ensalutpaĝo"
+
+msgid "CampusHomepageMainArea"
+msgstr "Ĉefa areo de la Kampa paĝo"
+
+msgid "CampusHomepageMenu"
+msgstr "Menuo de la Kampa startpaĝo"
+
+msgid "MyCoursesMainArea"
+msgstr "Ĉefa areo de la kurso"
+
+msgid "MyCoursesMenu"
+msgstr "Kursa menuo"
+
+msgid "Header"
+msgstr "Titolo"
+
+msgid "Footer"
+msgstr "Suba teksto"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "Pagoj publike alireblaj konforme al WAI"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Web Accessibility Initiative = retalirebla iniciato) estas iniciato celanta igi retpaĝojn pli alireblaj. Per elekto de tiu opcio la publike alireblaj paĝoj de Chamilo iĝis pli alireblaj. Per ĝi la enhavo de publike alireblaj paĝoj povas esti prezentata iom alimaniere."
+
+msgid "VersionCheck"
+msgstr "Versia kontrolo"
+
+msgid "Active"
+msgstr "Aktiva"
+
+msgid "Inactive"
+msgstr "Malaktiva"
+
+msgid "SessionOverview"
+msgstr "Sesia supervido"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Enskribi uzanton, se ŝli ankorau ne estas enskribita"
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Malenskribu la uzanton, se ŝli ne troviĝas en la dosiero"
+
+msgid "DeleteSelectedSessions"
+msgstr "Forigi elektitajn dosierojn"
+
+msgid "CourseListInSession"
+msgstr "Kurslisto en ĉi tiu sesio"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Forigu la elektitan kurson el tiu sesio"
+
+msgid "NbUsers"
+msgstr "Uzantoj"
+
+msgid "SubscribeUsersToSession"
+msgstr "Enskribi uzantojn en ĉi tiu sesio"
+
+msgid "UserListInPlatform"
+msgstr "Listo de uzantoj en la platformo"
+
+msgid "UserListInSession"
+msgstr "Listo de uzantoj enskribitaj en ĉi tiu sesio"
+
+msgid "CourseListInPlatform"
+msgstr "List de kursoj en la platformo"
+
+msgid "Host"
+msgstr "Gastiganto"
+
+msgid "UserOnHost"
+msgstr "Uzanta nomo"
+
+msgid "FtpPassword"
+msgstr "FTPa pasvorto"
+
+msgid "PathToLzx"
+msgstr "Pado al la LZX-dosieroj"
+
+msgid "WCAGContent"
+msgstr "teksto"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Aldoni kursojn al ĉi tiu sesio"
+
+msgid "DateStartSession"
+msgstr "Startodato de la sesio"
+
+msgid "DateEndSession"
+msgstr "Findato de la sesio"
+
+msgid "EditSession"
+msgstr "Ŝanĝi ĉi tiun sesion"
+
+msgid "VideoConferenceUrl"
+msgstr "Pado al la vida konferenco"
+
+msgid "VideoClassroomUrl"
+msgstr "Pado al la vidkonferenca klaso"
+
+msgid "ReconfigureExtension"
+msgstr "Rekonfiguri la sufikson"
+
+msgid "ServiceReconfigured"
+msgstr "Rekonfiguri la servon"
+
+msgid "ChooseNewsLanguage"
+msgstr "Elekti novaĵa lingvo"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "Entuta tempo pasigita en kurso"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Per ĉi tiu opcio eblas tuj kalkuli kiom da tempo uzanto elspezas al kurso. Vi povas ĉi tie enigi la renovigan periodon en sekundoj. Por malŝalti tiun opcion, sufiĉas entajpi valoron 0 en la kampon."
+
+msgid "EditLink"
+msgstr "Redakti ĉi tiun ligilon"
+
+msgid "FinishSessionCreation"
+msgstr "Fini la sesian kreadon"
+
+msgid "VisioRTMPPort"
+msgstr "Konektilo al vidkonferenca RTMP-protokolo"
+
+msgid "SessionNameAlreadyExists"
+msgstr "Sesia nomo baldaŭ ekzistos"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "Neniu klaso estas kreita"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Ĉi tiu kampo estu numera"
+
+msgid "UserLocked"
+msgstr "Uzanto blokita"
+
+msgid "UserUnlocked"
+msgstr "Uzanto malblokita"
+
+msgid "CannotDeleteUser"
+msgstr "Vi ne povas forigi tiun uzanton"
+
+msgid "SelectedUsersDeleted"
+msgstr "Elektitaj uzantoj forigitaj"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Iuj uzantoj estas ne forigitaj"
+
+msgid "ExternalAuthentication"
+msgstr "Eksterna aŭtentikigo"
+
+msgid "RegistrationDate"
+msgstr "Registriĝa dato"
+
+msgid "UserUpdated"
+msgstr "Uzanto ĝisdatigita"
+
+msgid "HomePageFilesNotReadable"
+msgstr "Hejmpaĝaj dosieroj ne legeblas"
+
+msgid "Choose"
+msgstr "Elektu"
+
+msgid "ModifySessionCourse"
+msgstr "Ŝanĝi la kursan sesion"
+
+msgid "CourseSessionList"
+msgstr "Listo de kursoj en ĉi tiu sesio"
+
+msgid "SelectACoach"
+msgstr "Elekti gvidanton"
+
+msgid "UserNameUsedTwice"
+msgstr "Uzantnomo estas dufoje uzita"
+
+msgid "UserNameNotAvailable"
+msgstr "Tiu uzantnomo ne estas disponebla"
+
+msgid "UserNameTooLong"
+msgstr "Tiu uzantnomo estas tro longa"
+
+msgid "WrongStatus"
+msgstr "Tiu statuso ne ekzistas"
+
+msgid "ClassNameNotAvailable"
+msgstr "Tiu klasnomo ne disponeblas"
+
+msgid "FileImported"
+msgstr "Dosiero importita"
+
+msgid "WhichSessionToExport"
+msgstr "Elektu la eksportendan sesion"
+
+msgid "AllSessions"
+msgstr "Ĉiuj sesioj"
+
+msgid "CodeDoesNotExists"
+msgstr "Tiu kodo ne ekzistas"
+
+msgid "UnknownUser"
+msgstr "Nekonata uzanto"
+
+msgid "UnknownStatus"
+msgstr "Nekonata statuso"
+
+msgid "SessionDeleted"
+msgstr "Sesio forigita"
+
+msgid "CourseDoesNotExist"
+msgstr "Tiu kurso ne ekzistas"
+
+msgid "UserDoesNotExist"
+msgstr "Tiu uzanto ne ekzistas"
+
+msgid "ButProblemsOccured"
+msgstr "sed okazis problemoj"
+
+msgid "UsernameTooLongWasCut"
+msgstr "La uzantnomo estas mallongigita"
+
+msgid "NoInputFile"
+msgstr "Neniu dosiero sendita"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "La statuso de la studento estas transdonita al"
+
+msgid "WrongDate"
+msgstr "Malĝusta datoformato (tttt-mm-jj)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Ĉi tio estas aŭtomata retpoŝta mesaĝo. Bonvolu ne respondi ĝin"
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "Vi baldaŭ ricevos retpoŝtan mesaĝon de via gvidanto."
+
+msgid "SlideSize"
+msgstr "Grando de la diapozitivoj"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Prevento de Efora plagiato"
+
+msgid "CourseTeachers"
+msgstr "Kursinstruistoj"
+
+msgid "UnknownTeacher"
+msgstr "instruisto nekonata"
+
+msgid "HideDLTTMarkup"
+msgstr "Kaŝi DLTT-an aranĝon"
+
+msgid "ListOfCoursesOfSession"
+msgstr "Listo de kursoj por la sesio"
+
+msgid "UnsubscribeSelectedUsersFromSession"
+msgstr "Forigi elektitajn uzantojn el la sesio"
+
+msgid "ShowDifferentCourseLanguageComment"
+msgstr "Montri la lingvon de la kurso apud la kursan titolon sur la startpaĝo"
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "Montri sur la startpaĝo la kategoriojn de la kursoj, eĉ se ili estas malplenaj"
+
+msgid "ShowEmptyCourseCategories"
+msgstr "Montri malplenajn kursajn kategoriojn"
+
+msgid "XMLNotValid"
+msgstr "La XMLa dokumento ne validas"
+
+msgid "ForTheSession"
+msgstr "por la sesio"
+
+msgid "AllowEmailEditorTitle"
+msgstr "Aktivigi konektitan mesaĝilon"
+
+msgid "AllowEmailEditorComment"
+msgstr "Se tiu opcio estas aktiva, konektita mesaĝilo estas malfermata post alklako de retpoŝtadreso"
+
+msgid "AddCSVHeader"
+msgstr "Ĉu aldoni la CSV-titolon?"
+
+msgid "YesAddCSVHeader"
+msgstr "Jes, aldoni la CSV-titolon<br /> Tiu linio difinas la kampojn kaj estas necesan kiam vi volas importi la dosieron en alian Chamilo-kampon"
+
+msgid "ListOfUsersSubscribedToCourse"
+msgstr "Listo de uzantoj enskribitaj por la kurso"
+
+msgid "NumberOfCourses"
+msgstr "Nombro da kursoj"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Montri kurslingvojn"
+
+msgid "VisioRTMPTunnelPort"
+msgstr "Konektilo de vidokonferenca RTMTP-protokolo"
+
+msgid "name"
+msgstr "Nomo"
+
+msgid "Security"
+msgstr "Sekuro"
+
+msgid "UploadExtensionsListType"
+msgstr "Filtrilspeco por dokumentalŝuto"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "Uzo de nigralista aŭ blanklista filtrado. Por plia informo vidu priskribon de nigralisto aŭ blanklisto ĉi-malsupre"
+
+msgid "Blacklist"
+msgstr "Nigralisto"
+
+msgid "Whitelist"
+msgstr "Blanklisto"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "Nigralisto - agordoj"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "Blanklisto - agordoj"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "La nigralisto estas uzata por indiki dosiersufiksojn filtrendajn per forigo (aŭ renomo). La sufiksoj estas enigendaj sen antaŭa punkto (.) kej estas apartigataj per punktokomo (;). Ekzemple: exe;com;bat;scr;php. Dosieroj sen sufikso estas akceptataj. La usklado ne rolas."
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "La blanklisto estas uzata por filtri (forigi aŭ renomi)sufiksojn, kiuj ne enestas en la blanklisto. Tiu formo ĝenerale estas rigardata pli sekura, sed estas pli restrikta ol la nigralisto. La sufiksoj estu enigataj sen la punkto (.) kaj apartigata per punktokomo (;). Ekzemple: htm;html;txt;doc;xls;ppt  Sensufiksaj dosieroj estas akceptataj. La usklado ne rolas."
+
+msgid "UploadExtensionsSkip"
+msgstr "Filtrilaj ecoj (pretervidi/ renomi)"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "Se vi elektas pretervidi, dosieroj filtritaj per nigralisto aŭ blanklisto ne estas alŝutataj al la sistemo. Se vi elektas renomi, la sufiksoj estas anstataŭigotaj far tiu, kiu estas indikata en la sistemo. Atentu, ke renomi ne vere sekurigas kaj ankaŭ ke la alŝuto de dosieroj kun la sama nomo, sed alia sufikso povas konduki al eraroj."
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "Anstataŭanta sufikso"
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "Enigu la sufikson, kiun vi volas uzi anstataŭ la danĝera sufikso detektita far la filtrilo. Tio utilas nur se vi elektris filtri per anstataŭigo."
+
+msgid "Remove"
+msgstr "Forigi"
+
+msgid "Rename"
+msgstr "Renomi"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "Montri la nombron da kursoj en ĉiu kategorio en la listo de kategorioj sur la atartpaĝo"
+
+msgid "EphorusDescription"
+msgstr "Uzi la Eforan kontraŭplagiatan servon en Chamilo. Per Eforo vi senpene evitas interretan plagiaton. Vi povas uzi ĉi tiun unikan retservon por fari vian propran integrigadon aŭ peti helpon de la Chamilo-integrada modulo."
+
+msgid "EphorusLeadersInAntiPlagiarism"
+msgstr "Gvidantoj en kontraŭplagiatado"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "Klaku ĉi tie por pli da informo kaj prezoj"
+
+msgid "NameOfTheSession"
+msgstr "Sesia nomo"
+
+msgid "NoSessionsForThisUser"
+msgstr "Ĉi tiu uzanto ne estas enskribita en sesio"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "Montri kategoriojn sur la startpaĝo"
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "Ĉi tiu opcio vidigas aŭ kaŝas la kursajn kategoriojn sur la paĝo de la portalo"
+
+msgid "ShowTabsTitle"
+msgstr "Etiketoj en la titolo"
+
+msgid "ShowTabsComment"
+msgstr "Marku la elementojn, kiujn vi deziras vidi en la titolo. La ne markitaj elementoj aperos je la dekstra flanko de la kampa startpaĝo aŭ miakursa paĝo, se tio necesas."
+
+msgid "DefaultForumViewTitle"
+msgstr "malanstataŭa foruma prezento"
+
+msgid "DefaultForumViewComment"
+msgstr "Kiu estas la malanstataŭa prezento de forumo dum la preparo de nova forumo? Ĉiu kursadministranto tamen povas elekti apartan prezentadon por ĉiu forumo"
+
+msgid "TabsMyCourses"
+msgstr "Miakursa etiketo"
+
+msgid "TabsCampusHomepage"
+msgstr "Kampstartpaĝa etiketo"
+
+msgid "TabsReporting"
+msgstr "Raporta etiketo"
+
+msgid "TabsPlatformAdministration"
+msgstr "Platformadministranta etiketo"
+
+msgid "NoCoursesForThisSession"
+msgstr "Neniu kurso por tiu sesio"
+
+msgid "NoUsersForThisSession"
+msgstr "Neniu uzanto por tiu sesio"
+
+msgid "LastNameMandatory"
+msgstr "La familinomo ne povas resti malplena"
+
+msgid "FirstNameMandatory"
+msgstr "La antaŭnomo ne povas esti malplena"
+
+msgid "EmailMandatory"
+msgstr "La retpoŝtadreso ne povas esti malplena"
+
+msgid "TabsMyAgenda"
+msgstr "Miaagenda etiketo"
+
+msgid "NoticeWillBeNotDisplayed"
+msgstr "La averto ne estas montrata sur la startpaĝo"
+
+msgid "LetThoseFieldsEmptyToHideTheNotice"
+msgstr "Lasu la kampojn malplenaj por kaŝi la averton"
+
+msgid "Ppt2lpVoiceRecordingNeedsRed5"
+msgstr "La voĉrikorda funkcio en la lernpada redaktilo uzas Red5 fluiga servilo. La parametroj de tiu servilo povas esti konfigurataj en la videokonferenca sekcio ĉi-paĝe."
+
+msgid "PlatformCharsetTitle"
+msgstr "Tiparo"
+
+msgid "PlatformCharsetComment"
+msgstr "La tiparo difinas la manieron prezenti apartajn lingvojn en Chamilo. Se vi ekzemple uzas rusajn aŭ japanajn signojn, povas esti oportune adapti ĝin. Sed por ĉiuj anglaj, latinaj kaj okcidenteŭropaj signoj la tiparo UTF-8 kutimo taŭgas."
+
+msgid "ExtendedProfileRegistrationTitle"
+msgstr "Kampo de la etendita profilo dum registrado"
+
+msgid "ExtendedProfileRegistrationComment"
+msgstr "Kiuj el la ĉi-subaj kampoj de la ampleksa profilo estu disponeblaj, kiam uzanto registriĝas? Tio postulas, ke la ampleksa profilo estu aktiva (vidu supre)"
+
+msgid "ExtendedProfileRegistrationRequiredTitle"
+msgstr "Plenendaj kampoj de la ampleksa profilo dum registrado"
+
+msgid "ExtendedProfileRegistrationRequiredComment"
+msgstr "Kiuj el la ĉi-subaj kampoj de la ampleksa profilo estu devige plenigataj, kiam uzul registriĝas? Tio postulas, ke la ampleksa profilo estu aktiva, kaj ke la kampo disponeblas ĉe registrado (vidu ĉi-supre)"
+
+msgid "NoReplyEmailAddress"
+msgstr "Mankas responda retpoŝtadreso"
+
+msgid "NoReplyEmailAddressComment"
+msgstr "Tiu estas la retpoŝtadreso uzata, kiam estas sendenda mesaĝo, en kiu eksplicite estas petata ne respondi. Plejofte tiu retpoŝtadreso estas tiel notita en via servilo, ke envenantaj mesaĝoj estas ignorataj/ rifuzataj."
+
+msgid "SurveyEmailSenderNoReply"
+msgstr "Sendinto de esplora nerespondenda retpoŝtaĵo"
+
+msgid "SurveyEmailSenderNoReplyComment"
+msgstr "Ĉu la retpoŝtaj invitoj sendotaj por esplori povas uzi la retpoŝtadreson de la ekzercanto/instruisto, aŭ de la speciala nerespondadreso (donita en la ĝenerala konfiguro)?"
+
+msgid "CourseCoachEmailSender"
+msgstr "Retpoŝtadreso de la mentoro"
+
+msgid "NoReplyEmailSender"
+msgstr "\"Senresponda\" retpoŝtadreso"
+
+msgid "Flat"
+msgstr "Ebene"
+
+msgid "Threaded"
+msgstr "Strukturite"
+
+msgid "Nested"
+msgstr "Skeme"
+
+msgid "OpenIdAuthenticationComment"
+msgstr "Aktivigu la OpenID URL-bazitan aŭtentikigilon (aperos kroma ensalutformularo sur la hejmpaĝo)"
+
+msgid "VersionCheckEnabled"
+msgstr "Versikontrolo enŝaltitas"
+
+msgid "InstallDirAccessibleSecurityThreat"
+msgstr "La dosierujo main/install de via Chamilo-sistemo ankoraŭ ĉiam alireblas por retuzantoj. Tio endaĝerigas vian sekurecon. Ni konsilas vin forigi tiun dosierujon, aŭ ŝanĝi la permesojn por malebligi retuzantojn aliri la enhavon de tiu dosierujo."
+
+msgid "GradebookActivation"
+msgstr "Aktivigi la certigilaron."
+
+msgid "GradebookActivationComment"
+msgstr "La aktivigo de la certigilaro ebligas difini la lernocelojn per atingendaj poentaroj, sed se vi ne uzas tion, ĝi senutile komplikigas la interfacon. Ĉu vi deziras aktvigi la certigilaron?"
+
+msgid "UserTheme"
+msgstr "Temo (stilpaĝo)"
+
+msgid "UserThemeSelection"
+msgstr "Temelekto de uzanto"
+
+msgid "UserThemeSelectionComment"
+msgstr "Permesi al uzantoj elekti propran vidan temon en sia profilo. Per tio Chamilo aspektos alie por ili, sen ŝanĝi la norman stilon de la portalo. Se specifa kurso aŭ sesio havas propran temon, ĝi havas prioritaton antaŭ tiu de la uzanto."
+
+msgid "AllowurlfopenIsSetToOff"
+msgstr "La PHP-agordo \"allow_url_fopen\" estas malŝaltita. Sekve la registrilo ne povas ĝuste funkcii. Tiu agordo estas ŝanĝebla en via PHP-konfiguraĵo (php.ini) aŭ en la Apache Virtual Host-konfiguraĵo, per instruo php_admin_value"
+
+msgid "VisioHost"
+msgstr "Sevila gastnomo aŭ IP-adreso de la vidokonferenco"
+
+msgid "VisioPort"
+msgstr "Vidokonferenca servila pordo"
+
+msgid "VisioPassword"
+msgstr "Vidokonferenca servila pasvorto"
+
+msgid "Port"
+msgstr "Pordo"
+
+msgid "EphorusClickHereForADemoAccount"
+msgstr "Klaku ĉi tie por demonstracia konto"
+
+msgid "ManageUserFields"
+msgstr "Administracii uzulajn kampojn"
+
+msgid "UserFields"
+msgstr "Uzulaj kampoj"
+
+msgid "AddUserField"
+msgstr "Aldoni uzulan kampon"
+
+msgid "FieldLabel"
+msgstr "Uzula vinjeto"
+
+msgid "FieldType"
+msgstr "Kampa tipo"
+
+msgid "FieldTitle"
+msgstr "Kampa titolo"
+
+msgid "FieldDefaultValue"
+msgstr "Kampa mankovaloro"
+
+msgid "FieldOrder"
+msgstr "Kampa ordigo"
+
+msgid "FieldVisibility"
+msgstr "Kampa videblo"
+
+msgid "FieldChangeability"
+msgstr "Kampa ŝanĝeblo"
+
+msgid "FieldTypeText"
+msgstr "Teksto"
+
+msgid "FieldTypeTextarea"
+msgstr "Tekstkampo"
+
+msgid "FieldTypeRadio"
+msgstr "Radiobutonoj"
+
+msgid "FieldTypeSelect"
+msgstr "Elektolisto"
+
+msgid "FieldTypeSelectMultiple"
+msgstr "Plurelekta listo"
+
+msgid "FieldAdded"
+msgstr "Kampo aldonitis"
+
+msgid "GradebookScoreDisplayColoring"
+msgstr "Kolorigi la rezultojn"
+
+msgid "GradebookScoreDisplayColoringComment"
+msgstr "Marku la elekton por kolorigi la rezulton. Vi montru kiuj rezultoj iĝu ekzemple ruĝaj."
+
+msgid "TabsGradebookEnableColoring"
+msgstr "Aktivigi la kolorigon de rezultoj"
+
+msgid "GradebookScoreDisplayCustom"
+msgstr "Montri la uzulajn kolorojn"
+
+msgid "GradebookScoreDisplayCustomComment"
+msgstr "Elektu ĉi tiun opcion por aktivigi la montron de alĝustigitaj koloroj"
+
+msgid "TabsGradebookEnableCustom"
+msgstr "Aktivigu alĝustigitajn rezultojn"
+
+msgid "GradebookScoreDisplayColorSplit"
+msgstr "Disponeblaj koloroj"
+
+msgid "GradebookScoreDisplayColorSplitComment"
+msgstr "Lima procentaĵo, sub kiu la rezultoj iĝos ruĝaj"
+
+msgid "GradebookScoreDisplayUpperLimit"
+msgstr "Montri la supran limon"
+
+msgid "GradebookScoreDisplayUpperLimitComment"
+msgstr "Marki la supran limon de la rezultoj"
+
+msgid "TabsGradebookEnableUpperLimit"
+msgstr "Aktivigi la supran limon de la rezultoj"
+
+msgid "AddUserFields"
+msgstr "Aldoni uzulan kampon"
+
+msgid "FieldPossibleValues"
+msgstr "Eblaj valoroj"
+
+msgid "FieldPossibleValuesComment"
+msgstr "Nur por ripetataj kampoj, apartigitaj per punktokomoj (;)"
+
+msgid "FieldTypeDate"
+msgstr "Dato"
+
+msgid "FieldTypeDatetime"
+msgstr "Dato kaj tempo"
+
+msgid "UserFieldsAddHelp"
+msgstr "Aldoni uzulan kampon estas facile <br /> - elektu identigilon konsistantan el unu vorto kaj nur minuskloj sen specialaj karaktroj<br /> - elektu la teksto aperonta por la uzulo (se vi uzas ekzistantan lingvovariablon, kia BirthDate aŭ UserSex ĝi estos aŭtomate tradukata en la uzulan lingvon.<br /> - se vi elektis kampon kun pluraj ebloj (radio, elekto, multoblelekto) vi povasdifini la eblajn elektojn (ankaŭ ĉi tie vi povas uzi la tradukojn de Chamilo) apartigante ilin per punktokomoj<br /> - por teksttipoj vi povas elekti norman valoron<br /><br />- Fininte tion vi povas aldoni la kampon kaj elekti ĉu vi volas igi ĝin videbla kaj/aŭ ŝanĝebla por la uzulo. Igi ĝin ŝanĝebla sed nevidebla estas senutila."
+
+msgid "AllowCourseThemeTitle"
+msgstr "Ebligi la uzon de kursaj stilpaĝoj"
+
+msgid "UploadNewStylesheet"
+msgstr "Nova stilpaĝa dosiero"
+
+msgid "StylesheetAdded"
+msgstr "Stilpaĝo aldonitas"
+
+msgid "LDAPFilledTutorFieldValueTitle"
+msgstr "Identiga valoro de  repetitoro"
+
+msgid "LDAPFilledTutorFieldValueComment"
+msgstr "Se la ĉi-supre donita repetitora kampo estas markita, ties valoro estu ene de unu el la repetitorkampaj subelementoj por ke la uzanto estu konsiderata kiel instruisto. Se vi lasas ĉi tiun kampon malplena, la sola kondiĉo estas, ke la kampo ekzistas por ĉi tiu LDAP-uzanto estu konsiderata kiel instruisto. Ekzemple, la kampo povus esti \"membro de\" kaj la valoro serĉata povus esti \"CN=G_TREJNISTO,OU=Trejnisto\"."
+

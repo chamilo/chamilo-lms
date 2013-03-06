@@ -1,0 +1,132 @@
+msgid "LearnPathAddedTitle"
+msgstr "Malugod na pagdating sa authoring tool ng kurso ng Chamilo !"
+
+msgid "DisplayComment"
+msgstr "Panoorin ang kurso mula sa punto-de-vista ng mag-aaral"
+
+msgid "NewStepComment"
+msgstr "Magdagdag ng mga pagsusulit, mga aktibidad at nilalaman ng multimedia"
+
+msgid "LearnpathTitle"
+msgstr "Pamagat"
+
+msgid "LearnpathAddLearnpath"
+msgstr "Lumikha ng bagong kurso (Chamilo MAY-AKDA)"
+
+msgid "LearnpathEditLearnpath"
+msgstr "I-edit ang learnpath"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "Tanggalin ang kurso"
+
+msgid "LearnpathPublish"
+msgstr "Ilathala sa homepage ng pagsasanay"
+
+msgid "LearnpathEditModule"
+msgstr "I-edit ang paglalarawan ng seksyon/pangalan"
+
+msgid "LearnpathDeleteModule"
+msgstr "Tanggalin ang seksyon"
+
+msgid "langNewChapter"
+msgstr "Magdagdag ng seksyon"
+
+msgid "langNewStep"
+msgstr "Magdagdag ng bagay na pinag-aaralan o aktibidad"
+
+msgid "langEnterDataNewChapter"
+msgstr "Pagdadagdag ng isang seksyon sa kurso"
+
+msgid "langNewDocument"
+msgstr "Matingkad na pahina ng media / aktibidad"
+
+msgid "langPosition"
+msgstr "Sa talaan ng mga nilalaman"
+
+msgid "langViewModeEmbedded"
+msgstr "Kasalukuyang view mode: embedded"
+
+msgid "langShowDebug"
+msgstr "Ipakita ang debug"
+
+msgid "langNewDocumentCreated"
+msgstr "Ang matingkad na pahina ng media/aktibidad ay naidagdag sa kurso"
+
+msgid "langUploadScorm"
+msgstr "I-import ang kurso ng SCORM"
+
+msgid "FirstPosition"
+msgstr "Unang posisyon"
+
+msgid "AddLpIntro"
+msgstr "<strong>Malugod</strong> na pagdating sa authoring tool ng Kurso ng Chamilo.<br />Lumikha ng iyong mga kurso ng hakbang-sa-hakbang. Ang talaan ng mga nilalaman ay lilitaw sa bandang kaliwa."
+
+msgid "AddLpToStart"
+msgstr "Upang magsimula, magbigay ng pamagat sa iyong kurso"
+
+msgid "AllowMultipleAttempts"
+msgstr "Payagan ang maramihang pagtatangka"
+
+msgid "NewExercise"
+msgstr "Bagong pagsusulit"
+
+msgid "CreateANewForum"
+msgstr "Lumikha ng bagong forum"
+
+msgid "LinkAdd"
+msgstr "Magdagdag ng link"
+
+msgid "ReturnToLearningPaths"
+msgstr "Bumalik sa mga learning path"
+
+msgid "UpdateAllAudioFragments"
+msgstr "Magdagdag ng audio"
+
+msgid "RemoveAudio"
+msgstr "Tanggalin ang audio"
+
+msgid "ImageWillResizeMsg"
+msgstr "Ang larawan ng trainer ay magre-resize kung kinakailangan"
+
+msgid "EditLPSettings"
+msgstr "I-edit ang mga setting ng kurso"
+
+msgid "SaveLPSettings"
+msgstr "I-save ang mga setting ng kurso"
+
+msgid "ShowAllAttempts"
+msgstr "Ipakita ang lahat ng mga pagtatangka"
+
+msgid "HideAllAttempts"
+msgstr "Itago ang lahat ng mga pagtatangka"
+
+msgid "CreateLearningPath"
+msgstr "Magpatuloy"
+
+msgid "AddForum"
+msgstr "Magdagdag ng isang forum"
+
+msgid "LPCreateDocument"
+msgstr "Idagdag ang dokumentong ito sa kurso"
+
+msgid "LPName"
+msgstr "Pangalan ng kurso"
+
+msgid "AuthoringOptions"
+msgstr "Mga opsyon sa authoring"
+
+msgid "SaveSection"
+msgstr "I-save ang seksyon"
+
+msgid "SaveAudioAndOrganization"
+msgstr "I-save ang audio at organisasyon"
+
+msgid "LpPrerequisiteDescription"
+msgstr "Ang pagpipili ng isa pang learning path bilang prerequisite ay magtatago sa kasalukuyang prerequisite hanggang ang isang prerequisite ay nakumpleto nang buo (100%)"
+
+msgid "UseMaxScore100"
+msgstr "Gamitin ang maximum na default score na 100"
+
+msgid "LPNotVisibleToStudent"
+msgstr "Ang mga mag-aaral ay hindi makikita itong learning path"
+

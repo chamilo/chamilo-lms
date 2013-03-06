@@ -1,0 +1,174 @@
+msgid "langOnlineConference"
+msgstr "Conferência"
+
+msgid "langWash"
+msgstr "Limpar"
+
+msgid "langReset"
+msgstr "Reiniciar"
+
+msgid "langSave"
+msgstr "Salvar"
+
+msgid "langRefresh"
+msgstr "Atualizar"
+
+msgid "langIsNowInYourDocDir"
+msgstr "foi adicionado à sua área de Documentos. <br><B>Este arquivo será visível a todos os usuários</B>"
+
+msgid "langCopyFailed"
+msgstr "A impressão falhou"
+
+msgid "langTypeMessage"
+msgstr "Por favor, digite a sua mensagem!"
+
+msgid "langConfirmReset"
+msgstr "Tem a certeza que deseja excluir todas as mensagens?"
+
+msgid "langHasResetChat"
+msgstr "foi enviada para o Chat"
+
+msgid "langNoOnlineConference"
+msgstr "Não há conferências nesse momento ..."
+
+msgid "langMediaFile"
+msgstr "Áudio ao vivo ou streaming de vídeo"
+
+msgid "langContentFile"
+msgstr "Apresentação"
+
+msgid "langListOfParticipants"
+msgstr "Lista de participantes"
+
+msgid "langYourPicture"
+msgstr "Sua foto"
+
+msgid "langOnlineDescription"
+msgstr "Descrição da conferência"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Por favor, selecione esta caixa apenas para perguntar algo importante !"
+
+msgid "langQuestion"
+msgstr "questão"
+
+msgid "langClearList"
+msgstr "Limpar a lista"
+
+msgid "langWhiteBoard"
+msgstr "Quadro branco"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Editor de texto</h2>Copie e cole directamente do seu Ms-Word® e edite. Os participantes irão ver as suas modificações ao vivo."
+
+msgid "langStreaming"
+msgstr "Streaming"
+
+msgid "langStreamURL"
+msgstr "URL do stream"
+
+msgid "langStreamType"
+msgstr "Tipo de stream"
+
+msgid "langLinkName"
+msgstr "Nome do link"
+
+msgid "langLinkURL"
+msgstr "URL do link"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Bem vindo à <b>Conferência On-line</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Nenhum Link disponível"
+
+msgid "langChat_reset_by"
+msgstr "limpar chat"
+
+msgid "OrFile"
+msgstr "Ou arquivo"
+
+msgid "langCallSent"
+msgstr "O convite para o Chat foi enviado. Aguarde aprovação do usuário solicitado."
+
+msgid "langChatDenied"
+msgstr "Seu convite para o chat não foi aceito pelo usuário."
+
+msgid "Send"
+msgstr "Enviar"
+
+msgid "Connected"
+msgstr "Conectados"
+
+msgid "Think"
+msgstr "Pensar"
+
+msgid "BigGrin"
+msgstr "Grande sorriso"
+
+msgid "Amazing"
+msgstr "Extraordinário"
+
+msgid "Confused"
+msgstr "Confuso"
+
+msgid "Cool"
+msgstr "Frio"
+
+msgid "Surprised"
+msgstr "Surpreso"
+
+msgid "Hand"
+msgstr "Olá"
+
+msgid "Wink"
+msgstr "Piscar"
+
+msgid "Neutral"
+msgstr "Neutro"
+
+msgid "Angry"
+msgstr "Zangado"
+
+msgid "Avid"
+msgstr "Ávido"
+
+msgid "Redface"
+msgstr "Envergonhado"
+
+msgid "Sad"
+msgstr "Triste"
+
+msgid "Silence"
+msgstr "Silêncio"
+
+msgid "Silenced"
+msgstr "Silenciados"
+
+msgid "Smile"
+msgstr "Sorriso"
+
+msgid "Exclamation"
+msgstr "Exclamação"
+
+msgid "Arrow"
+msgstr "Seta"
+
+msgid "Question"
+msgstr "Pergunta"
+
+msgid "Idea"
+msgstr "Idéia"
+
+msgid "AskPermissionSpeak"
+msgstr "Pedir autorização para falar"
+
+msgid "GiveTheFloorTo"
+msgstr "Dar a palavra a"
+
+msgid "Pause"
+msgstr "Pausa"
+
+msgid "Stop"
+msgstr "Parar"
+

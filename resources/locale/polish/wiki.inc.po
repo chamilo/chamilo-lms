@@ -1,0 +1,27 @@
+msgid "Wiki"
+msgstr "Wiki - Grupa"
+
+msgid "StartPage"
+msgstr "Strona startowa"
+
+msgid "ShowPageHistory"
+msgstr "Pokaż historię strony"
+
+msgid "AllPages"
+msgstr "Wszystkie strony"
+
+msgid "AddNew"
+msgstr "Dodaj nową stronę"
+
+msgid "Legend"
+msgstr "Legenda"
+
+msgid "Print"
+msgstr "Drukuj"
+
+msgid "Visits"
+msgstr "wizyty"
+
+msgid "Changes"
+msgstr "modyfikacje"
+

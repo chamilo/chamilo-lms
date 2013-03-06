@@ -1,0 +1,313 @@
+msgid "FlatView"
+msgstr "Ravni pregled"
+
+msgid "ScoreEdit"
+msgstr "Uređivanje pravila ocjenjivanja"
+
+msgid "ScoreColor"
+msgstr "Boja ocjene"
+
+msgid "ScoringSystem"
+msgstr "Sustav ocjenjivanja"
+
+msgid "EnableScoreColor"
+msgstr "Omoguči označavanje bojom ocjena"
+
+msgid "Below"
+msgstr "ispod"
+
+msgid "WillColorRed"
+msgstr "biti će označeno crvenom bojom"
+
+msgid "EnableScoringSystem"
+msgstr "Omoguči sustav ocjenjivanja"
+
+msgid "IncludeUpperLimit"
+msgstr "Obuhvati gornju granicu"
+
+msgid "ScoreInfo"
+msgstr "Informacija o rezultatu"
+
+msgid "Between"
+msgstr "između"
+
+msgid "CurrentCategory"
+msgstr "Trenutna kategorija"
+
+msgid "RootCat"
+msgstr "Temeljna kategorija"
+
+msgid "NewCategory"
+msgstr "Nova kategorija"
+
+msgid "NewEvaluation"
+msgstr "Novo ocjenjivanje"
+
+msgid "Weight"
+msgstr "Težina"
+
+msgid "PickACourse"
+msgstr "Odaberite kolegij"
+
+msgid "CategoryName"
+msgstr "Naziv kategorije"
+
+msgid "CourseIndependent"
+msgstr "Neovisno od kolegija"
+
+msgid "CourseIndependentEvaluation"
+msgstr "Ocjenjivanje, neovisno od kolegija"
+
+msgid "EvaluationName"
+msgstr "Naziv ocjenjivanja"
+
+msgid "Max"
+msgstr "Max"
+
+msgid "DateEval"
+msgstr "Nadnevak ocjenjivanja"
+
+msgid "AddUserToEval"
+msgstr "Dodaj studente za ocjenjivanje"
+
+msgid "NewSubCategory"
+msgstr "Nova podkategorija"
+
+msgid "MakeLink"
+msgstr "Napravi poveznicu"
+
+msgid "DeleteSelected"
+msgstr "Obriši odabrano"
+
+msgid "SetVisible"
+msgstr "Prikaži"
+
+msgid "SetInvisible"
+msgstr "Sakrij"
+
+msgid "ChooseLink"
+msgstr "Odaberi vrstu poveznice"
+
+msgid "DokeosExercises"
+msgstr "Chamilo vježbe"
+
+msgid "DokeosDropbox"
+msgstr "Chamilo pretinac"
+
+msgid "DokeosStudentPublications"
+msgstr "Chamilo studentski radovi"
+
+msgid "DokeosLearningPaths"
+msgstr "Chamilo putevi učenja"
+
+msgid "ChooseExercise"
+msgstr "Odaberite vježbu"
+
+msgid "AddResult"
+msgstr "Dodaj rezultate"
+
+msgid "BackToOverview"
+msgstr "Nazad na pregled"
+
+msgid "ExportPDF"
+msgstr "Prenesi u PDF format"
+
+msgid "Print"
+msgstr "Tiskanje"
+
+msgid "ChooseOrientation"
+msgstr "Odaberite usmjerivanje"
+
+msgid "Portrait"
+msgstr "Uspravno"
+
+msgid "Landscape"
+msgstr "Vodoravno"
+
+msgid "FilterCategory"
+msgstr "Filtriraj kategoriju"
+
+msgid "DeleteAll"
+msgstr "Obriši sve"
+
+msgid "ScoringUpdated"
+msgstr "Rezultati su ažurirani"
+
+msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
+msgstr "%s potvrđuje da je
+
+ %s 
+
+uspješno završio kolegij 
+
+ \'%s\' 
+
+sa ocjenom
+
+ \'%s\'"
+
+msgid "CertificateMinScore"
+msgstr "Minimalni rezultat prolaznosti"
+
+msgid "CategoryAdded"
+msgstr "Kategorija dodana"
+
+msgid "InViMod"
+msgstr "Kategorija sakrivena"
+
+msgid "ViMod"
+msgstr "Kategorija prikazana"
+
+msgid "ViewResult"
+msgstr "Pregled rezultata"
+
+msgid "NoUser"
+msgstr "Nema studenta"
+
+msgid "NoResultsInEvaluation"
+msgstr "Za sada nema rezultata ocjenjivanja"
+
+msgid "AddStudent"
+msgstr "Dodaj studenta"
+
+msgid "ImportResult"
+msgstr "Učitaj rezultate"
+
+msgid "Score"
+msgstr "Poredak"
+
+msgid "ImportFileLocation"
+msgstr "Put do tražene datoteke"
+
+msgid "Location"
+msgstr "Mjesto"
+
+msgid "FileType"
+msgstr "Vrsta datoteke"
+
+msgid "ExampleCSVFile"
+msgstr "Primjer CSV datoteke"
+
+msgid "ExampleXMLFile"
+msgstr "Primjer XML datoteke"
+
+msgid "OverwriteScores"
+msgstr "Prepiši rezultate"
+
+msgid "IgnoreErrors"
+msgstr "Zanemari pogreške"
+
+msgid "ItemsVisible"
+msgstr "Odabrani elementi su vidljivi"
+
+msgid "ItemsInVisible"
+msgstr "Odabrani elementi su skriveni"
+
+msgid "NoItemsSelected"
+msgstr "Niti jedan element nije odabran"
+
+msgid "DeletedCategories"
+msgstr "Obrisane kategorije"
+
+msgid "DeletedEvaluations"
+msgstr "Obrisane ocjene"
+
+msgid "DeletedLinks"
+msgstr "Obrisane poveznice"
+
+msgid "TotalItems"
+msgstr "Ukupno elemenata"
+
+msgid "LinkAdded"
+msgstr "Poveznica dodana"
+
+msgid "LinkDeleted"
+msgstr "Poveznica obrisana"
+
+msgid "EditEvaluation"
+msgstr "Uredi ocjenjivanje"
+
+msgid "DeleteResult"
+msgstr "Obriši rezultat"
+
+msgid "Display"
+msgstr "Ocjena"
+
+msgid "Average"
+msgstr "Prosjek"
+
+msgid "ViewStatistics"
+msgstr "Pregled statistike"
+
+msgid "ResultAdded"
+msgstr "Dodan rezultat"
+
+msgid "EvaluationStatistics"
+msgstr "Statistika ocjenjivanja"
+
+msgid "ExportResult"
+msgstr "Prenesi rezultate"
+
+msgid "EditResult"
+msgstr "Uredi rezultate"
+
+msgid "GradebookWelcomeMessage"
+msgstr "Dobro došli u alat za ocjenjivanje. Ovaj alat vam omogućava određivanje potrebnog zadovoljavanja uvjeta za jedan ili više kolegija te unos vanjskog ocjenjivanja u sustav."
+
+msgid "CreateAllCat"
+msgstr "Napravi sve kategorije kolegija"
+
+msgid "AddAllCat"
+msgstr "Dodane sve kategorije"
+
+msgid "StatsStudent"
+msgstr "Statistika za"
+
+msgid "Results"
+msgstr "Rezultati"
+
+msgid "Certificates"
+msgstr "Potvrđuje"
+
+msgid "Certificate"
+msgstr "Potvrda"
+
+msgid "ChooseUser"
+msgstr "Odaberite studenta za ocjenjivanje"
+
+msgid "FirstLetter"
+msgstr "Prvo slovo prezimena"
+
+msgid "UserAdded"
+msgstr "Korisnik je dodan"
+
+msgid "ResultEdited"
+msgstr "Rezultat ažuriran"
+
+msgid "ChooseFormat"
+msgstr "Odaberite format"
+
+msgid "OutputFileType"
+msgstr "Vrsta datoteke za prenos"
+
+msgid "OverMax"
+msgstr "Vrijednost koju pokušavate upisati je veća od dozvoljene granice za ovo ocjenjivanje."
+
+msgid "MoreInfo"
+msgstr "Više informacija"
+
+msgid "ResultsPerUser"
+msgstr "Rezultati po studentu"
+
+msgid "TotalUser"
+msgstr "Ukupni zbroj za studenta"
+
+msgid "AverageTotal"
+msgstr "Prosjek ukupnog zbroja"
+
+msgid "Evaluation"
+msgstr "Ocjenjivanja"
+
+msgid "EvaluationAverage"
+msgstr "Prosjek ocjenjivanja"
+

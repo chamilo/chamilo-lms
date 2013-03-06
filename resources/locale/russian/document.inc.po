@@ -1,0 +1,342 @@
+msgid "MoveTo"
+msgstr "Переместить в"
+
+msgid "langDownloadFile"
+msgstr "Выгрузить файл на сервер"
+
+msgid "langNameDir"
+msgstr "Название новой папки"
+
+msgid "langSize"
+msgstr "Размер"
+
+msgid "langRename"
+msgstr "Переименовать"
+
+msgid "langCopy"
+msgstr "Копировать содержимое курса"
+
+msgid "langTo"
+msgstr "в"
+
+msgid "langNoSpace"
+msgstr "Загрузка файла не удалась. Либо Вы превысили Вашу максимальную квоту, либо не достаточно места на диске."
+
+msgid "langDownloadEnd"
+msgstr "Загрузка закончена"
+
+msgid "langFileExists"
+msgstr "Операция невозможна, файл с таким именем уже существует"
+
+msgid "langImpossible"
+msgstr "Операция невозможна"
+
+msgid "langAddComment"
+msgstr "Добавить/изменить комментарий для"
+
+msgid "langDocCopied"
+msgstr "Документ скопирован"
+
+msgid "langDocDeleted"
+msgstr "Документ удален"
+
+msgid "langElRen"
+msgstr "Элемент переименован"
+
+msgid "langDirMv"
+msgstr "Элемент перемещен"
+
+msgid "langComMod"
+msgstr "Комментарий изменен"
+
+msgid "langViMod"
+msgstr "Видимость изменена"
+
+msgid "langGroupSpace"
+msgstr "Зона группы"
+
+msgid "langGroupSpaceLink"
+msgstr "Зона группы"
+
+msgid "langGroupForumLink"
+msgstr "Форум группы"
+
+msgid "langZipNoPhp"
+msgstr "Архив .zip не может содержать файлы с расширением .PHP"
+
+msgid "langUncompress"
+msgstr "Разархивировать zip"
+
+msgid "langDownloadAndZipEnd"
+msgstr "Zip файл загружен и разархивирован"
+
+msgid "langRoot"
+msgstr "корень"
+
+msgid "CreateDoc"
+msgstr "Создать документ"
+
+msgid "langDown"
+msgstr "вниз"
+
+msgid "langFileError"
+msgstr "Файл для загрузки не действителен"
+
+msgid "langMaxFileSize"
+msgstr "Максимальный размер файла - это"
+
+msgid "langFileName"
+msgstr "Имя файла"
+
+msgid "langNoFileName"
+msgstr "Пожалуйста, введите имя файла"
+
+msgid "langNoText"
+msgstr "Пожалуйста, введите свой текст (HTML)"
+
+msgid "langAreYouSureToDelete"
+msgstr "Вы уверены, что хотите удалить"
+
+msgid "langScormcontent"
+msgstr "Это содержимое Scorm <br /><input type=button name=scormbutton value=\'Пуск!\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr "Это курс в формате Scorm. Чтобы начать, нажмите здесь : <input type=button name=scormbutton value=\'Пуск!\' onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Опубликовать"
+
+msgid "langMissingImagesDetected"
+msgstr "Обнаружены недостающие изображения"
+
+msgid "langCreateDocument"
+msgstr "Создать документ"
+
+msgid "langEditDocument"
+msgstr "Редактировать"
+
+msgid "langDocuments"
+msgstr "Документы"
+
+msgid "langOrganiseDocuments"
+msgstr "Создать содержание"
+
+msgid "langEditTOC"
+msgstr "Редактировать содержание"
+
+msgid "langChapter"
+msgstr "Глава"
+
+msgid "langDocumentList"
+msgstr "Список всех документов"
+
+msgid "langOrganisationList"
+msgstr "Содержание"
+
+msgid "langCreationSucces"
+msgstr "Содержание успешно создано"
+
+msgid "langCanViewOrganisation"
+msgstr "Вы можете просмотреть свою организацию"
+
+msgid "langHere"
+msgstr "здесь."
+
+msgid "langViewDocument"
+msgstr "Просмотр"
+
+msgid "langHtmlTitle"
+msgstr "Содержание"
+
+msgid "langAddToTOC"
+msgstr "Добавить в содержание"
+
+msgid "langAddChapter"
+msgstr "Добавить главу"
+
+msgid "langReady"
+msgstr "Генерировать содержание"
+
+msgid "langStoreDocuments"
+msgstr "Накопитель документов"
+
+msgid "langTocDown"
+msgstr "Вниз"
+
+msgid "langTocUp"
+msgstr "Вверх"
+
+msgid "CutPasteLink"
+msgstr "Без рамок"
+
+msgid "langCreatePath"
+msgstr "Создать путь (план)"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "Oogie: превращение в формат PowerPoint"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "Преобразователь PowerPoint в Учебный план"
+
+msgid "langAddMetadata"
+msgstr "Просмотреть/Редактировать метаданные (данные о данных)"
+
+msgid "langGoMetadata"
+msgstr "Старт"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "Квота для этого курса равна"
+
+msgid "langDel"
+msgstr "удалить"
+
+msgid "langUp"
+msgstr "Вверх"
+
+msgid "langDate"
+msgstr "Дата"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Показать квоту курса"
+
+msgid "CourseCurrentlyUses"
+msgstr "Этот курс в настоящее время используется"
+
+msgid "MaximumAllowedQuota"
+msgstr "Ваш лимит накопления"
+
+msgid "PercentageQuotaInUse"
+msgstr "Доля Вашей квоты, которая в пользовании"
+
+msgid "PercentageQuotaFree"
+msgstr "Доля Вашей квоты, которая еще свободна"
+
+msgid "CurrentDirectory"
+msgstr "Текущая папка"
+
+msgid "UplUploadDocument"
+msgstr "Загрузить документ"
+
+msgid "UplPartialUpload"
+msgstr "Загружаемый файл был загружет только частично"
+
+msgid "UplExceedMaxPostSize"
+msgstr "Размер файла превышает максимально возможные настройки:"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "Загружаемый файл превышает максимально разрешенные на сервере размеры файла:"
+
+msgid "UplFileTooBig"
+msgstr "Файл слишком большой для загрузки"
+
+msgid "UplUploadFailed"
+msgstr "Загрузка файла не удалась"
+
+msgid "UplUnableToSaveFile"
+msgstr "Загруженный файл не может быть сохранен (возможно проблемы с разрешением на запись?)"
+
+msgid "UplNotEnoughSpace"
+msgstr "Не достаточно места для загрузки этого файла"
+
+msgid "UplNoSCORMContent"
+msgstr "Никакого содержимого SCORM найдено не было"
+
+msgid "UplZipExtractSuccess"
+msgstr "Архив zip был успешно извлечен"
+
+msgid "UplZipCorrupt"
+msgstr "Невозможно извлечь архив zip (поврежденный файл?)"
+
+msgid "UplAlreadyExists"
+msgstr "уже существует."
+
+msgid "UplFileSavedAs"
+msgstr "Файл сохранен как"
+
+msgid "UplFileOverwritten"
+msgstr "был перезаписан."
+
+msgid "CannotCreateDir"
+msgstr "Невозможно создать папку."
+
+msgid "UplUpload"
+msgstr "Загрузить"
+
+msgid "UplWhatIfFileExists"
+msgstr "Если файл существует:"
+
+msgid "UplDoNothing"
+msgstr "Ничего не делать"
+
+msgid "UplDoNothingLong"
+msgstr "Не загружать, если файл существует"
+
+msgid "UplOverwrite"
+msgstr "Перезаписать"
+
+msgid "UplOverwriteLong"
+msgstr "Перезаписать существующий файл"
+
+msgid "UplRename"
+msgstr "Переименовать"
+
+msgid "UplRenameLong"
+msgstr "Переименовать загруженный файл, если он существует"
+
+msgid "Metadata"
+msgstr "Метаданные (данные о данных)"
+
+msgid "DocumentQuota"
+msgstr "Квота для документов"
+
+msgid "NoDocsInFolder"
+msgstr "Нет документов для демонстрации"
+
+msgid "UploadTo"
+msgstr "Загрузить в"
+
+msgid "fileModified"
+msgstr "Файл изменен"
+
+msgid "DocumentsOverview"
+msgstr "Просмотр документов"
+
+msgid "ViewSlideshow"
+msgstr "Галерея изображений (слайдшоу)"
+
+msgid "Options"
+msgstr "Опции"
+
+msgid "WelcomeOogieConverter"
+msgstr "Добро пожаловать в Oogie преобразователь PowerPoint <ul type=\"1\"><li>Просмотрите Ваш жесткий диск, чтобы найти файлы с расширениями .ppt или .odp <li>Загрузите их на Oogie. Это трансформирует их в учебный план Scorm.<li>После этого Вам будет разрешено добавлять аудио комментарии по каждому слайду и вставлять тесты между слайдами для оценки знаний"
+
+msgid "ConvertToLP"
+msgstr "Преобразовать в Учебный план"
+
+msgid "AdvancedSettings"
+msgstr "Расширенные настройки"
+
+msgid "File"
+msgstr "Файл"
+
+msgid "DocDeleteError"
+msgstr "Произошла ошибка во время удаления документа"
+
+msgid "ViModProb"
+msgstr "Проблема возникла во время обновления статуса видимости"
+
+msgid "DirDeleted"
+msgstr "Папка удалена"
+
+msgid "TemplateName"
+msgstr "Образец (шаблон) имени"
+
+msgid "TemplateDescription"
+msgstr "Образец (шаблон) описания"
+
+msgid "DocumentSetAsTemplate"
+msgstr "Документ собран как новый образец"
+
+msgid "DocumentUnsetAsTemplate"
+msgstr "Документ не является больше образцом"
+

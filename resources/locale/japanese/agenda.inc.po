@@ -1,0 +1,51 @@
+msgid "AgendaAdd"
+msgstr "Add new Agenda Item"
+
+msgid "ShowAllEvents"
+msgstr "Show All Agenda Items"
+
+msgid "ShowCurrent"
+msgstr "Show Agenda Items of current month"
+
+msgid "AddCalendarItem"
+msgstr "Add a new Agenda item"
+
+msgid "Day"
+msgstr "Day"
+
+msgid "Month"
+msgstr "Month"
+
+msgid "Year"
+msgstr "Year"
+
+msgid "Hour"
+msgstr "Hour"
+
+msgid "Minutes"
+msgstr "Minutes"
+
+msgid "Detail"
+msgstr "Detail"
+
+msgid "EditSuccess"
+msgstr "The agenda item has been edited"
+
+msgid "AddSuccess"
+msgstr "Agenda item added"
+
+msgid "AgendaDeleteSuccess"
+msgstr "The agenda item has been deleted"
+
+msgid "NoAgendaItems"
+msgstr "There are no Agenda Items"
+
+msgid "lang_september"
+msgstr "September"
+
+msgid "langClassName"
+msgstr "クラス名"
+
+msgid "ShowAll"
+msgstr "Show All Agenda Items"
+

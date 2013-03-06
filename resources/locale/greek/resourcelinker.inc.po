@@ -1,0 +1,84 @@
+msgid "ResourceAdded"
+msgstr "Resource added. You can now go back to the path or add more resources."
+
+msgid "LearningPath"
+msgstr "Εκπαιδευτική Διαδρομή"
+
+msgid "LevelUp"
+msgstr "level up"
+
+msgid "AddIt"
+msgstr "Add it"
+
+msgid "MainCategory"
+msgstr "main category"
+
+msgid "lang_delete_added_resources"
+msgstr "Delete added resources"
+
+msgid "AddToLinks"
+msgstr "Add to the course links"
+
+msgid "DontAdd"
+msgstr "do not add"
+
+msgid "lang_show_all_added_resources"
+msgstr "Show all added resources"
+
+msgid "ResourcesAdded"
+msgstr "Added new resources"
+
+msgid "BackTo"
+msgstr "Back to"
+
+msgid "ExternalResources"
+msgstr "External resources"
+
+msgid "CourseResources"
+msgstr "Course resources"
+
+msgid "ExternalLink"
+msgstr "External link"
+
+msgid "DropboxAdd"
+msgstr "Add the dropbox page to this chapter."
+
+msgid "AddAssignmentPage"
+msgstr "Add the upload assignment page to this chapter."
+
+msgid "Exercise"
+msgstr "Test"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "AdValvas"
+msgstr "Ad Valvas"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "IntroductionText"
+msgstr "Εισαγωγικό κείμενο"
+
+msgid "CourseDescription"
+msgstr "Περιγραφή Μαθήματος"
+
+msgid "Groups"
+msgstr "Ομάδες Χρηστών"
+
+msgid "Users"
+msgstr "Χρήστες"
+
+msgid "Modify"
+msgstr "Τροποποίηση"
+
+msgid "Detail"
+msgstr "Λεπτομέρεια"
+
+msgid "EditSuccess"
+msgstr "Το γεγονός τροποποιήθηκε"
+
+msgid "AddAnn"
+msgstr "Προσθήκη Ανακοίνωσης"
+

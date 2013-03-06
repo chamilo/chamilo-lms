@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "文档元数据"
+
+msgid "langClickKw"
+msgstr "点击子目录下关键字选择或不选择它。"
+
+msgid "langKwHelp"
+msgstr "点击 \'+\'按钮打开，\'-\'按钮关闭，\'++\'按钮打开所有，\'--\'按钮关闭所有，<br /><br />通过关闭子目录取消对所有关键字的选择，再次打开点按钮\'+\'。<br />按alt单击\'+\'在子目录中寻找原始关键字，<br /><br />按alt单击选择一个没有broader terms 的关键字，或不选择它，<br /><br />time. 如果您改变了描述语言，请不要同时加上关键字.<br />"
+
+msgid "langAdvanced"
+msgstr "高级"
+
+msgid "langSearch"
+msgstr "搜索"
+
+msgid "langSearchCrit"
+msgstr "每行一字！"
+
+msgid "langNoKeywords"
+msgstr "此课程无关键词"
+
+msgid "langKwCacheProblem"
+msgstr "关键词缓存无法打开"
+
+msgid "langCourseKwds"
+msgstr "此文档包含课程关键字"
+
+msgid "langKwdsInMD"
+msgstr "MD 所使用的关键词"
+
+msgid "langKwdRefs"
+msgstr "关键词参考"
+
+msgid "langNonCourseKwds"
+msgstr "非课程关键词"
+
+msgid "langKwdsUse"
+msgstr "课程关键字(粗体就是未被使用)"
+
+msgid "langTotalMDEs"
+msgstr "全部 MD 条目的链接数："
+

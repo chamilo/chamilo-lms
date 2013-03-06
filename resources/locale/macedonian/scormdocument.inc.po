@@ -1,0 +1,180 @@
+msgid "langChapter"
+msgstr "Поглавје"
+
+msgid "langDocumentList"
+msgstr "Список на сите документи"
+
+msgid "langOrganisationList"
+msgstr "Содржина"
+
+msgid "langEditTOC"
+msgstr "Уреди ја Содржината"
+
+msgid "langEditDocument"
+msgstr "Уреди"
+
+msgid "langCreateDocument"
+msgstr "Креирај документ"
+
+msgid "langMissingImagesDetected"
+msgstr "Сликите што недстасуваа се откриени"
+
+msgid "langPublish"
+msgstr "Објави"
+
+msgid "langScormcontentstudent"
+msgstr "Ова е курс во Scorm формат. За да го пуштите, кликнете овде: <input type=button name=scormbutton value=\'Преземи го !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "Ова е содржина на Scorm <br><input type=button name=scormbutton value=\'Превземи го !\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr "Компресираната датотека е качена и декомпресирана"
+
+msgid "langZipNoPhp"
+msgstr "Компрезирана (зипувана) даотека не може да содржи .PHP датотеки"
+
+msgid "langGroupForumLink"
+msgstr "Форум на групата"
+
+msgid "langGroupSpace"
+msgstr "Област на групата"
+
+msgid "langNotScormContent"
+msgstr "Ова не е scorm компресирана датотека!"
+
+msgid "langNoText"
+msgstr "Ве молам внесете ја вашиата текст / HTML содржина"
+
+msgid "langNoFileName"
+msgstr "Ве молам внесете име на датотеката"
+
+msgid "langMaxFileSize"
+msgstr "Максимална големина на датотека е"
+
+msgid "langFileName"
+msgstr "Име на датотеката"
+
+msgid "langFileError"
+msgstr "Датотеката за качување не е валидна"
+
+msgid "langDown"
+msgstr "долу"
+
+msgid "langViMod"
+msgstr "Видливоска е менувана"
+
+msgid "langAddComment"
+msgstr "Додај/измени коментар на"
+
+msgid "langImpossible"
+msgstr "Операцијата е невозможна"
+
+msgid "langNewDir"
+msgstr "Име на новата папка"
+
+msgid "langTo"
+msgstr "до"
+
+msgid "langNoSpace"
+msgstr "Качувањето беше неуспешно. Или сте ја пречекориле максималната квота, или нема повеќе простор на дискот."
+
+msgid "langDownloadEnd"
+msgstr "Качувањето заврши"
+
+msgid "langFileExists"
+msgstr "Операцијата е невозможна, датотеката со ова име веќе постои"
+
+msgid "langDocCopied"
+msgstr "Документот е копиран"
+
+msgid "langDocDeleted"
+msgstr "Документот е избришан"
+
+msgid "langElRen"
+msgstr "Елементот е преименуван"
+
+msgid "langDirMv"
+msgstr "Елементот е преместен"
+
+msgid "langComMod"
+msgstr "Коментарот е менуван"
+
+msgid "langRename"
+msgstr "Применувај"
+
+msgid "langCopy"
+msgstr "Копија на содржината на курсот"
+
+msgid "langNameDir"
+msgstr "Име на новиот директориум"
+
+msgid "langDownloadFile"
+msgstr "Качи ја датотеката на серверот"
+
+msgid "learning_path_access"
+msgstr "кликнете \'креирај патека на учењето\' во избриши/менувај/покажи/сокриј/креирај/додај патека на учењето"
+
+msgid "langRoot"
+msgstr "корен"
+
+msgid "langBuilder"
+msgstr "Алатка за изработка на Патека на учењето"
+
+msgid "lang_edit_learnpath"
+msgstr "уреди патека_на_учењето"
+
+msgid "lang_add_title_and_desc"
+msgstr "Уредување на наслов & опис."
+
+msgid "lang_add_learnpath"
+msgstr "Додај Патека на учењето"
+
+msgid "lang_learnpath_added"
+msgstr "Новата Патека на учењето беше креирана успешно. Сега можете да и\' додавате модули кликајќи на плусот."
+
+msgid "lang_delete_learnpath"
+msgstr "избриши патека_на_учењето"
+
+msgid "lang_learnpath_edited"
+msgstr "патеката_на_учењето беше уредена"
+
+msgid "lang_learnpath_deleted"
+msgstr "патеката_на_учењето беше избришана"
+
+msgid "lang_no_publish"
+msgstr "не објавувај"
+
+msgid "lang_publish"
+msgstr "објави"
+
+msgid "lang_no_published"
+msgstr "не е објавено"
+
+msgid "lang_published"
+msgstr "објавено"
+
+msgid "lang_description"
+msgstr "опис"
+
+msgid "lang_title"
+msgstr "наслов"
+
+msgid "langScormBuilder"
+msgstr "Градител на патека - алатка за креирање на патека на учењето во Scorm формат"
+
+msgid "langCreateDoc"
+msgstr "Креирај документ"
+
+msgid "langOrganiseDocuments"
+msgstr "Креирај ја Содржината"
+
+msgid "langUncompress"
+msgstr "одкомпресирај"
+
+msgid "ExportShort"
+msgstr "Извези како SCORM"
+
+msgid "progress"
+msgstr "Напредок"
+

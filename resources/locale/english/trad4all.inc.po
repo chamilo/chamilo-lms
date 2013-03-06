@@ -1,0 +1,4205 @@
+msgid "ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher"
+msgstr "This item is invisible for learner but you have access as teacher."
+
+msgid "DeleteAllAttendances"
+msgstr "Delete all created attendances"
+
+msgid "Unsubscribe"
+msgstr "Unsubscribe"
+
+msgid "SearchXapianModuleNotInstalled"
+msgstr "The Xapian search module is not installed"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "By"
+msgstr "By"
+
+msgid "UsersOnline"
+msgstr "Users online"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "langEnter"
+msgstr "Back to training list"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Links"
+msgstr "Links"
+
+msgid "langWorks"
+msgstr "Assignments"
+
+msgid "Forums"
+msgstr "Forums"
+
+msgid "langExercices"
+msgstr "Tests"
+
+msgid "langCreateDir"
+msgstr "Create folder"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "langComment"
+msgstr "Comment"
+
+msgid "langVisible"
+msgstr "Visible"
+
+msgid "langNewDir"
+msgstr "Name of the new folder"
+
+msgid "langDirCr"
+msgstr "Folder created"
+
+msgid "Download"
+msgstr "Download"
+
+msgid "langGroup"
+msgstr "Groups"
+
+msgid "langEdit"
+msgstr "Edit"
+
+msgid "langGroupForum"
+msgstr "Group Forum"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "LoginName"
+msgstr "Login"
+
+msgid "AutostartMp3"
+msgstr "Do you want audio file to START automatically?"
+
+msgid "Assignments"
+msgstr "Assignments"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "langDelImage"
+msgstr "Remove picture"
+
+msgid "langCode"
+msgstr "Training code"
+
+msgid "langUp"
+msgstr "Up"
+
+msgid "Down"
+msgstr "down"
+
+msgid "Up"
+msgstr "Up"
+
+msgid "Theme"
+msgstr "Graphical theme"
+
+msgid "TheListIsEmpty"
+msgstr "Empty"
+
+msgid "langUniqueSelect"
+msgstr "Multiple choice"
+
+msgid "CreateCategory"
+msgstr "Create category"
+
+msgid "SendFile"
+msgstr "Upload document"
+
+msgid "SaveChanges"
+msgstr "Save changes"
+
+msgid "SearchTerm"
+msgstr "Search term"
+
+msgid "TooShort"
+msgstr "Too short"
+
+msgid "langCourseCreate"
+msgstr "Create a course"
+
+msgid "langTodo"
+msgstr "To do"
+
+msgid "UserName"
+msgstr "Username"
+
+msgid "lang_show_hide"
+msgstr "Show / hide"
+
+msgid "langCategoryMod"
+msgstr "Edit Category"
+
+msgid "Hide"
+msgstr "Hide"
+
+msgid "langDear"
+msgstr "Dear"
+
+msgid "langArchive"
+msgstr "archive"
+
+msgid "langCourseCode"
+msgstr "Code"
+
+msgid "langNoDescription"
+msgstr "No description"
+
+msgid "langOfficialCode"
+msgstr "Code"
+
+msgid "FirstName"
+msgstr "First name"
+
+msgid "LastName"
+msgstr "Last name"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "langEmail"
+msgstr "E-mail"
+
+msgid "SlideshowConversion"
+msgstr "Slideshow conversion"
+
+msgid "UploadFile"
+msgstr "File upload"
+
+msgid "AvailableFrom"
+msgstr "Available from"
+
+msgid "AvailableTill"
+msgstr "Until"
+
+msgid "Preview"
+msgstr "Preview"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "EmailAddress"
+msgstr "Email address"
+
+msgid "Organisation"
+msgstr "Company"
+
+msgid "Reporting"
+msgstr "Reporting"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Update"
+msgstr "Update"
+
+msgid "SelectQuestionType"
+msgstr "Select question type"
+
+msgid "CurrentCourse"
+msgstr "Current course"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Info"
+msgstr "Information"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "AdvancedSearch"
+msgstr "Advanced search"
+
+msgid "Open"
+msgstr "Open"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "AddAnother"
+msgstr "Add another"
+
+msgid "Author"
+msgstr "Author"
+
+msgid "TrueFalse"
+msgstr "True / False"
+
+msgid "QuestionType"
+msgstr "Question type"
+
+msgid "NoSearchResults"
+msgstr "No search results"
+
+msgid "SelectQuestion"
+msgstr "Select question"
+
+msgid "AddNewQuestionType"
+msgstr "Add new question type"
+
+msgid "Numbered"
+msgstr "Numbered"
+
+msgid "iso639_2_code"
+msgstr "en"
+
+msgid "iso639_1_code"
+msgstr "eng"
+
+msgid "charset"
+msgstr "iso-8859-1"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr ","
+
+msgid "number_decimal_separator"
+msgstr "."
+
+msgid "dateFormatShort"
+msgstr "%b %d, %Y"
+
+msgid "dateFormatLong"
+msgstr "%A %B %d, %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%B %d, %Y at %I:%M %p"
+
+msgid "timeNoSecFormat"
+msgstr "%I:%M %p"
+
+msgid "langYes"
+msgstr "Yes"
+
+msgid "langNo"
+msgstr "No"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "langAllowed"
+msgstr "Allowed"
+
+msgid "langBackHome"
+msgstr "Back to Home Page of"
+
+msgid "langPropositions"
+msgstr "Proposals for an improvement of"
+
+msgid "langMaj"
+msgstr "Update"
+
+msgid "langModify"
+msgstr "Edit"
+
+msgid "langDelete"
+msgstr "delete"
+
+msgid "langInvisible"
+msgstr "invisible"
+
+msgid "langSave"
+msgstr "Send message"
+
+msgid "langMove"
+msgstr "Move"
+
+msgid "Help"
+msgstr "Help"
+
+msgid "langOk"
+msgstr "Validate"
+
+msgid "langAdd"
+msgstr "Add"
+
+msgid "langAddIntro"
+msgstr "Add an introduction text"
+
+msgid "langBackList"
+msgstr "Return to the list"
+
+msgid "langText"
+msgstr "Text"
+
+msgid "langEmpty"
+msgstr "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your training code, see the Training Program"
+
+msgid "langConfirmYourChoice"
+msgstr "Please confirm your choice"
+
+msgid "langAnd"
+msgstr "and"
+
+msgid "langChoice"
+msgstr "Your choice"
+
+msgid "langFinish"
+msgstr "Quit test"
+
+msgid "langCancel"
+msgstr "Cancel"
+
+msgid "langNotAllowed"
+msgstr "You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges."
+
+msgid "langNotLogged"
+msgstr "You are not logged in"
+
+msgid "langManager"
+msgstr "Administrator"
+
+msgid "langOptional"
+msgstr "Optional"
+
+msgid "NextPage"
+msgstr "Next page"
+
+msgid "PreviousPage"
+msgstr "Previous page"
+
+msgid "langUse"
+msgstr "Use"
+
+msgid "langTotal"
+msgstr "Total"
+
+msgid "langTake"
+msgstr "take"
+
+msgid "langOne"
+msgstr "One"
+
+msgid "langSeveral"
+msgstr "Several"
+
+msgid "langNotice"
+msgstr "Notice"
+
+msgid "langDate"
+msgstr "Date"
+
+msgid "langAmong"
+msgstr "among"
+
+msgid "langShow"
+msgstr "Show"
+
+msgid "langMyCourses"
+msgstr "My courses"
+
+msgid "langModifyProfile"
+msgstr "Profile"
+
+msgid "langMyStats"
+msgstr "View my progress"
+
+msgid "langLogout"
+msgstr "Logout"
+
+msgid "langMyAgenda"
+msgstr "Personal agenda"
+
+msgid "langCourseHomepage"
+msgstr "Course home"
+
+msgid "langCourseManagerview"
+msgstr "Teacher View"
+
+msgid "langStudentView"
+msgstr "Learner View"
+
+msgid "AddResource"
+msgstr "Add it"
+
+msgid "AddedResources"
+msgstr "Attachments"
+
+msgid "lang_modify_resource"
+msgstr "Edit / Add resources"
+
+msgid "lang_resource"
+msgstr "Resource"
+
+msgid "lang_resources"
+msgstr "Resources"
+
+msgid "langNameOfLang[\'arabic\']"
+msgstr ""
+
+msgid "langNameOfLang[\'brazilian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'bulgarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'catalan\']"
+msgstr ""
+
+msgid "langNameOfLang[\'croatian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'danish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english\']"
+msgstr ""
+
+msgid "langNameOfLang[\'finnish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_KM\']"
+msgstr ""
+
+msgid "langNameOfLang[\'galician\']"
+msgstr ""
+
+msgid "langNameOfLang[\'german\']"
+msgstr ""
+
+msgid "langNameOfLang[\'greek\']"
+msgstr ""
+
+msgid "langNameOfLang[\'italian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'japanese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'polish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'portuguese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'russian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'simpl_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish\']"
+msgstr ""
+
+msgid "Close"
+msgstr "close"
+
+msgid "langPlatform"
+msgstr "Portal"
+
+msgid "localLangName"
+msgstr "language"
+
+msgid "email"
+msgstr "e-mail"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "Sorry, but that training code already exists. Please choose another one."
+
+msgid "Statistics"
+msgstr "Statistics"
+
+msgid "langGrouplist"
+msgstr "Groups list"
+
+msgid "langPrevious"
+msgstr "Previous"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "The target folder does not exist"
+
+msgid "Courses"
+msgstr "Courses"
+
+msgid "In"
+msgstr "in"
+
+msgid "langShowAll"
+msgstr "Show all"
+
+msgid "langPage"
+msgstr "Page"
+
+msgid "englishLangName"
+msgstr "English"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "langAreYouSureToDelete"
+msgstr "Are you sure you want to delete"
+
+msgid "SelectAll"
+msgstr "Select all"
+
+msgid "UnSelectAll"
+msgstr "Unselect all"
+
+msgid "WithSelected"
+msgstr "With selected"
+
+msgid "langOnLine"
+msgstr "Online"
+
+msgid "langUsers"
+msgstr "Users"
+
+msgid "langPlatformAdmin"
+msgstr "Administration"
+
+msgid "langNameOfLang[\'hungarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'indonesian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'malay\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovenian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish_latin\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swedish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'thai\']"
+msgstr ""
+
+msgid "langNameOfLang[\'turkce\']"
+msgstr ""
+
+msgid "langNameOfLang[\'vietnamese\']"
+msgstr ""
+
+msgid "UserInfo"
+msgstr "user information"
+
+msgid "langModifyQuestion"
+msgstr "Save the question"
+
+msgid "Example"
+msgstr "Example"
+
+msgid "langCheckAll"
+msgstr "Check all"
+
+msgid "langNbAnnoucement"
+msgstr "Announcement"
+
+msgid "lang_no_access_here"
+msgstr "No access here"
+
+msgid "langOtherCourses"
+msgstr "other courses"
+
+msgid "Doc"
+msgstr "Training"
+
+msgid "PlataformAdmin"
+msgstr "Portal Admin"
+
+msgid "Groups"
+msgstr "Groups"
+
+msgid "GroupManagement"
+msgstr "Groups management"
+
+msgid "All"
+msgstr "All"
+
+msgid "None"
+msgstr "none"
+
+msgid "langSorry"
+msgstr "Select a training first"
+
+msgid "langDenied"
+msgstr "This function is only available to trainers"
+
+msgid "Today"
+msgstr "Today"
+
+msgid "langCourseHomepageLink"
+msgstr "Course home"
+
+msgid "Attachment"
+msgstr "attachment"
+
+msgid "User"
+msgstr "User"
+
+msgid "MondayInit"
+msgstr "M"
+
+msgid "TuesdayInit"
+msgstr "T"
+
+msgid "WednesdayInit"
+msgstr "W"
+
+msgid "ThursdayInit"
+msgstr "T"
+
+msgid "FridayInit"
+msgstr "F"
+
+msgid "SaturdayInit"
+msgstr "S"
+
+msgid "SundayInit"
+msgstr "S"
+
+msgid "MondayShort"
+msgstr "Mon"
+
+msgid "TuesdayShort"
+msgstr "Tue"
+
+msgid "WednesdayShort"
+msgstr "Wed"
+
+msgid "ThursdayShort"
+msgstr "Thu"
+
+msgid "FridayShort"
+msgstr "Fri"
+
+msgid "SaturdayShort"
+msgstr "Sat"
+
+msgid "SundayShort"
+msgstr "Sun"
+
+msgid "MondayLong"
+msgstr "Monday"
+
+msgid "TuesdayLong"
+msgstr "Tuesday"
+
+msgid "WednesdayLong"
+msgstr "Wednesday"
+
+msgid "ThursdayLong"
+msgstr "Thursday"
+
+msgid "FridayLong"
+msgstr "Friday"
+
+msgid "SaturdayLong"
+msgstr "Saturday"
+
+msgid "SundayLong"
+msgstr "Sunday"
+
+msgid "JanuaryInit"
+msgstr "J"
+
+msgid "FebruaryInit"
+msgstr "F"
+
+msgid "MarchInit"
+msgstr "M"
+
+msgid "AprilInit"
+msgstr "A"
+
+msgid "MayInit"
+msgstr "M"
+
+msgid "JuneInit"
+msgstr "J"
+
+msgid "JulyInit"
+msgstr "J"
+
+msgid "AugustInit"
+msgstr "A"
+
+msgid "SeptemberInit"
+msgstr "S"
+
+msgid "OctoberInit"
+msgstr "O"
+
+msgid "NovemberInit"
+msgstr "N"
+
+msgid "DecemberInit"
+msgstr "D"
+
+msgid "JanuaryShort"
+msgstr "Jan"
+
+msgid "FebruaryShort"
+msgstr "Feb"
+
+msgid "MarchShort"
+msgstr "Mar"
+
+msgid "AprilShort"
+msgstr "Apr"
+
+msgid "MayShort"
+msgstr "May"
+
+msgid "JuneShort"
+msgstr "Jun"
+
+msgid "JulyShort"
+msgstr "Jul"
+
+msgid "AugustShort"
+msgstr "Aug"
+
+msgid "SeptemberShort"
+msgstr "Sep"
+
+msgid "OctoberShort"
+msgstr "Oct"
+
+msgid "NovemberShort"
+msgstr "Nov"
+
+msgid "DecemberShort"
+msgstr "Dec"
+
+msgid "JanuaryLong"
+msgstr "January"
+
+msgid "FebruaryLong"
+msgstr "February"
+
+msgid "MarchLong"
+msgstr "March"
+
+msgid "AprilLong"
+msgstr "April"
+
+msgid "MayLong"
+msgstr "May"
+
+msgid "JuneLong"
+msgstr "June"
+
+msgid "JulyLong"
+msgstr "July"
+
+msgid "AugustLong"
+msgstr "August"
+
+msgid "SeptemberLong"
+msgstr "September"
+
+msgid "OctoberLong"
+msgstr "October"
+
+msgid "NovemberLong"
+msgstr "November"
+
+msgid "DecemberLong"
+msgstr "December"
+
+msgid "langMyCompetences"
+msgstr "My competences"
+
+msgid "langMyDiplomas"
+msgstr "My diplomas"
+
+msgid "langMyPersonalOpenArea"
+msgstr "My personal open area"
+
+msgid "langMyTeach"
+msgstr "What I am able to teach"
+
+msgid "Agenda"
+msgstr "Agenda"
+
+msgid "HourShort"
+msgstr "h"
+
+msgid "PleaseTryAgain"
+msgstr "Please Try Again!"
+
+msgid "UplNoFileUploaded"
+msgstr "No file was uploaded."
+
+msgid "UplSelectFileFirst"
+msgstr "Please select a file before pressing the upload button."
+
+msgid "UplNotAZip"
+msgstr "The file you selected was not a zip file."
+
+msgid "UplUploadSucceeded"
+msgstr "File upload succeeded!"
+
+msgid "ExportAsCSV"
+msgstr "CSV export"
+
+msgid "ExportAsXLS"
+msgstr "Excel export"
+
+msgid "langOpenarea"
+msgstr "Personal area"
+
+msgid "Done"
+msgstr "Done"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "DocumentAdded"
+msgstr "Document added"
+
+msgid "DocumentUpdated"
+msgstr "Document updated"
+
+msgid "DocumentInFolderUpdated"
+msgstr "Document updated in folder"
+
+msgid "Course_description"
+msgstr "Description"
+
+msgid "Average"
+msgstr "Average"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "Learnpath"
+msgstr "Courses"
+
+msgid "Link"
+msgstr "Links"
+
+msgid "Announcement"
+msgstr "Announcements"
+
+msgid "Dropbox"
+msgstr "Dropbox"
+
+msgid "Quiz"
+msgstr "Tests"
+
+msgid "langChat"
+msgstr "Chat"
+
+msgid "Conference"
+msgstr "Conference"
+
+msgid "Student_publication"
+msgstr "Assignments"
+
+msgid "Tracking"
+msgstr "Reporting"
+
+msgid "langhomepage_link"
+msgstr "Add link to this page"
+
+msgid "Course_setting"
+msgstr "Settings"
+
+msgid "langbackup"
+msgstr "Backup and import"
+
+msgid "langcopy_course_content"
+msgstr "Copy this course\'s content"
+
+msgid "langrecycle_course"
+msgstr "Empty this course"
+
+msgid "StartDate"
+msgstr "Start Date"
+
+msgid "EndDate"
+msgstr "End Date"
+
+msgid "StartTime"
+msgstr "Start Time"
+
+msgid "EndTime"
+msgstr "End Time"
+
+msgid "langYouWereCalled"
+msgstr "You were invited to chat with"
+
+msgid "langDoYouAccept"
+msgstr "Do you accept it ?"
+
+msgid "Everybody"
+msgstr "All"
+
+msgid "SentTo"
+msgstr "Visible to"
+
+msgid "Export"
+msgstr "Export"
+
+msgid "Tools"
+msgstr "Modules"
+
+msgid "Everyone"
+msgstr "Everyone"
+
+msgid "SelectGroupsUsers"
+msgstr "Select groups/users"
+
+msgid "Student"
+msgstr "Learner"
+
+msgid "Teacher"
+msgstr "Trainer"
+
+msgid "Send2All"
+msgstr "You did not select a user / group. The announcement is visible for every learner"
+
+msgid "Wiki"
+msgstr "Group wiki"
+
+msgid "Complete"
+msgstr "Complete"
+
+msgid "Incomplete"
+msgstr "Incomplete"
+
+msgid "reservation"
+msgstr "Book resource"
+
+msgid "StartTimeWindow"
+msgstr "Start"
+
+msgid "EndTimeWindow"
+msgstr "End"
+
+msgid "AccessNotAllowed"
+msgstr "The access to this page is not allowed"
+
+msgid "InThisCourse"
+msgstr "in this course"
+
+msgid "ThisFieldIsRequired"
+msgstr "required field"
+
+msgid "AllowedHTMLTags"
+msgstr "Allowed HTML tags"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "The form contains incorrect or incomplete data. Please check your input."
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "The first date should be before the end date"
+
+msgid "InvalidDate"
+msgstr "Invalid date"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "Only letters and numbers allowed"
+
+msgid "langBasicOverview"
+msgstr "Organize"
+
+msgid "CourseAdminRole"
+msgstr "Course admin"
+
+msgid "UserRole"
+msgstr "Role"
+
+msgid "OnlyImagesAllowed"
+msgstr "Only PNG, JPG or GIF images allowed"
+
+msgid "ViewRight"
+msgstr "View"
+
+msgid "EditRight"
+msgstr "Edit"
+
+msgid "DeleteRight"
+msgstr "Delete"
+
+msgid "OverviewCourseRights"
+msgstr "Roles & rights overview"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "Focus on role"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Focus on right"
+
+msgid "langAdvanced"
+msgstr "Authoring"
+
+msgid "RightValueModified"
+msgstr "The value has been modified."
+
+msgid "course_rights"
+msgstr "Roles & rights overview"
+
+msgid "Visio_conference"
+msgstr "Virtual meeting"
+
+msgid "CourseAdminRoleDescription"
+msgstr "Teacher"
+
+msgid "Move"
+msgstr "Move"
+
+msgid "MoveTo"
+msgstr "Move to"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "MoveFileTo"
+msgstr "Move file to"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Anonymous"
+msgstr "Anonymous"
+
+msgid "h"
+msgstr "h"
+
+msgid "CreateNewGlobalRole"
+msgstr "Create new global role"
+
+msgid "CreateNewLocalRole"
+msgstr "Create new local role"
+
+msgid "Actions"
+msgstr "Detail"
+
+msgid "Inbox"
+msgstr "Inbox"
+
+msgid "ComposeMessage"
+msgstr "Compose message"
+
+msgid "Other"
+msgstr "Other"
+
+msgid "AddRight"
+msgstr "Add"
+
+msgid "CampusHomepage"
+msgstr "Homepage"
+
+msgid "YouHaveNewMessage"
+msgstr "You have a new message!"
+
+msgid "myActiveSessions"
+msgstr "My active sessions"
+
+msgid "myInactiveSessions"
+msgstr "My inactive sessions"
+
+msgid "FileUpload"
+msgstr "File upload"
+
+msgid "langMyActiveSessions"
+msgstr "My active Sessions"
+
+msgid "langMyInActiveSessions"
+msgstr "My inactive sessions"
+
+msgid "langMySpace"
+msgstr "Reporting"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "This extension has been actived but can\'t be operational for the moment."
+
+msgid "MyStudents"
+msgstr "My learners"
+
+msgid "Progress"
+msgstr "Progress"
+
+msgid "Or"
+msgstr "or"
+
+msgid "Uploading"
+msgstr "Uploading..."
+
+msgid "AccountExpired"
+msgstr "Account expired"
+
+msgid "AccountInactive"
+msgstr "Account inactive"
+
+msgid "ActionNotAllowed"
+msgstr "Action not allowed"
+
+msgid "SubTitle"
+msgstr "Sub-title"
+
+msgid "NoResourcesToRecycle"
+msgstr "No resource to recycle"
+
+msgid "noOpen"
+msgstr "Could not open"
+
+msgid "TempsFrequentation"
+msgstr "Frequentation time"
+
+msgid "Progression"
+msgstr "Progress"
+
+msgid "NoCourse"
+msgstr "This course could not be found"
+
+msgid "Teachers"
+msgstr "Trainers"
+
+msgid "Session"
+msgstr "Session"
+
+msgid "Sessions"
+msgstr "Course sessions"
+
+msgid "NoSession"
+msgstr "The session could not be found"
+
+msgid "NoStudent"
+msgstr "The learner could not be found"
+
+msgid "Students"
+msgstr "Learners"
+
+msgid "NoResults"
+msgstr "No results found"
+
+msgid "Tutors"
+msgstr "Coaches"
+
+msgid "Tel"
+msgstr "Tel"
+
+msgid "NoTel"
+msgstr "No tel"
+
+msgid "SendMail"
+msgstr "Send mail"
+
+msgid "RdvAgenda"
+msgstr "Agenda appointment"
+
+msgid "VideoConf"
+msgstr "Chamilo LIVE"
+
+msgid "MyProgress"
+msgstr "Progress"
+
+msgid "NoOnlineStudents"
+msgstr "Nobody online"
+
+msgid "InCourse"
+msgstr "In course"
+
+msgid "UserOnlineListSession"
+msgstr "Users online - In my training sessions"
+
+msgid "From"
+msgstr "From"
+
+msgid "To"
+msgstr "To"
+
+msgid "Content"
+msgstr "Content"
+
+msgid "year"
+msgstr "year"
+
+msgid "Years"
+msgstr "years"
+
+msgid "Day"
+msgstr "Day"
+
+msgid "Days"
+msgstr "days"
+
+msgid "PleaseStandBy"
+msgstr "Please stand by..."
+
+msgid "AvailableUntil"
+msgstr "Until"
+
+msgid "HourMinuteDivider"
+msgstr "h"
+
+msgid "Visio_classroom"
+msgstr "Virtual classroom"
+
+msgid "Survey"
+msgstr "Survey"
+
+msgid "More"
+msgstr "More"
+
+msgid "ClickHere"
+msgstr "Click here"
+
+msgid "Here"
+msgstr "here"
+
+msgid "SaveQuestion"
+msgstr "Save question"
+
+msgid "ReturnTo"
+msgstr "You can now return to the"
+
+msgid "Horizontal"
+msgstr "Horizontal"
+
+msgid "Vertical"
+msgstr "Vertical"
+
+msgid "DisplaySearchResults"
+msgstr "Display search results"
+
+msgid "DisplayAll"
+msgstr "Display all"
+
+msgid "File_upload"
+msgstr "File upload"
+
+msgid "NoUsersInCourse"
+msgstr "No users in course"
+
+msgid "Percentage"
+msgstr "Percentage"
+
+msgid "Information"
+msgstr "Information"
+
+msgid "EmailDestination"
+msgstr "Receiver"
+
+msgid "SendEmail"
+msgstr "Send email"
+
+msgid "EmailTitle"
+msgstr "Subject"
+
+msgid "EmailText"
+msgstr "Email content"
+
+msgid "Send"
+msgstr "Send"
+
+msgid "Comments"
+msgstr "Comments"
+
+msgid "ModifyRecipientList"
+msgstr "Edit recipient list"
+
+msgid "Line"
+msgstr "Line"
+
+msgid "NoLinkVisited"
+msgstr "No link visited"
+
+msgid "NoDocumentDownloaded"
+msgstr "No document downloaded"
+
+msgid "Clicks"
+msgstr "clicks"
+
+msgid "SearchResults"
+msgstr "Search results"
+
+msgid "SessionPast"
+msgstr "Past"
+
+msgid "SessionActive"
+msgstr "Active"
+
+msgid "SessionFuture"
+msgstr "Not yet begun"
+
+msgid "DateFormatLongWithoutDay"
+msgstr "%B %d, %Y"
+
+msgid "InvalidDirectoryPleaseCreateAnImagesFolder"
+msgstr "Invalid folder: Please create a folder with the name images in your documents tool so that the images can be uploaded in this folder"
+
+msgid "UsersConnectedToMySessions"
+msgstr "Online in my sessions"
+
+msgid "Category"
+msgstr "Category"
+
+msgid "DearUser"
+msgstr "Dear user"
+
+msgid "YourRegistrationData"
+msgstr "Your registration data"
+
+msgid "ResetLink"
+msgstr "Click here to recover your password"
+
+msgid "VisibilityChanged"
+msgstr "The visibility has been changed."
+
+msgid "MainNavigation"
+msgstr "Main navigation"
+
+msgid "SeeDetail"
+msgstr "See detail"
+
+msgid "GroupSingle"
+msgstr "Group"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "Please try to login again from the homepage"
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "Please try to login again using the form below"
+
+msgid "AccessToFaq"
+msgstr "Access to the Frequently Asked Questions"
+
+msgid "Faq"
+msgstr "Frequently Asked Question"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "Remind learners inactive since"
+
+msgid "RemindInactiveLearnersMailSubject"
+msgstr "Inactivity on %s"
+
+msgid "RemindInactiveLearnersMailContent"
+msgstr "Dear user,<br /><br /> you are not active on %s since more than %s days."
+
+msgid "OpenIdAuthentication"
+msgstr "OpenID authentication"
+
+msgid "UploadMaxSize"
+msgstr "Upload max size"
+
+msgid "Unknown"
+msgstr "Unknown"
+
+msgid "MoveUp"
+msgstr "Move up"
+
+msgid "MoveDown"
+msgstr "Move down"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "File upload failed: this file extension or file type is prohibited"
+
+msgid "OpenIDURL"
+msgstr "OpenID URL"
+
+msgid "UplFileTooBig"
+msgstr "The file is too big to upload."
+
+msgid "UplGenericError"
+msgstr "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+
+msgid "MyGradebook"
+msgstr "Assessments"
+
+msgid "Gradebook"
+msgstr "Assessments"
+
+msgid "OpenIDWhatIs"
+msgstr "What is OpenID?"
+
+msgid "OpenIDDescription"
+msgstr "OpenID eliminates the need for multiple logins across different websites, simplifying your online experience. You get to choose the OpenID Provider that best meets your needs and most importantly that you trust. At the same time, your OpenID can stay with you, no matter which Provider you move to. And best of all, the OpenID technology is not proprietary and is completely free.For businesses, this means a lower cost of password and account management, while drawing new web traffic. OpenID lowers user frustration by letting users have control of their login.<br /><br /><a href=\"http://openid.net/what/\">Read on...</a>"
+
+msgid "NoManager"
+msgstr "No administrator"
+
+msgid "ExportiCal"
+msgstr "iCal export"
+
+msgid "ExportiCalPublic"
+msgstr "Export in iCal format as public event"
+
+msgid "ExportiCalPrivate"
+msgstr "Export in iCal format as private event"
+
+msgid "ExportiCalConfidential"
+msgstr "Export in iCal format as confidential event"
+
+msgid "MoreStats"
+msgstr "More stats"
+
+msgid "Drh"
+msgstr "Human Resources Manager"
+
+msgid "MinDecade"
+msgstr "decade"
+
+msgid "MinYear"
+msgstr "year"
+
+msgid "MinMonth"
+msgstr "month"
+
+msgid "MinWeek"
+msgstr "week"
+
+msgid "MinDay"
+msgstr "day"
+
+msgid "MinHour"
+msgstr "hour"
+
+msgid "MinMinute"
+msgstr "minute"
+
+msgid "MinDecades"
+msgstr "decades"
+
+msgid "MinYears"
+msgstr "years"
+
+msgid "MinMonths"
+msgstr "months"
+
+msgid "MinWeeks"
+msgstr "weeks"
+
+msgid "MinDays"
+msgstr "days"
+
+msgid "MinHours"
+msgstr "hours"
+
+msgid "MinMinutes"
+msgstr "minutes"
+
+msgid "HomeDirectory"
+msgstr "Home"
+
+msgid "DocumentCreated"
+msgstr "Documented created"
+
+msgid "ForumAdded"
+msgstr "The forum has been added"
+
+msgid "ForumThreadAdded"
+msgstr "Forum thread added"
+
+msgid "ForumAttachmentAdded"
+msgstr "Forum attachment added"
+
+msgid "directory"
+msgstr "directory"
+
+msgid "Directories"
+msgstr "directories"
+
+msgid "UserAge"
+msgstr "Age"
+
+msgid "UserBirthday"
+msgstr "Birthday"
+
+msgid "Course"
+msgstr "Course"
+
+msgid "FilesUpload"
+msgstr "documents"
+
+msgid "ExerciseFinished"
+msgstr "Test Finished"
+
+msgid "UserSex"
+msgstr "Sex"
+
+msgid "UserNativeLanguage"
+msgstr "Native language"
+
+msgid "UserResidenceCountry"
+msgstr "Country of residence"
+
+msgid "AddAnAttachment"
+msgstr "Add attachment"
+
+msgid "FileComment"
+msgstr "File comment"
+
+msgid "FileName"
+msgstr "File name"
+
+msgid "SessionsAdmin"
+msgstr "Sessions administrator"
+
+msgid "MakeChangeable"
+msgstr "Make changeable"
+
+msgid "MakeUnchangeable"
+msgstr "Make unchangeable"
+
+msgid "UserFields"
+msgstr "Profile attributes"
+
+msgid "FieldShown"
+msgstr "The field is now visible for the user."
+
+msgid "CannotShowField"
+msgstr "Cannot make the field visible."
+
+msgid "FieldHidden"
+msgstr "The field is now invisible for the user."
+
+msgid "CannotHideField"
+msgstr "Cannot make the field invisible"
+
+msgid "FieldMadeChangeable"
+msgstr "The field is now changeable by the user: the user can now fill or edit the field"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "The field can not be made changeable."
+
+msgid "FieldMadeUnchangeable"
+msgstr "The field is now made unchangeable: the user cannot fill or edit the field."
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "The field cannot be made unchangeable"
+
+msgid "Folder"
+msgstr "Folder"
+
+msgid "CloseOtherSession"
+msgstr "The chat is not available because another training has been opened in another page. To avoid this, please make sure you remain inside the same training for the duration of your chat session. To join the chat session again, please re-launch the chat from the training homepage."
+
+msgid "FileUploadSucces"
+msgstr "The file has successfully been uploaded."
+
+msgid "Yesterday"
+msgstr "Yesterday"
+
+msgid "Submit"
+msgstr "Submit"
+
+msgid "Department"
+msgstr "Department"
+
+msgid "BackToNewSearch"
+msgstr "Back to start new search"
+
+msgid "Step"
+msgstr "Step"
+
+msgid "SomethingFemininAddedSuccessfully"
+msgstr "added successfully"
+
+msgid "SomethingMasculinAddedSuccessfully"
+msgstr "added successfully"
+
+msgid "DeleteError"
+msgstr "Delete error"
+
+msgid "StepsList"
+msgstr "Steps list"
+
+msgid "AddStep"
+msgstr "Add step"
+
+msgid "StepCode"
+msgstr "Step code"
+
+msgid "Label"
+msgstr "Label"
+
+msgid "UnableToConnectTo"
+msgstr "Unable to connect to"
+
+msgid "NoUser"
+msgstr "No user"
+
+msgid "SearchResultsFor"
+msgstr "Search results for:"
+
+msgid "SelectFile"
+msgstr "Select a file"
+
+msgid "WarningFaqFileNonWriteable"
+msgstr "Warning - The FAQ file, located in the /home/ directory of your portal, is not writable. Your text will not be saved until the file permissions are changed."
+
+msgid "AddCategory"
+msgstr "Add category"
+
+msgid "NoExercises"
+msgstr "No tests"
+
+msgid "NotAllowedClickBack"
+msgstr "Sorry, you are not allowed to access this page, or maybe your connection has expired. Please click your browser\'s \"Back\" button or follow the link below to return to the previous page."
+
+msgid "Exercise"
+msgstr "Tests"
+
+msgid "Result"
+msgstr "Result"
+
+msgid "AttemptingToLoginAs"
+msgstr "Attempting to login as %s %s (id %s)"
+
+msgid "LoginSuccessfulGoToX"
+msgstr "Login successful. Go to %s"
+
+msgid "FckMp3Autostart"
+msgstr "Start audio automatically"
+
+msgid "Learner"
+msgstr "Learner"
+
+msgid "IntroductionTextUpdated"
+msgstr "Intro was updated"
+
+msgid "Align"
+msgstr "Align"
+
+msgid "Width"
+msgstr "Width"
+
+msgid "VSpace"
+msgstr "V Space"
+
+msgid "HSpace"
+msgstr "H Space"
+
+msgid "Border"
+msgstr "Border"
+
+msgid "Alt"
+msgstr "Alt"
+
+msgid "Height"
+msgstr "Height"
+
+msgid "ImageManager"
+msgstr "Image manager"
+
+msgid "ImageFile"
+msgstr "Image File"
+
+msgid "ConstrainProportions"
+msgstr "Constrain proportions"
+
+msgid "InsertImage"
+msgstr "Insert image"
+
+msgid "AccountActive"
+msgstr "Account active"
+
+msgid "GroupSpace"
+msgstr "Group area"
+
+msgid "GroupWiki"
+msgstr "Wiki"
+
+msgid "ExportToPDF"
+msgstr "Export to PDF"
+
+msgid "CommentAdded"
+msgstr "You comment has been added"
+
+msgid "BackToPreviousPage"
+msgstr "Back to previous page"
+
+msgid "ListView"
+msgstr "List view"
+
+msgid "NoOfficialCode"
+msgstr "No code"
+
+msgid "Owner"
+msgstr "Owner"
+
+msgid "DisplayOrder"
+msgstr "Display order"
+
+msgid "SearchFeatureDoIndexDocument"
+msgstr "Index document text?"
+
+msgid "SearchFeatureDocumentLanguage"
+msgstr "Document language for indexation"
+
+msgid "With"
+msgstr "with"
+
+msgid "GeneralCoach"
+msgstr "General coach"
+
+msgid "SaveDocument"
+msgstr "Save document"
+
+msgid "CategoryDeleted"
+msgstr "The category has been deleted."
+
+msgid "CategoryAdded"
+msgstr "Category added"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Qualify"
+msgstr "Grade activity"
+
+msgid "Words"
+msgstr "Words"
+
+msgid "GoBack"
+msgstr "Go back"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "EditLink"
+msgstr "Edit link"
+
+msgid "LinkEdited"
+msgstr "Assessment edited"
+
+msgid "ForumThreads"
+msgstr "Forum threads"
+
+msgid "GradebookVisible"
+msgstr "Visible"
+
+msgid "GradebookInvisible"
+msgstr "Invisible"
+
+msgid "Phone"
+msgstr "Phone"
+
+msgid "InfoMessage"
+msgstr "Information message"
+
+msgid "ConfirmationMessage"
+msgstr "Confirmation message"
+
+msgid "WarningMessage"
+msgstr "Warning message"
+
+msgid "ErrorMessage"
+msgstr "Error message"
+
+msgid "Glossary"
+msgstr "Glossary"
+
+msgid "Coach"
+msgstr "Coach"
+
+msgid "Condition"
+msgstr "Condition"
+
+msgid "CourseSettings"
+msgstr "Course settings"
+
+msgid "EmailNotifications"
+msgstr "Email notifications"
+
+msgid "UserRights"
+msgstr "User rights"
+
+msgid "Theming"
+msgstr "Graphical theme"
+
+msgid "Qualification"
+msgstr "Score"
+
+msgid "OnlyNumbers"
+msgstr "Only numbers"
+
+msgid "ReorderOptions"
+msgstr "Reorder options"
+
+msgid "EditUserFields"
+msgstr "Edit user fields"
+
+msgid "OptionText"
+msgstr "Text"
+
+msgid "FieldTypeDoubleSelect"
+msgstr "Double select"
+
+msgid "FieldTypeDivider"
+msgstr "Visual divider"
+
+msgid "ScormUnknownPackageFormat"
+msgstr "Unknown package format"
+
+msgid "ResourceDeleted"
+msgstr "The resource has been deleted"
+
+msgid "AdvancedParameters"
+msgstr "Advanced settings"
+
+msgid "GoTo"
+msgstr "Go to"
+
+msgid "SessionNameAndCourseTitle"
+msgstr "Session and course name"
+
+msgid "CreationDate"
+msgstr "Creation date"
+
+msgid "LastUpdateDate"
+msgstr "Latest update"
+
+msgid "ViewHistoryChange"
+msgstr "View changes history"
+
+msgid "langNameOfLang[\'asturian\']"
+msgstr ""
+
+msgid "SearchGoToLearningPath"
+msgstr "Go to course"
+
+msgid "SearchLectureLibrary"
+msgstr "Lectures library"
+
+msgid "SearchImagePreview"
+msgstr "Preview image"
+
+msgid "SearchAdvancedOptions"
+msgstr "Advanced search options"
+
+msgid "SearchResetKeywords"
+msgstr "Reset keywords"
+
+msgid "SearchKeywords"
+msgstr "Keywords"
+
+msgid "IntroductionTextDeleted"
+msgstr "Intro was deleted"
+
+msgid "SearchKeywordsHelpTitle"
+msgstr "Keywords search help"
+
+msgid "SearchKeywordsHelpComment"
+msgstr "Select keywords in one or more fields and click the search button.<br /><br />To select more than one keyword in a field, use Ctrl+click."
+
+msgid "Validate"
+msgstr "Validate"
+
+msgid "SearchCombineSearchWith"
+msgstr "Combine keywords with"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "The full-text search feature is not enabled in Chamilo. Please contact the Chamilo administrator."
+
+msgid "Top"
+msgstr "Top"
+
+msgid "YourTextHere"
+msgstr "Your text here"
+
+msgid "OrderBy"
+msgstr "Order by"
+
+msgid "Notebook"
+msgstr "Notebook"
+
+msgid "FieldRequired"
+msgstr "Mandatory field"
+
+msgid "BookingSystem"
+msgstr "Booking system"
+
+msgid "Any"
+msgstr "Any"
+
+msgid "SpecificSearchFields"
+msgstr "Specific search fields"
+
+msgid "SpecificSearchFieldsIntro"
+msgstr "Here you can define the fields you want to use for indexing content. When you are indexing one element you should add one or many terms on each field separated by comas."
+
+msgid "AddSpecificSearchField"
+msgstr "Add a specific search field"
+
+msgid "SaveSettings"
+msgstr "Save settings"
+
+msgid "NoParticipation"
+msgstr "There are no participants"
+
+msgid "Subscribers"
+msgstr "Subscribers"
+
+msgid "Accept"
+msgstr "Accept"
+
+msgid "Reserved"
+msgstr "Reserved"
+
+msgid "SharedDocumentsDirectory"
+msgstr "Shared documents folder"
+
+msgid "Gallery"
+msgstr "Gallery"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "GoToQuestion"
+msgstr "Go to question"
+
+msgid "Level"
+msgstr "Level"
+
+msgid "Duration"
+msgstr "Duration"
+
+msgid "SearchPrefilterPrefix"
+msgstr "Specific Field for prefilter"
+
+msgid "SearchPrefilterPrefixComment"
+msgstr "This option let you choose the Specific field to use on prefilter search type."
+
+msgid "MaxTimeAllowed"
+msgstr "Max. time (minutes)"
+
+msgid "Class"
+msgstr "Class"
+
+msgid "Select"
+msgstr "Select"
+
+msgid "Booking"
+msgstr "Booking"
+
+msgid "ManageReservations"
+msgstr "Booking"
+
+msgid "DestinationUsers"
+msgstr "Destination users"
+
+msgid "AttachmentFileDeleteSuccess"
+msgstr "The attached file has been deleted"
+
+msgid "AccountURLInactive"
+msgstr "Account inactive for this URL"
+
+msgid "MaxFileSize"
+msgstr "Maximum file size"
+
+msgid "SendFileError"
+msgstr "An error has been detected while receiving your file. Please check your file is not corrupted and try again."
+
+msgid "Expired"
+msgstr "Expired"
+
+msgid "InvitationHasBeenSent"
+msgstr "The invitation has been sent"
+
+msgid "InvitationHasBeenNotSent"
+msgstr "The invitation hasn\'t been sent"
+
+msgid "Outbox"
+msgstr "Outbox"
+
+msgid "Overview"
+msgstr "Overview"
+
+msgid "ApiKeys"
+msgstr "API keys"
+
+msgid "GenerateApiKey"
+msgstr "Generate API key"
+
+msgid "MyApiKey"
+msgstr "My API key"
+
+msgid "DateSend"
+msgstr "Date sent"
+
+msgid "Deny"
+msgstr "Deny"
+
+msgid "ThereIsNotQualifiedLearners"
+msgstr "There are no qualified learners"
+
+msgid "ThereIsNotUnqualifiedLearners"
+msgstr "There are no unqualified learners"
+
+msgid "SocialNetwork"
+msgstr "Social network"
+
+msgid "BackToOutbox"
+msgstr "Back to outbox"
+
+msgid "Invitation"
+msgstr "Invitation"
+
+msgid "SeeMoreOptions"
+msgstr "See more options"
+
+msgid "TemplatePreview"
+msgstr "Template preview"
+
+msgid "NoTemplatePreview"
+msgstr "Preview not available"
+
+msgid "ModifyCategory"
+msgstr "Edit category"
+
+msgid "Photo"
+msgstr "Photo"
+
+msgid "MoveFile"
+msgstr "Move the file"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Subject"
+msgstr "Subject"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "MoreInformation"
+msgstr "More information"
+
+msgid "MakeInvisible"
+msgstr "Make invisible"
+
+msgid "MakeVisible"
+msgstr "Make Visible"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "SaveIntroText"
+msgstr "Save intro text"
+
+msgid "CourseName"
+msgstr "Course name"
+
+msgid "SendAMessage"
+msgstr "Send a message"
+
+msgid "Menu"
+msgstr "Menu"
+
+msgid "BackToUserList"
+msgstr "Back to user list"
+
+msgid "GraphicNotAvailable"
+msgstr "Graphic not available"
+
+msgid "BackTo"
+msgstr "Back to"
+
+msgid "HistoryTrainingSessions"
+msgstr "Courses sessions history"
+
+msgid "ConversionFailled"
+msgstr "Conversion failled"
+
+msgid "AlreadyExists"
+msgstr "Already exists"
+
+msgid "TheNewWordHasBeenAdded"
+msgstr "The new word has been added"
+
+msgid "CommentErrorExportDocument"
+msgstr "Some of the documents are too complex to be treated automatically by the document converter"
+
+msgid "DataType"
+msgstr "Data type"
+
+msgid "Value"
+msgstr "Value"
+
+msgid "System"
+msgstr "System"
+
+msgid "ImportantActivities"
+msgstr "Important activities"
+
+msgid "SearchActivities"
+msgstr "Search for specific activities"
+
+msgid "Parent"
+msgstr "Parent"
+
+msgid "SurveyAdded"
+msgstr "Survey added"
+
+msgid "WikiAdded"
+msgstr "Wiki added"
+
+msgid "ReadOnly"
+msgstr "Read only"
+
+msgid "Unacceptable"
+msgstr "Unacceptable"
+
+msgid "DisplayTrainingList"
+msgstr "Display courses list"
+
+msgid "HistoryTrainingSession"
+msgstr "Courses history"
+
+msgid "Until"
+msgstr "Until"
+
+msgid "FirstPage"
+msgstr "First page"
+
+msgid "LastPage"
+msgstr "Last page"
+
+msgid "Coachs"
+msgstr "Coachs"
+
+msgid "DragAndDropAnElementHere"
+msgstr "Drag and drop an element here"
+
+msgid "ThereAreNoRegisteredDatetimeYet"
+msgstr "There is no date/time registered yet"
+
+msgid "CalendarList"
+msgstr "Calendar list of attendances"
+
+msgid "AttendanceCalendarDescription"
+msgstr "The attendance calendar allows you to register attendance lists (one per real session the students need to attend). Add new attendance lists here."
+
+msgid "CleanCalendar"
+msgstr "Clean the calendar of all lists"
+
+msgid "AddDateAndTime"
+msgstr "Add a date and time"
+
+msgid "AttendanceSheet"
+msgstr "Attendance sheet"
+
+msgid "GoToAttendanceCalendar"
+msgstr "Go to the attendance calendar"
+
+msgid "AttendanceCalendar"
+msgstr "Attendance calendar"
+
+msgid "QualifyAttendanceGradebook"
+msgstr "Grade the attendance list in the assessment tool"
+
+msgid "CreateANewAttendance"
+msgstr "Create a new attendance list"
+
+msgid "Attendance"
+msgstr "Attendance"
+
+msgid "GeneralDescription"
+msgstr "Description"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "What is the goal of the training? Are there prerequisites? How is this training connected to other training?"
+
+msgid "GeneralDescriptionInformation"
+msgstr "Describe the training (number of hours, sser number, location) and trainer (name, office, Tel., e-mail, office hours . . . .)."
+
+msgid "Objectives"
+msgstr "Objectives"
+
+msgid "ObjectivesInformation"
+msgstr "What are the objectives of the training (competences, skills, outcomes)?"
+
+msgid "ObjectivesQuestions"
+msgstr "What should the end results be when the learner has completed the training? What are the activities performed during the training?"
+
+msgid "Topics"
+msgstr "Topics"
+
+msgid "TopicsInformation"
+msgstr "List of topics included in the training. Importance of each topic. Level of difficulty. Structure and inter-dependence of the different parts."
+
+msgid "TopicsQuestions"
+msgstr "How does the training progress? Where should the learner pay special care? Are there identifiable problems in understanding different areas? How much time should one dedicate to the different areas of the training?"
+
+msgid "Methodology"
+msgstr "Methodology"
+
+msgid "MethodologyQuestions"
+msgstr "What methods and activities help achieve the objectives of the training?  What would the schedule be?"
+
+msgid "MethodologyInformation"
+msgstr "Presentation of the activities (conference, papers, group research, labs...)."
+
+msgid "CourseMaterial"
+msgstr "Course material"
+
+msgid "CourseMaterialQuestions"
+msgstr "Is there a course book, a collection of papers, a bibliography, a list of links on the internet?"
+
+msgid "CourseMaterialInformation"
+msgstr "Short description of the course materials."
+
+msgid "HumanAndTechnicalResources"
+msgstr "Resources"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "Consider the trainers, coaches, a technical helpdesk, training managers, and/or materials available."
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "Identify and describe the different contact persons and technical devices available."
+
+msgid "Assessment"
+msgstr "Assessment"
+
+msgid "AssessmentQuestions"
+msgstr "How will learners be assessed? Are there strategies to develop in order to master the topic?"
+
+msgid "AssessmentInformation"
+msgstr "Criteria for skills acquisition."
+
+msgid "langNameOfLang[\'bosnian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'czech\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dari\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english_org\']"
+msgstr ""
+
+msgid "langNameOfLang[\'friulian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'georgian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'hebrew\']"
+msgstr ""
+
+msgid "langNameOfLang[\'korean\']"
+msgstr ""
+
+msgid "langNameOfLang[\'latvian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'lithuanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'macedonian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'norwegian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'pashto\']"
+msgstr ""
+
+msgid "langNameOfLang[\'persian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'quechua_cusco\']"
+msgstr ""
+
+msgid "langNameOfLang[\'romanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'serbian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovak\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swahili\']"
+msgstr ""
+
+msgid "langNameOfLang[\'trad_chinese\']"
+msgstr ""
+
+msgid "ChamiloInstallation"
+msgstr "Chamilo installation"
+
+msgid "langNameOfLang[\'ukrainian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'yoruba\']"
+msgstr ""
+
+msgid "New"
+msgstr "New"
+
+msgid "YouMustToInstallTheExtensionLDAP"
+msgstr "You must install the extension LDAP"
+
+msgid "AddAdditionalProfileField"
+msgstr "Add user profile field"
+
+msgid "InvitationDenied"
+msgstr "Invitation denied"
+
+msgid "UserAdded"
+msgstr "The user is added"
+
+msgid "UpdatedIn"
+msgstr "Updated on"
+
+msgid "Metadata"
+msgstr "Metadata"
+
+msgid "langAddMetadata"
+msgstr "View/Edit Metadata"
+
+msgid "SendMessage"
+msgstr "Send message"
+
+msgid "SeeForum"
+msgstr "See forum"
+
+msgid "SeeMore"
+msgstr "See more"
+
+msgid "NoDataAvailable"
+msgstr "No data available"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "LastUpdate"
+msgstr "Last update"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "User not registered in course"
+
+msgid "EditMyProfile"
+msgstr "Edit my profile"
+
+msgid "Announcements"
+msgstr "Announcements"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "DescriptionGroup"
+msgstr "Groupe description"
+
+msgid "Installation"
+msgstr "Installation"
+
+msgid "ReadTheInstallationGuide"
+msgstr "Read the installation guide"
+
+msgid "SeeBlog"
+msgstr "See blog"
+
+msgid "Blog"
+msgstr "Blog"
+
+msgid "BlogPosts"
+msgstr "Blog Posts"
+
+msgid "BlogComments"
+msgstr "Blog comments"
+
+msgid "ThereAreNotExtrafieldsAvailable"
+msgstr "There are not extra fields available"
+
+msgid "StartToType"
+msgstr "Start to type, then click on this bar to validate tag"
+
+msgid "InstallChamilo"
+msgstr "Install chamilo"
+
+msgid "ChamiloURL"
+msgstr "Chamilo URL"
+
+msgid "TitleColumnGradebook"
+msgstr "Column header in Competences Report"
+
+msgid "QualifyWeight"
+msgstr "Weight in Report"
+
+msgid "ThematicAdvance"
+msgstr "Thematic advance"
+
+msgid "EditProfile"
+msgstr "Edit profile"
+
+msgid "TabsDashboard"
+msgstr "Dashboard"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "DashboardPlugins"
+msgstr "Dashboard plugins"
+
+msgid "SelectBlockForDisplayingInsideBlocksDashboardView"
+msgstr "Select blocks to display in the dashboard blocks view"
+
+msgid "ColumnPosition"
+msgstr "Position (column)"
+
+msgid "EnableDashboardBlock"
+msgstr "Enable dashboard block"
+
+msgid "ThereAreNoEnabledDashboardPlugins"
+msgstr "There is no enabled dashboard plugin"
+
+msgid "Enabled"
+msgstr "Enabled"
+
+msgid "ThematicAdvanceQuestions"
+msgstr "What is the current progress you have reached with your learners inside your course? How much do you think is remaining in comparison to the complete program?"
+
+msgid "ThematicAdvanceHistory"
+msgstr "Advance history"
+
+msgid "Homepage"
+msgstr "Homepage"
+
+msgid "Attendances"
+msgstr "Attendances"
+
+msgid "CountDoneAttendance"
+msgstr "# attended"
+
+msgid "AssignUsers"
+msgstr "Assign users"
+
+msgid "AssignCourses"
+msgstr "Assign courses"
+
+msgid "AssignSessions"
+msgstr "Assign sessions"
+
+msgid "Timezone"
+msgstr "Timezone"
+
+msgid "Company"
+msgstr "Company"
+
+msgid "GradebookExcellent"
+msgstr "Excellent"
+
+msgid "GradebookOutstanding"
+msgstr "Outstanding"
+
+msgid "GradebookGood"
+msgstr "Good"
+
+msgid "GradebookFair"
+msgstr "Fair"
+
+msgid "GradebookPoor"
+msgstr "Poor"
+
+msgid "GradebookFailed"
+msgstr "Failed"
+
+msgid "UploadedDate"
+msgstr "Date of upload"
+
+msgid "Filename"
+msgstr "Filename"
+
+msgid "Recover"
+msgstr "Recover"
+
+msgid "Recovered"
+msgstr "Recovered"
+
+msgid "RecoverDropboxFiles"
+msgstr "Recover dropbox files"
+
+msgid "ForumCategory"
+msgstr "Forum category"
+
+msgid "YouCanAccessTheExercise"
+msgstr "Go to the test"
+
+msgid "YouHaveBeenRegisteredToCourseX"
+msgstr "You have been registered to course %s"
+
+msgid "DashboardPluginsHaveBeenUpdatedSucesslly"
+msgstr "Dashboard plugins have been updated sucessfully"
+
+msgid "LoginEnter"
+msgstr "Login"
+
+msgid "AttendanceSheetDescription"
+msgstr "The attendance sheets allow you to specify a list of dates in which you will report attendance to your courses"
+
+msgid "ThereAreNoRegisteredLearnersInsidetheCourse"
+msgstr "There are no registered learners inside the course"
+
+msgid "GoToAttendanceCalendarList"
+msgstr "Go to the calendar list of attendance dates"
+
+msgid "ToolCourseDescription"
+msgstr "Course description"
+
+msgid "ToolDocument"
+msgstr "Documents"
+
+msgid "ToolLearnpath"
+msgstr "Learning path"
+
+msgid "ToolLink"
+msgstr "Links"
+
+msgid "ToolQuiz"
+msgstr "Tests"
+
+msgid "ToolAnnouncement"
+msgstr "Announcements"
+
+msgid "ToolGradebook"
+msgstr "Assessments"
+
+msgid "ToolGlossary"
+msgstr "Glossary"
+
+msgid "ToolAttendance"
+msgstr "Attendances"
+
+msgid "ToolCalendarEvent"
+msgstr "Agenda"
+
+msgid "ToolForum"
+msgstr "Forums"
+
+msgid "ToolDropbox"
+msgstr "Dropbox"
+
+msgid "ToolUser"
+msgstr "Users"
+
+msgid "ToolGroup"
+msgstr "Groups"
+
+msgid "ToolChat"
+msgstr "Chat"
+
+msgid "ToolStudentPublication"
+msgstr "Assignments"
+
+msgid "ToolSurvey"
+msgstr "Surveys"
+
+msgid "ToolWiki"
+msgstr "Wiki"
+
+msgid "ToolNotebook"
+msgstr "Notebook"
+
+msgid "ToolBlogManagement"
+msgstr "Projects"
+
+msgid "ToolTracking"
+msgstr "Reporting"
+
+msgid "ToolCourseSetting"
+msgstr "Settings"
+
+msgid "ToolCourseMaintenance"
+msgstr "Backup"
+
+msgid "AreYouSureToDeleteAllDates"
+msgstr "Are you sure you want to delete all dates?"
+
+msgid "AddADateTime"
+msgstr "Add a date time"
+
+msgid "ThematicControl"
+msgstr "Thematic control"
+
+msgid "ThematicDetails"
+msgstr "Thematic view with details"
+
+msgid "ThematicList"
+msgstr "Thematic view as list"
+
+msgid "Thematic"
+msgstr "Thematic"
+
+msgid "ThematicPlan"
+msgstr "Thematic plan"
+
+msgid "EditThematicPlan"
+msgstr "Edit tematic advance"
+
+msgid "EditThematicAdvance"
+msgstr "Edit thematic advance"
+
+msgid "ThereIsNoStillAthematicSection"
+msgstr "There is not still a thematic section"
+
+msgid "NewThematicSection"
+msgstr "New thematic section"
+
+msgid "DeleteAllThematics"
+msgstr "Delete all thematics"
+
+msgid "ThematicDetailsDescription"
+msgstr "Details of topics and their respective plan and progress. To indicate a topic as completed, select its date following the chronological order and the system will display all previous dates as completed."
+
+msgid "SkillToAcquireQuestions"
+msgstr "What skills are to be acquired bu the end of this thematic section?"
+
+msgid "SkillToAcquire"
+msgstr "Skills to acquire"
+
+msgid "InfrastructureQuestions"
+msgstr "What infrastructure is necessary to achieve the goals of this topic normally?"
+
+msgid "Infrastructure"
+msgstr "Infrastructure"
+
+msgid "AditionalNotesQuestions"
+msgstr "Which other elements are necessary?"
+
+msgid "DurationInHours"
+msgstr "Duration in hours"
+
+msgid "ThereAreNoAttendancesInsideCourse"
+msgstr "There is no attendance sheet in this course"
+
+msgid "YouMustSelectAtleastAStartDate"
+msgstr "You must select a start date"
+
+msgid "EditTematicAdvance"
+msgstr "Edit tematic advance"
+
+msgid "AditionalNotes"
+msgstr "Additional notes"
+
+msgid "StartDateFromAnAttendance"
+msgstr "Start date taken from an attendance date"
+
+msgid "StartDateCustom"
+msgstr "Custom start date"
+
+msgid "StartDateOptions"
+msgstr "Start date options"
+
+msgid "ThematicAdvanceConfiguration"
+msgstr "Thematic advance configuration"
+
+msgid "InfoAboutAdvanceInsideHomeCourse"
+msgstr "Information on thematic advance on course homepage"
+
+msgid "DisplayAboutLastDoneAdvance"
+msgstr "Display information about the last completed topic"
+
+msgid "DisplayAboutNextAdvanceNotDone"
+msgstr "Display information about the next uncompleted topic"
+
+msgid "InfoAboutLastDoneAdvance"
+msgstr "Information about the last completed topic"
+
+msgid "InfoAboutNextAdvanceNotDone"
+msgstr "Information about the next uncompleted topic"
+
+msgid "ThereIsNoAThematicSection"
+msgstr "There is no thematic section"
+
+msgid "ThereIsNoAThematicAdvance"
+msgstr "There is no thematic advance"
+
+msgid "StillDoNotHaveAThematicPlan"
+msgstr "There is no thematic plan for now"
+
+msgid "NewThematicAdvance"
+msgstr "New thematic advance"
+
+msgid "DurationInHoursMustBeNumeric"
+msgstr "Duration must be numeric"
+
+msgid "CreateAThematicSection"
+msgstr "Create a thematic section"
+
+msgid "EditThematicSection"
+msgstr "Edit thematic section"
+
+msgid "ToolCourseProgress"
+msgstr "Course progress"
+
+msgid "SelectAnAttendance"
+msgstr "Select an attendance"
+
+msgid "ResultsHiddenByExerciseSetting"
+msgstr "Results hidden by the exercise setting"
+
+msgid "NotAttended"
+msgstr "Not attended"
+
+msgid "Attended"
+msgstr "Attented"
+
+msgid "IPAddress"
+msgstr "IP address"
+
+msgid "CourseAdvance"
+msgstr "Avance en el curso"
+
+msgid "CertificateGenerated"
+msgstr "Generó certificado"
+
+msgid "ThematicSectionHasBeenCreatedSuccessfull"
+msgstr "Thematic section has been created success full"
+
+msgid "NowYouShouldAddThematicPlanXAndThematicAdvanceX"
+msgstr "Now you should add thematic plan %s and thematic advance %s"
+
+msgid "QualificationNumeric"
+msgstr "Maximum score"
+
+msgid "Literal0"
+msgstr "zero"
+
+msgid "Literal1"
+msgstr "one"
+
+msgid "Literal2"
+msgstr "two"
+
+msgid "Literal3"
+msgstr "three"
+
+msgid "Literal4"
+msgstr "four"
+
+msgid "Literal5"
+msgstr "five"
+
+msgid "Literal6"
+msgstr "six"
+
+msgid "Literal7"
+msgstr "seven"
+
+msgid "Literal8"
+msgstr "eight"
+
+msgid "Literal9"
+msgstr "nine"
+
+msgid "Literal10"
+msgstr "ten"
+
+msgid "Literal11"
+msgstr "eleven"
+
+msgid "Literal12"
+msgstr "twelve"
+
+msgid "Literal13"
+msgstr "thirteen"
+
+msgid "Literal14"
+msgstr "fourteen"
+
+msgid "Literal15"
+msgstr "fifteen"
+
+msgid "Literal16"
+msgstr "sixteen"
+
+msgid "Literal17"
+msgstr "seventeen"
+
+msgid "Literal18"
+msgstr "eighteen"
+
+msgid "Literal19"
+msgstr "nineteen"
+
+msgid "Literal20"
+msgstr "twenty"
+
+msgid "DateTime"
+msgstr "Date & time"
+
+msgid "Item"
+msgstr "Item"
+
+msgid "Never"
+msgstr "Never"
+
+msgid "CopyLabelSuffix"
+msgstr "Copy"
+
+msgid "SkillsRanking"
+msgstr "Skills ranking"
+
+msgid "ImportSkillsListCSV"
+msgstr "Import skills from a CSV file"
+
+msgid "SkillsImport"
+msgstr "Skills import"
+
+msgid "SkillsWheel"
+msgstr "Skills wheel"
+
+msgid "SkillsYouAcquired"
+msgstr "Skills you acquired"
+
+msgid "SkillsSearchedFor"
+msgstr "Skills searched for"
+
+msgid "SkillsYouCanLearn"
+msgstr "Skills you can learn"
+
+msgid "Legend"
+msgstr "Legend"
+
+msgid "ClickToZoom"
+msgstr "Click to zoom"
+
+msgid "SkillXWithCourseX"
+msgstr "%s with %s"
+
+msgid "ToGetToLearnXYouWillNeedToTakeOneOfTheFollowingCourses"
+msgstr "To get to learn %s you will need to take one of the following courses:"
+
+msgid "YourSkillRankingX"
+msgstr "Your skill ranking: %s"
+
+msgid "ManageSkills"
+msgstr "Manage skills"
+
+msgid "Categories"
+msgstr "Categories"
+
+msgid "StartDateMustBeBeforeTheEndDate"
+msgstr "Start date must be before the end date"
+
+msgid "SkillRoot"
+msgstr "Root"
+
+msgid "SkillInfo"
+msgstr "Skill info"
+
+msgid "GetNewSkills"
+msgstr "Get new skills"
+
+msgid "ViewSkillsWheel"
+msgstr "View skills wheel"
+
+msgid "MissingOneStepToMatch"
+msgstr "Missing <b>one</b> step to match"
+
+msgid "CompleteMatch"
+msgstr "Complete match"
+
+msgid "MissingXStepsToMatch"
+msgstr "Missing <b>%s</b> steps"
+
+msgid "Rank"
+msgstr "Rank"
+
+msgid "CurrentlyLearning"
+msgstr "Currently learning"
+
+msgid "SkillsAcquired"
+msgstr "Skills acquired"
+
+msgid "AddSkillToProfileSearch"
+msgstr "Add skill to profile search"
+
+msgid "ShortCode"
+msgstr "Short code"
+
+msgid "CreateChildSkill"
+msgstr "Create child skill"
+
+msgid "SearchProfileMatches"
+msgstr "Search profile matches"
+
+msgid "IsThisWhatYouWereLookingFor"
+msgstr "Is this what you were looking for?"
+
+msgid "WhatSkillsAreYouLookingFor"
+msgstr "What skills are you looking for?"
+
+msgid "ProfileSearch"
+msgstr "Profile search"
+
+msgid "here"
+msgstr "here"
+
+msgid "ImportUsers"
+msgstr "Import users"
+
+msgid "YouWillBeRedirectedInXSeconds"
+msgstr "Just a moment, please. You will be redirected in %s seconds..."
+
+msgid "NumberOfCoursesPublic"
+msgstr "Number of public courses"
+
+msgid "NumberOfCoursesOpen"
+msgstr "Number of open courses"
+
+msgid "NumberOfCoursesPrivate"
+msgstr "Number of private courses"
+
+msgid "NumberOfCoursesClosed"
+msgstr "Number of closed courses"
+
+msgid "NumberOfCoursesTotal"
+msgstr "Total number of courses"
+
+msgid "NumberOfUsersActive"
+msgstr "Number of active users"
+
+msgid "Approved"
+msgstr "Approved"
+
+msgid "EditSettings"
+msgstr "Edit settings"
+
+msgid "ThisValueCantBeChanged"
+msgstr "This value can\'t be changed."
+
+msgid "TotalAvailableUsers"
+msgstr "Total available users"
+
+msgid "LowerCaseUser"
+msgstr "user"
+
+msgid "dateFormatLongNoDay"
+msgstr "%d %B %Y"
+
+msgid "dateFormatOnlyDayName"
+msgstr "%A"
+
+msgid "ReturnToCourseList"
+msgstr "Return to the course list"
+
+msgid "dateFormatShortNumberNoYear"
+msgstr "%d/%m"
+
+msgid "CourseTutor"
+msgstr "Course tutor"
+
+msgid "StudentInSessionCourse"
+msgstr "Student in session course"
+
+msgid "StudentInCourse"
+msgstr "Student in course"
+
+msgid "SessionGeneralCoach"
+msgstr "Session general coach"
+
+msgid "SessionCourseCoach"
+msgstr "Session course coach"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "UserNotAttendedSymbol"
+msgstr "NP"
+
+msgid "UserAttendedSymbol"
+msgstr "P"
+
+msgid "Order"
+msgstr "Order"
+
+msgid "GlobalPlatformInformation"
+msgstr "Global platform information"
+
+msgid "ReportABug"
+msgstr "Report a bug"
+
+msgid "Letters"
+msgstr "Letters"
+
+msgid "MaximumOfParticipants"
+msgstr "Maximum number of members"
+
+msgid "ContactInformation"
+msgstr "Contact information"
+
+msgid "PersonName"
+msgstr "Your name"
+
+msgid "CompanyName"
+msgstr "Your company\'s name"
+
+msgid "PersonRole"
+msgstr "Your job\'s description"
+
+msgid "HaveYouThePowerToTakeFinancialDecisions"
+msgstr "Do you have the power to take financial decisions on behalf of your company?"
+
+msgid "CompanyCountry"
+msgstr "Your company\'s home country"
+
+msgid "CompanyCity"
+msgstr "Company city"
+
+msgid "WhichLanguageWouldYouLikeToUseWhenContactingYou"
+msgstr "Preferred contact language"
+
+msgid "SendInformation"
+msgstr "Send information"
+
+msgid "YouMustAcceptLicence"
+msgstr "You must accept the licence"
+
+msgid "SelectOne"
+msgstr "Select one"
+
+msgid "ContactInformationHasBeenSent"
+msgstr "Contact information has been sent"
+
+msgid "UserInactivedSinceX"
+msgstr "User inactive since %s"
+
+msgid "ContactInformationDescription"
+msgstr "Dear user,<br />
+<br />You are about to start using one of the best open-source e-learning platform on the market. Like many other open-source project, this project is backed up by a large community of students, teachers, developers and content creators who would like to promote the project better.<br />
+<br />
+By knowing a little bit more about you, one of our most important users, who will manage this e-learning system, we will be able to let people know that our software is used and let you know when we organize events that might be relevant to you.<br />
+<br />
+By filling this form, you accept that the Chamilo association or its members might send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flow, with a permanent respect of your time and your privacy.<br />
+<br />
+Please note that you are <b>not required</b> to fill this form. If you want to remain anonymous, we will loose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click \"Next\".<br /><br />"
+
+msgid "CompanyActivity"
+msgstr "Your company\'s activity"
+
+msgid "DateUnLock"
+msgstr "Unlock date"
+
+msgid "DateLock"
+msgstr "Lock date"
+
+msgid "GoToStudentDetails"
+msgstr "Go to learner details"
+
+msgid "RepeatDate"
+msgstr "Repeat date"
+
+msgid "ToAttend"
+msgstr "To attend"
+
+msgid "HaveFun"
+msgstr "Have fun,"
+
+msgid "ClearSearchResults"
+msgstr "Clear search results"
+
+msgid "TestServerMode"
+msgstr "Test server mode"
+
+msgid "PageExecutionTimeWas"
+msgstr "Page execution time was"
+
+msgid "MemoryUsage"
+msgstr "Memory usage"
+
+msgid "MemoryUsagePeak"
+msgstr "Memory usage peak"
+
+msgid "Seconds"
+msgstr "seconds"
+
+msgid "QualifyInGradebook"
+msgstr "Grade in the assessment tool"
+
+msgid "SessionSpecificResource"
+msgstr "Session-specific resource"
+
+msgid "EditionNotAvailableFromSession"
+msgstr "Edition not available from the session, please edit from the basic course."
+
+msgid "HandingOverOfTaskX"
+msgstr "Handing over of task %s"
+
+msgid "ProtectedDocument"
+msgstr "Protected Document"
+
+msgid "ConnectionsLastMonth"
+msgstr "Connections last month"
+
+msgid "TotalStudents"
+msgstr "Total learners"
+
+msgid "FilteringWithScoreX"
+msgstr "Filtering with score %s"
+
+msgid "ExamTaken"
+msgstr "Taken"
+
+msgid "ExamNotTaken"
+msgstr "Not taken"
+
+msgid "ExamPassX"
+msgstr "Pass minimun %s"
+
+msgid "ExamFail"
+msgstr "Fail"
+
+msgid "ExamTracking"
+msgstr "Exam tracking"
+
+msgid "NoAttempt"
+msgstr "No attempts"
+
+msgid "PassExam"
+msgstr "Pass"
+
+msgid "CreateCourseRequest"
+msgstr "Create a course request"
+
+msgid "TermsAndConditions"
+msgstr "Terms and Conditions"
+
+msgid "ReadTermsAndConditions"
+msgstr "Read the Terms and Conditions"
+
+msgid "IAcceptTermsAndConditions"
+msgstr "I have read and I accept the Terms and Conditions"
+
+msgid "YouHaveToAcceptTermsAndConditions"
+msgstr "You have to accept our Terms and Conditions to proceed."
+
+msgid "BrowserDontSupportsSVG"
+msgstr "Your browser does not support SVG files. To use the drawing tool you must have an advanced browser like: Firefox or Chrome"
+
+msgid "FillWithExemplaryContent"
+msgstr "Fill with demo content"
+
+msgid "ToolVideoconference"
+msgstr "Videoconference"
+
+msgid "SelectSVGEditImage"
+msgstr "Select a picture"
+
+msgid "OnlyAccessFromYourGroup"
+msgstr "Only accessible from your group"
+
+msgid "UserFolders"
+msgstr "Folders of users"
+
+msgid "CertificatesFiles"
+msgstr "Certificates"
+
+msgid "ChatFiles"
+msgstr "Chat conversations history"
+
+msgid "Flash"
+msgstr "Flash"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Images"
+msgstr "Images"
+
+msgid "OpenInANewWindow"
+msgstr "Open in a new window"
+
+msgid "ExamNotAvailableAtThisTime"
+msgstr "Exam not available at this time"
+
+msgid "LoginOrEmailAddress"
+msgstr "Username or e-mail address"
+
+msgid "Activate"
+msgstr "Activate"
+
+msgid "Deactivate"
+msgstr "Deactivate"
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "CreatedAt"
+msgstr "Created at"
+
+msgid "UpdatedAt"
+msgstr "Updated at"
+
+msgid "CreatedOn"
+msgstr "Created on"
+
+msgid "UpdatedOn"
+msgstr "Updated on"
+
+msgid "Paint"
+msgstr "Paint"
+
+msgid "MyResults"
+msgstr "My results"
+
+msgid "LearningPaths"
+msgstr "Learning paths"
+
+msgid "AllLearningPaths"
+msgstr "All learning paths"
+
+msgid "ByCourse"
+msgstr "By course"
+
+msgid "MyQCM"
+msgstr "My MCQ"
+
+msgid "AddACourse"
+msgstr "Add a course"
+
+msgid "PerWeek"
+msgstr "Per week"
+
+msgid "PhotoRetouching"
+msgstr "Photo retouching"
+
+msgid "SeeAll"
+msgstr "See all"
+
+msgid "SeeOnlyArchived"
+msgstr "See only archived"
+
+msgid "SeeOnlyUnarchived"
+msgstr "See only unarchived"
+
+msgid "LatestAttempt"
+msgstr "Latest attempt"
+
+msgid "ContactInformationHasNotBeenSent"
+msgstr "Your contact information could not be sent. This is probably due to a temporary network problem. Please try again in a few seconds. If the problem remains, ignore this registration process and simply click the button to go to the next step."
+
+msgid "FileDeleted"
+msgstr "File deleted"
+
+msgid "MyClasses"
+msgstr "My classes"
+
+msgid "PublicationDate"
+msgstr "Publication date"
+
+msgid "CorrectAndRate"
+msgstr "Correct and rate"
+
+msgid "ItemAdded"
+msgstr "Item added"
+
+msgid "ItemDeleted"
+msgstr "Item deleted"
+
+msgid "ItemUpdated"
+msgstr "Item updated"
+
+msgid "ItemCopied"
+msgstr "Item copied"
+
+msgid "MyStatistics"
+msgstr "My statistics"
+
+msgid "FromDateXToDateY"
+msgstr "From %s to %s"
+
+msgid "CourseThematicAdvance"
+msgstr "Course progress"
+
+msgid "Clean"
+msgstr "Clean"
+
+msgid "MailNotifyInvitation"
+msgstr "Notify by mail on new invitation received"
+
+msgid "MailNotifyMessage"
+msgstr "Notify by mail on new personal message received"
+
+msgid "MailNotifyGroupMessage"
+msgstr "Notify by mail on new message received in group"
+
+msgid "ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField"
+msgstr "Click on the box below to select files from your computer (you can use CTRL + clic to select various files at a time), or drag and drop some files from your desktop directly over the box below. The system will handle the rest!"
+
+msgid "Simple"
+msgstr "Simple"
+
+msgid "Multiple"
+msgstr "Multiple"
+
+msgid "UploadFiles"
+msgstr "Clic or drag and drop files here to upload them"
+
+msgid "SupportedFormatsForIndex"
+msgstr "Supported formats for index"
+
+msgid "Installed"
+msgstr "Installed"
+
+msgid "NotInstalled"
+msgstr "Not installed"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "OnlyLettersAndNumbers"
+msgstr "Only letters (a-z) and numbers (0-9)"
+
+msgid "CheckFilePermissions"
+msgstr "Check file permissions"
+
+msgid "AddedToALP"
+msgstr "Added to a LP"
+
+msgid "NotAvailable"
+msgstr "Not available"
+
+msgid "NanogongNoApplet"
+msgstr "Can\'t find the applet Nanogong"
+
+msgid "NanogongRecordBeforeSave"
+msgstr "Before try to send the file you should make the recording"
+
+msgid "NanogongGiveTitle"
+msgstr "You did not give a name to file"
+
+msgid "NanogongFailledToSubmit"
+msgstr "Failed to submit the voice recording"
+
+msgid "NanogongSubmitted"
+msgstr "Voice recording has been submitted"
+
+msgid "RecordMyVoice"
+msgstr "Record my voice"
+
+msgid "PressRecordButton"
+msgstr "To start recording press the red button"
+
+msgid "VoiceRecord"
+msgstr "Voice record"
+
+msgid "BrowserNotSupportNanogongSend"
+msgstr "Your browser does not send your recording to the platform, although you can save on your computer disk and send it later. To have all the features, we recommend using advanced browsers such as Firefox or Chrome."
+
+msgid "FileExistRename"
+msgstr "Already exist a file with the same name.  Please, rename the file."
+
+msgid "GradebookAndAttendances"
+msgstr "Assessments and attendances"
+
+msgid "SelectADateRange"
+msgstr "Select a date range"
+
+msgid "AllDone"
+msgstr "All done"
+
+msgid "AllNotDone"
+msgstr "All not done"
+
+msgid "GroupUpdated"
+msgstr "Class updated."
+
+msgid "AuthSourceNotAvailable"
+msgstr "Authentication source unavailable."
+
+msgid "Responsable"
+msgstr "Responsible"
+
+msgid "TheAttendanceSheetIsLocked"
+msgstr "The attendance sheet is locked."
+
+msgid "Presence"
+msgstr "Assistance"
+
+msgid "ACourseCategoryWithThisNameAlreadyExists"
+msgstr "A course category with the same name already exists."
+
+msgid "OpenIDRedirect"
+msgstr "OpenID redirect"
+
+msgid "Blogs"
+msgstr "Blogs"
+
+msgid "Others"
+msgstr "Others"
+
+msgid "BackToCourseDesriptionList"
+msgstr "Back to the course description"
+
+msgid "Postpone"
+msgstr "Postpone"
+
+msgid "NotHavePermission"
+msgstr "The user doesn\'t have permissions to do the requested operation."
+
+msgid "CourseCodeAlreadyExistExplained"
+msgstr "When a course code is duplicated, the database system detects a course code that already exists and prevents the creation of a duplicate. Please ensure no course code is duplicated."
+
+msgid "CantDeleteReadonlyFiles"
+msgstr "Cannot delete files that are configured in read-only mode."
+
+msgid "Uploaded"
+msgstr "Uploaded."
+
+msgid "Saved"
+msgstr "Saved."
+
+msgid "Reset"
+msgstr "Reset"
+
+msgid "EmailSentFromDokeos"
+msgstr "E-mail sent from the platform"
+
+msgid "InfoAboutLastDoneAdvanceAndNextAdvanceNotDone"
+msgstr "Information about the last finished step and the next unfinished one."
+
+msgid "LatexCode"
+msgstr "LaTeX code"
+
+msgid "LatexFormula"
+msgstr "LaTeX formula"
+
+msgid "AreYouSureToLockTheAttendance"
+msgstr "Are you sure you want to lock the attendance?"
+
+msgid "UnlockMessageInformation"
+msgstr "The attendance is not locked, which means your teacher is still able to modify it."
+
+msgid "LockAttendance"
+msgstr "Lock attendance"
+
+msgid "AreYouSureToUnlockTheAttendance"
+msgstr "Are you sure you want to unlock the attendance?"
+
+msgid "UnlockAttendance"
+msgstr "Unlock attendance"
+
+msgid "LockedAttendance"
+msgstr "Locked attendance"
+
+msgid "DecreaseFontSize"
+msgstr "Decrease the font size"
+
+msgid "ResetFontSize"
+msgstr "Reset the font size"
+
+msgid "IncreaseFontSize"
+msgstr "Increase the font size"
+
+msgid "LoggedInAsX"
+msgstr "Logged in as %s"
+
+msgid "AttachmentUpload"
+msgstr "attachment upload"
+
+msgid "CourseAutoRegister"
+msgstr "Auto-registration course"
+
+msgid "ThematicAdvanceInformation"
+msgstr "The thematic advance tool allows you to organize your training through time."
+
+msgid "RequestURIInfo"
+msgstr "The URL requested to get to this page, without the domain definition."
+
+msgid "DiskFreeSpace"
+msgstr "Free space on disk"
+
+msgid "ProtectFolder"
+msgstr "Protected folder"
+
+msgid "SomeHTMLNotAllowed"
+msgstr "Some HTML attributed are not allowed."
+
+msgid "MyOtherGroups"
+msgstr "My other classes"
+
+msgid "XLSFileNotValid"
+msgstr "The provided XLS file is not valid."
+
+msgid "YouAreRegisterToSessionX"
+msgstr "You are registered to session: %s."
+
+msgid "NextBis"
+msgstr "Next"
+
+msgid "Prev"
+msgstr "Prev"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "ToGroup"
+msgstr "To social group"
+
+msgid "XWroteY"
+msgstr "%s wrote: <br /><i>%s</i>"
+
+msgid "BackToGroup"
+msgstr "Back to the group"
+
+msgid "GoAttendance"
+msgstr "Go to attendances"
+
+msgid "GoAssessments"
+msgstr "Go assessments"
+
+msgid "UserRoles"
+msgstr "User roles"
+
+msgid "GroupRoles"
+msgstr "Group roles"
+
+msgid "StorePermissions"
+msgstr "Store permissions"
+
+msgid "PendingInvitation"
+msgstr "Pending invitation"
+
+msgid "MaximunFileSizeXMB"
+msgstr "Maximum file size: %sMB."
+
+msgid "MessageHasBeenSent"
+msgstr "Your message has been sent."
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "ClassesUnSubscribed"
+msgstr "Classes unsubscribed."
+
+msgid "NotAddedToCourse"
+msgstr "Not added to course"
+
+msgid "UsersNotRegistered"
+msgstr "Users who did not register."
+
+msgid "ClearFilterResults"
+msgstr "Clear filter results"
+
+msgid "SelectFilter"
+msgstr "Select filter"
+
+msgid "ThereIsNoClassScheduledTodayTryPickingAnotherDay"
+msgstr "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons."
+
+msgid "AddToCalendar"
+msgstr "Add to calendar"
+
+msgid "RandomPick"
+msgstr "Random pick"
+
+msgid "YouHaveANewInvitationFromX"
+msgstr "You have a new invitation from %s"
+
+msgid "YouHaveANewMessageFromGroupX"
+msgstr "You have a new message from group %s"
+
+msgid "YouHaveANewMessageFromX"
+msgstr "You have a new message from %s"
+
+msgid "SeeMessage"
+msgstr "See message"
+
+msgid "SeeInvitation"
+msgstr "See invitation"
+
+msgid "YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX"
+msgstr "You have received this notification because you are subscribed or involved in it to change your notification preferences please click here: %s"
+
+msgid "Replies"
+msgstr "Replies"
+
+msgid "Reply"
+msgstr "Reply"
+
+msgid "Broken"
+msgstr "Broken"
+
+msgid "CheckURL"
+msgstr "Check link"
+
+msgid "NoItem"
+msgstr "No item yet"
+
+msgid "LoadExtraData"
+msgstr "Load extra user fields data (have to be marked as \'Filter\' to appear)."
+
+msgid "CourseAssistant"
+msgstr "Assistant"
+
+msgid "SupportedScormContentMakers"
+msgstr "Scorm Authoring tools supported"
+
+msgid "Copy"
+msgstr "Copy"
+
+msgid "EnableStartTime"
+msgstr "Enable start time"
+
+msgid "EnableEndTime"
+msgstr "Enable end time"
+
+msgid "Wrong"
+msgstr "Wrong"
+
+msgid "Certification"
+msgstr "Certification"
+
+msgid "CertificateOnlineLink"
+msgstr "Online link to certificate"
+
+msgid "NewExercises"
+msgstr "New exercises"
+
+msgid "MyAverage"
+msgstr "My average"
+
+msgid "AllAttempts"
+msgstr "All attempts"
+
+msgid "NoCookies"
+msgstr "You do not have cookies support enabled in your browser. Chamilo relies on the feature called \"cookies\" to store your connection details. This means you will not be able to login if cookies are not enabled. Please change your browser configuration (generally in the Edit -> Preferences menu) and reload this page."
+
+msgid "NoJavascript"
+msgstr "Your do not have JavaScript support enabled in your browser. Chamilo relies heavily on JavaScript to provide you with a more dynamic interface. It is likely that most feature will work, but you might not benefit from the latest improvements in usability. We recommend you change your browser configuration (generally under the Edit -> Preferences menu) and reload this page."
+
+msgid "NoFlash"
+msgstr "You do not seems to have Flash support enabled in your browser. Chamilo only relies on Flash for a few features and will not lock you out in any way if you don\'t have it, but if you want to benefit from the complete set of tools from Chamilo, we recommend you install the Flash Plugin and restart your browser."
+
+msgid "Attempt"
+msgstr "Attempt"
+
+msgid "SaveForNow"
+msgstr "Save and continue later"
+
+msgid "NoQuicktime"
+msgstr "Your browser does not have the QuickTime plugin installed. You can still use the platform, but to run a larger number of media file types, we suggest you might want to install it."
+
+msgid "NoJavaSun"
+msgstr "Your browser doesn\'t seem to have the Sun Java plugin installed. You can still use the platform, but you will lose a few of its capabilities."
+
+msgid "NoJava"
+msgstr "Your browser does not support Java"
+
+msgid "JavaSun24"
+msgstr "Your browser has a Java version not supported by this tool.
+To use it you have to install a Java Sun version higher than 24"
+
+msgid "NoMessageAnywere"
+msgstr "If you do not want to see this message again during this session, click here"
+
+msgid "Attempts"
+msgstr "Attempts"
+
+msgid "SeeResults"
+msgstr "See results"
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid "AreYouSureToRestore"
+msgstr "Are you sure you want to restore this element?"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "This is an automatic email message. Please do not reply to it."
+
+msgid "PersonalCalendar"
+msgstr "Personal Calendar"
+
+msgid "SkillsTree"
+msgstr "Skills Tree"
+
+msgid "Skills"
+msgstr "Skills"
+
+msgid "SkillsProfile"
+msgstr "Skills Profile"
+
+msgid "WithCertificate"
+msgstr "With Certificate"
+
+msgid "AdminCalendar"
+msgstr "Admin Calendar"
+
+msgid "CourseCalendar"
+msgstr "Course Calendar"
+
+msgid "Reports"
+msgstr "Reports"
+
+msgid "dateFormatShortNumber"
+msgstr "%m/%d/%Y"
+
+msgid "dateTimeFormatLong24H"
+msgstr "%B %d, %Y at %H:%M"
+
+msgid "GradingModelTitle"
+msgstr "Grading model"
+
+msgid "Discussions"
+msgstr "Discussions"
+
+msgid "GradeModel"
+msgstr "Grading model"
+
+msgid "ViewSkillsTree"
+msgstr "View skills tree"
+
+msgid "MySkills"
+msgstr "My skills"
+
+msgid "SeeFile"
+msgstr "See file"
+
+msgid "UserList"
+msgstr "User list"
+
+msgid "SearchUsers"
+msgstr "Search users"
+
+msgid "Administration"
+msgstr "Administration"
+
+msgid "SkillsAndGradebooks"
+msgstr "Skills and assessments"
+
+msgid "AddSkill"
+msgstr "Add skill"
+
+msgid "AcceptLegal"
+msgstr "Accept legal agreement"
+
+msgid "CourseLegalAgreement"
+msgstr "Legal agreement for this course"
+
+msgid "SkillDoesNotExist"
+msgstr "There is no such skill"
+
+msgid "SkillRootName"
+msgstr "Absolute skill"
+
+msgid "Option"
+msgstr "Option"
+
+msgid "Updates"
+msgstr "Updates"
+
+msgid "Teaching"
+msgstr "Teaching"
+
+msgid "CoursesReporting"
+msgstr "Courses reporting"
+
+msgid "AdminReports"
+msgstr "Admin reports"
+
+msgid "ExamsReporting"
+msgstr "Exams reports"
+
+msgid "MyReporting"
+msgstr "My reporting"
+
+msgid "SearchSkills"
+msgstr "Search skills"
+
+msgid "SaveThisSearch"
+msgstr "Save this search"
+
+msgid "SkillProfiles"
+msgstr "Stored skills profiles"
+
+msgid "Matches"
+msgstr "Matches"
+
+msgid "WelcomeUserXToTheSiteX"
+msgstr "%s, welcome to %s"
+
+msgid "CheckUsersWithId"
+msgstr "Use user\'s IDs from the file to subscribe them"
+
+msgid "MB"
+msgstr "MB"
+
+msgid "SessionList"
+msgstr "Session list"
+
+msgid "StudentList"
+msgstr "Learners list"
+
+msgid "GroupReply"
+msgstr "Reply"
+
+msgid "GroupReplies"
+msgstr "Replies"
+
+msgid "SkillNotFound"
+msgstr "Skill not found"
+
+msgid "IHaveThisSkill"
+msgstr "I have this skill"
+
+msgid "Me"
+msgstr "Me"
+
+msgid "Vote"
+msgstr "Vote"
+
+msgid "Votes"
+msgstr "Votes"
+
+msgid "XStarsOutOf5"
+msgstr "%s stars out of 5"
+
+msgid "Visit"
+msgstr "Visit"
+
+msgid "Visits"
+msgstr "Visits"
+
+msgid "YourVote"
+msgstr "Your vote"
+
+msgid "HottestCourses"
+msgstr "Most popular courses"
+
+msgid "SentAtX"
+msgstr "Sent at: %s"
+
+msgid "dateTimeFormatShort"
+msgstr "%b %d, %Y at %I:%M %p"
+
+msgid "dateTimeFormatShortTimeFirst"
+msgstr "%I:%M %p, %b %d %Y"
+
+msgid "LoginToVote"
+msgstr "Login to vote"
+
+msgid "DoNotShow"
+msgstr "Do not show"
+
+msgid "ShowToAdminsOnly"
+msgstr "Show to admins only"
+
+msgid "ShowToAdminsAndTeachers"
+msgstr "Show to admins and teachers"
+
+msgid "ShowToAllUsers"
+msgstr "Show to all  users"
+
+msgid "SelectAnAction"
+msgstr "Select an action"
+
+msgid "LoginX"
+msgstr "Login: %s"
+
+msgid "ChatConnected"
+msgstr "Chat (Connected)"
+
+msgid "ChatDisconnected"
+msgstr "Chat (Disconnected)"
+
+msgid "ThingsToDo"
+msgstr "Things to do next"
+
+msgid "WamiFlashDialog"
+msgstr "It will display a dialog box which asks for your permission to access the microphone, answer yes and close the dialog box (if you do not want to appear again, before closing check remember)"
+
+msgid "WamiStartRecorder"
+msgstr "Start recording by pressing the microphone and stop it by pressing again. Each time you do this will generate a file."
+
+msgid "InputNameHere"
+msgstr "Enter name here"
+
+msgid "Reload"
+msgstr "Reload"
+
+msgid "TimeSpentLastXDays"
+msgstr "Time spent the last %s days"
+
+msgid "TimeSpentBetweenXAndY"
+msgstr "Time spent between %s and %s"
+
+msgid "GoToCourse"
+msgstr "Go to the course"
+
+msgid "SubTotal"
+msgstr "Subtotal"
+
+msgid "Configure"
+msgstr "Configure"
+
+msgid "Regions"
+msgstr "Regions"
+
+msgid "CourseList"
+msgstr "Course list"
+
+msgid "NumberAbbreviation"
+msgstr "N°"
+
+msgid "FirstnameAndLastname"
+msgstr "First Name and Last Name"
+
+msgid "LastnameAndFirstname"
+msgstr "Last Name and First Name"
+
+msgid "Plugins"
+msgstr "Plugins"
+
+msgid "Detailed"
+msgstr "Detailed"
+
+msgid "ResourceLockedByGradebook"
+msgstr "This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator."
+
+msgid "ConfirmToLockElement"
+msgstr "Are you sure you want to lock this item? After locking this item you can\'t edit the user results. To unlock it, you need to contact the platform administrator."
+
+msgid "ConfirmToUnLockElement"
+msgstr "Are you sure you want to unlock this element?"
+
+msgid "Default"
+msgstr "Default"
+
+msgid "ReturnToCourseHomepage"
+msgstr "Return to Course Homepage"
+
+msgid "WebCamClip"
+msgstr "Webcam Clip"
+
+msgid "Snapshot"
+msgstr "Snapshot"
+
+msgid "TakeYourPhotos"
+msgstr "Take your photos"
+
+msgid "LocalInputImage"
+msgstr "Local input image"
+
+msgid "ClipSent"
+msgstr "Clip sent"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "YouHaveSomeUnsavedChanges"
+msgstr "You have some unsaved changes. Do you want to abandon them ?"
+
+msgid "ActivateEvent"
+msgstr "Activate event"
+
+msgid "AvailableEventKeys"
+msgstr "Available event keys. Use them between (( ))."
+
+msgid "Events"
+msgstr "Events"
+
+msgid "EventTypeName"
+msgstr "Event type name"
+
+msgid "ExportToPDFOnlyHTMLAndImages"
+msgstr "Export to PDF web pages and images"
+
+msgid "CourseCatalog"
+msgstr "Course catalog"
+
+msgid "Go"
+msgstr "Go"
+
+msgid "ImportThematic"
+msgstr "Import course progress"
+
+msgid "ExportThematic"
+msgstr "Export course progress"
+
+msgid "DeleteAllThematic"
+msgstr "Delete all course progress"
+
+msgid "ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation"
+msgstr "This platform was unable to send the email. Please contact %s for more information."
+
+msgid "FirstLoginChangePassword"
+msgstr "This is your first login. Please update your password to something you will remember."
+
+msgid "NeedContactAdmin"
+msgstr "Click here to contact the administrator"
+
+msgid "MarkAll"
+msgstr "Select all"
+
+msgid "UnmarkAll"
+msgstr "Unselect all"
+
+msgid "NotAuthorized"
+msgstr "Not authorized"
+
+msgid "UnknownAction"
+msgstr "Unknown action"
+
+msgid "First"
+msgstr "First"
+
+msgid "Last"
+msgstr "Last"
+
+msgid "YouAreNotAuthorized"
+msgstr "You are not authorized to do this"
+
+msgid "NoImplementation"
+msgstr "No implementation available yet for this action"
+
+msgid "ReplaceExistingEntries"
+msgstr "Replace existing entries"
+
+msgid "AddItems"
+msgstr "Add items"
+
+msgid "NotFound"
+msgstr "Not found"
+
+msgid "SentSuccessfully"
+msgstr "Successfully sent"
+
+msgid "SentFailed"
+msgstr "Sending failed"
+
+msgid "PortalSessionsLimitReached"
+msgstr "The number of sessions limit for this portal has been reached"
+
+msgid "ANewSessionWasCreated"
+msgstr "A new session has been created"
+
+msgid "Online"
+msgstr "Online"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "TimelineItemText"
+msgstr "Text"
+
+msgid "TimelineItemMedia"
+msgstr "Media"
+
+msgid "TimelineItemMediaCaption"
+msgstr "Caption"
+
+msgid "TimelineItemMediaCredit"
+msgstr "Credits"
+
+msgid "TimelineItemTitleSlide"
+msgstr "Slider title"
+
+msgid "SSOError"
+msgstr "Single Sign On error"
+
+msgid "Sent"
+msgstr "Sent"
+
+msgid "TimelineItem"
+msgstr "Item"
+
+msgid "Listing"
+msgstr "Listing"
+
+msgid "CourseRssTitle"
+msgstr "Course RSS"
+
+msgid "CourseRssDescription"
+msgstr "RSS feed for all course notifications"
+
+msgid "AllowPublicCertificates"
+msgstr "Learner certificates are public"
+
+msgid "PortalHomepageEdited"
+msgstr "Portal homepage updated"
+
+msgid "UserRegistrationTitle"
+msgstr "User registration"
+
+msgid "UserRegistrationComment"
+msgstr "Actions to be fired when a user registers to the platform"
+
+msgid "Disabled"
+msgstr "Disabled"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "CategorySaved"
+msgstr "Category saved"
+
+msgid "CategoryRemoved"
+msgstr "Category removed"
+
+msgid "BrowserDoesNotSupportNanogongPlayer"
+msgstr "Your browser doesn\'t support the Nanogong player"
+
+msgid "ImportCSV"
+msgstr "Import CSV"
+
+msgid "DataTableLengthMenu"
+msgstr "Table length"
+
+msgid "DataTableZeroRecords"
+msgstr "No record found"
+
+msgid "MalformedUrl"
+msgstr "Badly formed URL"
+
+msgid "DataTableInfo"
+msgstr "Info"
+
+msgid "DataTableInfoEmpty"
+msgstr "Empty"
+
+msgid "DataTableInfoFiltered"
+msgstr "Filtered"
+
+msgid "DataTableSearch"
+msgstr "Search"
+
+msgid "HideColumn"
+msgstr "Hide column"
+
+msgid "DisplayColumn"
+msgstr "Show column"
+
+msgid "LegalAgreementAccepted"
+msgstr "Legal agreement accepted"
+

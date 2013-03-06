@@ -1,0 +1,90 @@
+msgid "NewNote"
+msgstr "Nova nota"
+
+msgid "Note"
+msgstr "Nota"
+
+msgid "NoteDeleted"
+msgstr "Nota eliminada"
+
+msgid "NoteUpdated"
+msgstr "Nota actualitzada"
+
+msgid "NoteCreated"
+msgstr "Nota creada"
+
+msgid "YouMustWriteANote"
+msgstr "Per favor, escrigui una nota"
+
+msgid "SaveNote"
+msgstr "Guardar nota"
+
+msgid "WriteYourNoteHere"
+msgstr "Escrigui la seua nota ací"
+
+msgid "SearchByTitle"
+msgstr "Buscar per títol"
+
+msgid "WriteTheTitleHere"
+msgstr "Escrigui el seu títol ací"
+
+msgid "UpdateDate"
+msgstr "Última modificació"
+
+msgid "NoteAddNew"
+msgstr "Afegir una nota"
+
+msgid "OrderByCreationDate"
+msgstr "Ordenar per data de creació"
+
+msgid "OrderByModificationDate"
+msgstr "Ordenar per data de modificació"
+
+msgid "OrderByTitle"
+msgstr "Ordenar per títol"
+
+msgid "NoteTitle"
+msgstr "Títol de la nota"
+
+msgid "NoteComment"
+msgstr "Contingut de la nota"
+
+msgid "NoteAdded"
+msgstr "Nota afegida"
+
+msgid "NoteConfirmDelete"
+msgstr "Desitja realment esborrar la nota?"
+
+msgid "AddNote"
+msgstr "Afegir nota"
+
+msgid "ModifyNote"
+msgstr "Modificar nota"
+
+msgid "BackToNoteList"
+msgstr "Tornar a la llista d\'anotacions"
+
+msgid "NotebookManagement"
+msgstr "Administració de nota personal"
+
+msgid "BackToNotesList"
+msgstr "Tornar al llistat de notes"
+
+msgid "NotesSortedByTitleAsc"
+msgstr "Notes en ordre ascendent per títol"
+
+msgid "NotesSortedByTitleDESC"
+msgstr "Notes en ordre descendent per títol"
+
+msgid "NotesSortedByUpdateDateAsc"
+msgstr "Notes en ordre ascendent per data d\'actualització"
+
+msgid "NotesSortedByUpdateDateDESC"
+msgstr "Notes en ordre descendent per data d\'actualització"
+
+msgid "NotesSortedByCreationDateAsc"
+msgstr "Notes en ordre ascendent per data de creació"
+
+msgid "NotesSortedByCreationDateDESC"
+msgstr "Notes en ordre descendent per data de creació"
+

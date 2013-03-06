@@ -1,0 +1,528 @@
+msgid "langExercice"
+msgstr "Test"
+
+msgid "langActivate"
+msgstr "Prikaži"
+
+msgid "langDeactivate"
+msgstr "Sakrij"
+
+msgid "langNoEx"
+msgstr "U ovom trenutku nema testa"
+
+msgid "langNewEx"
+msgstr "Novi test"
+
+msgid "langQuestion"
+msgstr "pitanje"
+
+msgid "langQuestions"
+msgstr "Pitanja"
+
+msgid "langAnswers"
+msgstr "Odgovori"
+
+msgid "langTrue"
+msgstr "Ispravno"
+
+msgid "langAnswer"
+msgstr "Odgovor"
+
+msgid "langResult"
+msgstr "Rezultati"
+
+msgid "langNoResult"
+msgstr "Još uvek nema rezultata"
+
+msgid "langYourResults"
+msgstr "Vaši rezultati"
+
+msgid "langStudentResults"
+msgstr "Rezultati polaznika"
+
+msgid "langExerciseType"
+msgstr "Tip testa"
+
+msgid "langExerciseName"
+msgstr "Ime testa"
+
+msgid "langExerciseDescription"
+msgstr "Opis testa"
+
+msgid "langSimpleExercise"
+msgstr "Na jedinstvenoj stranici"
+
+msgid "langSequentialExercise"
+msgstr "Jedno pitanje po stranici (po redosledu)"
+
+msgid "langRandomQuestions"
+msgstr "Slučajna pitanja"
+
+msgid "langGiveExerciseName"
+msgstr "Molim Vas, dajte ime testu"
+
+msgid "langSound"
+msgstr "Audio  ili video fajl"
+
+msgid "langDeleteSound"
+msgstr "Obriši Audio ili video fajl"
+
+msgid "langNoAnswer"
+msgstr "Još uvek nema odgovora"
+
+msgid "langGoBackToQuestionPool"
+msgstr "Vrati se nazad na set pitanja"
+
+msgid "langGoBackToQuestionList"
+msgstr "Vrati se nazad na listu pitanja"
+
+msgid "langQuestionAnswers"
+msgstr "Odgovori na pitanje"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Upozorenje! Ovo pitanje i ovi odgovori su upotrebljeni u više testova. Da li želite da ih izmenite?"
+
+msgid "langModifyInAllExercises"
+msgstr "u svim testovima"
+
+msgid "langModifyInThisExercise"
+msgstr "samo u tekućem testu"
+
+msgid "langAnswerType"
+msgstr "Tip odgovora"
+
+msgid "langMultipleSelect"
+msgstr "Više ponuđenih odgovora (više tačnih odgovora)"
+
+msgid "langFillBlanks"
+msgstr "Popuni praznine"
+
+msgid "langMatching"
+msgstr "Povezivanje"
+
+msgid "langAddPicture"
+msgstr "Dodavanje slike"
+
+msgid "langReplacePicture"
+msgstr "Zameni sliku"
+
+msgid "langDeletePicture"
+msgstr "Brisanje slike"
+
+msgid "langQuestionDescription"
+msgstr "Opcionalni komentar"
+
+msgid "langGiveQuestion"
+msgstr "molim Vas, otkucajte pitanje"
+
+msgid "langWeightingForEachBlank"
+msgstr "Molim vas unesite bodove za svaku prazninu."
+
+msgid "langUseTagForBlank"
+msgstr "Koristite uglaste zagrade [...] da definišete više praznina"
+
+msgid "langQuestionWeighting"
+msgstr "Bodovanje"
+
+msgid "langMoreAnswers"
+msgstr "+odgovor"
+
+msgid "langLessAnswers"
+msgstr "-odgovor"
+
+msgid "langMoreElements"
+msgstr "+element"
+
+msgid "langLessElements"
+msgstr "-element"
+
+msgid "langTypeTextBelow"
+msgstr "Molim Vas, ukucajte vaš tekst ispod"
+
+msgid "langDefaultTextInBlanks"
+msgstr "[Britanci] žive u [Velikoj Britaniji]."
+
+msgid "langDefaultMatchingOptA"
+msgstr "bogat"
+
+msgid "langDefaultMatchingOptB"
+msgstr "dobrog izgleda"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Tvoj tata je"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Tvoja mama je"
+
+msgid "langDefineOptions"
+msgstr "Molim Vas, definišite opcije"
+
+msgid "langMakeCorrespond"
+msgstr "Poveži ih"
+
+msgid "langFillLists"
+msgstr "Molim Vas, popunite dve liste ispod"
+
+msgid "langGiveText"
+msgstr "Molima Vas, ukucajte tekst"
+
+msgid "langDefineBlanks"
+msgstr "molim Vas, definišite bar jednu prazninu uglastim zagradama [...]"
+
+msgid "langGiveAnswers"
+msgstr "Molim Vas, otkucajte odgovore na pitanja"
+
+msgid "langChooseGoodAnswer"
+msgstr "Molim Vas, selektujte tačan odgovor"
+
+msgid "langChooseGoodAnswers"
+msgstr "Molim Vas, selektujte jedan ili više tačnih odgovora"
+
+msgid "langQuestionList"
+msgstr "Lista pitanja za test"
+
+msgid "langMoveUp"
+msgstr "Pomeri gore"
+
+msgid "langMoveDown"
+msgstr "Pomeri dole"
+
+msgid "langGetExistingQuestion"
+msgstr "Uzmi pitanje iz baze"
+
+msgid "langFinishTest"
+msgstr "Završi test"
+
+msgid "langQuestionPool"
+msgstr "Set pitanja"
+
+msgid "langOrphanQuestions"
+msgstr "Nezavisna pitanja"
+
+msgid "langNoQuestion"
+msgstr "Trenutno nema pitanja"
+
+msgid "langAllExercises"
+msgstr "Svi testovi"
+
+msgid "langFilter"
+msgstr "Filter"
+
+msgid "langGoBackToEx"
+msgstr "Vrati se nazad na test"
+
+msgid "langReuse"
+msgstr "Ponovo koristi"
+
+msgid "langExerciseManagement"
+msgstr "Administriranje testa"
+
+msgid "langQuestionManagement"
+msgstr "Pitanja/Odgovori administracija"
+
+msgid "langQuestionNotFound"
+msgstr "Pitanje nije pronađeno"
+
+msgid "langExerciseNotFound"
+msgstr "Test nije pronađen ili nije vidljiv"
+
+msgid "langAlreadyAnswered"
+msgstr "Već ste odgovorili na pitanje."
+
+msgid "langElementList"
+msgstr "Lista elemenata"
+
+msgid "langScore"
+msgstr "Rezultat"
+
+msgid "langCorrespondsTo"
+msgstr "Odgovara"
+
+msgid "langExpectedChoice"
+msgstr "Očekivani izbor"
+
+msgid "langYourTotalScore"
+msgstr "Vaš konačni rezultat je"
+
+msgid "langExerciseAdded"
+msgstr "Vežba dodana"
+
+msgid "Build"
+msgstr "Napravi"
+
+msgid "langEvalSet"
+msgstr "parametri za evaluaciju"
+
+msgid "langActive"
+msgstr "aktivan"
+
+msgid "langInactive"
+msgstr "neaktivan"
+
+msgid "langQuestCreate"
+msgstr "napravite pitanja"
+
+msgid "langExRecord"
+msgstr "vaša vežba je snimljena"
+
+msgid "langBackModif"
+msgstr "nazad na izmenu stranice sa pitanjima"
+
+msgid "langDoEx"
+msgstr "napravite vežbu"
+
+msgid "langDefScor"
+msgstr "Opišite parametre za evaluaciju"
+
+msgid "langCreateModif"
+msgstr "Napravite/izmenite pitanja"
+
+msgid "langSub"
+msgstr "podnaslov"
+
+msgid "langMyAnswer"
+msgstr "Moj odgovor"
+
+msgid "langMorA"
+msgstr "+ odgovor"
+
+msgid "langLesA"
+msgstr "- odgovor"
+
+msgid "langRecEx"
+msgstr "snimi vežbu"
+
+msgid "langRecQu"
+msgstr "Snimi pitanje"
+
+msgid "langRecAns"
+msgstr "Snimi odgovore"
+
+msgid "langIntroduction"
+msgstr "Uvod"
+
+msgid "langTitleAssistant"
+msgstr "Asistent za kreiranje vežbi"
+
+msgid "langQuesList"
+msgstr "lista pitanja"
+
+msgid "langSaveEx"
+msgstr "snimi vežbanje"
+
+msgid "langFinish"
+msgstr "Završi"
+
+msgid "langCancel"
+msgstr "Otkaži"
+
+msgid "langQImage"
+msgstr "Pitanje sa slikom"
+
+msgid "langAddQ"
+msgstr "Dodaj pitanje"
+
+msgid "langDoAnEx"
+msgstr "Uradi vežbu"
+
+msgid "langGenerator"
+msgstr "Lista vežbi"
+
+msgid "langChoice"
+msgstr "Vaš izbor"
+
+msgid "langCorrect"
+msgstr "Ispravi"
+
+msgid "langPossAnsw"
+msgstr "Broj tačnih odgovora za jedno pitanje"
+
+msgid "langStudAnsw"
+msgstr "broj grešaka koje je polaznik napravio"
+
+msgid "langDetermine"
+msgstr "Odredi"
+
+msgid "langNonNumber"
+msgstr "ne numerička vrednost"
+
+msgid "langReplaced"
+msgstr "Zamenjeno"
+
+msgid "langSuperior"
+msgstr "vrednost veća od 20"
+
+msgid "langRep20"
+msgstr "Zameni 20"
+
+msgid "langDefault"
+msgstr "Osnovne vrednosti *"
+
+msgid "langDefComment"
+msgstr "Prethodne vrednosti će biti zemenjene klikom na dugme „osnovne vrednosti\""
+
+msgid "langScoreGet"
+msgstr "crni brojevi = rezultat"
+
+msgid "langShowScor"
+msgstr "Pokažite evaluaciju polazniku"
+
+msgid "langStep1"
+msgstr "Korak 1"
+
+msgid "langStep2"
+msgstr "Korak 2"
+
+msgid "langTake"
+msgstr "uzmi"
+
+msgid "langAmong"
+msgstr "između"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Uvezi HotPotatoes testove"
+
+msgid "langHotPotatoesTests"
+msgstr "Uvezi HotPotatoes testove"
+
+msgid "langDownloadFile"
+msgstr "Učitaj fajl na server"
+
+msgid "langDownloadImg"
+msgstr "Učitaj fajlove sa slikama na server"
+
+msgid "langDownloadEnd"
+msgstr "Učitavanje na server je završeno"
+
+msgid "langNoSpace"
+msgstr "Učitavanje na server nije uspelo. Ili ste premašili vašu maksimalnu kvotu ili nema dovoljno mesta na disku."
+
+msgid "langZipNoPhp"
+msgstr "zip fajl ne može da sadrži .php fajlove"
+
+msgid "langNoImg"
+msgstr "Test bez slika"
+
+msgid "langImgNote_st"
+msgstr "<br> Još uvek imate da učitavate"
+
+msgid "langImgNote_en"
+msgstr "slika/e:"
+
+msgid "langDocDeleted"
+msgstr "Dokument je obrisan"
+
+msgid "langViMod"
+msgstr "Vidljivost je modifikovana"
+
+msgid "langNameNotEqual"
+msgstr "to nije validan fajl!"
+
+msgid "langIndice"
+msgstr "Indeks"
+
+msgid "langIndices"
+msgstr "Indeksi"
+
+msgid "langDateExo"
+msgstr "Datum"
+
+msgid "langShowQuestion"
+msgstr "Pokaži pitanje"
+
+msgid "langUnknownExercise"
+msgstr "Nepoznata vežba"
+
+msgid "langReuseQuestion"
+msgstr "Ponovo koristi pitanje"
+
+msgid "langCreateExercise"
+msgstr "Pravljenje vežbe"
+
+msgid "langCreateQuestion"
+msgstr "Pravljenje pitanja"
+
+msgid "langCreateAnswers"
+msgstr "Pravljenje odgovora"
+
+msgid "langModifyExercise"
+msgstr "Izmena vežbe"
+
+msgid "langModifyAnswers"
+msgstr "izmena odgovora"
+
+msgid "langForExercise"
+msgstr "za vežbu"
+
+msgid "langUseExistantQuestion"
+msgstr "Upotreba postojećeg pitanja"
+
+msgid "FreeAnswer"
+msgstr "Slobodan odgovor"
+
+msgid "notCorrectedYet"
+msgstr "Ovaj odgovor jo� nije ispravljan. U međuvremenu rezultat za ovo pitanje je pode�en na 0 i utuče na konačan rezultat."
+
+msgid "adminHP"
+msgstr "Hot Potatoes administracija"
+
+msgid "NewQu"
+msgstr "Novo pitanje"
+
+msgid "NoImage"
+msgstr "Molimo Vas odaberite sliku"
+
+msgid "langAnswerHotspot"
+msgstr "Opis i bodovanje je potrebno za svako aktivno mesto - napomena je opciona"
+
+msgid "langMinHotspot"
+msgstr "Morate napraviti barem jedno (1) aktivno mjesto."
+
+msgid "langMaxHotspot"
+msgstr "Najviše možete napraviti dvanaest (12) aktivnih mjesta."
+
+msgid "langHotspotError"
+msgstr "Molim unesite opis i težinu za svako aktivno mjesto."
+
+msgid "langMoreHotspots"
+msgstr "Dodaj aktivno mesto"
+
+msgid "langLessHotspots"
+msgstr "Ukloni aktivno mesto"
+
+msgid "langHotspotZones"
+msgstr "Aktivna mesta (hotspots)"
+
+msgid "langNextQuestion"
+msgstr "Sledeće pitanje"
+
+msgid "langCorrectAnswer"
+msgstr "Tačan odgovor"
+
+msgid "langHotspotHit"
+msgstr "Vaš odgovor je"
+
+msgid "langOnlyJPG"
+msgstr "Za kreiranje aktivnih mesta možete koristiti samo slike JPG (ili JPEG) formata"
+
+msgid "ResultsDisabled"
+msgstr "Prikazivanje rezultata nije vidljivo za polaznike"
+
+msgid "IfNoError"
+msgstr "Ako nema grešaka"
+
+msgid "YourAnswer"
+msgstr "Vaš odgovor"
+
+msgid "ResultIs"
+msgstr "Vaš rezultat je :"
+
+msgid "Min"
+msgstr "Minimum"
+
+msgid "Max"
+msgstr "Maksimum"
+
+msgid "ExerciseTotalDurationInMinutes"
+msgstr "Ukupno trajanje testa u minutama"
+

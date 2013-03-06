@@ -1,0 +1,639 @@
+msgid "MoveTo"
+msgstr "Taşınacağı Yer"
+
+msgid "langDownloadFile"
+msgstr "Sunucuya dosya yükle"
+
+msgid "langNameDir"
+msgstr "Yeni dizin adı"
+
+msgid "langSize"
+msgstr "Boyut"
+
+msgid "langRename"
+msgstr "Yeniden isimlendir"
+
+msgid "langCopy"
+msgstr "Ders içeriğini kopyala"
+
+msgid "langTo"
+msgstr "kopyalanacağı yer"
+
+msgid "langNoSpace"
+msgstr "Yükleme başarısız. Ya maksimum kotanızı aştınız yada yeterli alan yok."
+
+msgid "langDownloadEnd"
+msgstr "Yükleme tamamlandı"
+
+msgid "langFileExists"
+msgstr "İşlem yapılamıyor.<br>Aynı isimde bir dosya var."
+
+msgid "langImpossible"
+msgstr "İşlem yapılamıyor"
+
+msgid "langAddComment"
+msgstr "Yorum ekle/değiştir"
+
+msgid "langDocCopied"
+msgstr "Belge kopyalandı"
+
+msgid "langDocDeleted"
+msgstr "Belge silindi"
+
+msgid "langElRen"
+msgstr "Dosya yeniden adlandırıldı"
+
+msgid "langDirMv"
+msgstr "Dosya taşındı"
+
+msgid "langComMod"
+msgstr "Yorum değiştirildi"
+
+msgid "langViMod"
+msgstr "Görünürlük değiştirildi"
+
+msgid "langGroupSpace"
+msgstr "Grup alanı"
+
+msgid "langGroupSpaceLink"
+msgstr "Grup alanı"
+
+msgid "langGroupForumLink"
+msgstr "Grup forumu"
+
+msgid "langZipNoPhp"
+msgstr "The zip file can not contain .PHP files"
+
+msgid "langUncompress"
+msgstr "zip dosyasını sunucuda aç"
+
+msgid "langDownloadAndZipEnd"
+msgstr "zip dosyası sunucuya yüklendi ve açıldı"
+
+msgid "langRoot"
+msgstr "ana dizin"
+
+msgid "CreateDoc"
+msgstr "Yeni bir belge oluştur"
+
+msgid "langDown"
+msgstr "aşağı"
+
+msgid "langFileError"
+msgstr "Dosya yükleme için geçerli değil"
+
+msgid "langMaxFileSize"
+msgstr "En fazla dosya boyutu"
+
+msgid "langFileName"
+msgstr "Dosya ismi"
+
+msgid "langNoFileName"
+msgstr "Lütfen dosya ismini yazınız"
+
+msgid "langNoText"
+msgstr "Lütfen metin veya HTML içeriğini yazın"
+
+msgid "langAreYouSureToDelete"
+msgstr "Silmek istediğinizden emin misiniz?"
+
+msgid "langScormcontent"
+msgstr "Bu bir SCORM dosyasıdır.<br><input type=button name=scormbutton value=\'Çalıştır !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr "Bu ders SCORM formatındadır.Çalıştırmak için <input type=button name=scormbutton value=\'TIKLAYIN !\' onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Yayınla"
+
+msgid "langMissingImagesDetected"
+msgstr "Resimler eksik"
+
+msgid "langCreateDocument"
+msgstr "Dosya oluştur"
+
+msgid "langEditDocument"
+msgstr "Düzenle"
+
+msgid "langDocuments"
+msgstr "Belgeler"
+
+msgid "langOrganiseDocuments"
+msgstr "İçerik tablosu oluştur"
+
+msgid "langEditTOC"
+msgstr "İçerik tablosu düzenle"
+
+msgid "langChapter"
+msgstr "Bölüm"
+
+msgid "langDocumentList"
+msgstr "Belgelerin listesi"
+
+msgid "langOrganisationList"
+msgstr "İçerik tablosu"
+
+msgid "langCreationSucces"
+msgstr "İçerik tablosu oluşturuldu"
+
+msgid "langCanViewOrganisation"
+msgstr "Organizasyonunuzu"
+
+msgid "langHere"
+msgstr "burada g�rebilirsiniz."
+
+msgid "langViewDocument"
+msgstr "Göster"
+
+msgid "langHtmlTitle"
+msgstr "İçerik Tablosu"
+
+msgid "langAddToTOC"
+msgstr "İçeriğe ekle"
+
+msgid "langAddChapter"
+msgstr "Bölüm ekle"
+
+msgid "langReady"
+msgstr "İçerik tablosu oluştur"
+
+msgid "langStoreDocuments"
+msgstr "Belgeleri kaydet"
+
+msgid "langTocDown"
+msgstr "Aşağı"
+
+msgid "langTocUp"
+msgstr "Yukarı"
+
+msgid "CutPasteLink"
+msgstr "Çerçevesiz"
+
+msgid "langCreatePath"
+msgstr "adres oluştur"
+
+msgid "SendDocument"
+msgstr "Dosya yükle"
+
+msgid "ThisFolderCannotBeDeleted"
+msgstr "Bu dizin silinemez"
+
+msgid "ChangeVisibility"
+msgstr "Görünürlüğü değiştir"
+
+msgid "VisibilityCannotBeChanged"
+msgstr "Görünürlük değiştirilemez"
+
+msgid "DocumentCannotBeMoved"
+msgstr "Belgeye yer değiştirilemez"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "Chamilo RAPID : PowerPoint çevrimi"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "PowerPoint Sunumundan SCORM Derslerine Çevrim"
+
+msgid "langAddMetadata"
+msgstr "Metadata görüntüle / Düzenle"
+
+msgid "langGoMetadata"
+msgstr "Git"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "Bu dersin kotası"
+
+msgid "langDel"
+msgstr "sil"
+
+msgid "langUp"
+msgstr "Yukarı"
+
+msgid "langDate"
+msgstr "Tarih"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Ders kotasını göster"
+
+msgid "CourseCurrentlyUses"
+msgstr "Mevcut kullanım"
+
+msgid "MaximumAllowedQuota"
+msgstr "Limitiniz"
+
+msgid "PercentageQuotaInUse"
+msgstr "Kullanımdaki kota yüzdesi"
+
+msgid "PercentageQuotaFree"
+msgstr "Kullanılabilir kota yüzdesi"
+
+msgid "CurrentDirectory"
+msgstr "Geçerli dizin"
+
+msgid "UplUploadDocument"
+msgstr "Belge gönder"
+
+msgid "UplPartialUpload"
+msgstr "Dosya kısmen gönderildi"
+
+msgid "UplExceedMaxPostSize"
+msgstr "İzin verilen maksimum büyüklüğü aşan dosya boyutu:"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "Gönderilen dosya boyutu sunucunun izin verdiği maksimum değerden büyük :"
+
+msgid "UplFileTooBig"
+msgstr "Dosya boyutu çok büyük!"
+
+msgid "UplUploadFailed"
+msgstr "Dosya gönderme başarısız!"
+
+msgid "UplUnableToSaveFile"
+msgstr "Gönderilen dosya kaydedilemedi (erişim izni problemi?)"
+
+msgid "UplNotEnoughSpace"
+msgstr "Bu dosyayı göndermek için yeterli disk alanı bulunmuyor."
+
+msgid "UplNoSCORMContent"
+msgstr "Herhangi bir SCORM içeriği bulunmuyor!"
+
+msgid "UplZipExtractSuccess"
+msgstr "Zip dosyası başarıyla açıldı!"
+
+msgid "UplZipCorrupt"
+msgstr "Zip dosyası açılamıyor !"
+
+msgid "UplAlreadyExists"
+msgstr "zaten mevcut!"
+
+msgid "UplFileSavedAs"
+msgstr "Dosya kayıt ismi"
+
+msgid "UplFileOverwritten"
+msgstr "üzerine kaydedildi."
+
+msgid "CannotCreateDir"
+msgstr "Dizin oluşturulamıyor!"
+
+msgid "UplUpload"
+msgstr "Gönder"
+
+msgid "UplWhatIfFileExists"
+msgstr "Eğer dosya mevcut ise:"
+
+msgid "UplDoNothing"
+msgstr "Hiçbir şey yapma"
+
+msgid "UplDoNothingLong"
+msgstr "Eğer dosya mevcut ise gönderme."
+
+msgid "UplOverwrite"
+msgstr "Üzerine kaydet"
+
+msgid "UplOverwriteLong"
+msgstr "Mevcut dosyanın üzerine kaydet"
+
+msgid "UplRename"
+msgstr "Yeniden isimlendir"
+
+msgid "UplRenameLong"
+msgstr "Eğer mevcut ise gönderilen dosyayı yeniden isimlendir"
+
+msgid "Metadata"
+msgstr "Metadata"
+
+msgid "DocumentQuota"
+msgstr "Belge kotası"
+
+msgid "NoDocsInFolder"
+msgstr "Bu klasörde dosya bulunmuyor!"
+
+msgid "UploadTo"
+msgstr "Gönderileceği Yer"
+
+msgid "fileModified"
+msgstr "Dosya düzenlendi"
+
+msgid "DocumentsOverview"
+msgstr "belgelere genel bakış"
+
+msgid "ViewSlideshow"
+msgstr "Resimleri slayt göster"
+
+msgid "Options"
+msgstr "Seçenekler"
+
+msgid "WelcomeOogieConverter"
+msgstr "Chamilo RAPID e hoş geldiniz <ul type=\"1\"><li> Bilgisayarınızdaki .ppt yada .odp dosyalarını seçin<li>Oogie ye yükleyin. Oda Scorm dersi haline çevirsin.<li>Ondan sonra her slayta ses ekleyebilir, test ilave edebilir ve slaytlar arasına aktiviteler koyabilirsiniz."
+
+msgid "ConvertToLP"
+msgstr "Derse çevir"
+
+msgid "AdvancedSettings"
+msgstr "Gelişmiş ayarlar"
+
+msgid "File"
+msgstr "Dosya"
+
+msgid "DocDeleteError"
+msgstr "Belgenin silinmesi sırasından hata"
+
+msgid "ViModProb"
+msgstr "Görünürlük güncellenirken problem oluştu"
+
+msgid "DirDeleted"
+msgstr "Dizin silindi"
+
+msgid "TemplateName"
+msgstr "Şablon adı"
+
+msgid "TemplateDescription"
+msgstr "Şablon tanımı"
+
+msgid "DocumentSetAsTemplate"
+msgstr "Belge yeni şablon olarak ayarlandı"
+
+msgid "DocumentUnsetAsTemplate"
+msgstr "Belgenin şablon olma durumu kaldırıldı"
+
+msgid "AddAsTemplate"
+msgstr "Şablon olarak ekle"
+
+msgid "RemoveAsTemplate"
+msgstr "Şablonu kaldır"
+
+msgid "ReadOnly"
+msgstr "Salt okunur"
+
+msgid "ReadOnlyFile"
+msgstr "Salt okunur dosya"
+
+msgid "FileNotFound"
+msgstr "Dosya bulunamadı"
+
+msgid "TemplateTitleFirstPage"
+msgstr "İlk sayfa"
+
+msgid "TemplateTitleFirstPageDescription"
+msgstr "Dersinizin kapak sayfasıdır"
+
+msgid "TemplateTitleDedicatory"
+msgstr "İthaf"
+
+msgid "TemplateTitleDedicatoryDescription"
+msgstr "kendi ithafınızı yapın"
+
+msgid "TemplateTitlePreface"
+msgstr "Ders önsözü"
+
+msgid "TemplateTitlePrefaceDescription"
+msgstr "Önsöz"
+
+msgid "TemplateTitleIntroduction"
+msgstr "Giriş"
+
+msgid "TemplateTitleIntroductionDescription"
+msgstr "Tanıtım metnini girin"
+
+msgid "TemplateTitlePlan"
+msgstr "Plan"
+
+msgid "TemplateTitlePlanDescription"
+msgstr "İçindekiler"
+
+msgid "TemplateTitleMrDokeos"
+msgstr "Küçük Mr.Dokeos açıklıyor"
+
+msgid "TemplateTitleMrDokeosDescription"
+msgstr "Mr. Chamilo ile söyleşi aşağıda"
+
+msgid "TemplateTitleTeacher"
+msgstr "Eğitmeniniz"
+
+msgid "TemplateTitleTeacherDescription"
+msgstr "Eğitmen ile söyleşi aşağıda"
+
+msgid "TemplateTitleProduction"
+msgstr "Şablon başlığı oluşturma"
+
+msgid "TemplateTitleProductionDescription"
+msgstr "Başlık Tanımı"
+
+msgid "TemplateTitleAnalyze"
+msgstr "Analiz"
+
+msgid "TemplateTitleAnalyzeDescription"
+msgstr "Analiz Tanımı"
+
+msgid "TemplateTitleSynthetize"
+msgstr "Sentez"
+
+msgid "TemplateTitleSynthetizeDescription"
+msgstr "Sentez Tanımı"
+
+msgid "TemplateTitleText"
+msgstr "Metin sayfası"
+
+msgid "TemplateTitleTextDescription"
+msgstr "Düz metin sayfası"
+
+msgid "TemplateTitleLeftImage"
+msgstr "Sol resim"
+
+msgid "TemplateTitleLeftImageDescription"
+msgstr "Sol resim"
+
+msgid "TemplateTitleTextCentered"
+msgstr "Meitn ve resim ortalandı"
+
+msgid "TemplateTitleTextCenteredDescription"
+msgstr "Ortalanmış resimli bir mesaj ve açıklama"
+
+msgid "TemplateTitleComparison"
+msgstr "Kıyasla"
+
+msgid "TemplateTitleComparisonDescription"
+msgstr "2 sütunlu metin sayfası"
+
+msgid "TemplateTitleDiagram"
+msgstr "Açıklanmış grafik"
+
+msgid "TemplateTitleDiagramDescription"
+msgstr "Resim Solda, Yorum Sağda"
+
+msgid "TemplateTitleImage"
+msgstr "Sadece resim"
+
+msgid "TemplateTitleImageDescription"
+msgstr "Sadece Resim"
+
+msgid "TemplateTitleFlash"
+msgstr "Flash animasyonu"
+
+msgid "TemplateTitleFlashDescription"
+msgstr "Animasyon ve tanıtım metni"
+
+msgid "TemplateTitleAudio"
+msgstr "Sesli yorum"
+
+msgid "TemplateTitleAudioDescription"
+msgstr "Ses + resim + metin : dinleyerek kavrama"
+
+msgid "TemplateTitleSchema"
+msgstr "Sesli şema açıklaması"
+
+msgid "TemplateTitleSchemaDescription"
+msgstr "Eğitmen tarafından açıklanan şema"
+
+msgid "TemplateTitleVideo"
+msgstr "Video sayfası"
+
+msgid "TemplateTitleVideoDescription"
+msgstr "İsteğe bağlı video + metin"
+
+msgid "TemplateTitleVideoFullscreen"
+msgstr "Video sayfası tam ekran"
+
+msgid "TemplateTitleVideoFullscreenDescription"
+msgstr "İsteğe bağlı tam ekran video"
+
+msgid "TemplateTitleTable"
+msgstr "Tablo sayfası"
+
+msgid "TemplateTitleTableDescription"
+msgstr "Hesap tablosu benzeri sayfa"
+
+msgid "TemplateTitleAssigment"
+msgstr "Ödev tanımı"
+
+msgid "TemplateTitleAssigmentDescription"
+msgstr "Amaç, rol ve takvimi açıklayın"
+
+msgid "TemplateTitleResources"
+msgstr "Kaynaklar"
+
+msgid "TemplateTitleResourcesDescription"
+msgstr "Kitaplar, bağlantılar, araçlar"
+
+msgid "TemplateTitleBibliography"
+msgstr "Kaynakça"
+
+msgid "TemplateTitleBibliographyDescription"
+msgstr "Kitaplar, bağlantılar, araçlar"
+
+msgid "TemplateTitleFAQ"
+msgstr "Sıkça Sorulan Sorular"
+
+msgid "TemplateTitleFAQDescription"
+msgstr "Soru ve cevap listesi"
+
+msgid "TemplateTitleGlossary"
+msgstr "Terimler Sözlüğü"
+
+msgid "TemplateTitleGlossaryDescription"
+msgstr "Bölümün Terimler Listesi"
+
+msgid "TemplateTitleEvaluation"
+msgstr "Değerlendirme"
+
+msgid "TemplateTitleEvaluationDescription"
+msgstr "Değerlendirme"
+
+msgid "TemplateTitleCertificate"
+msgstr "Tamamlama Sertifikası"
+
+msgid "TemplateTitleCertificateDescription"
+msgstr "Ders sonunda belirtmek için"
+
+msgid "TemplateTitleCheckList"
+msgstr "Kontrol Listesi"
+
+msgid "TemplateTitleCourseTitle"
+msgstr "Eğitim adı"
+
+msgid "TemplateTitleLeftList"
+msgstr "Sol liste"
+
+msgid "TemplateTitleLeftListDescription"
+msgstr "Eğitimcili sol liste"
+
+msgid "TemplateTitleCheckListDescription"
+msgstr "Kaynak listesi"
+
+msgid "TemplateTitleCourseTitleDescription"
+msgstr "Logolu eğitim adı"
+
+msgid "TemplateTitleRightList"
+msgstr "Sağ liste"
+
+msgid "TemplateTitleRightListDescription"
+msgstr "Eğitimcili sağ liste"
+
+msgid "TemplateTitleLeftRightList"
+msgstr "Sol ve sağ liste"
+
+msgid "TemplateTitleLeftRightListDescription"
+msgstr "Eğitimcili sol ve sağ liste"
+
+msgid "TemplateTitleDesc"
+msgstr "Tanım"
+
+msgid "TemplateTitleDescDescription"
+msgstr "Bir kaynak tanımla"
+
+msgid "TemplateTitleObjectives"
+msgstr "Dersin amacı"
+
+msgid "TemplateTitleObjectivesDescription"
+msgstr "Eğitimin amaçlarını tanımlayın"
+
+msgid "TemplateTitleCycle"
+msgstr "Pay Graik"
+
+msgid "TemplateTitleCycleDescription"
+msgstr "2 listeli pay grafik"
+
+msgid "TemplateTitleLearnerWonder"
+msgstr "Öğrenci merak ediyor"
+
+msgid "TemplateTitleLearnerWonderDescription"
+msgstr "Öğrenci merak ediyor tanımı"
+
+msgid "TemplateTitleTimeline"
+msgstr "Aşama zaman çizgisi"
+
+msgid "TemplateTitleTimelineDescription"
+msgstr "Bağlantılı oklu 3 liste"
+
+msgid "TemplateTitleStopAndThink"
+msgstr "Dur ve Düşün"
+
+msgid "TemplateTitleListLeftListDescription"
+msgstr "Eğitimcili sol liste"
+
+msgid "TemplateTitleStopAndThinkDescription"
+msgstr "Durup ve Düşünmeyi özendirmek için plan/düzen"
+
+msgid "CreateTheDocument"
+msgstr "Onayla"
+
+msgid "CreateTemplate"
+msgstr "Şablon oluştur"
+
+msgid "SharedFolder"
+msgstr "Paylaşım Klasörü"
+
+msgid "CreateFolder"
+msgstr "Dizini yarat"
+
+msgid "HelpDefaultDirDocuments"
+msgstr "Bu dizin varsayılan arşivi içerir. Dosyaları temizleyebilir yada yeni bir tane ekleyebilirsiniz, fakat eğer bir dosya web belgesi olarak gizliyken konduysa öğrenciler bu belge içinde o dosyayı göremeyeceklerdir. Web belgesi olarak koydupunuz dosyaların görünür olduğundan emin olun. Dizinler gizli kalabilir."
+
+msgid "HelpSharedFolder"
+msgstr "Bu dizin diğer kullanıcıların (yada sizin) editör yardımıyla bir kurs için gönderdiğiniz dosyaları içerir (eğer grup aracından yapılmadıysa). Ön değer olarak öğretmenler tarafından görülebilir fakat diğer öğrenciler tarafından gizlenebilir (dosyalara doğrudan erişim izni olmak kaydıyla). Eğer bir kullanıcı dizini görünür ise diğer kullanıcılar dizinin tüm içeriğini görebilirler."
+
+msgid "TemplateImage"
+msgstr "Şanlon ikonu"
+
+msgid "MoveElement"
+msgstr "Öğeyi taşı"
+

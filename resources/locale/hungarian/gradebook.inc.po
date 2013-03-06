@@ -1,0 +1,123 @@
+msgid "FlatView"
+msgstr "Alapnézet"
+
+msgid "ScoreEdit"
+msgstr "Pontozási szabályok szerkesztése"
+
+msgid "ScoreColor"
+msgstr "Pontozás színe"
+
+msgid "ScoringSystem"
+msgstr "Pontozási rendszer"
+
+msgid "EnableScoreColor"
+msgstr "Pontozás színezés bekapcsolása"
+
+msgid "Below"
+msgstr "alatt"
+
+msgid "WillColorRed"
+msgstr "vörös színnel fog megjelenni"
+
+msgid "EnableScoringSystem"
+msgstr "Pontozási rendszer engedélyezése"
+
+msgid "IncludeUpperLimit"
+msgstr "Felső határ megadása"
+
+msgid "ScoreInfo"
+msgstr "Pontozás infó"
+
+msgid "Between"
+msgstr "között"
+
+msgid "CurrentCategory"
+msgstr "Jelenlegi kategória"
+
+msgid "ExportPDF"
+msgstr "Exportálás PDF-be"
+
+msgid "Print"
+msgstr "Nyomtat"
+
+msgid "ChooseOrientation"
+msgstr "Oldal tájolása"
+
+msgid "Portrait"
+msgstr "Álló"
+
+msgid "Landscape"
+msgstr "Fekvő"
+
+msgid "FilterCategory"
+msgstr "Szűrő kategória"
+
+msgid "DeleteAll"
+msgstr "Az összes törlése"
+
+msgid "FileType"
+msgstr "Állomány típus"
+
+msgid "TotalItems"
+msgstr "Elem összesen"
+
+msgid "Average"
+msgstr "Átlag"
+
+msgid "EditResult"
+msgstr "Eredmények módosítása"
+
+msgid "Results"
+msgstr "Eredmények"
+
+msgid "UserAdded"
+msgstr "A felhasználó hozzáadva"
+
+msgid "ResultEdited"
+msgstr "Eredmény szerkesztve"
+
+msgid "ChooseFormat"
+msgstr "Válasszon formátumot"
+
+msgid "OutputFileType"
+msgstr "Kimeneti állomány formátuma"
+
+msgid "OverMax"
+msgstr "A rögzíteni kívánt érték nagyobb, mint amit maximumként megadtak ehhez az értékeléshez."
+
+msgid "MoreInfo"
+msgstr "További adatok"
+
+msgid "ResultsPerUser"
+msgstr "Eredmények felhasználónként"
+
+msgid "TotalUser"
+msgstr "Összesen a felhasználónak"
+
+msgid "AverageTotal"
+msgstr "Átlag összesen"
+
+msgid "Evaluation"
+msgstr "Értékelés"
+
+msgid "EvaluationAverage"
+msgstr "Értékelés átlag"
+
+msgid "EditCategory"
+msgstr "Kategória szerkesztése"
+
+msgid "EditAllWeights"
+msgstr "Az összes súlyozás szerkesztése"
+
+msgid "GradebookQualificationTotal"
+msgstr "Összesen"
+
+msgid "GradebookEvaluationDeleted"
+msgstr "Az értékelés sikeresen törölve lett"
+
+msgid "ResourceType"
+msgstr "Erőforrás típus"
+
+msgid "GradebookWhoChangedItLog"
+msgstr "Ki módosította"
+

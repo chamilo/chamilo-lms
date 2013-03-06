@@ -1,0 +1,249 @@
+msgid "langNewGroupCreate"
+msgstr "สร้างหมู่เรียนใหม่"
+
+msgid "langGroupCreation"
+msgstr "เปิดหมู่เรียนใหม่"
+
+msgid "langCreate"
+msgstr "สร้าง"
+
+msgid "langNewGroups"
+msgstr "หมู่เรียนใหม่"
+
+msgid "langMax"
+msgstr "ตั้งได้จำนวนสูงสุด 12 ตัวอักษรเช่น<b>AD2032106</b>"
+
+msgid "langGroupPlacesThis"
+msgstr "ที่นั่ง"
+
+msgid "langGroupsAdded"
+msgstr "ได้เพิ่มกลุ่มแล้ว"
+
+msgid "langGroupDel"
+msgstr "สร้างกลุ่ม"
+
+msgid "langDocuments"
+msgstr "เอกสาร"
+
+msgid "langExistingGroups"
+msgstr "กลุ่ม"
+
+msgid "langRegistered"
+msgstr "ลงทะเบียน"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "อนุญาตให้ผู้ใช้ลงทะเบียนเข้ากลุ่มด้วยตัวเอง"
+
+msgid "langGroupTools"
+msgstr "เครื่องมือ"
+
+msgid "langGroupDocument"
+msgstr "เอกสาร"
+
+msgid "langGroupPropertiesModified"
+msgstr "แก้ไขการตั้งค่ากลุ่ม"
+
+msgid "langGroupSpace"
+msgstr "พื้นที่กลุ่ม"
+
+msgid "langGroupName"
+msgstr "ชื่อกลุ่ม"
+
+msgid "langGroupDescription"
+msgstr "รายละเอียดกลุ่ม"
+
+msgid "langGroupMembers"
+msgstr "สมาชิกกลุ่ม"
+
+msgid "langEditGroup"
+msgstr "แก้ไขกลุ่มนี้"
+
+msgid "Optional"
+msgstr "เลือกค่า(optional)"
+
+msgid "langGroupSettingsModified"
+msgstr "แก้ไขการตั้งค่ากลุ่มแล้ว"
+
+msgid "langGroupTooMuchMembers"
+msgstr "เกินจำนวนที่กำหนดไว้ คุณต้องตั้งค่าใหม่Number proposed exceeds max. that you allowed (you can modify it below). Group composition has not been modified"
+
+msgid "langGroupTutor"
+msgstr "กลุ่มผู้ช่วยสอน"
+
+msgid "langGroupNoTutor"
+msgstr "ไม่มี(none)"
+
+msgid "langGroupNone"
+msgstr "ไม่มี(none)"
+
+msgid "langGroupNoneMasc"
+msgstr "ไม่มี(none)"
+
+msgid "langAddTutors"
+msgstr "รายชื่อผู้ใช้ที่ได้รับสิทธิ์ให้เป็นผู้บริหารระบบ"
+
+msgid "langMyGroup"
+msgstr "กลุ่มของเรา"
+
+msgid "langOneMyGroups"
+msgstr "ที่ปรึกษากลุ่ม"
+
+msgid "langGroupSelfRegistration"
+msgstr "การลงทะเบียน"
+
+msgid "langGroupSelfRegInf"
+msgstr "ลงทะเบียน"
+
+msgid "langRegIntoGroup"
+msgstr "เพิ่มตัวเราเข้ากลุ่มนี้"
+
+msgid "langGroupNowMember"
+msgstr "คุณได้เป็นสมาชิกในกลุ่มนี้แล้ว"
+
+msgid "langPrivate"
+msgstr "เปิดเป็นวิชาเรียนเฉพาะกลุ่มบุคคลที่ระบุชื่อ"
+
+msgid "langPublic"
+msgstr "บุคคลทั่วไปเข้าโฮมเพจได้โดยไม่ต้องใช้รหัส"
+
+msgid "langPropModify"
+msgstr "แก้ไขการตั้งค่า"
+
+msgid "langState"
+msgstr "สถานที่"
+
+msgid "langGroupFilledGroups"
+msgstr "เพิ่มชื่อในกลุ่มแล้ว"
+
+msgid "langSubscribed"
+msgstr "สมาชิกที่ลงทะเบียนรายวิชา"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "สมาชิกผู้ใช้ที่ไม่ได้อยู่ในกลุ่มนี้"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "มีสมาชิกกลุ่มได้ไม่เกิน"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr "¡ÅØèÁ"
+
+msgid "langGroupLimit"
+msgstr "จำกัด"
+
+msgid "langStudentRegAllowed"
+msgstr "ผู้เรียนสามารถลงทะเบียนเข้ากลุ่มได้ด้วยตัวเอง"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "ผู้ใช้ที่เป็นสมาชิกกลุ่มสามารถถอนชื่อออกจากกลุ่มได้เอง"
+
+msgid "langAllGroups"
+msgstr "ทุกกลุ่ม"
+
+msgid "langStudentUnsubscribe"
+msgstr "ถอนชื่อเราออกจากกลุ่มนี้"
+
+msgid "langStudentDeletesHimself"
+msgstr "คุณได้ถอนชื่อออกจากกบุ่มแล้ว"
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "ค่าเริ่มต้นสำหรับกล่มที่สร้างใหม่"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "กลุ่มที่คุณเลือกไว้ ได้ถูกลบไปแล้ว"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "ไม่มีกลุ่มที่เลือกแล้ว"
+
+msgid "langGroupEmptied"
+msgstr "äÁèÁÕ¡ÅØèÁ"
+
+msgid "langSelectedGroupsFilled"
+msgstr "ทุกกลุ่มที่เลือกมีอยู่แล้ว"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "ไม่ลงทะเบียน"
+
+msgid "langSameForAll"
+msgstr "เหมือนกันหมด"
+
+msgid "langNoLimit"
+msgstr "ไม่จำกัด"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "เลือกหมายเลขกลุ่มที่คุณต้องการ"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "สร้างกลุ่มจากชื่อผู้ใช้จาก virtual courses"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "ÇÔªÒ¹Õé€×Í¡ÒÃÃÇÁ¡Ñ¹¢Í§ÇÔªÒšÃÔ§áÅÐÇÔªÒàÊÁ×Í¹Ë¹Öè§áÅÐËÅÒÂÇÔªÒ. ¶éÒ€Ø³¡Ž»ØèÁŽÑ§µèÍä»¹Õé, ÃÐººšÐÊÃéÒ§¡ÅØèÁãËÁèãËéàÊÁ×Í¹à»ç¹ÇÔªÒšÃÔ§.ŒÙéàÃÕÂ¹·Ø¡€¹šÐô¡ÃÑºÃÇÁà»ç¹ÊÁÒªÔ¡¢Í§¡ÅØèÁ¹ÕéŽéÇÂ.This course is a combination of a real course and one or more virtual courses."
+
+msgid "langNoGroupsAvailable"
+msgstr "ยังไม่มีกลุ่มที่เข้าใช้งานได้"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "วิขาเสมือนVirtual courses"
+
+msgid "NotAvailable"
+msgstr "ยังใช้ไม่ได้"
+
+msgid "CreateSubgroups"
+msgstr "สร้างกลุ่มย่อย"
+
+msgid "CreateSubgroupsInfo"
+msgstr "This option allows you to create new groups based on an existing group. Provide the desired number of groups and choose an existing group. The given number of groups will be created and all members of the existing group will be subscribed in those new gro"
+
+msgid "CreateNumberOfGroups"
+msgstr "สร้าง"
+
+msgid "WithUsersFrom"
+msgstr "กลุ่มและสมาชิกจาก"
+
+msgid "CategoryDeleted"
+msgstr "ลบประเภทแล้ว"
+
+msgid "Empty"
+msgstr "ว่าง"
+
+msgid "FillGroup"
+msgstr "เพิ่มผู้ใช้"
+
+msgid "EmptyGroup"
+msgstr "ถอนการสมัครของทุกคน"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "ระบุการอนุญาตให้มีจำนวนกลุ่มไว้ทั้งหมดและจำนวนสมาชิกภายในกลุ่มไว้ไม่เกินเท่าใด"
+
+msgid "GroupOverview"
+msgstr "ลักษณะทั่วไปของกลุ่ม"
+
+msgid "GroupCategory"
+msgstr "ประเภทกลุ่ม"
+
+msgid "NoTitleGiven"
+msgstr "กรุณาตั้งชื่อ"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "กรุณาใส่จำนวนมากสุดของกลุ่ม"
+
+msgid "CategoryOrderChanged"
+msgstr "เปลี่ยนประเภทให้แล้ว"
+
+msgid "Wiki"
+msgstr "กลุ่ม wiki"
+
+msgid "CategoryCreated"
+msgstr "สร้างประเภทวิชา"
+
+msgid "GroupTutors"
+msgstr "ผู้ช่วยสอน"
+
+msgid "GroupWork"
+msgstr "งาน"
+
+msgid "GroupCalendar"
+msgstr "กำหนดการ"
+
+msgid "GroupAnnouncements"
+msgstr "ประกาศ"
+

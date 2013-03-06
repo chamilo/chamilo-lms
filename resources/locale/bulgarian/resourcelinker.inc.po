@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Добавен е ресурс."
+
+msgid "LearningPath"
+msgstr "Пътеки за обучение"
+
+msgid "LevelUp"
+msgstr "Ниво нагоре"
+
+msgid "AddIt"
+msgstr "Добави"
+
+msgid "MainCategory"
+msgstr "Главна категория"
+
+msgid "lang_delete_added_resources"
+msgstr "Изтриване на ресурсите"
+
+msgid "AddToLinks"
+msgstr "Добави към връзките за курса"
+
+msgid "DontAdd"
+msgstr "Да не се добавя"
+
+msgid "lang_show_all_added_resources"
+msgstr "Показване на всички добавени ресурси"
+
+msgid "ResourcesAdded"
+msgstr "Новите ресурси са добавени."
+
+msgid "BackTo"
+msgstr "Обратно към"
+
+msgid "ExternalResources"
+msgstr "Външни ресурси"
+
+msgid "CourseResources"
+msgstr "Ресурси на курса"
+
+msgid "ExternalLink"
+msgstr "Връзки"
+
+msgid "DropboxAdd"
+msgstr "Добавяне на страница \"Куриер\" към този модул."
+
+msgid "AddAssignmentPage"
+msgstr "Добаване на страница \"Работи на курсистите\" към този модул."
+
+msgid "Exercise"
+msgstr "Тест"
+
+msgid "Link"
+msgstr "Връзки"
+
+msgid "AdValvas"
+msgstr "Обява"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "ShowDelete"
+msgstr "Показване / Изтриване"
+
+msgid "IntroductionText"
+msgstr "Встъпителен текст"
+
+msgid "CourseDescription"
+msgstr "Описание на курса"
+
+msgid "Groups"
+msgstr "Групи"
+
+msgid "Users"
+msgstr "Потребители"
+
+msgid "IntroductionTextAdd"
+msgstr "Добавяне на \"Встъпителен текст\" към този модул."
+
+msgid "CourseDescriptionAdd"
+msgstr "Добавяне на страница \"Описание на курса\" към този модул."
+
+msgid "GroupsAdd"
+msgstr "Добавяне на страница \"Групи\" към този модул."
+
+msgid "UsersAdd"
+msgstr "Добавяне на страница \"Потребители\" към този модул."
+
+msgid "ExportableCourseResources"
+msgstr "Експортируеми ресурси"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Ресурси, специфични за Chamilo"
+
+msgid "LinkTarget"
+msgstr "Отваряне на връзката"
+
+msgid "SameWindow"
+msgstr "в същия прозорец"
+
+msgid "NewWindow"
+msgstr "в нов прозорец"
+
+msgid "StepDeleted1"
+msgstr "Тази стъпка ("
+
+msgid "StepDeleted2"
+msgstr ") е изтрита."
+
+msgid "Modify"
+msgstr "Промяна"
+
+msgid "Chapter"
+msgstr "Модул"
+
+msgid "NoAgendaItems"
+msgstr "Няма събития"
+
+msgid "AgendaAdd"
+msgstr "Добавяне на събитие"
+
+msgid "UserGroupFilter"
+msgstr "Филтър за групи/потребители"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Сортиране на програмата хронологично"
+
+msgid "ShowCurrent"
+msgstr "Събитията от този месец"
+
+msgid "ModifyCalendarItem"
+msgstr "Промяна на събитие от програмата"
+
+msgid "ItemTitle"
+msgstr "Наименование на събитието"
+
+msgid "Detail"
+msgstr "Описание"
+
+msgid "EditSuccess"
+msgstr "Събитието е редактирано."
+
+msgid "AddCalendarItem"
+msgstr "Добавяне на събитие в програмата"
+
+msgid "AddAnn"
+msgstr "Нова обява"
+
+msgid "ForumAddNewTopic"
+msgstr "Форум: добавяне на нова тема"
+
+msgid "ForumEditTopic"
+msgstr "Форум: редактиране на тема"
+
+msgid "ExerciseAnswers"
+msgstr "Тест: отговори"
+
+msgid "ForumReply"
+msgstr "Форум: отговор"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Сортиране на програмата в обратен хронологичен ред"
+

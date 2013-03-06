@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Belge Metadata"
+
+msgid "langClickKw"
+msgstr "Seçmek veya seçimi iptal için bir anahtar kelimeye tıklayın"
+
+msgid "langKwHelp"
+msgstr "<br/> Açmak için  \'+\' , kapamak için \'-\' , hepsini açmak için \'++\' , hepsini kapatmak için \'--\' düğmesine tıklayın.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Gelişmiş"
+
+msgid "langSearch"
+msgstr "Araştır"
+
+msgid "langSearchCrit"
+msgstr "Her satıra bir kelime!"
+
+msgid "langNoKeywords"
+msgstr "Bu ders i�in anahtar kelime yok"
+
+msgid "langKwCacheProblem"
+msgstr "Anahtar kelime ön belleği açılamıyor."
+
+msgid "langCourseKwds"
+msgstr "Bu belge ders anahtar kelimeleri i�eriyor"
+
+msgid "langKwdsInMD"
+msgstr "MD içinde kullanılan anahtar kelimeler"
+
+msgid "langKwdRefs"
+msgstr "anahtar kelime referansları"
+
+msgid "langNonCourseKwds"
+msgstr "Derse ait olmayan anahtar kelimeler"
+
+msgid "langKwdsUse"
+msgstr "Ders anahtar kelimeleri (koyu = kullanılmıyor)"
+
+msgid "langTotalMDEs"
+msgstr "MD giriş bağlantılarının Toplam Sayısı:"
+

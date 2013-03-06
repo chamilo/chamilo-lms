@@ -1,0 +1,204 @@
+msgid "lang_already_enrolled"
+msgstr "ju&#380; zapisany"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Lista moich kursów"
+
+msgid "lang_course_enrollment"
+msgstr "Kursy użykownika"
+
+msgid "lang_course_not_available"
+msgstr "Kurs niedost&#281;pny..."
+
+msgid "lang_enroll"
+msgstr "Zapisz"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Zapisz do nowego kursu"
+
+msgid "lang_my_present_course_list"
+msgstr "Aktualna lista kursów"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "W tej kategorii nie ma dostêpnych kursów."
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Lub wyszukaj według kodów kursów"
+
+msgid "lang_search"
+msgstr "Szukaj"
+
+msgid "lang_select_course_among_categories"
+msgstr "Szukaj kursów według kategorii"
+
+msgid "lang_select_course_in"
+msgstr "Szukaj kursu w"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Wskaż kurs na liście rezultatów"
+
+msgid "Unsubscribe"
+msgstr "Wypisz"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Powrót do strony głównej"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Powrót do listy Moje kursy"
+
+msgid "langTitular"
+msgstr "Lider"
+
+msgid "langBackToListOfThisUser"
+msgstr "Powrót do listy kursów"
+
+msgid "langAdministrationTools"
+msgstr "Narzędzia administracyjne"
+
+msgid "lang_back_to_parent_category"
+msgstr "Powrót do kategorii głównej"
+
+msgid "lang_back_to_course_selection"
+msgstr "Powrót do wyboru kursów"
+
+msgid "lang_up"
+msgstr "Powrót do kategorii głównej"
+
+msgid "langCatList"
+msgstr "Kategorie"
+
+msgid "langCourseList"
+msgstr "Lista kursów"
+
+msgid "Subscribe"
+msgstr "Zapisz"
+
+msgid "AlreadySubscribed"
+msgstr "Zapisany"
+
+msgid "CourseCategoryStored"
+msgstr "Kategoria została stworzona"
+
+msgid "langWithoutTimeLimits"
+msgstr "Bez limitów czasowych"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Powrót do listy kategorii"
+
+msgid "langAdded"
+msgstr "Dodany"
+
+msgid "langDeleted"
+msgstr "Usunięty"
+
+msgid "langKeeped"
+msgstr "Zatrzymany"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Ukryty / Zamknięty"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Ukryty / Otwarty"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Widoczny / Otwarty"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Widoczny / Zamknięty"
+
+msgid "langAdminThisUser"
+msgstr "Powrót do użytkownika"
+
+msgid "langManage"
+msgstr "Zarządzanie portalem"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Zostałeś zapisany na ten kurs. Jesteś zarejestrowanym użytkownikiem."
+
+msgid "langSubCat"
+msgstr "podkategoriach"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Wypisanie z tego kursy jest niedozwolone."
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Jesteś administratorem tego kursu."
+
+msgid "CourseManagement"
+msgstr "Zarządzanie kursem"
+
+msgid "SortMyCourses"
+msgstr "Posortuj moje kursy"
+
+msgid "SubscribeToCourse"
+msgstr "Zapisz na kurs"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Wypisz z kursu"
+
+msgid "CreateCourseCategory"
+msgstr "Utwórz kategorię kursu"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Czy jesteś pewien, że chcesz skasować tę kategorię kursu?"
+
+msgid "CourseCategories"
+msgstr "Kategorie kursów"
+
+msgid "CoursesInCategory"
+msgstr "Kursy należące do tej kategorii"
+
+msgid "SearchCourse"
+msgstr "Szukaj kursu"
+
+msgid "UpOneCategory"
+msgstr "<- Kategoria wyżej"
+
+msgid "SearchResultsFor"
+msgstr "Szukaj wyników dla :"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Czy jesteś pewnie, że chcesz się wypisać z tego kursu?"
+
+msgid "NoCourseCategory"
+msgstr "Brak kategorii kursów"
+
+msgid "EditCourseCategorySucces"
+msgstr "kurs został dodany do kategorii"
+
+msgid "SubscribingNotAllowed"
+msgstr "Zapisy niedozwolone"
+
+msgid "CourseSortingDone"
+msgstr "Sortowanie kursów ukończone"
+
+msgid "ExistingCourseCategories"
+msgstr "Istniejące kategorie kursów"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Jesteś wypisany z tego kursu"
+
+msgid "ViewOpenCourses"
+msgstr "Wyświetl otwarte kursy"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Wystąpił nieoczekiwany błąd. Skontaktuj się z administratorem platformy."
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "Kod kursu jest nieprawidłowy"
+
+msgid "CourseRequiresPassword"
+msgstr "Kurs wymaga hasła"
+
+msgid "SubmitRegistrationCode"
+msgstr "Prześlij kod rejestracyjny"
+
+msgid "CourseCategoryDeleted"
+msgstr "Kategoria została usunięta"
+
+msgid "CategorySortingDone"
+msgstr "Kategoria została posortowana"
+
+msgid "CourseCategoryEditStored"
+msgstr "Kategoria została uaktualniona"
+

@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Metadati del documento"
+
+msgid "langClickKw"
+msgstr "Clicca sulla Parola chiave nell\'albero per selezionarla o deselezionarla."
+
+msgid "langKwHelp"
+msgstr "<br/> Fai Click sul pulsante \'+\' per aprire e su  \'-\' per chiudere; \'++\' apre tutto e \'--\' chiude tutto.<br/> <br/> Cancella le Parole chiave selezionate richiudendo l\'albero e riaprendolo di nuovo con il pulsante \'+\' .<br/> Alt-click \'+\' cerca le Parole chiave originali nell\'albero.<br/> <br/> Alt-click Parola chiave seleziona una parola chiave senzatermini più dettagliati o la deseleziona.<br/> <br/> Se cambi la lingua della descrizione non introdurre Parole chiave nello stesso tempo..<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Crea"
+
+msgid "langSearch"
+msgstr "Cerca"
+
+msgid "langSearchCrit"
+msgstr "Una parola per linea!"
+
+msgid "langNoKeywords"
+msgstr "Il corso non contiene Parole chiave"
+
+msgid "langKwCacheProblem"
+msgstr "Non è possibile aprire la cache delle parole chiave"
+
+msgid "langCourseKwds"
+msgstr "Questo documento contiene le parole chiave del corso"
+
+msgid "langKwdsInMD"
+msgstr "parole chiave impiegate dei Metadati"
+
+msgid "langKwdRefs"
+msgstr "Parole chiave di riferimento"
+
+msgid "langNonCourseKwds"
+msgstr "Parole chiave non del corso"
+
+msgid "langKwdsUse"
+msgstr "Parole chiave del corso (grassetto = non impiegate)"
+
+msgid "langTotalMDEs"
+msgstr "Numero totale di MD dei Collegamenti:"
+

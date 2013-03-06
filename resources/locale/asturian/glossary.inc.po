@@ -1,0 +1,69 @@
+msgid "TermAddNew"
+msgstr "Amestar terminu nuevu"
+
+msgid "TermName"
+msgstr "Nome del términu"
+
+msgid "TermDefinition"
+msgstr "Definición"
+
+msgid "TermDeleted"
+msgstr "Términu esborráu"
+
+msgid "TermUpdated"
+msgstr "Términu actualizáu"
+
+msgid "TermConfirmDelete"
+msgstr "¿ De verdá quier esborrar esti términu ?"
+
+msgid "TermAddButton"
+msgstr "Amestar esti términu"
+
+msgid "TermUpdateButton"
+msgstr "Actualizar términu"
+
+msgid "TermEdit"
+msgstr "Editar términu"
+
+msgid "TermDeleteAction"
+msgstr "Esborrar términu"
+
+msgid "OrderBy"
+msgstr "Ordenar por"
+
+msgid "CreationDate"
+msgstr "Fecha de creación"
+
+msgid "UpdateDate"
+msgstr "Última modificación"
+
+msgid "PreSelectedOrder"
+msgstr "Ordenar por seleición"
+
+msgid "TermAdded"
+msgstr "Términu amestáu"
+
+msgid "YouMustEnterATermName"
+msgstr "Usté tien d\'escribir un nome de términu"
+
+msgid "YouMustEnterATermDefinition"
+msgstr "Tien d\'escribir un definición del términu"
+
+msgid "TableView"
+msgstr "Ver cuadru"
+
+msgid "GlossaryTermAlreadyExistsYouShouldEditIt"
+msgstr "Esti terminu del glosariu ya esiste, por favor, camudálu por otru nome"
+
+msgid "GlossaryManagement"
+msgstr "Alministración de glosariu"
+
+msgid "TermMoved"
+msgstr "El términu movíose"
+
+msgid "ShowGlossaryInExtraToolsTitle"
+msgstr "Amuesa los términos del glosariu nes ferramientes extres"
+
+msgid "ShowGlossaryInExtraToolsComment"
+msgstr "Dende equí puedes configurar como amestar los términos del glosariu en ferramientes como lleiciones y exercicios"
+

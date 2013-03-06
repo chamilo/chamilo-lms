@@ -1,0 +1,252 @@
+msgid "lang_learning_path"
+msgstr "KURS"
+
+msgid "lang_learning_path_builder"
+msgstr "Kurs Düzenleyicisi"
+
+msgid "lang_description"
+msgstr "açıklama"
+
+msgid "LearnpathTitle"
+msgstr "başlık"
+
+msgid "LearnpathPrerequisites"
+msgstr "Önşartlar"
+
+msgid "LearnpathMoveUp"
+msgstr "Yukarı taşı"
+
+msgid "LearnpathMoveDown"
+msgstr "Aşağı taşı"
+
+msgid "langThisItem"
+msgstr "?"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Başlık ve açıklama"
+
+msgid "LearnpathChangeOrder"
+msgstr "Sıralamayı değiştir"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Önşart ekle"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Başlık ve açıklama düzenle"
+
+msgid "lang_delete"
+msgstr "Sil"
+
+msgid "lang_add_chapter"
+msgstr "Bölüm Ekle"
+
+msgid "langLearnpathMystatus"
+msgstr "Durumum"
+
+msgid "langLearnpathCompstatus"
+msgstr "tamamlandı"
+
+msgid "langLearnpathIncomplete"
+msgstr "tamamlanmadı"
+
+msgid "langLearnpathPassed"
+msgstr "atlandı"
+
+msgid "langLearnpathFailed"
+msgstr "Başarısız"
+
+msgid "langLearnpathPrevious"
+msgstr "Önceki"
+
+msgid "langLearnpathNext"
+msgstr "Sonraki"
+
+msgid "langLearnpathRestart"
+msgstr "Yeniden başlat"
+
+msgid "langLearnpathThisStatus"
+msgstr "Bu bölüm"
+
+msgid "langLearnpathToEnter"
+msgstr "Giriş için"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "Öncelikle tamamlamanız gerekli"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Bölüm başlığı"
+
+msgid "langLearnpathStatus"
+msgstr "Durum"
+
+msgid "langLearnpathScore"
+msgstr "Puan"
+
+msgid "langLearnpathTime"
+msgstr "Süre"
+
+msgid "langLearnpathVersion"
+msgstr "versiyon"
+
+msgid "langLearnpathRestarted"
+msgstr "Bütün bölümler tamamlanmadı."
+
+msgid "langLearnpathNoNext"
+msgstr "Son bölüm."
+
+msgid "langLearnpathNoPrev"
+msgstr "&#304;lk bölüm."
+
+msgid "LearnpathAddLearnpath"
+msgstr "Yeni bir KURS ekle"
+
+msgid "lang_learnpath_added"
+msgstr "Yeni bir KURS oluşturuldu. Artı (+) işaretine tıklayarak bölümler ekleyebilirsiniz."
+
+msgid "LearnpathEditLearnpath"
+msgstr "kurs düzenle"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "kurs sil"
+
+msgid "lang_learnpath_edited"
+msgstr "kurs düzenlendi"
+
+msgid "lang_learnpath_deleted"
+msgstr "kurs silindi"
+
+msgid "LearnpathDoNotPublish"
+msgstr "yayınlama"
+
+msgid "LearnpathPublish"
+msgstr "yayınla"
+
+msgid "LearnpathNotPublished"
+msgstr "yayınlanmadı"
+
+msgid "LearnpathPublished"
+msgstr "yayınlandı"
+
+msgid "lang_add_learnpath_module"
+msgstr "Yeni bir bölüm ekle"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Bu kursa yeni bir bölüm ekle"
+
+msgid "lang_learnpath_module_added"
+msgstr "Yeni Kurs modülü oluşturuldu.Şimdi çarpı işaretine tıklayıp kurs basamaklarını ekleyebilirsiniz."
+
+msgid "LearnpathEditModule"
+msgstr "Bölüm açıklaması/başlığı düzenle"
+
+msgid "LearnpathDeleteModule"
+msgstr "Bölümü sil"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Bölüm başarı ile düzenlendi"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Bölüm ve içeriği silindi"
+
+msgid "LearnpathNoChapters"
+msgstr "Henüz eklenmiş modül yok."
+
+msgid "LearnpathAddItem"
+msgstr "Bu Modüle basamak ekle"
+
+msgid "LearnpathItemDeleted"
+msgstr "Kurs adımı silindi"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "lütfen bu kurs basamağını/basamaklarını şu modüle bağlayın :"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Kurs basamağı tanımı/başlığı düzenle"
+
+msgid "lang_add_prereq"
+msgstr "Bu basamağa ön şart ekle / düzenle"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Basamağı Sil"
+
+msgid "LearnpathItemEdited"
+msgstr "Kurs basamağı değiştirildi."
+
+msgid "lang_prereq_deleted_error"
+msgstr "Silindi !"
+
+msgid "lang_none"
+msgstr "HİÇBİRİ"
+
+msgid "lang_forum_opened"
+msgstr "Seçilen forum yeni bir pencerede açıldı."
+
+msgid "lang_link_opened"
+msgstr "Seçilen bağlantı yeni bir pencerede açıldı."
+
+msgid "lang_short_help"
+msgstr "Bir basamak eklemek için çarpı işaretine tıklayın.Yeni bir başlık/açıklama eklemek için kalem sembolüne ve bir ön şart eklemek için çift sayfalı sembole tıklayın. Üstteki Öğrenci Görüntüsü komutuna tıklayıp öğrencilerinizin ne göreceğini kontrol edebilirsiniz."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "önşartlar tamamlanmadı"
+
+msgid "lang_author"
+msgstr "Yazan"
+
+msgid "lang_date"
+msgstr "Tarih"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Ön şartlar (sınır)"
+
+msgid "lang_loading"
+msgstr "Sayfa Yükleniyor, lütfen bekleyiniz..."
+
+msgid "lang_empty"
+msgstr "Bu kurs herhangi bir basamak içermiyor"
+
+msgid "langHotPotatoesFinished"
+msgstr "Bu HotPotatoes testi kapat&#305;lm&#305;&#351;t&#305;r."
+
+msgid "langCompletionLimit"
+msgstr "Tamamlama limiti (en az puan)"
+
+msgid "langPrereqToEnter"
+msgstr "Giriş"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "Öncelikle tamamlamanız gerekli"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "En az 1 adım atlandı..."
+
+msgid "langPrereqModuleMinimum2"
+msgstr "Önkoşullar olarak ayarlananlar."
+
+msgid "langPrereqTestLimit1"
+msgstr "minimuma ulaşmalısınız"
+
+msgid "langPrereqTestLimit2"
+msgstr "puanlar"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Now you have :"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "normal ekrana dön"
+
+msgid "langLearnpathFullScreen"
+msgstr "tam ekran"
+
+msgid "langItemMissing1"
+msgstr "Kursun orijinalinde,"
+
+msgid "langItemMissing2"
+msgstr "burada bir sayfa (basamak) vardı."
+
+msgid "langDone"
+msgstr "Tamam"
+
+msgid "langNoItemSelected"
+msgstr "Burada bir şey göstermek için yandaki menüden seçiminizi yapınız."
+

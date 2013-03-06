@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Nun escoyó nengún archivu pa unvialu o igual ye que ye más grande de la cuenta."
+
+msgid "langLinkTarget"
+msgstr "Destín del enllaz"
+
+msgid "langSameWindow"
+msgstr "Na mesma ventana"
+
+msgid "langNewWindow"
+msgstr "Nuna ventana nueva"
+
+msgid "langAdded"
+msgstr "Añadíu"
+
+msgid "langAddLink"
+msgstr "Amestar un enllaz"
+
+msgid "langEditLink"
+msgstr "Editar un enllaz de la páxina d\'entamu del cursu"
+

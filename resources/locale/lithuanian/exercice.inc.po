@@ -1,0 +1,681 @@
+msgid "langExercice"
+msgstr "Testas"
+
+msgid "langActivate"
+msgstr "Rodyti"
+
+msgid "langDeactivate"
+msgstr "Slėpti"
+
+msgid "langNoEx"
+msgstr "Šiuo metu testų nėra"
+
+msgid "langNewEx"
+msgstr "Naujas testas"
+
+msgid "langQuestion"
+msgstr "klausimas"
+
+msgid "langQuestions"
+msgstr "Klausimai"
+
+msgid "langAnswers"
+msgstr "Atsakymai"
+
+msgid "langTrue"
+msgstr "Teisnga"
+
+msgid "langAnswer"
+msgstr "Atsakymas"
+
+msgid "langResult"
+msgstr "Rezultatas"
+
+msgid "langNoResult"
+msgstr "Dar nėra rezultato"
+
+msgid "langYourResults"
+msgstr "Jūsų rezultatai"
+
+msgid "langStudentResults"
+msgstr "Studentų įvertinimai"
+
+msgid "langExerciseType"
+msgstr "Testo tipas"
+
+msgid "langExerciseName"
+msgstr "Testo pavadinimas"
+
+msgid "langExerciseDescription"
+msgstr "Testo apibrėžimas"
+
+msgid "langSimpleExercise"
+msgstr "Unikaliame puslapyje"
+
+msgid "langSequentialExercise"
+msgstr "Vienas klausimas puslapyje (eilės tvarka)"
+
+msgid "langRandomQuestions"
+msgstr "Atsitiktiniai klausimai"
+
+msgid "langGiveExerciseName"
+msgstr "Įrašykite testo pavadinimą"
+
+msgid "langSound"
+msgstr "Audio arba video failas"
+
+msgid "langDeleteSound"
+msgstr "Ištrinti audio arba video failą"
+
+msgid "langNoAnswer"
+msgstr "Šiuo metu atsakymų dar nėra"
+
+msgid "langGoBackToQuestionPool"
+msgstr "Atgal į klausimų archyvą"
+
+msgid "langGoBackToQuestionList"
+msgstr "Atgal į klausimų sąrašą"
+
+msgid "langQuestionAnswers"
+msgstr "Atsakymai į klausimą"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Dėmesio! Šis klausimas su atsakymais naudojamas kituose testuose. Ar tikrai norite jį redaguoti"
+
+msgid "langModifyInAllExercises"
+msgstr "visuose testuose"
+
+msgid "langModifyInThisExercise"
+msgstr "tik šiame teste"
+
+msgid "langAnswerType"
+msgstr "Atsakymo tipas"
+
+msgid "langMultipleSelect"
+msgstr "Daugelio atsakymų pasirinkimas"
+
+msgid "langFillBlanks"
+msgstr "Tuščių laukelių užpildymas"
+
+msgid "langMatching"
+msgstr "Atitinkantys atsakymai"
+
+msgid "langAddPicture"
+msgstr "Įdėti nuotrauką"
+
+msgid "langReplacePicture"
+msgstr "Užrašyti paveikslėlį"
+
+msgid "langDeletePicture"
+msgstr "Ištrinti paveiksliuką"
+
+msgid "langQuestionDescription"
+msgstr "Nebūtinas komentaras"
+
+msgid "langGiveQuestion"
+msgstr "Įrašykite klausimą"
+
+msgid "langWeightingForEachBlank"
+msgstr "Įrašykite svorį kiekvienam atsakymui"
+
+msgid "langUseTagForBlank"
+msgstr "use square brackets [...] to define one or more blanks"
+
+msgid "langQuestionWeighting"
+msgstr "Svorinis įvertinimo koeficientas"
+
+msgid "langMoreAnswers"
+msgstr "+atsakymas"
+
+msgid "langLessAnswers"
+msgstr "-atsakymas"
+
+msgid "langMoreElements"
+msgstr "+elementas"
+
+msgid "langLessElements"
+msgstr "-elementas"
+
+msgid "langTypeTextBelow"
+msgstr "Įrašykite tekstą žemiau"
+
+msgid "langDefaultTextInBlanks"
+msgstr "[British people] live in the [United Kingdom]."
+
+msgid "langDefaultMatchingOptA"
+msgstr "rich"
+
+msgid "langDefaultMatchingOptB"
+msgstr "good looking"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Your daddy is"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Your mother is"
+
+msgid "langDefineOptions"
+msgstr "Apibrėžkite nustatymus"
+
+msgid "langMakeCorrespond"
+msgstr "Palyginti juos"
+
+msgid "langFillLists"
+msgstr "Užpildykite abu sąrašus žemiau"
+
+msgid "langGiveText"
+msgstr "Įrašykite tekstą"
+
+msgid "langDefineBlanks"
+msgstr "Please define at least one blank with square brackets [...]"
+
+msgid "langGiveAnswers"
+msgstr "Įrašykite klausimo atsakymus"
+
+msgid "langChooseGoodAnswer"
+msgstr "Pažymėkite teisingą atsakymą"
+
+msgid "langChooseGoodAnswers"
+msgstr "Pažymėkite vieną ar daugiau teisingų atsakymų"
+
+msgid "langQuestionList"
+msgstr "Testo klausimų sąrašas"
+
+msgid "langMoveUp"
+msgstr "Kelti viršun"
+
+msgid "langMoveDown"
+msgstr "Kelti žemyn"
+
+msgid "langGetExistingQuestion"
+msgstr "Klausimų archyvas"
+
+msgid "langFinishTest"
+msgstr "Testo pabaiga"
+
+msgid "langQuestionPool"
+msgstr "Klausimų archyvas"
+
+msgid "langOrphanQuestions"
+msgstr "Pavieniai klausimai"
+
+msgid "langNoQuestion"
+msgstr "Šiuo momentu klausimo nėra"
+
+msgid "langAllExercises"
+msgstr "Visi testai"
+
+msgid "langFilter"
+msgstr "Filtras"
+
+msgid "langGoBackToEx"
+msgstr "Grįžti į testą"
+
+msgid "langReuse"
+msgstr "Re-use"
+
+msgid "langExerciseManagement"
+msgstr "Testų valdymas"
+
+msgid "langQuestionManagement"
+msgstr "Klausimų / Atsakymų valdymas"
+
+msgid "langQuestionNotFound"
+msgstr "Klausimo nėra"
+
+msgid "langExerciseNotFound"
+msgstr "Testo nėra arba jis nematomas"
+
+msgid "langAlreadyAnswered"
+msgstr "Jau atsakėte į šį klausimą"
+
+msgid "langElementList"
+msgstr "Elementų sąrašas"
+
+msgid "langScore"
+msgstr "Įvertinimas"
+
+msgid "langCorrespondsTo"
+msgstr "Siejasi su"
+
+msgid "langExpectedChoice"
+msgstr "Laukiamas pasirinkimas"
+
+msgid "langYourTotalScore"
+msgstr "Galutinis Jūsų įvetinimas yra"
+
+msgid "Build"
+msgstr "Sukurti"
+
+msgid "langEvalSet"
+msgstr "įvertinimo parametrai"
+
+msgid "langActive"
+msgstr "aktyvus"
+
+msgid "langInactive"
+msgstr "neaktyvus"
+
+msgid "langQuestCreate"
+msgstr "sukurti klausimus"
+
+msgid "langExRecord"
+msgstr "pratimas įrašytas"
+
+msgid "langBackModif"
+msgstr "atgal į klausimų rengimo puslapį"
+
+msgid "langDoEx"
+msgstr "kurti pratimą"
+
+msgid "langDefScor"
+msgstr "describe evaluation parameters"
+
+msgid "langCreateModif"
+msgstr "sukurti / redaguoti klausimus"
+
+msgid "langSub"
+msgstr "poantraštė"
+
+msgid "langMyAnswer"
+msgstr "Mano atsakymas"
+
+msgid "langMorA"
+msgstr "+ atsakymas"
+
+msgid "langLesA"
+msgstr "- atsakymas"
+
+msgid "langRecEx"
+msgstr "išsaugoti pratimą"
+
+msgid "langRecQu"
+msgstr "Išsaugoti klausimą"
+
+msgid "langRecAns"
+msgstr "Išsaugoti atsakymus"
+
+msgid "langIntroduction"
+msgstr "Įvadas"
+
+msgid "langTitleAssistant"
+msgstr "Pratimų kūrimo asistentas"
+
+msgid "langQuesList"
+msgstr "klausimų sąrašas"
+
+msgid "langSaveEx"
+msgstr "išsaugoti pratimus"
+
+msgid "langFinish"
+msgstr "Užbaigti"
+
+msgid "langCancel"
+msgstr "Atsisakyti"
+
+msgid "langQImage"
+msgstr "Klausimas su paveikslėliu"
+
+msgid "langAddQ"
+msgstr "Įrašyti klausimą"
+
+msgid "langDoAnEx"
+msgstr "Do an exercice"
+
+msgid "langGenerator"
+msgstr "Pratimų sąrašas"
+
+msgid "langChoice"
+msgstr "Jūsų pasirinkimas"
+
+msgid "langCorrect"
+msgstr "Teisingas"
+
+msgid "langPossAnsw"
+msgstr "Gerų atsakymų skaičius vienam klausimui"
+
+msgid "langStudAnsw"
+msgstr "studento klaidingų atsakymų skaičius"
+
+msgid "langDetermine"
+msgstr "Apibrėžti"
+
+msgid "langNonNumber"
+msgstr "ne skaitinė reikšmė"
+
+msgid "langReplaced"
+msgstr "Pakeistas"
+
+msgid "langSuperior"
+msgstr "didesnė už 20 reikšmė"
+
+msgid "langRep20"
+msgstr "Pakeisti 20"
+
+msgid "langDefault"
+msgstr "Reikšmės pagal nutylėjimą *"
+
+msgid "langDefComment"
+msgstr "previous values will be replaced by clicking the \"default values\" button"
+
+msgid "langScoreGet"
+msgstr "black numbers = score"
+
+msgid "langShowScor"
+msgstr "Peržiūrėti studento įvertinimą:"
+
+msgid "langStep1"
+msgstr "Žingsnis 1"
+
+msgid "langStep2"
+msgstr "Žingsnis 2"
+
+msgid "langTake"
+msgstr "imti"
+
+msgid "langAmong"
+msgstr "tarp"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Importuoti HotPotatoes testus"
+
+msgid "langHotPotatoesTests"
+msgstr "Importuoti HotPotatoes testus"
+
+msgid "langDownloadFile"
+msgstr "Įkelti failą į serverį"
+
+msgid "langDownloadImg"
+msgstr "Įkelti paveikslėlį į serverį"
+
+msgid "langDownloadEnd"
+msgstr "Įkėlimas baigtas"
+
+msgid "langNoSpace"
+msgstr "Įkėlimas nepavyko. Galbūt viršijote asmeninę kvotą arba nėra vietos diske."
+
+msgid "langZipNoPhp"
+msgstr "Zip failas negali turėti .PHP failų"
+
+msgid "langNoImg"
+msgstr "Testas be paveikslėlių"
+
+msgid "langImgNote_st"
+msgstr "<br> You still have to upload"
+
+msgid "langImgNote_en"
+msgstr " paveikslėlis(iai) :"
+
+msgid "langDocDeleted"
+msgstr "Dokumentas ištrintas"
+
+msgid "langViMod"
+msgstr "Matomumas modifikuotas"
+
+msgid "langNameNotEqual"
+msgstr "nėra tinkamas failas!"
+
+msgid "langIndice"
+msgstr "Indeksas"
+
+msgid "langIndices"
+msgstr "Indeksai"
+
+msgid "langDateExo"
+msgstr "Data"
+
+msgid "langShowQuestion"
+msgstr "Rodyti klausimą"
+
+msgid "langUnknownExercise"
+msgstr "Nežinomas pratimas"
+
+msgid "langReuseQuestion"
+msgstr "Reuse the question"
+
+msgid "langCreateExercise"
+msgstr "Sukurti pratimą"
+
+msgid "langCreateQuestion"
+msgstr "Sukurti klausimą"
+
+msgid "langCreateAnswers"
+msgstr "Sukurti atsakymus"
+
+msgid "langModifyExercise"
+msgstr "Redaguoti pratimus"
+
+msgid "langModifyAnswers"
+msgstr "redaguoti atsakymus"
+
+msgid "langForExercise"
+msgstr "užduočiai"
+
+msgid "langUseExistantQuestion"
+msgstr "Naudoti esantį klausimą"
+
+msgid "FreeAnswer"
+msgstr "Laisvos formos atsakymas"
+
+msgid "notCorrectedYet"
+msgstr "Šis atsakymas dar neištaisytas. Šio klausimo įverinimas įrašytas 0."
+
+msgid "adminHP"
+msgstr "Hot Potatoes administratorius"
+
+msgid "NewQu"
+msgstr "Naujas klausimas"
+
+msgid "NoImage"
+msgstr "Veuillez choisir une image."
+
+msgid "langAnswerHotspot"
+msgstr "Paaiškinimai ir svoriniai įvertinimo koeficientai būtini - komentarai nebūtini"
+
+msgid "langMinHotspot"
+msgstr "Turite sukurti mažiausiai vieną (1) \"hotspot\"."
+
+msgid "langMaxHotspot"
+msgstr "Daugiausia galima sukurti 12 \"hotspots\"."
+
+msgid "langHotspotError"
+msgstr "Prašome užpildyti paaiškinimą ir svorinius įvertinimo koeficientus kiekvienam \"hotspot\"."
+
+msgid "langMoreHotspots"
+msgstr "+\"hotspot\""
+
+msgid "langLessHotspots"
+msgstr "-\"hotspot\""
+
+msgid "langHotspotZones"
+msgstr "Paveikslėlių zonos"
+
+msgid "langNextQuestion"
+msgstr "Kitas klausimas"
+
+msgid "langCorrectAnswer"
+msgstr "Teisingas atsakymas"
+
+msgid "langHotspotHit"
+msgstr "Jūsų atsakymas buvo"
+
+msgid "langOnlyJPG"
+msgstr "Paveikslėlių testams galite naudoti tik jpg (jpeg) formato paveikslėlius"
+
+msgid "langFinishThisTest"
+msgstr "Rodyti teisingus atsakymus kiekvienam klausimui ir testo įvertinimą"
+
+msgid "langAllQuestions"
+msgstr "Visi klausimai"
+
+msgid "langModifyTitleDescription"
+msgstr "Redaguoti antraštę ir komentarą"
+
+msgid "langModifyHotspots"
+msgstr "Redaguoti atsakymus/\"hotspots\""
+
+msgid "langHotspotNotDrawn"
+msgstr "Dar nenupiešėte \"hotspots\""
+
+msgid "langHotspotWeightingError"
+msgstr "Turite įrašyti tik teigiamus (>0) svorinius įvertinimo koeficientus"
+
+msgid "langHotspotValidateError1"
+msgstr "Pilnai atsakykite į klausimą ("
+
+msgid "langHotspotValidateError2"
+msgstr " paspaudimų ant paveikslėlio) prieš peržiūrint rezultatus"
+
+msgid "langHotspotRequired"
+msgstr "Paaiškinimai ir svoriniai įvertinimo koeficientai būtini - komentarai nebūtini"
+
+msgid "langHotspotChoose"
+msgstr "<div style=\"padding:2px 3px;\">•Kad sukurti \"hotspot\": pasirinkite kontūrą šalia spalvos ir nupieškite \"hotspot\".</div><div style=\"padding:2px 3px;\">•Kad sukurti naują \"hotspot\" spauskite [ + ] mygtuką.</div><div style=\"padding:2px 3px;\">•Kad uždaryti \"polygon\" sritį: dešinys pelės klavišas ir \"Close polygon\".</div>"
+
+msgid "Fault"
+msgstr "Neteisingas"
+
+msgid "HotSpot"
+msgstr "Paveikslėlių zonos"
+
+msgid "ClickNumber"
+msgstr "Paspausti ant numerio"
+
+msgid "HotspotGiveAnswers"
+msgstr "Įrašykite atsakymą"
+
+msgid "Addlimits"
+msgstr "Laiko ir bandymų limitai"
+
+msgid "AreYouSure"
+msgstr "Ar tikrai"
+
+msgid "StudentScore"
+msgstr "Studento įvertinimas"
+
+msgid "backtoTesthome"
+msgstr "Atgal į testų titulinį"
+
+msgid "Feedback"
+msgstr "Grįžtamasis ryšys"
+
+msgid "MarkIsUpdated"
+msgstr "Žymė atnaujinta"
+
+msgid "MarkInserted"
+msgstr "Žymė įterpta"
+
+msgid "PleaseGiveAMark"
+msgstr "Prašome įterpti žymę"
+
+msgid "EditCommentsAndMarks"
+msgstr "Redaguoti komentarus ir žymes"
+
+msgid "AddComments"
+msgstr "Rašyti komentarus"
+
+msgid "Number"
+msgstr "N"
+
+msgid "Weighting"
+msgstr "Svorinis įvertinimo koeficientas"
+
+msgid "ChooseQuestionType"
+msgstr "To create a new question, choose the type above"
+
+msgid "MatchesTo"
+msgstr "Matches To"
+
+msgid "CorrectTest"
+msgstr "Taisyti šį testą"
+
+msgid "ViewTest"
+msgstr "Peržiūra"
+
+msgid "State"
+msgstr "Sistemos būsena"
+
+msgid "NotAttempted"
+msgstr "Nebandyta"
+
+msgid "AddElem"
+msgstr "+ elementas"
+
+msgid "DelElem"
+msgstr "- elementas"
+
+msgid "PlusAnswer"
+msgstr "+ atsakymas"
+
+msgid "LessAnswer"
+msgstr "- atsakymas"
+
+msgid "YourScore"
+msgstr "Jūsų įvertinimas"
+
+msgid "Attempted"
+msgstr "Bandytas"
+
+msgid "AssignMarks"
+msgstr "Assign a mark"
+
+msgid "Results"
+msgstr "Rezultatai"
+
+msgid "ExerciseStored"
+msgstr "Užduotis išsaugota"
+
+msgid "ChooseAtLeastOneCheckbox"
+msgstr "Choose at least one good answer"
+
+msgid "ExerciseEdited"
+msgstr "The exercise has been edited"
+
+msgid "ExerciseDeleted"
+msgstr "The exercise has been deleted"
+
+msgid "ClickToCommentAndGiveFeedback"
+msgstr "Click the following link to check the answer and give feedback"
+
+msgid "OpenQuestionsAttempted"
+msgstr "A learner has answered an open question"
+
+msgid "AttemptDetails"
+msgstr "Attempt details"
+
+msgid "TestAttempted"
+msgstr "Test attempted"
+
+msgid "StudentName"
+msgstr "Student\'s name"
+
+msgid "StudentEmail"
+msgstr "Student email"
+
+msgid "OpenQuestionsAttemptedAre"
+msgstr "Open question attempted is"
+
+msgid "CourseName"
+msgstr "Course name"
+
+msgid "UploadJpgPicture"
+msgstr "Upload a JPG picture"
+
+msgid "HotspotDescription"
+msgstr "Hotspot description"
+
+msgid "ExamSheetVCC"
+msgstr "Examsheet viewed/corrected/commented by teacher"
+
+msgid "AttemptVCC"
+msgstr "Your following attempt has been viewed/commented/corrected by teacher"
+
+msgid "ClickLinkToViewComment"
+msgstr "Click the link below to access  your account and view your commented Examsheet."
+
+msgid "Regards"
+msgstr "Regards"
+
+msgid "AttemptVCCLong"
+msgstr "You attempt for the test %s has been viewed/commented/corrected by the teacher. Click the link below to access  your account and view your Examsheet."
+

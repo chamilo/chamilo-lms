@@ -1,0 +1,78 @@
+msgid "NewNote"
+msgstr "Uusi muistiinpano"
+
+msgid "Note"
+msgstr "Muistiinpano"
+
+msgid "NoteDeleted"
+msgstr "Muistiinpano poistettu"
+
+msgid "NoteUpdated"
+msgstr "Muistiinpano päivitetty"
+
+msgid "NoteCreated"
+msgstr "Muistiinpano tehty"
+
+msgid "YouMustWriteANote"
+msgstr "Kirjoita muistiinpano"
+
+msgid "SaveNote"
+msgstr "Tallenna muistiinpano"
+
+msgid "WriteYourNoteHere"
+msgstr "Klikkaa kirjoittaaksesi uuden muistiinpanon"
+
+msgid "SearchByTitle"
+msgstr "Etsi otsikolla"
+
+msgid "WriteTheTitleHere"
+msgstr "Kirjoita otsikko tähän"
+
+msgid "UpdateDate"
+msgstr "Muokkaus päivä"
+
+msgid "NoteAddNew"
+msgstr "Lisää uusi muistiinpano"
+
+msgid "OrderByCreationDate"
+msgstr "Järjestä luontipäivän mukaan"
+
+msgid "OrderByModificationDate"
+msgstr "Järjestä muokkauspäivän mukaan"
+
+msgid "OrderByTitle"
+msgstr "Järjestä otsikon mukaan"
+
+msgid "NoteTitle"
+msgstr "Muistiinpanon otsikko"
+
+msgid "NoteComment"
+msgstr "Muistiinpanon yksityiskohdat"
+
+msgid "NoteAdded"
+msgstr "Muistiinpano lisätty"
+
+msgid "NoteConfirmDelete"
+msgstr "Haluatko varmasti poistaa tämän muistiinpanon?"
+
+msgid "AddNote"
+msgstr "Lisää muistiinpano"
+
+msgid "ModifyNote"
+msgstr "Muokkaa henkilökohtaista muistiinpanoa"
+
+msgid "BackToNoteList"
+msgstr "Palaa muistio listaan"
+
+msgid "NotebookManagement"
+msgstr "Muistion hallinta"
+
+msgid "BackToNotesList"
+msgstr "Takaisin muistio listaan"
+
+msgid "NotesSortedByTitleAsc"
+msgstr "Muistiot järjestettynä nimen mukaan (a-z)"
+
+msgid "NotesSortedByTitleDESC"
+msgstr "Muistiot järjestettynä nimen mukaan (z-a)"
+

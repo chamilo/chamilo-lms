@@ -1,0 +1,66 @@
+msgid "langSelectOptionForBackup"
+msgstr "Mangyaring pumili ng isang backup-option"
+
+msgid "langLetMeSelectItems"
+msgstr "Hayaan akong pumili ng mga bagay na mapag-aaralan"
+
+msgid "langCreateFullBackup"
+msgstr "Lumikha ng isang kumpletong backup ng pagsasanay na ito"
+
+msgid "langSelectBackupFile"
+msgstr "Pumili ng isang backup file"
+
+msgid "langImportBackup"
+msgstr "I-import ang backup"
+
+msgid "langImportFullBackup"
+msgstr "I-import ang buong backup"
+
+msgid "langTests"
+msgstr "Mga Pagsusulit"
+
+msgid "langCopyCourse"
+msgstr "Kopyahin ang kurso"
+
+msgid "langSameFilename"
+msgstr "Ano ang dapat gawin sa na-import na mga file na mayroong kaparehong kapangalan ng file na umiiral sa mga file?"
+
+msgid "langSameFilenameSkip"
+msgstr "Laktawan ang parehong pangalan ng file"
+
+msgid "langSameFilenameRename"
+msgstr "I-rename ang file (hal. file.pdf ay magiging file_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Patungan ang file"
+
+msgid "langSelectResources"
+msgstr "Pumili ng mga mapagkukunan"
+
+msgid "langLocalFile"
+msgstr "lokal na file"
+
+msgid "langNoBackupsAvailable"
+msgstr "Walang backup ang magagamit"
+
+msgid "langImportBackupInfo"
+msgstr "Mag-import ng backup. Ikaw ay maaaring makapag-upload ng isang backup file mula sa iyong lokal na drive o maaari mong gamitin ang isang backup file na magagamit sa server."
+
+msgid "langCreateBackupInfo"
+msgstr "Lumikha ng isang backup. Maaari kang pumili ng mga bagay na mapag-aaralan upang pagsamahin sa backup file."
+
+msgid "ToolIntro"
+msgstr "Panimulang Tool"
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Ang mga dokumento ay idadagdag din"
+
+msgid "ToExportLearnpathWithQuizYouHaveToSelectQuiz"
+msgstr "Kung nais mo na mag-export ng isang kurso na naglalaman ng pagsusulit, kailangan mong tiyakin na ang mga katumbas na pagsusulit ay kabilang sa export, kung kaya"
+
+msgid "IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments"
+msgstr "Kung ang iyong mga learning path ay kabilang ang mga audio file, dapat mong piliin ang mga ito mula sa mga dokumennto"
+
+msgid "DontForgetToSelectTheMediaFilesIfYourResourceNeedIt"
+msgstr "Huwag kalilimutang pumili ng mga media file kung kinakailangan ito ng iyong mapagkukunan"
+

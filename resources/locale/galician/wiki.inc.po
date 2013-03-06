@@ -1,0 +1,694 @@
+msgid "WikiSearchResults"
+msgstr "resultados da procura do Wiki"
+
+msgid "Wiki"
+msgstr "Wiki do grupo"
+
+msgid "StartPage"
+msgstr "Páxina principal"
+
+msgid "EditThisPage"
+msgstr "Editar esta páxina"
+
+msgid "ShowPageHistory"
+msgstr "Histórico"
+
+msgid "RecentChanges"
+msgstr "Trocos recentes"
+
+msgid "AllPages"
+msgstr "Tódalas páxinas"
+
+msgid "AddNew"
+msgstr "Engadir nova páxina"
+
+msgid "ChangesStored"
+msgstr "Os seus trocos foron gardados"
+
+msgid "NewWikiSaved"
+msgstr "A nova páxina foi gardada. Pode visualizala facendo click en:"
+
+msgid "DefaultContent"
+msgstr " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para comezar, edite esta p�xina</p>"
+
+msgid "CourseWikiPages"
+msgstr "Páxinas Wiki do curso"
+
+msgid "GroupWikiPages"
+msgstr "Páxinas Wiki do grupo"
+
+msgid "NoWikiPageTitle"
+msgstr "Os seus trocos foron gardados. Debe darlle un título á paxina"
+
+msgid "WikiPageTitleExist"
+msgstr "O título desta páxina foi creada con anterioridade, edite o contido da páxina facendo click aquí"
+
+msgid "WikiDiffAddedLine"
+msgstr "Liña engadida"
+
+msgid "WikiDiffDeletedLine"
+msgstr "Liña borrada"
+
+msgid "WikiDiffMovedLine"
+msgstr "Liña movida"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "Liña sen trocos"
+
+msgid "DifferencesNew"
+msgstr "trocos na versión"
+
+msgid "DifferencesOld"
+msgstr "antiga versión de"
+
+msgid "Differences"
+msgstr "Diferenzas"
+
+msgid "MostRecentVersion"
+msgstr "Vista da versión máis recente das selecionadas"
+
+msgid "Legend"
+msgstr "Lenda"
+
+msgid "ShowDifferences"
+msgstr "Compare as versións selecionadas"
+
+msgid "SearchPages"
+msgstr "Buscar páxinas"
+
+msgid "Discuss"
+msgstr "Discutir"
+
+msgid "History"
+msgstr "Historial"
+
+msgid "ShowThisPage"
+msgstr "Ver esta páxina"
+
+msgid "DeleteThisPage"
+msgstr "Eliminar esta páxina"
+
+msgid "DiscussThisPage"
+msgstr "Discutir esta páxina"
+
+msgid "HomeWiki"
+msgstr "Páxina principal do Wiki"
+
+msgid "DeleteWiki"
+msgstr "Eliminar todo o Wiki"
+
+msgid "WikiDeleted"
+msgstr "Wiki eliminado"
+
+msgid "WikiPageDeleted"
+msgstr "A páxina foi eliminada xunto con todo o seu historial"
+
+msgid "NumLine"
+msgstr "Núm. de liña"
+
+msgid "DeletePageHistory"
+msgstr "Eliminar esta páxina e todas as súas versións"
+
+msgid "OnlyAdminDeleteWiki"
+msgstr "Só os administradores dun curso poden borrar un Wiki"
+
+msgid "OnlyAdminDeletePageWiki"
+msgstr "Só os administradores do curso poden borrar unha páxina wiki"
+
+msgid "OnlyAddPagesGroupMembers"
+msgstr "Só os responsables do curso e os membros deste grupo poden engadir páxinas ao Wiki do grupo"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "Só os responsables do curso e os membros deste grupo poden editar as páxinas do Wiki do grupo"
+
+msgid "ConfirmDeleteWiki"
+msgstr "Está seguro de querer eliminar este Wiki?"
+
+msgid "ConfirmDeletePage"
+msgstr "Está seguro de querer eliminar esta páxina e todas as súas versións?"
+
+msgid "AlsoSearchContent"
+msgstr "Buscar tamén no contido"
+
+msgid "PageLocked"
+msgstr "Páxina protexida"
+
+msgid "PageUnlocked"
+msgstr "Páxina non protexida"
+
+msgid "PageLockedExtra"
+msgstr "Esta páxina está protexida. Só os profesores do curso poden modificala"
+
+msgid "PageUnlockedExtra"
+msgstr "Esta páxina deixou de estar protexida. Todos os membros do curso ou, no seu caso, do grupo poden escribir nesta páxina"
+
+msgid "ShowAddOption"
+msgstr "Activar engadir"
+
+msgid "HideAddOption"
+msgstr "Desactivar engadir"
+
+msgid "AddOptionProtected"
+msgstr "A opción engadir páxinas foi protexida. Só os profesores do curso poden engadir paginas neste Wiki. Aínda que os usuarios do curso ou grupo no seu caso, si poderán editalas"
+
+msgid "AddOptionUnprotected"
+msgstr "A opción engadir páxinas foi activada para todos os membros do curso ou do grupo"
+
+msgid "NotifyChanges"
+msgstr "Nofificar cambios"
+
+msgid "NotNotifyChanges"
+msgstr "Non notificar cambios"
+
+msgid "NotifyByEmail"
+msgstr "Gostaría de ser informado por email sempre que alguén responder a esta mensaxe"
+
+msgid "CancelNotifyByEmail"
+msgstr "Non notificarme por email cando esta páxina sea modificada"
+
+msgid "MostRecentVersionBy"
+msgstr "A última versión foi realizada por"
+
+msgid "Rating"
+msgstr "Puntuación"
+
+msgid "RatingMedia"
+msgstr "A puntuación media da páxina é"
+
+msgid "NumComments"
+msgstr "Comentarios a esta páxina"
+
+msgid "NumCommentsScore"
+msgstr "Número de comentarios nesta páxina:"
+
+msgid "AddPagesLocked"
+msgstr "A opción de engadir páxinas foi temporalmente deshabilitada polo administrador do curso"
+
+msgid "LinksPages"
+msgstr "Referencias"
+
+msgid "ShowLinksPages"
+msgstr "Mostra as páxinas que teñen enlaces a esta páxina"
+
+msgid "MoreWikiOptions"
+msgstr "Máis opcións do Wiki"
+
+msgid "DefaultTitle"
+msgstr "Páxina inicial"
+
+msgid "DiscussNotAvailable"
+msgstr "Discusión non dispoñible"
+
+msgid "Print"
+msgstr "Imprimir"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "EditPage"
+msgstr "Editar"
+
+msgid "AddedBy"
+msgstr "engadido por"
+
+msgid "EditedBy"
+msgstr "editado por"
+
+msgid "DeletedBy"
+msgstr "eliminado por"
+
+msgid "WikiStandardMode"
+msgstr "Modo Wiki"
+
+msgid "GroupTutorAndMember"
+msgstr "Profesor e membro do grupo"
+
+msgid "GroupTutor"
+msgstr "Titor do grupo"
+
+msgid "GroupStandardMember"
+msgstr "Membro do grupo"
+
+msgid "AssignmentMode"
+msgstr "Modo de tarefas individuais"
+
+msgid "ConfigDefault"
+msgstr "Configuración por defecto"
+
+msgid "UnlockPage"
+msgstr "Desprotexer"
+
+msgid "LockPage"
+msgstr "Protexer"
+
+msgid "NotifyDiscussChanges"
+msgstr "Notificar comentario"
+
+msgid "NotNotifyDiscussChanges"
+msgstr "Non notificar comentarios"
+
+msgid "AssignmentWork"
+msgstr "Traballo do estudiante"
+
+msgid "AssignmentDesc"
+msgstr "Tarefa proposta polo profesor"
+
+msgid "WikiDiffAddedTex"
+msgstr "Texto engadido"
+
+msgid "WikiDiffDeletedTex"
+msgstr "Texto eliminado"
+
+msgid "WordsDiff"
+msgstr "palabra a palabra"
+
+msgid "LinesDiff"
+msgstr "liña a liña"
+
+msgid "MustSelectPage"
+msgstr "Debe seleccionar unha páxina primeiro"
+
+msgid "Export2ZIP"
+msgstr "Exportar a ZIP"
+
+msgid "HidePage"
+msgstr "Ocultar páxina"
+
+msgid "ShowPage"
+msgstr "Amosar páxina"
+
+msgid "GoAndEditMainPage"
+msgstr "Para comezar o wiki edite a páxina principal"
+
+msgid "UnlockDiscuss"
+msgstr "Desbloquear discusión"
+
+msgid "LockDiscuss"
+msgstr "Bloquear discusión"
+
+msgid "HideDiscuss"
+msgstr "Ocultar discusión"
+
+msgid "ShowDiscuss"
+msgstr "Amosar discusión"
+
+msgid "UnlockRatingDiscuss"
+msgstr "Activar puntuación"
+
+msgid "LockRatingDiscuss"
+msgstr "Desactivar puntuación"
+
+msgid "EditAssignmentWarning"
+msgstr "Pode editar esta páxina, pero as páxinas dos alumnos non serán modificadas"
+
+msgid "ExportToDocArea"
+msgstr "Exportar a última versión desta páxina a Documentos"
+
+msgid "LockByTeacher"
+msgstr "Deshabilitado polo profesor"
+
+msgid "LinksPagesFrom"
+msgstr "Páxinas que enlazan a esta páxina"
+
+msgid "DefineAssignmentPage"
+msgstr "Definir esta páxina coma unha asignación individual"
+
+msgid "AssignmentDescription"
+msgstr "Descripción da asignación"
+
+msgid "UnlockRatingDiscussExtra"
+msgstr "Agora tódolos membros poden puntuar esta páxina"
+
+msgid "LockRatingDiscussExtra"
+msgstr "Agora só os profesores poden puntuar esta páxina"
+
+msgid "HidePageExtra"
+msgstr "Agora a páxina só e visible polo profesor"
+
+msgid "ShowPageExtra"
+msgstr "Agora a páxina é visible por tódolos usuarios"
+
+msgid "OnlyEditPagesCourseManager"
+msgstr "A páxina principal pode ser editada tan só por un profesor"
+
+msgid "AssignmentLinktoTeacherPage"
+msgstr "Acceso á páxina do profesor"
+
+msgid "HideDiscussExtra"
+msgstr "Agora a discusión só é visible para profesores"
+
+msgid "ShowDiscussExtra"
+msgstr "Agora a discusión é visible por tódolos usuarios"
+
+msgid "LockDiscussExtra"
+msgstr "Agora só os profesores poden engadir comentarios a esta discusión"
+
+msgid "UnlockDiscussExtra"
+msgstr "Agora tódolos membros poden engadir comentarios a esta discusión"
+
+msgid "AssignmentDescExtra"
+msgstr "Esta páxina é unha asignación proposta polo profesor"
+
+msgid "AssignmentWorkExtra"
+msgstr "Esta páxina é traballo dun estudiante"
+
+msgid "NoAreSeeingTheLastVersion"
+msgstr "Atención, vostede non está a ver a última versión da páxina"
+
+msgid "AssignmentFirstComToStudent"
+msgstr "Cambie esta páxina para facer o seu traballo acerca da asignación proposta"
+
+msgid "AssignmentLinkstoStudentsPage"
+msgstr "Acceso ós papeles escritos polos estudiantes"
+
+msgid "AllowLaterSends"
+msgstr "Permitir envío retrasado"
+
+msgid "WikiStandBy"
+msgstr "Este Wiki esa conxelado dende hai tempo. Un profesor debe comezalo."
+
+msgid "NotifyDiscussByEmail"
+msgstr "A notificación por email dos novos comentarios está habilitada"
+
+msgid "CancelNotifyDiscussByEmail"
+msgstr "A notificación por email dos novos comentarios está deshabilitada"
+
+msgid "EmailWikiChanges"
+msgstr "Notificar cambios no Wiki"
+
+msgid "EmailWikipageModified"
+msgstr "A páxina foi modificada"
+
+msgid "EmailWikiPageAdded"
+msgstr "A páxina foi engadida"
+
+msgid "EmailWikipageDedeleted"
+msgstr "Unha páxina foi eliminada do Wiki"
+
+msgid "EmailWikiPageDiscAdded"
+msgstr "Novos comentarios na discusión da páxina"
+
+msgid "FullNotifyByEmail"
+msgstr "Recibir unha notificación por email cada vez que haia un cambio no Wiki"
+
+msgid "FullCancelNotifyByEmail"
+msgstr "Deixar de recibir unha notificación por email cada vez que haia un cambio no Wiki"
+
+msgid "EmailWikiChangesExt_1"
+msgstr "Esta notificación foi feita de acordo ó seu desexo de monitorizar os trocos no Wiki. Esta opción significa que vostede activou o botón"
+
+msgid "EmailWikiChangesExt_2"
+msgstr "Si vostede desexa deixar de ser notificado dos trocos no Wiki, seleccione os separadores Trocos recentes, páxina Actual, COnversa como apropiados e entón pulse o botón"
+
+msgid "Visits"
+msgstr "visitas"
+
+msgid "OrphanedPages"
+msgstr "Páxinas orfas"
+
+msgid "WantedPages"
+msgstr "Páxinas buscadas"
+
+msgid "MostVisitedPages"
+msgstr "Páxinas máis visitadas"
+
+msgid "MostChangedPages"
+msgstr "Páxinas máis modificadas"
+
+msgid "Changes"
+msgstr "Trocos"
+
+msgid "MostActiveUsers"
+msgstr "Usuarios máis activos"
+
+msgid "Contributions"
+msgstr "contribucións"
+
+msgid "UserContributions"
+msgstr "Contribucións do usuario"
+
+msgid "WarningDeleteMainPage"
+msgstr "Eliminar a páxina principal do Wiki non é recomendado xa que é o acceso principal ó wiki.
+Si de tódolos xeitos precisa facelo, non esquenza voltar a crear a páxina principal. Ata entón, os outros usuarios non van ser capaces de engadir novas páxinas."
+
+msgid "ConvertToLastVersion"
+msgstr "Para establecer esta versión coma a última faga click"
+
+msgid "Restore"
+msgstr "Restaurar"
+
+msgid "CurrentVersion"
+msgstr "Versión actual"
+
+msgid "LastVersion"
+msgstr "Última versión"
+
+msgid "PageRestored"
+msgstr "A páxina foi restaurada. Pode vela facendo click"
+
+msgid "RestoredFromVersion"
+msgstr "Restaurado dende a versión"
+
+msgid "HWiki"
+msgstr "Axuda: wiki"
+
+msgid "FirstSelectOnepage"
+msgstr "Por favor, seleccione unha páxina primeiro"
+
+msgid "DefineTask"
+msgstr "Si vostede introduce unha descripción, está páxina será considerada como unha páxina especial que lle permite crear unha tarefa"
+
+msgid "ThisPageisBeginEditedBy"
+msgstr "Neste momento, esta páxina está sendo editada por"
+
+msgid "ThisPageisBeginEditedTryLater"
+msgstr "Por favor, ténteo de novo máis tarde. Si o usuario que está editando a páxina actualmente non a garda, a páxina estará dispoñible para vostede de novo"
+
+msgid "EditedByAnotherUser"
+msgstr "Os seus trocos non serán gardados porque outro usuario modificou e gardou a páxina mentres vostede a estaba editando"
+
+msgid "WarningMaxEditingTime"
+msgstr "Ten 20 minutos para editar esta páxina. Despois deste tempo, si non gardou a páxina, outro usuario a podería editar, e vostede perdería os seus trocos"
+
+msgid "TheTaskDoesNotBeginUntil"
+msgstr "Aínda non é a data de comezo"
+
+msgid "TheDeadlineHasBeenCompleted"
+msgstr "Excedeu a data límite"
+
+msgid "HasReachedMaxNumWords"
+msgstr "Excedeu o número de palabras permitida"
+
+msgid "HasReachedMaxiNumVersions"
+msgstr "Excedeu o número de versións permitida"
+
+msgid "DescriptionOfTheTask"
+msgstr "Descripción da asignación"
+
+msgid "OtherSettings"
+msgstr "Outros requerimentos"
+
+msgid "NMaxWords"
+msgstr "Máximo número de palabras"
+
+msgid "NMaxVersion"
+msgstr "Número máximo de versións"
+
+msgid "Feedback"
+msgstr "Retroalimentación"
+
+msgid "AddFeedback"
+msgstr "Engadir mensaxes de guía asociados co progreso na páxina"
+
+msgid "Feedback1"
+msgstr "Primeira mensaxe"
+
+msgid "Feedback2"
+msgstr "Segunda mensaxe"
+
+msgid "Feedback3"
+msgstr "Terceira mensaxe"
+
+msgid "FProgress"
+msgstr "Progreso"
+
+msgid "PutATimeLimit"
+msgstr "Establecer un tempo límite"
+
+msgid "StandardTask"
+msgstr "Tarefa estándar"
+
+msgid "ThePageHasBeenExportedToDocArea"
+msgstr "A páxina foi exportada á ferramenta documentos"
+
+msgid "CreateAssignmentPage"
+msgstr "Isto creará unha páxina wiki especial na que o profesor describe a tarefa, a cal enlazarase automaticamente ás páxinas wiki donde os estudantes a realizarán. Tanto a páxina do docente como as dos estudantes créanse autoaticamente. Neste tipo de tarefas os estudantes só poderán editar e ver as súas páxinas, aínda que isto podo cambialo se o desexa."
+
+msgid "MostLinkedPages"
+msgstr "Páxinas mal ligadas"
+
+msgid "DeadEndPages"
+msgstr "Páxinas sen saída"
+
+msgid "MostNewPages"
+msgstr "Páxinas máis recentes"
+
+msgid "MostLongPages"
+msgstr "Páxina máis longas"
+
+msgid "NotAddedToCourse"
+msgstr "Non agredado ao curso"
+
+msgid "UsersNotRegistered"
+msgstr "Usuarios non rexistrados"
+
+msgid "ClearFilterResults"
+msgstr "Limpar os filtros de resultados"
+
+msgid "SelectFilter"
+msgstr "Seleccionar filtro"
+
+msgid "HiddenPages"
+msgstr "Páxinas escondidas"
+
+msgid "MostDiscussPages"
+msgstr "Páxinas máis discutidas"
+
+msgid "BestScoredPages"
+msgstr "Páxinas con mellor puntuación"
+
+msgid "MProgressPages"
+msgstr "Páxinas con maior progreso"
+
+msgid "MostDiscussUsers"
+msgstr "Usuarios máis discutidos"
+
+msgid "RandomPage"
+msgstr "Páxina aleatoria"
+
+msgid "ProtectedPages"
+msgstr "Páxinas protexidas"
+
+msgid "IncludeAllVersions"
+msgstr "Buscar tamén nas versión antigas de cada páxina"
+
+msgid "TotalHiddenPages"
+msgstr "Total de páxinas ocultas"
+
+msgid "TotalPagesEditedAtThisTime"
+msgstr "Total de páxinas que están editándose neste momento"
+
+msgid "TotalWikiUsers"
+msgstr "Total de usuarios que participaron no Wiki"
+
+msgid "StudentAddNewPages"
+msgstr "Os estudantes poden engadir novas páxinas ao Wiki"
+
+msgid "DateCreateOldestWikiPage"
+msgstr "Data de creación da páxina máis antiga do Wiki"
+
+msgid "DateEditLatestWikiVersion"
+msgstr "Data da edición máis recente do Wiki"
+
+msgid "AverageScoreAllPages"
+msgstr "Puntuación media de todas as páxinas"
+
+msgid "AverageMediaUserProgress"
+msgstr "Media do progreso estimado polos usuarios nas súas páxinas"
+
+msgid "TotalIpAdress"
+msgstr "Total de direccións IP diferentes que accederon algunha vez ao Wiki"
+
+msgid "Pages"
+msgstr "Páxinas"
+
+msgid "Versions"
+msgstr "Versións"
+
+msgid "EmptyPages"
+msgstr "Total de páxinas baleiras"
+
+msgid "LockedDiscussPages"
+msgstr "Número de páxinas de discusión bloqueadas"
+
+msgid "HiddenDiscussPages"
+msgstr "Número de páxinas de discusión ocultas"
+
+msgid "TotalComments"
+msgstr "Total de comentarios realizados nas distintas versións das páxinas"
+
+msgid "TotalOnlyRatingByTeacher"
+msgstr "Total de páxinas que só poden ser puntuadas polo seu profesor"
+
+msgid "TotalRatingPeers"
+msgstr "Total de páxinas que poden ser puntuadas por outros alumnos"
+
+msgid "TotalTeacherAssignments"
+msgstr "Número de páxinas de tarefas propostas por un profesor"
+
+msgid "TotalStudentAssignments"
+msgstr "Número de páxinas de tarefas individuais dos alumnos"
+
+msgid "TotalTask"
+msgstr "Número de tarefas"
+
+msgid "PortfolioMode"
+msgstr "Modo portafolios"
+
+msgid "StandardMode"
+msgstr "Modo tarefa estándar"
+
+msgid "ContentPagesInfo"
+msgstr "Información sobre o contido das páxinas"
+
+msgid "InTheLastVersion"
+msgstr "Na última versión"
+
+msgid "InAllVersions"
+msgstr "En todas as versións"
+
+msgid "NumContributions"
+msgstr "Número de contribucións"
+
+msgid "NumAccess"
+msgstr "Número de visitas"
+
+msgid "NumWords"
+msgstr "Número de palabras"
+
+msgid "NumlinksHtmlImagMedia"
+msgstr "Número de ligazóns extarnas html inseridas (textom imaxes, etc)"
+
+msgid "NumWikilinks"
+msgstr "Número de ligazóns Wiki"
+
+msgid "NumImages"
+msgstr "Número de ligazóns inseridas"
+
+msgid "NumFlash"
+msgstr "Número de arquivos flash inseridos"
+
+msgid "NumMp3"
+msgstr "Número de arquivos de audio mp3 inseridos"
+
+msgid "NumFlvVideo"
+msgstr "Número de arquivos de video FLV inseridos"
+
+msgid "NumYoutubeVideo"
+msgstr "Número de videros de Youtube embebidos"
+
+msgid "NumOtherAudioVideo"
+msgstr "Número de arquivos de audio e video inseridos (excepto mp3 e flv)"
+
+msgid "NumTables"
+msgstr "Número de táboas inseridas"
+
+msgid "Anchors"
+msgstr "Áncoras"
+
+msgid "NumProtectedPages"
+msgstr "Número de páxinas protexidas"
+
+msgid "WhoAndWhere"
+msgstr "Quen e donde"
+

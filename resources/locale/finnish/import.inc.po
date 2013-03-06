@@ -1,0 +1,27 @@
+msgid "langExplanation"
+msgstr "Kun klikkaat Ok, niin sivustolle luodaan foorumi, esityslista, dokumenttien hallinta yms. Voit muuttaa sivustoa omalla tunnuksellasi."
+
+msgid "langTooBig"
+msgstr "Et valinnut mitään tallennettavaksi tai se on liian iso"
+
+msgid "langCouldNot"
+msgstr "Tiedostoa ei voitu tallentaa"
+
+msgid "langAddPageToSite"
+msgstr "Lisää sivu sivustolle"
+
+msgid "langCouldNotSendPage"
+msgstr "Tämä sivu ei ole HTML-muodossa, sitä ei voitu lähettää. Jos haluat lähettää sivun ei-HTML-muodossa (PDF, DOC, SWD, jne.), niin käytä<a href=../document/document.php>Dokumentti-sivua</a>"
+
+msgid "langSendPage"
+msgstr "Tallennettava sivu"
+
+msgid "langPageTitleModified"
+msgstr "Sivun otsikko on muutettu"
+
+msgid "langPageAdded"
+msgstr "Sivu lisätty"
+
+msgid "Choose"
+msgstr "Valitse"
+

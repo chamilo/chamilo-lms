@@ -1,0 +1,312 @@
+msgid "langProfessors"
+msgstr "Predavači"
+
+msgid "langExplanation"
+msgstr "Kada kliknete na OK, Forum, Agenda, Organizator dokumenata i td. će biti kreiran. Kao osoba koja je kreirala sajt imate mogućnost da to modifikujete prema vašim potrebama."
+
+msgid "langEmpty"
+msgstr "Ostavili ste neka polja prazna..<br>Koristite <b>Back</b> dugme u vašem pretraživaču i pokušajte ponovo.<br>"
+
+msgid "langCodeTaken"
+msgstr "Ovaj kod kursa je već u upotrebi. <br />Koristit <b>Back</b> dugme u va�em pretra�ivaču i poku�ajte ponovo."
+
+msgid "langFormula"
+msgstr "Srdacno vas"
+
+msgid "langMessage"
+msgstr "Kada uklonite test forum uklonićete i sve poruke u forumu takođe."
+
+msgid "langExerciceEx"
+msgstr "Uzorak testa"
+
+msgid "langAntique"
+msgstr "Ironija"
+
+msgid "langSocraticIrony"
+msgstr "Sokrativska ironija je..."
+
+msgid "langManyAnswers"
+msgstr "(više od jednog odgovora može da bude tačno)"
+
+msgid "langRidiculise"
+msgstr "Ismejavati nečijeg sagovornika dok on ne prizna da nije u pravu."
+
+msgid "langNoPsychology"
+msgstr "Ne. Sokratova ironija nije pitanje psihologije, tiče se argumentacije."
+
+msgid "langAdmitError"
+msgstr "Priznavanje sopstvenih grešaka poziva sagovornike da učine isto."
+
+msgid "langNoSeduction"
+msgstr "Ne. Sokratovska ironija nije strategija zavođenje ili metod baziran na primerima."
+
+msgid "langForce"
+msgstr "Postaviti sagovorniku seriju pitanja i podpitanja, dok ne prizna da ne zna ono što tvrdi da zna."
+
+msgid "langIndeed"
+msgstr "Doista. Sokratovska ironija je upitni metod. Na grčkom „eirotao\" znači „postavljati pitanja\"."
+
+msgid "langContradiction"
+msgstr "Koristiti princip povlađivanja da prisilite sagovornika da dođe u ćorsokak."
+
+msgid "langNotFalse"
+msgstr "Ovaj odgovor nije netačan. Istina je da otkriće sagovornikovog neznanja znači pokazivanje kontradiktornosti zaključaka kuda vode njegove permise."
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langVideo"
+msgstr "Video"
+
+msgid "langCourseProgram"
+msgstr "Opis kursa"
+
+msgid "langAnnouncements"
+msgstr "Obaveštenja"
+
+msgid "langAddPageHome"
+msgstr "Učitaj stranicu i napravi link ka početnoj stranici."
+
+msgid "langLinkSite"
+msgstr "Dodaj link na početnu stranicu"
+
+msgid "langModifyInfo"
+msgstr "Podešavanja kursa"
+
+msgid "langCourseDesc"
+msgstr "Opis kursa"
+
+msgid "langAgendaTitle"
+msgstr "Utorak 11. decembar – prvi sastanak. Soba: 18"
+
+msgid "langAgendaText"
+msgstr "Opšti uvod u menadžment projekata"
+
+msgid "langMicro"
+msgstr "Ulični intervjui"
+
+msgid "langGoogle"
+msgstr "Brz i moćan pretraživač"
+
+msgid "langIntroductionText"
+msgstr "Ovo je uvodni tekst. Da biste ga zamenili va�im tekstom kliknite dole na <b>olovku</b>."
+
+msgid "langIntroductionTwo"
+msgstr "Ova strana omogućava korisnicima i grupama da objavljuju svoje dokumente."
+
+msgid "langCourseDescription"
+msgstr "Opis kursa"
+
+msgid "langProfessor"
+msgstr "Predavač"
+
+msgid "langAnnouncementEx"
+msgstr "Ovo je primer obave�tenja. Samo predavači kursa mogu da objave obave�tenja."
+
+msgid "langJustCreated"
+msgstr "Upravo ste kreirali okruženje kursa"
+
+msgid "langEnter"
+msgstr "Nazad na moju listu kurseva"
+
+msgid "langGroups"
+msgstr "Grupe"
+
+msgid "langCreateCourseGroups"
+msgstr "Grupe"
+
+msgid "langCatagoryMain"
+msgstr "Glavni"
+
+msgid "langCatagoryGroup"
+msgstr "Grupni forumi"
+
+msgid "langLn"
+msgstr "Jezik"
+
+msgid "langCreateSite"
+msgstr "Kreiraj okruženje kursa"
+
+msgid "langFieldsRequ"
+msgstr "Sva polja su obavezna"
+
+msgid "langEx"
+msgstr "npr. <i>Inovacioni menadžment</i>"
+
+msgid "langFac"
+msgstr "Kategorija"
+
+msgid "langTargetFac"
+msgstr "Ovo je oblast ili bilo koja druga kategorija gde je kurs postavljan."
+
+msgid "langMax"
+msgstr "Maksimum 20 karaktera. pr. <i>INNOV21</i>"
+
+msgid "langDoubt"
+msgstr "Ako imate sumnji oko šifre kursa, konsultujte"
+
+msgid "langProgram"
+msgstr "Program kursa</a>. Ako vaš kurs nema šifru, iz bilo kog razloga, izmislite mu jednu. Na primer <i>INOVACIJE</i> ako je kurs o Inovacionom menadžmentu."
+
+msgid "langScormtool"
+msgstr "Putanja učenja"
+
+msgid "langScormbuildertool"
+msgstr "Alat za izgradnju Scorm putanje"
+
+msgid "langPathbuildertool"
+msgstr "Kreiranje putanje učenja"
+
+msgid "langOnlineConference"
+msgstr "Konferencija"
+
+msgid "langAgendaCreationTitle"
+msgstr "Kreiranje kursa"
+
+msgid "langAgendaCreationContenu"
+msgstr "Kurs je upravo kreiran."
+
+msgid "langOnlineDescription"
+msgstr "Opis konferencije"
+
+msgid "langDropbox"
+msgstr "Dropbox"
+
+msgid "langOnly"
+msgstr "Samo"
+
+msgid "langRandomLanguage"
+msgstr "Izmešaj odabir u dostupnim jezicima"
+
+msgid "langImages"
+msgstr "Slike"
+
+msgid "langAudio"
+msgstr "Audio"
+
+msgid "langFlash"
+msgstr "Flash"
+
+msgid "langForumLanguage"
+msgstr "engleski"
+
+msgid "langNewCourse"
+msgstr "Novo okruženje kursa"
+
+msgid "langAddNewCourse"
+msgstr "Dodaj novo okruženje kursa"
+
+msgid "langRestoreCourse"
+msgstr "Obnovi kurs"
+
+msgid "langOtherProperties"
+msgstr "Ostala svojstva pronađena u arhivi"
+
+msgid "langSysId"
+msgstr "ID sistema"
+
+msgid "langDepartment"
+msgstr "Oblast"
+
+msgid "langDepartmentUrl"
+msgstr "URL oblasti"
+
+msgid "langScoreShow"
+msgstr "Prikaži rezultat"
+
+msgid "langVisibility"
+msgstr "Vidljivost"
+
+msgid "langVersionDb"
+msgstr "Verzija baze podataka koja je upotrebljena u vreme arhiviranja"
+
+msgid "langLastVisit"
+msgstr "Poslednja poseta"
+
+msgid "langLastEdit"
+msgstr "Poslednje izmene"
+
+msgid "langExpire"
+msgstr "Isticanje"
+
+msgid "langChoseFile"
+msgstr "Selektovani fajl"
+
+msgid "langFtpFileTips"
+msgstr "Fajl na FTP serveru"
+
+msgid "langHttpFileTips"
+msgstr "Fajl na Web (HTTP) serveru"
+
+msgid "langLocalFileTips"
+msgstr "Fajl na platformi servera"
+
+msgid "langPostFileTips"
+msgstr "Fajl na vašem lokalnom računaru"
+
+msgid "langOtherCategory"
+msgstr "Druga kategorija"
+
+msgid "langMinimum"
+msgstr "minimum"
+
+msgid "langMaximum"
+msgstr "maksimum"
+
+msgid "langRestoreACourse"
+msgstr "obnovi kurs"
+
+msgid "langBackup"
+msgstr "Backup"
+
+msgid "langCopy"
+msgstr "Kopiraj sadržaj kursa"
+
+msgid "langRecycle"
+msgstr "Reciklirani kurs"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Ovo je primer obave�tenja"
+
+msgid "Wikipedia"
+msgstr "Besplatna enciklopedija na Internetu"
+
+msgid "DefaultGroupCategory"
+msgstr "Osnovne grupe"
+
+msgid "DefaultCourseImages"
+msgstr "Galerija"
+
+msgid "ExampleForumCategory"
+msgstr "Pimer kategorije foruma"
+
+msgid "ExampleForum"
+msgstr "Primer foruma"
+
+msgid "ExampleThread"
+msgstr "Primer teme"
+
+msgid "ExampleThreadContent"
+msgstr "Primer sadržaja"
+
+msgid "IntroductionWiki"
+msgstr "Reč Wiki je skraćeno od WikiWikiWeb. Wikiwiki je havajska reč značenja \"brz\", \"brzina\". Wiki stranice autori uređuju zajedno, u kolaboraciji. Ako jedan pogreši u , drugi može ispraviti njegovu grešku. Sledeći pak može dopisati i nešto novo u na Wiki stranici. Na taj način, Wiki stranice se neprestano poboljšavaju."
+
+msgid "CreateCourseArea"
+msgstr "Kreiraj kurs"
+
+msgid "CreateCourse"
+msgstr "Kreiraj kurs"
+
+msgid "Create"
+msgstr "Kreiraj"
+
+msgid "MessageOfNewCourseToAdmin"
+msgstr "To poruka vam je poslata da vas informiše o kreiranju novog kursa na platformi"
+
+msgid "NewCourseCreatedIn"
+msgstr "Novi kurs kreiran u"
+
+msgid "ExplicationTrainers"
+msgstr "Trener je podešen na Vas trenutno. Možete da promenite ovo podešavanja kasnije u podešavanjima konfiguracije treninga"
+

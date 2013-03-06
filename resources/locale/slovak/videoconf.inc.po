@@ -1,0 +1,315 @@
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Microphone"
+msgstr "Mikrofón"
+
+msgid "Name"
+msgstr "Názov"
+
+msgid "DeleteStream"
+msgstr "Zmazať stream"
+
+msgid "Progress"
+msgstr "Postup"
+
+msgid "Play"
+msgstr "Prehrať"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "Record"
+msgstr "Nahrávať"
+
+msgid "NoFileAvailable"
+msgstr "Žiadny súbor k dispozícii"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Nahrávky len pre lektorov"
+
+msgid "UsersNow"
+msgstr "Aktuálni používatelia:"
+
+msgid "StartConference"
+msgstr "Začať konferenciu"
+
+msgid "MyName"
+msgstr "Moje meno"
+
+msgid "OrganisationSVideoconference"
+msgstr "Chamilo Videokonferencia"
+
+msgid "ImportPresentation"
+msgstr "Importovať prezentáciu"
+
+msgid "RefreshList"
+msgstr "Aktualizovať zoznam"
+
+msgid "GoToTop"
+msgstr "Na začiatok"
+
+msgid "NewPoll"
+msgstr "Nové hlasovanie"
+
+msgid "CreateNewPoll"
+msgstr "Vytvoriť nové hlasovanie pre túto triedu"
+
+msgid "Question"
+msgstr "Otázka"
+
+msgid "PollType"
+msgstr "Typ hlasovania:"
+
+msgid "Create"
+msgstr "Vytvoriť"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Info: Každý pripojený používateľ v tejto triede dostane o novom hlasovaní notifikáciu."
+
+msgid "YesNo"
+msgstr "Áno / Nie"
+
+msgid "Numeric1To10"
+msgstr "Číselný 1-10"
+
+msgid "Poll"
+msgstr "Hlasovanie"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Ak chcete vytvoriť hlasovanie, musíte sa stať v tejto triede moderátorom."
+
+msgid "YourVoteHasBeenSent"
+msgstr "Váš hlas bol poslaný"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "V tomto hlasovaní ste už svoj hlas poslali"
+
+msgid "VoteButton"
+msgstr "Hlasuj!"
+
+msgid "YourAnswer"
+msgstr "Vaša odpoveď:"
+
+msgid "Yes"
+msgstr "Áno"
+
+msgid "No"
+msgstr "Nie"
+
+msgid "WantsToKnow"
+msgstr "chcem vedieť:"
+
+msgid "PollResults"
+msgstr "Výsledky hlasovania"
+
+msgid "Votes"
+msgstr "Hlasy:"
+
+msgid "Result"
+msgstr "Výsledok"
+
+msgid "ThereIsNoPoll"
+msgstr "Žiadne hlasovanie."
+
+msgid "MeetingMode"
+msgstr "Stretnutie (max 4 miesta)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Konferencia (max 50 miest)"
+
+msgid "Mode"
+msgstr "Mód"
+
+msgid "RemainingSeats"
+msgstr "Ostávajúce miesta"
+
+msgid "AlreadyIn"
+msgstr "Už zaregistrovaný"
+
+msgid "CheckIn"
+msgstr "Zaregistrovať sa"
+
+msgid "TheModeratorHasLeft"
+msgstr "Moderátor tejto konferencie opustil triedu."
+
+msgid "SystemMessage"
+msgstr "Systémová správa"
+
+msgid "ChooseDevices"
+msgstr "Vybrať zariadenia"
+
+msgid "ChooseCam"
+msgstr "Vybrať kameru:"
+
+msgid "ChooseMic"
+msgstr "Vybrať mikrofón:"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Musíte sa opätovne pripojiť aby zmeny nadobudli účinnosť."
+
+msgid "ChangeSettings"
+msgstr "Zmeniť nastavenia"
+
+msgid "Course"
+msgstr "Kurz"
+
+msgid "CourseLanguage"
+msgstr "Jazyk kurzu:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Potvrdiť zmazanie tabule"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Mala by byť tabuľa zmazaná predtým ako pridám nový obrázok?"
+
+msgid "DontAskMeAgain"
+msgstr "Nepýtaj sa ma zasa"
+
+msgid "EditSettings"
+msgstr "Upraviť nastavenia"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Pred zmazaním tabule žiadaj potvrdenie."
+
+msgid "UserInfo"
+msgstr "informácie o používateľovi"
+
+msgid "ClearDrawArea"
+msgstr "Vyčistiť priestor na kreslenie"
+
+msgid "Undo"
+msgstr "Späť"
+
+msgid "SelectAnObject"
+msgstr "Vybrať predmet"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Paint"
+msgstr "Kreslenie"
+
+msgid "DrawLine"
+msgstr "Nakresliť čiaru"
+
+msgid "DrawUnderline"
+msgstr "Podčiarknuť"
+
+msgid "Rectangle"
+msgstr "Obdĺžnik"
+
+msgid "Elipse"
+msgstr "Elipsa"
+
+msgid "Arrow"
+msgstr "Šípka"
+
+msgid "DeleteChosenItem"
+msgstr "Zmazať vybranú položku"
+
+msgid "ApplyForModeration"
+msgstr "Žiadať o moderovanie"
+
+msgid "Apply"
+msgstr "Žiadať"
+
+msgid "BecomeModerator"
+msgstr "Stať sa moderátorom"
+
+msgid "Close"
+msgstr "zavriet"
+
+msgid "Italic"
+msgstr "Kurzíva"
+
+msgid "Bold"
+msgstr "Tučné"
+
+msgid "Waiting"
+msgstr "Čakanie"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "Používateľ žiada o moderovanie:"
+
+msgid "Accept"
+msgstr "Akceptovať"
+
+msgid "Reject"
+msgstr "Odmietnuť"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Poslať požiadavku nasledujúcim používateľom"
+
+msgid "Accepted"
+msgstr "Akceptovaný"
+
+msgid "Rejected"
+msgstr "Odmietnutý"
+
+msgid "ChangeModerator"
+msgstr "Zmeniť moderátora"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "Nemoderujete tento kurz!"
+
+msgid "Moderator"
+msgstr "Moderátor:"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "Táto trieda je plná. Skúste neskôr prosím."
+
+msgid "Loading"
+msgstr "Nahrávanie"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Prosím čakajte, kým sa nahrá obrázok"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "Synchronizácia členov konferencie"
+
+msgid "Trainer"
+msgstr "Tútor"
+
+msgid "Learner"
+msgstr "Študent"
+
+msgid "Chat"
+msgstr "Pokec"
+
+msgid "Slides"
+msgstr "Snímky"
+
+msgid "WaitingForParticipants"
+msgstr "Čakanie na účastníkov"
+
+msgid "Send"
+msgstr "Poslať"
+
+msgid "Browse"
+msgstr "Prehliadať"
+
+msgid "Cancel"
+msgstr "Zrušiť"
+
+msgid "ChooseFile"
+msgstr "Vybrať súbor na import"
+
+msgid "ConvertingDocument"
+msgstr "Konvertovanie dokumentu"
+
+msgid "Disconnected"
+msgstr "Odpojený"
+
+msgid "FineStroke"
+msgstr "Tenký"
+
+msgid "MediumStroke"
+msgstr "Stredný"
+
+msgid "ThickStroke"
+msgstr "Tučný"
+

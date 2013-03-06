@@ -1,0 +1,4984 @@
+msgid "CasMainActivateComment"
+msgstr "Activar l\'autenticació CAS permetrà als usuaris autenticar-se amb les seves credencials CAS."
+
+msgid "UsersRegisteredInAnyGroup"
+msgstr "Usuaris no registrats a cap curs"
+
+msgid "ShowHotCoursesComment"
+msgstr "La llista de cursos amb més prestigi s\'afegirà a la pàgina principal"
+
+msgid "ShowHotCoursesTitle"
+msgstr "Mostra els cursos amb més prestigi"
+
+msgid "EnableIframeInclusionComment"
+msgstr "Permetre iframes a l\'editor HTML augmentarà les capacitats d\'edició dels usuaris, però pot representar un risc de seguretat. Asseguri\'s que pot confiar ens els seus usuaris (per exemple, vostè sap qui són) abans d\'activar aquesta prestació."
+
+msgid "EnableIframeInclusionTitle"
+msgstr "Permet iframes a l\'editor HTML"
+
+msgid "MailTemplateRegistrationMessage"
+msgstr "Benvolgut ((firstname)) ((lastname)),
+
+Ha estat registrat a ((sitename)) amb la configuració següent:
+
+Nom d\'usuari : ((username))
+Contrasenya : ((password))
+
+L\'adreça de ((sitename)) és : ((url))
+
+Si té alguna dificultat, contacti amb nosaltres.
+
+Cordialment:
+((admin_name)) ((admin_surname))."
+
+msgid "MailTemplateRegistrationTitle"
+msgstr "Usuari nou a ((sitename))"
+
+msgid "AdminBy"
+msgstr "Administrat per"
+
+msgid "AdministrationTools"
+msgstr "Eines d\'administració"
+
+msgid "State"
+msgstr "Estat del sistema"
+
+msgid "Statistiques"
+msgstr "Estadístiques"
+
+msgid "VisioHostLocal"
+msgstr "Servidor per la videoconferència"
+
+msgid "VisioRTMPIsWeb"
+msgstr "El protocol de la videoconferència funciona en mode web (la majoria de vegades no és així)"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Mostrar un enllaç per tornar a la jerarquia del curs. De totes maneres, sempre hi haurà un enllaç disponible al final de la llista."
+
+msgid "langUsed"
+msgstr "usat"
+
+msgid "langPresent"
+msgstr "D\'acord"
+
+msgid "langMissing"
+msgstr "manca"
+
+msgid "langExist"
+msgstr "existeix"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Mostrar un enllaç per tornar enrere sobre l\'arbre de categories/cursos"
+
+msgid "ShowNumberOfCourses"
+msgstr "Mostrar nombre de cursos"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Mostrar el professor/a en el títol del curs"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Mostrar professor/a del curs en la llista de comentaris."
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Mostrar el codi del curs en cadascun dels cursos del llistat"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Mostrar el codi del curs en el títol"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "No hi ha cursos virtuals a la plataforma"
+
+msgid "ConfigureHomePage"
+msgstr "Configurar la pàgina d\'inici"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Mòduls actius després de crear un curs"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Quines eines s\'han d\'activar (visible) per defecte quan es crea un curs nou?"
+
+msgid "SearchUsers"
+msgstr "Cerca d\'usuaris"
+
+msgid "CreateUser"
+msgstr "Crear usuari"
+
+msgid "ModifyInformation"
+msgstr "Modificar informació"
+
+msgid "ModifyUser"
+msgstr "Modificar usuari"
+
+msgid "buttonEditUserField"
+msgstr "Editar camps d\'usuari"
+
+msgid "ModifyCoach"
+msgstr "Modificar tutor"
+
+msgid "ModifyThisSession"
+msgstr "Modificar aquesta sessió"
+
+msgid "ExportSession"
+msgstr "Exportar sessió"
+
+msgid "ImportSession"
+msgstr "Importar sessió"
+
+msgid "langCourseBackup"
+msgstr "Realitzar còpia de seguretat d\'aquest curs"
+
+msgid "langCourseTitular"
+msgstr "Professor/a"
+
+msgid "langCourseTitle"
+msgstr "Títol del curs"
+
+msgid "langCourseFaculty"
+msgstr "Categoria del curs"
+
+msgid "langCourseDepartment"
+msgstr "Departament"
+
+msgid "langCourseDepartmentURL"
+msgstr "URL del departament"
+
+msgid "langCourseLanguage"
+msgstr "Idioma del curs"
+
+msgid "langCourseAccess"
+msgstr "Accés al curs"
+
+msgid "langCourseSubscription"
+msgstr "Inscriure\'s al curs"
+
+msgid "langPublicAccess"
+msgstr "Accés Públic"
+
+msgid "langPrivateAccess"
+msgstr "Accés restringit"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "L\'administració de la base de dades només està disponible per l\'administrador del servidor."
+
+msgid "langShowUsersOfCourse"
+msgstr "Mostrar els usuaris del curs"
+
+msgid "langShowClassesOfCourse"
+msgstr "Mostrar les aules inscrites en aquest curs"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Mostrar els grups d\'aquest curs"
+
+msgid "langPhone"
+msgstr "Telèfon"
+
+msgid "langPhoneNumber"
+msgstr "Número de Telèfon"
+
+msgid "langActions"
+msgstr "Accions"
+
+msgid "langAddToCourse"
+msgstr "Afegir a un curs"
+
+msgid "langDeleteFromPlatform"
+msgstr "Esborrar del sistema"
+
+msgid "langDeleteCourse"
+msgstr "Esborrar els cursos seleccionats"
+
+msgid "langDeleteFromCourse"
+msgstr "Anul·lar la inscripció del curs o cursos"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Esborrar les classes seleccionades"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Esborrar els grups seleccionats"
+
+msgid "langAdministrator"
+msgstr "Administrador/a"
+
+msgid "langAddPicture"
+msgstr "Afegir una imatge"
+
+msgid "langChangePicture"
+msgstr "Canviar la imatge"
+
+msgid "langDeletePicture"
+msgstr "Esborrar la imatge"
+
+msgid "langAddUsers"
+msgstr "Afegir usuaris"
+
+msgid "langAddGroups"
+msgstr "Afegir grups"
+
+msgid "langAddClasses"
+msgstr "Afegir aules"
+
+msgid "langExportUsers"
+msgstr "Exportar el llistat d\'usuaris"
+
+msgid "langKeyword"
+msgstr "Paraula clau"
+
+msgid "langGroupName"
+msgstr "Nom del grup"
+
+msgid "langGroupTutor"
+msgstr "Tutor del grup"
+
+msgid "langGroupDescription"
+msgstr "Descripció del grup"
+
+msgid "langNumberOfParticipants"
+msgstr "Nombre de membres"
+
+msgid "langNumberOfUsers"
+msgstr "Nombre d\'usuaris"
+
+msgid "langMaximum"
+msgstr "màxim"
+
+msgid "langMaximumOfParticipants"
+msgstr "Nombre màxim de membres"
+
+msgid "langParticipants"
+msgstr "Membres"
+
+msgid "langFirstLetterClass"
+msgstr "Primera lletra (nom de l\'aula)	"
+
+msgid "langFirstLetterUser"
+msgstr "Primera lletra (cognoms)"
+
+msgid "langFirstLetterCourse"
+msgstr "Primera lletra (codi)"
+
+msgid "langModifyUserInfo"
+msgstr "Modificar la informació d\'un usuari"
+
+msgid "langModifyClassInfo"
+msgstr "Modificar la informació d\'una aula"
+
+msgid "langModifyGroupInfo"
+msgstr "Modificar la informació d\'un grup"
+
+msgid "langModifyCourseInfo"
+msgstr "Modificar la informació del curs"
+
+msgid "langPleaseEnterClassName"
+msgstr "Si us plau, introduïu el nom de l\'aula!"
+
+msgid "langPleaseEnterLastName"
+msgstr "Si us plau, introduïu els cognoms de l\'usuari"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Si us plau, introduïu el nom de l\'usuari!"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Si us plau, introduïu una adreça de correu electrònic correcte!"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Si us plau, introduïu un nom d\'usuari correcte!"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Si us plau, introduïu el codi del curs!"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Si us plau, introduïu el nom i cognoms del professorat!"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Si us plau, introduïu el títol del curs!"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Els formats acceptats són: .JPG, .PNG i .GIF!"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Aquest nom d\'usuari ja està en ús!	"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Importar llistat d\'usuaris des d\'un arxiu XML/CSV"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Exportar llistat d\'usuaris a un fitxer XML/CSV"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Només usuaris del curs"
+
+msgid "langAddClassesToACourse"
+msgstr "Afegir aules a un curs"
+
+msgid "langAddUsersToACourse"
+msgstr "Afegir usuaris a un curs"
+
+msgid "langAddUsersToAClass"
+msgstr "Afegir ususaris a una aula"
+
+msgid "langAddUsersToAGroup"
+msgstr "Afegir ususaris a un grup"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Heu de seleccionar com a mínim una aula i un curs!"
+
+msgid "AtLeastOneUser"
+msgstr "Com a mínim heu de seleccionar un usuari!"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Com a mínim heu de seleccionar un usuari i un curs!"
+
+msgid "langClassList"
+msgstr "Llistat d\'aules"
+
+msgid "langUserList"
+msgstr "Llistat d\'usuaris"
+
+msgid "langCourseList"
+msgstr "Llistat de cursos"
+
+msgid "langAddToThatCourse"
+msgstr "Afegir a aquest curs o cursos"
+
+msgid "langAddToClass"
+msgstr "Afegir a l\'aula"
+
+msgid "langRemoveFromClass"
+msgstr "Treure de l\'aula"
+
+msgid "langAddToGroup"
+msgstr "Afegir al grup"
+
+msgid "langRemoveFromGroup"
+msgstr " Treure del grup"
+
+msgid "langUsersOutsideClass"
+msgstr "Usuaris fora de la Classe"
+
+msgid "langUsersInsideClass"
+msgstr "Usuaris dins la classe"
+
+msgid "langUsersOutsideGroup"
+msgstr "Usuaris fora del grup"
+
+msgid "langUsersInsideGroup"
+msgstr "Usuaris dintre del grup"
+
+msgid "langImportFileLocation"
+msgstr "Localització de l\'arxiu CSV / XML"
+
+msgid "langFileType"
+msgstr "Tipus d\'arxiu"
+
+msgid "langOutputFileType"
+msgstr "Tipologia d\'arxiu que s\'arxiva"
+
+msgid "langMustUseSeparator"
+msgstr "S\'ha d\'utilitzar el caràcter \";\" com a separador"
+
+msgid "langCSVMustLookLike"
+msgstr "El fitxer CSV ha de tenir el següent aspecte"
+
+msgid "langXMLMustLookLike"
+msgstr "El fitxer XML ha de tenir el següent aspecte"
+
+msgid "langMandatoryFields"
+msgstr "Els camps en <strong>negreta</strong> són obligatoris"
+
+msgid "langNotXML"
+msgstr "L\'arxiu seleccionat no és un format vàlid XML!"
+
+msgid "langNotCSV"
+msgstr "L\'arxiu seleccionat no és un format CSV vàlid!"
+
+msgid "langNoNeededData"
+msgstr "L\'arxiu especificat no conté totes les dades necessàries !"
+
+msgid "langMaxImportUsers"
+msgstr " No pot importar més de 500 usuaris immediatament!"
+
+msgid "langAdminDatabases"
+msgstr "Base de dades (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Usuaris"
+
+msgid "langAdminClasses"
+msgstr "Classes d\'usuaris"
+
+msgid "langAdminGroups"
+msgstr "Grup d\'usuaris"
+
+msgid "langAdminCourses"
+msgstr "Cursos"
+
+msgid "langAdminCategories"
+msgstr "Categoria dels cursos"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Subscriure un usuari /grup a un curs"
+
+msgid "AddACategory"
+msgstr "Afegir una categoria"
+
+msgid "langInto"
+msgstr "Dintre"
+
+msgid "langNoCategories"
+msgstr "No hi ha categories aquí"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Permetre afegir cursos en aquesta categoria ?"
+
+msgid "langGoToForum"
+msgstr "Anar al fòrum"
+
+msgid "langCategoryCode"
+msgstr "Codi de categoria"
+
+msgid "langCategoryName"
+msgstr "Nom de categoria"
+
+msgid "langCategories"
+msgstr "Categories"
+
+msgid "langEditNode"
+msgstr "Editar aquesta categoria"
+
+msgid "langOpenNode"
+msgstr "Obrir aquesta categoria"
+
+msgid "langDeleteNode"
+msgstr "Suprimir aquesta categoria"
+
+msgid "langAddChildNode"
+msgstr "Afegir una subcategoria"
+
+msgid "langViewChildren"
+msgstr "Veure processos subordinats"
+
+msgid "langTreeRebuildedIn"
+msgstr "Arbre reconstruit"
+
+msgid "langTreeRecountedIn"
+msgstr "Arbre reconsiderat en"
+
+msgid "langRebuildTree"
+msgstr "Reconstruir arbre"
+
+msgid "langRefreshNbChildren"
+msgstr "Actualitzar el número de processos subordinats"
+
+msgid "langShowTree"
+msgstr "Mostrar l\'arbre"
+
+msgid "langBack"
+msgstr "Tornar a la pàgina anterior"
+
+msgid "langLogDeleteCat"
+msgstr "Categoria esborrada"
+
+msgid "langRecountChildren"
+msgstr "Recomptar els processos subordinats"
+
+msgid "langUpInSameLevel"
+msgstr " Cap amunt en el mateix nivell"
+
+msgid "langSeconds"
+msgstr "segons"
+
+msgid "langMailTo"
+msgstr "Enviar e-mail a:"
+
+msgid "lang_no_access_here"
+msgstr "No té accés aquí"
+
+msgid "lang_php_info"
+msgstr "informació del sistema"
+
+msgid "langAddAdminInApache"
+msgstr "Afegir un usuari administrador"
+
+msgid "langAddFaculties"
+msgstr "Afegir categories"
+
+msgid "langSearchACourse"
+msgstr "Buscar un curs"
+
+msgid "langSearchAUser"
+msgstr "Buscar un usuari"
+
+msgid "langTechnicalTools"
+msgstr "Técnica"
+
+msgid "langConfig"
+msgstr "Configuració del sistema"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Llista de conexions (extesa)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Nombre màxim d\'usuaris a mostrar en una llista deplegable"
+
+msgid "NoTimeLimits"
+msgstr "Sense límit de temps"
+
+msgid "GeneralCoach"
+msgstr "Tutor general"
+
+msgid "GeneralProperties"
+msgstr "propietats generals"
+
+msgid "CourseCoach"
+msgstr "Tutor del curs"
+
+msgid "UsersNumber"
+msgstr "Nombre d\'usuaris"
+
+msgid "DokeosClassic"
+msgstr "Chamilo clàssic"
+
+msgid "PublicAdmin"
+msgstr "Administració pública"
+
+msgid "PageAfterLoginTitle"
+msgstr "Pàgina inicial"
+
+msgid "PageAfterLoginComment"
+msgstr "Pàgina a redirigir quan l\'usuari es connecta"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Lloc web de Chamilo"
+
+msgid "TabsMyProfile"
+msgstr "Pestanya del Meu Perfil"
+
+msgid "GlobalRole"
+msgstr "Objectiu principal"
+
+msgid "langNomOutilTodo"
+msgstr "Gestiona llista de pendents"
+
+msgid "langNomPageAdmin"
+msgstr "Administració"
+
+msgid "langSysInfo"
+msgstr "Informació del sistema"
+
+msgid "langDiffTranslation"
+msgstr "Compara traduccions"
+
+msgid "langStatOf"
+msgstr "Estadístiques de"
+
+msgid "langSpeeSubscribe"
+msgstr "Subscripció ràpida com comprovador de curs"
+
+msgid "langLogIdentLogout"
+msgstr "Registre de conexions i desconexions"
+
+msgid "langServerStatus"
+msgstr "Estat del servidor MySQL :"
+
+msgid "langDataBase"
+msgstr "Base de dades"
+
+msgid "langRun"
+msgstr "treball"
+
+msgid "langClient"
+msgstr "Client MySql"
+
+msgid "langServer"
+msgstr "Servidor MySql"
+
+msgid "langtitulary"
+msgstr "Propietari"
+
+msgid "langUpgradeBase"
+msgstr "Actualitzar base de dades"
+
+msgid "langManage"
+msgstr "Administració del campus"
+
+msgid "langErrorsFound"
+msgstr "errors trobats"
+
+msgid "langMaintenance"
+msgstr "Manteniment"
+
+msgid "langUpgrade"
+msgstr "Actualitzar Chamilo"
+
+msgid "langWebsite"
+msgstr "Lloc web de Chamilo"
+
+msgid "langDocumentation"
+msgstr "Documentació"
+
+msgid "langContribute"
+msgstr "Contribueix"
+
+msgid "langInfoServer"
+msgstr "Informació del servidor"
+
+msgid "langOtherCategory"
+msgstr "Altre categoria"
+
+msgid "langSendMailToUsers"
+msgstr "Enviar un correu als usuaris"
+
+msgid "langExampleXMLFile"
+msgstr "Exemple d\'arxiu XML"
+
+msgid "langExampleCSVFile"
+msgstr "Exemple d\'arxiu CSV"
+
+msgid "langCourseSystemCode"
+msgstr "Codi del sistema"
+
+msgid "langCourseVisualCode"
+msgstr "Codi visual"
+
+msgid "langSystemCode"
+msgstr "Codi de sistema"
+
+msgid "langVisualCode"
+msgstr "Codi visual"
+
+msgid "langAddCourse"
+msgstr "Crear un curs"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Administrar cursos virtuals"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Crear un curs virtual"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "El curs virtual compartirà enmagatzament (directori i base de dades) amb un curs \'real\' exsitent"
+
+msgid "langRealCourseCode"
+msgstr "Codi del curs real"
+
+msgid "langCourseCreationSucceeded"
+msgstr "El curs ha estat creat satisfactoriament"
+
+msgid "langYourDokeosUses"
+msgstr "La seva instal·lació Chamilo utilitza actualment"
+
+msgid "langOnTheHardDisk"
+msgstr "En el disc dur"
+
+msgid "langIsVirtualCourse"
+msgstr "És un curs virtual"
+
+msgid "langSystemAnnouncements"
+msgstr "Anuncis del sistema"
+
+msgid "langAddAnnouncement"
+msgstr "Afegir nou anunci"
+
+msgid "langAnnouncementAdded"
+msgstr "L\'anunci ha estat afegit"
+
+msgid "langAnnouncementUpdated"
+msgstr "Anunci actualitzat"
+
+msgid "langAnnouncementDeleted"
+msgstr "Anunci esborrat"
+
+msgid "langContent"
+msgstr "Contingut"
+
+msgid "PermissionsForNewFiles"
+msgstr "Permisos per a arxius nous"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "La possibilitat de definir la configuració dels permisos assinats als nous fitxers, augmenta la seguretat contra els atacs de crackers que podrien enviar material perillós a la plataforma. La configuració per defecte (0555) hauria de ser suficient per dotar el vostre servidor d\'un nivell de protecció raonable. El format proporcionat utilitza la terminologia UNIX Propietari-Grup-Altres, amb els permisos de Lectura-Escriptura-Execució."
+
+msgid "langStudent"
+msgstr "Alumne"
+
+msgid "Guest"
+msgstr "Convidat"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Entrar com a"
+
+msgid "langLoginAsThisUser"
+msgstr "Entrar"
+
+msgid "SelectPicture"
+msgstr "Seleccioneu una imatge ..."
+
+msgid "DontResetPassword"
+msgstr "No esborreu la contrasenya"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Participar en el desenvolupament"
+
+msgid "langCourseAdmin"
+msgstr "Administrador del curs"
+
+msgid "langOtherCourses"
+msgstr "Altres cursos"
+
+msgid "PlatformLanguageTitle"
+msgstr "Idioma de la plataforma"
+
+msgid "ServerStatusComment"
+msgstr "Quin tipus de servidor utilitzeu? Això activa o desactiva algunes opcions específiques. En un servidor de desenvolupament hi ha una funcionalitat que indica les cadenes de caràcters no traduïdes."
+
+msgid "ServerStatusTitle"
+msgstr "Tipus de servidor"
+
+msgid "PlatformLanguages"
+msgstr "Idiomes de la plataforma Chamilo"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Aquesta eina gestiona el menú de selecció d\'idioma a la pàgina d\'entrada. Com a administrador de la plataforma podeu decidir quines llengües haurien d\'estar disponibles per als vostres usuaris."
+
+msgid "OriginalName"
+msgstr "Nom original"
+
+msgid "EnglishName"
+msgstr "Nom anglès"
+
+msgid "DokeosFolder"
+msgstr "Directori Chamilo"
+
+msgid "Properties"
+msgstr "Propietats"
+
+msgid "PlatformConfigSettings"
+msgstr "Paremetres de configuració DOKEOS"
+
+msgid "SettingsStored"
+msgstr "Els paràmetres han estat arxivats"
+
+msgid "InstitutionTitle"
+msgstr "Nom de la institució"
+
+msgid "InstitutionComment"
+msgstr " El nom de la institució (apareix en l\'encapçalament a la dreta)"
+
+msgid "InstitutionUrlTitle"
+msgstr "URL de la institució"
+
+msgid "InstitutionUrlComment"
+msgstr "L\'URL de la institució (L\'enllaç que apareix a la dret, a la capçalera)"
+
+msgid "SiteNameTitle"
+msgstr "Títol del campus Chamilo"
+
+msgid "SiteNameComment"
+msgstr "El nom del teu Campus de DOKEOS (apareix a l\'encapçalament)"
+
+msgid "emailAdministratorTitle"
+msgstr "Administrador de la platafomra:e-mail"
+
+msgid "emailAdministratorComment"
+msgstr " L\'adreça de correu electrònic de l\'Administrador de Plataforma (apareix en el títol a peu de pàgina a l\'esquerra)"
+
+msgid "administratorSurnameTitle"
+msgstr "Administrador de la plataforma: cognom"
+
+msgid "administratorSurnameComment"
+msgstr "Els cognoms de l\'administrador de la plataforma (apareixen al costat esquerre del peu)"
+
+msgid "administratorNameTitle"
+msgstr "Administrador de plataforma: Nom"
+
+msgid "administratorNameComment"
+msgstr " El Nom de l\'Administrador de Plataforma (apareix en el títol apeu de pàgina a l\'esquerra)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Informació de l\'administardor de la plataforma a peu de pàgina"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Voleu que es mostri la Informació de l\'Administrador de la Plataforma a peu de pàgina?"
+
+msgid "HomepageViewTitle"
+msgstr "Vista de la pàgina principal"
+
+msgid "HomepageViewComment"
+msgstr " Com voleu que es presenti la pàgina inicial d\'un curs?"
+
+msgid "HomepageViewDefault"
+msgstr "Esquema de dues columnes. Les eines desactivades queden amagades"
+
+msgid "HomepageViewFixed"
+msgstr "Presentació en tres columnes. Les eines desactivsdes apareixen en gris (les icones es mantenen al seu lloc)."
+
+msgid "Yes"
+msgstr "Si"
+
+msgid "No"
+msgstr "No"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Barra d\'accés ràpid a les eines"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Voleu que es mostri a la capçalera la barra d\'accés ràpid a les eines?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Vista d\'estudiant"
+
+msgid "ShowStudentViewComment"
+msgstr "Permetre Visualització d\'Estudiant?<br>Aquesta opció permet al professor veure el portal en mode estudiant."
+
+msgid "AllowGroupCategories"
+msgstr "Categories de grup"
+
+msgid "AllowGroupCategoriesComment"
+msgstr " Permetre als administradors de curs crear categories en el mòdul de grups?	"
+
+msgid "PlatformLanguageComment"
+msgstr "Podeu determinar els idiomes de la plataforma en una part diferent de l\'administració de la plataforma, a saber: <a href=\"languages.php\">Idiomes de la plataforma Chamilo</a>"
+
+msgid "ProductionServer"
+msgstr "Servidor de producció"
+
+msgid "TestServer"
+msgstr "Serviodor de proves"
+
+msgid "ShowOnlineTitle"
+msgstr "Usuaris connectats"
+
+msgid "AsPlatformLanguage"
+msgstr "Com a idioma de la plataforma"
+
+msgid "ShowOnlineComment"
+msgstr "Mostrar el nombre de persones en línia?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Permetre el canvi de nom al perfil?"
+
+msgid "AllowNameChangeComment"
+msgstr "Permetre a l\'usuari canviar els seus nom i cognom?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Quota d\'espai per defecte destinada als documents"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Quina és la quota d\'espai per defecte destinada a l\'eina de documents? Podeu canviar aquesta quota per a cursos específics a través de: administració de la plataforma -> Cursos -> modificar"
+
+msgid "ProfileChangesTitle"
+msgstr "Perfil"
+
+msgid "ProfileChangesComment"
+msgstr "Quina part del perfil voleu modificar?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Inscripció: camps obligatoris"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Quins camps s\'haurien d\'omplir obligatòriament (a part del nom i cognoms, nom d\'usuari i contrasenya)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Quota per defecte dels grups"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Quina és la quota per defecte per l\'eina documents del grup ?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Contrasenya perduda"
+
+msgid "AllowLostPasswordComment"
+msgstr "Pot l\'ususari demanar una contrasenya perduda?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Inscripció"
+
+msgid "AllowRegistrationComment"
+msgstr "Es permet el registre de nous usuaris? Els usuaris poden crear nous comptes?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Inscripció en tant que docent"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "És possible d\'inscriure\'s com a docent (podent crear cursos)?"
+
+msgid "PlatformLanguage"
+msgstr "Idioma de la plataforma"
+
+msgid "Tuning"
+msgstr "Millorar el rendiment"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "Dividir el directori de transferència dels usuaris"
+
+msgid "SplitUsersUploadDirectoryComment"
+msgstr "En portals amb ús important o amb un nombre gran d\'usuaris que s\'enregistren i envien la foto, el directori de descàrrega (main/upload/users/) podria tenir més fitxers que els que pot gestionar el sistema de fitxers del servidor (s\'ha documentat el cas d\'un directori en un servidor Debian amb més de 36000 fitxers). Activar aquesta opció modificarà la gestió d\'aquest repertori per utilitzar un mètode de separació en 9 subdirectoris de \"1\" a \"9\" en el directori de base. Els directoris i fitxers dels usuaris seran guardats llavors en un d\'aquests 9 subdirectoris segons la seva primera lletra/xifra. L\'activació d\'aquesta opció no modifica gens l\'estructura dels directores en el vostre servidor, sinó el comportament del codi de Chamilo, cosa que si l\'activa haurà de crear nous directoris, haurà de moure els directoris dels usuaris 1 a 9 a subdirectoris amb el mateix nom. Si no esteu segur d\'usar aquesta opció, és millor que no l\'activeu."
+
+msgid "CourseQuota"
+msgstr "Quota del curs"
+
+msgid "EditNotice"
+msgstr "Editar notícia"
+
+msgid "General"
+msgstr "General"
+
+msgid "LostPassword"
+msgstr "Contrasenya perduda"
+
+msgid "Registration"
+msgstr "Registre"
+
+msgid "Password"
+msgstr "Constrasenya"
+
+msgid "InsertLink"
+msgstr "Insertar enllaç"
+
+msgid "EditNews"
+msgstr "Editar notícies"
+
+msgid "EditCategories"
+msgstr "Editar categories"
+
+msgid "EditHomePage"
+msgstr "Editar la pàgina principal"
+
+msgid "AllowUserHeadingsComment"
+msgstr "L\'administrador d\'un curs pot definir les capçaleres per obtenir informació suplementària relativa als usuaris?"
+
+msgid "Platform"
+msgstr "Plataforma"
+
+msgid "Course"
+msgstr "Curs"
+
+msgid "Languages"
+msgstr "Idiomes"
+
+msgid "Privacy"
+msgstr "Privat"
+
+msgid "NoticeTitle"
+msgstr "Títol de l\'anunci"
+
+msgid "NoticeText"
+msgstr "Text de l\'anunci"
+
+msgid "LinkName"
+msgstr "Text d\'enllaç"
+
+msgid "LinkURL"
+msgstr "URL de l\'enllaç"
+
+msgid "OpenInNewWindow"
+msgstr "Obrir en una nova finestra"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "A les pantalles d\'inscripció dels usuaris en el curs o en les classes, si el nombre d\'usuaris a la llista no filtrada, després de la primera càrrega, depassa aquest nombre, filtreu per defecte a la primera lletra (A)"
+
+msgid "Plugins"
+msgstr "Connectors"
+
+msgid "HideDLTTMarkupComment"
+msgstr "Amagar la marca [= ... =] quan una variable d\'idioma no estigui traduïda"
+
+msgid "Info"
+msgstr "Informació"
+
+msgid "UserAdded"
+msgstr "L\'usuari ha estat afegit"
+
+msgid "NoSearchResults"
+msgstr "No s\'han trobat resultats"
+
+msgid "UserDeleted"
+msgstr "L\'usuari ha estat esborrat"
+
+msgid "NoClassesForThisCourse"
+msgstr "No hi ha classes en aquest curs"
+
+msgid "CourseUsage"
+msgstr "Utilització del curs"
+
+msgid "NoCoursesForThisUser"
+msgstr "Aquest usuari no s\'ha inscrit a cap curs"
+
+msgid "NoClassesForThisUser"
+msgstr "Aquest usuari no està inscrit a cap classe"
+
+msgid "NoCoursesForThisClass"
+msgstr "Aquesta classe no està inscrita a cap curs"
+
+msgid "langOpenToTheWorld"
+msgstr "Obert - Accés autoritzat per tothom"
+
+msgid "OpenToThePlatform"
+msgstr "Obert - Accés autoritzat als usuaris enregistrats de la plataforma"
+
+msgid "langPrivate"
+msgstr "Accés privat (lloc accessible únicament entre les persones de la llista d\'usuaris)"
+
+msgid "langCourseVisibilityClosed"
+msgstr " Completament tancat; el curs és només accessible a l\'administrador del curs."
+
+msgid "langSubscription"
+msgstr "Subscriure"
+
+msgid "langUnsubscription"
+msgstr "Anul·lar la inscripció"
+
+msgid "CourseAccessConfigTip"
+msgstr "El vostre curs és públic per defecte, però podeu definir a continuació el nivell de confidencialitat"
+
+msgid "Tool"
+msgstr "Eina"
+
+msgid "NumberOfItems"
+msgstr "nombre d\'elements"
+
+msgid "DocumentsAndFolders"
+msgstr "Documents i carpetes"
+
+msgid "Learnpath"
+msgstr "Itinerari formatiu"
+
+msgid "Exercises"
+msgstr "Exercicis"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Agenda personal"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "L\'usuari pot afegir els elements de l\'agenda personal a la pàgina \"La meva agenda\" ?"
+
+msgid "CurrentValue"
+msgstr "Valor actual"
+
+msgid "CourseDescription"
+msgstr "Descripció del curs"
+
+msgid "OnlineConference"
+msgstr "Conferència en línia"
+
+msgid "Chat"
+msgstr "Missatgeria (xat)"
+
+msgid "Quiz"
+msgstr "Exercicis"
+
+msgid "Announcements"
+msgstr "Taulell de notícies"
+
+msgid "Links"
+msgstr "Enllaços"
+
+msgid "LearningPath"
+msgstr "Itinerari formatiu"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "UserPicture"
+msgstr "Imatge"
+
+msgid "officialcode"
+msgstr "Codi oficial"
+
+msgid "Login"
+msgstr "Identificador (login)"
+
+msgid "UserPassword"
+msgstr "Contrasenya"
+
+msgid "SubscriptionAllowed"
+msgstr "Inscripció autoritzada"
+
+msgid "UnsubscriptionAllowed"
+msgstr "Anul·lar inscripció"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Permès"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Denegat"
+
+msgid "AddDummyContentToCourse"
+msgstr "Afegir continguts de prova al curs"
+
+msgid "DummyCourseCreator"
+msgstr "Crear continguts de prova"
+
+msgid "DummyCourseDescription"
+msgstr "Això afegirà alguns continguts a aquest curs que  serveixin d\'exemple. Aquesta utilitat només s\'ha d\'usar  per fer proves."
+
+msgid "AvailablePlugins"
+msgstr "En el vostre sistema, han estat trobats aquests connectors"
+
+msgid "CreateVirtualCourse"
+msgstr "Crear un curs virtual"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Mostrar una llista de cursos virtuals"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Vinculat al codi de curs real"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Creant el curs virtual ..."
+
+msgid "WantedCourseCode"
+msgstr "Codi del curs"
+
+msgid "ResetPassword"
+msgstr "Actualitzar la contrasenya"
+
+msgid "CheckToSendNewPassword"
+msgstr "Enviar la nova contrasenya"
+
+msgid "AutoGeneratePassword"
+msgstr "Generar automàticament una nova contrasenya"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Utilitzar un títol pel nom del document"
+
+msgid "UseDocumentTitleComment"
+msgstr "Això permetrà utilitzar un títol pel nom del document en comptes de nom_del_document.ext"
+
+msgid "StudentPublications"
+msgstr "Publicacions d\'estudiants"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "Els fitxers esborrats no podran ser restaurats"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr " Suprimint un arxiu a l\'eina de documents permanentment el suprimeix. L\'arxiu no es pot restaurar"
+
+msgid "ClassName"
+msgstr "Nom de la classe"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Compartició de fitxers: mida màxima dels documents"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Quina mida (en bytes) pot tenir un document a la secció de compartició de fitxers ?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Compartició de fitxers: els documents d\'origen poden ser sobreescrits"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "El document original es pot sobreescriure quan un estudiant o professor carrega un document amb el nom d\'un document que ja existeix? Si contesteu sí perdreu la possibilitat de conservar successives versions"
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Compartició de fitxers: autoritzar l\'enviament de documents a si mateix"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Permetre a professors i a estudiants carregar documents a la seva safata de compartició de fitxers sense enviar-los a ningú més (enviar-se documents a sí mateixos)"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Compartició de fitxers: estudiant <-> estudiant"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Permetre als estudiants enviar documents a uns altres estudiants (intercanvi P2P). Els estudiants podrien utilitzar això per a enviar-se documents poc rellevants (mp3, solucions...). Si deshabiliteu aquesta opció llavors l\'estudiant només podrà enviar documents als professors"
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Compartició de fitxers: es permet l\'enviament de correu"
+
+msgid "DropboxAllowMailingComment"
+msgstr " Amb la funcionalitat de publitramesa pot enviar un document personal acada estudiant"
+
+msgid "PermissionsForNewDirs"
+msgstr "Permisos per a directoris nous"
+
+msgid "PermissionsForNewDirsComment"
+msgstr "La possibilitat de definir la configuració dels permisos assignats als nous directoris, augmenta la seguretat contra els atacs de crackers que poguessin enviar material perillós a la plataforma. La configuració per defecte (0770) hauria de ser suficient per dotar el vostre servidor d\'un nivell de protecció raonable. El format proporcionat utilitza la terminologia UNIX Propietari-Grup-Altres amb els permisos de Lectura-Escriptura-Execució."
+
+msgid "UserListHasBeenExported"
+msgstr "La llista d\'usuaris ha estat exportada"
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Cliqueu aquí per descarregar el fitxer"
+
+msgid "administratorTelephoneTitle"
+msgstr "Administrador de la plataforma: telèfon"
+
+msgid "administratorTelephoneComment"
+msgstr "El número de telèfon de l\'administrador de la plataforma"
+
+msgid "SendMailToNewUser"
+msgstr "Enviar correu a un nou usuari"
+
+msgid "ExtendedProfileTitle"
+msgstr "Perfil extès"
+
+msgid "ExtendedProfileComment"
+msgstr "Si es configura com a \'Veritable\', l\'usuari podrà emplenar els següents camps (opcionals): \'Les meves competències\', \'Les meves titulacions\', \'Què puc ensenyar\' i \'La meva àrea personal pública\'"
+
+msgid "Classes"
+msgstr "Classes"
+
+msgid "UserUnsubscribed"
+msgstr "L\'usuari ha estat exclòs"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "L\'usuari no pot anul·lar la seva inscripció al curs. Aquest usuari és unadministrador del curs."
+
+msgid "InvalidStartDate"
+msgstr "La data d\'inici no és vàlida"
+
+msgid "InvalidEndDate"
+msgstr " La data final no és vàlida"
+
+msgid "DateFormatLabel"
+msgstr "(d/m/a h:m)"
+
+msgid "HomePageFilesNotWritable"
+msgstr " Els arxius de la pàgina principal no es poden escriure!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Si usplau, introduïu el text de la notícia"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Si us plau, introduïu el títol de la notícia"
+
+msgid "PleaseEnterLinkName"
+msgstr "Si us plau, introduïu el nom de l\'enllaç"
+
+msgid "InsertThisLink"
+msgstr "Inserir aquest enllaç"
+
+msgid "FirstPlace"
+msgstr "En primer lloc"
+
+msgid "After"
+msgstr "després"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Compartició de fitxers: permetre al grup"
+
+msgid "DropboxAllowGroupComment"
+msgstr "Els usuaris poden enviar arxius als grups"
+
+msgid "ClassDeleted"
+msgstr "La classe ha estat eliminada"
+
+msgid "ClassesDeleted"
+msgstr "Les classes han estat eliminades"
+
+msgid "NoUsersInClass"
+msgstr "No hi ha usuaris en aquesta classe"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "Els usuaris seleccionats han estat inscrits als seus corresponents cursos"
+
+msgid "InvalidTitle"
+msgstr "Si us plau, introduïu un títol"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Aquesta categoria ja està en ús"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Si us plau, introduïu un codi i un nom per a la categoria"
+
+msgid "DokeosHomepage"
+msgstr "Pàgina principal de Chamilo"
+
+msgid "DokeosForum"
+msgstr "Fòrum de Chamilo"
+
+msgid "RegisterYourPortal"
+msgstr "Registreu el vostre portal"
+
+msgid "DokeosExtensions"
+msgstr "Extensions de Chamilo"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Mostrar el menú de navegació del curs"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Mostrar un menú de navegació que facilita l\'accés a diferents parts del curs"
+
+msgid "LoginAs"
+msgstr "Accedir com"
+
+msgid "ImportClassListCSV"
+msgstr "Importar un llistat de classe des d\'un fitxer CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "Mostrar el nombre d\'usuaris connectats a la pàgina inicial (visible per tothom)"
+
+msgid "ShowOnlineUsers"
+msgstr "Mostrar el nombre d\'usuaris en línia a totes les pàgines (visible per les persones que han entrat)"
+
+msgid "ShowOnlineCourse"
+msgstr "Mostrar el nombre d\'usuaris connectats a aquest curs"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Mostrar les imatges en el menú de navegació"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Veure tots els rols i localitzacions per a un permís específic"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Vegi tots els rols i permisos per a una localització específica"
+
+msgid "ClassesUnsubscribed"
+msgstr "La classe seleccionada ha deixat d\'estar inscrita als cursos seleccionats"
+
+msgid "ClassesSubscribed"
+msgstr "Les classes seleccionades han estat subscrites als cursos seleccionats"
+
+msgid "RoleId"
+msgstr "ID de rol"
+
+msgid "RoleName"
+msgstr "Nom del rol"
+
+msgid "RoleType"
+msgstr "Tipus"
+
+msgid "RightValueModified"
+msgstr "El valor ha estat modificat"
+
+msgid "MakeAvailable"
+msgstr "Habilitar"
+
+msgid "MakeUnavailable"
+msgstr "Deshabilitar"
+
+msgid "Stylesheets"
+msgstr "Fulls d\'estil"
+
+msgid "DefaultDokeosStyle"
+msgstr "Estil Chamilo per defecte"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "El menu de navegació hauria de mostrar les diferents icones d\'eina?"
+
+msgid "Plugin"
+msgstr "Connector"
+
+msgid "MainMenu"
+msgstr "Menú principal"
+
+msgid "MainMenuLogged"
+msgstr "Menú principal després de la connexió (login)"
+
+msgid "Banner"
+msgstr "Banner"
+
+msgid "ImageResizeTitle"
+msgstr "Redimensionar les imatges dels usuaris"
+
+msgid "ImageResizeComment"
+msgstr "Les imatges descarregades pels usuaris poden ser redimensionades si PHP ha estat compilat amb la <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">llibreria GD</a>. Si no és així, la configuració serà ignorada."
+
+msgid "MaxImageWidthTitle"
+msgstr "Amplada màxima de les imatges"
+
+msgid "MaxImageWidthComment"
+msgstr "Amplada màxima en píxels per les imatges descarregades. Aquesta configuració no té efecte si el redimensionament de les imatges no ha estat activat"
+
+msgid "MaxImageHeightTitle"
+msgstr "Alçada màxima de les imatges"
+
+msgid "MaxImageHeightComment"
+msgstr "Alçada màxima en píxels de les imatges descarregades. Aquesta configuració no té efecte si el redimensionament de les imatges no ha estat activat."
+
+msgid "YourVersionNotUpToDate"
+msgstr "La seva versió no està actualitzada"
+
+msgid "YourVersionIs"
+msgstr "La seva versió és la"
+
+msgid "PleaseVisitDokeos"
+msgstr "Gràcies per visitar el lloc web de Chamilo"
+
+msgid "VersionUpToDate"
+msgstr "La vostra versió està actualitzada"
+
+msgid "ConnectSocketError"
+msgstr "Error de connexió al lloc"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Les connexions externes (sockets) no estan autoritzades"
+
+msgid "ShowEmailAddresses"
+msgstr "Mostrar les adreces de correu-e"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Mostrar les adreces de correu-e als usuaris"
+
+msgid "LatestVersionIs"
+msgstr "L\'última versió és"
+
+msgid "langConfigureExtensions"
+msgstr "Configurar els serveis"
+
+msgid "langActiveExtensions"
+msgstr "Activar els serveis"
+
+msgid "langVisioconf"
+msgstr "Videoconferència"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo Live Conferencing® és una eina normalitzada de videoconferència que ofereix: difusió de diapositives, pissarra per dibuixar i \'escriure, àudio i vídeo dúplex, xat i llista d\'usuaris connectats. Funciona sobre el navegador d\'internet amb Flash® sobre 3 modes: un a un, un a molts i molts a molts"
+
+msgid "langPpt2lp"
+msgstr "Oogie-Woogie (importació de PowerPoint)"
+
+msgid "langPpt2lpDescription"
+msgstr "oogie-Woogie és una eina que permet generar ràpidament itineraris formatius. Pot convertir presentacions PowerPoint i documents Word, així com els seus equivalents d\'OpenOffice en cursos de tipus SCORM. després de ser convertit, el document serà administrable per l\'eina Itineraris formatius de Chamilo. Podrà afegir diapositives,àudio, exercicis entre les diapositives o activitats com fòrums de discussió i l\'enviament de tasques. Com que és un curs SCORM, permet l\'informe i el seguiment als estudiants. El sistema combina el poder d\'OpenOffice com a eina de conversió de documents MS-Office amb el servidor streamming RED5 per a la grabació d\'àudio i amb l\'eina d\'administració d\'itineraris formatius de Chamilo."
+
+msgid "langBandWidthStatistics"
+msgstr "Estadístiques d\'amplada de banda"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG us permet consultar les estadístiques detallades sobre l\'estat del vostre servidor a les últimes 24 hores."
+
+msgid "ServerStatistics"
+msgstr "Estadístiques del sevidor"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats us permet consultar les estadístiques de visites de la plataforma, visitants, pàgines vistes, procedència dels visitants..."
+
+msgid "SearchEngine"
+msgstr "Cercador a text complet"
+
+msgid "langSearchEngineDescription"
+msgstr "El Cercador a text complet us permet de cercar una paraula dins el conjunt de la plataforma. La indexació diària dels continguts assegura la qualitat dels resultats."
+
+msgid "langListSession"
+msgstr "Llista de sessions"
+
+msgid "AddSession"
+msgstr "Afegir una sessió"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Importar sessions en format XML/CSV"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Exportar sessions en format XML/CSV"
+
+msgid "SessionName"
+msgstr "Nom de la sessió"
+
+msgid "langNbCourses"
+msgstr "Nombre de cursos"
+
+msgid "DateStart"
+msgstr "Data d\'inici"
+
+msgid "DateEnd"
+msgstr "Data de finalització"
+
+msgid "CoachName"
+msgstr "Nom del tutor"
+
+msgid "SessionList"
+msgstr "Llista de sessions"
+
+msgid "SessionNameIsRequired"
+msgstr "Doneu un nom a aquesta sessió"
+
+msgid "NextStep"
+msgstr "Etapa següent"
+
+msgid "keyword"
+msgstr "Paraula clau"
+
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Anular la inscripció dels usuaris del curs"
+
+msgid "MissingClassName"
+msgstr "Falta el nom de la classe"
+
+msgid "ClassNameExists"
+msgstr "Aquest nom de classe ja existeix"
+
+msgid "ImportCSVFileLocation"
+msgstr "Posició del fitxer d\'importació CSV"
+
+msgid "ClassesCreated"
+msgstr "Classes creades"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Errors en importar el fitxer"
+
+msgid "ServiceActivated"
+msgstr "Servei activat"
+
+msgid "ActivateExtension"
+msgstr "Serveis activats"
+
+msgid "InvalidExtension"
+msgstr "Servei no vàlid"
+
+msgid "VersionCheckExplanation"
+msgstr "Per tal d\'activar la verificació automàtica de les versions, heu d\'enregistrar el vostre portal a Chamilo.com. Les dades que ens transmeteu, en haver clicat el botó, són reservades per a usos interns; només es faran públiques les dades estadístiques globals (nombre total de plataformes Chamilo, de cursos, d\'estudiants ...)Vegeu <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>.Després d\'enregistrar la vostra plataforma Chamilo, apareixerà també en la nostra llista internacional (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>).Si no hi voleu aparèixer, marqueu el quadre de sota. Per enregistrar-vos, res més simple: cliqueu només el botó !"
+
+msgid "AfterApproval"
+msgstr "Després de ser aprovat"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Activar la vista estudiant"
+
+msgid "StudentViewEnabledComment"
+msgstr "Activar la vista estudiant, que permet als tutors o als administrador veure el curs tal i com ho veuria un alumne"
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Límit de temps d\'Usuaris en Línia"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Aquest límit de temps defineix quan de temps després de l\'última acció enregistrada es considera que un usuari està *en línia*"
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Materials d\'exemple per la creació de cursos"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Crear un conjunt de materials d\'exemple quan es creï un nou curs"
+
+msgid "AccountValidDurationTitle"
+msgstr "Validesa dels comptes d\'usuari"
+
+msgid "AccountValidDurationComment"
+msgstr "Un nou compte d\'usuari és vàlid durant aquest nombre de dies després d\'haver-se creat"
+
+msgid "UseSessionModeTitle"
+msgstr "Utilitzar el mode sessió"
+
+msgid "UseSessionModeComment"
+msgstr "Les sessions permeten gestionar els cursos de manera diferent. Cada curs té un creador, tutors i estudiants. Un tutor dóna un curs durant un període determinat, anomenat \"sessió\", a un grup d\'usuaris determinat"
+
+msgid "HomepageViewActivity"
+msgstr "Vista activitat"
+
+msgid "HomepageView2column"
+msgstr "Vista en dues columnes"
+
+msgid "HomepageView3column"
+msgstr "Vista en tres columnes"
+
+msgid "AllowUserHeadings"
+msgstr "Permetre els encapçalaments d\'usuaris"
+
+msgid "IconsOnly"
+msgstr "Només icones"
+
+msgid "TextOnly"
+msgstr "Només text"
+
+msgid "IconsText"
+msgstr "Icones i text"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Activar les introduccions d\'eines"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Activar les introduccions a la pàgina inicial de cada eina"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Barra de navegació de la pàgina inicial del curs"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "La barra de navegació és un sistema de navegació horitzontal mitjançant enllaços que generalment es situa a la zona superior esquerra de la vostra pàgina. Aquesta opció us permet seleccionar el contingut d\'aquesta barra en la pàgina inicial de cada curs"
+
+msgid "Comment"
+msgstr "Comentari"
+
+msgid "Version"
+msgstr "Versió"
+
+msgid "LoginPageMainArea"
+msgstr "Zona principal pàgina d\'accés"
+
+msgid "LoginPageMenu"
+msgstr "Menú de la pàgina d\'accés"
+
+msgid "CampusHomepageMainArea"
+msgstr "Zona principal de la pàgina del portal"
+
+msgid "CampusHomepageMenu"
+msgstr "Menú de la pàgina inicial del portal"
+
+msgid "MyCoursesMainArea"
+msgstr "Zona principal dels cursos"
+
+msgid "MyCoursesMenu"
+msgstr "Menú dels cursos"
+
+msgid "Header"
+msgstr "Capçalera"
+
+msgid "Footer"
+msgstr "Peu de pàgina"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "Pàgines públiques conformes a la WAI"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Web Accessibility Initiative) és una iniciativa que cerca fer el web més accessible. Triant aquesta opció, fareu que les pàgines públiques del vostre portal siguin més accessibles. Això significa també que alguns continguts de pàgines públiques del lloc podrien aparèixer de manera diferent."
+
+msgid "VersionCheck"
+msgstr "Verificació de la versió"
+
+msgid "Active"
+msgstr "Actiu"
+
+msgid "Inactive"
+msgstr "Inactiu"
+
+msgid "SessionOverview"
+msgstr "Resum de la sessió"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Inscriure l\'usuari si encara no està inscrit"
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Anular la inscripció de l\'usuari si encara no està en el fitxer"
+
+msgid "DeleteSelectedSessions"
+msgstr "Eliminar les sessions seleccionades"
+
+msgid "CourseListInSession"
+msgstr "Llista dels cursos d\'aquesta sessió"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Suprimir els cursos seleccionats d\'aquesta sessió"
+
+msgid "NbUsers"
+msgstr "Usuaris"
+
+msgid "SubscribeUsersToSession"
+msgstr "Inscriure els usuaris en aquesta sessió"
+
+msgid "UserListInPlatform"
+msgstr "Llista dels usuaris de la plataforma"
+
+msgid "UserListInSession"
+msgstr "Llista dels usuaris inscrits en aquesta sessió"
+
+msgid "CourseListInPlatform"
+msgstr "Llista dels cursos de la plataforma"
+
+msgid "Host"
+msgstr "Servidor"
+
+msgid "UserOnHost"
+msgstr "Nom d\'usuari"
+
+msgid "FtpPassword"
+msgstr "Contrasenya FTP"
+
+msgid "PathToLzx"
+msgstr "Camí cap als fitxers LZX"
+
+msgid "WCAGContent"
+msgstr "Text"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Afegir cursos a aquesta sessió"
+
+msgid "DateStartSession"
+msgstr "Data d\'inici de la sessió"
+
+msgid "DateEndSession"
+msgstr "Data de finalització de la sessió"
+
+msgid "EditSession"
+msgstr "Editar la sessió"
+
+msgid "VideoConferenceUrl"
+msgstr "Camí cap a la videoconferència"
+
+msgid "VideoClassroomUrl"
+msgstr "Camí cap a la sala de videoconferència"
+
+msgid "ReconfigureExtension"
+msgstr "Reconfigurar l\'extensió"
+
+msgid "ServiceReconfigured"
+msgstr "Servei reconfigurat"
+
+msgid "ChooseNewsLanguage"
+msgstr "Trieu idioma"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "Càlcul de temps passat en un curs"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Aquesta opció permet calcular en temps real el temps que un usuari passa en un curs. El valor a omplir en aquest camp és l\'interval de refresc en segons. Per desactivar aquesta opció, deixeu el valor 0 en aquests camps"
+
+msgid "EditLink"
+msgstr "Editar l\'enllaç"
+
+msgid "FinishSessionCreation"
+msgstr "Acabar la creació de la sessió"
+
+msgid "VisioRTMPPort"
+msgstr "Port del protocol RTMPT per la videoconferència"
+
+msgid "SessionNameAlreadyExists"
+msgstr "Aquest nom de sessió ja existeix"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "No s\'ha creat cap classe"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Aquest camp hauria de contenir un nombre"
+
+msgid "UserLocked"
+msgstr "Usuari bloquejat"
+
+msgid "UserUnlocked"
+msgstr "Usuari desbloquejat"
+
+msgid "CannotDeleteUser"
+msgstr "No podeu esborrar aquest usuari"
+
+msgid "SelectedUsersDeleted"
+msgstr "Els usuaris seleccionats han estat esborrats"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Alguns usuaris no s\'han pogut esborrar"
+
+msgid "ExternalAuthentication"
+msgstr "Autenticació externa"
+
+msgid "RegistrationDate"
+msgstr "Data de registre"
+
+msgid "UserUpdated"
+msgstr "Usuari actualitzat"
+
+msgid "HomePageFilesNotReadable"
+msgstr "Els fitxers de la pàgina inicial no tenen drets de lectura"
+
+msgid "Choose"
+msgstr "Trieu"
+
+msgid "ModifySessionCourse"
+msgstr "Modificar la sessió del curs"
+
+msgid "CourseSessionList"
+msgstr "Llista dels cursos de la sessió"
+
+msgid "SelectACoach"
+msgstr "Seleccionar un tutor"
+
+msgid "UserNameUsedTwice"
+msgstr "El nom d\'usuari està duplicat"
+
+msgid "UserNameNotAvailable"
+msgstr "Nom d\'usuari no disponible"
+
+msgid "UserNameTooLong"
+msgstr "Nom d\'usuari massa llarg"
+
+msgid "WrongStatus"
+msgstr "Aquest estat no existeix"
+
+msgid "ClassNameNotAvailable"
+msgstr "Nom de classe no disponible"
+
+msgid "FileImported"
+msgstr "Fitxer importat"
+
+msgid "WhichSessionToExport"
+msgstr "Trieu la sessió per exportar"
+
+msgid "AllSessions"
+msgstr "Totes les sessions"
+
+msgid "CodeDoesNotExists"
+msgstr "Aquest codi no existeix"
+
+msgid "UnknownUser"
+msgstr "Usuari desconegut"
+
+msgid "UnknownStatus"
+msgstr "Estat desconegut"
+
+msgid "SessionDeleted"
+msgstr "La sessió s\'ha esborrat correctament"
+
+msgid "CourseDoesNotExist"
+msgstr "Curs inexistent"
+
+msgid "UserDoesNotExist"
+msgstr "Usuari inexistent"
+
+msgid "ButProblemsOccured"
+msgstr "però hi ha hagut problemes"
+
+msgid "UsernameTooLongWasCut"
+msgstr "Nom d\'usuari tallat"
+
+msgid "NoInputFile"
+msgstr "No s\'ha enviat cap fitxer"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "L\'estat d\'alumne ha estat atribuït a"
+
+msgid "WrongDate"
+msgstr "La data no s\'ha entrat correctament (aaaa-mm-dd)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Aquest és un missatge automàtic. Si us plau, no respongueu a aquest missatge."
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "En breu rebràs un correu del teu professor."
+
+msgid "SlideSize"
+msgstr "Mida de les diapositives"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Prevenció de plagi Ephorus"
+
+msgid "CourseTeachers"
+msgstr "Docents del curs"
+
+msgid "UnknownTeacher"
+msgstr "Professor desconegut"
+
+msgid "HideDLTTMarkup"
+msgstr "Amagar les marques DLTT"
+
+msgid "ListOfCoursesOfSession"
+msgstr "Llistat de cursos de la sessió"
+
+msgid "UnsubscribeSelectedUsersFromSession"
+msgstr "Eliminar de la sessió els usuaris seleccionats"
+
+msgid "ShowDifferentCourseLanguageComment"
+msgstr "Mostrar la llengua assignada a cada curs, al costat del títol del curs, en la llista de cursos de la pàgina inicial"
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "Mostrar les categories del curs a la pàgina inicial, encara que estiguin buides"
+
+msgid "ShowEmptyCourseCategories"
+msgstr "Mostrar les categories de curs buides"
+
+msgid "XMLNotValid"
+msgstr "El document XML no és vàlid"
+
+msgid "ForTheSession"
+msgstr "per a la sessió"
+
+msgid "AllowEmailEditorTitle"
+msgstr "Activar l\'editor de correus-e en línia"
+
+msgid "AllowEmailEditorComment"
+msgstr "Si aquesta opció està activa, cliqueu sobre una adreça de correu-e i s\'obrirà un editor en línia"
+
+msgid "AddCSVHeader"
+msgstr "Afegir la línia de capçalera del CSV ?"
+
+msgid "YesAddCSVHeader"
+msgstr "Sí, afegir les capçaleres CSVAquesta línia defineix tots els camps i es necessita quan vulgui importar l\'arxiu en una altra plataforma Chamilo"
+
+msgid "ListOfUsersSubscribedToCourse"
+msgstr "Llistat d\'usuaris subscrits al curs"
+
+msgid "NumberOfCourses"
+msgstr "Nombre de Cursos"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Mostrar els idiomes dels cursos"
+
+msgid "VisioRTMPTunnelPort"
+msgstr "Port túnel del protocol RTMPT per la videoconferència"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "Security"
+msgstr "Seguretat"
+
+msgid "UploadExtensionsListType"
+msgstr "Tipus de filtratge sobre l\'enviament de documents"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "Utilització de llista negra o blanca. Vegeu la descripció de la llista negra i la llista blanca a sota per més detalls"
+
+msgid "Blacklist"
+msgstr "Llista negra"
+
+msgid "Whitelist"
+msgstr "Llista blanca"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "Llista negra - paràmetres"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "Llista blanca - paràmetres"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "La llista negra (blacklist) és un mode de filtratge que permet eliminar (o canviar el nom) els fitxers les extensions del qual figuren en la llista següent. Les extensions han d\'estar mencionades sense el punt (.) de prefix, i han d\'estar separats per punts i coma (;) com per exemple: exe;com;bat;scr;php. Els fitxers sense extensió són acceptats d\'entrada. El fet d\'escriure en majúscula o en minúscula no té importància."
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "La llista blanca (o whitelist) és un mode de filtratge que permet eliminar (o canviar de nom) els fitxers les extensions del qual *NO* figuren a la llista següent. Aquest mètode és considerat com a més segur però més restrictiu que la llista negra. Les extensions han de mencionar-se sense el punt (.) del prefix, i separats per punts i coma (;) com htm;html;txt;doc;xls;ppt;jpg;gif;sxw. Els fitxers sense extensió s\'accepten per defecte. El fet d\'escriure en majúscula o en minúscula no té importància."
+
+msgid "UploadExtensionsSkip"
+msgstr "Comportament de filtratge (eliminar/reanomenar)"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "Si escolliu eliminar, els fitxers que tinguin l\'extensió filtrada per la llista negra o blanca no seran enviats al vostre campus. Si trieu canviar-los el nom, la seva extensió serà substituïda pel valor indicat en el paràmetre de reemplaçament d\'extensió. Noteu que el reemplaçament d\'extensió no us protegeix realment, i pot causar conflictes de noms si existeixen molt fitxers amb el mateix nom però amb extensions diferents."
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "Extensió de reemplaçament"
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "Introduïu l\'extensió que reemplaçarà les extensions perilloses que han estat detectats pel filtre. Només us servirà si heu seleccionat un filtratge per reemplaçament."
+
+msgid "Remove"
+msgstr "Esborrar"
+
+msgid "Rename"
+msgstr "Reanomenar"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "Mostrar el nombre de cursos en cada categoria, en les categories de cursos de la pàgina inicial"
+
+msgid "EphorusDescription"
+msgstr "Comenceu a utilitzar Ephorus servei anti plagi a Chamilo <br /> <STRONG> Amb Ephorus, previndreu el plagi a internet sense cap esforç addicional.</STRONG><br /> Podeu utilitzar el nostre estàndard obert webservice per construir la vostra integració o utilitzar un dels nostres mòduls d\'integració Chamilo."
+
+msgid "EphorusLeadersInAntiPlagiarism"
+msgstr "<STRONG>Líders en <BR>anti plagi </STRONG>"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "Cliqueu aquí per més informació i preus"
+
+msgid "NameOfTheSession"
+msgstr "Nom de la sessió"
+
+msgid "NoSessionsForThisUser"
+msgstr "Aquest usuari no ha estat subscrit a una sessió"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "Mostrar categories a la pàgina principal"
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "Aquesta opció mostrarà o ocultarà les categories de cursos a la pàgina principal de la plataforma"
+
+msgid "ShowTabsTitle"
+msgstr "Pestanyes a la capçalera"
+
+msgid "ShowTabsComment"
+msgstr "seleccioneu quines pestanyes voleu que apareguin a la capçalera. Les pestanyes no seleccionades, si fossin necessàries, apareixerien en el menú dret de la pàgina principal de la plataforma i a la pàgina dels meus cursos"
+
+msgid "DefaultForumViewTitle"
+msgstr "Vista del fòrum per defecte"
+
+msgid "DefaultForumViewComment"
+msgstr "Quina és l\'opció per defecte quan es crea un nou fòrum. No obstant això, qualsevol administrador d\'un curs pot escollir una vista diferent en cada fòrum"
+
+msgid "TabsMyCourses"
+msgstr "Pestanya Els meus cursos"
+
+msgid "TabsCampusHomepage"
+msgstr "Pestanya Pàgina principal de la plataforma"
+
+msgid "TabsReporting"
+msgstr "Pestanya Informes"
+
+msgid "TabsPlatformAdministration"
+msgstr "Pestanya Administració de la plataforma"
+
+msgid "NoCoursesForThisSession"
+msgstr "No hi ha cursos per a aquesta sessió"
+
+msgid "NoUsersForThisSession"
+msgstr "No hi ha usuaris per a aquesta sessió"
+
+msgid "LastNameMandatory"
+msgstr "Cal que els cognoms es complimentin obligatòriament"
+
+msgid "FirstNameMandatory"
+msgstr "Cal que complimenteu obligatòriament el nom"
+
+msgid "EmailMandatory"
+msgstr "L\'adreça de correu-e s\'ha de complimentar obligatòriament"
+
+msgid "TabsMyAgenda"
+msgstr "Pestanya La meva agenda"
+
+msgid "NoticeWillBeNotDisplayed"
+msgstr "La notícia no serà mostrada a la pàgina principal"
+
+msgid "LetThoseFieldsEmptyToHideTheNotice"
+msgstr "Deixeu aquests camps buits si no voleu mostrar la notícia"
+
+msgid "Ppt2lpVoiceRecordingNeedsRed5"
+msgstr "La funcionalitat d\'enregistrament de veu a l\'Editor d\'Itineraris formatius depèn d\'un servidor de streamming Red5. Els paràmetres d\'aquest servidor poden configurar-se a la secció de videoconferència d\'aquesta mateixa pàgina."
+
+msgid "PlatformCharsetTitle"
+msgstr "Joc de caràcters"
+
+msgid "PlatformCharsetComment"
+msgstr "El joc de caràcters és el que controla la manera en què determinats idiomes són mostrats a Chamilo. Si, per exemple, utilitza caràcters russos o japonesos, és possible que vulgui canviar aquest joc. Per a tots els caràcters anglosaxons, llatins i d\'Europa Occidental, el joc per defecte UTF-8 hauria de ser el correcte."
+
+msgid "ExtendedProfileRegistrationTitle"
+msgstr "Camps del perfil estès del registre"
+
+msgid "ExtendedProfileRegistrationComment"
+msgstr "Quins camps del perfil estès cal que estiguin disponibles en el procés de registre d\'un usuari? Això requereix que el perfil estès estigui activat (vegeu més amunt)."
+
+msgid "ExtendedProfileRegistrationRequiredTitle"
+msgstr "Camps requerits en el perfil estès del registre"
+
+msgid "ExtendedProfileRegistrationRequiredComment"
+msgstr "Quins camps del perfil estès són obligatoris en el procés de registre d\'un usuari? Això requereix que el perfil estès estigui activat i que el camp també estigui disponible en el formulari de registre (vegeu més amunt)."
+
+msgid "NoReplyEmailAddress"
+msgstr "No respongueu aquest correu"
+
+msgid "NoReplyEmailAddressComment"
+msgstr "Aquesta és l\'adreça de correu electrònic que s\'utilitza quan s\'envia un correu per sol·licitar que no es realitzi cap resposta. generalment, aquesta adreça de correu electrònic cal que sigui configurada en el servidor de manera que elimini o ignori qualsevol correu entrant."
+
+msgid "SurveyEmailSenderNoReply"
+msgstr "Remitent de l\'enquesta (no respongueu)"
+
+msgid "SurveyEmailSenderNoReplyComment"
+msgstr "¿Els correus electrònics utilitzats per enviar les enquestes, hauran d\'utilitzar el correu electrònic del professor/tutor o una adreça especial de correu-e a la qual el destinatari no respongui (definida en els paràmetres de la plataforma)?"
+
+msgid "CourseCoachEmailSender"
+msgstr "Correu-e del professor/tutor"
+
+msgid "NoReplyEmailSender"
+msgstr "No respongueu aquest correu"
+
+msgid "Flat"
+msgstr "Plana"
+
+msgid "Threaded"
+msgstr "Per fils de discussió"
+
+msgid "Nested"
+msgstr "Imbricada"
+
+msgid "OpenIdAuthenticationComment"
+msgstr "Activar l\'autenticació basada en URL OpenID (mostra un formulari addicional d\'identificació a la pàgina principal de la plataforma)"
+
+msgid "VersionCheckEnabled"
+msgstr "Comprovació de la versió activada"
+
+msgid "InstallDirAccessibleSecurityThreat"
+msgstr "El directori d\'instal·lació /main/install encara és accessible als usuaris de la web. Això podria representar un problema de seguretat. Us recomanem que elimineu aquest directori o que canvieu els seus permisos, de manera que els usuaris de la web no puguin utilitzar els scripts que conté."
+
+msgid "GradebookActivation"
+msgstr "Activació de l\'eina Quadern de qualificacions"
+
+msgid "GradebookActivationComment"
+msgstr "Quan activeu l\'eina Quadern de qualificacions s\'afegeix la possibilitat de relacionar els objectius d\'aprenentatge amb els seus resultats; no obstant, això pot generar una interfície bastant més complexa. Realment voleu activar aquesta eina?"
+
+msgid "UserTheme"
+msgstr "Tema (full d\'estil)"
+
+msgid "UserThemeSelection"
+msgstr "Selecció de tema per l\'usuari"
+
+msgid "UserThemeSelectionComment"
+msgstr "Permetre als usuaris escollir un tema visual al seu perfil. Això els canviarà l\'aspecte de Chamilo, però deixarà intacte l\'estil per defecte de la plataforma. Si a un curs o a una sessió els ha estat assignat un tema específic, aquest darrer tindrà prioritat sobre el tema definit al perfil d\'usuari."
+
+msgid "AllowurlfopenIsSetToOff"
+msgstr "El paràmetre de PHP \"allow_url_fopen\" està desactivat. Això impedeix que el mecanisme de registre funcioni correctament. Aquest paràmetre es pot canviar al fitxer de configuració de PHP (php.ini) o a la configuració del Virtual Host de Apache, mitjançant la directiva php_admin_value"
+
+msgid "VisioHost"
+msgstr "Nom o adreça IP del servidor de streamming per a la videoconferència"
+
+msgid "VisioPort"
+msgstr "port del servidor de streamming per a la videoconferència"
+
+msgid "VisioPassword"
+msgstr "Contrasenya del servidor de streamming per a la videoconferència"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "EphorusClickHereForADemoAccount"
+msgstr "Feu clic aquí per a obtenir un compte de demostració"
+
+msgid "ManageUserFields"
+msgstr "Gestionar els camps d\'usuari"
+
+msgid "UserFields"
+msgstr "Camps d\'usuari"
+
+msgid "AddUserField"
+msgstr "Afegir un camp d\'usuari"
+
+msgid "FieldLabel"
+msgstr "Etiqueta del camp"
+
+msgid "FieldType"
+msgstr "Tipus de camp"
+
+msgid "FieldTitle"
+msgstr "Títol del camp"
+
+msgid "FieldDefaultValue"
+msgstr "Valor per defecte del camp"
+
+msgid "FieldOrder"
+msgstr "Ordre del camp"
+
+msgid "FieldVisibility"
+msgstr "Visibilitat del camp"
+
+msgid "FieldChangeability"
+msgstr "Modificable"
+
+msgid "FieldTypeText"
+msgstr "Text"
+
+msgid "FieldTypeTextarea"
+msgstr "Àrea de text"
+
+msgid "FieldTypeRadio"
+msgstr "Botons de radio"
+
+msgid "FieldTypeSelect"
+msgstr "Desplegable"
+
+msgid "FieldTypeSelectMultiple"
+msgstr "Desplegable amb elecció múltiple"
+
+msgid "FieldAdded"
+msgstr "El camp ha estat afegit"
+
+msgid "GradebookScoreDisplayColoring"
+msgstr "Acolorit de puntuacions"
+
+msgid "GradebookScoreDisplayColoringComment"
+msgstr "Seleccioneu la casella per habilitar l\'acolorit de les puntuacions (per exemple, haureu de definir quines puntuacions seran marcades en vermell)"
+
+msgid "TabsGradebookEnableColoring"
+msgstr "Habilitar l\'acolorit de les puntuacions"
+
+msgid "GradebookScoreDisplayCustom"
+msgstr "Personalització de la presentació de les puntuacions"
+
+msgid "GradebookScoreDisplayCustomComment"
+msgstr "Marqueu la casella per activar la personalització de les puntuacions (seleccioneu el nivell que s\'associarà a cada puntuació)"
+
+msgid "TabsGradebookEnableCustom"
+msgstr "activar la configuració de puntuacions"
+
+msgid "GradebookScoreDisplayColorSplit"
+msgstr "Límit per a l\'acolorit de les puntuacions"
+
+msgid "GradebookScoreDisplayColorSplitComment"
+msgstr "Percentatge mínim, per sota del qual les puntuacions s\'acoloriran en vermell"
+
+msgid "GradebookScoreDisplayUpperLimit"
+msgstr "Mostrar el límit superior de puntuació"
+
+msgid "GradebookScoreDisplayUpperLimitComment"
+msgstr "Marqueu la casella per mostrar el límit superior de la puntuació"
+
+msgid "TabsGradebookEnableUpperLimit"
+msgstr "Activar la visualització del límit superior de la puntuació"
+
+msgid "AddUserFields"
+msgstr "Afegir camps d\'usuari"
+
+msgid "FieldPossibleValues"
+msgstr "Valors possibles"
+
+msgid "FieldPossibleValuesComment"
+msgstr "Solament en camps repetitius, havent d\'estar separats per punt i coma (;)"
+
+msgid "FieldTypeDate"
+msgstr "Data"
+
+msgid "FieldTypeDatetime"
+msgstr "Data i hora"
+
+msgid "UserFieldsAddHelp"
+msgstr "Afegir un camp d\'usuari és molt fàcil: <br />- escolliu una paraula com identificador en minúscules, <br /> - seleccioneu un tipus, <br /> - escolliu el text que hauria d\'aparèixer a l\'usuari (si utilizeu un nom ja traduït por Chamilo, como ara BirthDate o UserSex, automàticament es tradueix a tots els idiomes), <br /> - si heu escollit un camp del tipus selecció múltiple (radio, seleccionar, selecció múltiple), teniu l\'oportunitat de triar (també aquí, podeu fer ús de les variables d\'idioma definides a Chamilo), separat per punt i coma, <br /> - en els camps tipus text, podeu triar un valor per defecte. <br /> <br /> Un cop acabat, agregueu el camp i decidiu si voleu fer-lo visible i modificable. Fer-lo modificable però ocult no té sentit."
+
+msgid "AllowCourseThemeTitle"
+msgstr "Permetre temes gràfics personalitzats als cursos"
+
+msgid "AllowCourseThemeComment"
+msgstr "Permetre que els cursos puguin tenir un tema gràfic diferent, canviant el full d\'estil usat per un dels disponibles a Chamilo. Quan un usuari entra en un curs, el full d\'estil del curs té preferència sobre el de l\'usuari i sobre el que està definit per defecte a la plataforma."
+
+msgid "DisplayMiniMonthCalendarTitle"
+msgstr "Mostrar a l\'agenda el calendari mensual reduït"
+
+msgid "DisplayMiniMonthCalendarComment"
+msgstr "Aquesta configuració activa o desactiva el petit calendari mensual que apareix a l\'esquerra a l\'eina agenda d\'un curs"
+
+msgid "DisplayUpcomingEventsTitle"
+msgstr "Mostrar els propers esdeveniments a l\'agenda"
+
+msgid "DisplayUpcomingEventsComment"
+msgstr "Aquesta configuració activa o desactiva els propers esdeveniments que apareixen a l\'esquerra de l\'eina agenda d\'un curs"
+
+msgid "NumberOfUpcomingEventsTitle"
+msgstr "Nombre de propers esdeveniments que cal mostrar"
+
+msgid "NumberOfUpcomingEventsComment"
+msgstr "Nombre dels propers esdeveniments que seran mostrats a l\'agenda. Això requereix que la funcionalitat propers esdeveniments estigui activada (vegeu més amunt la configuració)"
+
+msgid "ShowClosedCoursesTitle"
+msgstr "Mostrar els cursos tancats a la pàgina de registre y a la pàgina principal de la plataforma?"
+
+msgid "ShowClosedCoursesComment"
+msgstr "Mostrar els cursos tancats a la pàgina de registre i a la pàgina principal de la plataforma? A la pàgina d\'inici de la plataforma apareixerà una icona al costat del curs, per inscriure-s\'hi ràpidament. Això tan sols es mostrarà a la pàgina principal de la plataforma després de l\'autenticació de l\'usuari i sempre que ja no estigui inscrit en aquest curs."
+
+msgid "LDAPConnectionError"
+msgstr "Error de connexió LDAP"
+
+msgid "LDAP"
+msgstr "LDAP"
+
+msgid "LDAPEnableTitle"
+msgstr "Habilitar LDAP"
+
+msgid "LDAPEnableComment"
+msgstr "Si teniu un servidor LDAP, haureu de configurar els paràmetres inferiors i modificar el fitxer de configuració descrit a la guia d\'instal·lació, i finalment activar-lo. Això permetrà als usuaris autentificar-se utilitzant llur nom d\'usuari LDAP. Si no coneixeu LDAP és preferible que deixeu aquesta opció desactivada."
+
+msgid "LDAPMainServerAddressTitle"
+msgstr "Adreça del servidor LDAP principal"
+
+msgid "LDAPMainServerAddressComment"
+msgstr "L\'adreça IP o la URL del vostre servidor LDAP principal"
+
+msgid "LDAPMainServerPortTitle"
+msgstr "Port del servidor LDAP principal"
+
+msgid "LDAPMainServerPortComment"
+msgstr "El port en el qual respondrà el servidor LDAP principal (generalment 389). Aquest paràmetre és necessari."
+
+msgid "LDAPDomainTitle"
+msgstr "Domini LDAP"
+
+msgid "LDAPDomainComment"
+msgstr "Aquest és el domini (dc)mLDAP que serà utilitzat per trobar els contactes en el servidor LDAP. Per exemple: dc=xx, dc=yy, dc=zz"
+
+msgid "LDAPReplicateServerAddressTitle"
+msgstr "Adreça del servidor de replicació"
+
+msgid "LDAPReplicateServerAddressComment"
+msgstr "Quan el servidor principal no estigui disponible, aquest servidor us donarà accés. Deixeu en blanc o utilitzeu el mateix valor que el del servidor principal si no teniu un servidor de replicació."
+
+msgid "LDAPReplicateServerPortTitle"
+msgstr "Port del servidor LDAP de replicació"
+
+msgid "LDAPReplicateServerPortComment"
+msgstr "El port en el qual respondrà el servidor de replicació LDAP"
+
+msgid "LDAPSearchTermTitle"
+msgstr "Terme de cerca"
+
+msgid "LDAPSearchTermComment"
+msgstr "Aquest terme serà utilitzat per filtrar la cerca de contactes en el servidor LDAP. Si no esteu segur del que heu d\'escriure aquí, consulteu la documentació i configuració del vostre servidor LDAP."
+
+msgid "LDAPVersionTitle"
+msgstr "Versió LDAP"
+
+msgid "LDAPVersionComment"
+msgstr "Si us plau, seleccioneu la versió del servidor LDAP que voleu utilitzar. L\'ús de la versió correcta depèn de la configuració del vostre servidor LDAP."
+
+msgid "LDAPVersion2"
+msgstr "LDAP 2"
+
+msgid "LDAPVersion3"
+msgstr "LDAP 3"
+
+msgid "LDAPFilledTutorFieldTitle"
+msgstr "Camp d\'identificació del professor"
+
+msgid "LDAPFilledTutorFieldComment"
+msgstr "Comprovarà el contingut del camp de contacte LDAP on seran inserits els nous usuaris. Si aquest camp no està buit, l\'usuari serà considerat professor i serà inserit a Chamilo com a tal. Si voleu que tots els usuaris siguin reconeguts com a simples usuaris, deixeu aquest camp en blanc. Podreu modificar aquest comportament canviant el codi. Per a més informació llegiu la <a href=\"../../documentation/installation_guide.html\">guía d\'instal·lació</a>."
+
+msgid "LDAPAuthenticationLoginTitle"
+msgstr "Identificador d\'autenticació"
+
+msgid "LDAPAuthenticationLoginComment"
+msgstr "Si esteu usant un servidor LDAP que no accepta l\'accés anònim, empleneu el següent camp amb el nom d\'usuari que s\'haurà d\'utilitzar. No inclogueu \"cn=\". En el cas d\'acceptar accés anònim i voler usar-lo, deixeu-lo buit."
+
+msgid "LDAPAuthenticationPasswordTitle"
+msgstr "Contrasenya d\'autenticació"
+
+msgid "LDAPAuthenticationPasswordComment"
+msgstr "Si esteu usant un servidor LDAP que no accepta l\'accés anònim, empleneu el següent camp amb la contrasenya que s\'hagi d\'utilitzar"
+
+msgid "LDAPImport"
+msgstr "Importació LDAP"
+
+msgid "EmailNotifySubscription"
+msgstr "Notificar per correu-e els usuaris registrats"
+
+msgid "DontUncheck"
+msgstr "No desactivar"
+
+msgid "AllSlashNone"
+msgstr "Tots/Cap"
+
+msgid "LDAPImportUsersSteps"
+msgstr "Importació LDAP: Usuaris/Etapes"
+
+msgid "EnterStepToAddToYourSession"
+msgstr "Introduïu l\'etapa que voleu afegir a la vostra sessió"
+
+msgid "ToDoThisYouMustEnterYearDepartmentAndStep"
+msgstr "Per fer això, cal que introduïu l\'any, el departament i l\'etapa"
+
+msgid "FollowEachOfTheseStepsStepByStep"
+msgstr "Seguiu cadascun dels elements, pas a pas"
+
+msgid "RegistrationYearExample"
+msgstr "Any de registre. Exemple: %s per a l\'any acadèmic %s-%s"
+
+msgid "SelectDepartment"
+msgstr "Seleccioneu departament"
+
+msgid "RegistrationYear"
+msgstr "Any de registre"
+
+msgid "SelectStepAcademicYear"
+msgstr "Seleccioneu etapa (any acadèmic)"
+
+msgid "ErrorExistingStep"
+msgstr "Error: aquesta etapa ja existeix"
+
+msgid "ErrorStepNotFoundOnLDAP"
+msgstr "Error: etapa no trobada al servidor LDAP"
+
+msgid "StepDeletedSuccessfully"
+msgstr "L\'etapa ha estat suprimida"
+
+msgid "StepUsersDeletedSuccessfully"
+msgstr "Els usuaris han estat eliminats de l\'etapa"
+
+msgid "NoStepForThisSession"
+msgstr "Ni hi ha etapes per a aquesta sessió"
+
+msgid "DeleteStepUsers"
+msgstr "Esborrar usuaris de l\'etapa"
+
+msgid "ImportStudentsOfAllSteps"
+msgstr "Importar els alumnes de totes les etapes"
+
+msgid "ImportLDAPUsersIntoPlatform"
+msgstr "Afegir usuaris LDAP"
+
+msgid "NoUserInThisSession"
+msgstr "No hi ha usuaris en aquesta sessió"
+
+msgid "SubscribeSomeUsersToThisSession"
+msgstr "Inscriure usuaris en aquesta sessió"
+
+msgid "EnterStudentsToSubscribeToCourse"
+msgstr "Introduïu els alumnes que voleu inscriure en el vostre curs"
+
+msgid "ToDoThisYouMustEnterYearComponentAndComponentStep"
+msgstr "Per fer això, cal que introduïu l\'any, el component i l\'etapa del component"
+
+msgid "SelectComponent"
+msgstr "Seleccionar component"
+
+msgid "Component"
+msgstr "Component"
+
+msgid "SelectStudents"
+msgstr "Seleccionar estudiants"
+
+msgid "LDAPUsersAdded"
+msgstr "Usuaris LDAP afegits"
+
+msgid "NoUserAdded"
+msgstr "Cap usuari afegit"
+
+msgid "ImportLDAPUsersIntoCourse"
+msgstr "Importar usuaris LDAP en un curs"
+
+msgid "ImportLDAPUsersAndStepIntoSession"
+msgstr "Importar usuaris LDAP i una etapa en aquesta sessió"
+
+msgid "LDAPSynchroImportUsersAndStepsInSessions"
+msgstr "Sincronització LDAP: Importar usuaris/etapes a les sessions"
+
+msgid "TabsMyGradebook"
+msgstr "Pestanya El meu quadern de qualificacions"
+
+msgid "LDAPUsersAddedOrUpdated"
+msgstr "Usuaris LDAP afegits o actualitzats"
+
+msgid "SearchLDAPUsers"
+msgstr "Buscar usuaris LDAP"
+
+msgid "SelectCourseToImportUsersTo"
+msgstr "Seleccioneu el curs en el qual voleu inscriure els usuaris que heu seleccionat"
+
+msgid "ImportLDAPUsersIntoSession"
+msgstr "Importar usuaris LDAP en una sessió"
+
+msgid "LDAPSelectFilterOnUsersOU"
+msgstr "Seleccioneu un filtre per trobar usuaris l\'atribut OU (Unitat Organitzativa) dels quals acabi amb aquest filtre"
+
+msgid "LDAPOUAttributeFilter"
+msgstr "Filtre de l\'atribut OU"
+
+msgid "SelectSessionToImportUsersTo"
+msgstr "Seleccioneu la sessió a la qual voleu importar aquests usuaris"
+
+msgid "VisioUseRtmptTitle"
+msgstr "Usar el protocol rtmpt"
+
+msgid "VisioUseRtmptComment"
+msgstr "El protocol rtmpt permet accedir a una videoconferència des de darrere d\'un firewall, redirigint les comunicacions a través del port 80. Això ralentitzarà el streamming, per la qual cosa es recomana no utilitzar-lo si no és necessari."
+
+msgid "UploadNewStylesheet"
+msgstr "Nou fitxer de full d\'estil"
+
+msgid "NameStylesheet"
+msgstr "Nom del full d\'estil"
+
+msgid "StylesheetAdded"
+msgstr "El full d\'estil ha estat afegit"
+
+msgid "LDAPFilledTutorFieldValueTitle"
+msgstr "Valor d\'identificació d\'un professor"
+
+msgid "LDAPFilledTutorFieldValueComment"
+msgstr "Quan es realitzi una comprovació en el camp professor que apareix dalt, per tal que l\'usuari sigui considerat professor, el valor que se li doni cal que sigui un dels subelements del camp professor. Si deixeu aquest camp en blanc, l\'única condició per tal que sigui considerat professor és que en aquest usuari LDAP existeixi el camp. Per exemple, el camp pot ser \"memberof\" i el valor de cerca pot ser \"CN=G_TRAINER,OU=Trainer\""
+
+msgid "IsNotWritable"
+msgstr "no es pot escriure"
+
+msgid "FieldMovedDown"
+msgstr "El camp ha estat mogut cap avall"
+
+msgid "CannotMoveField"
+msgstr "El camp no s\'ha pogut moure"
+
+msgid "FieldMovedUp"
+msgstr "El camp ha estat mogut cap amunt"
+
+msgid "FieldShown"
+msgstr "Ara el camp és visible per a l\'usuari"
+
+msgid "CannotShowField"
+msgstr "No es pot fer el camp visible"
+
+msgid "FieldHidden"
+msgstr "Ara el camp és invisible per a l\'usuari"
+
+msgid "CannotHideField"
+msgstr "No es pot fer el camp invisible"
+
+msgid "FieldMadeChangeable"
+msgstr "El camp és ara editable per l\'usuari: l\'usuari pot ara omplir o modificar el camp"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "﻿El camp no es pot fer modificable."
+
+msgid "FieldMadeUnchangeable"
+msgstr "﻿El camp es fa ara immutable: l\'usuari no pot omplir o modificar el camp."
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "﻿El camp no es pot fer immutable"
+
+msgid "FieldDeleted"
+msgstr "El camp ha estat eliminat"
+
+msgid "CannotDeleteField"
+msgstr "No es pot eliminar el camp"
+
+msgid "AddUsersByCoachTitle"
+msgstr "Registre d\'usuaris pel tutor"
+
+msgid "AddUsersByCoachComment"
+msgstr "El tutor pot registrar nous usuaris en la plataforma i inscriure\'ls en una sessió"
+
+msgid "UserFieldsSortOptions"
+msgstr "Ordenar les opcions dels camps del perfil"
+
+msgid "FieldOptionMovedUp"
+msgstr "Aquesta opció ha estat moguda dalt"
+
+msgid "CannotMoveFieldOption"
+msgstr "No es pot moure l\'opció"
+
+msgid "FieldOptionMovedDown"
+msgstr "L\'opció ha estat moguda baix"
+
+msgid "DefineSessionOptions"
+msgstr "Definir el retard de l\'accés del tutor"
+
+msgid "DaysBefore"
+msgstr "dies abans"
+
+msgid "DaysAfter"
+msgstr "dies després"
+
+msgid "SessionAddTypeUnique"
+msgstr "Registre individual"
+
+msgid "SessionAddTypeMultiple"
+msgstr "Registre múltiple"
+
+msgid "EnableSearchTitle"
+msgstr "Funcionalitat de recerca de text complet"
+
+msgid "EnableSearchComment"
+msgstr "Seleccioni \"Sí\" per habilitar aquesta funcionalitat. Aquesta utilitat depèn de l\'extensió Xapian per a PHP, pel que no funcionarà si aquesta extensió no està instal·lada en el seu servidor, com a mmínim la versió 1.x"
+
+msgid "SearchASession"
+msgstr "Buscar una versió"
+
+msgid "ActiveSession"
+msgstr "Activació de la sessió"
+
+msgid "AddUrl"
+msgstr "Agregar URL"
+
+msgid "ShowSessionCoachTitle"
+msgstr "Mostrar el tutor de la sessió"
+
+msgid "ShowSessionCoachComment"
+msgstr "Mostrar el nom del tutor dins de la caixa de títol de la pàgina del llistat de cursos"
+
+msgid "ExtendRightsForCoachTitle"
+msgstr "Ampliar els permisos del tutor"
+
+msgid "ExtendRightsForCoachComment"
+msgstr "L\'activació d\'aquesta opció donarà al tutor els mateixos permisos que tingui un professor sobre les eines d\'autoria"
+
+msgid "ExtendRightsForCoachOnSurveyComment"
+msgstr "L\'activació d\'aquesta opció donarà als tutors el dret de crear i editar enquestes"
+
+msgid "ExtendRightsForCoachOnSurveyTitle"
+msgstr "Ampliar els permisos dels tutors en les enquestes"
+
+msgid "CannotDeleteUserBecauseOwnsCourse"
+msgstr "Aquest usuari no es pot eliminar perquè segueix com docent d\'un curs o més. Pot canviar el seu títol de docent d\'aquests cursos abans d\'eliminar-lo o bloquejar el seu compte."
+
+msgid "AllowUsersToCreateCoursesTitle"
+msgstr "Permetre la creació de cursos"
+
+msgid "AllowUsersToCreateCoursesComment"
+msgstr "Els professors poden crear cursos en la plataforma"
+
+msgid "AllowStudentsToBrowseCoursesComment"
+msgstr "Permetre als estudiants consultar el catàleg de cursos en els quals poden matricular-se"
+
+msgid "YesWillDeletePermanently"
+msgstr "Sí (els arxius s\'eliminaran permanentment i no podran ser recuperats)"
+
+msgid "NoWillDeletePermanently"
+msgstr "No (els arxius s\'esborraran de l\'aplicació i podran ser recuperats manualment pel seu administrador)"
+
+msgid "SelectAResponsible"
+msgstr "Seleccioni un responsable"
+
+msgid "ThereIsNotStillAResponsible"
+msgstr "Encara no hi ha responsables"
+
+msgid "AllowStudentsToBrowseCoursesTitle"
+msgstr "Els estudiants poden consultar el catàleg de cursos"
+
+msgid "SharedSettingIconComment"
+msgstr "Aquesta configuració està compartida"
+
+msgid "GlobalAgenda"
+msgstr "Agenda Global"
+
+msgid "AdvancedFileManagerTitle"
+msgstr "Gestor avançat de fitxers per a l\'editor WYSIWYG"
+
+msgid "AdvancedFileManagerComment"
+msgstr "Activar el gestor avançat d\'arxius per a l\'editor WYSWYG? Aixó afegirà un considerable nombre d\'opcions al gestor de fitxers que s\'obre en una finestra quan s\'envien arxius al servidor"
+
+msgid "ScormAndLPProgressTotalAverage"
+msgstr "Mitjana de progrés en els cursos"
+
+msgid "MultipleAccessURLs"
+msgstr "Accés mÚltiple a URL"
+
+msgid "SearchShowUnlinkedResultsTitle"
+msgstr "Recerca de text complet: mostrar resultats no accesibles"
+
+msgid "SearchShowUnlinkedResultsComment"
+msgstr "Al moment de mostrar els resultats de la recerca de text complet, com hauria de comportar-se el sistema per als enllaços que no son accesibles per a l\'usuari actual?"
+
+msgid "SearchHideUnlinkedResults"
+msgstr "No mostrar-los"
+
+msgid "SearchShowUnlinkedResults"
+msgstr "Mostrar-los però sense enllaç al recurs"
+
+msgid "Templates"
+msgstr "Plantilles"
+
+msgid "HideCampusFromPublicDokeosPlatformsList"
+msgstr "No mostrar el meu campus en la llista pública de plataformes Chamilo"
+
+msgid "EnableVersionCheck"
+msgstr "Activar la verificació de versiones"
+
+msgid "AllowMessageToolTitle"
+msgstr " Habilitar l\'eina missatge"
+
+msgid "AllowReservationTitle"
+msgstr "Habilitar l\'eina de Reserves"
+
+msgid "AllowReservationComment"
+msgstr "Aquesta opció habilitarà el sistema de reserves"
+
+msgid "ConfigureResourceType"
+msgstr "Configurar tipus de recurs"
+
+msgid "ConfigureMultipleAccessURLs"
+msgstr "Configurar accés a multiple URLs"
+
+msgid "URLAdded"
+msgstr "URL agregada"
+
+msgid "URLAlreadyAdded"
+msgstr "La URL ja està registrada, ingressi altra URL"
+
+msgid "AreYouSureYouWantToSetThisLanguageAsThePortalDefault"
+msgstr "Està segur que destitja configurar aquest idioma com l\'idioma per defecte de la plataforma"
+
+msgid "CurrentLanguagesPortal"
+msgstr "Idioma actual de la plataforma"
+
+msgid "EditUsersToURL"
+msgstr "Editar usuaris i URLs"
+
+msgid "AddUsersToURL"
+msgstr "Agregar usuaris a una URL"
+
+msgid "URLList"
+msgstr "Llista de URLs"
+
+msgid "AddToThatURL"
+msgstr "Agregar usuaris a aquesta URL"
+
+msgid "SelectUrl"
+msgstr "Seleccioni una URL"
+
+msgid "UserListInURL"
+msgstr "Usuaris registrats en aquesta URL"
+
+msgid "UsersWereEdited"
+msgstr "Els usuaris han estat modificats"
+
+msgid "AtLeastOneUserAndOneURL"
+msgstr "Seleccioni almenys un usuari i una URL"
+
+msgid "UsersBelongURL"
+msgstr "Els comptes d\'usuari ara són conectades a l\'URL"
+
+msgid "LPTestScore"
+msgstr "Puntuació de les proves del curs"
+
+msgid "ScormAndLPTestTotalAverage"
+msgstr "Mitjana de les proves en els cursos"
+
+msgid "ImportUsersToACourse"
+msgstr "Importar usuaris a un curs des d\'un fitxer"
+
+msgid "ImportCourses"
+msgstr " 	Importar cursos des d\'un fitxer"
+
+msgid "ManageUsers"
+msgstr "Administrar usuaris"
+
+msgid "ManageCourses"
+msgstr "Administrar cursos"
+
+msgid "UserListIn"
+msgstr "Usuaris de"
+
+msgid "URLInactive"
+msgstr "La URL ha estat desactivada"
+
+msgid "URLActive"
+msgstr "La URL ha estat activada"
+
+msgid "EditUsers"
+msgstr "Editar usuaris"
+
+msgid "EditCourses"
+msgstr "Editar cursos"
+
+msgid "CourseListIn"
+msgstr "Cursos de"
+
+msgid "AddCoursesToURL"
+msgstr "Agregar cursos a una URL"
+
+msgid "EditCoursesToURL"
+msgstr "Editar cursos d\'una URL"
+
+msgid "AddCoursesToThatURL"
+msgstr "Agregar cursos a aquesta URL"
+
+msgid "EnablePlugins"
+msgstr "Habilitar els plugins seleccionats"
+
+msgid "AtLeastOneCourseAndOneURL"
+msgstr "Ha d\'escollir almenys un curs i una URL"
+
+msgid "ClickToRegisterAdmin"
+msgstr "Faci click per a registrar a l\'usuari Administrador en totes les URLs"
+
+msgid "AdminShouldBeRegisterInSite"
+msgstr "L\'usuari administrador hauria d\'estar registrat en:"
+
+msgid "URLNotConfiguredPleaseChangedTo"
+msgstr "URL encara no configurada, agregui la següent URL"
+
+msgid "AdminUserRegisteredToThisURL"
+msgstr "Usuari registrat a aquesta URL"
+
+msgid "CoursesWereEdited"
+msgstr "Els cursos han estat editats"
+
+msgid "URLEdited"
+msgstr "La URL ha estat modificada"
+
+msgid "AddSessionToURL"
+msgstr "Agregar una sessió a una URL"
+
+msgid "FirstLetterSession"
+msgstr "Primera lletra del nom de la sessió"
+
+msgid "EditSessionToURL"
+msgstr "Editar sessió"
+
+msgid "AddSessionsToThatURL"
+msgstr "Agregar sessions a aquesta URL"
+
+msgid "SessionBelongURL"
+msgstr "Les sessions han estat editades"
+
+msgid "ManageSessions"
+msgstr "Administrar sessions"
+
+msgid "AllowMessageToolComment"
+msgstr "Aquesta opció habilitarà l\'eina de missatges"
+
+msgid "AllowSocialToolTitle"
+msgstr "Habilita l\'eina de xarxa social"
+
+msgid "AllowSocialToolComment"
+msgstr "L\'instrument de xarxa social permet a usuaris definir relacions amb altres usuaris i definir grups d\'amics. Combinat amb l\'instrument intern de la missatgeria, aquest instrument permet a la comunicació amb amics, dintre de l\'ambient portal."
+
+msgid "SetLanguageAsDefault"
+msgstr "Utilitzar aquesta llengua per defecte"
+
+msgid "FieldFilter"
+msgstr "Filtre"
+
+msgid "FilterOn"
+msgstr "Habilitar filtre"
+
+msgid "FilterOff"
+msgstr "Deshabilitar filtre"
+
+msgid "FieldFilterSetOn"
+msgstr "Pot utilitzar aquest camp com filtre"
+
+msgid "FieldFilterSetOff"
+msgstr "Filtre deshabilitat"
+
+msgid "buttonAddUserField"
+msgstr "Afegir camp d\'usuari"
+
+msgid "UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses"
+msgstr "Els usuaris han estat registrats als següents cursos perquè diversos cursos comparteixen el mateix codi visual"
+
+msgid "TheFollowingCoursesAlreadyUseThisVisualCode"
+msgstr "Els següents cursos ja utilitzen aquest codi"
+
+msgid "UsersSubscribedToBecauseVisualCode"
+msgstr "Els usuaris han estat subscrits als següents cursos, perquè molts cursos comparteixen el mateix codi visual"
+
+msgid "UsersUnsubscribedFromBecauseVisualCode"
+msgstr "La subscripció d\'aquest usuaris als següents cursos ha estat cancel·lada perquè hi ha altres cursos que comparteixen el mateix codi visual"
+
+msgid "FilterUsers"
+msgstr "Filtre d\'usuaris"
+
+msgid "SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode"
+msgstr "Diversos cursos es van subscriure a la sessió a causa d\'un codi duplicat de curs"
+
+msgid "CoachIsRequired"
+msgstr "Ha de seleccionar un tutor"
+
+msgid "EncryptMethodUserPass"
+msgstr "Mètode d\'encriptació"
+
+msgid "AddTemplate"
+msgstr "Afegir una plantilla"
+
+msgid "TemplateImageComment100x70"
+msgstr "Aquesta imatge representarà la seva plantilla en la llista de plantilles. No hauria de ser major de 100x70 píxels"
+
+msgid "TemplateAdded"
+msgstr "Plantilla afegida"
+
+msgid "TemplateDeleted"
+msgstr "Plantilla esborrada"
+
+msgid "EditTemplate"
+msgstr "Edició de plantilla"
+
+msgid "FileImportedJustUsersThatAreNotRegistered"
+msgstr "Es va importar els usuaris que no estaven registrats a la plataforma"
+
+msgid "YouMustImportAFileAccordingToSelectedOption"
+msgstr "Ha d\'importar un arxiu d\'acord a l\'opció seleccionada"
+
+msgid "ShowEmailOfTeacherOrTutorTitle"
+msgstr "Mostrar adreça electrònica del professor o del tutor el el peu de pàgina"
+
+msgid "ShowEmailOfTeacherOrTutorComent"
+msgstr "Mostrar l\'adreça electrònica del professor o tutor en el peu de pàgina?"
+
+msgid "Created"
+msgstr "Creat"
+
+msgid "AddSystemAnnouncement"
+msgstr "Afegir anunci del sistema"
+
+msgid "EditSystemAnnouncement"
+msgstr "Editar anunci del sistema"
+
+msgid "LPProgressScore"
+msgstr "% d\'objects d\'aprenentatge visitats"
+
+msgid "TotalTimeByCourse"
+msgstr "Temps total per curs"
+
+msgid "LastTimeTheCourseWasUsed"
+msgstr "Últim accès d\'usuaris al curs"
+
+msgid "AnnouncementAvailable"
+msgstr "L\'anunci està disponible"
+
+msgid "AnnouncementNotAvailable"
+msgstr "L\'anunci no està disponible"
+
+msgid "Searching"
+msgstr "Cercant"
+
+msgid "AddLDAPUsers"
+msgstr "Afegir usuaris LDAP"
+
+msgid "Academica"
+msgstr "Acadèmica"
+
+msgid "AddNews"
+msgstr "Afegir notícies"
+
+msgid "SearchDatabaseOpeningError"
+msgstr "No es va poder obrir la base de dades del motor d\'indexació,provi afegir un nou recurs (exercici,enllaç,lliçó,etc) el qual serà indexat al cercador"
+
+msgid "SearchDatabaseVersionError"
+msgstr "La base de dades està en un format no suportat"
+
+msgid "SearchDatabaseModifiedError"
+msgstr "La base de dades ha estat modificada (alterada)"
+
+msgid "SearchDatabaseLockError"
+msgstr "No es va poder bloquejar una base de dades"
+
+msgid "SearchDatabaseCreateError"
+msgstr "No es va poder crear una base de dades"
+
+msgid "SearchDatabaseCorruptError"
+msgstr "Es va detectar greus errors en la base de dades"
+
+msgid "SearchNetworkTimeoutError"
+msgstr "Temps expirat mentre es connectava a una base de dades remota"
+
+msgid "SearchOtherXapianError"
+msgstr "Error en el motor de recerca"
+
+msgid "FieldRemoved"
+msgstr "Camp eliminat"
+
+msgid "TheNewSubLanguageHasBeenAdded"
+msgstr "El nou sub-llenguatge ha estat afegit amb les següents referències"
+
+msgid "DeleteSubLanguage"
+msgstr "Eliminar sub-idioma"
+
+msgid "CreateSubLanguageForLanguage"
+msgstr "Crear sub-llenguatge per a aquesta llengua"
+
+msgid "DeleteSubLanguageFromLanguage"
+msgstr "Eliminar subllenguatge de llengua"
+
+msgid "CreateSubLanguage"
+msgstr "Crear sub-llenguatge"
+
+msgid "RegisterTermsOfSubLanguageForLanguage"
+msgstr "Registrar termes del sub-llenguatge per a la llengua"
+
+msgid "AddTermsOfThisSubLanguage"
+msgstr "Afegisca nous termes per a aquest sub-llenguatge"
+
+msgid "LoadLanguageFile"
+msgstr "Carregar fitxer de llengües"
+
+msgid "AllowUseSubLanguageTitle"
+msgstr "Permet definir sub-llenguatges"
+
+msgid "AllowUseSubLanguageComment"
+msgstr "A l\'activar aquesta opció, vostè podrà definir variacions per a cada terme del llenguatge usat per a la interfície de la plataforma, en la forma d\'un nou llenguatge basat en un llenguatge existent. Podrà trobar aquesta opció en el menu d\'idiomes de la seva pàgina d\'administració."
+
+msgid "AddWordForTheSubLanguage"
+msgstr "Afegir paraules al sub-llenguatge"
+
+msgid "TemplateEdited"
+msgstr "Plantilla modificada"
+
+msgid "SubLanguage"
+msgstr "Sub-llenguatge"
+
+msgid "LanguageIsNowVisible"
+msgstr "El llenguatge es ara visible i està disponible en la plataforma"
+
+msgid "LanguageIsNowHidden"
+msgstr "El llenguatge ara no es visible"
+
+msgid "LanguageDirectoryNotWriteableContactAdmin"
+msgstr "El directori /main/lang usat en aquest portal,no té permisos d\'escriptura. Per favor contacti amb el seu administrador"
+
+msgid "ShowGlossaryInDocumentsTitle"
+msgstr "Mostrar els termes del glossari en els documents"
+
+msgid "ShowGlossaryInDocumentsComment"
+msgstr "Des d\'ací vostè pot configurar la forma de com s\'afegiran els termes del glossari als documents"
+
+msgid "ShowGlossaryInDocumentsIsAutomatic"
+msgstr "Automàtica. A l\'activar està opció s\'afegirà un enllaç a tots els termes del glossari que es trobin en el document."
+
+msgid "ShowGlossaryInDocumentsIsManual"
+msgstr "Manual. A l\'activar està opció, es mostrarà una icona en l\'editor en línia que li permetrà marcar les paraules que desitgi que enllacin amb els termes del glossari."
+
+msgid "ShowGlossaryInDocumentsIsNone"
+msgstr "Cap. Si activa aquesta opció, les paraules dels seus documents no s\'enllaçaran amb els termes que apareguin en el glossari."
+
+msgid "LanguageVariable"
+msgstr "Variable d\'idioma"
+
+msgid "ToExportDocumentsWithGlossaryYouHaveToSelectGlossary"
+msgstr "Si vol exportar un document que contingui termes del glossari, haurà d\'assegurar-se que aquests termes han estat inclosos en l\'exportació; per a això haurà d\'haver-los seleccionat en la llista del glossari."
+
+msgid "ShowTutorDataTitle"
+msgstr "Informació del tutor de la sessió a peu de pàgina"
+
+msgid "ShowTutorDataComment"
+msgstr "Mostrar l\'informació del tutor de la sessió a peu de pàgina?"
+
+msgid "ShowTeacherDataTitle"
+msgstr "Mostrar informació del professor a peu de pàgina"
+
+msgid "ShowTeacherDataComment"
+msgstr "Mostrar l\'informació a peu de página?"
+
+msgid "TermsAndConditions"
+msgstr "Termes i condicions"
+
+msgid "HTMLText"
+msgstr "HTML"
+
+msgid "PageLink"
+msgstr "Enllaç"
+
+msgid "DisplayTermsConditions"
+msgstr "Mostrar Termes i condicions en la pàgina de registre, el visitant ha d\'acceptar els T&C per a poder registrar-se."
+
+msgid "AllowTermsAndConditionsTitle"
+msgstr "Habilitar Termes i Condicions"
+
+msgid "AllowTermsAndConditionsComment"
+msgstr "Aquesta opció mostrarà els Termes i Condicions en el formulari de registre per als nous usuaris"
+
+msgid "Load"
+msgstr "Carregar"
+
+msgid "AllVersions"
+msgstr "Totes les versions"
+
+msgid "EditTermsAndConditions"
+msgstr "Modificar termes i condicions"
+
+msgid "Changes"
+msgstr "Canvis"
+
+msgid "ExplainChanges"
+msgstr "Explicar canvis"
+
+msgid "TermAndConditionNotSaved"
+msgstr "Termes i condicions no guardats"
+
+msgid "TheSubLanguageHasBeenRemoved"
+msgstr "El sub-llenguatge ha estat eliminat"
+
+msgid "AddTermsAndConditions"
+msgstr "Afegir termes i condicions"
+
+msgid "TermAndConditionSaved"
+msgstr "Termes i condicions guardats"
+
+msgid "Visibility"
+msgstr "Visibilitat"
+
+msgid "SessionCategory"
+msgstr "Categoria de la sessió"
+
+msgid "ListSessionCategory"
+msgstr "Llista de categories de les sessions"
+
+msgid "AddSessionCategory"
+msgstr "Afegir categoria"
+
+msgid "SessionCategoryName"
+msgstr "Nom de la categoria"
+
+msgid "EditSessionCategory"
+msgstr "Editar categoria de sessió"
+
+msgid "SessionCategoryAdded"
+msgstr "La categoria ha estat afegida"
+
+msgid "SessionCategoryUpdate"
+msgstr "Categoria actualitzada"
+
+msgid "SessionCategoryDelete"
+msgstr "Les categories seleccionades han estat esborrades"
+
+msgid "SessionCategoryNameIsRequired"
+msgstr "Ha de donar un nom per a la categoria"
+
+msgid "ThereIsNotStillASession"
+msgstr "Encara no hi ha una sessió"
+
+msgid "SelectASession"
+msgstr "Seleccione una sessió"
+
+msgid "OriginCoursesFromSession"
+msgstr "Cursos  de la sessió d\'origen"
+
+msgid "DestinationCoursesFromSession"
+msgstr "Cursos de la sessió de destinació"
+
+msgid "CopyCourseFromSessionToSessionExplanation"
+msgstr "Si vols copiar un curs d\'una sessió a altre curs d\'altra sessió has de seleccionar primer un curs de la llesta cursos d\'origen de la sessió. Pots copiar continguts de les eines descripció del curs, documents, glossari, enllaços, exercicis i lliçons de forma directa o seleccionant els components del curs"
+
+msgid "TypeOfCopy"
+msgstr "Tipus de còpia"
+
+msgid "CopyFromCourseInSessionToAnotherSession"
+msgstr "Copiar cursos d\'una a altra sessió"
+
+msgid "YouMustSelectACourseFromOriginalSession"
+msgstr "Has de seleccionar un curs de la sessió original"
+
+msgid "MaybeYouWantToDeleteThisUserFromSession"
+msgstr "Tal vegada desitja eliminar a l\'usuari de la sessió en lloc d\'eliminar-lo de tots els cursos."
+
+msgid "EditSessionCoursesByUser"
+msgstr "Editar cursos per usuari"
+
+msgid "CoursesUpdated"
+msgstr "Cursos actualitzats"
+
+msgid "CurrentCourses"
+msgstr "Cursos de l\'usuari"
+
+msgid "CoursesToAvoid"
+msgstr "Cursos no accessibles"
+
+msgid "EditSessionCourses"
+msgstr "Editar cursos"
+
+msgid "SessionVisibility"
+msgstr "Visibilitat desprès de la data final"
+
+msgid "BlockCoursesForThisUser"
+msgstr "Bloquejar cursos a aquest usuari"
+
+msgid "LanguageFile"
+msgstr "Arxiu de traducció"
+
+msgid "ShowCoursesDescriptionsInCatalogTitle"
+msgstr "Mostrar les descripcions dels cursos en el catàleg"
+
+msgid "ShowCoursesDescriptionsInCatalogComment"
+msgstr "Mostrar les descripcions dels cursos com finestres emergents al fer clic en una icona d\'informació del curs en el catàleg de cursos"
+
+msgid "StylesheetNotHasBeenAdded"
+msgstr "La fulla d\'estils no ha estat afegida,probablement el seu arxiu zip contingui fitxers no permesos,el zip ha de contenir fitxers amb les següents extensions(\'png\', \'jpg\', \'gif\', \'css\')"
+
+msgid "AddSessionsInCategories"
+msgstr "Afegir múltiples sessions a una categoria"
+
+msgid "ItIsRecommendedInstallImagickExtension"
+msgstr "Es recomana instal·lar la extensió imagick de php per a obtenir millor qualitat en la resolució de les imatges al generar els thumbnail en cas contrari no es mostrarà molt bé"
+
+msgid "EditSpecificSearchField"
+msgstr "Editar camp específic"
+
+msgid "FieldName"
+msgstr "Camp"
+
+msgid "SpecialExports"
+msgstr "Exportacions especials"
+
+msgid "SpecialCreateFullBackup"
+msgstr "Crear exportació especial completa"
+
+msgid "SpecialLetMeSelectItems"
+msgstr "Seleccionar els components"
+
+msgid "CreateBackup"
+msgstr "Crear cópia de seguretat"
+
+msgid "AllowCoachsToEditInsideTrainingSessions"
+msgstr "Permetre als tutors editar dintre dels cursos de les sessions"
+
+msgid "AllowCoachsToEditInsideTrainingSessionsComment"
+msgstr "Permetre als tutors editar comentaris dins dels cursos de les sessions"
+
+msgid "ShowSessionDataTitle"
+msgstr "Mostrar dades del període de la sessió"
+
+msgid "ShowSessionDataComment"
+msgstr "Mostrar comentaris de dades de la sessió"
+
+msgid "SubscribeSessionsToCategory"
+msgstr "Inscriure sessions a una categoria"
+
+msgid "SessionListInPlatform"
+msgstr "Llista de sessions de la plataforma"
+
+msgid "SessionListInCategory"
+msgstr "Llista de sessions en la categoria"
+
+msgid "ToExportSpecialSelect"
+msgstr "Si vol exportar cursos que contingui sessions, hauria d\'assegurar-se que aquests siguin inclosos en l\'exportació; per a això hauria d\'haver-los seleccionat en la llista."
+
+msgid "ErrorMsgSpecialExport"
+msgstr "No es van trobar cursos registrat o és possible que no s\'hagi realitzat l\'associació amb les sessions"
+
+msgid "ConfigureInscription"
+msgstr "Configuració de la pàgina de registre"
+
+msgid "MsgErrorSessionCategory"
+msgstr "Ha de seleccionar una categoria i les sessiones"
+
+msgid "NumberOfSession"
+msgstr "Nombre de sessions"
+
+msgid "DeleteSelectedSessionCategory"
+msgstr "Eliminar solament les categories seleccionades sense sessions"
+
+msgid "DeleteSelectedFullSessionCategory"
+msgstr "Eliminar les categorias seleccionades amb les sessions"
+
+msgid "EditTopRegister"
+msgstr "Editar avis"
+
+msgid "InsertTabs"
+msgstr "Insertar Tabs"
+
+msgid "EditTabs"
+msgstr "Editar Tabs"
+
+msgid "YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill"
+msgstr "L\'avaluació necessita tenir un certificat per poder relacionar-lo a una competència"
+
+msgid "PlatformUnsubscribeTitle"
+msgstr "Permet donar-se de baixa de la plataforma"
+
+msgid "PlatformUnsubscribeComment"
+msgstr "A l\'activar aquesta opció, es permetrà que qualsevol usuari elimini definitivament el seu compte i totes les dades relacionades amb el mateix des de la plataforma. Això és una acció radical, però és necessari en els portals oberts al públic on els usuaris puguin registrar-se automàticament. Es publicarà una entrada addicional al perfil de l\'usuari per donar-se de baixa després de la confirmació."
+
+msgid "BabyOrange"
+msgstr "Nens taronja"
+
+msgid "BlueLagoon"
+msgstr "Llacuna blava"
+
+msgid "CoolBlue"
+msgstr "Blau fresc"
+
+msgid "Corporate"
+msgstr "Corporatiu"
+
+msgid "CosmicCampus"
+msgstr "Campus còsmic"
+
+msgid "DeliciousBordeaux"
+msgstr "Bordeus deliciós"
+
+msgid "DokeosClassic2D"
+msgstr "Chamilo clàssic 2D"
+
+msgid "DokeosBlue"
+msgstr "Chamilo blau"
+
+msgid "EmpireGreen"
+msgstr "Verd imperial"
+
+msgid "FruityOrange"
+msgstr "Taronja afruitat"
+
+msgid "Medical"
+msgstr "Mèdica"
+
+msgid "RoyalPurple"
+msgstr "Porpra real"
+
+msgid "SilverLine"
+msgstr "Línia platejada"
+
+msgid "SoberBrown"
+msgstr "Marró sobri"
+
+msgid "SteelGrey"
+msgstr "Gris acer"
+
+msgid "TastyOlive"
+msgstr "Sabor oliva"
+
+msgid "ExportCourses"
+msgstr "Exporta cursos"
+
+msgid "IsAdministrator"
+msgstr "És administrador"
+
+msgid "IsNotAdministrator"
+msgstr "No és administrador"
+
+msgid "AddTimeLimit"
+msgstr "Afegeix límit de temps"
+
+msgid "EditTimeLimit"
+msgstr "Edita el límit de temps"
+
+msgid "TheTimeLimitsAreReferential"
+msgstr "El plaç d\'una categoria és referencial, no afectarà als límits d\'una sessió de formació"
+
+msgid "ShowGlossaryInExtraToolsTitle"
+msgstr "Mostra els termes del glossari a les eines lliçons (SCORM) i exercicis"
+
+msgid "ShowGlossaryInExtraToolsComment"
+msgstr "Des d\'aquí pot configurar com afegir els termes del glossari a les eines com lliçons (SCORM) i exercicis"
+
+msgid "FieldTypeTag"
+msgstr "Etiqueta de l\'usuari"
+
+msgid "SendEmailToAdminTitle"
+msgstr "Avís per correu electrònic de la creació d\'un curs nou"
+
+msgid "SendEmailToAdminComment"
+msgstr "Envia un correu electrònic a l\'administrador de la plataforma cada cop que un professor creï un curs nou"
+
+msgid "UserTag"
+msgstr "Etiqueta de l\'usuari"
+
+msgid "SelectSession"
+msgstr "Selecciona una sessió"
+
+msgid "GroupPermissions"
+msgstr "Permisos del grup"
+
+msgid "SpecialCourse"
+msgstr "Curs especial"
+
+msgid "MathMimetexTitle"
+msgstr "Editor matemàtic mimeTEX"
+
+msgid "MathMimetexComment"
+msgstr "Habilita l\'editor matemàtic mimeTEX"
+
+msgid "MathASCIImathMLTitle"
+msgstr "Editor matemàtic ASCIIMathML"
+
+msgid "MathASCIImathMLComment"
+msgstr "Habilita l\'editor matemàtic ASCIIMathML"
+
+msgid "YoutubeForStudentsTitle"
+msgstr "Permet als estudiants inserir vídeos de YouTube"
+
+msgid "YoutubeForStudentsComment"
+msgstr "Habilita la possibilitat que els estudiants puguin inserir vídeos de YouTube"
+
+msgid "BlockCopyPasteForStudentsTitle"
+msgstr "Bloqueja als estudiants copia i enganxa"
+
+msgid "BlockCopyPasteForStudentsComment"
+msgstr "Bloqueja als estudiants la possibilitat de copiar i enganxar a l\'editor WYSIWYG"
+
+msgid "MoreButtonsForMaximizedModeTitle"
+msgstr "Barres de botons esteses"
+
+msgid "MoreButtonsForMaximizedModeComment"
+msgstr "Permet les barres de botons esteses quan l\'editor WYSIWYG estigui maximitzat"
+
+msgid "Editor"
+msgstr "Editor HTML"
+
+msgid "GoToCourseAfterLoginTitle"
+msgstr "Anar directament al curs després d\'autenticar-se"
+
+msgid "GoToCourseAfterLoginComment"
+msgstr "Quan un usuari està inscrit només a un curs, anar directament al curs després d\'autenticar-se"
+
+msgid "GroupList"
+msgstr "Llista de grups de la xarxa social"
+
+msgid "AllowStudentsDownloadFoldersTitle"
+msgstr "Permet als estudiants descarregar directoris"
+
+msgid "AllowStudentsDownloadFoldersComment"
+msgstr "Permet als estudiants empaquetar i descarregar un directori complet a l\'eina documents"
+
+msgid "AllowStudentsToCreateGroupsInSocialTitle"
+msgstr "Permet als usuaris crear grups a la xarxa social"
+
+msgid "AllowStudentsToCreateGroupsInSocialComment"
+msgstr "Permet als usuaris crear els seus propis grups a la xarxa social"
+
+msgid "AllowSendMessageToAllPlatformUsersTitle"
+msgstr "Permet enviar missatges a tots els usuaris de la plataforma"
+
+msgid "AllowSendMessageToAllPlatformUsersComment"
+msgstr "Permet poder enviar missatges a tots els usuaris de la plataforma"
+
+msgid "TabsSocial"
+msgstr "Pestanya Xarxa social"
+
+msgid "MessageMaxUploadFilesizeTitle"
+msgstr "Mida màxima de l\'arxiu en els missatges"
+
+msgid "MessageMaxUploadFilesizeComment"
+msgstr "Mida màxima de l\'arxiu permesa per adjuntar un missatge (en Bytes)"
+
+msgid "AddAdditionalProfileField"
+msgstr "Afegeix un camp del perfil d\'usuari"
+
+msgid "Username"
+msgstr "Nom d\'usuari"
+
+msgid "ChamiloHomepage"
+msgstr "Pàgina principal de Chamilo"
+
+msgid "ChamiloForum"
+msgstr "Fòrum de Chamilo"
+
+msgid "ChamiloExtensions"
+msgstr "Serveis de Chamilo"
+
+msgid "ImpossibleToContactVersionServerPleaseTryAgain"
+msgstr "Impossible de connectar-se al servidor de versions. Si us plau, intenti-ho de nou més endavant."
+
+msgid "ChamiloGreen"
+msgstr "Chamilo Verd"
+
+msgid "ChamiloRed"
+msgstr "Chamilo Vermell"
+
+msgid "MessagesSent"
+msgstr "Nombre de missatges enviats"
+
+msgid "MessagesReceived"
+msgstr "Nombre de missatges rebuts"
+
+msgid "CountFriends"
+msgstr "Nombre de contactes"
+
+msgid "ThisPluginHasbeenDeletedFromDashboardPluginDirectory"
+msgstr "Aquest connector ha estat eliminat de la llista de connectors del tauler de control"
+
+msgid "EnableDashboardPlugins"
+msgstr "Habilita els connectors del tauler de control"
+
+msgid "CoursesListInPlatform"
+msgstr "Llista de cursos de la plataforma"
+
+msgid "AssignedCoursesListToHumanResourceManager"
+msgstr "Cursos assignats al Director de Recursos Humans"
+
+msgid "AssignedCoursesTo"
+msgstr "Cursos assignats a"
+
+msgid "AssignCoursesToHumanResourcesManager"
+msgstr "Assigna cursos al Director de Recursos Humans"
+
+msgid "TimezoneValueTitle"
+msgstr "Zona horària"
+
+msgid "TimezoneValueComment"
+msgstr "Aquesta és la zona horària d\'aquest portal. Si la deixa buida, s\'utilitzarà la zona horària del servidor. Si la configura, totes les hores del sistema es mostraran en funció d\'ella. Aquesta configuració té una prioritat més baixa que la zona horària de l\'usuari si està habilitada i selecciona una altra."
+
+msgid "UseUsersTimezoneTitle"
+msgstr "Utilitza les zones horàries dels usuaris"
+
+msgid "UseUsersTimezoneComment"
+msgstr "Activa la selecció pels usuaris de la seva zona horària. El camp de zona horària ha de seleccionar-se com a visible i modificable abans que els usuaris escollin el seu compte. Un cop configurada els usuaris podran veure-la."
+
+msgid "FieldTypeTimezone"
+msgstr "Zona horària"
+
+msgid "AssignedSessionsHaveBeenUpdatedSuccessfully"
+msgstr "Les sessions assignades han estat actualitzades"
+
+msgid "AssignedCoursesHaveBeenUpdatedSuccessfully"
+msgstr "Els cursos assignats han estat actualitzats"
+
+msgid "AssignedUsersHaveBeenUpdatedSuccessfully"
+msgstr "Els usuaris assignats han estat actualitzats"
+
+msgid "Lock"
+msgstr "Bloqueja"
+
+msgid "AssignUsersToX"
+msgstr "Assigna usuaris a %s"
+
+msgid "AssignUsersToHumanResourcesManager"
+msgstr "Assigna usuaris al Director de Recursos Humans"
+
+msgid "AssignedUsersListToHumanResourcesManager"
+msgstr "Llista d\'usuaris assignats al Director de Recursos Humans"
+
+msgid "AssignCoursesToX"
+msgstr "Assigna cursos a %s"
+
+msgid "SessionsListInPlatform"
+msgstr "Llista de sessions de la plataforma"
+
+msgid "AssignSessionsToHumanResourcesManager"
+msgstr "Assigna sessions al Director de Recursos Humans"
+
+msgid "AssignedSessionsListToHumanResourcesManager"
+msgstr "Llista de sessions assignades al Director de Recursos Humans"
+
+msgid "SessionsInformation"
+msgstr "Informe de sessions"
+
+msgid "YourSessionsList"
+msgstr "Les seves sessions"
+
+msgid "TeachersInformationsList"
+msgstr "Informe de professors"
+
+msgid "YourTeachers"
+msgstr "Els seus professors"
+
+msgid "StudentsInformationsList"
+msgstr "Informe dels estudiants"
+
+msgid "YourStudents"
+msgstr "Els seus estudiants"
+
+msgid "GoToThematicAdvance"
+msgstr "Vés a l\'avançament temàtic"
+
+msgid "TeachersInformationsGraph"
+msgstr "Informe gràfic dels professors"
+
+msgid "StudentsInformationsGraph"
+msgstr "Informe gràfic dels estudiants"
+
+msgid "Timezones"
+msgstr "Zones horàries"
+
+msgid "TimeSpentOnThePlatformLastWeekByDay"
+msgstr "Temps a la plataforma la setmana passada, per dia"
+
+msgid "GraphicNotAvailable"
+msgstr "Gràfic no disponible"
+
+msgid "AttendancesFaults"
+msgstr "Faltes d\'assistència"
+
+msgid "Minutes"
+msgstr "Minuts"
+
+msgid "SystemStatus"
+msgstr "Informació del sistema"
+
+msgid "IsWritable"
+msgstr "L\'escriptura és possible a"
+
+msgid "DirectoryExists"
+msgstr "El directori existeix"
+
+msgid "DirectoryMustBeWritable"
+msgstr "El servidor web ha de deixar escriure en aquest directori"
+
+msgid "DirectoryShouldBeRemoved"
+msgstr "És convenient que elimini aquest directori (no es necessitarà més)"
+
+msgid "Section"
+msgstr "Secció"
+
+msgid "Expected"
+msgstr "Esperat"
+
+msgid "Setting"
+msgstr "Paràmetre"
+
+msgid "Current"
+msgstr "Actual"
+
+msgid "SessionGCMaxLifetimeInfo"
+msgstr "El temps màxim de vida del recol·lector de brossa és el temps màxim que es dóna entre dues execucions del recol·lector de brossa."
+
+msgid "PHPVersionInfo"
+msgstr "Versió PHP"
+
+msgid "FileUploadsInfo"
+msgstr "La càrrega d\'arxius indica si la pujada d\'arxius està autoritzada"
+
+msgid "UploadMaxFilesizeInfo"
+msgstr "Mida màxima d\'un arxiu quan es puja. Aquest ajustament ha d\'anar en la majoria dels casos acompanyada de la variables post_max_size"
+
+msgid "MagicQuotesRuntimeInfo"
+msgstr "Aquesta és una característica en absolut recomanable que converteix els valors tornats per totes les funcions que tornen valors externs en valors amb barres d\'escapament. Aquesta funcionalitat *no* hauria d\'activar-se."
+
+msgid "PostMaxSizeInfo"
+msgstr "Aquesta és la mida màxima dels enviaments realitzats a través de formularis utilitzant el mètode POST (és a dir, la forma típica de càrrega d\'arxius mitjançant formularis)"
+
+msgid "SafeModeInfo"
+msgstr "Mode segur és una característica obsoleta de PHP que limita (malament) l\'accés dels scripts PHP a d\'altres recursos. És recomanable deixar-ho desactivat."
+
+msgid "DisplayErrorsInfo"
+msgstr "Mostra els errors a la pantalla. Activar-ho a servidors de desenvolupament i desactivar-ho en servidors de producció."
+
+msgid "MaxInputTimeInfo"
+msgstr "El temps màxim permès per tal que un formulari sigui processat pel servidor. Si se sobrepassa, el procés és abandonat i es retorna una pàgina en blanc."
+
+msgid "DefaultCharsetInfo"
+msgstr "Joc de caràcters predeterminat que serà enviat quan es retornin les pàgines"
+
+msgid "RegisterGlobalsInfo"
+msgstr "Permet seleccionar, o no, l\'ús de variables globals. L\'ús d\'aquesta funcionalitat representa un risc de seguretat."
+
+msgid "ShortOpenTagInfo"
+msgstr "Permet utilitzar etiquetes abreujades o no. Aquesta funcionalitat no hauria d\'utilitzar-se."
+
+msgid "MemoryLimitInfo"
+msgstr "Límit màxim de memòria per a l\'execució d\'un script. Si la memòria necessària és més gran, el procés s\'aturarà per evitar consumir tota la memòria disponible del servidor i, per tant que això no afecti a d\'altres usuaris."
+
+msgid "MagicQuotesGpcInfo"
+msgstr "Permet escapar automàticament valors de GET, POST i GALETES. Una característica similar és prevista per les dades requerides en aquest programari, així que el seu ús provoca una doble barra d\'escapament en els valors."
+
+msgid "VariablesOrderInfo"
+msgstr "L\'ordre de preferència de les variables de l\'Entorn, GET, POST, GALETES i SESSIÓ"
+
+msgid "MaxExecutionTimeInfo"
+msgstr "Temps màxim que un script pot prendre per a la seva execució. Si s\'utilitza més, l\'escript s\'abandonarà per evitar l\'alentiment d\'altres usuaris."
+
+msgid "ExtensionMustBeLoaded"
+msgstr "Aquesta extensió ha de ser carregada."
+
+msgid "MysqlProtoInfo"
+msgstr "Protocol MySQL"
+
+msgid "MysqlHostInfo"
+msgstr "Servidor MySQL"
+
+msgid "MysqlServerInfo"
+msgstr "Informació del servidor MySQL"
+
+msgid "MysqlClientInfo"
+msgstr "Client MySQL"
+
+msgid "ServerProtocolInfo"
+msgstr "Protocol usat per aquest servidor"
+
+msgid "ServerRemoteInfo"
+msgstr "Accés remot (com és rebuda la seva adreça pel servidor)"
+
+msgid "ServerAddessInfo"
+msgstr "Adreça del servidor"
+
+msgid "ServerNameInfo"
+msgstr "Nom del servidor (com s\'utilitza aquesta petició)"
+
+msgid "ServerPortInfo"
+msgstr "Port del servidor"
+
+msgid "ServerUserAgentInfo"
+msgstr "El seu agent d\'usuari com és rebut pel servidor"
+
+msgid "ServerSoftwareInfo"
+msgstr "Programari executant-se com un servidor web"
+
+msgid "UnameInfo"
+msgstr "Informació del sistema sobre el que està funcionant el servidor"
+
+msgid "AssignSessionsToX"
+msgstr "Assigna sessions a %s"
+
+msgid "AssignCoursesToSessionsAdministrator"
+msgstr "Assigna cursos al\'administrador de sessions"
+
+msgid "AssignCoursesToPlatformAdministrator"
+msgstr "Assigna cursos a l\'administrador de la plataforma"
+
+msgid "AssignedCoursesListToPlatformAdministrator"
+msgstr "Llista de cursos assignats a l\'administrador de la plataforma"
+
+msgid "AssignedCoursesListToSessionsAdministrator"
+msgstr "Llista de cursos assignats a l\'administrador de sessions"
+
+msgid "AssignSessionsToPlatformAdministrator"
+msgstr "Assigna sessions a l\'administrador de la plataforma"
+
+msgid "AssignSessionsToSessionsAdministrator"
+msgstr "Assigna sessions a l\'administrador de sessions"
+
+msgid "AssignedSessionsListToPlatformAdministrator"
+msgstr "Llista de sessions assignades a l\'administrador de la plataforma"
+
+msgid "AssignedSessionsListToSessionsAdministrator"
+msgstr "Llista de sessions assignades a l\'administrador de sessions"
+
+msgid "EvaluationsGraph"
+msgstr "Gràfics de les avaluacions"
+
+msgid "Action"
+msgstr "Acció"
+
+msgid "ISOCode"
+msgstr "Codi ISO"
+
+msgid "TheSubLanguageForThisLanguageHasBeenAdded"
+msgstr "El sub-llenguatge d\'aquest idioma ha estat afegit"
+
+msgid "ReturnToLanguagesList"
+msgstr "Torna a la llista d\'idiomes"
+
+msgid "ActivityCoach"
+msgstr "El tutor de la sessió tindrà tots els drets i permisos en tots els cursos que pertanyin a la sessió."
+
+msgid "CategoriesNumber"
+msgstr "Categories"
+
+msgid "CourseProgress"
+msgstr "Avançament temàtic"
+
+msgid "ExportAllCoursesList"
+msgstr "Exporta tota la llista de cursos"
+
+msgid "ExportSelectedCoursesFromCoursesList"
+msgstr "Exporta només cursos de la llista"
+
+msgid "CoursesListHasBeenExported"
+msgstr "La llista de cursos ha estat exportada"
+
+msgid "WhichCoursesToExport"
+msgstr "Seleccioneu els cursos que desitja exportar"
+
+msgid "AssignUsersToPlatformAdministrator"
+msgstr "Assigna usuaris a l\'administrador de la plataforma"
+
+msgid "AssignedUsersListToPlatformAdministrator"
+msgstr "Llista d\'usuaris assignats a l\'administrador de la plataforma"
+
+msgid "AssignedCoursesListToHumanResourcesManager"
+msgstr "Llista d\'usuaris assignats a l\'administrador de recursos humans"
+
+msgid "ThereAreNotCreatedCourses"
+msgstr "No hi ha cursos creats"
+
+msgid "HomepageViewVerticalActivity"
+msgstr "Veure l\'activitat de forma vertical"
+
+msgid "CoursesInformation"
+msgstr "Informació de cursos"
+
+msgid "SpecialExportsIntroduction"
+msgstr "La funcionalitat d\'exportacions especials existeix per ajudar al revisor instruccional/acadèmic en exportar els documents de tots els cursos amb una sola passa. Una altra opció li permet escollir els cursos que desitja exportar, i també exportarà els documents presents a les sessions d\'aquests cursos. Aquesta és una operació molt pesada. Per tant, li recomanem no iniciar-la durant les hores d\'ús normal del seu portal. Faci-ho en un període més tranquil. Si no necessita tots els continguts d\'un sol cop, provi exportar documents de cursos directament des de l\'eina de manteniment del curs, dins del mateix curs."
+
+msgid "AllowUserCourseSubscriptionByCourseAdminTitle"
+msgstr "Permet als professors registrar usuaris a un curs"
+
+msgid "AllowUserCourseSubscriptionByCourseAdminComment"
+msgstr "A l\'activar aquesta opció permetrà que els professors puguin inscriure usuaris al seu curs"
+
+msgid "ConfigureDashboardPlugin"
+msgstr "Configura el connector del Tauler de control"
+
+msgid "EditBlocks"
+msgstr "Edita blocs"
+
+msgid "TheXMLImportLetYouAddMoreInfoAndCreateResources"
+msgstr "La importació XML le permetrà afegir més informació i crear recursos (cursos, usuaris), durant la importació CSV només crearà sessions i utilitzarà recursos ja existents."
+
+msgid "ShowLinkBugNotificationTitle"
+msgstr "Mostra l\'enllaç per informar d\'errors"
+
+msgid "ShowLinkBugNotificationComment"
+msgstr "Mostra un enllaç a la capçalera per informar d\'un error a la plataforma de suport (http://support.chamilo.org). Al fer clic a l\'enllaç l\'usuari serà dirigit al sistema de suport de Chamilo, en el que una pàgina wiki descriu el procediment per informar d\'errors."
+
+msgid "DataFiller"
+msgstr "Emplena dades"
+
+msgid "GradebookActivateScoreDisplayCustom"
+msgstr "Habilita l\'etiquetatge de nivell de competència amb la finalitat d\'establir la informació de resultats personalitzats."
+
+msgid "GradebookScoreDisplayCustomValues"
+msgstr "Nivells de competència dels valors personalitzats"
+
+msgid "GradebookNumberDecimals"
+msgstr "Nombre de decimals"
+
+msgid "GradebookNumberDecimalsComment"
+msgstr "Estableix el nombre de decimals permesos en una puntuació"
+
+msgid "EditSessionsToURL"
+msgstr "Edita sessions d\'una URL"
+
+msgid "AddSessionsToURL"
+msgstr "Afegeix sessions a una URL"
+
+msgid "SessionListIn"
+msgstr "Llista de sessions a"
+
+msgid "FillUsers"
+msgstr "Genera usuaris"
+
+msgid "ThisSectionIsOnlyVisibleOnSourceInstalls"
+msgstr "Aquesta secció només és visible en instal·lacions des del codi font, no en versions estables de la plataforma. Li permetrà inserir a la seva plataforma dades de prova. Utilitzi-la amb cura (les dades s\'insereixen realment) i només en instal·lacions de desenvolupament o de prova."
+
+msgid "UsersFillingReport"
+msgstr "Emplena l\'informe d\'usuaris"
+
+msgid "AllUsersAreAutomaticallyRegistered"
+msgstr "Tots els usuaris seran afegits automàticament"
+
+msgid "AssignCoach"
+msgstr "Assigna tutor"
+
+msgid "chamilo"
+msgstr "Chamilo"
+
+msgid "php"
+msgstr "PHP"
+
+msgid "Off"
+msgstr "Desactivat"
+
+msgid "minimum"
+msgstr "mínim"
+
+msgid "webserver"
+msgstr "Servidor web"
+
+msgid "mysql"
+msgstr "MySQL"
+
+msgid "Social"
+msgstr "Social"
+
+msgid "BackupCreated"
+msgstr "Còpia de seguretat generada"
+
+msgid "NotInserted"
+msgstr "No inserit"
+
+msgid "phone"
+msgstr "Telèfon"
+
+msgid "ResetLP"
+msgstr "Torna a establir la seqüència d\'aprenentatge"
+
+msgid "LPWasReset"
+msgstr "La seqüència d\'aprenentatge ha estat restablerta per a l\'estudiant"
+
+msgid "AnnouncementVisible"
+msgstr "Anunci visible"
+
+msgid "AnnouncementInvisible"
+msgstr "Anunci invisible"
+
+msgid "GlossaryDeleted"
+msgstr "Glossari esborrat"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Descripció de curs actualitzada"
+
+msgid "SessionReadOnly"
+msgstr "Només lectura"
+
+msgid "SessionAccessible"
+msgstr "Accessible"
+
+msgid "SessionNotAccessible"
+msgstr "No accessible"
+
+msgid "GroupAdded"
+msgstr "Grup afegit"
+
+msgid "AddUsersToGroup"
+msgstr "Afegeix usuaris al grup"
+
+msgid "ErrorReadingZip"
+msgstr "Error llegint l\'arxiu ZIP"
+
+msgid "ErrorStylesheetFilesExtensionsInsideZip"
+msgstr "Les úniques extensions acceptades a l\'arxiu ZIP són jpg, jpeg, png, gif i css."
+
+msgid "MyTextHere"
+msgstr "Introduïu el seu text aquí..."
+
+msgid "FieldTypeSocialProfile"
+msgstr "Vincle xarxa social"
+
+msgid "AllowUsersCopyFilesTitle"
+msgstr "Permet als usuaris copiar arxius d\'un curs a la seva àrea d\'arxius personals"
+
+msgid "AllowUsersCopyFilesComment"
+msgstr "Permet als usuaris copiar arxius d\'un curs a la seva àrea personal, visible a través de l\'eina Xarxa Social o mitjançant l\'editor HTML quan es troben fora d\'un curs"
+
+msgid "ReviewCourseRequests"
+msgstr "Valida Cursos"
+
+msgid "AcceptedCourseRequests"
+msgstr "Cursos Validats"
+
+msgid "RejectedCourseRequests"
+msgstr "Cursos Refusats"
+
+msgid "BrowscapInfo"
+msgstr "Browscap carrega l\'arxiu browscap.ini el qual conté una gran quantitat de dades sobre els navegadors i les seves capacitats, per tal que pugui ser utilitzada per la funció get_browser() de PHP"
+
+msgid "EnableCourseValidation"
+msgstr "Sol·licitud de cursos"
+
+msgid "EnableCourseValidationComment"
+msgstr "Quan la sol·licitud de cursos està activada, un professor no podrà crear un curs per si mateix sinó que haurà d\'emplenar una sol·licitud. L\'administrador de la plataforma revisarà la sol·licitud i l\'aprovarà o refusarà. Aquesta funcionalitat es basa en missatges de correu electrònic automàtics pel que s\'ha d\'assegurar que la seva instal·lació de Chamilo utilitza un servidor de correu i una adreça de correu electrònic dedicada a aquest fet."
+
+msgid "CourseValidationTermsAndConditionsLink"
+msgstr "Sol·licitud de cursos - enllaç a termes i condicions"
+
+msgid "CourseValidationTermsAndConditionsLinkComment"
+msgstr "La URL que enllaça el document \"Termes i Condicions\" que regeix la sol·licitud d\'un curs. Si aquesta adreça està configurada, l\'usuari haurà de llegir i acceptar els termes i condicions abans d\'enviar una sol·licitud de curs. Si activa el mòdul \"Termes i condicions\" de Chamilo i vol utilitzar aquest enlloc de termes i condicions propis, deixi aquest camp buit."
+
+msgid "EnableSSOTitle"
+msgstr "Single Sign On (registre únic)"
+
+msgid "EnableSSOComment"
+msgstr "L\'activació de Single Sign On li permet connectar aquesta plataforma com a client d\'un servidor d\'autenticació, per exemple un lloc web de Drupal que tingui el mòdul Drupal-Chamilo o qualsevol altre servidor amb una configuració similar."
+
+msgid "SSOServerDomainTitle"
+msgstr "Domini del servidor de Single Sign On"
+
+msgid "SSOServerDomainComment"
+msgstr "Domini del servidor de Single Sign On (adreça web del servidor que permetrà el registre automàtic dins de Chamilo). L\'adreça del servidor ha d\'escriure\'s sense el protocol al començament i sense la barra al final, per exemple www.exemple.cat"
+
+msgid "SSOServerAuthURITitle"
+msgstr "URL del servidor de Single Sign On"
+
+msgid "SSOServerAuthURIComment"
+msgstr "Adreça de la pàgina encarregada de verificar l\'autenticació. Per exemple, en el cas de Drupal /?q=user"
+
+msgid "SSOServerUnAuthURITitle"
+msgstr "URL de Sortida del servidor de Single Sign Out"
+
+msgid "SSOServerUnAuthURIComment"
+msgstr "Adreça de la pàgina del servidor que desconnecta a un usuari. Aquesta opció és útil únicament si desitja que els usuaris que es desconnectin de Chamilo també es desconnectin del servidor d\'autenticació."
+
+msgid "SSOServerProtocolTitle"
+msgstr "Protocol del servidor Single Sign On"
+
+msgid "SSOServerProtocolComment"
+msgstr "Prefix que indica el protocol del domini del servidor de Single Sign On (si el seu servidor ho permet, recomanem https:// doncs protocols no segurs són un perill per a un sistema d\'autenticació)."
+
+msgid "EnabledWirisTitle"
+msgstr "Editor matemàtic WIRIS"
+
+msgid "EnabledWirisComment"
+msgstr "Activa l\'editor matemàtic WIRIS. Instal·lant aquest connector obtindrà WIRIS editor i WIRIS CAS.
+L\'activació no es realitza completament si prèviament no s\'ha descarregat el <a href=\"http://www.wiris.com/plugins/editors/download?filter=fckeditor\" target=\"_blank\">PHP plugin for FCKeditor WIRIS</a> i descomprimit el seu contingut al directori de Chamilo main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/ 
+Això és necessari degut a que WIRIS és un programari propietari i els serveis de WIRIS són <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\"> comercials </a>. Per realitzar ajustaments en el connector editi l\'arxiu configuration.ini o substitueixi el seu contingut pel de configuration.ini.default que acompanya a Chamilo."
+
+msgid "\'activació no es realitza completament si prèviament no s\'ha descarregat el <a href"
+msgstr ""
+
+msgid "ixò és necessari degut a que WIRIS és un programari propietari i els serveis de WIRIS són <a href"
+msgstr ""
+
+msgid "AllowSpellCheckTitle"
+msgstr "Corrector ortogràfic"
+
+msgid "AllowSpellCheckComment"
+msgstr "Activa el corrector ortogràfic"
+
+msgid "EnabledSVGTitle"
+msgstr "Creació i edició d\'arxius SVG"
+
+msgid "EnabledSVGComment"
+msgstr "Aquesta opció li permetrà crear i editar arxius SVG (Gràfics vectorials escalables) multicapa en línia, així com exportar-los a imatges en format PNG."
+
+msgid "ForceWikiPasteAsPlainTextTitle"
+msgstr "Obliga a enganxar com a text pla al Wiki"
+
+msgid "ForceWikiPasteAsPlainTextComment"
+msgstr "Això impedirà que moltes etiquetes ocultes, incorrectes o no estàndard, copiades d\'altres texts acabin corrompent el text del Wiki després de moltes edicions; però perdrà algunes possibilitats durant l\'edició."
+
+msgid "EnabledGooglemapsTitle"
+msgstr "Activa Google Maps"
+
+msgid "EnabledGooglemapsComment"
+msgstr "Activa el botó per inserir mapes de Google. L\'activació no es realitzarà completament si prèviament no heu editat l\'arxiu main/inc/lib/fckeditor/myconfig.php i afegit una clau API de Google maps."
+
+msgid "EnabledImageMapsTitle"
+msgstr "Activa Mapes d\'imatge"
+
+msgid "EnabledImageMapsComment"
+msgstr "Activa el botó per inserir Mapes d\'imatge. Això li permetrà associar adreces URL a zones d\'una imatge, generant zones interactives."
+
+msgid "CourseTool"
+msgstr "Eina del curs"
+
+msgid "BigBlueButtonEnableTitle"
+msgstr "Eina de videoconferència BigBlueButton"
+
+msgid "BigBlueButtonEnableComment"
+msgstr "Seleccioneu si desitgeu habilitar l\'eina de videoconferència BigBlueButton. Un cop activada, es mostrarà com una eina a la pàgina principal de tots els cursos. Els professors podran llançar una videoconferència en qualsevol moment, però els estudiants només podran unir-se a una ja llançada. Si no disposeu d\'un servidor BigBlueButton, proveu a <a href=\"http://bigbluebutton.org/\" target=\"_blank\">configurar-ne un</a> o demaneu ajut als <a href=\"http://bigbluebutton.org/\" target=\"_blank\">proveïdors oficials de Chamilo</a>. BigBlueButton és lliure, però la seva instal·lació requereix a certes habilitats tècniques que no tot el món posseeix. Pot instal·lar-ho pel seu compte o buscar ajut professional amb el conseqüent cost. En la lògica del programari lliure, nosaltres li oferim les eines per fer més fàcil la seva feina i li recomanem professionals (els proveïdors oficials de Chamilo) que seran capaços d\'ajudar-lo."
+
+msgid "BigBlueButtonHostTitle"
+msgstr "Servidor BigBlueButton"
+
+msgid "BigBlueButtonHostComment"
+msgstr "Aquest és el nom del servidor on el seu servidor BigBlueButton està executant-se. Pot ser localhost, una adreça IP (ex.: 192.168.14.54) o un nom de domini (per ex.: my.video.com)."
+
+msgid "BigBlueButtonSecuritySaltTitle"
+msgstr "Clau de seguretat del servidor BigBlueButton"
+
+msgid "BigBlueButtonSecuritySaltComment"
+msgstr "Aquesta és la clau de seguretat del seu servidor BigBlueButton, que permetrà al seu servidor autenticar la instal·lació a Chamilo. Consulteu la documentació de BigBlueButton per localitzar-la."
+
+msgid "AsciiSvgTitle"
+msgstr "Editor de gràfics matemàtics ASCIIsvg"
+
+msgid "AsciiSvgComment"
+msgstr "Activació de l\'editor de gràfics matemàtics (ASCIIsvg)."
+
+msgid "Text2AudioTitle"
+msgstr "Activa els serveis de conversió de text a àudio"
+
+msgid "Text2AudioComment"
+msgstr "Eina en línia per convertir text a àudio. Utilitza la tecnologia i sistemes de síntesi de la parla per oferir recursos de veu."
+
+msgid "ShowUsersFoldersTitle"
+msgstr "Mostra les carpetes dels usuaris a l\'eina documents"
+
+msgid "ShowUsersFoldersComment"
+msgstr "Aquesta opció li permetrà mostrar o ocultar als professors les carpetes que el sistema genera per a cada usuari que visita l\'eina documents o envia un arxiu a través de l\'editor web. Si mostra aquestes carpetes als professors, aquests podran fer-les visibles o no als estudiants i permetran a cada estudiant disposar d\'un lloc específic en el curs on, no només emmagatzemar documents, sinó on també podran crear i modificar pàgines web i poder exportar-les a PDF, crear dibuixos, crear plantilles web personals, enviar arxius, així com crear, moure i eliminar subdirectoris i arxius, i treure còpies de seguretat de les seves carpetes. Cada usuari disposarà d\'un complet gestor de documents. A més, recordeu que qualsevol usuari podrà copiar un arxiu, que sigui visible, des de qualsevol carpeta de l\'eina documents (sigui o no la seva) al seu portafoli o àrea personal de documents de la xarxa social, on estarà disponible per tal que ho pugui utilitzar en d\'altres cursos."
+
+msgid "ShowDefaultFoldersTitle"
+msgstr "Mostra a l\'eina documents les carpetes que contenen els recursos multimèdia subministrats per defecte."
+
+msgid "ShowDefaultFoldersComment"
+msgstr "Les carpetes d\'arxius multimèdia subministrades per defecte contenen arxius de distribució lliure organitzats per categories de vídeo, imatge i animacions flash per tal de ser utilitzades en els seus cursos. Encara que les oculti en l\'eina documents, podrà seguir utilitzant-les a l\'editor web de la plataforma."
+
+msgid "ShowChatFolderTitle"
+msgstr "Mostra la carpeta de l\'historial de les converses del xat"
+
+msgid "ShowChatFolderComment"
+msgstr "Això mostrarà al professorat la carpeta que conté totes les sessions que s\'han realitzat en el xat, podent aquest fer-les visibles o no als estudiants i utilitzar-les com un recurs més."
+
+msgid "EnabledStudentExport2PDFTitle"
+msgstr "Permet als estudiants exportar documents web al format PDF a les eines documents i wiki"
+
+msgid "EnabledStudentExport2PDFComment"
+msgstr "Aquesta prestació està habilitada per defecte, però en cas de sobrecàrrega del servidor per abús d\'ella, o en entorns de formació específics, pot que desitgi desactivar-la en tots els cursos."
+
+msgid "EnabledInsertHtmlTitle"
+msgstr "Permet la inserció de Ginys"
+
+msgid "EnabledInsertHtmlComment"
+msgstr "Això li permetrà incrustar a les seves pàgines web els seus vídeos i aplicacions favorites com Vimeo o Slideshare i tot tipus de ginys"
+
+msgid "IncludeAsciiMathMlTitle"
+msgstr "Carrega el fitxer ASCIIMathML.js per a totes les pàgines de la plataforma"
+
+msgid "IncludeAsciiMathMlComment"
+msgstr "Activeu aquest paràmetre si desitja mostrar fórmules matemàtiques basades en ASCIIMathML i gràfics matemàtics basats en ASCIIsvg, no tan sols a l\'eina \"Documents\", però també en d\'altres eines de la plataforma."
+
+msgid "CourseHideToolsTitle"
+msgstr "Oculta les eines als docents"
+
+msgid "CourseHideToolsComment"
+msgstr "Seleccioneu les eines que desitja ocultar al docent. Això prohibirà l\'accés a l\'eina."
+
+msgid "MoveUserStats"
+msgstr "Mou els resultats dels usuaris des de / fins a una sessió de formació"
+
+msgid "CompareUserResultsBetweenCoursesAndCoursesInASession"
+msgstr "Aquesta eina avançada li permet millorar manualment el seguiment dels resultats dels usuaris quan canvia d\'un model de cursos a un model de sessions de formació. En una majoria de casos, no necessitarà usar-la.
+En aquesta pantalla, pot comparar els resultats que els usuaris tenen en el context d\'un curs i en el context del mateix curs d\'una sessió de formació.
+Quan decideixi quin és el millor context per al seguiment (resultats d\'exercicis i seguiment de lliçons), podrà moure\'l d\'un curs a una sessió."
+
+msgid "PDFExportWatermarkEnableTitle"
+msgstr "Marques d\'aigua en les exportacions a PDF"
+
+msgid "PDFExportWatermarkEnableComment"
+msgstr "Si activeu aquesta opció podrà carregar una imatge o un text que seran automàticament afegits com a marca d\'aigua en els documents resultants de totes les exportacions a PDF que realitzi el sistema."
+
+msgid "AddWaterMark"
+msgstr "Carrega una imatge per a marca d\'aigua"
+
+msgid "PDFExportWatermarkByCourseTitle"
+msgstr "Activa la definició de marques d\'aigua per curs"
+
+msgid "PDFExportWatermarkByCourseComment"
+msgstr "Quan aquesta opció està activada, els professors podran definir les seves pròpies marques d\'aigua en els documents dels seus cursos."
+
+msgid "PDFExportWatermarkTextTitle"
+msgstr "Text de marca d\'aigua per a PDF"
+
+msgid "PDFExportWatermarkTextComment"
+msgstr "Aquest text s\'afegirà com a marca d\'aigua en els documents resultants de les exportacions al format PDF."
+
+msgid "ExerciseMinScoreTitle"
+msgstr "Puntuació mínima dels exercicis"
+
+msgid "ExerciseMinScoreComment"
+msgstr "Estableixi una puntuació mínima (generalment 0) per a tots els exercicis de la plataforma. Això definirà com els resultats finals es mostraran als estudiants i als professors."
+
+msgid "ExerciseMaxScoreTitle"
+msgstr "Puntuació màxima dels exercicis"
+
+msgid "ExerciseMaxScoreComment"
+msgstr "Estableixi una puntuació màxima (generalment 10, 20 o 100) per a tots els exercicis de la plataforma. Això definirà la manera com els resultats finals es mostraran als professors i als estudiants."
+
+msgid "CareersAndPromotions"
+msgstr "Carreres i promocions"
+
+msgid "Careers"
+msgstr "Carreres"
+
+msgid "Promotions"
+msgstr "Promocions"
+
+msgid "Updated"
+msgstr "Actualització correcta"
+
+msgid "Career"
+msgstr "Carrera"
+
+msgid "SubscribeSessionsToPromotions"
+msgstr "Inscriure\'s a les sessions de la promoció"
+
+msgid "SessionsInPlatform"
+msgstr "Sessions no associades"
+
+msgid "FirstLetterSessions"
+msgstr "Primera lletra del nom de la sessió"
+
+msgid "SessionsInPromotion"
+msgstr "Sessions en aquesta promoció"
+
+msgid "SubscribeSessionsToPromotion"
+msgstr "Subscriure\'s a sessions de la promoció"
+
+msgid "NoEndTime"
+msgstr "Sense data final"
+
+msgid "SubscribeUsersToClass"
+msgstr "Inscriure usuaris a l\'aula"
+
+msgid "SubscribeClassToCourses"
+msgstr "Associar un crus a l\'aula"
+
+msgid "SubscribeClassToSessions"
+msgstr "Associar sessions a l\'aula"
+
+msgid "SessionsInGroup"
+msgstr "Sessions de l\'aula"
+
+msgid "CoursesInGroup"
+msgstr "Cursos del grup"
+
+msgid "UsersInGroup"
+msgstr "Usuaris del grup"
+
+msgid "UsersInPlatform"
+msgstr "Usuaris de la plataforma"
+
+msgid "YouNeedToCreateACareerFirst"
+msgstr "Es requereix que existeixi una carrera abans de poder afegir promocions (promocions són sub-elements d\'una carrera)."
+
+msgid "OutputBufferingInfo"
+msgstr "L\'output buffering (o memòria cau de sortida) està a \"On\" quan activat i a \"Off\" quan desactivat. Aquest paràmetre també pot ser activat a través d\'un valor sencer (4096, per exemple) que sol ser la mida de la memòria cau de sortida."
+
+msgid "LoadedExtension"
+msgstr "Extensió carregada"
+
+msgid "SubscribeGroupToSessions"
+msgstr "Associa l\'aula a vàries sessions"
+
+msgid "SubscribeGroupToCourses"
+msgstr "Inscriu grup en cursos"
+
+msgid "CompareStats"
+msgstr "Compara estadístiques"
+
+msgid "EnabledPixlrTitle"
+msgstr "Activa els serveis externs de Pixlr"
+
+msgid "EnabledPixlrComment"
+msgstr "Pixlr li permetrà editar, ajustar i filtrar les seves fotografies amb prestacions similars a les de Photoshop. És el complement ideal per tractar imatges basades en mapes de bits"
+
+msgid "PromotionXArchived"
+msgstr "La promoció %s ha estat arxivada. Aquesta acció té com a conseqüència fer invisibles totes les sessions registrades a aquesta promoció. Podeu desfer aquest canvi des-arxivant la promoció."
+
+msgid "PromotionXUnarchived"
+msgstr "La promoció %s s\'ha des-arxivat. Aquesta acció té com a conseqüència fer visibles totes les sessions registrades a aquesta promoció. Podeu desfer aquest canvi arxivant la promoció."
+
+msgid "CareerXArchived"
+msgstr "La carrera %s ha estat arxivada. Això té com a conseqüència el fer invisible la carrera, les seves promocions així com les sessions registrades en aquestes promocions. Pot desfer aquesta acció des-arxivant a la carrera."
+
+msgid "CareerXUnarchived"
+msgstr "La carrera %s s\'ha des-arxivat. En aquest cas és el fer visible la carrera, les seves promocions així com les sessions registrades en aquestes promocions. Podeu desfer aquesta acció arxivant a la carrera."
+
+msgid "RegistrationByUsersGroups"
+msgstr "Inscripció per aules"
+
+msgid "FillCourses"
+msgstr "Genera cursos"
+
+msgid "FillSessions"
+msgstr "Genera sessions"
+
+msgid "Archived"
+msgstr "Arxivada"
+
+msgid "Unarchived"
+msgstr "Sense arxivar"
+
+msgid "StatsUsersDidNotLoginInLastPeriods"
+msgstr "No connectats per un temps"
+
+msgid "LastXMonths"
+msgstr "Últims %i mesos"
+
+msgid "NeverConnected"
+msgstr "Mai connectats"
+
+msgid "EnableAccessibilityFontResizeTitle"
+msgstr "Funcionalitat de redimensionament de fonts"
+
+msgid "EnableAccessibilityFontResizeComment"
+msgstr "Activar aquesta opció mostrarà una sèrie d\'opcions de redimensionament de fonts a la part superior dreta del seu campus. Això permetrà a les persones amb dificultats visuals llegir més fàcilment els continguts dels seus cursos."
+
+msgid "GlobalEvent"
+msgstr "Esdeveniment de la plataforma"
+
+msgid "SearchEnabledTitle"
+msgstr "Cerca a text complet"
+
+msgid "SearchEnabledComment"
+msgstr "Aquesta funcionalitat permet la indexació de la majoria dels documents pujats al seu portal, de manera que permet la recerca per als usuaris.
+Aquesta funcionalitat no indexa els documents que ja van ser enviats, pel que és important (si es vol) activar al començament de la seva implementació.
+Un cop activada, una caixa de cerca apareixerà a la llista de cursos de cada usuari. Cercar un terme específic subministra una llista de documents, exercicis o temes de fòrum corresponents, filtrats depenent de la seva disponibilitat per a l\'usuari."
+
+msgid "SpecificSearchFieldsAvailable"
+msgstr "Camps de cerca personalitzats disponibles"
+
+msgid "XapianModuleInstalled"
+msgstr "Mòdul Xapian instal·lat"
+
+msgid "ProgramsNeededToConvertFiles"
+msgstr "Programes necessaris per indexar arxius de formats aliens"
+
+msgid "YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool"
+msgstr "Està utilitzant Chamilo en una plataforma Windows. Malauradament, no pot convertir els documents per indexar-ho amb aquesta eina."
+
+msgid "HideCoursesInSessionsTitle"
+msgstr "Oculta cursos a la llista de sessions"
+
+msgid "HideCoursesInSessionsComment"
+msgstr "Quan es mostren els blocs de sessions a la pàgina de cursos, oculta la llista de cursos dins de la sessió (només mostra\'ls a la pàgina específica de la sessió)."
+
+msgid "ShowGroupsToUsersTitle"
+msgstr "Mostra les aules als usuaris"
+
+msgid "ShowGroupsToUsersComment"
+msgstr "Mostra les aules als usuaris. Les aules són una funcionalitat que permet subscriure / donar de baixa grups d\'usuaris dins d\'una sessió o d\'un curs directament, reduint el treball administratiu. Quan s\'activa aquesta opció, els estudiants poden veure de quina aula formen part, a través de la seva interfície de xarxa social."
+
+msgid "HomepageViewActivityBig"
+msgstr "Gran vista d\'activitat (estil iPad)"
+
+msgid "EnableQuizScenarioTitle"
+msgstr "Escenarització d\'exercicis"
+
+msgid "EnableQuizScenarioComment"
+msgstr "A l\'activar aquesta funcionalitat, farà disponible els exercicis de tipus escenari, que proposen noves preguntes a l\'estudiant en funció de les seves respostes. El docent dissenyarà l\'escenari complet de la prova, amb totes les seves possibilitats, a través d\'una interfície senzilla però estesa."
+
+msgid "EnableNanogongTitle"
+msgstr "Activa el gravador - reproductor de veu Nanogong"
+
+msgid "EnableNanogongComment"
+msgstr "Nanogong és un gravador - reproductor de veu que li permet gravar la seva veu i enviar-la a la plataforma o descarregar-la al seu disc dur. També permet reproduir la gravació. Els estudiants només necessiten un micròfon i uns altaveus, i acceptar la càrrega de la miniaplicació quan es carregui per primera vegada. És molt útil perquè els estudiants d\'idiomes puguin sentir la seva veu després de sentir la correcta pronunciació proposada pel professor en un altre arxiu wav o mp3."
+
+msgid "ExerciseAndLPsAreInvisibleInTheNewCourse"
+msgstr "Els exercicis i les lliçons han estat configurats com ocults en els cursos nous que es creïn. El docent haurà d\'aprovar la publicació primer."
+
+msgid "YouMustChooseARelationType"
+msgstr "Heu de seleccionar un tipus de relació"
+
+msgid "SelectARelationType"
+msgstr "Selecció del tipus de relació"
+
+msgid "AddUserToURL"
+msgstr "Afegeix l\'usuari a la URL"
+
+msgid "CourseBelongURL"
+msgstr "Curs registrat a la URL"
+
+msgid "AtLeastOneSessionAndOneURL"
+msgstr "Heu de seleccionar com a mínim una sessió i una URL"
+
+msgid "SelectURL"
+msgstr "Selecciona una URL"
+
+msgid "SessionsWereEdited"
+msgstr "Les sessions han estat actualitzades"
+
+msgid "URLDeleted"
+msgstr "URL eliminada"
+
+msgid "CannotDeleteURL"
+msgstr "No és possible eliminar la URL"
+
+msgid "CoursesInPlatform"
+msgstr "Cursos a la plataforma."
+
+msgid "UsersEdited"
+msgstr "Usuaris actualitzats."
+
+msgid "CourseHome"
+msgstr "Pàgina principal del curs"
+
+msgid "ComingSoon"
+msgstr "Properament ..."
+
+msgid "DummyCourseOnlyOnTestServer"
+msgstr "Contingut del curs de proves - només disponible en les plataformes de proves."
+
+msgid "ThereAreNotSelectedCoursesOrCoursesListIsEmpty"
+msgstr "No existeixen cursos seleccionats o la llista de cursos és buida."
+
+msgid "CodeTwiceInFile"
+msgstr "El codi ha estat utilitzat dues vegades en l\'arxiu. Els codis de cursos han de ser únics."
+
+msgid "CodeExists"
+msgstr "El codi ja existeix"
+
+msgid "UnkownCategoryCourseCode"
+msgstr "No s\'ha trobat la categoria"
+
+msgid "LinkedCourseTitle"
+msgstr "Títol del curs relacionat"
+
+msgid "LinkedCourseCode"
+msgstr "Codi del curs relacionat"
+
+msgid "AssignUsersToSessionsAdministrator"
+msgstr "Assigna un usuari a l\'administrador de sessions"
+
+msgid "AssignedUsersListToSessionsAdministrator"
+msgstr "Assigna una llista d\'usuaris a l\'administrador de sessions"
+
+msgid "GroupDeleted"
+msgstr "Aula eliminada."
+
+msgid "CannotDeleteGroup"
+msgstr "Aquesta aula no ha pogut ser eliminada."
+
+msgid "SomeGroupsNotDeleted"
+msgstr "Algunes aules no han pogut ser eliminades."
+
+msgid "DontUnchek"
+msgstr "No desactivis"
+
+msgid "Modified"
+msgstr "Actualitzat"
+
+msgid "SessionsList"
+msgstr "Llista de sessions"
+
+msgid "Promotion"
+msgstr "Promoció"
+
+msgid "UpdateSession"
+msgstr "Actualitza la sessió"
+
+msgid "Path"
+msgstr "Ruta"
+
+msgid "SelectOptionExport"
+msgstr "Seleccioneu una opció d\'exportació"
+
+msgid "FieldEdited"
+msgstr "Camp afegit."
+
+msgid "LanguageParentNotExist"
+msgstr "L\'idioma pare no existeix."
+
+msgid "TheSubLanguageHasNotBeenRemoved"
+msgstr "El sub-idioma no ha estat eliminat."
+
+msgid "ShowOrHide"
+msgstr "Mostra/Oculta"
+
+msgid "StatusCanNotBeChangedToHumanResourcesManager"
+msgstr "L\'estat d\'aquest usuari no pot ser canviat per l\'Administrador de Recursos Humans."
+
+msgid "FieldTaken"
+msgstr "Camp emprat"
+
+msgid "UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses"
+msgstr "Usuaris registrats en diversos cursos a través d\'un curs virtual."
+
+msgid "NoUrlForThisUser"
+msgstr "Aquest usuari no té una URL relacionada."
+
+msgid "ExtraData"
+msgstr "Informació addicional"
+
+msgid "ExercisesInLp"
+msgstr "Exercicis en lliçons"
+
+msgid "Id"
+msgstr "Id"
+
+msgid "ThereWasAnError"
+msgstr "Hi ha hagut un error."
+
+msgid "CantMoveToTheSameSession"
+msgstr "No és possible moure a la mateixa sessió."
+
+msgid "StatsMoved"
+msgstr "Estadístiques traslladades"
+
+msgid "UserInformationOfThisCourse"
+msgstr "Informació de l\'usuari en aquest curs"
+
+msgid "OriginCourse"
+msgstr "Curs d\'origen"
+
+msgid "OriginSession"
+msgstr "Sessió d\'origen"
+
+msgid "DestinyCourse"
+msgstr "Curs de destinació"
+
+msgid "DestinySession"
+msgstr "Sessió de destinació"
+
+msgid "CourseDoesNotExistInThisSession"
+msgstr "El curs no existeix en aquesta sessió. La còpia només funcionarà des d\'un curs en una sessió fins el mateix curs en una altra sessió."
+
+msgid "UserNotRegistered"
+msgstr "Usuari no registrat."
+
+msgid "ViewStats"
+msgstr "Mostra estadístiques"
+
+msgid "YouNeedToAddASessionCategoryFirst"
+msgstr "Necessiteu afegir una categoria de sessió"
+
+msgid "InstallationGuide"
+msgstr "Guia d\'instal·lació"
+
+msgid "ChangesInLastVersion"
+msgstr "Canvis en l\'última versió"
+
+msgid "ContributorsList"
+msgstr "Llista de distribuïdors"
+
+msgid "SecurityGuide"
+msgstr "Guia de seguretat"
+
+msgid "OptimizationGuide"
+msgstr "Guia d\'optimització"
+
+msgid "FreeBusyCalendar"
+msgstr "Calendari lliure/ocupat"
+
+msgid "ExtensionCouldBeLoaded"
+msgstr "L\'extensió està disponible"
+
+msgid "ArchiveDirCleanup"
+msgstr "Neteja del directori archive"
+
+msgid "ArchiveDirCleanupDescr"
+msgstr "Chamilo guarda una còpia dels arxius temporals que genera (per les còpies de seguretat, les exportacions, les còpies, etc) dins del directori archive/. Passat un temps, tot això pot arribar a ocupar força espai al disc dur. Si fa clic al següent botó executarà una neteja manual d\'aquest directori. Aquesta operació hauria de ser realitzada regularment mitjançant la utilitat cron de Linux, però si això no és possible en el seu entorn pot utilitzar aquesta pàgina per eliminar tots els arxius temporals de tant en tant."
+
+msgid "ArchiveDirCleanupProceedButton"
+msgstr "Executa la neteja"
+
+msgid "ArchiveDirCleanupSucceeded"
+msgstr "El contingut del directori archive/ ha estat eliminat."
+
+msgid "ArchiveDirCleanupFailed"
+msgstr "Per alguna raó (potser per falta de permisos), no s\'ha pogut netejar la carpeta archive/. Pot netejar manualment connectant-se al servidor i eliminant tot el contingut de la carpeta chamilo/archive/, excepte el fitxer .htaccess."
+
+msgid "LocalTimeUsingPortalTimezoneXIsY"
+msgstr "L\'hora local utilitzant la zona horària del portal (%s) és %s"
+
+msgid "AllowTeacherChangeGradebookGradingModelTitle"
+msgstr "Els docents poden escollir el model d\'avaluació"
+
+msgid "AllowTeacherChangeGradebookGradingModelComment"
+msgstr "Activant aquesta opció, permetrà a cada docent escollir el model d\'avaluació que s\'usa en el seu/s curs/os. Aquest canvi s\'operarà dins de l\'eina d\'avaluacions del curs."
+
+msgid "NumberOfSubEvaluations"
+msgstr "Nombre de sub-avaluacions"
+
+msgid "AddNewModel"
+msgstr "Afegeix un model nou"
+
+msgid "GroupParentship"
+msgstr "Parentesc del grup"
+
+msgid "NoParentship"
+msgstr "Sense parentesc"
+
+msgid "NoCertificate"
+msgstr "Sense certificat"
+
+msgid "ShowDocumentPreviewTitle"
+msgstr "Mostra la vista prèvia del document"
+
+msgid "ShowDocumentPreviewComment"
+msgstr "Mostra vista prèvia de documents a l\'eina de documents. Aquest mode permet evitar la càrrega d\'una nova pàgina per mostrar un document, però pot resultar inestable en antics navegadors o poc pràctic en pantalles petites."
+
+msgid "CasMainActivateTitle"
+msgstr "Activa l\'autenticació CAS"
+
+msgid "CasMainServerTitle"
+msgstr "Servidor CAS principal"
+
+msgid "CasMainServerComment"
+msgstr "És el servidor CAS principal que serà utilitzat per a l\'autenticació (adreça IP o nom)"
+
+msgid "CasMainServerURITitle"
+msgstr "URI del servidor CAS principal"
+
+msgid "CasMainServerURIComment"
+msgstr "La ruta fins el servei CAS al servidor"
+
+msgid "CasMainPortTitle"
+msgstr "Port del servidor principal CAS"
+
+msgid "CasMainPortComment"
+msgstr "El port actual en el qual un es pot connectar al servidor principal CAS"
+
+msgid "CasMainProtocolTitle"
+msgstr "Protocol del servidor principal CAS"
+
+msgid "CAS1Text"
+msgstr "CAS 1"
+
+msgid "CAS2Text"
+msgstr "CAS 2"
+
+msgid "SAMLText"
+msgstr "SAML"
+
+msgid "CasMainProtocolComment"
+msgstr "Protocol amb el que ens connectem al servidor CAS"
+
+msgid "CasUserAddActivateTitle"
+msgstr "Activa registre d\'usuaris mitjançant CAS"
+
+msgid "CasUserAddActivateComment"
+msgstr "Permet crear comptes d\'usuaris amb CAS"
+
+msgid "CasUserAddLoginAttributeTitle"
+msgstr "Registra el nom d\'usuari"
+
+msgid "CasUserAddLoginAttributeComment"
+msgstr "Registra el nom d\'usuari CAS quan es registra un usuari nou per aquesta via"
+
+msgid "CasUserAddEmailAttributeTitle"
+msgstr "Registra el correu electrònic CAS"
+
+msgid "CasUserAddEmailAttributeComment"
+msgstr "Registra el correu electrònic CAS quan es registra un usuari nou per aquesta via"
+
+msgid "CasUserAddFirstnameAttributeTitle"
+msgstr "Registra el nom CAS"
+
+msgid "CasUserAddFirstnameAttributeComment"
+msgstr "Registra el nom CAS quan es registra un usuari nou per aquesta via"
+
+msgid "CasUserAddLastnameAttributeTitle"
+msgstr "Registra el cognom CAS"
+
+msgid "CasUserAddLastnameAttributeComment"
+msgstr "Registra el cognom CAS quan es registra un usuari nou per aquesta via"
+
+msgid "ShowAdminToolbarTitle"
+msgstr "Mostra la barra d\'administració"
+
+msgid "ShowAdminToolbarComment"
+msgstr "Mostra als usuaris, segons el seu perfil, una barra global a la part superior de la pàgina. Aquesta barra, molt similar a les de WordPress i Google, pot augmentar considerablement la seva eficiència en fer activitats complexes i augmenta l\'espai disponible per al contingut d\'aprenentatge."
+
+msgid "AddInMenu"
+msgstr "Afegeix al menú"
+
+msgid "AllowUsersToChangeEmailWithNoPasswordTitle"
+msgstr "Permet que els usuaris puguin canviar el seu correu electrònic sense necessitat de sol·licitar contrasenya"
+
+msgid "AllowUsersToChangeEmailWithNoPasswordComment"
+msgstr "Quan es modifica el compte de l\'usuari"
+
+msgid "EnableHelpLinkTitle"
+msgstr "Habilita el vincle d\'ajuda"
+
+msgid "EnableHelpLinkComment"
+msgstr "El vincle d\'ajuda es troba a la part superior dreta de la pantalla"
+
+msgid "BackToAdmin"
+msgstr "Torna a l\'administració"
+
+msgid "AllowGlobalChatTitle"
+msgstr "Habilita el xat global"
+
+msgid "HeaderExtraContentTitle"
+msgstr "Contingut addicional a la capçalera"
+
+msgid "HeaderExtraContentComment"
+msgstr "Podeu afegir codi HTML com les metaetiquetes"
+
+msgid "FooterExtraContentTitle"
+msgstr "Contingut addicional al peu"
+
+msgid "AllowGlobalChatComment"
+msgstr "Els usuaris poden conversar entre si mitjançant un xat global"
+
+msgid "FooterExtraContentComment"
+msgstr "Podeu incloure contingut HTML com metaetiquetes"
+
+msgid "CopyOnlySessionItems"
+msgstr "Copia només els elements d\'una sessió"
+
+msgid "FirstLetterCourseTitle"
+msgstr "Primera lletra del títol del curs"
+
+msgid "UsersFoundInOtherPortals"
+msgstr "Usuaris trobats en d\'altres portals"
+
+msgid "AddUserToMyURL"
+msgstr "Afegeix l\'usuari al meu portal"
+
+msgid "UsersDeleted"
+msgstr "Usuaris eliminats"
+
+msgid "UsersAdded"
+msgstr "Usuaris afegits"
+
+msgid "PluginArea"
+msgstr "Àrea de connectors"
+
+msgid "NoConfigurationSettingsForThisPlugin"
+msgstr "No hi ha opcions de configuració per aquest connector"
+
+msgid "Regions"
+msgstr "Regions"
+
+msgid "CoursesDefaultCreationVisibilityTitle"
+msgstr "Visibilitat del curs per defecte"
+
+msgid "CoursesDefaultCreationVisibilityComment"
+msgstr "Visibilitat del curs per defecte quan s\'està creant un curs"
+
+msgid "YouHaveEnteredTheCourseXInY"
+msgstr "Heu ingressat al curs %s el %s"
+
+msgid "LoginIsEmailTitle"
+msgstr "Utilitza el correu electrònic com a nom d\'usuari"
+
+msgid "LoginIsEmailComment"
+msgstr "El correu electrònic s\'utilitzarà per ingressar al sistema"
+
+msgid "AllowBrowserSnifferTitle"
+msgstr "Activa l\'investigador de navegadors"
+
+msgid "AllowBrowserSnifferComment"
+msgstr "Això activarà un investigador de les capacitats que suporten els navegadors que es connecten a Chamilo. Per tant, millorarà l\'experiència de l\'usuari, adaptant les respostes de la plataforma al tipus de navegador que es connecta, però reduirà la velocitat de càrrega de la pàgina inicial dels usuaris cada vegada que entrin a la plataforma."
+
+msgid "EnableWamiRecordTitle"
+msgstr "Activa Wami-recorder"
+
+msgid "EnableWamiRecordComment"
+msgstr "Wami-recorder és una eina de gravació de veu sobre Flash"
+
+msgid "ChangeSharedSetting"
+msgstr "Canvia la visibilitat de la configuració per als altres portals"
+
+msgid "AllowHRSkillsManagementTitle"
+msgstr "Permet al perfil RRHH administrar les competències"
+
+msgid "AllowHRSkillsManagementComment"
+msgstr "L\'usuari podrà crear i editar competències"
+
+msgid "GradebookDefaultWeightTitle"
+msgstr "Pes total per defecte a l\'eina Avaluacions"
+
+msgid "GradebookDefaultWeightComment"
+msgstr "Aquest pes s\'utilitzarà en tots els cursos"
+
+msgid "TeachersCanChangeScoreSettingsTitle"
+msgstr "Els professors poden canviar la configuració de puntuació de les avaluacions"
+
+msgid "TeachersCanChangeScoreSettingsComment"
+msgstr "A l\'editar la configuració de les Avaluacions"
+
+msgid "GradebookEnableLockingTitle"
+msgstr "Activa el bloqueig d\'Avaluacions pels professors"
+
+msgid "GradebookEnableLockingComment"
+msgstr "Un cop activada, aquesta opció permetrà als professors bloquejar qualsevol avaluació dins del seu curs. Això prohibirà al professor qualsevol modificació posterior dels resultats dels seus alumnes en els recursos usats per a aquesta avaluació: exàmens, lliçons, tasques, etc. L\'únic rol autoritzat a desbloquejar una avaluació és l\'administrador. El professor estarà informat d\'aquesta possibilitat en intentar desbloquejar l\'avaluació. El bloqueig com el desbloqueig estaran desats en el registre d\'activitats importants del sistema."
+
+msgid "LdapDescriptionComment"
+msgstr "<div class=\'normal-message\'> <br /><ul><li>Autenticació LDAP:<br />Veure I. tot seguit per configurar LDAP <br />Veure II. tot seguit per activar l\'autenticació LDAP</li><br /><br /><li> Actualitze els atributs d\'usuari com a dades LDAP després de l\'autenticació CAS (veure <a href=\'settings.php?category=CAS\'>configuració CAS</a>) : <br />Veure I. tot seguit per configurar LDAP <br />CAS administra l\'autenticació d\'usuari, l\'activació de LDAP és doncs innecessària.</li><br /></ul></div><br /><h4>I. Configuració LDAP</h4><h5>Editar l\'arxiu main/auth/external_login/ldap.conf.php </h5>-&gt; Editar valors de l\'array <code>&#36;extldap_config</code> <br /><br />Els paràmetres són <br /><ul><li>cadena del domini base (ex : \'base_dn\' =&gt; \'DC=cblue,DC=be\') </li><li>nom distinguit d\'administrador (ex : \'admin_dn\' =&gt;\'CN=admin,dc=cblue,dc=be\') </li><li>contrasenya d\'administrador (ex : \'admin_password\' =&gt; \'123456\') </li><li>anfitrió LDAP (ex : \'host\' =&gt; array(\'1.2.3.4\', \'2.3.4.5\', \'3.4.5.6\')) </li><li>filtre (ex : \'filter\' =&gt; \'\') </li><li>port (ex : \'port\' =&gt; 389) </li><li>versió de protocol (2 o 3) (ex : \'protocol_version\' =&gt; 3) </li><li>user_search (ex : \'user_search\' =&gt; \'sAMAccountName=%username%\') </li><li>codificació (ex : \'encoding\' =&gt; \'UTF-8\') </li><li>update_userinfo (ex : \'update_userinfo\' =&gt; true) </li></ul>-&gt; Per actualitzar les correspondències entre usuari i atributs LDAP, edite l\'array <code>&#36;extldap_user_correspondance</code> <br />Els valors de l\'array són &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />L\'estructura de l\'array està explicada a l\'arxiu main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Activar autenticació LDAP </h4><h5>Edite l\'arxiu main/inc/conf/configuration.php </h5>-&gt; Descomente les línies <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration[\'root_sys\'].&#36;_configuration[\'code_append\'].&quot;auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration[\'root_sys\'].&#36;_configuration[\'code_append\'].&quot;auth/external_login/newUser.ldap.php&quot;;<br /><br />A tindre en compte : Els usuaris LDAP usen els mateixos camps per identificar-se que els usuaris de la plataforma.<br />A tindre en compte : L\'activació de LDAP afegeix un menú d\'autenticació externa [LDAP] en \"afegir o modificar\" pàgines d\'usuari.</div>"
+
+msgid "ShibbolethMainActivateTitle"
+msgstr "Autenticació Shibboleth"
+
+msgid "ShibbolethMainActivateComment"
+msgstr "En primer lloc, heu de configurar Shibboleth per al seu servidor.<br />
+
+Per configurar-ho a Chamilo
+
+<h5>editeu l\'arxiu main/auth/shibboleth/config/aai.class.php</h5>
+
+Modifiqueu els valors de  amb el nom dels atributs de Shibboleth
+
+<ul>
+<li> = \'mail\';
+<li> = \'cn\';
+<li> = \'uid\';
+<li> = \'mail\';
+<li> = \'-\';
+<li> = \'-\';
+<li> = \'-\';
+<li> = \'-\';
+<li> = \'-\';
+<li> = \'-\';
+<li> = \'-\';
+<li> = \'-\';
+<li>...
+</ul>
+
+Aneu al connector per afegir el botó d\'autenticació Shibboleth per al seu campus Chamilo."
+
+msgid "li>$result->unique_id"
+msgstr ""
+
+msgid "li>$result->firstname"
+msgstr ""
+
+msgid "li>$result->lastname"
+msgstr ""
+
+msgid "li>$result->email"
+msgstr ""
+
+msgid "li>$result->language"
+msgstr ""
+
+msgid "li>$result->gender"
+msgstr ""
+
+msgid "li>$result->address"
+msgstr ""
+
+msgid "li>$result->staff_category"
+msgstr ""
+
+msgid "li>$result->home_organization_type"
+msgstr ""
+
+msgid "li>$result->home_organization"
+msgstr ""
+
+msgid "li>$result->affiliation"
+msgstr ""
+
+msgid "li>$result->persistent_id"
+msgstr ""
+
+msgid "LdapDescriptionTitle"
+msgstr "Autenticació LDAP"
+
+msgid "FacebookMainActivateTitle"
+msgstr "Autenticació amb Facebook"
+
+msgid "FacebookMainActivateComment"
+msgstr "En primer lloc, heu de crear una aplicació de Facebook (veure <a href=\"https://developers.facebook.com/apps\">https://developers.facebook.com/apps</a>) amb un compte de Facebook. En els paràmetres d\'aplicacions de Facebook, el valor de direcció URL del lloc ha de tenir \"una acció = fbconnect\" un paràmetre GET (http://mychamilo.com/?action=fbconnect, per exemple).<br /> 
+
+Llavors, 
+
+<h5>editeu el fitxer main/auth/external_login/facebook.conf.php</h5> i accediu a \"appId\" i \"secret\" els valors de .<br /> Aneu connectors per afegir un botó configurable \"Accediu amb Facebook\" per al campus de Chamilo."
+
+msgid "LanguagePriority1Title"
+msgstr "Prioritat d\'idioma 1"
+
+msgid "LanguagePriority2Title"
+msgstr "Prioritat de l\'idioma 2"
+
+msgid "LanguagePriority3Title"
+msgstr "Prioritat d\'idioma 3"
+
+msgid "LanguagePriority4Title"
+msgstr "Prioritat d\'idioma 4"
+
+msgid "LanguagePriority5Title"
+msgstr "Prioritat d\'idioma 5"
+
+msgid "LanguagePriority1Comment"
+msgstr "L\'idioma amb la prioritat més alta"
+
+msgid "LanguagePriority2Comment"
+msgstr "Prioritat de l\'idioma 2"
+
+msgid "LanguagePriority3Comment"
+msgstr "Prioritat de l\'idioma 3"
+
+msgid "LanguagePriority4Comment"
+msgstr "Prioritat de l\'idioma 4"
+
+msgid "LanguagePriority5Comment"
+msgstr "La prioritat més baixa entre els idiomes"
+
+msgid "UserLanguage"
+msgstr "Idioma de l\'usuari"
+
+msgid "UserSelectedLanguage"
+msgstr "Idioma de l\'usuari seleccionat"
+
+msgid "TeachersCanChangeGradeModelSettingsTitle"
+msgstr "Els professors poden canviar el model de qualificació dins del quadern d\'avaluacions"
+
+msgid "TeachersCanChangeGradeModelSettingsComment"
+msgstr "Quan s\'edita una avaluació"
+
+msgid "GradebookDefaultGradeModelTitle"
+msgstr "Model de qualificació per defecte"
+
+msgid "GradebookDefaultGradeModelComment"
+msgstr "Aquest valor es seleccionarà per defecte quan es creï un curs"
+
+msgid "GradebookEnableGradeModelTitle"
+msgstr "Habilita el model de qualificació al quadern d\'avaluacions"
+
+msgid "GradebookEnableGradeModelComment"
+msgstr "Permet utilitzar un model de qualificació al quadern d\'avaluacions"
+
+msgid "AllowSessionAdminsToSeeAllSessionsTitle"
+msgstr "Permet als administradors de sessions veure totes les sessions"
+
+msgid "AllowSessionAdminsToSeeAllSessionsComment"
+msgstr "Quan aquesta opció està desactivada els administradors de sessions només podran veure les seves sessions."
+
+msgid "AllowSkillsToolTitle"
+msgstr "Habilita l\'eina de competències"
+
+msgid "AllowSkillsToolComment"
+msgstr "Els usuaris poden veure les seves competències a la xarxa social i en un bloc de la pàgina principal."
+
+msgid "AllowPublicCertificatesTitle"
+msgstr "Permet certificats públics"
+
+msgid "AllowPublicCertificatesComment"
+msgstr "Els certificats poden ser visualitzats per persones no registrades al portal."
+
+msgid "EnableWebCamClipTitle"
+msgstr "Activar Webcam Clip"
+
+msgid "EnableWebCamClipComment"
+msgstr "Webcam Clip permet als usuaris capturar imatges des de la seva càmera web i enviar-les al servidor en format JPEG"
+
+msgid "YouShouldCreateTermAndConditionsForAllAvailableLanguages"
+msgstr "Heu de crear els Termes i Condicions per tots els idiomes disponibles a la plataforma"
+
+msgid "ActivateEmailTemplateTitle"
+msgstr "Activa plantilles de correu electrònic"
+
+msgid "ActivateEmailTemplateComment"
+msgstr "És possible enviar correus electrònics per certes accions a certs usuaris."
+
+msgid "SystemManagement"
+msgstr "Administració del sistema"
+
+msgid "RemoveOldDatabaseMessage"
+msgstr "Elimina la base de dades antiga"
+
+msgid "RemoveOldTables"
+msgstr "Elimina les taules antigues"
+
+msgid "TotalSpaceUsedByPortalXLimitIsYMB"
+msgstr "Espai tot utilitzat pel portal %s el límit és de %s MB"
+
+msgid "EventMessageManagement"
+msgstr "Administració d\'esdeveniments"
+
+msgid "Events"
+msgstr "Esdeveniments"
+
+msgid "ToBeWarnedUserList"
+msgstr "Llista d\'usuaris per ser alertats"
+
+msgid "HideCampusFromPublicPlatformsList"
+msgstr "Amaga el campus de llista pública de plataformes"
+
+msgid "ChamiloOfficialServicesProviders"
+msgstr "Proveïdors oficials de Chamilo"
+
+msgid "Reader"
+msgstr "Lector"
+
+msgid "Zombies"
+msgstr "Zombis"
+
+msgid "ActiveOnly"
+msgstr "Només actiu"
+
+msgid "AuthenticationSource"
+msgstr "Font d\'autenticació"
+
+msgid "RegisteredDate"
+msgstr "Data de registre"
+
+msgid "FilterTermsTitle"
+msgstr "Filtre termes"
+
+msgid "FilterTermsComment"
+msgstr "Proporcioneu una llista de termes, un per línia, que seran filtrats per tal que no apareguin a les seves pàgines web i correus electrònics. Aquests termes seran substituïts per ***"
+
+msgid "UseCustomPagesTitle"
+msgstr "Utilitza pàgines personalitzades"
+
+msgid "UseCustomPagesComment"
+msgstr "Activeu aquesta funcionalitat per configurar pàgines específiques d\'autenticació segons el perfil de l\'usuari"
+
+msgid "StudentPageAfterLoginTitle"
+msgstr "Pàgina de l\'alumne després d\'autenticar-se"
+
+msgid "StudentPageAfterLoginComment"
+msgstr "Aquesta pàgina serà la que veuran tots els alumnes després d\'autenticar-se."
+
+msgid "TeacherPageAfterLoginTitle"
+msgstr "Pàgina del professor després d\'autenticar-se"
+
+msgid "TeacherPageAfterLoginComment"
+msgstr "Aquesta pàgina serà la que es carregui després que un professor s\'hagi autenticat"
+
+msgid "DRHPageAfterLoginTitle"
+msgstr "Pàgina del Director de Recursos Humans després d\'haver-se autenticat"
+
+msgid "DRHPageAfterLoginComment"
+msgstr "Aquesta pàgina serà la que es carregui després que un Director de Recursos Humans s\'hagi autenticat."
+
+msgid "StudentAutosubscribeTitle"
+msgstr "Inscripció pel propi alumne"
+
+msgid "StudentAutosubscribeComment"
+msgstr "Inscripció pel propi alumne - encara no disponible"
+
+msgid "TeacherAutosubscribeTitle"
+msgstr "Inscripció pel propi professor"
+
+msgid "TeacherAutosubscribeComment"
+msgstr "Inscripció pel propi professor - encara no disponible"
+
+msgid "DRHAutosubscribeTitle"
+msgstr "Inscripció pel propi Director de Recursos Humans"
+
+msgid "DRHAutosubscribeComment"
+msgstr "Inscripció pel propi Director de Recursos Humans - encara no disponible"
+
+msgid "ScormCumulativeSessionTimeTitle"
+msgstr "Temps acumulat de sessió per SCORM"
+
+msgid "ScormCumulativeSessionTimeComment"
+msgstr "Quan s\'activa el temps d\'una sessió per una seqüència d\'aprenentatge SCORM serà acumulatiu, en cas contrari, només comptarà des del moment de l\'última actualització."
+
+msgid "SessionAdminPageAfterLoginTitle"
+msgstr "Pàgina de l\'administrador de sessions després d\'autenticar-se"
+
+msgid "SessionAdminPageAfterLoginComment"
+msgstr "Pàgina que es carregarà després que un administrador de sessions s\'hagi autenticat"
+
+msgid "SessionadminAutosubscribeTitle"
+msgstr "Inscripció pel propi administrador de sessions"
+
+msgid "SessionadminAutosubscribeComment"
+msgstr "Inscripció pel propi administrador de sessions - encara no disponible"
+
+msgid "ToolVisibleByDefaultAtCreationTitle"
+msgstr "Eina visible al crear un curs"
+
+msgid "ToolVisibleByDefaultAtCreationComment"
+msgstr "Seleccioneu les eines que seran visibles quan es creïn els cursos"
+
+msgid "casAddUserActivatePlatform"
+msgstr "Configuració interna CAS"
+
+msgid "casAddUserActivateLDAP"
+msgstr "Configuració interna CAS"
+
+msgid "UpdateUserInfoCasWithLdapTitle"
+msgstr "Configuració interna CAS"
+
+msgid "UpdateUserInfoCasWithLdapComment"
+msgstr "Configuració interna CAS"
+
+msgid "ShowAllUsers"
+msgstr "Mostra tots els usuaris"
+
+msgid "ShowUsersNotAddedInTheURL"
+msgstr "Mostra usuaris no afegits a la URL"
+
+msgid "UserNotAddedInURL"
+msgstr "Usuaris no afegits a la URL"
+
+msgid "UsersRegisteredInNoSession"
+msgstr "Usuaris no registrats a cap sessió"
+
+msgid "CommandLineInterpreter"
+msgstr "Intèrpret d\'ordres en línia (CLI)"
+
+msgid "PleaseVisitOurWebsite"
+msgstr "Visiteu el nostre lloc web http://www.chamilo.org"
+
+msgid "SpaceUsedOnSystemCannotBeMeasuredOnWindows"
+msgstr "L\'espai utilitzat en aquest disc no pot ser mesurat en sistemes basats en Windows."
+
+msgid "XOldTablesDeleted"
+msgstr "%d taules antigues eliminades"
+
+msgid "XOldDatabasesDeleted"
+msgstr "%d bases de dades antigues eliminades"
+
+msgid "ExtensionShouldBeLoaded"
+msgstr "Aquesta extensió s\'hauria de carregar"
+

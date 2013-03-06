@@ -1,0 +1,129 @@
+msgid "langMdCallingTool"
+msgstr "Документи"
+
+msgid "langMdTitle"
+msgstr "Наименование на обекта"
+
+msgid "langMdDescription"
+msgstr "За да запишете тази информация, натиснете \"Записване\""
+
+msgid "langMdCoverage"
+msgstr "т.е. бакалавър по ..."
+
+msgid "langMdCopyright"
+msgstr "т.е. указване на източника"
+
+msgid "langTool"
+msgstr "Метаданни за документ"
+
+msgid "langNoScript"
+msgstr "Скриптовете не са разрешени на вашия браузър, моля, игнорирайте частта от екрана под този текст - тя няма да работи."
+
+msgid "langPressAgain"
+msgstr "Натиснете отново \"Записване\"..."
+
+msgid "langLanguageTip"
+msgstr "Езикът, на кото е създаден този обект."
+
+msgid "langIdentifier"
+msgstr "Идентификатор"
+
+msgid "langIdentifierTip"
+msgstr "Уникален идентификатор на този обект, съставен от букви, цифри и знаците _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "Заглавие или наименование и на какъв език е изписано."
+
+msgid "langDescriptionTip"
+msgstr "Описание или коментар; какъв език се използва за описанието на този обект."
+
+msgid "langKeyword"
+msgstr "Ключова дума"
+
+msgid "langKeywordTip"
+msgstr "Разделете ключовите думи със запетаи."
+
+msgid "langCoverage"
+msgstr "Покрива"
+
+msgid "langCoverageTip"
+msgstr "например: бакалавър по..."
+
+msgid "langKwNote"
+msgstr "Ако променяте езика на описанието, не добавайте в същото време ключови думи."
+
+msgid "langClickKw"
+msgstr "Щракнете ключова дума от дървото, за да я изберете или за да я откажете."
+
+msgid "langKwHelp"
+msgstr "<br/>Предназначение на бутоните: \"+\" - за отваряне, \"-\" - за затваряне, \"++\" за отваряне на всички, \"--\" - за затваряне на всички.<br/><br/>Ако променяте езика на описанието, не добавяйте в същото време ключови думи.<br/><br/>"
+
+msgid "langRights"
+msgstr "Права за ползване"
+
+msgid "langRightsTip"
+msgstr "Опишете в свободен текст"
+
+msgid "langVersion"
+msgstr "Версия"
+
+msgid "langVersionTip"
+msgstr "Номер или описание"
+
+msgid "langStatusTip"
+msgstr "Изберете от списъка"
+
+msgid "langCreatedSize"
+msgstr "Дата, размер"
+
+msgid "langCreatedSizeTip"
+msgstr "YYYY-MM-DD - дата на създаването; размерът е в байтове."
+
+msgid "langAuthorTip"
+msgstr "във vCard-формат (електронна визитна картичка)"
+
+msgid "langFormat"
+msgstr "Формат"
+
+msgid "langFormatTip"
+msgstr "Изберете от списъка"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "Щракнете, за да отворите обекта."
+
+msgid "langStore"
+msgstr "Записване"
+
+msgid "langDeleteAll"
+msgstr "Изтриване на всички метаданни"
+
+msgid "langConfirmDelete"
+msgstr "Наистина ли искате да изтриете всички метаданни?"
+
+msgid "langCourseKwds"
+msgstr "Този документ съдържа ключови думи за курс"
+
+msgid "langSearch"
+msgstr "Търсене"
+
+msgid "langSearchCrit"
+msgstr "Само една дума на ред!"
+
+msgid "langStatuses"
+msgstr ":draft:проект,,      final:окончателен,,      revised:ревизия,,      unavailable:неизвестен"
+
+msgid "langCosts"
+msgstr ":no:без заплащане,, yes:срещу заплащане"
+
+msgid "langCopyrights"
+msgstr ":yes:запазени права,, no:свободен"
+
+msgid "langFormats"
+msgstr ":text/plain;windows-1251:text/plain;windows-1251,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;windows-1251,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;windows-1251:XML;windows-1251,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+
+msgid "langLngResTypes"
+msgstr ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция"
+

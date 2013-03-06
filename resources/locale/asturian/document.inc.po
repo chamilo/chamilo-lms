@@ -1,0 +1,639 @@
+msgid "MoveTo"
+msgstr "Mover a"
+
+msgid "langDownloadFile"
+msgstr "Unviar un archivu"
+
+msgid "langNameDir"
+msgstr "Nome del direutoriu nuevu"
+
+msgid "langSize"
+msgstr "Tamañu"
+
+msgid "langRename"
+msgstr "Cambiar de nome"
+
+msgid "langCopy"
+msgstr "Copiar el conteníu del cursu"
+
+msgid "langTo"
+msgstr "pa"
+
+msgid "langNoSpace"
+msgstr "L\'unvíu falló. Nun hai espaciu bastante nel so direutoriu"
+
+msgid "langDownloadEnd"
+msgstr "L\'unvíu fízose bien"
+
+msgid "langFileExists"
+msgstr "Operación imposible, esiste un archivu col mesmu nome."
+
+msgid "langImpossible"
+msgstr "Operación imposible"
+
+msgid "langAddComment"
+msgstr "Amestar/cambiar un comentariu a"
+
+msgid "langDocCopied"
+msgstr "Documentu copiáu"
+
+msgid "langDocDeleted"
+msgstr "Documentu esborráu"
+
+msgid "langElRen"
+msgstr "Archivu cambiáu de nome"
+
+msgid "langDirMv"
+msgstr "Elementu movíu"
+
+msgid "langComMod"
+msgstr "Comentariu cambiáu"
+
+msgid "langViMod"
+msgstr "Visibilidá cambiada"
+
+msgid "langGroupSpace"
+msgstr "Área de grupu"
+
+msgid "langGroupSpaceLink"
+msgstr "Área de grupu"
+
+msgid "langGroupForumLink"
+msgstr "Foru de grupu"
+
+msgid "langZipNoPhp"
+msgstr "L\'archivu zip nun pue tener archivos con formatu .php"
+
+msgid "langUncompress"
+msgstr "Descomprimir archivu (.zip) nel servidor"
+
+msgid "langDownloadAndZipEnd"
+msgstr "L\'archivu zip unvióse y descomprimióse nel servidor"
+
+msgid "langRoot"
+msgstr "raíz"
+
+msgid "CreateDoc"
+msgstr "Crear un documentu"
+
+msgid "langDown"
+msgstr "embaxu"
+
+msgid "langFileError"
+msgstr "L\'archivu que quier subir nun val"
+
+msgid "langMaxFileSize"
+msgstr "El tamañu másimu pa un archivu ye"
+
+msgid "langFileName"
+msgstr "Nome del archivu"
+
+msgid "langNoFileName"
+msgstr "Por favor, escriba\'l nome del archivu"
+
+msgid "langNoText"
+msgstr "Por favor, escriba\'l conteníu de testu / conteníu HTML"
+
+msgid "langAreYouSureToDelete"
+msgstr "¿ Ta seguru de que quier esborrar"
+
+msgid "langScormcontent"
+msgstr "Esti ye un conteníu SCORM<br><input type=button name=scormbutton value=\'Entamar\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr "Esti ye un cursu con formatu SCORM. Si quier velu, calque equí:<input type=button name=scormbutton value=\'Entamar\' onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Publicar"
+
+msgid "langMissingImagesDetected"
+msgstr "Deteutóse que falten imáxenes"
+
+msgid "langCreateDocument"
+msgstr "Crear un documentu"
+
+msgid "langEditDocument"
+msgstr "Editar"
+
+msgid "langDocuments"
+msgstr "Documentos"
+
+msgid "langOrganiseDocuments"
+msgstr "Crear tabla de conteníos"
+
+msgid "langEditTOC"
+msgstr "Editar tabla de conteníos"
+
+msgid "langChapter"
+msgstr "Capítulu"
+
+msgid "langDocumentList"
+msgstr "Llistáu de tolos documentos"
+
+msgid "langOrganisationList"
+msgstr "Tabla de conteníos"
+
+msgid "langCreationSucces"
+msgstr "Creóse la tabla de conteníos."
+
+msgid "langCanViewOrganisation"
+msgstr "Agora pue ver la organización de los sos conteníos"
+
+msgid "langHere"
+msgstr "equí."
+
+msgid "langViewDocument"
+msgstr "Ver"
+
+msgid "langHtmlTitle"
+msgstr "Tabla de conteníos"
+
+msgid "langAddToTOC"
+msgstr "Amestar a los conteníos"
+
+msgid "langAddChapter"
+msgstr "Amestar capítulu"
+
+msgid "langReady"
+msgstr "Xenerar tabla de conteníos"
+
+msgid "langStoreDocuments"
+msgstr "Almacenar documentos"
+
+msgid "langTocDown"
+msgstr "Abaxo"
+
+msgid "langTocUp"
+msgstr "Enriba"
+
+msgid "CutPasteLink"
+msgstr "Abrir nuna ventana nueva"
+
+msgid "langCreatePath"
+msgstr "Crear un itinerariu"
+
+msgid "SendDocument"
+msgstr "Unviar documentu"
+
+msgid "ThisFolderCannotBeDeleted"
+msgstr "Esta carpeta nun puede ser desaniciada"
+
+msgid "ChangeVisibility"
+msgstr "Camudar la visibilidá"
+
+msgid "VisibilityCannotBeChanged"
+msgstr "Nun pudo camudase la visibilidá"
+
+msgid "DocumentCannotBeMoved"
+msgstr "Nun pudo movese\'l documentu"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "Oogie: conversión PowerPoint"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "Conversor de presentaciones PowerPoint en Itinerios d\'aprendizaxe"
+
+msgid "langAddMetadata"
+msgstr "Ver / Editar metadatos"
+
+msgid "langGoMetadata"
+msgstr "Dir"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "La cantidá d\'espaciu asignada a esti cursu nel servidor ye"
+
+msgid "langDel"
+msgstr "Esborrar"
+
+msgid "langUp"
+msgstr "Enriba"
+
+msgid "langDate"
+msgstr "Fecha"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Amosar la cantidá d\'espaciu que tien esti cursu nel servidor"
+
+msgid "CourseCurrentlyUses"
+msgstr "Esti cursu agora mesmo usa"
+
+msgid "MaximumAllowedQuota"
+msgstr "La so llende d\'espaciu d\'almacenamientu ye de"
+
+msgid "PercentageQuotaInUse"
+msgstr "Porcentaxe de cantidá d\'espaciu n\'usu"
+
+msgid "PercentageQuotaFree"
+msgstr "Porcentaxe de cantidá d\'espaciu llibre"
+
+msgid "CurrentDirectory"
+msgstr "Direutoriu actual"
+
+msgid "UplUploadDocument"
+msgstr "Unviar un documentu"
+
+msgid "UplPartialUpload"
+msgstr "Namás s\'unvió l\'archivu parcialmente."
+
+msgid "UplExceedMaxPostSize"
+msgstr "El tamañu del ficheru perpasa\'l másimu permitíu na configuración:"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "L\'archivu unviáu perpasa\'l másimu de tamañu permitíu pol servidor:"
+
+msgid "UplFileTooBig"
+msgstr "L\'archivu unviáu ye más grande de la cuenta"
+
+msgid "UplUploadFailed"
+msgstr "Nun se pudo unviar l\'archivu"
+
+msgid "UplUnableToSaveFile"
+msgstr "El ficheru unviáu nun se pudo guardar (¿problema de permisos?)"
+
+msgid "UplNotEnoughSpace"
+msgstr "Nun hai espaciu bastante pa unviar esti ficheru"
+
+msgid "UplNoSCORMContent"
+msgstr "Nun s\'atopó conteníos SCORM"
+
+msgid "UplZipExtractSuccess"
+msgstr "Archivu zip descomprimíu"
+
+msgid "UplZipCorrupt"
+msgstr "Nun se pudo descomprimir l\'archivu zip (¿ficheru corruptu?)"
+
+msgid "UplAlreadyExists"
+msgstr "¡yá esiste!"
+
+msgid "UplFileSavedAs"
+msgstr "Archivu guardáu como"
+
+msgid "UplFileOverwritten"
+msgstr "escribióse enriba d\'él"
+
+msgid "CannotCreateDir"
+msgstr "Nun se pudo crear el direutoriu"
+
+msgid "UplUpload"
+msgstr "Unviar"
+
+msgid "UplWhatIfFileExists"
+msgstr "Si yá hai un archivu como esti:"
+
+msgid "UplDoNothing"
+msgstr "Nun unviar"
+
+msgid "UplDoNothingLong"
+msgstr "Nun unviar si l\'archivu esiste"
+
+msgid "UplOverwrite"
+msgstr "Escribir enriba"
+
+msgid "UplOverwriteLong"
+msgstr "Escribir enriba l\'archivu esistente"
+
+msgid "UplRename"
+msgstr "Cambiar de nome"
+
+msgid "UplRenameLong"
+msgstr "Cambiar de nome l\'archivu unviáu"
+
+msgid "Metadata"
+msgstr "Metadatos"
+
+msgid "DocumentQuota"
+msgstr "Cantidá d\'espaciu pal cursu nel servidor"
+
+msgid "NoDocsInFolder"
+msgstr "Entá nun hai documentos nesta carpeta"
+
+msgid "UploadTo"
+msgstr "Unviar a"
+
+msgid "fileModified"
+msgstr "L\'archivu modificóse"
+
+msgid "DocumentsOverview"
+msgstr "llistáu de documentos"
+
+msgid "ViewSlideshow"
+msgstr "Ver presentación d\'imáxenes"
+
+msgid "Options"
+msgstr "Opciones"
+
+msgid "WelcomeOogieConverter"
+msgstr "Bienveníu al conversor de PowerPoint Oogie<br>1. Compruebe\'l so discu duru y busque un archivu con estensión *.ppt o *odp<br>2.Unvíelu a Oogie, que lu va tresformar nun Itinerariu d\'aprendizaxe Scorm.<br>3. Va poder añadir comentarios d\'audiu a caúna les diapositives y insertar un test d\'evaluación ente elles."
+
+msgid "ConvertToLP"
+msgstr "Convertir nun Itinerariu d\'aprendizaxe"
+
+msgid "AdvancedSettings"
+msgstr "Configuraciones avanzaes"
+
+msgid "File"
+msgstr "Archivu"
+
+msgid "DocDeleteError"
+msgstr "Erru de la que s\'esborraba\'l documentu"
+
+msgid "ViModProb"
+msgstr "Hubo un problema de la que s\'actualizaba la visibilidá"
+
+msgid "DirDeleted"
+msgstr "Direutoriu esborráu"
+
+msgid "TemplateName"
+msgstr "Nome de la plantiya"
+
+msgid "TemplateDescription"
+msgstr "Descripción de la plantiya"
+
+msgid "DocumentSetAsTemplate"
+msgstr "Documentu convertíu nuna plantiya nueva"
+
+msgid "DocumentUnsetAsTemplate"
+msgstr "El documentu yá nun ye una plantiya"
+
+msgid "AddAsTemplate"
+msgstr "Amestar como plantiya"
+
+msgid "RemoveAsTemplate"
+msgstr "Esborrar plantiya"
+
+msgid "ReadOnly"
+msgstr "Námas llectura"
+
+msgid "ReadOnlyFile"
+msgstr "L\'archivu ye namás de llectura"
+
+msgid "FileNotFound"
+msgstr "Nun s\'atopó l\'archivu"
+
+msgid "TemplateTitleFirstPage"
+msgstr "Páxina d\'entamu"
+
+msgid "TemplateTitleFirstPageDescription"
+msgstr "Ye la páxina d\'entamu del so cursu"
+
+msgid "TemplateTitleDedicatory"
+msgstr "Dedicatoria"
+
+msgid "TemplateTitleDedicatoryDescription"
+msgstr "Escribi la to propia dedicatoria"
+
+msgid "TemplateTitlePreface"
+msgstr "Prólogu"
+
+msgid "TemplateTitlePrefaceDescription"
+msgstr "Escribi\'l to propiu prólogu"
+
+msgid "TemplateTitleIntroduction"
+msgstr "Introducción"
+
+msgid "TemplateTitleIntroductionDescription"
+msgstr "Escriba una introducción"
+
+msgid "TemplateTitlePlan"
+msgstr "Plan"
+
+msgid "TemplateTitlePlanDescription"
+msgstr "Tabla de conteníos"
+
+msgid "TemplateTitleMrDokeos"
+msgstr "Mr Dokeos esplicando"
+
+msgid "TemplateTitleMrDokeosDescription"
+msgstr "Un diálogu esplicativu con Mr. Chamilo"
+
+msgid "TemplateTitleTeacher"
+msgstr "Profesor esplicando"
+
+msgid "TemplateTitleTeacherDescription"
+msgstr "Un diálogu esplicativu con un profesor"
+
+msgid "TemplateTitleProduction"
+msgstr "Producción"
+
+msgid "TemplateTitleProductionDescription"
+msgstr "Descripción d\'una producción"
+
+msgid "TemplateTitleAnalyze"
+msgstr "Análisis"
+
+msgid "TemplateTitleAnalyzeDescription"
+msgstr "Descripción d\'un análisis"
+
+msgid "TemplateTitleSynthetize"
+msgstr "Síntesis"
+
+msgid "TemplateTitleSynthetizeDescription"
+msgstr "Descripción d\'una síntesis"
+
+msgid "TemplateTitleText"
+msgstr "Páxina con testu"
+
+msgid "TemplateTitleTextDescription"
+msgstr "Páxina con testu planu"
+
+msgid "TemplateTitleLeftImage"
+msgstr "Imaxe a la izquierda"
+
+msgid "TemplateTitleLeftImageDescription"
+msgstr "Imaxe a la izquierda"
+
+msgid "TemplateTitleTextCentered"
+msgstr "Testu y imaxe centraos"
+
+msgid "TemplateTitleTextCenteredDescription"
+msgstr "Testu y imaxe nel centru con lleenda"
+
+msgid "TemplateTitleComparison"
+msgstr "Comparación"
+
+msgid "TemplateTitleComparisonDescription"
+msgstr "Páxina con 2 columnes"
+
+msgid "TemplateTitleDiagram"
+msgstr "Diagrama esplicativu"
+
+msgid "TemplateTitleDiagramDescription"
+msgstr "Imaxe a la izquierda y comentariu tamién a la izquierda"
+
+msgid "TemplateTitleImage"
+msgstr "Imaxe"
+
+msgid "TemplateTitleImageDescription"
+msgstr "Páxina con namás una imaxe"
+
+msgid "TemplateTitleFlash"
+msgstr "Animación Flash"
+
+msgid "TemplateTitleFlashDescription"
+msgstr "Animación + testu d\'introducción"
+
+msgid "TemplateTitleAudio"
+msgstr "Audiu con comentariu"
+
+msgid "TemplateTitleAudioDescription"
+msgstr "Audiu + imaxe + testu"
+
+msgid "TemplateTitleSchema"
+msgstr "Esquema con audiu"
+
+msgid "TemplateTitleSchemaDescription"
+msgstr "Esquema esplicáu por un profesor"
+
+msgid "TemplateTitleVideo"
+msgstr "Páxina con videu"
+
+msgid "TemplateTitleVideoDescription"
+msgstr "Videu + testu esplicativu"
+
+msgid "TemplateTitleVideoFullscreen"
+msgstr "Páxina con namás videu"
+
+msgid "TemplateTitleVideoFullscreenDescription"
+msgstr "Videu + testu esplicativu"
+
+msgid "TemplateTitleTable"
+msgstr "Tables"
+
+msgid "TemplateTitleTableDescription"
+msgstr "Páxina con tabla tipu fueya de cálculu"
+
+msgid "TemplateTitleAssigment"
+msgstr "Descripción de llabores /deberes"
+
+msgid "TemplateTitleAssigmentDescription"
+msgstr "Esplica oxetivos, roles, axenda"
+
+msgid "TemplateTitleResources"
+msgstr "Recursos"
+
+msgid "TemplateTitleResourcesDescription"
+msgstr "Llibros, enllaces, ferramientes"
+
+msgid "TemplateTitleBibliography"
+msgstr "Bibliografía"
+
+msgid "TemplateTitleBibliographyDescription"
+msgstr "Llibros, enllaces y ferramientes"
+
+msgid "TemplateTitleFAQ"
+msgstr "Entrugues frecuentes"
+
+msgid "TemplateTitleFAQDescription"
+msgstr "Llistáu d\'entrugues y retruques"
+
+msgid "TemplateTitleGlossary"
+msgstr "Glosariu"
+
+msgid "TemplateTitleGlossaryDescription"
+msgstr "Llistáu de términos"
+
+msgid "TemplateTitleEvaluation"
+msgstr "Evaluación"
+
+msgid "TemplateTitleEvaluationDescription"
+msgstr "Evaluación"
+
+msgid "TemplateTitleCertificate"
+msgstr "Certificáu de qu\'acabó\'l cursu"
+
+msgid "TemplateTitleCertificateDescription"
+msgstr "Va apaecer a la fin d\'un Itinerariu d\'aprendizaxe"
+
+msgid "TemplateTitleCheckList"
+msgstr "Llistáu de revisión"
+
+msgid "TemplateTitleCourseTitle"
+msgstr "Títulu del cursu"
+
+msgid "TemplateTitleLeftList"
+msgstr "Llistáu a la izquierda"
+
+msgid "TemplateTitleLeftListDescription"
+msgstr "Llistáu de la izquierda con un instructor"
+
+msgid "TemplateTitleCheckListDescription"
+msgstr "Llistáu d\'elementos"
+
+msgid "TemplateTitleCourseTitleDescription"
+msgstr "Títulu del cursu con logu"
+
+msgid "TemplateTitleRightList"
+msgstr "Llistáu a la derecha"
+
+msgid "TemplateTitleRightListDescription"
+msgstr "Llistáu a la derecha con un instructor"
+
+msgid "TemplateTitleLeftRightList"
+msgstr "Llistaos a la izquierda y a la derecha"
+
+msgid "TemplateTitleLeftRightListDescription"
+msgstr "Llistáu a la izquierda y a la derecha con un instructor"
+
+msgid "TemplateTitleDesc"
+msgstr "Descripción"
+
+msgid "TemplateTitleDescDescription"
+msgstr "Describir un elementu"
+
+msgid "TemplateTitleObjectives"
+msgstr "Oxetivos del cursu"
+
+msgid "TemplateTitleObjectivesDescription"
+msgstr "Descripción de los oxetivos del cursu"
+
+msgid "TemplateTitleCycle"
+msgstr "Gráficu cíclicu"
+
+msgid "TemplateTitleCycleDescription"
+msgstr "2 llistaos con feches circulares"
+
+msgid "TemplateTitleLearnerWonder"
+msgstr "Espectatives del alumnu"
+
+msgid "TemplateTitleLearnerWonderDescription"
+msgstr "Descripción de les espectatives del alumnu"
+
+msgid "TemplateTitleTimeline"
+msgstr "Procesos y etapes"
+
+msgid "TemplateTitleTimelineDescription"
+msgstr "3 llistaos relacionaos con fleches"
+
+msgid "TemplateTitleStopAndThink"
+msgstr "Para y piensa"
+
+msgid "TemplateTitleListLeftListDescription"
+msgstr "Llistáu a la izquierda con un instructor"
+
+msgid "TemplateTitleStopAndThinkDescription"
+msgstr "Invitación a parar y pensar"
+
+msgid "CreateTheDocument"
+msgstr "Guardar documentu"
+
+msgid "CreateTemplate"
+msgstr "Criar plantilla"
+
+msgid "SharedFolder"
+msgstr "Carpeta compartida"
+
+msgid "CreateFolder"
+msgstr "Criar el direutoriu"
+
+msgid "HelpDefaultDirDocuments"
+msgstr "Esti direutoriu caltien los ficheros suministraos por defeutu. Puedes desaniciar o amestar otros ficheros, pero si un ficheru ta anubríu cuando ye inxertáu nun documentu web los escolinos tampoco podrán velu equí. Cuando inxertes un ficheru nun documentu web faelo visible previamente. Los direutorios pueden siguir anubríos."
+
+msgid "HelpSharedFolder"
+msgstr "Esti direutoriu caltien los ficheros que los estudiantes (y tú) unvían a un cursu a traviés del editor, si nun lo facen dende la ferramienta grupos. Por defeutu serán visibles por cualisquier mayestru, pero tarán anubríos pa otros estudiantes salvo qu\'accedan a ellos mediante un accesu direutu. Si fae visible\'l direutoriu d\'un escolín otros escolinos podrán ver tolo que caltenga."
+
+msgid "TemplateImage"
+msgstr "Imaxe de la plantilla"
+
+msgid "MoveElement"
+msgstr "Mover elementu"
+

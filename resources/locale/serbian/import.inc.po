@@ -1,0 +1,24 @@
+msgid "langExplanation"
+msgstr "Kada kliknete na OK, Forum, Agenda, Organizator dokumenata i td. će biti kreiran. Kao osoba koja je kreirala sajt imate mogućnost da to modifikujete prema vašim potrebama."
+
+msgid "langTooBig"
+msgstr "Niste izabrali nijedan fajl za slanje ili je prevelik"
+
+msgid "langCouldNot"
+msgstr "Fajl nije mogao da se učita na server"
+
+msgid "langAddPageToSite"
+msgstr "Dodavanje stranice u okruženje"
+
+msgid "langCouldNotSendPage"
+msgstr "Ovaj fajl nije u HTML formatu i ne mo da se u;ita na server. Ako elite da poaljete dokument koji nije u HTML formatu (PDF, Word, Power Point, Video, itd.) koristite <a href=../document/document.php>Dokumeta alatku</a>"
+
+msgid "langSendPage"
+msgstr "Stranica za učitavanje na server"
+
+msgid "langPageTitleModified"
+msgstr "Naslov stranice je izmenjen"
+
+msgid "langPageAdded"
+msgstr "Stranica je dodata"
+

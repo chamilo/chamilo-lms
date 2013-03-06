@@ -1,0 +1,135 @@
+msgid "MyTasks"
+msgstr "Moje úkoly"
+
+msgid "FavoriteBlogs"
+msgstr "Moje oblíbené blog-y"
+
+msgid "Navigation"
+msgstr "Navigace"
+
+msgid "TopTen"
+msgstr "Top ten Blogy"
+
+msgid "Subtitle"
+msgstr "Podnadpis"
+
+msgid "ThisBlog"
+msgstr "Tento blog"
+
+msgid "NewPost"
+msgstr "Nový článek"
+
+msgid "TaskManager"
+msgstr "Správa úkolů"
+
+msgid "MemberManager"
+msgstr "Správa uživatelů"
+
+msgid "PostFullText"
+msgstr "Text"
+
+msgid "ReadPost"
+msgstr "Číst tento článek"
+
+msgid "Home"
+msgstr "Domů"
+
+msgid "FirstPostText"
+msgstr "Toto je první článek v tomot projektu. Všichni zapsaní do projektu mohou přispívat"
+
+msgid "AddNewComment"
+msgstr "Přidat nový komentář"
+
+msgid "ReplyToThisComment"
+msgstr "Odpovědět na tento komentář"
+
+msgid "ManageTasks"
+msgstr "Spravovat úlohy"
+
+msgid "ManageMembers"
+msgstr "Zapsat/odregistrovat uživatele z projektu"
+
+msgid "Register"
+msgstr "Registrovat"
+
+msgid "UnRegister"
+msgstr "Odregistrovat"
+
+msgid "SubscribeMembers"
+msgstr "Schválit uživatele"
+
+msgid "UnsubscribeMembers"
+msgstr "Neschválit uživatele"
+
+msgid "RightsManager"
+msgstr "Správa uživatelských práv"
+
+msgid "ManageRights"
+msgstr "Spravovat funkce a práva uživatele v tomto projektu"
+
+msgid "Task"
+msgstr "Úkol"
+
+msgid "Tasks"
+msgstr "Úkoly"
+
+msgid "Member"
+msgstr "Člen"
+
+msgid "Members"
+msgstr "Členové"
+
+msgid "Role"
+msgstr "Funkce"
+
+msgid "Rate"
+msgstr "Hodnota"
+
+msgid "Roles"
+msgstr "Funkce"
+
+msgid "AddTask"
+msgstr "Přidat novou funkci"
+
+msgid "AddTasks"
+msgstr "Přidat nové funkce"
+
+msgid "langTask1"
+msgstr "Úloha 1"
+
+msgid "langTask2"
+msgstr "Úloha 2"
+
+msgid "langTask3"
+msgstr "Úloha 3"
+
+msgid "langTask1Desc"
+msgstr "Úloha 1 - popis"
+
+msgid "langTask2Desc"
+msgstr "Úloha 2 - popis"
+
+msgid "langTask3Desc"
+msgstr "Úloha 3 - popis"
+
+msgid "blog_management"
+msgstr "Blog management"
+
+msgid "langWelcome"
+msgstr "Vítejte !"
+
+msgid "langModule"
+msgstr "Modul"
+
+msgid "langUserHasPermissionNot"
+msgstr "Uživatel nemá práva"
+
+msgid "langUserHasPermission"
+msgstr "Uživatel má práva"
+
+msgid "langLegend"
+msgstr "Legenda"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "Uživatel má práva v jeho skupině"
+

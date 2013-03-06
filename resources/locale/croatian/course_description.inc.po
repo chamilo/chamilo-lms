@@ -1,0 +1,45 @@
+msgid "langCourseProgram"
+msgstr "Opis kolegija"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Ovaj kolegij nije opisan"
+
+msgid "langEditCourseProgram"
+msgstr "Unesi i izmijeni opis kolegija"
+
+msgid "QuestionPlan"
+msgstr "Pitanje nosiocu"
+
+msgid "langInfo2Say"
+msgstr "Informacije za korisnike"
+
+msgid "langOuAutreTitre"
+msgstr "Naslov"
+
+msgid "langNewBloc"
+msgstr "Ostalo"
+
+msgid "langAddCat"
+msgstr "Dodaj kategoriju"
+
+msgid "langAdd"
+msgstr "Dodaj"
+
+msgid "langValid"
+msgstr "Prihvati"
+
+msgid "langBackAndForget"
+msgstr "Odustani"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Opis kolegija je ažuriran"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Opis kolegija je izbrisan"
+
+msgid "CourseDescriptionIntro"
+msgstr "Za unos opisa tečaja, odaberite (klik) naslov i popunite odgovarajuća polja.<br><br> Odaberite OK i po potrebi odaberite slijedeći naslov."
+
+msgid "langSaveDescription"
+msgstr "Spremi opis"
+

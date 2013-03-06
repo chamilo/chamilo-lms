@@ -1,0 +1,42 @@
+msgid "Height"
+msgstr "Výška"
+
+msgid "ResizingComment"
+msgstr "zmeniť veľkosť obrázku na nasledujúce rozmery (v pixeloch)"
+
+msgid "Width"
+msgstr "Šírka"
+
+msgid "Resizing"
+msgstr "ZMENIŤ VEĽKOSŤ"
+
+msgid "NoResizingComment"
+msgstr "Zobraziť všetky obrázky v ich pôvodnej veľkosti. Nenastane zmena veľkosti. Rolovacie lišty sa Vám zobrazia automaticky, keď bude obrázok väčší ako je veľkosť Vašej obrazovky."
+
+msgid "ShowThumbnails"
+msgstr "Zobraziť miniatúry"
+
+msgid "SetSlideshowOptions"
+msgstr "Nastaviť možnosti prezentácie"
+
+msgid "SlideshowOptions"
+msgstr "Možnosti prezentácie"
+
+msgid "NoResizing"
+msgstr "NEMENIŤ VEĽKOSŤ (prednastavená)"
+
+msgid "ExitSlideshow"
+msgstr "Ukončiť prezentáciu"
+
+msgid "SlideShow"
+msgstr "Prezentácia"
+
+msgid "PreviousSlide"
+msgstr "Predchádzajúci snímok"
+
+msgid "NextSlide"
+msgstr "Nasledujúci snímok"
+
+msgid "ViewSlideshow"
+msgstr "Prezrieť si prezentáciu"
+

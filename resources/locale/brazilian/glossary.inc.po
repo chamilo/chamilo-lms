@@ -1,0 +1,96 @@
+msgid "TermAddNew"
+msgstr "Adicionar um novo termo ao glossário"
+
+msgid "TermName"
+msgstr "Termo"
+
+msgid "TermDefinition"
+msgstr "Definição do termo"
+
+msgid "TermDeleted"
+msgstr "Termo excluido"
+
+msgid "TermUpdated"
+msgstr "Termo atualizado"
+
+msgid "TermConfirmDelete"
+msgstr "Deseja excluir este termo?"
+
+msgid "TermAddButton"
+msgstr "Salvar este termo"
+
+msgid "TermUpdateButton"
+msgstr "Atualizar termo"
+
+msgid "TermEdit"
+msgstr "Editar termo"
+
+msgid "TermDeleteAction"
+msgstr "Excluir termo"
+
+msgid "OrderBy"
+msgstr "Ordenar por"
+
+msgid "CreationDate"
+msgstr "Data de criação"
+
+msgid "UpdateDate"
+msgstr "Última modificação"
+
+msgid "PreSelectedOrder"
+msgstr "Ordenar por selecção"
+
+msgid "TermAdded"
+msgstr "Termo adicionado"
+
+msgid "YouMustEnterATermName"
+msgstr "Deve introduzir um termo"
+
+msgid "YouMustEnterATermDefinition"
+msgstr "Você deverá digitar uma definição do termo"
+
+msgid "TableView"
+msgstr "Visualizar como tabela"
+
+msgid "GlossaryTermAlreadyExistsYouShouldEditIt"
+msgstr "Este termo já existe no glossário. Por favor, altere o nome do termo."
+
+msgid "GlossaryManagement"
+msgstr "Gerenciamento do glossário"
+
+msgid "TermMoved"
+msgstr "O termo foi movido"
+
+msgid "ShowGlossaryInExtraToolsTitle"
+msgstr "Exibir os termos do glossário em outras ferramentas"
+
+msgid "ShowGlossaryInExtraToolsComment"
+msgstr "A partir daqui você pode configurar como adicionar os termos do glossário em ferramentas extras como Rotas de Aprendizagem e Exercícios"
+
+msgid "ImportGlossary"
+msgstr "Importar glossário"
+
+msgid "ReplaceGlossary"
+msgstr "Substituir glossário"
+
+msgid "CannotDeleteGlossary"
+msgstr "Não pode apagar o glossário"
+
+msgid "TermsImported"
+msgstr "Termos importados"
+
+msgid "TermsNotImported"
+msgstr "Termos não importados"
+
+msgid "ExportGlossaryAsCSV"
+msgstr "Exportar glossário como arquivo CSV"
+
+msgid "List"
+msgstr "Lista"
+
+msgid "GlossaryTermUpdated"
+msgstr "Termo atualizado"
+
+msgid "DeleteAllGlossaryTerms"
+msgstr "Apagar todos os termos"
+

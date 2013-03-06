@@ -1,0 +1,48 @@
+msgid "langCourseProgram"
+msgstr "Kursbeschreibung"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Für diesen Kurs liegt noch keine Beschreibung vor."
+
+msgid "langEditCourseProgram"
+msgstr "Kursbeschreibung erstellen und bearbeiten"
+
+msgid "QuestionPlan"
+msgstr "Frage an Kursleiter"
+
+msgid "langInfo2Say"
+msgstr "Informationen für Kursteilnehmer"
+
+msgid "langOuAutreTitre"
+msgstr "Titel"
+
+msgid "langNewBloc"
+msgstr "Sonstiges"
+
+msgid "langAddCat"
+msgstr "Kategorie hinzufügen"
+
+msgid "langAdd"
+msgstr "hinzufügen"
+
+msgid "langValid"
+msgstr "gültig"
+
+msgid "langBackAndForget"
+msgstr "abbrechen"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Die Kursbeschreibung wurde aktualisiert"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Die Kursbeschreibung wurde gelöscht"
+
+msgid "CourseDescriptionIntro"
+msgstr "Um eine Kursbeschreibung zu erstellen, klicken Sie auf ein Thema oder füllen Sie das richtige Formularfeld aus.<br/><br/>Klicken Sie dann OK und füllen Sie ein weiteres Thema aus."
+
+msgid "langSaveDescription"
+msgstr "Beschreibung speichern"
+
+msgid "AddCourseDescription"
+msgstr "Kursbeschreibung hinzufügen"
+

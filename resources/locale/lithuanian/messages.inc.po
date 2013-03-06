@@ -1,0 +1,60 @@
+msgid "Inbox"
+msgstr "Priėmimo dėžutė"
+
+msgid "Messages"
+msgstr "Žinutės"
+
+msgid "SendMessage"
+msgstr "Siūsti žinutę"
+
+msgid "NewMessage"
+msgstr "Nauja žinutė"
+
+msgid "ComposeMessage"
+msgstr "Rašyti žinutę"
+
+msgid "DeleteSelectedMessages"
+msgstr "Ištrinti pasirinktas žinutes"
+
+msgid "SelectAll"
+msgstr "Pažymėti visas"
+
+msgid "DeselectAll"
+msgstr "Atžymėti visas"
+
+msgid "ReplyToMessage"
+msgstr "Atsakyti į šią žinutę"
+
+msgid "BackToInbox"
+msgstr "Atgal į priėmimo dėžutę"
+
+msgid "MessageSentTo"
+msgstr "Žinutė išsiųsta"
+
+msgid "SendMessageTo"
+msgstr "Siųsti kam"
+
+msgid "Myself"
+msgstr "man"
+
+msgid "From"
+msgstr "Nuo"
+
+msgid "To"
+msgstr "Kam"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "InvalidMessageId"
+msgstr "Žinutė, į kurią norima atsakyti, neegzistuoja."
+
+msgid "ErrorSendingMessage"
+msgstr "Klaida bandant išsiųsti žinutę."
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Ar tikrai norite ištrinti pažymėtas žinutes?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "The selected messages have been deleted"
+

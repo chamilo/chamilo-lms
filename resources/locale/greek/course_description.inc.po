@@ -1,0 +1,54 @@
+msgid "langCourseProgram"
+msgstr "Περιγραφή μαθήματος"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Το μάθημα, προς το παρόν, δεν διαθέτει περιγραφή"
+
+msgid "langEditCourseProgram"
+msgstr "Δημιουργία ή Επεξεργασία της περιγραφής του μαθήματος"
+
+msgid "QuestionPlan"
+msgstr "Ερώτηση στον επικεφαλή"
+
+msgid "langInfo2Say"
+msgstr "Πληροφορία προς τους χρήστες"
+
+msgid "langOuAutreTitre"
+msgstr "Τίτλος"
+
+msgid "langNewBloc"
+msgstr "Άλλο"
+
+msgid "langAddCat"
+msgstr "Προσθήκη μιας κατηγορίας"
+
+msgid "langAdd"
+msgstr "Προσθήκη"
+
+msgid "langValid"
+msgstr "Επικύρωση"
+
+msgid "langBackAndForget"
+msgstr "Επιστροφή και ακύρωση"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Αυτή η περιγραφή ενημερώθηκε"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Η περιγραφή έχει διαγραφεί"
+
+msgid "CourseDescriptionIntro"
+msgstr "Κάντε κλικ στο Ok για να συνεχίσετε."
+
+msgid "langSaveDescription"
+msgstr "Αποθήκευση περιγραφής"
+
+msgid "AddCourseDescription"
+msgstr "Προσθήκη περιγραφής μαθήματος"
+
+msgid "DescriptionUpdated"
+msgstr "Η περιγραφή ενημερώθηκε"
+
+msgid "CourseDescriptions"
+msgstr "Περιγραφές μαθημάτων"
+

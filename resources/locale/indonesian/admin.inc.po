@@ -1,0 +1,1503 @@
+msgid "AdminBy"
+msgstr "Admin oleh"
+
+msgid "AdministrationTools"
+msgstr "Administrasi"
+
+msgid "State"
+msgstr "Keadaan system"
+
+msgid "Statistiques"
+msgstr "Statistik"
+
+msgid "langUsed"
+msgstr "digunakan"
+
+msgid "langPresent"
+msgstr "Ok"
+
+msgid "langMissing"
+msgstr "hilang"
+
+msgid "langExist"
+msgstr "ada"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Tampilkan Pengajar dalam judul mata kuliah"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Tampilkan Pengajar dalam komentar daftar mata kuliah"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Tampilkan Kode Mata Kuliah dalam komentar daftar mata kuliah"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Tampilkan kode mata kuliah dalam Judul Mata Kuliah"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "Tidak terdapat mata kuliah virtual dalam platform."
+
+msgid "ConfigureHomePage"
+msgstr "Tata homepage"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Modul-modul aktif saat pembuatan pelajaran"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Tool mana yang akan diaktifkan (nampak) sebagai default ketika matakuliah dibuat?"
+
+msgid "langCourseBackup"
+msgstr "Buat back-up mata kuliah ini"
+
+msgid "langCourseTitular"
+msgstr "Pengajar"
+
+msgid "langCourseTitle"
+msgstr "Judul Mata Kuliah"
+
+msgid "langCourseFaculty"
+msgstr "Kategoi Mata Kuliah"
+
+msgid "langCourseDepartment"
+msgstr "Jurusan/Departemen Mata Kuliah"
+
+msgid "langCourseDepartmentURL"
+msgstr "URL Jurusan/Departemen"
+
+msgid "langCourseLanguage"
+msgstr "Bahasa Mata Kuliah"
+
+msgid "langCourseAccess"
+msgstr "Akses Mata Kuliah"
+
+msgid "langCourseSubscription"
+msgstr "Pendaftaran Mata Kuliah"
+
+msgid "langPublicAccess"
+msgstr "Akses Publik"
+
+msgid "langPrivateAccess"
+msgstr "Akses Privat"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Manajemen Database hanya tersedia bagi administrator server"
+
+msgid "langShowUsersOfCourse"
+msgstr "Tampilkan user yang terdaftar di mata kuliah ini"
+
+msgid "langShowClassesOfCourse"
+msgstr "Tampilkan klas yang terdaftar di mata kuliah ini"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Tampilkan group-group pada mata kuliah ini"
+
+msgid "langPhone"
+msgstr "Telepon"
+
+msgid "langPhoneNumber"
+msgstr "Nomor Telepon"
+
+msgid "langActions"
+msgstr "Aksi"
+
+msgid "langAddToCourse"
+msgstr "tambah ke suatu mata kuliah"
+
+msgid "langDeleteFromPlatform"
+msgstr "Hapus dari platform"
+
+msgid "langDeleteCourse"
+msgstr "Hapus mata kuliah ini"
+
+msgid "langDeleteFromCourse"
+msgstr "Hapus dari mata kuliah ini"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Hapus klas-klas terseleksi"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Hapus group-group terseleksi"
+
+msgid "langAdministrator"
+msgstr "Administrator"
+
+msgid "langAddPicture"
+msgstr "Tambah foto"
+
+msgid "langChangePicture"
+msgstr "Ubah foto"
+
+msgid "langDeletePicture"
+msgstr "Hapus foto"
+
+msgid "langAddUsers"
+msgstr "Tambah user"
+
+msgid "langAddGroups"
+msgstr "Tambah group"
+
+msgid "langAddClasses"
+msgstr "Tambah klas"
+
+msgid "langExportUsers"
+msgstr "Export daftar user"
+
+msgid "langKeyword"
+msgstr "Kata kunci"
+
+msgid "langGroupName"
+msgstr "Nama Group"
+
+msgid "langGroupTutor"
+msgstr "Nama tutor Group"
+
+msgid "langGroupDescription"
+msgstr "Deskripsi Group"
+
+msgid "langNumberOfParticipants"
+msgstr "Jumlah peserta"
+
+msgid "langNumberOfUsers"
+msgstr "Jumlah user"
+
+msgid "langMaximum"
+msgstr "maximum"
+
+msgid "langMaximumOfParticipants"
+msgstr "Jumlah Maximum peserta"
+
+msgid "langParticipants"
+msgstr "perserta"
+
+msgid "langFirstLetterClass"
+msgstr "Huruf Pertama (nama klas)"
+
+msgid "langFirstLetterUser"
+msgstr "Huruf Pertama (nama belakang)"
+
+msgid "langFirstLetterCourse"
+msgstr "Huruf Pertama (Kode)"
+
+msgid "langModifyUserInfo"
+msgstr "Ubah informasi user"
+
+msgid "langModifyClassInfo"
+msgstr "Ubah informasi klas"
+
+msgid "langModifyGroupInfo"
+msgstr "Ubah informasi group"
+
+msgid "langModifyCourseInfo"
+msgstr "Ubah informasi mata kuliah"
+
+msgid "langPleaseEnterClassName"
+msgstr "Silahkan masukkan nama klas !"
+
+msgid "langPleaseEnterLastName"
+msgstr "Silahkan masukkan nama belakang user !"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Silahkan masukkan nama depan user !"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Silahkan masukkan alamat e-mail yang sah !"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Silahkan masukkan login/nama user yang sah !"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Silahkan masukkan kode mata kuliah !"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Silahkan masukkan nama belakang dan depann pengajar !"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Silahkan masukkan judul mata kuliah !"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Format yang diperbolehkan adalah JPG, PNG dan GIF !"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Login ini sudah terpakai !"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Import daftar user dari file XML/CSV"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Export daftar user ke file XML/CSV"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Hanya user dari mata kuliah"
+
+msgid "langAddClassesToACourse"
+msgstr "Tambah kelas ke mata kuliah"
+
+msgid "langAddUsersToACourse"
+msgstr "Tambah user ke mata kuliah"
+
+msgid "langAddUsersToAClass"
+msgstr "Tambah user ke klas"
+
+msgid "langAddUsersToAGroup"
+msgstr "Tambah user ke group"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Anda harus memilih setidaknya satu klas dan satu mata kuliah !"
+
+msgid "AtLeastOneUser"
+msgstr "Anda harus memilih setidaknya satu user !"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Anda harus memilih setidaknya satu user dan satu mata kuliah !"
+
+msgid "langClassList"
+msgstr "Daftar Klas"
+
+msgid "langUserList"
+msgstr "Daftar User"
+
+msgid "langCourseList"
+msgstr "Daftar Mata Kuliah"
+
+msgid "langAddToThatCourse"
+msgstr "Tambahkan ke mata kuliah tersebut"
+
+msgid "langAddToClass"
+msgstr "Tambahkan ke klas"
+
+msgid "langRemoveFromClass"
+msgstr "Hapus dari klas"
+
+msgid "langAddToGroup"
+msgstr "Tambahkan ke group"
+
+msgid "langRemoveFromGroup"
+msgstr "Hapus dari group"
+
+msgid "langUsersOutsideClass"
+msgstr "User-user dari luar klas"
+
+msgid "langUsersInsideClass"
+msgstr "User-user dari dalam klas"
+
+msgid "langUsersOutsideGroup"
+msgstr "User-user dari luar group"
+
+msgid "langUsersInsideGroup"
+msgstr "User-user dari dalam group"
+
+msgid "langImportFileLocation"
+msgstr "Lokasi file CSV / XML"
+
+msgid "langFileType"
+msgstr "Type file"
+
+msgid "langOutputFileType"
+msgstr "Type file output"
+
+msgid "langMustUseSeparator"
+msgstr "harus menggunakan karakter \';\' sebagai pemisah"
+
+msgid "langCSVMustLookLike"
+msgstr "File CSV harus seperti ini"
+
+msgid "langXMLMustLookLike"
+msgstr "File XML harus seperti ini"
+
+msgid "langMandatoryFields"
+msgstr "field-field dalam <b>huruf tebal</b> adalah wajib"
+
+msgid "langNotXML"
+msgstr "File tersebut bukan dalam format XML !"
+
+msgid "langNotCSV"
+msgstr "File tersebut bukan dalam format CSV !"
+
+msgid "langNoNeededData"
+msgstr "File tersebut tidak berisi semua data yang dibutuhkan !"
+
+msgid "langMaxImportUsers"
+msgstr "Anda tidak dapat meng-import lebih dari 500 user sekaligus !"
+
+msgid "langAdminDatabases"
+msgstr "Database (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "User-user"
+
+msgid "langAdminClasses"
+msgstr "Klas-klas user"
+
+msgid "langAdminGroups"
+msgstr "Group-group user"
+
+msgid "langAdminCourses"
+msgstr "Mata kuliah"
+
+msgid "langAdminCategories"
+msgstr "Kategori Mata Kuliah"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Daftarkan user / group ke mata kuliah"
+
+msgid "AddACategory"
+msgstr "tambah Kategori"
+
+msgid "langInto"
+msgstr "kedalam"
+
+msgid "langNoCategories"
+msgstr "Tidak ada kategori disini"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Ijinkan menambahkan mata kuliah dalam kategori ini ?"
+
+msgid "langGoToForum"
+msgstr "Lihat forum"
+
+msgid "langCategoryCode"
+msgstr "Kode Kategori"
+
+msgid "langCategoryName"
+msgstr "Nama Kategori"
+
+msgid "langCategories"
+msgstr "kategori"
+
+msgid "langEditNode"
+msgstr "Edit Kategori ini"
+
+msgid "langOpenNode"
+msgstr "Buka Kategori ini"
+
+msgid "langDeleteNode"
+msgstr "Hapus Kategori ini"
+
+msgid "langAddChildNode"
+msgstr "Tambah sub-kategori"
+
+msgid "langViewChildren"
+msgstr "Lihat sub-nya"
+
+msgid "langTreeRebuildedIn"
+msgstr "Tree dibangun dalam"
+
+msgid "langTreeRecountedIn"
+msgstr "Tree dihitung dalam"
+
+msgid "langRebuildTree"
+msgstr "Bangun-ulang tree"
+
+msgid "langRefreshNbChildren"
+msgstr "Refresh jumlah sub"
+
+msgid "langShowTree"
+msgstr "Tampilkan tree"
+
+msgid "langBack"
+msgstr "kembali ke halaman sebelumnya"
+
+msgid "langLogDeleteCat"
+msgstr "Kategori dihapus"
+
+msgid "langRecountChildren"
+msgstr "Hitung-ulang sub"
+
+msgid "langUpInSameLevel"
+msgstr "Keatas dalam level yang sama"
+
+msgid "langSeconds"
+msgstr "detik"
+
+msgid "langMailTo"
+msgstr "Kirim surat ke :"
+
+msgid "lang_no_access_here"
+msgstr "Tidak ada akses disini"
+
+msgid "lang_php_info"
+msgstr "informasi tentang system"
+
+msgid "langAddAdminInApache"
+msgstr "Tambah user berhak admin"
+
+msgid "langAddFaculties"
+msgstr "Tambah fakultas/kategori"
+
+msgid "langSearchACourse"
+msgstr "Cari mata kuliah"
+
+msgid "langSearchAUser"
+msgstr "Cari user"
+
+msgid "langTechnicalTools"
+msgstr "Teknis"
+
+msgid "langConfig"
+msgstr "Konfigurasi System"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Daftar Login (extended)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Jumlah maksimum user tampil di scroll list"
+
+msgid "NoTimeLimits"
+msgstr "Tanpa batas waktu"
+
+msgid "GeneralCoach"
+msgstr "Pelatih umum"
+
+msgid "GeneralProperties"
+msgstr "Properti umum"
+
+msgid "CourseCoach"
+msgstr "Pelatih kuliah"
+
+msgid "UsersNumber"
+msgstr "Nomor pemakai"
+
+msgid "PageAfterLoginTitle"
+msgstr "Halaman setelah login"
+
+msgid "PageAfterLoginComment"
+msgstr "Halaman yang dapat dilihat oleh user yang menghubungi."
+
+msgid "DokeosAdminWebLinks"
+msgstr "Web Chamilo"
+
+msgid "GlobalRole"
+msgstr "Role Global"
+
+msgid "langNomOutilTodo"
+msgstr "Kelola daftar yang akan dilakukan"
+
+msgid "langNomPageAdmin"
+msgstr "Administrasi"
+
+msgid "langSysInfo"
+msgstr "Info tentang System"
+
+msgid "langDiffTranslation"
+msgstr "Bandingkan terjemahan"
+
+msgid "langStatOf"
+msgstr "Statistik dari"
+
+msgid "langSpeeSubscribe"
+msgstr "Mendaftar cepat sebagai Course Checker"
+
+msgid "langLogIdentLogout"
+msgstr "Daftar Login"
+
+msgid "langServerStatus"
+msgstr "Status server MySQL :"
+
+msgid "langDataBase"
+msgstr "Database"
+
+msgid "langRun"
+msgstr "bekerja"
+
+msgid "langClient"
+msgstr "Klien MySql"
+
+msgid "langServer"
+msgstr "Server MySql"
+
+msgid "langtitulary"
+msgstr "Pemilik"
+
+msgid "langUpgradeBase"
+msgstr "Upgrade database"
+
+msgid "langManage"
+msgstr "Kelola kampus"
+
+msgid "langErrorsFound"
+msgstr "error ditemukan"
+
+msgid "langMaintenance"
+msgstr "Perawatan"
+
+msgid "langUpgrade"
+msgstr "Upgrade Software"
+
+msgid "langWebsite"
+msgstr "Situs Software"
+
+msgid "langDocumentation"
+msgstr "Dokumentasi"
+
+msgid "langContribute"
+msgstr "Kontribusi"
+
+msgid "langInfoServer"
+msgstr "Informasi Server"
+
+msgid "langOtherCategory"
+msgstr "Kategori Lain"
+
+msgid "langSendMailToUsers"
+msgstr "Kirim email ke user"
+
+msgid "langExampleXMLFile"
+msgstr "Contoh file XML"
+
+msgid "langExampleCSVFile"
+msgstr "Contoh file CSV"
+
+msgid "langCourseSystemCode"
+msgstr "Kode System"
+
+msgid "langCourseVisualCode"
+msgstr "Kode Visual"
+
+msgid "langSystemCode"
+msgstr "Kode System"
+
+msgid "langVisualCode"
+msgstr "kode visual"
+
+msgid "langAddCourse"
+msgstr "Buat mata kuliah"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Kelola mata kuliah virtual"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Buat mata kuliah virtual"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "Mata kuliah virtual tsb akan berbagi simpanan (direktori dan database) dengan mata kuliah sungguhan yang ada."
+
+msgid "langRealCourseCode"
+msgstr "Kode mata kuliah nyata"
+
+msgid "langCourseCreationSucceeded"
+msgstr "Mata kuliah tsb sukses dibuat."
+
+msgid "langYourDokeosUses"
+msgstr "Instalasi Chamilo anda saat ini menggunakan"
+
+msgid "langOnTheHardDisk"
+msgstr "dalam hard disk"
+
+msgid "langIsVirtualCourse"
+msgstr "merupaka mata kuliah virtual"
+
+msgid "langSystemAnnouncements"
+msgstr "Pengumuman System"
+
+msgid "langAddAnnouncement"
+msgstr "Tambah pengumuman baru"
+
+msgid "langAnnouncementAdded"
+msgstr "Pengumuman telah ditambahkan"
+
+msgid "langAnnouncementUpdated"
+msgstr "Pengumuman telah di-update"
+
+msgid "langAnnouncementDeleted"
+msgstr "Pengumuman telah dihapus"
+
+msgid "langContent"
+msgstr "Isi (content)"
+
+msgid "langStudent"
+msgstr "Siswa"
+
+msgid "Guest"
+msgstr "Tamu"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Login sebagai"
+
+msgid "langLoginAsThisUser"
+msgstr "Login"
+
+msgid "SelectPicture"
+msgstr "Pilih gambar..."
+
+msgid "DontResetPassword"
+msgstr "Jangan reset password"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Berpartisipasi dalam pengembangan"
+
+msgid "langCourseAdmin"
+msgstr "Pengelola"
+
+msgid "langOtherCourses"
+msgstr "mata kuliah lain"
+
+msgid "PlatformLanguageTitle"
+msgstr "Bahasa Platform"
+
+msgid "ServerStatusComment"
+msgstr "Server jenis apakah ini? Ini mengangktifkan/menonaktifkan opsi-opsi tertentu.  Pada server pengembangan terdapat fitur penterjemah yang dapat menunjukkan string yang belum diterjemahkan"
+
+msgid "ServerStatusTitle"
+msgstr "Type Server"
+
+msgid "PlatformLanguages"
+msgstr "Bahasa-bahasa Platform Chamilo"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Tool ini mengatur menu pemilihan bahasa  pada halaman login. Sebagai administrator platform anda dapat memutuskan bahasa apa yang tersedia untuk user."
+
+msgid "OriginalName"
+msgstr "Nama asli"
+
+msgid "EnglishName"
+msgstr "Nama Inggris"
+
+msgid "DokeosFolder"
+msgstr "Folder Chamilo"
+
+msgid "Properties"
+msgstr "Properties"
+
+msgid "PlatformConfigSettings"
+msgstr "Seting Konfigurasi Chamilo"
+
+msgid "SettingsStored"
+msgstr "Seting telah disiimpan"
+
+msgid "InstitutionTitle"
+msgstr "Nama Institusi"
+
+msgid "InstitutionComment"
+msgstr "Nama institusi (tampil di header kanan)"
+
+msgid "InstitutionUrlTitle"
+msgstr "URL Institusi"
+
+msgid "InstitutionUrlComment"
+msgstr "URL Institusi (link yang tampil pada header kanan)"
+
+msgid "SiteNameTitle"
+msgstr "Judul Kampus Chamilo"
+
+msgid "SiteNameComment"
+msgstr "Nama kampus Chamilo anda (tampil di header kiri)"
+
+msgid "emailAdministratorTitle"
+msgstr "Administrator Platform: E-mail"
+
+msgid "emailAdministratorComment"
+msgstr "Alamat email Administrator Platform (tampil di kiri bawah)"
+
+msgid "administratorSurnameTitle"
+msgstr "Administrator Platform: Nama Belakang"
+
+msgid "administratorSurnameComment"
+msgstr "Nama Belakang Administrator (tampil di kiri bawah)"
+
+msgid "administratorNameTitle"
+msgstr "Administrator Platform: Nama Depan"
+
+msgid "administratorNameComment"
+msgstr "Nama Depan administrator platfor (tampil di kiri bawah)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Informasi Administrator Platform di catatan kaki"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Tampilkan Informasi Administrator Platform di footer?"
+
+msgid "HomepageViewTitle"
+msgstr "Judul Tampilan Homepage"
+
+msgid "HomepageViewComment"
+msgstr "Bagaimana tampilan yang diinginkan pada homepage mata kuliah?"
+
+msgid "HomepageViewDefault"
+msgstr "Layout dua kolom.  Tool yang tidak aktif disembunyikan."
+
+msgid "HomepageViewFixed"
+msgstr "Layout tiga kolom.  Tool yang tidak aktif berwarna kelabu (Ikon tetap ditempatnya)"
+
+msgid "Yes"
+msgstr "Ya"
+
+msgid "No"
+msgstr "Tidak"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Shortcut Tool"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Tampilkan shortcut tool di banner?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Tampilan terlihat Siswa"
+
+msgid "ShowStudentViewComment"
+msgstr "Menyediakan fasilitas Tampilan Yang Terlihat Siswa? <br> Fitur ini memungkinkan pengajar melihat apa yang akan tampil terlihat siswa."
+
+msgid "AllowGroupCategories"
+msgstr "Kategori-kategori Group"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Ijinkan admin mata kuliah untuk membuat kategori dalam modul group?"
+
+msgid "PlatformLanguageComment"
+msgstr "Anda dapat menentukan bahasa platform dalam bagian berbeda pada administrasi platform, yaitu pada: <a href=\"languages.php\">Bahasa Platform Chamilo</a>"
+
+msgid "ProductionServer"
+msgstr "Production Server"
+
+msgid "TestServer"
+msgstr "Server Ujicoba"
+
+msgid "ShowOnlineTitle"
+msgstr "siapa yang online"
+
+msgid "AsPlatformLanguage"
+msgstr "sebagai bahasa platform"
+
+msgid "ShowOnlineComment"
+msgstr "Tampilkan jumlah user online?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Ijinkan Peruban Nama dalam profil?"
+
+msgid "AllowNameChangeComment"
+msgstr "Apakah user diijinkan untuk merubah namanya?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Quota Default Dokumen"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Berapa quota default untuk tool dokumen? anda dapat melampaui quota untuk mata kuliah tertentu: administrasi platform > Mata Kuliah > Ubah"
+
+msgid "ProfileChangesTitle"
+msgstr "Profil"
+
+msgid "ProfileChangesComment"
+msgstr "Bagian profil mana yang dapat diubah?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Pendaftaran: field yang wajib diisi"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Field mana yang wajib diisi (disamping nama depan, nama belakang, login dan password)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Quota group default"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Berapa quota default untuk suatu tool dokumen group?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Lupa Password"
+
+msgid "AllowLostPasswordComment"
+msgstr "Apakah user diijinkan memohon passwordnya yang hilang/lupa?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Pendaftaran"
+
+msgid "AllowRegistrationComment"
+msgstr "Apakah pendaftaran sebagai user baru diijinkan? Bolehkah user membuat account baru?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Pendaftaran sebagai Pengajar"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Bolehkah seseorang mendaftar sebagai pengajar (yang dapat membuat homepage mata kuliah)?"
+
+msgid "PlatformLanguage"
+msgstr "Bahasa Platform"
+
+msgid "CourseQuota"
+msgstr "Quota Mata Kuliah"
+
+msgid "EditNotice"
+msgstr "Edit pemberitahuan"
+
+msgid "General"
+msgstr "umum"
+
+msgid "LostPassword"
+msgstr "Lupa Password"
+
+msgid "Registration"
+msgstr "pendaftaran"
+
+msgid "Password"
+msgstr "password"
+
+msgid "InsertLink"
+msgstr "masukkan link"
+
+msgid "EditNews"
+msgstr "Edit Berita"
+
+msgid "EditCategories"
+msgstr "edit kategori"
+
+msgid "EditHomePage"
+msgstr "Edit Homepage"
+
+msgid "AllowUserHeadingsComment"
+msgstr "Bolehkah admin matakuliah menentukan heading user untuk mengambil informasi user tambahan?"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Course"
+msgstr "Mata Kuliah"
+
+msgid "Languages"
+msgstr "Bahasa-bahasa"
+
+msgid "Privacy"
+msgstr "Privacy"
+
+msgid "NoticeTitle"
+msgstr "Judul Pemberitahuan"
+
+msgid "NoticeText"
+msgstr "Text Pemberitahuan"
+
+msgid "LinkName"
+msgstr "Text Link"
+
+msgid "LinkURL"
+msgstr "URL Link"
+
+msgid "OpenInNewWindow"
+msgstr "Buka di jendela baru"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "Pada layar yang membolehkan penambahan user kesuatu mata kuliah atau klas, jika daftar pertama yang tidak difilter berisi lebih banyak dari jumlah user ini, maka default ke huruf pertama (A)"
+
+msgid "Plugins"
+msgstr "Plugins"
+
+msgid "Info"
+msgstr "informasi"
+
+msgid "UserAdded"
+msgstr "User tersebut telah ditambahkan"
+
+msgid "NoSearchResults"
+msgstr "Hasil pencarian tidak ada"
+
+msgid "UserDeleted"
+msgstr "User tersebut telah dihapus"
+
+msgid "NoClassesForThisCourse"
+msgstr "Tidak ada siswa mendaftar pada mata kuliah ini"
+
+msgid "CourseUsage"
+msgstr "Pemanfaatan Mata Kuliah"
+
+msgid "NoCoursesForThisUser"
+msgstr "User tersebut tidak terdaftar pada mata kuliah"
+
+msgid "NoClassesForThisUser"
+msgstr "User tersebut tidak terdaftar pada suatu kelas mata kuliah"
+
+msgid "NoCoursesForThisClass"
+msgstr "Klas ini tidak terdaftar pada mata kuliah"
+
+msgid "langOpenToTheWorld"
+msgstr "Terbuka - akses diijinkan untuk seluruh dunia"
+
+msgid "OpenToThePlatform"
+msgstr "Terbuka - akses diijinkan untuk user yang terdaftar pada platform ini"
+
+msgid "langPrivate"
+msgstr "Akses privat (situs hanya dapat diakses oleh user yang terdaftar)"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Tertutup; mata kuliah hanya dapat diakses oleh admin."
+
+msgid "langSubscription"
+msgstr "Pendaftaran"
+
+msgid "langUnsubscription"
+msgstr "Mengundurkan diri"
+
+msgid "CourseAccessConfigTip"
+msgstr "Secara default mata kuliah anda tersedia untuk publik. Tetapi anda dapat menentukan level akses di atas."
+
+msgid "Tool"
+msgstr "tool"
+
+msgid "NumberOfItems"
+msgstr "jumlah item"
+
+msgid "DocumentsAndFolders"
+msgstr "Dokumen dan folder"
+
+msgid "Learnpath"
+msgstr "Learnpath"
+
+msgid "Exercises"
+msgstr "Latihan"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Agenda Personal"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "Bolehkan user menambahkan item agenda personal pada halaman Agenda-ku?"
+
+msgid "CurrentValue"
+msgstr "nilai sekarang"
+
+msgid "CourseDescription"
+msgstr "Deskripsi mata kuliah"
+
+msgid "OnlineConference"
+msgstr "Konfrensi Online"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Quiz"
+msgstr "Latihan"
+
+msgid "Announcements"
+msgstr "Pengumuman"
+
+msgid "Links"
+msgstr "Link"
+
+msgid "LearningPath"
+msgstr "Learning path"
+
+msgid "Documents"
+msgstr "Dokumen"
+
+msgid "UserPicture"
+msgstr "Foto"
+
+msgid "officialcode"
+msgstr "Kode Resmi (NIP/NPM/Nomor Induk)"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "UserPassword"
+msgstr "Password"
+
+msgid "SubscriptionAllowed"
+msgstr "Pendaftaran diijinkan"
+
+msgid "UnsubscriptionAllowed"
+msgstr "Pengunduran diri diijinkan"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Diijinkan"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Dilarang"
+
+msgid "AddDummyContentToCourse"
+msgstr "Tambah dummy content ke mata kuliah ini"
+
+msgid "DummyCourseCreator"
+msgstr "Buat dummy course content"
+
+msgid "DummyCourseDescription"
+msgstr "Ini akan menambah dummy content ke mata kuliah ini.  Tool ini untuk ujicoba saja."
+
+msgid "AvailablePlugins"
+msgstr "Ini merupakan plugins yang ditemukan dalam system anda."
+
+msgid "CreateVirtualCourse"
+msgstr "Buat mata kuliah virtual"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Tampilkan daftar mata kuliah virtual"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Link-kan ke kode mata kuliah nyata"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Usaha pembuatan mata kuliah virtual..."
+
+msgid "WantedCourseCode"
+msgstr "kode mata kuliah yang diinginkan"
+
+msgid "ResetPassword"
+msgstr "Reset password"
+
+msgid "CheckToSendNewPassword"
+msgstr "Conteng untuk mengirim password baru"
+
+msgid "AutoGeneratePassword"
+msgstr "Secara otomatis membuat password baru"
+
+msgid "UseDocumentTitleTitle"
+msgstr "gunakan judul untuk nama dokumen"
+
+msgid "UseDocumentTitleComment"
+msgstr "Ini akan memungkinkan penggunaan judul untuk nama dokumen sebagai pengganti nama_dokumen.ext"
+
+msgid "StudentPublications"
+msgstr "Publikasi siswa"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "File yang dihapus tidak dapat di-restore"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Penghapusan file dalam tool dokumen secara permanen akan menghapusnya.  File tsb tidak dapat di-restore"
+
+msgid "ClassName"
+msgstr "Nama Klas"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Dropbox: Ukuran maksimum file dokumen dropbox"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Berapa ukuran (byte) sebuah dokumen dropbox yang diijinkan?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Dropbox: Bolehkan dokumen ditimpah/overwritten"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "Dapatkah dokumen asli ditimpah jika siswa/pengajar meng-upload dokumen dengan nama sama dengan yang sudah ada? Jika jawabannya ya anda kehilangan mekanisme versi (versioning mechanism)"
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Dropbox:  Upload ke dropbox sendiri?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Ijinkan pengajar dan siswa untuk meng-upload dokumen ke dropboxnya masing-masing tanpa mengirimkannya ke yang lain (= mengirim dokumen ke diri sendiri)"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Dropbox: Siswa <-> Siswa"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Ijinkan siswa untuk mengirim dokumen ke siswa lain (peer 2 peer, P2P exchange).  Siswa dapat  juga menggunakan ini untuk dokumen yang kurang relevan (mp3, solusi soal ...). Jika anda men-disable ini, maka siswa hanya bisa mengirim dokumen ke pengajar"
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Dropbox: mailing diijinkan"
+
+msgid "DropboxAllowMailingComment"
+msgstr "Dengan fungsionalnya mailing anda dapat mengirim ke setiap siswa dokumen personal"
+
+msgid "UserListHasBeenExported"
+msgstr "Daftar user telah diekspor."
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Klik disini untuk mendownload file tsb."
+
+msgid "administratorTelephoneTitle"
+msgstr "Administrator Platform : Telepone"
+
+msgid "administratorTelephoneComment"
+msgstr "Nomor telepon administrator platform"
+
+msgid "SendMailToNewUser"
+msgstr "Kirim email ke user baru"
+
+msgid "ExtendedProfileTitle"
+msgstr "Extended profile"
+
+msgid "ExtendedProfileComment"
+msgstr "Jika seting diset \'Benar\', user dapat mengisi field (opsional) berikut ini: \'Kompetensi-ku\', \'Diploma-ku\', \'Apa yang dapat saya ajarkan\' dan \'Open area personal-ku\'"
+
+msgid "Classes"
+msgstr "Klas"
+
+msgid "UserUnsubscribed"
+msgstr "User kini mengundurkan diri"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "User tidak dapat mengundurkan diri dari mata kuliah.  User ini administrator mata kuliah."
+
+msgid "InvalidStartDate"
+msgstr "Tanggal mulai tidak sah."
+
+msgid "InvalidEndDate"
+msgstr "Tanggal selesai tidak sah."
+
+msgid "DateFormatLabel"
+msgstr "(d/m/y h:m)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "File-Homepage tidak dapat ditulisi!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Silahkan berikan sebuah teks pemberitahuan"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Silahkan beri judul pemberitahuan"
+
+msgid "PleaseEnterLinkName"
+msgstr "Silahkan beri nama link"
+
+msgid "InsertThisLink"
+msgstr "Masukkan link ini"
+
+msgid "FirstPlace"
+msgstr "Tempat pertama"
+
+msgid "After"
+msgstr "setelah"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Dropbox: ijinkan group"
+
+msgid "DropboxAllowGroupComment"
+msgstr "User dapat mengirim file ke group"
+
+msgid "ClassDeleted"
+msgstr "Klas tersebut dihapus"
+
+msgid "ClassesDeleted"
+msgstr "Klas tersebut dihapus"
+
+msgid "NoUsersInClass"
+msgstr "Tidak ada user di kelas ini"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "User yang dipilih tsb didaftarkan ke mata kuliah yang dipilih"
+
+msgid "InvalidTitle"
+msgstr "Silahkan masukkan judul"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Kategori ini sudah lebih dahulu digunakan"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Silahkan masukkan kode dan nama kategori"
+
+msgid "DokeosHomepage"
+msgstr "Homepage Chamilo"
+
+msgid "DokeosForum"
+msgstr "Forum Chamilo"
+
+msgid "RegisterYourPortal"
+msgstr "Daftarkan portal anda"
+
+msgid "DokeosExtensions"
+msgstr "Chamilo Extensions"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Tampilkan menu navigasi mata kuliah"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Tampilkan menu navigasi yang membuat mudah untuk menelusuri suatu mata kuliah"
+
+msgid "LoginAs"
+msgstr "Login sebagai"
+
+msgid "ImportClassListCSV"
+msgstr "Import daftar klas via CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "Tampilkan jumlah user yang online pada halaman login (tampak bagi umum)"
+
+msgid "ShowOnlineUsers"
+msgstr "Tampilkan jumlah user yang online pada semua halaman (tampak bagi pengguna yang sudah login)"
+
+msgid "ShowOnlineCourse"
+msgstr "Tampilkan jumlah user yang online pada mata kuliah ini"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Tampilkan ikon pada menu navigasi"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Lihat semua Peran/Role dan lokasi untuk suatu Hak"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Lihat semua Peran/role dan Hak untuk suatu lokasi"
+
+msgid "ClassesUnsubscribed"
+msgstr "kelas-kelas yang terseleksi telah di-undur-dirikan dari mata kuliah-mata kuliah tersebut"
+
+msgid "ClassesSubscribed"
+msgstr "kelas-kelas yang terseleksi telah di-daftarkan pada kuliah-mata kuliah tersebut"
+
+msgid "RoleId"
+msgstr "ID Peran/Role"
+
+msgid "RoleName"
+msgstr "Nama Peran/Role"
+
+msgid "RoleType"
+msgstr "Jenis"
+
+msgid "RightValueModified"
+msgstr "Nilai telah diubah."
+
+msgid "MakeAvailable"
+msgstr "Buat menjadi tersedia"
+
+msgid "MakeUnavailable"
+msgstr "Buat tidak tersedia"
+
+msgid "Stylesheets"
+msgstr "Style sheets"
+
+msgid "DefaultDokeosStyle"
+msgstr "Style Chamilo Default"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Apakah menu navigasi menampilkan ikon tool yang berbeda?"
+
+msgid "Plugin"
+msgstr "Plugin"
+
+msgid "MainMenu"
+msgstr "Menu Utama"
+
+msgid "MainMenuLogged"
+msgstr "Menu Utama setelah login"
+
+msgid "Banner"
+msgstr "Banner"
+
+msgid "ImageResizeTitle"
+msgstr "Resize gambar-gambar yang di-upload user"
+
+msgid "ImageResizeComment"
+msgstr "Gambar-gambar user dapat di-resize pada saat di-upload jika PHP di-compiled dengan <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. Jika GD tidak tersedia, setting ini akan diabaikan."
+
+msgid "MaxImageWidthTitle"
+msgstr "Ukuran lebar maksimum gambar user"
+
+msgid "MaxImageWidthComment"
+msgstr "Lebar maksimum dalam pixel gambarnya user.  Setting ini berlaku jika gambar user di-set untuk di-resized pada saat di-upload."
+
+msgid "MaxImageHeightTitle"
+msgstr "Ukuran tinggi maksimum gambar user"
+
+msgid "MaxImageHeightComment"
+msgstr "Tinng maksimum (dalam pixel) ukuran gambarnya user.  Setting ini berlaku jika gambar user di-set untuk di-resize pada saat di-upload."
+
+msgid "YourVersionNotUpToDate"
+msgstr "Versi anda tidak up-to-date"
+
+msgid "YourVersionIs"
+msgstr "Versi anda adalah"
+
+msgid "PleaseVisitDokeos"
+msgstr "Silahkan kunjungi Chamilo"
+
+msgid "VersionUpToDate"
+msgstr "Versi anda up-to-date"
+
+msgid "ConnectSocketError"
+msgstr "Kesalahan koneksi soket"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Koneksi soket dimatikan"
+
+msgid "ShowEmailAddresses"
+msgstr "Tampilkan alamat email"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Tampilkan alamat email ke user"
+
+msgid "LatestVersionIs"
+msgstr "Versi terkini adalah"
+
+msgid "langConfigureExtensions"
+msgstr "Konfigur layanan tersebut"
+
+msgid "langActiveExtensions"
+msgstr "Aktivasi layanan ini"
+
+msgid "langVisioconf"
+msgstr "Visio-conference"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo Live Conferencing® merupakan alat standar untuk visioconfrence yang menawarkan: menampilkan diapos, whiteboard untuk menggambar dan menulis, audio/video duplex, dan chat.  Ini membutuhkan Flash® player dan menyediakan 3 model : satu-ke-satu, satu-ke-banyak, dan banyak-ke-banyak."
+
+msgid "langPpt2lp"
+msgstr "PowerPoint2LearningPath"
+
+msgid "langPpt2lpDescription"
+msgstr "PowerPoint2LearningPath menyediakan alat transformasi presentasi Powerpoint ke suatu Learning Path dengan beberapa klik."
+
+msgid "langBandWidthStatistics"
+msgstr "Statistik Bandwidth"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG menyediakan statistik canggih tentang server selama 24 jam terakhir."
+
+msgid "ServerStatistics"
+msgstr "Statistik server"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats menyediakan statistik platform anda: pengunjung, page views, referers ..."
+
+msgid "SearchEngine"
+msgstr "Mesin Pencari Full Text"
+
+msgid "langSearchEngineDescription"
+msgstr "Mesin Pencari Full Text menyediakan alat pencari kata ke dalam flatform. Peng-index-an konten harian akan menjamin kualitas pencarian."
+
+msgid "langListSession"
+msgstr "Daftar Sesi"
+
+msgid "AddSession"
+msgstr "Tambah sesi"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Import sesi ke format XML/CSV"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Eksport sesi dalam format XML/CSV"
+
+msgid "SessionName"
+msgstr "Nama sesi"
+
+msgid "langNbCourses"
+msgstr "Kode Mata Kuliah"
+
+msgid "DateStart"
+msgstr "Tanggal Mulai"
+
+msgid "DateEnd"
+msgstr "Tanggal Selesai"
+
+msgid "CoachName"
+msgstr "Nama Pelatih"
+
+msgid "SessionList"
+msgstr "Daftar Sesi"
+
+msgid "SessionNameIsRequired"
+msgstr "Nama dibutuhkan untuk suatu sesi"
+
+msgid "NextStep"
+msgstr "Langkah berikutnya"
+
+msgid "keyword"
+msgstr "Kata Kunci"
+
+msgid "Confirm"
+msgstr "Konfirmasi"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Keluarkan user dari Mata Kuliah"
+
+msgid "MissingClassName"
+msgstr "Nama klas hilang"
+
+msgid "ClassNameExists"
+msgstr "Nama klas sudah ada"
+
+msgid "ImportCSVFileLocation"
+msgstr "Lokasi impor file CSV"
+
+msgid "ClassesCreated"
+msgstr "Klas telah dibuat"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Error pada saat mengimport file"
+
+msgid "ServiceActivated"
+msgstr "Layanan diaktivasi"
+
+msgid "ActivateExtension"
+msgstr "Layanan aktif"
+
+msgid "InvalidExtension"
+msgstr "Ektensi tidak syah"
+
+msgid "VersionCheckExplanation"
+msgstr "Agar dimungkinkan pemeriksaan versi otomatis, anda harus mendaftarkan kampus anda ke chamilo.com.  Informasi yang diperoleh dengan mengklik tombol ini adalah untuk penggunaan internal dan hnya data agregat yang tersedia bagi umum (jumlah total kampus, jumlah total mata kuliah chamilo, jumlah total siswa. ...) (Lihat <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>.  Jika mendaftar, maka institusi anda muncul dalam daftar dunia <a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php.</a>. Jika institusi anda tidak ingin tampil dalam daftar anda dapat menconteng kotak cek di bawah ini.  Pendaftaran mudah: anda hanya mengklik tombol ini <br />"
+
+msgid "AfterApproval"
+msgstr "Setelah disetujui"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Bolehkan tampilan siswa"
+
+msgid "StudentViewEnabledComment"
+msgstr "Bolehkan tampilan siswa yang memungkinkan pengajar atau admin melihat kuliah seperti yang dilihat siswa"
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Batas waktu di WhoIsOnline"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Batas waktu ini menentukan berapa lama (detik) setelah aksi terakhir pemakai akan dianggap *online*"
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Materi contoh tentang pembuatan kuliah"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Buat materi contoh otomatis saat membuat kuliah baru"
+
+msgid "AccountValidDurationTitle"
+msgstr "Validitas akun"
+
+msgid "AccountValidDurationComment"
+msgstr "Akun pemakai valid selama sekian hari ini setelah dibuat"
+
+msgid "UseSessionModeTitle"
+msgstr "Gunakan mode sesi"
+
+msgid "UseSessionModeComment"
+msgstr "Sesi memungkinkan cara penanganan kuliah yang berbeda; kuliah akan memiliki kreator, pelatih, dan siswa. Setiap pelatih memberikan kuliah selama jangka waktu tertentu, yang disebut *sesi*, kepada siswa"
+
+msgid "HomepageViewActivity"
+msgstr "Tampilan aktivitas"
+
+msgid "HomepageView2column"
+msgstr "Tampilan dua kolom"
+
+msgid "HomepageView3column"
+msgstr "Tampilan tiga kolom"
+
+msgid "AllowUserHeadings"
+msgstr "Bolehkan kop pemakai"
+
+msgid "IconsOnly"
+msgstr "Ikon saja"
+
+msgid "TextOnly"
+msgstr "Teks saja"
+
+msgid "IconsText"
+msgstr "Ikon dan teks"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Bolehkan memakai tool"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Bolehkan pengantar pada setiap laman tool"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Navigasi laman kuliah"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "Navigasi (breadcrumb) adalah sistem navigasi tautan horizontal yang biasanya muncul di kiri atas halaman Anda. Opsi ini memilih apa yang Anda inginkan muncul di breadcrumb pada laman kuliah"
+
+msgid "Comment"
+msgstr "Komentar"
+
+msgid "Version"
+msgstr "Versi"
+
+msgid "LoginPageMainArea"
+msgstr "Area utama halaman login"
+
+msgid "LoginPageMenu"
+msgstr "Menu halaman login"
+
+msgid "CampusHomepageMainArea"
+msgstr "Area utama laman kampus"
+
+msgid "CampusHomepageMenu"
+msgstr "Menu laman kampus"
+
+msgid "MyCoursesMainArea"
+msgstr "Area utama kuliah"
+
+msgid "MyCoursesMenu"
+msgstr "Menu kuliah"
+
+msgid "Header"
+msgstr "Kop"
+

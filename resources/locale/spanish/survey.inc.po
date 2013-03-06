@@ -1,0 +1,636 @@
+msgid "PublishSurvey"
+msgstr "Publicar encuesta"
+
+msgid "CompareQuestions"
+msgstr "Comparar preguntas"
+
+msgid "InformationUpdated"
+msgstr "Información actualizada"
+
+msgid "SurveyTitle"
+msgstr "Título de la encuesta"
+
+msgid "SurveyIntroduction"
+msgstr "Introducción de la encuesta"
+
+msgid "CreateNewSurvey"
+msgstr "Crear encuesta"
+
+msgid "Survey"
+msgstr "Encuesta"
+
+msgid "SurveyTemplate"
+msgstr "Plantilla de encuesta"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "Por favor, escriba el título de la encuesta"
+
+msgid "PleaseEnterValidDate"
+msgstr "Por favor, introduzca una fecha correcta"
+
+msgid "NotPublished"
+msgstr "No publicada"
+
+msgid "AdvancedReportDetails"
+msgstr "El informe avanzado permite elegir el usuario y las preguntas para ver informaciones más detalladas"
+
+msgid "AdvancedReport"
+msgstr "Informe avanzado"
+
+msgid "CompleteReportDetails"
+msgstr "El informe completo permite ver todos los resultados obtenidos por la gente encuestada, y exportalos en csv (para Excel)"
+
+msgid "CompleteReport"
+msgstr "Informe completo"
+
+msgid "OnlyThoseAddresses"
+msgstr "Enviar la encuesta sólo a estas direcciones"
+
+msgid "BackToQuestions"
+msgstr "Volver a las preguntas"
+
+msgid "SelectWhichLanguage"
+msgstr "Seleccione el idioma en que desea crear la encuesta"
+
+msgid "CreateInAnotherLanguage"
+msgstr "Crear esta encuesta en otro idioma"
+
+msgid "ExportInExcel"
+msgstr "Exportar en formato Excel"
+
+msgid "ComparativeResults"
+msgstr "Resultados comparativos"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "Seleccionar los datos que desea comparar"
+
+msgid "OrCopyPasteUrl"
+msgstr "O copiar y pegar el enlace en la barra de direcciones de su navegador:"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "Hacer clic aquí para realizar una encuesta"
+
+msgid "SurveyNotShared"
+msgstr "Ninguna encuesta ha sido compartida todavía"
+
+msgid "ViewSurvey"
+msgstr "Ver encuesta"
+
+msgid "SelectDisplayType"
+msgstr "Seleccionar el tipo de visualización:"
+
+msgid "Thanks"
+msgstr "Mensaje de feedback"
+
+msgid "SurveyReporting"
+msgstr "Informe de la encuesta"
+
+msgid "NoSurveyAvailable"
+msgstr "No hay encuestas disponibles"
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "ha sido publicada"
+
+msgid "CreateFromExistingSurvey"
+msgstr "Crear a partir de  una encuesta ya existente"
+
+msgid "Publish"
+msgstr "Publicar encuesta"
+
+msgid "SearchASurvey"
+msgstr "Buscar una encuesta"
+
+msgid "CourseName"
+msgstr "Nombre del curso"
+
+msgid "SurveysOfAllCourses"
+msgstr "Encuesta(s) de todos los cursos"
+
+msgid "PleaseSelectAChoice"
+msgstr "Por favor, seleccione una opción"
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "No hay preguntas en la base de datos"
+
+msgid "UpdateQuestionType"
+msgstr "Actualizar el tipo de pregunta:"
+
+msgid "AddAnotherQuestion"
+msgstr "Añadir una nueva pregunta"
+
+msgid "IsShareSurvey"
+msgstr "Compartir la encuesta con otros"
+
+msgid "Proceed"
+msgstr "Proceder"
+
+msgid "PleaseFillNumber"
+msgstr "Por favor, rellene los valores numéricos para las puntuaciones."
+
+msgid "PleaseFillAllPoints"
+msgstr "Por favor, rellene las puntuaciones de 1-5"
+
+msgid "PleasFillAllAnswer"
+msgstr "Por favor, rellene  todos los campos de las respuestas."
+
+msgid "PleaseSelectFourTrue"
+msgstr "Por favor, seleccione al menos cuatro respuestas verdaderas."
+
+msgid "PleaseSelectFourDefault"
+msgstr "Por favor, seleccione al menos cuatro respuestas por defecto."
+
+msgid "PleaseFillDefaultText"
+msgstr "Por favor, rellene el texto por defecto"
+
+msgid "ModifySurveyInformation"
+msgstr "Modificar la información de la encuesta"
+
+msgid "ViewQuestions"
+msgstr "Ver preguntas"
+
+msgid "CreateSurvey"
+msgstr "Crear encuesta"
+
+msgid "FinishSurvey"
+msgstr "Terminar la encuesta"
+
+msgid "QuestionsAdded"
+msgstr "Las preguntas son añadidas"
+
+msgid "DeleteSurvey"
+msgstr "Eliminar encuesta"
+
+msgid "SurveyCode"
+msgstr "Código de la encuesta"
+
+msgid "SurveyList"
+msgstr "Encuestas"
+
+msgid "SurveyAttached"
+msgstr "Encuesta adjuntada"
+
+msgid "QuestionByType"
+msgstr "Preguntas por tipo"
+
+msgid "SelectQuestionByType"
+msgstr "Seleccionar una pregunta por tipo"
+
+msgid "PleaseEnterAQuestion"
+msgstr "Por favor, introduzca una pregunta"
+
+msgid "NoOfQuestions"
+msgstr "Número de preguntas"
+
+msgid "Question"
+msgstr "Pregunta"
+
+msgid "ThisCodeAlradyExists"
+msgstr "Este código ya existe"
+
+msgid "SaveAndExit"
+msgstr "Guardar y salir"
+
+msgid "ViewAnswers"
+msgstr "Ver respuestas"
+
+msgid "CreateExistingSurvey"
+msgstr "Crear desde una encuesta ya existente"
+
+msgid "SurveyName"
+msgstr "Nombre de la encuesta"
+
+msgid "SurveySubTitle"
+msgstr "Subtítulo de la encuesta"
+
+msgid "ShareSurvey"
+msgstr "Compartir la encuesta"
+
+msgid "SurveyThanks"
+msgstr "Agradecimientos"
+
+msgid "EditSurvey"
+msgstr "Editar la encuesta"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "O volver a la vista general de la encuesta"
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "Hay un parámetro que falta en el enlace. Por favor, use copiar y pegar."
+
+msgid "WrongInvitationCode"
+msgstr "Código de invitado erróneo"
+
+msgid "SurveyFinished"
+msgstr "Ha terminado la encuesta."
+
+msgid "SurveyPreview"
+msgstr "Previsualización de la encuesta"
+
+msgid "InvallidSurvey"
+msgstr "Encuesta no válida"
+
+msgid "AddQuestion"
+msgstr "Añadir una pregunta"
+
+msgid "EditQuestion"
+msgstr "Editar pregunta"
+
+msgid "TypeDoesNotExist"
+msgstr "Este tipo no existe"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "La encuesta ha sido creada"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Ahora puede añadir las preguntas"
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "La encuesta hasido actualizada"
+
+msgid "QuestionAdded"
+msgstr "La pregunta ha sido añadida."
+
+msgid "QuestionUpdated"
+msgstr "La pregunta ha sido actualizada."
+
+msgid "RemoveAnswer"
+msgstr "Quitar opción"
+
+msgid "AddAnswer"
+msgstr "Añadir opción"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Mostrar"
+
+msgid "AnswerOptions"
+msgstr "Opciones de respuesta"
+
+msgid "YesNo"
+msgstr "Si / No"
+
+msgid "MultipleResponse"
+msgstr "Respuesta multiple"
+
+msgid "Open"
+msgstr "Respuesta abierta"
+
+msgid "Dropdown"
+msgstr "Lista desplegable"
+
+msgid "Pagebreak"
+msgstr "Fin de página"
+
+msgid "QuestionNumber"
+msgstr "Pregunta número"
+
+msgid "NumberOfOptions"
+msgstr "Número de opciones"
+
+msgid "SurveyInvitations"
+msgstr "Invitaciones a la encuesta"
+
+msgid "InvitationCode"
+msgstr "Código de invitación"
+
+msgid "InvitationDate"
+msgstr "Fecha de invitación"
+
+msgid "Answered"
+msgstr "Respondido"
+
+msgid "AdditonalUsersComment"
+msgstr "Puede invitar a otros usuarios para que completen esta encuesta. Para ello debe escribir sus correos electrónicos separados por , o ;"
+
+msgid "MailTitle"
+msgstr "Asunto del correo"
+
+msgid "InvitationsSend"
+msgstr "invitaciones enviadas."
+
+msgid "SurveyDeleted"
+msgstr "La encuesta ha sido eliminada."
+
+msgid "NoSurveysSelected"
+msgstr "No ha seleccionado ninguna encuesta."
+
+msgid "NumberOfQuestions"
+msgstr "Número de preguntas"
+
+msgid "Invited"
+msgstr "Invitado"
+
+msgid "SubmitQuestionFilter"
+msgstr "Filtrar"
+
+msgid "ResetQuestionFilter"
+msgstr "Cancelar filtro"
+
+msgid "ExportCurrentReport"
+msgstr "Exportar el informe actual"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "Sólo pueden usarse preguntas con respuestas predefinidas"
+
+msgid "SelectXAxis"
+msgstr "Seleccione la pregunta del eje X"
+
+msgid "SelectYAxis"
+msgstr "Seleccione la pregunta del eje Y"
+
+msgid "ComparativeReport"
+msgstr "Informe comparativo"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "Todas las preguntas serán mostradas en una página"
+
+msgid "SelectUser"
+msgstr "Usuario"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "Seleccionar el usuario que completó la encuesta"
+
+msgid "userreport"
+msgstr "Informe del usuario"
+
+msgid "VisualRepresentation"
+msgstr "Gráfico"
+
+msgid "AbsoluteTotal"
+msgstr "Total global"
+
+msgid "NextQuestion"
+msgstr "Pregunta siguiente"
+
+msgid "PreviousQuestion"
+msgstr "Pregunta anterior"
+
+msgid "PeopleWhoAnswered"
+msgstr "Personas que han elegido esta respuesta"
+
+msgid "CourseUsers"
+msgstr "Usuarios del Curso"
+
+msgid "SurveyPublication"
+msgstr "Publicación de la encuesta"
+
+msgid "AdditonalUsers"
+msgstr "Usuarios adicionales"
+
+msgid "MailText"
+msgstr "Texto del correo"
+
+msgid "UseLinkSyntax"
+msgstr "Los usuarios que haya seleccionado recibirán un correo electrónico con el texto que ha escrito más arriba, así como un enlace que los usuarios tendrán que pulsar para cumplimentar la encuesta. Si desea introducir este enlace en algún lugar de su texto, debe insertar lo siguiente: ** enlace ** (asterisco asterisco enlace asterisco asterisco). Esta etiqueta será sustituida automáticamente por el enlace. Si no agrega el ** enlace ** a su texto,  el enlace se añadirá al final del correo"
+
+msgid "DetailedReportByUser"
+msgstr "Informe detallado por usuario"
+
+msgid "DetailedReportByQuestion"
+msgstr "Informe detallado por pregunta"
+
+msgid "ComparativeReportDetail"
+msgstr "En este informe puede comparar dos preguntas."
+
+msgid "CompleteReportDetail"
+msgstr "En este informe se obtiene un sumario de las respuestas de todos los usuarios a todas las preguntas. También dispone de una opción para sólamente ver una selección de preguntas. Puede exportar los resultados a un archivo en formato de CSV para su utilización en aplicaciones estadísticas."
+
+msgid "DetailedReportByUserDetail"
+msgstr "En este informe puede ver todas las respuestas de un usuario."
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "En este informe se ven los resultados pregunta a pregunta. Proporciona un análisis estadístico básico y gráficos."
+
+msgid "ReminderResendToAllUsers"
+msgstr "Enviar a todos los usuarios seleccionados. Si no marca esta casilla, sólamente recibirán el correo electrónico los usuarios adicionales que haya añadido."
+
+msgid "Multiplechoice"
+msgstr "Elección multiple"
+
+msgid "Score"
+msgstr "Puntuación"
+
+msgid "Shared"
+msgstr "Compartido"
+
+msgid "Invite"
+msgstr "Invitados"
+
+msgid "MaximumScore"
+msgstr "Puntuación máximo"
+
+msgid "ViewInvited"
+msgstr "Ver invitados"
+
+msgid "ViewAnswered"
+msgstr "Ver las personas que han respondido"
+
+msgid "ViewUnanswered"
+msgstr "Ver las personas que no han respondido"
+
+msgid "DeleteSurveyQuestion"
+msgstr "¿ Está seguro de que quiere eliminar esta pregunta ?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "Ya ha rellenado esta encuesta"
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "Haga clic aquí para contestar la encuesta"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "o copie y pegue la siguiente url:"
+
+msgid "UnknowUser"
+msgstr "Usuario desconocido"
+
+msgid "MoveDown"
+msgstr "Mover abajo"
+
+msgid "MoveUp"
+msgstr "Mover arriba"
+
+msgid "HaveAnswered"
+msgstr "han contestado"
+
+msgid "WereInvited"
+msgstr "fueron invitados"
+
+msgid "PagebreakNotFirst"
+msgstr "El separador de página no puede estar al comienzo"
+
+msgid "PagebreakNotLast"
+msgstr "El separador de página no puede estar al final"
+
+msgid "SurveyNotAvailableAnymore"
+msgstr "Lo sentimos pero esta encuesta ya no está disponible. Le agradecemos su interés."
+
+msgid "DuplicateSurvey"
+msgstr "Duplicar la encuesta"
+
+msgid "EmptySurvey"
+msgstr "Limpiar la encuesta"
+
+msgid "SurveyEmptied"
+msgstr "Las respuestas a la encuesta han sido eliminadas"
+
+msgid "SurveyNotAvailableYet"
+msgstr "Esta encuesta aún no está disponible. Inténtelo más tarde. Gracias."
+
+msgid "PeopleAnswered"
+msgstr "Personas que han respondido"
+
+msgid "AnonymousSurveyCannotKnowWhoAnswered"
+msgstr "Esta encuesta es anónima. Ud. no puede ver quien ha respondido."
+
+msgid "IllegalSurveyId"
+msgstr "Identificador de encuesta desconocido"
+
+msgid "SurveyQuestionMoved"
+msgstr "La pregunta ha sido movida"
+
+msgid "IdenticalSurveycodeWarning"
+msgstr "Este código de la encuesta ya existe. Probablemente esto sea debido a que la encuesta también existe en otros idiomas. Los usuarios podrán elegir entre diferentes idiomas."
+
+msgid "ThisSurveyCodeSoonExistsInThisLanguage"
+msgstr "Este código de encuesta ya existe en este idioma"
+
+msgid "SurveyUserAnswersHaveBeenRemovedSuccessfully"
+msgstr "Las respuestas del usuario han sido eliminadas satisfactoriamente"
+
+msgid "DeleteSurveyByUser"
+msgstr "Eliminar las respuesta de este usuario de esta encuesta"
+
+msgid "SelectType"
+msgstr "Seleccionar el tipo"
+
+msgid "Conditional"
+msgstr "Condicional"
+
+msgid "ParentSurvey"
+msgstr "Encuesta madre"
+
+msgid "OneQuestionPerPage"
+msgstr "Una pregunta por pagina"
+
+msgid "ActivateShuffle"
+msgstr "Activar para barajar"
+
+msgid "ShowFormProfile"
+msgstr "Mostrar el formato del perfil"
+
+msgid "PersonalityQuestion"
+msgstr "Editar pregunta"
+
+msgid "YouNeedToCreateGroups"
+msgstr "Tu necesitas crear grupos"
+
+msgid "ManageGroups"
+msgstr "Administrar grupos"
+
+msgid "Create"
+msgstr "Crear"
+
+msgid "GroupCreatedSuccessfully"
+msgstr "Grupo creado con éxito"
+
+msgid "GroupNeedName"
+msgstr "Grupo necesita nombre"
+
+msgid "Personality"
+msgstr "Personalizar"
+
+msgid "Condition"
+msgstr "Condición"
+
+msgid "Primary"
+msgstr "Primero"
+
+msgid "Secondary"
+msgstr "Segundo"
+
+msgid "CourseSettings"
+msgstr "Configuración del curso"
+
+msgid "PleaseChooseACondition"
+msgstr "Por favor elija una condición"
+
+msgid "ChooseDifferentCategories"
+msgstr "Elija diferente categoria"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "NoLogOfDuration"
+msgstr "Ningún registro de duración"
+
+msgid "AutoInviteLink"
+msgstr "Los usuarios que no hayan sido invitados pueden utilizar este enlace para realizar la encuesta:"
+
+msgid "CompleteTheSurveysQuestions"
+msgstr "Complete las preguntas de la encuesta"
+
+msgid "SurveysDeleted"
+msgstr "Encuestas borradas"
+
+msgid "RemindUnanswered"
+msgstr "Recordatorio sólo para los usuarios que no hayan respondido"
+
+msgid "ModifySurvey"
+msgstr "Modificar encuesta"
+
+msgid "CreateQuestionSurvey"
+msgstr "Crear pregunta"
+
+msgid "ModifyQuestionSurvey"
+msgstr "Modificar pregunta"
+
+msgid "BackToSurvey"
+msgstr "Volver a la encuesta"
+
+msgid "UpdateInformation"
+msgstr "Actualización de información"
+
+msgid "PleaseFillSurvey"
+msgstr "Por favor, llene la encuesta"
+
+msgid "ReportingOverview"
+msgstr "Sumario de informes"
+
+msgid "ThereAreNotQuestionsForthisSurvey"
+msgstr "No hay preguntas para esta encuesta"
+
+msgid "GenerateSurveyAccessLinkExplanation"
+msgstr "Copiando el enlace a bajo en un correo o en un sitio web, permitirá a personas anónimas participar a la encuesta. Puede probar esta funcionalidad dándole clic al botón arriba y respondiendo la encuesta. Es particularmente útil si quiere invitar a personas de las cuales no conoce el correo electrónico."
+
+msgid "GenerateSurveyAccessLink"
+msgstr "Generar enlace de acceso a encuesta"
+
+msgid "Multipleresponse"
+msgstr "Respuesta múltiple"
+
+msgid "ErrorSurveyTypeUnknown"
+msgstr "Tipo de encuesta desconocido"
+
+msgid "SurveyUndetermined"
+msgstr "Encuesta no definida"
+
+msgid "QuestionComment"
+msgstr "Comentario de la pregunta"
+
+msgid "UnknowQuestion"
+msgstr "Pregunta desconocida"
+
+msgid "Lastname"
+msgstr "Apellido"
+
+msgid "Firstname"
+msgstr "Nombre"
+
+msgid "DeleteSurveyGroup"
+msgstr "Eliminar un grupo de encuestas"
+
+msgid "ErrorOccurred"
+msgstr "Un error ha ocurrido."
+

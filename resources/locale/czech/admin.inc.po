@@ -1,0 +1,2886 @@
+msgid "AdminBy"
+msgstr "Správce"
+
+msgid "AdministrationTools"
+msgstr "Administrace"
+
+msgid "State"
+msgstr "Stav systému"
+
+msgid "Statistiques"
+msgstr "Statistika"
+
+msgid "VisioHostLocal"
+msgstr "Videokonference - název hostitele"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Videokonferenční protokol je na bázi webu(většinou není)"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Ukaž na odkaz jít zpět do Tréninkové struktury. Odkaz je v každém případě dostupný ve spodní čaásti listu."
+
+msgid "langUsed"
+msgstr "použité"
+
+msgid "langPresent"
+msgstr "Ok"
+
+msgid "langMissing"
+msgstr "chybějící"
+
+msgid "langExist"
+msgstr "existující"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Ukázat zpětné odkazy z kategorií/kurzů"
+
+msgid "ShowNumberOfCourses"
+msgstr "Ukázat číslo školení"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Zobraz učitele v názvu kurzu"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Zobraz učitele v poznámce seznamu kurzu"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Zobraz kód kurzu v poznámce seznamu kurzů"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Zobraz kód kurzu v názvu kurzu"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "V této platformě nejsou žádné virtuální kurzy"
+
+msgid "ConfigureHomePage"
+msgstr "Nakonfigurovat domácí stránku"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Aktivní moduly po vytvoření kurzu"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Které nástroje mají být zaktivované (viditelné) při vytvoření kurzu?"
+
+msgid "SearchUsers"
+msgstr "Hledání uživatelů"
+
+msgid "CreateUser"
+msgstr "Vytvořit uživatele"
+
+msgid "ModifyInformation"
+msgstr "Upravit informace"
+
+msgid "ModifyUser"
+msgstr "Upravit uživatele"
+
+msgid "buttonEditUserField"
+msgstr "Upravit uživatelské pole"
+
+msgid "ModifyCoach"
+msgstr "Upravit školitele"
+
+msgid "ModifyThisSession"
+msgstr "Upravit toto sezení"
+
+msgid "ExportSession"
+msgstr "Exportovat sezení"
+
+msgid "ImportSession"
+msgstr "Importovat sezení"
+
+msgid "langCourseBackup"
+msgstr "Vytvořit zálohu tohto kurzu"
+
+msgid "langCourseTitular"
+msgstr "Učitel"
+
+msgid "langCourseTitle"
+msgstr "Název kurzu"
+
+msgid "langCourseFaculty"
+msgstr "Kategorie kurzu"
+
+msgid "langCourseDepartment"
+msgstr "Oddělení kurzu"
+
+msgid "langCourseDepartmentURL"
+msgstr "URL oddělení"
+
+msgid "langCourseLanguage"
+msgstr "Jazyk kurzu"
+
+msgid "langCourseAccess"
+msgstr "Přístup kurzu"
+
+msgid "langCourseSubscription"
+msgstr "Zapsání kurzu"
+
+msgid "langPublicAccess"
+msgstr "Veřejný přístup"
+
+msgid "langPrivateAccess"
+msgstr "Privátní přístup"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Správa databáze je přístupná pouze správci serveru"
+
+msgid "langShowUsersOfCourse"
+msgstr "Zobraz uživatele přihlášeného do tohoto kurzu"
+
+msgid "langShowClassesOfCourse"
+msgstr "Zobraz třídy přihlášené do tohoto kurzu"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Zobraz skupiny tohoto kurzu"
+
+msgid "langPhone"
+msgstr "Telefon"
+
+msgid "langPhoneNumber"
+msgstr "Číslo telefónu"
+
+msgid "langActions"
+msgstr "Akce"
+
+msgid "langAddToCourse"
+msgstr "Přidat do kurzu"
+
+msgid "langDeleteFromPlatform"
+msgstr "Odstranit z platformy"
+
+msgid "langDeleteCourse"
+msgstr "Smazat vybraný kurz(y)"
+
+msgid "langDeleteFromCourse"
+msgstr "Odhlášení z kurzu(ů)"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Smazat vybrané třídy"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Smazat vybrané skupiny"
+
+msgid "langAdministrator"
+msgstr "Administrátor"
+
+msgid "langAddPicture"
+msgstr "Přidat obrázek"
+
+msgid "langChangePicture"
+msgstr "Změnit obrázek"
+
+msgid "langDeletePicture"
+msgstr "Smazat obrázek"
+
+msgid "langAddUsers"
+msgstr "Přidat uživatele"
+
+msgid "langAddGroups"
+msgstr "Přidat skupinu"
+
+msgid "langAddClasses"
+msgstr "Přidat třídu"
+
+msgid "langExportUsers"
+msgstr "Exportovat seznam uživatelů"
+
+msgid "langKeyword"
+msgstr "Klíčové slovo"
+
+msgid "langGroupName"
+msgstr "Jméno skupiny"
+
+msgid "langGroupTutor"
+msgstr "Školitel skupiny"
+
+msgid "langGroupDescription"
+msgstr "Popis skupiny"
+
+msgid "langNumberOfParticipants"
+msgstr "Počet účastníků"
+
+msgid "langNumberOfUsers"
+msgstr "Počet uživatelů"
+
+msgid "langMaximum"
+msgstr "maximum"
+
+msgid "langMaximumOfParticipants"
+msgstr "Maximální počet účastníků"
+
+msgid "langParticipants"
+msgstr "účastníci"
+
+msgid "langFirstLetterClass"
+msgstr "První písmeno (název třídy)"
+
+msgid "langFirstLetterUser"
+msgstr "První písmeno (příjmení)"
+
+msgid "langFirstLetterCourse"
+msgstr "První písmeno (kód)"
+
+msgid "langModifyUserInfo"
+msgstr "Změnit informace o uživateli"
+
+msgid "langModifyClassInfo"
+msgstr "Změnit informace o třídě"
+
+msgid "langModifyGroupInfo"
+msgstr "Změnit informace o skupině"
+
+msgid "langModifyCourseInfo"
+msgstr "Změnit informace o kurzu"
+
+msgid "langPleaseEnterClassName"
+msgstr "Prosím zadejte název třídy !"
+
+msgid "langPleaseEnterLastName"
+msgstr "Prosím zadejte uživatelovo příjmení !"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Prosím zadejte uživatelovo jméno !"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Prosím zadejte platnou e-mailovou adresu !"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Prosím zadejte platné přihlašovací jméno !"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Prosím zadejte kód kurzu !"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Prosím zadejte učitelovo jméno a příjmení !"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Prosím zadejte název kurzu !"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Akceptovatelné formáty jsou JPG, PNG a GIF !"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Toto přihlašovací jméno je již použito !"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Importuj seznam uživatelů z XML/CSV souboru"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Exportuj seznam uživatelů do XML/CSV souboru"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Jenom uživatelé tohoto kurzu"
+
+msgid "langAddClassesToACourse"
+msgstr "Přidat třídy do kurzu"
+
+msgid "langAddUsersToACourse"
+msgstr "Přidat uživatele do kurzu"
+
+msgid "langAddUsersToAClass"
+msgstr "Přidat uživatele do třídy"
+
+msgid "langAddUsersToAGroup"
+msgstr "Přidat uživatele do skupiny"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Musíte zvolit minimálně jednu třídu a jeden kurz !"
+
+msgid "AtLeastOneUser"
+msgstr "Musíte zvolit minimálně jednoho uživatele !"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Musíte zvolit minimálně jednoho uživatele a jeden kurz !"
+
+msgid "langClassList"
+msgstr "Seznam tříd"
+
+msgid "langUserList"
+msgstr "Seznam uživatel"
+
+msgid "langCourseList"
+msgstr "Seznam kurzů"
+
+msgid "langAddToThatCourse"
+msgstr "Přidat do tohoto (těchto) kurzu(ů)"
+
+msgid "langAddToClass"
+msgstr "Přidat do třídy"
+
+msgid "langRemoveFromClass"
+msgstr "Odebrat z třídy"
+
+msgid "langAddToGroup"
+msgstr "Přidat do skupiny"
+
+msgid "langRemoveFromGroup"
+msgstr "Odebrat ze skupiny"
+
+msgid "langUsersOutsideClass"
+msgstr "Uživatelé mimo třídu"
+
+msgid "langUsersInsideClass"
+msgstr "Uživatelé uvnitř třídy"
+
+msgid "langUsersOutsideGroup"
+msgstr "Uživatelé mimo skupinu"
+
+msgid "langUsersInsideGroup"
+msgstr "Uživatelé uvnitř skupiny"
+
+msgid "langImportFileLocation"
+msgstr "Umístění CSV / XML souboru"
+
+msgid "langFileType"
+msgstr "Typ souboru"
+
+msgid "langOutputFileType"
+msgstr "Typ výstupního souboru"
+
+msgid "langMustUseSeparator"
+msgstr "musíte použít \';\' znak ako oddělovač"
+
+msgid "langCSVMustLookLike"
+msgstr "CSV soubor musí vypadat jako tento"
+
+msgid "langXMLMustLookLike"
+msgstr "XML soubor musí vypadat jako tento"
+
+msgid "langMandatoryFields"
+msgstr "Pole zvýrazněná <strong>tučně</strong> jsou povinná."
+
+msgid "langNotXML"
+msgstr "Specifikovaný soubor není ve formátu XML !"
+
+msgid "langNotCSV"
+msgstr "Specifikovaný soubor není ve formátu CSV !"
+
+msgid "langNoNeededData"
+msgstr "Specifikovaný soubor neobsahuje všechny potřebné údaje !"
+
+msgid "langMaxImportUsers"
+msgstr "Nemůžete importovat více než 500 uživatelů najednou !"
+
+msgid "langAdminDatabases"
+msgstr "Databáze (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Uživatelé"
+
+msgid "langAdminClasses"
+msgstr "Třídy uživatelů"
+
+msgid "langAdminGroups"
+msgstr "Skupiny uživatelů"
+
+msgid "langAdminCourses"
+msgstr "Kurzy"
+
+msgid "langAdminCategories"
+msgstr "Kategorie kurzů"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Zaregistrovat uživatele / skupinu do kurzu"
+
+msgid "AddACategory"
+msgstr "Přidat kategorii"
+
+msgid "langInto"
+msgstr "do"
+
+msgid "langNoCategories"
+msgstr "Tady nejsou žádné kategorie"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Povolit přídání kurzů v této kategorii ?"
+
+msgid "langGoToForum"
+msgstr "Jdi na fórum"
+
+msgid "langCategoryCode"
+msgstr "Kód kategorie"
+
+msgid "langCategoryName"
+msgstr "Název kategorie"
+
+msgid "langCategories"
+msgstr "kategorie"
+
+msgid "langEditNode"
+msgstr "Uprav tuto kategorii"
+
+msgid "langOpenNode"
+msgstr "Otevři tuto kategorii"
+
+msgid "langDeleteNode"
+msgstr "Vymaž tuto kategorii"
+
+msgid "langAddChildNode"
+msgstr "Přidej pod-kategorii"
+
+msgid "langViewChildren"
+msgstr "Zobraz podřízené (children)"
+
+msgid "langTreeRebuildedIn"
+msgstr "Strom obnovený v"
+
+msgid "langTreeRecountedIn"
+msgstr "Strom přepočtený v"
+
+msgid "langRebuildTree"
+msgstr "Obnovit strom"
+
+msgid "langRefreshNbChildren"
+msgstr "Obnovit počet podřízených(children)"
+
+msgid "langShowTree"
+msgstr "Zobrazit strom"
+
+msgid "langBack"
+msgstr "Zpět na předchozí stránku"
+
+msgid "langLogDeleteCat"
+msgstr "Kategorie smazána"
+
+msgid "langRecountChildren"
+msgstr "Přepočítat podřízených(children)"
+
+msgid "langUpInSameLevel"
+msgstr "Nahoru v stejnou úroveň"
+
+msgid "langSeconds"
+msgstr "sekundy"
+
+msgid "langMailTo"
+msgstr "E-mail na:"
+
+msgid "lang_no_access_here"
+msgstr "Žádný přístup"
+
+msgid "lang_php_info"
+msgstr "informace o systému"
+
+msgid "langAddAdminInApache"
+msgstr "Přidat správce"
+
+msgid "langAddFaculties"
+msgstr "Přidat kategorie"
+
+msgid "langSearchACourse"
+msgstr "Hledej kurz"
+
+msgid "langSearchAUser"
+msgstr "Hledej uživatele"
+
+msgid "langTechnicalTools"
+msgstr "Technická administrace"
+
+msgid "langConfig"
+msgstr "Konfigurace systému"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Seznam přihlášení (rozšířený)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Maximum uživatelů v posuvnom seznamu"
+
+msgid "NoTimeLimits"
+msgstr "Žádné časové omezení"
+
+msgid "GeneralCoach"
+msgstr "Výchozí učitel"
+
+msgid "GeneralProperties"
+msgstr "Výchozí vlastnosti"
+
+msgid "CourseCoach"
+msgstr "Učitel kurzu"
+
+msgid "UsersNumber"
+msgstr "Počet uživatelů"
+
+msgid "DokeosClassic"
+msgstr "Chamilo classic"
+
+msgid "PublicAdmin"
+msgstr "Veřejná administrace"
+
+msgid "PageAfterLoginTitle"
+msgstr "Stránka po přihlášení"
+
+msgid "PageAfterLoginComment"
+msgstr "Stránka kterou vidí připojený uživatel"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Chamilo web"
+
+msgid "TabsMyProfile"
+msgstr "Můj profil"
+
+msgid "GlobalRole"
+msgstr "Globální Role"
+
+msgid "langNomOutilTodo"
+msgstr "Spravovat seznam pracovních úkolů (Todo)"
+
+msgid "langNomPageAdmin"
+msgstr "Administrace"
+
+msgid "langSysInfo"
+msgstr "Informace o systému"
+
+msgid "langDiffTranslation"
+msgstr "Porovnat překlady"
+
+msgid "langStatOf"
+msgstr "Statistika o"
+
+msgid "langSpeeSubscribe"
+msgstr "Rychlé zapsání jako Tester Kurzu"
+
+msgid "langLogIdentLogout"
+msgstr "Seznam přihlášení"
+
+msgid "langServerStatus"
+msgstr "Stav MySQL serveru :"
+
+msgid "langDataBase"
+msgstr "Databáze"
+
+msgid "langRun"
+msgstr "pracuje"
+
+msgid "langClient"
+msgstr "MySql Klient"
+
+msgid "langServer"
+msgstr "MySql Server"
+
+msgid "langtitulary"
+msgstr "Vlastník"
+
+msgid "langUpgradeBase"
+msgstr "Aktualizovat databázi"
+
+msgid "langManage"
+msgstr "Spravovat Portál"
+
+msgid "langErrorsFound"
+msgstr "nalezeny chyby"
+
+msgid "langMaintenance"
+msgstr "Údržba"
+
+msgid "langUpgrade"
+msgstr "Aktualizace Chamilo"
+
+msgid "langWebsite"
+msgstr "Webová stránka Chamilo"
+
+msgid "langDocumentation"
+msgstr "Dokumentace"
+
+msgid "langContribute"
+msgstr "Přispět"
+
+msgid "langInfoServer"
+msgstr "Informace o Serveru"
+
+msgid "langOtherCategory"
+msgstr "Jiná kategorie"
+
+msgid "langSendMailToUsers"
+msgstr "Odeslat e-mail uživatelům"
+
+msgid "langExampleXMLFile"
+msgstr "Příklad XML souboru"
+
+msgid "langExampleCSVFile"
+msgstr "Příklad CSV souboru"
+
+msgid "langCourseSystemCode"
+msgstr "Kód systému"
+
+msgid "langCourseVisualCode"
+msgstr "Visuální kód"
+
+msgid "langSystemCode"
+msgstr "Kód Systému"
+
+msgid "langVisualCode"
+msgstr "visuální kód"
+
+msgid "langAddCourse"
+msgstr "Vytvořit kurz"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Spravovat virtuální kurz"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Vytvořit virtuální kurz"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "Virtuální kurz bude sdílet paměťový prostor (adresář a databázi) s existujícím pravým\' kurzem."
+
+msgid "langRealCourseCode"
+msgstr "Kód pravého kurzu"
+
+msgid "langCourseCreationSucceeded"
+msgstr "Kurz byl úspěšně vytvořen."
+
+msgid "langYourDokeosUses"
+msgstr "Vaše Chamilo instalace užívá v součastnosti"
+
+msgid "langOnTheHardDisk"
+msgstr "na hard disk"
+
+msgid "langIsVirtualCourse"
+msgstr "Je virtuální kurz"
+
+msgid "langSystemAnnouncements"
+msgstr "Systémové Oznámení"
+
+msgid "langAddAnnouncement"
+msgstr "Přidat nové oznámení"
+
+msgid "langAnnouncementAdded"
+msgstr "Oznámení bylo přidané"
+
+msgid "langAnnouncementUpdated"
+msgstr "Oznámení bylo aktualizované"
+
+msgid "langAnnouncementDeleted"
+msgstr "Oznámení bylo vymazané"
+
+msgid "langContent"
+msgstr "Obsah"
+
+msgid "PermissionsForNewFiles"
+msgstr "Práva pro nové soubory"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "Schopnost definovat práva ke každému nově vytvořenému souboru, zvyšuje bezpečnost proti útokům hackerů uploadovat nebezpečný obsah na váš portál. Výchozí nastavení (0550) by mělo dát serveru racionální úroveň zabezpečení. Daný formát používá UNIXovou terminologii (Uživatel - Skupina - Ostatní, Číst - Zapisovat - Spouštět). Pokud Používáte Oogie, dejte pozor, zda uživatel který používá OpenOffice může ukládat soubory do adresáře kurzu."
+
+msgid "langStudent"
+msgstr "Student"
+
+msgid "Guest"
+msgstr "Host"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Přihlásit jako"
+
+msgid "langLoginAsThisUser"
+msgstr "Přihlásit"
+
+msgid "SelectPicture"
+msgstr "Vyberte obrázek..."
+
+msgid "DontResetPassword"
+msgstr "Neresetovat heslo"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Účastnit se na vývoji"
+
+msgid "langCourseAdmin"
+msgstr "manažer kurzu"
+
+msgid "langOtherCourses"
+msgstr "ostatní kurzy"
+
+msgid "PlatformLanguageTitle"
+msgstr "Jazyk platformy"
+
+msgid "ServerStatusComment"
+msgstr "Tento server je jakého typu? Tady zpřístupníte nebo zablokujete určité specifikované volby. Na vývojovom serveri (development server) je funkce překladu, která označuje nepřeložené řetězce"
+
+msgid "ServerStatusTitle"
+msgstr "Typ serveru"
+
+msgid "PlatformLanguages"
+msgstr "Jazyky Chamilo platformy"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Tento nástroj spravuje menu výběru jazyků na přihlašovací stránce. Jako platformový administrátor můžete rozhodnout který jazyk bude dostupný pro Vaše uživatele."
+
+msgid "OriginalName"
+msgstr "Původní pojmenování"
+
+msgid "EnglishName"
+msgstr "Anglické pojmenování"
+
+msgid "DokeosFolder"
+msgstr "Chamilo složka"
+
+msgid "Properties"
+msgstr "Vlastnosti"
+
+msgid "PlatformConfigSettings"
+msgstr "Chamilo konfigurační nastavení"
+
+msgid "SettingsStored"
+msgstr "Nastavení bylo uloženo"
+
+msgid "InstitutionTitle"
+msgstr "Název instituce"
+
+msgid "InstitutionComment"
+msgstr "Jméno instituce (objeví se v záhlaví na pravo)"
+
+msgid "InstitutionUrlTitle"
+msgstr "URL instituce"
+
+msgid "InstitutionUrlComment"
+msgstr "URL institucí (odkaz se objeví v záhlaví na pravo)"
+
+msgid "SiteNameTitle"
+msgstr "Název Chamilo Campus-u"
+
+msgid "SiteNameComment"
+msgstr "Jméno vašeho Chamilo Campus-u (objeví se v záhlaví)"
+
+msgid "emailAdministratorTitle"
+msgstr "Administrátor platformy: E-mail"
+
+msgid "emailAdministratorComment"
+msgstr "Adresa e-mailu Administrátora platformy (objeví se v úpatí stránky na levo)"
+
+msgid "administratorSurnameTitle"
+msgstr "Administrátor platformy: Příjmení"
+
+msgid "administratorSurnameComment"
+msgstr "Příjmení Administrátora platformy (objeví se v úpatí stránky na levo)"
+
+msgid "administratorNameTitle"
+msgstr "Administrátor platformy: Křestní jméno"
+
+msgid "administratorNameComment"
+msgstr "Křestní jméno Administrátora platformy (objeví se v úpatí stránky na levo)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Informace o Administrátorovi platformy v úpatí stránky"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Zobrazit informace o Administrátorovi platformy v úpatí stránky?"
+
+msgid "HomepageViewTitle"
+msgstr "Náhled Domácí stránky"
+
+msgid "HomepageViewComment"
+msgstr "Jak chcete aby vypadala Vaše domácí stránka kurzu?"
+
+msgid "HomepageViewDefault"
+msgstr "Rozvržení ve dvou sloupcích. Neaktivní nástroje jsou skryté"
+
+msgid "HomepageViewFixed"
+msgstr "Rozvržení ve třech sloupcích. Neaktivní nástroje jsou stínované šedě (Ikony zůstávají na svím místě)"
+
+msgid "Yes"
+msgstr "Ano"
+
+msgid "No"
+msgstr "Ne"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Nástrojové zkratky"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Zobrazit nástrojové zkratky v baneru?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Pohled Studenta"
+
+msgid "ShowStudentViewComment"
+msgstr "Zapnout Pohled Studenta?<br>Tato funkce dovoluje učitelovi vidět tak, jak to vidí student."
+
+msgid "AllowGroupCategories"
+msgstr "Kategorie Skupin"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Povolit administrátorům kurzu tvorbu kategorií v skupinovém modulu?"
+
+msgid "PlatformLanguageComment"
+msgstr "Můžete si zvolit jazyky platformy v různých částích platformové administrace, jměnovitě: <a href=\"languages.php\">Jazyky Chamilo platformy</a>"
+
+msgid "ProductionServer"
+msgstr "Server (Produkce)"
+
+msgid "TestServer"
+msgstr "Test Server"
+
+msgid "ShowOnlineTitle"
+msgstr "Kdo je Online"
+
+msgid "AsPlatformLanguage"
+msgstr "jako jazyk platformy"
+
+msgid "ShowOnlineComment"
+msgstr "Zobrazit počet osob který jsou online?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Povolit změnu jména v profilu?"
+
+msgid "AllowNameChangeComment"
+msgstr "Je uživatelovi dovoleno změnit jeho/její jméno a příjmění?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Standardní Kvóta Dokumentu"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Jaká je standartní kvóta pro nástroje dokumentů? Můžete překročit kvótu pro určité kurzy skrze: platformová administrace > Kurzy > upravit"
+
+msgid "ProfileChangesTitle"
+msgstr "Profil"
+
+msgid "ProfileChangesComment"
+msgstr "Které části profilu mohou být změneny?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Registrace: požadované pole"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Které pole je požadováno (ještě jméno, křestní jméno, login a heslo)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Stanadrdní kvóta skupiny"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Jaká je stanardní kvóta pro nástroje skupinových dokumentů?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Ztracené heslo"
+
+msgid "AllowLostPasswordComment"
+msgstr "Je uživateli povoleno požadovat jejich ztracené heslo?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Registrace"
+
+msgid "AllowRegistrationComment"
+msgstr "Je registrace jako nový uživatel povolena? Můžou uživatelé vytvářet nové účty?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Registrace jako učitel"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Může se někdo zaregistrovat jako učitel (může vytvářet kurzy)?"
+
+msgid "PlatformLanguage"
+msgstr "Jazyk platformy"
+
+msgid "Tuning"
+msgstr "Vylepšení"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "Rozdělit uživatelský adresář pro upload"
+
+msgid "SplitUsersUploadDirectoryComment"
+msgstr "Na více vytížených portálech, kde je mnoho registrovaných uživatelů a mohou posílat své obrázky, pak může adresář pro upload obsahovat mnoho souborů. To znamená pro <i>souborový systém</i> velkou obtíž(bylo zjištěno u více neř 36000 souborů na Debian serveru). Změnou této vlastnosti umožníte jednoúrovňové oddělení adresářů v adresáři pro upload. 9 adresářů může být použito v kořenovém adresáři a všechny následné uživatelské adresáře budou uložený do těchto devíti adresářů. Změna této vlastnosti nemá vliv na adresářovou strukturu na disku, ale má vliv na chování Chamilo systému, takže když změníte tuto vlastnost, musíte vytvořit nové adresáře a přemístit existující adresáře ručně na serveru. Dávejte pozor při vytváření těchto adresářů, musíte přesouvat adresáře uživatelů 1 až 9 do podadresářů stejného jména. Pokud si nejste jisti touto vlastností, nejlepší bude tuto vlastnost neaktivovat."
+
+msgid "CourseQuota"
+msgstr "Kvóta kurzu"
+
+msgid "EditNotice"
+msgstr "Upravit poznámku"
+
+msgid "General"
+msgstr "Obecní"
+
+msgid "LostPassword"
+msgstr "Ztracené heslo"
+
+msgid "Registration"
+msgstr "registrace"
+
+msgid "Password"
+msgstr "heslo"
+
+msgid "InsertLink"
+msgstr "vložit odkaz (link)"
+
+msgid "EditNews"
+msgstr "Editovat Novinky"
+
+msgid "EditCategories"
+msgstr "editovat kategorie"
+
+msgid "EditHomePage"
+msgstr "Editovat Domácí stránku"
+
+msgid "AllowUserHeadingsComment"
+msgstr "Může administrátor kurzu definovat nadpisy uživatelů pro získání dodatečných informací o uživateli?"
+
+msgid "Platform"
+msgstr "Platforma"
+
+msgid "Course"
+msgstr "Kurz"
+
+msgid "Languages"
+msgstr "Jazyky"
+
+msgid "Privacy"
+msgstr "Důvěrnost"
+
+msgid "NoticeTitle"
+msgstr "Název Poznámky"
+
+msgid "NoticeText"
+msgstr "Text Poznámky"
+
+msgid "LinkName"
+msgstr "Text odkazu (Link-u)"
+
+msgid "LinkURL"
+msgstr "URL odkazu (Link-u)"
+
+msgid "OpenInNewWindow"
+msgstr "Otevřít v novém okně"
+
+msgid "Plugins"
+msgstr "Doplňky"
+
+msgid "Info"
+msgstr "informace"
+
+msgid "UserAdded"
+msgstr "Uživatel byl přidán"
+
+msgid "NoSearchResults"
+msgstr "Žádné výsledky hledání"
+
+msgid "UserDeleted"
+msgstr "Uživatel byl smazán"
+
+msgid "NoClassesForThisCourse"
+msgstr "Žádné třídy nejsou zapsané do tohoto kurzu"
+
+msgid "CourseUsage"
+msgstr "Statistika kurzu"
+
+msgid "NoCoursesForThisUser"
+msgstr "Uživatel není zapsán v kurzu"
+
+msgid "NoClassesForThisUser"
+msgstr "Uživatel není zařazen ve třídě"
+
+msgid "NoCoursesForThisClass"
+msgstr "Tato třída neobsahuje žádný kurz"
+
+msgid "langOpenToTheWorld"
+msgstr "Otevřeno - přístup povolen pro celý svět"
+
+msgid "OpenToThePlatform"
+msgstr "Otevřeno - přístup povolen pro uživatele registrované v systému"
+
+msgid "langPrivate"
+msgstr "Neveřejný přístup (školení je přístupné pouze pro uživatele ze seznamu)"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Zcela uzavřeno: školení je přístupné pouze pro školitele"
+
+msgid "langSubscription"
+msgstr "Zapsát"
+
+msgid "langUnsubscription"
+msgstr "Odepsát"
+
+msgid "CourseAccessConfigTip"
+msgstr "Standardně je školení veřejné. Ale můžete definovat stupeň utajení."
+
+msgid "Tool"
+msgstr "nástroj"
+
+msgid "NumberOfItems"
+msgstr "počet položek"
+
+msgid "DocumentsAndFolders"
+msgstr "Dokumenty a složky"
+
+msgid "Learnpath"
+msgstr "Kurzy"
+
+msgid "Exercises"
+msgstr "Cvičení"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Osobní Agenda"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "Může student vložit vlastní události do programu školení?"
+
+msgid "CurrentValue"
+msgstr "aktuální hodnota"
+
+msgid "CourseDescription"
+msgstr "Popis Kurzu"
+
+msgid "OnlineConference"
+msgstr "Online Konference"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Quiz"
+msgstr "Kvíz"
+
+msgid "Announcements"
+msgstr "Oznámení"
+
+msgid "Links"
+msgstr "Linky"
+
+msgid "LearningPath"
+msgstr "Výuková osnova"
+
+msgid "Documents"
+msgstr "Dokumenty"
+
+msgid "UserPicture"
+msgstr "Obrázek"
+
+msgid "officialcode"
+msgstr "Přidělený kód"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "UserPassword"
+msgstr "Heslo"
+
+msgid "SubscriptionAllowed"
+msgstr "Zápis povolen"
+
+msgid "UnsubscriptionAllowed"
+msgstr "Zrušení registrace povolena"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Povoleno"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Zakázáno"
+
+msgid "AddDummyContentToCourse"
+msgstr "Vložit připravený obsah do tohoto školení"
+
+msgid "DummyCourseCreator"
+msgstr "Vytvořit fiktivní kurz."
+
+msgid "DummyCourseDescription"
+msgstr "Tímto přidáte fiktivní(předpřipravený) obsah do tohoto kurzu. Používá se pro testovací účely."
+
+msgid "AvailablePlugins"
+msgstr "Toto jsou pluginy, které mohou být použity na tomto systému. Stáhnout přídavné pluginy lze na <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
+
+msgid "CreateVirtualCourse"
+msgstr "Vytvořit virtuální kurz"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Zobrazit seznam virtuálních kurzů"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Spojen s existujícím kódem"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Pokusné vytvoření virtuálního kurzu..."
+
+msgid "WantedCourseCode"
+msgstr "Hledaný kód kurzu"
+
+msgid "ResetPassword"
+msgstr "Resetovat heslo"
+
+msgid "CheckToSendNewPassword"
+msgstr "Zaškrtnutím zašlete nové heslo"
+
+msgid "AutoGeneratePassword"
+msgstr "Automaticky vygenerovat nové heslo"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Použij nadpis pro název dokumentu"
+
+msgid "UseDocumentTitleComment"
+msgstr "Tímto povolíte použít titulek pro název dokument místo názvu souboru"
+
+msgid "StudentPublications"
+msgstr "Úkol"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "Vymazané soubory nemůžou být obnoveny"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Smazáním souboru v tomto dokumentu jej smažete nadobro. Soubor již nepůjde obnovit."
+
+msgid "ClassName"
+msgstr "Jméno třídy"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Schránka: maximální velikost dokumentu"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Jak velká(v bytech) může být schránka dokumentů?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Schránka: Mohou být dokumenty přepsány"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "Může být přepsán originální dokument, který uploadoval student či školitel, dokumentem se jménem, které již existuje? Pokud odpovíte ANO, pak přijdete o verzovací mechanismus"
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Schránka: Uploadovat vlastní obsah schránky?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Povolí školiteli a uživatelům uploadovat dokumenty do jejich schránek, beztoho aby byly poslány samy sobě"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Schránka: Školitel <-> Student"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Povolí uživatelům poslat dokumenty jiným uživatelům (p2p). Uživatelé to mohou také použít pro méně relevantní dokumenty(mp3, testy, výsledky ...). Pokud toto zakážete, pak mohou uživatelé posílat dokumenty pouze školiteli."
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Schránka: Povolit mailing"
+
+msgid "DropboxAllowMailingComment"
+msgstr "S funkcí mailingu můžete posílat každému studentovi osobní dokumenty"
+
+msgid "PermissionsForNewDirs"
+msgstr "Oprávnění pro nové adresáře"
+
+msgid "PermissionsForNewDirsComment"
+msgstr "Schopnost definovat oprávnění pro každý nově vytvořený adresář vám umožňuje zvýšit zabezpečení proti hackerským útokům na váš portál. Výchozí nastavení (0770) by mělo být dostačující pro racionální zabezpečení vašeho serveru. Daný formát používá UNIXovou terminologii (Vlastník-Skupina-OStatní, Čtení-Zápis-Spuštění)"
+
+msgid "UserListHasBeenExported"
+msgstr "Uživatelský výpis byl exportován"
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Stáhnout soubor"
+
+msgid "administratorTelephoneTitle"
+msgstr "Platformový administrátor: Telefon"
+
+msgid "administratorTelephoneComment"
+msgstr "Telefonní číslo platformového administrátora"
+
+msgid "SendMailToNewUser"
+msgstr "Poslat email novému uživateli"
+
+msgid "ExtendedProfileTitle"
+msgstr "Rozšířený profil"
+
+msgid "ExtendedProfileComment"
+msgstr "Toto nastavení je dáno na \'Povolit\', uživatel může vyplnit následující(nepovinné) pole: \'Má kvalifikace\', \'Mé certifikáty\', \'Co jsem schopný vyučovat\' a \'Můj osobní obsah\'"
+
+msgid "Classes"
+msgstr "Třídy"
+
+msgid "UserUnsubscribed"
+msgstr "Uživatel je nyní odepsaný(odregistrovaný)"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "Nemůže být odregistrovaný, protože je jeden ze školitelů"
+
+msgid "InvalidStartDate"
+msgstr "Nekorektní počáteční datum"
+
+msgid "InvalidEndDate"
+msgstr "Nekorektní konečné datum"
+
+msgid "DateFormatLabel"
+msgstr "(d/m/r h:m)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "Soubory hlavní stránky nejsou přepisovatelné!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Prosím napište text"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Prosím napište titulek k textu"
+
+msgid "PleaseEnterLinkName"
+msgstr "Prosím napište název odkazu"
+
+msgid "InsertThisLink"
+msgstr "Vložit tento odkaz (link)"
+
+msgid "FirstPlace"
+msgstr "První místo"
+
+msgid "After"
+msgstr "Po"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Schránka: povolit skupinu"
+
+msgid "DropboxAllowGroupComment"
+msgstr "Uživatelé mohou posílat soubory skupinám"
+
+msgid "ClassDeleted"
+msgstr "Třída je smazaná"
+
+msgid "ClassesDeleted"
+msgstr "Třídy jsou smazané"
+
+msgid "NoUsersInClass"
+msgstr "Žádný uživatel v této třídě."
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "Zvolení uživatelé jsou zapsáni do zvoleného školení"
+
+msgid "InvalidTitle"
+msgstr "Prosím vložte titulek"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Tato kategorie je již použita"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Prosím vložte kód a název kategorie"
+
+msgid "DokeosHomepage"
+msgstr "Chamilo webová stránka"
+
+msgid "DokeosForum"
+msgstr "Komunitní fórum"
+
+msgid "RegisterYourPortal"
+msgstr "Registrovat váš portál"
+
+msgid "DokeosExtensions"
+msgstr "Komunitní doplňky"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Zobraz navigační menu kurzu"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Zobraz navigační menu, které urychlí přístup k nástrojům"
+
+msgid "LoginAs"
+msgstr "Přihlásit se jako"
+
+msgid "ImportClassListCSV"
+msgstr "Importovat třídu pomocí CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "Zobraz počet uživatelů, kteří jsou online na stránce přihlášení(viditelná pro všechny)"
+
+msgid "ShowOnlineUsers"
+msgstr "Zobraz počet uživatelů online na všech stránkách(viditelných pro všechny co jsou zalogováni)"
+
+msgid "ShowOnlineCourse"
+msgstr "Zobraz počet uživatelů online v tomto školení"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Zobrazit ikony v navigačním menu?"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Zaměř se na pravo"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Zaměř se na místo"
+
+msgid "ClassesUnsubscribed"
+msgstr "Zvolené třídy jsou odregistrovány ze zvolených školení"
+
+msgid "ClassesSubscribed"
+msgstr "Zvolené třídy jsou zaregistrovány do zvolených školení"
+
+msgid "RoleId"
+msgstr "ID funkce"
+
+msgid "RoleName"
+msgstr "Jméno funkce"
+
+msgid "RoleType"
+msgstr "Typ"
+
+msgid "RightValueModified"
+msgstr "Hodnota byla upravená."
+
+msgid "MakeAvailable"
+msgstr "Zpřístupnit"
+
+msgid "MakeUnavailable"
+msgstr "Znepřístupnit"
+
+msgid "Stylesheets"
+msgstr "Styl listu"
+
+msgid "DefaultDokeosStyle"
+msgstr "Výchozí Chamilo styl"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Smí navigační menu jiné nástrojové ikony?"
+
+msgid "Plugin"
+msgstr "Plugin"
+
+msgid "MainMenu"
+msgstr "Hlavní menu"
+
+msgid "MainMenuLogged"
+msgstr "Hlavní menu po přihlášení"
+
+msgid "Banner"
+msgstr "Banner"
+
+msgid "ImageResizeTitle"
+msgstr "Změnit velikost nahraných uživatelských obrázků"
+
+msgid "ImageResizeComment"
+msgstr "Uživatelské obrázky mohou být zmenšeny při nahrání, pokud PHP je kompilovánom s <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. Pokud není GD přítomno, pak je vlastnost ignoravána."
+
+msgid "MaxImageWidthTitle"
+msgstr "Maximální šířka obrázku (px)"
+
+msgid "MaxImageWidthComment"
+msgstr "Maximální šířka obrázku v pixelech. Tato vlastnost je aplikována tehdy, pokud uživatelské obrázky mají zvolenou změnu velikosti při nahrávání."
+
+msgid "MaxImageHeightTitle"
+msgstr "Maximální výška obrázku (px)"
+
+msgid "MaxImageHeightComment"
+msgstr "Maximální výška obrázku v pixelech. Tato vlastnost je aplikována tehdy, pokud uživatelské obrázky mají zvolenou změnu velikosti při nahrávání."
+
+msgid "YourVersionNotUpToDate"
+msgstr "Vaše verze není aktuální"
+
+msgid "YourVersionIs"
+msgstr "Vaše verze je"
+
+msgid "PleaseVisitDokeos"
+msgstr "Prosím prohlédněte si Chamilo"
+
+msgid "VersionUpToDate"
+msgstr "Vaše verze je aktuální"
+
+msgid "ConnectSocketError"
+msgstr "Socket Connection Error"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Spojení je přerušeno"
+
+msgid "ShowEmailAddresses"
+msgstr "Ukaž e-mailové adresy"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Zobrazit emailové adresy uživatelům"
+
+msgid "LatestVersionIs"
+msgstr "Poslední verze je"
+
+msgid "langConfigureExtensions"
+msgstr "Chamilo PRO"
+
+msgid "langActiveExtensions"
+msgstr "Aktivuj toto rozšíření"
+
+msgid "langVisioconf"
+msgstr "Visio-konference"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo LIVE je videokonferenční nástroj který nabízí: sdílení prezentací, tabuli na kreslení a psaní textů do prezentací, obousměrné audio/video a chat. Požaduje Flash® player 9+"
+
+msgid "langPpt2lp"
+msgstr "Chamilo RAPID"
+
+msgid "langBandWidthStatistics"
+msgstr "Statistika přenosu dat"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG dovoluje prozkoumat pokročilé statistiky stavu serveru za posledních 24h"
+
+msgid "ServerStatistics"
+msgstr "Statistika serveru"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats umožňuje prozkoumat statistiky vašeho portálu: navštěvy, zobrazené stránky, příspěvky"
+
+msgid "SearchEngine"
+msgstr "Chamilo LIBRARY"
+
+msgid "langSearchEngineDescription"
+msgstr "Chamilo LIBRARY je vyhledávací nástroj nabízející multikrytériovou indexaci a výzkum. Je součástí Chamilo Medical vlastností"
+
+msgid "langListSession"
+msgstr "Výpis školení"
+
+msgid "AddSession"
+msgstr "Přidat výukové sezení"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Importovat seznam sezení"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Exportovat seznam sezení"
+
+msgid "SessionName"
+msgstr "Název sezení"
+
+msgid "langNbCourses"
+msgstr "Školení"
+
+msgid "DateStart"
+msgstr "Počáteční datum"
+
+msgid "DateEnd"
+msgstr "Konečné datum"
+
+msgid "CoachName"
+msgstr "Jméno školitele"
+
+msgid "SessionList"
+msgstr "Seznam sekcí školení"
+
+msgid "SessionNameIsRequired"
+msgstr "Název je vyžadován pro sekci"
+
+msgid "NextStep"
+msgstr "Další krok"
+
+msgid "keyword"
+msgstr "klíčové slovo"
+
+msgid "Confirm"
+msgstr "Potvrdit"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Odregistrovat uživatele ze školení"
+
+msgid "MissingClassName"
+msgstr "Chybí název třídy"
+
+msgid "ClassNameExists"
+msgstr "Název třídy existuje"
+
+msgid "ImportCSVFileLocation"
+msgstr "umístění importovaného CSV souboru"
+
+msgid "ClassesCreated"
+msgstr "Třída vytvořena"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Chyby během importu souboru"
+
+msgid "ServiceActivated"
+msgstr "Služba aktivována"
+
+msgid "ActivateExtension"
+msgstr "Aktivuj služby"
+
+msgid "InvalidExtension"
+msgstr "Neplatné rozšíření"
+
+msgid "VersionCheckExplanation"
+msgstr "Jestliže požadujete automatické hlídání verzí, pak se musíte registrovat na portálu chamilo.com. Informace, kterou obdržíte kliknutím na toto tlačítko je pouze pro interní použití a pouze souhrnná data budou publikována (celkový počet portálů, celkový počet chamilo školení, celkový počet chamilo uživatelů, ....) na <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>. Při registraci se také objevíte na seznamu <a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>."
+
+msgid "AfterApproval"
+msgstr "Potvrdit později"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Povolit pohled studenta"
+
+msgid "StudentViewEnabledComment"
+msgstr "Povolení pohledu uživatele, které dovoluje školiteli nebo adminovi vidět školení z pohledu studenta"
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Časový limit pro online uživatele"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Tento limit definuje po kolik sekund od poslední akce je uživatel stále považovaný za *online*"
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Vzorový obsah na vytvoření školení"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Vytvoří vzorový obsah automaticky při vytvoření nového školení"
+
+msgid "AccountValidDurationTitle"
+msgstr "Platnost účtu"
+
+msgid "AccountValidDurationComment"
+msgstr "Uživatelský účet je platný po tento počet dní od vytvoření"
+
+msgid "UseSessionModeTitle"
+msgstr "Použij školící sekce"
+
+msgid "UseSessionModeComment"
+msgstr "Sezení umoňuje jiný způsob zacházení s kurzy, kdy má kurz tvůrce, lektora a studenty. Každý lektor se v kurzu věnuje ve stanoveném časovém úseku, nazvaném sezení, skupině studentů"
+
+msgid "HomepageViewActivity"
+msgstr "Pohled aktivity"
+
+msgid "HomepageView2column"
+msgstr "2-sloupcový pohled"
+
+msgid "HomepageView3column"
+msgstr "3-sloupcový pohled"
+
+msgid "AllowUserHeadings"
+msgstr "Povolit uživatelům profilování uvnitř školení"
+
+msgid "IconsOnly"
+msgstr "Pouze ikony"
+
+msgid "TextOnly"
+msgstr "Pouze text"
+
+msgid "IconsText"
+msgstr "Ikony a text"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Povolit popis nástroje"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Povolit úvod do všech nástrojových stranek"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Domácí stránka kurzu Breadcrumb"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "Breadcrumb je horizontální navigační systém odkazů, obvykle nahoře vlevo vaší stránky. Tímto nastavením zvolíte, co chcete vidět v breadcrumb na hlavní stránce kurzů"
+
+msgid "Comment"
+msgstr "Komentář"
+
+msgid "Version"
+msgstr "Verze"
+
+msgid "LoginPageMainArea"
+msgstr "Přihlašovací stránka hlavní plochy"
+
+msgid "LoginPageMenu"
+msgstr "Přihlašovací menu"
+
+msgid "CampusHomepageMainArea"
+msgstr "Hlavní oblast na domácí stránce portálu"
+
+msgid "CampusHomepageMenu"
+msgstr "Portálové hlavní menu"
+
+msgid "MyCoursesMainArea"
+msgstr "Hlavní oblast školení"
+
+msgid "MyCoursesMenu"
+msgstr "Menu školení"
+
+msgid "Header"
+msgstr "Záhlaví"
+
+msgid "Footer"
+msgstr "Patička"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "Veřejné stránky vyhovující WAI"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Web Accessibility Initiative) je iniciativa vytvářet web více přístupný. Zvolením této vlastnosti budou veřejné stránky Chamilou více přístupné. To také znamená, že se může stejný obsah na portálových stránkách vypadat jinak"
+
+msgid "VersionCheck"
+msgstr "Kontrola verze"
+
+msgid "Active"
+msgstr "aktivní"
+
+msgid "Inactive"
+msgstr "neaktivní"
+
+msgid "SessionOverview"
+msgstr "Přehled sezení"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Přidat uživatele do školení, pouze pokud v něm ještě není"
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Vymazat uživatele ze školení, pokud jeho jméno není na seznamu"
+
+msgid "DeleteSelectedSessions"
+msgstr "Smazat zvolená sezení"
+
+msgid "CourseListInSession"
+msgstr "Školenení v tomto sezení"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Odregistrovat zvolená školení z tohoto sezení"
+
+msgid "NbUsers"
+msgstr "Uživatelé"
+
+msgid "SubscribeUsersToSession"
+msgstr "Zapsat uživatele do sezení"
+
+msgid "UserListInPlatform"
+msgstr "Portálový uživatelský seznam"
+
+msgid "UserListInSession"
+msgstr "Seznam uživatelů restrovaných do tohoto sezení"
+
+msgid "CourseListInPlatform"
+msgstr "Seznam školení"
+
+msgid "Host"
+msgstr "Hostitel"
+
+msgid "UserOnHost"
+msgstr "Login"
+
+msgid "FtpPassword"
+msgstr "FTP heslo"
+
+msgid "PathToLzx"
+msgstr "cesta k LZX souborům"
+
+msgid "WCAGContent"
+msgstr "Text"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Přidat školení do tohoto sezení"
+
+msgid "DateStartSession"
+msgstr "Počáteční datum"
+
+msgid "DateEndSession"
+msgstr "Konečné datum"
+
+msgid "EditSession"
+msgstr "Upravit toto sezení"
+
+msgid "VideoConferenceUrl"
+msgstr "Cesta k živé konferenci"
+
+msgid "VideoClassroomUrl"
+msgstr "Cesta k místnosti živé konference"
+
+msgid "ReconfigureExtension"
+msgstr "Rekonfigurovat rozšíření"
+
+msgid "ServiceReconfigured"
+msgstr "Služba rekonfigurována"
+
+msgid "ChooseNewsLanguage"
+msgstr "Zvol jazyk zpráv"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "Celkový čas strávený ve školení"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Tato možnost se používá na výpočet času, který uživatel strávil v kurzu. Hodnota v poli je obnovovaný interval v sekundách. Když chcete možnost deaktivovat, nechejte v poli 0."
+
+msgid "EditLink"
+msgstr "Upravit odkaz"
+
+msgid "FinishSessionCreation"
+msgstr "Ukončit vytváření sezení"
+
+msgid "VisioRTMPPort"
+msgstr "Videokonferenční port protokolu RTMTP"
+
+msgid "SessionNameAlreadyExists"
+msgstr "Název sezení již existuje"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "Žádné třídy nebyly vytvořeny"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Toto pole by mělo být číslo"
+
+msgid "UserLocked"
+msgstr "Uživatel uzamčen"
+
+msgid "UserUnlocked"
+msgstr "Uživatel odemčen"
+
+msgid "CannotDeleteUser"
+msgstr "Nelze smazat tohoto uživatele"
+
+msgid "SelectedUsersDeleted"
+msgstr "Zvolení uživatelé smazáni"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Někteří uživatelé nebyli smazáni"
+
+msgid "ExternalAuthentication"
+msgstr "Externí autentizace"
+
+msgid "RegistrationDate"
+msgstr "Datum registrace"
+
+msgid "UserUpdated"
+msgstr "Uživatel aktualizován"
+
+msgid "HomePageFilesNotReadable"
+msgstr "Soubory domácí stránky nejdou číst"
+
+msgid "Choose"
+msgstr "Zvolit"
+
+msgid "ModifySessionCourse"
+msgstr "Upravit školení ze sezení"
+
+msgid "CourseSessionList"
+msgstr "Školení v tomto sezení"
+
+msgid "SelectACoach"
+msgstr "Zvolit vedoucího"
+
+msgid "UserNameUsedTwice"
+msgstr "Login je použit dvakrát"
+
+msgid "UserNameNotAvailable"
+msgstr "Login není dostupný"
+
+msgid "UserNameTooLong"
+msgstr "Tento login je příliš dlouhý"
+
+msgid "WrongStatus"
+msgstr "Tento status neexistuje"
+
+msgid "ClassNameNotAvailable"
+msgstr "Toto jméno třídy není dostupné"
+
+msgid "FileImported"
+msgstr "Soubor byl naimportován"
+
+msgid "WhichSessionToExport"
+msgstr "Zvol sezení k exportu"
+
+msgid "AllSessions"
+msgstr "Všechna sezení"
+
+msgid "CodeDoesNotExists"
+msgstr "Tento kód neexistuje"
+
+msgid "UnknownUser"
+msgstr "Neznámý uživatel"
+
+msgid "UnknownStatus"
+msgstr "Neznámý status"
+
+msgid "SessionDeleted"
+msgstr "Sezení smazáno"
+
+msgid "CourseDoesNotExist"
+msgstr "Tento kurz neexistuje"
+
+msgid "UserDoesNotExist"
+msgstr "Tenhle uživatel neexistuje"
+
+msgid "ButProblemsOccured"
+msgstr "ale vyskytly se problémy"
+
+msgid "UsernameTooLongWasCut"
+msgstr "Login byl zkrácen"
+
+msgid "NoInputFile"
+msgstr "Žádný soubor nebyl poslán"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "Status školitele byl uveřejněn"
+
+msgid "WrongDate"
+msgstr "Špatný formát datumu (rrrr-mm-dd)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Toto je automatická emailová zpráva - prosím neodpovídejte"
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "Brzy obdržíte email od vedoucího"
+
+msgid "SlideSize"
+msgstr "Velikost prezentace"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Plagiátorská prevence Ephorus"
+
+msgid "CourseTeachers"
+msgstr "Studenti"
+
+msgid "UnknownTeacher"
+msgstr "Neznámý student"
+
+msgid "HideDLTTMarkup"
+msgstr "Schovat DLTT značení"
+
+msgid "ListOfCoursesOfSession"
+msgstr "Seznam školení v tomto sezení"
+
+msgid "UnsubscribeSelectedUsersFromSession"
+msgstr "Odregistrovat zvolené uživatele ze sezení"
+
+msgid "ShowDifferentCourseLanguageComment"
+msgstr "Zvolit jazyk ve kterém je uváděno každé školení, kromě titulku školení na domácí stránce seznamu školení"
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "Ukaž kategorie školení na domácí stránce, i když jsou prázdné"
+
+msgid "ShowEmptyCourseCategories"
+msgstr "Ukaž prázdné kategorie"
+
+msgid "XMLNotValid"
+msgstr "XML dokument je neplatný"
+
+msgid "ForTheSession"
+msgstr "pro sezení"
+
+msgid "AllowEmailEditorTitle"
+msgstr "Aktivovat emailový online editor"
+
+msgid "AllowEmailEditorComment"
+msgstr "Pokud je tato funkce zapnuta, kliknutím na e-mail adresu se otevře mail editor"
+
+msgid "AddCSVHeader"
+msgstr "Přidat řádek záhlaví CSV"
+
+msgid "YesAddCSVHeader"
+msgstr "Ano, přidat záhlaví CSV<br/>Tento řádek definuje pole a je nutné, při importu souboru na jiný Chamilo portál"
+
+msgid "ListOfUsersSubscribedToCourse"
+msgstr "Seznam uživatelů zapsaných do školení"
+
+msgid "NumberOfCourses"
+msgstr "Školení"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Ukázat jazyky školení"
+
+msgid "VisioRTMPTunnelPort"
+msgstr "Videokonferenční tunnel port protokolu RTMTP"
+
+msgid "name"
+msgstr "Jméno"
+
+msgid "Security"
+msgstr "Zabezpečení"
+
+msgid "UploadExtensionsListType"
+msgstr "Typ filtrování na nahraných dokumentech"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "Použití funkce blacklist - whitelist filtrování. <br/>Pro více informací si prohlédněte popis níže."
+
+msgid "Blacklist"
+msgstr "Blacklist"
+
+msgid "Whitelist"
+msgstr "Whitelist"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "Blacklist - nastavení"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "Whitelist - nastavení"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "Blacklist je použit k filtrování souborů s příponou, která se nachází na seznamu blacklistu. Přípona by měla být zapsána bez tečky(.) a oddělena středníkem (;) např: exe;com;bat;php <br/>Soubory bez přípony jsou akceptovány. Nezáleží na velkém nebo malém písmenu."
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "Whitelist je použit k filtrování souborů s příponou, která se nenachází na seznamu whitelistu. Přípona by měla být zapsána bez tečky(.) a oddělena středníkem (;) např: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw <br/>Soubory bez přípony jsou akceptovány. Nezáleží na velkém nebo malém písmenu."
+
+msgid "UploadExtensionsSkip"
+msgstr "Způsob filtrování (přeskočit/přejmenovat)"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "Pokud zvolíte přeskočit, soubory které vyhovují blacklistu (popř. nevyhovují whitelistu) nebudou nahrané do systému. Pokud zvolíte přejmenovat, jejich přípona bude nahrazena jednou z definovaných v nastavení <b>přejmenování přípony</b>. Mějte na paměti, že vás přejmenování neochrání a může způsobit kolizi v názvu některých souborů stejného jména, ale odlišné přípony."
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "Přejmenování přípony"
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "Napište příponu, která bude nahrazovat potenciálně nebezpečné soubory s příponou z filtru. Je třeba nastavit tehdy, když máte zvolenou funkci filtru nahrazením(přejmenováním)"
+
+msgid "Remove"
+msgstr "Odstranit"
+
+msgid "Rename"
+msgstr "Přejmenovat"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "Zobraz počet školení v každé kategorii školení na hlavní stránce"
+
+msgid "EphorusDescription"
+msgstr "Začít používat Ephorus, službu proti plagiátorství v Chamilou. <br/> <strong>Ephorus zabrání internetovému plagiátorství bez dodatečného úsilí</strong> <br/>Můžete používat jedinečnou, otevřenou a standardizovanou webovou službu, kterou můžete samostatně integrovat nebo můžete použít jeden z našich Chamilo-integračních modulů."
+
+msgid "EphorusLeadersInAntiPlagiarism"
+msgstr "<STRONG>Leader proti BR>plagiátorství</STRONG>"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "Klikněte pro více informací a ceny"
+
+msgid "NameOfTheSession"
+msgstr "Název sezení"
+
+msgid "NoSessionsForThisUser"
+msgstr "Tento uživatel není zapsán do sezení"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "Zobraz kategorie na domácí stránce"
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "Tato volba zobrazí nebo skryje kategorie školení na hlavní stránce portálu"
+
+msgid "ShowTabsTitle"
+msgstr "Záložky v záhlaví"
+
+msgid "ShowTabsComment"
+msgstr "Zaškrtni záložky, které budou vidět v záhlaví. Nezvolené záložky budou zobrazeny v pravém ručním menu na portálu hlavní stránky a mého školení (pokud to bude potřeba)."
+
+msgid "DefaultForumViewTitle"
+msgstr "Výchozí pohled fóra"
+
+msgid "DefaultForumViewComment"
+msgstr "Co by měla být výchozí volba při vytvoření nového fóra. Každý student může zvolit jiný vzhled pro každé jednotlivé fórum."
+
+msgid "TabsMyCourses"
+msgstr "Záložka školení"
+
+msgid "TabsCampusHomepage"
+msgstr "Záložka domácí stránky portálu"
+
+msgid "TabsReporting"
+msgstr "Záložka zpráv"
+
+msgid "TabsPlatformAdministration"
+msgstr "Záložka administrace platformy"
+
+msgid "NoCoursesForThisSession"
+msgstr "Žádné školení v tomto sezení"
+
+msgid "NoUsersForThisSession"
+msgstr "Žádní uživatelé v tomto sezení"
+
+msgid "LastNameMandatory"
+msgstr "Příjmení nemůže být prázdné"
+
+msgid "FirstNameMandatory"
+msgstr "Jméno nemůže být prázdné"
+
+msgid "EmailMandatory"
+msgstr "Email nemůže být prázdný"
+
+msgid "TabsMyAgenda"
+msgstr "Záložka program"
+
+msgid "NoticeWillBeNotDisplayed"
+msgstr "Oznámení nebude zobrazeno na hlavní stránce"
+
+msgid "LetThoseFieldsEmptyToHideTheNotice"
+msgstr "Nechat tato pole prázdná pro schování oznámení"
+
+msgid "Ppt2lpVoiceRecordingNeedsRed5"
+msgstr "Vlastnost nahrávání hlasu v průběhu přenosu na Red5 streamovací server. Tyto parametry serveru mohou být konfigurovány ve videokonferenční sekci na aktuální stránce"
+
+msgid "PlatformCharsetTitle"
+msgstr "Volba znakové sady"
+
+msgid "PlatformCharsetComment"
+msgstr "Znaková sada je to, co nám umožňuje zobrazit jednotlivé jazyky v Chamilou. Napíklad, pokud použijete Ruské nebo Japonské znaky, pak můžete toto změnit. Pro korektní zobrazení češtiny použijte windows-1250, iso-8859-2 nebo nejlépe <b>UTF8</b>"
+
+msgid "ExtendedProfileRegistrationTitle"
+msgstr "Rozšířená pole profilu při registraci"
+
+msgid "ExtendedProfileRegistrationComment"
+msgstr "Která z následujících polí v rozšířeném profilu mají být dostupná během uživatelské registrace? Toto je požadováno, pokud je rozšířený profil aktivován (viz nahoře)"
+
+msgid "ExtendedProfileRegistrationRequiredTitle"
+msgstr "Požadovaná rozšířená pole profilu při registraci"
+
+msgid "ExtendedProfileRegistrationRequiredComment"
+msgstr "Které z následujících polí budou požadovány při registraci? Je nutné, aby byl aktivován rozšířený profil a aby toto pole bylo také dostupné v registračním formuláři (viz výše)."
+
+msgid "NoReplyEmailAddress"
+msgstr "E-mailová adresa bez možnosti odpovědi (neodpovídat na tento email)"
+
+msgid "NoReplyEmailAddressComment"
+msgstr "Tato emailová adresa bude použita tehdy, když odesílaný email bude obsahovat požadavek, aby na něj nikdo neodpovídal. Obvykle je tento email definován na serveru (mail serveru) tak, aby ignoroval veškerou příchozí poštu."
+
+msgid "SurveyEmailSenderNoReply"
+msgstr "Emailová adresa odesílatele (bez možnosti odpovědi)"
+
+msgid "SurveyEmailSenderNoReplyComment"
+msgstr "Mohou mít e-maily, poslané jako pozvánky, e-mailovou adresu vedoucího nebo speciální adresu bez možnosti odpovědi (definovanou v hlavní části konfigurace)?"
+
+msgid "CourseCoachEmailSender"
+msgstr "Emailová adresa vedoucího(školitele)"
+
+msgid "NoReplyEmailSender"
+msgstr "Emailová adresa bez možnosti odpovědi"
+
+msgid "Flat"
+msgstr "Plochý"
+
+msgid "Threaded"
+msgstr "Závitový"
+
+msgid "Nested"
+msgstr "Vložený"
+
+msgid "OpenIdAuthenticationComment"
+msgstr "Povolení OpenID URL - založené na autentifikaci (zobrazí dodatečný přihlašovací login formulář na hlavní stránce)"
+
+msgid "VersionCheckEnabled"
+msgstr "Povolení kontroly nové verze"
+
+msgid "InstallDirAccessibleSecurityThreat"
+msgstr "Instalační adresář vašeho Chamilo systému je stále přístupný web uživatelům. To může znamenat bezpečnostní hrozbu pro vaši instalaci. Doporučujeme jej odstranit nebo změnit práva tak, aby weboví uživatelé nemohli použít obsažené skripty."
+
+msgid "GradebookActivation"
+msgstr "Aktivace klisifikačního nástroje"
+
+msgid "GradebookActivationComment"
+msgstr "Nástroj klasifikace(hodnocení) umožňuje ohodnotit studijní cíl ve vaší organizaci, pomocí slučování tříd a aktuálním vyhodnocením ve výkonových reportech. Chcete jej aktivovat?"
+
+msgid "UserTheme"
+msgstr "Téma"
+
+msgid "UserThemeSelection"
+msgstr "Zvolení uživatelského tématu"
+
+msgid "UserThemeSelectionComment"
+msgstr "Umožňuje uživatelům si v profilu zvolit vlastní vzhled. Tímto si změní vzhled Chamilou, ale výchozí styl portálu zůstane nezměněn. Pokud má daný kurz nebo sezení zvoleno specifické téma, pak má vyšší prioritu než uživatelsky definované téma."
+
+msgid "AllowurlfopenIsSetToOff"
+msgstr "PHP volba \"allow_url_fopen\" je nyní nastavena na off. To zabraňuje, aby registračnmí mechanismus pracoval korektně. Toto nastavení může být změněno ve vašem PHP konfiguračním souboru php.ini nebo v nastavení Apache  Virtual Host, použitím instrukce php_admin_value"
+
+msgid "VisioHost"
+msgstr "Hostname nebo IP adresa streamovacího serveru videokonference"
+
+msgid "VisioPort"
+msgstr "Port streamovacího serveru videokonference"
+
+msgid "VisioPassword"
+msgstr "Heslo streamovacího serveru videokonference"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "EphorusClickHereForADemoAccount"
+msgstr "Klikněte zde pro demo účet"
+
+msgid "ManageUserFields"
+msgstr "Upravit uživatelská pole"
+
+msgid "UserFields"
+msgstr "Uživatelská pole"
+
+msgid "AddUserField"
+msgstr "Přidat uživatelské pole"
+
+msgid "FieldLabel"
+msgstr "Jmenovka pole"
+
+msgid "FieldType"
+msgstr "Typ pole"
+
+msgid "FieldTitle"
+msgstr "Název pole"
+
+msgid "FieldDefaultValue"
+msgstr "Výchozí hodnota"
+
+msgid "FieldOrder"
+msgstr "Pořadí"
+
+msgid "FieldVisibility"
+msgstr "Viditelnost pole"
+
+msgid "FieldChangeability"
+msgstr "Možnost změny"
+
+msgid "FieldTypeText"
+msgstr "Text"
+
+msgid "FieldTypeTextarea"
+msgstr "Textové pole"
+
+msgid "FieldTypeRadio"
+msgstr "Rádiová tlačítka"
+
+msgid "FieldTypeSelect"
+msgstr "Rolovací nabídka"
+
+msgid "FieldTypeSelectMultiple"
+msgstr "Vícenásobné rolovací menu"
+
+msgid "FieldAdded"
+msgstr "Pole úspěšně vloženo"
+
+msgid "GradebookScoreDisplayColoring"
+msgstr "Zbarvení výsledků"
+
+msgid "GradebookScoreDisplayColoringComment"
+msgstr "Označte, abyste aktivovali zabarvení výsledku (musíte definovat, který výsledek bude zbarven červeně)"
+
+msgid "TabsGradebookEnableColoring"
+msgstr "Povolení zabarvení výsledků"
+
+msgid "GradebookScoreDisplayCustom"
+msgstr "Úprava výsledků"
+
+msgid "GradebookScoreDisplayCustomComment"
+msgstr "Označte, abyste aktivovali úpravu výsledků (vyberte jaká známka bude odpovídat danému výsledku)"
+
+msgid "TabsGradebookEnableCustom"
+msgstr "Povolit úpravu výsledků"
+
+msgid "GradebookScoreDisplayColorSplit"
+msgstr "Zobrazit rozdělení barev"
+
+msgid "GradebookScoreDisplayColorSplitComment"
+msgstr "Hranice (v %), pod kterou bude výsledek zabarven červeně"
+
+msgid "GradebookScoreDisplayUpperLimit"
+msgstr "Zobraz nejvyšší možný výsledek"
+
+msgid "GradebookScoreDisplayUpperLimitComment"
+msgstr "Označte, aby byl zobrazen nejvyšší možný výsledek"
+
+msgid "TabsGradebookEnableUpperLimit"
+msgstr "Povolení zobrazení nejvyššího výsledku"
+
+msgid "AddUserFields"
+msgstr "Přidat uživatelské pole"
+
+msgid "FieldPossibleValues"
+msgstr "Možné hodnoty"
+
+msgid "FieldPossibleValuesComment"
+msgstr "Pouze pro opakující se pole, oddělené středníkem (;)"
+
+msgid "FieldTypeDate"
+msgstr "Datum"
+
+msgid "FieldTypeDatetime"
+msgstr "Datum a čas"
+
+msgid "UserFieldsAddHelp"
+msgstr "Přidání uživatelského pole je velmi jednoduché:<br/>- zvolte si jednoslovný identifikátor, napsaný malými písmeny,<br/>- vyberte text, který by měl odpovídat uživateli(pokud zvolíte existující přeložený název, bude automaticky přeložen do všech jazyků),<br/>- pokud zvolíte vícenásobný typ(vícenásbný výběr), připravte si možnosti(opět může být jazyková proměnná z Chamilou), oddělte je středníkem,<br/>- pro textový typ můžete použít výchozí hodnotu.<br/><br/>Až budete hotovi, přidejte pole a zvolte bude pole viditelné a modifikovatelné. Je vcelku nepoužitelné mít pole modifikovatelné, ale ne-viditelné."
+
+msgid "AllowCourseThemeTitle"
+msgstr "Povol téma kurzu"
+
+msgid "AllowCourseThemeComment"
+msgstr "Povolením grafických témat na kurzech je možné měnit vzhled kurzu jakýmkoli stylem z Chamilou. Pokud uživatel vstoupí do kurzu, styl kurzu bude mít vyšší prioritu než uživatelský styl a výchozí styl portálu."
+
+msgid "DisplayMiniMonthCalendarTitle"
+msgstr "Zobraz malý měsíční kalendář v programu"
+
+msgid "DisplayMiniMonthCalendarComment"
+msgstr "Toto nastavení povolí nebo zakáže viditelnost malého měsíčního kalendáře v levém sloupci programu"
+
+msgid "DisplayUpcomingEventsTitle"
+msgstr "Zobrazit aktuální události v programu školení"
+
+msgid "DisplayUpcomingEventsComment"
+msgstr "Toto nastavení povolí nebo zakáže zobrazení aktuálních událostí v levém sloupci programu školení určitého kurzu"
+
+msgid "NumberOfUpcomingEventsTitle"
+msgstr "Počet událostí, které budou zobrazeny"
+
+msgid "NumberOfUpcomingEventsComment"
+msgstr "Počet událostí, které budou zobrazeny v programu. Je požadováno, aby funkce aktuálních událostí byla aktivována (viz výše)"
+
+msgid "ShowClosedCoursesTitle"
+msgstr "Zobrazit uzavřené kurzy na přihlašovací stránce a hlavní straně portálu?"
+
+msgid "ShowClosedCoursesComment"
+msgstr "Zobrazit uzavřená školení na přihlašovací stránce a hlavní stránce školení?  Na portálové startovací stránce se objeví ikona vedle školení s jednoduchým popisem školení. To se objeví na portálové hlavní straně, když se uživatel přihlásí a ještě není zapsán do kurzu"
+
+msgid "LDAPConnectionError"
+msgstr "LDAP chyba spojení"
+
+msgid "LDAP"
+msgstr "LDAP"
+
+msgid "LDAPEnableTitle"
+msgstr "Povolit LDAP"
+
+msgid "LDAPEnableComment"
+msgstr "Pokud máte k dispozici LDAP, musíte upravit jeho vlastnosti níže a upravit váš konfigurační soubor, jak je popsáno v instalačním manuálu, a aktivovat jej. Tímto povolíte uživatele se autentizovat použitím jejich LDAP přihlašovacích údajů. Pokud netušíte co je LDAP, prosím nechte jej zakázaný."
+
+msgid "LDAPMainServerAddressTitle"
+msgstr "Adresa hlavního LDAP serveru"
+
+msgid "LDAPMainServerAddressComment"
+msgstr "IP adresa nebo url vašeho LDAP serveru"
+
+msgid "LDAPMainServerPortTitle"
+msgstr "Port LDAP serveru"
+
+msgid "LDAPMainServerPortComment"
+msgstr "Port, na kterém beží LDAP server (obvykle 389). Toto je povinné nastavení."
+
+msgid "LDAPDomainTitle"
+msgstr "LDAP doména"
+
+msgid "LDAPDomainComment"
+msgstr "Toto je LDAP doména (dc), která bude použita k nalezení kontaktů na LDAP serveru. Například: dc=xx, dc=yy, dc=zz"
+
+msgid "LDAPReplicateServerAddressTitle"
+msgstr "Adresa replikovaného serveru"
+
+msgid "LDAPReplicateServerAddressComment"
+msgstr "Když je hlavní server nedostupný, tento server jej zastoupí. Nechte prázdný nebo použijte stejnou hodnotu jako u hlavního serveru, pokud nemáte replikační server."
+
+msgid "LDAPReplicateServerPortTitle"
+msgstr "Port replikovaného serveru"
+
+msgid "LDAPReplicateServerPortComment"
+msgstr "Port, na kterém běží replikovaný server."
+
+msgid "LDAPSearchTermTitle"
+msgstr "Vyhledávaný výraz"
+
+msgid "LDAPSearchTermComment"
+msgstr "Tento výraz bude použit pro filtrování vyhledávaných kontaktů na LDAP serveru. Pokud si nejste jistí co zde dát, prosím nahlédněte do vaší dokumentace a konfigurace LDAP serveru"
+
+msgid "LDAPVersionTitle"
+msgstr "LDAP verze"
+
+msgid "LDAPVersionComment"
+msgstr "Prosím zvolte verzi vašeho LDAP serveru, který chcete použít. Použití správné verze závisí na vaší konfiguraci LDAP serveru"
+
+msgid "LDAPVersion2"
+msgstr "LDAP 2"
+
+msgid "LDAPVersion3"
+msgstr "LDAP 3"
+
+msgid "LDAPFilledTutorFieldTitle"
+msgstr "Identifikační pole učitele"
+
+msgid "LDAPFilledTutorFieldComment"
+msgstr "Ověření proběhne na tomto LDAP kontaktním poli při vložení nového uživatele. Pokud toto pole není prázdné, uživatel bude považovaný za učitele a vložen do Chamilou. Pokud chcete všechny vaše uživatele rozpoznat jako jednoduché uživatele, nechte toto pole prázdné. Toto chování můžete měnit změnou kódu. Pro více informací si prosím přečtěte <a href=\"../../documentation/installation_guide.html\">instalační manuál</a>"
+
+msgid "LDAPAuthenticationLoginTitle"
+msgstr "Autentifikační login"
+
+msgid "LDAPAuthenticationLoginComment"
+msgstr "Pokud použijete LDAP server, který nepodporuje nebo neumožňuje anonymní přístup, vyplňte následující pole uživatelský login, který bude použit. Ne včetně \"cn=\". Ponechte prázdné pro anonymní přístup."
+
+msgid "LDAPAuthenticationPasswordTitle"
+msgstr "Heslo autentifikace"
+
+msgid "LDAPAuthenticationPasswordComment"
+msgstr "Pokud používáte LDAP server, který nepodporuje nebo neumažňuje anonymní přístup, vyplňte následující pole s uživatelským heslem."
+
+msgid "LDAPImport"
+msgstr "LDAP import"
+
+msgid "EmailNotifySubscription"
+msgstr "Informujte zapsané uživatele emailem"
+
+msgid "DontUncheck"
+msgstr "Neodškrtávejte"
+
+msgid "AllSlashNone"
+msgstr "Všechno/Nic"
+
+msgid "LDAPImportUsersSteps"
+msgstr "LDAP import: Uživatelé/Etapy"
+
+msgid "EnterStepToAddToYourSession"
+msgstr "Zadejte etapu, kterou chcete přidat do vašeho sezení"
+
+msgid "ToDoThisYouMustEnterYearDepartmentAndStep"
+msgstr "Musíte zadat rok, oddělení a etapu"
+
+msgid "FollowEachOfTheseStepsStepByStep"
+msgstr "Následujte tyto etapy, krok za krokem"
+
+msgid "RegistrationYearExample"
+msgstr "Registrační rok. Například %s pro akademický rok %s-%s"
+
+msgid "SelectDepartment"
+msgstr "Zvolte oddělení"
+
+msgid "RegistrationYear"
+msgstr "Registrační rok"
+
+msgid "SelectStepAcademicYear"
+msgstr "Zvolte etapu (akademický rok)"
+
+msgid "ErrorExistingStep"
+msgstr "Chyba, tato etapa již existuje"
+
+msgid "ErrorStepNotFoundOnLDAP"
+msgstr "Chyba: etapa nenalezena na LDAP serveru"
+
+msgid "StepDeletedSuccessfully"
+msgstr "Etapa úspěšně smazána"
+
+msgid "StepUsersDeletedSuccessfully"
+msgstr "Uživatelé etap úspěšně vyjmuti"
+
+msgid "NoStepForThisSession"
+msgstr "Žádná etapa pro toto sezení"
+
+msgid "DeleteStepUsers"
+msgstr "Vyjmout uživatele z etapy"
+
+msgid "ImportStudentsOfAllSteps"
+msgstr "Importovat studenty ze všech etap"
+
+msgid "ImportLDAPUsersIntoPlatform"
+msgstr "Importovat LDAP uživatele na platformu"
+
+msgid "NoUserInThisSession"
+msgstr "Žádný uživatel v tomto sezení"
+
+msgid "SubscribeSomeUsersToThisSession"
+msgstr "Zařadit nekteré uživatele do sezení"
+
+msgid "EnterStudentsToSubscribeToCourse"
+msgstr "Zadejte studenty, které chcete zaregistrovat do kurzu"
+
+msgid "ToDoThisYouMustEnterYearComponentAndComponentStep"
+msgstr "Je požadováno, abyste zadali rok, prvek a etapu prvku"
+
+msgid "SelectComponent"
+msgstr "Zvolit prvek"
+
+msgid "Component"
+msgstr "Prvek"
+
+msgid "SelectStudents"
+msgstr "Zvolit studenty"
+
+msgid "LDAPUsersAdded"
+msgstr "LDAP uživatelé přidáni"
+
+msgid "NoUserAdded"
+msgstr "Žádný uživatel nebyl přidán"
+
+msgid "ImportLDAPUsersIntoCourse"
+msgstr "Importovat LDAP uživatele do kurzu"
+
+msgid "ImportLDAPUsersAndStepIntoSession"
+msgstr "Importovat LDAP uživatele a etapu do sezení"
+
+msgid "LDAPSynchroImportUsersAndStepsInSessions"
+msgstr "LDAP synchronizace: Importovat studenty/etapy do sezení"
+
+msgid "TabsMyGradebook"
+msgstr "Záložka hodnocení"
+
+msgid "LDAPUsersAddedOrUpdated"
+msgstr "LDAP uživatelé přidáni nebo aktualizováni"
+
+msgid "SearchLDAPUsers"
+msgstr "Hledat LDAP uživatele"
+
+msgid "SelectCourseToImportUsersTo"
+msgstr "Zvolte kurz do kterého chcete registrovat uživatele, které vyberete dále"
+
+msgid "ImportLDAPUsersIntoSession"
+msgstr "Importovat LDAP uživatele do sezení"
+
+msgid "LDAPSelectFilterOnUsersOU"
+msgstr "Zvolit filtr, k nalezení odpovídajícího řetězce na konec OU atributu"
+
+msgid "LDAPOUAttributeFilter"
+msgstr "Filtr OU atributu"
+
+msgid "SelectSessionToImportUsersTo"
+msgstr "Zvolte sezení, do kterého chcete importovat tyto uživatele"
+
+msgid "VisioUseRtmptTitle"
+msgstr "Použít RTMPT protokol"
+
+msgid "VisioUseRtmptComment"
+msgstr "RTMPT protokol povolí přístup do videokonference za firewallem, přesměrováním komunikačního portu 80. Ačkoliv se streaming zpomalí, nedoporučujeme používat pokud to není nutné"
+
+msgid "UploadNewStylesheet"
+msgstr "Nový soubor stylu"
+
+msgid "NameStylesheet"
+msgstr "Jméno stylu"
+
+msgid "StylesheetAdded"
+msgstr "Styl byl přidán"
+
+msgid "LDAPFilledTutorFieldValueTitle"
+msgstr "Identifikační hodnota učitele"
+
+msgid "LDAPFilledTutorFieldValueComment"
+msgstr "Když je identifikační hodnota učitele zadána, tak musí být uvnitř jednoho z dílčích prvků učitelského pole, aby byl považován za školitele. Pokud necháte toto pole prázdné, pak je podmínkou existence pole pro tohoto LDAP uživatele, aby byl považován za školitele. Například: pole může být \"člen\" a hodnota vyhledávání může být \"CN=G_TRAINER,OU=Trainer\""
+
+msgid "IsNotWritable"
+msgstr "Není zapisovatelný"
+
+msgid "FieldMovedDown"
+msgstr "Pole je úspěšně přesunuto dolů"
+
+msgid "CannotMoveField"
+msgstr "Nejde pole přesunout"
+
+msgid "FieldMovedUp"
+msgstr "Pole je úspěšně přesunuto nahoru"
+
+msgid "FieldShown"
+msgstr "Pole je nyní viditelné pro uživatele"
+
+msgid "CannotShowField"
+msgstr "Není možné pole zviditelnit"
+
+msgid "FieldHidden"
+msgstr "Pole je nyní neviditelné pro uživatele"
+
+msgid "CannotHideField"
+msgstr "Není možné pole zneviditelnit"
+
+msgid "FieldMadeChangeable"
+msgstr "Pole je nyní měnitelné uživatelem: Uživatel nyní může vyplnit nebo upravit pole"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "Pole nejde udělat měnitelné"
+
+msgid "FieldMadeUnchangeable"
+msgstr "Pole je nyní neměnitelné: uživatel nemůže vyplnit nebo upravit pole"
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "Pole nemůže být neměnitelné"
+
+msgid "FieldDeleted"
+msgstr "Pole bylo smazáno"
+
+msgid "CannotDeleteField"
+msgstr "Není možné smazat pole"
+
+msgid "AddUsersByCoachTitle"
+msgstr "Registrovat uživatele školitelem"
+
+msgid "AddUsersByCoachComment"
+msgstr "Školitelé mohou vytvářet uživatele platformy a zapisovat do sezení"
+
+msgid "UserFieldsSortOptions"
+msgstr "Setřízení vlastností uživatelských polí"
+
+msgid "FieldOptionMovedUp"
+msgstr "Možnost byla přesunuta nahoru"
+
+msgid "CannotMoveFieldOption"
+msgstr "Není možné přesunout vlastnost"
+
+msgid "FieldOptionMovedDown"
+msgstr "Vlastnost byla přesunuta dolů"
+
+msgid "DefineSessionOptions"
+msgstr "Definovat přístupové limity pro školitele"
+
+msgid "DaysBefore"
+msgstr "Dny před začátkem sezení"
+
+msgid "DaysAfter"
+msgstr "Dny po"
+
+msgid "SessionAddTypeUnique"
+msgstr "Jednoduchá registrace"
+
+msgid "SessionAddTypeMultiple"
+msgstr "Vícenásobná registrace"
+
+msgid "EnableSearchTitle"
+msgstr "Funkce full-textového vyhledávání"
+
+msgid "EnableSearchComment"
+msgstr "Zvolte ANO, pro povolení této funkce, Je silně závislé na Xapian rozšíření pro PHP, takže nebude fungovat, pokud toto rošíření nebude instalováno na vašem serveru, minimálně v 1.x verzi."
+
+msgid "SearchASession"
+msgstr "Nalézt sezení"
+
+msgid "ActiveSession"
+msgstr "Aktivace sezení"
+
+msgid "AddUrl"
+msgstr "Přidat URL"
+
+msgid "ShowSessionCoachTitle"
+msgstr "Zobrazit školitele sezení"
+
+msgid "ShowSessionCoachComment"
+msgstr "Zobrazit jméno hlavního školitele v titulku sezení na seznamu kurzů"
+
+msgid "ExtendRightsForCoachTitle"
+msgstr "Rozšířená práva pro školitele"
+
+msgid "ExtendRightsForCoachComment"
+msgstr "Aktivací této funkce dáte lektorovi stejná práva v autorských nástrojích jako má školitel"
+
+msgid "ExtendRightsForCoachOnSurveyComment"
+msgstr "Aktivací této funkce povolíte lektorovi vytvořit a upravovat průzkumy"
+
+msgid "ExtendRightsForCoachOnSurveyTitle"
+msgstr "Rošířená práva pro lektory v průzkumech"
+
+msgid "CannotDeleteUserBecauseOwnsCourse"
+msgstr "Tento uživatel nemůže být smazán, protože je stále lektorem v kurzu. Můžete ale odstranit jeho status školitele z tohoto kurze a pak smazat účet, nebo zakázat jeho účet místo smazání."
+
+msgid "AllowUsersToCreateCoursesTitle"
+msgstr "Povolit ne-administrátorům vytvářet školení"
+
+msgid "AllowUsersToCreateCoursesComment"
+msgstr "Povolit ne-administrátorům(školitelům) vytvářet nová školení na portálu"
+
+msgid "AllowStudentsToBrowseCoursesComment"
+msgstr "Povolit studentům procházet katalog kurzů a zapsat se do dostupného školení"
+
+msgid "YesWillDeletePermanently"
+msgstr "Ano (soubory budou nevratně smazány)"
+
+msgid "NoWillDeletePermanently"
+msgstr "Ne (soubory budou smazány z aplikace, ale budou manuálně obnovitelné vaším administrátorem serveru)"
+
+msgid "SelectAResponsible"
+msgstr "Zvolit manažera"
+
+msgid "ThereIsNotStillAResponsible"
+msgstr "Žádný HR manažer není dostupný"
+
+msgid "AllowStudentsToBrowseCoursesTitle"
+msgstr "Přístup studentů do katalogu školení"
+
+msgid "SharedSettingIconComment"
+msgstr "Toto je sdílené nastavení"
+
+msgid "GlobalAgenda"
+msgstr "Globální agenda"
+
+msgid "AdvancedFileManagerTitle"
+msgstr "Pokročilý souborový manažer pro WYSIWYG editor"
+
+msgid "AdvancedFileManagerComment"
+msgstr "Povolit pokročilý souborový manažer pro WYSIWYG editor?"
+
+msgid "ScormAndLPProgressTotalAverage"
+msgstr "Průměrný pokrok v kurzu"
+
+msgid "MultipleAccessURLs"
+msgstr "Vícenásobný URL přístup"
+
+msgid "SearchShowUnlinkedResultsTitle"
+msgstr "Full-textové vyhledávání: zobraz nepřístupné výsledky"
+
+msgid "SearchShowUnlinkedResultsComment"
+msgstr "Když zobrazujeme výsledky full-textového vyhledávání, co máme udělat s výsledky které jsou pro aktuálního uživatele nepřístupné."
+
+msgid "SearchHideUnlinkedResults"
+msgstr "Nezobrazovat"
+
+msgid "SearchShowUnlinkedResults"
+msgstr "Zobrazit, ale bez odkazu na zdroj"
+
+msgid "Templates"
+msgstr "Šablona"
+
+msgid "HideCampusFromPublicDokeosPlatformsList"
+msgstr "Nezobrazovat můj portál v seznamu Chamilo portálů"
+
+msgid "EnableVersionCheck"
+msgstr "Povolit kontrolu nové verze"
+
+msgid "AllowMessageToolTitle"
+msgstr "Interní komunikační nástroj"
+
+msgid "AllowReservationTitle"
+msgstr "Povolit rezervační systém"
+
+msgid "AllowReservationComment"
+msgstr "Rezervační systém umožňuje zarezervovat zdroje pro váš kurz (učebny, knihy, pc ...) Je nutné tento nástroj povolit (adminem) aby se objevil v uživatelském menu"
+
+msgid "ConfigureResourceType"
+msgstr "Konfigurovat typ zdroje"
+
+msgid "ConfigureMultipleAccessURLs"
+msgstr "Nastavit URL vícenásobného přístupu"
+
+msgid "URLAdded"
+msgstr "URL přidáno"
+
+msgid "URLAlreadyAdded"
+msgstr "URL již existuje - prosím zvolte jiné"
+
+msgid "AreYouSureYouWantToSetThisLanguageAsThePortalDefault"
+msgstr "Jste si jistí, že chcete zvolit tento jazyk jako výchozí pro portál?"
+
+msgid "CurrentLanguagesPortal"
+msgstr "Aktuální jazyk portálu"
+
+msgid "EditUsersToURL"
+msgstr "Upravit uživatele a URL adresy"
+
+msgid "AddUsersToURL"
+msgstr "Přidat uživatele k URL"
+
+msgid "URLList"
+msgstr "Seznam URL"
+
+msgid "AddToThatURL"
+msgstr "Přidat uživatele k této URL"
+
+msgid "SelectUrl"
+msgstr "Zvolit URL"
+
+msgid "UserListInURL"
+msgstr "Uživatelé přihlášení k této URL"
+
+msgid "UsersWereEdited"
+msgstr "Uživatelský účet byl aktualizován"
+
+msgid "AtLeastOneUserAndOneURL"
+msgstr "Musíte vybrat nejméně jednoho uživatele a jednu URL"
+
+msgid "UsersBelongURL"
+msgstr "Uživatelské účty byly připojeny k URL"
+
+msgid "LPTestScore"
+msgstr "Výsledek testů učební osnovy"
+
+msgid "ScormAndLPTestTotalAverage"
+msgstr "Průměrný výsledek testů v kurzech"
+
+msgid "ImportUsersToACourse"
+msgstr "Importovat uživatelský seznam"
+
+msgid "ImportCourses"
+msgstr "Importovat seznam školení"
+
+msgid "ManageUsers"
+msgstr "Správa uživatelů"
+
+msgid "ManageCourses"
+msgstr "Správa kurzů"
+
+msgid "UserListIn"
+msgstr "Uživatelé"
+
+msgid "URLInactive"
+msgstr "URL zakázáno"
+
+msgid "URLActive"
+msgstr "URL povoleno"
+
+msgid "EditUsers"
+msgstr "Upravit uživatele"
+
+msgid "EditCourses"
+msgstr "Upravit kurzy"
+
+msgid "CourseListIn"
+msgstr "Kurzy"
+
+msgid "AddCoursesToURL"
+msgstr "Přidat kurzy k URL"
+
+msgid "EditCoursesToURL"
+msgstr "Upravit kurzy URL"
+
+msgid "AddCoursesToThatURL"
+msgstr "Přidat kurzy k této URL"
+
+msgid "EnablePlugins"
+msgstr "Povolit zvolené pluginy"
+
+msgid "AtLeastOneCourseAndOneURL"
+msgstr "Nejméně jeden kurz a jedna URL"
+
+msgid "ClickToRegisterAdmin"
+msgstr "Klikněte zde, abyste registrovali admina do všech URL"
+
+msgid "AdminShouldBeRegisterInSite"
+msgstr "Admin by zde měl být zaregistrován"
+
+msgid "URLNotConfiguredPleaseChangedTo"
+msgstr "URL ještě nenakonfigurováno, prosím přidejte toto URL:"
+
+msgid "AdminUserRegisteredToThisURL"
+msgstr "Admin zapsaný k této URL"
+
+msgid "CoursesWereEdited"
+msgstr "Kurz úspěšně aktualizován"
+
+msgid "URLEdited"
+msgstr "URL upraveno"
+
+msgid "AddSessionToURL"
+msgstr "Přidat sezení k této URL"
+
+msgid "FirstLetterSession"
+msgstr "První písmeno sezení"
+
+msgid "EditSessionToURL"
+msgstr "Upravit sezení"
+
+msgid "AddSessionsToThatURL"
+msgstr "Přidat sezení k této URL"
+
+msgid "SessionBelongURL"
+msgstr "Sezení upraveny"
+
+msgid "ManageSessions"
+msgstr "Správa sezení"
+
+msgid "AllowMessageToolComment"
+msgstr "Povolením interní komunikace umožníte uživatelům zasílat zprávy jiným uživatelům platformy a mít schránku na příchozí správy"
+
+msgid "AllowSocialToolTitle"
+msgstr "Nástroj sociálních sítí (jako Facebook)"
+
+msgid "AllowSocialToolComment"
+msgstr "Nástroj sociálních sítí umožňuje uživatelům formulovat vztahy s ostatními uživateli a vytvářet skupiny přátel. Kombinací s interním komunikačním nástrojem vám umožní úzce komunikovat s přáteli uvnitř portálu"
+
+msgid "SetLanguageAsDefault"
+msgstr "Zvolit výchozí jazyk"
+
+msgid "FieldFilter"
+msgstr "Filtr"
+
+msgid "FilterOn"
+msgstr "Filtr zapnutý"
+
+msgid "FilterOff"
+msgstr "Filtr vypnutý"
+
+msgid "FieldFilterSetOn"
+msgstr "Nyní nejde použít toto pole jako filtr"
+
+msgid "FieldFilterSetOff"
+msgstr "Nejde použít toto pole jako filtr"
+
+msgid "buttonAddUserField"
+msgstr "Přidat uživatelské pole"
+
+msgid "UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses"
+msgstr "Uživatelé byli zapsáni do následujících kurzů, protožr několik kurzů sdílí stejný vizuální kód"
+
+msgid "TheFollowingCoursesAlreadyUseThisVisualCode"
+msgstr "Následující kurzy používají tento kód"
+
+msgid "UsersSubscribedToBecauseVisualCode"
+msgstr "Uživatelé byli zapsáni do následujících kurzů, protože několik kurzů sdílí stejný vizuální kód"
+
+msgid "UsersUnsubscribedFromBecauseVisualCode"
+msgstr "Uživatelé byli odregistrovaní z následujících kurzů, protože několik kurzů obsahuje stejný vizuální kód"
+
+msgid "FilterUsers"
+msgstr "Filtr uživatelů"
+
+msgid "SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode"
+msgstr "Několik školení bylo zapsáno do lekce, z důvodu duplikace školícího kódu"
+
+msgid "CoachIsRequired"
+msgstr "Musíte zvolit vedoucího"
+
+msgid "EncryptMethodUserPass"
+msgstr "Šifrovací metoda"
+
+msgid "AddTemplate"
+msgstr "Přidat šablonu"
+
+msgid "TemplateImageComment100x70"
+msgstr "Tento obrázek reprezentuje šablonu v seznamu šablon. Neměl by být větší než 100x70 px"
+
+msgid "TemplateAdded"
+msgstr "Šablona přidána"
+
+msgid "TemplateDeleted"
+msgstr "Šablona smazána"
+
+msgid "EditTemplate"
+msgstr "Šablona"
+
+msgid "FileImportedJustUsersThatAreNotRegistered"
+msgstr "Uživatelé neregistrovaní na portálu byli importováni"
+
+msgid "YouMustImportAFileAccordingToSelectedOption"
+msgstr "Musíte importovat soubor v odpovídajícím zvoleném formátu"
+
+msgid "ShowEmailOfTeacherOrTutorTitle"
+msgstr "Zobraz školitelovu nebo lektorovu emailovou adresu v patičce"
+
+msgid "ShowEmailOfTeacherOrTutorComent"
+msgstr "Zobrazit email školitele v patičce?"
+
+msgid "Created"
+msgstr "Vytvořeno"
+
+msgid "AddSystemAnnouncement"
+msgstr "Přidat systémové oznámení"
+
+msgid "EditSystemAnnouncement"
+msgstr "Upravit systémové oznámení"
+
+msgid "LPProgressScore"
+msgstr "% navštívených školících objektů"
+
+msgid "TotalTimeByCourse"
+msgstr "Celkový čas v kurzu"
+
+msgid "LastTimeTheCourseWasUsed"
+msgstr "Školitel naposledy přihlášený do školení"
+
+msgid "AnnouncementAvailable"
+msgstr "Oznámení je dostupné"
+
+msgid "AnnouncementNotAvailable"
+msgstr "Oznámení není dostupné"
+
+msgid "Searching"
+msgstr "Vyhledávání"
+
+msgid "AddLDAPUsers"
+msgstr "Přidat LDAP uživatele"
+
+msgid "Academica"
+msgstr "Academica"
+
+msgid "AddNews"
+msgstr "Přidat zprávu"
+
+msgid "BabyOrange"
+msgstr "Baby Orange"
+
+msgid "BlueLagoon"
+msgstr "Blue lagoon"
+
+msgid "CoolBlue"
+msgstr "Cool blue"
+
+msgid "Corporate"
+msgstr "Korporátní"
+
+msgid "CosmicCampus"
+msgstr "Cosmic campus"
+
+msgid "DeliciousBordeaux"
+msgstr "Delicious Bordeaux"
+
+msgid "DokeosClassic2D"
+msgstr "Chamilo classic 2D"
+
+msgid "DokeosBlue"
+msgstr "Chamilo blue"
+
+msgid "EmpireGreen"
+msgstr "Empire green"
+
+msgid "FruityOrange"
+msgstr "Fruity orange"
+
+msgid "Medical"
+msgstr "Lékařský"
+
+msgid "RoyalPurple"
+msgstr "Royal purple"
+
+msgid "SilverLine"
+msgstr "Silver line"
+
+msgid "SoberBrown"
+msgstr "Sober brown"
+
+msgid "SteelGrey"
+msgstr "Steel grey"
+
+msgid "TastyOlive"
+msgstr "Tasty olive"
+

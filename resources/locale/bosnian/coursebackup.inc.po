@@ -1,0 +1,3 @@
+msgid "langSelectOptionForBackup"
+msgstr "sistemas operativos"
+

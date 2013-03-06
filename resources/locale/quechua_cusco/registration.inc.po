@@ -1,0 +1,501 @@
+msgid "langShouldBeCSVFormat"
+msgstr "Khipuqa CSV nisqapi kashan. Ama imatapas yapankichu. Imayna kasqanta kikillanpuni kanqa:"
+
+msgid "langTracking"
+msgstr "Qatikuy"
+
+msgid "langEnter2passToChange"
+msgstr "Qelqa pakata t\'ijrachinapqa haykuchiy hoq musuq qelqa pakata kay kanchakunapi. Sichus qepakuyta munaq ñaupaqwan chayqa, ajnallata saqey  iskhay kanchakunata."
+
+msgid "langAuthInfo"
+msgstr "Cheqaqchana"
+
+msgid "langUpdateImage"
+msgstr "Hoq wankita churay"
+
+msgid "langImageWrong"
+msgstr "Khipuqa kanqapuni kay yupamanta huch\'uykama"
+
+msgid "langAddImage"
+msgstr "Wankitawan churay"
+
+msgid "langCourseManager"
+msgstr "Yachachiq"
+
+msgid "NewPass"
+msgstr "Musuq qelqa-paka"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "Kunan kaq qelqa-pakasqaqa ch\'usaqmi kashan utaq mana allin ruwasqa"
+
+msgid "password_request"
+msgstr "Ichapas mañakuranki qelqa pakasqaykita. Sichus mana mañakuranki chayqa amaña qhawariypaschu kay e-chaskita."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Qelqa pakasqaykiqa ña apachikuy e-chakiykiman."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Haykuchiy may e-chaski qelpachikusqaykita chayraq apachimusaykiku haykuqmasi sutiykita qelqa paka churasqaykitawan."
+
+msgid "langLogin"
+msgstr "Haykuy"
+
+msgid "langAction"
+msgstr "Ruwarpariy"
+
+msgid "langPreserved"
+msgstr "Waqaychay"
+
+msgid "langDeleted"
+msgstr "Pichasqa"
+
+msgid "langAdded"
+msgstr "Yapasqaña"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Cheqaqchay hakuqmasiq qelqapachikusqanta amaña ruwachikunanpaq"
+
+msgid "langCourseName"
+msgstr "Yachachinaq sutin"
+
+msgid "langSubscribe"
+msgstr "Qelqachiy"
+
+msgid "langSee"
+msgstr "Riy"
+
+msgid "langLastVisits"
+msgstr "Qepakuq watukuqniykuna"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Sichus munanki haykuqmasikunamanta hoq sinrita yapayta, chayqa tapuriy kamachiqta."
+
+msgid "langPassTooEasy"
+msgstr "kay qelqa pakaqa nishu atinalla. Kay hinata churay"
+
+msgid "langGroupUserManagement"
+msgstr "Huñusqakunaq kamachinan"
+
+msgid "langAddedToCourse"
+msgstr "kay yachachinapi qelqachasunkiku"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Kikin sutiyuq haykuqmasi ña qelqapasqa kashan."
+
+msgid "langBackUser"
+msgstr "Kutiy haykuqmasikunaq sinrinman"
+
+msgid "langUserOneByOneExplanation"
+msgstr "Payqa chaskinqa hoq e-chaskita  haykuqmasiq sitinwan qelqa pakanwan ima"
+
+msgid "langGiveTutor"
+msgstr "Pusaqta ruway"
+
+msgid "langRemoveRight"
+msgstr "Qechuy kay huñita"
+
+msgid "langGiveAdmin"
+msgstr "Kamachiq kay"
+
+msgid "langUserNumber"
+msgstr "hayka kaq"
+
+msgid "langDownloadUserList"
+msgstr "Wichachiy sinrita"
+
+msgid "langSend"
+msgstr "Apachiy"
+
+msgid "langUserAddExplanation"
+msgstr "Khipu apachisqaykiqa  sapa seq\'enqa kanqapuni 5 kanchakuna  (mana ni hujpas):  <b>Sutin Mamataytanmant- suti   		Haykuqmasi-sutin   Qelqa-pakan 		  E-chaskin</b> Tabulador nisqawan t\'aqapasqa hinallataq kay qati qati hinapi.		Haykuqmasikunaqa chaskinqaku  e-chaskinpi  haykuqmasi sutinta qelqa-pakantawan"
+
+msgid "langUserMany"
+msgstr "Apachimuy haykuqmasikunaq sinrinta kay khipu hinantin .txt"
+
+msgid "langOneByOne"
+msgstr "Yapay maki ruwayllawan hoq haykuqmasita"
+
+msgid "langNow"
+msgstr "kunan"
+
+msgid "langTutor"
+msgstr "Pusaq"
+
+msgid "langTitular"
+msgstr "Sutinchayniyuq"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>T\'ijrachiy yachachikunaq  sinrinta</big><br><br>Ajllay mayqan yachachinapi munashanki  qelqachikuyta.<br>Qechuy ajllanata may yachachipi mama nusasqayki qelqachikunaykipaq.<br>Chaymantaqa OK nisqapi runp\'uta q\'apinki"
+
+msgid "langStudent"
+msgstr "Yachaqe"
+
+msgid "langImportUserList"
+msgstr "Apachimuy haykuqmasikunaq sinrinta"
+
+msgid "langAddAU"
+msgstr "Yapay haykuqmasita"
+
+msgid "langAddedU"
+msgstr "yapachisqaña kanki. Sichus ña qelqarunki e-chaskiykita, chayqa apachimusaykiku haykuqmasi sutiykita"
+
+msgid "langTheU"
+msgstr "Hakuqmasi"
+
+msgid "langRegYou"
+msgstr "Kay yachachinapin qelqacharunki"
+
+msgid "langOneResp"
+msgstr "Yachachinaq huj kamachiqnin"
+
+msgid "langTaken"
+msgstr "Ña kashan. Hoqta ajllay."
+
+msgid "langUserNo"
+msgstr "Haykuqmasi suti ajllasqayki"
+
+msgid "langFilled"
+msgstr "Mana llipin kanchakunatachu hunt\'achinki."
+
+msgid "langInC"
+msgstr "kay yachachinapi"
+
+msgid "langRole"
+msgstr "Nisqaynin"
+
+msgid "UserPicture"
+msgstr "Wanki"
+
+msgid "langProfileReg"
+msgstr "Haykuqmasi kasqaykimanta allchachikunña"
+
+msgid "langEmailWrong"
+msgstr "E-chaski qelqasqaykiqa manan hunt\'achu kashan utaq hoqniraq seq\'ekunawan mana allin qelqasqa kashan"
+
+msgid "langUserTaken"
+msgstr "Haykuqmasi sutin ajllasqaykiqa kashanña"
+
+msgid "langFields"
+msgstr "Manan llipin kanchakunata hunt\'achinkichu"
+
+msgid "langAgain"
+msgstr "Hoqmanta qallariy !"
+
+msgid "langPassTwo"
+msgstr "Mana qelqarankichu kikin qelqa-pakata  iskayninpi"
+
+msgid "langViewProfile"
+msgstr "Noqamanta qhawariy (mana atikunchu t\'ijrayta)"
+
+msgid "langModifProfile"
+msgstr "T\'ijrachiy imaymana noqamanta"
+
+msgid "langIsReg"
+msgstr "T\'ijrachisqaykiqa allchasqaña"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Kunanqa atillanki hoq yachachina kamayta"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Kunanqa atinki yachachinakuna sinriman rispa ajllayta munasqaykikunata"
+
+msgid "langMailHasBeenSent"
+msgstr "Chaskinki  yuyarinaykipaq haykuqmasi sutita qelqa pakasqatawa hoq e-chaskipi."
+
+msgid "langPersonalSettings"
+msgstr "Qanmanta ima willaykuna ña qelqachasqa kashan."
+
+msgid "langManager"
+msgstr "Manuchakuq"
+
+msgid "langFormula"
+msgstr "Atentamente"
+
+msgid "langProblem"
+msgstr "Ima sasa tarispaqa, waqharillawayku tapuriwallaykupas."
+
+msgid "langIs"
+msgstr "es"
+
+msgid "langAddress"
+msgstr "Piqpa maypi kaqnin"
+
+msgid "langSettings"
+msgstr "kay imakunawan:Haykuqmasiq sutin:"
+
+msgid "langYouAreReg"
+msgstr "Qan qelqachikunkiña kaypi"
+
+msgid "langYourReg"
+msgstr "Qelqachikusqaykiqa kaypin"
+
+msgid "langUserFree"
+msgstr "Hakuqmasiq sutin ajllasqaykiqa ña kasha q\'apiy \'Qepa\' nisqata wanpuqniykimanta chaymantaqa ajllay hoqta."
+
+msgid "langEmptyFields"
+msgstr "Mana llapan kanchakunatachu hunt\'achinki. Q\'apipay runp\'u \'Qepa\' wanp\'uqniykiqta ymanata hoqmanta ruway."
+
+msgid "langPassTwice"
+msgstr "Mana qelqankichu kikin qelqa-pakata iskaykutipi. Q\'apipay runp\'u \'Qepa\' wanp\'uqniykiqta chaymanata hoqmanta ruway."
+
+msgid "langRegAdmin"
+msgstr "Yachachiq (yachachinata kamay)"
+
+msgid "langRegStudent"
+msgstr "Yachaqe (hoq yachachinapi qelqachikusaq)"
+
+msgid "langConfirmation"
+msgstr "Cheqaqchay qelqa pakasqata"
+
+msgid "langPass"
+msgstr "Qelqa pakay"
+
+msgid "langSurname"
+msgstr "Suti"
+
+msgid "langRegistration"
+msgstr "Qelqachana"
+
+msgid "langYourAccountParam"
+msgstr "Kaymi haykuqmasi sutiyki qelq- pakaykipas ima"
+
+msgid "langLoginRequest"
+msgstr "Haykuqmasiq sutin mañakuy"
+
+msgid "langDefineHeadings"
+msgstr "Ajllapay umachasqakunata"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Yachacheqkunalla"
+
+msgid "langLostPassword"
+msgstr "Qonqarankichu qelqa pakaykita?"
+
+msgid "langAdminOfCourse"
+msgstr "Yachachina kamachiq"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Yachachinaq haykuqmasin"
+
+msgid "langIsTutor"
+msgstr "Pusaq"
+
+msgid "langParamInTheCourse"
+msgstr "Yachachinaq ima kasqan"
+
+msgid "langMember"
+msgstr "masimasi"
+
+msgid "langLock"
+msgstr "Hark\'ay"
+
+msgid "langUnlock"
+msgstr "Kachariy"
+
+msgid "langHaveNoCourse"
+msgstr "mana yachachinayuq"
+
+msgid "langManage"
+msgstr "Kamachiy hanp\'arata"
+
+msgid "langAdministrationTools"
+msgstr "Kamachinaq llank\'anakuna"
+
+msgid "langUserProfileReg"
+msgstr "Haykuqmasiq e-portafolio nisqan qelqachanakunña"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Mana kanchu hoq haykuqmasipas kay e-chaskiwan"
+
+msgid "langCourses4User"
+msgstr "Kay haykuqmasiq yachachinankuna"
+
+msgid "langCoursesByUser"
+msgstr "Yachachinakuna sapanqa haykuqmasimanta"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Qelqachay yachaqekunata"
+
+msgid "langPreced100"
+msgstr "100 ñaupakuna"
+
+msgid "langAddmore"
+msgstr "Yapay haykuqmasikuna qelqachasqata"
+
+msgid "langAddback"
+msgstr "Riy yupachasqa haykuqmasikunaman"
+
+msgid "langreg"
+msgstr "Qelqachay"
+
+msgid "langQuit"
+msgstr "Lloqsiy"
+
+msgid "your_password_has_been_reset"
+msgstr "Qelqa pakaykiqa hoqmanta ruwachikunña"
+
+msgid "langSex"
+msgstr "Qhari warmi"
+
+msgid "langClass"
+msgstr "Rak\'i"
+
+msgid "langEdit"
+msgstr "Ruwapay"
+
+msgid "required"
+msgstr "Kancha ruwanapaqpuni"
+
+msgid "langOptionalTextFields"
+msgstr "Kanchakuna munaspapas ruwanapaq"
+
+msgid "langMyProductions"
+msgstr "Llank\'asqaykuna"
+
+msgid "langFileDeleted"
+msgstr "Khipuqa pichasqaña."
+
+msgid "FullUserName"
+msgstr "Hunt\'a suti"
+
+msgid "SearchForUser"
+msgstr "Haykuqmasintinta maskhay"
+
+msgid "SearchButton"
+msgstr "Maskhay"
+
+msgid "SearchNoResultsFound"
+msgstr "Mana tarikunchu maskhasqata"
+
+msgid "UsernameWrong"
+msgstr "Haykuqmasi sutiykiqa qelqakunman seq\'ekunawa, yupaykunawa kaykunawanpas _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "Kayqa e-chaskiq qelqa pakan mañakuymin"
+
+msgid "CorrespondsToAccount"
+msgstr "Kay e-chaskiqa haykuqmasiq kay cuenta nisqanmantan."
+
+msgid "CorrespondsToAccounts"
+msgstr "Kay e-chaskiqa haykuqmasiq kay cuenta nisqakunamantan."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo kikinmanta manan ruwanmanchu mañakusqata, cuenta nisqaqa hawamantan kamachikushan. Ama hina kaychu, ima ruwaytaqa ruwariy hinallataq willay haykuqmasiman."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo kikinmanta manan ruwanmanchu mañakusqata, ichapas huj cuenta nisqaqapas hawamantan kamachikushan. Ama hina kaychu, ima ruwaytaqa ruwariy (hanp\'aramanta kamachikusqatapas) hinallataq willay haykuqmasiman."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo kikinmanta manan ruwanmanchu  kay hina cuenta nisqapaq mañakusqata. Mañakusqaykiqa apachikunña hanp\'ara kamachiqman payllas ima ruwaytaqa ruwariqa hinallataq willasunki tukuyuspa."
+
+msgid "langphone"
+msgstr "Teléfono"
+
+msgid "Unreg"
+msgstr "Horqoy"
+
+msgid "MyProgress"
+msgstr "Purisqay"
+
+msgid "ProgressIntroduction"
+msgstr "Ajllay yachachinamanta sesiónnisqata.<br/>Qhawayta atinki sapanka yachachinapi imayna aypasqaykita."
+
+msgid "Select"
+msgstr "Ajllay"
+
+msgid "NeverExpires"
+msgstr "Haykaqpas tukukunchu"
+
+msgid "On"
+msgstr "Kaypi"
+
+msgid "ExpirationDate"
+msgstr "Pacha tukukuy"
+
+msgid "ActiveAccount"
+msgstr "Kancharichiy cuenta nisqata"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "Qelqachikusqaykiqa chaymantaña chaskichikunqa"
+
+msgid "ApprovalForNewAccount"
+msgstr "Musuq qelqachanaq chaninchaynin"
+
+msgid "ManageUser"
+msgstr "Haykuqmasi kamachina"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Qelqachay yachachiqkunata"
+
+msgid "SendMessage"
+msgstr "Apachiy willanakunata"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "Qelqa pakaykiqa encriptada nisqa kashan tajyaykipaq. Chayrayku hoqmanta mañakunki chayqa, musuq e-chaskita apachimusaykiku qelqa-pakaykiwan."
+
+msgid "UsersUnsubscribed"
+msgstr "Haykuqmasikuna ajllasqaqa hoqochisqaña yachichinamanta"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "Kay k\'itiqa manaraqmi apachisunkichu e-chaskita"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "Kay OpenId manan kashanchu base de datos nisqapiqa. Ama hina kaychu, qelqachakuy cuenta nisqata hap\'ipanaykipaq. Sichus cuenta nisqawan ña kashanki, chayqa ruwapay runaykimanta OpenId nisqa yapanapaq"
+
+msgid "UsernameMaxXCharacters"
+msgstr "Haykuqmasi sutiqa kay yupasqa seq\'ellawan kanqa %s"
+
+msgid "PictureUploaded"
+msgstr "Wankiykiqa apachikunña"
+
+msgid "ProductionUploaded"
+msgstr "Llank\'asqaykiqa apachikunña"
+
+msgid "FolderUpdated"
+msgstr "Wayaqa kunanyachisqa"
+
+msgid "UsersRegistered"
+msgstr "Kay haykuqmasikunaqa qelqachikunkuña"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "Haykuqmasiqa qelqachikunña hoq coach nisqawan"
+
+msgid "UserCreatedPlatform"
+msgstr "Hanp\'arapi kamasqa haykuqmasi"
+
+msgid "UserInSession"
+msgstr "Sesion nisqaman haykuqmasi yapachisqaña"
+
+msgid "UserNotAdded"
+msgstr "Haykuqmasi mana yapasqa"
+
+msgid "NoSessionId"
+msgstr "Sesion nisqaqa manan riqsichikunranchu"
+
+msgid "NoUsersRead"
+msgstr "Ama hina kaychu cheqaqchay kay khipukunata XML/CVS"
+
+msgid "UserImportFileMessage"
+msgstr "Sichus kay khipukunapi XML/CVS haykuqmasikunaq  sutinkuna (username)  mana chaskikunqachu chayqa churakunqa kikin Sutin (Firstname) hinallataq Mamataytamanta suti  (Lastname). Qhawarinaykipaq, kay hina sutiyuqpaqa Julio Montoya kaykuqmasi sutinqa kanqa jmontoya"
+
+msgid "UserAlreadyRegisteredByOtherCreator"
+msgstr "Haukuqmasiqa ña qelqachikunña hoq coach nisqawan"
+
+msgid "NewUserInTheCourse"
+msgstr "Musuq haykuqmasi yachachinanpi qelqachasqa"
+
+msgid "MessageNewUserInTheCourse"
+msgstr "Kay willaqa willasunkin hoq musuq haykuqmasiq yachachinapi qelqachikusqanmantan"
+
+msgid "EditNormalProfile"
+msgstr "Runamanta pisi ruwapay"
+
+msgid "EditExtendProfile"
+msgstr "Runamanta askha ruwapay"
+
+msgid "EditInformation"
+msgstr "Ruwapay willanata"
+
+msgid "RegisterUser"
+msgstr "Registrar usuario"
+

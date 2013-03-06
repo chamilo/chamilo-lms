@@ -1,0 +1,162 @@
+msgid "Announcement"
+msgstr "Hirdetmények"
+
+msgid "langAnnEmpty"
+msgstr "A hirdetménylista kiürítve"
+
+msgid "AnnouncementModified"
+msgstr "Hirdetmény megváltoztatva"
+
+msgid "AnnouncementAdded"
+msgstr "Hirdetmény hozzáadva"
+
+msgid "AnnouncementDeleted"
+msgstr "Hirdetmény törölve"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Közzétéve:"
+
+msgid "AddAnnouncement"
+msgstr "Hozzáadás felhívásként"
+
+msgid "langContent"
+msgstr "Tartalom"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Hirdetménylista kiürítése"
+
+msgid "professorMessage"
+msgstr "Kurzusfelelős üzenete"
+
+msgid "langEmailSent"
+msgstr " és elküldve e-mailben a regisztrált hallgatóknak"
+
+msgid "EmailOption"
+msgstr "Ennek a hirdetménynek az elküldése e-mailben a a regisztrált hallgatóknak"
+
+msgid "langOn"
+msgstr "Be"
+
+msgid "langRegUser"
+msgstr "a honlap regisztrált felhasználói"
+
+msgid "langUnvalid"
+msgstr "nincs vagy érvénytelen e-mail cím"
+
+msgid "langModifAnn"
+msgstr "Megváltoztatni ezt a hirdetményt"
+
+msgid "langModify"
+msgstr "módosít"
+
+msgid "langDelete"
+msgstr "töröl"
+
+msgid "langTitle"
+msgstr "Cím"
+
+msgid "langHelp"
+msgstr "súgó"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAddIntro"
+msgstr "Bejelentkezési szöveg hozzáadása"
+
+msgid "langBackList"
+msgstr "Vissza a listához"
+
+msgid "langSelMess"
+msgstr "Néhány felhasználó figyelmeztetése"
+
+msgid "EmailTitle"
+msgstr "E levél tárgya"
+
+msgid "langUserlist"
+msgstr "Csoportok és felhasználók listája"
+
+msgid "langSelectedUsers"
+msgstr "Kiválasztott felhasználók"
+
+msgid "langSubmit"
+msgstr "Elküld"
+
+msgid "langPleaseEnterMessage"
+msgstr "Be kell vezesse az üzenet szövegét."
+
+msgid "langPleaseSelectUsers"
+msgstr "Néhány felhasználót ki kell választania."
+
+msgid "Teachersubject"
+msgstr "Üzenet elküdve a diákjainak"
+
+msgid "langMessages"
+msgstr "Üzenetek"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Üzenetek a kiválasztott felhasználóknak"
+
+msgid "langIntroText"
+msgstr "Üzenet küldéséhez válasszon ki felhasználói csoportokat (elöl egy G jelöli) vagy egyéni felhasználókat a bal oldali listából."
+
+msgid "langDown"
+msgstr "lent"
+
+msgid "langMsgSent"
+msgstr "Az üzenet elküldve a kiválasztott hallgatóknak"
+
+msgid "langSelUser"
+msgstr "a honlap kiválasztott felhasználói"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Üzenet a kiválasztott csoportoknak"
+
+msgid "langSelectedGroups"
+msgstr "kijelölt csoportok"
+
+msgid "langMsg"
+msgstr "Üzenetek"
+
+msgid "langYes"
+msgstr "Igen"
+
+msgid "MsgText"
+msgstr "Üzenet"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Minden hirdetmény törölve lett"
+
+msgid "AnnouncementMoved"
+msgstr "Minden hirdetmény át lett mozgatva"
+
+msgid "NoAnnouncements"
+msgstr "Nincsenek hirdetrmények"
+
+msgid "SelectEverybody"
+msgstr "Mindenkit kiválaszt"
+
+msgid "SelectedUsersGroups"
+msgstr "kiválasztott felhasználói csoportok"
+
+msgid "LearnerMessage"
+msgstr "Üzenet egy tanulótól"
+
+msgid "TitleIsRequired"
+msgstr "A címet kötelező megadni"
+
+msgid "AnnounceSentByEmail"
+msgstr "A hirdetmény e-mailben elküldve"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "A hirdetmény elküldve a kiválasztott felhasználóknak"
+
+msgid "SendAnnouncement"
+msgstr "Felhívás elküldése"
+
+msgid "ModifyAnnouncement"
+msgstr "Felhívás szerkesztése"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Felhívás elküldése"
+

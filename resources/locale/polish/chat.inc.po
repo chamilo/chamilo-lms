@@ -1,0 +1,102 @@
+msgid "langOnlineConference"
+msgstr "Konferencja online"
+
+msgid "langWash"
+msgstr "Wyczy¶ć"
+
+msgid "langReset"
+msgstr "Zresetuj"
+
+msgid "langSave"
+msgstr "Zapisz"
+
+msgid "langRefresh"
+msgstr "Od¶wież"
+
+msgid "langIsNowInYourDocDir"
+msgstr "jest ju� w obszarze dokument�w. <br /><B>Ten plik jest widoczny.</B>"
+
+msgid "langCopyFailed"
+msgstr "Bł±d drukowania"
+
+msgid "langTypeMessage"
+msgstr "Wpisz tresc wiadomosci!"
+
+msgid "langConfirmReset"
+msgstr "Czy na pewno chcesz usunąć wszystkie wiadomości?"
+
+msgid "langHasResetChat"
+msgstr "zresetował Chat"
+
+msgid "langNoOnlineConference"
+msgstr "W tej chwili nie ma �adnych konferencji online ..."
+
+msgid "langMediaFile"
+msgstr "Strumień audio lub wideo"
+
+msgid "langContentFile"
+msgstr "Prezentacja"
+
+msgid "langListOfParticipants"
+msgstr "Lista uczestników"
+
+msgid "langYourPicture"
+msgstr "Twoje zdjęcie"
+
+msgid "langOnlineDescription"
+msgstr "Opis konferencji online"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Zaznacz to pole jedynie w celu zadania ważnego pytania!!!"
+
+msgid "langQuestion"
+msgstr "pytanie"
+
+msgid "langClearList"
+msgstr "Wyczyść listę"
+
+msgid "langWhiteBoard"
+msgstr "Biała tablica"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Edytor tekstu</h2>Wklej tu tekst i edytuj go. Uczestnicy zobaczą modyfikacje w czasie rzeczywistym, wtedy kiedy będziesz je robił."
+
+msgid "langStreaming"
+msgstr "Transmisja"
+
+msgid "langStreamURL"
+msgstr "URL transmisji (adres źródła)"
+
+msgid "langStreamType"
+msgstr "Rodzaj transmisji"
+
+msgid "langLinkName"
+msgstr "Nazwa łącza(link\'a)"
+
+msgid "langLinkURL"
+msgstr "URL łącza (adres link\'a)"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Witam na <b>Konferencji online</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Brak łącza"
+
+msgid "langChat_reset_by"
+msgstr "zresetuj czat"
+
+msgid "OrFile"
+msgstr "Lub plik"
+
+msgid "langCallSent"
+msgstr "Twój czatowy rozmówca otrzymał powiadomienie i wie, że chcesz z nim rozmawiać. Oczekiwanie na przyjęcie rozmowy."
+
+msgid "langChatDenied"
+msgstr "Rozmówca nie chce z tobą teraz rozmawiać."
+
+msgid "Send"
+msgstr "Wyślij"
+
+msgid "Connected"
+msgstr "Połączony"
+

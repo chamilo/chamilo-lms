@@ -1,0 +1,129 @@
+msgid "langMdCallingTool"
+msgstr "Dokumentumok"
+
+msgid "langMdTitle"
+msgstr "Tanulási objektum címe"
+
+msgid "langMdDescription"
+msgstr "Az információ tárolásához kattintson a Tárolás gombra"
+
+msgid "langMdCoverage"
+msgstr "pl. Kandidátus"
+
+msgid "langMdCopyright"
+msgstr "pl. a forrás mellékelése megengedett"
+
+msgid "langTool"
+msgstr "Dokumentum metaadat"
+
+msgid "langNoScript"
+msgstr "A parancsértelmező nincs engedélyezve a böngészőjén, kérjük, ne vegye figyelembe az alábbi szöveget, nem fog működni..."
+
+msgid "langPressAgain"
+msgstr "Kattintson újra a Tárolás\' gombra"
+
+msgid "langLanguageTip"
+msgstr "a tanulási objektumban használt nyelv"
+
+msgid "langIdentifier"
+msgstr "Azonosító"
+
+msgid "langIdentifierTip"
+msgstr "A tanulási objektum egyedi azonosítója összeállítva betűkből, számokból, _-.()\'!* karakterekből"
+
+msgid "langTitleTip"
+msgstr "cím vagy elnevezés, és ezek nyelve"
+
+msgid "langDescriptionTip"
+msgstr "Megjegyzés leírása, és a tanulási objektum leírásához használt nyelv"
+
+msgid "langKeyword"
+msgstr "Kulcsszó"
+
+msgid "langKeywordTip"
+msgstr "elválastztva vesszőkkel (betűk, számok, -.)"
+
+msgid "langCoverage"
+msgstr "Terjedelem"
+
+msgid "langCoverageTip"
+msgstr "például xxx kandidátusa"
+
+msgid "langKwNote"
+msgstr "Ha megváltoztatja a leírás nyelvét, ne adjon hozzá ezzel egy időben kulcsszavakat."
+
+msgid "langClickKw"
+msgstr "Kattintson a kulcsszóra a fa struktúrában a kiválasztáshoz/kijelölés megszűntetéséhez."
+
+msgid "langKwHelp"
+msgstr "<p><br>Kattintson a \'+\' gombra a megnyitáshoz, , a \'-\' gombra a bezéréshoz, a \'++\' gombra az összes kinyitásához, a \'--\' gombra az összes bezárásához.<br><br>A kulcsszavak kijelölésének megszűntetéséhez zérja be teljesen a fastruktúrát és nyissa ki újra a \'+\' gombbal.<br>Alt gomb lenyomása közben a \'+\' gombra kattintva kereshetők az eredeti kulcsszavak a fában.<br><br>Alt gomb lenyomása közbeni kattintással lehet kiválastrani a kulcsszavakat anélkül, hogy bővítenénk a kifejezéseket, vagy megszűntetni a kulcsszó kijelölését a fogalmak bővítésével. </p><p><br>Ha megváltoztatja a leírás nyelvét, nem adjon hozzá kulcsszavakat vele egyidőben.<br></p>"
+
+msgid "langRights"
+msgstr "Használati jogok"
+
+msgid "langRightsTip"
+msgstr "leírás szavakkal"
+
+msgid "langVersion"
+msgstr "Verzió"
+
+msgid "langVersionTip"
+msgstr "szám vagy leírás"
+
+msgid "langStatusTip"
+msgstr "kiválasztás a listából"
+
+msgid "langCreatedSize"
+msgstr "Létrehozva, méret"
+
+msgid "langCreatedSizeTip"
+msgstr "YYYY-MM-DD mikor jött létre, méret (bájtokban)"
+
+msgid "langAuthorTip"
+msgstr "VCARD formátumban"
+
+msgid "langFormat"
+msgstr "Formátum"
+
+msgid "langFormatTip"
+msgstr "kiválasztás a listáról"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "kattintson ide az objektum megnyitásához"
+
+msgid "langStore"
+msgstr "Tárol"
+
+msgid "langDeleteAll"
+msgstr "Az összes metaadat törlése"
+
+msgid "langConfirmDelete"
+msgstr "*Biztosan* törölni akarja az összes metaadatot?"
+
+msgid "langCourseKwds"
+msgstr "Ez a dokumentum tartalmazza a kurzus kulcsszavait"
+
+msgid "langSearch"
+msgstr "Keresés"
+
+msgid "langSearchCrit"
+msgstr "Soronként egy szó!"
+
+msgid "langStatuses"
+msgstr ":draft:vázlat,, final:végleges,, revised:javított,, unavailable:nem elérhető"
+
+msgid "langCosts"
+msgstr "no: szabad,  ingyenes,, yes: nem szabad,  fizetős"
+
+msgid "langCopyrights"
+msgstr ":yes:jogvédett,, no:nem jogvédett"
+
+msgid "langFormats"
+msgstr ":text/plain;iso-8859-2:text/plain;iso-8859-2,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-2:text/html;iso-8859-2,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-2:XML;iso-8859-2,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+
+msgid "langLngResTypes"
+msgstr ":exercise:feladat,, simulation:szimuláció,, questionnaire:kérdőív,, diagram:diagram,, figure:ábra,, graph:grafikon,, index:tárgymutató,, slide:dia,, table:tábla,, narrative text:narrátor szöveg,, exam:teszt,, experiment:kísérlet,, problem statement:probléma megállapítás,, self assessment:önértékelés,, lecture:előadó"
+

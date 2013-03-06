@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Resursas įdėtas. Dabar galite eiti atgal arba įdėti daugiau resursų."
+
+msgid "LearningPath"
+msgstr "Teorinė kurso medžiaga"
+
+msgid "LevelUp"
+msgstr "vienu lygmeniu į viršų"
+
+msgid "AddIt"
+msgstr "Pridėti"
+
+msgid "MainCategory"
+msgstr "pagrindinė kategorija"
+
+msgid "lang_delete_added_resources"
+msgstr "Ištrinti naujus resursus"
+
+msgid "AddToLinks"
+msgstr "Įdėti į kurso nuorodas"
+
+msgid "DontAdd"
+msgstr "nedėti"
+
+msgid "lang_show_all_added_resources"
+msgstr "Rodyti visus įdėtus resursus"
+
+msgid "ResourcesAdded"
+msgstr "Resursai įdėti"
+
+msgid "BackTo"
+msgstr "Grįžti į"
+
+msgid "ExternalResources"
+msgstr "Išoriniai resursai"
+
+msgid "CourseResources"
+msgstr "Kurso resursai"
+
+msgid "ExternalLink"
+msgstr "Išorinė nuoroda"
+
+msgid "DropboxAdd"
+msgstr "Įdėti failų saugyklos puslapį į šį skyrių."
+
+msgid "AddAssignmentPage"
+msgstr "Įdėti studentų publikacijas į šį skyrių."
+
+msgid "Exercise"
+msgstr "Testai"
+
+msgid "Link"
+msgstr "Nuorodos"
+
+msgid "AdValvas"
+msgstr "Pranešimai"
+
+msgid "Document"
+msgstr "Dokumentai"
+
+msgid "ShowDelete"
+msgstr "Rodyti / Ištrinti"
+
+msgid "IntroductionText"
+msgstr "Aiškinamasis tekstas"
+
+msgid "CourseDescription"
+msgstr "Kurso aprašymas"
+
+msgid "Groups"
+msgstr "Grupės"
+
+msgid "Users"
+msgstr "Vartotojai"
+
+msgid "IntroductionTextAdd"
+msgstr "Add a page containing the introduction text to this chapter."
+
+msgid "CourseDescriptionAdd"
+msgstr "Add a page containing the course description to this chapter."
+
+msgid "GroupsAdd"
+msgstr "Pridėti Grupių puslapį į šį skyrių."
+
+msgid "UsersAdd"
+msgstr "Pridėti Vartotojų puslapį į šį skyrių."
+
+msgid "ExportableCourseResources"
+msgstr "Eksportuojami kurso resursai"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Chamilo related course resources"
+
+msgid "LinkTarget"
+msgstr "Nuoroda"
+
+msgid "SameWindow"
+msgstr "Tame pačiame lange"
+
+msgid "NewWindow"
+msgstr "Naujame lange"
+
+msgid "StepDeleted1"
+msgstr "Šis"
+
+msgid "StepDeleted2"
+msgstr "įrašas ištrintas šiame įrankyje."
+
+msgid "Modify"
+msgstr "redaguoti"
+
+msgid "Chapter"
+msgstr "Skyrius"
+
+msgid "NoAgendaItems"
+msgstr "Darbotvarkės įrašų nėra"
+
+msgid "AgendaAdd"
+msgstr "Pridėti naują darbotvarkės įrašą"
+
+msgid "UserGroupFilter"
+msgstr "Filtruoti pagal grupes/įrašus"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Rūšiuoti darbotvarkės įrašus chronologine tvarka (į viršų)"
+
+msgid "ShowCurrent"
+msgstr "Rodyti šio mėnesio darbotvarkės įrašus"
+
+msgid "ModifyCalendarItem"
+msgstr "Redaguoti įrašą"
+
+msgid "ItemTitle"
+msgstr "Įrašo pavadinimas"
+
+msgid "Detail"
+msgstr "Detalės"
+
+msgid "EditSuccess"
+msgstr "Darbotvarkės įrašas buvo redaguotas"
+
+msgid "AddCalendarItem"
+msgstr "Pridėti naują darbotvarkės įrašą"
+
+msgid "AddAnn"
+msgstr "Įrašyti pranešimą"
+
+msgid "ForumAddNewTopic"
+msgstr "Forumas: įrašyti naują temą"
+
+msgid "ForumEditTopic"
+msgstr "Forumas: redaguoti temą"
+
+msgid "ExerciseAnswers"
+msgstr "Pratimas: Atsakymai"
+
+msgid "ForumReply"
+msgstr "Forumas: atsakyti"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Rūšiuoti darbotvarkę chronologiškai (žemyn)"
+

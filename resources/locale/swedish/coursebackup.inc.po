@@ -1,0 +1,135 @@
+msgid "langSelectOptionForBackup"
+msgstr "Var vänlig välj ett säkerhets kopia alternativ."
+
+msgid "langLetMeSelectItems"
+msgstr "Låt mig välja kursdelar"
+
+msgid "langCreateFullBackup"
+msgstr "Skapa en komplett säkerhetskopia av denna kurs."
+
+msgid "langCreateBackup"
+msgstr "skapa en säkerhetskopia"
+
+msgid "langBackupCreated"
+msgstr "Säkerhetskopiering av denna kurs har startat. Nerladdningen av denna kopia startar om ett ögonblick. Om den inte startar, klicka på följande länk."
+
+msgid "langSelectBackupFile"
+msgstr "Välj en säkerhetskopia."
+
+msgid "langImportBackup"
+msgstr "Importera säkerhetskopia"
+
+msgid "langImportFullBackup"
+msgstr "Importera full säkerhetskopia"
+
+msgid "langImportFinished"
+msgstr "Import avslutad"
+
+msgid "langEvents"
+msgstr "Händelser"
+
+msgid "langAnnouncements"
+msgstr "Tillkännagivanden"
+
+msgid "langDocuments"
+msgstr "Dokument"
+
+msgid "langTests"
+msgstr "Tester"
+
+msgid "langLearnpaths"
+msgstr "Learnpaths"
+
+msgid "langCopyCourse"
+msgstr "Kopiera kurs"
+
+msgid "langSelectItemsToCopy"
+msgstr "Välj objekt att kopiera"
+
+msgid "langCopyFinished"
+msgstr "Kopiering avslutad"
+
+msgid "langFullRecycle"
+msgstr "Full återanvändning"
+
+msgid "langRecycleCourse"
+msgstr "Återanvänd kurs"
+
+msgid "langRecycleFinished"
+msgstr "Återanvändning avslutad"
+
+msgid "langRecycleWarning"
+msgstr "Varning: genom att använda detta verktyg,  kommer du att radera några delar ur din kurs. Detta kan inte göras ogjort. Vi råder dig att göra en <a href=\"create_backup.php\">säkerhetskopia</a> innan du använder detta återanvändningsverktyg."
+
+msgid "langSameFilename"
+msgstr "Vad vill du göra med importerade filer som har samma namn som redan existerande filer?"
+
+msgid "langSameFilenameSkip"
+msgstr "Hoppa över filer med samma namn"
+
+msgid "langSameFilenameRename"
+msgstr "Döp om fil (ex.fil.pdf till fil_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Skriv över fil"
+
+msgid "langSelectDestinationCourse"
+msgstr "Välj målkurs"
+
+msgid "langFullCopy"
+msgstr "Full kopia"
+
+msgid "langCourseDescription"
+msgstr "Kurs beskrivning"
+
+msgid "langNoResourcesToBackup"
+msgstr "Det finns inga resurser att säkerhetskopiera"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Det finns inga resurser i säkerhetskopian"
+
+msgid "langSelectResources"
+msgstr "Välj resurser"
+
+msgid "langNoResourcesToRecycles"
+msgstr "Det finns inga resurser att återskapa"
+
+msgid "langIncludeQuestionPool"
+msgstr "Inkludera frågepool"
+
+msgid "langLocalFile"
+msgstr "lokal fil"
+
+msgid "langServerFile"
+msgstr "server fil"
+
+msgid "langNoBackupsAvailable"
+msgstr "ingen säkerhetskopia är tillgänglig"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "Det finns ingen tillgänglig målkurs"
+
+msgid "langBackup"
+msgstr "Säkerhetskopia"
+
+msgid "langImportBackupInfo"
+msgstr "Importera en säkerhetskopia. Du kan ladda upp en säkerhetskopia från din egen dator eller använda en säkerhetskopia från servern."
+
+msgid "langCreateBackupInfo"
+msgstr "Gör en säkerhetskopia från denna kurs. Du kan välja kursinnehåll att göra en säkerhetskopia av."
+
+msgid "ToolIntro"
+msgstr "Verktygsintroduktion"
+
+msgid "UploadError"
+msgstr "Misslyckades med filuppladdning. Kontrollera maximalt accepterad filstorlek och rättigheter för mappen på servern"
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Dokument kommer också att läggas till"
+
+msgid "ToExportLearnpathWithQuizYouHaveToSelectQuiz"
+msgstr "Om du vill exportera ett kursmoment som innehåller ett test måste du vara noga med att välja de test som ska vara med i exporten i listan över test."
+
+msgid "ArchivesDirectoryNotWriteableContactAdmin"
+msgstr "Arkivmappen som verktyget använder är inte skrivbar. Kontakta administratören för din lärplattform."
+

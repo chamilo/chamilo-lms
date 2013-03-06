@@ -1,0 +1,321 @@
+msgid "NewForumCreated"
+msgstr "Det nya forumet har skapats"
+
+msgid "NewThreadCreated"
+msgstr "Den nya forumtråden har skapats"
+
+msgid "AddHotpotatoes"
+msgstr "Lägg till \"hot potatoes\""
+
+msgid "lang_learning_path"
+msgstr "Inlärningsväg"
+
+msgid "lang_learning_path_builder"
+msgstr "Inlärningsvägsverktyg"
+
+msgid "lang_description"
+msgstr "beskrivning"
+
+msgid "LearnpathTitle"
+msgstr "titel"
+
+msgid "LearnpathPrerequisites"
+msgstr "Förkunskaper"
+
+msgid "LearnpathMoveUp"
+msgstr "Flytta upp"
+
+msgid "LearnpathMoveDown"
+msgstr "Flytta ner"
+
+msgid "langThisItem"
+msgstr "detta objekt"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Titel & beskrivning"
+
+msgid "LearnpathChangeOrder"
+msgstr "Ändra ordning"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Lägg till förkunskaper"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Ändra titel och beskrivning"
+
+msgid "lang_delete"
+msgstr "Ta bort"
+
+msgid "lang_add_chapter"
+msgstr "Lägg till modul"
+
+msgid "langLearnpathMystatus"
+msgstr "Min status"
+
+msgid "langLearnpathCompstatus"
+msgstr "avslutad"
+
+msgid "langLearnpathIncomplete"
+msgstr "ej avslutad"
+
+msgid "langLearnpathPassed"
+msgstr "godkänd"
+
+msgid "langLearnpathFailed"
+msgstr "icke godkänd"
+
+msgid "langLearnpathPrevious"
+msgstr "Föregående"
+
+msgid "langLearnpathNext"
+msgstr "Nästa"
+
+msgid "langLearnpathRestart"
+msgstr "Omstart"
+
+msgid "langLearnpathThisStatus"
+msgstr "Detta steg är nu"
+
+msgid "langLearnpathToEnter"
+msgstr "För att komma in"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "behöver du först slutföra"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Stegtitel"
+
+msgid "langLearnpathStatus"
+msgstr "Status"
+
+msgid "langLearnpathScore"
+msgstr "Poäng"
+
+msgid "langLearnpathTime"
+msgstr "Tid"
+
+msgid "langLearnpathVersion"
+msgstr "version"
+
+msgid "langLearnpathRestarted"
+msgstr "Alla steg är nu ofullständiga."
+
+msgid "langLearnpathNoNext"
+msgstr "Detta är det sista steget"
+
+msgid "langLearnpathNoPrev"
+msgstr "Detta är det första steget"
+
+msgid "LearnpathAddLearnpath"
+msgstr "Lägg till ny inlärningsväg"
+
+msgid "lang_learnpath_added"
+msgstr "Den nya inlärningsvägen har skapats. Nu kan du lägga till moduler genom att klicka på kryssen."
+
+msgid "LearnpathEditLearnpath"
+msgstr "ändra inlärningsväg"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "Ta bort inlärningsväg"
+
+msgid "lang_learnpath_edited"
+msgstr "inlärningsvägen har ändrats"
+
+msgid "lang_learnpath_deleted"
+msgstr "inlärningsvägen har tagits bort"
+
+msgid "LearnpathDoNotPublish"
+msgstr "publicera inte"
+
+msgid "LearnpathPublish"
+msgstr "publicera"
+
+msgid "LearnpathNotPublished"
+msgstr "ej publicerad"
+
+msgid "LearnpathPublished"
+msgstr "publicerad"
+
+msgid "lang_add_learnpath_module"
+msgstr "Lägg till ny modul"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Lägg till en ny modul till denna inlärningsväg"
+
+msgid "lang_learnpath_module_added"
+msgstr "Den nya modulen har skapats. Nu kan du lägga till steg genom att klicka på kryssen."
+
+msgid "LearnpathEditModule"
+msgstr "Ändra modulbeskrivning/titel"
+
+msgid "LearnpathDeleteModule"
+msgstr "Ta bort modul"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Modulen har ändrats"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Modulen och alla steg är borttagna"
+
+msgid "LearnpathNoChapters"
+msgstr "Inga moduler tillagda ännu"
+
+msgid "LearnpathAddItem"
+msgstr "Lägg till steg till denna modul"
+
+msgid "LearnpathItemDeleted"
+msgstr "Steget har tagits bort"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "var vänlig konfigurera denna/dessa steg till modul:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Ändra steg även beskrivning/titel"
+
+msgid "lang_add_prereq"
+msgstr "Lägg till/ändra förkunskaper för detta steg"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Ta bort steg"
+
+msgid "LearnpathItemEdited"
+msgstr "Steget har ändrats"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Har tagits bort!"
+
+msgid "lang_none"
+msgstr "INGEN"
+
+msgid "lang_forum_opened"
+msgstr "Det valda forumet har öppnats i ett nytt fönster."
+
+msgid "lang_link_opened"
+msgstr "Den valda länken har öppnats i ett nytt fönster."
+
+msgid "lang_short_help"
+msgstr "För att lägga till ett steg klicka på krysset; för att lägga till en ny titel/beskrivning klicka på pennan; för att lägga till förkunskaper klicka på ikonen med två dokument. Du kan kontrollera vad studenterna kommer att se genom att klicka på Studentvy ovan."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "Förkunskaperna är inte kompletta"
+
+msgid "lang_author"
+msgstr "Författare"
+
+msgid "lang_date"
+msgstr "Datum"
+
+msgid "langBasicOverview"
+msgstr "Organisera"
+
+msgid "langAdvanced"
+msgstr "Skapa"
+
+msgid "langDisplay"
+msgstr "Titta"
+
+msgid "langNewChapter"
+msgstr "Nytt kapitel"
+
+msgid "langNewStep"
+msgstr "Nytt steg"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Förkunskaper (begränsning)"
+
+msgid "lang_loading"
+msgstr "Laddar sidan, var vänlig vänta..."
+
+msgid "lang_empty"
+msgstr "Denna path innehåller inga steg."
+
+msgid "langHotPotatoesFinished"
+msgstr "Denna HotPotatoes test har stängts."
+
+msgid "langCompletionLimit"
+msgstr "Slutförande gräns (min poäng)"
+
+msgid "langPrereqToEnter"
+msgstr "För att stiga in"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "behöver du först slutföra"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Minst 1 steg saknas från"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "som är satt som Förkunskaper."
+
+msgid "langPrereqTestLimit1"
+msgstr "du måste nå minst"
+
+msgid "langPrereqTestLimit2"
+msgstr "poäng i"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Nu har du:"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "tillbaka till normalt fönster"
+
+msgid "langLearnpathFullScreen"
+msgstr "full skärm"
+
+msgid "langItemMissing1"
+msgstr "Det var en"
+
+msgid "langItemMissing2"
+msgstr "sida (steg) här i Chamilo originalinlärningsväg"
+
+msgid "langDone"
+msgstr "Klart"
+
+msgid "langNoItemSelected"
+msgstr "För att visa någonting här, var vänlig välj ett objekt från sidomenyn"
+
+msgid "langUploadScorm"
+msgstr "SCORM- eller AICC-paket att ladda upp"
+
+msgid "CreateTheForum"
+msgstr "Lägg till forumet"
+
+msgid "AddLpToStart"
+msgstr "För att börja, ge din inlärningsväg en titel"
+
+msgid "CreateTheLink"
+msgstr "Importera en länk"
+
+msgid "MoveCurrentLink"
+msgstr "Flytta den aktuella länken"
+
+msgid "EditCurrentLink"
+msgstr "Ändra den aktuella länken"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "LatencyTimeSpent"
+msgstr "Nedlagd tid"
+
+msgid "Result"
+msgstr "Resultat"
+
+msgid "ReturnToLearningPaths"
+msgstr "Tillbaka till utbildningsväg"
+
+msgid "HideAllAttempts"
+msgstr "Dölja alla försök"
+
+msgid "ShowAttempt"
+msgstr "Försök"
+
+msgid "ShowAndQualifyAttempt"
+msgstr "Visa och betygsätta prov"
+
+msgid "LPName"
+msgstr "Kursnamn"
+
+msgid "CourseSettings"
+msgstr "Inställningar"
+

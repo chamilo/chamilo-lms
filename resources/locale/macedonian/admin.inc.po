@@ -1,0 +1,1812 @@
+msgid "AdminBy"
+msgstr "Управувано од"
+
+msgid "AdministrationTools"
+msgstr "Управување"
+
+msgid "State"
+msgstr "Состојба на системот"
+
+msgid "Statistiques"
+msgstr "Статистики"
+
+msgid "VisioHostLocal"
+msgstr "Видеоконференциски хост"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Дали видеоконференцискиот протокол е web-базиран? (не, најчесто)"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Прикажи ја врската за враќање назад до хиерархијата на курсот. Како и да е врската е достапна на дното од списокот."
+
+msgid "langUsed"
+msgstr "Исползувано"
+
+msgid "langPresent"
+msgstr "Во ред"
+
+msgid "langMissing"
+msgstr "недостасува"
+
+msgid "langExist"
+msgstr "постои"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Прикажи ја врската назад на дрвото категории/курсеви"
+
+msgid "ShowNumberOfCourses"
+msgstr "Прикажи број на курсеви"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Прикажи го Учителот во насловот на курсот"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Прикажи го Учителот во листата на курсеви"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Прикажи ја шифрата на курсот во листата на курсеви"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Прикажи ја шифрата на курсот во насловот на курстот"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "Нема \'ѓомити\' курсеви на платформата."
+
+msgid "ConfigureHomePage"
+msgstr "Конфигурирај ја почетната страница"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Активни модули при креирање на курсот"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Кои алатки треба да бидат активирани (видливи) кога се креира нов курс?"
+
+msgid "langCourseBackup"
+msgstr "Направи \"back-up\" копија на овој курс."
+
+msgid "langCourseTitular"
+msgstr "Учител"
+
+msgid "langCourseTitle"
+msgstr "Наслов на курсот"
+
+msgid "langCourseFaculty"
+msgstr "Категорија на курсот"
+
+msgid "langCourseDepartment"
+msgstr "Оддел на курсот"
+
+msgid "langCourseDepartmentURL"
+msgstr "URL оддел"
+
+msgid "langCourseLanguage"
+msgstr "Јазик на курсот"
+
+msgid "langCourseAccess"
+msgstr "Пристап до курсот"
+
+msgid "langCourseSubscription"
+msgstr "Запишување на курсот"
+
+msgid "langPublicAccess"
+msgstr "Јавен пристап"
+
+msgid "langPrivateAccess"
+msgstr "Приватен пристап"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Управувањето со базата на податоци е овозможено само за администраторот на серверот"
+
+msgid "langShowUsersOfCourse"
+msgstr "Прикажи ги корисниците запишани на овој курс"
+
+msgid "langShowClassesOfCourse"
+msgstr "Прикажи ги паралелките запишани на овој курс"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Прикажи ги групите од овој курс"
+
+msgid "langPhone"
+msgstr "Телефон"
+
+msgid "langPhoneNumber"
+msgstr "Телефонски број"
+
+msgid "langActions"
+msgstr "Дејности"
+
+msgid "langAddToCourse"
+msgstr "Додај на курсот"
+
+msgid "langDeleteFromPlatform"
+msgstr "Одстрани од платформата"
+
+msgid "langDeleteCourse"
+msgstr "Избриши го/ги селектираниот/те курс(еви)"
+
+msgid "langDeleteFromCourse"
+msgstr "Отпиши се од курс(евите)"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Избриши ги селектираните паралелки"
+
+msgid "langDeleteSelectedGroups"
+msgstr "IИзбриши ги селектираните групи"
+
+msgid "langAdministrator"
+msgstr "Управувач"
+
+msgid "langAddPicture"
+msgstr "Додај слика"
+
+msgid "langChangePicture"
+msgstr "Смени ја сликата"
+
+msgid "langDeletePicture"
+msgstr "Избриши ја сликата"
+
+msgid "langAddUsers"
+msgstr "Додај корисници"
+
+msgid "langAddGroups"
+msgstr "Додај групи"
+
+msgid "langAddClasses"
+msgstr "Додај паралелки"
+
+msgid "langExportUsers"
+msgstr "Извези листа на корисници"
+
+msgid "langKeyword"
+msgstr "Клучен збор"
+
+msgid "langGroupName"
+msgstr "Име на групата"
+
+msgid "langGroupTutor"
+msgstr "Инструктор на групата"
+
+msgid "langGroupDescription"
+msgstr "Опис на групата"
+
+msgid "langNumberOfParticipants"
+msgstr "Број на членови"
+
+msgid "langNumberOfUsers"
+msgstr "Број на корисници"
+
+msgid "langMaximum"
+msgstr "максимум"
+
+msgid "langMaximumOfParticipants"
+msgstr "Максимален број на членови"
+
+msgid "langParticipants"
+msgstr "членови"
+
+msgid "langFirstLetterClass"
+msgstr "Прва пуква (име на паралелката)"
+
+msgid "langFirstLetterUser"
+msgstr "Прва буква (презиме)"
+
+msgid "langFirstLetterCourse"
+msgstr "Прва буква (шифра)"
+
+msgid "langModifyUserInfo"
+msgstr "Уредување на информациите за корисникот"
+
+msgid "langModifyClassInfo"
+msgstr "Уредување на информациите за паралелката"
+
+msgid "langModifyGroupInfo"
+msgstr "Уредување на информациите за групата"
+
+msgid "langModifyCourseInfo"
+msgstr "Уредување на информациите за курсот"
+
+msgid "langPleaseEnterClassName"
+msgstr "Ве молам внесете го името на паралелката!"
+
+msgid "langPleaseEnterLastName"
+msgstr "Ве молам внесете го презимето на корисникот!"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Ве молам внесете го името на корисникот!"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Ве молам внесете исправна e-mail адреса!"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Ве молам внесете исправно корисничко име!"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Ве молам внесете шифра на курсот!"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Ве молам внесете го името презимето на учителот!"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Ве молам внесете го насловот на курсот!"
+
+msgid "langAcceptedPictureFormats"
+msgstr "прифатени формати се JPG, PNG и GIF !"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Ова корисничко име веќе постои !"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Увези листа на корисници од XML/CSV датотека"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Извези ја листата на корисници во XML/CSV датотека"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Само корисници на курсот"
+
+msgid "langAddClassesToACourse"
+msgstr "Додај паралелки на курсот"
+
+msgid "langAddUsersToACourse"
+msgstr "Додај корисници на курсот"
+
+msgid "langAddUsersToAClass"
+msgstr "Додај корисници во паралелката"
+
+msgid "langAddUsersToAGroup"
+msgstr "Додај корисник во група"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Мора да селектирате најмалку една паралелка и еден курс !"
+
+msgid "AtLeastOneUser"
+msgstr "Морате да изберете најмалку еден корисник!"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Морате да изберете најмалку еден корисник и еден курс !"
+
+msgid "langClassList"
+msgstr "Список на паралелки"
+
+msgid "langUserList"
+msgstr "Листа на корисници"
+
+msgid "langCourseList"
+msgstr "Список на курсеви"
+
+msgid "langAddToThatCourse"
+msgstr "Додај на овој (овие) курс(еви)"
+
+msgid "langAddToClass"
+msgstr "Додај на паралелката"
+
+msgid "langRemoveFromClass"
+msgstr "Отстрани од паралелката"
+
+msgid "langAddToGroup"
+msgstr "Додај во групата"
+
+msgid "langRemoveFromGroup"
+msgstr "Отстрани од групата"
+
+msgid "langUsersOutsideClass"
+msgstr "Корисници надвор од паралелката"
+
+msgid "langUsersInsideClass"
+msgstr "Корисници кои се во паралелката"
+
+msgid "langUsersOutsideGroup"
+msgstr "Корисници надвор од групата"
+
+msgid "langUsersInsideGroup"
+msgstr "Корисници кои се во групата"
+
+msgid "langImportFileLocation"
+msgstr "Локација на CSV / XML датотеката"
+
+msgid "langFileType"
+msgstr "Тип на датотека"
+
+msgid "langOutputFileType"
+msgstr "Излезен тип на датотека"
+
+msgid "langMustUseSeparator"
+msgstr "мора да се користи \';\' карактерот како разделувач"
+
+msgid "langCSVMustLookLike"
+msgstr "CSV датотеката мора да изгледа вака"
+
+msgid "langXMLMustLookLike"
+msgstr "XML датотеката мора да изгледа вака"
+
+msgid "langMandatoryFields"
+msgstr "Полињата во <strong>bold</strong> се задолжителни"
+
+msgid "langNotXML"
+msgstr "Назначената датотека не е во XML формат!"
+
+msgid "langNotCSV"
+msgstr "Назначената датотека не е во CSV формат!"
+
+msgid "langNoNeededData"
+msgstr "Одбраната датотека не ги содржи сите потребни податоци!"
+
+msgid "langMaxImportUsers"
+msgstr "Не може да увезете повеќе од 500 корисници одеднаш !"
+
+msgid "langAdminDatabases"
+msgstr "Бази на податоци (phpMyAdmın)"
+
+msgid "langAdminUsers"
+msgstr "Корисници"
+
+msgid "langAdminClasses"
+msgstr "Паралелки од корисници"
+
+msgid "langAdminGroups"
+msgstr "Групи на корисници"
+
+msgid "langAdminCourses"
+msgstr "Курсеви"
+
+msgid "langAdminCategories"
+msgstr "Категории на курсеви"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Запиши корисник/група на курс"
+
+msgid "AddACategory"
+msgstr "Додади категорија"
+
+msgid "langInto"
+msgstr "во"
+
+msgid "langNoCategories"
+msgstr "Овде нема категории"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Дали е допуштено да се додаваат курсеви во оваа категорија ?"
+
+msgid "langGoToForum"
+msgstr "Оди на форумот"
+
+msgid "langCategoryCode"
+msgstr "Шифра на категоријата"
+
+msgid "langCategoryName"
+msgstr "Име на категорија"
+
+msgid "langCategories"
+msgstr "категории"
+
+msgid "langEditNode"
+msgstr "Уреди ја оваа категорија"
+
+msgid "langOpenNode"
+msgstr "Отвори ја оваа категорија"
+
+msgid "langDeleteNode"
+msgstr "Избриши ја оваа категорија"
+
+msgid "langAddChildNode"
+msgstr "Додади под-категорија"
+
+msgid "langViewChildren"
+msgstr "Прикажи ги елементите на пониско ниво"
+
+msgid "langTreeRebuildedIn"
+msgstr "Дрво обновено во"
+
+msgid "langTreeRecountedIn"
+msgstr "Дрво преброено во"
+
+msgid "langRebuildTree"
+msgstr "Обнови дрво"
+
+msgid "langRefreshNbChildren"
+msgstr "Освежи број на елементи од пониско ниво"
+
+msgid "langShowTree"
+msgstr "Прикажи дрво"
+
+msgid "langBack"
+msgstr "Назад до претходната страна"
+
+msgid "langLogDeleteCat"
+msgstr "Категоријата е избришана"
+
+msgid "langRecountChildren"
+msgstr "Преброј ги елементите од пониско ниво"
+
+msgid "langUpInSameLevel"
+msgstr "Погоре во истото ниво"
+
+msgid "langSeconds"
+msgstr "секунди"
+
+msgid "langMailTo"
+msgstr "Писмо до:"
+
+msgid "lang_no_access_here"
+msgstr "Немате пристап тука"
+
+msgid "lang_php_info"
+msgstr "информација за системот"
+
+msgid "langAddAdminInApache"
+msgstr "Додај управувач"
+
+msgid "langAddFaculties"
+msgstr "Додај категории"
+
+msgid "langSearchACourse"
+msgstr "Барај курс"
+
+msgid "langSearchAUser"
+msgstr "Барај корисник"
+
+msgid "langTechnicalTools"
+msgstr "Технички алатки"
+
+msgid "langConfig"
+msgstr "Изглед на системот"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Список на кориснички имиња (долг)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Максимален број на корсиници во лозгачкиот список"
+
+msgid "NoTimeLimits"
+msgstr "Нема временски ограничувања"
+
+msgid "GeneralCoach"
+msgstr "Главен обучувач"
+
+msgid "GeneralProperties"
+msgstr "Општи својства"
+
+msgid "CourseCoach"
+msgstr "Обучувач на курсот"
+
+msgid "UsersNumber"
+msgstr "Број на корисници"
+
+msgid "PageAfterLoginTitle"
+msgstr "Страница после влегувањето"
+
+msgid "PageAfterLoginComment"
+msgstr "Страницата која ја гледа конектиран корисник"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Chamilo Web"
+
+msgid "GlobalRole"
+msgstr "Глобална улога"
+
+msgid "langNomOutilTodo"
+msgstr "Управување со списокот со задачи"
+
+msgid "langNomPageAdmin"
+msgstr "Раководство"
+
+msgid "langSysInfo"
+msgstr "Информации за Системот"
+
+msgid "langDiffTranslation"
+msgstr "Спореди преводи"
+
+msgid "langStatOf"
+msgstr "Статистика"
+
+msgid "langSpeeSubscribe"
+msgstr "Брзо запишување како Проверувач на курсеви"
+
+msgid "langLogIdentLogout"
+msgstr "Список на кориснички имиња"
+
+msgid "langServerStatus"
+msgstr "Статус на MySQL серверот:"
+
+msgid "langDataBase"
+msgstr "База на податоци"
+
+msgid "langRun"
+msgstr "работи"
+
+msgid "langClient"
+msgstr "MySQL Клиент"
+
+msgid "langServer"
+msgstr "MySQL Сервер"
+
+msgid "langtitulary"
+msgstr "Сопственик"
+
+msgid "langUpgradeBase"
+msgstr "Надгради ја базата на податоци"
+
+msgid "langManage"
+msgstr "Управувај со Порталот"
+
+msgid "langErrorsFound"
+msgstr "Пронајдени грешки"
+
+msgid "langMaintenance"
+msgstr "Одржување"
+
+msgid "langUpgrade"
+msgstr "Надгради го Chamilo"
+
+msgid "langWebsite"
+msgstr "Веб страна на Chamilo"
+
+msgid "langDocumentation"
+msgstr "Документација"
+
+msgid "langContribute"
+msgstr "Придонеси"
+
+msgid "langInfoServer"
+msgstr "Информации за серверот"
+
+msgid "langOtherCategory"
+msgstr "Друга категорија"
+
+msgid "langSendMailToUsers"
+msgstr "Прати пошта на корисници"
+
+msgid "langExampleXMLFile"
+msgstr "Пример на XML датотека"
+
+msgid "langExampleCSVFile"
+msgstr "Пример на CSV датотека"
+
+msgid "langCourseSystemCode"
+msgstr "Шифра на системот"
+
+msgid "langCourseVisualCode"
+msgstr "Шифра на приказот"
+
+msgid "langSystemCode"
+msgstr "Код на системот"
+
+msgid "langVisualCode"
+msgstr "Шифра на приказот"
+
+msgid "langAddCourse"
+msgstr "Креирај курс"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Управување на виртуелни курсеви"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Креирај виртуелен курс"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "Виртуелниот курс ќе го дели просторот за складирање (папки и бази на податоци) со постоечки \'реален\' курс."
+
+msgid "langRealCourseCode"
+msgstr "Шифра на реален курс"
+
+msgid "langCourseCreationSucceeded"
+msgstr "Курсот беше успешно креиран."
+
+msgid "langYourDokeosUses"
+msgstr "Вашата Chamilo инсталација сега користи"
+
+msgid "langOnTheHardDisk"
+msgstr "на хард дискот"
+
+msgid "langIsVirtualCourse"
+msgstr "Е виртуелен курс"
+
+msgid "langSystemAnnouncements"
+msgstr "Системски известувања"
+
+msgid "langAddAnnouncement"
+msgstr "Додај ново известување"
+
+msgid "langAnnouncementAdded"
+msgstr "Известувањето беше додадено"
+
+msgid "langAnnouncementUpdated"
+msgstr "Известувањето беше ажурирано"
+
+msgid "langAnnouncementDeleted"
+msgstr "Известувањето беше избришано"
+
+msgid "langContent"
+msgstr "Содржина"
+
+msgid "langStudent"
+msgstr "Курсист"
+
+msgid "Guest"
+msgstr "Гостин"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Пријави се како"
+
+msgid "langLoginAsThisUser"
+msgstr "Корисничко име"
+
+msgid "SelectPicture"
+msgstr "Избери слика"
+
+msgid "DontResetPassword"
+msgstr "Не ја поништувај лозинката"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Учествувај во развојот"
+
+msgid "langCourseAdmin"
+msgstr "Управувач на курсот"
+
+msgid "langOtherCourses"
+msgstr "други курсеви"
+
+msgid "PlatformLanguageTitle"
+msgstr "Јазик на платформата"
+
+msgid "ServerStatusComment"
+msgstr "Какво подредување на серверот е ова? Овозможува или оневозможува некои специфични опции. На развојниот сервер постојат функционални одлики на преводот кои укажуваат на непреведени фрази."
+
+msgid "ServerStatusTitle"
+msgstr "Вид на сервер"
+
+msgid "PlatformLanguages"
+msgstr "Јазици на Chamilo платформата"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Оваа алатка управува со менито за избор на јазик на страницата за најавување. Како управувач на платформа може да одлучиш кои јазици ќе бидат достапни за твоите корисници."
+
+msgid "OriginalName"
+msgstr "Оригинално име"
+
+msgid "EnglishName"
+msgstr "Име на Англиски"
+
+msgid "DokeosFolder"
+msgstr "Директориум на Chamilo"
+
+msgid "Properties"
+msgstr "Својства"
+
+msgid "PlatformConfigSettings"
+msgstr "Конфигурациски поставки на Chamilo"
+
+msgid "SettingsStored"
+msgstr "Поставките се складирани"
+
+msgid "InstitutionTitle"
+msgstr "Име на институцијата"
+
+msgid "InstitutionComment"
+msgstr "Името на институцијата (се појавува во горниот десен агол)"
+
+msgid "InstitutionUrlTitle"
+msgstr "URL на институцијата"
+
+msgid "InstitutionUrlComment"
+msgstr "URL- то на институциите (линкот кој се појавува во горниот десен агол)"
+
+msgid "SiteNameTitle"
+msgstr "Име ма кампусот на Chamilo"
+
+msgid "SiteNameComment"
+msgstr "Име на Вашиот Chamilo кампус (се појавува во заглавието)"
+
+msgid "emailAdministratorTitle"
+msgstr "Управувач на платформата: E-mail"
+
+msgid "emailAdministratorComment"
+msgstr "e-mail адреса  на управувачот на платформата (се појавува на левата страна на подножјето)"
+
+msgid "administratorSurnameTitle"
+msgstr "Управувач на платформата: Презиме"
+
+msgid "administratorSurnameComment"
+msgstr "Презимето на управувачот на платформата (се појавува на левата страна од подножјето)"
+
+msgid "administratorNameTitle"
+msgstr "Управувач на платформата: Име"
+
+msgid "administratorNameComment"
+msgstr "Името на управувачот на платформата (се појавува на левата страна на подножјето)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Информации за управувачот на платформата во подножјето"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Дали да бидат прикажани информациите за управувачот на платформата во подножјето?"
+
+msgid "HomepageViewTitle"
+msgstr "Приказ на почетната страна"
+
+msgid "HomepageViewComment"
+msgstr "Како сакате да изгледа почетната страна на курсот?"
+
+msgid "HomepageViewDefault"
+msgstr "Приказ со две колони. Неактивните алатки се сокриени"
+
+msgid "HomepageViewFixed"
+msgstr "Приказ со три колони. Неактивните алатки се сиви (Иконите се на своите места)"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Не"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Кратенки за алатките"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Дали да бидат прикажани кратенките на алатките на банерот?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Како ќе гледа курсистот"
+
+msgid "ShowStudentViewComment"
+msgstr "Дали да биде овозможен погледот на курсистот?<br>Ова му овозможува на учителот да види што курсустот ќе гледа, во неговиот приказ."
+
+msgid "AllowGroupCategories"
+msgstr "Категории на група"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Дали да биде допуштено на управувачите на курсеви да креираат категории во групите на модули?"
+
+msgid "PlatformLanguageComment"
+msgstr "Можете да ги определите јазиците на платформата во различни делови од управувањето со платформата, наречени: <a href=\"languages.php\">Dokeos Platform Languages</a>"
+
+msgid "ProductionServer"
+msgstr "Сервер на продукцијата"
+
+msgid "TestServer"
+msgstr "Тест сервер"
+
+msgid "ShowOnlineTitle"
+msgstr "Кој е онлајн"
+
+msgid "AsPlatformLanguage"
+msgstr "како јазик_на_платформата"
+
+msgid "ShowOnlineComment"
+msgstr "Покажи го бројот на корисници кои се онлајн?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Дали да биде допуштено Промена на Името во профилот?"
+
+msgid "AllowNameChangeComment"
+msgstr "Дали на корисникот му е дозволено да го смени неговото име и презиме?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Поставена квота на Документи"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Која е поставената квота за алатката за документи? Можете да ја надминете квотата за некои специфични курсеви преку: управување со платформата > Курсеви > Измени"
+
+msgid "ProfileChangesTitle"
+msgstr "Профил"
+
+msgid "ProfileChangesComment"
+msgstr "Кои делови од профилот можат да бидат сменети?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Регистрација: задолжителни полиња"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Кои полиња се потребни (покрај име, корисничко име и лозинка)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Поставена квота за група"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Која е поставената квота за алатката за групи на документи?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Изгубена лозинка"
+
+msgid "AllowLostPasswordComment"
+msgstr "Дали на корисникот му е допуштено да ја добие својата изгубена лозинка?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Регистрација"
+
+msgid "AllowRegistrationComment"
+msgstr "Дали е допуштена регистрација на нов корисник? Може ли корисниците да креираат нови досиеја?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Регистрација како учител"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Може ли овој корисник да се регистрира како учител (кој може да креира курсеви)?"
+
+msgid "PlatformLanguage"
+msgstr "Јазик на платформата"
+
+msgid "Tuning"
+msgstr "Подесување"
+
+msgid "CourseQuota"
+msgstr "Квота на курсот"
+
+msgid "EditNotice"
+msgstr "Уреди забелешка"
+
+msgid "General"
+msgstr "општо"
+
+msgid "LostPassword"
+msgstr "Изгубена Лозинка"
+
+msgid "Registration"
+msgstr "регистрација"
+
+msgid "Password"
+msgstr "лозинка"
+
+msgid "InsertLink"
+msgstr "вметни врска"
+
+msgid "EditNews"
+msgstr "Уреди Вести"
+
+msgid "EditCategories"
+msgstr "уреди категории"
+
+msgid "EditHomePage"
+msgstr "Уреди Почетна страна"
+
+msgid "AllowUserHeadingsComment"
+msgstr "Може ли управувачот на курсот да ги враќа корисничките податоци и да бара дополнителна информација?"
+
+msgid "Platform"
+msgstr "Платформа"
+
+msgid "Course"
+msgstr "Курс"
+
+msgid "Languages"
+msgstr "Јазици"
+
+msgid "Privacy"
+msgstr "Приватност"
+
+msgid "NoticeTitle"
+msgstr "Наслов на Забелешка"
+
+msgid "NoticeText"
+msgstr "Текст на Забелешката"
+
+msgid "LinkName"
+msgstr "Текст на Врска"
+
+msgid "LinkURL"
+msgstr "URL на Врска"
+
+msgid "OpenInNewWindow"
+msgstr "Отвори во нов прозорец"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "На екраните е допуштено додавање на корисници или паралелки, ако првиот нефилтриран список содржи повеќе отколку што е овој број на корисници, тогаш постави на првата буква (А)"
+
+msgid "Plugins"
+msgstr "Додатоци"
+
+msgid "Info"
+msgstr "информации"
+
+msgid "UserAdded"
+msgstr "Корисникот е додаден"
+
+msgid "NoSearchResults"
+msgstr "Нема резултати од пребарувањето"
+
+msgid "UserDeleted"
+msgstr "Корисникот е избришан"
+
+msgid "NoClassesForThisCourse"
+msgstr "Не постојат паралелки запишани на овој курс"
+
+msgid "CourseUsage"
+msgstr "Постапка за ползување на курсот"
+
+msgid "NoCoursesForThisUser"
+msgstr "Овој корисник не е запишан на курсот"
+
+msgid "NoClassesForThisUser"
+msgstr "Овој корисник не е запишан во оваа паралелка"
+
+msgid "NoCoursesForThisClass"
+msgstr "Оваа паралелка не е запишана на курсот"
+
+msgid "langOpenToTheWorld"
+msgstr "Отвори - пристапот е допуштен на целиот свет"
+
+msgid "OpenToThePlatform"
+msgstr "Отвори - пристап допуштен за корисници регистрирани на платформата"
+
+msgid "langPrivate"
+msgstr "Приватен пристап (страната е достапна само за луѓето од корисничкиот список)"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Комплетно затворен; курсот е достапен само за управувачот на курсот."
+
+msgid "langSubscription"
+msgstr "Пријава"
+
+msgid "langUnsubscription"
+msgstr "Одјава"
+
+msgid "CourseAccessConfigTip"
+msgstr "Вашиот курс е поставен како јавен. Но може да го дефинирате нивото на доверливост погоре."
+
+msgid "Tool"
+msgstr "алатка"
+
+msgid "NumberOfItems"
+msgstr "број на елементи"
+
+msgid "DocumentsAndFolders"
+msgstr "Документи и Папки"
+
+msgid "Learnpath"
+msgstr "Патека_на_учење"
+
+msgid "Exercises"
+msgstr "Вежби"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Личен роковник"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "Може ли корисникот да додаде елементи на личен роковник на страната Мој Роковник?"
+
+msgid "CurrentValue"
+msgstr "тековна вредност"
+
+msgid "CourseDescription"
+msgstr "Опис на курсот"
+
+msgid "OnlineConference"
+msgstr "Online Конференција"
+
+msgid "Chat"
+msgstr "Муабет"
+
+msgid "Quiz"
+msgstr "Вежби"
+
+msgid "Announcements"
+msgstr "Известувања"
+
+msgid "Links"
+msgstr "Линкови"
+
+msgid "LearningPath"
+msgstr "Патека на учењето"
+
+msgid "Documents"
+msgstr "Документи"
+
+msgid "UserPicture"
+msgstr "Слика"
+
+msgid "officialcode"
+msgstr "Официјална шифра"
+
+msgid "Login"
+msgstr "Корисничко име"
+
+msgid "UserPassword"
+msgstr "Лозинка"
+
+msgid "SubscriptionAllowed"
+msgstr "Допуштено запишување"
+
+msgid "UnsubscriptionAllowed"
+msgstr "Дозволено отпишување"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Допуштено"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Одбиено"
+
+msgid "AddDummyContentToCourse"
+msgstr "Додај некои фиктивни (за пример) содржини во овој курс"
+
+msgid "DummyCourseCreator"
+msgstr "Креира фиктивни содржини на курсот"
+
+msgid "DummyCourseDescription"
+msgstr "Ова ќе додаде некои фиктивни (за пример) содржини на овој курс. Тоа има само тестирачки цели."
+
+msgid "AvailablePlugins"
+msgstr "Ова се додатоците што се најдени на Вашиот систем. Може да симнете други додатоци на <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
+
+msgid "CreateVirtualCourse"
+msgstr "Креирај виртуелен курс"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Прикажи список на виртуелни курсеви"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Поврзано со шифра на реален курс"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Направен обид за креирање на виртуелен курс..."
+
+msgid "WantedCourseCode"
+msgstr "Се бара шифра на курсот"
+
+msgid "ResetPassword"
+msgstr "Повторно избери лозинка"
+
+msgid "CheckToSendNewPassword"
+msgstr "Кликни за испраќање на мовата лозинка"
+
+msgid "AutoGeneratePassword"
+msgstr "Автоматски генерирај нова лозинка"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Користи го насловот за име на документот"
+
+msgid "UseDocumentTitleComment"
+msgstr "Ова ќе допушти користење на наслвот за имиња на документ наместо име_на_документот.ext"
+
+msgid "StudentPublications"
+msgstr "Публикации на курсистот"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "Избришаните датотеки не може да се вратат"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Бришењето на датотеката во алатката за документи ги брише перманентно. Датотеката не може да се врати."
+
+msgid "ClassName"
+msgstr "Име на паралелката"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Размена на документи и пораки: Максимална големина на датотеката на документот од паќачката кутија"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Колку голем (во бита) може да биде документ во алатката Раземна на документи и пораки?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Размена на датотеки и пораки: Може ли документот да биде препокриен"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "Може ли оригиналниот документ да биде препокриен кога курсист или учител качува документ со име на документ кој веќе постои? Ако одговорот е да, тогаш го губите механизмот за следење на верзијата на документот."
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Размена на датотеки и пораки: Да се постави во сопствена кутија за размена на датотеки и пораки?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Допушти на учителите и курсистите да качуваат документи во нивни сопствени паѓачки кутии, без да ги праќаат некому (=праќање на документи на самиот себе)"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Размена на датотеки и пораки: Курсист <-> Курсист"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Допушти курсисите да праќаат документи на други курсисти (размена peer 2 peer). Курсистите може да го ползуваат ова за помалку важни документи (mp3, решенија, ...). Ако го оневозможите ова, тогаш курсисот може да праќа документи само на учителите."
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Раземна на документи и пораки: Допушти праќање пораки"
+
+msgid "DropboxAllowMailingComment"
+msgstr "Со функционалност на поштата, можете на секој курсист да му праќате личен документ"
+
+msgid "UserListHasBeenExported"
+msgstr "Корисничкиот список е извезен"
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Кликни овде за да ја преземеш датотеката"
+
+msgid "administratorTelephoneTitle"
+msgstr "Управувач на платформата: Телефон"
+
+msgid "administratorTelephoneComment"
+msgstr "Телефонскиот број на управувачот на платформата"
+
+msgid "SendMailToNewUser"
+msgstr "Испрати пошта на новиот корисник"
+
+msgid "ExtendedProfileTitle"
+msgstr "Продолжен профил"
+
+msgid "ExtendedProfileComment"
+msgstr "Ако поставките се поставени на \'Точно\', корисникот може (незадолжително) да ги пополни следните полиња: \'Мои надлежности\', \'Мои дипломи\', \'Што можам да подучувам\' и \'Мои лична области на интереси\'"
+
+msgid "Classes"
+msgstr "Паралелки"
+
+msgid "UserUnsubscribed"
+msgstr "Корисникот е сега отпишан"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "Корисникот не може да биде отпишан од курсот. Овој корисник е управувач со курсот."
+
+msgid "InvalidStartDate"
+msgstr "Објавен е неважечки почетен датум."
+
+msgid "InvalidEndDate"
+msgstr "Објавен е неважечки краен датум."
+
+msgid "DateFormatLabel"
+msgstr "(д/м/г ч:м)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "Не може да се пишува на датотеката на почетната страна"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Ве молам внесете текст за забелешка"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Ве молам внесете наслов на забелешката"
+
+msgid "PleaseEnterLinkName"
+msgstr "Ве молам внесете име на врската"
+
+msgid "InsertThisLink"
+msgstr "Вметни ја оваа врска"
+
+msgid "FirstPlace"
+msgstr "Прво место"
+
+msgid "After"
+msgstr "Потоа"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Размена на датотеки и пораки: допушти група"
+
+msgid "DropboxAllowGroupComment"
+msgstr "Корисниците може да испраќаат датотеки на групите"
+
+msgid "ClassDeleted"
+msgstr "Паралелката е избришана"
+
+msgid "ClassesDeleted"
+msgstr "Паралелките се избришани"
+
+msgid "NoUsersInClass"
+msgstr "Нема корисници во паралелката"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "Селектираните корисници се запишани во селектираните курсеви"
+
+msgid "InvalidTitle"
+msgstr "Ве молам внесете наслов"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Оваа категорија е веќе исползувана"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Ве молам внесете шифра и имена категоријата"
+
+msgid "DokeosHomepage"
+msgstr "Почетна страна на Chamilo"
+
+msgid "DokeosForum"
+msgstr "Форум на Chamilo"
+
+msgid "RegisterYourPortal"
+msgstr "Регистрирајте го Вашиот портал"
+
+msgid "DokeosExtensions"
+msgstr "Chamilo екстензии"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Прикажи го менито за навигација на курсот"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Го прикажува менито за навигација кое го олеснува преминувањето од една на друга област на курсот"
+
+msgid "LoginAs"
+msgstr "Најави се како"
+
+msgid "ImportClassListCSV"
+msgstr "Увези список на паралелку преку CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "Прикажи го бројот на online корисници на страната за најавување (видливо за цел свет)"
+
+msgid "ShowOnlineUsers"
+msgstr "Прикажи го бројот на online корисници на сите страни (видливо само за најавените корисници)"
+
+msgid "ShowOnlineCourse"
+msgstr "Прикажи го бројот на online корисници на овој курс"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Да бидат ли прикажани иконите во менито за навигација?"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Фокусирај на правилното"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Фокусирај се на положбата"
+
+msgid "ClassesUnsubscribed"
+msgstr "Селектираните паралелки се отпишани од селектираните курсеви"
+
+msgid "ClassesSubscribed"
+msgstr "Селектираните паралелки се запишани на селектираните курсеви"
+
+msgid "RoleId"
+msgstr "Идентификација на улогата"
+
+msgid "RoleName"
+msgstr "Име на улогата"
+
+msgid "RoleType"
+msgstr "Тип"
+
+msgid "RightValueModified"
+msgstr "Вредноста е променета"
+
+msgid "MakeAvailable"
+msgstr "Направи достапно"
+
+msgid "MakeUnavailable"
+msgstr "Направи недостапно"
+
+msgid "Stylesheets"
+msgstr "Стил-листови"
+
+msgid "DefaultDokeosStyle"
+msgstr "Поставен стил на Chamilo"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Дали менито за навигација да покажува различни икони за алатки?"
+
+msgid "Plugin"
+msgstr "Додатоци"
+
+msgid "MainMenu"
+msgstr "Главно мени"
+
+msgid "MainMenuLogged"
+msgstr "Мени после најавувањето"
+
+msgid "Banner"
+msgstr "Банер"
+
+msgid "ImageResizeTitle"
+msgstr "Промена на големината на корисничките слики"
+
+msgid "ImageResizeComment"
+msgstr "На корисничките слики може да им се промени големината ако PHP е компајлирано со <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. Ако GD не е достапно, оваа поставка тивко ќе биде игнорирана."
+
+msgid "MaxImageWidthTitle"
+msgstr "Максимална ширина на сликата на корисникот"
+
+msgid "MaxImageWidthComment"
+msgstr "Максимална ширина во пиксели на сликата на корисникот. Оваа поставка се применува само ако сликите на корисникот при качувањето се подесени така што да може да им се менува големината."
+
+msgid "MaxImageHeightTitle"
+msgstr "Максимална висина на сликата на корисникот"
+
+msgid "MaxImageHeightComment"
+msgstr "Максимална висина во пиксели на висината на сликата на корисникот. Оваа поставка може да се примени само ако сликите на корисникот при качувањето се подесени така што може да им се менува големината."
+
+msgid "YourVersionNotUpToDate"
+msgstr "Вашата верзија не е ажурирана"
+
+msgid "YourVersionIs"
+msgstr "Вашата верзија е"
+
+msgid "PleaseVisitDokeos"
+msgstr "Ве молиме посетете го Chamilo"
+
+msgid "VersionUpToDate"
+msgstr "Вашата верзија е ажурирана"
+
+msgid "ConnectSocketError"
+msgstr "Грешка во поврзувањето"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Поврзувањата се оневозможени"
+
+msgid "ShowEmailAddresses"
+msgstr "Прикажи ја e-mail адресата"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Прикажи ја e-mail адресата на корисниците"
+
+msgid "LatestVersionIs"
+msgstr "Последната верзија е"
+
+msgid "langConfigureExtensions"
+msgstr "Подеси ги сервисите"
+
+msgid "langActiveExtensions"
+msgstr "Активирај го овој сервис"
+
+msgid "langVisioconf"
+msgstr "Видео-конференција"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo Live Conferencing® е стандардна алатка за видеоконференција која нуди: прикажување на дијапозотови, табла за цртање и пишување, аудио/видео пренос, говор. Таа бара само Flash® player и дозволува користење на три мода: еден_на_еден, еден_на_многу и многу_на_многу."
+
+msgid "langPpt2lp"
+msgstr "oogie"
+
+msgid "langPpt2lpDescription"
+msgstr "PowerPoint2LearningPath Ви допушта да трансформирате Powerpoint презентација во Патека на учењето со неколку клика."
+
+msgid "langBandWidthStatistics"
+msgstr "Статистика на ширината на опсегот"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG Ви допушта да се консултирате со напредна статистика за состојбата на серверот во последните 24 часа."
+
+msgid "ServerStatistics"
+msgstr "Статистики на серверот"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats Ви допушта да консултирате статистики за Вашата платформа: посетители, погледи на страницата, упатени ..."
+
+msgid "SearchEngine"
+msgstr "Машина за пребарување на Цел Текст"
+
+msgid "langSearchEngineDescription"
+msgstr "Машината за пребарување на Цел Текст Ви допушта да пребарувате збор низ целата платформа. Дневното индексирање на содржината Ве дава сигурност во добиените резултати од пребарувањето."
+
+msgid "langListSession"
+msgstr "Список на сесии"
+
+msgid "AddSession"
+msgstr "Додај сесија"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Увези сесии во XML/CSV формат"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Извези сесии во XML/CSV формат"
+
+msgid "SessionName"
+msgstr "Име на сесијата"
+
+msgid "langNbCourses"
+msgstr "број на курсеви"
+
+msgid "DateStart"
+msgstr "Почетен датум"
+
+msgid "DateEnd"
+msgstr "Краен датум"
+
+msgid "CoachName"
+msgstr "Име на обучувачот"
+
+msgid "SessionList"
+msgstr "Список на сесии"
+
+msgid "SessionNameIsRequired"
+msgstr "Името е неопходно за сесијата"
+
+msgid "NextStep"
+msgstr "Следен чекор"
+
+msgid "keyword"
+msgstr "Клучен збор"
+
+msgid "Confirm"
+msgstr "Потврдува"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Отпиши ги корисниците од курсот"
+
+msgid "MissingClassName"
+msgstr "Недостасува името на паралелката"
+
+msgid "ClassNameExists"
+msgstr "Постои името на паралелката"
+
+msgid "ImportCSVFileLocation"
+msgstr "Локација за увоз на CSV датотека"
+
+msgid "ClassesCreated"
+msgstr "Креирани паралелки"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Грешки при увезувањето на датотеката"
+
+msgid "ServiceActivated"
+msgstr "Сервисот е активиран"
+
+msgid "ActivateExtension"
+msgstr "Активирај го сервисот"
+
+msgid "InvalidExtension"
+msgstr "Неисправна екстензија"
+
+msgid "VersionCheckExplanation"
+msgstr "За да биде овозможено автоматско проверување на верзијата, регистрирајте се на кампусот на chamilo.com. Информацијата добиена со кликање на ова кошче е само за внатрешна употреба. Собраните податоци ќе бидат јавно достапни (вкупен број на кампуси, вкупен број на chamilo курсеви, вкупен број на chamilo курсисти, ...) (видете <a href=\"видете http://www.chamilo.org/stats/\">видете http://www.chamilo.org/stats/</a>. Кога се регистрирате, исто така се прави список на мрежата (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>. Ако не саката да се појавите на тој список морате да ја штиклирате чек-кутијата подолу. Регистрацијата е колку што е можно наједноставна. Само морате на кликнете на ова копче: <br />"
+
+msgid "AfterApproval"
+msgstr "После одобрувањето"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Овозможен приказ на курсисти"
+
+msgid "StudentViewEnabledComment"
+msgstr "Овозможува приказ на курсистот, што му допушта на учителот или на управувачот да го погледне курсот онака како што би го видел курсистот."
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Времето ограничено на КојЕАктивен"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Ова временско ограничување определува колку секунди после неговата последна акција, корисникот  ќе биде третиран за *активен*"
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Примери за материјали при креирање на курс"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Автоматски креира примери за материјали кога се креира нов курс"
+
+msgid "AccountValidDurationTitle"
+msgstr "Валидност на досието"
+
+msgid "AccountValidDurationComment"
+msgstr "Корисничкото досие е валидно олку денови после креирањето"
+
+msgid "UseSessionModeTitle"
+msgstr "Користи мод на сесија"
+
+msgid "UseSessionModeComment"
+msgstr "Сесиите даваат различни начини на оперирање со курсеви, каде курсот има креатор, обучувач и курсисти. Секој обучувач дава инструкции одредено време, кое се нарекува *сесија*, на едно множесто курсисти."
+
+msgid "HomepageViewActivity"
+msgstr "Приказ на активностите"
+
+msgid "HomepageView2column"
+msgstr "Приказ во две колони"
+
+msgid "HomepageView3column"
+msgstr "Приказ во три колони"
+
+msgid "AllowUserHeadings"
+msgstr "Допушти заглавија на корисникот"
+
+msgid "IconsOnly"
+msgstr "Само икони"
+
+msgid "TextOnly"
+msgstr "Само текст"
+
+msgid "IconsText"
+msgstr "Икони и текст"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Овозможи ја алатката за вовед"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Овозможи воведи на почетката страна од секоја алатка"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Ситници од почетната страна на курсот"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "Ситниците во хоризонталниопт систем за навигација обично се лево горе на Вашата страна. Преку оваа опција избирате што сакате да се појавува во ситниците на почетната страна на курсот."
+
+msgid "Comment"
+msgstr "Коментар"
+
+msgid "Version"
+msgstr "Верзија"
+
+msgid "LoginPageMainArea"
+msgstr "Главна област на страната за најавување"
+
+msgid "LoginPageMenu"
+msgstr "Мени на страната за најавување"
+
+msgid "CampusHomepageMainArea"
+msgstr "Главна област на почетната страна на Кампусот"
+
+msgid "CampusHomepageMenu"
+msgstr "Мени на почетната страна на Кампусот"
+
+msgid "MyCoursesMainArea"
+msgstr "Главна област на курсевите"
+
+msgid "MyCoursesMenu"
+msgstr "Мени на курсевите"
+
+msgid "Header"
+msgstr "Заглавие"
+
+msgid "Footer"
+msgstr "Подножје"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "Јавни страни усогласени со WAI"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Web Accessibility Initiative) е иницијатива да се направи вебот попристапен. Селектирајќи ја оваа опција, јавните страни на Chamilo ќе станат попристапни. Тоа исто така значи дека некоја содржина на јавните страни на порталот може да се појават различно."
+
+msgid "VersionCheck"
+msgstr "Проверка на верзијата"
+
+msgid "Active"
+msgstr "Активен"
+
+msgid "Inactive"
+msgstr "Неактивен"
+
+msgid "SessionOverview"
+msgstr "Краток преглед на сесијата"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Запиши го корисникот ако веќе не е запишан"
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Отпиши го корисникот ако запишувањето не е во датотека"
+
+msgid "DeleteSelectedSessions"
+msgstr "Избриши ја селектираната сесија"
+
+msgid "CourseListInSession"
+msgstr "Список на курсот во оваа сесија"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Отпиши ги селектираните курсеви од оваа сесија"
+
+msgid "NbUsers"
+msgstr "Корисници"
+
+msgid "SubscribeUsersToSession"
+msgstr "Запиши ги корисниците на оваа сесија"
+
+msgid "UserListInPlatform"
+msgstr "Список на корисници на платфорната"
+
+msgid "UserListInSession"
+msgstr "Список на корисници запишани во оваа сесија"
+
+msgid "CourseListInPlatform"
+msgstr "Список на курсот на платформата"
+
+msgid "Host"
+msgstr "комп-домаќин"
+
+msgid "UserOnHost"
+msgstr "Корисничко_име"
+
+msgid "FtpPassword"
+msgstr "FTP лозинка"
+
+msgid "PathToLzx"
+msgstr "Патека до LZX датотеките"
+
+msgid "WCAGContent"
+msgstr "Содржина"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Запиши курсеви на оваа сесија"
+
+msgid "DateStartSession"
+msgstr "Почетен датум на сесијата"
+
+msgid "DateEndSession"
+msgstr "Краен датум на сесијата"
+
+msgid "EditSession"
+msgstr "Уреди ја оваа сесија"
+
+msgid "VideoConferenceUrl"
+msgstr "Патека до конференција во живо"
+
+msgid "VideoClassroomUrl"
+msgstr "Патека до училницата за конференција во живо"
+
+msgid "ReconfigureExtension"
+msgstr "Реконфигурирај екстензија"
+
+msgid "ServiceReconfigured"
+msgstr "Сервисот е реконфигуриран"
+
+msgid "ChooseNewsLanguage"
+msgstr "Избери јазик за вести"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "Вкупно време поминато на курсот"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Оваа опција се користи за да се пресмета во реално време, времето кое корисникот го поминал на курсот. Вредноста во полето е интервал во секунди. За деактивирање на оваа опција, остави ја поставената вредност 0 во полето."
+
+msgid "EditLink"
+msgstr "Уреди врска"
+
+msgid "FinishSessionCreation"
+msgstr "Заврши креирање на сесија"
+
+msgid "SessionNameAlreadyExists"
+msgstr "Името на сесијата ќе постои извесно време"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "Не се креирани паралелки"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Полето треба да е бројчано"
+
+msgid "UserLocked"
+msgstr "Корисникот е заклучен"
+
+msgid "UserUnlocked"
+msgstr "Корисникот е отклучен"
+
+msgid "CannotDeleteUser"
+msgstr "Не може да го избришете овој корисник"
+
+msgid "SelectedUsersDeleted"
+msgstr "Селектираните корицници се избришани"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Некои корисници не се избришани"
+
+msgid "ExternalAuthentication"
+msgstr "Надворешна проверка на автентичноста"
+
+msgid "RegistrationDate"
+msgstr "Датум на регистрирање"
+
+msgid "UserUpdated"
+msgstr "Корисникот е ажуриран"
+
+msgid "HomePageFilesNotReadable"
+msgstr "Датотеките од почетната страна не може да бидат прочитани"
+
+msgid "Choose"
+msgstr "Избери"
+
+msgid "ModifySessionCourse"
+msgstr "Промени ја сесијата на курсот"
+
+msgid "CourseSessionList"
+msgstr "Список на курсеви од сесијата"
+
+msgid "SelectACoach"
+msgstr "Избери обучувач"
+
+msgid "UserNameUsedTwice"
+msgstr "Корисничкото_име е употребено двапати"
+
+msgid "UserNameNotAvailable"
+msgstr "Ова корисничко_име не е достапно"
+
+msgid "UserNameTooLong"
+msgstr "Ова корисничко_име е предолго"
+
+msgid "WrongStatus"
+msgstr "Статусот не постои"
+
+msgid "ClassNameNotAvailable"
+msgstr "Ова име_на_паралелката не е достапно"
+
+msgid "FileImported"
+msgstr "Датотеката е увезена"
+
+msgid "WhichSessionToExport"
+msgstr "Избери ја сесијата за извоз"
+
+msgid "AllSessions"
+msgstr "Сите сесии"
+
+msgid "CodeDoesNotExists"
+msgstr "Оваа шифра не постои"
+
+msgid "UnknownUser"
+msgstr "Непознат корисник"
+
+msgid "UnknownStatus"
+msgstr "Непознат статус"
+
+msgid "SessionDeleted"
+msgstr "Оваа сесија била избришана"
+
+msgid "CourseDoesNotExist"
+msgstr "Овој курс не постои"
+
+msgid "UserDoesNotExist"
+msgstr "Овој корисник не постои"
+
+msgid "ButProblemsOccured"
+msgstr "но проблеми се случиле"
+
+msgid "UsernameTooLongWasCut"
+msgstr "Ова корисничко_име беше исечено"
+
+msgid "NoInputFile"
+msgstr "Ниедна датотека не беше испратена"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "Статусот курсист му бил доделен на"
+
+msgid "WrongDate"
+msgstr "Погрешен формат на датум (гггг-мм-дд)"
+
+msgid "SlideSize"
+msgstr "Големина на слајдовите"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Превентивна заштита од плагијат"
+
+msgid "CourseTeachers"
+msgstr "Учители на курсот"
+
+msgid "XMLNotValid"
+msgstr "XML документот не е валиден"
+
+msgid "AllowEmailEditorTitle"
+msgstr "Активен уредувач на електронска пошта"
+
+msgid "AllowEmailEditorComment"
+msgstr "Ако оваа опција е активирана, со кликање на e-mail ќе се отвори активниот уредувач на електронска пошта"
+
+msgid "AddCSVHeader"
+msgstr "Дали да се додаде ред за CSV заглавие?"
+
+msgid "YesAddCSVHeader"
+msgstr "Да, додај CSV  заглавие<br /> Овој ред ги дефинира полињата и е неопходен кога сакате да ја увезете датотеката во друг кампус на Chamilo"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Прикажи ги јазиците на курсот"
+
+msgid "name"
+msgstr "Име"
+
+msgid "Security"
+msgstr "Безбедност"
+
+msgid "UploadExtensionsListType"
+msgstr "Вид на филтрирање на качените документи"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "Или сакате да користите филтрирање со црн_список или со бел_список. Видете го описот подолу за повеќе детали."
+
+msgid "Blacklist"
+msgstr "Црн_список"
+
+msgid "Whitelist"
+msgstr "Бел_список"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "Црн_список - поставки"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "Бел_список - поставки"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "Црн_список се користи за филтрирање на екстензии на датотеки за отстранување (или преименување) на било која датотека со екстензија која фигурира во црниот_список подолу. Екстензијата треба да фигурира без точка (.) и одделена со точка-запирка (;) како на пример: exe;com;bat;scr;php. Датотеките без екстензија се прифаќаат. Големи-мали букви не е важно."
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "Бел_список се користи за филтрирање на екстензии на датотеки за отстранување (или преименување) на било која датотека чија екстензија *НЕ* фигурира во белиот_список подолу. Тоа дава побезбеден, но порестриктивен приод кон филтрирањето. Екстензиите треба да фигурираат без точка (.) и одделени со точка-запирка (;) како на пример: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw . Датотеки без екстензија се прифаќаат. Големи-мали букви не е важно."
+
+msgid "UploadExtensionsSkip"
+msgstr "Однесување на филтрирањето (прескокни/преименувај)"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "Ако одберете прескокни, датотеките филтрирани низ црниот_список или белиот_список нема да бидат качени на системот. Ако одберете да ги преименувате, нивните екстензии ќе бидат заменети со оние дефинирани во поставките за заменување. Внимавајте, преименувањето всушност не Ве заштитува и може да предизвика колизија во имињата ако постојат повеќе датотеки со исти имиња, но различни екстензии."
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "Екстензија на заменувањето"
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "Внеете екстензиј што сакате да се користи при замената на опасни екстензии со филтер. Само потребното, ако имате селектирано филтер за замена."
+
+msgid "Remove"
+msgstr "Отстрани"
+
+msgid "Rename"
+msgstr "Преименувај"
+
+msgid "EphorusLeadersInAntiPlagiarism"
+msgstr "<STRONG>Лидери во <BR>анти плагијаторство </STRONG>"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "Кликнете овде за повеќе информации и цени"
+

@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "mauk\'a simiq t\'ijrachaynin"
+
+msgid "langMdCallingTool"
+msgstr "Qelqa khipukuna"
+
+msgid "langTool"
+msgstr "Qelqa khipuq metadato nisqan"
+
+msgid "langNotInDB"
+msgstr "manan kanchu waskhanapaq kay mita waskhanapaq"
+
+msgid "langManifestSyntax"
+msgstr "(pantay qelqa wayaqa manifest nisqapi...)"
+
+msgid "langEmptyManifest"
+msgstr "(wayaqa  manifest nisqa ch\'usaq kashan...)"
+
+msgid "langNoManifest"
+msgstr "(manan kanchu wayaqa  manifest nisqa...)"
+
+msgid "langNotFolder"
+msgstr "mana atikunqachu, mana wayaqachu..."
+
+msgid "langUploadHtt"
+msgstr "Apachiy HTT khipu"
+
+msgid "langHttFileNotFound"
+msgstr "Musuq HTT khipuqa manan atikunchu kichakuyta (ichapas ch\'usaq kashan, sinchi hatunpas)"
+
+msgid "langHttOk"
+msgstr "Musuq HTT khipuqa apachikunña"
+
+msgid "langHttNotOk"
+msgstr "HTT khipuqa manan atikunchu apachikuyta"
+
+msgid "langRemoveHtt"
+msgstr "Pichay HTT khipu"
+
+msgid "langHttRmvOk"
+msgstr "HTT khipuqa pichachisqaña"
+
+msgid "langHttRmvNotOk"
+msgstr "HTT khipuqa manan atikunchu pichakuyta"
+
+msgid "langImport"
+msgstr "Apachimuy"
+
+msgid "langRemove"
+msgstr "Pichay metadatos (MDE) nisqaq haykunninta"
+
+msgid "langAllRemovedFor"
+msgstr "Llipin haykuqkunaqa hoqochinkunkuña mitamantaqa"
+
+msgid "langIndex"
+msgstr "Simikunata qhawarichiq"
+
+msgid "langTotalMDEs"
+msgstr "Metadatos (MD) nisqa waskhanakunapaq llipin haykuqnin"
+
+msgid "langMainMD"
+msgstr "Kichay Entrada de Metadatos (MDE) nisqamanta raphi qallariyninta"
+
+msgid "langLines"
+msgstr "seq\'ekuna"
+
+msgid "langPlay"
+msgstr "Purichiy index.php nisqata"
+
+msgid "langNonePossible"
+msgstr "Manapunin ima ruwaypas atikunchu metadatos (MD) patapiqa"
+
+msgid "langOrElse"
+msgstr "Ajllay waskhanamanta hoq mitata"
+
+msgid "langWorkWith"
+msgstr "Llank\'ay SCORM wayaqawan"
+
+msgid "langSDI"
+msgstr "... Wayaqa SCORM nisqa SD-id nisqawan (rak\'iy manifest nisqata utaq ch\'usaqta saqeruy)"
+
+msgid "langRoot"
+msgstr "saphi"
+
+msgid "langSplitData"
+msgstr "Rak\'iy manifest nisqata, hinallataq #MDe nisqatapa, sichus mayqenkuna:"
+
+msgid "langMffNotOk"
+msgstr "Manifest khipuqa manan hoqman t\'ijrapakuyqa atikunraqchu"
+
+msgid "langMffOk"
+msgstr "Manifest khipuqa hoqman t\'ijrapachisqaña"
+
+msgid "langMffFileNotFound"
+msgstr "Musuq khipu manifest manan atikunchu kichakuyta (ichapas ch\'usaq kashan, sinchi hatunpas)"
+
+msgid "langUploadMff"
+msgstr "Hoqman t\'ijrapay manifest khiputa"
+

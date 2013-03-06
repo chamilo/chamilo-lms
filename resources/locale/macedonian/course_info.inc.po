@@ -1,0 +1,282 @@
+msgid "ModifInfo"
+msgstr "Поставки на курсот"
+
+msgid "langModifDone"
+msgstr "Информацијата беше изменета"
+
+msgid "langDelCourse"
+msgstr "Бришење на целиот простор на курсот"
+
+msgid "langProfessors"
+msgstr "Учители"
+
+msgid "langFaculty"
+msgstr "Категорија"
+
+msgid "langConfidentiality"
+msgstr "Доверливост"
+
+msgid "langPublic"
+msgstr "Јавен пристап од почетната страница на порталот дури и без пријавување"
+
+msgid "langUnsubscription"
+msgstr "Одјава"
+
+msgid "langPrivOpen"
+msgstr "Приватен пристап, отворено регистрирање"
+
+msgid "langPrivate"
+msgstr "Приватен пристап (страната е достапна само за луѓето од корисничкиот список)"
+
+msgid "langForbidden"
+msgstr "Не е допуштено"
+
+msgid "CourseAccessConfigTip"
+msgstr "Вашиот курс е поставен како јавен. Но може да го дефинирате нивото на доверливост погоре."
+
+msgid "langOpenToTheWorld"
+msgstr "Отвори - пристапот е допуштен на целиот свет"
+
+msgid "OpenToThePlatform"
+msgstr "Отвори - пристап допуштен за корисници регистрирани на платформата"
+
+msgid "langOpenToThePlatform"
+msgstr "Отворено - пристапот е допуштен за регистрирани корисници на платформата"
+
+msgid "langTipLang"
+msgstr "Овој јазик ќе биде валиден за секој посетител на веб страницата од вашиот курс"
+
+msgid "langVid"
+msgstr "Видео"
+
+msgid "langWork"
+msgstr "Прилози"
+
+msgid "langProgramMenu"
+msgstr "Програма на курсот"
+
+msgid "langAnnouncement"
+msgstr "Известувања"
+
+msgid "langExercise"
+msgstr "Тестови"
+
+msgid "langStats"
+msgstr "Статистики"
+
+msgid "langUplPage"
+msgstr "Вчитај ја страницата и поврзи со почетната страница"
+
+msgid "langLinkSite"
+msgstr "Додај врска за страницата на почетната страница"
+
+msgid "langCourse"
+msgstr "Област"
+
+msgid "langHasDel"
+msgstr "Ќе биде избришано"
+
+msgid "langBackHome"
+msgstr "Враќање кон почетната страница"
+
+msgid "langByDel"
+msgstr "Бришењето на оваа област засекогаш ќе ги избрише сите елементи (документи, врски...) кои ги содржи и ќе ги одјави сите членови од оваа област (но, нив нема да ги отстрани од другите простори). Оваа постапка, исто така, ќе ги избрише сите виртуелни курсови поврзани од овој курс. <p>Навистина ли сакате да ја избришете областа на овој курс?"
+
+msgid "langY"
+msgstr "ДА"
+
+msgid "langN"
+msgstr "НЕ"
+
+msgid "langDepartmentUrl"
+msgstr "URL оддел"
+
+msgid "langDepartmentUrlName"
+msgstr "Оддел"
+
+msgid "langBackupCourse"
+msgstr "Архивирање на областа на курсот"
+
+msgid "langModifGroups"
+msgstr "Групи"
+
+msgid "langProfessor"
+msgstr "Учител"
+
+msgid "langGroups"
+msgstr "Групи"
+
+msgid "langDescriptionCours"
+msgstr "Опис на курсот"
+
+msgid "langArchiveCourse"
+msgstr "Резервна копија од курсот"
+
+msgid "langRestoreCourse"
+msgstr "Обновување на курсот од неговата резервна копија"
+
+msgid "langRestore"
+msgstr "Обновување"
+
+msgid "langCreatedIn"
+msgstr "создадено во"
+
+msgid "langCreateMissingDirectories"
+msgstr "Создавање на директориумите кои недостасуваат"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Копии на датотеките од курсовите"
+
+msgid "langDisk_free_space"
+msgstr "Слободен простор на дискот"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Правење на резервни копии од датотеките"
+
+msgid "langFileCopied"
+msgstr "датотеката е копирана"
+
+msgid "langArchiveLocation"
+msgstr "Локација на архивата"
+
+msgid "langSizeOf"
+msgstr "Големина на"
+
+msgid "langArchiveName"
+msgstr "Име на архивата"
+
+msgid "langBackupSuccesfull"
+msgstr "Успешно се направени резервните копии"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Правење на резервни копии од курсовите во главната база на податоци за"
+
+msgid "langBUUsersInMainBase"
+msgstr "Правење на резервни копии од податоците на корисникот во главната база на податоци за"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Правење на резервни копии од објавените соопштенија во главната база на податоци за"
+
+msgid "langBackupOfDataBase"
+msgstr "Резервна копија од базата на податоци"
+
+msgid "langCreationDate"
+msgstr "Создадено"
+
+msgid "langExpirationDate"
+msgstr "Датум на истекување на рокот"
+
+msgid "langPostPone"
+msgstr "Одложување"
+
+msgid "langLastEdit"
+msgstr "Последно уредување"
+
+msgid "langLastVisit"
+msgstr "Последна посета"
+
+msgid "langSubscription"
+msgstr "Пријава"
+
+msgid "langCourseAccess"
+msgstr "Пристап до курсот"
+
+msgid "langConfirmBackup"
+msgstr "Сакате ли навистина да направите резервна копија од областа на курсот?"
+
+msgid "langCreateSite"
+msgstr "Создај област на курсот"
+
+msgid "langRestoreDescription"
+msgstr "Курсот е архивиран во некоја од датотеките кои можете да ги изберете во просторот подолу.<br><br> Еднаш кликнете на \"Restore\", архивираните датотеки ќе бидат декомпресирани (распакувани) и курсот ќе биде повторно креиран"
+
+msgid "langRestoreNotice"
+msgstr "Оваа листа од наредби сеуште не овозможува автоматско обновување  на корисниците, но податоците зачувани во \"users.csv\" се доволни за да може управувачот да ги обнови рачно"
+
+msgid "langAvailableArchives"
+msgstr "Листа на достапни зачувани датотеки"
+
+msgid "langNoArchive"
+msgstr "Не е избрана ниту една од зачуваните датотеки"
+
+msgid "langArchiveNotFound"
+msgstr "Не се пронајдени зачувани датотеки"
+
+msgid "langArchiveUncompressed"
+msgstr "Архивираните датотеки ќе бидат декомпримирани (распакувани) и инсталирани"
+
+msgid "langCsvPutIntoDocTool"
+msgstr "TДатотеката \"users.csv\" е ставена во алатката Документи."
+
+msgid "langBackH"
+msgstr "назад до почетната страна"
+
+msgid "langOtherCategory"
+msgstr "Друга категорија"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "На корисниците им е допуштено да се отпишуваат од овој курс"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "На корисниците НЕ им е допуштено да се отпишуваат одо овој курс."
+
+msgid "langCourseVisibilityClosed"
+msgstr "Комплетно затворен; курсот е достапен само за управувачот на курсот."
+
+msgid "CourseVisibilityClosed"
+msgstr "Затвоено - до курсот имаат пристап само управувачот и помошниците."
+
+msgid "CourseVisibilityModified"
+msgstr "Изменето (повеќе детални поставки се подесени преку системот за права на улогите)"
+
+msgid "WorkEmailAlert"
+msgstr "Предупредување преку e-mail."
+
+msgid "WorkEmailAlertActivate"
+msgstr "Активирај предупредување преку e-mail."
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Оневозможи предупредување преку e-mail."
+
+msgid "DropboxEmailAlert"
+msgstr "Предупредување преку e-mail за добиена порака преку алатката Размена на датотеки и пораки."
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Активирај предупредување преку e-mail за порака во алатката Размена на датотеки и пораки."
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Оневозможи предупредување преку e-mail за добиена порака во алатката Размена на датотеки и пораки."
+
+msgid "AllowUserEditAgenda"
+msgstr "Допушти им на корисниците да го уредуваат распоредот на курсот."
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Активирај ја опцијата за уредување на распоредот на курсот од самите корисници"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Оневозможи им на корсиниците уредување на распоредот на курсот"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Допушти им на корисниците да уредуваат известувања за курсот"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Овозможи уредување од самите корисници"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Оневозможи уредување од самите корисници"
+
+msgid "OrInTime"
+msgstr "Или во"
+
+msgid "CourseRegistrationPassword"
+msgstr "Лозинка за регистрирање на курсот"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Кликни на оваа врска за да елиминираш секаква трага од курсот на серверот.<br><br>Оваа опција треба да се применува крајно претпазливо!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Chamilo ја прифаќа можноста да се направи дупликат на целиот или дел од еден курс со друг, кој почетно може да е празен.<br><br>Единствен предуслов за тоа е курсот да содржи некои документи, реклами, форуми ... и вториот курс да не содржи елементи на првиот!"
+
+msgid "DescriptionRecycleCourse"
+msgstr "Оваа алатката го празни курсот од селектрианите елементи или од сите елементи што ги содржи. Таа ги бриши документите, форумите, врските... Оваа процедура може да се примени на крајот од еден дел или целата академска година. Се разбира, пред да \"рециклирате\", би се погрижиле за целосно снимање на Вашиот курс."
+

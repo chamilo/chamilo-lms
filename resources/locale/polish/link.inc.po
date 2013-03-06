@@ -1,0 +1,124 @@
+msgid "LinkMoved"
+msgstr "Ten link został przeunięty"
+
+msgid "langLinkName"
+msgstr "Nazwa łącza(link\'a)"
+
+msgid "langLinkAdd"
+msgstr "Dodaj odnośnik"
+
+msgid "langLinkAdded"
+msgstr "Odnośnik został dodany"
+
+msgid "langLinkMod"
+msgstr "Modyfikuj odnośnik"
+
+msgid "langLinkModded"
+msgstr "Odnośnik został zmodyfikowany"
+
+msgid "langLinkDel"
+msgstr "Usuwanie odnośnika"
+
+msgid "langLinkDeleted"
+msgstr "Odnośnik został usunięty"
+
+msgid "langLinkDelconfirm"
+msgstr "Czy chcesz usunąć odnośnik?"
+
+msgid "langAllLinksDel"
+msgstr "Usunięcie całej listy odnośników w kategorii"
+
+msgid "langCategoryName"
+msgstr "Nazwa kategorii"
+
+msgid "langCategoryAdd"
+msgstr "Dodaj kategorię"
+
+msgid "langCategoryAdded"
+msgstr "Kategoria została dodana"
+
+msgid "langCategoryModded"
+msgstr "Kategoria została zmodyfikowana"
+
+msgid "langCategoryDel"
+msgstr "Usuwanie kategorii"
+
+msgid "langCategoryDeleted"
+msgstr "Kategoria i wszystkie odnośniki zostały usunięte"
+
+msgid "langCategoryDelconfirm"
+msgstr "Po usunięciu kategorii wszystkie odnośniki zostana także usunięte.
+Czy na pewno chcesz usunąć kategorię i listę odnośników?"
+
+msgid "langAllCategoryDel"
+msgstr "Usunięcie wszystkich kategorii i odno¶ników"
+
+msgid "langGiveURL"
+msgstr "Podaj adres URL"
+
+msgid "langGiveCategoryName"
+msgstr "Podaj nazwę kategorii"
+
+msgid "langNoCategory"
+msgstr "Nie określono kategorii"
+
+msgid "showall"
+msgstr "Pokaż wszystkie"
+
+msgid "shownone"
+msgstr "Ukryj wszystkie"
+
+msgid "langListDeleted"
+msgstr "Lista została skasowana"
+
+msgid "langAddLink"
+msgstr "Dodaj odno¶nik"
+
+msgid "langDelList"
+msgstr "Usuń link"
+
+msgid "langModifyLink"
+msgstr "Modyfikuj link"
+
+msgid "langCsvImport"
+msgstr "Import CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "Importowany plik CSV nie może zostać otworzony (może być np. pusty lub za duży)"
+
+msgid "langCsvFileNoSeps"
+msgstr "Importowany plik CSV musi wykorzystywać \',\' lub \';\' jako separatora listy"
+
+msgid "langCsvFileNoURL"
+msgstr "Importowany plik CSV musi posiadać przynajmniej kolumny URL oraz tytuł"
+
+msgid "langCsvFileLine1"
+msgstr "... - linia 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "linia(-ie) nie zaimportowały linka (brak URL lub brak tytułu)"
+
+msgid "langCsvLinesOld"
+msgstr "nowe informacje do występującego(-cych) linka(-ów) dodane (te same URL i kategoria)"
+
+msgid "langCsvLinesNew"
+msgstr "nowy link(-i) stworzony(-ne)."
+
+msgid "langCsvExplain"
+msgstr "Plik powinien wyglądać następująco: <blockquote><pre> <b>URL</b>;kategoria;<b>title</b>;opis; <b>http://www.aaa.org/...</b>; Ważne linki;<b>Nazwa 1</b>;Opis 1;  <b>http://www.bbb.net/...</b>;;<b>Nazwa 2</b>;\"Opis 2\"; </pre></blockquote> Jeśli URL oraz kategoria jest taka sama jak URL i kategorie istniejących linków, wprowadzane są stosowne zmiany do jego tytułu i opisu. We wszystkich pozostałych przypadkach tworzony jest nowy link.<br><br> Wytłuszczenie = obowiązkowe. Pola mogą być w dowolnym porządku, nazwy mogą zawierać małe lub duże litery. Dodatkowe pola służą opisowi. Separatorem jest przecinek lub średnik. Wartości moga być podawane, ale nie w polu przeznaczonym na nazwę. Niektóre [b]znaki HTML[/b] mogą zostać użyte w polu opisu."
+
+msgid "langLinkUpdated"
+msgstr "Zmiany w linku zostały wprowadzone"
+
+msgid "langAll_Link_Deleted"
+msgstr "Link został usunięty"
+
+msgid "langOnHomepage"
+msgstr "Pokaż link na stronie domowej"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Pokaż ten link jako ikonę na domowej stronie kursu"
+
+msgid "General"
+msgstr "ogólne"
+

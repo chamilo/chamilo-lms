@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Recursu agregáu"
+
+msgid "LearningPath"
+msgstr "Itinerarios d\'aprendizaxe"
+
+msgid "LevelUp"
+msgstr "Subir un nivel"
+
+msgid "AddIt"
+msgstr "Amestar"
+
+msgid "MainCategory"
+msgstr "categoría d\'entamu"
+
+msgid "lang_delete_added_resources"
+msgstr "Esborrar los recursos amestaos"
+
+msgid "AddToLinks"
+msgstr "Amestar a los enllaces del cursu"
+
+msgid "DontAdd"
+msgstr "non amestar"
+
+msgid "lang_show_all_added_resources"
+msgstr "Amosar tolos recursos amestaos"
+
+msgid "ResourcesAdded"
+msgstr "Recursos amestaos"
+
+msgid "BackTo"
+msgstr "Volver a"
+
+msgid "ExternalResources"
+msgstr "Recursos esternos"
+
+msgid "CourseResources"
+msgstr "Recursos del cursu"
+
+msgid "ExternalLink"
+msgstr "Enllaz esternu"
+
+msgid "DropboxAdd"
+msgstr "Amestar la ferramienta Compartir Documentos a esti módulu."
+
+msgid "AddAssignmentPage"
+msgstr "Amestar la ferramienta Trabayos a esti módulu."
+
+msgid "Exercise"
+msgstr "Exercicios"
+
+msgid "Link"
+msgstr "Enllaz"
+
+msgid "AdValvas"
+msgstr "Amestar anuncia"
+
+msgid "Document"
+msgstr "Documentu"
+
+msgid "ShowDelete"
+msgstr "Amosar / Esborrar"
+
+msgid "IntroductionText"
+msgstr "Testu d\'entrada"
+
+msgid "CourseDescription"
+msgstr "Descripción del cursu"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "Users"
+msgstr "Usuarios"
+
+msgid "IntroductionTextAdd"
+msgstr "Amestar una páxina que tenga\'l testu d\'entrada a esti módulu."
+
+msgid "CourseDescriptionAdd"
+msgstr "Amestar una páxina que tenga la Descripción del cursu a esti módulu."
+
+msgid "GroupsAdd"
+msgstr "Amestar una páxina colos Grupos a esti módulu."
+
+msgid "UsersAdd"
+msgstr "Amestar una páxina de los Usuarios a esti módulu."
+
+msgid "ExportableCourseResources"
+msgstr "Recursos del cursu que se puen esportar en formatu SCORM"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Recursos rellacionaos. Nun se puen esportar en formatu SCORM."
+
+msgid "LinkTarget"
+msgstr "Destín del enllaz"
+
+msgid "SameWindow"
+msgstr "Na mesma ventana"
+
+msgid "NewWindow"
+msgstr "Nuna ventana nueva"
+
+msgid "StepDeleted1"
+msgstr "Esti"
+
+msgid "StepDeleted2"
+msgstr "l\'elementu esborróse nesta ferramienta."
+
+msgid "Modify"
+msgstr "modificar"
+
+msgid "Chapter"
+msgstr "Capítulu"
+
+msgid "NoAgendaItems"
+msgstr "Nun hai eventos"
+
+msgid "AgendaAdd"
+msgstr "Amestar un eventu"
+
+msgid "UserGroupFilter"
+msgstr "Filtrar por grupos/usuarios"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ordenar eventos (antigüos/recientes)"
+
+msgid "ShowCurrent"
+msgstr "Amosar tolos eventos del mes"
+
+msgid "ModifyCalendarItem"
+msgstr "Cambiar un eventu de l\'axenda"
+
+msgid "ItemTitle"
+msgstr "Títulu del eventu"
+
+msgid "Detail"
+msgstr "Detalles"
+
+msgid "EditSuccess"
+msgstr "L\'eventu modificóse"
+
+msgid "AddCalendarItem"
+msgstr "Amestar un eventu nuevu a la axenda"
+
+msgid "AddAnn"
+msgstr "Amestar una anuncia"
+
+msgid "ForumAddNewTopic"
+msgstr "Foru: amestar un tema"
+
+msgid "ForumEditTopic"
+msgstr "Foru: editar un tema"
+
+msgid "ExerciseAnswers"
+msgstr "Exerciciu: Retruques"
+
+msgid "ForumReply"
+msgstr "Foru: retrucar"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Ordenar eventos (recientes/antigüos)"
+

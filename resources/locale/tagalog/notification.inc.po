@@ -1,0 +1,12 @@
+msgid "LearnpathAdded"
+msgstr "Nadagdag ang kurso"
+
+msgid "DocumentInvisible"
+msgstr "Di nakikita ang dokumento"
+
+msgid "DocumentVisible"
+msgstr "Nakikita ang dokumento"
+
+msgid "CourseDescriptionAdded"
+msgstr "Nadagdag ang Paglalarawan ng Kurso"
+

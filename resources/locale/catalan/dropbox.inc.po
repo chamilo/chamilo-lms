@@ -1,0 +1,303 @@
+msgid "Upload"
+msgstr "Enviar"
+
+msgid "BackList"
+msgstr "Tornar a la seva bústia de compartició de fitxers"
+
+msgid "ShowFeedback"
+msgstr "Mostrar comentari"
+
+msgid "GiveFeedback"
+msgstr "afegir/modificar un comentari"
+
+msgid "JustUploadInSelect"
+msgstr "Transferir a mi mateix"
+
+msgid "MailingNothingFor"
+msgstr "Res per a"
+
+msgid "MailingFileNotRegistered"
+msgstr "(no registrat  per aquest curs)"
+
+msgid "MailingFileSentTo"
+msgstr "Enviat a"
+
+msgid "MailingFileIsFor"
+msgstr "És per a"
+
+msgid "MailingFileRecipDup"
+msgstr "Múltiples ususaris tenen"
+
+msgid "MailingFileRecipNotFound"
+msgstr "Cap estudiant amb"
+
+msgid "MailingFileNoRecip"
+msgstr "el nom no conté cap identificador de destinatari"
+
+msgid "MailingFileNoPostfix"
+msgstr "El nom no acaba amb"
+
+msgid "MailingFileNoPrefix"
+msgstr "El nom no comença amb"
+
+msgid "MailingFileFunny"
+msgstr "sense nom, o amb una extensió que no té entre 1 i 4 caràcters"
+
+msgid "MailingZipDups"
+msgstr "Zipfile que envia no ha de contenir arxius de duplicat - no s\'enviarà"
+
+msgid "MailingZipPhp"
+msgstr "El fitxer zip que envia no pot contenir fitxers php - en aquest darrer cas no s\'enviarà"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "El fitxer zip de correu és buit o es troba malmès"
+
+msgid "MailingWrongZipfile"
+msgstr "El fitxer de correu ha de ser un fitxer zip el nom del qual contingui les paraules STUDENTID oLOGINNAME"
+
+msgid "MailingConfirmSend"
+msgstr "Enviar el contingut de l\'arxiu a destinacions individuals?"
+
+msgid "MailingSend"
+msgstr "Enviar contingut d\'arxius"
+
+msgid "MailingNotYetSent"
+msgstr "No s\'han enviat encara els fitxers continguts en el correu"
+
+msgid "MailingInSelect"
+msgstr "---enviament per e-mail---"
+
+msgid "MailingAsUsername"
+msgstr "Enviar per e-mail"
+
+msgid "FileDeleted"
+msgstr "L\'arxiu seleccionat s\'ha tret de la seva bústia de compartició de fitxers."
+
+msgid "DocAdd"
+msgstr "El document ha estat afegit"
+
+msgid "Sender"
+msgstr "remitent"
+
+msgid "Author"
+msgstr "autor"
+
+msgid "FileSize"
+msgstr "Tamany de l\'arxiu"
+
+msgid "Title"
+msgstr "Títol"
+
+msgid "OverwriteFile"
+msgstr "Sobreescriure els arxius previament enviats?"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Unknown"
+msgstr "Desconegut"
+
+msgid "SentOn"
+msgstr "En"
+
+msgid "SentTo"
+msgstr "Enviat a"
+
+msgid "ConfirmDelete"
+msgstr "Això només esborrarà l\'entrda de la teva llista"
+
+msgid "SendTo"
+msgstr "Enviar a"
+
+msgid "Description"
+msgstr "Descripció del documet"
+
+msgid "UploadFile"
+msgstr "Carregar document"
+
+msgid "ErrorCreatingDir"
+msgstr "No s\'ha pogut crear el directori de compartició de fitxers. Si us plau contacteu amb l\'administrador del sistema"
+
+msgid "UploadError"
+msgstr "Errors en l\'enviament, verifiqueu la mida dels fitxers i els permisos del directori."
+
+msgid "TooBig"
+msgstr "No heu escollit cap arxiu o l\'arxiu és massa gran"
+
+msgid "NoFileSpecified"
+msgstr "No heu seleccionat cap arxiu per enviar"
+
+msgid "NoUserSelected"
+msgstr "Si us plau seleccioneu un usuari per a enviar-li l\'arxiu"
+
+msgid "BadFormData"
+msgstr "L\'enviament ha fracassat: dades del formulari errònies. Si us plau contacteu amb l\'administrador del sistema."
+
+msgid "GeneralError"
+msgstr "S\'ha produït un error. Si us plau, contacteu amb l\'administrador del sistema"
+
+msgid "Dropbox"
+msgstr "Compartició de fitxers"
+
+msgid "Help"
+msgstr "Ajuda"
+
+msgid "ReceivedFiles"
+msgstr "Fitxers rebuts"
+
+msgid "SentFiles"
+msgstr "Fitxers enviats"
+
+msgid "ReceivedTitle"
+msgstr "Títol"
+
+msgid "SentTitle"
+msgstr "Arxius enviats"
+
+msgid "Authors"
+msgstr "Autors"
+
+msgid "Size"
+msgstr "Mida"
+
+msgid "LastResent"
+msgstr "Darrer reenviament en"
+
+msgid "kB"
+msgstr "Kb"
+
+msgid "Root"
+msgstr "Arrel"
+
+msgid "UploadNewFile"
+msgstr "Enviar un nou fitxer"
+
+msgid "AreYouSureToDelete"
+msgstr "Esteu segur de voler esborrar"
+
+msgid "Feedback"
+msgstr "Comentari"
+
+msgid "CloseFeedback"
+msgstr "Tancar comentaris"
+
+msgid "AddNewFeedback"
+msgstr "Afegir un nou comentari"
+
+msgid "DropboxFeedbackStored"
+msgstr "El comentari ha estat guardat"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Tots els usuaris han esborrat aquest fitxer per tant ningú no veurà el comentari que esteu afegint."
+
+msgid "FeedbackError"
+msgstr "Error en el comentari"
+
+msgid "PleaseTypeText"
+msgstr "Escrigui el text"
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "No esteu autoritzat a descarregar aquest fitxer"
+
+msgid "CheckAtLeastOneFile"
+msgstr "Marqueu almenys un fitxer"
+
+msgid "ReceivedFileDeleted"
+msgstr "El fitxer rebut ha estat esborrat"
+
+msgid "SentFileDeleted"
+msgstr "El fitxer enviat ha estat esborrat"
+
+msgid "FilesMoved"
+msgstr "Els fitxers seleccionats han estat desplaçats"
+
+msgid "ReceivedFileMoved"
+msgstr "El fitxer rebut ha estat desplaçat"
+
+msgid "SentFileMoved"
+msgstr "El fitxer enviat ha estat desplaçat"
+
+msgid "NotMovedError"
+msgstr "El fitxer (o els fitxers...) no es pot moure."
+
+msgid "AddNewCategory"
+msgstr "Afegir una nova categoria"
+
+msgid "EditCategory"
+msgstr "Editar aquesta categoria"
+
+msgid "CategoryName"
+msgstr "Nom de la categoria"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Doni un nom a la categoria"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Aquest nom ja existeix, utilitzeu-ne un altre per la categoria"
+
+msgid "CurrentlySeeing"
+msgstr "Esteu visualitzant la/les categoria(es)"
+
+msgid "CategoryStored"
+msgstr "La categoria s\'ha enregistrat"
+
+msgid "CategoryModified"
+msgstr "La categoria s\'ha modificat"
+
+msgid "CategoryDeleted"
+msgstr "La categoria s\'ha esborrat"
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "El camp autor no pot ser buit"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Heu de seleccionar almenys un destinatari"
+
+msgid "DropboxFileTooBig"
+msgstr "El fitxer de la bústia és massa gran."
+
+msgid "TheFileIsNotUploaded"
+msgstr "El fitxer no ha estat enviat."
+
+msgid "FileUploadSucces"
+msgstr "El fitxer ha estat enviat satisfactòriament."
+
+msgid "MailingNonMailingError"
+msgstr "L\'enviament per correu no pot ser sobreescrit per enviaments que no siguin de correu iviceversa"
+
+msgid "MailingSelectNoOther"
+msgstr " L\'enviament per correu no es pot combinar amb uns altres destinatariss"
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "No es pot combinar l\'enviament a sí mateix amb altres destinataris"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Un nou fitxer ha estat enviat a la bústia de compartició de fitxers"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Un nou fitxer ha estat enviat a la bústia de compartició de fitxers del vostre curs"
+
+msgid "langAddEdit"
+msgstr "Afegir/Editar"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Aquest directori està vuit"
+
+msgid "AddComment"
+msgstr "Afegir comentari"
+
+msgid "SentCatgoryDeleted"
+msgstr "Aquesta carpeta ha estat eliminada"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "La carpeta ha estat eliminada"
+
+msgid "InvalideUserDetected"
+msgstr "S\'ha detectat un usuari invàlid."
+
+msgid "InvalideGroupDetected"
+msgstr "S\'ha detectat un grup invàlid."
+
+msgid "OverviewOfFilesInThisZip"
+msgstr "Panoràmica dels arxius d\'aquest Zip"
+

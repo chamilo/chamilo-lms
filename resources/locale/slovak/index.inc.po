@@ -1,0 +1,192 @@
+msgid "langInvalidId"
+msgstr "Prihlásenie zlyhalo - nesprávne meno alebo heslo."
+
+msgid "langWelcome"
+msgstr "Vitajte !"
+
+msgid "langPass"
+msgstr "Heslo"
+
+msgid "langEnter"
+msgstr "Späť na zoznam mojích kurzov"
+
+msgid "langReg"
+msgstr "Registrácia"
+
+msgid "langMenu"
+msgstr "Menu"
+
+msgid "langAdvises"
+msgstr "Oznamy"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Upozornenie :</b> Tento kurz neexistuje"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "pre prevzatie kurzu z Vášho starého portálu kliknite sem"
+
+msgid "langOtherCourses"
+msgstr "ostatné kurzy"
+
+msgid "langSupportForum"
+msgstr "Podporné fórum"
+
+msgid "langCategories"
+msgstr "kategórie"
+
+msgid "langBackToHomePage"
+msgstr "Prehľad kategórií"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Žiadny verejne dostupný kurz."
+
+msgid "langLostPassword"
+msgstr "Zabudnuté heslo"
+
+msgid "lang_edit_my_course_list"
+msgstr "Uprav zoznam mojích kurzov"
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langValvas"
+msgstr "Posledné oznamy"
+
+msgid "langUp"
+msgstr "Hore"
+
+msgid "langCatList"
+msgstr "Kategórie"
+
+msgid "langCourseList"
+msgstr "Zoznam kurzov"
+
+msgid "langHelptwo"
+msgstr "Pomoc"
+
+msgid "langRegAll"
+msgstr "zaregistrovať"
+
+msgid "EussMenu"
+msgstr "menu"
+
+msgid "Opinio"
+msgstr "Názor"
+
+msgid "Intranet"
+msgstr "Intranet"
+
+msgid "Englin"
+msgstr "anglicky"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Prihlásenie zlyhalo - ak nie ste registrovaný, môžete tak urobiť  pomocou <a href=claroline/auth/inscription.php>registračného formuláru</a>"
+
+msgid "langSubCat"
+msgstr "podkategórie"
+
+msgid "langMenuGeneral"
+msgstr "Hlavná ponuka"
+
+msgid "langMenuUser"
+msgstr "Moja ponuka"
+
+msgid "langMenuAdmin"
+msgstr "Administrátor platformy"
+
+msgid "langUsersOnLineList"
+msgstr "Zoznam pou��vateľov online"
+
+msgid "langTotalOnLine"
+msgstr "Celkovo online"
+
+msgid "langRefresh"
+msgstr "Obnoviť"
+
+msgid "langMe"
+msgstr "ja"
+
+msgid "langSystemAnnouncements"
+msgstr "Oznamy systému"
+
+msgid "langHelpMaj"
+msgstr "Pomoc"
+
+msgid "langNotRegistered"
+msgstr "Nezaregistrovaný"
+
+msgid "langAdmin"
+msgstr "Administrátor platformy"
+
+msgid "Login"
+msgstr "Prihlasovacie meno"
+
+msgid "langRegisterForCourse"
+msgstr "Prihlásiť sa na kurz"
+
+msgid "langUnregisterForCourse"
+msgstr "Odhlásiť sa z kurzu"
+
+msgid "langCombinedCourse"
+msgstr "Kombinovaný kurz"
+
+msgid "Platform"
+msgstr "Platforma"
+
+msgid "Refresh"
+msgstr "Obnoviť"
+
+msgid "TotalOnLine"
+msgstr "Súhrn používateľov online"
+
+msgid "langCourseClosed"
+msgstr "(kurz je momentálne zatvorený)"
+
+msgid "ViewOpenCourses"
+msgstr "Pozrieť otvorené kurzy"
+
+msgid "langCompetences"
+msgstr "Oprávnenia"
+
+msgid "langDiplomas"
+msgstr "Diplomy"
+
+msgid "langTeach"
+msgstr "Čo môže učiť"
+
+msgid "langProductions"
+msgstr "Práce"
+
+msgid "langSendChatRequest"
+msgstr "Poslať tejto osobe požiadavku na pokec"
+
+msgid "langRequestDenied"
+msgstr "Pozvanie bolo odmietnuté"
+
+msgid "UsageDatacreated"
+msgstr "Používateľské údaje vytvorené"
+
+msgid "SessionView"
+msgstr "Zobraziť kurzy zoradené podľa stretnutí"
+
+msgid "CourseView"
+msgstr "Zobraziť úplný zoznam kurzov"
+
+msgid "DropboxFileAdded"
+msgstr "Súbor na zdieľané dokumenty pridaný"
+
+msgid "NewMessageInForum"
+msgstr "Nová správa poslaná do fóra"
+
+msgid "FolderCreated"
+msgstr "Nová zložka vytvorená"
+
+msgid "LinkAdded"
+msgstr "Odkaz pridaný"
+
+msgid "AnnouncementAdded"
+msgstr "Oznam bol pridaný"
+
+msgid "AgendaAdded"
+msgstr "Položka agendy pridaná"
+

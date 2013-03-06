@@ -1,0 +1,597 @@
+msgid "PublishSurvey"
+msgstr "Reqsipachiy tapukuyta"
+
+msgid "CompareQuestions"
+msgstr "Kuskachay tapukunata"
+
+msgid "InformationUpdated"
+msgstr "Información actualizada"
+
+msgid "SurveyTitle"
+msgstr "Tapukuypa sutinchaynin"
+
+msgid "SurveyIntroduction"
+msgstr "Tapukuypa qallariynin"
+
+msgid "CreateNewSurvey"
+msgstr "Kamariy tapukuyta"
+
+msgid "Survey"
+msgstr "Tapukuy"
+
+msgid "SurveyTemplate"
+msgstr "Tapukuypa yupin"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "Ama hina kaychu, tapukuypa sutinchayninta qelqay"
+
+msgid "PleaseEnterValidDate"
+msgstr "Ama hina kaychu, churay allin ima pacha kasqata"
+
+msgid "NotPublished"
+msgstr "Manaraq churasqa"
+
+msgid "AdvancedReportDetails"
+msgstr "Askha willaqa atipachin haykuqmasita ajllanapaq hinalataq tapukuytapas hoq willaykunata allinta qhawarinapaq"
+
+msgid "AdvancedReport"
+msgstr "Askha willa"
+
+msgid "CompleteReportDetails"
+msgstr "Hunt\'a willayqa qhawarichin imaynan kan runakunaq tapukuykusqamanta, hinallataq alchakun csv nisqapi (Excelpaq)"
+
+msgid "CompleteReport"
+msgstr "Hunt\'a willa"
+
+msgid "OnlyThoseAddresses"
+msgstr "Tapukuyta kay ñeqllaman apachiy"
+
+msgid "BackToQuestions"
+msgstr "Kutiy tapukunaman"
+
+msgid "SelectWhichLanguage"
+msgstr "Ima simipi kamachiyta munanki tapukuyta, chayta ajllay"
+
+msgid "CreateInAnotherLanguage"
+msgstr "Kay tapukuyta kamariy hoq simipi"
+
+msgid "ExportInExcel"
+msgstr "Allchay Excel nisqapi"
+
+msgid "ComparativeResults"
+msgstr "Kuskachasqamanta tarisqakuna"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "Ajllay imakunaq kikinchayta munaspa"
+
+msgid "OrCopyPasteUrl"
+msgstr "Utaq kikinchaspa ratachiy waskhanata wanpunapi:"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "Hoq tapukuyta ruwanapaqqa clic-yay kaypi"
+
+msgid "SurveyNotShared"
+msgstr "Manaraq hoq tapukuypas t\'aqapasqachu"
+
+msgid "ViewSurvey"
+msgstr "Tapukuyta qhaway"
+
+msgid "SelectDisplayType"
+msgstr "Ajllay imayna qhawachikunanpaq:"
+
+msgid "Thanks"
+msgstr "Feedback nisqamanta willay"
+
+msgid "SurveyReporting"
+msgstr "Tapukuypa willan"
+
+msgid "NoSurveyAvailable"
+msgstr "Manan kanchu tapukuykuna"
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "ña reqsipachikushanña"
+
+msgid "CreateFromExistingSurvey"
+msgstr "Tapukuy ruwasqañamanta kamariy"
+
+msgid "Publish"
+msgstr "Tapukuyta reqsipachiy"
+
+msgid "SearchASurvey"
+msgstr "Maskhay hoq tapukuyta"
+
+msgid "CourseName"
+msgstr "Yachachinaq sutin"
+
+msgid "SurveysOfAllCourses"
+msgstr "Tapukuy(kuna) llapan yachachinamanta"
+
+msgid "PleaseSelectAChoice"
+msgstr "Ama hina kaychu, ajllay hujta"
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "Mana kanchu tapukuna base de datos nisqapi"
+
+msgid "UpdateQuestionType"
+msgstr "Kunanyachiy ima taputa:"
+
+msgid "AddAnotherQuestion"
+msgstr "Yapay hoq musuq taputa"
+
+msgid "IsShareSurvey"
+msgstr "Hoqkunawan t\'aqapakuy tapukuyta"
+
+msgid "Proceed"
+msgstr "Ruwallay"
+
+msgid "PleaseFillNumber"
+msgstr "Ama hina kaychu, haykuchiy yupanakunata llallipasqa yupanapaq."
+
+msgid "PleaseFillAllPoints"
+msgstr "Ama hina kaychu, churay markakunata hujmanta pisqakama 1-5"
+
+msgid "PleasFillAllAnswer"
+msgstr "Ama hina kaychu, qelqay llapan kutichikunawan kanchakunata."
+
+msgid "PleaseSelectFourTrue"
+msgstr "Ama hina kaychu, tawa cheqaq kutichillatapas ajllay."
+
+msgid "PleaseSelectFourDefault"
+msgstr "Ama hina kaychu, tawa kutichillatapas imayna kasqanmanta ajllay."
+
+msgid "PleaseFillDefaultText"
+msgstr "Ama hina kaychu, haykuchiy qelqata imayna kasqanmanta"
+
+msgid "ModifySurveyInformation"
+msgstr "Hoqmanta ruway tapukuypa willayninta"
+
+msgid "ViewQuestions"
+msgstr "Qhaway tapukunata"
+
+msgid "CreateSurvey"
+msgstr "Kamariy tapukuyta"
+
+msgid "FinishSurvey"
+msgstr "Tukuriy tapukuyta"
+
+msgid "QuestionsAdded"
+msgstr "Tapukunaqa yapachikusqaña"
+
+msgid "DeleteSurvey"
+msgstr "Pichay tapukuyta"
+
+msgid "SurveyCode"
+msgstr "Tapukuypa chinpun"
+
+msgid "SurveyList"
+msgstr "Tapukuykuna"
+
+msgid "SurveyAttached"
+msgstr "Tapukuy yapasqa"
+
+msgid "QuestionByType"
+msgstr "Ima niraqmanta tapukuna"
+
+msgid "SelectQuestionByType"
+msgstr "Ajllay ima niraqmanta hoq taputa"
+
+msgid "PleaseEnterAQuestion"
+msgstr "Ama hinakaychu, haykuchiy hoq taputa"
+
+msgid "NoOfQuestions"
+msgstr "Hayka tapukuykuna"
+
+msgid "Question"
+msgstr "Tapuy"
+
+msgid "ThisCodeAlradyExists"
+msgstr "Kay chinpuqa ña kashan"
+
+msgid "SaveAndExit"
+msgstr "Allchaspa lloqsiy"
+
+msgid "ViewAnswers"
+msgstr "Qhawariy kutichikuykunata"
+
+msgid "CreateExistingSurvey"
+msgstr "Tapukuy ruwasqañamanta kamariy"
+
+msgid "SurveyName"
+msgstr "Tapukuypa sutin"
+
+msgid "SurveySubTitle"
+msgstr "Tapukuypa sullka sutinchaynin"
+
+msgid "ShareSurvey"
+msgstr "T\'aqapay tapukuyta"
+
+msgid "SurveyThanks"
+msgstr "Añayukuykuna"
+
+msgid "EditSurvey"
+msgstr "Ruwapay tapukuyta"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "Utaq kutiruy llapan tapukuykuna qhawanaman"
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "Wataqqa mana allinchu. Ama hina kaychu hoqmanta kikinchaspa ratachiy."
+
+msgid "WrongInvitationCode"
+msgstr "Mink\'asqaq chinpun waqllisqa"
+
+msgid "SurveyFinished"
+msgstr "Tapukuyqa tukurunña."
+
+msgid "SurveyPreview"
+msgstr "Tapukuypa ñaupa qhawariy"
+
+msgid "InvallidSurvey"
+msgstr "Mana chaniyuq tapukuy"
+
+msgid "AddQuestion"
+msgstr "Yapay hoq taputa"
+
+msgid "EditQuestion"
+msgstr "Ruwapay taputa"
+
+msgid "TypeDoesNotExist"
+msgstr "Kay ima niraqqa manan kanchu"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "Tapuqa kamachisqaña"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Kunanqa yapawaq tapukunata"
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "Tapukuyqa kunanyachisqaña"
+
+msgid "QuestionAdded"
+msgstr "Tapuqa yapachikunñan."
+
+msgid "QuestionUpdated"
+msgstr "Tapuqa kunanyachikun."
+
+msgid "RemoveAnswer"
+msgstr "Qechuy imaymanata"
+
+msgid "AddAnswer"
+msgstr "Yapay imaymanata"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Qhawarichiy"
+
+msgid "AnswerOptions"
+msgstr "Kutichiymanta hokaqninkuna"
+
+msgid "YesNo"
+msgstr "Ari / Mana"
+
+msgid "MultipleResponse"
+msgstr "Askha kutichiy"
+
+msgid "Open"
+msgstr "Kichasqa kutichikuy"
+
+msgid "Dropdown"
+msgstr "Mast\'arikuq sinri"
+
+msgid "Pagebreak"
+msgstr "Raphiq tukuynin"
+
+msgid "QuestionNumber"
+msgstr "Hayka tapuy"
+
+msgid "NumberOfOptions"
+msgstr "Hayka imaymanakuna"
+
+msgid "SurveyInvitations"
+msgstr "Tapukuypa mink\'aykuna"
+
+msgid "InvitationCode"
+msgstr "Mik\'anaq chinpun"
+
+msgid "InvitationDate"
+msgstr "P\'unchay mink\'achina"
+
+msgid "Answered"
+msgstr "Kutichisqa"
+
+msgid "AdditonalUsersComment"
+msgstr "Mink\'akuwaq hoq haykuqmasikunata kay tapukuyta hunt\'achinankupaq. Chaypaqqa qelqay e-chakinkunata  kaykunawan t\'aqapasqa \',\'  utaq \';\' nisqakunawan"
+
+msgid "MailTitle"
+msgstr "E-chaskiq sutinchaynin"
+
+msgid "InvitationsSend"
+msgstr "wink\'aykuna apachisqa."
+
+msgid "SurveyDeleted"
+msgstr "Tapukuyqa wañuchikun."
+
+msgid "NoSurveysSelected"
+msgstr "Mana ajllankichu ni huj tapukuytapas."
+
+msgid "NumberOfQuestions"
+msgstr "Hayka tapukuna"
+
+msgid "Invited"
+msgstr "Mink\'asqa"
+
+msgid "SubmitQuestionFilter"
+msgstr "Suysuy"
+
+msgid "ResetQuestionFilter"
+msgstr "Suysunata utichiy"
+
+msgid "ExportCurrentReport"
+msgstr "Apachiy kunan kaq willata"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "Tapukuna ima kasqanmanta kutichiykunallawan churanaqa"
+
+msgid "SelectXAxis"
+msgstr "X kasqapi taputa ajllay"
+
+msgid "SelectYAxis"
+msgstr "Y kasqapi taputa ajllay"
+
+msgid "ComparativeReport"
+msgstr "Willa kikinchay"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "Llapan tapukuna qhawarichikunqaku hoq raphipi"
+
+msgid "SelectUser"
+msgstr "Haykuqmasi"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "Ajllay haykuqmasita, manqen tapukuyta hunt\'achisqata"
+
+msgid "userreport"
+msgstr "Haykuqmasiq willan"
+
+msgid "VisualRepresentation"
+msgstr "Wanki"
+
+msgid "AbsoluteTotal"
+msgstr "Lliw muyu"
+
+msgid "NextQuestion"
+msgstr "Hamuq tapu"
+
+msgid "PreviousQuestion"
+msgstr "Ñaupaq tapu"
+
+msgid "PeopleWhoAnswered"
+msgstr "Kay kutichita ajllaq runakuna"
+
+msgid "CourseUsers"
+msgstr "Yachachinamanta haykuqmasin"
+
+msgid "SurveyPublication"
+msgstr "Tapukuypa reqsipachikuynin"
+
+msgid "AdditonalUsers"
+msgstr "Haykuqmasikuna yapachasqaku"
+
+msgid "MailText"
+msgstr "E-chaskiq qelqan"
+
+msgid "UseLinkSyntax"
+msgstr "Haykuqmasikuna ajllasqaykiqa chaskinqaku huj e-chaskita wichaypi qelqasqaykiwan, hinallataq huj wataqtawan q\'apispa tapukuyta hunt\'achinankupaq.Sichus munanki kay waskaq churayta may qelqasqaykipi, chayqa churanki haqnata ** wataq **. Mana churanki kikin kasqanta chayqa wataqqa churakunqa e-chaskiq qelqa tukukuyninpi"
+
+msgid "DetailedReportByUser"
+msgstr "Sapanka haykuqmasimanta willay"
+
+msgid "DetailedReportByQuestion"
+msgstr "Sapanka tapumanta willay"
+
+msgid "ComparativeReportDetail"
+msgstr "Kay willapiqa iskay taputa kuskachawaq."
+
+msgid "CompleteReportDetail"
+msgstr "Kay willapiqa qhawanki kutichikuypa tantayta llapan haykuqmasikunamanta llapan tapuykunamantawan. Hinallataq kashanmi    hoq ajllapasqa tapuykunata qhawanapaq. Apachiwaq ima tarisqakunata CSV khipupi chaymanta yupanapi yupanankupaq."
+
+msgid "DetailedReportByUserDetail"
+msgstr "Kay willapiqa qhawawaq hoq haykuqmasiq llipin kutichikuyninta."
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "Kay willapiqa qhawakun sapanqa tapumanta miraynin. Qhawachikunpaqpas llanp\'u hamut\'aspalla yupaykunamanta wanki qhawachiqmanta ima."
+
+msgid "ReminderResendToAllUsers"
+msgstr "Apachiy llapan haykuqmasikuna ajllasqaman. Mana chayqa ajllay kay casilla nisqata, e-chaskitaqa haykuqmasikuna yapachisqaykillan chaskinqaku."
+
+msgid "Multiplechoice"
+msgstr "Askha ajllay"
+
+msgid "Score"
+msgstr "Puntuación"
+
+msgid "Shared"
+msgstr "T\'aqapasqa"
+
+msgid "Invite"
+msgstr "Mink\'asqakuna"
+
+msgid "MaximumScore"
+msgstr "Askha markana"
+
+msgid "ViewInvited"
+msgstr "Qhaway mink\'asqakunata"
+
+msgid "ViewAnswered"
+msgstr "Qhawariy kutichikuqkunata"
+
+msgid "ViewUnanswered"
+msgstr "Qhawariy runakuna manaraq kutichikusqakunata"
+
+msgid "DeleteSurveyQuestion"
+msgstr "Cheqaychu munanki kay tapuy pichakunanpaq ?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "Ña hunt\'achinki kay tapukuyta"
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "Q\'apiy kaypi tapukuya kutichinaykipaq"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "utaq kikinchaspa ratachiy kay url:"
+
+msgid "UnknowUser"
+msgstr "Mana reqsisqa haykuqmasi"
+
+msgid "MoveDown"
+msgstr "Kuyurichiy urayman"
+
+msgid "MoveUp"
+msgstr "Kuyurichiy wichayman"
+
+msgid "HaveAnswered"
+msgstr "kutichinkuña"
+
+msgid "WereInvited"
+msgstr "mink\'achikunkuñan"
+
+msgid "PagebreakNotFirst"
+msgstr "Raphiq t\'aqapaqqa manan qallariypi kanmanchu"
+
+msgid "PagebreakNotLast"
+msgstr "Raphi t\'aqayqa mana qepapi kanmanchu"
+
+msgid "SurveyNotAvailableAnymore"
+msgstr "Kay tapukuyqa manan kashanku ñawichanapaqqa. Ichaqa añayukuykiku munapakusqaykimanta."
+
+msgid "DuplicateSurvey"
+msgstr "Iskayachiy tapukuyta"
+
+msgid "EmptySurvey"
+msgstr "Tapukuyta pichay"
+
+msgid "SurveyEmptied"
+msgstr "Tapukuypa kutichiyninkunaqa pichachikunkun"
+
+msgid "SurveyNotAvailableYet"
+msgstr "Kay tapukuyqa manaq kashanchu hap\'ipanapaq. Chaymantaña malliwaq. Añay."
+
+msgid "PeopleAnswered"
+msgstr "Kutichiq runakuna"
+
+msgid "AnonymousSurveyCannotKnowWhoAnswered"
+msgstr "Kay tapukuyqa churakun ruwaqpa mana sutinwan. Manan rikuwaqchu pin kutichisqatapas."
+
+msgid "IllegalSurveyId"
+msgstr "Mana reqsisqa tapukuymanta reqsichiq"
+
+msgid "SurveyQuestionMoved"
+msgstr "Tapuqa kuyurichisqaña"
+
+msgid "IdenticalSurveycodeWarning"
+msgstr "Tapukupa chinpunqa kashanña. Kay tapukuy ichapas hoq simipi kasqanraykun. Haykuqmasikunaqa ajllanqaku hoq simikunamanta."
+
+msgid "ThisSurveyCodeSoonExistsInThisLanguage"
+msgstr "Kay tapukuypa chinpunqa kashanña kay simipi"
+
+msgid "SurveyUserAnswersHaveBeenRemovedSuccessfully"
+msgstr "Haykuqmasiq kutichiyninqa allintan pichakun"
+
+msgid "DeleteSurveyByUser"
+msgstr "Pichachiy kay tapukuypi haykuqmasi kutichisqanta"
+
+msgid "SelectType"
+msgstr "Ajllay ima niraqta"
+
+msgid "Conditional"
+msgstr "Imayna kanapaq"
+
+msgid "ParentSurvey"
+msgstr "Mama tapukuy"
+
+msgid "OneQuestionPerPage"
+msgstr "Huj tapuylla sapanqa raphipaq"
+
+msgid "ActivateShuffle"
+msgstr "Hap\'ichiy urachinapaq"
+
+msgid "ShowFormProfile"
+msgstr "Qhawarichiy runamanta ima formato kasqanpi"
+
+msgid "PersonalityQuestion"
+msgstr "Ruwapay taputa"
+
+msgid "YouNeedToCreateGroups"
+msgstr "Qanqa munashankipuni huñusqakuna kamayta"
+
+msgid "ManageGroups"
+msgstr "Huñusqakunata kamachiy"
+
+msgid "Create"
+msgstr "Kamay"
+
+msgid "GroupCreatedSuccessfully"
+msgstr "Huñukusqaqa allintan kamachikun"
+
+msgid "GroupNeedName"
+msgstr "Huñusqaqa sutita munan"
+
+msgid "Personality"
+msgstr "Runakikinyachiy"
+
+msgid "Condition"
+msgstr "Ima kay"
+
+msgid "Primary"
+msgstr "Huj ñeqe"
+
+msgid "Secondary"
+msgstr "Iskay ñeqe"
+
+msgid "CourseSettings"
+msgstr "Configuración de la lección"
+
+msgid "PleaseChooseACondition"
+msgstr "Ama hina kaychu ajllay ima kayta"
+
+msgid "ChooseDifferentCategories"
+msgstr "Ajllay hoq mitata"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "Normal"
+msgstr "Llanp\'u kay"
+
+msgid "NoLogOfDuration"
+msgstr "Ningún registro de duración"
+
+msgid "AutoInviteLink"
+msgstr "Haykuqmasikunaqa manan mink\'asqachu, kay wasqasqaman riwaq tapukuyta ruwanapaq:"
+
+msgid "CompleteTheSurveysQuestions"
+msgstr "Hunt\'achiy tapukunata tapukuyman"
+
+msgid "SurveysDeleted"
+msgstr "Tapukuykuna pichasqa"
+
+msgid "RemindUnanswered"
+msgstr "Yuyarichina mana kutichiq haykuqmasikunallapaq"
+
+msgid "ModifySurvey"
+msgstr "T\'ijrapay tapukuyta"
+
+msgid "CreateQuestionSurvey"
+msgstr "Kamay tapuyta"
+
+msgid "ModifyQuestionSurvey"
+msgstr "T\'ijrapay tapuyta"
+
+msgid "BackToSurvey"
+msgstr "Volver a la encuesta"
+
+msgid "UpdateInformation"
+msgstr "Actualización de información"
+
+msgid "PleaseFillSurvey"
+msgstr "Por favor, llene la encuesta"
+

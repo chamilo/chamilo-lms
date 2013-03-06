@@ -1,0 +1,774 @@
+msgid "NewForumCreated"
+msgstr "Das neue Forum wurde erstellt"
+
+msgid "NewThreadCreated"
+msgstr "Das neue Forum Thema wurde erstellt"
+
+msgid "AddHotpotatoes"
+msgstr "Hot Potatoes hinzufügen"
+
+msgid "HideAttemptView"
+msgstr "Anzeige der Versuche verstecken"
+
+msgid "ExtendAttemptView"
+msgstr "Anzeige der Versuche aktivieren"
+
+msgid "LearnPathAddedTitle"
+msgstr "Willkommen im Chamilo Kurs-Autoren Werkzeug!"
+
+msgid "BuildComment"
+msgstr "Fügen Sie Lernobjekte und Aktiviäten in Ihren Kurs ein"
+
+msgid "BasicOverviewComment"
+msgstr "Fügen Sie Audio-Kommentare hinzu und sortieren Sie Ihre Lernobjekte in der Inhaltsübersicht"
+
+msgid "DisplayComment"
+msgstr "Betrachten Sie den Kurs aus der Teilnehmer-Sicht"
+
+msgid "NewChapterComment"
+msgstr "Kapitel 1, Kapitel 2 oder Woche 1, Woche 2 ..."
+
+msgid "NewStepComment"
+msgstr "Fügen Sie Tests, Aktivitäten oder multimediale Inhalte hinzu"
+
+msgid "lang_learning_path"
+msgstr "Lernpfad"
+
+msgid "lang_learning_path_builder"
+msgstr "Lernpfad-Baukasten"
+
+msgid "lang_description"
+msgstr "Beschreibung"
+
+msgid "LearnpathTitle"
+msgstr "Titel"
+
+msgid "LearnpathPrerequisites"
+msgstr "Voraussetzungen"
+
+msgid "LearnpathMoveUp"
+msgstr "Nach oben schieben"
+
+msgid "LearnpathMoveDown"
+msgstr "Nach unten schieben"
+
+msgid "langThisItem"
+msgstr "dieses Element"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Titel & Beschreibung"
+
+msgid "LearnpathChangeOrder"
+msgstr "Reihenfolge verändern"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Voraussetzungen hinzufügen"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Titel & Beschreibung bearbeiten"
+
+msgid "lang_delete"
+msgstr "Löschen"
+
+msgid "lang_add_chapter"
+msgstr "Modul hinzufügen"
+
+msgid "langLearnpathMystatus"
+msgstr "Mein Status"
+
+msgid "langLearnpathCompstatus"
+msgstr "abgeschlossen"
+
+msgid "langLearnpathIncomplete"
+msgstr "unvollständig"
+
+msgid "langLearnpathPassed"
+msgstr "bestanden"
+
+msgid "langLearnpathFailed"
+msgstr "nicht bestanden"
+
+msgid "langLearnpathPrevious"
+msgstr "Zurück"
+
+msgid "langLearnpathNext"
+msgstr "Weiter"
+
+msgid "langLearnpathRestart"
+msgstr "Neu starten"
+
+msgid "langLearnpathThisStatus"
+msgstr "Dieser Schritt ist nun"
+
+msgid "langLearnpathToEnter"
+msgstr "Um weiterzukommen"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "müssen Sie zunächst erfüllen"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Schritt-Titel"
+
+msgid "langLearnpathStatus"
+msgstr "Status"
+
+msgid "langLearnpathScore"
+msgstr "Punktzahl"
+
+msgid "langLearnpathTime"
+msgstr "Zeit"
+
+msgid "langLearnpathVersion"
+msgstr "Version"
+
+msgid "langLearnpathRestarted"
+msgstr "Kein Schritt wurde vollständig abgearbeitet."
+
+msgid "langLearnpathNoNext"
+msgstr "Dies ist der letzte Schritt."
+
+msgid "langLearnpathNoPrev"
+msgstr "Dies ist der erste Schritt."
+
+msgid "LearnpathAddLearnpath"
+msgstr "Neuen Lernpfad erstellen"
+
+msgid "lang_learnpath_added"
+msgstr "Der neue Lernpfad wurde erstellt. Fahren Sie fort, indem Sie einzelne Module hinzufügen."
+
+msgid "LearnpathEditLearnpath"
+msgstr "Lernpfad bearbeiten"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "Lernpfad löschen"
+
+msgid "lang_learnpath_edited"
+msgstr "Lernpfad wurde geändert"
+
+msgid "lang_learnpath_deleted"
+msgstr "Lernpfad wurde gelöscht"
+
+msgid "LearnpathDoNotPublish"
+msgstr "nicht veröffentlichen"
+
+msgid "LearnpathPublish"
+msgstr "veröffentlichen"
+
+msgid "LearnpathNotPublished"
+msgstr "nicht veröffentlicht"
+
+msgid "LearnpathPublished"
+msgstr "veröffentlicht"
+
+msgid "lang_add_learnpath_module"
+msgstr "Neues Modul hinzufügen"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Neues Modul zu diesem Lernpfad hinzufügen"
+
+msgid "lang_learnpath_module_added"
+msgstr "Das Lernpfad-Modul wurde erstellt. Fahren sie fort, indem Sie einzelne Lern-Schritte hinzufügen."
+
+msgid "LearnpathEditModule"
+msgstr "Modul-Titel und -Beschreibung bearbeiten"
+
+msgid "LearnpathDeleteModule"
+msgstr "Modul löschen"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Die Bearbeitung des Lernpfad-Moduls wurde erfolgreich abgeschlossen."
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Das Lernpfad-Modul und alle Lern-Schritte wurden gelöscht."
+
+msgid "LearnpathNoChapters"
+msgstr "Es wurden noch keine Module hinzugefügt."
+
+msgid "LearnpathAddItem"
+msgstr "Schritte zu diesem Modul hinzufügen"
+
+msgid "LearnpathItemDeleted"
+msgstr "Der Lernpfad-Schritt wurde gelöscht"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "Bitte weisen Sie diese(n) Lernpfad-Schritt(e) einem Modul zu:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Zusätzl. Titel/Beschreibung des Schrittes bearbeiten"
+
+msgid "lang_add_prereq"
+msgstr "Voraussetzungen zu diesem Schritt hinzufügen/bearbeiten"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Schritt löschen"
+
+msgid "LearnpathItemEdited"
+msgstr "Der Lernpfad-Schritt wurde bearbeitet"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Wurde gelöscht!"
+
+msgid "lang_none"
+msgstr "KEIN"
+
+msgid "lang_forum_opened"
+msgstr "Das ausgewählte Forum wurde in einem neuen Fenster geöffnet."
+
+msgid "lang_link_opened"
+msgstr "Der gewählte Link wurde in einem neuen Fenster geöffnet."
+
+msgid "lang_short_help"
+msgstr "Nutzen Sie die entsprechenden Symbole, um Schritte, Titel/Beschreibung oder Voraussetzungen hinzuzufügen."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "Nicht alle Vorrausetzungen sind erfüllt. 
+Entweder haben Sie die schrittweise Reihenfolge nicht befolgt oder 
+es wurde die Mindestpunktzahl eines Tests nicht erreicht, die notwendig ist, diesen Schrift aufzurufen."
+
+msgid "lang_author"
+msgstr "Autor"
+
+msgid "lang_date"
+msgstr "Datum"
+
+msgid "langBasicOverview"
+msgstr "Aufbau"
+
+msgid "langAdvanced"
+msgstr "Authoring"
+
+msgid "langDisplay"
+msgstr "Vorschau"
+
+msgid "langNewChapter"
+msgstr "Neues Kapitel"
+
+msgid "langNewStep"
+msgstr "Neuer Schritt"
+
+msgid "langEditPrerequisites"
+msgstr "Vorbedingungen für Element bearbeiten"
+
+msgid "langTitleManipulateChapter"
+msgstr "Kapitel bearbeiten"
+
+msgid "langTitleManipulateModule"
+msgstr "Modul bearbeiten"
+
+msgid "langTitleManipulateDocument"
+msgstr "Dokument bearbeiten"
+
+msgid "langTitleManipulateLink"
+msgstr "Link bearbeiten"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Test-Struktur bearbeiten"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Ausarbeitung bearbeiten"
+
+msgid "langEnterDataNewChapter"
+msgstr "Die Daten für das neue Kapitel eingeben"
+
+msgid "langEnterDataNewModule"
+msgstr "Die Daten für das neue Modul eingeben"
+
+msgid "langCreateNewStep"
+msgstr "Neues Dokument erstellen"
+
+msgid "langNewDocument"
+msgstr "Dokument / Aktivität"
+
+msgid "langUseAnExistingResource"
+msgstr "oder eine bestehende Quelle benutzen:"
+
+msgid "langParent"
+msgstr "Eltern"
+
+msgid "langPosition"
+msgstr "Position"
+
+msgid "langNewChapterCreated"
+msgstr "Das neue Kapitel wurde erstellt. Sie können nun ein weiteres Kapitel oder einen weiteren Schritt hinzufügen"
+
+msgid "langNewLinksCreated"
+msgstr "Der Link wurde erstellt"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "Die Ausarbeitung wurde erstellt"
+
+msgid "langNewModuleCreated"
+msgstr "Das neue Modul wurde erstellt. Sie können nun ein Kapitel oder einen Schritt hinzufügen"
+
+msgid "langNewExerciseCreated"
+msgstr "Der Test wurde erstellt"
+
+msgid "langItemRemoved"
+msgstr "Das Element wurde entfernt"
+
+msgid "langConverting"
+msgstr "Konvertierung läuft ..."
+
+msgid "langPpt2lpError"
+msgstr "Fehler während der Powerpoint Konvertierung. Bitte prüfen, ob es Sonderzeichen im Namen der PowerPoint Datei gibt. Zur Sicherheit die PowerPoint Datei so Umbenenen, dass nur Buchstaben und Zahlen ohne Umlaute, Sonder- und Leerzeichen vorkommen."
+
+msgid "langBuild"
+msgstr "Erstellen"
+
+msgid "langViewModeEmbedded"
+msgstr "Ansichtmodus: eingebettet"
+
+msgid "langViewModeFullScreen"
+msgstr "Ansichtmodus: Vollbildschirm"
+
+msgid "langShowDebug"
+msgstr "Debug anzeigen"
+
+msgid "langHideDebug"
+msgstr "Debug nicht anzeigen"
+
+msgid "langCantEditDocument"
+msgstr "Dieses Dokument kann nicht bearbeitet werden"
+
+msgid "langAfter"
+msgstr "Nach"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Voraussetzungen (Limit)"
+
+msgid "lang_loading"
+msgstr "Seite wird geladen. Bitte warten..."
+
+msgid "lang_empty"
+msgstr "Dieser Lernpfad enthält keine Schritte."
+
+msgid "langHotPotatoesFinished"
+msgstr "Dieser HotPotatoes-Test wurde geschlossen."
+
+msgid "langCompletionLimit"
+msgstr "Abschluß-Limit (Punkt-Minimum)"
+
+msgid "langPrereqToEnter"
+msgstr "Eingabe"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "Zuerst muss dies erreicht werden"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Es fehlt mindestens ein Schritt in"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "ist als Voraussetzung vermerkt"
+
+msgid "langPrereqTestLimit1"
+msgstr "Sie müssen mindestens erreichen:"
+
+msgid "langPrereqTestLimit2"
+msgstr "Punkte in"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Momentan haben Sie:"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "Vollbild anzeigen"
+
+msgid "langLearnpathFullScreen"
+msgstr "Vollbild"
+
+msgid "langItemMissing1"
+msgstr "Hier gab es"
+
+msgid "langItemMissing2"
+msgstr "eine Seite (Schritt) im ursprünglichen Lernpfad"
+
+msgid "langDone"
+msgstr "Fertig"
+
+msgid "langNoItemSelected"
+msgstr "Um hier etwas anzuzeigen, bitte eine Auswahl aus dem Seitenmenu treffen"
+
+msgid "langNewDocumentCreated"
+msgstr "Das neue Dokument wurde erstellt"
+
+msgid "langEditCurrentChapter"
+msgstr "Aktuelles Kapitel bearbeiten"
+
+msgid "langditCurrentModule"
+msgstr "Aktuelles Modul bearbeiten"
+
+msgid "langCreateTheDocument"
+msgstr "Dokument erstellen"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Aktuelles Dokument verschieben"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Aktuelles Dokument bearbeiten"
+
+msgid "langWarning"
+msgstr "Warnung !"
+
+msgid "langWarningEditingDocument"
+msgstr "Wenn Sie ein bestehendes Dokument im Lernpfad bearbeiten, wird die neue Version des Dokuments die alte Version nicht überschreiben sondern als neues Dokument gespeichert. Wenn Sie ein Dokument endgültig bearbeiten wollen, können Sie dies über den Dokumenten-Manager tun"
+
+msgid "langDirectory"
+msgstr "Verzeichnis"
+
+msgid "langCreateTheExercise"
+msgstr "Test erstellen"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Test verschieben"
+
+msgid "langEditCurrentExecice"
+msgstr "Test bearbeiten"
+
+msgid "langUploadScorm"
+msgstr "Import von SCORM-Kursen"
+
+msgid "langPowerPointConvert"
+msgstr "PowerPoint Umwandlung"
+
+msgid "langLPCreatedToContinue"
+msgstr "Als nächstes können Sie ein Modul, Kapitel oder einen Schritt über das Menü links zu Ihrem Lernpfad hinzufügen"
+
+msgid "langLPCreatedAddChapterStep"
+msgstr "Sie könnenein Modul, Kapitel oder einen Schritt zu ihrem Lernpfad über das Menü links hinzufügen"
+
+msgid "langPrerequisitesAdded"
+msgstr "Vorbedingungen für aktuellen Schritt wurden hinzugefügt"
+
+msgid "langAddEditPrerequisites"
+msgstr "Vorbedingungen hinzufügen/bearbeiten"
+
+msgid "langMinimum"
+msgstr "Minimum"
+
+msgid "langMaximum"
+msgstr "Maximum"
+
+msgid "langNoDocuments"
+msgstr "Keine Dokumente"
+
+msgid "langNoExercisesAvailable"
+msgstr "Es sind keineTests verfügbar"
+
+msgid "langNoLinksAvailable"
+msgstr "Es sind keine Links verfügbar"
+
+msgid "langNoItemsInLp"
+msgstr "Im Augenblick gibt es keine Schritte im Lernpfad. Auf \"Authoring\" klicken, um Lernpfad Schritte zu erstellen"
+
+msgid "FirstPosition"
+msgstr "Erste Stelle"
+
+msgid "NewQuiz"
+msgstr "Neuer Test"
+
+msgid "CreateTheForum"
+msgstr "Forum hinzufügen"
+
+msgid "AddLpIntro"
+msgstr "<strong>Willkommen</strong> zum Chamilo Lernpfad Erstellungstool.<br />Sie können Ihren Lernpfad Schritt für Schritt erstellen.  Die Struktur Ihres Lernpfads erscheint links in dem Menu."
+
+msgid "AddLpToStart"
+msgstr "Beginnen Sie damit, Ihrem Lernpfad einen Titel zu geben"
+
+msgid "CreateTheLink"
+msgstr "Link importieren"
+
+msgid "MoveCurrentLink"
+msgstr "Link verschieben"
+
+msgid "EditCurrentLink"
+msgstr "Link bearbeiten"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "MoveCurrentStudentPublication"
+msgstr "Ausarbeitung verschieben"
+
+msgid "EditCurrentStudentPublication"
+msgstr "Ausarbeitung bearbeiten"
+
+msgid "AllowMultipleAttempts"
+msgstr "Mehrere Versuche gestatten"
+
+msgid "PreventMultipleAttempts"
+msgstr "Mehrere Versuche ausschliessen"
+
+msgid "MakeScormRecordingExtra"
+msgstr "SCORM Aufzeichnungen extra behandeln"
+
+msgid "MakeScormRecordingNormal"
+msgstr "SCORM Aufzeichnungen normal behandeln"
+
+msgid "DocumentHasBeenDeleted"
+msgstr "Das Dokument kann nicht angezeigt werden, weil es gelöscht wurde."
+
+msgid "EditCurrentForum"
+msgstr "Forum bearbeiten"
+
+msgid "NoPrerequisites"
+msgstr "Keine Vorbedingungen"
+
+msgid "NewExercise"
+msgstr "Neuer Test"
+
+msgid "CreateANewLink"
+msgstr "Neuen Link erstellen"
+
+msgid "CreateANewForum"
+msgstr "Neues Forum erstellen"
+
+msgid "LinkAdd"
+msgstr "Link hinzufügen"
+
+msgid "WoogieConversionPowerPoint"
+msgstr "RAPID: MS Word Konvertierung"
+
+msgid "WelcomeWoogieSubtitle"
+msgstr "Ein MS Word zu SCORM Konvertierer"
+
+msgid "WelcomeWoogieConverter"
+msgstr "Willkommen beim RAPID Konvertierer <ul type=\"1\"><li>Datei auswählen ais .doc, .sxw, .odt<li>Diese in RAPID hochladen. Sie wird zu einem SCORM Lernpfad konvertiert.</li><li>Dann kann man Audio Kommentare auf jeder Seite hinzufügen und Tests sowie andere Aktivitäten zwischen den Seiten einfügen</li></ul>"
+
+msgid "WoogieError"
+msgstr "Fehler ist aufgetreten bei der Konvertierung des Word Dokuments. Bitte prüfen, ob Sonderzeichen im Dateinamen vorhanden sind."
+
+msgid "WordConvert"
+msgstr "MS Word Konvertierung"
+
+msgid "Order"
+msgstr "Reihenfolge"
+
+msgid "InteractionID"
+msgstr "InteraktionsID"
+
+msgid "TimeFinished"
+msgstr "Endzeit (beendet um ....)"
+
+msgid "CorrectAnswers"
+msgstr "Richtige Antworten"
+
+msgid "StudentResponse"
+msgstr "Antworten der Kursteilnehmer"
+
+msgid "LatencyTimeSpent"
+msgstr "benötigte Zeit"
+
+msgid "Result"
+msgstr "Ergebnis"
+
+msgid "SplitStepsPerPage"
+msgstr "Ein Schritt pro Seite"
+
+msgid "SplitStepsPerChapter"
+msgstr "Ein Kapitel pro Schritt"
+
+msgid "TakeSlideName"
+msgstr "Dia Namen der Folien für die Lernpfad-Schritte verwenden"
+
+msgid "CannotConnectToOpenOffice"
+msgstr "Die Verbindung zum Konvertierer für das Dokument schlug fehl. Verständigen Sie bitte den Plattform Administrator, um das Problem zu beheben."
+
+msgid "OogieConversionFailed"
+msgstr "Die Konvertierung ist fehlgeschlagen. <br/>Einige Dokumente sind zu komplex, um automatisch vom Konvertierer für Dokumente verarbeitet zu werden.<br/>Wir sind bemüht, dies zu verbessern."
+
+msgid "OogieUnknownError"
+msgstr "Die Konvertierung ist aus unbekanntem Grund fehlgeschlagen. <br/>Kontaktieren Sie den Administrator, um weitere Informationen einzuholen."
+
+msgid "OogieBadExtension"
+msgstr "Die Datei hat eine falsche Endung."
+
+msgid "WoogieBadExtension"
+msgstr "Bitte nur Text-Dokumente hochladen. Dateinamen sollten enden mit .doc, .docx oder .odt"
+
+msgid "ShowAudioRecorder"
+msgstr "Audio Rekorder anzeigen"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "Die Volltext-Suche-Funktion ist nicht aktiviert. Nehmen Sie Kontakt mit dem Portal-Administrator auf."
+
+msgid "SearchFeatureSearchExplanation"
+msgstr "Um die die Kurs-Datenbank zu durchsuchen, verwenden Sie bitte folgende Syntax:<br />
+<i>Begriff tag:Schlagwort -exclude + include \"genaue Phrase\"</i><br />
+Beispiel:<br />
+<i>Auto tag:Laster -Ferrari +Ford \"\'hoher Verbrauch\".</i><br/> 
+Das Ergebnis wird alles zeigen, was das Wort <i>Auto</i> enthält, als <i>Laster</i> verschlagwortet wurde und nicht den Begriff <i>Ferrar</i>i aber den Begriff <i>Ford</i> behinhaltet und genau die Phrase <i>hoher Verbrauch</i> enthält."
+
+msgid "ViewLearningPath"
+msgstr "Lernpfad anschauen"
+
+msgid "SearchFeatureDocumentTagsIfIndexing"
+msgstr "Zum Dokument beim Indizieren hinzuzufügende Schlagworte"
+
+msgid "ReturnToLearningPaths"
+msgstr "Zurück zum Lernpfad"
+
+msgid "UploadMp3audio"
+msgstr "mp3 Datei hochladen"
+
+msgid "UpdateAllAudioFragments"
+msgstr "Audio hinzufügen"
+
+msgid "LeaveEmptyToKeepCurrentFile"
+msgstr "Leer lassen, um aktuelles Audio beizubehalten"
+
+msgid "RemoveAudio"
+msgstr "Audio entfernen"
+
+msgid "SaveAudio"
+msgstr "speichern"
+
+msgid "ChangesStored"
+msgstr "Audio hinzugefügt"
+
+msgid "ViewScoreChangeHistory"
+msgstr "Bewertungsverlauf ansehen"
+
+msgid "ImageWillResizeMsg"
+msgstr "Bild des Kursleiters wird bei Bedarf in der Größe angepasst"
+
+msgid "ImagePreview"
+msgstr "Bildvorschau"
+
+msgid "UplAlreadyExists"
+msgstr "existiert bereits."
+
+msgid "UplUnableToSaveFile"
+msgstr "Die hochgeladene Datei konnte nicht gespeichert werden (Evtl. ein Rechte-Problem...)"
+
+msgid "UnknownPackageFormat"
+msgstr "Das Format des Pakets konnte nicht erkannt werden. Bitte überprüfen Sie, ob diese ein gültiges Paket ist."
+
+msgid "MoveDocument"
+msgstr "Dokument verschieben"
+
+msgid "EditLPSettings"
+msgstr "Kurseinstellungen ändern"
+
+msgid "SaveLPSettings"
+msgstr "Kurseinstellungen speichern"
+
+msgid "ShowAllAttempts"
+msgstr "Alle Versuche anzeigen"
+
+msgid "HideAllAttempts"
+msgstr "Alle Versuche verstecken"
+
+msgid "ShowAllAttemptsByExercise"
+msgstr "Alle Test-Versuche zeigen"
+
+msgid "ShowAttempt"
+msgstr "Versuch zeigen"
+
+msgid "ShowAndQualifyAttempt"
+msgstr "Versuch anzeigen und markieren"
+
+msgid "langAddEdit"
+msgstr "Hinzufügen / Bearbeiten"
+
+msgid "ModifyPrerequisites"
+msgstr "Vorbedigungseinstellungen speichern"
+
+msgid "CreateLearningPath"
+msgstr "Weiter"
+
+msgid "AddExercise"
+msgstr "Test hinzufügen"
+
+msgid "AddForum"
+msgstr "Forum hinzufügen"
+
+msgid "LPCreateDocument"
+msgstr "Dokument hinzufügen"
+
+msgid "ObjectiveID"
+msgstr "Ziel-ID"
+
+msgid "ObjectiveStatus"
+msgstr "Ziel-Status"
+
+msgid "ObjectiveRawScore"
+msgstr "Ziel Bewertung"
+
+msgid "ObjectiveMaxScore"
+msgstr "Ziel max. Punkte"
+
+msgid "ObjectiveMinScore"
+msgstr "Ziel min. Punkte"
+
+msgid "LPName"
+msgstr "Lernpfad"
+
+msgid "AuthoringOptions"
+msgstr "Bearbeitungsoptionen"
+
+msgid "CourseSettings"
+msgstr "Kurseinstellungen"
+
+msgid "SaveSection"
+msgstr "Modul speichern"
+
+msgid "AddLinkToCourse"
+msgstr "Link hinzufügen"
+
+msgid "AddAssignmentToCourse"
+msgstr "Ausarbeitung hinzufügen"
+
+msgid "AddForumToCourse"
+msgstr "Forum hinzufügen"
+
+msgid "SaveAudioAndOrganization"
+msgstr "Audio und Sortierung speichern"
+
+msgid "UploadOnlyMp3Files"
+msgstr "Bitte nur mp3-Dateien hochladen"
+
+msgid "ModifyHotPotatoes"
+msgstr "Hot Potatoes bearbeiten"
+
+msgid "SaveHotpotatoes"
+msgstr "Hot Potatoes speichern"
+
+msgid "ReturnToLPList"
+msgstr "Zurück zur Übersicht"
+
+msgid "LpPrerequisiteDescription"
+msgstr "Dieser Lernpfad ist erst sichtbar, wenn der in der Voraussetzung ausgewählte Pfad zu 100% komplettiert wurde."
+
+msgid "ExerciseCantBeEditedAfterAddingToTheLP"
+msgstr "Tests können nicht bearbeitet werden, während Sie in einen Lernpfad eingefügt sind."
+
+msgid "EnableTimeLimits"
+msgstr "Einschränkungen / Begrenzungen aktivieren"
+
+msgid "PublicationDate"
+msgstr "Veröffentlichungsdatum"
+
+msgid "UseMaxScore100"
+msgstr "Standardmäßig 100 Punkte verwenden"
+
+msgid "EnableLPAutoLaunch"
+msgstr "Automatische Weiterleitung zum Lernpfad aktivieren"
+
+msgid "DisableLPAutoLaunch"
+msgstr "Automatische Weiterleitung zum Lernpfad deaktivieren"
+
+msgid "ViewModeEmbedFrame"
+msgstr "Aktueller Darstellungsmodus: Extern eingebunden. Bitte nur für das Einbinden in externen Seiten verwenden."
+
+msgid "LPNotVisibleToStudent"
+msgstr "Kursteilnehmer können den Lernpfad nicht sehen"
+
+msgid "EditCurrentModule"
+msgstr "Modul bearbeiten"
+
+msgid "SearchFeatureTerms"
+msgstr "Bedigungen für die Such-Funktion"
+
+msgid "PrerequisiteDeletedError"
+msgstr "Fehler: Das Element, was als Vorbedingung definiert ist, wurde gelöscht."
+

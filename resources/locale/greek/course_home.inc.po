@@ -1,0 +1,87 @@
+msgid "langActivate"
+msgstr "Εμφάνιση"
+
+msgid "langDeactivate"
+msgstr "Απόκρυψη"
+
+msgid "langInLnk"
+msgstr "Κρυφά εργαλεία και σύνδεσμοι"
+
+msgid "langDelLk"
+msgstr "Θέλετε πραγματικά να διαγράψετε αυτόν τον σύνδεσμο;"
+
+msgid "langCourseCreate"
+msgstr "Δημιουργία μιας σειράς μαθημάτων"
+
+msgid "langNameOfTheLink"
+msgstr "Όνομα του συνδέσμου"
+
+msgid "lang_main_categories_list"
+msgstr "Λίστα κύριας κατηγορίας"
+
+msgid "langCourseAdminOnly"
+msgstr "Μόνο Καθηγητές / Εκπαιδευτές"
+
+msgid "PlatformAdminOnly"
+msgstr "Μόνο για τους Διαχειριστές της Πλατφόρμας"
+
+msgid "langCombinedCourse"
+msgstr "Συνδυασμένο μάθημα"
+
+msgid "ToolIsNowVisible"
+msgstr "Το εργαλείο είναι τώρα ορατό"
+
+msgid "ToolIsNowHidden"
+msgstr "Το εργαλείο είναι τώρα αόρατο"
+
+msgid "EditLink"
+msgstr "Επεξεργασία συνδέσμου"
+
+msgid "Blog_management"
+msgstr "Έργα / Projects"
+
+msgid "Forum"
+msgstr "Forums"
+
+msgid "Course_maintenance"
+msgstr "Λήψη Αντιγράφων ασφαλείας"
+
+msgid "TOOL_SURVEY"
+msgstr "Ανασκοπήσεις/ Surveys"
+
+msgid "GreyIcons"
+msgstr "Εργαλεία"
+
+msgid "Interaction"
+msgstr "Αλληλεπίδραση"
+
+msgid "Authoring"
+msgstr "Συγγραφή"
+
+msgid "Administration"
+msgstr "Διαχείριση"
+
+msgid "IntroductionTextUpdated"
+msgstr "Η εισαγωγή έχει ενημερωθεί"
+
+msgid "IntroductionTextDeleted"
+msgstr "Η εισαγωγή έχει διαγραφεί"
+
+msgid "SessionIdentifier"
+msgstr "Ταυτοποίηση συνεδρίας"
+
+msgid "SessionName"
+msgstr "Όνομα συνεδρίας"
+
+msgid "SessionCategory"
+msgstr "Κατηγορίες συνεδριών"
+
+msgid "SessionData"
+msgstr "Δεδομένα των συνεδριών"
+
+msgid "TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP"
+msgstr "Η ρύθμιση για αυτόματη εκκίνηση της εκπαιδευτικής διαδρομής είναι ενεργοποιημένη. Όταν οι εκπαιδευόμενοι εισέλθουν στη σειρά μαθημάτων, θα ανακατευθυνθούν αυτομάτως στην εκπαιδευτική διαδρομή που είναι σημειωμένη ως αυτόματη εκκίνηση (auto-launch)."
+
+msgid "ToolSearch"
+msgstr "Αναζήτηση"
+

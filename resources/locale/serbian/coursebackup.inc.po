@@ -1,0 +1,123 @@
+msgid "langSelectOptionForBackup"
+msgstr "Molim Vas, odaberite opcije za backup."
+
+msgid "langLetMeSelectItems"
+msgstr "Dopusti da ja odaberem komponente kursa"
+
+msgid "langCreateFullBackup"
+msgstr "Kreiraj kompletni backup ovog kursa"
+
+msgid "langCreateBackup"
+msgstr "kreiraj backup"
+
+msgid "langBackupCreated"
+msgstr "Backup ovog kursa je kreiran. Download ovog fajla &#263;e po&#269;eti za par trenutaka. Ako download  ne po&#269;ne kliknite na slede&#263;i link."
+
+msgid "langSelectBackupFile"
+msgstr "selektujte backup fajl"
+
+msgid "langImportBackup"
+msgstr "Uvezi backup"
+
+msgid "langImportFullBackup"
+msgstr "Uvezi kompletan backup"
+
+msgid "langImportFinished"
+msgstr "Uvoz je završen"
+
+msgid "langEvents"
+msgstr "Događaji"
+
+msgid "langAnnouncements"
+msgstr "Obaveštenja"
+
+msgid "langDocuments"
+msgstr "Dokumenti"
+
+msgid "langTests"
+msgstr "Testovi"
+
+msgid "langLearnpaths"
+msgstr "Putanje učenja"
+
+msgid "langCopyCourse"
+msgstr "Kopiraj kurs"
+
+msgid "langSelectItemsToCopy"
+msgstr "Selektuj stavke za kopiranje"
+
+msgid "langCopyFinished"
+msgstr "Kopiranje je završeno"
+
+msgid "langFullRecycle"
+msgstr "Potpuno reciklirano"
+
+msgid "langRecycleCourse"
+msgstr "Recikliraj kurs"
+
+msgid "langRecycleFinished"
+msgstr "Recikliranje je završeno"
+
+msgid "langRecycleWarning"
+msgstr "Upozorenje: upotrebom ovog alata obrisaćete neke delove vašeg kursa. Ova akcija se ne može poništiti. Savetujemo vas da napravite <a href=\"create_backup.php\">backup</a> pre upotrebe alata za recikliranje."
+
+msgid "langSameFilename"
+msgstr "Šta treba da bude učinjeno sa uvezenim fajlovima koji imaju isto ime kao i postojeći fajlovi?"
+
+msgid "langSameFilenameSkip"
+msgstr "Preskoči isto ime fajla"
+
+msgid "langSameFilenameRename"
+msgstr "Preimenuj fajl (eg file.pdf postaje file_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Piši preko postojećeg fajla"
+
+msgid "langSelectDestinationCourse"
+msgstr "Odaberite lokaciju kursa"
+
+msgid "langFullCopy"
+msgstr "Kompletno kopiraj"
+
+msgid "langCourseDescription"
+msgstr "Opis kursa"
+
+msgid "langNoResourcesToBackup"
+msgstr "Nema resursa koje treba backup-ovati"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Nema resursa u backup fajlu"
+
+msgid "langSelectResources"
+msgstr "Selektuj resurse"
+
+msgid "langNoResourcesToRecycles"
+msgstr "Nema resursa za recikliranje"
+
+msgid "langIncludeQuestionPool"
+msgstr "Uključi set pitanja"
+
+msgid "langLocalFile"
+msgstr "lokalni fajl"
+
+msgid "langServerFile"
+msgstr "server fajl"
+
+msgid "langNoBackupsAvailable"
+msgstr "ni jedan backup nije dostupan"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "ni jedan opis kursa nije dostupan"
+
+msgid "langBackup"
+msgstr "Backup"
+
+msgid "langImportBackupInfo"
+msgstr "Uvezi backup. Moći ćete da uvezete backup fajl sa vaše lokalne radne stanice ili možete da koristite fajlove koji su dostupni na serveru."
+
+msgid "langCreateBackupInfo"
+msgstr "Kreiraj backup ovog kursa. Možete sami da selektujete sadržaj kursa koji želite da stavite u backup fajl."
+
+msgid "ToolIntro"
+msgstr "Uvod u alate"
+

@@ -1,0 +1,168 @@
+msgid "Announcement"
+msgstr "Ilmoitukset"
+
+msgid "langAnnEmpty"
+msgstr "Ilmoitusten lista on tyhjennetty"
+
+msgid "AnnouncementModified"
+msgstr "Ilmoituksia on muutettu"
+
+msgid "AnnouncementAdded"
+msgstr "Ilmoitus on lisätty"
+
+msgid "AnnouncementDeleted"
+msgstr "Ilmoitus on poistettu"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Julkaistu"
+
+msgid "AddAnnouncement"
+msgstr "Lisää ilmoituksena"
+
+msgid "langContent"
+msgstr "Sisältö"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Tyhjennä ilmoitusten lista"
+
+msgid "professorMessage"
+msgstr "Viesti opettajaltasi"
+
+msgid "langEmailSent"
+msgstr "ja lähetetty sähköpostilla rekisteröityneille käyttäjille"
+
+msgid "EmailOption"
+msgstr "Lähetä tämä ilmoitus sähköpostilla rekisteröityneille käyttäjille"
+
+msgid "langOn"
+msgstr "On"
+
+msgid "langRegUser"
+msgstr "kurssin rekisteröityneet käyttäjät"
+
+msgid "langUnvalid"
+msgstr "have unvalid or no email address"
+
+msgid "langModifAnn"
+msgstr "Muokkaa tätä ilmoitusta"
+
+msgid "langModify"
+msgstr "Muokkaa"
+
+msgid "langDelete"
+msgstr "Poista"
+
+msgid "langTitle"
+msgstr "Otsikko"
+
+msgid "langHelp"
+msgstr "Apua"
+
+msgid "langOk"
+msgstr "Ok"
+
+msgid "langAddIntro"
+msgstr "Lisää esittely"
+
+msgid "langBackList"
+msgstr "Takaisin listaan"
+
+msgid "langSelMess"
+msgstr "Varoitukset joillekkin käyttäjille"
+
+msgid "EmailTitle"
+msgstr "Ilmoituksen aihe"
+
+msgid "langUserlist"
+msgstr "Lista ryhmistä ja käyttäjistä"
+
+msgid "langSelectedUsers"
+msgstr "Valitut käyttäjät"
+
+msgid "langSubmit"
+msgstr "Lähetä"
+
+msgid "langPleaseEnterMessage"
+msgstr "Sinun on esiteltävä viestin teksti."
+
+msgid "langPleaseSelectUsers"
+msgstr "Valitse ainakin yksi käyttäjä"
+
+msgid "Teachersubject"
+msgstr "Viesti lähetetty opiskelijoillesi"
+
+msgid "langMessages"
+msgstr "Viestit"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Viesti valituille käyttäjille"
+
+msgid "langIntroText"
+msgstr "Lähettääksesi viesti, valitse ryhmä (merkitty G -kirjaimella) tai yksittäisiä käyttäjiä vasemmalla olevasta listasta."
+
+msgid "langDown"
+msgstr "alas"
+
+msgid "langMsgSent"
+msgstr "Viesti on lähetetty valituille käyttäjille"
+
+msgid "langSelUser"
+msgstr "valitut käyttäjät"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Viesti valituille ryhmille"
+
+msgid "langSelectedGroups"
+msgstr "valitut ryhmät"
+
+msgid "langMsg"
+msgstr "Viestit"
+
+msgid "langYes"
+msgstr "kyllä"
+
+msgid "MsgText"
+msgstr "Viesti"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Kaikki ilmoitukset on poistettu"
+
+msgid "AnnouncementMoved"
+msgstr "Ilmoitukset on siirretty"
+
+msgid "NoAnnouncements"
+msgstr "Ilmoituksia ei ole"
+
+msgid "SelectEverybody"
+msgstr "Valitse kaikki"
+
+msgid "SelectedUsersGroups"
+msgstr "valitut käyttäjä ryhmät"
+
+msgid "LearnerMessage"
+msgstr "Viesti opiskelijalta"
+
+msgid "TitleIsRequired"
+msgstr "Otsikko täytyy olla"
+
+msgid "AnnounceSentByEmail"
+msgstr "Ilmoitus lähetetty sähköpostilla"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Ilmoitus lähetetty valituille käyttäjille"
+
+msgid "SendAnnouncement"
+msgstr "Lähetä ilmoitus"
+
+msgid "ModifyAnnouncement"
+msgstr "Muokkaa ilmoitusta"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Lähetä ilmoitus"
+
+msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
+msgstr "Hyvä käyttäjä, käyttäjätunnuksesi on nyt aktivoitu ja voit nyt kirjautua ympäristöön."
+
+msgid "AddAsAnnouncement"
+msgstr "Lisää ilmoitukseksi"
+

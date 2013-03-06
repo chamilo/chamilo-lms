@@ -1,0 +1,15 @@
+msgid "langWash"
+msgstr "Padam"
+
+msgid "langSave"
+msgstr "Simpan"
+
+msgid "langRefresh"
+msgstr "Terima Mesej"
+
+msgid "langIsNowInYourDocDir"
+msgstr " - Kini, fail ini berada dalam Alat Bantu Dokumen. <br /><B>Fail ini dalam format .txt</B>"
+
+msgid "langCopyFailed"
+msgstr "Proses cetakan gagal"
+

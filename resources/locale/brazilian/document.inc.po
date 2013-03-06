@@ -1,0 +1,805 @@
+msgid "MoveTo"
+msgstr "Mover para"
+
+msgid "langDownloadFile"
+msgstr "Enviar arquivo para o servidor"
+
+msgid "langNameDir"
+msgstr "Nome da nova pasta"
+
+msgid "langSize"
+msgstr "Tamanho"
+
+msgid "langRename"
+msgstr "Renomear"
+
+msgid "langCopy"
+msgstr "Copiar conteúdo do Curso"
+
+msgid "langTo"
+msgstr "para"
+
+msgid "langNoSpace"
+msgstr "O envio falhou. Não há espaço em disco suficiente em sua pasta"
+
+msgid "langDownloadEnd"
+msgstr "O envio terminou"
+
+msgid "langFileExists"
+msgstr "Operação impossível.<br>Um arquivo com o mesmo nome já existe."
+
+msgid "langImpossible"
+msgstr "Operação impossível"
+
+msgid "langAddComment"
+msgstr "Adicionar/Editar um comentário para"
+
+msgid "langDocCopied"
+msgstr "Documento copiado"
+
+msgid "langDocDeleted"
+msgstr "Documento excluido"
+
+msgid "langElRen"
+msgstr "Arquivo renomeado"
+
+msgid "langDirMv"
+msgstr "Diretório movido"
+
+msgid "langComMod"
+msgstr "Comentário modificado"
+
+msgid "langViMod"
+msgstr "Visibilidade modificada"
+
+msgid "langGroupSpace"
+msgstr "Área do grupo"
+
+msgid "langGroupSpaceLink"
+msgstr "Área do grupo"
+
+msgid "langGroupForumLink"
+msgstr "Fórum do grupo"
+
+msgid "langZipNoPhp"
+msgstr "O arquivo zip não pode conter arquivos .PHP"
+
+msgid "langUncompress"
+msgstr "descompactar arquivos (.zip)"
+
+msgid "langDownloadAndZipEnd"
+msgstr " Arquivo Zip enviado e descompactado"
+
+msgid "langRoot"
+msgstr "raiz"
+
+msgid "CreateDoc"
+msgstr "Criar um documento"
+
+msgid "langDown"
+msgstr "abaixo"
+
+msgid "langFileError"
+msgstr "O arquivo a ser enviado não é válido."
+
+msgid "langMaxFileSize"
+msgstr "O tamanho máximo do arquivo é"
+
+msgid "langFileName"
+msgstr "Nome do arquivo"
+
+msgid "langNoFileName"
+msgstr "Por favor, informe o nome do arquivo"
+
+msgid "langNoText"
+msgstr "Por favor, digite o conteúdo texto / HTML"
+
+msgid "langAreYouSureToDelete"
+msgstr "Tem a certeza que desja excluir"
+
+msgid "langScormcontent"
+msgstr "Esse é um conteúdo SCORM<br><input type=button name=scormbutton value=\'Carregar !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr "Este é um curso no formato Scorm. Para executá-lo, clique aqui : <input type=button name=scormbutton value=\'Executar !\' onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Publicar"
+
+msgid "langMissingImagesDetected"
+msgstr "Detectada ausência de imagens"
+
+msgid "langCreateDocument"
+msgstr "Criar um documento"
+
+msgid "langEditDocument"
+msgstr "Editar"
+
+msgid "langDocuments"
+msgstr "Documentos"
+
+msgid "langOrganiseDocuments"
+msgstr "Criar tabela de conteúdos"
+
+msgid "langEditTOC"
+msgstr "Editar a tabela de conteúdos"
+
+msgid "langChapter"
+msgstr "Capítulo"
+
+msgid "langDocumentList"
+msgstr "Listar todos os documentos"
+
+msgid "langOrganisationList"
+msgstr "Tabela de conteúdos"
+
+msgid "langCreationSucces"
+msgstr "Tabela de conteúdos criada com sucesso."
+
+msgid "langCanViewOrganisation"
+msgstr "Visualizar sua organização"
+
+msgid "langHere"
+msgstr "aqui."
+
+msgid "langViewDocument"
+msgstr "Visualizar"
+
+msgid "langHtmlTitle"
+msgstr "Tabela de conteúdos"
+
+msgid "langAddToTOC"
+msgstr "Adicionar aos conteúdos"
+
+msgid "langAddChapter"
+msgstr "Adicionar capítulo"
+
+msgid "langReady"
+msgstr "Gerar tabela de conteúdos"
+
+msgid "langStoreDocuments"
+msgstr "Armazenar documentos"
+
+msgid "langTocDown"
+msgstr "Abaixo"
+
+msgid "langTocUp"
+msgstr "Acima"
+
+msgid "CutPasteLink"
+msgstr "Nenhum frame"
+
+msgid "langCreatePath"
+msgstr "Criar uma rota (ferramenta de autoria)"
+
+msgid "SendDocument"
+msgstr "Enviar arquivo"
+
+msgid "ThisFolderCannotBeDeleted"
+msgstr "Esta pasta não pode ser excluida"
+
+msgid "ChangeVisibility"
+msgstr "Alterar visibilidade"
+
+msgid "VisibilityCannotBeChanged"
+msgstr "A visibilidade não pode ser alterada"
+
+msgid "DocumentCannotBeMoved"
+msgstr "O documento não pode ser movido"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "Oogie: Conversão de arquivos PowerPoint"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "Conversor de PowerPoint para Rotas de Aprendizagem"
+
+msgid "langAddMetadata"
+msgstr "Ver/Editar Metadados"
+
+msgid "langGoMetadata"
+msgstr "Ir"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "Quota de Espaço do Curso é"
+
+msgid "langDel"
+msgstr "excluir"
+
+msgid "langUp"
+msgstr "Acima"
+
+msgid "langDate"
+msgstr "Data"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Espaço disponível"
+
+msgid "CourseCurrentlyUses"
+msgstr "Este curso ocupa atualmente"
+
+msgid "MaximumAllowedQuota"
+msgstr "Seu limite de espaço de armazenamento"
+
+msgid "PercentageQuotaInUse"
+msgstr "Porcentagem do espaço que encontra-se em uso"
+
+msgid "PercentageQuotaFree"
+msgstr "Porcentagem de espaço livre"
+
+msgid "CurrentDirectory"
+msgstr "Pasta atual"
+
+msgid "UplUploadDocument"
+msgstr "Enviar um documento"
+
+msgid "UplPartialUpload"
+msgstr "O arquivo selecionado foi parcialmente enviado."
+
+msgid "UplExceedMaxPostSize"
+msgstr "O tamanho do arquivo excede a configuração máxima permitida:"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "O tamanho do arquivo excede o máximo permitido pela configuração do servidor:"
+
+msgid "UplFileTooBig"
+msgstr "Arquivo muito grande para envio!"
+
+msgid "UplUploadFailed"
+msgstr "Falha no envio de arquivo!"
+
+msgid "UplUnableToSaveFile"
+msgstr "O arquivo enviado não pode ser salvo (problema de permissão?)!"
+
+msgid "UplNotEnoughSpace"
+msgstr "Não há espaço suficiente para enviar esse arquivo!"
+
+msgid "UplNoSCORMContent"
+msgstr "Nenhum conteúdo SCORM encontrado!"
+
+msgid "UplZipExtractSuccess"
+msgstr "Arquivo Zip extraído com sucesso!"
+
+msgid "UplZipCorrupt"
+msgstr "Impossível descompactar o arquivo zip (arquivo corrompido?)."
+
+msgid "UplAlreadyExists"
+msgstr "já existe!"
+
+msgid "UplFileSavedAs"
+msgstr "Arquivo salvo como"
+
+msgid "UplFileOverwritten"
+msgstr "foi sobreescrito."
+
+msgid "CannotCreateDir"
+msgstr "Impossível criar a pasta!"
+
+msgid "UplUpload"
+msgstr "Enviar"
+
+msgid "UplWhatIfFileExists"
+msgstr "Se o arquivo existir:"
+
+msgid "UplDoNothing"
+msgstr "Não faça nada"
+
+msgid "UplDoNothingLong"
+msgstr "Não enviar se o arquivo já existir"
+
+msgid "UplOverwrite"
+msgstr "Substituir"
+
+msgid "UplOverwriteLong"
+msgstr "Sobreescrever o arquivo existente"
+
+msgid "UplRename"
+msgstr "Renomear"
+
+msgid "UplRenameLong"
+msgstr "Renomear o arquivo enviado caso exista"
+
+msgid "Metadata"
+msgstr "Metadados"
+
+msgid "DocumentQuota"
+msgstr "Quota de Esapaço para Documentos"
+
+msgid "NoDocsInFolder"
+msgstr "Nenhum documento nessa pasta!"
+
+msgid "UploadTo"
+msgstr "Enviar para"
+
+msgid "fileModified"
+msgstr "O arquivo foi modificado"
+
+msgid "DocumentsOverview"
+msgstr "visão geral dos documentos"
+
+msgid "ViewSlideshow"
+msgstr "Visualizar a galeria de imagens"
+
+msgid "Options"
+msgstr "Opções"
+
+msgid "WelcomeOogieConverter"
+msgstr "Bem-vindo ao conversor Oogie PowerPoint. <ul type=\"1\"><li> Pesquise no seu disco e seleccione um arquivo .ppt ou .odp<li>Carregue-o para Oogie. Transforme numa Rota de Aprendizagem SCORM. <li> Depois poderá acrescentar comentários áudio para cada slide e inserir exercícios entre os slides para avaliação."
+
+msgid "ConvertToLP"
+msgstr "Converter para Rota de Aprendizagem"
+
+msgid "AdvancedSettings"
+msgstr "Configurações avançadas"
+
+msgid "File"
+msgstr "Arquivo"
+
+msgid "DocDeleteError"
+msgstr "Erro ocorrido durante a exlusão do documentos"
+
+msgid "ViModProb"
+msgstr "Ocorreu um problema durante a atualização da visibilidade"
+
+msgid "DirDeleted"
+msgstr "Diretório excluido"
+
+msgid "TemplateName"
+msgstr "Nome do modelo"
+
+msgid "TemplateDescription"
+msgstr "Descrição do Modelo"
+
+msgid "DocumentSetAsTemplate"
+msgstr "Documento adiconado como novo modelo"
+
+msgid "DocumentUnsetAsTemplate"
+msgstr "Documento tornou-se um modelo"
+
+msgid "AddAsTemplate"
+msgstr "Adicionar como um modelo"
+
+msgid "RemoveAsTemplate"
+msgstr "Retirar tabela modelo"
+
+msgid "ReadOnly"
+msgstr "Apenas leitura"
+
+msgid "ReadOnlyFile"
+msgstr "Arquivo somente para leitura"
+
+msgid "FileNotFound"
+msgstr "O arquivo não foi encontrado"
+
+msgid "TemplateTitleFirstPage"
+msgstr "Página inicial"
+
+msgid "TemplateTitleFirstPageDescription"
+msgstr "É a página inicial do curso"
+
+msgid "TemplateTitleDedicatory"
+msgstr "Dedicatória"
+
+msgid "TemplateTitleDedicatoryDescription"
+msgstr "Faça a sua própria dedicatória"
+
+msgid "TemplateTitlePreface"
+msgstr "Prefácio do curso"
+
+msgid "TemplateTitlePrefaceDescription"
+msgstr "Prefácio"
+
+msgid "TemplateTitleIntroduction"
+msgstr "Introdução"
+
+msgid "TemplateTitleIntroductionDescription"
+msgstr "Inserir texto de introdução"
+
+msgid "TemplateTitlePlan"
+msgstr "Plano"
+
+msgid "TemplateTitlePlanDescription"
+msgstr "Tabela de conteúdos"
+
+msgid "TemplateTitleMrDokeos"
+msgstr "Explicação do Mr Chamilo"
+
+msgid "TemplateTitleMrDokeosDescription"
+msgstr "Diálogo explicativo com Mr Chamilo"
+
+msgid "TemplateTitleTeacher"
+msgstr "Seu professor"
+
+msgid "TemplateTitleTeacherDescription"
+msgstr "Diálogo com o professor"
+
+msgid "TemplateTitleProduction"
+msgstr "Produção"
+
+msgid "TemplateTitleProductionDescription"
+msgstr "Descrição de uma produção"
+
+msgid "TemplateTitleAnalyze"
+msgstr "Análise"
+
+msgid "TemplateTitleAnalyzeDescription"
+msgstr "Descrição da análise"
+
+msgid "TemplateTitleSynthetize"
+msgstr "Síntese"
+
+msgid "TemplateTitleSynthetizeDescription"
+msgstr "Descrição da síntese"
+
+msgid "TemplateTitleText"
+msgstr "Página de texto"
+
+msgid "TemplateTitleTextDescription"
+msgstr "Página com um texto plano"
+
+msgid "TemplateTitleLeftImage"
+msgstr "Imagem à esquerda"
+
+msgid "TemplateTitleLeftImageDescription"
+msgstr "Imagem à esquerda"
+
+msgid "TemplateTitleTextCentered"
+msgstr "Texto e imagem centralizadas"
+
+msgid "TemplateTitleTextCenteredDescription"
+msgstr "Texto com imagem centralizada e legenda"
+
+msgid "TemplateTitleComparison"
+msgstr "Comparar"
+
+msgid "TemplateTitleComparisonDescription"
+msgstr "Página de texto com 2 colunas"
+
+msgid "TemplateTitleDiagram"
+msgstr "Diagrama explicativo"
+
+msgid "TemplateTitleDiagramDescription"
+msgstr "Imagem à esquerda, comentário à direita"
+
+msgid "TemplateTitleImage"
+msgstr "Só imagem"
+
+msgid "TemplateTitleImageDescription"
+msgstr "Página uma imagem"
+
+msgid "TemplateTitleFlash"
+msgstr "Animação flash"
+
+msgid "TemplateTitleFlashDescription"
+msgstr "Animação + texto explicativo"
+
+msgid "TemplateTitleAudio"
+msgstr "Áudio com comentário"
+
+msgid "TemplateTitleAudioDescription"
+msgstr "Áudio + imagem + texto : compreensão oral"
+
+msgid "TemplateTitleSchema"
+msgstr "Esquema com áudio explicativo"
+
+msgid "TemplateTitleSchemaDescription"
+msgstr "Esquema explicado pelo professor"
+
+msgid "TemplateTitleVideo"
+msgstr "Página com vídeo"
+
+msgid "TemplateTitleVideoDescription"
+msgstr "Vídeo e texto explicativo"
+
+msgid "TemplateTitleVideoFullscreen"
+msgstr "Página de vídeo fullscreen"
+
+msgid "TemplateTitleVideoFullscreenDescription"
+msgstr "Vídeo fullscreen com texto explicativo"
+
+msgid "TemplateTitleTable"
+msgstr "Página de tabela"
+
+msgid "TemplateTitleTableDescription"
+msgstr "Página com tabela estilo folha de cálculo"
+
+msgid "TemplateTitleAssigment"
+msgstr "Descrição de tarefas/exercícios"
+
+msgid "TemplateTitleAssigmentDescription"
+msgstr "Explicar objetivos, funções e agenda"
+
+msgid "TemplateTitleResources"
+msgstr "Recursos"
+
+msgid "TemplateTitleResourcesDescription"
+msgstr "Livros, links, ferramentas"
+
+msgid "TemplateTitleBibliography"
+msgstr "Bibliografia"
+
+msgid "TemplateTitleBibliographyDescription"
+msgstr "Livros, links, ferramentas"
+
+msgid "TemplateTitleFAQ"
+msgstr "Perguntas frequentes"
+
+msgid "TemplateTitleFAQDescription"
+msgstr "Lista de perguntas e respostas"
+
+msgid "TemplateTitleGlossary"
+msgstr "Glossário"
+
+msgid "TemplateTitleGlossaryDescription"
+msgstr "Lista de termos"
+
+msgid "TemplateTitleEvaluation"
+msgstr "Avaliação"
+
+msgid "TemplateTitleEvaluationDescription"
+msgstr "Avaliação"
+
+msgid "TemplateTitleCertificate"
+msgstr "Certificado de finalização"
+
+msgid "TemplateTitleCertificateDescription"
+msgstr "Aparecer ao final da Rota de Aprendizagem"
+
+msgid "TemplateTitleCheckList"
+msgstr "Lista de verificação"
+
+msgid "TemplateTitleCourseTitle"
+msgstr "Título do curso"
+
+msgid "TemplateTitleLeftList"
+msgstr "Lista à esquerda"
+
+msgid "TemplateTitleLeftListDescription"
+msgstr "Lista à esquerda com instrutor"
+
+msgid "TemplateTitleCheckListDescription"
+msgstr "Lista de recursos"
+
+msgid "TemplateTitleCourseTitleDescription"
+msgstr "Título de curso com logótipo"
+
+msgid "TemplateTitleRightList"
+msgstr "Lista à direita"
+
+msgid "TemplateTitleRightListDescription"
+msgstr "Lista à direita com instrutor"
+
+msgid "TemplateTitleLeftRightList"
+msgstr "Lista à direita e à esquerda"
+
+msgid "TemplateTitleLeftRightListDescription"
+msgstr "Lista à esquerda e direita com instrutor"
+
+msgid "TemplateTitleDesc"
+msgstr "Descrição"
+
+msgid "TemplateTitleDescDescription"
+msgstr "Descrever um recurso"
+
+msgid "TemplateTitleObjectives"
+msgstr "Objetivos do curso"
+
+msgid "TemplateTitleObjectivesDescription"
+msgstr "Descrever os objetivos do curso"
+
+msgid "TemplateTitleCycle"
+msgstr "Gráfico cíclico"
+
+msgid "TemplateTitleCycleDescription"
+msgstr "2 listas com flechas circulares"
+
+msgid "TemplateTitleLearnerWonder"
+msgstr "Expectativas dos alunos"
+
+msgid "TemplateTitleLearnerWonderDescription"
+msgstr "Descrição das expectativas do aluno"
+
+msgid "TemplateTitleTimeline"
+msgstr "Processos e etapas"
+
+msgid "TemplateTitleTimelineDescription"
+msgstr "3 listas relacionadas com setas"
+
+msgid "TemplateTitleStopAndThink"
+msgstr "Párar e pensar"
+
+msgid "TemplateTitleListLeftListDescription"
+msgstr "Lista à esquerda com instrutor"
+
+msgid "TemplateTitleStopAndThinkDescription"
+msgstr "Convite para parar e refletir"
+
+msgid "CreateTheDocument"
+msgstr "Salvar documento"
+
+msgid "CreateTemplate"
+msgstr "Criar modelo"
+
+msgid "SharedFolder"
+msgstr "Pasta compartilhada"
+
+msgid "CreateFolder"
+msgstr "Criar uma pasta"
+
+msgid "HelpDefaultDirDocuments"
+msgstr "Este diretório contém arquivos predefinidos. Pode eliminar ou adicionar novos arquivos, mas se um arquivo está oculto quando é inserido num documento, os usuários não serão capazes de o visualizar nesse documento. Ao inserir um arquivo num documento, certifique-se primeiro que se encontra visível. Os diretórios podem permanecer ocultos."
+
+msgid "HelpSharedFolder"
+msgstr "Este diretório contém os arquivos que os usuários enviaram para um curso através do editor (não realizarado a partir da ferramenta de grupos). Por predefinição, serão visíveis para qualquer instrutor, mas estará oculto para outros usuários (desde que não visiveis aos arquivos diretamente). Se tornar o directório de um usuário visível, todos os outros usuários poderão visualizar o seu conteúdo."
+
+msgid "TemplateImage"
+msgstr "Imagem do modelo"
+
+msgid "ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile"
+msgstr "Para reproduzir as mídias vai precisar atualizar seu navegador a uma versão recente ou atualizar a sua extensão Flash. Confira se o arquivo tem uma extensão correta."
+
+msgid "UpdateRequire"
+msgstr "Precisa de atualização"
+
+msgid "MoveElement"
+msgstr "Mover elemento"
+
+msgid "CertificateName"
+msgstr "Nome"
+
+msgid "HelpFolderLearningPaths"
+msgstr "INFORMAÇÕES VISÍVEIS SOMENTE PARA OS PROFESSORES:
+Esta pasta contém documentos criados pela ferramenta de roteiro de aprendizagem. Dentro da pasta pode editar o arquivo HTML que é gerado ao importar conteúdo do roteiro de aprendizagem, como são os importados por Chamilo Rapid, por exemplo. Recomendamos-lhe ocultar esta pasta aos seus alunos."
+
+msgid "CopyToMyFiles"
+msgstr "Copiar para minha área de arquivos privados"
+
+msgid "Export2PDF"
+msgstr "Exportar para o formato PDF"
+
+msgid "ResourceShared"
+msgstr "Recurso compartilhado"
+
+msgid "CopyAlreadyDone"
+msgstr "Há um arquivo com o mesmo nome em sua área de arquivos privados. Você quer substituí-lo?"
+
+msgid "CopyFailed"
+msgstr "Cópia falhou"
+
+msgid "CopyMade"
+msgstr "A cópia foi realizada"
+
+msgid "OverwritenFile"
+msgstr "Arquivo substituído"
+
+msgid "Draw"
+msgstr "Desenhar"
+
+msgid "FileExistsChangeToSave"
+msgstr "Existe um arquivo com este nome, escolha outro para salvar sua imagem."
+
+msgid "FileSavedAs"
+msgstr "Arquivo salvo como"
+
+msgid "FileExportAs"
+msgstr "Arquivo exportado como"
+
+msgid "UserFolder"
+msgstr "Pasta do usuário"
+
+msgid "HelpUsersFolder"
+msgstr "INFORMAÇÃO VISÍVEL SOMENTE POR PROFESSORES:
+
+A pasta de usuários contém uma pasta para cada usuário que tenha acessado, através da ferramenta de documentos, ou quando qualquer arquivo foi enviado no curso através do editor online. Se nenhuma circunstância ocorreu, então nenhuma pasta do usuário terá sido criada. No caso dos grupos, os arquivos enviados através do editor serão adicionados na pasta de cada grupo, que apenas são acessíveis por alunos deste grupo.
+
+A pasta de usuários e cada uma das pastas internas ficarão ocultas por padrão para todos os alunos, mas cada aluno poderá ver o conteúdo do seu diretório através do editor online. No entanto, se um aluno sabe o endereço de um arquivo ou pasta de outro aluno, ele pode ser capaz de acessá-lo.
+
+Se a pasta de um aluno é visível, outros alunos podem ver o que ele contém. Neste caso, o aluno que possui a pasta também pode (a partir da ferramenta de documentos e só na sua pasta): criar e editar documentos web, converter um documento em um modelo para uso pessoal, criar e editar desenhos em formatos SVG e PNG, enviar documentos, criar pastas, mover pastas e arquivos, apagar pastas e arquivos, fazer backup e download de sua pasta.
+
+Além disso, a ferramenta de documentos é sincronizada com o gerenciador de arquivos do editor online, as alterações em documentos a partir de qualquer um desses vai afetar ambos.
+
+Como tal, a pasta de usuário não é apenas um local para depósito de arquivos, torna-se um completo gestor dos documentos de alunos durante o curso. Além disso, lembre-se que qualquer usuário pode copiar um arquivo que é visível a partir de qualquer pasta na ferramenta de documentos (seja ele dono ou não) para seus portfólios e documentos pessoais da área de redes sociais, que estará disponível para ele e para uso em outros cursos."
+
+msgid "HelpFolderChat"
+msgstr "INFORMAÇÃO VISÍVEL SOMENTE POR PROFESSORES: Esta pasta contém todas as sessões que foram abertas no chat. Embora a sessões de chat muitas vezes são triviais, outras podem ser realmente interessante e digna de ser incorporada como um documento de trabalho adicional. Para fazer isso sem alterar a visibilidade desta pasta, torne o arquivo visível e vincule-o de onde considerar adequada. Não é recomendável tornar esta pasta visível a todos."
+
+msgid "HelpFolderCertificates"
+msgstr "INFORMAÇÃO VISÍVEL SOMENTE POR PROFESSORES: 
+
+Esta pasta contém vários modelos de certificados que foram criados para a ferramenta de classificação. Não é recomendável tornar esta pasta visível a todos."
+
+msgid "DestinationDirectory"
+msgstr "Pasta de destino"
+
+msgid "CreateAudio"
+msgstr "Crie o áudio"
+
+msgid "InsertText2Audio"
+msgstr "Digite o texto que você deseja converter para um arquivo de áudio"
+
+msgid "HelpText2Audio"
+msgstr "Converta seu texto em fala"
+
+msgid "BuildMP3"
+msgstr "Construir MP3"
+
+msgid "Voice"
+msgstr "Voz"
+
+msgid "Female"
+msgstr "Mulher"
+
+msgid "Male"
+msgstr "Homem"
+
+msgid "GoogleAudio"
+msgstr "Usar serviços de áudio do Google"
+
+msgid "vozMe"
+msgstr "Usar o serviço de áudio do vozMe"
+
+msgid "HelpGoogleAudio"
+msgstr "Suporta até 100 caracteres em uma ampla variedade de idiomas. Os arquivos são gerados e salvos automaticamente para o diretório Chamilo onde você está atualmente."
+
+msgid "HelpvozMe"
+msgstr "Suporta o texto de vários milhares personagens de pessoas, você também pode selecionar o tipo de voz, masculina ou feminina. Ele funciona com menos idiomas e a qualidade do áudio é menor. Finalmente, você tem que baixar os arquivos manualmente a partir de uma nova janela."
+
+msgid "SaveMP3"
+msgstr "Salvar MP3"
+
+msgid "Speed"
+msgstr "Velocidade"
+
+msgid "GoFaster"
+msgstr "Mais rápido"
+
+msgid "Fast"
+msgstr "Rápido"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Slow"
+msgstr "Devagar"
+
+msgid "SlowDown"
+msgstr "Mais devagar"
+
+msgid "Pediaphon"
+msgstr "Usar o serviço de áudio da Pediaphon"
+
+msgid "HelpPediaphon"
+msgstr "Suporta o texto com milhares de caracteres em vários tipos de vozes masculinas e femininas (dependendo do idioma). Os arquivos de áudio serão gerados e salvos automaticamente para o diretório Chamilo em que você está."
+
+msgid "FirstSelectALanguage"
+msgstr "Por favor, selecione um idioma"
+
+msgid "RenameAndComment"
+msgstr "Renomear e comentar"
+
+msgid "YouAreCurrentlyUsingXOfYourX"
+msgstr "Você está usando %s MB (%s) de seus %s MB."
+
+msgid "UplUploadFailedSizeIsZero"
+msgstr "Houve um problema ao carregar o documento: o arquivo recebido tinha um tamanho de 0 bytes no servidor. Por favor, reveja o arquivo local e caso constate qualquer tipo de corrupção ou danos, tente novamente."
+
+msgid "NewImage"
+msgstr "Nova imagem"
+
+msgid "DirExists"
+msgstr "Esta operação não é permitida, uma pasta já existe com este nome."
+
+msgid "DocMv"
+msgstr "Documento movido."
+
+msgid "NoSVGImagesInImagesGalleryPath"
+msgstr "Não há imagens SVG na sua pasta de galeria de imagens"
+
+msgid "NoSVGImages"
+msgstr "Sem imagem SVG"
+
+msgid "WamiNeedFilename"
+msgstr "Antes de ativar a gravação é preciso um nome de arquivo."
+
+msgid "SelectAnAudioFileFromDocuments"
+msgstr "Selecione um arquivo de audio dos documentos"
+

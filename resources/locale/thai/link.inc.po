@@ -1,0 +1,117 @@
+msgid "langLinkName"
+msgstr "ชื่อเชื่อมโยง"
+
+msgid "langLinkAdd"
+msgstr "เพิ่มรายการเชื่อมโยง"
+
+msgid "langLinkAdded"
+msgstr "เพิ่มการเชื่อมโยงแล้ว"
+
+msgid "langLinkMod"
+msgstr "แก้ไขรายการเชื่อมโยง"
+
+msgid "langLinkModded"
+msgstr "แก้ไขการเชื่อมโยงแล้ว"
+
+msgid "langLinkDel"
+msgstr "ลบรายการเชื่อมโยง"
+
+msgid "langLinkDeleted"
+msgstr "ลบการเชื่อมโยงแล้ว"
+
+msgid "langLinkDelconfirm"
+msgstr "คุณต้องการที่จะลบการเชื่อมโยงนี้"
+
+msgid "langAllLinksDel"
+msgstr "ลบการเชื่อมโยงในประเภทนี้ทั้งหมด"
+
+msgid "langCategoryName"
+msgstr "ชื่อประเภท"
+
+msgid "langCategoryAdd"
+msgstr "เพิ่มประเภท"
+
+msgid "langCategoryAdded"
+msgstr "เพิ่มประเภทแล้ว"
+
+msgid "langCategoryModded"
+msgstr "ได้แก้ไขประเภทแล้ว"
+
+msgid "langCategoryDel"
+msgstr "ลบประเภท"
+
+msgid "langCategoryDeleted"
+msgstr "รายการเชื่อมโยงในประเภททั้งหมดถูกลบแล้ว"
+
+msgid "langCategoryDelconfirm"
+msgstr "เมื่อลบประเภทแล้วทุกรายการเชื่อมโยงต้องถูกลบด้วย คุณแน่ใจที่จะลบหรือไม่"
+
+msgid "langAllCategoryDel"
+msgstr "ลบทุกรายการและประเภทเชื่อมโยง"
+
+msgid "langGiveURL"
+msgstr "กรุณาใส่ที่อยู่ออนไลน์ของรายการเชื่อมโยง"
+
+msgid "langGiveCategoryName"
+msgstr "กรุณาตั้งชื่อประเภท"
+
+msgid "langNoCategory"
+msgstr "ไม่มีประเภท"
+
+msgid "showall"
+msgstr "เปิดทุกประเภทรายการเชื่อมโยง"
+
+msgid "shownone"
+msgstr "ปิดรายการเชื่อมโยงทุกประเภท"
+
+msgid "langListDeleted"
+msgstr "รายการถูกลบแล้ว"
+
+msgid "langAddLink"
+msgstr "เพิ่มการเชื่อมโยง"
+
+msgid "langDelList"
+msgstr "ลบรายการทั้งหมด"
+
+msgid "langModifyLink"
+msgstr "แก้ไขรายการเชื่อมโยง"
+
+msgid "langCsvImport"
+msgstr "นำเข้าcsv"
+
+msgid "langCsvFileNotFound"
+msgstr "ไฟล์ CSV ที่นำเข้ามาไม่สามารถเปิดได้ เพราะไฟล์มีขนาดใหญ่เกินหรือไม่มีข้อมูลภายใน"
+
+msgid "langCsvFileNoSeps"
+msgstr "ไฟล์CSVที่นำเข้ามาต้องใช้เครื่องหมายคอมม่า,หรือเซมิโคล่อน; เป็นตัวคั่นรายการชื่อไฟล์"
+
+msgid "langCsvFileNoURL"
+msgstr "ไฟล์csvที่นำเข้าต้องมีส่วนประกอบอย่างน้อยคือ ชื่อและรายการบ่งชี้ที่อยู่ออนไลน์"
+
+msgid "langCsvFileLine1"
+msgstr "... - บรรทัดที่1="
+
+msgid "langCsvLinesFailed"
+msgstr "บรรทัดนี้การเชื่อมโยงผิดพลาด(ไม่มีที่อยู่เว็ปหรือไม่มีชื่อ)"
+
+msgid "langCsvLinesOld"
+msgstr "มีรายการเชื่อมโยงนี้แล้ว ปรับปรุงแล้ว(มีที่อยู่และประเภทเดียวกัน)"
+
+msgid "langCsvLinesNew"
+msgstr "สร้างรายการเชื่อมโยงให้แล้ว"
+
+msgid "langCsvExplain"
+msgstr "ไฟล์ต้องควรจะเป็นดังนี้: <blockquote><pre> <b>ที่อยู่เว็ปไซท์</b>;ประเภท;<b>ชื่อเรื่อง</b>;คำอธิบาย; <b>http://www.tinnabutr.com/dokeos</b>;รายการเชื่อมโยงที่น่าสนใจ;<b>ชื่อที่ 1</b>;คำอธิบายที่ 1; <b>http://www.wittycomputer.com/prachid</b>;;<b>ชิ่อเรื่องที่ 2</b>;\"คำอธิบายที่ 2\"; </pre></blockquote>หากมีชื่อ ที่อยู่เว็ป และคำอธิบายอยู่เดิมแล้วก็จะถือว่าเป็นการปรับปรุงข้อมูลใหม่.<br><br> ตัวหนา = ส่วนที่รับคำสั่ง. การพิมพ์รับค่าได้ทั้งตัวใหญ่ตัวเล็ก หากต้องการใส่หลายค่าในแต่ละตารางแสดงข้อมูลให้แยกคำด้วยเครื่องหมาย, หรือ ; [b]โค๊ดคำสั่งของ HTML tags[/b] สามารถนำเข้าไฟล์ มาใส่ไว้ในตาราง."
+
+msgid "langLinkUpdated"
+msgstr "ปรับแก้การเชื่อมโยงแล้ว"
+
+msgid "langAll_Link_Deleted"
+msgstr "ลบการเชื่อมโยงแล้ว"
+
+msgid "langOnHomepage"
+msgstr "แสดงการเชื่อมโยงในโฮมเพจวิชา"
+
+msgid "langShowLinkOnHomepage"
+msgstr "�ʴ���¡��������§����ྨ�Ԫ����ٻ�ͤ�͹�ԧ��"
+

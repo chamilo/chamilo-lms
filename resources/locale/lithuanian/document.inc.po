@@ -1,0 +1,330 @@
+msgid "MoveTo"
+msgstr "Perkelti į"
+
+msgid "langDownloadFile"
+msgstr "Įkelti failą į serverį"
+
+msgid "langNameDir"
+msgstr "Naujo katalogo vardas"
+
+msgid "langSize"
+msgstr "Dydis"
+
+msgid "langRename"
+msgstr "Pervadinti"
+
+msgid "langCopy"
+msgstr "Kopijuoti kurso turinį"
+
+msgid "langTo"
+msgstr "į"
+
+msgid "langNoSpace"
+msgstr "Įkėlimas nepavyko. Galbūt viršijote asmeninę kvotą arba nėra vietos diske."
+
+msgid "langDownloadEnd"
+msgstr "Įkėlimas baigtas"
+
+msgid "langFileExists"
+msgstr "Operacija negalima, failas su tokiu vardu jau yra."
+
+msgid "langImpossible"
+msgstr "Operacija negalima"
+
+msgid "langAddComment"
+msgstr "Įrašyti/modifikuoti komentarą"
+
+msgid "langDocCopied"
+msgstr "Dokumentas nukopijuotas"
+
+msgid "langDocDeleted"
+msgstr "Dokumentas ištrintas"
+
+msgid "langElRen"
+msgstr "Elementas pervadintas"
+
+msgid "langDirMv"
+msgstr "Elementas perkeltas"
+
+msgid "langComMod"
+msgstr "Komentaras modifikuotas"
+
+msgid "langViMod"
+msgstr "Matomumas modifikuotas"
+
+msgid "langGroupSpace"
+msgstr "Grupės sritis"
+
+msgid "langGroupSpaceLink"
+msgstr "Grupės sritis"
+
+msgid "langGroupForumLink"
+msgstr "Grupės forumas"
+
+msgid "langZipNoPhp"
+msgstr "Zip failas negali turėti .PHP failų"
+
+msgid "langUncompress"
+msgstr "išpakuoti zip failą"
+
+msgid "langDownloadAndZipEnd"
+msgstr " Zip failas įkeltas ir išpakuotas"
+
+msgid "langRoot"
+msgstr "šakninis katalogas"
+
+msgid "CreateDoc"
+msgstr "Sukurti dokumentą"
+
+msgid "langDown"
+msgstr "žemyn"
+
+msgid "langFileError"
+msgstr "Failas negali būti įkeliamas."
+
+msgid "langMaxFileSize"
+msgstr "Maksimalus failo dydis yra"
+
+msgid "langFileName"
+msgstr "Failo vardas"
+
+msgid "langNoFileName"
+msgstr "Prašome įrašyti failo vardą"
+
+msgid "langNoText"
+msgstr "Prašome įrašyti tekstą / HTML turinį"
+
+msgid "langAreYouSureToDelete"
+msgstr "Ar tikrai norite ištrinti"
+
+msgid "langScormcontent"
+msgstr "Tai Scorm turinys<br><input type=button name=scormbutton value=\'Paleisti!\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr "Tai Scorm formato kursas. Jo peržiūrai spauskite čia : <input type=button name=scormbutton value=\'Paleisti!\' onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Publikuoti"
+
+msgid "langMissingImagesDetected"
+msgstr "rastas neegzistuojantis paveikslėlis"
+
+msgid "langCreateDocument"
+msgstr "Sukurti dokumentą"
+
+msgid "langEditDocument"
+msgstr "Redaguoti"
+
+msgid "langDocuments"
+msgstr "Dokumentai"
+
+msgid "langOrganiseDocuments"
+msgstr "Sukurti turinį"
+
+msgid "langEditTOC"
+msgstr "Redaguoti turinį"
+
+msgid "langChapter"
+msgstr "Skyrius"
+
+msgid "langDocumentList"
+msgstr "Visų dokumentų sąrašas"
+
+msgid "langOrganisationList"
+msgstr "Turinys"
+
+msgid "langCreationSucces"
+msgstr "Turinys sėkmingai sukurtas."
+
+msgid "langCanViewOrganisation"
+msgstr "You can view your organisation"
+
+msgid "langHere"
+msgstr "here."
+
+msgid "langViewDocument"
+msgstr "Peržiūrėti"
+
+msgid "langHtmlTitle"
+msgstr "Turinys"
+
+msgid "langAddToTOC"
+msgstr "Įrašyti"
+
+msgid "langAddChapter"
+msgstr "Įrašyti skyrių"
+
+msgid "langReady"
+msgstr "generuoti turinį"
+
+msgid "langStoreDocuments"
+msgstr "Išsaugoti dokumentus"
+
+msgid "langTocDown"
+msgstr "žemyn"
+
+msgid "langTocUp"
+msgstr "Aukštyn"
+
+msgid "CutPasteLink"
+msgstr "Be rėmelių (frames)"
+
+msgid "langCreatePath"
+msgstr "Sukurti kelią"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "Oogie : PowerPoint konvertavimas"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "PowerPoint į Teorinę kursų medžiagą konvertavimas"
+
+msgid "langAddMetadata"
+msgstr "Peržiūrėti/redaguoti Meta duomenis"
+
+msgid "langGoMetadata"
+msgstr "Eiti"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "Šio kurso kvota yra"
+
+msgid "langDel"
+msgstr "ištrinti"
+
+msgid "langUp"
+msgstr "Viršun"
+
+msgid "langDate"
+msgstr "Data"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Rodyti kurso užimamos vietos kvotą"
+
+msgid "CourseCurrentlyUses"
+msgstr "Šis kursas dabar naudoja"
+
+msgid "MaximumAllowedQuota"
+msgstr "Jūsų saugojimo limitas yra"
+
+msgid "PercentageQuotaInUse"
+msgstr "Failų užimamos vietos kvotos išnaudojimas procentais"
+
+msgid "PercentageQuotaFree"
+msgstr "Laisva failų užimamos vietos kvotos dalis procentais"
+
+msgid "CurrentDirectory"
+msgstr "Esamas katalogas"
+
+msgid "UplUploadDocument"
+msgstr "Įkelti dokumentą"
+
+msgid "UplPartialUpload"
+msgstr "Failas tik dalinai įkeltas."
+
+msgid "UplExceedMaxPostSize"
+msgstr "Failo dydis viršija maksimalų leistiną dydį:"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "Failo dydis viršija maksimalų leistiną dydį, nustatytą serveryje:"
+
+msgid "UplFileTooBig"
+msgstr "Failas per didelis įkelti."
+
+msgid "UplUploadFailed"
+msgstr "Failo įkėlimas nutrūko."
+
+msgid "UplUnableToSaveFile"
+msgstr "Įkeltas failas neišsaugotas (galbūt dėl teisių?)"
+
+msgid "UplNotEnoughSpace"
+msgstr "Nėra pakankamai vietos šio failo įkėlimui."
+
+msgid "UplNoSCORMContent"
+msgstr "SCORM formato turinio nerasta."
+
+msgid "UplZipExtractSuccess"
+msgstr "Zip failas sėkmingai išpakuotas."
+
+msgid "UplZipCorrupt"
+msgstr "Zip failo išpakuoti nepavyko (sugadintas failas?)."
+
+msgid "UplAlreadyExists"
+msgstr " jau yra."
+
+msgid "UplFileSavedAs"
+msgstr "Failas išsaugotas kaip"
+
+msgid "UplFileOverwritten"
+msgstr " perrašytas."
+
+msgid "CannotCreateDir"
+msgstr "Sukurti katalogo nepavyko."
+
+msgid "UplUpload"
+msgstr "Įkėlimas"
+
+msgid "UplWhatIfFileExists"
+msgstr "Jei failas jau yra:"
+
+msgid "UplDoNothing"
+msgstr "Nieko nedaryti"
+
+msgid "UplDoNothingLong"
+msgstr "Įkėlimo nevykdyti, jei failas yra"
+
+msgid "UplOverwrite"
+msgstr "Perrašyti"
+
+msgid "UplOverwriteLong"
+msgstr "Užrašyti esamą failą"
+
+msgid "UplRename"
+msgstr "Pervadinti"
+
+msgid "UplRenameLong"
+msgstr "Pervadinti įkeliamą failą, jei toks jau yra"
+
+msgid "Metadata"
+msgstr "Meta duomenys"
+
+msgid "DocumentQuota"
+msgstr "Dokumentų kvota"
+
+msgid "NoDocsInFolder"
+msgstr "Dokumentų nėra."
+
+msgid "UploadTo"
+msgstr "Įkelti į"
+
+msgid "fileModified"
+msgstr "Failas modifikuotas"
+
+msgid "DocumentsOverview"
+msgstr "dokumentų peržiūra"
+
+msgid "ViewSlideshow"
+msgstr "Paveikslėlių demonstracija"
+
+msgid "Options"
+msgstr "Nustatymai"
+
+msgid "WelcomeOogieConverter"
+msgstr "Welcome to Oogie PowerPoint converter<ul type=\"1\"><li>Browse your hard disk to find any .ppt or .odp file<li>Upload it to Oogie. It will tranform it into a Scorm learning path.<li>You will then be allowed to add audio comments on each slide and inserts test between slides for evaluation"
+
+msgid "ConvertToLP"
+msgstr "Konvertuoti į Mokymosi medžiagą"
+
+msgid "AdvancedSettings"
+msgstr "Išplėstiniai nustatymai"
+
+msgid "File"
+msgstr "Failas"
+
+msgid "DocDeleteError"
+msgstr "Klaida trinant dokumentą"
+
+msgid "ViModProb"
+msgstr "Problema keičiant matomumą"
+
+msgid "DirDeleted"
+msgstr "Katalogas ištrintas"
+

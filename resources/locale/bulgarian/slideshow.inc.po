@@ -1,0 +1,48 @@
+msgid "Height"
+msgstr "Височина (пиксели) "
+
+msgid "ResizingComment"
+msgstr "Да се преоразмерят изображенията в следните рамери:"
+
+msgid "Width"
+msgstr "Широчина (пиксели)"
+
+msgid "Resizing"
+msgstr "<b>С преоразмеряване</b>"
+
+msgid "NoResizingComment"
+msgstr "Всички изображения са с оригиналните им размери."
+
+msgid "ShowThumbnails"
+msgstr "Миниатюрни изображения"
+
+msgid "SetSlideshowOptions"
+msgstr "Задаване на настройки"
+
+msgid "SlideshowOptions"
+msgstr "Настройки на презентацията"
+
+msgid "NoResizing"
+msgstr "<b>Без преоразмеряване</b>"
+
+msgid "ExitSlideshow"
+msgstr "Край на презентацията"
+
+msgid "SlideShow"
+msgstr "Презентация"
+
+msgid "PreviousSlide"
+msgstr "Предишно"
+
+msgid "NextSlide"
+msgstr "Следващо"
+
+msgid "ViewSlideshow"
+msgstr "Старт на презентацията"
+
+msgid "FirstSlide"
+msgstr "Първо"
+
+msgid "LastSlide"
+msgstr "Последно"
+

@@ -1,0 +1,130 @@
+msgid "langMdCallingTool"
+msgstr "مدارک آموزشی"
+
+msgid "langMdTitle"
+msgstr "عنوان زیر مجموعۀ آموزشی"
+
+msgid "langMdDescription"
+msgstr "برای ضبط اطلاعات لطفاً بر روی دکمۀ �ضبط� فشار دهید"
+
+msgid "langMdCoverage"
+msgstr "..دیپلم متوسطه رشته"
+
+msgid "langMdCopyright"
+msgstr "معدل کل"
+
+msgid "langTool"
+msgstr "اطلاعات در مورد ابرداده های قسمت مدارک"
+
+msgid "langNoScript"
+msgstr "مرورگر مورد استفادۀ شما قابلیت نمایش پایین صفحه را ندارد"
+
+msgid "langPressAgain"
+msgstr "لطفاً دوباره روی کلمۀ �ضبط� فشار دهید"
+
+msgid "langLanguageTip"
+msgstr "زبانی که این زیر مجموعۀ آموزشی به آن نوشته شده است"
+
+msgid "langIdentifier"
+msgstr "نام کاربری"
+
+msgid "langIdentifierTip"
+msgstr "کدی برای شناسایی این زیر مجموعۀ آموزشی : عدد و حرف"
+
+msgid "langTitleTip"
+msgstr "نام زیر مجموعۀ آموزشی و زبان  این نام"
+
+msgid "langDescriptionTip"
+msgstr "توضیحات زیر مجموعۀ آموزشی و زبان آن"
+
+msgid "langKeyword"
+msgstr "کلمه
+کلیدی"
+
+msgid "langKeywordTip"
+msgstr "لطفاً برای جداسازی آنها از خط تیره استفاده کنید"
+
+msgid "langCoverage"
+msgstr "هدف"
+
+msgid "langCoverageTip"
+msgstr "...دیپلم متوسطه در رشتۀ"
+
+msgid "langKwNote"
+msgstr "اگر زبان توضیحات را تغییر می دهید لطفاً به صورت همزمان به اضافه کردن کلمات کلیدی نپردازید"
+
+msgid "langClickKw"
+msgstr "لطفاً برای انتخاب یا ابطال انتخاب کلمات کلیدی کلیک کنید"
+
+msgid "langKwHelp"
+msgstr "کلیک +برای باز کردن، کلیک - برای بستن، کلیک ++ برای باز کردن همه، کلیک -- برای بستن همه<br><br>برای ابطال انتخاب های قبلی، لطفاً نمایش درختی را بسته و آن را دوباره با فشار دادن روی علامت + باز کنید <br><br>برای بازگشتن به وضعیت اولیه کلمات کلیدی، لطفاً آن را با دکمه های زیر باز کنید<br>Alt Click +<br><br>با فشار دادن دکمه های زیربه طور همزمان کلمات کلیدیِ بدون حدود  گسترده تر انتخاب می شوند و انتخاب کلمات کلیدیِ دارای حدود گسترده تر ابطال میشود  <br>Alt Click<br><br>اگر زبان توضیحات را تغییر می دهید لطفاً به صورت همزمان به اضافه کردن کلمات کلیدی نپردازید"
+
+msgid "langRights"
+msgstr "شرایط و ضوابط استفاده"
+
+msgid "langRightsTip"
+msgstr "توضیحات"
+
+msgid "langVersion"
+msgstr "نسخه"
+
+msgid "langVersionTip"
+msgstr "تعداد یا توضیحات"
+
+msgid "langStatusTip"
+msgstr "لطفاً از درون لیست انتخاب کنید"
+
+msgid "langCreatedSize"
+msgstr "تاریخ ایجاد، اندازه"
+
+msgid "langCreatedSizeTip"
+msgstr "ایجاد شده در تاریخ (روز، ماه، سال)، وزن بر حسب بایت"
+
+msgid "langAuthorTip"
+msgstr " VCARD نوع فایل"
+
+msgid "langFormat"
+msgstr "نوع فایل"
+
+msgid "langFormatTip"
+msgstr "لطفاً از درون لیست انتخاب کنید"
+
+msgid "langLocation"
+msgstr "آدرس اینترنتی"
+
+msgid "langLocationTip"
+msgstr "برای بازکردن زیر مجموعۀ آموزشی روی آن کلیک کنید"
+
+msgid "langStore"
+msgstr "ضبط"
+
+msgid "langDeleteAll"
+msgstr "حذف تمامی ابر داده ها"
+
+msgid "langConfirmDelete"
+msgstr "آیا واقعاً می خواهید تمامی ابرداده ها را حذف کنید؟"
+
+msgid "langCourseKwds"
+msgstr "این فایل حاوی کلمات کلیدی درس است"
+
+msgid "langSearch"
+msgstr "جستجو کنید"
+
+msgid "langSearchCrit"
+msgstr "یک کلمه در هر خط"
+
+msgid "langStatuses"
+msgstr "draft:چرک نویس,, final:آخرین نسخه,, revised:نسخه بازبینی شده,, unavailable:موجود نمی باشد"
+
+msgid "langCosts"
+msgstr ":no:رایگان,, yes:غیر رایگان"
+
+msgid "langCopyrights"
+msgstr ":yes:حق مالکیت,, no:بدون حق مالکیت"
+
+msgid "langFormats"
+msgstr "text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+
+msgid "langLngResTypes"
+msgstr "exercise:آزمون,, simulation:شبیه سازی,, questionnaire:پرسشنامه,, diagram:دیاگرام,, figure:شکل,, graph:گراف,, index:صفحۀ اصلی,, slide:اسلاید,, table:جدول,, narrative text:متن روایی,, exam:امتحان,, experiment:تجربه,, problem statement:صورت مسئله,, self assessment:خودآزمایی,, lecture:سخنرانی"
+

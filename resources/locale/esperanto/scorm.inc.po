@@ -1,0 +1,108 @@
+msgid "langScormVersion"
+msgstr "versio"
+
+msgid "langScormRestarted"
+msgstr "Ciuj lecionoj estas nun malkompletaj."
+
+msgid "langScormNoNext"
+msgstr "Jen la lasta leciono."
+
+msgid "langScormNoPrev"
+msgstr "Jen la unua leciono."
+
+msgid "langScormTime"
+msgstr "Tempo"
+
+msgid "langScormNoOrder"
+msgstr "Ne estas difinita ordo; vi povas musklaki sur ajna leciono."
+
+msgid "langScormScore"
+msgstr "Poentaro"
+
+msgid "langScormLessonTitle"
+msgstr "Leciona tiolo"
+
+msgid "langScormStatus"
+msgstr "Statuso"
+
+msgid "langScormToEnter"
+msgstr "Por partopreni"
+
+msgid "langScormFirstNeedTo"
+msgstr "vi unue realigu la sekvantan lecionon:"
+
+msgid "langScormThisStatus"
+msgstr "Ĉi-leciono estas nun"
+
+msgid "langScormClose"
+msgstr "Fini"
+
+msgid "langScormRestart"
+msgstr "Restarti"
+
+msgid "langScormCompstatus"
+msgstr "Kompletigita"
+
+msgid "langScormIncomplete"
+msgstr "Ne kompleta"
+
+msgid "langScormPassed"
+msgstr "Sukcesis"
+
+msgid "langScormFailed"
+msgstr "Malsukcesis"
+
+msgid "langScormPrevious"
+msgstr "Antaŭa"
+
+msgid "langScormNext"
+msgstr "Sekvanta"
+
+msgid "langScormTitle"
+msgstr "Chamilo-Scorm-ludilo"
+
+msgid "langScormMystatus"
+msgstr "Mia statuso"
+
+msgid "langScormNoItems"
+msgstr "Ĉi-enhavo enhavas neniun elementon."
+
+msgid "langScormNoStatus"
+msgstr "Ne statuso por ĉi-enhavo"
+
+msgid "langScormLoggedout"
+msgstr "adiaŭinta el Scorm-tutaĵo"
+
+msgid "langScormCloseWindow"
+msgstr "Fermi fenestron"
+
+msgid "ScormBrowsed"
+msgstr "Vizitita"
+
+msgid "langScormExitFullScreen"
+msgstr "Reiri al normala ekrano"
+
+msgid "langScormFullScreen"
+msgstr "Plena ekrano"
+
+msgid "langScormNotAttempted"
+msgstr "Ne provita"
+
+msgid "langCharset"
+msgstr "Tiparo"
+
+msgid "langLocal"
+msgstr "Loka"
+
+msgid "langRemote"
+msgstr "Fora"
+
+msgid "langAutodetect"
+msgstr "Aŭtomate trovi"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Nombro da finitaj paŝoj"
+
+msgid "langUnknown"
+msgstr "Nekonata"
+

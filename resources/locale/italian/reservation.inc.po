@@ -1,0 +1,406 @@
+msgid "ReservationPeriodToSmall"
+msgstr "Il periodo di prenotazione è troppo corto."
+
+msgid "BookingSystem"
+msgstr "Sistema di prenotazione"
+
+msgid "BookingPeriodList"
+msgstr "Elenco dei periodi di prenotazione"
+
+msgid "BookingListView"
+msgstr "Prenotazioni: vista elenco"
+
+msgid "BookingCalendarView"
+msgstr "Prenotazioni: vista calendario"
+
+msgid "BookingPeriods"
+msgstr "Periodi di prenotazione"
+
+msgid "ResourceList"
+msgstr "Elenco delle risorse"
+
+msgid "GoToCalendarView"
+msgstr "Vai alla modalità calendario"
+
+msgid "GoToListView"
+msgstr "Vai alla modalità elenco"
+
+msgid "ManageResources"
+msgstr "Gestisci le risorse"
+
+msgid "EditResource"
+msgstr "Modifica le risorse"
+
+msgid "BookIt"
+msgstr "Prenota!"
+
+msgid "GoTo"
+msgstr "Vai a"
+
+msgid "NoTimePicker"
+msgstr "Senza timer"
+
+msgid "TimePicker"
+msgstr "Timer"
+
+msgid "ManageBookingPeriods"
+msgstr "Gestisci i periodi di prenotazione"
+
+msgid "BookingPeriodToSmall"
+msgstr "Il periodo di prenotazione è troppo piccolo"
+
+msgid "BookingPeriodToBig"
+msgstr "Il periodo di prenotazione è troppo grande"
+
+msgid "BookingPeriodTimePickerError1"
+msgstr "Un periodo di prenotazione senza timer non può essere accettato se i tempi minimo e massimo del segmento sono diversi da zero."
+
+msgid "BookingPeriodTimePickerError2"
+msgstr "Un periodo di prenotazione con timer non può essere accettato se il tempo massimo è inferiore al valore minimo del segmento."
+
+msgid "BookingPeriodTimePickerError3"
+msgstr "Un periodo di prenotazione con timer non può essere accettato se il tempo massimo del segmento non corrisponde alla differenza tra la data finale e quella iniziale."
+
+msgid "BookingPeriodHasSubscriptions"
+msgstr "Il periodo di prenotazione ha #NUM# richieste in corso, non è possibile modificare il periodo di prenotazione"
+
+msgid "TimePickerMaxUsers"
+msgstr "* se si usa il timer verrà ignorato il numero masso di richieste"
+
+msgid "TimePickerMinMaxNull"
+msgstr "* se il valore minimo e massimo del timer è zero, il tempo può essere scelto arbitrariamente"
+
+msgid "DeleteSelectedBookingPeriod"
+msgstr "Elimina i periodi di prenotazione selezionati"
+
+msgid "EditNewBookingPeriod"
+msgstr "Modifica un periodo di prenotazione"
+
+msgid "BookingPeriodAdded"
+msgstr "Il periodo di prenotazione è stato aggiunto"
+
+msgid "BookingPeriodDeleted"
+msgstr "Il periodo di prenotazione è stato eliminato"
+
+msgid "ConfirmDeleteBookingPeriod"
+msgstr "Sei sicuro di voler eliminare definitivamente il periodo di prenotazione?"
+
+msgid "DeleteBookingPeriod"
+msgstr "Rimuovi questo periodo di prenotazione"
+
+msgid "BookingPeriodEdited"
+msgstr "Il periodo di prenotazione è stato modificato"
+
+msgid "BookingPeriodDateOverlap"
+msgstr "Il periodo di prenotazione è in parte già utilizzato dal #START# al #END#"
+
+msgid "BookingPeriodSubscribeUntilAfterStart"
+msgstr "La richiesta \"fino ad una certa data\" supera la data d\'inizio"
+
+msgid "RepeatFor"
+msgstr "Ripeti ogni"
+
+msgid "RepeatUntil"
+msgstr "Ripeti fino a"
+
+msgid "BookingPeriodPast"
+msgstr "Non è possibile prenotare prima del momento attuale"
+
+msgid "ReservationMaxUsersOverrun"
+msgstr "Ci sono più richieste del numero massimo previsto"
+
+msgid "AddNewBookingPeriod"
+msgstr "Aggiungi un periodo di prenotazione"
+
+msgid "BookingPeriodTimePickerLimitation"
+msgstr "Non è possibile effettuare prenotazioni con un timer se la data d\'inizio e fine sono diverse"
+
+msgid "ResourceTypeName"
+msgstr "Nome del tipo di risorsa"
+
+msgid "AddNewResourceType"
+msgstr "Aggiungi un nuovo tipo di risorsa"
+
+msgid "ResourceTypeAdded"
+msgstr "Tipo di risorsa aggiunto"
+
+msgid "ResourceTypeEdited"
+msgstr "Tipo di risorsa modificato"
+
+msgid "ResourceTypeDeleted"
+msgstr "Il tipo di risorsa è stato eliminato"
+
+msgid "ConfirmDeleteResourceType"
+msgstr "Sei sicuro di voler eliminare definitivamente questo tipo di risorsa?"
+
+msgid "EditResourceType"
+msgstr "Modifica il tipo di risorsa"
+
+msgid "DeleteResourceType"
+msgstr "Elimina il tipo di risorsa"
+
+msgid "DeleteSelectedCategories"
+msgstr "Elimina gli elementi selezionati"
+
+msgid "NoResourcesType"
+msgstr "Nessun tipo di risorsa presente"
+
+msgid "ResourceType"
+msgstr "Tipo di risorsa"
+
+msgid "ResourceTypeExist"
+msgstr "La risorsa è già stata creata"
+
+msgid "ResourceTypeHasItems"
+msgstr "Il tipo di risorsa ha ancora #NUM# unità! La cancellazione è stata annullata"
+
+msgid "ResourceTypeNotDeleted"
+msgstr "Alcuni tipi di risorsa non sono stati eliminati perchè esistono ancora unità presenti"
+
+msgid "DeleteSelectedSubscriptions"
+msgstr "Elimina la prenotazione selezionata"
+
+msgid "DeleteSubscription"
+msgstr "Elimina la prenotazione"
+
+msgid "SubscriptionDeleted"
+msgstr "La prenotazione è stata eliminata"
+
+msgid "ConfirmDeleteSubscription"
+msgstr "Sei sicura/o di voler eliminare la prenotazione?"
+
+msgid "SubscribeInformation"
+msgstr "Conferma di voler effettuare una prenotazione dal #start# al #end# per #name#"
+
+msgid "SubscribeTimePickerInformation"
+msgstr "Seleziona per #name# un intervallo di tempo #from_till compreso nel periodo: #start_end"
+
+msgid "ReservationAdded"
+msgstr "Prenotazione aggiunta"
+
+msgid "ReservationTresspassing"
+msgstr "La prenotazione è completa, non è possibile effettuarne ancora una"
+
+msgid "ReservationOutOfDate"
+msgstr "La data scelta è già usata e/o non è compresa nel periodo da #START# a #END# di prenotazione"
+
+msgid "ReservationAlready"
+msgstr "Hai già prenotato questa risorsa"
+
+msgid "ReservationMadeTitle"
+msgstr "Hai prenotato la risorsa #ITEM# con successo"
+
+msgid "ReservationMadeMessage"
+msgstr "Cara/o utente 
+
+La tua prenotazione per la risorsa #ITEM# dal #START# al #END# è stata effettuata con successo."
+
+msgid "ReservationDeleteTitle"
+msgstr "E\' stato eliminato un periodo di prenotazione per la risorsa #NAME#"
+
+msgid "ReservationDeleteMessage"
+msgstr "Cara/o utente 
+
+La tua prenotazione per la risorsa #ITEM# dal #START# al #END# è stata cancellata."
+
+msgid "OutPeriod"
+msgstr "Fuori tempo"
+
+msgid "ReservationFromUntilError"
+msgstr "Il periodo di prenotazione dal #START# al #END# non è stato accettato in quanto si sovrappone parzialmente con un altro periodo di prenotazione"
+
+msgid "Recurrence"
+msgstr "Ripetizione"
+
+msgid "NoRecurrence"
+msgstr "Nessuna ripetizione"
+
+msgid "UntilRecurrence"
+msgstr "Attiva una ripetizione"
+
+msgid "TimePickerLimitation"
+msgstr "* Se il timer è in uso, le date di inizio e fine devono coincidere."
+
+msgid "OverviewSubscriptions"
+msgstr "Vista delle prenotazioni"
+
+msgid "OverviewReservedPeriods"
+msgstr "Vista dei periodi di prenotazione"
+
+msgid "SubscribedStartDate"
+msgstr "Riservato fino dalla data finale"
+
+msgid "SubscribedEndDate"
+msgstr "Riservato fino alla data finale"
+
+msgid "SubscribedPerson"
+msgstr "Richiedente"
+
+msgid "BookingView"
+msgstr "Vista Prenotazioni"
+
+msgid "SubscribeUntil"
+msgstr "Riserva fino a"
+
+msgid "SubscribeFrom"
+msgstr "Riserva da"
+
+msgid "Notes"
+msgstr "Annotazioni"
+
+msgid "SubscriptionPeriod"
+msgstr "Periodo di prenotazione"
+
+msgid "NoPeriod"
+msgstr "Non c\'è alcun periodo di prenotazione"
+
+msgid "FixedPeriod"
+msgstr "Periodo fisso di prenotazione"
+
+msgid "ResourceFilter"
+msgstr "Filtra la risorsa"
+
+msgid "NoReservation"
+msgstr "Non c\'è ancora un periodo di prenotazione"
+
+msgid "MaxUsers"
+msgstr "Numero massimo di prenotazioni"
+
+msgid "AutoAccept"
+msgstr "Accetta automaticamente gli utenti"
+
+msgid "ResourceName"
+msgstr "Nome della risorsa"
+
+msgid "ResourceAdded"
+msgstr "Risorsa aggiunta"
+
+msgid "ResourceEdited"
+msgstr "Risorsa modificata"
+
+msgid "ResourceDeleted"
+msgstr "Risorsa eliminata"
+
+msgid "AddNewResource"
+msgstr "Aggiungi una risorsa"
+
+msgid "ConfirmDeleteResource"
+msgstr "Sei sicura/o di voler eliminare definitivamente la risorsa?"
+
+msgid "ResourceInactivated"
+msgstr "Risorsa disattivata"
+
+msgid "ResourceActivated"
+msgstr "Risorsa attivata"
+
+msgid "Resource"
+msgstr "Risorsa"
+
+msgid "OpenBooking"
+msgstr "Abilita la prenotazione"
+
+msgid "DeleteResource"
+msgstr "Elimina la risorsa"
+
+msgid "DeleteSelectedResources"
+msgstr "Elimina le risorse selezionate"
+
+msgid "ResourceExist"
+msgstr "Risorsa già esistente"
+
+msgid "AcceptUsers"
+msgstr "Si accettano utenti"
+
+msgid "UnacceptedUsers"
+msgstr "Non si accettano utenti"
+
+msgid "DeleteSubscriptions"
+msgstr "Eliminazione delle prenotazioni"
+
+msgid "NoItems"
+msgstr "Non ci sono unità presenti"
+
+msgid "ItemNotDeleted"
+msgstr "Alcune unità non sono state eliminate perché prenotate"
+
+msgid "ItemHasReservations"
+msgstr "L\'elemento ha ancora #NUM# prenotazioni/e attive/a"
+
+msgid "NoItemsReservation"
+msgstr "Non ci sono più unità disponibili per questa risorsa"
+
+msgid "ReservationAccepted"
+msgstr "La tua prenotazione per #ITEM# è stata accolta"
+
+msgid "ReservationDenied"
+msgstr "La tua prenotazione per #ITEM# è stata rifiutata"
+
+msgid "ReservationForItemAccepted"
+msgstr "Cara/o Utente,
+
+La tua prenotazione per #ITEM# dal #BEGIN al #END è stata accolta."
+
+msgid "ReservationForItemDenied"
+msgstr "Cara/o Utente,
+
+La tua prenotazione per #ITEM# dal #BEGIN al #END è stata rifiutata."
+
+msgid "ReservationCancelled"
+msgstr "Prenotazione eliminata, #NAME# temporaneamente non è disponibile"
+
+msgid "ReservationActive"
+msgstr "Prenotazione ripristinata, #NAME# è di nuovo disponibile"
+
+msgid "ReservationUnavailable"
+msgstr "Cara/o Utente,
+
+ l\'elemento #NAME#  non è temporaneamente disponibile, per cui la prenotazione dal #BEGIN al #END non è stata accolta.
+ Riceverai un\'email quando l\'elemento sarà nuovamente disponibile, ci scusiamo per l\'inconveniente."
+
+msgid "ReservationAvailable"
+msgstr "Cara/o Utente,
+
+ l\'elemento #NAME#  è ora nuovamente disponibile, per cui la prenotazione dal #BEGIN al #END è ora attiva, grazie."
+
+msgid "Resources"
+msgstr "Risorse"
+
+msgid "EditBookingPeriod"
+msgstr "Modifica il periodo di prenotazione"
+
+msgid "CreateResourceType"
+msgstr "Crea tipo di risorsa"
+
+msgid "ModifyResourceType"
+msgstr "Modifica tipo di risorsa"
+
+msgid "ViewResourceTypes"
+msgstr "Vedi i tipi di risorsa"
+
+msgid "ViewResources"
+msgstr "Vedi le risorse"
+
+msgid "ViewBookingPeriods"
+msgstr "Vedi i periodi di prenotazione"
+
+msgid "AlwaysAvailable"
+msgstr "Sempre disponibile"
+
+msgid "SelectResourceTypeAndResource"
+msgstr "Seleziona il tipo di risorsa"
+
+msgid "Step1SelectResourceType"
+msgstr "Passo 1: seleziona il tipo di risorsa"
+
+msgid "Step2SelectResource"
+msgstr "Passo 2: seleziona la risorsa"
+
+msgid "Step3SelectBookingPeriod"
+msgstr "Passo 3: indica il periodo di prenotazione"
+
+msgid "NoReservations"
+msgstr "Nessuna prenotazione"
+
+msgid "ItemRightDeleted"
+msgstr "Permesso rimosso"
+

@@ -1,0 +1,27 @@
+msgid "langInvalidId"
+msgstr "ログインは减け烧けられませんでした。もし判峡がまだなら、肌のリンクでどうぞ <a href"
+
+msgid "langWelcome"
+msgstr " コ〖スは极统にアクセス叫丸ます(布のリスト)。それ笆嘲のコ〖スをとるためには≈判峡∽をして、ユ〖ザおよびパスワ〖ドが涩妥です。兜徽は、ウエブサイトを侯ることが叫丸ます。その眷圭は、≈コ〖スのサイトを侯る(兜徽)∽を联んでください。"
+
+msgid "langPass"
+msgstr "パスワ〖ド"
+
+msgid "langEnter"
+msgstr "Entrer"
+
+msgid "langReg"
+msgstr "判峡"
+
+msgid "langMenu"
+msgstr "メニュ"
+
+msgid "langCourseDoesntExist"
+msgstr "焚桂¨このコ〖スは赂哼しません。"
+
+msgid "langHelpMaj"
+msgstr "へルプ"
+
+msgid "langAdmin"
+msgstr "瓷妄荚"
+

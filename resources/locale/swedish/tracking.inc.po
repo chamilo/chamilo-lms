@@ -1,0 +1,459 @@
+msgid "langToolName"
+msgstr "Importera Blackboard kurser"
+
+msgid "TrackingDisabled"
+msgstr "Spårning har avaktiverats av systemadministratören."
+
+msgid "InactivesStudents"
+msgstr "Inaktiva användare"
+
+msgid "SeeStudentList"
+msgstr "Titta på användarlistan"
+
+msgid "langShowNone"
+msgstr "Visa ingen"
+
+msgid "langCourseStats"
+msgstr "Kursstatistik"
+
+msgid "langToolsAccess"
+msgstr "Tillgång till verktyg"
+
+msgid "langCourseAccess"
+msgstr "Kursåtkomst"
+
+msgid "langLinksAccess"
+msgstr "Länkar"
+
+msgid "langDocumentsAccess"
+msgstr "Dokument"
+
+msgid "langScormAccess"
+msgstr "Learning path - Scorm format kurser"
+
+msgid "langLinksDetails"
+msgstr "Länkar som student följt"
+
+msgid "langWorksDetails"
+msgstr "Arbeten uppladdade av student från \'Författare\'"
+
+msgid "langLoginsDetails"
+msgstr "Klicka på månadsnamn för fler detaljer"
+
+msgid "langDocumentsDetails"
+msgstr "Dokument nedladdade av student"
+
+msgid "langExercicesDetails"
+msgstr "Poäng över färdiga övningar"
+
+msgid "langBackToList"
+msgstr "Tillbaka till användarlistan"
+
+msgid "langDetails"
+msgstr "Detaljer"
+
+msgid "langStatsOfCourse"
+msgstr "Kursstatistik"
+
+msgid "langStatsOfUser"
+msgstr "Användarstatistik"
+
+msgid "langStatsOfCampus"
+msgstr "Campusstatistik"
+
+msgid "langCountUsers"
+msgstr "Antal användare"
+
+msgid "langCountToolAccess"
+msgstr "Totalt antal anslutningar till denna kurs"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Månad"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Antal login"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Namn på verktyget"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Antal användarklick"
+
+msgid "langToolTitleCountColumn"
+msgstr "Totalt antal klick"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Länk"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Antal användarklick"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Totalt antal klick"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Övning"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Poäng"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Dokument"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Antal användarnedladdningar"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Totalt antal nedladdningar"
+
+msgid "langScormContentColumn"
+msgstr "Titel"
+
+msgid "langScormStudentColumn"
+msgstr "Användare"
+
+msgid "langScormTitleColumn"
+msgstr "Lektion/Steg"
+
+msgid "langScormStatusColumn"
+msgstr "Status"
+
+msgid "langScormScoreColumn"
+msgstr "Poäng"
+
+msgid "langScormTimeColumn"
+msgstr "Tid"
+
+msgid "langScormNeverOpened"
+msgstr "Denna kurs är aldrig öppnad av denna användare."
+
+msgid "langWorkTitle"
+msgstr "Titel"
+
+msgid "langWorkAuthors"
+msgstr "Författare"
+
+msgid "langWorkDescription"
+msgstr "Beskrivning"
+
+msgid "informationsAbout"
+msgstr "Spårning av"
+
+msgid "langNoEmail"
+msgstr "Ingen emejladress angiven"
+
+msgid "langNoResult"
+msgstr "Det finns inga resultat ännu"
+
+msgid "langCourse"
+msgstr "Webbsajten"
+
+msgid "langHits"
+msgstr "Träffar"
+
+msgid "langTotal"
+msgstr "Total"
+
+msgid "langHour"
+msgstr "Timme"
+
+msgid "langDay"
+msgstr "dag"
+
+msgid "langLittleHour"
+msgstr "h."
+
+msgid "langLast31days"
+msgstr "Inom de senaste 31 dagarna"
+
+msgid "langLast7days"
+msgstr "Inom de sista 7 dagarna"
+
+msgid "langThisday"
+msgstr "Denna dag"
+
+msgid "langLogins"
+msgstr "Inloggningar"
+
+msgid "langLoginsExplaination"
+msgstr "Här är listan över dina senaste inloggningar med de verktyg som du använt under dessa inloggningar."
+
+msgid "langExercicesResults"
+msgstr "Resultat över gjorda övningar"
+
+msgid "langVisits"
+msgstr "Besök"
+
+msgid "langAt"
+msgstr "vid"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Datum"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Antal besök"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Inloggningar och åtkomst av verktyg"
+
+msgid "langWorkUploads"
+msgstr "Arbeten uppladdade"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Ogiltig användare : denna användare existerar inte i denna grupp"
+
+msgid "langListStudents"
+msgstr "Lista över studenter i denna grupp"
+
+msgid "langPeriodHour"
+msgstr "Timme"
+
+msgid "langPeriodDay"
+msgstr "Dag"
+
+msgid "langPeriodWeek"
+msgstr "Vecka"
+
+msgid "langPeriodMonth"
+msgstr "Månad"
+
+msgid "langPeriodYear"
+msgstr "År"
+
+msgid "langNextDay"
+msgstr "Nästa dag"
+
+msgid "langPreviousDay"
+msgstr "Föregående dag"
+
+msgid "langNextWeek"
+msgstr "Nästa vecka"
+
+msgid "langPreviousWeek"
+msgstr "Föregående vecka"
+
+msgid "langNextMonth"
+msgstr "Nästa månad"
+
+msgid "langPreviousMonth"
+msgstr "Föregående månad"
+
+msgid "langNextYear"
+msgstr "Nästa år"
+
+msgid "langPreviousYear"
+msgstr "Föregående år"
+
+msgid "langViewToolList"
+msgstr "Visa lista över alla verktyg"
+
+msgid "langToolList"
+msgstr "Lista över alla verktyg"
+
+msgid "langFrom"
+msgstr "Från"
+
+msgid "langTo"
+msgstr "till"
+
+msgid "langPeriodToDisplay"
+msgstr "Period"
+
+msgid "langDetailView"
+msgstr "Visa efter"
+
+msgid "langBredCrumpGroups"
+msgstr "Grupper"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Grupparea"
+
+msgid "langBredCrumpUsers"
+msgstr "Användare"
+
+msgid "langAdminToolName"
+msgstr "Administratörsstatistik"
+
+msgid "langPlatformStats"
+msgstr "Platformsstatistik"
+
+msgid "langStatsDatabase"
+msgstr "Databasstatistik"
+
+msgid "langPlatformAccess"
+msgstr "Åtkomst till campus"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Åtkomst till kurser"
+
+msgid "langPlatformToolAccess"
+msgstr "Åtkomst till verktyg"
+
+msgid "langHardAndSoftUsed"
+msgstr "Countries Providers Browsers Os Referers"
+
+msgid "langStrangeCases"
+msgstr "Mystiska fall"
+
+msgid "langStatsDatabaseLink"
+msgstr "Klicka här"
+
+msgid "langCountCours"
+msgstr "Antal kurser"
+
+msgid "langCountCourseByFaculte"
+msgstr "Antal kurser efter fakultet"
+
+msgid "langCountCourseByLanguage"
+msgstr "Antal användare efter språk"
+
+msgid "langCountCourseByVisibility"
+msgstr "Antal användare efter synlighet"
+
+msgid "langCountUsersByCourse"
+msgstr "Antal användare efter kurs"
+
+msgid "langCountUsersByFaculte"
+msgstr "Antal användare efter fakultet"
+
+msgid "langCountUsersByStatus"
+msgstr "Antal användare efter statuss"
+
+msgid "langAccess"
+msgstr "Åtkomst"
+
+msgid "langCountries"
+msgstr "Länder"
+
+msgid "langProviders"
+msgstr "Internetleverantörer"
+
+msgid "langOS"
+msgstr "OS"
+
+msgid "langBrowsers"
+msgstr "Webbläsare"
+
+msgid "langReferers"
+msgstr "Referenter"
+
+msgid "langAccessExplain"
+msgstr "(When an user open the index of the campus)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Total"
+
+msgid "langTotalPlatformLogin"
+msgstr "Total"
+
+msgid "langMultipleLogins"
+msgstr "Konton med samma <i>Användarnamn</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Konton med samma <i>Användarnamn</i> OCH samma <i>Lösenord</i>"
+
+msgid "langMultipleEmails"
+msgstr "Konton med samma <i>Emejl</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Kurser utan lärare"
+
+msgid "langCourseWithoutAccess"
+msgstr "Kurser som ej använts"
+
+msgid "langLoginWithoutAccess"
+msgstr "Användare som ej använts"
+
+msgid "langAllRight"
+msgstr "Det är ett mystiskt fall här"
+
+msgid "langDefcon"
+msgstr "Ooops, konstiga fall har detekterats !!"
+
+msgid "langNULLValue"
+msgstr "Tom (eller NULL)"
+
+msgid "langTrafficDetails"
+msgstr "Trafikdetaljer"
+
+msgid "langSeeIndividualTracking"
+msgstr "För individuell spårning se <a href=../user/user.php>Användare</a> tool."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Denna path har aldrig blivit öppnad av någon."
+
+msgid "SynthesisView"
+msgstr "Visa syntes"
+
+msgid "Visited"
+msgstr "Besökt"
+
+msgid "FirstAccess"
+msgstr "Första access"
+
+msgid "LastAccess"
+msgstr "Senaste access"
+
+msgid "MoyenneTest"
+msgstr "Provets poäng"
+
+msgid "Trainers"
+msgstr "Lärare"
+
+msgid "Administrators"
+msgstr "Administratörer"
+
+msgid "ExcelFormat"
+msgstr "Excel-format"
+
+msgid "Time"
+msgstr "Tid"
+
+msgid "Score"
+msgstr "Prestation"
+
+msgid "LastConnexion"
+msgstr "Senast aktiv"
+
+msgid "Attempts"
+msgstr "Försök"
+
+msgid "LimitDate"
+msgstr "Datumbegränsning"
+
+msgid "NoComment"
+msgstr "Ingen kommentar"
+
+msgid "LatestLogin"
+msgstr "Senaste"
+
+msgid "Messages"
+msgstr "Meddelande"
+
+msgid "Print"
+msgstr "Skriv ut"
+
+msgid "Learnpaths"
+msgstr "Utbildningsväg"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Nedlagd tid"
+
+msgid "AvgMessages"
+msgstr "Meddelande"
+
+msgid "NoConnexion"
+msgstr "Ingen anslutning"
+
+msgid "Ranking"
+msgstr "Rangordning"
+
+msgid "BestResultInCourse"
+msgstr "Bästa resultatet i kursen"
+
+msgid "BestAttempt"
+msgstr "Bästa försök"
+
+msgid "Timeline"
+msgstr "Tidslinije"
+

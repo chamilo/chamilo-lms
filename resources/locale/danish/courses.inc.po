@@ -1,0 +1,204 @@
+msgid "lang_already_enrolled"
+msgstr "allerede tilmeldt"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Min personlige kursusoversigt"
+
+msgid "lang_course_enrollment"
+msgstr "Tilmeldte kurser"
+
+msgid "lang_course_not_available"
+msgstr "Kurset er ikke tilgængeligt eller findes ikke"
+
+msgid "lang_enroll"
+msgstr "Tilmeld"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Tilmelding til et nyt kursus"
+
+msgid "lang_my_present_course_list"
+msgstr "Min kursusoversigt"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Der er ikke muligt at tilmelde sig kurser i denne kategori"
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Eller søg efter kursuskoden"
+
+msgid "lang_search"
+msgstr "Søg"
+
+msgid "lang_select_course_among_categories"
+msgstr "Vælg kursus mellem kategorierne"
+
+msgid "lang_select_course_in"
+msgstr "Vælg kursus på"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Vælg kursus blandt søgeresultaterne"
+
+msgid "Unsubscribe"
+msgstr "Afmeld"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Tilbage til min kursusoversigt"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Tilbage til min kursusoversigt"
+
+msgid "langTitular"
+msgstr "Koordinator"
+
+msgid "langBackToListOfThisUser"
+msgstr "Tilbage til kursusoversigten"
+
+msgid "langAdministrationTools"
+msgstr "Administrationsværktøjer"
+
+msgid "lang_back_to_parent_category"
+msgstr "Tilbage til ovenstående kategori"
+
+msgid "lang_back_to_course_selection"
+msgstr "Tilbage til valg af kursus"
+
+msgid "lang_up"
+msgstr "Tilbage til ovenstående kategori"
+
+msgid "langCatList"
+msgstr "Kategorier"
+
+msgid "langCourseList"
+msgstr "Oversigt over kursusside"
+
+msgid "Subscribe"
+msgstr "Tilmeld"
+
+msgid "AlreadySubscribed"
+msgstr "Allerede tilmeldt"
+
+msgid "CourseCategoryStored"
+msgstr "Kursuskategori er oprettet"
+
+msgid "langWithoutTimeLimits"
+msgstr "Uden tidsbegrænsninger"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Tilbage til kategorier"
+
+msgid "langAdded"
+msgstr "Tilføjet"
+
+msgid "langDeleted"
+msgstr "Slettet"
+
+msgid "langKeeped"
+msgstr "Behold"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Skjult / Lukket"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Skjult / åben"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Synlig / åben"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Synlig / Lukket"
+
+msgid "langAdminThisUser"
+msgstr "Tilbage til deltageren"
+
+msgid "langManage"
+msgstr "Bestyrer"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Du er tilmeldt dette kursus"
+
+msgid "langSubCat"
+msgstr "underkategorier"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Afmelding ikke tilladt for dette kursus."
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Du er kursusadministrator på kursussiden."
+
+msgid "CourseManagement"
+msgstr "Kursushåndtering"
+
+msgid "SortMyCourses"
+msgstr "Sorter mine kurser"
+
+msgid "SubscribeToCourse"
+msgstr "Tilmeld kurser"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Afmeld kurser"
+
+msgid "CreateCourseCategory"
+msgstr "Opret en kursuskategori"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Er du sikker på at du ønsker at slette den valgte kursuskategori? Kurser i denne kategori vil blive flyttet uden for kursuskategori"
+
+msgid "CourseCategories"
+msgstr "Kursuskategorier"
+
+msgid "CoursesInCategory"
+msgstr "Kurser i denne kategori"
+
+msgid "SearchCourse"
+msgstr "Søg i kurser"
+
+msgid "UpOneCategory"
+msgstr "<- En kategori op"
+
+msgid "SearchResultsFor"
+msgstr "Søgeresultater for:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Er du sikker på, at du ønsker at afmelde disse kurser?"
+
+msgid "NoCourseCategory"
+msgstr "Ingen kursuskategori"
+
+msgid "EditCourseCategorySucces"
+msgstr "Kurset blev tilføjet kategorien"
+
+msgid "SubscribingNotAllowed"
+msgstr "Tilmelding ikke tilladt"
+
+msgid "CourseSortingDone"
+msgstr "Sortering af kursus fuldført"
+
+msgid "ExistingCourseCategories"
+msgstr "Eksisterende kursuskategorier"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Du er nu afmeldt kurset"
+
+msgid "ViewOpenCourses"
+msgstr "Se åbne kursussider"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Der er opstået en ukendt fejl. Kontakt venligst den supporten"
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "Kursuskoden er ikke korrekt"
+
+msgid "CourseRequiresPassword"
+msgstr "Kurset kan kun tilgåes med et adgangsord"
+
+msgid "SubmitRegistrationCode"
+msgstr "Tilføj registreringskode"
+
+msgid "CourseCategoryDeleted"
+msgstr "Kursuskategorien er slettet"
+
+msgid "CategorySortingDone"
+msgstr "Sortering af kategori er gennemført"
+
+msgid "CourseCategoryEditStored"
+msgstr "Kategorien er ændret"
+

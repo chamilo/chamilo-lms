@@ -1,0 +1,180 @@
+msgid "langChapter"
+msgstr "บทที่"
+
+msgid "langDocumentList"
+msgstr "รายชื่อเอกสารทั้งหมด"
+
+msgid "langOrganisationList"
+msgstr "สารบัญเนื้อหา"
+
+msgid "langEditTOC"
+msgstr "แก้ไขสารบัญเนื้อหา"
+
+msgid "langEditDocument"
+msgstr "แก้ไข"
+
+msgid "langCreateDocument"
+msgstr "สร้างเอกสาร"
+
+msgid "langMissingImagesDetected"
+msgstr "พบว่า ภาพหายไป"
+
+msgid "langPublish"
+msgstr "ตีพิมพ์"
+
+msgid "langScormcontentstudent"
+msgstr "คือวิชาตามมาตรฐานscorm. เข้าอ่านและใช้งานคลิกที่นี่: <input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "นี่คือเนื้อหาScorm<br><input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr " ส่งข้อมูลไฟล์บีบอัดและทำการขยายเรียบร้อยแล้ว"
+
+msgid "langZipNoPhp"
+msgstr "ไฟล์ zip ไม่สามารถบรรจุ PHP filesได้"
+
+msgid "langGroupForumLink"
+msgstr "กลุ่มอภิปราย"
+
+msgid "langGroupSpace"
+msgstr "พื้นที่กลุ่ม"
+
+msgid "langNotScormContent"
+msgstr "�������� .zip ���Ẻ�ҵðҹScorm"
+
+msgid "langNoText"
+msgstr "กรุณาพิมพ์ข้อความ/หรือไฟล์เนื้อหารูปแบบเอกสาร html:Please type your text / HTML content"
+
+msgid "langNoFileName"
+msgstr "กรุณาใส่ชื่อไฟล์"
+
+msgid "langMaxFileSize"
+msgstr "ขนาดไฟล์ใหญ่สุดคือ"
+
+msgid "langFileName"
+msgstr "ชื่อไฟล์"
+
+msgid "langFileError"
+msgstr "ไฟล์ที่จะโอนย้ายขึ้นระบบ(Upload)ไม่ถูกต้องสมบูรณ์"
+
+msgid "langDown"
+msgstr "ŧ"
+
+msgid "langViMod"
+msgstr "ปรับปรุงการให้เห็นเอกสารแล้ว"
+
+msgid "langAddComment"
+msgstr "เพิ่ม/ปรับปรุงหมายเหตุที่"
+
+msgid "langImpossible"
+msgstr "ไม่สามารถปฏิบัติได้"
+
+msgid "langNewDir"
+msgstr "ชื่อแฟ้มใหม่"
+
+msgid "langTo"
+msgstr "ไปยัง"
+
+msgid "langNoSpace"
+msgstr "การอัพโหลดล้มเหลว มีเนื้อที่ไม่พอในไดเร็กทอรีของท่าน"
+
+msgid "langDownloadEnd"
+msgstr "สิ้นสุดการอัพโหลด"
+
+msgid "langFileExists"
+msgstr "ไม่สามารถปฏิบัติได้<br>มีไฟล์ชื่อนี้อยู่แล้ว"
+
+msgid "langDocCopied"
+msgstr "ย้ายเอกสารแล้ว"
+
+msgid "langDocDeleted"
+msgstr "ลบเอกสารแล้ว"
+
+msgid "langElRen"
+msgstr "เปลี่ยนชื่อแล้ว"
+
+msgid "langDirMv"
+msgstr "ย้ายdirectory เรียบร้อย"
+
+msgid "langComMod"
+msgstr "แก้ไขข้อคิดเห็นแล้ว"
+
+msgid "langRename"
+msgstr "เปลี่ยนชื่อ"
+
+msgid "langCopy"
+msgstr "ทำสำเนาเนื้อหารายวิชา"
+
+msgid "langNameDir"
+msgstr "ชื่อแฟ้มเก็บไฟล์ใหม่"
+
+msgid "langDownloadFile"
+msgstr "อัพโหลดข้อมูลไปที่เครื่องแม่ข่าย"
+
+msgid "learning_path_access"
+msgstr "คลิกที่คำว่า \'create learning path\' เพื่อทำการ ลบ/แก้ไข/แสดง/ซ่อน/สร้าง/เพิ่ม learning path"
+
+msgid "langRoot"
+msgstr "root"
+
+msgid "langBuilder"
+msgstr "ตัวสร้างแผนการเรียน"
+
+msgid "lang_edit_learnpath"
+msgstr "แก้ไขแผนการเรียน"
+
+msgid "lang_add_title_and_desc"
+msgstr "แก้ไขชื่อและคำอธิบาย"
+
+msgid "lang_add_learnpath"
+msgstr "เพิ่มเติมแผนการเรียนใหม่"
+
+msgid "lang_learnpath_added"
+msgstr "ได้สร้างแผนการเรียนรู้ให้เรียบร้อยแล้ว คุณสามารถเพิ่มเติมหน่วยการเรียนหรือบทเรียนย่อยได้ทันที ด้วยการคลิกที่เครื่องหมาย+"
+
+msgid "lang_delete_learnpath"
+msgstr "ลบแผนการเรียน"
+
+msgid "lang_learnpath_edited"
+msgstr "แก้ไขแผนการเรียนแล้ว"
+
+msgid "lang_learnpath_deleted"
+msgstr "ลบแผนการเรียนแล้ว"
+
+msgid "lang_no_publish"
+msgstr "ยังไม่เผยแพร่"
+
+msgid "lang_publish"
+msgstr "เผยแพร่"
+
+msgid "lang_no_published"
+msgstr "ไม่เผยแพร่"
+
+msgid "lang_published"
+msgstr "ส่งเผยแพร่แล้ว"
+
+msgid "lang_description"
+msgstr "คำอธิบาย"
+
+msgid "lang_title"
+msgstr "ชื่อหน่วย"
+
+msgid "langScormBuilder"
+msgstr "โปรแกรมสร้างรูปแบบมาตรฐานscorm"
+
+msgid "langCreateDoc"
+msgstr "สร้างเอกสาร"
+
+msgid "langOrganiseDocuments"
+msgstr "สร้างสารบัญเนื้อหา"
+
+msgid "langUncompress"
+msgstr "ขยายไฟล์บีบอัดบนเครื่องแม่ข่าย"
+
+msgid "ExportShort"
+msgstr "ส่งออกไฟล์"
+
+msgid "progress"
+msgstr "ความก้าวหน้า"
+

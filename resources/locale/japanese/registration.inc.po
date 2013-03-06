@@ -1,0 +1,112 @@
+msgid "langStudent"
+msgstr "student"
+
+msgid "langAddAU"
+msgstr "ユ〖ザを裁える"
+
+msgid "langAddedU"
+msgstr "has been added. An email has been sent to give him his username"
+
+msgid "langTheU"
+msgstr "The user"
+
+msgid "langRegYou"
+msgstr "has registered you on this course"
+
+msgid "langOneResp"
+msgstr "One of the course administrators"
+
+msgid "langTaken"
+msgstr "贷に蝗われています。戮の叹涟を联んでください。"
+
+msgid "langUserNo"
+msgstr "あなたが联んだユ〖ザ叹"
+
+msgid "langFilled"
+msgstr "いくつかの腕が鄂球です"
+
+msgid "langInC"
+msgstr "in this course"
+
+msgid "langRole"
+msgstr "Role"
+
+msgid "langProfileReg"
+msgstr "あなたの糠プロファイルが瘦赂されました"
+
+msgid "langEmailWrong"
+msgstr "この email address は稍窗链か、网脱叫丸ない矢机が崔まれています"
+
+msgid "langUserTaken"
+msgstr "このユ〖ザ叹はすでに、戮の客がつかっています。"
+
+msgid "langFields"
+msgstr "いくつかの腕が鄂球です。"
+
+msgid "langAgain"
+msgstr "浩刨活してください!"
+
+msgid "langPassTwo"
+msgstr "You have typed two different passwords"
+
+msgid "langModifProfile"
+msgstr "极尸のプロファイルを饯赖"
+
+msgid "langIsReg"
+msgstr "ccourses is registered"
+
+msgid "langPersonalSettings"
+msgstr "改客肋年が判峡されました。ユ〖ザ叹とパスワ〖ドの承えを淡很した mailが流烧されました。さて、あなたがとりたいコ〖スを联んでください。"
+
+msgid "langManager"
+msgstr "笨脱荚"
+
+msgid "langFormula"
+msgstr "Yours sincerely"
+
+msgid "langProblem"
+msgstr "啼玛がおきたときは、息晚してください"
+
+msgid "langIs"
+msgstr "は"
+
+msgid "langAddress"
+msgstr "アドレス::"
+
+msgid "langSettings"
+msgstr "肌の肋年です: 
+ Username:"
+
+msgid "langYouAreReg"
+msgstr "You are registered on"
+
+msgid "langYourReg"
+msgstr "判峡されました:"
+
+msgid "langUserFree"
+msgstr "このユ〖ザ叹はすでに、戮の客がつかっています。ボタンで提って、侍の叹涟で判峡してください。"
+
+msgid "langEmptyFields"
+msgstr "いくつかの腕が鄂球です。ボタンで提って、浩刨ためしてください"
+
+msgid "langPassTwice"
+msgstr "1刨誊と2刨誊で般ったパスワ〖ドを掐れました。ボタンで提って、浩刨ためしてください"
+
+msgid "langRegAdmin"
+msgstr "コ〖スのウエブサイトをつくる (兜徽)"
+
+msgid "langRegStudent"
+msgstr "肌のコ〖スがあります(池栏)"
+
+msgid "langConfirmation"
+msgstr "澄千"
+
+msgid "langPass"
+msgstr "パスワ〖ド"
+
+msgid "langSurname"
+msgstr "叹涟"
+
+msgid "langRegistration"
+msgstr "判峡"
+

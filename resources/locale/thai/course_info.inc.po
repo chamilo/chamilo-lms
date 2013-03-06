@@ -1,0 +1,231 @@
+msgid "ModifInfo"
+msgstr "ตั้งค่าวิชา"
+
+msgid "langModifDone"
+msgstr "ได้แก้ไขข้อมูลแล้ว"
+
+msgid "langDelCourse"
+msgstr "ลบรายวิชานี้"
+
+msgid "langProfessors"
+msgstr "อาจารย์ผู้สอน"
+
+msgid "langFaculty"
+msgstr "ประเภท"
+
+msgid "langConfidentiality"
+msgstr "ความลับ"
+
+msgid "langPublic"
+msgstr "บุคคลทั่วไปเข้าโฮมเพจได้โดยไม่ต้องใช้รหัส"
+
+msgid "langUnsubscription"
+msgstr "ถอนการสมัคร"
+
+msgid "langPrivOpen"
+msgstr "แบบสิทธิเฉพาะ,เปิดการลงทะเบียน"
+
+msgid "langPrivate"
+msgstr "เปิดเป็นวิชาเรียนเฉพาะกลุ่มบุคคลที่ระบุชื่อ"
+
+msgid "langForbidden"
+msgstr "ไม่อนุญาต"
+
+msgid "CourseAccessConfigTip"
+msgstr "โดยปกติการเปิดวิชาครั้งแรกจะให้เป็นแบบสาธารณะคือใครก็เข้าเรียนได้ แต่อย่างไรก็ตาม สามารถกำหนดค่าระดับการรักษาความปลอดภัยของข้อมูลได้"
+
+msgid "langOpenToTheWorld"
+msgstr "เปิด ให้เรียนฟรี"
+
+msgid "OpenToThePlatform"
+msgstr "เปิดวิชาให้เรียนเฉพาะผู้ที่ลงทะเบียนสมาชิกในระบบ"
+
+msgid "langOpenToThePlatform"
+msgstr "แบบสาธารณะ โดยอนุญาตเฉพาะผู้ทึลงทะเบียนเป็นผู้ใช้ในระบบ"
+
+msgid "langTipLang"
+msgstr "ภาษาที่กำหนดใช้นี้ จะใช้แสดงผลตรงกับภาษาที่กำหนดไว้ และกับทุกคนที่เข้าใช้โฮมเพจวิชานี้"
+
+msgid "langVid"
+msgstr "วิดีทัศน์"
+
+msgid "langWork"
+msgstr "การสนับสนุน"
+
+msgid "langProgramMenu"
+msgstr "ปฏิทินการศึกษา"
+
+msgid "langAnnouncement"
+msgstr "ประกาศ"
+
+msgid "langExercise"
+msgstr "แบบทดสอบ"
+
+msgid "langStats"
+msgstr "สถิติ"
+
+msgid "langUplPage"
+msgstr "หน้าโอนย้ายไฟล์และเชื่อมต่อไปหน้าโฮมเพจ"
+
+msgid "langLinkSite"
+msgstr "เพิ่มการเชื่อมโยงต่อไปหน้าโฮมเพจ"
+
+msgid "langCourse"
+msgstr "ขอบข่าย"
+
+msgid "langHasDel"
+msgstr "ลบแล้ว"
+
+msgid "langBackHome"
+msgstr "กลับไปที่โฮมเพจของ"
+
+msgid "langByDel"
+msgstr "การลบในที่นี้ จะเป็นการลบเอกสารที่มีทั้งหมดรวมทั้งรายชื่อสมาชิกในรายวิชาแบบถาวร(ห้ามเอาออกในที่อื่น)<p>คุณต้องการลบออกจริงๆหรือไม่?"
+
+msgid "langY"
+msgstr "ใช่"
+
+msgid "langN"
+msgstr "ไม่"
+
+msgid "langDepartmentUrl"
+msgstr "ที่อยู่เว็ปไซท์ของหน่วยงาน"
+
+msgid "langDepartmentUrlName"
+msgstr "หน่วยงาน"
+
+msgid "langBackupCourse"
+msgstr "เก็บรวบรวมเอกสารของรายวิชา"
+
+msgid "langModifGroups"
+msgstr "กลุ่ม"
+
+msgid "langProfessor"
+msgstr "อาจารย์ผู้สอน"
+
+msgid "langGroups"
+msgstr "กลุ่มเรียน"
+
+msgid "langDescriptionCours"
+msgstr "คำอธิบายรายวิชา"
+
+msgid "langArchiveCourse"
+msgstr "สำรองข้อมูลรายวิชา"
+
+msgid "langRestoreCourse"
+msgstr "กู้คืนรายวิชา"
+
+msgid "langRestore"
+msgstr "กู้คืน"
+
+msgid "langCreatedIn"
+msgstr "สร้างใน"
+
+msgid "langCreateMissingDirectories"
+msgstr "การสร้างยังไม่มีแฟ้ม"
+
+msgid "langCopyDirectoryCourse"
+msgstr "ทำสำเนาไฟล์ของรายวิชา"
+
+msgid "langDisk_free_space"
+msgstr "ลบไฟล์ขยะ"
+
+msgid "langBuildTheCompressedFile"
+msgstr "การสำรองข้อมูล"
+
+msgid "langFileCopied"
+msgstr "ทำสำเนาไฟล์แล้ว"
+
+msgid "langArchiveLocation"
+msgstr "ที่เก็บรวบรวมเอกสาร"
+
+msgid "langSizeOf"
+msgstr "ขนาดของ"
+
+msgid "langArchiveName"
+msgstr "ชื่อที่เก็บรวบรวมเอกสาร"
+
+msgid "langBackupSuccesfull"
+msgstr "การสำรองข้อมูลเสร็จเรียบร้อย"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "สำรองข้อมูลและฐานข้อมูลหลักของ"
+
+msgid "langBUUsersInMainBase"
+msgstr "สำรองข้อมูลและฐานข้อมูลของผู้ใช้"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "สำรองข้อมูลและฐานข้อมูลของประกาศ"
+
+msgid "langBackupOfDataBase"
+msgstr "สำรองฐานข้อมูล"
+
+msgid "langCreationDate"
+msgstr "สร้างแล้ว"
+
+msgid "langExpirationDate"
+msgstr "วันหมดอายุ"
+
+msgid "langPostPone"
+msgstr "เลื่อนไป"
+
+msgid "langLastEdit"
+msgstr "แก้ไขครั้งล่าสุด"
+
+msgid "langLastVisit"
+msgstr "เข้ามาครั้งล่าสุด"
+
+msgid "langSubscription"
+msgstr "การสมัคร"
+
+msgid "langCourseAccess"
+msgstr "การเข้าเรียนในวิชา"
+
+msgid "langConfirmBackup"
+msgstr "คุณต้องการสำรองแผนการเรียนของรายวิชาใช่หรือไม่?"
+
+msgid "langCreateSite"
+msgstr "สร้างขอบข่ายรายวิชา"
+
+msgid "langRestoreDescription"
+msgstr "การคืนสภาพวิชาที่จัดเก็บไว้ ให้เลือกรายวิชาที่ถูกจัดเก็บไว้<br><br>ให้คลิกที่ \"Restore\"เพื่อแตกไฟล์ทั้งหมดกลับคืนมาเป็นรายวิชาปกติ"
+
+msgid "langRestoreNotice"
+msgstr "����觹���ѧ���͹حҵ�����׹���ͼ�������ѵ��ѵ� �������Ѵ������� \"users.csv\" ��觡���§�ͷ��������èѴ����к� ����ö�ШѴ��õ�ʹ��µ���ͧ���§���"
+
+msgid "langAvailableArchives"
+msgstr "รายการเอกสารที่จัดเก็บไว้ในสารบบ"
+
+msgid "langNoArchive"
+msgstr "ไม่มีการเลือกรายการสารบบใดๆ"
+
+msgid "langArchiveNotFound"
+msgstr "ค้นไม่พบเอกสารรวมในสารบบ"
+
+msgid "langArchiveUncompressed"
+msgstr "เอกสารที่เก็บรวบรวมไว้ในสารบบได้ทำการกู้และคืนสภาพพร้อมใช้แล้ว"
+
+msgid "langCsvPutIntoDocTool"
+msgstr "ไฟล์ \"users.csv\"ได้จัดการเรียบร้อยแล้ว"
+
+msgid "langBackH"
+msgstr "กลับไปหน้าโฮมเพจ"
+
+msgid "langOtherCategory"
+msgstr "ประเภทอื่น"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "ผู้ใช้สามารถถอนวิชาเองได้"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "ผู้ใช้ไม่ได้รับอนุญาตให้ถอนวิชาด้วยตัวเอง"
+
+msgid "langCourseVisibilityClosed"
+msgstr "ปิดวิชา อนุญาตใช้เฉพาะผู้บริหารวิชา"
+
+msgid "CourseVisibilityClosed"
+msgstr "ปิด-ไม่ให้เข้าในวิชานี้"
+
+msgid "CourseVisibilityModified"
+msgstr "การแก้ไข(มีรายละเอียดการตั้งค่าอีกมากที่ต้องกำหนดผ่านทางระบบกำหนดสิทธิ์)"
+

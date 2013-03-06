@@ -1,0 +1,42 @@
+msgid "Tools"
+msgstr "Alat Bantu"
+
+msgid "SendWork"
+msgstr "Muatnaik Tugasan"
+
+msgid "langTooBig"
+msgstr "Anda tidak memilih sebarang fail atau saiz fail terlalu besar"
+
+msgid "langListDeleted"
+msgstr "Senarai pautan telah dipadam"
+
+msgid "langDocModif"
+msgstr "Tajuk tugasan diubahsuai"
+
+msgid "langDocAdd"
+msgstr "Tugasan ditambah"
+
+msgid "langDocDel"
+msgstr "Tugasan dipadam"
+
+msgid "langTitleWork"
+msgstr "Tajuk Tugasan"
+
+msgid "langAuthors"
+msgstr "Disediakan Oleh"
+
+msgid "langDelList"
+msgstr "Padam semua pautan"
+
+msgid "langWorkDelete"
+msgstr "Padam"
+
+msgid "langWorkModify"
+msgstr "Ubahsuai"
+
+msgid "langWorkConfirmDelete"
+msgstr "Anda pasti untuk padam tugasan ini"
+
+msgid "langAllFiles"
+msgstr "Semua fail"
+

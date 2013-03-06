@@ -1,0 +1,291 @@
+msgid "langProfessors"
+msgstr "المعلمون"
+
+msgid "langExplanation"
+msgstr "  بمجرد نقرك على الزر, سيتم إنشاء الموقع مع المنتديات وجدول الأعمال  و مدير المستندات الخ.., تسجيل دخولك كمدير الموقع يخولك لتحريره حسب متطلباتك الخاصة"
+
+msgid "langEmpty"
+msgstr " لقد قمت بترك بعض الحقوق فارغة. <br /> استخدم <b> زر الرجوع </b> في المتصفح وحاول مرة أخرى. <br /> اذا قمت بتجاهل رمز المقرر , انظر الى برنامج المقرر"
+
+msgid "langCodeTaken"
+msgstr "  رمز المقرر هذا تم استخدامه مسبقا. <br/ > استخدم  <b> زر الرجوع </b> في المتصفح وحاول مرة أخرى"
+
+msgid "langFormula"
+msgstr " المخلص"
+
+msgid "langMessage"
+msgstr " إذا قمت بإزالة المنتدى التجريبي, سيتم حذف جميع المشاركات و الرسائل في ذلك المنتدى أيضا"
+
+msgid "langExerciceEx"
+msgstr " نموذج اختبار"
+
+msgid "langAntique"
+msgstr " Irony"
+
+msgid "langSocraticIrony"
+msgstr " Socratic irony is..."
+
+msgid "langManyAnswers"
+msgstr " يمكن أن تكون أكثر من إجابة صحيحة"
+
+msgid "langRidiculise"
+msgstr " Ridiculise one\'s interlocutor in order to have him concede he is wrong."
+
+msgid "langNoPsychology"
+msgstr " No. Socratic irony is not a matter of psychology, it concerns argumentation."
+
+msgid "langAdmitError"
+msgstr " Admit one\'s own errors to invite one\'s interlocutor to do the same."
+
+msgid "langNoSeduction"
+msgstr " No. Socratic irony is not a seduction strategy or a method based on the example."
+
+msgid "langForce"
+msgstr " Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know."
+
+msgid "langIndeed"
+msgstr " Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \" ask questions\""
+
+msgid "langContradiction"
+msgstr " Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end."
+
+msgid "langNotFalse"
+msgstr " This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses."
+
+msgid "langAgenda"
+msgstr " الأجندة"
+
+msgid "langVideo"
+msgstr " الفيديو"
+
+msgid "langCourseProgram"
+msgstr "  وصف المقرر"
+
+msgid "langAnnouncements"
+msgstr " الإعلانات"
+
+msgid "langAddPageHome"
+msgstr " تحميل صفحة ورابط للصفحة الرئيسية"
+
+msgid "langLinkSite"
+msgstr "إضافة رابط الصفحة على الصفحة الرئيسية"
+
+msgid "langModifyInfo"
+msgstr " إعدادت المقرر"
+
+msgid "langCourseDesc"
+msgstr " وصف المقرر"
+
+msgid "langAgendaTitle"
+msgstr " يوم الثلاثاء 12 ديسمبر - الإجتماع الأول - القاعة 55"
+
+msgid "langAgendaText"
+msgstr " تعريف عام بإدارة المشروع"
+
+msgid "langMicro"
+msgstr " مقابلات باشرة"
+
+msgid "langGoogle"
+msgstr " محرك بحث قوي وسريع"
+
+msgid "langIntroductionText"
+msgstr " هذا نص تعريفي , لاستبداله بنصك الخاص , انقر أدناه على أيقونة قلم الرصاص (فقط لمدراء المقرر)"
+
+msgid "langIntroductionTwo"
+msgstr "  من خلال هذه الصفحة يمكن للمستخدمين والمجموعات  نشر المستندات"
+
+msgid "langCourseDescription"
+msgstr " وصف المقرر"
+
+msgid "langProfessor"
+msgstr "المعلم"
+
+msgid "langAnnouncementEx"
+msgstr "  هذا مثال عن إعلان.  فقط مدرسي المقررات بإمكانهم نشر إعلانات"
+
+msgid "langJustCreated"
+msgstr " لقد تم إضافة الدرس بنجاح"
+
+msgid "langEnter"
+msgstr " الرجوع إلى قائمة مقرراتي"
+
+msgid "langGroups"
+msgstr "المجموعات"
+
+msgid "langCreateCourseGroups"
+msgstr " المجموعات"
+
+msgid "langCatagoryMain"
+msgstr " الرئيسية"
+
+msgid "langCatagoryGroup"
+msgstr " منتديات المجموعات"
+
+msgid "langLn"
+msgstr " اللغة"
+
+msgid "langCreateSite"
+msgstr "إنشاء مساحة مقرر"
+
+msgid "langFieldsRequ"
+msgstr " جميع الحقول مطلوبة"
+
+msgid "langEx"
+msgstr " مثال. <i>إدارة الإبداع</i>"
+
+msgid "langFac"
+msgstr " التصنيف"
+
+msgid "langTargetFac"
+msgstr " هذا التصنيف الذي سيوضع الدرس ضمنه"
+
+msgid "langMax"
+msgstr " 20 حرف كحد أقصى , مثال: <i>INNOV21</i>"
+
+msgid "langDoubt"
+msgstr "  إذا كنت في شك من رمز مقررك, استشر"
+
+msgid "langProgram"
+msgstr " برنامج المقرر</a> إذا لم يكن لدى مقررك رمز خاص . لأي سبب كان . اخترع واحدا , مثلا :  <i>حاسب</i> إذا كان مقررك خاص بالحاسب الآلي"
+
+msgid "langScormtool"
+msgstr " مسار التّعلم"
+
+msgid "langScormbuildertool"
+msgstr " مولد سكورم مسار التّعلم"
+
+msgid "langPathbuildertool"
+msgstr " مولد مسار التّعلم"
+
+msgid "langOnlineConference"
+msgstr "إجتماع"
+
+msgid "langAgendaCreationTitle"
+msgstr " إنشاء مقرر"
+
+msgid "langAgendaCreationContenu"
+msgstr " لقد تم إنشاء هذا المقرر في هذه اللحظة"
+
+msgid "langOnlineDescription"
+msgstr "نبذة عن الإجتماع"
+
+msgid "langDropbox"
+msgstr " صندوق المشاركات"
+
+msgid "langOnly"
+msgstr " فقط"
+
+msgid "langRandomLanguage"
+msgstr " تحديد عشوائي في اللغات المتوفرة"
+
+msgid "langImages"
+msgstr " صور"
+
+msgid "langAudio"
+msgstr " صوة"
+
+msgid "langFlash"
+msgstr " فلاض"
+
+msgid "langForumLanguage"
+msgstr " الإنجليزية"
+
+msgid "langNewCourse"
+msgstr " منطقة مقرر جديدة"
+
+msgid "langAddNewCourse"
+msgstr " أضف منطقة مقرر جديدة"
+
+msgid "langRestoreCourse"
+msgstr "استعادة المقرر"
+
+msgid "langOtherProperties"
+msgstr " تم العثور على خيارات أخرى في الأرشيف"
+
+msgid "langSysId"
+msgstr " هوية النظام - System ID"
+
+msgid "langDepartment"
+msgstr " القسم"
+
+msgid "langDepartmentUrl"
+msgstr "رابط القسم"
+
+msgid "langScoreShow"
+msgstr " أظهر النقاط"
+
+msgid "langVisibility"
+msgstr " خاصية الظهور"
+
+msgid "langVersionDb"
+msgstr " Database version used at archive time"
+
+msgid "langLastVisit"
+msgstr "آخر زيارة"
+
+msgid "langLastEdit"
+msgstr "آخر تحرير"
+
+msgid "langExpire"
+msgstr " انتهاء الصلاحية"
+
+msgid "langChoseFile"
+msgstr " حدد ملف"
+
+msgid "langFtpFileTips"
+msgstr " الملف على خادم FTP"
+
+msgid "langHttpFileTips"
+msgstr " الملف على الويب خادم (HTTP)"
+
+msgid "langLocalFileTips"
+msgstr " الملف على الخادم - خادم النظام"
+
+msgid "langPostFileTips"
+msgstr " الملف على جهازك المحلي"
+
+msgid "langOtherCategory"
+msgstr " الصنف الآخر"
+
+msgid "langMinimum"
+msgstr " الحد الأدني"
+
+msgid "langMaximum"
+msgstr " الحد الأقصى"
+
+msgid "langRestoreACourse"
+msgstr " استرجاع المقرر"
+
+msgid "langBackup"
+msgstr " نسخ احتياطي"
+
+msgid "langCopy"
+msgstr " نسخ محتويات المقرر"
+
+msgid "langRecycle"
+msgstr " أعد  استخدام مقرر"
+
+msgid "AnnouncementExampleTitle"
+msgstr " هذا مثال عن الإعلان"
+
+msgid "Wikipedia"
+msgstr " الموسوعة المجانية على الإنترنت"
+
+msgid "DefaultGroupCategory"
+msgstr " المجموعات الإفتراضية"
+
+msgid "DefaultCourseImages"
+msgstr " المعرض"
+
+msgid "ExampleForumCategory"
+msgstr " مثال عن تصنيف منتدى"
+
+msgid "ExampleForum"
+msgstr " مثال منتدى"
+
+msgid "ExampleThread"
+msgstr " مثال موضوع"
+
+msgid "ExampleThreadContent"
+msgstr " مثال محتوى"
+

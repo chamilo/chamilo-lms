@@ -1,0 +1,270 @@
+msgid "BackList"
+msgstr "Gå tillbaka till din dropbox"
+
+msgid "ShowFeedback"
+msgstr "Visa feedback"
+
+msgid "GiveFeedback"
+msgstr "Ge / Ändra feedback"
+
+msgid "JustUploadInSelect"
+msgstr "---NyligenUpladdat---"
+
+msgid "MailingNothingFor"
+msgstr "Ingenting för"
+
+msgid "MailingFileNotRegistered"
+msgstr "(ej registrerad för denna kurs)"
+
+msgid "MailingFileSentTo"
+msgstr "skickad till"
+
+msgid "MailingFileIsFor"
+msgstr "är för"
+
+msgid "MailingFileRecipDup"
+msgstr "flera användare har"
+
+msgid "MailingFileRecipNotFound"
+msgstr "ingen sådan student med"
+
+msgid "MailingFileNoRecip"
+msgstr "namn innehåller inget mottagar id"
+
+msgid "MailingFileNoPostfix"
+msgstr "namn slutar inte med"
+
+msgid "MailingFileNoPrefix"
+msgstr "namn börjar inte med"
+
+msgid "MailingFileFunny"
+msgstr "inget namn, eller ändelse inga 1-4 bokstäver eller siffror"
+
+msgid "MailingZipDups"
+msgstr "E-post zipfil får inte innehålla fildubletter - den kommer inte att skickas"
+
+msgid "MailingZipPhp"
+msgstr "E-post zip-fil får inte innehålla php filer - den kommer inte att skickas"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "E-post zipfil är tom eller ingen giltig zip-fil"
+
+msgid "MailingWrongZipfile"
+msgstr "E-post måste vara en zip-fil med STUDENTID och LOGINNAMN"
+
+msgid "MailingConfirmSend"
+msgstr "Skicka filinnehåll till individuella destinationer?"
+
+msgid "MailingSend"
+msgstr "Skicka filinnehåll"
+
+msgid "MailingNotYetSent"
+msgstr "E-post filinnehåll har ännu inte skickats ut..."
+
+msgid "MailingInSelect"
+msgstr "---E-post---"
+
+msgid "MailingAsUsername"
+msgstr "E-post"
+
+msgid "FileDeleted"
+msgstr "Den valda filen har flyttats från din dropbox."
+
+msgid "DocAdd"
+msgstr "Blad har lagts till"
+
+msgid "Sender"
+msgstr "avsändare"
+
+msgid "Author"
+msgstr "Författare"
+
+msgid "FileSize"
+msgstr "filstorlek"
+
+msgid "Title"
+msgstr "titel"
+
+msgid "OverwriteFile"
+msgstr "Skriva över senast skickade fil?"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Unknown"
+msgstr "okänd"
+
+msgid "SentOn"
+msgstr "på"
+
+msgid "SentTo"
+msgstr "Skickad till"
+
+msgid "ConfirmDelete"
+msgstr "Detta tar bort det angivna från din lista bara"
+
+msgid "SendTo"
+msgstr "Skicka till"
+
+msgid "Description"
+msgstr "Dokument beskrivning"
+
+msgid "UploadFile"
+msgstr "Ladda upp dokument"
+
+msgid "ErrorCreatingDir"
+msgstr "Kan inte skapa dropbox katalog. Var vänlig kontakta din system administratör."
+
+msgid "UploadError"
+msgstr "Misslyckades med filuppladdning. Kontrollera maximalt accepterad filstorlek och rättigheter för mappen på servern"
+
+msgid "TooBig"
+msgstr "Du har inte valt en fil, den kan även vara för stor."
+
+msgid "NoFileSpecified"
+msgstr "Du har inte angett en fil att ladda upp."
+
+msgid "NoUserSelected"
+msgstr "Var vänlig välj en användare att skicka filen till."
+
+msgid "BadFormData"
+msgstr "Felaktigt angivet material: felaktigt dataformat. Var vänlig kontakta din systemadministratör."
+
+msgid "GeneralError"
+msgstr "Ett fel har uppstått. Var vänlig kontakta din system administratör."
+
+msgid "Dropbox"
+msgstr "Dropbox"
+
+msgid "Help"
+msgstr "Hjälp"
+
+msgid "ReceivedFiles"
+msgstr "Mottagna filer"
+
+msgid "SentFiles"
+msgstr "Skickade filer"
+
+msgid "ReceivedTitle"
+msgstr "Titel"
+
+msgid "SentTitle"
+msgstr "Skickade filer"
+
+msgid "Authors"
+msgstr "Författare"
+
+msgid "Size"
+msgstr "Storlek"
+
+msgid "LastResent"
+msgstr "Senast ansluten"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "UploadNewFile"
+msgstr "Skicka en ny fil"
+
+msgid "AreYouSureToDelete"
+msgstr "Är du säker på att du vill radera"
+
+msgid "Feedback"
+msgstr "Återkoppling"
+
+msgid "CloseFeedback"
+msgstr "Stäng återkoppling"
+
+msgid "AddNewFeedback"
+msgstr "Lägg till återkoppling"
+
+msgid "DropboxFeedbackStored"
+msgstr "Återkoppling sparades"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Alla användare har tagit bort filen så ingen kommer att se återkopplingen du skrev."
+
+msgid "FeedbackError"
+msgstr "Fel vid återkoppling"
+
+msgid "PleaseTypeText"
+msgstr "Skriv något."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "Du har inte behörighet att ladda ner denna fil."
+
+msgid "CheckAtLeastOneFile"
+msgstr "Kontrollera minst en fil."
+
+msgid "ReceivedFileDeleted"
+msgstr "Den mottagna filen är raderad"
+
+msgid "SentFileDeleted"
+msgstr "Den skickade filen är raderad."
+
+msgid "FilesMoved"
+msgstr "Valda filer har flyttats."
+
+msgid "ReceivedFileMoved"
+msgstr "Mottagna filer har flyttats."
+
+msgid "SentFileMoved"
+msgstr "Skickade filer har flyttats"
+
+msgid "NotMovedError"
+msgstr "Filen/filerna kan inte flyttas."
+
+msgid "AddNewCategory"
+msgstr "Lägg till en ny kategori"
+
+msgid "EditCategory"
+msgstr "Ändra denna kategori"
+
+msgid "CategoryName"
+msgstr "Kategorinamn"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Var vänlig ange kategorinamn"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Kategorinamnet finns redan, välj ett annat"
+
+msgid "CurrentlySeeing"
+msgstr "Du ser redan kategorin"
+
+msgid "CategoryStored"
+msgstr "Kategorin är sparad"
+
+msgid "CategoryModified"
+msgstr "Kategorin är ändrad"
+
+msgid "CategoryDeleted"
+msgstr "Kategorin är raderad"
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "Ägarnamn måste anges"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Du måste välja minst en mottagare"
+
+msgid "DropboxFileTooBig"
+msgstr "Filen är för stor för inlämningsmappen"
+
+msgid "TheFileIsNotUploaded"
+msgstr "Filen är inte uppladdad."
+
+msgid "FileUploadSucces"
+msgstr "Filuppladdningen lyckades."
+
+msgid "MailingNonMailingError"
+msgstr "E-post kan inte överskrivas av icke-e-post och vice versa"
+
+msgid "MailingSelectNoOther"
+msgstr "E-post kan inte kombineras med andra mottagare"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Ny fil i inlämningsmappen"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "En ny fil har lämnats i inlämningsmappen för din kurs"
+

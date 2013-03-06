@@ -1,0 +1,3 @@
+msgid "ReservationPeriodToSmall"
+msgstr "El periodo de reserva es demasiado corto."
+

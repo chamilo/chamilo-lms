@@ -1,0 +1,27 @@
+msgid "langExplanation"
+msgstr "Un cop hagueu clicat Acceptar es crearà el lloc web d\'un curs. el qual constarà de diverses eines: un gestor de documents, un creador d\'itineraris formatius en format SCORM, un visualitzador de lliçons o itineraris formatius, la possibilitat de realitzar exàmens i lliurar treballs, discutir en fòrums i a través de xat, enviar anuncis i missatges, disposar d\'una agenda, videoconferència i pissarra digital, eines per al treball en grup, realitzar enquestes i seguiment dels alumnes, etc. La vostra identificació com a creador d\'aquest lloc us permetrà modificar-lo segons les vostres necessitats."
+
+msgid "langTooBig"
+msgstr "No ha escollit cap arxiu a enviar, o és massa gran"
+
+msgid "langCouldNot"
+msgstr "El fitxer no es pot enviar"
+
+msgid "langAddPageToSite"
+msgstr "Afegeix plana al lloc"
+
+msgid "langCouldNotSendPage"
+msgstr "Aquest fitxer no està en format HMTL i no ha pogut ser enviat. Si vols enviar documents no-HTML (PDF, Word, Power Point, Video, etc.) utilitza <a href=../document/document.php>l\'eina de Documents</a>"
+
+msgid "langSendPage"
+msgstr "Pàgina a enviar"
+
+msgid "langPageTitleModified"
+msgstr "El títol de la pàgina ha estat modificat"
+
+msgid "langPageAdded"
+msgstr "Pàgina afegida"
+
+msgid "Choose"
+msgstr "Trieu"
+

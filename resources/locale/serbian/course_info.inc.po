@@ -1,0 +1,228 @@
+msgid "ModifInfo"
+msgstr "Podešavanja kursa"
+
+msgid "langModifDone"
+msgstr "Ova informavija je izmenjena"
+
+msgid "langDelCourse"
+msgstr "Obriši celo okruženje kursa"
+
+msgid "langProfessors"
+msgstr "Predavači"
+
+msgid "langFaculty"
+msgstr "Kategorije"
+
+msgid "langConfidentiality"
+msgstr "Poverljivo"
+
+msgid "langPublic"
+msgstr "Javni pristup sa portala početne stranice čak i bez prijavljivanja"
+
+msgid "langUnsubscription"
+msgstr "Odjava"
+
+msgid "langPrivOpen"
+msgstr "Privatni pristup, registracija je otvorena"
+
+msgid "langPrivate"
+msgstr "Privatan pristup (sajt je dostupan samo osobama sa liste korisnika)"
+
+msgid "langForbidden"
+msgstr "Nije dozvoljeno"
+
+msgid "CourseAccessConfigTip"
+msgstr "Svaki kurs po kreiranju je javni, ali Vi možete definisati nifo poverljivosti gore."
+
+msgid "langOpenToTheWorld"
+msgstr "Otovren – pristup omogućen celom svetu"
+
+msgid "OpenToThePlatform"
+msgstr "Otvoren pristup – pristup omogućen korisnicima koji su registrovani."
+
+msgid "langOpenToThePlatform"
+msgstr "Otvoren – pristup dozvoljen svim korisnicima koji su registrovani na platformi"
+
+msgid "langTipLang"
+msgstr "Ovaj jezik će važiti za sve posetioce vašeg kursa"
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Doprinosi"
+
+msgid "langProgramMenu"
+msgstr "Program kursa"
+
+msgid "langAnnouncement"
+msgstr "Obaveštenja"
+
+msgid "langExercise"
+msgstr "Testovi"
+
+msgid "langStats"
+msgstr "Statistike"
+
+msgid "langUplPage"
+msgstr "Učitaj stranicu na server i stavi link ka početnoj stranici"
+
+msgid "langLinkSite"
+msgstr "Dodaj link na početnu stranicu"
+
+msgid "langCourse"
+msgstr "Okruženje"
+
+msgid "langHasDel"
+msgstr "obrisano"
+
+msgid "langBackHome"
+msgstr "Nazad na početnu stranicu"
+
+msgid "langByDel"
+msgstr "Brisanje ovog okruženja će permenento obrisati dokumenta i sadržinu i odjavit sve njene članove. (neće ih ukloniti iz drugih okruženja).<p>Da li zaista želite da obrišete?"
+
+msgid "langY"
+msgstr "DA"
+
+msgid "langN"
+msgstr "NE"
+
+msgid "langDepartmentUrl"
+msgstr "URL oblasti"
+
+msgid "langDepartmentUrlName"
+msgstr "Oblast"
+
+msgid "langBackupCourse"
+msgstr "Arhiviraj okruženje kursa"
+
+msgid "langModifGroups"
+msgstr "Grupe"
+
+msgid "langProfessor"
+msgstr "Predavač"
+
+msgid "langGroups"
+msgstr "Grupe"
+
+msgid "langDescriptionCours"
+msgstr "Opis kursa"
+
+msgid "langArchiveCourse"
+msgstr "Backup kursa"
+
+msgid "langRestoreCourse"
+msgstr "Obnovi kurs"
+
+msgid "langRestore"
+msgstr "Obnovi"
+
+msgid "langCreatedIn"
+msgstr "kreirano u"
+
+msgid "langCreateMissingDirectories"
+msgstr "Kreiranje direktorijuma koji nedostaju"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Kopiranje fajlova kursa"
+
+msgid "langDisk_free_space"
+msgstr "Slobodan prostor na disku"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Kreiranje backup fajla"
+
+msgid "langFileCopied"
+msgstr "fajl je kopiran"
+
+msgid "langArchiveLocation"
+msgstr "Lokacija arhive"
+
+msgid "langSizeOf"
+msgstr "Veličina"
+
+msgid "langArchiveName"
+msgstr "Ime arhive"
+
+msgid "langBackupSuccesfull"
+msgstr "Uspešan backup"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Backup podataka kursa u glavnoj bazi podataka za"
+
+msgid "langBUUsersInMainBase"
+msgstr "Backup podataka korisnika u glavnoj bazi podataka za"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Backup obaveštenja u glavnoj bazi podataka za"
+
+msgid "langBackupOfDataBase"
+msgstr "Backup baze podataka"
+
+msgid "langCreationDate"
+msgstr "Kreirano"
+
+msgid "langExpirationDate"
+msgstr "Datum isticanja"
+
+msgid "langPostPone"
+msgstr "Odloži"
+
+msgid "langLastEdit"
+msgstr "Poslednje izmene"
+
+msgid "langLastVisit"
+msgstr "Poslednja poseta"
+
+msgid "langSubscription"
+msgstr "Prijava"
+
+msgid "langCourseAccess"
+msgstr "Pristup kursu"
+
+msgid "langConfirmBackup"
+msgstr "Da li zaista želite da uradite Backup okruženja kursa?"
+
+msgid "langCreateSite"
+msgstr "Kreiraj okruženje kursa"
+
+msgid "langRestoreDescription"
+msgstr "Kurs je u arhivi koju možete da odaberete dole.<br><br>Jednom kada kliknete na \"Obnovi\" arhiv će se raspakovati i kurs će ponovo biti kreiran."
+
+msgid "langRestoreNotice"
+msgstr "Ovaj skript jo�uvek ne dozvoljava automatsku obnovu korisnika, ali su podaci sačuvani u \"users.csv\" dovoljni da administrator to uradi ručno."
+
+msgid "langAvailableArchives"
+msgstr "Lista dostupnih arhiva"
+
+msgid "langNoArchive"
+msgstr "Nijedan arhiv nije selektovan"
+
+msgid "langArchiveNotFound"
+msgstr "Arhiv nije pronađen"
+
+msgid "langArchiveUncompressed"
+msgstr "Arhiv je raspakovan i instaliran"
+
+msgid "langCsvPutIntoDocTool"
+msgstr "Fajl „users.csv“ je stavljen u alatku Dokumenta"
+
+msgid "langBackH"
+msgstr "nazad na početnu stranicu"
+
+msgid "langOtherCategory"
+msgstr "Druga kategorija"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Korisnicima je dozvoljeno da se odjave sa ovog kursa"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Korisnicima nije dozvoljeno da se odjave sa ovog kursa"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Potpuno zatvoren; kursu može da pristupi samo administrator kursa."
+
+msgid "CourseVisibilityClosed"
+msgstr "Zatvoren – nema pristupa ovom kursu"
+

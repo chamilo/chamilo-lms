@@ -1,0 +1,630 @@
+msgid "PublishSurvey"
+msgstr "Publicar questionário"
+
+msgid "CompareQuestions"
+msgstr "Comparar questões"
+
+msgid "InformationUpdated"
+msgstr "Informação atualizada"
+
+msgid "SurveyTitle"
+msgstr "Título da Enquete"
+
+msgid "SurveyIntroduction"
+msgstr "Introdução da Enquete"
+
+msgid "CreateNewSurvey"
+msgstr "Criar Enquete"
+
+msgid "Survey"
+msgstr "Enquete"
+
+msgid "SurveyTemplate"
+msgstr "Estrutura da Enquete"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "Escreva o título da Enquete"
+
+msgid "PleaseEnterValidDate"
+msgstr "Escreva uma data válida"
+
+msgid "NotPublished"
+msgstr "Não publicado"
+
+msgid "AdvancedReportDetails"
+msgstr "O relatório avançado permite-lhe escolher o usuário e as questões para ver informações mais detalhadas."
+
+msgid "AdvancedReport"
+msgstr "Relatório avançado"
+
+msgid "CompleteReportDetails"
+msgstr "O relatório completo permite-lhe ver todos os resultados obtidos pelas pessoas entrevistadas e exportá-lo em CSV (para Excel)."
+
+msgid "CompleteReport"
+msgstr "Completar relatório"
+
+msgid "OnlyThoseAddresses"
+msgstr "Enviar enquete somente para os seguintes endereços"
+
+msgid "BackToQuestions"
+msgstr "Voltar às questões"
+
+msgid "SelectWhichLanguage"
+msgstr "Selecionar o idioma em que deseja criar a enquete"
+
+msgid "CreateInAnotherLanguage"
+msgstr "Criar esta enquete num outro idioma"
+
+msgid "ExportInExcel"
+msgstr "Exportar em formato Excel"
+
+msgid "ComparativeResults"
+msgstr "Resultados comparativos"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "Selecione os dados que deseja comparar"
+
+msgid "OrCopyPasteUrl"
+msgstr "Ou copie e cole a ligação na barra de endereços do seu browser (navegador) :"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "Clicar aqui para realizar o questionário"
+
+msgid "SurveyNotShared"
+msgstr "Nenhuma enquete foi ainda compartilhada"
+
+msgid "ViewSurvey"
+msgstr "Ver enquete"
+
+msgid "SelectDisplayType"
+msgstr "Selecionar o tipo de visualização:"
+
+msgid "Thanks"
+msgstr "Mensagem de feedback"
+
+msgid "SurveyReporting"
+msgstr "Relatório da enquete"
+
+msgid "NoSurveyAvailable"
+msgstr "Não há nenhuma enquete disponível"
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "foi publicado"
+
+msgid "CreateFromExistingSurvey"
+msgstr "Criar a partir de uma enquete existente"
+
+msgid "Publish"
+msgstr "Publicar enquete"
+
+msgid "SearchASurvey"
+msgstr "Procurar uma enquete"
+
+msgid "CourseName"
+msgstr "Nome do curso"
+
+msgid "SurveysOfAllCourses"
+msgstr "Enquetes de todos os cursos"
+
+msgid "PleaseSelectAChoice"
+msgstr "Por favor, faça uma opção"
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "Não existem questões na base de dados"
+
+msgid "UpdateQuestionType"
+msgstr "Atualizar tipo de questão:"
+
+msgid "AddAnotherQuestion"
+msgstr "Acrescentar nova questão"
+
+msgid "IsShareSurvey"
+msgstr "Compartilhar enquete com outros"
+
+msgid "Proceed"
+msgstr "Prosseguir"
+
+msgid "PleaseFillNumber"
+msgstr "Por favor, preencher valores numéricos para os pontos"
+
+msgid "PleaseFillAllPoints"
+msgstr "Por favor, preencher pontos de 1-5"
+
+msgid "PleasFillAllAnswer"
+msgstr "Por favor, preencher todos os campos da resposta"
+
+msgid "PleaseSelectFourTrue"
+msgstr "Por favor, selecionar pelo menos quatro respostas corretas."
+
+msgid "PleaseSelectFourDefault"
+msgstr "Por favor, selecionar pelo menos quatro respostas por padrão."
+
+msgid "PleaseFillDefaultText"
+msgstr "Por favor, preencher texto padrão"
+
+msgid "ModifySurveyInformation"
+msgstr "Alterar informação do questionário"
+
+msgid "ViewQuestions"
+msgstr "Visualizar questões"
+
+msgid "CreateSurvey"
+msgstr "Criar questionário"
+
+msgid "FinishSurvey"
+msgstr "Terminar questionário"
+
+msgid "QuestionsAdded"
+msgstr "Questões acrescentadas"
+
+msgid "DeleteSurvey"
+msgstr "Apagar questionário"
+
+msgid "SurveyCode"
+msgstr "Código do questionário"
+
+msgid "SurveyList"
+msgstr "Lista de questionários"
+
+msgid "SurveyAttached"
+msgstr "Questionário anexado"
+
+msgid "QuestionByType"
+msgstr "Questão por tipo"
+
+msgid "SelectQuestionByType"
+msgstr "Selecionar questão por tipo"
+
+msgid "PleaseEnterAQuestion"
+msgstr "Por favor, escreva uma questão"
+
+msgid "NoOfQuestions"
+msgstr "Número da questão"
+
+msgid "Question"
+msgstr "Pergunta"
+
+msgid "ThisCodeAlradyExists"
+msgstr "Este código já existe"
+
+msgid "SaveAndExit"
+msgstr "Gravar e sair"
+
+msgid "ViewAnswers"
+msgstr "Ver respostas"
+
+msgid "CreateExistingSurvey"
+msgstr "Criar a partir de um questionário existente"
+
+msgid "SurveyName"
+msgstr "Nome do Questionário"
+
+msgid "SurveySubTitle"
+msgstr "Subtítulo do questionário"
+
+msgid "ShareSurvey"
+msgstr "Compartilhar questionário"
+
+msgid "SurveyThanks"
+msgstr "Agradecimentos"
+
+msgid "EditSurvey"
+msgstr "Editar questionário"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "Ou voltar à lista de questionários"
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "Há um parâmetro em falta na ligação. Por favor, copie e cole"
+
+msgid "WrongInvitationCode"
+msgstr "Código de convite errado"
+
+msgid "SurveyFinished"
+msgstr "Você concluiu a participação neste questionário.<br>Obrigado pela colaboração!"
+
+msgid "SurveyPreview"
+msgstr "Previsão do questionário"
+
+msgid "InvallidSurvey"
+msgstr "Questionário inválido"
+
+msgid "AddQuestion"
+msgstr "Acrescentar questão"
+
+msgid "EditQuestion"
+msgstr "Editar questão"
+
+msgid "TypeDoesNotExist"
+msgstr "Este tipo não existe"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "O questionário foi criado com êxito"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Pode acrescentar questões ao questionário"
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "O questionário foi atualizado com êxito"
+
+msgid "QuestionAdded"
+msgstr "A questão foi acrescentada."
+
+msgid "QuestionUpdated"
+msgstr "A questão foi atualizada."
+
+msgid "RemoveAnswer"
+msgstr "Remover opção"
+
+msgid "AddAnswer"
+msgstr "Acrescentar opção"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Mostrar"
+
+msgid "AnswerOptions"
+msgstr "Opções de resposta"
+
+msgid "YesNo"
+msgstr "Sim / Não"
+
+msgid "MultipleResponse"
+msgstr "Múltiplas respostas"
+
+msgid "Open"
+msgstr "abrir"
+
+msgid "Dropdown"
+msgstr "Dropdown"
+
+msgid "Pagebreak"
+msgstr "Página final"
+
+msgid "QuestionNumber"
+msgstr "Número da questão"
+
+msgid "NumberOfOptions"
+msgstr "Número de opções"
+
+msgid "SurveyInvitations"
+msgstr "Convites para pesquisa"
+
+msgid "InvitationCode"
+msgstr "Código do convite"
+
+msgid "InvitationDate"
+msgstr "Data do convite"
+
+msgid "Answered"
+msgstr "Respondido"
+
+msgid "AdditonalUsersComment"
+msgstr "Você pode convidar outros usuários a preencher esta pesquisa. Digite o email dos convidados aqui, separados por , ou ;"
+
+msgid "MailTitle"
+msgstr "Título do email"
+
+msgid "InvitationsSend"
+msgstr "convites enviados."
+
+msgid "SurveyDeleted"
+msgstr "O questionário foi apagado."
+
+msgid "NoSurveysSelected"
+msgstr "Nenhum questionário foi selecionado."
+
+msgid "NumberOfQuestions"
+msgstr "Número de questões"
+
+msgid "Invited"
+msgstr "Convidado"
+
+msgid "SubmitQuestionFilter"
+msgstr "Submeter filtro"
+
+msgid "ResetQuestionFilter"
+msgstr "Atualizar filtro"
+
+msgid "ExportCurrentReport"
+msgstr "Exportar relatório atual"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "Só as questões com respostas pré-definidas podem ser usadas"
+
+msgid "SelectXAxis"
+msgstr "Selecionar a questão no eixo X"
+
+msgid "SelectYAxis"
+msgstr "Selecionar a questão no eixo do Y"
+
+msgid "ComparativeReport"
+msgstr "Relatório comparativo"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "Todas questões exibidas em uma página"
+
+msgid "SelectUser"
+msgstr "Usuário"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "Selecionar o usuário que preencheu a enquete."
+
+msgid "userreport"
+msgstr "Relatório do usuário"
+
+msgid "VisualRepresentation"
+msgstr "Gráfico"
+
+msgid "AbsoluteTotal"
+msgstr "Total global"
+
+msgid "NextQuestion"
+msgstr "Próxima questão"
+
+msgid "PreviousQuestion"
+msgstr "Questão anterior"
+
+msgid "PeopleWhoAnswered"
+msgstr "Pessoas que escolheram esta resposta"
+
+msgid "CourseUsers"
+msgstr "Usuários do curso"
+
+msgid "SurveyPublication"
+msgstr "Publicação do questionário"
+
+msgid "AdditonalUsers"
+msgstr "Usuários adicionais"
+
+msgid "MailText"
+msgstr "Texto do email"
+
+msgid "UseLinkSyntax"
+msgstr "Os usuários selecionados receberão um email com o texto acima e uma única ligação que terão de clicar para preencher o questionário. Se desejar colocar a ligação em um outro lugar do texto tem de escrever o seguinte texto onde desejar no meio do texto: **ligação** (asterisco asterisco ligação asterisco asterisco). Isto será automaticamente substituído por uma única ligação. Se não acrescentar **ligação** no seu texto uma ligação será, então, acrescentada na parte final do texto."
+
+msgid "DetailedReportByUser"
+msgstr "Relatório por usuário"
+
+msgid "DetailedReportByQuestion"
+msgstr "Relatório por questão"
+
+msgid "ComparativeReportDetail"
+msgstr "Neste relatório vc pode comparar duas questões"
+
+msgid "CompleteReportDetail"
+msgstr "Neste relatório pode-se ver todas as respostas de todos os utilizadores em todas as questões. Também tem a opção de ver somente uma seleção de questões. Pode exportar os resultados em formato CVS e usar este arquivo para processá-lo numa aplicação estatística."
+
+msgid "DetailedReportByUserDetail"
+msgstr "Neste relatório, vc visualiza todas as respostas de um usuário"
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "Neste relatório, vc visualiza os resultados questão por questão, com estatística básica e gráficos"
+
+msgid "ReminderResendToAllUsers"
+msgstr "Recordar todos os usuários do questionário. Se não ativar esta função, só os novos usuários receberão um email."
+
+msgid "Multiplechoice"
+msgstr "Múltipla escolha"
+
+msgid "Score"
+msgstr "Pontuação"
+
+msgid "Shared"
+msgstr "Compartilhado"
+
+msgid "Invite"
+msgstr "Convidados"
+
+msgid "MaximumScore"
+msgstr "Resultado máximo"
+
+msgid "ViewInvited"
+msgstr "Ver convidados"
+
+msgid "ViewAnswered"
+msgstr "Ver pessoas que responderam"
+
+msgid "ViewUnanswered"
+msgstr "Ver pessoas que não responderam"
+
+msgid "DeleteSurveyQuestion"
+msgstr "Tem certeza que deseja apagar esta questão?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "Você já preencheu este questionário. Obrigado!"
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "Clique aqui para responder ao questionário"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "ou copiar e colar o seguinte endereço:"
+
+msgid "UnknowUser"
+msgstr "Usuário desconhecido"
+
+msgid "MoveDown"
+msgstr "Mover para baixo"
+
+msgid "MoveUp"
+msgstr "Mover para cima"
+
+msgid "HaveAnswered"
+msgstr "responderam"
+
+msgid "WereInvited"
+msgstr "foram convidados"
+
+msgid "PagebreakNotFirst"
+msgstr "O separador da página não pode estar no início"
+
+msgid "PagebreakNotLast"
+msgstr "O separador da página não pode estar no fim"
+
+msgid "SurveyNotAvailableAnymore"
+msgstr "Infelizmente este questionário não está mais disponível. Obrigado por ter tentado."
+
+msgid "DuplicateSurvey"
+msgstr "Duplicar o questionário"
+
+msgid "EmptySurvey"
+msgstr "Esvaziar o questionário"
+
+msgid "SurveyEmptied"
+msgstr "Respostas para este questionário foram apagadas com sucesso."
+
+msgid "SurveyNotAvailableYet"
+msgstr "Este questionário ainda não está disponível. Por favor, tente novamente mais tarde. Obrigado."
+
+msgid "PeopleAnswered"
+msgstr "pessoas que responderam"
+
+msgid "AnonymousSurveyCannotKnowWhoAnswered"
+msgstr "Este questionário é anónimo. Não poderá visualizar quem respondeu."
+
+msgid "IllegalSurveyId"
+msgstr "Número de questionário desconhecido"
+
+msgid "SurveyQuestionMoved"
+msgstr "A questão foi movida"
+
+msgid "IdenticalSurveycodeWarning"
+msgstr "O código do questionário já existe. Isso pode significar que o questionário existe em outro idioma. As pessoas convidadas a responder ao questionário poderão escolher entre diferentes idiomas."
+
+msgid "ThisSurveyCodeSoonExistsInThisLanguage"
+msgstr "O código do questionário já existe neste idioma"
+
+msgid "SurveyUserAnswersHaveBeenRemovedSuccessfully"
+msgstr "As respostas do usuário foram removidas do questionário"
+
+msgid "DeleteSurveyByUser"
+msgstr "Eliminar as respostas deste usuário neste questionário"
+
+msgid "SelectType"
+msgstr "Selecionar tipo"
+
+msgid "Conditional"
+msgstr "Condicional"
+
+msgid "ParentSurvey"
+msgstr "Questionário principal"
+
+msgid "OneQuestionPerPage"
+msgstr "Uma questão por página"
+
+msgid "ActivateShuffle"
+msgstr "Habilitar modo aleatório"
+
+msgid "ShowFormProfile"
+msgstr "Exibir o formulário de perfil"
+
+msgid "PersonalityQuestion"
+msgstr "Editar questão"
+
+msgid "YouNeedToCreateGroups"
+msgstr "Você precisa criar grupos"
+
+msgid "ManageGroups"
+msgstr "Organizar grupos"
+
+msgid "Create"
+msgstr "Criar"
+
+msgid "GroupCreatedSuccessfully"
+msgstr "Grupo criado com sucesso"
+
+msgid "GroupNeedName"
+msgstr "Grupo precisa de um nome"
+
+msgid "Personality"
+msgstr "Personalizar"
+
+msgid "Condition"
+msgstr "Condição"
+
+msgid "Primary"
+msgstr "Primário"
+
+msgid "Secondary"
+msgstr "Secundário"
+
+msgid "CourseSettings"
+msgstr "Configurações do curso"
+
+msgid "PleaseChooseACondition"
+msgstr "Por favor escolha uma condição"
+
+msgid "ChooseDifferentCategories"
+msgstr "Escolher diferentes categorias"
+
+msgid "Version"
+msgstr "Versão"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "NoLogOfDuration"
+msgstr "Sem registo de duração"
+
+msgid "AutoInviteLink"
+msgstr "Usuários que não são convidados podem usar este link para acessar a pesquisa:"
+
+msgid "CompleteTheSurveysQuestions"
+msgstr "Complete as perguntas da pesquisa"
+
+msgid "SurveysDeleted"
+msgstr "Questionários apagados"
+
+msgid "RemindUnanswered"
+msgstr "Lembrar somente usuários que não responderam"
+
+msgid "ModifySurvey"
+msgstr "Editar questionário"
+
+msgid "CreateQuestionSurvey"
+msgstr "Criar questão"
+
+msgid "ModifyQuestionSurvey"
+msgstr "Editar questão"
+
+msgid "BackToSurvey"
+msgstr "Voltar ao questionário"
+
+msgid "UpdateInformation"
+msgstr "Atualizar informação"
+
+msgid "PleaseFillSurvey"
+msgstr "Por favor, preencha o questionário"
+
+msgid "ReportingOverview"
+msgstr "Visualizar relatório"
+
+msgid "ThereAreNotQuestionsForthisSurvey"
+msgstr "Não existem perguntas para esta enquete"
+
+msgid "Multipleresponse"
+msgstr "Múltiplas alternativas"
+
+msgid "ErrorSurveyTypeUnknown"
+msgstr "Tipo de enquete desconhecida"
+
+msgid "SurveyUndetermined"
+msgstr "Enquete indefinida"
+
+msgid "QuestionComment"
+msgstr "Comentário da questão"
+
+msgid "UnknowQuestion"
+msgstr "Questão desconhecida"
+
+msgid "Lastname"
+msgstr "Último nome"
+
+msgid "Firstname"
+msgstr "Primeiro nome"
+
+msgid "DeleteSurveyGroup"
+msgstr "Excluir um grupo de enquete"
+
+msgid "ErrorOccurred"
+msgstr "Ocorreu um erro."
+

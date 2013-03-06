@@ -1,0 +1,213 @@
+msgid "AgendaAdd"
+msgstr "Lägg till kalenderpost"
+
+msgid "ShowAllEvents"
+msgstr "Visa alla kalenderposter"
+
+msgid "ShowCurrent"
+msgstr "Visa kalenderposter i aktuell månad"
+
+msgid "AddCalendarItem"
+msgstr "Lägg till kalenderpost"
+
+msgid "Day"
+msgstr "Dag"
+
+msgid "Month"
+msgstr "Månad"
+
+msgid "Year"
+msgstr "År"
+
+msgid "Hour"
+msgstr "Timme"
+
+msgid "Minutes"
+msgstr "Minuter"
+
+msgid "Detail"
+msgstr "Detalj"
+
+msgid "EditSuccess"
+msgstr "Kalenderposten har blivit ändrad"
+
+msgid "AddSuccess"
+msgstr "Kalenderpost skapad"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Kalenderposten är raderad"
+
+msgid "NoAgendaItems"
+msgstr "Det finns inga kalenderposter"
+
+msgid "lang_september"
+msgstr "september"
+
+msgid "langClassName"
+msgstr "Klassnamn"
+
+msgid "lang_agenda"
+msgstr "Kalender"
+
+msgid "ModifyCalendarItem"
+msgstr "Ändra en kalenderpost"
+
+msgid "ItemTitle"
+msgstr "Objekttitel"
+
+msgid "langDay"
+msgstr "dag"
+
+msgid "month_default"
+msgstr "standardmånad"
+
+msgid "langYear"
+msgstr "År"
+
+msgid "year_default"
+msgstr "standardår"
+
+msgid "langHour"
+msgstr "Timme"
+
+msgid "hour_default"
+msgstr "standardtimme"
+
+msgid "langMinute"
+msgstr "minut"
+
+msgid "langLasting"
+msgstr "varar"
+
+msgid "langOldToNew"
+msgstr "gammal till ny"
+
+msgid "langNewToOld"
+msgstr "ny till gammal"
+
+msgid "langNow"
+msgstr "nu"
+
+msgid "langAddEvent"
+msgstr "Lägg till en händelse"
+
+msgid "langDetail"
+msgstr "detalj"
+
+msgid "MonthView"
+msgstr "Månadsöversikt"
+
+msgid "WeekView"
+msgstr "Veckoöversikt"
+
+msgid "DayView"
+msgstr "Dagöversikt"
+
+msgid "AddPersonalItem"
+msgstr "Lägg till personligt objekt"
+
+msgid "Week"
+msgstr "Vecka"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Time"
+msgstr "Tid"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Lägg till en personlig kalenderpost"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Ändra en personlig kalenderpost"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Din personliga kalenderpost är tillagd"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Din personliga kalenderpost är ändrad"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Din personliga kalenderpost är raderad"
+
+msgid "ViewPersonalItem"
+msgstr "Visa personliga objekt"
+
+msgid "UserGroupFilter"
+msgstr "Filter på grupper/användare"
+
+msgid "ShowAll"
+msgstr "Visa allt"
+
+msgid "Print"
+msgstr "Skriv ut"
+
+msgid "MyTextHere"
+msgstr "min text här"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Kopierad som tillkännagivande"
+
+msgid "NewAnnouncement"
+msgstr "Nytt tillkännagivande"
+
+msgid "AddAnnouncement"
+msgstr "Lägg till som ett tillkännagivande"
+
+msgid "UpcomingEvent"
+msgstr "Kommande händelser"
+
+msgid "RepeatedEvent"
+msgstr "Återkommande händelse"
+
+msgid "RepeatType"
+msgstr "Typ av upprepning"
+
+msgid "RepeatDaily"
+msgstr "Dagligen"
+
+msgid "RepeatWeekly"
+msgstr "Veckovis"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Månadsvis (datum)"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Månadsvis (dag)"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Månadsvis (begränsad dag)"
+
+msgid "RepeatYearly"
+msgstr "Årsvis"
+
+msgid "RepeatEnd"
+msgstr "Slutdatum för upprepning"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Visa ursprunglig händelse"
+
+msgid "ICalFileImport"
+msgstr "Importera iCal/ics fil"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Alla system användarna"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Stigande"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Fallande"
+
+msgid "SelectACourse"
+msgstr "Välj en kurs"
+
+msgid "PleaseSelectACourseOrASessionInTheLeftColumn"
+msgstr "Välj en kurs eller en session från sidofältet."
+
+msgid "DisableEndDate"
+msgstr "Inaktivera slutdatum"
+
+msgid "AllEvents"
+msgstr "Alla händelse"
+

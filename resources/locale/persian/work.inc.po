@@ -1,0 +1,82 @@
+msgid "Tools"
+msgstr "ابزارها"
+
+msgid "SendWork"
+msgstr "ارسال فایل"
+
+msgid "langTooBig"
+msgstr "ظاهراً مدرکی را برای ارسال انتخاب نکرده اید یا مدرک انتخابی سنگین تر از حد قابل قبول است"
+
+msgid "langListDeleted"
+msgstr "لیست مورد نظر به طور کامل حذف گردید"
+
+msgid "langDocModif"
+msgstr "عنوانفایل مورد نظرتغییر یافت"
+
+msgid "langDocAdd"
+msgstr "فایلمورد نظر افزودهشد"
+
+msgid "langDocDel"
+msgstr "فایلمورد نظر حذفشد"
+
+msgid "langTitleWork"
+msgstr "عنوانفایل"
+
+msgid "langAuthors"
+msgstr "نویسندگان"
+
+msgid "langDelList"
+msgstr "حذف کامل پیوند"
+
+msgid "langWorkDelete"
+msgstr "حذف"
+
+msgid "langWorkModify"
+msgstr "تغییر"
+
+msgid "langWorkConfirmDelete"
+msgstr "آیاواقعاً می خواهیداین فایل را حذفکنید؟"
+
+msgid "langAllFiles"
+msgstr "تمامیفایل ها"
+
+msgid "DefaultUpload"
+msgstr "تعمیم تنظیمات معمول قابلیت رؤیت به تمامی مدارک ارسالی"
+
+msgid "NewVisible"
+msgstr "فایل هایارسالی جدیدبرای همه کاربرانقابل رؤیت هستند"
+
+msgid "NewUnvisible"
+msgstr "فایل هایارسالی جدیدتنها برای مسئولدرس قابل رؤیتهستند"
+
+msgid "lang_doc_unvisible"
+msgstr "فایل ارسالی شما تنها برای استاد یا اساتید قابل رؤیت است و بنابراین شما نمی توانید آن را ببینید"
+
+msgid "langDelLk"
+msgstr "آیا واقعاً می خواهید این پیوند را حذف کنید؟</SPAN>\";
+"
+
+msgid "langMustBeRegisteredUser"
+msgstr "تنها کاربران ثبت نام شده در این درس می توانند فایل های خود را منتشر کنند"
+
+msgid "langListDel"
+msgstr "حذف  لیست"
+
+msgid "langNameDir"
+msgstr "نامپرونده"
+
+msgid "langFileExists"
+msgstr "عملیاتغیر ممکن !فایلی با این نام وجوددارد.لطفاًنام دیگری انتخابکنید"
+
+msgid "CreateDirectory"
+msgstr "آفرینش یک پرونده"
+
+msgid "langCurrentDir"
+msgstr "پرونده کنونی"
+
+msgid "UploadADocument"
+msgstr "ارسال فایل"
+
+msgid "EditToolOptions"
+msgstr "تغییر خصوصیات ابزارهای آموزشی"
+

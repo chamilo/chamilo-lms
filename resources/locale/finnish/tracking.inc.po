@@ -1,0 +1,42 @@
+msgid "langToolName"
+msgstr "Käytön seuranta"
+
+msgid "TrackingDisabled"
+msgstr "Seuranta on kytketty pois päältä ylläpitäjän toimesta."
+
+msgid "langShowNone"
+msgstr "Piilota kaikki"
+
+msgid "langCourseStats"
+msgstr "Kurssin tilastot"
+
+msgid "langToolsAccess"
+msgstr "Työkalujen käyttö"
+
+msgid "langLinksAccess"
+msgstr "Linkit"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Harjoitus"
+
+msgid "langNoResult"
+msgstr "Tulosta ei vielä ole"
+
+msgid "MyLearnpath"
+msgstr "Oppimispolkuni"
+
+msgid "Attempts"
+msgstr "Yrityksiä"
+
+msgid "Correction"
+msgstr "Korjaus"
+
+msgid "NoExercise"
+msgstr "Ei harjoituksia"
+
+msgid "Print"
+msgstr "Tulosta"
+
+msgid "CourseTitle"
+msgstr "Kurssin nimi"
+

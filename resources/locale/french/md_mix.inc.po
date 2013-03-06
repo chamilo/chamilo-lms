@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Métadonnées document"
+
+msgid "langClickKw"
+msgstr "Clic pour sélectionner ou annuler un mot clé."
+
+msgid "langKwHelp"
+msgstr "<br />Clic \'+\' pour ouvrir, \'-\' pour fermer, \'++\' pour ouvrir tout, \'--\' pour tout fermer.<br /><br />Pour annuler les choix précédents, fermez l\'arborescence et ré-ouvrez-là avec \'+\'.<br />Pour remettre les mots clé originaux, ouvrez-là avec Alt-clic \'+\'.<br /><br />Alt-clic mot clé sélectionne un mot clé sans termes plus large etannulle avec termes plus larges.<br /><br />Si vous changez la langue de la description, n\'ajoutez pas de nouveaux mots clé en même temps.<br /><br />"
+
+msgid "langAdvanced"
+msgstr "Construire"
+
+msgid "langSearch"
+msgstr "Cherchez"
+
+msgid "langSearchCrit"
+msgstr "Un mot par ligne !"
+
+msgid "langNoKeywords"
+msgstr "Aucun mot-clé pour décrire ce cours"
+
+msgid "langKwCacheProblem"
+msgstr "Le cache des mots-clés ne peut être ouvert"
+
+msgid "langCourseKwds"
+msgstr "Ce document contient les mots clé du cours"
+
+msgid "langKwdsInMD"
+msgstr "mots-clés utilisés dans les métadonnées"
+
+msgid "langKwdRefs"
+msgstr "Références des mots clés"
+
+msgid "langNonCourseKwds"
+msgstr "Mots clés hors cours"
+
+msgid "langKwdsUse"
+msgstr "Mots-clés du cours (en gras = non utilisés)"
+
+msgid "langTotalMDEs"
+msgstr "Nombre total d\'entrées de Métadonnées"
+

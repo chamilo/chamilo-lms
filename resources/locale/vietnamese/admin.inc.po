@@ -1,0 +1,114 @@
+msgid "AdminBy"
+msgstr "Quản trị bởi"
+
+msgid "AdministrationTools"
+msgstr "Các công cụ quản trị"
+
+msgid "State"
+msgstr "Tình trạng hệ thống"
+
+msgid "Statistiques"
+msgstr "Thống kê"
+
+msgid "langUsed"
+msgstr "used"
+
+msgid "langPresent"
+msgstr "Ok"
+
+msgid "langMissing"
+msgstr "Thiếu"
+
+msgid "langExist"
+msgstr "Thoát ra"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Tên giáo viên trên tiêu đề khóa học"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Tên Giáo viên trong chú thích danh sách khóa học"
+
+msgid "langAddAdminInApache"
+msgstr "Thêm người quản trịr"
+
+msgid "langAddFaculties"
+msgstr "Thêm bộ môn"
+
+msgid "langSearchACourse"
+msgstr "Tìm giáo trình"
+
+msgid "langSearchAUser"
+msgstr "Tìm người dùng"
+
+msgid "langTechnicalTools"
+msgstr "Quản trị kỹ thuật"
+
+msgid "langConfig"
+msgstr "Cầu hình hệ thống"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Danh mục Login (mở rộng)"
+
+msgid "langNomOutilTodo"
+msgstr "Quản lí danh mục cần làm"
+
+msgid "langNomPageAdmin"
+msgstr "Quản trị"
+
+msgid "langSysInfo"
+msgstr "Thông tin về hệ thống"
+
+msgid "langDiffTranslation"
+msgstr "So sánh các bản dịch ngôn ngữ"
+
+msgid "langStatOf"
+msgstr "Thống kê về"
+
+msgid "langSpeeSubscribe"
+msgstr "Đăng ký nhanh quyền kiểm tra giáo trình"
+
+msgid "langLogIdentLogout"
+msgstr "Danh mục đăng nhập"
+
+msgid "langServerStatus"
+msgstr "Trạng thái MySQL server :"
+
+msgid "langDataBase"
+msgstr "Database"
+
+msgid "langRun"
+msgstr "work"
+
+msgid "langClient"
+msgstr "MySql Client"
+
+msgid "langServer"
+msgstr "MySql Server"
+
+msgid "langtitulary"
+msgstr "Owner"
+
+msgid "langUpgradeBase"
+msgstr "nâng cấp cơ sở dữ liệu"
+
+msgid "langManage"
+msgstr "Quản lý chuyên môn"
+
+msgid "langErrorsFound"
+msgstr "lỗi tìm thấy"
+
+msgid "langMaintenance"
+msgstr "Bảo trì"
+
+msgid "langUpgrade"
+msgstr "Nâng cấp"
+
+msgid "langWebsite"
+msgstr "Claroline website"
+
+msgid "langDocumentation"
+msgstr "Tài liệu"
+
+msgid "langContribute"
+msgstr "Tài trợ"
+

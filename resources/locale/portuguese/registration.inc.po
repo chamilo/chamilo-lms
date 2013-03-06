@@ -1,0 +1,523 @@
+msgid "langShouldBeCSVFormat"
+msgstr "O ficheiro deve de estar no formato CSV. Não adicione espaços. A estrutura deve ser exactamente :"
+
+msgid "langTracking"
+msgstr "Relatórios"
+
+msgid "langEnter2passToChange"
+msgstr "Para modificar a sua senha/password, introduza a sua senha/password actual no campo acima e a nova senha/password em ambos os campos abaixo desse. Para manter a senha/password actual, deixe os três campos vazios."
+
+msgid "langAuthInfo"
+msgstr "Autenticação"
+
+msgid "langUpdateImage"
+msgstr "Modificar imagem"
+
+msgid "langImageWrong"
+msgstr "O tamanho do ficheiro deve ser menor que"
+
+msgid "langAddImage"
+msgstr "Imagem"
+
+msgid "langCourseManager"
+msgstr "Instrutor"
+
+msgid "NewPass"
+msgstr "Nova senha/password"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "A senha/password está incorreta"
+
+msgid "password_request"
+msgstr "Pedir para redefinir sua senha/password. Se não o solicitou, então ignore este e-mail."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "A sua senha/password foi-lhe enviada por e-mail."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Indique o endereço de e-mail que utilizou para se registar para lhe ser enviada a senha/password."
+
+msgid "langLogin"
+msgstr "Log In/Aceder"
+
+msgid "langAction"
+msgstr "Acção"
+
+msgid "langPreserved"
+msgstr "Preservada"
+
+msgid "langDeleted"
+msgstr "Eliminado"
+
+msgid "langAdded"
+msgstr "Adicionado"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Confirmar o cancelamento/anulação do utilizador"
+
+msgid "langCourseName"
+msgstr "Nome do curso"
+
+msgid "langSubscribe"
+msgstr "Inscrever"
+
+msgid "langSee"
+msgstr "Ir para"
+
+msgid "langLastVisits"
+msgstr "As minhas últimas visitas"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Se deseja adicionar uma lista de utilizadores ao seu curso, por favor contacte o administrador do sistema."
+
+msgid "langPassTooEasy"
+msgstr "esta senha/password é demasiado simples. Utilize uma como esta"
+
+msgid "langGroupUserManagement"
+msgstr "Gestão de Grupos"
+
+msgid "langAddedToCourse"
+msgstr "foi registado no seu curso"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Um utilizador com o mesmo nome já se encontra registado neste curso."
+
+msgid "langBackUser"
+msgstr "Regressar à lista de utilizadores"
+
+msgid "langUserOneByOneExplanation"
+msgstr "O utilizador receberá um e-mail de confirmação com o login/acesso e com a senha/password"
+
+msgid "langGiveTutor"
+msgstr "Tornar Tutor"
+
+msgid "langRemoveRight"
+msgstr "Remover esta permissão"
+
+msgid "langGiveAdmin"
+msgstr "Tornar administrador"
+
+msgid "langUserNumber"
+msgstr "número"
+
+msgid "langDownloadUserList"
+msgstr "Enviar a lista"
+
+msgid "langSend"
+msgstr "Enviar pedido de uma nova senha/password"
+
+msgid "langUserAddExplanation"
+msgstr "Cada linha do ficheiro para enviar deve necessáriamente conter apenas os 5 campos seguintes: <b>Primeiro nome   Último nome   Login/acesso   Senha/password   E-mail</b> separados por tabulações e nessa ordem. Os utilizadores receberão um e-mail de confirmação com o login/acesso e a senha/password."
+
+msgid "langUserMany"
+msgstr "Importar uma lista de utilizadores"
+
+msgid "langOneByOne"
+msgstr "Adicionar manualmente um utilizador"
+
+msgid "langNow"
+msgstr "agora"
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langTitular"
+msgstr "Orientador/mentor"
+
+msgid "langAddHereSomeCourses"
+msgstr "<big>Editar lista de cursos</big><br><br>Seleccione os cursos em que deseja inscrever-se.<br>Desceleccione os cursos em que não deseja continuar inscrito.<br>Em seguida, clique em OK na parte inferior da lista"
+
+msgid "langStudent"
+msgstr "Aluno"
+
+msgid "langImportUserList"
+msgstr "Importar lista de Utilizadores"
+
+msgid "langAddAU"
+msgstr "Adicionar um utilizador"
+
+msgid "langAddedU"
+msgstr "foi adicionado. Foi enviado um e-mail ao utilizador para lhe comunicar o login/acesso"
+
+msgid "langTheU"
+msgstr "O utilizador"
+
+msgid "langRegYou"
+msgstr "registou-o neste curso"
+
+msgid "langOneResp"
+msgstr "Um dos administradores do curso"
+
+msgid "langTaken"
+msgstr "já está a ser utilizado. Escolha um outro diferente."
+
+msgid "langUserNo"
+msgstr "O login/acesso que escolheu"
+
+msgid "langFilled"
+msgstr "Deixou alguns campos por preencher."
+
+msgid "langInC"
+msgstr "neste curso"
+
+msgid "langRole"
+msgstr "Descrição"
+
+msgid "UserPicture"
+msgstr "Imagem"
+
+msgid "langProfileReg"
+msgstr "O seu novo perfil foi guardado"
+
+msgid "langEmailWrong"
+msgstr "O endereço de e-mail está incompleto ou contém alguns caracteres inválidos"
+
+msgid "langUserTaken"
+msgstr "Este login/acesso já se encontra em utilização"
+
+msgid "langFields"
+msgstr "Deixou alguns campos por preencher"
+
+msgid "langAgain"
+msgstr "Tente novamente!"
+
+msgid "langPassTwo"
+msgstr "Introduziu duas senhas/passwords diferentes."
+
+msgid "langViewProfile"
+msgstr "Visualizar o meu e-portfolio"
+
+msgid "langModifProfile"
+msgstr "Editar perfil"
+
+msgid "langIsReg"
+msgstr "As suas modificações foram registadas"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Pode agora ir criar o seu curso"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Pode agora ir seleccionar, na lista, os cursos a que deseja ter acesso"
+
+msgid "langMailHasBeenSent"
+msgstr "Foi enviado um e-mail para o ajudar a lembrar o seu login/acesso e a sua senha/password"
+
+msgid "langPersonalSettings"
+msgstr "As suas configurações pessoais foram registadas"
+
+msgid "langManager"
+msgstr "Gestor"
+
+msgid "langFormula"
+msgstr "Com os melhores cumprimentos"
+
+msgid "langProblem"
+msgstr "Em caso de problemas, entre em contacto connosco."
+
+msgid "langIs"
+msgstr "é"
+
+msgid "langAddress"
+msgstr "A morada de"
+
+msgid "langSettings"
+msgstr "com as seguintes configurações: 
+ Login/acesso :"
+
+msgid "langYouAreReg"
+msgstr "Encontra-se registado em"
+
+msgid "langYourReg"
+msgstr "O seu registo em"
+
+msgid "langUserFree"
+msgstr "Este login/acesso já não se encontra disponível. Utilize o botão de voltar atrás do seu browser/navegador e escolha um outro diferente."
+
+msgid "langEmptyFields"
+msgstr "Deixou alguns campos por preencher. Utilize o botão de voltar atrás do seu browser/navegador e tente novamente."
+
+msgid "langPassTwice"
+msgstr "Introduziu duas senhas/passwords diferentes. Utilize o botão de voltar atrás do seu browser/navegador e tente novamente."
+
+msgid "langRegAdmin"
+msgstr "Criar curso"
+
+msgid "langRegStudent"
+msgstr "Acompanhar curso"
+
+msgid "langConfirmation"
+msgstr "Confirmar senha/password"
+
+msgid "langPass"
+msgstr "Senha/password"
+
+msgid "langSurname"
+msgstr "Último nome"
+
+msgid "langRegistration"
+msgstr "Inscrição/registo"
+
+msgid "langYourAccountParam"
+msgstr "Esta é a sua informação para aceder a"
+
+msgid "langLoginRequest"
+msgstr "Pedido de login/acesso"
+
+msgid "langDefineHeadings"
+msgstr "Definir posições/cabeçalhos"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Apenas instrutores"
+
+msgid "langLostPassword"
+msgstr "Perdi a minha senha/password"
+
+msgid "langAdminOfCourse"
+msgstr "Admin"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Utilizador do curso"
+
+msgid "langIsTutor"
+msgstr "Tutor"
+
+msgid "langParamInTheCourse"
+msgstr "Estado do curso"
+
+msgid "langMember"
+msgstr "membro"
+
+msgid "langLock"
+msgstr "bloqueado"
+
+msgid "langUnlock"
+msgstr "desbloqueado"
+
+msgid "langHaveNoCourse"
+msgstr "nenhum curso"
+
+msgid "langManage"
+msgstr "Gerir o Portal"
+
+msgid "langAdministrationTools"
+msgstr "Ferramentas de Administração"
+
+msgid "langUserProfileReg"
+msgstr "Foi registado o e-portfolio do utilizador"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Não existe nenhum utilizador com este endereço de e-mail."
+
+msgid "langCourses4User"
+msgstr "Cursos do utilizador"
+
+msgid "langCoursesByUser"
+msgstr "Cursos por utilizador"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Inscrever utilizadores no curso"
+
+msgid "langPreced100"
+msgstr "Anteriores 100"
+
+msgid "langAddmore"
+msgstr "Adicionar utilizadores registados"
+
+msgid "langAddback"
+msgstr "Ir para a lista de utilizadores"
+
+msgid "langreg"
+msgstr "Registar-se"
+
+msgid "langQuit"
+msgstr "Abandonar/Sair"
+
+msgid "your_password_has_been_reset"
+msgstr "Sua senha/password foi redefinida"
+
+msgid "langSex"
+msgstr "Sexo"
+
+msgid "langClass"
+msgstr "Turma"
+
+msgid "langEdit"
+msgstr "Editar"
+
+msgid "required"
+msgstr "obrigatório"
+
+msgid "langOptionalTextFields"
+msgstr "Campos opcionais"
+
+msgid "langMyProductions"
+msgstr "Minhas produções/trabalhos"
+
+msgid "langFileDeleted"
+msgstr "O ficheiro foi eliminado."
+
+msgid "FullUserName"
+msgstr "Nome completo"
+
+msgid "SearchForUser"
+msgstr "Pesquisar utilizador"
+
+msgid "SearchButton"
+msgstr "Pesquisa"
+
+msgid "SearchNoResultsFound"
+msgstr "Nenhum resultado encontrado na pesquisa"
+
+msgid "UsernameWrong"
+msgstr "O login/acesso só pode conter apenas letras, números e _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "Este é um pedido de senha/password para o endereço de e-mail"
+
+msgid "CorrespondsToAccount"
+msgstr "Este endereço de e-mail corresponde à seguinte conta de utilizador."
+
+msgid "CorrespondsToAccounts"
+msgstr "Este endereço de e-mail corresponde às seguintes contas de utilizador."
+
+msgid "AccountExternalAuthSource"
+msgstr "O Chamilo não consegue responder automaticamente ao pedido porque a conta possui uma fonte de autenticação externa. Por favor, tome as medidas adequadas e notifique o utilizador."
+
+msgid "AccountsExternalAuthSource"
+msgstr "O Chamilo não consegue responder automaticamente ao pedido porque pelo menos uma das contas possui uma fonte de autenticação externa. Por favor, tome as medidas adequadas para todos os utilizadores (incluindo os que possuem autenticação da plataforma) e notifique o utilizador."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "O Chamilo não consegue responder automaticamente ao pedido para este género/tipo de conta. O seu pedido foi enviado para o administrador da plataforma/sistema, que irá tomar as medidas apropriadas e notificá-lo posteriormente dos resultados."
+
+msgid "langphone"
+msgstr "Telefone"
+
+msgid "Unreg"
+msgstr "Anular/cancelar registo"
+
+msgid "MyProgress"
+msgstr "Progresso"
+
+msgid "ProgressIntroduction"
+msgstr "Comece por seleccionar uma sessão do curso abaixo.<br /> Poderá visualizar o seu progresso em cada um dos cursos que estiver inscrito."
+
+msgid "Select"
+msgstr "Validar"
+
+msgid "NeverExpires"
+msgstr "Nunca expira"
+
+msgid "On"
+msgstr "A"
+
+msgid "ExpirationDate"
+msgstr "Data de expiração"
+
+msgid "ActiveAccount"
+msgstr "Conta"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "A sua conta tem de ser aprovada"
+
+msgid "ApprovalForNewAccount"
+msgstr "Aprovação de nova conta"
+
+msgid "ManageUser"
+msgstr "Gerir utilizador"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Inscrever instrutores"
+
+msgid "SendMessage"
+msgstr "Enviar mensagem"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "A sua senha/password encontra-se encriptada por razões de segurança. Assim, após clicar na ligação/link ser-lhe-á enviado um e-mail com a sua password."
+
+msgid "UsersUnsubscribed"
+msgstr "As inscrições dos utilizadores seleccionados no curso foram canceladas/anuladas"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "Não foi possível ao Portal enviar o e-mail de contacto"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "Este OpenID não foi encontrado na nossa base-de-dados. Por favor, registe-se com uma nova conta. Se já possui uma conta, por favor edite o seu perfil na área da sua conta para adicionar este OpenID"
+
+msgid "UsernameMaxXCharacters"
+msgstr "O login/acesso só pode conter um máximo de %s caracteres"
+
+msgid "PictureUploaded"
+msgstr "A sua imagem foi enviada"
+
+msgid "ProductionUploaded"
+msgstr "O seu ficheiro de produção/trabalho foi enviado"
+
+msgid "FolderUpdated"
+msgstr "Pasta/directório actualizada"
+
+msgid "UsersRegistered"
+msgstr "Estes utilizadores foram registados no curso"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "Utilizador já registado por outro tutor."
+
+msgid "UserCreatedPlatform"
+msgstr "Utilizador criado no portal"
+
+msgid "UserInSession"
+msgstr "Utilizador adicionado na sessão"
+
+msgid "UserNotAdded"
+msgstr "Utilizador não adicionado."
+
+msgid "NoSessionId"
+msgstr "A sessão não foi identificada"
+
+msgid "NoUsersRead"
+msgstr "Por favor verifique o seu ficheiro XML/CVS"
+
+msgid "UserImportFileMessage"
+msgstr "Se no ficheiro XML/CVS os logins/acessos estiverem em falta, o primeiro e o último nome serão utilizados para criar um login/acesso, p. ex.: Julio Montoya em jmontoya"
+
+msgid "UserAlreadyRegisteredByOtherCreator"
+msgstr "Utilizador já registado por outro tutor."
+
+msgid "NewUserInTheCourse"
+msgstr "Novo utilizador no curso"
+
+msgid "MessageNewUserInTheCourse"
+msgstr "Existe um novo utilizador no curso"
+
+msgid "EditNormalProfile"
+msgstr "Editar perfil normal"
+
+msgid "EditExtendProfile"
+msgstr "Editar perfil alargado/extendido"
+
+msgid "EditInformation"
+msgstr "Editar perfil"
+
+msgid "RegisterUser"
+msgstr "Registar-se"
+
+msgid "IHaveReadAndAgree"
+msgstr "Li e concordo com"
+
+msgid "ByClickingRegisterYouAgreeTermsAndConditions"
+msgstr "Ao clicar abaixo em \'Registar-se\' concorda com os Termos e Condições"
+
+msgid "User"
+msgstr "Utilizador"
+
+msgid "LostPass"
+msgstr "Esqueceu-se da sua senha/password ?"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "Introduza o nome de utilizador ou o endereço de e-mail com os quais se registou para podermos enviar-lhe a sua senha/password."
+
+msgid "NoUserAccountWithThisEmailAddress"
+msgstr "Não existe nenhuma conta com este utilizador e/ou endereço de e-mail"
+
+msgid "WithTheFollowingSettings"
+msgstr "com as seguintes configurações:"
+

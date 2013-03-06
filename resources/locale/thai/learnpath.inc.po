@@ -1,0 +1,252 @@
+msgid "lang_learning_path"
+msgstr "แผนการเรียน"
+
+msgid "lang_learning_path_builder"
+msgstr "ตัวสร้างแผนการเรียน"
+
+msgid "lang_description"
+msgstr "คำอธิบาย"
+
+msgid "LearnpathTitle"
+msgstr "ชื่อหน่วย"
+
+msgid "LearnpathPrerequisites"
+msgstr "ที่ต้องเรียนผ่านมาก่อน"
+
+msgid "LearnpathMoveUp"
+msgstr "เลื่อนขึ้น"
+
+msgid "LearnpathMoveDown"
+msgstr "เลื่อนลง"
+
+msgid "langThisItem"
+msgstr "ÃÒÂ¡ÒÃ¹Õé"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "ชื่อและคำอธิบาย"
+
+msgid "LearnpathChangeOrder"
+msgstr "จัดลำดับ"
+
+msgid "LearnpathAddPrereqi"
+msgstr "เพิ่มแผนการเรียน ที่ต้องเรียนก่อน"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "แก้ไขชื่อและคำอธิบาย"
+
+msgid "lang_delete"
+msgstr "ź"
+
+msgid "lang_add_chapter"
+msgstr "เพิ่มหน่วยการเรียน/บทเรียน"
+
+msgid "langLearnpathMystatus"
+msgstr "ผลการเรียน"
+
+msgid "langLearnpathCompstatus"
+msgstr "เรียนแล้ว"
+
+msgid "langLearnpathIncomplete"
+msgstr "ยังไม่เรียน"
+
+msgid "langLearnpathPassed"
+msgstr "ผ่าน"
+
+msgid "langLearnpathFailed"
+msgstr "ไม่ผ่าน"
+
+msgid "langLearnpathPrevious"
+msgstr "ย้อนกลับ"
+
+msgid "langLearnpathNext"
+msgstr "ต่อไป"
+
+msgid "langLearnpathRestart"
+msgstr "เริ่มต้นใหม่"
+
+msgid "langLearnpathThisStatus"
+msgstr "¡ÓÅÑ§ÍÂÙèã¹áŒ¹¡ÒÃàÃÕÂ¹Ë¹èÇÂ¹Õé"
+
+msgid "langLearnpathToEnter"
+msgstr "เข้าเรียน"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "คุณต้องทำให้เสร็จขั้นตอนก่อน"
+
+msgid "langLearnpathLessonTitle"
+msgstr "ชื่อหน่วย/ขั้นการเรียน"
+
+msgid "langLearnpathStatus"
+msgstr "สถานะ Status"
+
+msgid "langLearnpathScore"
+msgstr "คะแนน Score"
+
+msgid "langLearnpathTime"
+msgstr "เวลา Time"
+
+msgid "langLearnpathVersion"
+msgstr "รุ่นversion"
+
+msgid "langLearnpathRestarted"
+msgstr "ขณะนี้ยังไม่เสร็จเรียบร้อยทุกขั้นตอน"
+
+msgid "langLearnpathNoNext"
+msgstr "¹Õèà»ç¹áŒ¹¡ÒÃàÃÕÂ¹Ë¹èÇÂÊØŽ·éÒÂ"
+
+msgid "langLearnpathNoPrev"
+msgstr "¹Õèà»ç¹áŒ¹¡ÒÃàÃÕÂ¹Ë¹èÇÂáÃ¡"
+
+msgid "LearnpathAddLearnpath"
+msgstr "เพิ่มเติมแผนการเรียนใหม่"
+
+msgid "lang_learnpath_added"
+msgstr "ได้สร้างแผนการเรียนรู้ให้เรียบร้อยแล้ว คุณสามารถเพิ่มเติมหน่วยการเรียนหรือบทเรียนย่อยได้ทันที ด้วยการคลิกที่เครื่องหมาย+"
+
+msgid "LearnpathEditLearnpath"
+msgstr "แก้ไขแผนการเรียน"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "ลบแผนการเรียน"
+
+msgid "lang_learnpath_edited"
+msgstr "แก้ไขแผนการเรียนแล้ว"
+
+msgid "lang_learnpath_deleted"
+msgstr "ลบแผนการเรียนแล้ว"
+
+msgid "LearnpathDoNotPublish"
+msgstr "ยังไม่เผยแพร่"
+
+msgid "LearnpathPublish"
+msgstr "เผยแพร่"
+
+msgid "LearnpathNotPublished"
+msgstr "ไม่เผยแพร่"
+
+msgid "LearnpathPublished"
+msgstr "ส่งเผยแพร่แล้ว"
+
+msgid "lang_add_learnpath_module"
+msgstr "เพิ่มหน่วยการเรียนใหม่"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "เพิ่มเติมหน่วยการเรียนหรือบทเรียนย่อยเข้าไปใหม่ ในแผนการเรียนรู้นี้"
+
+msgid "lang_learnpath_module_added"
+msgstr "ได้เพิ่มหน่วยการเรียนในแผนเรียบร้อยแล้ว คุณสามารถเพิ่มขั้นตอนการเรียนรู้เข้าไปได้ โดยคลิกที่เครื่องหมาย+"
+
+msgid "LearnpathEditModule"
+msgstr "แก้ไข ชื่อ คำอธิบาย หน่วยการเรียน"
+
+msgid "LearnpathDeleteModule"
+msgstr "ลบหน่วยการเรียน"
+
+msgid "lang_learnpath_module_edited"
+msgstr "แก้ไขหน่วยการเรียน ในแผนการเรียนเรียบร้อบแล้ว"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "หน่วยการเรียนและขั้นตอนได้ลบแล้ว"
+
+msgid "LearnpathNoChapters"
+msgstr "ยังไม่มีการเพิ่มหน่วยการเรียน"
+
+msgid "LearnpathAddItem"
+msgstr "เพิ่มลำดับการเรียนในหน่วยการเรียน"
+
+msgid "LearnpathItemDeleted"
+msgstr "ลบหน่วยการเรียนแล้ว"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "กำหนดขั้นตอนการเรียนรู้ ในหน่วยการเรียน:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "แก้ไขชื่อและคำอธิบายขั้นตอนที่เพิ่มเติม"
+
+msgid "lang_add_prereq"
+msgstr "เพิ่มเติม/แก้ไข หน่วยหรือขั้นตอนที่ต้องเรียนผ่านมาก่อน ของหน่วยนี้"
+
+msgid "lang_delete_learnpath_item"
+msgstr "ลบขั้นตอน"
+
+msgid "LearnpathItemEdited"
+msgstr "ได้แก้ไขขั้นตอนการเรียนของแผนการเรียน เรียบร้อยแล้ว"
+
+msgid "lang_prereq_deleted_error"
+msgstr "ลบไปแล้ว"
+
+msgid "lang_none"
+msgstr "ไม่มี"
+
+msgid "lang_forum_opened"
+msgstr "การอภิปรายที่เลือกไว้ ได้เปิดให้เป็นกรอบใหม่แล้ว"
+
+msgid "lang_link_opened"
+msgstr "The selected link has been opened in a new window."
+
+msgid "lang_short_help"
+msgstr "To add a step, click on the cross; to add new title/description, click on the pencil; to add prerequisities click on the icon with two documents. You can check what the students will see by clicking on Student View on top."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "prerequisites are not complete"
+
+msgid "lang_author"
+msgstr "เจ้าของงาน"
+
+msgid "lang_date"
+msgstr "วันที่"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Prerequisities (limit)"
+
+msgid "lang_loading"
+msgstr "กรุณารอ กำลังถ่ายโอนข้อมูลมาแสดง"
+
+msgid "lang_empty"
+msgstr "Ë¹èÇÂ¹ÕéÂÑ§äÁèäŽé¡ÓË¹Ž¢Ñé¹µÍ¹"
+
+msgid "langHotPotatoesFinished"
+msgstr "This HotPotatoes test has been closed."
+
+msgid "langCompletionLimit"
+msgstr "Completion limit (minimum points)"
+
+msgid "langPrereqToEnter"
+msgstr "To enter"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "คุณต้องผ่านขั้นแรกมาก่อน"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Minimum 1 step is missing from"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "which is set as prerequisities."
+
+msgid "langPrereqTestLimit1"
+msgstr "you must reach minimum"
+
+msgid "langPrereqTestLimit2"
+msgstr "ลงใน"
+
+msgid "langPrereqTestLimitNow"
+msgstr "ตอนนี้คุณมี Now you have :"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "กลับหน้าจอปกติ"
+
+msgid "langLearnpathFullScreen"
+msgstr "ขยายเต็มจอ"
+
+msgid "langItemMissing1"
+msgstr "There was a"
+
+msgid "langItemMissing2"
+msgstr "page (step) here in the original Chamilo Learning Path."
+
+msgid "langDone"
+msgstr "เรียบร้อย"
+
+msgid "langNoItemSelected"
+msgstr "To display something here, please select an item from the side menu"
+

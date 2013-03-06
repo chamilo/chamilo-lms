@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Metadados do Documento"
+
+msgid "langClickKw"
+msgstr "Clique em uma palavra-chave na árvore para marcar ou desmarcá-lo."
+
+msgid "langKwHelp"
+msgstr "<br/> Clique no botão \'+\' para abrir, no botão \'-\' para fechar, no botão \'++\' para abrir todos, no botão \'--\' para fechar todos.<br/> <br/> Limpe todas as palavras-chave selecionadas fechando a árvore e abrindo-a novamente com o botão \'+\'.<br/> Segurando o Alt e clicando no botão \'+\' pesquisa as palavras-chave originais na árvore.<br/> <br/> Segurando o Alt e clicando na palavra-chave seleciona uma palavra-chave sem termos abrangentes ou desmarca uma palavra-chave com termos abrangentes.<br/> <br/> Se você modificar a língua da descrição, não adicione palavras-chave ao mesmo tempo.<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Avançado"
+
+msgid "langSearch"
+msgstr "Pesquisar"
+
+msgid "langSearchCrit"
+msgstr "Uma palavra por linha!"
+
+msgid "langNoKeywords"
+msgstr "Este curso não possui nenhuma palavra-chave"
+
+msgid "langKwCacheProblem"
+msgstr "O Cache de palavras-chave não pode ser aberto"
+
+msgid "langCourseKwds"
+msgstr "Esse documento contém as palavras-chave do curso"
+
+msgid "langKwdsInMD"
+msgstr "palavras chave usadas no MD"
+
+msgid "langKwdRefs"
+msgstr "referências da palavra chave"
+
+msgid "langNonCourseKwds"
+msgstr "Palavras chave não ligadas ao curso"
+
+msgid "langKwdsUse"
+msgstr "Palavras chave do curso (negrito = não utilizadas)"
+
+msgid "langTotalMDEs"
+msgstr "Número total de entradas MD de Links:"
+

@@ -1,0 +1,366 @@
+msgid "ModifInfo"
+msgstr "Настройки на курса"
+
+msgid "langModifDone"
+msgstr "Информацията е променена."
+
+msgid "langDelCourse"
+msgstr "Изтриване на курса"
+
+msgid "langProfessors"
+msgstr "Преподаватели"
+
+msgid "langFaculty"
+msgstr "Категория"
+
+msgid "langConfidentiality"
+msgstr "Ниво на достъп"
+
+msgid "langPublic"
+msgstr "Публичен достъп - всеки може да чете курса"
+
+msgid "langUnsubscription"
+msgstr "Самостоятелно отписване от курс"
+
+msgid "langPrivOpen"
+msgstr "Ограничен достъп - курсът е достъпен само след регистрация в системата"
+
+msgid "langPrivate"
+msgstr "Частен - курсът е достъпен само за записали се в него потребители"
+
+msgid "langForbidden"
+msgstr "Забранен"
+
+msgid "CourseAccessConfigTip"
+msgstr "По подразбиране вашият курс е досъпен за всички. По-горе можете да зададете ниво на достъп."
+
+msgid "langOpenToTheWorld"
+msgstr "Отворен - курсът е достъпен за \"целия свят\""
+
+msgid "OpenToThePlatform"
+msgstr "Отворен - курсът е достъпен за всички регистрирани в системата потребители"
+
+msgid "langOpenToThePlatform"
+msgstr "Отворен - курсът е достъпен за всички регистрирани в системата потребители"
+
+msgid "langTipLang"
+msgstr "Този език ще е валиден за всеки посетител на вашия курс."
+
+msgid "langVid"
+msgstr "Видео"
+
+msgid "langWork"
+msgstr "Работи на курсистите"
+
+msgid "langProgramMenu"
+msgstr "Програма на курса"
+
+msgid "langAnnouncement"
+msgstr "Обяви"
+
+msgid "langExercise"
+msgstr "Тестове"
+
+msgid "langStats"
+msgstr "Статистики"
+
+msgid "langUplPage"
+msgstr "Качване на HTML и създаване на връзка към началната страница"
+
+msgid "langLinkSite"
+msgstr "Добави връзка към началната страница"
+
+msgid "langCourse"
+msgstr "Курсът"
+
+msgid "langHasDel"
+msgstr "е изтрит."
+
+msgid "langBackHome"
+msgstr "Обратно към главната страница"
+
+msgid "langByDel"
+msgstr "<p>Ще изтриете целия сайт на курса.</p><p>Ще изтриете всички документи и ще отпишете всички курсисти.</p><p>Курсистите няма да бъдат отписани от останалите курсове.</p><p>Наистина ли желаете да изтриете курса?</p>"
+
+msgid "langY"
+msgstr "ДА"
+
+msgid "langN"
+msgstr "НЕ"
+
+msgid "langDepartmentUrl"
+msgstr "Сайт на отдела (катедрата)"
+
+msgid "langDepartmentUrlName"
+msgstr "Отдел (катедра)"
+
+msgid "langBackupCourse"
+msgstr "Архивирай този курс"
+
+msgid "langModifGroups"
+msgstr "Групи"
+
+msgid "langProfessor"
+msgstr "Преподавател"
+
+msgid "langGroups"
+msgstr "Групи"
+
+msgid "langDescriptionCours"
+msgstr "Описание на курса"
+
+msgid "langArchiveCourse"
+msgstr "Архивиране на курса"
+
+msgid "langRestoreCourse"
+msgstr "Възстановяване на курса"
+
+msgid "langRestore"
+msgstr "Възстановяване"
+
+msgid "langCreatedIn"
+msgstr "създаден в"
+
+msgid "langCreateMissingDirectories"
+msgstr "Създаване на липсващите директории"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Копиране на файловете на курса"
+
+msgid "langDisk_free_space"
+msgstr "свободно място"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Създаване на компресиран файл"
+
+msgid "langFileCopied"
+msgstr "Файлът е копиран."
+
+msgid "langArchiveLocation"
+msgstr "Местоположение на архива"
+
+msgid "langSizeOf"
+msgstr "Размер на"
+
+msgid "langArchiveName"
+msgstr "Име на архива"
+
+msgid "langBackupSuccesfull"
+msgstr "Архивирането е успешно."
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Архивиране на данните на курса в главната база данни за"
+
+msgid "langBUUsersInMainBase"
+msgstr "Архивиране на данните за потребителите в главната база данни за"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Архивиране на обявите в главната база данни за"
+
+msgid "langBackupOfDataBase"
+msgstr "Архивиране на базата данни"
+
+msgid "langCreationDate"
+msgstr "Създаден на"
+
+msgid "langExpirationDate"
+msgstr "Крайна дата"
+
+msgid "langPostPone"
+msgstr "Отлагане"
+
+msgid "langLastEdit"
+msgstr "Последно редактиране"
+
+msgid "langLastVisit"
+msgstr "Последно посещение"
+
+msgid "langSubscription"
+msgstr "Самостоятелно записване в курс"
+
+msgid "langCourseAccess"
+msgstr "Достъп до курса"
+
+msgid "langConfirmBackup"
+msgstr "Потвърдете, желаете ли да архивирате курса?"
+
+msgid "langCreateSite"
+msgstr "Създаване сайт на курса"
+
+msgid "langRestoreDescription"
+msgstr "Курсът е в архивен файл, който можете да изберете по-долу.<br/><br/>След като щракнете върху \"Възстановяване\", архивът ще бъде разкомпресиран и курсът - възстановен."
+
+msgid "langRestoreNotice"
+msgstr "Все още не е възможно да се възстановяват автоматично данните за потребителите; данните, които са записани във файла \"users.csv\" са подходящи за администратора да извърши възстановяването ръчно."
+
+msgid "langAvailableArchives"
+msgstr "Списък с достъпни архивни файлове"
+
+msgid "langNoArchive"
+msgstr "Не е избран архивен файл."
+
+msgid "langArchiveNotFound"
+msgstr "Не е намерен архивен файл."
+
+msgid "langArchiveUncompressed"
+msgstr "Архивният файл е декомпресиран и инсталиран."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "Файлът \"users.csv\" е записан. Ще го намерите в \"Документи\"."
+
+msgid "langBackH"
+msgstr "Обратно към началната страница"
+
+msgid "langOtherCategory"
+msgstr "Друга категория"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "На потребителите е разрешено да се отписват от този курс"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "На потребителите не е разрешено да се отписват от този курс"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Напълно затворен - курсът е достъпен само за преподавателя"
+
+msgid "CourseVisibilityClosed"
+msgstr "Затворен - курсът е достъпен само за преподаватели и инструктори"
+
+msgid "CourseVisibilityModified"
+msgstr "Специален - достъпът до курса се определя подробно чрез системата за роли и права"
+
+msgid "WorkEmailAlert"
+msgstr "Известяване чрез e-mail при публикуване на работа"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Активиране на известяването чрез e-mail при публикуване на работа"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Забрана на известяването чрез e-mail при публикуване на работа"
+
+msgid "DropboxEmailAlert"
+msgstr "Известяване чрез e-mail при изпращане с Куриер"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Активиране за известяване чрез e-mail при изпращане с Куриер"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Забрана за известяване чрез e-mail при изпращане с Куриер"
+
+msgid "AllowUserEditAgenda"
+msgstr "Разрешаване на потребителите да редактират програмата на курса"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Активиране редактирането на програмата на курса от потребителите"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Забрана на редактирането на програмата на курса от потребителите"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Разрешаване на потребителите да редактират обявите в курса"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Разрешаване на редактирането от потребителите"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Забрана за редактиране от потребителите"
+
+msgid "OrInTime"
+msgstr "Или в"
+
+msgid "CourseRegistrationPassword"
+msgstr "Парола за записване в курса"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Пълно изтриване на курса - не остават никакви следи от него на сървъра.<br/><br/>Този инструмент трябва да се използва много внимателно!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Копиране на целия курс или на негови части в друг курс. За да използвате този инструмент трябва да сте създали поне 2 курса, за които имате права на преподавател."
+
+msgid "DescriptionRecycleCourse"
+msgstr "Този инструмент премахва ресурси на курса - документи, форуми, връзки и т.н. Имате възможност да избирате кои ресурси да се изтрият или да иберете да изтриете всички ресурси."
+
+msgid "QuizEmailAlert"
+msgstr "Известяване по e-mail при създаване на нов тест"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Известяване по e-mail, когато потребител отговори на въпроси"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Изключване на известяването по e-mail, когато потребител отговори на въпроси"
+
+msgid "AllowUserImageForum"
+msgstr "Снимки на потребителите във форумите"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Да се показват снимките на потребителите във форумите"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Да не се показват снимките на потребителите във форумите"
+
+msgid "AllowLearningPathTheme"
+msgstr "Промяна на визуалния стил на пътеките за обучение"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "Разрешена"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Забранена"
+
+msgid "ConfigChat"
+msgstr "Настройки за говорилнята"
+
+msgid "AllowOpenchatWindow"
+msgstr "Отваряне на говорилнята в отделен прозорец"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "Отваряне на говорилнята в нов прозорец"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "Отваряне на говорилнята в същия прозорец"
+
+msgid "NewUserEmailAlert"
+msgstr "Известяване на инструктора по e-mail, когато потребител се запише самостоятелно в курса"
+
+msgid "NewUserEmailAlertEnable"
+msgstr "Да се уведомява с e-mail преподавателя, когато потребител се регистрира самостоятелно в курса"
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "Да се уведомяват с e-mail преподавателите и инструкторите, когато потребител се регистрира самостоятелно в курса"
+
+msgid "NewUserEmailAlertDisable"
+msgstr "Изключване на уведомяването с e-mail на новозаписаните курсисти"
+
+msgid "AllowUserViewUserList"
+msgstr "Разрешанаве на курситите да виждат списъка с потребителите"
+
+msgid "AllowUserViewUserListActivate"
+msgstr "Разрешаване"
+
+msgid "AllowUserViewUserListDeactivate"
+msgstr "Забрана"
+
+msgid "DoNotDisplayAnyAdvance"
+msgstr "Да не се показва напредъка"
+
+msgid "NewHomeworkEmailAlert"
+msgstr "Да се уведомят потребителите с e-mail, когато се създаде нова домашна работа"
+
+msgid "NewHomeworkEmailAlertEnable"
+msgstr "Да се уведомят потребителите с e-mail, когато се представи домашна работа"
+
+msgid "NewHomeworkEmailAlertDisable"
+msgstr "Да не се уведомяват потребителите, когато се представи домашна работа"
+
+msgid "DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance"
+msgstr "Да се показва последната изпълнена стъпка и следващата неизпълнена стъпка"
+
+msgid "AddPicture"
+msgstr "Добавяне на изображение"
+
+msgid "LPAutoLaunch"
+msgstr "Автоматично стартиране на пътеките за обучение"
+
+msgid "ConfigLearnpath"
+msgstr "Настройки за пътеките за обучение"
+

@@ -1,0 +1,96 @@
+msgid "langOnlineConference"
+msgstr "Interreta konferenco"
+
+msgid "langWash"
+msgstr "Viŝi"
+
+msgid "langReset"
+msgstr "Restartigi"
+
+msgid "langSave"
+msgstr "Konservi"
+
+msgid "langRefresh"
+msgstr "Refreŝigi"
+
+msgid "langIsNowInYourDocDir"
+msgstr "estas nun en via dokument-ero. <br><B>Atentu, la dosiero nun alireblas por ĉiu</B>"
+
+msgid "langCopyFailed"
+msgstr "La kopiado de la dosiero malsukcesis..."
+
+msgid "langTypeMessage"
+msgstr "Bonvolu tajpi tekston!"
+
+msgid "langConfirmReset"
+msgstr "Ĉu certe, ke vi volas forigi ĉiujn mesaĝojn?"
+
+msgid "langHasResetChat"
+msgstr "reŝargis la babiladon"
+
+msgid "langNoOnlineConference"
+msgstr "Ĉi-momente ne estas konferenco"
+
+msgid "langMediaFile"
+msgstr "rekta aŭd- aŭ vidstriado"
+
+msgid "langContentFile"
+msgstr "Prezentaĵo"
+
+msgid "langListOfParticipants"
+msgstr "Listo de partoprenantoj"
+
+msgid "langYourPicture"
+msgstr "Via foto"
+
+msgid "langOnlineDescription"
+msgstr "Priskribo de la konferenco"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Bonvolu marki ĉi-opcion nur se vi starigas gravan demandon."
+
+msgid "langQuestion"
+msgstr "demando"
+
+msgid "langClearList"
+msgstr "Viŝi"
+
+msgid "langWhiteBoard"
+msgstr "Tabulo"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Tekstprilaborilo</h2>  Aldonu ĉi tie tekston, bildojn, ligilojn ... Partoprenantoj de tiu ĉi rekta konferenco senpere vidas viajn ŝanĝojn."
+
+msgid "langStreaming"
+msgstr "Datumstriado XX"
+
+msgid "langStreamURL"
+msgstr "Datumstria URL  XX"
+
+msgid "langStreamType"
+msgstr "Datumstria tipo XX"
+
+msgid "langLinkName"
+msgstr "Nomo"
+
+msgid "langLinkURL"
+msgstr "URL"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Bonvenon ĉe tiu ĉi <b>rekta konferenco</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Ne disponeblas ligilo"
+
+msgid "langChat_reset_by"
+msgstr "reŝargi babiladon"
+
+msgid "OrFile"
+msgstr "Aŭ dosiero"
+
+msgid "langCallSent"
+msgstr "Babilpeto sendita. Atendu la konsenton de via partnero."
+
+msgid "langChatDenied"
+msgstr "Via peto estas ignorata de via partnero."
+

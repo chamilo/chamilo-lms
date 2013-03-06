@@ -1,0 +1,159 @@
+msgid "ResourceAdded"
+msgstr "Materialo aldonita. Reiru nun al la pado aŭ aldonu plian materialon."
+
+msgid "LearningPath"
+msgstr "Lernopado"
+
+msgid "LevelUp"
+msgstr "supren"
+
+msgid "AddIt"
+msgstr "Aldoni tion"
+
+msgid "MainCategory"
+msgstr "ĉefkategorio"
+
+msgid "lang_delete_added_resources"
+msgstr "Forigi aldonitan materialon"
+
+msgid "AddToLinks"
+msgstr "Aldoni al kursaj ligiloj"
+
+msgid "DontAdd"
+msgstr "ne aldoni"
+
+msgid "lang_show_all_added_resources"
+msgstr "Montru ĉiun aldonitan materialon"
+
+msgid "ResourcesAdded"
+msgstr "Aldonita materialo"
+
+msgid "BackTo"
+msgstr "Reiri al"
+
+msgid "ExternalResources"
+msgstr "Ekstera materialo"
+
+msgid "CourseResources"
+msgstr "Kursmaterialo"
+
+msgid "ExternalLink"
+msgstr "Ekstera ligilo"
+
+msgid "DropboxAdd"
+msgstr "Aldoni la demetujan paĝon al ĉi-ĉapitro."
+
+msgid "AddAssignmentPage"
+msgstr "Aldoni la alŝutitan studentan publikaĵon al ĉi-ĉapitro."
+
+msgid "Exercise"
+msgstr "Ekzerco"
+
+msgid "Link"
+msgstr "Ligilo"
+
+msgid "AdValvas"
+msgstr "Publikigejo"
+
+msgid "Document"
+msgstr "Dokumento"
+
+msgid "ShowDelete"
+msgstr "Montri / Forigi"
+
+msgid "IntroductionText"
+msgstr "Enkonduka teksto"
+
+msgid "CourseDescription"
+msgstr "Kursa priskribo"
+
+msgid "Groups"
+msgstr "Grupoj"
+
+msgid "Users"
+msgstr "Uzuloj"
+
+msgid "IntroductionTextAdd"
+msgstr "Aldoni al la ĉapitro paĝon enhavantan enkondukon."
+
+msgid "CourseDescriptionAdd"
+msgstr "Aldoni al ĉi-ĉapitro paĝon enhavantan kurspriskribon."
+
+msgid "GroupsAdd"
+msgstr "Aldoni la gruppaĝon al ĉi ĉapitro."
+
+msgid "UsersAdd"
+msgstr "Aldoni la uzulan paĝon al ĉi-ĉapitro."
+
+msgid "ExportableCourseResources"
+msgstr "Eksportebla kursmaterialo"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Chamilo-rilata kursmaterialo"
+
+msgid "LinkTarget"
+msgstr "Ligila celo"
+
+msgid "SameWindow"
+msgstr "En la sama fenestro"
+
+msgid "NewWindow"
+msgstr "En nova fenestro"
+
+msgid "StepDeleted1"
+msgstr "Ĉi tio"
+
+msgid "StepDeleted2"
+msgstr "Elemento estis forigita el ĉi-ilaro."
+
+msgid "Modify"
+msgstr "modifi"
+
+msgid "Chapter"
+msgstr "Ĉapitro"
+
+msgid "NoAgendaItems"
+msgstr "Neniu agendero"
+
+msgid "AgendaAdd"
+msgstr "Aldoni Novan Agenderon"
+
+msgid "UserGroupFilter"
+msgstr "Filtri grupojn/ uzulojn"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ordigi agendon kronologie (supren)"
+
+msgid "ShowCurrent"
+msgstr "Montri agenderojn ĉi-monatajn"
+
+msgid "ModifyCalendarItem"
+msgstr "Ŝanĝi agenderon"
+
+msgid "ItemTitle"
+msgstr "Era titolo"
+
+msgid "Detail"
+msgstr "Detalo"
+
+msgid "EditSuccess"
+msgstr "La agendero ŝanĝiĝis"
+
+msgid "AddCalendarItem"
+msgstr "Aldoni novan agenderon"
+
+msgid "AddAnn"
+msgstr "Aldoni anoncon"
+
+msgid "ForumAddNewTopic"
+msgstr "Forumo: aldoni novan mesaĝon"
+
+msgid "ForumEditTopic"
+msgstr "Forumo: modifi mesaĝon"
+
+msgid "ExerciseAnswers"
+msgstr "Ekzercoj: respondoj"
+
+msgid "ForumReply"
+msgstr "Forumo: respondi"
+

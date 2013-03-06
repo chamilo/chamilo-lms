@@ -1,0 +1,207 @@
+msgid "AgendaAdd"
+msgstr "Pridať novú položku agendy"
+
+msgid "ShowAllEvents"
+msgstr "Zobraziť všetky položky agendy"
+
+msgid "ShowCurrent"
+msgstr "Zobraziť položky agendy z tohto mesiaca"
+
+msgid "AddCalendarItem"
+msgstr "Pridať novú položku agendy"
+
+msgid "Day"
+msgstr "Deň"
+
+msgid "Month"
+msgstr "Mesiac"
+
+msgid "Year"
+msgstr "Rok"
+
+msgid "Hour"
+msgstr "Hodina"
+
+msgid "Minutes"
+msgstr "Minúty"
+
+msgid "Detail"
+msgstr "Detail"
+
+msgid "EditSuccess"
+msgstr "Položka agendy bola upravená"
+
+msgid "AddSuccess"
+msgstr "Položka agendy pridaná"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Položka agendy bola zmazaná"
+
+msgid "NoAgendaItems"
+msgstr "Nie sú tu iadne poloky agendy"
+
+msgid "lang_september"
+msgstr "September"
+
+msgid "langClassName"
+msgstr "Názov triedy"
+
+msgid "lang_agenda"
+msgstr "Agenda"
+
+msgid "ModifyCalendarItem"
+msgstr "Zmeniť položku agendy"
+
+msgid "ItemTitle"
+msgstr "Názov položky"
+
+msgid "langDay"
+msgstr "deň"
+
+msgid "month_default"
+msgstr "prednastavený mesiac"
+
+msgid "langYear"
+msgstr "Rok"
+
+msgid "year_default"
+msgstr "prednastavený rok"
+
+msgid "langHour"
+msgstr "Hodina"
+
+msgid "hour_default"
+msgstr "prednastavená minúta"
+
+msgid "langMinute"
+msgstr "minúta"
+
+msgid "langLasting"
+msgstr "trvalý"
+
+msgid "langOldToNew"
+msgstr "starý novému"
+
+msgid "langNewToOld"
+msgstr "nový starému"
+
+msgid "langNow"
+msgstr "teraz"
+
+msgid "langAddEvent"
+msgstr "Pridať udalosť"
+
+msgid "langDetail"
+msgstr "detail"
+
+msgid "MonthView"
+msgstr "Mesačný prehľad"
+
+msgid "WeekView"
+msgstr "Týždenný prehľad"
+
+msgid "DayView"
+msgstr "Denný prehľad"
+
+msgid "AddPersonalItem"
+msgstr "Pridať osobnú položku"
+
+msgid "Week"
+msgstr "Týždeň"
+
+msgid "Date"
+msgstr "Dátum"
+
+msgid "Time"
+msgstr "Čas"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Pridať súkromnú položku agendy"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Zmeniť súkromnú položku agendy"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Vaša súkromná položka agendy bola úspešne pridaná"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Vaša súkromná položka agendy bola úspešne upravená"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Vaša súkromná položka agendy bola úspešne zmazaná"
+
+msgid "ViewPersonalItem"
+msgstr "Zobraziť osobné položky"
+
+msgid "UserGroupFilter"
+msgstr "Filter na skupiny/užívateľov"
+
+msgid "ShowAll"
+msgstr "Zobraziť všetko"
+
+msgid "Print"
+msgstr "Tlač"
+
+msgid "MyTextHere"
+msgstr "môj text tu"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Skopírované ako oznam"
+
+msgid "NewAnnouncement"
+msgstr "Nový oznam"
+
+msgid "AddAnnouncement"
+msgstr "Pridať ako oznam"
+
+msgid "UpcomingEvent"
+msgstr "Nová udalosť"
+
+msgid "RepeatedEvent"
+msgstr "Opakovaná udalosť"
+
+msgid "RepeatType"
+msgstr "Periodicita"
+
+msgid "RepeatDaily"
+msgstr "Denne"
+
+msgid "RepeatWeekly"
+msgstr "Týždenne"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Mesačne, podľa dátumu"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Mesačne, podľa dňa"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Mesačne, podľa dňa, obmedzene"
+
+msgid "RepeatYearly"
+msgstr "Ročne"
+
+msgid "RepeatEnd"
+msgstr "Opakovať dátum ukončenia"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Pozrieť pôvodnú udalosť"
+
+msgid "ICalFileImport"
+msgstr "Importovať iCal/ics súbor"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Všetci používatelia platformy"
+
+msgid "GlobalEvent"
+msgstr "Globálna udalosť"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Dátum ukončenia nemôže byť skôr ako dátum začiatku"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Zoradiť agendu chronologicky (vzostupne)"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Zoradiť agendu chronologicky (zostupne)"
+

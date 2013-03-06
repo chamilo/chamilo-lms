@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Metadatos"
+
+msgid "langClickKw"
+msgstr "Presione sobre la palabra clave en el árbol para seleccionarla o deseleccionarla"
+
+msgid "langKwHelp"
+msgstr "<br /> Clic en el botón \'+\' para abrir, en el botón \'-\' cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrar todo.<br /> <br /> Desechar todas las palabras claves seleccionadas cerrando el árbol y abriéndolo de nuevo con el botón \'"
+
+msgid "langAdvanced"
+msgstr "Avanzado"
+
+msgid "langSearch"
+msgstr "Búsqueda"
+
+msgid "langSearchCrit"
+msgstr "Use el área de abajo para palabras descriptivas, una palabra por línea!"
+
+msgid "langNoKeywords"
+msgstr "Este curso no tiene claves"
+
+msgid "langKwCacheProblem"
+msgstr "La palabra clave no puede ser abierta"
+
+msgid "langCourseKwds"
+msgstr "palabras clave del curso"
+
+msgid "langKwdsInMD"
+msgstr "palabras clave usadas en los metadatos (MD)"
+
+msgid "langKwdRefs"
+msgstr "referencias de palabras clave"
+
+msgid "langNonCourseKwds"
+msgstr "Palabras clave no pertenecientes al curso"
+
+msgid "langKwdsUse"
+msgstr "Palabras clave del curso (negrita = sin usar)"
+
+msgid "langTotalMDEs"
+msgstr "Total de entradas de metadatos (MD):"
+

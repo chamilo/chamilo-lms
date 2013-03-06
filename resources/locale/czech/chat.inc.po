@@ -1,0 +1,96 @@
+msgid "langOnlineConference"
+msgstr "Konference"
+
+msgid "langWash"
+msgstr "Vyčistit"
+
+msgid "langReset"
+msgstr "Resetovat"
+
+msgid "langSave"
+msgstr "Uložit"
+
+msgid "langRefresh"
+msgstr "Aktualizovat"
+
+msgid "langIsNowInYourDocDir"
+msgstr "je nyní uložený ve Vaší složce dokumentů. <br><B>Tento soubor je viditelný</B>"
+
+msgid "langCopyFailed"
+msgstr "Tisk se nezdařil"
+
+msgid "langTypeMessage"
+msgstr "Prosím napište Vaši správu!"
+
+msgid "langConfirmReset"
+msgstr "Opravdu chcete smazat všechny správy?"
+
+msgid "langHasResetChat"
+msgstr "zresetován Chat"
+
+msgid "langNoOnlineConference"
+msgstr "Momentálně není žádná konference ..."
+
+msgid "langMediaFile"
+msgstr "Živé audio nebo video streaming"
+
+msgid "langContentFile"
+msgstr "Prezentace"
+
+msgid "langListOfParticipants"
+msgstr "Seznam účastníků"
+
+msgid "langYourPicture"
+msgstr "Vaše foto"
+
+msgid "langOnlineDescription"
+msgstr "Popis konference (On-line)"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Prosím zaškrtněte políčko jenom v případě důležité otázky !"
+
+msgid "langQuestion"
+msgstr "otázka"
+
+msgid "langClearList"
+msgstr "Vyčistit seznam"
+
+msgid "langWhiteBoard"
+msgstr "Tabule na psaní"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Textový editor</h2>Z programu MS-Word® zde můžete vkládat a vyjmout text, a pak upravovat. Účastníci uvidí vaše úpravy naźivo."
+
+msgid "langStreaming"
+msgstr "Přenos (streaming)"
+
+msgid "langStreamURL"
+msgstr "Stream-URL"
+
+msgid "langStreamType"
+msgstr "Typ streamingu"
+
+msgid "langLinkName"
+msgstr "Název odkazu (linku)"
+
+msgid "langLinkURL"
+msgstr "URL odkaz (link)"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Vítejte v <b>Online Konferenci</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Není odkaz (link)"
+
+msgid "langChat_reset_by"
+msgstr "reset chatu"
+
+msgid "OrFile"
+msgstr "Nebo soubor"
+
+msgid "langCallSent"
+msgstr "Váše pozvání na Chat hovor bylo posláno, nyní čekám na potvrzení od vašeho partnera."
+
+msgid "langChatDenied"
+msgstr "Volaný zamítnul Váš hovor."
+

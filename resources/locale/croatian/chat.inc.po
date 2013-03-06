@@ -1,0 +1,102 @@
+msgid "langOnlineConference"
+msgstr "Konferencija"
+
+msgid "langWash"
+msgstr "Isperi"
+
+msgid "langReset"
+msgstr "Resetiraj"
+
+msgid "langSave"
+msgstr "Spremi"
+
+msgid "langRefresh"
+msgstr "Osvježi"
+
+msgid "langIsNowInYourDocDir"
+msgstr " se nalazi  u vašim dokumentima. <br><B>Datoteka je vidljiva</B>"
+
+msgid "langCopyFailed"
+msgstr "Tiskanje nije uspjelo"
+
+msgid "langTypeMessage"
+msgstr "Molim unesite poruku!"
+
+msgid "langConfirmReset"
+msgstr "Želite li doista izbrisati sve poruke?"
+
+msgid "langHasResetChat"
+msgstr "resetirao je Chat"
+
+msgid "langNoOnlineConference"
+msgstr "Trenutno nema konferencija..."
+
+msgid "langMediaFile"
+msgstr "Prijenos zvučnih ili vizualnih podataka uživo"
+
+msgid "langContentFile"
+msgstr "Prezentacija"
+
+msgid "langListOfParticipants"
+msgstr "Popis sudionika"
+
+msgid "langYourPicture"
+msgstr "Vaša slika"
+
+msgid "langOnlineDescription"
+msgstr "Opis konferencije"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Molim označite ovaj okvir samo u slučaju važnoga pitanja!"
+
+msgid "langQuestion"
+msgstr "pitanje"
+
+msgid "langClearList"
+msgstr "Isprazni popis"
+
+msgid "langWhiteBoard"
+msgstr "Bijela ploča"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Obrada teksta</h2> Izreži i zalijepi ovdje pomoću Ms-Word® potom uredi. Sudionici će vidjeti izmjene uživo."
+
+msgid "langStreaming"
+msgstr "Prijenos (streaming)"
+
+msgid "langStreamURL"
+msgstr "URL prijenosa podataka"
+
+msgid "langStreamType"
+msgstr "Vrsta prijenosa podataka"
+
+msgid "langLinkName"
+msgstr "Naziv poveznice"
+
+msgid "langLinkURL"
+msgstr "URL poveznice"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Dobrodošli na <b>Konferenciju uživo</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Poveznice nedostupne"
+
+msgid "langChat_reset_by"
+msgstr "resetiraj chat"
+
+msgid "OrFile"
+msgstr "Ili datoteka"
+
+msgid "langCallSent"
+msgstr "Poziv za chat je poslan. Pričekajte odobrenje sugovornika."
+
+msgid "langChatDenied"
+msgstr "Sugovornik je odbio poziv."
+
+msgid "Send"
+msgstr "Pošalji"
+
+msgid "Connected"
+msgstr "Povezan"
+

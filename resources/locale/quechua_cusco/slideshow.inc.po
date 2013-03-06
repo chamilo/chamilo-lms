@@ -1,0 +1,42 @@
+msgid "Height"
+msgstr "Sayaynin"
+
+msgid "ResizingComment"
+msgstr "tajsachay wankita kay sayayman (pixeles nisqapi)"
+
+msgid "Width"
+msgstr "Kinraynin"
+
+msgid "Resizing"
+msgstr "Tajsachay"
+
+msgid "NoResizingComment"
+msgstr "Qhararichiy wankikunata kikin sayayninpi. Ama tajsachiyqa hap\'ichisqañan. Barra de despalamiento nisqaqa rikurimunqa sichus wanki sinchi hatun kaqtinqa."
+
+msgid "ShowThumbnails"
+msgstr "Qharichiy uch\'uychakunata"
+
+msgid "SetSlideshowOptions"
+msgstr "Presentación nisqapa imaymanankuna"
+
+msgid "SlideshowOptions"
+msgstr "Presentación nisqapa imaymanankuna"
+
+msgid "NoResizing"
+msgstr "Mana tajsayachisqa (kikinmanta)"
+
+msgid "ExitSlideshow"
+msgstr "Lloqsiy presentación nisqamanta"
+
+msgid "SlideShow"
+msgstr "Presentación nisqa"
+
+msgid "PreviousSlide"
+msgstr "Ñaupaq diapositiva nisqa"
+
+msgid "NextSlide"
+msgstr "Hamuq diapositiva nisqa"
+
+msgid "ViewSlideshow"
+msgstr "Qhawariy presentación nisqata"
+

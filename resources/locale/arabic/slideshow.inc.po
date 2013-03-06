@@ -1,0 +1,42 @@
+msgid "Height"
+msgstr "الإرتفاع"
+
+msgid "ResizingComment"
+msgstr "تغيير مقاس الصورة إلى المقاسات التالية (بالبكسل)"
+
+msgid "Width"
+msgstr "العرض"
+
+msgid "Resizing"
+msgstr "تغيير المقاس"
+
+msgid "NoResizingComment"
+msgstr "أظهر جميع الصور في مقاساتها الأصلية. لم يتم تحديد إعادة تغيير المقاس. سيتم إظهار شريط التمرير تلقائيا في حين كانت الصورة أكبر من حجم الشاشة"
+
+msgid "ShowThumbnails"
+msgstr "عرض صور مصغرة"
+
+msgid "SetSlideshowOptions"
+msgstr "اضبط خيارات عرض الشرائح"
+
+msgid "SlideshowOptions"
+msgstr "خيارات عرض الشرائح"
+
+msgid "NoResizing"
+msgstr "عدم تغيير المقاس (افتراضي)"
+
+msgid "ExitSlideshow"
+msgstr "الخروج من عرض الشرائح"
+
+msgid "SlideShow"
+msgstr "شرائح العرض"
+
+msgid "PreviousSlide"
+msgstr "الشريحة السابقة"
+
+msgid "NextSlide"
+msgstr "الشريحة التالية"
+
+msgid "ViewSlideshow"
+msgstr "إظهار عرض الشرائح"
+

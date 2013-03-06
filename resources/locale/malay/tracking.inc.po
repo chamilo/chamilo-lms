@@ -1,0 +1,348 @@
+msgid "langToolName"
+msgstr "Statistik"
+
+msgid "TrackingDisabled"
+msgstr "Fungsi pengesanan telah dimatikan oleh Pentadbir Sistem."
+
+msgid "langShowNone"
+msgstr "Tiada Paparan"
+
+msgid "langCourseStats"
+msgstr "Statistik Subjek"
+
+msgid "langToolsAccess"
+msgstr "Capaian untuk Alat Bantu"
+
+msgid "langCourseAccess"
+msgstr "Capaian Subjek"
+
+msgid "langLinksAccess"
+msgstr "Pautan"
+
+msgid "langDocumentsAccess"
+msgstr "Dokumen"
+
+msgid "langLinksDetails"
+msgstr "Pautan yang dicapai oleh Pelajar"
+
+msgid "langWorksDetails"
+msgstr "Tugasan/Dokumen yang dimuat naik oleh Pelajar"
+
+msgid "langLoginsDetails"
+msgstr "Klik nama bulan untuk keterangan lanjut"
+
+msgid "langDocumentsDetails"
+msgstr "Dokumen yang dimuat turun oleh Pelajar"
+
+msgid "langExercicesDetails"
+msgstr "Markah latihan disiapkan oleh Pelajar"
+
+msgid "langBackToList"
+msgstr "Kembali ke Senarai Pengguna"
+
+msgid "langDetails"
+msgstr "Keterangan Lanjut"
+
+msgid "langStatsOfCourse"
+msgstr "Statistik Subjek"
+
+msgid "langStatsOfUser"
+msgstr "Statistik Pengguna"
+
+msgid "langStatsOfCampus"
+msgstr "Statistik Kampus"
+
+msgid "langCountUsers"
+msgstr "Nama Pengguna"
+
+msgid "langCountToolAccess"
+msgstr "Bilangan Pengguna Yang Capai Subjek"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Bulan"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Bilangan Login"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Bilangan Alat Bantu"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Klik Pengguna"
+
+msgid "langToolTitleCountColumn"
+msgstr "Bilangan Klik"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Pautan"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Klik Pengguna"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Bilangan Klik"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Latihan"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Markah"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Dokumen"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Pengguna Muat turun"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Jumlah Muat turun"
+
+msgid "langWorkTitle"
+msgstr "Tajuk"
+
+msgid "langWorkAuthors"
+msgstr "Disediakan Oleh"
+
+msgid "langWorkDescription"
+msgstr "Penerangan"
+
+msgid "informationsAbout"
+msgstr "Pengesanan"
+
+msgid "langNoEmail"
+msgstr "Alamat email tidak dinyatakan"
+
+msgid "langNoResult"
+msgstr "Tiada keputusan carian"
+
+msgid "langCourse"
+msgstr "Laman Subjek"
+
+msgid "langHits"
+msgstr "Hits"
+
+msgid "langTotal"
+msgstr "Jumlah"
+
+msgid "langHour"
+msgstr "Jam"
+
+msgid "langDay"
+msgstr "Hari"
+
+msgid "langLittleHour"
+msgstr "j."
+
+msgid "langLast31days"
+msgstr "31 hari lepas"
+
+msgid "langLast7days"
+msgstr "7 hari lepas"
+
+msgid "langThisday"
+msgstr "Hari ini"
+
+msgid "langLogins"
+msgstr "Masuk"
+
+msgid "langLoginsExplaination"
+msgstr "Login terakhir dan alat bantu yang anda lawati semasa sesi tersebut."
+
+msgid "langExercicesResults"
+msgstr "Keputusan Latihan yg Selesai"
+
+msgid "langVisits"
+msgstr "lawatan"
+
+msgid "langAt"
+msgstr "pada"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Tarikh"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Lawati"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Login dan capaian kepada alat bantu"
+
+msgid "langWorkUploads"
+msgstr "Tugasan dimuat naik"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Pengguna tidak sah : pengguna ini tidak terdapat dalam kumpulan"
+
+msgid "langListStudents"
+msgstr "Senarai Pelajar dalam Kumpulan"
+
+msgid "langPeriodHour"
+msgstr "Jam"
+
+msgid "langPeriodDay"
+msgstr "Hari"
+
+msgid "langPeriodWeek"
+msgstr "Minggu"
+
+msgid "langPeriodMonth"
+msgstr "Bulan"
+
+msgid "langPeriodYear"
+msgstr "Tahun"
+
+msgid "langNextDay"
+msgstr "Hari Seterusnya"
+
+msgid "langPreviousDay"
+msgstr "Hari Sebelumnya"
+
+msgid "langNextWeek"
+msgstr "Minggu Seterusnya"
+
+msgid "langPreviousWeek"
+msgstr "Minggu Sebelumnya"
+
+msgid "langNextMonth"
+msgstr "Bulan Seterusnya"
+
+msgid "langPreviousMonth"
+msgstr "Bulan Sebelumnya"
+
+msgid "langNextYear"
+msgstr "Tahun Seterusnya"
+
+msgid "langPreviousYear"
+msgstr "Tahun Sebelumnya"
+
+msgid "langViewToolList"
+msgstr "Paparkan senarai alat bantu"
+
+msgid "langToolList"
+msgstr "Senarai alat bantu"
+
+msgid "langFrom"
+msgstr "Dari"
+
+msgid "langTo"
+msgstr "ke"
+
+msgid "langPeriodToDisplay"
+msgstr "Jangkamasa"
+
+msgid "langDetailView"
+msgstr "Dipaparkan oleh"
+
+msgid "langBredCrumpGroups"
+msgstr "Kumpulan"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Maklumat Kumpulan"
+
+msgid "langBredCrumpUsers"
+msgstr "Pengguna"
+
+msgid "langAdminToolName"
+msgstr "Statistik Pentadbir Sistem"
+
+msgid "langPlatformStats"
+msgstr "Statistik Platform"
+
+msgid "langStatsDatabase"
+msgstr "Statistik Pangkalan Data"
+
+msgid "langPlatformAccess"
+msgstr "Capaian ke Kampus"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Capaian ke Subjek"
+
+msgid "langPlatformToolAccess"
+msgstr "Capaian ke Alat Bantu"
+
+msgid "langHardAndSoftUsed"
+msgstr "Countries Providers Browsers Os Referers"
+
+msgid "langStrangeCases"
+msgstr "Kes Berasingan"
+
+msgid "langStatsDatabaseLink"
+msgstr "Klik di sini"
+
+msgid "langCountCours"
+msgstr "Nama Subjek"
+
+msgid "langCountCourseByFaculte"
+msgstr "Bilangan subjek mengikut Pusat Pengajian"
+
+msgid "langCountCourseByLanguage"
+msgstr "Bilangan subjek mengikut Bahasa"
+
+msgid "langCountCourseByVisibility"
+msgstr "Number of courses by visibility"
+
+msgid "langCountUsersByCourse"
+msgstr "Bilangan Pengguna mengikut Subjek"
+
+msgid "langCountUsersByFaculte"
+msgstr "Bilangan Pengguna mengikut Pusat Pengajian"
+
+msgid "langCountUsersByStatus"
+msgstr "Bilangan Pengguna mengikut Status"
+
+msgid "langAccess"
+msgstr "Capaian"
+
+msgid "langCountries"
+msgstr "Negara"
+
+msgid "langProviders"
+msgstr "Penyedia Perkhidmatan"
+
+msgid "langOS"
+msgstr "OS"
+
+msgid "langBrowsers"
+msgstr "Pelayar"
+
+msgid "langReferers"
+msgstr "Rujukan"
+
+msgid "langAccessExplain"
+msgstr "(When an user open the index of the campus)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Jumlah"
+
+msgid "langTotalPlatformLogin"
+msgstr "Jumlah"
+
+msgid "langMultipleLogins"
+msgstr "Akaun dengan <i>ID Pengguna</i> yang sama"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Akaun dengan <i>ID Pengguna</i> dan <i>Katalaluan</i> yang sama"
+
+msgid "langMultipleEmails"
+msgstr "Akaun dengan <i>eMail</i> yang sama"
+
+msgid "langCourseWithoutProf"
+msgstr "Subjek tanpa Pensyarah"
+
+msgid "langCourseWithoutAccess"
+msgstr "Subjek tidak digunakan"
+
+msgid "langLoginWithoutAccess"
+msgstr "Login yang tidak digunakan"
+
+msgid "langAllRight"
+msgstr "Tiada sesuatu yang luar biasa disini"
+
+msgid "langDefcon"
+msgstr "Amaran, perkara luar biasa ditemui !!"
+
+msgid "langNULLValue"
+msgstr "Kosong (atau Tiada Nilai)"
+
+msgid "langTrafficDetails"
+msgstr "Keterangan Kesesakan"
+

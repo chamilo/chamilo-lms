@@ -1,0 +1,57 @@
+msgid "Inbox"
+msgstr "收信箱"
+
+msgid "Messages"
+msgstr "信息"
+
+msgid "SendMessage"
+msgstr "寄信息"
+
+msgid "NewMessage"
+msgstr "新信息"
+
+msgid "ComposeMessage"
+msgstr "写信息"
+
+msgid "DeleteSelectedMessages"
+msgstr "删除被选信息"
+
+msgid "SelectAll"
+msgstr "选全部"
+
+msgid "DeselectAll"
+msgstr "不选全部"
+
+msgid "ReplyToMessage"
+msgstr "回复本主题"
+
+msgid "BackToInbox"
+msgstr "回到收信箱"
+
+msgid "MessageSentTo"
+msgstr "本信息已发给"
+
+msgid "SendMessageTo"
+msgstr "寄给"
+
+msgid "Myself"
+msgstr "我自己"
+
+msgid "From"
+msgstr "由"
+
+msgid "To"
+msgstr "至"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "InvalidMessageId"
+msgstr "要回复的信息ID 无效。"
+
+msgid "ErrorSendingMessage"
+msgstr "发送信息时发生错误。"
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "你肯定要删除被选的信息？"
+

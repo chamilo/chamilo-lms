@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Enlaces"
+
+msgid "langMdTitle"
+msgstr "Nombre del enlace"
+
+msgid "langMdDescription"
+msgstr "Descripción del enlace"
+
+msgid "langMdCoverage"
+msgstr "Universal"
+
+msgid "langMdCopyright"
+msgstr "Universidad de Gante"
+
+msgid "nameTools"
+msgstr "variable de idioma obsoleta"
+
+msgid "langTool"
+msgstr "Metadatos del enlace"
+
+msgid "langNoScript"
+msgstr "El script no está activado en su navegador, por favor ignore lo que se vea debajo de este texto, no funcionará"
+
+msgid "langLanguageTip"
+msgstr "el idioma en el cual este objeto de aprendizaje fue hecho"
+
+msgid "langIdentifier"
+msgstr "Identificador"
+
+msgid "langIdentifierTip"
+msgstr "identificación única para este objeto de aprendizaje, compuesto de letras, dígitos, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "título o nombre e idioma del título o nombre"
+
+msgid "langDescriptionTip"
+msgstr "descripción o comentario e idioma usado para describir el objeto de aprendizaje"
+
+msgid "langKeyword"
+msgstr "Palabras Clave"
+
+msgid "langKeywordTip"
+msgstr "separado por comas (letras, digitos, -.)"
+
+msgid "langCoverage"
+msgstr "Categoría"
+
+msgid "langCoverageTip"
+msgstr "nombre de categoría"
+
+msgid "langKwNote"
+msgstr "Si ud cambia el idioma de descripción, no añada palabras clave al mismo tiempo"
+
+msgid "langClickKw"
+msgstr "Haga clic en una palabra clave del árbol para seleccionarla o deseleccionarla."
+
+msgid "langKwHelp"
+msgstr "<br />Haga clic en el botón \'+\' para abrir, en el botón \'-\' para cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrarlo todo.<br /><br />Deseleccione todas las palabras clave cerrando el árbol y abriéndolo de nuevo con el botón \'+\""
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "haga clic para abrir el objeto"
+
+msgid "langStore"
+msgstr "Almacenar"
+
+msgid "langDeleteAll"
+msgstr "Borrar todos los metadatos"
+
+msgid "langConfirmDelete"
+msgstr "Está *seguro* de querer borrar todos los metadatos ?"
+
+msgid "langWorkOn"
+msgstr "en"
+
+msgid "langNotInDB"
+msgstr "no existe esta categoría para el enlace"
+
+msgid "langManifestSyntax"
+msgstr "(error de sintáxis en el archivo Manifest...)"
+
+msgid "langEmptyManifest"
+msgstr "(el archivo Manifest está vacío...)"
+
+msgid "langNoManifest"
+msgstr "(no existe el archivo Manifest...)"
+
+msgid "langNotFolder"
+msgstr "no es posible, esto no es una carpeta ..."
+
+msgid "langContinue"
+msgstr "Continuar con"
+
+msgid "langCreate"
+msgstr "Crear Entradas de Meta Datos (MDE)"
+
+msgid "langRemove"
+msgstr "Borrar Entradas de Meta Datos (MDE)"
+
+msgid "langAllRemovedFor"
+msgstr "Todas las entradas han sido removidas de la categoría"
+
+msgid "langRemainingFor"
+msgstr "entradas obsoletas quitadas por categoría"
+
+msgid "langIndex"
+msgstr "Índice de palabras"
+
+msgid "langTotalMDEs"
+msgstr "Total de Entradas de Meta Datos (MD) de Enlaces"
+
+msgid "langMainMD"
+msgstr "Abrir la página principal de Entradas de Meta Datos (MDE)"
+
+msgid "langOrElse"
+msgstr "Seleccione una categoría de Enlaces"
+
+msgid "langWarningDups"
+msgstr "¡ - los nombres de categoría duplicados serán retirados de la lista !"
+
+msgid "langSLC"
+msgstr "Trabajar con la categoría de Enlaces nombrada"
+

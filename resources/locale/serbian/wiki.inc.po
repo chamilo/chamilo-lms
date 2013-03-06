@@ -1,0 +1,75 @@
+msgid "StartPage"
+msgstr "Glavna strana"
+
+msgid "EditThisPage"
+msgstr "Izmeni stranu"
+
+msgid "AllPages"
+msgstr "Sve strane"
+
+msgid "AddNew"
+msgstr "Dodaj novu stranu"
+
+msgid "ChangesStored"
+msgstr "Promene su sačuvane"
+
+msgid "DifferencesNew"
+msgstr "Promene u verziji"
+
+msgid "Legend"
+msgstr "Legenda"
+
+msgid "ShowDifferences"
+msgstr "Uporedi odabrane verzije"
+
+msgid "SearchPages"
+msgstr "Traži"
+
+msgid "History"
+msgstr "Istorija"
+
+msgid "ShowThisPage"
+msgstr "Pogledaj stranu"
+
+msgid "DeleteThisPage"
+msgstr "Obriši stranu"
+
+msgid "DeleteWiki"
+msgstr "Izbriši sve"
+
+msgid "WikiPageDeleted"
+msgstr "Strana i njena istorija je izbrisana."
+
+msgid "DeletePageHistory"
+msgstr "Obriši stranu i sve njene verzije"
+
+msgid "PageLocked"
+msgstr "Strana je zaštićena"
+
+msgid "Version"
+msgstr "Verzija"
+
+msgid "LockPage"
+msgstr "Zaštiti"
+
+msgid "WikiDiffAddedTex"
+msgstr "Tekst je dodat"
+
+msgid "HidePage"
+msgstr "Sakrij stranicu"
+
+msgid "ShowPage"
+msgstr "Prikaži stranicu"
+
+msgid "HideDiscuss"
+msgstr "Sakrij diskusiju"
+
+msgid "ShowDiscuss"
+msgstr "Prikaži diskusiju"
+
+msgid "LockByTeacher"
+msgstr "Onemogućeno od strane trenera"
+
+msgid "StandardTask"
+msgstr "Standardni zadatak"
+

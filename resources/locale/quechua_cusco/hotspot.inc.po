@@ -1,0 +1,57 @@
+msgid "select"
+msgstr "Ajllay"
+
+msgid "square"
+msgstr "Tawa k\'uchu"
+
+msgid "circle"
+msgstr "Lunp\'u"
+
+msgid "poly"
+msgstr "Askha k\'uchuyuq"
+
+msgid "status1"
+msgstr "Seq\'echay k\'iti interactiva nisqata."
+
+msgid "status2_poly"
+msgstr "Askha k\'uchuyuqta wisqanapaqqa huk\'uchaq pañan runp\'unta q\'apiy."
+
+msgid "status2_other"
+msgstr "K\'iti interactiva allchanapaqqa huk\'uchaq runp\'unta kachariy."
+
+msgid "status3"
+msgstr "K\'iti interactiva allchasqa"
+
+msgid "exercise_status_1"
+msgstr "Ima kay: Tapu mana kutichisqa"
+
+msgid "exercise_status_2"
+msgstr "Cheqaqchay ajllasqayta"
+
+msgid "exercise_status_3"
+msgstr "Ima kay: Tapu kutichisqa"
+
+msgid "showUserPoints"
+msgstr "Qhawachiy/Pakay clicks nisqata"
+
+msgid "showHotspots"
+msgstr "Qhawachiy/Pakay k\'iti interactiva nisqata"
+
+msgid "labelPolyMenu"
+msgstr "Kisqay askha k\'uchuyuqta"
+
+msgid "triesleft"
+msgstr "Mallinapaq puchuqkuna"
+
+msgid "exeFinished"
+msgstr "Llipin k\'itikuna ajllasqaña. Kunanqa ichapas hoqmanta churawaq kutichisqaykikunata utaq urapi runp\'u kaqta q\'apispa tukuwaq taputa."
+
+msgid "nextAnswer"
+msgstr "Clicta ruway kay patapi:  &done=done"
+
+msgid "delineation"
+msgstr "Saywana"
+
+msgid "labelDelineationMenu"
+msgstr "Wisqay saywanata"
+

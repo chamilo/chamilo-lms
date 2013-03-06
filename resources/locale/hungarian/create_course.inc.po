@@ -1,0 +1,303 @@
+msgid "langProfessors"
+msgstr "Oktatók"
+
+msgid "langExplanation"
+msgstr "Amint az OK-re kattint, létrejön az új kurzus honlapja fórummal, naptárral, dokumentum szerkesztővel és az egyéb eszközökkel. A kurzus létrehozójaként vagy adminisztrátoraként később igényei szerint testreszabhatja a kurzust."
+
+msgid "langEmpty"
+msgstr "Néhány mezőt üresen hagyott.<br>Használja a <b>Vissza</b> gombot a böngészőjén és próbálja újra.<br>Ha a kurzus kódot kihagyja, olvassa el a Kurzus Programot"
+
+msgid "langCodeTaken"
+msgstr "Ez a kód már foglalt.  <br>Használja a <b>Vissza</b> gombot a böngészőjén és próbálja újra"
+
+msgid "langFormula"
+msgstr "Üdvözlettel"
+
+msgid "langMessage"
+msgstr "Amikor eltávolítja a teszt fórumot, az összes üzenet is elvész abban a fórumban."
+
+msgid "langExerciceEx"
+msgstr "Példa teszt"
+
+msgid "langAntique"
+msgstr "Irónia"
+
+msgid "langSocraticIrony"
+msgstr "A szókratészi irónia..."
+
+msgid "langManyAnswers"
+msgstr "(egynél több helyes válasz is lehetséges)"
+
+msgid "langRidiculise"
+msgstr "Nevetségessé tenni a beszélgető-partnerünket, hogy rávegyük arra, hogy beismerje, hogy tévedett."
+
+msgid "langNoPsychology"
+msgstr "Nem. A szókratészi irónia nem pszihológia, hanem egyfajta érvelés."
+
+msgid "langAdmitError"
+msgstr "Beismerni saját hibáinkat, hogy beszélgető-partnerünket is ugyanezt tegye."
+
+msgid "langNoSeduction"
+msgstr "Nem. A szókratészi irónia nem egy meggyőzésre irányuló stratégia vagy a példában bemutatott módszer."
+
+msgid "langForce"
+msgstr "Egy sor kérdéssel és azok al-kérdéseivel rávenni beszélgető-partnerünket, hogy beismerje, hogy nem tudja, amiről azt állította, hogy tudja."
+
+msgid "langIndeed"
+msgstr "Valóban. A szókratészi irónia egy kérdező módszer. A görög \"eirotao\" jelentése \"kérdések feltevése\""
+
+msgid "langContradiction"
+msgstr "A Nem Ellentmondás szabály használata, mellyel beszélgető-partnerünket zsákutcába kényszerítjük."
+
+msgid "langNotFalse"
+msgstr "Ez a válasz nem hamis. Ez a beszélgető-partner tudatlanságának felfedése azáltal, hogy megmutatjuk az egymásnak ellentmondó következtetéseket, amelyek az érveléséből erednek."
+
+msgid "langAgenda"
+msgstr "Naptár"
+
+msgid "langVideo"
+msgstr "Video"
+
+msgid "langCourseProgram"
+msgstr "Kurzusleírás"
+
+msgid "langAnnouncements"
+msgstr "Hirdetmények"
+
+msgid "langAddPageHome"
+msgstr "Oldal feltöltése és link a főoldalra"
+
+msgid "langLinkSite"
+msgstr "A link hozzáadása a főoldalhoz"
+
+msgid "langModifyInfo"
+msgstr "Kurzus beéllítások"
+
+msgid "langCourseDesc"
+msgstr "Kurzus leírás"
+
+msgid "langAgendaTitle"
+msgstr "Kedd, 11-e december az első találkozás - LIN 18-as szoba"
+
+msgid "langAgendaText"
+msgstr "Általános bevezető a projektmenedzsmentbe"
+
+msgid "langMicro"
+msgstr "Utcai interjúk"
+
+msgid "langGoogle"
+msgstr "Gyors és hatékony keresőmotor"
+
+msgid "langIntroductionText"
+msgstr "Ez egy rövid bevezető szöveg helye. A módosításához kattintson a szöveg alatti <b>ceruzára</b> (csak a kurzus adminisztrátorai tehetik ezt meg)."
+
+msgid "langIntroductionTwo"
+msgstr "Ezen az oldalon kersztül bármelyik felhasználó vagy csoport feltölthet dokumentumokat a kurzusba."
+
+msgid "langCourseDescription"
+msgstr "Kurzus leírás"
+
+msgid "langProfessor"
+msgstr "Vezető"
+
+msgid "langAnnouncementEx"
+msgstr "Ez egy példa hirdetmény. Csak a kurzus vezetők tehetnek közzé hirdetményeket."
+
+msgid "langJustCreated"
+msgstr "Létrehozta a kurzust"
+
+msgid "langEnter"
+msgstr "Vissza a kurzuslistámhoz"
+
+msgid "langGroups"
+msgstr "Csoportok"
+
+msgid "langCreateCourseGroups"
+msgstr "Csoportok"
+
+msgid "langCatagoryMain"
+msgstr "Fő"
+
+msgid "langCatagoryGroup"
+msgstr "Csoprt fórumok"
+
+msgid "langLn"
+msgstr "Nyelv"
+
+msgid "langCreateSite"
+msgstr "Kurzus létrehozása"
+
+msgid "langFieldsRequ"
+msgstr "Minden mező kötelező"
+
+msgid "langEx"
+msgstr "pl.: <i>Innováció menedzsment</i>"
+
+msgid "langFac"
+msgstr "Kategória"
+
+msgid "langTargetFac"
+msgstr "Ez az a részleg vagy bármilyen kategória ahova a kurzus tartozik"
+
+msgid "langMax"
+msgstr "max. 12 karakter, pl.: <i>INNOV21</i>"
+
+msgid "langDoubt"
+msgstr "Ha kételkedik a kurzusa kódjában, egyeztessen :"
+
+msgid "langProgram"
+msgstr "Kurzus Program</a>. Ha a kurzusának nincs kódja, bármi is az oka, találjon  ki egyet. Pl .: <i>INNOVATION</i> ha a kurzus az Innovációs Menedzsmentről szól"
+
+msgid "langScormtool"
+msgstr "Tanulási programok"
+
+msgid "langScormbuildertool"
+msgstr "Tanulási program építő"
+
+msgid "langPathbuildertool"
+msgstr "Tanulási program építő"
+
+msgid "langOnlineConference"
+msgstr "Konferencia"
+
+msgid "langAgendaCreationTitle"
+msgstr "Kurzus létrehozás"
+
+msgid "langAgendaCreationContenu"
+msgstr "A kurzus létrejött ebben a pillanatban."
+
+msgid "langOnlineDescription"
+msgstr "Konferencia leírás"
+
+msgid "langDropbox"
+msgstr "File Posta"
+
+msgid "langOnly"
+msgstr "Csak"
+
+msgid "langRandomLanguage"
+msgstr "A választás megkeverése az elérhető nyelveken"
+
+msgid "langImages"
+msgstr "Képek"
+
+msgid "langAudio"
+msgstr "Hangállomány"
+
+msgid "langFlash"
+msgstr "Flash animáció"
+
+msgid "langForumLanguage"
+msgstr "angol"
+
+msgid "langNewCourse"
+msgstr "Új kurzus"
+
+msgid "langAddNewCourse"
+msgstr "Új kurzus hozzáadása"
+
+msgid "langRestoreCourse"
+msgstr "Kurzus visszaállítása"
+
+msgid "langOtherProperties"
+msgstr "Az archívban talált egyéb tulajdonságok"
+
+msgid "langSysId"
+msgstr "Rendszer ID"
+
+msgid "langDepartment"
+msgstr "Részleg"
+
+msgid "langDepartmentUrl"
+msgstr "A részleg URL-je"
+
+msgid "langScoreShow"
+msgstr "Pontszám megtekintése"
+
+msgid "langVisibility"
+msgstr "Láthatóság"
+
+msgid "langVersionDb"
+msgstr "Az archiváláskor használt adatbázis verziója"
+
+msgid "langLastVisit"
+msgstr "Legutolsó látogatás"
+
+msgid "langLastEdit"
+msgstr "Legutolsó szerkesztés"
+
+msgid "langExpire"
+msgstr "Lejárat"
+
+msgid "langChoseFile"
+msgstr "File kiválasztása"
+
+msgid "langFtpFileTips"
+msgstr "File az FTP szerveren"
+
+msgid "langHttpFileTips"
+msgstr "File a Web (HTTP) szerveren"
+
+msgid "langLocalFileTips"
+msgstr "File a platform szerveren"
+
+msgid "langPostFileTips"
+msgstr "File a helyi számítógépen"
+
+msgid "langOtherCategory"
+msgstr "Egyéb kategória"
+
+msgid "langMinimum"
+msgstr "minimum"
+
+msgid "langMaximum"
+msgstr "maximum"
+
+msgid "langRestoreACourse"
+msgstr "kurzus visszaállítása"
+
+msgid "langBackup"
+msgstr "Visszaállítás"
+
+msgid "langCopy"
+msgstr "Kurzus tartalmának másolása"
+
+msgid "langRecycle"
+msgstr "Kurzus újrahasznosítása"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Ez egy példa hirdetmény."
+
+msgid "Wikipedia"
+msgstr "Internetes szabadlexikon."
+
+msgid "DefaultGroupCategory"
+msgstr "Alapértelemzett csoportok"
+
+msgid "DefaultCourseImages"
+msgstr "Galéria"
+
+msgid "ExampleForumCategory"
+msgstr "Példa fórum kategória"
+
+msgid "ExampleForum"
+msgstr "Példa fórum"
+
+msgid "ExampleThread"
+msgstr "Példa szál"
+
+msgid "ExampleThreadContent"
+msgstr "Példa tartalom"
+
+msgid "IntroductionWiki"
+msgstr "A Wiki szó a WikiWikiWeb rövidítése. a WikiWiki szó Havaii eredetű, azt jelenti, hogy \"gyorsan\".  A wiki oldalakat az emberek közösen írhatják, szerkeszthetik. Ha valaki valamit rosszul tud, más kijavíthatja. Mások újabb részletekkel egészíthetik azt ki. Ezért az oldal tartalma idővel egyre jobb és jobb lehet."
+
+msgid "CreateCourseArea"
+msgstr "Kurzus terület létrehozása"
+
+msgid "CreateCourse"
+msgstr "Kurzus létrehozása"
+
+msgid "Create"
+msgstr "Létrehoz"
+

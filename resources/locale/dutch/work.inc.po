@@ -1,0 +1,261 @@
+msgid "Tools"
+msgstr "Functies"
+
+msgid "SendWork"
+msgstr "Document opsturen"
+
+msgid "langTooBig"
+msgstr "U hebt geen bestand gekozen op te verzenden, of het bestand is te groot."
+
+msgid "langListDeleted"
+msgstr "Lijst is verwijderd."
+
+msgid "langDocModif"
+msgstr "Het document is gewijzigd."
+
+msgid "langDocAdd"
+msgstr "Het document is toegevoegd."
+
+msgid "langDocDel"
+msgstr "Het document is verwijderd."
+
+msgid "langTitleWork"
+msgstr "Titel van het werk voluit"
+
+msgid "langAuthors"
+msgstr "Auteurs"
+
+msgid "langDelList"
+msgstr "Verwijder lijst"
+
+msgid "langWorkDelete"
+msgstr "Verwijderen"
+
+msgid "langWorkModify"
+msgstr "Wijzigen"
+
+msgid "langWorkConfirmDelete"
+msgstr "Bent u zeker dat u dit bestand wilt verwijderen?"
+
+msgid "langAllFiles"
+msgstr "Acties op alle bestanden"
+
+msgid "DefaultUpload"
+msgstr "Standaardinstelling voor de zichtbaarheid van opgestuurde documenten"
+
+msgid "NewVisible"
+msgstr "Nieuwe documenten zijn voor alle gebruikers zichtbaar"
+
+msgid "NewUnvisible"
+msgstr "Nieuwe documenten zijn enkel voor de cursusbeheerder(s) zichtbaar"
+
+msgid "lang_doc_unvisible"
+msgstr "Uw lesgever heeft er voor gekozen het document enkel zichtbaar te maken voor cursusbeheerders, bijgevolg zal het voor u niet zichtbaar zijn."
+
+msgid "langDelLk"
+msgstr "Wilt u deze link verwijderen?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "U moet geregistreerd zijn voor deze cursus om werk te kunnen publiceren."
+
+msgid "langListDel"
+msgstr "Verwijder lijst"
+
+msgid "langNameDir"
+msgstr "Titel van nieuwe map"
+
+msgid "langFileExists"
+msgstr "Onmogelijk.<br />Er bestaat al een bestand met dezelfde naam."
+
+msgid "CreateDirectory"
+msgstr "Map aanmaken"
+
+msgid "langCurrentDir"
+msgstr "huidige map"
+
+msgid "UploadADocument"
+msgstr "Een document uploaden"
+
+msgid "EditToolOptions"
+msgstr "Moduleopties wijzigen"
+
+msgid "DocumentDeleted"
+msgstr "Het document is verwijderd"
+
+msgid "SendMailBody"
+msgstr "Een gebruiker postte een document in de publicaties-tool van uw cursus."
+
+msgid "DirDelete"
+msgstr "Verwijder folder"
+
+msgid "ValidateChanges"
+msgstr "Valideer wijzigingen"
+
+msgid "FolderUpdated"
+msgstr "De folder werd geüpdated."
+
+msgid "EndsAt"
+msgstr "Eindigt op (volledig gesloten)"
+
+msgid "QualificationOfAssignment"
+msgstr "Score van de opdracht"
+
+msgid "MakeQualifiable"
+msgstr "Evaluaties activeren"
+
+msgid "QualificationNumberOver"
+msgstr "Score"
+
+msgid "WeightInTheGradebook"
+msgstr "Gewicht in competenties rapport"
+
+msgid "DatesAvailables"
+msgstr "Beschikbare data"
+
+msgid "ExpiresAt"
+msgstr "verloopt op"
+
+msgid "AddToCalendar"
+msgstr "Toevoegen aan calender"
+
+msgid "DirectoryCreated"
+msgstr "Map aangemaakt"
+
+msgid "Assignment"
+msgstr "Opdrachten"
+
+msgid "AdvancedParameters"
+msgstr "Geavanceerde instellingen"
+
+msgid "ExpiryDateToSendWorkIs"
+msgstr "Deadline voor opdrachten"
+
+msgid "EnableExpiryDate"
+msgstr "Einddatum activeren (zichtbaar voor studenten)"
+
+msgid "EnableEndDate"
+msgstr "Uiterste inleverdatum activeren (onzichtbaar voor studenten)"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "Het is niet mogelijk om het document te bewaren"
+
+msgid "EndDateCannotBeBeforeTheExpireDate"
+msgstr "De uiterste inleverdatum kan zich niet voor de einddatum bevinden."
+
+msgid "SelectAFilter"
+msgstr "Selecteer een filter"
+
+msgid "FilterByNotExpired"
+msgstr "Filteren: nog niet afgelopen"
+
+msgid "FilterAssignments"
+msgstr "Opdrachten filteren"
+
+msgid "WeightNecessary"
+msgstr "U dient een minimum score in te geven."
+
+msgid "QualificationOver"
+msgstr "Score"
+
+msgid "ExpiryDateAlreadyPassed"
+msgstr "De uiterste inleverdatumdatum is reeds voorbij"
+
+msgid "EndDateAlreadyPassed"
+msgstr "De uiterste inleverdatum ligt reeds in het verleden"
+
+msgid "MoveXTo"
+msgstr "Verplaats %s naar"
+
+msgid "QualificationMustNotBeMoreThanQualificationOver"
+msgstr "De score kan niet hoger zijn dan de maximum score"
+
+msgid "ModifyDirectory"
+msgstr "Folder wijzigen"
+
+msgid "DeleteAllFiles"
+msgstr "Alle bestanden verwijderen"
+
+msgid "BackToWorksList"
+msgstr "Terug naar lijst"
+
+msgid "EditMedia"
+msgstr "wijzig bestand"
+
+msgid "AllFilesInvisible"
+msgstr "Alle bestanden zijn nu onzichtbaar"
+
+msgid "FileInvisible"
+msgstr "Het bestand in nu onzichtbaar gemaakt"
+
+msgid "AllFilesVisible"
+msgstr "Alle bestanden zijn nu zichtbaar"
+
+msgid "FileVisible"
+msgstr "Het bestand in nu zichtbaar gemaakt"
+
+msgid "ButtonCreateAssignment"
+msgstr "Opdracht aanmaken"
+
+msgid "AssignmentName"
+msgstr "Titel van de opdracht"
+
+msgid "CreateAssignment"
+msgstr "Opdracht aanmaken"
+
+msgid "FolderEdited"
+msgstr "De folder is gewijzigd"
+
+msgid "UpdateWork"
+msgstr "Werk taak bij"
+
+msgid "MakeAllPapersInvisible"
+msgstr "Maak alle documenten onzichtbaar"
+
+msgid "MakeAllPapersVisible"
+msgstr "Maak alle documenten zichtbaar"
+
+msgid "TheDocumentHasBeenDeleted"
+msgstr "Het bestand is verwijderd."
+
+msgid "YouAreNotAllowedToDeleteThisDocument"
+msgstr "U hebt onvoldoende rechten om dit document te verwijderen"
+
+msgid "StudentAllowedToDeleteOwnPublication"
+msgstr "Toestaan dat studenten hun eigen werk verwijderen"
+
+msgid "ConfirmYourChoiceDeleteAllfiles"
+msgstr "Bevestig uw keuze. Alle bestanden zullen permanent worden verwijderd."
+
+msgid "WorkName"
+msgstr "Naam van de opdracht"
+
+msgid "ReminderToSubmitPendingTask"
+msgstr "Onthoud dat je nog een opdracht moet versturen"
+
+msgid "MessageConfirmSendingOfTask"
+msgstr "Dit bericht bevestigt dat de opdracht is ontvangen"
+
+msgid "DataSent"
+msgstr "Gegevens verstuurd"
+
+msgid "DownloadLink"
+msgstr "Download link"
+
+msgid "ViewUsersWithTask"
+msgstr "Ontvangen opgaven"
+
+msgid "ReminderMessage"
+msgstr "Stuur een herinnering"
+
+msgid "DateSent"
+msgstr "Verzenddatum"
+
+msgid "ViewUsersWithoutTask"
+msgstr "Toon ontbrekende opgaven"
+
+msgid "HomeworkCreated"
+msgstr "Een opgave is aangemaakt"
+
+msgid "HomeworkHasBeenCreatedForTheCourse"
+msgstr "Een opgave voor de cursus is aangemaakt"
+

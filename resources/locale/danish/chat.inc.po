@@ -1,0 +1,102 @@
+msgid "langOnlineConference"
+msgstr "Konference"
+
+msgid "langWash"
+msgstr "Ryd"
+
+msgid "langReset"
+msgstr "Nulstil"
+
+msgid "langSave"
+msgstr "Gem"
+
+msgid "langRefresh"
+msgstr "Opdater"
+
+msgid "langIsNowInYourDocDir"
+msgstr "er nu i dokumentmappen. <br><B>Filen er synlig</B>"
+
+msgid "langCopyFailed"
+msgstr "Udskrift mislykkedes"
+
+msgid "langTypeMessage"
+msgstr "Indtast venligst din meddelelse!"
+
+msgid "langConfirmReset"
+msgstr "Ønsker du virkelig at slette alle meddelelser?"
+
+msgid "langHasResetChat"
+msgstr "har nulstillet chatten"
+
+msgid "langNoOnlineConference"
+msgstr "Der er i øjeblikket ingen konference..."
+
+msgid "langMediaFile"
+msgstr "Live lyd eller video streaming"
+
+msgid "langContentFile"
+msgstr "Præsentation"
+
+msgid "langListOfParticipants"
+msgstr "Deltagerliste"
+
+msgid "langYourPicture"
+msgstr "Dit billede"
+
+msgid "langOnlineDescription"
+msgstr "Konferencebeskrivelse"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Klik kun i denne boks hvis dit spørgsmål er vigtigt!"
+
+msgid "langQuestion"
+msgstr "spørgsmål"
+
+msgid "langClearList"
+msgstr "Ryd listen"
+
+msgid "langWhiteBoard"
+msgstr "Opslagstavle"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Tekstbehandling</h2>Klip og indsæt her fra MS Word® og rediger derefter. De deltagende vil se dine ændringer live."
+
+msgid "langStreaming"
+msgstr "Streaming"
+
+msgid "langStreamURL"
+msgstr "Stream URL"
+
+msgid "langStreamType"
+msgstr "Stream type"
+
+msgid "langLinkName"
+msgstr "Link navn"
+
+msgid "langLinkURL"
+msgstr "Link URL"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Velkommen til denne <b>Online Konference</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Der er ikke et tilgængeligt link"
+
+msgid "langChat_reset_by"
+msgstr "nulstil/ryd chat"
+
+msgid "OrFile"
+msgstr "Eller fil"
+
+msgid "langCallSent"
+msgstr "Anmodning om chat er blevet afsendt. Venter på svar fra bruger"
+
+msgid "langChatDenied"
+msgstr "Dit anmodning blev afvist"
+
+msgid "Send"
+msgstr "Send"
+
+msgid "Connected"
+msgstr "Deltager i chatten"
+

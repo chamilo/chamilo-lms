@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "คุณไม่ได้เลือกไฟล์ที่จะส่งหรือไฟล์มีขนาดใหญ่เกินไป"
+
+msgid "langLinkTarget"
+msgstr "เชื่อมโยงให้แสดงใน"
+
+msgid "langSameWindow"
+msgstr "แทนที่กรอบหน้าต่างเดิม"
+
+msgid "langNewWindow"
+msgstr "แสดงในกรอบหน้าต่างใหม่"
+
+msgid "langAdded"
+msgstr "เพิ่มแล้ว"
+
+msgid "langAddLink"
+msgstr "เพิ่มการเชื่อมโยง"
+
+msgid "langEditLink"
+msgstr "แก้ไขการเชื่อมโยงโฮมเพจรายวิชา"
+

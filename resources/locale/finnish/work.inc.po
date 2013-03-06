@@ -1,0 +1,111 @@
+msgid "Tools"
+msgstr "Työkalut"
+
+msgid "SendWork"
+msgstr "Lisää tiedosto"
+
+msgid "langTooBig"
+msgstr "Et valinnut mitään tallennettavaksi tai se on liian iso"
+
+msgid "langListDeleted"
+msgstr "Lista on poistettu"
+
+msgid "langDocModif"
+msgstr "Tehtävän otsikko on muutettu"
+
+msgid "langDocAdd"
+msgstr "Tehtävä on lisätty"
+
+msgid "langDocDel"
+msgstr "Tehtävä on poistettu"
+
+msgid "langTitleWork"
+msgstr "Tehtävän otsikko"
+
+msgid "langAuthors"
+msgstr "Tekijät"
+
+msgid "langDelList"
+msgstr "Poista koko lista"
+
+msgid "langWorkDelete"
+msgstr "Poista"
+
+msgid "langWorkModify"
+msgstr "Muokkaa"
+
+msgid "langWorkConfirmDelete"
+msgstr "Haluatko varmasti poistaa tämän"
+
+msgid "langAllFiles"
+msgstr "Toiminnot kaikille tiedostoille"
+
+msgid "DefaultUpload"
+msgstr "Oletusasetukset näkyvyydestä uusille tiedostoille"
+
+msgid "NewVisible"
+msgstr "Uudet dokumentit ovat käyttäjien nähtävillä"
+
+msgid "NewUnvisible"
+msgstr "Uudet dokumentit ovat ainoastaan kurssin opettajan nähtävillä"
+
+msgid "lang_doc_unvisible"
+msgstr "Lähettämäsi tiedosto on ainoastaan kurssin opettajan nähtävillä ja siksi et näe sitä itse."
+
+msgid "langDelLk"
+msgstr "Haluatko varmasti poistaa tämän linkin?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Ainoastaan kurssin rekisteröityneet käyttäjät voivat julkaista dokumentteja."
+
+msgid "langListDel"
+msgstr "Poista lista"
+
+msgid "langNameDir"
+msgstr "Uuden hakemiston nimi"
+
+msgid "langFileExists"
+msgstr "Toiminto on mahdoton.<br>Samanniminen tiedosto on olemassa."
+
+msgid "CreateDirectory"
+msgstr "Luo hakemisto"
+
+msgid "langCurrentDir"
+msgstr "Nykyinen kansio"
+
+msgid "UploadADocument"
+msgstr "Tallenna dokumentti"
+
+msgid "EditToolOptions"
+msgstr "Muokkaa työkaluja"
+
+msgid "DocumentDeleted"
+msgstr "Tiedosto poistettu"
+
+msgid "SendMailBody"
+msgstr "Käyttäjä on tehnyt dokumentin kurssisi julkaisu työkalulla."
+
+msgid "DirDelete"
+msgstr "Poista hakemisto"
+
+msgid "ValidateChanges"
+msgstr "Tallenna muutokset"
+
+msgid "FolderUpdated"
+msgstr "Kansio päivitetty"
+
+msgid "EndsAt"
+msgstr "Päättyy (täysin suljettu)"
+
+msgid "AddToCalendar"
+msgstr "Lisää kalenteriin"
+
+msgid "ButtonCreateAssignment"
+msgstr "Luo testi"
+
+msgid "AssignmentName"
+msgstr "Testin nimi"
+
+msgid "CreateAssignment"
+msgstr "Luo testi"
+

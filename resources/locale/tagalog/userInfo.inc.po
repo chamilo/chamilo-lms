@@ -1,0 +1,108 @@
+msgid "langCourseManager"
+msgstr "Guro"
+
+msgid "langGroupUserManagement"
+msgstr "Pangangasiwa ng mga grupo"
+
+msgid "AddToFriends"
+msgstr "Sigurado ka bang nais mong idagdag ang contact naito sa iyong mga kaibigan ?"
+
+msgid "AddPersonalMessage"
+msgstr "Magdagdag ng personal na mensahe"
+
+msgid "Friends"
+msgstr "Mga Kaibigan"
+
+msgid "SocialFriend"
+msgstr "Aking mga kaibigan"
+
+msgid "PendingInvitations"
+msgstr "Mga nakabinbing imbitasyon"
+
+msgid "ExtraInformation"
+msgstr "Karagdagang impormasyon"
+
+msgid "Friend"
+msgstr "Kaibigan"
+
+msgid "ViewMySharedProfile"
+msgstr "Ang aking ibinahaging profile"
+
+msgid "TryAndFindSomeFriends"
+msgstr "Subukan at maghanap ng ilang mga kaibigan"
+
+msgid "SendInvitation"
+msgstr "Magpadala ng imbitasyon"
+
+msgid "Invitations"
+msgstr "Mga Imbitasyon"
+
+msgid "MyGroups"
+msgstr "Ang aking mga grupo"
+
+msgid "EditProfile"
+msgstr "I-edit ang profile"
+
+msgid "Social"
+msgstr "Social"
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "Messages"
+msgstr "Mga Mensahe"
+
+msgid "UsersGroups"
+msgstr "Mga Gumagamit, Mga Grupo"
+
+msgid "AddPicture"
+msgstr "Magdagdag ng larawan"
+
+msgid "NewTopic"
+msgstr "Lumikha ng thread"
+
+msgid "EditGroup"
+msgstr "I-edit ang grupo"
+
+msgid "Admin"
+msgstr "Tagapangasiwa"
+
+msgid "AddOneMoreFile"
+msgstr "Magdagdag ng isa pang file"
+
+msgid "ModifyInformation"
+msgstr "I-edit ang impormasyon"
+
+msgid "GroupList"
+msgstr "Listahan ng Grupo"
+
+msgid "Newest"
+msgstr "Pinaka-bago"
+
+msgid "Popular"
+msgstr "Tanyag"
+
+msgid "Member"
+msgstr "Miyembro"
+
+msgid "Open"
+msgstr "Buksan"
+
+msgid "GroupMembers"
+msgstr "Mga miyembro ng grupo"
+
+msgid "Me"
+msgstr "Ako"
+
+msgid "Topics"
+msgstr "Mga Paksa"
+
+msgid "MyFiles"
+msgstr "Aking mga files"
+
+msgid "SocialGroups"
+msgstr "Mga Social group"
+
+msgid "CreateASocialGroup"
+msgstr "Lumikha ng isang social group"
+

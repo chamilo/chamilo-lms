@@ -1,0 +1,42 @@
+msgid "Tools"
+msgstr "Công cụ"
+
+msgid "SendWork"
+msgstr "Upload bài"
+
+msgid "langTooBig"
+msgstr "Bạn không chọn tệp nào, hoặc là kích thước tệp quá lớn"
+
+msgid "langListDeleted"
+msgstr "Danh sách đã bị xoá"
+
+msgid "langDocModif"
+msgstr "tên bài đã sửa"
+
+msgid "langDocAdd"
+msgstr "Bài đã nộp"
+
+msgid "langDocDel"
+msgstr "Bài đã xoá"
+
+msgid "langTitleWork"
+msgstr "Tên bài"
+
+msgid "langAuthors"
+msgstr "Người gửi"
+
+msgid "langDelList"
+msgstr "Xoá toàn bộ danh sách"
+
+msgid "langWorkDelete"
+msgstr "Xoá"
+
+msgid "langWorkModify"
+msgstr "Sửa"
+
+msgid "langWorkConfirmDelete"
+msgstr "Bạn có chắc muốn xoá bài nàyr"
+
+msgid "langAllFiles"
+msgstr "Tất cả file"
+

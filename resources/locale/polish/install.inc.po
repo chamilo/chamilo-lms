@@ -1,0 +1,165 @@
+msgid "langStatDB"
+msgstr "Baza raportów."
+
+msgid "langEnableTracking"
+msgstr "Włączenie raportowania"
+
+msgid "langInstituteShortName"
+msgstr "Skrót nazwy instytucji"
+
+msgid "langWarningResponsible"
+msgstr "Użyj tego sktyptu tylko po uaktualnieniu. Autorzy systemu nie ponoszą odpowiedzialności za utratę lub uszkodzenie danych"
+
+msgid "langAllowSelfRegProf"
+msgstr "Zezwalaj na samodzielną rejestrację twórców kursu"
+
+msgid "langEG"
+msgstr "np."
+
+msgid "langDBHost"
+msgstr "Host Bazy danych"
+
+msgid "langDBLogin"
+msgstr "Nazwa użytkownika bazy danych"
+
+msgid "langDBPassword"
+msgstr "Hasło bazy danych"
+
+msgid "langMainDB"
+msgstr "Główna baza danych Claroline"
+
+msgid "langAllFieldsRequired"
+msgstr "Wymagane wypełnienie wszystkich pól"
+
+msgid "langPrintVers"
+msgstr "Do wydruku"
+
+msgid "langLocalPath"
+msgstr "¦cieżka lokalna"
+
+msgid "langAdminEmail"
+msgstr "E-mail administratora"
+
+msgid "langAdminName"
+msgstr "Imię administratora"
+
+msgid "langAdminSurname"
+msgstr "Nazwisko administratora"
+
+msgid "langAdminLogin"
+msgstr " Identyfikator administratora"
+
+msgid "langAdminPass"
+msgstr "Hasło administratora"
+
+msgid "langEducationManager"
+msgstr "Kierownik projektu"
+
+msgid "langCampusName"
+msgstr "Nazwa Twojego campusu"
+
+msgid "langDBSettingIntro"
+msgstr "Skrypt instalacyjny utworzy główną bazę danych Chamilo. Zwróć uwagę, że Chamilo tworzy wiele baz danych. Jeśli masz dostęp tylko do jednej bazy danych w swoim serwerze, Chamilo nie będzie działać."
+
+msgid "langStep1"
+msgstr "Krok 1"
+
+msgid "langStep2"
+msgstr "Krok 2"
+
+msgid "langStep3"
+msgstr "Krok 3 z 6"
+
+msgid "langStep4"
+msgstr "Krok 4 z 6"
+
+msgid "langStep5"
+msgstr "Krok 5 z 6"
+
+msgid "langStep6"
+msgstr "Krok 6 z 6"
+
+msgid "langCfgSetting"
+msgstr "Ustawienia konfiguracyne"
+
+msgid "langDBSetting"
+msgstr "Ustawienia bazy danych MySQL"
+
+msgid "langMainLang"
+msgstr "Główny język"
+
+msgid "langLicence"
+msgstr "Licencja"
+
+msgid "langLastCheck"
+msgstr "Ostatnie sprawdzenie przed instalacją"
+
+msgid "langRequirements"
+msgstr "Wymagania"
+
+msgid "langDbPrefixForm"
+msgstr "MySQL Prefix"
+
+msgid "langDbPrefixCom"
+msgstr "Pozostaw puste, jeśli nie jest konieczne"
+
+msgid "langEncryptUserPass"
+msgstr "Ukryj hasła użytkowników w bazie danych"
+
+msgid "langSingleDb"
+msgstr "Użyj jednej lub kilku baz danych Chamilo"
+
+msgid "langAllowSelfReg"
+msgstr "Zezwalaj na samodzielną rejestrację"
+
+msgid "langRecommended"
+msgstr "(zalecane)"
+
+msgid "langScormDB"
+msgstr "Scorm DB"
+
+msgid "langAdminLastName"
+msgstr "Nazwisko administratora"
+
+msgid "langAdminPhone"
+msgstr "Telefon administratora"
+
+msgid "langAdminFirstName"
+msgstr "Imię administratora"
+
+msgid "langInstituteURL"
+msgstr "Adres URL tej organizacji"
+
+msgid "langDokeosURL"
+msgstr "URL Chamilo"
+
+msgid "langUserDB"
+msgstr "Użytkownik bazy"
+
+msgid "langInstallationLanguage"
+msgstr "Język instalacji"
+
+msgid "ReadThoroughly"
+msgstr "Przeczytaj uważnie"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "Do uruchomienia Chamiloa potrzebujesz następujących rzeczy na swoim serwerze"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "Uwaga!<br/>Instalator wykrył instalację Chamiloa w twoim systemie."
+
+msgid "NewInstallation"
+msgstr "Nowa instalacja"
+
+msgid "CheckDatabaseConnection"
+msgstr "Sprawdź połączenie z bazą danych"
+
+msgid "PrintOverview"
+msgstr "Pokaż podsumowanie"
+
+msgid "Installing"
+msgstr "Zainstaluj"
+
+msgid "PHPVersion"
+msgstr "wersja PHP"
+

@@ -1,0 +1,90 @@
+msgid "NewNote"
+msgstr "Nieuwe notitie"
+
+msgid "Note"
+msgstr "Notitie"
+
+msgid "NoteDeleted"
+msgstr "Notitie verwijderd"
+
+msgid "NoteUpdated"
+msgstr "Notitie aangepast"
+
+msgid "NoteCreated"
+msgstr "Notitie aangemaakt"
+
+msgid "YouMustWriteANote"
+msgstr "Gelieve een notitie te schrijven"
+
+msgid "SaveNote"
+msgstr "Notitie opslaan"
+
+msgid "WriteYourNoteHere"
+msgstr "Klik hier om een nieuwe notitie toe te voegen"
+
+msgid "SearchByTitle"
+msgstr "Zoeken op titel"
+
+msgid "WriteTheTitleHere"
+msgstr "Typ de titel hier"
+
+msgid "UpdateDate"
+msgstr "geüpdated"
+
+msgid "NoteAddNew"
+msgstr "Voeg nieuwe notitie toe in mijn persoonlijke notitieblok"
+
+msgid "OrderByCreationDate"
+msgstr "Sorteer volgens aanmaakdatum"
+
+msgid "OrderByModificationDate"
+msgstr "Sorteer volgens wijzigingsdatum"
+
+msgid "OrderByTitle"
+msgstr "Sorteer volgens titel"
+
+msgid "NoteTitle"
+msgstr "Notitietitel"
+
+msgid "NoteComment"
+msgstr "Notitie inhoud"
+
+msgid "NoteAdded"
+msgstr "Notitie toegevoegd"
+
+msgid "NoteConfirmDelete"
+msgstr "Ben je zeker dat je deze notitie wil verwijderen ?"
+
+msgid "AddNote"
+msgstr "Maak notitie aan"
+
+msgid "ModifyNote"
+msgstr "Pas mijn persoonlijke notitie aan"
+
+msgid "BackToNoteList"
+msgstr "Terug naar notitielijst"
+
+msgid "NotebookManagement"
+msgstr "Notitiebeheer"
+
+msgid "BackToNotesList"
+msgstr "Terug naar notitielijst"
+
+msgid "NotesSortedByTitleAsc"
+msgstr "Sorteer stijgend volgens titel"
+
+msgid "NotesSortedByTitleDESC"
+msgstr "Sorteer aflopend volgens titel"
+
+msgid "NotesSortedByUpdateDateAsc"
+msgstr "Sorteer stijgend volgens wijzigingsdatum"
+
+msgid "NotesSortedByUpdateDateDESC"
+msgstr "Sorteer aflopend volgens wijzigingsdatum"
+
+msgid "NotesSortedByCreationDateAsc"
+msgstr "Sorteer stijgend volgens aanmaakdatum"
+
+msgid "NotesSortedByCreationDateDESC"
+msgstr "Sorteer aflopend volgens aanmaakdatum"
+

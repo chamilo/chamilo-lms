@@ -1,0 +1,303 @@
+msgid "Upload"
+msgstr "ارسال"
+
+msgid "BackList"
+msgstr "بازگشت به قسمت تبادل فایل"
+
+msgid "ShowFeedback"
+msgstr "نمایش توضیحات"
+
+msgid "GiveFeedback"
+msgstr "افزودن یا ویرایش توضیحات"
+
+msgid "JustUploadInSelect"
+msgstr "---فقط ارسال---"
+
+msgid "MailingNothingFor"
+msgstr "هیچ برای"
+
+msgid "MailingFileNotRegistered"
+msgstr "(دراین درس ثبت نامنشده است)"
+
+msgid "MailingFileSentTo"
+msgstr "ارسال شده به"
+
+msgid "MailingFileIsFor"
+msgstr "است برای"
+
+msgid "MailingFileRecipDup"
+msgstr "دانشجویان   متعددی دارای   مشخصات مورد نظر   می باشند"
+
+msgid "MailingFileRecipNotFound"
+msgstr "دانشجویان مشخصات مورد نظر موجود نمی باشد"
+
+msgid "MailingFileNoRecip"
+msgstr "گیرنده می باشد (ID) نام مورد نظر فاقد رمز شناسایی"
+
+msgid "MailingFileNoPostfix"
+msgstr ": نام مورد نظر دارای پسوند روبرو نیست"
+
+msgid "MailingFileNoPrefix"
+msgstr "نام مورد نظر با پیشوند روبرو شروع نمی شود"
+
+msgid "MailingFileFunny"
+msgstr "ظاهراً فایل مورد نظر شما فاقد نام می باشد یا دنباله آن دارای یک تا چهار حرف نیست"
+
+msgid "MailingZipDups"
+msgstr "فایل تعیین شده برای ارسال از طریق ایمیل نباید حاوی فایل های تکثیر شده باشد، درغیر این صورت فرستاده نخواهد شد"
+
+msgid "MailingZipPhp"
+msgstr "فایل فشردۀ تعیین شده نباید حاوی فایل های پی اچ پی باشد، در غیر این صورت فرستاده نخواهد شد"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "ظاهراً فایل فشرده تعیین شده برای ارسال از طریق رایانامه معتبر نیست یا خالی می باشد"
+
+msgid "MailingWrongZipfile"
+msgstr "فایل تعیین شده برای ارسال از طریق ایمیل باید از نوع فشرده باشد<br>(zip) + STUDENTID یا LOGINNAME<br>"
+
+msgid "MailingConfirmSend"
+msgstr "ارسال فایل به افراد مشخص را تأیید می کنید؟"
+
+msgid "MailingSend"
+msgstr "تأیید"
+
+msgid "MailingNotYetSent"
+msgstr "مدارک مورد نظر برای ارسال از طریق  ایمیل هنوز ارسال نشده اند"
+
+msgid "MailingInSelect"
+msgstr "---ارسال ایمیل---"
+
+msgid "MailingAsUsername"
+msgstr "ارسال ایمیل"
+
+msgid "FileDeleted"
+msgstr "فایل انتخابی از قسمت تبادل فایل حذف شد"
+
+msgid "DocAdd"
+msgstr "فایل مورد نظر افزوده شد"
+
+msgid "Sender"
+msgstr "فرستنده"
+
+msgid "Author"
+msgstr "نویسنده"
+
+msgid "FileSize"
+msgstr "حجم"
+
+msgid "Title"
+msgstr "عنوان"
+
+msgid "OverwriteFile"
+msgstr "آیا می خواهید که نسخۀ جدید این فایل جایگزین نسخه قبلی آن شود؟"
+
+msgid "Ok"
+msgstr "تأیید"
+
+msgid "Unknown"
+msgstr "ناشناس"
+
+msgid "SentOn"
+msgstr "در تاریخ"
+
+msgid "SentTo"
+msgstr "ارسال شده به"
+
+msgid "ConfirmDelete"
+msgstr "این کارآیی باعث خواهد شد که فایل مورد نظر از فهرست فایل های شما حذف شود. لطفاً توجه داشته باشید که فایل مورد نظر از فهرست دیگران حذف نخواهد گردید"
+
+msgid "SendTo"
+msgstr "ارسال  به"
+
+msgid "Description"
+msgstr "توضیحات"
+
+msgid "UploadFile"
+msgstr "ارسال فایل"
+
+msgid "ErrorCreatingDir"
+msgstr "عملیات ایجاد پروندۀ لازم برای تبادل فایل بی نتیجه ماند. لطفاً برای رفع این مشکل با مسئول فضای آموزشی تماس بگیرید"
+
+msgid "UploadError"
+msgstr "ظاهراً مشکلی در عملیات ارسال فایل مورد نظر شما رخ داده است. لطفاً برای رفع این مشکل با مسئول فضای آموزشی تماس بگیرید"
+
+msgid "TooBig"
+msgstr "ظاهراً فایلی انتخاب نکرده اید یا فایل انتخابی سنگین تر از حد قابل قبول است"
+
+msgid "NoFileSpecified"
+msgstr "ظاهراً فایلی برای ارسال تعیین نکرده اید"
+
+msgid "NoUserSelected"
+msgstr "لطفاً گیرنده این فایل را مشخص نمایید"
+
+msgid "BadFormData"
+msgstr "فرایند ارسال بی ثمر ماند. لطفاً برای رفع این مشکل با مسئول فضای آموزشی تماس بگیرید."
+
+msgid "GeneralError"
+msgstr "ظاهراًاشتباهی رخ داده است. لطفاً برای رفع این مشکل با مسئول فضای آموزشی تماس بگیرید."
+
+msgid "Dropbox"
+msgstr "تبادل فایل"
+
+msgid "Help"
+msgstr "راهنمایی"
+
+msgid "ReceivedFiles"
+msgstr "فایل های دریافت شده"
+
+msgid "SentFiles"
+msgstr "فایل های ارسال شده"
+
+msgid "ReceivedTitle"
+msgstr "عنوان"
+
+msgid "SentTitle"
+msgstr "ارسال گردید"
+
+msgid "Authors"
+msgstr "نویسنده"
+
+msgid "Size"
+msgstr "حجم"
+
+msgid "LastResent"
+msgstr "آخرین ارسال مجدد"
+
+msgid "kB"
+msgstr "کیلوبایت"
+
+msgid "Root"
+msgstr "ریشه"
+
+msgid "UploadNewFile"
+msgstr "اشتراک گذاری یک فایل جدید"
+
+msgid "AreYouSureToDelete"
+msgstr "آیا مطمئن هستید قصد حذف دارید"
+
+msgid "Feedback"
+msgstr "توضیحات"
+
+msgid "CloseFeedback"
+msgstr "بستن توضیحات"
+
+msgid "AddNewFeedback"
+msgstr "افزودن توضیحات"
+
+msgid "DropboxFeedbackStored"
+msgstr "پیام توضیحات بازیابی شده است"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "تمامی کاربران فایل مورد نظر را حذف کرده اند، بنابراین هیچکس توضیحات اضافه شده شما را نخواهد دید."
+
+msgid "FeedbackError"
+msgstr "خطای توضیحات"
+
+msgid "PleaseTypeText"
+msgstr "لطفا متنی یادداشت کنید."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "شما مجاز به دانلود این فایل نیستید."
+
+msgid "CheckAtLeastOneFile"
+msgstr "حداقل یک فایل را چک کنید."
+
+msgid "ReceivedFileDeleted"
+msgstr "فایل دریافت شده حذف گردید."
+
+msgid "SentFileDeleted"
+msgstr "فایل ارسال شده حذف گردید."
+
+msgid "FilesMoved"
+msgstr "فایل های انتخاب شده منتقل شدند."
+
+msgid "ReceivedFileMoved"
+msgstr "فایل های دریافت شده منتقل شدند."
+
+msgid "SentFileMoved"
+msgstr "فایل های ارسال شده منتقل شدند."
+
+msgid "NotMovedError"
+msgstr "قادر به انتقال فایل (ها) نیستیم."
+
+msgid "AddNewCategory"
+msgstr "افزودن یک پوشه جدید"
+
+msgid "EditCategory"
+msgstr "ویرایش یک دسته بندی"
+
+msgid "CategoryName"
+msgstr "نام پوشه"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "لطفا یک نام دسته وارد کنید"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "این دسته قبلا وجود دارد، لطفا یک نام دیگر انتخاب کنید"
+
+msgid "CurrentlySeeing"
+msgstr "شما در پوشه هستید"
+
+msgid "CategoryStored"
+msgstr "پوشه مورد نظر ایجاد شده است"
+
+msgid "CategoryModified"
+msgstr "دسته مورد نظر تغییر یافت."
+
+msgid "CategoryDeleted"
+msgstr "دسته مورد نظر حذف گردید."
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "گزینه نویسنده نباید خالی باشد"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "شما حداقل می بایست یک مقصد انتخاب نمایید"
+
+msgid "DropboxFileTooBig"
+msgstr "اندازه فایل بیش از حد بزرگ هست."
+
+msgid "TheFileIsNotUploaded"
+msgstr "فایل مورد نظر آپلود نشده است."
+
+msgid "FileUploadSucces"
+msgstr "فایل بصورت موفقیت آمیز آپلود شده است."
+
+msgid "MailingNonMailingError"
+msgstr "ارسال ایمیل قادر به بازنویسی توسط بدون ایمیل ها نیست"
+
+msgid "MailingSelectNoOther"
+msgstr "ارسال ایمیل قادر به ترکیب با دیگر دریافت کننده ها نمی باشد"
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "فقط آپلود قادر به ترکیب با دیگر دریافت کننده ها نیستند"
+
+msgid "NewDropboxFileUploaded"
+msgstr "یک فایل جدید در بخش تبادل فایل ارسال شده است."
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "یک فایل جدید در بخش تبادل فایل ارسال شد"
+
+msgid "langAddEdit"
+msgstr "افزودن / ویرایش"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "این پوشه خالی هست"
+
+msgid "AddComment"
+msgstr "ذخیره توضیحات"
+
+msgid "SentCatgoryDeleted"
+msgstr "پوشه مورد نظر حذف شد"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "پوشه مورد نظر حذف شد"
+
+msgid "InvalideUserDetected"
+msgstr "کاربر غیر معتبر شناسایی شد."
+
+msgid "InvalideGroupDetected"
+msgstr "گروه غیر معتبر شناسایی شد."
+
+msgid "OverviewOfFilesInThisZip"
+msgstr "دورنمای diles در فایل فشرده"
+

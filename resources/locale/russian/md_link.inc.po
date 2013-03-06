@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Документы"
+
+msgid "langMdTitle"
+msgstr "Название предмета изучения"
+
+msgid "langMdDescription"
+msgstr "Чтобы запомнить эту информацию, нажмите \"Запомнить\""
+
+msgid "langMdCoverage"
+msgstr "например, бакалавр ..."
+
+msgid "langMdCopyright"
+msgstr "например, предложенный источник общепризнан"
+
+msgid "nameTools"
+msgstr "устаревшая языковая переменная"
+
+msgid "langTool"
+msgstr "Документ Данные о данных"
+
+msgid "langNoScript"
+msgstr "Шрифт не включен на Вашем браузере, пожалуйста, игнорируйте часть экрана ниже этого текста, это не будет работать..."
+
+msgid "langLanguageTip"
+msgstr "язык на котором этот предмет изучения был создан"
+
+msgid "langIdentifier"
+msgstr "Идентификатор"
+
+msgid "langIdentifierTip"
+msgstr "уникальный идентификатор для этого предмета изучения, состоящий из букв, цифр, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "заглавие или имя (название) и их язык"
+
+msgid "langDescriptionTip"
+msgstr "описание или комментарий и язык, использованный для описания этого предмета изучения"
+
+msgid "langKeyword"
+msgstr "Ключевое слово"
+
+msgid "langKeywordTip"
+msgstr "разделить с помощью запятых (буквы, цифры, -.)"
+
+msgid "langCoverage"
+msgstr "Сфера действия"
+
+msgid "langCoverageTip"
+msgstr "например, бакалавр по ххх: ууу"
+
+msgid "langKwNote"
+msgstr "Если Вы меняете язык описания, не добавляйте одновременно ключевые слова"
+
+msgid "langClickKw"
+msgstr "Щелкните ключевое слово на дереве для его выбора или для отмены выбора"
+
+msgid "langKwHelp"
+msgstr "<br /> Щелкнуть на кнопку \'+\' чтобы открыть, кнопку \'-\' чтобы закрыть, кнопку \'++\' чтобы открыть все, кнопку \'--\' чтобы все закрыть.<br /> <br /> Очистить все выбранные ключевые слова с помощью закрытия дерева и открыть его снова с помощью конпки \'+\'.<br /> Alt-щелчек \'+\' позволяет искать оригинальные ключевые слова на дереве.<br /> <br /> Alt-щелчек ключевое слово выбирает ключевое слово без расширенных терминов или не выбирает его с расширенными терминами.<br /> <br /> Если Вы меняете язык описания, не добавляете одновременно ключевые слова.<br /> <br />"
+
+msgid "langLocation"
+msgstr "URL/URI-адрес"
+
+msgid "langLocationTip"
+msgstr "щелкнуть, чтобы открыть предмет"
+
+msgid "langStore"
+msgstr "Запомнить"
+
+msgid "langDeleteAll"
+msgstr "Удалить все данные о данных (метадата)"
+
+msgid "langConfirmDelete"
+msgstr "Вы *действительно* хотите удалить все метаданные?"
+
+msgid "langWorkOn"
+msgstr "на"
+
+msgid "langNotInDB"
+msgstr "нет такого раздела ссылок"
+
+msgid "langManifestSyntax"
+msgstr "(синтаксическая ошибка в очевидном файле...)"
+
+msgid "langEmptyManifest"
+msgstr "(пустой очевидный файл...)"
+
+msgid "langNoManifest"
+msgstr "(нет очевидного файла...)"
+
+msgid "langNotFolder"
+msgstr "не возможно, это не папка..."
+
+msgid "langContinue"
+msgstr "Продолжить с"
+
+msgid "langCreate"
+msgstr "создать"
+
+msgid "langRemove"
+msgstr "Стереть MDE (метаданные)"
+
+msgid "langAllRemovedFor"
+msgstr "Все входы, удаленные для раздела"
+
+msgid "langRemainingFor"
+msgstr "устаревшие входы, удаленные для раздела"
+
+msgid "langIndex"
+msgstr "Индексирование"
+
+msgid "langTotalMDEs"
+msgstr "Общее количество Ссылок БД входа:"
+
+msgid "langMainMD"
+msgstr "Открыть главную MDE (запись метаданных)"
+
+msgid "langOrElse"
+msgstr "Выбрать раздел Ссылок"
+
+msgid "langWarningDups"
+msgstr "- дублировать название разделов, где они были удалены из списка!"
+
+msgid "langSLC"
+msgstr "Работать с разделами ссылок с именами"
+

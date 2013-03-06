@@ -1,0 +1,3 @@
+msgid "langScormBuilder"
+msgstr "Tvorca učebnej osnovy - tvorca kurzu formátu SCORM"
+

@@ -1,0 +1,159 @@
+msgid "ResourceAdded"
+msgstr "เพิ่มหน่วยการเรียนรู้แล้ว หากต้องการเพิ่มเติมอีกให้ย้อนกลับไปที่เดิมแล้วเพิ่มรายการใหม่"
+
+msgid "LearningPath"
+msgstr "แผนการเรียน"
+
+msgid "LevelUp"
+msgstr "ย้อนขึ้นไปอีกระดับ"
+
+msgid "AddIt"
+msgstr "เพิ่ม"
+
+msgid "MainCategory"
+msgstr "ประเภทรายการหลัก"
+
+msgid "lang_delete_added_resources"
+msgstr "ลบหน่วยการเรียนที่เพิ่มเข้า"
+
+msgid "AddToLinks"
+msgstr "เพิ่มเข้าไปในรายการเชื่อมโยงของรายวิชา"
+
+msgid "DontAdd"
+msgstr "ไม่ต้องเพิ่ม"
+
+msgid "lang_show_all_added_resources"
+msgstr "แสดงรายการหน่วยการเรียนที่เพิ่มเข้าทั้งหมด"
+
+msgid "ResourcesAdded"
+msgstr "เพิ่มหน่วยการเรียน"
+
+msgid "BackTo"
+msgstr "กลับไปที่"
+
+msgid "ExternalResources"
+msgstr "หน่วยการเรียนรู้จากภายนอก"
+
+msgid "CourseResources"
+msgstr "หน่วยการเรียนรู้ของรายวิชา"
+
+msgid "ExternalLink"
+msgstr "รายการเชื่อมโยงไปนอกระบบ"
+
+msgid "DropboxAdd"
+msgstr "เพิ่มกล่องรับส่งงานไว้ไนหน่วยการเรียน/บทนี้"
+
+msgid "AddAssignmentPage"
+msgstr "เพิ่มหน้าการส่งงาน/การบ้านของผู้เรียน เข้าไว้ในหน่วยการเรียน/บทนี้"
+
+msgid "Exercise"
+msgstr "แบบฝึกหัด/แบบทดสอบ"
+
+msgid "Link"
+msgstr "การเชื่อมโยง"
+
+msgid "AdValvas"
+msgstr "ประกาศ"
+
+msgid "Document"
+msgstr "เอกสาร"
+
+msgid "ShowDelete"
+msgstr "แสดง / ลบ"
+
+msgid "IntroductionText"
+msgstr "บทนำ"
+
+msgid "CourseDescription"
+msgstr "คำอธิบายรายวิชา"
+
+msgid "Groups"
+msgstr "กลุ่ม"
+
+msgid "Users"
+msgstr "ผู้ใช้ในระบบ:Users"
+
+msgid "IntroductionTextAdd"
+msgstr "เพิ่มบทนำในบทเรียน"
+
+msgid "CourseDescriptionAdd"
+msgstr "เพิ่มคำอธิบายรายวิชาในบทเรียน"
+
+msgid "GroupsAdd"
+msgstr "เพิ่มกลุ่มในบทเรียน"
+
+msgid "UsersAdd"
+msgstr "เพิ่มชื่อผู้ใช้ในบทเรียน"
+
+msgid "ExportableCourseResources"
+msgstr "หน่วยการเรียนรู้ที่สามารถส่งออกเป็นไฟล์ได้"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "หน่วยการเรียนรู้ที่มีเนื้อหาเกี่ยวข้องกับระบบ Chamilo"
+
+msgid "LinkTarget"
+msgstr "เชื่อมโยงต่อไปที่"
+
+msgid "SameWindow"
+msgstr "ในหน้าต่างเดิม"
+
+msgid "NewWindow"
+msgstr "ในหน้าต่างใหม่"
+
+msgid "StepDeleted1"
+msgstr "¹Õé"
+
+msgid "StepDeleted2"
+msgstr "item was deleted in that tool."
+
+msgid "Modify"
+msgstr "แก้ไข"
+
+msgid "Chapter"
+msgstr "บทที่"
+
+msgid "NoAgendaItems"
+msgstr "ÂÑ§äÁèÁÕ¡ÓË¹Ž¡ÒÃ"
+
+msgid "AgendaAdd"
+msgstr "เพิ่มกำหนดการใหม่"
+
+msgid "UserGroupFilter"
+msgstr "กรองจากกลุ่ม/บัญชีผู้ใช้งาน"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "แสดงกำหนดการตามลำดับวันเวลา"
+
+msgid "ShowCurrent"
+msgstr "แสดงกำหนดการทั้งหมดของเดือนนี้"
+
+msgid "ModifyCalendarItem"
+msgstr "แก้ไขกำหนดการ"
+
+msgid "ItemTitle"
+msgstr "รายชื่อเรื่อง"
+
+msgid "Detail"
+msgstr "รายละเอียด"
+
+msgid "EditSuccess"
+msgstr "แก้ไขกำหนดการแล้ว"
+
+msgid "AddCalendarItem"
+msgstr "เพิ่มกำหนดการใหม่"
+
+msgid "AddAnn"
+msgstr "เพิ่มประกาศ"
+
+msgid "ForumAddNewTopic"
+msgstr "เปิดอภิปราย: ตั้งหัวข้อใหม่"
+
+msgid "ForumEditTopic"
+msgstr "การอภิปราย:แก้ไขหัวข้อ"
+
+msgid "ExerciseAnswers"
+msgstr "แบบฝึกหัด:คำตอบ"
+
+msgid "ForumReply"
+msgstr "การอภิปราย:ตอบกระทู้"
+

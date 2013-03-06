@@ -1,0 +1,315 @@
+msgid "MoveTo"
+msgstr "Przenieś do"
+
+msgid "langDownloadFile"
+msgstr "Załaduj plik do serwera"
+
+msgid "langNameDir"
+msgstr "Nazwa nowego katalogu"
+
+msgid "langSize"
+msgstr "Rozmiar"
+
+msgid "langRename"
+msgstr "Zmień nazwę"
+
+msgid "langCopy"
+msgstr "Kopiuj zawartość kursu"
+
+msgid "langTo"
+msgstr "do"
+
+msgid "langNoSpace"
+msgstr "Ładowanie pliku nie powiodło się. Nie ma wystarczającej przestrzeni w Twoim katalogu"
+
+msgid "langDownloadEnd"
+msgstr "Ładowanie pliku zakończone"
+
+msgid "langFileExists"
+msgstr "Czynność niemożliwa.<br>Plik o tej nazwie już istnieje."
+
+msgid "langImpossible"
+msgstr "Czynność niemożliwa"
+
+msgid "langAddComment"
+msgstr "Dodaj/modyfikuj komentarz do"
+
+msgid "langDocCopied"
+msgstr "Dokument skopiowany"
+
+msgid "langDocDeleted"
+msgstr "Dokument usunięty"
+
+msgid "langElRen"
+msgstr "Zmieniono nazwę elementu"
+
+msgid "langDirMv"
+msgstr "Element przeniesiony"
+
+msgid "langComMod"
+msgstr "Komentarz zmodyfikowany"
+
+msgid "langViMod"
+msgstr "Widoczność zmodyfikowana"
+
+msgid "langGroupSpace"
+msgstr "Obszar grup"
+
+msgid "langGroupSpaceLink"
+msgstr "Obszar grup"
+
+msgid "langGroupForumLink"
+msgstr "Fora grup"
+
+msgid "langZipNoPhp"
+msgstr "Plik zip nie może zawierać plików .PHP"
+
+msgid "langUncompress"
+msgstr "rozpakuj plik archiwum (.zip) w serwerze"
+
+msgid "langDownloadAndZipEnd"
+msgstr " Plik zip załadowany i rozpakowany"
+
+msgid "langRoot"
+msgstr "root"
+
+msgid "CreateDoc"
+msgstr "Utwórz dokument"
+
+msgid "langDown"
+msgstr "dół"
+
+msgid "langFileError"
+msgstr "Nieprawdłowy plik do załadowania."
+
+msgid "langMaxFileSize"
+msgstr "Maksymalna wielkość pliku"
+
+msgid "langFileName"
+msgstr "Nazwa pliku"
+
+msgid "langNoFileName"
+msgstr "Podaj nazwę pliku"
+
+msgid "langNoText"
+msgstr "Wpisz zawartość - tekst/HTML"
+
+msgid "langAreYouSureToDelete"
+msgstr "Usunąć? Jesteś pewien?"
+
+msgid "langScormcontent"
+msgstr "To jest zawartość pliku SCORM<br><input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr "To jest kurs w formacie SCORM. Aby uruchomić naciśnij:<input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Publikowanie"
+
+msgid "langMissingImagesDetected"
+msgstr "Wykryto brakujące obrazki"
+
+msgid "langCreateDocument"
+msgstr "Utwórz dokument"
+
+msgid "langEditDocument"
+msgstr "Edytuj"
+
+msgid "langDocuments"
+msgstr "Dokumenty"
+
+msgid "langOrganiseDocuments"
+msgstr "Tworzenie spisu treści"
+
+msgid "langEditTOC"
+msgstr "Edycja spisu treści"
+
+msgid "langChapter"
+msgstr "Rozdział"
+
+msgid "langDocumentList"
+msgstr "Lista wszystkich dokumentów"
+
+msgid "langOrganisationList"
+msgstr "Spis treści"
+
+msgid "langCreationSucces"
+msgstr "Utworzono Spis treści."
+
+msgid "langCanViewOrganisation"
+msgstr "Możesz obejrzeć organizację swoich materiałów"
+
+msgid "langHere"
+msgstr "tutaj."
+
+msgid "langViewDocument"
+msgstr "widok"
+
+msgid "langHtmlTitle"
+msgstr "Spis treści"
+
+msgid "langAddToTOC"
+msgstr "Dodaj do spisu"
+
+msgid "langAddChapter"
+msgstr "Dodaj rozdział"
+
+msgid "langReady"
+msgstr "Utwórz Spis treści"
+
+msgid "langStoreDocuments"
+msgstr "Dokumenty"
+
+msgid "langTocDown"
+msgstr "W dół"
+
+msgid "langTocUp"
+msgstr "W górę"
+
+msgid "CutPasteLink"
+msgstr "Brak klatek"
+
+msgid "langCreatePath"
+msgstr "Utwórz ścieżkę"
+
+msgid "langAddMetadata"
+msgstr "Podgląd/Edycja Metadanych"
+
+msgid "langGoMetadata"
+msgstr "Idź"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "Rozmiar dla tego kursu to:"
+
+msgid "langDel"
+msgstr "kasuj"
+
+msgid "langUp"
+msgstr "W górę"
+
+msgid "langDate"
+msgstr "Data"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Pokaż rozmiar dla kursu"
+
+msgid "CourseCurrentlyUses"
+msgstr "Ten kurs obecnie używa"
+
+msgid "MaximumAllowedQuota"
+msgstr "Twój limit przestrzeni"
+
+msgid "PercentageQuotaInUse"
+msgstr "Procent wykorzystania twojej przestrzeni"
+
+msgid "PercentageQuotaFree"
+msgstr "Procent niewykorzystanej przez ciebie przestrzeni"
+
+msgid "CurrentDirectory"
+msgstr "Bieżący katalog"
+
+msgid "UplUploadDocument"
+msgstr "Załaduj dokument"
+
+msgid "UplPartialUpload"
+msgstr "Plik zastał jedynie częsciowo załadowany"
+
+msgid "UplExceedMaxPostSize"
+msgstr "Wielkość pliku przekracza maksymalny rozmiar"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "Ładowany plik przekracza maksymalny rozmiar dozwolony na serwerze:"
+
+msgid "UplFileTooBig"
+msgstr "Zbyt duży plik!"
+
+msgid "UplUploadFailed"
+msgstr "Załądowanie pliku <b>nie ukończone pomyślnie</b>"
+
+msgid "UplUnableToSaveFile"
+msgstr "Załadowany plik nie mógł być zapisany (problemy z prawem dostępu?)"
+
+msgid "UplNotEnoughSpace"
+msgstr "Brak miejsca na załądowanie tego pliku!"
+
+msgid "UplNoSCORMContent"
+msgstr "Brak zawartości typu SCORM"
+
+msgid "UplZipExtractSuccess"
+msgstr "Archiwum zip wypakowane pomyślnie!"
+
+msgid "UplZipCorrupt"
+msgstr "Nie można wypkować pliku .zip. (Plik uszkodzony?)"
+
+msgid "UplAlreadyExists"
+msgstr "już istnieje!"
+
+msgid "UplFileSavedAs"
+msgstr "Plik zapisany jako"
+
+msgid "UplFileOverwritten"
+msgstr "został zastąpiony."
+
+msgid "CannotCreateDir"
+msgstr "Nie można utworzyć katalogu!"
+
+msgid "UplUpload"
+msgstr "Załaduj"
+
+msgid "UplWhatIfFileExists"
+msgstr "Jeżeli plik istnieje:"
+
+msgid "UplDoNothing"
+msgstr "Nie rób nic"
+
+msgid "UplDoNothingLong"
+msgstr "Nie ładuj (upload) jeżeli plik istnieje"
+
+msgid "UplOverwrite"
+msgstr "Zastąp"
+
+msgid "UplOverwriteLong"
+msgstr "Zapisz w miejsce istniejącego pliku"
+
+msgid "UplRename"
+msgstr "Zmień nazwę"
+
+msgid "UplRenameLong"
+msgstr "Zmień nazwę załądowanego pliku, o ile istnieje"
+
+msgid "Metadata"
+msgstr "Metadane"
+
+msgid "DocumentQuota"
+msgstr "Rozmiar dla Dokumentów"
+
+msgid "NoDocsInFolder"
+msgstr "Brak dokumentów w tym folderze!"
+
+msgid "UploadTo"
+msgstr "Załaduj do"
+
+msgid "fileModified"
+msgstr "Plik jest zmodyfikowany"
+
+msgid "DocumentsOverview"
+msgstr "podgląd dokumentów"
+
+msgid "ViewSlideshow"
+msgstr "Pokaż obrazki (slajdy)"
+
+msgid "Options"
+msgstr "Opcje"
+
+msgid "ReadOnly"
+msgstr "Tylko do odczytu"
+
+msgid "ReadOnlyFile"
+msgstr "Ten plik jest tylko do odczytu"
+
+msgid "FileNotFound"
+msgstr "Plik nie istnieje"
+
+msgid "TemplateTitleResources"
+msgstr "Zasoby"
+

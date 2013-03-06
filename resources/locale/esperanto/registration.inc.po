@@ -1,0 +1,381 @@
+msgid "langShouldBeCSVFormat"
+msgstr "La dosiero estu CSV-formata. Ne enmetu spacetojn. La strukturo estu precize kiel:"
+
+msgid "langTracking"
+msgstr "Statistikoj"
+
+msgid "langEnter2passToChange"
+msgstr "Dufoje enigi novan pasvorton, aŭ enigi nenion por konservi vian aktualan"
+
+msgid "langAuthInfo"
+msgstr "Aŭtentikigo"
+
+msgid "langUpdateImage"
+msgstr "Ŝanĝi foton"
+
+msgid "langImageWrong"
+msgstr "La grando de la foto estu maksimume"
+
+msgid "langAddImage"
+msgstr "Foto"
+
+msgid "langCourseManager"
+msgstr "Kursmastrumanto"
+
+msgid "password_request"
+msgstr "Vi petis sendi vian pasvorton. Se vi ne faris tion, ignoru ĉi-mesaĝon. Por reagordi vian mesaĝon, musklaku sur la reagordan ligilon."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Via pasvorto estas sendita al vi per restpoŝto."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Donu vian repoŝtadreson, per kiu vi registris kaj nii sendos al vi novan pasvorton."
+
+msgid "langLogin"
+msgstr "Ensaluti"
+
+msgid "langAction"
+msgstr "Ago"
+
+msgid "langPreserved"
+msgstr "Konservita"
+
+msgid "langDeleted"
+msgstr "Forigite"
+
+msgid "langAdded"
+msgstr "Aldonite"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Konfirmu nuligon de registrado"
+
+msgid "langCourseName"
+msgstr "Nomo de la kurso"
+
+msgid "langSubscribe"
+msgstr "Registri"
+
+msgid "langSee"
+msgstr "Iri al"
+
+msgid "langLastVisits"
+msgstr "Miaj lastaj vizitoj"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Por aldoni liston da uzuloj al via kurso vi devas kontaktiĝi kun mastrumanto"
+
+msgid "langPassTooEasy"
+msgstr "Ĉi-pasvorto estas tro simpla. Elektu alian, kia ekzemple"
+
+msgid "langGroupUserManagement"
+msgstr "Grupmastrumado"
+
+msgid "langAddedToCourse"
+msgstr "nun estas registrita por via kurso"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Jam estas registrita uzulo por la kurso kun la sama nomo kaj antaŭnomo. Vi ne povas registri tiun uzulon je la dua fojo"
+
+msgid "langBackUser"
+msgstr "Reiri al la uzullisto"
+
+msgid "langUserOneByOneExplanation"
+msgstr "La ĉi-plenigita uzulnomo kaj pasvorto estos sendata al ĉi-uzulo per retpoŝto."
+
+msgid "langGiveTutor"
+msgstr "Nomumi akompananto"
+
+msgid "langRemoveRight"
+msgstr "Nuligi tiun rajton"
+
+msgid "langGiveAdmin"
+msgstr "Nomumi mastrumanto"
+
+msgid "langUserNumber"
+msgstr "nombro"
+
+msgid "langDownloadUserList"
+msgstr "Sendi liston"
+
+msgid "langSend"
+msgstr "Sendi"
+
+msgid "langUserAddExplanation"
+msgstr "Ĉiu linio de la sendota dosiero devige kaj nur enhavu la 5 kampojn <b>Nomo   Antaŭnomo    Uzulnomo   Pasvorto    Retpoŝto</b> apartigitaj per taboj kaj prezentitaj en tiu ordo. La uzuloj ricevos siajn uzulnomon kaj pasvorton per retpoŝto."
+
+msgid "langUserMany"
+msgstr "Import uzulliston per tekstodosiero"
+
+msgid "langOneByOne"
+msgstr "Aldoni uzulon permane"
+
+msgid "langNow"
+msgstr "nun"
+
+msgid "langTutor"
+msgstr "Akompananto (de grupoj)"
+
+msgid "langTitular"
+msgstr "Instruisto"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'arial, helvetica\'><big>miaj kursoj</big><br><br> Indiku la kursojn, kiujn vi volas viziti kaj tiujn, kiujn vi ne plu deziras viziti (ne eblas por kursoj, pri kiuj vi responsas). Sekve musklaku sur \'en ordo\' sub la listo."
+
+msgid "langStudent"
+msgstr "Studento"
+
+msgid "langImportUserList"
+msgstr "Importi liston da uzuloj"
+
+msgid "langAddAU"
+msgstr "Aldoni uzulojn"
+
+msgid "langAddedU"
+msgstr "estas aldonita. Se vi tajpis lian adreson, la studento ricevos mesaĝon kun sia uzulnomo"
+
+msgid "langTheU"
+msgstr "La uzulo"
+
+msgid "langRegYou"
+msgstr "aligis vin al"
+
+msgid "langOneResp"
+msgstr "Unu el la responsuloj por la Chamilo-kurso"
+
+msgid "langTaken"
+msgstr "jam estas uzata. Elektu alian."
+
+msgid "langUserNo"
+msgstr "La eketita uzulnomo"
+
+msgid "langFilled"
+msgstr "Vi ne plenigis ĉiujn kampojn."
+
+msgid "langInC"
+msgstr "en tiu kurso"
+
+msgid "langRole"
+msgstr "Rolo (fakultative)"
+
+msgid "UserPicture"
+msgstr "Bildo"
+
+msgid "langProfileReg"
+msgstr "Via nova profilo estas konservita"
+
+msgid "langEmailWrong"
+msgstr "La retpoŝtadreso estas malkompleta aŭ enhavas malvalidan signojn"
+
+msgid "langUserTaken"
+msgstr "La elektita uzulnomo jam estas uzata"
+
+msgid "langFields"
+msgstr "Vi ne plenigis ĉiujn kampojn"
+
+msgid "langAgain"
+msgstr "Denove!"
+
+msgid "langPassTwo"
+msgstr "Vi enigis du malsamajn pasvortojn"
+
+msgid "langViewProfile"
+msgstr "Mia profilo"
+
+msgid "langModifProfile"
+msgstr "Ŝanĝi mian profilon"
+
+msgid "langIsReg"
+msgstr "Viaj lastaj ŝanĝoj estas konservitaj"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Vi povas pluiri por krei vian kurson"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Vi nun povas el la listo elekti la kursojn, kiujn vi deziras uzi."
+
+msgid "langMailHasBeenSent"
+msgstr "Retmasaĝo estas sendita al vi por memorigi viajn uzulan nomon kaj pasvorton."
+
+msgid "langPersonalSettings"
+msgstr "Viaj personaj datumoj estas konservitaj."
+
+msgid "langManager"
+msgstr "Platformmastrumanto"
+
+msgid "langFormula"
+msgstr "Afablajn salutojn, via instruisto"
+
+msgid "langProblem"
+msgstr "Kaze de problemoj vi povas kontaktiĝi kun ni."
+
+msgid "langIs"
+msgstr "estas"
+
+msgid "langAddress"
+msgstr "La adreso de"
+
+msgid "langSettings"
+msgstr "kun jenaj parametroj:Uzulnomo:"
+
+msgid "langYouAreReg"
+msgstr "Vi registrigxis por"
+
+msgid "langYourReg"
+msgstr "Via registriĝo je"
+
+msgid "langUserFree"
+msgstr "La enigita uzulnomo estas jam uzata. Uzu la retroiran butonon de via foliumilo ka provu denove."
+
+msgid "langEmptyFields"
+msgstr "Vi ne plenigis ĉiujn kampojn. Uzu la retroiran butonon de via foliumilo, kaj provu denove."
+
+msgid "langPassTwice"
+msgstr "Vi enigis du malsamajn pasvortojn. Uzu la retroiran butonon de via foliumilo, kaj provu denove."
+
+msgid "langRegAdmin"
+msgstr "Krei kursojn"
+
+msgid "langRegStudent"
+msgstr "Registri al kursoj"
+
+msgid "langConfirmation"
+msgstr "Konfirmo"
+
+msgid "langPass"
+msgstr "Pasvorto"
+
+msgid "langSurname"
+msgstr "Antaŭnomo"
+
+msgid "langRegistration"
+msgstr "Registrado"
+
+msgid "langYourAccountParam"
+msgstr "Tio ĉi estas la necesa informo por ensaluti al"
+
+msgid "langLoginRequest"
+msgstr "Ensaluta peto"
+
+msgid "langDefineHeadings"
+msgstr "Difini Aldonan Informon"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Nur por kursmastrumanto"
+
+msgid "langAdminOfCourse"
+msgstr "Kursadministranto"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Uzulo de ĉi-kurso"
+
+msgid "langIsTutor"
+msgstr "Guvernanto"
+
+msgid "langParamInTheCourse"
+msgstr "Rolo en la kurso"
+
+msgid "langMember"
+msgstr "membro"
+
+msgid "langLock"
+msgstr "ŝlosita"
+
+msgid "langUnlock"
+msgstr "malŝlosita"
+
+msgid "langHaveNoCourse"
+msgstr "ne kurso"
+
+msgid "langManage"
+msgstr "Mastrumi Portalon"
+
+msgid "langAdministrationTools"
+msgstr "Mastrumada ilaro XX"
+
+msgid "langUserProfileReg"
+msgstr "Uzula elektronika aktujo"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Neneiu uzulo konata kun tiu retpoŝtadreso."
+
+msgid "langCourses4User"
+msgstr "Kursoj por ĉi-uzulo"
+
+msgid "langCoursesByUser"
+msgstr "Kursoj de uzulo"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Aligi uzulojn al via kurso"
+
+msgid "langPreced100"
+msgstr "Antaŭaj 100"
+
+msgid "langAddmore"
+msgstr "Aligi uzulojn"
+
+msgid "langAddback"
+msgstr "Reiri al uzullisto"
+
+msgid "langreg"
+msgstr "Aliĝi  XX"
+
+msgid "langQuit"
+msgstr "Adiaŭi"
+
+msgid "your_password_has_been_reset"
+msgstr "Via pasvorto estas reagordita kaj estas sendita al vi per retpoŝto."
+
+msgid "langSex"
+msgstr "Sekso"
+
+msgid "langClass"
+msgstr "Klaso"
+
+msgid "langEdit"
+msgstr "redakti"
+
+msgid "required"
+msgstr "devigata"
+
+msgid "langOptionalTextFields"
+msgstr "Kromaj kampoj"
+
+msgid "langMyProductions"
+msgstr "Miaj faritaĵoj"
+
+msgid "langFileDeleted"
+msgstr "La dosiero estas forigita."
+
+msgid "FullUserName"
+msgstr "Nomo"
+
+msgid "SearchForUser"
+msgstr "Serĉi uzanton"
+
+msgid "SearchButton"
+msgstr "Serĉi"
+
+msgid "SearchNoResultsFound"
+msgstr "Neniu serĉita rezulto estas trovita"
+
+msgid "UsernameWrong"
+msgstr "Uzulnomo enhavu nur literojn, ciferojn kaj _."
+
+msgid "PasswordRequestFrom"
+msgstr "Ĉi tio estas peto de pasvorto por la retpoŝta adreso"
+
+msgid "CorrespondsToAccount"
+msgstr "ĉi tiu retpoŝta adreso kongruas kun jena uzanto."
+
+msgid "CorrespondsToAccounts"
+msgstr "Ĉi tiu retpoŝta adreso kongruas kun jenaj uzantoj."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo ne kapablas aŭtomate trakti la peton, ĉar la kompto uzas eksteran aŭtentigilon. Bonvolu apte reagi kaj informi la uzanton pri tio."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo ne kapablas aŭtomate trakti la peton, ĉar almenaŭ unu el la konptoj uzas eksternan aŭtentigilon. Bonvolu konvene reagi por ĉiuj kontoj (ankaŭ tiuj kun platforma aŭtentigo) kaj informi la uzantojn pri tio."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo ne kapablas aŭtomate pritrakti la peton pri tia konto. Vi apeto estas sendita al la platformadministranto, kiu faros la necesajn agojn kaj informos vin pri la rezulto."
+

@@ -1,0 +1,171 @@
+msgid "Announcement"
+msgstr "Anúncios"
+
+msgid "langAnnEmpty"
+msgstr "A lista de anúncios está vazia"
+
+msgid "AnnouncementModified"
+msgstr "A lista de anúncios foi modificada"
+
+msgid "AnnouncementAdded"
+msgstr "O anúncios foi adicionado"
+
+msgid "AnnouncementDeleted"
+msgstr "O anúncios foi excluido"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Publicado em"
+
+msgid "AddAnnouncement"
+msgstr "Adicionar um anúncio"
+
+msgid "langContent"
+msgstr "Conteúdo"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Excluir a lista de anúncios"
+
+msgid "professorMessage"
+msgstr "Mensagem do professor"
+
+msgid "langEmailSent"
+msgstr "e enviado para os estudantes registrados"
+
+msgid "EmailOption"
+msgstr "Enviar esse anúncios por e-mail para os estudantes registrados"
+
+msgid "langOn"
+msgstr "Em"
+
+msgid "langRegUser"
+msgstr "usuários registrados na plataforma"
+
+msgid "langUnvalid"
+msgstr "endereço de e-mail inválido ou não informado"
+
+msgid "langModifAnn"
+msgstr "Modificar este anúncio"
+
+msgid "langModify"
+msgstr "modificar"
+
+msgid "langDelete"
+msgstr "excluir"
+
+msgid "langTitle"
+msgstr "Assunto"
+
+msgid "langHelp"
+msgstr "Ajuda"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAddIntro"
+msgstr "Adicionar um texto de introdução"
+
+msgid "langBackList"
+msgstr "Voltar para a lista"
+
+msgid "langSelMess"
+msgstr "Avisos é necessário fornecer o texto da mensagem."
+
+msgid "EmailTitle"
+msgstr "Assunto"
+
+msgid "langUserlist"
+msgstr "Lista de grupos e usuários"
+
+msgid "langSelectedUsers"
+msgstr "Usuários Selecionados"
+
+msgid "langSubmit"
+msgstr "Enviar"
+
+msgid "langPleaseEnterMessage"
+msgstr "É necessário fornecer o texto da mensagem."
+
+msgid "langPleaseSelectUsers"
+msgstr "É necessário selecionar alguns usuários."
+
+msgid "Teachersubject"
+msgstr "Mensagem enviada para os seus usuários"
+
+msgid "langMessages"
+msgstr "Mensagens"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Mensagens para usuários selecionados"
+
+msgid "langIntroText"
+msgstr "Para enviar uma mensagem, selecione o grupos de usuários (identificados com um G na frente) ou usuários individuais da lista à esquerda."
+
+msgid "langDown"
+msgstr "abaixo"
+
+msgid "langMsgSent"
+msgstr "A mensagem foi enviada para os estudantes selecionados"
+
+msgid "langSelUser"
+msgstr "usuarios selecionados da plataforma"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Mensagem para grupos selecionados"
+
+msgid "langSelectedGroups"
+msgstr "grupos selecionados"
+
+msgid "langMsg"
+msgstr "Mensagens"
+
+msgid "langYes"
+msgstr "sim"
+
+msgid "MsgText"
+msgstr "Mensagem"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Todos os anúncios foram excluidos"
+
+msgid "AnnouncementMoved"
+msgstr "O anúncio foi movido"
+
+msgid "NoAnnouncements"
+msgstr "Não há anúncios"
+
+msgid "SelectEverybody"
+msgstr "Selecionar Todos"
+
+msgid "SelectedUsersGroups"
+msgstr "grupos de usuários selecionados"
+
+msgid "LearnerMessage"
+msgstr "Mensagem de um aluno"
+
+msgid "TitleIsRequired"
+msgstr "O título é obrigatório"
+
+msgid "AnnounceSentByEmail"
+msgstr "Anúncio enviado por e-mail"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Anúncio enviado para os usuários selecionados"
+
+msgid "SendAnnouncement"
+msgstr "Enviar anúncio"
+
+msgid "ModifyAnnouncement"
+msgstr "Editar anúncio"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Enviar"
+
+msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
+msgstr "Prezado usuário, sua conta foi ativada na plataforma. Faça o login e desfrute de seus cursos."
+
+msgid "AddAsAnnouncement"
+msgstr "Adicionar como anúncio"
+
+msgid "AnnouncementForGroup"
+msgstr "Anúncio para um grupo"
+

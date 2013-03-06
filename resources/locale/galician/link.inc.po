@@ -1,0 +1,156 @@
+msgid "LinkMoved"
+msgstr "Moveuse a ligazón"
+
+msgid "langLinkName"
+msgstr "Nome da ligazón"
+
+msgid "langLinkAdd"
+msgstr "Engadir ligazón"
+
+msgid "langLinkAdded"
+msgstr "Engadíuse a ligazón"
+
+msgid "langLinkMod"
+msgstr "Modificouse a ligazón"
+
+msgid "langLinkModded"
+msgstr "Modificouse a ligazón"
+
+msgid "langLinkDel"
+msgstr "Borrouse a ligazón"
+
+msgid "langLinkDeleted"
+msgstr "A ligazón foi eliminada"
+
+msgid "langLinkDelconfirm"
+msgstr "¿Quere eliminar esta ligazón?"
+
+msgid "langAllLinksDel"
+msgstr "Borrar todas as ligazóns desta categoría"
+
+msgid "langCategoryName"
+msgstr "Nome de categoría"
+
+msgid "langCategoryAdd"
+msgstr "Engadir unha categoría"
+
+msgid "langCategoryAdded"
+msgstr "Engadíuse a categoría"
+
+msgid "langCategoryModded"
+msgstr "Modificouse a categoría"
+
+msgid "langCategoryDel"
+msgstr "Borrar categoría"
+
+msgid "langCategoryDeleted"
+msgstr "A categoría e todas as ligazóns borrŽronse"
+
+msgid "langCategoryDelconfirm"
+msgstr "Cando borres unha categoría, tamén se borrarán todas as ligazóns desa categoria. Queres borrar a categoría e as ligazóns?"
+
+msgid "langAllCategoryDel"
+msgstr "Borrar todas as categorías e todas as ligazóns"
+
+msgid "langGiveURL"
+msgstr "Proporciona a ligazón URL"
+
+msgid "langGiveCategoryName"
+msgstr "Proporciona nome á categoría"
+
+msgid "langNoCategory"
+msgstr "Sen categoría"
+
+msgid "showall"
+msgstr "Expandir"
+
+msgid "shownone"
+msgstr "Contraer"
+
+msgid "langListDeleted"
+msgstr "A lista borrouse completamente"
+
+msgid "langAddLink"
+msgstr "Engadir unha ligazón"
+
+msgid "langDelList"
+msgstr "Borrar a lista"
+
+msgid "langModifyLink"
+msgstr "Modificar a ligazón"
+
+msgid "langCsvImport"
+msgstr "Importación de arquivo CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "O arquivo CSV non pode abrirse (p.ex. vacío, demasiado grande)"
+
+msgid "langCsvFileNoSeps"
+msgstr "O arquivo CSV debe usar , ou ; como separador"
+
+msgid "langCsvFileNoURL"
+msgstr "O arquivo CSV debe ter polo menos as columnas URL e título"
+
+msgid "langCsvFileLine1"
+msgstr "... -liña 1="
+
+msgid "langCsvLinesFailed"
+msgstr "liña(s) que  fallaron durante a importación de links (sen URL ou título)"
+
+msgid "langCsvLinesOld"
+msgstr "ligazóns existentes actualizados (mesma URL e categoría)."
+
+msgid "langCsvLinesNew"
+msgstr "nova(s) ligazón(s) creada(s)."
+
+msgid "langCsvExplain"
+msgstr "O arquivo debería ser como isto: <blockquote><pre> <b>URL</b>;categoría;<b>título</b>;descrición; <b>http://www.aaa.org/...</b>;Important ligazóns;<b>Nome 1</b>;Descrición 1; <b>http://www.bbb.net/...</b>;;<b>Nome 2</b>;\"Descrición 2\"; </pre></blockquote> Se a URL e a categoría son iguais a os dunha ligazón existente, o seu título e descripción serán actualizados. Se non, crearase unha nova ligazón.  <br><br> Negriña = obligatorio. Os campos poden estar en calquera orden, e os nomes en maiuscula ou minúscula. Os campos adicionais engádense á descrición. Separador: coma ou punto e coma.  Os valores poden estar entre comiñas, pero non os nomes dos campos. Algunhas  [b]etiquetas HTML[/b] poden importarse no campo descrición.	"
+
+msgid "langLinkUpdated"
+msgstr "A ligazón foi actualizada"
+
+msgid "langAll_Link_Deleted"
+msgstr "A ligazón foi borrada"
+
+msgid "langOnHomepage"
+msgstr "Amosar ligazón na páxina de inicio"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Amosar a ligazón como unha icona na páxina inicial do curso"
+
+msgid "General"
+msgstr "xeral"
+
+msgid "SearchFeatureDoIndexLink"
+msgstr "Indexar título e descrición?"
+
+msgid "langSaveLink"
+msgstr "Gardar a ligazón"
+
+msgid "langSaveCategory"
+msgstr "Gardar a categoría"
+
+msgid "BackToLinksOverview"
+msgstr "Regresar á lista de enlaces"
+
+msgid "AddTargetOfLinkOnHomepage"
+msgstr "Seleccione o \"target\" co que se mostrará o enlace na páxina principal do curso"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "LinkOpenSelf"
+msgstr "Abrir"
+
+msgid "LinkOpenBlank"
+msgstr "Abrir nunha ventá nova"
+
+msgid "LinkOpenParent"
+msgstr "Abrir nunha ventá superior"
+
+msgid "LinkOpenTop"
+msgstr "Abrir na ventá de arriba"
+
+msgid "LinkTarget"
+msgstr "Enlace"
+

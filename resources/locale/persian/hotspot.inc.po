@@ -1,0 +1,60 @@
+msgid "select"
+msgstr "معتبر سازی"
+
+msgid "square"
+msgstr "مربع"
+
+msgid "circle"
+msgstr "بیضی"
+
+msgid "poly"
+msgstr "چند گوشه"
+
+msgid "status1"
+msgstr "رسم یک کانون"
+
+msgid "status2_poly"
+msgstr "از راست کلیک جهت بستن چند گوشه استفاده کنید."
+
+msgid "status2_other"
+msgstr "انتشار دکمه ماوس جهت ذخیره کردن کانون."
+
+msgid "status3"
+msgstr "کانون ذخیره شد"
+
+msgid "exercise_status_1"
+msgstr "پاسخ دادن بوسیله کلیک بر تصویر پایین"
+
+msgid "exercise_status_2"
+msgstr "معتبر سازی پاسخ ها"
+
+msgid "exercise_status_3"
+msgstr "وضعیت: سوال تمام شد"
+
+msgid "showUserPoints"
+msgstr "نمایش/پنهان سازی کلیک کاربران"
+
+msgid "showHotspots"
+msgstr "نمایش/پنهان سازی کانون ها"
+
+msgid "labelPolyMenu"
+msgstr "بستن چند گوشه"
+
+msgid "triesleft"
+msgstr "تلاش های باقیمانده"
+
+msgid "exeFinished"
+msgstr "هم اکنون بر روی دکمه پایین جهت معتبر سازی پاسخ هایتان کلیک کنید."
+
+msgid "nextAnswer"
+msgstr "اکنون کلیک کنید بروی: &done=done"
+
+msgid "delineation"
+msgstr "طرح"
+
+msgid "labelDelineationMenu"
+msgstr "بستن طرح"
+
+msgid "oar"
+msgstr "ناحیه در خطر"
+

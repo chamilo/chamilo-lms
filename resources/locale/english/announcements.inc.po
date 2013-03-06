@@ -1,0 +1,173 @@
+msgid "Announcement"
+msgstr "Announcements"
+
+msgid "langAnnEmpty"
+msgstr "Announcements list has been cleared up"
+
+msgid "AnnouncementModified"
+msgstr "Announcement has been modified"
+
+msgid "AnnouncementAdded"
+msgstr "Announcement has been added"
+
+msgid "AnnouncementDeleted"
+msgstr "Announcement has been deleted"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Published on"
+
+msgid "AddAnnouncement"
+msgstr "Add an announcement"
+
+msgid "langContent"
+msgstr "Content"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Clear list of announcements"
+
+msgid "professorMessage"
+msgstr "Message from the trainer"
+
+msgid "langEmailSent"
+msgstr " and emailed to registered learners"
+
+msgid "EmailOption"
+msgstr "Send this announcement by email to selected groups/users"
+
+msgid "langOn"
+msgstr "On"
+
+msgid "langRegUser"
+msgstr "registered users of the site"
+
+msgid "langUnvalid"
+msgstr "have unvalid or no email address"
+
+msgid "langModifAnn"
+msgstr "Modifies this announcement"
+
+msgid "langModify"
+msgstr "Edit"
+
+msgid "langDelete"
+msgstr "delete"
+
+msgid "langTitle"
+msgstr "Subject"
+
+msgid "langHelp"
+msgstr "help"
+
+msgid "langOk"
+msgstr "Validate"
+
+msgid "langAddIntro"
+msgstr "Add an introduction text"
+
+msgid "langBackList"
+msgstr "Return to the list"
+
+msgid "langSelMess"
+msgstr "Warnings to some users"
+
+msgid "EmailTitle"
+msgstr "Subject"
+
+msgid "langUserlist"
+msgstr "List of groups and users"
+
+msgid "langSelectedUsers"
+msgstr "Selected Users"
+
+msgid "langSubmit"
+msgstr "Submit"
+
+msgid "langPleaseEnterMessage"
+msgstr "You must introduce the message text."
+
+msgid "langPleaseSelectUsers"
+msgstr "You must select some users."
+
+msgid "Teachersubject"
+msgstr "Message sent to users"
+
+msgid "langMessages"
+msgstr "Messages"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Messages to selected users"
+
+msgid "langIntroText"
+msgstr "To send a message, select groups of users (see G) or single users from the list on the left."
+
+msgid "langDown"
+msgstr "down"
+
+msgid "langMsgSent"
+msgstr "The message has been sent to the selected learners"
+
+msgid "langSelUser"
+msgstr "selected users of the site"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Message to selected groups"
+
+msgid "langSelectedGroups"
+msgstr "selected groups"
+
+msgid "langMsg"
+msgstr "Messages"
+
+msgid "langYes"
+msgstr "yes"
+
+msgid "MsgText"
+msgstr "Message"
+
+msgid "AnnouncementDeletedAll"
+msgstr "All announcements have been deleted"
+
+msgid "AnnouncementMoved"
+msgstr "The announcement has been moved"
+
+msgid "NoAnnouncements"
+msgstr "There are no announcements."
+
+msgid "SelectEverybody"
+msgstr "Select Everybody"
+
+msgid "SelectedUsersGroups"
+msgstr "selected user groups"
+
+msgid "LearnerMessage"
+msgstr "Message from a learner"
+
+msgid "TitleIsRequired"
+msgstr "Title is required"
+
+msgid "AnnounceSentByEmail"
+msgstr "Announcement sent by email"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Announcement sent to the selected users"
+
+msgid "SendAnnouncement"
+msgstr "Send announcement"
+
+msgid "ModifyAnnouncement"
+msgstr "Edit announcement"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Send announcement"
+
+msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
+msgstr "Dear user, 
+
+Your account has now been activated on the platform. Please login and enjoy your courses."
+
+msgid "AddAsAnnouncement"
+msgstr "Add as an announcement"
+
+msgid "AnnouncementForGroup"
+msgstr "Announcement for a group"
+

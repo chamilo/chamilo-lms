@@ -1,0 +1,51 @@
+msgid "Camera"
+msgstr "Κάμερα"
+
+msgid "Microphone"
+msgstr "Μικρόφωνο"
+
+msgid "Name"
+msgstr "Όνομα"
+
+msgid "DeleteStream"
+msgstr "Διαγραφή ροής (stream)"
+
+msgid "Progress"
+msgstr "Πρόοδος"
+
+msgid "Play"
+msgstr "Αναπαραγωγή"
+
+msgid "Stop"
+msgstr "Διακοπή"
+
+msgid "Record"
+msgstr "Εγγραφή"
+
+msgid "NoFileAvailable"
+msgstr "Δεν υπάρχει διαθέσιμο αρχείο"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Εγγραφή μόνο για τους Εκπαιδευτές"
+
+msgid "UsersNow"
+msgstr "Χρήστες αυτή τη στιγμή"
+
+msgid "StartConference"
+msgstr "Έναρξη τηλεδιάσκεψης"
+
+msgid "MyName"
+msgstr "Το όνομά μου"
+
+msgid "OrganisationSVideoconference"
+msgstr "Chamilo LIVE Τηλεδιάσκεψη"
+
+msgid "ImportPresentation"
+msgstr "Εισαγωγή παρουσίασης"
+
+msgid "RefreshList"
+msgstr "Ανανέωση λίστας"
+
+msgid "GoToTop"
+msgstr "Μετάβαση στην κορυφή"
+

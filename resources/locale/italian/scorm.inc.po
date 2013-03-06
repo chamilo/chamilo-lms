@@ -1,0 +1,165 @@
+msgid "langScormVersion"
+msgstr "versione"
+
+msgid "langScormRestarted"
+msgstr "Tutti gli elementi devono essere completati"
+
+msgid "langScormNoNext"
+msgstr "Ultimo elemento."
+
+msgid "langScormNoPrev"
+msgstr "Primo elemento."
+
+msgid "langScormTime"
+msgstr "Tempo"
+
+msgid "langScormNoOrder"
+msgstr "Non c\'è un ordine obbligatorio, puoi cliccare su qualsiasi elemento."
+
+msgid "langScormScore"
+msgstr "Punteggio"
+
+msgid "langScormLessonTitle"
+msgstr "Elemento"
+
+msgid "langScormStatus"
+msgstr "Status"
+
+msgid "langScormToEnter"
+msgstr "Per entrare in"
+
+msgid "langScormFirstNeedTo"
+msgstr "devi prima concludere"
+
+msgid "langScormThisStatus"
+msgstr "L\'elemento è"
+
+msgid "langScormClose"
+msgstr "Concludi"
+
+msgid "langScormRestart"
+msgstr "Ricomincia"
+
+msgid "langScormCompstatus"
+msgstr "Concluso"
+
+msgid "langScormIncomplete"
+msgstr "Incompleto"
+
+msgid "langScormPassed"
+msgstr "Superato"
+
+msgid "langScormFailed"
+msgstr "Non superato"
+
+msgid "langScormPrevious"
+msgstr "Precedente"
+
+msgid "langScormNext"
+msgstr "Seguente"
+
+msgid "langScormTitle"
+msgstr "Lettore Scorm di Chamilo"
+
+msgid "langScormMystatus"
+msgstr "Situazione"
+
+msgid "langScormNoItems"
+msgstr "Questa parte non contiene elementi"
+
+msgid "langScormNoStatus"
+msgstr "Stato non definito per il contenuto"
+
+msgid "langScormLoggedout"
+msgstr "Sei stato disconnesso dall\'area Moduli didattici"
+
+msgid "langScormCloseWindow"
+msgstr "Vuoi veramente concludere?"
+
+msgid "ScormBrowsed"
+msgstr "Visto"
+
+msgid "langScormExitFullScreen"
+msgstr "Schermo normale"
+
+msgid "langScormFullScreen"
+msgstr "Schermo pieno"
+
+msgid "langScormNotAttempted"
+msgstr "Non affrontato"
+
+msgid "langCharset"
+msgstr "Set di caratteri"
+
+msgid "langLocal"
+msgstr "Locale"
+
+msgid "langRemote"
+msgstr "Remoto"
+
+msgid "langAutodetect"
+msgstr "Rileva automaticamente"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Totale delle parti completate"
+
+msgid "langUnknown"
+msgstr "Sconosciuto"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "Sei sicuro di voler eliminare questi elementi?"
+
+msgid "Origin"
+msgstr "Provenienza"
+
+msgid "Local"
+msgstr "Locale"
+
+msgid "Remote"
+msgstr "Remoto"
+
+msgid "FileToUpload"
+msgstr "File da caricare"
+
+msgid "ContentMaker"
+msgstr "Sistema autore"
+
+msgid "ContentProximity"
+msgstr "Stato del contenuto"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "Carica un file locale dalla directory principale o garbage"
+
+msgid "ThisItemIsNotExportable"
+msgstr "L\'elemento non è per ora compatibile con lo standard SCORM, quindi non è esportabile."
+
+msgid "MoveCurrentChapter"
+msgstr "Sposta il capitolo"
+
+msgid "GenericScorm"
+msgstr "SCORM generico"
+
+msgid "UnknownPackageFormat"
+msgstr "Il formato del pacchetto non è riconosciuto. Scegli un pacchetto valido."
+
+msgid "Attempt"
+msgstr "Tentativo"
+
+msgid "MoveTheCurrentForum"
+msgstr "Sposta il Forum corrente"
+
+msgid "WarningWhenEditingScorm"
+msgstr "Attenzione!<br/>Modificando il contenuto di un elemento, puoi modificare le informazioni sugli esiti o danneggiarlo!"
+
+msgid "AdditionalProfileField"
+msgstr "Aggiungi un campo al profilo utente"
+
+msgid "ScormUnknownPackageFormat"
+msgstr "Il pacchetto che stai caricando non ha un formato standard accettabile"
+
+msgid "ScormNotEnoughSpaceInCourseToInstallPackage"
+msgstr "In questo corso non c\'è spazio sufficiente per espandere il pacchetto compresso"
+
+msgid "ScormPackageFormatNotScorm"
+msgstr "Il pacchetto che stai caricando non sembra essere in formato SCORM. Verifica che il file imsmanifest.xml sia nella directory principale del file compresso"
+

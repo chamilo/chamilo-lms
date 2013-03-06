@@ -1,0 +1,90 @@
+msgid "langLinkName"
+msgstr "Όνομα συνδέσμου"
+
+msgid "langLinkAdd"
+msgstr "Προσθήκη συνδέσμου"
+
+msgid "langLinkAdded"
+msgstr "Ο σύνδεσμος προστέθηκε"
+
+msgid "langLinkMod"
+msgstr "Τροποποίηση συνδέσμου"
+
+msgid "langLinkModded"
+msgstr "Ο σύνδεσμος τροποποιήθηκε"
+
+msgid "langLinkDel"
+msgstr "Διαγραφή συνδέσμου"
+
+msgid "langLinkDeleted"
+msgstr "Ο σύνδεσμος διαγράφτηκε"
+
+msgid "langLinkDelconfirm"
+msgstr "Θέλετε να διαγράψετε το σύνδεσμο;"
+
+msgid "langAllLinksDel"
+msgstr "Διαγραφή όλων συνδέσμων αυτής της κατηγορίας"
+
+msgid "langCategoryName"
+msgstr "Όνομα κατηγορίας"
+
+msgid "langCategoryAdd"
+msgstr "Προσθήκη κατηγορίας"
+
+msgid "langCategoryAdded"
+msgstr "Η κατηγορία προστέθηκε"
+
+msgid "langCategoryModded"
+msgstr "Η κατηγορία τροποποιήθηκε"
+
+msgid "langCategoryDel"
+msgstr "Διαγραφή κατηγορίας"
+
+msgid "langCategoryDeleted"
+msgstr "Η κατηγορία και όλοι οι σύνδεσμοι της διαγράφτηκαν"
+
+msgid "langCategoryDelconfirm"
+msgstr "Θέλετε να διαγράψετε τη κατηγορία; Θα διαγράψετε και όλους τους συνδέσμους της"
+
+msgid "langAllCategoryDel"
+msgstr "Διαγραφή όλων των καταλόγων και όλων των συνδέσμων"
+
+msgid "langGiveURL"
+msgstr "Δώστε το URL του συνδέσμου"
+
+msgid "langGiveCategoryName"
+msgstr "Δώστε το όνομα της κατηγορίας"
+
+msgid "langNoCategory"
+msgstr "Καμιά κατηγορία"
+
+msgid "showall"
+msgstr "Ανοίξτε όλες τις κατηγορίες"
+
+msgid "shownone"
+msgstr "Κλείστε όλες τις κατηγορίες"
+
+msgid "langListDeleted"
+msgstr "Ο κατάλογος έχει διαγραφτεί"
+
+msgid "langAddLink"
+msgstr "Προσθήκη συνδέσμου"
+
+msgid "langDelList"
+msgstr "Διαγραφή ολόκληρου του καταλόγου"
+
+msgid "langCsvImport"
+msgstr "Εισαγωγή αρχείου CSV"
+
+msgid "langLinkUpdated"
+msgstr "Ο σύνδεσμος τροποποιήθηκε"
+
+msgid "langAll_Link_Deleted"
+msgstr "Ο σύνδεσμος διαγράφτηκε"
+
+msgid "langOnHomepage"
+msgstr "Στη κέντρικη σελίδα"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Εικονίδιο στην άρχικη σελίδα"
+

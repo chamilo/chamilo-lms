@@ -1,0 +1,219 @@
+msgid "AgendaAdd"
+msgstr "Adicionar um evento"
+
+msgid "ShowAllEvents"
+msgstr "Todos os eventos"
+
+msgid "ShowCurrent"
+msgstr "Mês actual/corrente"
+
+msgid "AddCalendarItem"
+msgstr "Adicionar um evento à agenda"
+
+msgid "Day"
+msgstr "Dia"
+
+msgid "Month"
+msgstr "Mês"
+
+msgid "Year"
+msgstr "Ano"
+
+msgid "Hour"
+msgstr "Hora"
+
+msgid "Minutes"
+msgstr "Minutos"
+
+msgid "Detail"
+msgstr "Detalhes"
+
+msgid "EditSuccess"
+msgstr "Evento editado"
+
+msgid "AddSuccess"
+msgstr "Evento adicionado"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Evento eliminado"
+
+msgid "NoAgendaItems"
+msgstr "Não existem quaisquer eventos"
+
+msgid "lang_september"
+msgstr "Setembro"
+
+msgid "langClassName"
+msgstr "Nome da turma"
+
+msgid "lang_agenda"
+msgstr "Agenda"
+
+msgid "ModifyCalendarItem"
+msgstr "Editar evento"
+
+msgid "ItemTitle"
+msgstr "Nome do evento"
+
+msgid "langDay"
+msgstr "dia"
+
+msgid "month_default"
+msgstr "mês pré-definido/padrão"
+
+msgid "langYear"
+msgstr "Ano"
+
+msgid "year_default"
+msgstr "ano pré-definido/padrão"
+
+msgid "langHour"
+msgstr "Hora"
+
+msgid "hour_default"
+msgstr "hora pré-definida/padrão"
+
+msgid "langMinute"
+msgstr "minuto"
+
+msgid "langLasting"
+msgstr "durável"
+
+msgid "langOldToNew"
+msgstr "antigo para novo"
+
+msgid "langNewToOld"
+msgstr "novo para antigo"
+
+msgid "langNow"
+msgstr "agora"
+
+msgid "langAddEvent"
+msgstr "Guardar/salvar evento"
+
+msgid "langDetail"
+msgstr "Detalhe"
+
+msgid "MonthView"
+msgstr "Mensal"
+
+msgid "WeekView"
+msgstr "Semanal"
+
+msgid "DayView"
+msgstr "Diário"
+
+msgid "AddPersonalItem"
+msgstr "Adicionar evento à Agenda"
+
+msgid "Week"
+msgstr "Semana"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Adicionar evento à Agenda"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Editar evento pessoal"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Evento adicionado"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Evento guardado/salvado"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "O evento foi eliminado"
+
+msgid "ViewPersonalItem"
+msgstr "Ver apenas os eventos Pessoais"
+
+msgid "UserGroupFilter"
+msgstr "Filtrar grupos/utilizadores"
+
+msgid "ShowAll"
+msgstr "Mostrar todos"
+
+msgid "Print"
+msgstr "Imprimir"
+
+msgid "MyTextHere"
+msgstr "inserir o meu texto aqui"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Copiado como anúncio"
+
+msgid "NewAnnouncement"
+msgstr "Novo anúncio"
+
+msgid "AddAnnouncement"
+msgstr "Adicionar como anúncio"
+
+msgid "UpcomingEvent"
+msgstr "Próximos eventos"
+
+msgid "RepeatedEvent"
+msgstr "Repetir evento"
+
+msgid "RepeatType"
+msgstr "Repetir tipo"
+
+msgid "RepeatDaily"
+msgstr "Diário"
+
+msgid "RepeatWeekly"
+msgstr "Semanal"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Mensal, por data"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Mensal, por dia"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Mensal, por dia, restrito"
+
+msgid "RepeatYearly"
+msgstr "Anual"
+
+msgid "RepeatEnd"
+msgstr "Repetir data final"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Ver evento original"
+
+msgid "ICalFileImport"
+msgstr "Importar ficheiro Outlook (iCal/ics)"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Todos os utilizadores da plataforma/sistema"
+
+msgid "GlobalEvent"
+msgstr "Evento global"
+
+msgid "ModifyEvent"
+msgstr "Editar evento"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "A data final não pode ser anterior à data de início"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ascendente"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Descendente"
+
+msgid "ItemForUserSelection"
+msgstr "Lista de selecção de utilizadores"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Este ficheiro não está em formato iCal"
+
+msgid "RepeatEvent"
+msgstr "Repetir evento"
+

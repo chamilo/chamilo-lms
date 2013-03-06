@@ -1,0 +1,192 @@
+msgid "langInvalidId"
+msgstr "Најавувањето беше неуспешно - неточно корисничко_име или лозинка"
+
+msgid "langWelcome"
+msgstr "Добредојдовте !"
+
+msgid "langPass"
+msgstr "Лозинка"
+
+msgid "langEnter"
+msgstr "Назад на мојот список на курсеви"
+
+msgid "langReg"
+msgstr "Регистрирање"
+
+msgid "langMenu"
+msgstr "Мени"
+
+msgid "langAdvises"
+msgstr "Совети"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Предупредување:</b> Овој курс не постои"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "кликнете овде за да го добиете овој курс од Вашиот стар портал"
+
+msgid "langOtherCourses"
+msgstr "други курсеви"
+
+msgid "langSupportForum"
+msgstr "Форум за поддршка"
+
+msgid "langCategories"
+msgstr "категории"
+
+msgid "langBackToHomePage"
+msgstr "Преглед на Категориите"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Нема јавно достапни курсеви"
+
+msgid "langLostPassword"
+msgstr "Ја загубивте Лозинката?"
+
+msgid "lang_edit_my_course_list"
+msgstr "Уреди го мојот Список на курсеви"
+
+msgid "langAgenda"
+msgstr "Распоред"
+
+msgid "langValvas"
+msgstr "Последни известувања"
+
+msgid "langUp"
+msgstr "Горе"
+
+msgid "langCatList"
+msgstr "Категории"
+
+msgid "langCourseList"
+msgstr "Список на курсеви"
+
+msgid "langHelptwo"
+msgstr "Помош"
+
+msgid "langRegAll"
+msgstr "регистрирање"
+
+msgid "EussMenu"
+msgstr "мени"
+
+msgid "Opinio"
+msgstr "Мислење"
+
+msgid "Intranet"
+msgstr "Интранет"
+
+msgid "Englin"
+msgstr "англиски"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Најавувањето беше неуспешно - ако не сте регистрирани, можете да го направите тоа ползувајќи   го <a href=claroline/auth/inscription.php>форма за регистрирање</a>"
+
+msgid "langSubCat"
+msgstr "под-категории"
+
+msgid "langMenuGeneral"
+msgstr "Општо"
+
+msgid "langMenuUser"
+msgstr "Корисник"
+
+msgid "langMenuAdmin"
+msgstr "Управувач со платформата"
+
+msgid "langUsersOnLineList"
+msgstr "Список на најавени корисници"
+
+msgid "langTotalOnLine"
+msgstr "Вкупно најавени"
+
+msgid "langRefresh"
+msgstr "Освежи"
+
+msgid "langMe"
+msgstr "јас"
+
+msgid "langSystemAnnouncements"
+msgstr "Системски известувања"
+
+msgid "langHelpMaj"
+msgstr "Помош"
+
+msgid "langNotRegistered"
+msgstr "Нерегистриран"
+
+msgid "langAdmin"
+msgstr "Управувач со платформата"
+
+msgid "Login"
+msgstr "Корисничко име"
+
+msgid "langRegisterForCourse"
+msgstr "Регисрирај се за курс"
+
+msgid "langUnregisterForCourse"
+msgstr "Одрегистрирај се од курсот"
+
+msgid "langCombinedCourse"
+msgstr "Комбиниран курс"
+
+msgid "Platform"
+msgstr "Платформа"
+
+msgid "Refresh"
+msgstr "Освежи"
+
+msgid "TotalOnLine"
+msgstr "вкупно најавени корисници"
+
+msgid "langCourseClosed"
+msgstr "(курсот е затворен во моментов)"
+
+msgid "ViewOpenCourses"
+msgstr "Приказ на отворени курсеви"
+
+msgid "langCompetences"
+msgstr "Компетенции"
+
+msgid "langDiplomas"
+msgstr "Дипломи"
+
+msgid "langTeach"
+msgstr "Што таа/тој може да подучува"
+
+msgid "langProductions"
+msgstr "Дела"
+
+msgid "langSendChatRequest"
+msgstr "Испрати покана за муабет на оваа личност"
+
+msgid "langRequestDenied"
+msgstr "Повикот беше одбиен"
+
+msgid "UsageDatacreated"
+msgstr "Податоците за начинот на користење се креирани"
+
+msgid "SessionView"
+msgstr "Прикажи ги курсевите подредени по сесии"
+
+msgid "CourseView"
+msgstr "Прикажи го комплетниот список на курсеви"
+
+msgid "DropboxFileAdded"
+msgstr "Датотеката е додадена во кутијата за Размена на датотеки и пораки"
+
+msgid "NewMessageInForum"
+msgstr "Новата порака е објавена на форумот"
+
+msgid "FolderCreated"
+msgstr "Новата папка е креирана"
+
+msgid "LinkAdded"
+msgstr "Новата врска е додадена"
+
+msgid "AnnouncementAdded"
+msgstr "Известувањето е додадено"
+
+msgid "AgendaAdded"
+msgstr "Додаден е елементот на календарот"
+

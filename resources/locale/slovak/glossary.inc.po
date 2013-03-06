@@ -1,0 +1,48 @@
+msgid "TermAddNew"
+msgstr "Pridať nový výraz"
+
+msgid "TermName"
+msgstr "Výraz"
+
+msgid "TermDefinition"
+msgstr "Definícia výrazu"
+
+msgid "TermDeleted"
+msgstr "Výraz odstránený"
+
+msgid "TermUpdated"
+msgstr "Výraz aktualizovaný"
+
+msgid "TermConfirmDelete"
+msgstr "Naozaj chcete zmazať tento výraz"
+
+msgid "TermAddButton"
+msgstr "Pridať tento výraz"
+
+msgid "TermUpdateButton"
+msgstr "Aktualizovať výraz"
+
+msgid "TermEdit"
+msgstr "Upraviť výraz"
+
+msgid "TermDeleteAction"
+msgstr "Zmazať výraz"
+
+msgid "OrderBy"
+msgstr "Zoradiť podľa"
+
+msgid "CreationDate"
+msgstr "Dátum vytvorenia"
+
+msgid "UpdateDate"
+msgstr "Dátum aktualizácie"
+
+msgid "TermAdded"
+msgstr "Výraz pridaný"
+
+msgid "YouMustEnterATermName"
+msgstr "Musíte zadať výraz"
+
+msgid "YouMustEnterATermDefinition"
+msgstr "Musíte zadať definíciu výrazu"
+

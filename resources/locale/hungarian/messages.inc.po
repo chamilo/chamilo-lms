@@ -1,0 +1,102 @@
+msgid "MessageEmptyMessageOrSubject"
+msgstr "Adja meg az üzenet tárgyát vagy szövegét"
+
+msgid "Inbox"
+msgstr "Beérkező üzenetek"
+
+msgid "Messages"
+msgstr "Üzenetek"
+
+msgid "SendMessage"
+msgstr "Üzenet küldése"
+
+msgid "NewMessage"
+msgstr "Új üzenet"
+
+msgid "ComposeMessage"
+msgstr "Üzenet írása"
+
+msgid "DeleteSelectedMessages"
+msgstr "Kijelölt üzenetek törlése"
+
+msgid "SelectAll"
+msgstr "Összes kijelölése"
+
+msgid "DeselectAll"
+msgstr "Összes kijelölés megszüntetése"
+
+msgid "ReplyToMessage"
+msgstr "Válasz erre az üzenetre"
+
+msgid "BackToInbox"
+msgstr "Vissza a bejövő üzenetekhez"
+
+msgid "MessageSentTo"
+msgstr "Az üzenet az alábbi címzett számára elküldésre került:"
+
+msgid "SendMessageTo"
+msgstr "Elküld"
+
+msgid "Myself"
+msgstr "magamnak"
+
+msgid "From"
+msgstr "Feladó"
+
+msgid "To"
+msgstr "Címzett"
+
+msgid "Date"
+msgstr "Dátum"
+
+msgid "InvalidMessageId"
+msgstr "A megválaszolní kívánt üzenet azonosítója érvénytelen."
+
+msgid "ErrorSendingMessage"
+msgstr "Az üzenet elküldése közben hiba lépett fel."
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Biztos benne, hogy törölni kívánja a kiválasztott üzenetet?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "A kiválasztott üzenetek törlésre kerültek"
+
+msgid "EnterTitle"
+msgstr "Adjon meg egy címet"
+
+msgid "TypeYourMessage"
+msgstr "Írja ide az üzenetét"
+
+msgid "MessageDeleted"
+msgstr "Az üzenete törölve"
+
+msgid "ConfirmDeleteMessage"
+msgstr "Biztosan törölni akarja a kiválasztott üzenetet?"
+
+msgid "DeleteMessage"
+msgstr "Üzenet törlése"
+
+msgid "ReadMessage"
+msgstr "Üzenet elolvasása"
+
+msgid "SendInviteMessage"
+msgstr "Meghívó üzenet küldése"
+
+msgid "SendMessageInvitation"
+msgstr "Biztosan el akarja küldeni ezeket a meghívásokat?"
+
+msgid "MessageTool"
+msgstr "Üzenetek eszköz"
+
+msgid "WriteAMessage"
+msgstr "Üzenet írása"
+
+msgid "AlreadyReadMessage"
+msgstr "Elolvasott üzenet"
+
+msgid "UnReadMessage"
+msgstr "Elolvasatlan üzenet"
+
+msgid "MessageSent"
+msgstr "Az üzenet elküldve"
+

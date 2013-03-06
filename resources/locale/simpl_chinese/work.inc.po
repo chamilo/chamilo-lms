@@ -1,0 +1,108 @@
+msgid "Tools"
+msgstr "工具"
+
+msgid "SendWork"
+msgstr "上传文件"
+
+msgid "langTooBig"
+msgstr "你没有选择任何文件，或者文件太大"
+
+msgid "langListDeleted"
+msgstr "列表已删除"
+
+msgid "langDocModif"
+msgstr "论文标题已修改"
+
+msgid "langDocAdd"
+msgstr "作业已经上传。"
+
+msgid "langDocDel"
+msgstr "文件已经删除"
+
+msgid "langTitleWork"
+msgstr "文件标题"
+
+msgid "langAuthors"
+msgstr "作者"
+
+msgid "langDelList"
+msgstr "删除链接"
+
+msgid "langWorkDelete"
+msgstr "删除"
+
+msgid "langWorkModify"
+msgstr "修改"
+
+msgid "langWorkConfirmDelete"
+msgstr "你真的想要删除这个文件"
+
+msgid "langAllFiles"
+msgstr "应用于本课程所有作业"
+
+msgid "DefaultUpload"
+msgstr "作业可见性的默认设置"
+
+msgid "NewVisible"
+msgstr "作业对所有人都可见"
+
+msgid "NewUnvisible"
+msgstr "作业只对课程管理员可见"
+
+msgid "lang_doc_unvisible"
+msgstr "作业只对这门课程的教师可见, 因此对你是不可见的。"
+
+msgid "langDelLk"
+msgstr "确定要移除该工具吗?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "只有此课程的注册用户可以上传作业。"
+
+msgid "langListDel"
+msgstr "删除列表"
+
+msgid "langNameDir"
+msgstr "目录名称"
+
+msgid "langFileExists"
+msgstr "操作失败，文件或目录已经存在."
+
+msgid "CreateDirectory"
+msgstr "新建目录"
+
+msgid "langCurrentDir"
+msgstr "当前目录"
+
+msgid "UploadADocument"
+msgstr "上传文档"
+
+msgid "EditToolOptions"
+msgstr "编辑工具选项"
+
+msgid "DocumentDeleted"
+msgstr "已删除文件"
+
+msgid "SendMailBody"
+msgstr "发件人"
+
+msgid "DirDelete"
+msgstr "删除目录"
+
+msgid "ValidateChanges"
+msgstr "验证变化"
+
+msgid "FolderUpdated"
+msgstr "文件夹已更新"
+
+msgid "EndsAt"
+msgstr "结束于(可完全关闭)"
+
+msgid "ExpiresAt"
+msgstr "过期于"
+
+msgid "DirectoryCreated"
+msgstr "文件夹已创建"
+
+msgid "MoveXTo"
+msgstr "移动 %s 到"
+

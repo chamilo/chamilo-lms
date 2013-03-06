@@ -1,0 +1,33 @@
+msgid "langCourseProgram"
+msgstr "Penerangan Subjek"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Subjek ini belum diberi penerangan"
+
+msgid "langEditCourseProgram"
+msgstr "Bina/Ubahsuai Penerangan Subjek"
+
+msgid "QuestionPlan"
+msgstr "Maklumat untuk Pensyarah"
+
+msgid "langInfo2Say"
+msgstr "Maklumat untuk Pelajar"
+
+msgid "langOuAutreTitre"
+msgstr "Tajuk"
+
+msgid "langNewBloc"
+msgstr "Lain-lain"
+
+msgid "langAddCat"
+msgstr "Tambah Penerangan"
+
+msgid "langAdd"
+msgstr "Tambah"
+
+msgid "langValid"
+msgstr "Proses"
+
+msgid "langBackAndForget"
+msgstr "Kembali"
+

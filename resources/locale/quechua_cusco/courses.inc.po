@@ -1,0 +1,213 @@
+msgid "lang_already_enrolled"
+msgstr "ña qelqachikunkiña"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Yachachinakunamanta noqaq sinriy"
+
+msgid "lang_course_enrollment"
+msgstr "Yachachinamanta haykuqmasi"
+
+msgid "lang_course_not_available"
+msgstr "Kay yachachinaqa manan hap\'ipanapaqchu utaq mana kanchu."
+
+msgid "lang_enroll"
+msgstr "Qelqachikuy"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Qelqachikuy hoq yachachinapi"
+
+msgid "lang_my_present_course_list"
+msgstr "Yachachinakunaymanta kuna kaq sinriy"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Kay mitapiqa mana kanchu yachachinakuna qelqachikunaykipaq."
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Utaq maskhay yachachinaq chinpunwan"
+
+msgid "lang_search"
+msgstr "Maskhay"
+
+msgid "lang_select_course_among_categories"
+msgstr "Ajllay mitakunamanta yachachinata"
+
+msgid "lang_select_course_in"
+msgstr "Ajllay hoq yachachinata kay nisqapi"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Ajllay hoq yachachinata maskhaypi rikurisqakunamanta"
+
+msgid "Unsubscribe"
+msgstr "Horqoy wañuchiy hoq qelqachikuyta"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Kutiy raphi qallariyniyman"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Kutiy yachachinakunaq sinriyman"
+
+msgid "langTitular"
+msgstr "Sutinchayniyuq"
+
+msgid "langBackToListOfThisUser"
+msgstr "Kutiy haykuqmasikuna sinriman"
+
+msgid "langAdministrationTools"
+msgstr "Kamachinaq llank\'anakuna"
+
+msgid "lang_back_to_parent_category"
+msgstr "Kutiy kuraq wichay mitaman"
+
+msgid "lang_back_to_course_selection"
+msgstr "Kutiy yachachinaq ajllanaman"
+
+msgid "lang_up"
+msgstr "Kutiy kuraq wichay mitaman"
+
+msgid "langCatList"
+msgstr "Mitakuna"
+
+msgid "langCourseList"
+msgstr "Yachachinaq sinrin"
+
+msgid "Subscribe"
+msgstr "Qelqachikuway"
+
+msgid "AlreadySubscribed"
+msgstr "Ña qelqachisqa kashanki"
+
+msgid "CourseCategoryStored"
+msgstr "Mitaqa kamarisqaña"
+
+msgid "langWithoutTimeLimits"
+msgstr "Mana pacha tukukuyniyuq"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Kutiy mitakunaq kuraq sinrinman"
+
+msgid "langAdded"
+msgstr "Yapasqaña"
+
+msgid "langDeleted"
+msgstr "Pichasqa"
+
+msgid "langKeeped"
+msgstr "Allchasqa"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Pakasqa / Wisqasqa"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Pakasqa / Kichasqa"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Qhawasqa / Kichasqa"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Qhawasqa / Wisqasqa"
+
+msgid "langAdminThisUser"
+msgstr "Kutiy kay haykuqmasiman"
+
+msgid "langManage"
+msgstr "Kamachiy hanp\'arata"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Yachachinapi qelqachikusqaykiqa ña ruwakunña"
+
+msgid "langSubCat"
+msgstr "ukhu-mitakuna"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Kay yachachinapiqa kikin haykuqmasikuna qelqachikusqankuta manan qechukunkumanchu."
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Qanqa kashanki kay yachachinamanta kamachiq"
+
+msgid "CourseManagement"
+msgstr "Yachachinakuyniypa Kamachinay"
+
+msgid "SortMyCourses"
+msgstr "Allichay yachachinaykunata"
+
+msgid "SubscribeToCourse"
+msgstr "Qelqachiway hoq yachachinapi"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Horqoy yachachinapi qelqachikusqayta"
+
+msgid "CreateCourseCategory"
+msgstr "Kamay yachachinakumanta hoq mitata"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr " Cheqaychu kashanki yachachinamanta mitata pichakunanpaq ? Mitamanta yachachinakunaqa rinsipi rikurimunku mana mitachasqasqa"
+
+msgid "CourseCategories"
+msgstr "Yachachinakunamanta mitakuna"
+
+msgid "CoursesInCategory"
+msgstr "Kay mitapi yachachinakuna"
+
+msgid "SearchCourse"
+msgstr "Makhay yachachinakunata"
+
+msgid "UpOneCategory"
+msgstr "<- Hoq mita wichaypi"
+
+msgid "SearchResultsFor"
+msgstr "Maskhaymanta kutichisqakuna:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr " Cheqaychu kashanki yachachinamanta qelqachikusqaykita horqochikunaykipaq ?"
+
+msgid "NoCourseCategory"
+msgstr "Ama churaychu yachachinata hoq mitaman"
+
+msgid "EditCourseCategorySucces"
+msgstr "Yachachinaqa kay mitamam churachikun"
+
+msgid "SubscribingNotAllowed"
+msgstr "Qelqachikuy mana chaskikuq"
+
+msgid "CourseSortingDone"
+msgstr "Yachachinakuna ruwasqamanta allichana"
+
+msgid "ExistingCourseCategories"
+msgstr "Mita kausaqkuna"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Manañan yachachinamantachu kanki"
+
+msgid "ViewOpenCourses"
+msgstr "Qhaway yachachinakuna kichasqata"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Mana reqsisqa pantay rikurimuy. Ama hina kaychu, rimarikuy hanp\'araq kamachiqwan."
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "Yachachinaq chinpunqa mana allinchu"
+
+msgid "CourseRequiresPassword"
+msgstr "Yachachinaqa munan qelqa pakata"
+
+msgid "SubmitRegistrationCode"
+msgstr "Apachiy qelqachiynamanta chinpunta"
+
+msgid "CourseCategoryDeleted"
+msgstr "Mitaqa wañuchisqaña"
+
+msgid "CategorySortingDone"
+msgstr "Mitakuna ruwakusqamanta allichana"
+
+msgid "CourseCategoryEditStored"
+msgstr "Mita kunanyachisqa"
+
+msgid "buttonCreateCourseCategory"
+msgstr "Kamay yachachinaq hoq mitanta"
+
+msgid "buttonSaveCategory"
+msgstr "Allachay mitata"
+
+msgid "buttonChangeCategory"
+msgstr "T\'ijray mitata"
+

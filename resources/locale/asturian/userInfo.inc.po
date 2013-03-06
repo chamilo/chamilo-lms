@@ -1,0 +1,564 @@
+msgid "langLineNumber"
+msgstr "Cantidá de ringleres"
+
+msgid "langLine"
+msgstr "ringlera"
+
+msgid "langLines"
+msgstr "ringleres"
+
+msgid "langLineOrLines"
+msgstr "ringlera(es)"
+
+msgid "langMoveUp"
+msgstr "Subir"
+
+msgid "langMoveDown"
+msgstr "Baxar"
+
+msgid "langAddNewHeading"
+msgstr "Amestar encabezáu nuevu"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Namás profesores"
+
+msgid "langDefineHeadings"
+msgstr "Definir encabezaos"
+
+msgid "langBackToUsersList"
+msgstr "Tornar al llistáu d\'usuarios"
+
+msgid "langTracking"
+msgstr "Siguimientu"
+
+msgid "langCourseManager"
+msgstr "Profesor"
+
+msgid "langModRight"
+msgstr "cambiar los permisos de"
+
+msgid "langNoAdmin"
+msgstr "dende agora <b>nun</b> tien permisu p\'alministrar esti sitiu."
+
+msgid "langAllAdmin"
+msgstr "agora tien <b>tolos</b> permisos p\'alministrar esta páxina."
+
+msgid "langModRole"
+msgstr "Cambiar estatus de"
+
+msgid "langRole"
+msgstr "Descripción"
+
+msgid "langIsNow"
+msgstr "ta agora enriba"
+
+msgid "langInC"
+msgstr "nesti cursu"
+
+msgid "langFilled"
+msgstr "Nun escribió tolos campos."
+
+msgid "langUserNo"
+msgstr "El nome d\'usuariu qu\'escoyó"
+
+msgid "langTaken"
+msgstr "yá esiste. Escueya otru."
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langUnreg"
+msgstr "Anula matrícula"
+
+msgid "langGroupUserManagement"
+msgstr "Xestión de Grupos"
+
+msgid "langUnregister"
+msgstr "Ensin rexistrar"
+
+msgid "langAddAUser"
+msgstr "Amestar usuarios"
+
+msgid "UsersUnsubscribed"
+msgstr "Los usuarios seleicionaos tán daos de baxa nel cursu"
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "Esti estudiante ta matriculáu nesti cursu nuna sesión. Nun pue editar la so información."
+
+msgid "NoDataAvailable"
+msgstr "Nun hai datos disponibles"
+
+msgid "AddToFriends"
+msgstr "¿De xuro que quies amestalu a la to rede d\'amigos?"
+
+msgid "AddPersonalMessage"
+msgstr "Amestar un mensax personal"
+
+msgid "Friends"
+msgstr "Amigos"
+
+msgid "PersonalData"
+msgstr "Datos pesonales"
+
+msgid "Contacts"
+msgstr "Contautos"
+
+msgid "SocialInformationComment"
+msgstr "Equí puedes organizar los tos contautos"
+
+msgid "AttachContactsToGroup"
+msgstr "Agrupa los tos contautos"
+
+msgid "ContactsList"
+msgstr "Llista de los mios contautos"
+
+msgid "AttachToGroup"
+msgstr "Amestar a esti grupu de contautos"
+
+msgid "SelectOneContact"
+msgstr "Seleiciona un contautu"
+
+msgid "SelectOneGroup"
+msgstr "Seleiciona un grupu"
+
+msgid "AttachContactsPersonal"
+msgstr "Amestar contautu personal"
+
+msgid "AttachContactsToGroupSuccesfuly"
+msgstr "El to contautu foi agrupáu correutamente"
+
+msgid "InvitationDenied"
+msgstr "Invitación non aceptada"
+
+msgid "AddedContactToList"
+msgstr "Usuariu amestáu a la to llista de contautos"
+
+msgid "ContactsGroupsComment"
+msgstr "Equí amuesense los tos contactos ordenaos por grupos"
+
+msgid "YouDontHaveContactsInThisGroup"
+msgstr "Nun tienes contautos nesti grupu"
+
+msgid "SelectTheCheckbox"
+msgstr "Seleiciona una o más opciones de la casilla de verificación"
+
+msgid "YouDontHaveInvites"
+msgstr "Actualmente nun tienes invitaciones"
+
+msgid "SocialInvitesComment"
+msgstr "Equí puedes aceutar o torgar les invitaciones entrantes"
+
+msgid "InvitationSentBy"
+msgstr "Invitación unviada por"
+
+msgid "RequestContact"
+msgstr "Petición de contautu"
+
+msgid "SocialUnknow"
+msgstr "Contautos desconocidos"
+
+msgid "SocialParent"
+msgstr "Los mios familiares"
+
+msgid "SocialFriend"
+msgstr "Los mios amigos"
+
+msgid "SocialGoodFriend"
+msgstr "Los mios meyores amigos"
+
+msgid "SocialEnemy"
+msgstr "Contautos nun deseyaos"
+
+msgid "SocialDeleted"
+msgstr "Contautu desaniciáu"
+
+msgid "MessageOutboxComment"
+msgstr "Equí puedes ver los mensaxes qu\'unviaste"
+
+msgid "MyPersonalData"
+msgstr "Equí puedes ver y camudar los tos datos personales"
+
+msgid "AlterPersonalData"
+msgstr "Camuda los tos datos personales dende equí"
+
+msgid "Invites"
+msgstr "Los mios invitaos"
+
+msgid "ContactsGroups"
+msgstr "Los mios grupos"
+
+msgid "ErrorSendingMessage"
+msgstr "Hubo un erru de la que s\'unviaba\'l mensaxe"
+
+msgid "PendingInvitations"
+msgstr "Invitaciones pendientes"
+
+msgid "MyInbox"
+msgstr "Bandexa d\'entrada"
+
+msgid "ViewSharedProfile"
+msgstr "Perfil compartíu"
+
+msgid "SeeAll"
+msgstr "Ver toos"
+
+msgid "ImagesUploaded"
+msgstr "Les mios imáxenes"
+
+msgid "ExtraInformation"
+msgstr "Información estra"
+
+msgid "SearchContacts"
+msgstr "Equí pueden amestase contautos a la to rede social"
+
+msgid "SocialSeeContacts"
+msgstr "Ver la mio rede de contautos"
+
+msgid "SocialUserInformationAttach"
+msgstr "Escribe un mensax enantes d\'unviar la solicitú d\'accesu."
+
+msgid "MessageInvitationNotSent"
+msgstr "El to mensax d\'invitación nun foi unviáu"
+
+msgid "SocialAddToFriends"
+msgstr "Amestar a la mio rede d\'amigos"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "Usuariu nun rexistráu nel cursu"
+
+msgid "ChangeContactGroup"
+msgstr "Camudar el grupu del mio contautu"
+
+msgid "Friend"
+msgstr "Amigu"
+
+msgid "ViewMySharedProfile"
+msgstr "El mio perfil compartíu"
+
+msgid "UserStatistics"
+msgstr "Informes d\'esti usuariu"
+
+msgid "EditUser"
+msgstr "Editar usuariu"
+
+msgid "ViewUser"
+msgstr "Ver usuariu"
+
+msgid "RSSFeeds"
+msgstr "Agregador RSS"
+
+msgid "NoFriendsInYourContactList"
+msgstr "La to llista de contautos ta erma"
+
+msgid "TryAndFindSomeFriends"
+msgstr "Preba a alcontrar dalgunos amigos"
+
+msgid "ClearSearchResults"
+msgstr "Llimpiar el resultáu de la gueta"
+
+msgid "SendInvitation"
+msgstr "Unviar invitación"
+
+msgid "SocialInvitationToFriends"
+msgstr "Invitar a xunise a la mio rede de collacios"
+
+msgid "MyCertificates"
+msgstr "Los mios certificaos"
+
+msgid "ToChangeYourEmailMustTypeYourPassword"
+msgstr "Pa camudar el to corréu electrónicu tienes qu\'escribir la to contraseña"
+
+msgid "Invitations"
+msgstr "Invitaciones"
+
+msgid "MyGroups"
+msgstr "Los mios grupos"
+
+msgid "EditProfile"
+msgstr "Editar perfil"
+
+msgid "Social"
+msgstr "Social"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "MyFriends"
+msgstr "Los mios collacios"
+
+msgid "Messages"
+msgstr "Mensaxes"
+
+msgid "CreateAgroup"
+msgstr "Crear un grupu"
+
+msgid "UsersGroups"
+msgstr "Usuarios, Grupos"
+
+msgid "SorryNoResults"
+msgstr "Nun hai resultaos"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "AddPicture"
+msgstr "Amestar imaxe"
+
+msgid "GroupPermissions"
+msgstr "Permisos del grupu"
+
+msgid "Closed"
+msgstr "Peslláu"
+
+msgid "AddGroup"
+msgstr "Amestar grupu"
+
+msgid "Privacy"
+msgstr "Priváu"
+
+msgid "ThisIsAnOpenGroup"
+msgstr "Esti ye un grupu abiertu"
+
+msgid "YouShouldCreateATopic"
+msgstr "Tendría de crear un tema"
+
+msgid "IAmAnAdmin"
+msgstr "Yo soi un alministrador"
+
+msgid "NewTopic"
+msgstr "Tema nuevu"
+
+msgid "MessageList"
+msgstr "Llistáu de mensaxes"
+
+msgid "EditGroup"
+msgstr "Editar grupu"
+
+msgid "MemberList"
+msgstr "Llistáu de miembros"
+
+msgid "WaitingList"
+msgstr "Llistáu d\'espera"
+
+msgid "InviteFriends"
+msgstr "Invitar amigos"
+
+msgid "Members"
+msgstr "Usuarios"
+
+msgid "Admin"
+msgstr "Alministrador"
+
+msgid "AttachmentFiles"
+msgstr "Axuntar archivos"
+
+msgid "AddOneMoreFile"
+msgstr "Amestar otru ficheru"
+
+msgid "MaximunFileSizeX"
+msgstr "Tamañu máximu d\'archivu %s"
+
+msgid "ModifyInformation"
+msgstr "Camudar información"
+
+msgid "GroupList"
+msgstr "Llista de grupos"
+
+msgid "GroupEdit"
+msgstr "Editar grupu"
+
+msgid "ThereAreNotUsersInTheWaitingList"
+msgstr "Nun hai usuarios nel llistáu d\'espera"
+
+msgid "SendInvitationTo"
+msgstr "Unviar invitación a"
+
+msgid "InviteUsersToGroup"
+msgstr "Invitar usuarios a grupu"
+
+msgid "PostIn"
+msgstr "Espublizáu"
+
+msgid "Reply"
+msgstr "Retrucar"
+
+msgid "Newest"
+msgstr "Lo último"
+
+msgid "Popular"
+msgstr "Populares"
+
+msgid "Moderator"
+msgstr "Moderador"
+
+msgid "DeleteModerator"
+msgstr "Esborrar moderador"
+
+msgid "UserChangeToModerator"
+msgstr "Usuariu cambiáu a moderador"
+
+msgid "IAmAModerator"
+msgstr "Yo soi un moderador"
+
+msgid "ThisIsACloseGroup"
+msgstr "Esti ye un grupu zarráu"
+
+msgid "IAmAReader"
+msgstr "Yo soi un llector"
+
+msgid "UserChangeToReader"
+msgstr "Usuariu cambiáu a llector"
+
+msgid "AddModerator"
+msgstr "Amestar como moderador"
+
+msgid "UserDeleted"
+msgstr "Los usuarios seleicionaos esborrárense"
+
+msgid "JoinGroup"
+msgstr "Xunise al grupu"
+
+msgid "YouShouldJoinTheGroup"
+msgstr "Tendría de xunise al grupu"
+
+msgid "WaitingForAdminResponse"
+msgstr "Esperando a que l\'almin respuenda"
+
+msgid "Member"
+msgstr "Usuariu"
+
+msgid "Re"
+msgstr "Re"
+
+msgid "FilesAttachment"
+msgstr "Axuntar archivu"
+
+msgid "GroupWaitingList"
+msgstr "Grupu de llistáu d\'espera"
+
+msgid "Open"
+msgstr "Retruque abiertu"
+
+msgid "UsersAlreadyInvited"
+msgstr "Usuarios yá invitaos"
+
+msgid "SubscribeUsersToGroup"
+msgstr "Apuntar usuarios al grupu"
+
+msgid "YouHaveBeenInvitedJoinNow"
+msgstr "Tien una invitación pa xunise agora"
+
+msgid "DenyInvitation"
+msgstr "Rechazar invitación"
+
+msgid "AcceptInvitation"
+msgstr "Dar preste a invitación"
+
+msgid "GroupsWaitingApproval"
+msgstr "Grupos esperando aprobación"
+
+msgid "GroupInvitationWasDeny"
+msgstr "Invitación de grupu rechazada"
+
+msgid "UserIsSubscribedToThisGroup"
+msgstr "Usuariu apuntóse nel grupu"
+
+msgid "DeleteFromGroup"
+msgstr "Esborrar del grupu"
+
+msgid "GroupMembers"
+msgstr "Miembros del grupu"
+
+msgid "Subscribe"
+msgstr "Matriculame"
+
+msgid "YouAreInvitedToGroupContent"
+msgstr "Ta invitáu a ver el conteníu del grupu"
+
+msgid "YouAreInvitedToGroup"
+msgstr "Tas invitáu a xunite al grupu"
+
+msgid "ToSubscribeClickInTheLinkBelow"
+msgstr "P\'apuntate calca nel enllaz que vien darréu"
+
+msgid "ReturnToInbox"
+msgstr "Tornar al buzón d\'entrada"
+
+msgid "View"
+msgstr "Vista"
+
+msgid "Me"
+msgstr "Mi"
+
+msgid "ReturnToOutbox"
+msgstr "Tornar a buzón de salida"
+
+msgid "EditNormalProfile"
+msgstr "Edición básica del perfil"
+
+msgid "GroupPendingInvitations"
+msgstr "Invitaciones pendientes de grupu"
+
+msgid "LeaveGroup"
+msgstr "Dexar grupu"
+
+msgid "UserIsNotSubscribedToThisGroup"
+msgstr "L\'usuariu nun ta apuntáu a esti grupu"
+
+msgid "InvitationReceived"
+msgstr "Invitación aceptada"
+
+msgid "InvitationSent"
+msgstr "Invitación unviada"
+
+msgid "YouAlreadySentAnInvitation"
+msgstr "Usté yá unvió una invitación"
+
+msgid "UserAdded"
+msgstr "Añadióse l\'usuariu"
+
+msgid "FilesSizeExceedsX"
+msgstr "Tamañu del archivu pergrande"
+
+msgid "YouShouldWriteASubject"
+msgstr "Tienes qu\'escribir l\'asuntu"
+
+msgid "Topics"
+msgstr "Temes"
+
+msgid "StatusInThisGroup"
+msgstr "Estáu nesti grupu"
+
+msgid "FriendsOnline"
+msgstr "Amigos online"
+
+msgid "GroupDescription"
+msgstr "Descripción del grupu"
+
+msgid "MyProductions"
+msgstr "Les mios producciones"
+
+msgid "YouHaveReceivedANewMessageInTheGroupX"
+msgstr "Recibistes un mensax nuevu nel grupu %s"
+
+msgid "ClickHereToSeeMessageGroup"
+msgstr "Calca equí pa ver el mensax de grupu"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "o copie y peque la siguiente URL:"
+
+msgid "ThereIsANewMessageInTheGroupX"
+msgstr "Hai un mensax nuevu nel grupu %s"
+
+msgid "UserIsAlreadySubscribedToThisGroup"
+msgstr "L\'usuariu ya ta soscritu a esti grupu"
+
+msgid "AddNormalUser"
+msgstr "Amestar como un usuariu normal"
+
+msgid "DenyEntry"
+msgstr "Torgar la entrada"
+
+msgid "YouNeedToHaveFriendsInYourSocialNetwork"
+msgstr "Necesites tener collacios na to rede social"
+

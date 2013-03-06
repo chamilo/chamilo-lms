@@ -1,0 +1,162 @@
+msgid "Announcement"
+msgstr "Anuncies"
+
+msgid "langAnnEmpty"
+msgstr "Les anuncies esborrárense"
+
+msgid "AnnouncementModified"
+msgstr "L\'anuncia modificóse"
+
+msgid "AnnouncementAdded"
+msgstr "L\'anuncia amestóse"
+
+msgid "AnnouncementDeleted"
+msgstr "La anuncia esborróse"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Publicáu\'l"
+
+msgid "AddAnnouncement"
+msgstr "Amestar como una anuncia"
+
+msgid "langContent"
+msgstr "Conteníu"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Esborrar toles anuncies"
+
+msgid "professorMessage"
+msgstr "Recáu del profesor"
+
+msgid "langEmailSent"
+msgstr "y unviáu a los estudiantes rexistraos"
+
+msgid "EmailOption"
+msgstr "Unviar esta anuncia per corréu electrónicu a los participantes del cursu"
+
+msgid "langOn"
+msgstr "Hai"
+
+msgid "langRegUser"
+msgstr "usuarios apuntaos al cursu"
+
+msgid "langUnvalid"
+msgstr "tienen una direición de corréu inválida o nun la dieren de la que se matriculaben"
+
+msgid "langModifAnn"
+msgstr "Cambiar esta anuncia"
+
+msgid "langModify"
+msgstr "cambiar"
+
+msgid "langDelete"
+msgstr "Esborrar"
+
+msgid "langTitle"
+msgstr "Títulu"
+
+msgid "langHelp"
+msgstr "Ayuda"
+
+msgid "langOk"
+msgstr "Aceutar"
+
+msgid "langAddIntro"
+msgstr "Amestar un testu d\'entamu"
+
+msgid "langBackList"
+msgstr "Tornar al llistáu"
+
+msgid "langSelMess"
+msgstr "Alvertencia a dellos usuarios"
+
+msgid "EmailTitle"
+msgstr "Títulu de l\'anuncia"
+
+msgid "langUserlist"
+msgstr "Llistáu d\'usuarios"
+
+msgid "langSelectedUsers"
+msgstr "Usuarios seleicionaos"
+
+msgid "langSubmit"
+msgstr "Unviar"
+
+msgid "langPleaseEnterMessage"
+msgstr "Tien d\'escribir el testu del mensaxe."
+
+msgid "langPleaseSelectUsers"
+msgstr "Tien de seleicionar dagún usuariu."
+
+msgid "Teachersubject"
+msgstr "Mensaxe unviáu a los sos estudiantes"
+
+msgid "langMessages"
+msgstr "Mensaxes:"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Unviar mensaxes a usuarios en particular"
+
+msgid "langIntroText"
+msgstr "Pa unviar un mensaxe, escueya los grupos d\'usuarios (marcaos cun a G delantre) o a usuarios en particular (marcaos con una U) del llistáu de la izquierda."
+
+msgid "langDown"
+msgstr "embaxu"
+
+msgid "langMsgSent"
+msgstr "El mensaxe unvióse a los alumnos seleicionaos"
+
+msgid "langSelUser"
+msgstr "Seleicionar usuarios de la páxina"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Mensaxe a los grupos seleicionaos"
+
+msgid "langSelectedGroups"
+msgstr "Grupos seleicionaos"
+
+msgid "langMsg"
+msgstr "Mensaxes"
+
+msgid "langYes"
+msgstr "Sí"
+
+msgid "MsgText"
+msgstr "Mensaxe"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Toles anuncies esborrárense"
+
+msgid "AnnouncementMoved"
+msgstr "L\'anuncia movióse"
+
+msgid "NoAnnouncements"
+msgstr "Nun hai anuncies"
+
+msgid "SelectEverybody"
+msgstr "Seleicionar toos"
+
+msgid "SelectedUsersGroups"
+msgstr "Grupu d\'usuarios seleicionaos"
+
+msgid "LearnerMessage"
+msgstr "Mensaxe d\'un alumnu"
+
+msgid "TitleIsRequired"
+msgstr "El títulu ye obligatoriu"
+
+msgid "AnnounceSentByEmail"
+msgstr "Anunciu unviáu per corréu electrónicu"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Anunciu unviáu a una seleición d\'usuarios"
+
+msgid "SendAnnouncement"
+msgstr "Unviar anunciu"
+
+msgid "ModifyAnnouncement"
+msgstr "Camudar anunciu"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Unviar anunciu"
+

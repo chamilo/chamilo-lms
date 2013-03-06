@@ -1,0 +1,129 @@
+msgid "langMdCallingTool"
+msgstr "Dokumen"
+
+msgid "langMdTitle"
+msgstr "Judul Obyek Pembelajaran"
+
+msgid "langMdDescription"
+msgstr "Untuk menyimpan informasi ini, tekan Simpan"
+
+msgid "langMdCoverage"
+msgstr "misal Sarjana ..."
+
+msgid "langMdCopyright"
+msgstr "misal: dengan syarat sumber dikenal"
+
+msgid "langTool"
+msgstr "Metadata Dokumen"
+
+msgid "langNoScript"
+msgstr "Skrip tidak dihidupkan di browser anda, silahkan abaikan layar di bagian bawah teks ini, ini tidak akan berfungsi ..."
+
+msgid "langPressAgain"
+msgstr "Tekan \'Simpan\' kembali ..."
+
+msgid "langLanguageTip"
+msgstr "bahasa yang digunakan untuk membuat obyek pembelajaran"
+
+msgid "langIdentifier"
+msgstr "Pengenal/identifier"
+
+msgid "langIdentifierTip"
+msgstr "identifikasi unik untuk obyek pembelajaran ini, terdiri dari huruf, angka,  _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "judul atau nama, dan bahasa judul atau nama"
+
+msgid "langDescriptionTip"
+msgstr "deskripsi atau komentar, dan bahasa digunakan untk mendeskripsikan obyek pembelajaran ini"
+
+msgid "langKeyword"
+msgstr "Kata kunci"
+
+msgid "langKeywordTip"
+msgstr "dipisahkan oleh koma (huruf, angka, -.)"
+
+msgid "langCoverage"
+msgstr "Cakupan"
+
+msgid "langCoverageTip"
+msgstr "contoh sarjana xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Jika anda mengubah bahasa deskripsi, jangan tambah kata kunci pada saat yang sama."
+
+msgid "langClickKw"
+msgstr "Klik sebuah kata kunci pada tree untuk memilih atau membatalkan pilihan."
+
+msgid "langKwHelp"
+msgstr "<br/> Klik tombol \'+\' untuk membuka, tombol  \'-\' untuk menutup, tombol  \'++\' untuk membuka semua, tombol \'--\' untuk menutup semua.<br/> <br/> Bersihkan semua kata kunci yang terpilih dengan menuutp dan membukanya kembali dengan tombol \'+\' <br/> Alt-click \'+\' cari kata kunci original dalam tree.<br/> <br/> Alt-click pada kata kunci  tanpa teminologi atau batalkan pilihan (deselect) suatu keyword dengan terminologi yang lebih luas.<br/> <br/> Jika anda mengubah bahasa deskrips, jangan tambahkan kata kunci pada saat yang sama.<br/> <br/>"
+
+msgid "langRights"
+msgstr "Hak-hak Penggunaan"
+
+msgid "langRightsTip"
+msgstr "deskripsikan dalam kata-kata"
+
+msgid "langVersion"
+msgstr "Versi"
+
+msgid "langVersionTip"
+msgstr "jumlah deskripsi"
+
+msgid "langStatusTip"
+msgstr "pilih dari daftar"
+
+msgid "langCreatedSize"
+msgstr "Dibuat, ukuran"
+
+msgid "langCreatedSizeTip"
+msgstr "YYYY-MM-DD waktu dibuat, ukuran dalam octets (bytes)"
+
+msgid "langAuthorTip"
+msgstr "dalam format VCARD"
+
+msgid "langFormat"
+msgstr "Format"
+
+msgid "langFormatTip"
+msgstr "pilih dari daftar"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "klik untuk membuka obyek"
+
+msgid "langStore"
+msgstr "Simpan"
+
+msgid "langDeleteAll"
+msgstr "Hapus semua metadata"
+
+msgid "langConfirmDelete"
+msgstr "Apakah anda sungguh-sunguh ingin menghapus semua metadata?"
+
+msgid "langCourseKwds"
+msgstr "Dokumen ini berisi kata kunci mata kuliah tsb"
+
+msgid "langSearch"
+msgstr "Cari"
+
+msgid "langSearchCrit"
+msgstr "Satu kata per baris!"
+
+msgid "langStatuses"
+msgstr ":draft:draft,, final:final,, perbaikan:perbaikan,, tak tersedia:tak tersedia"
+
+msgid "langCosts"
+msgstr ":tidak:gratis, gratis,, ya:tidak gratis, biaya"
+
+msgid "langCopyrights"
+msgstr ":ya:hak-cipta,, tidak:tidak ber-hak-cipta"
+
+msgid "langFormats"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+
+msgid "langLngResTypes"
+msgstr ":exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture"
+

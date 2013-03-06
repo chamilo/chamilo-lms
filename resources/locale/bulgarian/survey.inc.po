@@ -1,0 +1,606 @@
+msgid "PublishSurvey"
+msgstr "Публикуване на анкетата"
+
+msgid "CompareQuestions"
+msgstr "Сравняване на въпросите"
+
+msgid "InformationUpdated"
+msgstr "Информацията е обновена."
+
+msgid "SurveyTitle"
+msgstr "Заглавие"
+
+msgid "SurveyIntroduction"
+msgstr "Въведение"
+
+msgid "CreateNewSurvey"
+msgstr "Създаване на анкета"
+
+msgid "Survey"
+msgstr "Анкета"
+
+msgid "SurveyTemplate"
+msgstr "Шаблон"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "Моля, въведете заглавие на анкетата."
+
+msgid "PleaseEnterValidDate"
+msgstr "Моля, въведете валидна дата."
+
+msgid "NotPublished"
+msgstr "Не е публикувана"
+
+msgid "AdvancedReportDetails"
+msgstr "Разширените справки ви позволяват да изберете потребител и въпроси, за да видите по-подробна информация."
+
+msgid "AdvancedReport"
+msgstr "Разширена справка"
+
+msgid "CompleteReportDetails"
+msgstr "Пълните справки ви позволяват да видите резултатите на анкетираните хора и да ги експортиране в CSV-файл (за Excel)."
+
+msgid "CompleteReport"
+msgstr "Пълна справка"
+
+msgid "OnlyThoseAddresses"
+msgstr "Да се изпрати анкетата само до тези адреси"
+
+msgid "BackToQuestions"
+msgstr "Обратно към въпросите"
+
+msgid "SelectWhichLanguage"
+msgstr "Изберете, анкетата на какъв език ще се създаде"
+
+msgid "CreateInAnotherLanguage"
+msgstr "Създаване на анкетата на друг език"
+
+msgid "ExportInExcel"
+msgstr "Експортиране в Excel формат"
+
+msgid "ComparativeResults"
+msgstr "Съпоставими резултати"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "Изберете данните, които да се съпоставят"
+
+msgid "OrCopyPasteUrl"
+msgstr "Или копирайте и поставете връзката в адресното поле на вашия браузър:"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "Щракнете тук, за да отворите анкетата"
+
+msgid "SurveyNotShared"
+msgstr "Още не са споделени анкети."
+
+msgid "ViewSurvey"
+msgstr "Преглеждане на анкетата"
+
+msgid "SelectDisplayType"
+msgstr "Изберете начина на показване"
+
+msgid "Thanks"
+msgstr "Коментар"
+
+msgid "SurveyReporting"
+msgstr "Справки"
+
+msgid "NoSurveyAvailable"
+msgstr "Няма анкети."
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "Вашата анкета е публикувана."
+
+msgid "CreateFromExistingSurvey"
+msgstr "Създаване от съществуваща анкета"
+
+msgid "Publish"
+msgstr "Публикуване на анкетата"
+
+msgid "SearchASurvey"
+msgstr "Търсене на анкета"
+
+msgid "CourseName"
+msgstr "Име на курса"
+
+msgid "SurveysOfAllCourses"
+msgstr "Анкета(и) за всички курсове"
+
+msgid "PleaseSelectAChoice"
+msgstr "Моля, направете избор."
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "Няма въпроси в базата данни."
+
+msgid "UpdateQuestionType"
+msgstr "Промяна на типа на въпроса:"
+
+msgid "AddAnotherQuestion"
+msgstr "Нов въпрос"
+
+msgid "IsShareSurvey"
+msgstr "Споделяне на анкетата с други"
+
+msgid "Proceed"
+msgstr "Продължи"
+
+msgid "PleaseFillNumber"
+msgstr "Моля, въведете числови стойности за точките."
+
+msgid "PleaseFillAllPoints"
+msgstr "Моля, въведете точки от 1 до 5."
+
+msgid "PleasFillAllAnswer"
+msgstr "Моля, попълнете всички отговори."
+
+msgid "PleaseSelectFourTrue"
+msgstr "Моля, изберете поне 4 верни отговора."
+
+msgid "PleaseSelectFourDefault"
+msgstr "Моля, изберете поне 4 подразбиращи се отговора."
+
+msgid "PleaseFillDefaultText"
+msgstr "Моля, попълнете подразбиращият се текст."
+
+msgid "ModifySurveyInformation"
+msgstr "Промяна на информацията за анкетата"
+
+msgid "ViewQuestions"
+msgstr "Преглед на въпросите"
+
+msgid "CreateSurvey"
+msgstr "Създаване на анкета"
+
+msgid "FinishSurvey"
+msgstr "Край на анкетата"
+
+msgid "QuestionsAdded"
+msgstr "Въпросите са добавени."
+
+msgid "DeleteSurvey"
+msgstr "Изтриване на анкетата."
+
+msgid "SurveyCode"
+msgstr "Код на анкетата"
+
+msgid "SurveyList"
+msgstr "Анкети"
+
+msgid "SurveyAttached"
+msgstr "Анкетата е прикрепена."
+
+msgid "QuestionByType"
+msgstr "Въпроси по типове"
+
+msgid "SelectQuestionByType"
+msgstr "Изберете въпрос по тип"
+
+msgid "PleaseEnterAQuestion"
+msgstr "Моля, въведете въпрос."
+
+msgid "NoOfQuestions"
+msgstr "Брой въпроси"
+
+msgid "Question"
+msgstr "Въпрос"
+
+msgid "ThisCodeAlradyExists"
+msgstr "Този код вече съществува."
+
+msgid "SaveAndExit"
+msgstr "Записване и изход"
+
+msgid "ViewAnswers"
+msgstr "Преглед на отговорите"
+
+msgid "CreateExistingSurvey"
+msgstr "Създаване от съществуваща анкета"
+
+msgid "SurveyName"
+msgstr "Заглавие"
+
+msgid "SurveySubTitle"
+msgstr "Подзаглавие"
+
+msgid "ShareSurvey"
+msgstr "Споделяне на анкетата"
+
+msgid "SurveyThanks"
+msgstr "Благодарности"
+
+msgid "EditSurvey"
+msgstr "Редактиране на анкетата"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "или да се върнете към прегледа на анкетите."
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "Липсва параметър на връзката."
+
+msgid "WrongInvitationCode"
+msgstr "Грешен код на покана."
+
+msgid "SurveyFinished"
+msgstr "Приключихте с тази анкета."
+
+msgid "SurveyPreview"
+msgstr "Преглед на анкетата"
+
+msgid "InvallidSurvey"
+msgstr "Невалидна анкета."
+
+msgid "AddQuestion"
+msgstr "Добавяне на въпрос"
+
+msgid "EditQuestion"
+msgstr "Редактиране на въпрос"
+
+msgid "TypeDoesNotExist"
+msgstr "Този тип не съществува."
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "Анкетата е създадена"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Можете да добавяте въпроси."
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "Анкетата е актуализирана"
+
+msgid "QuestionAdded"
+msgstr "Въпросът е добавен."
+
+msgid "QuestionUpdated"
+msgstr "Въпросът е обновен."
+
+msgid "RemoveAnswer"
+msgstr "Премахване на опция"
+
+msgid "AddAnswer"
+msgstr "Добавяне на опция"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Показване"
+
+msgid "AnswerOptions"
+msgstr "Опции за отговаряне"
+
+msgid "YesNo"
+msgstr "Да/Не"
+
+msgid "MultipleResponse"
+msgstr "Избор на няколко отговора"
+
+msgid "Open"
+msgstr "Отворен въпрос"
+
+msgid "Dropdown"
+msgstr "Падащо меню"
+
+msgid "Pagebreak"
+msgstr "Прекъсване на страницата"
+
+msgid "QuestionNumber"
+msgstr "Въпрос номер"
+
+msgid "NumberOfOptions"
+msgstr "Брой опции"
+
+msgid "SurveyInvitations"
+msgstr "Покани за анкетиране"
+
+msgid "InvitationCode"
+msgstr "Код на покана"
+
+msgid "InvitationDate"
+msgstr "Дата на покана"
+
+msgid "Answered"
+msgstr "Отговорен"
+
+msgid "AdditonalUsersComment"
+msgstr "Можете да поканите още потребители да попълнят анкетата. За да направите това, въведете техните e-mail адреси, разделени с , или ;"
+
+msgid "MailTitle"
+msgstr "Заглавие на съобщението"
+
+msgid "InvitationsSend"
+msgstr "покани са изпратени."
+
+msgid "SurveyDeleted"
+msgstr "Анкетата е изтрита."
+
+msgid "NoSurveysSelected"
+msgstr "Не са избрани анкети."
+
+msgid "NumberOfQuestions"
+msgstr "Брой въпроси"
+
+msgid "Invited"
+msgstr "Поканен"
+
+msgid "SubmitQuestionFilter"
+msgstr "Филтър на въпросите"
+
+msgid "ResetQuestionFilter"
+msgstr "Филтър за отказ на въпроси"
+
+msgid "ExportCurrentReport"
+msgstr "Експортиране на текущата справка"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "Могат да се използват само въпроси с предложени отговори."
+
+msgid "SelectXAxis"
+msgstr "Избиране на въпрос по ос X"
+
+msgid "SelectYAxis"
+msgstr "Избиране на въпрос по ос Y"
+
+msgid "ComparativeReport"
+msgstr "Сравнителна справка"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "Всички въпроси се показват на една страница"
+
+msgid "SelectUser"
+msgstr "Потребител"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "Избор на потребител, който е попълнил анкетата"
+
+msgid "userreport"
+msgstr "Справка за потребител"
+
+msgid "VisualRepresentation"
+msgstr "Графика"
+
+msgid "AbsoluteTotal"
+msgstr "Общо"
+
+msgid "NextQuestion"
+msgstr "Следващият въпрос"
+
+msgid "PreviousQuestion"
+msgstr "Предишният въпрос"
+
+msgid "PeopleWhoAnswered"
+msgstr "Хората, които са избрали този отговор"
+
+msgid "CourseUsers"
+msgstr "Курсисти"
+
+msgid "SurveyPublication"
+msgstr "Публикуване на анкетата"
+
+msgid "AdditonalUsers"
+msgstr "Още потребители"
+
+msgid "MailText"
+msgstr "Текст на съобщението"
+
+msgid "UseLinkSyntax"
+msgstr "Избраните потребители ще получат e-mail с текста по горе и уникална връзка, чрез която могат да отворят анкетата.<br/>Уникалната връзка автоматично ще се появи в края на вашата покана. Но вие можете да определите изрично, къде да се появи тя, като на съответното място поставите текста **link**. Този текст **link** при изпращането автоматично ще се се замества с уникалната връзка за всеки поканен потребител."
+
+msgid "DetailedReportByUser"
+msgstr "Подробна справка за потребител"
+
+msgid "DetailedReportByQuestion"
+msgstr "Подробна справка за въпрос"
+
+msgid "ComparativeReportDetail"
+msgstr "В тази справка можете да сравнявате въпроси."
+
+msgid "CompleteReportDetail"
+msgstr "Тази справка представлява обзор на на всички отговори на всички въпроси от всички потребители. Можете да избирате, само за кои въпроси да се показва справката.<br/>Можете да експортирате справката в CSV-файл и да я обработите (анализирате) със статистически софтуер."
+
+msgid "DetailedReportByUserDetail"
+msgstr "В тази справка можете да видите всички дадени отговори от потребител."
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "В тази справка можете да видите резултатите, групирани по въпроси. Предоставят се опростен статистически анализ и графики."
+
+msgid "ReminderResendToAllUsers"
+msgstr "Напомняне на всички потребители за анкетата. <i>Ако не изберете това, само новите добавени потребители ще получат e-mail съобщение.<i/>"
+
+msgid "Multiplechoice"
+msgstr "Избор на един отговор"
+
+msgid "Score"
+msgstr "Резултат"
+
+msgid "Shared"
+msgstr "Споделена"
+
+msgid "Invite"
+msgstr "Покана"
+
+msgid "MaximumScore"
+msgstr "Максимален резултат"
+
+msgid "ViewInvited"
+msgstr "Виж поканените"
+
+msgid "ViewAnswered"
+msgstr "Виж отговорилите"
+
+msgid "ViewUnanswered"
+msgstr "Виж неотговорилите"
+
+msgid "DeleteSurveyQuestion"
+msgstr "Наистина ли искате да изтриете въпроса?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "Вече сте попълвали тази анкета."
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "Щракнете тук, за да попълните анкетата."
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "или копирайте и вмъкнете сладната връзка:"
+
+msgid "UnknowUser"
+msgstr "Неизвестен потребител"
+
+msgid "MoveDown"
+msgstr "Преместване надолу"
+
+msgid "MoveUp"
+msgstr "Преместване нагоре"
+
+msgid "HaveAnswered"
+msgstr "са отговорили"
+
+msgid "WereInvited"
+msgstr "бяха поканени"
+
+msgid "PagebreakNotFirst"
+msgstr "Прекъсването на страница не може да бъде в началото."
+
+msgid "PagebreakNotLast"
+msgstr "Разделителят на страници не може да бъде накрая."
+
+msgid "SurveyNotAvailableAnymore"
+msgstr "За съжаление анкетата вече не е достъпна. Благодарим Ви, че опитахте."
+
+msgid "DuplicateSurvey"
+msgstr "Дублиране на анкетата"
+
+msgid "EmptySurvey"
+msgstr "Изчистване на анкетата"
+
+msgid "SurveyEmptied"
+msgstr "Всички въпроси в анкетата са изтрити."
+
+msgid "SurveyNotAvailableYet"
+msgstr "Анкетата още не е достъпна. Моля, опитайте по-късно. Благодарим Ви."
+
+msgid "PeopleAnswered"
+msgstr "човека са отговорили"
+
+msgid "AnonymousSurveyCannotKnowWhoAnswered"
+msgstr "Тази анкета е анонимна. Не можете да видите кой как е отговарял."
+
+msgid "IllegalSurveyId"
+msgstr "Невалиден идентификатор на анкетата."
+
+msgid "SurveyQuestionMoved"
+msgstr "Въпросът е преместен."
+
+msgid "IdenticalSurveycodeWarning"
+msgstr "Този код на анкетата вече съществува. Това вероятно означава, че анкетата съществува и на други езици. Поканените участници ще могат да избират своя език."
+
+msgid "ThisSurveyCodeSoonExistsInThisLanguage"
+msgstr "Кодът на анкетата вече съществува за този език."
+
+msgid "SurveyUserAnswersHaveBeenRemovedSuccessfully"
+msgstr "Отговорите на потребителя в анкетата са изтрити."
+
+msgid "DeleteSurveyByUser"
+msgstr "Изтриване на отговорите на потребителя от тази анкета"
+
+msgid "SelectType"
+msgstr "Изберете тип"
+
+msgid "Conditional"
+msgstr "Условна"
+
+msgid "ParentSurvey"
+msgstr "Родителска анкета"
+
+msgid "OneQuestionPerPage"
+msgstr "По един въпрос на страница"
+
+msgid "ActivateShuffle"
+msgstr "Случаен ред на въпросите"
+
+msgid "ShowFormProfile"
+msgstr "Допълнителна информация за потребителя"
+
+msgid "PersonalityQuestion"
+msgstr "Редактиране на въпроса"
+
+msgid "YouNeedToCreateGroups"
+msgstr "Трябва да създадете групи."
+
+msgid "ManageGroups"
+msgstr "Управление на групите"
+
+msgid "Create"
+msgstr "Създаване"
+
+msgid "GroupCreatedSuccessfully"
+msgstr "Групата е създадена."
+
+msgid "GroupNeedName"
+msgstr "Трябва да зададете името на групата"
+
+msgid "Personality"
+msgstr "Персонализиране"
+
+msgid "Condition"
+msgstr "Условие"
+
+msgid "Primary"
+msgstr "Първично"
+
+msgid "Secondary"
+msgstr "Вторично"
+
+msgid "CourseSettings"
+msgstr "Настройки"
+
+msgid "PleaseChooseACondition"
+msgstr "Моля, изберете условие."
+
+msgid "ChooseDifferentCategories"
+msgstr "Изберете различни категории."
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Normal"
+msgstr "Нормална"
+
+msgid "NoLogOfDuration"
+msgstr "Няма записи за продължителност."
+
+msgid "AutoInviteLink"
+msgstr "Потребителите, които не са поканени може да използват следната връзка, за да участват в анкетата:"
+
+msgid "CompleteTheSurveysQuestions"
+msgstr "Отговорете на въпросите от анкетата."
+
+msgid "SurveysDeleted"
+msgstr "Анкетите са изтрити."
+
+msgid "RemindUnanswered"
+msgstr "Подсещане на потребителите, които не са отговорили."
+
+msgid "ModifySurvey"
+msgstr "Редактиране на анкетата"
+
+msgid "CreateQuestionSurvey"
+msgstr "Създаване на въпрос"
+
+msgid "ModifyQuestionSurvey"
+msgstr "Редактиране на въпрос"
+
+msgid "BackToSurvey"
+msgstr "Обратно към анкетата"
+
+msgid "UpdateInformation"
+msgstr "Обновяване на информацията"
+
+msgid "PleaseFillSurvey"
+msgstr "Моля, попълнете анкетата."
+
+msgid "ReportingOverview"
+msgstr "справките"
+
+msgid "ThereAreNotQuestionsForthisSurvey"
+msgstr "Няма въпроси в тази анкета."
+
+msgid "Multipleresponse"
+msgstr "Повече от един отговора"
+

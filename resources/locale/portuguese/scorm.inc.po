@@ -1,0 +1,153 @@
+msgid "langScormVersion"
+msgstr "versão"
+
+msgid "langScormRestarted"
+msgstr "Todos os objectos de aprendizagem estão incompletos."
+
+msgid "langScormNoNext"
+msgstr "Este é o último objecto de aprendizagem."
+
+msgid "langScormNoPrev"
+msgstr "Este é o primeiro objecto de aprendizagem."
+
+msgid "langScormTime"
+msgstr "Tempo"
+
+msgid "langScormNoOrder"
+msgstr "Não existe uma ordem pré-definida, pode clicar em qualquer objecto de aprendizagem."
+
+msgid "langScormScore"
+msgstr "Pontuação"
+
+msgid "langScormLessonTitle"
+msgstr "Nome do objecto de aprendizagem"
+
+msgid "langScormStatus"
+msgstr "Estado"
+
+msgid "langScormToEnter"
+msgstr "Para aceder"
+
+msgid "langScormFirstNeedTo"
+msgstr "necessita primeiro completar"
+
+msgid "langScormThisStatus"
+msgstr "Este objecto de aprendizagem é agora"
+
+msgid "langScormClose"
+msgstr "Terminar"
+
+msgid "langScormRestart"
+msgstr "Recomeçar"
+
+msgid "langScormCompstatus"
+msgstr "Concluído"
+
+msgid "langScormIncomplete"
+msgstr "Incompleto"
+
+msgid "langScormPassed"
+msgstr "Aprovado"
+
+msgid "langScormFailed"
+msgstr "Não aprovado"
+
+msgid "langScormPrevious"
+msgstr "Anterior"
+
+msgid "langScormNext"
+msgstr "Seguinte"
+
+msgid "langScormTitle"
+msgstr "Chamilo Scorm player"
+
+msgid "langScormMystatus"
+msgstr "O meu progresso"
+
+msgid "langScormNoItems"
+msgstr "Este curso encontra-se vazio."
+
+msgid "langScormNoStatus"
+msgstr "Não existe estado para este conteúdo"
+
+msgid "langScormLoggedout"
+msgstr "desconectado da área de Scorm"
+
+msgid "langScormCloseWindow"
+msgstr "Fechar janelas"
+
+msgid "ScormBrowsed"
+msgstr "Acedido"
+
+msgid "langScormExitFullScreen"
+msgstr "Regressar ao ecrã normal"
+
+msgid "langScormFullScreen"
+msgstr "Ecrã total"
+
+msgid "langScormNotAttempted"
+msgstr "Não acedido"
+
+msgid "langCharset"
+msgstr "Conjunto de caracteres"
+
+msgid "langLocal"
+msgstr "Local"
+
+msgid "langRemote"
+msgstr "Remoto"
+
+msgid "langAutodetect"
+msgstr "Detectar automaticamente"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Total de objectos de aprendizagem concluídos"
+
+msgid "langUnknown"
+msgstr "Desconhecido"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "Tem a certeza que deseja eliminar estes passos?"
+
+msgid "Origin"
+msgstr "Ferramenta de Autoría"
+
+msgid "Local"
+msgstr "Local"
+
+msgid "Remote"
+msgstr "Remoto"
+
+msgid "FileToUpload"
+msgstr "Ficheiro SCORM ou AICC a enviar"
+
+msgid "ContentMaker"
+msgstr "Ferramenta de Autoría"
+
+msgid "ContentProximity"
+msgstr "Situação"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "Enviar ficheiro local a partir da pasta/directório principal"
+
+msgid "ThisItemIsNotExportable"
+msgstr "Este objecto de aprendizagem ou actividade não é SCORM compliant ou não está conforme com a norma SCORM. Por isso não é possível exportá-lo."
+
+msgid "MoveCurrentChapter"
+msgstr "Mover a secção actual"
+
+msgid "GenericScorm"
+msgstr "Scorm genérico"
+
+msgid "UnknownPackageFormat"
+msgstr "Não é possível reconhecer o formato deste pacote. Por favor verifique se se trata de um pacote válido."
+
+msgid "Attempt"
+msgstr "Tentativa"
+
+msgid "MoveTheCurrentForum"
+msgstr "Mover este fórum"
+
+msgid "WarningWhenEditingScorm"
+msgstr "Atenção !<br /> Quando edita o conteúdo de um objecto de aprendizagem, a informação do curso poderá ser alterada ou até danificar o objecto de aprendizagem."
+

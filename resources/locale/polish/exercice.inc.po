@@ -1,0 +1,492 @@
+msgid "langExercice"
+msgstr "Test"
+
+msgid "langActivate"
+msgstr "aktywuj"
+
+msgid "langDeactivate"
+msgstr "deaktywuj"
+
+msgid "langNoEx"
+msgstr "Nie ma jeszcze żadnych testów"
+
+msgid "langNewEx"
+msgstr "Nowy test"
+
+msgid "langQuestion"
+msgstr "pytanie"
+
+msgid "langQuestions"
+msgstr "Pytania"
+
+msgid "langAnswers"
+msgstr "Odpowiedzi"
+
+msgid "langTrue"
+msgstr "Prawda"
+
+msgid "langAnswer"
+msgstr "Odpowiedź"
+
+msgid "langResult"
+msgstr "Rezultat"
+
+msgid "langNoResult"
+msgstr "Nie ma żadnych wyników"
+
+msgid "langYourResults"
+msgstr "Twoje wyniki"
+
+msgid "langStudentResults"
+msgstr "Wyniki studenta"
+
+msgid "langExerciseType"
+msgstr "Typ testu"
+
+msgid "langExerciseName"
+msgstr "Nazwa testu"
+
+msgid "langExerciseDescription"
+msgstr "Opis testu"
+
+msgid "langSimpleExercise"
+msgstr "Na osobnej stronie"
+
+msgid "langSequentialExercise"
+msgstr "Jedno pytanie na stronie (kolejno)"
+
+msgid "langRandomQuestions"
+msgstr "Przypadkowy dobór pytań"
+
+msgid "langGiveExerciseName"
+msgstr "Podaj nazwę testu"
+
+msgid "langSound"
+msgstr "Plik dźwiękowy"
+
+msgid "langDeleteSound"
+msgstr "Usuń dźwięk"
+
+msgid "langNoAnswer"
+msgstr "Nie ma jeszcze żadnych odpowiedzi"
+
+msgid "langGoBackToQuestionPool"
+msgstr "Powrót do puli pytań"
+
+msgid "langGoBackToQuestionList"
+msgstr "Powrót do listy pytań"
+
+msgid "langQuestionAnswers"
+msgstr "Odpowiedzi na pytania"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Uwaga ! To pytanie i odpowiedź są używane w kilku testach. Chciałbyś je zmodyfikować?"
+
+msgid "langModifyInAllExercises"
+msgstr "we wszystkicg testach"
+
+msgid "langModifyInThisExercise"
+msgstr "tylko w bieżącym teście"
+
+msgid "langAnswerType"
+msgstr "Typ odpowiedzi"
+
+msgid "langMultipleSelect"
+msgstr "Wielokrotny wybór (wiele odpowiedzi poprawnych)"
+
+msgid "langFillBlanks"
+msgstr "Wypełnij pole"
+
+msgid "langMatching"
+msgstr "Dopasuj"
+
+msgid "langAddPicture"
+msgstr "Dodaj obrazek"
+
+msgid "langReplacePicture"
+msgstr "Wymień obrazek"
+
+msgid "langDeletePicture"
+msgstr "Kasuj obrazek"
+
+msgid "langQuestionDescription"
+msgstr "Opcjonalny komentarz"
+
+msgid "langGiveQuestion"
+msgstr "Podaj treść pytania"
+
+msgid "langWeightingForEachBlank"
+msgstr "Podaj punktację do każdego pola"
+
+msgid "langUseTagForBlank"
+msgstr "zastosuj nawias [...] do zdefiniowania jednego lub więcej pól"
+
+msgid "langQuestionWeighting"
+msgstr "Wynik"
+
+msgid "langMoreAnswers"
+msgstr "+odp"
+
+msgid "langLessAnswers"
+msgstr "-odp"
+
+msgid "langMoreElements"
+msgstr "+elem"
+
+msgid "langLessElements"
+msgstr "-elem"
+
+msgid "langTypeTextBelow"
+msgstr "Wpisz tekst poniżej"
+
+msgid "langDefaultTextInBlanks"
+msgstr "[Anglicy] mieszkają w [Anglii]."
+
+msgid "langDefaultMatchingOptA"
+msgstr "bogaty"
+
+msgid "langDefaultMatchingOptB"
+msgstr "przystojny"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Twój tata jest"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Twoja mama jest"
+
+msgid "langDefineOptions"
+msgstr "Podaj opcje"
+
+msgid "langMakeCorrespond"
+msgstr "Powiąż"
+
+msgid "langFillLists"
+msgstr "Wypełnij dwie listy poniżej"
+
+msgid "langGiveText"
+msgstr "Wpisz tekst"
+
+msgid "langDefineBlanks"
+msgstr "Zdefiniuj przynajmniej jedno pole z nawiasami [...]"
+
+msgid "langGiveAnswers"
+msgstr "Podaj odpowiedzi na pytania"
+
+msgid "langChooseGoodAnswer"
+msgstr "Wybierz poprawną odpowiedź"
+
+msgid "langChooseGoodAnswers"
+msgstr "Podaj jedn± lub więcej poprawnych odpowiedzi"
+
+msgid "langQuestionList"
+msgstr "Lista pytań w teście"
+
+msgid "langMoveUp"
+msgstr "Przenieś wyżej"
+
+msgid "langMoveDown"
+msgstr "Przenieś niżej"
+
+msgid "langGetExistingQuestion"
+msgstr "Pobierz pytanie z innego testu"
+
+msgid "langFinishTest"
+msgstr "Test końcowy"
+
+msgid "langQuestionPool"
+msgstr "Pula pytań"
+
+msgid "langOrphanQuestions"
+msgstr "Pytania bez przydziału"
+
+msgid "langNoQuestion"
+msgstr "Nie ma pytań"
+
+msgid "langAllExercises"
+msgstr "Wszystkie testy"
+
+msgid "langFilter"
+msgstr "Filtr"
+
+msgid "langGoBackToEx"
+msgstr "Powrót do testu"
+
+msgid "langReuse"
+msgstr "Użyj ponownie"
+
+msgid "langExerciseManagement"
+msgstr "Zarządzanie testami"
+
+msgid "langQuestionManagement"
+msgstr "Zarządzanie pytaniami/odpowiedziami"
+
+msgid "langQuestionNotFound"
+msgstr "Nie znaleziono pytania"
+
+msgid "langExerciseNotFound"
+msgstr "Nie znaleziono testu"
+
+msgid "langAlreadyAnswered"
+msgstr "Już odpowiedziałe(a)¶ na to pytanie"
+
+msgid "langElementList"
+msgstr "Lista elementów"
+
+msgid "langScore"
+msgstr "Wynik"
+
+msgid "langCorrespondsTo"
+msgstr "Dotyczy"
+
+msgid "langExpectedChoice"
+msgstr "Spodziewany wybór"
+
+msgid "langYourTotalScore"
+msgstr "Twój wynik ostateczny"
+
+msgid "ReachedMaxAttemptsAdmin"
+msgstr "Została osiągnięta maksymalna liczba prób dla tego zadania. Jednakże, jako administrator tego kursu, nadal możesz spróbować, ale pamiętaj, że wyniki nie będą wyświetlane na stronie wyników."
+
+msgid "Build"
+msgstr "Buduj"
+
+msgid "langActive"
+msgstr "aktywne"
+
+msgid "langInactive"
+msgstr "nieaktywne"
+
+msgid "langQuestCreate"
+msgstr "utwórz pytania"
+
+msgid "langExRecord"
+msgstr "twoje ćwiczenia zostały zapisane"
+
+msgid "langBackModif"
+msgstr "powrót do strony z edycją pytań"
+
+msgid "langDoEx"
+msgstr "wykonaj ćwiczenie"
+
+msgid "langCreateModif"
+msgstr "Utwórz/Edytuj pytanie"
+
+msgid "langSub"
+msgstr "napisy"
+
+msgid "langMyAnswer"
+msgstr "Moje odpowiedzi"
+
+msgid "langMorA"
+msgstr "+ odpowiedź"
+
+msgid "langLesA"
+msgstr "- odpowiedź"
+
+msgid "langRecEx"
+msgstr "zapisz ćwiczenie"
+
+msgid "langRecQu"
+msgstr "Zapisz pytanie"
+
+msgid "langRecAns"
+msgstr "Zapisz odpowiedzi"
+
+msgid "langIntroduction"
+msgstr "Wprowadzenie"
+
+msgid "langTitleAssistant"
+msgstr "Asystent utworzonych ćwiczeń"
+
+msgid "langQuesList"
+msgstr "lista pytań"
+
+msgid "langSaveEx"
+msgstr "zapisz ćwiczenia"
+
+msgid "langFinish"
+msgstr "Zakończ"
+
+msgid "langCancel"
+msgstr "Anuluj"
+
+msgid "langQImage"
+msgstr "Pytania z obrazkiem"
+
+msgid "langAddQ"
+msgstr "Dodaj pytanie"
+
+msgid "langDoAnEx"
+msgstr "Wykonaj ćwiczenie"
+
+msgid "langGenerator"
+msgstr "Lista ćwiczeń"
+
+msgid "langChoice"
+msgstr "Twój wybór"
+
+msgid "langCorrect"
+msgstr "Poprawnie"
+
+msgid "langPossAnsw"
+msgstr "Ilość dobrych odpowiedzi na jedno pytanie"
+
+msgid "langStudAnsw"
+msgstr "liczba błędów studenta"
+
+msgid "langDefault"
+msgstr "Wartości domyślne *"
+
+msgid "langStep1"
+msgstr "Krok 1"
+
+msgid "langStep2"
+msgstr "Krok 2"
+
+msgid "langTake"
+msgstr "brać (przystepować)"
+
+msgid "langAmong"
+msgstr "spośród"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Importuj Testy (HotPotatoes)"
+
+msgid "langHotPotatoesTests"
+msgstr "Importuj Testy (HotPotatoes)"
+
+msgid "langDownloadFile"
+msgstr "Załaduj plik do serwera"
+
+msgid "langDownloadImg"
+msgstr "Załąduj obraz do serwera"
+
+msgid "langDownloadEnd"
+msgstr "Ładowanie pliku zakończone"
+
+msgid "langNoSpace"
+msgstr "Ładowanie pliku nie powiodło się. Nie ma wystarczającej przestrzeni w Twoim katalogu"
+
+msgid "langZipNoPhp"
+msgstr "Plik zip nie może zawierać plików .PHP"
+
+msgid "langNoImg"
+msgstr "Test bez obrazków"
+
+msgid "langImgNote_st"
+msgstr "Wciąż musisz załadować"
+
+msgid "langImgNote_en"
+msgstr "obraz(y):"
+
+msgid "langDocDeleted"
+msgstr "Dokument usunięty"
+
+msgid "langViMod"
+msgstr "Widoczność zmodyfikowana"
+
+msgid "langNameNotEqual"
+msgstr "nieprawidłowy plik!"
+
+msgid "langIndice"
+msgstr "Wskazówka"
+
+msgid "langIndices"
+msgstr "Wskazówki"
+
+msgid "langDateExo"
+msgstr "Data"
+
+msgid "langShowQuestion"
+msgstr "Pokaż pytania"
+
+msgid "langUnknownExercise"
+msgstr "Nieznane ćwiczenie"
+
+msgid "langReuseQuestion"
+msgstr "Użyj ponownie pytania"
+
+msgid "langCreateExercise"
+msgstr "Utwórz ćwiczenie"
+
+msgid "langCreateQuestion"
+msgstr "Utwórz pytanie"
+
+msgid "langCreateAnswers"
+msgstr "Utwórz odpowiedź"
+
+msgid "langModifyExercise"
+msgstr "Edytuj test"
+
+msgid "langModifyAnswers"
+msgstr "Edytuj odpowiedź"
+
+msgid "langForExercise"
+msgstr "dla ćwiczenia"
+
+msgid "langUseExistantQuestion"
+msgstr "Użyj istniejącego pytania"
+
+msgid "FreeAnswer"
+msgstr "Wolna odpowiedź"
+
+msgid "notCorrectedYet"
+msgstr "Ta odpowiedź nie była jeszcze sprawdzana. Tymczasem twój wynik za to pytanie wynosi 0 i jest brany pod uwagę podczas liczenia całkowitego wyniku."
+
+msgid "NewQu"
+msgstr "Nowe pytanie"
+
+msgid "NoImage"
+msgstr "Proszę wybrać obraz"
+
+msgid "langNextQuestion"
+msgstr "Następne pytanie"
+
+msgid "langCorrectAnswer"
+msgstr "Poprawna odpowiedź"
+
+msgid "langHotspotHit"
+msgstr "Twoja odpowiedź"
+
+msgid "langAllQuestions"
+msgstr "Wszystkie pytania"
+
+msgid "langModifyTitleDescription"
+msgstr "Edytuj tytuł i opis"
+
+msgid "StudentScore"
+msgstr "Wyniki studenta"
+
+msgid "EditCommentsAndMarks"
+msgstr "Edytuj komentarz i ocenę"
+
+msgid "AddComments"
+msgstr "Dodaj komentarz"
+
+msgid "Weighting"
+msgstr "Wynik"
+
+msgid "CorrectTest"
+msgstr "Popraw test"
+
+msgid "ViewTest"
+msgstr "Widok"
+
+msgid "State"
+msgstr "Stan systemu"
+
+msgid "NotAttempted"
+msgstr "Brak prób"
+
+msgid "YourScore"
+msgstr "Twój wynik"
+
+msgid "Results"
+msgstr "Wyniki"
+
+msgid "AttemptVCCLong"
+msgstr "Twoj test %s zostal sprawdzony/skomentowany/poprawiony przez nauczyciela. Kliknij ponizszy link aby dostac sie na swoj profil i zobaczyc test egzaminacyjny."
+
+msgid "ValidateAnswer"
+msgstr "Sprawdź odpowiedzi"
+

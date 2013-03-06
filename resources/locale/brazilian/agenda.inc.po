@@ -1,0 +1,237 @@
+msgid "AgendaAdd"
+msgstr "Adicionar um novo evento"
+
+msgid "ShowAllEvents"
+msgstr "Mostrar todos os eventos"
+
+msgid "ShowCurrent"
+msgstr "Mostrar eventos do mês"
+
+msgid "AddCalendarItem"
+msgstr "Adicionar um novo evento a agenda"
+
+msgid "Day"
+msgstr "Dia"
+
+msgid "Month"
+msgstr "Mês"
+
+msgid "Year"
+msgstr "Ano"
+
+msgid "Hour"
+msgstr "Hora"
+
+msgid "Minutes"
+msgstr "Minutos"
+
+msgid "Detail"
+msgstr "Detalhe"
+
+msgid "EditSuccess"
+msgstr "O evento foi editado"
+
+msgid "AddSuccess"
+msgstr "Evento adicionado na agenda"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Evento da agenda foi excluido"
+
+msgid "NoAgendaItems"
+msgstr "Não há eventos na agenda"
+
+msgid "lang_september"
+msgstr "Setembro"
+
+msgid "langClassName"
+msgstr "Nome da turma"
+
+msgid "lang_agenda"
+msgstr "Agenda"
+
+msgid "ModifyCalendarItem"
+msgstr "Modificar um evento da Agenda"
+
+msgid "ItemTitle"
+msgstr "Nome do evento"
+
+msgid "langDay"
+msgstr "dia"
+
+msgid "month_default"
+msgstr "mês padrão"
+
+msgid "langYear"
+msgstr "Ano"
+
+msgid "year_default"
+msgstr "ano padrão"
+
+msgid "langHour"
+msgstr "Hora"
+
+msgid "hour_default"
+msgstr "hora padrão"
+
+msgid "langMinute"
+msgstr "minuto"
+
+msgid "langLasting"
+msgstr "duração"
+
+msgid "langOldToNew"
+msgstr "antigo para novo"
+
+msgid "langNewToOld"
+msgstr "novo para antigo"
+
+msgid "langNow"
+msgstr "agora"
+
+msgid "langAddEvent"
+msgstr "Salvar um evento"
+
+msgid "langDetail"
+msgstr "detalhe"
+
+msgid "MonthView"
+msgstr "Visualizar Mês"
+
+msgid "WeekView"
+msgstr "Semana"
+
+msgid "DayView"
+msgstr "Visualizar Dia"
+
+msgid "AddPersonalItem"
+msgstr "Adicionar evento pessoal"
+
+msgid "Week"
+msgstr "Semana"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Time"
+msgstr "Horário"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Adicionar um evento pessoal a agenda"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Alterar um um evento pessoal da agenda"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Seu evento pessoal da agenda foi adicionado com sucesso"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Seu evento pessoal da agenda foi editado com sucesso"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Seu evento pessoal da agenda foi excluido com sucesso"
+
+msgid "ViewPersonalItem"
+msgstr "Visualizar eventos pessoais"
+
+msgid "UserGroupFilter"
+msgstr "Filtrar por grupos/usuários"
+
+msgid "ShowAll"
+msgstr "Mostrar Tudo"
+
+msgid "Print"
+msgstr "Imprimir"
+
+msgid "MyTextHere"
+msgstr "Inserir seu texto aqui"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Copiado como anúncio"
+
+msgid "NewAnnouncement"
+msgstr "Novo anúncio"
+
+msgid "AddAnnouncement"
+msgstr "Acrescentado como anúncio"
+
+msgid "UpcomingEvent"
+msgstr "Próximo Evento"
+
+msgid "RepeatedEvent"
+msgstr "Evento repetido"
+
+msgid "RepeatType"
+msgstr "Periodicidade"
+
+msgid "RepeatDaily"
+msgstr "Diário"
+
+msgid "RepeatWeekly"
+msgstr "Semanal"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Mensal, por data"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Mensal, por dia"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Mensal, por dia, limitado"
+
+msgid "RepeatYearly"
+msgstr "Anual"
+
+msgid "RepeatEnd"
+msgstr "Repetir data final"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Visualizar evento original"
+
+msgid "ICalFileImport"
+msgstr "Importar arquivo do Outlook (iCal/ics)"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Todos os usuários da plataforma"
+
+msgid "GlobalEvent"
+msgstr "Evento global"
+
+msgid "ModifyEvent"
+msgstr "Editar evento"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "A data final não pode ser anterior à data inícial"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ascendente"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Descendente"
+
+msgid "ItemForUserSelection"
+msgstr "Lista de seleção de usuários"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Este arquivo não está em formato iCal"
+
+msgid "RepeatEvent"
+msgstr "Repetir evento"
+
+msgid "RepeatDate"
+msgstr "Repetir a data"
+
+msgid "EndDateMustBeMoreThanStartDate"
+msgstr "Data final dever ser posterior a data de início"
+
+msgid "SelectACourse"
+msgstr "Selecione um curso"
+
+msgid "PleaseSelectACourseOrASessionInTheLeftColumn"
+msgstr "Por favor, selecione um curso ou uma sessão na barra lateral."
+
+msgid "DisableEndDate"
+msgstr "Desabilitar fim do compromisso"
+
+msgid "AllEvents"
+msgstr "Todos os eventos"
+

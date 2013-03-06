@@ -1,0 +1,318 @@
+msgid "Camera"
+msgstr "Càmera"
+
+msgid "Microphone"
+msgstr "Micròfon"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "DeleteStream"
+msgstr "Eliminar flux"
+
+msgid "Progress"
+msgstr "Progrés"
+
+msgid "Play"
+msgstr "Reproduir"
+
+msgid "Stop"
+msgstr "Detenir"
+
+msgid "Record"
+msgstr "Gravar"
+
+msgid "NoFileAvailable"
+msgstr "No hi ha arxius disponibles"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Només poden gravar els professors"
+
+msgid "UsersNow"
+msgstr "Usuaris actuals"
+
+msgid "StartConference"
+msgstr "Començar conferència"
+
+msgid "MyName"
+msgstr "El meu nom"
+
+msgid "OrganisationSVideoconference"
+msgstr "Videoconferència Chamilo"
+
+msgid "ImportPresentation"
+msgstr "Importar presentació"
+
+msgid "RefreshList"
+msgstr "Actualitzar la llista"
+
+msgid "GoToTop"
+msgstr "Anar al començament"
+
+msgid "NewPoll"
+msgstr "Nou sondeig"
+
+msgid "CreateNewPoll"
+msgstr "Crear un nou sondeig per a aquesta sala"
+
+msgid "Question"
+msgstr "Qüestió"
+
+msgid "PollType"
+msgstr "Tipus de sondeig"
+
+msgid "Create"
+msgstr "Crear"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Info: Cada usuari connectat a aquesta sala rebrà una notificació d\'aquest nou sondeig."
+
+msgid "YesNo"
+msgstr "Sí / No"
+
+msgid "Numeric1To10"
+msgstr "Numèric de 1 a 10."
+
+msgid "Poll"
+msgstr "Sondeig"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Vè. ha de ser un moderador d\'aquesta sala per a poder realitzar sondejos."
+
+msgid "YourVoteHasBeenSent"
+msgstr "El seu vot ha estat enviat"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Vè. ja ha votat en aquest sondeig"
+
+msgid "VoteButton"
+msgstr "Votar"
+
+msgid "YourAnswer"
+msgstr "La seva resposta"
+
+msgid "Yes"
+msgstr "Si"
+
+msgid "No"
+msgstr "No"
+
+msgid "WantsToKnow"
+msgstr "vull saber"
+
+msgid "PollResults"
+msgstr "Resultats del sondeig"
+
+msgid "Votes"
+msgstr "Votos"
+
+msgid "Result"
+msgstr "Resultat"
+
+msgid "ThereIsNoPoll"
+msgstr "No hi ha disponible cap sondeig."
+
+msgid "MeetingMode"
+msgstr "Manera reunió (màx. 4 places)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Conferència (màx. 50 places)"
+
+msgid "Mode"
+msgstr "Manera"
+
+msgid "RemainingSeats"
+msgstr "Places restants"
+
+msgid "AlreadyIn"
+msgstr "Ja connectat"
+
+msgid "CheckIn"
+msgstr "Comprovar connexió"
+
+msgid "TheModeratorHasLeft"
+msgstr "El moderador d\'aquesta conferència ha abandonat la sala."
+
+msgid "SystemMessage"
+msgstr "Missatge del sistema"
+
+msgid "ChooseDevices"
+msgstr "Seleccionar dispositius"
+
+msgid "ChooseCam"
+msgstr "Seleccionar la càmera"
+
+msgid "ChooseMic"
+msgstr "Seleccionar el Micro:"
+
+msgid "OK"
+msgstr "D\'acord"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Ha de tornar-se a connectar perquè els canvis tinguin efecte."
+
+msgid "ChangeSettings"
+msgstr "Canviar paràmetres"
+
+msgid "Course"
+msgstr "Curs"
+
+msgid "CourseLanguage"
+msgstr "Idioma del curs"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Confirmar la neteja de la pissarra"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Vol esborrar la pissarra abans d\'afegir una nova imatge ?"
+
+msgid "DontAskMeAgain"
+msgstr "No tornar a preguntar"
+
+msgid "EditSettings"
+msgstr "Editar paràmetres"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Demani confirmació abans d\'esborrar la pissarra"
+
+msgid "UserInfo"
+msgstr "Informació de l\'usuari"
+
+msgid "ClearDrawArea"
+msgstr "Netejar la pissarra"
+
+msgid "Undo"
+msgstr "Desfer"
+
+msgid "Redo"
+msgstr "Refer"
+
+msgid "SelectAnObject"
+msgstr "Seleccionar un objecte"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Paint"
+msgstr "Pintar"
+
+msgid "DrawLine"
+msgstr "Dibuixar una línia"
+
+msgid "DrawUnderline"
+msgstr "Dibuixar subratllat"
+
+msgid "Rectangle"
+msgstr "Rectangle"
+
+msgid "Elipse"
+msgstr "El·lipse"
+
+msgid "Arrow"
+msgstr "Fletxa"
+
+msgid "DeleteChosenItem"
+msgstr "Esborrar l\'element seleccionat"
+
+msgid "ApplyForModeration"
+msgstr "Demanar moderador"
+
+msgid "Apply"
+msgstr "Fer"
+
+msgid "BecomeModerator"
+msgstr "Convertir en moderador"
+
+msgid "Close"
+msgstr "Tanca"
+
+msgid "Italic"
+msgstr "Cursiva"
+
+msgid "Bold"
+msgstr "Negreta"
+
+msgid "Waiting"
+msgstr "Esperant"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "Un usuari vol ser moderador:"
+
+msgid "Accept"
+msgstr "Acceptar"
+
+msgid "Reject"
+msgstr "Rebutjar"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Enviar una sol·licitud als següents usuaris"
+
+msgid "Accepted"
+msgstr "Acceptat"
+
+msgid "Rejected"
+msgstr "Rebutjat"
+
+msgid "ChangeModerator"
+msgstr "Canviar de moderador"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "Vè. no és el moderador d\'aquest curs"
+
+msgid "Moderator"
+msgstr "Moderador:"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "Aquesta sala està completa. Per favor, intenti\'l més tard"
+
+msgid "Loading"
+msgstr "Carregant"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Per favor, esperi mentre es carrega la imatge"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "Sincronització dels participants"
+
+msgid "Trainer"
+msgstr "Professor"
+
+msgid "Learner"
+msgstr "Alumne"
+
+msgid "Chat"
+msgstr "Missatgeria (xat)"
+
+msgid "Slides"
+msgstr "Diapositives"
+
+msgid "WaitingForParticipants"
+msgstr "Esperant als participants"
+
+msgid "Send"
+msgstr "Enviar"
+
+msgid "Browse"
+msgstr "Navegador"
+
+msgid "Cancel"
+msgstr "Cancel·lar"
+
+msgid "ChooseFile"
+msgstr "Seleccionar l\'arxiu a enviar"
+
+msgid "ConvertingDocument"
+msgstr "Convertint el document"
+
+msgid "Disconnected"
+msgstr "Desconectar"
+
+msgid "FineStroke"
+msgstr "Fi"
+
+msgid "MediumStroke"
+msgstr "Mitjà"
+
+msgid "ThickStroke"
+msgstr "Gruix"
+

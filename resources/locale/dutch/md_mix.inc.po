@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Document Metadata"
+
+msgid "langClickKw"
+msgstr "Klik om een sleutelwoord te kiezen of te annuleren."
+
+msgid "langKwHelp"
+msgstr "<br/>Klik \'+\' om te openen, \'−\' om te sluiten, \'++\' om alles te openen, \'−−\' om alles te sluiten.<br/><br/>Sluit de boomstructuur en open hem met \'+\' om eerdere keuzes te annuleren.<br/>Open hem met Alt-klik \'+\' om de originele sleutelwoorden terug te zetten.<br/><br/>Alt-klik sleutelwoord selecteert het sleutelwoord zonder omvattende concepten en annuleert een keuze met omvattende concepten.<br/><br/>Als u de taal van de beschrijving wil veranderen, voeg niet tegelijk nieuwe sleutelwoorden toe.<br/><br/>"
+
+msgid "langAdvanced"
+msgstr "Geavanceerde weergave"
+
+msgid "langSearch"
+msgstr "Zoek"
+
+msgid "langSearchCrit"
+msgstr "Eén woord per regel!"
+
+msgid "langNoKeywords"
+msgstr "De cursus heeft geen kernwoorden"
+
+msgid "langKwCacheProblem"
+msgstr "De cache van de kernwoorden kan niet geopend worden"
+
+msgid "langCourseKwds"
+msgstr "Dit document bevat de sleutelwoorden van de cursus"
+
+msgid "langKwdsInMD"
+msgstr "kernwoorden gebruikt in MD"
+
+msgid "langKwdRefs"
+msgstr "kernwoordverwijzingen"
+
+msgid "langNonCourseKwds"
+msgstr "Niet-cursuskernwoorden"
+
+msgid "langKwdsUse"
+msgstr "Cursuskernwoorden (vet = niet gebruikt)"
+
+msgid "langTotalMDEs"
+msgstr "Totaal aantal link-MD-gegevens:"
+

@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "تم إضافة المصادر . يمكنك الآن الرجوع إلى المسار أو إضافة مصادر أخرى"
+
+msgid "LearningPath"
+msgstr " مسار تعليمي"
+
+msgid "LevelUp"
+msgstr "مستوى واحد لأعلى"
+
+msgid "AddIt"
+msgstr "أضفه"
+
+msgid "MainCategory"
+msgstr "التصنيف الرئيسي"
+
+msgid "lang_delete_added_resources"
+msgstr "حذف المصادر المضافة"
+
+msgid "AddToLinks"
+msgstr "أضف إلى روابط المقرر"
+
+msgid "DontAdd"
+msgstr "لا تضف"
+
+msgid "lang_show_all_added_resources"
+msgstr "أظهر جميع المصادر المضافة"
+
+msgid "ResourcesAdded"
+msgstr "تم إضافة المصادر"
+
+msgid "BackTo"
+msgstr "الرجوع إلى"
+
+msgid "ExternalResources"
+msgstr "مصادر خارجية"
+
+msgid "CourseResources"
+msgstr "مصادر المقرر"
+
+msgid "ExternalLink"
+msgstr "روابط خاريجة"
+
+msgid "DropboxAdd"
+msgstr "أضف صندوق مشاركات إلى هذا الفصل"
+
+msgid "AddAssignmentPage"
+msgstr "أضف صفحة نشرات الطلاب إلى هذا الفصل"
+
+msgid "Exercise"
+msgstr "اختبارات"
+
+msgid "Link"
+msgstr "رابط"
+
+msgid "AdValvas"
+msgstr "إعلانات"
+
+msgid "Document"
+msgstr "مستند"
+
+msgid "ShowDelete"
+msgstr "أظهر / حذف"
+
+msgid "IntroductionText"
+msgstr "نص توضيحي"
+
+msgid "CourseDescription"
+msgstr " توصيف المقرر"
+
+msgid "Groups"
+msgstr "مجموعات"
+
+msgid "Users"
+msgstr "مستخدمين"
+
+msgid "IntroductionTextAdd"
+msgstr "أضف صفحة تحتوي على نص تعريفي إلى هذا المقرر"
+
+msgid "CourseDescriptionAdd"
+msgstr "أضف صفحة تحتوي على وصف المقرر إلى هذا الفصل"
+
+msgid "GroupsAdd"
+msgstr "أضف صفحة المجموعات إلى هذا الفصل"
+
+msgid "UsersAdd"
+msgstr "اضف صفحة المستخدمين في هذا الفصل"
+
+msgid "ExportableCourseResources"
+msgstr "مصادر مقرر قابلة للتصدير"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "مصادر مقرر ذات علاقة"
+
+msgid "LinkTarget"
+msgstr "هدف الرابط"
+
+msgid "SameWindow"
+msgstr "في نفس النافذة"
+
+msgid "NewWindow"
+msgstr "في نافذة جديدة"
+
+msgid "StepDeleted1"
+msgstr " هذا"
+
+msgid "StepDeleted2"
+msgstr "تم حذف العصنر في تلك الأداة"
+
+msgid "Modify"
+msgstr "تعديل"
+
+msgid "Chapter"
+msgstr "الفصل"
+
+msgid "NoAgendaItems"
+msgstr "لا يوجد هناك أي حدث"
+
+msgid "AgendaAdd"
+msgstr "أضف حدث جديد للأجندة"
+
+msgid "UserGroupFilter"
+msgstr "مرشح (فلتر) على المجموعات  / المستخدمين"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "رتب الأجندة   تصاعديا (أعلى)"
+
+msgid "ShowCurrent"
+msgstr "أظهر جميع الأحداث الخاصة بهذا الشهر"
+
+msgid "ModifyCalendarItem"
+msgstr "تحرير حدث"
+
+msgid "ItemTitle"
+msgstr "عنوان الحدث"
+
+msgid "Detail"
+msgstr "تفاصيل"
+
+msgid "EditSuccess"
+msgstr "لقد تم تحرير الحدث بنجاح"
+
+msgid "AddCalendarItem"
+msgstr "أضف حدث لجدول الأعمال"
+
+msgid "AddAnn"
+msgstr "أضف إعلان"
+
+msgid "ForumAddNewTopic"
+msgstr "من : أضف موضوع جديد"
+
+msgid "ForumEditTopic"
+msgstr "من : تحرير موضوع"
+
+msgid "ExerciseAnswers"
+msgstr "تمارين : أجوبة"
+
+msgid "ForumReply"
+msgstr "من : الرد"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr " رتب الأجندة زمنا (للأسفل)"
+

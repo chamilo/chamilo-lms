@@ -1,0 +1,96 @@
+msgid "TermAddNew"
+msgstr "Afegir un terme"
+
+msgid "TermName"
+msgstr "Terme"
+
+msgid "TermDefinition"
+msgstr "Definició"
+
+msgid "TermDeleted"
+msgstr "Terme eliminat"
+
+msgid "TermUpdated"
+msgstr "Terme actualitzat"
+
+msgid "TermConfirmDelete"
+msgstr "Realment desitja eliminar el terme"
+
+msgid "TermAddButton"
+msgstr "Guardar aquest terme"
+
+msgid "TermUpdateButton"
+msgstr "Actualitzar terme"
+
+msgid "TermEdit"
+msgstr "Editar terme"
+
+msgid "TermDeleteAction"
+msgstr "Eliminar terme"
+
+msgid "OrderBy"
+msgstr "Ordenar per"
+
+msgid "CreationDate"
+msgstr "Data de creació"
+
+msgid "UpdateDate"
+msgstr "Última modificació"
+
+msgid "PreSelectedOrder"
+msgstr "Ordenar per selecció"
+
+msgid "TermAdded"
+msgstr "Terme afegit"
+
+msgid "YouMustEnterATermName"
+msgstr "Ha d\'introduir un terme"
+
+msgid "YouMustEnterATermDefinition"
+msgstr "Ha d\'introduir la definició del terme"
+
+msgid "TableView"
+msgstr "Veure com taula"
+
+msgid "GlossaryTermAlreadyExistsYouShouldEditIt"
+msgstr "Aquest terme del glossari ja existeix, per favor canvie\'l per altre nom"
+
+msgid "GlossaryManagement"
+msgstr "Administració del glossari"
+
+msgid "TermMoved"
+msgstr "El terme s\'ha mogut"
+
+msgid "ShowGlossaryInExtraToolsTitle"
+msgstr "Mostrar els termes del glossari en eines extra"
+
+msgid "ShowGlossaryInExtraToolsComment"
+msgstr "Des d\'ací pots configurar com afegir els termes del glossari de les eines extra com a eina d\'exercicis i rutes d\'aprenentatge"
+
+msgid "ImportGlossary"
+msgstr "Importar glossari"
+
+msgid "ReplaceGlossary"
+msgstr "Reemplaçar glossari"
+
+msgid "CannotDeleteGlossary"
+msgstr "No es pot eliminar el glossari"
+
+msgid "TermsImported"
+msgstr "Els termes s\'han importat"
+
+msgid "TermsNotImported"
+msgstr "Els termes no s\'han importat"
+
+msgid "ExportGlossaryAsCSV"
+msgstr "Exportar glossari com a arxiu CSV"
+
+msgid "List"
+msgstr "Listar"
+
+msgid "GlossaryTermUpdated"
+msgstr "Els termes s\'han actualitzat"
+
+msgid "DeleteAllGlossaryTerms"
+msgstr "Eliminar tots els termes"
+

@@ -1,0 +1,57 @@
+msgid "select"
+msgstr "Ověřit"
+
+msgid "square"
+msgstr "Čtverec"
+
+msgid "circle"
+msgstr "Elipsa"
+
+msgid "poly"
+msgstr "Polygon"
+
+msgid "status1"
+msgstr "Nakresli hostpot"
+
+msgid "status2_poly"
+msgstr "Použij pravé tlačítko myši pro uzavření polygonu"
+
+msgid "status2_other"
+msgstr "Uvolni tlačítko myši pro uložení hotspotu."
+
+msgid "status3"
+msgstr "Hotspot uložen"
+
+msgid "exercise_status_1"
+msgstr "Odpovězte kliknutím na obrázek dole."
+
+msgid "exercise_status_2"
+msgstr "Ověřit odpovědi"
+
+msgid "exercise_status_3"
+msgstr "Status: Otázka stornována"
+
+msgid "showUserPoints"
+msgstr "Ukaž/Schovej uživatelská kliknutí"
+
+msgid "showHotspots"
+msgstr "Ukaž/Schovej hotspoty"
+
+msgid "labelPolyMenu"
+msgstr "Zavřít polygon"
+
+msgid "triesleft"
+msgstr "Vynechané pokusy"
+
+msgid "exeFinished"
+msgstr "Nyní klikněte na tlačítko dole a ověřte své odpovědi"
+
+msgid "nextAnswer"
+msgstr "Nyní klikněte na: &done=done"
+
+msgid "delineation"
+msgstr "Náčrt"
+
+msgid "labelDelineationMenu"
+msgstr "Zvřít náčrt"
+

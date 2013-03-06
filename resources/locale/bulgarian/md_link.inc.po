@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Документи"
+
+msgid "langMdTitle"
+msgstr "Наименование на обекта"
+
+msgid "langMdDescription"
+msgstr "За да запишете тази информация, натиснете \"Записване\""
+
+msgid "langMdCoverage"
+msgstr "т.е. бакалавър по ..."
+
+msgid "langMdCopyright"
+msgstr "т.е. указване на източника"
+
+msgid "nameTools"
+msgstr "obsolete language variable"
+
+msgid "langTool"
+msgstr "Метаданни за документ"
+
+msgid "langNoScript"
+msgstr "Скриптовете не са разрешени на вашия браузър, моля, игнорирайте частта от екрана под този текст - тя няма да работи."
+
+msgid "langLanguageTip"
+msgstr "Езикът, на кото е създаден този обект."
+
+msgid "langIdentifier"
+msgstr "Идентификатор"
+
+msgid "langIdentifierTip"
+msgstr "Уникален идентификатор на този обект, съставен от букви, цифри и знаците _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "Заглавие или наименование и на какъв език е изписано."
+
+msgid "langDescriptionTip"
+msgstr "Описание или коментар; какъв език се използва за описанието на този обект."
+
+msgid "langKeyword"
+msgstr "Ключова дума"
+
+msgid "langKeywordTip"
+msgstr "Разделете ключовите думи със запетаи."
+
+msgid "langCoverage"
+msgstr "Покрива"
+
+msgid "langCoverageTip"
+msgstr "например: бакалавър по..."
+
+msgid "langKwNote"
+msgstr "Ако променяте езика на описанието, не добавайте в същото време ключови думи."
+
+msgid "langClickKw"
+msgstr "Щракнете ключова дума от дървото, за да я изберете или за да я откажете."
+
+msgid "langKwHelp"
+msgstr "<br/>Предназначение на бутоните: \"+\" - за отваряне, \"-\" - за затваряне, \"++\" за отваряне на всички, \"--\" - за затваряне на всички.<br/><br/>Ако променяте езика на описанието, не добавяйте в същото време ключови думи.<br/><br/>"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "Щракнете, за да отворите обекта."
+
+msgid "langStore"
+msgstr "Записване"
+
+msgid "langDeleteAll"
+msgstr "Изтриване на всички метаданни"
+
+msgid "langConfirmDelete"
+msgstr "Наистина ли искате да изтриете всички метаданни?"
+
+msgid "langWorkOn"
+msgstr "на"
+
+msgid "langNotInDB"
+msgstr "Няма такава категория връзки."
+
+msgid "langManifestSyntax"
+msgstr "(синтактична грешка в манифестния файл...)"
+
+msgid "langEmptyManifest"
+msgstr "(празен манифестен файл...)"
+
+msgid "langNoManifest"
+msgstr "(няма манифестен файл...)"
+
+msgid "langNotFolder"
+msgstr "импортирането не е възможно, не е папка..."
+
+msgid "langContinue"
+msgstr "Продължи с"
+
+msgid "langCreate"
+msgstr "Създаване"
+
+msgid "langRemove"
+msgstr "Премахване на записи с метаданни"
+
+msgid "langAllRemovedFor"
+msgstr "Всички записи са премахнати от категорията"
+
+msgid "langRemainingFor"
+msgstr "Остарелите записи с метаданни са премахнати от категорията"
+
+msgid "langIndex"
+msgstr "Индексиране"
+
+msgid "langTotalMDEs"
+msgstr "Брой записи с метаданни:"
+
+msgid "langMainMD"
+msgstr "Отваряне на главния запис с метаданни"
+
+msgid "langOrElse"
+msgstr "Изберете категория връзки"
+
+msgid "langWarningDups"
+msgstr " - категориите с повтарящи се имена ще бъдат премахнати от списъка!"
+
+msgid "langSLC"
+msgstr "Работа с категорията"
+

@@ -1,0 +1,78 @@
+msgid "langCourseStats"
+msgstr "Στατιστικά μαθήματος"
+
+msgid "langLinksAccess"
+msgstr "Σύνδεσμοι"
+
+msgid "langDocumentsAccess"
+msgstr "Έγγραφα"
+
+msgid "langBackToList"
+msgstr "Επιστροφή στη λίστα χρηστών"
+
+msgid "langDetails"
+msgstr "Λεπτομέρειες"
+
+msgid "langStatsOfUser"
+msgstr "Στατιστικά του χρήστη"
+
+msgid "langCountUsers"
+msgstr "Αριθμός χρηστών"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Μήνας"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Αριθμός εισόδων"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Όνομα εργαλείου"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Κλικ του χρήστη"
+
+msgid "langToolTitleCountColumn"
+msgstr "Συνολικά κλικ"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Σύνδεσμος"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Κλικ των χρηστών"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Συνολικά κλικ"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Διαγώνισμα"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Βαθμολογία"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Έγγραφο"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Κατεβάσματα χρηστών"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Συνολικά κατεβάσματα"
+
+msgid "langScormContentColumn"
+msgstr "Τίτλος"
+
+msgid "langScormStudentColumn"
+msgstr "Χρήστες"
+
+msgid "langScormTitleColumn"
+msgstr "Μάθημα /βήμα"
+
+msgid "langScormStatusColumn"
+msgstr "Κατάσταση"
+
+msgid "langScormScoreColumn"
+msgstr "Βαθμολογία"
+
+msgid "langCourse"
+msgstr "το μάθημα"
+

@@ -1,0 +1,27 @@
+msgid "langExplanation"
+msgstr "След като щракнете бутона \"OK\" ще се създаде сайт на курса. Ше можете да променяте курса както пожелаете, защото сте негов създател."
+
+msgid "langTooBig"
+msgstr "Не сте избрали файл за изпращане, или този е твърде голям."
+
+msgid "langCouldNot"
+msgstr "Файлът не може да бъде качен."
+
+msgid "langAddPageToSite"
+msgstr "Добавяне на страница към сайта"
+
+msgid "langCouldNotSendPage"
+msgstr "Този файл не е в HTML-формат и не може да бъде изпратен. Ако искате да изпратите не-HTML документи (PDF, Word, Power Point, Video и т.н.), използвайте <a href=../document/document.php>\"Документи\"</a>."
+
+msgid "langSendPage"
+msgstr "Страница за качване"
+
+msgid "langPageTitleModified"
+msgstr "Заглавието на страницата е променено."
+
+msgid "langPageAdded"
+msgstr "Страницата е добавена."
+
+msgid "Choose"
+msgstr "Изберете"
+

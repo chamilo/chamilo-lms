@@ -1,0 +1,30 @@
+msgid "langLinkDelconfirm"
+msgstr "Nais mo bang tanggalin ang link na ito?"
+
+msgid "langCategoryAdd"
+msgstr "Magdagdag ng kategorya"
+
+msgid "langOnHomepage"
+msgstr "Ipakita ang link sa homepage ng pagsasanay"
+
+msgid "General"
+msgstr "pangkalahatan"
+
+msgid "langSaveLink"
+msgstr "I-save ang link"
+
+msgid "AddTargetOfLinkOnHomepage"
+msgstr "Piliin ang \"target\" na nagpapakita sa link sa homepage ng kurso"
+
+msgid "LinkOpenSelf"
+msgstr "Buksan ang sarili"
+
+msgid "LinkOpenBlank"
+msgstr "Magbukas ng blanko"
+
+msgid "LinkOpenParent"
+msgstr "Buksan ang pinagmulan"
+
+msgid "LinkOpenTop"
+msgstr "Buksan ang itaas"
+

@@ -1,0 +1,174 @@
+msgid "langOnlineConference"
+msgstr "Conferenza"
+
+msgid "langWash"
+msgstr "Ripulisci"
+
+msgid "langReset"
+msgstr "Riparti"
+
+msgid "langSave"
+msgstr "Salva"
+
+msgid "langRefresh"
+msgstr "Aggiorna"
+
+msgid "langIsNowInYourDocDir"
+msgstr "si trova ora nella sezione Documenti. <br><B>Il documento è visibile</B>"
+
+msgid "langCopyFailed"
+msgstr "Stampa non effettuata"
+
+msgid "langTypeMessage"
+msgstr "Per favore, scrivi il tuo messaggio !"
+
+msgid "langConfirmReset"
+msgstr "Vuoi veramente cancellare tutti i messaggi ?"
+
+msgid "langHasResetChat"
+msgstr "ha fatto ripartire la Chat"
+
+msgid "langNoOnlineConference"
+msgstr "In questo momento non ci sono incontri online ..."
+
+msgid "langMediaFile"
+msgstr "Streaming audio o video in diretta"
+
+msgid "langContentFile"
+msgstr "Presentazione"
+
+msgid "langListOfParticipants"
+msgstr "Elenco dei partecipanti"
+
+msgid "langYourPicture"
+msgstr "La tua fotografia"
+
+msgid "langOnlineDescription"
+msgstr "Descrizione dell\'incontro online"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Per favore, segna la casella solo per domande importanti!"
+
+msgid "langQuestion"
+msgstr "domanda"
+
+msgid "langClearList"
+msgstr "Cancella i messaggi"
+
+msgid "langWhiteBoard"
+msgstr "Lavagna"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Elaboratore testi</h2>Taglia e incolla un testo e modificalo. I partecipanti vedranno le modifiche dal vivo."
+
+msgid "langStreaming"
+msgstr "Streaming"
+
+msgid "langStreamURL"
+msgstr "URL della trasmissione"
+
+msgid "langStreamType"
+msgstr "Estensione"
+
+msgid "langLinkName"
+msgstr "Nome"
+
+msgid "langLinkURL"
+msgstr "URL"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Benvenuti nella <b>Videoconferenza</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Non ci sono collegamenti disponibili"
+
+msgid "langChat_reset_by"
+msgstr "Fai ripartire la chat"
+
+msgid "OrFile"
+msgstr "O importa"
+
+msgid "langCallSent"
+msgstr "La chiamata in chat è stata inviata: sono in attesa di consenso da parte della persona che hai chiamato"
+
+msgid "langChatDenied"
+msgstr "Il consenso alla chat è stato negato da parte della persona che hai chiamato"
+
+msgid "Send"
+msgstr "Invia"
+
+msgid "Connected"
+msgstr "Connessi"
+
+msgid "Think"
+msgstr "Penso..."
+
+msgid "BigGrin"
+msgstr "Grande sorriso"
+
+msgid "Amazing"
+msgstr "Incredibile!"
+
+msgid "Confused"
+msgstr "Confuso"
+
+msgid "Cool"
+msgstr "Indifferente"
+
+msgid "Surprised"
+msgstr "Sorpreso"
+
+msgid "Hand"
+msgstr "Ciao!"
+
+msgid "Wink"
+msgstr "Strizzo l\'occhio"
+
+msgid "Neutral"
+msgstr "Neutrale"
+
+msgid "Angry"
+msgstr "Arrabbiato"
+
+msgid "Avid"
+msgstr "Appassionato"
+
+msgid "Redface"
+msgstr "Arrossisco"
+
+msgid "Sad"
+msgstr "Triste"
+
+msgid "Silence"
+msgstr "Zitto"
+
+msgid "Silenced"
+msgstr "Ammutolito"
+
+msgid "Smile"
+msgstr "Sorriso"
+
+msgid "Exclamation"
+msgstr "Esclamazione"
+
+msgid "Arrow"
+msgstr "Freccia"
+
+msgid "Question"
+msgstr "Domanda"
+
+msgid "Idea"
+msgstr "Idea"
+
+msgid "AskPermissionSpeak"
+msgstr "Chiedo la parola"
+
+msgid "GiveTheFloorTo"
+msgstr "Dò la parola a"
+
+msgid "Pause"
+msgstr "Pausa"
+
+msgid "Stop"
+msgstr "Stop"
+

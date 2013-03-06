@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Recurso adicionado"
+
+msgid "LearningPath"
+msgstr "Cursos"
+
+msgid "LevelUp"
+msgstr "nível acima"
+
+msgid "AddIt"
+msgstr "Adicioná-lo"
+
+msgid "MainCategory"
+msgstr "categoria principal"
+
+msgid "lang_delete_added_resources"
+msgstr "Eliminar os recursos adicionados"
+
+msgid "AddToLinks"
+msgstr "Adicionar às ligações/links do curso"
+
+msgid "DontAdd"
+msgstr "não adicionar"
+
+msgid "lang_show_all_added_resources"
+msgstr "Apresentar todos os recursos adicionados"
+
+msgid "ResourcesAdded"
+msgstr "Recursos adicionados"
+
+msgid "BackTo"
+msgstr "Regressar a"
+
+msgid "ExternalResources"
+msgstr "Recursos externos"
+
+msgid "CourseResources"
+msgstr "Recursos do Curso"
+
+msgid "ExternalLink"
+msgstr "Ligação/link externa"
+
+msgid "DropboxAdd"
+msgstr "Adicionar a caixa de entrega a esta secção."
+
+msgid "AddAssignmentPage"
+msgstr "Adicionar a ferramenta de Trabalhos/tarefas ao curso"
+
+msgid "Exercise"
+msgstr "Exercícios"
+
+msgid "Link"
+msgstr "Ligações/links"
+
+msgid "AdValvas"
+msgstr "Anúncios"
+
+msgid "Document"
+msgstr "Documento"
+
+msgid "ShowDelete"
+msgstr "Mostrar / Eliminar"
+
+msgid "IntroductionText"
+msgstr "Texto de introdução"
+
+msgid "CourseDescription"
+msgstr "Descrição do Curso"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "Users"
+msgstr "Utilizadores"
+
+msgid "IntroductionTextAdd"
+msgstr "Adicionar uma página contendo o texto de introdução a esta secção."
+
+msgid "CourseDescriptionAdd"
+msgstr "Adicionar uma página contendo a descrição do curso a esta secção."
+
+msgid "GroupsAdd"
+msgstr "Adicionar a ferramenta de Grupos a esta secção."
+
+msgid "UsersAdd"
+msgstr "Adicionar a ferramenta de Utilizadores a esta secção."
+
+msgid "ExportableCourseResources"
+msgstr "Recursos do curso que podem ser exportados"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Recursos do curso relacionados com o Chamilo"
+
+msgid "LinkTarget"
+msgstr "Destino da Ligação/link"
+
+msgid "SameWindow"
+msgstr "Na mesma janela"
+
+msgid "NewWindow"
+msgstr "Numa nova janela"
+
+msgid "StepDeleted1"
+msgstr "Este"
+
+msgid "StepDeleted2"
+msgstr "item foi eliminado nessa ferramenta."
+
+msgid "Modify"
+msgstr "Editar"
+
+msgid "Chapter"
+msgstr "Secção"
+
+msgid "NoAgendaItems"
+msgstr "Não existem eventos na agenda"
+
+msgid "AgendaAdd"
+msgstr "Adicionar um evento"
+
+msgid "UserGroupFilter"
+msgstr "Filtrar grupos/utilizadores"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ascendente"
+
+msgid "ShowCurrent"
+msgstr "Mês actual/corrente"
+
+msgid "ModifyCalendarItem"
+msgstr "Editar evento"
+
+msgid "ItemTitle"
+msgstr "Nome do evento"
+
+msgid "Detail"
+msgstr "Detalhes"
+
+msgid "EditSuccess"
+msgstr "Evento editado"
+
+msgid "AddCalendarItem"
+msgstr "Adicionar um evento à agenda"
+
+msgid "AddAnn"
+msgstr "Adicionar anúncio"
+
+msgid "ForumAddNewTopic"
+msgstr "Fórum: adicionar novo tópico"
+
+msgid "ForumEditTopic"
+msgstr "Fórum: editar tópico"
+
+msgid "ExerciseAnswers"
+msgstr "Exercício: Respostas"
+
+msgid "ForumReply"
+msgstr "Fórum: responder"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Descendente"
+

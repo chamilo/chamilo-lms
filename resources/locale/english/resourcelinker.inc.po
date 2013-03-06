@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Resource added"
+
+msgid "LearningPath"
+msgstr "Learning paths"
+
+msgid "LevelUp"
+msgstr "level up"
+
+msgid "AddIt"
+msgstr "Add it"
+
+msgid "MainCategory"
+msgstr "main category"
+
+msgid "lang_delete_added_resources"
+msgstr "Delete added resources"
+
+msgid "AddToLinks"
+msgstr "Add to the training links"
+
+msgid "DontAdd"
+msgstr "do not add"
+
+msgid "lang_show_all_added_resources"
+msgstr "Show all added resources"
+
+msgid "ResourcesAdded"
+msgstr "Resources added"
+
+msgid "BackTo"
+msgstr "Back to"
+
+msgid "ExternalResources"
+msgstr "External resources"
+
+msgid "CourseResources"
+msgstr "Course resources"
+
+msgid "ExternalLink"
+msgstr "External link"
+
+msgid "DropboxAdd"
+msgstr "Add the dropbox to this section."
+
+msgid "AddAssignmentPage"
+msgstr "Add the Assignments tool to the course"
+
+msgid "Exercise"
+msgstr "Tests"
+
+msgid "Link"
+msgstr "Links"
+
+msgid "AdValvas"
+msgstr "Announcements"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "ShowDelete"
+msgstr "Show / Delete"
+
+msgid "IntroductionText"
+msgstr "Introduction text"
+
+msgid "CourseDescription"
+msgstr "Course Description"
+
+msgid "Groups"
+msgstr "Groups"
+
+msgid "Users"
+msgstr "Users"
+
+msgid "IntroductionTextAdd"
+msgstr "Add a page containing the introduction text to this section."
+
+msgid "CourseDescriptionAdd"
+msgstr "Add a page containing the course description to this section."
+
+msgid "GroupsAdd"
+msgstr "Add the Groups tool to this section."
+
+msgid "UsersAdd"
+msgstr "Add the Users tool to this section."
+
+msgid "ExportableCourseResources"
+msgstr "Exportable course resources"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Chamilo related course resources"
+
+msgid "LinkTarget"
+msgstr "Link\'s target"
+
+msgid "SameWindow"
+msgstr "In the same window"
+
+msgid "NewWindow"
+msgstr "In a new window"
+
+msgid "StepDeleted1"
+msgstr "This"
+
+msgid "StepDeleted2"
+msgstr "item was deleted in that tool."
+
+msgid "Modify"
+msgstr "Edit"
+
+msgid "Chapter"
+msgstr "Section"
+
+msgid "NoAgendaItems"
+msgstr "There are no events"
+
+msgid "AgendaAdd"
+msgstr "Add event"
+
+msgid "UserGroupFilter"
+msgstr "Filter on groups/users"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ascending"
+
+msgid "ShowCurrent"
+msgstr "Current month"
+
+msgid "ModifyCalendarItem"
+msgstr "Edit event"
+
+msgid "ItemTitle"
+msgstr "Event name"
+
+msgid "Detail"
+msgstr "Detail"
+
+msgid "EditSuccess"
+msgstr "Event edited"
+
+msgid "AddCalendarItem"
+msgstr "Add event to agenda"
+
+msgid "AddAnn"
+msgstr "Add announcement"
+
+msgid "ForumAddNewTopic"
+msgstr "Forum: add new topic"
+
+msgid "ForumEditTopic"
+msgstr "Forum: edit topic"
+
+msgid "ExerciseAnswers"
+msgstr "Test : Answers"
+
+msgid "ForumReply"
+msgstr "Forum: reply"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Descending"
+

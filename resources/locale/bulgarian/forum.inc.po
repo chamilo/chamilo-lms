@@ -1,0 +1,426 @@
+msgid "ForumDeleted"
+msgstr "Форумът е изтрит."
+
+msgid "ForumCategoryDeleted"
+msgstr "Категорията е изтрита."
+
+msgid "ForumLocked"
+msgstr "Форумът е блокиран."
+
+msgid "Forum"
+msgstr "Форуми"
+
+msgid "AddForumCategory"
+msgstr "Добавяне на категория"
+
+msgid "AddForum"
+msgstr "Добавяне"
+
+msgid "Topics"
+msgstr "Теми"
+
+msgid "Posts"
+msgstr "Съобщения"
+
+msgid "LastPosts"
+msgstr "Последно съобщение"
+
+msgid "Message"
+msgstr "Съобщение"
+
+msgid "NoForumInThisCategory"
+msgstr "Няма форуми в тази категория."
+
+msgid "InForumCategory"
+msgstr "Създаване в категорията"
+
+msgid "AllowAnonymousPosts"
+msgstr "Да се позволят ли анонимни съобщения?"
+
+msgid "StudentsCanEdit"
+msgstr "Могат ли потребителите да редактират собствените си съобщения?"
+
+msgid "ApprovalDirect"
+msgstr "Съобщение с / без одобряване"
+
+msgid "AllowNewThreads"
+msgstr "Разрешаване на потребителите да откриват нови теми"
+
+msgid "DefaultViewType"
+msgstr "Подразбиращ се преглед"
+
+msgid "GroupSettings"
+msgstr "Настройки на групата"
+
+msgid "NotAGroupForum"
+msgstr "Не е форум на група."
+
+msgid "PublicPrivateGroupForum"
+msgstr "Публичен или частен форум на групата?"
+
+msgid "Public"
+msgstr "За всички участници в курса"
+
+msgid "Private"
+msgstr "Само за участниците в групата"
+
+msgid "NewPostStored"
+msgstr "Вашето съобщение е записано."
+
+msgid "ReturnTo"
+msgstr "Можете да се върнете в"
+
+msgid "Or"
+msgstr "или"
+
+msgid "ReplyToThread"
+msgstr "Отговор по темата"
+
+msgid "ReplyToMessage"
+msgstr "Отговор на това съобщение"
+
+msgid "QuoteMessage"
+msgstr "Цитат на съобщението"
+
+msgid "NewTopic"
+msgstr "Нова тема"
+
+msgid "Replies"
+msgstr "Отговори"
+
+msgid "Views"
+msgstr "Преглед"
+
+msgid "LastPost"
+msgstr "Последно съобщение"
+
+msgid "Quoting"
+msgstr "Цитат"
+
+msgid "NotifyByEmail"
+msgstr "Уведоми ме по e-mail, когато някой отговори."
+
+msgid "StickyPost"
+msgstr "Това е \"лепкаво\" съобщение - появява се винаги най-отгоре."
+
+msgid "ReplyShort"
+msgstr "Re:"
+
+msgid "DeletePost"
+msgstr "Изтриването на това съобщение ще изтрие и отговорите към него. Моля, направете структуриран преглед, за да видите, кои отговори ще се изтрият.<br/>Наистина ли искате да изтриете това съобщение?"
+
+msgid "Locked"
+msgstr "Заключване: курсистите не могат да изпращат нови съобщения в съответната категория или тема, но все още могат да четат съществуващите отпреди съобщения."
+
+msgid "Unlocked"
+msgstr "Отключване: курсистите могат да изпращат нови съобщения в съответната категория или тема."
+
+msgid "Flat"
+msgstr "Линеен"
+
+msgid "Threaded"
+msgstr "Тематичен"
+
+msgid "Nested"
+msgstr "Йеархичен"
+
+msgid "FlatView"
+msgstr "Линеен преглед"
+
+msgid "ThreadedView"
+msgstr "Тематичен преглед"
+
+msgid "NestedView"
+msgstr "Йеархичен преглед"
+
+msgid "Structure"
+msgstr "Структура"
+
+msgid "ForumCategoryAdded"
+msgstr "Категорията е добавена."
+
+msgid "ForumCategoryEdited"
+msgstr "Категорията е редактирана."
+
+msgid "ForumAdded"
+msgstr "Форумът е създаден."
+
+msgid "ForumEdited"
+msgstr "Форумът е променен."
+
+msgid "NewThreadStored"
+msgstr "Новата тема е добавена."
+
+msgid "Approval"
+msgstr "С одобряване"
+
+msgid "Direct"
+msgstr "Без контрол"
+
+msgid "ForGroup"
+msgstr "За групата"
+
+msgid "ThreadLocked"
+msgstr "Темата е заключена."
+
+msgid "NotAllowedHere"
+msgstr "Нямате достъп тук."
+
+msgid "ReplyAdded"
+msgstr "Отговорът е изпратен."
+
+msgid "EditPost"
+msgstr "Редактиране на статия"
+
+msgid "EditPostStored"
+msgstr "Съобщението е променено."
+
+msgid "NewForumPost"
+msgstr "Ново съобщение във форума"
+
+msgid "YouWantedToStayInformed"
+msgstr "Вие пожелахте да бъдете информирани с e-mail, когато някой отговори по темата."
+
+msgid "MessageHasToBeApproved"
+msgstr "Въшето съобщение трябва да бъде одобрено, преди да се покаже на другите участници."
+
+msgid "AllowAttachments"
+msgstr "Разрешаване да се прикачват файлове"
+
+msgid "EditForumCategory"
+msgstr "Редактиране на категорията"
+
+msgid "MovePost"
+msgstr "Преместване на съобщението"
+
+msgid "MoveToThread"
+msgstr "Преместване в тема"
+
+msgid "ANewThread"
+msgstr "Нова тема"
+
+msgid "Reply"
+msgstr "Отговор"
+
+msgid "DeleteForum"
+msgstr "Да се изтрие ли форума?"
+
+msgid "DeleteForumCategory"
+msgstr "Да се изтрие ли категорията?"
+
+msgid "Lock"
+msgstr "Заключване"
+
+msgid "Unlock"
+msgstr "Отключване"
+
+msgid "MoveThread"
+msgstr "Преместване на темата"
+
+msgid "PostVisibilityChanged"
+msgstr "Видимостта на съобщението е променена."
+
+msgid "PostDeleted"
+msgstr "Съобщението е изтрито."
+
+msgid "MakeInvisible"
+msgstr "Скриване"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "Темата се намира тук"
+
+msgid "MakeVisible"
+msgstr "Показване"
+
+msgid "DeleteCompleteThread"
+msgstr "Да се изтрше ли цялата темя?"
+
+msgid "PostDeletedSpecial"
+msgstr "Специалното съобщение е изтрито."
+
+msgid "ThreadDeleted"
+msgstr "Темата е изтрита"
+
+msgid "NextMessage"
+msgstr "Следващо съобщение"
+
+msgid "PrevMessage"
+msgstr "Предишно съобщение"
+
+msgid "FirstMessage"
+msgstr "Първо съобщение"
+
+msgid "LastMessage"
+msgstr "Последно съобщение"
+
+msgid "ForumSearch"
+msgstr "Търсене във форума"
+
+msgid "SearchTerm"
+msgstr "Израз за търсене"
+
+msgid "ForumSearchResults"
+msgstr "Резултати от търсенето във форума"
+
+msgid "ForumSearchInformation"
+msgstr "Ако търсите по няколко думи изпишете ги със знака + между тях."
+
+msgid "YouWillBeNotifiedOfNewPosts"
+msgstr "Ще бъдете уведомявани за нови съобщения чрез e-mail."
+
+msgid "YouWillNoLongerBeNotifiedOfNewPosts"
+msgstr "Няма да бъдете уведомявани за нови съобщения чрез e-mail."
+
+msgid "AddImage"
+msgstr "Добавяне на изображени"
+
+msgid "QualifyThread"
+msgstr "Оценяване на темата"
+
+msgid "ThreadUsersList"
+msgstr "Курсисти в темата"
+
+msgid "StudentList"
+msgstr "Списък на курсистите"
+
+msgid "QualifyThisThread"
+msgstr "Оценка на темата"
+
+msgid "CourseUsers"
+msgstr "Курсисти"
+
+msgid "PostsNumber"
+msgstr "Брой съобщения"
+
+msgid "NumberOfPostsForThisUser"
+msgstr "Брой съобщения за потребителя"
+
+msgid "AveragePostPerUser"
+msgstr "Съобщения за потребител"
+
+msgid "QualificationChangesHistory"
+msgstr "История на оценките"
+
+msgid "MoreRecent"
+msgstr "по-нови"
+
+msgid "Older"
+msgstr "по-стари"
+
+msgid "OrderBy"
+msgstr "Сортиране по"
+
+msgid "WhoChanged"
+msgstr "Кой е променял"
+
+msgid "NoteChanged"
+msgstr "Бележка относно промяната"
+
+msgid "DateChanged"
+msgstr "Дата на промяната"
+
+msgid "ViewComentPost"
+msgstr "Преглед на коментарите"
+
+msgid "AllStudents"
+msgstr "Всички курсисти"
+
+msgid "StudentsQualified"
+msgstr "Оценени курсисти"
+
+msgid "StudentsNotQualified"
+msgstr "Курсисти без оценка"
+
+msgid "NamesAndLastNames"
+msgstr "Име и фамилия"
+
+msgid "MaxScore"
+msgstr "Максимален резултат"
+
+msgid "QualificationCanNotBeGreaterThanMaxScore"
+msgstr "Оценката не може да надмине максималната си стойност."
+
+msgid "ThreadStatistics"
+msgstr "Статистика за темата"
+
+msgid "Thread"
+msgstr "Тема"
+
+msgid "NotifyMe"
+msgstr "Извести ме"
+
+msgid "ConfirmUserQualification"
+msgstr "Потвърждаване на оценката"
+
+msgid "NotChanged"
+msgstr "Без промени"
+
+msgid "TitleColumnGradebook"
+msgstr "Наименование на колоната в справката за успеха"
+
+msgid "QualifyThreadGradebook"
+msgstr "Оценка на темата"
+
+msgid "QualifyWeight"
+msgstr "Тегло за оценка"
+
+msgid "QualifyNumeric"
+msgstr "Резултат"
+
+msgid "AlterQualifyThread"
+msgstr "Редактиране на оценката по темата"
+
+msgid "ForumMoved"
+msgstr "Форумът е преместен."
+
+msgid "YouMustAssignWeightOfQualification"
+msgstr "Трябва на поставите тегло на оценката."
+
+msgid "DeleteAttachmentFile"
+msgstr "Изтриване на приложения файл"
+
+msgid "EditAnAttachment"
+msgstr "Редактиране на приложението"
+
+msgid "SeeForum"
+msgstr "Към форума"
+
+msgid "CreateForum"
+msgstr "Създаване на форум"
+
+msgid "ModifyForum"
+msgstr "Редактиране на форума"
+
+msgid "CreateThread"
+msgstr "Нова тема"
+
+msgid "ModifyThread"
+msgstr "Редактиране на темата"
+
+msgid "EditForum"
+msgstr "Редактиране на форума"
+
+msgid "BackToForum"
+msgstr "Обратно към форума"
+
+msgid "BackToForumOverview"
+msgstr "Обратно към списъка с форуми"
+
+msgid "BackToThread"
+msgstr "Обратно към темата"
+
+msgid "ForumcategoryLocked"
+msgstr "Категорията форуми е заключена."
+
+msgid "PreviewImage"
+msgstr "Преглеждане на изображението"
+
+msgid "UpdateImage"
+msgstr "Промяна на изображението"
+
+msgid "EnableTimeLimits"
+msgstr "Активиране на времеви лимити"
+
+msgid "RemoveSearchResults"
+msgstr "Изчистване на резултатите от търсенето"
+

@@ -1,0 +1,229 @@
+msgid "langInvalidId"
+msgstr "خطای ورود - نام کاربری و یا کلمه عبور اشتباه"
+
+msgid "langWelcome"
+msgstr "خوش آمدید"
+
+msgid "langPass"
+msgstr "کلمه عبور"
+
+msgid "langEnter"
+msgstr "بازگشت به فهرست دروس"
+
+msgid "langReg"
+msgstr "ثبت نام"
+
+msgid "langMenu"
+msgstr "فهرست"
+
+msgid "langAdvises"
+msgstr "توصیه ها"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>توجه :</b> درس مورد نظر موجود نمی باشد"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "برای دسترسی به این درس از طریق محیط آموزشی قدیم خود اینجا را فشار دهید"
+
+msgid "langOtherCourses"
+msgstr "دیگر دروس"
+
+msgid "langSupportForum"
+msgstr "انجمن پشتیبانی"
+
+msgid "langCategories"
+msgstr "دسته ها"
+
+msgid "langBackToHomePage"
+msgstr "نمایش دسته ها"
+
+msgid "lang_No_course_publicly_available"
+msgstr "هیچ درسی برای دسترسی عمومی موجود نمی باشد"
+
+msgid "langLostPassword"
+msgstr "کلمه عبور را فراموش کرده اید؟"
+
+msgid "lang_edit_my_course_list"
+msgstr "تغییر فهرست دروس"
+
+msgid "langAgenda"
+msgstr "تقویم آموزشی"
+
+msgid "langValvas"
+msgstr "آخرین اطلاعیه ها"
+
+msgid "langUp"
+msgstr "بالا"
+
+msgid "langCatList"
+msgstr "دسته بندی"
+
+msgid "langCourseList"
+msgstr "لیست دروس"
+
+msgid "langHelptwo"
+msgstr "راهنمایی"
+
+msgid "langRegAll"
+msgstr "ثبت نام"
+
+msgid "EussMenu"
+msgstr "فهرست"
+
+msgid "Opinio"
+msgstr "نظر"
+
+msgid "Intranet"
+msgstr "اینترانت"
+
+msgid "Englin"
+msgstr "انگلیسی"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "نام کاربری یا کلمه ورود مورد نظر شما برای سیستم شناخته شده نیست. اگر تاکنون ثبت نام نکرده اید می توانید با رفتن به <a href=claroline/auth/inscription.php>قسمت ثبت نام</a> این کار را انجام دهید"
+
+msgid "langSubCat"
+msgstr "زیر دسته ها"
+
+msgid "langMenuGeneral"
+msgstr "راهنمایی"
+
+msgid "langMenuUser"
+msgstr "مشخصات من"
+
+msgid "langMenuAdmin"
+msgstr "پرتال مدیر"
+
+msgid "langUsersOnLineList"
+msgstr "فهرست افراد متصل"
+
+msgid "langTotalOnLine"
+msgstr "تعداد کل افراد متصل"
+
+msgid "langRefresh"
+msgstr "تجدید کردن"
+
+msgid "langMe"
+msgstr "خودم"
+
+msgid "langSystemAnnouncements"
+msgstr "پیام های سیستم"
+
+msgid "langHelpMaj"
+msgstr "راهنمایی"
+
+msgid "langNotRegistered"
+msgstr "اگر تا کنون دراین محیط آموزشی ثبت نام نکرده اید، لطفاً با استفاده از <a href=\"claroline/auth/inscription.php\"> فرم ثبت نام </a> این کار را انجام دهید"
+
+msgid "langAdmin"
+msgstr "پرتال مدیر"
+
+msgid "Login"
+msgstr "نام کاربری"
+
+msgid "langRegisterForCourse"
+msgstr "ثبت نام درس"
+
+msgid "langUnregisterForCourse"
+msgstr "ابطال ثبت نام درس"
+
+msgid "langCombinedCourse"
+msgstr "درس ترکیبی"
+
+msgid "Platform"
+msgstr "محیط آموزشی مجازی"
+
+msgid "Refresh"
+msgstr "تجدید"
+
+msgid "TotalOnLine"
+msgstr "تعداد کل کاربران متصل"
+
+msgid "langCourseClosed"
+msgstr "این درس فعلاً بسته است"
+
+msgid "ViewOpenCourses"
+msgstr "نمایش دروس باز"
+
+msgid "langCompetences"
+msgstr "توانایی ها"
+
+msgid "langDiplomas"
+msgstr "گواهی های تحصیلی"
+
+msgid "langTeach"
+msgstr "دروسی که میتواند تدریس کند"
+
+msgid "langProductions"
+msgstr "آفرینش ها و انتشارات"
+
+msgid "langSendChatRequest"
+msgstr "درخواست از این شخص برای گفتگو"
+
+msgid "langRequestDenied"
+msgstr "درخواست گفتگوی شما مورد قبول فرد مورد نظر قرار نگرفت"
+
+msgid "UsageDatacreated"
+msgstr "آمار داده ها ساخته شد"
+
+msgid "SessionView"
+msgstr "نمایش تمرین ها به ترتیب جلسه های تمرین"
+
+msgid "CourseView"
+msgstr "لیست کامل  دروس را نمایش داده شود"
+
+msgid "DropboxFileAdded"
+msgstr "فایل اضافه شد"
+
+msgid "NewMessageInForum"
+msgstr "پیام جدید در انجمن ارسال شد"
+
+msgid "FolderCreated"
+msgstr "پوشه جدید ساخته شد"
+
+msgid "LinkAdded"
+msgstr "ارزیابی"
+
+msgid "AnnouncementAdded"
+msgstr "اطلاعیه اضافه شد"
+
+msgid "AgendaAdded"
+msgstr "رویداد اضافه شد"
+
+msgid "LoginEnter"
+msgstr "ورود"
+
+msgid "Messages"
+msgstr "پیام ها"
+
+msgid "Inbox"
+msgstr "صندوق ورودی"
+
+msgid "Comppose"
+msgstr "ارسال پیام"
+
+msgid "PendingInvitations"
+msgstr "دعوتنامه های معلق"
+
+msgid "YouDoNotHaveAnySessionInItsHistory"
+msgstr "شما هیچ جلسه ای در تاریخ جلسات خود ندارید"
+
+msgid "PortalHomepageDefaultIntroduction"
+msgstr "تبریک می گوییم! شما با موفقیت سیستم آموزشی خود را نصب کرده اید."
+
+msgid "Username"
+msgstr "نام کاربری"
+
+msgid "GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX"
+msgstr "پیش بروید و کاتالوگ دروس خود را بگردید و به هر درسی که خواستید ثبت نام کنید. پس از ثبت نام، شما خواهید دید که بجای این پیام درس در سمت راست %s نمایش داده می شود."
+
+msgid "HelloXAsYouCanSeeYourCourseListIsEmpty"
+msgstr "سلام علیکم %s ، خوش آمدید،
+همانطور که می بینید، فهرست دروس شما هنوز خالی هست. به این خاطر هست که شما تا بحال در هیچ درسی ثبت نام نکرده اید!"
+
+msgid "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"
+msgstr "لطفا مقداری زمان بدهید تا شما را در یکی از دروس خود ثبت نام کنیم. اگر فکر می کنید که ما شما را نادیده گرفته ایم، با مدیر پرتال تماس بگیرید. شما معمولا در پایین صفحه قادر به پیدا کردن جزئیات تماس ایشان خواهید بود."
+
+msgid "Profile"
+msgstr "مشخصات من"
+

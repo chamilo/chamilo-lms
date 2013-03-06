@@ -1,0 +1,231 @@
+msgid "langNewGroupCreate"
+msgstr "새 그룹 생성"
+
+msgid "langGroupCreation"
+msgstr "새 그룹 생성"
+
+msgid "langCreate"
+msgstr "생성"
+
+msgid "langNewGroups"
+msgstr "새 그룹"
+
+msgid "langMax"
+msgstr "최대. 20 자, e.g. <i>INNOV21</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "좌석(부가항목)"
+
+msgid "langGroupsAdded"
+msgstr "그룹이 추가되었습니다"
+
+msgid "langGroupDel"
+msgstr "그룹이 삭제되었습니다"
+
+msgid "langDocuments"
+msgstr "문서"
+
+msgid "langExistingGroups"
+msgstr "그룹"
+
+msgid "langRegistered"
+msgstr "등록됨"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "유저는 그룹별로 직접등록 하는 것이 허용되었습니다"
+
+msgid "langGroupTools"
+msgstr "도구"
+
+msgid "langGroupDocument"
+msgstr "문서"
+
+msgid "langGroupPropertiesModified"
+msgstr "그룹 설정이 변경되었습니다"
+
+msgid "langGroupSpace"
+msgstr "그룹 영역"
+
+msgid "langGroupName"
+msgstr "그룹 명"
+
+msgid "langGroupDescription"
+msgstr "그룹 설명"
+
+msgid "langGroupMembers"
+msgstr "그룹 멤버"
+
+msgid "langEditGroup"
+msgstr "그룹정보 수정"
+
+msgid "Optional"
+msgstr "(부가항목)"
+
+msgid "langGroupTooMuchMembers"
+msgstr "지정된 수가 허용한도를 초과하였습니다(아래에서 수정가능). 그룹 구성이 변경되지 않았습니다."
+
+msgid "langGroupTutor"
+msgstr "그룹 튜터"
+
+msgid "langGroupNoTutor"
+msgstr "(none)"
+
+msgid "langGroupNone"
+msgstr "(none)"
+
+msgid "langGroupNoneMasc"
+msgstr "(none)"
+
+msgid "langAddTutors"
+msgstr "관리자 목록"
+
+msgid "langMyGroup"
+msgstr "내 그룹"
+
+msgid "langOneMyGroups"
+msgstr "내 교사"
+
+msgid "langGroupSelfRegistration"
+msgstr "등록"
+
+msgid "langGroupSelfRegInf"
+msgstr "등록"
+
+msgid "langRegIntoGroup"
+msgstr "나를 이 그룹에 추가"
+
+msgid "langGroupNowMember"
+msgstr "이제 이 그룹의 멤버가 되었습니다."
+
+msgid "langPrivate"
+msgstr "개인 접근 (유저 리스트에 있는 사람만이 접근 가능합니다)"
+
+msgid "langPublic"
+msgstr "로그인 없이도 포털 홈페이지로부터 누구나 접근 가능"
+
+msgid "langPropModify"
+msgstr "설정 수정"
+
+msgid "langState"
+msgstr "상태"
+
+msgid "langGroupFilledGroups"
+msgstr "그룹은 \"Users\"목록에 나타난 유저들로 채워집니다."
+
+msgid "langSubscribed"
+msgstr "이 과정에 등록한 유저"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "이 그룹에 속하지 않는 유저"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "제한 인원의 수만큼 유저가 등록할 수 있습니다."
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr "?그룹"
+
+msgid "langGroupLimit"
+msgstr "제한"
+
+msgid "langStudentRegAllowed"
+msgstr "학생들은 스스로 그룹에 등록할 수 있습니다"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "유저는 스스로 그룹에서 탈퇴할 수 있습니다"
+
+msgid "langAllGroups"
+msgstr "모든 그룹"
+
+msgid "langStudentUnsubscribe"
+msgstr "이 그룹에서 나를 제외시킴"
+
+msgid "langStudentDeletesHimself"
+msgstr "그룹에서 제외되었습니다."
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "새 그룹의 기본 설정"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "선택된 모든 그룹이 삭제되었습니다"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "선택한 모든 그룹이 이제 존재하지 않습니다"
+
+msgid "langGroupEmptied"
+msgstr "그룹이 현재 존재하지 않습니다"
+
+msgid "langSelectedGroupsFilled"
+msgstr "선택한 모든 그룹의 인원이 찼습니다"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "등록 취소"
+
+msgid "langSameForAll"
+msgstr "모두 같음"
+
+msgid "langNoLimit"
+msgstr "제한없음"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "원하는 그룹 수를 입력하십시요"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "이 과정은 실제 과정과 한개 혹은 그 이상의 가상 과정이 결합된 것입니다. 만일 다음 버튼을 누르면, 이 과정에 대한 새 그룹이 생성될 것입니다. 모든 학생들은 그룹에 등록할 수 있습니다."
+
+msgid "langNoGroupsAvailable"
+msgstr "적합한 그룹이 없습니다"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "가상 과정"
+
+msgid "NotAvailable"
+msgstr "적합하지 않음"
+
+msgid "CreateSubgroups"
+msgstr "하위그룹 생성"
+
+msgid "CreateSubgroupsInfo"
+msgstr "이 옵션은 기존 그룹에 근거하여 새 그룹을 생성할 수 있도록 허용해줍니다. 원하는 그룹 수를 제공하고 존재하는 그룹에서도 선택할 수 있도록 해줍니다. 주어진 그룹 수만큼 새로 생성이 되고 기존 그룹의 모든 멤버는 그러한 새 그룹에 등록할 수 있습니다. 존재하는 그룹에는 영향을 미치지 않습니다."
+
+msgid "CreateNumberOfGroups"
+msgstr "생성"
+
+msgid "WithUsersFrom"
+msgstr "멤버가 있는 그룹"
+
+msgid "CategoryDeleted"
+msgstr "카테고리가 삭제되었습니다"
+
+msgid "Empty"
+msgstr "비었음"
+
+msgid "FillGroup"
+msgstr "유저 추가"
+
+msgid "EmptyGroup"
+msgstr "모든 듀저 등록 취소"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "당신이 제시한 유저 당 그룹의 최대 수가 부정확합니다. 현재 당신이 제안한 그룹보다 더 많은 수의 그룹에 등록한 유저가 존재합니다."
+
+msgid "GroupOverview"
+msgstr "그룹 개요"
+
+msgid "GroupCategory"
+msgstr "그룹 카테고리"
+
+msgid "NoTitleGiven"
+msgstr "제목을 입력하십시요"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "최대 멤버 수를 정확히 기입해주십시요"
+
+msgid "CategoryOrderChanged"
+msgstr "카테고리 순서가 변경되었습니다"
+
+msgid "Wiki"
+msgstr "그룹 위키"
+
+msgid "CategoryCreated"
+msgstr "카테고리가 생성되었습니다"
+

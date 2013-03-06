@@ -1,0 +1,630 @@
+msgid "langToolName"
+msgstr "Увези курсеви од Blackboard"
+
+msgid "TrackingDisabled"
+msgstr "Следењето беше овозможено од управувачот на системот."
+
+msgid "InactivesStudents"
+msgstr "Неактивни ученици"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Просечно време поминато на платформата"
+
+msgid "AverageCoursePerStudent"
+msgstr "Просечен број на курсеви по ученик"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Просечен напредок во патеките_на_учењето"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Просечен резултат на вежбите"
+
+msgid "SeeStudentList"
+msgstr "Види го списокот на ученици"
+
+msgid "NbActiveSessions"
+msgstr "Активни сесии"
+
+msgid "NbPastSessions"
+msgstr "Минати сесии"
+
+msgid "NbFutureSessions"
+msgstr "Идни сесии"
+
+msgid "NbStudentPerSession"
+msgstr "Број на ученици по сесија"
+
+msgid "NbCoursesPerSession"
+msgstr "Број на курсеви по сесија"
+
+msgid "SeeSessionList"
+msgstr "Види го списокот на сесии"
+
+msgid "langShowNone"
+msgstr "Не покажувај ништо"
+
+msgid "langCourseStats"
+msgstr "Статистики на курсот"
+
+msgid "langToolsAccess"
+msgstr "Пристап до алатките"
+
+msgid "langCourseAccess"
+msgstr "Пристап до курсот"
+
+msgid "langLinksAccess"
+msgstr "Врски"
+
+msgid "langDocumentsAccess"
+msgstr "Документи"
+
+msgid "langScormAccess"
+msgstr "Патека на учењето - курсеви во Scorm формат"
+
+msgid "langLinksDetails"
+msgstr "Врски до кои пристапил корисникот"
+
+msgid "langWorksDetails"
+msgstr "Трудови качени од корисникот во име на \'Автори\'"
+
+msgid "langLoginsDetails"
+msgstr "Кликнете на името на месецот за повеќе детали"
+
+msgid "langDocumentsDetails"
+msgstr "Документи симнати од корисникот"
+
+msgid "langExercicesDetails"
+msgstr "Резултат од изработените тестови"
+
+msgid "langBackToList"
+msgstr "Назад до спискот на корисници"
+
+msgid "langDetails"
+msgstr "Детали"
+
+msgid "langStatsOfCourse"
+msgstr "Статистики за областа на курсот"
+
+msgid "langStatsOfUser"
+msgstr "Статистики на корисникот"
+
+msgid "langStatsOfCampus"
+msgstr "Статистики на порталот"
+
+msgid "langCountUsers"
+msgstr "Број на корисници"
+
+msgid "langCountToolAccess"
+msgstr "Вкупен број на поврзувања со овој курс"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Месец"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Број на најавувања"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Име на алатката"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Кликови на корисникот"
+
+msgid "langToolTitleCountColumn"
+msgstr "Вкупно кликови"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Врска"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Кликови на корисниците"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Вкупно кликови"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Тест"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Резултат"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Документ"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Симнувања на корисниците"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Вкупно симнувања"
+
+msgid "langScormContentColumn"
+msgstr "Наслов"
+
+msgid "langScormStudentColumn"
+msgstr "Корисници"
+
+msgid "langScormTitleColumn"
+msgstr "Лекција/Чекор"
+
+msgid "langScormStatusColumn"
+msgstr "Статус"
+
+msgid "langScormScoreColumn"
+msgstr "Резултат"
+
+msgid "langScormTimeColumn"
+msgstr "Време"
+
+msgid "langScormNeverOpened"
+msgstr "&#1050;&#1086;&#1088;&#1080;&#1089;&#1085;&#1080;&#1082;&#1086;&#1090; &#1085;&#1080;&#1082;&#1086;&#1075;&#1072;&#1096; &#1085;&#1077; &#1075;&#1086; &#1086;&#1090;&#1074;&#1086;&#1088;&#1080;&#1083; &#1086;&#1074;&#1086;&#1112; &#1082;&#1091;&#1088;&#10"
+
+msgid "langWorkTitle"
+msgstr "Наслов"
+
+msgid "langWorkAuthors"
+msgstr "Автори"
+
+msgid "langWorkDescription"
+msgstr "Опис"
+
+msgid "informationsAbout"
+msgstr "Следење на"
+
+msgid "langNoEmail"
+msgstr "не е определена ниедна e-mail адреса"
+
+msgid "langNoResult"
+msgstr "Сеуште нема резултати"
+
+msgid "langCourse"
+msgstr "Област"
+
+msgid "langHits"
+msgstr "Погодоци"
+
+msgid "langTotal"
+msgstr "Вкупно"
+
+msgid "langHour"
+msgstr "Час"
+
+msgid "langDay"
+msgstr "ден"
+
+msgid "langLittleHour"
+msgstr "ч."
+
+msgid "langLast31days"
+msgstr "Во последните 31 дена."
+
+msgid "langLast7days"
+msgstr "Во последните 7 дена"
+
+msgid "langThisday"
+msgstr "&#1044;&#1077;&#1085;&#1077;&#1089;"
+
+msgid "langLogins"
+msgstr "Најавувања"
+
+msgid "langLoginsExplaination"
+msgstr "&#1054;&#1074;&#1072; &#1077; &#1089;&#1087;&#1080;&#1089;&#1086;&#1082;&#1086;&#1090; &#1085;&#1072; &#1042;&#1072;&#1096;&#1080;&#1090;&#1077; &#1087;&#1086;&#1089;&#1083;&#1077;&#1076;&#1085;&#1080; &#1085;&#1072;&#1112;&#1072;&#1074;&#1091;&#1074;&#10"
+
+msgid "langExercicesResults"
+msgstr "Резултат од изработените тестови"
+
+msgid "langVisits"
+msgstr "посети"
+
+msgid "langAt"
+msgstr "на"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Датум"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Посети"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Најви и пристапдо алатките"
+
+msgid "langWorkUploads"
+msgstr "Качени прилози"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Неисправен корсиник: ваков корисник не постои во Вашата група"
+
+msgid "langListStudents"
+msgstr "Список на корисници во оваа група"
+
+msgid "langPeriodHour"
+msgstr "Час"
+
+msgid "langPeriodDay"
+msgstr "Ден"
+
+msgid "langPeriodWeek"
+msgstr "Седмица"
+
+msgid "langPeriodMonth"
+msgstr "Месец"
+
+msgid "langPeriodYear"
+msgstr "Година"
+
+msgid "langNextDay"
+msgstr "Следниот ден"
+
+msgid "langPreviousDay"
+msgstr "Претходниот ден"
+
+msgid "langNextWeek"
+msgstr "Следната седмица"
+
+msgid "langPreviousWeek"
+msgstr "Претходната седмица"
+
+msgid "langNextMonth"
+msgstr "Следниот месец"
+
+msgid "langPreviousMonth"
+msgstr "Претходниот месец"
+
+msgid "langNextYear"
+msgstr "Следната година"
+
+msgid "langPreviousYear"
+msgstr "Претходната година"
+
+msgid "langViewToolList"
+msgstr "Приказ на Списокот со Сите Алатки"
+
+msgid "langToolList"
+msgstr "Список на сите алатки"
+
+msgid "langFrom"
+msgstr "Од"
+
+msgid "langTo"
+msgstr "до"
+
+msgid "langPeriodToDisplay"
+msgstr "Период"
+
+msgid "langDetailView"
+msgstr "Видено од"
+
+msgid "langBredCrumpGroups"
+msgstr "Групи"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Опкружување на групите"
+
+msgid "langBredCrumpUsers"
+msgstr "Корисници"
+
+msgid "langAdminToolName"
+msgstr "Статистики за управувачот"
+
+msgid "langPlatformStats"
+msgstr "Статистики за платформата"
+
+msgid "langStatsDatabase"
+msgstr "Статистики за Базата на податоци"
+
+msgid "langPlatformAccess"
+msgstr "Пристап до порталот"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Пристап до курсевите"
+
+msgid "langPlatformToolAccess"
+msgstr "Пристап до алатките"
+
+msgid "langHardAndSoftUsed"
+msgstr "Земји, Провајдери, Прелистувачи, Референци на оперативните системи"
+
+msgid "langStrangeCases"
+msgstr "Проблематични случаи"
+
+msgid "langStatsDatabaseLink"
+msgstr "Кликнете овде"
+
+msgid "langCountCours"
+msgstr "Број на курсеви"
+
+msgid "langCountCourseByFaculte"
+msgstr "Број не курсеви по категории"
+
+msgid "langCountCourseByLanguage"
+msgstr "Број на курсеви по јазици"
+
+msgid "langCountCourseByVisibility"
+msgstr "Број на курсеви по видливост"
+
+msgid "langCountUsersByCourse"
+msgstr "Број на корисници по курс"
+
+msgid "langCountUsersByFaculte"
+msgstr "Број на корисници по категорија"
+
+msgid "langCountUsersByStatus"
+msgstr "Број на корисници по статус"
+
+msgid "langAccess"
+msgstr "Пристап"
+
+msgid "langCountries"
+msgstr "Земји"
+
+msgid "langProviders"
+msgstr "Провајдери"
+
+msgid "langOS"
+msgstr "Оперативни системи"
+
+msgid "langBrowsers"
+msgstr "Прелистувачи"
+
+msgid "langReferers"
+msgstr "Препорачувачи"
+
+msgid "langAccessExplain"
+msgstr "(Кога корсиник ќе го отвори индексот на порталот)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Вкупно"
+
+msgid "langTotalPlatformLogin"
+msgstr "Вкупно"
+
+msgid "langMultipleLogins"
+msgstr "Досиеја со исто <i>Корисничко_име</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Досиеја со исто <i>Корисничко_име</i> И иста <i>Лозинка</i>"
+
+msgid "langMultipleEmails"
+msgstr "Досиеја со ист <i>E-mail</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "курсеви без водач"
+
+msgid "langCourseWithoutAccess"
+msgstr "Курсот не е ползуван"
+
+msgid "langLoginWithoutAccess"
+msgstr "Корисничкото_име не е ползувано"
+
+msgid "langAllRight"
+msgstr "&#1054;&#1074;&#1076;&#1077; &#1085;&#1077;&#1084;&#1072; &#1095;&#1091;&#1076;&#1077;&#1085; &#1089;&#1083;&#1091;&#1095;&#1072;&#1112;"
+
+msgid "langDefcon"
+msgstr "Ууупс, откриен проблематичен случај!!"
+
+msgid "langNULLValue"
+msgstr "Празно (или неважечко - NULL)"
+
+msgid "langTrafficDetails"
+msgstr "Детали за сообраќајот"
+
+msgid "langSeeIndividualTracking"
+msgstr "За индивидуално следење видете ја алатката <a href=../user/user.php>Корисници</a>."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "&#1053;&#1080;&#1082;&#1086;&#1112; &#1085;&#1080;&#1082;&#1086;&#1075;&#1072;&#1096; &#1085;&#1077; &#1112;&#1072; &#1086;&#1090;&#1074;&#1086;&#1088;&#1080;&#1083; &#1086;&#1074;&#1072;&#1072; &#1087;&#1072;&#1090;&#1077;&#1082;&#1072;."
+
+msgid "SynthesisView"
+msgstr "Синтетички поглед"
+
+msgid "Visited"
+msgstr "Посетено"
+
+msgid "FirstAccess"
+msgstr "Прв пристап"
+
+msgid "LastAccess"
+msgstr "Последен пристап"
+
+msgid "langProbationers"
+msgstr "Ученици"
+
+msgid "MoyenneTest"
+msgstr "Просек на тестот"
+
+msgid "exportExcel"
+msgstr "Извези во Excel формат"
+
+msgid "MoyCourse"
+msgstr "Просек на курсот"
+
+msgid "MoyenneExamen"
+msgstr "Просек на испитот"
+
+msgid "MoySession"
+msgstr "Просек на сесијата"
+
+msgid "TakenSessions"
+msgstr "Запишани сесии"
+
+msgid "FollowUp"
+msgstr "Следи"
+
+msgid "Trainers"
+msgstr "Обучувачи"
+
+msgid "Administrators"
+msgstr "Управувачи"
+
+msgid "Tracks"
+msgstr "Следења"
+
+msgid "Success"
+msgstr "Успех"
+
+msgid "ExcelFormat"
+msgstr "Excel формат"
+
+msgid "MyLearnpath"
+msgstr "Моја Патека_на_учењето"
+
+msgid "Time"
+msgstr "Време"
+
+msgid "Score"
+msgstr "Резултат"
+
+msgid "LastConnexion"
+msgstr "Последно поврзување"
+
+msgid "ConnectionTime"
+msgstr "Време на поврзувањето"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Поврзувања со овој курс"
+
+msgid "StudentTutors"
+msgstr "Обучувачи на курсистот"
+
+msgid "StudentSessions"
+msgstr "Сесии на курсистот"
+
+msgid "StudentCourses"
+msgstr "Курсеви на студентот"
+
+msgid "NoLearnpath"
+msgstr "Нема Патека_на_учењето"
+
+msgid "Attempts"
+msgstr "Обиди"
+
+msgid "Correction"
+msgstr "Корекција"
+
+msgid "NoExercise"
+msgstr "Нема вежби"
+
+msgid "LimitDate"
+msgstr "Краен рок"
+
+msgid "SentDate"
+msgstr "Датум на испраќање"
+
+msgid "Annotate"
+msgstr "Припиши"
+
+msgid "DayOfDelay"
+msgstr "Ден(ови) на доцнење"
+
+msgid "NoProduction"
+msgstr "Нема производи"
+
+msgid "NoComment"
+msgstr "Нема коментар"
+
+msgid "LatestLogin"
+msgstr "Последно поврзување"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Време поминато на платформата"
+
+msgid "Messages"
+msgstr "Пораки"
+
+msgid "AveragePostsInForum"
+msgstr "Просечен број на написи во форумот"
+
+msgid "AverageAssignments"
+msgstr "Просечен број на известувања"
+
+msgid "Print"
+msgstr "Печати"
+
+msgid "StudentDetails"
+msgstr "Детали за ученикот"
+
+msgid "StudentDetailsInCourse"
+msgstr "Детали за ученикот во курсот"
+
+msgid "Learnpaths"
+msgstr "Патеки_на_учењето"
+
+msgid "OtherTools"
+msgstr "Други алатки"
+
+msgid "DetailsStudentInCourse"
+msgstr "Детали за курсистот во курсот"
+
+msgid "CourseTitle"
+msgstr "Наслов на курсот"
+
+msgid "NbStudents"
+msgstr "Број на ученици"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Време поминато на курсот"
+
+msgid "AvgStudentsProgress"
+msgstr "Просечен напредок на учениците"
+
+msgid "AvgCourseScore"
+msgstr "Просечни резултати на учениците"
+
+msgid "AvgMessages"
+msgstr "Пораки по ученик"
+
+msgid "AvgAssignments"
+msgstr "Задачи по ученик"
+
+msgid "ToolsMostUsed"
+msgstr "Најползувани алатки"
+
+msgid "StudentsTracking"
+msgstr "Следење на учениците"
+
+msgid "CourseTracking"
+msgstr "Следење на курсот"
+
+msgid "LinksMostClicked"
+msgstr "Најпосетувани врски"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Најсимнувани документи"
+
+msgid "LearningPathDetails"
+msgstr "Детали на Патеката_на_учењето"
+
+msgid "NoConnexion"
+msgstr "Нема конекција"
+
+msgid "TeacherInterface"
+msgstr "Интерфејс за учителот"
+
+msgid "CoachInterface"
+msgstr "Интерфејс за обучувачот"
+
+msgid "AdminInterface"
+msgstr "Интерфејс за управувачот"
+
+msgid "NumberOfSessions"
+msgstr "Број на сесии"
+
+msgid "YourCourseList"
+msgstr "Вашиот список со курсеви"
+
+msgid "YourStatistics"
+msgstr "Вашите статистики"
+
+msgid "CoachList"
+msgstr "Список на обучувачи"
+
+msgid "CoachStudents"
+msgstr "Курсисти на обучувачот"
+
+msgid "NoLearningPath"
+msgstr "Нема Патеки на учењето"
+
+msgid "SessionCourses"
+msgstr "Сесија на курсеви"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Овде ќе го најдете следењето на Вашите курсисти запишани на овој курс."
+

@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "застарена јазиќна променлива"
+
+msgid "langMdCallingTool"
+msgstr "Документи"
+
+msgid "langTool"
+msgstr "Метаподатоци на документот"
+
+msgid "langNotInDB"
+msgstr "нема таква категорија на Врски"
+
+msgid "langManifestSyntax"
+msgstr "(синтаксна грешка во манифест датотеката...)"
+
+msgid "langEmptyManifest"
+msgstr "(празна манифест датотека...)"
+
+msgid "langNoManifest"
+msgstr "(нема манифест датотеки...)"
+
+msgid "langNotFolder"
+msgstr "невозможно, ова не е папка..."
+
+msgid "langUploadHtt"
+msgstr "Качување на HTT датотека"
+
+msgid "langHttFileNotFound"
+msgstr "Нова HTT датотека не можеше да се отвори (пр. празна, преголема)"
+
+msgid "langHttOk"
+msgstr "Новата HTT датотека беше качена"
+
+msgid "langHttNotOk"
+msgstr "Качувањето на HTT датотеката беше неуспешно"
+
+msgid "langRemoveHtt"
+msgstr "Отстрани ја HTT датотеката"
+
+msgid "langHttRmvOk"
+msgstr "HTT датотеката е отстранета"
+
+msgid "langHttRmvNotOk"
+msgstr "Отстранувањето на HTT датотеката беше неуспешно"
+
+msgid "langImport"
+msgstr "Увоз"
+
+msgid "langRemove"
+msgstr "Отстрани MDEs"
+
+msgid "langAllRemovedFor"
+msgstr "Целата содржина на категоријата е отстранета"
+
+msgid "langIndex"
+msgstr "Индекс на Зборови"
+
+msgid "langTotalMDEs"
+msgstr "Вкупен број на внесени метаподатоци за Врски:"
+
+msgid "langMainMD"
+msgstr "Отвори ја Главната MDE датотека"
+
+msgid "langLines"
+msgstr "редови"
+
+msgid "langPlay"
+msgstr "Пушти го index.php"
+
+msgid "langNonePossible"
+msgstr "Нема возможни МП операции"
+
+msgid "langOrElse"
+msgstr "Избери категорија на Врски"
+
+msgid "langWorkWith"
+msgstr "Работи со Scorm Directory"
+
+msgid "langSDI"
+msgstr "...Scorm Directory со SD-id (и подели го манифестот - или остави го празен)"
+
+msgid "langRoot"
+msgstr "корен"
+
+msgid "langSplitData"
+msgstr "Подели ги манифестите, и #MDe, ако ги има:"
+
+msgid "langMffNotOk"
+msgstr "Заменувањето на манифест датотеката беше неуспешно"
+
+msgid "langMffOk"
+msgstr "Манифест датотеката беше заменета"
+
+msgid "langMffFileNotFound"
+msgstr "Нова манифест датотека не можеше да се отвори (пр. празна, или преголема)"
+
+msgid "langUploadMff"
+msgstr "Замени ја манифест датотеката"
+

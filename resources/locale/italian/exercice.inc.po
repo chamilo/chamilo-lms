@@ -1,0 +1,1221 @@
+msgid "langExercice"
+msgstr "Test"
+
+msgid "langActivate"
+msgstr "Mostra"
+
+msgid "langDeactivate"
+msgstr "Nascondi"
+
+msgid "langNoEx"
+msgstr "Nessun test disponibile"
+
+msgid "langNewEx"
+msgstr "Nuovo test"
+
+msgid "langQuestion"
+msgstr "domanda"
+
+msgid "langQuestions"
+msgstr "Quesiti"
+
+msgid "langAnswers"
+msgstr "Risposte"
+
+msgid "langTrue"
+msgstr "Vero"
+
+msgid "langAnswer"
+msgstr "Risposta"
+
+msgid "langResult"
+msgstr "Risultato"
+
+msgid "langNoResult"
+msgstr "Nessun risultato ancora disponibile"
+
+msgid "langYourResults"
+msgstr "I tuoi risultati"
+
+msgid "langStudentResults"
+msgstr "Punteggi"
+
+msgid "langExerciseType"
+msgstr "Sequenza"
+
+msgid "langExerciseName"
+msgstr "Nome del test"
+
+msgid "langExerciseDescription"
+msgstr "Descrizione del contesto"
+
+msgid "langSimpleExercise"
+msgstr "Su un\'unica pagina"
+
+msgid "langSequentialExercise"
+msgstr "Un quesito per pagina"
+
+msgid "langRandomQuestions"
+msgstr "Selezione casuale dei quesiti"
+
+msgid "langGiveExerciseName"
+msgstr "Definire il nome per il test!"
+
+msgid "langSound"
+msgstr "File audio/video"
+
+msgid "langDeleteSound"
+msgstr "Cancella l\'audio/il video"
+
+msgid "langNoAnswer"
+msgstr "Per ora non c\'è alcuna risposta"
+
+msgid "langGoBackToQuestionPool"
+msgstr "Ritorna all\'archivio test"
+
+msgid "langGoBackToQuestionList"
+msgstr "Ritorna all\'elenco dei quesiti"
+
+msgid "langQuestionAnswers"
+msgstr "Risposte al quesito"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Attenzione! Questo quesito e le rispettive risposte vengono utilizzati in diversi Test. Desideri modificarle?"
+
+msgid "langModifyInAllExercises"
+msgstr "in tutti i Test"
+
+msgid "langModifyInThisExercise"
+msgstr "solo in questo Test"
+
+msgid "langAnswerType"
+msgstr "Tipologia di risposta"
+
+msgid "langMultipleSelect"
+msgstr "Risposte multiple"
+
+msgid "langFillBlanks"
+msgstr "Riempimento"
+
+msgid "langMatching"
+msgstr "Abbinamento"
+
+msgid "langAddPicture"
+msgstr "Aggiungi un\'immagine"
+
+msgid "langReplacePicture"
+msgstr "Sostituisci l\'immagine"
+
+msgid "langDeletePicture"
+msgstr "Elimina l\'immagine"
+
+msgid "langQuestionDescription"
+msgstr "Testo e media associati"
+
+msgid "langGiveQuestion"
+msgstr "Formula il quesito"
+
+msgid "langWeightingForEachBlank"
+msgstr "Assegna un peso a ciascun spazio vuoto"
+
+msgid "langUseTagForBlank"
+msgstr "Metti tra parentesi quadre [...] le parole da sostituire con spazi bianchi"
+
+msgid "langQuestionWeighting"
+msgstr "Punteggio"
+
+msgid "langMoreAnswers"
+msgstr "+risp"
+
+msgid "langLessAnswers"
+msgstr "-risp"
+
+msgid "langMoreElements"
+msgstr "+elem"
+
+msgid "langLessElements"
+msgstr "-elem"
+
+msgid "langTypeTextBelow"
+msgstr "Digita il testo nello spazio sottostante"
+
+msgid "langDefaultTextInBlanks"
+msgstr "Gli [Udinesi] sono [Italiani]_________________________scegli tra le parole: Udinesi, Romeni, Italiani, Parigini"
+
+msgid "langDefaultMatchingOptA"
+msgstr "in bianconero"
+
+msgid "langDefaultMatchingOptB"
+msgstr "in rossonero"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "L\'Udinese è una squadra"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Il Milan è la squadra"
+
+msgid "langDefineOptions"
+msgstr "Definisci le opzioni"
+
+msgid "langMakeCorrespond"
+msgstr "Crea una corrispondenza"
+
+msgid "langFillLists"
+msgstr "Riempi i due elenchi sottostanti"
+
+msgid "langGiveText"
+msgstr "Digita il testo"
+
+msgid "langDefineBlanks"
+msgstr "Definisci almeno uno spazio con le parentesi [...]"
+
+msgid "langGiveAnswers"
+msgstr "Fornisci le risposte al quesito"
+
+msgid "langChooseGoodAnswer"
+msgstr "Scegli la risposta corretta"
+
+msgid "langChooseGoodAnswers"
+msgstr "Scegli una o più risposte corrette"
+
+msgid "langQuestionList"
+msgstr "Elenco dei quesiti del test"
+
+msgid "langMoveUp"
+msgstr "Sposta in su"
+
+msgid "langMoveDown"
+msgstr "Sposta in giù"
+
+msgid "langGetExistingQuestion"
+msgstr "Test dall\'archivio"
+
+msgid "langFinishTest"
+msgstr "Concludi il test"
+
+msgid "langQuestionPool"
+msgstr "Test dall\'archivio"
+
+msgid "langOrphanQuestions"
+msgstr "Quesiti orfani"
+
+msgid "langNoQuestion"
+msgstr "Nessun quesito disponibile al momento"
+
+msgid "langAllExercises"
+msgstr "Tutti i test"
+
+msgid "langFilter"
+msgstr "Filtro"
+
+msgid "langGoBackToEx"
+msgstr "Ritorna al test"
+
+msgid "langReuse"
+msgstr "Riutilizza"
+
+msgid "langExerciseManagement"
+msgstr "Gestione Test"
+
+msgid "langQuestionManagement"
+msgstr "Gestione di Quesiti e Risposte"
+
+msgid "langQuestionNotFound"
+msgstr "Quesito non trovato"
+
+msgid "langExerciseNotFound"
+msgstr "Test non trovato"
+
+msgid "langAlreadyAnswered"
+msgstr "É stata già fornita una risposta a questo quesito"
+
+msgid "langElementList"
+msgstr "Elenco degli elementi"
+
+msgid "langScore"
+msgstr "Punteggio"
+
+msgid "langCorrespondsTo"
+msgstr "Corrisponde a"
+
+msgid "langExpectedChoice"
+msgstr "Scelta corretta"
+
+msgid "langYourTotalScore"
+msgstr "Il tuo punteggio totale è"
+
+msgid "ReachedMaxAttemptsAdmin"
+msgstr "Hai superato il numero di tentativi per l\'esercizio. Poiché sei gestore del corso puoi effettuare ulteriori tentativi, che però non verranno registrati tra i risultati."
+
+msgid "langExerciseAdded"
+msgstr "Quesito aggiunto"
+
+msgid "Build"
+msgstr "Componi"
+
+msgid "langEvalSet"
+msgstr "parametri di valutazione"
+
+msgid "langActive"
+msgstr "attivo"
+
+msgid "langInactive"
+msgstr "inattivo"
+
+msgid "langQuestCreate"
+msgstr "Crea dei quesiti"
+
+msgid "langExRecord"
+msgstr "Il test è stato salvato"
+
+msgid "langBackModif"
+msgstr "ritorna alla pagina di modifica dei quesiti"
+
+msgid "langDoEx"
+msgstr "Crea un test"
+
+msgid "langDefScor"
+msgstr "descrivi i parametri di valutazione"
+
+msgid "langCreateModif"
+msgstr "Conferma creazione o modifica"
+
+msgid "langSub"
+msgstr "Sottotitolo"
+
+msgid "langMyAnswer"
+msgstr "La mia risposta"
+
+msgid "langMorA"
+msgstr "+ risposta"
+
+msgid "langLesA"
+msgstr "- risposta"
+
+msgid "langRecEx"
+msgstr "Salva il quesito"
+
+msgid "langRecQu"
+msgstr "Salva il quesito"
+
+msgid "langRecAns"
+msgstr "Salva le risposte"
+
+msgid "langIntroduction"
+msgstr "Introduzione"
+
+msgid "langTitleAssistant"
+msgstr "Assistente per la creazione di test"
+
+msgid "langQuesList"
+msgstr "Elenco dei quesiti"
+
+msgid "langSaveEx"
+msgstr "Salva i test"
+
+msgid "langFinish"
+msgstr "Concludi"
+
+msgid "langCancel"
+msgstr "Annulla"
+
+msgid "langQImage"
+msgstr "Quesito con immagine"
+
+msgid "langAddQ"
+msgstr "Aggiungi un quesito"
+
+msgid "langDoAnEx"
+msgstr "Esegui un test"
+
+msgid "langGenerator"
+msgstr "Elenco dei test"
+
+msgid "langChoice"
+msgstr "La tua scelta"
+
+msgid "langCorrect"
+msgstr "Corretto"
+
+msgid "langPossAnsw"
+msgstr "Numero delle risposte esatte presenti in un quesito"
+
+msgid "langStudAnsw"
+msgstr "numero di errori da parte del corsista"
+
+msgid "langDetermine"
+msgstr "Determina"
+
+msgid "langNonNumber"
+msgstr "un valore non numerico"
+
+msgid "langReplaced"
+msgstr "Sostituito"
+
+msgid "langSuperior"
+msgstr "un valore maggiore di 20"
+
+msgid "langRep20"
+msgstr "Sostituisci 20"
+
+msgid "langDefault"
+msgstr "Valori di default *"
+
+msgid "langDefComment"
+msgstr "i valori precedenti saranno sostituiti da quelli di default premendo il pulsante."
+
+msgid "langScoreGet"
+msgstr "numeri in nero = punteggio"
+
+msgid "langShowScor"
+msgstr "Mostra il risultato della valutazione al corsista:"
+
+msgid "langStep1"
+msgstr "Passo 1"
+
+msgid "langStep2"
+msgstr "Passo 2"
+
+msgid "langTake"
+msgstr "prendi"
+
+msgid "langAmong"
+msgstr "tra"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Importa da HotPotatoes"
+
+msgid "langHotPotatoesTests"
+msgstr "Importa test da HotPotatoes"
+
+msgid "langDownloadFile"
+msgstr "Carica il documento"
+
+msgid "langDownloadImg"
+msgstr "Carica immagini sul server"
+
+msgid "langDownloadEnd"
+msgstr "Documento caricato"
+
+msgid "langNoSpace"
+msgstr "Documento non caricato. Spazio insufficiente nella cartella"
+
+msgid "langZipNoPhp"
+msgstr "L\'archivio .ZIP non può contenere documenti in formato PHP"
+
+msgid "langNoImg"
+msgstr "Test senza immagini"
+
+msgid "langImgNote_st"
+msgstr "<br> Devi ancora caricare"
+
+msgid "langImgNote_en"
+msgstr "immagine/i :"
+
+msgid "langDocDeleted"
+msgstr "Documento eliminato"
+
+msgid "langViMod"
+msgstr "Visibilità modificata"
+
+msgid "langNameNotEqual"
+msgstr "non è un file valido!"
+
+msgid "langIndice"
+msgstr "Indice"
+
+msgid "langIndices"
+msgstr "Indici"
+
+msgid "langDateExo"
+msgstr "Data"
+
+msgid "langShowQuestion"
+msgstr "Mostra il quesito"
+
+msgid "langUnknownExercise"
+msgstr "Test sconosciuto"
+
+msgid "langReuseQuestion"
+msgstr "Riutilizza il quesito"
+
+msgid "langCreateExercise"
+msgstr "Crea un test"
+
+msgid "langCreateQuestion"
+msgstr "Crea un quesito"
+
+msgid "langCreateAnswers"
+msgstr "Crea le risposte"
+
+msgid "langModifyExercise"
+msgstr "Modifica proprietà del test"
+
+msgid "langModifyAnswers"
+msgstr "modifica le risposte"
+
+msgid "langForExercise"
+msgstr "per il test"
+
+msgid "langUseExistantQuestion"
+msgstr "Usa un quesito esistente"
+
+msgid "FreeAnswer"
+msgstr "Risposta aperta"
+
+msgid "notCorrectedYet"
+msgstr "La risposta non è stata ancora corretta. Il punteggio per la risposta è posto temporaneamente a 0, con conseguenze sul punteggio totale."
+
+msgid "adminHP"
+msgstr "Amministra test Hot Potatoes"
+
+msgid "NewQu"
+msgstr "Nuovo quesito"
+
+msgid "NoImage"
+msgstr "Scegli un\'immagine"
+
+msgid "langAnswerHotspot"
+msgstr "E\' richiesta la descrizione e la determinazione del peso per ogni zona sensibile - il commento è facoltativo"
+
+msgid "langMinHotspot"
+msgstr "Devi creare almeno una (1) zona sensibile"
+
+msgid "langMaxHotspot"
+msgstr "Possono essere create al massimo dodici (12) zone sensibili"
+
+msgid "langHotspotError"
+msgstr "Fornisci una descrizione ed un peso per ogni zona sensibile"
+
+msgid "langMoreHotspots"
+msgstr "+ zona sensibile"
+
+msgid "langLessHotspots"
+msgstr "- zona sensibile"
+
+msgid "langHotspotZones"
+msgstr "Zone sensibili"
+
+msgid "langNextQuestion"
+msgstr "Prossimo quesito"
+
+msgid "langCorrectAnswer"
+msgstr "Risposta corretta"
+
+msgid "langHotspotHit"
+msgstr "La tua risposta è stata"
+
+msgid "langOnlyJPG"
+msgstr "Per le zone sensibili puoi usare solo immagini in formato jpg (o jpeg)"
+
+msgid "langFinishThisTest"
+msgstr "Mostra la risposta corretta per ogni quesito e il punteggio del test"
+
+msgid "langAllQuestions"
+msgstr "Tutti i quesiti"
+
+msgid "langModifyTitleDescription"
+msgstr "Modifica titolo e commento"
+
+msgid "langModifyHotspots"
+msgstr "Modifica le risposte / le zone sensibili"
+
+msgid "langHotspotNotDrawn"
+msgstr "Non hai ancora tracciato tutte le zone sensibili"
+
+msgid "langHotspotWeightingError"
+msgstr "Devi assegnare un peso positivo (>0) ad ogni zona sensibile"
+
+msgid "langHotspotValidateError1"
+msgstr "Devi rispondere al quesito in modo completo (necessari"
+
+msgid "langHotspotValidateError2"
+msgstr "click sull\'immagine) prima di poter vedere il risultato"
+
+msgid "langHotspotRequired"
+msgstr "Sono richiesti peso e descrizione per ogni zona sensibile. Il commento è facoltativo"
+
+msgid "langHotspotChoose"
+msgstr "<div style=\"padding:2px 3px;\">• Per creare una zona sensibile: seleziona una forma vicino al colore, e traccia la zona.</div><div style=\"padding:2px 3px;\">• Per muovere una zona, seleziona il colore, clicca su una zona diversa nell\'immagine e traccia la nuova zona.</div><div style=\"padding:2px 3px;\">• Per aggiungere una zona sensibile clicca sul pulsante  [+zona sensibile].</div><div style=\"padding:2px 3px;\">• Per chiudere una forma poligonale usa il pulsante destro del mouse e seleziona \"Chiudi il poligono\".</div>"
+
+msgid "Fault"
+msgstr "Errato"
+
+msgid "HotSpot"
+msgstr "Selezione zona"
+
+msgid "ClickNumber"
+msgstr "Clicca sul numero"
+
+msgid "HotspotGiveAnswers"
+msgstr "Per favore, dai una risposta"
+
+msgid "Addlimits"
+msgstr "Aggiungi limitazioni"
+
+msgid "AreYouSure"
+msgstr "Sei sicuro"
+
+msgid "StudentScore"
+msgstr "Punteggio del/dei corsista/i"
+
+msgid "backtoTesthome"
+msgstr "Ritorna alla pagina iniziale dei test"
+
+msgid "Feedback"
+msgstr "Commenti"
+
+msgid "MarkIsUpdated"
+msgstr "Voto aggiornato"
+
+msgid "MarkInserted"
+msgstr "Voto inserito"
+
+msgid "PleaseGiveAMark"
+msgstr "Assegna un voto"
+
+msgid "EditCommentsAndMarks"
+msgstr "Modifica voto e commenti"
+
+msgid "AddComments"
+msgstr "Aggiungi commenti"
+
+msgid "Number"
+msgstr "N°"
+
+msgid "Weighting"
+msgstr "Punteggio"
+
+msgid "ChooseQuestionType"
+msgstr "Per creare un quesito, indica la tipologia qui sopra"
+
+msgid "MatchesTo"
+msgstr "Corrisponde a"
+
+msgid "CorrectTest"
+msgstr "Correggi il test"
+
+msgid "ViewTest"
+msgstr "Vedi il test"
+
+msgid "State"
+msgstr "Stato del Sistema"
+
+msgid "NotAttempted"
+msgstr "Non affrontato"
+
+msgid "AddElem"
+msgstr "+ elementi"
+
+msgid "DelElem"
+msgstr "- elementi"
+
+msgid "PlusAnswer"
+msgstr "+ risposte"
+
+msgid "LessAnswer"
+msgstr "- risposte"
+
+msgid "YourScore"
+msgstr "Il tuo punteggio"
+
+msgid "Attempted"
+msgstr "Affrontato"
+
+msgid "AssignMarks"
+msgstr "Dai un voto"
+
+msgid "Results"
+msgstr "Risultati"
+
+msgid "ExerciseStored"
+msgstr "L\'esercizio è stato memorizzato"
+
+msgid "ChooseAtLeastOneCheckbox"
+msgstr "Scegli almeno una risposta corretta"
+
+msgid "ExerciseEdited"
+msgstr "Esercizio modificato"
+
+msgid "ExerciseDeleted"
+msgstr "Esercizio eliminato"
+
+msgid "ClickToCommentAndGiveFeedback"
+msgstr "Clicca sul collegamento seguente per controllare la risposta e commentarla"
+
+msgid "OpenQuestionsAttempted"
+msgstr "Un corsista ha risposto ad una domanda a risposta aperta"
+
+msgid "AttemptDetails"
+msgstr "Dettagli sulla risposta"
+
+msgid "TestAttempted"
+msgstr "Test affrontato"
+
+msgid "StudentName"
+msgstr "Nome del corsista"
+
+msgid "StudentEmail"
+msgstr "Email del corsista"
+
+msgid "OpenQuestionsAttemptedAre"
+msgstr "La risposta aperta affrontata è"
+
+msgid "CourseName"
+msgstr "Nome del corso"
+
+msgid "UploadJpgPicture"
+msgstr "Carica un\'immagine JPG"
+
+msgid "HotspotDescription"
+msgstr "Descrizione delle zone"
+
+msgid "ExamSheetVCC"
+msgstr "Test visto/corretto/commentato dal docente"
+
+msgid "AttemptVCC"
+msgstr "Lo svolgimento del test qui indicato è stato visto/commentato/corretto dal docente"
+
+msgid "ClickLinkToViewComment"
+msgstr "Clicca su collegamento qui sotto per accedere al sistema e vedere la correzione del test"
+
+msgid "Regards"
+msgstr "Cordialmente"
+
+msgid "AttemptVCCLong"
+msgstr "Il test %s che hai svolto è stato visto/commentato/corretto dal docente. Clicca qui sotto per accedere al sistema e vedere gli esiti."
+
+msgid "DearStudentEmailIntroduction"
+msgstr "Caro corsista,"
+
+msgid "ExerciseFinished"
+msgstr "Test completato"
+
+msgid "ResultsEnabled"
+msgstr "Risultati attivati per i corsisti"
+
+msgid "ResultsDisabled"
+msgstr "Risultati disabilitati per i corsisti"
+
+msgid "ExportWithUserFields"
+msgstr "Esporta anche i campi utente"
+
+msgid "ExportWithoutUserFields"
+msgstr "Non esportare i campi utente"
+
+msgid "DisableResults"
+msgstr "Non mostrare i risultati ai corsisti"
+
+msgid "EnableResults"
+msgstr "Mostra i risultati ai corsisti"
+
+msgid "ValidateAnswer"
+msgstr "Convalida le risposte"
+
+msgid "FillInBlankSwitchable"
+msgstr "Risposta multipla considerata corretta se parzialmente in bianco"
+
+msgid "ReachedMaxAttempts"
+msgstr "Non puoi ripetere il test %s in quanto hai già effettuato i %s tentativi consentiti"
+
+msgid "AdvancedParameters"
+msgstr "Parametri avanzati"
+
+msgid "RandomQuestionsToDisplay"
+msgstr "Numero di domande casuali da mostrare"
+
+msgid "RandomQuestionsHelp"
+msgstr "Numero di quesiti da scegliere a caso tra quelli presenti nel test.<br />Per default vengono presentati tutti nel loro ordine; indicando un numero ne verranno scelti un dato numero in ordine casuale."
+
+msgid "ExerciseAttempts"
+msgstr "Numero massimo di tentativi"
+
+msgid "DoNotRandomize"
+msgstr "Non cambiare l\'ordine"
+
+msgid "Infinite"
+msgstr "Illimitato"
+
+msgid "BackToExercisesList"
+msgstr "Ritorna ai quesiti"
+
+msgid "ViewScoreChangeHistory"
+msgstr "Guarda lo storico dei punteggi"
+
+msgid "NoStartDate"
+msgstr "Nessuna data d\'inizio"
+
+msgid "NoLogOfDuration"
+msgstr "Nessuna registrazione della durata"
+
+msgid "EnableTimeLimits"
+msgstr "Abilita il limite di tempo"
+
+msgid "ExeStartTime"
+msgstr "Data iniziale"
+
+msgid "ExeEndTime"
+msgstr "Data finale"
+
+msgid "Value"
+msgstr "Valore"
+
+msgid "DeleteAttempt"
+msgstr "Eliminare il tentativo?"
+
+msgid "WithoutComment"
+msgstr "Senza commento"
+
+msgid "QuantityQuestions"
+msgstr "Numero di quesiti"
+
+msgid "FilterExercices"
+msgstr "Filtra gli esercizi"
+
+msgid "FilterByNotRevised"
+msgstr "Solo non valutati"
+
+msgid "FilterByRevised"
+msgstr "Solo valutati"
+
+msgid "Duration"
+msgstr "Durata"
+
+msgid "ReachedTimeLimit"
+msgstr "Limiti di tempo superati"
+
+msgid "TryAgain"
+msgstr "Tenta di nuovo"
+
+msgid "SeeTheory"
+msgstr "Vedi la teoria"
+
+msgid "EndActivity"
+msgstr "Fine dell\'attività"
+
+msgid "NoFeedback"
+msgstr "Esame (senza feedback)"
+
+msgid "DirectFeedback"
+msgstr "Autovalutazione (feedback immediato)"
+
+msgid "FeedbackType"
+msgstr "Valutazione:"
+
+msgid "Scenario"
+msgstr "Scenario"
+
+msgid "VisitUrl"
+msgstr "Visita questo collegamento"
+
+msgid "ExitTest"
+msgstr "Esci dal test"
+
+msgid "DurationFormat"
+msgstr "%1 secondi"
+
+msgid "Difficulty"
+msgstr "Difficoltà"
+
+msgid "NewScore"
+msgstr "Nuovo punteggio"
+
+msgid "NewComment"
+msgstr "Nuovo commento"
+
+msgid "ExerciseNoStartedYet"
+msgstr "Test non ancora iniziato"
+
+msgid "ExerciseNoStartedAdmin"
+msgstr "Il docente non ha ancora aperto l\'accesso"
+
+msgid "SelectTargetLP"
+msgstr "Deleziona il modulo didattico cui puntare"
+
+msgid "SelectTargetQuestion"
+msgstr "Seleziona il test di destinazione"
+
+msgid "DirectFeedbackCantModifyTypeQuestion"
+msgstr "Il tipo di valutazione non può essere modificato, in quanto identificato come auto-valutazione"
+
+msgid "CantShowResults"
+msgstr "Non disponibile"
+
+msgid "CantViewResults"
+msgstr "Il risultato non può essere visto"
+
+msgid "ShowCorrectedOnly"
+msgstr "Mostra i quesiti corretti"
+
+msgid "ShowUnCorrectedOnly"
+msgstr "Mostra i quesiti non ancora corretti"
+
+msgid "HideResultsToStudents"
+msgstr "Non mostrare i risultati ai corsisti"
+
+msgid "ShowResultsToStudents"
+msgstr "Mostra i risultati ai corsisti"
+
+msgid "ProcedToQuestions"
+msgstr "Prepara i quesiti"
+
+msgid "AddQuestionToExercise"
+msgstr "Aggiungi un quesito a un test"
+
+msgid "PresentationQuestions"
+msgstr "Introduzione ai quesiti"
+
+msgid "UniqueAnswer"
+msgstr "Scelta multipla"
+
+msgid "MultipleAnswer"
+msgstr "Risposta multipla"
+
+msgid "ReachedOneAttempt"
+msgstr "Non è possibile ripetere ulteriormente questo test, in quanto già completato"
+
+msgid "QuestionsPerPage"
+msgstr "Quesiti per pagina"
+
+msgid "QuestionsPerPageOne"
+msgstr "Uno"
+
+msgid "QuestionsPerPageAll"
+msgstr "Tutti"
+
+msgid "EditIndividualComment"
+msgstr "Modifica il commento"
+
+msgid "ThankYouForPassingTheTest"
+msgstr "Grazie per aver eseguito il test"
+
+msgid "ExerciseAtTheEndOfTheTest"
+msgstr "Alla fine del test"
+
+msgid "EnrichQuestion"
+msgstr "Perfeziona il quesito"
+
+msgid "langDefaultUniqueQuestion"
+msgstr "Quale degli alimenti seguenti è un latticino?"
+
+msgid "langDefaultUniqueAnswer1"
+msgstr "Latte"
+
+msgid "langDefaultUniqueComment1"
+msgstr "Il latte è la base di molti alimenti comuni, ta cui il burro, il formaggio, lo yogurt"
+
+msgid "langDefaultUniqueAnswer2"
+msgstr "Fiocchi d\'avena"
+
+msgid "langDefaultUniqueComment2"
+msgstr "I fiocchi d\'avena sono cereali e costituiscono uno degli alimenti più completi. Per le loro qualità nutrizionali ed energetiche sono un\'ottima base per l\'alimentazione"
+
+msgid "langDefaultMultipleQuestion"
+msgstr "Quali tra i seguenti paesi stanno fuori dal continente europeo?"
+
+msgid "langDefaultMultipleAnswer1"
+msgstr "Spagna"
+
+msgid "langDefaultMultipleComment1"
+msgstr "E\' un membro dell\'Unione Europea; è una monarchia parlamentare con forma di governo democratica"
+
+msgid "langDefaultMultipleAnswer2"
+msgstr "Perù"
+
+msgid "langDefaultMultipleComment2"
+msgstr "E\' un paese del Sud America, confina con l\'Ecuador e la Colombia a nord, con il Brasile ad est, con la Bolivia a sud-est, con il Cile a sud e con l\'Oceano Pacifico ad ovest"
+
+msgid "langDefaultFillBlankQuestion"
+msgstr "Calcola l\'IMC (o BMI)"
+
+msgid "langDefaultMathingQuestion"
+msgstr "Determina la relazione seguente"
+
+msgid "langDefaultOpenQuestion"
+msgstr "Quando si celebra la \"Festa dei lavoratori\"?"
+
+msgid "langMoreHotspotsImage"
+msgstr "Aggiungi/Modifica zone sensibili sull\'immagine"
+
+msgid "ReachedTimeLimitAdmin"
+msgstr "Configura i limiti di tempo"
+
+msgid "LastScoreTest"
+msgstr "Ultimo punteggio di un test"
+
+msgid "BackToResultList"
+msgstr "Torna all\'elenco dei risultati"
+
+msgid "EditingScoreCauseProblemsToExercisesInLP"
+msgstr "Se modifichi il punteggio di un quesito, ricorda che il Test è inserito in un modulo didattico: i punteggi del modulo potrebbero esserne influenzati"
+
+msgid "SelectExercice"
+msgstr "Seleziona un test"
+
+msgid "YouHaveToSelectATest"
+msgstr "Devi selezionare un quesito"
+
+msgid "HotspotDelineation"
+msgstr "Tracciamento zona attiva"
+
+msgid "CreateQuestions"
+msgstr "Crea quesiti"
+
+msgid "MoreOAR"
+msgstr "+ Valutazioni"
+
+msgid "LessOAR"
+msgstr "- Valutazioni"
+
+msgid "LearnerIsInformed"
+msgstr "Questo messaggio verrà visto dal corsista se non supera la fase, assieme all\'elenco dei risultati"
+
+msgid "MinOverlap"
+msgstr "Sovrapposizione minima"
+
+msgid "MaxExcess"
+msgstr "Supera il massimo"
+
+msgid "MaxMissing"
+msgstr "Massimo non indicato"
+
+msgid "IfNoError"
+msgstr "Se non ci sono errori"
+
+msgid "LearnerHasNoMistake"
+msgstr "Il corsista non ha commesso errori"
+
+msgid "YourAnswer"
+msgstr "La tua risposta"
+
+msgid "YourDelineation"
+msgstr "La tua demarcazione:"
+
+msgid "ResultIs"
+msgstr "Il risultato è :"
+
+msgid "Overlap"
+msgstr "Area sovrapposta"
+
+msgid "Missing"
+msgstr "Area mancante"
+
+msgid "Excess"
+msgstr "Area troppo grande"
+
+msgid "Min"
+msgstr "Minimo"
+
+msgid "Max"
+msgstr "Massimo"
+
+msgid "Requirements"
+msgstr "Requisiti"
+
+msgid "OARHit"
+msgstr "Almeno una valutazione globale è stata selezionata"
+
+msgid "TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons"
+msgstr "Traccia di nuovo la figura in modo più semplice, il numero di tratti è eccessivo."
+
+msgid "Thresholds"
+msgstr "Soglia"
+
+msgid "Delineation"
+msgstr "Demarcazione"
+
+msgid "QuestionTypeDoesNotBelongToFeedbackTypeInExercise"
+msgstr "Tipo di quesito non coerente con il tipo di feedback del test"
+
+msgid "XResultsCleaned"
+msgstr "%d risultati cancellati"
+
+msgid "AreYouSureToDeleteResults"
+msgstr "Sei sicuro di voler cancellare i risultati"
+
+msgid "ExerciseCopied"
+msgstr "Quesito copiato"
+
+msgid "AreYouSureToCopy"
+msgstr "Sei sicuro di voler copiare"
+
+msgid "EditingExerciseCauseProblemsInLP"
+msgstr "La modifica dei quesiti può comportare problemi nei moduli didattici"
+
+msgid "SessionIsReadOnly"
+msgstr "La sessione è di sola lettura"
+
+msgid "EnableTimerControl"
+msgstr "Abilita il controllo del tempo"
+
+msgid "ExerciseTotalDurationInMinutes"
+msgstr "Durata totale del test in minuti"
+
+msgid "ToContinueUseMenu"
+msgstr "Per procedere usa il menù a lato"
+
+msgid "RandomAnswers"
+msgstr "Mescola le risposte"
+
+msgid "NotMarkActivity"
+msgstr "Non è possibile valutare l\'attività"
+
+msgid "YouHaveToCreateAtLeastOneAnswer"
+msgstr "Devi indicare almeno una risposta valida"
+
+msgid "ExerciseAttempted"
+msgstr "Quesito affrontato"
+
+msgid "MultipleSelectCombination"
+msgstr "Risposta esatta"
+
+msgid "MultipleAnswerCombination"
+msgstr "Combinazione esatta"
+
+msgid "ExerciceExpiredTimeMessage"
+msgstr "Il tempo assegnato allo svolgimento dell\'esercizio è scaduto; i quesiti completati saranno comunque presi in considerazione."
+
+msgid "CopyExercise"
+msgstr "Duplica il quesito creandone una copia"
+
+msgid "CleanStudentResults"
+msgstr "Cancella i risultati attribuiti a tutti i corsisti per questo quesito"
+
+msgid "ImportQtiQuiz"
+msgstr "Importa dei quesiti Qti2"
+
+msgid "ReUseACopyInCurrentTest"
+msgstr "Riutilizza una copia all\'interno del test"
+
+msgid "Copy"
+msgstr "Copia"
+
+msgid "ScoreAverageFromAllAttempts"
+msgstr "Media dl punteggio per tutti i tentativi"
+
+msgid "DefaultContent"
+msgstr "Genera un contenuto di default"
+
+msgid "ExerciseEditionNotAvailableInSession"
+msgstr "Non è possibile modificare gli esercizi nel corso di una sessione"
+
+msgid "UniqueAnswerNoOption"
+msgstr "Risposta unica con \"non so\""
+
+msgid "MultipleAnswerTrueFalse"
+msgstr "Risposta multipla (V/F/Non So)"
+
+msgid "MultipleAnswerCombinationTrueFalse"
+msgstr "Combinazione V/F/Non So"
+
+msgid "DontKnow"
+msgstr "Non so"
+
+msgid "False"
+msgstr "Falso"
+
+msgid "DoubtScore"
+msgstr "Non so"
+
+msgid "HotSpotDelineation"
+msgstr "Individuazione di aree calde"
+
+msgid "PropagateNegativeResults"
+msgstr "Distribuisci i risultati negativi tra i quesiti"
+
+msgid "InsertALinkToThisQuestionInTheExercise"
+msgstr "Usa il quesito come collegamento (non copiarlo nel Test)"
+
+msgid "OnlyShowScore"
+msgstr "Mostra solo il punteggio"
+
+msgid "ImportExcelQuiz"
+msgstr "Importa un esercizio da MS Excel"
+
+msgid "DownloadExcelTemplate"
+msgstr "Scarica il modello xls"
+
+msgid "ExerciseWillBeActivatedFromXToY"
+msgstr "Esercizio aperto dal %s al %s"
+
+msgid "EnableStartTime"
+msgstr "Attiva il tempo iniziale"
+
+msgid "EnableEndTime"
+msgstr "Attiva il tempo di conclusione"
+
+msgid "ExerciseAvailableFromX"
+msgstr "Esercizio aperto dal %s"
+
+msgid "ExerciseAvailableUntilX"
+msgstr "Esercizio aperto fino al %s"
+
+msgid "TestLimitsAdded"
+msgstr "Limitazioni aggiunte ai test"
+
+msgid "AddLimits"
+msgstr "Aggiungi limitazioni"
+
+msgid "Unlimited"
+msgstr "Senza limitazioni"
+
+msgid "LimitedTime"
+msgstr "Limitazioni di tempo"
+
+msgid "LimitedAttempts"
+msgstr "Limitazioni sul numero di tentativi"
+
+msgid "Times"
+msgstr "Tempo"
+
+msgid "Random"
+msgstr "Casuale"
+
+msgid "ExerciseTimerControlMinutes"
+msgstr "Abilita il controllo del tempo sugli esercizi"
+
+msgid "Numeric"
+msgstr "Numerico"
+
+msgid "Acceptable"
+msgstr "Accettabile"
+
+msgid "Hotspot"
+msgstr "Zona calda"
+
+msgid "ChangeTheVisibilityOfTheCurrentImage"
+msgstr "Cambia la visibilità dell\'immagine"
+
+msgid "Steps"
+msgstr "Passi"
+
+msgid "OriginalValue"
+msgstr "Valore originale"
+
+msgid "ChooseAnAnswer"
+msgstr "Seleziona una risposta"
+
+msgid "ImportExercise"
+msgstr "Importa un quesito"
+
+msgid "MultipleChoiceMultipleAnswers"
+msgstr "Scelta multipla, risposta multipla"
+
+msgid "MultipleChoiceUniqueAnswer"
+msgstr "Scelta multipla, risposta unica"
+
+msgid "HotPotatoesFiles"
+msgstr "File HotPotatoes"
+
+msgid "HotPotatoes"
+msgstr "HotPotatoes"
+
+msgid "OAR"
+msgstr "Zona da evitare"
+
+msgid "TotalScoreTooBig"
+msgstr "Punteggio totale troppo elevato"
+
+msgid "InvalidQuestionType"
+msgstr "Tipo di quesito non valido"
+

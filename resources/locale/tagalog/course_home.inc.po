@@ -1,0 +1,12 @@
+msgid "ToolIsNowVisible"
+msgstr "Ang tool ay nakikita na."
+
+msgid "ToolIsNowHidden"
+msgstr "Ang tool ay hindi na nakikita."
+
+msgid "Interaction"
+msgstr "Interaksyon"
+
+msgid "Authoring"
+msgstr "Authoring"
+

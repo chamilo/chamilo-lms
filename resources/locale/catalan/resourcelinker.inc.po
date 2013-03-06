@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Recurs afegit. Vostè ara pot tornar a cursos o afegir més recursos"
+
+msgid "LearningPath"
+msgstr "Itinerari formatiu"
+
+msgid "LevelUp"
+msgstr "nivell superior"
+
+msgid "AddIt"
+msgstr "Afegir"
+
+msgid "MainCategory"
+msgstr "Categoria principal"
+
+msgid "lang_delete_added_resources"
+msgstr "Esborrar recursos afegits"
+
+msgid "AddToLinks"
+msgstr "Add to the course links"
+
+msgid "DontAdd"
+msgstr "do not add"
+
+msgid "lang_show_all_added_resources"
+msgstr "Show all added resources"
+
+msgid "ResourcesAdded"
+msgstr "Added new resources"
+
+msgid "BackTo"
+msgstr "Tornar a"
+
+msgid "ExternalResources"
+msgstr "External resources"
+
+msgid "CourseResources"
+msgstr "Course resources"
+
+msgid "ExternalLink"
+msgstr "External link"
+
+msgid "DropboxAdd"
+msgstr "Add the dropbox page to this chapter."
+
+msgid "AddAssignmentPage"
+msgstr "Add the upload assignment page to this chapter."
+
+msgid "Exercise"
+msgstr "Test"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "AdValvas"
+msgstr "Ad Valvas"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "ShowDelete"
+msgstr "Mostrar/eliminar"
+
+msgid "IntroductionText"
+msgstr "Introduir text"
+
+msgid "CourseDescription"
+msgstr "Descripció del curs"
+
+msgid "Groups"
+msgstr "Grups"
+
+msgid "Users"
+msgstr "Usuaris"
+
+msgid "IntroductionTextAdd"
+msgstr "Afegeixi una pàgina que conté el text d\'introducció a aquest capítol."
+
+msgid "CourseDescriptionAdd"
+msgstr "Afegeixi una pàgina que conté la descripció de curs a aquest capítol."
+
+msgid "GroupsAdd"
+msgstr "Afegeixi la pàgina de Grups a aquest capítol."
+
+msgid "UsersAdd"
+msgstr "Afegeixi la pàgina d\'Usuaris a aquest capítol."
+
+msgid "ExportableCourseResources"
+msgstr "Recursos de curs exportables"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Chamilo relacionava recursos de curs"
+
+msgid "LinkTarget"
+msgstr "Destí d\'enllaç"
+
+msgid "SameWindow"
+msgstr "A la mateixa finestra"
+
+msgid "NewWindow"
+msgstr "A una nova finestra"
+
+msgid "StepDeleted1"
+msgstr "Aquest"
+
+msgid "StepDeleted2"
+msgstr "l\'element fou suprimit en aquesta eina"
+
+msgid "Modify"
+msgstr "modificar"
+
+msgid "Chapter"
+msgstr "Capítol"
+
+msgid "NoAgendaItems"
+msgstr "No hi ha esdeveniments"
+
+msgid "AgendaAdd"
+msgstr "Afegir una nova activitat a l\'agenda"
+
+msgid "UserGroupFilter"
+msgstr "Filtrar per grups / usuaris"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ordenar esdeveniments (antics/recents)"
+
+msgid "ShowCurrent"
+msgstr "Veure les activitats d\'aquest mes"
+
+msgid "ModifyCalendarItem"
+msgstr "Modificar una anotació de l\'agenda"
+
+msgid "ItemTitle"
+msgstr "Títol de l\'anotació"
+
+msgid "Detail"
+msgstr "Detall"
+
+msgid "EditSuccess"
+msgstr "L\'anotació ha estat editada"
+
+msgid "AddCalendarItem"
+msgstr "Afegir una nova anotació a l\'agenda"
+
+msgid "AddAnn"
+msgstr "Afegir un anunci"
+
+msgid "ForumAddNewTopic"
+msgstr "Fòrum: afegir un nou tòpic"
+
+msgid "ForumEditTopic"
+msgstr "Foro: editar un tema"
+
+msgid "ExerciseAnswers"
+msgstr "Exercici: respostes"
+
+msgid "ForumReply"
+msgstr "Foro: respondre"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Ordenar events (recents/antics)"
+

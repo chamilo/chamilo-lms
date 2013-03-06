@@ -1,0 +1,192 @@
+msgid "langNewGroupCreate"
+msgstr "Muodosta uusia ryhmiä"
+
+msgid "langGroupCreation"
+msgstr "Uusien ryhmien muodostaminen"
+
+msgid "langCreate"
+msgstr "muodosta"
+
+msgid "langNewGroups"
+msgstr "uudet ryhmät"
+
+msgid "langMax"
+msgstr "Korkeintaan 12 merkkiä, esimerkiksi <i>Luokka2121</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "paikkoja (valinnainen)"
+
+msgid "langGroupsAdded"
+msgstr "ryhmät on lisätty"
+
+msgid "langGroupDel"
+msgstr "Ryhmä poistettu"
+
+msgid "langDocuments"
+msgstr "Dokumentit"
+
+msgid "langExistingGroups"
+msgstr "Ryhmät"
+
+msgid "langRegistered"
+msgstr "Rekisteröityneet"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Käyttäjät voivat itse muodostaa ryhmät"
+
+msgid "langGroupTools"
+msgstr "Työkalut"
+
+msgid "langGroupDocument"
+msgstr "Dokumentit"
+
+msgid "langGroupPropertiesModified"
+msgstr "Ryhmien asetuksia on muutettu"
+
+msgid "langGroupSpace"
+msgstr "Ryhmän alue"
+
+msgid "langGroupName"
+msgstr "Ryhmän nimi"
+
+msgid "langGroupDescription"
+msgstr "Kuvaus"
+
+msgid "langGroupMembers"
+msgstr "Ryhmän jäsenet"
+
+msgid "langEditGroup"
+msgstr "Muokkaa tätä ryhmää"
+
+msgid "Optional"
+msgstr "(valinnainen)"
+
+msgid "langGroupSettingsModified"
+msgstr "Ryhmäasetuksia muutettu"
+
+msgid "langGroupTooMuchMembers"
+msgstr "Ehdottamasi määrä ylittää maksinin, jonka olet määritellyt (voit muuttaa sitä alla). Ryhmää ei muodostettu."
+
+msgid "langGroupTutor"
+msgstr "Tutor"
+
+msgid "langGroupNoTutor"
+msgstr "(ei ole)"
+
+msgid "langGroupNone"
+msgstr "(ei yhtään)"
+
+msgid "langGroupNoneMasc"
+msgstr "(ei yhtään)"
+
+msgid "langAddTutors"
+msgstr "Muokkaa käyttäjälistaa"
+
+msgid "langMyGroup"
+msgstr "ryhmäni"
+
+msgid "langOneMyGroups"
+msgstr "valvonnassani"
+
+msgid "langGroupSelfRegistration"
+msgstr "Rekisteröityminen"
+
+msgid "langGroupSelfRegInf"
+msgstr "rekisteröidy"
+
+msgid "langRegIntoGroup"
+msgstr "Lisää minut tähän ryhmään"
+
+msgid "langGroupNowMember"
+msgstr "Olet nyt tämän ryhmän jäsen."
+
+msgid "langPrivate"
+msgstr "Yksityinen pääsy, reisteröityminen suljettu (sisäänpääsy vain <a href=../user/user.php>käyttäjien listalta</a>)"
+
+msgid "langPublic"
+msgstr "Avoin pääsy sivuston omalta sivulta ilman sisäänkirjautumista"
+
+msgid "langPropModify"
+msgstr "Muokkaa asetuksia"
+
+msgid "langState"
+msgstr "Tila"
+
+msgid "langGroupFilledGroups"
+msgstr "Ryhmät on täydennetty käyttäjälistassa olevilla käyttäjillä."
+
+msgid "langSubscribed"
+msgstr "kurssille rekisteröityneet käyttäjät"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Käyttäjät jotka eivät ole tässä ryhmässä"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Käyttäjä voi kuulu maksimissaan"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr " ryhmään"
+
+msgid "langGroupLimit"
+msgstr "Rajoitus"
+
+msgid "CreateGroup"
+msgstr "Luo ryhmä(t)"
+
+msgid "langStudentRegAllowed"
+msgstr "Opiskelijat voivat itse rekisteröityä ryhmiin"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Käyttäjät on sallitu itse poistua ryhmistä"
+
+msgid "langAllGroups"
+msgstr "Kaikki ryhmät"
+
+msgid "langStudentUnsubscribe"
+msgstr "Poista minut tästä ryhmästä."
+
+msgid "langStudentDeletesHimself"
+msgstr "Sinut on nyt poistettu ryhmästä."
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Oletusasetukset uusille ryhmille"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Kaikki valitut ryhmät on poistettu"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Kaikki valitut ryhmät ovat nyt tyhjiä"
+
+msgid "langGroupEmptied"
+msgstr "Ryhmä on nyt tyhjä"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Kaikki valitut ryhmät on nyt täytetty"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "poistu"
+
+msgid "langSameForAll"
+msgstr "sama kaikille"
+
+msgid "langNoLimit"
+msgstr "Ei rajoituksia"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Montako ryhmää haluat muodostaa"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Muodosta ryhmät kaikista kurssilla olijoista"
+
+msgid "Empty"
+msgstr "Tyhjä"
+
+msgid "FillGroup"
+msgstr "Lisää käyttäjiä"
+
+msgid "GroupAnnouncements"
+msgstr "Ilmoitukset"
+
+msgid "Group"
+msgstr "Ryhmä"
+

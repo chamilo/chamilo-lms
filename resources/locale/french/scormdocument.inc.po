@@ -1,0 +1,180 @@
+msgid "langChapter"
+msgstr "Chapitre"
+
+msgid "langDocumentList"
+msgstr "Liste des documents"
+
+msgid "langOrganisationList"
+msgstr "Table des matières"
+
+msgid "langEditTOC"
+msgstr "Modifier la table des matières"
+
+msgid "langEditDocument"
+msgstr "Editer"
+
+msgid "langCreateDocument"
+msgstr "Créer un document"
+
+msgid "langMissingImagesDetected"
+msgstr "Images manquantes détectées"
+
+msgid "langPublish"
+msgstr "Publier"
+
+msgid "langScormcontentstudent"
+msgstr "Ceci est un format de cours Scorm. Si vous souhaitez le lancer, cliquez ici : <input type=button name=scormbutton value=\'Exécuter\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "Ceci est un contenu Scorm<br /><input type=button name=scormbutton value=\'Exécuter\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr " Le fichier ZIP a été envoyé et décompressé"
+
+msgid "langZipNoPhp"
+msgstr "Le fichier ZIP ne peut pas contenir de fichiers en .php"
+
+msgid "langGroupForumLink"
+msgstr "Forum du groupe"
+
+msgid "langGroupSpace"
+msgstr "Espace de groupe"
+
+msgid "langNotScormContent"
+msgstr "Ceci n\'est pas un fichier ZIP Scorm !"
+
+msgid "langNoText"
+msgstr "Veuillez introduire votre texte / contenu HTML"
+
+msgid "langNoFileName"
+msgstr "Veuillez introduire le nom du fichier"
+
+msgid "langMaxFileSize"
+msgstr "La taille maximale est de"
+
+msgid "langFileName"
+msgstr "Nom du fichier"
+
+msgid "langFileError"
+msgstr "Le fichier à télécharger n\'est pas valide."
+
+msgid "langDown"
+msgstr "descendre"
+
+msgid "langViMod"
+msgstr "Visibilité modifiée"
+
+msgid "langAddComment"
+msgstr "Ajouter/modifier un commentaire à"
+
+msgid "langImpossible"
+msgstr "Impossible d\'effectuer cette opération"
+
+msgid "langNewDir"
+msgstr "nom du nouveau répertoire"
+
+msgid "langTo"
+msgstr "vers"
+
+msgid "langNoSpace"
+msgstr "Le chargement a échoué. Il n\'y a plus assez de place dans votre répertoire"
+
+msgid "langDownloadEnd"
+msgstr "Le chargement est terminé"
+
+msgid "langFileExists"
+msgstr "Impossible d\'effectuer cette opération.<br />Un fichier portant ce nom existe déjà."
+
+msgid "langDocCopied"
+msgstr "Document copié"
+
+msgid "langDocDeleted"
+msgstr "Élément supprimé"
+
+msgid "langElRen"
+msgstr "Elément renommé"
+
+msgid "langDirMv"
+msgstr "Élément déplacé"
+
+msgid "langComMod"
+msgstr "Commentaire modifié"
+
+msgid "langRename"
+msgstr "Renommer"
+
+msgid "langCopy"
+msgstr "Copiez le contenu du cours"
+
+msgid "langNameDir"
+msgstr "Nom du nouveau répertoire"
+
+msgid "langDownloadFile"
+msgstr "Charger le fichier"
+
+msgid "learning_path_access"
+msgstr "Pour créer/modifier/montrer/cacher ou ajouter un parcours, cliquez sur Créer un parcours"
+
+msgid "langRoot"
+msgstr "racine"
+
+msgid "langBuilder"
+msgstr "Créer un parcours"
+
+msgid "lang_edit_learnpath"
+msgstr "Editer le nom et/ou la description du parcours"
+
+msgid "lang_add_title_and_desc"
+msgstr "Editer nom et descr."
+
+msgid "lang_add_learnpath"
+msgstr "Créer un parcours"
+
+msgid "lang_learnpath_added"
+msgstr "Le parcours a été créé. Vous pouvez maintenant ajouter des chapitres et des étapes"
+
+msgid "lang_delete_learnpath"
+msgstr "Supprimer le parcours"
+
+msgid "lang_learnpath_edited"
+msgstr "Le parcours a été édité"
+
+msgid "lang_learnpath_deleted"
+msgstr "Le parcours et tous ses composants ont été supprimés"
+
+msgid "lang_no_publish"
+msgstr "Masquer aux apprenants"
+
+msgid "lang_publish"
+msgstr "Montrer aux apprenants"
+
+msgid "lang_no_published"
+msgstr "est maintenant invisible pour les apprenants"
+
+msgid "lang_published"
+msgstr "est maintenant accessible aux apprenants"
+
+msgid "lang_description"
+msgstr "description"
+
+msgid "lang_title"
+msgstr "nom"
+
+msgid "langScormBuilder"
+msgstr "Outil auteur de cours au format Scorm"
+
+msgid "langCreateDoc"
+msgstr "Créer un document"
+
+msgid "langOrganiseDocuments"
+msgstr "Créer une table des matières"
+
+msgid "langUncompress"
+msgstr "Décompresser un fichier ZIP"
+
+msgid "ExportShort"
+msgstr "Export SCORM"
+
+msgid "progress"
+msgstr "Progression"
+

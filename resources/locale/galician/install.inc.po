@@ -1,0 +1,396 @@
+msgid "langStatDB"
+msgstr "Base de datos de Seguimento."
+
+msgid "langEnableTracking"
+msgstr "Permitir Seguemento"
+
+msgid "langInstituteShortName"
+msgstr "Acrónimo da Institución"
+
+msgid "langWarningResponsible"
+msgstr "Usa este script só despois de facer backup. O equipo de Chamilo non se responsabiliza se perdas ou danos nos datos"
+
+msgid "langAllowSelfRegProf"
+msgstr "Permitir autorrexistro como profesor"
+
+msgid "langEG"
+msgstr "e. g."
+
+msgid "langDBHost"
+msgstr "Host da Base de Datos"
+
+msgid "langDBLogin"
+msgstr "Nome de de usuario para a Base de Datos"
+
+msgid "langDBPassword"
+msgstr "Clave para a Base de Datos"
+
+msgid "langMainDB"
+msgstr "Base de datos principal de Chamilo (DB)"
+
+msgid "langAllFieldsRequired"
+msgstr "requírense todos os campos"
+
+msgid "langPrintVers"
+msgstr "Versión para Imprimir"
+
+msgid "langLocalPath"
+msgstr "Rota local correspondente"
+
+msgid "langAdminEmail"
+msgstr "Email do Administrador"
+
+msgid "langAdminName"
+msgstr "Nome do Administrador"
+
+msgid "langAdminSurname"
+msgstr "Apelidos do Administrador"
+
+msgid "langAdminLogin"
+msgstr "Login do Administrador"
+
+msgid "langAdminPass"
+msgstr "Clave do Administrador"
+
+msgid "langEducationManager"
+msgstr "Responsable Educativo"
+
+msgid "langCampusName"
+msgstr "Nome do seu portal"
+
+msgid "langDBSettingIntro"
+msgstr "O script de instalación creará a(s) base(s) de datos principal(is) de Chamilo. Por favor, lembre que Clarolinenecesitará crear varias BBDD. Se o seu fornecedor de servizos só lle permite usar unha base de datos, Chamilo non funcionará a non ser que escolla a opción \"Unha base de datos\"."
+
+msgid "langStep1"
+msgstr "Paso 1"
+
+msgid "langStep2"
+msgstr "Paso 2"
+
+msgid "langStep3"
+msgstr "Paso 3 de 6"
+
+msgid "langStep4"
+msgstr "Paso 4 de 6"
+
+msgid "langStep5"
+msgstr "Paso 5 de 6"
+
+msgid "langStep6"
+msgstr "Paso 6 de 6"
+
+msgid "langCfgSetting"
+msgstr "Parámetros de Configuración"
+
+msgid "langDBSetting"
+msgstr "Parámetros da base de datos MySQL"
+
+msgid "langMainLang"
+msgstr "Idioma Principal"
+
+msgid "langLicence"
+msgstr "Licenza"
+
+msgid "langLastCheck"
+msgstr "Última comprobación antes de instalar"
+
+msgid "langRequirements"
+msgstr "Requisitos"
+
+msgid "langDbPrefixForm"
+msgstr "Prefixo da base de datos MySQL"
+
+msgid "langDbPrefixCom"
+msgstr "Deixar baleiro se non se pide"
+
+msgid "langEncryptUserPass"
+msgstr "Encriptar a clave dos usuarios na Base de Datos"
+
+msgid "langSingleDb"
+msgstr "Usar unha ou varias BBDD para Chamilo"
+
+msgid "langAllowSelfReg"
+msgstr "Permitir autorrexistro"
+
+msgid "langRecommended"
+msgstr "(recomendado)"
+
+msgid "langScormDB"
+msgstr "BD Scorm"
+
+msgid "langAdminLastName"
+msgstr "Apelidos do administrador"
+
+msgid "langAdminPhone"
+msgstr "Teléfono do administrador"
+
+msgid "OK"
+msgstr "De acordo"
+
+msgid "langAdminFirstName"
+msgstr "Nome do administrador"
+
+msgid "langInstituteURL"
+msgstr "URL desta institución"
+
+msgid "langDokeosURL"
+msgstr "URL de Chamilo"
+
+msgid "langUserDB"
+msgstr "BD de usuario"
+
+msgid "PleaseWait"
+msgstr "Por favor, espere"
+
+msgid "PleaseCheckTheseValues"
+msgstr "Por favor, comprobe estes valores"
+
+msgid "PleasGoBackToStep1"
+msgstr "Por favor, volte para a etapa 1"
+
+msgid "langInstallationLanguage"
+msgstr "Lingua de Instalación"
+
+msgid "ReadThoroughly"
+msgstr "Lea con cuidado"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "Para que Chamilo poida funcionar, necesita o seguinte no seu servidor"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "¡Cuidado! <br> O instalador detectou unha platafoma Chamilo xa instalada no seu servidor."
+
+msgid "NewInstallation"
+msgstr "Instalación nova"
+
+msgid "CheckDatabaseConnection"
+msgstr "Comprobar a conexión da base de datos"
+
+msgid "PrintOverview"
+msgstr "Mostrar Visión Xeral"
+
+msgid "Installing"
+msgstr "Instalar"
+
+msgid "of"
+msgstr "de"
+
+msgid "Step"
+msgstr "Paso"
+
+msgid "MoreDetails"
+msgstr "Para máis detalles"
+
+msgid "ServerRequirements"
+msgstr "Requisitos do servidor"
+
+msgid "ServerRequirementsInfo"
+msgstr "As librarías e funcións que o servidor debe fornecer para poder utilizar Chamilo con todas as súas capacidades"
+
+msgid "PHPVersion"
+msgstr "Versión do PHP"
+
+msgid "support"
+msgstr "soporte"
+
+msgid "PHPVersionOK"
+msgstr "A versión do PHP está ben"
+
+msgid "RecommendedSettings"
+msgstr "Configuración recomendada"
+
+msgid "RecommendedSettingsInfo"
+msgstr "Configuración recomendada para a configuración do seu servidor. Esta configuración faise constar no ficheiro de configuración php.ini do seu servidor."
+
+msgid "Setting"
+msgstr "Configuración"
+
+msgid "Actual"
+msgstr "Actualmente"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "Permisos de directorio e ficheiros"
+
+msgid "DirectoryAndFilePermissionsInfo"
+msgstr "Algúns directorios e os ficheiros que inclúen deben poder ser escritos polo servidor web para poder executar Chamilo (ficheiros enviados polos estudantes, ficheiros html das páxinas,...) Isto podería implicar unha modificación manual no seu servidor (fora desta interface)."
+
+msgid "NotWritable"
+msgstr "Non se pode escribir"
+
+msgid "Writable"
+msgstr "Pódese escribir"
+
+msgid "ExtensionLDAPNotAvailable"
+msgstr "Extensión LDAP non dispoñible"
+
+msgid "ExtensionGDNotAvailable"
+msgstr "Extensión GD non dispoñible"
+
+msgid "DokeosLicenseInfo"
+msgstr "Chamilo é software libre distribuído baixo GNU General Public licence (GPL)"
+
+msgid "IAccept"
+msgstr "Acepto"
+
+msgid "ConfigSettingsInfo"
+msgstr "Os seguintes valores serán escritos no seu arquivo de configuración <b>main/inc/conf/configuration.php</b>:"
+
+msgid "DokeosInstallation"
+msgstr "Instalación de Chamilo"
+
+msgid "InstallDokeos"
+msgstr "Instalar Chamilo"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "Ir ao portal que acaba de crear."
+
+msgid "FirstUseTip"
+msgstr "Cando entra no seu Campus por primeira vez, o mellor xeito de entendelo é rexistrarse coa opción \"Crear o sitio dun curso\" e seguir as instrucións."
+
+msgid "Version_"
+msgstr "Versión"
+
+msgid "UpdateFromDokeosVersion"
+msgstr "Actualización de Chamilo"
+
+msgid "WelcomToTheDokeosInstaller"
+msgstr "Benvido ao Instalador de Chamilo"
+
+msgid "PleaseSelectInstallationProcessLanguage"
+msgstr "Por favor, seleccione o idioma que desexa utilizar durante a instalación"
+
+msgid "ReadTheInstallGuide"
+msgstr "ler a guía de instalación"
+
+msgid "HereAreTheValuesYouEntered"
+msgstr "Estes son os valores que introduciu"
+
+msgid "PrintThisPageToRememberPassAndOthers"
+msgstr "Imprima esta páxina para recordar o seu contrasinal e outras configuracións"
+
+msgid "TheInstallScriptWillEraseAllTables"
+msgstr "O programa de instalación borrará todas as táboas das bases de datos seleccionadas. Recomendámoslle encarecidamente que realice unha copia de seguridade completa de todas elas antes de confirmar este último paso na instalación."
+
+msgid "Warning"
+msgstr "Atención"
+
+msgid "ReadWarningBelow"
+msgstr "lea a advertencia inferior"
+
+msgid "SecurityAdvice"
+msgstr "Aviso de seguridade"
+
+msgid "YouHaveMoreThanXCourses"
+msgstr "Ten vostede máis de %d cursos na súa plataforma Chamilo! Somente se actualizaron %d cursos. Para actualizar os outros, %s faga clic aquí %s"
+
+msgid "ToProtectYourSiteMakeXAndYReadOnly"
+msgstr "Para protexer o seu sitio, configure %s e %s como ficheiros de só lectura (CHMOD 444)."
+
+msgid "Error"
+msgstr "Erro"
+
+msgid "Back"
+msgstr "Volver"
+
+msgid "HasNotBeenFound"
+msgstr "non se encontrou"
+
+msgid "PleaseGoBackToStep1"
+msgstr "Por favor, volva ao Paso 1"
+
+msgid "HasNotBeenFoundInThatDir"
+msgstr "non se atopou neste directorio"
+
+msgid "OldVersionRootPath"
+msgstr "path raíz da antiga versión"
+
+msgid "NoWritePermissionPleaseReadInstallGuide"
+msgstr "Algúns arquivos ou carpetas non teñen permiso de escritura. Para poder instalar Chamilo debe modificar primeiro os permisos (empregando CHMOD). Por favor lea a %s Guía de Instalación %s"
+
+msgid "DBServerDoesntWorkOrLoginPassIsWrong"
+msgstr "O servidor de base de datos non funciona ou a identificación / clave é incorrecta"
+
+msgid "PleaseGoBackToStep"
+msgstr " 	Por favor, volva ao Paso"
+
+msgid "DBSettingUpgradeIntro"
+msgstr "O programa de actualización recuperará e actualizará as bases de datos de Chamilo. Para realizar isto, o programa utilizará as bases de datos e a configuración definidas debaixo. ¡ Debido a que o noso software funciona nunha ampla gama de sistemas e non foi posible probalo en todos, recomendámoslle encarecidamente que realice unha copia completa das súas bases de datos antes de proceder á actualización !"
+
+msgid "ExtensionMBStringNotAvailable"
+msgstr "Extensión MBString non dispoñible"
+
+msgid "ExtensionMySQLNotAvailable"
+msgstr "Extensión MySQL non dispoñible"
+
+msgid "DokeosArtLicense"
+msgstr "As imaxes e as galerías de medios de Chamilo utilizan imaxes e iconas de Nuvola, Crystal Clear e Tango. Outras imaxes e medios, como diagramas e animacións flash, tomáronse prestadas de Wikimedia e dos cursos de Ali Pakdel e de Denis Hoa co seu consentimento e publicadas baixo licenza BY-SA Creative Commons. Pode atopar os detalles da licenza en <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">a web de CC</a>, onde un enlace ao pé da páxina daralle acceso ao texto completo da licenza."
+
+msgid "OptionalParameters"
+msgstr "Parámetros opcionais"
+
+msgid "FailedConectionDatabase"
+msgstr "A conexión coa base de datos fallou. Poida que o nome de usuario, a contraseña ou o prefixo da base de datos sexan incorrectos. Por favor, revise estes datos e volva intentalo."
+
+msgid "EncryptMethodUserPass"
+msgstr "Método de encriptación"
+
+msgid "UpgradeFromDokeos16x"
+msgstr "Actualizar desde Chamilo 1.6.x"
+
+msgid "UpgradeFromDokeos18x"
+msgstr "Actualizar desde Chamilo 1.8.x"
+
+msgid "Step7"
+msgstr "Paso 7"
+
+msgid "SuggestionOnlyToEnableCSSUploadFeature"
+msgstr "Aconsellable só si quere activar a opción de subida de CSS"
+
+msgid "SuggestionOnlyToEnableSubLanguageFeature"
+msgstr "Aconsellable só si quere activar a opción de sub-linguaxe"
+
+msgid "ToProtectYourSiteMakeXReadOnlyAndDeleteY"
+msgstr "Para protexer a súa instalación, poña o cartafol %s en só lectura chmod -r 0555 baixo Linux) e borre completamente o cartafol %s."
+
+msgid "IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog"
+msgstr "Se intenta actualizar <a href=\"http://translate.chamilo.org/documentation/changelog.html\" target=\"_blank\">desde unha versión anterior de Chamilo</a>, quizás desexe botar unha mirada ao rexistro de cambios para coñecer as novidades e o que cambiou."
+
+msgid "WelcomeToTheDokeosInstaller"
+msgstr "Benvido ao instalador de Chamilo"
+
+msgid "PHPVersionError"
+msgstr "A súa versión de PHP non coincide cos requisitos para este software. Por favor, comprobe que ten a versión máis recente e volva intentalo."
+
+msgid "ExtensionSessionsNotAvailable"
+msgstr "Extensión de sesións non dispoñible"
+
+msgid "ExtensionZlibNotAvailable"
+msgstr "Extensión Zlib non dispoñible"
+
+msgid "ExtensionPCRENotAvailable"
+msgstr "Extensión PCRE non dispoñible"
+
+msgid "DatabaseXWillBeCreated"
+msgstr "Crearase a base de datos %s"
+
+msgid "ADatabaseWithTheSameNameAlreadyExists"
+msgstr "Xa existe unha base de datos co mesmo nome"
+
+msgid "UserXCantHaveAccessInTheDatabaseX"
+msgstr "O usuario %s non ten acceso á base de datos %s"
+
+msgid "DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions"
+msgstr "Non se pode crear a base de datos %s, o usuario %s non ten persimos suficientes"
+
+msgid "CourseTestWasCreated"
+msgstr "O test do curso foi creado satisfactoriamente"
+
+msgid "InstallExecution"
+msgstr "Instalación en proceso de execución"
+
+msgid "UpdateExecution"
+msgstr "Actualizar o proceso de execución"
+
+msgid "PleaseWaitThisCouldTakeAWhile"
+msgstr "Por favor espere. Isto podería levar un tempo..."
+

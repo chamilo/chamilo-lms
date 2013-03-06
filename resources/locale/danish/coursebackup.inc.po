@@ -1,0 +1,129 @@
+msgid "langSelectOptionForBackup"
+msgstr "Vælg venligst en backup-løsning."
+
+msgid "langLetMeSelectItems"
+msgstr "Lad mig vælge kursuskomponenterne"
+
+msgid "langCreateFullBackup"
+msgstr "Lav en komplet backup af dette kursus"
+
+msgid "langCreateBackup"
+msgstr "Lav en backup"
+
+msgid "langBackupCreated"
+msgstr "Backup af kurset er oprettet. Download af denne fil skulle starte straks. Hvis ikke, klik det følgende link"
+
+msgid "langSelectBackupFile"
+msgstr "vælg en backup-fil"
+
+msgid "langImportBackup"
+msgstr "Importer backup"
+
+msgid "langImportFullBackup"
+msgstr "Importer fuld backup"
+
+msgid "langImportFinished"
+msgstr "Importering fuldført"
+
+msgid "langEvents"
+msgstr "Kalender"
+
+msgid "langAnnouncements"
+msgstr "Meddelelser"
+
+msgid "langDocuments"
+msgstr "Dokumenter"
+
+msgid "langTests"
+msgstr "Øvelser"
+
+msgid "langLearnpaths"
+msgstr "Læringsstier"
+
+msgid "langCopyCourse"
+msgstr "Kopier kursus"
+
+msgid "langSelectItemsToCopy"
+msgstr "Vælg dele som skal kopieres"
+
+msgid "langCopyFinished"
+msgstr "Kopiering fuldført"
+
+msgid "langFullRecycle"
+msgstr "Genbrug kursussiden, men uden indhold"
+
+msgid "langRecycleCourse"
+msgstr "Genbrug kursusside"
+
+msgid "langRecycleFinished"
+msgstr "Siden er nu renset for indhold"
+
+msgid "langRecycleWarning"
+msgstr "Advarsel: Ved at bruge dette værktøj, sletter du dele af dit kursus. Dette kan ikke fortrydes. Vi anbefaler af du tager en <a href=\"create_backup.php\">backup</a> før du bruger dette genbrugs-værktøj."
+
+msgid "langSameFilename"
+msgstr "Hvad skal der gøres med importerede filer, som har samme filnavn som en eksisterende fil?"
+
+msgid "langSameFilenameSkip"
+msgstr "Spring over filer med samme navn"
+
+msgid "langSameFilenameRename"
+msgstr "Omdøb fil (eks. fil.pdf bliver til fil_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Overskriv fil"
+
+msgid "langSelectDestinationCourse"
+msgstr "Vælg destinationen for kurset"
+
+msgid "langFullCopy"
+msgstr "Fuld kopi"
+
+msgid "langCourseDescription"
+msgstr "Kursusbeskrivelse"
+
+msgid "langNoResourcesToBackup"
+msgstr "Der er intet materiale at tage backup af"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Der er intet materiale i backup-filen"
+
+msgid "langSelectResources"
+msgstr "Vælg materiale"
+
+msgid "langNoResourcesToRecycles"
+msgstr "Der er intet materiale at genbruge"
+
+msgid "langIncludeQuestionPool"
+msgstr "Inkluder spørgsmålsbank"
+
+msgid "langLocalFile"
+msgstr "lokal fil"
+
+msgid "langServerFile"
+msgstr "fil på server"
+
+msgid "langNoBackupsAvailable"
+msgstr "ingen backup tilgængelig"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "Ingen destination for kurset tilgængelig"
+
+msgid "langBackup"
+msgstr "Backup"
+
+msgid "langImportBackupInfo"
+msgstr "Importer en backup. Du kan enten uploade en backup-fil fra din computer eller benytte en backup-fil på serveren."
+
+msgid "langCreateBackupInfo"
+msgstr "Lav en backup af dette kursus. Du kan vælge hvilket kursusindhold, som skal i backup filen."
+
+msgid "ToolIntro"
+msgstr "Introduktioner til værktøjer på siden"
+
+msgid "UploadError"
+msgstr "Upload lykkedes ikke. Venligst undersøg at filernes størrelse ikke overskrider begrænsningen, og at der ingen korrupte fil- og mappenavne er at finde"
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Dokumenter tilføjes også"
+

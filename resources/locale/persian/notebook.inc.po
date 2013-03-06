@@ -1,0 +1,90 @@
+msgid "NewNote"
+msgstr "یادداشت جدید"
+
+msgid "Note"
+msgstr "یادداشت"
+
+msgid "NoteDeleted"
+msgstr "یادداشت حذف شد"
+
+msgid "NoteUpdated"
+msgstr "یادداشت بروز رسانی شد"
+
+msgid "NoteCreated"
+msgstr "یادداشت ساخته شد"
+
+msgid "YouMustWriteANote"
+msgstr "لطفا یک یادداشت بنویسید"
+
+msgid "SaveNote"
+msgstr "ذخیره یادداشت"
+
+msgid "WriteYourNoteHere"
+msgstr "برای نوشتن یادداشت جدید اینجا کلیک کنید"
+
+msgid "SearchByTitle"
+msgstr "جستجو بر اساس عنوان"
+
+msgid "WriteTheTitleHere"
+msgstr "عنوان را اینجا بنویسید"
+
+msgid "UpdateDate"
+msgstr "بروز رسانی شد"
+
+msgid "NoteAddNew"
+msgstr "افزودن یک یادداشت در دفترچه یادداشت شخصی من"
+
+msgid "OrderByCreationDate"
+msgstr "چینش بر اساس تاریخ ساخت"
+
+msgid "OrderByModificationDate"
+msgstr "چینش بر اساس آخرین تاریخ بروز رسانی"
+
+msgid "OrderByTitle"
+msgstr "چینش بر اساس عنوان"
+
+msgid "NoteTitle"
+msgstr "عنوان یادداشت"
+
+msgid "NoteComment"
+msgstr "جزئیات یادداشت"
+
+msgid "NoteAdded"
+msgstr "یادداشت اضافه شد"
+
+msgid "NoteConfirmDelete"
+msgstr "آیا مطمئن هستید قصد حذف این یادداشت را دارید"
+
+msgid "AddNote"
+msgstr "ساخت یادداشت"
+
+msgid "ModifyNote"
+msgstr "ویرایش یادداشت شخصی من"
+
+msgid "BackToNoteList"
+msgstr "بازگشت به فهرست یادداشت"
+
+msgid "NotebookManagement"
+msgstr "مدیریت دفترچه یادداشت"
+
+msgid "BackToNotesList"
+msgstr "بازگشت به فهرست یادداشت"
+
+msgid "NotesSortedByTitleAsc"
+msgstr "چینش یادداشت ها بر اساس عنوان صعودی"
+
+msgid "NotesSortedByTitleDESC"
+msgstr "چینش یادداشت ها بر اساس عنوان نزولی"
+
+msgid "NotesSortedByUpdateDateAsc"
+msgstr "چینش یادداشت ها بر اساس تاریخ بروز رسانی صعودی"
+
+msgid "NotesSortedByUpdateDateDESC"
+msgstr "چینش یادداشت ها بر اساس تاریخ بروز رسانی نزولی"
+
+msgid "NotesSortedByCreationDateAsc"
+msgstr "چینش یادداشت ها بر اساس تاریخ ساخت صعودی"
+
+msgid "NotesSortedByCreationDateDESC"
+msgstr "چینش یادداشت ها بر اساس تاریخ ساخت نزولی"
+

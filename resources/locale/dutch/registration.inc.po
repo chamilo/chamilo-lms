@@ -1,0 +1,556 @@
+msgid "langShouldBeCSVFormat"
+msgstr "Het bestand moet in CSV-formaat zijn. Voeg geen spaties toe. De structuur moet exact zijn zoals:"
+
+msgid "langTracking"
+msgstr "Statistieken"
+
+msgid "langEnter2passToChange"
+msgstr "Nieuw wachtwoord tweemaal invullen, of blanco laten om het huidige te behouden."
+
+msgid "langAuthInfo"
+msgstr "Authenticatie"
+
+msgid "langUpdateImage"
+msgstr "Wijzig foto"
+
+msgid "langImageWrong"
+msgstr "De bestandsgrootte voor de foto moet kleiner zijn dan"
+
+msgid "langAddImage"
+msgstr "Foto"
+
+msgid "langCourseManager"
+msgstr "Cursusbeheerder"
+
+msgid "NewPass"
+msgstr "Nieuw wachtwoord"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "Het huidige wachtwoord is onjuist"
+
+msgid "password_request"
+msgstr "U heeft gevraagd om uw wachtwoord op te sturen.Indien u dit niet gedaan heeft, negeer deze mail.Om uw wachtwoord te resetten, klik op de resetlink."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Uw wachtwoord werd u doorgestuurd per e-mail."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Geef het e-mailadres waarmee u registreerde en wij sturen u een nieuw wachtwoord."
+
+msgid "langLogin"
+msgstr "Inloggen"
+
+msgid "langAction"
+msgstr "Actie"
+
+msgid "langPreserved"
+msgstr "Bewaard"
+
+msgid "langDeleted"
+msgstr "Verwijderd"
+
+msgid "langAdded"
+msgstr "Toegevoegd"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Bevestig annulering registratie"
+
+msgid "langCourseName"
+msgstr "Naam van de cursus"
+
+msgid "langSubscribe"
+msgstr "Registreer"
+
+msgid "langSee"
+msgstr "Ga naar"
+
+msgid "langLastVisits"
+msgstr "Mijn laatste bezoeken"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Om een lijst van gebruikers aan uw cursus toe te voegen moet u een beheerder contacteren."
+
+msgid "langPassTooEasy"
+msgstr "Dit wachtwoord is te eenvoudig. Kies een ander zoals bv."
+
+msgid "langGroupUserManagement"
+msgstr "Groepenbeheer"
+
+msgid "langAddedToCourse"
+msgstr "is nu geregistreerd voor uw cursus"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Er is al een gebruiker met dezelfde naam en voornaam ingeschreven voor de cursus. U kan deze gebruiker niet voor een tweede keer inschrijven."
+
+msgid "langBackUser"
+msgstr "Terug naar gebruikerslijst"
+
+msgid "langUserOneByOneExplanation"
+msgstr "De hier ingevulde gebruikersnaam en wachtwoord zullen aan deze gebruiker per e-mail medegedeeld worden."
+
+msgid "langGiveTutor"
+msgstr "Tot begeleider benoemen"
+
+msgid "langRemoveRight"
+msgstr "Dit recht annuleren"
+
+msgid "langGiveAdmin"
+msgstr "Tot beheerder benoemen"
+
+msgid "langUserNumber"
+msgstr "aantal"
+
+msgid "langDownloadUserList"
+msgstr "Lijst opsturen"
+
+msgid "langSend"
+msgstr "Opsturen"
+
+msgid "langUserAddExplanation"
+msgstr "Elke lijn van het bestand dat opgestuurd wordt, moet uit exact deze 5 velden bestaan: <b>Naam   Voornaam   		Gebruikersnaam   Wachtwoord 		  E-mail</b> door tabs gescheiden en in deze volgorde. De gebruikers zullen hun gebruikersnaam en wachtwoord per e-mail krijgen."
+
+msgid "langUserMany"
+msgstr "Gebruikerslijst importeren via een tekstbestand"
+
+msgid "langOneByOne"
+msgstr "Gebruiker manueel toevoegen"
+
+msgid "langNow"
+msgstr "nu"
+
+msgid "langTutor"
+msgstr "Begeleider (groepen)"
+
+msgid "langTitular"
+msgstr "Lesgever"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'arial, helvetica\'><big>Mijn cursussen</big><br /><br />Duid de cursussen aan die u wenst te volgen en degene die u niet meer wenst te volgen (niet mogelijk voor de cursussen waarvan u beheerder bent). Klik dan op \'Ok\' onder de lijst."
+
+msgid "langStudent"
+msgstr "Student"
+
+msgid "langImportUserList"
+msgstr "Importeer een lijst van gebruikers"
+
+msgid "langAddAU"
+msgstr "Gebruikers toevoegen"
+
+msgid "langAddedU"
+msgstr "werd toegevoegd. Indien u zijn adres ingetikt hebt, zal de student een bericht krijgen met zijn gebruikersnaam."
+
+msgid "langTheU"
+msgstr "De gebruiker"
+
+msgid "langRegYou"
+msgstr "heeft u ingeschreven op"
+
+msgid "langOneResp"
+msgstr "Een van de verantwoordelijken voor de Chamilocursus"
+
+msgid "langTaken"
+msgstr "is al in gebruik. Kies een ander."
+
+msgid "langUserNo"
+msgstr "De gekozen gebruikersnaam"
+
+msgid "langFilled"
+msgstr "U hebt niet alle velden ingevuld."
+
+msgid "langInC"
+msgstr "in deze cursus"
+
+msgid "langRole"
+msgstr "Rol (facultatief)"
+
+msgid "UserPicture"
+msgstr "Afbeelding"
+
+msgid "langProfileReg"
+msgstr "Uw nieuw profiel is opgeslagen."
+
+msgid "langEmailWrong"
+msgstr "Het e-mailadres is onvolledig of bevat ongeldige lettertekens."
+
+msgid "langUserTaken"
+msgstr "De gekozen gebruikersnaam is al in gebruik."
+
+msgid "langFields"
+msgstr "U hebt niet alle velden ingevuld."
+
+msgid "langAgain"
+msgstr "Opnieuw!"
+
+msgid "langPassTwo"
+msgstr "U hebt twee verschillende wachtwoorden ingevuld."
+
+msgid "langViewProfile"
+msgstr "Mijn profiel"
+
+msgid "langModifProfile"
+msgstr "Wijzig mijn profiel"
+
+msgid "langIsReg"
+msgstr "Uw wijzigingen zijn opgeslagen."
+
+msgid "langNowGoCreateYourCourse"
+msgstr "U kunt nu verdergaan om uw cursus aan te maken."
+
+msgid "langNowGoChooseYourCourses"
+msgstr "U mag nu in de lijst de cursussen selecteren die u wenst te gebruiken."
+
+msgid "langMailHasBeenSent"
+msgstr "Een e-mail werd naar u opgestuurd ter herinnering van uw gebruikersnaam en wachtwoord."
+
+msgid "langPersonalSettings"
+msgstr "Uw persoonlijke gegevens zijn opgeslagen."
+
+msgid "langManager"
+msgstr "Platformbeheerder"
+
+msgid "langFormula"
+msgstr "Vriendelijke groeten, uw lesgever"
+
+msgid "langProblem"
+msgstr "In geval van problemen kan u met ons contact opnemen."
+
+msgid "langIs"
+msgstr "is"
+
+msgid "langAddress"
+msgstr "Het adres van"
+
+msgid "langSettings"
+msgstr "met de volgende parameters:
+Gebruikersnaam:"
+
+msgid "langYouAreReg"
+msgstr "U bent geregistreerd voor"
+
+msgid "langYourReg"
+msgstr "Uw registratie op"
+
+msgid "langUserFree"
+msgstr "De ingevoerde gebruikersnaam is al in gebruik. Gebruik de terugknop van uw browser en probeer opnieuw."
+
+msgid "langEmptyFields"
+msgstr "U hebt niet alle velden ingevuld. Gebruik de terugknop van uw browser en probeer opnieuw."
+
+msgid "langPassTwice"
+msgstr "U hebt twee verschillende wachtwoorden ingevuld. Gebruik de terugknop van uw browser en probeer opnieuw."
+
+msgid "langRegAdmin"
+msgstr "Cursussen aanmaken"
+
+msgid "langRegStudent"
+msgstr "Registreren voor cursussen"
+
+msgid "langConfirmation"
+msgstr "Bevestiging"
+
+msgid "langPass"
+msgstr "Wachtwoord"
+
+msgid "langSurname"
+msgstr "Voornaam"
+
+msgid "langRegistration"
+msgstr "Registratie"
+
+msgid "langYourAccountParam"
+msgstr "Dit is de nodige informatie om in te loggen op"
+
+msgid "langLoginRequest"
+msgstr "Log-inverzoek"
+
+msgid "langDefineHeadings"
+msgstr "Definieer aanvullende informatie"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Enkel voor cursusbeheerders"
+
+msgid "langLostPassword"
+msgstr "Wachtwoord vergeten"
+
+msgid "langAdminOfCourse"
+msgstr "Cursusbeheerder"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Gebruiker van deze cursus"
+
+msgid "langIsTutor"
+msgstr "Leraar"
+
+msgid "langParamInTheCourse"
+msgstr "Rol binnen de cursus"
+
+msgid "langMember"
+msgstr "lid"
+
+msgid "langLock"
+msgstr "gesloten"
+
+msgid "langUnlock"
+msgstr "open"
+
+msgid "langHaveNoCourse"
+msgstr "geen cursus"
+
+msgid "langManage"
+msgstr "Portaalbeheer"
+
+msgid "langAdministrationTools"
+msgstr "Administratietools"
+
+msgid "langUserProfileReg"
+msgstr "Gebruiker e-portfolio is geregistreerd."
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Geen gebruiker gekend met dit e-mailadres."
+
+msgid "langCourses4User"
+msgstr "Cursussen voor deze gebruiker"
+
+msgid "langCoursesByUser"
+msgstr "Cursussen van gebruiker"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Schrijf gebruikers in in uw cursus"
+
+msgid "langPreced100"
+msgstr "Vorige 100"
+
+msgid "langAddmore"
+msgstr "Gebruikers inschrijven"
+
+msgid "langAddback"
+msgstr "Terug naar gebruikerslijst"
+
+msgid "langreg"
+msgstr "Schrijf in"
+
+msgid "langQuit"
+msgstr "Uitloggen"
+
+msgid "your_password_has_been_reset"
+msgstr "Uw wachtwoord is gereset en werd u doorgestuurd per e-mail."
+
+msgid "langSex"
+msgstr "Geslacht"
+
+msgid "langClass"
+msgstr "Klas"
+
+msgid "langEdit"
+msgstr "wijzig"
+
+msgid "required"
+msgstr "verplicht"
+
+msgid "langOptionalTextFields"
+msgstr "Extra velden"
+
+msgid "langMyProductions"
+msgstr "Mijn prestaties"
+
+msgid "langFileDeleted"
+msgstr "Het bestand is verwijderd."
+
+msgid "FullUserName"
+msgstr "Naam"
+
+msgid "SearchForUser"
+msgstr "Zoek naar een gebruiker"
+
+msgid "SearchButton"
+msgstr "Zoek"
+
+msgid "SearchNoResultsFound"
+msgstr "Geen zoekresultaten gevonden."
+
+msgid "UsernameWrong"
+msgstr "De gebruikersnaam mag enkel letters, cijfers en _.- bevatten."
+
+msgid "PasswordRequestFrom"
+msgstr "Dit is een wachtwoordaanvraag voor het e-mailadres"
+
+msgid "CorrespondsToAccount"
+msgstr "Dit e-mailadres komt overeen met de volgende gebruiker."
+
+msgid "CorrespondsToAccounts"
+msgstr "Dit e-mailadres komt overeen met de volgende gebruikers."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo kan de aanvraag niet automatisch behandelen omdat de account een externe authenticatiebron gebruikt. Gelieve de gepaste maatregelen te nemen en de gebruiker hierover in te lichten."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo kan de aanvraag niet automatisch behandelen omdat minstens een van de accounts een externe authenticatiebron gebruikt. Gelieve de gepaste maatregelen te nemen voor alle accounts (ook die met platformauthenticatie) en de gebruiker hierover in te lichten."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo kan de aanvraag niet automatisch behandelen voor dit accounttype. Uw aanvraag is verzonden naar de platformbeheerder, die de gepaste maatregelen zal nemen en u zal inlichten over het resultaat."
+
+msgid "langphone"
+msgstr "Telefoonnummer"
+
+msgid "Unreg"
+msgstr "Registratie ongedaan maken"
+
+msgid "MyProgress"
+msgstr "Mijn vooruitgang"
+
+msgid "ProgressIntroduction"
+msgstr "Start met het kiezen van een cursus sessie.<br />U kunt daarna uw vooruitgang volgen voor alle cursussen waarvoor u ingeschreven bent."
+
+msgid "Select"
+msgstr "Kies"
+
+msgid "NeverExpires"
+msgstr "Vervalt nooit"
+
+msgid "On"
+msgstr "Op"
+
+msgid "ExpirationDate"
+msgstr "Vervaldatum"
+
+msgid "ActiveAccount"
+msgstr "Actieve gebruiker"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "Uw account is geaccepteerd"
+
+msgid "ApprovalForNewAccount"
+msgstr "Goedkeuring voor een nieuw account"
+
+msgid "ManageUser"
+msgstr "Beheer gebruiker"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Schrijf de gebruikers in deze cursus in als leerkracht"
+
+msgid "SendMessage"
+msgstr "Verstuur bericht"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "Uw paswoord is geëncrypteerd omwile van beveiligingsredenen. Na het klikken op de link wordt opnieuw een e-mail verstuurd met uw paswoord."
+
+msgid "UsersUnsubscribed"
+msgstr "De geselecteerde gebruikers zijn uitgeschreven uit de cursus"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "Het systeem kon het email contact niet verzenden"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "Deze OpenID bestaat niet in onze database. Gelieve u te registreren voor een nieuwe account. Bent u bij ons reeds geregistreerd, gelieve dan uw profiel aan te passen, en deze OpenID toe te voegen"
+
+msgid "UsernameMaxXCharacters"
+msgstr "De gebruikersnaam mag slechts maximum %s tekens lang zijn"
+
+msgid "PictureUploaded"
+msgstr "Uw afbeelding werd geüploaded"
+
+msgid "ProductionUploaded"
+msgstr "Het bestand van uw productie is geüploaded."
+
+msgid "FolderUpdated"
+msgstr "De folder werd geüpdated."
+
+msgid "UsersRegistered"
+msgstr "Deze gebruikers werden ingeschreven in de cursus"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "Gebruiker reeds geregistreerd bij een andere coach"
+
+msgid "UserCreatedPlatform"
+msgstr "Gebruiker aangemaakt in het systeem"
+
+msgid "UserInSession"
+msgstr "Gebruiker toegevoegd in de sessie"
+
+msgid "UserNotAdded"
+msgstr "Gebruiker niet toegevoegd"
+
+msgid "NoSessionId"
+msgstr "De sessie werd niet geïdentificeerd"
+
+msgid "NoUsersRead"
+msgstr "Gelieve uw XML/CSV bestand te controleren"
+
+msgid "UserImportFileMessage"
+msgstr "Als de XML/CVS file ontbrekende logins bevat zal de voornaam en de familienaam samengevoegd worden om een nieuwe login te maken. bv. Julio Montoya wordt jmontoya"
+
+msgid "UserAlreadyRegisteredByOtherCreator"
+msgstr "Gebruiker reeds geregistreerd door een ander coach"
+
+msgid "NewUserInTheCourse"
+msgstr "Nieuwe gebruiker in de cursus"
+
+msgid "MessageNewUserInTheCourse"
+msgstr "Er is een nieuwe gebruiker in de cursus"
+
+msgid "EditNormalProfile"
+msgstr "Wijzig normaal profiel"
+
+msgid "EditExtendProfile"
+msgstr "Wijzig uitgebreid profiel"
+
+msgid "EditInformation"
+msgstr "Wijzig profiel"
+
+msgid "RegisterUser"
+msgstr "Registreer"
+
+msgid "IHaveReadAndAgree"
+msgstr "Ik heb het gelezen en ga akkoord met de"
+
+msgid "ByClickingRegisterYouAgreeTermsAndConditions"
+msgstr "Door te klikken op \'registreer\' hieronder, gaat u akkoord met de algemene termen en condities"
+
+msgid "User"
+msgstr "Gebruiker"
+
+msgid "LostPass"
+msgstr "Wachtwoord vergeten?"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "Gelieve uw gebruikersnaam of uw e-mailadres in te vullen waarmee u geregistreerd bent en we versturen uw wachtwoord."
+
+msgid "NoUserAccountWithThisEmailAddress"
+msgstr "Er werd geen gebruiker gevonden met deze login en/of  dit e-mailadres."
+
+msgid "CouldNotResetPassword"
+msgstr "Onmogelijk om het wachtwoord te herstellen"
+
+msgid "WithTheFollowingSettings"
+msgstr "met de volgende instellingen:"
+
+msgid "UnsubscribeUsersAlreadyAddedInCourse"
+msgstr "Schrijf reeds toegevoegde gebruikers uit"
+
+msgid "YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators"
+msgstr "Uw account op %s werd goedgekeurd door één van onze beheerders."
+
+msgid "HaveFun"
+msgstr "Veel plezier,"
+
+msgid "YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided"
+msgstr "U kan zich nu aanmelden bij %s door gebruik te maken van de login en het wachtwoord dat u hebt ingegeven."
+
+msgid "AreYouSureToEditTheUserStatus"
+msgstr "Bent u zeker dat u de gebruikersstatus wenst te wijzigen?"
+
+msgid "TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse"
+msgstr "De begeleider kan enkel de voortgang van de cursisten binnen de cursus opvolgen"
+
+msgid "TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse"
+msgstr "De leerkracht kan kwalificeren, evalueren en de voortgang van de cursisten in de cursus opvolgen."
+
+msgid "LoginOrEmailAddress"
+msgstr "Gebruikersnaam of e-mailadres"
+
+msgid "AtOnce"
+msgstr "Bij ontvangst"
+
+msgid "Daily"
+msgstr "Dagelijks"
+

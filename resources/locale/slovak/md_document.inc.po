@@ -1,0 +1,96 @@
+msgid "langMdCallingTool"
+msgstr "Dokumenty"
+
+msgid "langMdTitle"
+msgstr "Názov vyučovacieho predmetu"
+
+msgid "langMdDescription"
+msgstr "Pre uloženie tejto informácie stlačte Uložiť"
+
+msgid "langTool"
+msgstr "Metadáta dokumentu"
+
+msgid "langPressAgain"
+msgstr "Znova stlačte \"Uložiť\" ..."
+
+msgid "langLanguageTip"
+msgstr "jazyk, v ktorom bol vyučovací predmet vytvorený"
+
+msgid "langIdentifier"
+msgstr "Identifikátor"
+
+msgid "langIdentifierTip"
+msgstr "jedinečná identifikácia vyučovacieho predmetu zložená z písmen, číslic, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "názov alebo meno a jazyk tohto názvu alebo mena"
+
+msgid "langDescriptionTip"
+msgstr "popis alebo komentár a jazyk použitý pre popis tohto vyučovacieho predmetu"
+
+msgid "langKeyword"
+msgstr "Klúčové slová"
+
+msgid "langKeywordTip"
+msgstr "rozdeliť čiarkami (písmená, číslice, -.)"
+
+msgid "langKwNote"
+msgstr "Keď zmeníte jazyk popisu, nepridávajte súčasne kľúčové slová."
+
+msgid "langClickKw"
+msgstr "Pre označenie alebo zrušenie výberu kľúčového slova kliknite naň v štruktúre."
+
+msgid "langRights"
+msgstr "Používateľské práva"
+
+msgid "langRightsTip"
+msgstr "opísať slovami"
+
+msgid "langVersion"
+msgstr "Verzia"
+
+msgid "langVersionTip"
+msgstr "číslo alebo popis"
+
+msgid "langStatusTip"
+msgstr "vybrať zo zoznamu"
+
+msgid "langCreatedSize"
+msgstr "Vytvorený, veľkosť"
+
+msgid "langCreatedSizeTip"
+msgstr "RRRR-MM-DD vytvorenia, veľkosť v bytoch"
+
+msgid "langAuthorTip"
+msgstr "vo formáte VCARD"
+
+msgid "langFormat"
+msgstr "Formát"
+
+msgid "langFormatTip"
+msgstr "vybrať zo zoznamu"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "Klikom otvoríte predmet"
+
+msgid "langStore"
+msgstr "Uložiť"
+
+msgid "langDeleteAll"
+msgstr "Zmazať všetky metadáta"
+
+msgid "langConfirmDelete"
+msgstr "*Naozaj* chcete zmazať všetky metadáta?"
+
+msgid "langCourseKwds"
+msgstr "Tento dokument obsahuje kľ�čov� slov� kurzu"
+
+msgid "langSearch"
+msgstr "Vyhľadať"
+
+msgid "langSearchCrit"
+msgstr "Jedno slovo v riadku!"
+

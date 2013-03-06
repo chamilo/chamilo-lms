@@ -1,0 +1,133 @@
+msgid "LinkMoved"
+msgstr "Linkki siirretty"
+
+msgid "langLinkName"
+msgstr "Linkin nimi"
+
+msgid "langLinkAdd"
+msgstr "Lisää linkki"
+
+msgid "langLinkAdded"
+msgstr "Linkki on lisätty"
+
+msgid "langLinkMod"
+msgstr "Muokkaa linkkiä"
+
+msgid "langLinkModded"
+msgstr "Linkki on muokattu"
+
+msgid "langLinkDel"
+msgstr "Linkki on poistettu"
+
+msgid "langLinkDeleted"
+msgstr "Linkki on poistettu"
+
+msgid "langLinkDelconfirm"
+msgstr "Haluatko poistaa tämän linkin?"
+
+msgid "langAllLinksDel"
+msgstr "Poista kaikki linkit tästä aihealueesta"
+
+msgid "langCategoryName"
+msgstr "Aihealueen nimi"
+
+msgid "langCategoryAdd"
+msgstr "Lisää aihealue"
+
+msgid "langCategoryAdded"
+msgstr "Aihealue on lisätty"
+
+msgid "langCategoryModded"
+msgstr "Aihealue on muokattu."
+
+msgid "langCategoryDel"
+msgstr "Poista aihealue"
+
+msgid "langCategoryDeleted"
+msgstr "Aihealue ja kaikki siellä olleet linkit on poistettu"
+
+msgid "langCategoryDelconfirm"
+msgstr "Poistaessasi aihealuuen kaikki siellä olevat linkit poistuvat.
+Haluatko varmasti poistaa tämän aihealueen?"
+
+msgid "langAllCategoryDel"
+msgstr "Poista kaikki aihealueet ja linkit"
+
+msgid "langGiveURL"
+msgstr "Kirjoita linkit URL-osoite"
+
+msgid "langGiveCategoryName"
+msgstr "Kirjoita aihealueen nimi"
+
+msgid "langNoCategory"
+msgstr "Ei aihealuetta"
+
+msgid "showall"
+msgstr "Avaa kaikki aihealueet"
+
+msgid "shownone"
+msgstr "Sulje kaikki aihealueet"
+
+msgid "langListDeleted"
+msgstr "Lista on poistettu"
+
+msgid "langAddLink"
+msgstr "Lisää linkki"
+
+msgid "langDelList"
+msgstr "Poista koko lista"
+
+msgid "langModifyLink"
+msgstr "Muokkaa linkkiä"
+
+msgid "langCsvImport"
+msgstr "CSV tiedoston tuonti"
+
+msgid "langCsvFileNotFound"
+msgstr "CVS liitetiedostoa ei voida avata (tyhjä tai liian iso)"
+
+msgid "langCsvFileNoSeps"
+msgstr "CSV tiedostossa välimerkkinä täytyy olla , tai ;"
+
+msgid "langCsvFileNoURL"
+msgstr "CSV tiedostossa pitää vähintään olla sarakkeet URL ja title"
+
+msgid "langCsvFileLine1"
+msgstr "... - rivi 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "rivi(ä) ei voitu tuoda linkkiä (ei URL tai otsikkoa)"
+
+msgid "langCsvLinesOld"
+msgstr "aiempaa linkki(ä) päivitetty (sama URL tai luokka)"
+
+msgid "langCsvLinesNew"
+msgstr "uutta linkkiä luotu."
+
+msgid "langCsvExplain"
+msgstr "Tiedoston sisällön tulisi olla: <blockquote><pre> <b>URL</b>;category;<b>title</b>;description; <b>http://www.aaa.org/...</b>;Tärkeät linkit;<b>Nimi 1</b>;Kuvaus 1; <b>http://www.bbb.net/...</b>;;<b>Nimi 2</b>;\"Kuvaus 2\"; </pre></blockquote> Jos URL ja luokka vastaavat jo olemassa olevaa linkkiä otsikko ja kuvaus päivitetään.  Muussa tapauksessa tehdään uusi linkki.<br><br> Lihavoitu = pakollinen. Sarakkeet voi olla missä tahansa järjestyksessä, nimet pienellä tai isolla kirjoitettuna. Ylimääräiset kentät lisätään kuvaukseen. Välimerkkinä: pilkku tai puolipiste (, ;)."
+
+msgid "langLinkUpdated"
+msgstr "Linkki on päivitetty"
+
+msgid "langAll_Link_Deleted"
+msgstr "Linkki on poistettu"
+
+msgid "langOnHomepage"
+msgstr "Näytä linkki kotisivulla"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Näytä tämä linkki kuvakkeena kurssin etusivulla"
+
+msgid "General"
+msgstr "Yleinen"
+
+msgid "langSaveLink"
+msgstr "Tallenna linkki"
+
+msgid "langSaveCategory"
+msgstr "Tallenna kansio"
+
+msgid "BackToLinksOverview"
+msgstr "Palaa linkkien johdantoon"
+

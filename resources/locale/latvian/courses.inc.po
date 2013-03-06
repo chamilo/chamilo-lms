@@ -1,0 +1,249 @@
+msgid "AlreadyRegisteredToCourse"
+msgstr "Jau ir reģistrēti kursā"
+
+msgid "lang_already_enrolled"
+msgstr "Šajā kursā Jūs jau esat piereģistrējies."
+
+msgid "lang_my_personnal_course_list"
+msgstr "Manu kursu saraksts"
+
+msgid "lang_course_enrollment"
+msgstr "Lietotāju kursu saraksts"
+
+msgid "lang_course_not_available"
+msgstr "Šis kurss nav pieejams, vai arī neeksistē."
+
+msgid "lang_enroll"
+msgstr "Pieteikties"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Pieteikties jaunam kursam"
+
+msgid "lang_my_present_course_list"
+msgstr "Mani kursi"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Šajā nodaļā nav neviena kursa, kurā var pieteikties"
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Vai meklējiet pēc kursa koda"
+
+msgid "lang_search"
+msgstr "Meklēt"
+
+msgid "lang_select_course_among_categories"
+msgstr "Izvēlieties kursus no mācību kategorijām"
+
+msgid "lang_select_course_in"
+msgstr "Izvēlieties kursu no"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Izvēlieties kursu no atrastajiem"
+
+msgid "Unsubscribe"
+msgstr "Atteikties no kursa"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Atpakaļ uz manu mājas lapu"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Atpakaļ uz manu kursu sarakstu"
+
+msgid "langTitular"
+msgstr "Līderis"
+
+msgid "langBackToListOfThisUser"
+msgstr "Atpakaļ uz kursu sarakstu"
+
+msgid "langAdministrationTools"
+msgstr "Administrēšanas instrumenti"
+
+msgid "lang_back_to_parent_category"
+msgstr "Atpakaļ uz augstāku nodaļu"
+
+msgid "lang_back_to_course_selection"
+msgstr "Atpakaļ uz kursu izvēlni"
+
+msgid "lang_up"
+msgstr "Atpakaļ uz augstāku nodaļu"
+
+msgid "langCatList"
+msgstr "Mācību kategorijas"
+
+msgid "langCourseList"
+msgstr "Kursu saraksts"
+
+msgid "Subscribe"
+msgstr "Pieteikties"
+
+msgid "AlreadySubscribed"
+msgstr "Reģistrēšanās jau ir veikta"
+
+msgid "CodeMandatory"
+msgstr "Kods ir obligāts"
+
+msgid "CourseCategoryMandatory"
+msgstr "Kursa nodaļa obligāta"
+
+msgid "TeacherMandatory"
+msgstr "Lektors ir obligāts"
+
+msgid "CourseCategoryStored"
+msgstr "Kursu nodaļa ir izveidota"
+
+msgid "langWithoutTimeLimits"
+msgstr "Bez laika ierobežojuma"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Atpakaļ uz Kategoriju galveno sarakstu"
+
+msgid "langAdded"
+msgstr "Pievienots"
+
+msgid "langDeleted"
+msgstr "Izdzēsts"
+
+msgid "langKeeped"
+msgstr "Saglabāts"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Neredzams / Aizvērts"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Neredzams / Atvērts"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Redzams / Atvērts"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Redzams / Aizvērts"
+
+msgid "langAdminThisUser"
+msgstr "Atpakaļ pie lietotāja"
+
+msgid "langManage"
+msgstr "Administrēt portālu"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Jūs esat veiksmīgi  piereģistrēts/a kursam :)!               <br>Lai uzsāktu tā apguvi, dodieties uz  nodaļu - <b>Mani kursi</b>."
+
+msgid "langSubCat"
+msgstr "Apakškategorijas"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Jūs nevarat atteikties no šī kursa !"
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Jūs esat šī kursa veidotājs /administrators"
+
+msgid "CourseManagement"
+msgstr "<b>Kursu vadība :</b><br>- Pieteikšanās Kursiem<br> - Kursu organizācija<br> - Kursu kārtošana"
+
+msgid "SortMyCourses"
+msgstr "Sakārtot / organizēt manus kursus"
+
+msgid "SubscribeToCourse"
+msgstr "Pieteikties kursiem"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Atteikties no kursiem"
+
+msgid "CreateCourseCategory"
+msgstr "Izveidot kursu kategoriju (mapi)"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Vai tiešām vēlaties izdzēst šo kursu kategoriju?<br>Kursi, kas ir šajā kategorijā, tiks pārvietoti ārpus kursu kategoriju saraksta."
+
+msgid "CourseCategories"
+msgstr "Kursu kategorijas"
+
+msgid "CoursesInCategory"
+msgstr "Kursi šajā kategorijā"
+
+msgid "SearchCourse"
+msgstr "Meklēt kursus"
+
+msgid "UpOneCategory"
+msgstr "Vienu kategoriju augstāk"
+
+msgid "SearchResultsFor"
+msgstr "Meklēšanas rezultāti:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Vai tiešām vēlaties atteikties no šī kursa?"
+
+msgid "NoCourseCategory"
+msgstr "nav kursu nodaļas"
+
+msgid "EditCourseCategorySucces"
+msgstr "Kurss tika pievienots nodaļai"
+
+msgid "SubscribingNotAllowed"
+msgstr "Pieteikšanās kursā nav atļauta"
+
+msgid "CourseSortingDone"
+msgstr "Kursi pārkārtoti"
+
+msgid "ExistingCourseCategories"
+msgstr "Esošās kursu kategorijas"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Jūs tagad esat atteikusies/-cies  no kursa"
+
+msgid "ViewOpenCourses"
+msgstr "Apskatīt atvērtos kursus"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Nezināma kļūda, lūdzu sazinieties ar platformas administrātoru."
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "Kursa kods ir nepareizs"
+
+msgid "CourseRequiresPassword"
+msgstr "Pieeja kursam tikai ar paroli"
+
+msgid "SubmitRegistrationCode"
+msgstr "Nosūtīt reģistrācijas kodu"
+
+msgid "CourseCategoryDeleted"
+msgstr "Kategorija tika izdzēsta"
+
+msgid "CategorySortingDone"
+msgstr "Kategoriju kārtošana pabeigta"
+
+msgid "CourseCategoryEditStored"
+msgstr "Kategorija atjaunināta"
+
+msgid "buttonCreateCourseCategory"
+msgstr "Saglabāt kursu kategoriju"
+
+msgid "buttonSaveCategory"
+msgstr "Saglabāt kategoriju"
+
+msgid "buttonChangeCategory"
+msgstr "Izmainīt kategoriju"
+
+msgid "SessionName"
+msgstr "Sesijas nosaukums"
+
+msgid "SessionCategory"
+msgstr "Sesiju kategorijas."
+
+msgid "Expand"
+msgstr "Paplašināt"
+
+msgid "Collapse"
+msgstr "Saspiest"
+
+msgid "CourseDetails"
+msgstr "Kursa apraksts"
+
+msgid "GroupPendingInvitations"
+msgstr "Neatvērtie ielūgumi grupā"
+
+msgid "Compose"
+msgstr "Rakstīt jaunu vēstuli"
+
+msgid "ThereAreNoCoursesInThisCategory"
+msgstr "Šajā kategoriju līmenī, kursa nav"
+

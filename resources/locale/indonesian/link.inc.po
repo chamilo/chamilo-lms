@@ -1,0 +1,118 @@
+msgid "langLinkName"
+msgstr "Nama Link"
+
+msgid "langLinkAdd"
+msgstr "Tambah link"
+
+msgid "langLinkAdded"
+msgstr "Link telah ditambahkan"
+
+msgid "langLinkMod"
+msgstr "Link diubah"
+
+msgid "langLinkModded"
+msgstr "Link tersebut telah diubah"
+
+msgid "langLinkDel"
+msgstr "Link dihapus"
+
+msgid "langLinkDeleted"
+msgstr "Link tersebut telah dihapus"
+
+msgid "langLinkDelconfirm"
+msgstr "Anda yakin akan menghapus link ini?"
+
+msgid "langAllLinksDel"
+msgstr "Hapus semua link pada kategori ini"
+
+msgid "langCategoryName"
+msgstr "Nama Kategori"
+
+msgid "langCategoryAdd"
+msgstr "Tambah kategori"
+
+msgid "langCategoryAdded"
+msgstr "Kategori telah ditambahkan"
+
+msgid "langCategoryModded"
+msgstr "Kategori telah diubah"
+
+msgid "langCategoryDel"
+msgstr "Hapus kategori"
+
+msgid "langCategoryDeleted"
+msgstr "Kategori dan semua linknya telah dihapus"
+
+msgid "langCategoryDelconfirm"
+msgstr "Jika menghapus kategori, semua link pada kategori tersebut juga dihapus.
+Apakah anda ingin menghapus kategori tersebut beserta link-nya ?"
+
+msgid "langAllCategoryDel"
+msgstr "Hapus semua kategori dan semua link"
+
+msgid "langGiveURL"
+msgstr "Silahkan isi URL dari link"
+
+msgid "langGiveCategoryName"
+msgstr "Silahkan isi nama kategori"
+
+msgid "langNoCategory"
+msgstr "Tidak ada kategori"
+
+msgid "showall"
+msgstr "Tampilkan semua"
+
+msgid "shownone"
+msgstr "Sembunyikan semua"
+
+msgid "langListDeleted"
+msgstr "Daftar tsb telah dihapus"
+
+msgid "langAddLink"
+msgstr "Tambah link"
+
+msgid "langDelList"
+msgstr "Hapus daftar"
+
+msgid "langModifyLink"
+msgstr "Ubah Link"
+
+msgid "langCsvImport"
+msgstr "import CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "File import CSV tidak dapat dibuka (mungkin kosong/ terlalu besar)"
+
+msgid "langCsvFileNoSeps"
+msgstr "File import CSV harus menggunakan , atau ; sebagai pemisah/separator"
+
+msgid "langCsvFileNoURL"
+msgstr "File import CSV harus setidaknya memiliki kolom URL dan Judul"
+
+msgid "langCsvFileLine1"
+msgstr "... - baris 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "baris gagal diimport link (tidak ada URL atau tidak ada judul)"
+
+msgid "langCsvLinesOld"
+msgstr "link sebelumnya di-update (URL dan kategori yang sama )"
+
+msgid "langCsvLinesNew"
+msgstr "link baru dibuat."
+
+msgid "langCsvExplain"
+msgstr "File tsb harusnya seperti ini : <blockquote><pre> <b>URL</b>;kategori;<b>title</b>;deskripsi; <b>http://www.aaa.org/...</b>;Link Peinting;<b>Nama 1</b>;Deskripsi 1; <b>http://www.bbb.net/...</b>;;<b>Nama 2</b>;\"Deskripsi 2\"; </pre></blockquote> Jika URL  dan kategori sama dengan link sebelumnya yang sudah ada, maka judul dan deskripsinya akan diupdate.  Selain dari itu maka link baru akan dibuat.<br><br> Tebal = wajib. Field dapat dalam urutan sembarang, nama dalam huruf kecil/besar. Field tambahan ditambahkan ke deskripsi. Separator: koma atau titik koma. Niali dapat di beri tanda kutip, tetapi jangan untuk nama field. beberapa [b]tag HTML [/b] dapat diimport pada field deskripsi."
+
+msgid "langLinkUpdated"
+msgstr "Link telah di-update"
+
+msgid "langAll_Link_Deleted"
+msgstr "Link telah dihapus"
+
+msgid "langOnHomepage"
+msgstr "Tampilkan link di homepage"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Tampilkan link dalam bentuk ikon di homepage mata kuliah"
+

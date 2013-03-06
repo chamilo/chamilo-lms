@@ -1,0 +1,1962 @@
+msgid "AdminBy"
+msgstr "管理者"
+
+msgid "AdministrationTools"
+msgstr "系統管理"
+
+msgid "State"
+msgstr "系統狀態"
+
+msgid "Statistiques"
+msgstr "統計數據"
+
+msgid "VisioRTMPIsWeb"
+msgstr "視像會議是／否為線上模式（通常設定為否）"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "增加回到課程系統的連結，儘管列表底部已經提供了連結。"
+
+msgid "langUsed"
+msgstr "已使用的"
+
+msgid "langPresent"
+msgstr "確定"
+
+msgid "langMissing"
+msgstr "不見"
+
+msgid "langExist"
+msgstr "存在的"
+
+msgid "ShowNumberOfCourses"
+msgstr "展示課程數量"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "於課程標題顯示教師名字"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "於課程列表顯示教師名字"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "於課程列表顯示課程編號"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "於課程標題顯示課程編號"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "在這個課程網站沒有虛擬課程"
+
+msgid "ConfigureHomePage"
+msgstr "設定首頁"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "建立課程時啟用模組"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "建立新課程時，要啟用(顯示)那種工具？"
+
+msgid "langCourseBackup"
+msgstr "備份課程"
+
+msgid "langCourseTitular"
+msgstr "授課老師"
+
+msgid "langCourseTitle"
+msgstr "課程名稱"
+
+msgid "langCourseFaculty"
+msgstr "課程分類"
+
+msgid "langCourseDepartment"
+msgstr "課程所屬部門"
+
+msgid "langCourseDepartmentURL"
+msgstr "部門URL"
+
+msgid "langCourseLanguage"
+msgstr "課程語言"
+
+msgid "langCourseAccess"
+msgstr "課程訪問"
+
+msgid "langCourseSubscription"
+msgstr "課程註冊"
+
+msgid "langPublicAccess"
+msgstr "匿名訪問"
+
+msgid "langPrivateAccess"
+msgstr "密碼訪問"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "數據庫管理僅對伺服器管理員開放"
+
+msgid "langShowUsersOfCourse"
+msgstr "顯示註冊該課程用戶"
+
+msgid "langShowClassesOfCourse"
+msgstr "顯示註冊該課程班級"
+
+msgid "langShowGroupsOfCourse"
+msgstr "顯示註冊該課程用戶組"
+
+msgid "langPhone"
+msgstr "電話"
+
+msgid "langPhoneNumber"
+msgstr "電話號碼"
+
+msgid "langActions"
+msgstr "操作"
+
+msgid "langAddToCourse"
+msgstr "加入到該課程"
+
+msgid "langDeleteFromPlatform"
+msgstr "刪除"
+
+msgid "langDeleteCourse"
+msgstr "刪除所選課程"
+
+msgid "langDeleteFromCourse"
+msgstr "取消註冊課程"
+
+msgid "langDeleteSelectedClasses"
+msgstr "刪除所選班級"
+
+msgid "langDeleteSelectedGroups"
+msgstr "刪除所選組"
+
+msgid "langAdministrator"
+msgstr "管理員"
+
+msgid "langAddPicture"
+msgstr "加入圖片"
+
+msgid "langChangePicture"
+msgstr "更換圖片"
+
+msgid "langDeletePicture"
+msgstr "刪除圖片"
+
+msgid "langAddUsers"
+msgstr "添加用戶"
+
+msgid "langAddGroups"
+msgstr "添加組"
+
+msgid "langAddClasses"
+msgstr "添加班級"
+
+msgid "langExportUsers"
+msgstr "輸出用戶名單"
+
+msgid "langKeyword"
+msgstr "關鍵詞"
+
+msgid "langGroupName"
+msgstr "組名"
+
+msgid "langGroupTutor"
+msgstr "小組導師"
+
+msgid "langGroupDescription"
+msgstr "小組描述"
+
+msgid "langNumberOfParticipants"
+msgstr "參加者數目"
+
+msgid "langNumberOfUsers"
+msgstr "學生數量"
+
+msgid "langMaximum"
+msgstr "最大"
+
+msgid "langMaximumOfParticipants"
+msgstr "參加人數上限"
+
+msgid "langParticipants"
+msgstr "參加者"
+
+msgid "langFirstLetterClass"
+msgstr "首字母"
+
+msgid "langFirstLetterUser"
+msgstr "首字母"
+
+msgid "langFirstLetterCourse"
+msgstr "首字母"
+
+msgid "langModifyUserInfo"
+msgstr "修改用戶訊息"
+
+msgid "langModifyClassInfo"
+msgstr "修改班級訊息"
+
+msgid "langModifyGroupInfo"
+msgstr "修改組訊息"
+
+msgid "langModifyCourseInfo"
+msgstr "修改課程資料"
+
+msgid "langPleaseEnterClassName"
+msgstr "請輸入班級名稱!"
+
+msgid "langPleaseEnterLastName"
+msgstr "請輸入用戶姓!"
+
+msgid "langPleaseEnterFirstName"
+msgstr "請輸入用戶名!"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "請輸入有效電子郵件位址!"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "請輸入有效用戶!"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "請輸入課程代碼!"
+
+msgid "langPleaseEnterTitularName"
+msgstr "請輸入授課老師姓名!"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "請輸入課程名稱!"
+
+msgid "langAcceptedPictureFormats"
+msgstr "可接受格式為:JPG, PNG 於GIF!"
+
+msgid "langLoginAlreadyTaken"
+msgstr "您已經登錄!"
+
+msgid "langImportUserListXMLCSV"
+msgstr "匯入用戶"
+
+msgid "langExportUserListXMLCSV"
+msgstr "匯出用戶"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "匯出範圍"
+
+msgid "langAddClassesToACourse"
+msgstr "分發課程-班級"
+
+msgid "langAddUsersToACourse"
+msgstr "分發課程-用戶"
+
+msgid "langAddUsersToAClass"
+msgstr "添加學生"
+
+msgid "langAddUsersToAGroup"
+msgstr "加組用戶"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "你至少要選擇一個班級和一門課程﹗"
+
+msgid "AtLeastOneUser"
+msgstr "你至少要選擇一個用戶！"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "你至少要選擇一個用戶和一門課程﹗"
+
+msgid "langClassList"
+msgstr "班級清單"
+
+msgid "langUserList"
+msgstr "用戶清單"
+
+msgid "langCourseList"
+msgstr "課程清單"
+
+msgid "langAddToThatCourse"
+msgstr "加入該課程"
+
+msgid "langAddToClass"
+msgstr "加入該班級"
+
+msgid "langRemoveFromClass"
+msgstr "從班級刪除"
+
+msgid "langAddToGroup"
+msgstr "加入該組"
+
+msgid "langRemoveFromGroup"
+msgstr "從組刪除"
+
+msgid "langUsersOutsideClass"
+msgstr "班級外學生"
+
+msgid "langUsersInsideClass"
+msgstr "班級內學生"
+
+msgid "langUsersOutsideGroup"
+msgstr "組外用戶"
+
+msgid "langUsersInsideGroup"
+msgstr "組內用戶"
+
+msgid "langImportFileLocation"
+msgstr "匯入檔案"
+
+msgid "langFileType"
+msgstr "檔案類型"
+
+msgid "langOutputFileType"
+msgstr "輸出檔案類型"
+
+msgid "langMustUseSeparator"
+msgstr "需用"
+
+msgid "langCSVMustLookLike"
+msgstr "CSV檔案格式如下"
+
+msgid "langXMLMustLookLike"
+msgstr "XML檔案格式如下"
+
+msgid "langMandatoryFields"
+msgstr "<strong>加粗</strong>為必需字段"
+
+msgid "langNotXML"
+msgstr "檔案不是XML格式!"
+
+msgid "langNotCSV"
+msgstr "檔案不是CSV格式!"
+
+msgid "langNoNeededData"
+msgstr "檔案中沒有找到所需數據!"
+
+msgid "langMaxImportUsers"
+msgstr "每次輸入用戶數不能超過500名!"
+
+msgid "langAdminDatabases"
+msgstr "數據庫（phpMyAdmin）"
+
+msgid "langAdminUsers"
+msgstr "用戶"
+
+msgid "langAdminClasses"
+msgstr "班級"
+
+msgid "langAdminGroups"
+msgstr "用戶組"
+
+msgid "langAdminCourses"
+msgstr "課程"
+
+msgid "langAdminCategories"
+msgstr "課程分類"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "加入用戶/組到課程"
+
+msgid "AddACategory"
+msgstr "添加分類"
+
+msgid "langInto"
+msgstr "到"
+
+msgid "langNoCategories"
+msgstr "沒有分類"
+
+msgid "langAllowCoursesInCategory"
+msgstr "允許添加課程"
+
+msgid "langGoToForum"
+msgstr "轉向論壇"
+
+msgid "langCategoryCode"
+msgstr "分類代碼"
+
+msgid "langCategoryName"
+msgstr "分類名"
+
+msgid "langCategories"
+msgstr "分類"
+
+msgid "langEditNode"
+msgstr "編輯分類"
+
+msgid "langOpenNode"
+msgstr "打開分類"
+
+msgid "langDeleteNode"
+msgstr "刪除該分類"
+
+msgid "langAddChildNode"
+msgstr "添加二級分類"
+
+msgid "langViewChildren"
+msgstr "察看下一級"
+
+msgid "langTreeRebuildedIn"
+msgstr "主目錄重建於"
+
+msgid "langTreeRecountedIn"
+msgstr "主目錄重數於"
+
+msgid "langRebuildTree"
+msgstr "重建主目錄"
+
+msgid "langRefreshNbChildren"
+msgstr "刷新下一級數目"
+
+msgid "langShowTree"
+msgstr "顯示主目錄"
+
+msgid "langBack"
+msgstr "返回"
+
+msgid "langLogDeleteCat"
+msgstr "分類已刪除"
+
+msgid "langRecountChildren"
+msgstr "重數下一級"
+
+msgid "langUpInSameLevel"
+msgstr "提升到同一級"
+
+msgid "langSeconds"
+msgstr "秒"
+
+msgid "langMailTo"
+msgstr "寄給:"
+
+msgid "lang_no_access_here"
+msgstr "不開放"
+
+msgid "lang_php_info"
+msgstr "系統訊息"
+
+msgid "langAddAdminInApache"
+msgstr "添加管理員"
+
+msgid "langAddFaculties"
+msgstr "添加分類"
+
+msgid "langSearchACourse"
+msgstr "搜索課程"
+
+msgid "langSearchAUser"
+msgstr "搜索用戶"
+
+msgid "langTechnicalTools"
+msgstr "技術支援"
+
+msgid "langConfig"
+msgstr "系統配置"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "登錄名單（擴展）"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "在清單能顯示的最大用戶數"
+
+msgid "NoTimeLimits"
+msgstr "沒有時限"
+
+msgid "GeneralCoach"
+msgstr "一般指導員"
+
+msgid "GeneralProperties"
+msgstr "一般屬性"
+
+msgid "CourseCoach"
+msgstr "課程指導員"
+
+msgid "UsersNumber"
+msgstr "使用者數量"
+
+msgid "PageAfterLoginTitle"
+msgstr "登入後頁面"
+
+msgid "PageAfterLoginComment"
+msgstr "使用者進入平台後看到的頁面"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Chamilo 網站"
+
+msgid "TabsMyProfile"
+msgstr "我的個人資料標籤"
+
+msgid "GlobalRole"
+msgstr "整體角色"
+
+msgid "langNomOutilTodo"
+msgstr "管理Todo清單"
+
+msgid "langNomPageAdmin"
+msgstr "系統管理"
+
+msgid "langSysInfo"
+msgstr "系統訊息"
+
+msgid "langDiffTranslation"
+msgstr "比較翻譯"
+
+msgid "langStatOf"
+msgstr "統計訊息"
+
+msgid "langSpeeSubscribe"
+msgstr "快速選課"
+
+msgid "langLogIdentLogout"
+msgstr "登錄日誌"
+
+msgid "langServerStatus"
+msgstr "MySQL伺服器狀態"
+
+msgid "langDataBase"
+msgstr "數據庫"
+
+msgid "langRun"
+msgstr "生效"
+
+msgid "langClient"
+msgstr "MySql客戶"
+
+msgid "langServer"
+msgstr "MySql伺服器"
+
+msgid "langtitulary"
+msgstr "控權"
+
+msgid "langUpgradeBase"
+msgstr "升級數據庫"
+
+msgid "langManage"
+msgstr "管理入口"
+
+msgid "langErrorsFound"
+msgstr "發現問題"
+
+msgid "langMaintenance"
+msgstr "維護工具"
+
+msgid "langUpgrade"
+msgstr "升級IILearn"
+
+msgid "langWebsite"
+msgstr "DEKEOS網站"
+
+msgid "langDocumentation"
+msgstr "文獻"
+
+msgid "langContribute"
+msgstr "貢獻"
+
+msgid "langInfoServer"
+msgstr "伺服器訊息"
+
+msgid "langOtherCategory"
+msgstr "其它分類"
+
+msgid "langSendMailToUsers"
+msgstr "發送郵件"
+
+msgid "langExampleXMLFile"
+msgstr "XML檔案樣例"
+
+msgid "langExampleCSVFile"
+msgstr "CSV檔案樣例"
+
+msgid "langCourseSystemCode"
+msgstr "系統代碼"
+
+msgid "langCourseVisualCode"
+msgstr "可見代碼"
+
+msgid "langSystemCode"
+msgstr "系統代碼"
+
+msgid "langVisualCode"
+msgstr "可見代碼"
+
+msgid "langAddCourse"
+msgstr "新建課程"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "管理虛擬課程"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "新建虛擬課程"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "這門虛擬課程將要和現有的\"真實\"課程共享存儲空間（目錄和數據庫空間）"
+
+msgid "langRealCourseCode"
+msgstr "真實課程代碼"
+
+msgid "langCourseCreationSucceeded"
+msgstr "創建課程成功"
+
+msgid "langYourDokeosUses"
+msgstr "IILearn安裝程式現下在使用"
+
+msgid "langOnTheHardDisk"
+msgstr "在硬碟上"
+
+msgid "langIsVirtualCourse"
+msgstr "虛擬課程"
+
+msgid "langSystemAnnouncements"
+msgstr "系統公告"
+
+msgid "langAddAnnouncement"
+msgstr "新增公告"
+
+msgid "langAnnouncementAdded"
+msgstr "已新增公告"
+
+msgid "langAnnouncementUpdated"
+msgstr "已更新公告"
+
+msgid "langAnnouncementDeleted"
+msgstr "已刪除公告"
+
+msgid "langContent"
+msgstr "內容"
+
+msgid "PermissionsForNewFiles"
+msgstr "新檔案權限"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "定義新目錄權限可加強平台的安全性。預設值 (0550) 應足以保護你的平台。這格式為 UNIX 術語，給予擁有人-小組-其他以執行-寫入-讀取之權力。若你使用 Oogie，當心使用者運行 OpenOffice 時可在課程資料夾寫入檔案。"
+
+msgid "langStudent"
+msgstr "學生"
+
+msgid "Guest"
+msgstr "訪客"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "用戶登錄"
+
+msgid "langLoginAsThisUser"
+msgstr "登錄"
+
+msgid "SelectPicture"
+msgstr "選取圖片"
+
+msgid "DontResetPassword"
+msgstr "不重設密碼"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "參與發展"
+
+msgid "langCourseAdmin"
+msgstr "教師"
+
+msgid "langOtherCourses"
+msgstr "其它課程"
+
+msgid "PlatformLanguageTitle"
+msgstr "平台語言"
+
+msgid "ServerStatusComment"
+msgstr "這是甚麼類型的伺服器？這選項讓你啟用或停用一些選項。在開發者的服器上，會提供翻譯功具顯示未被翻譯的詞串。"
+
+msgid "ServerStatusTitle"
+msgstr "伺服器類型"
+
+msgid "PlatformLanguages"
+msgstr "Chamilo 平台語言"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "本工具控制登入頁面之語言選單。作為管理者，你可以決定使用者有那些語言可供選擇。"
+
+msgid "OriginalName"
+msgstr "真實姓名"
+
+msgid "EnglishName"
+msgstr "英文名稱"
+
+msgid "DokeosFolder"
+msgstr "Chamilo 資料夾"
+
+msgid "Properties"
+msgstr "屬性"
+
+msgid "PlatformConfigSettings"
+msgstr "Chamilo 設定配置"
+
+msgid "SettingsStored"
+msgstr "配置已被儲存"
+
+msgid "InstitutionTitle"
+msgstr "學院名稱"
+
+msgid "InstitutionComment"
+msgstr "學院名稱（於標頭右方顯示）"
+
+msgid "InstitutionUrlTitle"
+msgstr "學院網址"
+
+msgid "InstitutionUrlComment"
+msgstr "學院網址（於標頭右方顯示之學院連結）"
+
+msgid "SiteNameTitle"
+msgstr "Chamilo 網上校園名稱"
+
+msgid "SiteNameComment"
+msgstr "Chamilo 網上校園名稱(於標頭顯示)"
+
+msgid "emailAdministratorTitle"
+msgstr "平台管理者：電郵"
+
+msgid "emailAdministratorComment"
+msgstr "平台管理者電郵地址（於頁尾左面顯示）"
+
+msgid "administratorSurnameTitle"
+msgstr "平台管理員：姓氏"
+
+msgid "administratorSurnameComment"
+msgstr "平台管理員姓氏（於頁尾左面顯示）"
+
+msgid "administratorNameTitle"
+msgstr "平台管理員名字"
+
+msgid "administratorNameComment"
+msgstr "平台管理員名字（於頁尾左面顯示）"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "頁尾顯示平台管理員資訊"
+
+msgid "ShowAdministratorDataComment"
+msgstr "是否於頁尾顯示平台管理員資料？"
+
+msgid "HomepageViewTitle"
+msgstr "首頁界面"
+
+msgid "HomepageViewComment"
+msgstr "你希望怎樣設定你的課程首頁？"
+
+msgid "HomepageViewDefault"
+msgstr "兩欄頁面，隱藏無效工具"
+
+msgid "HomepageViewFixed"
+msgstr "三欄頁面，無效工具圖示為灰色，留在原位"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "工具快捷列"
+
+msgid "ShowToolShortcutsComment"
+msgstr "是否於橫幅中顯示工具快捷列？"
+
+msgid "ShowStudentViewTitle"
+msgstr "學員界面"
+
+msgid "ShowStudentViewComment"
+msgstr "允許學員界面？<br />本功能允許教師看到學員能看到的界面"
+
+msgid "AllowGroupCategories"
+msgstr "小組類別"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "允許課程管理者於小組模式中建立類別？"
+
+msgid "PlatformLanguageComment"
+msgstr "你可以在管理員平台的另一部份決定平台的語言，就是 <a href=\"languages.php\"> Chamilo 平台語言</a>"
+
+msgid "ProductionServer"
+msgstr "平台伺服器"
+
+msgid "TestServer"
+msgstr "測試伺服器"
+
+msgid "ShowOnlineTitle"
+msgstr "誰在線上？"
+
+msgid "AsPlatformLanguage"
+msgstr "作為平台語言"
+
+msgid "ShowOnlineComment"
+msgstr "是否顯示在線人數？"
+
+msgid "AllowNameChangeTitle"
+msgstr "允許於個人資料中更改姓名？"
+
+msgid "AllowNameChangeComment"
+msgstr "是否允許使用者更改姓／名？"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "預設文件數限制"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "預設文件數限制是多少?管理員可修改:管理>課目>修改"
+
+msgid "ProfileChangesTitle"
+msgstr "個人資料"
+
+msgid "ProfileChangesComment"
+msgstr "那部份個人資料可被更改？"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "註冊：必須欄目"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "那些欄目為必須（除了姓、名、帳戶名稱及密碼）？"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "預設小組數量"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "預設群組文件限量是多少?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "忘記密碼"
+
+msgid "AllowLostPasswordComment"
+msgstr "允許使用者要求取回密碼？"
+
+msgid "AllowRegistrationTitle"
+msgstr "註冊"
+
+msgid "AllowRegistrationComment"
+msgstr "是否允許新使用者的註冊？使用者能否自建新戶口？"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "註冊為導師"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "是否允許註冊為導師（能創建課程）？"
+
+msgid "PlatformLanguage"
+msgstr "平台語言"
+
+msgid "Tuning"
+msgstr "調整"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "分拆使用者上載目錄"
+
+msgid "SplitUsersUploadDirectoryComment"
+msgstr "在使用量高的站台，有大量使用者註冊及上載圖片，檔案管理系統要處理的上載目錄(main/upload/users/)可能會含有太多檔案。改變這選項可以讓原有的上載目錄分為九個。往後，使用者的上載檔便會儲存在其中一個目錄中。這選項不會改變碟片結構但會影響 Chamilo 編碼，所以你要在事前自行建立一個目錄把已存在的檔案移走。若你需要創建或移動這些目錄，你必須把使用者目錄1至9號到同名的屬目錄。若你對這選項不理解，最好不要啟用它。"
+
+msgid "CourseQuota"
+msgstr "課程數量"
+
+msgid "EditNotice"
+msgstr "編輯通告"
+
+msgid "General"
+msgstr "一般"
+
+msgid "LostPassword"
+msgstr "忘記密碼"
+
+msgid "Registration"
+msgstr "註冊"
+
+msgid "Password"
+msgstr "密碼"
+
+msgid "InsertLink"
+msgstr "插入連結"
+
+msgid "EditNews"
+msgstr "編輯消息"
+
+msgid "EditCategories"
+msgstr "編輯類別"
+
+msgid "EditHomePage"
+msgstr "編輯首頁"
+
+msgid "AllowUserHeadingsComment"
+msgstr "課目管理員能定義使用者標題檢索另外的使用者資訊嗎?"
+
+msgid "Platform"
+msgstr "平台"
+
+msgid "Course"
+msgstr "課程"
+
+msgid "Languages"
+msgstr "語言"
+
+msgid "Privacy"
+msgstr "個人私隱"
+
+msgid "NoticeTitle"
+msgstr "通告標題"
+
+msgid "NoticeText"
+msgstr "通告內文"
+
+msgid "LinkName"
+msgstr "連結文字"
+
+msgid "LinkURL"
+msgstr "連結網址"
+
+msgid "OpenInNewWindow"
+msgstr "在新視窗開啟"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "此界面允許添加用戶到課程或班級中, 如果第一個未經篩選的清單中的用戶數超過這個數字, 預設為第一個字母（A）"
+
+msgid "Plugins"
+msgstr "插件"
+
+msgid "HideDLTTMarkupComment"
+msgstr "若語言未被翻譯時隱藏 [= ... =] 標示"
+
+msgid "Info"
+msgstr "資訊"
+
+msgid "UserAdded"
+msgstr "已增加這使用者"
+
+msgid "NoSearchResults"
+msgstr "沒有搜尋結果"
+
+msgid "UserDeleted"
+msgstr "此使用者已被刪除"
+
+msgid "NoClassesForThisCourse"
+msgstr "沒有班級加入本課程"
+
+msgid "CourseUsage"
+msgstr "課程用途"
+
+msgid "NoCoursesForThisUser"
+msgstr "這使用者沒有選修課程"
+
+msgid "NoClassesForThisUser"
+msgstr "這使用者沒有加入班級"
+
+msgid "NoCoursesForThisClass"
+msgstr "這班級沒有選修課程"
+
+msgid "langOpenToTheWorld"
+msgstr "開放 - 允許任何人訪問"
+
+msgid "OpenToThePlatform"
+msgstr "開放 - 僅供本平台已註冊的使用者"
+
+msgid "langPrivate"
+msgstr "訪問限制 - 僅對選定的用戶開放訪問"
+
+msgid "langCourseVisibilityClosed"
+msgstr "完全關閉 - 僅對課程管理員開放訪問"
+
+msgid "langSubscription"
+msgstr "註冊"
+
+msgid "langUnsubscription"
+msgstr "註銷"
+
+msgid "CourseAccessConfigTip"
+msgstr "課程預設為開放. 你可以自定義開放級別."
+
+msgid "Tool"
+msgstr "工具"
+
+msgid "NumberOfItems"
+msgstr "項目數量"
+
+msgid "DocumentsAndFolders"
+msgstr "文件及資料夾"
+
+msgid "Learnpath"
+msgstr "學習路徑"
+
+msgid "Exercises"
+msgstr "習作"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "個人日程"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "使用者可否於「個人日程」中加入個人行事項目？"
+
+msgid "CurrentValue"
+msgstr "當前值"
+
+msgid "CourseDescription"
+msgstr "課程描述"
+
+msgid "OnlineConference"
+msgstr "線上會議"
+
+msgid "Chat"
+msgstr "聊天"
+
+msgid "Quiz"
+msgstr "小測驗"
+
+msgid "Announcements"
+msgstr "公告"
+
+msgid "Links"
+msgstr "連結"
+
+msgid "LearningPath"
+msgstr "學習路線"
+
+msgid "Documents"
+msgstr "文件"
+
+msgid "UserPicture"
+msgstr "圖片"
+
+msgid "officialcode"
+msgstr "正式編碼"
+
+msgid "Login"
+msgstr "登入"
+
+msgid "UserPassword"
+msgstr "密碼"
+
+msgid "SubscriptionAllowed"
+msgstr "已接受申請"
+
+msgid "UnsubscriptionAllowed"
+msgstr "已接受退選"
+
+msgid "AllowedToUnsubscribe"
+msgstr "接受"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "拒絕"
+
+msgid "AddDummyContentToCourse"
+msgstr "在本課程中加入範例內容"
+
+msgid "DummyCourseCreator"
+msgstr "創建範例課程內容"
+
+msgid "DummyCourseDescription"
+msgstr "於本課程創建範例內容作測試用途"
+
+msgid "AvailablePlugins"
+msgstr "此乃這系統原有插件，你可按以下連結下載額外插件：<b><a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
+
+msgid "CreateVirtualCourse"
+msgstr "創建虛擬課程"
+
+msgid "DisplayListVirtualCourses"
+msgstr "展示虛擬課程清單"
+
+msgid "LinkedToRealCourseCode"
+msgstr "連結往真實課程編碼"
+
+msgid "WantedCourseCode"
+msgstr "索取課目代碼"
+
+msgid "ResetPassword"
+msgstr "重設密碼"
+
+msgid "CheckToSendNewPassword"
+msgstr "勾選以傳送新密碼"
+
+msgid "AutoGeneratePassword"
+msgstr "自動產生新密碼"
+
+msgid "UseDocumentTitleTitle"
+msgstr "使用標題作為文件名稱"
+
+msgid "UseDocumentTitleComment"
+msgstr "允許用標題作為文件名而非ＤＯＣＵＥＭＮＴ＿ＮＡＭＥ．ＥＸＴ"
+
+msgid "StudentPublications"
+msgstr "學員發佈"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "刪除的檔案會無法回復"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "在文件工具中刪除檔案為永久性，檔案會無法回復"
+
+msgid "ClassName"
+msgstr "班級名稱"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "投遞箱：投遞箱檔案大小上限"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "投遞箱檔案最大為多少 bytes？"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "投遞箱：允許覆寫文件嗎？"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "老師或學員上載檔案時，若投遞箱已有同名檔案，是否取代原有檔案？若選「是」則「多版本機制」功能會被取消。"
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "投遞箱：上載檔案至個人投遞箱？"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "投遞箱：學生 <-> 學生"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "投遞箱：學生 <-> 學生"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "允許學生間互傳文件，包括與課程相關性較低的文件(如 mp3等)。若不允許，則學員只可傳送檔案給導師。"
+
+msgid "DropboxAllowMailingTitle"
+msgstr "允許電郵功能"
+
+msgid "DropboxAllowMailingComment"
+msgstr "你可籍電郵功能向每個學生發送個人文件"
+
+msgid "PermissionsForNewDirs"
+msgstr "新目錄權限"
+
+msgid "PermissionsForNewDirsComment"
+msgstr "定義新目錄權限可加強平台的安全性。預設值 (0770) 應足以保護你的平台。這格式為 UNIX 術語，給予擁有人-小組-其他以執行-寫入-讀取之權力。"
+
+msgid "UserListHasBeenExported"
+msgstr "已匯出使用者清單"
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "按這兒下載檔案"
+
+msgid "administratorTelephoneTitle"
+msgstr "平台管理員：電話"
+
+msgid "administratorTelephoneComment"
+msgstr "平台管理員電話號碼"
+
+msgid "SendMailToNewUser"
+msgstr "向新使用者發送電郵"
+
+msgid "ExtendedProfileTitle"
+msgstr "詳細個人資料"
+
+msgid "ExtendedProfileComment"
+msgstr "若選「是」，使用者可自選填寫以下項目：個人能力、我的證書、可任教科目、個人開放區域"
+
+msgid "Classes"
+msgstr "班級"
+
+msgid "UserUnsubscribed"
+msgstr "使用者已退選"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "使用者不能退選。這使用者為課程管理員。"
+
+msgid "InvalidStartDate"
+msgstr "無效開始日期"
+
+msgid "InvalidEndDate"
+msgstr "無效結束日期"
+
+msgid "DateFormatLabel"
+msgstr "(日/月/年 時:分)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "首頁檔案為不可寫入"
+
+msgid "PleaseEnterNoticeText"
+msgstr "請加入通告內容"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "請加入通告標題"
+
+msgid "PleaseEnterLinkName"
+msgstr "請加入連結名稱"
+
+msgid "InsertThisLink"
+msgstr "加入本連結"
+
+msgid "FirstPlace"
+msgstr "首位"
+
+msgid "After"
+msgstr "之後"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "投遞箱：允許小組"
+
+msgid "DropboxAllowGroupComment"
+msgstr "使用者可向小組傳送檔案"
+
+msgid "ClassDeleted"
+msgstr "班級已被刪除"
+
+msgid "ClassesDeleted"
+msgstr "這些班級已被刪除"
+
+msgid "NoUsersInClass"
+msgstr "本班未有使用者"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "選定之使用者已選修指定之課程"
+
+msgid "InvalidTitle"
+msgstr "請加入標題"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "此類別已被使用"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "請為類別加入編碼及名稱"
+
+msgid "DokeosHomepage"
+msgstr "Chamilo 首頁"
+
+msgid "DokeosForum"
+msgstr "Chamilo 討論區"
+
+msgid "RegisterYourPortal"
+msgstr "登錄你的網站"
+
+msgid "DokeosExtensions"
+msgstr "Chamilo 擴展套件"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "顯示課程導覽選單"
+
+msgid "ShowNavigationMenuComment"
+msgstr "顯示課程導覽選單能使用家更易到達課程各區"
+
+msgid "LoginAs"
+msgstr "登入為"
+
+msgid "ImportClassListCSV"
+msgstr "以CSV滙入班級清單"
+
+msgid "ShowOnlineWorld"
+msgstr "在登入頁面顯示在線使用者數量(公眾可見)"
+
+msgid "ShowOnlineUsers"
+msgstr "在所有頁面顯示在線使用者數量(只有登入人士可見)"
+
+msgid "ShowOnlineCourse"
+msgstr "顯示本課程在線使用者數量"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "於導覽選單顯示圖示"
+
+msgid "ClassesUnsubscribed"
+msgstr "選定之班級已退修指定之課程"
+
+msgid "ClassesSubscribed"
+msgstr "選定之班級已選修指定之課程"
+
+msgid "RoleId"
+msgstr "角色 ID"
+
+msgid "RoleName"
+msgstr "角色名稱"
+
+msgid "RoleType"
+msgstr "類型"
+
+msgid "RightValueModified"
+msgstr "數值已被更新"
+
+msgid "MakeAvailable"
+msgstr "設為有效"
+
+msgid "MakeUnavailable"
+msgstr "設為無效"
+
+msgid "Stylesheets"
+msgstr "版面樣式"
+
+msgid "DefaultDokeosStyle"
+msgstr "預設 Chamilo 樣式"
+
+msgid "Plugin"
+msgstr "插件"
+
+msgid "MainMenu"
+msgstr "主選單"
+
+msgid "MainMenuLogged"
+msgstr "登入後主選單"
+
+msgid "Banner"
+msgstr "橫幅"
+
+msgid "ImageResizeTitle"
+msgstr "調整使用者上載圖片尺寸"
+
+msgid "MaxImageWidthTitle"
+msgstr "使用者圖片最大寬度"
+
+msgid "MaxImageWidthComment"
+msgstr "使用者圖片最大寬度像素。若選定調整使用者上載圖片尺寸方會應用此功能。"
+
+msgid "MaxImageHeightTitle"
+msgstr "使用者圖片最大高度像素。"
+
+msgid "MaxImageHeightComment"
+msgstr "使用者圖片最大高度像素。若選定調整使用者上載圖片尺寸方會應用此功能。"
+
+msgid "YourVersionNotUpToDate"
+msgstr "你的版本並非最新"
+
+msgid "YourVersionIs"
+msgstr "你的版本為"
+
+msgid "PleaseVisitDokeos"
+msgstr "請探訪 Chamilo"
+
+msgid "VersionUpToDate"
+msgstr "你正使用最新版本"
+
+msgid "ShowEmailAddresses"
+msgstr "顯示電郵地址"
+
+msgid "ShowEmailAddressesComment"
+msgstr "向使用者顯示電郵地址"
+
+msgid "LatestVersionIs"
+msgstr "最新版本為"
+
+msgid "langConfigureExtensions"
+msgstr "配置應用"
+
+msgid "langActiveExtensions"
+msgstr "啟動本服務"
+
+msgid "langVisioconf"
+msgstr "視頻會議"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo Live Conferencing 是一個標準的視頻會議工具，它提供了顯示幻燈片、白板、語音/視頻和聊天等功能；它僅僅需要Flash播放器支援，它提供了三種使用模式︰一對一、一對多、多對多。"
+
+msgid "langPpt2lp"
+msgstr "oogie"
+
+msgid "langPpt2lpDescription"
+msgstr "本工具讓您可以點擊滑鼠就能將幻燈片轉換為學習路徑。"
+
+msgid "langBandWidthStatistics"
+msgstr "流量統計"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG 讓您可以了解伺服器在最近24小時內的營運狀態。"
+
+msgid "ServerStatistics"
+msgstr "伺服器統計"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats 讓您了解系統以下情況︰訪問、頁面瀏覽、提交..."
+
+msgid "SearchEngine"
+msgstr "全文搜尋引擎"
+
+msgid "langSearchEngineDescription"
+msgstr "全文搜索引擎讓您搜索系統的內容，每天進行內容索引保證了搜索質量。"
+
+msgid "langListSession"
+msgstr "學期單元清單"
+
+msgid "AddSession"
+msgstr "新增學期單元"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "以 XML/CSV 格式匯入學期單元"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "以 XML/CSV 格式匯出學期單元"
+
+msgid "SessionName"
+msgstr "學期單元名稱"
+
+msgid "langNbCourses"
+msgstr "課程編號"
+
+msgid "DateStart"
+msgstr "開始日期"
+
+msgid "DateEnd"
+msgstr "結束日期"
+
+msgid "CoachName"
+msgstr "指導員姓名"
+
+msgid "SessionList"
+msgstr "學期單元清單"
+
+msgid "SessionNameIsRequired"
+msgstr "須填寫學期單元名稱"
+
+msgid "NextStep"
+msgstr "下一步"
+
+msgid "keyword"
+msgstr "關鍵字詞"
+
+msgid "Confirm"
+msgstr "確定"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "把使用者從本課程剔除"
+
+msgid "MissingClassName"
+msgstr "遺失的班級名稱"
+
+msgid "ClassNameExists"
+msgstr "班級名稱已存在"
+
+msgid "ImportCSVFileLocation"
+msgstr "CSV 檔案匯入位置"
+
+msgid "ClassesCreated"
+msgstr "已創建班級"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "匯入檔案時發生錯誤"
+
+msgid "ServiceActivated"
+msgstr "服務生效"
+
+msgid "ActivateExtension"
+msgstr "啟用服務"
+
+msgid "InvalidExtension"
+msgstr "無效的擴充套件"
+
+msgid "VersionCheckExplanation"
+msgstr "要啟動自動版本偵測，你的學校須在 chamilo.com 註冊。按這按鈕後送出的料只會作內部用途，也只有總數資料方會被公開(如：學校總數、課程總數、學員總數等)。(瀏覽<a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>.)註冊後你會在我們的全球學校名單中出現  (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>)如果你不想在名單中出現請勾選下面的格子。註冊十分簡易：請按這按鈕：<br />"
+
+msgid "AfterApproval"
+msgstr "核准之後"
+
+msgid "StudentViewEnabledTitle"
+msgstr "允許學員界面"
+
+msgid "StudentViewEnabledComment"
+msgstr "允許學員界面，讓教師或管理員預覽學員能看到的界面"
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "顯示在線時限"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "本在線時限定義使用者於線上停止活動後多少秒變為離線"
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "創建課程教材範例"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "於建立新課程時創建課程教材範例"
+
+msgid "AccountValidDurationTitle"
+msgstr "帳戶有效"
+
+msgid "AccountValidDurationComment"
+msgstr "使用者帳戶於創建後的有效日數"
+
+msgid "UseSessionModeTitle"
+msgstr "採用學期單元模式"
+
+msgid "UseSessionModeComment"
+msgstr "學期單元為另一種課程模式，有創建者、導師及學員。導師在一段期限內給予小組學員一個課程，稱為學期單元。"
+
+msgid "HomepageViewActivity"
+msgstr "活動界面"
+
+msgid "HomepageView2column"
+msgstr "兩欄界面"
+
+msgid "HomepageView3column"
+msgstr "三欄界面"
+
+msgid "AllowUserHeadings"
+msgstr "允許使用者標頭"
+
+msgid "IconsOnly"
+msgstr "只有圖示"
+
+msgid "TextOnly"
+msgstr "只有文字"
+
+msgid "IconsText"
+msgstr "圖片及文字"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "允許工具介紹"
+
+msgid "EnableToolIntroductionComment"
+msgstr "允許每項工具的首頁中提供工具介紹"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "課程首頁層級路徑鏈"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "「層級路徑鏈」通常位於頁面導航系統的左上方。這項目選取了你想在課程首頁中顯示的層級路徑鏈接次序。"
+
+msgid "Comment"
+msgstr "意見"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "LoginPageMainArea"
+msgstr "登入頁面主區域"
+
+msgid "LoginPageMenu"
+msgstr "登入頁面選單"
+
+msgid "CampusHomepageMainArea"
+msgstr "校園首頁主區域"
+
+msgid "CampusHomepageMenu"
+msgstr "校園首頁選單"
+
+msgid "MyCoursesMainArea"
+msgstr "課程主區域"
+
+msgid "MyCoursesMenu"
+msgstr "課程選單"
+
+msgid "Header"
+msgstr "頁首"
+
+msgid "Footer"
+msgstr "頁尾"
+
+msgid "VersionCheck"
+msgstr "檢查版本"
+
+msgid "Active"
+msgstr "啟用"
+
+msgid "Inactive"
+msgstr "不啟用"
+
+msgid "SessionOverview"
+msgstr "學期單元總覽"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "加入使用者若其並未選修課程"
+
+msgid "DeleteSelectedSessions"
+msgstr "刪除已選學單元"
+
+msgid "CourseListInSession"
+msgstr "本學期單元內之課程清單"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "退修本學期單元中選取課程"
+
+msgid "NbUsers"
+msgstr "使用者"
+
+msgid "SubscribeUsersToSession"
+msgstr "於本學期單元加入使用者"
+
+msgid "UserListInPlatform"
+msgstr "本平台使用者清單"
+
+msgid "UserListInSession"
+msgstr "本學期單元選修者清單"
+
+msgid "CourseListInPlatform"
+msgstr "本平台課程清單"
+
+msgid "Host"
+msgstr "擁有者"
+
+msgid "UserOnHost"
+msgstr "使用者名稱"
+
+msgid "FtpPassword"
+msgstr "FTP 密碼"
+
+msgid "PathToLzx"
+msgstr "連接 LZX 檔案的路徑"
+
+msgid "WCAGContent"
+msgstr "內文"
+
+msgid "SubscribeCoursesToSession"
+msgstr "選修本學期單元之課程"
+
+msgid "DateStartSession"
+msgstr "學期單元開始日期"
+
+msgid "DateEndSession"
+msgstr "學期單元結束日期"
+
+msgid "EditSession"
+msgstr "編輯本學期單元"
+
+msgid "VideoConferenceUrl"
+msgstr "實時會議路徑"
+
+msgid "VideoClassroomUrl"
+msgstr "課室實時會議路徑"
+
+msgid "ReconfigureExtension"
+msgstr "重設擴充套件"
+
+msgid "ServiceReconfigured"
+msgstr "服務已重設"
+
+msgid "ChooseNewsLanguage"
+msgstr "選擇新語言"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "課程使用總時間"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "這選項用以計算學員用於課程的總時間,以秒為計算單位。要取消這項功能把設定值保留為 0 。"
+
+msgid "EditLink"
+msgstr "編輯連結"
+
+msgid "FinishSessionCreation"
+msgstr "完成創建學期單元"
+
+msgid "VisioRTMPPort"
+msgstr "視像會議 RTMTP 協定埠"
+
+msgid "SessionNameAlreadyExists"
+msgstr "學期單元名稱快將出現"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "未有創建班級"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "本欄只可填入數字"
+
+msgid "UserLocked"
+msgstr "使用者被封鎖"
+
+msgid "UserUnlocked"
+msgstr "解除封鎖使用者"
+
+msgid "CannotDeleteUser"
+msgstr "你不能刪除此使用者"
+
+msgid "SelectedUsersDeleted"
+msgstr "選取之使用者已被刪除"
+
+msgid "SomeUsersNotDeleted"
+msgstr "部分使用者未被刪除"
+
+msgid "ExternalAuthentication"
+msgstr "外部認證"
+
+msgid "RegistrationDate"
+msgstr "註冊日期"
+
+msgid "UserUpdated"
+msgstr "使用者已更新"
+
+msgid "HomePageFilesNotReadable"
+msgstr "首頁檔為不可讀取"
+
+msgid "Choose"
+msgstr "選擇"
+
+msgid "ModifySessionCourse"
+msgstr "修改學期單元課程"
+
+msgid "CourseSessionList"
+msgstr "學期單元課程清單"
+
+msgid "SelectACoach"
+msgstr "選擇指導員"
+
+msgid "UserNameUsedTwice"
+msgstr "使用者名稱被重覆使用"
+
+msgid "UserNameNotAvailable"
+msgstr "這使用者名稱未能採用"
+
+msgid "UserNameTooLong"
+msgstr "使用者名稱過長"
+
+msgid "WrongStatus"
+msgstr "這身份不存在"
+
+msgid "ClassNameNotAvailable"
+msgstr "無效的班級名稱"
+
+msgid "FileImported"
+msgstr "已匯入檔案"
+
+msgid "WhichSessionToExport"
+msgstr "選取要匯出之檔案"
+
+msgid "AllSessions"
+msgstr "所有學期單元"
+
+msgid "CodeDoesNotExists"
+msgstr "此編碼不存在"
+
+msgid "UnknownUser"
+msgstr "不明使用者"
+
+msgid "UnknownStatus"
+msgstr "不明的身份"
+
+msgid "SessionDeleted"
+msgstr "學期單元已被刪除"
+
+msgid "CourseDoesNotExist"
+msgstr "此課程不存在"
+
+msgid "UserDoesNotExist"
+msgstr "此使用者不存在"
+
+msgid "ButProblemsOccured"
+msgstr "但是出現問題"
+
+msgid "UsernameTooLongWasCut"
+msgstr "使用者名稱被截短"
+
+msgid "NoInputFile"
+msgstr "沒有送出檔案"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "學員狀態已指派給"
+
+msgid "WrongDate"
+msgstr "錯誤日期格式 (yyyy-mm-dd)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "這是自動電郵訊息，請勿回覆。"
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "你很快會收到由導師發出之電郵。"
+
+msgid "SlideSize"
+msgstr "投映片大小"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "歐福羅斯(Ephorus)防抄襲系統"
+
+msgid "CourseTeachers"
+msgstr "課程教師"
+
+msgid "UnknownTeacher"
+msgstr "不明教師"
+
+msgid "HideDLTTMarkup"
+msgstr "隱藏 DLTT 標記"
+
+msgid "ListOfCoursesOfSession"
+msgstr "此學期單元課程清單"
+
+msgid "UnsubscribeSelectedUsersFromSession"
+msgstr "取消課程單元中己選使用者"
+
+msgid "ShowDifferentCourseLanguageComment"
+msgstr "在首頁課程清單，課程標題旁顯示課程語言。"
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "即使類別中未有課程，亦於首頁中顯示所有課類別。"
+
+msgid "ShowEmptyCourseCategories"
+msgstr "顯示空的課程類別"
+
+msgid "XMLNotValid"
+msgstr "不允許 XML 文件"
+
+msgid "AllowEmailEditorTitle"
+msgstr "啟用線上電郵編輯器"
+
+msgid "AllowEmailEditorComment"
+msgstr "若敫用本項目，按下電郵地址時會開啟線上電郵編輯器。"
+
+msgid "ListOfUsersSubscribedToCourse"
+msgstr "課程選修者清單"
+
+msgid "NumberOfCourses"
+msgstr "課程數量"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "顯示課程語言"
+
+msgid "name"
+msgstr "名稱"
+
+msgid "Security"
+msgstr "安全性"
+
+msgid "UploadExtensionsListType"
+msgstr "上載文件過濾器類型"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "你是否使用黑名單或白名單過濾？請檢視以下的黑名單或白名單詳情。"
+
+msgid "Blacklist"
+msgstr "黑名單"
+
+msgid "Whitelist"
+msgstr "白名單"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "黑名單 - 設定"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "白名單 - 設定"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "黑名單是用以移除(或重新命名)帶有指定延伸檔名的檔案。名單中的副檔名前不可有點號 (.) ，檔名間要以分號 (;) 隔開，例子：exe;com;bat;scr;php。沒有延伸檔名的檔案可被接受，檔名可以是英文大／小寫。"
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "白名單是用以移除(或重新命名)<strong>不帶有</strong>指定延伸檔名的檔案。通常白名單的安全性會較高但限制性會較強。名單中的副檔名前不可有點號 (.) ，檔名間要以分號 (;) 隔開，例子：htm;html;txt;doc;xls;ppt;jpg;jpeg;gif。沒有延伸檔名的檔案可被接受，檔名可以是英文大／小寫。"
+
+msgid "UploadExtensionsSkip"
+msgstr "過濾器屬性(跳過 / 重新命名)　"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "若你選<strong>跳過</strong>，經黑名單或白名單過濾出來的檔案不會被上載到系統上。若你選<strong>重新命名</strong>，檔案的延伸檔名會被系統預設的延伸檔名取代。小心這樣做或不能保護你，同時若有檔案同名但延伸檔名不同時，也可能會出現檔名衝突的問題。"
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "替代延伸檔名"
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "若你選了把危險延伸檔名替換的過濾功能，輸入你想使用的替代延伸檔名用以取代過濾器偵測到的危險延伸檔名。"
+
+msgid "Remove"
+msgstr "移除"
+
+msgid "Rename"
+msgstr "重新命名"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "於首頁課程類別中顯示各類別中現有的課程數量"
+
+msgid "EphorusDescription"
+msgstr "啟用 Chamilo 中的歐福羅斯(Ephorus)防抄襲系統。.<br /> <strong>使用歐福羅斯(Ephorus)防抄襲系統，你能輕易檢查出於網上抄襲的文章。</strong><br /> 你可以使用我們的開源站台服務來建立你自己的整合系統，或使用我們的 Chamilo 整合模組。"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "按這裏取得更多資訊和價目"
+
+msgid "NameOfTheSession"
+msgstr "學期單元名稱"
+
+msgid "NoSessionsForThisUser"
+msgstr "本使用者未有修讀學期單元"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "於首頁展示課程類別"
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "本選項可決定顯示或隱藏站台的課程"
+
+msgid "ShowTabsTitle"
+msgstr "頁首之標籤"
+
+msgid "ShowTabsComment"
+msgstr "勾選你想顯示於標頭的標籤。未選的標籤會在校園首頁及我的課程頁面的右選單顯現(如有需要)。"
+
+msgid "DefaultForumViewTitle"
+msgstr "預設討論區外觀"
+
+msgid "DefaultForumViewComment"
+msgstr "當創建新討論區時應該預設的選項。任何課程管理人都可以為個別的討論區選擇不同的外觀。"
+
+msgid "TabsMyCourses"
+msgstr "我的課程標籤"
+
+msgid "TabsCampusHomepage"
+msgstr "校園首頁標籤"
+
+msgid "TabsReporting"
+msgstr "舉報標籤"
+
+msgid "TabsPlatformAdministration"
+msgstr "平台管理員標籤"
+
+msgid "NoCoursesForThisSession"
+msgstr "本學期單元未有課程"
+
+msgid "NoUsersForThisSession"
+msgstr "本學期單元未有使用者"
+
+msgid "LastNameMandatory"
+msgstr "必須填寫姓氏"
+
+msgid "FirstNameMandatory"
+msgstr "必須填寫名字"
+
+msgid "EmailMandatory"
+msgstr "電郵不能為空白"
+
+msgid "TabsMyAgenda"
+msgstr "我的行事曆標籤"
+
+msgid "NoticeWillBeNotDisplayed"
+msgstr "本通告不會於首頁中展示"
+
+msgid "LetThoseFieldsEmptyToHideTheNotice"
+msgstr "把這些欄目保持空白以隱藏這通告"
+
+msgid "Ppt2lpVoiceRecordingNeedsRed5"
+msgstr "錄音功能要依頼 Red5 串流伺服器運作。你可以在當前頁面的視像會議部分設定伺服器參數。"
+
+msgid "PlatformCharsetTitle"
+msgstr "字元設定"
+
+msgid "PlatformCharsetComment"
+msgstr "字元設定主導了 Chamilo 平台上展示特殊語言的方式。例如你要使用俄文或日文，你或需要更改它。英語、拉丁語系及西歐語系則可以保留預設值：UTF-8"
+
+msgid "ExtendedProfileRegistrationTitle"
+msgstr "註冊過程中提供額外個人資料欄目"
+
+msgid "ExtendedProfileRegistrationComment"
+msgstr "你打算提供那一欄的額外個人資料讓使用者在註冊時填寫？選用本項，你要啟用額外個人資料(請看上面）。"
+
+msgid "ExtendedProfileRegistrationRequiredTitle"
+msgstr "註冊時必須填寫的額外個人資料"
+
+msgid "ExtendedProfileRegistrationRequiredComment"
+msgstr "那一欄的額外個人資料是使用者在註冊時必須填寫的？選用本項，你要啟用額外個人資料，並選取提供該等欄目(請看上面）。"
+
+msgid "NoReplyEmailAddress"
+msgstr "毋須回覆電郵地址"
+
+msgid "NoReplyEmailAddressComment"
+msgstr "這是用作發出「毋須回覆郵件」的電郵地址。通常在伺服器上會設定刪除或不理會這電郵地址所收到的郵件。"
+
+msgid "SurveyEmailSenderNoReply"
+msgstr "統計調查電郵傳送器(毋須回覆)"
+
+msgid "SurveyEmailSenderNoReplyComment"
+msgstr "向使用者發出統計調查邀請時，使用指導員/導師本人的電郵還是採用主要設定中預設的毋須回覆電郵地址？"
+
+msgid "CourseCoachEmailSender"
+msgstr "導師電郵"
+
+msgid "NoReplyEmailSender"
+msgstr "毋須回覆電郵地址"
+
+msgid "VersionCheckEnabled"
+msgstr "允許檢查版本"
+
+msgid "InstallDirAccessibleSecurityThreat"
+msgstr "你的 Chamilo 系統中的主要/安裝目錄仍可讓線上使用者進入，這意味著你安裝的系統出現安全漏洞。我們建議你移除安裝目錄料夾或改變其權限以保證其他人不能使用其中資料。"
+
+msgid "GradebookActivation"
+msgstr "評級手冊"
+
+msgid "GradebookActivationComment"
+msgstr "啟用評級手冊工具適用於須要以分數評定之學習目標，但亦會令使用界面複雜化，你是否希望啟用此工具？"
+
+msgid "UserTheme"
+msgstr "畫面(樣式)"
+
+msgid "UserThemeSelection"
+msgstr "使用者樣式選擇"
+
+msgid "UserThemeSelectionComment"
+msgstr "允許使用者在個人檔案頁面用自選樣式。使用者的畫面會改變，但站台的預設畫面會保持原狀。如課程或學期擁有本身的設定頁面，則課程或學期的設定頁面會優先被使用。"
+
+msgid "VisioHost"
+msgstr "視像會議串流伺服器名稱或 IP 位址"
+
+msgid "VisioPort"
+msgstr "視像會議串流伺服器埠"
+
+msgid "VisioPassword"
+msgstr "視像會議串流伺服器密碼"
+

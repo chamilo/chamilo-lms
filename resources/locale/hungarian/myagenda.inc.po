@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Az én naptáram"
+
+msgid "langToday"
+msgstr "Ma"
+

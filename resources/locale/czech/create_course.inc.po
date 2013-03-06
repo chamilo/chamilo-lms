@@ -1,0 +1,303 @@
+msgid "langProfessors"
+msgstr "Učitelé"
+
+msgid "langExplanation"
+msgstr "Jedním kliknutím na OK vytvoříte webstránku s Fórem, Agendou, Správou dokumentů atd. Vaše přihlášení, jako tvorce webstránky Vám umožní změnit ji dle Vaší potřeby."
+
+msgid "langEmpty"
+msgstr "Nechali jste některá políčka prázdna.<br>Použijte tlačítko <b>Zpět</b> na Vašem prohlížeči a skuste to znovu.<br>Jestli ignorujete kód kurzu, podívejte se na Program kurzu"
+
+msgid "langCodeTaken"
+msgstr "Tento kód kurzu byl už použit. <br>Použijte tlačítko <b>Zpět</b> na Vašem prohlížeči a skuste to znovu"
+
+msgid "langFormula"
+msgstr "S přátelským pozdravem"
+
+msgid "langMessage"
+msgstr "Když odstraníte test fórum, odstraníte také všechny odkazy které se v tomto fóru nachází."
+
+msgid "langExerciceEx"
+msgstr "Vzorový test"
+
+msgid "langAntique"
+msgstr "Ironie"
+
+msgid "langSocraticIrony"
+msgstr "Sokratická ironie je..."
+
+msgid "langManyAnswers"
+msgstr "(může být správna více než jedna odpověď)"
+
+msgid "langRidiculise"
+msgstr "Zesměšňuje účastníka rozmluvy aby ho donútil připust že nemá pravdu."
+
+msgid "langNoPsychology"
+msgstr "Ne. Sokratická ironie nezávisý na psychologii, týká se argumentace."
+
+msgid "langAdmitError"
+msgstr "Připustit si jeden vlastný omyl aby doshál toho, že řečník udělá to samé."
+
+msgid "langNoSeduction"
+msgstr "Ne. Sokratická ironie není strategie k svádení nebo metoda založena na příkladech."
+
+msgid "langForce"
+msgstr "Přinutit jednoho účastníka rozpravy pomocí série otázek a podotázek, aby si přiznal že neví nic o tom co tvrdil že ví."
+
+msgid "langIndeed"
+msgstr "Skutečně. Sokratická ironie je dotazovací metoda. Grécké \"eirotao\" znamená \"klást otázky\""
+
+msgid "langContradiction"
+msgstr "Použitím Principu bez protiřečení zaženete účastníka rozmluvy do slepé uličky."
+
+msgid "langNotFalse"
+msgstr "Odpověd není špatná. Je pravda že odhalení nevědomosti účastníka rozmluvy znamená poukázání na protichůdné závěry kam vedl své předpoklady."
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langVideo"
+msgstr "Video"
+
+msgid "langCourseProgram"
+msgstr "Popis kurzu"
+
+msgid "langAnnouncements"
+msgstr "Oznámení"
+
+msgid "langAddPageHome"
+msgstr "Nahrát stránku a spoj(link) s Domácí stránkou"
+
+msgid "langLinkSite"
+msgstr "Přidat odkaz stránky na Domácí stránku"
+
+msgid "langModifyInfo"
+msgstr "Nastavení kurzu"
+
+msgid "langCourseDesc"
+msgstr "Popis kurzu"
+
+msgid "langAgendaTitle"
+msgstr "Uterý 11. Prosince  - První setkání. Místnost: LIN 18"
+
+msgid "langAgendaText"
+msgstr "Všeobecní úvod do projektového managementu"
+
+msgid "langMicro"
+msgstr "Pouliční rozhovory"
+
+msgid "langGoogle"
+msgstr "Rychlý a účinný vyhledávač"
+
+msgid "langIntroductionText"
+msgstr "Toto je úvodní text. Pro nahrazení Vašim vlastním textem, klikněte dolů na ikonu s tužkou (pouze pro administrátory kurzu)"
+
+msgid "langIntroductionTwo"
+msgstr "Tato stránka dovoluje uživatelům a skupinám publikování dokumentů."
+
+msgid "langCourseDescription"
+msgstr "Popis kurzu"
+
+msgid "langProfessor"
+msgstr "Učitel"
+
+msgid "langAnnouncementEx"
+msgstr "Toto je jenom příklad oznámení. Jenom učitelům kurzu je dovoleno publikovat oznámení."
+
+msgid "langJustCreated"
+msgstr "Práve jste vytvořil oblast kurzu"
+
+msgid "langEnter"
+msgstr "Zpět na můj seznam kurzů"
+
+msgid "langGroups"
+msgstr "Skupiny"
+
+msgid "langCreateCourseGroups"
+msgstr "Skupiny"
+
+msgid "langCatagoryMain"
+msgstr "Hlavní"
+
+msgid "langCatagoryGroup"
+msgstr "Skupinové fóra"
+
+msgid "langLn"
+msgstr "Jazyk"
+
+msgid "langCreateSite"
+msgstr "Vytvořit oblast kurzu"
+
+msgid "langFieldsRequ"
+msgstr "Všechny políčka jsou požadována"
+
+msgid "langEx"
+msgstr "např. <i>Inovační management</i>"
+
+msgid "langFac"
+msgstr "Kategorie"
+
+msgid "langTargetFac"
+msgstr "Toto je oddělení nebo jiná kategorie, kde je kurz zařazený"
+
+msgid "langMax"
+msgstr "max. 20 znaků, např. <i>INNOV21</i>"
+
+msgid "langDoubt"
+msgstr "Jestli máte pochybnosti o kódu kurzu, poraďte se s administrátorem"
+
+msgid "langProgram"
+msgstr "Program kurzu</a>. Jestli Váš kurz nemá kód a to z jakéhokoliv důvodu, vytvořte mu ho. Například <i>INOVACE</i> když se kurz týká Inovačního Managementu"
+
+msgid "langScormtool"
+msgstr "Učební osnova"
+
+msgid "langScormbuildertool"
+msgstr "Vytváření SCORM učební osnovy"
+
+msgid "langPathbuildertool"
+msgstr "Tvorba učební osnovy"
+
+msgid "langOnlineConference"
+msgstr "Konference"
+
+msgid "langAgendaCreationTitle"
+msgstr "Vytvoření kurzu"
+
+msgid "langAgendaCreationContenu"
+msgstr "Tento kurz byl vytvořen v tento moment."
+
+msgid "langOnlineDescription"
+msgstr "Popis konference (On-line)"
+
+msgid "langDropbox"
+msgstr "Schránka dokumentů"
+
+msgid "langOnly"
+msgstr "Pouze"
+
+msgid "langRandomLanguage"
+msgstr "Náhodný výběr v dostupných jazycích"
+
+msgid "langImages"
+msgstr "Obrázky"
+
+msgid "langAudio"
+msgstr "Audio"
+
+msgid "langFlash"
+msgstr "Flash"
+
+msgid "langForumLanguage"
+msgstr "Anglicky"
+
+msgid "langNewCourse"
+msgstr "Nová Oblast kurzu"
+
+msgid "langAddNewCourse"
+msgstr "Přidat novou oblast kurzu"
+
+msgid "langRestoreCourse"
+msgstr "Obnovit kurz"
+
+msgid "langOtherProperties"
+msgstr "Ostatní vlastnosti nalezené v archivu"
+
+msgid "langSysId"
+msgstr "ID Systému"
+
+msgid "langDepartment"
+msgstr "Oddělení"
+
+msgid "langDepartmentUrl"
+msgstr "URL oddělení"
+
+msgid "langScoreShow"
+msgstr "Ukaž výsledek"
+
+msgid "langVisibility"
+msgstr "Viditelnost"
+
+msgid "langVersionDb"
+msgstr "Verze databáze je použitá v čase archivu"
+
+msgid "langLastVisit"
+msgstr "Posledně navštívené"
+
+msgid "langLastEdit"
+msgstr "Posledně editované"
+
+msgid "langExpire"
+msgstr "Expirace"
+
+msgid "langChoseFile"
+msgstr "Vyber soubor"
+
+msgid "langFtpFileTips"
+msgstr "Soubor na FTP serveru"
+
+msgid "langHttpFileTips"
+msgstr "Soubor na Web (HTTP) serveru"
+
+msgid "langLocalFileTips"
+msgstr "Soubor na platforme serveru"
+
+msgid "langPostFileTips"
+msgstr "Soubor na Vašem lokálním počítači"
+
+msgid "langOtherCategory"
+msgstr "Jiná kategorie"
+
+msgid "langMinimum"
+msgstr "minimum"
+
+msgid "langMaximum"
+msgstr "maximum"
+
+msgid "langRestoreACourse"
+msgstr "obnovit kurz"
+
+msgid "langBackup"
+msgstr "Záloha"
+
+msgid "langCopy"
+msgstr "Kopírovat obsah kurzu"
+
+msgid "langRecycle"
+msgstr "Recyklovat kurz"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Toto je přiklad oznámení"
+
+msgid "Wikipedia"
+msgstr "Online encyklopedie - bezplatná"
+
+msgid "DefaultGroupCategory"
+msgstr "Předvolené skupiny"
+
+msgid "DefaultCourseImages"
+msgstr "Galerie"
+
+msgid "ExampleForumCategory"
+msgstr "Příklad kategorie fóra"
+
+msgid "ExampleForum"
+msgstr "Příklad fóra"
+
+msgid "ExampleThread"
+msgstr "Příklad vlákna"
+
+msgid "ExampleThreadContent"
+msgstr "Příklad obsahu"
+
+msgid "IntroductionWiki"
+msgstr "Slovo Wiki je zkratka pro WikiWikiWeb. Wikiwiki je havajské slovo, znamenající rychlý nebo rychlost. Ve wiki lidé píšou stránky společně. Pokud někdo něco napíše chybně, pak jej může další osoba opravit. Další osoba může přidat další informaci. Tím jsou stránky neustále vylepšovány."
+
+msgid "CreateCourseArea"
+msgstr "Vytvořit tento kurz"
+
+msgid "CreateCourse"
+msgstr "Vytvořit kurz"
+
+msgid "Create"
+msgstr "Vytvořit"
+

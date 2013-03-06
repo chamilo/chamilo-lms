@@ -1,0 +1,330 @@
+msgid "langStatDB"
+msgstr "Spårnings-DB. Endast användbar vid flera DB"
+
+msgid "langEnableTracking"
+msgstr "Möjliggör spårning"
+
+msgid "langInstituteShortName"
+msgstr "Institution kortnamn"
+
+msgid "langWarningResponsible"
+msgstr "Använd detta skript bara efter en säkerhetskopiering. Chamilo team är inte ansvariga för någon form av förlorad data."
+
+msgid "langAllowSelfRegProf"
+msgstr "Tillåt självregistrering som kurs skapare"
+
+msgid "langEG"
+msgstr "e.g."
+
+msgid "langDBHost"
+msgstr "Databasvärd"
+
+msgid "langDBLogin"
+msgstr "Databasanvändare"
+
+msgid "langDBPassword"
+msgstr "Databaslösenord"
+
+msgid "langMainDB"
+msgstr "Claroline huvudDB"
+
+msgid "langAllFieldsRequired"
+msgstr "alla fält krävs"
+
+msgid "langPrintVers"
+msgstr "Utskrivbar version"
+
+msgid "langLocalPath"
+msgstr "Motsvarande lokal sökväg"
+
+msgid "langAdminEmail"
+msgstr "Administratörens emejl"
+
+msgid "langAdminName"
+msgstr "Administratörens efternamn"
+
+msgid "langAdminSurname"
+msgstr "Administratörens förname"
+
+msgid "langAdminLogin"
+msgstr "Administratörens användare"
+
+msgid "langAdminPass"
+msgstr "Administratörens lösenord  (<font color=\"red\">du vill kanske ändra detta sedan</font>)"
+
+msgid "langEducationManager"
+msgstr "Utbildningsansvarig"
+
+msgid "langCampusName"
+msgstr "Ditt campus-namn"
+
+msgid "langDBSettingIntro"
+msgstr "				Installationsscriptet kommer att skapa huvuddatabasen för claroline. Var snäll och notera att Claroline 				behöver skapa många databaser. Om du bara är tillåten för en  				DB för din webbsajt av din Värdservice, kommer Claroline inte att fungera."
+
+msgid "langStep1"
+msgstr "Steg 1"
+
+msgid "langStep2"
+msgstr "Steg 2"
+
+msgid "langStep3"
+msgstr "Steg 3 av 6"
+
+msgid "langStep4"
+msgstr "Steg 4 av 6"
+
+msgid "langStep5"
+msgstr "Steg 5 av 6"
+
+msgid "langStep6"
+msgstr "Steg 6 av 6"
+
+msgid "langCfgSetting"
+msgstr "Konfigurationsinställningar"
+
+msgid "langDBSetting"
+msgstr "MySQL databasinställningar"
+
+msgid "langMainLang"
+msgstr "Huvudspråk"
+
+msgid "langLicence"
+msgstr "Licens"
+
+msgid "langLastCheck"
+msgstr "Sista kontroll före installation"
+
+msgid "langRequirements"
+msgstr "Krav"
+
+msgid "langDbPrefixForm"
+msgstr "MySQL-Prefix"
+
+msgid "langDbPrefixCom"
+msgstr "Lämna tom om den inte efterfrågas"
+
+msgid "langEncryptUserPass"
+msgstr "Kryptera användarnas lösenord i DB"
+
+msgid "langSingleDb"
+msgstr "Använd en eller flera DB för Claroline"
+
+msgid "langAllowSelfReg"
+msgstr "Tillåt självregistrering"
+
+msgid "langRecommended"
+msgstr "(rekommenderad)"
+
+msgid "langScormDB"
+msgstr "Scorm DB"
+
+msgid "langAdminLastName"
+msgstr "Administratörens efternamn"
+
+msgid "langAdminPhone"
+msgstr "Administratörens telefonnummer"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "langAdminFirstName"
+msgstr "Administratörens förnamn"
+
+msgid "langInstituteURL"
+msgstr "URL till denna organisation"
+
+msgid "langDokeosURL"
+msgstr "URL till Chamilo"
+
+msgid "langUserDB"
+msgstr "Användar DB"
+
+msgid "PleaseWait"
+msgstr "Vänta lite"
+
+msgid "PleaseCheckTheseValues"
+msgstr "Kontrollera dessa värden"
+
+msgid "PleasGoBackToStep1"
+msgstr "Gå tillbaka till steg 1"
+
+msgid "langInstallationLanguage"
+msgstr "Installationsspråk"
+
+msgid "ReadThoroughly"
+msgstr "Läs grundligt"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "För att få Chamilo att fungera behöver du följande på din server:"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "Varning!<br>Installeraren har upptäckt ett redan existerande Chamilo plattform på ditt system."
+
+msgid "NewInstallation"
+msgstr "Ny installation"
+
+msgid "CheckDatabaseConnection"
+msgstr "Kontrollera databas kopplingen"
+
+msgid "PrintOverview"
+msgstr "Visa översikt"
+
+msgid "Installing"
+msgstr "Installation"
+
+msgid "of"
+msgstr "av"
+
+msgid "Step"
+msgstr "Steg"
+
+msgid "MoreDetails"
+msgstr "För mer detaljer"
+
+msgid "ServerRequirements"
+msgstr "Krav på servern"
+
+msgid "ServerRequirementsInfo"
+msgstr "Program och funktioner som servern måste hantera för att Chamilo ska kunna användas fullt ut"
+
+msgid "PHPVersion"
+msgstr "PHP-version"
+
+msgid "support"
+msgstr "support"
+
+msgid "PHPVersionOK"
+msgstr "PHP-versionen är OK"
+
+msgid "RecommendedSettings"
+msgstr "Rekommenderade inställningar"
+
+msgid "RecommendedSettingsInfo"
+msgstr "Rekommenderade inställningar för serverns konfiguration. Inställningarna görs i konfigurationsfilen php.ini av serveradministratören på din server"
+
+msgid "Setting"
+msgstr "Inställningar"
+
+msgid "Actual"
+msgstr "Just nu"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "Mapp- och filrättigheter"
+
+msgid "DirectoryAndFilePermissionsInfo"
+msgstr "En del mappar och filer i vissa mappar måste vara skrivbara för webbservern för att Chamilo ska kunna fungera (användarnas filuppladdning, skapandet av kursdelar, mm). Det kan innebära att rättigheterna måste ställas in manuellt (utanför installationsprogrammet)."
+
+msgid "NotWritable"
+msgstr "Ej skrivbar"
+
+msgid "Writable"
+msgstr "Skrivbar"
+
+msgid "ExtensionLDAPNotAvailable"
+msgstr "LDAP-modul ej tillgänglig"
+
+msgid "ExtensionGDNotAvailable"
+msgstr "GD-modul ej tillgänglig"
+
+msgid "DokeosLicenseInfo"
+msgstr "Chamilo är ett fritt program distribuerat under GNU General Public license (GPL)"
+
+msgid "IAccept"
+msgstr "Jag godkänner"
+
+msgid "ConfigSettingsInfo"
+msgstr "Följande värden kommer att skrivas in i din konfigurationsfil"
+
+msgid "DokeosInstallation"
+msgstr "Chamilo installation"
+
+msgid "InstallDokeos"
+msgstr "Installera Chamilo"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "Gå till din nya portal."
+
+msgid "FirstUseTip"
+msgstr "När du kommer till din kursplats första gången är det enklast att lära känna den om du registrerar dig med valet \'Skapa kurs\' och sedan fortsätta där."
+
+msgid "Version_"
+msgstr "Version"
+
+msgid "UpdateFromDokeosVersion"
+msgstr "Uppdatera från Chamilo"
+
+msgid "WelcomToTheDokeosInstaller"
+msgstr "Välkommen till Chamilo installationsprogram"
+
+msgid "PleaseSelectInstallationProcessLanguage"
+msgstr "Välj det språk du vill använda under installationen"
+
+msgid "ReadTheInstallGuide"
+msgstr "Läs installationsguiden"
+
+msgid "HereAreTheValuesYouEntered"
+msgstr "Här är värdena du skrev in"
+
+msgid "PrintThisPageToRememberPassAndOthers"
+msgstr "Skriv ut den här sidan och spara den med ditt lösenord och andra inställningar"
+
+msgid "TheInstallScriptWillEraseAllTables"
+msgstr "Installationsprogrammet kommer ta bort alla tabeller i den valda databasen. Vi rekommenderar verkligen att du gör en fullständig säkerhetskopia av dem innan du bekräftar detta sista installationssteg, annars förlorar du alla data i tabellerna."
+
+msgid "Warning"
+msgstr "Varning"
+
+msgid "ReadWarningBelow"
+msgstr "Läs varningen nedan"
+
+msgid "SecurityAdvice"
+msgstr "Säkerhetsråd"
+
+msgid "YouHaveMoreThanXCourses"
+msgstr "Du har mer än %d kurser i din Chamiloplattform! Endast %d kurser har uppdaterats. För att uppdatera de andra kurserna, %s Klicka här %s"
+
+msgid "ToProtectYourSiteMakeXAndYReadOnly"
+msgstr "För att skydda din webbplats, ändra rättigheterna på %s och %s (men inte deras mappar) till enbart läsbara (chmod 444)."
+
+msgid "Error"
+msgstr "Fel"
+
+msgid "Back"
+msgstr "Tillbaka"
+
+msgid "HasNotBeenFound"
+msgstr "hittades inte"
+
+msgid "PleaseGoBackToStep1"
+msgstr "Återgå till steg 1"
+
+msgid "HasNotBeenFoundInThatDir"
+msgstr "hittades inte i den mappen"
+
+msgid "OldVersionRootPath"
+msgstr "Sökväg till roten i den gamla versionen"
+
+msgid "NoWritePermissionPleaseReadInstallGuide"
+msgstr "Några filer eller mappar har inte rättigheter för skrivning. För att kunna installera Chamilo måste du först ändra deras rättigheter (med chmod i terminal eller filattribut i FTP-program). Läs mer i %s installationguiden %s"
+
+msgid "DBServerDoesntWorkOrLoginPassIsWrong"
+msgstr "Databasservern är inte tillgänglig eller fel login/lösenord till databasen"
+
+msgid "PleaseGoBackToStep"
+msgstr "Gå tillbaka till steg"
+
+msgid "DBSettingUpgradeIntro"
+msgstr "Uppgraderingsskriptet kommer att återskapa och uppdatera databasen(erna) för Chamilo. För att göra det kommer skriptet använda databasen och inställningarna angivna nedan. Eftersom Chamilo körs i så många olika miljöer och alla kanske inte är testade, rekommenderar vi verkligen att du gör en fullständig säkerhetskopia av dina Chamilo-databaser innan du fortsätter med uppgraderingen."
+
+msgid "ExtensionMBStringNotAvailable"
+msgstr "MBString för PHP ej tillänglig"
+
+msgid "ExtensionMySQLNotAvailable"
+msgstr "MySQL-modul för PHP ej tillänglig"
+
+msgid "DokeosArtLicense"
+msgstr "Bilder och mediagallerier i Chamilo använder bilder från Nuvola, Crystal Clear och TangoŽs ikongallerier. Andra bilder och media som diagram och Flash-animationer är lånade från Wikimedia och Ali Pakdel\'s och Denis Hoa\'s kurser med deras tillåtelse och släppta under BY-SA Creative Commons licens. Du kan hitta licensdetaljerna på <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">CC webbsidan</a>"
+
+msgid "OptionalParameters"
+msgstr "Frivilliga parameterar"
+

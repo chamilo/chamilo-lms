@@ -1,0 +1,138 @@
+msgid "Announcement"
+msgstr "ประกาศ"
+
+msgid "langAnnEmpty"
+msgstr "ลบประกาศทุกรายการแล้ว"
+
+msgid "AnnouncementModified"
+msgstr "แก้ไขประกาศแล้ว"
+
+msgid "AnnouncementAdded"
+msgstr "เพิ่มประกาศแล้ว"
+
+msgid "AnnouncementDeleted"
+msgstr "ลบประกาศแล้ว"
+
+msgid "AnnouncementPublishedOn"
+msgstr "ประกาศเมื่อ"
+
+msgid "AddAnnouncement"
+msgstr "เพิ่มประกาศ"
+
+msgid "langContent"
+msgstr "เนื้อหา"
+
+msgid "AnnouncementDeleteAll"
+msgstr "ลบรายการที่ประกาศ"
+
+msgid "professorMessage"
+msgstr "ข้อความจากอาจารย์ผู้สอน"
+
+msgid "langEmailSent"
+msgstr "อีเมลส่งถึงผู้เรียนที่ลงทะเบียน"
+
+msgid "EmailOption"
+msgstr "ส่งประกาศนี้ทางอีเมล์ไปยังนักศึกษาที่ลงทะเบียน"
+
+msgid "langOn"
+msgstr "มี"
+
+msgid "langRegUser"
+msgstr "ผู้ที่ลงทะเบียนเป็นผู้ใช้งานในระบบ"
+
+msgid "langUnvalid"
+msgstr "รูปแบบอีเมล์ไม่ถูกต้อง"
+
+msgid "langModifAnn"
+msgstr "แก้ไขประกาศ"
+
+msgid "langModify"
+msgstr "แก้ไข"
+
+msgid "langDelete"
+msgstr "ź"
+
+msgid "langTitle"
+msgstr "ชื่อเรื่อง"
+
+msgid "langHelp"
+msgstr "คำแนะนำการใช้งาน"
+
+msgid "langOk"
+msgstr "ตกลง"
+
+msgid "langAddIntro"
+msgstr "เพิ่มคำนำ"
+
+msgid "langBackList"
+msgstr "กลับไปสารบัญ"
+
+msgid "langSelMess"
+msgstr "คำเตือนสำหรับผู้ใช้"
+
+msgid "EmailTitle"
+msgstr "เรื่อง"
+
+msgid "langUserlist"
+msgstr "รายชื่อกลุ่มและผู้ใช้ในระบบ"
+
+msgid "langSelectedUsers"
+msgstr "เลือกผู้ใช้"
+
+msgid "langSubmit"
+msgstr "ยอมรับ"
+
+msgid "langPleaseEnterMessage"
+msgstr "คุณต้องเขียนข้อความแนะนำ"
+
+msgid "langPleaseSelectUsers"
+msgstr "คุณต้องเลือกผู้ใช้บางคน"
+
+msgid "Teachersubject"
+msgstr "ส่งข้อความถึงผู้เรียนของท่านแล้ว"
+
+msgid "langMessages"
+msgstr "ข้อความ"
+
+msgid "langMessageToSelectedUsers"
+msgstr "ข้อความถึงผู้ใช้ที่เลือกไว้"
+
+msgid "langIntroText"
+msgstr "การส่งข้อความ : เลือกคลิกทำเครื่องหมายหน้ารายการที่ต้องการส่งถึง"
+
+msgid "langDown"
+msgstr "ŧ"
+
+msgid "langMsgSent"
+msgstr "ข้อความได้ส่งไปให้ผู้เรียนที่ท่านเลือกแล้ว"
+
+msgid "langSelUser"
+msgstr "เลือกผู้ใช้ในระบบ"
+
+msgid "langMessageToSelectedGroups"
+msgstr "ข้อความถึงกลุ่ม"
+
+msgid "langSelectedGroups"
+msgstr "เลือกกลุ่ม"
+
+msgid "langMsg"
+msgstr "ข้อความ"
+
+msgid "langYes"
+msgstr "ใช่"
+
+msgid "MsgText"
+msgstr "ข้อความ"
+
+msgid "AnnouncementDeletedAll"
+msgstr "ลบประกาศทั้งหมดแล้ว"
+
+msgid "AnnouncementMoved"
+msgstr "ย้ายประกาศแล้ว"
+
+msgid "NoAnnouncements"
+msgstr "ÂÑ§äÁèÁÕ»ÃÐ¡ÒÈ"
+
+msgid "SelectEverybody"
+msgstr "เลือกทุกคน"
+

@@ -1,0 +1,240 @@
+msgid "MyTasks"
+msgstr "我的任務"
+
+msgid "FavoriteBlogs"
+msgstr "我喜愛的網誌"
+
+msgid "Navigation"
+msgstr "導航"
+
+msgid "TopTen"
+msgstr "首十位網誌"
+
+msgid "Subtitle"
+msgstr "副標題"
+
+msgid "ThisBlog"
+msgstr "本網誌"
+
+msgid "NewPost"
+msgstr "新文章"
+
+msgid "TaskManager"
+msgstr "管理任務"
+
+msgid "MemberManager"
+msgstr "管理使用者"
+
+msgid "PostFullText"
+msgstr "內文"
+
+msgid "ReadPost"
+msgstr "閱讀本帖子"
+
+msgid "Home"
+msgstr "首頁"
+
+msgid "FirstPostText"
+msgstr "這是本網誌的第一篇文章。現在，加入本網誌的人都可以參與"
+
+msgid "AddNewComment"
+msgstr "新增意見"
+
+msgid "ReplyToThisComment"
+msgstr "回應意見"
+
+msgid "ManageTasks"
+msgstr "管理任務"
+
+msgid "ManageMembers"
+msgstr "加入/取消本網誌的使用者"
+
+msgid "Register"
+msgstr "註冊"
+
+msgid "UnRegister"
+msgstr "取消註冊"
+
+msgid "SubscribeMembers"
+msgstr "加入使用者"
+
+msgid "UnsubscribeMembers"
+msgstr "取消使用者"
+
+msgid "RightsManager"
+msgstr "管理使用者權限"
+
+msgid "ManageRights"
+msgstr "管理本網誌使用者的角色及權限"
+
+msgid "Task"
+msgstr "任務"
+
+msgid "Tasks"
+msgstr "任務"
+
+msgid "Member"
+msgstr "會員"
+
+msgid "Members"
+msgstr "會員"
+
+msgid "Role"
+msgstr "角色"
+
+msgid "Rate"
+msgstr "評級"
+
+msgid "Roles"
+msgstr "角色"
+
+msgid "AddTask"
+msgstr "新增任務"
+
+msgid "AddTasks"
+msgstr "新增任務"
+
+msgid "AssignTask"
+msgstr "委派任務"
+
+msgid "AssignTasks"
+msgstr "委派任務"
+
+msgid "EditTask"
+msgstr "編輯此任務"
+
+msgid "DeleteTask"
+msgstr "刪除此任務"
+
+msgid "DeleteSystemTask"
+msgstr "這是一個預設任務，你不能把它刪除"
+
+msgid "SelectUser"
+msgstr "使用者"
+
+msgid "SelectTask"
+msgstr "任務"
+
+msgid "SelectTargetDate"
+msgstr "日期"
+
+msgid "TargetDate"
+msgstr "日期"
+
+msgid "Color"
+msgstr "色彩"
+
+msgid "TaskList"
+msgstr "本網誌中的任務"
+
+msgid "AssignedTasks"
+msgstr "已委派的任務"
+
+msgid "ArticleManager"
+msgstr "文章管理員"
+
+msgid "CommentManager"
+msgstr "意見管理員"
+
+msgid "BlogManager"
+msgstr "網誌管理員"
+
+msgid "ReadMore"
+msgstr "閱讀更多......"
+
+msgid "DeleteThisArticle"
+msgstr "刪除本文章"
+
+msgid "EditThisPost"
+msgstr "編輯本文章"
+
+msgid "DeleteThisComment"
+msgstr "刪除本意見"
+
+msgid "NoArticles"
+msgstr "目前本網誌未有文章。若你是本網誌的作者，按「新文章」來寫作新的篇章。"
+
+msgid "NoTasks"
+msgstr "沒有任務"
+
+msgid "Rating"
+msgstr "評級"
+
+msgid "RateThis"
+msgstr "評定本文章的等級"
+
+msgid "SelectTaskArticle"
+msgstr "為本任務選取一篇文章"
+
+msgid "ExecuteThisTask"
+msgstr "執行本任務"
+
+msgid "WrittenBy"
+msgstr "撰寫人"
+
+msgid "InBlog"
+msgstr "於網誌中"
+
+msgid "ViewPostsOfThisDay"
+msgstr "閱讀今天張貼的文章"
+
+msgid "PostsOf"
+msgstr "文章屬於"
+
+msgid "NoArticleMatches"
+msgstr "找不到文章。請檢查串字或嘗試新的搜尋。"
+
+msgid "langTask1"
+msgstr "任務 1"
+
+msgid "langTask2"
+msgstr "任務 2"
+
+msgid "langTask3"
+msgstr "任務3"
+
+msgid "langTask1Desc"
+msgstr "任務 1 描述"
+
+msgid "langTask2Desc"
+msgstr "任務 2 描述"
+
+msgid "langTask3Desc"
+msgstr "任務 3 描述"
+
+msgid "blog_management"
+msgstr "網誌管理"
+
+msgid "langWelcome"
+msgstr "歡迎 ﹗"
+
+msgid "langModule"
+msgstr "模塊"
+
+msgid "langUserHasPermissionNot"
+msgstr "用戶沒有權限"
+
+msgid "langUserHasPermission"
+msgstr "用戶有權限"
+
+msgid "langLegend"
+msgstr "圖例"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "用戶有群組的權限"
+
+msgid "EditPost"
+msgstr "編輯文章"
+
+msgid "AddBlog"
+msgstr "創建新網誌"
+
+msgid "EditBlog"
+msgstr "編輯標題及副標題"
+
+msgid "DeleteBlog"
+msgstr "刪除本網誌"
+
+msgid "Shared"
+msgstr "已分享"
+

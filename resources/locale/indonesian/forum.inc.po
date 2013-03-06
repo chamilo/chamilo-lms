@@ -1,0 +1,177 @@
+msgid "Forum"
+msgstr "Forum"
+
+msgid "AddForumCategory"
+msgstr "Tambah kategori baru foum"
+
+msgid "AddForum"
+msgstr "Tambah sebuah forum baru"
+
+msgid "Topics"
+msgstr "Topik"
+
+msgid "Posts"
+msgstr "Posts"
+
+msgid "LastPosts"
+msgstr "Post terakhir"
+
+msgid "Message"
+msgstr "pesan"
+
+msgid "NoForumInThisCategory"
+msgstr "Tidak ada forum dalam kategori ini"
+
+msgid "InForumCategory"
+msgstr "Buat dalam kategori"
+
+msgid "AllowAnonymousPosts"
+msgstr "Ijinkan posting anonim?"
+
+msgid "StudentsCanEdit"
+msgstr "Bolehkan siswa mengedir postingnya?"
+
+msgid "ApprovalDirect"
+msgstr "Posting Pengesahan / Langsung"
+
+msgid "AllowNewThreads"
+msgstr "Ijinkan siswa memulai thread baru"
+
+msgid "DefaultViewType"
+msgstr "Type view Default"
+
+msgid "GroupSettings"
+msgstr "Seting Kelompok"
+
+msgid "NotAGroupForum"
+msgstr "Bukan forum kelompok"
+
+msgid "PublicPrivateGroupForum"
+msgstr "forum kelompok Publik atau privat ?"
+
+msgid "Public"
+msgstr "Untuk semua anggota mata kuliah"
+
+msgid "Private"
+msgstr "Untuk anggota kelompok saja"
+
+msgid "NewPostStored"
+msgstr "Pesan anda telah disimpan"
+
+msgid "ReturnTo"
+msgstr "Anda kini dapat kembali ke"
+
+msgid "Or"
+msgstr "atau"
+
+msgid "ReplyToThread"
+msgstr "Tanggapi thread ini"
+
+msgid "ReplyToMessage"
+msgstr "Tanggapi pesan ini"
+
+msgid "QuoteMessage"
+msgstr "Kutip pesan ini"
+
+msgid "NewTopic"
+msgstr "Thread baru"
+
+msgid "Replies"
+msgstr "Tanggapi"
+
+msgid "Views"
+msgstr "Lihat"
+
+msgid "LastPost"
+msgstr "Posting terakhir"
+
+msgid "Quoting"
+msgstr "Mengkutip"
+
+msgid "NotifyByEmail"
+msgstr "Ingatkan saya melalaui email jika ada tanggapan"
+
+msgid "StickyPost"
+msgstr "Ini pesan khusus (tampil selalu di atas dan memiliki ikon khusus)"
+
+msgid "ReplyShort"
+msgstr "Re:"
+
+msgid "DeletePost"
+msgstr "Anda yakin ingin mengapus postingan ini?  Menghapus ini juga akan menghapus tanggapan-nya. Silahkan tandai kenampakan thread untuk melihat postingan mana saja yang juga akan dihapus."
+
+msgid "Locked"
+msgstr "Terkunci: siswa tidak dapat memposting pesan baru di kategori forum , forum atau thread ini tapi mereka dapat tetap membaca pesan-pesan yang telah diposting"
+
+msgid "Unlocked"
+msgstr "Tridak terkunci: siswa dapat memposting pesan pada kategori forum, forum atau thread"
+
+msgid "Flat"
+msgstr "Flat"
+
+msgid "Threaded"
+msgstr "Ber-thread"
+
+msgid "Nested"
+msgstr "Bersarang"
+
+msgid "FlatView"
+msgstr "Penampakan datar"
+
+msgid "ThreadedView"
+msgstr "Penambakan Ber-thread"
+
+msgid "NestedView"
+msgstr "Penampakan bersarang"
+
+msgid "Structure"
+msgstr "Struktur"
+
+msgid "ForumCategoryAdded"
+msgstr "Kategori forum telah ditambahkan"
+
+msgid "ForumCategoryEdited"
+msgstr "Kategori forum telah diubah"
+
+msgid "ForumAdded"
+msgstr "Forum tersebut telah ditambah"
+
+msgid "ForumEdited"
+msgstr "Forum tersebut telah diubah"
+
+msgid "NewThreadStored"
+msgstr "Thread baru tersebut telah ditambah"
+
+msgid "Approval"
+msgstr "Persetujuan"
+
+msgid "Direct"
+msgstr "Langsung"
+
+msgid "ForGroup"
+msgstr "Untuk Group"
+
+msgid "ThreadLocked"
+msgstr "Thread dikunci"
+
+msgid "NotAllowedHere"
+msgstr "Anda tidak diijinkan di sini."
+
+msgid "ReplyAdded"
+msgstr "Tanggapan telah ditambahkan"
+
+msgid "EditPost"
+msgstr "Edit postingan"
+
+msgid "EditPostStored"
+msgstr "Postingan telah diubah"
+
+msgid "NewForumPost"
+msgstr "Potingan baru di forum"
+
+msgid "YouWantedToStayInformed"
+msgstr "Anda harus nyatakan bahwa anda ingin diinformasikan oleh email ketika sesorang menanggapi pada thread tersebut"
+
+msgid "MessageHasToBeApproved"
+msgstr "Pesan anda telah disetujui sebelum orang lain dapat melihatnya."
+

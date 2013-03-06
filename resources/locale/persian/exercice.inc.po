@@ -1,0 +1,575 @@
+msgid "langExercice"
+msgstr "آزمون"
+
+msgid "langActivate"
+msgstr "آشکار"
+
+msgid "langDeactivate"
+msgstr "پنهان"
+
+msgid "langNoEx"
+msgstr "هیچ
+آزمونی تا کنون
+طرح نشده است"
+
+msgid "langNewEx"
+msgstr "آزمون
+جدید"
+
+msgid "langQuestion"
+msgstr "پرسش"
+
+msgid "langQuestions"
+msgstr "سؤالها"
+
+msgid "langAnswers"
+msgstr "جوابها"
+
+msgid "langTrue"
+msgstr "درست"
+
+msgid "langAnswer"
+msgstr "جواب"
+
+msgid "langResult"
+msgstr "نتایج"
+
+msgid "langNoResult"
+msgstr "هیچ
+نتیجه ای تا
+کنون ثبت نگردیده
+است"
+
+msgid "langYourResults"
+msgstr "نتایج
+آزمون شما"
+
+msgid "langStudentResults"
+msgstr "نتایج
+آزمون دانشجوی
+شما"
+
+msgid "langExerciseType"
+msgstr "نوع
+آزمون"
+
+msgid "langExerciseName"
+msgstr "نام
+آزمون"
+
+msgid "langExerciseDescription"
+msgstr "توضیحات
+مربوط به آزمون"
+
+msgid "langSimpleExercise"
+msgstr "نمایش
+تمامی سؤالات
+بر روی یک صفحه"
+
+msgid "langSequentialExercise"
+msgstr "نمایش
+یک سؤال در هر
+صفحه"
+
+msgid "langRandomQuestions"
+msgstr "سؤال
+تصادفی"
+
+msgid "langGiveExerciseName"
+msgstr "لطفاً
+نام آزمون را
+وارد کنید"
+
+msgid "langSound"
+msgstr "افزودنفایل صوتی یاتصویری"
+
+msgid "langDeleteSound"
+msgstr "حذففایل صوتی یاتصویری"
+
+msgid "langNoAnswer"
+msgstr "تا
+کنون جوابی برای
+این سؤال در نظر
+گرفته نشده
+است"
+
+msgid "langGoBackToQuestionPool"
+msgstr "بازگشت
+به مخزن سؤالات"
+
+msgid "langGoBackToQuestionList"
+msgstr "بازگشت
+به فهرست سؤالات"
+
+msgid "langQuestionAnswers"
+msgstr "جوابهای
+این سؤال"
+
+msgid "langUsedInSeveralExercises"
+msgstr "توجه! این سؤال
+و جوابهای آن
+در آزمونهای
+مختلفی مورد
+استفاده قرار
+گرفته اند.
+آیا واقعاً
+می خواهید آنها
+را تغییر دهید؟"
+
+msgid "langModifyInAllExercises"
+msgstr "در
+تمامی آزمونها"
+
+msgid "langModifyInThisExercise"
+msgstr "تنها
+در این آزمون"
+
+msgid "langAnswerType"
+msgstr "نوع
+جواب"
+
+msgid "langMultipleSelect"
+msgstr "چند
+گزینه ای با چند
+جواب صحیح"
+
+msgid "langFillBlanks"
+msgstr "پر
+کردن جای خالی"
+
+msgid "langMatching"
+msgstr "تطابق
+موارد"
+
+msgid "langAddPicture"
+msgstr "عکستان
+را اضافه کنید"
+
+msgid "langReplacePicture"
+msgstr "تعویض
+عکس"
+
+msgid "langDeletePicture"
+msgstr "عکستان
+را حذف کنید"
+
+msgid "langQuestionDescription"
+msgstr "توضیحاتاختیاری"
+
+msgid "langGiveQuestion"
+msgstr "لطفاً
+سؤال را وارد
+کنید"
+
+msgid "langWeightingForEachBlank"
+msgstr "لطفاً
+امتیاز هر سؤال
+را وارد کنید"
+
+msgid "langUseTagForBlank"
+msgstr "از
+کروشه ها [...]
+برای مشخص
+کردن جاهای خالی
+استفاده کنید"
+
+msgid "langQuestionWeighting"
+msgstr "امتیاز"
+
+msgid "langMoreAnswers"
+msgstr "گزینه
++"
+
+msgid "langLessAnswers"
+msgstr "گزینه
+-"
+
+msgid "langMoreElements"
+msgstr "مورد
++"
+
+msgid "langLessElements"
+msgstr "مورد
+-"
+
+msgid "langTypeTextBelow"
+msgstr "لطفاً
+متن خود را در
+زیر وارد کنید"
+
+msgid "langDefaultTextInBlanks"
+msgstr "پاریس
+[پایتخت]
+کشور فرانسه
+است"
+
+msgid "langDefaultMatchingOptA"
+msgstr "تهران 
+است"
+
+msgid "langDefaultMatchingOptB"
+msgstr "پاریس 
+است"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "پایتخت 
+ایران"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "پایتخت 
+فرانسه"
+
+msgid "langDefineOptions"
+msgstr "لطفاً
+گزینه ها را
+تعیین کنید"
+
+msgid "langMakeCorrespond"
+msgstr "لطفاً
+موارد را تطابق
+دهید"
+
+msgid "langFillLists"
+msgstr "لطفاً
+دو فهرست زیر
+را پرکنید"
+
+msgid "langGiveText"
+msgstr "لطفاً
+متن خود را وارد
+کنید"
+
+msgid "langDefineBlanks"
+msgstr "لطفاً
+با استفاده از
+کروشه ها [...]
+حداقل
+یک جای خالی
+تعیین کنید"
+
+msgid "langGiveAnswers"
+msgstr "لطفاً
+جواب سؤالها
+را وارد کنید"
+
+msgid "langChooseGoodAnswer"
+msgstr "لطفاً
+جواب صحیح را
+مشخص کنید"
+
+msgid "langChooseGoodAnswers"
+msgstr "لطفاً
+یک یا چند جواب
+صحیح را مشخص
+کنید"
+
+msgid "langQuestionList"
+msgstr "فهرست
+سؤالات آزمون"
+
+msgid "langMoveUp"
+msgstr "بالا
+راندن"
+
+msgid "langMoveDown"
+msgstr "پایین
+راندن"
+
+msgid "langGetExistingQuestion"
+msgstr "دریافت
+سؤال از مخزن
+سؤالها"
+
+msgid "langFinishTest"
+msgstr "پایان آزمون"
+
+msgid "langQuestionPool"
+msgstr "مخزن
+سؤالات"
+
+msgid "langOrphanQuestions"
+msgstr "سؤالات یتیم"
+
+msgid "langNoQuestion"
+msgstr "تا
+کنون سؤالی طرح
+نشده است"
+
+msgid "langAllExercises"
+msgstr "تمام
+آزمونها"
+
+msgid "langFilter"
+msgstr ": انتخابسؤال از میان"
+
+msgid "langGoBackToEx"
+msgstr "بازگشت
+به آزمون"
+
+msgid "langReuse"
+msgstr "استفادۀ
+دوباره"
+
+msgid "langExerciseManagement"
+msgstr "مدیریت
+آزمونها"
+
+msgid "langQuestionManagement"
+msgstr "مدیریت
+سؤالها و جوابها"
+
+msgid "langQuestionNotFound"
+msgstr "سؤال
+مورد نظر یافت
+نشد"
+
+msgid "langExerciseNotFound"
+msgstr "ظاهراً
+چنین سؤالی وجود
+ندارد یا سؤال
+مورد نظر پنهان
+است"
+
+msgid "langAlreadyAnswered"
+msgstr "شما
+قبلاً به این
+سؤال پاسخ داده
+اید"
+
+msgid "langElementList"
+msgstr "فهرست
+موارد"
+
+msgid "langScore"
+msgstr "امتیاز"
+
+msgid "langCorrespondsTo"
+msgstr "مربوط
+به"
+
+msgid "langExpectedChoice"
+msgstr "جواب
+صحیح"
+
+msgid "langYourTotalScore"
+msgstr "امتیاز
+کل شما"
+
+msgid "langEvalSet"
+msgstr "معیارهای  ارزشیابی"
+
+msgid "langActive"
+msgstr "فعال"
+
+msgid "langInactive"
+msgstr "غیر فعال"
+
+msgid "langQuestCreate"
+msgstr "طرح کردن  سؤالات"
+
+msgid "langExRecord"
+msgstr "تمرین مورد نظر ضبط گردید"
+
+msgid "langBackModif"
+msgstr "بازگشت به صفحه طرح و تغییر سؤالات"
+
+msgid "langDoEx"
+msgstr "از این تمرین گذشتن"
+
+msgid "langDefScor"
+msgstr "توصیف معیارهای ارزشیابی"
+
+msgid "langCreateModif"
+msgstr "طرح یا تغییر سؤالات"
+
+msgid "langSub"
+msgstr "زبر عنوان"
+
+msgid "langMyAnswer"
+msgstr "جواب من"
+
+msgid "langMorA"
+msgstr "جواب +"
+
+msgid "langLesA"
+msgstr "جواب -"
+
+msgid "langRecEx"
+msgstr "ضبط تمرین"
+
+msgid "langRecQu"
+msgstr "ضبط سؤال"
+
+msgid "langRecAns"
+msgstr "ضبط پاسخ ها"
+
+msgid "langIntroduction"
+msgstr "مقدمه"
+
+msgid "langTitleAssistant"
+msgstr "کمک به طرح تمرین ها"
+
+msgid "langQuesList"
+msgstr "لیست سؤالها"
+
+msgid "langSaveEx"
+msgstr "ضبط تمرین ها"
+
+msgid "langFinish"
+msgstr "پایان"
+
+msgid "langCancel"
+msgstr "ابطال"
+
+msgid "langQImage"
+msgstr "سؤال همراه با تصویر"
+
+msgid "langAddQ"
+msgstr "افزودن سؤال"
+
+msgid "langDoAnEx"
+msgstr "انجام یک تمرین"
+
+msgid "langGenerator"
+msgstr "فهرست تمرین ها"
+
+msgid "langChoice"
+msgstr "انتخاب شما"
+
+msgid "langCorrect"
+msgstr "صحیح"
+
+msgid "langPossAnsw"
+msgstr "تعداد جواب های صحیح به سؤال"
+
+msgid "langStudAnsw"
+msgstr "تعداد اشتباهات هر دانشجو"
+
+msgid "langDetermine"
+msgstr "معیّن کردن"
+
+msgid "langNonNumber"
+msgstr "یک  ارزش  غیر عددی"
+
+msgid "langReplaced"
+msgstr "جا به جا شده"
+
+msgid "langSuperior"
+msgstr "یک ارزش عددی بزرگتر از ٢٠"
+
+msgid "langRep20"
+msgstr "٢٠ را جایگزین کنید"
+
+msgid "langDefault"
+msgstr "ارزش های عددی اولیه"
+
+msgid "langDefComment"
+msgstr "با فشار دادن روی دکمه \"ارزش های اولیه\" ارزش های عددی قبلی به وسیله ارزش های عددی اولیه جایگزین خواهند شد"
+
+msgid "langScoreGet"
+msgstr "رتبه شما به رنگ سیاه نمایان می شود"
+
+msgid "langShowScor"
+msgstr "نمایش رتبه دانشجو به او"
+
+msgid "langStep1"
+msgstr "به قسمت کمکی در طرح سؤالات چند گزینه ای خوش آمدید"
+
+msgid "langStep2"
+msgstr "لطفاً عنوان و توضیحات تمرین را اضافه کنید یا آنها را تعییر دهید"
+
+msgid "langTake"
+msgstr "گذراندن آزمون"
+
+msgid "langAmong"
+msgstr "در میان"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "وارد کردن تمرین های ساخته شده در <br>HotPotatoes<br>"
+
+msgid "langHotPotatoesTests"
+msgstr "وارد کردن سؤالات  ساخته شده در <br>HotPotatoes<br>"
+
+msgid "langDownloadFile"
+msgstr "ارسال فایلبه سرور"
+
+msgid "langDownloadImg"
+msgstr "ارسال یک عکس به سرور"
+
+msgid "langDownloadEnd"
+msgstr " بارگیری با موفقیّت به پایان رسید"
+
+msgid "langNoSpace"
+msgstr " ارسال فایل به دلیل کمبود فضا در این پرونده با شکست روبرو شد"
+
+msgid "langZipNoPhp"
+msgstr "عملیات ارسال فایل با شکست روبرو شد. فایل فشرده (زیپ) نباید فایل های پی اچ پی در بر داشته باشد"
+
+msgid "langNoImg"
+msgstr "آزمایش، بدون عکس"
+
+msgid "langImgNote_st"
+msgstr "باید از نو بارگیری کنید"
+
+msgid "langImgNote_en"
+msgstr ": عکس ها"
+
+msgid "langDocDeleted"
+msgstr "فایل/ پروندهمورد نظرحذف شد"
+
+msgid "langViMod"
+msgstr "تغییر
+قابلیّت رؤیت
+انجام شد"
+
+msgid "langNameNotEqual"
+msgstr "فایل مناسبی نیست"
+
+msgid "langIndice"
+msgstr "صفحه اصلی"
+
+msgid "langIndices"
+msgstr "صفحه اصلی"
+
+msgid "langDateExo"
+msgstr "تاریخ"
+
+msgid "langShowQuestion"
+msgstr "مشاهده سؤال"
+
+msgid "langUnknownExercise"
+msgstr "این تمرین برای سیستم ناشناخته است"
+
+msgid "langReuseQuestion"
+msgstr "استفاده دوباره از سؤال"
+
+msgid "langCreateExercise"
+msgstr "طرح کردن تمرین"
+
+msgid "langCreateQuestion"
+msgstr "طرح کردن سؤال"
+
+msgid "langCreateAnswers"
+msgstr "طرح کردن جواب ها"
+
+msgid "langModifyExercise"
+msgstr "تغییر تمرین"
+
+msgid "langModifyAnswers"
+msgstr "تغییر جواب ها"
+
+msgid "langForExercise"
+msgstr "برای تمرین مورد نظر"
+
+msgid "langUseExistantQuestion"
+msgstr "استفاده از تمرین های موجود"
+
+msgid "FreeAnswer"
+msgstr "تشریحی"
+
+msgid "notCorrectedYet"
+msgstr "جواب شما به این سؤال تشریحی هنوز بررسی نشده است. فعلاً به صورت موقّت نمره صفر برای این جواب در نظر گرفته می شود. این نمره بر روی رتبه کل شما تأثیر خواهد داشت"
+
+msgid "adminHP"
+msgstr "Hot potatoes مدیریت آزمون های"
+

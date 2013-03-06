@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Metadata Dokumen"
+
+msgid "langClickKw"
+msgstr "Klik sebuah kata kunci pada tree untuk memilih atau membatalkan pilihan."
+
+msgid "langKwHelp"
+msgstr "<br/> Klik tombol \'+\' untuk membuka, tombol  \'-\' untuk menutup, tombol  \'++\' untuk membuka semua, tombol \'--\' untuk menutup semua.<br/> <br/> Bersihkan semua kata kunci yang terpilih dengan menuutp dan membukanya kembali dengan tombol \'+\' <br/> Alt-click \'+\' cari kata kunci original dalam tree.<br/> <br/> Alt-click pada kata kunci  tanpa teminologi atau batalkan pilihan (deselect) suatu keyword dengan terminologi yang lebih luas.<br/> <br/> Jika anda mengubah bahasa deskrips, jangan tambahkan kata kunci pada saat yang sama.<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Tingkat Lanjut"
+
+msgid "langSearch"
+msgstr "Cari"
+
+msgid "langSearchCrit"
+msgstr "Satu kata per baris!"
+
+msgid "langNoKeywords"
+msgstr "Mata kuliah ini tidak memiliki kata kunci"
+
+msgid "langKwCacheProblem"
+msgstr "Cache Kata kunci tidak dapat dibuka"
+
+msgid "langCourseKwds"
+msgstr "Dokumen ini berisi kata kunci mata kuliah tsb"
+
+msgid "langKwdsInMD"
+msgstr "Kata kunci digunakan dalam MD"
+
+msgid "langKwdRefs"
+msgstr "referensi kata kunci"
+
+msgid "langNonCourseKwds"
+msgstr "Kata kunci non-mata kuliah"
+
+msgid "langKwdsUse"
+msgstr "Kata kunci mata kuliah (tebal = tidak digunakan)"
+
+msgid "langTotalMDEs"
+msgstr "Jumlah total link item MD:"
+

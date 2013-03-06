@@ -1,0 +1,93 @@
+msgid "Tools"
+msgstr "Verktyg"
+
+msgid "SendWork"
+msgstr "Ladda upp dokument"
+
+msgid "langTooBig"
+msgstr "Du valde ingen fil att sända, eller så var den för stor"
+
+msgid "langListDeleted"
+msgstr "Listan har radrats"
+
+msgid "langDocModif"
+msgstr "uppgiftstitel modifierad"
+
+msgid "langDocAdd"
+msgstr "arbetet är lagt till"
+
+msgid "langDocDel"
+msgstr "Filen raderad"
+
+msgid "langTitleWork"
+msgstr "Filnamn"
+
+msgid "langAuthors"
+msgstr "Författare"
+
+msgid "langDelList"
+msgstr "Radera hela listan"
+
+msgid "langWorkDelete"
+msgstr "Radera"
+
+msgid "langWorkModify"
+msgstr "Modifiera"
+
+msgid "langWorkConfirmDelete"
+msgstr "Vill du verkligen radera detta dokument"
+
+msgid "langAllFiles"
+msgstr "Alla filer"
+
+msgid "DefaultUpload"
+msgstr "Standard inställning för visning av nyligen postade filer."
+
+msgid "NewVisible"
+msgstr "Nya dokument är synliga för alla användare"
+
+msgid "NewUnvisible"
+msgstr "Nya dokument är synliga endast för kursansvarig(a)"
+
+msgid "lang_doc_unvisible"
+msgstr "Ditt dokument är bara synligt för läraren(na) i denna kurs och är därför inte synlig för dig."
+
+msgid "langDelLk"
+msgstr "Vill du verkligen radera denna länk?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Bara registrerade användare i denna kurs kan publicera dokument."
+
+msgid "langListDel"
+msgstr "Radera lista"
+
+msgid "langNameDir"
+msgstr "Namn på den nya mappen"
+
+msgid "langFileExists"
+msgstr "Operationen är omöjlig.<br>En fil med detta namn existerar redan."
+
+msgid "CreateDirectory"
+msgstr "Skapa arkiv"
+
+msgid "langCurrentDir"
+msgstr "Aktuell mapp"
+
+msgid "UploadADocument"
+msgstr "Ladda upp dokument"
+
+msgid "EditToolOptions"
+msgstr "Ändra verktygs val"
+
+msgid "DocumentDeleted"
+msgstr "Dokument raderat"
+
+msgid "SendMailBody"
+msgstr "En användare har postat ett dokument genom uppgiftsverktyget på din kurs"
+
+msgid "DirDelete"
+msgstr "Radera katalog"
+
+msgid "ValidateChanges"
+msgstr "Godkänn ändringar"
+

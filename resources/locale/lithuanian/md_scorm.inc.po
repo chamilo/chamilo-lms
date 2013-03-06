@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "nebenaudojamas kalbos kintamasis"
+
+msgid "langMdCallingTool"
+msgstr "Dokumentai"
+
+msgid "langTool"
+msgstr "Dokumento metaduomenys"
+
+msgid "langNotInDB"
+msgstr "no such Links category"
+
+msgid "langManifestSyntax"
+msgstr "(syntax error in manifest file...)"
+
+msgid "langEmptyManifest"
+msgstr "(empty manifest file...)"
+
+msgid "langNoManifest"
+msgstr "(no manifest file...)"
+
+msgid "langNotFolder"
+msgstr "are not possible, it is not a folder..."
+
+msgid "langUploadHtt"
+msgstr "Įkelti HTT failą"
+
+msgid "langHttFileNotFound"
+msgstr "Naujas HTT failas negali būti atidarytas (pvz. tuščias, per didelis)"
+
+msgid "langHttOk"
+msgstr "Naujas HTT failas įkeltas"
+
+msgid "langHttNotOk"
+msgstr "HTT failo įkrovimas napavyko"
+
+msgid "langRemoveHtt"
+msgstr "Ištrinti HTT failą"
+
+msgid "langHttRmvOk"
+msgstr "HTT failas ištrintas"
+
+msgid "langHttRmvNotOk"
+msgstr "HTT failo ištrynimas nepavyko"
+
+msgid "langImport"
+msgstr "Importuoti"
+
+msgid "langRemove"
+msgstr "Remove MDEs"
+
+msgid "langAllRemovedFor"
+msgstr "All entries removed for category"
+
+msgid "langIndex"
+msgstr "Indeksiniai žodžiai"
+
+msgid "langTotalMDEs"
+msgstr "Total number of Links MD entries:"
+
+msgid "langMainMD"
+msgstr "Atidaryti pagrindinį MDE"
+
+msgid "langLines"
+msgstr "eilutės"
+
+msgid "langPlay"
+msgstr "Paleisti index.php"
+
+msgid "langNonePossible"
+msgstr "MD operacijos negalimos"
+
+msgid "langOrElse"
+msgstr "Išrinkti nuorodų kategoriją"
+
+msgid "langWorkWith"
+msgstr "Darbas su Scorm katalogu"
+
+msgid "langSDI"
+msgstr "... Scorm Directory with SD-id (and split manifest - or leave empty)"
+
+msgid "langRoot"
+msgstr "šakninis katalogas"
+
+msgid "langSplitData"
+msgstr "Split manifests, and #MDe, if any:"
+
+msgid "langMffNotOk"
+msgstr "Manifest file replace has failed"
+
+msgid "langMffOk"
+msgstr "Manifest file has been replaced"
+
+msgid "langMffFileNotFound"
+msgstr "New manifest file could not be opened (e.g. empty, too big)"
+
+msgid "langUploadMff"
+msgstr "Replace manifest file"
+

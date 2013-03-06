@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Не сте избрали файл за изпращане, или този е твърде голям."
+
+msgid "langLinkTarget"
+msgstr "Отваряне на връзката"
+
+msgid "langSameWindow"
+msgstr "в същия прозорец"
+
+msgid "langNewWindow"
+msgstr "в нов прозорец"
+
+msgid "langAdded"
+msgstr "Добавен"
+
+msgid "langAddLink"
+msgstr "Добавяне на връзка"
+
+msgid "langEditLink"
+msgstr "Редактиране на връзката към началната страница на курса"
+

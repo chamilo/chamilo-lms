@@ -1,0 +1,48 @@
+msgid "Height"
+msgstr "Hoogte"
+
+msgid "ResizingComment"
+msgstr "Pas de grootte van de afbeelding aan tot de volgende afmetingen (in pixels)"
+
+msgid "Width"
+msgstr "Breedte"
+
+msgid "Resizing"
+msgstr "GROOTTE AANPASSEN"
+
+msgid "NoResizingComment"
+msgstr "Toon alle afbeeldingen in hun originele grootte. De afbeeldingen worden niet vergroot of verkleind. Schuifbalken zullen automatisch verschijnen als de afbeeelding groter is dan uw scherm."
+
+msgid "ShowThumbnails"
+msgstr "Toon miniaturen"
+
+msgid "SetSlideshowOptions"
+msgstr "Slideshowinstellingen"
+
+msgid "SlideshowOptions"
+msgstr "Slideshowinstellingen"
+
+msgid "NoResizing"
+msgstr "GROOTTE NIET AANPASSEN (standaard)"
+
+msgid "ExitSlideshow"
+msgstr "Beëindig slideshow"
+
+msgid "SlideShow"
+msgstr "Slideshow"
+
+msgid "PreviousSlide"
+msgstr "Vorige afbeelding"
+
+msgid "NextSlide"
+msgstr "Volgende afbeelding"
+
+msgid "ViewSlideshow"
+msgstr "Toon slideshow"
+
+msgid "FirstSlide"
+msgstr "Eerste slide"
+
+msgid "LastSlide"
+msgstr "Laatste slide"
+

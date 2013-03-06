@@ -1,0 +1,267 @@
+msgid "langProfessors"
+msgstr "Profesor(es)"
+
+msgid "langExplanation"
+msgstr "Una vez que usted haya pulsado \"Crear Curso\", el curso es creado con secciones para exámenes, proyectos basados en el aprendizaje, evaluaciones, cursos, buzón, agenda y muchas cosas más. Al iniciar la sesión como profesor le proporciona privilegios de e"
+
+msgid "langEmpty"
+msgstr "Usted no ha rellenado todos los campos.<br />Utilice el botón \'Atrás\' de su navegador y vuelva a empezar.<br />Si usted no conoce el código de su curso, consulte el programa del curso"
+
+msgid "langCodeTaken"
+msgstr "Este código de curso ya se utilizó por otro curso.<br />Utilice el botón \'Atrás\' de su navegador y vuelva a empezar."
+
+msgid "langFormula"
+msgstr "Cordialmente, el profesor"
+
+msgid "langMessage"
+msgstr "En el momento que usted suprima el foro \"Foro de pruebas\", igualmente se suprimirá el presente tema que no contiene más que este mensaje"
+
+msgid "langExerciceEx"
+msgstr "Ejemplo de ejercicio"
+
+msgid "langAntique"
+msgstr "Historia de la filosofía clásica"
+
+msgid "langSocraticIrony"
+msgstr "La ironía socrática consiste en..."
+
+msgid "langManyAnswers"
+msgstr "(varias respuestas correctas son posibles)"
+
+msgid "langRidiculise"
+msgstr "Ridiculizar al interlocutor para hacerle admitir su error."
+
+msgid "langNoPsychology"
+msgstr "No. La ironía socrática no se aplica al terreno de la psicología, sino en el de la argumentación."
+
+msgid "langAdmitError"
+msgstr "Reconocer los propios errores para invitar al interlocutor a hacer lo mismo."
+
+msgid "langNoSeduction"
+msgstr "No. No se trata de una estrategia de seducción o de un método por ejemplo."
+
+msgid "langForce"
+msgstr "Forzar  al interlocutor, por medio de una serie de cuestiones y subcuestiones, para que reconozca que no sabe lo que pretende saber."
+
+msgid "langIndeed"
+msgstr "Correcto. La ironía socrática es un metódo interrogativo. El término griego \"eirotao\" significa , por otro lado, \"interrogar\"."
+
+msgid "langContradiction"
+msgstr "Utilizar el principio de no contradicción para llevar al interlocutor a un callejón sin salida."
+
+msgid "langNotFalse"
+msgstr "Esta respuesta no es falsa. Es exacto que la puesta en evidencia de la ignorancia del interlocutor se realiza poniendo en evidencia las contradicciones en que desembocan sus tesis."
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langVideo"
+msgstr "Video"
+
+msgid "langCourseProgram"
+msgstr "Programa del Curso"
+
+msgid "langAnnouncements"
+msgstr "Anuncios"
+
+msgid "langAddPageHome"
+msgstr "Enviar una página y enlazarla con la página principal"
+
+msgid "langLinkSite"
+msgstr "Agregar un enlace a  la página principal"
+
+msgid "langModifyInfo"
+msgstr "Descripción del curso"
+
+msgid "langCourseDesc"
+msgstr "Descripción del Curso"
+
+msgid "langAgendaTitle"
+msgstr "Martes 11 diciembre 14h00 : curso de filosofía (1) - Local : Sur 18"
+
+msgid "langAgendaText"
+msgstr "Introducción general a la filosofía y explicación sobre el funcionamiento del curso"
+
+msgid "langMicro"
+msgstr "Entrevistas de calle"
+
+msgid "langGoogle"
+msgstr "Potente motor de búsqueda"
+
+msgid "langIntroductionText"
+msgstr "Este es el texto de introducción de su curso. Para modificarlo, haga click sobre \"modificar\"."
+
+msgid "langIntroductionTwo"
+msgstr "Esta página permite a cada estudiante o grupo de estudiantes colocar un documento en el sitio web del curso. Envíe documentos en formato HTML únicamente si estos no contienen imágenes."
+
+msgid "langCourseDescription"
+msgstr "Escriba aquí la descripción que aparecerá en la lista de los cursos"
+
+msgid "langProfessor"
+msgstr "Profesor"
+
+msgid "langAnnouncementEx"
+msgstr "Este es un ejemplo de un anuncio."
+
+msgid "langJustCreated"
+msgstr "Usted acaba de crear el sitio web del curso"
+
+msgid "langEnter"
+msgstr "Volver a mi lista de cursos"
+
+msgid "langGroups"
+msgstr "Grupos"
+
+msgid "langCreateCourseGroups"
+msgstr "Grupos"
+
+msgid "langCatagoryMain"
+msgstr "Principal"
+
+msgid "langCatagoryGroup"
+msgstr "Foros de grupos"
+
+msgid "langLn"
+msgstr "Idioma"
+
+msgid "langCreateSite"
+msgstr "Crear un sitio web de un curso"
+
+msgid "langFieldsRequ"
+msgstr "Todos los campos son obligatorios"
+
+msgid "langEx"
+msgstr "p. ej. <i>Historia de la literatura</i>"
+
+msgid "langFac"
+msgstr "Facultad/Carrera"
+
+msgid "langTargetFac"
+msgstr "Se trata de la Facultad en la que se realiza el curso"
+
+msgid "langMax"
+msgstr "Max. 12 caracteres, p. ej.<i>ROM2121</i>"
+
+msgid "langDoubt"
+msgstr "En caso de dudas sobre el título exacto del curso o el código que le corresponde , consultar el"
+
+msgid "langProgram"
+msgstr "Programa del curso</a>. Si el sitio web que usted quiere crear no corresponde con ningún código de curso existente, usted puede definir uno. Por ejemplo <i>INNOVACION</i> si se trata de un programa de formación  sobre gestión de la innovación"
+
+msgid "langScormtool"
+msgstr "Itinerario Formativo"
+
+msgid "langScormbuildertool"
+msgstr "Constructor de itinerarios scorm"
+
+msgid "langPathbuildertool"
+msgstr "Constructor de itinerario formativo"
+
+msgid "langOnlineConference"
+msgstr "Conferencia en línea"
+
+msgid "langAgendaCreationTitle"
+msgstr "Creación de curso"
+
+msgid "langAgendaCreationContenu"
+msgstr "Este curso acaba de ser creado"
+
+msgid "langOnlineDescription"
+msgstr "Este es un ejemplo de descripción para la herramienta de Conferencia en línea"
+
+msgid "langDropbox"
+msgstr "Baúl de tareas"
+
+msgid "langOnly"
+msgstr "Sólo"
+
+msgid "langRandomLanguage"
+msgstr "Escoja entre los idiomas disponibles"
+
+msgid "langForumLanguage"
+msgstr "Español"
+
+msgid "langNewCourse"
+msgstr "Nuevo curso"
+
+msgid "langAddNewCourse"
+msgstr "Agregar un nuevo curso"
+
+msgid "langRestoreCourse"
+msgstr "Restablecer un curso"
+
+msgid "langOtherProperties"
+msgstr "Autres propriétés trouvées dans l\'archive"
+
+msgid "langSysId"
+msgstr "Id Système"
+
+msgid "langDepartment"
+msgstr "Departamento"
+
+msgid "langDepartmentUrl"
+msgstr "URL"
+
+msgid "langScoreShow"
+msgstr "Mostar puntajes"
+
+msgid "langVisibility"
+msgstr "Visibilidad"
+
+msgid "langVersionDb"
+msgstr "Version de la base de donnée lors de l\'archivage"
+
+msgid "langLastVisit"
+msgstr "Ultima visita"
+
+msgid "langLastEdit"
+msgstr "Ultima contribución"
+
+msgid "langExpire"
+msgstr "Expiración"
+
+msgid "langChoseFile"
+msgstr "Selecccione el archivo"
+
+msgid "langFtpFileTips"
+msgstr "Si le fichier est sur un ordinateur tiers et accessible par ftp"
+
+msgid "langHttpFileTips"
+msgstr "Si le fichier est sur un ordinateur tiers et accessible par http"
+
+msgid "langLocalFileTips"
+msgstr "Si le fichier est sur l\'espace de stockage des cours de ce campus"
+
+msgid "langPostFileTips"
+msgstr "Si le fichier est sur  votre ordinateur"
+
+msgid "langOtherCategory"
+msgstr "Otra categoría"
+
+msgid "langMinimum"
+msgstr "mínimo"
+
+msgid "langMaximum"
+msgstr "máximo"
+
+msgid "langRestoreACourse"
+msgstr "Restaurar un curso"
+
+msgid "langBackup"
+msgstr "Copia de seguridad"
+
+msgid "langCopy"
+msgstr "Copiar el contenido del curso"
+
+msgid "langRecycle"
+msgstr "Reciclar curso"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Este es un anuncio de ejemplo"
+
+msgid "Wikipedia"
+msgstr "Enciclopedia libre en línea"
+
+msgid "DefaultGroupCategory"
+msgstr "Grupos por defecto"
+

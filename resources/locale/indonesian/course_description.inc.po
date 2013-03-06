@@ -1,0 +1,33 @@
+msgid "langCourseProgram"
+msgstr "Deskripsi Mata Kuliah"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Mata Kuliah ini saat ini belum dideskripsikan"
+
+msgid "langEditCourseProgram"
+msgstr "Buat dan edit dengan formulir"
+
+msgid "QuestionPlan"
+msgstr "Pertanyaan ke pengajar"
+
+msgid "langInfo2Say"
+msgstr "Informasi untuk siswa"
+
+msgid "langOuAutreTitre"
+msgstr "Judul"
+
+msgid "langNewBloc"
+msgstr "Lainnya"
+
+msgid "langAddCat"
+msgstr "tambah kategori"
+
+msgid "langAdd"
+msgstr "Tambah"
+
+msgid "langValid"
+msgstr "Sah"
+
+msgid "langBackAndForget"
+msgstr "Kembali dan lupakan"
+

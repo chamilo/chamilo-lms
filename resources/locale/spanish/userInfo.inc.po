@@ -1,0 +1,600 @@
+msgid "langLineNumber"
+msgstr "Número de líneas"
+
+msgid "langLine"
+msgstr "línea"
+
+msgid "langLines"
+msgstr "líneas"
+
+msgid "langLineOrLines"
+msgstr "línea(s)"
+
+msgid "langMoveUp"
+msgstr "Subir"
+
+msgid "langMoveDown"
+msgstr "Bajar"
+
+msgid "langAddNewHeading"
+msgstr "Añadir nuevo encabezado"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Sólo profesores"
+
+msgid "langDefineHeadings"
+msgstr "Definir encabezados"
+
+msgid "langBackToUsersList"
+msgstr "Volver a la lista de usuarios"
+
+msgid "langTracking"
+msgstr "Seguimiento"
+
+msgid "langCourseManager"
+msgstr "Profesor"
+
+msgid "langModRight"
+msgstr "cambiar los permisos de"
+
+msgid "langNoAdmin"
+msgstr "desde ahora <b>no</b> tiene permisos para la administración de este sitio"
+
+msgid "langAllAdmin"
+msgstr "ahora tiene <b>todos</b> los permisos para la administración de esta página"
+
+msgid "langModRole"
+msgstr "Cambiar el rol de"
+
+msgid "langRole"
+msgstr "Descripción"
+
+msgid "langIsNow"
+msgstr "está ahora arriba"
+
+msgid "langInC"
+msgstr "en este curso"
+
+msgid "langFilled"
+msgstr "No ha rellenado todos los campos."
+
+msgid "langUserNo"
+msgstr "El nombre de usuario que eligió"
+
+msgid "langTaken"
+msgstr "ya existe. Elija uno diferente."
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langUnreg"
+msgstr "Anular inscripción"
+
+msgid "langGroupUserManagement"
+msgstr "Gestión de Grupos"
+
+msgid "langUnregister"
+msgstr "Sin registrar"
+
+msgid "langAddAUser"
+msgstr "Añadir usuarios"
+
+msgid "UsersUnsubscribed"
+msgstr "Los usuarios seleccionados han sido dados de baja en el curso"
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "Este estudiante está inscrito en este curso mediante una sesión. No puede editar su información"
+
+msgid "NoDataAvailable"
+msgstr "No hay datos disponibles"
+
+msgid "AddToFriends"
+msgstr "¿Esta seguro(a) que desea añadirlo(a) a su red de amigos?"
+
+msgid "AddPersonalMessage"
+msgstr "Añadir un mensaje personal"
+
+msgid "Friends"
+msgstr "Amigos"
+
+msgid "PersonalData"
+msgstr "Datos personales"
+
+msgid "Contacts"
+msgstr "Contactos"
+
+msgid "SocialInformationComment"
+msgstr "Aquí puede organizar sus contactos"
+
+msgid "AttachContactsToGroup"
+msgstr "Agrupe sus contactos"
+
+msgid "ContactsList"
+msgstr "Lista de mis contactos"
+
+msgid "AttachToGroup"
+msgstr "Añadir a este grupo de contactos"
+
+msgid "SelectOneContact"
+msgstr "Seleccione un contacto"
+
+msgid "SelectOneGroup"
+msgstr "Seleccione un grupo"
+
+msgid "AttachContactsPersonal"
+msgstr "Está seguro de que desea añadir este contacto al grupo seleccionado"
+
+msgid "AttachContactsToGroupSuccesfuly"
+msgstr "Su contacto fue agrupado correctamente"
+
+msgid "InvitationDenied"
+msgstr "Invitación rechazada"
+
+msgid "AddedContactToList"
+msgstr "Usuario añadido a su lista de contactos"
+
+msgid "ContactsGroupsComment"
+msgstr "Aquí se muestran sus contactos ordenados por grupos"
+
+msgid "YouDontHaveContactsInThisGroup"
+msgstr "No tiene contactos en este grupo"
+
+msgid "SelectTheCheckbox"
+msgstr "Seleccione una o más opciones de la casilla de verificación"
+
+msgid "YouDontHaveInvites"
+msgstr "Actualmente no tiene invitaciones"
+
+msgid "SocialInvitesComment"
+msgstr "Aquí puede aceptar o denegar las invitaciones entrantes"
+
+msgid "InvitationSentBy"
+msgstr "Invitación enviada por"
+
+msgid "RequestContact"
+msgstr "Petición de contacto"
+
+msgid "SocialUnknow"
+msgstr "Contactos desconocidos"
+
+msgid "SocialParent"
+msgstr "Mis parientes"
+
+msgid "SocialFriend"
+msgstr "Mis amigos"
+
+msgid "SocialGoodFriend"
+msgstr "Mis mejores amigos"
+
+msgid "SocialEnemy"
+msgstr "Contactos no deseados"
+
+msgid "SocialDeleted"
+msgstr "Contacto eliminado"
+
+msgid "MessageOutboxComment"
+msgstr "Aquí puede ver los mensajes que ha enviado"
+
+msgid "MyPersonalData"
+msgstr "Aquí puede ver y modificar sus datos personales"
+
+msgid "AlterPersonalData"
+msgstr "Modifique sus datos personales desde aquí"
+
+msgid "Invites"
+msgstr "Mis invitados"
+
+msgid "ContactsGroups"
+msgstr "Mis grupos"
+
+msgid "ErrorSendingMessage"
+msgstr "Se ha producido un error mientras se intentaba enviar el mensaje."
+
+msgid "PendingInvitations"
+msgstr "Invitaciones pendientes"
+
+msgid "MyInbox"
+msgstr "Bandeja de entrada"
+
+msgid "ViewSharedProfile"
+msgstr "Perfil compartido"
+
+msgid "SeeAll"
+msgstr "Ver todos"
+
+msgid "ImagesUploaded"
+msgstr "Mis imágenes"
+
+msgid "ExtraInformation"
+msgstr "Infomación extra"
+
+msgid "SearchContacts"
+msgstr "Aquí puede añadir contactos a su red social"
+
+msgid "SocialSeeContacts"
+msgstr "Ver mi red de contactos"
+
+msgid "SocialUserInformationAttach"
+msgstr "Escriba un mensaje antes de  enviar la solicitud de acceso."
+
+msgid "MessageInvitationNotSent"
+msgstr "Su mensaje de invitación no ha sido enviado"
+
+msgid "SocialAddToFriends"
+msgstr "Añadir a mi red de amigos"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "Usuario no registrado en el curso"
+
+msgid "ChangeContactGroup"
+msgstr "Cambiar el grupo de mi contacto"
+
+msgid "Friend"
+msgstr "Amigo"
+
+msgid "ViewMySharedProfile"
+msgstr "Mi perfil compartido"
+
+msgid "UserStatistics"
+msgstr "Informes de este usuario"
+
+msgid "EditUser"
+msgstr "Editar usuario"
+
+msgid "ViewUser"
+msgstr "Ver usuario"
+
+msgid "RSSFeeds"
+msgstr "Agregador RSS"
+
+msgid "NoFriendsInYourContactList"
+msgstr "Su lista de contactos está vacía"
+
+msgid "TryAndFindSomeFriends"
+msgstr "Pruebe a encontrar algunos amigos"
+
+msgid "ClearSearchResults"
+msgstr "Limpiar el resultado de la búsqueda"
+
+msgid "SendInvitation"
+msgstr "Enviar invitación"
+
+msgid "SocialInvitationToFriends"
+msgstr "Invitar a unirse a mi red de amigos"
+
+msgid "MyCertificates"
+msgstr "Mis certificados"
+
+msgid "UnsubscribeFromPlatformSuccess"
+msgstr "Su cuenta %s ha sido eliminada por completo de este portal. Gracias por el tiempo que ha permanecido con nosotros. En el futuro esperamos volver a  verlo de nuevo con nosotros."
+
+msgid "ToChangeYourEmailMustTypeYourPassword"
+msgstr "Para cambiar su correo electrónico debe escribir su contraseña"
+
+msgid "Invitations"
+msgstr "Invitaciones"
+
+msgid "MyGroups"
+msgstr "Mis grupos"
+
+msgid "EditProfile"
+msgstr "Editar perfil"
+
+msgid "Social"
+msgstr "Social"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "MyFriends"
+msgstr "Mis amigos"
+
+msgid "Messages"
+msgstr "Mensajes"
+
+msgid "CreateAgroup"
+msgstr "Crear un grupo"
+
+msgid "UsersGroups"
+msgstr "Usuarios, Grupos"
+
+msgid "SorryNoResults"
+msgstr "No hay resultados"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "AddPicture"
+msgstr "Agregar imagen"
+
+msgid "GroupPermissions"
+msgstr "Permisos del grupo"
+
+msgid "Closed"
+msgstr "Cerrado"
+
+msgid "AddGroup"
+msgstr "Agregar grupo"
+
+msgid "Privacy"
+msgstr "Privacidad"
+
+msgid "ThisIsAnOpenGroup"
+msgstr "Grupo abierto"
+
+msgid "YouShouldCreateATopic"
+msgstr "Debería crear un tema"
+
+msgid "IAmAnAdmin"
+msgstr "Administrador"
+
+msgid "NewTopic"
+msgstr "Nuevo tema"
+
+msgid "MessageList"
+msgstr "Lista de mensajes"
+
+msgid "EditGroup"
+msgstr "Editar grupo"
+
+msgid "MemberList"
+msgstr "Lista de miembros"
+
+msgid "WaitingList"
+msgstr "Lista de espera"
+
+msgid "InviteFriends"
+msgstr "Invitar amigos"
+
+msgid "Members"
+msgstr "Usuarios"
+
+msgid "Admin"
+msgstr "Administrador"
+
+msgid "AttachmentFiles"
+msgstr "Adjuntar archivos"
+
+msgid "AddOneMoreFile"
+msgstr "Agregar otro fichero"
+
+msgid "MaximunFileSizeX"
+msgstr "Tamaño máximo de archivo %s"
+
+msgid "ModifyInformation"
+msgstr "Modificar información"
+
+msgid "GroupList"
+msgstr "Lista de grupos"
+
+msgid "GroupEdit"
+msgstr "Editar grupo"
+
+msgid "ThereAreNotUsersInTheWaitingList"
+msgstr "No hay usuarios en la lista de espera"
+
+msgid "SendInvitationTo"
+msgstr "Enviar invitación a"
+
+msgid "InviteUsersToGroup"
+msgstr "Invitar usuarios a grupo"
+
+msgid "PostIn"
+msgstr "Publicado"
+
+msgid "Reply"
+msgstr "Responder"
+
+msgid "Newest"
+msgstr "Lo último"
+
+msgid "Popular"
+msgstr "Populares"
+
+msgid "Moderator"
+msgstr "Moderador"
+
+msgid "DeleteModerator"
+msgstr "Dar de baja como moderador"
+
+msgid "UserChangeToModerator"
+msgstr "Usuario convertido en moderador"
+
+msgid "IAmAModerator"
+msgstr "Moderador"
+
+msgid "ThisIsACloseGroup"
+msgstr "Grupo privado"
+
+msgid "IAmAReader"
+msgstr "Usuario base"
+
+msgid "UserChangeToReader"
+msgstr "Usuario convertido en miembro base"
+
+msgid "AddModerator"
+msgstr "Agregar como moderador"
+
+msgid "UserDeleted"
+msgstr "Los usuarios seleccionados han sido dados de baja en el grupo"
+
+msgid "JoinGroup"
+msgstr "Unirse al grupo"
+
+msgid "YouShouldJoinTheGroup"
+msgstr "Debería unirse al grupo"
+
+msgid "WaitingForAdminResponse"
+msgstr "Esperando a que el admin responda"
+
+msgid "Member"
+msgstr "Usuario"
+
+msgid "Re"
+msgstr "Re"
+
+msgid "FilesAttachment"
+msgstr "Adjuntar archivo"
+
+msgid "GroupWaitingList"
+msgstr "Grupo de lista de espera"
+
+msgid "Open"
+msgstr "Abierto"
+
+msgid "UsersAlreadyInvited"
+msgstr "Usuarios ya invitados"
+
+msgid "SubscribeUsersToGroup"
+msgstr "Inscribir usuarios al grupo"
+
+msgid "YouHaveBeenInvitedJoinNow"
+msgstr "Ud. ha sido invitado a unirser ahora"
+
+msgid "DenyInvitation"
+msgstr "Rechazar invitación"
+
+msgid "AcceptInvitation"
+msgstr "Aceptar invitación"
+
+msgid "GroupsWaitingApproval"
+msgstr "Grupos esperando su aceptación"
+
+msgid "GroupInvitationWasDeny"
+msgstr "Invitación de grupo fue rechazada"
+
+msgid "UserIsSubscribedToThisGroup"
+msgstr "Ahora ya forma parte del grupo"
+
+msgid "DeleteFromGroup"
+msgstr "Dar de baja en el grupo"
+
+msgid "GroupMembers"
+msgstr "Miembros del grupo"
+
+msgid "Subscribe"
+msgstr "Quiero formar parte de este grupo"
+
+msgid "YouAreInvitedToGroupContent"
+msgstr "Queda invitado/a a acceder al contenido del grupo"
+
+msgid "YouAreInvitedToGroup"
+msgstr "Invitación para unirse al grupo"
+
+msgid "ToSubscribeClickInTheLinkBelow"
+msgstr "Para unirse haga clic en el siguiente enlace"
+
+msgid "ReturnToInbox"
+msgstr "Regresar a bandeja de entrada"
+
+msgid "View"
+msgstr "Vista"
+
+msgid "Me"
+msgstr "Mí"
+
+msgid "ReturnToOutbox"
+msgstr "Regresar a bandeja de salida"
+
+msgid "EditNormalProfile"
+msgstr "Edición básica del perfil"
+
+msgid "GroupPendingInvitations"
+msgstr "Invitaciones pendientes de grupo"
+
+msgid "LeaveGroup"
+msgstr "Abandonar el grupo"
+
+msgid "UserIsNotSubscribedToThisGroup"
+msgstr "Ha dejado de formar parte de este grupo"
+
+msgid "InvitationReceived"
+msgstr "Invitaciones recibidas"
+
+msgid "InvitationSent"
+msgstr "Invitaciones enviadas"
+
+msgid "YouAlreadySentAnInvitation"
+msgstr "Ya le he enviado una invitación"
+
+msgid "UserAdded"
+msgstr "El usuario ha sido añadido"
+
+msgid "FilesSizeExceedsX"
+msgstr "Tamaña del archivo excedido"
+
+msgid "YouShouldWriteASubject"
+msgstr "Debe escribir el asunto"
+
+msgid "Topics"
+msgstr "Temas"
+
+msgid "StatusInThisGroup"
+msgstr "Mi estatus en el grupo"
+
+msgid "FriendsOnline"
+msgstr "Amigos en línea"
+
+msgid "GroupDescription"
+msgstr "Descripción del grupo"
+
+msgid "MyProductions"
+msgstr "Mis producciones"
+
+msgid "YouHaveReceivedANewMessageInTheGroupX"
+msgstr "Ha recibido un nuevo mensaje en el grupo %s"
+
+msgid "ClickHereToSeeMessageGroup"
+msgstr "Clic aquí para ver el mensaje de grupo"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "o copie y pegue la siguiente url:"
+
+msgid "ThereIsANewMessageInTheGroupX"
+msgstr "Hay un nuevo mensaje en el grupo %s"
+
+msgid "UserIsAlreadySubscribedToThisGroup"
+msgstr "El usuario ya pertenece a este grupo"
+
+msgid "AddNormalUser"
+msgstr "Agregar como usuario base"
+
+msgid "DenyEntry"
+msgstr "Denegar la entrada"
+
+msgid "YouNeedToHaveFriendsInYourSocialNetwork"
+msgstr "Necesita tener amigos en su red social"
+
+msgid "SeeAllMyGroups"
+msgstr "Ver todos mis grupos"
+
+msgid "YouAlreadyInviteAllYourContacts"
+msgstr "Ya invitó a todos sus contactos"
+
+msgid "YouShouldCreateAGroup"
+msgstr "Debería crear un grupo"
+
+msgid "MyFiles"
+msgstr "Mis archivos"
+
+msgid "MySocialGroups"
+msgstr "Mis grupos"
+
+msgid "SocialGroups"
+msgstr "Grupos"
+
+msgid "CreateASocialGroup"
+msgstr "Crear un grupo social"
+
+msgid "EditMembersList"
+msgstr "Editar lista de miembros"
+
+msgid "IAmAHRM"
+msgstr "Soy responsable de recursos humanos"
+
+msgid "UnsubscribeFromPlatform"
+msgstr "Si desea darse de baja completamente en el Campus y que toda su información sea eliminada de nuestra base de datos pulse el botón inferior."
+
+msgid "UnsubscribeFromPlatformConfirm"
+msgstr "Sí, quiero suprimir completamente esta cuenta. Ningún dato quedará en el servidor y no podré acceder de nuevo, salvo que cree una cuenta completamente nueva."
+

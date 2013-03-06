@@ -1,0 +1,51 @@
+msgid "select"
+msgstr "Vælg"
+
+msgid "square"
+msgstr "Firkant"
+
+msgid "circle"
+msgstr "Elipse"
+
+msgid "poly"
+msgstr "Polygon"
+
+msgid "status1"
+msgstr "Indsæt et hotspot."
+
+msgid "status2_poly"
+msgstr "Højreklik for at afslutte polygon-figuren"
+
+msgid "status2_other"
+msgstr "Slip muse-knappen for at gemme hotspot."
+
+msgid "status3"
+msgstr "Hotspot gemt"
+
+msgid "exercise_status_1"
+msgstr "Status: Du er endnu ikke færdig med spørgsmålet"
+
+msgid "exercise_status_2"
+msgstr "Klik for afgive dit svar på spørgsmålet"
+
+msgid "exercise_status_3"
+msgstr "Status: Du er færdig med spørgsmålet"
+
+msgid "showUserPoints"
+msgstr "Vis/skjul deltagernes klik"
+
+msgid "showHotspots"
+msgstr "Vis/skjul hotspots"
+
+msgid "labelPolyMenu"
+msgstr "Afslut polygon"
+
+msgid "triesleft"
+msgstr "Antal forsøg tilbage"
+
+msgid "exeFinished"
+msgstr "Alle svar er afgivet. Du kan nu flytte rundt på hotspots eller klikke på knappen under billedet for at afslutte"
+
+msgid "nextAnswer"
+msgstr "Klik nu på: &done=done"
+

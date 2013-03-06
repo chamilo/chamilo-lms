@@ -1,0 +1,291 @@
+msgid "langProfessors"
+msgstr "Преподаватели"
+
+msgid "langExplanation"
+msgstr "Как только Вы щелкните ОК, вебсайт с Форумом, Повесткой дня, Управлением документами и т.д. будет создан. Ваше имя пользователя (логин), как создателя вебсайта, позволяет Вам изменять их согласно личным требованиям."
+
+msgid "langEmpty"
+msgstr "Вы оставили какие-то поля пустыми.<br />Используй опцию <b>Назад</b> в окне просмотра и попробуй еще раз.<br />Если Вы не указали код курса, смотрите Программу Курса."
+
+msgid "langCodeTaken"
+msgstr "Такой код курса уже используется. <br />Используйте опцию <b>Назад</b> в окне просмотра и попробуйте еще раз."
+
+msgid "langFormula"
+msgstr "Искренне Ваш"
+
+msgid "langMessage"
+msgstr "Если Вы удаляете тестовый (пробный) форум, то вместе с этим удаляются и все сообщения на этом форуме."
+
+msgid "langExerciceEx"
+msgstr "Пример (образец) теста"
+
+msgid "langAntique"
+msgstr "Ирония (история античной философии)"
+
+msgid "langSocraticIrony"
+msgstr "Сократический метод ведения спора - это..."
+
+msgid "langManyAnswers"
+msgstr "(больше, чем один ответ может быть верно)"
+
+msgid "langRidiculise"
+msgstr "Высмеять собеседника для того, чтобы он признал свою неправоту."
+
+msgid "langNoPsychology"
+msgstr "Нет. Сократический метод ведения спора - это не вопрос психологии, он касается теории аргументации."
+
+msgid "langAdmitError"
+msgstr "Отметить чьи-то ошибки, чтобы пригласить собеседника сделать то же самое."
+
+msgid "langNoSeduction"
+msgstr "Нет. Сократовский метод ведения спора - это не стратегия обольщения или метод, основанный на примере."
+
+msgid "langForce"
+msgstr "Заставить собеседника с помощью ряда вопросов и подвопросов признать, что он не знает того, о чем заявляет, что знает."
+
+msgid "langIndeed"
+msgstr "Действительно. Сократовский метод ведения споров - это метод вопросов (интеррогативный метод). С греческого \"eirotao\" означает \"задавать вопросы\"."
+
+msgid "langContradiction"
+msgstr "Использовать принципы непротиворечия для того, чтобы завести собеседника в тупик."
+
+msgid "langNotFalse"
+msgstr "Этот ответ не является неправильным. Это правда, что разоблачение невежества собеседника означает показать ему, что его предположения приводят к противоречивым выводам."
+
+msgid "langAgenda"
+msgstr "Повестка дня (расписание)"
+
+msgid "langVideo"
+msgstr "Видео"
+
+msgid "langCourseProgram"
+msgstr "Описание курса"
+
+msgid "langAnnouncements"
+msgstr "Объявления"
+
+msgid "langAddPageHome"
+msgstr "Загрузить страницу и связать с Домашней страницей"
+
+msgid "langLinkSite"
+msgstr "Добавить ссылку на домашнюю страницу курса"
+
+msgid "langModifyInfo"
+msgstr "Установочные параметры курса"
+
+msgid "langCourseDesc"
+msgstr "Описание курса"
+
+msgid "langAgendaTitle"
+msgstr "Вторник 11 декабря - первая встреча. Аудитория: 18."
+
+msgid "langAgendaText"
+msgstr "Общее введение в управление проектом"
+
+msgid "langMicro"
+msgstr "Уличные интервью"
+
+msgid "langGoogle"
+msgstr "Быстрый и мощный поиск"
+
+msgid "langIntroductionText"
+msgstr "Это вводный текст. Чтобы заменить его на Ваш собственный, щелкните ниже на иконку карандаша (только для администратора курса)."
+
+msgid "langIntroductionTwo"
+msgstr "Эта страница позволяет пользователям и группам публиковать документы."
+
+msgid "langCourseDescription"
+msgstr "Описание курса"
+
+msgid "langProfessor"
+msgstr "Преподаватель"
+
+msgid "langAnnouncementEx"
+msgstr "Это пример объявления. Только преподаватели курса имеют право публиковать объявления."
+
+msgid "langJustCreated"
+msgstr "Вы только что создали зону курса"
+
+msgid "langEnter"
+msgstr "Вернуться к моему списку курсов"
+
+msgid "langGroups"
+msgstr "Группы"
+
+msgid "langCreateCourseGroups"
+msgstr "Группы"
+
+msgid "langCatagoryMain"
+msgstr "Главный"
+
+msgid "langCatagoryGroup"
+msgstr "Форумы групп"
+
+msgid "langLn"
+msgstr "Язык"
+
+msgid "langCreateSite"
+msgstr "Создать курс в целом"
+
+msgid "langFieldsRequ"
+msgstr "Все поля обязательны"
+
+msgid "langEx"
+msgstr "например <i>Инновационное управление</i>"
+
+msgid "langFac"
+msgstr "Раздел"
+
+msgid "langTargetFac"
+msgstr "Это раздел, куда курс передается"
+
+msgid "langMax"
+msgstr "макс. 20 знаков, например <i>ИННОВ21</i>"
+
+msgid "langDoubt"
+msgstr "Если Вы сомневаетесь по поводу кода курса, проконсультируйтесь"
+
+msgid "langProgram"
+msgstr "Программа курса</a>. Если Ваш курс не имеет кода, какой бы не была причина, придумайте его. Например <i>ИННОВАЦИЯ</i>, если курс об инновациях в управлении"
+
+msgid "langScormtool"
+msgstr "Учебный план"
+
+msgid "langScormbuildertool"
+msgstr "Строитель плана Scorm"
+
+msgid "langPathbuildertool"
+msgstr "Строитель учебного плана"
+
+msgid "langOnlineConference"
+msgstr "Конференция"
+
+msgid "langAgendaCreationTitle"
+msgstr "Создание курса"
+
+msgid "langAgendaCreationContenu"
+msgstr "Этот курс был создан на этот момент"
+
+msgid "langOnlineDescription"
+msgstr "Описание конференции"
+
+msgid "langDropbox"
+msgstr "Ящик для содержимого"
+
+msgid "langOnly"
+msgstr "Только"
+
+msgid "langRandomLanguage"
+msgstr "Случайный выбор доступных языков"
+
+msgid "langImages"
+msgstr "Изображения"
+
+msgid "langAudio"
+msgstr "Аудио"
+
+msgid "langFlash"
+msgstr "Вспышка (флэш)"
+
+msgid "langForumLanguage"
+msgstr "английский"
+
+msgid "langNewCourse"
+msgstr "Новая зона курса"
+
+msgid "langAddNewCourse"
+msgstr "Добавать новую зону курса"
+
+msgid "langRestoreCourse"
+msgstr "Восстановить курс"
+
+msgid "langOtherProperties"
+msgstr "Другие свойства найдены в архиве"
+
+msgid "langSysId"
+msgstr "Система идентификации (ID)"
+
+msgid "langDepartment"
+msgstr "Отделение"
+
+msgid "langDepartmentUrl"
+msgstr "Адрес (URL) учреждения"
+
+msgid "langScoreShow"
+msgstr "Показать результат"
+
+msgid "langVisibility"
+msgstr "Видимость"
+
+msgid "langVersionDb"
+msgstr "Версия базы данных, использованная в архивное время"
+
+msgid "langLastVisit"
+msgstr "Последний визит"
+
+msgid "langLastEdit"
+msgstr "Последнее редактирование"
+
+msgid "langExpire"
+msgstr "Окончание"
+
+msgid "langChoseFile"
+msgstr "Выбрать файл"
+
+msgid "langFtpFileTips"
+msgstr "Файл на FTP сервере (сервер, на котором размещаются файлы, доступные по протоколу FTP)"
+
+msgid "langHttpFileTips"
+msgstr "Файл на Веб (HTTP) сервере"
+
+msgid "langLocalFileTips"
+msgstr "Файл на сервере портала"
+
+msgid "langPostFileTips"
+msgstr "Файл на вашем локальном компьютере"
+
+msgid "langOtherCategory"
+msgstr "Другая категория"
+
+msgid "langMinimum"
+msgstr "минимум"
+
+msgid "langMaximum"
+msgstr "максимум"
+
+msgid "langRestoreACourse"
+msgstr "восстановить курс"
+
+msgid "langBackup"
+msgstr "Резервная копия (архив)"
+
+msgid "langCopy"
+msgstr "Копировать содержимое курса"
+
+msgid "langRecycle"
+msgstr "Повторно использовать курс"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Это пример объявления"
+
+msgid "Wikipedia"
+msgstr "Бесплатная интернет энциклопедия"
+
+msgid "DefaultGroupCategory"
+msgstr "Группы по умолчанию"
+
+msgid "DefaultCourseImages"
+msgstr "Галерея"
+
+msgid "ExampleForumCategory"
+msgstr "Пример форума раздела"
+
+msgid "ExampleForum"
+msgstr "Пример форума"
+
+msgid "ExampleThread"
+msgstr "Пример трэда (подпроцесс, запускаемый другим процессом в адресном пространстве этого (запускающего) процесса)"
+
+msgid "ExampleThreadContent"
+msgstr "Пример содержимого"
+

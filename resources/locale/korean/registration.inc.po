@@ -1,0 +1,318 @@
+msgid "langTracking"
+msgstr "트래킹"
+
+msgid "langEnter2passToChange"
+msgstr "변경하려면 패스워드를 두 번 입력하십시오. 아니면, 필드를 비워주십시오."
+
+msgid "langUpdateImage"
+msgstr "사진 변경"
+
+msgid "langAddImage"
+msgstr "사진"
+
+msgid "langCourseManager"
+msgstr "교사"
+
+msgid "password_request"
+msgstr "패스워드를 재설정하려면 요청을 하시기 바랍니다. 요청하지 않으면 이 메일은 무시됩니다. 패스워드를 재설정하기 위해서는 reset 링크를 클릭하십시오."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "패스워드가 메일로 전송되었습니다."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "등록 시에 사용한 이메일 주소를 입력하시면 패스워드를 전송하겠습니다."
+
+msgid "langLogin"
+msgstr "로그인"
+
+msgid "langDeleted"
+msgstr "삭제되었음"
+
+msgid "langAdded"
+msgstr "추가되었음"
+
+msgid "langCourseName"
+msgstr "과정명"
+
+msgid "langSubscribe"
+msgstr "등록"
+
+msgid "langSee"
+msgstr "이동하기"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "과정의 유저목록을 추가를 하고싶다면, 웹 관리자에게 문의하십시오."
+
+msgid "langPassTooEasy"
+msgstr "패스워드가 너무 단순합니다. 이와 같은 패스워드를 사용하십시오."
+
+msgid "langAddedToCourse"
+msgstr "당신의 과정에 등록되었습니다"
+
+msgid "langUserAlreadyRegistered"
+msgstr "동일한 유저명이 이 과정에 이미 등록되었습니다."
+
+msgid "langBackUser"
+msgstr "유저 목록으로 돌아가기"
+
+msgid "langUserOneByOneExplanation"
+msgstr "유저가 로그인과 패스워드에 대한 확인 메일을 받게 될 것입니다"
+
+msgid "langGiveAdmin"
+msgstr "관리자 만들기"
+
+msgid "langUserNumber"
+msgstr "번호"
+
+msgid "langSend"
+msgstr "전송"
+
+msgid "langUserMany"
+msgstr "CVS/XML 파일을 통해 유저 목록 가져오기"
+
+msgid "langOneByOne"
+msgstr "유저 직접 등록"
+
+msgid "langNow"
+msgstr "현재"
+
+msgid "langTutor"
+msgstr "튜터"
+
+msgid "langTitular"
+msgstr "리더"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>과정 목록 수정</big><br><br>수강하고 싶은 과정을 체크하십시오.<br>더 이상 수강하고싶지 않은 과정은 체크를 해제해주십시오.<br> 그 다음 리스트 하단의 Ok를 클릭하십시오."
+
+msgid "langStudent"
+msgstr "학생"
+
+msgid "langImportUserList"
+msgstr "유저 목록 불러오기"
+
+msgid "langAddAU"
+msgstr "유저 추가"
+
+msgid "langAddedU"
+msgstr "추가되었습니다. 이메일이 유저명을 입력한 사람에게 전송되었습니다."
+
+msgid "langTheU"
+msgstr "유저"
+
+msgid "langRegYou"
+msgstr "이 과정에 등록되었습니다"
+
+msgid "langOneResp"
+msgstr "과정 관리자 중 한 명"
+
+msgid "langTaken"
+msgstr "이미 사용중입니다. 다른 것을 선택하십시오."
+
+msgid "langUserNo"
+msgstr "선택한 유저명"
+
+msgid "langFilled"
+msgstr "입력하지 않은 항목이 있습니다."
+
+msgid "langInC"
+msgstr "이 과정"
+
+msgid "langRole"
+msgstr "설명"
+
+msgid "langProfileReg"
+msgstr "새 신상정보가 저장되었습니다"
+
+msgid "langEmailWrong"
+msgstr "이메일 주소가 완전하지 않거나 허용되지 않은 문자가 사용되었습니다"
+
+msgid "langUserTaken"
+msgstr "이 유저명은 이미 사용중입니다"
+
+msgid "langFields"
+msgstr "입력하지 않은 항목이 있습니다"
+
+msgid "langAgain"
+msgstr "다시 시도하십시오!"
+
+msgid "langPassTwo"
+msgstr "입력한 두 개의 패스워드가 일치하지 않습니다"
+
+msgid "langViewProfile"
+msgstr "내 포트폴리오 보기"
+
+msgid "langModifProfile"
+msgstr "프로필 수정"
+
+msgid "langIsReg"
+msgstr "수정한 내용이 저장되었습니다"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "당신의 과정 생성 부분으로 이동이 가능합니다"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "접속하고자 하는 과정의 리스트에서 선택할 수 있습니다"
+
+msgid "langMailHasBeenSent"
+msgstr "유저명과 패스워드가 이메일로 전송되었습니다"
+
+msgid "langPersonalSettings"
+msgstr "개인 설정이 등록되었습니다"
+
+msgid "langManager"
+msgstr "매니저"
+
+msgid "langFormula"
+msgstr "친애하는"
+
+msgid "langProblem"
+msgstr "문제 발생시에는 연락을 주시기 바랍니다."
+
+msgid "langIs"
+msgstr "은"
+
+msgid "langAddress"
+msgstr "주소"
+
+msgid "langSettings"
+msgstr "다음 설정과 합께 : 유저명 :"
+
+msgid "langYouAreReg"
+msgstr "등록 정보"
+
+msgid "langYourReg"
+msgstr "등록정보"
+
+msgid "langUserFree"
+msgstr "이 유저명은 이미 사용중입니다. 되돌아 가서 다른 것으로 선택해주십시오."
+
+msgid "langEmptyFields"
+msgstr "입력하지 않은 항목이 있습니다. 되돌아 가서 재시도하십시오."
+
+msgid "langPassTwice"
+msgstr "입력하신 두 패스워드가 일치하지 않습니다. 다시 입력해주십시오."
+
+msgid "langRegAdmin"
+msgstr "과정 영역 생성"
+
+msgid "langRegStudent"
+msgstr "과정 수행"
+
+msgid "langPass"
+msgstr "패스워드"
+
+msgid "langSurname"
+msgstr "성"
+
+msgid "langRegistration"
+msgstr "등록"
+
+msgid "langYourAccountParam"
+msgstr "이것은 당신의 접속 정보입니다"
+
+msgid "langLoginRequest"
+msgstr "로그인이 필요합니다"
+
+msgid "langDefineHeadings"
+msgstr "제목 정의"
+
+msgid "langCourseAdministratorOnly"
+msgstr "교사만 가능"
+
+msgid "langAdminOfCourse"
+msgstr "과정 관리자"
+
+msgid "langSimpleUserOfCourse"
+msgstr "과정의 유저"
+
+msgid "langIsTutor"
+msgstr "튜터"
+
+msgid "langParamInTheCourse"
+msgstr "과정에서의 지위"
+
+msgid "langMember"
+msgstr "멤버"
+
+msgid "langLock"
+msgstr "잠금"
+
+msgid "langUnlock"
+msgstr "열림"
+
+msgid "langHaveNoCourse"
+msgstr "과정 없음"
+
+msgid "langManage"
+msgstr "포털 관리"
+
+msgid "langAdministrationTools"
+msgstr "관리 도구"
+
+msgid "langUserProfileReg"
+msgstr "유저 포트폴리오가 등록되었습니다"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "이 메일 주소에 대한 계정이 존재하지 않습니다"
+
+msgid "langCourses4User"
+msgstr "이 유저의 과정"
+
+msgid "langCoursesByUser"
+msgstr "유저의 과정"
+
+msgid "langSubscribeUserToCourse"
+msgstr "이 과정에 유저 등록"
+
+msgid "langPreced100"
+msgstr "이전 100개"
+
+msgid "langAddmore"
+msgstr "등록한 유저 추가"
+
+msgid "langAddback"
+msgstr "유저 목록으로 가기"
+
+msgid "langreg"
+msgstr "등록"
+
+msgid "langQuit"
+msgstr "중지"
+
+msgid "your_password_has_been_reset"
+msgstr "패스워드가 초기회되었습니다"
+
+msgid "langClass"
+msgstr "클래스"
+
+msgid "langEdit"
+msgstr "수정"
+
+msgid "required"
+msgstr "필수"
+
+msgid "langOptionalTextFields"
+msgstr "부가적 항목"
+
+msgid "langMyProductions"
+msgstr "내 작품. 연구결과"
+
+msgid "langFileDeleted"
+msgstr "파일이 삭제되었습니다."
+
+msgid "FullUserName"
+msgstr "성명"
+
+msgid "SearchForUser"
+msgstr "유저 검색"
+
+msgid "SearchButton"
+msgstr "검색"
+
+msgid "SearchNoResultsFound"
+msgstr "검색 결과가 없습니다"
+
+msgid "UsernameWrong"
+msgstr "유저명은 문자,숫자 그리고 _.-만 포함할 수 있습니다"
+

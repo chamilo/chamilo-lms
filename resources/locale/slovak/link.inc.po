@@ -1,0 +1,130 @@
+msgid "LinkMoved"
+msgstr "Odkaz bol presunutý"
+
+msgid "langLinkName"
+msgstr "Názov odkazu"
+
+msgid "langLinkAdd"
+msgstr "Pridať odkaz"
+
+msgid "langLinkAdded"
+msgstr "Odkaz bol pridaný."
+
+msgid "langLinkMod"
+msgstr "Zmeniť odkaz"
+
+msgid "langLinkModded"
+msgstr "Odkaz bol zmenený."
+
+msgid "langLinkDel"
+msgstr "Zmazať odkaz"
+
+msgid "langLinkDeleted"
+msgstr "Odkaz bol zmazaný"
+
+msgid "langLinkDelconfirm"
+msgstr "Chcete zmazať tento odkaz?"
+
+msgid "langAllLinksDel"
+msgstr "Zmazať všetky odkazy v tejto kategórii"
+
+msgid "langCategoryName"
+msgstr "Názov kategórie"
+
+msgid "langCategoryAdd"
+msgstr "Pridať kategóriu"
+
+msgid "langCategoryAdded"
+msgstr "Kategória bola pridaná."
+
+msgid "langCategoryModded"
+msgstr "Kategória bola zmenená."
+
+msgid "langCategoryDel"
+msgstr "Zmazať kategóriu"
+
+msgid "langCategoryDeleted"
+msgstr "Kategória a všetky jej odkazy boli zmazané."
+
+msgid "langCategoryDelconfirm"
+msgstr "Keď zmažete kategóriu, všetky jej odkazy sa tiež zmažú.
+Naozaj chcete zmazať túto kategóriu a jej odkazy ?"
+
+msgid "langAllCategoryDel"
+msgstr "Zmazať všetky kategórie a všetky odkazy"
+
+msgid "langGiveURL"
+msgstr "Prosím zadajte URL odkazu"
+
+msgid "langGiveCategoryName"
+msgstr "Prosím zadajte názov kategórie"
+
+msgid "langNoCategory"
+msgstr "Žiadna kategória"
+
+msgid "showall"
+msgstr "Rozbaliť všetky kategórie"
+
+msgid "shownone"
+msgstr "Zbaliľ všetky kategórie"
+
+msgid "langListDeleted"
+msgstr "Odkaz bol zmazaný"
+
+msgid "langAddLink"
+msgstr "Pridať odkaz"
+
+msgid "langDelList"
+msgstr "Zmazať zoznam"
+
+msgid "langModifyLink"
+msgstr "Zmeniť odkaz"
+
+msgid "langCsvImport"
+msgstr "importovať zo súboru CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "Importovaný súbor CSV nemôže byť otvorený (napr. je prázdny alebo príliš veľký)"
+
+msgid "langCsvFileNoSeps"
+msgstr "Importovaný CSV súbor musí ako oddeľovač zoznamu použiť , alebo ;"
+
+msgid "langCsvFileNoURL"
+msgstr "Importovaný CSV súbor musí mať aspoň stĺpec pre URL a názov"
+
+msgid "langCsvFileLine1"
+msgstr "... - riadok 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "odkaz z riadku(riadkov) nebol importovaný (žiadna URL alebo názov)"
+
+msgid "langCsvLinesOld"
+msgstr "existujúci odkaz aktualizovaný (rovnaká URL a kategória)."
+
+msgid "langCsvLinesNew"
+msgstr "nový odkaz vytvorený."
+
+msgid "langCsvExplain"
+msgstr "Súbor by mal vyzerať takto: <blockquote><pre> <b>URL</b>;Kategória;<b>názov</b>;popis; <b>http://www.aaa.org/...</b>;Dôležité odkazy;<b>Názov 1</b>;Popis 1; <b>http://www.bbb.net/...</b>;;<b>Názov 2</b>;\"Popis 2\"; </pre></blockquote> Ak URL a kategória sú rovnaké ako tie v existujúcom odkaze, jej názov a popis sú  aktualizované. V ostatných prípadoch sa vytvorí nový odkaz.<br><br> tučný = povinný. Polia môžu byť v akomkoľvek poradí, názvy malými alebo veľkými písmenami. Ďalšie polia sú pridané k popisu. Oddeľovač: čiarka alebo bodkočiarka. Hodnoty môžu byť citované, nie však názvy polí. Niektoré [b]HTML tagy[/b] môžu byť do popisného poľa importované."
+
+msgid "langLinkUpdated"
+msgstr "Odkaz bol aktualizovaný"
+
+msgid "langAll_Link_Deleted"
+msgstr "Odkaz bol zmazaný"
+
+msgid "langOnHomepage"
+msgstr "Zobraziť tento odkaz na domovskej stránke"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Zobraziť tento odkaz ako ikonu na domovskej str�nke kurzu"
+
+msgid "General"
+msgstr "spoločné menu"
+
+msgid "langSaveLink"
+msgstr "Uložiť odkaz"
+
+msgid "langSaveCategory"
+msgstr "Uložiť kategóriu"
+

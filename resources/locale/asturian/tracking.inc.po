@@ -1,0 +1,726 @@
+msgid "langToolName"
+msgstr "Importar cursos de Blackboard"
+
+msgid "TrackingDisabled"
+msgstr "L\'alministrador del sistema deshabilitó\'l siguimientu."
+
+msgid "InactivesStudents"
+msgstr "Alumnos inactivos"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Tiempu mediu de conesión a la plataforma"
+
+msgid "AverageCoursePerStudent"
+msgstr "Media de cursos por usuariu"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Progresu mediu nos itinerarios d\'aprendizaxe"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Puntos nos exercicios"
+
+msgid "SeeStudentList"
+msgstr "Ver el llistáu d\'usuarios"
+
+msgid "NbActiveSessions"
+msgstr "Sesiones actives"
+
+msgid "NbPastSessions"
+msgstr "Sesiones pasaes"
+
+msgid "NbFutureSessions"
+msgstr "Sesiones futures"
+
+msgid "NbStudentPerSession"
+msgstr "Cantidá d\'alumnos por sesión"
+
+msgid "NbCoursesPerSession"
+msgstr "Cantidá de cursos por sesión"
+
+msgid "SeeSessionList"
+msgstr "Ver el llistáu de sesiones"
+
+msgid "langShowNone"
+msgstr "Nun amosar nengún"
+
+msgid "langCourseStats"
+msgstr "Estadístiques del cursu"
+
+msgid "langToolsAccess"
+msgstr "Entrada a les ferramientes"
+
+msgid "langCourseAccess"
+msgstr "Entrada al cursu"
+
+msgid "langLinksAccess"
+msgstr "Enllaces"
+
+msgid "langDocumentsAccess"
+msgstr "Documentos"
+
+msgid "langScormAccess"
+msgstr "Itinerarios d\'aprendizaxe - Cursos con formatu SCORM"
+
+msgid "langLinksDetails"
+msgstr "Enllaces visitaos"
+
+msgid "langWorksDetails"
+msgstr "Trabayos unviaos"
+
+msgid "langLoginsDetails"
+msgstr "Calque nel mes pa ver más detalles"
+
+msgid "langDocumentsDetails"
+msgstr "Documentos descargaos"
+
+msgid "langExercicesDetails"
+msgstr "Puntos consiguíos nos exercicios"
+
+msgid "langBackToList"
+msgstr "Tornar al llistáu d\'usuarios"
+
+msgid "langDetails"
+msgstr "Detalles"
+
+msgid "langStatsOfCourse"
+msgstr "Estadístiques del cursu"
+
+msgid "langStatsOfUser"
+msgstr "Estadístiques del usuariu"
+
+msgid "langStatsOfCampus"
+msgstr "Estadístiques de la plataforma"
+
+msgid "langCountUsers"
+msgstr "Cantidá d\'usuarios"
+
+msgid "langCountToolAccess"
+msgstr "Cantidá de conesiones a esti cursu"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Mes"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Cantidá d\'entraes con identificación"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Nome de la ferramienta"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Clics de los usuarios"
+
+msgid "langToolTitleCountColumn"
+msgstr "Clics totales"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Enllaces"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Clics de los usuarios"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Clics totales"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Exercicios"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Puntos"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Documentos"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Descargues de los usuarios"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Descargues totales"
+
+msgid "langScormContentColumn"
+msgstr "Títulu"
+
+msgid "langScormStudentColumn"
+msgstr "Usuarios"
+
+msgid "langScormTitleColumn"
+msgstr "Elementu"
+
+msgid "langScormStatusColumn"
+msgstr "Estáu"
+
+msgid "langScormScoreColumn"
+msgstr "Puntos"
+
+msgid "langScormTimeColumn"
+msgstr "Tiempu"
+
+msgid "langScormNeverOpened"
+msgstr "Esti usuariu nun entró enxamás nesti cursu."
+
+msgid "langWorkTitle"
+msgstr "Títulu"
+
+msgid "langWorkAuthors"
+msgstr "Autor"
+
+msgid "langWorkDescription"
+msgstr "Descripción"
+
+msgid "informationsAbout"
+msgstr "Siguimientu de"
+
+msgid "langNoEmail"
+msgstr "Nun especificó una direición de corréu electrónicu."
+
+msgid "langNoResult"
+msgstr "Entá nun hai resultaos"
+
+msgid "langCourse"
+msgstr "El cursu"
+
+msgid "langHits"
+msgstr "Entraes"
+
+msgid "langTotal"
+msgstr "Total"
+
+msgid "langHour"
+msgstr "Hora"
+
+msgid "langDay"
+msgstr "Día"
+
+msgid "langLittleHour"
+msgstr "h."
+
+msgid "langLast31days"
+msgstr "Nos caberos 31 díes"
+
+msgid "langLast7days"
+msgstr "Nos caberos 7 díes"
+
+msgid "langThisday"
+msgstr "Esti día"
+
+msgid "langLogins"
+msgstr "Entraes con identificación"
+
+msgid "langLoginsExplaination"
+msgstr "Esti ye\'l llistáu de les sos entraes, amás de les ferramientes que visitó neses sesiones."
+
+msgid "langExercicesResults"
+msgstr "Resultaos de los exercicios fechos"
+
+msgid "langVisits"
+msgstr "visites"
+
+msgid "langAt"
+msgstr "en"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Fecha"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Visites"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Entraes con identificación y accesos a les ferramientes"
+
+msgid "langWorkUploads"
+msgstr "Trabayos unviaos"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Usuariu inválidu: esti usuariu nun esiste nel so grupu."
+
+msgid "langListStudents"
+msgstr "Llistáu d\'usuarios nesti grupu"
+
+msgid "langPeriodHour"
+msgstr "Hora"
+
+msgid "langPeriodDay"
+msgstr "Día"
+
+msgid "langPeriodWeek"
+msgstr "Selmana"
+
+msgid "langPeriodMonth"
+msgstr "Mes"
+
+msgid "langPeriodYear"
+msgstr "Añu"
+
+msgid "langNextDay"
+msgstr "Siguiente día"
+
+msgid "langPreviousDay"
+msgstr "Día anterior"
+
+msgid "langNextWeek"
+msgstr "Siguiente selmana"
+
+msgid "langPreviousWeek"
+msgstr "Selmana anterior"
+
+msgid "langNextMonth"
+msgstr "Siguiente mes"
+
+msgid "langPreviousMonth"
+msgstr "Mes anterior"
+
+msgid "langNextYear"
+msgstr "Siguiente añu"
+
+msgid "langPreviousYear"
+msgstr "Añu anterior"
+
+msgid "langViewToolList"
+msgstr "Ver llistáu de toles ferramientes"
+
+msgid "langToolList"
+msgstr "Llistáu de toles ferramientes"
+
+msgid "langFrom"
+msgstr "De"
+
+msgid "langTo"
+msgstr "pa"
+
+msgid "langPeriodToDisplay"
+msgstr "Periodu"
+
+msgid "langDetailView"
+msgstr "Vistu por"
+
+msgid "langBredCrumpGroups"
+msgstr "Grupos"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Área de Grupu"
+
+msgid "langBredCrumpUsers"
+msgstr "Usuarios"
+
+msgid "langAdminToolName"
+msgstr "Estadístiques del alministrador"
+
+msgid "langPlatformStats"
+msgstr "Estadístiques de la plataforma"
+
+msgid "langStatsDatabase"
+msgstr "Estadístiques de la base de datos"
+
+msgid "langPlatformAccess"
+msgstr "Entrada a la plataforma"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Entrada a los cursos"
+
+msgid "langPlatformToolAccess"
+msgstr "Entrada a les ferramientes"
+
+msgid "langHardAndSoftUsed"
+msgstr "Países Proveedores Navegadores S.O. Referenciadores"
+
+msgid "langStrangeCases"
+msgstr "Casos problemáticos"
+
+msgid "langStatsDatabaseLink"
+msgstr "Calque equí"
+
+msgid "langCountCours"
+msgstr "Cantidá de cursos"
+
+msgid "langCountCourseByFaculte"
+msgstr "Cantidá de cursos per categoría"
+
+msgid "langCountCourseByLanguage"
+msgstr "Cantidá de cursos per idioma"
+
+msgid "langCountCourseByVisibility"
+msgstr "Cantidá de cursos per visibilidá"
+
+msgid "langCountUsersByCourse"
+msgstr "Cantidá d\'usuarios per cursu"
+
+msgid "langCountUsersByFaculte"
+msgstr "Cantidá d\'usuarios per categoría"
+
+msgid "langCountUsersByStatus"
+msgstr "Cantidá d\'usuarios per estatus"
+
+msgid "langAccess"
+msgstr "Entraes"
+
+msgid "langCountries"
+msgstr "Países"
+
+msgid "langProviders"
+msgstr "Proveedores"
+
+msgid "langOS"
+msgstr "S.O."
+
+msgid "langBrowsers"
+msgstr "Navegadores"
+
+msgid "langReferers"
+msgstr "Referenciadores"
+
+msgid "langAccessExplain"
+msgstr "(Si un usuariu abre l\'índex de la plataforma)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Total"
+
+msgid "langTotalPlatformLogin"
+msgstr "Total"
+
+msgid "langMultipleLogins"
+msgstr "Cuentes col mesmu <i>Nome d\'usuariu</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Cuentes col mesmu <i>Nome d\'usuariu</i> y la mesma <i>seña</i>"
+
+msgid "langMultipleEmails"
+msgstr "Cuentes col mesmu <i>E-mail</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Cursos ensin profesor"
+
+msgid "langCourseWithoutAccess"
+msgstr "Cursos ensin usar"
+
+msgid "langLoginWithoutAccess"
+msgstr "Nomes d\'usuariu ensin usar"
+
+msgid "langAllRight"
+msgstr "Equí nun hai nengún casu problemáticu"
+
+msgid "langDefcon"
+msgstr "¡¡ Deteutárense casos problemáticos !!"
+
+msgid "langNULLValue"
+msgstr "Vacíu ( o NULU)"
+
+msgid "langTrafficDetails"
+msgstr "Detalles del tráficu"
+
+msgid "langSeeIndividualTracking"
+msgstr "Pa facer un siguimientu individualizáu, ver la <a href=../user/user.php>ferramienta</a> usuarios."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Esti itinerariu nun lu abrió entá naide."
+
+msgid "SynthesisView"
+msgstr "Resume"
+
+msgid "Visited"
+msgstr "Visitáu"
+
+msgid "FirstAccess"
+msgstr "Primer accesu"
+
+msgid "LastAccess"
+msgstr "Últimu accesu"
+
+msgid "langProbationers"
+msgstr "Alumnos"
+
+msgid "MoyenneTest"
+msgstr "Media de los exercicios"
+
+msgid "exportExcel"
+msgstr "Esportar en formatu Excel"
+
+msgid "MoyCourse"
+msgstr "Media de cursu"
+
+msgid "MoyenneExamen"
+msgstr "Media d\'esame"
+
+msgid "MoySession"
+msgstr "Media de sesión"
+
+msgid "TakenSessions"
+msgstr "Sesiones feches"
+
+msgid "FollowUp"
+msgstr "Siguir"
+
+msgid "Trainers"
+msgstr "Profesores"
+
+msgid "Administrators"
+msgstr "Alministradores"
+
+msgid "Tracks"
+msgstr "Siguimientu"
+
+msgid "Success"
+msgstr "Nota"
+
+msgid "ExcelFormat"
+msgstr "Formatu Excel"
+
+msgid "MyLearnpath"
+msgstr "El mio itinerariu d\'aprendizaxe"
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "Score"
+msgstr "Puntos"
+
+msgid "LastConnexion"
+msgstr "Última conesión"
+
+msgid "ConnectionTime"
+msgstr "Tiempu de conesión"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Conesiones a esti cursu"
+
+msgid "StudentTutors"
+msgstr "Tutores del alumnu"
+
+msgid "StudentSessions"
+msgstr "Sesiones del alumnu"
+
+msgid "StudentCourses"
+msgstr "Cursos del alumnu"
+
+msgid "NoLearnpath"
+msgstr "Ensin itinerarios d\'aprendizaxe"
+
+msgid "Attempts"
+msgstr "Intentos"
+
+msgid "Correction"
+msgstr "Correición"
+
+msgid "NoExercise"
+msgstr "Ensin exercicios"
+
+msgid "LimitDate"
+msgstr "Fecha tope"
+
+msgid "SentDate"
+msgstr "Fecha d\'unvíu"
+
+msgid "Annotate"
+msgstr "Anotar"
+
+msgid "DayOfDelay"
+msgstr "Díes de retrasu"
+
+msgid "NoProduction"
+msgstr "Ensin productos"
+
+msgid "NoComment"
+msgstr "Ensin comentarios"
+
+msgid "LatestLogin"
+msgstr "Última conesión"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Tiempu d\'estancia na plataforma"
+
+msgid "Messages"
+msgstr "Mensaxes"
+
+msgid "AveragePostsInForum"
+msgstr "Cantidá de mensaxes nel foru"
+
+msgid "AverageAssignments"
+msgstr "Cantidá de llabores / deberes"
+
+msgid "Print"
+msgstr "Emprentar"
+
+msgid "StudentDetails"
+msgstr "Detalles del alumnu"
+
+msgid "StudentDetailsInCourse"
+msgstr "Detalles del alumnu nel cursu"
+
+msgid "Learnpaths"
+msgstr "Itinerarios d\'aprendizaxe"
+
+msgid "OtherTools"
+msgstr "Otres ferramientes"
+
+msgid "DetailsStudentInCourse"
+msgstr "Detalles del alumnu nel cursu"
+
+msgid "CourseTitle"
+msgstr "Títulu del cursu"
+
+msgid "NbStudents"
+msgstr "Cantidá d\'alumnos"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Tiempu d\'estancia nel cursu"
+
+msgid "AvgStudentsProgress"
+msgstr "Progresu de los alumnos"
+
+msgid "AvgCourseScore"
+msgstr "Puntuación media de los alumnos"
+
+msgid "AvgMessages"
+msgstr "Mensaxes por alumnu"
+
+msgid "AvgAssignments"
+msgstr "Trabayos por alumnu"
+
+msgid "ToolsMostUsed"
+msgstr "Ferramientes más usaes"
+
+msgid "StudentsTracking"
+msgstr "Estadístiques de los alumnos"
+
+msgid "CourseTracking"
+msgstr "Estadístiques del cursu"
+
+msgid "LinksMostClicked"
+msgstr "Enllaces más visitaos"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Documentos más descargaos"
+
+msgid "LearningPathDetails"
+msgstr "Detalles del itinerariu d\'aprendizaxe"
+
+msgid "NoConnexion"
+msgstr "Nun hai nenguna conesión"
+
+msgid "TeacherInterface"
+msgstr "Interfaz de profesor"
+
+msgid "CoachInterface"
+msgstr "Interfaz de tutor"
+
+msgid "AdminInterface"
+msgstr "Interfaz d\'alministrador"
+
+msgid "NumberOfSessions"
+msgstr "Cantidá de sesiones"
+
+msgid "YourCourseList"
+msgstr "El so llistáu de cursos"
+
+msgid "YourStatistics"
+msgstr "Les sos estadístiques"
+
+msgid "CoachList"
+msgstr "Llistáu de tutores"
+
+msgid "CoachStudents"
+msgstr "Alumnos del tutor"
+
+msgid "NoLearningPath"
+msgstr "Nun ta disponible nengún itinerariu d\'aprendizaxe"
+
+msgid "SessionCourses"
+msgstr "Sesiones de cursos"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Equi va alcontrar les estadístiques de los alumnos matriculaos nesti cursu."
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Tiempu mediu d\'estancia nel cursu"
+
+msgid "RemindInactiveUser"
+msgstr "Recordatoriu pa los usuarios ensin actividá"
+
+msgid "FirstLogin"
+msgstr "Primer accesu"
+
+msgid "AccessDetails"
+msgstr "Detalles d\'accesu"
+
+msgid "DateAndTimeOfAccess"
+msgstr "Fecha y hora del accesu"
+
+msgid "Duration"
+msgstr "Duración"
+
+msgid "WrongDatasForTimeSpentOnThePlatform"
+msgstr "Datos del usuariu que taba rexistráu de la que\'l cálculu d\'estancia na plataforma nun se podía facer."
+
+msgid "DisplayCoaches"
+msgstr "Resume de tutores"
+
+msgid "DisplayUserOverview"
+msgstr "Resume del usuariu"
+
+msgid "ExportUserOverviewOptions"
+msgstr "Opción d\'esportación del resume d\'usuariu"
+
+msgid "FollowingFieldsWillAlsoBeExported"
+msgstr "Los campos que vienen darréu van esportase"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "Puntos totales del exerciciu"
+
+msgid "TotalExercisesScorePossible"
+msgstr "Másimos puntos totales posibles"
+
+msgid "TotalExercisesAnswered"
+msgstr "Cantidá d\'exercicios contestaos"
+
+msgid "TotalExercisesScorePercentage"
+msgstr "Porcentaxe total de los puntos de los exercicios"
+
+msgid "ForumForumsNumber"
+msgstr "Númberu de foros"
+
+msgid "ForumThreadsNumber"
+msgstr "Númberu de temes"
+
+msgid "ForumPostsNumber"
+msgstr "Númberu de mensaxes"
+
+msgid "ChatConnectionsDuringLastXDays"
+msgstr "Conesiones al chat nos últimos %s díes"
+
+msgid "ChatLastConnection"
+msgstr "Última conesión al chat"
+
+msgid "CourseInformation"
+msgstr "Información del Cursu"
+
+msgid "NoAdditionalFieldsWillBeExported"
+msgstr "Los campos adicionales nun se van esportar"
+
+msgid "langSendNotification"
+msgstr "Unviar les notificaciones"
+
+msgid "TimeOfActiveByTraining"
+msgstr "Tiempu de formación (suma del timpu de permanencia de tolos escolinos)"
+
+msgid "AvgAllUsersInAllCourses"
+msgstr "Promediu de tolos alumnos"
+
+msgid "AvgExercisesScore"
+msgstr "Puntuación nos exercicios"
+
+msgid "TrainingTime"
+msgstr "Tiempu nel cursu"
+
+msgid "CourseProgress"
+msgstr "Progresu na lleición"
+
+msgid "ViewMinus"
+msgstr "Ver amenorgáu"
+
+msgid "ResourcesTracking"
+msgstr "Informe sobro recursos"
+
+msgid "SelectFieldToAdd"
+msgstr "Seleicionar un campu del perfil d\'usuariu"
+
+msgid "AddAdditionalProfileField"
+msgstr "Amestar un campu del perfil d\'usuariu"
+

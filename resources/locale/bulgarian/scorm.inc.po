@@ -1,0 +1,156 @@
+msgid "langScormVersion"
+msgstr "версия"
+
+msgid "langScormRestarted"
+msgstr "Обучението започна отначало."
+
+msgid "langScormNoNext"
+msgstr "Това е последната стъпка."
+
+msgid "langScormNoPrev"
+msgstr "Това е първата стъпка."
+
+msgid "langScormTime"
+msgstr "Време"
+
+msgid "langScormNoOrder"
+msgstr "Няма задължителен ред, можете да прочетете произволно всяка стъпка."
+
+msgid "langScormScore"
+msgstr "Резултат"
+
+msgid "langScormLessonTitle"
+msgstr "Заглавие на стъпката"
+
+msgid "langScormStatus"
+msgstr "Състояние"
+
+msgid "langScormToEnter"
+msgstr "За да влезете"
+
+msgid "langScormFirstNeedTo"
+msgstr "най-напред трябва да изпълните"
+
+msgid "langScormThisStatus"
+msgstr "Тази стъпка е"
+
+msgid "langScormClose"
+msgstr "Прекрати"
+
+msgid "langScormRestart"
+msgstr "Рестартиране. Ще започнете обучението си отначало!"
+
+msgid "langScormCompstatus"
+msgstr "изпълнена"
+
+msgid "langScormIncomplete"
+msgstr "неизпълнена"
+
+msgid "langScormPassed"
+msgstr "преминал"
+
+msgid "langScormFailed"
+msgstr "пропаднал"
+
+msgid "langScormPrevious"
+msgstr "Предишна стъпка"
+
+msgid "langScormNext"
+msgstr "Следваща стъпка"
+
+msgid "langScormTitle"
+msgstr "SCORM"
+
+msgid "langScormMystatus"
+msgstr "Напредък по материала"
+
+msgid "langScormNoItems"
+msgstr "Няма съдържание."
+
+msgid "langScormNoStatus"
+msgstr "Няма данни за състоянието."
+
+msgid "langScormLoggedout"
+msgstr "излезе от SCORM-пътеката."
+
+msgid "langScormCloseWindow"
+msgstr "Затваряне на прозореца"
+
+msgid "ScormBrowsed"
+msgstr "прегледана"
+
+msgid "langScormExitFullScreen"
+msgstr "Нормален екран"
+
+msgid "langScormFullScreen"
+msgstr "Цял екран"
+
+msgid "langScormNotAttempted"
+msgstr "не е започната"
+
+msgid "langCharset"
+msgstr "Знаково множество"
+
+msgid "langLocal"
+msgstr "локален"
+
+msgid "langRemote"
+msgstr "отдалечен"
+
+msgid "langAutodetect"
+msgstr "Автоматично разпознаване"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Общо изпълнени стъпки"
+
+msgid "langUnknown"
+msgstr "Неизвестно"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "Наистина ли искате да изтриете тези стъпки?"
+
+msgid "Origin"
+msgstr "Произход"
+
+msgid "Local"
+msgstr "локален"
+
+msgid "Remote"
+msgstr "отдалечен"
+
+msgid "FileToUpload"
+msgstr "SCORM или AICC файл за качване"
+
+msgid "ContentMaker"
+msgstr "Произход на курса"
+
+msgid "ContentProximity"
+msgstr "Местоположение на курса"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "Качване на файл от main/garbage директорията"
+
+msgid "ThisItemIsNotExportable"
+msgstr "Тази стъпка не е съвместима със стандарта SCORM. Тя не може да се експортира."
+
+msgid "MoveCurrentChapter"
+msgstr "Преместване на текущия модул"
+
+msgid "GenericScorm"
+msgstr "SCORM"
+
+msgid "UnknownPackageFormat"
+msgstr "Форматът на този пакет не е разпознат. Моля, проверете дали пакетът е валиден."
+
+msgid "Attempt"
+msgstr "Опит"
+
+msgid "MoveTheCurrentForum"
+msgstr "Преместване на текущия форум"
+
+msgid "WarningWhenEditingScorm"
+msgstr "Предупреждение!<br />Когато в пътеката за обучение редактирате стъпка, има опасност да да я повредите или да разкъсате нейната връзка със записите за генериране на справки или отчети."
+
+msgid "AdditionalProfileField"
+msgstr "Допълнителни данни"
+

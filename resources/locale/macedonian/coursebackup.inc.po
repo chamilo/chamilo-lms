@@ -1,0 +1,126 @@
+msgid "langSelectOptionForBackup"
+msgstr "Ве молам селектирајте ја опцијата за резервна_копија"
+
+msgid "langLetMeSelectItems"
+msgstr "Дозволи ми да ги одберам компонентите на курсот"
+
+msgid "langCreateFullBackup"
+msgstr "Креирај комплетна резервна_копија на овој курс"
+
+msgid "langCreateBackup"
+msgstr "креирај резервна_копија"
+
+msgid "langBackupCreated"
+msgstr "&#1056;&#1077;&#1079;&#1077;&#1088;&#1074;&#1085;&#1072;&#1090;&#1072;_&#1082;&#1086;&#1087;&#1080;&#1112;&#1072; &#1085;&#1072; &#1086;&#1074;&#1086;&#1112; &#1082;&#1091;&#1088;&#1089; &#1073;&#1077;&#1096;&#1077; &#1082;&#1088;&#1077;&#1080;&#1088;&#10"
+
+msgid "langSelectBackupFile"
+msgstr "избери датотека за резервна_копија"
+
+msgid "langImportBackup"
+msgstr "Увези резервна_копија"
+
+msgid "langImportFullBackup"
+msgstr "Увези целосна резервна_копија"
+
+msgid "langImportFinished"
+msgstr "Увезувањето заврши"
+
+msgid "langEvents"
+msgstr "Настани"
+
+msgid "langAnnouncements"
+msgstr "Известувања"
+
+msgid "langDocuments"
+msgstr "Документи"
+
+msgid "langTests"
+msgstr "Тестови"
+
+msgid "langLearnpaths"
+msgstr "Патеки_на_учење"
+
+msgid "langCopyCourse"
+msgstr "Копирај го курсот"
+
+msgid "langSelectItemsToCopy"
+msgstr "Изберете за копирање"
+
+msgid "langCopyFinished"
+msgstr "Копирањето заврши"
+
+msgid "langFullRecycle"
+msgstr "Целосно рециклирање"
+
+msgid "langRecycleCourse"
+msgstr "Рециклирај го курсот"
+
+msgid "langRecycleFinished"
+msgstr "Рециклирањето заврши"
+
+msgid "langRecycleWarning"
+msgstr "Предупредување: користејќи ја оваа алатка, ќе избришете некои делови од курсот. Ви советуваме да направите <a href=\"create_backup.php\">резервна_копија</a> пред да ја искористите алатката за рециклирање."
+
+msgid "langSameFilename"
+msgstr "Што треба да биде направено со увезените датотеки кои имаат исто име како и некои постоечки датотеки?"
+
+msgid "langSameFilenameSkip"
+msgstr "Прескокни ги датотеките со исто име"
+
+msgid "langSameFilenameRename"
+msgstr "Преименувај ја датотеката (пр. датотека.pdf станува file_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Препокриј ја датотеката"
+
+msgid "langSelectDestinationCourse"
+msgstr "Изберете ја локацијата на курсот"
+
+msgid "langFullCopy"
+msgstr "Целосна копија"
+
+msgid "langCourseDescription"
+msgstr "Опис на курсот"
+
+msgid "langNoResourcesToBackup"
+msgstr "Не постојат ресурси за резервна_копија"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Не посојат ресурси во датотеката од резервната_копија"
+
+msgid "langSelectResources"
+msgstr "Селектирај ги ресурсите"
+
+msgid "langNoResourcesToRecycles"
+msgstr "Не постојат ресурси за рециклирање"
+
+msgid "langIncludeQuestionPool"
+msgstr "Вклучи збирка на прашања"
+
+msgid "langLocalFile"
+msgstr "локална датотека"
+
+msgid "langServerFile"
+msgstr "датотека од серверот"
+
+msgid "langNoBackupsAvailable"
+msgstr "не е достапна резервна_копија"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "ниеден курс на оваа локација не е достапен"
+
+msgid "langBackup"
+msgstr "Резервна_копија"
+
+msgid "langImportBackupInfo"
+msgstr "Увези резервна_копија. Ќе можете да качите датотека од резервната_копија од вашиот компјутер или да користите датотека од резервната_копија достапна на серверот."
+
+msgid "langCreateBackupInfo"
+msgstr "Креирајте резервна_копија на овој курс. Може да ја селектирате содржината на курсот за да ја ставите во датотека од резервната_копија."
+
+msgid "ToolIntro"
+msgstr "Воведна алатка"
+
+msgid "UploadError"
+msgstr "Качувањето е неуспешно, Ве молиме проверете ги ограничувањата на максималната големина на датотеката и правата на папката."
+

@@ -1,0 +1,288 @@
+msgid "langStatDB"
+msgstr "日誌數據庫"
+
+msgid "langEnableTracking"
+msgstr "啟用日誌"
+
+msgid "langInstituteShortName"
+msgstr "你的組織簡稱"
+
+msgid "langWarningResponsible"
+msgstr "備份後才能使用這個腳本，如果丟失或損壞數據 IILearn 小組將不負責"
+
+msgid "langAllowSelfRegProf"
+msgstr "允許老師註冊"
+
+msgid "langEG"
+msgstr "例如"
+
+msgid "langDBHost"
+msgstr "數據庫主機"
+
+msgid "langDBLogin"
+msgstr "數據庫用戶名"
+
+msgid "langDBPassword"
+msgstr "數據庫密碼"
+
+msgid "langMainDB"
+msgstr "IILearn 主數據庫"
+
+msgid "langAllFieldsRequired"
+msgstr "所有選項都必需填寫"
+
+msgid "langPrintVers"
+msgstr "列印版本"
+
+msgid "langLocalPath"
+msgstr "本地路徑"
+
+msgid "langAdminEmail"
+msgstr "管理員 Email"
+
+msgid "langAdminName"
+msgstr "管理員名字"
+
+msgid "langAdminSurname"
+msgstr "管理員姓氏"
+
+msgid "langAdminLogin"
+msgstr "管理員登錄名"
+
+msgid "langAdminPass"
+msgstr "管理員密碼(<FONT color=red>可以修改</FONT>)"
+
+msgid "langEducationManager"
+msgstr "項目管理人"
+
+msgid "langCampusName"
+msgstr "網站名稱"
+
+msgid "langDBSettingIntro"
+msgstr "安裝腳本將創建 IILearn 的數據庫，系統預設將使用多數據庫模式，如果你的主機服務商只允許使用一個數據庫，您應選擇一個數據庫的模式。"
+
+msgid "langStep1"
+msgstr "步驟一"
+
+msgid "langStep2"
+msgstr "步驟二"
+
+msgid "langStep3"
+msgstr "步驟3/7"
+
+msgid "langStep4"
+msgstr "步驟4/7"
+
+msgid "langStep5"
+msgstr "步驟5/7"
+
+msgid "langStep6"
+msgstr "步驟6/7"
+
+msgid "langCfgSetting"
+msgstr "參數檔案設定"
+
+msgid "langDBSetting"
+msgstr "數據庫設定"
+
+msgid "langMainLang"
+msgstr "首選語言"
+
+msgid "langLicence"
+msgstr "軟體許可"
+
+msgid "langLastCheck"
+msgstr "安裝前的檢查"
+
+msgid "langRequirements"
+msgstr "系統要求"
+
+msgid "langDbPrefixForm"
+msgstr "數據庫前綴"
+
+msgid "langDbPrefixCom"
+msgstr "沒有需要可以不填"
+
+msgid "langEncryptUserPass"
+msgstr "加密用戶密碼"
+
+msgid "langSingleDb"
+msgstr "使用一個或多個數據庫"
+
+msgid "langAllowSelfReg"
+msgstr "允許學生註冊"
+
+msgid "langRecommended"
+msgstr "(推薦)"
+
+msgid "langScormDB"
+msgstr "Scorm 數據庫"
+
+msgid "langAdminLastName"
+msgstr "管理員姓氏"
+
+msgid "langAdminPhone"
+msgstr "管理員電話"
+
+msgid "OK"
+msgstr "通過"
+
+msgid "langAdminFirstName"
+msgstr "管理員名字"
+
+msgid "langInstituteURL"
+msgstr "組織的網址"
+
+msgid "langDokeosURL"
+msgstr "網址"
+
+msgid "langUserDB"
+msgstr "用戶數據庫"
+
+msgid "PleaseWait"
+msgstr "請等候"
+
+msgid "PleaseCheckTheseValues"
+msgstr "請檢查這些資料"
+
+msgid "PleasGoBackToStep1"
+msgstr "請回到步驟 1"
+
+msgid "langInstallationLanguage"
+msgstr "安裝語言"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "要讓 Chamilo 運作，你的伺服器需要以下條件"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "警告！<br />安裝器發現你的系統中已有一個 Chamilo 平台"
+
+msgid "NewInstallation"
+msgstr "新安裝"
+
+msgid "CheckDatabaseConnection"
+msgstr "測試數據庫連線"
+
+msgid "Installing"
+msgstr "安裝"
+
+msgid "Step"
+msgstr "步驟"
+
+msgid "MoreDetails"
+msgstr "詳細資料"
+
+msgid "ServerRequirements"
+msgstr "伺服器要求"
+
+msgid "PHPVersion"
+msgstr "PHP 版本"
+
+msgid "support"
+msgstr "支援"
+
+msgid "PHPVersionOK"
+msgstr "通過 PHP 版本"
+
+msgid "RecommendedSettings"
+msgstr "建議設定"
+
+msgid "RecommendedSettingsInfo"
+msgstr "伺服器設定建議。這些設定位於伺服器設定檔(php.ini configuration file)中。"
+
+msgid "Setting"
+msgstr "設定"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "目錄及檔案權限"
+
+msgid "DirectoryAndFilePermissionsInfo"
+msgstr "執行某些 Chamilo 功能(如：學生上載檔案、首頁 html 檔...)時，部份目錄及其中的檔案須設定為可寫入。你或須要於你的伺服器上(本平台以外)進行手動設定。"
+
+msgid "NotWritable"
+msgstr "不可寫入"
+
+msgid "Writable"
+msgstr "可寫入"
+
+msgid "ExtensionLDAPNotAvailable"
+msgstr "LDAP 擴充套件未啟用"
+
+msgid "ExtensionGDNotAvailable"
+msgstr "GD 擴充套件未啟用"
+
+msgid "DokeosLicenseInfo"
+msgstr "Chamilo 是根據 GNU 通用公共許可證 (GPL) 條款發佈的免費軟體。"
+
+msgid "IAccept"
+msgstr "我接受"
+
+msgid "ConfigSettingsInfo"
+msgstr "以下數據會被寫入至你的設定檔"
+
+msgid "DokeosInstallation"
+msgstr "Chamilo 安裝"
+
+msgid "InstallDokeos"
+msgstr "安裝 Chamilo"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "瀏覽你新建的站台"
+
+msgid "FirstUseTip"
+msgstr "當你首次進入的學園時，瞭解它的最佳辦法是選課程創建者的身份註冊，然後按步去做。"
+
+msgid "Version_"
+msgstr "版本"
+
+msgid "UpdateFromDokeosVersion"
+msgstr "由 Chamilo 更新"
+
+msgid "WelcomToTheDokeosInstaller"
+msgstr "歡迎來到安裝 Chamilo 的畫面"
+
+msgid "PleaseSelectInstallationProcessLanguage"
+msgstr "請選擇你在安裝時想使用的語言"
+
+msgid "ReadTheInstallGuide"
+msgstr "閱讀安裝說明"
+
+msgid "HereAreTheValuesYouEntered"
+msgstr "這是你輸入的數據"
+
+msgid "PrintThisPageToRememberPassAndOthers"
+msgstr "列印本頁以記下你的密碼及設定"
+
+msgid "TheInstallScriptWillEraseAllTables"
+msgstr "安裝程式會把指定數據庫中的原有資料表刪除。我們強烈建議你在確認最後的安裝步驟前進行完整的備份。"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "ReadWarningBelow"
+msgstr "閱讀以下警告"
+
+msgid "SecurityAdvice"
+msgstr "安全性建議"
+
+msgid "ToProtectYourSiteMakeXAndYReadOnly"
+msgstr "為了保護你的站台，請設定 %s 及%s （不包括它們包含的目錄）為只可讀取 (CHMOD 444)。"
+
+msgid "Error"
+msgstr "錯誤"
+
+msgid "Back"
+msgstr "返回"
+
+msgid "PleaseGoBackToStep1"
+msgstr "請回到步驟 1"
+
+msgid "NoWritePermissionPleaseReadInstallGuide"
+msgstr "部份檔案或資料夾沒有寫入的權限。要安裝 Chamilo，你必須先使用 CHMOD 改變它們的權限，詳情請看安裝說明。"
+
+msgid "DBServerDoesntWorkOrLoginPassIsWrong"
+msgstr "數據庫伺服器沒有運作或登入失敗。"
+
+msgid "PleaseGoBackToStep"
+msgstr "請回到步驟"
+

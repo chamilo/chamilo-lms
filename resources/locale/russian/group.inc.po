@@ -1,0 +1,264 @@
+msgid "langNewGroupCreate"
+msgstr "Создать новую(ые) группу(ы)"
+
+msgid "langGroupCreation"
+msgstr "Создание новых групп"
+
+msgid "langCreate"
+msgstr "создать"
+
+msgid "langNewGroups"
+msgstr "новая(ые) группа(ы)"
+
+msgid "langMax"
+msgstr "макс. 20 знаков, например <i>ИННОВ21</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "места (по желанию)"
+
+msgid "langGroupsAdded"
+msgstr "группа(ы) добавлена(ы)"
+
+msgid "langGroupDel"
+msgstr "Группа удалена"
+
+msgid "langDocuments"
+msgstr "Документы"
+
+msgid "langExistingGroups"
+msgstr "Группы"
+
+msgid "langRegistered"
+msgstr "Зарегистрирован"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Пользователям разрешена саморегистрация в группы"
+
+msgid "langGroupTools"
+msgstr "Инструменты"
+
+msgid "langGroupDocument"
+msgstr "Документы"
+
+msgid "langGroupPropertiesModified"
+msgstr "Настройки группы были изменены"
+
+msgid "langGroupSpace"
+msgstr "Зона группы"
+
+msgid "langGroupName"
+msgstr "Название группы"
+
+msgid "langGroupDescription"
+msgstr "Описание группы"
+
+msgid "langGroupMembers"
+msgstr "Члены группы"
+
+msgid "langEditGroup"
+msgstr "Редактировать эту группу"
+
+msgid "Optional"
+msgstr "(по желанию)"
+
+msgid "langGroupSettingsModified"
+msgstr "Настройки группы изменены"
+
+msgid "langGroupTooMuchMembers"
+msgstr "Число предложенных превышает макс. разрешенное (Вы можете это изменить ниже). Структура группы не изменена."
+
+msgid "langGroupTutor"
+msgstr "Руководитель группы"
+
+msgid "langGroupNoTutor"
+msgstr "(никто)"
+
+msgid "langGroupNone"
+msgstr "(никто)"
+
+msgid "langGroupNoneMasc"
+msgstr "(никто)"
+
+msgid "langAddTutors"
+msgstr "Управление списком пользователей"
+
+msgid "langMyGroup"
+msgstr "моя группа"
+
+msgid "langOneMyGroups"
+msgstr "мой контроль"
+
+msgid "langGroupSelfRegistration"
+msgstr "Регистрация"
+
+msgid "langGroupSelfRegInf"
+msgstr "журнал регистрации"
+
+msgid "langRegIntoGroup"
+msgstr "Добавить меня в эту группу"
+
+msgid "langGroupNowMember"
+msgstr "Сейчас Вы член этой группы"
+
+msgid "langPrivate"
+msgstr "Частный доступ (сайт доступен только людям из списка пользователей)"
+
+msgid "langPublic"
+msgstr "Свободный доступ с домашней страницы портала без пароля"
+
+msgid "langPropModify"
+msgstr "Изменить настройки"
+
+msgid "langState"
+msgstr "Состояние"
+
+msgid "langGroupFilledGroups"
+msgstr "Группы наполнены пользователями согласно списку \"Пользователи\""
+
+msgid "langSubscribed"
+msgstr "зарегистрированные пользователи на этот курс"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Пользователи не в этой группе"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Пользователь может быть членом максимума"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr "═пЁя─я┐п©п©я▀"
+
+msgid "langGroupLimit"
+msgstr "Ограничивать"
+
+msgid "langStudentRegAllowed"
+msgstr "Пользователям касательно саморегистрирования в группы"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Пользователям разрешено самостоятельно отменять регистрацию в группы"
+
+msgid "langAllGroups"
+msgstr "Все группы"
+
+msgid "langStudentUnsubscribe"
+msgstr "Выписать меня из группы"
+
+msgid "langStudentDeletesHimself"
+msgstr "Вы выписаны"
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Настройки по умолчанию для новых групп"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Все выбранные группы удалены"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Все выбранные группы сейчас пусты"
+
+msgid "langGroupEmptied"
+msgstr "Группа сейчас пуста"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Все выбранные группы заполнены"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "Отказаться от регистрации"
+
+msgid "langSameForAll"
+msgstr "одинаково для всех"
+
+msgid "langNoLimit"
+msgstr "Без ограничений"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Пожалуйста, введите желаемое количество групп"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Создать группы из всех пользователей виртуальных курсов"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "Этот курс - это комбинация реального курса и одного или более виртуальных курсов. Если Вы нажмете следующую кнопку, новые группы будут созданы согласно этим (виртуальным) курсам. Все студенты будут подписаны в группы."
+
+msgid "langNoGroupsAvailable"
+msgstr "Ни одна группа не доступна"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "Виртуальные курсы"
+
+msgid "NotAvailable"
+msgstr "Не доступен"
+
+msgid "CreateSubgroups"
+msgstr "Создать подгруппы"
+
+msgid "CreateSubgroupsInfo"
+msgstr "Эта опция позволяет Вам создавать новые группы, основываясь на уже существующих. Укажите желаемое количество групп и выберите существующую группу. Указанное количество групп будет создано и все члены существующей группы будут подписаны в эти новые группы. Существующая группа останется без изменения."
+
+msgid "CreateNumberOfGroups"
+msgstr "Создать"
+
+msgid "WithUsersFrom"
+msgstr "группы с членами из"
+
+msgid "CategoryDeleted"
+msgstr "Раздел удален"
+
+msgid "Empty"
+msgstr "Пустой"
+
+msgid "FillGroup"
+msgstr "добавить пользователей"
+
+msgid "EmptyGroup"
+msgstr "выписать всех пользователей"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "Максимальное количество групп согласно числу пользователей Вами заявленное ошибочно. Сейчас подписано пользователей для большего количества групп, чем Вы предложили."
+
+msgid "GroupOverview"
+msgstr "Обзор группы"
+
+msgid "GroupCategory"
+msgstr "Раздел группы"
+
+msgid "NoTitleGiven"
+msgstr "Пожалуйста, озаглавьте"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "Пожалуйста, введите правильное количество для максимального числа членов."
+
+msgid "CategoryOrderChanged"
+msgstr "Последовательность разделов изменена"
+
+msgid "Wiki"
+msgstr "Группа wiki"
+
+msgid "CategoryCreated"
+msgstr "Раздел создан"
+
+msgid "GroupTutors"
+msgstr "Наставники группы"
+
+msgid "GroupWork"
+msgstr "Задания"
+
+msgid "GroupCalendar"
+msgstr "Расписание"
+
+msgid "GroupAnnouncements"
+msgstr "Объявления"
+
+msgid "NoCategoriesDefined"
+msgstr "Ни один раздел не задан"
+
+msgid "GroupsFromClasses"
+msgstr "Группы из классов"
+
+msgid "GroupsFromClassesInfo"
+msgstr "Используя эту опцию, Вы можете создать группы, основанные на классах, подписанных на Ваш курс."
+
+msgid "Group"
+msgstr "Группа"
+
+msgid "ForumOfGroup"
+msgstr "Форум группы:"
+

@@ -1,0 +1,45 @@
+msgid "langCourseProgram"
+msgstr "Opis kursa"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Ovaj kurs trenutno nije opisan."
+
+msgid "langEditCourseProgram"
+msgstr "Kreiraj i izmeni opis kursa"
+
+msgid "QuestionPlan"
+msgstr "Pitanje za vođu"
+
+msgid "langInfo2Say"
+msgstr "Informacija za korisnike"
+
+msgid "langOuAutreTitre"
+msgstr "Naslov"
+
+msgid "langNewBloc"
+msgstr "Drugo"
+
+msgid "langAddCat"
+msgstr "dodaj kategoriju"
+
+msgid "langAdd"
+msgstr "Dodavanje"
+
+msgid "langValid"
+msgstr "Važeće"
+
+msgid "langBackAndForget"
+msgstr "Nazad i zaboravi"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Opis kursa je ažuriran"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Opis kursa je obrisan"
+
+msgid "CourseDescriptionIntro"
+msgstr "Da kreirate opis kursa, odaberite naslov i popunite polje. <br><br> kliknite OK za nastavak."
+
+msgid "langSaveDescription"
+msgstr "Snimi opis"
+

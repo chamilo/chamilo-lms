@@ -1,0 +1,27 @@
+msgid "langLinkName"
+msgstr "Nama Pautan"
+
+msgid "langLinkAdd"
+msgstr "Pautan ditambah"
+
+msgid "langLinkMod"
+msgstr "Pautan diubahsuai"
+
+msgid "langLinkDel"
+msgstr "Pautan dipadam"
+
+msgid "langGiveURL"
+msgstr "Sila berikan URL pautan"
+
+msgid "langListDeleted"
+msgstr "Senarai pautan telah dipadam"
+
+msgid "langAddLink"
+msgstr "Tambah Pautan"
+
+msgid "langDelList"
+msgstr "Padam semua pautan"
+
+msgid "langModifyLink"
+msgstr "Ubahsuai Pautan"
+

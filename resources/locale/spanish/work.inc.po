@@ -1,0 +1,288 @@
+msgid "Tools"
+msgstr "Herramientas"
+
+msgid "SendWork"
+msgstr "Enviar el documento"
+
+msgid "langTooBig"
+msgstr "No ha seleccionado el archivo a enviar o es demasiado grande"
+
+msgid "langListDeleted"
+msgstr "La lista ha sido completamente borrada"
+
+msgid "langDocModif"
+msgstr "El documento ha sido modificado"
+
+msgid "langDocAdd"
+msgstr "El documento ha sido enviado"
+
+msgid "langDocDel"
+msgstr "El archivo ha sido eliminado"
+
+msgid "langTitleWork"
+msgstr "Título del documento"
+
+msgid "langAuthors"
+msgstr "Autor"
+
+msgid "langDelList"
+msgstr "Borrar lista"
+
+msgid "langWorkDelete"
+msgstr "Eliminar"
+
+msgid "langWorkModify"
+msgstr "Modificar"
+
+msgid "langWorkConfirmDelete"
+msgstr "¿ Seguro que quiere eliminar este archivo ?"
+
+msgid "langAllFiles"
+msgstr "Todos los archivos"
+
+msgid "DefaultUpload"
+msgstr "Configuración de visibilidad por defecto para los documentos que se envíen"
+
+msgid "NewVisible"
+msgstr "Los documentos serán visibles por todos los usuarios"
+
+msgid "NewUnvisible"
+msgstr "Los documentos sólo serán visibles por los profesores"
+
+msgid "lang_doc_unvisible"
+msgstr "Este documento sólo es visible por el profesor (es)."
+
+msgid "langDelLk"
+msgstr "¿ Está seguro de querer desactivar esta herramienta ?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Sólo los usuarios inscritos en este curso pueden enviar sus tareas"
+
+msgid "langListDel"
+msgstr "Eliminar lista"
+
+msgid "langNameDir"
+msgstr "Nombre del nuevo directorio"
+
+msgid "langFileExists"
+msgstr "Operación imposible, existe un archivo con el mismo nombre."
+
+msgid "CreateDirectory"
+msgstr "Crear tarea"
+
+msgid "langCurrentDir"
+msgstr "tarea actual"
+
+msgid "UploadADocument"
+msgstr "Enviar un documento"
+
+msgid "EditToolOptions"
+msgstr "Modificar las opciones"
+
+msgid "DocumentDeleted"
+msgstr "Documento eliminado"
+
+msgid "SendMailBody"
+msgstr "Un usuario ha enviado un documento mediante la herramienta tareas."
+
+msgid "DirDelete"
+msgstr "Eliminar tarea"
+
+msgid "ValidateChanges"
+msgstr "Confirmar los cambios"
+
+msgid "FolderUpdated"
+msgstr "Folder actualizado"
+
+msgid "EndsAt"
+msgstr "Acaba en (cerrado completamente)"
+
+msgid "QualificationOfAssignment"
+msgstr "Calificación de la tarea"
+
+msgid "MakeQualifiable"
+msgstr "Permitir calificar en la herramienta de evaluaciones"
+
+msgid "QualificationNumberOver"
+msgstr "Calificación sobre"
+
+msgid "WeightInTheGradebook"
+msgstr "Ponderación en el promedio de la evaluación"
+
+msgid "DatesAvailables"
+msgstr "Fechas disponibles"
+
+msgid "ExpiresAt"
+msgstr "Expira en"
+
+msgid "AddToCalendar"
+msgstr "Agregar a la agenda"
+
+msgid "DirectoryCreated"
+msgstr "La tarea ha sido creada"
+
+msgid "Assignment"
+msgstr "Tarea"
+
+msgid "AdvancedParameters"
+msgstr "Parámetros avanzados"
+
+msgid "ExpiryDateToSendWorkIs"
+msgstr "Fecha de vencimiento para enviar tareas"
+
+msgid "EnableExpiryDate"
+msgstr "Activar fecha de vencimiento"
+
+msgid "EnableEndDate"
+msgstr "Activar fecha de finalización"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "La tarea no ha podido ser enviada"
+
+msgid "EndDateCannotBeBeforeTheExpireDate"
+msgstr "La fecha de finalización no puede ser anterior a la fecha de vencimiento"
+
+msgid "SelectAFilter"
+msgstr "Seleccionar filtro"
+
+msgid "FilterByNotExpired"
+msgstr "Filtrar por No vencidas"
+
+msgid "FilterAssignments"
+msgstr "Filtrar tareas"
+
+msgid "WeightNecessary"
+msgstr "Peso necesario"
+
+msgid "QualificationOver"
+msgstr "Calificación sobre"
+
+msgid "ExpiryDateAlreadyPassed"
+msgstr "Fecha de vencimiento ya ha pasado"
+
+msgid "EndDateAlreadyPassed"
+msgstr "Fecha final ya ha pasado"
+
+msgid "MoveXTo"
+msgstr "Mover %s a"
+
+msgid "QualificationMustNotBeMoreThanQualificationOver"
+msgstr "La calificación no puede ser superior a la calificacion máxima"
+
+msgid "ModifyDirectory"
+msgstr "Modificar tarea"
+
+msgid "DeleteAllFiles"
+msgstr "Eliminar todo"
+
+msgid "BackToWorksList"
+msgstr "Regresar a la lista de Tareas"
+
+msgid "EditMedia"
+msgstr "Editar y marcar la tarea"
+
+msgid "AllFilesInvisible"
+msgstr "Ahora la lista de documentos ha dejado de mostrarse"
+
+msgid "FileInvisible"
+msgstr "Ahora el archivo ya no se muestra"
+
+msgid "AllFilesVisible"
+msgstr "Ahora todos los documentos son visibles"
+
+msgid "FileVisible"
+msgstr "El archivo ahora es visible"
+
+msgid "ButtonCreateAssignment"
+msgstr "Crear tarea"
+
+msgid "AssignmentName"
+msgstr "Nombre de la tarea"
+
+msgid "CreateAssignment"
+msgstr "Crear una tarea"
+
+msgid "FolderEdited"
+msgstr "Tarea modificada"
+
+msgid "UpdateWork"
+msgstr "Modificar"
+
+msgid "MakeAllPapersInvisible"
+msgstr "Ocultar todos los documentos"
+
+msgid "MakeAllPapersVisible"
+msgstr "Hacer todos los documentos visibles"
+
+msgid "TheDocumentHasBeenDeleted"
+msgstr "El documento ha sido borrado."
+
+msgid "YouAreNotAllowedToDeleteThisDocument"
+msgstr "Usted no está autorizado para eliminar este documento"
+
+msgid "StudentAllowedToDeleteOwnPublication"
+msgstr "Permitir que los estudiantes puedan eliminar sus  tareas"
+
+msgid "ConfirmYourChoiceDeleteAllfiles"
+msgstr "Confirme su elección, se eliminarán todos los archivos y no se podrán recuperar"
+
+msgid "WorkName"
+msgstr "Nombre de la tarea"
+
+msgid "ReminderToSubmitPendingTask"
+msgstr "Se le recuerda que tiene una tarea pendiente"
+
+msgid "MessageConfirmSendingOfTask"
+msgstr "Este es un mensaje para confirmar el envío de su tarea"
+
+msgid "DataSent"
+msgstr "Fecha de envío"
+
+msgid "DownloadLink"
+msgstr "Enlace de descarga"
+
+msgid "ViewUsersWithTask"
+msgstr "Ver estudiantes que han enviado la tarea"
+
+msgid "ReminderMessage"
+msgstr "Enviar un recordatorio"
+
+msgid "DateSent"
+msgstr "Fecha de envío"
+
+msgid "ViewUsersWithoutTask"
+msgstr "Ver estudiantes que no han enviado la tarea"
+
+msgid "HomeworkCreated"
+msgstr "La tarea ha sido creada"
+
+msgid "HomeworkHasBeenCreatedForTheCourse"
+msgstr "Se ha creado una nueva tarea en el curso"
+
+msgid "PleaseCheckHomeworkPage"
+msgstr "Por favor, consulte la página de tareas."
+
+msgid "IncludedInEvaluation"
+msgstr "Incluida en la evaluación"
+
+msgid "DateExpiredNotBeLessDeadLine"
+msgstr "La fecha de caducidad no puede ser menor que la fecha límite"
+
+msgid "NotRevised"
+msgstr "No se ha revisado"
+
+msgid "MaxWeightNeedToBeProvided"
+msgstr "Un peso máximo tiene que ser indicado en las opciones de esta evaluación."
+
+msgid "ContainsAfile"
+msgstr "Contiene un fichero"
+
+msgid "AllowTextAssignments"
+msgstr "Permitir tareas de texto en línea"
+
+msgid "YouAlreadySentAPaperYouCantUpload"
+msgstr "Ya envió una tarea, no puede subir otra."
+
+msgid "CantUploadDeleteYourPaperFirst"
+msgstr "No puede subir esta tarea. Por favor elimine la tarea anterior primero."
+

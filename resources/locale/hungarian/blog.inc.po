@@ -1,0 +1,294 @@
+msgid "MyTasks"
+msgstr "Feladataim"
+
+msgid "FavoriteBlogs"
+msgstr "Kedvenc blogjaim"
+
+msgid "Navigation"
+msgstr "Navigálás"
+
+msgid "TopTen"
+msgstr "Legjobb tíz blog"
+
+msgid "Subtitle"
+msgstr "Alcím"
+
+msgid "ThisBlog"
+msgstr "Ez a blog"
+
+msgid "NewPost"
+msgstr "Új cikk"
+
+msgid "TaskManager"
+msgstr "Feladatkezelés"
+
+msgid "MemberManager"
+msgstr "Tagok kezelése"
+
+msgid "PostFullText"
+msgstr "Teljes szöveg elküldése"
+
+msgid "ReadPost"
+msgstr "Üzenet olvasása"
+
+msgid "Home"
+msgstr "Kezdőlap"
+
+msgid "FirstPostText"
+msgstr "Első üzenet szöveg"
+
+msgid "AddNewComment"
+msgstr "Új hozzászólás"
+
+msgid "ReplyToThisComment"
+msgstr "Válasz erre a hozzászólásra"
+
+msgid "ManageTasks"
+msgstr "Feladatok kezelése"
+
+msgid "ManageMembers"
+msgstr "Tagok kezelése"
+
+msgid "Register"
+msgstr "Feliratkozás"
+
+msgid "UnRegister"
+msgstr "Leiratkozás"
+
+msgid "SubscribeMembers"
+msgstr "Tagok feliratása"
+
+msgid "UnsubscribeMembers"
+msgstr "Tagok leiratása"
+
+msgid "RightsManager"
+msgstr "Jogok kezelése"
+
+msgid "ManageRights"
+msgstr "Jogok kezelése"
+
+msgid "Task"
+msgstr "Feladat"
+
+msgid "Tasks"
+msgstr "Feladatok"
+
+msgid "Member"
+msgstr "Tag"
+
+msgid "Members"
+msgstr "Tagok"
+
+msgid "Role"
+msgstr "Szerep"
+
+msgid "Rate"
+msgstr "Értékel"
+
+msgid "Roles"
+msgstr "Szerepek"
+
+msgid "AddTask"
+msgstr "Feladat hozzáadása"
+
+msgid "AddTasks"
+msgstr "Feladatok hozzáadása"
+
+msgid "AssignTask"
+msgstr "Feladat hozzárendelése"
+
+msgid "AssignTasks"
+msgstr "Feladatok hozzárendelése"
+
+msgid "EditTask"
+msgstr "Feladat szerkesztése"
+
+msgid "DeleteTask"
+msgstr "Feladat törlése"
+
+msgid "DeleteSystemTask"
+msgstr "Rendszerfeladat törlése"
+
+msgid "SelectUser"
+msgstr "Felhasználó kiválasztása"
+
+msgid "SelectTask"
+msgstr "Feladat kiválasztása"
+
+msgid "SelectTargetDate"
+msgstr "Cél dátum megadása"
+
+msgid "TargetDate"
+msgstr "Cél dátum"
+
+msgid "Color"
+msgstr "Szín"
+
+msgid "TaskList"
+msgstr "Feladatlista"
+
+msgid "AssignedTasks"
+msgstr "Hozzárendelt feladatok"
+
+msgid "ArticleManager"
+msgstr "Cikkek kezelése"
+
+msgid "CommentManager"
+msgstr "Hozzászólások kezelése"
+
+msgid "BlogManager"
+msgstr "Blogok kezelése"
+
+msgid "ReadMore"
+msgstr "Tovább"
+
+msgid "DeleteThisArticle"
+msgstr "Cikk törlése"
+
+msgid "EditThisPost"
+msgstr "Üzenet szerkesztése"
+
+msgid "DeleteThisComment"
+msgstr "Hozzászólás törlése"
+
+msgid "NoArticles"
+msgstr "Nincsenek cikkek."
+
+msgid "NoTasks"
+msgstr "Nincsenek feladatok"
+
+msgid "Rating"
+msgstr "Értékelés"
+
+msgid "RateThis"
+msgstr "Értékelje"
+
+msgid "SelectTaskArticle"
+msgstr "Feladat cikk kiválasztása"
+
+msgid "ExecuteThisTask"
+msgstr "Feladat végrehajtása"
+
+msgid "WrittenBy"
+msgstr "írta"
+
+msgid "InBlog"
+msgstr "Melyik blogban"
+
+msgid "ViewPostsOfThisDay"
+msgstr "A mai nap üzeneteinek megtekintése"
+
+msgid "PostsOf"
+msgstr "Üzenetek"
+
+msgid "NoArticleMatches"
+msgstr "A keresés nem járt eredménnyel"
+
+msgid "SaveProject"
+msgstr "Projekt mentése"
+
+msgid "langTask1"
+msgstr "1. Feladat"
+
+msgid "langTask2"
+msgstr "2. Feladat"
+
+msgid "langTask3"
+msgstr "3. Feladat"
+
+msgid "langTask1Desc"
+msgstr "1. Feladat leírása"
+
+msgid "langTask2Desc"
+msgstr "2. Feladat leírása"
+
+msgid "langTask3Desc"
+msgstr "3. Feladat leírása"
+
+msgid "blog_management"
+msgstr "Blog kezelése"
+
+msgid "langWelcome"
+msgstr "Üdvözöljük !"
+
+msgid "langModule"
+msgstr "Modul"
+
+msgid "langUserHasPermissionNot"
+msgstr "A felhasználó nem rendelkezik jogokkal"
+
+msgid "langUserHasPermission"
+msgstr "A felhasználó rendelkezik jogokkal"
+
+msgid "langLegend"
+msgstr "Jelmagyarázat"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "A felhasználó rendelkezik jogokkal a csoportjához"
+
+msgid "EditPost"
+msgstr "Üzenet szerkesztése"
+
+msgid "AddBlog"
+msgstr "Blog hozzáadása"
+
+msgid "EditBlog"
+msgstr "Blog szerkesztése"
+
+msgid "DeleteBlog"
+msgstr "Blog törlése"
+
+msgid "Shared"
+msgstr "Megosztott"
+
+msgid "PermissionGrantedByGroupOrRole"
+msgstr "A hozzáférés engedélyezve csoport vagy szerep szerint"
+
+msgid "Reader"
+msgstr "Olvasó"
+
+msgid "SeeBlog"
+msgstr "Blog megtekintése"
+
+msgid "BlogDeleted"
+msgstr "A projekt törölve lett."
+
+msgid "BlogEdited"
+msgstr "A projekt módosítva lett."
+
+msgid "BlogStored"
+msgstr "A projekt létrehozva."
+
+msgid "CommentCreated"
+msgstr "A hozzászólás el lett mentve."
+
+msgid "BlogAdded"
+msgstr "A cikk létrehozva."
+
+msgid "TaskCreated"
+msgstr "A feladat létrehozva."
+
+msgid "TaskEdited"
+msgstr "A feladat módosítva."
+
+msgid "TaskAssigned"
+msgstr "A feladat hozzárendelve."
+
+msgid "AssignedTaskEdited"
+msgstr "A hozzárendelt feladat módosítva"
+
+msgid "UserRegistered"
+msgstr "A felhasználó regisztrálva"
+
+msgid "TaskDeleted"
+msgstr "A feladat törölve."
+
+msgid "TaskAssignmentDeleted"
+msgstr "A feladat hozzárendelés törölve."
+
+msgid "CommentDeleted"
+msgstr "A hozzászólás törölve lett."
+
+msgid "RatingAdded"
+msgstr "Értékelés hozzáadva."
+

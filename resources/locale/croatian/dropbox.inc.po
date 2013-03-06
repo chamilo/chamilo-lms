@@ -1,0 +1,279 @@
+msgid "Upload"
+msgstr "Prijenos"
+
+msgid "BackList"
+msgstr "Vrati se u vlastiti pretinac"
+
+msgid "ShowFeedback"
+msgstr "Prikaži povratnu informaciju"
+
+msgid "GiveFeedback"
+msgstr "Pruži/Uredi povratnu informaciju"
+
+msgid "JustUploadInSelect"
+msgstr "---Samoprijenos---"
+
+msgid "MailingNothingFor"
+msgstr "Ništa za"
+
+msgid "MailingFileNotRegistered"
+msgstr "(nije registriran na kolegij)"
+
+msgid "MailingFileSentTo"
+msgstr "primalac"
+
+msgid "MailingFileIsFor"
+msgstr "je za"
+
+msgid "MailingFileRecipDup"
+msgstr "više korisnika ima"
+
+msgid "MailingFileRecipNotFound"
+msgstr "nema studenta s"
+
+msgid "MailingFileNoRecip"
+msgstr "ime ne sadržava identifikaciju primaoca"
+
+msgid "MailingFileNoPostfix"
+msgstr "ime ne završava s"
+
+msgid "MailingFileNoPrefix"
+msgstr "ime ne počinje s"
+
+msgid "MailingFileFunny"
+msgstr "nema imena ili ekstenzija ne sadrži 1-4 slova ili broja"
+
+msgid "MailingZipDups"
+msgstr "Datoteka zip pošiljke ne smije sadržavati dvije iste datoteke jer neće biti poslana"
+
+msgid "MailingZipPhp"
+msgstr "Datoteka zip pošiljke ne smije sadržavati datoteke php jer neće biti poslana"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "Datoteka zip pošiljke je prazna ili nije valjana"
+
+msgid "MailingWrongZipfile"
+msgstr "Pošiljka mora sadržavati datoteku zip sa šifrom studenta ili korisničkim imenom"
+
+msgid "MailingConfirmSend"
+msgstr "Pošalji datoteke sa sadržajem na pojedinačna odredišta?"
+
+msgid "MailingSend"
+msgstr "Pošalji datoteke sa sadržajem"
+
+msgid "MailingNotYetSent"
+msgstr "Datoteke sadržaja pošiljke još nisu poslane..."
+
+msgid "MailingInSelect"
+msgstr "---Pošiljke---"
+
+msgid "MailingAsUsername"
+msgstr "Pošiljke"
+
+msgid "FileDeleted"
+msgstr "Odabrana datoteka uklonjena je iz pretinca."
+
+msgid "DocAdd"
+msgstr "Dokument uspješno dodan"
+
+msgid "Sender"
+msgstr "pošiljalac"
+
+msgid "Author"
+msgstr "autor"
+
+msgid "FileSize"
+msgstr "veličina datoteke"
+
+msgid "Title"
+msgstr "naslov"
+
+msgid "OverwriteFile"
+msgstr "Pisati preko posljednje poslane datoteke?"
+
+msgid "Ok"
+msgstr "U redu"
+
+msgid "Unknown"
+msgstr "nepoznat"
+
+msgid "SentOn"
+msgstr "dana"
+
+msgid "SentTo"
+msgstr "Primalac"
+
+msgid "ConfirmDelete"
+msgstr "Ovime će datoteka biti uklonjena samo s vašega popisa"
+
+msgid "SendTo"
+msgstr "Primalac"
+
+msgid "Description"
+msgstr "Opis dokumenta"
+
+msgid "UploadFile"
+msgstr "Prijenos dokumenta"
+
+msgid "ErrorCreatingDir"
+msgstr "Nije moguća izrada direktorija u pretincu. Molim obratite se nadzorniku sustava."
+
+msgid "UploadError"
+msgstr "Učitavanje nije uspjelo. Molim provjerite maksimalnu dozvoljenu veličinu datoteke te prava mape."
+
+msgid "TooBig"
+msgstr "Niste odabrali datoteku ili je ona prevelika."
+
+msgid "NoFileSpecified"
+msgstr "Niste odredili datoteku za prijenos."
+
+msgid "NoUserSelected"
+msgstr "Molim odaberite korisnika kojemu šaljete datoteku."
+
+msgid "BadFormData"
+msgstr "Slanje nije uspjelo: podatci u nepravilnom obliku. Molim obratite se nadzorniku sustava."
+
+msgid "GeneralError"
+msgstr "Došlo je do greške. Molim obratite se nadzorniku sustava."
+
+msgid "Dropbox"
+msgstr "Pretinac"
+
+msgid "Help"
+msgstr "Pomoć"
+
+msgid "ReceivedFiles"
+msgstr "Primljene datoteke"
+
+msgid "SentFiles"
+msgstr "Poslane datoteke"
+
+msgid "ReceivedTitle"
+msgstr "Naslov"
+
+msgid "SentTitle"
+msgstr "Poslane datoteke"
+
+msgid "Authors"
+msgstr "Autori"
+
+msgid "Size"
+msgstr "Veličina"
+
+msgid "LastResent"
+msgstr "Posljednji put poslano"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Korijen"
+
+msgid "UploadNewFile"
+msgstr "Pošalji novu datoteku"
+
+msgid "AreYouSureToDelete"
+msgstr "Jeste li sigurni da želite obrisati"
+
+msgid "Feedback"
+msgstr "Povratna informacija"
+
+msgid "CloseFeedback"
+msgstr "Zatvori povratnu informaciju"
+
+msgid "AddNewFeedback"
+msgstr "Dodaj povratnu informaciju"
+
+msgid "DropboxFeedbackStored"
+msgstr "Poruka povratne informacije je spremljena"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Svi korisnici su obrisali datoteku zato nitko neće vidjeti povratnu informaciju koju dodajete."
+
+msgid "FeedbackError"
+msgstr "Pogreška pri povratnoj informaciji"
+
+msgid "PleaseTypeText"
+msgstr "Molim unesite nešto teksta."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "Nemate dodijeljenu dozvolu za prenos ove datoteke."
+
+msgid "CheckAtLeastOneFile"
+msgstr "Odaberite barem jednu datoteku."
+
+msgid "ReceivedFileDeleted"
+msgstr "Primljena datoteka je obrisana."
+
+msgid "SentFileDeleted"
+msgstr "Poslana datoteka je obrisana."
+
+msgid "FilesMoved"
+msgstr "Odabrana datoteka je premještena."
+
+msgid "ReceivedFileMoved"
+msgstr "Primljena datoteka je premještena."
+
+msgid "SentFileMoved"
+msgstr "Poslana datoteka je premještena."
+
+msgid "NotMovedError"
+msgstr "Datoteka(e) se ne može premjestiti."
+
+msgid "AddNewCategory"
+msgstr "Dodaj novu kategoriju"
+
+msgid "EditCategory"
+msgstr "Uredi ovu kategoriju"
+
+msgid "CategoryName"
+msgstr "Naziv kategorije"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Molim dajte naziv kategoriji"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Ova kategorija već postoji, molim odaberite drugačiji naziv"
+
+msgid "CurrentlySeeing"
+msgstr "Trenutno je prikazana kategorija"
+
+msgid "CategoryStored"
+msgstr "Kategorija je spremljena."
+
+msgid "CategoryModified"
+msgstr "Kategorija je promijenjena."
+
+msgid "CategoryDeleted"
+msgstr "Kategorija je obrisana."
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "Autor polje ne može ostati nepopunjeno"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Morate odabrati barem jedno odredište"
+
+msgid "DropboxFileTooBig"
+msgstr "Datoteka je prevelika."
+
+msgid "TheFileIsNotUploaded"
+msgstr "Datoteka nije prenesena."
+
+msgid "FileUploadSucces"
+msgstr "Datoteka je prenesena."
+
+msgid "MailingNonMailingError"
+msgstr "Preko poiljaka ne moe se pisati ne-poiljkama i obratno"
+
+msgid "MailingSelectNoOther"
+msgstr "Slanje poiljke ne moe se kombinirati sa slanjem drugim primaocima"
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "Samo prijenos  se ne može kombinirati s drugim primaocima"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Nova datoteka je poslana u dio alat pretinca"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Nova datoteka je poslana u dio alat pretinca tvoga kolegija"
+

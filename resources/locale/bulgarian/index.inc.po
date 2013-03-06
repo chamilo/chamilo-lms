@@ -1,0 +1,219 @@
+msgid "langInvalidId"
+msgstr "Неуспешно идентифициране - неправилно потребителско име или неправилна парола."
+
+msgid "langWelcome"
+msgstr "Добре дошли!"
+
+msgid "langPass"
+msgstr "Парола"
+
+msgid "langEnter"
+msgstr "<< Обратно към списъка с курсовете"
+
+msgid "langReg"
+msgstr "Регистрация"
+
+msgid "langMenu"
+msgstr "Меню"
+
+msgid "langAdvises"
+msgstr "Администриране на системата"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Внимание:</b> Този курс не съществува."
+
+msgid "langGetCourseFromOldPortal"
+msgstr "Щракнете тук за курса в стария портал."
+
+msgid "langOtherCourses"
+msgstr "други курсове"
+
+msgid "langSupportForum"
+msgstr "Форум за помощ"
+
+msgid "langCategories"
+msgstr "Категории"
+
+msgid "langBackToHomePage"
+msgstr "Обратно"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Няма курсове със свободен достъп."
+
+msgid "langLostPassword"
+msgstr "Забравена парола"
+
+msgid "lang_edit_my_course_list"
+msgstr "Промяна на списъка с курсове"
+
+msgid "langAgenda"
+msgstr "Програма"
+
+msgid "langValvas"
+msgstr "Последни обяви"
+
+msgid "langUp"
+msgstr "Нагоре"
+
+msgid "langCatList"
+msgstr "Категории"
+
+msgid "langCourseList"
+msgstr "Курсове"
+
+msgid "langHelptwo"
+msgstr "Помощ"
+
+msgid "langRegAll"
+msgstr "Записване"
+
+msgid "EussMenu"
+msgstr "Меню"
+
+msgid "Opinio"
+msgstr "Мнение"
+
+msgid "Intranet"
+msgstr "Интранет"
+
+msgid "Englin"
+msgstr "Английски"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Неуспешно влизане в портала - ако нямате регистрация, можете да я придобиете чрез <a href=main/auth/inscription.php>формуляра за регистрация</a>."
+
+msgid "langSubCat"
+msgstr "Подкатегории"
+
+msgid "langMenuGeneral"
+msgstr "Информация"
+
+msgid "langMenuUser"
+msgstr "Потребител"
+
+msgid "langMenuAdmin"
+msgstr "Администратор"
+
+msgid "langUsersOnLineList"
+msgstr "Списък на посетителите в момента"
+
+msgid "langTotalOnLine"
+msgstr "Общо посетители"
+
+msgid "langRefresh"
+msgstr "Обнови"
+
+msgid "langMe"
+msgstr "Аз"
+
+msgid "langSystemAnnouncements"
+msgstr "Обяви от администраторите"
+
+msgid "langHelpMaj"
+msgstr "Помощ"
+
+msgid "langNotRegistered"
+msgstr "Няма регистрация"
+
+msgid "langAdmin"
+msgstr "Администратор на системата"
+
+msgid "Login"
+msgstr "Потребителско име"
+
+msgid "langRegisterForCourse"
+msgstr "Записване в курс"
+
+msgid "langUnregisterForCourse"
+msgstr "Отписване от курс"
+
+msgid "langCombinedCourse"
+msgstr "Комбиниран курс -"
+
+msgid "Platform"
+msgstr "Система"
+
+msgid "Refresh"
+msgstr "Обновяване"
+
+msgid "TotalOnLine"
+msgstr "Общо посетители"
+
+msgid "langCourseClosed"
+msgstr "(в момента курсът е затворен)"
+
+msgid "ViewOpenCourses"
+msgstr "Преглед на курсовете със свободен достъп"
+
+msgid "langCompetences"
+msgstr "Квалификация"
+
+msgid "langDiplomas"
+msgstr "Дипломи"
+
+msgid "langTeach"
+msgstr "Какво тя/той може да преподава"
+
+msgid "langProductions"
+msgstr "Работи, разработки"
+
+msgid "langSendChatRequest"
+msgstr "Изпращане на покана за разговор"
+
+msgid "langRequestDenied"
+msgstr "Поканата за разговор беше отказана."
+
+msgid "UsageDatacreated"
+msgstr "Usage data created."
+
+msgid "SessionView"
+msgstr "Показване на курсовете по сесии"
+
+msgid "CourseView"
+msgstr "Показване на пълен списък на курсовете"
+
+msgid "DropboxFileAdded"
+msgstr "Добавен е файл."
+
+msgid "NewMessageInForum"
+msgstr "Изпратено е съобщение във форума."
+
+msgid "FolderCreated"
+msgstr "Създадена е папка."
+
+msgid "LinkAdded"
+msgstr "Връзката е добавена."
+
+msgid "AnnouncementAdded"
+msgstr "Създадена е обява."
+
+msgid "AgendaAdded"
+msgstr "Добавено е събитие в програмата."
+
+msgid "LoginEnter"
+msgstr "Добре (Ok)"
+
+msgid "Messages"
+msgstr "Съобщения"
+
+msgid "Inbox"
+msgstr "Входящи съобщения"
+
+msgid "Comppose"
+msgstr "Създаване на съобщение"
+
+msgid "PendingInvitations"
+msgstr "Покани за потвърждение"
+
+msgid "YouDoNotHaveAnySessionInItsHistory"
+msgstr "Няма учебни сесии в историята."
+
+msgid "PortalHomepageDefaultIntroduction"
+msgstr "<h2>Поздравления! Вие инсталирахте успешно системата за обучение!</h2>  <p>Остават още само три лесни стъпки:<br /> <ol>     <li>Конфигурирайте системата. Отидете в раздела \"Администриране\" и изберете <a href=\"main/admin/settings.php\">\"Настройки на системата\"</a>.</li>     <li>Оживете системата като добавите потребители и курсове. Можете да поканите хората да се регистрират самостоятелно. Вие можете да регистрирате потребители и да добавяте курсове в раздела <a href=\"main/admin/\">\"Администриране\"</a>, \"Потребители\" и \"Курсове\".</li>     <li>Редактирайте тази страница, вижте <a href=\"main/admin/configure_homepage.php\">\"Конфигуриране на главната страница\"</a> в раздела \"Администриране\".</li> </ol> <p>Можете да намерите още информация за софтуера на нашия сайт: <a href=\"http://www.chamilo.org\">http://www.chamilo.org</a>.</p> <p>Забавлявайте се и не се колебайте да се присъедините към нашата общност, за въпроси и мнения можете да използвате <a href=\"http://www.chamilo.org/forum\" target=\"_blank\">нашия форум</a>.</p>"
+
+msgid "Username"
+msgstr "Потребителско име"
+
+msgid "Profile"
+msgstr "Профил"
+

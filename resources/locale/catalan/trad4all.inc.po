@@ -1,0 +1,3981 @@
+msgid "ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher"
+msgstr "Aquest element no és visible per un estudiant però podrà accedir a ell com a professor"
+
+msgid "DeleteAllAttendances"
+msgstr "Elimina totes les assistències creades"
+
+msgid "Unsubscribe"
+msgstr "Dóna de baixa"
+
+msgid "SearchXapianModuleNotInstalled"
+msgstr "El mòdul Xapian de PHP no està configurat en el seu servidor"
+
+msgid "Title"
+msgstr "Títol"
+
+msgid "By"
+msgstr "Publicat per"
+
+msgid "UsersOnline"
+msgstr "Usuaris connectats"
+
+msgid "Remove"
+msgstr "Esborra"
+
+msgid "langEnter"
+msgstr "Retorna a la llista dels meus cursos"
+
+msgid "Description"
+msgstr "Descripció"
+
+msgid "Links"
+msgstr "Enllaços"
+
+msgid "langWorks"
+msgstr "Treballs dels estudiants"
+
+msgid "Forums"
+msgstr "Fòrums"
+
+msgid "langExercices"
+msgstr "Exercicis"
+
+msgid "langCreateDir"
+msgstr "Crea un directori"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "langComment"
+msgstr "Comenta"
+
+msgid "langVisible"
+msgstr "Visible/invisible"
+
+msgid "langNewDir"
+msgstr "Nom de la nova carpeta"
+
+msgid "langDirCr"
+msgstr "Directori creat"
+
+msgid "Download"
+msgstr "Descarregar"
+
+msgid "langGroup"
+msgstr "Grup"
+
+msgid "langEdit"
+msgstr "Editar"
+
+msgid "langGroupForum"
+msgstr "Fòrum"
+
+msgid "Language"
+msgstr "Llenguatge"
+
+msgid "LoginName"
+msgstr "Nom d\'usuari"
+
+msgid "AutostartMp3"
+msgstr "Pressioni Acceptar si desitja que l\'arxiu d\'àudio es reprodueixi automàticament"
+
+msgid "Assignments"
+msgstr "Assignments"
+
+msgid "Forum"
+msgstr "Fòrums"
+
+msgid "langDelImage"
+msgstr "Eliminar foto"
+
+msgid "langCode"
+msgstr "Codi del curs"
+
+msgid "langUp"
+msgstr "Amunt"
+
+msgid "Down"
+msgstr "Avall"
+
+msgid "Up"
+msgstr "amunt"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "TheListIsEmpty"
+msgstr "La llista és complerta"
+
+msgid "langUniqueSelect"
+msgstr " Elecció múltiple (Resposta única)"
+
+msgid "CreateCategory"
+msgstr "Crear categoria"
+
+msgid "SendFile"
+msgstr "Enviar arxiu"
+
+msgid "SaveChanges"
+msgstr "Guardar canvis"
+
+msgid "SearchTerm"
+msgstr "Paraula a cercar"
+
+msgid "TooShort"
+msgstr "Molt curt"
+
+msgid "langCourseCreate"
+msgstr "Crear un curs web"
+
+msgid "langTodo"
+msgstr "Activitats a fer"
+
+msgid "UserName"
+msgstr "Nom d\'usuari"
+
+msgid "lang_show_hide"
+msgstr "Mostrar / ocultar"
+
+msgid "langCategoryMod"
+msgstr "Modificar categoria"
+
+msgid "Hide"
+msgstr "Ocultar"
+
+msgid "langDear"
+msgstr "Estimat/da"
+
+msgid "langArchive"
+msgstr "arxiu"
+
+msgid "langCourseCode"
+msgstr "Codi del curs"
+
+msgid "langNoDescription"
+msgstr "Sense descripció"
+
+msgid "langOfficialCode"
+msgstr "Codi oficial"
+
+msgid "FirstName"
+msgstr "Nom"
+
+msgid "LastName"
+msgstr "Cognom"
+
+msgid "Status"
+msgstr "Perfil"
+
+msgid "langEmail"
+msgstr "Correu electrònic"
+
+msgid "SlideshowConversion"
+msgstr "Conversió de la presentació"
+
+msgid "UploadFile"
+msgstr "Enviar arxiu"
+
+msgid "AvailableFrom"
+msgstr "Disponible des de"
+
+msgid "AvailableTill"
+msgstr "Disponible fins"
+
+msgid "Preview"
+msgstr "Vista preliminar"
+
+msgid "Type"
+msgstr "Tipus"
+
+msgid "EmailAddress"
+msgstr "Adreça de correu electrònic"
+
+msgid "Organisation"
+msgstr "Organització"
+
+msgid "Reporting"
+msgstr "Informes"
+
+msgid "Code"
+msgstr "Codi"
+
+msgid "Update"
+msgstr "Actualitzar"
+
+msgid "SelectQuestionType"
+msgstr "Seleccionar tipus"
+
+msgid "CurrentCourse"
+msgstr "Curs actual"
+
+msgid "Back"
+msgstr "Tornar"
+
+msgid "Info"
+msgstr "Informació"
+
+msgid "Search"
+msgstr "Cercar"
+
+msgid "AdvancedSearch"
+msgstr "Recerca avançada"
+
+msgid "Open"
+msgstr "Resposta oberta"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "AddAnother"
+msgstr "Afegir un\'altra"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "TrueFalse"
+msgstr "Veritable / Fals"
+
+msgid "QuestionType"
+msgstr "Tipus de qüestió"
+
+msgid "NoSearchResults"
+msgstr "No s\'han trobat resultats"
+
+msgid "SelectQuestion"
+msgstr "Seleccionar una qüestió"
+
+msgid "AddNewQuestionType"
+msgstr "Afegir un nou tipus de qüestió"
+
+msgid "Numbered"
+msgstr "Numerada"
+
+msgid "iso639_2_code"
+msgstr "ct"
+
+msgid "iso639_1_code"
+msgstr "cat"
+
+msgid "charset"
+msgstr "iso-8859-1"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr "."
+
+msgid "number_decimal_separator"
+msgstr "\'"
+
+msgid "dateFormatShort"
+msgstr "%d %b, %y"
+
+msgid "dateFormatLong"
+msgstr "%A, %d de %B del %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%A, %d de %B del %Y a les %I:%M %p"
+
+msgid "timeNoSecFormat"
+msgstr "%I:%M %p"
+
+msgid "langYes"
+msgstr "sí"
+
+msgid "langNo"
+msgstr "No"
+
+msgid "Next"
+msgstr "Seguent"
+
+msgid "langAllowed"
+msgstr "Permés"
+
+msgid "langBackHome"
+msgstr "Retorna a la Plana Principal de"
+
+msgid "langPropositions"
+msgstr "Sugereix com millorar"
+
+msgid "langMaj"
+msgstr "Actualitza"
+
+msgid "langModify"
+msgstr "Modificar"
+
+msgid "langDelete"
+msgstr "Esborrar"
+
+msgid "langInvisible"
+msgstr "Fes-ho invisible"
+
+msgid "langSave"
+msgstr "Guarda"
+
+msgid "langMove"
+msgstr "Moure"
+
+msgid "Help"
+msgstr "Ajuda"
+
+msgid "langOk"
+msgstr "D\'acord"
+
+msgid "langAdd"
+msgstr "Afegeix"
+
+msgid "langAddIntro"
+msgstr "Afegir un text d\'introducció"
+
+msgid "langBackList"
+msgstr "Tornar a la llista"
+
+msgid "langText"
+msgstr "Text"
+
+msgid "langEmpty"
+msgstr "Heu deixat alguns camps buits.<br>Utilitzeu el bot <b>Enrera</b> del vostre navegador i proveu un altre cop.<br>Si desconeixeu el codi del vostre curs, mireu el programa del curs"
+
+msgid "langConfirmYourChoice"
+msgstr "Si us plau confirmeu la vostra seleccio"
+
+msgid "langAnd"
+msgstr "i"
+
+msgid "langChoice"
+msgstr "La teva opció"
+
+msgid "langFinish"
+msgstr "Finalitza"
+
+msgid "langCancel"
+msgstr "Cancela"
+
+msgid "langNotAllowed"
+msgstr "No perm&ecute;s"
+
+msgid "langNotLogged"
+msgstr "No estàs autentificat en el curs"
+
+msgid "langManager"
+msgstr "Responsable"
+
+msgid "langOptional"
+msgstr "Opcional"
+
+msgid "NextPage"
+msgstr "Pàgina seguent"
+
+msgid "PreviousPage"
+msgstr "Pàgina anterior"
+
+msgid "langUse"
+msgstr "Usar"
+
+msgid "langTotal"
+msgstr "Total"
+
+msgid "langTake"
+msgstr "Passar la prova"
+
+msgid "langOne"
+msgstr "Un"
+
+msgid "langSeveral"
+msgstr "Varis"
+
+msgid "langNotice"
+msgstr "Noticia"
+
+msgid "langDate"
+msgstr "Data"
+
+msgid "langAmong"
+msgstr "entre"
+
+msgid "langShow"
+msgstr "Mostrar"
+
+msgid "langMyCourses"
+msgstr "La meva llista de cursos"
+
+msgid "langModifyProfile"
+msgstr "Modifica el meu perfil"
+
+msgid "langMyStats"
+msgstr "Veure les meves estadístiques"
+
+msgid "langLogout"
+msgstr "Sortir"
+
+msgid "langMyAgenda"
+msgstr "Agenda personal"
+
+msgid "langCourseHomepage"
+msgstr "Pàgina principal del curs"
+
+msgid "langCourseManagerview"
+msgstr "Vista del professor"
+
+msgid "langStudentView"
+msgstr "Vista de l\'estudiant"
+
+msgid "AddResource"
+msgstr "Afegir"
+
+msgid "AddedResources"
+msgstr "Annexes"
+
+msgid "lang_modify_resource"
+msgstr "Modificar / afegir recursos"
+
+msgid "lang_resource"
+msgstr "Recurs"
+
+msgid "lang_resources"
+msgstr "Recursos"
+
+msgid "langNameOfLang[\'arabic\']"
+msgstr ""
+
+msgid "langNameOfLang[\'brazilian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'bulgarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'catalan\']"
+msgstr ""
+
+msgid "langNameOfLang[\'croatian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'danish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english\']"
+msgstr ""
+
+msgid "langNameOfLang[\'finnish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_KM\']"
+msgstr ""
+
+msgid "langNameOfLang[\'galician\']"
+msgstr ""
+
+msgid "langNameOfLang[\'german\']"
+msgstr ""
+
+msgid "langNameOfLang[\'greek\']"
+msgstr ""
+
+msgid "langNameOfLang[\'italian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'japanese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'polish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'portuguese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'russian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'simpl_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish\']"
+msgstr ""
+
+msgid "Close"
+msgstr "Tanca"
+
+msgid "langPlatform"
+msgstr "Plataforma basada en"
+
+msgid "localLangName"
+msgstr "idioma"
+
+msgid "email"
+msgstr "e-mail"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "Trist, però aquell codi de curs ja existeix. Si us plau esculli\'n un altre."
+
+msgid "Statistics"
+msgstr "Estadístiques"
+
+msgid "langGrouplist"
+msgstr "Llista de grups"
+
+msgid "langPrevious"
+msgstr "previ"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "El directori de destinació no existeix"
+
+msgid "Courses"
+msgstr "Cursos"
+
+msgid "In"
+msgstr "en"
+
+msgid "langShowAll"
+msgstr "Mostrar tots"
+
+msgid "langPage"
+msgstr "Pàgina"
+
+msgid "englishLangName"
+msgstr "Anglès"
+
+msgid "Home"
+msgstr "Pàgina inicial"
+
+msgid "langAreYouSureToDelete"
+msgstr "Estàs segur que vols esborrar?"
+
+msgid "SelectAll"
+msgstr "Seleccionar tot"
+
+msgid "UnSelectAll"
+msgstr "desmarcar tots"
+
+msgid "WithSelected"
+msgstr "Amb els seleccionats"
+
+msgid "langOnLine"
+msgstr "Online"
+
+msgid "langUsers"
+msgstr "Usuaris"
+
+msgid "langPlatformAdmin"
+msgstr "Administrador de l\'entorn"
+
+msgid "langNameOfLang[\'hungarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'indonesian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'malay\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovenian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish_latin\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swedish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'thai\']"
+msgstr ""
+
+msgid "langNameOfLang[\'turkce\']"
+msgstr ""
+
+msgid "langNameOfLang[\'vietnamese\']"
+msgstr ""
+
+msgid "UserInfo"
+msgstr "Informació de l\'usuari"
+
+msgid "langModifyQuestion"
+msgstr "Modificar la pregunta"
+
+msgid "langCheckAll"
+msgstr "Verificar tot"
+
+msgid "langNbAnnoucement"
+msgstr "Anunci"
+
+msgid "lang_no_access_here"
+msgstr "No té accés aquí"
+
+msgid "langOtherCourses"
+msgstr "Altres cursos"
+
+msgid "Doc"
+msgstr "Document"
+
+msgid "PlataformAdmin"
+msgstr "Administrador de l\'entorn"
+
+msgid "Groups"
+msgstr "Grups"
+
+msgid "GroupManagement"
+msgstr "Administració del grup"
+
+msgid "All"
+msgstr "Tot"
+
+msgid "None"
+msgstr "Res"
+
+msgid "langSorry"
+msgstr "Seleccioni primer un curs"
+
+msgid "langDenied"
+msgstr "Aquesta funció només està disponible per als administradors del curs"
+
+msgid "Today"
+msgstr "avui"
+
+msgid "langCourseHomepageLink"
+msgstr "Curs actual"
+
+msgid "Attachment"
+msgstr "Annexes"
+
+msgid "User"
+msgstr "Usuari"
+
+msgid "MondayInit"
+msgstr "Dl"
+
+msgid "TuesdayInit"
+msgstr "Dm"
+
+msgid "WednesdayInit"
+msgstr "Dc"
+
+msgid "ThursdayInit"
+msgstr "Dj"
+
+msgid "FridayInit"
+msgstr "Dv"
+
+msgid "SaturdayInit"
+msgstr "Ds"
+
+msgid "SundayInit"
+msgstr "Dg"
+
+msgid "MondayShort"
+msgstr "Dill"
+
+msgid "TuesdayShort"
+msgstr "Dima"
+
+msgid "WednesdayShort"
+msgstr "Dimc"
+
+msgid "ThursdayShort"
+msgstr "Dijo"
+
+msgid "FridayShort"
+msgstr "Dive"
+
+msgid "SaturdayShort"
+msgstr "Diss"
+
+msgid "SundayShort"
+msgstr "Dium"
+
+msgid "MondayLong"
+msgstr "Dilluns"
+
+msgid "TuesdayLong"
+msgstr "Dimarts"
+
+msgid "WednesdayLong"
+msgstr "Dimecres"
+
+msgid "ThursdayLong"
+msgstr "Dijous"
+
+msgid "FridayLong"
+msgstr "Divendres"
+
+msgid "SaturdayLong"
+msgstr "Dissabte"
+
+msgid "SundayLong"
+msgstr "Diumenge"
+
+msgid "JanuaryInit"
+msgstr "Ge"
+
+msgid "FebruaryInit"
+msgstr "Fe"
+
+msgid "MarchInit"
+msgstr "Mç"
+
+msgid "AprilInit"
+msgstr "A"
+
+msgid "MayInit"
+msgstr "M"
+
+msgid "JuneInit"
+msgstr "J"
+
+msgid "JulyInit"
+msgstr "Jl"
+
+msgid "AugustInit"
+msgstr "Ag"
+
+msgid "SeptemberInit"
+msgstr "Sp"
+
+msgid "OctoberInit"
+msgstr "Oc"
+
+msgid "NovemberInit"
+msgstr "Nov"
+
+msgid "DecemberInit"
+msgstr "Dc"
+
+msgid "JanuaryShort"
+msgstr "Gen"
+
+msgid "FebruaryShort"
+msgstr "Feb"
+
+msgid "MarchShort"
+msgstr "Mar"
+
+msgid "AprilShort"
+msgstr "Abr"
+
+msgid "MayShort"
+msgstr "Ma"
+
+msgid "JuneShort"
+msgstr "Jun"
+
+msgid "JulyShort"
+msgstr "Jul"
+
+msgid "AugustShort"
+msgstr "Ag"
+
+msgid "SeptemberShort"
+msgstr "Sep"
+
+msgid "OctoberShort"
+msgstr "Oct"
+
+msgid "NovemberShort"
+msgstr "Nov"
+
+msgid "DecemberShort"
+msgstr "Dec"
+
+msgid "JanuaryLong"
+msgstr "Gener"
+
+msgid "FebruaryLong"
+msgstr "Febrer"
+
+msgid "MarchLong"
+msgstr "Març"
+
+msgid "AprilLong"
+msgstr "Abril"
+
+msgid "MayLong"
+msgstr "Maig"
+
+msgid "JuneLong"
+msgstr "Juny"
+
+msgid "JulyLong"
+msgstr "Juliol"
+
+msgid "AugustLong"
+msgstr "Agost"
+
+msgid "SeptemberLong"
+msgstr "Septembre"
+
+msgid "OctoberLong"
+msgstr "Octubre"
+
+msgid "NovemberLong"
+msgstr "Novembre"
+
+msgid "DecemberLong"
+msgstr "Decembre"
+
+msgid "langMyCompetences"
+msgstr "Les meves competències"
+
+msgid "langMyDiplomas"
+msgstr "Els meus títols"
+
+msgid "langMyPersonalOpenArea"
+msgstr "La meva àrea pública"
+
+msgid "langMyTeach"
+msgstr "Quin puc ensenyar"
+
+msgid "Agenda"
+msgstr "Agenda"
+
+msgid "HourShort"
+msgstr "h"
+
+msgid "PleaseTryAgain"
+msgstr "Si us plau provi una altra vegada!"
+
+msgid "UplNoFileUploaded"
+msgstr "No s\'ha enviat cap fitxer"
+
+msgid "UplSelectFileFirst"
+msgstr " Si us plau seleccioneu un fitxer abans de prémer el botó enviar."
+
+msgid "UplNotAZip"
+msgstr "L\'arxiu que has seleccionat no és un arxiu zip."
+
+msgid "UplUploadSucceeded"
+msgstr "L\'arxiu ha estat enviat!"
+
+msgid "ExportAsCSV"
+msgstr "Exportar a un arxiu CSV"
+
+msgid "ExportAsXLS"
+msgstr "Exportar a un arxiu XLS"
+
+msgid "langOpenarea"
+msgstr "Àrea personal pública"
+
+msgid "Done"
+msgstr "Fet"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "DocumentAdded"
+msgstr "Documents afegits"
+
+msgid "DocumentUpdated"
+msgstr "Documents actualitzats"
+
+msgid "DocumentInFolderUpdated"
+msgstr "Document actualitzat en una carpeta"
+
+msgid "Course_description"
+msgstr "Descripció del curs"
+
+msgid "Average"
+msgstr "Mitjana"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "Learnpath"
+msgstr "Itinerari formatiu"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Announcement"
+msgstr "Anuncis"
+
+msgid "Dropbox"
+msgstr "Dropbox"
+
+msgid "Quiz"
+msgstr "Exercicis"
+
+msgid "langChat"
+msgstr "Xat"
+
+msgid "Conference"
+msgstr "Conferència"
+
+msgid "Student_publication"
+msgstr "Publicacions dels estudiants"
+
+msgid "Tracking"
+msgstr "Seguiment"
+
+msgid "langhomepage_link"
+msgstr "Afegir enlla a aquesta pàgina"
+
+msgid "Course_setting"
+msgstr "Configuració del curs"
+
+msgid "langbackup"
+msgstr "Còpia de seguretat del curs"
+
+msgid "langcopy_course_content"
+msgstr "Copiar el contingut del curs"
+
+msgid "langrecycle_course"
+msgstr "Reciclar aquest curs"
+
+msgid "StartDate"
+msgstr "Data inici"
+
+msgid "EndDate"
+msgstr "Data final"
+
+msgid "StartTime"
+msgstr "Hora inici"
+
+msgid "EndTime"
+msgstr "Hora final"
+
+msgid "langYouWereCalled"
+msgstr "El truquen per xatear amb"
+
+msgid "langDoYouAccept"
+msgstr "Ho acceptes?"
+
+msgid "Everybody"
+msgstr "Tothom"
+
+msgid "SentTo"
+msgstr "Visible per a"
+
+msgid "Export"
+msgstr "Exportar"
+
+msgid "Tools"
+msgstr "Eines"
+
+msgid "Everyone"
+msgstr "Cadasqú"
+
+msgid "SelectGroupsUsers"
+msgstr "Seleccionar grups/usuaris"
+
+msgid "Student"
+msgstr "Alumne"
+
+msgid "Teacher"
+msgstr "Professor"
+
+msgid "Send2All"
+msgstr "No seleccionava un usuari / grup. L\'element és visible per a tots els usuaris"
+
+msgid "Wiki"
+msgstr "Wiki del grup"
+
+msgid "Complete"
+msgstr "Complet"
+
+msgid "Incomplete"
+msgstr "Sense completar"
+
+msgid "reservation"
+msgstr "reservar"
+
+msgid "StartTimeWindow"
+msgstr "Inici"
+
+msgid "EndTimeWindow"
+msgstr "Final"
+
+msgid "AccessNotAllowed"
+msgstr "L\'accès a aquesta pàgina no està permès"
+
+msgid "InThisCourse"
+msgstr "En aquest curs"
+
+msgid "ThisFieldIsRequired"
+msgstr "contingut obligatori"
+
+msgid "AllowedHTMLTags"
+msgstr "Etiquetes HTML permeses"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "Aquest formulari conté dades incorrectes o incomplets. Per favor, revisi el que ha escrit."
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "La data d\'inici ha de ser anterior a la data final"
+
+msgid "InvalidDate"
+msgstr "Data no vàlida"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "Només es permeten lletres i nombres"
+
+msgid "langBasicOverview"
+msgstr "Organitzar"
+
+msgid "CourseAdminRole"
+msgstr "Administrador del curs"
+
+msgid "UserRole"
+msgstr "Rol"
+
+msgid "OnlyImagesAllowed"
+msgstr "Solament estan permeses imatges PNG, JPG i GIF"
+
+msgid "ViewRight"
+msgstr "Veure"
+
+msgid "EditRight"
+msgstr "Editar"
+
+msgid "DeleteRight"
+msgstr "Eliminar"
+
+msgid "OverviewCourseRights"
+msgstr "Descripció de rols i permisos"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "Rol"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Veure tots els rols i localitzacions per a un permís específic"
+
+msgid "langAdvanced"
+msgstr "Avançat"
+
+msgid "RightValueModified"
+msgstr "El valor ha estat modificat"
+
+msgid "course_rights"
+msgstr "Configuració de rols i permisos"
+
+msgid "Visio_conference"
+msgstr "Reunió per videoconferència"
+
+msgid "CourseAdminRoleDescription"
+msgstr "Administrador del curs"
+
+msgid "Move"
+msgstr "Moure"
+
+msgid "MoveTo"
+msgstr "Moure a"
+
+msgid "Delete"
+msgstr "Eliminar"
+
+msgid "MoveFileTo"
+msgstr "Moure arxiu a"
+
+msgid "Save"
+msgstr "Guardar"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Anonymous"
+msgstr "Anònim"
+
+msgid "h"
+msgstr "h"
+
+msgid "CreateNewGlobalRole"
+msgstr "Crear nou rol global"
+
+msgid "CreateNewLocalRole"
+msgstr "Crear nou rol local"
+
+msgid "Actions"
+msgstr "Acció"
+
+msgid "Inbox"
+msgstr "Safata d\'entrada"
+
+msgid "ComposeMessage"
+msgstr "Redactar"
+
+msgid "Other"
+msgstr "Altre"
+
+msgid "AddRight"
+msgstr "Afegir"
+
+msgid "CampusHomepage"
+msgstr "Pàgina principal"
+
+msgid "YouHaveNewMessage"
+msgstr "Té un nou missatge"
+
+msgid "myActiveSessions"
+msgstr "Les meues sessions actives"
+
+msgid "myInactiveSessions"
+msgstr "Les meves sessions no actives"
+
+msgid "FileUpload"
+msgstr "Enviament d\'arxiu"
+
+msgid "langMyActiveSessions"
+msgstr "Les meves sessions actives"
+
+msgid "langMyInActiveSessions"
+msgstr "Les meves sessions no actives"
+
+msgid "langMySpace"
+msgstr "Informes"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "Aquesta extensió ha estat activada però, ara com ara, no pot estar operativa."
+
+msgid "MyStudents"
+msgstr "Els meus estudiants"
+
+msgid "Progress"
+msgstr "Progrés"
+
+msgid "Or"
+msgstr "o"
+
+msgid "Uploading"
+msgstr "Enviant..."
+
+msgid "AccountExpired"
+msgstr "Compte caducat"
+
+msgid "AccountInactive"
+msgstr "Compte sense activar"
+
+msgid "ActionNotAllowed"
+msgstr "Acció no permesa"
+
+msgid "SubTitle"
+msgstr "Subtítol"
+
+msgid "NoResourcesToRecycle"
+msgstr "No hi ha recursos per a reciclar"
+
+msgid "noOpen"
+msgstr "No pot obrir-se"
+
+msgid "TempsFrequentation"
+msgstr "Temps de freqüenciació"
+
+msgid "Progression"
+msgstr "Progrés"
+
+msgid "NoCourse"
+msgstr "No es pot trobar el curs"
+
+msgid "Teachers"
+msgstr "Professors"
+
+msgid "Session"
+msgstr "Sessió"
+
+msgid "Sessions"
+msgstr "Sessions"
+
+msgid "NoSession"
+msgstr "La sessió no pot ser trobada"
+
+msgid "NoStudent"
+msgstr "No es pot trobar l\'alumne"
+
+msgid "Students"
+msgstr "Alumnes"
+
+msgid "NoResults"
+msgstr "No es troben resultats"
+
+msgid "Tutors"
+msgstr "Tutors"
+
+msgid "Tel"
+msgstr "Tel."
+
+msgid "NoTel"
+msgstr "Sense tel."
+
+msgid "SendMail"
+msgstr "Enviar correu"
+
+msgid "RdvAgenda"
+msgstr "Cita de l\'agenda"
+
+msgid "VideoConf"
+msgstr "Videoconferència"
+
+msgid "MyProgress"
+msgstr "El meu progrès"
+
+msgid "NoOnlineStudents"
+msgstr "No hi ha estudiants en línea"
+
+msgid "InCourse"
+msgstr "en curs"
+
+msgid "UserOnlineListSession"
+msgstr "Llista d\'usuaris en línia"
+
+msgid "From"
+msgstr "De"
+
+msgid "To"
+msgstr "Per a"
+
+msgid "Content"
+msgstr "Contingut"
+
+msgid "year"
+msgstr "any"
+
+msgid "Years"
+msgstr "anys"
+
+msgid "Day"
+msgstr "Dia"
+
+msgid "Days"
+msgstr "dies"
+
+msgid "PleaseStandBy"
+msgstr "Per favor, esperi..."
+
+msgid "AvailableUntil"
+msgstr "Disponible fins"
+
+msgid "HourMinuteDivider"
+msgstr "h"
+
+msgid "Visio_classroom"
+msgstr "Aula de videoconferència"
+
+msgid "Survey"
+msgstr "Enquesta"
+
+msgid "More"
+msgstr "Més"
+
+msgid "ClickHere"
+msgstr "Clic ací"
+
+msgid "Here"
+msgstr "ací"
+
+msgid "SaveQuestion"
+msgstr "Guardar qüestió"
+
+msgid "ReturnTo"
+msgstr "Podeu tornar cap a"
+
+msgid "Horizontal"
+msgstr "Horitzontal"
+
+msgid "Vertical"
+msgstr "Vertical"
+
+msgid "DisplaySearchResults"
+msgstr "Mostrar els resultats de la recerca"
+
+msgid "DisplayAll"
+msgstr "Mostrar tots"
+
+msgid "File_upload"
+msgstr "Enviar arxiu"
+
+msgid "NoUsersInCourse"
+msgstr "Aquest curs no té usuaris"
+
+msgid "Percentage"
+msgstr "Percentatge"
+
+msgid "Information"
+msgstr "Informació"
+
+msgid "EmailDestination"
+msgstr "Destinatari"
+
+msgid "SendEmail"
+msgstr "Enviar correu electrònic"
+
+msgid "EmailTitle"
+msgstr "Assumpte per aquest correu electrònic"
+
+msgid "EmailText"
+msgstr "Contingut del correu"
+
+msgid "Send"
+msgstr "Enviar"
+
+msgid "Comments"
+msgstr "Comentaris"
+
+msgid "ModifyRecipientList"
+msgstr "Modificar llista de destinataris"
+
+msgid "Line"
+msgstr "Línia"
+
+msgid "NoLinkVisited"
+msgstr "No s\'ha visitat cap enllaç"
+
+msgid "NoDocumentDownloaded"
+msgstr "No s\'ha descarregat cap document"
+
+msgid "Clicks"
+msgstr "clics"
+
+msgid "SearchResults"
+msgstr "Cercar resultats"
+
+msgid "SessionPast"
+msgstr "Passada"
+
+msgid "SessionActive"
+msgstr "Activa"
+
+msgid "SessionFuture"
+msgstr "Encara no ha començat"
+
+msgid "DateFormatLongWithoutDay"
+msgstr " 	%d %B %Y"
+
+msgid "InvalidDirectoryPleaseCreateAnImagesFolder"
+msgstr "Carpeta no vàlida: per favor creu una carpeta que es cridi <i> images i> en l\'eina documents, per a poder enviar a ella les magenes que pugi."
+
+msgid "UsersConnectedToMySessions"
+msgstr "Usuaris conectats a les meues sessions"
+
+msgid "Category"
+msgstr "Categoria"
+
+msgid "DearUser"
+msgstr "Estimat (ada) usuari (a)"
+
+msgid "YourRegistrationData"
+msgstr "Aquests són les seves dades d\'accés"
+
+msgid "ResetLink"
+msgstr "Premi en el següent enllaç per a regenerar la seva contrasenya"
+
+msgid "VisibilityChanged"
+msgstr "La visibilitat ha estat canviada"
+
+msgid "MainNavigation"
+msgstr "Navegació principal"
+
+msgid "SeeDetail"
+msgstr "Veure detalls"
+
+msgid "GroupSingle"
+msgstr "Grup"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "Per favor, provi a identificar-se de nou des de la pàgina principal de la plataforma"
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "Per favor, provi a identificar-se de nou usant el formulari inferior"
+
+msgid "AccessToFaq"
+msgstr "Accedir a les preguntes més freqüents (FAQ)"
+
+msgid "Faq"
+msgstr "Preguntes més freqüents"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "Recordatori per als usuaris que han romàs inactius durant més de"
+
+msgid "RemindInactiveLearnersMailSubject"
+msgstr "Falta d\'activitat en %s"
+
+msgid "RemindInactiveLearnersMailContent"
+msgstr "Benvolgut usuari, <br /><br /> no ha tingut activitat en %s des de fa més de %s dies."
+
+msgid "OpenIdAuthentication"
+msgstr "Autentificació OpenID"
+
+msgid "UploadMaxSize"
+msgstr "Grandària màxima dels enviaments"
+
+msgid "Unknown"
+msgstr "Desconegut"
+
+msgid "MoveUp"
+msgstr "Moure dalt"
+
+msgid "MoveDown"
+msgstr "Moure baix"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "Enviament d\'arxiu no completat: aquest tipus d\'arxiu o la seva extensió no estan permesos"
+
+msgid "OpenIDURL"
+msgstr "URL OpenID"
+
+msgid "UplFileTooBig"
+msgstr "¡ El fitxer enviat és massa gran !"
+
+msgid "UplGenericError"
+msgstr "L\'enviament de l\'arxiu no s\'ha pogut realitzar. Per favor, intenti\'l de nou més tard o posi\'s en contacte amb l\'administrador de la plataforma."
+
+msgid "MyGradebook"
+msgstr "Les meues qualificacions"
+
+msgid "Gradebook"
+msgstr "Avaluacions"
+
+msgid "OpenIDWhatIs"
+msgstr "Què és OpenID?"
+
+msgid "OpenIDDescription"
+msgstr "OpenID elimina la necessitat de tenir diversos noms d\'usuari en diferents llocs web, simplificant l\'experiència de l\'usuari en la Xarxa. Vè. pot escollir el proveïdor de OpenID que millor satisfaci les seves necessitats i, el que és més important, aquell en el qual tingui més confiança. També, encara que canviï de proveïdor, podrà conservar el seu OpenID. I el millor de tot, OpenID és una tecnologia no propietària i completament gratuïta. Per a les empreses, això significa un menor cost d\'administració de comptes i contrasenyes. OpenID reduïx la frustració de l\'usuari permetent que els usuaris tinguin el control del seu accés.<br /><br /><a href=\"http://openid.net/what/\">Para saber más...</a>"
+
+msgid "NoManager"
+msgstr "Sense responsable"
+
+msgid "ExportiCal"
+msgstr "Exportar en formato iCal"
+
+msgid "ExportiCalPublic"
+msgstr "Exportar en format iCal com esdeveniment públic"
+
+msgid "ExportiCalPrivate"
+msgstr "Exportar en format iCal com esdeveniment privat"
+
+msgid "ExportiCalConfidential"
+msgstr "Exportar en format iCal com esdeveniment confidencial"
+
+msgid "MoreStats"
+msgstr "Més estadístiques"
+
+msgid "Drh"
+msgstr "Responsable de Recursos Humans"
+
+msgid "MinDecade"
+msgstr "dècada"
+
+msgid "MinYear"
+msgstr "any"
+
+msgid "MinMonth"
+msgstr "mes"
+
+msgid "MinWeek"
+msgstr "setmana"
+
+msgid "MinDay"
+msgstr "dia"
+
+msgid "MinHour"
+msgstr "hora"
+
+msgid "MinMinute"
+msgstr "minut"
+
+msgid "MinDecades"
+msgstr "dècades"
+
+msgid "MinYears"
+msgstr "anys"
+
+msgid "MinMonths"
+msgstr "mesos"
+
+msgid "MinWeeks"
+msgstr "setmanes"
+
+msgid "MinDays"
+msgstr "dies"
+
+msgid "MinHours"
+msgstr "hores"
+
+msgid "MinMinutes"
+msgstr "minuts"
+
+msgid "HomeDirectory"
+msgstr "Principal"
+
+msgid "DocumentCreated"
+msgstr "Document creat"
+
+msgid "ForumAdded"
+msgstr "Fòrum creat"
+
+msgid "ForumThreadAdded"
+msgstr "Tema de discursió afegit al foro"
+
+msgid "ForumAttachmentAdded"
+msgstr "Arxiu adjunt afegit al foro"
+
+msgid "directory"
+msgstr "directori"
+
+msgid "Directories"
+msgstr "directoris"
+
+msgid "UserAge"
+msgstr "Edat"
+
+msgid "UserBirthday"
+msgstr "Data de naixement"
+
+msgid "Course"
+msgstr "Curs"
+
+msgid "FilesUpload"
+msgstr "documents"
+
+msgid "ExerciseFinished"
+msgstr "Exercici finalitzat"
+
+msgid "UserSex"
+msgstr "Sexe"
+
+msgid "UserNativeLanguage"
+msgstr "Llengua materna"
+
+msgid "UserResidenceCountry"
+msgstr "País de residència"
+
+msgid "AddAnAttachment"
+msgstr "Adjuntar un arxiu"
+
+msgid "FileComment"
+msgstr "Comentari del arxiu"
+
+msgid "FileName"
+msgstr "Nom de l\'arxiu"
+
+msgid "SessionsAdmin"
+msgstr "Administrador de sessions"
+
+msgid "MakeChangeable"
+msgstr "Convertir en modificable"
+
+msgid "MakeUnchangeable"
+msgstr "Convertir en no modificable"
+
+msgid "UserFields"
+msgstr "Camps d\'usuari"
+
+msgid "FieldShown"
+msgstr "Ara el camp és visible per a l\'usuari"
+
+msgid "CannotShowField"
+msgstr "No es pot fer el camp visible"
+
+msgid "FieldHidden"
+msgstr "Ara el camp és invisible per a l\'usuari"
+
+msgid "CannotHideField"
+msgstr "No es pot fer el camp invisible"
+
+msgid "FieldMadeChangeable"
+msgstr "El camp és ara editable per l\'usuari: l\'usuari pot ara omplir o modificar el camp"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "﻿El camp no es pot fer modificable."
+
+msgid "FieldMadeUnchangeable"
+msgstr "﻿El camp es fa ara immutable: l\'usuari no pot omplir o modificar el camp."
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "﻿El camp no es pot fer immutable"
+
+msgid "Folder"
+msgstr "Directori"
+
+msgid "CloseOtherSession"
+msgstr "El xat no està disponible degut al fet que altra pàgina del curs està oberta, per favor torni a ingressar al xat"
+
+msgid "FileUploadSucces"
+msgstr "El fitxer ha estat enviat satisfactòriament."
+
+msgid "Yesterday"
+msgstr "Ahir"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "Department"
+msgstr "Departament"
+
+msgid "BackToNewSearch"
+msgstr "Tornar per a realitzar una nova recerca"
+
+msgid "Step"
+msgstr "Etapa"
+
+msgid "SomethingFemininAddedSuccessfully"
+msgstr "ha estat afegida"
+
+msgid "SomethingMasculinAddedSuccessfully"
+msgstr "ha estat afegit"
+
+msgid "DeleteError"
+msgstr "Error d\'esborrat"
+
+msgid "StepsList"
+msgstr "Llista d\'etapes"
+
+msgid "AddStep"
+msgstr "Afegir etapa"
+
+msgid "StepCode"
+msgstr "Codi de l\'etapa"
+
+msgid "Label"
+msgstr "Etiqueta"
+
+msgid "UnableToConnectTo"
+msgstr "Impossible connectar amb"
+
+msgid "NoUser"
+msgstr "Sense usuaris"
+
+msgid "SearchResultsFor"
+msgstr "Resultats de cerca per a:"
+
+msgid "SelectFile"
+msgstr "Seleccioni un arxiu"
+
+msgid "WarningFaqFileNonWriteable"
+msgstr "Atenció - L\'arxiu FAQ localitzat en el directori /home/ de la seva plataforma, no és un arxiu en el qual es pugui escriure. El seu text no serà guardat fins que no canviï els permisos de l\'arxiu."
+
+msgid "AddCategory"
+msgstr "Afegir categoria"
+
+msgid "NoExercises"
+msgstr "No hi ha exercicis disponibles"
+
+msgid "NotAllowedClickBack"
+msgstr "Ho sentim, no li està permès accedir a aquesta pàgina. Per a tornar a la pàgina anterior premi l\'enllaç inferior o faci clic en el botó \"Enrere\" del seu navegador."
+
+msgid "Exercise"
+msgstr "Test"
+
+msgid "Result"
+msgstr "Resultat"
+
+msgid "AttemptingToLoginAs"
+msgstr "Intentar identificar-se com %s %s (aneu %s)"
+
+msgid "LoginSuccessfulGoToX"
+msgstr "Identificació realitzada. Vagi a %s"
+
+msgid "FckMp3Autostart"
+msgstr "Iniciar audio automàticament"
+
+msgid "Learner"
+msgstr "Alumne"
+
+msgid "IntroductionTextUpdated"
+msgstr "El text d\'introducció ha estat actualitzat"
+
+msgid "Align"
+msgstr "Alineació"
+
+msgid "Width"
+msgstr "Amplària"
+
+msgid "VSpace"
+msgstr "Espai V"
+
+msgid "HSpace"
+msgstr "Espai H"
+
+msgid "Border"
+msgstr "Bord"
+
+msgid "Alt"
+msgstr "Alt"
+
+msgid "Height"
+msgstr "Altura"
+
+msgid "ImageManager"
+msgstr "Administrador d\'imatges"
+
+msgid "ImageFile"
+msgstr "Imatge"
+
+msgid "ConstrainProportions"
+msgstr "Mantenir proporcions"
+
+msgid "InsertImage"
+msgstr "Importar imatge"
+
+msgid "AccountActive"
+msgstr "Compte actiu"
+
+msgid "GroupSpace"
+msgstr "Àrea del grup"
+
+msgid "GroupWiki"
+msgstr "Wiki"
+
+msgid "ExportToPDF"
+msgstr "Exportar a PDF"
+
+msgid "CommentAdded"
+msgstr "Comentari afegit"
+
+msgid "BackToPreviousPage"
+msgstr "Tornar a la pàgina anterior"
+
+msgid "ListView"
+msgstr "mostrar com una llista"
+
+msgid "NoOfficialCode"
+msgstr "Sense codi oficial"
+
+msgid "Owner"
+msgstr "Propietari"
+
+msgid "DisplayOrder"
+msgstr "Ordre"
+
+msgid "SearchFeatureDoIndexDocument"
+msgstr "Indexar el contingut del document ?"
+
+msgid "SearchFeatureDocumentLanguage"
+msgstr "Idioma del document per a la indexació"
+
+msgid "With"
+msgstr "amb"
+
+msgid "GeneralCoach"
+msgstr "Tutor general"
+
+msgid "SaveDocument"
+msgstr "Guardar document"
+
+msgid "CategoryDeleted"
+msgstr "La categoria s\'ha esborrat"
+
+msgid "CategoryAdded"
+msgstr "Categoria afegida"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Qualify"
+msgstr "Qualificar"
+
+msgid "Words"
+msgstr "Paraules"
+
+msgid "GoBack"
+msgstr "Tornar"
+
+msgid "Details"
+msgstr "Detalls"
+
+msgid "EditLink"
+msgstr "Editar l\'enllaç"
+
+msgid "LinkEdited"
+msgstr "L\'enllaç ha estat modificat"
+
+msgid "ForumThreads"
+msgstr "Temes del foro"
+
+msgid "GradebookVisible"
+msgstr "Visible"
+
+msgid "GradebookInvisible"
+msgstr "Invisible"
+
+msgid "Phone"
+msgstr "Telèfon"
+
+msgid "InfoMessage"
+msgstr "Missatge d\'informació"
+
+msgid "ConfirmationMessage"
+msgstr "Missatge de confirmació"
+
+msgid "WarningMessage"
+msgstr "Missatge d\'avís"
+
+msgid "ErrorMessage"
+msgstr "Missatge d\'error"
+
+msgid "Glossary"
+msgstr "Glossari"
+
+msgid "Coach"
+msgstr "Tutor"
+
+msgid "Condition"
+msgstr "Condició"
+
+msgid "CourseSettings"
+msgstr "Configuració del curs"
+
+msgid "EmailNotifications"
+msgstr "Notificacions per correu electrònic"
+
+msgid "UserRights"
+msgstr "Drets d\'usuari"
+
+msgid "Theming"
+msgstr "Tema"
+
+msgid "Qualification"
+msgstr "Qualificació"
+
+msgid "OnlyNumbers"
+msgstr "Solament números"
+
+msgid "ReorderOptions"
+msgstr "Reordenar opcions"
+
+msgid "EditUserFields"
+msgstr "Editar camps d\'usuari"
+
+msgid "OptionText"
+msgstr "Opció de text"
+
+msgid "FieldTypeDoubleSelect"
+msgstr "Camp de tipus selecció doble"
+
+msgid "FieldTypeDivider"
+msgstr "Divisor visual"
+
+msgid "ScormUnknownPackageFormat"
+msgstr "Format desconegut de paquet"
+
+msgid "ResourceDeleted"
+msgstr "Recurs eliminat"
+
+msgid "AdvancedParameters"
+msgstr "Paràmetres avançats"
+
+msgid "GoTo"
+msgstr "Anar a"
+
+msgid "SessionNameAndCourseTitle"
+msgstr "Títol del curs i nom de la sessió"
+
+msgid "CreationDate"
+msgstr "Data de creació"
+
+msgid "LastUpdateDate"
+msgstr "Última actualització"
+
+msgid "ViewHistoryChange"
+msgstr "Veure historial de canvis"
+
+msgid "langNameOfLang[\'asturian\']"
+msgstr ""
+
+msgid "SearchGoToLearningPath"
+msgstr "Anar al curs"
+
+msgid "SearchLectureLibrary"
+msgstr "Biblioteca de presentacions"
+
+msgid "SearchImagePreview"
+msgstr "Vista prèvia"
+
+msgid "SearchAdvancedOptions"
+msgstr "Opcions de recerca avançades"
+
+msgid "SearchResetKeywords"
+msgstr "Netejar paraules clau"
+
+msgid "SearchKeywords"
+msgstr "Paraules clau"
+
+msgid "IntroductionTextDeleted"
+msgstr "El text d\'introducció ha estat eliminat"
+
+msgid "SearchKeywordsHelpTitle"
+msgstr "Ajuda recerca per paraules clau"
+
+msgid "SearchKeywordsHelpComment"
+msgstr "Selecciona les paraules clau en un o més dels camps i feix clic pel botó de recerca.<br /><br />Per a seleccionar més d\'una paraula clau en un camp, usa Ctrl+Clic"
+
+msgid "Validate"
+msgstr "Validar"
+
+msgid "SearchCombineSearchWith"
+msgstr "Combinar paraules clau amb"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "La funcionalitat de recerca de text complet no està habilitada en Chamilo. Per favor, contacti amb l\'administrador de Chamilo."
+
+msgid "Top"
+msgstr "Inici"
+
+msgid "YourTextHere"
+msgstr "El seu text ací"
+
+msgid "OrderBy"
+msgstr "Ordenar per"
+
+msgid "Notebook"
+msgstr "Notes personals"
+
+msgid "FieldRequired"
+msgstr "Contingut obligatori"
+
+msgid "BookingSystem"
+msgstr "Sistema de reserves"
+
+msgid "Any"
+msgstr "Qualsevol"
+
+msgid "SpecificSearchFields"
+msgstr "Camps específics de recerca"
+
+msgid "SpecificSearchFieldsIntro"
+msgstr "Ací vostè pot definir els camps que vol usar per a indexar el contingut. Quan estigui indexant un element podrà agregar un o més termes en cada camp separats per comas."
+
+msgid "AddSpecificSearchField"
+msgstr "Agregar un camp específic de recerca"
+
+msgid "SaveSettings"
+msgstr "Guardar configuració"
+
+msgid "NoParticipation"
+msgstr "No hi ha participants"
+
+msgid "Subscribers"
+msgstr "Subscriptors"
+
+msgid "Accept"
+msgstr "Acceptar"
+
+msgid "Reserved"
+msgstr "Reservat"
+
+msgid "SharedDocumentsDirectory"
+msgstr "Directori de documents compartits"
+
+msgid "Gallery"
+msgstr "Galeria"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "GoToQuestion"
+msgstr "Anar a la qüestió"
+
+msgid "Level"
+msgstr "Nivell"
+
+msgid "Duration"
+msgstr "Duració"
+
+msgid "SearchPrefilterPrefix"
+msgstr "Camp específic per a pre filtrat"
+
+msgid "SearchPrefilterPrefixComment"
+msgstr "Aquesta opció li permet triar el camp específic que va a ser usat en el tipus de recerca prefiltrat."
+
+msgid "MaxTimeAllowed"
+msgstr "Temps màxim permès (min)"
+
+msgid "Class"
+msgstr "Classe"
+
+msgid "Select"
+msgstr "Seleccionar"
+
+msgid "Booking"
+msgstr "Reserves"
+
+msgid "ManageReservations"
+msgstr "Gestionar reserves"
+
+msgid "DestinationUsers"
+msgstr "Usuaris destinataris"
+
+msgid "AttachmentFileDeleteSuccess"
+msgstr "L\'arxiu adjunt ha estat eliminat"
+
+msgid "AccountURLInactive"
+msgstr "Compte no activar en aquesta URL"
+
+msgid "MaxFileSize"
+msgstr "Grandària màxima d\'arxiu"
+
+msgid "SendFileError"
+msgstr "Error al enviar l\'arxiu"
+
+msgid "Expired"
+msgstr "Vençut"
+
+msgid "InvitationHasBeenSent"
+msgstr "La invitació ha estat enviada"
+
+msgid "InvitationHasBeenNotSent"
+msgstr "La invitació no ha estat enviada"
+
+msgid "Outbox"
+msgstr "Safata de sortida"
+
+msgid "Overview"
+msgstr "Vista global"
+
+msgid "ApiKeys"
+msgstr "Claus API"
+
+msgid "GenerateApiKey"
+msgstr "Generar clau API"
+
+msgid "MyApiKey"
+msgstr "La meva clau API"
+
+msgid "DateSend"
+msgstr "Fecha de enviament"
+
+msgid "Deny"
+msgstr "Denegar"
+
+msgid "ThereIsNotQualifiedLearners"
+msgstr "No hi ha estudiants qualificats"
+
+msgid "ThereIsNotUnqualifiedLearners"
+msgstr "No hi ha estudiants qualificats"
+
+msgid "SocialNetwork"
+msgstr "Xarxa social"
+
+msgid "BackToOutbox"
+msgstr "Tornar a la safata de sortida"
+
+msgid "Invitation"
+msgstr "Invitació"
+
+msgid "SeeMoreOptions"
+msgstr "Veure més opcions"
+
+msgid "TemplatePreview"
+msgstr "Previsualització de la plantilla"
+
+msgid "NoTemplatePreview"
+msgstr "Previsualització no disponible"
+
+msgid "ModifyCategory"
+msgstr "Modificar categoria"
+
+msgid "Photo"
+msgstr "Foto"
+
+msgid "MoveFile"
+msgstr "Moure l\'arxiu"
+
+msgid "Filter"
+msgstr "Filtrar"
+
+msgid "Subject"
+msgstr "Assumpte"
+
+msgid "Message"
+msgstr "Missatge"
+
+msgid "MoreInformation"
+msgstr "Més informació"
+
+msgid "MakeInvisible"
+msgstr "Fer invisible"
+
+msgid "MakeVisible"
+msgstr "Fer visible"
+
+msgid "Image"
+msgstr "Imatge"
+
+msgid "SaveIntroText"
+msgstr "Guardar text d\'introducció"
+
+msgid "CourseName"
+msgstr "Nom del curs"
+
+msgid "SendAMessage"
+msgstr "Enviar missatge"
+
+msgid "Menu"
+msgstr "Menú"
+
+msgid "BackToUserList"
+msgstr "Tornar a la llista d\'usuaris"
+
+msgid "GraphicNotAvailable"
+msgstr "Gràfic no disponible"
+
+msgid "BackTo"
+msgstr "Tornar a"
+
+msgid "HistoryTrainingSessions"
+msgstr "Historial de sessions de formació"
+
+msgid "ConversionFailled"
+msgstr "Conversió fallida"
+
+msgid "AlreadyExists"
+msgstr "Ja existeix"
+
+msgid "TheNewWordHasBeenAdded"
+msgstr "La nova paraula ha estat afegida al subconjunt de l\'idioma principal"
+
+msgid "CommentErrorExportDocument"
+msgstr "Alguns documents contenen etiquetes internes no vàlides o són massa complexos per al seu tractament automàtic mitjançant el convertidor de documents"
+
+msgid "DataType"
+msgstr "Tipus de dada"
+
+msgid "Value"
+msgstr "Valor"
+
+msgid "System"
+msgstr "Sistema"
+
+msgid "ImportantActivities"
+msgstr "Activitats importants"
+
+msgid "SearchActivities"
+msgstr "Cercar activitats"
+
+msgid "Parent"
+msgstr "Origen"
+
+msgid "SurveyAdded"
+msgstr "Enquesta afegida"
+
+msgid "WikiAdded"
+msgstr "Wiki afegit"
+
+msgid "ReadOnly"
+msgstr "Només de lectura"
+
+msgid "Unacceptable"
+msgstr "No acceptable"
+
+msgid "DisplayTrainingList"
+msgstr "Mostrar la llista de cursos"
+
+msgid "HistoryTrainingSession"
+msgstr "Historial de sessions de formació"
+
+msgid "Until"
+msgstr "Fins"
+
+msgid "FirstPage"
+msgstr "Primera pàgina"
+
+msgid "LastPage"
+msgstr "Última pàgina"
+
+msgid "Coachs"
+msgstr "Tutors"
+
+msgid "DragAndDropAnElementHere"
+msgstr "Arrossegueu i deixeu anar un element aquí"
+
+msgid "ThereAreNoRegisteredDatetimeYet"
+msgstr "Encara no hi ha registrada cap data/hora"
+
+msgid "CalendarList"
+msgstr "Dates de la llista d\'assistència"
+
+msgid "AttendanceCalendarDescription"
+msgstr "El calendari d\'assistència li permet especificar les dates que apareixeran a la llista d\'assistència."
+
+msgid "CleanCalendar"
+msgstr "Neteja el calendari"
+
+msgid "AddDateAndTime"
+msgstr "Afegeix una data i una hora"
+
+msgid "AttendanceSheet"
+msgstr "Llista d\'assistència"
+
+msgid "GoToAttendanceCalendar"
+msgstr "Vés al calendari d\'assistència"
+
+msgid "AttendanceCalendar"
+msgstr "Calendari d\'assistència"
+
+msgid "QualifyAttendanceGradebook"
+msgstr "Qualifica la llista d\'assistència"
+
+msgid "CreateANewAttendance"
+msgstr "Crea una llista d\'assistència"
+
+msgid "Attendance"
+msgstr "Assistència"
+
+msgid "GeneralDescription"
+msgstr "Descripció general"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "Quin és el paper i funció del curs en el programa? Es requereixen activitats prèvies? Quina relació té aquest curs amb uns altres?"
+
+msgid "GeneralDescriptionInformation"
+msgstr "Descripció del curs (nombre d\'hores, codi, lloc on es desenvolupa...). Professor (nom, cognoms, despatx, telèfon, e-mail...)."
+
+msgid "Objectives"
+msgstr "Objectius"
+
+msgid "ObjectivesInformation"
+msgstr "Presentació dels objectius globals i específics del curs"
+
+msgid "ObjectivesQuestions"
+msgstr "Què vol que els estudiants sàpiguen fer al finalitzar el curs? Quins objectius aniran aconseguint  durant el mateix?"
+
+msgid "Topics"
+msgstr "Temes"
+
+msgid "TopicsInformation"
+msgstr "Llista de continguts del curs. Importància de cada contingut. Nivell de dificultat. Estructura i interdependència entre els seus apartats."
+
+msgid "TopicsQuestions"
+msgstr "Quin serà el desenvolupament del curs? On han de prestar especial atenció els estudiants? Hi ha problemes identificats en la comprensió d\'alguns capítols? Quant ha de dedicar-se a cada part del curs?"
+
+msgid "Methodology"
+msgstr "Metodologia"
+
+msgid "MethodologyQuestions"
+msgstr "Quins mètodes i activitats ajudaran a arribar a els objectius del curs? Quin és el calendari?"
+
+msgid "MethodologyInformation"
+msgstr "Presentació de les activitats (conferències, disertacions, investigacions en grup, laboratoris...)"
+
+msgid "CourseMaterial"
+msgstr "Materials"
+
+msgid "CourseMaterialQuestions"
+msgstr "Existeix una guia del curs, una col·lecció de documents, una bibliografia, una llista d\'enllaços d\'Internet ?"
+
+msgid "CourseMaterialInformation"
+msgstr "Breu descripció dels materials del curs"
+
+msgid "HumanAndTechnicalResources"
+msgstr "Recursos humans i tècnics"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "Qui són els professors, tutors, servei d\'assistència tècnica, assistents socials, etc ? Quins són els recursos físics dels quals disposa el curs: sala d\'ordinadors, etc ?"
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "Breu descripció de les persones de contacte i dels recursos tècnics disponibles."
+
+msgid "Assessment"
+msgstr "Avaluació"
+
+msgid "AssessmentQuestions"
+msgstr "Com van a ser avaluats els estudiants? Quins són les estratègies perquè aquests acabin dominant la matèria?"
+
+msgid "AssessmentInformation"
+msgstr "Exemples de les preguntes d\'examen. Criteris d\'avaluació. Pistes i trucs."
+
+msgid "langNameOfLang[\'bosnian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'czech\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dari\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english_org\']"
+msgstr ""
+
+msgid "langNameOfLang[\'friulian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'georgian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'hebrew\']"
+msgstr ""
+
+msgid "langNameOfLang[\'korean\']"
+msgstr ""
+
+msgid "langNameOfLang[\'latvian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'lithuanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'macedonian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'norwegian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'pashto\']"
+msgstr ""
+
+msgid "langNameOfLang[\'persian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'quechua_cusco\']"
+msgstr ""
+
+msgid "langNameOfLang[\'romanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'serbian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovak\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swahili\']"
+msgstr ""
+
+msgid "langNameOfLang[\'trad_chinese\']"
+msgstr ""
+
+msgid "ChamiloInstallation"
+msgstr "Instal·lació de Chamilo"
+
+msgid "langNameOfLang[\'ukrainian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'yoruba\']"
+msgstr ""
+
+msgid "New"
+msgstr "Nou"
+
+msgid "YouMustToInstallTheExtensionLDAP"
+msgstr "Heu d\'instal·lar l\'extensió LDAP"
+
+msgid "AddAdditionalProfileField"
+msgstr "Afegeix un camp del perfil d\'usuari"
+
+msgid "InvitationDenied"
+msgstr "Invitació denegada"
+
+msgid "UserAdded"
+msgstr "L\'usuari ha estat afegit"
+
+msgid "UpdatedIn"
+msgstr "Actualitzat"
+
+msgid "Metadata"
+msgstr "Metadades"
+
+msgid "langAddMetadata"
+msgstr "Mostra/Edita metadades"
+
+msgid "SendMessage"
+msgstr "Envia missatge"
+
+msgid "SeeForum"
+msgstr "Veure fòrum"
+
+msgid "SeeMore"
+msgstr "Veure més"
+
+msgid "NoDataAvailable"
+msgstr "No hi ha dades disponibles"
+
+msgid "Created"
+msgstr "Creat"
+
+msgid "LastUpdate"
+msgstr "Darrera actualització"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "Usuari no registrat al curs"
+
+msgid "EditMyProfile"
+msgstr "Edita el meu perfil"
+
+msgid "Announcements"
+msgstr "Anuncis"
+
+msgid "Password"
+msgstr "Contrasenya"
+
+msgid "DescriptionGroup"
+msgstr "Descripció del grup"
+
+msgid "Installation"
+msgstr "Instal·lació"
+
+msgid "ReadTheInstallationGuide"
+msgstr "Llegeix la guia d\'instal·lació"
+
+msgid "SeeBlog"
+msgstr "Veure bloc"
+
+msgid "Blog"
+msgstr "Bloc"
+
+msgid "BlogPosts"
+msgstr "Articles del bloc"
+
+msgid "BlogComments"
+msgstr "Comentaris del bloc"
+
+msgid "ThereAreNotExtrafieldsAvailable"
+msgstr "No hi ha camps addicionals disponibles"
+
+msgid "StartToType"
+msgstr "Comenceu a escriure, a continuació, feu clic sobre aquesta barra per validar l\'etiqueta"
+
+msgid "InstallChamilo"
+msgstr "Instal·la Chamilo"
+
+msgid "ChamiloURL"
+msgstr "URL de Chamilo"
+
+msgid "TitleColumnGradebook"
+msgstr "Títol de la columna en l\'Informe d\'Avaluació"
+
+msgid "QualifyWeight"
+msgstr "Pes de la qualificació"
+
+msgid "ThematicAdvance"
+msgstr "Avança temàtic"
+
+msgid "EditProfile"
+msgstr "Edita perfil"
+
+msgid "TabsDashboard"
+msgstr "Tauler de control"
+
+msgid "Dashboard"
+msgstr "Tauler de control"
+
+msgid "DashboardPlugins"
+msgstr "Connectors del tauler de control"
+
+msgid "SelectBlockForDisplayingInsideBlocksDashboardView"
+msgstr "Seleccioneu els blocs que es mostraran en el tauler de control"
+
+msgid "ColumnPosition"
+msgstr "Posició (columna)"
+
+msgid "EnableDashboardBlock"
+msgstr "Habiliteu bloc del tauler de control"
+
+msgid "ThereAreNoEnabledDashboardPlugins"
+msgstr "No hi ha habilitat cap connector en el tauler de control"
+
+msgid "Enabled"
+msgstr "Activat"
+
+msgid "ThematicAdvanceQuestions"
+msgstr "Quin és el progrés actual que ha arribat amb els seus estudiants en el curs? Quant resta per completar el programa del curs?"
+
+msgid "ThematicAdvanceHistory"
+msgstr "Historial del progrés en la programació"
+
+msgid "Homepage"
+msgstr "Pàgina principal"
+
+msgid "Attendances"
+msgstr "Assistència"
+
+msgid "CountDoneAttendance"
+msgstr "Assistències"
+
+msgid "AssignUsers"
+msgstr "Assigna usuaris"
+
+msgid "AssignCourses"
+msgstr "Assigna cursos"
+
+msgid "AssignSessions"
+msgstr "Assigna sessions de formació"
+
+msgid "Timezone"
+msgstr "Zona horària"
+
+msgid "DashboardPluginsHaveBeenUpdatedSucesslly"
+msgstr "Els connectors del tauler de control han estat actualitzats correctament"
+
+msgid "LoginEnter"
+msgstr "Accedeix"
+
+msgid "AttendanceSheetDescription"
+msgstr "Les llistes d\'assistència permeten registrar les faltes d\'assistència dels estudiants. En cas d\'absència d\'un estudiant, el professor ha d\'enregistrar manualment a la casella corresponent. És possible crear més d\'una llista d\'assistència per cada curs, així per exemple, podrà registrar separadament l\'assistència a les classes teòriques i pràctiques."
+
+msgid "ThereAreNoRegisteredLearnersInsidetheCourse"
+msgstr "No hi ha estudiants inscrits en aquest curs"
+
+msgid "GoToAttendanceCalendarList"
+msgstr "Vés al calendari d\'assitència"
+
+msgid "ToolCourseDescription"
+msgstr "Descripció del curs"
+
+msgid "ToolDocument"
+msgstr "Documents"
+
+msgid "ToolLearnpath"
+msgstr "Lliçons"
+
+msgid "ToolLink"
+msgstr "Enllaços"
+
+msgid "ToolQuiz"
+msgstr "Exercicis"
+
+msgid "ToolAnnouncement"
+msgstr "Anuncis"
+
+msgid "ToolGradebook"
+msgstr "Avaluacions"
+
+msgid "ToolGlossary"
+msgstr "Glossari"
+
+msgid "ToolAttendance"
+msgstr "Assistència"
+
+msgid "ToolCalendarEvent"
+msgstr "Agenda"
+
+msgid "ToolForum"
+msgstr "Fòrums"
+
+msgid "ToolDropbox"
+msgstr "Comparteix documents"
+
+msgid "ToolUser"
+msgstr "Usuaris"
+
+msgid "ToolGroup"
+msgstr "Grups"
+
+msgid "ToolChat"
+msgstr "Xat"
+
+msgid "ToolStudentPublication"
+msgstr "Tasques"
+
+msgid "ToolSurvey"
+msgstr "Enquestes"
+
+msgid "ToolWiki"
+msgstr "Wiki"
+
+msgid "ToolNotebook"
+msgstr "Notes personals"
+
+msgid "ToolBlogManagement"
+msgstr "Gestió de blocs"
+
+msgid "ToolTracking"
+msgstr "Informes"
+
+msgid "ToolCourseSetting"
+msgstr "Configuració del curs"
+
+msgid "ToolCourseMaintenance"
+msgstr "Manteniment del curs"
+
+msgid "AreYouSureToDeleteAllDates"
+msgstr "Voleu esborrar totes les dates?"
+
+msgid "AddADateTime"
+msgstr "Afegeix data"
+
+msgid "ThematicControl"
+msgstr "Programació didàctica"
+
+msgid "ThematicDetails"
+msgstr "La llista detallada d\'unitats didàctiques"
+
+msgid "ThematicList"
+msgstr "Llista simplificada d\'unitats didàctiques"
+
+msgid "Thematic"
+msgstr "Unitat didàctica"
+
+msgid "ThematicPlan"
+msgstr "Programació de la unitat didàctica"
+
+msgid "EditThematicPlan"
+msgstr "Edita la programació de la unitat didàctica"
+
+msgid "EditThematicAdvance"
+msgstr "Edita la temporització de la unitat didàctica"
+
+msgid "ThereIsNoStillAthematicSection"
+msgstr "Encara no s\'ha programat cap unitat didàctica"
+
+msgid "NewThematicSection"
+msgstr "Unitat didàctica nova"
+
+msgid "DeleteAllThematics"
+msgstr "Esborra totes les unitats didàctiques"
+
+msgid "ThematicDetailsDescription"
+msgstr "Aquí es detallen les unitats didàctiques, la seva programació i temporalització. Per indicar que una unitat didàctica (o una part d\'ella), ha finalitzat, seleccioneu la data corresponent seguint un ordre cronològic i el sistema també presentarà totes les dates anteriors com finalitzades."
+
+msgid "SkillToAcquireQuestions"
+msgstr "Quines competències s\'hauran desenvolupat a la finalització d\'aquesta unitat didàctica?"
+
+msgid "SkillToAcquire"
+msgstr "Competències a adquirir o desenvolupar"
+
+msgid "InfrastructureQuestions"
+msgstr "Quina infraestructura és necessària per portar a terme aquesta unitat didàctica?"
+
+msgid "Infrastructure"
+msgstr "Infraestructura"
+
+msgid "AditionalNotesQuestions"
+msgstr "Quines altres coses es requereixen?"
+
+msgid "DurationInHours"
+msgstr "Hores"
+
+msgid "ThereAreNoAttendancesInsideCourse"
+msgstr "No hi ha assistències dins del curs"
+
+msgid "YouMustSelectAtleastAStartDate"
+msgstr "Seleccioneu com a mínim una data d\'inici"
+
+msgid "EditTematicAdvance"
+msgstr "Edita la temporització de la programació"
+
+msgid "AditionalNotes"
+msgstr "Notes addicionals"
+
+msgid "StartDateFromAnAttendance"
+msgstr "Data d\'inici a partir d\'una assistència"
+
+msgid "StartDateCustom"
+msgstr "Data d\'inici personalitzada"
+
+msgid "StartDateOptions"
+msgstr "Opcions de data d\'inici"
+
+msgid "ThematicAdvanceConfiguration"
+msgstr "Configuració de l\'eina de programacions didàctiques"
+
+msgid "InfoAboutAdvanceInsideHomeCourse"
+msgstr "Mostra a la pàgina principal del curs informació sobre l\'avançament en la programació"
+
+msgid "DisplayAboutLastDoneAdvance"
+msgstr "Mostra informació sobre l\'últim tema finalitzat"
+
+msgid "DisplayAboutNextAdvanceNotDone"
+msgstr "Mostra informació sobre el tema següent a desenvolupar"
+
+msgid "InfoAboutLastDoneAdvance"
+msgstr "Informació sobre l\'últim tema finalitzat"
+
+msgid "InfoAboutNextAdvanceNotDone"
+msgstr "Informació sobre el tema següent a desenvolupar"
+
+msgid "ThereIsNoAThematicSection"
+msgstr "Encara no s\'ha programat cap unitat didàctica"
+
+msgid "ThereIsNoAThematicAdvance"
+msgstr "Unitat didàctica sense temporitzar"
+
+msgid "StillDoNotHaveAThematicPlan"
+msgstr "Unitat didàctica sense programació"
+
+msgid "NewThematicAdvance"
+msgstr "Etapa nova de la unitat didàctica"
+
+msgid "DurationInHoursMustBeNumeric"
+msgstr "Les hores de durada han de ser un número"
+
+msgid "CreateAThematicSection"
+msgstr "Crea una secció temàtica"
+
+msgid "EditThematicSection"
+msgstr "Edita secció temàtica"
+
+msgid "ToolCourseProgress"
+msgstr "Programació didàctica"
+
+msgid "SelectAnAttendance"
+msgstr "Selecciona la llista d\'assitència"
+
+msgid "ResultsHiddenByExerciseSetting"
+msgstr "Resultats ocults per la configuració de l\'exercici"
+
+msgid "ThematicSectionHasBeenCreatedSuccessfull"
+msgstr "La unitat didàctica ha estat creada"
+
+msgid "NowYouShouldAddThematicPlanXAndThematicAdvanceX"
+msgstr "Ara heu d\'afegir la programació de la unitat didàctica %s i la seva temporització %s"
+
+msgid "QualificationNumeric"
+msgstr "Qualificació numèrica sobre"
+
+msgid "Literal0"
+msgstr "zero"
+
+msgid "Literal1"
+msgstr "ú"
+
+msgid "Literal2"
+msgstr "dos"
+
+msgid "Literal3"
+msgstr "tres"
+
+msgid "Literal4"
+msgstr "quatre"
+
+msgid "Literal5"
+msgstr "cinc"
+
+msgid "Literal6"
+msgstr "sis"
+
+msgid "Literal7"
+msgstr "set"
+
+msgid "Literal8"
+msgstr "vuit"
+
+msgid "Literal9"
+msgstr "nou"
+
+msgid "Literal10"
+msgstr "deu"
+
+msgid "Literal11"
+msgstr "onze"
+
+msgid "Literal12"
+msgstr "dotze"
+
+msgid "Literal13"
+msgstr "tretze"
+
+msgid "Literal14"
+msgstr "catorze"
+
+msgid "Literal15"
+msgstr "quinze"
+
+msgid "Literal16"
+msgstr "setze"
+
+msgid "Literal17"
+msgstr "disset"
+
+msgid "Literal18"
+msgstr "divuit"
+
+msgid "Literal19"
+msgstr "dinou"
+
+msgid "Literal20"
+msgstr "vint"
+
+msgid "DateTime"
+msgstr "Data i hora"
+
+msgid "Item"
+msgstr "Element"
+
+msgid "Never"
+msgstr "Mai"
+
+msgid "YouWillBeRedirectedInXSeconds"
+msgstr "Sereu re-dirigits en uns segons"
+
+msgid "NumberOfCoursesPublic"
+msgstr "Nombre de cursos públics"
+
+msgid "NumberOfCoursesOpen"
+msgstr "Nombre de cursos oberts"
+
+msgid "NumberOfCoursesPrivate"
+msgstr "Nombre de cursos privats"
+
+msgid "NumberOfCoursesClosed"
+msgstr "Nombre de cursos tancats"
+
+msgid "NumberOfCoursesTotal"
+msgstr "Nombre total de cursos"
+
+msgid "NumberOfUsersActive"
+msgstr "Nombre d\'usuaris actius"
+
+msgid "GlobalPlatformInformation"
+msgstr "Informació global de la plataforma"
+
+msgid "ReportABug"
+msgstr "Comunica un error"
+
+msgid "Letters"
+msgstr "Lletres"
+
+msgid "MaximumOfParticipants"
+msgstr "Nombre màxim de membres"
+
+msgid "ContactInformation"
+msgstr "Informació de contacte"
+
+msgid "PersonName"
+msgstr "Nom de la persona"
+
+msgid "CompanyName"
+msgstr "Nom de l\'empresa"
+
+msgid "PersonRole"
+msgstr "Càrrec a l\'empresa"
+
+msgid "HaveYouThePowerToTakeFinancialDecisions"
+msgstr "Té la capacitat de prendre decisions financeres?"
+
+msgid "CompanyCountry"
+msgstr "País"
+
+msgid "CompanyCity"
+msgstr "Ciutat"
+
+msgid "WhichLanguageWouldYouLikeToUseWhenContactingYou"
+msgstr "Quin idioma de contacte prefereix?"
+
+msgid "SendInformation"
+msgstr "Envia la informació"
+
+msgid "YouMustAcceptLicence"
+msgstr "Heu d\'acceptar la llicència per poder utilitzar aquest programari"
+
+msgid "SelectOne"
+msgstr "Seleccioneu un"
+
+msgid "ContactInformationHasBeenSent"
+msgstr "Informació de contacte enviada"
+
+msgid "ContactInformationDescription"
+msgstr "Benvolgut usuari, 
+
+esteu a punt d\'instal·lar una de les millors plataformes de formació en línia de codi obert que hi ha al mercat. Igual de molts altres projectes de codi obert, Chamilo està suportat per una àmplia comunitat de professors, estudiants, desenvolupadors i creadors de contingut. 
+
+Si sabem una mica més de qui va a gestionar aquest sistema de formació en línia, podrem donar a conèixer a altres que el nostre programari l\'utilitza i a vostè podrem informar-lo sobre esdeveniments que poden ser del seu interès. 
+
+Emplenar aquest formulari, implica l\'acceptació de que l\'associació Chamilo o els seus membres puguin enviar-li informació per correu electrònic sobre esdeveniments importants o actualitzacions en el programari Chamilo. Això ajudarà a créixer a la comunitat com una entitat organitzada, on el flux d\'informació, es faci amb respecte permanent al seu temps i la seva privacitat. 
+
+De totes maneres, tingueu en compte que <b>no té l\'obligació</b> d\'emplenar aquest formulari. Si voleu romandre en l\'anonimat, perdrem l\'oportunitat d\'oferir tots els privilegis de ser un administrador de portal registrat, però respectarem la seva decisió. Només cal deixar buit aquest formulari i fer clic a \"Següent\" per continuar instal·lant Chamilo."
+
+msgid "CompanyActivity"
+msgstr "Sector"
+
+msgid "DateUnLock"
+msgstr "Desbloqueja data"
+
+msgid "DateLock"
+msgstr "Bloqueja data"
+
+msgid "GoToStudentDetails"
+msgstr "Veure detalls de l\'estudiant"
+
+msgid "RepeatDate"
+msgstr "Repeteix dia"
+
+msgid "ToAttend"
+msgstr "Pot assistir"
+
+msgid "HaveFun"
+msgstr "Divertiu-vos,"
+
+msgid "ClearSearchResults"
+msgstr "Neteja els resultats de cerca"
+
+msgid "TestServerMode"
+msgstr "Servidor en mode test"
+
+msgid "PageExecutionTimeWas"
+msgstr "El temps d\'execució de la pàgina ha estat de"
+
+msgid "MemoryUsage"
+msgstr "Us de memòria"
+
+msgid "MemoryUsagePeak"
+msgstr "Ús de memòria pic"
+
+msgid "Seconds"
+msgstr "segons"
+
+msgid "QualifyInGradebook"
+msgstr "Qualifica a l\'eina avaluació"
+
+msgid "SessionSpecificResource"
+msgstr "Recurs específic a la sessió"
+
+msgid "EditionNotAvailableFromSession"
+msgstr "No és possible editar aquest recurs de curs des d\'una sessió"
+
+msgid "HandingOverOfTaskX"
+msgstr "Entrega de tasques %s"
+
+msgid "ProtectedDocument"
+msgstr "Document protegit"
+
+msgid "ConnectionsLastMonth"
+msgstr "Connexions durant el mes anterior"
+
+msgid "TotalStudents"
+msgstr "Estudiants"
+
+msgid "FilteringWithScoreX"
+msgstr "Filtrant amb resultat %s"
+
+msgid "ExamTaken"
+msgstr "Fet"
+
+msgid "ExamNotTaken"
+msgstr "Sense fer"
+
+msgid "ExamPassX"
+msgstr "Aprovats amb un mínim de %s"
+
+msgid "ExamFail"
+msgstr "Suspensos"
+
+msgid "ExamTracking"
+msgstr "Seguiment d\'exàmens"
+
+msgid "NoAttempt"
+msgstr "Sense intentar"
+
+msgid "PassExam"
+msgstr "Aprovat"
+
+msgid "CreateCourseRequest"
+msgstr "Sol·licitud de curs nou"
+
+msgid "TermsAndConditions"
+msgstr "Termes i condicions"
+
+msgid "ReadTermsAndConditions"
+msgstr "Llegeix les condicions del servei"
+
+msgid "IAcceptTermsAndConditions"
+msgstr "He llegit i accepto les condicions del servei"
+
+msgid "YouHaveToAcceptTermsAndConditions"
+msgstr "Per continuar heu d\'acceptar els nostres termes i condicions"
+
+msgid "BrowserDontSupportsSVG"
+msgstr "El seu navegador no suporta arxius SVG. Per poder utilitzar aquesta eina heu de tenir instal·lat un navegador avançat del tipus: Firefox o Chrome"
+
+msgid "FillWithExemplaryContent"
+msgstr "Inclou continguts d\'exemple"
+
+msgid "ToolVideoconference"
+msgstr "Videoconferència"
+
+msgid "SelectSVGEditImage"
+msgstr "Selecciona una imatge"
+
+msgid "OnlyAccessFromYourGroup"
+msgstr "Només accessible des del seu grup"
+
+msgid "UserFolders"
+msgstr "Carpetes dels usuaris"
+
+msgid "CertificatesFiles"
+msgstr "Certificats"
+
+msgid "ChatFiles"
+msgstr "Historial de converses en el xat"
+
+msgid "Flash"
+msgstr "Flash"
+
+msgid "Video"
+msgstr "Vídeo"
+
+msgid "Images"
+msgstr "Imatges"
+
+msgid "OpenInANewWindow"
+msgstr "Obre en una finestra nova"
+
+msgid "ExamNotAvailableAtThisTime"
+msgstr "Examen no disponible en aquest moment"
+
+msgid "LoginOrEmailAddress"
+msgstr "Nom d\'usuari o adreça de correu electrònic"
+
+msgid "Activate"
+msgstr "Activa"
+
+msgid "Deactivate"
+msgstr "Desactiva"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "CreatedAt"
+msgstr "Creat el"
+
+msgid "UpdatedAt"
+msgstr "Actualitzat el"
+
+msgid "CreatedOn"
+msgstr "Creat el"
+
+msgid "UpdatedOn"
+msgstr "Actualitzat el"
+
+msgid "Paint"
+msgstr "Pinta"
+
+msgid "MyResults"
+msgstr "Els meus resultats"
+
+msgid "LearningPaths"
+msgstr "Lliçons"
+
+msgid "AllLearningPaths"
+msgstr "Totes les lliçons"
+
+msgid "ByCourse"
+msgstr "Per curs"
+
+msgid "MyQCM"
+msgstr "Les meves proves"
+
+msgid "AddACourse"
+msgstr "Afegeix un curs"
+
+msgid "PerWeek"
+msgstr "Per setmana"
+
+msgid "PhotoRetouching"
+msgstr "Retoc fotogràfic"
+
+msgid "SeeAll"
+msgstr "Veure tots"
+
+msgid "SeeOnlyArchived"
+msgstr "Veure només arxivats"
+
+msgid "SeeOnlyUnarchived"
+msgstr "Veure només no arxivats"
+
+msgid "LatestAttempt"
+msgstr "Últim intent"
+
+msgid "ContactInformationHasNotBeenSent"
+msgstr "La seva informació de contacte no ha pogut ser enviada. Segurament és degut a un problema de xarxa temporal. Intenteu-ho de nou en uns segons. Si el problema persisteix, ignoreu aquest procediment de registre i faci clic al botó per al pas següent."
+
+msgid "FileDeleted"
+msgstr "Arxiu eliminat"
+
+msgid "MyClasses"
+msgstr "Les meves classes"
+
+msgid "PublicationDate"
+msgstr "Data de publicació"
+
+msgid "CorrectAndRate"
+msgstr "Corregeix i puntua"
+
+msgid "ItemAdded"
+msgstr "Element afegit"
+
+msgid "ItemDeleted"
+msgstr "Element esborrat"
+
+msgid "ItemUpdated"
+msgstr "Element actualitzat"
+
+msgid "ItemCopied"
+msgstr "Element copiat"
+
+msgid "MyStatistics"
+msgstr "Les meves estadístiques"
+
+msgid "FromDateXToDateY"
+msgstr "Del %s al %"
+
+msgid "CourseThematicAdvance"
+msgstr "Avenç del curs"
+
+msgid "Clean"
+msgstr "Neteja"
+
+msgid "MailNotifyInvitation"
+msgstr "Notifica les invitacions per correu electrònic"
+
+msgid "MailNotifyMessage"
+msgstr "Notifica els missatges per correu electrònic"
+
+msgid "MailNotifyGroupMessage"
+msgstr "Notifica en els grups els missatges per correu electrònic"
+
+msgid "ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField"
+msgstr "Per enviar un o més fitxers, només haureu d\'arrossegar-los des del seu escriptori del seu ordinador fins a la caixa inferior i el sistema farà la resta. Alternativament, també podeu fer clic a la caixa inferior i seleccionar els fitxers que desitgeu pujar (podeu usar CTRL + clic per seleccionar diferents arxius a la vegada)."
+
+msgid "Simple"
+msgstr "Simple"
+
+msgid "Multiple"
+msgstr "Múltiple"
+
+msgid "UploadFiles"
+msgstr "Arrossegueu aquí els arxius que desitgeu enviar"
+
+msgid "SupportedFormatsForIndex"
+msgstr "Formats disponibles per a la indexació"
+
+msgid "Installed"
+msgstr "Instal·lat"
+
+msgid "NotInstalled"
+msgstr "No instal·lat"
+
+msgid "Settings"
+msgstr "Paràmetres"
+
+msgid "OnlyLettersAndNumbers"
+msgstr "Només lletres (a-z) i números (0-9)"
+
+msgid "CheckFilePermissions"
+msgstr "Comprova els permisos dels fitxers"
+
+msgid "AddedToALP"
+msgstr "Afegeix-ho a una lliçó"
+
+msgid "NotAvailable"
+msgstr "No disponible"
+
+msgid "NanogongNoApplet"
+msgstr "No es pot trobar la miniaplicació Nanogong"
+
+msgid "NanogongRecordBeforeSave"
+msgstr "Abans d\'intentar enviar l\'arxiu heu de realitzar la gravació"
+
+msgid "NanogongGiveTitle"
+msgstr "No heu donat un nom a l\'arxiu"
+
+msgid "NanogongFailledToSubmit"
+msgstr "No s\'ha pogut enviar la gravació"
+
+msgid "NanogongSubmitted"
+msgstr "La gravació ha estat enviada"
+
+msgid "RecordMyVoice"
+msgstr "Grava la meva veu"
+
+msgid "PressRecordButton"
+msgstr "Per iniciar la gravació premeu el botó vermell"
+
+msgid "VoiceRecord"
+msgstr "Gravació de veu"
+
+msgid "BrowserNotSupportNanogongSend"
+msgstr "El seu navegador no permet enviar la seva gravació a la plataforma, encara que sí podreu desar-la al disc del seu ordinador i enviar-la més endavant. Per disposar de totes les prestacions, li recomanem utilitzar navegadors avançats tals com Firefox o Chrome."
+
+msgid "FileExistRename"
+msgstr "Ja existeix un arxiu amb el mateix nom. Doneu un nom nou a l\'arxiu."
+
+msgid "GradebookAndAttendances"
+msgstr "Avaluacions i assistències"
+
+msgid "SelectADateRange"
+msgstr "Escull un rang de dates"
+
+msgid "AllDone"
+msgstr "Dies comprovats"
+
+msgid "AllNotDone"
+msgstr "Dies sense comprovar"
+
+msgid "GroupUpdated"
+msgstr "Classe actualitzada"
+
+msgid "AuthSourceNotAvailable"
+msgstr "Font d\'autenticació no disponible."
+
+msgid "Responsable"
+msgstr "Responsable"
+
+msgid "TheAttendanceSheetIsLocked"
+msgstr "La llista d\'assistència està bloquejada."
+
+msgid "Presence"
+msgstr "Assistència"
+
+msgid "ACourseCategoryWithThisNameAlreadyExists"
+msgstr "Una categoria de curs ja existeix amb el mateix nom."
+
+msgid "OpenIDRedirect"
+msgstr "Readreçament OpenID"
+
+msgid "Blogs"
+msgstr "Blocs"
+
+msgid "Others"
+msgstr "Altres"
+
+msgid "BackToCourseDesriptionList"
+msgstr "Torna a la descripció del curs"
+
+msgid "Postpone"
+msgstr "Ajorna"
+
+msgid "NotHavePermission"
+msgstr "L\'usuari no té permís per realitzar l\'acció sol·licitada."
+
+msgid "CourseCodeAlreadyExistExplained"
+msgstr "Quan un codi de curs es duplica, el sistema detecta un codi de curs que ja existeix i que impedeix la creació d\'un duplicat. Assegureu-vos que no es duplica un codi de curs."
+
+msgid "CantDeleteReadonlyFiles"
+msgstr "No es pot eliminar els arxius que estan configurats en mode de només lectura"
+
+msgid "Uploaded"
+msgstr "Pujat."
+
+msgid "Saved"
+msgstr "Desat."
+
+msgid "Reset"
+msgstr "Reinicia"
+
+msgid "EmailSentFromDokeos"
+msgstr "Correu electrònic enviat des de la plataforma"
+
+msgid "InfoAboutLastDoneAdvanceAndNextAdvanceNotDone"
+msgstr "Informació sobre l\'últim pas acabat i el següent sense acabar."
+
+msgid "LatexCode"
+msgstr "Codi LaTeX"
+
+msgid "LatexFormula"
+msgstr "Fórmula LaTeX"
+
+msgid "AreYouSureToLockTheAttendance"
+msgstr "Esteu segur de bloquejar l\'assistència?"
+
+msgid "UnlockMessageInformation"
+msgstr "L\'assistència no està bloquejada, el professor encara pot modificar-la."
+
+msgid "LockAttendance"
+msgstr "Bloqueja assistència"
+
+msgid "AreYouSureToUnlockTheAttendance"
+msgstr "Esteu segur de voler desbloquejar l\'assistència?"
+
+msgid "UnlockAttendance"
+msgstr "Desbloqueja assistència"
+
+msgid "LockedAttendance"
+msgstr "Bloqueja assistència"
+
+msgid "DecreaseFontSize"
+msgstr "Disminueix la mida de la font"
+
+msgid "ResetFontSize"
+msgstr "Restaura la mida de la font"
+
+msgid "IncreaseFontSize"
+msgstr "Augmenta la mida de la font"
+
+msgid "LoggedInAsX"
+msgstr "Connectat com %s"
+
+msgid "AttachmentUpload"
+msgstr "Puja arxiu adjunt"
+
+msgid "CourseAutoRegister"
+msgstr "Curs de registre automàtic"
+
+msgid "ThematicAdvanceInformation"
+msgstr "La temporització de la unitat didàctica permet organitzar el seu curs a través del temps."
+
+msgid "RequestURIInfo"
+msgstr "La URL sol·licitada no té la definició d\'un domini."
+
+msgid "DiskFreeSpace"
+msgstr "Espai lliure en disc"
+
+msgid "ProtectFolder"
+msgstr "Carpeta protegida"
+
+msgid "SomeHTMLNotAllowed"
+msgstr "Alguns atributs HTML no són permesos."
+
+msgid "MyOtherGroups"
+msgstr "Les meves altres classes"
+
+msgid "XLSFileNotValid"
+msgstr "L\'arxiu XLS no és vàlid."
+
+msgid "YouAreRegisterToSessionX"
+msgstr "Esteu registrat a la sessió: %s."
+
+msgid "NextBis"
+msgstr "Següent"
+
+msgid "Prev"
+msgstr "Anterior"
+
+msgid "Configuration"
+msgstr "Configuració"
+
+msgid "ToGroup"
+msgstr "Per a un grup social"
+
+msgid "XWroteY"
+msgstr "% va escriure:
+%s"
+
+msgid "BackToGroup"
+msgstr "Torna al grup"
+
+msgid "GoAttendance"
+msgstr "Vés a les assistències"
+
+msgid "GoAssessments"
+msgstr "Vés a les avaluacions"
+
+msgid "UserRoles"
+msgstr "Rols d\'usuari"
+
+msgid "GroupRoles"
+msgstr "Rols de grup"
+
+msgid "StorePermissions"
+msgstr "Emmagatzema permisos"
+
+msgid "PendingInvitation"
+msgstr "Invitació pendent"
+
+msgid "MaximunFileSizeXMB"
+msgstr "Mida màxima d\'arxiu: %sMB."
+
+msgid "MessageHasBeenSent"
+msgstr "El seu missatge ha estat enviat."
+
+msgid "Tags"
+msgstr "Etiquetes"
+
+msgid "ClassesUnSubscribed"
+msgstr "Classes amb cancel·lació de la subscripció."
+
+msgid "NotAddedToCourse"
+msgstr "No afegit al curs"
+
+msgid "UsersNotRegistered"
+msgstr "Usuaris que no s\'han registrat."
+
+msgid "ClearFilterResults"
+msgstr "Neteja els resultats"
+
+msgid "SelectFilter"
+msgstr "Selecciona filtre"
+
+msgid "ThereIsNoClassScheduledTodayTryPickingAnotherDay"
+msgstr "Intenteu una altra data o afegiu una fulla d\'assistència avui utilitzant les icones d\'acció."
+
+msgid "AddToCalendar"
+msgstr "Afegeix-ho al calendari"
+
+msgid "RandomPick"
+msgstr "Selecció aleatòria"
+
+msgid "YouHaveANewInvitationFromX"
+msgstr "Té una sol·licitud nova de %s"
+
+msgid "YouHaveANewMessageFromGroupX"
+msgstr "Té un missatge nou al grup %s"
+
+msgid "YouHaveANewMessageFromX"
+msgstr "Té un missatge nou de %s"
+
+msgid "SeeMessage"
+msgstr "Mostra missatge"
+
+msgid "SeeInvitation"
+msgstr "Mostra la sol·licitud"
+
+msgid "YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX"
+msgstr "Heu rebut aquesta notificació perquè esteu subscrit o participeu en ella, per canviar les seves preferències de notificació feu clic aquí: %s"
+
+msgid "Replies"
+msgstr "Respostes"
+
+msgid "Reply"
+msgstr "Resposta"
+
+msgid "Broken"
+msgstr "Trencat"
+
+msgid "CheckURL"
+msgstr "Comprova enllaç"
+
+msgid "NoItem"
+msgstr "Encara no hi ha cap element"
+
+msgid "LoadExtraData"
+msgstr "Carrega les dades de camps addicionals (aquests han de ser marcats com \'Filtre\' per tal que apareguin)."
+
+msgid "CourseAssistant"
+msgstr "Assistent"
+
+msgid "SupportedScormContentMakers"
+msgstr "Paquets SCORM suportats"
+
+msgid "Copy"
+msgstr "Copia"
+
+msgid "EnableStartTime"
+msgstr "Utilitza temps de publicació"
+
+msgid "EnableEndTime"
+msgstr "Utilitza temps de final de publicació"
+
+msgid "Wrong"
+msgstr "Malament"
+
+msgid "Certification"
+msgstr "Certificació"
+
+msgid "CertificateOnlineLink"
+msgstr "Vincle al certificat en línia"
+
+msgid "NewExercises"
+msgstr "Exercici nou"
+
+msgid "MyAverage"
+msgstr "La meva mitjana"
+
+msgid "AllAttempts"
+msgstr "Tots els intents"
+
+msgid "NoCookies"
+msgstr "Les galetes no estan activades al vostre navegador. Chamilo utilitza \"cookies\" per emmagatzemar les seves dades de connexió, de manera que no li serà possible entrar si les galetes no estan habilitades. Canvieu la configuració del seu navegador i recarregueu aquesta pàgina de nou."
+
+msgid "NoJavascript"
+msgstr "El seu navegador no té JavaScript activat. Chamilo se serveix de Javascript per proporcionar una interfície més dinàmica. És probable que moltes prestacions segueixin funcionant però altres no ho faran, especialment les relacionades amb la usabilitat. Us recomanem que canvieu la configuració del vostre navegador i recarregueu aquesta pàgina de nou."
+
+msgid "NoFlash"
+msgstr "El seu navegador no té activat el suport de Flash. Chamilo només es suporta en Flash per algunes de les seves funcions pel que la seva absència no li impedirà continuar. Però si vol beneficiar-se del conjunt de les eines de Chamilo, us recomanem que instal·leu i activeu el connector de Flash i reinicieu el vostre navegador."
+
+msgid "Attempt"
+msgstr "Intent"
+
+msgid "SaveForNow"
+msgstr "Desa i continua més endavant"
+
+msgid "NoQuicktime"
+msgstr "No teniu instal·lat el connector de QuickTime al vostre navegador. Podeu seguir utilitzant la plataforma, però per aconseguir reproduir un major nombre de tipus d\'arxius multimèdia us recomanem la seva instal·lació."
+
+msgid "NoJavaSun"
+msgstr "No teniu instal·lat el connector de Java de Sun al seu navegador. Podeu seguir utilitzant la plataforma, però perdrà algunes de les seves prestacions."
+
+msgid "NoJava"
+msgstr "El seu navegador no suporta Java"
+
+msgid "JavaSun24"
+msgstr "Teniu instal·lada una versió incompatible de Java al vostre navegador per aquesta eina. Per poder utilitzar-la haureu d\'instal·lar una versió de Java de Sun superior a la 24"
+
+msgid "NoMessageAnywere"
+msgstr "Si no desitgeu veure més aquest missatge durant aquest sessió premeu aquí"
+
+msgid "Attempts"
+msgstr "Intents"
+
+msgid "SeeResults"
+msgstr "Mostra resultats"
+
+msgid "Loading"
+msgstr "Carregant"
+
+msgid "AreYouSureToRestore"
+msgstr "Esteu segur que voleu restaurar aquest element?"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Aquest és un missatge automàtic. No li doneu resposta (serà ignorada)."
+
+msgid "PersonalCalendar"
+msgstr "Calendari personal"
+
+msgid "SkillsTree"
+msgstr "Arbre de competències"
+
+msgid "Skills"
+msgstr "Competències"
+
+msgid "SkillsProfile"
+msgstr "Perfil de competències"
+
+msgid "WithCertificate"
+msgstr "Amb certificat"
+
+msgid "AdminCalendar"
+msgstr "Calendari d\'admin"
+
+msgid "CourseCalendar"
+msgstr "Calendari de curs"
+
+msgid "Reports"
+msgstr "Informes"
+
+msgid "dateFormatShortNumber"
+msgstr "%d%m%Y"
+
+msgid "dateTimeFormatLong24H"
+msgstr "%d de %B del %Y a les %Hh%M"
+
+msgid "GradingModelTitle"
+msgstr "Model d\'avaluació"
+
+msgid "Discussions"
+msgstr "Discussions"
+
+msgid "GradeModel"
+msgstr "Model d\'avaluació"
+
+msgid "ViewSkillsTree"
+msgstr "Mostra arbre de competències"
+
+msgid "MySkills"
+msgstr "Les meves competències"
+
+msgid "SeeFile"
+msgstr "Mostra arxiu"
+
+msgid "UserList"
+msgstr "Llista d\'usuaris"
+
+msgid "SearchUsers"
+msgstr "Cerca usuaris"
+
+msgid "Administration"
+msgstr "Administració"
+
+msgid "SkillsAndGradebooks"
+msgstr "Competències i avaluacions"
+
+msgid "AddSkill"
+msgstr "Afegeix competència"
+
+msgid "AcceptLegal"
+msgstr "Accepta termes legals"
+
+msgid "CourseLegalAgreement"
+msgstr "Termes legals per aquest curs"
+
+msgid "SkillDoesNotExist"
+msgstr "No existeix tal competència"
+
+msgid "SkillRootName"
+msgstr "Competència absoluta"
+
+msgid "Option"
+msgstr "Opció"
+
+msgid "Updates"
+msgstr "Actualitzacions"
+
+msgid "Teaching"
+msgstr "Ensenyament"
+
+msgid "CoursesReporting"
+msgstr "Informes de cursos"
+
+msgid "AdminReports"
+msgstr "Informes d\'admin"
+
+msgid "ExamsReporting"
+msgstr "Informes d\'exàmens"
+
+msgid "MyReporting"
+msgstr "Els meus informes"
+
+msgid "SearchSkills"
+msgstr "Cerca competències"
+
+msgid "SaveThisSearch"
+msgstr "Desa aquesta cerca"
+
+msgid "SkillProfiles"
+msgstr "Perfils de competències desats"
+
+msgid "Matches"
+msgstr "Coincidències"
+
+msgid "WelcomeUserXToTheSiteX"
+msgstr "%s, benvingut al portal %s"
+
+msgid "CheckUsersWithId"
+msgstr "Utilitza l\'ID de l\'usuari de l\'arxiu per al registre"
+
+msgid "MB"
+msgstr "MB"
+
+msgid "SessionList"
+msgstr "Llista de sessions"
+
+msgid "StudentList"
+msgstr "Llista d\'estudiants"
+
+msgid "GroupReply"
+msgstr "Reposta"
+
+msgid "GroupReplies"
+msgstr "Respostes"
+
+msgid "SkillNotFound"
+msgstr "Competència no trobada"
+
+msgid "IHaveThisSkill"
+msgstr "Tinc aquesta competència"
+
+msgid "Me"
+msgstr "Jo"
+
+msgid "Vote"
+msgstr "Vot"
+
+msgid "Votes"
+msgstr "Vots"
+
+msgid "XStarsOutOf5"
+msgstr "%s estrelles de 5"
+
+msgid "Visit"
+msgstr "Visita"
+
+msgid "Visits"
+msgstr "Visites"
+
+msgid "YourVote"
+msgstr "El seu vot"
+
+msgid "HottestCourses"
+msgstr "Cursos més populars"
+
+msgid "SentAtX"
+msgstr "Enviat el: %s"
+
+msgid "dateTimeFormatShort"
+msgstr "%b %d, %Y a les %I:%M %p"
+
+msgid "dateTimeFormatShortTimeFirst"
+msgstr "%I:%M %p, %b %d %Y"
+
+msgid "LoginToVote"
+msgstr "Per votar s\'ha d\'estar autenticat"
+
+msgid "DoNotShow"
+msgstr "No mostris"
+
+msgid "ShowToAdminsOnly"
+msgstr "Mostra només als administradors"
+
+msgid "ShowToAdminsAndTeachers"
+msgstr "Mostra als administradors i als professors"
+
+msgid "ShowToAllUsers"
+msgstr "Mostra a tots als usuaris"
+
+msgid "SelectAnAction"
+msgstr "Selecciona una acció"
+
+msgid "LoginX"
+msgstr "Nom d\'usuari: %s"
+
+msgid "ChatConnected"
+msgstr "Xat (Connectat)"
+
+msgid "ChatDisconnected"
+msgstr "Xat (Desconnectat)"
+
+msgid "ThingsToDo"
+msgstr "Activitats per realitzar"
+
+msgid "WamiFlashDialog"
+msgstr "Es mostrarà un quadre de diàleg en el qual se li demanarà permís per poder accedir al micròfon, respongui afirmativament i tanqueu el quadre de diàleg (si no voleu que torni a aparèixer, abans de tancar marqui l\'opció recordar)"
+
+msgid "WamiStartRecorder"
+msgstr "Inicieu la gravació prement el micròfon i atureu-la prement-lo de nou. Cada cop que faci això es generarà un arxiu."
+
+msgid "InputNameHere"
+msgstr "Escriviu el vostre nom aquí"
+
+msgid "Reload"
+msgstr "Recarrega"
+
+msgid "TimeSpentLastXDays"
+msgstr "Temps dedicat en els últims %s dies"
+
+msgid "TimeSpentBetweenXAndY"
+msgstr "Temps dedicat entre el %s i el %s"
+
+msgid "GoToCourse"
+msgstr "Vés al curs"
+
+msgid "SubTotal"
+msgstr "Total parcial"
+
+msgid "Configure"
+msgstr "Configura"
+
+msgid "Regions"
+msgstr "Regions"
+
+msgid "CourseList"
+msgstr "Llista de cursos"
+
+msgid "NumberAbbreviation"
+msgstr "Núm."
+
+msgid "FirstnameAndLastname"
+msgstr "Nom i cognoms"
+
+msgid "LastnameAndFirstname"
+msgstr "Cognoms i nom"
+
+msgid "Plugins"
+msgstr "Connectors"
+
+msgid "Detailed"
+msgstr "Detallat"
+
+msgid "ResourceLockedByGradebook"
+msgstr "Aquesta opció no està disponible perquè l\'activitat està inclosa en una avaluació que es troba bloquejada. Per desbloquejar aquesta avaluació, pregunteu a l\'administrador de la plataforma."
+
+msgid "ConfirmToLockElement"
+msgstr "Esteu segur de voler bloquejar aquest element? Després de bloquejar aquest element no podreu editar els resultats dels estudiants. Per desbloquejar-lo haureu de contactar amb l\'administrador de la plataforma."
+
+msgid "ConfirmToUnLockElement"
+msgstr "Esteu segur de voler desbloquejar aquest element?"
+
+msgid "Default"
+msgstr "Defecte"
+
+msgid "ReturnToCourseHomepage"
+msgstr "Torna a la pàgina principal del curs"
+
+msgid "WebCamClip"
+msgstr "Webcam Clip"
+
+msgid "Snapshot"
+msgstr "Captura"
+
+msgid "TakeYourPhotos"
+msgstr "Tregui les seves fotos"
+
+msgid "LocalInputImage"
+msgstr "Imatge local"
+
+msgid "ClipSent"
+msgstr "Imatge enviada"
+
+msgid "Auto"
+msgstr "Automàtic"
+
+msgid "Stop"
+msgstr "Atura"
+
+msgid "YouHaveSomeUnsavedChanges"
+msgstr "Teniu alguns canvis no desats. Voleu abandonar-los?"
+
+msgid "ActivateEvent"
+msgstr "Activar esdeveniment"
+
+msgid "AvailableEventKeys"
+msgstr "Paraules clau dels esdeveniments. Utilitza\'ls entre (( ))."
+
+msgid "Events"
+msgstr "Esdeveniments"
+
+msgid "EventTypeName"
+msgstr "Nom del tipus d\'esdeveniment"
+
+msgid "ExportToPDFOnlyHTMLAndImages"
+msgstr "Exporta pàgines web i imatges a PDF"
+
+msgid "CourseCatalog"
+msgstr "Catàleg de cursos"
+
+msgid "Go"
+msgstr "Vés"
+
+msgid "ImportThematic"
+msgstr "Importa avenç temàtic"
+
+msgid "ExportThematic"
+msgstr "Exporta avenç temàtic"
+
+msgid "DeleteAllThematic"
+msgstr "Elimina tot l\'avenç temàtic"
+
+msgid "ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation"
+msgstr "Aquesta plataforma no ha pogut enviar el correu electrònic. Per a més informació, contacteu amb %s"
+
+msgid "FirstLoginChangePassword"
+msgstr "Aquesta és la seva primera autenticació. Actualitzeu la seva contrasenya, canviant-la per una altra que pugui recordar més fàcilment."
+
+msgid "NeedContactAdmin"
+msgstr "Feu clic aquí per contactar amb l\'administrador"
+
+msgid "MarkAll"
+msgstr "Selecciona-ho tot"
+
+msgid "UnmarkAll"
+msgstr "No ho seleccionis tot"
+
+msgid "NotAuthorized"
+msgstr "No autoritzat"
+
+msgid "UnknownAction"
+msgstr "Acció desconeguda"
+
+msgid "First"
+msgstr "Primer"
+
+msgid "Last"
+msgstr "Últim"
+
+msgid "YouAreNotAuthorized"
+msgstr "No esteu autoritzat per fer això"
+
+msgid "NoImplementation"
+msgstr "Implementació no disponible per aquesta acció"
+
+msgid "ReplaceExistingEntries"
+msgstr "Substitueix les entrades existents"
+
+msgid "AddItems"
+msgstr "Elements afegits"
+
+msgid "NotFound"
+msgstr "No trobat"
+
+msgid "SentSuccessfully"
+msgstr "Enviament realitzat"
+
+msgid "SentFailed"
+msgstr "Enviament fallat"
+
+msgid "PortalSessionsLimitReached"
+msgstr "S\'ha arribat a el límit de sessions per aquest portal"
+
+msgid "ANewSessionWasCreated"
+msgstr "S\'ha creat una sessió nova"
+
+msgid "Online"
+msgstr "Connectat"
+
+msgid "Offline"
+msgstr "Desconnectat"
+
+msgid "TimelineItemText"
+msgstr "Text"
+
+msgid "TimelineItemMedia"
+msgstr "Multimèdia"
+
+msgid "TimelineItemMediaCaption"
+msgstr "Títol"
+
+msgid "TimelineItemMediaCredit"
+msgstr "Drets"
+
+msgid "TimelineItemTitleSlide"
+msgstr "Títol de la diapositiva"
+
+msgid "SSOError"
+msgstr "Error Single Sign On"
+
+msgid "Sent"
+msgstr "Enviat"
+
+msgid "TimelineItem"
+msgstr "Element"
+
+msgid "Listing"
+msgstr "Llistat"
+
+msgid "CourseRssTitle"
+msgstr "RSS del curs"
+
+msgid "CourseRssDescription"
+msgstr "RSS per a les notificacions de tots els cursos"
+
+msgid "AllowPublicCertificates"
+msgstr "Els certificats dels alumnes són públics"
+
+msgid "PortalHomepageEdited"
+msgstr "Pàgina principal del portal actualitzada"
+
+msgid "UserRegistrationTitle"
+msgstr "Registre d\'usuaris"
+
+msgid "UserRegistrationComment"
+msgstr "Accions que s\'executaran quan un usuari es registre a la plataforma"
+
+msgid "Disabled"
+msgstr "Desactivat"
+
+msgid "Required"
+msgstr "Obligatori"
+
+msgid "CategorySaved"
+msgstr "Categoria desada"
+
+msgid "CategoryRemoved"
+msgstr "Categoria eliminada"
+
+msgid "BrowserDoesNotSupportNanogongPlayer"
+msgstr "El seu navegador no suporta el reproductor Nanogong"
+
+msgid "ImportCSV"
+msgstr "Importa CSV"
+
+msgid "DataTableLengthMenu"
+msgstr "Longitud de la taula"
+
+msgid "DataTableZeroRecords"
+msgstr "No s\'han trobat registres"
+
+msgid "MalformedUrl"
+msgstr "URL amb format incorrecte"
+
+msgid "DataTableInfo"
+msgstr "Informació"
+
+msgid "DataTableInfoEmpty"
+msgstr "Buida"
+
+msgid "DataTableInfoFiltered"
+msgstr "Filtrat"
+
+msgid "DataTableSearch"
+msgstr "Cerca"
+
+msgid "HideColumn"
+msgstr "Oculta columna"
+
+msgid "DisplayColumn"
+msgstr "Mostra columna"
+
+msgid "LegalAgreementAccepted"
+msgstr "Condicions legals acceptades"
+

@@ -1,0 +1,195 @@
+msgid "langStatDB"
+msgstr "Datumbenko por statistikoj"
+
+msgid "langEnableTracking"
+msgstr "Enŝalti statistikojn"
+
+msgid "langInstituteShortName"
+msgstr "La konciza nomo de via organizaĵo"
+
+msgid "langWarningResponsible"
+msgstr "Uzu ĉi-skripton nur post restaŭrkopio. La Chamilo-teamo ne responsas, se vi perdas datumojn aŭ se datumoj difektiĝas."
+
+msgid "langAllowSelfRegProf"
+msgstr "Permesi memaliĝon kiel kursmastrumanto"
+
+msgid "langEG"
+msgstr "ekz."
+
+msgid "langDBHost"
+msgstr "Datumbenka servilo"
+
+msgid "langDBLogin"
+msgstr "Uzulnoma datumbazo"
+
+msgid "langDBPassword"
+msgstr "Pasvorta datumbazo"
+
+msgid "langMainDB"
+msgstr "Centra Chamilo-datumbazo (DB)"
+
+msgid "langAllFieldsRequired"
+msgstr "Ĉiu kampoj plenigendaj"
+
+msgid "langPrintVers"
+msgstr "Presebla versio"
+
+msgid "langLocalPath"
+msgstr "Responda loka pado"
+
+msgid "langAdminEmail"
+msgstr "Administratoro retpoŝtadreso"
+
+msgid "langAdminName"
+msgstr "Administratora  nomo"
+
+msgid "langAdminSurname"
+msgstr "Administratora familinomo"
+
+msgid "langAdminLogin"
+msgstr "Administratora ensalutaj datumoj"
+
+msgid "langAdminPass"
+msgstr "Administratora pasvorto (<font color=\"red\">prefere ŝanĝenda</font>)"
+
+msgid "langEducationManager"
+msgstr "Projektgvidanto"
+
+msgid "langCampusName"
+msgstr "Chamilo-Kampa Titolo"
+
+msgid "langDBSettingIntro"
+msgstr "La instalskripto kreos la Chamilo-ĉef-datumbazo(j)n. Rimarku, ke Chamilo kreos plurajn datumbazojn. Se vi rajtas uzi nur unu datumbazon ĉe via gastiganta pernato, Chamilo ne funkcios, jes se vi ŝaltas la opcion \"Unu datumbazo\"."
+
+msgid "langStep1"
+msgstr "Bonvenon ĉe la asistilo por kreado de plurelektaj demandoj. Vi estos plukondukata. Klaku sur \'sekvanta\' por pluiri."
+
+msgid "langStep2"
+msgstr "Aldoni/ŝanĝi titolon de la ekzerco kaj priskribon. Klaku sur \'sekvanta\' post pretigo."
+
+msgid "langStep3"
+msgstr "Paŝo 3 el 6"
+
+msgid "langStep4"
+msgstr "Paŝo 4 el 6"
+
+msgid "langStep5"
+msgstr "Paŝo 5 el 6"
+
+msgid "langStep6"
+msgstr "Paŝo 6 el 6"
+
+msgid "langCfgSetting"
+msgstr "Konfiguraj agordoj"
+
+msgid "langDBSetting"
+msgstr "MySQL-datumbazaj agordoj"
+
+msgid "langMainLang"
+msgstr "Defaŭlta lingvo"
+
+msgid "langLicence"
+msgstr "Licenco"
+
+msgid "langLastCheck"
+msgstr "Lasta kontrolo antaŭ instalo"
+
+msgid "langRequirements"
+msgstr "Bezonoj"
+
+msgid "langDbPrefixForm"
+msgstr "MySQL-datumbaza prefikso"
+
+msgid "langDbPrefixCom"
+msgstr "Lasi malplena se ne plenigenda"
+
+msgid "langEncryptUserPass"
+msgstr "Kriptigi la uzulajn pasvortojn en la datumbazo"
+
+msgid "langSingleDb"
+msgstr "Uzi 1 aŭ pliajn datumbazojn por Chamilo"
+
+msgid "langAllowSelfReg"
+msgstr "Permesi uzulan registradon"
+
+msgid "langRecommended"
+msgstr "(rekomendata)"
+
+msgid "langScormDB"
+msgstr "Scorm DB"
+
+msgid "langAdminLastName"
+msgstr "Administranta nomo"
+
+msgid "langAdminPhone"
+msgstr "Administratora telefonnumero"
+
+msgid "OK"
+msgstr "En ordo"
+
+msgid "langAdminFirstName"
+msgstr "Administratora antaŭnomo"
+
+msgid "langInstituteURL"
+msgstr "URL de la organizaĵo"
+
+msgid "langDokeosURL"
+msgstr "URL de Chamilo"
+
+msgid "langUserDB"
+msgstr "Uzula datumbazo"
+
+msgid "langInstallationLanguage"
+msgstr "Instalada lingvo"
+
+msgid "ReadThoroughly"
+msgstr "Bonvolu atente legi"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "Por la bona funkciado de Chamilo vi ankoraŭ bezonan tion ĉi en via servilo"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "Atentu!!<br /> Ekzistas Dokeso-instalilo en via sistemo."
+
+msgid "NewInstallation"
+msgstr "Nova instalado"
+
+msgid "CheckDatabaseConnection"
+msgstr "Kontroli datumbankan konekton"
+
+msgid "PrintOverview"
+msgstr "Montri supervidon"
+
+msgid "Installing"
+msgstr "Instali"
+
+msgid "of"
+msgstr "de"
+
+msgid "Step"
+msgstr "Paŝo"
+
+msgid "MoreDetails"
+msgstr "Por pliaj detaloj"
+
+msgid "ServerRequirements"
+msgstr "Servilaj bezonoj"
+
+msgid "ServerRequirementsInfo"
+msgstr "Funkciaj bibliotekoj kaj funkciaroj provizendaj de la servilo por igi Chamilo-on plene uzebla"
+
+msgid "PHPVersion"
+msgstr "PHP-versio"
+
+msgid "support"
+msgstr "subteno"
+
+msgid "PHPVersionOK"
+msgstr "PHP-versio estas en ordo"
+
+msgid "RecommendedSettings"
+msgstr "Rekomenditaj aranĝoj"
+
+msgid "RecommendedSettingsInfo"
+msgstr "Rekomendindaj aranĝoj por via servilo. Eblas ŝanĝi tiujn aranĝojn en la php.ini konfigura dosiero en via servilo."
+

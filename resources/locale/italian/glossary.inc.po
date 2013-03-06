@@ -1,0 +1,69 @@
+msgid "TermAddNew"
+msgstr "Aggiungi una voce"
+
+msgid "TermName"
+msgstr "Voce"
+
+msgid "TermDefinition"
+msgstr "Definizione"
+
+msgid "TermDeleted"
+msgstr "Voce eliminata"
+
+msgid "TermUpdated"
+msgstr "Voce aggiornata"
+
+msgid "TermConfirmDelete"
+msgstr "Vuoi veramente eliminare la voce?"
+
+msgid "TermAddButton"
+msgstr "Aggiungi questa voce"
+
+msgid "TermUpdateButton"
+msgstr "Aggiorna la voce"
+
+msgid "TermEdit"
+msgstr "Modifica la voce"
+
+msgid "TermDeleteAction"
+msgstr "Elimina la voce"
+
+msgid "OrderBy"
+msgstr "Ordina per"
+
+msgid "CreationDate"
+msgstr "Data di creazione"
+
+msgid "UpdateDate"
+msgstr "Aggiorna la data"
+
+msgid "PreSelectedOrder"
+msgstr "Ordina per selezione"
+
+msgid "TermAdded"
+msgstr "Voce aggiunta"
+
+msgid "YouMustEnterATermName"
+msgstr "Devi immettere il termine da definire"
+
+msgid "YouMustEnterATermDefinition"
+msgstr "Devi immettere la definizione del termine"
+
+msgid "TableView"
+msgstr "Vista tabella"
+
+msgid "GlossaryTermAlreadyExistsYouShouldEditIt"
+msgstr "Voce del glossario già definita: cambia il nome"
+
+msgid "GlossaryManagement"
+msgstr "Gestione glossario"
+
+msgid "TermMoved"
+msgstr "La voce è stata spostata"
+
+msgid "ShowGlossaryInExtraToolsTitle"
+msgstr "Mostra le definizioni del glossario in esercizi e moduli"
+
+msgid "ShowGlossaryInExtraToolsComment"
+msgstr "Qui puoi configurare il modo in cui le definizioni del glossario saranno visualizzate in test e moduli didattici"
+

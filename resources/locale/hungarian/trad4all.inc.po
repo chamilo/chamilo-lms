@@ -1,0 +1,1947 @@
+msgid "Title"
+msgstr "Cím"
+
+msgid "By"
+msgstr "Szerző"
+
+msgid "UsersOnline"
+msgstr "Jelenlévő felhasználó"
+
+msgid "Remove"
+msgstr "Eltávolít"
+
+msgid "langEnter"
+msgstr "Vissza a kurzuslistámhoz"
+
+msgid "Description"
+msgstr "Leírás"
+
+msgid "Links"
+msgstr "Hivatkozások"
+
+msgid "langWorks"
+msgstr "Beadványok"
+
+msgid "Forums"
+msgstr "Fórumok"
+
+msgid "langExercices"
+msgstr "Tesztek"
+
+msgid "langCreateDir"
+msgstr "Könyvtár létrehozása"
+
+msgid "Name"
+msgstr "Név"
+
+msgid "langComment"
+msgstr "Megjegyzés"
+
+msgid "langVisible"
+msgstr "Látható/rejtett"
+
+msgid "langNewDir"
+msgstr "Az új könyvtár neve"
+
+msgid "langDirCr"
+msgstr "Könyvtár létrehozva"
+
+msgid "Download"
+msgstr "Letöltés"
+
+msgid "langGroup"
+msgstr "Csoport"
+
+msgid "langEdit"
+msgstr "szerkeszt"
+
+msgid "langGroupForum"
+msgstr "Csoport fóruma"
+
+msgid "Language"
+msgstr "Nyelv"
+
+msgid "LoginName"
+msgstr "Azonosító"
+
+msgid "AutostartMp3"
+msgstr "Kattintson az OK-ra, ha azt szeretné, hogy a hangfájl lejátszása automatikusan elinduljon"
+
+msgid "Assignments"
+msgstr "Hallgatói publikációk"
+
+msgid "Forum"
+msgstr "Fórumok"
+
+msgid "langDelImage"
+msgstr "Kép eltávolítása"
+
+msgid "langCode"
+msgstr "Kurzus kód"
+
+msgid "langUp"
+msgstr "Fel"
+
+msgid "Down"
+msgstr "le"
+
+msgid "Up"
+msgstr "fel"
+
+msgid "Theme"
+msgstr "Téma"
+
+msgid "TheListIsEmpty"
+msgstr "A lista üres."
+
+msgid "langUniqueSelect"
+msgstr "Több válaszból egy helyes"
+
+msgid "CreateCategory"
+msgstr "Mappa létrehozása"
+
+msgid "SendFile"
+msgstr "Állomány feltöltése"
+
+msgid "SaveChanges"
+msgstr "Változások mentése"
+
+msgid "SearchTerm"
+msgstr "Keresett szó"
+
+msgid "TooShort"
+msgstr "Túl rövid"
+
+msgid "langCourseCreate"
+msgstr "Kurzus website létrehozása"
+
+msgid "langTodo"
+msgstr "Tennivalók"
+
+msgid "UserName"
+msgstr "Felhasználói név"
+
+msgid "lang_show_hide"
+msgstr "Mutat / Elrejt"
+
+msgid "langCategoryMod"
+msgstr "Kategória módosítása"
+
+msgid "Hide"
+msgstr "Elrejt"
+
+msgid "langDear"
+msgstr "Kedves"
+
+msgid "langArchive"
+msgstr "archív"
+
+msgid "langCourseCode"
+msgstr "Kurzuskód"
+
+msgid "langNoDescription"
+msgstr "Nincs leírás"
+
+msgid "langOfficialCode"
+msgstr "Hivatalos kód"
+
+msgid "FirstName"
+msgstr "Keresztnév"
+
+msgid "LastName"
+msgstr "Vezetéknév"
+
+msgid "Status"
+msgstr "Státusz"
+
+msgid "langEmail"
+msgstr "E-mail"
+
+msgid "SlideshowConversion"
+msgstr "Diabemutató konverziója"
+
+msgid "UploadFile"
+msgstr "Fájl feltöltése"
+
+msgid "AvailableFrom"
+msgstr "Mikortól elérhető:"
+
+msgid "AvailableTill"
+msgstr "Meddíg elérhető"
+
+msgid "Preview"
+msgstr "Előzetes"
+
+msgid "Type"
+msgstr "Típus"
+
+msgid "EmailAddress"
+msgstr "Email cím"
+
+msgid "Organisation"
+msgstr "Szervezet"
+
+msgid "Reporting"
+msgstr "Jelentés"
+
+msgid "Code"
+msgstr "Kód"
+
+msgid "Update"
+msgstr "Frissít"
+
+msgid "SelectQuestionType"
+msgstr "Válasszon kérdés típust"
+
+msgid "CurrentCourse"
+msgstr "Jelenlegi kurzus"
+
+msgid "Back"
+msgstr "Vissza"
+
+msgid "Info"
+msgstr "Információ"
+
+msgid "Search"
+msgstr "Keresés"
+
+msgid "AdvancedSearch"
+msgstr "Összetett keresés"
+
+msgid "Open"
+msgstr "Nyitott (esszé)"
+
+msgid "Import"
+msgstr "Importál"
+
+msgid "AddAnother"
+msgstr "Újabb hozzáadása"
+
+msgid "Author"
+msgstr "Készítő"
+
+msgid "TrueFalse"
+msgstr "Igaz / Hamis"
+
+msgid "QuestionType"
+msgstr "Kérdés típus"
+
+msgid "NoSearchResults"
+msgstr "Nincs eredménye a keresésnek."
+
+msgid "SelectQuestion"
+msgstr "Kérdés kiválasztása"
+
+msgid "AddNewQuestionType"
+msgstr "Új kérdéstípus hozzáadása"
+
+msgid "Numbered"
+msgstr "Számozott"
+
+msgid "iso639_2_code"
+msgstr "hu"
+
+msgid "iso639_1_code"
+msgstr "hun"
+
+msgid "charset"
+msgstr "iso-8859-2"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr " ."
+
+msgid "number_decimal_separator"
+msgstr ","
+
+msgid "dateFormatShort"
+msgstr "%y %b %d"
+
+msgid "dateFormatLong"
+msgstr "%Y %B %d, %A"
+
+msgid "dateTimeFormatLong"
+msgstr "%Y %B %d, at %I:%M %p"
+
+msgid "timeNoSecFormat"
+msgstr "%I:%M %p"
+
+msgid "langYes"
+msgstr "Igen"
+
+msgid "langNo"
+msgstr "Nem"
+
+msgid "Next"
+msgstr "Következő"
+
+msgid "langAllowed"
+msgstr "Engedélyezve"
+
+msgid "langBackHome"
+msgstr "Vissza a főoldalra"
+
+msgid "langPropositions"
+msgstr "Fejlesztési javaslat az alábbi elemhez:"
+
+msgid "langMaj"
+msgstr "Frissít"
+
+msgid "langModify"
+msgstr "módosít"
+
+msgid "langDelete"
+msgstr "töröl"
+
+msgid "langInvisible"
+msgstr "Elrejt"
+
+msgid "langSave"
+msgstr "Ment"
+
+msgid "langMove"
+msgstr "Áthelyez"
+
+msgid "Help"
+msgstr "Súgó"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAdd"
+msgstr "Hozzáad"
+
+msgid "langAddIntro"
+msgstr "Bejelentkezési szöveg hozzáadása"
+
+msgid "langBackList"
+msgstr "Vissza a listához"
+
+msgid "langText"
+msgstr "Szöveg"
+
+msgid "langEmpty"
+msgstr "Néhány mezőt üresen hagyott.<br>Használja a <b>Vissza</b> gombot a böngészőjén és próbálja újra.<br>Ha a kurzus kódot kihagyja, olvassa el a Kurzus Programot"
+
+msgid "langConfirmYourChoice"
+msgstr "Kérjük, erősítse meg választását"
+
+msgid "langAnd"
+msgstr "és"
+
+msgid "langChoice"
+msgstr "A válasza"
+
+msgid "langFinish"
+msgstr "Befejez"
+
+msgid "langCancel"
+msgstr "Mégsem"
+
+msgid "langNotAllowed"
+msgstr "Nem engedélyezett"
+
+msgid "langNotLogged"
+msgstr "Nincs kurzusra bejelentkezve"
+
+msgid "langManager"
+msgstr "Menedszer"
+
+msgid "langOptional"
+msgstr "Opcionális"
+
+msgid "NextPage"
+msgstr "Következő oldal"
+
+msgid "PreviousPage"
+msgstr "Előző oldal"
+
+msgid "langUse"
+msgstr "Használat"
+
+msgid "langTotal"
+msgstr "Összes"
+
+msgid "langTake"
+msgstr "tart"
+
+msgid "langOne"
+msgstr "Egy"
+
+msgid "langSeveral"
+msgstr "Több"
+
+msgid "langNotice"
+msgstr "Figyelmeztetés"
+
+msgid "langDate"
+msgstr "Dátum"
+
+msgid "langAmong"
+msgstr "között"
+
+msgid "langShow"
+msgstr "Megmutat"
+
+msgid "langMyCourses"
+msgstr "Kurzusaim"
+
+msgid "langModifyProfile"
+msgstr "Profilom"
+
+msgid "langMyStats"
+msgstr "Statisztikáim megtekintése"
+
+msgid "langLogout"
+msgstr "Kijelentkezés"
+
+msgid "langMyAgenda"
+msgstr "Az én naptáram"
+
+msgid "langCourseHomepage"
+msgstr "Kurzus főoldala"
+
+msgid "langCourseManagerview"
+msgstr "Oktatói nézet"
+
+msgid "langStudentView"
+msgstr "Felhasználói nézet"
+
+msgid "AddResource"
+msgstr "Hozzáad"
+
+msgid "AddedResources"
+msgstr "Csatolások"
+
+msgid "lang_modify_resource"
+msgstr "Módosítás/Hozzáadás"
+
+msgid "lang_resource"
+msgstr "Forrás"
+
+msgid "lang_resources"
+msgstr "Források"
+
+msgid "langNameOfLang[\'arabic\']"
+msgstr ""
+
+msgid "langNameOfLang[\'brazilian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'bulgarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'catalan\']"
+msgstr ""
+
+msgid "langNameOfLang[\'croatian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'danish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english\']"
+msgstr ""
+
+msgid "langNameOfLang[\'finnish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_KM\']"
+msgstr ""
+
+msgid "langNameOfLang[\'galician\']"
+msgstr ""
+
+msgid "langNameOfLang[\'german\']"
+msgstr ""
+
+msgid "langNameOfLang[\'greek\']"
+msgstr ""
+
+msgid "langNameOfLang[\'italian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'japanese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'polish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'portuguese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'russian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'simpl_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish\']"
+msgstr ""
+
+msgid "Close"
+msgstr "bezár"
+
+msgid "langPlatform"
+msgstr "Platform"
+
+msgid "localLangName"
+msgstr "magyar"
+
+msgid "email"
+msgstr "e-mail"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "Sajnos ez a kurzus kód már létezik. Kérjük válassz egy másikat!"
+
+msgid "Statistics"
+msgstr "Statisztikák"
+
+msgid "langGrouplist"
+msgstr "csoport lista"
+
+msgid "langPrevious"
+msgstr "előző"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "A célkönyvtár nem létezik"
+
+msgid "Courses"
+msgstr "kurzusok"
+
+msgid "In"
+msgstr "itt:"
+
+msgid "langShowAll"
+msgstr "Mutasd mindet"
+
+msgid "langPage"
+msgstr "Oldal"
+
+msgid "englishLangName"
+msgstr "Angol"
+
+msgid "Home"
+msgstr "Kezdőlap"
+
+msgid "langAreYouSureToDelete"
+msgstr "Biztos, hogy törli"
+
+msgid "SelectAll"
+msgstr "Összes kijelölése"
+
+msgid "UnSelectAll"
+msgstr "összes kiválasztás visszavonása"
+
+msgid "WithSelected"
+msgstr "Kiválasztottal együtt"
+
+msgid "langOnLine"
+msgstr "Online"
+
+msgid "langUsers"
+msgstr "Felhasználók"
+
+msgid "langPlatformAdmin"
+msgstr "Platform adminisztrációja"
+
+msgid "langNameOfLang[\'hungarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'indonesian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'malay\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovenian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish_latin\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swedish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'thai\']"
+msgstr ""
+
+msgid "langNameOfLang[\'turkce\']"
+msgstr ""
+
+msgid "langNameOfLang[\'vietnamese\']"
+msgstr ""
+
+msgid "UserInfo"
+msgstr "Felhasználói információ"
+
+msgid "langModifyQuestion"
+msgstr "Kérdés módosítása"
+
+msgid "langCheckAll"
+msgstr "Összes ellenőrzése"
+
+msgid "langNbAnnoucement"
+msgstr "Bejelentés"
+
+msgid "lang_no_access_here"
+msgstr "Itt nincs belépés"
+
+msgid "langOtherCourses"
+msgstr "más kurzusok"
+
+msgid "Doc"
+msgstr "dokumentum"
+
+msgid "PlataformAdmin"
+msgstr "Platform Adminisztrátor"
+
+msgid "Groups"
+msgstr "Csoportok"
+
+msgid "GroupManagement"
+msgstr "Csoport menedzsment"
+
+msgid "All"
+msgstr "Mind"
+
+msgid "None"
+msgstr "semmi"
+
+msgid "langSorry"
+msgstr "Válasszon ki egy kurzust először"
+
+msgid "langDenied"
+msgstr "Ez a funkció csak a kurzus adminisztrátorai számára elérhető."
+
+msgid "Today"
+msgstr "ma"
+
+msgid "langCourseHomepageLink"
+msgstr "Aktuális kurzus"
+
+msgid "Attachment"
+msgstr "csatolás"
+
+msgid "User"
+msgstr "Felhasználó"
+
+msgid "MondayInit"
+msgstr "H"
+
+msgid "TuesdayInit"
+msgstr "K"
+
+msgid "WednesdayInit"
+msgstr "Sz"
+
+msgid "ThursdayInit"
+msgstr "Cs"
+
+msgid "FridayInit"
+msgstr "P"
+
+msgid "SaturdayInit"
+msgstr "Szo"
+
+msgid "SundayInit"
+msgstr "V"
+
+msgid "MondayShort"
+msgstr "Hét"
+
+msgid "TuesdayShort"
+msgstr "Ked"
+
+msgid "WednesdayShort"
+msgstr "Sze"
+
+msgid "ThursdayShort"
+msgstr "Csü"
+
+msgid "FridayShort"
+msgstr "Pén"
+
+msgid "SaturdayShort"
+msgstr "Szo"
+
+msgid "SundayShort"
+msgstr "Vas"
+
+msgid "MondayLong"
+msgstr "Hétfő"
+
+msgid "TuesdayLong"
+msgstr "Kedd"
+
+msgid "WednesdayLong"
+msgstr "Szerda"
+
+msgid "ThursdayLong"
+msgstr "Csütörtök"
+
+msgid "FridayLong"
+msgstr "Péntek"
+
+msgid "SaturdayLong"
+msgstr "Szombat"
+
+msgid "SundayLong"
+msgstr "Vasárnap"
+
+msgid "JanuaryInit"
+msgstr "J"
+
+msgid "FebruaryInit"
+msgstr "F"
+
+msgid "MarchInit"
+msgstr "M"
+
+msgid "AprilInit"
+msgstr "Á"
+
+msgid "MayInit"
+msgstr "M"
+
+msgid "JuneInit"
+msgstr "J"
+
+msgid "JulyInit"
+msgstr "J"
+
+msgid "AugustInit"
+msgstr "A"
+
+msgid "SeptemberInit"
+msgstr "S"
+
+msgid "OctoberInit"
+msgstr "O"
+
+msgid "NovemberInit"
+msgstr "N"
+
+msgid "DecemberInit"
+msgstr "D"
+
+msgid "JanuaryShort"
+msgstr "Jan"
+
+msgid "FebruaryShort"
+msgstr "Feb"
+
+msgid "MarchShort"
+msgstr "Már"
+
+msgid "AprilShort"
+msgstr "Ápr"
+
+msgid "MayShort"
+msgstr "Máj"
+
+msgid "JuneShort"
+msgstr "Jún"
+
+msgid "JulyShort"
+msgstr "Júl"
+
+msgid "AugustShort"
+msgstr "Aug"
+
+msgid "SeptemberShort"
+msgstr "Sze"
+
+msgid "OctoberShort"
+msgstr "Okt"
+
+msgid "NovemberShort"
+msgstr "Nov"
+
+msgid "DecemberShort"
+msgstr "Dec"
+
+msgid "JanuaryLong"
+msgstr "Január"
+
+msgid "FebruaryLong"
+msgstr "Február"
+
+msgid "MarchLong"
+msgstr "Március"
+
+msgid "AprilLong"
+msgstr "Április"
+
+msgid "MayLong"
+msgstr "Május"
+
+msgid "JuneLong"
+msgstr "Június"
+
+msgid "JulyLong"
+msgstr "Július"
+
+msgid "AugustLong"
+msgstr "Augusztus"
+
+msgid "SeptemberLong"
+msgstr "Szeptember"
+
+msgid "OctoberLong"
+msgstr "Október"
+
+msgid "NovemberLong"
+msgstr "November"
+
+msgid "DecemberLong"
+msgstr "December"
+
+msgid "langMyCompetences"
+msgstr "Kompetenciáim"
+
+msgid "langMyDiplomas"
+msgstr "Diplomáim"
+
+msgid "langMyPersonalOpenArea"
+msgstr "Személyes"
+
+msgid "langMyTeach"
+msgstr "Amit tanítok"
+
+msgid "Agenda"
+msgstr "Naptár"
+
+msgid "HourShort"
+msgstr "ó"
+
+msgid "PleaseTryAgain"
+msgstr "Próbálja meg újra!"
+
+msgid "UplNoFileUploaded"
+msgstr "Nem lett feltöltve fájl."
+
+msgid "UplSelectFileFirst"
+msgstr "Válaszzon ki egy fájlt, mielőtt megnyomja a feltöltés gombot."
+
+msgid "UplNotAZip"
+msgstr "A kiválasztott fájl nem ZIP archívum."
+
+msgid "UplUploadSucceeded"
+msgstr "A fájl feltöltése megtörtént!"
+
+msgid "ExportAsCSV"
+msgstr "Exportálás CSV fájlként"
+
+msgid "ExportAsXLS"
+msgstr "Exportálás XLS fájlként"
+
+msgid "langOpenarea"
+msgstr "Személyes"
+
+msgid "Done"
+msgstr "Kész"
+
+msgid "Documents"
+msgstr "Dokumentumok"
+
+msgid "DocumentAdded"
+msgstr "Dokumentum hozzáadva"
+
+msgid "DocumentUpdated"
+msgstr "Dokumentum frissítve"
+
+msgid "DocumentInFolderUpdated"
+msgstr "Dokumentum frissítve a mappában"
+
+msgid "Course_description"
+msgstr "Kurzus ismertetése"
+
+msgid "Document"
+msgstr "Dokumentum"
+
+msgid "Learnpath"
+msgstr "Tanulási programok"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Announcement"
+msgstr "Hirdetmények"
+
+msgid "Dropbox"
+msgstr "Fájlposta"
+
+msgid "Quiz"
+msgstr "Tesztek"
+
+msgid "langChat"
+msgstr "Csevegés"
+
+msgid "Conference"
+msgstr "Konferencia"
+
+msgid "Student_publication"
+msgstr "Hallgatói publikációk"
+
+msgid "Tracking"
+msgstr "Nyomonkövetés"
+
+msgid "langhomepage_link"
+msgstr "Hivatkozás hozzáadása az oldalhoz"
+
+msgid "Course_setting"
+msgstr "Kurzus beállítások"
+
+msgid "langbackup"
+msgstr "Kurzus biztonsági mentés"
+
+msgid "langcopy_course_content"
+msgstr "A kurzus tartalmának másolása"
+
+msgid "langrecycle_course"
+msgstr "A kurzus eltávolítása"
+
+msgid "StartDate"
+msgstr "Kezdés dátuma"
+
+msgid "EndDate"
+msgstr "Befejezés dátuma"
+
+msgid "StartTime"
+msgstr "Kezdés ideje"
+
+msgid "EndTime"
+msgstr "Befejezés ideje"
+
+msgid "langYouWereCalled"
+msgstr "Chat-elni hívott"
+
+msgid "langDoYouAccept"
+msgstr "Elfogadja?"
+
+msgid "Everybody"
+msgstr "Mindenki"
+
+msgid "SentTo"
+msgstr "Kik számára látható:"
+
+msgid "Export"
+msgstr "Exportálás"
+
+msgid "Tools"
+msgstr "Eszközök"
+
+msgid "Everyone"
+msgstr "Mindenki"
+
+msgid "SelectGroupsUsers"
+msgstr "Csoportok/tagok kiválasztása"
+
+msgid "Student"
+msgstr "Hallgató"
+
+msgid "Teacher"
+msgstr "Tanár"
+
+msgid "Send2All"
+msgstr "Nem választott ki csoportot/felhasználót. Az elem mindenki számára látható"
+
+msgid "Wiki"
+msgstr "Wiki"
+
+msgid "Complete"
+msgstr "Teljesítve"
+
+msgid "Incomplete"
+msgstr "Befejezetlen"
+
+msgid "reservation"
+msgstr "foglalás"
+
+msgid "StartTimeWindow"
+msgstr "Kezdés"
+
+msgid "EndTimeWindow"
+msgstr "Befejezés"
+
+msgid "AccessNotAllowed"
+msgstr "A hozzáférés ehhez az oldalhoz nem megengedett"
+
+msgid "InThisCourse"
+msgstr "Ebben a kurzusban"
+
+msgid "ThisFieldIsRequired"
+msgstr "kötelező mező"
+
+msgid "AllowedHTMLTags"
+msgstr "Engedélyezett HTML kódok"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "Az űrlap érvénytelen vagy hiányos adatokat tartalmaz. Kérem, ellenőrizze a beírtakat."
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "A kezdés dátuma nem lehet későbbi, mint a befejezés dátuma."
+
+msgid "InvalidDate"
+msgstr "Érvénytelen dátum"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "Csak betűk és számok engedélyezettek"
+
+msgid "langBasicOverview"
+msgstr "Általános leírás"
+
+msgid "CourseAdminRole"
+msgstr "Kurzus adminisztrátor"
+
+msgid "UserRole"
+msgstr "Szerep"
+
+msgid "OnlyImagesAllowed"
+msgstr "Csak a PNG, JPG és GIF képformátumok engedélyezettek."
+
+msgid "ViewRight"
+msgstr "Megnéz"
+
+msgid "EditRight"
+msgstr "Módosít"
+
+msgid "DeleteRight"
+msgstr "Töröl"
+
+msgid "OverviewCourseRights"
+msgstr "Szerepek és jogok áttekintése"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "Fókusz a szerepen"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Fókusz a jogokon"
+
+msgid "langAdvanced"
+msgstr "Haladó"
+
+msgid "RightValueModified"
+msgstr "Az érték módosításra került."
+
+msgid "course_rights"
+msgstr "Szerepek és jogok áttekintése"
+
+msgid "Visio_conference"
+msgstr "Videókonferencia"
+
+msgid "CourseAdminRoleDescription"
+msgstr "A kurzus adminisztrátora"
+
+msgid "Move"
+msgstr "Áthelyez"
+
+msgid "MoveTo"
+msgstr "Áthelyez"
+
+msgid "Delete"
+msgstr "Töröl"
+
+msgid "MoveFileTo"
+msgstr "Fájl áthelyezése ide"
+
+msgid "Save"
+msgstr "Mentés"
+
+msgid "Error"
+msgstr "Hiba"
+
+msgid "Anonymous"
+msgstr "Névtelen"
+
+msgid "h"
+msgstr "ó"
+
+msgid "CreateNewGlobalRole"
+msgstr "Új globális szerep létrehozása"
+
+msgid "CreateNewLocalRole"
+msgstr "Új helyi szerep létrehozása"
+
+msgid "Actions"
+msgstr "Akció"
+
+msgid "Inbox"
+msgstr "Beérkező üzenetek"
+
+msgid "ComposeMessage"
+msgstr "Üzenet írása"
+
+msgid "Other"
+msgstr "Más"
+
+msgid "AddRight"
+msgstr "Jogosultság hozzáadása"
+
+msgid "CampusHomepage"
+msgstr "Intézményi honlap"
+
+msgid "YouHaveNewMessage"
+msgstr "Új üzenete érkezett!"
+
+msgid "myActiveSessions"
+msgstr "Aktív munkameneteim"
+
+msgid "myInactiveSessions"
+msgstr "Passzív munkameneteim"
+
+msgid "FileUpload"
+msgstr "Fájl feltöltés"
+
+msgid "langMyActiveSessions"
+msgstr "Aktív belépéseim"
+
+msgid "langMyInActiveSessions"
+msgstr "Korábbi belépéseim"
+
+msgid "langMySpace"
+msgstr "Jelentések"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "A kiterjesztés aktiválásra került, de jelenleg nem üzemképes."
+
+msgid "MyStudents"
+msgstr "Hallgatóim"
+
+msgid "Progress"
+msgstr "Haladás"
+
+msgid "Or"
+msgstr "vagy"
+
+msgid "Uploading"
+msgstr "Feltöltés folyamatban..."
+
+msgid "AccountExpired"
+msgstr "Lejárt hozzáférés"
+
+msgid "AccountInactive"
+msgstr "Nem aktív hozzáférés"
+
+msgid "ActionNotAllowed"
+msgstr "Nem engedélyezett művelet"
+
+msgid "SubTitle"
+msgstr "Alcím"
+
+msgid "NoResourcesToRecycle"
+msgstr "Nincs újrahasznosítható erőforrás"
+
+msgid "noOpen"
+msgstr "Nem nyitható meg"
+
+msgid "TempsFrequentation"
+msgstr "Gyakoriság ideje"
+
+msgid "Progression"
+msgstr "Előrehaladás"
+
+msgid "NoCourse"
+msgstr "A kurzus nem található"
+
+msgid "Teachers"
+msgstr "Oktatók"
+
+msgid "Session"
+msgstr "Munkamenet"
+
+msgid "Sessions"
+msgstr "Munkamenetek"
+
+msgid "NoSession"
+msgstr "A munkamenet nem található"
+
+msgid "NoStudent"
+msgstr "A hallgató nem található"
+
+msgid "Students"
+msgstr "Hallgatók"
+
+msgid "NoResults"
+msgstr "Eredménytelen keresés"
+
+msgid "Tutors"
+msgstr "Konzulensek"
+
+msgid "Tel"
+msgstr "Telefon"
+
+msgid "NoTel"
+msgstr "Nincs telefon"
+
+msgid "SendMail"
+msgstr "Levél küldése"
+
+msgid "RdvAgenda"
+msgstr "Naptár találkozó"
+
+msgid "VideoConf"
+msgstr "Videokonferencia"
+
+msgid "MyProgress"
+msgstr "Előrehaladásom"
+
+msgid "NoOnlineStudents"
+msgstr "Nincs a portálra belépett hallgató"
+
+msgid "InCourse"
+msgstr "kurzusban"
+
+msgid "UserOnlineListSession"
+msgstr "Bejelentkezett felhasználók listája - munkamenet"
+
+msgid "From"
+msgstr "Feladó"
+
+msgid "To"
+msgstr "Címzett"
+
+msgid "Content"
+msgstr "Tartalom"
+
+msgid "year"
+msgstr "év"
+
+msgid "Years"
+msgstr "év"
+
+msgid "Day"
+msgstr "Nap"
+
+msgid "Days"
+msgstr "nap"
+
+msgid "PleaseStandBy"
+msgstr "Kérem várjon..."
+
+msgid "AvailableUntil"
+msgstr "Elérhető meddig"
+
+msgid "HourMinuteDivider"
+msgstr "ó"
+
+msgid "Visio_classroom"
+msgstr "Élő konferencia (osztályterem)"
+
+msgid "Survey"
+msgstr "Kérdőív"
+
+msgid "More"
+msgstr "Tovább"
+
+msgid "ClickHere"
+msgstr "Kattintson ide"
+
+msgid "Here"
+msgstr "itt"
+
+msgid "SaveQuestion"
+msgstr "Kérdés mentése."
+
+msgid "ReturnTo"
+msgstr "Most visszatérhet ide:"
+
+msgid "Horizontal"
+msgstr "Vízszintes"
+
+msgid "Vertical"
+msgstr "Függőleges"
+
+msgid "DisplaySearchResults"
+msgstr "Keresési eredmények megtekintése"
+
+msgid "DisplayAll"
+msgstr "Mind megtekintése"
+
+msgid "File_upload"
+msgstr "Állomány feltöltése"
+
+msgid "NoUsersInCourse"
+msgstr "Nincsenek felhasználók a kurzusban"
+
+msgid "Percentage"
+msgstr "Százalék"
+
+msgid "Information"
+msgstr "Információk"
+
+msgid "EmailDestination"
+msgstr "Fogadó"
+
+msgid "SendEmail"
+msgstr "Email küldése"
+
+msgid "EmailTitle"
+msgstr "E levél tárgya"
+
+msgid "EmailText"
+msgstr "Email tartalma"
+
+msgid "Send"
+msgstr "Küld"
+
+msgid "Comments"
+msgstr "Hozzászólások"
+
+msgid "ModifyRecipientList"
+msgstr "Fogadólista módosítása"
+
+msgid "Line"
+msgstr "Sor"
+
+msgid "NoLinkVisited"
+msgstr "Nincs meglátogatott link"
+
+msgid "NoDocumentDownloaded"
+msgstr "Nincs letöltött dokumentum"
+
+msgid "Clicks"
+msgstr "Kattintások"
+
+msgid "SearchResults"
+msgstr "Keresési eredmények"
+
+msgid "SessionPast"
+msgstr "Korábban"
+
+msgid "SessionActive"
+msgstr "Aktív"
+
+msgid "SessionFuture"
+msgstr "Nem kezdődött el"
+
+msgid "DateFormatLongWithoutDay"
+msgstr "%B %d, %Y"
+
+msgid "InvalidDirectoryPleaseCreateAnImagesFolder"
+msgstr "Érvénytelen mappa: kérem, hozzon létre egy \"images\" nevű mappát a dokumentumok eszközben, csak ezután tud feltölteni képeket"
+
+msgid "UsersConnectedToMySessions"
+msgstr "Az összes jelenlévő megtekintése a tevékenységeimben"
+
+msgid "Category"
+msgstr "Kategória"
+
+msgid "DearUser"
+msgstr "Kedves felhasználó"
+
+msgid "YourRegistrationData"
+msgstr "Belépési adatai"
+
+msgid "ResetLink"
+msgstr "Jelszava visszaállításához kattintson ide"
+
+msgid "VisibilityChanged"
+msgstr "A láthatóság megváltoztatva."
+
+msgid "MainNavigation"
+msgstr "Fő navigáció"
+
+msgid "SeeDetail"
+msgstr "Részletek megtekintése"
+
+msgid "GroupSingle"
+msgstr "Csoport"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "Kérem, próbáljon újra bejelentkezni a kezdőoldalról."
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "Kérem, próbáljon újra bejelentkezni az alábbi űrlap segítségével"
+
+msgid "AccessToFaq"
+msgstr "Belépés a Gyakran Ismételt Kérdésekhez"
+
+msgid "Faq"
+msgstr "Gyakran Feltett Kérdések"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "Emlékzetesse azokat a felhasználókat, akik nem léptek be ennyi ideje"
+
+msgid "RemindInactiveLearnersMailSubject"
+msgstr "Inaktivitás %s esetében"
+
+msgid "RemindInactiveLearnersMailContent"
+msgstr "Kedves felhasználó,<br /><br /> Ön nem lépett be %s  oldalra több mint %s napja."
+
+msgid "OpenIdAuthentication"
+msgstr "OpenID hitelesítés"
+
+msgid "UploadMaxSize"
+msgstr "A feltöltés max. mérete"
+
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+msgid "MoveUp"
+msgstr "Felfelé mozgat"
+
+msgid "MoveDown"
+msgstr "Lefelé mozgat"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "Állomány feltöltés sikertelen: a z állomány kiterjesztése vagy típusa nem engedélyezett."
+
+msgid "OpenIDURL"
+msgstr "OpenID URL"
+
+msgid "UplFileTooBig"
+msgstr "Az állomány túl nagy a feltöltéshez"
+
+msgid "UplGenericError"
+msgstr "Az állomány, amit fel akart tölteni, nem érkezett meg. Kérem, lépjen kapcsolatba a rendszer adminsiztrátorral és tájékoztassa a hibáról."
+
+msgid "OpenIDWhatIs"
+msgstr "Mi az az OpenID?"
+
+msgid "OpenIDDescription"
+msgstr "Az OpenID segítségével az eltérő weboldalakra nem kell többször bejelentkeznie. A szolgáltatás teljesen ingyenes.<br /><br /><a href=\"http://openid.net/what/\">További információk...</a>"
+
+msgid "NoManager"
+msgstr "Nincs adminisztrátor"
+
+msgid "ExportiCal"
+msgstr "Exportálás iCal formátumban"
+
+msgid "ExportiCalPublic"
+msgstr "Exportálás iCal formátumban nyilvános eseményként"
+
+msgid "ExportiCalPrivate"
+msgstr "Exportálás iCal formátumban magán eseményként"
+
+msgid "ExportiCalConfidential"
+msgstr "Exportálás iCal formátumban bizalmas eseményként"
+
+msgid "MoreStats"
+msgstr "További statisztikák"
+
+msgid "Drh"
+msgstr "HR menedzser"
+
+msgid "MinDecade"
+msgstr "évtized"
+
+msgid "MinYear"
+msgstr "év"
+
+msgid "MinMonth"
+msgstr "hónap"
+
+msgid "MinWeek"
+msgstr "hét"
+
+msgid "MinDay"
+msgstr "nap"
+
+msgid "MinHour"
+msgstr "óra"
+
+msgid "MinMinute"
+msgstr "perc"
+
+msgid "MinDecades"
+msgstr "évtized"
+
+msgid "MinYears"
+msgstr "év"
+
+msgid "MinMonths"
+msgstr "hónap"
+
+msgid "MinWeeks"
+msgstr "hét"
+
+msgid "MinDays"
+msgstr "nap"
+
+msgid "MinHours"
+msgstr "óra"
+
+msgid "MinMinutes"
+msgstr "perc"
+
+msgid "HomeDirectory"
+msgstr "Kezdőlap"
+
+msgid "DocumentCreated"
+msgstr "A dokumentum létrejött"
+
+msgid "ForumAdded"
+msgstr "Fórum hozzáadva"
+
+msgid "ForumThreadAdded"
+msgstr "Fórum szál létrehozva"
+
+msgid "ForumAttachmentAdded"
+msgstr "Fórum melléklet hozzáadva"
+
+msgid "directory"
+msgstr "mappa"
+
+msgid "Directories"
+msgstr "mappák"
+
+msgid "UserAge"
+msgstr "Kor"
+
+msgid "UserBirthday"
+msgstr "Születésnap"
+
+msgid "Course"
+msgstr "Kurzus"
+
+msgid "FilesUpload"
+msgstr "dokumentum"
+
+msgid "ExerciseFinished"
+msgstr "Teszt befejezve"
+
+msgid "UserSex"
+msgstr "Nem"
+
+msgid "UserNativeLanguage"
+msgstr "Anyanyelv"
+
+msgid "UserResidenceCountry"
+msgstr "Ország"
+
+msgid "AddAnAttachment"
+msgstr "Melléklet hozzáadása"
+
+msgid "FileComment"
+msgstr "Állomány leírása"
+
+msgid "FileName"
+msgstr "Állomány neve"
+
+msgid "SessionsAdmin"
+msgstr "Találkozók adminisztrátora"
+
+msgid "MakeChangeable"
+msgstr "Tegye módosíthatóvá"
+
+msgid "MakeUnchangeable"
+msgstr "Tegye módosíthatatlanná"
+
+msgid "UserFields"
+msgstr "Felhasználói mezők"
+
+msgid "FieldShown"
+msgstr "Mező látható"
+
+msgid "CannotShowField"
+msgstr "Nem tehető a mező láthatóvá"
+
+msgid "FieldHidden"
+msgstr "A mező láthatatlan lett"
+
+msgid "CannotHideField"
+msgstr "Nem lehetett a mezőt láthatatlanná tenni"
+
+msgid "FieldMadeChangeable"
+msgstr "A mező módosíthatóvá vált"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "Nem lehetett a mezőt módosíthatóvá tenni"
+
+msgid "FieldMadeUnchangeable"
+msgstr "A mező módosíthatatlan lett"
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "Nem lehetett a mezőt módosíthatatlanná tenni"
+
+msgid "Folder"
+msgstr "Mappa"
+
+msgid "CloseOtherSession"
+msgstr "A csevegés nem elérhető, mivel már egy másik kurzus már van a lapon. Hogy elkerülje ezt, kérjük, maradjon a csevegés ideje alatt abban a kurzusban, ahol a csevegést elindította.  A csevegésbe való újbóli bekapcsolódáshoz lépjen be a kurzusához, és kattintson újra a csevegés eszközre."
+
+msgid "FileUploadSucces"
+msgstr "Az állomány sikeresen feltöltve."
+
+msgid "Yesterday"
+msgstr "Tegnap"
+
+msgid "Submit"
+msgstr "Elküld"
+
+msgid "Department"
+msgstr "Tanszék"
+
+msgid "BackToNewSearch"
+msgstr "Visszalépés új keresés indításához"
+
+msgid "Step"
+msgstr "Lépés"
+
+msgid "SomethingFemininAddedSuccessfully"
+msgstr "sikeresen hozzáadva"
+
+msgid "SomethingMasculinAddedSuccessfully"
+msgstr "sikeresen hozzáadva"
+
+msgid "DeleteError"
+msgstr "Törlési hiba"
+
+msgid "StepsList"
+msgstr "Lépés lista"
+
+msgid "AddStep"
+msgstr "Lépés hozzáadása"
+
+msgid "StepCode"
+msgstr "Lépés kódja"
+
+msgid "Label"
+msgstr "Cimke"
+
+msgid "UnableToConnectTo"
+msgstr "Sikertelen kapcsolódási kísérlet a következőhöz:"
+
+msgid "NoUser"
+msgstr "Nincs felhasználó"
+
+msgid "SearchResultsFor"
+msgstr "A keresés eredménye erre a kurzusra:"
+
+msgid "SelectFile"
+msgstr "Állomány kiválasztása"
+
+msgid "WarningFaqFileNonWriteable"
+msgstr "Figyelem - A GYIK állomány, amely a chamilo /home/ mappájában található, nem írható. A beírt szöveget addíg nem lehet elmenteni, amíg nem lesz javítva az írási jog."
+
+msgid "AddCategory"
+msgstr "Kategória hozzáadása"
+
+msgid "NoExercises"
+msgstr "Nincsenek gyakorlatok"
+
+msgid "NotAllowedClickBack"
+msgstr "Sajnos nem jogosult az oldal megtekintésére. Kattintson a böngészője \"Vissza\" gombjára, vagy kövesse a lenti hivatkozást az előző oldalra jutáshoz."
+
+msgid "Exercise"
+msgstr "Teszt"
+
+msgid "Result"
+msgstr "Eredmény"
+
+msgid "AttemptingToLoginAs"
+msgstr "Belépés, mint %s %s  (azonosítója: %s)"
+
+msgid "LoginSuccessfulGoToX"
+msgstr "A belépés sikeres. Lépjen ide: %s"
+
+msgid "FckMp3Autostart"
+msgstr "Hang elindítása automatikusan"
+
+msgid "Learner"
+msgstr "Tanuló"
+
+msgid "IntroductionTextUpdated"
+msgstr "A bevezető szöveg frissítve lett."
+
+msgid "Align"
+msgstr "Igazítás"
+
+msgid "Width"
+msgstr "Szélesség"
+
+msgid "VSpace"
+msgstr "Függőleges térköz"
+
+msgid "HSpace"
+msgstr "Vízszintes térköz"
+
+msgid "Border"
+msgstr "Szegély"
+
+msgid "Alt"
+msgstr "Alternatív szöveg"
+
+msgid "Height"
+msgstr "Magasság"
+
+msgid "ImageManager"
+msgstr "Kép kezelés"
+
+msgid "ImageFile"
+msgstr "Kép állomány"
+
+msgid "ConstrainProportions"
+msgstr "Arányok megőrzése"
+
+msgid "InsertImage"
+msgstr "Kép beillesztése"
+
+msgid "AccountActive"
+msgstr "A felhasználói fiók aktív"
+
+msgid "GroupSpace"
+msgstr "Csoport terület"
+
+msgid "GroupWiki"
+msgstr "Wiki"
+
+msgid "ExportToPDF"
+msgstr "Mentés PDF-ként"
+
+msgid "CommentAdded"
+msgstr "A hozzászólását a rendszer elmentette"
+
+msgid "BackToPreviousPage"
+msgstr "Vissza az előző oldalra"
+
+msgid "ListView"
+msgstr "Megtekintés listaként"
+
+msgid "NoOfficialCode"
+msgstr "Nincs kód"
+
+msgid "Owner"
+msgstr "Tulajdonos"
+
+msgid "DisplayOrder"
+msgstr "Megjelenés sorrendje"
+
+msgid "SearchFeatureDoIndexDocument"
+msgstr "Dokumentum szövegének indexelése?"
+
+msgid "SearchFeatureDocumentLanguage"
+msgstr "A dokumentum nyelve indexeléshez"
+
+msgid "With"
+msgstr "mivel"
+
+msgid "GeneralCoach"
+msgstr "Általános tréner"
+
+msgid "SaveDocument"
+msgstr "Dokumentum mentése"
+
+msgid "CategoryDeleted"
+msgstr "A kategória törölve."
+
+msgid "CategoryAdded"
+msgstr "Kategória hozzáadva"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Qualify"
+msgstr "Tevékenység értékelése"
+
+msgid "Words"
+msgstr "Szó"
+
+msgid "GoBack"
+msgstr "Vissza"
+
+msgid "Details"
+msgstr "Részletek"
+
+msgid "EditLink"
+msgstr "Hivatkozás szerkesztése"
+
+msgid "LinkEdited"
+msgstr "Feladat szerkesztve"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Accept"
+msgstr "Elfogad"
+
+msgid "Reserved"
+msgstr "Foglalt"
+
+msgid "SharedDocumentsDirectory"
+msgstr "Megosztott dokumentumok mappa"
+
+msgid "Gallery"
+msgstr "Galéria"
+
+msgid "Audio"
+msgstr "Hang"
+
+msgid "Level"
+msgstr "Szint"
+
+msgid "Duration"
+msgstr "Időtartam"
+
+msgid "Expired"
+msgstr "Lejárt"
+
+msgid "Outbox"
+msgstr "Kimenő üzenetek"
+
+msgid "Overview"
+msgstr "Leírás"
+
+msgid "ApiKeys"
+msgstr "API kulcsok"
+
+msgid "GenerateApiKey"
+msgstr "API kulcs létrehozása"
+
+msgid "MyApiKey"
+msgstr "Az API kulcsom"
+
+msgid "DateSend"
+msgstr "Elküldés dátuma"
+
+msgid "Deny"
+msgstr "Elutasít"
+
+msgid "SocialNetwork"
+msgstr "Szociális hálózat"
+
+msgid "BackToOutbox"
+msgstr "Vissza a kimenő üzenetekhez"
+
+msgid "Invitation"
+msgstr "Meghívó"
+
+msgid "SeeMoreOptions"
+msgstr "További lehetőségek megtekintése"
+
+msgid "NoTemplatePreview"
+msgstr "Előzetes nézet nem található"
+
+msgid "ModifyCategory"
+msgstr "Kategória szerkesztése"
+
+msgid "Photo"
+msgstr "Kép"
+
+msgid "MoveFile"
+msgstr "Állomány áthelyezése"
+
+msgid "Filter"
+msgstr "Szűrő"
+
+msgid "Subject"
+msgstr "Tárgy"
+
+msgid "Message"
+msgstr "üzenet"
+
+msgid "MoreInformation"
+msgstr "További információ"
+
+msgid "MakeInvisible"
+msgstr "Ne legyen látható"
+
+msgid "MakeVisible"
+msgstr "Tegyük láthatóvá"
+
+msgid "Image"
+msgstr "Kép"
+
+msgid "SaveIntroText"
+msgstr "Bevezető szöveg mentése"
+
+msgid "CourseName"
+msgstr "Kurzus neve"
+
+msgid "SendAMessage"
+msgstr "Üzenet küldése"
+
+msgid "Menu"
+msgstr "Menü"
+
+msgid "BackToUserList"
+msgstr "Vissza a felhasználói listához"
+
+msgid "GraphicNotAvailable"
+msgstr "Kép nem található"
+
+msgid "Parent"
+msgstr "Szülő"
+
+msgid "GeneralDescription"
+msgstr "Általános meghatározás"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "Hol van a kurzus helye a képzési programban? Hogyan kapcsolódik a kurzus más kurzusokhoz?"
+
+msgid "GeneralDescriptionInformation"
+msgstr "A kurzus meghatározása (órák száma, hivatalos kód, osztályterem helye, stb.) és az oktató bemutatása (név, fogadóóra ideje, helye, telefonszáma, e-mail címe)"
+
+msgid "Objectives"
+msgstr "Célkitűzések"
+
+msgid "ObjectivesInformation"
+msgstr "A kurzus átfogó, részletes céljainak bemutatása"
+
+msgid "ObjectivesQuestions"
+msgstr "Mire lesznek képesek a hallgatók a kurzus befejezésekor. Mit várnak el tőlük a kurzus alatt."
+
+msgid "Topics"
+msgstr "Témák"
+
+msgid "TopicsInformation"
+msgstr "A kurzushoz tartozó témakörök listája. Az egyes témakörök fontossága. Nehézségi szintek. A különböző részek struktúrája és egymástól függősége."
+
+msgid "TopicsQuestions"
+msgstr "Hogyan fog lezajlani a kurzus? Mire kell a hallgatóknak különösen figyelmet fordítani? Vannak ismert nehézségek a különböző fejezetek megértésénél? Mennyi időt ajánlott eltölteni a kurzus különböző részeivel?"
+
+msgid "Methodology"
+msgstr "Metodológia"
+
+msgid "MethodologyQuestions"
+msgstr "Milyen metódusok és tanulási tevékenységek segítik kurzusban a célok elérését? Milyen ütemezés szerint?"
+
+msgid "MethodologyInformation"
+msgstr "A tevékenységek bemutatása (konferencia, dolgozatok, csoportos kutatás, labor, stb.)"
+
+msgid "CourseMaterial"
+msgstr "Kurzus tananyagok"
+
+msgid "CourseMaterialQuestions"
+msgstr "Van-e a kurzusnak tankönyve, tartoznak-e hozzá jegyzetek, van-e hozzá biográfia, hivatkozások az interneten?"
+
+msgid "CourseMaterialInformation"
+msgstr "A kurzushoz kapcsoló tananyagok rövid leírása"
+
+msgid "HumanAndTechnicalResources"
+msgstr "Emberi és technikai erőforrások"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "Vannak tanárok, konzulensek, technikai helpdesk, szociális tanácsadók, számítógép-termek?"
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "A különböző kapcsolattartó személyek és használható technikai eszközök bemutatása."
+
+msgid "Assessment"
+msgstr "Értékelés"
+
+msgid "AssessmentQuestions"
+msgstr "Hogyan lesznek értékelve a résztvevők?"
+
+msgid "AssessmentInformation"
+msgstr "Példa teszt kérdések. A sikeres teljesítés feltétele. Tippek és trükkök."
+

@@ -1,0 +1,1130 @@
+msgid "AddedToLPCannotBeAccessed"
+msgstr "Αυτή η άσκηση έχει συμπεριληφθεί στην Εκπαιδευτική διαδρομή, οπότε οι εκπαιδευόμενοι δεν μπορούν να έχουν πρόσβαση σε αυτήν από εδώ. Αν θέλετε αυτή η άσκηση να είναι διαθέσιμη μέσα από τα εργαλεία ασκήσεων, παρακαλώ κάντε ένα αντίγραφό της, χρησιμοποιώντας το εικονίδιο της αντιγραφής."
+
+msgid "langExercice"
+msgstr "Άσκηση"
+
+msgid "langActivate"
+msgstr "Εμφάνιση"
+
+msgid "langDeactivate"
+msgstr "Απόκρυψη"
+
+msgid "langNoEx"
+msgstr "Αυτή τη στιγμή δεν υπάρχει άσκηση"
+
+msgid "langNewEx"
+msgstr "Δημιουργία νέας άσκησης (τεστ)"
+
+msgid "langQuestion"
+msgstr "Ερώτηση"
+
+msgid "langQuestions"
+msgstr "Ερωτήσεις"
+
+msgid "langAnswers"
+msgstr "Απαντήσεις"
+
+msgid "langTrue"
+msgstr "Σωστό"
+
+msgid "langAnswer"
+msgstr "Απάντηση"
+
+msgid "langResult"
+msgstr "Αποτέλεσμα"
+
+msgid "langNoResult"
+msgstr "Δεν υπάρχει ακόμη αποτέλεσμα"
+
+msgid "langYourResults"
+msgstr "Τα αποτελέσματά σας"
+
+msgid "langStudentResults"
+msgstr "Βαθμολογία"
+
+msgid "langExerciseType"
+msgstr "Κατά σειρά (Διαδοχικά)"
+
+msgid "langExerciseName"
+msgstr "Όνομα άσκησης"
+
+msgid "langExerciseDescription"
+msgstr "Δώστε το γενικό πλαίσιο εντός του οποίου γίνεται η άσκηση"
+
+msgid "langSimpleExercise"
+msgstr "Όλες οι ερωτήσεις σε μια σελίδα"
+
+msgid "langSequentialExercise"
+msgstr "Μία ερώτηση ανά σελίδα (στη σειρά)"
+
+msgid "langRandomQuestions"
+msgstr "Τυχαίες ερωτήσεις"
+
+msgid "langGiveExerciseName"
+msgstr "Δώστε το όνομα της άσκησης"
+
+msgid "langSound"
+msgstr "Αρχείο ήχου ή βίντεο"
+
+msgid "langDeleteSound"
+msgstr "Διαγραφή αρχείου ήχου ή βίντεο"
+
+msgid "langNoAnswer"
+msgstr "Δεν υπάρχει απάντηση αυτή την στιγμή"
+
+msgid "langGoBackToQuestionPool"
+msgstr "Επιστροφή στην κοινή βάση διαθέσιμων ερωτήσεων"
+
+msgid "langGoBackToQuestionList"
+msgstr "Επιστροφή στη λίστα ερωτήσεων"
+
+msgid "langQuestionAnswers"
+msgstr "Απαντήσεις στην ερώτηση"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Προσοχή ! Αυτή η ερώτηση και οι απαντήσεις της, χρησιμοποιούνται σε αρκετές ασκήσεις. Θέλετε να τις αλλάξετε;"
+
+msgid "langModifyInAllExercises"
+msgstr "σε όλες τις ασκήσεις"
+
+msgid "langModifyInThisExercise"
+msgstr "μόνο στην τρέχουσα άσκηση"
+
+msgid "langAnswerType"
+msgstr "Τύπος Απάντησης"
+
+msgid "langMultipleSelect"
+msgstr "Πολλαπλής Επιλογής (Πολλαπλές Απαντήσεις)"
+
+msgid "langFillBlanks"
+msgstr "Συμπληρώστε τα κενά στη φόρμα"
+
+msgid "langMatching"
+msgstr "Ταίριασμα"
+
+msgid "langAddPicture"
+msgstr "Εισαγωγή εικόνας"
+
+msgid "langReplacePicture"
+msgstr "Αντικατάσταση της εικόνας"
+
+msgid "langDeletePicture"
+msgstr "Διαγραφή εικόνας"
+
+msgid "langQuestionDescription"
+msgstr "Εμπλουτισμός ερώτησης"
+
+msgid "langGiveQuestion"
+msgstr "Παρακαλώ πληκτρολογήστε την ερώτηση"
+
+msgid "langWeightingForEachBlank"
+msgstr "Δώστε μια βαθμολογία για το κάθε κενό"
+
+msgid "langUseTagForBlank"
+msgstr "χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά"
+
+msgid "langQuestionWeighting"
+msgstr "Βαθμολογία"
+
+msgid "langMoreAnswers"
+msgstr " +απαντ."
+
+msgid "langLessAnswers"
+msgstr " -απαντ."
+
+msgid "langMoreElements"
+msgstr "+Στοιχεία"
+
+msgid "langLessElements"
+msgstr "-Στοιχεία"
+
+msgid "langTypeTextBelow"
+msgstr "Πληκτρολογήστε το κείμενό σας παρακάτω"
+
+msgid "langDefaultTextInBlanks"
+msgstr "Παράδειγμα συμπλήρωσης φόρμας δραστηριότητας : Υπολογίστε τον Δείκτη Μάζας Σώματος (ΔΜΣ ή BMI)
+Ηλικία 	[25] ετών
+Φύλλο 	[Α] (Α ή Θ)
+Βάρος 	95 Kg
+Ύψος 	1.81 m
+ΔΜΣ 	[29]      =Βάρος/Ύψος2 (βλέπε άρθρο της Wikipedia)"
+
+msgid "�ΜΣ 	[29]"
+msgstr ""
+
+msgid "langDefaultMatchingOptA"
+msgstr "Σημειώστε τη διεύθυνση"
+
+msgid "langDefaultMatchingOptB"
+msgstr "Πάρτε επαφή με τις υπηρεσίες εκτάκτου ανάγκης"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Πρώτο βήμα"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Δεύτερο βήμα"
+
+msgid "langDefineOptions"
+msgstr "Καθορίστε τις επιλογές"
+
+msgid "langMakeCorrespond"
+msgstr "Κάντε την αντιστοίχιση"
+
+msgid "langFillLists"
+msgstr "Παρακαλώ, συμπληρώστε τις δύο λίστες που ακολουθούν"
+
+msgid "langGiveText"
+msgstr "Παρακαλώ, πληκτρολογήστε το κείμενο"
+
+msgid "langDefineBlanks"
+msgstr "Ορίστε τουλάχιστον ένα κενό με αγκύλες [...]"
+
+msgid "langGiveAnswers"
+msgstr "Παρακαλώ, πληκτρολογείστε τις απαντήσεις στις αντίστοιχες ερωτήσεις"
+
+msgid "langChooseGoodAnswer"
+msgstr "Επιλέξτε τη σωστή απάντηση"
+
+msgid "langChooseGoodAnswers"
+msgstr "Επιλέξτε μια ή περισσότερες σωστές απαντήσεις"
+
+msgid "langQuestionList"
+msgstr "Κατάλογος ερωτήσεων της άσκησης"
+
+msgid "langMoveUp"
+msgstr "Μετακίνηση προς τα πάνω"
+
+msgid "langMoveDown"
+msgstr "Μετακίνηση προς τα κάτω"
+
+msgid "langGetExistingQuestion"
+msgstr "Ανακύκλωση - επαναχρησιμοποίηση από τις υπάρχουσες ερωτήσεις"
+
+msgid "langFinishTest"
+msgstr "Διόρθωση της Εξέτασης"
+
+msgid "langQuestionPool"
+msgstr "Ανακύκλωση - επαναχρησιμοποίηση από τις υπάρχουσες ερωτήσεις"
+
+msgid "langOrphanQuestions"
+msgstr "Ορφανές Ερωτήσεις"
+
+msgid "langNoQuestion"
+msgstr "Κατάλογος ερωτήσεων (Δεν υπάρχει ερώτηση προς το παρόν)"
+
+msgid "langAllExercises"
+msgstr "Ολες οι ασκήσεις"
+
+msgid "langFilter"
+msgstr "Φιλτράρισμα"
+
+msgid "langGoBackToEx"
+msgstr "Επιστροφή στην άσκηση"
+
+msgid "langReuse"
+msgstr "Επαναχρησιμοποίηση στα πλαίσια της παρούσας άσκησης"
+
+msgid "langExerciseManagement"
+msgstr "Διαχείριση Ασκήσεων"
+
+msgid "langQuestionManagement"
+msgstr "Διαχείριση Ερωτήσεων / Απαντήσεων"
+
+msgid "langQuestionNotFound"
+msgstr "Η ερώτηση δεν βρέθηκε"
+
+msgid "langExerciseNotFound"
+msgstr "Η απάντηση δεν βρέθηκε"
+
+msgid "langAlreadyAnswered"
+msgstr "Απαντήσατε ήδη στην ερώτηση"
+
+msgid "langElementList"
+msgstr "Κατάλογος με τα στοιχεία"
+
+msgid "langScore"
+msgstr "Βαθμολογία"
+
+msgid "langCorrespondsTo"
+msgstr "Αντιστοιχεί σε"
+
+msgid "langExpectedChoice"
+msgstr "Αναμενόμενη Απάντηση"
+
+msgid "langYourTotalScore"
+msgstr "Βαθμολογία για την άσκηση αυτή"
+
+msgid "ReachedMaxAttemptsAdmin"
+msgstr "Φθάσατε στον ανώτατο αριθμό προσπαθειών για την άσκηση αυτή. Αφού είστε Εκπαιδευτής, μπορείτε να συνεχίσετε να προπονείσθε, αλλά τα Αποτελέσματά σας δεν θα δημοσιευθούν."
+
+msgid "langExerciseAdded"
+msgstr "Προστέθηκε Άσκηση"
+
+msgid "langEvalSet"
+msgstr "Ρυθμίσεις αξιολόγησης"
+
+msgid "langActive"
+msgstr "ενεργό"
+
+msgid "langInactive"
+msgstr "μη ενεργό"
+
+msgid "langQuestCreate"
+msgstr "Δημιουργία ερωτήσεων"
+
+msgid "langExRecord"
+msgstr "Η άσκηση σας αποθηκεύτηκε"
+
+msgid "langBackModif"
+msgstr "Επιστροφή στη σελίδα για την επεξεργασία των ερωτήσεων"
+
+msgid "langDoEx"
+msgstr "Κάντε την άσκηση"
+
+msgid "langDefScor"
+msgstr "Περιγραφή των ρυθμίσεων αξιολόγησης"
+
+msgid "langCreateModif"
+msgstr "Δημιουργία / Επεξεργασία των ερωτήσεων"
+
+msgid "langSub"
+msgstr "Υπότιτλος"
+
+msgid "langMyAnswer"
+msgstr "Η απάντησή μου"
+
+msgid "langMorA"
+msgstr "+απαντ.."
+
+msgid "langLesA"
+msgstr "-απάντ."
+
+msgid "langRecEx"
+msgstr "Αποθήκευση άσκησης"
+
+msgid "langRecQu"
+msgstr "Αποθήκευση ερώτησης"
+
+msgid "langRecAns"
+msgstr "Αποθήκευση απαντήσεων"
+
+msgid "langIntroduction"
+msgstr "Εισαγωγή"
+
+msgid "langTitleAssistant"
+msgstr "Βοηθός δημιουργίας ασκήσεων"
+
+msgid "langQuesList"
+msgstr "Κατάλογος ερωτήσεων"
+
+msgid "langSaveEx"
+msgstr "Αποθήκευση απαντήσεων"
+
+msgid "langFinish"
+msgstr "Τέλος"
+
+msgid "langCancel"
+msgstr "Ακύρωση"
+
+msgid "langQImage"
+msgstr "Ερώτηση με μια εικόνα"
+
+msgid "langAddQ"
+msgstr "Προσθήκη ερώτησης"
+
+msgid "langDoAnEx"
+msgstr "Κάντε μια άσκηση"
+
+msgid "langGenerator"
+msgstr "Κατάλογος ασκήσεων"
+
+msgid "langChoice"
+msgstr "Η επιλογή σας"
+
+msgid "langCorrect"
+msgstr "Σωστό"
+
+msgid "langPossAnsw"
+msgstr "Αριθμός πιθανών απαντήσεων για μια ερώτηση"
+
+msgid "langStudAnsw"
+msgstr "Αριθμός λαθών του εκπαιδευόμενου"
+
+msgid "langDetermine"
+msgstr "Ορίστε τους βαθμούς - στάθμιση βαρύτητας των απαντήσεων, συμπληρώνοντας τον παρακάτω πίνακα. Στη συνέχεια πατήστε  \"Εντάξει\""
+
+msgid "langNonNumber"
+msgstr "Μια μη αριθμητική τιμή"
+
+msgid "langReplaced"
+msgstr "Έχει αντικατασταθεί"
+
+msgid "langSuperior"
+msgstr "Τιμή μεγαλύτερη του 20"
+
+msgid "langRep20"
+msgstr "Αντικατάσταση του 20"
+
+msgid "langDefault"
+msgstr "Προεπιλεγμένες τιμές/ βαθμοί *"
+
+msgid "langDefComment"
+msgstr "Οι προηγούμενες τιμές/ βαθμοί θα αντικαταστθούν πατώντας το κουμπί \"Προεπιλεγμένες τιμές/ βαθμοί\""
+
+msgid "langScoreGet"
+msgstr "Οι αριθμοί με μαύρο χρώμα ειναι η βαθμολογία"
+
+msgid "langShowScor"
+msgstr "Εμφάνιση της βαθμολογίας προς τους εκπαιδευόμενους:"
+
+msgid "langStep1"
+msgstr "Βήμα 1"
+
+msgid "langStep2"
+msgstr "Βήμα 2"
+
+msgid "langTake"
+msgstr "διάλεξε"
+
+msgid "langAmong"
+msgstr "μεταξύ"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Εισαγωγή Καυτών Θεμάτων"
+
+msgid "langHotPotatoesTests"
+msgstr "Εισαγωγή ασκήσεων με Καυτά Θέματα"
+
+msgid "langDownloadFile"
+msgstr "Μεταφόρτωση αρχείου"
+
+msgid "langDownloadImg"
+msgstr "Μεταφορτώστε (upload) ένα αρχείο εικόνας στον διακομιστή"
+
+msgid "langDownloadEnd"
+msgstr "Ολοκληρώθηκε η μεταφόρτωση (upload)"
+
+msgid "langNoSpace"
+msgstr "Το ανέβασμα του αρχείου απέτυχε. Είτε έχετε υπερβεί το ανώτατο επιτρεπόμενο όριό σας, είτε δεν υπάρχει αρκετός χώρος στον δίσκο σας."
+
+msgid "langZipNoPhp"
+msgstr "Το αρχείο zip δεν πρέπει να περιέχει αρχεία.PHP"
+
+msgid "langNoImg"
+msgstr "Άσκηση χωρίς εικόνες"
+
+msgid "langImgNote_st"
+msgstr "Πρέπει να μεταφορτώσετε (upload)"
+
+msgid "langImgNote_en"
+msgstr "εικόνα (ες):"
+
+msgid "langDocDeleted"
+msgstr "Το έγγραφο έχει διαγραφεί"
+
+msgid "langViMod"
+msgstr "Η ορατότητα του εγγράφου άλλαξε"
+
+msgid "langNameNotEqual"
+msgstr "δεν είναι έγκυρο αρχείο!"
+
+msgid "langIndice"
+msgstr "Ευρετήριο"
+
+msgid "langIndices"
+msgstr "Ευρετήρια"
+
+msgid "langDateExo"
+msgstr "Ημερομηνία"
+
+msgid "langShowQuestion"
+msgstr "Εμφάνιση Ερώτησης"
+
+msgid "langUnknownExercise"
+msgstr "Άγνωστη άσκηση"
+
+msgid "langReuseQuestion"
+msgstr "Ξαναχρησιμοποιήστε την ερώτηση"
+
+msgid "langCreateExercise"
+msgstr "Δημιουργία Άσκησης"
+
+msgid "langCreateQuestion"
+msgstr "Δημιουργία ερώτησης"
+
+msgid "langCreateAnswers"
+msgstr "Δημιουργία απαντήσεων"
+
+msgid "langModifyExercise"
+msgstr "Επεξεργασία ονόματος της άσκησης και των ρυθμίσεων"
+
+msgid "langModifyAnswers"
+msgstr "Επεξεργασία απαντήσεων"
+
+msgid "langForExercise"
+msgstr "για την άσκηση"
+
+msgid "langUseExistantQuestion"
+msgstr "Χρήση υπάρχουσας ερώτησης"
+
+msgid "FreeAnswer"
+msgstr "Άνοιγμα ερώτησης"
+
+msgid "notCorrectedYet"
+msgstr "Αυτή η απάντηση δενέχει ακόμη διορθωθεί. Στο εντωμεταξύ, η βαθμολογία σας για την ερώτηση αυτή παραμένει στο 0, επηρρεάζοντας τη συνολική βαθμολογία."
+
+msgid "adminHP"
+msgstr "Διαχειριστής καυτών θεμάτων"
+
+msgid "NewQu"
+msgstr "Νέα ερώτηση"
+
+msgid "NoImage"
+msgstr "Παρακαλώ επιλέξτε μια εικόνα"
+
+msgid "langAnswerHotspot"
+msgstr "Χρειάζεται μια περιγραφή και μια βαθμολογία για κάθε καυτό θέμα - Η παροχή ανάδρασης (feedback) είναι προαιρετική"
+
+msgid "langMinHotspot"
+msgstr "Πρέπει να δημιουργήσετε τουλάχιστον ένα (1) καυτό θέμα."
+
+msgid "langMaxHotspot"
+msgstr "Ο μέγιστος αριθμός καυτών θεμάτων που μπορείτε να δημιουργήσετε είναι Δώδεκα (12)."
+
+msgid "langHotspotError"
+msgstr "Παρακαλώ δώστε μια περιγραφή και μια στάθμιση βαρύτητας για κάθε καυτό θέμα."
+
+msgid "langMoreHotspots"
+msgstr "Προσθήκη καυτού θέματος"
+
+msgid "langLessHotspots"
+msgstr "Διαγραφή καυτού θέματος"
+
+msgid "langHotspotZones"
+msgstr "Ζώνες εικόνας"
+
+msgid "langNextQuestion"
+msgstr "Επόμενη ερώτηση"
+
+msgid "langCorrectAnswer"
+msgstr "Σωστή απάντηση"
+
+msgid "langHotspotHit"
+msgstr "Η απάντησή σας ήταν"
+
+msgid "langOnlyJPG"
+msgstr "Για τα καυτά θέματα μπορείτε να χρησιμοποιήσετε μόνον αρχεία εικόνας σε μορφή JPG (ή JPEG)"
+
+msgid "langFinishThisTest"
+msgstr "Εμφάνιση των σωστών απαντήσεων για την κάθε ερώτηση, καθώς και της συνολικής βαθμολογίας της άσκησης"
+
+msgid "langAllQuestions"
+msgstr "Όλες οι ερωτήσεις"
+
+msgid "langModifyTitleDescription"
+msgstr "Επεξεργασία τίτλου και περιγραφής"
+
+msgid "langModifyHotspots"
+msgstr "Επεξεργασία απαντήσεων / καυτών θεμάτων"
+
+msgid "langHotspotNotDrawn"
+msgstr "Δεν ζωγραφίσατε ακόμη όλα τα Καυτά θέματά σας"
+
+msgid "langHotspotWeightingError"
+msgstr "Πρέπει να δώσετε μία θετική βαθμολογία για το κάθε Καυτό θέμα"
+
+msgid "langHotspotValidateError1"
+msgstr "Πρέπει να απαντήσετε πλήρως την ερώτηση ("
+
+msgid "langHotspotValidateError2"
+msgstr "τα κλικ που απαιτούνται στην εικόνα), για να μπορέσετε να δείτε τα αποτελέσματα"
+
+msgid "langHotspotRequired"
+msgstr "Για το κάθε Καυτό θέμα απαιτούνται η βαθμολογία και η περιγραφή. Η παροιχή ανάδρασης (feedback) είναι προαιρετική."
+
+msgid "langHotspotChoose"
+msgstr "Για τη δημιουργία ενός καυτού θέματος: επιλέξτε ένα σχήμα δίπλα από το χρώμα και ζωγραφίστε το Καυτό θέμα. Για τη μετακ΄λινηση ενός Καυτού θέματος, επιλέξτε το χρώμα, κάντε κλικ σε κάποιο άλλο σημείο της εικόνας,  και ζωγραφίστε το Καυτό θέμα. Για την προσθήκη ενός Καυτού θέματος: κάντε κλικ στο κουμπί Προσθήκη καυτού θέματος. Για να επιλέξετε ένα σχήμα πολυγώνου: κάντε δεξί κλικ και πατήστε Επιλογή πολυγώνου."
+
+msgid "Fault"
+msgstr "Λάθος"
+
+msgid "HotSpot"
+msgstr "Ζώνες εικόνας"
+
+msgid "ClickNumber"
+msgstr "Κάντε κλικ σε έναν αριθμό"
+
+msgid "HotspotGiveAnswers"
+msgstr "Παρακαλώ δώστε μια απάντηση"
+
+msgid "Addlimits"
+msgstr "Προσθήκη ορίων"
+
+msgid "AreYouSure"
+msgstr "Είστε σίγουρος;"
+
+msgid "StudentScore"
+msgstr "Βαθμολογία φοιτητή"
+
+msgid "backtoTesthome"
+msgstr "Επιστροφή στην αρχική σελίδα των ασκήσεων"
+
+msgid "Feedback"
+msgstr "Ανάδραση"
+
+msgid "MarkIsUpdated"
+msgstr "Ο βαθμός έχει ενημερωθεί"
+
+msgid "MarkInserted"
+msgstr "Ο βαθμός έχει εισαχθεί"
+
+msgid "PleaseGiveAMark"
+msgstr "Παρακαλώ, δώστε έναν βαθμό"
+
+msgid "EditCommentsAndMarks"
+msgstr "Επεξεργασία ατομικής ανάδρασης (feedback) και Βαθμολόγηση της ανοικτής ερώτησης"
+
+msgid "AddComments"
+msgstr "Προσθήκη ατομικής ανάδρασης (feedback)"
+
+msgid "Number"
+msgstr "Αριθμ."
+
+msgid "Weighting"
+msgstr "Βαθμολογία"
+
+msgid "ChooseQuestionType"
+msgstr "Για τη δημιουργία μιας νέας ερώτησης, επιλέξτε εδώ παραπάνω ένα είδος"
+
+msgid "MatchesTo"
+msgstr "Ταιριάζει με το"
+
+msgid "CorrectTest"
+msgstr "Σωστή άσκηση"
+
+msgid "ViewTest"
+msgstr "Όψη"
+
+msgid "State"
+msgstr "Κατάσταση (status)"
+
+msgid "NotAttempted"
+msgstr "Δεν έχει επιχειρηθεί"
+
+msgid "AddElem"
+msgstr "Προσθήκη στοιχείου"
+
+msgid "DelElem"
+msgstr "Αφαίρεση στοιχείου"
+
+msgid "PlusAnswer"
+msgstr "Προσθήκη απάντησης"
+
+msgid "LessAnswer"
+msgstr "Αφαίρεση απάντησης"
+
+msgid "YourScore"
+msgstr "Η βαθμολογία σας"
+
+msgid "Attempted"
+msgstr "Έχει γίνει προσπάθεια"
+
+msgid "AssignMarks"
+msgstr "Βάλτε έναν βαθμό"
+
+msgid "Results"
+msgstr "Αποτελέσματα"
+
+msgid "ExerciseStored"
+msgstr "Η άσκηση αποθηκεύτηκε"
+
+msgid "ChooseAtLeastOneCheckbox"
+msgstr "Επιλέξτε τουλάχιστον μια καλή απάντηση"
+
+msgid "ExerciseEdited"
+msgstr "Το όνομα της άσκησης και οι ρυθμίσεις έχουν αποθηκευθεί."
+
+msgid "ExerciseDeleted"
+msgstr "Η άσκηση έχει διαγραφεί"
+
+msgid "ClickToCommentAndGiveFeedback"
+msgstr "Κάντε κλικ στον παρακάτω σύνδεσμο για να τσεκάρετε την απάντηση και να προσφέρετε ανάδραση (feedback)"
+
+msgid "OpenQuestionsAttempted"
+msgstr "Ένας εκπαιδευόμενος απάντησε μια ανοικτή ερώτηση"
+
+msgid "AttemptDetails"
+msgstr "Λεπτομέρειες της προσπάθειας"
+
+msgid "TestAttempted"
+msgstr "Έγινε κάποια προσπάθεια με αυτή την άσκηση"
+
+msgid "StudentName"
+msgstr "Όνομα φοιτητή"
+
+msgid "StudentEmail"
+msgstr "E-mail φοιτητή"
+
+msgid "OpenQuestionsAttemptedAre"
+msgstr "Η ανοικτή ερώτηση που προσπαθήθηκε είναι"
+
+msgid "CourseName"
+msgstr "Τίτλος μαθήματος"
+
+msgid "UploadJpgPicture"
+msgstr "Ανέβασμα μια εικόνας JPG"
+
+msgid "HotspotDescription"
+msgstr "Τώρα κάντε κλικ στο: (...)"
+
+msgid "ExamSheetVCC"
+msgstr "Το φύλλο εξετάσεων διαβάστηκε/ διορθώθηκε/ σχολιάσθηκε από τον Εκπαιδευτή"
+
+msgid "AttemptVCC"
+msgstr "Η παρακάτω προσπάθειά σας έχει διαβασθεί/ σχολιασθεί/ διορθωθεί από τον Εκπαιδευτή"
+
+msgid "ClickLinkToViewComment"
+msgstr "Κάντε κλικ στον παρακάτω σύνδεσμο για να έχετε πρόσβαση στο λογαριασμό σας και να δείτε τον σχολιασμό στο Φύλλο των εξετάσεών σας."
+
+msgid "Regards"
+msgstr "Με εκτίμηση"
+
+msgid "AttemptVCCLong"
+msgstr "Η προσπάθειά σας για την άσκηση %s έχει διαβασθεί/ σχολιασθεί/ διορθωθεί από τον Εκπαιδευτή. Κάντε κλικ πιο κάτω, για να έχετε πρόσβαση στο λογαριασμό σας και να δείτε το δικό σας Φϋλλο εξετάσεων."
+
+msgid "DearStudentEmailIntroduction"
+msgstr "Αγαπητέ εκπαιδευόμενε / Αγαπητή εκπαιδευόμενη,"
+
+msgid "ExerciseFinished"
+msgstr "Η άσκηση ολοκληρώθηκε"
+
+msgid "ResultsEnabled"
+msgstr "Ενεργοποιήθηκαν τα αποτελέσματα για τους εκπαιδευόμενους"
+
+msgid "ResultsDisabled"
+msgstr "Απενεργοποιήθηκαν τα αποτελέσματα για τους εκπαιδευόμενους"
+
+msgid "ExportWithUserFields"
+msgstr "Να συμπεριλαμβάνεται το Προφίλ"
+
+msgid "ExportWithoutUserFields"
+msgstr "Να αποκλείεται το Προφίλ"
+
+msgid "DisableResults"
+msgstr "Να μην εμφανίζονται τα αποτελέσματα"
+
+msgid "EnableResults"
+msgstr "Να εμφανίζονται τα αποτελέσματα στους εκπαιδευόμενους"
+
+msgid "ValidateAnswer"
+msgstr "Έγκριση των απαντήσεων"
+
+msgid "ReachedMaxAttempts"
+msgstr "Δεν μπορείτε να λάβετε μέρος σε αυτή την άσκηση, διότι φθάσατε ήδη στο ανώτατο επιτρεπόμενο όριο των %s προσπαθειών."
+
+msgid "AdvancedParameters"
+msgstr "Προχωρημένες ρυθμίσεις"
+
+msgid "RandomQuestionsToDisplay"
+msgstr "Αριθμός τυχαίων ερωτήσεων που θα εμφανίζονται"
+
+msgid "RandomQuestionsHelp"
+msgstr "Για την τυχαιοποίηση όλων των ερωτήσεων, επιλέξτε το 10. Για την απενεργοποίηση της τυχαιοποίησης, επιλέξτε \"Να μη γίνεται τυχαιοποίηση\""
+
+msgid "ExerciseAttempts"
+msgstr "Μέγιστος αριθμός προσπαθειών"
+
+msgid "DoNotRandomize"
+msgstr "Να μη γίνεται τυχαιοποίηση"
+
+msgid "BackToExercisesList"
+msgstr "Επιστροφή στο Εργαλείο ασκήσεων"
+
+msgid "ViewScoreChangeHistory"
+msgstr "Εμφάνιση ιστορικού αλλαγών βαθμολογίας"
+
+msgid "NoStartDate"
+msgstr "Χωρίς ημερομηνία έναρξης"
+
+msgid "NoLogOfDuration"
+msgstr "Χωρίς αρχείο καταγραφής (log) της διάρκειας"
+
+msgid "EnableTimeLimits"
+msgstr "Να επιβληθεί ένα όριο ημερολογίου"
+
+msgid "ExeStartTime"
+msgstr "Ημερομηνία έναρξης"
+
+msgid "ExeEndTime"
+msgstr "Ημερομηνία λήξης"
+
+msgid "Value"
+msgstr "Τιμή"
+
+msgid "DeleteAttempt"
+msgstr "Να διαγραφεί η προσπάθεια;"
+
+msgid "WithoutComment"
+msgstr "Χωρίς σχόλιο"
+
+msgid "QuantityQuestions"
+msgstr "Ερωτήσεις"
+
+msgid "FilterExercices"
+msgstr "Φιλτράρισμα Αποτελεσμάτων"
+
+msgid "Duration"
+msgstr "Διάρκεια"
+
+msgid "ReachedTimeLimit"
+msgstr "Φθάσατε το χρονικό όριο"
+
+msgid "TryAgain"
+msgstr "Ξαναπροσπαθήστε"
+
+msgid "SeeTheory"
+msgstr "Σύνδεσμος για τη θεωρία"
+
+msgid "EndActivity"
+msgstr "Τέλος δραστηριότητας"
+
+msgid "NoFeedback"
+msgstr "Εξέταση (χωρίς ανάδραση)"
+
+msgid "DirectFeedback"
+msgstr "Αυτοαξιολόγηση (άμεση ανάδραση)"
+
+msgid "FeedbackType"
+msgstr "Ανάδραση (feedback)"
+
+msgid "Scenario"
+msgstr "Σενάριο"
+
+msgid "VisitUrl"
+msgstr "Επισκεφθείτε αυτόν τον σύνδεσμο"
+
+msgid "ExitTest"
+msgstr "Τερματίστε την εξέταση"
+
+msgid "DurationFormat"
+msgstr "%1 δευτερόλεπτα"
+
+msgid "Difficulty"
+msgstr "Δυσκολία"
+
+msgid "NewScore"
+msgstr "Νέα βαθμολογία"
+
+msgid "NewComment"
+msgstr "Νέο σχόλιο"
+
+msgid "ExerciseNoStartedYet"
+msgstr "Η άσκηση δεν άρχισε ακόμη"
+
+msgid "ExerciseNoStartedAdmin"
+msgstr "Ο εκπαιδευτής δεν επέτρεψε ακόμη να αρχίσει η άσκηση"
+
+msgid "SelectTargetLP"
+msgstr "Επιλογή της άσκησης-στόχου"
+
+msgid "SelectTargetQuestion"
+msgstr "Επιλογή άσκησης-στόχου"
+
+msgid "DirectFeedbackCantModifyTypeQuestion"
+msgstr "Αυτό το είδος άσκησης δεν μπορεί να τροποποιηθεί, αφού είχε ρυθμισθεί στη λειτουργία της αυτοαξιολόγησης. Η αυτοαξιολόγηση σας επιτρέπει να προσφέρετε άμεση ανάδαρσση (feedback) στον χρήστη, αλλά δεν είναι συμβατή με όλα τα είδη ασκήσεων και, έτσι, αυτού του είδους τα quiz δεν γίνεται να αλλάξουν εκ των υστέρων."
+
+msgid "CantShowResults"
+msgstr "Μη διαθέσιμα"
+
+msgid "CantViewResults"
+msgstr "Δεν είναι δυνατή η εμφάνιση των αποτελεσμάτων"
+
+msgid "ShowCorrectedOnly"
+msgstr "Με ατομική ανάδραση (feedback)"
+
+msgid "ShowUnCorrectedOnly"
+msgstr "Μη διορθωμένα αποτελέσματα"
+
+msgid "HideResultsToStudents"
+msgstr "Απόκρυψη αποτελεσμάτων"
+
+msgid "ShowResultsToStudents"
+msgstr "Εμφάνιση βαθμολογίας προς τον εκπαιδευόμενο"
+
+msgid "ProcedToQuestions"
+msgstr "Προχωρήστε στις ερωτήσεις"
+
+msgid "AddQuestionToExercise"
+msgstr "Προσθήκη αυτής της ερώτησης σε αυτή την άσκηση"
+
+msgid "PresentationQuestions"
+msgstr "Εμφάνιση"
+
+msgid "UniqueAnswer"
+msgstr "Πολλαπλές επιλογές"
+
+msgid "MultipleAnswer"
+msgstr "Πολλαπλές απαντήσεις"
+
+msgid "ReachedOneAttempt"
+msgstr "Δεν μπορείτε να κάνετε αυτή την άσκηση, διότι έχετε ήδη κάνει μια προσπάθεια"
+
+msgid "QuestionsPerPage"
+msgstr "Ερωτήσεις ανά σελίδα"
+
+msgid "QuestionsPerPageOne"
+msgstr "Μία"
+
+msgid "QuestionsPerPageAll"
+msgstr "Όλες"
+
+msgid "EditIndividualComment"
+msgstr "Επεξεργασία ατομικής ανάδρασης (feedback)"
+
+msgid "ExerciseAtTheEndOfTheTest"
+msgstr "Στο τέλος της άσκησης"
+
+msgid "EnrichQuestion"
+msgstr "Εμπλουτισμός ερώτησης"
+
+msgid "langDefaultUniqueQuestion"
+msgstr "Επιλέξτε το σωστό συλλογισμό"
+
+msgid "langDefaultUniqueAnswer1"
+msgstr "Α μετά το Β μετά το Γ"
+
+msgid "langDefaultUniqueComment1"
+msgstr "Το γάλα αποτελεί τη βάση για πολλά γαλακτοκομικά προϊόντα όπως, μεταξύ των άλλων, το βούτυρο, το τυρί, και το γιαούρτι."
+
+msgid "langDefaultUniqueAnswer2"
+msgstr "Α μετά το Γ μετά το Β"
+
+msgid "langDefaultUniqueComment2"
+msgstr "Η βρώμη είναι ένα από τα πιο διαδεδομένα δημητριακά. Λόγω της ενεργειακής και της διατροφικής της αξίας, υπήρξε η βάση για τη διατροφή των ανθρώπων."
+
+msgid "langDefaultMultipleQuestion"
+msgstr "Ο μαρασμός είναι ένα αποτέλεσμα της"
+
+msgid "langDefaultMultipleAnswer1"
+msgstr "έλλειψης Ασβεστίου"
+
+msgid "langDefaultMultipleComment1"
+msgstr "Το ασβέστιο δρά ως ..."
+
+msgid "langDefaultMultipleAnswer2"
+msgstr "Έλλειψης βιταμίνης Α"
+
+msgid "langDefaultMultipleComment2"
+msgstr "Η βιταμίνη Α είναι υπεύθυνη για..."
+
+msgid "langDefaultFillBlankQuestion"
+msgstr "Υπολογίστε τον Δείκτη Μάζας Σώματος"
+
+msgid "langDefaultOpenQuestion"
+msgstr "Παραθέστε ποια θεωρείτε ως τα 10 κορυφαία προτερήματα ενός καλού διαχειριστή ενός έργου (project manager);"
+
+msgid "langMoreHotspotsImage"
+msgstr "Προσθήκη/ Επεξεργασία Καυτών θεμάτων στην εικόνα"
+
+msgid "ReachedTimeLimitAdmin"
+msgstr "Φθάσατε στο όριο χρόνου διαχειριστή"
+
+msgid "LastScoreTest"
+msgstr "Τελευταία βαθμολογία μιας άσκησης"
+
+msgid "BackToResultList"
+msgstr "Επιστροφή στον κατάλογο αποτελεσμάτων"
+
+msgid "EditingScoreCauseProblemsToExercisesInLP"
+msgstr "Αν επεξεργάζεσθε την βαθμολογία μιας ερώτησης, παρακαλώ να θυμάσθε ότι αυτή η Ερώτηση έχει προστεθεί σε μια σειρά μαθημάτων"
+
+msgid "SelectExercice"
+msgstr "Επιλογή άσκησης"
+
+msgid "YouHaveToSelectATest"
+msgstr "Πρέπει να επιλεξετε μια άσκηση"
+
+msgid "CreateQuestions"
+msgstr "Δημιουργία ερωτήσεων"
+
+msgid "MoreOAR"
+msgstr "Περισσότερες περιοχές υπό κίνδυνο"
+
+msgid "LessOAR"
+msgstr "Λιγότερες περιοχές υπό κίνδυνο"
+
+msgid "LearnerIsInformed"
+msgstr "Αυτό το μήνυμα, καθώς και ο πίνακας αποτελεσμάτων, θα εμφανισθούν στον εκπαιδευόμενο, αν αποτύχει σε αυτό το βήμα"
+
+msgid "MinOverlap"
+msgstr "Ελάχιστη αλληλο-επικάλυψη"
+
+msgid "IfNoError"
+msgstr "Αν δεν υπάρχει σφάλμα"
+
+msgid "LearnerHasNoMistake"
+msgstr "Ο εκπαιδευπομενος δεν έκανε κανένα σφάλμα"
+
+msgid "YourAnswer"
+msgstr "Η απάντησή σας"
+
+msgid "ResultIs"
+msgstr "Το αποτέλεσμά σας είναι ;"
+
+msgid "Overlap"
+msgstr "Περιοχή αλληλο-επικάλυψης"
+
+msgid "Missing"
+msgstr "Περιοχή που λείπει"
+
+msgid "Requirements"
+msgstr "Απαιτήσεις"
+
+msgid "OARHit"
+msgstr "Μία περιοχή (ή και περισσότερες περιοχές) υπό κίνδυνο έχει χτυπηθεί"
+
+msgid "Thresholds"
+msgstr "Όρια (Thresholds)"
+
+msgid "XResultsCleaned"
+msgstr "%d αποτελέσματα έχουν διαγραφεί"
+
+msgid "AreYouSureToDeleteResults"
+msgstr "Είστε σίγουρος/η ότι θέλετε να διαγράψετε αποτελέσματα;"
+
+msgid "ExerciseCopied"
+msgstr "Η άσκηση έχει αντιγραφεί"
+
+msgid "AreYouSureToCopy"
+msgstr "Είστε σίγουρος/η ότι θέλετε να αντιγράψετε;"
+
+msgid "EditingExerciseCauseProblemsInLP"
+msgstr "Η επεξεργασία της άσκησης δημιουργεί προβλήματα στην Εκπαιδευτική Διαδρομή"
+
+msgid "SessionIsReadOnly"
+msgstr "Αυτή η συνεδρία είναι μόνο για ανάγνωση"
+
+msgid "EnableTimerControl"
+msgstr "Ενεργοποίηση ελέγχου χρόνου (time control)"
+
+msgid "ExerciseTotalDurationInMinutes"
+msgstr "Συνολική διάρκεια της άσκησης, σε λεπτά"
+
+msgid "ToContinueUseMenu"
+msgstr "Για να συνεχίσετε αυτή τη σειρά μαθημάτων, παρακαλώ χρησιμοποιήστε το πλευρικό μενού."
+
+msgid "RandomAnswers"
+msgstr "Ανακατέψτε τις απαντήσεις"
+
+msgid "NotMarkActivity"
+msgstr "Αυτή η δραστηριότητα δεν μπορεί να βαθμολογηθεί"
+
+msgid "YouHaveToCreateAtLeastOneAnswer"
+msgstr "Πρέπει να δημιουργήσετε τουλάχιστον μια απάντηση"
+
+msgid "ExerciseAttempted"
+msgstr "Ένας εκπαιδευόμενος προσπάθησε μια άσκηση"
+
+msgid "MultipleSelectCombination"
+msgstr "Ακριβής επιλογή"
+
+msgid "MultipleAnswerCombination"
+msgstr "Ακριβής συνδυασμός απαντήσεων"
+
+msgid "ExerciceExpiredTimeMessage"
+msgstr "Έληξε το όριο χρόνου της άσκησης"
+
+msgid "CopyExercise"
+msgstr "Αντιγράψτε αυτή την άσκηση σαν νέα άσκηση"
+
+msgid "CleanStudentResults"
+msgstr "Διαγράψτε όλα τα αποτελέσματα των εκπαιδευομένων για την άσκηση αυτή"
+
+msgid "ImportQtiQuiz"
+msgstr "Εισαγωγή ασκήσεων Qti2"
+
+msgid "ReUseACopyInCurrentTest"
+msgstr "Επανάχρηση ενός αντιγράφου μέσα στην τρέχουσα άσκηση"
+
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+msgid "ScoreAverageFromAllAttempts"
+msgstr "Μέσος όρος βαθμολογίας όλων των προσπαθειών"
+
+msgid "DefaultContent"
+msgstr "Δημιουργία προεπιλεγμένου περιεχομένου"
+
+msgid "ExerciseEditionNotAvailableInSession"
+msgstr "Δεν μπορείτε να επεξεργασθείτε αυτή τη σειρά μαθημάτων μέσα από μια συνεδρία"
+
+msgid "MultipleAnswerTrueFalse"
+msgstr "Πολλαπλές απαντήσεις Σωστό/ Λάθος/ Δεν ξέρω"
+
+msgid "MultipleAnswerCombinationTrueFalse"
+msgstr "Συνδυασμός Σωστό/ Λάθος/ Δεν ξέρω"
+
+msgid "DontKnow"
+msgstr "Δεν ξέρω"
+
+msgid "False"
+msgstr "Λάθος"
+
+msgid "DoubtScore"
+msgstr "Δεν ξέρω"
+
+msgid "PropagateNegativeResults"
+msgstr "Μετάδοση αρνητικών αποτελεσμάτων μεταξύ ερωτήσεων"
+
+msgid "InsertALinkToThisQuestionInTheExercise"
+msgstr "Χρησιμοποιήστε αυτή την ερώτηση στην άσκηση ως σύνδεσμο (όχι ένα αντίγραφο)"
+
+msgid "OnlyShowScore"
+msgstr "Λειτουργία προπόνησης: Εμφάνιση μόνο της βαθμολογίας"
+
+msgid "ImportExcelQuiz"
+msgstr "Εισαγωγή κουίζ από το Excel"
+
+msgid "DownloadExcelTemplate"
+msgstr "Κατεβάστε το Πρότυπο (template) του Excel"
+
+msgid "ExerciseWillBeActivatedFromXToY"
+msgstr "Η άσκηση θα ενεργοποιηθεί από %s σε %s"
+
+msgid "EnableStartTime"
+msgstr "Ενεργοποίηση χρόνου εκκίνησης"
+
+msgid "EnableEndTime"
+msgstr "Ενεργοποίηση χρόνου περάτωσης"
+
+msgid "ExerciseAvailableFromX"
+msgstr "Η άσκηση είναι διαθέσιμη από τις %s"
+
+msgid "ExerciseAvailableUntilX"
+msgstr "Η άσκηση θα είναι διαθέσιμη μέχρι τις %s"
+
+msgid "TestLimitsAdded"
+msgstr "Προστέθηκαν όρια ασκήσεων"
+
+msgid "AddLimits"
+msgstr "Προσθήκη ορίων"
+
+msgid "Unlimited"
+msgstr "Απεριόριστα"
+
+msgid "LimitedTime"
+msgstr "Περιορισμένος χρόνος"
+
+msgid "LimitedAttempts"
+msgstr "Περιορισμένες προσπάθειες"
+
+msgid "ExerciseTimerControlMinutes"
+msgstr "Ενεργοποίηση άσκησης ελεγκτή χρόνου"
+
+msgid "Numeric"
+msgstr "Αριθμητικά"
+
+msgid "Acceptable"
+msgstr "Αποδεκτά"
+

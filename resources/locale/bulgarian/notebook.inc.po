@@ -1,0 +1,90 @@
+msgid "NewNote"
+msgstr "Нова бележка"
+
+msgid "Note"
+msgstr "Бележка"
+
+msgid "NoteDeleted"
+msgstr "Бележката е изтрита."
+
+msgid "NoteUpdated"
+msgstr "Бележката е актуализирана."
+
+msgid "NoteCreated"
+msgstr "Създадена е бележка."
+
+msgid "YouMustWriteANote"
+msgstr "Бележката трябва да има съдържание."
+
+msgid "SaveNote"
+msgstr "Запис на бележката"
+
+msgid "WriteYourNoteHere"
+msgstr "Щракнете тук за създаване на бележка"
+
+msgid "SearchByTitle"
+msgstr "Търсене по заглавие"
+
+msgid "WriteTheTitleHere"
+msgstr "Напишете заглавието тук"
+
+msgid "UpdateDate"
+msgstr "Дата на промяна"
+
+msgid "NoteAddNew"
+msgstr "Добавяне на бележка"
+
+msgid "OrderByCreationDate"
+msgstr "Сортиране по датата на създаване"
+
+msgid "OrderByModificationDate"
+msgstr "Сортиране по датата на промяна"
+
+msgid "OrderByTitle"
+msgstr "Сортиране по заглавията"
+
+msgid "NoteTitle"
+msgstr "Заглавие"
+
+msgid "NoteComment"
+msgstr "Съдържание на бележката"
+
+msgid "NoteAdded"
+msgstr "Добавена е бележка."
+
+msgid "NoteConfirmDelete"
+msgstr "Сигурни ли сте, че искате да изтриете бележката?"
+
+msgid "AddNote"
+msgstr "Създаване на бележка"
+
+msgid "ModifyNote"
+msgstr "Редактиране на бележката"
+
+msgid "BackToNoteList"
+msgstr "Обратно към списъка с бележки"
+
+msgid "NotebookManagement"
+msgstr "Управление на бележките"
+
+msgid "BackToNotesList"
+msgstr "Обратно към списъка с бележките"
+
+msgid "NotesSortedByTitleAsc"
+msgstr "Бележките са сортирани по заглавията"
+
+msgid "NotesSortedByTitleDESC"
+msgstr "Бележките са сортирани по заглавията в обратен ред"
+
+msgid "NotesSortedByUpdateDateAsc"
+msgstr "Бележките са сортирани по дата на промяна"
+
+msgid "NotesSortedByUpdateDateDESC"
+msgstr "Бележките са сортирани по дата на промяна в обратен ред"
+
+msgid "NotesSortedByCreationDateAsc"
+msgstr "Бележките са сортирани по дата на създаване"
+
+msgid "NotesSortedByCreationDateDESC"
+msgstr "Бележките са сортирани по дата на създаване в обратен ред"
+

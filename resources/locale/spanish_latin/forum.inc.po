@@ -1,0 +1,177 @@
+msgid "Forum"
+msgstr "Foro"
+
+msgid "AddForumCategory"
+msgstr "Agregar una nueva categoría al foro"
+
+msgid "AddForum"
+msgstr "Agregar un nuevo foro"
+
+msgid "Topics"
+msgstr "Temas"
+
+msgid "Posts"
+msgstr "Mensajes"
+
+msgid "LastPosts"
+msgstr "Último mensaje"
+
+msgid "Message"
+msgstr "mensaje"
+
+msgid "NoForumInThisCategory"
+msgstr "No hay foros en esta categoría"
+
+msgid "InForumCategory"
+msgstr "Crear en categoría"
+
+msgid "AllowAnonymousPosts"
+msgstr "¿ Permitir mensajes anónimos ?"
+
+msgid "StudentsCanEdit"
+msgstr "¿ Pueden los estudiantes editar sus mensajes ?"
+
+msgid "ApprovalDirect"
+msgstr "Aprobación / Mensaje directo"
+
+msgid "AllowNewThreads"
+msgstr "Permitir a los estudiantes iniciar nuevos temas"
+
+msgid "DefaultViewType"
+msgstr "Tipo de vista por defecto"
+
+msgid "GroupSettings"
+msgstr "Configuración del grupo"
+
+msgid "NotAGroupForum"
+msgstr "No es un foro de grupo"
+
+msgid "PublicPrivateGroupForum"
+msgstr "¿ Foro del grupo público o privado ?"
+
+msgid "Public"
+msgstr "Para todos los miembros del curso"
+
+msgid "Private"
+msgstr "Sólo para los miembros del grupo"
+
+msgid "NewPostStored"
+msgstr "Su mensaje ha sido guardado"
+
+msgid "ReturnTo"
+msgstr "Ahora puede volver a"
+
+msgid "Or"
+msgstr "o"
+
+msgid "ReplyToThread"
+msgstr "Responder a este tema"
+
+msgid "ReplyToMessage"
+msgstr "Responder a este mensaje"
+
+msgid "QuoteMessage"
+msgstr "Citar este mensaje"
+
+msgid "NewTopic"
+msgstr "Nuevo tema"
+
+msgid "Replies"
+msgstr "Respuestas"
+
+msgid "Views"
+msgstr "Vistas"
+
+msgid "LastPost"
+msgstr "Último mensaje"
+
+msgid "Quoting"
+msgstr "Citando"
+
+msgid "NotifyByEmail"
+msgstr "Notificarme por e-mail cuando alguien responda"
+
+msgid "StickyPost"
+msgstr "Este es un mensaje fijo (aparece siempre arriba y tiene un icono fijo especial)"
+
+msgid "ReplyShort"
+msgstr "Re:"
+
+msgid "DeletePost"
+msgstr "¿ Está seguro de querer borrar este mensaje ? Al borrar este mensaje también borrará las respuestas que tenga. Por favor verifique el hilo del tema para ver que mensajes serán eliminados."
+
+msgid "Locked"
+msgstr "Cerrado: los estudiantes no pueden publicar más mensajes en esta categoría, foro o tema, pero pueden leer los mensajes que anteriormente hayan sido publicados."
+
+msgid "Unlocked"
+msgstr "Abierto: los estudiantes pueden publicar nuevos mensajes en esta categoría, foro o tema"
+
+msgid "Flat"
+msgstr "Plana"
+
+msgid "Threaded"
+msgstr "Hilo del tema"
+
+msgid "Nested"
+msgstr "Jerarquizado"
+
+msgid "FlatView"
+msgstr "Vista plana"
+
+msgid "ThreadedView"
+msgstr "Hilo del tema"
+
+msgid "NestedView"
+msgstr "Vista jerarquizada"
+
+msgid "Structure"
+msgstr "Estructura"
+
+msgid "ForumCategoryAdded"
+msgstr "La categoría de foros ha sido añadida"
+
+msgid "ForumCategoryEdited"
+msgstr "La categoría de foros ha sido modificada"
+
+msgid "ForumAdded"
+msgstr "El foro ha sido añadido"
+
+msgid "ForumEdited"
+msgstr "El foro ha sido modificado"
+
+msgid "NewThreadStored"
+msgstr "El nuevo tema ha sido añadido"
+
+msgid "Approval"
+msgstr "Aprobación"
+
+msgid "Direct"
+msgstr "Directo"
+
+msgid "ForGroup"
+msgstr "Para Grupo"
+
+msgid "ThreadLocked"
+msgstr "Tema cerrado."
+
+msgid "NotAllowedHere"
+msgstr "No está autorizado para estar aquí."
+
+msgid "ReplyAdded"
+msgstr "La respuesta ha sido añadida"
+
+msgid "EditPost"
+msgstr "Editar mensaje"
+
+msgid "EditPostStored"
+msgstr "El mensaje ha sido modificado"
+
+msgid "NewForumPost"
+msgstr "Nuevo mensaje en el foro"
+
+msgid "YouWantedToStayInformed"
+msgstr "Ha indicado que desea ser informado por e-mail cuando alguien conteste al tema"
+
+msgid "MessageHasToBeApproved"
+msgstr "Su mensaje debe ser aprobado antes de que los demás puedan verlo."
+

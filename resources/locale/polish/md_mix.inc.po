@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Dokument Metadane"
+
+msgid "langClickKw"
+msgstr "Kliknij na słowo kluczowe w drzewie, aby je zaznaczyć lub odznaczyć."
+
+msgid "langKwHelp"
+msgstr "<br/> Kliknij przycisk \'+\' aby otworzyć, przycisk \'-\' aby zamknąć, przycisk \'++\' aby otworzyć wszystkie,  przycisk \'--\' aby zamknąć wszystkie.<br/> <br/> Wyczyść wszystkie zaznaczone słowa kluczowe poprzez zamknięcie drzewa oraz otworzenie go ponowne za pomocą przycisku \'+\'.<br/> Kliknięcie \'+\' trzymając Alt pozwala znaleźć oryginalne słowa kluczowe w drzewie.<br/> <br/> Kliknięcie na słowo kluczowe trzymając Alt, zaznacza to słowo bez szerszych określeń lub odznacza słowo z szerszymi określeniami.<br/> <br/> Jeśli zmieniasz język opisu, nie dodawaj w tym samym czasie słów kluczowych.<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Buduj"
+
+msgid "langSearch"
+msgstr "Szukaj"
+
+msgid "langSearchCrit"
+msgstr "Jedno słowo w linijce!"
+
+msgid "langNoKeywords"
+msgstr "Ten kurs nie posiada sł�w kluczowych"
+
+msgid "langKwCacheProblem"
+msgstr "\'Cache\' słów kluczowych nie może zostać otwarte"
+
+msgid "langCourseKwds"
+msgstr "Ten dokument zawiera słowa kluczowe kursu"
+
+msgid "langKwdsInMD"
+msgstr "słowa kluczowe wykorzystywane w MD"
+
+msgid "langKwdRefs"
+msgstr "referencje dla słów kluczowych"
+
+msgid "langNonCourseKwds"
+msgstr "Słowa kluczowe nie związane z kursem"
+
+msgid "langKwdsUse"
+msgstr "Słowa kluczowe kursu (wytłuszczenie = nie używane)"
+
+msgid "langTotalMDEs"
+msgstr "Ogólna liczba wprowadzonych Linków MD"
+

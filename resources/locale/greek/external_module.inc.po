@@ -1,0 +1,18 @@
+msgid "langTooBig"
+msgstr "Δεν διαλέξατε κάποιο αρχείο για να στείλετε, ή είναι πολύ μεγάλο"
+
+msgid "langSameWindow"
+msgstr "Στο ίδιο παράθυρο"
+
+msgid "langNewWindow"
+msgstr "Σε νέο παράθυρο"
+
+msgid "langAdded"
+msgstr "Προστέθηκε"
+
+msgid "langAddLink"
+msgstr "Προσθήκη συνδέσμου"
+
+msgid "langEditLink"
+msgstr "Επεξεργασία συνδέσμου αρχικής σελίδας του μαθήματος"
+

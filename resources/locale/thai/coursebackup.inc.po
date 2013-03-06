@@ -1,0 +1,123 @@
+msgid "langSelectOptionForBackup"
+msgstr "กรุณาเลือกค่าและวิธีการสำรองข้อมูล"
+
+msgid "langLetMeSelectItems"
+msgstr "เลือกส่วนประกอบของรายวิชา"
+
+msgid "langCreateFullBackup"
+msgstr "ทำการสำรองข้อมูลของวิชานี้"
+
+msgid "langCreateBackup"
+msgstr "ทำการสำรองข้อมูล"
+
+msgid "langBackupCreated"
+msgstr "¡ÒÃÊÓÃÍ§¢éÍÁÙÅàÊÃçšÊÔé¹áÅéÇ ÍÕ¡ÊÑ¡€ÃÙèÃÐººšÐãËéâÍ¹ÂéÒÂä¿ÅìÅ§ÁÒãËéâŽÂÍÑµâ¹ÁÑµÔ ËÒ¡ÃÐººäÁè·Ó§Ò¹µèÍãËé·èÒ¹€ÅÔ¡·Õè LinkàŸ×èÍŽÒÇ¹ìâËÅŽàÍ§"
+
+msgid "langSelectBackupFile"
+msgstr "เลือกไฟล์ที่ต้องการสำรองข้อมูล"
+
+msgid "langImportBackup"
+msgstr "นำข้อมูลสำรองเข้าในระบบ"
+
+msgid "langImportFullBackup"
+msgstr "นำเข้าไฟล์ที่สำรองไว้ทั้งชุด"
+
+msgid "langImportFinished"
+msgstr "การนำเข้าเรียบร้อยแล้ว"
+
+msgid "langEvents"
+msgstr "เหตุการณ์"
+
+msgid "langAnnouncements"
+msgstr "ประกาศ"
+
+msgid "langDocuments"
+msgstr "เอกสาร"
+
+msgid "langTests"
+msgstr "แบบทดสอบ"
+
+msgid "langLearnpaths"
+msgstr "ลำดับการเรียน"
+
+msgid "langCopyCourse"
+msgstr "ทำสำเนารายวิชา"
+
+msgid "langSelectItemsToCopy"
+msgstr "เลือกรายการเพื่อทำสำเนา"
+
+msgid "langCopyFinished"
+msgstr "ทำสำเนาเรียบร้อยแล้ว"
+
+msgid "langFullRecycle"
+msgstr "นำกลับมาใช้ใหม่ทั้งหมด"
+
+msgid "langRecycleCourse"
+msgstr "นำวิชากลับมาเปิดใช้ใหม่อีก"
+
+msgid "langRecycleFinished"
+msgstr "การนำวิชากลับมาเปิดเรียนใหม่ เรียบร้อยแล้ว"
+
+msgid "langRecycleWarning"
+msgstr "คำเตือน:การใช้คำสั่งนี้ จะเป็นการลบบางส่วนของวิชา ซึ่งอาจมีข้อผิดพลาด ขอแนะนำให้คุณทำการa <a href=\"create_backup.php\">สำรองข้อมูล</a>ก่อนใช้คำสั่งนี้เพื่อทำการนำรายวิชากลับมาใช้ใหม่อีก"
+
+msgid "langSameFilename"
+msgstr "สิ่งควรระวังเมื่อนำเข้าไฟล์ คือชื่อไฟล์ที่เหมือนกันกับที่มีอยู่ในระบบ"
+
+msgid "langSameFilenameSkip"
+msgstr "ข้ามไฟล์ที่มีชื่อเดียวกัน"
+
+msgid "langSameFilenameRename"
+msgstr "เปลี่ยนชื่อไฟล์(เช่น prachid.pdf เป็น prachid_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "บันทึกทับไฟล์เดิม"
+
+msgid "langSelectDestinationCourse"
+msgstr "เลือกไปที่รายวิชา"
+
+msgid "langFullCopy"
+msgstr "สำเนาอย่างสมบูรณ์"
+
+msgid "langCourseDescription"
+msgstr "คำอธิบายรายวิชา"
+
+msgid "langNoResourcesToBackup"
+msgstr "ไม่มีข้อมูลที่จะสำรอง"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "ไม่มีข้อมูลในไฟล์ที่สำรองไว้"
+
+msgid "langSelectResources"
+msgstr "เลือกแหล่งข้อมูล"
+
+msgid "langNoResourcesToRecycles"
+msgstr "ไม่มีข้อมูลที่จะนำกลับมาใช้ใหม่ได้"
+
+msgid "langIncludeQuestionPool"
+msgstr "รวมแบบสอบถาม"
+
+msgid "langLocalFile"
+msgstr "ไฟล์ในเครื่อง"
+
+msgid "langServerFile"
+msgstr "ไฟล์ในเครื่องแม่ข่าย"
+
+msgid "langNoBackupsAvailable"
+msgstr "ไม่มีข้อมูลสำรอง"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "ไม่มีรายวิชาที่ต้องการ"
+
+msgid "langBackup"
+msgstr "สำรอง"
+
+msgid "langImportBackupInfo"
+msgstr "การนำเข้าไฟล์ข้อมูลที่สำรองไว้ สามารถนำเข้าจากไฟล์ที่สำรองไว้ในเครื่องแม่ข่ายหรือจากเครื่องที่ท่านใช้งานอยู่"
+
+msgid "langCreateBackupInfo"
+msgstr "การสำรองรายวิชา คุณสามารถเลือกเนื้อหาวิชาที่จะสำรองเก็บไว้ได้"
+
+msgid "ToolIntro"
+msgstr "แนะนำเครื่องมือ"
+

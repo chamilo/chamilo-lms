@@ -1,0 +1,54 @@
+msgid "langCourseProgram"
+msgstr "Mācību kursa satura un mērķu apraksts"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Aizpildot augstāk novietotās sadaļas - Informējiet Kursantus par :<br> -  Kursa mācību mērķiem, <br> - Paredzamajiem testiem,<br> -  Iesaistītajiem mācību spēkiem un citiem resursiem.<br><br><b>Tas palīdzēs Kursantiem vieglāk izprast Kursa saturu un sasniegt vēlamo rezultātu !</b><br><br>Izmantojot instrumentu <b>“Kursa apguves tematiskais plāns”</b>, Jūs varat augstāk minētās sadaļas saistīt ar reālu laika kontroles mehānismu, kas palīdzēs Kursantam sekot paveiktajam."
+
+msgid "langEditCourseProgram"
+msgstr "Izveidot un labot kursa aprakstu"
+
+msgid "QuestionPlan"
+msgstr "Satura tematika šajā nodaļā."
+
+msgid "langInfo2Say"
+msgstr "Informācija, kas sniedzama lietotājiem"
+
+msgid "langOuAutreTitre"
+msgstr "Virsraksts"
+
+msgid "langNewBloc"
+msgstr "Pievienot papildus informatīvo bloku"
+
+msgid "langAddCat"
+msgstr "Pievienot nodaļai"
+
+msgid "langAdd"
+msgstr "Pievienot"
+
+msgid "langValid"
+msgstr "Derīgs"
+
+msgid "langBackAndForget"
+msgstr "Atpakaļ un dzēst"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Kursa apraksts papildināts"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Kursa apraksts izdzēsts"
+
+msgid "CourseDescriptionIntro"
+msgstr "Lai veidotu kursa aprakstu, klikojiet uz nosaukuma  un aizpildiet lauciņu.<br><br> Spiediet OK, lai turpinātu"
+
+msgid "langSaveDescription"
+msgstr "Saglabāt aprakstu"
+
+msgid "AddCourseDescription"
+msgstr "Pievienot kursa aprakstu"
+
+msgid "DescriptionUpdated"
+msgstr "Kursu apraksti atjaunināti"
+
+msgid "CourseDescriptions"
+msgstr "Kursu apraksti"
+

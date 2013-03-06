@@ -1,0 +1,81 @@
+msgid "langLineNumber"
+msgstr "Číslo řádku"
+
+msgid "langLine"
+msgstr "řádek"
+
+msgid "langLines"
+msgstr "řádky"
+
+msgid "langLineOrLines"
+msgstr "řádek(ky)"
+
+msgid "langMoveUp"
+msgstr "Posunout nahoru"
+
+msgid "langMoveDown"
+msgstr "Posunout dolů"
+
+msgid "langAddNewHeading"
+msgstr "Přidat nový nadpis"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Pouze pro učitele"
+
+msgid "langDefineHeadings"
+msgstr "Definuj nadpisy"
+
+msgid "langBackToUsersList"
+msgstr "Zpět na seznam uživatelů"
+
+msgid "langTracking"
+msgstr "Sledování"
+
+msgid "langCourseManager"
+msgstr "Učitel"
+
+msgid "langModRight"
+msgstr "změna práv na"
+
+msgid "langNoAdmin"
+msgstr "od teď nemá <b>žádné</b> práva na této stránce"
+
+msgid "langAllAdmin"
+msgstr "od teď má <b>veškeré</b> práva na této stránce"
+
+msgid "langModRole"
+msgstr "Změna role na"
+
+msgid "langRole"
+msgstr "Role"
+
+msgid "langIsNow"
+msgstr "je od teď"
+
+msgid "langInC"
+msgstr "v tomto kurzu"
+
+msgid "langFilled"
+msgstr "Ne všechny pole byli vyplněný"
+
+msgid "langUserNo"
+msgstr "Číslo uživatele"
+
+msgid "langTaken"
+msgstr "je již používáno. Zvolte prosím jiné"
+
+msgid "langTutor"
+msgstr "Tutor (studijní vedoucí)"
+
+msgid "langUnreg"
+msgstr "Odhlásit"
+
+msgid "langGroupUserManagement"
+msgstr "Správa skupin"
+
+msgid "langUnregister"
+msgstr "Neregistrovaný"
+
+msgid "langAddAUser"
+msgstr "Přidat uživatele"
+

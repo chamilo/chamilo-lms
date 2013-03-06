@@ -1,0 +1,207 @@
+msgid "langInvalidId"
+msgstr "Entrada denegada - nome d\'usuariu o seña inválidu(os)."
+
+msgid "langWelcome"
+msgstr "Bienveníu/ida"
+
+msgid "langPass"
+msgstr "Seña"
+
+msgid "langEnter"
+msgstr "Tornar al mio llistáu de cursos"
+
+msgid "langReg"
+msgstr "Rexistru"
+
+msgid "langMenu"
+msgstr "Menú"
+
+msgid "langAdvises"
+msgstr "Avisos"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Cuidáu: </b> Esti cursu nun esiste"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "Calque equí pa traer esti cursu dende\'l so portal anterior"
+
+msgid "langOtherCourses"
+msgstr "otros cursos"
+
+msgid "langSupportForum"
+msgstr "Foru de Soporte"
+
+msgid "langCategories"
+msgstr "categoríes"
+
+msgid "langBackToHomePage"
+msgstr "Tornar"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Entá nun hai cursos disponibles"
+
+msgid "langLostPassword"
+msgstr "¿ Escaeció la so seña ?"
+
+msgid "lang_edit_my_course_list"
+msgstr "Editar el mio llistáu de cursos"
+
+msgid "langAgenda"
+msgstr "Axenda"
+
+msgid "langValvas"
+msgstr "Últimes noticies"
+
+msgid "langUp"
+msgstr "Enriba"
+
+msgid "langCatList"
+msgstr "Categoríes"
+
+msgid "langCourseList"
+msgstr "Llistáu de cursos"
+
+msgid "langHelptwo"
+msgstr "Ayuda"
+
+msgid "langRegAll"
+msgstr "Rexistru"
+
+msgid "EussMenu"
+msgstr "Menú"
+
+msgid "Opinio"
+msgstr "Opinión"
+
+msgid "Intranet"
+msgstr "Intranet"
+
+msgid "Englin"
+msgstr "Inglés"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Entrada denegada. Si nun ta rexistráu, complete\'l <a href=claroline/auth/inscription.php>formulariu de rexistru</a>"
+
+msgid "langSubCat"
+msgstr "Sub-categoríes"
+
+msgid "langMenuGeneral"
+msgstr "Xeneral"
+
+msgid "langMenuUser"
+msgstr "Usuariu"
+
+msgid "langMenuAdmin"
+msgstr "Alministrador de la plataforma"
+
+msgid "langUsersOnLineList"
+msgstr "Llistáu d\'usuarios online"
+
+msgid "langTotalOnLine"
+msgstr "Total online"
+
+msgid "langRefresh"
+msgstr "Actualizar"
+
+msgid "langMe"
+msgstr "Yo"
+
+msgid "langSystemAnnouncements"
+msgstr "Noticies del sistema"
+
+msgid "langHelpMaj"
+msgstr "Ayuda"
+
+msgid "langNotRegistered"
+msgstr "Ensin rexistrar"
+
+msgid "langAdmin"
+msgstr "Alministración de la plataforma"
+
+msgid "Login"
+msgstr "Nome d\'usuariu"
+
+msgid "langRegisterForCourse"
+msgstr "Matriculase nun cursu"
+
+msgid "langUnregisterForCourse"
+msgstr "Anular matrícula nun cursu"
+
+msgid "langCombinedCourse"
+msgstr "Cursu combináu"
+
+msgid "Platform"
+msgstr "Plataforma"
+
+msgid "Refresh"
+msgstr "Actualizar"
+
+msgid "TotalOnLine"
+msgstr "Total d\'usuarios online"
+
+msgid "langCourseClosed"
+msgstr "(esti cursu ta cerráu nesti momentu)"
+
+msgid "ViewOpenCourses"
+msgstr "Ver los cursos abiertos"
+
+msgid "langCompetences"
+msgstr "Competencies"
+
+msgid "langDiplomas"
+msgstr "Títulos"
+
+msgid "langTeach"
+msgstr "¿ Qué puedo enseñar ?"
+
+msgid "langProductions"
+msgstr "Trabayos"
+
+msgid "langSendChatRequest"
+msgstr "Unviar un pidimientu de chat a esta persona"
+
+msgid "langRequestDenied"
+msgstr "Esta llamada denegóse"
+
+msgid "UsageDatacreated"
+msgstr "Datos d\'usu creaos"
+
+msgid "SessionView"
+msgstr "Amosar los cursos ordenaos por sesiones"
+
+msgid "CourseView"
+msgstr "Amosar tol llistáu de cursos"
+
+msgid "DropboxFileAdded"
+msgstr "Unvióse un ficheru al Buzón de llabores / deberes"
+
+msgid "NewMessageInForum"
+msgstr "Espublizóse un mensaxe nuevu nel foru"
+
+msgid "FolderCreated"
+msgstr "Creóse un direutoriu nuevu"
+
+msgid "LinkAdded"
+msgstr "Enllaz amestáu"
+
+msgid "AnnouncementAdded"
+msgstr "L\'anuncia amestóse"
+
+msgid "AgendaAdded"
+msgstr "Amestóse un eventu a la axenda"
+
+msgid "Messages"
+msgstr "Mensaxes"
+
+msgid "Inbox"
+msgstr "Buzón d\'entrada"
+
+msgid "Comppose"
+msgstr "Redautar"
+
+msgid "PendingInvitations"
+msgstr "Invitaciones pendientes"
+
+msgid "YouDoNotHaveAnySessionInItsHistory"
+msgstr "Nun tienes nenguna sesión de formación na to hestoria"
+

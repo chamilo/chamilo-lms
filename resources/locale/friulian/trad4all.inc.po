@@ -1,0 +1,15 @@
+msgid "Title"
+msgstr "Titul"
+
+msgid "Links"
+msgstr "Colegaments"
+
+msgid "Doc"
+msgstr "Moduls didatics"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "Announcement"
+msgstr "Notiziis"
+

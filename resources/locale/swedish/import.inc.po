@@ -1,0 +1,24 @@
+msgid "langExplanation"
+msgstr "När du klickar på OK, kommer en sajt att skapas med Forum, Agenda, Dokumenthanterare m.m. Ditt login, som skapare av sajten, ger dig möjlighet att modifiera den efter dina behov."
+
+msgid "langTooBig"
+msgstr "Du valde ingen fil att sända, eller så var den för stor"
+
+msgid "langCouldNot"
+msgstr "Filen kunde inte sändas"
+
+msgid "langAddPageToSite"
+msgstr "lägg till sida till sajt"
+
+msgid "langCouldNotSendPage"
+msgstr "Denna fil är inte i HTML-format och kan inte skickas. Om du vill skicka upp icke HTML-dokument (PDF, Word, Power Point, Video, etc.) använder <a href=../document/document.php>Dokumentverktyget</a>"
+
+msgid "langSendPage"
+msgstr "Sida att sända"
+
+msgid "langPageTitleModified"
+msgstr "Sidans titel har modifierats"
+
+msgid "langPageAdded"
+msgstr "Sida adderad"
+

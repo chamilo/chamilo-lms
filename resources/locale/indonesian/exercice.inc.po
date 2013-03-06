@@ -1,0 +1,573 @@
+msgid "langExercice"
+msgstr "Latihan"
+
+msgid "langActivate"
+msgstr "Aktifkan"
+
+msgid "langDeactivate"
+msgstr "Non-aktifkan"
+
+msgid "langNoEx"
+msgstr "Saat ini belum ada latihan"
+
+msgid "langNewEx"
+msgstr "Latihan baru"
+
+msgid "langQuestion"
+msgstr "pertanyaan"
+
+msgid "langQuestions"
+msgstr "Pertanyaan-Pertanyaan"
+
+msgid "langAnswers"
+msgstr "Jawaban-Jawaban"
+
+msgid "langTrue"
+msgstr "Benar"
+
+msgid "langAnswer"
+msgstr "Jawaban"
+
+msgid "langResult"
+msgstr "Hasil"
+
+msgid "langNoResult"
+msgstr "Sementara belum ada hasil"
+
+msgid "langYourResults"
+msgstr "Hasil latihan anda"
+
+msgid "langStudentResults"
+msgstr "Hasil latihan siswa anda"
+
+msgid "langExerciseType"
+msgstr "Macam latihan"
+
+msgid "langExerciseName"
+msgstr "Nama latihan"
+
+msgid "langExerciseDescription"
+msgstr "Deskripsi latihan"
+
+msgid "langSimpleExercise"
+msgstr "Pada halaman khusus"
+
+msgid "langSequentialExercise"
+msgstr "Satu pertanyaan per halaman (sequential)"
+
+msgid "langRandomQuestions"
+msgstr "Pertanyaan-pertanyaan acak"
+
+msgid "langGiveExerciseName"
+msgstr "Silahkan beri nama untuk latihan"
+
+msgid "langSound"
+msgstr "File Audio atau video"
+
+msgid "langDeleteSound"
+msgstr "Hapus file audio atau video"
+
+msgid "langNoAnswer"
+msgstr "Sementara belum ada jawaban"
+
+msgid "langGoBackToQuestionPool"
+msgstr "Kembali ke bank pertanyaan"
+
+msgid "langGoBackToQuestionList"
+msgstr "Kembali ke daftar pertanyaan"
+
+msgid "langQuestionAnswers"
+msgstr "Jawaban pertanyaan"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Peringatan! pertanyaan ini dan jawabannya dipakai dalam beberapa latihan. Apakah anda ingin mengubahnya"
+
+msgid "langModifyInAllExercises"
+msgstr "dalam seluruh latihan"
+
+msgid "langModifyInThisExercise"
+msgstr "hanya dalam latihan ini"
+
+msgid "langAnswerType"
+msgstr "Macam jawaban"
+
+msgid "langMultipleSelect"
+msgstr "Pilihan berganda (Jawaban ganda)"
+
+msgid "langFillBlanks"
+msgstr "Mengisintitik-titik"
+
+msgid "langMatching"
+msgstr "Menjodohkan"
+
+msgid "langAddPicture"
+msgstr "Tambah foto"
+
+msgid "langReplacePicture"
+msgstr "Ganti gambar"
+
+msgid "langDeletePicture"
+msgstr "Hapus foto"
+
+msgid "langQuestionDescription"
+msgstr "Komentar Opsional"
+
+msgid "langGiveQuestion"
+msgstr "Silahkan berikan pertanyaan"
+
+msgid "langWeightingForEachBlank"
+msgstr "Silahkan berikan bobot pada tiap isian"
+
+msgid "langUseTagForBlank"
+msgstr "gunakan kurung kurawal [...] untuk mendefinisikan satu atau beberapa isian"
+
+msgid "langQuestionWeighting"
+msgstr "Bobot"
+
+msgid "langMoreAnswers"
+msgstr "+jawaban"
+
+msgid "langLessAnswers"
+msgstr "-jawaban"
+
+msgid "langMoreElements"
+msgstr "+elemen"
+
+msgid "langLessElements"
+msgstr "-elemen"
+
+msgid "langTypeTextBelow"
+msgstr "Silahkan ketik teks di bawah ini"
+
+msgid "langDefaultTextInBlanks"
+msgstr "[British people] live in [United Kingdom]."
+
+msgid "langDefaultMatchingOptA"
+msgstr "rich"
+
+msgid "langDefaultMatchingOptB"
+msgstr "good looking"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Your dady is"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Your mother is"
+
+msgid "langDefineOptions"
+msgstr "Please define the options"
+
+msgid "langMakeCorrespond"
+msgstr "Make correspond"
+
+msgid "langFillLists"
+msgstr "Silahkan isi dua poin di bawah ini"
+
+msgid "langGiveText"
+msgstr "Silahkan ketik teksnya"
+
+msgid "langDefineBlanks"
+msgstr "Silahkan tetapkan setidaknya sebuah isian dengan tanda kurung [...]"
+
+msgid "langGiveAnswers"
+msgstr "Silahkan berikan jawaban soalnya"
+
+msgid "langChooseGoodAnswer"
+msgstr "Silahkan pilih sebuah jawaban yang tepat"
+
+msgid "langChooseGoodAnswers"
+msgstr "Silahkan pilih satu atau lebih jawaban yang tepat"
+
+msgid "langQuestionList"
+msgstr "Daftar pertanyaan latihan"
+
+msgid "langMoveUp"
+msgstr "Ke atas"
+
+msgid "langMoveDown"
+msgstr "Ke bawah"
+
+msgid "langGetExistingQuestion"
+msgstr "Ambil pertanyaan dari latihan lain"
+
+msgid "langFinishTest"
+msgstr "Latihan Selesai"
+
+msgid "langQuestionPool"
+msgstr "Bank soal"
+
+msgid "langOrphanQuestions"
+msgstr "Soal bebas"
+
+msgid "langNoQuestion"
+msgstr "Tidak ada pertanyaan sementara ini"
+
+msgid "langAllExercises"
+msgstr "Seluruh latihan"
+
+msgid "langFilter"
+msgstr "Filter"
+
+msgid "langGoBackToEx"
+msgstr "Kembali ke latihan"
+
+msgid "langReuse"
+msgstr "Gunakan lagi"
+
+msgid "langExerciseManagement"
+msgstr "Manajemen latihan"
+
+msgid "langQuestionManagement"
+msgstr "Manajemen pertanyaan/jawaban"
+
+msgid "langQuestionNotFound"
+msgstr "Pertanyaan tidak ditemukan"
+
+msgid "langExerciseNotFound"
+msgstr "Latihan tidak ditemukan"
+
+msgid "langAlreadyAnswered"
+msgstr "Anda sudah menjawab pertanyaan tersebut"
+
+msgid "langElementList"
+msgstr "Daftar Elemen"
+
+msgid "langScore"
+msgstr "Skor"
+
+msgid "langCorrespondsTo"
+msgstr "Berhubungan dengan"
+
+msgid "langExpectedChoice"
+msgstr "Pilihan yang diharapkan"
+
+msgid "langYourTotalScore"
+msgstr "Skor total anda adalah"
+
+msgid "langEvalSet"
+msgstr "parameter evaluasi"
+
+msgid "langActive"
+msgstr "aktif"
+
+msgid "langInactive"
+msgstr "non aktif"
+
+msgid "langQuestCreate"
+msgstr "buat pertanyaan"
+
+msgid "langExRecord"
+msgstr "latihan anda telah disimpan"
+
+msgid "langBackModif"
+msgstr "kembali ke halaman edit pertanyaan"
+
+msgid "langDoEx"
+msgstr "buat latihan"
+
+msgid "langDefScor"
+msgstr "deskripsikan parameter evaluasi"
+
+msgid "langCreateModif"
+msgstr "buat / ubah pertanyaan"
+
+msgid "langSub"
+msgstr "sub-judul"
+
+msgid "langMyAnswer"
+msgstr "Jawaban-Ku"
+
+msgid "langMorA"
+msgstr "+ jawaban"
+
+msgid "langLesA"
+msgstr "- jawaban"
+
+msgid "langRecEx"
+msgstr "simpan latihan"
+
+msgid "langRecQu"
+msgstr "Simpan pertanyaan"
+
+msgid "langRecAns"
+msgstr "Simpan Jawaban"
+
+msgid "langIntroduction"
+msgstr "Pendahuluan"
+
+msgid "langTitleAssistant"
+msgstr "Asisten untuk membuat latihan"
+
+msgid "langQuesList"
+msgstr "daftar pertanyaan"
+
+msgid "langSaveEx"
+msgstr "simpan latihan"
+
+msgid "langFinish"
+msgstr "Selesai"
+
+msgid "langCancel"
+msgstr "Cancel"
+
+msgid "langQImage"
+msgstr "Pertanyaan dengan sebuah gambar"
+
+msgid "langAddQ"
+msgstr "Tambah pertanyaan"
+
+msgid "langDoAnEx"
+msgstr "Lakukan latihan"
+
+msgid "langGenerator"
+msgstr "Daftar Latihan"
+
+msgid "langChoice"
+msgstr "Pilihan anda"
+
+msgid "langCorrect"
+msgstr "Betul"
+
+msgid "langPossAnsw"
+msgstr "Jumlah jawaban cocok untuk satu pertanyaan"
+
+msgid "langStudAnsw"
+msgstr "jumlah kesalahan oleh siswa"
+
+msgid "langDetermine"
+msgstr "Ditentukan"
+
+msgid "langNonNumber"
+msgstr "bukan sebuah nilai numerik"
+
+msgid "langReplaced"
+msgstr "Diganti"
+
+msgid "langSuperior"
+msgstr "nilai lebih besar dari 20"
+
+msgid "langRep20"
+msgstr "Ganti 20"
+
+msgid "langDefault"
+msgstr "Nilai Deafult *"
+
+msgid "langDefComment"
+msgstr "nilai sebelumnya akan diganti dengan meng-klik tombol \"nilai default\""
+
+msgid "langScoreGet"
+msgstr "angka hitam = skor"
+
+msgid "langShowScor"
+msgstr "Tampikan evaluasi ke siswa:"
+
+msgid "langStep1"
+msgstr "Langkah 1"
+
+msgid "langStep2"
+msgstr "Langkah 2"
+
+msgid "langTake"
+msgstr "ambil"
+
+msgid "langAmong"
+msgstr "diantara"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Import HotPotatoes Tests"
+
+msgid "langHotPotatoesTests"
+msgstr "Import HotPotatoes Tests"
+
+msgid "langDownloadFile"
+msgstr "Upload file ke server"
+
+msgid "langDownloadImg"
+msgstr "Upload file gambar ke server"
+
+msgid "langDownloadEnd"
+msgstr "Upload selesai"
+
+msgid "langNoSpace"
+msgstr "Upload gagal. Tempat penyimpanan di direktori tidak cukup"
+
+msgid "langZipNoPhp"
+msgstr "File zip tidak dapat berisi file .PHP"
+
+msgid "langNoImg"
+msgstr "Latihan tanpa gambar"
+
+msgid "langImgNote_st"
+msgstr "<br> Anda tetap harus meng-upload"
+
+msgid "langImgNote_en"
+msgstr "gambar:"
+
+msgid "langDocDeleted"
+msgstr "Dokumen dihapus"
+
+msgid "langViMod"
+msgstr "Kenampakan diubah"
+
+msgid "langNameNotEqual"
+msgstr "bukan file yang sah !"
+
+msgid "langIndice"
+msgstr "Index"
+
+msgid "langIndices"
+msgstr "Index-index"
+
+msgid "langDateExo"
+msgstr "Tanggal"
+
+msgid "langShowQuestion"
+msgstr "Tampilkan Pertanyaan"
+
+msgid "langUnknownExercise"
+msgstr "Latihan tidak dikenal"
+
+msgid "langReuseQuestion"
+msgstr "Gunakan-ulang pertanyaan"
+
+msgid "langCreateExercise"
+msgstr "Buat Latihan"
+
+msgid "langCreateQuestion"
+msgstr "Buat pertanyaan"
+
+msgid "langCreateAnswers"
+msgstr "Buat jawaban"
+
+msgid "langModifyExercise"
+msgstr "Ubah Latihan"
+
+msgid "langModifyAnswers"
+msgstr "ubah jawaban"
+
+msgid "langForExercise"
+msgstr "untuk latihan"
+
+msgid "langUseExistantQuestion"
+msgstr "Gunakan pertanyaan yang sudah ada"
+
+msgid "FreeAnswer"
+msgstr "Jawaban bebas"
+
+msgid "notCorrectedYet"
+msgstr "Jawaban ini belum diperiksa.  Sementara, skor anda untuk pertanyaan ini dianggap 0, mempengaruhi skor total."
+
+msgid "adminHP"
+msgstr "Administrator Hot Potatoes"
+
+msgid "NewQu"
+msgstr "Pertanyaan baru"
+
+msgid "NoImage"
+msgstr "Silahkan pilih sebua gambar pada bagian bawah halaman."
+
+msgid "langAnswerHotspot"
+msgstr "Deskripsi dan bobot dibutuhkan untuk setiap \'hotspot - komentar adalah opsional"
+
+msgid "langMinHotspot"
+msgstr "Anda setidaknya harus membuat satu (1) hotspot."
+
+msgid "langMaxHotspot"
+msgstr "Maksimum hotspot yang dapat anda buat adalah 12."
+
+msgid "langHotspotError"
+msgstr "Silahkan isi deskripsi dan bobot tiap hotspot."
+
+msgid "langMoreHotspots"
+msgstr "+hotspot"
+
+msgid "langLessHotspots"
+msgstr "-hotspot"
+
+msgid "langHotspotZones"
+msgstr "Hotspot"
+
+msgid "langNextQuestion"
+msgstr "Pertanyaan berikutnya"
+
+msgid "langCorrectAnswer"
+msgstr "Jawaban benar"
+
+msgid "langHotspotHit"
+msgstr "Jawaban anda adalah"
+
+msgid "langOnlyJPG"
+msgstr "Untuk hotspot anda hanya dapat menggunakan citra JPG (atau JPEG)"
+
+msgid "langFinishThisTest"
+msgstr "Tampilkan jawaban benar untuk tiap pertanyaan dan skor tes"
+
+msgid "langAllQuestions"
+msgstr "Semua pertanyaan"
+
+msgid "langModifyTitleDescription"
+msgstr "Edit judul dan komentar"
+
+msgid "langModifyHotspots"
+msgstr "Edit jawaban/hotspot"
+
+msgid "langHotspotNotDrawn"
+msgstr "Anda belum menggambar semua hotspot anda"
+
+msgid "langHotspotWeightingError"
+msgstr "anda musti memberi bobot positif (>0) untuk semua hotspot"
+
+msgid "langHotspotValidateError1"
+msgstr "Anda harus menjawab lengkap pertanyaan ("
+
+msgid "langHotspotValidateError2"
+msgstr "klik dibutuhkan pada citra) sebelum melihat hasil"
+
+msgid "langHotspotRequired"
+msgstr "Deskripsi dan bobot dibutuhkan untuk tiap hotspot. Komentar adalah opsional."
+
+msgid "langHotspotChoose"
+msgstr "<div style=\"padding:2px 3px;\">• Untuk membuat sebuah hotspot: pilih bentuk disamping warna, dan gambarkan hotspot. </div><div style=\"padding:2px 3px;\">•  untuk memindahkan hotspot, pilih warna, dan klik hotspot lain pada citra, dan gambar hotspotnya. /div><div style=\"padding:2px 3px;\">•  Untuk menambah sebuah hotspot: klik tombol [+hotspot]. </div><div style=\"padding:2px 3px;\">•  Untuk menutup bentuk polygon: klik kanan dan pilih  \"Close polygon\".</div>"
+
+msgid "Fault"
+msgstr "Salah"
+
+msgid "HotSpot"
+msgstr "Hotspot"
+
+msgid "ClickNumber"
+msgstr "Klik angka"
+
+msgid "HotspotGiveAnswers"
+msgstr "Silahkan beri jawaban"
+
+msgid "Addlimits"
+msgstr "Tambah batas"
+
+msgid "AreYouSure"
+msgstr "Apakah anda yakin"
+
+msgid "StudentScore"
+msgstr "Skore Siswa"
+
+msgid "backtoTesthome"
+msgstr "Kembali ke menu tes/latihan"
+
+msgid "Feedback"
+msgstr "Umpan balik"
+
+msgid "MarkIsUpdated"
+msgstr "Tanda/mark telah diperbarui"
+
+msgid "MarkInserted"
+msgstr "Tanda dimasukkan"
+
+msgid "PleaseGiveAMark"
+msgstr "Silahkan beri sebuah tanda"
+
+msgid "EditCommentsAndMarks"
+msgstr "Edit komentar dan tanda"
+
+msgid "AddComments"
+msgstr "Tambah komentar"
+

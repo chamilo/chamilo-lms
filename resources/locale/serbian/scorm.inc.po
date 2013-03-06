@@ -1,0 +1,108 @@
+msgid "langScormVersion"
+msgstr "verzija"
+
+msgid "langScormRestarted"
+msgstr "Sve lekcije su za sada nedovršene."
+
+msgid "langScormNoNext"
+msgstr "ovo je poslednja lekcija"
+
+msgid "langScormNoPrev"
+msgstr "Ovo je prva lekcija"
+
+msgid "langScormTime"
+msgstr "Vreme"
+
+msgid "langScormNoOrder"
+msgstr "Nije zadat redosled, možete da kliknete na bilo koju lekciju."
+
+msgid "langScormScore"
+msgstr "Rezultat"
+
+msgid "langScormLessonTitle"
+msgstr "Naslov lekcije"
+
+msgid "langScormStatus"
+msgstr "Status"
+
+msgid "langScormToEnter"
+msgstr "Za unos"
+
+msgid "langScormFirstNeedTo"
+msgstr "potrebno Vam je prvo izvršenje"
+
+msgid "langScormThisStatus"
+msgstr "Ova lekcija je sad"
+
+msgid "langScormClose"
+msgstr "Završi"
+
+msgid "langScormRestart"
+msgstr "Restartuj"
+
+msgid "langScormCompstatus"
+msgstr "Završena"
+
+msgid "langScormIncomplete"
+msgstr "Nezavršena"
+
+msgid "langScormPassed"
+msgstr "Pređena"
+
+msgid "langScormFailed"
+msgstr "Nije uspelo"
+
+msgid "langScormPrevious"
+msgstr "Prethodna"
+
+msgid "langScormNext"
+msgstr "Naredna"
+
+msgid "langScormTitle"
+msgstr "Alat za pokretanje Scorm formata"
+
+msgid "langScormMystatus"
+msgstr "Moj status"
+
+msgid "langScormNoItems"
+msgstr "Ovaj sadraj nema stavke."
+
+msgid "langScormNoStatus"
+msgstr "Nema statusa za ovaj sadraj"
+
+msgid "langScormLoggedout"
+msgstr "odjavljen iz Scorm okruženja"
+
+msgid "langScormCloseWindow"
+msgstr "Zatvori prozor"
+
+msgid "ScormBrowsed"
+msgstr "Pregledan"
+
+msgid "langScormExitFullScreen"
+msgstr "Nazad na normalan ekran"
+
+msgid "langScormFullScreen"
+msgstr "Full screen"
+
+msgid "langScormNotAttempted"
+msgstr "Bez pokušaja"
+
+msgid "langCharset"
+msgstr "Skup znakova (character set)"
+
+msgid "langLocal"
+msgstr "Lokalni"
+
+msgid "langRemote"
+msgstr "Udaljeni"
+
+msgid "langAutodetect"
+msgstr "Automatsko pronalaženje"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Ukupno izvršenih koraka"
+
+msgid "langUnknown"
+msgstr "Nepoznat"
+

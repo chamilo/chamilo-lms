@@ -1,0 +1,600 @@
+msgid "langLineNumber"
+msgstr "Número da Linha"
+
+msgid "langLine"
+msgstr "linha"
+
+msgid "langLines"
+msgstr "linhas"
+
+msgid "langLineOrLines"
+msgstr "linha(s)"
+
+msgid "langMoveUp"
+msgstr "Mover acima"
+
+msgid "langMoveDown"
+msgstr "Mover abaixo"
+
+msgid "langAddNewHeading"
+msgstr "Adicionar novo cabeçalho"
+
+msgid "langCourseAdministratorOnly"
+msgstr "apenas professores"
+
+msgid "langDefineHeadings"
+msgstr "Informar Cabeçalhos"
+
+msgid "langBackToUsersList"
+msgstr "Voltar para a lista de usuários"
+
+msgid "langTracking"
+msgstr "Acompanhamento"
+
+msgid "langCourseManager"
+msgstr "Professor"
+
+msgid "langModRight"
+msgstr "modificar direitos do"
+
+msgid "langNoAdmin"
+msgstr "tem a partir de agora <b>nenhum</b> direito sobre essa página"
+
+msgid "langAllAdmin"
+msgstr "tem a partir de agora <b>todos</b> os direitos sobre essa página"
+
+msgid "langModRole"
+msgstr "Modificar papel do"
+
+msgid "langRole"
+msgstr "A descrição"
+
+msgid "langIsNow"
+msgstr "está a partir de agora"
+
+msgid "langInC"
+msgstr "para esse curso"
+
+msgid "langFilled"
+msgstr "Você deixou alguns campos vazios."
+
+msgid "langUserNo"
+msgstr "O codinome que você escolheu"
+
+msgid "langTaken"
+msgstr "já está em uso. Escolha outro."
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langUnreg"
+msgstr "Desinscrever-se"
+
+msgid "langGroupUserManagement"
+msgstr "Gerenciamento de grupo"
+
+msgid "langUnregister"
+msgstr "Descadastrar-se"
+
+msgid "langAddAUser"
+msgstr "Adicionar Usuários"
+
+msgid "UsersUnsubscribed"
+msgstr "Os usuários selecionados foram desinscritos do curso"
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "Este usuário está inscrito neste curso através da sessão. Não pode editar as suas informações."
+
+msgid "NoDataAvailable"
+msgstr "Dados não disponíveis"
+
+msgid "AddToFriends"
+msgstr "Tem certeza que deseja adicionar este contato em sua lista de amigos ?"
+
+msgid "AddPersonalMessage"
+msgstr "Adicionar uma mensagem pessoal"
+
+msgid "Friends"
+msgstr "Amigos"
+
+msgid "PersonalData"
+msgstr "Perfil"
+
+msgid "Contacts"
+msgstr "Contatos"
+
+msgid "SocialInformationComment"
+msgstr "Este quadro permite que organize seus contatos"
+
+msgid "AttachContactsToGroup"
+msgstr "Agrupar contatos"
+
+msgid "ContactsList"
+msgstr "Lista de contatos"
+
+msgid "AttachToGroup"
+msgstr "Acrescentar a este grupo"
+
+msgid "SelectOneContact"
+msgstr "Selecionar um contato"
+
+msgid "SelectOneGroup"
+msgstr "Selecione um grupo"
+
+msgid "AttachContactsPersonal"
+msgstr "Adicionar aos contatos pessoais"
+
+msgid "AttachContactsToGroupSuccesfuly"
+msgstr "Os contatos foram adicionados com sucesso ao grupo"
+
+msgid "InvitationDenied"
+msgstr "Convite negado"
+
+msgid "AddedContactToList"
+msgstr "Contato acrescentado à lista"
+
+msgid "ContactsGroupsComment"
+msgstr "Esta tabela apresenta uma lista de contatos separadaos por grupos"
+
+msgid "YouDontHaveContactsInThisGroup"
+msgstr "Não existem contatos neste grupo"
+
+msgid "SelectTheCheckbox"
+msgstr "Marcar caixa de seleção"
+
+msgid "YouDontHaveInvites"
+msgstr "Vazio"
+
+msgid "SocialInvitesComment"
+msgstr "Convites pendentes"
+
+msgid "InvitationSentBy"
+msgstr "Convite enviado por"
+
+msgid "RequestContact"
+msgstr "Solicitar contato"
+
+msgid "SocialUnknow"
+msgstr "Desconhecido"
+
+msgid "SocialParent"
+msgstr "Minha família"
+
+msgid "SocialFriend"
+msgstr "Meus amigos"
+
+msgid "SocialGoodFriend"
+msgstr "Meus melhores amigos"
+
+msgid "SocialEnemy"
+msgstr "Contatos não desejados"
+
+msgid "SocialDeleted"
+msgstr "Contato apagado"
+
+msgid "MessageOutboxComment"
+msgstr "Mensagens enviadas"
+
+msgid "MyPersonalData"
+msgstr "Meus dados pessoais"
+
+msgid "AlterPersonalData"
+msgstr "Alterar dados pessoais"
+
+msgid "Invites"
+msgstr "Meus convidados"
+
+msgid "ContactsGroups"
+msgstr "Grupo de contatos"
+
+msgid "ErrorSendingMessage"
+msgstr "Houve um erro ao tentar enviar a mensagem."
+
+msgid "PendingInvitations"
+msgstr "Convites pendentes"
+
+msgid "MyInbox"
+msgstr "Caixa de entrada"
+
+msgid "ViewSharedProfile"
+msgstr "Visualizar perfil compartilhado"
+
+msgid "SeeAll"
+msgstr "Ver todos"
+
+msgid "ImagesUploaded"
+msgstr "Imagens enviadas"
+
+msgid "ExtraInformation"
+msgstr "Informação extra"
+
+msgid "SearchContacts"
+msgstr "Procurar contatos"
+
+msgid "SocialSeeContacts"
+msgstr "Ver contatos"
+
+msgid "SocialUserInformationAttach"
+msgstr "Por favor escreva uma mensagem antes de enviar o pedido"
+
+msgid "MessageInvitationNotSent"
+msgstr "A sua mensagem não foi enviada"
+
+msgid "SocialAddToFriends"
+msgstr "Adicionar aos meus contatos"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "Usuário não inscrito neste curso"
+
+msgid "ChangeContactGroup"
+msgstr "Alterar grupo de contatos"
+
+msgid "Friend"
+msgstr "Amigo"
+
+msgid "ViewMySharedProfile"
+msgstr "Meu perfil compartilhado"
+
+msgid "UserStatistics"
+msgstr "Estatísticas deste usuário"
+
+msgid "EditUser"
+msgstr "Editar este usuário"
+
+msgid "ViewUser"
+msgstr "Visualizar este usuário"
+
+msgid "RSSFeeds"
+msgstr "Feed Rss"
+
+msgid "NoFriendsInYourContactList"
+msgstr "Não existem amigos em sua lista de contatos"
+
+msgid "TryAndFindSomeFriends"
+msgstr "Pesquise e adicione alguns amigos"
+
+msgid "ClearSearchResults"
+msgstr "Sem resultados para a pesquisa"
+
+msgid "SendInvitation"
+msgstr "Enviar convite"
+
+msgid "SocialInvitationToFriends"
+msgstr "Convide para juntar-se ao meu grupo de amigos"
+
+msgid "MyCertificates"
+msgstr "Meus certificados"
+
+msgid "UnsubscribeFromPlatformSuccess"
+msgstr "Sua conta %s foi completamente eliminada deste portal. Obrigado por ter estado conosco. A gente espera te ver de novo."
+
+msgid "ToChangeYourEmailMustTypeYourPassword"
+msgstr "Para alterar seu email, você precisa confirmar sua senha"
+
+msgid "Invitations"
+msgstr "Convites"
+
+msgid "MyGroups"
+msgstr "Meus grupos"
+
+msgid "EditProfile"
+msgstr "Editar perfil"
+
+msgid "Social"
+msgstr "Social"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "MyFriends"
+msgstr "Meus amigos"
+
+msgid "Messages"
+msgstr "Mensagens"
+
+msgid "CreateAgroup"
+msgstr "Criar um grupo"
+
+msgid "UsersGroups"
+msgstr "Usuários, Grupos"
+
+msgid "SorryNoResults"
+msgstr "Desculpe, sem resultados"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "AddPicture"
+msgstr "Adicionar uma imagem"
+
+msgid "GroupPermissions"
+msgstr "Permissões do grupo"
+
+msgid "Closed"
+msgstr "Fechado"
+
+msgid "AddGroup"
+msgstr "Adicionar um grupo"
+
+msgid "Privacy"
+msgstr "Privacidade"
+
+msgid "ThisIsAnOpenGroup"
+msgstr "Este é um grupo aberto"
+
+msgid "YouShouldCreateATopic"
+msgstr "Você deve criar um tópico"
+
+msgid "IAmAnAdmin"
+msgstr "Eu sou o administrador"
+
+msgid "NewTopic"
+msgstr "Criar um tópico"
+
+msgid "MessageList"
+msgstr "Lista de mensagens"
+
+msgid "EditGroup"
+msgstr "Editar grupo"
+
+msgid "MemberList"
+msgstr "Lista de membros"
+
+msgid "WaitingList"
+msgstr "Lista de espera"
+
+msgid "InviteFriends"
+msgstr "Convide seus amigos"
+
+msgid "Members"
+msgstr "Membros"
+
+msgid "Admin"
+msgstr "Administrador"
+
+msgid "AttachmentFiles"
+msgstr "Anexos"
+
+msgid "AddOneMoreFile"
+msgstr "Adicionar mais um arquivo"
+
+msgid "MaximunFileSizeX"
+msgstr "Tamanho máximo de arquivo: %s"
+
+msgid "ModifyInformation"
+msgstr "Editar informações"
+
+msgid "GroupList"
+msgstr "Lista de grupo"
+
+msgid "GroupEdit"
+msgstr "Editar grupo"
+
+msgid "ThereAreNotUsersInTheWaitingList"
+msgstr "Não existem usuários na lista de espera"
+
+msgid "SendInvitationTo"
+msgstr "Enviar convite para"
+
+msgid "InviteUsersToGroup"
+msgstr "Convidar usuários para o grupo"
+
+msgid "PostIn"
+msgstr "Publicado"
+
+msgid "Reply"
+msgstr "Responder"
+
+msgid "Newest"
+msgstr "Mais novo"
+
+msgid "Popular"
+msgstr "Popular"
+
+msgid "Moderator"
+msgstr "Moderator"
+
+msgid "DeleteModerator"
+msgstr "Remover moderator"
+
+msgid "UserChangeToModerator"
+msgstr "Usuário atualizado para moderador"
+
+msgid "IAmAModerator"
+msgstr "Eu sou um moderador"
+
+msgid "ThisIsACloseGroup"
+msgstr "Este é um grupo restrito"
+
+msgid "IAmAReader"
+msgstr "Eu sou um leitor"
+
+msgid "UserChangeToReader"
+msgstr "Usuário atualizado para leitor"
+
+msgid "AddModerator"
+msgstr "Adicionar como moderador"
+
+msgid "UserDeleted"
+msgstr "O usuário foi excluído"
+
+msgid "JoinGroup"
+msgstr "Participar do grupo"
+
+msgid "YouShouldJoinTheGroup"
+msgstr "Você deve fazer parte do grupo"
+
+msgid "WaitingForAdminResponse"
+msgstr "Aguardando resposta do adminitrador"
+
+msgid "Member"
+msgstr "Membro"
+
+msgid "Re"
+msgstr "Re"
+
+msgid "FilesAttachment"
+msgstr "Arquivos anexos"
+
+msgid "GroupWaitingList"
+msgstr "Lista de espera do grupo"
+
+msgid "Open"
+msgstr "Aberto"
+
+msgid "UsersAlreadyInvited"
+msgstr "Usuários já convidados"
+
+msgid "SubscribeUsersToGroup"
+msgstr "Inscrever usuários para o grupo"
+
+msgid "YouHaveBeenInvitedJoinNow"
+msgstr "Você foi convidado para participar do grupo agora"
+
+msgid "DenyInvitation"
+msgstr "Rejeitar convite"
+
+msgid "AcceptInvitation"
+msgstr "Aceitar convite"
+
+msgid "GroupsWaitingApproval"
+msgstr "Grupos que esperam a aprovação"
+
+msgid "GroupInvitationWasDeny"
+msgstr "O convite do grupo foi negado"
+
+msgid "UserIsSubscribedToThisGroup"
+msgstr "O usuário já faz parte do grupo"
+
+msgid "DeleteFromGroup"
+msgstr "Excluir do grupo"
+
+msgid "GroupMembers"
+msgstr "Membros do grupo"
+
+msgid "Subscribe"
+msgstr "Inscrever"
+
+msgid "YouAreInvitedToGroupContent"
+msgstr "Você foi convidado para acessar o conteúdo de um grupo"
+
+msgid "YouAreInvitedToGroup"
+msgstr "Você foi convidado para um grupo"
+
+msgid "ToSubscribeClickInTheLinkBelow"
+msgstr "Para participar, clique no link abaixo"
+
+msgid "ReturnToInbox"
+msgstr "Retornar à caixa de entrada"
+
+msgid "View"
+msgstr "Visão"
+
+msgid "Me"
+msgstr "Me"
+
+msgid "ReturnToOutbox"
+msgstr "Retornar à caixa de saída"
+
+msgid "EditNormalProfile"
+msgstr "Editar o perfil normal"
+
+msgid "GroupPendingInvitations"
+msgstr "Convites pendentes do grupo"
+
+msgid "LeaveGroup"
+msgstr "Deixar o grupo"
+
+msgid "UserIsNotSubscribedToThisGroup"
+msgstr "Usuário não está inscrito no grupo"
+
+msgid "InvitationReceived"
+msgstr "Convites recebidos"
+
+msgid "InvitationSent"
+msgstr "Convites enviados"
+
+msgid "YouAlreadySentAnInvitation"
+msgstr "Você já enviou um convite"
+
+msgid "UserAdded"
+msgstr "O usuário foi adicionado"
+
+msgid "FilesSizeExceedsX"
+msgstr "Excedeu o tamanho máximo de arquivo"
+
+msgid "YouShouldWriteASubject"
+msgstr "Você deve escrever um assunto"
+
+msgid "Topics"
+msgstr "Tópicos"
+
+msgid "StatusInThisGroup"
+msgstr "Status neste grupo"
+
+msgid "FriendsOnline"
+msgstr "Amigos online"
+
+msgid "GroupDescription"
+msgstr "Descrição do grupo"
+
+msgid "MyProductions"
+msgstr "Minhas produções"
+
+msgid "YouHaveReceivedANewMessageInTheGroupX"
+msgstr "Você recebeu uma nova mensagem no grupo %s"
+
+msgid "ClickHereToSeeMessageGroup"
+msgstr "Clique aqui para ver as mensagens do grupo"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "ou copie e cole a seguinte URL:"
+
+msgid "ThereIsANewMessageInTheGroupX"
+msgstr "Há uma nova mensagem no grupo %s"
+
+msgid "UserIsAlreadySubscribedToThisGroup"
+msgstr "Usuário já está inscrito para este grupo"
+
+msgid "AddNormalUser"
+msgstr "Adicionar como usuário simples"
+
+msgid "DenyEntry"
+msgstr "Acesso negado"
+
+msgid "YouNeedToHaveFriendsInYourSocialNetwork"
+msgstr "Você precisa ter amigos em sua rede social"
+
+msgid "SeeAllMyGroups"
+msgstr "Ver todos os meus grupos"
+
+msgid "YouAlreadyInviteAllYourContacts"
+msgstr "Você já convidou todos os seus contatos"
+
+msgid "YouShouldCreateAGroup"
+msgstr "Você deve criar um grupo"
+
+msgid "MyFiles"
+msgstr "Meus arquivos"
+
+msgid "MySocialGroups"
+msgstr "Meus grupos sociais"
+
+msgid "SocialGroups"
+msgstr "Grupos Sociais"
+
+msgid "CreateASocialGroup"
+msgstr "Criar um grupo social"
+
+msgid "EditMembersList"
+msgstr "Editar lista de membros"
+
+msgid "IAmAHRM"
+msgstr "Sou um gerenciador de recursos humanos"
+
+msgid "UnsubscribeFromPlatform"
+msgstr "Se quiser eliminar o cadastro neste campus completamente e eliminar todas as suas informações da nosso banco de dados, por favor, clique o botão de baixo e confirme."
+
+msgid "UnsubscribeFromPlatformConfirm"
+msgstr "Sim, quero apagar esta conta completamente. Nenhum dado vai ficar no servidor e não poderei fazer login de novo, a não ser que eu criasse uma conta completamente nova."
+

@@ -1,0 +1,639 @@
+msgid "langToolName"
+msgstr "Importer Blackboard-kurser"
+
+msgid "TrackingDisabled"
+msgstr "Udtrækning af statistik er slået fra af systemadministrator."
+
+msgid "InactivesStudents"
+msgstr "Inaktive deltagere"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Gennemsnit for tid anvendt i systemet"
+
+msgid "AverageCoursePerStudent"
+msgstr "Gennemsnit for kursussider per profil"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Gennesnit for progression i læringsstier"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Gennemsnit for score/point i øvelser"
+
+msgid "SeeStudentList"
+msgstr "Gå til deltagerlisten"
+
+msgid "NbActiveSessions"
+msgstr "Aktive sessioner"
+
+msgid "NbPastSessions"
+msgstr "Tidligere sessioner"
+
+msgid "NbFutureSessions"
+msgstr "Fremtidige sessioner"
+
+msgid "NbStudentPerSession"
+msgstr "Antal deltagere per session"
+
+msgid "NbCoursesPerSession"
+msgstr "Antal kursussider per session"
+
+msgid "SeeSessionList"
+msgstr "Gå til oversigt over sessioner"
+
+msgid "langShowNone"
+msgstr "Vis ingen"
+
+msgid "langCourseStats"
+msgstr "Kursusstatitsik"
+
+msgid "langToolsAccess"
+msgstr "Adgang til værktøjer"
+
+msgid "langCourseAccess"
+msgstr "Adgang til kurset"
+
+msgid "langLinksAccess"
+msgstr "Links"
+
+msgid "langDocumentsAccess"
+msgstr "Dokumenter"
+
+msgid "langScormAccess"
+msgstr "Læringssti"
+
+msgid "langLinksDetails"
+msgstr "Adgang til links"
+
+msgid "langWorksDetails"
+msgstr "Afleveringer uploadet af deltagere"
+
+msgid "langLoginsDetails"
+msgstr "Klik på måneden for flere detaljer"
+
+msgid "langDocumentsDetails"
+msgstr "Dokumenter downloadet af deltagere"
+
+msgid "langExercicesDetails"
+msgstr "Gennemførte øvelsers score"
+
+msgid "langBackToList"
+msgstr "Tilbage til deltagerlisten"
+
+msgid "langDetails"
+msgstr "Detaljer"
+
+msgid "langStatsOfCourse"
+msgstr "Kursusstatistik"
+
+msgid "langStatsOfUser"
+msgstr "Deltagerstatistik"
+
+msgid "langStatsOfCampus"
+msgstr "Systemstatistik"
+
+msgid "langCountUsers"
+msgstr "Antal deltagere"
+
+msgid "langCountToolAccess"
+msgstr "Totale antal forbindelser til dette kursus"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Måned"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Antal logins"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Værktøjets navn"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Deltageres klik"
+
+msgid "langToolTitleCountColumn"
+msgstr "Totale klik"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Link"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Deltageres klik"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Totale klik"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Øvelse"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Score"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Dokument"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Deltagernes downloads"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Totale downloads"
+
+msgid "langScormContentColumn"
+msgstr "Titel"
+
+msgid "langScormStudentColumn"
+msgstr "Deltagere"
+
+msgid "langScormTitleColumn"
+msgstr "Lektion/trin"
+
+msgid "langScormStatusColumn"
+msgstr "Status"
+
+msgid "langScormScoreColumn"
+msgstr "Score"
+
+msgid "langScormTimeColumn"
+msgstr "Tid"
+
+msgid "langScormNeverOpened"
+msgstr "Dette kursus har aldrig været åbnet af denne deltager."
+
+msgid "langWorkTitle"
+msgstr "Titel"
+
+msgid "langWorkAuthors"
+msgstr "Forfattere"
+
+msgid "langWorkDescription"
+msgstr "Beskrivelse"
+
+msgid "informationsAbout"
+msgstr "Udtræk af"
+
+msgid "langNoEmail"
+msgstr "Ingen angivelse af konkret e-mailadresse"
+
+msgid "langNoResult"
+msgstr "Der er endnu intet resultat"
+
+msgid "langCourse"
+msgstr "Kursussiden"
+
+msgid "langHits"
+msgstr "Hits"
+
+msgid "langTotal"
+msgstr "Total"
+
+msgid "langHour"
+msgstr "Time"
+
+msgid "langDay"
+msgstr "dag"
+
+msgid "langLittleHour"
+msgstr "t."
+
+msgid "langLast31days"
+msgstr "I de sidste 31 dage"
+
+msgid "langLast7days"
+msgstr "I de sidste 7 dage"
+
+msgid "langThisday"
+msgstr "I dag"
+
+msgid "langLogins"
+msgstr "Logins"
+
+msgid "langLoginsExplaination"
+msgstr "Her er listen over dine sidste logins samme med de værktøjer, du benyttede."
+
+msgid "langExercicesResults"
+msgstr "Øvelsens resultatet er givet"
+
+msgid "langVisits"
+msgstr "besøg"
+
+msgid "langAt"
+msgstr "hos"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Dato"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Besøg"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Logins og adgange til værktøjer"
+
+msgid "langWorkUploads"
+msgstr "Upload af afleveringer"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Ugyldig deltager : denne deltager eksisterer ikke i din gruppe"
+
+msgid "langListStudents"
+msgstr "Oversigt over deltagere i gruppen"
+
+msgid "langPeriodHour"
+msgstr "Time"
+
+msgid "langPeriodDay"
+msgstr "Dag"
+
+msgid "langPeriodWeek"
+msgstr "Uge"
+
+msgid "langPeriodMonth"
+msgstr "Måned"
+
+msgid "langPeriodYear"
+msgstr "År"
+
+msgid "langNextDay"
+msgstr "Næste dag"
+
+msgid "langPreviousDay"
+msgstr "Forrige dag"
+
+msgid "langNextWeek"
+msgstr "Næste uge"
+
+msgid "langPreviousWeek"
+msgstr "Forrige uge"
+
+msgid "langNextMonth"
+msgstr "Næste måned"
+
+msgid "langPreviousMonth"
+msgstr "Tidligere måneder"
+
+msgid "langNextYear"
+msgstr "Næste år"
+
+msgid "langPreviousYear"
+msgstr "Tidligere år"
+
+msgid "langViewToolList"
+msgstr "Se oversigt over alle værktøjer"
+
+msgid "langToolList"
+msgstr "Oversigt over alle værktøjer"
+
+msgid "langFrom"
+msgstr "Fra"
+
+msgid "langTo"
+msgstr "til"
+
+msgid "langPeriodToDisplay"
+msgstr "Periode"
+
+msgid "langDetailView"
+msgstr "Se på"
+
+msgid "langBredCrumpGroups"
+msgstr "Grupper"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Gruppeområde"
+
+msgid "langBredCrumpUsers"
+msgstr "Deltagere"
+
+msgid "langAdminToolName"
+msgstr "Admin-tilstand"
+
+msgid "langPlatformStats"
+msgstr "Systemstatistik"
+
+msgid "langStatsDatabase"
+msgstr "Databasetilstand"
+
+msgid "langPlatformAccess"
+msgstr "Adgange til system"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Adgange til kursussider"
+
+msgid "langPlatformToolAccess"
+msgstr "Adgang til værktøjer"
+
+msgid "langHardAndSoftUsed"
+msgstr "Lande Leverandørere Browsere Os Referencer"
+
+msgid "langStrangeCases"
+msgstr "Mærkelig sager"
+
+msgid "langStatsDatabaseLink"
+msgstr "Klik her"
+
+msgid "langCountCours"
+msgstr "Antal kursussider"
+
+msgid "langCountCourseByFaculte"
+msgstr "Antal kurser efter fakultet"
+
+msgid "langCountCourseByLanguage"
+msgstr "Antal kurser efter sprog"
+
+msgid "langCountCourseByVisibility"
+msgstr "Antal kurser efter synlighed"
+
+msgid "langCountUsersByCourse"
+msgstr "Antal deltagere efter kursus"
+
+msgid "langCountUsersByFaculte"
+msgstr "Antal deltagere efter fakultet"
+
+msgid "langCountUsersByStatus"
+msgstr "Antal deltagere efter stilling"
+
+msgid "langAccess"
+msgstr "Adgang"
+
+msgid "langCountries"
+msgstr "Lande"
+
+msgid "langProviders"
+msgstr "Leverandører"
+
+msgid "langOS"
+msgstr "OS"
+
+msgid "langBrowsers"
+msgstr "Browsers"
+
+msgid "langReferers"
+msgstr "Referencer"
+
+msgid "langAccessExplain"
+msgstr "(Når en deltager åbner forsiden tilsystemet)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Total"
+
+msgid "langTotalPlatformLogin"
+msgstr "Total"
+
+msgid "langMultipleLogins"
+msgstr "Konti med samme <i>Brugernavn</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Konti med samme <i>Brugernavn</i> Og samme <i>Adgangskode</i>"
+
+msgid "langMultipleEmails"
+msgstr "Konti med den samme <i>E-mail</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Kurser uden underviser"
+
+msgid "langCourseWithoutAccess"
+msgstr "Kurserne er ikke brugt"
+
+msgid "langLoginWithoutAccess"
+msgstr "Logins er ikke brugt"
+
+msgid "langAllRight"
+msgstr "Der er ingen mærkelige sager her"
+
+msgid "langDefcon"
+msgstr "Ups, opdaget mærkelige sager !!"
+
+msgid "langNULLValue"
+msgstr "Tom (eller nul)"
+
+msgid "langTrafficDetails"
+msgstr "Trafikdetaljer"
+
+msgid "langSeeIndividualTracking"
+msgstr "For individuel sporing se <a href=\"../user/user.php\">Bruger</a> værktøj."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Denne sti har aldrig været åbnet af nogen."
+
+msgid "SynthesisView"
+msgstr "Vis syntese"
+
+msgid "Visited"
+msgstr "Besøgt"
+
+msgid "FirstAccess"
+msgstr "Først besøgt"
+
+msgid "LastAccess"
+msgstr "Senest besøgt"
+
+msgid "langProbationers"
+msgstr "Deltagere"
+
+msgid "MoyenneTest"
+msgstr "Gennemsnit for øvelser"
+
+msgid "exportExcel"
+msgstr "Eksporter i Excel-format"
+
+msgid "MoyCourse"
+msgstr "Gennemsnit for kursusside"
+
+msgid "MoyenneExamen"
+msgstr "Gennemsnit for eksamen"
+
+msgid "MoySession"
+msgstr "Gennemsnit for session"
+
+msgid "TakenSessions"
+msgstr "Gennemførte sessioner"
+
+msgid "FollowUp"
+msgstr "Opfølgning"
+
+msgid "Trainers"
+msgstr "Undervisere"
+
+msgid "Administrators"
+msgstr "Administratorer"
+
+msgid "Tracks"
+msgstr "Tracks"
+
+msgid "Success"
+msgstr "Succes"
+
+msgid "ExcelFormat"
+msgstr "Excel-format"
+
+msgid "MyLearnpath"
+msgstr "Min læringssti"
+
+msgid "Time"
+msgstr "Tid"
+
+msgid "Score"
+msgstr "Resultat/værdi"
+
+msgid "LastConnexion"
+msgstr "Seneste chat"
+
+msgid "ConnectionTime"
+msgstr "Chattens længde"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Chats i forbindelse denne kursusside"
+
+msgid "StudentTutors"
+msgstr "Instruktorer"
+
+msgid "StudentSessions"
+msgstr "Deltagerens sessioner"
+
+msgid "StudentCourses"
+msgstr "Deltagerens kursussider"
+
+msgid "NoLearnpath"
+msgstr "Ingen læringssti"
+
+msgid "Attempts"
+msgstr "Forsøg"
+
+msgid "Correction"
+msgstr "Rettelse"
+
+msgid "NoExercise"
+msgstr "Ingen øvelser"
+
+msgid "LimitDate"
+msgstr "Datogrænse"
+
+msgid "SentDate"
+msgstr "Dato for afsendt"
+
+msgid "Annotate"
+msgstr "Giv besked"
+
+msgid "DayOfDelay"
+msgstr "Forsinkelsesdato"
+
+msgid "NoProduction"
+msgstr "Intet resultat"
+
+msgid "NoComment"
+msgstr "Ingen kommentarer"
+
+msgid "LatestLogin"
+msgstr "Seneste forbindelse"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Tid brugt på platformen"
+
+msgid "Messages"
+msgstr "Meddelelser"
+
+msgid "AveragePostsInForum"
+msgstr "Gennemsnit for indlæg i diskussionsforummet"
+
+msgid "AverageAssignments"
+msgstr "Gennemsnit for antal afleveringer"
+
+msgid "Print"
+msgstr "Udskriv"
+
+msgid "StudentDetails"
+msgstr "Detaljer om brugeren"
+
+msgid "StudentDetailsInCourse"
+msgstr "Detaljer om brugeren i relation til kursussiden"
+
+msgid "Learnpaths"
+msgstr "Læringsstier"
+
+msgid "OtherTools"
+msgstr "Andre værktøjer"
+
+msgid "DetailsStudentInCourse"
+msgstr "Detaljer om den studerende i relation til kursussiden"
+
+msgid "CourseTitle"
+msgstr "Kursustitel"
+
+msgid "NbStudents"
+msgstr "Antal deltagere"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Tidsforbrug på kursussiden"
+
+msgid "AvgStudentsProgress"
+msgstr "Gennemsnit for den studerendes progression"
+
+msgid "AvgCourseScore"
+msgstr "Gennemsnit for deltagerens score/point"
+
+msgid "AvgMessages"
+msgstr "Meddelelser per deltager"
+
+msgid "AvgAssignments"
+msgstr "Afleveringer per deltager"
+
+msgid "ToolsMostUsed"
+msgstr "Mest anvendte værktøjer"
+
+msgid "StudentsTracking"
+msgstr "Deltager-tracking"
+
+msgid "CourseTracking"
+msgstr "Kursus-tracking"
+
+msgid "LinksMostClicked"
+msgstr "Mest besøgte links"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Mest downloadede dokumenter"
+
+msgid "LearningPathDetails"
+msgstr "Detaljer om læringssti"
+
+msgid "NoConnexion"
+msgstr "Ingen forbindelse"
+
+msgid "TeacherInterface"
+msgstr "Brugergrænseflade for underviser"
+
+msgid "CoachInterface"
+msgstr "Brugergrænseflade for instruktor"
+
+msgid "AdminInterface"
+msgstr "Brugergrænseflade for administrator"
+
+msgid "NumberOfSessions"
+msgstr "Antal sessioner"
+
+msgid "YourCourseList"
+msgstr "Din kursusoversigt"
+
+msgid "YourStatistics"
+msgstr "Dine statistiske oplysninger"
+
+msgid "CoachList"
+msgstr "Oversigt over instruktorer"
+
+msgid "CoachStudents"
+msgstr "Studerende tilknyttet denne instruktor"
+
+msgid "NoLearningPath"
+msgstr "Ingen SCORM-kurser"
+
+msgid "SessionCourses"
+msgstr "Kursussessioner"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Her finder du den statistik, der er tilknyttet de deltagere, der er tilmeldt denne kursusside"
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Gennemsnit for tidsforbrug på kursussiden"
+
+msgid "RemindInactiveUser"
+msgstr "Påmind inaktive brugere"
+
+msgid "FirstLogin"
+msgstr "Første login"
+

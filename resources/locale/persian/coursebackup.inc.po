@@ -1,0 +1,144 @@
+msgid "langSelectOptionForBackup"
+msgstr "لطفاً نوع کپی را مشخص کنید"
+
+msgid "langLetMeSelectItems"
+msgstr "بخشهای این درس را خود مشخص خواهم کرد"
+
+msgid "langCreateFullBackup"
+msgstr "ایجاد یک کپی پشتیبانی کامل از این درس"
+
+msgid "langCreateBackup"
+msgstr "ایجاد یک کپی پشتیبانی"
+
+msgid "langBackupCreated"
+msgstr "&#1575;&#1740;&#1580;&#1575;&#1583; &#1601;&#1575;&#1740;&#1604; &#1662;&#1588;&#1578;&#1740;&#1576;&#1575;&#1606;&#1740; &#1575;&#1740;&#1606; &#1583;&#1585;&#1587; &#1575;&#1606;&#1580;&#1575;&#1605; &#1588;&#1583;. &#1578;&#1575; &#1604;&#1581;&#1592;&"
+
+msgid "langSelectBackupFile"
+msgstr "لطفاً فایل کپی را مشخص کنید"
+
+msgid "langImportBackup"
+msgstr "وارد کردن اطلاعات از فایل پشتیبانی"
+
+msgid "langImportFullBackup"
+msgstr "وارد کردن تمامی اطلاعات فایل پشتیبانی"
+
+msgid "langImportFinished"
+msgstr "وارد کردن اطلاعات فایل پشتیبانی انجام گردید"
+
+msgid "langEvents"
+msgstr "فعالیت ها"
+
+msgid "langAnnouncements"
+msgstr "اطلاعیه ها"
+
+msgid "langDocuments"
+msgstr "مدارک"
+
+msgid "langTests"
+msgstr "آزمون ها"
+
+msgid "langLearnpaths"
+msgstr "خط سیر آموزشی"
+
+msgid "langCopyCourse"
+msgstr "کپی کردن درس"
+
+msgid "langSelectItemsToCopy"
+msgstr "لطفاً منابعی از این درس که باید کپی شوند را مشخص کنید"
+
+msgid "langCopyFinished"
+msgstr "کپی انجام شد"
+
+msgid "langFullRecycle"
+msgstr "بازیافت کامل درس"
+
+msgid "langRecycleCourse"
+msgstr "بازیافت این درس"
+
+msgid "langRecycleFinished"
+msgstr "درس مربوطه بازیافت گردید"
+
+msgid "langRecycleWarning"
+msgstr "توجه : با انتخاب این کارآیی، شما بعضی از قسمتهای درس خود را حذف خواهید کرد. این حذف هرگز قابل برگشت نخواهد بود. قویاً پیشنهاد میکنیم که قبل از انجام این عمل یک<a href=\"create_backup.php\"> فایل پشتیبانی</a> از درس خود بسازید"
+
+msgid "langSameFilename"
+msgstr "در مورد فایلهایی  که هم اسم آنها وجود دارد چه باید کرد؟"
+
+msgid "langSameFilenameSkip"
+msgstr "از روی فایلهای دارای یک نام گذشتن"
+
+msgid "langSameFilenameRename"
+msgstr "تغییر نام فایلهای قدیمی؟"
+
+msgid "langSameFilenameOverwrite"
+msgstr "جایگزینی فایلهای قدیمی با فایلهای جدید؟"
+
+msgid "langSelectDestinationCourse"
+msgstr "لطفاً درس مقصد را مشخص کنید"
+
+msgid "langFullCopy"
+msgstr "تمامی منابع کپی شوند"
+
+msgid "langCourseDescription"
+msgstr "توضیحات درس"
+
+msgid "langNoResourcesToBackup"
+msgstr "هیچ منبعی از این درس قابل کپی نیست"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "هیچ منبع درسی ای در فایل پشتیبانی وجود ندارد"
+
+msgid "langSelectResources"
+msgstr "لطفاً منابع درسی را انتخاب کنید"
+
+msgid "langNoResourcesToRecycles"
+msgstr "هیچ منبع درسی ای برای کپی  وجود ندارد"
+
+msgid "langIncludeQuestionPool"
+msgstr "ضمیمه کردن مخزن سؤالات"
+
+msgid "langLocalFile"
+msgstr "انتخاب فایل از رایانه من"
+
+msgid "langServerFile"
+msgstr "انتخاب فایل از سرور"
+
+msgid "langNoBackupsAvailable"
+msgstr "هیچ فایل پشتیبانی وجود ندارد"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "هیچ درس مقصدی وجود ندارد"
+
+msgid "langBackup"
+msgstr "نسخه پشتیبان"
+
+msgid "langImportBackupInfo"
+msgstr "وارد کردن یک درس : میتوانید یک فایل پشتیبانی را از رایانه خود به محیط آموزشی  وارد کنید. همچنین میتوانید یکی از فایل های موجود در روی سرور را به محیط آموزشی  وارد کنید"
+
+msgid "langCreateBackupInfo"
+msgstr "ایجاد یک کپی پشتیبانی از این درس : میتوانید قسمت هایی از این درس را که میل دارید کپی کنید انتخاب نمایید"
+
+msgid "ToolIntro"
+msgstr "مقدمه ابزار آموزشی"
+
+msgid "UploadError"
+msgstr "آپلود با مشکل مواجه شد. لطفا حداکثر حجم آپلود و حقوق دسترسی پوشه را چک کنید."
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "اسناد هم اضافه خواهد شد"
+
+msgid "ToExportLearnpathWithQuizYouHaveToSelectQuiz"
+msgstr "اگر شما قصد صادر کردن یک درس حاوی آزمون را دارید، می بایست مطمئن شوید که  آزمون مربوطه بهنگام صدور انتخاب شده باشد، شما باید در فهرست آزمون ها موارد مورد نظر را نتخاب نمایید."
+
+msgid "ArchivesDirectoryNotWriteableContactAdmin"
+msgstr "پوشه آرشیو که توسط این ابزار مورد استفاده است، قابل نوشتن نیست. لطفا با مدیر سیستم تماس بگیرید."
+
+msgid "DestinationCourse"
+msgstr "درس مقصد"
+
+msgid "IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments"
+msgstr "اگر مسیر آموزشی شما دارای فایل های صوتی می باشد، شما باید آنها را از اسناد انتخاب کنید"
+
+msgid "DontForgetToSelectTheMediaFilesIfYourResourceNeedIt"
+msgstr "اگر منابع شما نیاز به فایل های چند رسانه ای دارد انتخاب آنها را فراموش نکنید"
+

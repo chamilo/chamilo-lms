@@ -1,0 +1,246 @@
+msgid "lang_already_enrolled"
+msgstr "Sie haben diesen Kurs bereits belegt"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Meine persönliche Kursliste"
+
+msgid "lang_course_enrollment"
+msgstr "Kurse des Benutzers"
+
+msgid "lang_course_not_available"
+msgstr "Dieser Kurs ist nicht verfügbar bzw. existiert nicht."
+
+msgid "lang_enroll"
+msgstr "Für Kurs registrieren"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Für einen weiteren Kurs registrieren"
+
+msgid "lang_my_present_course_list"
+msgstr "Meine aktuelle Kursliste"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Keine Kurse bei denen Sie sich registrieren können in dieser Kategorie"
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "oder mit Kurscode suchen"
+
+msgid "lang_search"
+msgstr "Suchen"
+
+msgid "lang_select_course_among_categories"
+msgstr "Kurse aus Kategorien auswählen"
+
+msgid "lang_select_course_in"
+msgstr "Kurs auswählen aus"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Kurs aus den Suchergebnissen auswählen"
+
+msgid "Unsubscribe"
+msgstr "Abmelden"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Zurück zu meiner Homepage"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Zurück zur eigenen Kursliste"
+
+msgid "langTitular"
+msgstr "Kursleiter"
+
+msgid "langBackToListOfThisUser"
+msgstr "Zurück zur Kursliste"
+
+msgid "langAdministrationTools"
+msgstr "Werkzeuge zur Verwaltung"
+
+msgid "lang_back_to_parent_category"
+msgstr "Zurück zur übergeordneten Kategorie"
+
+msgid "lang_back_to_course_selection"
+msgstr "Zurück zur Kursauswahl"
+
+msgid "lang_up"
+msgstr "Zurück zur übergeordneten Kategorie"
+
+msgid "langCatList"
+msgstr "Kategorien"
+
+msgid "langCourseList"
+msgstr "Kursliste"
+
+msgid "Subscribe"
+msgstr "Registrieren"
+
+msgid "AlreadySubscribed"
+msgstr "Bereits registriert"
+
+msgid "CodeMandatory"
+msgstr "Code ist Pflichtfeld"
+
+msgid "CourseCategoryMandatory"
+msgstr "Kurskategorie ist Pflichtfeld"
+
+msgid "TeacherMandatory"
+msgstr "Kursleiter  ist Pflichtfeld"
+
+msgid "CourseCategoryStored"
+msgstr "Kurskategorie wurde angelegt"
+
+msgid "langWithoutTimeLimits"
+msgstr "Ohne zeitliche Beschränkung"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Zurück zur Haupt-Kategorieliste"
+
+msgid "langAdded"
+msgstr "Hinzugefügt"
+
+msgid "langDeleted"
+msgstr "Gelöscht"
+
+msgid "langKeeped"
+msgstr "Behalten"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Versteckt / Geschlossen"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Versteckt / Geöffnet"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Sichtbar / Geöffnet"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Sichtbar / Geschlossen"
+
+msgid "langAdminThisUser"
+msgstr "Zurück zum Benutzer"
+
+msgid "langManage"
+msgstr "Portal verwalten"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Sie haben sich für diesen Kurs registriert"
+
+msgid "langSubCat"
+msgstr "Unterkategorien"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Abmelden von diesem Kurs ist nicht gestattet."
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Sie sind Kursleiter in diesem Kurs"
+
+msgid "CourseManagement"
+msgstr "Kursauswahl"
+
+msgid "SortMyCourses"
+msgstr "Meine Kurse sortieren"
+
+msgid "SubscribeToCourse"
+msgstr "Für Kurse registrieren"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Aus Kursen abmelden"
+
+msgid "CreateCourseCategory"
+msgstr "Eine persönliche Kategorie erstellen"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Wollen Sie diese Kategorie wirklich löschen? Kurse in dieser Kategorie werden nach ausserhalb der Kategorien verschoben"
+
+msgid "CourseCategories"
+msgstr "Kategorien"
+
+msgid "CoursesInCategory"
+msgstr "Kurse in dieser Kategorie"
+
+msgid "SearchCourse"
+msgstr "Kurse suchen"
+
+msgid "UpOneCategory"
+msgstr "<- eine Kategorie höher"
+
+msgid "SearchResultsFor"
+msgstr "Suchergebnisse für:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Wollen Sie sich wirklich von diesem Kurs abmelden"
+
+msgid "NoCourseCategory"
+msgstr "Keine Kurskategorie vorhanden"
+
+msgid "EditCourseCategorySucces"
+msgstr "Der Kurs wurde der Kategorie hinzugefügt"
+
+msgid "SubscribingNotAllowed"
+msgstr "Registrierung nicht freigegeben"
+
+msgid "CourseSortingDone"
+msgstr "Sortieren der Kurse abgeschlossen"
+
+msgid "ExistingCourseCategories"
+msgstr "Existierende Kategorien"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Sie haben sich nun vom Kurs abgemeldet"
+
+msgid "ViewOpenCourses"
+msgstr "Öffentliche Kurse ansehen"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Ein unbekannter Fehler ist aufgetreten. Bitte den Portal-Administrator benachrichtigen"
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "Der Registrierungscode ist nicht korrekt"
+
+msgid "CourseRequiresPassword"
+msgstr "Registrierungscode benötigt"
+
+msgid "SubmitRegistrationCode"
+msgstr "Registrierungscode angeben"
+
+msgid "CourseCategoryDeleted"
+msgstr "Kurskategorie wurde gelöscht"
+
+msgid "CategorySortingDone"
+msgstr "Sortieren der Kategorie erledigt"
+
+msgid "CourseCategoryEditStored"
+msgstr "Kategorie aktualisiert"
+
+msgid "buttonCreateCourseCategory"
+msgstr "Kategorie speichern"
+
+msgid "buttonSaveCategory"
+msgstr "Diese Kategorie speichern"
+
+msgid "buttonChangeCategory"
+msgstr "Kategorie ändern"
+
+msgid "SessionName"
+msgstr "Name des Session-Kurs"
+
+msgid "SessionCategory"
+msgstr "Session-Kurskategorie"
+
+msgid "Expand"
+msgstr "ausklappen"
+
+msgid "Collapse"
+msgstr "zusammenklappen"
+
+msgid "CourseDetails"
+msgstr "Kursbeschreibung"
+
+msgid "GroupPendingInvitations"
+msgstr "Gruppe offene Einladungen"
+
+msgid "Compose"
+msgstr "Nachricht erstellen"
+
+msgid "ThereAreNoCoursesInThisCategory"
+msgstr "Keine Kurse in dieser Kategorie-Ebene"
+

@@ -1,0 +1,18 @@
+msgid "AdminBy"
+msgstr "Administrator"
+
+msgid "AdministrationTools"
+msgstr "Administratorski alati"
+
+msgid "State"
+msgstr "Stanje sistema"
+
+msgid "Statistiques"
+msgstr "Statistika"
+
+msgid "VisioHostLocal"
+msgstr "Videokonferencijski poslužitelj"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Ukoliko je protokol videokonferencije web baziran ( u većini slučajeva netačno)"
+

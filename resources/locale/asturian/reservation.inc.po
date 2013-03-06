@@ -1,0 +1,403 @@
+msgid "ReservationPeriodToSmall"
+msgstr "El tiempu pa la reserva ye percurtiu."
+
+msgid "BookingSystem"
+msgstr "Sistema de reserves"
+
+msgid "BookingPeriodList"
+msgstr "Llistáu de tiempu de reserva"
+
+msgid "BookingListView"
+msgstr "Llistáu de reserves"
+
+msgid "BookingCalendarView"
+msgstr "Vista de calendariu"
+
+msgid "BookingPeriods"
+msgstr "Tiempos de reserva"
+
+msgid "ResourceList"
+msgstr "Llistáu de recursos"
+
+msgid "GoToCalendarView"
+msgstr "Dir a vista de calendariu"
+
+msgid "GoToListView"
+msgstr "Dir al llistáu"
+
+msgid "ManageResources"
+msgstr "Alministración de recursos"
+
+msgid "EditResource"
+msgstr "Editar recursu"
+
+msgid "BookIt"
+msgstr "reserva"
+
+msgid "GoTo"
+msgstr "Dir a"
+
+msgid "NoTimePicker"
+msgstr "Fuera de plazu"
+
+msgid "TimePicker"
+msgstr "En plazu"
+
+msgid "ManageBookingPeriods"
+msgstr "Alministrar tiempos de reserves"
+
+msgid "BookingPeriodToSmall"
+msgstr "El tiempu de la reserva ye percurtiu."
+
+msgid "BookingPeriodToBig"
+msgstr "El tiempu de la reserva ye pergrande."
+
+msgid "BookingPeriodTimePickerError1"
+msgstr "Nun se pue facer la reserva d\'un tiempu ensin un seleutor de tiempu si\'l tiempu mínimu y el másimu ye distintu a cero."
+
+msgid "BookingPeriodTimePickerError2"
+msgstr "El tiempu de reserva con un seleutor de tiempu nun se pue facer si\'l tiempu másimu ye menor que\'l tiempu mínimu."
+
+msgid "BookingPeriodTimePickerError3"
+msgstr "Un tiempu de reserva con un seleutor de tiempu nun se pue facer si\'l tiempu másimu nun ye un momentu ente la fecha d\'entamu y la d\'acabu."
+
+msgid "BookingPeriodHasSubscriptions"
+msgstr "Nun se pue cambiar el tiempu de reserva porque tien #NUM# reserva(es) activa(es)"
+
+msgid "TimePickerMaxUsers"
+msgstr "* Si\'l se ta en plazu, el númberu másimu de soscripciones ignórase."
+
+msgid "TimePickerMinMaxNull"
+msgstr "* Si\'l mínimu y el másimu de los valores del plazu ye cero, el tiempu pue variase."
+
+msgid "DeleteSelectedBookingPeriod"
+msgstr "Esborrar items seleicionaos"
+
+msgid "EditNewBookingPeriod"
+msgstr "Editar un tiempu de reserva"
+
+msgid "BookingPeriodAdded"
+msgstr "El tiempu de reserva apuntóse"
+
+msgid "BookingPeriodDeleted"
+msgstr "El tiempu de reserva esborróse"
+
+msgid "ConfirmDeleteBookingPeriod"
+msgstr "¿ Ta seguru/a de que quier esborrar dafechu esti tiempu de reserva ?"
+
+msgid "DeleteBookingPeriod"
+msgstr "Esborrar esti tiempu de reserva"
+
+msgid "BookingPeriodEdited"
+msgstr "El tiempu de reserva modificóse"
+
+msgid "BookingPeriodDateOverlap"
+msgstr "Una parte del tiempu de reserva ta yá usándose dende #START# hasta #END#"
+
+msgid "BookingPeriodSubscribeUntilAfterStart"
+msgstr "El plazu pa facer una reserva ye más grande que la fecha d\'entamu"
+
+msgid "RepeatFor"
+msgstr "Repetir cada"
+
+msgid "RepeatUntil"
+msgstr "Repetir hasta"
+
+msgid "BookingPeriodPast"
+msgstr "Nun se puen facer reserves enantes d\'esti momentu"
+
+msgid "ReservationMaxUsersOverrun"
+msgstr "Hai más reserves que\'l másimu qu\'escoyó."
+
+msgid "AddNewBookingPeriod"
+msgstr "Amestar un plazu nuevu de reserva"
+
+msgid "BookingPeriodTimePickerLimitation"
+msgstr "Nun se puen facer reserves con un seleutor de tiempu si les feches d\'entamu y d\'acabu son distintes."
+
+msgid "ResourceTypeName"
+msgstr "Nome del tipu de recursu"
+
+msgid "AddNewResourceType"
+msgstr "Amestar un tipu nuevu de recursu"
+
+msgid "ResourceTypeAdded"
+msgstr "El tipu de recursu amestóse"
+
+msgid "ResourceTypeEdited"
+msgstr "Amestóse\'l tipu de recursu"
+
+msgid "ResourceTypeDeleted"
+msgstr "Esborróse\'l tipu de recursu"
+
+msgid "ConfirmDeleteResourceType"
+msgstr "¿ Ta seguru de querer esborrar dafechu esti tipu de recursu ?"
+
+msgid "EditResourceType"
+msgstr "Editar el tipu de recursu"
+
+msgid "DeleteResourceType"
+msgstr "Esborrar el tipu de recursu"
+
+msgid "DeleteSelectedCategories"
+msgstr "Esborrar los elementos escoyíos"
+
+msgid "NoResourcesType"
+msgstr "Entá nun hai nengún tipu de recursu"
+
+msgid "ResourceType"
+msgstr "Tipu de recursu"
+
+msgid "ResourceTypeExist"
+msgstr "Esti tipu de recursu yá esiste"
+
+msgid "ResourceTypeHasItems"
+msgstr "¡ El tipu de recursu tien #NUM# unidaes ! Anulóse la cancelación"
+
+msgid "ResourceTypeNotDeleted"
+msgstr "Dellos tipos de recursu nun s\'esborraren porque hai unidaes qu\'entá se caltienen"
+
+msgid "DeleteSelectedSubscriptions"
+msgstr "Esborrar la reserva escoyida"
+
+msgid "DeleteSubscription"
+msgstr "Esborrar reserva"
+
+msgid "SubscriptionDeleted"
+msgstr "Reserva esborrada"
+
+msgid "ConfirmDeleteSubscription"
+msgstr "¿ Ta seguru/a de que quier esborrar estes reserves ?"
+
+msgid "SubscribeInformation"
+msgstr "Por favor, confirme que quier facer una reserva del #start# al #end# pa #name#"
+
+msgid "SubscribeTimePickerInformation"
+msgstr "Por favor, escueya un períodu #from_till énte #start_end pa #name#"
+
+msgid "ReservationAdded"
+msgstr "Amestóse la reserva"
+
+msgid "ReservationTresspassing"
+msgstr "Esta reserva ta yá completa, nun tien autorización pa esta páxina"
+
+msgid "ReservationOutOfDate"
+msgstr "La fecha qu\'escoyó ta usándose y/o nun entra dientro\'l períodu de reserva de #START# hasta #END#"
+
+msgid "ReservationAlready"
+msgstr "Usté yá fizo una reserva pa esti item"
+
+msgid "ReservationMadeTitle"
+msgstr "La so reserva de #ITEM# rexistróse"
+
+msgid "ReservationMadeMessage"
+msgstr "Estimáu/ada,
+
+La so reserva de #ITEM# de #START# a #END# rexistróse."
+
+msgid "ReservationDeleteTitle"
+msgstr "Un períodu de reserva pa #NAME# quedó esborráu"
+
+msgid "ReservationDeleteMessage"
+msgstr "Estimáu/ada, 
+
+El períodu de reserva de #NAME# de #START# a #END# esborróse"
+
+msgid "OutPeriod"
+msgstr "Fuera de plazu"
+
+msgid "ReservationFromUntilError"
+msgstr "El plazu de reserva de #START# a #END# nun se rexistró porque una parte d\'esti períodu yá ta usándose.n"
+
+msgid "Recurrence"
+msgstr "Recurrencia"
+
+msgid "NoRecurrence"
+msgstr "Ensin recurrencia"
+
+msgid "UntilRecurrence"
+msgstr "Usar recurrencia"
+
+msgid "TimePickerLimitation"
+msgstr "Si la recoyida de reserves ta abierta, la fecha d\'entamu y la d\'acabu tienen de ser les mesmes."
+
+msgid "OverviewSubscriptions"
+msgstr "Vista total de reserves"
+
+msgid "OverviewReservedPeriods"
+msgstr "Vista total de los plazos de reserva"
+
+msgid "SubscribedStartDate"
+msgstr "Reserves dende fecha d\'acabu"
+
+msgid "SubscribedEndDate"
+msgstr "Reserves dende fecha d\'acabu"
+
+msgid "SubscribedPerson"
+msgstr "Persona matriculada"
+
+msgid "BookingView"
+msgstr "Vista de reserves"
+
+msgid "SubscribeUntil"
+msgstr "Soscribise hasta"
+
+msgid "SubscribeFrom"
+msgstr "Soscribise dende"
+
+msgid "Notes"
+msgstr "Notes"
+
+msgid "SubscriptionPeriod"
+msgstr "Periodu de soscripción"
+
+msgid "NoPeriod"
+msgstr "Nun hai periodu de soscripción"
+
+msgid "FixedPeriod"
+msgstr "Periodu de soscripción correxíu"
+
+msgid "ResourceFilter"
+msgstr "Filtru de recursu"
+
+msgid "NoReservation"
+msgstr "Nun hai periodu de reserva"
+
+msgid "MaxUsers"
+msgstr "Númberu másimu d\'usuarios"
+
+msgid "AutoAccept"
+msgstr "Aceptar usuarios"
+
+msgid "ResourceName"
+msgstr "Nome del recursu"
+
+msgid "ResourceAdded"
+msgstr "Recursu agregáu"
+
+msgid "ResourceEdited"
+msgstr "Recursu editáu"
+
+msgid "ResourceDeleted"
+msgstr "Esborróse\'l recursu"
+
+msgid "AddNewResource"
+msgstr "Amestar un recursu nuevu"
+
+msgid "ConfirmDeleteResource"
+msgstr "¿ Ta seguru/a de que quier esborrar esti recursu ?"
+
+msgid "ResourceInactivated"
+msgstr "Desactivóse\'l recursu"
+
+msgid "ResourceActivated"
+msgstr "Activóse\'l recursu"
+
+msgid "Resource"
+msgstr "Recursu"
+
+msgid "OpenBooking"
+msgstr "Reserves habilitaes"
+
+msgid "DeleteResource"
+msgstr "Esborrar recursu"
+
+msgid "DeleteSelectedResources"
+msgstr "Esborrar los recursos escoyíos"
+
+msgid "ResourceExist"
+msgstr "El recursu yá esiste"
+
+msgid "AcceptUsers"
+msgstr "Aceptar usuarios"
+
+msgid "UnacceptedUsers"
+msgstr "Denegar usuarios"
+
+msgid "DeleteSubscriptions"
+msgstr "Esborrando soscripciones"
+
+msgid "NoItems"
+msgstr "Entá nun hai items"
+
+msgid "ItemNotDeleted"
+msgstr "Dellos items nun se puen esborrar porque entá esisten reserves"
+
+msgid "ItemHasReservations"
+msgstr "L\'item entá tien #NUM# reserves actives"
+
+msgid "NoItemsReservation"
+msgstr "Nun hai nengún oxetu pa usté nesti recursu"
+
+msgid "ReservationAccepted"
+msgstr "La reserva #ITEM# aceptóse"
+
+msgid "ReservationDenied"
+msgstr "La so reserva #ITEM# denegóse"
+
+msgid "ReservationForItemAccepted"
+msgstr "Estimáu/ada Señor/a,
+
+La so reserva pa #ITEM# de #BEGIN hasta #END aceptóse"
+
+msgid "ReservationForItemDenied"
+msgstr "Estimáu/ada Señor/a,
+
+La so reserva pa #ITEM# de #BEGIN hasta #END denegóse"
+
+msgid "ReservationCancelled"
+msgstr "Reserva cancelada #NAME# nun ta disponible pol momentu"
+
+msgid "ReservationActive"
+msgstr "La posibilidá de reserva ta otra vez activa, #NAME# ta habilitada otra vez"
+
+msgid "ReservationUnavailable"
+msgstr "Estimáu/ada Señor/a,
+
+#NAME# nun ta disponible pol momentu, polo que la so reserva de #BEGIN# hasta #END# quedó cancelada.
+Va recibir un corréu electrónicu si torna a tar disponible. Disculpe les molesties."
+
+msgid "ReservationAvailable"
+msgstr "Estimáu/ada Señor/a,
+
+Queremos informalu de que #NAME# ta otra vez disponible, polo que la so reserva de #BEGIN# hasta #END# ta otra vez activa."
+
+msgid "Resources"
+msgstr "Recursos"
+
+msgid "EditBookingPeriod"
+msgstr "Editar períodu de reserva"
+
+msgid "CreateResourceType"
+msgstr "Criar triba de recursu"
+
+msgid "ModifyResourceType"
+msgstr "Camudar triba de recursu"
+
+msgid "ViewResourceTypes"
+msgstr "Ver les tribes de recursos"
+
+msgid "ViewResources"
+msgstr "Ver los recursos"
+
+msgid "ViewBookingPeriods"
+msgstr "Ver los períodos de reserva"
+
+msgid "AlwaysAvailable"
+msgstr "Siempre disponible"
+
+msgid "SelectResourceTypeAndResource"
+msgstr "Seleiciona la triba de recursu"
+
+msgid "Step1SelectResourceType"
+msgstr "Pasu 1: Seleiciona la triba de recursu"
+
+msgid "Step2SelectResource"
+msgstr "Pasu 2: Seleiciona\'l recursu"
+
+msgid "Step3SelectBookingPeriod"
+msgstr "Pasu 3: Seleiciona\'l períodu de reserva"
+
+msgid "NoReservations"
+msgstr "Nun s\'almiten reserves"
+

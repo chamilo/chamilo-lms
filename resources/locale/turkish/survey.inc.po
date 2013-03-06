@@ -1,0 +1,600 @@
+msgid "PublishSurvey"
+msgstr "Anketi Yayınla"
+
+msgid "CompareQuestions"
+msgstr "Soruları Kıyasla"
+
+msgid "InformationUpdated"
+msgstr "Bilgi Güncellendi"
+
+msgid "SurveyTitle"
+msgstr "Anket Başlığı"
+
+msgid "SurveyIntroduction"
+msgstr "Anket Tanıtımı"
+
+msgid "CreateNewSurvey"
+msgstr "Anket Oluştur"
+
+msgid "Survey"
+msgstr "Anket"
+
+msgid "SurveyTemplate"
+msgstr "Anket Şablonu"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "Lütfen anket balığınıg giriniz"
+
+msgid "PleaseEnterValidDate"
+msgstr "Lütfen Geçerli Bir Tarih Giriniz"
+
+msgid "NotPublished"
+msgstr "Yayınlanmadı"
+
+msgid "AdvancedReportDetails"
+msgstr "Gelişmiş raporlar kullanıcıyı seçme ve sorular hakkında daha detaylı bilgiyi görme imkanı verir."
+
+msgid "AdvancedReport"
+msgstr "Gelişmiş Rapor"
+
+msgid "CompleteReportDetails"
+msgstr "Tam rapor anket gönderilen kişilerin sonuçlarını görmeye ve csv formatında dışa aktarmaya (Excel için) imkan tanır."
+
+msgid "CompleteReport"
+msgstr "Tam rapor"
+
+msgid "OnlyThoseAddresses"
+msgstr "Anketi sadece bu adreslere gönder"
+
+msgid "BackToQuestions"
+msgstr "Sorulara dön"
+
+msgid "SelectWhichLanguage"
+msgstr "Anketi hangi dilde oluşturacağınızı seçin"
+
+msgid "CreateInAnotherLanguage"
+msgstr "Bu anketi başka dilde oluştur"
+
+msgid "ExportInExcel"
+msgstr "Excel formatında dışa aktar"
+
+msgid "ComparativeResults"
+msgstr "Karşılaştırmalı sonuçlar"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "Kıyaslamak istediğniz veriyi seçiniz"
+
+msgid "OrCopyPasteUrl"
+msgstr "yada bağlantıyı kopyalayıp kendi tarayıcınıza yapıştırın"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "Ankete başlamak için buraya basın"
+
+msgid "SurveyNotShared"
+msgstr "henüz hiçbir anket paylaşılmadı"
+
+msgid "ViewSurvey"
+msgstr "Anketi görüntüle"
+
+msgid "SelectDisplayType"
+msgstr "Ekran tipini seçin"
+
+msgid "Thanks"
+msgstr "Geribildirim Mesajı"
+
+msgid "SurveyReporting"
+msgstr "Anket raporlama"
+
+msgid "NoSurveyAvailable"
+msgstr "Mevcut anket yok"
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "yayımlandı"
+
+msgid "CreateFromExistingSurvey"
+msgstr "Varolan anketten oluştur"
+
+msgid "Publish"
+msgstr "Anketi yayımla"
+
+msgid "SearchASurvey"
+msgstr "Anket ara"
+
+msgid "CourseName"
+msgstr "Eğitim adı"
+
+msgid "SurveysOfAllCourses"
+msgstr "Tüm eğitimlerin Anketi(leri)"
+
+msgid "PleaseSelectAChoice"
+msgstr "Lütfen bir seçim yapın"
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "Veritabanında soru yok"
+
+msgid "UpdateQuestionType"
+msgstr "Soru tipini güncelle"
+
+msgid "AddAnotherQuestion"
+msgstr "Yeni soru ekle"
+
+msgid "IsShareSurvey"
+msgstr "Diğerleri ile anketi paylaş"
+
+msgid "Proceed"
+msgstr "İlerle"
+
+msgid "PleaseFillNumber"
+msgstr "Lütfen puanlar için sayısal değerler girin"
+
+msgid "PleaseFillAllPoints"
+msgstr "Lütfen 1den 5 e kadar puanları doldurun"
+
+msgid "PleasFillAllAnswer"
+msgstr "Lütfen bütün cevap alanlarını doldurun"
+
+msgid "PleaseSelectFourTrue"
+msgstr "Lütfen en az 4 doğru cevap seçin"
+
+msgid "PleaseSelectFourDefault"
+msgstr "Lütfen en az 4 varsayılan cevapları seçin"
+
+msgid "PleaseFillDefaultText"
+msgstr "Lütfen varsayılan metni doldur"
+
+msgid "ModifySurveyInformation"
+msgstr "Anket bilgilerini düzenle"
+
+msgid "ViewQuestions"
+msgstr "Soruları görüntüle"
+
+msgid "CreateSurvey"
+msgstr "Anket oluştur"
+
+msgid "FinishSurvey"
+msgstr "Anketi bitir"
+
+msgid "QuestionsAdded"
+msgstr "Sorular eklendi"
+
+msgid "DeleteSurvey"
+msgstr "Anketi sil"
+
+msgid "SurveyCode"
+msgstr "Kod"
+
+msgid "SurveyList"
+msgstr "Ankıet Listesi"
+
+msgid "SurveyAttached"
+msgstr "Anket eklendi"
+
+msgid "QuestionByType"
+msgstr "Soru Tipleri"
+
+msgid "SelectQuestionByType"
+msgstr "Tipe göre soru seçin"
+
+msgid "PleaseEnterAQuestion"
+msgstr "Lütfen bir soru girin"
+
+msgid "NoOfQuestions"
+msgstr "Soru Sayısı"
+
+msgid "Question"
+msgstr "Soru"
+
+msgid "ThisCodeAlradyExists"
+msgstr "Bu kod zaten mevcut"
+
+msgid "SaveAndExit"
+msgstr "Kaydet ve çık"
+
+msgid "ViewAnswers"
+msgstr "Cevapları göster"
+
+msgid "CreateExistingSurvey"
+msgstr "Varolan bir aketten oluştur"
+
+msgid "SurveyName"
+msgstr "Anket Adı"
+
+msgid "SurveySubTitle"
+msgstr "Anket Altbaşlığı"
+
+msgid "ShareSurvey"
+msgstr "Anketi paylaş"
+
+msgid "SurveyThanks"
+msgstr "Son teşekkür"
+
+msgid "EditSurvey"
+msgstr "Anketi Düzenle"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "yada anket genel görünümüne dönün"
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "Bağlantıda bir parametre eksik. LÜTFen kopyala yapıştırı kullann"
+
+msgid "WrongInvitationCode"
+msgstr "Hatalı davet kodu"
+
+msgid "SurveyFinished"
+msgstr "Anketi bitirdiniz"
+
+msgid "SurveyPreview"
+msgstr "anket ön izlemesi"
+
+msgid "InvallidSurvey"
+msgstr "Geçersiz anket"
+
+msgid "AddQuestion"
+msgstr "soru ekle"
+
+msgid "EditQuestion"
+msgstr "Soru düzenle"
+
+msgid "TypeDoesNotExist"
+msgstr "Böyle bir itp yoktur"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "Anket başarılı şekilde ouşturuldu"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Anketinize sorular ekleyebilisiniz"
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "Anket başarılı şeklide güncellendi"
+
+msgid "QuestionAdded"
+msgstr "Soru eklendi"
+
+msgid "QuestionUpdated"
+msgstr "Soru güncellendi"
+
+msgid "RemoveAnswer"
+msgstr "Seçeneği kaldır"
+
+msgid "AddAnswer"
+msgstr "Seçenek ekle"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Göster"
+
+msgid "AnswerOptions"
+msgstr "Cevap seçenekleri"
+
+msgid "YesNo"
+msgstr "Eve/Hayır"
+
+msgid "MultipleResponse"
+msgstr "Çoklu cevap"
+
+msgid "Open"
+msgstr "Açık"
+
+msgid "Dropdown"
+msgstr "Açılır kutu"
+
+msgid "Pagebreak"
+msgstr "Sayfa sonu (Sorular ayrı sayfalarda)"
+
+msgid "QuestionNumber"
+msgstr "No"
+
+msgid "NumberOfOptions"
+msgstr "Seçenek"
+
+msgid "SurveyInvitations"
+msgstr "Anket davetleri"
+
+msgid "InvitationCode"
+msgstr "Davet kodu"
+
+msgid "InvitationDate"
+msgstr "Davet tarihi"
+
+msgid "Answered"
+msgstr "Cevaplandı"
+
+msgid "AdditonalUsersComment"
+msgstr "Anketi doldurmaları için ilave kulllanıcı davet edebilirsiniz. Bunun için e-posta adreslerini buraya , yada ; ile ayırarak yazın"
+
+msgid "MailTitle"
+msgstr "Mail Konusu"
+
+msgid "InvitationsSend"
+msgstr "Davetler gönderildi"
+
+msgid "SurveyDeleted"
+msgstr "Anket silindi"
+
+msgid "NoSurveysSelected"
+msgstr "Hiçbir anket seçilmedi"
+
+msgid "NumberOfQuestions"
+msgstr "Sorular"
+
+msgid "Invited"
+msgstr "Davet edildi"
+
+msgid "SubmitQuestionFilter"
+msgstr "Süzgeç"
+
+msgid "ResetQuestionFilter"
+msgstr "Süzgeci kaldır"
+
+msgid "ExportCurrentReport"
+msgstr "Raporu dışa aktar"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "Sadece cevabı önceden tanımlanmış sorular kullanılabliir"
+
+msgid "SelectXAxis"
+msgstr "X eksenindeki soruyu seçin"
+
+msgid "SelectYAxis"
+msgstr "Y eksenindeki soruyu seçin"
+
+msgid "ComparativeReport"
+msgstr "Karşılaştırmalı rapor"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "Bu ekran kullanıcının doldurduğu formun tam bir kopyasını gösterir"
+
+msgid "SelectUser"
+msgstr "Kullanıcı"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "Anketi dolduran kullanıcıyı seçin"
+
+msgid "userreport"
+msgstr "Kullanıcı raporu"
+
+msgid "VisualRepresentation"
+msgstr "Grafik"
+
+msgid "AbsoluteTotal"
+msgstr "Kesin toplam"
+
+msgid "NextQuestion"
+msgstr "Sonraki soru"
+
+msgid "PreviousQuestion"
+msgstr "Önceki soru"
+
+msgid "PeopleWhoAnswered"
+msgstr "Bu cevabı seçen kişiler"
+
+msgid "CourseUsers"
+msgstr "Öğrenciler"
+
+msgid "SurveyPublication"
+msgstr "Anket Yayımlama"
+
+msgid "AdditonalUsers"
+msgstr "İlave kullanıcılar"
+
+msgid "MailText"
+msgstr "E-posta iletileri"
+
+msgid "UseLinkSyntax"
+msgstr "Seçili kullanıcılar yukarıdaki metni içeren ve tıklamaları gereken ve anketi dolduracakları tek bir bağlantının olduğu bir e-posta alacaklar. Eğer bağlantıyı iletinizde herhangi bir yere koymak istiyorsanız aşağıdaki metni istediğiniz yere yerleştirin: **link** Otomatik olarak verilen bağlantı yeri istediğiniz yere alınacaktır. Eğer **link** şeklinde ekleme yapmazsanız bağlantınız e-postanızın sonuna eklenecektir."
+
+msgid "DetailedReportByUser"
+msgstr "Kullanıcıya göre detaylı rapor"
+
+msgid "DetailedReportByQuestion"
+msgstr "Soruya göre detaylı rapor"
+
+msgid "ComparativeReportDetail"
+msgstr "Bu raporda 2 soruyu kıyaslayabilirsiniz"
+
+msgid "CompleteReportDetail"
+msgstr "Bu raporda tüm sorulara tüm kullanıcılar tarafından verilen tüm cevapların genel olarak görürsünüz. Sadece bir grup seçilen soruda görüntülenebilir. Sonuçları csv formatında dışa aktararak istatistiksel uygulamalarda da kullanabiilrsiniz"
+
+msgid "DetailedReportByUserDetail"
+msgstr "Bu raporda belirli kişii tarafından verilen tüm cevapları görürmektedir."
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "Bu raporda sonuçlar sorular bazında görünmektedir. Basit istatistiksel analiz ve grafik verilmektedir."
+
+msgid "ReminderResendToAllUsers"
+msgstr "Anketi tüm kullanıcalara hatırlatır. Eğer bu kutuyu işaretlemezseniz sadece yeni eklenen kullanıcılar e-posta alırlar"
+
+msgid "Multiplechoice"
+msgstr "Çoktan seçmeli"
+
+msgid "Score"
+msgstr "Performans"
+
+msgid "Shared"
+msgstr "Paylaşıldı"
+
+msgid "Invite"
+msgstr "Davet et"
+
+msgid "MaximumScore"
+msgstr "Max. Puan"
+
+msgid "ViewInvited"
+msgstr "Davetlileri gör"
+
+msgid "ViewAnswered"
+msgstr "Cevaplayan kişileri gör"
+
+msgid "ViewUnanswered"
+msgstr "Ceaplamayanları gör"
+
+msgid "DeleteSurveyQuestion"
+msgstr "Soruyu silmek istediğinizden emin misiniz?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "Bu anketi zaten doldurdunuz."
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "Anketi cevaplamak için buraya basın"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "yada aşağıdaki adresi kopyalayıp yapıştırın"
+
+msgid "UnknowUser"
+msgstr "Bilinmeyen kullanıcı"
+
+msgid "MoveDown"
+msgstr "Aşağı"
+
+msgid "MoveUp"
+msgstr "Yukarı"
+
+msgid "HaveAnswered"
+msgstr "Cevaplanmıştı"
+
+msgid "WereInvited"
+msgstr "davet edildi"
+
+msgid "PagebreakNotFirst"
+msgstr "Sayfa ayrımı birinci olamaz"
+
+msgid "PagebreakNotLast"
+msgstr "Sayfa ayrımı sonuncu olamaz"
+
+msgid "SurveyNotAvailableAnymore"
+msgstr "Üzgünüz. Bu anket artık kullanımda değil. Denediğiniz için teşekkürler."
+
+msgid "DuplicateSurvey"
+msgstr "Anketten kopyala"
+
+msgid "EmptySurvey"
+msgstr "Anketi boşalt"
+
+msgid "SurveyEmptied"
+msgstr "Ankete verilen cevaplar başarılı şekilde silindi."
+
+msgid "SurveyNotAvailableYet"
+msgstr "Anket şu anda kullanılabilir değil. Lütfen daha sonra tekrar deneyin. Teşekkürler"
+
+msgid "PeopleAnswered"
+msgstr "Cevaplayanlar"
+
+msgid "AnonymousSurveyCannotKnowWhoAnswered"
+msgstr "Bu anket anonimdir. Kimin cevapladığını göremezsiniz."
+
+msgid "IllegalSurveyId"
+msgstr "Bilinmeyen anket tanımı"
+
+msgid "SurveyQuestionMoved"
+msgstr "Soru taşınmıştır."
+
+msgid "IdenticalSurveycodeWarning"
+msgstr "Bu anketin kodu zaten mevcut. Muhtemelen anket başka bir dilde mevcut. Davet edilenler değişik diller içinden seçim yapacaklar."
+
+msgid "ThisSurveyCodeSoonExistsInThisLanguage"
+msgstr "Bu anket kodu yakında bu dilde olacaktır."
+
+msgid "SurveyUserAnswersHaveBeenRemovedSuccessfully"
+msgstr "Kulanıcının ankete verdiği cevaplar başarılı şekilde kaldırıldı."
+
+msgid "DeleteSurveyByUser"
+msgstr "Bu kullanıcının cevaplarını sil."
+
+msgid "SelectType"
+msgstr "Tipi seçin."
+
+msgid "Conditional"
+msgstr "Koşullu"
+
+msgid "ParentSurvey"
+msgstr "Ana anket"
+
+msgid "OneQuestionPerPage"
+msgstr "Sayfa başına 1 soru"
+
+msgid "ActivateShuffle"
+msgstr "Karışık mod aktif."
+
+msgid "ShowFormProfile"
+msgstr "Profil formunu göster"
+
+msgid "PersonalityQuestion"
+msgstr "Soruyu düzenle"
+
+msgid "YouNeedToCreateGroups"
+msgstr "Grup oluşturmalısınız."
+
+msgid "ManageGroups"
+msgstr "Grupları yönet"
+
+msgid "Create"
+msgstr "Oluştur"
+
+msgid "GroupCreatedSuccessfully"
+msgstr "Grup oluşturuldu."
+
+msgid "GroupNeedName"
+msgstr "Grup adı gerekli"
+
+msgid "Personality"
+msgstr "Kişiselleştir"
+
+msgid "Condition"
+msgstr "Koşul"
+
+msgid "Primary"
+msgstr "Birincil"
+
+msgid "Secondary"
+msgstr "İkincil"
+
+msgid "CourseSettings"
+msgstr "Ders ayarları"
+
+msgid "PleaseChooseACondition"
+msgstr "Bir koşul seçiniz"
+
+msgid "ChooseDifferentCategories"
+msgstr "Farklı kategoriler seçiniz"
+
+msgid "Version"
+msgstr "Sürüm"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "NoLogOfDuration"
+msgstr "Süre kaydı yok"
+
+msgid "AutoInviteLink"
+msgstr "Davet edilmeyen kullanıcılar ankete giriş için bu linki kullanabilirler."
+
+msgid "CompleteTheSurveysQuestions"
+msgstr "Anketin sorularını tamamlayın"
+
+msgid "SurveysDeleted"
+msgstr "Silinmiş anketler"
+
+msgid "RemindUnanswered"
+msgstr "Sadece cevaplamayan kullanıcılara hatırlat"
+
+msgid "ModifySurvey"
+msgstr "Anketi düzenle"
+
+msgid "CreateQuestionSurvey"
+msgstr "Soru oluştur"
+
+msgid "ModifyQuestionSurvey"
+msgstr "Soruyu düzenle"
+
+msgid "BackToSurvey"
+msgstr "Ankete dön"
+
+msgid "UpdateInformation"
+msgstr "Bilgiyi güncelle"
+
+msgid "PleaseFillSurvey"
+msgstr "Lütfen anketi doldurun"
+
+msgid "ReportingOverview"
+msgstr "Raporlama Görünümü"
+

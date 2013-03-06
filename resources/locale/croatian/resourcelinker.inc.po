@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Resurs dodan. Možete se vratiti na put ili dodati još resursa."
+
+msgid "LearningPath"
+msgstr "Put učenja"
+
+msgid "LevelUp"
+msgstr "razina gore"
+
+msgid "AddIt"
+msgstr "Dodaj"
+
+msgid "MainCategory"
+msgstr "glavna kategorija"
+
+msgid "lang_delete_added_resources"
+msgstr "Izbriši dodane resurse"
+
+msgid "AddToLinks"
+msgstr "Dodaj poveznicama kolegija"
+
+msgid "DontAdd"
+msgstr "nemoj dodati"
+
+msgid "lang_show_all_added_resources"
+msgstr "Prikaži sve dodane resurse"
+
+msgid "ResourcesAdded"
+msgstr "Resursi dodani"
+
+msgid "BackTo"
+msgstr "Natrag na"
+
+msgid "ExternalResources"
+msgstr "Vanjski resursi"
+
+msgid "CourseResources"
+msgstr "Resursi kolegija"
+
+msgid "ExternalLink"
+msgstr "Vanjska poveznica"
+
+msgid "DropboxAdd"
+msgstr "Dodaj stranicu Pretinac ovome poglavlju."
+
+msgid "AddAssignmentPage"
+msgstr "Dodaj stranicu Studentski radovi ovome poglavlju."
+
+msgid "Exercise"
+msgstr "Vježbe"
+
+msgid "Link"
+msgstr "Poveznica"
+
+msgid "AdValvas"
+msgstr "Obavijesti"
+
+msgid "Document"
+msgstr "Dokument"
+
+msgid "ShowDelete"
+msgstr "Prikaži/Izbriši"
+
+msgid "IntroductionText"
+msgstr "Uvodni tekst"
+
+msgid "CourseDescription"
+msgstr "Opis kolegija"
+
+msgid "Groups"
+msgstr "Skupine"
+
+msgid "Users"
+msgstr "Korisnici"
+
+msgid "IntroductionTextAdd"
+msgstr "Dodaj stranicu s uvodnim tekstom ovome poglavlju."
+
+msgid "CourseDescriptionAdd"
+msgstr "Dodaj stranicu s opisom kolegija ovome poglavlju."
+
+msgid "GroupsAdd"
+msgstr "Dodaj stranicu Skupine ovome poglavlju."
+
+msgid "UsersAdd"
+msgstr "Dodaj stranicu Korisnici ovome poglavlju."
+
+msgid "ExportableCourseResources"
+msgstr "Resursi kolegija dostupni za prijenos"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Resursi kolegija povezani sa sustavom Chamilo"
+
+msgid "LinkTarget"
+msgstr "Odredište poveznice"
+
+msgid "SameWindow"
+msgstr "U istome prozoru"
+
+msgid "NewWindow"
+msgstr "U novome prozoru"
+
+msgid "StepDeleted1"
+msgstr "Ovaj"
+
+msgid "StepDeleted2"
+msgstr "element je izbrisan u tom alatu."
+
+msgid "Modify"
+msgstr "izmijeni"
+
+msgid "Chapter"
+msgstr "Poglavlje"
+
+msgid "NoAgendaItems"
+msgstr "Nema elemenata u rasporedu"
+
+msgid "AgendaAdd"
+msgstr "Dodaj novi element u raspored"
+
+msgid "UserGroupFilter"
+msgstr "Filtar prema grupama/korisnicima"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Sortiraj zapise rasporeda kronološki uzlazno"
+
+msgid "ShowCurrent"
+msgstr "Prikaži elemente rasporeda u tekućem mjesecu"
+
+msgid "ModifyCalendarItem"
+msgstr "Izmijeni element rasporeda"
+
+msgid "ItemTitle"
+msgstr "Naslov elementa"
+
+msgid "Detail"
+msgstr "Pojedinosti"
+
+msgid "EditSuccess"
+msgstr "Element rasporeda je izmjenjen"
+
+msgid "AddCalendarItem"
+msgstr "Dodaj novi element u raspored"
+
+msgid "AddAnn"
+msgstr "Dodaj obavijest"
+
+msgid "ForumAddNewTopic"
+msgstr "Forum: dodaj novu temu"
+
+msgid "ForumEditTopic"
+msgstr "Forum: uredi temu"
+
+msgid "ExerciseAnswers"
+msgstr "Vježba: odgovori"
+
+msgid "ForumReply"
+msgstr "Forum: odgovor"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Sortiraj zapise rasporeda kronološki silazno"
+

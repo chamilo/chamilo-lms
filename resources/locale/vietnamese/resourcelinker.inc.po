@@ -1,0 +1,60 @@
+msgid "ResourceAdded"
+msgstr "Tài nguyên đã được thêm vào.Bây giờ bạn có thể quay lại hoặc thêm tài nguyên mới"
+
+msgid "LearningPath"
+msgstr "Quá trình học tập"
+
+msgid "LevelUp"
+msgstr "level up"
+
+msgid "AddIt"
+msgstr "Thêm nó"
+
+msgid "MainCategory"
+msgstr "Danh mục chính"
+
+msgid "lang_delete_added_resources"
+msgstr "Xóa bỏ tài nguyên đã thêm vào"
+
+msgid "AddToLinks"
+msgstr "Thêm liên kết vào khóa học"
+
+msgid "DontAdd"
+msgstr "Không thêm"
+
+msgid "lang_show_all_added_resources"
+msgstr "Hiển thị toàn bộ tài nguyên được thêm vào"
+
+msgid "ResourcesAdded"
+msgstr "Thêm tài nguyên mới"
+
+msgid "BackTo"
+msgstr "Quay lại"
+
+msgid "ExternalResources"
+msgstr "Tài nguyên bên ngoài"
+
+msgid "CourseResources"
+msgstr "Tài nguyên khóa học"
+
+msgid "ExternalLink"
+msgstr "Liên kết ngoài"
+
+msgid "DropboxAdd"
+msgstr "Thêm Dropbox cho chương này"
+
+msgid "AddAssignmentPage"
+msgstr "Thêm các trang phân tải lên chương này."
+
+msgid "Exercise"
+msgstr "Kiểm tra"
+
+msgid "Link"
+msgstr "Liên kết"
+
+msgid "AdValvas"
+msgstr "Ad Valvas"
+
+msgid "Document"
+msgstr "Tài liệu"
+

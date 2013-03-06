@@ -1,0 +1,102 @@
+msgid "langOnlineConference"
+msgstr "Конференция"
+
+msgid "langWash"
+msgstr "Почистить"
+
+msgid "langReset"
+msgstr "Сбросить"
+
+msgid "langSave"
+msgstr "Сохранить"
+
+msgid "langRefresh"
+msgstr "Обновить"
+
+msgid "langIsNowInYourDocDir"
+msgstr "Сейчас в ваших инструментах \"документы\" <br /><B>Этот файл видимый</B>"
+
+msgid "langCopyFailed"
+msgstr "Копирование не удалось"
+
+msgid "langTypeMessage"
+msgstr "Пожалуйста, введите Ваше сообщение!"
+
+msgid "langConfirmReset"
+msgstr "Вы действительно хотите удалить все сообщения?"
+
+msgid "langHasResetChat"
+msgstr "Чат восстановлен"
+
+msgid "langNoOnlineConference"
+msgstr "В настоящий момент конференция не проводится..."
+
+msgid "langMediaFile"
+msgstr "Аудио или видео эфир"
+
+msgid "langContentFile"
+msgstr "Презентация"
+
+msgid "langListOfParticipants"
+msgstr "Список участников"
+
+msgid "langYourPicture"
+msgstr "Ваше фото"
+
+msgid "langOnlineDescription"
+msgstr "Описание конференции"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Пожалуйста, используйте это поле только, чтобы задать важный вопрос!"
+
+msgid "langQuestion"
+msgstr "вопрос"
+
+msgid "langClearList"
+msgstr "Очистить список"
+
+msgid "langWhiteBoard"
+msgstr "Редактор"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Текстовый редактор</h2>Введите сюда текст посредством \"копировать-вставить\" из Ms-Word, затем отредактируйте его. Участники будут видеть Ваши изменения немедленно."
+
+msgid "langStreaming"
+msgstr "Трансляция"
+
+msgid "langStreamURL"
+msgstr "Адрес (URL) трансляции"
+
+msgid "langStreamType"
+msgstr "Тип трансляции"
+
+msgid "langLinkName"
+msgstr "Название ссылки"
+
+msgid "langLinkURL"
+msgstr "Адрес (URL) ссылки"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Добро пожаловать в <b>Онлайн конференцию</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Доступных ссылок нет"
+
+msgid "langChat_reset_by"
+msgstr "сбросить чат"
+
+msgid "OrFile"
+msgstr "или файл"
+
+msgid "langCallSent"
+msgstr "Приглашение в чат было отослано. Ожидайте подтверждение от вашего партнера."
+
+msgid "langChatDenied"
+msgstr "Ваше приглашение было откланено вашим партнером"
+
+msgid "Send"
+msgstr "Отправить"
+
+msgid "Connected"
+msgstr "Соединенный"
+

@@ -1,0 +1,377 @@
+msgid "ReservationPeriodToSmall"
+msgstr "Pacha waqaychanapaqqa nishu chhikan."
+
+msgid "BookingSystem"
+msgstr "Waqaychanakunaq sisteman"
+
+msgid "BookingPeriodList"
+msgstr "Pacha waqaychanaq yupachasqaynin"
+
+msgid "BookingListView"
+msgstr "Waqaychanakunaq yupachasqaynin"
+
+msgid "BookingCalendarView"
+msgstr "Wata-kamachiq qhawarina"
+
+msgid "BookingPeriods"
+msgstr "Pacha waqaychana"
+
+msgid "ResourceList"
+msgstr "Yanapaysinakunaq yupachasqaynin"
+
+msgid "GoToCalendarView"
+msgstr "Wata-kamachiq qhawanaman riy"
+
+msgid "GoToListView"
+msgstr "Yupasqaman riy"
+
+msgid "ManageResources"
+msgstr "Yanapaysinakunaq kamachiynin"
+
+msgid "EditResource"
+msgstr "Ruwapaq yanapaysinata"
+
+msgid "BookIt"
+msgstr "Waqaychana"
+
+msgid "GoTo"
+msgstr "Riy kayman"
+
+msgid "NoTimePicker"
+msgstr "Manan kanchu pacha ajllaq"
+
+msgid "TimePicker"
+msgstr "Pacha ajllaq"
+
+msgid "ManageBookingPeriods"
+msgstr "Kamachiy pacha waqaychanakunata"
+
+msgid "BookingPeriodToSmall"
+msgstr "Pacha waqaychanapaqqa nishu huch\'uychan."
+
+msgid "BookingPeriodToBig"
+msgstr "Pacha waqaychanapaqqa nishu hatunmi."
+
+msgid "BookingPeriodTimePickerError1"
+msgstr "Mana waqaychakunmanchu hoq pachaqa mana pacha ajllaqniyuq hinallataq manapuni ajllakunmanchu pachaqasichus chu\'usaq kanqa chayqa."
+
+msgid "BookingPeriodTimePickerError2"
+msgstr "El periodo de reserva con un selector de tiempo no se puede realizar si el tiempo máximo es inferior al tiempo mínimo del periodo"
+
+msgid "BookingPeriodTimePickerError3"
+msgstr "Un periodo de reserva con un selector de tiempo no se puede realizar si el tiempo máximo del periodo no está entre la fecha de inicio y final"
+
+msgid "BookingPeriodHasSubscriptions"
+msgstr "No es posible modificar el periodo de reserva debido a que tiene #NUM# reserva(s) activa(s)"
+
+msgid "TimePickerMaxUsers"
+msgstr "* Cuando el timepicker está siendo usado, el Máximo número de suscripciones es ignorado"
+
+msgid "TimePickerMinMaxNull"
+msgstr "* Si el mínimo y máximo valor del timepicker es cero, el tiempo puede ser variable"
+
+msgid "DeleteSelectedBookingPeriod"
+msgstr "Pichay items ajllasqakunata"
+
+msgid "EditNewBookingPeriod"
+msgstr "Ruwapay hoq pacha waqaychanata"
+
+msgid "BookingPeriodAdded"
+msgstr "Pacha waqaychanaqa haykuchisqaña"
+
+msgid "BookingPeriodDeleted"
+msgstr "Pacha waqaychanaqa pichasqañan"
+
+msgid "ConfirmDeleteBookingPeriod"
+msgstr "Cheqaypaqchu munashanki pacha waqaychanata wiñaypaq pichakunanta ?"
+
+msgid "DeleteBookingPeriod"
+msgstr "Pichay kay pacha waqaychanata"
+
+msgid "BookingPeriodEdited"
+msgstr "Pacha waqaychanaqa t\'ijrapasqañan"
+
+msgid "BookingPeriodDateOverlap"
+msgstr "Pacha waqaychanaqa kusqayninqa hap\'ipasqañan kashan kaymanta #START# kaykama #END#"
+
+msgid "BookingPeriodSubscribeUntilAfterStart"
+msgstr "El periodo de realización de la reserva es mayor que la fecha de inicio"
+
+msgid "RepeatFor"
+msgstr "Kutipay sapa"
+
+msgid "RepeatUntil"
+msgstr "Kutipay kaykama"
+
+msgid "BookingPeriodPast"
+msgstr "No es posible realizar reservas antes del momento actual"
+
+msgid "ReservationMaxUsersOverrun"
+msgstr "Hay más reservas que el máximo que ha seleccionado"
+
+msgid "AddNewBookingPeriod"
+msgstr "Yapay musuq pacha waqaychanata"
+
+msgid "BookingPeriodTimePickerLimitation"
+msgstr "No es posible realizar reservas con un selector de tiempo si las fechas de inicio y finalización son distintas."
+
+msgid "ResourceTypeName"
+msgstr "Imaniraq yanapaysinaq sutin"
+
+msgid "AddNewResourceType"
+msgstr "Yapay hoq imaniraq yanapaysinata"
+
+msgid "ResourceTypeAdded"
+msgstr "Imaniraq yanapaysinaqa yapasqañan"
+
+msgid "ResourceTypeEdited"
+msgstr "Imaniraq yanapaysinaqa yapasqañan"
+
+msgid "ResourceTypeDeleted"
+msgstr "Imaniraq yanapaysinaqa pichasqañan"
+
+msgid "ConfirmDeleteResourceType"
+msgstr "Cheqaychu kashanki imaniraq yanapaysina wiñaypaq pichakunanpaq ?"
+
+msgid "EditResourceType"
+msgstr "Ruwapay imaniraq yanapaysinata"
+
+msgid "DeleteResourceType"
+msgstr "Pichay imaniraq yanapaysinata"
+
+msgid "DeleteSelectedCategories"
+msgstr "Pichay imaymanakuna ajllasqata"
+
+msgid "NoResourcesType"
+msgstr "Manaraq kashanchu imaniraq yanapaysinaqa"
+
+msgid "ResourceType"
+msgstr "Ima niraq yachachina"
+
+msgid "ResourceTypeExist"
+msgstr "Kay imaniraq yanapaysinaqa kashanñan"
+
+msgid "ResourceTypeHasItems"
+msgstr "¡ El tipo de recurso tiene  #NUM# unidades ! La cancelación ha sido anulada"
+
+msgid "ResourceTypeNotDeleted"
+msgstr "Imaniraq yanapaysinakunaqa manaraq pichachikunkuchu imachankuna kashaqtinrayku"
+
+msgid "DeleteSelectedSubscriptions"
+msgstr "Pichay waqaychanakuna ajllasqata"
+
+msgid "DeleteSubscription"
+msgstr "Pichay waqaychanata"
+
+msgid "SubscriptionDeleted"
+msgstr "Waqaychana pichasqa"
+
+msgid "ConfirmDeleteSubscription"
+msgstr "Cheqaychu kashanki kay waqaychanakunata pichanapaq?"
+
+msgid "SubscribeInformation"
+msgstr " Por favor confirma desea hacer una reserva del #start# al #end# para #name#"
+
+msgid "SubscribeTimePickerInformation"
+msgstr " Por favor elije un periodo #from_till entre #start_end para #name#"
+
+msgid "ReservationAdded"
+msgstr "Waqaychana yapasqa"
+
+msgid "ReservationTresspassing"
+msgstr "Esta reserva ya esta completa, usted no esta autorizado en esta página"
+
+msgid "ReservationOutOfDate"
+msgstr " La fecha que ha elegido esta en uso y/o no esta en el periodo de reserva de #START# hasta #END#"
+
+msgid "ReservationAlready"
+msgstr "Usted ya hizo una reservación para este item"
+
+msgid "ReservationMadeTitle"
+msgstr "Su reserva de #ITEM# ha sido registrada"
+
+msgid "ReservationMadeMessage"
+msgstr "Estimado, Estimada,
+
+Su reserva de #ITEM# de #START# a #END# ha sido registrada."
+
+msgid "ReservationDeleteTitle"
+msgstr "Un periodo de reserva para #NAME# ha sido eliminado"
+
+msgid "ReservationDeleteMessage"
+msgstr "Estimada, Estimado,
+
+El periodo de reserva de #NAME# de #START# a #END# ha sido eliminado"
+
+msgid "OutPeriod"
+msgstr "Fuera de periodo"
+
+msgid "ReservationFromUntilError"
+msgstr "El periodo de reserva de #START# a #END# no ha sido registrado porque una parte de este periodo ya esta usado.
+"
+
+msgid "Recurrence"
+msgstr "Recurrencia"
+
+msgid "NoRecurrence"
+msgstr "Sin recurrencia"
+
+msgid "UntilRecurrence"
+msgstr "Usar recurrencia"
+
+msgid "TimePickerLimitation"
+msgstr " Cuando el timepicker esta usado, la fecha de inicio y fecha de fin deben ser las mismas."
+
+msgid "OverviewSubscriptions"
+msgstr "Vista global de reservas"
+
+msgid "OverviewReservedPeriods"
+msgstr "Pacha waqaychanaq lliw qhawariynin"
+
+msgid "SubscribedStartDate"
+msgstr "Reservas desde fecha de fin"
+
+msgid "SubscribedEndDate"
+msgstr "Reservas desde fecha de fin"
+
+msgid "SubscribedPerson"
+msgstr "Persona inscrita"
+
+msgid "BookingView"
+msgstr "Vista para reservas"
+
+msgid "SubscribeUntil"
+msgstr "Suscribirse hasta"
+
+msgid "SubscribeFrom"
+msgstr "Suscribirse desde"
+
+msgid "Notes"
+msgstr "Willaykuna"
+
+msgid "SubscriptionPeriod"
+msgstr "Periódo de suscripción"
+
+msgid "NoPeriod"
+msgstr "No hay periodo de suscripción"
+
+msgid "FixedPeriod"
+msgstr "Periodo de suscripción corregido"
+
+msgid "ResourceFilter"
+msgstr "Yanapaysinaq suysunan"
+
+msgid "NoReservation"
+msgstr "Manan kashanchu pacha waqaychana"
+
+msgid "MaxUsers"
+msgstr "Número máximo de usuarios"
+
+msgid "AutoAccept"
+msgstr "Chaskiy haykuqmasikunata"
+
+msgid "ResourceName"
+msgstr "Yanapaysinaq sutin"
+
+msgid "ResourceAdded"
+msgstr "Yanapaysina yapasqa"
+
+msgid "ResourceEdited"
+msgstr "Yanapaysina ruwapasqa"
+
+msgid "ResourceDeleted"
+msgstr "Yanapaysinaqa pichasqañan"
+
+msgid "AddNewResource"
+msgstr "Yapay musuq yanapaysinata"
+
+msgid "ConfirmDeleteResource"
+msgstr "Cheqaychu kashanki kay yanapaysinata pichanapaq?"
+
+msgid "ResourceInactivated"
+msgstr "Yanapaysinaqa wañurichikun"
+
+msgid "ResourceActivated"
+msgstr "Yanapaysinaqa hap\'ichisqañan"
+
+msgid "Resource"
+msgstr "Yanapaysina"
+
+msgid "OpenBooking"
+msgstr "Reservas habilitadas"
+
+msgid "DeleteResource"
+msgstr "Pichay yanapaysinata"
+
+msgid "DeleteSelectedResources"
+msgstr "Pichay yanapaysinakuna ajllasqata"
+
+msgid "ResourceExist"
+msgstr "Yanapaysinaqa kashanña"
+
+msgid "AcceptUsers"
+msgstr "Haykuqmasikunata chaskispa"
+
+msgid "UnacceptedUsers"
+msgstr "Haykuqmasikunata ama chaskispa"
+
+msgid "DeleteSubscriptions"
+msgstr "Pichay qelqachikuskunata"
+
+msgid "NoItems"
+msgstr "Manaraq kanchu items nisqakuna"
+
+msgid "ItemNotDeleted"
+msgstr "Kay items nisqakunaqa manaraq pichakunmanchu kashanraqmi waqaychanakuna"
+
+msgid "ItemHasReservations"
+msgstr "El item aún tiene #NUM# reservas activas"
+
+msgid "NoItemsReservation"
+msgstr "Mana kanchu imapas qanpaq kay yanapaysinapi"
+
+msgid "ReservationAccepted"
+msgstr "Waqaychanaqa#ITEM#  chaskisqañan"
+
+msgid "ReservationDenied"
+msgstr "Waqaychanaykiqa #ITEM# mana chaskikunchu"
+
+msgid "ReservationForItemAccepted"
+msgstr " Estimado/a Señor(a), 
+
+Su reserva para #ITEM# de #BEGIN hasta #END ha sido aceptado"
+
+msgid "ReservationForItemDenied"
+msgstr "Estado/a Señor(a), 
+
+ su reservación para #ITEM# de #BEGIN hasta #END ha sido rechazada"
+
+msgid "ReservationCancelled"
+msgstr "Reservación cancelada #NAME# no está disponible temporalmente"
+
+msgid "ReservationActive"
+msgstr "Reservación nuevamente activada, #NAME# esta habilitada otra vez"
+
+msgid "ReservationUnavailable"
+msgstr "Estimado/a Señor(a),
+
+#NAME# no esta disponible temporalmente, por lo que su reservación de  #BEGIN# hasta #END# ha sido cancelada.
+Usted recibirá un correo electrónico cuando este disponible nuevamente, disculpenos por los inconvenientes."
+
+msgid "ReservationAvailable"
+msgstr "Estimado/a Señor(a), 
+
+Queremos informarle que #NAME# está disponible otra vez por lo que su reserva de #BEGIN# hasta #END# está de nuevamente activa."
+
+msgid "Resources"
+msgstr "Yanapaysikuna"
+
+msgid "EditBookingPeriod"
+msgstr "Ruwapay pacha waqaychanata"
+
+msgid "CreateResourceType"
+msgstr "Kamay imaniraq yanapaysinata"
+
+msgid "ModifyResourceType"
+msgstr "T\'ijrapay imaniraq yanapaysinata"
+

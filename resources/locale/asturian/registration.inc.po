@@ -1,0 +1,522 @@
+msgid "langShouldBeCSVFormat"
+msgstr "L\'archivu tien de tar en formatu CSV. Nun ponga espacios. La estructura tien de ser, esautamente:"
+
+msgid "langTracking"
+msgstr "Siguimientu"
+
+msgid "langEnter2passToChange"
+msgstr "Pa cambiar la seña, escriba la nueva nestos dos campos. Si quier caltener l\'actual, nun escriba nada."
+
+msgid "langAuthInfo"
+msgstr "Identificación"
+
+msgid "langUpdateImage"
+msgstr "Cambiar foto"
+
+msgid "langImageWrong"
+msgstr "L\'archivu tien de tener un tamañu menor de"
+
+msgid "langAddImage"
+msgstr "Incluyir foto"
+
+msgid "langCourseManager"
+msgstr "Profesor"
+
+msgid "NewPass"
+msgstr "Contraseña nueva"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "La contraseña actual ta erma o nun ye correuta"
+
+msgid "password_request"
+msgstr "Llegó anuncia de solicitú de reunvíu de seña. Si nun la solicitó o yá tien recuperada la so seña pue nun facer casu d\'esti corréu."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "La so seña unviose per corréu electrónicu."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Escriba la direición de corréu electrónicu cola que ta rexistráu y mandarémos-y el so nome d\'usuariu y seña."
+
+msgid "langLogin"
+msgstr "Entrar"
+
+msgid "langAction"
+msgstr "Aición"
+
+msgid "langPreserved"
+msgstr "Protexer"
+
+msgid "langDeleted"
+msgstr "Esborráu"
+
+msgid "langAdded"
+msgstr "Añadíu"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Confirmar que quier anular matrícula del usuariu"
+
+msgid "langCourseName"
+msgstr "Nome del cursu"
+
+msgid "langSubscribe"
+msgstr "Soscribir"
+
+msgid "langSee"
+msgstr "Dir a"
+
+msgid "langLastVisits"
+msgstr "Les mios caberes visites"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Si quier amestar un llistáu d\'usuarios d\'un cursu, contaute col alministrador."
+
+msgid "langPassTooEasy"
+msgstr "esta seña ye percenciella. Use una d\'esti tipu"
+
+msgid "langGroupUserManagement"
+msgstr "Xestión de Grupos"
+
+msgid "langAddedToCourse"
+msgstr "matriculóse nel so cursu"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Un usuariu col mesmu nome ya ta matriculáu nesti cursu."
+
+msgid "langBackUser"
+msgstr "Tornar al llistáu d\'usuarios"
+
+msgid "langUserOneByOneExplanation"
+msgstr "El/Ella va recibir un corréu electrónicu de confirmación col nome d\'usuariu y la seña."
+
+msgid "langGiveTutor"
+msgstr "Facer de tutor"
+
+msgid "langRemoveRight"
+msgstr "Quitar esti permisu"
+
+msgid "langGiveAdmin"
+msgstr "Ser alministrador"
+
+msgid "langUserNumber"
+msgstr "númberu"
+
+msgid "langDownloadUserList"
+msgstr "Subir llistáu"
+
+msgid "langSend"
+msgstr "Unviar"
+
+msgid "langUserAddExplanation"
+msgstr "Caúna les ringleres del archivu qu\'unvie tien d\'incluyir, por necesidá, los 5 campos (y nengún más)<b>Nome    Apellíos   Nome d\'usuariu   Seña    Corréu electrónicu</b> separtaos per tabuladores y nesi orde. Los usuarios van recibir un corréu de confirmación col so nome d\'usuariu y seña."
+
+msgid "langUserMany"
+msgstr "Importar llistáu d\'usuarios d\'un ficheru .txt"
+
+msgid "langOneByOne"
+msgstr "Amestar un usuariu a mano"
+
+msgid "langNow"
+msgstr "Agora"
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langTitular"
+msgstr "Titular"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>Modificar llistáu de cursos</big><br><br>Escueya los cursos nos que quier matriculase<br/>Quite la seleición nos cursos nos que nun quier siguir.<br/>Calque nel botón OK del llistáu."
+
+msgid "langStudent"
+msgstr "Estudiante"
+
+msgid "langImportUserList"
+msgstr "Importar un llistáu d\'suarios"
+
+msgid "langAddAU"
+msgstr "Amestar un usuariu"
+
+msgid "langAddedU"
+msgstr "amestóse. Si yá tien escrita la so direición electrónica va unviase-y un recáu pa comunica-y el so nome d\'usuariu."
+
+msgid "langTheU"
+msgstr "L\'usuariu"
+
+msgid "langRegYou"
+msgstr "matriculólu nesti cursu"
+
+msgid "langOneResp"
+msgstr "Ún los alministradores del cursu"
+
+msgid "langTaken"
+msgstr "yá esiste. Escueya otru."
+
+msgid "langUserNo"
+msgstr "El nome d\'usuariu qu\'escoyó"
+
+msgid "langFilled"
+msgstr "Nun escribió tolos campos."
+
+msgid "langInC"
+msgstr "nesti cursu"
+
+msgid "langRole"
+msgstr "Descripción"
+
+msgid "UserPicture"
+msgstr "Imaxe"
+
+msgid "langProfileReg"
+msgstr "El so perfil nuevu d\'usuariu guardóse"
+
+msgid "langEmailWrong"
+msgstr "La direición de corréu electrónicu qu\'escribió ta incompleta o tien carauteres non válidos."
+
+msgid "langUserTaken"
+msgstr "El nome d\'usuariu qu\'escoyó yá esiste."
+
+msgid "langFields"
+msgstr "Nun enllenó tolos campos"
+
+msgid "langAgain"
+msgstr "Pruebe otra vez"
+
+msgid "langPassTwo"
+msgstr "Nun escribió la mesma seña les dos veces."
+
+msgid "langViewProfile"
+msgstr "Ver el mio perfil (nun se pue cambiar)"
+
+msgid "langModifProfile"
+msgstr "Modificar el mio perfil"
+
+msgid "langIsReg"
+msgstr "Los sos cambios guardárense"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Agora pue crear un cursu"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Agora pue dir al llistáu de cursos y escoyer los que quier"
+
+msgid "langMailHasBeenSent"
+msgstr "Va recibir un corréu electrónicu colos sos datos de nome d\'usuariu y seña."
+
+msgid "langPersonalSettings"
+msgstr "Los sos datos rexistrárense"
+
+msgid "langManager"
+msgstr "Responsable"
+
+msgid "langFormula"
+msgstr "Un saludu, el profesor"
+
+msgid "langProblem"
+msgstr "Si tien dalgún problema, contaute con nós."
+
+msgid "langIs"
+msgstr "ye"
+
+msgid "langAddress"
+msgstr "La direición de"
+
+msgid "langSettings"
+msgstr "colos parámetros siguientes: Nome d\'usuariu:"
+
+msgid "langYouAreReg"
+msgstr "Ta matriculáu en"
+
+msgid "langYourReg"
+msgstr "La so matricula en"
+
+msgid "langUserFree"
+msgstr "El nome d\'usuariu qu\'escoyó yá esiste. Use\'l botón \'Atrás\' del so navegador y escueya otru."
+
+msgid "langEmptyFields"
+msgstr "Nun escribió tolos campos. Use\'l botón \'Atrás\' del so navegador y vuelva facelo."
+
+msgid "langPassTwice"
+msgstr "Nun escribió la mesma seña les dos veces. Use\'l botón \'Atrás\' del so navegador y faigalo otra vez."
+
+msgid "langRegAdmin"
+msgstr "Profesor (crear un cursu)"
+
+msgid "langRegStudent"
+msgstr "Estudiante (matriculame nun cursu)"
+
+msgid "langConfirmation"
+msgstr "Confirme la seña"
+
+msgid "langPass"
+msgstr "Seña"
+
+msgid "langSurname"
+msgstr "Nome"
+
+msgid "langRegistration"
+msgstr "Matricula"
+
+msgid "langYourAccountParam"
+msgstr "Esti ye\'l so nome d\'usuariu y la so seña"
+
+msgid "langLoginRequest"
+msgstr "Pidir nome d\'usuariu"
+
+msgid "langDefineHeadings"
+msgstr "Definir encabezaos"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Namás profesores"
+
+msgid "langLostPassword"
+msgstr "¿ Escaeció la so seña ?"
+
+msgid "langAdminOfCourse"
+msgstr "Alministrador del cursu"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Usuariu del cursu"
+
+msgid "langIsTutor"
+msgstr "Tutor"
+
+msgid "langParamInTheCourse"
+msgstr "Estatus nel cursu"
+
+msgid "langMember"
+msgstr "miembru"
+
+msgid "langLock"
+msgstr "Bloquear"
+
+msgid "langUnlock"
+msgstr "Desbloquear"
+
+msgid "langHaveNoCourse"
+msgstr "ensin cursos"
+
+msgid "langManage"
+msgstr "Alministación del Portal"
+
+msgid "langAdministrationTools"
+msgstr "Ferramientes d\'alministración"
+
+msgid "langUserProfileReg"
+msgstr "El e-portafolio del usuaru rexistróse"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Nun esiste una cuenta d\'usuariu con esta direición de corréu electrónicu"
+
+msgid "langCourses4User"
+msgstr "Cursos d\'esti usuariu"
+
+msgid "langCoursesByUser"
+msgstr "Cursos por usuarios"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Matricular usuarios nesti cursu"
+
+msgid "langPreced100"
+msgstr "100 anteriores"
+
+msgid "langAddmore"
+msgstr "Amestar usuarios rexistraos"
+
+msgid "langAddback"
+msgstr "Dir al llistáu d\'usuarios"
+
+msgid "langreg"
+msgstr "Matricular"
+
+msgid "langQuit"
+msgstr "Colar"
+
+msgid "your_password_has_been_reset"
+msgstr "La so seña xeneróse otra vez."
+
+msgid "langSex"
+msgstr "Sexu"
+
+msgid "langClass"
+msgstr "Clase"
+
+msgid "langEdit"
+msgstr "Editar"
+
+msgid "required"
+msgstr "Campu obligatoriu"
+
+msgid "langOptionalTextFields"
+msgstr "Campos opcionales"
+
+msgid "langMyProductions"
+msgstr "Los mios trabayos"
+
+msgid "langFileDeleted"
+msgstr "L\'archivu esborróse."
+
+msgid "FullUserName"
+msgstr "Nome completu"
+
+msgid "SearchForUser"
+msgstr "Buscar por usuariu"
+
+msgid "SearchButton"
+msgstr "Buscar"
+
+msgid "SearchNoResultsFound"
+msgstr "Nun s\'atoparen resultaos nesta busca"
+
+msgid "UsernameWrong"
+msgstr "El so nome d\'usuariu tien de tener lletres, númberos y _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "Esti ye un pidimientu de seña pa la direición de corréu electrónicu"
+
+msgid "CorrespondsToAccount"
+msgstr "Esta direición de corréu electrónicu correspuende al usuariu:"
+
+msgid "CorrespondsToAccounts"
+msgstr "Esta direición de corréu electrónicu correspuende al usuariu:"
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo nun pue xestionar el so pidimientu de manera automática porque la cuenta tien una fonte d\'idenficación esterna. Por favor, faiga lo necesario y notifíquelo al usuariu."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo nun pue xestionar de manera automática\'l so pidimientu porque polo menos una de les cuentes tien fonte d\'idientificación esterna. Por favor, tome les medíes pertienentes en toles sos cuentes (tamién nes que yá tienen autorización de la plataforma) y notifíqueles al usuariu."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo nun pue xestionar de manera automática\'l so pidimientu pa esti tipu cuenta. El so pidimientu unvióse al alministrador de la plataforma, que va facer lo que creya conveniente y dará-y cuenta de les sos aiciones."
+
+msgid "langphone"
+msgstr "Teléfonu"
+
+msgid "Unreg"
+msgstr "Anular matrícula"
+
+msgid "MyProgress"
+msgstr "Los mios progresos"
+
+msgid "ProgressIntroduction"
+msgstr "Seleiciones una sesión del cursu.<br/>Va poder ver el so progresu en caún los cursos nos que ta matriculáu."
+
+msgid "Select"
+msgstr "Seleicionar"
+
+msgid "NeverExpires"
+msgstr "Nun espira enxamás"
+
+msgid "On"
+msgstr "En"
+
+msgid "ExpirationDate"
+msgstr "Fecha d\'espiración"
+
+msgid "ActiveAccount"
+msgstr "Activar cuenta"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "La so matrícula necesita aprobación"
+
+msgid "ApprovalForNewAccount"
+msgstr "Aprobar una cuenta nueva"
+
+msgid "ManageUser"
+msgstr "Xestión d\'usuarios"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Matricular usuarios como profesores nesti cursu"
+
+msgid "SendMessage"
+msgstr "Unviar mensax"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "La so seña ta encriptada pola so seguridá. Poro, si calcó nel enllaz que rexenera la seña, va unviase-y un corréu nuevu cola so seña."
+
+msgid "UsersUnsubscribed"
+msgstr "Los usuarios seleicionaos tán daos de baxa nel cursu"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "El sistema nun pudo unvia-y el corréu electrónicu"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "Esti OpenID nun s\'atopa na base datos. Por favor, rexístrese pa tener una cuenta. Si yá la tien, edite\'l so perfil y ameste esti OpenID."
+
+msgid "UsernameMaxXCharacters"
+msgstr "El nome d\'usuariu pue tener, como muncho, %s carauteres"
+
+msgid "PictureUploaded"
+msgstr "La so imaxe unvióse"
+
+msgid "ProductionUploaded"
+msgstr "El so trabayu unvióse"
+
+msgid "FolderUpdated"
+msgstr "Carpeta actualizada"
+
+msgid "UsersRegistered"
+msgstr "Los usuarios que se menten darréu quedaren rexistraos:"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "Otru tutor yá rexistró a esti usuariu."
+
+msgid "UserCreatedPlatform"
+msgstr "Usuariu creau na plataforma"
+
+msgid "UserInSession"
+msgstr "Usuariu amestáu a la sesión"
+
+msgid "UserNotAdded"
+msgstr "Usuariu ensin agregar"
+
+msgid "NoSessionId"
+msgstr "La sesión ta ensin identificar"
+
+msgid "NoUsersRead"
+msgstr "Por favor, verifique\'l ficheru XML/CSV"
+
+msgid "UserImportFileMessage"
+msgstr "Si nel archivu XML/CSV los nomes d\'usuariu (usarname) nun tan, va tomase el Nome (Firstname) y l\'Apellíu (Lastname) del usuariu. Por exemplu, pal nome Xuan Suárez el username va ser xsuarez"
+
+msgid "UserAlreadyRegisteredByOtherCreator"
+msgstr "Un tutor yá rexistró a esti usuariu"
+
+msgid "NewUserInTheCourse"
+msgstr "Rexistróse un usuariu nuevu nel cursu"
+
+msgid "MessageNewUserInTheCourse"
+msgstr "Esti ye un mensaxe pa informar que acaba soscribise un usuariu nuevu nel cursu"
+
+msgid "EditNormalProfile"
+msgstr "Edición básica del perfil"
+
+msgid "EditExtendProfile"
+msgstr "Edición ampliada del perfil"
+
+msgid "EditInformation"
+msgstr "Editar información"
+
+msgid "RegisterUser"
+msgstr "Rexistrar usuariu"
+
+msgid "IHaveReadAndAgree"
+msgstr "Lleí y toi d\'alcuerdu colos"
+
+msgid "ByClickingRegisterYouAgreeTermsAndConditions"
+msgstr "Al calcar nel botón \'Rexistrar\' qu\'aparez de siguío, aceptes los Términos y Condiciones"
+
+msgid "User"
+msgstr "Usuariu"
+
+msgid "LostPass"
+msgstr "¿Escaeciste la contraseña?"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "Introduz el nome d\'usuariu y la direición de corréu electrónicu cola que tas rexistráu y unviaremoste la to contraseña."
+
+msgid "NoUserAccountWithThisEmailAddress"
+msgstr "Nun esiste una cuenta con esti usuariu y/o direición de corréu electrónicu"
+
+msgid "WithTheFollowingSettings"
+msgstr "colo parámetros siguientes:"
+

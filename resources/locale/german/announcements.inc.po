@@ -1,0 +1,171 @@
+msgid "Announcement"
+msgstr "Ankündigungen"
+
+msgid "langAnnEmpty"
+msgstr "Die Liste der Ankündigungen wurde gelöscht"
+
+msgid "AnnouncementModified"
+msgstr "Ankündigung wurde verändert"
+
+msgid "AnnouncementAdded"
+msgstr "Ankündigung wurde hinzugefügt"
+
+msgid "AnnouncementDeleted"
+msgstr "Ankündigung wurde gelöscht"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Veröffentlicht am"
+
+msgid "AddAnnouncement"
+msgstr "Als Ankündigung hinzugefügt"
+
+msgid "langContent"
+msgstr "Inhalt"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Liste der Ankündigungen löschen"
+
+msgid "professorMessage"
+msgstr "Mitteilung vom Kursleiter"
+
+msgid "langEmailSent"
+msgstr "und per E-Mail an Kursteilnehmer gesendet"
+
+msgid "EmailOption"
+msgstr "Diese Ankündigung per E-Mail an Kursteilnehmer senden"
+
+msgid "langOn"
+msgstr "Am"
+
+msgid "langRegUser"
+msgstr "registrierte Kursteilnehmer dieses Portals"
+
+msgid "langUnvalid"
+msgstr "haben eine ungültige oder keine E-Mail Adresse"
+
+msgid "langModifAnn"
+msgstr "Diese Ankündigung bearbeiten"
+
+msgid "langModify"
+msgstr "ändern"
+
+msgid "langDelete"
+msgstr "löschen"
+
+msgid "langTitle"
+msgstr "Titel"
+
+msgid "langHelp"
+msgstr "Hilfe"
+
+msgid "langOk"
+msgstr "Ok"
+
+msgid "langAddIntro"
+msgstr "Einführungstext hinzufügen"
+
+msgid "langBackList"
+msgstr "Zurück zur Liste"
+
+msgid "langSelMess"
+msgstr "Mitteilung an ausgewählte Benutzer"
+
+msgid "EmailTitle"
+msgstr "Betreff dieser E-Mail"
+
+msgid "langUserlist"
+msgstr "Liste der Gruppen und Benutzer"
+
+msgid "langSelectedUsers"
+msgstr "Ausgewählte Benutzer"
+
+msgid "langSubmit"
+msgstr "Senden"
+
+msgid "langPleaseEnterMessage"
+msgstr "Geben Sie bitte den Mitteilungstext ein"
+
+msgid "langPleaseSelectUsers"
+msgstr "Es müssen Benutzer ausgewählt werden."
+
+msgid "Teachersubject"
+msgstr "Mitteilung wurde an Benutzer verschickt"
+
+msgid "langMessages"
+msgstr "Mitteilungen"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Mitteilung an ausgewählte Benutzer"
+
+msgid "langIntroText"
+msgstr "Um eine Mitteilung zu verschicken, wählen Sie Benutzergruppen (mit einem <i>G</i> gekennzeichnet) oder einzelne Benutzer aus der Liste auf der linken Seite aus."
+
+msgid "langDown"
+msgstr "Nach unten"
+
+msgid "langMsgSent"
+msgstr "Die Mitteilung wurde an die ausgewählten Kursteilnehmer gesandt."
+
+msgid "langSelUser"
+msgstr "ausgewählte Benutzer diese Portals"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Mitteilung an ausgewählte Gruppen"
+
+msgid "langSelectedGroups"
+msgstr "ausgewählte Gruppen"
+
+msgid "langMsg"
+msgstr "Mitteilungen"
+
+msgid "langYes"
+msgstr "Ja"
+
+msgid "MsgText"
+msgstr "Nachricht"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Alle Ankündigungen wurden gelöscht"
+
+msgid "AnnouncementMoved"
+msgstr "Die Ankündigung wurde verschoben"
+
+msgid "NoAnnouncements"
+msgstr "Es gibt keine Ankündigungen"
+
+msgid "SelectEverybody"
+msgstr "Alle auswählen"
+
+msgid "SelectedUsersGroups"
+msgstr "Ausgewählte Benutzegruppen"
+
+msgid "LearnerMessage"
+msgstr "Nachricht von einem Kursteilnehmer"
+
+msgid "TitleIsRequired"
+msgstr "Überschrift fehlt"
+
+msgid "AnnounceSentByEmail"
+msgstr "Ankündigung über Email versendet"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Ankündigung wurde an die ausgewählten Benutzer versendet"
+
+msgid "SendAnnouncement"
+msgstr "Ankündigung versenden"
+
+msgid "ModifyAnnouncement"
+msgstr "Ankündigung bearbeiten"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Ankündigung versenden"
+
+msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
+msgstr "Sehr geehrter Benutzer, Ihr Konto auf diesem Portal wurde soeben freigeschaltet. Melden Sie Sich bitte an und genießen Sie Ihre Kurse."
+
+msgid "AddAsAnnouncement"
+msgstr "Als Ankündigung hinzugefügt"
+
+msgid "AnnouncementForGroup"
+msgstr "Ankündigung für eine Gruppe"
+

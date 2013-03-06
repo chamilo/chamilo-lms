@@ -1,0 +1,699 @@
+msgid "NewForumCreated"
+msgstr "Musuq k\'itirimana kamachikunña"
+
+msgid "NewThreadCreated"
+msgstr "Musuq rimanan kamachikun k\'itirimanapi."
+
+msgid "AddHotpotatoes"
+msgstr "Agregar hotpotatoes"
+
+msgid "HideAttemptView"
+msgstr "Ocultar la vista de intento(s)"
+
+msgid "ExtendAttemptView"
+msgstr "Ver la vista de intento(s)"
+
+msgid "lang_learning_path"
+msgstr "Yachanakuna"
+
+msgid "lang_learning_path_builder"
+msgstr "Yachanakunata ruwaq"
+
+msgid "lang_description"
+msgstr "Nisqaynin"
+
+msgid "LearnpathTitle"
+msgstr "Sutinchaynin"
+
+msgid "LearnpathPrerequisites"
+msgstr "Prerrequisitos"
+
+msgid "LearnpathMoveUp"
+msgstr "Wichay"
+
+msgid "LearnpathMoveDown"
+msgstr "Uray"
+
+msgid "langThisItem"
+msgstr "este item"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Sutinchayninwan nisqayninwan"
+
+msgid "LearnpathChangeOrder"
+msgstr "T\'ijrapay sinrita"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Añadir prerrequisitos"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Editar título y descripción"
+
+msgid "lang_delete"
+msgstr "Pichay"
+
+msgid "lang_add_chapter"
+msgstr "Yapay hoq"
+
+msgid "langLearnpathMystatus"
+msgstr "Imayna kasqay"
+
+msgid "langLearnpathCompstatus"
+msgstr "hut\'achisqa"
+
+msgid "langLearnpathIncomplete"
+msgstr "mana hunt\'achisqaraq"
+
+msgid "langLearnpathPassed"
+msgstr "aprobado"
+
+msgid "langLearnpathFailed"
+msgstr "sin aprobar"
+
+msgid "langLearnpathPrevious"
+msgstr "Previo"
+
+msgid "langLearnpathNext"
+msgstr "Siguiente"
+
+msgid "langLearnpathRestart"
+msgstr "Reiniciar"
+
+msgid "langLearnpathThisStatus"
+msgstr "Kay imaymanaqa kashan"
+
+msgid "langLearnpathToEnter"
+msgstr "Haykuy"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "primero necesita completar"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Sutinchaynin"
+
+msgid "langLearnpathStatus"
+msgstr "Estado"
+
+msgid "langLearnpathScore"
+msgstr "Markan"
+
+msgid "langLearnpathTime"
+msgstr "Pacha"
+
+msgid "langLearnpathVersion"
+msgstr "versión"
+
+msgid "langLearnpathRestarted"
+msgstr "Manan llapan imaymanakuna hunt\'achikunraqchu."
+
+msgid "langLearnpathNoNext"
+msgstr "Kayqa qepa imaymanan."
+
+msgid "langLearnpathNoPrev"
+msgstr "Kayqa qallariq imaymanan."
+
+msgid "LearnpathAddLearnpath"
+msgstr "Kamay yachanata"
+
+msgid "lang_learnpath_added"
+msgstr "Musuq yachanaqa allintan ruwarikun. kunanqa yapawaq kaypi q\'apispa (+)."
+
+msgid "LearnpathEditLearnpath"
+msgstr "Ruwapay yachanata"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "Pichay yachanata"
+
+msgid "lang_learnpath_edited"
+msgstr "Yachanaqa allintan ruwapachikun"
+
+msgid "lang_learnpath_deleted"
+msgstr "Yachanaqa pichasqañan"
+
+msgid "LearnpathDoNotPublish"
+msgstr "Ama reqsipachiychu"
+
+msgid "LearnpathPublish"
+msgstr "Reqsipachisqa"
+
+msgid "LearnpathNotPublished"
+msgstr "mana reqsipachisqa"
+
+msgid "LearnpathPublished"
+msgstr "reqsipachisqa"
+
+msgid "lang_add_learnpath_module"
+msgstr "Yapay musuq sutinchayninta"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Yapay kay yachanaman hoq sutichasqata"
+
+msgid "lang_learnpath_module_added"
+msgstr "El nuevo capítulo de la lección se creó con éxito. Ahora puede añadirle elementos haciendo clic en el signo más (+)."
+
+msgid "LearnpathEditModule"
+msgstr "Ruwapay sutichasqaq sutinchayninta nisqaynintawan"
+
+msgid "LearnpathDeleteModule"
+msgstr "Pichay sutichasqata"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Yachanaq sutichasqayninqa t\'ijrapachikunña"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Yachanaq sutichasqaynin llipin imaymanankunapas pichasqañan"
+
+msgid "LearnpathNoChapters"
+msgstr "Manan kashanchu sutichasqakuna yapasqaqa."
+
+msgid "LearnpathAddItem"
+msgstr "Yapay imaymanakunata kay sutichasqaman"
+
+msgid "LearnpathItemDeleted"
+msgstr "Yachachinaq imaymananqa pichasqañan."
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "qoy kay imaymanakunata yachanaq sutichasqanman:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Editar una descripción/título adicional del elemento"
+
+msgid "lang_add_prereq"
+msgstr "Añadir/editar prerrequisitos a este elemento"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Pichay imaymanata"
+
+msgid "LearnpathItemEdited"
+msgstr "Yachachinaq imaymananqa t\'ijrapachisqañan"
+
+msgid "lang_prereq_deleted_error"
+msgstr "¡ Pichasqañan !"
+
+msgid "lang_none"
+msgstr "Imapas"
+
+msgid "lang_forum_opened"
+msgstr "K\'itirimana ajllasqaqa kicharikun musuq qhawarinapi."
+
+msgid "lang_link_opened"
+msgstr "K\'itirimana ajllasqaqa kicharikun musuq qhawarinapi."
+
+msgid "lang_short_help"
+msgstr "Para añadir un elemento, haga clic en el signo más (+). Para modificar un título/descripción, haga clic en el icono en forma de lápiz. Para añadir prerrequisitos haga clic en el icono con dos documentos. Puede comprobar lo que los estudiantes visualizarán pulsando sobre la \'Vista de alumno\' del menú superior."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "prerrequisitos no completados."
+
+msgid "lang_author"
+msgstr "Ruwaq"
+
+msgid "lang_date"
+msgstr "Pacha"
+
+msgid "langBasicOverview"
+msgstr "Organizar"
+
+msgid "langAdvanced"
+msgstr "Avanzado"
+
+msgid "langDisplay"
+msgstr "Qhawachiy"
+
+msgid "langNewChapter"
+msgstr "Musuq sutichasqa"
+
+msgid "langNewStep"
+msgstr "Musuq imaymana"
+
+msgid "langEditPrerequisites"
+msgstr "Editar los prerrequisitos del item actual"
+
+msgid "langTitleManipulateChapter"
+msgstr "T\'ijrapay kunan kaq sutichasqata"
+
+msgid "langTitleManipulateModule"
+msgstr "T\'ijrapay kunan kaq sutichasqata"
+
+msgid "langTitleManipulateDocument"
+msgstr "T\'ijrapay kunan kaq qelqa khiputa"
+
+msgid "langTitleManipulateLink"
+msgstr "T\'ijrapay kunan kaq waskhanata"
+
+msgid "langTitleManipulateQuiz"
+msgstr "T\'ijrapay kunan kaq llank\'aynata"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "T\'ijrapay kunan kaq llank\'ayta"
+
+msgid "langEnterDataNewChapter"
+msgstr "Churay musuq sutichaqaq imayninta"
+
+msgid "langEnterDataNewModule"
+msgstr "Churay musuq sutichaqaq imayninta"
+
+msgid "langCreateNewStep"
+msgstr "Kamay musuq yanapaysinata :"
+
+msgid "langNewDocument"
+msgstr "Musuq qelqa khipu"
+
+msgid "langUseAnExistingResource"
+msgstr "Utaq hap\'ipay ña yanapaysina kasqata:"
+
+msgid "langParent"
+msgstr "Principal"
+
+msgid "langPosition"
+msgstr "Posición"
+
+msgid "langNewChapterCreated"
+msgstr "Sutichasqaqa karisqañan. Kunanqa ña churawaq imaymanakunata utaq kamariwaqpas hoq sutichasqata"
+
+msgid "langNewLinksCreated"
+msgstr "Musuq waskhanaqa kamarisqañan"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "Musuq llank\'ayqa kamarisqañan"
+
+msgid "langNewModuleCreated"
+msgstr "Musuq sutichasqaqa kamarisqañan. Kunanqachiwaq imaymanakunata utaq kamay hoq sutichasqata"
+
+msgid "langNewExerciseCreated"
+msgstr "Musuq llank\'aynaqa kamarisqañan."
+
+msgid "langItemRemoved"
+msgstr "Item nisqaqa pichasqañan"
+
+msgid "langConverting"
+msgstr "T\'ijrapaspa..."
+
+msgid "langPpt2lpError"
+msgstr "Pantarun PowerPoint t\'ijrachikuynin. Ama hina kaychu, kuskachay khipuq PowerPoint sutinta, ichapas hoqniraq seq\'ekunawan kashan."
+
+msgid "langBuild"
+msgstr "Ruway"
+
+msgid "langViewModeEmbedded"
+msgstr "Vista: embebida"
+
+msgid "langViewModeFullScreen"
+msgstr "Vista: pantalla completa"
+
+msgid "langShowDebug"
+msgstr "Qhawachiy debub nisqata"
+
+msgid "langHideDebug"
+msgstr "Pakay debub nisqata"
+
+msgid "langCantEditDocument"
+msgstr "Kay qelqa khipuqa manan ruwapachinapaqchu"
+
+msgid "langAfter"
+msgstr "Después de"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Prerrequisitos (límite)"
+
+msgid "lang_loading"
+msgstr "Cargando la página. Por favor, espere..."
+
+msgid "lang_empty"
+msgstr "Kay yachanaqa mana imaymanayuq kashan."
+
+msgid "langHotPotatoesFinished"
+msgstr "Kay test HotPotatoes nisqaqa tukunña."
+
+msgid "langCompletionLimit"
+msgstr "Límite de finalización (puntuación mínima)"
+
+msgid "langPrereqToEnter"
+msgstr "Haykunapaq"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "primero necesita terminar"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "1imaymanaraqpas pisiyashan"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "establecido como requisito."
+
+msgid "langPrereqTestLimit1"
+msgstr "debe alcanzar un mínimo"
+
+msgid "langPrereqTestLimit2"
+msgstr "puntos en"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Ud. tiene ahora :"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "volver a la pantalla normal"
+
+msgid "langLearnpathFullScreen"
+msgstr "pantalla completa"
+
+msgid "langItemMissing1"
+msgstr "Había una"
+
+msgid "langItemMissing2"
+msgstr "página (elemento) aquí en la Lección original de Chamilo."
+
+msgid "langDone"
+msgstr "Tukusqa"
+
+msgid "langNoItemSelected"
+msgstr "Para mostrar algo aquí, seleccione un elemento del menú lateral"
+
+msgid "langNewDocumentCreated"
+msgstr "Musuq qelqa khipuqa kamarichisqaña."
+
+msgid "langEditCurrentChapter"
+msgstr "Ruwapay kunan kaq sutichaqata"
+
+msgid "langditCurrentModule"
+msgstr "Ruwapay kunan kaq sutichaqata"
+
+msgid "langCreateTheDocument"
+msgstr "Kamay qelqa khiputa"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Kuyuchiy kunan kaq qelqa khiputa"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Ruwapay kunan kaq qelqa khiputa"
+
+msgid "langWarning"
+msgstr "¡ Paqtataq !"
+
+msgid "langWarningEditingDocument"
+msgstr "Cuando edita un documento existente en la lección, la nueva versión del documento no sobreescribirá la antigua, sino que será guardada como un nuevo documento. si quiere editar un documento definitivamente, puede hacerlo con la herramienta documentos."
+
+msgid "langDirectory"
+msgstr "Wayaqa"
+
+msgid "langCreateTheExercise"
+msgstr "Kamay llank\'aynata"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Kuyuchiy kunan kaq llank\'aynata"
+
+msgid "langEditCurrentExecice"
+msgstr "Ruwapay kunan kaq llank\'aynata"
+
+msgid "langUploadScorm"
+msgstr "Importación SCORM y AICC"
+
+msgid "langPowerPointConvert"
+msgstr "Conversión PowerPoint"
+
+msgid "langLPCreatedToContinue"
+msgstr "Rinallapaqqa, lloqe ajllanamanta yapawaq sutichasqata imaymanatawan yachanaykiman."
+
+msgid "langLPCreatedAddChapterStep"
+msgstr "Yapay sutichaqakunata imaymanakunatawan yachanaman"
+
+msgid "langPrerequisitesAdded"
+msgstr "Los prerrequisitos de este elemento han sido añadidos."
+
+msgid "langAddEditPrerequisites"
+msgstr "Añadir/Editar prerrequisitos"
+
+msgid "langMinimum"
+msgstr "aslla"
+
+msgid "langMaximum"
+msgstr "máximo"
+
+msgid "langNoDocuments"
+msgstr "Manan kanchu qelqa khipukuna"
+
+msgid "langNoExercisesAvailable"
+msgstr "Manan kanchu hap\'ipanapaq llank\'aynakuna"
+
+msgid "langNoLinksAvailable"
+msgstr "Manan kanchu hap\'ipanapaq waskhanakuna"
+
+msgid "langNoItemsInLp"
+msgstr "En este momento no hay items en la lección. Para crearlos, haga clic en \"Construir\""
+
+msgid "FirstPosition"
+msgstr "Primera posición"
+
+msgid "NewQuiz"
+msgstr "Musuq llank\'ayna"
+
+msgid "CreateTheForum"
+msgstr "Yapay k\'itirimanata"
+
+msgid "AddLpIntro"
+msgstr "<strong>Bienvenido</strong> a Lecciones, herramienta de autor de Chamilo<br />Cree su lección paso a paso. La estructura de la misma aparecerá en el menú izquierdo"
+
+msgid "AddLpToStart"
+msgstr "Qallarinapaqqa, churay sutinchayninta yachanaman"
+
+msgid "CreateTheLink"
+msgstr "Apachimuy hoq waskhanata"
+
+msgid "MoveCurrentLink"
+msgstr "Kuyuchiy kunan kaq waskhanata"
+
+msgid "EditCurrentLink"
+msgstr "Ruwapay kunan kaq waskhanata"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "MoveCurrentStudentPublication"
+msgstr "Kuyuchiy kunan kaq llank\'ayta"
+
+msgid "EditCurrentStudentPublication"
+msgstr "Ruwapay kunan kaq llank\'ayta"
+
+msgid "AllowMultipleAttempts"
+msgstr "Huñichay askha mallinakunata"
+
+msgid "PreventMultipleAttempts"
+msgstr "Ama huñichaychu askha mallinakunata"
+
+msgid "MakeScormRecordingExtra"
+msgstr "Crear elementos SCORM extra"
+
+msgid "MakeScormRecordingNormal"
+msgstr "Crear elementos SCORM básicos"
+
+msgid "DocumentHasBeenDeleted"
+msgstr "Qelqa khipuqa mana qhawachikunqachu pichachikusqanrayku"
+
+msgid "EditCurrentForum"
+msgstr "Ruwapay kay k\'itirimanata"
+
+msgid "NoPrerequisites"
+msgstr "Sin prerrequisitos"
+
+msgid "NewExercise"
+msgstr "Musuq llank\'ayna"
+
+msgid "CreateANewLink"
+msgstr "Kamay musuq waskhanata"
+
+msgid "CreateANewForum"
+msgstr "Kamay musuq k\'itirimanata"
+
+msgid "LinkAdd"
+msgstr "Yapay waskhanata"
+
+msgid "WoogieConversionPowerPoint"
+msgstr "Woogie: Word nisqaman T\'ijraq"
+
+msgid "WelcomeWoogieSubtitle"
+msgstr "Word khipukunata Yachanakunaman T\'ijraq"
+
+msgid "WelcomeWoogieConverter"
+msgstr "Bienvenido al conversor Woogie<ul type=\"1\"><li>Elegir un archivo .doc, .sxw, .odt<li>Enviarlo a Woogie, que lo convertirá en una Lección SCORM <li>Podrá añadir comentarios de audio en cada página e insertar tests y otras actividades entre las páginas</ul>"
+
+msgid "WoogieError"
+msgstr "Error durante la conversión del documento word. Por favor, compruebe si hay caracteres especiales en el nombre de su documento."
+
+msgid "WordConvert"
+msgstr "Conversión Word"
+
+msgid "Order"
+msgstr "Orden"
+
+msgid "InteractionID"
+msgstr "ID de Interacción"
+
+msgid "TimeFinished"
+msgstr "Pacha (kaypin tukukun...)"
+
+msgid "CorrectAnswers"
+msgstr "Respuestas correctas"
+
+msgid "StudentResponse"
+msgstr "Yachaqeq kitichinkuna"
+
+msgid "LatencyTimeSpent"
+msgstr "Pachapi ruwasqa"
+
+msgid "Result"
+msgstr "Resultado"
+
+msgid "SplitStepsPerPage"
+msgstr "Huj imaymana sapanka raphipi"
+
+msgid "SplitStepsPerChapter"
+msgstr "Huj sutichasqa sapanka imaymanapaq"
+
+msgid "TakeSlideName"
+msgstr "Usar los nombres de las diapositivas para los elementos de la lección"
+
+msgid "CannotConnectToOpenOffice"
+msgstr "La conexión con el conversor de documentos ha fallado. Póngase en contacto con el administrador de su plataforma para solucionar el problema."
+
+msgid "OogieConversionFailed"
+msgstr "Conversión fallida. <br />Algunos documentos son demasiado complejos para su tratamiento automático mediante el conversor de documentos.<br />En sucesivas versiones se irá ampliando esta capacidad."
+
+msgid "OogieUnknownError"
+msgstr "La conversión ha fallado por una razón desconocida. <br /> Contacte a su administrador para más información."
+
+msgid "OogieBadExtension"
+msgstr "Khipuqa mana allin extensión nisqawan kashan."
+
+msgid "WoogieBadExtension"
+msgstr "Por favor, envíe sólo documentos de texto. La extensión del archivo debe ser .doc, .docx o bien .odt"
+
+msgid "ShowAudioRecorder"
+msgstr "Mostrar el grabador de audio"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "La funcionalidad de búsqueda de texto completo no está habilitada en Chamilo. Por favor, contacte con el administrador de Chamilo."
+
+msgid "SearchFeatureSearchExplanation"
+msgstr "Para buscar en la base de datos de lecciones use la siguiente sintaxis::<br/>    <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>Por ejemplo:<br/>    <i>coche tag:camión -ferrari +ford \"alto consumo\".</i><br/> Esto mostrará todos los resultados para la palabra \'coche\' etiquetados como \'camión\', que no incluyan la palabra \'ferrari\', pero sí la palabra \'ford\' y la frase exacta \'alto consumo\'."
+
+msgid "ViewLearningPath"
+msgstr "Qhaway yachanakunata"
+
+msgid "SearchFeatureDocumentTagsIfIndexing"
+msgstr "Etiquetas para añadir al documento en caso de indexación"
+
+msgid "ReturnToLearningPaths"
+msgstr "Kutiy yachanakunaman"
+
+msgid "UploadMp3audio"
+msgstr "Cargar audio"
+
+msgid "UpdateAllAudioFragments"
+msgstr "Cargar todos los fragmentos de audio"
+
+msgid "LeaveEmptyToKeepCurrentFile"
+msgstr "Ch\'usaqllata saqen kunan kaq khiputa hap\'ipanapaqrayku"
+
+msgid "RemoveAudio"
+msgstr "Qechuy uyarinata"
+
+msgid "SaveAudio"
+msgstr "Allchay"
+
+msgid "ChangesStored"
+msgstr "T\'ijrapaykuna waqaychasqa"
+
+msgid "ViewScoreChangeHistory"
+msgstr "Ver puntuacion de historial de cambio"
+
+msgid "ImageWillResizeMsg"
+msgstr "Wankita tajsachikunqa allin sayayman"
+
+msgid "ImagePreview"
+msgstr "Wankiq ñaupa qhawariynin"
+
+msgid "UplAlreadyExists"
+msgstr "¡ ña kan !"
+
+msgid "UplUnableToSaveFile"
+msgstr "¡ Khipu apachisqaqa manan ajllchakuyta atikunchu(ichapas mana huñichasqa kashan?) !"
+
+msgid "UnknownPackageFormat"
+msgstr "El formato de este paquete no ha sido reconocido. Por favor, compruebe este es un paquete válido."
+
+msgid "MoveDocument"
+msgstr "Kuchiy qelqa khiputa"
+
+msgid "EditLPSettings"
+msgstr "T\'ijray yachanaq imaymananta"
+
+msgid "SaveLPSettings"
+msgstr "Allchay yachanaq imaymananta"
+
+msgid "ShowAllAttempts"
+msgstr "Qhawarichiy llapan mallinakunata"
+
+msgid "HideAllAttempts"
+msgstr "Pakay llapan mallinakunata"
+
+msgid "ShowAllAttemptsByExercise"
+msgstr "Qhawarichiy llapan mallinakunata sapanka llank\'aynapi"
+
+msgid "ShowAttempt"
+msgstr "Qhawarichiy mallinata"
+
+msgid "ShowAndQualifyAttempt"
+msgstr "Mostrar y calificar intento"
+
+msgid "langAddEdit"
+msgstr "Yapay / Ruwapay"
+
+msgid "ModifyPrerequisites"
+msgstr "Modificar los prerrequisitos"
+
+msgid "CreateLearningPath"
+msgstr "Kamay yachanata"
+
+msgid "AddExercise"
+msgstr "Yapay llank\'aynata"
+
+msgid "AddForum"
+msgstr "Yapay hoq k\'itirimanata"
+
+msgid "LPCreateDocument"
+msgstr "Crear un documento"
+
+msgid "ObjectiveID"
+msgstr "ID del objetivo"
+
+msgid "ObjectiveStatus"
+msgstr "Estatus del objetivo"
+
+msgid "ObjectiveRawScore"
+msgstr "Puntuación básica del objetivo"
+
+msgid "ObjectiveMaxScore"
+msgstr "Puntuación máxima del objetivo"
+
+msgid "ObjectiveMinScore"
+msgstr "Puntuación mínima del objetivo"
+
+msgid "LPName"
+msgstr "Título de la lección"
+
+msgid "AuthoringOptions"
+msgstr "Autorización de opciones"
+
+msgid "CourseSettings"
+msgstr "Configuración de la lección"
+
+msgid "SaveSection"
+msgstr "Guardar capítulo"
+
+msgid "AddLinkToCourse"
+msgstr "Agregar el enlace a la lección"
+
+msgid "AddAssignmentToCourse"
+msgstr "Agregar la tarea a la lección"
+
+msgid "AddForumToCourse"
+msgstr "Agregar el foro a la lección"
+

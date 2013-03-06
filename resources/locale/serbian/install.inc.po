@@ -1,0 +1,153 @@
+msgid "langStatDB"
+msgstr "Praćenje baze."
+
+msgid "langEnableTracking"
+msgstr "Omogući praćenje"
+
+msgid "langInstituteShortName"
+msgstr "Kratko ime organizacije"
+
+msgid "langWarningResponsible"
+msgstr "Koristi ovaj skript samo posle backup-a. Chamilo tim ne odgovara za izgubljene ili uništene podatke"
+
+msgid "langAllowSelfRegProf"
+msgstr "Dozvoli samoregistraciju za kreatora kursa"
+
+msgid "langEG"
+msgstr "pr."
+
+msgid "langDBHost"
+msgstr "Host baze podataka"
+
+msgid "langDBLogin"
+msgstr "Korisničko ime baze podataka"
+
+msgid "langDBPassword"
+msgstr "Lozinka baze podataka"
+
+msgid "langMainDB"
+msgstr "Glavna Chamiloova baza podataka"
+
+msgid "langAllFieldsRequired"
+msgstr "sva polja su obavezna"
+
+msgid "langPrintVers"
+msgstr "Verzija za štampu"
+
+msgid "langLocalPath"
+msgstr "Odgovarajuća lokalna putnja"
+
+msgid "langAdminEmail"
+msgstr "E-mail administratora"
+
+msgid "langAdminName"
+msgstr "Ime administratora"
+
+msgid "langAdminSurname"
+msgstr "Prezime administratora"
+
+msgid "langAdminLogin"
+msgstr "Korisničko ime administratora"
+
+msgid "langAdminPass"
+msgstr "Lozinka administratora (<font color=\"red\">možda ćete ovo želeti da promenite</font>)"
+
+msgid "langEducationManager"
+msgstr "Administrator projekta"
+
+msgid "langCampusName"
+msgstr "Ime vašeg portala"
+
+msgid "langDBSettingIntro"
+msgstr "Instalacioni skript će da kreira Chamiloovu glavnu bazu. Molim Vas, obratite pažnju da će Chamilo morati da kreira više baza. Ako Vam vaš Hosting servis dozvoljava da koristite samo jednu bazu Chamilo neće raditi osim ako ne odaberete opciju „Jedna baza\"."
+
+msgid "langStep1"
+msgstr "Korak 1"
+
+msgid "langStep2"
+msgstr "Korak 2"
+
+msgid "langStep3"
+msgstr "Korak 3 od 6"
+
+msgid "langStep4"
+msgstr "Korak 4 od 6"
+
+msgid "langStep5"
+msgstr "Korak 5 od 6"
+
+msgid "langStep6"
+msgstr "Korak 6 od 6"
+
+msgid "langCfgSetting"
+msgstr "Konfiguraciona podešavanja"
+
+msgid "langDBSetting"
+msgstr "Podešavanja MySQL baze"
+
+msgid "langMainLang"
+msgstr "Glavni jezik"
+
+msgid "langLicence"
+msgstr "Licenca"
+
+msgid "langLastCheck"
+msgstr "Poslednja provera pre instaliranja"
+
+msgid "langRequirements"
+msgstr "Zahtevi"
+
+msgid "langDbPrefixForm"
+msgstr "Prefiks MySQL baze"
+
+msgid "langDbPrefixCom"
+msgstr "Ostavi prazno ako nije zahtevano drugačije"
+
+msgid "langEncryptUserPass"
+msgstr "Šifruj korisničke lozinke u bazi"
+
+msgid "langSingleDb"
+msgstr "Koristi jednu ili više baza za Chamilo"
+
+msgid "langAllowSelfReg"
+msgstr "Omogući samostalno registrovanje"
+
+msgid "langRecommended"
+msgstr "(preporučeno)"
+
+msgid "langScormDB"
+msgstr "Scorm baza"
+
+msgid "langAdminLastName"
+msgstr "Prezime administratora"
+
+msgid "langAdminPhone"
+msgstr "Telefon administratora"
+
+msgid "langAdminFirstName"
+msgstr "Ime administratora"
+
+msgid "langInstituteURL"
+msgstr "URL ove organizacije"
+
+msgid "langDokeosURL"
+msgstr "URL Chamiloa"
+
+msgid "langUserDB"
+msgstr "Baza korisnika"
+
+msgid "ReadThoroughly"
+msgstr "Pročitajte pažljivo."
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "Da bi Chamilo radio potrebno je da imate sledeće na vašem serveru:"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "Upozorenje!<br>Instaler je otkrio postojeću Chamilo platformu na vašem sistemu."
+
+msgid "NewInstallation"
+msgstr "Nova Instalacija"
+
+msgid "CheckDatabaseConnection"
+msgstr "Proveri konekciju sa bazom"
+

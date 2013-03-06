@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Oma kalenteri"
+
+msgid "langToday"
+msgstr "Tänään"
+

@@ -1,0 +1,294 @@
+msgid "Upload"
+msgstr "Качване"
+
+msgid "BackList"
+msgstr "Връщане към вашия куриер"
+
+msgid "ShowFeedback"
+msgstr "Да се покажат коментарите"
+
+msgid "GiveFeedback"
+msgstr "Добавяне/редактиране на коментар"
+
+msgid "JustUploadInSelect"
+msgstr "---Само качване---"
+
+msgid "MailingNothingFor"
+msgstr "Нищо за"
+
+msgid "MailingFileNotRegistered"
+msgstr "(не е записан за този курс)"
+
+msgid "MailingFileSentTo"
+msgstr "изпратен на"
+
+msgid "MailingFileIsFor"
+msgstr "е за"
+
+msgid "MailingFileRecipDup"
+msgstr "няколко потребители имат"
+
+msgid "MailingFileRecipNotFound"
+msgstr "няма потребител с"
+
+msgid "MailingFileNoRecip"
+msgstr "името не съдържа идентификатор на получател"
+
+msgid "MailingFileNoPostfix"
+msgstr "името не завършва с"
+
+msgid "MailingFileNoPrefix"
+msgstr "името не започва с"
+
+msgid "MailingFileFunny"
+msgstr "няма име или разширението не е съставено от 1 до 4 букви и/или цифри"
+
+msgid "MailingZipDups"
+msgstr "Изпращаният ZIP-файл не може да съдържа повтарящи се файлове. Изпращането не се допуска."
+
+msgid "MailingZipPhp"
+msgstr "Изпращаният ZIP-файл не може да съдържа PHP-файлове. Изпращането не се допуска."
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "Изпращаният файл е празен или не е ZIP-файл (може и да е повреден)."
+
+msgid "MailingWrongZipfile"
+msgstr "Изпращаният файл трябва да е ZIP-архив и в наименованието му да се съдържа потребителското име."
+
+msgid "MailingConfirmSend"
+msgstr "Да се ипзращат ли файловете към индивидуални адресати?"
+
+msgid "MailingSend"
+msgstr "Изпращане на файловете"
+
+msgid "MailingNotYetSent"
+msgstr "Файловете все още не са изпратени..."
+
+msgid "MailingInSelect"
+msgstr "---Изпращане---"
+
+msgid "MailingAsUsername"
+msgstr "Изпращане"
+
+msgid "FileDeleted"
+msgstr "Посоченият файл беше изтрит от вашия куриер."
+
+msgid "DocAdd"
+msgstr "Файлът беше добавен."
+
+msgid "Sender"
+msgstr "подател"
+
+msgid "Author"
+msgstr "автор"
+
+msgid "FileSize"
+msgstr "размер на файла"
+
+msgid "Title"
+msgstr "заглавие"
+
+msgid "OverwriteFile"
+msgstr "Да се записва ли върху последния изпратен файл?"
+
+msgid "Ok"
+msgstr "Добре (OK)"
+
+msgid "Unknown"
+msgstr "анонимен"
+
+msgid "SentOn"
+msgstr "на"
+
+msgid "SentTo"
+msgstr "Изпратен до"
+
+msgid "ConfirmDelete"
+msgstr "Това ще премахне файла само от вашия списък, но не и от тези на останалите членове."
+
+msgid "SendTo"
+msgstr "Изпращане до"
+
+msgid "Description"
+msgstr "Описание на файла"
+
+msgid "UploadFile"
+msgstr "Качване на файл"
+
+msgid "ErrorCreatingDir"
+msgstr "Невъзможно е да се създаде папка."
+
+msgid "UploadError"
+msgstr "Качването на файла не е успешно. Моля, проверете лимита за максимален размер на файла и правата за съхраняващата папка."
+
+msgid "TooBig"
+msgstr "Вие не сте посочили файл за изпращане или файлът е прекалено голям."
+
+msgid "NoFileSpecified"
+msgstr "Не сте посочили файл за изпращане."
+
+msgid "NoUserSelected"
+msgstr "Моля, изберете получател за файла."
+
+msgid "BadFormData"
+msgstr "Изпращането не е успешно. Данните от формуляра са неточни."
+
+msgid "GeneralError"
+msgstr "Грешка. Свържете се с администратора."
+
+msgid "Dropbox"
+msgstr "Куриер"
+
+msgid "Help"
+msgstr "Помощ"
+
+msgid "ReceivedFiles"
+msgstr "Получени файлове"
+
+msgid "SentFiles"
+msgstr "Изпратени файлове"
+
+msgid "ReceivedTitle"
+msgstr "Получени файлове"
+
+msgid "SentTitle"
+msgstr "Изпратени файлове"
+
+msgid "Authors"
+msgstr "Автори"
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "LastResent"
+msgstr "Отново изпратен на"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Корен"
+
+msgid "UploadNewFile"
+msgstr "Изпращане на нов файл"
+
+msgid "AreYouSureToDelete"
+msgstr "Наистина ли искате да изтриете"
+
+msgid "Feedback"
+msgstr "Коментар"
+
+msgid "CloseFeedback"
+msgstr "Приключване на коментара"
+
+msgid "AddNewFeedback"
+msgstr "Добавяне на следващ коментар"
+
+msgid "DropboxFeedbackStored"
+msgstr "Коментарът е запазен."
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Всички потребители са изтрили файла. Този коментар няма да бъде видян от никого."
+
+msgid "FeedbackError"
+msgstr "Коментар - появи се грешка."
+
+msgid "PleaseTypeText"
+msgstr "Въведете текст."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "Не ви е позволено да свалите този файл."
+
+msgid "CheckAtLeastOneFile"
+msgstr "Маркирайте поне един файл."
+
+msgid "ReceivedFileDeleted"
+msgstr "Полученият файл е изтрит."
+
+msgid "SentFileDeleted"
+msgstr "Изпратеният файл е изтрит."
+
+msgid "FilesMoved"
+msgstr "Посочените файлове са преместени."
+
+msgid "ReceivedFileMoved"
+msgstr "Полученият файл е преместен."
+
+msgid "SentFileMoved"
+msgstr "Изпратеният файл е преместен."
+
+msgid "NotMovedError"
+msgstr "Файлът (файловете) не може да се премести (преместят)."
+
+msgid "AddNewCategory"
+msgstr "Добавяне на категория"
+
+msgid "EditCategory"
+msgstr "Редактиране на категорията"
+
+msgid "CategoryName"
+msgstr "Наименование на категорията"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Моля, дайте наименование на категорията."
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Тази категория вече съществува. Моля, Дайте различно наименование."
+
+msgid "CurrentlySeeing"
+msgstr "В момента преглеждате категорията"
+
+msgid "CategoryStored"
+msgstr "Категорията е запазена."
+
+msgid "CategoryModified"
+msgstr "Категорията е променена."
+
+msgid "CategoryDeleted"
+msgstr "Категорията е изтрита."
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "Трябва да се посочи автор."
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Трябва да се посочи поне един получател."
+
+msgid "DropboxFileTooBig"
+msgstr "Файлът е твърде голям."
+
+msgid "TheFileIsNotUploaded"
+msgstr "Файлът не е качен."
+
+msgid "FileUploadSucces"
+msgstr "Файлът е качен."
+
+msgid "MailingNonMailingError"
+msgstr "Не може да се презаписва без да има кореспонденция."
+
+msgid "MailingSelectNoOther"
+msgstr "Изпращането не може да бъде комбинирано с други получатели."
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "\"Само качване\" не може да се комбинира с други получатели."
+
+msgid "NewDropboxFileUploaded"
+msgstr "Нов файл беше изпратен чрез куриера."
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Нов файл беше изпратен чрез куриера за Вашия курс."
+
+msgid "langAddEdit"
+msgstr "Добавяне/Редактиране"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Папката е празна."
+
+msgid "AddComment"
+msgstr "Добавяне на коментар"
+
+msgid "SentCatgoryDeleted"
+msgstr "Папката е изтрита."
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "Папката е изтрита."
+

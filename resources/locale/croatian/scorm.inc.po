@@ -1,0 +1,153 @@
+msgid "langScormVersion"
+msgstr "verzija"
+
+msgid "langScormRestarted"
+msgstr "Sve su lekcije sada nepotpune."
+
+msgid "langScormNoNext"
+msgstr "Ovo je posljednja lekcija."
+
+msgid "langScormNoPrev"
+msgstr "Ovo je prva lekcija."
+
+msgid "langScormTime"
+msgstr "Vrijeme"
+
+msgid "langScormNoOrder"
+msgstr "Nema zadanog redoslijeda, odaberite bilo koju lekciju."
+
+msgid "langScormScore"
+msgstr "Rezultat"
+
+msgid "langScormLessonTitle"
+msgstr "Naslov lekcije"
+
+msgid "langScormStatus"
+msgstr "Status"
+
+msgid "langScormToEnter"
+msgstr "Za ulaz"
+
+msgid "langScormFirstNeedTo"
+msgstr "prvo morate dovršiti"
+
+msgid "langScormThisStatus"
+msgstr "Ova je lekcija sada"
+
+msgid "langScormClose"
+msgstr "Okončaj"
+
+msgid "langScormRestart"
+msgstr "Kreni ponovno"
+
+msgid "langScormCompstatus"
+msgstr "Dovršeno"
+
+msgid "langScormIncomplete"
+msgstr "Nedovršeno"
+
+msgid "langScormPassed"
+msgstr "Uspješno dovršeno"
+
+msgid "langScormFailed"
+msgstr "Neuspješno"
+
+msgid "langScormPrevious"
+msgstr "Prethodno"
+
+msgid "langScormNext"
+msgstr "Sljedeće"
+
+msgid "langScormTitle"
+msgstr "Program za pokretanje sustava Chamilo Scorm"
+
+msgid "langScormMystatus"
+msgstr "Moj status"
+
+msgid "langScormNoItems"
+msgstr "Ovaj sadržaj nema elemenata."
+
+msgid "langScormNoStatus"
+msgstr "Ovaj sadržaj nema status"
+
+msgid "langScormLoggedout"
+msgstr "odjavljen iz okruženja Scorm"
+
+msgid "langScormCloseWindow"
+msgstr "Zatvori prozore"
+
+msgid "ScormBrowsed"
+msgstr "Pregledan"
+
+msgid "langScormExitFullScreen"
+msgstr "Natrag u standardni prikaz"
+
+msgid "langScormFullScreen"
+msgstr "Prikaz preko cijelog zaslona"
+
+msgid "langScormNotAttempted"
+msgstr "Bez pokušaja"
+
+msgid "langCharset"
+msgstr "Skup znakova"
+
+msgid "langLocal"
+msgstr "Lokalni"
+
+msgid "langRemote"
+msgstr "Udaljeni"
+
+msgid "langAutodetect"
+msgstr "Automatsko pronalaženje"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Ukupno izvršenih koraka"
+
+msgid "langUnknown"
+msgstr "Nepoznat"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "Jeste li sigurni da želite obrisati odabrane korake?"
+
+msgid "Origin"
+msgstr "Izvor"
+
+msgid "Local"
+msgstr "Lokalni"
+
+msgid "Remote"
+msgstr "Udaljeni"
+
+msgid "FileToUpload"
+msgstr "SCORM ili AICC datoteka za učitavanje"
+
+msgid "ContentMaker"
+msgstr "Stvaranje kolegija (alat)"
+
+msgid "ContentProximity"
+msgstr "Lokacija kolegija"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "Učitaj datoteku iz direktorija main/garbage"
+
+msgid "ThisItemIsNotExportable"
+msgstr "Ovaj element nije trenutno kompatibilan sa SCORM formatom, zato ga ne možete prenositi."
+
+msgid "MoveCurrentChapter"
+msgstr "Pomakni trenutno pogavlje"
+
+msgid "GenericScorm"
+msgstr "Generički SCORM"
+
+msgid "UnknownPackageFormat"
+msgstr "Format datoteke nije prepoznat. Provjerite da je datoteka dobro generirana i da nema grešaka. Problemi mogu nastati zbog dodatnih uključenih ZIP opcija ili veličine datoteke. Ukoliko niste sigurni u ZIP, probajte generirati ZIP datoteku sa što manje dodatnih opcija."
+
+msgid "Attempt"
+msgstr "Pokušaj"
+
+msgid "MoveTheCurrentForum"
+msgstr "Premjesti trenutni forum"
+
+msgid "WarningWhenEditingScorm"
+msgstr "Upozorenje !<br/>Kada izmjenite trenutni SCORM korak, može doći do promjene izvješćivanja Puta učenja ili do greške samog koraka."
+

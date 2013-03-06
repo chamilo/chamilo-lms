@@ -1,0 +1,177 @@
+msgid "ModifInfo"
+msgstr "Mga Setting"
+
+msgid "langDelCourse"
+msgstr "I-delete ang lugar ng kurso"
+
+msgid "langUnsubscription"
+msgstr "Mag-Unsubscribe"
+
+msgid "CourseAccessConfigTip"
+msgstr "Batay sa default, ang iyong kurso ay pampubliko. Subalit maaari mo itong ilarawan sa antas ng pag-access sa itaas."
+
+msgid "langOpenToTheWorld"
+msgstr "Publiko - ang access ay pinapayagan para sa buong mundo"
+
+msgid "OpenToThePlatform"
+msgstr " Buksan - ang access ay pinapayagan para sa mga gumagamit na rehistrado sa platform"
+
+msgid "langTipLang"
+msgstr "Ang wikang ito ay magiging balido sa bawat bisita ng iyong website sa training."
+
+msgid "langStats"
+msgstr "Istatistika"
+
+msgid "langSubscription"
+msgstr "Suskrisyon"
+
+msgid "CourseVisibilityClosed"
+msgstr "Sarado - ang kurso ay maa-access lamang ng mga guro"
+
+msgid "WorkEmailAlert"
+msgstr "I-alerto sa pamamagitan ng e-mail sa pagsumite ng gawain"
+
+msgid "WorkEmailAlertActivate"
+msgstr "I-activate ang alerto sa e-mail sa pagsumite ng bagong gawain"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "I-disable ang alerto sa e-mail sa pagsumite ng bagong gawain"
+
+msgid "DropboxEmailAlert"
+msgstr "I-alerto sa pamamagitan ng e-mail sa pagsumite sa dropbox"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "I-activate ang alerto sa e-mail sa pagsumite sa dropbox"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "I-disable ang alerto sa e-mail sa pagsumite sa dropbox"
+
+msgid "AllowUserEditAgenda"
+msgstr "Payagan ang mga mag-aaral na i-edit ang agenda"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "I-activate ang edisyon ng training agenda ng mga gumagamit"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "I-disable ang edisyon ng agenda ng mga mag-aaral"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Payagan ang mga mag-aaral na i-edit ang mga anunsyo"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "I-enable ang edisyon ng mga gumagamit"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "I-disable ang edisyon ng mga gumagamit"
+
+msgid "CourseRegistrationPassword"
+msgstr "Password sa pagrerehistro ng kurso"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "I-click ang link na ito para sa kabuuang pagtanggal ng kurso mula sa server.<br /><br />Maging maingant, wala nang babalikan pa!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "I-duplicate ang kurso o ang ilang mga pinag-aaralang  bagay sa isa pang kurso. Kailangan mo ng 2 kurso upang magamit ang tampok na ito: isang orihinal na kurso at isang tina-target na kurso."
+
+msgid "DescriptionRecycleCourse"
+msgstr "Ang instrumentong ito ay inuubos ang laman ng kurso. Tinatanggal nito ang mga dokumento, mga forum, mga link. At pinapayagan kang pumili kung anong bahagi ang nais mong tanggalin o mapagpasyang tanggalin sa kabuuan."
+
+msgid "QuizEmailAlert"
+msgstr "Alerto sa e-mail sa naisumiteng bagong pagsusulit"
+
+msgid "QuizEmailAlertActivate"
+msgstr "I-activate ang pagpapadala ng e-mail kapag ang gumagamit ay nagsumite ng bagong mga sagot sa pagsusulit"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "I-disable ang alerto sa e-mail sa pagsumite ng bagong mga sagot sa pagsusulit"
+
+msgid "AllowUserImageForum"
+msgstr "Larawan ng gumagamit sa forum"
+
+msgid "AllowUserImageForumActivate"
+msgstr "I-display ang mga larawan ng mga gumagamit sa forum"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Itago ang mga larawan ng mga gumagamit sa forum"
+
+msgid "AllowLearningPathTheme"
+msgstr "Payagan ang tema ng training"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "Pinayagan"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Huwag Payagan"
+
+msgid "ConfigChat"
+msgstr "Mga setting ng chat"
+
+msgid "AllowOpenchatWindow"
+msgstr "Buksan ang chat sa isang bagong Window"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "I-activate buksan ang chat sa isang bagong window"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "I-deactivate buksan ang chat sa isang bagong window"
+
+msgid "NewUserEmailAlert"
+msgstr "Pabatid sa pamamagitan ng e-mail sa trainer ng auto subscription sa isang bagong gumagamit"
+
+msgid "NewUserEmailAlertEnable"
+msgstr "Pagganahin ang pabatid sa pamamagitan ng e-mail sa trainer ng auto subscription sa isang bagong gumagamit"
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "Pagganahin ang pabatid sa pamamagitan ng e-mail sa trainer at sa mga tutor ng auto subscription sa isang bagong gumagamit"
+
+msgid "NewUserEmailAlertDisable"
+msgstr "I-disable ang alerto sa e-mail para sa suskrisyon ng bagong gumagamit sa training"
+
+msgid "AllowUserViewUserList"
+msgstr "Payagan ang gumagamit ng tingnan ang listahan"
+
+msgid "AllowUserViewUserListActivate"
+msgstr "Pagganahin ang listahan ng gumagamit"
+
+msgid "AllowUserViewUserListDeactivate"
+msgstr "I-disable ang listahan ng gumagamit"
+
+msgid "DoNotDisplayAnyAdvance"
+msgstr "Huwag idi-display ang pagpapatuloy"
+
+msgid "CourseSettingsRegisterDirectLink"
+msgstr "Kung ang iyong kurso ay pampubliko o bukas, maaari mong gamitin ang direktang link sa ibaba upang makapagpadala ng imbitasyon sa mga bagong gumagamit, kung kaya\'t matapos ang rehistrasyon, sila ay direktang ipapadala sa kurso. At, maaari kang magdagdag ng e=1 parameter sa URL, pinapalitan ang \"1\" ng isang ID sa pagsasanay (exercise ID) upang direkta silang mapunta sa isang partikular na pagsusulit. Ang ID sa pagsasanay ay matutuklasan sa URL kapag magki-click na buksan ang isang pagsasanay.<br/>%s"
+
+msgid "DirectLink"
+msgstr "Direktang link"
+
+msgid "NewHomeworkEmailAlert"
+msgstr "Mag-email sa mga gumagamit sa paglikha ng takdang-aralin"
+
+msgid "NewHomeworkEmailAlertEnable"
+msgstr "I-enable ang e-mail ng mga gumagamit sa pagsumite ng takdang-aralin"
+
+msgid "NewHomeworkEmailAlertDisable"
+msgstr "I-disable ang e-mail ng mga gumagamit sa pagsumite ng takdang-aralin"
+
+msgid "DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance"
+msgstr "I-display ang huling ginawang hakbang at ang susunod na hindi natapos na hakbang"
+
+msgid "LPAutoLaunch"
+msgstr "Pagganahin ang learning path auto-launch"
+
+msgid "ConfigLearnpath"
+msgstr "Mga Setting sa learning path"
+
+msgid "RedirectToALearningPath"
+msgstr "I-redirect sa ilang piniling learning path"
+
+msgid "RedirectToTheLearningPathList"
+msgstr "I-redirect sa listahan ng mga learning path"
+
+msgid "ActivateLegal"
+msgstr "Pagganahin ang mga legal na takda"
+
+msgid "ShowALegalNoticeWhenEnteringTheCourse"
+msgstr "Magpakita ng legal na pabatid kapag pumapasok sa kurso"
+

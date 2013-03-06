@@ -1,0 +1,42 @@
+msgid "langCourseProgram"
+msgstr "Kursbeskrivning"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Denna kurs är inte beskriven för närvande"
+
+msgid "langEditCourseProgram"
+msgstr "Skapa och redigera med formulär"
+
+msgid "QuestionPlan"
+msgstr "Frågor till läraren"
+
+msgid "langInfo2Say"
+msgstr "Information att ge till eleverna"
+
+msgid "langOuAutreTitre"
+msgstr "Titel"
+
+msgid "langNewBloc"
+msgstr "Andra"
+
+msgid "langAddCat"
+msgstr "lägg till en kategori"
+
+msgid "langAdd"
+msgstr "Lägg till"
+
+msgid "langValid"
+msgstr "Godkänn"
+
+msgid "langBackAndForget"
+msgstr "Bakåt och avbryt"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Kursbeskrivningen har uppdaterats"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Kursbeskrivningen har tagits bort"
+
+msgid "CourseDescriptionIntro"
+msgstr "För att skriva en kursbeskrivning, klicka på en rubrik och fyll i rätt formulärfält <br />Klicka sedan OK och fortsätt därefter med nästa."
+

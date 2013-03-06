@@ -1,0 +1,36 @@
+msgid "langInvalidId"
+msgstr "Přihlášení selhalo. Zadejte prosím platné uživatelské jméno a heslo."
+
+msgid "langPass"
+msgstr "Heslo"
+
+msgid "langReg"
+msgstr "Registrace"
+
+msgid "langMenu"
+msgstr "Menu"
+
+msgid "langOtherCourses"
+msgstr "ostatní kurzy"
+
+msgid "langCategories"
+msgstr "kategorie"
+
+msgid "langBackToHomePage"
+msgstr "Přehled kategorií"
+
+msgid "langCourseList"
+msgstr "Seznam kurzů"
+
+msgid "langHelptwo"
+msgstr "Nápověda"
+
+msgid "EussMenu"
+msgstr "menu"
+
+msgid "langMenuUser"
+msgstr "Uživatel"
+
+msgid "langRefresh"
+msgstr "Aktualizovat"
+

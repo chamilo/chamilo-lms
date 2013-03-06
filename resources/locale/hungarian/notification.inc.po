@@ -1,0 +1,51 @@
+msgid "lang_new_item"
+msgstr "új elem hozzáadva"
+
+msgid "TitleNotification"
+msgstr "Legutóbbi látogatása óta"
+
+msgid "lang_update_agenda"
+msgstr "létező naptár bejegyzés frissítve"
+
+msgid "lang_new_agenda"
+msgstr "új naptár bejegyzés hozzáadva"
+
+msgid "lang_update_announcements"
+msgstr "létező hirdetmény frissítve"
+
+msgid "lang_new_announcements"
+msgstr "új hirdetmény hozzáadva"
+
+msgid "lang_new_document"
+msgstr "új dokumentum(ok) hozzáadva"
+
+msgid "lang_new_exercise"
+msgstr "új feladat engedélyezve"
+
+msgid "lang_update_link"
+msgstr "létező hivatkozás információi frissítve"
+
+msgid "lang_new_link"
+msgstr "új hivatkozás hozzáadva"
+
+msgid "lang_new_forum_topic"
+msgstr "új téma hozzáadva"
+
+msgid "lang_new_groupforum_topic"
+msgstr "új téma hozzáadva a csoport fórumhoz"
+
+msgid "lang_new_dropbox_file"
+msgstr "Új fájl érkezett"
+
+msgid "lang_update_dropbox_file"
+msgstr "Egy fájl a Fájlposta eszközben frissítésre került."
+
+msgid "ForumCategoryAdded"
+msgstr "A fórum kategória hozzáadva"
+
+msgid "LearnpathAdded"
+msgstr "Tanösvény létrehozva"
+
+msgid "GlossaryAdded"
+msgstr "Új kifejezés lett a Szójegyzékhez hozzáadva"
+

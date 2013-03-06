@@ -1,0 +1,156 @@
+msgid "LinkMoved"
+msgstr "L\'enllaç ha estat mogut"
+
+msgid "langLinkName"
+msgstr "Nom de l\'enllaç"
+
+msgid "langLinkAdd"
+msgstr "Afegir un enllaç"
+
+msgid "langLinkAdded"
+msgstr "L\'enllaç ha estat afegit"
+
+msgid "langLinkMod"
+msgstr "Modificar l\'enllaç"
+
+msgid "langLinkModded"
+msgstr "L\'enllaç ha estat modificat"
+
+msgid "langLinkDel"
+msgstr "Eliminar l\'enllaç"
+
+msgid "langLinkDeleted"
+msgstr "L\'enllaç ha estat eliminat"
+
+msgid "langLinkDelconfirm"
+msgstr "Esteu segur que voleu eliminar aquest enllaç?"
+
+msgid "langAllLinksDel"
+msgstr "Eliminar tots els enllaços d\'aquesta categoria"
+
+msgid "langCategoryName"
+msgstr "Nom de categoria"
+
+msgid "langCategoryAdd"
+msgstr "Afegir una categoria"
+
+msgid "langCategoryAdded"
+msgstr "La categoria ha estat afegida"
+
+msgid "langCategoryModded"
+msgstr "La categoria ha estat modificada"
+
+msgid "langCategoryDel"
+msgstr "Eliminar categoria"
+
+msgid "langCategoryDeleted"
+msgstr "S\'ha eliminat la categoria i tots els seus enllaços"
+
+msgid "langCategoryDelconfirm"
+msgstr "Quan esborreu una categoria també s\'esborraran tots els enllaços dins d\'ella. Esteu segur que voleu eliminar aquesta categoria i tots els seus enllaços?"
+
+msgid "langAllCategoryDel"
+msgstr "Esborrar totes les categories i els seus enllaços"
+
+msgid "langGiveURL"
+msgstr "Si us plau, poseu la URL"
+
+msgid "langGiveCategoryName"
+msgstr "Si us plau, poseu un nom per a la categoria"
+
+msgid "langNoCategory"
+msgstr "General"
+
+msgid "showall"
+msgstr "Expandir totes les categories"
+
+msgid "shownone"
+msgstr "Contraure totes les categories"
+
+msgid "langListDeleted"
+msgstr "S\'ha esborrat la llista"
+
+msgid "langAddLink"
+msgstr "Afegir un enllaç"
+
+msgid "langDelList"
+msgstr "Esborra la llista sencera"
+
+msgid "langModifyLink"
+msgstr "Modificar un enllaç"
+
+msgid "langCsvImport"
+msgstr "Importar CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "El fitxer CSV no es pot importar (està buit?, és massa gran?)"
+
+msgid "langCsvFileNoSeps"
+msgstr "Utilitzeu , o ; per separar les columnes del fitxer CSV a importar"
+
+msgid "langCsvFileNoURL"
+msgstr "Les columnes URL i títol han d\'estar obligatòriament en el fitxer CSV a importar"
+
+msgid "langCsvFileLine1"
+msgstr "...- línia 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "línia(es) errònia(es) en importar un enllaç (hi falta la URL o el títol)."
+
+msgid "langCsvLinesOld"
+msgstr "enllaç(os) existent(s) actualitzat(s) (igual URL i categoria)"
+
+msgid "langCsvLinesNew"
+msgstr "nou(s) enllaç(os) creat(s)."
+
+msgid "langCsvExplain"
+msgstr "El fitxer hauria de ser d\'aquesta manera:<blockquote><pre><b>URL</b>;categoria;<b>títol</b>;descripció;<b>http://www.aaa.org/...</b>;Enllaços importants;<b>Nom 1</b>;Descripció 1;<b>http://www.bbb.net/...</b>;<b>Nom 2</b>;\"Descripció 2\";</pre></blockquote>Si la \'URL\' i la \'categoria\' pertanyen a un enllaç ja existent, aquest serà actualitzat. En la resta dels casos es crearà un nou enllaç.<br><br> Negreta = obligatori. L\'ordre dels camps no té importància, majúscules i minúscules estan permeses. Els camps desconeguts seran afegits a la \'descripció\'. Separadors: comes o punts i comes. Els valors podran estar entre cometes, però no els noms de columna. Algunes [b]etiquetes HTML[/b] seran importades en el camp \'descripció\'."
+
+msgid "langLinkUpdated"
+msgstr "L\'enllaç ha estat actualitzat"
+
+msgid "langAll_Link_Deleted"
+msgstr "L\'enllaç ha estat eliminat"
+
+msgid "langOnHomepage"
+msgstr "Mostrar l\'enllaç a la pàgina principal"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Mostrar aquest enllaç com una icona a la pàgina principal del curs"
+
+msgid "General"
+msgstr "General"
+
+msgid "SearchFeatureDoIndexLink"
+msgstr "Indexar títol i descripció?"
+
+msgid "langSaveLink"
+msgstr "Guardar enllaç"
+
+msgid "langSaveCategory"
+msgstr "Guardar la categoria"
+
+msgid "BackToLinksOverview"
+msgstr "Regressar a la llista d\'enllaços"
+
+msgid "AddTargetOfLinkOnHomepage"
+msgstr "Seleccioni la manera (target) que es mostrarà l\'enllaç en la pàgina principal del curs"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "LinkOpenSelf"
+msgstr "La mateixa finestra"
+
+msgid "LinkOpenBlank"
+msgstr "Una altra finestra"
+
+msgid "LinkOpenParent"
+msgstr "Finestra pare"
+
+msgid "LinkOpenTop"
+msgstr "Part superior"
+
+msgid "LinkTarget"
+msgstr "Enllaç de destí"
+

@@ -1,0 +1,42 @@
+msgid "langCourseProgram"
+msgstr "Kurso aprašymas"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Šis kursas dar neaprašytas."
+
+msgid "langEditCourseProgram"
+msgstr "Sukurti ir redaguoti kurso aprašymą"
+
+msgid "QuestionPlan"
+msgstr "Pagalbiniai klausimai kūrėjui"
+
+msgid "langInfo2Say"
+msgstr "Informacija vartotojams"
+
+msgid "langOuAutreTitre"
+msgstr "Antraštė"
+
+msgid "langNewBloc"
+msgstr "Kita"
+
+msgid "langAddCat"
+msgstr "įrašyti kategoriją"
+
+msgid "langAdd"
+msgstr "Įrašyti"
+
+msgid "langValid"
+msgstr "Galiojantis"
+
+msgid "langBackAndForget"
+msgstr "Back and forget"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Kurso aprašymas atnaujintas"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Kurso aprašymas ištrintas"
+
+msgid "CourseDescriptionIntro"
+msgstr "Kad sukurti kurso aprašymą, spustelėkite ant ikonos, teisingai užpildykite formą."
+

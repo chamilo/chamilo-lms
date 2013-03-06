@@ -1,0 +1,300 @@
+msgid "MyTasks"
+msgstr "As miñas tarefas"
+
+msgid "FavoriteBlogs"
+msgstr "Os meus blogs favoritos"
+
+msgid "Navigation"
+msgstr "Navegación"
+
+msgid "TopTen"
+msgstr "Os dez mellores blogs"
+
+msgid "Subtitle"
+msgstr "Subtítulo"
+
+msgid "ThisBlog"
+msgstr "Este blog"
+
+msgid "NewPost"
+msgstr "Novo artigo"
+
+msgid "TaskManager"
+msgstr "Xestión de tarefas"
+
+msgid "MemberManager"
+msgstr "Xestión de usuarios"
+
+msgid "PostFullText"
+msgstr "Publicar texto completo"
+
+msgid "ReadPost"
+msgstr "Ler mensaxe"
+
+msgid "Home"
+msgstr "Principal"
+
+msgid "FirstPostText"
+msgstr "Este é o primeiro artigo deste blog. Doravante, todas as persoas inscritas neste blog poden participar."
+
+msgid "AddNewComment"
+msgstr "Engadir comentario"
+
+msgid "ReplyToThisComment"
+msgstr "Contestar a este comentario"
+
+msgid "ManageTasks"
+msgstr "Administrar tarefas"
+
+msgid "ManageMembers"
+msgstr "Administrar usuarios"
+
+msgid "Register"
+msgstr "Rexistrar"
+
+msgid "UnRegister"
+msgstr "Anular a inscrición neste blog"
+
+msgid "SubscribeMembers"
+msgstr "Dar de alta usuarios"
+
+msgid "UnsubscribeMembers"
+msgstr "Dar de baixa usuarios"
+
+msgid "RightsManager"
+msgstr "Xestor de permisos"
+
+msgid "ManageRights"
+msgstr "Xestionar os permisos"
+
+msgid "Task"
+msgstr "Tarefa"
+
+msgid "Tasks"
+msgstr "Tarefas"
+
+msgid "Member"
+msgstr "Membro"
+
+msgid "Members"
+msgstr "Membros"
+
+msgid "Role"
+msgstr "Rol"
+
+msgid "Rate"
+msgstr "Puntuación"
+
+msgid "Roles"
+msgstr "Roles"
+
+msgid "AddTask"
+msgstr "Engadir tarefa"
+
+msgid "AddTasks"
+msgstr "Engadir tarefas"
+
+msgid "AssignTask"
+msgstr "Asignar tarefa"
+
+msgid "AssignTasks"
+msgstr "Asignar tarefas"
+
+msgid "EditTask"
+msgstr "Editar tarefa"
+
+msgid "DeleteTask"
+msgstr "Eliminar tarefa"
+
+msgid "DeleteSystemTask"
+msgstr "Esta é unha tarefa pré-definida. Non pode eliminar unha tarefa pré-definida"
+
+msgid "SelectUser"
+msgstr "Usuario"
+
+msgid "SelectTask"
+msgstr "Tarefa"
+
+msgid "SelectTargetDate"
+msgstr "Data"
+
+msgid "TargetDate"
+msgstr "Data"
+
+msgid "Color"
+msgstr "Cor"
+
+msgid "TaskList"
+msgstr "Lista de tarefas"
+
+msgid "AssignedTasks"
+msgstr "Tarefas asignadas"
+
+msgid "ArticleManager"
+msgstr "Xestión de artigos"
+
+msgid "CommentManager"
+msgstr "Xestión de comentarios"
+
+msgid "BlogManager"
+msgstr "Xestión do blog"
+
+msgid "ReadMore"
+msgstr "Ler máis..."
+
+msgid "DeleteThisArticle"
+msgstr "Eliminar este artigo"
+
+msgid "EditThisPost"
+msgstr "Eliminar este artigo"
+
+msgid "DeleteThisComment"
+msgstr "Eliminar este comentario"
+
+msgid "NoArticles"
+msgstr "Neste momento non hai nengún artigo neste blog. Se é o autor deste blog, clique en \"novo artigo\" para escribir un artigo novo."
+
+msgid "NoTasks"
+msgstr "Sen tarefas"
+
+msgid "Rating"
+msgstr "Puntuación"
+
+msgid "RateThis"
+msgstr "Avaliar"
+
+msgid "SelectTaskArticle"
+msgstr "Seleccionar un artigo para esta tarefa"
+
+msgid "ExecuteThisTask"
+msgstr "Executar esta tarefa"
+
+msgid "WrittenBy"
+msgstr "Escrito por"
+
+msgid "InBlog"
+msgstr "no blog"
+
+msgid "ViewPostsOfThisDay"
+msgstr "Ver os artigos do día de hoxe"
+
+msgid "PostsOf"
+msgstr "Artigos de"
+
+msgid "NoArticleMatches"
+msgstr "Non se atoparon artigos que se axusten aos seus criterios de busca. Pode ser que teña escrito mal as palabras ou que a súa pesquisa sexa pouco concreta. Altere o que desexar e inicie unha nova pesquisa."
+
+msgid "SaveProject"
+msgstr "Gardar blog"
+
+msgid "langTask1"
+msgstr "Tarefa 1"
+
+msgid "langTask2"
+msgstr "Tarefa 2"
+
+msgid "langTask3"
+msgstr "Tarefa 3"
+
+msgid "langTask1Desc"
+msgstr "Descrición da tarefa 1"
+
+msgid "langTask2Desc"
+msgstr "Descrición da tarefa 2"
+
+msgid "langTask3Desc"
+msgstr "Descrición da tarefa 3"
+
+msgid "blog_management"
+msgstr "Xestión do blog"
+
+msgid "langWelcome"
+msgstr "Benvida/o!"
+
+msgid "langModule"
+msgstr "Módulo"
+
+msgid "langUserHasPermissionNot"
+msgstr "O usuario non ten permisos"
+
+msgid "langUserHasPermission"
+msgstr "O usuario ten permisos"
+
+msgid "langLegend"
+msgstr "Lexenda"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "O usuario ten os permisos do seu grupo"
+
+msgid "EditPost"
+msgstr "Modificar o artigo"
+
+msgid "AddBlog"
+msgstr "Crear un novo blog"
+
+msgid "EditBlog"
+msgstr "Modificar título e subtítulo"
+
+msgid "DeleteBlog"
+msgstr "Eliminar este blog"
+
+msgid "Shared"
+msgstr "Compartido"
+
+msgid "PermissionGrantedByGroupOrRole"
+msgstr "Permiso concedido por grupo ou rol"
+
+msgid "Reader"
+msgstr "Lector"
+
+msgid "SeeBlog"
+msgstr "Ver blog"
+
+msgid "BlogDeleted"
+msgstr "O blog foi eliminado"
+
+msgid "BlogEdited"
+msgstr "O blog foi modificado"
+
+msgid "BlogStored"
+msgstr "O blog foi engadido"
+
+msgid "CommentCreated"
+msgstr "O comentario foi gardado"
+
+msgid "BlogAdded"
+msgstr "Engadiuse o artigo"
+
+msgid "TaskCreated"
+msgstr "Creouse a tarefa"
+
+msgid "TaskEdited"
+msgstr "A tarefa foi modificada"
+
+msgid "TaskAssigned"
+msgstr "A tarefa foi asignada"
+
+msgid "AssignedTaskEdited"
+msgstr "A asignación da tarefa foi modificada"
+
+msgid "UserRegistered"
+msgstr "O usuario foi rexistrado"
+
+msgid "TaskDeleted"
+msgstr "Eliminouse a tarefa"
+
+msgid "TaskAssignmentDeleted"
+msgstr "A asignación da tarefa foi eliminada"
+
+msgid "CommentDeleted"
+msgstr "Eliminouse o comentario"
+
+msgid "RatingAdded"
+msgstr "Engadiuse a cualificación"
+
+msgid "BlogPosts"
+msgstr "Artigos do blog"
+
+msgid "BlogComments"
+msgstr "Comentarios dos artigos"
+

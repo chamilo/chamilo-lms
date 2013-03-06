@@ -1,0 +1,280 @@
+msgid "ModifInfo"
+msgstr "Kurso nustatymai"
+
+msgid "langModifDone"
+msgstr "Informacija buvo atnaujinta"
+
+msgid "langDelCourse"
+msgstr "Ištrinti visą kurso sritį"
+
+msgid "langProfessors"
+msgstr "Dėstytojai"
+
+msgid "langFaculty"
+msgstr "Kategorija"
+
+msgid "langConfidentiality"
+msgstr "Privatumas"
+
+msgid "langPublic"
+msgstr "Viešas priėjimas iš portalo titulinio netgi neprisijungus prie sistemos"
+
+msgid "langUnsubscription"
+msgstr "Išsiprenumeruoti"
+
+msgid "langPrivOpen"
+msgstr "Privatus priėjimas, galima registracija"
+
+msgid "langPrivate"
+msgstr " Privatus priėjimas vartotojams, esantiems vartotojų sąraše"
+
+msgid "langForbidden"
+msgstr "Neleidžiama"
+
+msgid "CourseAccessConfigTip"
+msgstr " Pagal nutylėjimą jūsų kursas yra viešas, bet galite nurodyti saugumo lygius aukščiau."
+
+msgid "langOpenToTheWorld"
+msgstr "Viešas priėjimas visiems lankytojams"
+
+msgid "OpenToThePlatform"
+msgstr " Atviras priėjimas vartotojams, priregistruotiems sistemoje"
+
+msgid "langOpenToThePlatform"
+msgstr "Atvira - priėjimas leidžiamas prisiregistravusiems sistemoje vartotojams"
+
+msgid "langTipLang"
+msgstr "Ši kalba bus prieinama kiekvienam jūsų kurso lankytojui."
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Bendradarbiavimas"
+
+msgid "langProgramMenu"
+msgstr "Kurso programa"
+
+msgid "langAnnouncement"
+msgstr "Pranešimai"
+
+msgid "langExercise"
+msgstr "Testai"
+
+msgid "langStats"
+msgstr "Statistika"
+
+msgid "langUplPage"
+msgstr "Įrašyti puslapį ir nuorodą į titulinį"
+
+msgid "langLinkSite"
+msgstr "Įrašyti nuorodą į puslapį tituliniame"
+
+msgid "langCourse"
+msgstr "Sritis"
+
+msgid "langHasDel"
+msgstr "ištrinta"
+
+msgid "langBackHome"
+msgstr "atgal į titulinį"
+
+msgid "langByDel"
+msgstr "Šios srities ištrynimas neatstatomai panaikins visą turinį (dokumentus, nuorodas...) išregistruos visus narius (jie liks kitose srityse). Tai taip pat ištrins visus virtualius kursus, susijusius su šia kurso sritimi.<p>Ar tikrai norite ištrinti kursą?"
+
+msgid "langY"
+msgstr "TAIP"
+
+msgid "langN"
+msgstr "NE"
+
+msgid "langDepartmentUrl"
+msgstr "Padalinio URL"
+
+msgid "langDepartmentUrlName"
+msgstr "Padalinys"
+
+msgid "langBackupCourse"
+msgstr "Archyvuoti šį kursą"
+
+msgid "langModifGroups"
+msgstr "Grupės"
+
+msgid "langProfessor"
+msgstr "Dėstytojai"
+
+msgid "langGroups"
+msgstr "Grupės"
+
+msgid "langDescriptionCours"
+msgstr "Kurso aprašymas"
+
+msgid "langArchiveCourse"
+msgstr "Kurso atsarginis archyvas"
+
+msgid "langRestoreCourse"
+msgstr "Atkurti kursą"
+
+msgid "langRestore"
+msgstr "Atkurti"
+
+msgid "langCreatedIn"
+msgstr "sukurtas"
+
+msgid "langCreateMissingDirectories"
+msgstr "Nerastų katalogų sukūrimas"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Kopijuoti kurso failus"
+
+msgid "langDisk_free_space"
+msgstr "Laisva vieta diske"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Atsarginio failo sukūrimas"
+
+msgid "langFileCopied"
+msgstr "failas nukopijuotas"
+
+msgid "langArchiveLocation"
+msgstr "Archyvo vieta"
+
+msgid "langSizeOf"
+msgstr "Dydis"
+
+msgid "langArchiveName"
+msgstr "Archyvo vardas"
+
+msgid "langBackupSuccesfull"
+msgstr "Atsarginis archyvavimas sėkmingas"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Sukurti kurso duomenų atsarginę kopiją pagrindinėje duomenų bazėje kursui"
+
+msgid "langBUUsersInMainBase"
+msgstr "Sukurti vartotojo duomenų atsarginę kopiją pagrindinėje duomenų bazėje kursui"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Sukurti pranešimų duomenų atsarginę kopiją pagrindinėje duomenų bazėje kursui"
+
+msgid "langBackupOfDataBase"
+msgstr "Sukurti duomenų bazės atsarginę kopiją"
+
+msgid "langCreationDate"
+msgstr "Sukurta"
+
+msgid "langExpirationDate"
+msgstr "Galiojimo pasibaigimo data"
+
+msgid "langPostPone"
+msgstr "Post pone"
+
+msgid "langLastEdit"
+msgstr "Paskutinis redagavimas"
+
+msgid "langLastVisit"
+msgstr "Paskutinis vizitas"
+
+msgid "langSubscription"
+msgstr "Prenumeruotis"
+
+msgid "langCourseAccess"
+msgstr "Priėjimas prie kurso"
+
+msgid "langConfirmBackup"
+msgstr "Ar tikrai norite sukurti kurso srities atsarginę kopiją?"
+
+msgid "langCreateSite"
+msgstr "Sukurti kurso sritį"
+
+msgid "langRestoreDescription"
+msgstr "Kursas yra archyve, kurį galite pasirinkti viršuje.<br><br>
+Kai tik nuspausite \"Atkurti\", archyvas bus išskleistas ir kursas atkurtas."
+
+msgid "langRestoreNotice"
+msgstr "This script doesn\'t allow yet to automatically restore users, but data saved in \"users.csv\" are sufficient for the administrator to do it manually."
+
+msgid "langAvailableArchives"
+msgstr "Esamų archyvų sąrašas"
+
+msgid "langNoArchive"
+msgstr "Joks archyvas neparinktas"
+
+msgid "langArchiveNotFound"
+msgstr "Archyvas nerastas"
+
+msgid "langArchiveUncompressed"
+msgstr "Archyvas buvo išskleistas ir įdiegtas."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "Failas \"users.csv\" įkeltas į dokumentus."
+
+msgid "langBackH"
+msgstr "atgal į titulinį"
+
+msgid "langOtherCategory"
+msgstr "Kita kategorija"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Vartotojams leidžiama išsiprenumeruoti iš šio kurso"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Vartotojams neleidžiama išsiprenumeruoti iš šio kurso"
+
+msgid "langCourseVisibilityClosed"
+msgstr " Priėjimas uždarytas; gali prieiti tik kurso vadovas."
+
+msgid "CourseVisibilityClosed"
+msgstr "Uždarytas; prie kurso gali prieiti tik kurso vadovas ir kuratoriai.."
+
+msgid "CourseVisibilityModified"
+msgstr "Modifikuota"
+
+msgid "WorkEmailAlert"
+msgstr "Perspėti e-mailu naujo dokumento pateikimo atveju"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Aktyvuoti e-mail perspėjimą naujo dokumento pateikimo atveju"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Deaktyvuoti e-mail perspėjimą naujo dokumento pateikimo atveju"
+
+msgid "DropboxEmailAlert"
+msgstr "Perspėti e-mailu naujo dokumento failų saugykloje pateikimo atveju"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Aktyvuoti e-mail perspėjimą naujo dokumento failų saugykloje pateikimo atveju"
+
+msgid "AllowUserEditAgenda"
+msgstr "Leisti vartotojams redaguoti kurso darbotvarkę"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Įjungti kurso darbotvarkės redagavimo galimybę vartotojams"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Išjungti kurso darbotvarkės redagavimo galimybę vartotojams"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Leisti vartotojams redaguoti kurso pranešimus"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Įjungti redagavimo galimybę vartotojams"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Išjungti redagavimo galimybę vartotojams"
+
+msgid "OrInTime"
+msgstr "Or in"
+
+msgid "CourseRegistrationPassword"
+msgstr "Kurso registracijos slaptažodis"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Visiškai neatstatomai ištrina kursą ir jo dokumentus.<br><br>Elkitės atidžiai!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Galimybė dublikuoti visą arba dalį kurso."
+
+msgid "DescriptionRecycleCourse"
+msgstr "Šis įrankis ištrina kurso dokumentus, forumo įrašus, nuorodas ir t.t. Patogu panaudoti pvz.: kartą į metus. Prieš tai išsaugokite atsarginę kurso dokumentų kopiją!"
+

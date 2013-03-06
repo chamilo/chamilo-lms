@@ -1,0 +1,102 @@
+msgid "MessageEmptyMessageOrSubject"
+msgstr "Por favor forneça um assunto ou a mensagem"
+
+msgid "Inbox"
+msgstr "Caixa de entrada"
+
+msgid "Messages"
+msgstr "Mensagens"
+
+msgid "SendMessage"
+msgstr "Enviar mensagem"
+
+msgid "NewMessage"
+msgstr "Nova mensagem"
+
+msgid "ComposeMessage"
+msgstr "Compor mensagem"
+
+msgid "DeleteSelectedMessages"
+msgstr "Eliminar as mensagens seleccionadas"
+
+msgid "SelectAll"
+msgstr "Seleccionar todas"
+
+msgid "DeselectAll"
+msgstr "Desceleccionar todas"
+
+msgid "ReplyToMessage"
+msgstr "Responder a esta mensagem"
+
+msgid "BackToInbox"
+msgstr "Regressar à caixa de entrada"
+
+msgid "MessageSentTo"
+msgstr "A mensagem foi enviada para"
+
+msgid "SendMessageTo"
+msgstr "Enviar para"
+
+msgid "Myself"
+msgstr "Eu"
+
+msgid "From"
+msgstr "De"
+
+msgid "To"
+msgstr "Para"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "InvalidMessageId"
+msgstr "O id da mensagem a quem responder não é válido."
+
+msgid "ErrorSendingMessage"
+msgstr "Houve um erro ao tentar enviar a mensagem."
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Tem a certeza que deseja eliminar todas as mensagens seleccionadas?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "As mensagens seleccionadas foram eliminadas"
+
+msgid "EnterTitle"
+msgstr "Por favor introduza um título"
+
+msgid "TypeYourMessage"
+msgstr "Escrever a sua mensagem aqui"
+
+msgid "MessageDeleted"
+msgstr "A mensagem foi eliminada"
+
+msgid "ConfirmDeleteMessage"
+msgstr "Tem a certeza que deseja eliminar a mensagem seleccionada?"
+
+msgid "DeleteMessage"
+msgstr "Eliminar mensagem"
+
+msgid "ReadMessage"
+msgstr "Ler mensagem"
+
+msgid "SendInviteMessage"
+msgstr "Enviar mensagem de convite"
+
+msgid "SendMessageInvitation"
+msgstr "Tem a certeza que deseja enviar estes convites?"
+
+msgid "MessageTool"
+msgstr "Ferramenta mensagens"
+
+msgid "WriteAMessage"
+msgstr "Escrever uma mensagem"
+
+msgid "AlreadyReadMessage"
+msgstr "Mensagem já lida"
+
+msgid "UnReadMessage"
+msgstr "Mensagem por ler"
+
+msgid "MessageSent"
+msgstr "Mensagem enviada"
+

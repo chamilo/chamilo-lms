@@ -1,0 +1,219 @@
+msgid "AgendaAdd"
+msgstr "Amestar un eventu"
+
+msgid "ShowAllEvents"
+msgstr "Amosar tolos eventos"
+
+msgid "ShowCurrent"
+msgstr "Amosar tolos eventos del mes"
+
+msgid "AddCalendarItem"
+msgstr "Amestar un eventu nuevu a la axenda"
+
+msgid "Day"
+msgstr "Día"
+
+msgid "Month"
+msgstr "Mes"
+
+msgid "Year"
+msgstr "Añu"
+
+msgid "Hour"
+msgstr "Hora"
+
+msgid "Minutes"
+msgstr "Mintutos"
+
+msgid "Detail"
+msgstr "Detalles"
+
+msgid "EditSuccess"
+msgstr "L\'eventu modificóse"
+
+msgid "AddSuccess"
+msgstr "L\'eventu amestóse a la axenda"
+
+msgid "AgendaDeleteSuccess"
+msgstr "L\'eventu esborróse de la axenda"
+
+msgid "NoAgendaItems"
+msgstr "Nun hai eventos"
+
+msgid "lang_september"
+msgstr "Setiembre"
+
+msgid "langClassName"
+msgstr "Nome de la clase"
+
+msgid "lang_agenda"
+msgstr "Axenda"
+
+msgid "ModifyCalendarItem"
+msgstr "Cambiar un eventu de l\'axenda"
+
+msgid "ItemTitle"
+msgstr "Títulu del eventu"
+
+msgid "langDay"
+msgstr "Día"
+
+msgid "month_default"
+msgstr "mes por defeutu"
+
+msgid "langYear"
+msgstr "Añu"
+
+msgid "year_default"
+msgstr "Añu por defeutu"
+
+msgid "langHour"
+msgstr "Hora"
+
+msgid "hour_default"
+msgstr "Hora por defeutu"
+
+msgid "langMinute"
+msgstr "Minutu"
+
+msgid "langLasting"
+msgstr "Duración"
+
+msgid "langOldToNew"
+msgstr "Antiguu a nuevu"
+
+msgid "langNewToOld"
+msgstr "Nuevu a antiguu"
+
+msgid "langNow"
+msgstr "Agora"
+
+msgid "langAddEvent"
+msgstr "Amestar un eventu"
+
+msgid "langDetail"
+msgstr "Detalles"
+
+msgid "MonthView"
+msgstr "Vista mensual"
+
+msgid "WeekView"
+msgstr "Vista selmanal"
+
+msgid "DayView"
+msgstr "Vista diaria"
+
+msgid "AddPersonalItem"
+msgstr "Amestar un eventu personal"
+
+msgid "Week"
+msgstr "Selmana"
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Amestar un eventu personal a la axenda"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Cambiar un eventu personal na axenda"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "L\'eventu personal amestóse a la so axenda"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "L\'eventu personal de la so axenda actualizóse"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "L\'eventu personal esborróse de la so axenda"
+
+msgid "ViewPersonalItem"
+msgstr "Ver los mios eventos personales"
+
+msgid "UserGroupFilter"
+msgstr "Filtrar por grupos/usuarios"
+
+msgid "ShowAll"
+msgstr "Amosar toos"
+
+msgid "Print"
+msgstr "Emprentar"
+
+msgid "MyTextHere"
+msgstr "El mio testu equí"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Copiáu como anuncia"
+
+msgid "NewAnnouncement"
+msgstr "Anuncia nueva"
+
+msgid "AddAnnouncement"
+msgstr "Amestar como una anuncia"
+
+msgid "UpcomingEvent"
+msgstr "Eventu prósimu"
+
+msgid "RepeatedEvent"
+msgstr "Eventu periódicu"
+
+msgid "RepeatType"
+msgstr "Periodicidá"
+
+msgid "RepeatDaily"
+msgstr "Diaria"
+
+msgid "RepeatWeekly"
+msgstr "Selmanal"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Mensual, por fecha"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Mensual, por día"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Mensual, por día, restrinxíu"
+
+msgid "RepeatYearly"
+msgstr "Añal"
+
+msgid "RepeatEnd"
+msgstr "Acabar les repeticiones el"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Ver l\'eventu primeru"
+
+msgid "ICalFileImport"
+msgstr "Importar un ficheru iCal/ics"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Tolos usuarios de la Plataforma"
+
+msgid "GlobalEvent"
+msgstr "Eventu global"
+
+msgid "ModifyEvent"
+msgstr "Camudar eventu"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Data final nun deberá ser menos que la data d\'aniciu"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ordenar eventos (antigüos/recientes)"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Ordenar eventos (recientes/antigüos)"
+
+msgid "ItemForUserSelection"
+msgstr "Eventu dirixíu a una seleición d\'usuarios"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Nun ye un ficheru de formatu iCal"
+
+msgid "RepeatEvent"
+msgstr "Repetir eventu"
+

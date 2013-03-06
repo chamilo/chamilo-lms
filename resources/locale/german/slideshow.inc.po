@@ -1,0 +1,54 @@
+msgid "Height"
+msgstr "Höhe"
+
+msgid "ResizingComment"
+msgstr "Bild auf folgende Größe (in Pixeln) reduzieren"
+
+msgid "Width"
+msgstr "Breite"
+
+msgid "Resizing"
+msgstr "Größe ändern"
+
+msgid "NoResizingComment"
+msgstr "Alle Bilder in Original-Größe anzeigen. Keine Größenänderung. Sollten Bilder größer als die Bildschirm sein, werden automatisch Scrollbalken angezeigt."
+
+msgid "ShowThumbnails"
+msgstr "Mini-Bild anzeigen"
+
+msgid "SetSlideshowOptions"
+msgstr "Diashow-Einstellungen"
+
+msgid "SlideshowOptions"
+msgstr "Diashow Optionen"
+
+msgid "NoResizing"
+msgstr "keine Größenänderung (Standard)"
+
+msgid "ExitSlideshow"
+msgstr "Diashow beenden"
+
+msgid "SlideShow"
+msgstr "Diashow"
+
+msgid "PreviousSlide"
+msgstr "Vorheriges Bild"
+
+msgid "NextSlide"
+msgstr "Nächstes Bild"
+
+msgid "ViewSlideshow"
+msgstr "Diashow anzeigen"
+
+msgid "FirstSlide"
+msgstr "Erstes Bild"
+
+msgid "LastSlide"
+msgstr "Letztes Bild"
+
+msgid "ResizingAuto"
+msgstr "automatische Größe (Standard)"
+
+msgid "ResizingAutoComment"
+msgstr "Diese Slideshow wird automatisch an die Bildschirmgröße angepaßt. Dies ist die Voreinstellung."
+

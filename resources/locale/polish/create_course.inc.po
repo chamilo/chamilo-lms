@@ -1,0 +1,300 @@
+msgid "langProfessors"
+msgstr "Prowadzący"
+
+msgid "langExplanation"
+msgstr "Kliknięcie OK spowoduje utworzenie stron kursu z Forum, Terminarzem, Obszarem dokumentów itd. Tylko Ty, jako twórca kursu możesz te strony modyfikować"
+
+msgid "langEmpty"
+msgstr "Zostawiłeś niewypełnione pola.<br>Użyj przycisku Wstecz i spróbuj jeszcze raz.<br>Jeśli zignorujesz Kod kursu spójrz do Programu kursu"
+
+msgid "langCodeTaken"
+msgstr "Kod kursu jest ju� podany.<br />U�yj przycisku Wstecz i spr�buj jeszcze raz"
+
+msgid "langFormula"
+msgstr "Z poważaniem"
+
+msgid "langMessage"
+msgstr "Jeżli usuniesz Forum przykładowe, skasujesz także bieżącą wiadomość."
+
+msgid "langExerciceEx"
+msgstr "Przykładowe ćwiczenie"
+
+msgid "langAntique"
+msgstr "Historia Filozofii Starożytnej"
+
+msgid "langSocraticIrony"
+msgstr "Sokratycza ironia oznacza ..."
+
+msgid "langManyAnswers"
+msgstr "(więcej niż jedna odopwiedź może być prawdziwa)"
+
+msgid "langRidiculise"
+msgstr "Ośmieszenie rozmówcy, który musi w ten sposób uznać swój błąd."
+
+msgid "langNoPsychology"
+msgstr "Nie. Sokratyczna ironia nie jest środkiem psychologicznym, oznacza argumentację."
+
+msgid "langAdmitError"
+msgstr "Uznanie własnych błędów i zachęcenie rozmówcy do zrobienia tego samego."
+
+msgid "langNoSeduction"
+msgstr "Nie. Sokratyczna ironia nie jest strategią zwodzenia ani metodą bazującą na przykładzie."
+
+msgid "langForce"
+msgstr "Doprowadzenie rozmówcy przez serię pytań do przyznania, że nie wie czegoś, o czym myślał, że wie."
+
+msgid "langIndeed"
+msgstr "Tak, Sokratyczna ironia jest metodą pytającą. Z greckiego \"eirotao\" - \"zadawać pytania\""
+
+msgid "langContradiction"
+msgstr "Użycie zasady podwójnego zaprzeczenia w celu doprowadzenia rozmówcy w ślepą uliczkę."
+
+msgid "langNotFalse"
+msgstr "Ta odpowiedź nie jest zła. To prawda, że odkrycie ignorancji rozmówcy oznacza pokazanie sprzecznych wniosków, które wynikają z jego przesłanek."
+
+msgid "langAgenda"
+msgstr "Terminarz"
+
+msgid "langVideo"
+msgstr "Wideo"
+
+msgid "langCourseProgram"
+msgstr "Opis kursu"
+
+msgid "langAnnouncements"
+msgstr "Ogłoszenia"
+
+msgid "langAddPageHome"
+msgstr "Załaduj stronę i odno¶nik na stronie głównej"
+
+msgid "langLinkSite"
+msgstr "Dodaj łącze do strony głównej"
+
+msgid "langModifyInfo"
+msgstr "Modyfikuj ustawienia kursu"
+
+msgid "langCourseDesc"
+msgstr "Opis kursu"
+
+msgid "langAgendaTitle"
+msgstr "Wtorek 11-ty grudnia - Pierwsza lekcja: Newton 18"
+
+msgid "langAgendaText"
+msgstr "Ogólne wprowadzenie do filozofii i zasad metodologii"
+
+msgid "langMicro"
+msgstr "Wywiady uliczne"
+
+msgid "langGoogle"
+msgstr "Szybka i wygodna wyszukiwarka"
+
+msgid "langIntroductionText"
+msgstr "To jest wprowadzenie do kursu. Żeby wymienić tekst na sw�j własny, kliknij łącze <b>modyfikuj</b> poniżej."
+
+msgid "langIntroductionTwo"
+msgstr "Ta strona pozwala studentom lub grupom na publikowanie swoich prac. Pliki HTML nie mogą zawierać obrazk�w."
+
+msgid "langCourseDescription"
+msgstr "Opis kursu"
+
+msgid "langProfessor"
+msgstr "Nauczyciel (Prowadzący)"
+
+msgid "langAnnouncementEx"
+msgstr "To jest przykładowe ogłoszenie. Tylko prowadzący i administratorzy kursu mogą umieszczać ogłoszenia."
+
+msgid "langJustCreated"
+msgstr "Utworzony został kurs"
+
+msgid "langEnter"
+msgstr "Powrót do listy kursów"
+
+msgid "langGroups"
+msgstr "Grupy"
+
+msgid "langCreateCourseGroups"
+msgstr "Grupy"
+
+msgid "langCatagoryMain"
+msgstr "Główna"
+
+msgid "langCatagoryGroup"
+msgstr "Fora grup"
+
+msgid "langLn"
+msgstr "Język"
+
+msgid "langCreateSite"
+msgstr "Tworzenie kursu"
+
+msgid "langFieldsRequ"
+msgstr "Wymagane wypełnienie wszystkich pól"
+
+msgid "langEx"
+msgstr "np. <i>Historia Literatury</i>"
+
+msgid "langFac"
+msgstr "Kategoria"
+
+msgid "langTargetFac"
+msgstr "Wydział, Instytut lub Szkoła, w której kurs jest prowadzony"
+
+msgid "langMax"
+msgstr "max. 12 znaków, np. <i>ROM2121</i>"
+
+msgid "langDoubt"
+msgstr "Je¶li masz w±tpliwo¶ci co do kodu kursu, skonsultuj się z administratorem"
+
+msgid "langProgram"
+msgstr "Program kursu</a>. Je¶li Twój kurs nie ma kodu, wymy¶l go. Na przykład <i>INNOWACJA</i>, je¶li kurs dotyczy Innowacji w Zarz±dzaniau."
+
+msgid "langScormtool"
+msgstr "Ścieżka nauczania"
+
+msgid "langPathbuildertool"
+msgstr "Narzędzie do kreowania ścieżki nauczania"
+
+msgid "langOnlineConference"
+msgstr "Konferencja online"
+
+msgid "langAgendaCreationTitle"
+msgstr "Tworzenie kursu"
+
+msgid "langAgendaCreationContenu"
+msgstr "Ten kurs został stworzony"
+
+msgid "langOnlineDescription"
+msgstr "Opis konferencji online"
+
+msgid "langDropbox"
+msgstr "Skrzynka nadawcza"
+
+msgid "langOnly"
+msgstr "Tylko"
+
+msgid "langRandomLanguage"
+msgstr "Przełącz język zaznaczonego obszaru"
+
+msgid "langImages"
+msgstr "Obrazy"
+
+msgid "langAudio"
+msgstr "Dźwięk"
+
+msgid "langFlash"
+msgstr "Flash"
+
+msgid "langForumLanguage"
+msgstr "poski"
+
+msgid "langNewCourse"
+msgstr "Nowy kurs"
+
+msgid "langAddNewCourse"
+msgstr "Dodaj nowy kurs"
+
+msgid "langRestoreCourse"
+msgstr "Przywracanie kursu"
+
+msgid "langOtherProperties"
+msgstr "Inne właściwości odnalezione w archiwum"
+
+msgid "langSysId"
+msgstr "Identyfikator systemu"
+
+msgid "langDepartment"
+msgstr "Wydział"
+
+msgid "langDepartmentUrl"
+msgstr "Adres internetowy Wydziału"
+
+msgid "langScoreShow"
+msgstr "Pokaż wyniki"
+
+msgid "langVisibility"
+msgstr "Widzialność"
+
+msgid "langVersionDb"
+msgstr "Wersja bazy danych podczas archiwizacji"
+
+msgid "langLastVisit"
+msgstr "Ostatnia wizyta"
+
+msgid "langLastEdit"
+msgstr "Ostatnio edytowany"
+
+msgid "langExpire"
+msgstr "Expiration"
+
+msgid "langChoseFile"
+msgstr "Wybierz plik"
+
+msgid "langFtpFileTips"
+msgstr "Plik w serwerze FTP"
+
+msgid "langHttpFileTips"
+msgstr "Plik na stronie Web (HTTP)"
+
+msgid "langLocalFileTips"
+msgstr "Plik w serwerze"
+
+msgid "langPostFileTips"
+msgstr "Plik w Twoim lokalnym komputerze"
+
+msgid "langOtherCategory"
+msgstr "Inna kategoria"
+
+msgid "langMinimum"
+msgstr "minimum"
+
+msgid "langMaximum"
+msgstr "maksimum"
+
+msgid "langRestoreACourse"
+msgstr "przywróć kurs"
+
+msgid "langBackup"
+msgstr "Kopia zapasowa"
+
+msgid "langCopy"
+msgstr "Kopiuj zawartość kursu"
+
+msgid "langRecycle"
+msgstr "Utylizuj kurs"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Oto przykład ogłoszenia"
+
+msgid "Wikipedia"
+msgstr "Darmowa encyklopedia online (Wilkipedia)"
+
+msgid "DefaultGroupCategory"
+msgstr "Grupy domyślne"
+
+msgid "DefaultCourseImages"
+msgstr "Galeria"
+
+msgid "ExampleForumCategory"
+msgstr "Przykładowa kategoria forum"
+
+msgid "ExampleForum"
+msgstr "Przykładowe forum"
+
+msgid "ExampleThread"
+msgstr "Przykładowy wątek"
+
+msgid "ExampleThreadContent"
+msgstr "Przykładowa zawartość."
+
+msgid "IntroductionWiki"
+msgstr "Słowo Wiki to skrót od WikiWikiWeb. WikiWiki to hawajskie słowo oznaczające szybkość lub prędkość. Wiki umożliwia wspólne tworzenie stron. Jeżeli jedna osoba napisze coś źle, następna może to poprawić. Kolejna osoba może także dodać nowe informacje. Z tego powodu strony są coraz lepsze jeżeli są zmieniane."
+
+msgid "CreateCourseArea"
+msgstr "Utwórz obszar kursu"
+
+msgid "CreateCourse"
+msgstr "Utwórz kurs"
+
+msgid "Create"
+msgstr "Utwórz"
+

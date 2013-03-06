@@ -1,0 +1,207 @@
+msgid "langInvalidId"
+msgstr "Prijavljivanje nije uspelo – pogrešno korisničko ime ili lozinka"
+
+msgid "langWelcome"
+msgstr "kursevi koji su navedeni dole su besplatni. Za ostale kurseve morate da imate korisničko ime i lozinku, koju možete da dobijete klikom na \'registracija\'. Predavači mogu da kreiraju okruženje kursa klikom na registracija takođe, ali selektovanjem posle \'Kreiraj okruženje kursa\'."
+
+msgid "langPass"
+msgstr "Lozinka"
+
+msgid "langEnter"
+msgstr "Nazad na moju listu kurseva"
+
+msgid "langReg"
+msgstr "Registracija"
+
+msgid "langMenu"
+msgstr "Meni"
+
+msgid "langAdvises"
+msgstr "Saveti"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Upozorenje:</b> Ovaj kurs ne postoji"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "kliknite ovde da dobijete ovaj kurs sa vašeg starog portala"
+
+msgid "langOtherCourses"
+msgstr "drugi kursevi"
+
+msgid "langSupportForum"
+msgstr "Forum za podršku"
+
+msgid "langCategories"
+msgstr "kategorije"
+
+msgid "langBackToHomePage"
+msgstr "Nazad na početnu stranicu"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Nijedan kurs nije javno dostupan"
+
+msgid "langLostPassword"
+msgstr "Izgubljena lozinka"
+
+msgid "lang_edit_my_course_list"
+msgstr "Izmeni moju listu kurseva"
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langValvas"
+msgstr "Poslednja obaveštenja"
+
+msgid "langUp"
+msgstr "Gore"
+
+msgid "langCatList"
+msgstr "Kategorije"
+
+msgid "langCourseList"
+msgstr "Lista kurseva"
+
+msgid "langHelptwo"
+msgstr "Pomoć"
+
+msgid "langRegAll"
+msgstr "registrovanje"
+
+msgid "EussMenu"
+msgstr "meni"
+
+msgid "Opinio"
+msgstr "Mišljenje"
+
+msgid "Intranet"
+msgstr "Intranet"
+
+msgid "Englin"
+msgstr "engleski"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Prijava nije uspela – ako se niste registrovali to možete učiniti preko <a href=claroline/auth/inscription.php>Formulara za prijavu</a>"
+
+msgid "langSubCat"
+msgstr "Podkategorije"
+
+msgid "langMenuGeneral"
+msgstr "Opšte"
+
+msgid "langMenuUser"
+msgstr "Korisnik"
+
+msgid "langMenuAdmin"
+msgstr "Platforma za administraciju"
+
+msgid "langUsersOnLineList"
+msgstr "Online lista korisnika"
+
+msgid "langTotalOnLine"
+msgstr "Ukupno online"
+
+msgid "langRefresh"
+msgstr "Osveži"
+
+msgid "langMe"
+msgstr "ja"
+
+msgid "langSystemAnnouncements"
+msgstr "Sistemska obaveštenja"
+
+msgid "langHelpMaj"
+msgstr "Pomoć"
+
+msgid "langNotRegistered"
+msgstr "Nije registrovan"
+
+msgid "langAdmin"
+msgstr "Administratorska platforma"
+
+msgid "Login"
+msgstr "Korisničko ime"
+
+msgid "langRegisterForCourse"
+msgstr "Registrovanje za kurs"
+
+msgid "langUnregisterForCourse"
+msgstr "Odjava sa kursa"
+
+msgid "langCombinedCourse"
+msgstr "Kombinovani kurs"
+
+msgid "Platform"
+msgstr "Platforma"
+
+msgid "Refresh"
+msgstr "Osveži"
+
+msgid "TotalOnLine"
+msgstr "ukupno korisnika online"
+
+msgid "langCourseClosed"
+msgstr "(kurs je trenutno zatvoren)"
+
+msgid "ViewOpenCourses"
+msgstr "Pregled otvorenih kurseva"
+
+msgid "langCompetences"
+msgstr "Kompetencije"
+
+msgid "langDiplomas"
+msgstr "Diplome"
+
+msgid "langTeach"
+msgstr "Šta može da predaje"
+
+msgid "langProductions"
+msgstr "Produkcije"
+
+msgid "langSendChatRequest"
+msgstr "Pоšalji sagovorniku zahtev za Chat"
+
+msgid "langRequestDenied"
+msgstr "Poziv je odbijen."
+
+msgid "UsageDatacreated"
+msgstr "Kreirani korisnički podaci"
+
+msgid "SessionView"
+msgstr "Prikaži treninge sortirane po sesijama"
+
+msgid "CourseView"
+msgstr "Prikaži kompletan spisak treninga"
+
+msgid "DropboxFileAdded"
+msgstr "Dodata datoteka u spisak"
+
+msgid "NewMessageInForum"
+msgstr "Objavljena nova poruka na forumu"
+
+msgid "FolderCreated"
+msgstr "Novi folder je kreiran"
+
+msgid "LinkAdded"
+msgstr "Novi link dodan"
+
+msgid "AnnouncementAdded"
+msgstr "Obaveštenje je dodato"
+
+msgid "AgendaAdded"
+msgstr "Dodat novi dogadjaj u raspored"
+
+msgid "Messages"
+msgstr "Poruke"
+
+msgid "Inbox"
+msgstr "Inbox"
+
+msgid "Comppose"
+msgstr "Napravi novu"
+
+msgid "PendingInvitations"
+msgstr "Pozivnice na čekanju"
+
+msgid "YouDoNotHaveAnySessionInItsHistory"
+msgstr "U istoriji nemate zapisani ni jednu trening sesiju"
+

@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Documentos"
+
+msgid "langMdTitle"
+msgstr "Título do Objeto de Aprendizagem"
+
+msgid "langMdDescription"
+msgstr "Para armazenar esta informação, clique em Armazenar"
+
+msgid "langMdCoverage"
+msgstr "bacharel em engenharia"
+
+msgid "langMdCopyright"
+msgstr "Universidade de Ghent"
+
+msgid "nameTools"
+msgstr "Variáveis de Linguagem Obsoletas"
+
+msgid "langTool"
+msgstr "Metadados do Documento"
+
+msgid "langNoScript"
+msgstr "O script não está habilitado no seu browser, por favor ignore a parte da tela abaixo desse texto, ele não irá funcionar..."
+
+msgid "langLanguageTip"
+msgstr "a língua na qual esse objeto de aprendizagem foi feito"
+
+msgid "langIdentifier"
+msgstr "Identificador"
+
+msgid "langIdentifierTip"
+msgstr "identificação única para esse objeto de aprendizagem, composta de letras, digitos,  _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "título ou nome, e língua daquele título ou nome"
+
+msgid "langDescriptionTip"
+msgstr "descrição ou comentário, e língua utilizada para descrever este objeto de aprendizagem"
+
+msgid "langKeyword"
+msgstr "Palavra-chave"
+
+msgid "langKeywordTip"
+msgstr "separado por vírgulas (letras, digitos, -.)"
+
+msgid "langCoverage"
+msgstr "Cobertura"
+
+msgid "langCoverageTip"
+msgstr "por exemplo, bacharel em xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Se você modificar a língua da descrição, não adicione palavras-chave ao mesmo tempo."
+
+msgid "langClickKw"
+msgstr "Clique em uma palavra-chave na árvore para marcar ou desmarcá-lo."
+
+msgid "langKwHelp"
+msgstr "<br/> Clique no botão \'+\' para abrir, no botão \'-\' para fechar, no botão \'++\' para abrir todos, no botão \'--\' para fechar todos.<br/> <br/> Limpe todas as palavras-chave selecionadas fechando a árvore e abrindo-a novamente com o botão \'+\'.<br/> Segurando o Alt e clicando no botão \'+\' pesquisa as palavras-chave originais na árvore.<br/> <br/> Segurando o Alt e clicando na palavra-chave seleciona uma palavra-chave sem termos abrangentes ou desmarca uma palavra-chave com termos abrangentes.<br/> <br/> Se você modificar a língua da descrição, não adicione palavras-chave ao mesmo tempo.<br/> <br/>"
+
+msgid "langLocation"
+msgstr "URL/Endereço"
+
+msgid "langLocationTip"
+msgstr "clique para abrir o objeto"
+
+msgid "langStore"
+msgstr "Armazenar"
+
+msgid "langDeleteAll"
+msgstr "Deletar todos os metadados"
+
+msgid "langConfirmDelete"
+msgstr "Você *realmente* quer apagar todos os metadados?"
+
+msgid "langWorkOn"
+msgstr "ligado"
+
+msgid "langNotInDB"
+msgstr "categoria de Links desconhecida"
+
+msgid "langManifestSyntax"
+msgstr "(erro de sintaxe no arquivo de manifesto...)"
+
+msgid "langEmptyManifest"
+msgstr "(arquivo de manifesto vazio...)"
+
+msgid "langNoManifest"
+msgstr "(nenhum arquivo de manifesto...)"
+
+msgid "langNotFolder"
+msgstr "não é possível, isto não é uma pasta..."
+
+msgid "langContinue"
+msgstr "Continuar com"
+
+msgid "langCreate"
+msgstr "Criar"
+
+msgid "langRemove"
+msgstr "Remover MDEs"
+
+msgid "langAllRemovedFor"
+msgstr "Todas as entradas removidas da categoria"
+
+msgid "langRemainingFor"
+msgstr "entradas obsoletas removidas da categoria"
+
+msgid "langIndex"
+msgstr "Indexar Palavras"
+
+msgid "langTotalMDEs"
+msgstr "Número total de entradas MD de Links:"
+
+msgid "langMainMD"
+msgstr "Abrir o MDE Principal"
+
+msgid "langOrElse"
+msgstr "Selecione uma categoria de link"
+
+msgid "langWarningDups"
+msgstr "- nomes de categoria duplicados serão removidos da lista!"
+
+msgid "langSLC"
+msgstr "Trabalhar com a categoria de Links chamada"
+

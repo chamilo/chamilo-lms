@@ -1,0 +1,489 @@
+msgid "NewForumCreated"
+msgstr "Беше креиран новиот форум"
+
+msgid "NewThreadCreated"
+msgstr "Беше креирана новата низа од форуми"
+
+msgid "lang_learning_path"
+msgstr "Патека на учењето"
+
+msgid "lang_learning_path_builder"
+msgstr "Алатка за изградба на Патека на Учењето "
+
+msgid "lang_description"
+msgstr "опис"
+
+msgid "LearnpathTitle"
+msgstr "наслов"
+
+msgid "LearnpathPrerequisites"
+msgstr "Предуслови"
+
+msgid "LearnpathMoveUp"
+msgstr "Помести нагоре"
+
+msgid "LearnpathMoveDown"
+msgstr "Помести надолу"
+
+msgid "langThisItem"
+msgstr "&#1086;&#1074;&#1086;&#1112; &#1077;&#1083;&#1077;&#1084;&#1077;&#1085;&#1090;"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Наслов & опис"
+
+msgid "LearnpathChangeOrder"
+msgstr "Измени го редоследот"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Додај предуслови"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Уредување на наслов & опис."
+
+msgid "lang_delete"
+msgstr "Избриши"
+
+msgid "lang_add_chapter"
+msgstr "Додај модул"
+
+msgid "langLearnpathMystatus"
+msgstr "Мој статус"
+
+msgid "langLearnpathCompstatus"
+msgstr "комплетирано"
+
+msgid "langLearnpathIncomplete"
+msgstr "некоплетно"
+
+msgid "langLearnpathPassed"
+msgstr "поминал успешно"
+
+msgid "langLearnpathFailed"
+msgstr "неуспешно"
+
+msgid "langLearnpathPrevious"
+msgstr "Претходно"
+
+msgid "langLearnpathNext"
+msgstr "Следно"
+
+msgid "langLearnpathRestart"
+msgstr "Повторно од почеток"
+
+msgid "langLearnpathThisStatus"
+msgstr "&#1054;&#1074;&#1086;&#1112; &#1095;&#1077;&#1082;&#1086;&#1088; &#1089;&#1077;&#1075;&#1072; &#1077;"
+
+msgid "langLearnpathToEnter"
+msgstr "За влез"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "прво треба да довршите"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Наслов на чекорот"
+
+msgid "langLearnpathStatus"
+msgstr "Статус"
+
+msgid "langLearnpathScore"
+msgstr "Резултат"
+
+msgid "langLearnpathTime"
+msgstr "Време"
+
+msgid "langLearnpathVersion"
+msgstr "верзија"
+
+msgid "langLearnpathRestarted"
+msgstr "Сите чекори не се комплетни сега."
+
+msgid "langLearnpathNoNext"
+msgstr "&#1054;&#1074;&#1072; &#1077; &#1087;&#1086;&#1089;&#1083;&#1077;&#1076;&#1085;&#1080;&#1086;&#1090; &#1095;&#1077;&#1082;&#1086;&#1088;."
+
+msgid "langLearnpathNoPrev"
+msgstr "&#1054;&#1074;&#1072; &#1077; &#1087;&#1088;&#1074;&#1080;&#1086;&#1090; &#1095;&#1077;&#1082;&#1086;&#1088;."
+
+msgid "LearnpathAddLearnpath"
+msgstr "Додај Патека на учењето"
+
+msgid "lang_learnpath_added"
+msgstr "Новата Патека на учењето беше креирана успешно. Сега можете да и\' додавате модули кликајќи на плусот."
+
+msgid "LearnpathEditLearnpath"
+msgstr "уреди патека_на_учењето"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "избриши патека_на_учењето"
+
+msgid "lang_learnpath_edited"
+msgstr "патеката_на_учењето беше уредена"
+
+msgid "lang_learnpath_deleted"
+msgstr "патеката_на_учењето беше избришана"
+
+msgid "LearnpathDoNotPublish"
+msgstr "не објавувај"
+
+msgid "LearnpathPublish"
+msgstr "објави"
+
+msgid "LearnpathNotPublished"
+msgstr "не е објавено"
+
+msgid "LearnpathPublished"
+msgstr "објавено"
+
+msgid "lang_add_learnpath_module"
+msgstr "Додај нов модул"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Додај нов модул на оваа патека на учењето"
+
+msgid "lang_learnpath_module_added"
+msgstr "Новиот модул на Патеката на учењето беше успешно креиран. Сега можете да му додавате чекори кликајќи на плусот."
+
+msgid "LearnpathEditModule"
+msgstr "Уредување на опис/наслов на модулот"
+
+msgid "LearnpathDeleteModule"
+msgstr "Избриши го модулот"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Модулот на Патеката на учењето беше успешно уреден"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Модулот на Патеката на учењето и сите негови чекори во него се избришани"
+
+msgid "LearnpathNoChapters"
+msgstr "Сеуште нема додено модули."
+
+msgid "LearnpathAddItem"
+msgstr "Додај чекори во овој модул"
+
+msgid "LearnpathItemDeleted"
+msgstr "Чекорот од Патеката на учењето беше избришан"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "Ве молиме доделете ги овие чекори од Патеката на учењето на модулот:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Уредување на дополнителен опис/наслов на чекорот"
+
+msgid "lang_add_prereq"
+msgstr "Додај/уреди предуслови за овој чекор"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Избриши го чекорот"
+
+msgid "LearnpathItemEdited"
+msgstr "Чекорот од Патеката на учењето беше менуван"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Избришано!"
+
+msgid "lang_none"
+msgstr "НИКОЈ"
+
+msgid "lang_forum_opened"
+msgstr "Избраниот форум беше отворен во нов прозорец."
+
+msgid "lang_link_opened"
+msgstr "Избраната врска беше отворена во нов прозорец."
+
+msgid "lang_short_help"
+msgstr "За да додадете чекор, кликнете на плусот; за додавање на нов наслов/опис, кликнете на моливчето; за да додадете предуслови кликнете на иконата со два документи. Можете да проверите како ќе изгледа екранот на курсистот кликајќи на Поглед_на_курсистот најгоре."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "предусловите не се комплетни"
+
+msgid "lang_author"
+msgstr "Автор"
+
+msgid "lang_date"
+msgstr "Датум"
+
+msgid "langBasicOverview"
+msgstr "Организирај"
+
+msgid "langAdvanced"
+msgstr "Гради"
+
+msgid "langDisplay"
+msgstr "Прикажи"
+
+msgid "langNewChapter"
+msgstr "Ново поглавје"
+
+msgid "langNewStep"
+msgstr "Нов чекор"
+
+msgid "langEditPrerequisites"
+msgstr "Уредување на предусловите за тековниот елемент."
+
+msgid "langTitleManipulateChapter"
+msgstr "Ракување со тековното поглавје"
+
+msgid "langTitleManipulateModule"
+msgstr "Ракување со тековниот модул"
+
+msgid "langTitleManipulateDocument"
+msgstr "Ракување со тековниот документ"
+
+msgid "langTitleManipulateLink"
+msgstr "Ракување со тековната врска"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Ракување со тековната вежба"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Ракување со тековната публикација на курсистот"
+
+msgid "langEnterDataNewChapter"
+msgstr "Внесување на податоците за новото поглавје"
+
+msgid "langEnterDataNewModule"
+msgstr "Внесување на податоците за новиот модул"
+
+msgid "langCreateNewStep"
+msgstr "Креирај нов чекор:"
+
+msgid "langNewDocument"
+msgstr "Нов документ"
+
+msgid "langUseAnExistingResource"
+msgstr "Или исползувај постоечки ресурси:"
+
+msgid "langParent"
+msgstr "Едно ниво погоре"
+
+msgid "langPosition"
+msgstr "Позиција"
+
+msgid "langNewChapterCreated"
+msgstr "Беше креирано новото поглавје. Сега можете да додадете чекор во него, или да креирате ново поглавје."
+
+msgid "langNewLinksCreated"
+msgstr "Беше креирана новата врска."
+
+msgid "langNewStudentPublicationCreated"
+msgstr "Беше креирана новата публикација на курсист"
+
+msgid "langNewModuleCreated"
+msgstr "Беше креиран новиот модул. Сега можете да му додадете поглавје или чекор."
+
+msgid "langNewExerciseCreated"
+msgstr "Беше креирана новата вежба."
+
+msgid "langItemRemoved"
+msgstr "Елементот беше отстранет"
+
+msgid "langConverting"
+msgstr "Претворање..."
+
+msgid "langPpt2lpError"
+msgstr "Грешка за време на претворањето на PowerPoint презентацијата. Ве молиме проверете дали има специјални карактери во името на Вашата PowerPoint презентација."
+
+msgid "langBuild"
+msgstr "Гради"
+
+msgid "langViewModeEmbedded"
+msgstr "Начин на прикажување: вгнездено"
+
+msgid "langViewModeFullScreen"
+msgstr "Начин на прикажување: цел_екран"
+
+msgid "langShowDebug"
+msgstr "Покажи дебагирање"
+
+msgid "langHideDebug"
+msgstr "Скриј дебагирање"
+
+msgid "langCantEditDocument"
+msgstr "Документот не може да се уредува"
+
+msgid "langAfter"
+msgstr "После"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Предуслови (ограничување)"
+
+msgid "lang_loading"
+msgstr "Страницата се вчитува, Ве молиме почекајте..."
+
+msgid "lang_empty"
+msgstr "&#1054;&#1074;&#1072;&#1072; &#1087;&#1072;&#1090;&#1077;&#1082;&#1072; &#1085;&#1077; &#1089;&#1086;&#1076;&#1088;&#1078;&#1080; &#1095;&#1077;&#1082;&#1086;&#1088;&#1080;."
+
+msgid "langHotPotatoesFinished"
+msgstr "&#1054;&#1074;&#1086;&#1112; HotPotatoes &#1090;&#1077;&#1089;&#1090; &#1073;&#1077;&#1096;&#1077; &#1079;&#1072;&#1090;&#1074;&#1086;&#1088;&#1077;&#1085;."
+
+msgid "langCompletionLimit"
+msgstr "Ограничување на завршувањето (минимум поени)"
+
+msgid "langPrereqToEnter"
+msgstr "За влез"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "мора прво да довршите"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Недостига најмалку 1 чекор од"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "кој е зададен како предуслов."
+
+msgid "langPrereqTestLimit1"
+msgstr "морате да го достигнете минимумот"
+
+msgid "langPrereqTestLimit2"
+msgstr "бодови во"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Сега имате:"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "назад на нормален екран"
+
+msgid "langLearnpathFullScreen"
+msgstr "цел екран"
+
+msgid "langItemMissing1"
+msgstr "Постоеше"
+
+msgid "langItemMissing2"
+msgstr "страна (чекор) во оригиналната Chamilo Патека на Учењето."
+
+msgid "langDone"
+msgstr "Готово"
+
+msgid "langNoItemSelected"
+msgstr "За да се прикаже овде нешто, Ве молиме изберете елемент од страничното мени"
+
+msgid "langNewDocumentCreated"
+msgstr "Беше креиран новиот документ."
+
+msgid "langEditCurrentChapter"
+msgstr "Уредување на тековното поглавје"
+
+msgid "langditCurrentModule"
+msgstr "Уредување на тековниот модул"
+
+msgid "langCreateTheDocument"
+msgstr "Креирај го документот"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Премести го тековниот документ"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Уредување на тековниот документ"
+
+msgid "langWarning"
+msgstr "Предупредување!"
+
+msgid "langWarningEditingDocument"
+msgstr "Кога уредувате постоечки документ во Птеката на Учењето, новата верзија на документот нема да ја препокрие старата верзија, но ќе биде снимена како нов документ. Ако сакате да ја уредите конечната верзија на документот, можете да го направите тоа во алатката Документи."
+
+msgid "langDirectory"
+msgstr "Директориум"
+
+msgid "langCreateTheExercise"
+msgstr "Креирање на вежбата"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Премести ја тековната вежба"
+
+msgid "langEditCurrentExecice"
+msgstr "Уредување на тековната вежба"
+
+msgid "langUploadScorm"
+msgstr "Увоз на SCORM и AICC"
+
+msgid "langPowerPointConvert"
+msgstr "Претворање од PowerPoint"
+
+msgid "langLPCreatedToContinue"
+msgstr "За да продолжите, може да додадете модул, поглавје или чекор на Вашата Патека на учењето од менито лево."
+
+msgid "langLPCreatedAddChapterStep"
+msgstr "Може да додадете модул, поглавје или чекор во Вашата Патека на учењето од менито лево."
+
+msgid "langPrerequisitesAdded"
+msgstr "Биле додадени предуслови за тековниот чекор."
+
+msgid "langAddEditPrerequisites"
+msgstr "Додај/уредувај предуслови"
+
+msgid "langMinimum"
+msgstr "минимум"
+
+msgid "langMaximum"
+msgstr "максимум"
+
+msgid "langNoDocuments"
+msgstr "Нема документи"
+
+msgid "langNoExercisesAvailable"
+msgstr "Нема достапни вежби"
+
+msgid "langNoLinksAvailable"
+msgstr "Нема достапни врски"
+
+msgid "langNoItemsInLp"
+msgstr "Во моментов нема елементи во Патеката на учењето. Кликнете на \"Гради\" за креирање елементи на Вашата Патека на учењето."
+
+msgid "FirstPosition"
+msgstr "Прва позиција"
+
+msgid "NewQuiz"
+msgstr "Нов квиз"
+
+msgid "CreateTheForum"
+msgstr "Додај го форумот"
+
+msgid "AddLpIntro"
+msgstr "<strong>Добредојдовте</strong> во алатката за правење на Патека на учењето на Chamilo. <br />Ќе можете да ја креирате Вашата Патека на учењето чекор по чекор. Структурата на Вашата Патека на учењето ќе се појави на менито лево."
+
+msgid "AddLpToStart"
+msgstr "За почеток, дајте и\' наслов на Вашата Патека на учењето"
+
+msgid "CreateTheLink"
+msgstr "Увези врска"
+
+msgid "MoveCurrentLink"
+msgstr "Премести ја тековната врска"
+
+msgid "EditCurrentLink"
+msgstr "Уреди ја тековната врска"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "MoveCurrentStudentPublication"
+msgstr "Премести ја тековната публикација на курсистот"
+
+msgid "EditCurrentStudentPublication"
+msgstr "Уреди ја тековната публикација на курсистот"
+
+msgid "AllowMultipleAttempts"
+msgstr "Допушти повеќе обиди"
+
+msgid "PreventMultipleAttempts"
+msgstr "Спречи повеќе обиди"
+
+msgid "MakeScormRecordingExtra"
+msgstr "Направи екстра SCORM снимања"
+
+msgid "MakeScormRecordingNormal"
+msgstr "Направи обични SCORM снимања"
+
+msgid "DocumentHasBeenDeleted"
+msgstr "Документот не може да се прикаже, бидејќи беше избришан"
+
+msgid "EditCurrentForum"
+msgstr "Вчитај го тековниот форум"
+
+msgid "NoPrerequisites"
+msgstr "Без предуслови"
+
+msgid "NewExercise"
+msgstr "Нов тест"
+

@@ -1,0 +1,477 @@
+msgid "WikiSearchResults"
+msgstr "Wiki zoekresultaten"
+
+msgid "Wiki"
+msgstr "Groepswiki"
+
+msgid "StartPage"
+msgstr "Startpagina"
+
+msgid "EditThisPage"
+msgstr "Deze pagina wijzigen"
+
+msgid "ShowPageHistory"
+msgstr "Geschiedenis"
+
+msgid "RecentChanges"
+msgstr "Recenten aanpassingen"
+
+msgid "AllPages"
+msgstr "Alle paginas"
+
+msgid "AddNew"
+msgstr "Nieuwe pagina toevoegen"
+
+msgid "ChangesStored"
+msgstr "Uw wijzigingen zijn opgeslagen."
+
+msgid "NewWikiSaved"
+msgstr "De nieuwe wiki startpagina is bewaard. U kunt het bekijken op:"
+
+msgid "DefaultContent"
+msgstr " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Om te beginnen wijzig deze pagina</p>"
+
+msgid "CourseWikiPages"
+msgstr "Wiki paginas van de cursus"
+
+msgid "GroupWikiPages"
+msgstr "Wiki paginas van de groep"
+
+msgid "NoWikiPageTitle"
+msgstr "Uw wijzigingen werde bewaard. U dient nog een titel te geven aan de pagina"
+
+msgid "WikiPageTitleExist"
+msgstr "Deze paginatitel bestaad reeds, om de inhoud te wijzigen klik hier:"
+
+msgid "WikiDiffAddedLine"
+msgstr "De lijn werd toegevoegd"
+
+msgid "WikiDiffDeletedLine"
+msgstr "De lijn werd verwijderd"
+
+msgid "WikiDiffMovedLine"
+msgstr "De lijn werd verplaatst"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "Lijn zonder wijzigingen"
+
+msgid "DifferencesNew"
+msgstr "wijzigingen in versie"
+
+msgid "DifferencesOld"
+msgstr "oude versie van"
+
+msgid "Differences"
+msgstr "Verschillen"
+
+msgid "MostRecentVersion"
+msgstr "Laatst geselecteerde versie"
+
+msgid "Legend"
+msgstr "Legenda"
+
+msgid "ShowDifferences"
+msgstr "Vergelijk geselecteerde versies"
+
+msgid "SearchPages"
+msgstr "zoek paginas"
+
+msgid "Discuss"
+msgstr "Becommentarieer"
+
+msgid "History"
+msgstr "Vorige versies"
+
+msgid "ShowThisPage"
+msgstr "Bekijk deze pagina"
+
+msgid "DeleteThisPage"
+msgstr "Verwijder deze pagina"
+
+msgid "DiscussThisPage"
+msgstr "Geef commentaar op deze pagina"
+
+msgid "HomeWiki"
+msgstr "Wiki startpagina"
+
+msgid "DeleteWiki"
+msgstr "Verwijder alle inhoud van de wiki"
+
+msgid "WikiDeleted"
+msgstr "Uw wiki is verwijderd."
+
+msgid "WikiPageDeleted"
+msgstr "De wiki pagina en de vorige versies zijn verwijderd."
+
+msgid "NumLine"
+msgstr "aantal lijnen"
+
+msgid "DeletePageHistory"
+msgstr "Verwijdere deze pagina en alle vorige versies"
+
+msgid "OnlyAdminDeleteWiki"
+msgstr "Enkel cursusbeheerders kunnen een volledige wiki verwijderen"
+
+msgid "OnlyAdminDeletePageWiki"
+msgstr "Enkel cursusbeheerders kunnen een wiki pagina verwijderen"
+
+msgid "OnlyAddPagesGroupMembers"
+msgstr "Enkel cursusbeheerders en leden van deze groep kunnen paginas toevoegen aan deze groepswiki"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "Enkel cursusbeheerders en leden van deze groep kunnen de paginas van deze groepswiki wijzigen."
+
+msgid "ConfirmDeleteWiki"
+msgstr "Bent u zeker dat u deze wiki wenst te verwijderen?"
+
+msgid "ConfirmDeletePage"
+msgstr "Bent u zeker dat u deze pagina wenst te verwijderen inclusief de vorige versies"
+
+msgid "AlsoSearchContent"
+msgstr "Zoek ook in de inhoud"
+
+msgid "PageLocked"
+msgstr "De pagina is beschermd"
+
+msgid "PageUnlocked"
+msgstr "De pagina is niet beschermd"
+
+msgid "PageLockedExtra"
+msgstr "Deze pagina is beschermd. Enkel cursusbeheerders kunnen deze pagina wijzigen."
+
+msgid "PageUnlockedExtra"
+msgstr "Deze pagina in niet beschermd. Alle cursusisten en groepsleden kunnen deze pagina wijzigen"
+
+msgid "ShowAddOption"
+msgstr "Functionaliteit om toe te voegen weergeven"
+
+msgid "HideAddOption"
+msgstr "Functionaliteit om toe te voegen verbergen"
+
+msgid "AddOptionProtected"
+msgstr "Functionaliteit om toe te voegen is beschermd. Enkel de cursusbeheerder kan paginas toevoegen aan deze wiki. Cursisten en groepsleden kunnen deze enkel wijzigen"
+
+msgid "AddOptionUnprotected"
+msgstr "De functionaliteit om toe te voegen is afgezet voor alle cursusgebruikers en groupsleden"
+
+msgid "NotifyChanges"
+msgstr "Breng me op de hoogte van wijzigingen"
+
+msgid "NotNotifyChanges"
+msgstr "Breng me niet op de hoogte van wijzigingen"
+
+msgid "NotifyByEmail"
+msgstr "Hou me via e-mail op de hoogte als iemand antwoordt"
+
+msgid "CancelNotifyByEmail"
+msgstr "Breng me niet op de hoogte als deze pagina gewijzigd wordt"
+
+msgid "MostRecentVersionBy"
+msgstr "De meest recente versie werd gewijzigd door"
+
+msgid "Rating"
+msgstr "Score"
+
+msgid "RatingMedia"
+msgstr "De gemiddelde score van deze pagina is"
+
+msgid "NumComments"
+msgstr "Commentaar op deze pagina"
+
+msgid "NumCommentsScore"
+msgstr "Aantal commentaren op deze pagina"
+
+msgid "AddPagesLocked"
+msgstr "De toevoegfunctionaliteit is tijdelijk uitgeschakeld door de cursusbeheerder"
+
+msgid "LinksPages"
+msgstr "Referenties"
+
+msgid "ShowLinksPages"
+msgstr "Geef de paginas weer die naar deze pagina linken"
+
+msgid "MoreWikiOptions"
+msgstr "Meer wiki opties"
+
+msgid "DefaultTitle"
+msgstr "Start"
+
+msgid "DiscussNotAvailable"
+msgstr "Discussie is niet beschikbaar"
+
+msgid "Print"
+msgstr "Afdrukken"
+
+msgid "Version"
+msgstr "Versie"
+
+msgid "EditPage"
+msgstr "Pas aan"
+
+msgid "AddedBy"
+msgstr "toegevoegd door"
+
+msgid "EditedBy"
+msgstr "aangepast door"
+
+msgid "DeletedBy"
+msgstr "gewist door"
+
+msgid "WikiStandardMode"
+msgstr "Wiki mode"
+
+msgid "GroupTutorAndMember"
+msgstr "Coach en groepslid"
+
+msgid "GroupTutor"
+msgstr "Leraar van de groep"
+
+msgid "GroupStandardMember"
+msgstr "Groepslid"
+
+msgid "AssignmentMode"
+msgstr "Individuele opdracht modus"
+
+msgid "ConfigDefault"
+msgstr "Standaard configuratie"
+
+msgid "UnlockPage"
+msgstr "Ontgrendelen"
+
+msgid "LockPage"
+msgstr "Vergrendelen"
+
+msgid "NotifyDiscussChanges"
+msgstr "Notificatie van discussie"
+
+msgid "NotNotifyDiscussChanges"
+msgstr "Geen reacties melden"
+
+msgid "AssignmentWork"
+msgstr "Studenten papier"
+
+msgid "AssignmentDesc"
+msgstr "Opdracht voorgesteld door de cursist"
+
+msgid "WikiDiffAddedTex"
+msgstr "Tekst toegevoegd"
+
+msgid "WikiDiffDeletedTex"
+msgstr "Tekst verwijderd"
+
+msgid "WordsDiff"
+msgstr "woord per woord"
+
+msgid "LinesDiff"
+msgstr "lijn per lijn"
+
+msgid "MustSelectPage"
+msgstr "U dient eerst een pagina te kiezen"
+
+msgid "Export2ZIP"
+msgstr "Exporteer naar een ZIP bestand"
+
+msgid "HidePage"
+msgstr "Verberg pagina"
+
+msgid "ShowPage"
+msgstr "Toon pagina"
+
+msgid "GoAndEditMainPage"
+msgstr "Om de Wiki te starten, editeer de Main page"
+
+msgid "UnlockDiscuss"
+msgstr "Discussie ontgrendelen"
+
+msgid "LockDiscuss"
+msgstr "Discussie vergrendelen"
+
+msgid "HideDiscuss"
+msgstr "Discussie verbergen"
+
+msgid "ShowDiscuss"
+msgstr "Discussie weergeven"
+
+msgid "UnlockRatingDiscuss"
+msgstr "Score activeren"
+
+msgid "LockRatingDiscuss"
+msgstr "Score desactiveren"
+
+msgid "EditAssignmentWarning"
+msgstr "U kan deze pagina wijzigen, maar de pagina\'s van de studenten zullen niet gewijzigd worden"
+
+msgid "ExportToDocArea"
+msgstr "Exporteer de laatste versie van deze pagina naar Documenten"
+
+msgid "LockByTeacher"
+msgstr "Uitgezet door de trainer"
+
+msgid "LinksPagesFrom"
+msgstr "Pagina\'s die verwijzen naar deze pagina"
+
+msgid "DefineAssignmentPage"
+msgstr "Definieer deze pagina als een individuele opdracht"
+
+msgid "AssignmentDescription"
+msgstr "Omschrijving opdracht"
+
+msgid "UnlockRatingDiscussExtra"
+msgstr "Nu kunnen alle leden deze pagina beoordelen"
+
+msgid "LockRatingDiscussExtra"
+msgstr "Nu kunnen enkel trainers deze pagina beoordelen"
+
+msgid "HidePageExtra"
+msgstr "Nu is de pagina enkel zichtbaar voor de trainer"
+
+msgid "ShowPageExtra"
+msgstr "Nu is de pagina zichtbaar voor alle gebruikers"
+
+msgid "OnlyEditPagesCourseManager"
+msgstr "De hoofdpagina kan enkel gewijzigd worden door de leerkracht"
+
+msgid "AssignmentLinktoTeacherPage"
+msgstr "Toegang tot de pagina van de trainer"
+
+msgid "HideDiscussExtra"
+msgstr "Discussies zijn nu enkel zichtbaar voor de trainers"
+
+msgid "ShowDiscussExtra"
+msgstr "Nu is de discussie zichtbaar voor alle gebruikers"
+
+msgid "LockDiscussExtra"
+msgstr "Nu kunnen alleen trainers commentaar toevoegen aan deze discussie"
+
+msgid "UnlockDiscussExtra"
+msgstr "Nu kunnen alle leden commentaar toevoegen aan deze discussie"
+
+msgid "AssignmentDescExtra"
+msgstr "Deze pagina is een opdracht van een trainer"
+
+msgid "AssignmentWorkExtra"
+msgstr "Deze pagina is het werk van een cursist"
+
+msgid "NoAreSeeingTheLastVersion"
+msgstr "Waarschuwing: u ziet niet de laatste versie van deze pagina"
+
+msgid "AllowLaterSends"
+msgstr "Maak het sturen met vertraging mogelijk"
+
+msgid "WikiStandBy"
+msgstr "Deze Wiki is bevroren. Aan trainer moet het starten."
+
+msgid "EmailWikiChanges"
+msgstr "Hou me op de hoogte van wijzigingen in de wiki"
+
+msgid "EmailWikipageModified"
+msgstr "De wiki pagina is gewijzigd."
+
+msgid "EmailWikiPageAdded"
+msgstr "De pagina is toegevoegd."
+
+msgid "EmailWikipageDedeleted"
+msgstr "Een pagina werd verwijderd uit de Wiki"
+
+msgid "EmailWikiChangesExt_2"
+msgstr "Als u niet meer op de hoogte gehouden wenst te worden van de wijzigingen in deze wiki kiest u de tabs <strong>Recente wijzigingen</strong>, <strong>Huidige pagina</strong>, <strong>Discussie</strong> en klikt u op de knop."
+
+msgid "Visits"
+msgstr "bezoeken"
+
+msgid "OrphanedPages"
+msgstr "Weespaginas"
+
+msgid "WantedPages"
+msgstr "Gevraagde paginas"
+
+msgid "MostVisitedPages"
+msgstr "Meest bezochte paginas"
+
+msgid "MostChangedPages"
+msgstr "Meest gewijzigde paginas"
+
+msgid "Changes"
+msgstr "Veranderingen"
+
+msgid "MostActiveUsers"
+msgstr "Meest actieve gebruikers"
+
+msgid "Contributions"
+msgstr "Bijdragen"
+
+msgid "UserContributions"
+msgstr "Bijdragen van gebruikers"
+
+msgid "WarningDeleteMainPage"
+msgstr "Het verwijderen van de startpagina van een Wiki is niet aan te raden omdat het de toegangspagina is voor de wiki. <br />Als u om een of andere reden dit toch dient te doen, dan mag u niet vergeten om deze startpagina opnieuw aan te maken. Tot u dit doet zult u geen nieuwe pagina\'s kunnen toevoegen"
+
+msgid "ConvertToLastVersion"
+msgstr "Om deze versie als de meest recente in te stellen kunt u klikken op"
+
+msgid "Restore"
+msgstr "Herstellen"
+
+msgid "CurrentVersion"
+msgstr "Huidige versie"
+
+msgid "LastVersion"
+msgstr "Laatste versie"
+
+msgid "PageRestored"
+msgstr "De pagina is hersteld. U kunt deze bekijken door te klikken op"
+
+msgid "RestoredFromVersion"
+msgstr "Hersteld van versie"
+
+msgid "HWiki"
+msgstr "Help: wiki"
+
+msgid "FirstSelectOnepage"
+msgstr "Selecteer eerst een pagina"
+
+msgid "ThisPageisBeginEditedBy"
+msgstr "Op dit moment wordt deze pagina bewerkt door"
+
+msgid "TheDeadlineHasBeenCompleted"
+msgstr "U hebt de deadline bereikt"
+
+msgid "HasReachedMaxNumWords"
+msgstr "U hebt het maximum aantal toegestane woorden bereikt"
+
+msgid "HasReachedMaxiNumVersions"
+msgstr "U hebt het maximum aantal toegestane versies bereikt"
+
+msgid "DescriptionOfTheTask"
+msgstr "Beschrijving van de opdracht"
+
+msgid "OtherSettings"
+msgstr "Andere eisen"
+
+msgid "NMaxWords"
+msgstr "Maximum aantal woorden"
+
+msgid "NMaxVersion"
+msgstr "Maximum aantal versies"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "AddFeedback"
+msgstr "Voeg begeleidende berichten toe die betrekking hebben op de vooruitgang in de pagina"
+
+msgid "Feedback1"
+msgstr "Eerste bericht"
+
+msgid "Feedback2"
+msgstr "Tweede bericht"
+
+msgid "Feedback3"
+msgstr "Derde bericht"
+
+msgid "FProgress"
+msgstr "Vooruitgang"
+
+msgid "PutATimeLimit"
+msgstr "Stel een tijdslimiet in"
+

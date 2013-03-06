@@ -1,0 +1,168 @@
+msgid "langScormVersion"
+msgstr "version"
+
+msgid "langScormRestarted"
+msgstr "All the learning objects are now incomplete."
+
+msgid "langScormNoNext"
+msgstr "This is the latest learning object."
+
+msgid "langScormNoPrev"
+msgstr "This is the first learning object."
+
+msgid "langScormTime"
+msgstr "Time"
+
+msgid "langScormNoOrder"
+msgstr "There is no given order, you can click on any learning object."
+
+msgid "langScormScore"
+msgstr "Score"
+
+msgid "langScormLessonTitle"
+msgstr "Learning object name"
+
+msgid "langScormStatus"
+msgstr "Status"
+
+msgid "langScormToEnter"
+msgstr "To enter"
+
+msgid "langScormFirstNeedTo"
+msgstr "you need first to accomplish"
+
+msgid "langScormThisStatus"
+msgstr "This learning object is now"
+
+msgid "langScormClose"
+msgstr "Terminate"
+
+msgid "langScormRestart"
+msgstr "Restart"
+
+msgid "langScormCompstatus"
+msgstr "Completed"
+
+msgid "langScormIncomplete"
+msgstr "Incomplete"
+
+msgid "langScormPassed"
+msgstr "Passed"
+
+msgid "langScormFailed"
+msgstr "Failed"
+
+msgid "langScormPrevious"
+msgstr "Previous"
+
+msgid "langScormNext"
+msgstr "Next"
+
+msgid "langScormTitle"
+msgstr "Chamilo Scorm player"
+
+msgid "langScormMystatus"
+msgstr "My progress"
+
+msgid "langScormNoItems"
+msgstr "This course is empty."
+
+msgid "langScormNoStatus"
+msgstr "No status for this content"
+
+msgid "langScormLoggedout"
+msgstr "logged out from Scorm area"
+
+msgid "langScormCloseWindow"
+msgstr "Close windows"
+
+msgid "ScormBrowsed"
+msgstr "Browsed"
+
+msgid "langScormExitFullScreen"
+msgstr "Back to normal screen"
+
+msgid "langScormFullScreen"
+msgstr "Full screen"
+
+msgid "langScormNotAttempted"
+msgstr "Not attempted"
+
+msgid "langCharset"
+msgstr "Character set"
+
+msgid "langLocal"
+msgstr "Local"
+
+msgid "langRemote"
+msgstr "Remote"
+
+msgid "langAutodetect"
+msgstr "Auto-detect"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Total of completed learning objects"
+
+msgid "langUnknown"
+msgstr "Unknown"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "Are you sure you want to delete these steps?"
+
+msgid "Origin"
+msgstr "Authoring tool"
+
+msgid "Local"
+msgstr "Local"
+
+msgid "Remote"
+msgstr "Remote"
+
+msgid "FileToUpload"
+msgstr "SCORM or AICC file to upload"
+
+msgid "ContentMaker"
+msgstr "Authoring tool"
+
+msgid "ContentProximity"
+msgstr "Course location"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "Upload local file from main/archive directory"
+
+msgid "ThisItemIsNotExportable"
+msgstr "This learning object or activity is not SCORM compliant. That\'s why it is not exportable."
+
+msgid "MoveCurrentChapter"
+msgstr "Move the current section"
+
+msgid "GenericScorm"
+msgstr "Generic Scorm"
+
+msgid "UnknownPackageFormat"
+msgstr "The format of this package could not be recognized. Please check this is a valid package."
+
+msgid "Attempt"
+msgstr "Attempt"
+
+msgid "MoveTheCurrentForum"
+msgstr "Move the current forum"
+
+msgid "WarningWhenEditingScorm"
+msgstr "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+
+msgid "AdditionalProfileField"
+msgstr "Add user profile field"
+
+msgid "ScormUnknownPackageFormat"
+msgstr "The package you are trying to upload has an unknown format. Please check it uses one of the supported formats."
+
+msgid "ScormNotEnoughSpaceInCourseToInstallPackage"
+msgstr "There is not enough space left in this course to uncompress the current package."
+
+msgid "ScormPackageFormatNotScorm"
+msgstr "The package you are uploading doesn\'t seem to be in SCORM format. Please check that the imsmanifest.xml is inside the ZIP file you are trying to upload."
+
+msgid "HideTocFrame"
+msgstr "Hide table of contents frame"
+

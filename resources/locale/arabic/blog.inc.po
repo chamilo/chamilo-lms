@@ -1,0 +1,240 @@
+msgid "MyTasks"
+msgstr "مهامي"
+
+msgid "FavoriteBlogs"
+msgstr "المدونات المفضلة"
+
+msgid "Navigation"
+msgstr "التصفح"
+
+msgid "TopTen"
+msgstr "أفضل عشر مدونات"
+
+msgid "Subtitle"
+msgstr "العنوان الفرعي"
+
+msgid "ThisBlog"
+msgstr "المدونة"
+
+msgid "NewPost"
+msgstr "مقال جديد"
+
+msgid "TaskManager"
+msgstr "إدارة المهام"
+
+msgid "MemberManager"
+msgstr "إدارة المستخدمين"
+
+msgid "PostFullText"
+msgstr "نص"
+
+msgid "ReadPost"
+msgstr "اقرأ هذه المشاركة"
+
+msgid "Home"
+msgstr "البداية"
+
+msgid "FirstPostText"
+msgstr "هذا أول مقال في المدونة. الأن أي مسجل في المدونة بإمكانه المشاركة"
+
+msgid "AddNewComment"
+msgstr "اضف تعليق جديد"
+
+msgid "ReplyToThisComment"
+msgstr "الرد على هذا التعليق"
+
+msgid "ManageTasks"
+msgstr "إدارة المهام"
+
+msgid "ManageMembers"
+msgstr "تسجيل / إلغاء تسجيل المستخدم في هذه المدونة"
+
+msgid "Register"
+msgstr "التسجيل في هذه المدونة"
+
+msgid "UnRegister"
+msgstr "إلغاء التسجيل من هذه المدونة"
+
+msgid "SubscribeMembers"
+msgstr "تسجيل مستخدمين"
+
+msgid "UnsubscribeMembers"
+msgstr "إلغاء تسجيل مستخدمين"
+
+msgid "RightsManager"
+msgstr "إدارة حقوق المستخدمين"
+
+msgid "ManageRights"
+msgstr "إدارة أدوار وحقوق المستخدمين في هذه المدونة"
+
+msgid "Task"
+msgstr "المهمة"
+
+msgid "Tasks"
+msgstr "المهام"
+
+msgid "Member"
+msgstr "العضو"
+
+msgid "Members"
+msgstr "الأعضاء"
+
+msgid "Role"
+msgstr "الدور"
+
+msgid "Rate"
+msgstr "تقييم"
+
+msgid "Roles"
+msgstr "الأدوار"
+
+msgid "AddTask"
+msgstr "اضف مهمة جديدة"
+
+msgid "AddTasks"
+msgstr "أضف مهمة جديدة"
+
+msgid "AssignTask"
+msgstr "إسناد مهمة"
+
+msgid "AssignTasks"
+msgstr "إسناد مهام"
+
+msgid "EditTask"
+msgstr "تعديل هذه المهمة"
+
+msgid "DeleteTask"
+msgstr "حذف هذه المهمة"
+
+msgid "DeleteSystemTask"
+msgstr "This is a preset task. You can\'t delete a preset task."
+
+msgid "SelectUser"
+msgstr "المستخدم"
+
+msgid "SelectTask"
+msgstr "المهمة"
+
+msgid "SelectTargetDate"
+msgstr "التاريخ"
+
+msgid "TargetDate"
+msgstr "التاريخ"
+
+msgid "Color"
+msgstr "اللون"
+
+msgid "TaskList"
+msgstr "مهام في هذه المدونة"
+
+msgid "AssignedTasks"
+msgstr "المهام المسندة"
+
+msgid "ArticleManager"
+msgstr "إدارة المقالات"
+
+msgid "CommentManager"
+msgstr "إدارة التعليقات"
+
+msgid "BlogManager"
+msgstr "إدارة المدونة"
+
+msgid "ReadMore"
+msgstr "اقرأ المزيد..."
+
+msgid "DeleteThisArticle"
+msgstr "حذف هذا المقال"
+
+msgid "EditThisPost"
+msgstr "تعديل هذه المشاركة"
+
+msgid "DeleteThisComment"
+msgstr "حذف هذا التعليق"
+
+msgid "NoArticles"
+msgstr "لا يوجد أي مقال في المدونة حاليا. إذا كنت كاتبا في هذه المدونة, انقر على الرابط \'مقال جديد\'  لكتابة مقال جديد"
+
+msgid "NoTasks"
+msgstr "لا مهام"
+
+msgid "Rating"
+msgstr "التقييم"
+
+msgid "RateThis"
+msgstr "قم بتقييم هذا المقال"
+
+msgid "SelectTaskArticle"
+msgstr "اختر مقالا لهذه المهمة"
+
+msgid "ExecuteThisTask"
+msgstr "تنفيذ هذه المهمة"
+
+msgid "WrittenBy"
+msgstr "كتب بواسطة"
+
+msgid "InBlog"
+msgstr "في المدونة"
+
+msgid "ViewPostsOfThisDay"
+msgstr "عرض المشاركات لهذا اليوم"
+
+msgid "PostsOf"
+msgstr "مشاركات ل"
+
+msgid "NoArticleMatches"
+msgstr "لم يتم العثور على نتائج. تأكد من تهجئة الكلمة أو حاول بحثا آخر"
+
+msgid "langTask1"
+msgstr "المهمة 1"
+
+msgid "langTask2"
+msgstr "المهمة 2"
+
+msgid "langTask3"
+msgstr "المهمة 3"
+
+msgid "langTask1Desc"
+msgstr "وصف المهمة 1"
+
+msgid "langTask2Desc"
+msgstr "وصف المهمة 2"
+
+msgid "langTask3Desc"
+msgstr "وصف المهمة 3"
+
+msgid "blog_management"
+msgstr "إدارة المدونة"
+
+msgid "langWelcome"
+msgstr "مرحبا !"
+
+msgid "langModule"
+msgstr "وحدة"
+
+msgid "langUserHasPermissionNot"
+msgstr "ليس للمستخدم الحقوق التالية"
+
+msgid "langUserHasPermission"
+msgstr "للمستخدم الحقوق التالية"
+
+msgid "langLegend"
+msgstr "Legend"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "للمستخدم حقوق مجموعته"
+
+msgid "EditPost"
+msgstr "تحرير مقال"
+
+msgid "AddBlog"
+msgstr "إنشئ مدونة جديدة"
+
+msgid "EditBlog"
+msgstr "تعديل العنوان والعنوان الفرعي"
+
+msgid "DeleteBlog"
+msgstr "حذف هذه المدونة"
+
+msgid "Shared"
+msgstr "مشترك"
+

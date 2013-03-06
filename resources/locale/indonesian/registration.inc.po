@@ -1,0 +1,382 @@
+msgid "langShouldBeCSVFormat"
+msgstr "File haru dalam format CSV. Jangan tambah spasi. Struk harus seperti ini:"
+
+msgid "langTracking"
+msgstr "Tracking"
+
+msgid "langEnter2passToChange"
+msgstr "Masukkan password dua kali untuk merubahnya.  Jika tidak ingin merubah, biarkan kosong."
+
+msgid "langAuthInfo"
+msgstr "Autentikasi"
+
+msgid "langUpdateImage"
+msgstr "Ubah foto"
+
+msgid "langImageWrong"
+msgstr "Ukuran file harus lebih kecil dari"
+
+msgid "langAddImage"
+msgstr "Foto"
+
+msgid "langCourseManager"
+msgstr "Penanggung jawab mata kuliah"
+
+msgid "password_request"
+msgstr "Anda mengajukan me-reset password. Jika anda merasa tidak memohon, abaikan sja email ini.  Untuk mereset password klik pada link reset."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Password telah dikirimkan ke email anda."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Masukkan alamat e-mail yang anda gunakan untuk mendaftar dan kami akan mengirimkan  password anda."
+
+msgid "langLogin"
+msgstr "Log In"
+
+msgid "langAction"
+msgstr "Action"
+
+msgid "langPreserved"
+msgstr "Dipertahankan"
+
+msgid "langDeleted"
+msgstr "Dihapus"
+
+msgid "langAdded"
+msgstr "Ditambahkan"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Konfirmasi pengunduran diri user"
+
+msgid "langCourseName"
+msgstr "Nama - mata kuliah"
+
+msgid "langSubscribe"
+msgstr "Daftar"
+
+msgid "langSee"
+msgstr "Lihat ke"
+
+msgid "langLastVisits"
+msgstr "Kunjungan saya yang terakhir"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Jika anda ingin menambah sebuah daftar user kedalam mata kuliah anda, silahkan hubungii administrator web."
+
+msgid "langPassTooEasy"
+msgstr "password tsb terlalu sederhana. Gunakan yang seperti ini"
+
+msgid "langGroupUserManagement"
+msgstr "Manajemen Group"
+
+msgid "langAddedToCourse"
+msgstr "telah terdaftar dalam mata kuliah anda"
+
+msgid "langUserAlreadyRegistered"
+msgstr "User dengan Nama Depan/Nama Belakang yang sama telah terdaftar lebih dulu pada mata kuliah ini."
+
+msgid "langBackUser"
+msgstr "Kembali ke daftar user"
+
+msgid "langUserOneByOneExplanation"
+msgstr "Dia akan menerima email konfirmasi berisi nama login and password"
+
+msgid "langGiveTutor"
+msgstr "Jadikan tutor"
+
+msgid "langRemoveRight"
+msgstr "Hapus hak ini"
+
+msgid "langGiveAdmin"
+msgstr "Jadian admin"
+
+msgid "langUserNumber"
+msgstr "jumlah"
+
+msgid "langDownloadUserList"
+msgstr "Upload daftar"
+
+msgid "langSend"
+msgstr "Kirim"
+
+msgid "langUserAddExplanation"
+msgstr "setiap baris file yang akan dikirim musti berisi 5 field: <b>Nama Belakang    Nama  Depan   		Nama Login   Password 		  Email</b> dipisahkan oleh tab dan dalam urutan tsb.		User akan menerima email konfirmasi berisi nama login/password."
+
+msgid "langUserMany"
+msgstr "Import daftar user melalui file teks"
+
+msgid "langOneByOne"
+msgstr "Tambah user secara manual"
+
+msgid "langNow"
+msgstr "sekarang"
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langTitular"
+msgstr "Pemilik"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>Ubah daftar mata kuliah</big><br><br>Periksa mata kuliah-mata kuliah yang akan diikuti.<br>Hilangkan tanda conteng pada mata kuliah yang tidak ingin diikuti lagi.<br> Kemudian klik Ok pada bagian bawah daftar"
+
+msgid "langStudent"
+msgstr "Siswa"
+
+msgid "langImportUserList"
+msgstr "Import daftar user"
+
+msgid "langAddAU"
+msgstr "Tambah user"
+
+msgid "langAddedU"
+msgstr "telah ditambahkan. Email telah dikirim untuk memberikan nama user"
+
+msgid "langTheU"
+msgstr "User tsb"
+
+msgid "langRegYou"
+msgstr "telah mendaftarkan anda pada mata kuliah ini"
+
+msgid "langOneResp"
+msgstr "Satu dari administrator mata kuliah"
+
+msgid "langTaken"
+msgstr "sudah terpakai. Pilih yang lain."
+
+msgid "langUserNo"
+msgstr "Nama user yang anda pilih"
+
+msgid "langFilled"
+msgstr "Anda belum mengisi semua field."
+
+msgid "langInC"
+msgstr "pada mata kuliah ini"
+
+msgid "langRole"
+msgstr "Peran"
+
+msgid "UserPicture"
+msgstr "Foto"
+
+msgid "langProfileReg"
+msgstr "Profil baru anda telah disimpan"
+
+msgid "langEmailWrong"
+msgstr "Alamat email tsb tidak lengkap atau berisi karakter yang tidak sah"
+
+msgid "langUserTaken"
+msgstr "Nama user ini sudah terpakai"
+
+msgid "langFields"
+msgstr "Anda belum mengisi semua field"
+
+msgid "langAgain"
+msgstr "Coba lagi!"
+
+msgid "langPassTwo"
+msgstr "Anda mengetik dua password berbeda"
+
+msgid "langViewProfile"
+msgstr "Viem e-portfolio -ku"
+
+msgid "langModifProfile"
+msgstr "Edit Profil"
+
+msgid "langIsReg"
+msgstr "Perubahan anda telah didaftar"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Anda kini dapat membuat situs mata kuliah anda"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Anda kini dapat memilih mata kuliah dari daftar untuk diakses."
+
+msgid "langMailHasBeenSent"
+msgstr "Email telah dikirim untuk membantu anda mengingat nama user dan password anda"
+
+msgid "langPersonalSettings"
+msgstr "Setting personal anda telah terdaftar dan email telah dikirim untuk membantu anda mengingat nama user dan password anda.</p>"
+
+msgid "langManager"
+msgstr "Pengelola"
+
+msgid "langFormula"
+msgstr "Dengan hormat, Pengajar anda"
+
+msgid "langProblem"
+msgstr "Jika ada masalah, hubungi kami."
+
+msgid "langIs"
+msgstr "adalah"
+
+msgid "langAddress"
+msgstr "Alamat dari"
+
+msgid "langSettings"
+msgstr "dengan setting berikut:
+Nama user:"
+
+msgid "langYouAreReg"
+msgstr "Anda terdaftar pada"
+
+msgid "langYourReg"
+msgstr "Pendaftaran anda pada"
+
+msgid "langUserFree"
+msgstr "Nama user ini telah terpakai. Gunakan tombol BACK di browser dan pilih nama lain."
+
+msgid "langEmptyFields"
+msgstr "Anda belum mengisi semua field. Gunakan tombol BACK di browser dan coba lagi."
+
+msgid "langPassTwice"
+msgstr "Anda mengetik dua password berbeda. Gunakan tombol BACK di browser dan coba lagi."
+
+msgid "langRegAdmin"
+msgstr "Buat situs mata kuliah"
+
+msgid "langRegStudent"
+msgstr "Ikut mata kuliah"
+
+msgid "langConfirmation"
+msgstr "Konfirmasi"
+
+msgid "langPass"
+msgstr "Password"
+
+msgid "langSurname"
+msgstr "Nama Depan"
+
+msgid "langRegistration"
+msgstr "Pendaftaran"
+
+msgid "langYourAccountParam"
+msgstr "Ini account Login-Password anda"
+
+msgid "langLoginRequest"
+msgstr "Permohonan Login"
+
+msgid "langDefineHeadings"
+msgstr "Definisikan Kolom Tambahan"
+
+msgid "langCourseAdministratorOnly"
+msgstr "hanya untuk pengajar"
+
+msgid "langAdminOfCourse"
+msgstr "admin"
+
+msgid "langSimpleUserOfCourse"
+msgstr "normal"
+
+msgid "langIsTutor"
+msgstr "tutor"
+
+msgid "langParamInTheCourse"
+msgstr "Status"
+
+msgid "langMember"
+msgstr "terdaftar"
+
+msgid "langLock"
+msgstr "kunci"
+
+msgid "langUnlock"
+msgstr "buka kunci"
+
+msgid "langHaveNoCourse"
+msgstr "tidak ada mata kuliah"
+
+msgid "langManage"
+msgstr "Kelola kampus"
+
+msgid "langAdministrationTools"
+msgstr "Tool Administrasi"
+
+msgid "langUserProfileReg"
+msgstr "di-update"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Email tsb tidak terdaftar."
+
+msgid "langCourses4User"
+msgstr "Mata Kuliah-mata kuliah user ini"
+
+msgid "langCoursesByUser"
+msgstr "Mata Kuliah-mata kuliah oleh user"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Daftarkan user ke mata kuliah ini"
+
+msgid "langPreced100"
+msgstr "100 sebelumnya"
+
+msgid "langAddmore"
+msgstr "Tambahkan user yang terdaftar"
+
+msgid "langAddback"
+msgstr "Ke daftar user"
+
+msgid "langreg"
+msgstr "Daftar"
+
+msgid "langQuit"
+msgstr "Keluar"
+
+msgid "your_password_has_been_reset"
+msgstr "Password anda telah di-reset"
+
+msgid "langSex"
+msgstr "Jenis Kelamin"
+
+msgid "langClass"
+msgstr "Klas"
+
+msgid "langEdit"
+msgstr "edit"
+
+msgid "required"
+msgstr "wajib"
+
+msgid "langOptionalTextFields"
+msgstr "Field opsional"
+
+msgid "langMyProductions"
+msgstr "Produksi-ku"
+
+msgid "langFileDeleted"
+msgstr "File telah dihapus."
+
+msgid "FullUserName"
+msgstr "Nama Lengkap"
+
+msgid "SearchForUser"
+msgstr "Cari user"
+
+msgid "SearchButton"
+msgstr "Cari"
+
+msgid "SearchNoResultsFound"
+msgstr "Tidak diketemukan hasil"
+
+msgid "UsernameWrong"
+msgstr "Nama user hanya dapat berisi huruf angka dan _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "Ini adalah permohonan password untuk alamat email"
+
+msgid "CorrespondsToAccount"
+msgstr "Alamat email ini berhubungan dengan user berikut ini."
+
+msgid "CorrespondsToAccounts"
+msgstr "Email berikut ini berhubungan dengan account user berikut."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo tidak dapat menangani permohonan secara automatis karena account tersebut memilikia autorisasi external.  Silahkan gunakan penyelesaian yang cocok dan beritahu user."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo tidak dapat menangani permohonan secara automatis karena setidaknya ada satu account yang berhubungan dengan autorisasi external.  Silahkan lakukan tindakan yang cocok untuk semua account (termasuk juga yang berhubungan dengan autorisasi platform) dan beritahu user."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo tidak dapat menangani permohonan secara automatis untuk account jenis ini.  Permohonan anda telah dikirim ke administrator platform, yang akan menangani masalah ini dan memberi tahu hasilnya."
+

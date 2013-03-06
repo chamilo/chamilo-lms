@@ -1,0 +1,156 @@
+msgid "LinkMoved"
+msgstr "El enlace ha sido movido"
+
+msgid "langLinkName"
+msgstr "Nombre del enlace"
+
+msgid "langLinkAdd"
+msgstr "Añadir un enlace"
+
+msgid "langLinkAdded"
+msgstr "El enlace ha sido añadido."
+
+msgid "langLinkMod"
+msgstr "Modificar enlace"
+
+msgid "langLinkModded"
+msgstr "El enlace ha sido modificado."
+
+msgid "langLinkDel"
+msgstr "Borrar enlace"
+
+msgid "langLinkDeleted"
+msgstr "El enlace ha sido borrado"
+
+msgid "langLinkDelconfirm"
+msgstr "¿ Está seguro de querer borrar este enlace ?"
+
+msgid "langAllLinksDel"
+msgstr " Borrar todos los enlaces de esta categoría"
+
+msgid "langCategoryName"
+msgstr "Nombre de la categoría"
+
+msgid "langCategoryAdd"
+msgstr "Añadir una categoría"
+
+msgid "langCategoryAdded"
+msgstr "La categoría ha sido añadida."
+
+msgid "langCategoryModded"
+msgstr "La categoría se ha modificado"
+
+msgid "langCategoryDel"
+msgstr "Borrar categoría"
+
+msgid "langCategoryDeleted"
+msgstr "Se ha eliminado la categoría y todos sus enlaces."
+
+msgid "langCategoryDelconfirm"
+msgstr "Al eliminar una categoría, también se eliminarán todos los enlaces que contenga. ¿Seguro que quiere eliminar esta categoría y todos sus enlaces?"
+
+msgid "langAllCategoryDel"
+msgstr "Borrar todas las categorías y sus enlaces"
+
+msgid "langGiveURL"
+msgstr "Por favor, ponga la URL"
+
+msgid "langGiveCategoryName"
+msgstr "Por favor, ponga un nombre para la categoría"
+
+msgid "langNoCategory"
+msgstr "General"
+
+msgid "showall"
+msgstr "Expandir todas las categorías"
+
+msgid "shownone"
+msgstr "Contraer todas las categorías"
+
+msgid "langListDeleted"
+msgstr "La lista ha sido completamente borrada"
+
+msgid "langAddLink"
+msgstr "Añadir un enlace"
+
+msgid "langDelList"
+msgstr "Borrar lista"
+
+msgid "langModifyLink"
+msgstr "Modificar un enlace"
+
+msgid "langCsvImport"
+msgstr "Importar CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "El fichero CSV no puede ser importado (¿vacío?, ¿demasiado grande?)"
+
+msgid "langCsvFileNoSeps"
+msgstr "Use , o ; para separar las columnas del archivo CSV a importar"
+
+msgid "langCsvFileNoURL"
+msgstr "Las columnas URL y título son obligatorias en el archivo CSV a importar"
+
+msgid "langCsvFileLine1"
+msgstr "... - línea 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "línea(s) erróneas al importar un enlace (falta la URL o el título)."
+
+msgid "langCsvLinesOld"
+msgstr "enlace/s existente/s actualizados (igual URL y categoría)"
+
+msgid "langCsvLinesNew"
+msgstr "nuevo enlace(s) creado."
+
+msgid "langCsvExplain"
+msgstr "El fichero se debe presentar así: <blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Enlaces importantes;<b>Nombre 1</b>;Descripción 1;<b>http://www.bbb.net/...</b>;;<b>Nombre 2</b>;\"Description 2\";</pre></blockquote>Si la \'URL\' y la \'categoría\' pertenecen a un enlace ya existente, éste será actualizado. En el resto de los casos un nuevo enlace será creado.<br><br>Negrita = obligatorio. El orden de los campos no tiene importancia, mayúsculas y minúsculas están permitidas. Los campos desconocidos serán añadidos a la \'descripción\'. Separadores: comas o puntos y comas. Los valores podrán encontrarse entre comillas, pero no los nombres de columna.Algunas [b]etiquetas HTML[/b] serán importadas en el campo \'descripción\'."
+
+msgid "langLinkUpdated"
+msgstr "El enlace ha sido actualizado"
+
+msgid "langAll_Link_Deleted"
+msgstr "El enlace ha sido borrado"
+
+msgid "langOnHomepage"
+msgstr "¿ Mostrar el enlace en la página principal del curso"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Mostrar este enlace como un icono en la p�gina principal del curso"
+
+msgid "General"
+msgstr "general"
+
+msgid "SearchFeatureDoIndexLink"
+msgstr "¿Indexar título y descripción?"
+
+msgid "langSaveLink"
+msgstr "Guardar el enlace"
+
+msgid "langSaveCategory"
+msgstr "Guardar la categoría"
+
+msgid "BackToLinksOverview"
+msgstr "Regresar a la lista de enlaces"
+
+msgid "AddTargetOfLinkOnHomepage"
+msgstr "Seleccione el modo (target) en que se mostrará el enlace en la página principal del curso"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "LinkOpenSelf"
+msgstr "Misma ventana"
+
+msgid "LinkOpenBlank"
+msgstr "Otra ventana"
+
+msgid "LinkOpenParent"
+msgstr "Ventana padre"
+
+msgid "LinkOpenTop"
+msgstr "Parte superior"
+
+msgid "LinkTarget"
+msgstr "Destino enlace"
+

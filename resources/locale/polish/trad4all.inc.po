@@ -1,0 +1,1527 @@
+msgid "Title"
+msgstr "Tytuł"
+
+msgid "By"
+msgstr "przez"
+
+msgid "UsersOnline"
+msgstr "Użytkownicy online"
+
+msgid "Remove"
+msgstr "usuń"
+
+msgid "langEnter"
+msgstr "Powrót do listy kursów"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Links"
+msgstr "Linki"
+
+msgid "langWorks"
+msgstr "Prace studentów"
+
+msgid "Forums"
+msgstr "Forum"
+
+msgid "langExercices"
+msgstr "Testy"
+
+msgid "langCreateDir"
+msgstr "Utwórz katalog"
+
+msgid "Name"
+msgstr "Nazwa"
+
+msgid "langComment"
+msgstr "Komentarz"
+
+msgid "langVisible"
+msgstr "Pokaż/ukryj"
+
+msgid "langNewDir"
+msgstr "Nazwa nowego katalogu"
+
+msgid "langDirCr"
+msgstr "Katalog utworzony"
+
+msgid "Download"
+msgstr "Pobierz"
+
+msgid "langGroup"
+msgstr "Grupa"
+
+msgid "langEdit"
+msgstr "edytuj"
+
+msgid "langGroupForum"
+msgstr "Forum dyskusyjne"
+
+msgid "Language"
+msgstr "Język"
+
+msgid "LoginName"
+msgstr "Login"
+
+msgid "AutostartMp3"
+msgstr "Odtwarzaj automatycznie pliki dźwiękowe?"
+
+msgid "Assignments"
+msgstr "Przypisania"
+
+msgid "Forum"
+msgstr "Fora"
+
+msgid "langDelImage"
+msgstr "Usuń obrazek"
+
+msgid "langCode"
+msgstr "Kod kursu"
+
+msgid "langUp"
+msgstr "W górę"
+
+msgid "Down"
+msgstr "Na dół"
+
+msgid "Up"
+msgstr "do góry"
+
+msgid "Theme"
+msgstr "Temat"
+
+msgid "TheListIsEmpty"
+msgstr "Ta lista jest pusta"
+
+msgid "langUniqueSelect"
+msgstr "Wielokrotny wybór (jedna odpowiedź poprawna)"
+
+msgid "langCourseCreate"
+msgstr "Utwórz nowy kurs"
+
+msgid "langTodo"
+msgstr "Wolne wnioski"
+
+msgid "UserName"
+msgstr "Nazwa użytkownika"
+
+msgid "lang_show_hide"
+msgstr "Pokaż / Ukryj"
+
+msgid "langCategoryMod"
+msgstr "Modyfikuj kategorię"
+
+msgid "Hide"
+msgstr "Ukryj"
+
+msgid "langDear"
+msgstr "Szanowna/y"
+
+msgid "langArchive"
+msgstr "archiwum"
+
+msgid "langCourseCode"
+msgstr "Kod kursu"
+
+msgid "langNoDescription"
+msgstr "Brak opisu"
+
+msgid "langOfficialCode"
+msgstr "Oficjalny Kod"
+
+msgid "FirstName"
+msgstr "Imię"
+
+msgid "LastName"
+msgstr "Nazwisko"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "langEmail"
+msgstr "E-mail"
+
+msgid "SlideshowConversion"
+msgstr "Konwersja prezentacji"
+
+msgid "UploadFile"
+msgstr "Załaduj plik"
+
+msgid "AvailableFrom"
+msgstr "Dostępny(a) od"
+
+msgid "AvailableTill"
+msgstr "Dostępny(a) do"
+
+msgid "Preview"
+msgstr "Podgląd"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "EmailAddress"
+msgstr "Adres e-mail"
+
+msgid "Organisation"
+msgstr "Organizacja"
+
+msgid "Reporting"
+msgstr "Raporty"
+
+msgid "Code"
+msgstr "Kod"
+
+msgid "Update"
+msgstr "Aktualizuj"
+
+msgid "CurrentCourse"
+msgstr "Aktualny kurs"
+
+msgid "Back"
+msgstr "Wstecz"
+
+msgid "Info"
+msgstr "informacje"
+
+msgid "Search"
+msgstr "Wyszukiwanie"
+
+msgid "AdvancedSearch"
+msgstr "Zaawansowane wyszukiwanie"
+
+msgid "Open"
+msgstr "Otwórz"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "AddAnother"
+msgstr "Dodaj kolejny"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "TrueFalse"
+msgstr "Prawda / Fałsz"
+
+msgid "NoSearchResults"
+msgstr "Brak wyników poszukiwania"
+
+msgid "SelectQuestion"
+msgstr "Wybierz pytanie"
+
+msgid "AddNewQuestionType"
+msgstr "Dodaj nowy typ pytania"
+
+msgid "Numbered"
+msgstr "Ponumerowany"
+
+msgid "iso639_2_code"
+msgstr "pol"
+
+msgid "iso639_1_code"
+msgstr "pl"
+
+msgid "charset"
+msgstr "iso-8859-2"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr ","
+
+msgid "number_decimal_separator"
+msgstr ","
+
+msgid "dateFormatShort"
+msgstr "%d %b %y"
+
+msgid "dateFormatLong"
+msgstr "%A, %d %B %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%d %B %Y at %H:%M"
+
+msgid "timeNoSecFormat"
+msgstr "%H:%M"
+
+msgid "langYes"
+msgstr "tak"
+
+msgid "langNo"
+msgstr "Nie"
+
+msgid "Next"
+msgstr "Dalej"
+
+msgid "langAllowed"
+msgstr "Dozwolone"
+
+msgid "langBackHome"
+msgstr "Powrót do strony głównej"
+
+msgid "langPropositions"
+msgstr "Sugestie poprawek"
+
+msgid "langMaj"
+msgstr "Uaktualnienie"
+
+msgid "langModify"
+msgstr "modyfikuj"
+
+msgid "langDelete"
+msgstr "usuń"
+
+msgid "langInvisible"
+msgstr "Uczyń widocznym"
+
+msgid "langSave"
+msgstr "Zapisz"
+
+msgid "langMove"
+msgstr "Przenieś"
+
+msgid "Help"
+msgstr "Pomoc"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAdd"
+msgstr "Dodaj"
+
+msgid "langAddIntro"
+msgstr "Dodaj tekst"
+
+msgid "langBackList"
+msgstr "Powrót do listy"
+
+msgid "langText"
+msgstr "Tekst"
+
+msgid "langEmpty"
+msgstr "Zostawiłeś niewypełnione pola.<br>Użyj przycisku Wstecz i spróbuj jeszcze raz.<br>Jeśli zignorujesz Kod kursu spójrz do Programu kursu"
+
+msgid "langConfirmYourChoice"
+msgstr "Potwierdź swój wybór"
+
+msgid "langAnd"
+msgstr "i"
+
+msgid "langChoice"
+msgstr "Twój wybór"
+
+msgid "langFinish"
+msgstr "Zakończ"
+
+msgid "langCancel"
+msgstr "Anuluj"
+
+msgid "langNotAllowed"
+msgstr "Niedostępny"
+
+msgid "langNotLogged"
+msgstr "Nie jesteś zalogowany(a) do kursu"
+
+msgid "langManager"
+msgstr "Administrator"
+
+msgid "langOptional"
+msgstr "Opcja"
+
+msgid "NextPage"
+msgstr "Następna strona"
+
+msgid "PreviousPage"
+msgstr "Poprzednia strona"
+
+msgid "langUse"
+msgstr "Use"
+
+msgid "langTotal"
+msgstr "całkowita"
+
+msgid "langTake"
+msgstr "brać (przystepować)"
+
+msgid "langOne"
+msgstr "Jeden"
+
+msgid "langSeveral"
+msgstr "Kilka"
+
+msgid "langNotice"
+msgstr "Uwaga"
+
+msgid "langDate"
+msgstr "Data"
+
+msgid "langAmong"
+msgstr "spośród"
+
+msgid "langShow"
+msgstr "Pokaż"
+
+msgid "langMyCourses"
+msgstr "Lista moich kursów"
+
+msgid "langModifyProfile"
+msgstr "Modyfikuj mój profil"
+
+msgid "langMyStats"
+msgstr "Pokaż moje statystyki"
+
+msgid "langLogout"
+msgstr "Wyloguj"
+
+msgid "langMyAgenda"
+msgstr "Mój kalendarz"
+
+msgid "langCourseHomepage"
+msgstr "Strona główna kursu"
+
+msgid "langCourseManagerview"
+msgstr "Widok administratora"
+
+msgid "langStudentView"
+msgstr "Widok studenta"
+
+msgid "AddResource"
+msgstr "Dodaj to"
+
+msgid "AddedResources"
+msgstr "Załączniki"
+
+msgid "lang_modify_resource"
+msgstr "Modyfikuj / Dodaj zasoby"
+
+msgid "lang_resource"
+msgstr "Zasób"
+
+msgid "lang_resources"
+msgstr "Zasoby"
+
+msgid "langNameOfLang[\'arabic\']"
+msgstr ""
+
+msgid "langNameOfLang[\'brazilian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'bulgarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'catalan\']"
+msgstr ""
+
+msgid "langNameOfLang[\'croatian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'danish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english\']"
+msgstr ""
+
+msgid "langNameOfLang[\'finnish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french\']"
+msgstr ""
+
+msgid "langNameOfLang[\'german\']"
+msgstr ""
+
+msgid "langNameOfLang[\'greek\']"
+msgstr ""
+
+msgid "langNameOfLang[\'italian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'japanese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'polish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'portuguese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'russian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'simpl_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish\']"
+msgstr ""
+
+msgid "Close"
+msgstr "zamknij"
+
+msgid "langPlatform"
+msgstr "Platforma"
+
+msgid "localLangName"
+msgstr "język"
+
+msgid "email"
+msgstr "e-mail"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "Przykro mi ale kurs tego kodu już istnieje. Proszę wybierz inny."
+
+msgid "Statistics"
+msgstr "Statystyki"
+
+msgid "langGrouplist"
+msgstr "lista grupy"
+
+msgid "langPrevious"
+msgstr "poprzedni"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "Docelowy folder nie istnieje"
+
+msgid "Courses"
+msgstr "kursów"
+
+msgid "In"
+msgstr "w"
+
+msgid "langShowAll"
+msgstr "Pokaż wszystkie"
+
+msgid "langPage"
+msgstr "Strona"
+
+msgid "englishLangName"
+msgstr "angielski"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "langAreYouSureToDelete"
+msgstr "Usunąć? Jesteś pewien?"
+
+msgid "SelectAll"
+msgstr "Zaznacz wszystko"
+
+msgid "UnSelectAll"
+msgstr "odznacz wszystkie"
+
+msgid "WithSelected"
+msgstr "Z zaznaczonymi"
+
+msgid "langOnLine"
+msgstr "Online"
+
+msgid "langUsers"
+msgstr "Użytkownicy"
+
+msgid "langPlatformAdmin"
+msgstr "Administrator platformy"
+
+msgid "langNameOfLang[\'hungarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'indonesian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'malay\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovenian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish_latin\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swedish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'thai\']"
+msgstr ""
+
+msgid "langNameOfLang[\'turkce\']"
+msgstr ""
+
+msgid "langNameOfLang[\'vietnamese\']"
+msgstr ""
+
+msgid "UserInfo"
+msgstr "dane użytkownika"
+
+msgid "langCheckAll"
+msgstr "Zaznacz wszystkie"
+
+msgid "langNbAnnoucement"
+msgstr "Ogłoszenie"
+
+msgid "lang_no_access_here"
+msgstr "Nie ma dostępu"
+
+msgid "langOtherCourses"
+msgstr "inne kursy"
+
+msgid "Doc"
+msgstr "dokument"
+
+msgid "PlataformAdmin"
+msgstr "Platforma administratora"
+
+msgid "Groups"
+msgstr "Grupy"
+
+msgid "GroupManagement"
+msgstr " Zarządzanie grupowe"
+
+msgid "All"
+msgstr "Wszystkie"
+
+msgid "None"
+msgstr "Żadne"
+
+msgid "langSorry"
+msgstr "Najpierw wybierz kurs"
+
+msgid "langDenied"
+msgstr "Ta funkcja jest dost&#281;pna jedynie dla administratorów kursu"
+
+msgid "Today"
+msgstr "dzi&#347;"
+
+msgid "langCourseHomepageLink"
+msgstr "Bieżący kurs"
+
+msgid "Attachment"
+msgstr "załącznik"
+
+msgid "User"
+msgstr "Użytkownik"
+
+msgid "MondayInit"
+msgstr "Pn"
+
+msgid "TuesdayInit"
+msgstr "W"
+
+msgid "WednesdayInit"
+msgstr "Ś"
+
+msgid "ThursdayInit"
+msgstr "C"
+
+msgid "FridayInit"
+msgstr "Pt"
+
+msgid "SaturdayInit"
+msgstr "S"
+
+msgid "SundayInit"
+msgstr "N"
+
+msgid "MondayShort"
+msgstr "Pon"
+
+msgid "TuesdayShort"
+msgstr "Wt"
+
+msgid "WednesdayShort"
+msgstr "Śr"
+
+msgid "ThursdayShort"
+msgstr "Czw"
+
+msgid "FridayShort"
+msgstr "Pt"
+
+msgid "SaturdayShort"
+msgstr "Sob"
+
+msgid "SundayShort"
+msgstr "Niedz"
+
+msgid "MondayLong"
+msgstr "Poniedziałek"
+
+msgid "TuesdayLong"
+msgstr "Wtorek"
+
+msgid "WednesdayLong"
+msgstr "Środa"
+
+msgid "ThursdayLong"
+msgstr "Czwartek"
+
+msgid "FridayLong"
+msgstr "Piątek"
+
+msgid "SaturdayLong"
+msgstr "Sobota"
+
+msgid "SundayLong"
+msgstr "Niedziela"
+
+msgid "JanuaryInit"
+msgstr "S"
+
+msgid "FebruaryInit"
+msgstr "L"
+
+msgid "MarchInit"
+msgstr "M"
+
+msgid "AprilInit"
+msgstr "K"
+
+msgid "MayInit"
+msgstr "M"
+
+msgid "JuneInit"
+msgstr "C"
+
+msgid "JulyInit"
+msgstr "L"
+
+msgid "AugustInit"
+msgstr "S"
+
+msgid "SeptemberInit"
+msgstr "W"
+
+msgid "OctoberInit"
+msgstr "P"
+
+msgid "NovemberInit"
+msgstr "L"
+
+msgid "DecemberInit"
+msgstr "G"
+
+msgid "JanuaryShort"
+msgstr "Sty"
+
+msgid "FebruaryShort"
+msgstr "Lu"
+
+msgid "MarchShort"
+msgstr "Mar"
+
+msgid "AprilShort"
+msgstr "Kw"
+
+msgid "MayShort"
+msgstr "Maj"
+
+msgid "JuneShort"
+msgstr "Cze"
+
+msgid "JulyShort"
+msgstr "Lip"
+
+msgid "AugustShort"
+msgstr "Sie"
+
+msgid "SeptemberShort"
+msgstr "Wrz"
+
+msgid "OctoberShort"
+msgstr "Paź"
+
+msgid "NovemberShort"
+msgstr "Lis"
+
+msgid "DecemberShort"
+msgstr "Gru"
+
+msgid "JanuaryLong"
+msgstr "Styczeń"
+
+msgid "FebruaryLong"
+msgstr "Luty"
+
+msgid "MarchLong"
+msgstr "Marzec"
+
+msgid "AprilLong"
+msgstr "Kwiecień"
+
+msgid "MayLong"
+msgstr "Maj"
+
+msgid "JuneLong"
+msgstr "Czerwiec"
+
+msgid "JulyLong"
+msgstr "Lipiec"
+
+msgid "AugustLong"
+msgstr "Sierpień"
+
+msgid "SeptemberLong"
+msgstr "Wrzesień"
+
+msgid "OctoberLong"
+msgstr "Październik"
+
+msgid "NovemberLong"
+msgstr "Listopad"
+
+msgid "DecemberLong"
+msgstr "Grudzień"
+
+msgid "langMyCompetences"
+msgstr "Moje kompetencje"
+
+msgid "langMyDiplomas"
+msgstr "Moje dyplomy"
+
+msgid "langMyPersonalOpenArea"
+msgstr "Moje otwarte pole osobiste"
+
+msgid "langMyTeach"
+msgstr "Czego jestem w stanie uczyć"
+
+msgid "Agenda"
+msgstr "Agenda (program)"
+
+msgid "HourShort"
+msgstr "godz"
+
+msgid "PleaseTryAgain"
+msgstr "Proszę spróbować ponownie!"
+
+msgid "UplNoFileUploaded"
+msgstr "Żaden plik nie został załadowany"
+
+msgid "UplSelectFileFirst"
+msgstr "Wybierz plik zanim klikniesz \"Załaduj\""
+
+msgid "UplNotAZip"
+msgstr "Wybrany plik nie jest archiwum .zip"
+
+msgid "UplUploadSucceeded"
+msgstr "Załadowanie pliku powiodło się!"
+
+msgid "ExportAsCSV"
+msgstr "Eksportuj jako plik CSV"
+
+msgid "ExportAsXLS"
+msgstr "Eksportuj jako plik XLS"
+
+msgid "langOpenarea"
+msgstr "Otwarte pole osobiste"
+
+msgid "Done"
+msgstr "Wykonano"
+
+msgid "Documents"
+msgstr "Dokumenty"
+
+msgid "DocumentAdded"
+msgstr "Dokument dodano"
+
+msgid "DocumentUpdated"
+msgstr "Dokument zaktualizowano"
+
+msgid "DocumentInFolderUpdated"
+msgstr "Dokument zaktualizowano w katalogu"
+
+msgid "Course_description"
+msgstr "Opis kursu"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "Learnpath"
+msgstr "Scieżka nauczania"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Announcement"
+msgstr "Ogłoszenia"
+
+msgid "Dropbox"
+msgstr "Skrzynka nadawcza (dropbox)"
+
+msgid "Quiz"
+msgstr "Ćwiczenia"
+
+msgid "langChat"
+msgstr "Czat"
+
+msgid "Conference"
+msgstr "Konferencja"
+
+msgid "Student_publication"
+msgstr "Prace studentów"
+
+msgid "Tracking"
+msgstr "Śledzenie"
+
+msgid "langhomepage_link"
+msgstr "Dodaj link do tej strony"
+
+msgid "Course_setting"
+msgstr "Ustawienia kursu"
+
+msgid "langbackup"
+msgstr "Wersja zapasowa kursu"
+
+msgid "langcopy_course_content"
+msgstr "Kopiuj zawartość tego kursu"
+
+msgid "langrecycle_course"
+msgstr "Wprowadź ten kurs ponownie do obiegu"
+
+msgid "StartDate"
+msgstr "Data początkowa"
+
+msgid "EndDate"
+msgstr "Data końcowa"
+
+msgid "StartTime"
+msgstr "Czas rozpoczęcia"
+
+msgid "EndTime"
+msgstr "Czas zakończenia"
+
+msgid "langYouWereCalled"
+msgstr "Zaproszono Cię do czatowania z"
+
+msgid "langDoYouAccept"
+msgstr "Czy się zgadzasz?"
+
+msgid "Everybody"
+msgstr "Wszyscy"
+
+msgid "SentTo"
+msgstr "Widoczne dla"
+
+msgid "Export"
+msgstr "Eksport"
+
+msgid "Tools"
+msgstr "Narzędzia"
+
+msgid "Everyone"
+msgstr "Każdy"
+
+msgid "SelectGroupsUsers"
+msgstr "Wybierz grupy/użytkowników"
+
+msgid "Student"
+msgstr "Student"
+
+msgid "Teacher"
+msgstr "Nauczyciel"
+
+msgid "Send2All"
+msgstr "Nie wybrałeś użytkownika / grupy. Element jest widoczny dla każdego użytkownika"
+
+msgid "Wiki"
+msgstr "Wiki"
+
+msgid "Complete"
+msgstr "Kompletny"
+
+msgid "Incomplete"
+msgstr "Niekompletny"
+
+msgid "reservation"
+msgstr "rezerwacja"
+
+msgid "StartTimeWindow"
+msgstr "Start"
+
+msgid "EndTimeWindow"
+msgstr "Koniec"
+
+msgid "AccessNotAllowed"
+msgstr "Dostęp do tej strony nie jest zezwolony"
+
+msgid "InThisCourse"
+msgstr "W tym kursie"
+
+msgid "ThisFieldIsRequired"
+msgstr "pole jest wymagane"
+
+msgid "AllowedHTMLTags"
+msgstr "Dozwolone tagi HTML"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "Formularz zawiera niekompletne lub nieprawidłowe dane. Sprawdź swoje dane."
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "Pierwsza data powinna być wcześniejsza niż końcowa"
+
+msgid "InvalidDate"
+msgstr "Zła data"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "Dozwolone są tylko litery i liczby"
+
+msgid "langBasicOverview"
+msgstr "Organizuj"
+
+msgid "CourseAdminRole"
+msgstr "Administrator kursu"
+
+msgid "UserRole"
+msgstr "Rola"
+
+msgid "OnlyImagesAllowed"
+msgstr "Tylko obrazy w formatach PNG, JPG lub GIF są dozwolone"
+
+msgid "ViewRight"
+msgstr "Widok"
+
+msgid "EditRight"
+msgstr "Edycja"
+
+msgid "DeleteRight"
+msgstr "Usuń"
+
+msgid "OverviewCourseRights"
+msgstr "Przegląd ról i praw dostępu"
+
+msgid "langAdvanced"
+msgstr "Buduj"
+
+msgid "RightValueModified"
+msgstr "Wartość została zmodyfikowana."
+
+msgid "course_rights"
+msgstr "Przegląd ról i uprawnień"
+
+msgid "Visio_conference"
+msgstr "Wirtualne spotkanie"
+
+msgid "CourseAdminRoleDescription"
+msgstr "Administrator kursu"
+
+msgid "Move"
+msgstr "Przenieś"
+
+msgid "MoveTo"
+msgstr "Przenieś do"
+
+msgid "Delete"
+msgstr "Usuń"
+
+msgid "MoveFileTo"
+msgstr "Przenieś plik do"
+
+msgid "Save"
+msgstr "Zapisz"
+
+msgid "Error"
+msgstr "Błąd"
+
+msgid "Anonymous"
+msgstr "Anonim"
+
+msgid "CreateNewGlobalRole"
+msgstr "Utwórz nową globalną rolę"
+
+msgid "CreateNewLocalRole"
+msgstr "Utwórz nową lokalna rolę"
+
+msgid "Actions"
+msgstr "Akcja"
+
+msgid "Inbox"
+msgstr "Skrzynka odbiorcza"
+
+msgid "ComposeMessage"
+msgstr "Napisz wiadomość"
+
+msgid "Other"
+msgstr "Inne"
+
+msgid "AddRight"
+msgstr "Dodaj"
+
+msgid "CampusHomepage"
+msgstr "Strona główna"
+
+msgid "YouHaveNewMessage"
+msgstr "Masz nową wiadomość !"
+
+msgid "myActiveSessions"
+msgstr "Moje aktywne sesje"
+
+msgid "myInactiveSessions"
+msgstr "Moje nieaktywne sesje"
+
+msgid "FileUpload"
+msgstr "Załaduj plik"
+
+msgid "langMyActiveSessions"
+msgstr "Moje aktywne Sesje"
+
+msgid "langMyInActiveSessions"
+msgstr "Moje nieaktywne sesje"
+
+msgid "langMySpace"
+msgstr "Raporty"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "Rozszerzenie zostało uaktywnione ale nie może być użyte w tym momencie."
+
+msgid "MyStudents"
+msgstr "Moi studenci"
+
+msgid "Progress"
+msgstr "Postęp"
+
+msgid "Or"
+msgstr "lub"
+
+msgid "Uploading"
+msgstr "Kopiowanie ..."
+
+msgid "AccountExpired"
+msgstr "Konto wygasło"
+
+msgid "AccountInactive"
+msgstr "Konto nieaktywne"
+
+msgid "ActionNotAllowed"
+msgstr "Akcja niedozwolona"
+
+msgid "SubTitle"
+msgstr "Podtytuł"
+
+msgid "noOpen"
+msgstr "Nie można otworzyć"
+
+msgid "Progression"
+msgstr "Postęp"
+
+msgid "NoCourse"
+msgstr "Kurs nie może zostać znaleziony"
+
+msgid "Teachers"
+msgstr "Nauczyciele"
+
+msgid "Session"
+msgstr "Sesja"
+
+msgid "Sessions"
+msgstr "Sesje"
+
+msgid "NoSession"
+msgstr "Sesja nie może zostać znaleziona"
+
+msgid "NoStudent"
+msgstr "Student nie może zostać znaleziony"
+
+msgid "Students"
+msgstr "Studenci"
+
+msgid "NoResults"
+msgstr "Brak wyników"
+
+msgid "Tutors"
+msgstr "Trenerzy"
+
+msgid "Tel"
+msgstr "Tel"
+
+msgid "NoTel"
+msgstr "Telefon niedostępny"
+
+msgid "SendMail"
+msgstr "Wyślij email"
+
+msgid "RdvAgenda"
+msgstr "Agenda spotkań"
+
+msgid "VideoConf"
+msgstr "Wideokonferencja"
+
+msgid "MyProgress"
+msgstr "Moje postępy"
+
+msgid "NoOnlineStudents"
+msgstr "Brak studentów online"
+
+msgid "InCourse"
+msgstr "w kursie"
+
+msgid "UserOnlineListSession"
+msgstr "Lista studentów online - Sesja"
+
+msgid "From"
+msgstr "Od"
+
+msgid "To"
+msgstr "Do"
+
+msgid "Content"
+msgstr "Treść"
+
+msgid "year"
+msgstr "rok"
+
+msgid "Years"
+msgstr "lata"
+
+msgid "Day"
+msgstr "Dzień"
+
+msgid "Days"
+msgstr "Dni"
+
+msgid "PleaseStandBy"
+msgstr "Proszę czekać ..."
+
+msgid "AvailableUntil"
+msgstr "Dostępny do"
+
+msgid "Visio_classroom"
+msgstr "Wirtualna klasa"
+
+msgid "Survey"
+msgstr "Ankieta"
+
+msgid "More"
+msgstr "Więcej"
+
+msgid "ClickHere"
+msgstr "Kliknij tutaj"
+
+msgid "Here"
+msgstr "tutaj"
+
+msgid "ReturnTo"
+msgstr "Możesz teraz wrócić do"
+
+msgid "Horizontal"
+msgstr "Horyzontalnie"
+
+msgid "Vertical"
+msgstr "Poprzecznie"
+
+msgid "DisplaySearchResults"
+msgstr "Wyświetl wyniki wyszukiwania"
+
+msgid "DisplayAll"
+msgstr "Wyświetl wszystkie"
+
+msgid "File_upload"
+msgstr "Załaduj plik"
+
+msgid "NoUsersInCourse"
+msgstr "Brak użytkowników w kursie"
+
+msgid "Percentage"
+msgstr "Procentowo"
+
+msgid "Information"
+msgstr "Informacje"
+
+msgid "EmailDestination"
+msgstr "Odbiorca"
+
+msgid "SendEmail"
+msgstr "Wyślij email"
+
+msgid "EmailTitle"
+msgstr "Temat ogłoszenia"
+
+msgid "EmailText"
+msgstr "treść listu"
+
+msgid "Send"
+msgstr "Wyślij"
+
+msgid "Comments"
+msgstr "Komentarze"
+
+msgid "ModifyRecipientList"
+msgstr "Modyfikuj listę odbiorców"
+
+msgid "Line"
+msgstr "Linia"
+
+msgid "NoLinkVisited"
+msgstr "Brak odwiedzonych adresów"
+
+msgid "NoDocumentDownloaded"
+msgstr "Brak pobranych dokumentów"
+
+msgid "Clicks"
+msgstr "kliknięcia"
+
+msgid "SearchResults"
+msgstr "Wyniki wyszukiwania"
+
+msgid "SessionPast"
+msgstr "Przeszłość"
+
+msgid "SessionActive"
+msgstr "Aktywne"
+
+msgid "SessionFuture"
+msgstr "Jeszcze nie zaczęto"
+
+msgid "DateFormatLongWithoutDay"
+msgstr "%d %B %Y"
+
+msgid "UsersConnectedToMySessions"
+msgstr "Użytkownicy podłączeni do mojej sesji"
+
+msgid "Category"
+msgstr "Kategoria"
+
+msgid "DearUser"
+msgstr "Szanowny użytkowniku"
+
+msgid "YourRegistrationData"
+msgstr "Twoje dane rejestracyjne"
+
+msgid "ResetLink"
+msgstr "Kliknij tutaj, aby odzyskać hasło"
+
+msgid "VisibilityChanged"
+msgstr "Widzialność została zmieniona."
+
+msgid "MainNavigation"
+msgstr "Menu główne"
+
+msgid "SeeDetail"
+msgstr "Wyświetl szczegóły"
+
+msgid "GroupSingle"
+msgstr "Grupa"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "Proszę spróbować zalogować się ponownie ze strony głównej"
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "Spróbuj zalogować się ponownie używając poniższego formularza"
+
+msgid "AccessToFaq"
+msgstr "Często zadawane pytania"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "Przypomnienie dla użytkowników nieaktywnych od"
+
+msgid "OpenIdAuthentication"
+msgstr "Autoryzacja OpenID"
+
+msgid "UploadMaxSize"
+msgstr "Maksymalny rozmiar plików"
+
+msgid "Unknown"
+msgstr "Nieznany"
+
+msgid "MoveUp"
+msgstr "Przenieś wyżej"
+
+msgid "MoveDown"
+msgstr "Przenieś niżej"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "Ładowanie pliku zakończone błędem: rozszerzenie pliku lub jego typ jest niedozwolony"
+
+msgid "OpenIDURL"
+msgstr "Odnośnik OpenID"
+
+msgid "MyGradebook"
+msgstr "Moje Oceny"
+
+msgid "Gradebook"
+msgstr "Oceny"
+
+msgid "OpenIDWhatIs"
+msgstr "Co to jest OpenID?"
+
+msgid "NoManager"
+msgstr "Brak nauczyciela"
+
+msgid "MinYear"
+msgstr "rok"
+
+msgid "MinDays"
+msgstr "dni"
+
+msgid "MinHours"
+msgstr "godziny"
+
+msgid "MinMinutes"
+msgstr "minuty"
+
+msgid "DocumentCreated"
+msgstr "Dokument został utworzony"
+
+msgid "UserAge"
+msgstr "Wiek"
+
+msgid "UserBirthday"
+msgstr "Urodziny"
+
+msgid "Course"
+msgstr "Kurs"
+
+msgid "FilesUpload"
+msgstr "dokumenty"
+
+msgid "SessionsAdmin"
+msgstr "Administrator sesji"
+
+msgid "SelectFile"
+msgstr "Wybierz plik"
+
+msgid "IntroductionTextUpdated"
+msgstr "Tekst wprowadzający został zaktualizowany"
+
+msgid "Width"
+msgstr "Szerokość"
+
+msgid "Height"
+msgstr "Wysokość"
+
+msgid "InsertImage"
+msgstr "Wstaw obrazek"
+
+msgid "AccountActive"
+msgstr "Konto aktywne"
+
+msgid "GroupWiki"
+msgstr "Wiki"
+
+msgid "ExportToPDF"
+msgstr "Eksport do PDF"
+
+msgid "CommentAdded"
+msgstr "Twój komentarz został dodany"
+
+msgid "BackToPreviousPage"
+msgstr "Powrót do poprzedniej strony"
+
+msgid "ListView"
+msgstr "Wyświetl jako listę"
+
+msgid "CategoryDeleted"
+msgstr "Ta kategoria została skasowana"
+
+msgid "CategoryAdded"
+msgstr "Dodano kategorię"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Qualify"
+msgstr "Upoważnij"
+
+msgid "Words"
+msgstr "Słowa"
+
+msgid "GoBack"
+msgstr "Powrót"
+
+msgid "Details"
+msgstr "Szczegóły"
+
+msgid "EditLink"
+msgstr "Edycja hiperłącza"
+
+msgid "LinkEdited"
+msgstr "Odnośnik został zmieniony"
+
+msgid "ForumThreads"
+msgstr "Wątki forum"
+
+msgid "GradebookVisible"
+msgstr "Widoczny"
+
+msgid "GradebookInvisible"
+msgstr "Niewidoczny"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "DateSend"
+msgstr "Data wysłania"
+
+msgid "BackToOutbox"
+msgstr "Powrót do wysłanych"
+
+msgid "GeneralDescription"
+msgstr "Ogólny opis"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "Jakie jest miejsce tego kursu w programie? Czy są jakieś wymogi? Czy ten kurs ma związek z innymi kursami?"
+
+msgid "GeneralDescriptionInformation"
+msgstr "Opisz kurs (ilość godzin, oficjalny kod, salę w której sie odbywa...) i nauczyciela (nazwisko, imię, pokój, telefon, e-mail...)"
+
+msgid "Objectives"
+msgstr "Cele"
+
+msgid "ObjectivesInformation"
+msgstr "Przedstawianie ogólnego i szczególowego celu kursu."
+
+msgid "ObjectivesQuestions"
+msgstr "Co użytkownicy będą w stanie zrobić pod koniec czasu trwania kursu? Do tworzenia czego są oni zachęcani podczas kursu?"
+
+msgid "Topics"
+msgstr "Tematy"
+
+msgid "TopicsInformation"
+msgstr "Lista tematów kursu. Istotność każdego z tematów. Poziom trudności. Struktura i wzajemne powiązania pomiędzy różnymi częściami."
+
+msgid "TopicsQuestions"
+msgstr "W jaki sposób kurs przebiega? Na co powinna być zwrócona specjalna uwaga użytkowników? Czy znane są problemy związane ze zrozumieniem poszczególnych rozdziałów kursu? Ile czasu powinno sie poświęcać na poszczególne części kursu?"
+
+msgid "Methodology"
+msgstr "Metodologia"
+
+msgid "MethodologyQuestions"
+msgstr "Jakie metody i jakie zajęcia pozwolą osiągnąć cel kursu? Według jakiego harmonogramu?"
+
+msgid "MethodologyInformation"
+msgstr "Przedstawienie zajęć (konferencja, paper\'y, badanie grupowe, zajęcia praktyczne, ...)"
+
+msgid "CourseMaterial"
+msgstr "Materiał kursu"
+
+msgid "CourseMaterialQuestions"
+msgstr "Czy istnieje skrypt kursu, zbiór paper\'ów, bibliografia, lista linków internetowych?"
+
+msgid "CourseMaterialInformation"
+msgstr "Krótki opis materiałów wykorzystywanych w czasie kursu."
+
+msgid "HumanAndTechnicalResources"
+msgstr "Zasoby ludzkie i techniczne"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "Czy są nauczyciele, wychowawcy, pomoc techniczna, pracownicy socjalni, sale komputerowe?"
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "Krótki opis tożsamości poszczególnych osób kontaktowych oraz dostępnego sprzętu technicznego."
+
+msgid "Assessment"
+msgstr "Ocena"
+
+msgid "AssessmentQuestions"
+msgstr "Jak użytkownicy będą oceniani? Czy można wprowadzić jakieś strategie aby pomóc opanować temat?"
+
+msgid "AssessmentInformation"
+msgstr "Przykładowe pytania egzaminacyjne. Kryteria zaliczenia. Rady i pomocne \'sztuczki\'."
+

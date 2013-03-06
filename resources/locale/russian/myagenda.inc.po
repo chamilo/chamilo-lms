@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Мой порядок дня (расписание)"
+
+msgid "langToday"
+msgstr "Сегодня"
+

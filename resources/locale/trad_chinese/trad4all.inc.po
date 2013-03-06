@@ -1,0 +1,1158 @@
+msgid "Title"
+msgstr "標題"
+
+msgid "UsersOnline"
+msgstr "線上使用者"
+
+msgid "Remove"
+msgstr "移除"
+
+msgid "langEnter"
+msgstr "返回課程清單"
+
+msgid "Description"
+msgstr "描述"
+
+msgid "Links"
+msgstr "連結"
+
+msgid "langWorks"
+msgstr "作業論文"
+
+msgid "Forums"
+msgstr "討論區"
+
+msgid "langExercices"
+msgstr "測驗"
+
+msgid "langCreateDir"
+msgstr "創建資料夾"
+
+msgid "Name"
+msgstr "名稱"
+
+msgid "langComment"
+msgstr "摘要"
+
+msgid "langVisible"
+msgstr "顯示/隱藏"
+
+msgid "langNewDir"
+msgstr "新檔案夾名稱"
+
+msgid "langDirCr"
+msgstr "目錄已經創建"
+
+msgid "Download"
+msgstr "下載"
+
+msgid "langGroup"
+msgstr "小組"
+
+msgid "langEdit"
+msgstr "編輯"
+
+msgid "langGroupForum"
+msgstr "小組論壇"
+
+msgid "Language"
+msgstr "語言"
+
+msgid "LoginName"
+msgstr "登入名稱"
+
+msgid "AutostartMp3"
+msgstr "若你想音訊檔自動插放，請按「確定」。"
+
+msgid "Assignments"
+msgstr "課業"
+
+msgid "Forum"
+msgstr "討論區"
+
+msgid "langDelImage"
+msgstr "移除圖片"
+
+msgid "langCode"
+msgstr "代碼"
+
+msgid "langUp"
+msgstr "向上"
+
+msgid "Down"
+msgstr "向下"
+
+msgid "Up"
+msgstr "向上"
+
+msgid "TheListIsEmpty"
+msgstr "這清單未有項目"
+
+msgid "langUniqueSelect"
+msgstr "單一答案選擇題"
+
+msgid "langCourseCreate"
+msgstr "創建課程"
+
+msgid "langTodo"
+msgstr "您的建議"
+
+msgid "UserName"
+msgstr "使用者名稱"
+
+msgid "lang_show_hide"
+msgstr "顯示/隱藏"
+
+msgid "langCategoryMod"
+msgstr "修改分類"
+
+msgid "Hide"
+msgstr "隱藏"
+
+msgid "langDear"
+msgstr "尊敬的"
+
+msgid "langArchive"
+msgstr "資料庫"
+
+msgid "langCourseCode"
+msgstr "課程編號"
+
+msgid "langNoDescription"
+msgstr "無形容"
+
+msgid "langOfficialCode"
+msgstr "編號"
+
+msgid "FirstName"
+msgstr "名"
+
+msgid "LastName"
+msgstr "姓"
+
+msgid "Status"
+msgstr "身份"
+
+msgid "langEmail"
+msgstr "電子郵件"
+
+msgid "SlideshowConversion"
+msgstr "轉換投映片"
+
+msgid "UploadFile"
+msgstr "上傳檔案"
+
+msgid "AvailableFrom"
+msgstr "開始生效日期"
+
+msgid "AvailableTill"
+msgstr "有效期至"
+
+msgid "Preview"
+msgstr "預覽"
+
+msgid "Type"
+msgstr "類型"
+
+msgid "EmailAddress"
+msgstr "電郵地址"
+
+msgid "Organisation"
+msgstr "機構"
+
+msgid "Reporting"
+msgstr "報告"
+
+msgid "Code"
+msgstr "編碼"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "CurrentCourse"
+msgstr "當前課程"
+
+msgid "Back"
+msgstr "返回"
+
+msgid "Info"
+msgstr "資訊"
+
+msgid "Search"
+msgstr "搜尋"
+
+msgid "AdvancedSearch"
+msgstr "進階搜尋"
+
+msgid "Open"
+msgstr "開啟"
+
+msgid "Import"
+msgstr "匯入"
+
+msgid "AddAnother"
+msgstr "加入另一個"
+
+msgid "Author"
+msgstr "作者"
+
+msgid "TrueFalse"
+msgstr "是 / 否"
+
+msgid "QuestionType"
+msgstr "問題類型"
+
+msgid "NoSearchResults"
+msgstr "沒有搜尋結果"
+
+msgid "SelectQuestion"
+msgstr "選擇問題"
+
+msgid "AddNewQuestionType"
+msgstr "加入新問題類型"
+
+msgid "Numbered"
+msgstr "給予編號"
+
+msgid "iso639_2_code"
+msgstr "zho"
+
+msgid "iso639_1_code"
+msgstr "zh"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr ","
+
+msgid "number_decimal_separator"
+msgstr "."
+
+msgid "dateFormatShort"
+msgstr "%b %d, %y"
+
+msgid "dateFormatLong"
+msgstr "%A %B %d, %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%B %d, %Y at %I:%M %p"
+
+msgid "timeNoSecFormat"
+msgstr "%I:%M %p"
+
+msgid "langYes"
+msgstr "確定"
+
+msgid "langNo"
+msgstr "否"
+
+msgid "Next"
+msgstr "下一個"
+
+msgid "langAllowed"
+msgstr "允許"
+
+msgid "langBackHome"
+msgstr "返回主頁"
+
+msgid "langPropositions"
+msgstr "提出建議"
+
+msgid "langMaj"
+msgstr "更新"
+
+msgid "langModify"
+msgstr "修改"
+
+msgid "langDelete"
+msgstr "刪除"
+
+msgid "langInvisible"
+msgstr "隱蕆"
+
+msgid "langSave"
+msgstr "儲存"
+
+msgid "langMove"
+msgstr "移動"
+
+msgid "Help"
+msgstr "幫助"
+
+msgid "langOk"
+msgstr "確定"
+
+msgid "langAdd"
+msgstr "添加"
+
+msgid "langAddIntro"
+msgstr "添加介紹文本"
+
+msgid "langBackList"
+msgstr "返回清單"
+
+msgid "langText"
+msgstr "內容"
+
+msgid "langEmpty"
+msgstr "有些項目沒有填寫。<br /><b>返回重試</b>。<br />如果不想填寫課程代碼，請參考教學大綱"
+
+msgid "langConfirmYourChoice"
+msgstr "確定您的選擇嗎？"
+
+msgid "langAnd"
+msgstr "和"
+
+msgid "langChoice"
+msgstr "選擇答案"
+
+msgid "langFinish"
+msgstr "完成"
+
+msgid "langCancel"
+msgstr "取消"
+
+msgid "langNotAllowed"
+msgstr "禁用"
+
+msgid "langNotLogged"
+msgstr "你並沒有登錄一項課程"
+
+msgid "langManager"
+msgstr "管理員"
+
+msgid "langOptional"
+msgstr "可選"
+
+msgid "NextPage"
+msgstr "下一頁"
+
+msgid "PreviousPage"
+msgstr "上一頁"
+
+msgid "langUse"
+msgstr "使用"
+
+msgid "langTotal"
+msgstr "總計"
+
+msgid "langTake"
+msgstr "參與"
+
+msgid "langOne"
+msgstr "一個"
+
+msgid "langSeveral"
+msgstr "多個"
+
+msgid "langNotice"
+msgstr "注意"
+
+msgid "langDate"
+msgstr "日期"
+
+msgid "langAmong"
+msgstr "在"
+
+msgid "langShow"
+msgstr "顯示"
+
+msgid "langMyCourses"
+msgstr "我的課程"
+
+msgid "langModifyProfile"
+msgstr "個人資料"
+
+msgid "langMyStats"
+msgstr "檢視狀態"
+
+msgid "langLogout"
+msgstr "退出"
+
+msgid "langMyAgenda"
+msgstr "日程安排"
+
+msgid "langCourseHomepage"
+msgstr "課程主頁"
+
+msgid "langCourseManagerview"
+msgstr "教師界面"
+
+msgid "langStudentView"
+msgstr "學生界面"
+
+msgid "AddResource"
+msgstr "加入"
+
+msgid "AddedResources"
+msgstr "附件"
+
+msgid "lang_modify_resource"
+msgstr "修改/添加資源"
+
+msgid "lang_resource"
+msgstr "資源"
+
+msgid "lang_resources"
+msgstr "資源"
+
+msgid "langPlatform"
+msgstr "系統"
+
+msgid "localLangName"
+msgstr "語言"
+
+msgid "email"
+msgstr "電郵"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "對不起，這課程編號已經存在，請選另外一個。"
+
+msgid "Statistics"
+msgstr "統計"
+
+msgid "langGrouplist"
+msgstr "群組清單"
+
+msgid "langPrevious"
+msgstr "上一步"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "目標檔案夾不存在"
+
+msgid "Courses"
+msgstr "課程"
+
+msgid "langShowAll"
+msgstr "全部顯示"
+
+msgid "langPage"
+msgstr "頁"
+
+msgid "Home"
+msgstr "首頁"
+
+msgid "langAreYouSureToDelete"
+msgstr "確定要刪除"
+
+msgid "SelectAll"
+msgstr "全選"
+
+msgid "UnSelectAll"
+msgstr "全不選"
+
+msgid "WithSelected"
+msgstr "用已選的"
+
+msgid "langOnLine"
+msgstr "線上"
+
+msgid "langUsers"
+msgstr "用戶"
+
+msgid "langPlatformAdmin"
+msgstr "系統管理"
+
+msgid "UserInfo"
+msgstr "用戶訊息"
+
+msgid "langModifyQuestion"
+msgstr "修改題目"
+
+msgid "langCheckAll"
+msgstr "全部選定"
+
+msgid "langNbAnnoucement"
+msgstr "通知"
+
+msgid "lang_no_access_here"
+msgstr "不開放"
+
+msgid "langOtherCourses"
+msgstr "其它課程"
+
+msgid "Doc"
+msgstr "學習路徑"
+
+msgid "PlataformAdmin"
+msgstr "平台管理員"
+
+msgid "Groups"
+msgstr "組別"
+
+msgid "GroupManagement"
+msgstr "組別管理"
+
+msgid "All"
+msgstr "全部"
+
+msgid "None"
+msgstr "沒有"
+
+msgid "langSorry"
+msgstr "先選擇一個課程"
+
+msgid "langDenied"
+msgstr "此功能只供課程管理員使用"
+
+msgid "Today"
+msgstr "今天"
+
+msgid "langCourseHomepageLink"
+msgstr "課程首頁"
+
+msgid "Attachment"
+msgstr "附件"
+
+msgid "User"
+msgstr "使用者"
+
+msgid "MondayLong"
+msgstr "星期一"
+
+msgid "TuesdayLong"
+msgstr "星期二"
+
+msgid "WednesdayLong"
+msgstr "星期三"
+
+msgid "ThursdayLong"
+msgstr "星期四"
+
+msgid "FridayLong"
+msgstr "星期五"
+
+msgid "SaturdayLong"
+msgstr "星期六"
+
+msgid "SundayLong"
+msgstr "星期日"
+
+msgid "JanuaryLong"
+msgstr "一月"
+
+msgid "FebruaryLong"
+msgstr "二月"
+
+msgid "MarchLong"
+msgstr "三月"
+
+msgid "AprilLong"
+msgstr "四月"
+
+msgid "MayLong"
+msgstr "五月"
+
+msgid "JuneLong"
+msgstr "六月"
+
+msgid "JulyLong"
+msgstr "七月"
+
+msgid "AugustLong"
+msgstr "八月"
+
+msgid "SeptemberLong"
+msgstr "九月"
+
+msgid "OctoberLong"
+msgstr "十月"
+
+msgid "NovemberLong"
+msgstr "十一月"
+
+msgid "DecemberLong"
+msgstr "十二月"
+
+msgid "langMyCompetences"
+msgstr "我的資歷"
+
+msgid "langMyDiplomas"
+msgstr "我的文憑"
+
+msgid "langMyPersonalOpenArea"
+msgstr "我的個人公開天地"
+
+msgid "langMyTeach"
+msgstr "我能任教的項目"
+
+msgid "Agenda"
+msgstr "日程"
+
+msgid "PleaseTryAgain"
+msgstr "請再嘗試！"
+
+msgid "UplNoFileUploaded"
+msgstr "未有上傳文件"
+
+msgid "UplSelectFileFirst"
+msgstr "請選擇檔案才按下上傳按鈕"
+
+msgid "UplNotAZip"
+msgstr "你選的檔案並非 zip 格式。"
+
+msgid "UplUploadSucceeded"
+msgstr "成功上傳檔案！"
+
+msgid "ExportAsCSV"
+msgstr "以 CSV 檔匯出"
+
+msgid "ExportAsXLS"
+msgstr "以 XLS 檔匯出"
+
+msgid "langOpenarea"
+msgstr "個人開放區"
+
+msgid "Done"
+msgstr "完成"
+
+msgid "Documents"
+msgstr "文件"
+
+msgid "DocumentAdded"
+msgstr "已加入文件"
+
+msgid "DocumentUpdated"
+msgstr "已更新文件"
+
+msgid "DocumentInFolderUpdated"
+msgstr "已於檔案夾中更新文件"
+
+msgid "Course_description"
+msgstr "課程描述"
+
+msgid "Document"
+msgstr "文件"
+
+msgid "Learnpath"
+msgstr "學習路徑"
+
+msgid "Link"
+msgstr "連結"
+
+msgid "Announcement"
+msgstr "公告"
+
+msgid "Dropbox"
+msgstr "投遞箱"
+
+msgid "Quiz"
+msgstr "小測驗"
+
+msgid "langChat"
+msgstr "聊天"
+
+msgid "Conference"
+msgstr "研討會"
+
+msgid "Student_publication"
+msgstr "課業"
+
+msgid "Tracking"
+msgstr "報告"
+
+msgid "langhomepage_link"
+msgstr "在本頁面添加鏈接"
+
+msgid "Course_setting"
+msgstr "課程設定"
+
+msgid "langbackup"
+msgstr "課程備份"
+
+msgid "langcopy_course_content"
+msgstr "拷備課程內容"
+
+msgid "langrecycle_course"
+msgstr "清空課程"
+
+msgid "StartDate"
+msgstr "開始日期"
+
+msgid "EndDate"
+msgstr "結束日期"
+
+msgid "StartTime"
+msgstr "開始時間"
+
+msgid "EndTime"
+msgstr "結束時間"
+
+msgid "langYouWereCalled"
+msgstr "有人邀請你聊天，邀請者是："
+
+msgid "langDoYouAccept"
+msgstr "是否同意?"
+
+msgid "Everybody"
+msgstr "每一個人"
+
+msgid "SentTo"
+msgstr "顯示給"
+
+msgid "Export"
+msgstr "匯出"
+
+msgid "Tools"
+msgstr "工具"
+
+msgid "Everyone"
+msgstr "每一個人"
+
+msgid "SelectGroupsUsers"
+msgstr "選擇組別 / 使用者"
+
+msgid "Student"
+msgstr "學員"
+
+msgid "Teacher"
+msgstr "教師"
+
+msgid "Send2All"
+msgstr "你未有選擇使用者 / 組別。項目會向所有使用者顯示。"
+
+msgid "Wiki"
+msgstr "維基(Wiki)"
+
+msgid "Complete"
+msgstr "完整"
+
+msgid "Incomplete"
+msgstr "不完整"
+
+msgid "reservation"
+msgstr "預約"
+
+msgid "StartTimeWindow"
+msgstr "開始"
+
+msgid "EndTimeWindow"
+msgstr "結束"
+
+msgid "AccessNotAllowed"
+msgstr "你未獲准許進入此頁"
+
+msgid "InThisCourse"
+msgstr "在本課程中"
+
+msgid "ThisFieldIsRequired"
+msgstr "所須欄目"
+
+msgid "AllowedHTMLTags"
+msgstr "容許 HTML 標籤"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "表格中有不完整或不正確的資料。請檢查你填寫的資料。"
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "開始日期必須早於結束日期"
+
+msgid "InvalidDate"
+msgstr "無效日期"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "只可使用英文字母及數字"
+
+msgid "langBasicOverview"
+msgstr "基本"
+
+msgid "CourseAdminRole"
+msgstr "課程管理員"
+
+msgid "UserRole"
+msgstr "角色"
+
+msgid "OnlyImagesAllowed"
+msgstr "只允許 PNG, JPG or GIF 圖片"
+
+msgid "ViewRight"
+msgstr "檢視"
+
+msgid "EditRight"
+msgstr "編輯"
+
+msgid "DeleteRight"
+msgstr "刪除"
+
+msgid "OverviewCourseRights"
+msgstr "檢視角色及權限"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "集中於角色"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "集中於權限"
+
+msgid "langAdvanced"
+msgstr "進階"
+
+msgid "RightValueModified"
+msgstr "數值已被更新"
+
+msgid "course_rights"
+msgstr "檢視角色及權限"
+
+msgid "Visio_conference"
+msgstr "虛擬會議"
+
+msgid "CourseAdminRoleDescription"
+msgstr "課程管理員"
+
+msgid "Move"
+msgstr "移動"
+
+msgid "MoveTo"
+msgstr "移到"
+
+msgid "Delete"
+msgstr "刪除"
+
+msgid "MoveFileTo"
+msgstr "把檔案移到"
+
+msgid "Save"
+msgstr "儲存"
+
+msgid "Error"
+msgstr "錯誤"
+
+msgid "Anonymous"
+msgstr "匿名"
+
+msgid "Actions"
+msgstr "行動"
+
+msgid "Inbox"
+msgstr "收件箱"
+
+msgid "ComposeMessage"
+msgstr "編寫訊息"
+
+msgid "Other"
+msgstr "其他"
+
+msgid "AddRight"
+msgstr "加入"
+
+msgid "CampusHomepage"
+msgstr "站台首頁"
+
+msgid "YouHaveNewMessage"
+msgstr "你收到新訊息！"
+
+msgid "langMyActiveSessions"
+msgstr "我的活躍 sessions"
+
+msgid "langMyInActiveSessions"
+msgstr "我的不活躍 Sessions"
+
+msgid "langMySpace"
+msgstr "學習進度"
+
+msgid "MyStudents"
+msgstr "我的學員"
+
+msgid "Progress"
+msgstr "進程"
+
+msgid "Or"
+msgstr "或"
+
+msgid "Uploading"
+msgstr "上載中......"
+
+msgid "AccountExpired"
+msgstr "帳戶已過期"
+
+msgid "AccountInactive"
+msgstr "帳戶不活躍"
+
+msgid "ActionNotAllowed"
+msgstr "行動未獲允許"
+
+msgid "SubTitle"
+msgstr "副標題"
+
+msgid "NoResourcesToRecycle"
+msgstr "沒有資源可供循環使用"
+
+msgid "noOpen"
+msgstr "不能開啟"
+
+msgid "Progression"
+msgstr "進程"
+
+msgid "NoCourse"
+msgstr "找不到這課程"
+
+msgid "Teachers"
+msgstr "教師"
+
+msgid "Session"
+msgstr "學期"
+
+msgid "Sessions"
+msgstr "學期"
+
+msgid "NoSession"
+msgstr "找不到這學期"
+
+msgid "NoStudent"
+msgstr "找不到這學員"
+
+msgid "Students"
+msgstr "學員"
+
+msgid "NoResults"
+msgstr "找不到結果"
+
+msgid "Tutors"
+msgstr "指導員"
+
+msgid "Tel"
+msgstr "電話號碼"
+
+msgid "NoTel"
+msgstr "沒有電話號碼"
+
+msgid "SendMail"
+msgstr "傳送電郵"
+
+msgid "RdvAgenda"
+msgstr "日程約會"
+
+msgid "VideoConf"
+msgstr "視像會議"
+
+msgid "MyProgress"
+msgstr "我的進程"
+
+msgid "NoOnlineStudents"
+msgstr "沒有在線學員"
+
+msgid "InCourse"
+msgstr "在課程中"
+
+msgid "UserOnlineListSession"
+msgstr "學員在線清單 - 學期"
+
+msgid "From"
+msgstr "由"
+
+msgid "To"
+msgstr "給"
+
+msgid "Content"
+msgstr "內容"
+
+msgid "PleaseStandBy"
+msgstr "請準備......"
+
+msgid "AvailableUntil"
+msgstr "有效至"
+
+msgid "Visio_classroom"
+msgstr "虛擬課室"
+
+msgid "Survey"
+msgstr "統計調查"
+
+msgid "More"
+msgstr "更多"
+
+msgid "ClickHere"
+msgstr "按這兒"
+
+msgid "Here"
+msgstr "這兒"
+
+msgid "SaveQuestion"
+msgstr "儲存問題"
+
+msgid "Horizontal"
+msgstr "水平"
+
+msgid "Vertical"
+msgstr "垂直"
+
+msgid "DisplaySearchResults"
+msgstr "展示搜尋結果"
+
+msgid "DisplayAll"
+msgstr "展示全部"
+
+msgid "File_upload"
+msgstr "上傳檔案"
+
+msgid "NoUsersInCourse"
+msgstr "課程中沒有使用者"
+
+msgid "Percentage"
+msgstr "百分比"
+
+msgid "Information"
+msgstr "資訊"
+
+msgid "EmailDestination"
+msgstr "收件者"
+
+msgid "SendEmail"
+msgstr "傳送電郵"
+
+msgid "EmailTitle"
+msgstr "郵件主題"
+
+msgid "EmailText"
+msgstr "郵件內容"
+
+msgid "Send"
+msgstr "已傳送"
+
+msgid "Comments"
+msgstr "意見"
+
+msgid "ModifyRecipientList"
+msgstr "修訂收件人清單"
+
+msgid "Line"
+msgstr "行"
+
+msgid "NoLinkVisited"
+msgstr "未有連結曾被探訪"
+
+msgid "NoDocumentDownloaded"
+msgstr "未有文件曾被下載"
+
+msgid "Clicks"
+msgstr "按下"
+
+msgid "SearchResults"
+msgstr "搜尋結果"
+
+msgid "SessionFuture"
+msgstr "尚未開始"
+
+msgid "UsersConnectedToMySessions"
+msgstr "檢視所有連結到我的學期的使用者"
+
+msgid "Category"
+msgstr "類別"
+
+msgid "DearUser"
+msgstr "親愛的使用者"
+
+msgid "YourRegistrationData"
+msgstr "你的註冊資料"
+
+msgid "ResetLink"
+msgstr "按這裏取回密碼"
+
+msgid "VisibilityChanged"
+msgstr "顯示/隱藏設定已經變更"
+
+msgid "MainNavigation"
+msgstr "主要導航"
+
+msgid "SeeDetail"
+msgstr "檢視詳細資料"
+
+msgid "GroupSingle"
+msgstr "組別"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "請在首頁再嘗試登入"
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "請用以下表格再嘗試登入"
+
+msgid "AccessToFaq"
+msgstr "前往最常見問題"
+
+msgid "Faq"
+msgstr "常見問題"
+
+msgid "UploadMaxSize"
+msgstr "上載檔案大小上限"
+
+msgid "MoveUp"
+msgstr "上移"
+
+msgid "MoveDown"
+msgstr "下移"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "檔案上傳失敗：檔案的類型或延伸檔名不被接受"
+
+msgid "UplFileTooBig"
+msgstr "檔案太大不能上傳"
+
+msgid "UplGenericError"
+msgstr "未能成功收到你上傳的檔案，請稍後再試或聯絡本平台的管理員。"
+
+msgid "MyGradebook"
+msgstr "我的成績本子"
+
+msgid "Gradebook"
+msgstr "成績本子"
+
+msgid "GeneralDescription"
+msgstr "概略介紹"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "這課程處於這計劃的甚麼位置？有沒有甚麼先決要素？這課程如何連接其他課程？"
+
+msgid "GeneralDescriptionInformation"
+msgstr "有關課程(時數、編號、室號......)及教師(名、姓、辦公室、電話、電郵......)"
+
+msgid "Objectives"
+msgstr "目標"
+
+msgid "ObjectivesInformation"
+msgstr "展示課程的整體及詳細目標"
+
+msgid "ObjectivesQuestions"
+msgstr "使用者在課程完結時能做到甚麼？課程的過程中，他們需要製作甚麼？"
+
+msgid "Topics"
+msgstr "議題"
+
+msgid "TopicsInformation"
+msgstr "課程中的主題清單。每個主題的重要性。難易程度。結構及各部份的關連。"
+
+msgid "Methodology"
+msgstr "方法"
+
+msgid "MethodologyQuestions"
+msgstr "使用甚麼方法及活動可以協助學員達到課程的目？配合的時間表？"
+
+msgid "MethodologyInformation"
+msgstr "活動展示(會議、文章、小組調查、實驗......)"
+
+msgid "CourseMaterial"
+msgstr "課程材料"
+
+msgid "CourseMaterialQuestions"
+msgstr "有沒有課程手冊、文章系列、相關文獻或網址連結清單？"
+
+msgid "CourseMaterialInformation"
+msgstr "課程材料簡介"
+
+msgid "HumanAndTechnicalResources"
+msgstr "人力及科技資源"
+
+msgid "Assessment"
+msgstr "評估程序"
+
+msgid "AssessmentQuestions"
+msgstr "使用者如何被評估？有沒有策略以協助使用者掌握課題？"
+
+msgid "AssessmentInformation"
+msgstr "考試問題範例、及格因素、提示及小技巧"
+

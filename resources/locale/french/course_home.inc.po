@@ -1,0 +1,90 @@
+msgid "langActivate"
+msgstr "afficher"
+
+msgid "langDeactivate"
+msgstr "masquer"
+
+msgid "langInLnk"
+msgstr "Outils masqués"
+
+msgid "langDelLk"
+msgstr "Voulez-vous réellement supprimer ce lien?"
+
+msgid "langCourseCreate"
+msgstr "Créer un cours"
+
+msgid "langNameOfTheLink"
+msgstr "Nom du lien"
+
+msgid "lang_main_categories_list"
+msgstr "Liste des catégories"
+
+msgid "langCourseAdminOnly"
+msgstr "Professeurs uniquement"
+
+msgid "PlatformAdminOnly"
+msgstr "Administrateurs de la plateforme uniquement"
+
+msgid "langCombinedCourse"
+msgstr "Cours combiné"
+
+msgid "ToolIsNowVisible"
+msgstr "L\'outil est à présent visible"
+
+msgid "ToolIsNowHidden"
+msgstr "L\'outil est à présent invisible"
+
+msgid "EditLink"
+msgstr "Editer le lien"
+
+msgid "Blog_management"
+msgstr "Gestion des blogs"
+
+msgid "Forum"
+msgstr "Forums"
+
+msgid "Course_maintenance"
+msgstr "Maintenance du cours"
+
+msgid "TOOL_SURVEY"
+msgstr "Enquêtes"
+
+msgid "GreyIcons"
+msgstr "Boîte à outils"
+
+msgid "Interaction"
+msgstr "Interaction"
+
+msgid "Authoring"
+msgstr "Production"
+
+msgid "Administration"
+msgstr "Administration"
+
+msgid "IntroductionTextUpdated"
+msgstr "Le texte d\'introduction a été mis à jour"
+
+msgid "IntroductionTextDeleted"
+msgstr "Le texte d\'introduction du cours a bien été supprimé"
+
+msgid "SessionIdentifier"
+msgstr "Identifiant de session"
+
+msgid "SessionName"
+msgstr "Nom de la session"
+
+msgid "SessionCategory"
+msgstr "Catégorie de sessions"
+
+msgid "SessionData"
+msgstr "Info de session"
+
+msgid "TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise"
+msgstr "La fonctionnalité d\'auto-démarrage des exercices est activée. Les apprenants seront automatiquement redirigés vers l\'exercice sélectionné."
+
+msgid "TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP"
+msgstr "Le paramètre d\'auto-démarrage des parcours d\'apprentissage est activé. Lorsque les apprenants entreront dans cet espace de cours, ils seront automatiquement redirigés vers le parcours d\'apprentissage sélectionné pour l\'auto-démarrage."
+
+msgid "ToolSearch"
+msgstr "Recherche"
+

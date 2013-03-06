@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Mój kalendarz"
+
+msgid "langToday"
+msgstr "Dzi&#347;"
+

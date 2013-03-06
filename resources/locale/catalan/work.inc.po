@@ -1,0 +1,288 @@
+msgid "Tools"
+msgstr "Eines"
+
+msgid "SendWork"
+msgstr "Penja un document"
+
+msgid "langTooBig"
+msgstr "No ha escollit cap arxiu a enviar, o és massa gran"
+
+msgid "langListDeleted"
+msgstr "S\'ha esborrat la llista"
+
+msgid "langDocModif"
+msgstr "títol del treball modificat"
+
+msgid "langDocAdd"
+msgstr "Treball afegit"
+
+msgid "langDocDel"
+msgstr "Treball esborrat"
+
+msgid "langTitleWork"
+msgstr "Títol del treball"
+
+msgid "langAuthors"
+msgstr "Autors"
+
+msgid "langDelList"
+msgstr "Esborra la llista sencera"
+
+msgid "langWorkDelete"
+msgstr "Eliminar"
+
+msgid "langWorkModify"
+msgstr "Modificar"
+
+msgid "langWorkConfirmDelete"
+msgstr "Segur que vols esborrar aquest arxiu"
+
+msgid "langAllFiles"
+msgstr "Tots els arxius"
+
+msgid "DefaultUpload"
+msgstr "Configuració per defecte per a la visualització dels nous arxius enviats"
+
+msgid "NewVisible"
+msgstr "Els nous documents són visibles per a tots els usuaris"
+
+msgid "NewUnvisible"
+msgstr "Els nous documents són només visibles per als administradors de cursos"
+
+msgid "lang_doc_unvisible"
+msgstr "L\'arxiu només és visible per al professor d\'aquest curs, tampoc el pots veure tu"
+
+msgid "langDelLk"
+msgstr "Voleu realment esborrar aquest enllaç?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Només els usuaris inscrits en aquest curs poden publicar documents"
+
+msgid "langListDel"
+msgstr "Eliminar llista"
+
+msgid "langNameDir"
+msgstr "Nom del nou directori"
+
+msgid "langFileExists"
+msgstr "Operació impossible.<br>Ja existeix un fitxer amb aquest nom."
+
+msgid "CreateDirectory"
+msgstr "Crear directori"
+
+msgid "langCurrentDir"
+msgstr "Directori actual"
+
+msgid "UploadADocument"
+msgstr "Penjar un document"
+
+msgid "EditToolOptions"
+msgstr "Editar les opcions de les eines"
+
+msgid "DocumentDeleted"
+msgstr "Document esborrat"
+
+msgid "SendMailBody"
+msgstr "Un usuari ha publicat un document en l\'eina treballs del vostre curs"
+
+msgid "DirDelete"
+msgstr "Esborrar el directori"
+
+msgid "ValidateChanges"
+msgstr "Validar els canvis"
+
+msgid "FolderUpdated"
+msgstr "Carpeta actualitzada"
+
+msgid "EndsAt"
+msgstr "Acaba en (tancat completament)"
+
+msgid "QualificationOfAssignment"
+msgstr "Qualificació de la tasca"
+
+msgid "MakeQualifiable"
+msgstr "Permetre qualificar"
+
+msgid "QualificationNumberOver"
+msgstr "Qualificació sobre"
+
+msgid "WeightInTheGradebook"
+msgstr "Pes en l\'informe d\'avaluació"
+
+msgid "DatesAvailables"
+msgstr "Dates disponibles"
+
+msgid "ExpiresAt"
+msgstr "Expira en"
+
+msgid "AddToCalendar"
+msgstr "Agregar a l\'agenda"
+
+msgid "DirectoryCreated"
+msgstr "La tasca ha estat creada"
+
+msgid "Assignment"
+msgstr "Tasca"
+
+msgid "AdvancedParameters"
+msgstr "Paràmetres avançats"
+
+msgid "ExpiryDateToSendWorkIs"
+msgstr "Data de venciment per a enviar tasques"
+
+msgid "EnableExpiryDate"
+msgstr "Activar data de venciment"
+
+msgid "EnableEndDate"
+msgstr "Activar data de finalització"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "La tasca no ha pogut ser enviada"
+
+msgid "EndDateCannotBeBeforeTheExpireDate"
+msgstr "La data de finalització no pot ser anterior a la data de venciment"
+
+msgid "SelectAFilter"
+msgstr "Seleccionar filtre"
+
+msgid "FilterByNotExpired"
+msgstr "Filtrar per no vençudes"
+
+msgid "FilterAssignments"
+msgstr "Filtrar tasques"
+
+msgid "WeightNecessary"
+msgstr "Pes necessari"
+
+msgid "QualificationOver"
+msgstr "Qualificació sobre"
+
+msgid "ExpiryDateAlreadyPassed"
+msgstr "Data de venciment ja ha passat"
+
+msgid "EndDateAlreadyPassed"
+msgstr "Data final ja ha passat"
+
+msgid "MoveXTo"
+msgstr "Moure %s A"
+
+msgid "QualificationMustNotBeMoreThanQualificationOver"
+msgstr "La qualificació no pot ser superior a la qualificació màxima"
+
+msgid "ModifyDirectory"
+msgstr "Modificar tasca"
+
+msgid "DeleteAllFiles"
+msgstr "Eliminar tot"
+
+msgid "BackToWorksList"
+msgstr "Tornar a la llista de tasques"
+
+msgid "EditMedia"
+msgstr "Editar i marcar la tasca"
+
+msgid "AllFilesInvisible"
+msgstr "Ara la llista de documents ha deixat de mostrar-se"
+
+msgid "FileInvisible"
+msgstr "Ara l\'arxiu ja no es mostra"
+
+msgid "AllFilesVisible"
+msgstr "Ara tots els documents són visibles"
+
+msgid "FileVisible"
+msgstr "L\'arxiu ara és visible"
+
+msgid "ButtonCreateAssignment"
+msgstr "Crear"
+
+msgid "AssignmentName"
+msgstr "Nom de la tasca"
+
+msgid "CreateAssignment"
+msgstr "Crear una tasca"
+
+msgid "FolderEdited"
+msgstr "Tasca modificada"
+
+msgid "UpdateWork"
+msgstr "Actualitzar la tasca"
+
+msgid "MakeAllPapersInvisible"
+msgstr "Ocultar tots els documents"
+
+msgid "MakeAllPapersVisible"
+msgstr "Fer tots els documents visibles"
+
+msgid "TheDocumentHasBeenDeleted"
+msgstr "El document ha estat esborrat"
+
+msgid "YouAreNotAllowedToDeleteThisDocument"
+msgstr "No està autoritzat per eliminar aquest document"
+
+msgid "StudentAllowedToDeleteOwnPublication"
+msgstr "Permet que els estudiants puguin eliminar les seves tasques"
+
+msgid "ConfirmYourChoiceDeleteAllfiles"
+msgstr "Confirmi la seva elecció, s\'eliminaran tots els arxius i no es podran recuperar"
+
+msgid "WorkName"
+msgstr "Nom de la tasca"
+
+msgid "ReminderToSubmitPendingTask"
+msgstr "Se li recorda que té una tasca pendent"
+
+msgid "MessageConfirmSendingOfTask"
+msgstr "Aquest és un missatge per confirmar la recepció de la seva tasca"
+
+msgid "DataSent"
+msgstr "Data d\'enviament"
+
+msgid "DownloadLink"
+msgstr "Enllaç de decàrrega"
+
+msgid "ViewUsersWithTask"
+msgstr "Mostra estudiants que han enviat la tasca"
+
+msgid "ReminderMessage"
+msgstr "Envia un recordatori"
+
+msgid "DateSent"
+msgstr "Data d\'enviament"
+
+msgid "ViewUsersWithoutTask"
+msgstr "Mostra estudiants que no han enviat la tasca"
+
+msgid "HomeworkCreated"
+msgstr "La tasca ha estat creada"
+
+msgid "HomeworkHasBeenCreatedForTheCourse"
+msgstr "S\'ha creat una tasca nova al curs"
+
+msgid "PleaseCheckHomeworkPage"
+msgstr "Si us plau, consulti la pàgina de tasques"
+
+msgid "IncludedInEvaluation"
+msgstr "Inclosa en l\'avaluació"
+
+msgid "DateExpiredNotBeLessDeadLine"
+msgstr "La data de caducitat no pot ser menor que la data límit"
+
+msgid "NotRevised"
+msgstr "No s\'ha revisat"
+
+msgid "MaxWeightNeedToBeProvided"
+msgstr "S\'ha d\'indicar un pes màxim en les opcions d\'aquesta avaluació"
+
+msgid "ContainsAfile"
+msgstr "Conté un fitxer"
+
+msgid "AllowTextAssignments"
+msgstr "Permet tasques de text en línia"
+
+msgid "YouAlreadySentAPaperYouCantUpload"
+msgstr "Ja heu enviat una tasca, no es pot pujar una altra"
+
+msgid "CantUploadDeleteYourPaperFirst"
+msgstr "No podeu pujar aquesta tasca. Si us plau, abans elimineu la tasca anterior"
+

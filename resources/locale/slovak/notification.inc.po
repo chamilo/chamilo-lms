@@ -1,0 +1,48 @@
+msgid "lang_new_item"
+msgstr "nová položka pridaná"
+
+msgid "TitleNotification"
+msgstr "Od Vašej poslednej návštevy"
+
+msgid "lang_update_agenda"
+msgstr "aktualizovaná existujúca položka agendy"
+
+msgid "lang_new_agenda"
+msgstr "pridaná nová položka agendy"
+
+msgid "lang_update_announcements"
+msgstr "existujúce oznamy boli aktualizované"
+
+msgid "lang_new_announcements"
+msgstr "pridaný nový oznam"
+
+msgid "lang_new_document"
+msgstr "pridaný nový dokument(y)"
+
+msgid "lang_new_exercise"
+msgstr "sprístupnené nové cvičenie"
+
+msgid "lang_update_link"
+msgstr "existujúci odkaz na informáciu bol aktualizovaný"
+
+msgid "lang_new_link"
+msgstr "pridaný nový odkaz"
+
+msgid "lang_new_forum_topic"
+msgstr "pridaná nová téma"
+
+msgid "lang_new_groupforum_topic"
+msgstr "nová téma pridaná do skupinového fóra"
+
+msgid "lang_new_dropbox_file"
+msgstr "prijatý nový súbor"
+
+msgid "lang_update_dropbox_file"
+msgstr "súbor vo Vašej schránke dokumentov bol aktualizovaný"
+
+msgid "ForumCategoryAdded"
+msgstr "Kategória fóra bola pridaná"
+
+msgid "LearnpathAdded"
+msgstr "pridaná učebná osnova"
+

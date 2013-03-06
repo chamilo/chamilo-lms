@@ -1,0 +1,42 @@
+msgid "langCourseProgram"
+msgstr "Описание курса"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Этот курс еще не описан"
+
+msgid "langEditCourseProgram"
+msgstr "Создать и редактировать описание курса"
+
+msgid "QuestionPlan"
+msgstr "Вопросы для преподавателя"
+
+msgid "langInfo2Say"
+msgstr "Информация для пользователей"
+
+msgid "langOuAutreTitre"
+msgstr "Название"
+
+msgid "langNewBloc"
+msgstr "Другое"
+
+msgid "langAddCat"
+msgstr "добавить раздел"
+
+msgid "langAdd"
+msgstr "Добавить"
+
+msgid "langValid"
+msgstr "Подтвердить"
+
+msgid "langBackAndForget"
+msgstr "Отменить"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Описание курса обновлено"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Описание курса удалено"
+
+msgid "CourseDescriptionIntro"
+msgstr "Для того, чтобы создать описание курса, щелкните на заголовок и заполните необходимые поля формы.<br /><br /> Затем щелкните ОК и заполните другой заголовок."
+

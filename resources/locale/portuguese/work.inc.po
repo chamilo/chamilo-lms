@@ -1,0 +1,228 @@
+msgid "Tools"
+msgstr "Ferramentas"
+
+msgid "SendWork"
+msgstr "Enviar documento"
+
+msgid "langTooBig"
+msgstr "Não escolheu o ficheiro que pretende enviar, ou então é demasiado grande"
+
+msgid "langListDeleted"
+msgstr "A lista foi eliminada"
+
+msgid "langDocModif"
+msgstr "Título do documento modificado"
+
+msgid "langDocAdd"
+msgstr "O ficheiro foi adicionado à lista das publicações."
+
+msgid "langDocDel"
+msgstr "Ficheiro eliminado"
+
+msgid "langTitleWork"
+msgstr "Título do documento"
+
+msgid "langAuthors"
+msgstr "Autores"
+
+msgid "langDelList"
+msgstr "Eliminar lista"
+
+msgid "langWorkDelete"
+msgstr "Eliminar"
+
+msgid "langWorkModify"
+msgstr "Editar"
+
+msgid "langWorkConfirmDelete"
+msgstr "Deseja mesmo eliminar este ficheiro"
+
+msgid "langAllFiles"
+msgstr "Acções em todos os ficheiros"
+
+msgid "DefaultUpload"
+msgstr "Configuração pré-definida para a visibilidade dos ficheiros publicados recentemente"
+
+msgid "NewVisible"
+msgstr "Os novos documentos são visíveis para todos os utilizadores"
+
+msgid "NewUnvisible"
+msgstr "Os novos documentos são apenas visíveis para o(s) instrutor(es)"
+
+msgid "lang_doc_unvisible"
+msgstr "O seu ficheiro é apenas visível para o(s) instrutor(es) e por esse motivo, não será visível para si."
+
+msgid "langDelLk"
+msgstr "Deseja mesmo eliminar esta ligação?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Apenas utilizadores registados neste curso podem publicar documentos."
+
+msgid "langListDel"
+msgstr "Eliminar lista"
+
+msgid "langNameDir"
+msgstr "Nome da nova pasta/directório"
+
+msgid "langFileExists"
+msgstr "É impossível realizar a operação, já existe um ficheiro com este nome."
+
+msgid "CreateDirectory"
+msgstr "Validar"
+
+msgid "langCurrentDir"
+msgstr "Pasta actual"
+
+msgid "UploadADocument"
+msgstr "Enviar documento"
+
+msgid "EditToolOptions"
+msgstr "Definições das tarefas/trabalhos"
+
+msgid "DocumentDeleted"
+msgstr "Documento eliminado"
+
+msgid "SendMailBody"
+msgstr "Um utilizador adicionou um documento na ferramenta de Tarefas/trabalhos."
+
+msgid "DirDelete"
+msgstr "Eliminar directório/pasta"
+
+msgid "ValidateChanges"
+msgstr "Validar modificações"
+
+msgid "FolderUpdated"
+msgstr "Pasta/directório actualizada"
+
+msgid "EndsAt"
+msgstr "Termina a (completamente encerrado)"
+
+msgid "QualificationOfAssignment"
+msgstr "Pontuação da tarefa/trabalho"
+
+msgid "MakeQualifiable"
+msgstr "Activar avaliação/classificação"
+
+msgid "QualificationNumberOver"
+msgstr "Pontuação"
+
+msgid "WeightInTheGradebook"
+msgstr "Peso/percentagem no relatório de competências"
+
+msgid "DatesAvailables"
+msgstr "Datas disponíveis"
+
+msgid "ExpiresAt"
+msgstr "Termina/expira a"
+
+msgid "AddToCalendar"
+msgstr "Adicionar ao calendário"
+
+msgid "DirectoryCreated"
+msgstr "Directório/pasta criada"
+
+msgid "Assignment"
+msgstr "Tarefas/trabalhos"
+
+msgid "AdvancedParameters"
+msgstr "Configurações avançadas"
+
+msgid "ExpiryDateToSendWorkIs"
+msgstr "Data limite para tarefas/trabalhos"
+
+msgid "EnableExpiryDate"
+msgstr "Activar data de expiração"
+
+msgid "EnableEndDate"
+msgstr "Activar data final"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "Não é possível guardar/salvar o documento"
+
+msgid "EndDateCannotBeBeforeTheExpireDate"
+msgstr "A data final não pode ser anterior à data de expiração"
+
+msgid "SelectAFilter"
+msgstr "Seleccionar um filtro"
+
+msgid "FilterByNotExpired"
+msgstr "Filtrar por não expirado"
+
+msgid "FilterAssignments"
+msgstr "Filtrar tarefas/trabalhos"
+
+msgid "WeightNecessary"
+msgstr "Pontuação mínima desejada"
+
+msgid "QualificationOver"
+msgstr "Pontuação"
+
+msgid "ExpiryDateAlreadyPassed"
+msgstr "Data de expiração já ultrapassada"
+
+msgid "EndDateAlreadyPassed"
+msgstr "Data de final já ultrapassada"
+
+msgid "MoveXTo"
+msgstr "Mover %s para"
+
+msgid "QualificationMustNotBeMoreThanQualificationOver"
+msgstr "O valor não pode ultrapassar a pontuação máxima"
+
+msgid "ModifyDirectory"
+msgstr "Validar"
+
+msgid "DeleteAllFiles"
+msgstr "Eliminar todos os documentos"
+
+msgid "BackToWorksList"
+msgstr "Regressar à lista de tarefas/trabalhos"
+
+msgid "EditMedia"
+msgstr "Editar e pontuar o documento"
+
+msgid "AllFilesInvisible"
+msgstr "Todos os documentos encontram-se agora invisíveis"
+
+msgid "FileInvisible"
+msgstr "O ficheiro está agora invisível"
+
+msgid "AllFilesVisible"
+msgstr "Todos os trabalhos são agora visíveis"
+
+msgid "FileVisible"
+msgstr "O ficheiro está agora visível"
+
+msgid "ButtonCreateAssignment"
+msgstr "Criar tarefa/trabalho"
+
+msgid "AssignmentName"
+msgstr "Nome da tarefa/trabalho"
+
+msgid "CreateAssignment"
+msgstr "Criar tarefa/trabalho"
+
+msgid "FolderEdited"
+msgstr "Pasta/directório editado"
+
+msgid "UpdateWork"
+msgstr "Actualizar esta tarefa"
+
+msgid "MakeAllPapersInvisible"
+msgstr "Tornar todos os documentos invisíveis"
+
+msgid "MakeAllPapersVisible"
+msgstr "Tornar todos os documento visíveis"
+
+msgid "TheDocumentHasBeenDeleted"
+msgstr "O documento foi eliminado."
+
+msgid "YouAreNotAllowedToDeleteThisDocument"
+msgstr "Não está autorizado a eliminar este documento"
+
+msgid "StudentAllowedToDeleteOwnPublication"
+msgstr "Permitir que os alunos possam eliminar as suas publicações"
+
+msgid "ConfirmYourChoiceDeleteAllfiles"
+msgstr "Ao confirmar a sua opção eliminará todos os ficheiros e não será possível voltar a recuperá-los mais tarde"
+

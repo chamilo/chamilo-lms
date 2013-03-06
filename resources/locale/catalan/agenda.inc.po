@@ -1,0 +1,237 @@
+msgid "AgendaAdd"
+msgstr "Afegir una nova activitat a l\'agenda"
+
+msgid "ShowAllEvents"
+msgstr "Veure totes les activitats"
+
+msgid "ShowCurrent"
+msgstr "Veure les activitats d\'aquest mes"
+
+msgid "AddCalendarItem"
+msgstr "Afegir una nova anotació a l\'agenda"
+
+msgid "Day"
+msgstr "Dia"
+
+msgid "Month"
+msgstr "Mes"
+
+msgid "Year"
+msgstr "Any"
+
+msgid "Hour"
+msgstr "Hora"
+
+msgid "Minutes"
+msgstr "Minuts"
+
+msgid "Detail"
+msgstr "Detall"
+
+msgid "EditSuccess"
+msgstr "L\'anotació ha estat editada"
+
+msgid "AddSuccess"
+msgstr "L\'anotació ha estat afegida a l\'agenda"
+
+msgid "AgendaDeleteSuccess"
+msgstr "L\'anotació ha estat esborrada de l\'agenda"
+
+msgid "NoAgendaItems"
+msgstr "No hi ha esdeveniments"
+
+msgid "lang_september"
+msgstr "Setembre"
+
+msgid "langClassName"
+msgstr "Nom de la classe"
+
+msgid "lang_agenda"
+msgstr "Agenda"
+
+msgid "ModifyCalendarItem"
+msgstr "Modificar una anotació de l\'agenda"
+
+msgid "ItemTitle"
+msgstr "Títol de l\'anotació"
+
+msgid "langDay"
+msgstr "Dia"
+
+msgid "month_default"
+msgstr "Mes per defecte"
+
+msgid "langYear"
+msgstr "Any"
+
+msgid "year_default"
+msgstr "Any per defecte"
+
+msgid "langHour"
+msgstr "Hora"
+
+msgid "hour_default"
+msgstr "Hora per defecte"
+
+msgid "langMinute"
+msgstr "Minut"
+
+msgid "langLasting"
+msgstr "Durada"
+
+msgid "langOldToNew"
+msgstr "d\'antic a nou"
+
+msgid "langNewToOld"
+msgstr "de nou a antic"
+
+msgid "langNow"
+msgstr "Ara"
+
+msgid "langAddEvent"
+msgstr "Afegir una activitat"
+
+msgid "langDetail"
+msgstr "detall"
+
+msgid "MonthView"
+msgstr "Vista Mensual"
+
+msgid "WeekView"
+msgstr "Vista Setmanal"
+
+msgid "DayView"
+msgstr "Vista diària"
+
+msgid "AddPersonalItem"
+msgstr "Afegir anotació personal"
+
+msgid "Week"
+msgstr "Setmana"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Afegir anotació personal"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Modificar anotació personal"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Anotació personal afegida correctament"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Anotació personal editada correctament"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "L\'esdeveniment personal ha estat esborrat de l\'agenda"
+
+msgid "ViewPersonalItem"
+msgstr "Veure anotacions personals"
+
+msgid "UserGroupFilter"
+msgstr "Filtrar per grups / usuaris"
+
+msgid "ShowAll"
+msgstr "Mostrar tots"
+
+msgid "Print"
+msgstr "Imprimir"
+
+msgid "MyTextHere"
+msgstr "el meu text aquí"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Copiat com anunci"
+
+msgid "NewAnnouncement"
+msgstr "Nou anunci"
+
+msgid "AddAnnouncement"
+msgstr "Afegir com anunci"
+
+msgid "UpcomingEvent"
+msgstr "Propera anotació"
+
+msgid "RepeatedEvent"
+msgstr "Anotació periòdica"
+
+msgid "RepeatType"
+msgstr "Periodicitat"
+
+msgid "RepeatDaily"
+msgstr "Diària"
+
+msgid "RepeatWeekly"
+msgstr "Setmanal"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Mensual, per data"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Mensual, per dia"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Mensual, per dia, restringit"
+
+msgid "RepeatYearly"
+msgstr "Anual"
+
+msgid "RepeatEnd"
+msgstr "Finalitzar les repeticions el"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Veure l\'anotació inicial"
+
+msgid "ICalFileImport"
+msgstr "Importar un fitxer iCal/ics"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Tots els usuaris de la plataforma"
+
+msgid "GlobalEvent"
+msgstr "Esdeveniment global"
+
+msgid "ModifyEvent"
+msgstr "Modificar esdeveniment"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "La data final no haurà de ser menor que la data d\'inici"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ordenar esdeveniments (antics/recents)"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Ordenar events (recents/antics)"
+
+msgid "ItemForUserSelection"
+msgstr "Esdeveniment dirigit a una selecció d\'usuaris"
+
+msgid "IsNotiCalFormatFile"
+msgstr "No és un arxiu de format iCal"
+
+msgid "RepeatEvent"
+msgstr "Repetir esdeveniment"
+
+msgid "RepeatDate"
+msgstr "Repeteix data"
+
+msgid "EndDateMustBeMoreThanStartDate"
+msgstr "La data de finalització ha de ser posterior a la data d\'inici"
+
+msgid "SelectACourse"
+msgstr "Selecciona un curs"
+
+msgid "PleaseSelectACourseOrASessionInTheLeftColumn"
+msgstr "Seleccioneu un curs o una sessió a la barra lateral."
+
+msgid "DisableEndDate"
+msgstr "Deshabilita la data final"
+
+msgid "AllEvents"
+msgstr "Tots els esdeveniments"
+

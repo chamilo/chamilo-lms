@@ -1,0 +1,156 @@
+msgid "LinkMoved"
+msgstr "De link is verplaatst"
+
+msgid "langLinkName"
+msgstr "Naam"
+
+msgid "langLinkAdd"
+msgstr "Link toevoegen"
+
+msgid "langLinkAdded"
+msgstr "Link is toegevoegd."
+
+msgid "langLinkMod"
+msgstr "Link wijzigen"
+
+msgid "langLinkModded"
+msgstr "Link is gewijzigd."
+
+msgid "langLinkDel"
+msgstr "Link verwijderen"
+
+msgid "langLinkDeleted"
+msgstr "Link is verwijderd."
+
+msgid "langLinkDelconfirm"
+msgstr "Wenst u deze link te verwijderen?"
+
+msgid "langAllLinksDel"
+msgstr "Alle links in deze categorie verwijderen"
+
+msgid "langCategoryName"
+msgstr "Categorietitel"
+
+msgid "langCategoryAdd"
+msgstr "Categorie toevoegen"
+
+msgid "langCategoryAdded"
+msgstr "Categorie is toegevoegd."
+
+msgid "langCategoryModded"
+msgstr "Categorie is gewijzigd."
+
+msgid "langCategoryDel"
+msgstr "Categorie verwijderen"
+
+msgid "langCategoryDeleted"
+msgstr "Categorie en bijhorende links zijn verwijderd."
+
+msgid "langCategoryDelconfirm"
+msgstr "Als u een categorie verwijdert, worden alle links van deze categorie ook verwijderd. Wenst u de categorie en bijhorende links te verwijderen?"
+
+msgid "langAllCategoryDel"
+msgstr "Alle categorieën en links verwijderen"
+
+msgid "langGiveURL"
+msgstr "Gelieve een URL op te geven."
+
+msgid "langGiveCategoryName"
+msgstr "Gelieve een categorienaam op te geven."
+
+msgid "langNoCategory"
+msgstr "Geen categorie"
+
+msgid "showall"
+msgstr "Toon alle"
+
+msgid "shownone"
+msgstr "Toon geen"
+
+msgid "langListDeleted"
+msgstr "Lijst is verwijderd."
+
+msgid "langAddLink"
+msgstr "Link toevoegen"
+
+msgid "langDelList"
+msgstr "Verwijder lijst"
+
+msgid "langModifyLink"
+msgstr "Wijzig link"
+
+msgid "langCsvImport"
+msgstr "CSV-bestand importeren"
+
+msgid "langCsvFileNotFound"
+msgstr "CSV-bestand kon niet geopend worden (bv. leeg, te groot)."
+
+msgid "langCsvFileNoSeps"
+msgstr "CSV-bestand moet , of ; gebruiken als scheidingsteken tussen de kolommen."
+
+msgid "langCsvFileNoURL"
+msgstr "CSV-bestand moet minstens de kolommen \'URL\' en \'title\'  hebben."
+
+msgid "langCsvFileLine1"
+msgstr "... - 1e regel ="
+
+msgid "langCsvLinesFailed"
+msgstr "regel(s) niet geïmporteerd (geen \'URL\' of geen \'title\')."
+
+msgid "langCsvLinesOld"
+msgstr "bestaande link(s) aangepast (zelfde \'URL\' en \'category\')."
+
+msgid "langCsvLinesNew"
+msgstr "nieuwe link(s) aangemaakt."
+
+msgid "langCsvExplain"
+msgstr "Het bestand moet er zó uitzien, met Engelse kolomnamen:<blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\";</pre></blockquote>Als er al een link bestaat met dezelfde \'URL\' en \'category\', worden \'title\' en \'description\' aangepast. In alle andere gevallen wordt een nieuwe link aangemaakt.<br /><br /><b>Vetjes</b> = verplicht.De volgorde is vrij, ook het gebruik van hoofd- of kleine letters.Extra velden worden toegevoegd bij \'description\'. Kolommen scheiden met komma of puntkomma.Inhoud mag tussen aanhalingstekens, veldnamen niet.Enkele HTML-tags worden herkend in het veld \'description\'."
+
+msgid "langLinkUpdated"
+msgstr "Link is geüpdatet."
+
+msgid "langAll_Link_Deleted"
+msgstr "Link is verwijderd."
+
+msgid "langOnHomepage"
+msgstr "Toon link op cursushoofdpagina"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Toon deze link als een icoon op de cursushoofdpagina"
+
+msgid "General"
+msgstr "algemeen"
+
+msgid "SearchFeatureDoIndexLink"
+msgstr "Index link titel en beschrijving"
+
+msgid "langSaveLink"
+msgstr "Koppeling bewaren"
+
+msgid "langSaveCategory"
+msgstr "Map bewaren"
+
+msgid "BackToLinksOverview"
+msgstr "Terug naar overzicht koppelingen"
+
+msgid "AddTargetOfLinkOnHomepage"
+msgstr "Selecteer het \"doel\" waarin de link van de homepage wordt getoond"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "LinkOpenSelf"
+msgstr "Open _self"
+
+msgid "LinkOpenBlank"
+msgstr "Open _blank"
+
+msgid "LinkOpenParent"
+msgstr "Open _parent"
+
+msgid "LinkOpenTop"
+msgstr "Open _top"
+
+msgid "LinkTarget"
+msgstr "Doel van de koppeling"
+

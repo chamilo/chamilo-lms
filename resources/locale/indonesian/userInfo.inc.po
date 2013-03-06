@@ -1,0 +1,81 @@
+msgid "langLineNumber"
+msgstr "Jumlah Baris"
+
+msgid "langLine"
+msgstr "baris"
+
+msgid "langLines"
+msgstr "baris"
+
+msgid "langLineOrLines"
+msgstr "baris"
+
+msgid "langMoveUp"
+msgstr "Ke atas"
+
+msgid "langMoveDown"
+msgstr "Ke bawah"
+
+msgid "langAddNewHeading"
+msgstr "Tambah kolom baru"
+
+msgid "langCourseAdministratorOnly"
+msgstr "hanya untuk pengajar"
+
+msgid "langDefineHeadings"
+msgstr "Definisikan Kolom Tambahan"
+
+msgid "langBackToUsersList"
+msgstr "Kembali ke daftar user"
+
+msgid "langTracking"
+msgstr "Tracking"
+
+msgid "langCourseManager"
+msgstr "Penanggung jawab mata kuliah"
+
+msgid "langModRight"
+msgstr "ubah hak dari"
+
+msgid "langNoAdmin"
+msgstr "mulai kini <b>tidak<b> memiliki hak atas halaman ini"
+
+msgid "langAllAdmin"
+msgstr "mulai sekarang <b>semua </b> hak atas halaman ini"
+
+msgid "langModRole"
+msgstr "Ubah peran dari"
+
+msgid "langRole"
+msgstr "Peran"
+
+msgid "langIsNow"
+msgstr "kini mulai sekarang"
+
+msgid "langInC"
+msgstr "pada mata kuliah ini"
+
+msgid "langFilled"
+msgstr "Anda belum mengisi semua field."
+
+msgid "langUserNo"
+msgstr "Nama user yang anda pilih"
+
+msgid "langTaken"
+msgstr "sudah terpakai. Pilih yang lain."
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langUnreg"
+msgstr "Undur diri"
+
+msgid "langGroupUserManagement"
+msgstr "Manajemen Group"
+
+msgid "langUnregister"
+msgstr "Mengundurkan diri"
+
+msgid "langAddAUser"
+msgstr "Tambah user"
+

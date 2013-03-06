@@ -1,0 +1,184 @@
+msgid "lang_already_enrolled"
+msgstr "telah terdaftar"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Daftar mata kuliah-ku"
+
+msgid "lang_course_enrollment"
+msgstr "Mata Kuliah milik User"
+
+msgid "lang_course_not_available"
+msgstr "Mata Kuliah tidak ada..."
+
+msgid "lang_enroll"
+msgstr "Daftar"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Daftar ke mata kuliah baru"
+
+msgid "lang_my_present_course_list"
+msgstr "Daftar mata kuliah-ku saat ini"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Tidak tersedia mata kuliah untuk mendaftar pada kategori ini ...
+"
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Atau cari melalui kode mata kuliah"
+
+msgid "lang_search"
+msgstr "Cari"
+
+msgid "lang_select_course_among_categories"
+msgstr "Pilih mata kuliah diantara kategori"
+
+msgid "lang_select_course_in"
+msgstr "Pilih mata kuliah dalam"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Pilih mata kuliah pada hasil pencarian"
+
+msgid "Unsubscribe"
+msgstr "Batalkan pendaftaran"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Kembali ke home page-ku"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Kembali ke daftar mata kuliah-ku"
+
+msgid "langTitular"
+msgstr "Pemilik"
+
+msgid "langBackToListOfThisUser"
+msgstr "Kembali ke daftar mata kuliah"
+
+msgid "langAdministrationTools"
+msgstr "Tool Administrasi"
+
+msgid "lang_back_to_parent_category"
+msgstr "Kembali ke induk kategori"
+
+msgid "lang_back_to_course_selection"
+msgstr "Kembali ke pemilihan mata kuliah"
+
+msgid "lang_up"
+msgstr "Kembali ke induk kategori"
+
+msgid "langCatList"
+msgstr "Kategori"
+
+msgid "langCourseList"
+msgstr "Daftar Mata Kuliah"
+
+msgid "Subscribe"
+msgstr "Daftar"
+
+msgid "AlreadySubscribed"
+msgstr "Sudah terdaftar"
+
+msgid "CourseCategoryStored"
+msgstr "Kategori Mata Kuliah dibuat"
+
+msgid "langWithoutTimeLimits"
+msgstr "Tanpa batasan waktu"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Kembali ke daftar kategori utama"
+
+msgid "langAdded"
+msgstr "Ditambahkan"
+
+msgid "langDeleted"
+msgstr "Dihapus"
+
+msgid "langKeeped"
+msgstr "Simpan"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Sembunyikan / Tertutup"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Sembunyikan / Terbuka"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Nampak / Terbuka"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Nampak / Tertutup"
+
+msgid "langAdminThisUser"
+msgstr "Kembali ke user"
+
+msgid "langManage"
+msgstr "Kelola kampus"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Anda telah terdaftar di mata kuliah tsb"
+
+msgid "langSubCat"
+msgstr "sub-kategori"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Pengunduran diri tidak diijinkan dalam mata kuliah ini."
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Anda adalah pengelola mata kuliah ini."
+
+msgid "CourseManagement"
+msgstr "Pengelolan Mata Kuliah"
+
+msgid "SortMyCourses"
+msgstr "Urutkan mata kuliah-ku"
+
+msgid "SubscribeToCourse"
+msgstr "Daftar ke mata kuliah"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Undur diri dari mata kuliah"
+
+msgid "CreateCourseCategory"
+msgstr "Buat kategori mata kuliah"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Anda yakin akan menghapus kategori mata kuliah ini?  Mata kuliah dalam kategori ini akan dipindahkan keluar dari kategori ini."
+
+msgid "CourseCategories"
+msgstr "Kategori Mata Kuliah"
+
+msgid "CoursesInCategory"
+msgstr "Mata Kuliah-Mata Kuliah dalam kategori ini"
+
+msgid "SearchCourse"
+msgstr "Cari Mata Kuliah"
+
+msgid "UpOneCategory"
+msgstr "<- naik satu kategori"
+
+msgid "SearchResultsFor"
+msgstr "Hasil Pencarian :"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Anda yakin akan undur diri dari mata kuliah ini?"
+
+msgid "NoCourseCategory"
+msgstr "Tida ada kategori mata kuliah"
+
+msgid "EditCourseCategorySucces"
+msgstr "Mata kuliah telah dimasukkan ke kategori tersebut"
+
+msgid "SubscribingNotAllowed"
+msgstr "Pendaftaran tidak diijinkan"
+
+msgid "CourseSortingDone"
+msgstr "Pengurutan Mata Kuliah selesai"
+
+msgid "ExistingCourseCategories"
+msgstr "Kategori Mata Kuliah yang ada"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Anda kini tidak terdaftar di mata kuliah tsb"
+
+msgid "ViewOpenCourses"
+msgstr "Tampilkan mata kuliah yang terbuka untuk umum"
+

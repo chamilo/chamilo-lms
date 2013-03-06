@@ -1,0 +1,2730 @@
+msgid "DeleteAllAttendances"
+msgstr "Изтриване на всички присъствия"
+
+msgid "Title"
+msgstr "Заглавие"
+
+msgid "By"
+msgstr "От"
+
+msgid "UsersOnline"
+msgstr "Посетители"
+
+msgid "Remove"
+msgstr "Премахване"
+
+msgid "langEnter"
+msgstr "Обратно към списъка с курсовете"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Links"
+msgstr "Връзки"
+
+msgid "langWorks"
+msgstr "Задачи"
+
+msgid "Forums"
+msgstr "Форуми"
+
+msgid "langExercices"
+msgstr "Тестове"
+
+msgid "langCreateDir"
+msgstr "Създаване на папка"
+
+msgid "Name"
+msgstr "Име"
+
+msgid "langComment"
+msgstr "Коментар"
+
+msgid "langVisible"
+msgstr "Видимост"
+
+msgid "langNewDir"
+msgstr "Име на папката"
+
+msgid "langDirCr"
+msgstr "Папката е създадена."
+
+msgid "Download"
+msgstr "Сваляне"
+
+msgid "langGroup"
+msgstr "Групи"
+
+msgid "langEdit"
+msgstr "Редактиране"
+
+msgid "langGroupForum"
+msgstr "Форум на групата"
+
+msgid "Language"
+msgstr "Език"
+
+msgid "LoginName"
+msgstr "Потребителско име"
+
+msgid "AutostartMp3"
+msgstr "Искате ли аудио-файлът да стартира автоматично?"
+
+msgid "Assignments"
+msgstr "Задачи"
+
+msgid "Forum"
+msgstr "Форуми"
+
+msgid "langDelImage"
+msgstr "Премахване на снимката"
+
+msgid "langCode"
+msgstr "Код на курса"
+
+msgid "langUp"
+msgstr "Нагоре"
+
+msgid "Down"
+msgstr "Надолу"
+
+msgid "Up"
+msgstr "Нагоре"
+
+msgid "Theme"
+msgstr "Визуален стил"
+
+msgid "TheListIsEmpty"
+msgstr "Списъкът е празен."
+
+msgid "langUniqueSelect"
+msgstr "Само един верен отговор"
+
+msgid "CreateCategory"
+msgstr "Създаване на категория"
+
+msgid "SendFile"
+msgstr "Качване на документа"
+
+msgid "SaveChanges"
+msgstr "Запис на промените"
+
+msgid "SearchTerm"
+msgstr "Израз за търсене"
+
+msgid "TooShort"
+msgstr "Изразът за търсене е твърде кратък или липсва."
+
+msgid "langCourseCreate"
+msgstr "Създаване на нов курс"
+
+msgid "langTodo"
+msgstr "Предложения"
+
+msgid "UserName"
+msgstr "Потребителско име"
+
+msgid "lang_show_hide"
+msgstr "Показване/скриване"
+
+msgid "langCategoryMod"
+msgstr "Редактиране на категория"
+
+msgid "Hide"
+msgstr "Скриване"
+
+msgid "langDear"
+msgstr "Уважаеми/Уважаема"
+
+msgid "langArchive"
+msgstr "Архив"
+
+msgid "langCourseCode"
+msgstr "Код на курса"
+
+msgid "langNoDescription"
+msgstr "Няма описание."
+
+msgid "langOfficialCode"
+msgstr "Служебен код"
+
+msgid "FirstName"
+msgstr "Име"
+
+msgid "LastName"
+msgstr "Фамилия"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "langEmail"
+msgstr "E-mail"
+
+msgid "SlideshowConversion"
+msgstr "Конвертиране на презентация"
+
+msgid "UploadFile"
+msgstr "Качване на файла"
+
+msgid "AvailableFrom"
+msgstr "Достъпен от"
+
+msgid "AvailableTill"
+msgstr "Достъпен до"
+
+msgid "Preview"
+msgstr "Преглед"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "EmailAddress"
+msgstr "E-mail адрес"
+
+msgid "Organisation"
+msgstr "Организация"
+
+msgid "Reporting"
+msgstr "Справки"
+
+msgid "Code"
+msgstr "Код"
+
+msgid "Update"
+msgstr "Обновяване"
+
+msgid "SelectQuestionType"
+msgstr "Избор на тип въпрос"
+
+msgid "CurrentCourse"
+msgstr "Текущ курс"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Info"
+msgstr "Преглед"
+
+msgid "Search"
+msgstr "Търсене"
+
+msgid "AdvancedSearch"
+msgstr "Разширено търсене"
+
+msgid "Open"
+msgstr "Отваряне"
+
+msgid "Import"
+msgstr "Импортиране"
+
+msgid "AddAnother"
+msgstr "Добави още"
+
+msgid "Author"
+msgstr "Автор"
+
+msgid "TrueFalse"
+msgstr "Вярно/невярно"
+
+msgid "QuestionType"
+msgstr "Тип на въпроса"
+
+msgid "NoSearchResults"
+msgstr "Няма данни."
+
+msgid "SelectQuestion"
+msgstr "Избиране на въпрос"
+
+msgid "AddNewQuestionType"
+msgstr "Добавяне на нов тип въпрос"
+
+msgid "Numbered"
+msgstr "Номериран"
+
+msgid "iso639_2_code"
+msgstr "bg"
+
+msgid "iso639_1_code"
+msgstr "bg"
+
+msgid "charset"
+msgstr "windows-1251"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr " "
+
+msgid "number_decimal_separator"
+msgstr ","
+
+msgid "dateFormatShort"
+msgstr "%d.%m.%Y"
+
+msgid "dateFormatLong"
+msgstr "%A, %d %B %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%d.%m.%Y, %H:%M"
+
+msgid "timeNoSecFormat"
+msgstr "%H:%M"
+
+msgid "langYes"
+msgstr "Да"
+
+msgid "langNo"
+msgstr "Не"
+
+msgid "Next"
+msgstr "Следващ"
+
+msgid "langAllowed"
+msgstr "Разрешено"
+
+msgid "langBackHome"
+msgstr "Обратно към главната страница"
+
+msgid "langPropositions"
+msgstr "Предложения за подобряване на"
+
+msgid "langMaj"
+msgstr "Обновяване"
+
+msgid "langModify"
+msgstr "Промяна"
+
+msgid "langDelete"
+msgstr "Изтриване"
+
+msgid "langInvisible"
+msgstr "Скриване"
+
+msgid "langSave"
+msgstr "Запиши"
+
+msgid "langMove"
+msgstr "Преместване"
+
+msgid "Help"
+msgstr "Помощ"
+
+msgid "langOk"
+msgstr "Добре (OK)"
+
+msgid "langAdd"
+msgstr "Добави"
+
+msgid "langAddIntro"
+msgstr "Добавяне на въведение"
+
+msgid "langBackList"
+msgstr "Връщане към списъка"
+
+msgid "langText"
+msgstr "Текст"
+
+msgid "langEmpty"
+msgstr "Оставили сте някои полета празни.<br/>Използвайте бутона <b>\"Назад\"</b> на вашия браузър и опитайте отново."
+
+msgid "langConfirmYourChoice"
+msgstr "Моля, потвърдете действието."
+
+msgid "langAnd"
+msgstr "и"
+
+msgid "langChoice"
+msgstr "Вашият избор"
+
+msgid "langFinish"
+msgstr "Край"
+
+msgid "langCancel"
+msgstr "Отказ"
+
+msgid "langNotAllowed"
+msgstr "Нямате права."
+
+msgid "langNotLogged"
+msgstr "Вие не сте влезли в курса."
+
+msgid "langManager"
+msgstr "Администратор"
+
+msgid "langOptional"
+msgstr "Незадължително"
+
+msgid "NextPage"
+msgstr "Следваща страница"
+
+msgid "PreviousPage"
+msgstr "Предишна страница"
+
+msgid "langUse"
+msgstr "Използване"
+
+msgid "langTotal"
+msgstr "Общо"
+
+msgid "langTake"
+msgstr "вземи"
+
+msgid "langOne"
+msgstr "Един"
+
+msgid "langSeveral"
+msgstr "Няколко"
+
+msgid "langNotice"
+msgstr "Забележка"
+
+msgid "langDate"
+msgstr "Дата"
+
+msgid "langAmong"
+msgstr "измежду"
+
+msgid "langShow"
+msgstr "Показване"
+
+msgid "langMyCourses"
+msgstr "Моите курсове"
+
+msgid "langModifyProfile"
+msgstr "Моят профил"
+
+msgid "langMyStats"
+msgstr "Преглед на моите посещения"
+
+msgid "langLogout"
+msgstr "Напускане"
+
+msgid "langMyAgenda"
+msgstr "Моята програма"
+
+msgid "langCourseHomepage"
+msgstr "Страница на курса"
+
+msgid "langCourseManagerview"
+msgstr "Изглед за преподавателя"
+
+msgid "langStudentView"
+msgstr "Изглед за курсиста"
+
+msgid "AddResource"
+msgstr "Добавяне"
+
+msgid "AddedResources"
+msgstr "Прикрепени ресурси"
+
+msgid "lang_modify_resource"
+msgstr "Промяна/добавяне на ресурс"
+
+msgid "lang_resource"
+msgstr "Ресурс"
+
+msgid "lang_resources"
+msgstr "Ресурси"
+
+msgid "langNameOfLang[\'arabic\']"
+msgstr ""
+
+msgid "langNameOfLang[\'brazilian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'bulgarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'catalan\']"
+msgstr ""
+
+msgid "langNameOfLang[\'croatian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'danish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english\']"
+msgstr ""
+
+msgid "langNameOfLang[\'finnish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_KM\']"
+msgstr ""
+
+msgid "langNameOfLang[\'galician\']"
+msgstr ""
+
+msgid "langNameOfLang[\'german\']"
+msgstr ""
+
+msgid "langNameOfLang[\'greek\']"
+msgstr ""
+
+msgid "langNameOfLang[\'italian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'japanese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'polish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'portuguese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'russian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'simpl_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish\']"
+msgstr ""
+
+msgid "Close"
+msgstr "Затваряне"
+
+msgid "langPlatform"
+msgstr "Система"
+
+msgid "localLangName"
+msgstr "български"
+
+msgid "email"
+msgstr "E-mail"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "Този код на курс вече е зает. Моля, въведете друг код."
+
+msgid "Statistics"
+msgstr "Статистика"
+
+msgid "langGrouplist"
+msgstr "Списък на групите"
+
+msgid "langPrevious"
+msgstr "Предишен"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "Папката-приемник не съществува."
+
+msgid "Courses"
+msgstr "Курсове"
+
+msgid "In"
+msgstr "в"
+
+msgid "langShowAll"
+msgstr "Покажи всички"
+
+msgid "langPage"
+msgstr "страница"
+
+msgid "englishLangName"
+msgstr "английски"
+
+msgid "Home"
+msgstr "Начало"
+
+msgid "langAreYouSureToDelete"
+msgstr "Желаете ли да изтриете"
+
+msgid "SelectAll"
+msgstr "Маркирай всички"
+
+msgid "UnSelectAll"
+msgstr "Размаркирай всички"
+
+msgid "WithSelected"
+msgstr "С маркираните"
+
+msgid "langOnLine"
+msgstr "Посетители"
+
+msgid "langUsers"
+msgstr "Потребители"
+
+msgid "langPlatformAdmin"
+msgstr "Администратор"
+
+msgid "langNameOfLang[\'hungarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'indonesian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'malay\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovenian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish_latin\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swedish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'thai\']"
+msgstr ""
+
+msgid "langNameOfLang[\'turkce\']"
+msgstr ""
+
+msgid "langNameOfLang[\'vietnamese\']"
+msgstr ""
+
+msgid "UserInfo"
+msgstr "потребителска информация"
+
+msgid "langModifyQuestion"
+msgstr "Промяна на въпроса"
+
+msgid "langCheckAll"
+msgstr "Провери всички"
+
+msgid "langNbAnnoucement"
+msgstr "Обяви"
+
+msgid "lang_no_access_here"
+msgstr "Нямате достъп тук."
+
+msgid "langOtherCourses"
+msgstr "други курсове"
+
+msgid "Doc"
+msgstr "Документи"
+
+msgid "PlataformAdmin"
+msgstr "Администратор"
+
+msgid "Groups"
+msgstr "Групи"
+
+msgid "GroupManagement"
+msgstr "Управление на групите"
+
+msgid "All"
+msgstr "Всички"
+
+msgid "None"
+msgstr "Няма"
+
+msgid "langSorry"
+msgstr "Първо изберете курс."
+
+msgid "langDenied"
+msgstr "Това действие е позволено само за преподаватели."
+
+msgid "Today"
+msgstr "днес"
+
+msgid "langCourseHomepageLink"
+msgstr "Начална страница"
+
+msgid "Attachment"
+msgstr "Прикачен файл"
+
+msgid "User"
+msgstr "Потребител"
+
+msgid "MondayInit"
+msgstr "П"
+
+msgid "TuesdayInit"
+msgstr "В"
+
+msgid "WednesdayInit"
+msgstr "С"
+
+msgid "ThursdayInit"
+msgstr "Ч"
+
+msgid "FridayInit"
+msgstr "П"
+
+msgid "SaturdayInit"
+msgstr "С"
+
+msgid "SundayInit"
+msgstr "Н"
+
+msgid "MondayShort"
+msgstr "Пон"
+
+msgid "TuesdayShort"
+msgstr "Вт"
+
+msgid "WednesdayShort"
+msgstr "Ср"
+
+msgid "ThursdayShort"
+msgstr "Чет"
+
+msgid "FridayShort"
+msgstr "Пет"
+
+msgid "SaturdayShort"
+msgstr "Съб"
+
+msgid "SundayShort"
+msgstr "Нед"
+
+msgid "MondayLong"
+msgstr "Понеделник"
+
+msgid "TuesdayLong"
+msgstr "Вторник"
+
+msgid "WednesdayLong"
+msgstr "Сряда"
+
+msgid "ThursdayLong"
+msgstr "Четвъртък"
+
+msgid "FridayLong"
+msgstr "Петък"
+
+msgid "SaturdayLong"
+msgstr "Събота"
+
+msgid "SundayLong"
+msgstr "Неделя"
+
+msgid "JanuaryInit"
+msgstr "Я"
+
+msgid "FebruaryInit"
+msgstr "Ф"
+
+msgid "MarchInit"
+msgstr "М"
+
+msgid "AprilInit"
+msgstr "А"
+
+msgid "MayInit"
+msgstr "М"
+
+msgid "JuneInit"
+msgstr "Ю"
+
+msgid "JulyInit"
+msgstr "Ю"
+
+msgid "AugustInit"
+msgstr "А"
+
+msgid "SeptemberInit"
+msgstr "С"
+
+msgid "OctoberInit"
+msgstr "О"
+
+msgid "NovemberInit"
+msgstr "Н"
+
+msgid "DecemberInit"
+msgstr "Д"
+
+msgid "JanuaryShort"
+msgstr "Яну"
+
+msgid "FebruaryShort"
+msgstr "Фев"
+
+msgid "MarchShort"
+msgstr "Мар"
+
+msgid "AprilShort"
+msgstr "Апр"
+
+msgid "MayShort"
+msgstr "Май"
+
+msgid "JuneShort"
+msgstr "Юни"
+
+msgid "JulyShort"
+msgstr "Юли"
+
+msgid "AugustShort"
+msgstr "Авг"
+
+msgid "SeptemberShort"
+msgstr "Сеп"
+
+msgid "OctoberShort"
+msgstr "Окт"
+
+msgid "NovemberShort"
+msgstr "Ное"
+
+msgid "DecemberShort"
+msgstr "Дек"
+
+msgid "JanuaryLong"
+msgstr "Януари"
+
+msgid "FebruaryLong"
+msgstr "Февруари"
+
+msgid "MarchLong"
+msgstr "Март"
+
+msgid "AprilLong"
+msgstr "Април"
+
+msgid "MayLong"
+msgstr "Май"
+
+msgid "JuneLong"
+msgstr "Юни"
+
+msgid "JulyLong"
+msgstr "Юли"
+
+msgid "AugustLong"
+msgstr "Август"
+
+msgid "SeptemberLong"
+msgstr "Септeмври"
+
+msgid "OctoberLong"
+msgstr "Октомври"
+
+msgid "NovemberLong"
+msgstr "Ноември"
+
+msgid "DecemberLong"
+msgstr "Декември"
+
+msgid "langMyCompetences"
+msgstr "Моята квалификация"
+
+msgid "langMyDiplomas"
+msgstr "Моите дипломи"
+
+msgid "langMyPersonalOpenArea"
+msgstr "Моята лична страница"
+
+msgid "langMyTeach"
+msgstr "Какво мога да преподавам"
+
+msgid "Agenda"
+msgstr "Програма"
+
+msgid "HourShort"
+msgstr "ч."
+
+msgid "PleaseTryAgain"
+msgstr "Моля, опитайте отново!"
+
+msgid "UplNoFileUploaded"
+msgstr "Няма качени файлове."
+
+msgid "UplSelectFileFirst"
+msgstr "Моля изберете файл преди да натиснете бутона за качване."
+
+msgid "UplNotAZip"
+msgstr "Файлът, който сте избрали не е ZIP-файл."
+
+msgid "UplUploadSucceeded"
+msgstr "Файлът е качен."
+
+msgid "ExportAsCSV"
+msgstr "Експортиране като CSV-файл"
+
+msgid "ExportAsXLS"
+msgstr "Експортиране като XLS-файл"
+
+msgid "langOpenarea"
+msgstr "Лична страница"
+
+msgid "Done"
+msgstr "Извършено"
+
+msgid "Documents"
+msgstr "Документи"
+
+msgid "DocumentAdded"
+msgstr "Документът е добавен."
+
+msgid "DocumentUpdated"
+msgstr "Документът е обновен."
+
+msgid "DocumentInFolderUpdated"
+msgstr "Документът е обновен."
+
+msgid "Course_description"
+msgstr "Описание на курса"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "Learnpath"
+msgstr "Пътека за обучение"
+
+msgid "Link"
+msgstr "Връзки"
+
+msgid "Announcement"
+msgstr "Обяви"
+
+msgid "Dropbox"
+msgstr "Куриер"
+
+msgid "Quiz"
+msgstr "Тестове"
+
+msgid "langChat"
+msgstr "Говорилня"
+
+msgid "Conference"
+msgstr "Конференция"
+
+msgid "Student_publication"
+msgstr "Работи на курсистите"
+
+msgid "Tracking"
+msgstr "Справки"
+
+msgid "langhomepage_link"
+msgstr "Добавяне на връзка в началната страница"
+
+msgid "Course_setting"
+msgstr "Настройки на курса"
+
+msgid "langbackup"
+msgstr "Работа с архиви"
+
+msgid "langcopy_course_content"
+msgstr "Копиране на съдържанието на курса"
+
+msgid "langrecycle_course"
+msgstr "Рециклиране на курса"
+
+msgid "StartDate"
+msgstr "Начална дата"
+
+msgid "EndDate"
+msgstr "Крайна дата"
+
+msgid "StartTime"
+msgstr "Начало"
+
+msgid "EndTime"
+msgstr "Край"
+
+msgid "langYouWereCalled"
+msgstr "Имате покана за разговор от"
+
+msgid "langDoYouAccept"
+msgstr "Приемате ли?"
+
+msgid "Everybody"
+msgstr "Всички"
+
+msgid "SentTo"
+msgstr "Изпращане до"
+
+msgid "Export"
+msgstr "Експортиране"
+
+msgid "Tools"
+msgstr "Инструменти"
+
+msgid "Everyone"
+msgstr "Всички"
+
+msgid "SelectGroupsUsers"
+msgstr "Групи/потребители"
+
+msgid "Student"
+msgstr "Курсист"
+
+msgid "Teacher"
+msgstr "Преподавател"
+
+msgid "Send2All"
+msgstr "Не избрахте група/потребители. Ще бъде видимо за всички потребители."
+
+msgid "Wiki"
+msgstr "Group wiki"
+
+msgid "Complete"
+msgstr "Изпълнено"
+
+msgid "Incomplete"
+msgstr "Неизпълнено"
+
+msgid "reservation"
+msgstr "резервация"
+
+msgid "StartTimeWindow"
+msgstr "Начало"
+
+msgid "EndTimeWindow"
+msgstr "Край"
+
+msgid "AccessNotAllowed"
+msgstr "Достъп до тази страница не е разрешен."
+
+msgid "InThisCourse"
+msgstr "В този курс"
+
+msgid "ThisFieldIsRequired"
+msgstr "Задължително се попълва."
+
+msgid "AllowedHTMLTags"
+msgstr "Разрешени HTML-тагове"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "Във формуляра не са попълнени всички задължителни данни. Моля, допълнете или коригирайте данните."
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "Началната дата трябва да предхожда крайната дата."
+
+msgid "InvalidDate"
+msgstr "Невалидна дата"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "Позволени са само букви и цифри."
+
+msgid "langBasicOverview"
+msgstr "Подредба"
+
+msgid "CourseAdminRole"
+msgstr "Преподавател"
+
+msgid "UserRole"
+msgstr "Роля"
+
+msgid "OnlyImagesAllowed"
+msgstr "Позволени са изображения само във файловите формати PNG, JPG (JPEG) или GIF."
+
+msgid "ViewRight"
+msgstr "Преглед"
+
+msgid "EditRight"
+msgstr "Редактиране"
+
+msgid "DeleteRight"
+msgstr "Изтриване"
+
+msgid "OverviewCourseRights"
+msgstr "Преглед на ролите и правата"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "За роля"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "За правото"
+
+msgid "langAdvanced"
+msgstr "Създаване"
+
+msgid "RightValueModified"
+msgstr "Стойността е променена."
+
+msgid "course_rights"
+msgstr "Преглед на ролите и правата"
+
+msgid "Visio_conference"
+msgstr "Виртуална среща"
+
+msgid "CourseAdminRoleDescription"
+msgstr "Преподавател"
+
+msgid "Move"
+msgstr "Преместване"
+
+msgid "MoveTo"
+msgstr "Преместване към"
+
+msgid "Delete"
+msgstr "Изтриване"
+
+msgid "MoveFileTo"
+msgstr "Преместване на файла в"
+
+msgid "Save"
+msgstr "Записване"
+
+msgid "Error"
+msgstr "Грешка!"
+
+msgid "Anonymous"
+msgstr "Анонимен посетител"
+
+msgid "h"
+msgstr " ч."
+
+msgid "CreateNewGlobalRole"
+msgstr "Създаване на глобална роля"
+
+msgid "CreateNewLocalRole"
+msgstr "Създаване на локална роля"
+
+msgid "Actions"
+msgstr "Действия"
+
+msgid "Inbox"
+msgstr "Входящи съобщения"
+
+msgid "ComposeMessage"
+msgstr "Създаване на съобщение"
+
+msgid "Other"
+msgstr "Друго"
+
+msgid "AddRight"
+msgstr "Добавяне на право"
+
+msgid "CampusHomepage"
+msgstr "Главна страница"
+
+msgid "YouHaveNewMessage"
+msgstr "Имате ново съобщение."
+
+msgid "myActiveSessions"
+msgstr "Моите активни сесии"
+
+msgid "myInactiveSessions"
+msgstr "Моите неактивни сесии"
+
+msgid "FileUpload"
+msgstr "Качване"
+
+msgid "langMyActiveSessions"
+msgstr "Моите активни сесии"
+
+msgid "langMyInActiveSessions"
+msgstr "Моите неактивни сесии"
+
+msgid "langMySpace"
+msgstr "Справки"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "Разширението е активирано, но в момента не може да работи."
+
+msgid "MyStudents"
+msgstr "Моите курсисти"
+
+msgid "Progress"
+msgstr "Напредък"
+
+msgid "Or"
+msgstr "или"
+
+msgid "Uploading"
+msgstr "Качване..."
+
+msgid "AccountExpired"
+msgstr "Регистрацията е изтекла."
+
+msgid "AccountInactive"
+msgstr "Регистрацията е неактивна."
+
+msgid "ActionNotAllowed"
+msgstr "Действието не е позволено."
+
+msgid "SubTitle"
+msgstr "Подзаглавие"
+
+msgid "NoResourcesToRecycle"
+msgstr "Няма ресурси за рециклиране."
+
+msgid "noOpen"
+msgstr "Не може да се отвори."
+
+msgid "TempsFrequentation"
+msgstr "Многократно"
+
+msgid "Progression"
+msgstr "Напредък"
+
+msgid "NoCourse"
+msgstr "Курсът не може да бъде намерен."
+
+msgid "Teachers"
+msgstr "Преподаватели"
+
+msgid "Session"
+msgstr "Сесия"
+
+msgid "Sessions"
+msgstr "Сесии"
+
+msgid "NoSession"
+msgstr "Сесията не може да бъде намерена."
+
+msgid "NoStudent"
+msgstr "Курсистът не може да бъде намерен."
+
+msgid "Students"
+msgstr "Курсисти"
+
+msgid "NoResults"
+msgstr "Няма резултати."
+
+msgid "Tutors"
+msgstr "Инструктори"
+
+msgid "Tel"
+msgstr "Телефон"
+
+msgid "NoTel"
+msgstr "Няма телефон."
+
+msgid "SendMail"
+msgstr "Изпращане на e-mail"
+
+msgid "RdvAgenda"
+msgstr "Програма за срещи"
+
+msgid "VideoConf"
+msgstr "Видеоконференция"
+
+msgid "MyProgress"
+msgstr "Моят напредък"
+
+msgid "NoOnlineStudents"
+msgstr "Няма посетители"
+
+msgid "InCourse"
+msgstr "В курс"
+
+msgid "UserOnlineListSession"
+msgstr "Посетители - сесия"
+
+msgid "From"
+msgstr "От"
+
+msgid "To"
+msgstr "До"
+
+msgid "Content"
+msgstr "Съдържание"
+
+msgid "year"
+msgstr "година"
+
+msgid "Years"
+msgstr "години"
+
+msgid "Day"
+msgstr "Ден"
+
+msgid "Days"
+msgstr "дена"
+
+msgid "PleaseStandBy"
+msgstr "Моля, почакайте..."
+
+msgid "AvailableUntil"
+msgstr "Достъпно до"
+
+msgid "HourMinuteDivider"
+msgstr ":"
+
+msgid "Visio_classroom"
+msgstr "Виртуална класна стая"
+
+msgid "Survey"
+msgstr "Анкета"
+
+msgid "More"
+msgstr "Справка"
+
+msgid "ClickHere"
+msgstr "Щракнете тук"
+
+msgid "Here"
+msgstr "тук"
+
+msgid "SaveQuestion"
+msgstr "Запис на въпроса"
+
+msgid "ReturnTo"
+msgstr "Можете да се върнете в"
+
+msgid "Horizontal"
+msgstr "Хоризонтално"
+
+msgid "Vertical"
+msgstr "Вертикално"
+
+msgid "DisplaySearchResults"
+msgstr "Показване на резултатите от търсенето"
+
+msgid "DisplayAll"
+msgstr "Покажи всички"
+
+msgid "File_upload"
+msgstr "Качване"
+
+msgid "NoUsersInCourse"
+msgstr "Няма потребители в курса."
+
+msgid "Percentage"
+msgstr "Проценти"
+
+msgid "Information"
+msgstr "Информация"
+
+msgid "EmailDestination"
+msgstr "Получател"
+
+msgid "SendEmail"
+msgstr "Изпращане на e-mail"
+
+msgid "EmailTitle"
+msgstr "Заглавие"
+
+msgid "EmailText"
+msgstr "Съдържание"
+
+msgid "Send"
+msgstr "Изпращане"
+
+msgid "Comments"
+msgstr "Коментари"
+
+msgid "ModifyRecipientList"
+msgstr "Промяна на списъка с получателите"
+
+msgid "Line"
+msgstr "Ред"
+
+msgid "NoLinkVisited"
+msgstr "Няма посетени връзки."
+
+msgid "NoDocumentDownloaded"
+msgstr "Няма свалени документи."
+
+msgid "Clicks"
+msgstr "Щраквания"
+
+msgid "SearchResults"
+msgstr "Резултати от търсенето"
+
+msgid "SessionPast"
+msgstr "Отминала"
+
+msgid "SessionActive"
+msgstr "Активна"
+
+msgid "SessionFuture"
+msgstr "Очаква се"
+
+msgid "DateFormatLongWithoutDay"
+msgstr "%B %d, %Y"
+
+msgid "InvalidDirectoryPleaseCreateAnImagesFolder"
+msgstr "Невалидна папка: Моля, създайте папка с името <i>images</i> в инструмента \"Документи\". Графичните файлове ще се качват там."
+
+msgid "UsersConnectedToMySessions"
+msgstr "Покажи посетителите в моите сесии"
+
+msgid "Category"
+msgstr "Категория"
+
+msgid "DearUser"
+msgstr "Уважаеми господине, / Уважаема госпожо,"
+
+msgid "YourRegistrationData"
+msgstr "Датата, на която сте регистрирани"
+
+msgid "ResetLink"
+msgstr "Щракнете тук, за да възстановите паролата си."
+
+msgid "VisibilityChanged"
+msgstr "Видимостта е променена."
+
+msgid "MainNavigation"
+msgstr "Главна навигация"
+
+msgid "SeeDetail"
+msgstr "Подробно"
+
+msgid "GroupSingle"
+msgstr "Група"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "Моля, влезте отново през главната страница."
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "Моля, въведете потребителското си име и паролата по-долу:"
+
+msgid "AccessToFaq"
+msgstr "Достъп до често задаваните въпроси"
+
+msgid "Faq"
+msgstr "Често задавани въпроси"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "Подсещане на потребителите, които са неактивни повече от"
+
+msgid "RemindInactiveLearnersMailSubject"
+msgstr "Отдавна не сте присъствали в %s"
+
+msgid "RemindInactiveLearnersMailContent"
+msgstr "Уважаеми господине, / Уважаема госпожо,<br /><br />Не сте присъствали в %s повече от %s дни."
+
+msgid "OpenIdAuthentication"
+msgstr "OpenID автентикация"
+
+msgid "UploadMaxSize"
+msgstr "Максимален размер на файл за качване"
+
+msgid "Unknown"
+msgstr "Неизвестен"
+
+msgid "MoveUp"
+msgstr "Преместване нагоре"
+
+msgid "MoveDown"
+msgstr "Преместване надолу"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "Качването на файла не е успешно: не е позвалено да се качва файл с това разширение или файл от този тип."
+
+msgid "OpenIDURL"
+msgstr "OpenID URL"
+
+msgid "UplFileTooBig"
+msgstr "Файлът е твърде голям, за да бъде качен."
+
+msgid "UplGenericError"
+msgstr "Файлът не беше качен успешно. Моля, опитайте отново малко по-късно или се свържете с адмистратора на системата."
+
+msgid "MyGradebook"
+msgstr "Регистър на оценките"
+
+msgid "Gradebook"
+msgstr "Регистър на оценките"
+
+msgid "OpenIDWhatIs"
+msgstr "Какво е OpenID?"
+
+msgid "OpenIDDescription"
+msgstr "OpenID е начин за опростяване автентификацията на потребители в множество сайтове. Трябва да изберете доставчик на OpenID, който отговаря на вашите потребности и което е важно - на който имате доверие. Ако вече имате OpenID, вие ще го запазите, ако решите да смените доставчика си. И което е най-добре, технологията OpenID не е собственическа, предоставя се свободно. За бизнеса това означава намаляване на разходите за управление на потребителски акаунти. OpenID намалява и неудовлетвореността на потребителите, като им позволява да контролират напълно данните си за идентификация.<br /><br /><a href=\"http://openid.net/what/\" target=\"_blank\">За повече информация: http://openid.net/what/</a>"
+
+msgid "NoManager"
+msgstr "Няма"
+
+msgid "ExportiCal"
+msgstr "Експортиране в iCal формат"
+
+msgid "ExportiCalPublic"
+msgstr "Експортиране в iCal формат като публично събитие"
+
+msgid "ExportiCalPrivate"
+msgstr "Експортиране в iCal формат като частно събитие"
+
+msgid "ExportiCalConfidential"
+msgstr "Експортиране в iCal формат като конфиденциално събитие"
+
+msgid "MoreStats"
+msgstr "Още статистика"
+
+msgid "Drh"
+msgstr "Мениджър по човешките ресурси"
+
+msgid "MinDecade"
+msgstr "десетилетие"
+
+msgid "MinYear"
+msgstr "година"
+
+msgid "MinMonth"
+msgstr "месец"
+
+msgid "MinWeek"
+msgstr "седмица"
+
+msgid "MinDay"
+msgstr "ден"
+
+msgid "MinHour"
+msgstr "час"
+
+msgid "MinMinute"
+msgstr "минута"
+
+msgid "MinDecades"
+msgstr "десетилетия"
+
+msgid "MinYears"
+msgstr "години"
+
+msgid "MinMonths"
+msgstr "месеца"
+
+msgid "MinWeeks"
+msgstr "седмици"
+
+msgid "MinDays"
+msgstr "дни"
+
+msgid "MinHours"
+msgstr "часа"
+
+msgid "MinMinutes"
+msgstr "минути"
+
+msgid "HomeDirectory"
+msgstr "Главна папка"
+
+msgid "DocumentCreated"
+msgstr "Документът е създаден."
+
+msgid "ForumAdded"
+msgstr "Форумът е създаден."
+
+msgid "ForumThreadAdded"
+msgstr "Темата във форума е добавена."
+
+msgid "ForumAttachmentAdded"
+msgstr "Приложението към съобщението е добавено."
+
+msgid "directory"
+msgstr "директория"
+
+msgid "Directories"
+msgstr "директории"
+
+msgid "UserAge"
+msgstr "Възраст"
+
+msgid "UserBirthday"
+msgstr "Рожден ден"
+
+msgid "Course"
+msgstr "Курс"
+
+msgid "FilesUpload"
+msgstr "документа"
+
+msgid "ExerciseFinished"
+msgstr "Тестът е завършен."
+
+msgid "UserSex"
+msgstr "Пол"
+
+msgid "UserNativeLanguage"
+msgstr "Роден език"
+
+msgid "UserResidenceCountry"
+msgstr "Държава"
+
+msgid "AddAnAttachment"
+msgstr "Приложение"
+
+msgid "FileComment"
+msgstr "Коментар"
+
+msgid "FileName"
+msgstr "Име на файла"
+
+msgid "SessionsAdmin"
+msgstr "Администриране на сесии"
+
+msgid "MakeChangeable"
+msgstr "Да може да се променя"
+
+msgid "MakeUnchangeable"
+msgstr "Да не може да се променя"
+
+msgid "UserFields"
+msgstr "Потребителски полета"
+
+msgid "FieldShown"
+msgstr "Полето е видимо за потребителите."
+
+msgid "CannotShowField"
+msgstr "Полето не може да се показва."
+
+msgid "FieldHidden"
+msgstr "Полето не е видимо за потребителите."
+
+msgid "CannotHideField"
+msgstr "Полето не може да се скрие."
+
+msgid "FieldMadeChangeable"
+msgstr "Стойността на полето ще може да се променя от потребителя."
+
+msgid "CannotMakeFieldChangeable"
+msgstr "Не може да се даде възможност за промяна на полето."
+
+msgid "FieldMadeUnchangeable"
+msgstr "Стойността на полето няма да може да се променя от потребителя."
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "Не може да се отнеме възможността за промяна на полето."
+
+msgid "Folder"
+msgstr "Папка"
+
+msgid "CloseOtherSession"
+msgstr "Говорилнята не е достъпна, защото сте отворили друг курс в отделен прозорец на браузъра. За да избегнете проблема, моля останете в курса, за който се отнася разговора. За да се присъедините към желания разговор, влезте в говорилнята през началната страница на съответния курс."
+
+msgid "FileUploadSucces"
+msgstr "Файлът е качен."
+
+msgid "Yesterday"
+msgstr "Вчера"
+
+msgid "Submit"
+msgstr "Изпращане"
+
+msgid "Department"
+msgstr "Отдел"
+
+msgid "BackToNewSearch"
+msgstr "Обратно за ново търсене"
+
+msgid "Step"
+msgstr "Стъпка"
+
+msgid "SomethingFemininAddedSuccessfully"
+msgstr "е добавена успешно"
+
+msgid "SomethingMasculinAddedSuccessfully"
+msgstr "е добавен успешно"
+
+msgid "DeleteError"
+msgstr "Изтриване на грешката"
+
+msgid "StepsList"
+msgstr "Списък на стъпките"
+
+msgid "AddStep"
+msgstr "Добавяне на стъпка"
+
+msgid "StepCode"
+msgstr "Код на стъпката"
+
+msgid "Label"
+msgstr "Надпис"
+
+msgid "UnableToConnectTo"
+msgstr "Няма връзка към"
+
+msgid "NoUser"
+msgstr "Няма патребители."
+
+msgid "SearchResultsFor"
+msgstr "Резултати за:"
+
+msgid "SelectFile"
+msgstr "Избор на файл"
+
+msgid "WarningFaqFileNonWriteable"
+msgstr "Предупреждение: Файлът с често задаваните въпроси (FAQ), който се намира в /home/ директорията на системата не може да се презаписва. Няма да можете да записвате вашия текст, докато не се сменят правата за файла."
+
+msgid "AddCategory"
+msgstr "Добавяне на категория"
+
+msgid "NoExercises"
+msgstr "Няма тестове."
+
+msgid "NotAllowedClickBack"
+msgstr "Нямате разрешен достъп до тази страница. Моля, щракнете бутона \"Обратно\" на браузъра или връзката по-долу, за да се върнете към предишната страница."
+
+msgid "Exercise"
+msgstr "Тест"
+
+msgid "Result"
+msgstr "Резултат"
+
+msgid "AttemptingToLoginAs"
+msgstr "Опит за влизане като %s %s (id %s)"
+
+msgid "LoginSuccessfulGoToX"
+msgstr "Влизането е успешно. Отидете в %s"
+
+msgid "FckMp3Autostart"
+msgstr "Автоматично стартиране на аудио-файла"
+
+msgid "Learner"
+msgstr "Курсист"
+
+msgid "IntroductionTextUpdated"
+msgstr "Встъпителният текст е актуализиран."
+
+msgid "Align"
+msgstr "Подравняване"
+
+msgid "Width"
+msgstr "Широчина"
+
+msgid "VSpace"
+msgstr "Вертикална разредка"
+
+msgid "HSpace"
+msgstr "Хоризонтална разредка"
+
+msgid "Border"
+msgstr "Рамка"
+
+msgid "Alt"
+msgstr "Алтернативен текст"
+
+msgid "Height"
+msgstr "Височина"
+
+msgid "ImageManager"
+msgstr "Изображение"
+
+msgid "ImageFile"
+msgstr "Файл-изображение"
+
+msgid "ConstrainProportions"
+msgstr "Запазване на пропорцията"
+
+msgid "InsertImage"
+msgstr "Вмъкване на изображение"
+
+msgid "AccountActive"
+msgstr "Акаунтът е активен"
+
+msgid "GroupSpace"
+msgstr "Страница на групата"
+
+msgid "GroupWiki"
+msgstr "Wiki"
+
+msgid "ExportToPDF"
+msgstr "Експортиране в PDF"
+
+msgid "CommentAdded"
+msgstr "Вашият коментар е добавен."
+
+msgid "BackToPreviousPage"
+msgstr "Обратно към предишната страница"
+
+msgid "ListView"
+msgstr "Показване като списък"
+
+msgid "NoOfficialCode"
+msgstr "Няма служебен код."
+
+msgid "Owner"
+msgstr "Собственик"
+
+msgid "DisplayOrder"
+msgstr "Ред на показване"
+
+msgid "SearchFeatureDoIndexDocument"
+msgstr "Да се индексира ли текста на документа?"
+
+msgid "SearchFeatureDocumentLanguage"
+msgstr "Език на документа за индексиране"
+
+msgid "With"
+msgstr "с"
+
+msgid "GeneralCoach"
+msgstr "Водещ преподавател/инструктор"
+
+msgid "SaveDocument"
+msgstr "Запис на документа"
+
+msgid "CategoryDeleted"
+msgstr "Категорията е изтрита."
+
+msgid "CategoryAdded"
+msgstr "Категорията е добавена."
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Qualify"
+msgstr "Качество"
+
+msgid "Words"
+msgstr "Думи"
+
+msgid "GoBack"
+msgstr "Обратно"
+
+msgid "Details"
+msgstr "Подробно"
+
+msgid "EditLink"
+msgstr "Редактиране на връзката"
+
+msgid "LinkEdited"
+msgstr "Връзката е редактирана."
+
+msgid "ForumThreads"
+msgstr "Теми във форумите"
+
+msgid "GradebookVisible"
+msgstr "Видим"
+
+msgid "GradebookInvisible"
+msgstr "Невидим"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "InfoMessage"
+msgstr "Информация"
+
+msgid "ConfirmationMessage"
+msgstr "За потвърждение"
+
+msgid "WarningMessage"
+msgstr "Предупреждение"
+
+msgid "ErrorMessage"
+msgstr "Грешка"
+
+msgid "Glossary"
+msgstr "Терминологичен речник"
+
+msgid "Coach"
+msgstr "Инструктор"
+
+msgid "Condition"
+msgstr "Условие"
+
+msgid "CourseSettings"
+msgstr "Настройки"
+
+msgid "EmailNotifications"
+msgstr "Уведомяване по e-mail"
+
+msgid "UserRights"
+msgstr "Права на потребителите"
+
+msgid "Theming"
+msgstr "Визуални стилове"
+
+msgid "Qualification"
+msgstr "Резултат"
+
+msgid "OnlyNumbers"
+msgstr "Допустими са само числа."
+
+msgid "ReorderOptions"
+msgstr "Ред на стойностите"
+
+msgid "EditUserFields"
+msgstr "Редактиране на потребителско поле"
+
+msgid "OptionText"
+msgstr "Стойност"
+
+msgid "FieldTypeDoubleSelect"
+msgstr "Двоен селектор"
+
+msgid "FieldTypeDivider"
+msgstr "Визуален разделител"
+
+msgid "ScormUnknownPackageFormat"
+msgstr "Неразпознат формат на пакета."
+
+msgid "ResourceDeleted"
+msgstr "Ресурсът е изтрит."
+
+msgid "AdvancedParameters"
+msgstr "Допълнителни опции"
+
+msgid "GoTo"
+msgstr "Към"
+
+msgid "SessionNameAndCourseTitle"
+msgstr "Име на сесия и име на курс"
+
+msgid "CreationDate"
+msgstr "Дата на създаване"
+
+msgid "LastUpdateDate"
+msgstr "Последна промяна"
+
+msgid "ViewHistoryChange"
+msgstr "Преглед на историята на промените"
+
+msgid "langNameOfLang[\'asturian\']"
+msgstr ""
+
+msgid "SearchGoToLearningPath"
+msgstr "Към пътеката за обучение"
+
+msgid "SearchLectureLibrary"
+msgstr "Библиотека с материали"
+
+msgid "SearchImagePreview"
+msgstr "Изображение за преглед"
+
+msgid "SearchAdvancedOptions"
+msgstr "Опции за разширено търсене"
+
+msgid "SearchResetKeywords"
+msgstr "Изчистване на ключовите думи"
+
+msgid "SearchKeywords"
+msgstr "Ключови думи"
+
+msgid "IntroductionTextDeleted"
+msgstr "Встъпителният текст е изтрит."
+
+msgid "SearchKeywordsHelpTitle"
+msgstr "Помощ за търсенето по ключови думи"
+
+msgid "Validate"
+msgstr "Добре (OK)"
+
+msgid "SearchCombineSearchWith"
+msgstr "Комбиниране на ключовите думи с"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "Пълнотекстовата търсеща машина не е активирана в системата Chamilo. Моля, потърсете администратора на системата."
+
+msgid "Top"
+msgstr "Нагоре"
+
+msgid "YourTextHere"
+msgstr "Въведете вашия текст тук."
+
+msgid "OrderBy"
+msgstr "Сортиране по"
+
+msgid "Notebook"
+msgstr "Бележки"
+
+msgid "FieldRequired"
+msgstr "Задължителни полета"
+
+msgid "BookingSystem"
+msgstr "Система за резервации"
+
+msgid "Any"
+msgstr "Всеки"
+
+msgid "SpecificSearchFields"
+msgstr "Допълнително поле за търсене"
+
+msgid "AddSpecificSearchField"
+msgstr "Добавяне на допълнително поле за търсене"
+
+msgid "SaveSettings"
+msgstr "Запис на настройките"
+
+msgid "NoParticipation"
+msgstr "Няма участници."
+
+msgid "Subscribers"
+msgstr "Абонати"
+
+msgid "Accept"
+msgstr "Приемам"
+
+msgid "Reserved"
+msgstr "Резервирано"
+
+msgid "SharedDocumentsDirectory"
+msgstr "Директория за споделени документи"
+
+msgid "Gallery"
+msgstr "Галерия"
+
+msgid "Audio"
+msgstr "Аудио"
+
+msgid "GoToQuestion"
+msgstr "Към въпрос"
+
+msgid "Level"
+msgstr "Ниво"
+
+msgid "Duration"
+msgstr "Продължителност"
+
+msgid "MaxTimeAllowed"
+msgstr "Максимално време (минути)"
+
+msgid "Class"
+msgstr "Клас"
+
+msgid "Select"
+msgstr "Изберете"
+
+msgid "Booking"
+msgstr "Резервации"
+
+msgid "ManageReservations"
+msgstr "Резервации"
+
+msgid "DestinationUsers"
+msgstr "За потребители"
+
+msgid "AttachmentFileDeleteSuccess"
+msgstr "Прикаченият файл е изтрит."
+
+msgid "AccountURLInactive"
+msgstr "Потребителският профил не е активен от този интернет-адрес."
+
+msgid "MaxFileSize"
+msgstr "Максимален размер на файла"
+
+msgid "SendFileError"
+msgstr "Появи се грешка при получаването на Вашия файл. Моля, проверете дали файлът не е повреден и опитайте пак."
+
+msgid "Expired"
+msgstr "Изтекъл срок"
+
+msgid "InvitationHasBeenSent"
+msgstr "Поканата е изпратена."
+
+msgid "InvitationHasBeenNotSent"
+msgstr "Поканата не е изпратена."
+
+msgid "Outbox"
+msgstr "Изходящи съобщения"
+
+msgid "Overview"
+msgstr "Преглед"
+
+msgid "ApiKeys"
+msgstr "API ключове"
+
+msgid "GenerateApiKey"
+msgstr "Генериране на API ключ"
+
+msgid "MyApiKey"
+msgstr "Моят API ключ"
+
+msgid "DateSend"
+msgstr "Дата на изпращане"
+
+msgid "Deny"
+msgstr "Отказ"
+
+msgid "ThereIsNotQualifiedLearners"
+msgstr "Няма оценени курсисти."
+
+msgid "ThereIsNotUnqualifiedLearners"
+msgstr "Няма курсисти без оценка."
+
+msgid "SocialNetwork"
+msgstr "Социална мрежа"
+
+msgid "BackToOutbox"
+msgstr "Обратно към изходящите съобщениея"
+
+msgid "Invitation"
+msgstr "Покана"
+
+msgid "SeeMoreOptions"
+msgstr "Повече опции"
+
+msgid "TemplatePreview"
+msgstr "Преглед на шаблона"
+
+msgid "NoTemplatePreview"
+msgstr "Няма преглед на шаблона"
+
+msgid "ModifyCategory"
+msgstr "Редактиране на категорията"
+
+msgid "Photo"
+msgstr "Снимка"
+
+msgid "MoveFile"
+msgstr "Преместване на файла"
+
+msgid "Filter"
+msgstr "Филтър"
+
+msgid "Subject"
+msgstr "Тема"
+
+msgid "Message"
+msgstr "Съобщение"
+
+msgid "MoreInformation"
+msgstr "Още информация"
+
+msgid "MakeInvisible"
+msgstr "Скриване"
+
+msgid "MakeVisible"
+msgstr "Показване"
+
+msgid "Image"
+msgstr "Изображение"
+
+msgid "SaveIntroText"
+msgstr "Запис на встъпителния текст"
+
+msgid "CourseName"
+msgstr "Име на курса"
+
+msgid "SendAMessage"
+msgstr "Изпращане на съобщение"
+
+msgid "Menu"
+msgstr "Меню"
+
+msgid "BackToUserList"
+msgstr "Обратно към списъка с потребителите"
+
+msgid "GraphicNotAvailable"
+msgstr "Няма изображение"
+
+msgid "BackTo"
+msgstr "Обратно към"
+
+msgid "HistoryTrainingSessions"
+msgstr "История на обучителните сесии"
+
+msgid "ConversionFailled"
+msgstr "Конвертирането не е успешно."
+
+msgid "AlreadyExists"
+msgstr "Вече съществува."
+
+msgid "TheNewWordHasBeenAdded"
+msgstr "Новата дума е добавена."
+
+msgid "DataType"
+msgstr "Тип на данните"
+
+msgid "Value"
+msgstr "Сойност"
+
+msgid "System"
+msgstr "Система"
+
+msgid "ImportantActivities"
+msgstr "Важни дейности"
+
+msgid "SearchActivities"
+msgstr "Търсене"
+
+msgid "Parent"
+msgstr "Родител"
+
+msgid "SurveyAdded"
+msgstr "Добавена е анкета."
+
+msgid "WikiAdded"
+msgstr "Добавено е Wiki."
+
+msgid "ReadOnly"
+msgstr "Само за четене"
+
+msgid "Unacceptable"
+msgstr "Не се приема"
+
+msgid "HistoryTrainingSession"
+msgstr "История на обучителната сесия"
+
+msgid "FirstPage"
+msgstr "Първа страница"
+
+msgid "LastPage"
+msgstr "Последна страница"
+
+msgid "Coachs"
+msgstr "Инструктори"
+
+msgid "CalendarList"
+msgstr "Календарен списък на присъствията"
+
+msgid "AddDateAndTime"
+msgstr "Добавяне на дата и час"
+
+msgid "AttendanceSheet"
+msgstr "Присъствия"
+
+msgid "AttendanceCalendar"
+msgstr "Календар на присъствията"
+
+msgid "QualifyAttendanceGradebook"
+msgstr "Да се отчетат присъствията в регистъра с оценки"
+
+msgid "CreateANewAttendance"
+msgstr "Създаване на нов списък с присъствия"
+
+msgid "Attendance"
+msgstr "Присъствие"
+
+msgid "GeneralDescription"
+msgstr "Общо описание"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "Какво е мястото на курса в учебната програма? Има ли предварителни изисквания? Каква е връзката с други курсове?"
+
+msgid "GeneralDescriptionInformation"
+msgstr "Опишете курса (брой часове, код, зала за провеждане, ...) и предоставете данни за преподавателя (име, кабинет, телефон, е-мейл, ...)."
+
+msgid "Objectives"
+msgstr "Цели"
+
+msgid "ObjectivesInformation"
+msgstr "Представяне, както общо, така и подробно на целите на курса."
+
+msgid "ObjectivesQuestions"
+msgstr "Какво ще могат да правят потребителите в края на курса? Какво ще трябва да демонстрират като способности по време на курса?"
+
+msgid "Topics"
+msgstr "Теми"
+
+msgid "TopicsInformation"
+msgstr "Списък на включените теми. Значението на всяка тема. Ниво на трудност. Структура и връзка между отделните части."
+
+msgid "TopicsQuestions"
+msgstr "Как се развива курсът? На какво трябва да обърне внимание курсистът? Съществуват ли проблеми при възприемането на отделни части на курса? Какво време трябва да се отдели на различните части на курса?"
+
+msgid "Methodology"
+msgstr "Методология"
+
+msgid "MethodologyQuestions"
+msgstr "Какви методи и какви дейности ще помогнат да се достигнат целите на курса? По каква програма?"
+
+msgid "MethodologyInformation"
+msgstr "Представяне на дейностите (конференции, публикации, групови изследвания, лаборатории, ...)."
+
+msgid "CourseMaterial"
+msgstr "Материали за курса"
+
+msgid "CourseMaterialQuestions"
+msgstr "Има ли учебник, публикации, библиография, списък с връзки към интернет?"
+
+msgid "CourseMaterialInformation"
+msgstr "Кратко описание на материалите по курса."
+
+msgid "HumanAndTechnicalResources"
+msgstr "Човешки и технически ресурси"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "Има ли преподаватели, лектори, асистенти, техническа поддръжка, компютърни зали?"
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "Кратко описание на различните лица за контакт и на достъпните технически средства."
+
+msgid "Assessment"
+msgstr "Оценяване"
+
+msgid "AssessmentQuestions"
+msgstr "Как ще се оценяват курсистите? Какъв е процесът? Оценяването свързано ли е със стратегия за по-нататъшен напредък на курсиста в предметната област?"
+
+msgid "AssessmentInformation"
+msgstr "Примерен тест за изпитване. Критерии за успех. Полезни съвети."
+
+msgid "langNameOfLang[\'bosnian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'czech\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dari\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english_org\']"
+msgstr ""
+
+msgid "langNameOfLang[\'friulian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'georgian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'hebrew\']"
+msgstr ""
+
+msgid "langNameOfLang[\'korean\']"
+msgstr ""
+
+msgid "langNameOfLang[\'latvian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'lithuanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'macedonian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'norwegian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'pashto\']"
+msgstr ""
+
+msgid "langNameOfLang[\'persian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'quechua_cusco\']"
+msgstr ""
+
+msgid "langNameOfLang[\'romanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'serbian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovak\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swahili\']"
+msgstr ""
+
+msgid "langNameOfLang[\'trad_chinese\']"
+msgstr ""
+
+msgid "ChamiloInstallation"
+msgstr "Инсталиране на Chamilo"
+
+msgid "langNameOfLang[\'ukrainian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'yoruba\']"
+msgstr ""
+
+msgid "New"
+msgstr "Нов"
+
+msgid "YouMustToInstallTheExtensionLDAP"
+msgstr "Разширението LDAP трябва да бъде инсталирано."
+
+msgid "AddAdditionalProfileField"
+msgstr "Добавяне на поле в профила"
+
+msgid "InvitationDenied"
+msgstr "Поканата е отказана."
+
+msgid "UserAdded"
+msgstr "Добавен е потребител."
+
+msgid "UpdatedIn"
+msgstr "Актуализиран на"
+
+msgid "Metadata"
+msgstr "Метаданни"
+
+msgid "langAddMetadata"
+msgstr "Преглед / редактиране на метаданните"
+
+msgid "SendMessage"
+msgstr "Изпращане на съобщение"
+
+msgid "SeeForum"
+msgstr "Към форума"
+
+msgid "NoDataAvailable"
+msgstr "Няма данни."
+
+msgid "Created"
+msgstr "Създаден"
+
+msgid "LastUpdate"
+msgstr "Последна актуализация"
+
+msgid "EditMyProfile"
+msgstr "Редактиране на профила"
+
+msgid "Announcements"
+msgstr "Обяви"
+
+msgid "Password"
+msgstr "Парола"
+
+msgid "DescriptionGroup"
+msgstr "Описание на групата"
+
+msgid "Installation"
+msgstr "Инсталиране"
+
+msgid "ReadTheInstallationGuide"
+msgstr "Прочетете ръководството за инсталиране."
+
+msgid "Blog"
+msgstr "Проекти"
+
+msgid "BlogPosts"
+msgstr "Публикации"
+
+msgid "BlogComments"
+msgstr "Коментари"
+
+msgid "InstallChamilo"
+msgstr "Инсталиране на Chamilo"
+
+msgid "ChamiloURL"
+msgstr "Интернет-адрес на системата Chamilo"
+
+msgid "TitleColumnGradebook"
+msgstr "Име на колоната в отчета за оценяване"
+
+msgid "QualifyWeight"
+msgstr "Тегло на оценката"
+
+msgid "ThematicAdvance"
+msgstr "Тематичен напредък"
+
+msgid "EditProfile"
+msgstr "Редактиране на профила"
+
+msgid "TabsDashboard"
+msgstr "Информационно табло"
+
+msgid "Dashboard"
+msgstr "Информационно табло"
+
+msgid "DashboardPlugins"
+msgstr "Добавки към информационното табло"
+
+msgid "ColumnPosition"
+msgstr "Позиция (колона)"
+
+msgid "ThereAreNoEnabledDashboardPlugins"
+msgstr "Няма активирани блокове в информационното табло"
+
+msgid "Enabled"
+msgstr "Разрешен"
+
+msgid "Homepage"
+msgstr "Главна страница"
+
+msgid "Attendances"
+msgstr "Присъствия"
+
+msgid "CountDoneAttendance"
+msgstr "Брой присъствия"
+
+msgid "AssignCourses"
+msgstr "Записване в курсове"
+
+msgid "Timezone"
+msgstr "Времева зона"
+
+msgid "LoginEnter"
+msgstr "Добре (Ok)"
+
+msgid "ThereAreNoRegisteredLearnersInsidetheCourse"
+msgstr "Няма записани курсисти."
+
+msgid "ToolCourseDescription"
+msgstr "Описание на курса"
+
+msgid "ToolDocument"
+msgstr "Документи"
+
+msgid "ToolLearnpath"
+msgstr "Пътеки за обучение"
+
+msgid "ToolLink"
+msgstr "Връзки"
+
+msgid "ToolQuiz"
+msgstr "Тестове"
+
+msgid "ToolAnnouncement"
+msgstr "Обяви"
+
+msgid "ToolGradebook"
+msgstr "Оценки"
+
+msgid "ToolGlossary"
+msgstr "Терминологичен речник"
+
+msgid "ToolAttendance"
+msgstr "Присъствия"
+
+msgid "ToolCalendarEvent"
+msgstr "Програма"
+
+msgid "ToolForum"
+msgstr "Форуми"
+
+msgid "ToolDropbox"
+msgstr "Куриер"
+
+msgid "ToolUser"
+msgstr "Потребители"
+
+msgid "ToolGroup"
+msgstr "Групи"
+
+msgid "ToolChat"
+msgstr "Говорилня"
+
+msgid "ToolStudentPublication"
+msgstr "Работи на курсистите"
+
+msgid "ToolSurvey"
+msgstr "Анкети"
+
+msgid "ToolWiki"
+msgstr "Wiki"
+
+msgid "ToolNotebook"
+msgstr "Бележки"
+
+msgid "ToolBlogManagement"
+msgstr "Проекти"
+
+msgid "ToolTracking"
+msgstr "Отчети"
+
+msgid "ToolCourseSetting"
+msgstr "Настройки на курса"
+
+msgid "ToolCourseMaintenance"
+msgstr "Поддръжка"
+
+msgid "ThematicPlan"
+msgstr "Тематичен план"
+
+msgid "NewThematicSection"
+msgstr "Нов тематичен раздел"
+
+msgid "SkillToAcquire"
+msgstr "Придобити умения"
+
+msgid "Infrastructure"
+msgstr "Инфраструктура"
+
+msgid "AditionalNotesQuestions"
+msgstr "Какви други елементи са необходими?"
+
+msgid "DurationInHours"
+msgstr "Продължителност в часове"
+
+msgid "AditionalNotes"
+msgstr "Бележки"
+
+msgid "DurationInHoursMustBeNumeric"
+msgstr "Продължителността се изразява с число."
+
+msgid "ToolCourseProgress"
+msgstr "Напредък в курса"
+
+msgid "QualificationNumeric"
+msgstr "Максимален резултат, число"
+
+msgid "Literal0"
+msgstr "нула"
+
+msgid "Literal1"
+msgstr "едно"
+
+msgid "Literal2"
+msgstr "две"
+
+msgid "Literal3"
+msgstr "три"
+
+msgid "Literal4"
+msgstr "четири"
+
+msgid "Literal5"
+msgstr "пет"
+
+msgid "Literal6"
+msgstr "шест"
+
+msgid "Literal7"
+msgstr "седем"
+
+msgid "Literal8"
+msgstr "осем"
+
+msgid "Literal9"
+msgstr "девет"
+
+msgid "Literal10"
+msgstr "десет"
+
+msgid "Literal11"
+msgstr "единадесет"
+
+msgid "Literal12"
+msgstr "дванадесет"
+
+msgid "Literal13"
+msgstr "тринадесет"
+
+msgid "Literal14"
+msgstr "четиринадесет"
+
+msgid "Literal15"
+msgstr "петнадесет"
+
+msgid "Literal16"
+msgstr "шестнадесет"
+
+msgid "Literal17"
+msgstr "седемнадесет"
+
+msgid "Literal18"
+msgstr "осемнадесет"
+
+msgid "Literal19"
+msgstr "деветнадесет"
+
+msgid "Literal20"
+msgstr "двадесет"
+
+msgid "DateTime"
+msgstr "Дата и час"
+
+msgid "Item"
+msgstr "Елемент"
+
+msgid "Never"
+msgstr "Никога"
+
+msgid "ReportABug"
+msgstr "Докладване на проблем"
+
+msgid "Letters"
+msgstr "Букви"
+
+msgid "MaximumOfParticipants"
+msgstr "Максимален брой членове"
+
+msgid "ContactInformation"
+msgstr "Информация за контакт"
+
+msgid "PersonName"
+msgstr "Вашето име"
+
+msgid "CompanyName"
+msgstr "Име на фирмата"
+
+msgid "PersonRole"
+msgstr "Описание на Вашата длъжност"
+
+msgid "CompanyCity"
+msgstr "Седалище на фирмата"
+
+msgid "SendInformation"
+msgstr "Изпращане на информацията"
+
+msgid "CompanyActivity"
+msgstr "Предмет на дейност на фирмата"
+
+msgid "DateUnLock"
+msgstr "Отключване на датата"
+
+msgid "DateLock"
+msgstr "Заключване на датата"
+
+msgid "RepeatDate"
+msgstr "Да се повтаря"
+
+msgid "HaveFun"
+msgstr "Приятна работа."
+
+msgid "ClearSearchResults"
+msgstr "Изчистване на резултатите от търсенето"
+
+msgid "TestServerMode"
+msgstr "Режим на тестване на сървъра"
+
+msgid "PageExecutionTimeWas"
+msgstr "Страницата е изпълнена за"
+
+msgid "MemoryUsage"
+msgstr "Използвана памет"
+
+msgid "MemoryUsagePeak"
+msgstr "Използвана памет, пикова стойност"
+
+msgid "Seconds"
+msgstr "секунди"
+
+msgid "QualifyInGradebook"
+msgstr "Да се отчете в регистъра с оценки"
+
+msgid "ProtectedDocument"
+msgstr "Защитен документ"
+
+msgid "ConnectionsLastMonth"
+msgstr "Посещения през последния месец"
+
+msgid "TotalStudents"
+msgstr "Общо курсисти"
+
+msgid "ExamTaken"
+msgstr "Преминат успешно"
+
+msgid "ExamNotTaken"
+msgstr "Не е преминат успешно"
+
+msgid "CreateCourseRequest"
+msgstr "Заявка за създаване на курс"
+
+msgid "TermsAndConditions"
+msgstr "Условия за ползване"
+
+msgid "ReadTermsAndConditions"
+msgstr "Прочетете Условията за ползване"
+
+msgid "IAcceptTermsAndConditions"
+msgstr "Прочетох и приемам Условията за ползване"
+
+msgid "YouHaveToAcceptTermsAndConditions"
+msgstr "Tрябва да приемете нашите Условия за ползване, за да продължите."
+
+msgid "FillWithExemplaryContent"
+msgstr "Да се добави примерно съдържание"
+
+msgid "ToolVideoconference"
+msgstr "Видео-конференция"
+
+msgid "SelectSVGEditImage"
+msgstr "Избор на изображение"
+
+msgid "UserFolders"
+msgstr "Папки на потребителите"
+
+msgid "CertificatesFiles"
+msgstr "Сертификати"
+
+msgid "ChatFiles"
+msgstr "Журнал на говорилнята"
+
+msgid "Flash"
+msgstr "Флаш-анимации"
+
+msgid "Video"
+msgstr "Видео"
+
+msgid "Images"
+msgstr "Изображения"
+
+msgid "OpenInANewWindow"
+msgstr "Показване в отделен прозорец"
+
+msgid "LoginOrEmailAddress"
+msgstr "Потребителско име или e-mail адрес"
+

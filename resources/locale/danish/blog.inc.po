@@ -1,0 +1,240 @@
+msgid "MyTasks"
+msgstr "Mine opgaver"
+
+msgid "FavoriteBlogs"
+msgstr "Mine favorit blogs"
+
+msgid "Navigation"
+msgstr "Navigation"
+
+msgid "TopTen"
+msgstr "Top 10 blogs"
+
+msgid "Subtitle"
+msgstr "Undertitel"
+
+msgid "ThisBlog"
+msgstr "Denne blog"
+
+msgid "NewPost"
+msgstr "Nyt indlæg"
+
+msgid "TaskManager"
+msgstr "Opgave-management"
+
+msgid "MemberManager"
+msgstr "Bruger-management"
+
+msgid "PostFullText"
+msgstr "Tekst"
+
+msgid "ReadPost"
+msgstr "Læs dette indlæg"
+
+msgid "Home"
+msgstr "Hjem"
+
+msgid "FirstPostText"
+msgstr "Dette er det første indlæg i denne blog. Det er nu muligt for alle, som abonnerer på bloggen, at deltage"
+
+msgid "AddNewComment"
+msgstr "tilføj ny kommentar"
+
+msgid "ReplyToThisComment"
+msgstr "Svar på kommentaren"
+
+msgid "ManageTasks"
+msgstr "Administrer opgaver"
+
+msgid "ManageMembers"
+msgstr "tillad / tillad ikke at brugeren abonnerer på denne blog"
+
+msgid "Register"
+msgstr "registrer"
+
+msgid "UnRegister"
+msgstr "registrer ikke"
+
+msgid "SubscribeMembers"
+msgstr "Tilføj brugere"
+
+msgid "UnsubscribeMembers"
+msgstr "Afmeld brugere"
+
+msgid "RightsManager"
+msgstr "Administration af brugerrettigheder"
+
+msgid "ManageRights"
+msgstr "Administrer roller og rettigheder for denne bruger på denne blog"
+
+msgid "Task"
+msgstr "Opgave"
+
+msgid "Tasks"
+msgstr "Opgaver"
+
+msgid "Member"
+msgstr "Medlem"
+
+msgid "Members"
+msgstr "Medlemmer"
+
+msgid "Role"
+msgstr "Rolle"
+
+msgid "Rate"
+msgstr "Vurdering"
+
+msgid "Roles"
+msgstr "Roller"
+
+msgid "AddTask"
+msgstr "Tilføj en ny opgave"
+
+msgid "AddTasks"
+msgstr "Tilføj en ny opgave"
+
+msgid "AssignTask"
+msgstr "Tildel en opgave"
+
+msgid "AssignTasks"
+msgstr "Tildel opgaver"
+
+msgid "EditTask"
+msgstr "Rediger denne opgave"
+
+msgid "DeleteTask"
+msgstr "Slet denne opgave"
+
+msgid "DeleteSystemTask"
+msgstr "Dette er en tidsbestemt opgave. Du kan ikke slette den"
+
+msgid "SelectUser"
+msgstr "Bruger"
+
+msgid "SelectTask"
+msgstr "Opgave"
+
+msgid "SelectTargetDate"
+msgstr "Dato"
+
+msgid "TargetDate"
+msgstr "Dato"
+
+msgid "Color"
+msgstr "Farve"
+
+msgid "TaskList"
+msgstr "Opgaver tilknyttet denne blog"
+
+msgid "AssignedTasks"
+msgstr "Tildelte opgaver"
+
+msgid "ArticleManager"
+msgstr "Administration af indlæg"
+
+msgid "CommentManager"
+msgstr "Administration af kommentarer"
+
+msgid "BlogManager"
+msgstr "Administration af bloggen"
+
+msgid "ReadMore"
+msgstr "Læs mere..."
+
+msgid "DeleteThisArticle"
+msgstr "Slet dette indlæg"
+
+msgid "EditThisPost"
+msgstr "Rediger dette indlæg"
+
+msgid "DeleteThisComment"
+msgstr "Slet denne kommentar"
+
+msgid "NoArticles"
+msgstr "Der er pt. ingen indlæg i bloggen. Hvis du er forfatteren af denne blog, skal du klikke på linket \'nyt indlæg\' for at skrive et indlæg"
+
+msgid "NoTasks"
+msgstr "Ingen opgaver"
+
+msgid "Rating"
+msgstr "Vurdering"
+
+msgid "RateThis"
+msgstr "Vurder denne artikel"
+
+msgid "SelectTaskArticle"
+msgstr "Vælg et indlæg til opgaven"
+
+msgid "ExecuteThisTask"
+msgstr "Udfør denne opgave"
+
+msgid "WrittenBy"
+msgstr "Skrevet af"
+
+msgid "InBlog"
+msgstr "I bloggen"
+
+msgid "ViewPostsOfThisDay"
+msgstr "Se indlæg fra denne dag"
+
+msgid "PostsOf"
+msgstr "Udgivet af"
+
+msgid "NoArticleMatches"
+msgstr "Der blev ikke fundet et indlæg. Undersøg om ordet er stavet rigtigt eller forsøg at søge på andre ord"
+
+msgid "langTask1"
+msgstr "Opgave 1"
+
+msgid "langTask2"
+msgstr "Opgave 2"
+
+msgid "langTask3"
+msgstr "Opgave 3"
+
+msgid "langTask1Desc"
+msgstr "Beskrivelse af opgave 1"
+
+msgid "langTask2Desc"
+msgstr "Beskrivelse af opgave 2"
+
+msgid "langTask3Desc"
+msgstr "Beskrivelse af opgave 3"
+
+msgid "blog_management"
+msgstr "Administration af blog"
+
+msgid "langWelcome"
+msgstr "Velkommen!"
+
+msgid "langModule"
+msgstr "Modul"
+
+msgid "langUserHasPermissionNot"
+msgstr "Brugeren har ikke rettighederne"
+
+msgid "langUserHasPermission"
+msgstr "Brugeren har rettighederne"
+
+msgid "langLegend"
+msgstr "Forklaring"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "Brugeren har rettigheder til gruppen"
+
+msgid "EditPost"
+msgstr "Rediger et indlæg"
+
+msgid "AddBlog"
+msgstr "Opret en ny blog"
+
+msgid "EditBlog"
+msgstr "Rediger titlen og undertitlen"
+
+msgid "DeleteBlog"
+msgstr "Slet denne blog"
+
+msgid "Shared"
+msgstr "Delte"
+

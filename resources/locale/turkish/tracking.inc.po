@@ -1,0 +1,390 @@
+msgid "langToolName"
+msgstr "KaraTahta Derslerini Al"
+
+msgid "TrackingDisabled"
+msgstr "İzleme aracı sistem yöneticisi tarafından devre dışı bırakılmıştır."
+
+msgid "langShowNone"
+msgstr "Hiçbirini gösterme"
+
+msgid "langCourseStats"
+msgstr "Ders İstatistikleri"
+
+msgid "langToolsAccess"
+msgstr "Araçlara Erişim"
+
+msgid "langCourseAccess"
+msgstr "Erişim"
+
+msgid "langLinksAccess"
+msgstr "Bağlantılar"
+
+msgid "langDocumentsAccess"
+msgstr "Belgeler"
+
+msgid "langScormAccess"
+msgstr "Kurs - Scorm kursları"
+
+msgid "langLinksDetails"
+msgstr "Bağlantı erişimleri"
+
+msgid "langWorksDetails"
+msgstr "Kullanıcı tarafından Yazan bölümüne gönderilen çalışmalar"
+
+msgid "langLoginsDetails"
+msgstr "Ayrıntılı bilgi için ilgili AY ismine tıklayın lütfen"
+
+msgid "langDocumentsDetails"
+msgstr "Kullanıcıların indirdiği dosyalar"
+
+msgid "langExercicesDetails"
+msgstr "Test sonuçları"
+
+msgid "langBackToList"
+msgstr "Kullanıcı listesine dön"
+
+msgid "langDetails"
+msgstr "Detaylar"
+
+msgid "langStatsOfCourse"
+msgstr "Ders İstatistikleri"
+
+msgid "langStatsOfUser"
+msgstr "Kullanıcı İstatistikleri"
+
+msgid "langStatsOfCampus"
+msgstr "Portal İstatistikleri"
+
+msgid "langCountUsers"
+msgstr "Kullanıcı Sayısı"
+
+msgid "langCountToolAccess"
+msgstr "Bu derse yapılan toplam bağlantı sayısı"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "AY"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Giriş Sayısı"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Araç İsmi"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Kullanıcı Tıklaması"
+
+msgid "langToolTitleCountColumn"
+msgstr "Toplam Tıklama"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Bağlantı"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Kullanıcı Tıklaması"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Toplam Tıklama"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Alıştırma"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Sonuç-Puan"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Belge"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Kullanıcıların indirdiği dosyalar"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Toplam indirilen dosyalar"
+
+msgid "langScormContentColumn"
+msgstr "Başlık"
+
+msgid "langScormStudentColumn"
+msgstr "Kullanıcı"
+
+msgid "langScormTitleColumn"
+msgstr "Ders/Bölüm"
+
+msgid "langScormStatusColumn"
+msgstr "Durum"
+
+msgid "langScormScoreColumn"
+msgstr "Puan"
+
+msgid "langScormTimeColumn"
+msgstr "Süre"
+
+msgid "langScormNeverOpened"
+msgstr "Bu kullan&#305;c&#305;n&#305;n bu derse hiç eri&#351;imi yok."
+
+msgid "langWorkTitle"
+msgstr "Başlık"
+
+msgid "langWorkAuthors"
+msgstr "Yazan"
+
+msgid "langWorkDescription"
+msgstr "Açıklama"
+
+msgid "informationsAbout"
+msgstr "İzleme sonuçları görüntülenen=>"
+
+msgid "langNoEmail"
+msgstr "Herhangi bir E-Posta adresi belirtilmemiş."
+
+msgid "langNoResult"
+msgstr "Henüz bir sonuç bulunmuyor"
+
+msgid "langCourse"
+msgstr "Web sitesi"
+
+msgid "langHits"
+msgstr "Görüntülenme"
+
+msgid "langTotal"
+msgstr "Toplam"
+
+msgid "langHour"
+msgstr "Saat"
+
+msgid "langDay"
+msgstr "gün"
+
+msgid "langLittleHour"
+msgstr "sa."
+
+msgid "langLast31days"
+msgstr "Son Bir Ay"
+
+msgid "langLast7days"
+msgstr "Son Hafta"
+
+msgid "langThisday"
+msgstr "Bugün"
+
+msgid "langLogins"
+msgstr "Giriş"
+
+msgid "langLoginsExplaination"
+msgstr "Ziyaret etti&#287;iniz bölümlere göre son giri&#351;lerinizin listesi"
+
+msgid "langExercicesResults"
+msgstr "Bitirilen testlerin sonucu"
+
+msgid "langVisits"
+msgstr "ziyaret"
+
+msgid "langAt"
+msgstr "@"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Tarih"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Ziyaretler"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Girişler ve Araçlara Erişim"
+
+msgid "langWorkUploads"
+msgstr "Gönderilen Yazılar"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Geçersiz kullanıcı: Bu kullanıcı grubunuzda bulunmuyor."
+
+msgid "langListStudents"
+msgstr "Gruptaki kullanıcıların listesi"
+
+msgid "langPeriodHour"
+msgstr "Saat"
+
+msgid "langPeriodDay"
+msgstr "Gün"
+
+msgid "langPeriodWeek"
+msgstr "Hafta"
+
+msgid "langPeriodMonth"
+msgstr "Ay"
+
+msgid "langPeriodYear"
+msgstr "Yıl"
+
+msgid "langNextDay"
+msgstr "Sonraki gün"
+
+msgid "langPreviousDay"
+msgstr "Önceki gün"
+
+msgid "langNextWeek"
+msgstr "Sonraki hafta"
+
+msgid "langPreviousWeek"
+msgstr "Önceki hafta"
+
+msgid "langNextMonth"
+msgstr "Sonraki ay"
+
+msgid "langPreviousMonth"
+msgstr "Önceki ay"
+
+msgid "langNextYear"
+msgstr "Sonraki yıl"
+
+msgid "langPreviousYear"
+msgstr "Önceki yıl"
+
+msgid "langViewToolList"
+msgstr "Araçların hepsinin listesini göster"
+
+msgid "langToolList"
+msgstr "Bütün araçların listesi"
+
+msgid "langFrom"
+msgstr "Kimden"
+
+msgid "langTo"
+msgstr "kopyalanacağı yer"
+
+msgid "langPeriodToDisplay"
+msgstr "Zaman"
+
+msgid "langDetailView"
+msgstr "Gösterim şekli"
+
+msgid "langBredCrumpGroups"
+msgstr "Gruplar"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Grup Alanı"
+
+msgid "langBredCrumpUsers"
+msgstr "Kullanıcılar"
+
+msgid "langAdminToolName"
+msgstr "İstatistikleri yönet"
+
+msgid "langPlatformStats"
+msgstr "Platfom İstatistikleri"
+
+msgid "langStatsDatabase"
+msgstr "İstatistik Veritabanı"
+
+msgid "langPlatformAccess"
+msgstr "Portala Erişim"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Derslere Erişim"
+
+msgid "langPlatformToolAccess"
+msgstr "Araçlara Erişim"
+
+msgid "langHardAndSoftUsed"
+msgstr "Ülkeler Servisler Tarayıcılar İşletim Sistemleri Referanslar"
+
+msgid "langStrangeCases"
+msgstr "İlginç, Acayip Durumlar"
+
+msgid "langStatsDatabaseLink"
+msgstr "Burayı Tıklayın"
+
+msgid "langCountCours"
+msgstr "Ders Sayısı"
+
+msgid "langCountCourseByFaculte"
+msgstr "Kategoriye göre ders sayısı"
+
+msgid "langCountCourseByLanguage"
+msgstr "Lisana göre ders sayısı"
+
+msgid "langCountCourseByVisibility"
+msgstr "Görülebilirliğe göre ders sayısı"
+
+msgid "langCountUsersByCourse"
+msgstr "Derse göre kullanıcı sayısı"
+
+msgid "langCountUsersByFaculte"
+msgstr "Kategoriya göre kullanıcı sayısı"
+
+msgid "langCountUsersByStatus"
+msgstr "Statüye göre kullanıcı sayısı"
+
+msgid "langAccess"
+msgstr "Erişimler"
+
+msgid "langCountries"
+msgstr "Ülkeler"
+
+msgid "langProviders"
+msgstr "Servis Sağlayıcılar"
+
+msgid "langOS"
+msgstr "İşletim Sistemleri"
+
+msgid "langBrowsers"
+msgstr "Tarayıcılar"
+
+msgid "langReferers"
+msgstr "Referanslar"
+
+msgid "langAccessExplain"
+msgstr "(Bir kullanıcı portal index\'ini açtığında)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Toplam"
+
+msgid "langTotalPlatformLogin"
+msgstr "Toplam"
+
+msgid "langMultipleLogins"
+msgstr "Aynı <i>Kullanıcı ismi</i> ile açılan hesaplar"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Aynı <i>Kullanıcı ismi</i> ve aynı <i>Şifre</i>ye sahip hesaplar"
+
+msgid "langMultipleEmails"
+msgstr "Aynı <i>E-Posta</i>ya sahip hesaplar"
+
+msgid "langCourseWithoutProf"
+msgstr "Sorumlusu olmayan dersler"
+
+msgid "langCourseWithoutAccess"
+msgstr "Kullanılmayan dersler"
+
+msgid "langLoginWithoutAccess"
+msgstr "Kullanılmayan kullanıcı isimleri"
+
+msgid "langAllRight"
+msgstr "Burada ilginç, acayip bir durum bulunmuyor."
+
+msgid "langDefcon"
+msgstr "Ooops, problemli durumlar bulundu !!"
+
+msgid "langNULLValue"
+msgstr "Boş (veya NULL)"
+
+msgid "langTrafficDetails"
+msgstr "Trafik Detayları"
+
+msgid "langSeeIndividualTracking"
+msgstr "Tek bir izleme için <a href=../user/user.php>Kullanıcılar</a> aracına bakın lütfen."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Bu yol hiçkimse taraf&#305;ndan aç&#305;lmad&#305;."
+
+msgid "SynthesisView"
+msgstr "Birleştirilmiş görünüm"
+
+msgid "Visited"
+msgstr "ziyaret edildi"
+
+msgid "FirstAccess"
+msgstr "İlk erişim"
+
+msgid "LastAccess"
+msgstr "Son Erişim"
+

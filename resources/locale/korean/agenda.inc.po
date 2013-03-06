@@ -1,0 +1,144 @@
+msgid "AgendaAdd"
+msgstr "새로운 일정 추가"
+
+msgid "ShowAllEvents"
+msgstr "모든 일정 보기"
+
+msgid "ShowCurrent"
+msgstr "이번 달 일정 보기"
+
+msgid "AddCalendarItem"
+msgstr "새로운 일정 추가"
+
+msgid "Day"
+msgstr "하루"
+
+msgid "Month"
+msgstr "한달"
+
+msgid "Year"
+msgstr "일년"
+
+msgid "Hour"
+msgstr "시간"
+
+msgid "Minutes"
+msgstr "분"
+
+msgid "Detail"
+msgstr "세부사항"
+
+msgid "EditSuccess"
+msgstr "일정이 변경되었습니다"
+
+msgid "AddSuccess"
+msgstr "일정이 추가되었습니다"
+
+msgid "AgendaDeleteSuccess"
+msgstr "일정이 삭제되었습니다"
+
+msgid "NoAgendaItems"
+msgstr "일정이 없습니다"
+
+msgid "lang_september"
+msgstr "9월"
+
+msgid "langClassName"
+msgstr "클래스 명"
+
+msgid "lang_agenda"
+msgstr "일정"
+
+msgid "ModifyCalendarItem"
+msgstr "일정 변경"
+
+msgid "ItemTitle"
+msgstr "일정 제목"
+
+msgid "langDay"
+msgstr "날"
+
+msgid "month_default"
+msgstr "기본 달"
+
+msgid "langYear"
+msgstr "해"
+
+msgid "year_default"
+msgstr "기본 해"
+
+msgid "langHour"
+msgstr "시각"
+
+msgid "hour_default"
+msgstr "현재 시각"
+
+msgid "langMinute"
+msgstr "분"
+
+msgid "langLasting"
+msgstr "지속"
+
+msgid "langOldToNew"
+msgstr "이전 것을 새 것으로"
+
+msgid "langNewToOld"
+msgstr "새 것을 이전 것으로"
+
+msgid "langNow"
+msgstr "현재"
+
+msgid "langAddEvent"
+msgstr "이벤트 추가"
+
+msgid "langDetail"
+msgstr "세부사항"
+
+msgid "MonthView"
+msgstr "월별 보기"
+
+msgid "WeekView"
+msgstr "주별 보기"
+
+msgid "DayView"
+msgstr "일별 보기"
+
+msgid "AddPersonalItem"
+msgstr "개인 일정 추가"
+
+msgid "Week"
+msgstr "주"
+
+msgid "Date"
+msgstr "날짜"
+
+msgid "Time"
+msgstr "시간"
+
+msgid "AddPersonalCalendarItem"
+msgstr "개인 일정 추가"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "개인 일정 변경"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "개인 일정이 성공적으로 추가되었습니다"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "개인 일정이 성공적으로 변경되었습니다"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "개인 일정이 성공적으로 삭제되었습니다"
+
+msgid "ViewPersonalItem"
+msgstr "개인 일정 보기"
+
+msgid "UserGroupFilter"
+msgstr "그룹/유저별 필터링"
+
+msgid "ShowAll"
+msgstr "모두 보여주기"
+
+msgid "Print"
+msgstr "프린트하기"
+

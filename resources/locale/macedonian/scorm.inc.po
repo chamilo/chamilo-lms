@@ -1,0 +1,144 @@
+msgid "langScormVersion"
+msgstr "верзија"
+
+msgid "langScormRestarted"
+msgstr "Сите лекции сега се непотполни"
+
+msgid "langScormNoNext"
+msgstr "&#1054;&#1074;&#1072; &#1077; &#1087;&#1086;&#1089;&#1083;&#1077;&#1076;&#1085;&#1072;&#1090;&#1072; &#1083;&#1077;&#1082;&#1094;&#1080;&#1112;&#1072;."
+
+msgid "langScormNoPrev"
+msgstr "&#1054;&#1074;&#1072; &#1077; &#1087;&#1088;&#1074;&#1072;&#1090;&#1072; &#1083;&#1077;&#1082;&#1094;&#1080;&#1112;&#1072;."
+
+msgid "langScormTime"
+msgstr "Време"
+
+msgid "langScormNoOrder"
+msgstr "Не е даден редослед, можете да кликнете на која било лекција."
+
+msgid "langScormScore"
+msgstr "Резултат"
+
+msgid "langScormLessonTitle"
+msgstr "Наслов на лекцијата"
+
+msgid "langScormStatus"
+msgstr "Статус"
+
+msgid "langScormToEnter"
+msgstr "За внесување"
+
+msgid "langScormFirstNeedTo"
+msgstr "морате прво да довршите"
+
+msgid "langScormThisStatus"
+msgstr "&#1054;&#1074;&#1072;&#1072; &#1083;&#1077;&#1082;&#1094;&#1080;&#1112;&#1072; &#1089;&#1077;&#1075;&#1072; &#1077;"
+
+msgid "langScormClose"
+msgstr "Прекини"
+
+msgid "langScormRestart"
+msgstr "Почни повторно"
+
+msgid "langScormCompstatus"
+msgstr "Комплетирано"
+
+msgid "langScormIncomplete"
+msgstr "Непотполно"
+
+msgid "langScormPassed"
+msgstr "Поминато"
+
+msgid "langScormFailed"
+msgstr "Неуспешно"
+
+msgid "langScormPrevious"
+msgstr "Претходно"
+
+msgid "langScormNext"
+msgstr "Следно"
+
+msgid "langScormTitle"
+msgstr "Програма за пуштање на Scorm-ови"
+
+msgid "langScormMystatus"
+msgstr "Мој статус"
+
+msgid "langScormNoItems"
+msgstr "&#1057;&#1086;&#1076;&#1088;&#1078;&#1080;&#1085;&#1072;&#1090;&#1072; &#1085;&#1077;&#1084;&#1072; &#1085;&#1080;&#1077;&#1076;&#1077;&#1085; &#1077;&#1083;&#1077;&#1084;&#1077;&#1085;&#1090;"
+
+msgid "langScormNoStatus"
+msgstr "&#1053;&#1077;&#1084;&#1072; &#1089;&#1090;&#1072;&#1090;&#1091;&#1089; &#1079;&#1072; &#1086;&#1074;&#1072;&#1072; &#1089;&#1086;&#1088;&#1076;&#1088;&#1078;&#1080;&#1085;&#1072;"
+
+msgid "langScormLoggedout"
+msgstr "одјавен од Scorm опкружувањето"
+
+msgid "langScormCloseWindow"
+msgstr "Затвори ги прозорците"
+
+msgid "ScormBrowsed"
+msgstr "Прелистано"
+
+msgid "langScormExitFullScreen"
+msgstr "Врати се за нормален екран"
+
+msgid "langScormFullScreen"
+msgstr "Цел екран"
+
+msgid "langScormNotAttempted"
+msgstr "Нема обиди"
+
+msgid "langCharset"
+msgstr "Множество на карактери"
+
+msgid "langLocal"
+msgstr "Локално"
+
+msgid "langRemote"
+msgstr "Премотај"
+
+msgid "langAutodetect"
+msgstr "Автоматско откривање"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Број на поминати чекори"
+
+msgid "langUnknown"
+msgstr "Непознато"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "Сигурни ли сте дека сакате да ги избришете овие чекори?"
+
+msgid "Origin"
+msgstr "Потекло"
+
+msgid "Local"
+msgstr "Локално"
+
+msgid "Remote"
+msgstr "Премотај"
+
+msgid "FileToUpload"
+msgstr "датотека за качување"
+
+msgid "ContentMaker"
+msgstr "Алатка за изработка на Содржина"
+
+msgid "ContentProximity"
+msgstr "Локација во содржината"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "Качи ги локалните датотеки од главен/ѓубре директориумот"
+
+msgid "ThisItemIsNotExportable"
+msgstr "Овој елемент за момент не е компатибилен со scorm. Затоа не може да се извезе."
+
+msgid "MoveCurrentChapter"
+msgstr "Премести го тековното поглавје"
+
+msgid "UnknownPackageFormat"
+msgstr "Не може да биде препознат горматот на пакетот. Осигурете се дека е добар формат и дека не содржи грешки. Проблемите можеби се настанати при зипувањето или при преносот на големите датотеки. Ако не сте сигурни за зипувањето, Ве молиме оскористете минимални зипувачки барања."
+
+msgid "Attempt"
+msgstr "Обид"
+

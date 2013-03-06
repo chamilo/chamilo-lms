@@ -1,0 +1,1185 @@
+msgid "AdminBy"
+msgstr "관리자"
+
+msgid "AdministrationTools"
+msgstr "관리"
+
+msgid "State"
+msgstr "시스템 상태"
+
+msgid "Statistiques"
+msgstr "통계"
+
+msgid "langUsed"
+msgstr "사용"
+
+msgid "langPresent"
+msgstr "확인"
+
+msgid "langMissing"
+msgstr "실종"
+
+msgid "langExist"
+msgstr "존재함"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "과정 제목에 교사명 표기"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "과정 목록에 교사명 표기"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "과정 코드를 과정 목록에 표기"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "과정 제목에 과정 코드 표기"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "가상 과정이 존재하지 않습니다."
+
+msgid "ConfigureHomePage"
+msgstr "홈페이지 구성"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "과정 생성을 위해 활성화 된 모듈"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "새 과정이 생성될 때, 기본적으로 활성화(visible) 할 도구는?"
+
+msgid "langCourseBackup"
+msgstr "이 과정을 백업합니다"
+
+msgid "langCourseTitular"
+msgstr "교사"
+
+msgid "langCourseTitle"
+msgstr "과정 타이틀"
+
+msgid "langCourseFaculty"
+msgstr "과정 카테고리"
+
+msgid "langCourseDepartment"
+msgstr "과정 department"
+
+msgid "langCourseDepartmentURL"
+msgstr "Department URL"
+
+msgid "langCourseLanguage"
+msgstr "과정 언어"
+
+msgid "langCourseAccess"
+msgstr "과정 접근"
+
+msgid "langCourseSubscription"
+msgstr "과정 등록"
+
+msgid "langPublicAccess"
+msgstr "전체 접근"
+
+msgid "langPrivateAccess"
+msgstr "개인 접근"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "데이터베이스 관리는 서버관리자만 할 수 있습니다"
+
+msgid "langShowUsersOfCourse"
+msgstr "이 과정에 등록한 유저 보기"
+
+msgid "langShowClassesOfCourse"
+msgstr "이 과정에 등록된 클래스 보기"
+
+msgid "langShowGroupsOfCourse"
+msgstr "이 과정의 그룹 보기"
+
+msgid "langPhone"
+msgstr "전화"
+
+msgid "langPhoneNumber"
+msgstr "전화번호"
+
+msgid "langActions"
+msgstr "동작"
+
+msgid "langAddToCourse"
+msgstr "과정에 추가"
+
+msgid "langDeleteFromPlatform"
+msgstr "플랫폼에서 제거"
+
+msgid "langDeleteCourse"
+msgstr "선택한 과정을 삭제"
+
+msgid "langDeleteFromCourse"
+msgstr "과정등록 취소"
+
+msgid "langDeleteSelectedClasses"
+msgstr "선택한 클래스 삭제"
+
+msgid "langDeleteSelectedGroups"
+msgstr "선택한 그룹 삭제"
+
+msgid "langAdministrator"
+msgstr "관리자"
+
+msgid "langAddPicture"
+msgstr "사진 추가"
+
+msgid "langChangePicture"
+msgstr "사진 변경"
+
+msgid "langDeletePicture"
+msgstr "사진 삭제"
+
+msgid "langAddUsers"
+msgstr "유저 추가"
+
+msgid "langAddGroups"
+msgstr "그룹 추가"
+
+msgid "langAddClasses"
+msgstr "클래스 추가"
+
+msgid "langExportUsers"
+msgstr "유저목록 내보내기"
+
+msgid "langKeyword"
+msgstr "키워드"
+
+msgid "langGroupName"
+msgstr "그룹 명"
+
+msgid "langGroupTutor"
+msgstr "그룹 튜터"
+
+msgid "langGroupDescription"
+msgstr "그룹 설명"
+
+msgid "langNumberOfParticipants"
+msgstr "참가자 수"
+
+msgid "langNumberOfUsers"
+msgstr "유저 수"
+
+msgid "langMaximum"
+msgstr "최대"
+
+msgid "langMaximumOfParticipants"
+msgstr "최대 참가자 수"
+
+msgid "langParticipants"
+msgstr "참가자"
+
+msgid "langFirstLetterClass"
+msgstr "첫 글자 (클래스 명)"
+
+msgid "langFirstLetterUser"
+msgstr "첫 글자 (성)"
+
+msgid "langFirstLetterCourse"
+msgstr "첫 글자 (코드)"
+
+msgid "langModifyUserInfo"
+msgstr "사용자 정보 수정"
+
+msgid "langModifyClassInfo"
+msgstr "클래스 정보 수정"
+
+msgid "langModifyGroupInfo"
+msgstr "그룹 정보 수정"
+
+msgid "langModifyCourseInfo"
+msgstr "과정 정보 수정"
+
+msgid "langPleaseEnterClassName"
+msgstr "클래스 명을 입력하십시오!"
+
+msgid "langPleaseEnterLastName"
+msgstr "사용자의 성을 입력하십시오!"
+
+msgid "langPleaseEnterFirstName"
+msgstr "사용자의 이름을 입력하십시오!"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "정확한 e-mail 주소를 입력하십시오!"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "정확한 로그인 명을 입력하십시오 !"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "과정 코드를 입력하십시요 !"
+
+msgid "langPleaseEnterTitularName"
+msgstr "교사의 성명을 입력하십시오!"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "과정 타이틀을 입력하십시오 !"
+
+msgid "langAcceptedPictureFormats"
+msgstr "허용가능한 파일 형태는 JPG, PNG 그리고 GIF입니다 !"
+
+msgid "langLoginAlreadyTaken"
+msgstr "이미 존재하는 로그인 네임입니다 !"
+
+msgid "langImportUserListXMLCSV"
+msgstr "XML/CSV 파일로부터 유저리스트를 가지고옵니다. (import)"
+
+msgid "langExportUserListXMLCSV"
+msgstr "유저 리스트를 XML/CSV 파일형태로 저장합니다 (export)"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "과정의 유저들만"
+
+msgid "langAddClassesToACourse"
+msgstr "클래스를 과정에 추가"
+
+msgid "langAddUsersToACourse"
+msgstr "과정에 유저를 추가"
+
+msgid "langAddUsersToAClass"
+msgstr "클래스에 유저 추가"
+
+msgid "langAddUsersToAGroup"
+msgstr "그룹에 유저 추가"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "최소 하나의 클래스와 과정을 선택해야만 합니다 !"
+
+msgid "AtLeastOneUser"
+msgstr "최소 한 유저를 선택해야 합니다 !"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "최소 한 유저와 한 과정을 선택해야합니다 !"
+
+msgid "langClassList"
+msgstr "클래스 리스트"
+
+msgid "langUserList"
+msgstr "유저 리스트"
+
+msgid "langCourseList"
+msgstr "과정 리스트"
+
+msgid "langAddToThatCourse"
+msgstr "이 과정에 추가"
+
+msgid "langAddToClass"
+msgstr "클래스에 추가"
+
+msgid "langRemoveFromClass"
+msgstr "클래스에서 제외"
+
+msgid "langAddToGroup"
+msgstr "그룹에 추가"
+
+msgid "langRemoveFromGroup"
+msgstr "그룹에서 제외"
+
+msgid "langUsersOutsideClass"
+msgstr "클래스에 포함되지 않은 유저"
+
+msgid "langUsersInsideClass"
+msgstr "클래스 안의 유저"
+
+msgid "langUsersOutsideGroup"
+msgstr "그룹에 속하지 않은 유저들"
+
+msgid "langUsersInsideGroup"
+msgstr "그룹에 포함된 유저들"
+
+msgid "langImportFileLocation"
+msgstr "CSV/XML 파일의 위치"
+
+msgid "langFileType"
+msgstr "파일 유형"
+
+msgid "langOutputFileType"
+msgstr "출력 파일 형태"
+
+msgid "langMustUseSeparator"
+msgstr "\' ; \' 을 구분자로 사용해야만 합니다"
+
+msgid "langCSVMustLookLike"
+msgstr "CSV 파일은 다음과 같아야 합니다"
+
+msgid "langXMLMustLookLike"
+msgstr "XML 파일은 다음과 같아야 합니다"
+
+msgid "langMandatoryFields"
+msgstr "strong>bold</strong> 안의 필드는 필수적인 것입니다."
+
+msgid "langNotXML"
+msgstr "지정한 파일은 XML 유형이 아닙니다 !"
+
+msgid "langNotCSV"
+msgstr "지정한 파일은 CSV 유형이 아닙니다 !"
+
+msgid "langNoNeededData"
+msgstr "지정한 파일은 필요한 데이터를 모두 포함하고 있지 않습니다 !"
+
+msgid "langMaxImportUsers"
+msgstr "한 번에 500 유저 이상은 불러들일 수 없습니다 !"
+
+msgid "langAdminDatabases"
+msgstr "데이터베이스 (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "유저"
+
+msgid "langAdminClasses"
+msgstr "유저의 클래스"
+
+msgid "langAdminGroups"
+msgstr "유저가 속한 그룹"
+
+msgid "langAdminCourses"
+msgstr "과정"
+
+msgid "langAdminCategories"
+msgstr "과정의 카테고리"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "과정에 유저/그룹 등록"
+
+msgid "AddACategory"
+msgstr "카테고리 추가"
+
+msgid "langInto"
+msgstr "into"
+
+msgid "langNoCategories"
+msgstr "카테고리가 존재하지 않습니다"
+
+msgid "langAllowCoursesInCategory"
+msgstr "이 카테고리에 과정 추가하기가 허용되었습니까?"
+
+msgid "langGoToForum"
+msgstr "포럼으로 이동"
+
+msgid "langCategoryCode"
+msgstr "카테고리 코드"
+
+msgid "langCategoryName"
+msgstr "카테고리 명"
+
+msgid "langCategories"
+msgstr "카테고리들"
+
+msgid "langEditNode"
+msgstr "이 카테고리를 수정"
+
+msgid "langOpenNode"
+msgstr "이 카테고리를 열기"
+
+msgid "langDeleteNode"
+msgstr "이 카테고리를 삭제"
+
+msgid "langAddChildNode"
+msgstr "하위 카테고리 추가"
+
+msgid "langViewChildren"
+msgstr "하위 카테고리 보기"
+
+msgid "langTreeRebuildedIn"
+msgstr "재구성 된 트리"
+
+msgid "langTreeRecountedIn"
+msgstr "재계산 된 트리"
+
+msgid "langRebuildTree"
+msgstr "트리 재구성"
+
+msgid "langRefreshNbChildren"
+msgstr "하위 카테고리 수 새로고침"
+
+msgid "langShowTree"
+msgstr "트리 보기"
+
+msgid "langBack"
+msgstr "이전 페이지로 돌아가기"
+
+msgid "langLogDeleteCat"
+msgstr "카테고리가 삭제되었습니다"
+
+msgid "langRecountChildren"
+msgstr "하위 카테고리 재계산"
+
+msgid "langUpInSameLevel"
+msgstr "동일한 레벨로 올리기"
+
+msgid "langSeconds"
+msgstr "분"
+
+msgid "langMailTo"
+msgstr "Mail to :"
+
+msgid "lang_no_access_here"
+msgstr "액세스한 사람이 없습니다"
+
+msgid "lang_php_info"
+msgstr "시스템 정보"
+
+msgid "langAddAdminInApache"
+msgstr "관리자 추가"
+
+msgid "langAddFaculties"
+msgstr "카테고리 추가"
+
+msgid "langSearchACourse"
+msgstr "과정 검색"
+
+msgid "langSearchAUser"
+msgstr "수강자 검색"
+
+msgid "langTechnicalTools"
+msgstr "기술적"
+
+msgid "langConfig"
+msgstr "시스템 설정"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "로그인 리스트(확장)"
+
+msgid "langNomOutilTodo"
+msgstr "관리 지침 리스트"
+
+msgid "langNomPageAdmin"
+msgstr "관리"
+
+msgid "langSysInfo"
+msgstr "시스템 정보"
+
+msgid "langDiffTranslation"
+msgstr "번역본과 비교"
+
+msgid "langStatOf"
+msgstr "통계정보"
+
+msgid "langSpeeSubscribe"
+msgstr "과정 체커로 빠른 등록"
+
+msgid "langLogIdentLogout"
+msgstr "로그인 리스트"
+
+msgid "langServerStatus"
+msgstr "MySQL의 상태:"
+
+msgid "langDataBase"
+msgstr "데이터베이스"
+
+msgid "langRun"
+msgstr "works"
+
+msgid "langClient"
+msgstr "MySql 클라이언트"
+
+msgid "langServer"
+msgstr "MySql 서버"
+
+msgid "langtitulary"
+msgstr "소유자"
+
+msgid "langUpgradeBase"
+msgstr "데이터베이스 업그레이드"
+
+msgid "langManage"
+msgstr "포털 관리"
+
+msgid "langErrorsFound"
+msgstr "에러 발견"
+
+msgid "langMaintenance"
+msgstr "유지"
+
+msgid "langUpgrade"
+msgstr "Chamilo 업그레이드"
+
+msgid "langWebsite"
+msgstr "Dokes 웹사이트"
+
+msgid "langDocumentation"
+msgstr "문서"
+
+msgid "langContribute"
+msgstr "기여"
+
+msgid "langInfoServer"
+msgstr "서버 정보"
+
+msgid "langOtherCategory"
+msgstr "다른 카테고리"
+
+msgid "langSendMailToUsers"
+msgstr "수강자에게 메일 보내기"
+
+msgid "langExampleXMLFile"
+msgstr "XML 파일의 예"
+
+msgid "langExampleCSVFile"
+msgstr "CSV 파일의 예"
+
+msgid "langCourseSystemCode"
+msgstr "시스템 코드"
+
+msgid "langCourseVisualCode"
+msgstr "보여지는 코드"
+
+msgid "langSystemCode"
+msgstr "시스템 코드"
+
+msgid "langVisualCode"
+msgstr "보여지는 코드"
+
+msgid "langAddCourse"
+msgstr "과정 생성"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "가상 과정(Virtual) 관리"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "가상(virtual) 과정 생성"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "가상(virtual) 과정은 \'실제\' 과정과 저장 공간을 공유하게 됩니다."
+
+msgid "langRealCourseCode"
+msgstr "실제 과정 코드"
+
+msgid "langCourseCreationSucceeded"
+msgstr "과정이 성공적으로 생성되었습니다."
+
+msgid "langYourDokeosUses"
+msgstr "Chamilo를 곧바로 사용할 수 있습니다"
+
+msgid "langOnTheHardDisk"
+msgstr "하드디스크에"
+
+msgid "langIsVirtualCourse"
+msgstr "가상(virtual) 과정입니다"
+
+msgid "langSystemAnnouncements"
+msgstr "시스템 공지사항"
+
+msgid "langAddAnnouncement"
+msgstr "새로운 공지사항 추가"
+
+msgid "langAnnouncementAdded"
+msgstr "공지사항이 추가되었습니다"
+
+msgid "langAnnouncementUpdated"
+msgstr "공지사항이 업데이트되었습니다"
+
+msgid "langAnnouncementDeleted"
+msgstr "공지사항이 삭제되었습니다"
+
+msgid "langContent"
+msgstr "내용"
+
+msgid "langStudent"
+msgstr "학생"
+
+msgid "Guest"
+msgstr "손님(Guest)"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "로그인 as"
+
+msgid "langLoginAsThisUser"
+msgstr "로그인"
+
+msgid "langCourseAdmin"
+msgstr "과정 관리자"
+
+msgid "langOtherCourses"
+msgstr "다른 과정들"
+
+msgid "PlatformLanguageTitle"
+msgstr "플랫폼 언어"
+
+msgid "ServerStatusComment"
+msgstr "어떤 종류의 서버인가요? 이에 따라 특정 옵션이 활성화 또는 비활성화 됩니다. 개발서버에는 번역되지 않은 문자를 나타내는 번역기능이 있습니다."
+
+msgid "ServerStatusTitle"
+msgstr "서버 타입"
+
+msgid "PlatformLanguages"
+msgstr "Chamilo 기본 언어"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "이 툴은 로그인 페이지에서 언어를 선택할 수 있는 메뉴를 제공합니다. 플랫폼 관리자는 수강자들에 적합한 언어를 결정할 수 있습니다."
+
+msgid "OriginalName"
+msgstr "원어 이름"
+
+msgid "EnglishName"
+msgstr "영문 이름"
+
+msgid "DokeosFolder"
+msgstr "Chamilo 폴더"
+
+msgid "Properties"
+msgstr "속성"
+
+msgid "PlatformConfigSettings"
+msgstr "Chamilo 설정 변경"
+
+msgid "SettingsStored"
+msgstr "설정 내용이 저장되었습니다"
+
+msgid "InstitutionTitle"
+msgstr "기관 명"
+
+msgid "InstitutionComment"
+msgstr "기관 명 (오른쪽 상단에 표기됩니다)"
+
+msgid "InstitutionUrlTitle"
+msgstr "기관 URL"
+
+msgid "InstitutionUrlComment"
+msgstr "기관 URL (오른쪽 상단에 링크가 표기됩니다)"
+
+msgid "SiteNameTitle"
+msgstr "Chamilo 캠퍼스 명"
+
+msgid "SiteNameComment"
+msgstr "Chamilo 캠퍼스 명 ( header에 표기 )"
+
+msgid "emailAdministratorTitle"
+msgstr "플랫폼 관리자: E-mail"
+
+msgid "emailAdministratorComment"
+msgstr "플랫폼 관리자의 e-mail 주소 ( 왼쪽 하단에 표기됩니다 )"
+
+msgid "administratorSurnameTitle"
+msgstr "플랫폼 관리자: 성(Family Name)"
+
+msgid "administratorSurnameComment"
+msgstr "플랫폼 관리자의 성(family name) (왼쪽 하단에 표기됩니다)"
+
+msgid "administratorNameTitle"
+msgstr "플랫폼 관리자: 이름"
+
+msgid "administratorNameComment"
+msgstr "플랫폼 관리자의 이름 (왼쪽 하단에 표기됩니다)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "하단의 플랫폼 관리자 정보"
+
+msgid "ShowAdministratorDataComment"
+msgstr "하단의 플랫폼 관리자 정보가 나타났습니까?"
+
+msgid "HomepageViewTitle"
+msgstr "홈페이지 보기"
+
+msgid "HomepageViewComment"
+msgstr "과정 홈페이지가 어떻게 보여지기를 원하나요?"
+
+msgid "HomepageViewDefault"
+msgstr "두 칸으로 나뉜 구조. 비활성화 된 툴들은 숨겨지게 됩니다."
+
+msgid "HomepageViewFixed"
+msgstr "세 칸으로 나뉜 구조. 비활성화 된 툴들이 희미하게 나타납니다. (아이콘은 원래자리에 위치)"
+
+msgid "Yes"
+msgstr "예"
+
+msgid "No"
+msgstr "아니요"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "도구 바로가기"
+
+msgid "ShowToolShortcutsComment"
+msgstr "도구 바로가기가 배너에 나타났습니까?"
+
+msgid "ShowStudentViewTitle"
+msgstr "학생 보기"
+
+msgid "ShowStudentViewComment"
+msgstr "학생 보기를 활성화하겠습니까? 이 기능은 교사가 학생들의 정보를 확인할 수 있도록 해줍니다."
+
+msgid "AllowGroupCategories"
+msgstr "그룹 카테고리"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "과정관리자가 그룹 모듈의 카테고리 생성하는 것을 허용하시겠습니까?"
+
+msgid "PlatformLanguageComment"
+msgstr "플랫폼 관리자의 다른 부분에서 플랫폼 언어를 결정할 수 있습니다, 즉; <a href=\"languages.php\">Dokeos Platform Languages</a>"
+
+msgid "ProductionServer"
+msgstr "제품 서버"
+
+msgid "TestServer"
+msgstr "테스트 서버"
+
+msgid "ShowOnlineTitle"
+msgstr "누가 로그인했을까?"
+
+msgid "AsPlatformLanguage"
+msgstr "플랫폼 언어처럼"
+
+msgid "ShowOnlineComment"
+msgstr "온라인 상에 있는 사람의 수를 표시하도록 하겠습니까?"
+
+msgid "AllowNameChangeTitle"
+msgstr "개인정보의 이름변경을 허용하시겠습니까?"
+
+msgid "AllowNameChangeComment"
+msgstr "유저가 자신의 이름을 변경하는 것이 허용되었습니까?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "기본 문서 할당량"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "문서의 기본 할당량은 얼마인가요? 과벙 별로 할당량을 수정할 수도 있습니다: platform administration > Courses > modify"
+
+msgid "ProfileChangesTitle"
+msgstr "개인정보"
+
+msgid "ProfileChangesComment"
+msgstr "개인정보의 어느 부분을 수정 가능합니까?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "등록: 필수 항목"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "어떤 항목이 필수적입니까 (besides name, first name, login and password)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "기본 그룹 할당량"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "그룹 문서의 기본 할당량은 얼마입니까?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "패스워드 분실"
+
+msgid "AllowLostPasswordComment"
+msgstr "유저들이 자신의 잃어버린 패스워드를 요청하는 것이 허용되었습니까?"
+
+msgid "AllowRegistrationTitle"
+msgstr "등록"
+
+msgid "AllowRegistrationComment"
+msgstr "새 유저를 등록하는 것이 허용되었습니까? 유저가 새로운 계정을 생성할 수 있습니까?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "교사로 등록"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "교사로 등록하는 것이 가능합니까(과정생성 가능)?"
+
+msgid "PlatformLanguage"
+msgstr "플랫폼 언어"
+
+msgid "CourseQuota"
+msgstr "코스 할당 용량"
+
+msgid "EditNotice"
+msgstr "알림 수정"
+
+msgid "General"
+msgstr "일반"
+
+msgid "LostPassword"
+msgstr "패스워드 분실"
+
+msgid "Registration"
+msgstr "등록"
+
+msgid "Password"
+msgstr "패스워드"
+
+msgid "InsertLink"
+msgstr "링크 삽입"
+
+msgid "EditNews"
+msgstr "뉴스 수정"
+
+msgid "EditCategories"
+msgstr "카테고리 수정"
+
+msgid "EditHomePage"
+msgstr "홈페이지 수정"
+
+msgid "AllowUserHeadingsComment"
+msgstr "과정 관리자가 유저의 부가적인 정보를 검샐하기 위해 유저의 headning을 정의할 수 있습니까?"
+
+msgid "Platform"
+msgstr "플랫폼"
+
+msgid "Course"
+msgstr "과정"
+
+msgid "Languages"
+msgstr "언어"
+
+msgid "Privacy"
+msgstr "프라이버시"
+
+msgid "NoticeTitle"
+msgstr "알림 제목"
+
+msgid "NoticeText"
+msgstr "알림 내용"
+
+msgid "LinkName"
+msgstr "링크 텍스트"
+
+msgid "LinkURL"
+msgstr "링크 URL"
+
+msgid "OpenInNewWindow"
+msgstr "새창에서 열기"
+
+msgid "Plugins"
+msgstr "플러그인"
+
+msgid "Info"
+msgstr "정보"
+
+msgid "UserAdded"
+msgstr "유저가 추가되었습니다"
+
+msgid "NoSearchResults"
+msgstr "검색결과 없음"
+
+msgid "NoClassesForThisCourse"
+msgstr "이 과정에 등록한 클래스가 없습니다"
+
+msgid "CourseUsage"
+msgstr "과정 용도"
+
+msgid "NoCoursesForThisUser"
+msgstr "이 유저는 과정에 등록하지 않았습니다"
+
+msgid "NoClassesForThisUser"
+msgstr "이 유저는 클래스에 등록하지 않았습니다"
+
+msgid "NoCoursesForThisClass"
+msgstr "이 클래스는 과정에 등록하지 않았습니다"
+
+msgid "langOpenToTheWorld"
+msgstr "공개 - 누구나 접근 가능합니다"
+
+msgid "OpenToThePlatform"
+msgstr "공개 - 플랫폼에 등록한 모든 유저가 접근가능합니다"
+
+msgid "langPrivate"
+msgstr "개인 접근 (유저 리스트에 있는 사람만이 접근 가능합니다)"
+
+msgid "langCourseVisibilityClosed"
+msgstr "차단됨; 과정 관리자만 접근이 가능합니다"
+
+msgid "langSubscription"
+msgstr "신청"
+
+msgid "langUnsubscription"
+msgstr "신청 취소"
+
+msgid "CourseAccessConfigTip"
+msgstr "기본적으로 과정은 모두에게 공개됩니다. 그러나, 위의 공개 레벨을 통해 지정이 가능합니다."
+
+msgid "Tool"
+msgstr "도구"
+
+msgid "NumberOfItems"
+msgstr "아이템 수"
+
+msgid "DocumentsAndFolders"
+msgstr "문서와 폴더"
+
+msgid "Learnpath"
+msgstr "Learnpath"
+
+msgid "Exercises"
+msgstr "연습문제"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "개인 일정"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "유저가 My Agenda 페이지에서 개인일정을 추가할 수 있습니까?"
+
+msgid "CurrentValue"
+msgstr "현재 값"
+
+msgid "CourseDescription"
+msgstr "과정 설명"
+
+msgid "OnlineConference"
+msgstr "온라인 회의"
+
+msgid "Chat"
+msgstr "대화하기"
+
+msgid "Quiz"
+msgstr "퀴즈"
+
+msgid "Announcements"
+msgstr "공지사항"
+
+msgid "Links"
+msgstr "링크"
+
+msgid "LearningPath"
+msgstr "Learning path"
+
+msgid "Documents"
+msgstr "문서"
+
+msgid "UserPicture"
+msgstr "사진"
+
+msgid "officialcode"
+msgstr "공식 코드"
+
+msgid "Login"
+msgstr "로그인"
+
+msgid "UserPassword"
+msgstr "패스워드"
+
+msgid "SubscriptionAllowed"
+msgstr "신청이 허용되었습니다"
+
+msgid "UnsubscriptionAllowed"
+msgstr "신청 취소가 허용되었습니다"
+
+msgid "AllowedToUnsubscribe"
+msgstr "허용"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "거부"
+
+msgid "AddDummyContentToCourse"
+msgstr "연습용 컨텐츠를 이 과정에 추가"
+
+msgid "DummyCourseCreator"
+msgstr "연습용 과정 컨텐츠 생성"
+
+msgid "DummyCourseDescription"
+msgstr "연습용컨텐츠를 과정에 추가할 수 있도록 해줍니다. 이는 테스트 목적으로 이루어집니다."
+
+msgid "AvailablePlugins"
+msgstr "이것들은 시스템에서 필요로 하는 플러그인들입니다. 부가적인 플러그인은 <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>에서 다운로드 가능합니다."
+
+msgid "CreateVirtualCourse"
+msgstr "가상 과정 생성"
+
+msgid "DisplayListVirtualCourses"
+msgstr "가상 과정의 리스트 보여주기"
+
+msgid "LinkedToRealCourseCode"
+msgstr "실제 과정에 연결"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "가상 과정 생성 시도..."
+
+msgid "WantedCourseCode"
+msgstr "과정 코드 필요"
+
+msgid "ResetPassword"
+msgstr "패스워드 초기화"
+
+msgid "CheckToSendNewPassword"
+msgstr "새 패스워드 전송 확인"
+
+msgid "AutoGeneratePassword"
+msgstr "자동으로 새 패스워드 생성"
+
+msgid "UseDocumentTitleTitle"
+msgstr "문서 명을 위한 타이틀 사용"
+
+msgid "UseDocumentTitleComment"
+msgstr "document_name.ext 대신 파일 명을 위해 타이틀을 사용하는 것을 허용합니다"
+
+msgid "StudentPublications"
+msgstr "학생 출판"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "삭제된 파일은 복구될 수 없습니다"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "문서 도구의 파일을 삭제하면 영구적으로 삭제하는 것입니다. 파일은 복구될 수 없습니다."
+
+msgid "ClassName"
+msgstr "클래스 명"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Dropbox : Dropbox 문서의 최대 파일크기"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Dropbox 문서의 크기는 어느정도 크기(in bytes)여야 하나?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Dropbox: 문서 덮어쓰기가 가능합니다"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "학생이나 강사가 원래 존재하는 파일과 동일한 파일명으로 문서를 업로드 하면 본래 파일은 덮어쓰기가 됩니까? 만약 그러하다면 versioning 메커니즘을 잃게 됩니다."
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Dropbox: 자신의 Dropbox에 업로드 하겠습니까?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "강사나 학생이 문서들을 자신이나 다른 누구에게 전송하는 과정 없이 자신의 Dropbox에 문서업로드하는 것을 허용"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Dropbox: Student <-> Student"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "학생들이 문서를 다른 학생에게 전송하는 것을 허용합니다 (peer 2 peer, P2P exchange). 학생들은 이를 관련성이 상대적으로 적은 문서들 또한 사용가능하게 합니다 (mp3, solutions, ...) 만약 이 기능이 비활성화되어 있다면 학생은 강사에게만 문서 전송이 가능합니다."
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Dropbox: 메일링 허용"
+
+msgid "DropboxAllowMailingComment"
+msgstr "메일링 기능으로 학생들끼리 개인적 문서 교환이 가능해집니다."
+
+msgid "UserListHasBeenExported"
+msgstr "유저 리스트가 export 되었습니다."
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "파일을 다운로드하려면 이곳을 클릭하십시요."
+
+msgid "administratorTelephoneTitle"
+msgstr "플랫폼 관리자: 전화"
+
+msgid "administratorTelephoneComment"
+msgstr "플랫폼 관리자의 전화번호"
+
+msgid "SendMailToNewUser"
+msgstr "새로 등록한 유저에게 메일 전송"
+
+msgid "ExtendedProfileTitle"
+msgstr "부가적 개인 정보"
+
+msgid "ExtendedProfileComment"
+msgstr "이 설정이 \'True\'로 설정되었다면, 유저는 다음과 같은 (부가적) 내용을 입력할 수 있습니다: \'My competences\', \'My diplomas\', \'What I am able to teach\' and \'My personal open area\'"
+
+msgid "Classes"
+msgstr "클래스"
+
+msgid "UserUnsubscribed"
+msgstr "과정신청을 취소한 유저입니다"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "유저는 과정신청을 취소할 수 없습니다. 이 유저는 과정 관리자입니다."
+
+msgid "InvalidStartDate"
+msgstr "유효하지 않은 시작 날짜입니다."
+
+msgid "InvalidEndDate"
+msgstr "유효하지 않은 종료일입니다."
+
+msgid "DateFormatLabel"
+msgstr "(d/m/y h:m)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "홈페이지 파일에는 쓰기가 불가능합니다 !"
+
+msgid "PleaseEnterNoticeText"
+msgstr "경고 메시지를 입력하십시요"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "경고 제목을 입력하십시요"
+
+msgid "PleaseEnterLinkName"
+msgstr "링크 네임을 입력하십시요"
+
+msgid "InsertThisLink"
+msgstr "이 링크를 입력"
+
+msgid "FirstPlace"
+msgstr "첫번째 장소"
+
+msgid "After"
+msgstr "다음"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Dropboz: 그룹 허용"
+
+msgid "DropboxAllowGroupComment"
+msgstr "유저들이 그룹에 파일을 전송할 수 있습니다."
+
+msgid "ClassDeleted"
+msgstr "클래스가 삭제되었습니다"
+
+msgid "ClassesDeleted"
+msgstr "클래스들이 삭제되었습니다"
+
+msgid "NoUsersInClass"
+msgstr "이 클래스에는 아무 유저도 없습니다"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "지정한 유저들이 이 과정에 등록되었습니다"
+
+msgid "InvalidTitle"
+msgstr "타이틀을 입력하십시요"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "이 카테고리는 이미 사용중입니다"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "카테고리의 코드와 이름을 입력하십시요"
+
+msgid "DokeosHomepage"
+msgstr "Chamilo 홈페이지"
+
+msgid "DokeosForum"
+msgstr "Chamilo 포럼"
+
+msgid "RegisterYourPortal"
+msgstr "자신의 포털 등록"
+
+msgid "DokeosExtensions"
+msgstr "Chamilo 확장"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "과정 네비게이션 메뉴 보여주기"
+
+msgid "ShowNavigationMenuComment"
+msgstr "과정의 특정 부분으로 찾아가기 쉽도록 과정 네비게이션 메뉴를 나타내줍니다"
+
+msgid "LoginAs"
+msgstr "로그인 명"
+
+msgid "ImportClassListCSV"
+msgstr "CSV를 통해 클래스 리스트를 불러오기"
+
+msgid "ShowOnlineWorld"
+msgstr "로그인 페이지에 온라인상에 있는 유저의 수를 나타내기"
+
+msgid "ShowOnlineUsers"
+msgstr "온라인 상에 있는 유저의 수를 모든 페이지에서 나타내줍니다"
+
+msgid "ShowOnlineCourse"
+msgstr "이 과정에 로그인한 유저의 수를 나타내줍니다"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "네비게이션 메뉴의 아이콘들이 보입니까?"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "모든 역할과 특정 권한의 위치를 보여줍니다"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "모든 역할과 특정 위치의 권한을 보여줍니다"
+
+msgid "ClassesUnsubscribed"
+msgstr "선택하신 클래스는 이 과정에 등록되어 있지 않습니다"
+
+msgid "ClassesSubscribed"
+msgstr "지정 클래스가 지정한 과정에 등록되었습니다"
+
+msgid "RoleId"
+msgstr "역할 ID"
+
+msgid "RoleName"
+msgstr "역할 이름"
+
+msgid "RoleType"
+msgstr "타입"
+
+msgid "RightValueModified"
+msgstr "값이 변경되었습니다."
+

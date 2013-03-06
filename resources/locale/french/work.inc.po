@@ -1,0 +1,288 @@
+msgid "Tools"
+msgstr "Outils"
+
+msgid "SendWork"
+msgstr "Envoyer le document"
+
+msgid "langTooBig"
+msgstr "Vous n\'avez choisi aucun fichier à envoyer, ou celui-ci est trop gros"
+
+msgid "langListDeleted"
+msgstr "La liste a été complètement effacée"
+
+msgid "langDocModif"
+msgstr "Le document a été modifié"
+
+msgid "langDocAdd"
+msgstr "Le document a été ajouté"
+
+msgid "langDocDel"
+msgstr "Le document a été suppprimé"
+
+msgid "langTitleWork"
+msgstr "Titre du document en toutes lettres"
+
+msgid "langAuthors"
+msgstr "Auteurs"
+
+msgid "langDelList"
+msgstr "Effacer complètement la liste"
+
+msgid "langWorkDelete"
+msgstr "Effacer"
+
+msgid "langWorkModify"
+msgstr "Modifier"
+
+msgid "langWorkConfirmDelete"
+msgstr "Confirmez-vous cette suppression ?"
+
+msgid "langAllFiles"
+msgstr "Tous les fichiers"
+
+msgid "DefaultUpload"
+msgstr "Visibilité par défaut des documents envoyés (y compris dans le futur)"
+
+msgid "NewVisible"
+msgstr "Les nouveaux documents sont par défaut visibles par tous les membres"
+
+msgid "NewUnvisible"
+msgstr "Les nouveaux documents sont par défaut visibles seulement par les responsables"
+
+msgid "lang_doc_unvisible"
+msgstr "Le responsable a choisi que votre document soit visible seulement pour les responsables, par conséquent il ne sera pas visible pour vous."
+
+msgid "langDelLk"
+msgstr "Voulez-vous réellement supprimer ce lien?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Seuls les utilisateurs enregistrés de ce cours peuvent publier des documents."
+
+msgid "langListDel"
+msgstr "Supprimer la liste"
+
+msgid "langNameDir"
+msgstr "Nom du nouveau répertoire"
+
+msgid "langFileExists"
+msgstr "Impossible d\'effectuer cette opération.<br />Un fichier portant ce nom existe déjà."
+
+msgid "CreateDirectory"
+msgstr "Créer un répertoire"
+
+msgid "langCurrentDir"
+msgstr "répertoire courant"
+
+msgid "UploadADocument"
+msgstr "Envoyer un document"
+
+msgid "EditToolOptions"
+msgstr "Éditer les options des travaux"
+
+msgid "DocumentDeleted"
+msgstr "Document supprimé"
+
+msgid "SendMailBody"
+msgstr "Un utilisateur a publié un document dans l\'outil travaux de votre cours"
+
+msgid "DirDelete"
+msgstr "Supprimer le répertoire"
+
+msgid "ValidateChanges"
+msgstr "Valider les changements"
+
+msgid "FolderUpdated"
+msgstr "Dosier mis à jour"
+
+msgid "EndsAt"
+msgstr "Envoi impossible à partir du"
+
+msgid "QualificationOfAssignment"
+msgstr "Évaluation de la tâche"
+
+msgid "MakeQualifiable"
+msgstr "Activer l\'évaluation"
+
+msgid "QualificationNumberOver"
+msgstr "Évaluation sur..."
+
+msgid "WeightInTheGradebook"
+msgstr "Pondération dans le rapport de compétences"
+
+msgid "DatesAvailables"
+msgstr "Dates disponibles"
+
+msgid "ExpiresAt"
+msgstr "Expire le"
+
+msgid "AddToCalendar"
+msgstr "Ajouter au calendrier"
+
+msgid "DirectoryCreated"
+msgstr "Dossier créé"
+
+msgid "Assignment"
+msgstr "Tâche"
+
+msgid "AdvancedParameters"
+msgstr "Paramètres avancés"
+
+msgid "ExpiryDateToSendWorkIs"
+msgstr "Expiration pour la remise des travaux"
+
+msgid "EnableExpiryDate"
+msgstr "Activer la date d\'expiration"
+
+msgid "EnableEndDate"
+msgstr "Date de fin"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "Impossible d\'enregistrer le document"
+
+msgid "EndDateCannotBeBeforeTheExpireDate"
+msgstr "La fin ne peut précéder la date d\'expiration"
+
+msgid "SelectAFilter"
+msgstr "Choisissez un filtre"
+
+msgid "FilterByNotExpired"
+msgstr "Filtrer - non expirés"
+
+msgid "FilterAssignments"
+msgstr "Filtrer tâches"
+
+msgid "WeightNecessary"
+msgstr "Minimum requis"
+
+msgid "QualificationOver"
+msgstr "Cotation sur"
+
+msgid "ExpiryDateAlreadyPassed"
+msgstr "La date d\'expiration est déjà passée"
+
+msgid "EndDateAlreadyPassed"
+msgstr "La date de fin est déjà passée"
+
+msgid "MoveXTo"
+msgstr "Déplacer %s vers"
+
+msgid "QualificationMustNotBeMoreThanQualificationOver"
+msgstr "La cote ne peut pas être supérieure à la qualification maximale"
+
+msgid "ModifyDirectory"
+msgstr "Modifier le répertoire"
+
+msgid "DeleteAllFiles"
+msgstr "Supprimer tous les travaux"
+
+msgid "BackToWorksList"
+msgstr "Retour à la liste de travaux"
+
+msgid "EditMedia"
+msgstr "Éditer et coter le travail"
+
+msgid "AllFilesInvisible"
+msgstr "Tous les travaux sont à présent visibles"
+
+msgid "FileInvisible"
+msgstr "Le fichier est à présent invisible"
+
+msgid "AllFilesVisible"
+msgstr "Tous les travaux sont à présent visibles"
+
+msgid "FileVisible"
+msgstr "Le travail est à présent visible"
+
+msgid "ButtonCreateAssignment"
+msgstr "Créer"
+
+msgid "AssignmentName"
+msgstr "Nom du travail"
+
+msgid "CreateAssignment"
+msgstr "Nouveau travail"
+
+msgid "FolderEdited"
+msgstr "Répertoire mis à jour"
+
+msgid "UpdateWork"
+msgstr "Mettre le document à jour"
+
+msgid "MakeAllPapersInvisible"
+msgstr "Rendre tous travaux invisibles"
+
+msgid "MakeAllPapersVisible"
+msgstr "Rendre tous travaux visibles"
+
+msgid "TheDocumentHasBeenDeleted"
+msgstr "Le document a été supprimé."
+
+msgid "YouAreNotAllowedToDeleteThisDocument"
+msgstr "Vous n\'êtes pas autorisé à supprimer ce document"
+
+msgid "StudentAllowedToDeleteOwnPublication"
+msgstr "Autoriser les apprenants à supprimer leurs propres travaux"
+
+msgid "ConfirmYourChoiceDeleteAllfiles"
+msgstr "Veuillez confirmer votre choix. Tous les fichiers seront supprimés sans possibilité de récupération postérieure"
+
+msgid "WorkName"
+msgstr "Titre du travail"
+
+msgid "ReminderToSubmitPendingTask"
+msgstr "Nous vous rappelons que vous devez soumettre une tâche"
+
+msgid "MessageConfirmSendingOfTask"
+msgstr "Ceci est un message de confirmation de bonne récpetion de la tâche"
+
+msgid "DataSent"
+msgstr "Données envoyées"
+
+msgid "DownloadLink"
+msgstr "Lien de téléchargement"
+
+msgid "ViewUsersWithTask"
+msgstr "Travaux déjà remis"
+
+msgid "ReminderMessage"
+msgstr "Envoyer un rappel"
+
+msgid "DateSent"
+msgstr "Date de réception"
+
+msgid "ViewUsersWithoutTask"
+msgstr "Travaux manquants"
+
+msgid "HomeworkCreated"
+msgstr "Un travail a été ajouté"
+
+msgid "HomeworkHasBeenCreatedForTheCourse"
+msgstr "Une tâche a été ajoutée dans le cours"
+
+msgid "PleaseCheckHomeworkPage"
+msgstr "Veuillez vérifier la page des tâches"
+
+msgid "IncludedInEvaluation"
+msgstr "Inclus dans le cahier de notes"
+
+msgid "DateExpiredNotBeLessDeadLine"
+msgstr "La date d\'expiration ne peut pas être antérieure à la date de fin."
+
+msgid "NotRevised"
+msgstr "Non cotés"
+
+msgid "MaxWeightNeedToBeProvided"
+msgstr "Un poids maximum doit être indiqué dans les options du cahier de notes"
+
+msgid "ContainsAfile"
+msgstr "Contient un fichier"
+
+msgid "AllowTextAssignments"
+msgstr "Permettre la remise de travaux comme texte en ligne"
+
+msgid "YouAlreadySentAPaperYouCantUpload"
+msgstr "Vous avez déjà envoyé un travail, vous ne pouvez pas en envoyer d\'autre."
+
+msgid "CantUploadDeleteYourPaperFirst"
+msgstr "Impossible d\'envoyer deux travaux. Veuillez tout d\'abord éliminer l\'antérieur."
+

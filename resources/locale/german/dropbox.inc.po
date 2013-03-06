@@ -1,0 +1,303 @@
+msgid "Upload"
+msgstr "Upload"
+
+msgid "BackList"
+msgstr "Zurück zur eigenen Dateikiste"
+
+msgid "ShowFeedback"
+msgstr "Antworten zeigen"
+
+msgid "GiveFeedback"
+msgstr "Antwort schreiben/bearbeiten"
+
+msgid "JustUploadInSelect"
+msgstr "---Nur-Upload---"
+
+msgid "MailingNothingFor"
+msgstr "Nichts für"
+
+msgid "MailingFileNotRegistered"
+msgstr "(nicht registriert für diesen Kurs)"
+
+msgid "MailingFileSentTo"
+msgstr "gesendet an"
+
+msgid "MailingFileIsFor"
+msgstr "ist für"
+
+msgid "MailingFileRecipDup"
+msgstr "verschiedene Benutzer haben"
+
+msgid "MailingFileRecipNotFound"
+msgstr "keinen Kursteilnehmer mit"
+
+msgid "MailingFileNoRecip"
+msgstr "Name enthält keine Empfänger-ID"
+
+msgid "MailingFileNoPostfix"
+msgstr "Name endet nicht mit"
+
+msgid "MailingFileNoPrefix"
+msgstr "Name beginnt nicht mit"
+
+msgid "MailingFileFunny"
+msgstr "Dateiname bzw. Erweiterung ungültig! Erlaubt sind nur Buchstaben und Ziffern. Die Länge der Dateierweiterung muss zwischen 1 und 4 Zeichen betragen."
+
+msgid "MailingZipDups"
+msgstr "Die Rundsendung wird <b>nicht</b> ausgeführt, da die ZIP-Datei doppelte Dateien enthält!"
+
+msgid "MailingZipPhp"
+msgstr "Die ZIP-Datei für die Rundsendung darf keine PHP-Dateien enthalten und wird <b>nicht</b> gesendet!"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "Die ZIP-Datei für die Rundsendung ist leer oder keine gültige ZIP-Datei!"
+
+msgid "MailingWrongZipfile"
+msgstr "Die Rundsendung muss aus einer ZIP-Datei mit Teilnehmer-ID oder Login-Namen bestehen!"
+
+msgid "MailingConfirmSend"
+msgstr "Inhaltsdateien an verschiedene Empfänger versenden?"
+
+msgid "MailingSend"
+msgstr "Inhaltsdateien versenden"
+
+msgid "MailingNotYetSent"
+msgstr "Die Dateien der Rundsendung wurden noch nicht versandt..."
+
+msgid "MailingInSelect"
+msgstr "---Rundsendung---"
+
+msgid "MailingAsUsername"
+msgstr "Rundsendung"
+
+msgid "FileDeleted"
+msgstr "Die ausgewählte Datei wurde aus Ihrer Dateikiste entfernt."
+
+msgid "DocAdd"
+msgstr "Material erfolgreich hinzugefügt"
+
+msgid "Sender"
+msgstr "Absender"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "FileSize"
+msgstr "Dateigröße"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "OverwriteFile"
+msgstr "Zuvor gesendete Datei überschreiben?"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Unknown"
+msgstr "unbekannt"
+
+msgid "SentOn"
+msgstr "am"
+
+msgid "SentTo"
+msgstr "Gesendet an"
+
+msgid "ConfirmDelete"
+msgstr "Der Eintrag wird nur aus Ihrer Liste entfernt"
+
+msgid "SendTo"
+msgstr "Senden an"
+
+msgid "Description"
+msgstr "Beschreibung des Dokuments"
+
+msgid "UploadFile"
+msgstr "Dokument hochladen"
+
+msgid "ErrorCreatingDir"
+msgstr "Das Dateikisten-Verzeichnis konnte nicht erstellt werden. Bitte kontaktieren Sie den System-Administrator."
+
+msgid "UploadError"
+msgstr "Upload ist fehlgeschlagen, bitte maximale Dateigröße und Schreibrechte für Verzeichnisse prüfen"
+
+msgid "TooBig"
+msgstr "Sie haben keine Datei ausgewählt bzw. die Datei ist zu groß!"
+
+msgid "NoFileSpecified"
+msgstr "Sie haben keine Datei zur Übertragung angegeben."
+
+msgid "NoUserSelected"
+msgstr "Bitte wählen Sie den Benutzer aus, dem Sie die Datei schicken möchten."
+
+msgid "BadFormData"
+msgstr "Übertragung fehlgeschlagen: fehlerhafte Daten. Bitte kontaktieren Sie den System-Administrator."
+
+msgid "GeneralError"
+msgstr "Es ist ein Fehler aufgetreten. Bitte kontaktieren Sie den System-Administrator."
+
+msgid "Dropbox"
+msgstr "Dateikiste"
+
+msgid "Help"
+msgstr "Hilfe"
+
+msgid "ReceivedFiles"
+msgstr "Empfangene Dateien"
+
+msgid "SentFiles"
+msgstr "versendete Dateien"
+
+msgid "ReceivedTitle"
+msgstr "Titel"
+
+msgid "SentTitle"
+msgstr "Gesendete Dateien"
+
+msgid "Authors"
+msgstr "Autoren"
+
+msgid "Size"
+msgstr "Größe"
+
+msgid "LastResent"
+msgstr "Zuletzt erneut gesendet am"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Wurzel"
+
+msgid "UploadNewFile"
+msgstr "Neue Datei senden"
+
+msgid "AreYouSureToDelete"
+msgstr "Wollen Sie wirklich löschen"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "CloseFeedback"
+msgstr "Feedback schließen"
+
+msgid "AddNewFeedback"
+msgstr "Neues Feedback hinzufügen"
+
+msgid "DropboxFeedbackStored"
+msgstr "Die Feedback Nachricht wurde gespeichert"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Alle Benutzer haben die Datei gelöscht, niemand wird die Feedback Nachricht sehen, die Sie hinzufügen"
+
+msgid "FeedbackError"
+msgstr "Feedback Fehler"
+
+msgid "PleaseTypeText"
+msgstr "Bitte Text einfügen"
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "Ihnen fehlt die Erlaubnis zum Download dieser Datei"
+
+msgid "CheckAtLeastOneFile"
+msgstr "Mindestens eine Datei markieren"
+
+msgid "ReceivedFileDeleted"
+msgstr "Die empfangene Datei wurde gelöscht"
+
+msgid "SentFileDeleted"
+msgstr "Die gesendete Datei wurde gelöscht"
+
+msgid "FilesMoved"
+msgstr "Die ausgewählten Dateien wurden verschoben"
+
+msgid "ReceivedFileMoved"
+msgstr "Die empfangene Datei wurde verschoben"
+
+msgid "SentFileMoved"
+msgstr "Die gesendete Datei wurde verschoben"
+
+msgid "NotMovedError"
+msgstr "Diese Datei(en) kann(können) nicht verschoben werden"
+
+msgid "AddNewCategory"
+msgstr "Neue Kategorie hinzufügen"
+
+msgid "EditCategory"
+msgstr "Diese Kategorie bearbeiten"
+
+msgid "CategoryName"
+msgstr "Name der Kategorie"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Bitte einen Namen für Kategorie angeben"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Diese Kategorie existiert bereits, bitte einen anderen Namen verwenden"
+
+msgid "CurrentlySeeing"
+msgstr "Sie befinden sich momentan in der Kategorie"
+
+msgid "CategoryStored"
+msgstr "Die Kategorie wurde gespeichert"
+
+msgid "CategoryModified"
+msgstr "Die Kategorie wurde verändert"
+
+msgid "CategoryDeleted"
+msgstr "Die Kategorie wurde gelöscht"
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "Das Autoren-Feld kann nicht leer sein"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Sie müssen zumindest einen Empfänger angeben"
+
+msgid "DropboxFileTooBig"
+msgstr "Die Dateikiste-Datei ist zu groß"
+
+msgid "TheFileIsNotUploaded"
+msgstr "Die Datei wurde nicht hochgeladen"
+
+msgid "FileUploadSucces"
+msgstr "Die Datei wurde erfolgreich hochgeladen"
+
+msgid "MailingNonMailingError"
+msgstr "Rundsendung kann nicht mit Nicht-Rundsendung überschrieben werden und umgekehrt"
+
+msgid "MailingSelectNoOther"
+msgstr "Rundsendung kann nicht mit anderen Empfängern kombiniert werden."
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "Hochladen kann nicht mit anderen Empfängern kombiniert werden"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Eine neue Datei wurde in die Dateikiste gesendet"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Eine neue Datei wurde in die Dateikiste Ihres Kurses gesendet"
+
+msgid "langAddEdit"
+msgstr "Hinzufügen / Ändern"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Dieses Verzeichnis ist leer"
+
+msgid "AddComment"
+msgstr "Feedback speichern"
+
+msgid "SentCatgoryDeleted"
+msgstr "Der Ordner wurde gelöscht"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "Der Ordner wurde gelöscht"
+
+msgid "InvalideUserDetected"
+msgstr "Ungültiger Benutzer entdeckt."
+
+msgid "InvalideGroupDetected"
+msgstr "Ungültige Gruppe entdeckt."
+
+msgid "OverviewOfFilesInThisZip"
+msgstr "Übersicht der Dateien in diesem ZIP-Archiv"
+

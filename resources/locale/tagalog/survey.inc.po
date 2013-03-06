@@ -1,0 +1,114 @@
+msgid "SurveyTitle"
+msgstr "Pamagat ng sarbey"
+
+msgid "SurveyIntroduction"
+msgstr "Panimula ng sarbey"
+
+msgid "CreateNewSurvey"
+msgstr "Lumikha ng sarbey"
+
+msgid "Publish"
+msgstr "Ilathala ang sarbey"
+
+msgid "CreateSurvey"
+msgstr "Lumikha ng sarbey"
+
+msgid "DeleteSurvey"
+msgstr "Tanggalin ang sarbey"
+
+msgid "SurveyCode"
+msgstr "Koda"
+
+msgid "SurveyList"
+msgstr "Lista ng sarbey"
+
+msgid "SurveyName"
+msgstr "Pangalan ng sarbey"
+
+msgid "SurveySubTitle"
+msgstr "Subtitle ng sarbey"
+
+msgid "SurveyThanks"
+msgstr "Panghuli salamat"
+
+msgid "EditSurvey"
+msgstr "I-edit ang sarbey"
+
+msgid "AddQuestion"
+msgstr "Magdagdag ng katanungan"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "Ang sarbey ay matagumpay na nalikha"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Maaari ka nang magdagdag ng mga tanong sa iyong sarbey"
+
+msgid "QuestionAdded"
+msgstr "Ang tanong ay naidagdag na."
+
+msgid "RemoveAnswer"
+msgstr "Opsyon sa pagtanggal"
+
+msgid "AddAnswer"
+msgstr "Opsyon sa pagdagdag"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Ipakita"
+
+msgid "AnswerOptions"
+msgstr "Mga opsyon sa pagsagot"
+
+msgid "MultipleResponse"
+msgstr "Maramihang sagot"
+
+msgid "Dropdown"
+msgstr "Dropdown"
+
+msgid "Pagebreak"
+msgstr "Katapusan ng pahina (hiwalay na mga tanong)"
+
+msgid "QuestionNumber"
+msgstr "N°"
+
+msgid "NumberOfOptions"
+msgstr "Mga Opsyon"
+
+msgid "NumberOfQuestions"
+msgstr "Mga Tanong"
+
+msgid "SelectUser"
+msgstr "Gumagamit"
+
+msgid "Multiplechoice"
+msgstr "Maramihang pagpipilian"
+
+msgid "Invite"
+msgstr "Mag-imbita"
+
+msgid "MaximumScore"
+msgstr "Maximum na score"
+
+msgid "DeleteSurveyQuestion"
+msgstr "Sigurado ka bang nais mong tanggalin ang tanong?"
+
+msgid "Conditional"
+msgstr "Kondiyonal"
+
+msgid "ParentSurvey"
+msgstr "Pinagmulang Sarbey"
+
+msgid "OneQuestionPerPage"
+msgstr "Isang katanungan bawat pahina"
+
+msgid "ActivateShuffle"
+msgstr "Pagganahin ang shuffle mode"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "CreateQuestionSurvey"
+msgstr "Lumikha ng tanong"
+
+msgid "BackToSurvey"
+msgstr "Bumalik sa sarbey"
+

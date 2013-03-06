@@ -1,0 +1,216 @@
+msgid "langStatDB"
+msgstr "日志数据库"
+
+msgid "langEnableTracking"
+msgstr "启用日志"
+
+msgid "langInstituteShortName"
+msgstr "你的组织简称"
+
+msgid "langWarningResponsible"
+msgstr "备份后才能使用这个脚本，如果丢失或损坏数据 IILearn 小组将不负责"
+
+msgid "langAllowSelfRegProf"
+msgstr "允许老师注册"
+
+msgid "langEG"
+msgstr "例如"
+
+msgid "langDBHost"
+msgstr "数据库主机"
+
+msgid "langDBLogin"
+msgstr "数据库用户名"
+
+msgid "langDBPassword"
+msgstr "数据库密码"
+
+msgid "langMainDB"
+msgstr "IILearn 主数据库"
+
+msgid "langAllFieldsRequired"
+msgstr "所有选项都必需填写"
+
+msgid "langPrintVers"
+msgstr "打印版本"
+
+msgid "langLocalPath"
+msgstr "本地路径"
+
+msgid "langAdminEmail"
+msgstr "管理员 Email"
+
+msgid "langAdminName"
+msgstr "管理员名字"
+
+msgid "langAdminSurname"
+msgstr "管理员姓氏"
+
+msgid "langAdminLogin"
+msgstr "管理员登录名"
+
+msgid "langAdminPass"
+msgstr "管理员密码(<FONT color=red>可以修改</FONT>)"
+
+msgid "langEducationManager"
+msgstr "项目管理人"
+
+msgid "langCampusName"
+msgstr "网站名称"
+
+msgid "langDBSettingIntro"
+msgstr "安装脚本将创建 IILearn 的数据库，系统默认将使用多数据库模式，如果你的主机服务商只允许使用一个数据库，您应选择一个数据库的模式。"
+
+msgid "langStep1"
+msgstr "步骤一"
+
+msgid "langStep2"
+msgstr "步骤二"
+
+msgid "langStep3"
+msgstr "步骤3/7"
+
+msgid "langStep4"
+msgstr "步骤4/7"
+
+msgid "langStep5"
+msgstr "步骤5/7"
+
+msgid "langStep6"
+msgstr "步骤6/7"
+
+msgid "langCfgSetting"
+msgstr "参数文件设置"
+
+msgid "langDBSetting"
+msgstr "数据库设置"
+
+msgid "langMainLang"
+msgstr "首选语言"
+
+msgid "langLicence"
+msgstr "软件许可"
+
+msgid "langLastCheck"
+msgstr "安装前的检查"
+
+msgid "langRequirements"
+msgstr "系统要求"
+
+msgid "langDbPrefixForm"
+msgstr "数据库前缀"
+
+msgid "langDbPrefixCom"
+msgstr "没有需要可以不填"
+
+msgid "langEncryptUserPass"
+msgstr "加密用户密码"
+
+msgid "langSingleDb"
+msgstr "使用一个或多个数据库"
+
+msgid "langAllowSelfReg"
+msgstr "允许学生注册"
+
+msgid "langRecommended"
+msgstr "(推荐)"
+
+msgid "langScormDB"
+msgstr "Scorm 数据库"
+
+msgid "langAdminLastName"
+msgstr "管理员姓氏"
+
+msgid "langAdminPhone"
+msgstr "管理员电话"
+
+msgid "OK"
+msgstr "确定"
+
+msgid "langAdminFirstName"
+msgstr "管理员名字"
+
+msgid "langInstituteURL"
+msgstr "组织的网址"
+
+msgid "langDokeosURL"
+msgstr "网址"
+
+msgid "langUserDB"
+msgstr "用户数据库"
+
+msgid "langInstallationLanguage"
+msgstr "安装语言"
+
+msgid "ReadThoroughly"
+msgstr "详细阅读"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "为了让Chamilo正常运行, 你的主机必须安装以下"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "警告!<br />安装程序检查到您的系统内已有一Chamilo平台."
+
+msgid "NewInstallation"
+msgstr "全新安装"
+
+msgid "CheckDatabaseConnection"
+msgstr "检查数据库连接"
+
+msgid "PrintOverview"
+msgstr "显示概况"
+
+msgid "Installing"
+msgstr "安装"
+
+msgid "of"
+msgstr "of"
+
+msgid "Step"
+msgstr "步骤"
+
+msgid "MoreDetails"
+msgstr "要求更多详情"
+
+msgid "ServerRequirements"
+msgstr "伺服器要求"
+
+msgid "PHPVersion"
+msgstr "PHP 版本"
+
+msgid "support"
+msgstr "支持"
+
+msgid "PHPVersionOK"
+msgstr "PHP 版本能接受"
+
+msgid "RecommendedSettings"
+msgstr "推荐设定"
+
+msgid "RecommendedSettingsInfo"
+msgstr "服务器的推荐设定。这些设定已出现在您的服务器里的php.ini文件。"
+
+msgid "Setting"
+msgstr "设定"
+
+msgid "Actual"
+msgstr "当前"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "目录及文档许可"
+
+msgid "NotWritable"
+msgstr "不可写"
+
+msgid "Writable"
+msgstr "可写"
+
+msgid "IAccept"
+msgstr "我接受"
+
+msgid "InstallDokeos"
+msgstr "安装 Chamilo"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "访问你新创建的入门网站。"
+

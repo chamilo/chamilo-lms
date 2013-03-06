@@ -1,0 +1,309 @@
+msgid "ModifInfo"
+msgstr "Postavke kolegija"
+
+msgid "langModifDone"
+msgstr "Podatci su izmijenjeni"
+
+msgid "langDelCourse"
+msgstr "Izbriši cijeli website kolegija?"
+
+msgid "langProfessors"
+msgstr "Predavači"
+
+msgid "langFaculty"
+msgstr "Kategorija"
+
+msgid "langConfidentiality"
+msgstr "Povjerljivost"
+
+msgid "langPublic"
+msgstr "Javni pristup s početne stranice portala bez prijave"
+
+msgid "langUnsubscription"
+msgstr "Ispiši se"
+
+msgid "langPrivOpen"
+msgstr "Privatni pristup, slobodna registracija"
+
+msgid "langPrivate"
+msgstr "Privatni pristup (stranica dostupna samo osobama na popisu korisnika)"
+
+msgid "langForbidden"
+msgstr "Zabranjeno"
+
+msgid "CourseAccessConfigTip"
+msgstr "Prema izvornoj postavci kolegij je javan. No stupanj povjerljivosti možete odrediti gore."
+
+msgid "langOpenToTheWorld"
+msgstr "Otvoreno - pristup omogućen svima"
+
+msgid "OpenToThePlatform"
+msgstr "Otvoreno - pristup omogućen korisnicima registriranim na platformu"
+
+msgid "langOpenToThePlatform"
+msgstr "Otvoreno - pristup omogućen korisnicima registriranima na platformu"
+
+msgid "langTipLang"
+msgstr "Ovaj će jezik vrijediti za sve posjetioce web stranica kolegija"
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Studentski radovi"
+
+msgid "langProgramMenu"
+msgstr "Program kolegija"
+
+msgid "langAnnouncement"
+msgstr "Obavijesti"
+
+msgid "langExercise"
+msgstr "Vježbe"
+
+msgid "langStats"
+msgstr "Statistika"
+
+msgid "langUplPage"
+msgstr "Podigni stranicu i poveznicu na početnu stranicu"
+
+msgid "langLinkSite"
+msgstr "Postavi poveznicu na početnu stranicu"
+
+msgid "langCourse"
+msgstr "Website kolegija"
+
+msgid "langHasDel"
+msgstr "je izbrisan"
+
+msgid "langBackHome"
+msgstr "Povratak na početnu stranicu"
+
+msgid "langByDel"
+msgstr "Brisanje ovog kolegija izbrisat će sve vezane dokumente i sve studente (ali ih neće izbrisati iz drugih kolegija ).<p> Želite li izbrisati kolegij?"
+
+msgid "langY"
+msgstr "DA"
+
+msgid "langN"
+msgstr "NE"
+
+msgid "langDepartmentUrl"
+msgstr "URL Odjela (Zavoda, Katedre)"
+
+msgid "langDepartmentUrlName"
+msgstr "Odjel"
+
+msgid "langBackupCourse"
+msgstr "Pohrani kolegij"
+
+msgid "langModifGroups"
+msgstr "Grupe"
+
+msgid "langProfessor"
+msgstr "Predavač"
+
+msgid "langGroups"
+msgstr "Skupine"
+
+msgid "langDescriptionCours"
+msgstr "Opis kolegija"
+
+msgid "langArchiveCourse"
+msgstr "Pričuvni primjerak kolegija"
+
+msgid "langRestoreCourse"
+msgstr "Obnovi kolegij"
+
+msgid "langRestore"
+msgstr "Obnovi"
+
+msgid "langCreatedIn"
+msgstr "izrađeno u"
+
+msgid "langCreateMissingDirectories"
+msgstr "Izrada nepostojećih mapa"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Preslika datoteka kolegija"
+
+msgid "langDisk_free_space"
+msgstr "Slobodan prostor diska"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Izrada pričuvnog primjerka datoteke"
+
+msgid "langFileCopied"
+msgstr "datoteka preslikana"
+
+msgid "langArchiveLocation"
+msgstr "Položaj arhive"
+
+msgid "langSizeOf"
+msgstr "veličina"
+
+msgid "langArchiveName"
+msgstr "Naziv arhive"
+
+msgid "langBackupSuccesfull"
+msgstr "Uspješno obavljena izrada pričuvnoga primjerka"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Izrada pričuvnoga primjerka podataka kolegija u glavnu bazu podataka za"
+
+msgid "langBUUsersInMainBase"
+msgstr "Izrada pričuvnoga primjerka korisničkih podataka u glavnu bazu podataka za"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Izrada pričuvnoga primjerka podataka obavijesti u glavnu bazu podataka za"
+
+msgid "langBackupOfDataBase"
+msgstr "Izrada pričuvnoga primjerka baze podataka"
+
+msgid "langCreationDate"
+msgstr "Izrađeno"
+
+msgid "langExpirationDate"
+msgstr "Nadnevak isteka"
+
+msgid "langPostPone"
+msgstr "Odgoda"
+
+msgid "langLastEdit"
+msgstr "Posljednje izmjene"
+
+msgid "langLastVisit"
+msgstr "Posljednja posjeta"
+
+msgid "langSubscription"
+msgstr "Upis"
+
+msgid "langCourseAccess"
+msgstr "Pristup kolegiju"
+
+msgid "langConfirmBackup"
+msgstr "Želite li doista izraditi pričuvni primjerak kolegija?"
+
+msgid "langCreateSite"
+msgstr "Izradi kolegij"
+
+msgid "langRestoreDescription"
+msgstr "Kolegij je pohranjen u jednoj od datoteka koje možete odabrati niže.<br><br> Kada kliknete na \"Obnovi\", pohranjena datoteka će biti dekomprimirana i kolegij će biti obnovljen."
+
+msgid "langRestoreNotice"
+msgstr "Popis naredbi još ne omogućuje automatsku obnovu korisnika, ali podatci spremljeni u \"korisnici.csv\" dostatni su da nadzornik to učini ručno."
+
+msgid "langAvailableArchives"
+msgstr "Popis dostupnih pohranjenih datoteka"
+
+msgid "langNoArchive"
+msgstr "Nije odabrana nijedna pohranjena datoteka"
+
+msgid "langArchiveNotFound"
+msgstr "Pohranjena datoteka nije pronađena"
+
+msgid "langArchiveUncompressed"
+msgstr "Pohranjena datoteka je dekomprimirana i postavljena."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "Datoteka \"korisnici.csv\" je smještena u alat Dokumenti."
+
+msgid "langBackH"
+msgstr "natrag na početnu stranicu"
+
+msgid "langOtherCategory"
+msgstr "Druga kategorija"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Korisnicima je omogućeno ispisati se s kolegija"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Korisnicima nije omogućen ispis s kolegija"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Potpuno zatvoreno; kolegij dostupan jedino nadzorniku kolegija."
+
+msgid "CourseVisibilityClosed"
+msgstr "Zatvoreno - kolegiju nema pristupa"
+
+msgid "CourseVisibilityModified"
+msgstr "Vidljivost izmjenjena (opširnije postavke su određene u sustavu uloge-prava)"
+
+msgid "WorkEmailAlert"
+msgstr "Upozorenje e-poštom nakon podnošenja rada"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Omogući upozorenje e-poštom nakon podnošenja novog rada"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Isključi upotorenje e-poštom nakon podnošenja novog rada"
+
+msgid "DropboxEmailAlert"
+msgstr "Upozorenje e-poštom za primanje nove datoteke u pretincu"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Omogući upozorenje e-poštom za primanje nove datoteke u pretincu"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Isključi upozorenje e-poštom za primanje nove datoteke u pretincu"
+
+msgid "AllowUserEditAgenda"
+msgstr "Dozvoli korisnicima uređivanje rasporeda kolegija"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Omogući korisnicima uređivanje rasporeda kolegija"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Isključi korisnicima  opciju uređivanje rasporeda kolegija"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Dozvoli korisnicima uređivanje obavijesti kolegija"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Omogući korisnicima opciju uređivanja"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Isključi korisnicima opciju uređivanja"
+
+msgid "OrInTime"
+msgstr "Ili u"
+
+msgid "CourseRegistrationPassword"
+msgstr "Registracija zaporke kolegija"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Odaberite ovu poveznicu za kompletno brisanje kolegija sa poslužitelja.<br><br>Ovu opciju upotrebljavajte vrlo oprezno!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Preslikaj dio ili dijelove kolegija u drugi kolegij. Za upotrebu ovog alata potrebno je najmanje 2 kolegija."
+
+msgid "DescriptionRecycleCourse"
+msgstr "Ovaj alat briše kolegij. Možete obrisati dokumente, forume, poveznice i odabrati dijelove ili obrisati cijeli kolegij."
+
+msgid "QuizEmailAlert"
+msgstr "E-pošta upozorenje prilikom objavljivanja novog testa"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Omogući obavijest e-poštom kada korisnik pošalje odgovore na novi test"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Isključi obavijest e-poštom kada korisnik pošalje odgovore na novi test"
+
+msgid "AllowUserImageForum"
+msgstr "Korisnička slika na forumu"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Prikaži korisničke slike na forumu"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Sakrij korisničke slike na forumu"
+
+msgid "AllowLearningPathTheme"
+msgstr "Dozvoli upotrebu personalizacije Puta učenja"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "Dozvoljeno"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Nije dozvoljeno"
+

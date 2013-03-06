@@ -1,0 +1,168 @@
+msgid "langChapter"
+msgstr "챕터"
+
+msgid "langDocumentList"
+msgstr "모든 문서의 목록"
+
+msgid "langOrganisationList"
+msgstr "컨텐츠의 테이블"
+
+msgid "langEditTOC"
+msgstr "컨텐츠 테이블 수정"
+
+msgid "langEditDocument"
+msgstr "수정"
+
+msgid "langCreateDocument"
+msgstr "문서 생성"
+
+msgid "langMissingImagesDetected"
+msgstr "잃어버린 이미지를 찾았습니다"
+
+msgid "langPublish"
+msgstr "발행"
+
+msgid "langScormcontentstudent"
+msgstr "이것은 Scorm 형식의 과정입니다. 실행하시려면, 이곳을 클릭하십시요.  <input type=button name=scormbutton value=\'Launch?it?!\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "이것은 Scorm 컨텐츠입니다<br><input type=button name=scormbutton value=\'Launch?it?!\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr "압축 파일 올리고 압축 해제"
+
+msgid "langZipNoPhp"
+msgstr "압축 파일은 .PHP 파일을 포함할 수 없습니다"
+
+msgid "langGroupForumLink"
+msgstr "그룹 포럼"
+
+msgid "langGroupSpace"
+msgstr "그룹 영역"
+
+msgid "langNotScormContent"
+msgstr "scorm 압축 파일이 아닙니다 !"
+
+msgid "langNoText"
+msgstr " text / HTML 내용을 입력하여 주십시요"
+
+msgid "langNoFileName"
+msgstr "파일 명을 입력해주십시요"
+
+msgid "langMaxFileSize"
+msgstr "최대 파일 사이즈는"
+
+msgid "langFileName"
+msgstr "파일 명"
+
+msgid "langFileError"
+msgstr "올리려는 파일이 적절하지 않습니다."
+
+msgid "langDown"
+msgstr "down"
+
+msgid "langViMod"
+msgstr "가시성이 변경되었습니다"
+
+msgid "langAddComment"
+msgstr "커멘트 추가/수정"
+
+msgid "langImpossible"
+msgstr "동작이 불가능합니다"
+
+msgid "langNewDir"
+msgstr "새 폴더 이름"
+
+msgid "langTo"
+msgstr "to"
+
+msgid "langNoSpace"
+msgstr "파일 올리기가 실패하였습니다. 제한 사용량을 넘었거나, 디스크 공간이 충분하지 않을 수 있습니다."
+
+msgid "langDownloadEnd"
+msgstr "파일 올리기가 종료되었습니다"
+
+msgid "langFileExists"
+msgstr "작업진행이 불가능합니다. 동일한 이름의 파일이 존재합니다."
+
+msgid "langDocCopied"
+msgstr "문서가 복사되었습니다"
+
+msgid "langDocDeleted"
+msgstr "문서가 삭제되었습니다"
+
+msgid "langElRen"
+msgstr "구성요소의 이름이 재지정되었습니다"
+
+msgid "langDirMv"
+msgstr "구성요소가 삭제되었습니다"
+
+msgid "langComMod"
+msgstr "커멘트가 수정되었습니다"
+
+msgid "langRename"
+msgstr "이름바꾸기"
+
+msgid "langCopy"
+msgstr "과정 내용 복사"
+
+msgid "langNameDir"
+msgstr "새 디렉토리 명"
+
+msgid "langDownloadFile"
+msgstr "서버에 파일 올리기"
+
+msgid "langRoot"
+msgstr "root"
+
+msgid "lang_edit_learnpath"
+msgstr "learnpath 수정"
+
+msgid "lang_add_title_and_desc"
+msgstr "제목과 설명 수정"
+
+msgid "lang_add_learnpath"
+msgstr "Chamilo Learning Path 생성"
+
+msgid "lang_learnpath_added"
+msgstr "새 learning path가 성공적으로 생성되었습니다. 이제 x표를 클릭하여 모듈 추가가 가능합니다."
+
+msgid "lang_delete_learnpath"
+msgstr "learnpath 삭제"
+
+msgid "lang_learnpath_edited"
+msgstr "learnpath가 수정되었습니다"
+
+msgid "lang_learnpath_deleted"
+msgstr "learnpath가 삭제되었습니다"
+
+msgid "lang_no_publish"
+msgstr "발행하지 않음"
+
+msgid "lang_publish"
+msgstr "발행"
+
+msgid "lang_no_published"
+msgstr "미발행"
+
+msgid "lang_published"
+msgstr "발행"
+
+msgid "lang_description"
+msgstr "설명"
+
+msgid "lang_title"
+msgstr "제목"
+
+msgid "langScormBuilder"
+msgstr "Path builder - Scorm format course builder"
+
+msgid "langCreateDoc"
+msgstr "문서 생성"
+
+msgid "langUncompress"
+msgstr "압축 해제"
+
+msgid "ExportShort"
+msgstr "간단히 내보내기"
+

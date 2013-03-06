@@ -1,0 +1,342 @@
+msgid "langStatDB"
+msgstr "Base de datos de siguimientu. Úsela si tien varies bases de datos."
+
+msgid "langEnableTracking"
+msgstr "Dar permisu pa facer siguimientu"
+
+msgid "langInstituteShortName"
+msgstr "Acrónimu de la organización"
+
+msgid "langWarningResponsible"
+msgstr "Use esti script namás dempués de facer una copia de seguridá. L\'equipu de Chamilo nun se fai responsable si pierde o estroza los sos datos."
+
+msgid "langAllowSelfRegProf"
+msgstr "Dar permisu pa que los usuarios puedan rexistrase como creadores de cursos"
+
+msgid "langEG"
+msgstr "ex."
+
+msgid "langDBHost"
+msgstr "Servidor de base de datos"
+
+msgid "langDBLogin"
+msgstr "Nome d\'usuariu de la base de datos"
+
+msgid "langDBPassword"
+msgstr "Seña de la base de datos"
+
+msgid "langMainDB"
+msgstr "Base de datos principal de Chamilo (BD)"
+
+msgid "langAllFieldsRequired"
+msgstr "Pidir que s\'enllenen tolos campos"
+
+msgid "langPrintVers"
+msgstr "Versión pa imprentar"
+
+msgid "langLocalPath"
+msgstr "Ruta llocal correspondiente"
+
+msgid "langAdminEmail"
+msgstr "E-mail del alministrador"
+
+msgid "langAdminName"
+msgstr "Nome del alministrador"
+
+msgid "langAdminSurname"
+msgstr "Apellíos del alministrador"
+
+msgid "langAdminLogin"
+msgstr "Nome d\'usuariu del alministrador"
+
+msgid "langAdminPass"
+msgstr "Seña del alministrador  (<font color=\"red\">pue querer cambiala</font>)"
+
+msgid "langEducationManager"
+msgstr "Responsable educativu"
+
+msgid "langCampusName"
+msgstr "Nome de la so plataforma"
+
+msgid "langDBSettingIntro"
+msgstr "El script d\'instalación va crear les bases de datos principales pa Chamilo. Por favor, Chamilo necesita crear varies bases de datos, si namás tien permisu pa tener una nel so proveedor, Chamilo nun va funcionar."
+
+msgid "langStep1"
+msgstr "Pasu 1"
+
+msgid "langStep2"
+msgstr "Pasu 2"
+
+msgid "langStep3"
+msgstr "Pasu 3 de 6"
+
+msgid "langStep4"
+msgstr "Pasu 4 de 6"
+
+msgid "langStep5"
+msgstr "Pasu 5 de 6"
+
+msgid "langStep6"
+msgstr "Pasu 6 de 6"
+
+msgid "langCfgSetting"
+msgstr "Parámetros de configuración"
+
+msgid "langDBSetting"
+msgstr "Parámetros de les bases de datos MySQL"
+
+msgid "langMainLang"
+msgstr "Idioma d\'entamu"
+
+msgid "langLicence"
+msgstr "Llicencia"
+
+msgid "langLastCheck"
+msgstr "Última comprobación enantes instalar"
+
+msgid "langRequirements"
+msgstr "Requerimientos"
+
+msgid "langDbPrefixForm"
+msgstr "Prefixu MySQL"
+
+msgid "langDbPrefixCom"
+msgstr "Déxelu en blancu si nun se necesita"
+
+msgid "langEncryptUserPass"
+msgstr "Encriptar les señes de los usuarios na base datos"
+
+msgid "langSingleDb"
+msgstr "Usar Chamilo con una o varies bases de datos"
+
+msgid "langAllowSelfReg"
+msgstr "Dar permisu pa que los usuarios puedan rexistrase"
+
+msgid "langRecommended"
+msgstr "Recomendao"
+
+msgid "langScormDB"
+msgstr "Base de datos SCROM"
+
+msgid "langAdminLastName"
+msgstr "Apellíos del alministrador"
+
+msgid "langAdminPhone"
+msgstr "Teléfonu del alministrador"
+
+msgid "OK"
+msgstr "Bien"
+
+msgid "langAdminFirstName"
+msgstr "Nome del alministrador"
+
+msgid "langInstituteURL"
+msgstr "URL de la organización"
+
+msgid "langDokeosURL"
+msgstr "URL de Chamilo"
+
+msgid "langUserDB"
+msgstr "Base de datos d\'usuarios"
+
+msgid "PleaseWait"
+msgstr "Por favor, espere"
+
+msgid "PleaseCheckTheseValues"
+msgstr "Por favor, compruebe estos valores"
+
+msgid "PleasGoBackToStep1"
+msgstr "Por favor, torne al Pasu 1"
+
+msgid "langInstallationLanguage"
+msgstr "Idioma d\'instalación"
+
+msgid "ReadThoroughly"
+msgstr "Llea con atención"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "Pa que Chamilo funciones, el so servidor tien de tener lo que vien darréu:"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "¡ Cuidáu ! <br> L\'instalador acaba deteutar qu\'hai una instalación anterior de Chamilo nel so sistema."
+
+msgid "NewInstallation"
+msgstr "Instalación nueva"
+
+msgid "CheckDatabaseConnection"
+msgstr "Comprobar la conesión cola base de datos"
+
+msgid "PrintOverview"
+msgstr "Resume de la instalación"
+
+msgid "Installing"
+msgstr "Instalar"
+
+msgid "of"
+msgstr "de"
+
+msgid "Step"
+msgstr "Pasu"
+
+msgid "MoreDetails"
+msgstr "Pa más detalles"
+
+msgid "ServerRequirements"
+msgstr "Necesidaes del servidor"
+
+msgid "ServerRequirementsInfo"
+msgstr "Biblioteques y funciones que\'l servidor tien de tener pa poder usar Chamilo con toles sos posibilidaes."
+
+msgid "PHPVersion"
+msgstr "Versión PHP"
+
+msgid "support"
+msgstr "disponible"
+
+msgid "PHPVersionOK"
+msgstr "La versión PHP ye correuta"
+
+msgid "RecommendedSettings"
+msgstr "Parámetros recomendaos"
+
+msgid "RecommendedSettingsInfo"
+msgstr "Parámetros recomendaos na configuración del so servidor. Estos parámetros puen establecese nel ficheru de configuración php.ini del so servidor."
+
+msgid "Setting"
+msgstr "Parámetru"
+
+msgid "Actual"
+msgstr "Actual"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "Permisos de direutorios y ficheros"
+
+msgid "DirectoryAndFilePermissionsInfo"
+msgstr "Dellos direutorios y los ficheros que tán dientro tienen de tener establecíos permisos d\'escritura nel servidor web pa que Chamilo pueda funcionar (unvíu de ficheros por parte los estudiantes, ficheros html de la páxina d\'entamu, etc.) Esto igual supón qu\'haya que facer cambios na configuración del servidor que tienen de facese fuera d\'esti interfaz)"
+
+msgid "NotWritable"
+msgstr "Nun se permite la escritura"
+
+msgid "Writable"
+msgstr "La escritua ta permitida"
+
+msgid "ExtensionLDAPNotAvailable"
+msgstr "La estensión LDAP nun ta disponible"
+
+msgid "ExtensionGDNotAvailable"
+msgstr "La estensión GD nun ta disponible"
+
+msgid "DokeosLicenseInfo"
+msgstr "Chamilo ye software llibre distribuíu con GNU General Public Licence (GPL)"
+
+msgid "IAccept"
+msgstr "Aceuto"
+
+msgid "ConfigSettingsInfo"
+msgstr "Los valores que vienen darréu van grabase nel so archivu de configuración <b>main/inc/conf/configuration.php</b>:"
+
+msgid "DokeosInstallation"
+msgstr "Instalación de Chamilo"
+
+msgid "InstallDokeos"
+msgstr "Instalar Chamilo"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "Dir a la plataforma qu\'acaba crear."
+
+msgid "FirstUseTip"
+msgstr "Si entra na plataforma por vez primera, la meyor manera d\'entender el so funcionamientu ye rexistrase cola opción \'Profesor (crear un cursu)\' y siguir les instrucciones."
+
+msgid "Version_"
+msgstr "Versión"
+
+msgid "UpdateFromDokeosVersion"
+msgstr "Actualización de Chamilo"
+
+msgid "WelcomToTheDokeosInstaller"
+msgstr "Bienveníu/ida al Instalador de Chamilo"
+
+msgid "PleaseSelectInstallationProcessLanguage"
+msgstr "Por favor, escueya l\'idioma que quier usar pa esta instalación."
+
+msgid "ReadTheInstallGuide"
+msgstr "lleer la guía d\'instalación"
+
+msgid "HereAreTheValuesYouEntered"
+msgstr "Estos son los valores escritos"
+
+msgid "PrintThisPageToRememberPassAndOthers"
+msgstr "Imprente esta páxina p\'alcordase de la so seña y otres configuraciones"
+
+msgid "TheInstallScriptWillEraseAllTables"
+msgstr "El programa d\'instalación va esborrar toles tables de les bases de datos seleicionaes. Recomendamos que faiga una copia de seguridá completa enantes de dar el so preste a esti últimu pasu de la instalación."
+
+msgid "Warning"
+msgstr "Cuidáu"
+
+msgid "ReadWarningBelow"
+msgstr "llea l\'alvertencia d\'embaxo"
+
+msgid "SecurityAdvice"
+msgstr "Avisu de seguridá"
+
+msgid "YouHaveMoreThanXCourses"
+msgstr "¡ Tien más de %d cursos na so plataforma Chamilo ! Namás s\'actualizaren los cursos de %d. Pa actualizar los otros cursos, %s calque equí %s"
+
+msgid "ToProtectYourSiteMakeXAndYReadOnly"
+msgstr "Pa protexer el so sitiu, configure %s y %s como archivos únicamente de llectura (CHMOD 444)"
+
+msgid "Error"
+msgstr "Erru"
+
+msgid "Back"
+msgstr "P\'atrás"
+
+msgid "HasNotBeenFound"
+msgstr "nun s\'atopó"
+
+msgid "PleaseGoBackToStep1"
+msgstr "Por favor, torne al Pasu 1"
+
+msgid "HasNotBeenFoundInThatDir"
+msgstr "nun s\'atopó nesti direutoriu"
+
+msgid "OldVersionRootPath"
+msgstr "Ruta a la versión vieya"
+
+msgid "NoWritePermissionPleaseReadInstallGuide"
+msgstr "Dellos archivos o direutorios nun tienen permisu d\'escritura. Pa poder instalar Chamilo primero tien de cambiar esos permisos (use CHMOD). Por favor, llea la Guía %s d\'Instalación %s"
+
+msgid "DBServerDoesntWorkOrLoginPassIsWrong"
+msgstr "El servidor de base de datos nun funciona o la identificación / clave nun ye válida."
+
+msgid "PleaseGoBackToStep"
+msgstr "Por favor, torne al Pasu"
+
+msgid "DBSettingUpgradeIntro"
+msgstr "El programa d\'actualización va recuperar y actualizar les bases de datos de Chamilo. Pa facer esto, el programa va usar les bases de datos y la configuración que se puen ver más embaxo. El software Chamilo funciona en la mayor parte los sistemes y nun se pudo probar en toos, por ello, recomendamos que faiga una copa completa de la base de datos enantes proceder a l\'actualización."
+
+msgid "ExtensionMBStringNotAvailable"
+msgstr "Estensión MBString nun disponible"
+
+msgid "ExtensionMySQLNotAvailable"
+msgstr "Estensión MySQL non disponible"
+
+msgid "DokeosArtLicense"
+msgstr "Les imáxenes y les galeríes de medios de Chamilo usen imáxenes y iconos de Nuvola, Crystal Clear y Tango. Otres imáxenes y medios, como diagrames y animaciones flash, apañárense como emprestu en Wikimedia y nos cursos d\'Ali Pakdel y Denis Hoa col so asentimientu. Tán espublizaes según la llicencia BY-SA Creative Commons. Pue atopar los detalles de la llicencia en <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">la web de CC</a>, nun enllaz a la parte embaxo la páxina que lu lleva al testu completu de la mesma."
+
+msgid "OptionalParameters"
+msgstr "Parámetros opcionales"
+
+msgid "FailedConectionDatabase"
+msgstr "La conesión a la base de datos falló. Pue ser que\'l nome d\'usuariu, la seña o el prefixu de la base datos nun valgan. Reviselos y vuelva intentalo."
+
+msgid "EncryptMethodUserPass"
+msgstr "Métodu d\'encriptación"
+
+msgid "UpgradeFromDokeos16x"
+msgstr "Anovar dende Chamilo 1.6.x"
+
+msgid "UpgradeFromDokeos18x"
+msgstr "Anovar dende Chamilo 1.8.x"
+

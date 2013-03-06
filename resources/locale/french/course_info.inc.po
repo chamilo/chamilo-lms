@@ -1,0 +1,402 @@
+msgid "ModifInfo"
+msgstr "Propriétés du cours"
+
+msgid "langModifDone"
+msgstr "Les informations ont été modifiées"
+
+msgid "langDelCourse"
+msgstr "Supprimer ce cours"
+
+msgid "langProfessors"
+msgstr "Co-responsables"
+
+msgid "langFaculty"
+msgstr "Catégorie"
+
+msgid "langConfidentiality"
+msgstr "Confidentialité"
+
+msgid "langPublic"
+msgstr "Accès public (depuis la page d\'accueil du portail, sans identifiant)"
+
+msgid "langUnsubscription"
+msgstr "Désinscription"
+
+msgid "langPrivOpen"
+msgstr "Accès privé, inscription ouverte"
+
+msgid "langPrivate"
+msgstr "Accès privé (site accessible uniquement aux personnes de la liste des utilisateurs)"
+
+msgid "langForbidden"
+msgstr "Accès non autorisé"
+
+msgid "CourseAccessConfigTip"
+msgstr "Votre cours est public par défaut, mais vous pouvez définir le niveau de confidentialité ci-dessus."
+
+msgid "langOpenToTheWorld"
+msgstr "Public - accès autorisé pour tout le monde"
+
+msgid "OpenToThePlatform"
+msgstr "Ouvert - accès autorisé aux utilisateurs enregistrés sur la plateforme"
+
+msgid "langOpenToThePlatform"
+msgstr "Ouvert à la plateforme"
+
+msgid "langTipLang"
+msgstr "Cette langue vaudra pour tous les visiteurs de votre cours."
+
+msgid "langVid"
+msgstr "Vidéo"
+
+msgid "langWork"
+msgstr "Travaux"
+
+msgid "langProgramMenu"
+msgstr "Cahier des charges"
+
+msgid "langAnnouncement"
+msgstr "Annonces"
+
+msgid "langExercise"
+msgstr "Tests"
+
+msgid "langStats"
+msgstr "Suivi"
+
+msgid "langUplPage"
+msgstr "Déposer page et lier à l\'accueil"
+
+msgid "langLinkSite"
+msgstr "Ajouter un lien sur la page d\'accueil"
+
+msgid "langCourse"
+msgstr "Le cours"
+
+msgid "langHasDel"
+msgstr "a été supprimé"
+
+msgid "langBackHome"
+msgstr "Retour à la page d\'accueil de"
+
+msgid "langByDel"
+msgstr "En supprimant ce cours, vous supprimerez tous les documents qu\'il contient et désinscrirez tous les membres qui y sont inscrits. <p>Voulez-vous réellement supprimer ce cours ?"
+
+msgid "langY"
+msgstr "OUI"
+
+msgid "langN"
+msgstr "NON"
+
+msgid "langDepartmentUrl"
+msgstr "URL du département"
+
+msgid "langDepartmentUrlName"
+msgstr "Département"
+
+msgid "langBackupCourse"
+msgstr "Archiver ce cours"
+
+msgid "langModifGroups"
+msgstr "Groupes"
+
+msgid "langProfessor"
+msgstr "Responsable"
+
+msgid "langGroups"
+msgstr "Groupes"
+
+msgid "langDescriptionCours"
+msgstr "Description de ce cours"
+
+msgid "langArchiveCourse"
+msgstr "Archivage de ce cours"
+
+msgid "langRestoreCourse"
+msgstr "Restauration d\'un cours"
+
+msgid "langRestore"
+msgstr "Restaurer"
+
+msgid "langCreatedIn"
+msgstr "créé dans"
+
+msgid "langCreateMissingDirectories"
+msgstr "Création des répertoires manquants"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Copie des fichiers de ce cours"
+
+msgid "langDisk_free_space"
+msgstr "Espace disque libre"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Création du fichier compressé"
+
+msgid "langFileCopied"
+msgstr "fichier copié"
+
+msgid "langArchiveLocation"
+msgstr "Emplacement de l\'archive"
+
+msgid "langSizeOf"
+msgstr "Taille de"
+
+msgid "langArchiveName"
+msgstr "Nom de l\'archive"
+
+msgid "langBackupSuccesfull"
+msgstr "Archivé avec succès"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Archivage des données de ce cours dans la base de données principale pour"
+
+msgid "langBUUsersInMainBase"
+msgstr "Archivage des données des utilisateurs dans la base de données principale pour"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Archivage des données des annonces dans la base de données principale pour"
+
+msgid "langBackupOfDataBase"
+msgstr "Archivage de la base de données"
+
+msgid "langCreationDate"
+msgstr "Créé"
+
+msgid "langExpirationDate"
+msgstr "Date d\'expiration"
+
+msgid "langPostPone"
+msgstr "Postposer"
+
+msgid "langLastEdit"
+msgstr "Dernière édition"
+
+msgid "langLastVisit"
+msgstr "Dernière visite"
+
+msgid "langSubscription"
+msgstr "Inscription"
+
+msgid "langCourseAccess"
+msgstr "Accès à ce cours"
+
+msgid "langConfirmBackup"
+msgstr "Voulez-vous vraiment archiver ce cours"
+
+msgid "langCreateSite"
+msgstr "Créer un cours"
+
+msgid "langRestoreDescription"
+msgstr "Ce cours se trouve dans une archive que vous pouvez sélectionner ci-dessous.<br /><br />Lorsque vous aurez cliqué sur \"Restaurer\", l\'archive sera décompressée et le cours recréé."
+
+msgid "langRestoreNotice"
+msgstr "Ce script ne permet pas encore la restauration automatique des utilisateurs, mais les données sauvegardées dans le fichier \"users.csv\" sont suffisantes pour que l\'administrateur puisse effectuer cette opération manuellement."
+
+msgid "langAvailableArchives"
+msgstr "Liste des archives disponibles"
+
+msgid "langNoArchive"
+msgstr "Aucune archive n\'a été sélectionnée"
+
+msgid "langArchiveNotFound"
+msgstr "Archive introuvable"
+
+msgid "langArchiveUncompressed"
+msgstr "L\'archive a été décompressée et installée."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "Le fichier \"users.csv\" a été placé dans l\'outil Documents."
+
+msgid "langBackH"
+msgstr "Retour à la page d\'accueil"
+
+msgid "langOtherCategory"
+msgstr "Autre catégorie"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Autoriser l\'annulation de son enregistrement"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Ne pas autoriser l\'annulation de son enregistrement"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Complètement fermé - le cours est uniquement accessible pour son administrateur"
+
+msgid "CourseVisibilityClosed"
+msgstr "Fermé - pas d\'accès à ce cours"
+
+msgid "CourseVisibilityModified"
+msgstr "Modifié (des configurations plus détaillés indiqués par le système de rôle-droits)"
+
+msgid "WorkEmailAlert"
+msgstr "Alerte par mail pour nouveau travail soumis"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Activer alerte par e-mail pour nouveau travail soumis"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Désactiver alerte par e-mail pour nouveau travail soumis"
+
+msgid "DropboxEmailAlert"
+msgstr "Alerte par e-mail sur nouveau document soumis dans partage de fichiers"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Activer alerte par e-mail pour nouveau document soumis dans partage de fichiers"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Désactiver alerte par e-mail pour nouveau document soumis dans partage de fichiers"
+
+msgid "AllowUserEditAgenda"
+msgstr "Autoriser les utilisateurs à éditer l\'agenda du cours"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Activer l\'édition de l\'agenda du cours par les utilisateurs"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Désactiver l\'édition de l\'agenda du cours par les utilisateurs"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Autoriser les utilisateurs à éditer les annonces du cours"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Activer l\'édition par les utilisateurs"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Désactiver l\'édition par les utilisateurs"
+
+msgid "OrInTime"
+msgstr "Soit dans"
+
+msgid "CourseRegistrationPassword"
+msgstr "Mot de passe du cours"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Cliquez sur ce lien afin d\'éliminer toute trace du cours sur le serveur.<br /><br />Cette fonctionnalité est à manier avec une extrême précaution !"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Chamilo introduit la possibilité de dupliquer tout ou partie d\'un cours existant vers un autre cours, qui peut être initialement vide.<br />Le seul préalable à cette manipulation est de disposer d\'un cours contenant des documents, annonces, forums, ... et d\'un second cours ne contenant pas les éléments du premier !"
+
+msgid "DescriptionRecycleCourse"
+msgstr "Cet outil vide le cours des éléments sélectionnés, ou de l\'ensemble des éléments qu\'il contient. Il supprime les documents, les forums, liens... Cette procédure peut être mise en oeuvre à l\'issue d\'une formation, ou d\'une année universitaire.<br />Bien entendu, avant de vider le cours, vous aurez pris soin d\'effectuer une sauvegarde complète !"
+
+msgid "QuizEmailAlert"
+msgstr "Alerte e-mail nouvel exercice"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Activer l\'envoi d\'un e-mail lorsqu\'un étudiant soumet des réponses à un exercice"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Désactiver l\'envoi d\'un e-mail sur réception de réponses à un exercice"
+
+msgid "AllowUserImageForum"
+msgstr "Photo utilisateur dans le forum"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Afficher les photos des utilisateurs dans le forum"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Ne pas afficher les photos des utilisateurs dans le forum"
+
+msgid "AllowLearningPathTheme"
+msgstr "Autoriser les thèmes par cours"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "Autorisé"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Non autorisé"
+
+msgid "ConfigChat"
+msgstr "Configuration de l\'outil Discuter"
+
+msgid "AllowOpenchatWindow"
+msgstr "Ouvrir l\'outil Discussion en popup"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "Activer l\'ouverture du chat dans une nouvelle fenêtre"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "Désactiver l\'ouverture du chat dans une nouvelle fenêtre"
+
+msgid "NewUserEmailAlert"
+msgstr "Alerter de nouvelles inscriptions"
+
+msgid "NewUserEmailAlertEnable"
+msgstr "Activer l\'alerte par e-mail aux enseignants lors de l\'inscription autonome d\'un nouvel apprenant"
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "Activer l\'alerte par e-mail aux enseignants et aux formateurs lors de l\'inscription autonome d\'un nouvel apprenant"
+
+msgid "NewUserEmailAlertDisable"
+msgstr "Ne pas activer l\'alerte pas e-mail lors d\'une nouvelle inscription au cours"
+
+msgid "AllowUserViewUserList"
+msgstr "Autoriser l\'utilisateur à voir la liste d\'utilisateurs"
+
+msgid "AllowUserViewUserListActivate"
+msgstr "Activer la liste des utilisateurs"
+
+msgid "AllowUserViewUserListDeactivate"
+msgstr "Désactiver la liste d\'utilisateurs"
+
+msgid "DoNotDisplayAnyAdvance"
+msgstr "Ne pas afficher le progrès"
+
+msgid "RedirectToTheExerciseList"
+msgstr "Rediriger à la liste d\'exercices"
+
+msgid "RedirectToExercise"
+msgstr "Rediriger à l\'exercice sélectionné"
+
+msgid "ConfigExercise"
+msgstr "Configurer l\'outil d\'exercices"
+
+msgid "CourseSettingsRegisterDirectLink"
+msgstr "Si votre cours est public ou ouvert, utilisez le lien direct ci-dessous pour envoyer une invitation aux nouveaux utilisateurs, afin qu\'ils soient envoyés immédiatement au cours après avoir complété le formulaire d\'inscription. Si vous le désirez, vous pouvez également ajouter le paramètre e=1 à l\'URL, en remplaçant le \"1\" par l\'identificateur numérique d\'un exercice ou examen, pour les envoyer directement vers celui-ci. L\'identificateur de l\'exercice peut être obtenu dans l\'URL d\'un exercice quand vous cliquez sur son nom pour le démarrer. %s"
+
+msgid "DirectLink"
+msgstr "Lien direct"
+
+msgid "NewHomeworkEmailAlert"
+msgstr "Envoi d\'e-mail aux utilisateurs lors de la création d\'un travail"
+
+msgid "NewHomeworkEmailAlertEnable"
+msgstr "Activer l\'envoi d\'un courriel lors de la réception d\'un nouveau travail"
+
+msgid "NewHomeworkEmailAlertDisable"
+msgstr "Désactiver l\'envoi d\'e-mail lors de la réception d\'un travail"
+
+msgid "DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance"
+msgstr "Afficher la dernière étape achevée et la prochaine étape non terminée"
+
+msgid "AddPicture"
+msgstr "Ajouter une image de présentation"
+
+msgid "LPAutoLaunch"
+msgstr "Activer l\'auto-démarrage des parcours d\'apprentissage"
+
+msgid "ConfigLearnpath"
+msgstr "Configuration des parcours"
+
+msgid "PDFWaterMarkHeader"
+msgstr "En-tête en filigranne (exports PDF)"
+
+msgid "RedirectToALearningPath"
+msgstr "Rediriger vers un parcours sélectionné"
+
+msgid "RedirectToTheLearningPathList"
+msgstr "Rediriger vers la liste des parcours"
+
+msgid "ActivateLegal"
+msgstr "Activer les termes légaux"
+
+msgid "ShowALegalNoticeWhenEnteringTheCourse"
+msgstr "Montrer un avis légal lors de l\'entrée dans le cours"
+
+msgid "CourseLegalAgreement"
+msgstr "Termes légaux pour ce cours"
+
+msgid "AcceptLegal"
+msgstr "Accepter les termes légaux"
+

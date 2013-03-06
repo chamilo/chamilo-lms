@@ -1,0 +1,63 @@
+msgid "Announcement"
+msgstr "????"
+
+msgid "langAnnEmpty"
+msgstr "お梦らせをすべて、猴近する"
+
+msgid "AnnouncementModified"
+msgstr "お梦らせ饯赖"
+
+msgid "AnnouncementAdded"
+msgstr "お梦らせ纳裁"
+
+msgid "AnnouncementDeleted"
+msgstr "お梦らせ猴近"
+
+msgid "AnnouncementPublishedOn"
+msgstr "给倡"
+
+msgid "AddAnnouncement"
+msgstr "お梦らせ纳裁"
+
+msgid "langContent"
+msgstr "柒推"
+
+msgid "AnnouncementDeleteAll"
+msgstr "お梦らせをすべて、猴近する"
+
+msgid "professorMessage"
+msgstr "Message from your professor"
+
+msgid "langEmailSent"
+msgstr " and emailed to registered students"
+
+msgid "EmailOption"
+msgstr "Send this announcement by email to registered students"
+
+msgid "langOn"
+msgstr "On"
+
+msgid "langRegUser"
+msgstr "registered users of the site"
+
+msgid "langUnvalid"
+msgstr "have unvalid or no email address"
+
+msgid "langModify"
+msgstr "饯赖"
+
+msgid "langDelete"
+msgstr "猴近"
+
+msgid "langTitle"
+msgstr "タイトル"
+
+msgid "langHelp"
+msgstr "へルプ"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langBackList"
+msgstr "リストに提る"
+

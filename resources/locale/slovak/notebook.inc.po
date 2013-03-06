@@ -1,0 +1,57 @@
+msgid "NewNote"
+msgstr "Nová poznámka"
+
+msgid "Note"
+msgstr "Poznámka"
+
+msgid "NoteDeleted"
+msgstr "Poznámka zmazaná"
+
+msgid "NoteUpdated"
+msgstr "Poznámka aktualizovaná"
+
+msgid "NoteCreated"
+msgstr "Poznámka vytvorená"
+
+msgid "YouMustWriteANote"
+msgstr "Prosím napíšte poznámku"
+
+msgid "SaveNote"
+msgstr "Uložiť poznámku"
+
+msgid "WriteYourNoteHere"
+msgstr "Pre napísanie novej poznámky kliknite sem"
+
+msgid "SearchByTitle"
+msgstr "Vyhľadať podľa názvu"
+
+msgid "WriteTheTitleHere"
+msgstr "Napíšte názov sem"
+
+msgid "UpdateDate"
+msgstr "Dátum aktualizácie"
+
+msgid "NoteAddNew"
+msgstr "Pridať novú poznámku"
+
+msgid "OrderByCreationDate"
+msgstr "Zoradiť podľa dátumu vytvorenia"
+
+msgid "OrderByModificationDate"
+msgstr "Zoradiť podľa dátumu zmeny"
+
+msgid "OrderByTitle"
+msgstr "Zoradiť podľa názvu"
+
+msgid "NoteTitle"
+msgstr "Názov poznámky"
+
+msgid "NoteComment"
+msgstr "Detaily poznámky"
+
+msgid "NoteAdded"
+msgstr "Poznámka pridaná"
+
+msgid "NoteConfirmDelete"
+msgstr "Naozaj chcete zmazať túto poznámku"
+

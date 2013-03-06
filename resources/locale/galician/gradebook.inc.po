@@ -1,0 +1,721 @@
+msgid "ModifyEvaluation"
+msgstr "Modificar avaliación"
+
+msgid "CreateLink"
+msgstr "Crear enlace"
+
+msgid "AddResultNoStudents"
+msgstr "Non hai estudantes para engadir resultados"
+
+msgid "FlatView"
+msgstr "Vista Lineal"
+
+msgid "ScoreEdit"
+msgstr "Editar as regras de puntuación"
+
+msgid "ScoreColor"
+msgstr "Cor da puntuación"
+
+msgid "ScoringSystem"
+msgstr "Sistema de puntuación"
+
+msgid "EnableScoreColor"
+msgstr "Activar o coloreado das puntuacións"
+
+msgid "Below"
+msgstr "Por baixo de"
+
+msgid "WillColorRed"
+msgstr "colorearase en vermello"
+
+msgid "EnableScoringSystem"
+msgstr "Activar o sistema de puntuación"
+
+msgid "IncludeUpperLimit"
+msgstr "Incluír o límite superior"
+
+msgid "ScoreInfo"
+msgstr "Información sobre a puntuación"
+
+msgid "Between"
+msgstr "Entre"
+
+msgid "CurrentCategory"
+msgstr "Categoría actual"
+
+msgid "RootCat"
+msgstr "Categoría principal"
+
+msgid "NewCategory"
+msgstr "Nova categoría"
+
+msgid "NewEvaluation"
+msgstr "Nova avaliación"
+
+msgid "Weight"
+msgstr "Peso"
+
+msgid "PickACourse"
+msgstr "Seleccionar un curso"
+
+msgid "CategoryName"
+msgstr "Nome da categoría"
+
+msgid "CourseIndependent"
+msgstr "Curso independente"
+
+msgid "CourseIndependentEvaluation"
+msgstr "Curso de avaliación independente"
+
+msgid "EvaluationName"
+msgstr "Nome da avaliación"
+
+msgid "Max"
+msgstr "Máx"
+
+msgid "DateEval"
+msgstr "Data de avaliación"
+
+msgid "AddUserToEval"
+msgstr "Engadir alumnos á avaliación"
+
+msgid "NewSubCategory"
+msgstr "Nova subcategoría"
+
+msgid "MakeLink"
+msgstr "Crear un enlace"
+
+msgid "DeleteSelected"
+msgstr "Eliminar selección"
+
+msgid "SetVisible"
+msgstr "Facer visible"
+
+msgid "SetInvisible"
+msgstr "Ocultar"
+
+msgid "ChooseLink"
+msgstr "Elixir o tipo de enlace"
+
+msgid "DokeosExercises"
+msgstr "Exercicios"
+
+msgid "DokeosDropbox"
+msgstr "Buzón de tarefas"
+
+msgid "DokeosStudentPublications"
+msgstr "Traballos"
+
+msgid "DokeosLearningPaths"
+msgstr "Leccións"
+
+msgid "ChooseExercise"
+msgstr "Elixir un exercicio"
+
+msgid "AddResult"
+msgstr "Engadir resultados"
+
+msgid "BackToOverview"
+msgstr "Volver á vista xeral"
+
+msgid "ExportPDF"
+msgstr "Exportar a PDF"
+
+msgid "Print"
+msgstr "Imprimir"
+
+msgid "ChooseOrientation"
+msgstr "Elixir orientación"
+
+msgid "Portrait"
+msgstr "Vertical"
+
+msgid "Landscape"
+msgstr "Horizontal"
+
+msgid "FilterCategory"
+msgstr "Filtrar por categoría"
+
+msgid "DeleteAll"
+msgstr "Eliminar todo"
+
+msgid "ScoringUpdated"
+msgstr "Puntuación actualizada"
+
+msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
+msgstr "%s certifica que
+
+ %s 
+
+realizou o curso 
+
+ \'%s\' 
+
+coa calificación de
+
+ \'%s\'"
+
+msgid "CertificateMinScore"
+msgstr "Puntuación mínima de certificación"
+
+msgid "CategoryAdded"
+msgstr "Categoría engadida"
+
+msgid "InViMod"
+msgstr "Este apartado xa non é visible"
+
+msgid "ViMod"
+msgstr "O apartado xa é visible"
+
+msgid "ViewResult"
+msgstr "Ver resultados"
+
+msgid "NoUser"
+msgstr "Sen usuarios"
+
+msgid "NoResultsInEvaluation"
+msgstr "Por agora non hai resultados na avaliación"
+
+msgid "AddStudent"
+msgstr "Engadir usuarios"
+
+msgid "ImportResult"
+msgstr "Importar resultados"
+
+msgid "Score"
+msgstr "Puntuación"
+
+msgid "ImportFileLocation"
+msgstr "Localización do ficheiro a importar"
+
+msgid "Location"
+msgstr "Localización"
+
+msgid "FileType"
+msgstr "Tipo de ficheiro"
+
+msgid "ExampleCSVFile"
+msgstr "Ficheiro CSV de exemplo"
+
+msgid "ExampleXMLFile"
+msgstr "Ficheiro XML de exemplo"
+
+msgid "OverwriteScores"
+msgstr "Sobrescribir puntuacións"
+
+msgid "IgnoreErrors"
+msgstr "Ignorar erros"
+
+msgid "ItemsVisible"
+msgstr "Fixéronse visibles os elementos"
+
+msgid "ItemsInVisible"
+msgstr "Fixéronse invisibles os elementos"
+
+msgid "NoItemsSelected"
+msgstr "Non hai seleccionado ningún elemento"
+
+msgid "DeletedCategories"
+msgstr "Categorías eliminadas"
+
+msgid "DeletedEvaluations"
+msgstr "Avaliacións eliminadas"
+
+msgid "DeletedLinks"
+msgstr "Enlaces eliminados"
+
+msgid "TotalItems"
+msgstr "Total de elementos"
+
+msgid "LinkAdded"
+msgstr "Enlace engadido"
+
+msgid "LinkDeleted"
+msgstr "Enlace eliminado"
+
+msgid "EditEvaluation"
+msgstr "Editar avaliación"
+
+msgid "DeleteResult"
+msgstr "Eliminar resultado"
+
+msgid "Display"
+msgstr "Nivel"
+
+msgid "Average"
+msgstr "Media"
+
+msgid "ViewStatistics"
+msgstr "Ver estadísticas"
+
+msgid "ResultAdded"
+msgstr "Resultado engadido"
+
+msgid "EvaluationStatistics"
+msgstr "Estatísticas de avaliación"
+
+msgid "ExportResult"
+msgstr "Exportar resultados"
+
+msgid "EditResult"
+msgstr "Editar resultados"
+
+msgid "GradebookWelcomeMessage"
+msgstr " 	Benvido á utilidade Caderno de cualificacións. Esta ferramenta permítelle establecer os obxectivos que se deben alcanzar nun curso ou conxunto de cursos, así como introducir puntuacións externas no sistema."
+
+msgid "CreateAllCat"
+msgstr "Crear todas as categorías do curso"
+
+msgid "AddAllCat"
+msgstr "Engadíronse todas as categorías"
+
+msgid "StatsStudent"
+msgstr "Estatísticas de"
+
+msgid "Results"
+msgstr "Resultados"
+
+msgid "Certificates"
+msgstr "Certificados"
+
+msgid "Certificate"
+msgstr "Certificado"
+
+msgid "ChooseUser"
+msgstr "Seleccionar usuarios para esta avaliación"
+
+msgid "FirstLetter"
+msgstr "Primeira letra do apelido"
+
+msgid "UserAdded"
+msgstr "Engadiuse o usuario"
+
+msgid "ResultEdited"
+msgstr "Resultado actualizado"
+
+msgid "ChooseFormat"
+msgstr "Escoller formato"
+
+msgid "OutputFileType"
+msgstr "Tipo de ficheiro de saída"
+
+msgid "OverMax"
+msgstr "O valor que intentou gardar é superior ao límite máximo establecido para esta avaliación."
+
+msgid "MoreInfo"
+msgstr "Máis información"
+
+msgid "ResultsPerUser"
+msgstr "Resultados por usuario"
+
+msgid "TotalUser"
+msgstr "Total por usuario"
+
+msgid "AverageTotal"
+msgstr "Media total"
+
+msgid "Evaluation"
+msgstr "Avaliación"
+
+msgid "EvaluationAverage"
+msgstr "Media da avaliación"
+
+msgid "EditCategory"
+msgstr "Configurar a avaliación do curso"
+
+msgid "EditAllWeights"
+msgstr "Editar ponderacións"
+
+msgid "GradebookQualificationTotal"
+msgstr "Total"
+
+msgid "GradebookEvaluationDeleted"
+msgstr "O compoñente da avaliación foi eliminado"
+
+msgid "GradebookQualifyLog"
+msgstr "Historial da avaliación"
+
+msgid "GradebookNameLog"
+msgstr "Compoñente da avaliación"
+
+msgid "GradebookDescriptionLog"
+msgstr "Descrición da avaliación"
+
+msgid "GradebookVisibilityLog"
+msgstr "Visibilidade"
+
+msgid "ResourceType"
+msgstr "Tipo"
+
+msgid "GradebookWhoChangedItLog"
+msgstr "Modificado por"
+
+msgid "EvaluationEdited"
+msgstr "O compoñente de avaliación foi modificado"
+
+msgid "CategoryEdited"
+msgstr "A avaliación do curso foi actualizada"
+
+msgid "OnlyNumbers"
+msgstr "Soamente números"
+
+msgid "IncorrectData"
+msgstr "Dato incorrecto"
+
+msgid "Resource"
+msgstr "Recurso"
+
+msgid "PleaseEnableScoringSystem"
+msgstr "Por favor, activar o sistema de puntuación"
+
+msgid "AllResultDeleted"
+msgstr "Todos os resultados foron eliminados"
+
+msgid "ImportNoFile"
+msgstr "Non importou ningún arquivo"
+
+msgid "ProblemUploadingFile"
+msgstr "Ocorreu un erro ao mandar o seu arquivo. Non se recibiu nada"
+
+msgid "AllResultsEdited"
+msgstr "Todos os resultados foron modificados"
+
+msgid "UserInfoDoesNotMatch"
+msgstr "Non coincide coa información do usuario"
+
+msgid "ScoreDoesNotMatch"
+msgstr "A puntuación non coincide"
+
+msgid "FileUploadComplete"
+msgstr "Cargouse o arquivo con éxito"
+
+msgid "NoResultsAvailable"
+msgstr "Non hai resultados dispoñibles"
+
+msgid "CannotChangeTheMaxNote"
+msgstr "Non se pode cambiar a nota máxima"
+
+msgid "GradebookWeightUpdated"
+msgstr "Peso(s) modificado(s) correctamente"
+
+msgid "ChooseItem"
+msgstr "Seleccione un item"
+
+msgid "AverageResultsVsResource"
+msgstr "Media de resultados por compoñente de avaliación"
+
+msgid "ToViewGraphScoreRuleMustBeEnabled"
+msgstr "Para ver o gráfico, as regras de puntuación deben estar definidas"
+
+msgid "GradebookPreviousWeight"
+msgstr "Ponderación previa"
+
+msgid "AddAssessment"
+msgstr "Crear"
+
+msgid "FolderView"
+msgstr "Regresar a avaliacións"
+
+msgid "GradebookSkillsRanking"
+msgstr "Avaliación"
+
+msgid "SaveScoringRules"
+msgstr "Gardar regras de puntuación"
+
+msgid "AttachCertificate"
+msgstr "Adxuntar certificado"
+
+msgid "GradebookSeeListOfStudentsCertificates"
+msgstr "Ver a lista de certificados de estudantes"
+
+msgid "CreateCertificate"
+msgstr "Crear certificado"
+
+msgid "UploadCertificate"
+msgstr "Enviar un certificado"
+
+msgid "CertificateName"
+msgstr "Nome do certificado"
+
+msgid "CertificateOverview"
+msgstr "Vista de certificado"
+
+msgid "CreateCertificateWithTags"
+msgstr "Crear certificado con estas etiquetas"
+
+msgid "ViewPresenceSheets"
+msgstr "Vista de follas de asistencia"
+
+msgid "ViewEvaluations"
+msgstr "Vista de avaliacións"
+
+msgid "NewPresenceSheet"
+msgstr "Nova folla de asistencia"
+
+msgid "NewPresenceStep1"
+msgstr "Nova folla de asistencia. Paso 1/2: encher os datos da folla de asistencia"
+
+msgid "TitlePresenceSheet"
+msgstr "Título da actividade"
+
+msgid "Trainer"
+msgstr "Profesor"
+
+msgid "PresenceSheetCreatedBy"
+msgstr "Folla de asistencia creada por"
+
+msgid "SavePresence"
+msgstr "Gardar folla de asistencia e continuar co paso 2"
+
+msgid "NewPresenceStep2"
+msgstr "Nova folla de asistencia. Paso 2/2: verificar os estudantes que estean presentes"
+
+msgid "NoCertificateAvailable"
+msgstr "Non hai certificado dispoñible"
+
+msgid "SaveCertificate"
+msgstr "Gardar certificado"
+
+msgid "CertificateNotRemoved"
+msgstr "O certificado non pode ser removido"
+
+msgid "CertificateRemoved"
+msgstr "Certificado eliminado"
+
+msgid "NoDefaultCertificate"
+msgstr "Non hai certificado predeterminado"
+
+msgid "DefaultCertificate"
+msgstr "Certificado predeterminado"
+
+msgid "PreviewCertificate"
+msgstr "Vista previa do certificado"
+
+msgid "IsDefaultCertificate"
+msgstr "O certificado está como predeterminado"
+
+msgid "ImportPresences"
+msgstr "Importar asistencia"
+
+msgid "AddPresences"
+msgstr "Agregar asistencias"
+
+msgid "DeletePresences"
+msgstr "Eliminar asistencias"
+
+msgid "GradebookListOfStudentsCertificates"
+msgstr "Lista de certificados de estudantes en avaliacións"
+
+msgid "NewPresence"
+msgstr "Nova asistencia"
+
+msgid "EditPresence"
+msgstr "Editar asistencia"
+
+msgid "SavedEditPresence"
+msgstr "Gardar asistencia modificada"
+
+msgid "PresenceSheetFormatExplanation"
+msgstr "Vostede debe utilizar a folla de asistencia que se pode descargar máis arriba. Esta folla de asistencia contén unha lista de todos os participantes nesta capacitación. A primeira columna do arquivo XLS é o código oficial do candidato, seguido polo apelido e polo nome. Só debe cambiar a columna 4 e a nota 0= ausente, 1= presente"
+
+msgid "ValidatePresenceSheet"
+msgstr "Validar folla de asistencia"
+
+msgid "BackTo"
+msgstr "Regresar a"
+
+msgid "PresenceSheet"
+msgstr "Folla de asistencia"
+
+msgid "PresenceSheets"
+msgstr "Follas de asistencia"
+
+msgid "Evaluations"
+msgstr "Avaliacións"
+
+msgid "SaveEditPresence"
+msgstr "Gardar cambios na folla de asistencia"
+
+msgid "Training"
+msgstr "Curso"
+
+msgid "Present"
+msgstr "Asistencia"
+
+msgid "Numero"
+msgstr "N"
+
+msgid "PresentAbsent"
+msgstr "0=ausente, 1=presente"
+
+msgid "ExampleXLSFile"
+msgstr "Exemplo de arquivo Excel (XLS)"
+
+msgid "NoResultsInPresenceSheet"
+msgstr "Non hai asistencia rexistrada"
+
+msgid "EditPresences"
+msgstr "Asistencias modificadas"
+
+msgid "TotalWeightMustNotBeMoreThan"
+msgstr "Peso total non deber ser maior que"
+
+msgid "ThereIsNotACertificateAvailableByDefault"
+msgstr "Non hai un certificado dispoñible por defecto"
+
+msgid "CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan"
+msgstr "A puntuación mínima para certificado é requerida e non debe ser maior que"
+
+msgid "LinkMod"
+msgstr "Gardar"
+
+msgid "EditLink"
+msgstr "Editar ligazón"
+
+msgid "CategoryDeleted"
+msgstr "A categoría foi eliminada"
+
+msgid "GenerateCertificates"
+msgstr "Xerar certificados"
+
+msgid "ExportAllCertificatesToPDF"
+msgstr "Exportar todos os certificados a PDF"
+
+msgid "DeleteAllCertificates"
+msgstr "Eliminar todos os certificados"
+
+msgid "AreYouSureToLockedTheEvaluation"
+msgstr "Está seguro que desexa bloquear a avaliación?"
+
+msgid "AreYouSureToUnLockedTheEvaluation"
+msgstr "Está seguro que desexa desbloquear a avaliación?"
+
+msgid "EvaluationHasBeenUnLocked"
+msgstr "Avaliación desbloqueada"
+
+msgid "EvaluationHasBeenLocked"
+msgstr "Avaliación bloqueada"
+
+msgid "Over100"
+msgstr "Sobre 100"
+
+msgid "UnderMin"
+msgstr "Por debaixo do mínimo"
+
+msgid "MoveWarning"
+msgstr "Advertencia: a información dentro do Caderno de cualificación pode ser afectada ao mover o Caderno de Cualificación"
+
+msgid "CategoryMoved"
+msgstr "O caderno de cualificación foi movido"
+
+msgid "EvaluationMoved"
+msgstr "Unha avaliación do caderno de cualificación foi movida"
+
+msgid "NoLinkItems"
+msgstr "Non hai compoñentes relacionados"
+
+msgid "NoUniqueScoreRanges"
+msgstr "Non existe ningún rango posible de puntuacións"
+
+msgid "DidNotTakeTheExamAcronym"
+msgstr "O usuario non realizou o exercicio"
+
+msgid "DidNotTakeTheExam"
+msgstr "O usuario non realizou o exercicio"
+
+msgid "DeleteUser"
+msgstr "Eliminar usuario"
+
+msgid "ResultDeleted"
+msgstr "Resultado eliminado"
+
+msgid "ResultsDeleted"
+msgstr "Resultados eliminados"
+
+msgid "OverWriteMax"
+msgstr "Sobreescribir o máximo valor"
+
+msgid "ImportOverWriteScore"
+msgstr "O importe sobreescribirá a cualificación"
+
+msgid "NoDecimals"
+msgstr "Sen decimais"
+
+msgid "NegativeValue"
+msgstr "Valor negativo"
+
+msgid "ToExportMustLockEvaluation"
+msgstr "Para explorar, deberá bloquear a avaliación"
+
+msgid "ShowLinks"
+msgstr "Amosar ligazóns"
+
+msgid "TotalForThisCategory"
+msgstr "Total para esta categoría"
+
+msgid "OpenDocument"
+msgstr "Abrir documento"
+
+msgid "LockEvaluation"
+msgstr "Bloquear avaliación"
+
+msgid "UnLockEvaluation"
+msgstr "Desbloquear avaliación"
+
+msgid "TheEvaluationIsLocked"
+msgstr "A avaliación está bloqueada"
+
+msgid "BackToEvaluation"
+msgstr "Regresar á avaliación"
+
+msgid "TotalWeight"
+msgstr "Peso total"
+
+msgid "SumOfActivitiesWeightMustBeEqualToTotalWeight"
+msgstr "A suma dos pesos de todas as actividades ten que ser igual ao peso total definido na configuración desta avaliación, senón os alumnos non poderán acadar a puntuación mínima requerida para obter o seu certificado."
+
+msgid "TotalSumOfWeights"
+msgstr "A suma de pesos de todos os compoñentes desta avaliación ten que ser igual a este número."
+
+msgid "TotalWeightMustBeX"
+msgstr "A suma de todos os pesos das actividades debe ser %s"
+
+msgid "ExportAsDOC"
+msgstr "Exportar como .doc"
+
+msgid "SelectGradebook"
+msgstr "Selecciona valoración"
+
+msgid "CheckYourGradingModelValues"
+msgstr "Por favor, revisa os valores do teu modelo de calificación"
+
+msgid "SkillsAchievedWhenAchievingThisGradebook"
+msgstr "Competencias obtidas cando superes esta avaliación"
+
+msgid "AddGradebook"
+msgstr "Engadir avaliación"
+
+msgid "SelectGradeModel"
+msgstr "Seleccionar un modelo de cualificación"
+
+msgid "AllMustWeight100"
+msgstr "A suma de todos os valores debe ser 100"
+
+msgid "Components"
+msgstr "Compoñentes"
+
+msgid "OnlyActiveWhenThereAreAnyComponents"
+msgstr "Esta opción está habilitada se ten algunha avaliación ou categoría"
+
+msgid "GradebookLockedAlert"
+msgstr "Esta avaliación foi bloqueada e non pode ser desbloqueada. Se precisa realmente desbloqueala, por favor, póñase en contacto co administrador da plataforma, explicando a súa razón (senon podería ser considerado coma un intento de fraude)."
+
+msgid "NoStudentCertificatesAvailableYet"
+msgstr "Aínda non están dispoñibles os certificados dos estudantes. Teña en conta que para xenerar o seu certificado un estudante ten que ir á ferramenta avaliacións e premer sobre a icona certificado, o cal só aparecerá cando se teñan logrado os obxectivos do curso."
+
+msgid "CertificateExistsButNotPublic"
+msgstr "O certificado solicitado existe pero non é público, polo que para podelo ver terá que identificarse."
+
+msgid "ConfirmToUnlockElement"
+msgstr "Confirme o desbloqueo do elemento"
+

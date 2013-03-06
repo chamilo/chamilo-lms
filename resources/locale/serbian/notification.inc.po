@@ -1,0 +1,93 @@
+msgid "lang_new_item"
+msgstr "nova stavka je dodata"
+
+msgid "TitleNotification"
+msgstr "Od vaše poslednje posete"
+
+msgid "lang_update_agenda"
+msgstr "postojeća stavka agende je ažurirana"
+
+msgid "lang_new_agenda"
+msgstr "nova stavka je dodata"
+
+msgid "lang_update_announcements"
+msgstr "postojeće obaveštenje je ažurirano"
+
+msgid "lang_new_announcements"
+msgstr "novo obaveštenje je dodato"
+
+msgid "lang_new_document"
+msgstr "Nova dokumenta su dodata"
+
+msgid "lang_new_exercise"
+msgstr "nova vežba je dostupna"
+
+msgid "lang_update_link"
+msgstr "postojeća informacija o linku je ažurirana"
+
+msgid "lang_new_link"
+msgstr "novi link je dodat"
+
+msgid "lang_new_forum_topic"
+msgstr "nova tema je dodata"
+
+msgid "lang_new_groupforum_topic"
+msgstr "nova tema je dodata u forum grupe"
+
+msgid "lang_new_dropbox_file"
+msgstr "novi fajl je stigao"
+
+msgid "lang_update_dropbox_file"
+msgstr "fajl u vašem dropbox-u je ažuriran"
+
+msgid "ForumCategoryAdded"
+msgstr "Kategorija foruma je dodata"
+
+msgid "LearnpathAdded"
+msgstr "Kurs dodan"
+
+msgid "GlossaryAdded"
+msgstr "Dodan je novi izraz u rečnik"
+
+msgid "QuizQuestionAdded"
+msgstr "Dodato novo pitanje u kvizu"
+
+msgid "QuizQuestionUpdated"
+msgstr "Ažurirano novo pitanje u kvizu"
+
+msgid "QuizQuestionDeleted"
+msgstr "Obrisano novo pitanje u kvizu"
+
+msgid "QuizUpdated"
+msgstr "Kviz je ažuriran"
+
+msgid "QuizAdded"
+msgstr "Kviz dodan"
+
+msgid "QuizDeleted"
+msgstr "Kviz obrisan"
+
+msgid "DocumentInvisible"
+msgstr "Dokument je vidljiv"
+
+msgid "DocumentVisible"
+msgstr "Dokument je vidljiv"
+
+msgid "CourseDescriptionAdded"
+msgstr "Opis kursa je dodan"
+
+msgid "WikiAdded"
+msgstr "Wiki je dodan"
+
+msgid "SurveyAdded"
+msgstr "Anketa je dodata"
+
+msgid "NotebookAdded"
+msgstr "Napomena je dodata"
+
+msgid "NotebookUpdated"
+msgstr "Napomena je ažurirana"
+
+msgid "NotebookDeleted"
+msgstr "Napomena je obrisana"
+

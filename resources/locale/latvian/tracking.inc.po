@@ -1,0 +1,963 @@
+msgid "AssignSessionsTo"
+msgstr "Noteikt sesiju uz"
+
+msgid "langToolName"
+msgstr "Importēt Blackboard kursus"
+
+msgid "TrackingDisabled"
+msgstr "Sekošanu izslēdza sistēmas administrators."
+
+msgid "InactivesStudents"
+msgstr "Lietotāji, kas nav pieslēgušies nedēļu vai vairāk"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Portālā pavadītais laiks"
+
+msgid "AverageCoursePerStudent"
+msgstr "Kursi pēc kursantiem"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Padarītais mācību apguvē"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Testu rezultāti"
+
+msgid "SeeStudentList"
+msgstr "Skatīt lietotāju sarakstu"
+
+msgid "NbActiveSessions"
+msgstr "Aktīvās mācību sesijas"
+
+msgid "NbPastSessions"
+msgstr "Pagājušās sesijas"
+
+msgid "NbFutureSessions"
+msgstr "Nākotnē apgūstamās sesijas"
+
+msgid "NbStudentPerSession"
+msgstr "Kursantu skaits sesijā"
+
+msgid "NbCoursesPerSession"
+msgstr "Apmācību skaits sesijā"
+
+msgid "SeeSessionList"
+msgstr "Skatīt sesiju sarakstu"
+
+msgid "langShowNone"
+msgstr "Neko nerādīt"
+
+msgid "langCourseStats"
+msgstr "Kursa statistika"
+
+msgid "langToolsAccess"
+msgstr "Pieeja instrumentiem"
+
+msgid "langCourseAccess"
+msgstr "Piekļuve kursam"
+
+msgid "langLinksAccess"
+msgstr "Hipersaites"
+
+msgid "langDocumentsAccess"
+msgstr "Dokumenti"
+
+msgid "langScormAccess"
+msgstr "Mācību plāns - Scorm formāta kursi"
+
+msgid "langLinksDetails"
+msgstr "Lietotāja apmeklētās hipersaites"
+
+msgid "langWorksDetails"
+msgstr "Augšupielādētie Referāti / Mājas darbi"
+
+msgid "langLoginsDetails"
+msgstr "Noklikšķiniet uz mēneša nosaukuma papildus informācijai"
+
+msgid "langDocumentsDetails"
+msgstr "Dokumenti, kurus lietotājs lejupielādējis"
+
+msgid "langExercicesDetails"
+msgstr "Kopējie paveiktie kontroldarbi"
+
+msgid "langBackToList"
+msgstr "Viss lietotāju saraksts"
+
+msgid "langDetails"
+msgstr "Detalizēta info"
+
+msgid "langStatsOfCourse"
+msgstr "Kursa apraksta statistika"
+
+msgid "langStatsOfUser"
+msgstr "Lietotāja statistika"
+
+msgid "langStatsOfCampus"
+msgstr "Portāla statistika"
+
+msgid "langCountUsers"
+msgstr "Lietotāju skaits"
+
+msgid "langCountToolAccess"
+msgstr "Kopējais pieslēgumu skaits šim kursam"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Mēnesis"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Autorizāciju skaits"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Instrumenta nosaukums"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Lietotāju apmeklējums"
+
+msgid "langToolTitleCountColumn"
+msgstr "Kopējais apmeklējumu skaits"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Hipersaite"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Lietotāju apmeklējums"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Kopējais apmeklējumu skaits"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Tests / kontroldarbs"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Kopējais Rezultāts"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Dokuments"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Lietotāji lejupielādējuši"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Kopējais lejupielāžu skaits"
+
+msgid "langScormContentColumn"
+msgstr "Virsraksts"
+
+msgid "langScormStudentColumn"
+msgstr "Lietotāji"
+
+msgid "langScormTitleColumn"
+msgstr "Lekcija/Posms"
+
+msgid "langScormStatusColumn"
+msgstr "Statuss"
+
+msgid "langScormScoreColumn"
+msgstr "Gala rezultāts"
+
+msgid "langScormTimeColumn"
+msgstr "Laiks"
+
+msgid "langScormNeverOpened"
+msgstr "Šis lietotājs vēl ne reizi nav apmeklējis šo kursu!"
+
+msgid "langWorkTitle"
+msgstr "Virsraksts"
+
+msgid "langWorkAuthors"
+msgstr "Autori"
+
+msgid "langWorkDescription"
+msgstr "Apraksts"
+
+msgid "informationsAbout"
+msgstr "Veiktās darbības"
+
+msgid "langNoEmail"
+msgstr "Nav norādīta epasta adrese"
+
+msgid "langNoResult"
+msgstr "Pagaidām rezultāta vēl nav"
+
+msgid "langCourse"
+msgstr "Apraksts"
+
+msgid "langHits"
+msgstr "Apmeklējumi"
+
+msgid "langTotal"
+msgstr "Kopsumma"
+
+msgid "langHour"
+msgstr "Stunda"
+
+msgid "langDay"
+msgstr "diena"
+
+msgid "langLittleHour"
+msgstr "st."
+
+msgid "langLast31days"
+msgstr "pēdējās 31 dienās"
+
+msgid "langLast7days"
+msgstr "pēdējās 7 dienās"
+
+msgid "langThisday"
+msgstr "Šodien"
+
+msgid "langLogins"
+msgstr "Autorizācijas"
+
+msgid "langLoginsExplaination"
+msgstr "Šajā sarakstā parādīti Jūsu pēdējie apmeklējumi kopā ar apmeklēto instrumentu sarakstu"
+
+msgid "langExercicesResults"
+msgstr "Paveikto kontroldarbu rezultātu kopsumma"
+
+msgid "langVisits"
+msgstr "apmeklējumi"
+
+msgid "langAt"
+msgstr "pie"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Datums"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Apmeklējumi"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Instrumentu apmeklējumam veiktās autorizācijas un pieejas"
+
+msgid "langWorkUploads"
+msgstr "Veiktās rakstu augšupielādes"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Neatbilstošs lietotājs: neatrodas Jūsu grupā"
+
+msgid "langListStudents"
+msgstr "Lietotāju saraksts Jūsu grupā"
+
+msgid "langPeriodHour"
+msgstr "Stunda"
+
+msgid "langPeriodDay"
+msgstr "Diena"
+
+msgid "langPeriodWeek"
+msgstr "Nedēļa"
+
+msgid "langPeriodMonth"
+msgstr "Mēnesis"
+
+msgid "langPeriodYear"
+msgstr "Gads"
+
+msgid "langNextDay"
+msgstr "Nākošā diena"
+
+msgid "langPreviousDay"
+msgstr "Iepriekšējā diena"
+
+msgid "langNextWeek"
+msgstr "Nākošā nedēļa"
+
+msgid "langPreviousWeek"
+msgstr "Iepriekšējā nedēļa"
+
+msgid "langNextMonth"
+msgstr "Nākošais mēnesis"
+
+msgid "langPreviousMonth"
+msgstr "Iepriekšējais mēnesis"
+
+msgid "langNextYear"
+msgstr "Nākošais gads"
+
+msgid "langPreviousYear"
+msgstr "Iepriekšējais gads"
+
+msgid "langViewToolList"
+msgstr "Skatīt visu instrumentu sarakstu"
+
+msgid "langToolList"
+msgstr "Visu instrumentu saraksts"
+
+msgid "langFrom"
+msgstr "No"
+
+msgid "langTo"
+msgstr "uz"
+
+msgid "langPeriodToDisplay"
+msgstr "Laika posmā"
+
+msgid "langDetailView"
+msgstr "Skatīt pēc"
+
+msgid "langBredCrumpGroups"
+msgstr "Groupas"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Grupas apraksts"
+
+msgid "langBredCrumpUsers"
+msgstr "Lietotāji"
+
+msgid "langAdminToolName"
+msgstr "Administrēšanas statistika"
+
+msgid "langPlatformStats"
+msgstr "Platformas statistika"
+
+msgid "langStatsDatabase"
+msgstr "Statistikas datubāze"
+
+msgid "langPlatformAccess"
+msgstr "Portāla pieeja"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Kursu pieeja"
+
+msgid "langPlatformToolAccess"
+msgstr "Pieeja instrumentiem"
+
+msgid "langHardAndSoftUsed"
+msgstr "Valstis Internets Pārlūki OS Saistītie"
+
+msgid "langStrangeCases"
+msgstr "Problemātiskie gadījumi"
+
+msgid "langStatsDatabaseLink"
+msgstr "Klikšķini šeit!"
+
+msgid "langCountCours"
+msgstr "Kursu skaits"
+
+msgid "langCountCourseByFaculte"
+msgstr "Kursu skaits skaitot pēc to kategorijas"
+
+msgid "langCountCourseByLanguage"
+msgstr "Kursu skaits skaitot pēc to valodas"
+
+msgid "langCountCourseByVisibility"
+msgstr "Kursu skaits skaitot pēc to redzamības"
+
+msgid "langCountUsersByCourse"
+msgstr "Lietotāju skaits skaitot pa kursiem"
+
+msgid "langCountUsersByFaculte"
+msgstr "Lietotāju skaits skaitot pa kategorijām"
+
+msgid "langCountUsersByStatus"
+msgstr "Lietotāju skaits skaitot pēc to statusa"
+
+msgid "langAccess"
+msgstr "Pieejas tiesības"
+
+msgid "langCountries"
+msgstr "Valstis"
+
+msgid "langProviders"
+msgstr "Interneta piegādātāji"
+
+msgid "langOS"
+msgstr "Operētāj Sistēmas"
+
+msgid "langBrowsers"
+msgstr "Pārlūkprogrammas"
+
+msgid "langReferers"
+msgstr "Saistītie resursi"
+
+msgid "langAccessExplain"
+msgstr "(Kad lietotājs atver portāla sākumlapu)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Kopumā"
+
+msgid "langTotalPlatformLogin"
+msgstr "Kopumā"
+
+msgid "langMultipleLogins"
+msgstr "Lietotāji ar vienādiem <i>Lietotājvārdiem</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Lietotāji ar vienādiem Lietotājvārdiem UN vienādām <i>Parolēm</i>"
+
+msgid "langMultipleEmails"
+msgstr "Lietotāji ar vienādiem <i>Epastiem</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Kursi bez vadītāja"
+
+msgid "langCourseWithoutAccess"
+msgstr "Kursi, kas netiek izmantoti"
+
+msgid "langLoginWithoutAccess"
+msgstr "Lietotāju konti, kas netiek izmantoti"
+
+msgid "langAllRight"
+msgstr "Šeit pagaidām nav dīvainu parādību šajā sakarā!"
+
+msgid "langDefcon"
+msgstr "Tāāā, tika atrasta kāda dīvainība!"
+
+msgid "langNULLValue"
+msgstr "Nav ieraksta (vai NULL)"
+
+msgid "langTrafficDetails"
+msgstr "Apmeklējuma plūsmas info"
+
+msgid "langSeeIndividualTracking"
+msgstr "Personificētai sekošanai izmantojiet <a href=../user/user.php>Lietotāji</a> rīku."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Šo saiti neviens nekad nav atvēris."
+
+msgid "SynthesisView"
+msgstr "Sintezēts skatu punkts"
+
+msgid "Visited"
+msgstr "Apmeklēts"
+
+msgid "FirstAccess"
+msgstr "Pirmais pieslēgums"
+
+msgid "LastAccess"
+msgstr "Pēdējais pieslēgums"
+
+msgid "langProbationers"
+msgstr "Kursants"
+
+msgid "MoyenneTest"
+msgstr "Testu / kontroldarbu rezultāts"
+
+msgid "exportExcel"
+msgstr "Eksportēt Excel formātā"
+
+msgid "MoyCourse"
+msgstr "Vidējais rādītājs kursā"
+
+msgid "MoyenneExamen"
+msgstr "Vidējais eksāmenu rezultāts"
+
+msgid "MoySession"
+msgstr "Sesijas vidējais"
+
+msgid "TakenSessions"
+msgstr "Apmeklētās sesijas"
+
+msgid "FollowUp"
+msgstr "Sekošana padarītajam"
+
+msgid "Trainers"
+msgstr "Lektori"
+
+msgid "Administrators"
+msgstr "Administrators"
+
+msgid "Tracks"
+msgstr "Fiksētās darbības"
+
+msgid "Success"
+msgstr "Panākumi"
+
+msgid "ExcelFormat"
+msgstr "Excel formāts"
+
+msgid "MyLearnpath"
+msgstr "Mani Kursi / tēmas"
+
+msgid "Time"
+msgstr "Laiks"
+
+msgid "Score"
+msgstr "Rezultāts"
+
+msgid "LastConnexion"
+msgstr "Pēdējā pieteikšanās kursā"
+
+msgid "ConnectionTime"
+msgstr "Pieslēgšanās laiks"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Pieslēgumu skaits šajā kursā"
+
+msgid "StudentTutors"
+msgstr "Kursantu asistenti"
+
+msgid "StudentSessions"
+msgstr "Kursantu sesijas"
+
+msgid "StudentCourses"
+msgstr "Kursantu kursi"
+
+msgid "NoLearnpath"
+msgstr "Kursu nav"
+
+msgid "Attempts"
+msgstr "Mēģinājumu skaits testā"
+
+msgid "Correction"
+msgstr "Labojumi"
+
+msgid "NoExercise"
+msgstr "Testu / kontroldarbu nav"
+
+msgid "LimitDate"
+msgstr "Ierobežojuma datums"
+
+msgid "SentDate"
+msgstr "Sūtīšanas datums"
+
+msgid "Annotate"
+msgstr "Atgādinājums"
+
+msgid "DayOfDelay"
+msgstr "Kavētās dienas"
+
+msgid "NoProduction"
+msgstr "Nav fiksētu darbību"
+
+msgid "NoComment"
+msgstr "Komentāru nav"
+
+msgid "LatestLogin"
+msgstr "Pēdējā pieslēgšanās"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Patērētais laiks portālā"
+
+msgid "Messages"
+msgstr "Ieraksti"
+
+msgid "AveragePostsInForum"
+msgstr "Diskusiju ieraksti"
+
+msgid "AverageAssignments"
+msgstr "Referāti / Mājas darbi"
+
+msgid "Print"
+msgstr "Drukāt"
+
+msgid "StudentDetails"
+msgstr "Informācijas detaļas par kursantu"
+
+msgid "StudentDetailsInCourse"
+msgstr "Informācija par kursantiem kursā"
+
+msgid "Learnpaths"
+msgstr "Kursi"
+
+msgid "OtherTools"
+msgstr "Atskaite par citām darbībām un aktivitātēm kursā."
+
+msgid "DetailsStudentInCourse"
+msgstr "Informācija par kursantiem kursos"
+
+msgid "CourseTitle"
+msgstr "Kursa nosaukums"
+
+msgid "NbStudents"
+msgstr "Kursantu skaits kursā"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Kursā patērētais laiks"
+
+msgid "AvgStudentsProgress"
+msgstr "Vidējais apgūtais apjoms"
+
+msgid "AvgCourseScore"
+msgstr "Vidējais rezultāts"
+
+msgid "AvgMessages"
+msgstr "Vēstules"
+
+msgid "AvgAssignments"
+msgstr "Referāti / Mājas darbi"
+
+msgid "ToolsMostUsed"
+msgstr "Visvairāk lietotie instrumenti"
+
+msgid "StudentsTracking"
+msgstr "Atskaite par kursantiem šajā kursā"
+
+msgid "CourseTracking"
+msgstr "Atskaite par šī kursa saturu un resursiem"
+
+msgid "LinksMostClicked"
+msgstr "Visvairāk apmeklētās hipersaites"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Visvairāk lejupielādētie dokumenti"
+
+msgid "LearningPathDetails"
+msgstr "Kursa detaļas"
+
+msgid "NoConnexion"
+msgstr "Nav savienojuma"
+
+msgid "TeacherInterface"
+msgstr "Lektora skata punkts"
+
+msgid "CoachInterface"
+msgstr "Asistenta darba virsma / skats"
+
+msgid "AdminInterface"
+msgstr "Platformas administratora skata punkts"
+
+msgid "NumberOfSessions"
+msgstr "Sesiju skaits"
+
+msgid "YourCourseList"
+msgstr "Vidējie rezultāti Jūsu kursos"
+
+msgid "YourStatistics"
+msgstr "Tava statistika"
+
+msgid "CoachList"
+msgstr "Lektoru saraksts"
+
+msgid "CoachStudents"
+msgstr "Lektoru kursanti"
+
+msgid "NoLearningPath"
+msgstr "Kursu nav"
+
+msgid "SessionCourses"
+msgstr "Kursu sesijas"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Informācija par kursantiem, kuri ir reģistrēti šajā kursā"
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Vidējais kursā pavadītais laiks"
+
+msgid "RemindInactiveUser"
+msgstr "Atgādinājums neaktīvam lietotājam"
+
+msgid "FirstLogin"
+msgstr "Pirmā pieslēgšanās"
+
+msgid "AccessDetails"
+msgstr "Kursā pavadītā laika uzskaite un grafiks"
+
+msgid "DateAndTimeOfAccess"
+msgstr "Pieslēgšanās datums un laiks"
+
+msgid "Duration"
+msgstr "Pieslēgšanās ilgums"
+
+msgid "WrongDatasForTimeSpentOnThePlatform"
+msgstr "Šī lietotāja darbību laiki tika reģistrēti periodā, kad nebija iespējams veikt platformā pavadītā laika uzskaiti."
+
+msgid "DisplayCoaches"
+msgstr "Pārskats par Kursu izstrādātājiem platformā"
+
+msgid "DisplayUserOverview"
+msgstr "Pārskats par Kursantiem platformas kursos"
+
+msgid "ExportUserOverviewOptions"
+msgstr "Lietotāja pārskata eksporta opcijas"
+
+msgid "FollowingFieldsWillAlsoBeExported"
+msgstr "Nākošie lauki arī tiks eksportēti"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "Kopējais testos iegūto punktu skaits"
+
+msgid "TotalExercisesScorePossible"
+msgstr "Maksimāli iegūstamais punktu skaits testos"
+
+msgid "TotalExercisesAnswered"
+msgstr "Atbildēto testu skaits"
+
+msgid "TotalExercisesScorePercentage"
+msgstr "Kopējie testu rezultāti procentos"
+
+msgid "ForumForumsNumber"
+msgstr "Diskusiju skaits"
+
+msgid "ForumThreadsNumber"
+msgstr "Tematu skaits"
+
+msgid "ForumPostsNumber"
+msgstr "Piezīmju skaits"
+
+msgid "ChatConnectionsDuringLastXDays"
+msgstr "Pievienošanos skaits %s tērzētavai pēdējo dienu laikā"
+
+msgid "ChatLastConnection"
+msgstr "Pēdējā pievienošanās tērzētavai"
+
+msgid "CourseInformation"
+msgstr "Informācija par kursiem"
+
+msgid "NoAdditionalFieldsWillBeExported"
+msgstr "Citi lauki netiks eksportēti"
+
+msgid "langSendNotification"
+msgstr "Paziņot"
+
+msgid "TimeOfActiveByTraining"
+msgstr "Kursā pavadītais laiks"
+
+msgid "AvgAllUsersInAllCourses"
+msgstr "Vidējais kursantu un tēmu skaits kursā"
+
+msgid "AvgExercisesScore"
+msgstr "Vidējais rezultāts testos"
+
+msgid "TrainingTime"
+msgstr "Kursā pavadītais Laiks"
+
+msgid "CourseProgress"
+msgstr "Apgūtais satura apjoms"
+
+msgid "ViewMinus"
+msgstr "Skatīt mīnuss"
+
+msgid "ResourcesTracking"
+msgstr "Atskaite par darbībām kursa saturā"
+
+msgid "SelectFieldToAdd"
+msgstr "Izvēlieties Lietotāja profila lauku, lai pievienotu"
+
+msgid "AddAdditionalProfileField"
+msgstr "Pievienot info lauku Lietotāja profilam"
+
+msgid "ConfigureExtensions"
+msgstr "Konfigurēt paplašinājumus"
+
+msgid "DashboardBlocks"
+msgstr "Info Paneļa bloki"
+
+msgid "DashboardList"
+msgstr "Info Paneļa bloku saraksts"
+
+msgid "YouHaveNotEnabledBlocks"
+msgstr "Pievienotu bloku nav"
+
+msgid "BlocksHaveBeenUpdatedSuccessfully"
+msgstr "Bloki ir atjaunināti"
+
+msgid "AttendanceSheetDescription"
+msgstr "Šis ir klātienes nodarbības <b>Kursantu apmeklējuma reģistrs</b> <br>Tas ļauj reģistrēt šīs nodarbības apmeklējumu visam kolektīvam kopā, vai arī pa grupām.        <br><br><b>Piemēram</b>    Datumā A šo aktivitāti izpildīs GRUPA1, Datumā B šo aktivitāti izpildīs GRUPA2. <br>Lai pievienotu vai dzēstu nodarbības apmeklējuma datumus,  izmantojiet augšā, jeb zemāk labajā pusē, novietoto instrumentu <b>Klātienes nodarbību kalendārs</b><br><br>Pēc noklusējuma, visi kursā reģistrētie Kursanti tiek uzskatīti, kā <b>nodarbību apmeklējuši</b>. <br> Ja nepieciešams, Jūs varat izņemt nodarbībā iztrūkstošu Kursantu no saraksta sekojoši:<br> - atslēdziet datu reģistru saraksta augšpusē<br> -  izņemiet reģistra atzīmi pretī Kursanta vārdam esošajā reģistra rūtiņā<br> - pēc izmaiņu izdarīšanas, sarakstu aizslēdziet"
+
+msgid "AttendanceSheetReport"
+msgstr "Atskaite par klātienes aktivitātēm"
+
+msgid "YouDoNotHaveDoneAttendances"
+msgstr "Jums nav nevienas klātienes aktivitātes"
+
+msgid "GoToAttendanceCalendarList"
+msgstr "Doties uz klātienes kalendāra ierakstiem"
+
+msgid "AddADateTime"
+msgstr "Pievienot laiku un datumu"
+
+msgid "AreYouSureToDeleteAllDates"
+msgstr "Jūs esat pārliecināti, ka vēlaties izdzēst visus datus?"
+
+msgid "DashboardPluginsHaveBeenUpdatedSuccessfully"
+msgstr "Info Paneļa spraudņi ir veiksmīgi atjaunināti"
+
+msgid "ThereIsNoInformationAboutYourCourses"
+msgstr "Šeit nav informācijas, par Jūsu mācību kursiem"
+
+msgid "ThereIsNoInformationAboutYourSessions"
+msgstr "Šeit nav informācijas, par Jūsu mācību sesijām"
+
+msgid "ThereIsNoInformationAboutYourTeachers"
+msgstr "Šeit nav informācijas, par Jūsu Lektoriem"
+
+msgid "ThereIsNoInformationAboutYourStudents"
+msgstr "Šeit nav informācijas, par Jūsu Kursantiem"
+
+msgid "TimeSpentLastWeek"
+msgstr "Pagājušajā nedēļā pavadītais laiks"
+
+msgid "DateLock"
+msgstr "Slēgt datumu"
+
+msgid "FolderCreated"
+msgstr "Jauna mape ir izveidota"
+
+msgid "LearnpathVisible"
+msgstr "Mācību saturs ir padarīts redzams"
+
+msgid "LinkInvisible"
+msgstr "Hipersaite ir redzama"
+
+msgid "LinkAdded"
+msgstr "Hipersaite pievienota"
+
+msgid "Minutes"
+msgstr "Piezīmes"
+
+msgid "BackupCreated"
+msgstr "Rezerves kopija ir izveidota. <b>Lai to lejupielādētu datorā</b>, aktivizējiet izveidoto zip failu <b>labajā pusē</b>"
+
+msgid "DisplayCourseOverview"
+msgstr "Kursu pārskats"
+
+msgid "DisplaySessionOverview"
+msgstr "Sesiju pārskats"
+
+msgid "TotalNumberOfMessages"
+msgstr "Kopējais vēstuļu skaits"
+
+msgid "TotalNumberOfAssignments"
+msgstr "Kopējais mājas darbu skaits"
+
+msgid "LastLogins"
+msgstr "Pēdējie pieslēgšanās gadījumi"
+
+msgid "AllLogins"
+msgstr "Visi pieslēgšanās gadījumi"
+
+msgid "LPExerciseResultsBySession"
+msgstr "Kursu uzdevumu / testu rezultāti sesijās"
+
+msgid "LPQuestionListResults"
+msgstr "Kursu uzdevumu /testu rezultātu saraksts"
+
+msgid "PleaseSelectACourse"
+msgstr "Lūdzu izvēlieties un atzīmējiet Kursu"
+
+msgid "StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts"
+msgstr "Kursantu vidējie aprēķina bāzes rezultāti, visos mācību kursos un visos testu mēģinājumos."
+
+msgid "AverageScore"
+msgstr "Vidējais rezultāts"
+
+msgid "LastConnexionDate"
+msgstr "Pēdējais pieslēgšanās datums"
+
+msgid "QuestionsAreTakenFromLPExercises"
+msgstr "Šie jautājumi ir paņemti no Kursiem."
+
+msgid "AllStudentsAttemptsAreConsidered"
+msgstr "Visi uzskatītie Kursantu mēģinājumi"
+
+msgid "PublishedExercises"
+msgstr "Pieejamie uzdevumu / testi"
+
+msgid "DoneExercises"
+msgstr "Izpildītie uzdevumi / testi"
+
+msgid "AverageExerciseResult"
+msgstr "Vidējie rezultāti uzdevumos / testos"
+
+msgid "LPProgress"
+msgstr "Mācību kursu satura apguves progress"
+
+msgid "Ranking"
+msgstr "Reitings"
+
+msgid "BestResultInCourse"
+msgstr "Labākie rezultāti Kursā"
+
+msgid "ExerciseStartDate"
+msgstr "Uzdevuma / testa publikācijas datums"
+
+msgid "OnlyBestResultsPerStudent"
+msgstr "Ja ir vairāki izpildes mēģinājuma gadījumi, rādīt tikai Kursanta labāko rezultātu."
+
+msgid "BestAttempt"
+msgstr "Labākais mēģinājums"
+
+msgid "ExercisesInTimeProgressChart"
+msgstr "Uzdevumu rezultātu attīstība laikā, salīdzinot Kursantu vidējos rezultātus tajos"
+
+msgid "AverageIsCalculatedBasedInAllAttempts"
+msgstr "Vidējais aprēķinātais, pamatojoties uz visiem testa mēģinājumiem"
+
+msgid "AverageIsCalculatedBasedInTheLatestAttempts"
+msgstr "Vidējais aprēķinātais, pamatojoties uz pēdējiem mēģinājumiem"
+
+msgid "LatestAttemptAverageScore"
+msgstr "Vidējais rezultāts pēdējos mēģinājumos"
+
+msgid "Untitled"
+msgstr "Nenosaukts"
+
+msgid "Quantity"
+msgstr "Daudzums"
+
+msgid "UploadedDocuments"
+msgstr "Augšupielādētie dokumenti"
+
+msgid "ExerciseProgress"
+msgstr "Progress uzdevumā / testā"
+
+msgid "NumberOfStudents"
+msgstr "Kursantu skaits"
+
+msgid "NumberStudentsAccessingCourse"
+msgstr "Kursantu skaits, kam ir piekļuve kursam"
+
+msgid "PercentageStudentsAccessingCourse"
+msgstr "Kursantu daudzums procentos, kam ir piekļuve kursam"
+
+msgid "NumberStudentsCompleteAllActivities"
+msgstr "Kursantu skaits, kuri izpildījuši visas plānotās aktivitātes"
+
+msgid "PercentageStudentsCompleteAllActivities"
+msgstr "Kursantu daudzums procentos, kuri izpildījuši visas plānotās aktivitātes"
+
+msgid "AverageOfActivitiesCompletedPerStudent"
+msgstr "Vidējais pabeigto aktivitāšu skaits uz Kursantu"
+
+msgid "TotalTimeSpentInTheCourse"
+msgstr "Kopējais Kursā patērētais laiks"
+
+msgid "AverageTimePerStudentInCourse"
+msgstr "Vidējais patērētais laiks uz Kursantu kursā"
+
+msgid "NumberOfDocumentsInLearnpath"
+msgstr "Kopējais dokumentu skaits Kursa mācību tēmās"
+
+msgid "NumberOfExercisesInLearnpath"
+msgstr "Kopējais uzdevumu skaits Kursa mācību tēmās"
+
+msgid "NumberOfLinksInLearnpath"
+msgstr "Kopējais saišu skaits Kursa mācību tēmās"
+
+msgid "NumberOfForumsInLearnpath"
+msgstr "Kopējais forumu skaits Kursa mācību tēmās"
+
+msgid "NumberOfAssignmentsInLearnpath"
+msgstr "Kopējais mājas darbu skaits Kursa mācību tēmās"
+
+msgid "NumberOfAnnouncementsInCourse"
+msgstr "Kopējais paziņojumu skaits Kursa mācību tēmās"
+
+msgid "CurrentCoursesReport"
+msgstr "Konkrētā kursa atskaite"
+
+msgid "NumberOfPublishedExercises"
+msgstr "Publicēto vingrinājumu #"
+
+msgid "NumberOfPublishedLps"
+msgstr "Mācību kursu #"
+
+msgid "EventType"
+msgstr "Notikuma tips"
+
+msgid "NbInactiveSessions"
+msgstr "Neaktīvo sesiju skaits"
+
+msgid "FollowedSessions"
+msgstr "Aktīvas sesijas"
+
+msgid "FollowedCourses"
+msgstr "Aktīvie kursi"
+
+msgid "FollowedUsers"
+msgstr "Izsekojamie Lietotāji"
+
+msgid "Timeline"
+msgstr "Laika skala"
+

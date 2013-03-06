@@ -1,0 +1,198 @@
+msgid "ModifInfo"
+msgstr "Setkan Subjek"
+
+msgid "langModifDone"
+msgstr "Maklumat telah diubahsuai"
+
+msgid "langDelCourse"
+msgstr "Gugurkan Subjek dari Pangkalan Data"
+
+msgid "langProfessors"
+msgstr "Pensyarah"
+
+msgid "langFaculty"
+msgstr "Pusat Pengajian"
+
+msgid "langConfidentiality"
+msgstr "Sulit"
+
+msgid "langPublic"
+msgstr "Capaian Umum (Subjek boleh dicapai tanpa proses <i>login</i>)"
+
+msgid "langPrivOpen"
+msgstr "Capaian Peribadi, Pendaftaran Terbuka"
+
+msgid "langPrivate"
+msgstr "Capaian terhad (Subjek hanya boleh dicapai oleh pengguna berikut sahaja <a href=../user/user.php>Senarai Pengguna</a>)"
+
+msgid "langForbidden"
+msgstr "Tidak dibenarkan"
+
+msgid "CourseAccessConfigTip"
+msgstr "Secara lalai, subjek anda hanya boleh diakses jika anda pengguna berdaftar. Jika anda inginkan kerahsian,cara terbaik ialah membuka pendaftaranselama seminggu, dan arahkan Pelajar anda untuk mendaftar sendiri, kemudian tutup Pendaftaran dan periksa samada terdapat Pengguna yang tidak dikenali."
+
+msgid "langTipLang"
+msgstr "Sila pilih bahasa yang anda kehendaki untuk Laman Subjek."
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Tugasan"
+
+msgid "langProgramMenu"
+msgstr "Program Subjek"
+
+msgid "langAnnouncement"
+msgstr "Pengumuman"
+
+msgid "langExercise"
+msgstr "Latihan"
+
+msgid "langStats"
+msgstr "Statistik"
+
+msgid "langUplPage"
+msgstr "Muatnaik Page dan pautkan dengan Home Page"
+
+msgid "langLinkSite"
+msgstr "Tambah pautan pada Home Page"
+
+msgid "langCourse"
+msgstr "Laman Subjek"
+
+msgid "langHasDel"
+msgstr "telah digugurkan"
+
+msgid "langBackHome"
+msgstr "Kembali ke Laman Subjek"
+
+msgid "langByDel"
+msgstr "Proses ini akan menyebabkan Keseluruhan Kandungan Laman Subjek akan digugurkan dari Pangkalan Data dan akan menggugurkan Pelajar yang berdaftar dengan subjek ini.<p>Anda pasti untuk menggugurkan subjek ini"
+
+msgid "langY"
+msgstr "YA"
+
+msgid "langN"
+msgstr "TIDAK"
+
+msgid "langDepartmentUrl"
+msgstr "URL Pusat Pengajian"
+
+msgid "langDepartmentUrlName"
+msgstr "Kod Pusat Pengajian"
+
+msgid "langBackupCourse"
+msgstr "Backup Subjek Anda"
+
+msgid "langModifGroups"
+msgstr "Kumpulan"
+
+msgid "langProfessor"
+msgstr "Pensyarah"
+
+msgid "langGroups"
+msgstr "Kumpulan"
+
+msgid "langDescriptionCours"
+msgstr "Penerangan Subjek"
+
+msgid "langArchiveCourse"
+msgstr "Backup Subjek"
+
+msgid "langRestoreCourse"
+msgstr "Guna semula Subjek"
+
+msgid "langRestore"
+msgstr "Guna Semula"
+
+msgid "langCreatedIn"
+msgstr "dibina di dalam"
+
+msgid "langCreateMissingDirectories"
+msgstr "Mencipta direktori yang hilang"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Menyalin fail Subjek"
+
+msgid "langDisk_free_space"
+msgstr "ruang kosong"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Mencipta fail backup"
+
+msgid "langFileCopied"
+msgstr "fail disalin"
+
+msgid "langArchiveLocation"
+msgstr "Lokasi Arkib"
+
+msgid "langSizeOf"
+msgstr "Size of"
+
+msgid "langArchiveName"
+msgstr "Nama Arkib"
+
+msgid "langBackupSuccesfull"
+msgstr "Backup berjaya dilaksanakan"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Backup data subjek ke dalam Pangkalan Data untuk"
+
+msgid "langBUUsersInMainBase"
+msgstr "Backup data pengguna dalam Pangkalan Data untuk"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Backup data pengumuman ke dalam Pangkalan Data untuk"
+
+msgid "langBackupOfDataBase"
+msgstr "Backup Pangkalan Data"
+
+msgid "langCreationDate"
+msgstr "Dicipta"
+
+msgid "langExpirationDate"
+msgstr "Luput"
+
+msgid "langPostPone"
+msgstr "Dipinda"
+
+msgid "langLastEdit"
+msgstr "Ubahsuai kali terakhir"
+
+msgid "langLastVisit"
+msgstr "Lawatan kali terakhir"
+
+msgid "langSubscription"
+msgstr "Langganan"
+
+msgid "langCourseAccess"
+msgstr "Capaian Subjek"
+
+msgid "langConfirmBackup"
+msgstr "Anda pasti untuk backup subjek"
+
+msgid "langCreateSite"
+msgstr "Bila Laman Subjek"
+
+msgid "langRestoreDescription"
+msgstr "The course is in an archive file which you can select below.<br><br>When you have clicked on \"Restore\", the archive will be uncompessed and the course recreated."
+
+msgid "langRestoreNotice"
+msgstr "This script doesn\'t allow yet to automatically restore users, but data saved in \"users.csv\" are sufficient so as for the administrator to be able to make that work manually."
+
+msgid "langAvailableArchives"
+msgstr "Available archive list"
+
+msgid "langNoArchive"
+msgstr "Tiada arkib yang dipilih"
+
+msgid "langArchiveNotFound"
+msgstr "Arkib tidak ditemui"
+
+msgid "langArchiveUncompressed"
+msgstr "The archive has been uncompressed and installed."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "The file \"users.csv\" has been put into the Documents tool."
+

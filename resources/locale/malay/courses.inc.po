@@ -1,0 +1,87 @@
+msgid "lang_already_enrolled"
+msgstr "telah sedia mengikuti"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Senarai Subjek Individu"
+
+msgid "lang_course_enrollment"
+msgstr "Subjek Pelajar"
+
+msgid "lang_course_not_available"
+msgstr "Subjek tidak ditawarkan..."
+
+msgid "lang_enroll"
+msgstr "Sertai"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Sertai Subjek Baru"
+
+msgid "lang_my_present_course_list"
+msgstr "Senarai Subjek Pengguna"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Tiada Subjek yang ditawarkan oleh Pusat Pengajian ini."
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Atau cari berdasarkan Kod Subjek"
+
+msgid "lang_search"
+msgstr "Cari"
+
+msgid "lang_select_course_among_categories"
+msgstr "Pilih Subjek daripada Pusat Pengajian"
+
+msgid "lang_select_course_in"
+msgstr "Pilih Subjek dalam"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Select course in search results"
+
+msgid "Unsubscribe"
+msgstr "Tidak dilanggan"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Kembali ke Laman Pengguna"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Kembali ke Senarai Subjek Pengguna"
+
+msgid "langTitular"
+msgstr "Titular"
+
+msgid "langBackToListOfThisUser"
+msgstr "Kembali ke Senarai Subjek"
+
+msgid "langAdministrationTools"
+msgstr "Alat Bantu Pentadbiran"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Kembali ke Senarai Kategori Utama"
+
+msgid "langAdded"
+msgstr "Tambahan"
+
+msgid "langDeleted"
+msgstr "Telah dipadam"
+
+msgid "langKeeped"
+msgstr "Simpan"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Hided / Closed"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Hided / Open"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Visible / Open"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Visible / Closed"
+
+msgid "langAdminThisUser"
+msgstr "Kembali ke Pengguna"
+
+msgid "langManage"
+msgstr "Menguruskan Kampus"
+

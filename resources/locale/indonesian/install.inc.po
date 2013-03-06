@@ -1,0 +1,237 @@
+msgid "langStatDB"
+msgstr "Men-track DB."
+
+msgid "langEnableTracking"
+msgstr "Aktifkan Tracking"
+
+msgid "langInstituteShortName"
+msgstr "Nama singkat organisasi"
+
+msgid "langWarningResponsible"
+msgstr "Gunakan skrip ini hanya setelah backup. Team Pembuat Software tidak bertanggujawab jika data anda hilang atau rusak"
+
+msgid "langAllowSelfRegProf"
+msgstr "Ijinkan pendaftaran mandiri sebagai pembuat mata kuliah"
+
+msgid "langEG"
+msgstr "misal"
+
+msgid "langDBHost"
+msgstr "Host Database"
+
+msgid "langDBLogin"
+msgstr "Nama user Database"
+
+msgid "langDBPassword"
+msgstr "Password Database"
+
+msgid "langMainDB"
+msgstr "Data Base utama Chamilo (DB)"
+
+msgid "langAllFieldsRequired"
+msgstr "semua field wajib diisi"
+
+msgid "langPrintVers"
+msgstr "Versi cetak"
+
+msgid "langLocalPath"
+msgstr "path lokal yang sesuai"
+
+msgid "langAdminEmail"
+msgstr "Email Administrator"
+
+msgid "langAdminName"
+msgstr "Nama Administrator"
+
+msgid "langAdminSurname"
+msgstr "Nama keluarga Administrator"
+
+msgid "langAdminLogin"
+msgstr "Login Administrator"
+
+msgid "langAdminPass"
+msgstr "Password Administrator  (<font color=\"red\">anda dapat merubahnya</font>)"
+
+msgid "langEducationManager"
+msgstr "Pengelola"
+
+msgid "langCampusName"
+msgstr "Nama kampus"
+
+msgid "langDBSettingIntro"
+msgstr "				Skrip Instalasi akan membuat DB utama. Software akan butuh membuat banyak DB (kecuali anda pilih  \"One\" di bawah ini). Jika anda hanya diijinkan satu DB untuk situs anda oleh Hosting Services, Software tidak dapat bekerja."
+
+msgid "langStep1"
+msgstr "Langkah 1"
+
+msgid "langStep2"
+msgstr "Langkah 2"
+
+msgid "langStep3"
+msgstr "Langkah 3 dari 6"
+
+msgid "langStep4"
+msgstr "Langkah 4 dari 6"
+
+msgid "langStep5"
+msgstr "Langkah 5 dari 6"
+
+msgid "langStep6"
+msgstr "Langkah 6 dari 6"
+
+msgid "langCfgSetting"
+msgstr "Setting Configurasi"
+
+msgid "langDBSetting"
+msgstr "Setting database MySQL"
+
+msgid "langMainLang"
+msgstr "Bahasa utama"
+
+msgid "langLicence"
+msgstr "Lisensi"
+
+msgid "langLastCheck"
+msgstr "Pemeriksaan akhir sebelum instalasi"
+
+msgid "langRequirements"
+msgstr "Persyaratan"
+
+msgid "langDbPrefixForm"
+msgstr "Prefix MySQL"
+
+msgid "langDbPrefixCom"
+msgstr "Biarkan kosong jika tidak diminta"
+
+msgid "langEncryptUserPass"
+msgstr "Encrypt password user di database"
+
+msgid "langSingleDb"
+msgstr "Gunakan satu atau beberapa DB untuk Software Ini"
+
+msgid "langAllowSelfReg"
+msgstr "Pendaftaran mandiri diijinkan"
+
+msgid "langRecommended"
+msgstr "(direkomendasikan)"
+
+msgid "langScormDB"
+msgstr "Database Scorm"
+
+msgid "langAdminLastName"
+msgstr "Nama belakang Administrator"
+
+msgid "langAdminPhone"
+msgstr "Telepon Administrator"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "langAdminFirstName"
+msgstr "Nama depan Administrator"
+
+msgid "langInstituteURL"
+msgstr "URL Organisasi ini"
+
+msgid "langDokeosURL"
+msgstr "URL Chamilo"
+
+msgid "langUserDB"
+msgstr "Database User"
+
+msgid "langInstallationLanguage"
+msgstr "Bahasa Instalasi"
+
+msgid "ReadThoroughly"
+msgstr "Baca secara menyeluruh"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "Agar Chamilo dapat berjalan, anda membutuhkan hal-hal berikut dalam server anda"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "Peringatan! <br>Program Instalasi mendeteksi platform Chamilo sudah ada dalam system anda."
+
+msgid "NewInstallation"
+msgstr "Instalasi baru"
+
+msgid "CheckDatabaseConnection"
+msgstr "Periksa koneksi database"
+
+msgid "PrintOverview"
+msgstr "Tampilkan Overview"
+
+msgid "Installing"
+msgstr "Install"
+
+msgid "of"
+msgstr "dari"
+
+msgid "Step"
+msgstr "Langkah"
+
+msgid "MoreDetails"
+msgstr "Untuk lebih detail"
+
+msgid "ServerRequirements"
+msgstr "Syarat-syarat server"
+
+msgid "ServerRequirementsInfo"
+msgstr "Library dan fitur yang dibutuhkan server untuk menggunakan Chamilo secara maksimal"
+
+msgid "PHPVersion"
+msgstr "Versi PHP"
+
+msgid "support"
+msgstr "dukungan"
+
+msgid "PHPVersionOK"
+msgstr "Versi PHP OK"
+
+msgid "RecommendedSettings"
+msgstr "Seting anjuran"
+
+msgid "RecommendedSettingsInfo"
+msgstr "Seting anjuran untuk konfigurasi server anda.  Seting ini di set dalam file konfigurasi php.ini pada server anda."
+
+msgid "Setting"
+msgstr "Seting"
+
+msgid "Actual"
+msgstr "Saat ini"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "Ijin direktori dan file"
+
+msgid "DirectoryAndFilePermissionsInfo"
+msgstr "Beberapa direktori dan file yang disertakan harus dapat ditulis/writeable oleh server web agar Chamilo berjalan (misal saat siswa meng-upload file dll).  Ini dapat saja membutuhkan perubahan sevara manual di server anda (diluar interface ini)."
+
+msgid "NotWritable"
+msgstr "Tidak dapat ditulis"
+
+msgid "Writable"
+msgstr "Dapat ditulis"
+
+msgid "ExtensionLDAPNotAvailable"
+msgstr "Ektensi LDAP tidak tersedia"
+
+msgid "ExtensionGDNotAvailable"
+msgstr "Ektensi GD tidak tersedia"
+
+msgid "DokeosLicenseInfo"
+msgstr "Chamilo merupakan software gratis yang didistribusikan oleh GNU General Public licence (GPL)."
+
+msgid "IAccept"
+msgstr "Saya Setuju"
+
+msgid "ConfigSettingsInfo"
+msgstr "Berikut ini akan dituliskan ke file konfigurasi <b>main/inc/conf/configuration.php</b>:"
+
+msgid "InstallDokeos"
+msgstr "Install Chamilo"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "Lihat ke portal anda yang baru dibuat."
+
+msgid "FirstUseTip"
+msgstr "Ketika memasukkan kampus anda untuk pertama kali, cara terbaik untuk mengertinya adalah dengan mendaftar dengan opsi \'Buat area mata kuliah\' dan ikuti langkah selanjutnya."
+

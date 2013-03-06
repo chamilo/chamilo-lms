@@ -1,0 +1,157 @@
+msgid "LinkMoved"
+msgstr "Link removido."
+
+msgid "langLinkName"
+msgstr "Nome do link"
+
+msgid "langLinkAdd"
+msgstr "Adicionar um link"
+
+msgid "langLinkAdded"
+msgstr "O link foi adicionado"
+
+msgid "langLinkMod"
+msgstr "Modificar link"
+
+msgid "langLinkModded"
+msgstr "O link foi modificado"
+
+msgid "langLinkDel"
+msgstr "Deletar link"
+
+msgid "langLinkDeleted"
+msgstr "O link foi adicionado"
+
+msgid "langLinkDelconfirm"
+msgstr "Você quer deletar esse link?"
+
+msgid "langAllLinksDel"
+msgstr "Delete todos os links dessa categoria"
+
+msgid "langCategoryName"
+msgstr "Nome da categoria"
+
+msgid "langCategoryAdd"
+msgstr "Adicionar uma categoria"
+
+msgid "langCategoryAdded"
+msgstr "A categoria foi adicionada"
+
+msgid "langCategoryModded"
+msgstr "A categoria foi modificada"
+
+msgid "langCategoryDel"
+msgstr "Deletar categoria"
+
+msgid "langCategoryDeleted"
+msgstr "A categoria e todos os seus links foram deletados"
+
+msgid "langCategoryDelconfirm"
+msgstr "Ao deletar uma categoria, todos os links dessa categoria também serão deletados.
+Você realmente quer deletar essa categoria e os seus links ?"
+
+msgid "langAllCategoryDel"
+msgstr "Deletar todas as categorias e todos os links"
+
+msgid "langGiveURL"
+msgstr "Por favor informe a URL do link"
+
+msgid "langGiveCategoryName"
+msgstr "Por favor informe o nome da categoria"
+
+msgid "langNoCategory"
+msgstr "Nenhuma categoria"
+
+msgid "showall"
+msgstr "Exibir todos"
+
+msgid "shownone"
+msgstr "Não exibir nenhum"
+
+msgid "langListDeleted"
+msgstr "A lista foi deletada"
+
+msgid "langAddLink"
+msgstr "Adicione um link"
+
+msgid "langDelList"
+msgstr "Deletar lista"
+
+msgid "langModifyLink"
+msgstr "Modificar Link"
+
+msgid "langCsvImport"
+msgstr "Importação CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "O arquivo CSV importado não pode ser aberto (ex.: vazio, muito grande)"
+
+msgid "langCsvFileNoSeps"
+msgstr "O arquivo CSV para importação precisa usar , ou ; como separador de lista"
+
+msgid "langCsvFileNoURL"
+msgstr "A importação de arquivos CSV precisa pelo menos das colunas título e URL"
+
+msgid "langCsvFileLine1"
+msgstr "... - linha 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "linha(s) que falharam durante a importação de links (sem URL ou sem título)"
+
+msgid "langCsvLinesOld"
+msgstr "link(s) existentes atualizados (mesma URL e categoria)."
+
+msgid "langCsvLinesNew"
+msgstr "novo(s) link(s) criado(s)."
+
+msgid "langCsvExplain"
+msgstr "O arquivo deve se parecer com isso: <blockquote><pre> <b>URL</b>;categoria;<b>título</b>;descrição; <b>http://www.aaa.org/...</b>;Links importantes;<b>Nome 1</b>;Descrição 1; <b>http://www.bbb.net/...</b>;;<b>Nome 2</b>;\"Descrição 2\"; </pre></blockquote> Se a URL e a categoria forem iguais aos de um link já existente, seu título e descrição serão atualizados. Em todos os outros casos um novo link será criado.<br><br> Negrito = obrigatório. Os campos podem estar em qualquer ordem, nomes em letras minúsculas ou maiúsculas. Campos adicionais são adicionados a descrição. Separador: vírgula ou barra. Os valores podem estar entre aspas, mas não os nomes dos campos. Algumas [b]tags HTML[/b] podem ser importadas para o campo descrição."
+
+msgid "langLinkUpdated"
+msgstr "Link atualizado com sucesso"
+
+msgid "langAll_Link_Deleted"
+msgstr "Link apagado com sucesso"
+
+msgid "langOnHomepage"
+msgstr "Fixar link na homepage do curso?"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Mostrar esse link como um ícone na homepage do curso"
+
+msgid "General"
+msgstr "geral"
+
+msgid "SearchFeatureDoIndexLink"
+msgstr "Indexar o título e a descrição do link?"
+
+msgid "langSaveLink"
+msgstr "Salvar link"
+
+msgid "langSaveCategory"
+msgstr "Salvar pasta"
+
+msgid "BackToLinksOverview"
+msgstr "Voltar à lista de links"
+
+msgid "AddTargetOfLinkOnHomepage"
+msgstr "Selecione o \"alvo\" no qual o link será visto na página principal do curso"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "LinkOpenSelf"
+msgstr "Abrir na mesma página"
+
+msgid "LinkOpenBlank"
+msgstr "Abrir em outra página"
+
+msgid "LinkOpenParent"
+msgstr "Open parent"
+
+msgid "LinkOpenTop"
+msgstr "Open top"
+
+msgid "LinkTarget"
+msgstr "Destino do link"
+

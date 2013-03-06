@@ -1,0 +1,60 @@
+msgid "select"
+msgstr "Geçerli kıl"
+
+msgid "square"
+msgstr "Kare"
+
+msgid "circle"
+msgstr "Elips"
+
+msgid "poly"
+msgstr "Çokgen"
+
+msgid "status1"
+msgstr "Hotspot çizin"
+
+msgid "status2_poly"
+msgstr "Çokgeni kapatmak için sağ tuşa basın"
+
+msgid "status2_other"
+msgstr "Hotspotu kaydetmek için farenin tuşunu bırakın"
+
+msgid "status3"
+msgstr "Hotspot kaydedildi"
+
+msgid "exercise_status_1"
+msgstr "Aşağıdaki resme tıklayarak cevaplayın"
+
+msgid "exercise_status_2"
+msgstr "Cevapları geçerli kıl"
+
+msgid "exercise_status_3"
+msgstr "Durum: Sorudan vazgeçildi"
+
+msgid "showUserPoints"
+msgstr "Kullanıcı tıklamalarını Göster/Gizle"
+
+msgid "showHotspots"
+msgstr "Hotspotları göster/gizle"
+
+msgid "labelPolyMenu"
+msgstr "Çokgeni kapat"
+
+msgid "triesleft"
+msgstr "Kalan denemeler"
+
+msgid "exeFinished"
+msgstr "Cevabınızın geçerli olması için aşağıdaki tuşu şimdi tıklayınız"
+
+msgid "nextAnswer"
+msgstr "Şimdi yapıldıya tıklayınız"
+
+msgid "delineation"
+msgstr "Çizim"
+
+msgid "labelDelineationMenu"
+msgstr "Çizimi kapat"
+
+msgid "oar"
+msgstr "Riskli alan"
+

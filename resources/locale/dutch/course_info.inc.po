@@ -1,0 +1,333 @@
+msgid "ModifInfo"
+msgstr "Cursuseigenschappen"
+
+msgid "langModifDone"
+msgstr "De eigenschappen werden gewijzigd."
+
+msgid "langDelCourse"
+msgstr "Deze cursussite verwijderen"
+
+msgid "langProfessors"
+msgstr "Lesgevers"
+
+msgid "langFaculty"
+msgstr "Faculteit"
+
+msgid "langConfidentiality"
+msgstr "Vertrouwelijkheid"
+
+msgid "langPublic"
+msgstr "Vrije toegang (vanaf de startpagina, zonder identificatiecode)"
+
+msgid "langUnsubscription"
+msgstr "Uitschrijven"
+
+msgid "langPrivOpen"
+msgstr "Beperkte toegang, open registratie"
+
+msgid "langPrivate"
+msgstr "Beperkte toegang, gesloten registratie (site voorbehouden voor mensen die in de gebruikerslijst staan)"
+
+msgid "langForbidden"
+msgstr "U bent geen beheerder van deze cursus."
+
+msgid "CourseAccessConfigTip"
+msgstr "Standaard is uw cursus publiek toegankelijk. U kan de toegankelijkheid hierboven wijzigen."
+
+msgid "langOpenToTheWorld"
+msgstr "Openbaar – toegang toegelaten voor de hele wereld"
+
+msgid "OpenToThePlatform"
+msgstr "Open – toegang toegelaten voor geregistreerde gebruikers"
+
+msgid "langOpenToThePlatform"
+msgstr "Open – toegang toegelaten voor geregistreerde gebruikers"
+
+msgid "langTipLang"
+msgstr "Deze taal zal gelden voor alle bezoekers van uw cursussite."
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Studentenpublicaties"
+
+msgid "langProgramMenu"
+msgstr "Takenprogramma"
+
+msgid "langAnnouncement"
+msgstr "Aankondigingen"
+
+msgid "langExercise"
+msgstr "Oefeningen"
+
+msgid "langStats"
+msgstr "Statistieken"
+
+msgid "langUplPage"
+msgstr "Pagina uploaden en verbinden met startpagina"
+
+msgid "langLinkSite"
+msgstr "Link toevoegen en verbinden met startpagina"
+
+msgid "langCourse"
+msgstr "De cursus"
+
+msgid "langHasDel"
+msgstr "werd verwijderd."
+
+msgid "langBackHome"
+msgstr "Terug naar startpagina van"
+
+msgid "langByDel"
+msgstr "Wanneer u deze cursus verwijdert, worden alle gegevens (documenten, links...) verwijderd. Eventuele virtuele cursussen gelinkt aan deze cursus worden ook verwijderd.<br /><br />Wenst u deze cursus te verwijderen?"
+
+msgid "langY"
+msgstr "JA"
+
+msgid "langN"
+msgstr "NEE"
+
+msgid "langDepartmentUrl"
+msgstr "URL van uw faculteit of vakgroep"
+
+msgid "langDepartmentUrlName"
+msgstr "Faculteit/vakgroep"
+
+msgid "langBackupCourse"
+msgstr "Cursusback-up maken"
+
+msgid "langModifGroups"
+msgstr "Groepen"
+
+msgid "langProfessor"
+msgstr "Lesgever"
+
+msgid "langGroups"
+msgstr "Groepen"
+
+msgid "langDescriptionCours"
+msgstr "Cursusbeschrijving"
+
+msgid "langArchiveCourse"
+msgstr "Cursusback-up"
+
+msgid "langRestoreCourse"
+msgstr "Herstel een cursussite"
+
+msgid "langRestore"
+msgstr "Herstellen"
+
+msgid "langCreatedIn"
+msgstr "gemaakt op"
+
+msgid "langCreateMissingDirectories"
+msgstr "Aanmaken van ontbrekende mappen"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Kopiëren van cursusbestanden"
+
+msgid "langDisk_free_space"
+msgstr "Beschikbare schijfruimte"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Archief maken"
+
+msgid "langFileCopied"
+msgstr "bestand gekopieerd"
+
+msgid "langArchiveLocation"
+msgstr "Locatie archief"
+
+msgid "langSizeOf"
+msgstr "Grootte"
+
+msgid "langArchiveName"
+msgstr "Naam archief"
+
+msgid "langBackupSuccesfull"
+msgstr "Succesvolle back-up"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Back-up van de cursusgegevens in de hoofddatabank voor"
+
+msgid "langBUUsersInMainBase"
+msgstr "Back-up van de gebruikersgegevens in de hoofddatabank voor"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Back-up van de aankondigingsgegevens in de hoofddatabank voor"
+
+msgid "langBackupOfDataBase"
+msgstr "Back-up van de databank"
+
+msgid "langCreationDate"
+msgstr "Aangemaakt"
+
+msgid "langExpirationDate"
+msgstr "Vervaldatum"
+
+msgid "langPostPone"
+msgstr "Uitstellen"
+
+msgid "langLastEdit"
+msgstr "Laatst gewijzigd"
+
+msgid "langLastVisit"
+msgstr "Laatste bezoek"
+
+msgid "langSubscription"
+msgstr "Inschrijving"
+
+msgid "langCourseAccess"
+msgstr "Toegang"
+
+msgid "langConfirmBackup"
+msgstr "Wilt u de cursussite echt back-uppen?"
+
+msgid "langCreateSite"
+msgstr "Cursussite aanmaken"
+
+msgid "langRestoreDescription"
+msgstr "De cursus bevindt zich in een archiefbestand dat u hieronder kunt selecteren.<br /><br />Wanneer u op \"Herstel\" drukt, zal het archief gedecomprimeerd worden en de cursus heraangemaakt."
+
+msgid "langRestoreNotice"
+msgstr "Dit script laat niet toe om automatisch gebruikers te herstellen, maar gegevens die bewaard zijn in \"users.csv\" volstaan voor de administrator om het manueel te doen."
+
+msgid "langAvailableArchives"
+msgstr "Beschikbare archievenlijst"
+
+msgid "langNoArchive"
+msgstr "Geen archief geselecteerd."
+
+msgid "langArchiveNotFound"
+msgstr "Het archief is niet gevonden."
+
+msgid "langArchiveUncompressed"
+msgstr "Het archief is gedecomprimeerd en geïnstalleerd."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "Het bestand \"users.csv\" is in de documentenmodule geladen."
+
+msgid "langBackH"
+msgstr "Terug naar startpagina"
+
+msgid "langOtherCategory"
+msgstr "Andere categorie"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Toegelaten"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Niet toegelaten"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Volledig gesloten, de cursus is enkel toegankelijk voor de cursusbeheerder"
+
+msgid "CourseVisibilityClosed"
+msgstr "Gesloten – geen toegang tot deze cursus"
+
+msgid "CourseVisibilityModified"
+msgstr "Gewijzigd (de instellingen werden gewijzigd via het rollen-rechten systeem)"
+
+msgid "WorkEmailAlert"
+msgstr "Waarschuw via email bij een nieuwe publicatie"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Activeer waarschuwing via email bij een nieuwe studentenpublicatie."
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Desactiveer waarschuwing via email bij nieuwe studentenpublicatie"
+
+msgid "DropboxEmailAlert"
+msgstr "Waarschuwing via email bij nieuw bestand in de Dropbox"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Activeer waarschuwing via email bij nieuw bestand in de Dropbox"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Desactiveer waarschuwing via email bij nieuw bestand in de Dropbox"
+
+msgid "AllowUserEditAgenda"
+msgstr "Gebruikers kunnen de cursusagenda wijzigen"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Wijzgen agenda door gebruikers inschakelen"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Wijzigen agenda door gebruikers uitschakelen"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Gebruikers toelaten aankondigingen te wijzigen"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Wijzigen door gebruikers inschakelen"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Wijzigen door gebruikers uitschakelen"
+
+msgid "OrInTime"
+msgstr "Of binnen"
+
+msgid "CourseRegistrationPassword"
+msgstr "Registratie-wachtwoord voor cursus"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Klik op deze link om alle sporen van de cursus op de server te verwijderen. <br><br> Wees zeer voorzichtig met het gebruik van deze functionaliteit!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Chamilo biedt nu ook de mogelijkheid om een bestaande cursus geheel of gedeeltelijk te kopiëren naar een andere cursus, die aanvankelijk leeg mag zijn.<br><br>De enige voorwaarde voor deze functie is dat u beschikt over een cursus met een aantal documenten, aankondigingen, forums en een tweede cursus die niet dezelfde elementen als de eerste bevat !"
+
+msgid "DescriptionRecycleCourse"
+msgstr "Deze functie verwijdert uit de cursus de geselecteerde onderdelen, of alle onderdelen. Documenten, forums, links... worden verwijderd. Deze procedure kan uitgevoerd worden aan het einde van de opleiding, of na afloop van het academiejaar. Opgelet: alvorens deze \"recycling\" uit te voeren, kunt u best een volledige backup nemen van uw cursus !"
+
+msgid "QuizEmailAlert"
+msgstr "Waarschuwing via email bij nieuwe quiz verzonden"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Activeer waarschuwing via email wanneer een gebruiker een nieuw antwoord instuurt op een quiz"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Desactiveer waarschuwing via email wanneer een gebruiker een nieuw antwoord instuurt op een quiz"
+
+msgid "AllowUserImageForum"
+msgstr "Foto gebruiker in forum"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Foto gebruiker in forum weergeven"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Foto gebruiker in forum verbergen"
+
+msgid "AllowLearningPathTheme"
+msgstr "stijlblad voor leerpad toelaten"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "Toegelaten"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Niet toegelaten"
+
+msgid "ConfigChat"
+msgstr "Chat instellingen"
+
+msgid "AllowOpenchatWindow"
+msgstr "Open de chat in een nieuw venster"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "Toon chatvenster in een nieuw scherm"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "Toon chatvenster in hetzelfde venster"
+
+msgid "NewUserEmailAlert"
+msgstr "Melding van nieuwe zelfinschrijvingen aan de cursusbeheerder"
+
+msgid "NewUserEmailAlertEnable"
+msgstr "Breng de cursusbeheerder op de hoogte van nieuwe zelfinschrijvingen"
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "Breng de cursusbeheerder en tutoren op de hoogte van nieuwe zelfinschrijvingen"
+
+msgid "NewUserEmailAlertDisable"
+msgstr "Breng de beheerders niet op de hoogte"
+

@@ -1,0 +1,180 @@
+msgid "langChapter"
+msgstr "Bölüm"
+
+msgid "langDocumentList"
+msgstr "Belgelerin listesi"
+
+msgid "langOrganisationList"
+msgstr "İçerik tablosu"
+
+msgid "langEditTOC"
+msgstr "İçerik tablosu düzenle"
+
+msgid "langEditDocument"
+msgstr "Düzenle"
+
+msgid "langCreateDocument"
+msgstr "Dosya oluştur"
+
+msgid "langMissingImagesDetected"
+msgstr "Resimler eksik"
+
+msgid "langPublish"
+msgstr "Yayınla"
+
+msgid "langScormcontentstudent"
+msgstr "Bu ders SCORM formatındadır.Çalıştırmak için <input type=button name=scormbutton value=\'TIKLAYIN !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "Bu bir SCORM dosyasıdır.<br><input type=button name=scormbutton value=\'Çalıştır !\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr "zip dosyası sunucuya yüklendi ve açıldı"
+
+msgid "langZipNoPhp"
+msgstr "The zip file can not contain .PHP files"
+
+msgid "langGroupForumLink"
+msgstr "Grup forumu"
+
+msgid "langGroupSpace"
+msgstr "Grup alanı"
+
+msgid "langNotScormContent"
+msgstr "BU bir SCORM Zip dosyası değildir."
+
+msgid "langNoText"
+msgstr "Lütfen metin veya HTML içeriğini yazın"
+
+msgid "langNoFileName"
+msgstr "Lütfen dosya ismini yazınız"
+
+msgid "langMaxFileSize"
+msgstr "En fazla dosya boyutu"
+
+msgid "langFileName"
+msgstr "Dosya ismi"
+
+msgid "langFileError"
+msgstr "Dosya yükleme için geçerli değil"
+
+msgid "langDown"
+msgstr "aşağı"
+
+msgid "langViMod"
+msgstr "Görünürlük değiştirildi"
+
+msgid "langAddComment"
+msgstr "Yorum ekle/değiştir"
+
+msgid "langImpossible"
+msgstr "İşlem yapılamıyor"
+
+msgid "langNewDir"
+msgstr "Yeni dosya ismi"
+
+msgid "langTo"
+msgstr "kopyalanacağı yer"
+
+msgid "langNoSpace"
+msgstr "Yükleme başarısız. Ya maksimum kotanızı aştınız yada yeterli alan yok."
+
+msgid "langDownloadEnd"
+msgstr "Yükleme tamamlandı"
+
+msgid "langFileExists"
+msgstr "İşlem yapılamıyor.<br>Aynı isimde bir dosya var."
+
+msgid "langDocCopied"
+msgstr "Belge kopyalandı"
+
+msgid "langDocDeleted"
+msgstr "Belge silindi"
+
+msgid "langElRen"
+msgstr "Dosya yeniden adlandırıldı"
+
+msgid "langDirMv"
+msgstr "Dosya taşındı"
+
+msgid "langComMod"
+msgstr "Yorum değiştirildi"
+
+msgid "langRename"
+msgstr "Yeniden isimlendir"
+
+msgid "langCopy"
+msgstr "Ders içeriğini kopyala"
+
+msgid "langNameDir"
+msgstr "Yeni dizin adı"
+
+msgid "langDownloadFile"
+msgstr "Sunucuya dosya yükle"
+
+msgid "learning_path_access"
+msgstr "Bir öğrenme yolu Silmek/Düzenlemek/Göstermek/Gizlemek/Oluşturmak/Eklemek  için \'Öğrenme yolu oluştur\' tıkla."
+
+msgid "langRoot"
+msgstr "ana dizin"
+
+msgid "langBuilder"
+msgstr "Öğrenme yol yapıcı"
+
+msgid "lang_edit_learnpath"
+msgstr "kurs düzenle"
+
+msgid "lang_add_title_and_desc"
+msgstr "Başlık ve açıklama düzenle"
+
+msgid "lang_add_learnpath"
+msgstr "Yeni bir KURS ekle"
+
+msgid "lang_learnpath_added"
+msgstr "Yeni bir KURS oluşturuldu. Artı (+) işaretine tıklayarak bölümler ekleyebilirsiniz."
+
+msgid "lang_delete_learnpath"
+msgstr "kurs sil"
+
+msgid "lang_learnpath_edited"
+msgstr "kurs düzenlendi"
+
+msgid "lang_learnpath_deleted"
+msgstr "kurs silindi"
+
+msgid "lang_no_publish"
+msgstr "yayınlama"
+
+msgid "lang_publish"
+msgstr "yayınla"
+
+msgid "lang_no_published"
+msgstr "yayınlanmadı"
+
+msgid "lang_published"
+msgstr "yayınlandı"
+
+msgid "lang_description"
+msgstr "açıklama"
+
+msgid "lang_title"
+msgstr "başlık"
+
+msgid "langScormBuilder"
+msgstr "Yol yapıcı - Scorm biçem ders yapıcı"
+
+msgid "langCreateDoc"
+msgstr "Yeni bir belge oluştur"
+
+msgid "langOrganiseDocuments"
+msgstr "İçerik tablosu oluştur"
+
+msgid "langUncompress"
+msgstr "zip dosyasını sunucuda aç"
+
+msgid "ExportShort"
+msgstr "Export short"
+
+msgid "progress"
+msgstr "İlerleme"
+

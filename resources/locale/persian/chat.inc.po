@@ -1,0 +1,174 @@
+msgid "langOnlineConference"
+msgstr "کنفرانس"
+
+msgid "langWash"
+msgstr "پاک کردن"
+
+msgid "langReset"
+msgstr "ریست کردن"
+
+msgid "langSave"
+msgstr "ارسال پیام"
+
+msgid "langRefresh"
+msgstr "تجدید کردن"
+
+msgid "langIsNowInYourDocDir"
+msgstr "این مدرک هم اکنون در قسمت مدارک قابل رؤیت است"
+
+msgid "langCopyFailed"
+msgstr "کپی کردن مدرک مورد نظر انجام نگرفت"
+
+msgid "langTypeMessage"
+msgstr "لطفاً پیام خود را وارد کنید!"
+
+msgid "langConfirmReset"
+msgstr "آیا واقعاً می خواهید همۀ پیام ها را حذف کنید؟"
+
+msgid "langHasResetChat"
+msgstr "متن گفتگوها را پاک و از نو آغاز کرده است"
+
+msgid "langNoOnlineConference"
+msgstr "در حال حاضر هیچ کنفرانسی وجود ندارد"
+
+msgid "langMediaFile"
+msgstr "پخش زنده صدا و تصویر"
+
+msgid "langContentFile"
+msgstr "سخنرانی"
+
+msgid "langListOfParticipants"
+msgstr "فهرست شرکت کنندگان"
+
+msgid "langYourPicture"
+msgstr "تصویر شما"
+
+msgid "langOnlineDescription"
+msgstr "توضیح کنفرانس"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "لطفاً تنها در صورت مهم بودن پرسش مورد نظر، این گزینه را علامت بزنید"
+
+msgid "langQuestion"
+msgstr "پرسش"
+
+msgid "langClearList"
+msgstr "حذف  لیست"
+
+msgid "langWhiteBoard"
+msgstr "تخته سفید"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>برنامه نگارش متون</h2>در این قسمت میتوانید متونی را که از جای دیگری کپی کرده اید بچسبانید و در صورت دلخواه به تغییر آن بپردازید. افراد متصل تغییرات را به طور زنده خواهند دید"
+
+msgid "langStreaming"
+msgstr "پخش همزمان"
+
+msgid "langStreamURL"
+msgstr "آدرس اینترنتی منبع دریافت"
+
+msgid "langStreamType"
+msgstr "نوع  دریافت"
+
+msgid "langLinkName"
+msgstr "نام پیوند"
+
+msgid "langLinkURL"
+msgstr "آدرس اینترنتی"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "به صفحه کنفرانس آنلاین خوش آمدید"
+
+msgid "langNoLinkAvailable"
+msgstr "هیچ پیوندی موجود نمی باشد"
+
+msgid "langChat_reset_by"
+msgstr "متن گفتگو حذف شد"
+
+msgid "OrFile"
+msgstr "یا فایل"
+
+msgid "langCallSent"
+msgstr "تقاضای گفتگو ارسال گردید. هم اکنون باید منتظر جواب شخص مورد نظر بود"
+
+msgid "langChatDenied"
+msgstr "تقاضای شما برای گفتگو توسط شخص مورد نظر رد گردید"
+
+msgid "Send"
+msgstr "ارسال پیام"
+
+msgid "Connected"
+msgstr "دوستان گفتگو"
+
+msgid "Think"
+msgstr "فکر"
+
+msgid "BigGrin"
+msgstr "لبخند بزرگ"
+
+msgid "Amazing"
+msgstr "شگفت انگیز"
+
+msgid "Confused"
+msgstr "گیج"
+
+msgid "Cool"
+msgstr "خونسرد"
+
+msgid "Surprised"
+msgstr "متعجب"
+
+msgid "Hand"
+msgstr "سلام"
+
+msgid "Wink"
+msgstr "پلک زدن"
+
+msgid "Neutral"
+msgstr "بی طرف"
+
+msgid "Angry"
+msgstr "عصبانی"
+
+msgid "Avid"
+msgstr "مشتاق"
+
+msgid "Redface"
+msgstr "شرمسار"
+
+msgid "Sad"
+msgstr "غمگین"
+
+msgid "Silence"
+msgstr "ساکت"
+
+msgid "Silenced"
+msgstr "ساکت شده"
+
+msgid "Smile"
+msgstr "لبخند"
+
+msgid "Exclamation"
+msgstr "فریاد"
+
+msgid "Arrow"
+msgstr "تیر"
+
+msgid "Question"
+msgstr "سوال"
+
+msgid "Idea"
+msgstr "نظر"
+
+msgid "AskPermissionSpeak"
+msgstr "اجازه صحبت بگیرید"
+
+msgid "GiveTheFloorTo"
+msgstr "محیط را بدهید به"
+
+msgid "Pause"
+msgstr "توقف"
+
+msgid "Stop"
+msgstr "ایست"
+

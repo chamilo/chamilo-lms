@@ -1,0 +1,162 @@
+msgid "Announcement"
+msgstr "Anúncios"
+
+msgid "langAnnEmpty"
+msgstr "A lista de anúncios foi eliminada"
+
+msgid "AnnouncementModified"
+msgstr "O anúncio foi modificado"
+
+msgid "AnnouncementAdded"
+msgstr "O anúncio foi aadicionado"
+
+msgid "AnnouncementDeleted"
+msgstr "O anúncio foi eliminado"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Publicado em"
+
+msgid "AddAnnouncement"
+msgstr "Adicionar como anúncio"
+
+msgid "langContent"
+msgstr "Conteúdo"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Eliminar todos os anúncios"
+
+msgid "professorMessage"
+msgstr "Mensagem do instrutor"
+
+msgid "langEmailSent"
+msgstr "e enviado aos utilizadores registados"
+
+msgid "EmailOption"
+msgstr "Enviar este anúncio por email aos grupos/utilizadores seleccionados"
+
+msgid "langOn"
+msgstr "Em"
+
+msgid "langRegUser"
+msgstr "utilizadores registados do site"
+
+msgid "langUnvalid"
+msgstr "tem um endereço de correio electrónico inválido ou não especificado"
+
+msgid "langModifAnn"
+msgstr "Modificar este anúncio"
+
+msgid "langModify"
+msgstr "Editar"
+
+msgid "langDelete"
+msgstr "eliminar"
+
+msgid "langTitle"
+msgstr "Assunto"
+
+msgid "langHelp"
+msgstr "ajuda"
+
+msgid "langOk"
+msgstr "Validar"
+
+msgid "langAddIntro"
+msgstr "Adicionar texto introdutório"
+
+msgid "langBackList"
+msgstr "Regressar à lista"
+
+msgid "langSelMess"
+msgstr "Avisos para alguns utilizadores"
+
+msgid "EmailTitle"
+msgstr "Assunto"
+
+msgid "langUserlist"
+msgstr "Lista de grupos e utilizadores"
+
+msgid "langSelectedUsers"
+msgstr "Utilizadores seleccionados"
+
+msgid "langSubmit"
+msgstr "Submeter"
+
+msgid "langPleaseEnterMessage"
+msgstr "Tem de introduzir o texto da mensagem."
+
+msgid "langPleaseSelectUsers"
+msgstr "Tem de seleccionar alguns utilizadores."
+
+msgid "Teachersubject"
+msgstr "Mensagem enviada aos utilizadores"
+
+msgid "langMessages"
+msgstr "Mensagens"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Mensagens para utilizadores seleccionados"
+
+msgid "langIntroText"
+msgstr "Para enviar uma mensagem, seleccione grupos de utilizadores (identificados com um G) ou utilizadores individuais da listagem à esquerda."
+
+msgid "langDown"
+msgstr "abaixo"
+
+msgid "langMsgSent"
+msgstr "A mensagem foi enviada aos utilizadores seleccionados"
+
+msgid "langSelUser"
+msgstr "utilizadores seleccionados do site"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Mensagem para grupos seleccionados"
+
+msgid "langSelectedGroups"
+msgstr "Grupos seleccionados"
+
+msgid "langMsg"
+msgstr "Mensagens"
+
+msgid "langYes"
+msgstr "Sim"
+
+msgid "MsgText"
+msgstr "Mensagem"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Todos os anúncios foram eliminados"
+
+msgid "AnnouncementMoved"
+msgstr "O anúncio foi movido"
+
+msgid "NoAnnouncements"
+msgstr "Não existem anúncios"
+
+msgid "SelectEverybody"
+msgstr "Seleccionar Todos"
+
+msgid "SelectedUsersGroups"
+msgstr "grupos de utilizadores seleccionados"
+
+msgid "LearnerMessage"
+msgstr "Mensagem de um utilizador"
+
+msgid "TitleIsRequired"
+msgstr "O título é obrigatório"
+
+msgid "AnnounceSentByEmail"
+msgstr "Anúncio enviado por e-mail"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Anúncio enviado para os utilizadores seleccionados"
+
+msgid "SendAnnouncement"
+msgstr "Enviar anúncio"
+
+msgid "ModifyAnnouncement"
+msgstr "Editar anúncio"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Enviar anúncio"
+

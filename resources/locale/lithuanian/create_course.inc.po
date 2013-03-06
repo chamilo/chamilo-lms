@@ -1,0 +1,291 @@
+msgid "langProfessors"
+msgstr "Dėstytojai"
+
+msgid "langExplanation"
+msgstr "Kai tik nuspausite TAIP, bus sukurtas visas tinklapis su Forumu, Darbotvarke, Dokumentų tvarkykle. Kaip kurso vadovas, galėsite keisti viso kurso turinį pagal savo poreikius."
+
+msgid "langEmpty"
+msgstr "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your course code, see the Course Program"
+
+msgid "langCodeTaken"
+msgstr "Šis kurso kodas jau užimtas<br />Spauskite <b>Atgal</b> mygtuką Jūsų naršyklėje ir bandykite dar kartą"
+
+msgid "langFormula"
+msgstr "Pagarbiai"
+
+msgid "langMessage"
+msgstr "Kada Jūs ištrinsite pavyzdinį forumą, taip pat bus ištrintos visos žinutės, buvusios forume."
+
+msgid "langExerciceEx"
+msgstr "Pavyzdinis testas"
+
+msgid "langAntique"
+msgstr "Irony"
+
+msgid "langSocraticIrony"
+msgstr "Socrates irony is..."
+
+msgid "langManyAnswers"
+msgstr "(daugiau kaip vienas atsakymas gali būti teisingas)"
+
+msgid "langRidiculise"
+msgstr "Ridiculise one\'s interlocutor in order to have him concede he is wrong."
+
+msgid "langNoPsychology"
+msgstr "No. Socratic irony is not a matter of psychology, it concerns argumentation."
+
+msgid "langAdmitError"
+msgstr "Admit one\'s own errors to invite one\'s interlocutor to do the same."
+
+msgid "langNoSeduction"
+msgstr "No. Socratic irony is not a seduction strategy or a method based on the example."
+
+msgid "langForce"
+msgstr "Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know."
+
+msgid "langIndeed"
+msgstr "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\""
+
+msgid "langContradiction"
+msgstr "Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end."
+
+msgid "langNotFalse"
+msgstr "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses."
+
+msgid "langAgenda"
+msgstr "Darbotvarkė"
+
+msgid "langVideo"
+msgstr "Video"
+
+msgid "langCourseProgram"
+msgstr "Kurso aprašymas"
+
+msgid "langAnnouncements"
+msgstr "Pranešimai"
+
+msgid "langAddPageHome"
+msgstr "Įkrauti puslapį ir nuorodą į titulinį"
+
+msgid "langLinkSite"
+msgstr "Įrašyti nuorodą į puslapį tituliniame"
+
+msgid "langModifyInfo"
+msgstr "Kurso nustatymai"
+
+msgid "langCourseDesc"
+msgstr "Kurso aprašymas"
+
+msgid "langAgendaTitle"
+msgstr "Tuesday the 11th of December - First meeting. Room: LIN 18"
+
+msgid "langAgendaText"
+msgstr "General introduction to project management"
+
+msgid "langMicro"
+msgstr "Street interviews"
+
+msgid "langGoogle"
+msgstr "Quick and powerful search engine"
+
+msgid "langIntroductionText"
+msgstr "Čia yra aiškinamasis tekstas. Kad jį pakeisti, spauskite ant pieštuko ikonėlės (tik kurso vadovai)."
+
+msgid "langIntroductionTwo"
+msgstr "Šiame puslapyje publikuojami vartotojų ir jų grupių dokumentai."
+
+msgid "langCourseDescription"
+msgstr "Kurso aprašymas"
+
+msgid "langProfessor"
+msgstr "Dėstytojai"
+
+msgid "langAnnouncementEx"
+msgstr "Tai pranešimo pavyzdys. Tik kursų dėstytojai gali rašyti pranešimus."
+
+msgid "langJustCreated"
+msgstr "Sukūrėte kurso sritį"
+
+msgid "langEnter"
+msgstr "Atgal į kursų sąrašą"
+
+msgid "langGroups"
+msgstr "Grupės"
+
+msgid "langCreateCourseGroups"
+msgstr "Grupės"
+
+msgid "langCatagoryMain"
+msgstr "Pagrindinis"
+
+msgid "langCatagoryGroup"
+msgstr "Grupių forumai"
+
+msgid "langLn"
+msgstr "Kalba"
+
+msgid "langCreateSite"
+msgstr "Sukurti kurso sritį"
+
+msgid "langFieldsRequ"
+msgstr "Būtina užpildyti visus laukelius"
+
+msgid "langEx"
+msgstr "pvz. <i>Innovation management</i>"
+
+msgid "langFac"
+msgstr "Kategorija"
+
+msgid "langTargetFac"
+msgstr "This is the department or any other category where the course is delivered"
+
+msgid "langMax"
+msgstr "max. 20 simbolių, pvz. <i>INNOV21</i>"
+
+msgid "langDoubt"
+msgstr "Jei nežinote kokį kodą rašyti, peržvelkite"
+
+msgid "langProgram"
+msgstr "kurso programą</a>. Jei Jūsų kursas neturi kodo, rašykite susijusį žodį, pvz. <i>INNOVATION</i> jei kursas yra apie Innovation Management"
+
+msgid "langScormtool"
+msgstr "Mokymosi medžiaga"
+
+msgid "langScormbuildertool"
+msgstr "Scorm kūrimo įrankis"
+
+msgid "langPathbuildertool"
+msgstr "Mokymosi medžiagos kūrimo įrankis"
+
+msgid "langOnlineConference"
+msgstr "Konferencija"
+
+msgid "langAgendaCreationTitle"
+msgstr "Kurso sukūrimas"
+
+msgid "langAgendaCreationContenu"
+msgstr "Kursas sukurtas."
+
+msgid "langOnlineDescription"
+msgstr "Konferencijos aprašymas"
+
+msgid "langDropbox"
+msgstr "Failų saugykla"
+
+msgid "langOnly"
+msgstr "Tik"
+
+msgid "langRandomLanguage"
+msgstr "Shuffle selection in aivailable languages"
+
+msgid "langImages"
+msgstr "Paveikslėliai"
+
+msgid "langAudio"
+msgstr "Audio"
+
+msgid "langFlash"
+msgstr "Flash"
+
+msgid "langForumLanguage"
+msgstr "anglų"
+
+msgid "langNewCourse"
+msgstr "Nauja kurso sritis"
+
+msgid "langAddNewCourse"
+msgstr "Įrašyti naują kursų sritį"
+
+msgid "langRestoreCourse"
+msgstr "Atkurti kursą"
+
+msgid "langOtherProperties"
+msgstr "Archyve rastos kitos savybės"
+
+msgid "langSysId"
+msgstr "Sistemos ID"
+
+msgid "langDepartment"
+msgstr "Padalinys"
+
+msgid "langDepartmentUrl"
+msgstr "Padalinio URL"
+
+msgid "langScoreShow"
+msgstr "Peržiūrėti įvertinimus"
+
+msgid "langVisibility"
+msgstr "Matomumas"
+
+msgid "langVersionDb"
+msgstr "Database version used at archive time"
+
+msgid "langLastVisit"
+msgstr "Paskutinis vizitas"
+
+msgid "langLastEdit"
+msgstr "Paskutinis redagavimas"
+
+msgid "langExpire"
+msgstr "Galiojimo terminas"
+
+msgid "langChoseFile"
+msgstr "Pasirinkti failą"
+
+msgid "langFtpFileTips"
+msgstr "Failas FTP serveryje"
+
+msgid "langHttpFileTips"
+msgstr "Failas Web (HTTP) serveryje"
+
+msgid "langLocalFileTips"
+msgstr "Failas sistemos serveryje"
+
+msgid "langPostFileTips"
+msgstr "Failas Jūsų kompiuteryje"
+
+msgid "langOtherCategory"
+msgstr "Kita kategorija"
+
+msgid "langMinimum"
+msgstr "minimumas"
+
+msgid "langMaximum"
+msgstr "maksimalus"
+
+msgid "langRestoreACourse"
+msgstr "atkurti kursą"
+
+msgid "langBackup"
+msgstr "Archyvuoti"
+
+msgid "langCopy"
+msgstr "Kopijuoti kurso turinį"
+
+msgid "langRecycle"
+msgstr "Ištrinti kursą"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Tai pranešimo pavyzdys"
+
+msgid "Wikipedia"
+msgstr "Nemokama enciklopedija"
+
+msgid "DefaultGroupCategory"
+msgstr "Grupės pagal nutylėjimą"
+
+msgid "DefaultCourseImages"
+msgstr "Galerija"
+
+msgid "ExampleForumCategory"
+msgstr "Forumo kategorijos pavyzdys"
+
+msgid "ExampleForum"
+msgstr "Forumo pavyzdys"
+
+msgid "ExampleThread"
+msgstr "Diskusijos pavyzdys"
+
+msgid "ExampleThreadContent"
+msgstr "Turinio pavyzdys"
+

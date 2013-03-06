@@ -1,0 +1,315 @@
+msgid "Camera"
+msgstr "鏡頭"
+
+msgid "Microphone"
+msgstr "麥克風"
+
+msgid "Name"
+msgstr "名稱"
+
+msgid "DeleteStream"
+msgstr "刪除串流"
+
+msgid "Progress"
+msgstr "進程"
+
+msgid "Play"
+msgstr "插放"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Record"
+msgstr "錄製"
+
+msgid "NoFileAvailable"
+msgstr "沒有可用檔案"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "只供教師使用之錄製品"
+
+msgid "UsersNow"
+msgstr "目前的使用者："
+
+msgid "StartConference"
+msgstr "開始會議"
+
+msgid "MyName"
+msgstr "我的名字"
+
+msgid "OrganisationSVideoconference"
+msgstr "Chamilo 視像會議"
+
+msgid "ImportPresentation"
+msgstr "匯入簡報"
+
+msgid "RefreshList"
+msgstr "刷新清單"
+
+msgid "GoToTop"
+msgstr "前往頂部"
+
+msgid "NewPoll"
+msgstr "新投票"
+
+msgid "CreateNewPoll"
+msgstr "在本會議室建立新投票"
+
+msgid "Question"
+msgstr "問題"
+
+msgid "PollType"
+msgstr "投票類型"
+
+msgid "Create"
+msgstr "創建"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "資訊：每個已連到本會議室的使用者都會收到新投票的通知"
+
+msgid "YesNo"
+msgstr "是 / 否"
+
+msgid "Numeric1To10"
+msgstr "數字 1 - 10"
+
+msgid "Poll"
+msgstr "投票"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "要建立投票，你先要成為本會議室的主持人。"
+
+msgid "YourVoteHasBeenSent"
+msgstr "你的投票已被傳送"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "你已在本題進行過投票"
+
+msgid "VoteButton"
+msgstr "投票！"
+
+msgid "YourAnswer"
+msgstr "你的答案："
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "WantsToKnow"
+msgstr "想知道："
+
+msgid "PollResults"
+msgstr "投票結果"
+
+msgid "Votes"
+msgstr "投票："
+
+msgid "Result"
+msgstr "成績"
+
+msgid "ThereIsNoPoll"
+msgstr "沒有投票題目。"
+
+msgid "MeetingMode"
+msgstr "會議(最多 4 個席位)"
+
+msgid "ConferenceMaxSeats"
+msgstr "研討會(最多 50 席位)"
+
+msgid "Mode"
+msgstr "模式"
+
+msgid "RemainingSeats"
+msgstr "餘下席位"
+
+msgid "AlreadyIn"
+msgstr "已進入"
+
+msgid "CheckIn"
+msgstr "登記進入"
+
+msgid "TheModeratorHasLeft"
+msgstr "會議主持人已離開這房間。"
+
+msgid "SystemMessage"
+msgstr "系統訊息"
+
+msgid "ChooseDevices"
+msgstr "選擇設備"
+
+msgid "ChooseCam"
+msgstr "選擇鏡頭"
+
+msgid "ChooseMic"
+msgstr "選擇麥克風"
+
+msgid "OK"
+msgstr "通過"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "你要重新連線以使改變生效。"
+
+msgid "ChangeSettings"
+msgstr "改變設定"
+
+msgid "Course"
+msgstr "課程"
+
+msgid "CourseLanguage"
+msgstr "課程語言："
+
+msgid "ConfirmClearWhiteboard"
+msgstr "確定清刷白板"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "在我加上新圖像前，是否要先清刷白板？"
+
+msgid "DontAskMeAgain"
+msgstr "別再問我"
+
+msgid "EditSettings"
+msgstr "編輯設定"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "清刷白板前要求確定"
+
+msgid "UserInfo"
+msgstr "用戶訊息"
+
+msgid "ClearDrawArea"
+msgstr "清理繪圖區"
+
+msgid "Undo"
+msgstr "復原"
+
+msgid "Redo"
+msgstr "重做"
+
+msgid "SelectAnObject"
+msgstr "選擇一件物件"
+
+msgid "Text"
+msgstr "文字"
+
+msgid "Paint"
+msgstr "髹漆"
+
+msgid "DrawLine"
+msgstr "畫線"
+
+msgid "DrawUnderline"
+msgstr "畫下標線"
+
+msgid "Rectangle"
+msgstr "矩形"
+
+msgid "Elipse"
+msgstr "橢圓形"
+
+msgid "Arrow"
+msgstr "箭頭"
+
+msgid "DeleteChosenItem"
+msgstr "刪除選取項目"
+
+msgid "ApplyForModeration"
+msgstr "申請作主持"
+
+msgid "Apply"
+msgstr "申請"
+
+msgid "BecomeModerator"
+msgstr "成為主持人"
+
+msgid "Close"
+msgstr "封閉"
+
+msgid "Italic"
+msgstr "斜體"
+
+msgid "Bold"
+msgstr "粗體"
+
+msgid "Waiting"
+msgstr "等候"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "一位使用者欲申請成為主持人："
+
+msgid "Accept"
+msgstr "接受"
+
+msgid "Reject"
+msgstr "拒絕"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "向以下使用者發出請求"
+
+msgid "Accepted"
+msgstr "已接受"
+
+msgid "Rejected"
+msgstr "已拒絕"
+
+msgid "ChangeModerator"
+msgstr "更換主持人"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "你不是這課程的主持人！"
+
+msgid "Moderator"
+msgstr "主持人："
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "對不起，這會議室人數已滿，請稍後再試。"
+
+msgid "Loading"
+msgstr "下載中"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "正下載圖片，請稍候。"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "正進行研討會成員同步"
+
+msgid "Trainer"
+msgstr "指導員"
+
+msgid "Learner"
+msgstr "學員"
+
+msgid "Chat"
+msgstr "聊天"
+
+msgid "Slides"
+msgstr "幻燈片"
+
+msgid "WaitingForParticipants"
+msgstr "等候參加者"
+
+msgid "Send"
+msgstr "已傳送"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "ChooseFile"
+msgstr "選取要匯入的檔案"
+
+msgid "ConvertingDocument"
+msgstr "轉換文件"
+
+msgid "Disconnected"
+msgstr "中斷連線"
+
+msgid "FineStroke"
+msgstr "幼"
+
+msgid "MediumStroke"
+msgstr "中等"
+
+msgid "ThickStroke"
+msgstr "粗"
+

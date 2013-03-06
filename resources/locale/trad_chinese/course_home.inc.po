@@ -1,0 +1,69 @@
+msgid "langActivate"
+msgstr "公開"
+
+msgid "langDeactivate"
+msgstr "隱藏"
+
+msgid "langInLnk"
+msgstr "隱藏的工具"
+
+msgid "langDelLk"
+msgstr "確定要移除這連結嗎?"
+
+msgid "langCourseCreate"
+msgstr "創建課程"
+
+msgid "langNameOfTheLink"
+msgstr "鏈接名稱"
+
+msgid "lang_main_categories_list"
+msgstr "主分類清單"
+
+msgid "langCourseAdminOnly"
+msgstr "教師"
+
+msgid "PlatformAdminOnly"
+msgstr "只限平台管理員"
+
+msgid "langCombinedCourse"
+msgstr "合併的課程"
+
+msgid "ToolIsNowVisible"
+msgstr "這工具現已顯示"
+
+msgid "ToolIsNowHidden"
+msgstr "這工具現已隱藏"
+
+msgid "EditLink"
+msgstr "編輯連結"
+
+msgid "Blog_management"
+msgstr "管理網誌"
+
+msgid "Forum"
+msgstr "討論區"
+
+msgid "Course_maintenance"
+msgstr "課程維護"
+
+msgid "TOOL_SURVEY"
+msgstr "調查"
+
+msgid "GreyIcons"
+msgstr "工具箱"
+
+msgid "Interaction"
+msgstr "互動"
+
+msgid "Authoring"
+msgstr "寫作"
+
+msgid "Administration"
+msgstr "管理"
+
+msgid "IntroductionTextUpdated"
+msgstr "已更新簡介文字"
+
+msgid "IntroductionTextDeleted"
+msgstr "已刪除簡介文字"
+

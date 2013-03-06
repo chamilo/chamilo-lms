@@ -1,0 +1,48 @@
+msgid "lang_new_item"
+msgstr "Nowy punkt został dodany"
+
+msgid "TitleNotification"
+msgstr "Od ostatniej wizyty"
+
+msgid "lang_update_agenda"
+msgstr "Istniejący porządek dzienny został zaktualizowny"
+
+msgid "lang_new_agenda"
+msgstr "Punkt porządku dziennego został dodany"
+
+msgid "lang_update_announcements"
+msgstr "Istniejące ogłoszenia zostały zaktualizowane"
+
+msgid "lang_new_announcements"
+msgstr "Nowe ogłoszenie zostało dodane"
+
+msgid "lang_new_document"
+msgstr "Nowy dokumenty(y) został(y) dodane"
+
+msgid "lang_new_exercise"
+msgstr "Nowy test został dodany"
+
+msgid "lang_update_link"
+msgstr "Istniejący odnośnik został zaktualizowany"
+
+msgid "lang_new_link"
+msgstr "Nowy odnośnik został dodany"
+
+msgid "lang_new_forum_topic"
+msgstr "Nowy temat został dodany"
+
+msgid "lang_new_groupforum_topic"
+msgstr "Nowy temat został dodany do Forum Grupy"
+
+msgid "lang_new_dropbox_file"
+msgstr "otrzymano nowy plik"
+
+msgid "lang_update_dropbox_file"
+msgstr "plik w Twojej skrzynce nadawczej został zaktualizowany"
+
+msgid "ForumCategoryAdded"
+msgstr "Kategoria forów została dodana"
+
+msgid "LearnpathAdded"
+msgstr "Ścieżka nauki została dodana"
+

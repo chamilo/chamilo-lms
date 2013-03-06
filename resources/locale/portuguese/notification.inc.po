@@ -1,0 +1,93 @@
+msgid "lang_new_item"
+msgstr "novo item adicionado"
+
+msgid "TitleNotification"
+msgstr "Desde a última visita"
+
+msgid "lang_update_agenda"
+msgstr "evento actualizado"
+
+msgid "lang_new_agenda"
+msgstr "evento adicionado"
+
+msgid "lang_update_announcements"
+msgstr "actualizado o anúncio existente"
+
+msgid "lang_new_announcements"
+msgstr "novo anúncio adicionado"
+
+msgid "lang_new_document"
+msgstr "novo(s) documentos(s) adicionado"
+
+msgid "lang_new_exercise"
+msgstr "novo exercício activado"
+
+msgid "lang_update_link"
+msgstr "actualizada a ligação/link existente"
+
+msgid "lang_new_link"
+msgstr "nova ligação/link adicionada"
+
+msgid "lang_new_forum_topic"
+msgstr "novo tópico adicionado"
+
+msgid "lang_new_groupforum_topic"
+msgstr "novo tópico adicionado ao grupo do fórum"
+
+msgid "lang_new_dropbox_file"
+msgstr "novo ficheiro recebido"
+
+msgid "lang_update_dropbox_file"
+msgstr "um ficheiro na caixa de entrega foi actualizado"
+
+msgid "ForumCategoryAdded"
+msgstr "A categoria do fórum foi adicionada"
+
+msgid "LearnpathAdded"
+msgstr "Curso adicionado"
+
+msgid "GlossaryAdded"
+msgstr "Adicionado um novo termo ao Glossário"
+
+msgid "QuizQuestionAdded"
+msgstr "Adicionada uma nova pergunta ao questionário"
+
+msgid "QuizQuestionUpdated"
+msgstr "Actualizada a nova pergunta no Questionário"
+
+msgid "QuizQuestionDeleted"
+msgstr "Eliminada a nova pergunta no Questionário"
+
+msgid "QuizUpdated"
+msgstr "Questionário actualizado"
+
+msgid "QuizAdded"
+msgstr "Questionário adicionado"
+
+msgid "QuizDeleted"
+msgstr "Questionário eliminado"
+
+msgid "DocumentInvisible"
+msgstr "Documento invisível"
+
+msgid "DocumentVisible"
+msgstr "Documento visível"
+
+msgid "CourseDescriptionAdded"
+msgstr "Descrição do curso adicionada"
+
+msgid "WikiAdded"
+msgstr "Wiki adicionado"
+
+msgid "SurveyAdded"
+msgstr "Inquérito adicionado"
+
+msgid "NotebookAdded"
+msgstr "Nota adicionada"
+
+msgid "NotebookUpdated"
+msgstr "Nota actualizada"
+
+msgid "NotebookDeleted"
+msgstr "Nota eliminada"
+

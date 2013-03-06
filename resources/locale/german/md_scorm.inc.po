@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "obsolete Sprachvariable"
+
+msgid "langMdCallingTool"
+msgstr "Dokumente"
+
+msgid "langTool"
+msgstr "Dokument-Metadaten"
+
+msgid "langNotInDB"
+msgstr "keine solche Link-Kategorie vorhanden"
+
+msgid "langManifestSyntax"
+msgstr "(Syntaxfehler in Manifest-Datei ...)"
+
+msgid "langEmptyManifest"
+msgstr "(leere Manifest-Datei ...)"
+
+msgid "langNoManifest"
+msgstr "(keine Manifest-Datei ...)"
+
+msgid "langNotFolder"
+msgstr "ist nicht möglich, es handelt sich nicht um ein Verzeichnis ..."
+
+msgid "langUploadHtt"
+msgstr "HTT-Datei Upload"
+
+msgid "langHttFileNotFound"
+msgstr "Neue HTT-Datei konnte nicht geöffnet werden (z.B. leer, zu groß)"
+
+msgid "langHttOk"
+msgstr "Neue HTT-Datei wurde hochgeladen"
+
+msgid "langHttNotOk"
+msgstr "Upload der HTT-Datei ist fehlgeschlagen"
+
+msgid "langRemoveHtt"
+msgstr "HTT-Datei entfernen"
+
+msgid "langHttRmvOk"
+msgstr "HTT-Datei wurde entfernt"
+
+msgid "langHttRmvNotOk"
+msgstr "Löschen der HTT-Datei ist fehlgeschlagen"
+
+msgid "langImport"
+msgstr "Importieren"
+
+msgid "langRemove"
+msgstr "Metadaten-Einträge entfernen"
+
+msgid "langAllRemovedFor"
+msgstr "Alle Einträge wurden aus Kategorie entfernt"
+
+msgid "langIndex"
+msgstr "Wörter indizieren"
+
+msgid "langTotalMDEs"
+msgstr "Gesamtzahl der Link Metadaten-Einträge:"
+
+msgid "langMainMD"
+msgstr "Haupt Metadaten-Einträge  öffnen"
+
+msgid "langLines"
+msgstr "Zeilen"
+
+msgid "langPlay"
+msgstr "index.php öffnen"
+
+msgid "langNonePossible"
+msgstr "Es sind keine Metadaten-Aktionen möglich"
+
+msgid "langOrElse"
+msgstr "Eine Link-Kategorie auswählen"
+
+msgid "langWorkWith"
+msgstr "Mit SCORM Verzeichnis arbeiten"
+
+msgid "langSDI"
+msgstr "... SCOMR Verzeichnis mit SD-ID erstellen (und Manifest splitten - oder leer lassen)"
+
+msgid "langRoot"
+msgstr "Wurzelverzeichnis"
+
+msgid "langSplitData"
+msgstr "Manifests splitten, und #MDe, falls vorhanden:"
+
+msgid "langMffNotOk"
+msgstr "Ersetzen der Manifest-Datei ist fehlgeschlagen"
+
+msgid "langMffOk"
+msgstr "Manifest-Datei wurde ersetzt"
+
+msgid "langMffFileNotFound"
+msgstr "Neue Manifest-Datei konnte nicht geöffnet werden (z.B. leer, zu groß)"
+
+msgid "langUploadMff"
+msgstr "Manifest-Datei ersetzen"
+

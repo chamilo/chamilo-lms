@@ -1,0 +1,1305 @@
+msgid "AdminBy"
+msgstr "บริหารระบบโดย"
+
+msgid "AdministrationTools"
+msgstr "การจัดการ"
+
+msgid "State"
+msgstr "สถานะของระบบ"
+
+msgid "Statistiques"
+msgstr "สถิติ"
+
+msgid "VisioHostLocal"
+msgstr "เครื่องแม่ข่ายบริการประชุมออนไลน์"
+
+msgid "VisioRTMPIsWeb"
+msgstr "แม้ว่าโปรโตคอลของ videoconference นั้นต้่องขึ้นอยู่กับเว็บ (ผิดเวลาไปมาก)"
+
+msgid "langUsed"
+msgstr "ใช้แล้ว"
+
+msgid "langPresent"
+msgstr "การตรวจสอบ"
+
+msgid "langMissing"
+msgstr "หายไป"
+
+msgid "langExist"
+msgstr "มีอยู่แล้ว"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "แสดงชื่อผู้สอนในรายวิชา"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "แสดงชื่อผู้สอนในรายวิชาที่มีการแสดงความคิดเห็น"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "แสดงรหัสรายวิชาในรายวิชาที่มีการแสดงความคิดเห็น"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "แสดงรหัสรายวิชาในชื่อรายวิชา"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "�ѧ����ա���Դ����Ԫ�����ҹ��"
+
+msgid "ConfigureHomePage"
+msgstr "ตั้งค่าหน้าแรกของเว็ปไซท์"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "ให้หน่วยการเรียนใช้งานได้เมื่อมีการสร้างรายวิชาขึ้นใหม่"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "เครื่องมือใดจะใช้งานได้เป็นค่าเริ่มต้นโดยปริยาย ต่อเมื่อมีการสร้างรายวิชาแล้ว"
+
+msgid "langCourseBackup"
+msgstr "ทำการสำรองข้อมูลรายวิชานี้"
+
+msgid "langCourseTitular"
+msgstr "อาจารย์ผู้สอน"
+
+msgid "langCourseTitle"
+msgstr "ชื่อรายวิชา"
+
+msgid "langCourseFaculty"
+msgstr "ประเภทรายวิชา"
+
+msgid "langCourseDepartment"
+msgstr "หลักสูตรภาควิชา/หมวดวิชา"
+
+msgid "langCourseDepartmentURL"
+msgstr "ที่อยู่เว็ปไซท์ของหน่วยงาน"
+
+msgid "langCourseLanguage"
+msgstr "ภาษาที่ใช้ในรายวิชา"
+
+msgid "langCourseAccess"
+msgstr "การเข้าเรียนในวิชา"
+
+msgid "langCourseSubscription"
+msgstr "การสมัครเข้าเรียน"
+
+msgid "langPublicAccess"
+msgstr "เปิดให้เข้าเรียนแบบสาธารณะ"
+
+msgid "langPrivateAccess"
+msgstr "เปิดให้เข้าเรียนเป็นส่วนบุคคล"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "การบริหารจัดการระบบฐานข้อมูล อนุญาตเฉพาะผู้บริหารเครื่องแม่ข่ายบริการ"
+
+msgid "langShowUsersOfCourse"
+msgstr "แสดงชื่อสมาชิกที่สมัครเข้าเรียนในรายวิชา"
+
+msgid "langShowClassesOfCourse"
+msgstr "แสดงชื่อหมู่เรียนที่สมัครเรียนในรายวิชานี้"
+
+msgid "langShowGroupsOfCourse"
+msgstr "แสดงกลุ่มของรายวิชา"
+
+msgid "langPhone"
+msgstr "โทรศัพท์"
+
+msgid "langPhoneNumber"
+msgstr "เบอร์โทรศัพท์"
+
+msgid "langActions"
+msgstr "สิทธิฐานะ"
+
+msgid "langAddToCourse"
+msgstr "เพิ่มเข้าในรายวิชา"
+
+msgid "langDeleteFromPlatform"
+msgstr "เอาออกจากระบบบริหารจัดการ"
+
+msgid "langDeleteCourse"
+msgstr "ลบรายวิชาที่เลือก"
+
+msgid "langDeleteFromCourse"
+msgstr "ถอดถอนการสมัครรายวิชา"
+
+msgid "langDeleteSelectedClasses"
+msgstr "ลบหมู่เรียนที่เลือก"
+
+msgid "langDeleteSelectedGroups"
+msgstr "ลบกลุ่มเรียนที่เลือก"
+
+msgid "langAdministrator"
+msgstr "ผู้ดูแลระบบ"
+
+msgid "langAddPicture"
+msgstr "ใส่ภาพ"
+
+msgid "langChangePicture"
+msgstr "เปลี่ยนภาพ"
+
+msgid "langDeletePicture"
+msgstr "ลบภาพ"
+
+msgid "langAddUsers"
+msgstr "เพิ่มชื่อผู้ใช้"
+
+msgid "langAddGroups"
+msgstr "เพิ่มกลุ่มเรียน"
+
+msgid "langAddClasses"
+msgstr "เพิ่มหมู่เรียน"
+
+msgid "langExportUsers"
+msgstr "ส่งออกรายชื่อผู้ใช้"
+
+msgid "langKeyword"
+msgstr "คำสำคัญ"
+
+msgid "langGroupName"
+msgstr "ชื่อกลุ่ม"
+
+msgid "langGroupTutor"
+msgstr "กลุ่มผู้ช่วยสอน"
+
+msgid "langGroupDescription"
+msgstr "รายละเอียดกลุ่ม"
+
+msgid "langNumberOfParticipants"
+msgstr "จำนวนผู้ร่วมงาน"
+
+msgid "langNumberOfUsers"
+msgstr "จำนวนสมาชิกผู้ใช้"
+
+msgid "langMaximum"
+msgstr "มากที่สุด"
+
+msgid "langMaximumOfParticipants"
+msgstr "จำนวนผู้ร่วมงานมากที่สุด"
+
+msgid "langParticipants"
+msgstr "ผู้ร่วมงาน"
+
+msgid "langFirstLetterClass"
+msgstr "อักษรนำหน้า(หมู่เรียน)"
+
+msgid "langFirstLetterUser"
+msgstr "อักษรนำหน้า(นามสกุล)"
+
+msgid "langFirstLetterCourse"
+msgstr "อักษรนำหน้า(รัหสวิชา)"
+
+msgid "langModifyUserInfo"
+msgstr "แก้ไขข้อมูลสมาชิก"
+
+msgid "langModifyClassInfo"
+msgstr "แก้ไขข้อมูลหมู่เรียน"
+
+msgid "langModifyGroupInfo"
+msgstr "แก้ไขข้อมูลกลุ่มเรียน"
+
+msgid "langModifyCourseInfo"
+msgstr "แก้ไขข้อมูลรายวิชา"
+
+msgid "langPleaseEnterClassName"
+msgstr "กรุณาใส่ชื่อหมู่เรียน!"
+
+msgid "langPleaseEnterLastName"
+msgstr "กรุณาใส่นามสกุลของผู้ใช้"
+
+msgid "langPleaseEnterFirstName"
+msgstr "กรุณาใส่ชื่อของผู้ใช้"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "กรุณาใส่ที่อยู่อีเมลให้ถูกต้องและสมบูรณ์แบบ"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "กรุณาใส่ชื่อผู้ใช้ให้ถูกต้อง"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "กรุณาใส่รหัสวิชา"
+
+msgid "langPleaseEnterTitularName"
+msgstr "กรุณาใส่ชื่ออาจารย์ผู้สอน"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "กรุณาใส่ชื่อวิชา"
+
+msgid "langAcceptedPictureFormats"
+msgstr "รูปแบบไฟล์ภาพที่ระบบยอมรับและแสดงผลได้คือสกุล .jpg .png .gif"
+
+msgid "langLoginAlreadyTaken"
+msgstr "���ͼ�������駹�� �ռ�����������"
+
+msgid "langImportUserListXMLCSV"
+msgstr "นำเข้ารายชื่อผู้ใช้จากไฟล์รูปแบบ xml/csv"
+
+msgid "langExportUserListXMLCSV"
+msgstr "ส่งออกรายชื่อผู้ใช้เป็นไฟล์รูปแบบ xml/csv"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "เฉพาะผู้ใช้ในรายวิชา"
+
+msgid "langAddClassesToACourse"
+msgstr "เพิ่มหมู่เรียนในรายวิชา"
+
+msgid "langAddUsersToACourse"
+msgstr "เพิ่มผู้ใช้เข้ารายวิชา"
+
+msgid "langAddUsersToAClass"
+msgstr "เพิ่มผู้ใช้ในหมู่เรียน"
+
+msgid "langAddUsersToAGroup"
+msgstr "เพิ่มผู้ใช้เข้ากลุ่ม"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "คุณต้องเลือกอย่างน้อย 1 หมู่เรียนและ 1 รายวิชา"
+
+msgid "AtLeastOneUser"
+msgstr "คุณต้องเลือกอย่างน้อย 1 ผู้ใช้"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "คุณต้องเลือกอย่างน้อย 1 ผู้ใช้และ 1 รายวิชา"
+
+msgid "langClassList"
+msgstr "รายชื่อหมู่เรียน"
+
+msgid "langUserList"
+msgstr "รายชื่อผู้ใช้"
+
+msgid "langCourseList"
+msgstr "รายชื่อวิชา"
+
+msgid "langAddToThatCourse"
+msgstr "เพิ่มเข้าไปในรายวิชานี้"
+
+msgid "langAddToClass"
+msgstr "เพิ่มเข้าในหมู่เรียน"
+
+msgid "langRemoveFromClass"
+msgstr "เอาออกจากหมู่เรียน"
+
+msgid "langAddToGroup"
+msgstr "เพิ่มเข้าในกลุ่ม"
+
+msgid "langRemoveFromGroup"
+msgstr "เอาออกจากกลุ่ม"
+
+msgid "langUsersOutsideClass"
+msgstr "ผู้ใช้ที่ไม่สังกัดหมู่เรียน"
+
+msgid "langUsersInsideClass"
+msgstr "ผู้ใช้สังกัดหมู่เรียน"
+
+msgid "langUsersOutsideGroup"
+msgstr "ผู้ใช้ที่ไม่สังกัดกลุ่ม"
+
+msgid "langUsersInsideGroup"
+msgstr "ผู้ใช้ที่สังกัดในกลุ่ม"
+
+msgid "langImportFileLocation"
+msgstr "ที่อยู่ของไฟล์ csv/xml"
+
+msgid "langFileType"
+msgstr "ประเภทไฟล์"
+
+msgid "langOutputFileType"
+msgstr "ประเภทไฟล์ส่งออก"
+
+msgid "langMustUseSeparator"
+msgstr "ต้องใช้เครื่องหมาย ; เป็นตัวคั่น"
+
+msgid "langCSVMustLookLike"
+msgstr "ไฟล์ csv ต้องดูเหมือนอย่างนี้"
+
+msgid "langXMLMustLookLike"
+msgstr "ไฟล์ xml ต้องดูเหมือนอย่างนี้"
+
+msgid "langMandatoryFields"
+msgstr "รูปแบบคำสั่ง<strong>bold</strong>คือให้เป็นตัวหนา"
+
+msgid "langNotXML"
+msgstr "ไฟล์ที่ระบุนี้ไม่ใช่รูปแบบของไฟล์ xml"
+
+msgid "langNotCSV"
+msgstr "ไฟล์ที่ระบุไม่ใช่ไฟล์รูปแบบ csv"
+
+msgid "langNoNeededData"
+msgstr "ไฟล์ที่ระบุ ไม่มีข้อมูลที่ตรงกับความต้องการ"
+
+msgid "langMaxImportUsers"
+msgstr "อนุญาตให้นำเข้ารายชื่อผู้ใช้ได้ครั้งละไม่เกิน 500 คน"
+
+msgid "langAdminDatabases"
+msgstr "ฐานข้อมูล(phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "ผู้ใช้ในระบบ"
+
+msgid "langAdminClasses"
+msgstr "หมู่เรียน"
+
+msgid "langAdminGroups"
+msgstr "กลุ่มผู้ใช้"
+
+msgid "langAdminCourses"
+msgstr "รายวิชา"
+
+msgid "langAdminCategories"
+msgstr "ประเภทรายวิชา"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "รับลงทะเบียนผู้ใช้/กลุ่มเข้าในรายวิชา"
+
+msgid "AddACategory"
+msgstr "เพิ่มเติมประเภท"
+
+msgid "langInto"
+msgstr "เข้าใน"
+
+msgid "langNoCategories"
+msgstr "�ѧ����ա�èѴ������"
+
+msgid "langAllowCoursesInCategory"
+msgstr "อนุญาตให้เพิ่มรายวิชาในประเภทนี้"
+
+msgid "langGoToForum"
+msgstr "ไปที่การอภิปราย"
+
+msgid "langCategoryCode"
+msgstr "รหัสประเภท"
+
+msgid "langCategoryName"
+msgstr "ชื่อประเภท"
+
+msgid "langCategories"
+msgstr "ประเภทวิชา"
+
+msgid "langEditNode"
+msgstr "แก้ไขประเภทนี้"
+
+msgid "langOpenNode"
+msgstr "เปิดประเภทนี้"
+
+msgid "langDeleteNode"
+msgstr "ลบประเภทนี้"
+
+msgid "langAddChildNode"
+msgstr "เพิ่มหัวข้อย่อยในประเภท"
+
+msgid "langViewChildren"
+msgstr "ดูแผนผังโครงสร้างไฟล์ย่อย"
+
+msgid "langTreeRebuildedIn"
+msgstr "สร้างโครงสร้างไฟล์รูปแบบแผนภูมิต้นไม้ ใหม่ใน"
+
+msgid "langTreeRecountedIn"
+msgstr "นับแผนภูมิโครงสร้างไฟล์แบบต้นไม้ ใหม่ใน"
+
+msgid "langRebuildTree"
+msgstr "สร้างโครงสร้างไฟล์รูปแบบแผนภูมิต้นไม้ ใหม่"
+
+msgid "langRefreshNbChildren"
+msgstr "กะพริบจอดูแผนผังโครงสร้างไฟล์ย่อยใหม่"
+
+msgid "langShowTree"
+msgstr "แสดงโครงสร้างไฟล์รูปแบบแผนภูมิต้นไม้"
+
+msgid "langBack"
+msgstr "ย้อนกลับไปหน้าที่ผ่านมา"
+
+msgid "langLogDeleteCat"
+msgstr "ลบประเภท"
+
+msgid "langRecountChildren"
+msgstr "นับดูแผนผังโครงสร้างไฟล์ย่อยใหม่"
+
+msgid "langUpInSameLevel"
+msgstr "ปรับมาระดับเดียวกัน"
+
+msgid "langSeconds"
+msgstr "วินาที"
+
+msgid "langMailTo"
+msgstr "ส่งอีเมลถึง"
+
+msgid "lang_no_access_here"
+msgstr "ห้ามเข้า"
+
+msgid "lang_php_info"
+msgstr "ข้อมูลเกี่ยวกับระบบ"
+
+msgid "langAddAdminInApache"
+msgstr "เพิ่มผู้ดูแลระบบ"
+
+msgid "langAddFaculties"
+msgstr "เพิ่มประเภท"
+
+msgid "langSearchACourse"
+msgstr "ค้นหารายวิชา"
+
+msgid "langSearchAUser"
+msgstr "ค้นหาผู้ใช้"
+
+msgid "langTechnicalTools"
+msgstr "เทคนิค"
+
+msgid "langConfig"
+msgstr "ตั้งค่าระบบ"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "บันทึกการเข้าใช้งานระบบ"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "แสดงจำนวนสมาชิกในรายการแถบเลื่อนไว้มากที่สุด"
+
+msgid "PageAfterLoginTitle"
+msgstr "หน้าที่แสดงเมื่อเข้าใช้ระบบ"
+
+msgid "PageAfterLoginComment"
+msgstr "หน้าที่ให้เห็นเฉพาะสมาชิกที่กำลังเชื่อมต่อ"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Chamilo Web"
+
+msgid "GlobalRole"
+msgstr "Global Role"
+
+msgid "langNomOutilTodo"
+msgstr "สิ่งควรปรับปรุง"
+
+msgid "langNomPageAdmin"
+msgstr "การบริหารจัดการระบบ"
+
+msgid "langSysInfo"
+msgstr "แสดงรายละเอียดสถานะของระบบ"
+
+msgid "langDiffTranslation"
+msgstr "เปรียบเทียบการแปล"
+
+msgid "langStatOf"
+msgstr "ʶԵԢͧ"
+
+msgid "langSpeeSubscribe"
+msgstr "ลงทะเบียนด่วนเป็นผู้ตรวจสอบวิชา"
+
+msgid "langLogIdentLogout"
+msgstr "แสดงรายการเข้าสู่ระบบ"
+
+msgid "langServerStatus"
+msgstr "ʶҹТͧ MySQL server"
+
+msgid "langDataBase"
+msgstr "ฐานข้อมูล"
+
+msgid "langRun"
+msgstr "งาน"
+
+msgid "langClient"
+msgstr "ลูกข่ายรับบริการ MySql"
+
+msgid "langServer"
+msgstr "เครื่องแม่ข่ายบริการ MySql"
+
+msgid "langtitulary"
+msgstr "เจ้าของ"
+
+msgid "langUpgradeBase"
+msgstr "ปรับปรุงฐานข้อมูล"
+
+msgid "langManage"
+msgstr "สำนักงานบริหาร"
+
+msgid "langErrorsFound"
+msgstr "พบข้อผิดพลาด"
+
+msgid "langMaintenance"
+msgstr "การดูแลรักษา"
+
+msgid "langUpgrade"
+msgstr "ปรับรุ่น Chamilo"
+
+msgid "langWebsite"
+msgstr "เว็ปไซท์Dokeos"
+
+msgid "langDocumentation"
+msgstr "การจัดเอกสาร"
+
+msgid "langContribute"
+msgstr "ʹѺʹع"
+
+msgid "langInfoServer"
+msgstr "ข้อมูลแม่ข่ายบริการ"
+
+msgid "langOtherCategory"
+msgstr "ประเภทอื่น"
+
+msgid "langSendMailToUsers"
+msgstr "ส่งอีเมลถึงผู้ใช้ในระบบ"
+
+msgid "langExampleXMLFile"
+msgstr "ตัวอย่างของไฟล์ xml"
+
+msgid "langExampleCSVFile"
+msgstr "ตัวอย่างไฟล์ CSV"
+
+msgid "langCourseSystemCode"
+msgstr "รหัสระบบ"
+
+msgid "langCourseVisualCode"
+msgstr "รหัสที่มองเห็น"
+
+msgid "langSystemCode"
+msgstr "รหัสระบบ"
+
+msgid "langVisualCode"
+msgstr "รหัสที่มองเห็น"
+
+msgid "langAddCourse"
+msgstr "สร้างรายวิชา"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "บริหารรายวิชาเสมือน"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "สร้างรายวิชาเสมือน"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "รายวิชาเสมือนจะร่วมใช้ไฟล์และพื้นที่เก็บไฟล์กับรายวิชาจริง"
+
+msgid "langRealCourseCode"
+msgstr "รหัสวิชาจริง"
+
+msgid "langCourseCreationSucceeded"
+msgstr "ได้สร้างรายวิชาเรียบร้อยแล้ว"
+
+msgid "langYourDokeosUses"
+msgstr "ติดตั้ง Chamilo ตามที่แสดงค่านี้"
+
+msgid "langOnTheHardDisk"
+msgstr "อยู่ในฮาร์ดดิสก์"
+
+msgid "langIsVirtualCourse"
+msgstr "เป็นวิชาเสมือน"
+
+msgid "langSystemAnnouncements"
+msgstr "ประกาศข่าวภายในระบบ"
+
+msgid "langAddAnnouncement"
+msgstr "เพิ่มประกาศใหม่"
+
+msgid "langAnnouncementAdded"
+msgstr "ได้เพิ่มประกาศแล้ว"
+
+msgid "langAnnouncementUpdated"
+msgstr "ปรับแก้ประกาศแล้ว"
+
+msgid "langAnnouncementDeleted"
+msgstr "ลบประกาศแล้ว"
+
+msgid "langContent"
+msgstr "เนื้อหา"
+
+msgid "langStudent"
+msgstr "ผู้เรียน"
+
+msgid "Guest"
+msgstr "บุคคลทั่วไป"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "เข้าสู่ระบบด้วยชื่อ"
+
+msgid "langLoginAsThisUser"
+msgstr "เข้าสู่ระบบ"
+
+msgid "DontResetPassword"
+msgstr "อย่าตั้งรหัสผ่านใหม่"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "ร่วมพัฒนา"
+
+msgid "langCourseAdmin"
+msgstr "ผู้จัดการวิชา"
+
+msgid "langOtherCourses"
+msgstr "รายวิชาอื่น"
+
+msgid "PlatformLanguageTitle"
+msgstr "ภาษาของระบบ"
+
+msgid "ServerStatusComment"
+msgstr "การทราบชนิดของเครื่องแม่ข่าย ก็เพื่อสามารถกำหนดค่าทางเลือก และสมรรถนะของการปรับปรุงคุณภาพและคุณสมบัติเครื่อง ให้มีความสามารถแปลคำสั่งได้ตรงกับหน้าที่การใช้งานที่ต้องการ"
+
+msgid "ServerStatusTitle"
+msgstr "ชนิดของเครื่องแม่ข่าย"
+
+msgid "PlatformLanguages"
+msgstr "ภาษาคำสั่งของระบบ"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "������͡���Ҩҡ�����˹���á�ͧ���ྨ ���繡�����͡���������ҷ�����͡����к�"
+
+msgid "OriginalName"
+msgstr "ชื่อภาษาเดิม"
+
+msgid "EnglishName"
+msgstr "ชื่อภาษาอังกฤษ"
+
+msgid "DokeosFolder"
+msgstr "ชื่อในแฟ้มของDokeos"
+
+msgid "Properties"
+msgstr "ปรับเปลี่ยน"
+
+msgid "PlatformConfigSettings"
+msgstr "แก้ไขตั้งค่าระบบ Chamilo"
+
+msgid "SettingsStored"
+msgstr "เก็บค่าที่แก้ไขแล้ว"
+
+msgid "InstitutionTitle"
+msgstr "ชื่อหน่วยงาน"
+
+msgid "InstitutionComment"
+msgstr "ชื่อของหน่วยงาน(จะปรากฏที่หัวมุมบนด้านขวามือ)"
+
+msgid "InstitutionUrlTitle"
+msgstr "เว็ปไซท์หน่วยงาน"
+
+msgid "InstitutionUrlComment"
+msgstr "ชื่อเว็ปไซท์ของหน่วยงาน(เป็นชื่อที่เชื่อมโยงและปรากฏอยู่ด้านบนขวา)"
+
+msgid "SiteNameTitle"
+msgstr "ตั้งชื่อหัวเรื่องของระบบ"
+
+msgid "SiteNameComment"
+msgstr "ชื่อเว็ปไซท์Dokeosของคุณ(จะปรากฏชื่อบนแถบด้านบน)"
+
+msgid "emailAdministratorTitle"
+msgstr "อีเมลของผู้ดูแลระบบ"
+
+msgid "emailAdministratorComment"
+msgstr "อีเมลของผู้จัดการระบบ(จะปรากฏในแถบล่างมุมซ้าย)"
+
+msgid "administratorSurnameTitle"
+msgstr "นามสกุลของผู้จัดการระบบ"
+
+msgid "administratorSurnameComment"
+msgstr "ชื่อของผุ้จัดการระบบ(จะปรากฏที่ท้ายหน้าโฮมเพจมุมซ้ายล่าง)"
+
+msgid "administratorNameTitle"
+msgstr "ชื่อผู้จัดการระบบ"
+
+msgid "administratorNameComment"
+msgstr "ชื่อผู้จัดการระบบ(จะปรากฏที่ท้ายหน้าโฮมเพจมุมล่างซ้าย)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "ข้อมูลและรุ่นของระบบที่จะแสดงที่ท้ายล่างของโฮมเพจ"
+
+msgid "ShowAdministratorDataComment"
+msgstr "แสดงข้อมูลและรุ่นของระบบที่ท้ายหน้าโฮมเพจ"
+
+msgid "HomepageViewTitle"
+msgstr "ดูโฮมเพจ"
+
+msgid "HomepageViewComment"
+msgstr "คุณต้องการให้โฮมเพจวิชามีรูปแบบตามนี้"
+
+msgid "HomepageViewDefault"
+msgstr "ซ่อนเครื่องมือที่ควบคุมการแสดงผลแบบ 2 คอลัมน์"
+
+msgid "HomepageViewFixed"
+msgstr "จัดหน้าโฮมเพจแบบ 3 คอลัมน์ หากปุ่มเครื่องมือเป็นสีเทาแสดงว่ายังไม่ถูกกำหนดให้ใช้งาน"
+
+msgid "Yes"
+msgstr "ใช่"
+
+msgid "No"
+msgstr "ไม่"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "เครื่องมือลัด"
+
+msgid "ShowToolShortcutsComment"
+msgstr "แสดงเครื่องมือลัดไว้ในป้ายประกาศ"
+
+msgid "ShowStudentViewTitle"
+msgstr "หน้าจอผู้เรียน"
+
+msgid "ShowStudentViewComment"
+msgstr "ให้แสดงผลหน้าจอของผู้เรียน<b>การกำหนดใช้คำสั่งนี้ก็เพื่อให้ผู้สอนทราบว่า หน้าจอของผู้เรียนจะปรากฏรายการใดแสดงให้เห็นบ้าง"
+
+msgid "AllowGroupCategories"
+msgstr "ประเภทกลุ่ม"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "อนุญาตให้ผู้จัดการวิชาสร้างประเภทรายการในบทเรียนได้"
+
+msgid "PlatformLanguageComment"
+msgstr "คุณสามารถกำหนดภาษาของระบบไว้ในส่วนต่างๆได้ เพียงคัดลอกคำสั่งเชื่อมโยงนี้ไปไว้ในที่ต้องการ<a href=\"languages.php\">ภาษาระบบของDokeos</a>"
+
+msgid "ProductionServer"
+msgstr "เครื่องแม่ข่ายบริการจริง"
+
+msgid "TestServer"
+msgstr "เครื่องแม่ข่ายบริการจำลอง"
+
+msgid "ShowOnlineTitle"
+msgstr "ผู้ที่กำลังร่วมใช้งาน"
+
+msgid "AsPlatformLanguage"
+msgstr "เป็นภาษาของระบบ"
+
+msgid "ShowOnlineComment"
+msgstr "ให้แสดงจำนวนผู้ที่กำลังใช้งานระบบ"
+
+msgid "AllowNameChangeTitle"
+msgstr "อนุญาตให้เปลี่ยนชื่อในแฟ้มประวัติได้"
+
+msgid "AllowNameChangeComment"
+msgstr "ให้ผู้ใช้เปลี่ยนแปลงชื่อและนามสกุลได้หรือไม่"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "พื้นที่เก็บเอกสาร"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "การควบคุมโควต้าเอกสาร สามารถกำหนดเองได้โดยพิมพ์ค่าตัวเลขเป็นจำนวนไบท์ ลงในช่องกำหนดตามที่ต้องการ เส้นทางการเข้าถึงการกำหนดค่าโควต้าคือไปที่ : การบริหารจัดการ> รายวิชา> ใส่ค่าที่ต้องการ"
+
+msgid "ProfileChangesTitle"
+msgstr "ประวัติ"
+
+msgid "ProfileChangesComment"
+msgstr "อนุญาตให้เปลี่ยนแปลงแฟ้มส่วนบุคคลในส่วนใด"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "การลงทะเบียน: บังคับต้องกรอกรายการในช่องที่มี * กำกับ"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "เขตข้อมูลที่ต้องการ (besides name, first name, login and password)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "ค่าเริ่มต้นของโควตากลุ่ม"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "โควต้าเอกสารกลุ่ม (What is the default quotum for a groups documents tool?)"
+
+msgid "AllowLostPasswordTitle"
+msgstr "ลืมรหัสผ่าน"
+
+msgid "AllowLostPasswordComment"
+msgstr "อนุญาตให้ผู้ใช้ร้องขอรหัสที่ลืมได้หรือไม่"
+
+msgid "AllowRegistrationTitle"
+msgstr "การลงทะเบียน"
+
+msgid "AllowRegistrationComment"
+msgstr "อนุญาตให้ผู้ใช้สร้างชื่อใหม่ได้หรือไม่"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "ลงทะเบียนเป็นอาจารย์ผู้สอน"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "อนุญาตให้ผู้สมัครเป็นผู้ใช้ใหม่มีสิทธิฐานะเป็นผู้สอนได้เลยหรือไม่"
+
+msgid "PlatformLanguage"
+msgstr "ระบบภาษา"
+
+msgid "CourseQuota"
+msgstr "มีพื้นที่เก็บไฟล์ของวิชาในระบบให้เป็นจำนวน(ไบท์)"
+
+msgid "EditNotice"
+msgstr "แก้ไขการแจ้งข่าว"
+
+msgid "General"
+msgstr "เมนูรายการเชื่อมโยง"
+
+msgid "LostPassword"
+msgstr "ลืมรหัสผ่าน"
+
+msgid "Registration"
+msgstr "การลงทะเบียน"
+
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+msgid "InsertLink"
+msgstr "เพิ่มการเชื่อมโยง"
+
+msgid "EditNews"
+msgstr "แก้ไขข่าว"
+
+msgid "EditCategories"
+msgstr "แก้ไขประเภท"
+
+msgid "EditHomePage"
+msgstr "แก้ไขหน้าโฮมเพจ"
+
+msgid "AllowUserHeadingsComment"
+msgstr "ผู้บริหารวิชาสามารถเพิ่มเติมรายละเอียดข้อมูลของผู้เรียน/ผู้ใช้(User)"
+
+msgid "Platform"
+msgstr "ระบบ"
+
+msgid "Course"
+msgstr "รายวิชา"
+
+msgid "Languages"
+msgstr "ภาษา"
+
+msgid "Privacy"
+msgstr "ส่วนตัว"
+
+msgid "NoticeTitle"
+msgstr "แจ้งข่าวเรื่อง"
+
+msgid "NoticeText"
+msgstr "ข้อความที่แจ้งให้ทราบ"
+
+msgid "LinkName"
+msgstr "ข้อความที่เชื่อมโยง"
+
+msgid "LinkURL"
+msgstr "ที่อยู่รายการที่เชื่อมโยง"
+
+msgid "OpenInNewWindow"
+msgstr "เปิดเป็นหน้าจอใหม่"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "ในหน้าจอการอนุญาตเพิ่มผู้เรียนเข้าชั้นนั้นIn the screens allowing addition of users to courses or classes, if the first non-filtered list contains more than this number of users, then default to the first letter (A)"
+
+msgid "Plugins"
+msgstr "โปรแกรมเสริม"
+
+msgid "Info"
+msgstr "ข้อมูล"
+
+msgid "UserAdded"
+msgstr "เพิ่มผู้ใช้แล้ว"
+
+msgid "NoSearchResults"
+msgstr "ไม่พบรายการที่ค้นหา"
+
+msgid "UserDeleted"
+msgstr "ลบชื่อผู้ใช้แล้ว"
+
+msgid "NoClassesForThisCourse"
+msgstr "ยังไม่มีหมู่เรียนใดสมัครเรียนวิชานี้"
+
+msgid "CourseUsage"
+msgstr "การเข้าเรียนในรายวิชา"
+
+msgid "NoCoursesForThisUser"
+msgstr "��������ѧ�������Ѥ�������¹"
+
+msgid "NoClassesForThisUser"
+msgstr "��������������Ѥ������������¹"
+
+msgid "NoCoursesForThisClass"
+msgstr "�������¹����ѧ�������Ѥ����¹"
+
+msgid "langOpenToTheWorld"
+msgstr "เปิด ให้เรียนฟรี"
+
+msgid "OpenToThePlatform"
+msgstr "เปิดวิชาให้เรียนเฉพาะผู้ที่ลงทะเบียนสมาชิกในระบบ"
+
+msgid "langPrivate"
+msgstr "เปิดเป็นวิชาเรียนเฉพาะกลุ่มบุคคลที่ระบุชื่อ"
+
+msgid "langCourseVisibilityClosed"
+msgstr "ปิดวิชา อนุญาตใช้เฉพาะผู้บริหารวิชา"
+
+msgid "langSubscription"
+msgstr "การสมัคร"
+
+msgid "langUnsubscription"
+msgstr "ถอนการสมัคร"
+
+msgid "CourseAccessConfigTip"
+msgstr "โดยปกติการเปิดวิชาครั้งแรกจะให้เป็นแบบสาธารณะคือใครก็เข้าเรียนได้ แต่อย่างไรก็ตาม สามารถกำหนดค่าระดับการรักษาความปลอดภัยของข้อมูลได้"
+
+msgid "Tool"
+msgstr "เครื่องมือ"
+
+msgid "NumberOfItems"
+msgstr "จำนวนในแต่ละรายการ"
+
+msgid "DocumentsAndFolders"
+msgstr "แฟ้มเก็บเอกสาร"
+
+msgid "Learnpath"
+msgstr "แผนการเรียน"
+
+msgid "Exercises"
+msgstr "แบบทดสอบ"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "กำหนดการส่วนตัว"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "ผู้ใช้สามารถเพิ่มเติมกำหนดการของตัวเองเข้าได้หรือไม่"
+
+msgid "CurrentValue"
+msgstr "ปัจจุบันใช้คำสั่งของระบบเป็นภาษา"
+
+msgid "CourseDescription"
+msgstr "คำอธิบายรายวิชา"
+
+msgid "OnlineConference"
+msgstr "การสัมมนาออนไลน์"
+
+msgid "Chat"
+msgstr "สนทนาออนไลน์"
+
+msgid "Quiz"
+msgstr "แบบทดสอบ"
+
+msgid "Announcements"
+msgstr "ประกาศข่าว"
+
+msgid "Links"
+msgstr "การเชื่อมโยง"
+
+msgid "LearningPath"
+msgstr "แผนการเรียน"
+
+msgid "Documents"
+msgstr "เอกสาร"
+
+msgid "UserPicture"
+msgstr "รูปภาพ"
+
+msgid "officialcode"
+msgstr "รหัสประจำตัว"
+
+msgid "Login"
+msgstr "เข้าสู่ระบบ"
+
+msgid "UserPassword"
+msgstr "รหัสผ่าน"
+
+msgid "SubscriptionAllowed"
+msgstr "รับการสมัครแล้ว"
+
+msgid "UnsubscriptionAllowed"
+msgstr "อนุมัติให้ถอนการสมัคร"
+
+msgid "AllowedToUnsubscribe"
+msgstr "͹حҵ"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "ไม่อนุญาต"
+
+msgid "AddDummyContentToCourse"
+msgstr "เพิ่มผังรายการเนื้อหา(ตัวอย่าง)ในรายวิชา"
+
+msgid "DummyCourseCreator"
+msgstr "สร้างผังรายการเนื้อหาวิชา"
+
+msgid "DummyCourseDescription"
+msgstr "���繡�������ѧ��¡��������(������ҧ)���������Ԫ� : ���ͷ��ͺ����ҹ��"
+
+msgid "AvailablePlugins"
+msgstr "�������¡������������(plugins)����յԴ���������к� �س����ö�ӡ���͹���ŧ�ҵԴ������������ҡ<a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
+
+msgid "CreateVirtualCourse"
+msgstr "สร้างรายวิชาเสมือน"
+
+msgid "DisplayListVirtualCourses"
+msgstr "แสดงรายชื่อรายวิชาเสมือน"
+
+msgid "LinkedToRealCourseCode"
+msgstr "เชื่อมสู่รหัสวิชาจริง : Linked to real course code"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "ต้องการสร้างรายวิชาเสมือน"
+
+msgid "WantedCourseCode"
+msgstr "ต้องใส่รหัสวิชา"
+
+msgid "ResetPassword"
+msgstr "ตั้งรหัสผ่านใหม่"
+
+msgid "CheckToSendNewPassword"
+msgstr "ตรวจเพื่อส่งรหัสผ่านใหม่"
+
+msgid "AutoGeneratePassword"
+msgstr "ตั้งรหัสผ่านให้โดยอัตโนมัติ"
+
+msgid "UseDocumentTitleTitle"
+msgstr "ใช้ชื่อเรื่องเป็นชื่อเอกสาร"
+
+msgid "UseDocumentTitleComment"
+msgstr "�����������ͧ�ͧ�͡����繡�õ�駪������������͡���"
+
+msgid "StudentPublications"
+msgstr "ผลงาน/การบ้านของผู้เรียน"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "ไฟล์ที่ลบไม่สามารถกู้คืนได้อีก"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "การลบไฟล์ด้วยเครื่องมือของโปรแกรมจะเป็นการลบอย่างถาวร. ไฟล์จะไม่สามารถกู้คืนได้"
+
+msgid "ClassName"
+msgstr "ชื่อหมู่เรียน"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "กล่องรับส่งงาน:รับขนาดไฟล์ได้สูงสุด"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "ขนาดไฟล์ใหญ่สุดที่เท่าไร ที่กล่องรับส่งงานรับเข้าได้"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "กล่องรับส่งงาน:สามารถบันทึกทับไฟล์เดิมได้"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "ชื่อเอกสารเดิมที่จัดเก็บในระบบสามารถบันทึกทับกันได้ เมื่อมีการโอนย้ายไฟล์เข้าเก็บในแฟ้มเก็บงานเดียวกัน หากคุณยอมรับ ไฟล์เดิมจะถูกบันทึกเป็นไฟล์ใหม่ล่าสุดแทน"
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "กล่องรับส่งงาน: โอนย้ายขึ้นเก็บในส่วนของตัวเอง"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "อนุญาตให้อาจารย์หรือผู้เรียนโอนย้ายไฟล์เอกสารขึ้นเก็บในพื้นที่ของตนเองได้เป็นอิสระ โดยไม่ต้องแจ้งใคร : Allow teachers and student to upload documents to their own dropbox without sending them to anyone (=sending the documents to themselves)"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "กล่องรับส่งงาน:ผู้เรียน<->ผู้เรียน"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "การอนุญาตให้ผู้เรียนส่งไฟล์แลกเปลี่ยนถึงกันและกันได้ อาจารย์ควรพิจารณาอนุญาตและคาดหมายถึงพฤติกรรมการส่งไฟล์ระหว่างกันนั้น เป็นไฟล์ที่จะเป็นประโยชน์หรือไม่ เช่นอาจจะส่งไฟล์ที่เป็นเพลง mp3 หรือแลก/ลอกไฟล์การบ้านกัน หากไม่อนุญาต ผู้เรียนจะส่งงานให้ได้เฉพาะอาจารย์ผู้สอนเท่านั้น"
+
+msgid "DropboxAllowMailingTitle"
+msgstr "กล่องรับส่งงาน:อนุญาตให้ส่งอีเมล"
+
+msgid "DropboxAllowMailingComment"
+msgstr "กำหนดให้ส่งอีเมล์เอกสารไปให้ผู้เรียนเป็นรายบุคคล"
+
+msgid "UserListHasBeenExported"
+msgstr "ได้ส่งออกบัญชีชื่อผู้ใช้แล้ว"
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "คลิกที่นี่เพื่อโอนย้ายไฟล์ลงมา(Download)"
+
+msgid "administratorTelephoneTitle"
+msgstr "เบอร์โทรศัพท์ผู้บริหารระบบ"
+
+msgid "administratorTelephoneComment"
+msgstr "เบอร์โทรศัพท์ของผู้จัดการระบบ"
+
+msgid "SendMailToNewUser"
+msgstr "ส่งอีเมลให้ผู้ใช้คนใหม่"
+
+msgid "ExtendedProfileTitle"
+msgstr "ส่วนเพิ่มเติมแฟ้มประวัติ"
+
+msgid "ExtendedProfileComment"
+msgstr "หากตั้งค่าให้เป็น\"ใช่\"ผู้สมัครในสิทธิฐานะอาจารย์ผู้สอนต้องกรอกข้อมูลเพิ่มเติมในช่องของ ความสามารถพิเศษ คุณวุฒิ และวิชาที่สามารถสอนได้ และข้อมูลส่วนตัวที่สามารถเปิดเผยได้"
+
+msgid "Classes"
+msgstr "หมู่เรียน"
+
+msgid "UserUnsubscribed"
+msgstr "ถอดถอนการสมัครของผู้ใช้แล้ว"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "������������ö�͹�Ԫ����ͧ ��ͧ�駼������èѴ����ԪҴ��Թ������"
+
+msgid "InvalidStartDate"
+msgstr "กำหนดวันเริ่มต้นไม่ถูกต้อง"
+
+msgid "InvalidEndDate"
+msgstr "กำหนดวันสุดท้ายไม่ถูกต้อง"
+
+msgid "DateFormatLabel"
+msgstr "วัน/เดือน/ปี/ชั่วโมง:นาที"
+
+msgid "HomePageFilesNotWritable"
+msgstr "ไฟล์โฮมเพจไม่สามารถบันทึกได้"
+
+msgid "PleaseEnterNoticeText"
+msgstr "กรุณาพิมพ์ ข้อความที่จะแจ้งให้ทราบ"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "กรุณาพิมพ์ชื่อเรื่อง เรื่องที่แจ้งให้ทราบ"
+
+msgid "PleaseEnterLinkName"
+msgstr "กรุณาแจ้ง ชื่อการเชื่อมโยง"
+
+msgid "InsertThisLink"
+msgstr "ใส่การเชื่อมโยงนี้"
+
+msgid "FirstPlace"
+msgstr "ก่อนรายการ"
+
+msgid "After"
+msgstr "หลังรายการ"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "กล่องรับส่งงาน:ของกลุ่ม"
+
+msgid "DropboxAllowGroupComment"
+msgstr "ผู้ใช้งานในระบบสามารถส่งไฟล์ให้กันได้"
+
+msgid "ClassDeleted"
+msgstr "ลบหมู่เรียนแล้ว"
+
+msgid "ClassesDeleted"
+msgstr "ลบหมู่เรียนแล้ว"
+
+msgid "NoUsersInClass"
+msgstr "ไม่มีผู้เรียนในหมู่เรียนนี้"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "เพิ่มชื่อผู้สมัครเรียนตามรายการที่เลือก เข้าไปในรายวิชา"
+
+msgid "InvalidTitle"
+msgstr "กรุณาใส่ชื่อเรื่อง"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "���������������"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "โปรดใส่รหัสและชื่อประเภท"
+
+msgid "DokeosHomepage"
+msgstr "เชื่อมโยงไปที่เวปไซท์ Chamilo"
+
+msgid "DokeosForum"
+msgstr "เข้าร่วมกลุ่มอภิปรายกับ www.chamilo.org"
+
+msgid "RegisterYourPortal"
+msgstr "แจ้งลงทะเบียนเว็ปไซท์ของเราไว้ที่ Chamilo"
+
+msgid "DokeosExtensions"
+msgstr "ดาวน์โหลดโปรแกรมเสริมจากเว็ปไซท์ของ Chamilo"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "แสดงเมนูนำทางวิชา"
+
+msgid "ShowNavigationMenuComment"
+msgstr "แสดงเมนูนำทางทำให้ง่ายต่อการเข้าไปในรายวิชาต่างๆ"
+
+msgid "LoginAs"
+msgstr "เข้าใช้ระบบด้วยชื่อ"
+
+msgid "ImportClassListCSV"
+msgstr "นำเข้ารายชื่อผู้เรียนด้วยไฟล์ CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "แสดงจำนวนผู้ที่กำลังเข้าใช้งานในหน้าที่กำลังดูอยู่ปัจจุบัน(เห็นทุกคน)"
+
+msgid "ShowOnlineUsers"
+msgstr "แสดงจำนวนผู้ที่กำลังเข้าใช้งานในทุกหน้า(เห็นเฉพาะผู้ที่เข้าสู่ระบบแล้ว)"
+
+msgid "ShowOnlineCourse"
+msgstr "แสดงจำนวนผู้ที่กำลังเข้าใช้งานในรายวิชา"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "แสดงสัญรูปในเมนูนำทาง"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "ดูกฏระเบียบที่ใช้สิทธิ์เฉพาะทั้งหมด"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "ดูสิทธิ์และกฏระเบียบที่ใช้เฉพาะทั้งหมด"
+
+msgid "ClassesUnsubscribed"
+msgstr "ได้ถอดถอนกลุ่มเรียนที่เลือกไว้ ออกจากวิชาแล้ว"
+
+msgid "ClassesSubscribed"
+msgstr "ได้รับกลุ่มเรียนที่เลือกไว้ เข้าในรายวิชาแล้ว"
+
+msgid "RoleId"
+msgstr "รหัสระเบียบ"
+
+msgid "RoleName"
+msgstr "ชื่อระเบียบ"
+
+msgid "RoleType"
+msgstr "ประเภท"
+
+msgid "RightValueModified"
+msgstr "ได้เปลี่ยนแปลงค่าแล้ว"
+
+msgid "MakeAvailable"
+msgstr "ทำให้ใช้งานได้"
+
+msgid "MakeUnavailable"
+msgstr "ทำให้ยังใช้งานไม่ได้"
+
+msgid "Stylesheets"
+msgstr "รูปแบบเอกสาร"
+
+msgid "DefaultDokeosStyle"
+msgstr "รูปแบบค่าเริ่มต้นของโดคีอส"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "ให้แสดงเมนูนำทางด้วยสัญรูปที่แตกต่างหรือไม่"
+
+msgid "Plugin"
+msgstr " โปรแกรมเสริม"
+
+msgid "MainMenu"
+msgstr "เมนูหลัก"
+
+msgid "MainMenuLogged"
+msgstr "เมนูหลักเมื่อเข้าระบบ"
+
+msgid "Banner"
+msgstr "ป้ายโฆษณา"
+
+msgid "ImageResizeTitle"
+msgstr "ปรับขนาดภาพของสมาชิกที่ส่งขึ้น"
+
+msgid "ImageResizeComment"
+msgstr "ภาพของสมาชิกสามารถปรับขนาดได้ในระหว่างหารส่งไฟล์ขึ้น หากระบบสามารถคอมพายล์ใช้คำสั่งภาษาPHP ร่วมกับ<a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. ได้ หากไม่คอมพายล์ใช้งาน การตั้งค่าปรับขนาดของภาพจะไม่เกิดผลกับภาพแต่อย่างใด"
+
+msgid "MaxImageWidthTitle"
+msgstr "ขนาดภาพกว้างมากที่สุด"
+
+msgid "MaxImageWidthComment"
+msgstr "Maximum width in pixels of a user image. This setting only applies if user images are set to be resized on upload."
+
+msgid "MaxImageHeightTitle"
+msgstr "ความสูงของภาพใหญ่สุดที่กำหนด"
+
+msgid "MaxImageHeightComment"
+msgstr "Maximum height in pixels of a user image. This setting only applies if user images are set to be resized on upload."
+
+msgid "YourVersionNotUpToDate"
+msgstr "เวอร์ชั่นที่คุณใช้ยังไม่ได้ปรับเป็นรุ่นใหม่"
+
+msgid "YourVersionIs"
+msgstr "เวอร์ชั่นของคุณคือ"
+
+msgid "PleaseVisitDokeos"
+msgstr "กรุณาไปที่เว็ปไซท์ของโดคีออส"
+
+msgid "VersionUpToDate"
+msgstr "เวอร์ชั่นที่คุณใช้เป็นรุ่นปัจจุบัน"
+
+msgid "ConnectSocketError"
+msgstr "การเชื่อมต่อทาง Socket เกิดความผิดพลาด"
+
+msgid "SocketFunctionsDisabled"
+msgstr "ไม่สามารถใช้การเชื่อมต่อทาง Socket ได้"
+
+msgid "ShowEmailAddresses"
+msgstr "แสดงชื่อที่อยู่อีเมล"
+
+msgid "ShowEmailAddressesComment"
+msgstr "แสดงชื่อที่อยู่อีเมล"
+
+msgid "langActiveExtensions"
+msgstr "เปิดใช้งาน"
+
+msgid "langVisioconf"
+msgstr "กรประชุมสัมมนาออนไลน์"
+
+msgid "ServerStatistics"
+msgstr "สถิติของเครื่องแม่ข่ายบริการ"
+
+msgid "langNbCourses"
+msgstr "รหัสกระบวนวิชา"
+
+msgid "DateStart"
+msgstr "เริ่มวันที่"
+
+msgid "DateEnd"
+msgstr "ถึงวันที่"
+

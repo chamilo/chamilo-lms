@@ -1,0 +1,129 @@
+msgid "langMdCallingTool"
+msgstr "Dokumente"
+
+msgid "langMdTitle"
+msgstr "Element-Titel"
+
+msgid "langMdDescription"
+msgstr "Um diese Informationen zu sichern, klicken Sie auch \'speichern\'"
+
+msgid "langMdCoverage"
+msgstr "z.B. Erwachsenenbildung, Sekundarstufe 2"
+
+msgid "langMdCopyright"
+msgstr "z.B. wenn die Quelle erwähnt wird"
+
+msgid "nameTools"
+msgstr "obsolete Sprachvariable"
+
+msgid "langTool"
+msgstr "Dokument-Metadaten"
+
+msgid "langNoScript"
+msgstr "Script ist in Ihrem Browser nicht aktiviert; bitte ignorieren Sie den Teil des Bildschirms unter diesem Text, es wird nicht funktionieren ..."
+
+msgid "langLanguageTip"
+msgstr "die Sprache, in der dieses Element erstellt wurde"
+
+msgid "langIdentifier"
+msgstr "Erkennungszeichen / ID"
+
+msgid "langIdentifierTip"
+msgstr "Ein einzigartiges Erkennungszeichen/ID für dieses Element, bestehend aus Buchstaben, Ziffern,_-.()\'|*"
+
+msgid "langTitleTip"
+msgstr "Titel oder Name, Sprache des Titels oder Namens"
+
+msgid "langDescriptionTip"
+msgstr "Bescheibung oder Kommentar, und Sprache für die Beschreibung dieses Elements"
+
+msgid "langKeyword"
+msgstr "Schlagwort"
+
+msgid "langKeywordTip"
+msgstr "Durch Kommata trennen (Buchstaben, Ziffern,-)"
+
+msgid "langCoverage"
+msgstr "Geeignet für"
+
+msgid "langCoverageTip"
+msgstr "z.B. Erwachsenenbildung, Sekundarstufe 2"
+
+msgid "langKwNote"
+msgstr "Wenn Sie die Sprache für die Beschreibung ändern, bitte gleichzeitig  keine Schlagworte hinzufügen"
+
+msgid "langClickKw"
+msgstr "Ein Schlagwort anklicken, um es aus- oder abzuwählen"
+
+msgid "langKwHelp"
+msgstr "<br/>Zum Öffnen den \'+\' Button klicken, \'-\' Button zum Schließen, \'++\' Button um alle zu öffnen, \'--\' Button um alle zu schließen.<br/><br/>
+Schlagwort-Auswahl aufheben: Baum  einklappen und anschileßend  mit dem \'+\' Knopf Öffnen.<br/>
+Original Schlagwort im Baum suchen: Alt-Klick \'+\' <br/><br/>
+Alt-Klick Schlagwort wählt ein Schlagwort ohne weitere Begriffe aus oder hebt eine Schlagwort-Markierung  mit weiteren Begriffen auf.<br/><br/>Wenn Sie die Sprache für die Beschreibung ändern, fügen Sie bitte zur gleichen Zeit keine Schlagworte hinzu.<br/><br/>"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "Zum Öffnen des Objekts klicken"
+
+msgid "langStore"
+msgstr "speichern"
+
+msgid "langDeleteAll"
+msgstr "Alle Metadaten löschen"
+
+msgid "langConfirmDelete"
+msgstr "Wollen Sie *wirklich* alle Metadaten löschen?"
+
+msgid "langWorkOn"
+msgstr "an"
+
+msgid "langNotInDB"
+msgstr "Link-Kategorie nicht vorhanden"
+
+msgid "langManifestSyntax"
+msgstr "(Syntaxfehler in Manifest-Datei ...)"
+
+msgid "langEmptyManifest"
+msgstr "(leere Manifest-Datei ...)"
+
+msgid "langNoManifest"
+msgstr "(keine Manifest-Datei ...)"
+
+msgid "langNotFolder"
+msgstr "ist nicht möglich, es handelt sich nicht um ein Verzeichnis ..."
+
+msgid "langContinue"
+msgstr "Weiter mit"
+
+msgid "langCreate"
+msgstr "erstellen"
+
+msgid "langRemove"
+msgstr "Medatdateneinträge (MDE)  entfernen"
+
+msgid "langAllRemovedFor"
+msgstr "Alle Einträge wurden aus Kategorie entfernt"
+
+msgid "langRemainingFor"
+msgstr "veraltete Einträge für Kategorie wurden entfernt"
+
+msgid "langIndex"
+msgstr "Wörter indizieren"
+
+msgid "langTotalMDEs"
+msgstr "Gesamtzahl der Link-Metadaten Einträge:"
+
+msgid "langMainMD"
+msgstr "Haupt-Metadateneinträge öffnen"
+
+msgid "langOrElse"
+msgstr "Eine Link-Kategorie auswählen"
+
+msgid "langWarningDups"
+msgstr "- doppelte Kategorienamen wurden aus der Liste entfernt!"
+
+msgid "langSLC"
+msgstr "Mit der Link-Kategorie arbeiten"
+

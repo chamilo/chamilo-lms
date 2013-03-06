@@ -1,0 +1,522 @@
+msgid "WikiSearchResults"
+msgstr "维基查找结果"
+
+msgid "Wiki"
+msgstr "维基"
+
+msgid "StartPage"
+msgstr "首页"
+
+msgid "EditThisPage"
+msgstr "编辑此页面"
+
+msgid "ShowPageHistory"
+msgstr "历史"
+
+msgid "RecentChanges"
+msgstr "最新更改"
+
+msgid "AllPages"
+msgstr "全部页面"
+
+msgid "AddNew"
+msgstr "添加新页面"
+
+msgid "ChangesStored"
+msgstr "音频已添加"
+
+msgid "NewWikiSaved"
+msgstr "维基页面已保存. 通过点击查看:"
+
+msgid "DefaultContent"
+msgstr " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">删除此文字以开始编辑主页面</p>"
+
+msgid "CourseWikiPages"
+msgstr "课程维基页面"
+
+msgid "GroupWikiPages"
+msgstr "组别维基页面"
+
+msgid "NoWikiPageTitle"
+msgstr "更改已保存. 需要为页面起名"
+
+msgid "WikiPageTitleExist"
+msgstr "页面名称已存在. 点此修改页面内容:"
+
+msgid "WikiDiffAddedLine"
+msgstr "已添加行"
+
+msgid "WikiDiffDeletedLine"
+msgstr "已删除行"
+
+msgid "WikiDiffMovedLine"
+msgstr "行已移动"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "行没有改变"
+
+msgid "DifferencesNew"
+msgstr "版本变更"
+
+msgid "DifferencesOld"
+msgstr "旧版本"
+
+msgid "Differences"
+msgstr "差异"
+
+msgid "MostRecentVersion"
+msgstr "查看最近选择的版本"
+
+msgid "Legend"
+msgstr "图例"
+
+msgid "ShowDifferences"
+msgstr "比较已选择版本"
+
+msgid "SearchPages"
+msgstr "搜索"
+
+msgid "Discuss"
+msgstr "讨论"
+
+msgid "History"
+msgstr "历史"
+
+msgid "ShowThisPage"
+msgstr "查看页面"
+
+msgid "DeleteThisPage"
+msgstr "删除页面"
+
+msgid "DiscussThisPage"
+msgstr "讨论页面"
+
+msgid "HomeWiki"
+msgstr "维基主目录"
+
+msgid "DeleteWiki"
+msgstr "删除全部"
+
+msgid "WikiDeleted"
+msgstr "维基已删除"
+
+msgid "WikiPageDeleted"
+msgstr "页面和历史记录已删."
+
+msgid "NumLine"
+msgstr "行数"
+
+msgid "DeletePageHistory"
+msgstr "删除页面和全部的版本"
+
+msgid "OnlyAdminDeleteWiki"
+msgstr "只能删除维基"
+
+msgid "OnlyAdminDeletePageWiki"
+msgstr "只能删除页面"
+
+msgid "OnlyAddPagesGroupMembers"
+msgstr "组成员只能添加页面到组别维基"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "组成员只能编辑组别维基里面的页面"
+
+msgid "ConfirmDeleteWiki"
+msgstr "确认删除此维基?"
+
+msgid "ConfirmDeletePage"
+msgstr "确认删除此页面和其历史记录?"
+
+msgid "AlsoSearchContent"
+msgstr "在内容中搜索"
+
+msgid "PageLocked"
+msgstr "页面受保护"
+
+msgid "PageUnlocked"
+msgstr "页面无保护"
+
+msgid "PageLockedExtra"
+msgstr "页面受保护. 只有导师能修改"
+
+msgid "PageUnlockedExtra"
+msgstr "页面无保护. 课程学员或组成员可以修改"
+
+msgid "ShowAddOption"
+msgstr "显示添加选项"
+
+msgid "HideAddOption"
+msgstr "隐藏添加选项"
+
+msgid "AddOptionProtected"
+msgstr "添加选项已受保护. 只有导师可以添加页面到维基中, 但学员和组成员可以对其编辑"
+
+msgid "AddOptionUnprotected"
+msgstr "添加选项已开放给课程用户和组成员"
+
+msgid "NotifyChanges"
+msgstr "改变时通知我"
+
+msgid "NotNotifyChanges"
+msgstr "改变时不通知我"
+
+msgid "NotifyByEmail"
+msgstr "当有人回复时邮件通知我"
+
+msgid "CancelNotifyByEmail"
+msgstr "取消页面修改后邮件通知"
+
+msgid "MostRecentVersionBy"
+msgstr "最新的版本修改自"
+
+msgid "Rating"
+msgstr "评分"
+
+msgid "RatingMedia"
+msgstr "页面的平均分是"
+
+msgid "NumComments"
+msgstr "页面评论"
+
+msgid "NumCommentsScore"
+msgstr "评论数:"
+
+msgid "AddPagesLocked"
+msgstr "添加选项暂时无法使用"
+
+msgid "LinksPages"
+msgstr "参考"
+
+msgid "ShowLinksPages"
+msgstr "显示链接到此的页面"
+
+msgid "MoreWikiOptions"
+msgstr "更多维基选项"
+
+msgid "DefaultTitle"
+msgstr "主目录"
+
+msgid "DiscussNotAvailable"
+msgstr "讨论不可用"
+
+msgid "Print"
+msgstr "打印"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "EditPage"
+msgstr "编辑"
+
+msgid "AddedBy"
+msgstr "添加自"
+
+msgid "EditedBy"
+msgstr "修改自"
+
+msgid "DeletedBy"
+msgstr "删除自"
+
+msgid "WikiStandardMode"
+msgstr "维基模式"
+
+msgid "GroupTutorAndMember"
+msgstr "导师和组成员"
+
+msgid "GroupTutor"
+msgstr "导师"
+
+msgid "GroupStandardMember"
+msgstr "组成员"
+
+msgid "AssignmentMode"
+msgstr "个人模式"
+
+msgid "ConfigDefault"
+msgstr "默认配置"
+
+msgid "UnlockPage"
+msgstr "解保护"
+
+msgid "LockPage"
+msgstr "加保护"
+
+msgid "NotifyDiscussChanges"
+msgstr "通知评论"
+
+msgid "NotNotifyDiscussChanges"
+msgstr "不通知评论"
+
+msgid "AssignmentWork"
+msgstr "学员作业"
+
+msgid "AssignmentDesc"
+msgstr "导师建议的作业"
+
+msgid "WikiDiffAddedTex"
+msgstr "文本已添加"
+
+msgid "WikiDiffDeletedTex"
+msgstr "文本已删除"
+
+msgid "WordsDiff"
+msgstr "逐个单词"
+
+msgid "LinesDiff"
+msgstr "逐行"
+
+msgid "MustSelectPage"
+msgstr "需要先选择一个页面"
+
+msgid "Export2ZIP"
+msgstr "导出为ZIP"
+
+msgid "HidePage"
+msgstr "隐藏页面"
+
+msgid "ShowPage"
+msgstr "显示页面"
+
+msgid "GoAndEditMainPage"
+msgstr "修改主页面以开始使用维基"
+
+msgid "UnlockDiscuss"
+msgstr "解锁讨论"
+
+msgid "LockDiscuss"
+msgstr "上锁讨论"
+
+msgid "HideDiscuss"
+msgstr "隐藏讨论"
+
+msgid "ShowDiscuss"
+msgstr "显示讨论"
+
+msgid "UnlockRatingDiscuss"
+msgstr "激活评分"
+
+msgid "LockRatingDiscuss"
+msgstr "取消评分"
+
+msgid "EditAssignmentWarning"
+msgstr "你可以修改页面, 但学员将收不到更改通知"
+
+msgid "ExportToDocArea"
+msgstr "导出最新版本到文档中"
+
+msgid "LockByTeacher"
+msgstr "导师禁止"
+
+msgid "LinksPagesFrom"
+msgstr "链接到此的页面"
+
+msgid "DefineAssignmentPage"
+msgstr "定义此页面为个人作业"
+
+msgid "AssignmentDescription"
+msgstr "作业描述"
+
+msgid "UnlockRatingDiscussExtra"
+msgstr "全部成员可评分此页面"
+
+msgid "LockRatingDiscussExtra"
+msgstr "只有导师可评分此页面"
+
+msgid "HidePageExtra"
+msgstr "页面只对导师可见"
+
+msgid "ShowPageExtra"
+msgstr "页面对全部用户可见"
+
+msgid "OnlyEditPagesCourseManager"
+msgstr "主页面只能由导师编辑"
+
+msgid "AssignmentLinktoTeacherPage"
+msgstr "访问导师页面"
+
+msgid "HideDiscussExtra"
+msgstr "讨论只对导师可见"
+
+msgid "ShowDiscussExtra"
+msgstr "讨论对全部用户可见"
+
+msgid "LockDiscussExtra"
+msgstr "只有导师可以添加评论到讨论中"
+
+msgid "UnlockDiscussExtra"
+msgstr "全部用户可以添加评论到讨论中"
+
+msgid "AssignmentDescExtra"
+msgstr "这是导师推荐的作业"
+
+msgid "AssignmentWorkExtra"
+msgstr "这是学员的作业"
+
+msgid "NoAreSeeingTheLastVersion"
+msgstr "注意 你目前查看的页面不是最新版本"
+
+msgid "AssignmentFirstComToStudent"
+msgstr "修改此页面作为你所推荐的作业"
+
+msgid "AssignmentLinkstoStudentsPage"
+msgstr "访问学员的作业"
+
+msgid "AllowLaterSends"
+msgstr "全部延迟发送"
+
+msgid "WikiStandBy"
+msgstr "维基目前封禁中. 需要导师去开启."
+
+msgid "NotifyDiscussByEmail"
+msgstr "允许使用邮件通知当有新的评论添加到此页面"
+
+msgid "CancelNotifyDiscussByEmail"
+msgstr "禁止使用邮件通知当有新的评论添加到此页面"
+
+msgid "EmailWikiChanges"
+msgstr "通知维基变更"
+
+msgid "EmailWikipageModified"
+msgstr "维基页面已更改"
+
+msgid "EmailWikiPageAdded"
+msgstr "页面已添加"
+
+msgid "EmailWikipageDedeleted"
+msgstr "页面已删除"
+
+msgid "EmailWikiPageDiscAdded"
+msgstr "评论已添加"
+
+msgid "FullNotifyByEmail"
+msgstr "允许每次维基变更时发送邮件通知"
+
+msgid "FullCancelNotifyByEmail"
+msgstr "取消每次维基变更时发送邮件通知"
+
+msgid "EmailWikiChangesExt_1"
+msgstr "依用户需要此通知用于告知维基的变更. 此选项说明你已经激活功能"
+
+msgid "EmailWikiChangesExt_2"
+msgstr "如果你想停止变更通知, 选择相应的标签<strong>最近变更</ strong>, <strong>目前页面</ strong>, <strong>讨论</ strong> 并取消选项"
+
+msgid "Visits"
+msgstr "浏览"
+
+msgid "OrphanedPages"
+msgstr "独立的页面"
+
+msgid "WantedPages"
+msgstr "需要的页面"
+
+msgid "MostVisitedPages"
+msgstr "最多浏览的页面"
+
+msgid "MostChangedPages"
+msgstr "最多变更的页面"
+
+msgid "Changes"
+msgstr "变更"
+
+msgid "MostActiveUsers"
+msgstr "更多在线用户"
+
+msgid "Contributions"
+msgstr "贡献"
+
+msgid "UserContributions"
+msgstr "用户贡献"
+
+msgid "WarningDeleteMainPage"
+msgstr "因为主页面为维基主要访问页面, 不推荐删除.<br />如果你需要这样做, 请重新创建此主页面. 只有这样, 其他用户才能添加新页面."
+
+msgid "ConvertToLastVersion"
+msgstr "点击设置此版本为最新版本"
+
+msgid "Restore"
+msgstr "恢复"
+
+msgid "CurrentVersion"
+msgstr "当前版本"
+
+msgid "LastVersion"
+msgstr "最后版本"
+
+msgid "PageRestored"
+msgstr "页面已恢复。点击浏览"
+
+msgid "RestoredFromVersion"
+msgstr "恢复自版本"
+
+msgid "HWiki"
+msgstr "帮助: 维基"
+
+msgid "FirstSelectOnepage"
+msgstr "请先选择页面"
+
+msgid "DefineTask"
+msgstr "如果添加了描述, 此页面将允许你创建一个任务"
+
+msgid "ThisPageisBeginEditedBy"
+msgstr "此页面同时修改自"
+
+msgid "ThisPageisBeginEditedTryLater"
+msgstr "请稍后尝试. 如果当前正在修改的用户没保存此页面, 你将可以使用此页面"
+
+msgid "EditedByAnotherUser"
+msgstr "由于其他用户已修改此页面, 你以前所作的修改将不能保存"
+
+msgid "WarningMaxEditingTime"
+msgstr "你有20分钟可以修改此页面. 如果超时的话, 将轮到其他用户进行修改, 而你所作的修改将丢失"
+
+msgid "TheTaskDoesNotBeginUntil"
+msgstr "还没到开始日期"
+
+msgid "TheDeadlineHasBeenCompleted"
+msgstr "超过限期"
+
+msgid "HasReachedMaxNumWords"
+msgstr "超出字数限制"
+
+msgid "HasReachedMaxiNumVersions"
+msgstr "超过版本数目"
+
+msgid "DescriptionOfTheTask"
+msgstr "任务描述"
+
+msgid "OtherSettings"
+msgstr "其它需求"
+
+msgid "NMaxWords"
+msgstr "最多字数"
+
+msgid "NMaxVersion"
+msgstr "最多版本数目"
+
+msgid "Feedback"
+msgstr "反馈"
+
+msgid "AddFeedback"
+msgstr "添加带有进度的反馈信息"
+
+msgid "Feedback1"
+msgstr "第一条信息"
+
+msgid "Feedback2"
+msgstr "第二条信息"
+
+msgid "Feedback3"
+msgstr "第三条信息"
+
+msgid "FProgress"
+msgstr "进度"
+
+msgid "PutATimeLimit"
+msgstr "设置时间限制"
+
+msgid "StandardTask"
+msgstr "标准任务"
+
+msgid "ThePageHasBeenExportedToDocArea"
+msgstr "页面已导出到文档工具中"
+

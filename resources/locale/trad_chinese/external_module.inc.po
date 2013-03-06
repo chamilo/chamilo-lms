@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "你沒有選擇任何檔案，或者檔案太大"
+
+msgid "langLinkTarget"
+msgstr "鏈接目標"
+
+msgid "langSameWindow"
+msgstr "在同一個視窗"
+
+msgid "langNewWindow"
+msgstr "在新的視窗"
+
+msgid "langAdded"
+msgstr "添加"
+
+msgid "langAddLink"
+msgstr "添加一個鏈接"
+
+msgid "langEditLink"
+msgstr "編輯課程主頁鏈接"
+

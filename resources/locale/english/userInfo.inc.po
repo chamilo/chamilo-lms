@@ -1,0 +1,600 @@
+msgid "langLineNumber"
+msgstr "Line Number"
+
+msgid "langLine"
+msgstr "line"
+
+msgid "langLines"
+msgstr "lines"
+
+msgid "langLineOrLines"
+msgstr "line(s)"
+
+msgid "langMoveUp"
+msgstr "Move up"
+
+msgid "langMoveDown"
+msgstr "Move down"
+
+msgid "langAddNewHeading"
+msgstr "Add new heading"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Teachers only"
+
+msgid "langDefineHeadings"
+msgstr "Define Headings"
+
+msgid "langBackToUsersList"
+msgstr "Back to users list"
+
+msgid "langTracking"
+msgstr "Reporting"
+
+msgid "langCourseManager"
+msgstr "Teacher"
+
+msgid "langModRight"
+msgstr "change rights of"
+
+msgid "langNoAdmin"
+msgstr "has from now on <b>no</b> rights on this page"
+
+msgid "langAllAdmin"
+msgstr "has from now on <b>all</b> rights on this page"
+
+msgid "langModRole"
+msgstr "Change role of"
+
+msgid "langRole"
+msgstr "Description"
+
+msgid "langIsNow"
+msgstr "is from now on"
+
+msgid "langInC"
+msgstr "in this training"
+
+msgid "langFilled"
+msgstr "You have left some fields empty."
+
+msgid "langUserNo"
+msgstr "The login you chose"
+
+msgid "langTaken"
+msgstr "is already in use. Choose another one."
+
+msgid "langTutor"
+msgstr "Coach"
+
+msgid "langUnreg"
+msgstr "Unsubscribe"
+
+msgid "langGroupUserManagement"
+msgstr "Groups management"
+
+msgid "langUnregister"
+msgstr "Unregister"
+
+msgid "langAddAUser"
+msgstr "Add a user"
+
+msgid "UsersUnsubscribed"
+msgstr "The selected users have been unsubscribed from the training"
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "This learner is subscribed in this training through a training session. You cannot edit his information"
+
+msgid "NoDataAvailable"
+msgstr "No data available"
+
+msgid "AddToFriends"
+msgstr "Are you sure you want to add this contact to your friends ?"
+
+msgid "AddPersonalMessage"
+msgstr "Add a personal message"
+
+msgid "Friends"
+msgstr "Friends"
+
+msgid "PersonalData"
+msgstr "Profile"
+
+msgid "Contacts"
+msgstr "Contacts"
+
+msgid "SocialInformationComment"
+msgstr "This screen allows you to organise your contacts"
+
+msgid "AttachContactsToGroup"
+msgstr "Attach contacts to group"
+
+msgid "ContactsList"
+msgstr "Contacts list"
+
+msgid "AttachToGroup"
+msgstr "Add to a group"
+
+msgid "SelectOneContact"
+msgstr "Select one contact"
+
+msgid "SelectOneGroup"
+msgstr "Select one group"
+
+msgid "AttachContactsPersonal"
+msgstr "Add personal contacts"
+
+msgid "AttachContactsToGroupSuccesfuly"
+msgstr "Successfully added contacts to group"
+
+msgid "InvitationDenied"
+msgstr "Invitation denied"
+
+msgid "AddedContactToList"
+msgstr "Added contact to list"
+
+msgid "ContactsGroupsComment"
+msgstr "This screen is a list of contacts sorted by groups"
+
+msgid "YouDontHaveContactsInThisGroup"
+msgstr "No contacts found"
+
+msgid "SelectTheCheckbox"
+msgstr "Select the check box"
+
+msgid "YouDontHaveInvites"
+msgstr "Empty"
+
+msgid "SocialInvitesComment"
+msgstr "Pending invitations."
+
+msgid "InvitationSentBy"
+msgstr "Invitation sent by"
+
+msgid "RequestContact"
+msgstr "Request contact"
+
+msgid "SocialUnknow"
+msgstr "Unknown"
+
+msgid "SocialParent"
+msgstr "My parents"
+
+msgid "SocialFriend"
+msgstr "My friends"
+
+msgid "SocialGoodFriend"
+msgstr "My real friends"
+
+msgid "SocialEnemy"
+msgstr "My enemies"
+
+msgid "SocialDeleted"
+msgstr "Contact deleted"
+
+msgid "MessageOutboxComment"
+msgstr "Messages sent."
+
+msgid "MyPersonalData"
+msgstr "My personal data"
+
+msgid "AlterPersonalData"
+msgstr "Alter personal data"
+
+msgid "Invites"
+msgstr "Invitations"
+
+msgid "ContactsGroups"
+msgstr "Group contacts"
+
+msgid "ErrorSendingMessage"
+msgstr "There was an error while trying to send the message."
+
+msgid "PendingInvitations"
+msgstr "Pending invitations"
+
+msgid "MyInbox"
+msgstr "My inbox"
+
+msgid "ViewSharedProfile"
+msgstr "View shared profile"
+
+msgid "SeeAll"
+msgstr "See all"
+
+msgid "ImagesUploaded"
+msgstr "Uploaded images"
+
+msgid "ExtraInformation"
+msgstr "Extra information"
+
+msgid "SearchContacts"
+msgstr "Search contacts"
+
+msgid "SocialSeeContacts"
+msgstr "See contacts"
+
+msgid "SocialUserInformationAttach"
+msgstr "Please write a message before sending the request"
+
+msgid "MessageInvitationNotSent"
+msgstr "your invitation message has not been sent"
+
+msgid "SocialAddToFriends"
+msgstr "Add to my contacts"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "User not registered in course"
+
+msgid "ChangeContactGroup"
+msgstr "Change contact group"
+
+msgid "Friend"
+msgstr "Friend"
+
+msgid "ViewMySharedProfile"
+msgstr "My shared profile"
+
+msgid "UserStatistics"
+msgstr "Reporting for this user"
+
+msgid "EditUser"
+msgstr "Edit this user"
+
+msgid "ViewUser"
+msgstr "View this user"
+
+msgid "RSSFeeds"
+msgstr "RSS feed"
+
+msgid "NoFriendsInYourContactList"
+msgstr "No friends in your contact list"
+
+msgid "TryAndFindSomeFriends"
+msgstr "Try and find some friends"
+
+msgid "ClearSearchResults"
+msgstr "Clear search results"
+
+msgid "SendInvitation"
+msgstr "Send invitation"
+
+msgid "SocialInvitationToFriends"
+msgstr "Invite to join my group of friends"
+
+msgid "MyCertificates"
+msgstr "My certificates"
+
+msgid "UnsubscribeFromPlatformSuccess"
+msgstr "Your account %s has been completely removed from this portal. Thank you for staying with us for a while. We hope to see you again later."
+
+msgid "ToChangeYourEmailMustTypeYourPassword"
+msgstr "In order to change your e-mail address, you are required to confirm your password"
+
+msgid "Invitations"
+msgstr "Invitations"
+
+msgid "MyGroups"
+msgstr "My groups"
+
+msgid "EditProfile"
+msgstr "Edit profile"
+
+msgid "Social"
+msgstr "Social"
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "MyFriends"
+msgstr "My friends"
+
+msgid "Messages"
+msgstr "Messages"
+
+msgid "CreateAgroup"
+msgstr "Create a group"
+
+msgid "UsersGroups"
+msgstr "Users, Groups"
+
+msgid "SorryNoResults"
+msgstr "Sorry no results"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "AddPicture"
+msgstr "Add picture"
+
+msgid "GroupPermissions"
+msgstr "Group Permissions"
+
+msgid "Closed"
+msgstr "Closed"
+
+msgid "AddGroup"
+msgstr "Add group"
+
+msgid "Privacy"
+msgstr "Privacy"
+
+msgid "ThisIsAnOpenGroup"
+msgstr "This is an open group"
+
+msgid "YouShouldCreateATopic"
+msgstr "You should create a topic"
+
+msgid "IAmAnAdmin"
+msgstr "I am an admin"
+
+msgid "NewTopic"
+msgstr "Create thread"
+
+msgid "MessageList"
+msgstr "Messages list"
+
+msgid "EditGroup"
+msgstr "Edit group"
+
+msgid "MemberList"
+msgstr "Members list"
+
+msgid "WaitingList"
+msgstr "Waiting list"
+
+msgid "InviteFriends"
+msgstr "Invite friends"
+
+msgid "Members"
+msgstr "Members"
+
+msgid "Admin"
+msgstr "Administrator"
+
+msgid "AttachmentFiles"
+msgstr "Attachments"
+
+msgid "AddOneMoreFile"
+msgstr "Add one more file"
+
+msgid "MaximunFileSizeX"
+msgstr "Maximun file size: %s"
+
+msgid "ModifyInformation"
+msgstr "Edit information"
+
+msgid "GroupList"
+msgstr "Group List"
+
+msgid "GroupEdit"
+msgstr "Edit group"
+
+msgid "ThereAreNotUsersInTheWaitingList"
+msgstr "There are no users in the waiting list"
+
+msgid "SendInvitationTo"
+msgstr "Send invitation to"
+
+msgid "InviteUsersToGroup"
+msgstr "Invite users to group"
+
+msgid "PostIn"
+msgstr "It posted"
+
+msgid "Reply"
+msgstr "Reply"
+
+msgid "Newest"
+msgstr "Newest"
+
+msgid "Popular"
+msgstr "Popular"
+
+msgid "Moderator"
+msgstr "Moderator"
+
+msgid "DeleteModerator"
+msgstr "Remove moderator"
+
+msgid "UserChangeToModerator"
+msgstr "User updated to moderator"
+
+msgid "IAmAModerator"
+msgstr "I am a moderator"
+
+msgid "ThisIsACloseGroup"
+msgstr "This is a closed group"
+
+msgid "IAmAReader"
+msgstr "I am a reader"
+
+msgid "UserChangeToReader"
+msgstr "User updated to reader"
+
+msgid "AddModerator"
+msgstr "Add as moderator"
+
+msgid "UserDeleted"
+msgstr "The user is deleted"
+
+msgid "JoinGroup"
+msgstr "Join group"
+
+msgid "YouShouldJoinTheGroup"
+msgstr "You should join the group"
+
+msgid "WaitingForAdminResponse"
+msgstr "Waiting for admin response"
+
+msgid "Member"
+msgstr "Member"
+
+msgid "Re"
+msgstr "Re"
+
+msgid "FilesAttachment"
+msgstr "Files attachments"
+
+msgid "GroupWaitingList"
+msgstr "Group waiting list"
+
+msgid "Open"
+msgstr "Open"
+
+msgid "UsersAlreadyInvited"
+msgstr "Users already invited"
+
+msgid "SubscribeUsersToGroup"
+msgstr "Subscribe users to group"
+
+msgid "YouHaveBeenInvitedJoinNow"
+msgstr "You have been invited to join now"
+
+msgid "DenyInvitation"
+msgstr "Deny invitation"
+
+msgid "AcceptInvitation"
+msgstr "Accept invitation"
+
+msgid "GroupsWaitingApproval"
+msgstr "Groups waiting for approval"
+
+msgid "GroupInvitationWasDeny"
+msgstr "Group invitation was denied"
+
+msgid "UserIsSubscribedToThisGroup"
+msgstr "User is subscribed to this group"
+
+msgid "DeleteFromGroup"
+msgstr "Delete from group"
+
+msgid "GroupMembers"
+msgstr "Group members"
+
+msgid "Subscribe"
+msgstr "Subscribe"
+
+msgid "YouAreInvitedToGroupContent"
+msgstr "You are invited to access a group content"
+
+msgid "YouAreInvitedToGroup"
+msgstr "You are invited to group"
+
+msgid "ToSubscribeClickInTheLinkBelow"
+msgstr "To subscribe, click the link below"
+
+msgid "ReturnToInbox"
+msgstr "Return to inbox"
+
+msgid "View"
+msgstr "View"
+
+msgid "Me"
+msgstr "Me"
+
+msgid "ReturnToOutbox"
+msgstr "Return to outbox"
+
+msgid "EditNormalProfile"
+msgstr "Edit normal profile"
+
+msgid "GroupPendingInvitations"
+msgstr "Group pending invitations"
+
+msgid "LeaveGroup"
+msgstr "Leave group"
+
+msgid "UserIsNotSubscribedToThisGroup"
+msgstr "User is not subscribed to this group"
+
+msgid "InvitationReceived"
+msgstr "Invitation received"
+
+msgid "InvitationSent"
+msgstr "Invitation sent"
+
+msgid "YouAlreadySentAnInvitation"
+msgstr "You already sent an invitation"
+
+msgid "UserAdded"
+msgstr "The user is added"
+
+msgid "FilesSizeExceedsX"
+msgstr "Files size exceeds"
+
+msgid "YouShouldWriteASubject"
+msgstr "You should write a subject"
+
+msgid "Topics"
+msgstr "Topics"
+
+msgid "StatusInThisGroup"
+msgstr "Status in this group"
+
+msgid "FriendsOnline"
+msgstr "Friends online"
+
+msgid "GroupDescription"
+msgstr "Group description"
+
+msgid "MyProductions"
+msgstr "My productions"
+
+msgid "YouHaveReceivedANewMessageInTheGroupX"
+msgstr "You have received a new message in group %s"
+
+msgid "ClickHereToSeeMessageGroup"
+msgstr "Click here to see group message"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "or copy paste the following url :"
+
+msgid "ThereIsANewMessageInTheGroupX"
+msgstr "There is a new message in group %s"
+
+msgid "UserIsAlreadySubscribedToThisGroup"
+msgstr "User is already subscribed to this group"
+
+msgid "AddNormalUser"
+msgstr "Add as simple user"
+
+msgid "DenyEntry"
+msgstr "Deny access"
+
+msgid "YouNeedToHaveFriendsInYourSocialNetwork"
+msgstr "You need to have friends in your social network"
+
+msgid "SeeAllMyGroups"
+msgstr "See all my groups"
+
+msgid "YouAlreadyInviteAllYourContacts"
+msgstr "You already invite all your contacts"
+
+msgid "YouShouldCreateAGroup"
+msgstr "You should create a group"
+
+msgid "MyFiles"
+msgstr "My files"
+
+msgid "MySocialGroups"
+msgstr "My social groups"
+
+msgid "SocialGroups"
+msgstr "Social groups"
+
+msgid "CreateASocialGroup"
+msgstr "Create a social group"
+
+msgid "EditMembersList"
+msgstr "Edit members list"
+
+msgid "IAmAHRM"
+msgstr "I am a human resources manager"
+
+msgid "UnsubscribeFromPlatform"
+msgstr "If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm."
+
+msgid "UnsubscribeFromPlatformConfirm"
+msgstr "Yes, I want to remove this account completely. No data will remain on the server and I will be unable to login again, unless I create a completely new account."
+

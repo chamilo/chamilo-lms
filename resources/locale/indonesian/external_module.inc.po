@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Anda tidak memilih file untuk dikirim, atau itu terlalu besar"
+
+msgid "langLinkTarget"
+msgstr "Target Link"
+
+msgid "langSameWindow"
+msgstr "Dalam jendela yang sama"
+
+msgid "langNewWindow"
+msgstr "Dalam jendela yang baru"
+
+msgid "langAdded"
+msgstr "Ditambahkan"
+
+msgid "langAddLink"
+msgstr "Tambah link"
+
+msgid "langEditLink"
+msgstr "Edit link Homepage Mata Kuliah"
+

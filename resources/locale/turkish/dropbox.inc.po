@@ -1,0 +1,168 @@
+msgid "Upload"
+msgstr "Yükle"
+
+msgid "BackList"
+msgstr "Gelen Giden Kutusuna dön"
+
+msgid "ShowFeedback"
+msgstr "Geri dönüş göster"
+
+msgid "GiveFeedback"
+msgstr "Geri dönüş Ver/Düzenle"
+
+msgid "JustUploadInSelect"
+msgstr "--SadeceGönder--"
+
+msgid "MailingNothingFor"
+msgstr "Nothing for"
+
+msgid "MailingFileNotRegistered"
+msgstr "(bu derse kayıtlı değil)"
+
+msgid "MailingFileSentTo"
+msgstr "gideceği yer"
+
+msgid "MailingFileIsFor"
+msgstr "is for"
+
+msgid "MailingFileRecipDup"
+msgstr "multiple users have"
+
+msgid "MailingFileNoRecip"
+msgstr "isimde alıcı ID si yok"
+
+msgid "MailingFileNoPostfix"
+msgstr "isim şu sonekle bitmiyor"
+
+msgid "MailingFileNoPrefix"
+msgstr "isim şu önekle başlamıyor :"
+
+msgid "MailingFileFunny"
+msgstr "isim yok veya uzantı 1-4 karakter değil"
+
+msgid "MailingZipDups"
+msgstr "Posta zip dosyasında birden fazla aynı dosya olmamalıdır - dosya gönderilmeyecek."
+
+msgid "MailingZipPhp"
+msgstr "Posta zip dosyasında php dosyaları olmamalıdır- dosya gönderilmeyecek."
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "Postalanacak zip dosyası boş veya geçerli değil."
+
+msgid "MailingWrongZipfile"
+msgstr "Posta ÖĞRENCİID veya KULLANICIİSMİ ile ve zip dosyası olmalıdır."
+
+msgid "MailingConfirmSend"
+msgstr "İçerik dosyaları ayrı alıcılara gönderilsin?"
+
+msgid "MailingSend"
+msgstr "İçerik dosyalarını gönder"
+
+msgid "MailingNotYetSent"
+msgstr "Posta içerik dosyaları henüz gönderilmedi..."
+
+msgid "MailingInSelect"
+msgstr "---Postala---"
+
+msgid "MailingAsUsername"
+msgstr "Postala"
+
+msgid "FileDeleted"
+msgstr "Seçilen dosya Gelen Giden kutusundan silindi."
+
+msgid "DocAdd"
+msgstr "Dosya başarıyla eklendi."
+
+msgid "Sender"
+msgstr "gönderen"
+
+msgid "Author"
+msgstr "yazan"
+
+msgid "FileSize"
+msgstr "dosya boyutu"
+
+msgid "Title"
+msgstr "başlık"
+
+msgid "OverwriteFile"
+msgstr "Daha önce gönderilmiş dosyanı üzerine kaydet?"
+
+msgid "Ok"
+msgstr "TAMAM"
+
+msgid "Unknown"
+msgstr "bilinmiyor"
+
+msgid "SentOn"
+msgstr "tarih"
+
+msgid "SentTo"
+msgstr "Alıcı"
+
+msgid "ConfirmDelete"
+msgstr "Bu işlem sadece sizin listenizden silecektir."
+
+msgid "SendTo"
+msgstr "Gönderileceği yer"
+
+msgid "Description"
+msgstr "Belge açıklaması"
+
+msgid "UploadFile"
+msgstr "Gönderilecek belge"
+
+msgid "ErrorCreatingDir"
+msgstr "Gelen Giden dizini oluşturulamıyor. Lütfen sistem yetkilisine bildirin."
+
+msgid "UploadError"
+msgstr "Yükleme başarısız oldu. Lütfen maksimum dosya boyutunu ve klasör haklarını kontrol ediniz"
+
+msgid "TooBig"
+msgstr "Bir dosya seçmediniz veya dosya boyutu çok büyük."
+
+msgid "NoFileSpecified"
+msgstr "Göndermek için bir dosya belirlemediniz."
+
+msgid "NoUserSelected"
+msgstr "Dosyayı göndereceğiniz bir kullanıcı seçin lütfen."
+
+msgid "BadFormData"
+msgstr "Kayıt başarısız: bilgi formu hatalı, lütfen sistem yöneticisine bildirin."
+
+msgid "GeneralError"
+msgstr "Bir hata oluştu. Lütfen sistem yöneticisine bildirin."
+
+msgid "Dropbox"
+msgstr "Gelen Giden Kutusu"
+
+msgid "Help"
+msgstr "Yardım"
+
+msgid "SentTitle"
+msgstr "Gönderilen Dosyalar"
+
+msgid "Authors"
+msgstr "Yazan"
+
+msgid "LastResent"
+msgstr "Son gönderim"
+
+msgid "MailingSelectNoOther"
+msgstr "Postalama di&#287;er al&#305;c&#305;larla birle&#351;tirilemez"
+
+msgid "langAddEdit"
+msgstr "Ekle / Düzenle"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Dizin boş"
+
+msgid "AddComment"
+msgstr "Geri beslemeyi kaydet"
+
+msgid "SentCatgoryDeleted"
+msgstr "Dizin silindi"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "Dizin silindi"
+

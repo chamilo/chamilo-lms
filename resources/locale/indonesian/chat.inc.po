@@ -1,0 +1,96 @@
+msgid "langOnlineConference"
+msgstr "Konfrensi"
+
+msgid "langWash"
+msgstr "Wash"
+
+msgid "langReset"
+msgstr "Reset"
+
+msgid "langSave"
+msgstr "Simpan"
+
+msgid "langRefresh"
+msgstr "Refresh"
+
+msgid "langIsNowInYourDocDir"
+msgstr "kini dalam tool Document anda. <br><B>File ini nampak</B>"
+
+msgid "langCopyFailed"
+msgstr "Pencetakan gagal"
+
+msgid "langTypeMessage"
+msgstr "Silahkan ketik pesan anda!"
+
+msgid "langConfirmReset"
+msgstr "Apakah anda benar-benar akan menghapus semua pesan?"
+
+msgid "langHasResetChat"
+msgstr "telah me-reset Chat"
+
+msgid "langNoOnlineConference"
+msgstr "Tidak ada konfrensi pada saat ini ..."
+
+msgid "langMediaFile"
+msgstr "Live audio atau video streaming"
+
+msgid "langContentFile"
+msgstr "Presentasi"
+
+msgid "langListOfParticipants"
+msgstr "Daftar peserta"
+
+msgid "langYourPicture"
+msgstr "Foto anda"
+
+msgid "langOnlineDescription"
+msgstr "Deskripsi konfrensi"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Silahkan check kotak ini hanya untuk mengajukan pertanyaan penting!"
+
+msgid "langQuestion"
+msgstr "pertanyaan"
+
+msgid "langClearList"
+msgstr "Hapus daftar"
+
+msgid "langWhiteBoard"
+msgstr "Papan tulis"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Word processor</h2>Cut dan paste di sini dari  Ms-Word® kemudian edit.  Peserta dapat melihat modifikasi yang anda lakukan secara live."
+
+msgid "langStreaming"
+msgstr "Streaming"
+
+msgid "langStreamURL"
+msgstr "URL Stream"
+
+msgid "langStreamType"
+msgstr "Type Stream"
+
+msgid "langLinkName"
+msgstr "Nama Link"
+
+msgid "langLinkURL"
+msgstr "URL Link"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Selamat datang di  <b>Konfrensi Online</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Tidak ada Link"
+
+msgid "langChat_reset_by"
+msgstr "reset chat"
+
+msgid "OrFile"
+msgstr "Or file"
+
+msgid "langCallSent"
+msgstr "Panggilan Chat  telah dikirim. Menunggu jawaban patner anda."
+
+msgid "langChatDenied"
+msgstr "Panggilan anda ditolak patner anda."
+

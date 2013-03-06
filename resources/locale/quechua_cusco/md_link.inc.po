@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Qelqa khipukuna"
+
+msgid "langMdTitle"
+msgstr "Yachay aypanapaqqa sutinchaynin"
+
+msgid "langMdDescription"
+msgstr "Kay willa allchanapaqqa, q\'apiy Allchay nisqapi"
+
+msgid "langMdCoverage"
+msgstr "qhawarichi, licenciadokusqa imapipas..."
+
+msgid "langMdCopyright"
+msgstr "qhawarichi, ima apachiqqa reqsisqan"
+
+msgid "nameTools"
+msgstr "mauk\'a simiq t\'ijrachaynin"
+
+msgid "langTool"
+msgstr "Qelqa khipuq metadato nisqan"
+
+msgid "langNoScript"
+msgstr "Wanp\'uqninkiqa manan chaskinchu scripts nisqata, ama hina kanchu amaña qhawaychu ura chakipi kaqta. Mana rikurinqachu..."
+
+msgid "langLanguageTip"
+msgstr "yachay ima simipi ruwachikuran"
+
+msgid "langIdentifier"
+msgstr "Riqsichiq"
+
+msgid "langIdentifierTip"
+msgstr "kay yachanamanta sapan seqsichiq, seq\'ekunawa, yupaykunawan, _-.()\'!* kaykunapuwan ruwachisqa"
+
+msgid "langTitleTip"
+msgstr "sutinchaynin utaq sutin, sutinchaymanta utaq sutimanta simi"
+
+msgid "langDescriptionTip"
+msgstr "nisqana utaq rimariyna, hinallataq kay imaymanamata simi nisqanapaq"
+
+msgid "langKeyword"
+msgstr "Ancha simi"
+
+msgid "langKeywordTip"
+msgstr "t\'aqapay kaykunawan (seq\'ekunawan, chinpukunawan, -.)"
+
+msgid "langCoverage"
+msgstr "Chayana"
+
+msgid "langCoverageTip"
+msgstr "qhawarichi, licenciadokusqa imapipas xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Sichus t\'ijranki ima nisqasqamanta simita, ama yapaychu ancha simikunata chay ruwashaspaqa."
+
+msgid "langClickKw"
+msgstr "Q\'apiy kayta sach\'amanta ancha simikunata ajllanapaq utaq saqellapaq."
+
+msgid "langKwHelp"
+msgstr "<br/>Kichanapaqqa kayta q\'apiy \'+\' , kisqanapaqqa kayta \'-\' , llipinta kichanapaqtaq kayta \'++\' , hinallataq llipinta wisqanapaqtaq kayta \'--\' .<br/>Sach\'amanta ancha simikunata hoqmanta ajllanapaqqa wisqaspa hoqmanta kicharuy kaywan \'+\'.<br/>Alt-clic \'+\' kayta churaspataq ancha simikunata sach\'api maskhanqa.<br/><br/>Alt-clic q\'apispaqa ajllan utaq saqen ancha simikuna mana sinchi supanniyuq kasqata.<br/><br/>Sichus t\'ijrapayanki simi ima nisqaymanta, chay pachapi ruwakushaqtinqa mana yapawaqchu ancha simikunata.<br/><br/>"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "clik nisqallata ruwan ima kichanapaqqa"
+
+msgid "langStore"
+msgstr "Allchay"
+
+msgid "langDeleteAll"
+msgstr "Pichay llipin metadatos sutiyuqta"
+
+msgid "langConfirmDelete"
+msgstr "*Cheqaychu* kashanki llipin metadatos nisqata pichakunanpaq ?"
+
+msgid "langWorkOn"
+msgstr "kaypi"
+
+msgid "langNotInDB"
+msgstr "manan kanchu waskhanapaq kay mita waskhanapaq"
+
+msgid "langManifestSyntax"
+msgstr "(pantay qelqa wayaqa manifest nisqapi...)"
+
+msgid "langEmptyManifest"
+msgstr "(wayaqa  manifest nisqa ch\'usaq kashan...)"
+
+msgid "langNoManifest"
+msgstr "(manan kanchu wayaqa  manifest nisqa...)"
+
+msgid "langNotFolder"
+msgstr "mana atikunqachu, mana wayaqachu..."
+
+msgid "langContinue"
+msgstr "Rillay kaywan"
+
+msgid "langCreate"
+msgstr "Kamay"
+
+msgid "langRemove"
+msgstr "Pichay metadatos (MDE) nisqaq haykunninta"
+
+msgid "langAllRemovedFor"
+msgstr "Llipin haykuqkunaqa hoqochinkunkuña mitamantaqa"
+
+msgid "langRemainingFor"
+msgstr "haykuqkuna mana puriqqa orqochikunkuña mitamantaqa"
+
+msgid "langIndex"
+msgstr "Simikunata qhawarichiq"
+
+msgid "langTotalMDEs"
+msgstr "Metadatos (MD) nisqa waskhanakunapaq llipin haykuqnin"
+
+msgid "langMainMD"
+msgstr "Kichay Entrada de Metadatos (MDE) nisqamanta raphi qallariyninta"
+
+msgid "langOrElse"
+msgstr "Ajllay waskhanamanta hoq mitata"
+
+msgid "langWarningDups"
+msgstr "- mita sutiyuq kutichisqaqa horqochikunqa yupachasqamantaqa !"
+
+msgid "langSLC"
+msgstr "Llank\'ay waskhana sutichasqa mitawan"
+

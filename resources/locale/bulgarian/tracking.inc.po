@@ -1,0 +1,801 @@
+msgid "langToolName"
+msgstr "Импортиране на курсове от системата Blackboard"
+
+msgid "TrackingDisabled"
+msgstr "Прегледът е изключен от администратора на системата."
+
+msgid "InactivesStudents"
+msgstr "Неактивни потребители"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Средно време, прекарано в портала"
+
+msgid "AverageCoursePerStudent"
+msgstr "Среден брой курсове за потребител"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Усреднен напредък по материала в пътеките за обучение"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Усреднен резултат от тестовете"
+
+msgid "SeeStudentList"
+msgstr "Вижте списъка с потребители"
+
+msgid "NbActiveSessions"
+msgstr "Активни сесии"
+
+msgid "NbPastSessions"
+msgstr "Отминали сесии"
+
+msgid "NbFutureSessions"
+msgstr "Бъдещи сесии"
+
+msgid "NbStudentPerSession"
+msgstr "Среден брой потребители в сесия"
+
+msgid "NbCoursesPerSession"
+msgstr "Среден брой курсове в сесия"
+
+msgid "SeeSessionList"
+msgstr "Вижте списъка със сесии"
+
+msgid "langShowNone"
+msgstr "Скрий всички"
+
+msgid "langCourseStats"
+msgstr "Текущо състояние на курса"
+
+msgid "langToolsAccess"
+msgstr "Достъп до инструментите"
+
+msgid "langCourseAccess"
+msgstr "Достъп до курса"
+
+msgid "langLinksAccess"
+msgstr "Връзки"
+
+msgid "langDocumentsAccess"
+msgstr "Документи"
+
+msgid "langScormAccess"
+msgstr "Пътеки за обучение (SCORM)"
+
+msgid "langLinksDetails"
+msgstr "Връзки, използвани от потребителя"
+
+msgid "langWorksDetails"
+msgstr "Работи, качени от потребител"
+
+msgid "langLoginsDetails"
+msgstr "Щракнете върху името на месеца за повече подробности."
+
+msgid "langDocumentsDetails"
+msgstr "Документи, свалени от потребителя"
+
+msgid "langExercicesDetails"
+msgstr "Резултати от направените тестове"
+
+msgid "langBackToList"
+msgstr "Обратно към списъка с потребители"
+
+msgid "langDetails"
+msgstr "Подробно"
+
+msgid "langStatsOfCourse"
+msgstr "Преглед на посещенията на курса"
+
+msgid "langStatsOfUser"
+msgstr "Статистика за потребителя"
+
+msgid "langStatsOfCampus"
+msgstr "Статистика за портала"
+
+msgid "langCountUsers"
+msgstr "Брой потребители"
+
+msgid "langCountToolAccess"
+msgstr "Брой посещения в този курс"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Месец"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Брой влизания"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Име на инструмента"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Щраквания от регистрирани потребители"
+
+msgid "langToolTitleCountColumn"
+msgstr "Общо щраквания"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Връзка"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Щраквания от регистрирани потребители"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Общо щраквания"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Тест"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Резултат"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Документ"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Сваляния от регистрирани потребители"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Общо сваляния"
+
+msgid "langScormContentColumn"
+msgstr "Заглавие"
+
+msgid "langScormStudentColumn"
+msgstr "Потребители"
+
+msgid "langScormTitleColumn"
+msgstr "Стъпка"
+
+msgid "langScormStatusColumn"
+msgstr "Състояние"
+
+msgid "langScormScoreColumn"
+msgstr "Резултат"
+
+msgid "langScormTimeColumn"
+msgstr "Време"
+
+msgid "langScormNeverOpened"
+msgstr "Не е отваряна."
+
+msgid "langWorkTitle"
+msgstr "Заглавие"
+
+msgid "langWorkAuthors"
+msgstr "Автор"
+
+msgid "langWorkDescription"
+msgstr "Описание"
+
+msgid "informationsAbout"
+msgstr "Относно"
+
+msgid "langNoEmail"
+msgstr "Не е посочен адрес за електронна поща."
+
+msgid "langNoResult"
+msgstr "Все още няма резултати."
+
+msgid "langCourse"
+msgstr "Курсът"
+
+msgid "langHits"
+msgstr "Посещения"
+
+msgid "langTotal"
+msgstr "Общо"
+
+msgid "langHour"
+msgstr "Час"
+
+msgid "langDay"
+msgstr "ден"
+
+msgid "langLittleHour"
+msgstr " ч."
+
+msgid "langLast31days"
+msgstr "През последните 31 дни"
+
+msgid "langLast7days"
+msgstr "През последните 7 дни"
+
+msgid "langThisday"
+msgstr "Днес"
+
+msgid "langLogins"
+msgstr "Посещения"
+
+msgid "langLoginsExplaination"
+msgstr "Тук е списъкът с вашите посещения и инструментите, които сте използвали."
+
+msgid "langExercicesResults"
+msgstr "Резултати от направените тестове"
+
+msgid "langVisits"
+msgstr "посещения"
+
+msgid "langAt"
+msgstr "в"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Дата"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Посещения"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Посещения и достъп до инструменти"
+
+msgid "langWorkUploads"
+msgstr "Качвания на работи"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Невалиден потребител, няма такъв във вашата група."
+
+msgid "langListStudents"
+msgstr "Списък с потребителите в тази група"
+
+msgid "langPeriodHour"
+msgstr "Час"
+
+msgid "langPeriodDay"
+msgstr "Ден"
+
+msgid "langPeriodWeek"
+msgstr "Седмица"
+
+msgid "langPeriodMonth"
+msgstr "Месец"
+
+msgid "langPeriodYear"
+msgstr "Година"
+
+msgid "langNextDay"
+msgstr "Следващият ден"
+
+msgid "langPreviousDay"
+msgstr "Предишният ден"
+
+msgid "langNextWeek"
+msgstr "Следващата седмица"
+
+msgid "langPreviousWeek"
+msgstr "Предишната седмица"
+
+msgid "langNextMonth"
+msgstr "Следващият месец"
+
+msgid "langPreviousMonth"
+msgstr "Предишният месец"
+
+msgid "langNextYear"
+msgstr "Следващата година"
+
+msgid "langPreviousYear"
+msgstr "Предишната година"
+
+msgid "langViewToolList"
+msgstr "Преглед на списъка с инструменти"
+
+msgid "langToolList"
+msgstr "Списък с инструментите"
+
+msgid "langFrom"
+msgstr "От"
+
+msgid "langTo"
+msgstr "в"
+
+msgid "langPeriodToDisplay"
+msgstr "Период"
+
+msgid "langDetailView"
+msgstr "Видяно от"
+
+msgid "langBredCrumpGroups"
+msgstr "Групи"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Страница на групата"
+
+msgid "langBredCrumpUsers"
+msgstr "Потребители"
+
+msgid "langAdminToolName"
+msgstr "Преглед на посещенията"
+
+msgid "langPlatformStats"
+msgstr "Статистика за системата"
+
+msgid "langStatsDatabase"
+msgstr "Статистическа база данни"
+
+msgid "langPlatformAccess"
+msgstr "Достъп до портала"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Достъп до курсовете"
+
+msgid "langPlatformToolAccess"
+msgstr "Достъп до инструментите"
+
+msgid "langHardAndSoftUsed"
+msgstr "Данни за държави, доставчици, браузъри, опрерационни системи, препратки"
+
+msgid "langStrangeCases"
+msgstr "Аномалии"
+
+msgid "langStatsDatabaseLink"
+msgstr "Щракнете тук"
+
+msgid "langCountCours"
+msgstr "Брой курсове"
+
+msgid "langCountCourseByFaculte"
+msgstr "Брой на курсовете по категории"
+
+msgid "langCountCourseByLanguage"
+msgstr "Брой на курсовете по езици"
+
+msgid "langCountCourseByVisibility"
+msgstr "Брой на курсовете по достъпност"
+
+msgid "langCountUsersByCourse"
+msgstr "Брой на потребителите по курсове"
+
+msgid "langCountUsersByFaculte"
+msgstr "Брой на потребителите по категории"
+
+msgid "langCountUsersByStatus"
+msgstr "Брой на потребителите по статус"
+
+msgid "langAccess"
+msgstr "Достъп"
+
+msgid "langCountries"
+msgstr "Държави"
+
+msgid "langProviders"
+msgstr "Доставчици"
+
+msgid "langOS"
+msgstr "Операционни системи"
+
+msgid "langBrowsers"
+msgstr "Браузъри"
+
+msgid "langReferers"
+msgstr "Препратки"
+
+msgid "langAccessExplain"
+msgstr "(когато потребител отвори главната страница на портала)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Общо"
+
+msgid "langTotalPlatformLogin"
+msgstr "Общо"
+
+msgid "langMultipleLogins"
+msgstr "Регистрации с еднакво <i>потребителско име</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Регистрации с еднакви <i>потребителско име</i> и <i>парола</i>"
+
+msgid "langMultipleEmails"
+msgstr "Регистрации с еднакъв <i>адрес за електронна поща</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Курсове без преподавател"
+
+msgid "langCourseWithoutAccess"
+msgstr "Неизползвани курсове"
+
+msgid "langLoginWithoutAccess"
+msgstr "Неизползвани регистрации"
+
+msgid "langAllRight"
+msgstr "Няма аномалии."
+
+msgid "langDefcon"
+msgstr "Открити са аномалии!"
+
+msgid "langNULLValue"
+msgstr "Празна (или NULL) стойност"
+
+msgid "langTrafficDetails"
+msgstr "Разпределение на посещенията по часове на денонощието"
+
+msgid "langSeeIndividualTracking"
+msgstr "За индивидуален преглед вижте инструмента \"<a href=../user/user.php>Потребители</a>\"."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Тази пътека за обучение не е отваряна от никого."
+
+msgid "SynthesisView"
+msgstr "Обобщен преглед"
+
+msgid "Visited"
+msgstr "Напредък по материала"
+
+msgid "FirstAccess"
+msgstr "Първо посещение"
+
+msgid "LastAccess"
+msgstr "Последно посещение"
+
+msgid "langProbationers"
+msgstr "Курсисти"
+
+msgid "MoyenneTest"
+msgstr "Среден брой тестове"
+
+msgid "exportExcel"
+msgstr "Експортиране в Excel формат"
+
+msgid "MoyCourse"
+msgstr "Среден брой курсове"
+
+msgid "MoyenneExamen"
+msgstr "Среден брой изпити"
+
+msgid "MoySession"
+msgstr "Среден брой сесии"
+
+msgid "TakenSessions"
+msgstr "Взети сесии"
+
+msgid "FollowUp"
+msgstr "Продължение"
+
+msgid "Trainers"
+msgstr "Преподаватели"
+
+msgid "Administrators"
+msgstr "Администратори"
+
+msgid "Tracks"
+msgstr "Прегледи"
+
+msgid "Success"
+msgstr "Успех"
+
+msgid "ExcelFormat"
+msgstr "Excel формат"
+
+msgid "MyLearnpath"
+msgstr "Моята пътека за обучение"
+
+msgid "Time"
+msgstr "Час"
+
+msgid "Score"
+msgstr "Резултат"
+
+msgid "LastConnexion"
+msgstr "Последно посещение"
+
+msgid "ConnectionTime"
+msgstr "Време на посещаване"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Посещения в този курс"
+
+msgid "StudentTutors"
+msgstr "Инсруктори на курсиста"
+
+msgid "StudentSessions"
+msgstr "Сесии на курсиста"
+
+msgid "StudentCourses"
+msgstr "Курсове на курсиста"
+
+msgid "NoLearnpath"
+msgstr "Няма пътеки за обучение."
+
+msgid "Attempts"
+msgstr "Опити"
+
+msgid "Correction"
+msgstr "Корекция"
+
+msgid "NoExercise"
+msgstr "Няма тестове."
+
+msgid "LimitDate"
+msgstr "Крайна дата"
+
+msgid "SentDate"
+msgstr "Дата на изпращане"
+
+msgid "Annotate"
+msgstr "Уведомяване"
+
+msgid "DayOfDelay"
+msgstr "Закъснение"
+
+msgid "NoProduction"
+msgstr "Няма публикувани работи."
+
+msgid "NoComment"
+msgstr "Без коментар."
+
+msgid "LatestLogin"
+msgstr "Последно посещение"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Време, прекарано в системата"
+
+msgid "Messages"
+msgstr "Съобщения"
+
+msgid "AveragePostsInForum"
+msgstr "Среден брой съобщения във форум"
+
+msgid "AverageAssignments"
+msgstr "Среден брой работи"
+
+msgid "Print"
+msgstr "Печат"
+
+msgid "StudentDetails"
+msgstr "Подробно за курсиста"
+
+msgid "StudentDetailsInCourse"
+msgstr "Подробно за курсиста в този курс"
+
+msgid "Learnpaths"
+msgstr "Пътеки за обучение"
+
+msgid "OtherTools"
+msgstr "Други инструменти"
+
+msgid "DetailsStudentInCourse"
+msgstr "Подробно за курсиста в този курс"
+
+msgid "CourseTitle"
+msgstr "Заглавие на курса"
+
+msgid "NbStudents"
+msgstr "Брой курсисти"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Време, прекарано в курс"
+
+msgid "AvgStudentsProgress"
+msgstr "Среден напредък на курсистите"
+
+msgid "AvgCourseScore"
+msgstr "Среден резултат на курсистите"
+
+msgid "AvgMessages"
+msgstr "Среден брой съобщения за курсист"
+
+msgid "AvgAssignments"
+msgstr "Работи за курсист"
+
+msgid "ToolsMostUsed"
+msgstr "Най-използваните инструменти"
+
+msgid "StudentsTracking"
+msgstr "Преглед на курсистите"
+
+msgid "CourseTracking"
+msgstr "Преглед на курса"
+
+msgid "LinksMostClicked"
+msgstr "Най-посещаваните връзки"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Документи, сваляни най-много"
+
+msgid "LearningPathDetails"
+msgstr "Подробно за пътеката за обучение"
+
+msgid "NoConnexion"
+msgstr "Няма посещения."
+
+msgid "TeacherInterface"
+msgstr "Преподавателски интерфейс"
+
+msgid "CoachInterface"
+msgstr "Интерфейс за инструктор"
+
+msgid "AdminInterface"
+msgstr "Администраторски интерфейс"
+
+msgid "NumberOfSessions"
+msgstr "Брой сесии"
+
+msgid "YourCourseList"
+msgstr "Вашите курсове"
+
+msgid "YourStatistics"
+msgstr "Вашата статистика"
+
+msgid "CoachList"
+msgstr "Списък с инструкторите"
+
+msgid "CoachStudents"
+msgstr "Курсисти на този инструктор"
+
+msgid "NoLearningPath"
+msgstr "Няма SCORM-курсове."
+
+msgid "SessionCourses"
+msgstr "Сесия"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Тук ще виждате резултатите от посещенията на курсистите във Вашия курс."
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Средно време, прекарано в курса"
+
+msgid "RemindInactiveUser"
+msgstr "Подсещане на неактивен потребител"
+
+msgid "FirstLogin"
+msgstr "Първо посещение"
+
+msgid "AccessDetails"
+msgstr "Подробности"
+
+msgid "DateAndTimeOfAccess"
+msgstr "Дата и час на достъпа"
+
+msgid "Duration"
+msgstr "Продължителност"
+
+msgid "WrongDatasForTimeSpentOnThePlatform"
+msgstr "Невъзможна стойност на прекараното от потребителя време според датата на регистрация."
+
+msgid "DisplayCoaches"
+msgstr "Преглед за инструкторите"
+
+msgid "DisplayUserOverview"
+msgstr "Преглед за потребителите"
+
+msgid "ExportUserOverviewOptions"
+msgstr "Опции на експортирането"
+
+msgid "FollowingFieldsWillAlsoBeExported"
+msgstr "Следните полета също ще бъдат експортирани"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "Общ постигнат резултат от тестовете"
+
+msgid "TotalExercisesScorePossible"
+msgstr "Общ възможен резултат от тестовете"
+
+msgid "TotalExercisesAnswered"
+msgstr "Брой на преминатите тестове"
+
+msgid "TotalExercisesScorePercentage"
+msgstr "Общ резултат от тестовете в проценти"
+
+msgid "ForumForumsNumber"
+msgstr "Брой форуми"
+
+msgid "ForumThreadsNumber"
+msgstr "Брой теми"
+
+msgid "ForumPostsNumber"
+msgstr "Брой съобщения"
+
+msgid "ChatConnectionsDuringLastXDays"
+msgstr "Изпозване на говорилнята през последните %s дни"
+
+msgid "ChatLastConnection"
+msgstr "Последно използване на говорилнята"
+
+msgid "CourseInformation"
+msgstr "Информация за курса"
+
+msgid "NoAdditionalFieldsWillBeExported"
+msgstr "Допълнителни полета няма да се екпортират."
+
+msgid "langSendNotification"
+msgstr "Известяване"
+
+msgid "TimeOfActiveByTraining"
+msgstr "Време прекарано в курса"
+
+msgid "AvgAllUsersInAllCourses"
+msgstr "Среден резултат от пътеките за обучение за всички участници в курса"
+
+msgid "AvgExercisesScore"
+msgstr "Среден резултат от тестовете"
+
+msgid "TrainingTime"
+msgstr "Време действие на курса"
+
+msgid "CourseProgress"
+msgstr "Напредък"
+
+msgid "ViewMinus"
+msgstr "Скриване"
+
+msgid "ResourcesTracking"
+msgstr "Справка за учебната дейност"
+
+msgid "SelectFieldToAdd"
+msgstr "Изберете поле за добавяне в потребителския профил"
+
+msgid "AddAdditionalProfileField"
+msgstr "Добавяне на поле в потребителския профил"
+
+msgid "ConfigureExtensions"
+msgstr "Настройване на разширенията"
+
+msgid "DashboardBlocks"
+msgstr "Преглед на информационното табло"
+
+msgid "DashboardList"
+msgstr "Преглед като списък"
+
+msgid "YouHaveNotEnabledBlocks"
+msgstr "Не сте активирали раздели в информационното табло."
+
+msgid "BlocksHaveBeenUpdatedSuccessfully"
+msgstr "Разделите в информационното табло са обновени."
+
+msgid "AttendanceSheetReport"
+msgstr "Справка за присъствията"
+
+msgid "YouDoNotHaveDoneAttendances"
+msgstr "Нямате присъствия."
+
+msgid "GoToAttendanceCalendarList"
+msgstr "Към календара за присъствията"
+
+msgid "AddADateTime"
+msgstr "Добавяне на час и дата"
+
+msgid "AreYouSureToDeleteAllDates"
+msgstr "Сигерни ли сте, че искате да изтриете всички дати?"
+
+msgid "DashboardPluginsHaveBeenUpdatedSuccessfully"
+msgstr "Добавките за информационното табло са обновени."
+
+msgid "ThereIsNoInformationAboutYourCourses"
+msgstr "Няма информация за Вашите курсове."
+
+msgid "ThereIsNoInformationAboutYourSessions"
+msgstr "Няма информация за Вашите сесии."
+
+msgid "ThereIsNoInformationAboutYourTeachers"
+msgstr "Няма информация за Вашите преподаватели."
+
+msgid "ThereIsNoInformationAboutYourStudents"
+msgstr "Няма информация за Вашите курсисти."
+
+msgid "TimeSpentLastWeek"
+msgstr "Прекарано време през последната седмица"
+
+msgid "DateLock"
+msgstr "Заключване на датата"
+
+msgid "FolderCreated"
+msgstr "Създадена е нова папка."
+
+msgid "LinkAdded"
+msgstr "Добавена е връзка."
+
+msgid "Minutes"
+msgstr "Резюме"
+
+msgid "BackupCreated"
+msgstr "Създаден е резервен архив."
+
+msgid "DisplayCourseOverview"
+msgstr "Преглед на курсовете"
+
+msgid "DisplaySessionOverview"
+msgstr "Преглед на сесиите"
+
+msgid "TotalNumberOfMessages"
+msgstr "Общ брой съобщения"
+
+msgid "TotalNumberOfAssignments"
+msgstr "Общ брой задачи"
+

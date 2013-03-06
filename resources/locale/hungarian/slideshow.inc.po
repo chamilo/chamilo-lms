@@ -1,0 +1,42 @@
+msgid "Height"
+msgstr "Szélesség"
+
+msgid "ResizingComment"
+msgstr "Kép átméretezése a következő kiterjedésre (pixelben)"
+
+msgid "Width"
+msgstr "Hosszúság"
+
+msgid "Resizing"
+msgstr "Átméretezés"
+
+msgid "NoResizingComment"
+msgstr "Minden kép eredeti méretben látszik. Nem lett átméretezés végrehajtva. Ha a kép nagyobb, mint a képernyő mérete, gördítősáv fog megjelenni automatikusan."
+
+msgid "ShowThumbnails"
+msgstr "Bélyegképek mutatása"
+
+msgid "SetSlideshowOptions"
+msgstr "Diavetítés tulajdonságainak beállítása"
+
+msgid "SlideshowOptions"
+msgstr "Diavetítés tulajdonságai"
+
+msgid "NoResizing"
+msgstr "NINCS ÁTMÉRETEZÉS (alapértelmezett)"
+
+msgid "ExitSlideshow"
+msgstr "Kilépés a diavetítésből"
+
+msgid "SlideShow"
+msgstr "Diavetítés"
+
+msgid "PreviousSlide"
+msgstr "Előző dia"
+
+msgid "NextSlide"
+msgstr "Következő dia"
+
+msgid "ViewSlideshow"
+msgstr "Diavetítés megtekintése"
+

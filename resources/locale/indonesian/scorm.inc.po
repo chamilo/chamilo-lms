@@ -1,0 +1,108 @@
+msgid "langScormVersion"
+msgstr "versi"
+
+msgid "langScormRestarted"
+msgstr "Semua topik kini tidak lengkap."
+
+msgid "langScormNoNext"
+msgstr "Ini topik terakhir."
+
+msgid "langScormNoPrev"
+msgstr "Ini topik awal."
+
+msgid "langScormTime"
+msgstr "Waktu"
+
+msgid "langScormNoOrder"
+msgstr "Tidak ada urut-urutan, anda dapat meng-klik ke sembarang topik."
+
+msgid "langScormScore"
+msgstr "Nilai"
+
+msgid "langScormLessonTitle"
+msgstr "Judul Topik"
+
+msgid "langScormStatus"
+msgstr "Status"
+
+msgid "langScormToEnter"
+msgstr "Untuk memasuki"
+
+msgid "langScormFirstNeedTo"
+msgstr "anda musti menyelesaikan"
+
+msgid "langScormThisStatus"
+msgstr "Mata kuliah ini kini"
+
+msgid "langScormClose"
+msgstr "Hentikan"
+
+msgid "langScormRestart"
+msgstr "Ulang"
+
+msgid "langScormCompstatus"
+msgstr "Lengkap"
+
+msgid "langScormIncomplete"
+msgstr "Tidak Lengkap"
+
+msgid "langScormPassed"
+msgstr "Berhaasil"
+
+msgid "langScormFailed"
+msgstr "Gagal"
+
+msgid "langScormPrevious"
+msgstr "Sebelumnya"
+
+msgid "langScormNext"
+msgstr "Berikutnya"
+
+msgid "langScormTitle"
+msgstr "Player Scorm Chamilo"
+
+msgid "langScormMystatus"
+msgstr "Status-ku"
+
+msgid "langScormNoItems"
+msgstr "Konten ini tidak ada isinya."
+
+msgid "langScormNoStatus"
+msgstr "Tidak ada status pada konten ini."
+
+msgid "langScormLoggedout"
+msgstr "keluar dari area Scorm"
+
+msgid "langScormCloseWindow"
+msgstr "Tutup jendela"
+
+msgid "ScormBrowsed"
+msgstr "Di-browse"
+
+msgid "langScormExitFullScreen"
+msgstr "Kembali ke layar normal"
+
+msgid "langScormFullScreen"
+msgstr "Full screen"
+
+msgid "langScormNotAttempted"
+msgstr "Belum diupayakan"
+
+msgid "langCharset"
+msgstr "Character set"
+
+msgid "langLocal"
+msgstr "Lokal"
+
+msgid "langRemote"
+msgstr "Remote/jauh"
+
+msgid "langAutodetect"
+msgstr "Auto-detect"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Jumlah total langkah yang telah dilakukan"
+
+msgid "langUnknown"
+msgstr "Tidak diketahui"
+

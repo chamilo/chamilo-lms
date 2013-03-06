@@ -1,0 +1,42 @@
+msgid "Month"
+msgstr "Buwan"
+
+msgid "Week"
+msgstr "Linggo"
+
+msgid "RepeatType"
+msgstr "Ulitin ang uri"
+
+msgid "RepeatDaily"
+msgstr "Araw-araw"
+
+msgid "RepeatWeekly"
+msgstr "Lingguhan"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Buwanan, ayon sa petsa"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Buwanan, ayon sa araw"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Buwanan, ayon sa araw, paghigpitan"
+
+msgid "RepeatYearly"
+msgstr "Taunan"
+
+msgid "RepeatEnd"
+msgstr "Ulitin ang katapusan petsa"
+
+msgid "ICalFileImport"
+msgstr "I-import ang Outlook"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Ang katapusang petsa ay hindi maaaaring bago ang simula ng petsa"
+
+msgid "RepeatEvent"
+msgstr "Ulitin ang event"
+
+msgid "EndDateMustBeMoreThanStartDate"
+msgstr "Ang katapusang petsa ay dapat mas mahigit sa panimulang petsa"
+

@@ -1,0 +1,311 @@
+msgid "lang_learning_path"
+msgstr "&#1582;&#159"
+
+msgid "lang_learning_path_builder"
+msgstr "خط
+سیر ساز"
+
+msgid "lang_description"
+msgstr "توضیحات"
+
+msgid "LearnpathTitle"
+msgstr "عنوان"
+
+msgid "LearnpathPrerequisites"
+msgstr "پیش نیاز"
+
+msgid "LearnpathMoveUp"
+msgstr "بالا
+راندن"
+
+msgid "LearnpathMoveDown"
+msgstr "پایین
+راندن"
+
+msgid "langThisItem"
+msgstr "&#1570;&#1740;&#157"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "عنوان
+و توضیح"
+
+msgid "LearnpathChangeOrder"
+msgstr "تغییر
+ترتیب"
+
+msgid "LearnpathAddPrereqi"
+msgstr "افزودن
+پیش نیاز"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "تغییر
+عنوان و توضیح"
+
+msgid "lang_delete"
+msgstr "حذف"
+
+msgid "lang_add_chapter"
+msgstr "افزودن
+فصل"
+
+msgid "langLearnpathMystatus"
+msgstr "وضعیت
+من"
+
+msgid "langLearnpathCompstatus"
+msgstr "تکمیل
+شد"
+
+msgid "langLearnpathIncomplete"
+msgstr "نا
+تمام"
+
+msgid "langLearnpathPassed"
+msgstr "گذرانده
+شد"
+
+msgid "langLearnpathFailed"
+msgstr "مردود
+شد"
+
+msgid "langLearnpathPrevious"
+msgstr "قبلی"
+
+msgid "langLearnpathNext"
+msgstr "بعدی"
+
+msgid "langLearnpathRestart"
+msgstr "شروع
+دوباره"
+
+msgid "langLearnpathThisStatus"
+msgstr "&#1608;&#1590;&#1593;&#1740;&#157"
+
+msgid "langLearnpathToEnter"
+msgstr "برای
+ورود"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "باید
+ابتدا بخش زیر
+را به پایان
+برسانید"
+
+msgid "langLearnpathLessonTitle"
+msgstr "عنوان
+بخش"
+
+msgid "langLearnpathStatus"
+msgstr "وضعیت"
+
+msgid "langLearnpathScore"
+msgstr "امتیاز"
+
+msgid "langLearnpathTime"
+msgstr "زمان"
+
+msgid "langLearnpathVersion"
+msgstr "نسخه"
+
+msgid "langLearnpathRestarted"
+msgstr "تمامی
+بخشها ناتمام
+هستند"
+
+msgid "langLearnpathNoNext"
+msgstr "&#1575;&#1740;&#160"
+
+msgid "langLearnpathNoPrev"
+msgstr "&#1575;&#1740;&#160"
+
+msgid "LearnpathAddLearnpath"
+msgstr "افزودن
+خط سیر آموزشی"
+
+msgid "lang_learnpath_added"
+msgstr "خط سیر آموزشی جدید با موفقیت ایجاد شد. هم اکنون می توانید با فشار دادن روی علامت به اضافه  فصول و بخشهای مختلف این خط سیر را به آن بیافزایید"
+
+msgid "LearnpathEditLearnpath"
+msgstr "تغییر نام و توضیحات مربوط به خط سیر آموزشی"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "حذف خط سیر آموزشی"
+
+msgid "lang_learnpath_edited"
+msgstr "خط سیر تغییر یافت"
+
+msgid "lang_learnpath_deleted"
+msgstr "خط سیر آموزشی و همامی قسمتهای آن حذف شدند"
+
+msgid "LearnpathDoNotPublish"
+msgstr "پنهان کردن از دید دانشجویان"
+
+msgid "LearnpathPublish"
+msgstr "آشکار کردن برای دانشجویان"
+
+msgid "LearnpathNotPublished"
+msgstr "هم اکنون از دید دانشجویان پنهان می باشد"
+
+msgid "LearnpathPublished"
+msgstr "هم اکنون قابل دسترسی برای دانشجویان می باشد"
+
+msgid "lang_add_learnpath_module"
+msgstr "افزودن
+یک فصل جدید"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "افزودن
+یک فصل جدید به
+این خط سیر آموزشی"
+
+msgid "lang_learnpath_module_added"
+msgstr "بخشجدید خط سیرآموزشی با موفقیتایجاد شد. هماکنون می توانیدبا فشار دادنروی علامت بهاضافه، بخشهایمختلف به آنبیفزایید"
+
+msgid "LearnpathEditModule"
+msgstr "تغییر
+عنوان یا توضیحات
+فصل"
+
+msgid "LearnpathDeleteModule"
+msgstr "حذف
+فصل"
+
+msgid "lang_learnpath_module_edited"
+msgstr "فصل مورد نظر در  خط سیر آموزشی  تغییر یافت"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "فصل مورد نظر در خط سیر آموزشی و تماتی بخشهای آن حذف شدند"
+
+msgid "LearnpathNoChapters"
+msgstr "تا
+کنون فصلی به
+این خط سیر آموزشی
+اضافه نشده
+است"
+
+msgid "LearnpathAddItem"
+msgstr "افزودن
+بخشهای مختلف
+به این فصل"
+
+msgid "LearnpathItemDeleted"
+msgstr "بخش
+مورد نظر حذف
+شد"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "لطفاً بخش یا بخشهای دلخواه خود را به این فصل اضافه کنید"
+
+msgid "lang_edit_learnpath_item"
+msgstr "تغییر
+عنوان و توضیحات
+این بخش"
+
+msgid "lang_add_prereq"
+msgstr "افزودن
+یا تغییر پیش
+نیازهای این
+درس"
+
+msgid "lang_delete_learnpath_item"
+msgstr "حذف
+بخش"
+
+msgid "LearnpathItemEdited"
+msgstr "بخش
+مورد نظر تغییر
+یافت"
+
+msgid "lang_prereq_deleted_error"
+msgstr "حذف
+شد"
+
+msgid "lang_none"
+msgstr "هیچ"
+
+msgid "lang_forum_opened"
+msgstr "پیامگاه
+مورد نظر در
+پنجره ای دیگر
+باز شد"
+
+msgid "lang_link_opened"
+msgstr "صفحۀ
+مربوط به پیوند
+مورد نظر در
+پنجره ای دیگر
+باز شد"
+
+msgid "lang_short_help"
+msgstr "&#1576;&#1585;&#1575;&#1740; &#1575;&#1601;&#1586;&#1608;&#1583;&#1606; &#1740;&#1705; &#1576;&#1582;&#1588;&#1548; &#1585;&#1608;&#1740; &#1593;&#1604;&#1575;&#1605;&#1578; «&#1576;&#1607; &#1575;&#1590;&#1575;&#1601;&#1607;» &#1601;&#1588;&#1575;&#1585;"
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "پیش
+نیازهای این
+بخش تکمیل نشده
+اند"
+
+msgid "lang_author"
+msgstr "نویسنده"
+
+msgid "lang_date"
+msgstr "تاریخ"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "پیش نیاز"
+
+msgid "lang_loading"
+msgstr "صفحۀ
+مورد نظر در حال
+بارگیری ست.
+لطفاً
+صبر کنید"
+
+msgid "lang_empty"
+msgstr "&#1583;&#158"
+
+msgid "langHotPotatoesFinished"
+msgstr "&#1575;&#1740;&#1606; &#1570;&#1586;&#1605;&#1608;&#1606; &#1576;&#1607; &#1662;&#1575;&#1740;&#1575;&#1606; &#1585;&#1587;&#1740;&#1583;"
+
+msgid "langCompletionLimit"
+msgstr "حد اقل امتیاز لازم"
+
+msgid "langPrereqToEnter"
+msgstr "برای ورود"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "شما باید ابتدا مورد زیر را به انجام رسانید"
+
+msgid "langPrereqModuleMinimum1"
+msgstr ": حدأقل یک مرحله کم است از"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "که به عنوان پیش نیاز تعریف شده است"
+
+msgid "langPrereqTestLimit1"
+msgstr ": شما باید حدأقل به رتبه روبرو دست یابید"
+
+msgid "langPrereqTestLimit2"
+msgstr "نمره از"
+
+msgid "langPrereqTestLimitNow"
+msgstr ": باقی مانده برای شما"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "بازگشت به طرز نمایش عادی"
+
+msgid "langLearnpathFullScreen"
+msgstr "نمایش در کل صفحه"
+
+msgid "langItemMissing1"
+msgstr ": مرحله آموزشی روبرو"
+
+msgid "langItemMissing2"
+msgstr "در خط سیر آموزشی اولیه ساخته شده در دوکئوس وجود داشته است"
+
+msgid "langDone"
+msgstr "گذرانده شده"
+
+msgid "langNoItemSelected"
+msgstr "برای نمایش اطلاعات در این محل، لطفاً از فهرست کناری موردی را انتخاب نمایید"
+

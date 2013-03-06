@@ -1,0 +1,261 @@
+msgid "langProfessors"
+msgstr "Professors"
+
+msgid "langExplanation"
+msgstr "Un còp qu\'auretz clicat Acceptar se crearà lo sit dau cors, aqueu comprendrà d\'instruments variats: un gestionari de documents, un creator d\'itineraris de formacion en format SCORM, un visualizator de leiçons ò d\'itineraris de formacion, la possibilitat de realizar d\'examens e de liurar de pretzfachs, de charrar dins de fòrums e per lo mejan de barjacadas, de mandar d\'anóncias e de messatges, de dispausar d\'un agenda, de videoconferéncias e d\'un tablèu digitau, d\'aisinas per trabalhar en grop e lo seguit deis estudiants, eca. Vòstra identifiacion per creator d\'aqueste sit vos permetrà de lo modificar segon lo bòn besonh."
+
+msgid "langEmpty"
+msgstr "D\'airaus son demorats vuejes !<br>Emplegatz lo boton <b>Arrier</b> de vòstre navigator e assajatz tornarmai.<br>Se conoissètz pas lo còdi dau cors, vos fau anar veire lo catalòg deis cors"
+
+msgid "langCodeTaken"
+msgstr "Aqueste còde de cors s\'emplega ja per un autre cors.<br />Utilizatz lo boton<b>Arrier</b> de vòstre navigator e assajatz tornarmai"
+
+msgid "langFormula"
+msgstr "De còr, lo professor"
+
+msgid "langMessage"
+msgstr "Quora eliminatz aqueste fòrum d\'assai, s\'escafaràn tanbèn totei leis messatges."
+
+msgid "langExerciceEx"
+msgstr "Exemple d\'exercici"
+
+msgid "langAntique"
+msgstr "Istòria de la Filosofia classica"
+
+msgid "langSocraticIrony"
+msgstr "L\'Ironia socratica…"
+
+msgid "langManyAnswers"
+msgstr "(se pòt marcar mai d\'una respònsa)"
+
+msgid "langRidiculise"
+msgstr "Ridiculizar ton interlocutor per tala maniera que s\'avise coma s\'es enganat."
+
+msgid "langNoPsychology"
+msgstr "Non. L\'ironia socratica es pas ges una question de psicologia, mai bèn d\'argumentacion."
+
+msgid "langAdmitError"
+msgstr "Admetre sei pròpreis errors per menar ton interlocutor a faire parier."
+
+msgid "langNoSeduction"
+msgstr "Non. L\'ironia socratica es pas ges una estrategia de seduccion ò un biais basat sus l\'exemple."
+
+msgid "langForce"
+msgstr "Forçar ton interlocutor, per lo mejan d\'una seria de questions e de sotaquestions, a reconóisser que saup ren au just de çò que ditz que saup."
+
+msgid "langIndeed"
+msgstr "Corrècte. L\'ironia socratica es un metòde interrogatiu. La paraula grèga \"eirotao\" vòu dire \"interrogar\""
+
+msgid "langContradiction"
+msgstr "Emplegar lo Principi de la Non Contradiccion per menar ton interlocutor a una androna."
+
+msgid "langNotFalse"
+msgstr "Aquesta respònsa es pas fausa. Segur que la revelacion de l\'inhorància de l\'interlocutor se fa en s\'avisant dei contradiccions onte lo menan sei tèsis."
+
+msgid "langVideo"
+msgstr "Video"
+
+msgid "langCourseProgram"
+msgstr "Descripcion dau cors"
+
+msgid "langAddPageHome"
+msgstr "Mandar una pagina e la reliar a la pagina d\'entrada"
+
+msgid "langModifyInfo"
+msgstr "Modificar la configuracion dau cors"
+
+msgid "langAgendaTitle"
+msgstr "Dimars 11 de Decembre 14:00 - Premiera leiçon: Newton 18"
+
+msgid "langAgendaText"
+msgstr "Introduccion generala ai principis metodologics e filosofics"
+
+msgid "langMicro"
+msgstr "Entrevistas per carrieras"
+
+msgid "langGoogle"
+msgstr "Motor de recèrca potent e rapid"
+
+msgid "langIntroductionText"
+msgstr "Vaquí l\'introduccion de vòstre cors. Per li metre a la plaça vòstre tèxte personau, clicatz sus <b>modificar</b>."
+
+msgid "langIntroductionTwo"
+msgstr "Aquesta pagina permet a cada estudiant ò grop de descargar un document sus lo sit dau cors. Mandatz de fiquiers HTML que contengan GES d\'imatge."
+
+msgid "langCourseDescription"
+msgstr "Escrivetz aicí la descripcion que pareisserà dins la lista dei cors."
+
+msgid "langAnnouncementEx"
+msgstr "Aquò es un exemple d\'anóncia. Lei professors e leis autreis administrators dau cors solament pòdon publicar d\'anóncias."
+
+msgid "langJustCreated"
+msgstr "Avètz acabat de crear lo sit dau cors"
+
+msgid "langEnter"
+msgstr "Tornar a la lista de mei cors"
+
+msgid "langCatagoryMain"
+msgstr "Principau"
+
+msgid "langCatagoryGroup"
+msgstr "Fòrum dei grops"
+
+msgid "langLn"
+msgstr "Lenga"
+
+msgid "langCreateSite"
+msgstr "Crear lo sit d\'un cors"
+
+msgid "langFieldsRequ"
+msgstr "Totei leis airaus son obligatòris"
+
+msgid "langEx"
+msgstr "ex: <i>Istòria de la Literatura</i>"
+
+msgid "langTargetFac"
+msgstr "Aquò es la facultat, lo despartement ò l\'escòla qu\'apartèn lo cors"
+
+msgid "langMax"
+msgstr "max. 12 caractèrs, ex: <i>ONA2121</i>"
+
+msgid "langDoubt"
+msgstr "Se dobtatz dau títol ò dau còdi de vòstre cors, demandatz,"
+
+msgid "langProgram"
+msgstr "Programa dau cors</a>. Se ton cors a ges de còdi, per la rason que siegue, inventa-ne\'n un. Per exemple<i>INNOVACION<i> si lo cors tracta de la Gestion de l\'Innovacion"
+
+msgid "langScormtool"
+msgstr "Itineraris de formacion"
+
+msgid "langScormbuildertool"
+msgstr "Creator de modules SCORM"
+
+msgid "langPathbuildertool"
+msgstr "Creator d\'itineraris de formacion"
+
+msgid "langOnlineConference"
+msgstr "Conferéncia en linha"
+
+msgid "langAgendaCreationTitle"
+msgstr "Creacion de cors"
+
+msgid "langAgendaCreationContenu"
+msgstr "Creacion dau cors."
+
+msgid "langOnlineDescription"
+msgstr "Aiçò es un exemple de descripcion per l\'aisina de Conferéncia"
+
+msgid "langDropbox"
+msgstr "Dorsier compartit"
+
+msgid "langOnly"
+msgstr "Solament"
+
+msgid "langRandomLanguage"
+msgstr "Causida escasençosa entre lei lengas disponiblas"
+
+msgid "langImages"
+msgstr "Imatges"
+
+msgid "langAudio"
+msgstr "Audio"
+
+msgid "langFlash"
+msgstr "Flash"
+
+msgid "langNewCourse"
+msgstr "Cors nòu"
+
+msgid "langAddNewCourse"
+msgstr "Crear un cors nòu"
+
+msgid "langRestoreCourse"
+msgstr "Restaurar lo cors"
+
+msgid "langOtherProperties"
+msgstr "Autrei proprietats dau fiquier"
+
+msgid "langSysId"
+msgstr "ID dau sistèma"
+
+msgid "langDepartment"
+msgstr "Despartement"
+
+msgid "langDepartmentUrl"
+msgstr "URL dau Despartement"
+
+msgid "langScoreShow"
+msgstr "Mostrar lei resultats"
+
+msgid "langVisibility"
+msgstr "Visibilitat"
+
+msgid "langVersionDb"
+msgstr "Version de la basa de donadas"
+
+msgid "langLastVisit"
+msgstr "Darriera visita"
+
+msgid "langLastEdit"
+msgstr "Darriera edicion"
+
+msgid "langChoseFile"
+msgstr "Causir un fiquier"
+
+msgid "langFtpFileTips"
+msgstr "Se l\'archiu es sus un autre ordinator e mai accessible per FTP"
+
+msgid "langHttpFileTips"
+msgstr "Se l\'archiu es sus un autre ordinator e mai accessible per HTTP"
+
+msgid "langLocalFileTips"
+msgstr "Se l\'archiu es accessible en locau"
+
+msgid "langPostFileTips"
+msgstr "Se l\'archiu es meme sus son ordinator"
+
+msgid "langOtherCategory"
+msgstr "Una autra categoria"
+
+msgid "langMinimum"
+msgstr "lo mens"
+
+msgid "langMaximum"
+msgstr "lo mai"
+
+msgid "langRestoreACourse"
+msgstr "restaurar un cors"
+
+msgid "langBackup"
+msgstr "Còpia de seguretat"
+
+msgid "langRecycle"
+msgstr "Restaurar un cors"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Aquesta anóncia es un exemple"
+
+msgid "Wikipedia"
+msgstr "Enciclopedia a gratis en linha"
+
+msgid "DefaultGroupCategory"
+msgstr "Grops per manca"
+
+msgid "DefaultCourseImages"
+msgstr "Imatges per manca"
+
+msgid "ExampleForumCategory"
+msgstr "Exemple de categoria"
+
+msgid "ExampleForum"
+msgstr "Exemple de fòrum"
+
+msgid "ExampleThread"
+msgstr "Exemple de tèma de convèrsa"
+
+msgid "ExampleThreadContent"
+msgstr "Exemple de contengut"
+
+msgid "IntroductionWiki"
+msgstr "La paraula WIki es una abreviadura de WikiWikiWeb. Wikiwiki es una paraula hawaiana que significa rapid ò lèu-lèu. En un Wiki leis usanciers pòdon escriure de paginas contributivas. Si una persona escriu quauqua-ren de faus, la seguenta o pòt corregir. Aquesta darriera persona tanbèn pòt ajustar d\'elements nòus a la pagina. Per ansin, la pagina se melhora per d\'escambis successius que demòran enregistrats en un istoriau."
+

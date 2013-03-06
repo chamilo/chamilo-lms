@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Dokument – Opisna definicuja"
+
+msgid "langClickKw"
+msgstr "Kliknite ne ključnu reč na drvetu da je selektujete ili deselektujete."
+
+msgid "langKwHelp"
+msgstr "<br/> Kliknite na \'+\' dugme da biste otvorili, \'-\' dugme da biste zatvorili, \'++\' dugme da otvorite sve, \'--\' dugme da zatvorite sve.<br/> <br/> Očistite sve selektovane ključne reči zatvaranjem drveta i otvaranjem ponovo sa \'+\' dugmetom.<br/> Alt-click \'+\' traži originalne ključne reči u drvetu.<br/> <br/> Alt-click ključna reč selektuje ključnu reč bez širih termina ili deselktuje ključnu reč sa širim terminima.<br/> <br/> Ako promenite jezik opisa ne dodajte ključne reči u isto vreme.<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Napredni"
+
+msgid "langSearch"
+msgstr "Traži"
+
+msgid "langSearchCrit"
+msgstr "Jedna reč po liniji!"
+
+msgid "langNoKeywords"
+msgstr "Ovaj kurs nema ključne reči"
+
+msgid "langKwCacheProblem"
+msgstr "Keš ključnih reči ne može da se otvori"
+
+msgid "langCourseKwds"
+msgstr "Ovaj dokument sadr�i ključne reči kursa"
+
+msgid "langKwdsInMD"
+msgstr "ključne reči korišćene u MD"
+
+msgid "langKwdRefs"
+msgstr "reference ključnih reči"
+
+msgid "langNonCourseKwds"
+msgstr "Ključne reči koje ne pripadaju kursu"
+
+msgid "langKwdsUse"
+msgstr "ključne reči kursa (podebljane = nisu korišćene)"
+
+msgid "langTotalMDEs"
+msgstr "Ukupan broj linkova MD unosa:"
+

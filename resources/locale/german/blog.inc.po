@@ -1,0 +1,300 @@
+msgid "MyTasks"
+msgstr "Meine Aufgaben"
+
+msgid "FavoriteBlogs"
+msgstr "Meine Projekte"
+
+msgid "Navigation"
+msgstr "Navigation"
+
+msgid "TopTen"
+msgstr "Top Ten"
+
+msgid "Subtitle"
+msgstr "Projektbeschreibung"
+
+msgid "ThisBlog"
+msgstr "Dieses Projekt"
+
+msgid "NewPost"
+msgstr "Neue Aufgabe"
+
+msgid "TaskManager"
+msgstr "Verantwortlichkeiten - Verwaltung"
+
+msgid "MemberManager"
+msgstr "Mitglieder verwalten"
+
+msgid "PostFullText"
+msgstr "Aufgabe"
+
+msgid "ReadPost"
+msgstr "Beitrag lesen"
+
+msgid "Home"
+msgstr "Projekt Home"
+
+msgid "FirstPostText"
+msgstr "Dies ist die erste Aufgabe in diesem Projekt. Jetzt kann jeder, der dieses Projekt abonniert, am Geschehen teilnehmen."
+
+msgid "AddNewComment"
+msgstr "Kommentar hinzufügen"
+
+msgid "ReplyToThisComment"
+msgstr "Auf diesen Kommentar antworten"
+
+msgid "ManageTasks"
+msgstr "Verantwortlichkeiten verwalten"
+
+msgid "ManageMembers"
+msgstr "Mitglieder verwalten"
+
+msgid "Register"
+msgstr "Eintragen"
+
+msgid "UnRegister"
+msgstr "Austragen"
+
+msgid "SubscribeMembers"
+msgstr "Mitglieder eintragen"
+
+msgid "UnsubscribeMembers"
+msgstr "Mitglieder austragen"
+
+msgid "RightsManager"
+msgstr "Rechte verwalten"
+
+msgid "ManageRights"
+msgstr "Rechte und Verantwortlichkeiten der Mitglieder verwalten"
+
+msgid "Task"
+msgstr "Aufgabe"
+
+msgid "Tasks"
+msgstr "Aufgaben"
+
+msgid "Member"
+msgstr "Mitglied"
+
+msgid "Members"
+msgstr "Mitglieder"
+
+msgid "Role"
+msgstr "Verantwortlichkeit"
+
+msgid "Rate"
+msgstr "Bewertung"
+
+msgid "Roles"
+msgstr "Verantwortlichkeiten"
+
+msgid "AddTask"
+msgstr "Neue Verantwortlichkeit hinzufügen"
+
+msgid "AddTasks"
+msgstr "Neue Verantwortlichkeiten  hinzufügen"
+
+msgid "AssignTask"
+msgstr "Verantwortlichkeit zuweisen"
+
+msgid "AssignTasks"
+msgstr "Verantwortlichkeiten zuweisen"
+
+msgid "EditTask"
+msgstr "Aufgabe bearbeiten"
+
+msgid "DeleteTask"
+msgstr "Aufgabe löschen"
+
+msgid "DeleteSystemTask"
+msgstr "Dies ist eine vordefinierter Aufgabe. Man kann diese nicht löschen."
+
+msgid "SelectUser"
+msgstr "Mitglied auswählen"
+
+msgid "SelectTask"
+msgstr "Aufgabe auswählen"
+
+msgid "SelectTargetDate"
+msgstr "Datum auswählen"
+
+msgid "TargetDate"
+msgstr "Datum"
+
+msgid "Color"
+msgstr "Farbe"
+
+msgid "TaskList"
+msgstr "Verantwortlichkeiten-Liste"
+
+msgid "AssignedTasks"
+msgstr "Zugewiesene Aufgaben"
+
+msgid "ArticleManager"
+msgstr "Aufgaben verwalten"
+
+msgid "CommentManager"
+msgstr "Kommentare verwalten"
+
+msgid "BlogManager"
+msgstr "Projekt verwalten"
+
+msgid "ReadMore"
+msgstr "weiterlesen"
+
+msgid "DeleteThisArticle"
+msgstr "Diese Aufgabe löschen"
+
+msgid "EditThisPost"
+msgstr "Diese Aufgabe bearbeiten"
+
+msgid "DeleteThisComment"
+msgstr "Diesen Kommentar löschen"
+
+msgid "NoArticles"
+msgstr "Aktuell sind keine Aufgaben in diesem Projekt. Sollten Sie der Inhaber dieses Projekts sein, klicken Sie bitte auf \'Neue Aufgabe\', um eine anzulegen."
+
+msgid "NoTasks"
+msgstr "Keine Aufgaben"
+
+msgid "Rating"
+msgstr "Bewerten"
+
+msgid "RateThis"
+msgstr "Diese Aufgabe bewerten"
+
+msgid "SelectTaskArticle"
+msgstr "Aufgabe für Verantwortlichkeit auswählen"
+
+msgid "ExecuteThisTask"
+msgstr "Eine Aufgabe für mich"
+
+msgid "WrittenBy"
+msgstr "Geschrieben von"
+
+msgid "InBlog"
+msgstr "im Projekt"
+
+msgid "ViewPostsOfThisDay"
+msgstr "Aufgaben für diesen Tag ansehen"
+
+msgid "PostsOf"
+msgstr "Aufgaben von"
+
+msgid "NoArticleMatches"
+msgstr "Keine passende Aufgabe gefunden"
+
+msgid "SaveProject"
+msgstr "Projekt speichern"
+
+msgid "langTask1"
+msgstr "Aufgabe 1"
+
+msgid "langTask2"
+msgstr "Aufgabe 2"
+
+msgid "langTask3"
+msgstr "Aufgabe 3"
+
+msgid "langTask1Desc"
+msgstr "Beschreibung von Aufgabe 1"
+
+msgid "langTask2Desc"
+msgstr "Beschreibung von Aufgabe 2"
+
+msgid "langTask3Desc"
+msgstr "Beschreibung von Aufgabe 3"
+
+msgid "blog_management"
+msgstr "Projekt Verwaltung"
+
+msgid "langWelcome"
+msgstr "Willkommen !"
+
+msgid "langModule"
+msgstr "Modul"
+
+msgid "langUserHasPermissionNot"
+msgstr "Das Mitglied hat keine Rechte"
+
+msgid "langUserHasPermission"
+msgstr "Das Mitglied hat Rechte"
+
+msgid "langLegend"
+msgstr "Legende"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "Das Mitglied hat die Rechte seiner Gruppen"
+
+msgid "EditPost"
+msgstr "Aufgabel bearbeiten"
+
+msgid "AddBlog"
+msgstr "Neues Projekt hinzufügen"
+
+msgid "EditBlog"
+msgstr "Projekt bearbeiten"
+
+msgid "DeleteBlog"
+msgstr "Projekt löschen"
+
+msgid "Shared"
+msgstr "Geteilt"
+
+msgid "PermissionGrantedByGroupOrRole"
+msgstr "Erlaubnis durch Gruppe oder Verantwortlichkeit"
+
+msgid "Reader"
+msgstr "Leser"
+
+msgid "SeeBlog"
+msgstr "siehe Projekt"
+
+msgid "BlogDeleted"
+msgstr "Das Projekt wurde gelöscht"
+
+msgid "BlogEdited"
+msgstr "Projekt wurde geändert"
+
+msgid "BlogStored"
+msgstr "Projekt wurde hinzugefügt"
+
+msgid "CommentCreated"
+msgstr "Kommentar gespeichert"
+
+msgid "BlogAdded"
+msgstr "Artikel hinzugefügt"
+
+msgid "TaskCreated"
+msgstr "Aufgabe erstellt"
+
+msgid "TaskEdited"
+msgstr "Aufgabe geändert"
+
+msgid "TaskAssigned"
+msgstr "Aufgabe wurde zugewiesen"
+
+msgid "AssignedTaskEdited"
+msgstr "Zugewiesene Aufgabe wurde geändert"
+
+msgid "UserRegistered"
+msgstr "Mitglied wurde registriert"
+
+msgid "TaskDeleted"
+msgstr "Aufgabe wurde gelöscht"
+
+msgid "TaskAssignmentDeleted"
+msgstr "Aufgabenzuweisung wurde gelöscht"
+
+msgid "CommentDeleted"
+msgstr "Kommentar gelöscht"
+
+msgid "RatingAdded"
+msgstr "Wertung hinzugefügt"
+
+msgid "BlogPosts"
+msgstr "Projekt-Aufgaben"
+
+msgid "BlogComments"
+msgstr "Projekt - Kommentare"
+

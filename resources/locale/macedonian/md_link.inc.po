@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Документи"
+
+msgid "langMdTitle"
+msgstr "Наслов на Објектот за Учење"
+
+msgid "langMdDescription"
+msgstr "За складирање на оваа информација, притиснете Складирај"
+
+msgid "langMdCoverage"
+msgstr "на пр. Дипломиран ..."
+
+msgid "langMdCopyright"
+msgstr "на пр. изворот е потврден"
+
+msgid "nameTools"
+msgstr "застарена јазиќна променлива"
+
+msgid "langTool"
+msgstr "Метаподатоци на документот"
+
+msgid "langNoScript"
+msgstr "Скриптата не е овозможена во Вашиот прелистувач, Ве молиме не обрнувајте внимание на делот од екранот надодолу, нема да работи..."
+
+msgid "langLanguageTip"
+msgstr "јазикот на кој овој објект за учење е направен"
+
+msgid "langIdentifier"
+msgstr "Идентификатор"
+
+msgid "langIdentifierTip"
+msgstr "единствен (сопствена) идентификација на овој објект за учење, составен од букви, цифри, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "наслов или име, и јазик на тој наслов или име"
+
+msgid "langDescriptionTip"
+msgstr "опис или коменатр и јазикот кој е употебен за опишување на овој објект за учење"
+
+msgid "langKeyword"
+msgstr "Клучен збор"
+
+msgid "langKeywordTip"
+msgstr "одделено со запирка (букви, цифри, -.)"
+
+msgid "langCoverage"
+msgstr "Корица"
+
+msgid "langCoverageTip"
+msgstr "на пример дипломиран xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Ако го промените јазикот за опишување, не додавајте клучни_зборови во исто време."
+
+msgid "langClickKw"
+msgstr "Кликнете на клучниот_збор во дрвото за да го селектирате или отселектирате."
+
+msgid "langKwHelp"
+msgstr "<br/> Кликнете на копчето \'+\' за отворање, на копчето \'-\' за затворање, на копчето \'++\' за да отворите се\', на копчето  \'--\' за да затворите се\'.<br/> <br/> За да ги отселектирате сите селектирани клучни_зборови, затворете го дрвото и повторно отворете го со копчето \'+\' .<br/> Alt-клик \'+\' ги бара оригиналните клучни_зборови во дрвото..<br/> <br/> Alt-клик на клучен_збор го селектира клучниот_збор без пошироки изрази.<br/> <br/> Ако го смените јазикот за опишување, не додавајте клучни_зборови во исто време.<br/> <br/>"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "кликнете за да го отворите објектот"
+
+msgid "langStore"
+msgstr "Складирај"
+
+msgid "langDeleteAll"
+msgstr "Избриши ги сите метаподатоци"
+
+msgid "langConfirmDelete"
+msgstr "Дали *навистина* сакате да ги избришете сите метаподатоци?"
+
+msgid "langWorkOn"
+msgstr "на"
+
+msgid "langNotInDB"
+msgstr "нема таква категорија на Врски"
+
+msgid "langManifestSyntax"
+msgstr "(синтаксна грешка во манифест датотеката...)"
+
+msgid "langEmptyManifest"
+msgstr "(празна манифест датотека...)"
+
+msgid "langNoManifest"
+msgstr "(нема манифест датотеки...)"
+
+msgid "langNotFolder"
+msgstr "невозможно, ова не е папка..."
+
+msgid "langContinue"
+msgstr "Продолжи со"
+
+msgid "langCreate"
+msgstr "креирај"
+
+msgid "langRemove"
+msgstr "Отстрани MDEs"
+
+msgid "langAllRemovedFor"
+msgstr "Целата содржина на категоријата е отстранета"
+
+msgid "langRemainingFor"
+msgstr "застарените податоци се отстранети од категоријата"
+
+msgid "langIndex"
+msgstr "Индекс на Зборови"
+
+msgid "langTotalMDEs"
+msgstr "Вкупен број на внесени метаподатоци за Врски:"
+
+msgid "langMainMD"
+msgstr "Отвори ја Главната MDE датотека"
+
+msgid "langOrElse"
+msgstr "Избери категорија на Врски"
+
+msgid "langWarningDups"
+msgstr "- Имињата_на_категории што се јавуваа двапати се отстранети од списокот!"
+
+msgid "langSLC"
+msgstr "Работа со категоријата на Врски која се вика"
+

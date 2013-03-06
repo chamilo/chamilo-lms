@@ -1,0 +1,180 @@
+msgid "langChapter"
+msgstr "Secção"
+
+msgid "langDocumentList"
+msgstr "Lista de todos os documentos"
+
+msgid "langOrganisationList"
+msgstr "Tabela de conteúdos"
+
+msgid "langEditTOC"
+msgstr "Editar tabela de conteúdos"
+
+msgid "langEditDocument"
+msgstr "Editar"
+
+msgid "langCreateDocument"
+msgstr "Criar página de conteúdos de media / actividade"
+
+msgid "langMissingImagesDetected"
+msgstr "Foi detectado imagens em falta"
+
+msgid "langPublish"
+msgstr "Publicar"
+
+msgid "langScormcontentstudent"
+msgstr "Este é um curso no formato Scorm. Para iniciar, clique aqui: <input type=button name=scormbutton value=\'Iniciar!\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "Isto é um conteúdo Scorm<br><input type=button name=scormbutton value=\'Iniciar!\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr "Ficheiro zip enviado e descomprimido"
+
+msgid "langZipNoPhp"
+msgstr "O ficheiro zip não pode conter ficheiros .PHP"
+
+msgid "langGroupForumLink"
+msgstr "Fórum do grupo"
+
+msgid "langGroupSpace"
+msgstr "Área do grupo"
+
+msgid "langNotScormContent"
+msgstr "N�o � um ficheiro ZIP Scorm !"
+
+msgid "langNoText"
+msgstr "Escreva por favor o seu texto / conteúdo HTML"
+
+msgid "langNoFileName"
+msgstr "Escreva por favor o nome do ficheiro"
+
+msgid "langMaxFileSize"
+msgstr "O tamanho máximo do ficheiro é"
+
+msgid "langFileName"
+msgstr "Nome da página / actividade"
+
+msgid "langFileError"
+msgstr "O ficheiro para enviar não é válido."
+
+msgid "langDown"
+msgstr "abaixo"
+
+msgid "langViMod"
+msgstr "Visibilidade modificada"
+
+msgid "langAddComment"
+msgstr "Adicionar/editar um comentário"
+
+msgid "langImpossible"
+msgstr "Impossível realizar a operação"
+
+msgid "langNewDir"
+msgstr "Nome da nova pasta/directório"
+
+msgid "langTo"
+msgstr "para"
+
+msgid "langNoSpace"
+msgstr "O envio falhou. Ou excedeu o máximo de quota, ou não existe espaço suficiente em disco."
+
+msgid "langDownloadEnd"
+msgstr "O envio terminou"
+
+msgid "langFileExists"
+msgstr "É impossível realizar a operação, já existe um ficheiro com este nome."
+
+msgid "langDocCopied"
+msgstr "Documento copiado"
+
+msgid "langDocDeleted"
+msgstr "Documento eliminado"
+
+msgid "langElRen"
+msgstr "Elemento renomeado"
+
+msgid "langDirMv"
+msgstr "Elemento movido"
+
+msgid "langComMod"
+msgstr "Comentário modificado"
+
+msgid "langRename"
+msgstr "Renomear"
+
+msgid "langCopy"
+msgstr "Copiar conteúdos do curso"
+
+msgid "langNameDir"
+msgstr "Nome da nova pasta/directório"
+
+msgid "langDownloadFile"
+msgstr "Enviar ficheiro"
+
+msgid "learning_path_access"
+msgstr "Seleccione \'Criar um curso\' para eliminar/modificar/mostrar/esconder/criar/adicionar um curso"
+
+msgid "langRoot"
+msgstr "raiz/root"
+
+msgid "langBuilder"
+msgstr "Criar um curso (ferramenta de autoría)"
+
+msgid "lang_edit_learnpath"
+msgstr "Editar percurso/caminho de aprendizagem"
+
+msgid "lang_add_title_and_desc"
+msgstr "Editar nome & desc."
+
+msgid "lang_add_learnpath"
+msgstr "Criar um novo curso (Dokeos AUTHOR)"
+
+msgid "lang_learnpath_added"
+msgstr "O curso foi criado. Adicionar secções e objectos de aprendizagem para construir o curso."
+
+msgid "lang_delete_learnpath"
+msgstr "Eliminar curso"
+
+msgid "lang_learnpath_edited"
+msgstr "O curso foi editado"
+
+msgid "lang_learnpath_deleted"
+msgstr "O curso foi eliminado"
+
+msgid "lang_no_publish"
+msgstr "não publicar"
+
+msgid "lang_publish"
+msgstr "Publicar na página inicial do curso"
+
+msgid "lang_no_published"
+msgstr "não publicado"
+
+msgid "lang_published"
+msgstr "publicado"
+
+msgid "lang_description"
+msgstr "Configurações do Curso"
+
+msgid "lang_title"
+msgstr "Título"
+
+msgid "langScormBuilder"
+msgstr "Criar um curso (ferramenta de autoría)"
+
+msgid "langCreateDoc"
+msgstr "Criar página de conteúdos de media / actividade"
+
+msgid "langOrganiseDocuments"
+msgstr "Criar tabela de conteúdos"
+
+msgid "langUncompress"
+msgstr "Descomprimir ficheiro zip"
+
+msgid "ExportShort"
+msgstr "Exportar como SCORM"
+
+msgid "progress"
+msgstr "Progresso"
+

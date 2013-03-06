@@ -1,0 +1,90 @@
+msgid "langActivate"
+msgstr "Activar"
+
+msgid "langDeactivate"
+msgstr "Desactivar"
+
+msgid "langInLnk"
+msgstr "Enlaces desactivados"
+
+msgid "langDelLk"
+msgstr "¿ Está seguro de querer desactivar esta herramienta ?"
+
+msgid "langCourseCreate"
+msgstr "Crear un curso"
+
+msgid "langNameOfTheLink"
+msgstr "Nombre del enlace"
+
+msgid "lang_main_categories_list"
+msgstr "Lista de categorías principales"
+
+msgid "langCourseAdminOnly"
+msgstr "Sólo profesores"
+
+msgid "PlatformAdminOnly"
+msgstr "Sólo administradores de la plataforma"
+
+msgid "langCombinedCourse"
+msgstr "Curso combinado"
+
+msgid "ToolIsNowVisible"
+msgstr "Ahora la herramienta es visible"
+
+msgid "ToolIsNowHidden"
+msgstr "Ahora la herramienta no es visible"
+
+msgid "EditLink"
+msgstr "Editar enlace"
+
+msgid "Blog_management"
+msgstr "Gestión de blogs"
+
+msgid "Forum"
+msgstr "Foros"
+
+msgid "Course_maintenance"
+msgstr "Mantenimiento del curso"
+
+msgid "TOOL_SURVEY"
+msgstr "Encuestas"
+
+msgid "GreyIcons"
+msgstr "Caja de herramientas"
+
+msgid "Interaction"
+msgstr "Interacción"
+
+msgid "Authoring"
+msgstr "Creación de contenidos"
+
+msgid "Administration"
+msgstr "Administración"
+
+msgid "IntroductionTextUpdated"
+msgstr "El texto de introducción ha sido actualizado"
+
+msgid "IntroductionTextDeleted"
+msgstr "El texto de introducción ha sido eliminado"
+
+msgid "SessionIdentifier"
+msgstr "Identificador de la sesión"
+
+msgid "SessionName"
+msgstr "Nombre de la sesión"
+
+msgid "SessionCategory"
+msgstr "Categoría de la sesión"
+
+msgid "SessionData"
+msgstr "Datos de la sesión"
+
+msgid "TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise"
+msgstr "La configuración para el despliegue automático de Ejercicios está activada. Los estudiantes serán redirigidos al ejercicio seleccionado para que se muestre automáticamente."
+
+msgid "TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP"
+msgstr "La configuración para el despliegue automático de Lecciones está activada. Los estudiantes serán redirigidos a la lección seleccionada cuando entren al curso para que se muestre automáticamente."
+
+msgid "ToolSearch"
+msgstr "Búsqueda"
+

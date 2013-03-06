@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Dokumentaj metadatumoj"
+
+msgid "langClickKw"
+msgstr "Musklaku sur ŝlosilvorton por elekti aŭ nuligi ĝin."
+
+msgid "langKwHelp"
+msgstr "<br/> Klaku sur \'+\' por malfermi, \'-\' por fermi, \'++\' por malfermi ĉion, \'--\' por fermi ĉion.<br/> <br/> Fermu la arbostrukturon kaj malfermu ĝin per \'+\' por nuligi antaŭajn elektojn.<br/> Malfermu per Alt-klaku \'+\' por remeti la originalajn ŝlosilvortojn.<br/> <br/> Alt-klako sur ŝlosilvorto elektas la ŝlosilvorton sen akompanantaj konceptoj akj nuligas elekton kun akompanantaj konceptoj.<br/> <br/> Se vi volas ŝanĝi la lingvon de la priskribo, ne samtempe aldonu novajn ŝlosilvortojn.<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Altnivela"
+
+msgid "langSearch"
+msgstr "Serĉi"
+
+msgid "langSearchCrit"
+msgstr "Po unu vorto en linio!"
+
+msgid "langNoKeywords"
+msgstr "Tiu ĉi kurso ne havas ŝlosilvortojn."
+
+msgid "langKwCacheProblem"
+msgstr "Ne eblas malfermi la provizejon de ŝlosilvortoj"
+
+msgid "langCourseKwds"
+msgstr "Ĉi-dokumento enhavas la ŝlosilvortojn de la kurso"
+
+msgid "langKwdsInMD"
+msgstr "ŝlosilvortoj uzataj en MD"
+
+msgid "langKwdRefs"
+msgstr "ŝlosilvortaj referencoj"
+
+msgid "langNonCourseKwds"
+msgstr "Ne-kursaj ŝlosilvortoj"
+
+msgid "langKwdsUse"
+msgstr "Kursaj ŝlosilvortoj (grasaj = ne uzataj)"
+
+msgid "langTotalMDEs"
+msgstr "Totala nombro da Ligil-MDaj datumoj :"
+

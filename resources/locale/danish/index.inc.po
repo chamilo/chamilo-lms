@@ -1,0 +1,192 @@
+msgid "langInvalidId"
+msgstr "Fejl ved login.<BR>Hvis du ikke er registreret, brug <a href=claroline/auth/inscription.php>Registrering</a></font color>. <br><br>Du kan få tilsendt dine brugeroplysninger ved at klikke på linket Glemt brugeroplysninger."
+
+msgid "langWelcome"
+msgstr "Velkommen!"
+
+msgid "langPass"
+msgstr "Adgangskode"
+
+msgid "langEnter"
+msgstr "Tilbage til min kursusoversigt"
+
+msgid "langReg"
+msgstr "Registrering"
+
+msgid "langMenu"
+msgstr "Menu"
+
+msgid "langAdvises"
+msgstr "Informere"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Advarsel :</b> Dette kursus eksisterer ikke"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "Klik her for at hente dette kursusforløb fra den gamle portal"
+
+msgid "langOtherCourses"
+msgstr "andre kurser"
+
+msgid "langSupportForum"
+msgstr "Hjælpeforum"
+
+msgid "langCategories"
+msgstr "kategorier"
+
+msgid "langBackToHomePage"
+msgstr "Tilbage til kursusoversigten"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Der er ingen åbne kursussider tilgængelige."
+
+msgid "langLostPassword"
+msgstr "Glemt brugeroplysninger?"
+
+msgid "lang_edit_my_course_list"
+msgstr "Rediger min kursusoversigt"
+
+msgid "langAgenda"
+msgstr "Kalender"
+
+msgid "langValvas"
+msgstr "Seneste meddelelser"
+
+msgid "langUp"
+msgstr "Op"
+
+msgid "langCatList"
+msgstr "Kategorier"
+
+msgid "langCourseList"
+msgstr "Oversigt over kursusside"
+
+msgid "langHelptwo"
+msgstr "Hjælp"
+
+msgid "langRegAll"
+msgstr "Registrer"
+
+msgid "EussMenu"
+msgstr "menu"
+
+msgid "Opinio"
+msgstr "Mening"
+
+msgid "Intranet"
+msgstr "Intranet"
+
+msgid "Englin"
+msgstr "English"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Fejl med login - hvis du ikke er registreret, kan du bruge bruge denne <a href=claroline/auth/inscription.php>registreringsformular</a>"
+
+msgid "langSubCat"
+msgstr "underkategorier"
+
+msgid "langMenuGeneral"
+msgstr "Generelt"
+
+msgid "langMenuUser"
+msgstr "Deltagere"
+
+msgid "langMenuAdmin"
+msgstr "Systemadmin"
+
+msgid "langUsersOnLineList"
+msgstr "Online deltagerliste"
+
+msgid "langTotalOnLine"
+msgstr "Online i alt"
+
+msgid "langRefresh"
+msgstr "Opdater"
+
+msgid "langMe"
+msgstr "mig"
+
+msgid "langSystemAnnouncements"
+msgstr "Systemmeddelelser"
+
+msgid "langHelpMaj"
+msgstr "Hjælp"
+
+msgid "langNotRegistered"
+msgstr "Ikke registreret"
+
+msgid "langAdmin"
+msgstr "Systemadmin"
+
+msgid "Login"
+msgstr "Brugernavn"
+
+msgid "langRegisterForCourse"
+msgstr "Tilmeld kursusside"
+
+msgid "langUnregisterForCourse"
+msgstr "Afmeld kursusside"
+
+msgid "langCombinedCourse"
+msgstr "Kombineret kursus"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Refresh"
+msgstr "Opdatér"
+
+msgid "TotalOnLine"
+msgstr "Brugere online i alt"
+
+msgid "langCourseClosed"
+msgstr "(dette kursusforløb er p.t. lukket)"
+
+msgid "ViewOpenCourses"
+msgstr "Se åbne kursussider"
+
+msgid "langCompetences"
+msgstr "Kompetencer"
+
+msgid "langDiplomas"
+msgstr "Diplomer"
+
+msgid "langTeach"
+msgstr "Hvad han/hun kan undervise i"
+
+msgid "langProductions"
+msgstr "Produktioner"
+
+msgid "langSendChatRequest"
+msgstr "Send en chat-forespørgsel til denne person"
+
+msgid "langRequestDenied"
+msgstr "Opkaldet blev afvist"
+
+msgid "UsageDatacreated"
+msgstr "Data om brug er oprettet"
+
+msgid "SessionView"
+msgstr "Vis kursussiderne ud fra session"
+
+msgid "CourseView"
+msgstr "Vis en samlet oversigt over kursussiderne"
+
+msgid "DropboxFileAdded"
+msgstr "Fil fra dueslag er tilføjet"
+
+msgid "NewMessageInForum"
+msgstr "Der er skrevet et nyt indlæg i diskussionsforummet"
+
+msgid "FolderCreated"
+msgstr "Ny mappe er oprettet"
+
+msgid "LinkAdded"
+msgstr "Et nyt link er tilføjet"
+
+msgid "AnnouncementAdded"
+msgstr "Meddelelsen er blevet tilføjet"
+
+msgid "AgendaAdded"
+msgstr "Aftale er tilføjet"
+

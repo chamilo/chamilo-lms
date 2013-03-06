@@ -1,0 +1,156 @@
+msgid "AgendaAdd"
+msgstr "Pridėti naują darbotvarkės įrašą"
+
+msgid "ShowAllEvents"
+msgstr "Rodyti viską"
+
+msgid "ShowCurrent"
+msgstr "Rodyti šio mėnesio darbotvarkės įrašus"
+
+msgid "AddCalendarItem"
+msgstr "Pridėti naują darbotvarkės įrašą"
+
+msgid "Day"
+msgstr "Diena"
+
+msgid "Month"
+msgstr "Mėnuo"
+
+msgid "Year"
+msgstr "Metai"
+
+msgid "Hour"
+msgstr "Valanda"
+
+msgid "Minutes"
+msgstr "Minutės"
+
+msgid "Detail"
+msgstr "Detalės"
+
+msgid "EditSuccess"
+msgstr "Darbotvarkės įrašas buvo redaguotas"
+
+msgid "AddSuccess"
+msgstr "Darbotvarkės įrašas pridėtas"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Darbotvarkės įrašas ištrintas"
+
+msgid "NoAgendaItems"
+msgstr "Įrašų nėra"
+
+msgid "lang_september"
+msgstr "Rugsėjis"
+
+msgid "langClassName"
+msgstr "Klasės vardas"
+
+msgid "lang_agenda"
+msgstr "Darbotvarkė"
+
+msgid "ModifyCalendarItem"
+msgstr "Redaguoti įrašą"
+
+msgid "ItemTitle"
+msgstr "Įrašo pavadinimas"
+
+msgid "langDay"
+msgstr "diena"
+
+msgid "month_default"
+msgstr "mėnuo pagal nutylėjimą"
+
+msgid "langYear"
+msgstr "Metai"
+
+msgid "year_default"
+msgstr "metai pagal nutylėjimą"
+
+msgid "langHour"
+msgstr "Valanda"
+
+msgid "hour_default"
+msgstr "valanda pagal nutylėjimą"
+
+msgid "langMinute"
+msgstr "minutė"
+
+msgid "langLasting"
+msgstr "lasting"
+
+msgid "langOldToNew"
+msgstr "senas į naują"
+
+msgid "langNewToOld"
+msgstr "naujas į seną"
+
+msgid "langNow"
+msgstr "dabar"
+
+msgid "langAddEvent"
+msgstr "Pridėti įvykį"
+
+msgid "langDetail"
+msgstr "detalus"
+
+msgid "MonthView"
+msgstr "Peržiūra mėnesiais"
+
+msgid "WeekView"
+msgstr "Peržiūra savaitėmis"
+
+msgid "DayView"
+msgstr "Peržiūra dienomis"
+
+msgid "AddPersonalItem"
+msgstr "Įrašyti privatų įrašą"
+
+msgid "Week"
+msgstr "Savaitė"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Time"
+msgstr "Laikas"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Įrašyti privatų darbotvarkės įrašą"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Redaguoti privatų darbotvarkės įrašą"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Jūsų privatus darbotvarkės įrašas sėkmingai įrašytas"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Jūsų privatus darbotvarkės įrašas sėkmingai redaguotas"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Jūsų privatus darbotvarkės įrašas sėkmingai ištrintas"
+
+msgid "ViewPersonalItem"
+msgstr "Rodyti privačius įrašus"
+
+msgid "UserGroupFilter"
+msgstr "Filtruoti pagal grupes/įrašus"
+
+msgid "ShowAll"
+msgstr "Rodyti viską"
+
+msgid "Print"
+msgstr "Spausdinti"
+
+msgid "MyTextHere"
+msgstr "mano tekstas čia"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Copied as announcement"
+
+msgid "NewAnnouncement"
+msgstr "New announcement"
+
+msgid "AddAnnouncement"
+msgstr "Add as an announcement"
+

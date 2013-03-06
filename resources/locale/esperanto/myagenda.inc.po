@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Mia agendo"
+
+msgid "langToday"
+msgstr "hodiaŭ"
+

@@ -1,0 +1,285 @@
+msgid "langNewGroupCreate"
+msgstr "Izveidot jaunu grupu(as)"
+
+msgid "langGroupCreation"
+msgstr "Jaunas grupas izveide"
+
+msgid "langCreate"
+msgstr "izveidot"
+
+msgid "langNewGroups"
+msgstr "jauna grupa(s)"
+
+msgid "langMax"
+msgstr "max. 20 simbolu, piem.: <i>INNOV21</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "Dalībnieku skaits grupā (nav obligāti)"
+
+msgid "langGroupsAdded"
+msgstr "grupa(s) tika izveidota(s)"
+
+msgid "langGroupDel"
+msgstr "Grupa izdzēsta"
+
+msgid "langDocuments"
+msgstr "Dokumenti"
+
+msgid "langExistingGroups"
+msgstr "Grupas"
+
+msgid "langRegistered"
+msgstr "Reģistrēts"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Lietotājiem ir atļauts pašiem sevi pieteikt grupām"
+
+msgid "langGroupTools"
+msgstr "Instrumenti"
+
+msgid "langGroupDocument"
+msgstr "Dokumenti"
+
+msgid "langGroupPropertiesModified"
+msgstr "Grupas iestatījumi tika izmainīti"
+
+msgid "langGroupSpace"
+msgstr "Grupas lauks"
+
+msgid "langGroupName"
+msgstr "Grupas nosaukums"
+
+msgid "langGroupDescription"
+msgstr "Grupas apraksts"
+
+msgid "langGroupMembers"
+msgstr "Grupas dalībnieki"
+
+msgid "langEditGroup"
+msgstr "Labot šo grupu"
+
+msgid "Optional"
+msgstr "(nav obligāti)"
+
+msgid "langGroupSettingsModified"
+msgstr "Grupas iestatījumi tika izmainīti"
+
+msgid "langGroupTooMuchMembers"
+msgstr "Skaits, ko piedāvājat, pārsniedz maksimāli atļauto (Jūs varat to labot zemāk). Grupa netika pārveidota."
+
+msgid "langGroupTutor"
+msgstr "Grupas Mācību spēks (Lektors)"
+
+msgid "langGroupNoTutor"
+msgstr "(nav)"
+
+msgid "langGroupNone"
+msgstr "(nav)"
+
+msgid "langGroupNoneMasc"
+msgstr "(nav)"
+
+msgid "langAddTutors"
+msgstr "Lietotāju saraksta administrēšana"
+
+msgid "langMyGroup"
+msgstr "mana grupa"
+
+msgid "langOneMyGroups"
+msgstr "mana pārvaldība"
+
+msgid "langGroupSelfRegistration"
+msgstr "Reģistrēšanās"
+
+msgid "langGroupSelfRegInf"
+msgstr "reģistrēt"
+
+msgid "langRegIntoGroup"
+msgstr "Pievienot mani šai grupai"
+
+msgid "langGroupNowMember"
+msgstr "Jūs tagad esat pievienots šai grupai."
+
+msgid "langPrivate"
+msgstr "Privāta pieeja (saite pieejama lietotājiem no īpaša saraksta)"
+
+msgid "langPublic"
+msgstr "Publiska pieeja no portāla sākumlapas bez autorizācijas pieprasījuma"
+
+msgid "langPropModify"
+msgstr "Izmainīt iestatījumus"
+
+msgid "langState"
+msgstr "Stāvoklis"
+
+msgid "langGroupFilledGroups"
+msgstr "Grupas ir nokomplektētas ar \"Lietotāju\" sarakstā esošajiem lietotājiem."
+
+msgid "langSubscribed"
+msgstr "lietotāji, kas reģistrēti šajā kursā"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Lietotāji, kas neatrodas šajā grupā"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Lietotājs var būt dalībnieks ne vairāk, kā"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr "grupas"
+
+msgid "langGroupLimit"
+msgstr "Limits"
+
+msgid "CreateGroup"
+msgstr "Izveidot grupu(as)"
+
+msgid "ProceedToCreateGroup"
+msgstr "Turpināt izveidot grupu(as)"
+
+msgid "langStudentRegAllowed"
+msgstr "Lietotāji var sevi piereģistrēt grupās"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Lietotāji var atteikt sevi no grupām"
+
+msgid "langAllGroups"
+msgstr "Visas grupas"
+
+msgid "langStudentUnsubscribe"
+msgstr "Vēlos atteikties no šīs grupas"
+
+msgid "langStudentDeletesHimself"
+msgstr "Jūs vairs neesat šajā grupā"
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Jaunveidojamo grupu iestatījumu pēc noklusējuma"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Visas iezīmētās grupas tika izdzēstas"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Visas iezīmētās grupas tagad ir tukšas"
+
+msgid "langGroupEmptied"
+msgstr "Šī grupa tagad ir tukša"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Visas iezīmētās grupas tagad ir aizpildītas"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "atteikties"
+
+msgid "langSameForAll"
+msgstr "vienāds visiem"
+
+msgid "langNoLimit"
+msgstr "Nav ierobežojumu"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Lūdzu, ievadiet grupu skaitu"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Izveidot grupas no visiem lietotājiem virtuālajos kursos"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "Šis kurss ir reāla un viena vai vairāku virtuālu kursu kombinējums. Ja Jūs noklikšķināsiet uz sekojošās pogas, jaunas grupas tiks izveidotas balstoties uz šiem (virtuālajiem) kursiem. Visi Kursanti tiks reģistrēti šajās grupās."
+
+msgid "langNoGroupsAvailable"
+msgstr "Nav pieejamu grupu"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "Virtuālie kursi"
+
+msgid "NotAvailable"
+msgstr "Nav pieejami"
+
+msgid "CreateSubgroups"
+msgstr "Izveidot apakšgrupas"
+
+msgid "CreateSubgroupsInfo"
+msgstr "Šī iespēja ļauj Jums izveidot jaunas grupas izmantojot jau esošu. Norādiet nepieciešamo grupu skaitu un izvēlieties jau esošu grupu. Tiks izveidotas grupas pēc norādītā skaita un visi lietotāji esošā grupā tiks piereģistrēti jaunizveidotajām. Esošās grupas sastāvs netiek mainīts."
+
+msgid "CreateNumberOfGroups"
+msgstr "Veidot"
+
+msgid "WithUsersFrom"
+msgstr "grupas ar dalībniekiem no"
+
+msgid "CategoryDeleted"
+msgstr "Kategorija tika izdzēsta"
+
+msgid "Empty"
+msgstr "Iztukšot"
+
+msgid "FillGroup"
+msgstr "pievienot lietotājus"
+
+msgid "EmptyGroup"
+msgstr "atteikt visus lietotājus"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "Jūsu norādītais maksimālais grupu skaits uz katru lietotāju ir nekorekts. Tagad ir lietotāji, kas ir pierakstīti vairāk grupās nekā pieļauj skaits, ko Jūs norādījāt."
+
+msgid "GroupOverview"
+msgstr "Grupas pārskats"
+
+msgid "GroupCategory"
+msgstr "Grupas kategorija"
+
+msgid "NoTitleGiven"
+msgstr "Lūdzu, norādiet virsrakstu"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "Lūdzu, norādiet korektu maksimālo lietotāju skaitu."
+
+msgid "CategoryOrderChanged"
+msgstr "Kategoriju kārtība tika mainīta"
+
+msgid "Wiki"
+msgstr "Grupas WIKI"
+
+msgid "CategoryCreated"
+msgstr "Kategorija izveidota"
+
+msgid "GroupTutors"
+msgstr "Mācību spēki"
+
+msgid "GroupWork"
+msgstr "Referāti / Mājas darbi"
+
+msgid "GroupCalendar"
+msgstr "Dienas kārtība"
+
+msgid "GroupAnnouncements"
+msgstr "Paziņojumi kursa lietotājiem"
+
+msgid "NoCategoriesDefined"
+msgstr "Kategorijas nav definētas"
+
+msgid "GroupsFromClasses"
+msgstr "Klašu grupas"
+
+msgid "GroupsFromClassesInfo"
+msgstr "Lietojot šo opciju, Jūs variet veidot grupas no klasēm, kuras ir pierakstītas Jūsu kursam"
+
+msgid "Group"
+msgstr "Grupa"
+
+msgid "ForumOfGroup"
+msgstr "Grupas diskusija"
+
+msgid "BackToGroupList"
+msgstr "Atpakaļ uz Grupu sarakstu"
+
+msgid "EditGroupCategory"
+msgstr "Rediģēt grupu kategoriju"
+
+msgid "NoStudents"
+msgstr "Nav Kursantu"
+
+msgid "NoData"
+msgstr "Dati nav pieejami"
+
+msgid "AllGroups"
+msgstr "Visas grupas"
+

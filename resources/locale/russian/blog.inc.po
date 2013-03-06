@@ -1,0 +1,240 @@
+msgid "MyTasks"
+msgstr "Мои задания"
+
+msgid "FavoriteBlogs"
+msgstr "Мои любимые блоги (дневники)"
+
+msgid "Navigation"
+msgstr "Навигация"
+
+msgid "TopTen"
+msgstr "Лучшая десятка блогов (дневников)"
+
+msgid "Subtitle"
+msgstr "Подзаголовок"
+
+msgid "ThisBlog"
+msgstr "Этот блог (дневник)"
+
+msgid "NewPost"
+msgstr "Новая статья"
+
+msgid "TaskManager"
+msgstr "Управление заданиями"
+
+msgid "MemberManager"
+msgstr "Управление пользователями"
+
+msgid "PostFullText"
+msgstr "Текст"
+
+msgid "ReadPost"
+msgstr "Прочитать это уведомление"
+
+msgid "Home"
+msgstr "Начало (домой)"
+
+msgid "FirstPostText"
+msgstr "Это первая статья в этом блоге. Сейчас все подписчики на этот блог могут участвовать"
+
+msgid "AddNewComment"
+msgstr "Добавить новый комментарий"
+
+msgid "ReplyToThisComment"
+msgstr "Оветить на этот комментарий"
+
+msgid "ManageTasks"
+msgstr "Управлять заданиями"
+
+msgid "ManageMembers"
+msgstr "Подписать/прекратить подписку пользователя в этом блоге"
+
+msgid "Register"
+msgstr "Зарегистрироваться"
+
+msgid "UnRegister"
+msgstr "Отказаться от регистрации"
+
+msgid "SubscribeMembers"
+msgstr "Подписать пользователей"
+
+msgid "UnsubscribeMembers"
+msgstr "Отменить подписку пользователей"
+
+msgid "RightsManager"
+msgstr "Управление правами пользователей"
+
+msgid "ManageRights"
+msgstr "Управлять ролями и правами этого пользователя в этом блоге"
+
+msgid "Task"
+msgstr "Задание"
+
+msgid "Tasks"
+msgstr "Задания"
+
+msgid "Member"
+msgstr "Член"
+
+msgid "Members"
+msgstr "Члены"
+
+msgid "Role"
+msgstr "Роль"
+
+msgid "Rate"
+msgstr "Оценка"
+
+msgid "Roles"
+msgstr "Роли"
+
+msgid "AddTask"
+msgstr "Добавить новое задание"
+
+msgid "AddTasks"
+msgstr "Добавить новое задание"
+
+msgid "AssignTask"
+msgstr "Дать задание"
+
+msgid "AssignTasks"
+msgstr "Дать задания"
+
+msgid "EditTask"
+msgstr "Редактировать это задание"
+
+msgid "DeleteTask"
+msgstr "Удалить это задание"
+
+msgid "DeleteSystemTask"
+msgstr "Это системное задание на настоящий момент. Вы не можете удалить такое задание."
+
+msgid "SelectUser"
+msgstr "Пользователь"
+
+msgid "SelectTask"
+msgstr "Задание"
+
+msgid "SelectTargetDate"
+msgstr "Выбрать дату"
+
+msgid "TargetDate"
+msgstr "Дата"
+
+msgid "Color"
+msgstr "Цвет"
+
+msgid "TaskList"
+msgstr "Задания в этом блоге"
+
+msgid "AssignedTasks"
+msgstr "Заданные задания"
+
+msgid "ArticleManager"
+msgstr "Управление статьей"
+
+msgid "CommentManager"
+msgstr "Управление комментариями"
+
+msgid "BlogManager"
+msgstr "Управление блогом"
+
+msgid "ReadMore"
+msgstr "Читать дополнительно..."
+
+msgid "DeleteThisArticle"
+msgstr "Удалить эту статью"
+
+msgid "EditThisPost"
+msgstr "Редактировать это послание"
+
+msgid "DeleteThisComment"
+msgstr "Удалить этот комментарий"
+
+msgid "NoArticles"
+msgstr "В настоящее время в этом блоге нет статей. Если Вы автор этого блога, щелкните на ссылку \"новая статья\" для того, чтобы ее написать."
+
+msgid "NoTasks"
+msgstr "Нет заданий"
+
+msgid "Rating"
+msgstr "Рейтинг"
+
+msgid "RateThis"
+msgstr "Оценить эту статью"
+
+msgid "SelectTaskArticle"
+msgstr "Выбрать статью для данного задания"
+
+msgid "ExecuteThisTask"
+msgstr "Выполнить это задание"
+
+msgid "WrittenBy"
+msgstr "Написано"
+
+msgid "InBlog"
+msgstr "В блоге"
+
+msgid "ViewPostsOfThisDay"
+msgstr "Просмотреть послания (статьи) сегодняшнего дня"
+
+msgid "PostsOf"
+msgstr "Послания (статьи) от"
+
+msgid "NoArticleMatches"
+msgstr "Статей не найдено. Проверьте правильность написания слов или попробуйте искать по-другому."
+
+msgid "langTask1"
+msgstr "Задание 1"
+
+msgid "langTask2"
+msgstr "Задание 2"
+
+msgid "langTask3"
+msgstr "Задание 3"
+
+msgid "langTask1Desc"
+msgstr "Описание задания 1"
+
+msgid "langTask2Desc"
+msgstr "Описание задания 2"
+
+msgid "langTask3Desc"
+msgstr "Описание задания 3"
+
+msgid "blog_management"
+msgstr "Управление блогом"
+
+msgid "langWelcome"
+msgstr "Добро пожаловать!"
+
+msgid "langModule"
+msgstr "Модуль"
+
+msgid "langUserHasPermissionNot"
+msgstr "Пользователь не обладает правами"
+
+msgid "langUserHasPermission"
+msgstr "Пользователь обладает правами"
+
+msgid "langLegend"
+msgstr "Легенда (надпись)"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "Пользователь имеет права этой группы"
+
+msgid "EditPost"
+msgstr "Редактировать статью"
+
+msgid "AddBlog"
+msgstr "Создать новый блог"
+
+msgid "EditBlog"
+msgstr "Редактировать заголовок и подзаголовок"
+
+msgid "DeleteBlog"
+msgstr "Удалить этот блог"
+
+msgid "Shared"
+msgstr "Совместный"
+

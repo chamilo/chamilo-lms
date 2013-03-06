@@ -1,0 +1,57 @@
+msgid "Name"
+msgstr "Pangalan"
+
+msgid "Progress"
+msgstr "Progreso"
+
+msgid "Stop"
+msgstr "Ihinto"
+
+msgid "Question"
+msgstr "Tanong"
+
+msgid "Create"
+msgstr "Lumikha"
+
+msgid "YesNo"
+msgstr "Oo / Hindi"
+
+msgid "Yes"
+msgstr "Oo"
+
+msgid "No"
+msgstr "Hindi"
+
+msgid "Votes"
+msgstr "Mga Boto:"
+
+msgid "Result"
+msgstr "Resulta"
+
+msgid "Course"
+msgstr "Kurso"
+
+msgid "CourseLanguage"
+msgstr "Wika:"
+
+msgid "Arrow"
+msgstr "Arrow"
+
+msgid "Close"
+msgstr "Isara"
+
+msgid "Loading"
+msgstr "Naglo-load"
+
+msgid "Learner"
+msgstr "Mag-aaral"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Send"
+msgstr "Ipadala ang mensahe"
+
+msgid "Cancel"
+msgstr "Kanselahin"
+

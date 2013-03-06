@@ -1,0 +1,21 @@
+msgid "langActivate"
+msgstr "Aktifkan"
+
+msgid "langDeactivate"
+msgstr "Tidak aktif"
+
+msgid "langInLnk"
+msgstr "Pautan yang tidak aktif"
+
+msgid "langDelLk"
+msgstr "Anda pasti untuk padam pautan ini?"
+
+msgid "langCourseCreate"
+msgstr "Bina Laman Subjek"
+
+msgid "langNameOfTheLink"
+msgstr "Nama Pautan"
+
+msgid "lang_main_categories_list"
+msgstr "Senarai Kategori Utama"
+

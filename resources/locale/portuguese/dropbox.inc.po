@@ -1,0 +1,294 @@
+msgid "Upload"
+msgstr "Enviar"
+
+msgid "BackList"
+msgstr "Regressar à caixa de entrega"
+
+msgid "ShowFeedback"
+msgstr "Apresentar Feedback"
+
+msgid "GiveFeedback"
+msgstr "Atribuir / Editar Feedback"
+
+msgid "JustUploadInSelect"
+msgstr "---Enviar apenas---"
+
+msgid "MailingNothingFor"
+msgstr "Nada para"
+
+msgid "MailingFileNotRegistered"
+msgstr "(não se encontra registado neste curso)"
+
+msgid "MailingFileSentTo"
+msgstr "enviado para"
+
+msgid "MailingFileIsFor"
+msgstr "é para"
+
+msgid "MailingFileRecipDup"
+msgstr "vários utilizadores têm"
+
+msgid "MailingFileRecipNotFound"
+msgstr "não existe nenhum aluno com"
+
+msgid "MailingFileNoRecip"
+msgstr "o nome não contém nenhum ID de destinatário"
+
+msgid "MailingFileNoPostfix"
+msgstr "o nome não termina com"
+
+msgid "MailingFileNoPrefix"
+msgstr "o nome não começa com"
+
+msgid "MailingFileFunny"
+msgstr "sem nome, ou extensão sem caracteres (pode ter desde 1 a 4 caracteres)"
+
+msgid "MailingZipDups"
+msgstr "O ficheiro zip do correio não pode conter ficheiros duplicados - não será enviado."
+
+msgid "MailingZipPhp"
+msgstr "O ficheiro zip do correio não pode conter ficheiros PHP - não será enviado"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "O ficheiro zip do correio encontra-se vazio ou é um ficheiro zip inválido"
+
+msgid "MailingWrongZipfile"
+msgstr "O correio tem de ser comprimido num ficheiro zip com ID do ALUNO ou com o nome do LOGIN/ACESSO"
+
+msgid "MailingConfirmSend"
+msgstr "Enviar ficheiros de conteúdo para outros destinatários?"
+
+msgid "MailingSend"
+msgstr "Validar"
+
+msgid "MailingNotYetSent"
+msgstr "Os ficheiros de conteúdo no correio ainda não foram enviados..."
+
+msgid "MailingInSelect"
+msgstr "---Correio---"
+
+msgid "MailingAsUsername"
+msgstr "Correio"
+
+msgid "FileDeleted"
+msgstr "O ficheiro seleccionado foi removido da sua caixa de entrega."
+
+msgid "DocAdd"
+msgstr "O documento foi adicionado com sucesso"
+
+msgid "Sender"
+msgstr "remetente"
+
+msgid "Author"
+msgstr "autor"
+
+msgid "FileSize"
+msgstr "tamanho do ficheiro"
+
+msgid "Title"
+msgstr "título"
+
+msgid "OverwriteFile"
+msgstr "Substituir as versões anteriores do mesmo documento?"
+
+msgid "Ok"
+msgstr "Validar"
+
+msgid "Unknown"
+msgstr "desconhecido"
+
+msgid "SentOn"
+msgstr "em"
+
+msgid "SentTo"
+msgstr "Enviado para"
+
+msgid "ConfirmDelete"
+msgstr "Remove apenas o registo de entrada da sua lista"
+
+msgid "SendTo"
+msgstr "Enviar para"
+
+msgid "Description"
+msgstr "Observações"
+
+msgid "UploadFile"
+msgstr "Enviar documento"
+
+msgid "ErrorCreatingDir"
+msgstr "Não é possível criar o directório/pasta. Por favor, contacte o administrador do sistema."
+
+msgid "UploadError"
+msgstr "Falha no upload/envio do ficheiro. Por favor verifique o tamanho limite máximo de upload de ficheiros e as permissões da pasta de destino."
+
+msgid "TooBig"
+msgstr "Não seleccionou o ficheiro ou o ficheiro é demasiado grande."
+
+msgid "NoFileSpecified"
+msgstr "Não especificou um ficheiro para enviar."
+
+msgid "NoUserSelected"
+msgstr "Por favor, seleccione o utilizador a que pretende enviar o ficheiro."
+
+msgid "BadFormData"
+msgstr "Falha no envio: dados incorrectos no formulário. Por favor contacte o administrador do sistema."
+
+msgid "GeneralError"
+msgstr "Ocorreu um erro. Por favor, contacte o administrador do sistema."
+
+msgid "Dropbox"
+msgstr "Caixa de entrega"
+
+msgid "Help"
+msgstr "Ajuda"
+
+msgid "ReceivedFiles"
+msgstr "Ficheiros recebidos"
+
+msgid "SentFiles"
+msgstr "Ficheiros enviados"
+
+msgid "ReceivedTitle"
+msgstr "Título"
+
+msgid "SentTitle"
+msgstr "Ficheiros enviados"
+
+msgid "Authors"
+msgstr "Autores"
+
+msgid "Size"
+msgstr "Tamanho"
+
+msgid "LastResent"
+msgstr "Último envio em"
+
+msgid "kB"
+msgstr "KB"
+
+msgid "Root"
+msgstr "Raiz"
+
+msgid "UploadNewFile"
+msgstr "Partilhar um novo ficheiro"
+
+msgid "AreYouSureToDelete"
+msgstr "Tem a certeza que deseja eliminar?"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "CloseFeedback"
+msgstr "Encerrar feedback"
+
+msgid "AddNewFeedback"
+msgstr "Adicionar feedback"
+
+msgid "DropboxFeedbackStored"
+msgstr "A mensagem de feedback foi guardada"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Todos os utilizadores eliminaram o ficheiro para que ninguém possa visualizar o feedback que está adicionar."
+
+msgid "FeedbackError"
+msgstr "Erro no Feedback"
+
+msgid "PleaseTypeText"
+msgstr "Por favor escreva algum texto."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "Não está autorizado a fazer o download/descarregar este ficheiro."
+
+msgid "CheckAtLeastOneFile"
+msgstr "Verificar pelo menos um ficheiro."
+
+msgid "ReceivedFileDeleted"
+msgstr "O ficheiro recebido foi eliminado."
+
+msgid "SentFileDeleted"
+msgstr "O ficheiro enviado foi eliminado."
+
+msgid "FilesMoved"
+msgstr "Os ficheiros seleccionados foram movidos."
+
+msgid "ReceivedFileMoved"
+msgstr "O ficheiro recebido foi movido."
+
+msgid "SentFileMoved"
+msgstr "O ficheiro enviado foi movido"
+
+msgid "NotMovedError"
+msgstr "O(s) ficheiro(s) não pode(m) ser movidos."
+
+msgid "AddNewCategory"
+msgstr "Adicionar uma nova pasta"
+
+msgid "EditCategory"
+msgstr "Editar esta categoria"
+
+msgid "CategoryName"
+msgstr "Nome da pasta"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Por favor, atribua um nome à categoria"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Esta categoria já existe, por favor, escolha um nome diferente."
+
+msgid "CurrentlySeeing"
+msgstr "Encontra-se na pasta"
+
+msgid "CategoryStored"
+msgstr "A pasta foi criada"
+
+msgid "CategoryModified"
+msgstr "A categoria foi modificada."
+
+msgid "CategoryDeleted"
+msgstr "A categoria foi eliminada."
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "O campo do autor não pode estar vazio"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Tem de seleccionar pelo menos um destinatário."
+
+msgid "DropboxFileTooBig"
+msgstr "O tamanho do ficheiro é demasiado grande."
+
+msgid "TheFileIsNotUploaded"
+msgstr "O ficheiro não é enviado."
+
+msgid "FileUploadSucces"
+msgstr "O ficheiro foi enviado com sucesso."
+
+msgid "MailingNonMailingError"
+msgstr "O correio não pode ser substituido por não-correio e vice-versa"
+
+msgid "MailingSelectNoOther"
+msgstr "O correio não pode ser combinado com outros destinatários"
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "-Enviar apenas- não pode ser combinado com outros destinatários"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Foi enviado um novo ficheiro da caixa de entrega"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Foi enviado um novo ficheiro para a Caixa de entrega"
+
+msgid "langAddEdit"
+msgstr "Adicionar / Editar"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Esta pasta encontra-se vazia"
+
+msgid "AddComment"
+msgstr "Guardar feedback"
+
+msgid "SentCatgoryDeleted"
+msgstr "A pasta foi eliminada"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "A pasta foi eliminada"
+

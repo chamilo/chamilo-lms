@@ -1,0 +1,69 @@
+msgid "langActivate"
+msgstr "Gør aktiv/ synlig for deltagerne"
+
+msgid "langDeactivate"
+msgstr "Gør passiv/ skjul for deltagerne"
+
+msgid "langInLnk"
+msgstr "Ikke aktive funktioner og links"
+
+msgid "langDelLk"
+msgstr "Er du sikkert på, at du vil slettet dette link?"
+
+msgid "langCourseCreate"
+msgstr "Opret kursusside"
+
+msgid "langNameOfTheLink"
+msgstr "Navn på link"
+
+msgid "lang_main_categories_list"
+msgstr "Hovedkategoriliste"
+
+msgid "langCourseAdminOnly"
+msgstr "Kun undervisere"
+
+msgid "PlatformAdminOnly"
+msgstr "Kun platformsadministratorer"
+
+msgid "langCombinedCourse"
+msgstr "Kombineret kursus"
+
+msgid "ToolIsNowVisible"
+msgstr "Værktøjet er nu synligt"
+
+msgid "ToolIsNowHidden"
+msgstr "Værktøjet er nu skjult"
+
+msgid "EditLink"
+msgstr "Rediger link"
+
+msgid "Blog_management"
+msgstr "Administration af blogs"
+
+msgid "Forum"
+msgstr "Diskussionsfora"
+
+msgid "Course_maintenance"
+msgstr "Kursusvedligeholdelse"
+
+msgid "TOOL_SURVEY"
+msgstr "Evalueringer"
+
+msgid "GreyIcons"
+msgstr "Værktøjskasse"
+
+msgid "Interaction"
+msgstr "Interaktion"
+
+msgid "Authoring"
+msgstr "Distribution"
+
+msgid "Administration"
+msgstr "Administration"
+
+msgid "IntroductionTextUpdated"
+msgstr "Introduktionsteksten er opdateret"
+
+msgid "IntroductionTextDeleted"
+msgstr "Introduktionsteksten er slettet"
+

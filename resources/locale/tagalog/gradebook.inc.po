@@ -1,0 +1,75 @@
+msgid "FlatView"
+msgstr "Tingnan ang Lista"
+
+msgid "ScoreEdit"
+msgstr "Ranggo sa kasanayan"
+
+msgid "RootCat"
+msgstr "Pangunahing folder"
+
+msgid "NewEvaluation"
+msgstr "Magdagdag ng aktibidad sa silid-aralan"
+
+msgid "Weight"
+msgstr "Timbang"
+
+msgid "EvaluationName"
+msgstr "Pagtatasa"
+
+msgid "MakeLink"
+msgstr "Magdagdag ng aktibidad online"
+
+msgid "DeleteSelected"
+msgstr "Tanggalin ang pinili"
+
+msgid "SetVisible"
+msgstr "I-set na nakikita"
+
+msgid "SetInvisible"
+msgstr "I-set na di-nakikita"
+
+msgid "DeleteAll"
+msgstr "Tanggalin ang pagtatasa?"
+
+msgid "CertificateMinScore"
+msgstr "Minimum na score ng sertipikasyon"
+
+msgid "Display"
+msgstr "Ranggo"
+
+msgid "Results"
+msgstr "Mga Resulta at feedback"
+
+msgid "Evaluation"
+msgstr "Score"
+
+msgid "EditAllWeights"
+msgstr "Timbang sa Ulat"
+
+msgid "AttachCertificate"
+msgstr "Ikabit ang sertipiko"
+
+msgid "GradebookSeeListOfStudentsCertificates"
+msgstr "Tingan ang lista ng mga sertipiko ng mag-aaral"
+
+msgid "Evaluations"
+msgstr "Mga Ebalwasyon"
+
+msgid "ThereIsNotACertificateAvailableByDefault"
+msgstr "Walang sertipiko ang magagamit ayon sa default"
+
+msgid "LinkMod"
+msgstr "I-save"
+
+msgid "TotalWeight"
+msgstr "Kabuuang timbang"
+
+msgid "TotalWeightMustBeX"
+msgstr "Ang kabuuan ng lahat ng mga timbang ng mga aktibidad ay dapat %s"
+
+msgid "SelectGradebook"
+msgstr "Piliin ang pagtatasa"
+
+msgid "AddGradebook"
+msgstr "Idagdag ang pagtatasa"
+

@@ -1,0 +1,231 @@
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Microphone"
+msgstr "Mikrofoni"
+
+msgid "Name"
+msgstr "Nimi"
+
+msgid "DeleteStream"
+msgstr "Poista tallenne"
+
+msgid "Progress"
+msgstr "Edistyminen"
+
+msgid "Play"
+msgstr "Toista"
+
+msgid "Stop"
+msgstr "Pysäytä"
+
+msgid "Record"
+msgstr "Nauhoita"
+
+msgid "NoFileAvailable"
+msgstr "Tiedostoa ei saatavilla"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Äänittäminen vain opettajille."
+
+msgid "UsersNow"
+msgstr "Käyttäjiä tällä hetkellä:"
+
+msgid "StartConference"
+msgstr "Aloita konferenssi"
+
+msgid "MyName"
+msgstr "Nimeni"
+
+msgid "OrganisationSVideoconference"
+msgstr "Chamilo LIVE"
+
+msgid "ImportPresentation"
+msgstr "Lataa esitys"
+
+msgid "RefreshList"
+msgstr "Virkistä lista"
+
+msgid "GoToTop"
+msgstr "Mene alkuun"
+
+msgid "NewPoll"
+msgstr "Uusi äänestys"
+
+msgid "CreateNewPoll"
+msgstr "Luo uusi äänestys tähän huoneesen"
+
+msgid "Question"
+msgstr "Kysymys"
+
+msgid "PollType"
+msgstr "Kyselyn tyyppi:"
+
+msgid "Create"
+msgstr "Luo"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Info: Jokainen tässä tilassa oleva käyttäjä saa ilmoituksen uudesta kyselystä."
+
+msgid "YesNo"
+msgstr "Kyllä / Ei"
+
+msgid "Numeric1To10"
+msgstr "Numero 1-10"
+
+msgid "Poll"
+msgstr "Kysely"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Sinun tulee olla puheenjohtaja jotta voit tehdä kyselyitä."
+
+msgid "YourVoteHasBeenSent"
+msgstr "Äänesi on rekisteröity"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Olet jo äänestänyt"
+
+msgid "VoteButton"
+msgstr "Äänestä!"
+
+msgid "YourAnswer"
+msgstr "Vastauksesi:"
+
+msgid "Yes"
+msgstr "Kyllä"
+
+msgid "No"
+msgstr "Ei"
+
+msgid "WantsToKnow"
+msgstr "haluaa tietää:"
+
+msgid "PollResults"
+msgstr "Kyselyn tulokset"
+
+msgid "Votes"
+msgstr "Äänet:"
+
+msgid "Result"
+msgstr "Tulos"
+
+msgid "ThereIsNoPoll"
+msgstr "Kyselyä ei ole."
+
+msgid "MeetingMode"
+msgstr "Kokous (max 4 käyttäjää)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Luento (max 50 käyttäjää)"
+
+msgid "Mode"
+msgstr "Tila"
+
+msgid "RemainingSeats"
+msgstr "Paikkoja jäljellä"
+
+msgid "AlreadyIn"
+msgstr "Jo sisällä"
+
+msgid "CheckIn"
+msgstr "Kirjautuminen"
+
+msgid "TheModeratorHasLeft"
+msgstr "Luennon valvoja on poistunut huoneesta."
+
+msgid "SystemMessage"
+msgstr "Järjestelmän viesti"
+
+msgid "ChooseDevices"
+msgstr "Valitse laitteet"
+
+msgid "ChooseCam"
+msgstr "Valitse kamera"
+
+msgid "ChooseMic"
+msgstr "Valitse mikrofoni:"
+
+msgid "OK"
+msgstr "Vahvista"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Sinun täytyy kirjautua uudelleen, jotta muutokset tulevat voimaan."
+
+msgid "ChangeSettings"
+msgstr "Muuta asetuksia"
+
+msgid "Course"
+msgstr "Kurssi"
+
+msgid "CourseLanguage"
+msgstr "Kieli:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Haluatko varmasti tyhjentää taulun"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Tyhjennetäänkö taulu ennen uuden kuvan lisäystä?"
+
+msgid "DontAskMeAgain"
+msgstr "Älä kysy enää"
+
+msgid "EditSettings"
+msgstr "Muokkaa asetuksia"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Kysy vahvistus ennen taulun tyhjentämistä"
+
+msgid "UserInfo"
+msgstr "käyttäjä tiedot"
+
+msgid "ClearDrawArea"
+msgstr "Tyhjennä piirto alue"
+
+msgid "Undo"
+msgstr "Peru"
+
+msgid "Redo"
+msgstr "Toista"
+
+msgid "SelectAnObject"
+msgstr "Valitse objekti"
+
+msgid "Text"
+msgstr "Teksti"
+
+msgid "Paint"
+msgstr "Maalaa"
+
+msgid "DrawLine"
+msgstr "Piirrä viiva"
+
+msgid "DrawUnderline"
+msgstr "Alleviivaa"
+
+msgid "Rectangle"
+msgstr "Suorakulmio"
+
+msgid "Elipse"
+msgstr "Ellipsi"
+
+msgid "Arrow"
+msgstr "Nuoli"
+
+msgid "DeleteChosenItem"
+msgstr "Poista valittu resurssi"
+
+msgid "ApplyForModeration"
+msgstr "Ilmoittaudu valvojaksi"
+
+msgid "BecomeModerator"
+msgstr "Ryhdy valvojaksi"
+
+msgid "Close"
+msgstr "sulje"
+
+msgid "Italic"
+msgstr "Kursiivi"
+
+msgid "Bold"
+msgstr "Lihavoitu"
+

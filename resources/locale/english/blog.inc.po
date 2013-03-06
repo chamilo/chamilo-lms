@@ -1,0 +1,300 @@
+msgid "MyTasks"
+msgstr "My tasks"
+
+msgid "FavoriteBlogs"
+msgstr "My projects"
+
+msgid "Navigation"
+msgstr "Navigation"
+
+msgid "TopTen"
+msgstr "Top ten"
+
+msgid "Subtitle"
+msgstr "Project description"
+
+msgid "ThisBlog"
+msgstr "This project"
+
+msgid "NewPost"
+msgstr "New task"
+
+msgid "TaskManager"
+msgstr "Roles management"
+
+msgid "MemberManager"
+msgstr "Users management"
+
+msgid "PostFullText"
+msgstr "Task"
+
+msgid "ReadPost"
+msgstr "Read this post"
+
+msgid "Home"
+msgstr "Project home"
+
+msgid "FirstPostText"
+msgstr "This is the first task in the project. Everybody subscribed to this project is able to participate"
+
+msgid "AddNewComment"
+msgstr "Add a new comment"
+
+msgid "ReplyToThisComment"
+msgstr "Reply to this comment"
+
+msgid "ManageTasks"
+msgstr "Manage roles"
+
+msgid "ManageMembers"
+msgstr "Subscribe / Unsubscribe users in this project"
+
+msgid "Register"
+msgstr "Register"
+
+msgid "UnRegister"
+msgstr "Unregister"
+
+msgid "SubscribeMembers"
+msgstr "Subscribe users"
+
+msgid "UnsubscribeMembers"
+msgstr "Unsubscribe users"
+
+msgid "RightsManager"
+msgstr "Users rights management"
+
+msgid "ManageRights"
+msgstr "Manage roles and rights of user in this project"
+
+msgid "Task"
+msgstr "Task"
+
+msgid "Tasks"
+msgstr "Tasks"
+
+msgid "Member"
+msgstr "Member"
+
+msgid "Members"
+msgstr "Members"
+
+msgid "Role"
+msgstr "Role"
+
+msgid "Rate"
+msgstr "Rate"
+
+msgid "Roles"
+msgstr "Roles"
+
+msgid "AddTask"
+msgstr "Add a new role"
+
+msgid "AddTasks"
+msgstr "Add a new role"
+
+msgid "AssignTask"
+msgstr "Assign a role"
+
+msgid "AssignTasks"
+msgstr "Assign roles"
+
+msgid "EditTask"
+msgstr "Edit this task"
+
+msgid "DeleteTask"
+msgstr "Delete this task"
+
+msgid "DeleteSystemTask"
+msgstr "This is a preset task. You can\'t delete a preset task."
+
+msgid "SelectUser"
+msgstr "User"
+
+msgid "SelectTask"
+msgstr "Task"
+
+msgid "SelectTargetDate"
+msgstr "Date"
+
+msgid "TargetDate"
+msgstr "Date"
+
+msgid "Color"
+msgstr "Colour"
+
+msgid "TaskList"
+msgstr "Roles in this project"
+
+msgid "AssignedTasks"
+msgstr "Assigned tasks"
+
+msgid "ArticleManager"
+msgstr "Tasks manager"
+
+msgid "CommentManager"
+msgstr "Comment manager"
+
+msgid "BlogManager"
+msgstr "Project manager"
+
+msgid "ReadMore"
+msgstr "Read more..."
+
+msgid "DeleteThisArticle"
+msgstr "Delete this task"
+
+msgid "EditThisPost"
+msgstr "Edit this task"
+
+msgid "DeleteThisComment"
+msgstr "Delete this comment"
+
+msgid "NoArticles"
+msgstr "There are no tasks in this project. If you are the manager of this project, click on  link \'New task\' to write an task."
+
+msgid "NoTasks"
+msgstr "No tasks"
+
+msgid "Rating"
+msgstr "Rating"
+
+msgid "RateThis"
+msgstr "Rate this task"
+
+msgid "SelectTaskArticle"
+msgstr "Select a task for this role"
+
+msgid "ExecuteThisTask"
+msgstr "A task for me"
+
+msgid "WrittenBy"
+msgstr "Written by"
+
+msgid "InBlog"
+msgstr "in the project"
+
+msgid "ViewPostsOfThisDay"
+msgstr "View tasks for today"
+
+msgid "PostsOf"
+msgstr "Tasks by"
+
+msgid "NoArticleMatches"
+msgstr "No tasks have been found. Check the word spelling or try another search."
+
+msgid "SaveProject"
+msgstr "Save blog"
+
+msgid "langTask1"
+msgstr "Task 1"
+
+msgid "langTask2"
+msgstr "Task 2"
+
+msgid "langTask3"
+msgstr "Task 3"
+
+msgid "langTask1Desc"
+msgstr "Task 1 description"
+
+msgid "langTask2Desc"
+msgstr "Task 2 description"
+
+msgid "langTask3Desc"
+msgstr "Task 3 description"
+
+msgid "blog_management"
+msgstr "Project management"
+
+msgid "langWelcome"
+msgstr "Welcome !"
+
+msgid "langModule"
+msgstr "Module"
+
+msgid "langUserHasPermissionNot"
+msgstr "The user hasn\'t rights"
+
+msgid "langUserHasPermission"
+msgstr "The user has rights"
+
+msgid "langLegend"
+msgstr "Legend"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "The user has rights of its group"
+
+msgid "EditPost"
+msgstr "Edit a task"
+
+msgid "AddBlog"
+msgstr "Create a new project"
+
+msgid "EditBlog"
+msgstr "Edit a project"
+
+msgid "DeleteBlog"
+msgstr "Delete this project"
+
+msgid "Shared"
+msgstr "Shared"
+
+msgid "PermissionGrantedByGroupOrRole"
+msgstr "Permission granted by group or role"
+
+msgid "Reader"
+msgstr "Reader"
+
+msgid "SeeBlog"
+msgstr "See blog"
+
+msgid "BlogDeleted"
+msgstr "The project has been deleted."
+
+msgid "BlogEdited"
+msgstr "The project has been edited."
+
+msgid "BlogStored"
+msgstr "The project has been added."
+
+msgid "CommentCreated"
+msgstr "The comment has been saved."
+
+msgid "BlogAdded"
+msgstr "The article has been added."
+
+msgid "TaskCreated"
+msgstr "The task has been created"
+
+msgid "TaskEdited"
+msgstr "The task has been edited."
+
+msgid "TaskAssigned"
+msgstr "The task has been assigned."
+
+msgid "AssignedTaskEdited"
+msgstr "The assigned task has been edited"
+
+msgid "UserRegistered"
+msgstr "The user has been registered"
+
+msgid "TaskDeleted"
+msgstr "The task has been deleted."
+
+msgid "TaskAssignmentDeleted"
+msgstr "The task assignment has been deleted."
+
+msgid "CommentDeleted"
+msgstr "The comment has been deleted."
+
+msgid "RatingAdded"
+msgstr "A rating has been added."
+
+msgid "BlogPosts"
+msgstr "Blog Posts"
+
+msgid "BlogComments"
+msgstr "Blog comments"
+

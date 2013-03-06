@@ -1,0 +1,443 @@
+msgid "langShouldBeCSVFormat"
+msgstr "Tiedoston tulee olla CSV-formaatissa. Älä lisää välilyöntejä. Tiedoston rakenteen tulee olla tarkasti seuraava:"
+
+msgid "langTracking"
+msgstr "Seuranta"
+
+msgid "langEnter2passToChange"
+msgstr "Vaihtaaksesi salasanasi syötä se kaksi kertaa. Muussa tapauksessa jätä kentät tyhjiksi."
+
+msgid "langAuthInfo"
+msgstr "Tunnistaminen"
+
+msgid "langUpdateImage"
+msgstr "Vaihda kuva"
+
+msgid "langImageWrong"
+msgstr "Tiedoston koon pitäisi olla pienempi kuin"
+
+msgid "langAddImage"
+msgstr "Kuva"
+
+msgid "langCourseManager"
+msgstr "Opettaja"
+
+msgid "NewPass"
+msgstr "Uusi salasana"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "Nykyinen salasana on väärä"
+
+msgid "password_request"
+msgstr "Olet pyytänyt salasanasi uusimista. Jos et ole pyytänyt sitä voit jättää tämän viestin huomiotta."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Salasanasi on lähetetty sähköpostiisi"
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Syötä sähköpostiosoitteesi jota käytit rekisteröityessäsi niin lähetämme salasanasi sinulle."
+
+msgid "langLogin"
+msgstr "Kirjaudu"
+
+msgid "langAction"
+msgstr "Toiminto"
+
+msgid "langPreserved"
+msgstr "Varattu"
+
+msgid "langDeleted"
+msgstr "Poistettu"
+
+msgid "langAdded"
+msgstr "Lisätty"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Vahvista käyttäjän poisto"
+
+msgid "langCourseName"
+msgstr "Kurssin nimi"
+
+msgid "langSubscribe"
+msgstr "Rekisteröi"
+
+msgid "langSee"
+msgstr "Siirry"
+
+msgid "langLastVisits"
+msgstr "Viimeisimmät vierailuni"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Jos haluat lisätä joukon käyttäjiä kurssillesi ota yhteyttä pääkäyttäjään."
+
+msgid "langPassTooEasy"
+msgstr "tämä salasana on liian yksinkertainen. Käytä salasanaa kuten"
+
+msgid "langGroupUserManagement"
+msgstr "Ryhmien hallinta"
+
+msgid "langAddedToCourse"
+msgstr "on lisätty kurssille"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Saman niminen käyttäjä on jo rekisteröity tälle kurssille"
+
+msgid "langBackUser"
+msgstr "Takaisin käyttäjälistaan"
+
+msgid "langUserOneByOneExplanation"
+msgstr "Käyttäjälle lähetetään sähköpostivahvistus, jossa on käyttäjätunnus ja salasana"
+
+msgid "langGiveTutor"
+msgstr "Tee tutoriksi"
+
+msgid "langRemoveRight"
+msgstr "Poista tämä oikeus"
+
+msgid "langGiveAdmin"
+msgstr "Tee admin"
+
+msgid "langUserNumber"
+msgstr "numero"
+
+msgid "langDownloadUserList"
+msgstr "Lataa lista"
+
+msgid "langSend"
+msgstr "Lähetä"
+
+msgid "langUserAddExplanation"
+msgstr "Jokaisen rivin tiedostossa täytyy sisältää vähintään 5 kenttää: Etunimi Sukunimi Käyttäjätunnus Salasana Sähköposti eroteltuna tabulaattorilla tässä järjestyksessä. Käyttäjät saavat sähköpostivahvistuksen, jossa on käyttätunnus ja salasana."
+
+msgid "langUserMany"
+msgstr "Tuo käyttäjälista"
+
+msgid "langOneByOne"
+msgstr "Lisää käyttäjä manuaalisesti"
+
+msgid "langNow"
+msgstr "nyt"
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langStudent"
+msgstr "Opiskelija"
+
+msgid "langImportUserList"
+msgstr "Tuo lista käyttäjistä"
+
+msgid "langAddAU"
+msgstr "Lisää käyttäjä"
+
+msgid "langAddedU"
+msgstr "on lisätty. Sähköposti, jossa on hänen käyttäjänimensä, on lähetety hänelle"
+
+msgid "langTheU"
+msgstr "Käyttäjä"
+
+msgid "langRegYou"
+msgstr "on rekisteröinyt sinut tälle kurssille"
+
+msgid "langOneResp"
+msgstr "Eräs kurssin ylläpitäjistä"
+
+msgid "langTaken"
+msgstr "on jo käytössä. valitse uusi."
+
+msgid "langUserNo"
+msgstr "Valitsemasi käyttäjänimi"
+
+msgid "langFilled"
+msgstr "Jätit jotkut kentistä tyhjiksi."
+
+msgid "langInC"
+msgstr "tällä kurssilla"
+
+msgid "langRole"
+msgstr "Rooli"
+
+msgid "UserPicture"
+msgstr "Kuva"
+
+msgid "langProfileReg"
+msgstr "Profiili on tallennettu"
+
+msgid "langEmailWrong"
+msgstr "Sähköpostiosoitteesi on puutteellinen tai virheellinen"
+
+msgid "langUserTaken"
+msgstr "Tämä käyttäjänimi on jo käytössä"
+
+msgid "langFields"
+msgstr "Jotkut kentät ovat tyhjiä"
+
+msgid "langAgain"
+msgstr "Yritä uudestaan!"
+
+msgid "langPassTwo"
+msgstr "Kaksi eri salasanaa!"
+
+msgid "langModifProfile"
+msgstr "Muokkaa profiiliani"
+
+msgid "langIsReg"
+msgstr "Kursseille on rekisteröity"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Nyt voit luoda oman kurssisi"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Voit nyt siirtyä valitsemaan haluamasi kurssin"
+
+msgid "langMailHasBeenSent"
+msgstr "Sinulle on lähetetty sähköpostilla käyttäjätunnuksesi ja salasanasi."
+
+msgid "langPersonalSettings"
+msgstr "Henkilökohtaiset asetuksesi on rekisteröity ja sähköpostissa on lähetetty käyttäjänimesi ja salasanasi, jotta muistaisit ne.</p>Valitse listasta kurssit, joihin haluat pääsyn."
+
+msgid "langManager"
+msgstr "Ylläpitäjä"
+
+msgid "langFormula"
+msgstr "Sinun opettajasi:"
+
+msgid "langProblem"
+msgstr "Jos sinulla on ongelmia, ota yhteyttä."
+
+msgid "langIs"
+msgstr "on"
+
+msgid "langAddress"
+msgstr "Osoite"
+
+msgid "langSettings"
+msgstr "seuraavilla asetuksilla:
+Käyttäjänimi:"
+
+msgid "langYouAreReg"
+msgstr "Olet rekisteröitynyt:"
+
+msgid "langYourReg"
+msgstr "Rekisteröintisi:"
+
+msgid "langUserFree"
+msgstr "Tämä käyttäjänimi on jo käytössä. Mene takaisin ja yritä uudestaan."
+
+msgid "langEmptyFields"
+msgstr "Jätit jotkut kentistä tyhjiksi. Mene takaisin ja yritä uudestaan."
+
+msgid "langPassTwice"
+msgstr "Kirjoitti kaksi erilaista salasanaa. Mene takaisin ja yritä uudestaan."
+
+msgid "langRegAdmin"
+msgstr "Luo kurssien sivustot (opettaja)"
+
+msgid "langRegStudent"
+msgstr "Valitse kursseja (opiskelija)"
+
+msgid "langConfirmation"
+msgstr "Vahvistus"
+
+msgid "langPass"
+msgstr "Salasana"
+
+msgid "langSurname"
+msgstr "Etunimi"
+
+msgid "langRegistration"
+msgstr "Rekisteröinti"
+
+msgid "langDefineHeadings"
+msgstr "Määrittele otsikot"
+
+msgid "langCourseAdministratorOnly"
+msgstr "vain opettaja"
+
+msgid "langLostPassword"
+msgstr "Olen kadottanut salasanani"
+
+msgid "langAdminOfCourse"
+msgstr "Kurssin ylläpitäjä"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Kurssin opiskelija"
+
+msgid "langIsTutor"
+msgstr "Tutor"
+
+msgid "langParamInTheCourse"
+msgstr "Rooli kurssilla"
+
+msgid "langMember"
+msgstr "jäsen"
+
+msgid "langLock"
+msgstr "lukittu"
+
+msgid "langUnlock"
+msgstr "käytössä"
+
+msgid "langHaveNoCourse"
+msgstr "ei kurssia"
+
+msgid "langManage"
+msgstr "Hallitse sivustoa"
+
+msgid "langAdministrationTools"
+msgstr "Ylläpitäjän työkalut"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Tällä sähköpostiosoitteella ei ole käyttäjätunnusta"
+
+msgid "langCourses4User"
+msgstr "Käyttäjän kurssit"
+
+msgid "langCoursesByUser"
+msgstr "Käyttäjien kurssit"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Lisää käyttäjiä kurssille"
+
+msgid "langPreced100"
+msgstr "Edelliset 100"
+
+msgid "langAddmore"
+msgstr "Lisää rekisteröityneitä käyttäjiä"
+
+msgid "langAddback"
+msgstr "Käyttäjälistaan"
+
+msgid "langreg"
+msgstr "Rekisteröidy"
+
+msgid "langQuit"
+msgstr "Lopeta"
+
+msgid "your_password_has_been_reset"
+msgstr "Salasanasi on nollattu"
+
+msgid "langSex"
+msgstr "Sukupuoli"
+
+msgid "langClass"
+msgstr "Luokka"
+
+msgid "langEdit"
+msgstr "muokkaa"
+
+msgid "required"
+msgstr "Pakollinen"
+
+msgid "langOptionalTextFields"
+msgstr "Valinnaiset kentät"
+
+msgid "langMyProductions"
+msgstr "Oma tuotantoni"
+
+msgid "langFileDeleted"
+msgstr "Tiedosto on poistettu"
+
+msgid "FullUserName"
+msgstr "Koko nimi"
+
+msgid "SearchForUser"
+msgstr "Etsi käyttäjää"
+
+msgid "SearchButton"
+msgstr "Etsi"
+
+msgid "SearchNoResultsFound"
+msgstr "Etsinnälle ei löytynyt tuloksia"
+
+msgid "UsernameWrong"
+msgstr "Käyttäjätunnuksessa saa olla ainoastaan kirjaimia, numeroita ja _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "Tämä on salasanan pyyntö sähköpostiosoitteelle"
+
+msgid "CorrespondsToAccount"
+msgstr "Tämä sähköpostiosoite liittyy käyttäjätunnukseen"
+
+msgid "CorrespondsToAccounts"
+msgstr "Tämä sähköpostiosoite liittyy seuraaviin käyttäjätunnuksiin"
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo ei voi käsitellä pyyntöä automaattisesti, koska käyttäjätunnukseen liittyy ulkopuolinen autentikointi lähde. Ole hyvä ja ilmoita käyttäjälle."
+
+msgid "langphone"
+msgstr "Puhelin"
+
+msgid "Unreg"
+msgstr "Peru rekisteröinti"
+
+msgid "MyProgress"
+msgstr "Edistymiseni"
+
+msgid "ProgressIntroduction"
+msgstr "Aloita valitsemalla haluamasi kurssi.
+Sen jälkeen voit seurata edistymistäsi jokaisella kurssillasi."
+
+msgid "Select"
+msgstr "Vahvista"
+
+msgid "NeverExpires"
+msgstr "Ei vanhene koskaan"
+
+msgid "On"
+msgstr "Päättyy"
+
+msgid "ExpirationDate"
+msgstr "Päättymis päivä"
+
+msgid "ActiveAccount"
+msgstr "Tunnus"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "Tunnuksesi täytyy hyväksyä"
+
+msgid "ApprovalForNewAccount"
+msgstr "Uuden tunnuksen hyväksyminen"
+
+msgid "ManageUser"
+msgstr "Hallitse käyttäjää"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Rekisteröi kouluttajia"
+
+msgid "SendMessage"
+msgstr "Lähetä viesti"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "Salasanasi on salattu tietoturvan takaamiseksi. Painamalla linkkiä saat sähköpostiin uuden salasanan."
+
+msgid "UsersUnsubscribed"
+msgstr "Valitut käyttäjät on poistettu kurssilta"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "Sähköpostin lähettäminen ei onnistunut"
+
+msgid "UsernameMaxXCharacters"
+msgstr "Tunnuksen pitää olla korkeintaan %s merkkiä pitkä"
+
+msgid "PictureUploaded"
+msgstr "Kuvasi on ladattu"
+
+msgid "FolderUpdated"
+msgstr "Kansio päivitetty"
+
+msgid "UsersRegistered"
+msgstr "Käyttäjät on rekisteröity kurssille"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "Käyttäjä on rekisteröity jo toiselle kouluttajalle"
+
+msgid "UserCreatedPlatform"
+msgstr "Käyttäjä luotu sivustolle"
+
+msgid "UserNotAdded"
+msgstr "Käyttäjää ei lisätty."
+
+msgid "NoUsersRead"
+msgstr "Tarkista XML/CVS tiedoston rakenne."
+

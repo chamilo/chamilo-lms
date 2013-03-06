@@ -1,0 +1,453 @@
+msgid "WikiSearchResults"
+msgstr "Wiki keresési eredmények"
+
+msgid "Wiki"
+msgstr "Csoport wiki"
+
+msgid "StartPage"
+msgstr "Kezdőoldal"
+
+msgid "EditThisPage"
+msgstr "Az oldal módosítása"
+
+msgid "ShowPageHistory"
+msgstr "Változtatások"
+
+msgid "RecentChanges"
+msgstr "Legutóbbi változások"
+
+msgid "AllPages"
+msgstr "Az összes oldal"
+
+msgid "AddNew"
+msgstr "Új oldal hozzáadása"
+
+msgid "ChangesStored"
+msgstr "A módosításait a rendszer elmentette"
+
+msgid "NewWikiSaved"
+msgstr "Az új wiki oldal létrejött. Megnézheti, ha ide kattint:"
+
+msgid "DefaultContent"
+msgstr " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Kezdésként módosítsa ezt az oldalt</p>"
+
+msgid "CourseWikiPages"
+msgstr "Kurzus wiki oldalak"
+
+msgid "GroupWikiPages"
+msgstr "Csoport Wiki oldalak"
+
+msgid "NoWikiPageTitle"
+msgstr "A módosításait a rendszer elmentette, de az oldalnak még nevet kell adnia"
+
+msgid "WikiPageTitleExist"
+msgstr "Ez az oldal már létre van hozva, a tartalmát ide kattintva módosíthatja:"
+
+msgid "WikiDiffAddedLine"
+msgstr "Egy sor lett hozzáadva"
+
+msgid "WikiDiffDeletedLine"
+msgstr "Egy sor lett törölve"
+
+msgid "WikiDiffMovedLine"
+msgstr "Egy sor lett áthelyezve"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "Válozatlan sor"
+
+msgid "DifferencesNew"
+msgstr "változások a következő verzióban"
+
+msgid "DifferencesOld"
+msgstr "A következő oldal régebbi verziója:"
+
+msgid "Differences"
+msgstr "Különbségek"
+
+msgid "MostRecentVersion"
+msgstr "A legutóbbi kijelölt verzió megtekintése"
+
+msgid "Legend"
+msgstr "Jelmagyarázat"
+
+msgid "ShowDifferences"
+msgstr "Kijelölt verziók összehasonlítása"
+
+msgid "SearchPages"
+msgstr "Oldalak keresése"
+
+msgid "Discuss"
+msgstr "Megvitatás"
+
+msgid "History"
+msgstr "Történelem"
+
+msgid "ShowThisPage"
+msgstr "Az oldal megtekintése"
+
+msgid "DeleteThisPage"
+msgstr "Az oldal törlése"
+
+msgid "DiscussThisPage"
+msgstr "Az oldal megvitatása"
+
+msgid "HomeWiki"
+msgstr "A Wiki kezdőoldala"
+
+msgid "DeleteWiki"
+msgstr "A Wiki összes tartalmának törlése"
+
+msgid "WikiDeleted"
+msgstr "A Wiki törölve lett."
+
+msgid "WikiPageDeleted"
+msgstr "Az oldal törölve lett az összes korábbi változatával együtt"
+
+msgid "NumLine"
+msgstr "Sor szám"
+
+msgid "DeletePageHistory"
+msgstr "Az oldal törlése az összes korábbi változatával együtt"
+
+msgid "OnlyAdminDeleteWiki"
+msgstr "Csak kurzus adminisztrátorok törölhetik a teljes Wikit"
+
+msgid "OnlyAdminDeletePageWiki"
+msgstr "Csak kurzus adminisztrátorok törölhetik az oldalt"
+
+msgid "OnlyAddPagesGroupMembers"
+msgstr "Csak a csoport résztvevői és kurzus adminisztrátorai tudnak oldalakat létrehozni a csoport Wikijében"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "Csak a csoport résztvevői és kurzus adminisztrátorai tudják szerkeszteni a csoport Wiki oldalait."
+
+msgid "ConfirmDeleteWiki"
+msgstr "Biztosan törölni szeretné ezt a Wikit?"
+
+msgid "ConfirmDeletePage"
+msgstr "Biztosan törölni szeretné az oldalt és az összes előzményét?"
+
+msgid "AlsoSearchContent"
+msgstr "Keressen a tartalmában is"
+
+msgid "PageLocked"
+msgstr "Az oldal védett"
+
+msgid "PageUnlocked"
+msgstr "Az oldal nem védett"
+
+msgid "PageLockedExtra"
+msgstr "Az oldal védett. Csak a kurzus adminisztrátorai módosíthatják"
+
+msgid "PageUnlockedExtra"
+msgstr "Az oldal nem védett. A kurzus résztvevői vagy a csoport résztvevői módosíthatják az oldalt"
+
+msgid "ShowAddOption"
+msgstr "A hozzáadás lehetőség megjelenítése"
+
+msgid "HideAddOption"
+msgstr "A hozzáadás lehetőség elrejtése"
+
+msgid "AddOptionProtected"
+msgstr "A hozzáadás lehetőség korlátozott. Csa a kurzus adminisztrátorai adhatnak hozzá oldalakat ehhez a Wikihez. A kurzus résztvevői vagy a csoport tagjai csak szerkeszthetik azokat."
+
+msgid "AddOptionUnprotected"
+msgstr "A hozzáadás lehetőség engedélyezett a kurzus résztvevőinek vagy a csoport tagjainak."
+
+msgid "NotifyChanges"
+msgstr "Értesítsen a változásokról"
+
+msgid "NotNotifyChanges"
+msgstr "Ne értesítsen a változásokról"
+
+msgid "NotifyByEmail"
+msgstr "Kérek email értesítést, ha valaki reagál"
+
+msgid "CancelNotifyByEmail"
+msgstr "Ne értesítsen e-mailben az oldal változásairól"
+
+msgid "MostRecentVersionBy"
+msgstr "A legutolsó verzió szerkesztője"
+
+msgid "Rating"
+msgstr "Értékelés"
+
+msgid "RatingMedia"
+msgstr "Az oldal értékelésének átlaga"
+
+msgid "NumComments"
+msgstr "Hozzászólások száma az oldalhoz"
+
+msgid "NumCommentsScore"
+msgstr "A hozzászólások száma ehhez az oldalhoz:"
+
+msgid "AddPagesLocked"
+msgstr "A hozzáadás lehetőséget a kurzus adminisztrátora ideiglenesen letiltotta"
+
+msgid "LinksPages"
+msgstr "Beállítások"
+
+msgid "ShowLinksPages"
+msgstr "Az erre az oldalra hivatkozó lapok megtekintése"
+
+msgid "MoreWikiOptions"
+msgstr "További Wiki beállítások"
+
+msgid "DefaultTitle"
+msgstr "Kezdőoldal"
+
+msgid "DiscussNotAvailable"
+msgstr "Vitafórum nem elérhető"
+
+msgid "Print"
+msgstr "Nyomtat"
+
+msgid "Version"
+msgstr "Verzió"
+
+msgid "EditPage"
+msgstr "Szerkeszt"
+
+msgid "AddedBy"
+msgstr "hozzáadta"
+
+msgid "EditedBy"
+msgstr "módosította"
+
+msgid "DeletedBy"
+msgstr "törölte"
+
+msgid "WikiStandardMode"
+msgstr "Wiki mód"
+
+msgid "GroupTutorAndMember"
+msgstr "Tutor és csoport tag"
+
+msgid "GroupTutor"
+msgstr "A csoport tutora"
+
+msgid "GroupStandardMember"
+msgstr "Csoport tag"
+
+msgid "AssignmentMode"
+msgstr "Egyéni feladat mód"
+
+msgid "ConfigDefault"
+msgstr "Alapértelmezett beállítás"
+
+msgid "UnlockPage"
+msgstr "Védelem feloldása"
+
+msgid "LockPage"
+msgstr "Védelem"
+
+msgid "NotifyDiscussChanges"
+msgstr "Hozzászólásról értesítés"
+
+msgid "NotNotifyDiscussChanges"
+msgstr "Ne legyen hozzászólásról értesítés"
+
+msgid "AssignmentWork"
+msgstr "Tanulói munka"
+
+msgid "AssignmentDesc"
+msgstr "A tutor által ajánlott feladat"
+
+msgid "WikiDiffAddedTex"
+msgstr "Szöveg hozzáadva"
+
+msgid "WikiDiffDeletedTex"
+msgstr "Szöveg törölve"
+
+msgid "WordsDiff"
+msgstr "szóról szóra"
+
+msgid "LinesDiff"
+msgstr "sorról sorra"
+
+msgid "MustSelectPage"
+msgstr "Először ki kell választania egy oldal"
+
+msgid "Export2ZIP"
+msgstr "Exportálás ZIP állományba"
+
+msgid "HidePage"
+msgstr "Oldal elrejtése"
+
+msgid "ShowPage"
+msgstr "Oldal megtekintése"
+
+msgid "GoAndEditMainPage"
+msgstr "A Wiki elkezdéséhez nyissa meg a Főoldalt és szerkessze"
+
+msgid "UnlockDiscuss"
+msgstr "Vitafórum feloldása"
+
+msgid "LockDiscuss"
+msgstr "Vitafórum lezárása"
+
+msgid "HideDiscuss"
+msgstr "Vitafórum elrejtése"
+
+msgid "ShowDiscuss"
+msgstr "Vitafórum megjelenítése"
+
+msgid "UnlockRatingDiscuss"
+msgstr "Pontozás bekapcsolása"
+
+msgid "LockRatingDiscuss"
+msgstr "Pontozás kikapcsolása"
+
+msgid "EditAssignmentWarning"
+msgstr "Szerkesztheti ezt az oldalt, de a tanulók oldalai nem fognak módosulni."
+
+msgid "ExportToDocArea"
+msgstr "Az oldal legfrissebb verziójának elmentése a Dokumentumokba"
+
+msgid "LockByTeacher"
+msgstr "Tutor által kikapcsolva"
+
+msgid "LinksPagesFrom"
+msgstr "Az oldalak, amik erre az oldalra hivatkoznak"
+
+msgid "DefineAssignmentPage"
+msgstr "Az oldal megjelölése egyéni feladatként"
+
+msgid "AssignmentDescription"
+msgstr "Feladat meghatározása"
+
+msgid "UnlockRatingDiscussExtra"
+msgstr "Mostantól mindenki értékelheti ezt az oldalt"
+
+msgid "LockRatingDiscussExtra"
+msgstr "Mostantól csak a tutorok értékelhetik ezt az oldalt"
+
+msgid "HidePageExtra"
+msgstr "Mostantól az oldal csak a tutor számára látható"
+
+msgid "ShowPageExtra"
+msgstr "Mostantól az oldal mindenki számára látható"
+
+msgid "OnlyEditPagesCourseManager"
+msgstr "A Főoldalt csak a tutor szerkesztheti"
+
+msgid "AssignmentLinktoTeacherPage"
+msgstr "Hozzáférés a tutor oldalhoz"
+
+msgid "HideDiscussExtra"
+msgstr "Mostantól a vitafórumot csak a tutorok láthatják"
+
+msgid "ShowDiscussExtra"
+msgstr "Mostantól a vitafórumot mindenki láthatja"
+
+msgid "LockDiscussExtra"
+msgstr "Mostantól csak a tutorok szólhatnak hozzá a vitafórumhoz"
+
+msgid "UnlockDiscussExtra"
+msgstr "Mostantól a vitafórumhoz bárki hozzászólhat"
+
+msgid "AssignmentDescExtra"
+msgstr "Ez az oldal a tutor által felajánlott feladat"
+
+msgid "AssignmentWorkExtra"
+msgstr "Ez az oldal egy hallgatói munka"
+
+msgid "NoAreSeeingTheLastVersion"
+msgstr "Figyelem, nem az oldal legfrissebb verzióját nézi"
+
+msgid "AssignmentFirstComToStudent"
+msgstr "A feladat beadásához szerkessze az oldalt"
+
+msgid "AssignmentLinkstoStudentsPage"
+msgstr "Hozzáférés a tanulók által írt oldalakhoz"
+
+msgid "AllowLaterSends"
+msgstr "Késleltetett beküldés engedélyezése"
+
+msgid "WikiStandBy"
+msgstr "A wiki jelenleg be van fagyasztva. Csak egy tutor tudja elindítani."
+
+msgid "NotifyDiscussByEmail"
+msgstr "Az oldal hozzászólásairól emailben értesítés engedélyezve"
+
+msgid "CancelNotifyDiscussByEmail"
+msgstr "Az oldal hozzászólásairól emailben értesítés kikapcsolva"
+
+msgid "EmailWikiChanges"
+msgstr "Wiki változásairól értesítés"
+
+msgid "EmailWikipageModified"
+msgstr "Az oldal módosult"
+
+msgid "EmailWikiPageAdded"
+msgstr "Új oldal jött létre"
+
+msgid "EmailWikipageDedeleted"
+msgstr "Egy wiki oldalt töröltek"
+
+msgid "EmailWikiPageDiscAdded"
+msgstr "Az oldalhoz új hozzászólás érkezett"
+
+msgid "FullNotifyByEmail"
+msgstr "E-mail értesítés fogadása minden alkalommal, amikor módosul a Wiki"
+
+msgid "FullCancelNotifyByEmail"
+msgstr "A Wiki módosításairól e-mail értesítés kikapcsolása"
+
+msgid "EmailWikiChangesExt_1"
+msgstr "Az emlékeztetőt a wiki változásainak figyelemmel kísérésére lehet használni. Ez a kapcsoló azt jelenti, hogy engedélyezte a funkciót."
+
+msgid "EmailWikiChangesExt_2"
+msgstr "Ha ki akarja kapcsolni a Wiki oldalak módosulásáról szóló értesítéseket, kattintson a <strong> Legutóbbi módosítások</ strong>, <strong>Jelenlegi oldal</ strong>, <strong>Beszélgetés</ strong> fülekre, és nyomja meg a gombot."
+
+msgid "Visits"
+msgstr "látogatás"
+
+msgid "OrphanedPages"
+msgstr "Elárvult oldalak"
+
+msgid "WantedPages"
+msgstr "Keresett oldalak"
+
+msgid "MostVisitedPages"
+msgstr "Legtöbbször megtekintett oldalak"
+
+msgid "MostChangedPages"
+msgstr "Legtöbbet módosított oldalak"
+
+msgid "Changes"
+msgstr "változások"
+
+msgid "MostActiveUsers"
+msgstr "Legaktívabb felhasználók"
+
+msgid "Contributions"
+msgstr "hozzájárulások"
+
+msgid "UserContributions"
+msgstr "Felhasználói hozzájárulások"
+
+msgid "WarningDeleteMainPage"
+msgstr "Nem javasolt törölni a Wiki kezdőoldalát, mivel ez az ugróoldal a hierarchia többi oldalához. <br> Ha mégis törölnie kell, ne felejtse el újra létrehozni. Amíg ezt nem teszi meg, más felhasználók nem tudnak újabb oldalakat hozzáadni a rendszerhez."
+
+msgid "ConvertToLastVersion"
+msgstr "Ha az előző verziót akarja beállítani, kattintson ide"
+
+msgid "Restore"
+msgstr "Visszaállít"
+
+msgid "CurrentVersion"
+msgstr "Jelenlegi verzió"
+
+msgid "LastVersion"
+msgstr "Utolsó verzió"
+
+msgid "PageRestored"
+msgstr "Az oldal vissza lett állítva. A megtekintéshez kattintson ide"
+
+msgid "RestoredFromVersion"
+msgstr "Visszaállítva a következő verzióból:"
+
+msgid "HWiki"
+msgstr "Súgó: wiki"
+

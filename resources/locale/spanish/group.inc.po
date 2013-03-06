@@ -1,0 +1,285 @@
+msgid "langNewGroupCreate"
+msgstr "Crear grupos"
+
+msgid "langGroupCreation"
+msgstr "Creación de grupos"
+
+msgid "langCreate"
+msgstr "Crear"
+
+msgid "langNewGroups"
+msgstr "nuevo(s) grupo(s)"
+
+msgid "langMax"
+msgstr "max. 20 caracteres, p. ej. <i>INNOV21</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "plazas (opcional)"
+
+msgid "langGroupsAdded"
+msgstr "grupo(s) ha(n) sido creado(s)"
+
+msgid "langGroupDel"
+msgstr "Grupo borrado"
+
+msgid "langDocuments"
+msgstr "Documentos"
+
+msgid "langExistingGroups"
+msgstr "Grupos"
+
+msgid "langRegistered"
+msgstr "Inscritos"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Los propios usuarios pueden inscribirse en el grupo que quieran"
+
+msgid "langGroupTools"
+msgstr "Herramientas"
+
+msgid "langGroupDocument"
+msgstr "Documentos"
+
+msgid "langGroupPropertiesModified"
+msgstr "La configuración del grupo ha sido modificada"
+
+msgid "langGroupSpace"
+msgstr "Área de grupo"
+
+msgid "langGroupName"
+msgstr "Nombre del grupo"
+
+msgid "langGroupDescription"
+msgstr "Descripción del grupo"
+
+msgid "langGroupMembers"
+msgstr "Miembros del grupo"
+
+msgid "langEditGroup"
+msgstr "Modificar este grupo"
+
+msgid "Optional"
+msgstr "(opcional)"
+
+msgid "langGroupSettingsModified"
+msgstr "Configuración del grupo modificada"
+
+msgid "langGroupTooMuchMembers"
+msgstr "El número propuesto excede el máximo que Ud. autoriza (puede modificarlo debajo). 				La composición del grupo no se ha modificado"
+
+msgid "langGroupTutor"
+msgstr "Tutor del grupo"
+
+msgid "langGroupNoTutor"
+msgstr "(ninguno)"
+
+msgid "langGroupNone"
+msgstr "(ninguno)"
+
+msgid "langGroupNoneMasc"
+msgstr "(ninguno)"
+
+msgid "langAddTutors"
+msgstr "Herramienta de gestión de usuarios"
+
+msgid "langMyGroup"
+msgstr "mi grupo"
+
+msgid "langOneMyGroups"
+msgstr "mi supervisión"
+
+msgid "langGroupSelfRegistration"
+msgstr "Inscripción"
+
+msgid "langGroupSelfRegInf"
+msgstr "inscribirme"
+
+msgid "langRegIntoGroup"
+msgstr "Inscribirme en este grupo"
+
+msgid "langGroupNowMember"
+msgstr "Ahora ya es miembro de este grupo"
+
+msgid "langPrivate"
+msgstr "Acceso privado (acceso autorizado sólo a los miembros del grupo)"
+
+msgid "langPublic"
+msgstr "Acceso público (acceso autorizado a cualquier miembro del curso)"
+
+msgid "langPropModify"
+msgstr "Modificar configuración"
+
+msgid "langState"
+msgstr "Estado"
+
+msgid "langGroupFilledGroups"
+msgstr "Los grupos han sido completados con los integrantes de la lista usuarios del curso"
+
+msgid "langSubscribed"
+msgstr "usuarios inscritos en este curso"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Usuarios no pertenecientes a este grupo"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Un usuario puede pertenecer a un máximo de"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr " grupos"
+
+msgid "langGroupLimit"
+msgstr "Límite"
+
+msgid "CreateGroup"
+msgstr "Crear grupo(s)"
+
+msgid "ProceedToCreateGroup"
+msgstr "Proceder para crear grupo(s)"
+
+msgid "langStudentRegAllowed"
+msgstr "Los propios estudiantes pueden inscribirse en los grupos"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Los propios usuarios pueden anular su inscripción a un grupo"
+
+msgid "langAllGroups"
+msgstr "Todos los grupos"
+
+msgid "langStudentUnsubscribe"
+msgstr "Anular mi inscripción en este grupo"
+
+msgid "langStudentDeletesHimself"
+msgstr "Su inscripción ha sido anulada"
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Configuración por defecto para los nuevos grupos"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Todos los grupos seleccionados han sido borrados"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Todos los grupos seleccionados están ahora vacíos"
+
+msgid "langGroupEmptied"
+msgstr "El grupo está ahora vacío"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Todos los grupos seleccionados han sido completados"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "anular inscripción"
+
+msgid "langSameForAll"
+msgstr "igual para todos"
+
+msgid "langNoLimit"
+msgstr "Sin límite"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Por favor, introduzca el número de grupos deseado"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Crear grupos para todos los usuarios en los cursos virtuales"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "Este curso es una combinación de un curso real y uno o más cursos virtuales. Si pulsa el botón siguiente, nuevos grupos serán creados a partir de estos cursos virtuales. Todos los estudiantes serán inscritos en los grupos."
+
+msgid "langNoGroupsAvailable"
+msgstr "No hay grupos disponibles"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "Cursos virtuales"
+
+msgid "NotAvailable"
+msgstr "No disponible"
+
+msgid "CreateSubgroups"
+msgstr "Crear subgrupos"
+
+msgid "CreateSubgroupsInfo"
+msgstr "Esta opción le permite crear nuevos grupos basados en grupos ya existentes. Indique el número de grupos que desea y elija un grupo existente. Se crearán el número de grupos deseado y todos los miembros del grupo inicial serán inscritos en ellos. El grupo"
+
+msgid "CreateNumberOfGroups"
+msgstr "Crear numero de grupos"
+
+msgid "WithUsersFrom"
+msgstr "grupos con miembros de"
+
+msgid "CategoryDeleted"
+msgstr "La categoría ha sido eliminada."
+
+msgid "Empty"
+msgstr "Vaciar"
+
+msgid "FillGroup"
+msgstr "Añadir usuarios"
+
+msgid "EmptyGroup"
+msgstr "Anular la inscripción de todos los usuarios"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "El número máximo de grupos por usuario que ha enviado no es válido. Actualmente hay usuarios inscritos en un número mayor de grupos que el que Ud. propone."
+
+msgid "GroupOverview"
+msgstr "Sumario de los grupos"
+
+msgid "GroupCategory"
+msgstr "Categoría del grupo"
+
+msgid "NoTitleGiven"
+msgstr "Por favor, introduzca un título"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "Por favor introduzca un número válido para el número máximo de miembros"
+
+msgid "CategoryOrderChanged"
+msgstr "El orden de las categorías ha sido cambiado"
+
+msgid "Wiki"
+msgstr "Wiki del grupo"
+
+msgid "CategoryCreated"
+msgstr "Categoría creada"
+
+msgid "GroupTutors"
+msgstr "Tutores"
+
+msgid "GroupWork"
+msgstr "Tareas"
+
+msgid "GroupCalendar"
+msgstr "Agenda"
+
+msgid "GroupAnnouncements"
+msgstr "Anuncios"
+
+msgid "NoCategoriesDefined"
+msgstr "Sin categorías definidas"
+
+msgid "GroupsFromClasses"
+msgstr "Grupos de clases"
+
+msgid "GroupsFromClassesInfo"
+msgstr "Información de grupos de clases"
+
+msgid "Group"
+msgstr "Grupo"
+
+msgid "ForumOfGroup"
+msgstr "Foro del grupo:"
+
+msgid "BackToGroupList"
+msgstr "Volver a la lista de grupos"
+
+msgid "EditGroupCategory"
+msgstr "Modificar categoria de grupo"
+
+msgid "NoStudents"
+msgstr "No hay estudiantes"
+
+msgid "NoData"
+msgstr "No hay datos disponibles"
+
+msgid "AllGroups"
+msgstr "Todos los grupos"
+

@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Metadatos do documento"
+
+msgid "langClickKw"
+msgstr "Pulsa nunha palabra chave na árbore para seleccionar ou deseleccionala"
+
+msgid "langKwHelp"
+msgstr "<br/> Pulse o botón \'+\' para abrir, o botón \'-\' para pechar, o botón  \'++\' para abri-los todos, o botón  \'--\' para pecha-los todos.<br/> <br/>Borrar todas as palabras chave pechando a árbore e abréndola de novo co botón \'+\'.<br/> Alt-click \'+\' busca as palabras orixinais na árbore. <br/> <br/> Alt-click selecciona unha palabra clave sen termos máis amplos ou deselecciona unha palabra chave con termos máis amplos.<br/> <br/> Se cambia a língua de descripción, non engada palabras chave á vez.<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Avanzado"
+
+msgid "langSearch"
+msgstr "Buscar"
+
+msgid "langSearchCrit"
+msgstr "¡Unha palabra por liña!"
+
+msgid "langNoKeywords"
+msgstr "Este curso non contén palabras chave"
+
+msgid "langKwCacheProblem"
+msgstr "O caché de palabras chave non pode abrirse"
+
+msgid "langCourseKwds"
+msgstr "Este documento contén as palabras chave do curso"
+
+msgid "langKwdsInMD"
+msgstr "palabras chave usadas nos Metadatos (MD)"
+
+msgid "langKwdRefs"
+msgstr "referencias da palabra chave"
+
+msgid "langNonCourseKwds"
+msgstr "Palabras chave non ligadas ó curso"
+
+msgid "langKwdsUse"
+msgstr "Palabras chave do curso (negriña = sen usar)"
+
+msgid "langTotalMDEs"
+msgstr "Número total de entradas MD de ligazóns:"
+

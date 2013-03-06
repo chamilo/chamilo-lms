@@ -1,0 +1,333 @@
+msgid "ModifInfo"
+msgstr "Nastavení kurzu"
+
+msgid "langModifDone"
+msgstr "Informace byla upravená"
+
+msgid "langDelCourse"
+msgstr "Vymazat celou oblast kurzu"
+
+msgid "langProfessors"
+msgstr "Učitelé"
+
+msgid "langFaculty"
+msgstr "Kategorie"
+
+msgid "langConfidentiality"
+msgstr "Důvěrnost"
+
+msgid "langPublic"
+msgstr "Veřejný přístup z portálu hlavní stránky i bez přihlášení"
+
+msgid "langUnsubscription"
+msgstr "Odepsát"
+
+msgid "langPrivOpen"
+msgstr "Privátní přístup, otevřená registrace"
+
+msgid "langPrivate"
+msgstr "Neveřejný přístup (školení je přístupné pouze pro uživatele ze seznamu)"
+
+msgid "langForbidden"
+msgstr "Zakázaný"
+
+msgid "CourseAccessConfigTip"
+msgstr "Standardně je školení veřejné. Ale můžete definovat stupeň utajení."
+
+msgid "langOpenToTheWorld"
+msgstr "Otevřeno - přístup povolen pro celý svět"
+
+msgid "OpenToThePlatform"
+msgstr "Otevřeno - přístup povolen pro uživatele registrované v systému"
+
+msgid "langOpenToThePlatform"
+msgstr "Otevřeno - přístup povolen pouze registrovaným uživatelům platformy"
+
+msgid "langTipLang"
+msgstr "Tento jazyk bude použit u každého návštěvníka vašeho kurzu na webu."
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Příspěvky"
+
+msgid "langProgramMenu"
+msgstr "Program kurzu"
+
+msgid "langAnnouncement"
+msgstr "Oznámení"
+
+msgid "langExercise"
+msgstr "Testy"
+
+msgid "langStats"
+msgstr "Statistiky"
+
+msgid "langUplPage"
+msgstr "Nahrát stránku a odkázat ji na Domácí stránku"
+
+msgid "langLinkSite"
+msgstr "Přidat odkaz stránky na Domácí stránku"
+
+msgid "langCourse"
+msgstr "Kurz"
+
+msgid "langHasDel"
+msgstr "byl smazán"
+
+msgid "langBackHome"
+msgstr "Zpět na Domácí stránku"
+
+msgid "langByDel"
+msgstr "Smazáním tohoto kurzu permanentně vymažete také veškerý obsah (dokumenty, odkazy...) který tam je a odhlásite všechny jeho členy (neodstraníte je však z ostatních oblastí kurzu). Také vymažete všechny virtuální kurzy, které jsou připojeny k tomuto kurzu.<p>Opravdu chcete vymazat oblast kurzu?"
+
+msgid "langY"
+msgstr "ANO"
+
+msgid "langN"
+msgstr "NE"
+
+msgid "langDepartmentUrl"
+msgstr "URL oddělení"
+
+msgid "langDepartmentUrlName"
+msgstr "Oddělení"
+
+msgid "langBackupCourse"
+msgstr "Archivuj tento kurz"
+
+msgid "langModifGroups"
+msgstr "Skupiny"
+
+msgid "langProfessor"
+msgstr "Učitel"
+
+msgid "langGroups"
+msgstr "Skupiny"
+
+msgid "langDescriptionCours"
+msgstr "Popis kurzu"
+
+msgid "langArchiveCourse"
+msgstr "Záloha kurzu"
+
+msgid "langRestoreCourse"
+msgstr "Obnovit kurz"
+
+msgid "langRestore"
+msgstr "Obnovit"
+
+msgid "langCreatedIn"
+msgstr "vytvořené v"
+
+msgid "langCreateMissingDirectories"
+msgstr "Vytváření chybějících adresářů"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Kopírování souborů kurzu"
+
+msgid "langDisk_free_space"
+msgstr "Volné místo na disku"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Vytvoření souboru se zálohou"
+
+msgid "langFileCopied"
+msgstr "soubor skopírovaný"
+
+msgid "langArchiveLocation"
+msgstr "Umístění archivu"
+
+msgid "langSizeOf"
+msgstr "Velikost"
+
+msgid "langArchiveName"
+msgstr "Jméno archivu"
+
+msgid "langBackupSuccesfull"
+msgstr "Zálohování úspěšné"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Zálohování dat kurzu v hlavní databáze pro"
+
+msgid "langBUUsersInMainBase"
+msgstr "Zálohování uživatelských dat v hlavní databáze pro"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Zálohování dat oznámení v hlavní databáze pro"
+
+msgid "langBackupOfDataBase"
+msgstr "Zálohování databázy"
+
+msgid "langCreationDate"
+msgstr "Vytvořené"
+
+msgid "langExpirationDate"
+msgstr "Datum vypršení"
+
+msgid "langPostPone"
+msgstr "Odložit na později"
+
+msgid "langLastEdit"
+msgstr "Posledně editované"
+
+msgid "langLastVisit"
+msgstr "Posledně navštívené"
+
+msgid "langSubscription"
+msgstr "Zapsát"
+
+msgid "langCourseAccess"
+msgstr "Přístup kurzu"
+
+msgid "langConfirmBackup"
+msgstr "Opravdu chcete zálohovat oblast kurzu?"
+
+msgid "langCreateSite"
+msgstr "Vytvořit oblast kurzu"
+
+msgid "langRestoreDescription"
+msgstr "Kurz je archivován v souboru který můžete vybrat níže.<br><br> Jedním kliknutím na \"Obnovit\", dekomprimujete archiv a obnovíte kurz."
+
+msgid "langRestoreNotice"
+msgstr "Tento script zatím nedovoluje automatickú obnovu uživatelů, ale data uložena v \"users.csv\" jsou dostatečná na to, aby to udělal administrátor ručně."
+
+msgid "langAvailableArchives"
+msgstr "Seznam dostupních archivů"
+
+msgid "langNoArchive"
+msgstr "Nebyl vybrán žádný archiv"
+
+msgid "langArchiveNotFound"
+msgstr "Archiv nebyl nalezen"
+
+msgid "langArchiveUncompressed"
+msgstr "Archiv byl rozbalen a nainstalován."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "Soubor \"users.csv\" byl vložen do Nástroje dokumentů."
+
+msgid "langBackH"
+msgstr "zpět na domácí stránku"
+
+msgid "langOtherCategory"
+msgstr "Jiná kategorie"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Uživatelé mají povoleno se odepsat z tohoto kurzu"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Uživatelé nemají dovoleno se odepsat z tohoto kurzu"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Zcela uzavřeno: školení je přístupné pouze pro školitele"
+
+msgid "CourseVisibilityClosed"
+msgstr "Uzavřený - kurz je přístupný pouze pro správce kurzu a vyučující asistenty."
+
+msgid "CourseVisibilityModified"
+msgstr "Modifikovaný (podrobnější nastavení se specifikuje skrz systém rolí-práv)"
+
+msgid "WorkEmailAlert"
+msgstr "Upozornění e-mailom při předložení nové práce"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Aktivovat upozornění e-mailom při předložení nové práce"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Zrušit e-mailové upozornění při předložení nové práce"
+
+msgid "DropboxEmailAlert"
+msgstr "Upozornění e-mailom o doručení do poštovní schránky"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Aktivace upozornění e-mailem o novém doručení do poštovní schránky"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Zrušit upozornění e-mailem o novém doručení do poštovní schránky"
+
+msgid "AllowUserEditAgenda"
+msgstr "Povolit uživatelům editovat agendu kurzu"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Aktivovat editaci agendy kurzu uživatelům"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Deaktivovat editaci agendy kurzu uživatelům"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Povolit uživatelům editovat oznámení kurzu"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Aktivovat editaci uživatelům"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Deaktivovat editaci uživatelům"
+
+msgid "OrInTime"
+msgstr "Nebo v"
+
+msgid "CourseRegistrationPassword"
+msgstr "Heslo registrace kurzu"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Klikněte na tento odkaz za účelem eliminace sledování kurzu na serveru.<br><br>S touto funkcí zacházejte s vysokou opatrností!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Chamilo zavádí možnost duplikace celé části nějakého existujíciho kurzu do jiného kurzu, který může být původně prázdný.<br><br>Jediný předpoklad pro takový spůsob práce je mít kurz obsahující nějaké dokumenty, ohlášení, fóra... a druhý kurz který neobsahuje elementy z prvního !"
+
+msgid "DescriptionRecycleCourse"
+msgstr "Tento nástroj vyprázdní vybrané elementy kurzu, nebo všechny elementy které kurz obsahuje. Odstráni dokumenty, fóra, odkazy... Tato procedura může být implementována na konci vytváření, nebo po akademickém roku. Samozřejmě, před “recyklací”, musíte provést kompletní uložení vašeho kurzu!"
+
+msgid "QuizEmailAlert"
+msgstr "Emailové upozornění o novém testu"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Aktivovat poslání emailu, když uživatel odevzdá odpovědi nového testu"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Deaktivovat emailové upozornění, když uživatel odevzdá odpovědi k novému testu"
+
+msgid "AllowUserImageForum"
+msgstr "Uživatelský obrázek ve fóru"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Zobrazit uživatelský obrázek ve fóru"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Schovat uživatelské obrázky ve fóru"
+
+msgid "AllowLearningPathTheme"
+msgstr "Povolit téma učební osnovy"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "Povolený"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Nepovolený"
+
+msgid "ConfigChat"
+msgstr "Vlastnosti chatu"
+
+msgid "AllowOpenchatWindow"
+msgstr "Otevřít chat v novém okně"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "Aktivovat otevření chatu v novém okně"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "Deaktivovat otevření chatu v novém okně"
+
+msgid "NewUserEmailAlert"
+msgstr "Oznámení emailem učiteli o zápisu do kurzu novým uživatelem"
+
+msgid "NewUserEmailAlertEnable"
+msgstr "Povolit oznámení emailem učiteli o zápisu do kurzu novým uživatelem"
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "Povolit oznámení emailem učiteli a tvůrci kurzu o zápisu do kurzu novým uživatelem"
+
+msgid "NewUserEmailAlertDisable"
+msgstr "Zneplatnit oznámení emailem o zápisu do kurzu novým uživatelem"
+

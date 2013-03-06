@@ -1,0 +1,45 @@
+msgid "langCourseProgram"
+msgstr "Descrizione del Corso"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Questo corso non è stato ancora descritto"
+
+msgid "langEditCourseProgram"
+msgstr "Crea o modifica la descrizione"
+
+msgid "QuestionPlan"
+msgstr "Informazioni da dare:"
+
+msgid "langInfo2Say"
+msgstr "Informazioni da fornire ai corsisti"
+
+msgid "langOuAutreTitre"
+msgstr "Titolo"
+
+msgid "langNewBloc"
+msgstr "Altro"
+
+msgid "langAddCat"
+msgstr "Aggiungi una categoria"
+
+msgid "langAdd"
+msgstr "Aggiungi"
+
+msgid "langValid"
+msgstr "Conferma"
+
+msgid "langBackAndForget"
+msgstr "Annulla"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Descrizione del corso aggiornata"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Descrizione del corso eliminata"
+
+msgid "CourseDescriptionIntro"
+msgstr "Clicca sulla voce e compila il modulo per creare una descrizione.<br><br>Clicca Conferma per salvare."
+
+msgid "langSaveDescription"
+msgstr "Salva la descrizione"
+

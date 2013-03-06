@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Liitteet on lisätty. Voit nyt palata oppimispolkuun tai lisätä uusia liitteitä."
+
+msgid "LearningPath"
+msgstr "Learning Path"
+
+msgid "LevelUp"
+msgstr "level up"
+
+msgid "AddIt"
+msgstr "Add it"
+
+msgid "MainCategory"
+msgstr "main category"
+
+msgid "lang_delete_added_resources"
+msgstr "Delete added resources"
+
+msgid "AddToLinks"
+msgstr "Add to the course links"
+
+msgid "DontAdd"
+msgstr "do not add"
+
+msgid "lang_show_all_added_resources"
+msgstr "Show all added resources"
+
+msgid "ResourcesAdded"
+msgstr "Added new resources"
+
+msgid "BackTo"
+msgstr "Back to"
+
+msgid "ExternalResources"
+msgstr "External resources"
+
+msgid "CourseResources"
+msgstr "Course resources"
+
+msgid "ExternalLink"
+msgstr "External link"
+
+msgid "DropboxAdd"
+msgstr "Add the dropbox page to this chapter."
+
+msgid "AddAssignmentPage"
+msgstr "Add the upload assignment page to this chapter."
+
+msgid "Exercise"
+msgstr "Test"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "AdValvas"
+msgstr "Ad Valvas"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "ShowDelete"
+msgstr "Näytä / Poista"
+
+msgid "IntroductionText"
+msgstr "esittely teksti"
+
+msgid "CourseDescription"
+msgstr "Kurssin kuvaus"
+
+msgid "Groups"
+msgstr "Ryhmät"
+
+msgid "Users"
+msgstr "Käyttäjät"
+
+msgid "IntroductionTextAdd"
+msgstr "Lisää sivu joka sisältää johdannon tähän osaan."
+
+msgid "CourseDescriptionAdd"
+msgstr "Lisää sivu joka sisältää kuvauksen tähän osioon."
+
+msgid "GroupsAdd"
+msgstr "Lisää Ryhmät työkalu tähän osioon."
+
+msgid "UsersAdd"
+msgstr "Lisää Käyttäjät työkalu tähän osioon."
+
+msgid "ExportableCourseResources"
+msgstr "Siirrettäviä kurssimateriaaleja"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Dokeokseen liittyviä kurssimateriaaleja"
+
+msgid "LinkTarget"
+msgstr "Linkin kohde"
+
+msgid "SameWindow"
+msgstr "Samassa ikkunassa"
+
+msgid "NewWindow"
+msgstr "Uudessa ikkunassa"
+
+msgid "StepDeleted1"
+msgstr "Tämä"
+
+msgid "StepDeleted2"
+msgstr "on poistettu tässä työkalussa."
+
+msgid "Modify"
+msgstr "Muokkaa"
+
+msgid "Chapter"
+msgstr "Kappale"
+
+msgid "NoAgendaItems"
+msgstr "Kalenterimerkintöjä ei ole"
+
+msgid "AgendaAdd"
+msgstr "Lisää uusi merkintä"
+
+msgid "UserGroupFilter"
+msgstr "Suodatin ryhmisä/kättäjissä"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Nouseva"
+
+msgid "ShowCurrent"
+msgstr "Näytä tämän kuun kalenterimerkinnät"
+
+msgid "ModifyCalendarItem"
+msgstr "Muokkaa merkintää"
+
+msgid "ItemTitle"
+msgstr "Merkinnän otsikko"
+
+msgid "Detail"
+msgstr "Yksityiskohdat"
+
+msgid "EditSuccess"
+msgstr "Merkintää on muokattu"
+
+msgid "AddCalendarItem"
+msgstr "Lisää uusi merkintä"
+
+msgid "AddAnn"
+msgstr "Lisää ilmoitus"
+
+msgid "ForumAddNewTopic"
+msgstr "Foorumi: lisää uusi aihe"
+
+msgid "ForumEditTopic"
+msgstr "Foorumi: muokkaa aihetta"
+
+msgid "ExerciseAnswers"
+msgstr "Tehtävä: Vastaus"
+
+msgid "ForumReply"
+msgstr "Foorumi: vastaus"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Laskeva"
+

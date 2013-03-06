@@ -1,0 +1,174 @@
+msgid "langInvalidId"
+msgstr "Ĉi-identigilo ne validas (misa ensaluto aŭ pasvorto)."
+
+msgid "langWelcome"
+msgstr "Bonvenon!"
+
+msgid "langPass"
+msgstr "Pasvorto"
+
+msgid "langEnter"
+msgstr "Reiru al via kurslisto"
+
+msgid "langReg"
+msgstr "Registrado"
+
+msgid "langMenu"
+msgstr "Menuo"
+
+msgid "langAdvises"
+msgstr "Konsilo"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Atenton:</b> Ĉi-kurso ne ekzistas"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "Musklaku ĉi tien por elŝuti la kurson el la malnova portala TTT."
+
+msgid "langOtherCourses"
+msgstr "Aliaj kursoj"
+
+msgid "langSupportForum"
+msgstr "Subtena forumo"
+
+msgid "langCategories"
+msgstr "kategorioj"
+
+msgid "langBackToHomePage"
+msgstr "Reiri al hejmpaĝo"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Ne libere alireblaj kursoj."
+
+msgid "langLostPassword"
+msgstr "Pasvorto forgesita"
+
+msgid "lang_edit_my_course_list"
+msgstr "Iri al Kursa Supervido"
+
+msgid "langAgenda"
+msgstr "Agendo"
+
+msgid "langValvas"
+msgstr "Freŝdataj anoncoj"
+
+msgid "langUp"
+msgstr "Supren"
+
+msgid "langCatList"
+msgstr "Kategorioj"
+
+msgid "langCourseList"
+msgstr "Kurslisto"
+
+msgid "langHelptwo"
+msgstr "Helpo"
+
+msgid "langRegAll"
+msgstr "Registru"
+
+msgid "EussMenu"
+msgstr "Menuo"
+
+msgid "Opinio"
+msgstr "Opinio"
+
+msgid "Intranet"
+msgstr "Interna reto  XX"
+
+msgid "Englin"
+msgstr "angla"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Se vi ankoraŭ ne aliĝis, bonvolu plenigi la <a href=\'claroline/auth/inscription.php\'>registran formularon </a>."
+
+msgid "langSubCat"
+msgstr "sub-kategorioj"
+
+msgid "langMenuGeneral"
+msgstr "Ĝenerala"
+
+msgid "langMenuUser"
+msgstr "Uzulo"
+
+msgid "langMenuAdmin"
+msgstr "Platformmastrumanto"
+
+msgid "langUsersOnLineList"
+msgstr "Listo de konektintaj uzuloj"
+
+msgid "langTotalOnLine"
+msgstr "Entute konektintaj"
+
+msgid "langRefresh"
+msgstr "Refreŝigi"
+
+msgid "langMe"
+msgstr "min mem"
+
+msgid "langSystemAnnouncements"
+msgstr "Platformaj anoncoj"
+
+msgid "langHelpMaj"
+msgstr "Helpo"
+
+msgid "langNotRegistered"
+msgstr "Ne registrita"
+
+msgid "langAdmin"
+msgstr "Platformmastrumanto"
+
+msgid "Login"
+msgstr "Ensaluto"
+
+msgid "langRegisterForCourse"
+msgstr "Aliĝi al nova kurso"
+
+msgid "langUnregisterForCourse"
+msgstr "Malaliĝi al kurso"
+
+msgid "langCombinedCourse"
+msgstr "Kombinita:"
+
+msgid "Platform"
+msgstr "Platformo"
+
+msgid "Refresh"
+msgstr "Refreŝu"
+
+msgid "TotalOnLine"
+msgstr "Nombro da uzuloj konektintaj"
+
+msgid "langCourseClosed"
+msgstr "(la kurso ne estas alirebla)"
+
+msgid "ViewOpenCourses"
+msgstr "Pririgardi malfermajn kursojn"
+
+msgid "langCompetences"
+msgstr "Kompetentoj"
+
+msgid "langDiplomas"
+msgstr "Diplomoj"
+
+msgid "langTeach"
+msgstr "Pri kio vi kapablas instrui"
+
+msgid "langProductions"
+msgstr "Produktaĵoj"
+
+msgid "langSendChatRequest"
+msgstr "Sendi babilpeton al tiu persono"
+
+msgid "langRequestDenied"
+msgstr "La peto estas malakceptita."
+
+msgid "UsageDatacreated"
+msgstr "Uzulaj datumoj kreitaj"
+
+msgid "SessionView"
+msgstr "Prezenti la kursojn laŭ sesioj"
+
+msgid "CourseView"
+msgstr "Prezenti la kompletan liston da kursoj"
+

@@ -1,0 +1,132 @@
+msgid "langNewGroupCreate"
+msgstr "Bina kumpulan baru"
+
+msgid "langGroupCreation"
+msgstr "Bina Kumpulan Baru"
+
+msgid "langCreate"
+msgstr "Bina"
+
+msgid "langNewGroups"
+msgstr "kumpulan baru"
+
+msgid "langMax"
+msgstr "cth:. <i>EKT221</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "orang pelajar"
+
+msgid "langGroupsAdded"
+msgstr "Kumpulan baru telah dibina"
+
+msgid "langGroupDel"
+msgstr "Satu kumpulan dipadam"
+
+msgid "langDocuments"
+msgstr "Dokumen"
+
+msgid "langExistingGroups"
+msgstr "Nama Kumpulan"
+
+msgid "langRegistered"
+msgstr "Bilangan Ahli Semasa"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Pelajar dibenarkan untuk mendaftar sendiri ke kumpulan"
+
+msgid "langGroupTools"
+msgstr "Alat Bantu"
+
+msgid "langGroupDocument"
+msgstr "Dokumen"
+
+msgid "langGroupPropertiesModified"
+msgstr "<i>Setting</i> kumpulan telah diubahsuai"
+
+msgid "langGroupSpace"
+msgstr "Ruangan Kumpulan"
+
+msgid "langGroupName"
+msgstr "Nama Kumpulan"
+
+msgid "langGroupDescription"
+msgstr "Penerangan"
+
+msgid "langGroupMembers"
+msgstr "Ahli Kumpulan"
+
+msgid "langEditGroup"
+msgstr "Ubahsuai kumpulan ini"
+
+msgid "Optional"
+msgstr "(pilihan)"
+
+msgid "langGroupSettingsModified"
+msgstr "<i>Setting</i> kumpulan diubahsuai"
+
+msgid "langGroupTooMuchMembers"
+msgstr "Number proposed exceeds max. that you allowed (you can modify it below). 				Group composition has not been modified"
+
+msgid "langGroupTutor"
+msgstr "Jurutera Pengajar/Tutor"
+
+msgid "langGroupNoTutor"
+msgstr "(tiada)"
+
+msgid "langGroupNone"
+msgstr "(tiada)"
+
+msgid "langGroupNoneMasc"
+msgstr "(tiada)"
+
+msgid "langAddTutors"
+msgstr "Senarai Pengguna (Pentadbir Laman Subjek)"
+
+msgid "langMyGroup"
+msgstr "Kumpulan Pelajar"
+
+msgid "langOneMyGroups"
+msgstr "my supervision"
+
+msgid "langGroupSelfRegistration"
+msgstr "Pendaftaran"
+
+msgid "langGroupSelfRegInf"
+msgstr "daftar"
+
+msgid "langRegIntoGroup"
+msgstr "Tambah saya dalam Kumpulan ini"
+
+msgid "langGroupNowMember"
+msgstr "Anda sekarang ialah ahli kepada Kumpulan Baru"
+
+msgid "langPrivate"
+msgstr "Capaian terhad (Subjek hanya boleh dicapai oleh pengguna berikut sahaja <a href=../user/user.php>Senarai Pengguna</a>)"
+
+msgid "langPublic"
+msgstr "Capaian Umum (Subjek boleh dicapai tanpa proses <i>login</i>)"
+
+msgid "langPropModify"
+msgstr "Ubahsuai Kumpulan"
+
+msgid "langState"
+msgstr "Status"
+
+msgid "langGroupFilledGroups"
+msgstr "Kumpulan ini telah dipenuhkan oleh Pelajar yang berada dalam senarai Pelajar Berdaftar."
+
+msgid "langSubscribed"
+msgstr "Pelajar berdaftar untuk subjek ini"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Pelajar bukan dalam kumpulan ini"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Pelajar boleh menjadi ahli kepada maksimum"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr " kumpulan"
+
+msgid "langStudentRegAllowed"
+msgstr "Pelajar dibenarkan untuk mendaftar-sendiri ke kumpulan ini"
+

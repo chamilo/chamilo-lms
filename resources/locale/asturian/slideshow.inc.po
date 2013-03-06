@@ -1,0 +1,48 @@
+msgid "Height"
+msgstr "Altu"
+
+msgid "ResizingComment"
+msgstr "cambiar dimensiones de la imaxe a esti tamañu (en píxeles)"
+
+msgid "Width"
+msgstr "Anchu"
+
+msgid "Resizing"
+msgstr "Cambiar les dimensiones"
+
+msgid "NoResizingComment"
+msgstr "Amosar toles imáxenes nel tamañu orixinal. Nun cambiar de tamañu ta activáu. Les barres de desplazamientu van apaecer automáticamente si la imaxe ye más grande que\'l tamañu del so monitor."
+
+msgid "ShowThumbnails"
+msgstr "Amosar miniatures"
+
+msgid "SetSlideshowOptions"
+msgstr "Opciones de la presentación"
+
+msgid "SlideshowOptions"
+msgstr "Opciones de la presentación"
+
+msgid "NoResizing"
+msgstr "Ensin cambiu de tamañu (por defeutu)"
+
+msgid "ExitSlideshow"
+msgstr "Colar de la presentación"
+
+msgid "SlideShow"
+msgstr "Presentación"
+
+msgid "PreviousSlide"
+msgstr "Diapositiva anterior"
+
+msgid "NextSlide"
+msgstr "Diapositiva siguiente"
+
+msgid "ViewSlideshow"
+msgstr "Ver presentación"
+
+msgid "FirstSlide"
+msgstr "Primer diapositiva"
+
+msgid "LastSlide"
+msgstr "Cabera diapositiva"
+

@@ -1,0 +1,105 @@
+msgid "MessageEmptyMessageOrSubject"
+msgstr "Por favor, escriba el título y el texto de su mensaje"
+
+msgid "Inbox"
+msgstr "Bandeja de entrada"
+
+msgid "Messages"
+msgstr "Mensajes"
+
+msgid "SendMessage"
+msgstr "Enviar mensaje"
+
+msgid "NewMessage"
+msgstr "Nuevo mensaje"
+
+msgid "ComposeMessage"
+msgstr "Redactar"
+
+msgid "DeleteSelectedMessages"
+msgstr "Borrar los mensajes seleccionados"
+
+msgid "SelectAll"
+msgstr "Seleccionar todo"
+
+msgid "DeselectAll"
+msgstr "Anular selección"
+
+msgid "ReplyToMessage"
+msgstr "Responder a este mensaje"
+
+msgid "BackToInbox"
+msgstr "Volver a la Bandeja de entrada"
+
+msgid "MessageSentTo"
+msgstr "El mensaje ha sido enviado a"
+
+msgid "SendMessageTo"
+msgstr "Enviar a"
+
+msgid "Myself"
+msgstr "Yo mismo"
+
+msgid "From"
+msgstr "De"
+
+msgid "To"
+msgstr "Para"
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "InvalidMessageId"
+msgstr "El id del mensaje a contestar no es válido."
+
+msgid "ErrorSendingMessage"
+msgstr "Se ha producido un error mientras se intentaba enviar el mensaje."
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "¿ Está seguro de querer borrar los mensajes seleccionados ?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "Los mensajes seleccionados han sido suprimidos"
+
+msgid "EnterTitle"
+msgstr "Ingrese un título"
+
+msgid "TypeYourMessage"
+msgstr "Escriba su mensaje"
+
+msgid "MessageDeleted"
+msgstr "El mensaje ha sido eliminado"
+
+msgid "ConfirmDeleteMessage"
+msgstr "¿Esta seguro de que desea borrar este mensaje?"
+
+msgid "DeleteMessage"
+msgstr " Borrar mensaje"
+
+msgid "ReadMessage"
+msgstr " Leer"
+
+msgid "SendInviteMessage"
+msgstr "Enviar mensaje de invitación"
+
+msgid "SendMessageInvitation"
+msgstr "¿ Está seguro de que desea enviar las invitaciones a los usuarios seleccionados ?"
+
+msgid "MessageTool"
+msgstr "Herramienta mensajes"
+
+msgid "WriteAMessage"
+msgstr "Escribir un mensaje"
+
+msgid "AlreadyReadMessage"
+msgstr "Mensaje leído"
+
+msgid "UnReadMessage"
+msgstr "Mensaje sin leer"
+
+msgid "MessageSent"
+msgstr "Mensaje enviado"
+
+msgid "YouShouldWriteAMessage"
+msgstr "Escribir un mensaje"
+

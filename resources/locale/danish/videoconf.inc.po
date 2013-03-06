@@ -1,0 +1,276 @@
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Microphone"
+msgstr "Mikrofon"
+
+msgid "Name"
+msgstr "Navn"
+
+msgid "DeleteStream"
+msgstr "Slet stream"
+
+msgid "Progress"
+msgstr "Progression"
+
+msgid "Play"
+msgstr "Play/spil"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "Record"
+msgstr "Optag/record"
+
+msgid "NoFileAvailable"
+msgstr "Ingen fil tilgængelig"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Kun undervisere kan optage"
+
+msgid "UsersNow"
+msgstr "Deltagere pt."
+
+msgid "StartConference"
+msgstr "Start konference"
+
+msgid "MyName"
+msgstr "Mit navn"
+
+msgid "OrganisationSVideoconference"
+msgstr "Videokonference"
+
+msgid "ImportPresentation"
+msgstr "Importer præsentation"
+
+msgid "RefreshList"
+msgstr "Opdater listen"
+
+msgid "GoToTop"
+msgstr "Gå til Top"
+
+msgid "NewPoll"
+msgstr "Ny afstemning"
+
+msgid "CreateNewPoll"
+msgstr "Opret ny afstemning"
+
+msgid "Question"
+msgstr "Spørgsmål"
+
+msgid "PollType"
+msgstr "Afstemningstype:"
+
+msgid "Create"
+msgstr "Opret"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Info: Alle deltagere i konferencen vil modtage en besked om den nye afstemning"
+
+msgid "YesNo"
+msgstr "Ja/nej"
+
+msgid "Numeric1To10"
+msgstr "Numerisk 1-10"
+
+msgid "Poll"
+msgstr "Afstemning"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Du skal være moderator af konferencen for at kunne oprette afstemninger"
+
+msgid "YourVoteHasBeenSent"
+msgstr "Din stemme er afsendt"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Du har allerede givet din stemme i afstemningen"
+
+msgid "VoteButton"
+msgstr "Stem!"
+
+msgid "YourAnswer"
+msgstr "Dit svar:"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "WantsToKnow"
+msgstr "ønsker at vide:"
+
+msgid "PollResults"
+msgstr "Resultat af afstemning"
+
+msgid "Votes"
+msgstr "Stemmer:"
+
+msgid "Result"
+msgstr "Resultat"
+
+msgid "ThereIsNoPoll"
+msgstr "Der er ingen afstemning"
+
+msgid "MeetingMode"
+msgstr "Møde (maks. fire deltagere)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Konference (maks. 50 deltagere)"
+
+msgid "Mode"
+msgstr "form"
+
+msgid "RemainingSeats"
+msgstr "Resterende pladser"
+
+msgid "AlreadyIn"
+msgstr "Allerede i"
+
+msgid "CheckIn"
+msgstr "Check in"
+
+msgid "TheModeratorHasLeft"
+msgstr "Moderatoren har forladt konferencen"
+
+msgid "SystemMessage"
+msgstr "Systemmeddelelse"
+
+msgid "ChooseDevices"
+msgstr "Vælg udstyr"
+
+msgid "ChooseCam"
+msgstr "Vælg kamera:"
+
+msgid "ChooseMic"
+msgstr "Vælg mikrofon:"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Du skal opdatere forbindelsen for at se ændringerne"
+
+msgid "ChangeSettings"
+msgstr "Kursusindstillinger"
+
+msgid "Course"
+msgstr "Kursus"
+
+msgid "CourseLanguage"
+msgstr "Sprog på kursusside:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Bekræft at Whiteboard skal ryddes"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Skal whiteboardet ryddes før jeg tilføjer et nyt billede?"
+
+msgid "DontAskMeAgain"
+msgstr "Spørg mig ikke igen"
+
+msgid "EditSettings"
+msgstr "Rediger indstillinger"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Spørg før whiteboard ryddes"
+
+msgid "UserInfo"
+msgstr "brugerinformation"
+
+msgid "ClearDrawArea"
+msgstr "Ryd tegneområde"
+
+msgid "Undo"
+msgstr "Fortryd"
+
+msgid "Redo"
+msgstr "Genskab"
+
+msgid "SelectAnObject"
+msgstr "Vælg et objekt"
+
+msgid "Text"
+msgstr "Tekst"
+
+msgid "Paint"
+msgstr "Mal/tegn"
+
+msgid "DrawLine"
+msgstr "Tegn linie"
+
+msgid "DrawUnderline"
+msgstr "Tegn understregning"
+
+msgid "Rectangle"
+msgstr "Rektangel"
+
+msgid "Elipse"
+msgstr "Ellipse"
+
+msgid "Arrow"
+msgstr "Pil"
+
+msgid "DeleteChosenItem"
+msgstr "Slet valgte genstand"
+
+msgid "ApplyForModeration"
+msgstr "Ansøg om at blive moderator"
+
+msgid "Apply"
+msgstr "Søg"
+
+msgid "BecomeModerator"
+msgstr "Bliv moderator"
+
+msgid "Close"
+msgstr "luk"
+
+msgid "Italic"
+msgstr "Kursiv"
+
+msgid "Bold"
+msgstr "Fed"
+
+msgid "Waiting"
+msgstr "Afventende"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "En deltager ønsker at blive moderator"
+
+msgid "Accept"
+msgstr "Accept"
+
+msgid "Reject"
+msgstr "Afvis"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Send forespørgsel til følgende deltagere"
+
+msgid "Accepted"
+msgstr "Accepterede"
+
+msgid "Rejected"
+msgstr "Afviste"
+
+msgid "ChangeModerator"
+msgstr "Skift moderator"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "Du modererer ikke dette kursus"
+
+msgid "Moderator"
+msgstr "Moderator:"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "Konferencen er fyldt - der er desværre ikke flere pladser. Forsøg venligst senere."
+
+msgid "Loading"
+msgstr "Loader..."
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Vent venligst mens billedet loader"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "Synkroniser konferencens deltagere"
+

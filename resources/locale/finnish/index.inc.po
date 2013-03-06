@@ -1,0 +1,162 @@
+msgid "langInvalidId"
+msgstr "Sisäänkirjautuminen epäonnistui. Jos et ole rekisteröitynyt, niin täytä <a href=\'../auth/inscription.php\'>rekisteröitymislomake</a></font color>"
+
+msgid "langWelcome"
+msgstr "Tervetuloa!"
+
+msgid "langPass"
+msgstr "Salasana"
+
+msgid "langEnter"
+msgstr "Sisään."
+
+msgid "langReg"
+msgstr "Rekisteröinti"
+
+msgid "langMenu"
+msgstr "Menu"
+
+msgid "langAdvises"
+msgstr "Vinkit"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Varoitus:</b>Tätä kurssia ei enää ole"
+
+msgid "langOtherCourses"
+msgstr "Kurssit"
+
+msgid "langSupportForum"
+msgstr "Tukifoorumi(eng)"
+
+msgid "langCategories"
+msgstr "Koulutusalat"
+
+msgid "langBackToHomePage"
+msgstr "Takaisin etusivulle"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Ei avoimia kursseja."
+
+msgid "langLostPassword"
+msgstr "Salasana hukassa"
+
+msgid "lang_edit_my_course_list"
+msgstr "Muokkaa omat kurssini luetteloa"
+
+msgid "langAgenda"
+msgstr "Kalenteri"
+
+msgid "langValvas"
+msgstr "Viimeinen ilmoitus"
+
+msgid "langUp"
+msgstr "Ylös"
+
+msgid "langCatList"
+msgstr "Aihealueet"
+
+msgid "langCourseList"
+msgstr "Kurssit"
+
+msgid "langHelptwo"
+msgstr "Apua"
+
+msgid "EussMenu"
+msgstr "Valikko"
+
+msgid "Englin"
+msgstr "Englanti"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Kirjautuminen epäonnistui - jos et ole vielä rekisteröitynyt, tee se<a href=claroline/auth/inscription.php>rekisteröintilomakkeella</a>"
+
+msgid "langSubCat"
+msgstr "alakategoriat"
+
+msgid "langMenuGeneral"
+msgstr "Yleiset"
+
+msgid "langMenuUser"
+msgstr "Käyttäjä"
+
+msgid "langMenuAdmin"
+msgstr "Ympäristön ylläpitäjä"
+
+msgid "langUsersOnLineList"
+msgstr "Tällä hetkellä kirjautuneina"
+
+msgid "langTotalOnLine"
+msgstr "Tällä hetkellä käyttäjiä"
+
+msgid "langRefresh"
+msgstr "Järjestä"
+
+msgid "langSystemAnnouncements"
+msgstr "Järjestelmän tiedotus"
+
+msgid "langHelpMaj"
+msgstr "Apua"
+
+msgid "langNotRegistered"
+msgstr "Rekisteröitymätön"
+
+msgid "langAdmin"
+msgstr "Ympäristön ylläpitäjä"
+
+msgid "Login"
+msgstr "Kirjautuminen"
+
+msgid "langRegisterForCourse"
+msgstr "Rekisteröidy kurssille"
+
+msgid "langUnregisterForCourse"
+msgstr "Rekisteröidy kurssilta pois"
+
+msgid "Platform"
+msgstr "Ympäristö"
+
+msgid "Refresh"
+msgstr "Päivitä"
+
+msgid "TotalOnLine"
+msgstr "Käyttäjiä kirjautuneena yhteensä"
+
+msgid "langCourseClosed"
+msgstr "(kurssi on tällä hetkellä suljettu)"
+
+msgid "ViewOpenCourses"
+msgstr "Näytä avoimet kurssit"
+
+msgid "langCompetences"
+msgstr "Koulutus"
+
+msgid "langDiplomas"
+msgstr "Suoritukset"
+
+msgid "langTeach"
+msgstr "Mitä hän voi opettaa"
+
+msgid "langProductions"
+msgstr "Tuotokset"
+
+msgid "langSendChatRequest"
+msgstr "Lähetä keskustelupyyntö hänelle"
+
+msgid "langRequestDenied"
+msgstr "Kutsu hylätty."
+
+msgid "NewMessageInForum"
+msgstr "Uusi viesti keskustelualueella"
+
+msgid "FolderCreated"
+msgstr "Uusi kansio tehty"
+
+msgid "LinkAdded"
+msgstr "Uusi linkki lisätty"
+
+msgid "AnnouncementAdded"
+msgstr "Ilmoitus on lisätty"
+
+msgid "AgendaAdded"
+msgstr "Tapahtuma lisätty"
+

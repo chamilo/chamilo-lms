@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "เอกสาร Documents"
+
+msgid "langMdTitle"
+msgstr "วัตถุประสงค์การเรียน Learning Object Title"
+
+msgid "langMdDescription"
+msgstr "กดปุ่มจัดเก็บ(restore) To store this information, press Store"
+
+msgid "langMdCoverage"
+msgstr "เช่น ปริญญา e.g. Bachelor of ..."
+
+msgid "langMdCopyright"
+msgstr "e.g. provided the source is acknowledged"
+
+msgid "nameTools"
+msgstr "obsolete language variable"
+
+msgid "langTool"
+msgstr "เอกสาร Metadata"
+
+msgid "langNoScript"
+msgstr "โปรแกรมดูอินเตอร์เน็ตที่ท่านใช้อยู่นี้ ไม่ได้อนุญาตให้อ่านคำสั่งนี้ ให้ข้ามไป Script is not enabled in your browser, please ignore the screen part below this text, it won\'t work..."
+
+msgid "langLanguageTip"
+msgstr "the language in which this learning object was made"
+
+msgid "langIdentifier"
+msgstr "ตัวบ่งชี้ Identifier"
+
+msgid "langIdentifierTip"
+msgstr "unique identification for this learning object, composed of letters, digits, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "title or name, and language of that title or name"
+
+msgid "langDescriptionTip"
+msgstr "อธิบายแสดงความคิดเห็น description or comment, and language used for describing this learning object"
+
+msgid "langKeyword"
+msgstr "คำสำคัญ"
+
+msgid "langKeywordTip"
+msgstr "แยกคำด้วยเครื่องหมาย , separate by commas (letters, digits, -.)"
+
+msgid "langCoverage"
+msgstr "ครอบคลุม Coverage"
+
+msgid "langCoverageTip"
+msgstr "ตัวอย่างปริญญาของ for example bachelor of xxx: yyy"
+
+msgid "langKwNote"
+msgstr "If you change the description language, do not add keywords at the same time."
+
+msgid "langClickKw"
+msgstr "Click a keyword in the tree to select or deselect it."
+
+msgid "langKwHelp"
+msgstr "<br/>คลิกปุ่มบวก \'+\' เพื่อเปิด,ลบ \'-\' เพื่อปิด, \'++\' button to open all, \'--\' button to close all..<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/>"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "คลิกเปิด click to open object"
+
+msgid "langStore"
+msgstr "จัดเก็บ Store"
+
+msgid "langDeleteAll"
+msgstr "ลบ metadata ทั้งหมด"
+
+msgid "langConfirmDelete"
+msgstr "คุณต้องการที่จะลบ metadata ทั้งหมดจริงๆใช่หรือไม่"
+
+msgid "langWorkOn"
+msgstr "เปิด"
+
+msgid "langNotInDB"
+msgstr "ไม่มีประเภทรายการเชื่อมโยง"
+
+msgid "langManifestSyntax"
+msgstr "(syntax error in manifest file...)"
+
+msgid "langEmptyManifest"
+msgstr "ไม่มีไฟล์ข้อมูล"
+
+msgid "langNoManifest"
+msgstr "ไม่มีไฟล์ข้อมูล"
+
+msgid "langNotFolder"
+msgstr "เป็นไปไม่ได้ ไม่มีแฟ้ม"
+
+msgid "langContinue"
+msgstr "ต่อไปด้วย"
+
+msgid "langCreate"
+msgstr "สร้าง"
+
+msgid "langRemove"
+msgstr "เอา MDEs ออก"
+
+msgid "langAllRemovedFor"
+msgstr "เอารายการที่มีในประเภทออกไป"
+
+msgid "langRemainingFor"
+msgstr "เอารายการที่ล้าหลังออกจากประเภท"
+
+msgid "langIndex"
+msgstr "ดัชนีคำ"
+
+msgid "langTotalMDEs"
+msgstr "รวมจำนวนการเชื่อมโยงที่มีของ MD"
+
+msgid "langMainMD"
+msgstr "เปิดรายการหลัก MDE"
+
+msgid "langOrElse"
+msgstr "เลือกประเภทการเชื่อมโยง"
+
+msgid "langWarningDups"
+msgstr "สำเนาชื่อประเภทได้เอาออกจากรายการแล้ว"
+
+msgid "langSLC"
+msgstr "ใช้งานร่วมกับชื่อของประเภท"
+

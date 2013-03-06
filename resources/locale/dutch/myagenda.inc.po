@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Mijn agenda"
+
+msgid "langToday"
+msgstr "Vandaag"
+

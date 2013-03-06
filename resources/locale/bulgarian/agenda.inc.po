@@ -1,0 +1,225 @@
+msgid "AgendaAdd"
+msgstr "Добавяне на събитие"
+
+msgid "ShowAllEvents"
+msgstr "Покажи всички събития"
+
+msgid "ShowCurrent"
+msgstr "Събитията от този месец"
+
+msgid "AddCalendarItem"
+msgstr "Добавяне на събитие в програмата"
+
+msgid "Day"
+msgstr "Ден"
+
+msgid "Month"
+msgstr "Месец"
+
+msgid "Year"
+msgstr "Година"
+
+msgid "Hour"
+msgstr "Час"
+
+msgid "Minutes"
+msgstr "Минути"
+
+msgid "Detail"
+msgstr "Описание"
+
+msgid "EditSuccess"
+msgstr "Събитието е редактирано."
+
+msgid "AddSuccess"
+msgstr "Събитието е добавено."
+
+msgid "AgendaDeleteSuccess"
+msgstr "Събитието е изтрито."
+
+msgid "NoAgendaItems"
+msgstr "Няма събития"
+
+msgid "lang_september"
+msgstr "Септември"
+
+msgid "langClassName"
+msgstr "Име на класа"
+
+msgid "lang_agenda"
+msgstr "Програма"
+
+msgid "ModifyCalendarItem"
+msgstr "Промяна на събитие от програмата"
+
+msgid "ItemTitle"
+msgstr "Наименование на събитието"
+
+msgid "langDay"
+msgstr "ден"
+
+msgid "month_default"
+msgstr "месец по подразбиране"
+
+msgid "langYear"
+msgstr "Година"
+
+msgid "year_default"
+msgstr "година по подразбиране"
+
+msgid "langHour"
+msgstr "Час"
+
+msgid "hour_default"
+msgstr "час по подразбиране"
+
+msgid "langMinute"
+msgstr "минута"
+
+msgid "langLasting"
+msgstr "продължителност"
+
+msgid "langOldToNew"
+msgstr "старо към ново"
+
+msgid "langNewToOld"
+msgstr "ново към старо"
+
+msgid "langNow"
+msgstr "сега"
+
+msgid "langAddEvent"
+msgstr "Добавяне на събитие"
+
+msgid "langDetail"
+msgstr "Описание"
+
+msgid "MonthView"
+msgstr "Месечен преглед"
+
+msgid "WeekView"
+msgstr "Седмичен преглед"
+
+msgid "DayView"
+msgstr "Преглед за деня"
+
+msgid "AddPersonalItem"
+msgstr "Добавяне на събитие"
+
+msgid "Week"
+msgstr "Седмица"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Time"
+msgstr "Час"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Добавяне на събитие"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Промяна на събитие"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Събитието беше добавено към вашата програма."
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Събитието във вашата програма е редактирано."
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Събитието е изтрито от вашата програма."
+
+msgid "ViewPersonalItem"
+msgstr "Персонални събития"
+
+msgid "UserGroupFilter"
+msgstr "Филтър за групи/потребители"
+
+msgid "ShowAll"
+msgstr "Покажи всички"
+
+msgid "Print"
+msgstr "Печат"
+
+msgid "MyTextHere"
+msgstr "Тук започва вашият текст..."
+
+msgid "CopiedAsAnnouncement"
+msgstr "Копирано като обява"
+
+msgid "NewAnnouncement"
+msgstr "Нова обява"
+
+msgid "AddAnnouncement"
+msgstr "Добавяне на обява"
+
+msgid "UpcomingEvent"
+msgstr "Предстоящо събитие"
+
+msgid "RepeatedEvent"
+msgstr "Повтарящо се събитие"
+
+msgid "RepeatType"
+msgstr "Периодичност на повторението"
+
+msgid "RepeatDaily"
+msgstr "Ежедневно"
+
+msgid "RepeatWeekly"
+msgstr "Ежеседмично"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Всеки месец, по дата"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Всеки месец, по ден от седмицата"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Всеки месец, по ден от седмицата (ограничено)"
+
+msgid "RepeatYearly"
+msgstr "Всяка година"
+
+msgid "RepeatEnd"
+msgstr "Дата за прекратяване на повторението"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Преглед на оригиналното събитие"
+
+msgid "ICalFileImport"
+msgstr "Импортиране от iCal/ics файл"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Добавяне на потребители на системата"
+
+msgid "GlobalEvent"
+msgstr "Глобално събитие"
+
+msgid "ModifyEvent"
+msgstr "Редактиране на събитието"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Крайната дата не може да предхожда началната дата."
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Сортиране на програмата хронологично"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Сортиране на програмата в обратен хронологичен ред"
+
+msgid "ItemForUserSelection"
+msgstr "Избиране на потребители"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Файлът не е в iCal формат."
+
+msgid "RepeatEvent"
+msgstr "Повторение на събитието"
+
+msgid "RepeatDate"
+msgstr "Да се повтаря"
+
+msgid "EndDateMustBeMoreThanStartDate"
+msgstr "Крайната дата не може да предшества началната дата."
+

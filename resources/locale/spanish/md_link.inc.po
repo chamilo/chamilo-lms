@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Documentos"
+
+msgid "langMdTitle"
+msgstr "Título del objeto de aprendizaje"
+
+msgid "langMdDescription"
+msgstr "Para guardar esta información, presione Guardar"
+
+msgid "langMdCoverage"
+msgstr "por ej., Licenciado en..."
+
+msgid "langMdCopyright"
+msgstr "por ej., el proveedor de la fuente es conocido"
+
+msgid "nameTools"
+msgstr "variable de idioma obsoleta"
+
+msgid "langTool"
+msgstr "Metadatos del documento"
+
+msgid "langNoScript"
+msgstr "Su navegador no permite scripts, por favor ignore la parte inferior de la pantalla. No funcionará..."
+
+msgid "langLanguageTip"
+msgstr "idioma en el que el objeto de aprendizaje fue hecho"
+
+msgid "langIdentifier"
+msgstr "Identificador"
+
+msgid "langIdentifierTip"
+msgstr "identificador único para este objeto de aprendizaje, compuesto de letras, números, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "título o nombre, e idioma del título o del nombre"
+
+msgid "langDescriptionTip"
+msgstr "descripción o comentario, e idioma usado para describir este objeto de aprendizaje"
+
+msgid "langKeyword"
+msgstr "Palabra clave"
+
+msgid "langKeywordTip"
+msgstr "separar mediante comas (letras, dígitos, -.)"
+
+msgid "langCoverage"
+msgstr "Destino"
+
+msgid "langCoverageTip"
+msgstr "por ejemplo licenciado en xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Si desea cambiar el idioma de la descripción, no lo haga a la vez que añade palabras clave"
+
+msgid "langClickKw"
+msgstr "Haga clic en la palabra clave del árbol para seleccionarla o anular su selección."
+
+msgid "langKwHelp"
+msgstr "<br/>Haga clic en el botón \'+\' para abrir, en el botón \'-\' para cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrarlo todo.<br/>Anule la selección de todas las palabras clave cerrando el árbol y abriéndolo de nuevo con el botón \'+\'.<br/>Alt-clic \'+\' busca las palabras claves originales en el árbol.<br/><br/>Alt-clic selecciona las palabras clave sin términos más amplios o anula la selección de palabras clave con términos más amplios.<br/><br/>Si desea cambiar el idioma de la descripción, no lo haga a la vez que añade palabras clave/><br/>"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "haga clic para abrir el objeto"
+
+msgid "langStore"
+msgstr "Guardar"
+
+msgid "langDeleteAll"
+msgstr "Borrar todos los metadatos"
+
+msgid "langConfirmDelete"
+msgstr "¿ Está *seguro* de querer borrar todos los metadatos ?"
+
+msgid "langWorkOn"
+msgstr "en"
+
+msgid "langNotInDB"
+msgstr "no existe esta categoría para el enlace"
+
+msgid "langManifestSyntax"
+msgstr "(error de sintaxis en el fichero manifest...)"
+
+msgid "langEmptyManifest"
+msgstr "(el fichero manifest está vacío...)"
+
+msgid "langNoManifest"
+msgstr "(no existe el fichero manifest...)"
+
+msgid "langNotFolder"
+msgstr "no es posible, esto no es una carpeta..."
+
+msgid "langContinue"
+msgstr "Continuar con"
+
+msgid "langCreate"
+msgstr "Crear"
+
+msgid "langRemove"
+msgstr "Borrar entradas de metadatos (MDE)"
+
+msgid "langAllRemovedFor"
+msgstr "Todas las entradas han sido retiradas de la categoría"
+
+msgid "langRemainingFor"
+msgstr "entradas obsoletas quitadas por categoría"
+
+msgid "langIndex"
+msgstr "Indice de palabras"
+
+msgid "langTotalMDEs"
+msgstr "Total de entradas de metadatos (MD) de enlaces"
+
+msgid "langMainMD"
+msgstr "Abrir la página principal de entradas de metadatos (MDE)"
+
+msgid "langOrElse"
+msgstr "Seleccionar una categoría de enlaces"
+
+msgid "langWarningDups"
+msgstr "¡ - los nombres de categoría duplicados serán retirados de la lista !"
+
+msgid "langSLC"
+msgstr "Trabajar con la categoría de enlace nombrada"
+

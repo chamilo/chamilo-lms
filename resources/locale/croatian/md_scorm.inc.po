@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "suvišna jezična odrednica"
+
+msgid "langMdCallingTool"
+msgstr "Dokumenti"
+
+msgid "langTool"
+msgstr "Definicijski podatci dokumenta"
+
+msgid "langNotInDB"
+msgstr "nema takve kategorije poveznica"
+
+msgid "langManifestSyntax"
+msgstr "(sintaktička pogreška u datoteci manifesta...)"
+
+msgid "langEmptyManifest"
+msgstr "(datoteka manifesta prazna...)"
+
+msgid "langNoManifest"
+msgstr "(nema datoteke manifesta...)"
+
+msgid "langNotFolder"
+msgstr "nije moguće, to nije mapa..."
+
+msgid "langUploadHtt"
+msgstr "Učitaj datoteku HTT"
+
+msgid "langHttFileNotFound"
+msgstr "Nov datoteku HTT nije moguće otvoriti (npr. prazna, prevelika)"
+
+msgid "langHttOk"
+msgstr "Nova datoteka HTT učitana"
+
+msgid "langHttNotOk"
+msgstr "Predaja datoteke HTT nije uspjela"
+
+msgid "langRemoveHtt"
+msgstr "Ukloni datoteku HTT"
+
+msgid "langHttRmvOk"
+msgstr "Datoteka HTT uklonjena"
+
+msgid "langHttRmvNotOk"
+msgstr "Uklanjanje datoteke HTT nije uspjelo"
+
+msgid "langImport"
+msgstr "Prijenos"
+
+msgid "langRemove"
+msgstr "Ukloni datoteke MDE"
+
+msgid "langAllRemovedFor"
+msgstr "Svi unosi uklonjeni iz kategorije"
+
+msgid "langIndex"
+msgstr "Kazalo riječi"
+
+msgid "langTotalMDEs"
+msgstr "Ukupan broj unosa MD za poveznice:"
+
+msgid "langMainMD"
+msgstr "Otvori glavnu datoteku MDE"
+
+msgid "langLines"
+msgstr "redci"
+
+msgid "langPlay"
+msgstr "Pokreni index.php"
+
+msgid "langNonePossible"
+msgstr "Nisu moguće operacije s definicijskim podatcima"
+
+msgid "langOrElse"
+msgstr "Odaberi kategoriju poveznica"
+
+msgid "langWorkWith"
+msgstr "Radi s mapom Scorm"
+
+msgid "langSDI"
+msgstr "...mapa Scorm s identifikacijom SD-a (i razdijeli manifest - ili ostavi prazno)"
+
+msgid "langRoot"
+msgstr "korijen"
+
+msgid "langSplitData"
+msgstr "Razdijeli manifeste, i #MDe, ako postoje:"
+
+msgid "langMffNotOk"
+msgstr "Zamjena datoteke manifesta nije uspjela"
+
+msgid "langMffOk"
+msgstr "Datoteka manifesta je zamijenjena"
+
+msgid "langMffFileNotFound"
+msgstr "Novu datoteku manifesta nije moguće otvoriti (npr. prazna, prevelika)"
+
+msgid "langUploadMff"
+msgstr "Zamijeni datoteku manifesta"
+

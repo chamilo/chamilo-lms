@@ -1,0 +1,167 @@
+msgid "langOnlineConference"
+msgstr "Τηλεδιάσκεψη"
+
+msgid "langWash"
+msgstr "Καθάρισμα"
+
+msgid "langReset"
+msgstr "Επανεκκίνηση (reset)"
+
+msgid "langSave"
+msgstr "Αποστολή μηυνύματος"
+
+msgid "langRefresh"
+msgstr "Ανανέωση"
+
+msgid "langIsNowInYourDocDir"
+msgstr "είναι τώρα στο εργαλείο των εγγράφων. <br><B>Το αρχείο είναι ορατό</B>"
+
+msgid "langCopyFailed"
+msgstr "Η εκτύπωση απέτυχε"
+
+msgid "langTypeMessage"
+msgstr "Πληκτρολογήστε το μήνυμά σας παρακάτω"
+
+msgid "langConfirmReset"
+msgstr "Θέλετε πραγματικά να διαγράψετε όλα τα μηνύματα;"
+
+msgid "langHasResetChat"
+msgstr "έχει κάνει επαναφορά (reset) της Συνομιλίας"
+
+msgid "langNoOnlineConference"
+msgstr "Δεν υπάρχει καμία τηλεδιάσκεψη αυτή τη στιγμή ..."
+
+msgid "langMediaFile"
+msgstr "Ζωντανή αναμετάδοση ήχου ή ροής video (streaming)"
+
+msgid "langContentFile"
+msgstr "Παρουσίαση"
+
+msgid "langListOfParticipants"
+msgstr "Κατάλογος συμμετεχόντων"
+
+msgid "langYourPicture"
+msgstr "Η εικόνα σας"
+
+msgid "langOnlineDescription"
+msgstr "Περιγραφή τηλεδιάσκεψης"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Παρακαλώ να τσεκάρετε αυτό το κουτάκι επιλογής (checkbox) μόνο για υποβολή μιας σημαντικής ερώτησης!"
+
+msgid "langQuestion"
+msgstr "Ερώτηση"
+
+msgid "langClearList"
+msgstr "Καθρισμός της συνομιλίας (chat)"
+
+msgid "langWhiteBoard"
+msgstr "Ασπροπίνακας"
+
+msgid "langTextEditorDefault"
+msgstr "
+Επεξεργαστής κειμένου
+Κάντε αποκοπή και επικόλληση εδώ, από το Ms-Word® και, μετά, επεξεργασία. Οι συμμετέχοντες θα δουν τις τροποποιήσεις σας σε πραγματικό χρόνο (live)."
+
+msgid "langStreaming"
+msgstr "Ροή (streaming)"
+
+msgid "langStreamURL"
+msgstr "Ροή URL"
+
+msgid "langStreamType"
+msgstr "Τύπος ροής"
+
+msgid "langLinkName"
+msgstr "Όνομα συνδέσμου"
+
+msgid "langLinkURL"
+msgstr "Σύνδεσμος URL"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Καλωσήρθατε στο Κέντρο Online Τηλεδιασκέψεων"
+
+msgid "langNoLinkAvailable"
+msgstr "Δεν υπάρχει διαθέσιμος σύνδεσμος"
+
+msgid "langChat_reset_by"
+msgstr "επανεκκίνηση (reset) της συνομιλίας"
+
+msgid "langCallSent"
+msgstr "Έχει σταλεί η κλήση για συνομιλία. Βρίσκεσθε σε αναμονή για την έγκριση του συνομιλητή σας."
+
+msgid "langChatDenied"
+msgstr "Η κλήση σας έχει απορριφθεί από τον συνομιλητή σας."
+
+msgid "Send"
+msgstr "Αποστολή μηνύματος"
+
+msgid "Connected"
+msgstr "Συμμετέχοντες στη συνομιλία"
+
+msgid "BigGrin"
+msgstr "Μεγάλο χαμόγελο"
+
+msgid "Amazing"
+msgstr "Καταπληκτικό"
+
+msgid "Confused"
+msgstr "Μπερδεμένος/η"
+
+msgid "Cool"
+msgstr "Cool"
+
+msgid "Surprised"
+msgstr "Έκπληκτος/η"
+
+msgid "Hand"
+msgstr "Γεια σου"
+
+msgid "Wink"
+msgstr "Κλείσιμο του ματιού"
+
+msgid "Neutral"
+msgstr "Ουδέτερος/η"
+
+msgid "Angry"
+msgstr "Θυμωμένος/η"
+
+msgid "Avid"
+msgstr "Αχόρταγος/η"
+
+msgid "Redface"
+msgstr "Κοκκινισμένος/η στο πρόσωπο"
+
+msgid "Sad"
+msgstr "Λυπημένος/η"
+
+msgid "Silence"
+msgstr "Σιωπή"
+
+msgid "Silenced"
+msgstr "Σώπασε"
+
+msgid "Smile"
+msgstr "Χαμόγελο"
+
+msgid "Exclamation"
+msgstr "Επιφώνημα"
+
+msgid "Arrow"
+msgstr "Βέλος"
+
+msgid "Question"
+msgstr "Ερώτηση"
+
+msgid "Idea"
+msgstr "Ιδέα"
+
+msgid "AskPermissionSpeak"
+msgstr "Ζητήστε την άδεια να μιλήσετε"
+
+msgid "Pause"
+msgstr "Παύση"
+
+msgid "Stop"
+msgstr "Διακοπή"
+

@@ -1,0 +1,318 @@
+msgid "Camera"
+msgstr "Камера"
+
+msgid "Microphone"
+msgstr "Микрофон"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "DeleteStream"
+msgstr "Удалить направление (течение)"
+
+msgid "Progress"
+msgstr "Прогресс"
+
+msgid "Play"
+msgstr "Воспроизвести"
+
+msgid "Stop"
+msgstr "Остановить"
+
+msgid "Record"
+msgstr "Записать"
+
+msgid "NoFileAvailable"
+msgstr "Нет доступного файла"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Запись только для преподавателей"
+
+msgid "UsersNow"
+msgstr "Пользователи в настоящий момент:"
+
+msgid "StartConference"
+msgstr "Начать конференцию"
+
+msgid "MyName"
+msgstr "Мое имя"
+
+msgid "OrganisationSVideoconference"
+msgstr "Видео Конференция Chamilo"
+
+msgid "ImportPresentation"
+msgstr "Импортировать презентацию"
+
+msgid "RefreshList"
+msgstr "Обновить список"
+
+msgid "GoToTop"
+msgstr "Перейти наверх"
+
+msgid "NewPoll"
+msgstr "Новое голосование"
+
+msgid "CreateNewPoll"
+msgstr "Создать новое голосование для этой комнаты"
+
+msgid "Question"
+msgstr "Вопрос"
+
+msgid "PollType"
+msgstr "Тип голосования:"
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Инфо: каждый подключенный пользователь в этой комнате получит извещение об этом новом Голосовании"
+
+msgid "YesNo"
+msgstr "Да/Нет"
+
+msgid "Numeric1To10"
+msgstr "Числовой 1-10"
+
+msgid "Poll"
+msgstr "Опрос"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Вы должны стать модератором этой комнаты, чтобы создавать опросы."
+
+msgid "YourVoteHasBeenSent"
+msgstr "Ваш голос был послан"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Вы уже проголосовали"
+
+msgid "VoteButton"
+msgstr "Голосовать!"
+
+msgid "YourAnswer"
+msgstr "Ваш ответ:"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "WantsToKnow"
+msgstr "потребности знать:"
+
+msgid "PollResults"
+msgstr "Результаты голосования"
+
+msgid "Votes"
+msgstr "Избиратели:"
+
+msgid "Result"
+msgstr "Результат"
+
+msgid "ThereIsNoPoll"
+msgstr "Голосования нет"
+
+msgid "MeetingMode"
+msgstr "Встреча (максимум 4 места)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Конференция (максимум 50 мест)"
+
+msgid "Mode"
+msgstr "Метод"
+
+msgid "RemainingSeats"
+msgstr "Оставшиеся места"
+
+msgid "AlreadyIn"
+msgstr "Уже в"
+
+msgid "CheckIn"
+msgstr "Отметить (записать)"
+
+msgid "TheModeratorHasLeft"
+msgstr "Модератор этой конференции покинул комнату"
+
+msgid "SystemMessage"
+msgstr "Системное сообщение"
+
+msgid "ChooseDevices"
+msgstr "Выбрать устройства"
+
+msgid "ChooseCam"
+msgstr "Выбрать камеру:"
+
+msgid "ChooseMic"
+msgstr "Выбрать микрофон:"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Вы должны подключиться заново для того, чтобы изменения вступили в силу"
+
+msgid "ChangeSettings"
+msgstr "Изменить установочные параметры"
+
+msgid "Course"
+msgstr "Курс"
+
+msgid "CourseLanguage"
+msgstr "Язык курса:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Подтверждение очищения белой доски"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Должна ли быть очищена белая доска перед тем, как я добавлю новое изображение?"
+
+msgid "DontAskMeAgain"
+msgstr "Не спрашивать меня снова"
+
+msgid "EditSettings"
+msgstr "Редактировать установочные параметры"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Попросить подтверждения перед тем, как очистить белую доску"
+
+msgid "UserInfo"
+msgstr "информация пользователя"
+
+msgid "ClearDrawArea"
+msgstr "Очистить область рисования"
+
+msgid "Undo"
+msgstr "Вернуться к прежнему"
+
+msgid "Redo"
+msgstr "Повторить"
+
+msgid "SelectAnObject"
+msgstr "Выбрать предмет"
+
+msgid "Text"
+msgstr "Текст"
+
+msgid "Paint"
+msgstr "Рисование"
+
+msgid "DrawLine"
+msgstr "Нарисовать линию"
+
+msgid "DrawUnderline"
+msgstr "Нарисовать линию, подчеркивающую слово"
+
+msgid "Rectangle"
+msgstr "Прямоугольник"
+
+msgid "Elipse"
+msgstr "Эллипс (овал)"
+
+msgid "Arrow"
+msgstr "Стрелка"
+
+msgid "DeleteChosenItem"
+msgstr "Удалить выбранный пункт"
+
+msgid "ApplyForModeration"
+msgstr "Обратиться с заявлением о работе модератором"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "BecomeModerator"
+msgstr "Стать модератором"
+
+msgid "Close"
+msgstr "закрыть"
+
+msgid "Italic"
+msgstr "Курсив"
+
+msgid "Bold"
+msgstr "Жирный"
+
+msgid "Waiting"
+msgstr "Ожидание"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "Пользователь хочеть подать заявление на роль модератора:"
+
+msgid "Accept"
+msgstr "Принять"
+
+msgid "Reject"
+msgstr "Отклонить"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Послать запрос следующим пользователям"
+
+msgid "Accepted"
+msgstr "Принято"
+
+msgid "Rejected"
+msgstr "Отклонено"
+
+msgid "ChangeModerator"
+msgstr "Сменить модератора"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "Вы не координируете этот курс!"
+
+msgid "Moderator"
+msgstr "Модератор:"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "Эта Комната переполнена. Извините, пожалуйста, повторите попытку позже."
+
+msgid "Loading"
+msgstr "Загрузка"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Пожалуйста подождите пока загружается изображение"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "Синхронизировать членов конференции"
+
+msgid "Trainer"
+msgstr "Инструктор"
+
+msgid "Learner"
+msgstr "Студент"
+
+msgid "Chat"
+msgstr "разговор онлайн"
+
+msgid "Slides"
+msgstr "Слайды"
+
+msgid "WaitingForParticipants"
+msgstr "Ожидание участников"
+
+msgid "Send"
+msgstr "Отправить"
+
+msgid "Browse"
+msgstr "Просмотреть"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "ChooseFile"
+msgstr "Выбрать файл для импортирования"
+
+msgid "ConvertingDocument"
+msgstr "Конвертировать документ"
+
+msgid "Disconnected"
+msgstr "Разъединенный"
+
+msgid "FineStroke"
+msgstr "Тонкий"
+
+msgid "MediumStroke"
+msgstr "Средний"
+
+msgid "ThickStroke"
+msgstr "Толстый"
+

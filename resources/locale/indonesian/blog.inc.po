@@ -1,0 +1,48 @@
+msgid "MyTasks"
+msgstr "Tugas-ku (Task)"
+
+msgid "FavoriteBlogs"
+msgstr "Blog Favorit-ku"
+
+msgid "Navigation"
+msgstr "Navigasi"
+
+msgid "TopTen"
+msgstr "10 Blog top"
+
+msgid "Subtitle"
+msgstr "Sub-judul"
+
+msgid "ThisBlog"
+msgstr "Blog ini"
+
+msgid "NewPost"
+msgstr "Artikel baru"
+
+msgid "TaskManager"
+msgstr "Pengelolaan Tugas/task"
+
+msgid "Member"
+msgstr "Anggota"
+
+msgid "blog_management"
+msgstr "Pengelolaan Blog"
+
+msgid "langWelcome"
+msgstr "Selamat Datang !"
+
+msgid "langModule"
+msgstr "Modul"
+
+msgid "langUserHasPermissionNot"
+msgstr "User tersebut tidak punya hak"
+
+msgid "langUserHasPermission"
+msgstr "User tersebut punya hak"
+
+msgid "langLegend"
+msgstr "Legenda"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "User tersebut punya hak pada kelompok--nya"
+

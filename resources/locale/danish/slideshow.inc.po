@@ -1,0 +1,42 @@
+msgid "Height"
+msgstr "Højde"
+
+msgid "ResizingComment"
+msgstr "Ændre billedets dimensioner til følgende (i pixels)"
+
+msgid "Width"
+msgstr "Bredde"
+
+msgid "Resizing"
+msgstr "ÆNDRE"
+
+msgid "NoResizingComment"
+msgstr "Vis alle billeder i deres oprindelige størrelse. Ingen ændringer foretages. Scroll-bar vil indsættes, hvis billedet er større end din skærm."
+
+msgid "ShowThumbnails"
+msgstr "Vis thumbnails/ store ikoner"
+
+msgid "SetSlideshowOptions"
+msgstr "Ændre indstillinger for slideshow"
+
+msgid "SlideshowOptions"
+msgstr "Indstillinger for slideshow"
+
+msgid "NoResizing"
+msgstr "INGEN ÆNDRING (standardindstilling)"
+
+msgid "ExitSlideshow"
+msgstr "Luk slideshow"
+
+msgid "SlideShow"
+msgstr "Slideshow"
+
+msgid "PreviousSlide"
+msgstr "Forrige slide"
+
+msgid "NextSlide"
+msgstr "Næste slide"
+
+msgid "ViewSlideshow"
+msgstr "Gennemse slideshow"
+

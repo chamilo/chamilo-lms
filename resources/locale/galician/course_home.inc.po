@@ -1,0 +1,90 @@
+msgid "langActivate"
+msgstr "Activar"
+
+msgid "langDeactivate"
+msgstr "Desactivar"
+
+msgid "langInLnk"
+msgstr "Ligazóns desactivadas"
+
+msgid "langDelLk"
+msgstr "¿Estás seguro de que queres desactivar esta ligazón?"
+
+msgid "langCourseCreate"
+msgstr "Crear un Curso"
+
+msgid "langNameOfTheLink"
+msgstr "Nome da ligazón"
+
+msgid "lang_main_categories_list"
+msgstr "Lista de categorías principais"
+
+msgid "langCourseAdminOnly"
+msgstr "Só profesores"
+
+msgid "PlatformAdminOnly"
+msgstr "Só administradores da plataforma"
+
+msgid "langCombinedCourse"
+msgstr "Curso combinado"
+
+msgid "ToolIsNowVisible"
+msgstr "A ferramenta é agora visible"
+
+msgid "ToolIsNowHidden"
+msgstr "A ferramenta é agora invisible"
+
+msgid "EditLink"
+msgstr "Editar ligazón"
+
+msgid "Blog_management"
+msgstr "Xestión do blog"
+
+msgid "Forum"
+msgstr "Foros"
+
+msgid "Course_maintenance"
+msgstr "Mantemento do curso"
+
+msgid "TOOL_SURVEY"
+msgstr "Enquisas"
+
+msgid "GreyIcons"
+msgstr "Ferramentas"
+
+msgid "Interaction"
+msgstr "Interacción"
+
+msgid "Authoring"
+msgstr "Creación de contidos"
+
+msgid "Administration"
+msgstr "Administración"
+
+msgid "IntroductionTextUpdated"
+msgstr "Actualizouse a mensaxe introdutoria"
+
+msgid "IntroductionTextDeleted"
+msgstr "Texto de introdución eliminado."
+
+msgid "SessionIdentifier"
+msgstr "Identificador da sesión"
+
+msgid "SessionName"
+msgstr "Nome da sesión"
+
+msgid "SessionCategory"
+msgstr "Categoría da sesión"
+
+msgid "SessionData"
+msgstr "Datos da sesión"
+
+msgid "TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise"
+msgstr "A configuración para o despregue automático de exercicios está activada. Os estudantes van ser redirixidos ao exercicio seleccionado para que se amose automaticamente."
+
+msgid "TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP"
+msgstr "A configuración para o despregue automático de leccións está activada. Cando os alumnos entren no curso, serán redirixidos á lección seleccionada para que se despregue automaticamente."
+
+msgid "ToolSearch"
+msgstr "Procura"
+

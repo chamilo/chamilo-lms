@@ -1,0 +1,237 @@
+msgid "lang_already_enrolled"
+msgstr "já inscrito"
+
+msgid "lang_my_personnal_course_list"
+msgstr "A minha lista de cursos"
+
+msgid "lang_course_enrollment"
+msgstr "Cursos do utilizador"
+
+msgid "lang_course_not_available"
+msgstr "Este curso não se encontra disponível ou não existe."
+
+msgid "lang_enroll"
+msgstr "Inscrever-se"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Inscrever-se num novo curso"
+
+msgid "lang_my_present_course_list"
+msgstr "Os meus cursos"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Não existem cursos nesta categoria para se inscrever."
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Pesquise pelo nome ou pelo código do curso"
+
+msgid "lang_search"
+msgstr "Pesquisar"
+
+msgid "lang_select_course_among_categories"
+msgstr "Seleccione um curso das várias categorias existentes"
+
+msgid "lang_select_course_in"
+msgstr "Seleccione um curso em"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Seleccione um curso a partir dos resultados da pesquisa"
+
+msgid "Unsubscribe"
+msgstr "Anular/cancelar inscrição"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Voltar à minha página inicial"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Voltar à minha lista de cursos"
+
+msgid "langTitular"
+msgstr "Orientador/mentor"
+
+msgid "langBackToListOfThisUser"
+msgstr "Voltar à lista de cursos"
+
+msgid "langAdministrationTools"
+msgstr "Ferramentas de Administração"
+
+msgid "lang_back_to_parent_category"
+msgstr "Voltar à categoria principal"
+
+msgid "lang_back_to_course_selection"
+msgstr "Voltar à selecção de cursos"
+
+msgid "lang_up"
+msgstr "Voltar à categoria principal"
+
+msgid "langCatList"
+msgstr "Categorias"
+
+msgid "langCourseList"
+msgstr "Lista de cursos"
+
+msgid "Subscribe"
+msgstr "Aderir/inscrever-se"
+
+msgid "AlreadySubscribed"
+msgstr "Já aderido/subscrito"
+
+msgid "CodeMandatory"
+msgstr "Código obrigatório"
+
+msgid "CourseCategoryMandatory"
+msgstr "Categoria de curso obrigatória"
+
+msgid "TeacherMandatory"
+msgstr "Instrutor obrigatório"
+
+msgid "CourseCategoryStored"
+msgstr "Categoria do curso criada"
+
+msgid "langWithoutTimeLimits"
+msgstr "Sem limite de tempo"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Voltar à lista de categorias principal"
+
+msgid "langAdded"
+msgstr "Adicionado"
+
+msgid "langDeleted"
+msgstr "Eliminado"
+
+msgid "langKeeped"
+msgstr "Mantido/guardado"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Oculto / Fechado"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Oculto / Aberto"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Visível / Aberto"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Visível / Fechado"
+
+msgid "langAdminThisUser"
+msgstr "Voltar ao utlizador"
+
+msgid "langManage"
+msgstr "Gerir o Portal"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Foi registado no curso"
+
+msgid "langSubCat"
+msgstr "sub-categorias"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Não é permitido anular/cancelar a inscrição neste curso"
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Você é Instrutor neste curso"
+
+msgid "CourseManagement"
+msgstr "Gestão de Cursos"
+
+msgid "SortMyCourses"
+msgstr "Ordenar cursos"
+
+msgid "SubscribeToCourse"
+msgstr "Aderir/inscrever-se no curso"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Anular/cancelar a inscrição em cursos"
+
+msgid "CreateCourseCategory"
+msgstr "Criar uma categoria para cursos"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Tem a certeza que deseja eliminar esta categoria de cursos? Os cursos pertencentes a esta categoria serão movidos/excluídos das categorias."
+
+msgid "CourseCategories"
+msgstr "Categorias de cursos"
+
+msgid "CoursesInCategory"
+msgstr "Cursos nesta categoria"
+
+msgid "SearchCourse"
+msgstr "Pesquisar cursos"
+
+msgid "UpOneCategory"
+msgstr "Uma categoria acima/um nível superior na categoria"
+
+msgid "SearchResultsFor"
+msgstr "Resultados da pesquisa para:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Tem a certeza que deseja mesmo anular/cancelar a inscrição?"
+
+msgid "NoCourseCategory"
+msgstr "Categoria de curso inexistente"
+
+msgid "EditCourseCategorySucces"
+msgstr "O curso foi adicionado à categoria"
+
+msgid "SubscribingNotAllowed"
+msgstr "Inscrição não permitida"
+
+msgid "CourseSortingDone"
+msgstr "Cursos ordenados/triados"
+
+msgid "ExistingCourseCategories"
+msgstr "Categorias de cursos existentes"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "A sua inscrição foi anulada/cancelada do curso"
+
+msgid "ViewOpenCourses"
+msgstr "Ver cursos em aberto/em curso"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Ocorreu um erro desconhecido. Por favor, contacte o administrador da plataforma."
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "O código do curso está incorrecto"
+
+msgid "CourseRequiresPassword"
+msgstr "Este curso requer uma password/senha"
+
+msgid "SubmitRegistrationCode"
+msgstr "Submeter código do registo"
+
+msgid "CourseCategoryDeleted"
+msgstr "Categoria foi eliminada"
+
+msgid "CategorySortingDone"
+msgstr "Ordenação/triagem de categorias concluída"
+
+msgid "CourseCategoryEditStored"
+msgstr "Categoria actualizada"
+
+msgid "buttonCreateCourseCategory"
+msgstr "Guardar/salvar categoria de curso"
+
+msgid "buttonSaveCategory"
+msgstr "Guardar/salvar categoria"
+
+msgid "buttonChangeCategory"
+msgstr "Editar/modificar categoria"
+
+msgid "SessionName"
+msgstr "Nome da sessão"
+
+msgid "SessionCategory"
+msgstr "Categorias das sessões"
+
+msgid "Expand"
+msgstr "Expandir"
+
+msgid "Collapse"
+msgstr "Recolher"
+
+msgid "CourseDetails"
+msgstr "Descrição do curso"
+

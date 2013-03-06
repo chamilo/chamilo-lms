@@ -1,0 +1,519 @@
+msgid "WikiSearchResults"
+msgstr "Resultados da pesquisa no Wiki"
+
+msgid "Wiki"
+msgstr "Wiki do Grupo"
+
+msgid "StartPage"
+msgstr "Página principal"
+
+msgid "EditThisPage"
+msgstr "Editar esta página"
+
+msgid "ShowPageHistory"
+msgstr "Histórico"
+
+msgid "RecentChanges"
+msgstr "Últimas modificações"
+
+msgid "AllPages"
+msgstr "Todas as páginas"
+
+msgid "AddNew"
+msgstr "Adicionar nova página"
+
+msgid "ChangesStored"
+msgstr "Áudio adicionado"
+
+msgid "NewWikiSaved"
+msgstr "A página wiki foi gravada. Pode visualizá-la clicando em:"
+
+msgid "DefaultContent"
+msgstr " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para começar a editar esta página e remover este texto</p>"
+
+msgid "CourseWikiPages"
+msgstr "Páginas do Wiki"
+
+msgid "GroupWikiPages"
+msgstr "Páginas do Wiki do grupo"
+
+msgid "NoWikiPageTitle"
+msgstr "As suas modificações foram gravadas. Ainda falta atribuir um nome à página"
+
+msgid "WikiPageTitleExist"
+msgstr "Este nome de página já existe. Para editar o conteúdo da página, clique aqui:"
+
+msgid "WikiDiffAddedLine"
+msgstr "A linha foi adicionada"
+
+msgid "WikiDiffDeletedLine"
+msgstr "A linha foi eliminada"
+
+msgid "WikiDiffMovedLine"
+msgstr "A linha foi movida"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "Linha sem modificações"
+
+msgid "DifferencesNew"
+msgstr "Modificações na versão"
+
+msgid "DifferencesOld"
+msgstr "versão antiga de"
+
+msgid "Differences"
+msgstr "Diferenças"
+
+msgid "MostRecentVersion"
+msgstr "Visualização da última versão seleccionada"
+
+msgid "Legend"
+msgstr "Legenda"
+
+msgid "ShowDifferences"
+msgstr "Comparar versões seleccionadas"
+
+msgid "SearchPages"
+msgstr "Pesquisar"
+
+msgid "Discuss"
+msgstr "Discutir"
+
+msgid "History"
+msgstr "Histórico"
+
+msgid "ShowThisPage"
+msgstr "Visualizar esta página"
+
+msgid "DeleteThisPage"
+msgstr "Eliminar esta página"
+
+msgid "DiscussThisPage"
+msgstr "Discutir esta página"
+
+msgid "HomeWiki"
+msgstr "Página inicial do Wiki"
+
+msgid "DeleteWiki"
+msgstr "Eliminar tudo"
+
+msgid "WikiDeleted"
+msgstr "O seu Wiki foi eliminado"
+
+msgid "WikiPageDeleted"
+msgstr "A página e o seu histórico foram eliminados."
+
+msgid "NumLine"
+msgstr "Núm. de linha"
+
+msgid "DeletePageHistory"
+msgstr "Eliminar esta página e todas as suas versões"
+
+msgid "OnlyAdminDeleteWiki"
+msgstr "Os Instrutores apenas podem eliminar o Wiki"
+
+msgid "OnlyAdminDeletePageWiki"
+msgstr "Os Instrutores apenas podem eliminar uma página"
+
+msgid "OnlyAddPagesGroupMembers"
+msgstr "Os Instrutores e membros deste grupo apenas podem adicionar páginas ao Wiki do grupo"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "Os Instrutores e membros do grupo apenas podem editar páginas do Wiki do grupo"
+
+msgid "ConfirmDeleteWiki"
+msgstr "Tem a certeza que deseja eliminar este Wiki?"
+
+msgid "ConfirmDeletePage"
+msgstr "Tem a certeza que deseja eliminar esta página e todo o seu histórico?"
+
+msgid "AlsoSearchContent"
+msgstr "Pesquisar também no conteúdo"
+
+msgid "PageLocked"
+msgstr "Página protegida"
+
+msgid "PageUnlocked"
+msgstr "Página não protegida"
+
+msgid "PageLockedExtra"
+msgstr "Esta página encontra-se protegida. Apenas os Instrutores a podem modificar"
+
+msgid "PageUnlockedExtra"
+msgstr "Esta página não se encontra protegida. Todos os utilizadores do curso e membros do grupo podem editar ou modificar esta página."
+
+msgid "ShowAddOption"
+msgstr "Mostrar adicionar opção"
+
+msgid "HideAddOption"
+msgstr "Esconder adicionar opção"
+
+msgid "AddOptionProtected"
+msgstr "A opção Adicionar foi protegida. Apenas Instrutores podem adicionar páginas a este Wiki. Os alunos e membros do grupo podem apenas editar as páginas"
+
+msgid "AddOptionUnprotected"
+msgstr "A opção adicionar foi activada para todos os utilizadores do curso e membros do grupo"
+
+msgid "NotifyChanges"
+msgstr "Notificar-me sobre modificações"
+
+msgid "NotNotifyChanges"
+msgstr "Não notificar-me sobre modificações"
+
+msgid "NotifyByEmail"
+msgstr "Notificar-me por e-mail quando alguém responde"
+
+msgid "CancelNotifyByEmail"
+msgstr "Não notificar-me por e-mail quando esta página for editada"
+
+msgid "MostRecentVersionBy"
+msgstr "A última versão foi editada por"
+
+msgid "Rating"
+msgstr "Classificação"
+
+msgid "RatingMedia"
+msgstr "A classificação média para a página é"
+
+msgid "NumComments"
+msgstr "Comentários nesta página"
+
+msgid "NumCommentsScore"
+msgstr "Número de comentários nesta página:"
+
+msgid "AddPagesLocked"
+msgstr "A opção adicionar foi temporariamente desactivada pelo instructor"
+
+msgid "LinksPages"
+msgstr "Referências"
+
+msgid "ShowLinksPages"
+msgstr "Mostrar as páginas que têm ligações/links para esta página"
+
+msgid "MoreWikiOptions"
+msgstr "Mais opções do Wiki"
+
+msgid "DefaultTitle"
+msgstr "Ínicio"
+
+msgid "DiscussNotAvailable"
+msgstr "Discussão não se encontra disponível"
+
+msgid "Print"
+msgstr "Imprimir"
+
+msgid "Version"
+msgstr "Versão"
+
+msgid "EditPage"
+msgstr "Editar"
+
+msgid "AddedBy"
+msgstr "adicionado por"
+
+msgid "EditedBy"
+msgstr "editado por"
+
+msgid "DeletedBy"
+msgstr "eliminado por"
+
+msgid "WikiStandardMode"
+msgstr "Modo wiki"
+
+msgid "GroupTutorAndMember"
+msgstr "Tutor e membro do grupo"
+
+msgid "GroupTutor"
+msgstr "Tutor do grupo"
+
+msgid "GroupStandardMember"
+msgstr "Membro do grupo"
+
+msgid "AssignmentMode"
+msgstr "Modo de tarefa/trabalho individual"
+
+msgid "ConfigDefault"
+msgstr "Configuração pré-definida"
+
+msgid "UnlockPage"
+msgstr "Desproteger"
+
+msgid "LockPage"
+msgstr "Proteger"
+
+msgid "NotifyDiscussChanges"
+msgstr "Notificar comentários"
+
+msgid "NotNotifyDiscussChanges"
+msgstr "Não notificar comentários"
+
+msgid "AssignmentWork"
+msgstr "Documento do aluno"
+
+msgid "AssignmentDesc"
+msgstr "Tarefa/trabalho proposto pelo instrutor"
+
+msgid "WikiDiffAddedTex"
+msgstr "Texto adicionado"
+
+msgid "WikiDiffDeletedTex"
+msgstr "Texto eliminado"
+
+msgid "WordsDiff"
+msgstr "palavra por palavra"
+
+msgid "LinesDiff"
+msgstr "linha por linha"
+
+msgid "MustSelectPage"
+msgstr "Deverá primeiro seleccionar uma página"
+
+msgid "Export2ZIP"
+msgstr "Exportar para ZIP"
+
+msgid "HidePage"
+msgstr "Ocultar página"
+
+msgid "ShowPage"
+msgstr "Mostrar página"
+
+msgid "GoAndEditMainPage"
+msgstr "Para iniciar o Wiki edite a página Principal"
+
+msgid "UnlockDiscuss"
+msgstr "Desbloquear discussão"
+
+msgid "LockDiscuss"
+msgstr "Bloquear discussão"
+
+msgid "HideDiscuss"
+msgstr "Ocultar discussão"
+
+msgid "ShowDiscuss"
+msgstr "Mostrar discussão"
+
+msgid "UnlockRatingDiscuss"
+msgstr "Activar classificar"
+
+msgid "LockRatingDiscuss"
+msgstr "Desactivar classificação"
+
+msgid "EditAssignmentWarning"
+msgstr "Pode editar esta página, mas as páginas dos alunos não serão modificadas"
+
+msgid "ExportToDocArea"
+msgstr "Exportar a última versão desta página para Documentos"
+
+msgid "LockByTeacher"
+msgstr "Desactivado pelo instrutor"
+
+msgid "LinksPagesFrom"
+msgstr "Páginas que apontam ou têm uma ligação/link para esta página"
+
+msgid "DefineAssignmentPage"
+msgstr "Definir esta página como tarefa/trabalho individual"
+
+msgid "AssignmentDescription"
+msgstr "Descrição da tarefa/trabalho"
+
+msgid "UnlockRatingDiscussExtra"
+msgstr "Todos os membros podem agora classificar esta página"
+
+msgid "LockRatingDiscussExtra"
+msgstr "Apenas instrutores podem agora classificar esta página"
+
+msgid "HidePageExtra"
+msgstr "A página é agora apenas visível para o instrutor"
+
+msgid "ShowPageExtra"
+msgstr "A página é agora visível para todos utilizadores"
+
+msgid "OnlyEditPagesCourseManager"
+msgstr "A Página Principal pode apenas ser editada por um instrutor"
+
+msgid "AssignmentLinktoTeacherPage"
+msgstr "Acesso à página do instrutor"
+
+msgid "HideDiscussExtra"
+msgstr "A discussão é agora apenas visível para instrutores"
+
+msgid "ShowDiscussExtra"
+msgstr "A discussão é agora visível para todos os utilizadores"
+
+msgid "LockDiscussExtra"
+msgstr "Apenas instrutores podem agora adicionar comentários a esta discussão"
+
+msgid "UnlockDiscussExtra"
+msgstr "Todos os membros podem agora adicionar comentários a esta discussão"
+
+msgid "AssignmentDescExtra"
+msgstr "Esta página é uma tarefa/trabalho proposto por um instrutor"
+
+msgid "AssignmentWorkExtra"
+msgstr "Esta página é um trabalho de um aluno"
+
+msgid "NoAreSeeingTheLastVersion"
+msgstr "Atenção não está a visualizar a última versão da página"
+
+msgid "AssignmentFirstComToStudent"
+msgstr "Modifique esta página para realizar o trabalho/tarefa sobre a proposta atribuída"
+
+msgid "AssignmentLinkstoStudentsPage"
+msgstr "Acesso aos documentos escritos pelos alunos"
+
+msgid "AllowLaterSends"
+msgstr "Permitir envio adiado"
+
+msgid "WikiStandBy"
+msgstr "Este Wiki encontra-se inactivo até ao momento. Deverá ser iniciado por um instrutor."
+
+msgid "NotifyDiscussByEmail"
+msgstr "A notificação por e-mail de novos comentários sobre esta página está activa"
+
+msgid "CancelNotifyDiscussByEmail"
+msgstr "A notificação por e-mail de novos comentários sobre esta página está desactivada"
+
+msgid "EmailWikiChanges"
+msgstr "Notificar modificações no Wiki"
+
+msgid "EmailWikipageModified"
+msgstr "A página foi modificada"
+
+msgid "EmailWikiPageAdded"
+msgstr "A página foi adicionada"
+
+msgid "EmailWikipageDedeleted"
+msgstr "Foi eliminada uma página no Wiki"
+
+msgid "EmailWikiPageDiscAdded"
+msgstr "Novo comentário na discussão da página"
+
+msgid "FullNotifyByEmail"
+msgstr "Receber uma notificação por e-mail sempre que houver uma modificação no Wiki"
+
+msgid "FullCancelNotifyByEmail"
+msgstr "Parar de receber notificações por e-mail sempre que houver uma modificação no Wiki"
+
+msgid "EmailWikiChangesExt_1"
+msgstr "Esta notificação foi realizada de acordo com seu desejo de monitorar as modificações no Wiki. Esta opção significa que activou o botão."
+
+msgid "EmailWikiChangesExt_2"
+msgstr "Se desejar parar de receber notificações sobre modificações no Wiki, seleccione os separadores <strong>Modificações recentes</strong>, <strong>Página actual</strong>, <strong>Conversa</strong> conforme o caso e, em seguida, pressione o botão"
+
+msgid "Visits"
+msgstr "visitas"
+
+msgid "OrphanedPages"
+msgstr "Páginas orfãs"
+
+msgid "WantedPages"
+msgstr "Páginas desejadas"
+
+msgid "MostVisitedPages"
+msgstr "Páginas mais visitadas"
+
+msgid "MostChangedPages"
+msgstr "Páginas mais modificadas"
+
+msgid "Changes"
+msgstr "Alterações"
+
+msgid "MostActiveUsers"
+msgstr "Utilizadores mais activos"
+
+msgid "Contributions"
+msgstr "Contribuições"
+
+msgid "UserContributions"
+msgstr "Contribuições do utilizador"
+
+msgid "WarningDeleteMainPage"
+msgstr "Não é recomendado eliminar a página inicial do Wiki porque é o principal acesso ao wiki. <br/> No entanto, caso seja necessário, deverá ser criada novamente a página inicial. Enquanto a operação não for realizada, os outros utilizadores não poderão adicionar novas páginas."
+
+msgid "ConvertToLastVersion"
+msgstr "Para definir esta versão como última versão, clique em"
+
+msgid "Restore"
+msgstr "Restaurar"
+
+msgid "CurrentVersion"
+msgstr "Versão actual"
+
+msgid "LastVersion"
+msgstr "Última versão"
+
+msgid "PageRestored"
+msgstr "A página foi restaurada. Poderá visualizá-la clicando em"
+
+msgid "RestoredFromVersion"
+msgstr "Restaurada a partir da versão"
+
+msgid "HWiki"
+msgstr "Ajuda: wiki"
+
+msgid "FirstSelectOnepage"
+msgstr "Por favor seleccione primeiro uma página"
+
+msgid "DefineTask"
+msgstr "Se introduzir uma descrição, esta página será considerada uma página especial e que lhe permite criar uma tarefa"
+
+msgid "ThisPageisBeginEditedBy"
+msgstr "Neste momento, esta página está a ser editada por"
+
+msgid "ThisPageisBeginEditedTryLater"
+msgstr "Por favor tente mais tarde. Se o utilizador que se encontra actualmente a editar a página não a guardar, a página ficará disponível para si"
+
+msgid "EditedByAnotherUser"
+msgstr "As suas modificações não serão guardadas porque um outro utilizador modificou e guardou a página enquanto a estava a editar"
+
+msgid "WarningMaxEditingTime"
+msgstr "Dispõe de 20 minutos para editar esta página. Após este tempo, se não tiver guardado a página, outro utilizador poderá editá-la, e assim perder as suas modificações"
+
+msgid "TheTaskDoesNotBeginUntil"
+msgstr "Ainda não é a data de início"
+
+msgid "TheDeadlineHasBeenCompleted"
+msgstr "Excedeu o tempo limite"
+
+msgid "HasReachedMaxNumWords"
+msgstr "Excedeu o número de palavras permitidas"
+
+msgid "HasReachedMaxiNumVersions"
+msgstr "Excedeu o número de versões permitidas"
+
+msgid "DescriptionOfTheTask"
+msgstr "Descrição da tarefa/trabalho"
+
+msgid "OtherSettings"
+msgstr "Outros requisitos"
+
+msgid "NMaxWords"
+msgstr "Número máximo de palavras"
+
+msgid "NMaxVersion"
+msgstr "Número máximo de versões"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "AddFeedback"
+msgstr "Adicione mensagens de orientação na página associada ao progresso"
+
+msgid "Feedback1"
+msgstr "Primeira mensagem"
+
+msgid "Feedback2"
+msgstr "Segunda mensagem"
+
+msgid "Feedback3"
+msgstr "Terceira mensagem"
+
+msgid "FProgress"
+msgstr "Progresso"
+
+msgid "PutATimeLimit"
+msgstr "Definir um limite de tempo"
+
+msgid "StandardTask"
+msgstr "Tarefa modelo/padrão"
+

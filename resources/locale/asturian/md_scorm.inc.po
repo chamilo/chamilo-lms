@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "variable d\'idioma caduca"
+
+msgid "langMdCallingTool"
+msgstr "Documentos"
+
+msgid "langTool"
+msgstr "Metadatos del documentu"
+
+msgid "langNotInDB"
+msgstr "Nun esite esta categoría pal enllaz"
+
+msgid "langManifestSyntax"
+msgstr "(erru de sintaxis nel ficheru manifest...)"
+
+msgid "langEmptyManifest"
+msgstr "(el ficheru manifest ta vacíu...)"
+
+msgid "langNoManifest"
+msgstr "(nun esiste el ficheru manifest...)"
+
+msgid "langNotFolder"
+msgstr "nun se pue, esto nun ye una carpeta..."
+
+msgid "langUploadHtt"
+msgstr "Unviar un archivu HTT"
+
+msgid "langHttFileNotFound"
+msgstr "L\'archivu HTT nuevu nun se pue abrir (igual ta vacíu o ye más grande de la cuenta)"
+
+msgid "langHttOk"
+msgstr "El ficheru HTT nuevu unvióse"
+
+msgid "langHttNotOk"
+msgstr "L\'unvíu de ficheru HTT nun se pudo facer"
+
+msgid "langRemoveHtt"
+msgstr "Esborrar el ficheru HTT"
+
+msgid "langHttRmvOk"
+msgstr "El ficheru HTT esborróse"
+
+msgid "langHttRmvNotOk"
+msgstr "Nun se pue esborrar el ficheru HTT"
+
+msgid "langImport"
+msgstr "Importar"
+
+msgid "langRemove"
+msgstr "Esborrar entraes de metadatos (MDE)"
+
+msgid "langAllRemovedFor"
+msgstr "Toles entraes quitárense de la categoría"
+
+msgid "langIndex"
+msgstr "Índiz de palabres"
+
+msgid "langTotalMDEs"
+msgstr "Total d\'entraes de metadatos (MD) de los enllaces"
+
+msgid "langMainMD"
+msgstr "Abrir la páxina d\'entamu d\'entraes de metadatos (MDE)"
+
+msgid "langLines"
+msgstr "ringleres"
+
+msgid "langPlay"
+msgstr "Executar index.php"
+
+msgid "langNonePossible"
+msgstr "Nun se puen facer operaciones nos metadatos (MD)"
+
+msgid "langOrElse"
+msgstr "Escoyer una categoría d\'enllaces"
+
+msgid "langWorkWith"
+msgstr "Trabaye con un direutoriu SCORM"
+
+msgid "langSDI"
+msgstr "... Direutoriu SCORM con SD-id (dividir el manifest o dexalu vacíu)"
+
+msgid "langRoot"
+msgstr "raíz"
+
+msgid "langSplitData"
+msgstr "Dividir el manifest, y #MDe, si daqué:"
+
+msgid "langMffNotOk"
+msgstr "El cambiu del archivu manifest nun se pudo"
+
+msgid "langMffOk"
+msgstr "El ficheru manifest nun se pudo remplazar"
+
+msgid "langMffFileNotFound"
+msgstr "El ficheru nuevu manifest nun se pue abrir (igual ye que ta vacíu o ye más grande de la cuenta)"
+
+msgid "langUploadMff"
+msgstr "Reemplazar el ficheru manifest"
+

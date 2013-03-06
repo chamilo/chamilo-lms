@@ -1,0 +1,90 @@
+msgid "NewNote"
+msgstr "Nuovo appunto"
+
+msgid "Note"
+msgstr "Appunti"
+
+msgid "NoteDeleted"
+msgstr "Appunto eliminato"
+
+msgid "NoteUpdated"
+msgstr "Appunto aggiornato"
+
+msgid "NoteCreated"
+msgstr "Appunto creato"
+
+msgid "YouMustWriteANote"
+msgstr "Scrivi un appunto"
+
+msgid "SaveNote"
+msgstr "Salva l\'appunto"
+
+msgid "WriteYourNoteHere"
+msgstr "Scrivi qui il tuo appunto"
+
+msgid "SearchByTitle"
+msgstr "Cerca nel titolo"
+
+msgid "WriteTheTitleHere"
+msgstr "Scrivi qui il titolo"
+
+msgid "UpdateDate"
+msgstr "Aggiorna la data"
+
+msgid "NoteAddNew"
+msgstr "Nuovo appunto"
+
+msgid "OrderByCreationDate"
+msgstr "Ordina per data di creazione"
+
+msgid "OrderByModificationDate"
+msgstr "Ordina per data di modifica"
+
+msgid "OrderByTitle"
+msgstr "Ordina per titolo"
+
+msgid "NoteTitle"
+msgstr "Titolo dell\'appunto"
+
+msgid "NoteComment"
+msgstr "Commenti all\'appunto"
+
+msgid "NoteAdded"
+msgstr "Appunto aggiunto"
+
+msgid "NoteConfirmDelete"
+msgstr "Vuoi veramente eliminare l\'appunto?"
+
+msgid "AddNote"
+msgstr "Aggiungi appunto"
+
+msgid "ModifyNote"
+msgstr "Modifica appunto"
+
+msgid "BackToNoteList"
+msgstr "Torna all\'elenco degli appunti"
+
+msgid "NotebookManagement"
+msgstr "Gestione appunti"
+
+msgid "BackToNotesList"
+msgstr "Torna all\'elenco degli appunti"
+
+msgid "NotesSortedByTitleAsc"
+msgstr "Annotazioni in ordine ascendente per titolo"
+
+msgid "NotesSortedByTitleDESC"
+msgstr "Annotazioni in ordine discendente per titolo"
+
+msgid "NotesSortedByUpdateDateAsc"
+msgstr "Annotazioni in ordine ascendente per data di modifica"
+
+msgid "NotesSortedByUpdateDateDESC"
+msgstr "Annotazioni in ordine discendente per data di modifica"
+
+msgid "NotesSortedByCreationDateAsc"
+msgstr "Annotazioni in ordine ascendente per data di creazione"
+
+msgid "NotesSortedByCreationDateDESC"
+msgstr "Annotazioni in ordine discendente per data di creazione"
+

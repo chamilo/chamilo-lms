@@ -1,0 +1,157 @@
+msgid "LinkMoved"
+msgstr "Le lien a bien été déplacé"
+
+msgid "langLinkName"
+msgstr "Nom du lien"
+
+msgid "langLinkAdd"
+msgstr "Ajouter un lien"
+
+msgid "langLinkAdded"
+msgstr "Le lien a été ajouté"
+
+msgid "langLinkMod"
+msgstr "Modifier un lien"
+
+msgid "langLinkModded"
+msgstr "Le lien a été modifié"
+
+msgid "langLinkDel"
+msgstr "Le lien a été effacé"
+
+msgid "langLinkDeleted"
+msgstr "Le lien a été supprimé"
+
+msgid "langLinkDelconfirm"
+msgstr "Voulez-vous supprimer ce lien ?"
+
+msgid "langAllLinksDel"
+msgstr "Supprimer tous les liens de cette catégorie"
+
+msgid "langCategoryName"
+msgstr "Nom de la catégorie"
+
+msgid "langCategoryAdd"
+msgstr "Ajouter une catégorie"
+
+msgid "langCategoryAdded"
+msgstr "La catégorie a été ajoutée"
+
+msgid "langCategoryModded"
+msgstr "La catégorie a été modifiée"
+
+msgid "langCategoryDel"
+msgstr "Supprimer cette catégorie"
+
+msgid "langCategoryDeleted"
+msgstr "La catégorie et tous ses liens ont été supprimés"
+
+msgid "langCategoryDelconfirm"
+msgstr "Lorsque vous supprimez une catégorie, tous ses liens sont également supprimés.
+Etes-vous sûr de vouloir supprimer cette catégorie et tous ses liens ?"
+
+msgid "langAllCategoryDel"
+msgstr "Supprimer toutes les catégories et tous les liens"
+
+msgid "langGiveURL"
+msgstr "Veuillez introduire l\'URL du lien"
+
+msgid "langGiveCategoryName"
+msgstr "Veuillez indiquer le nom de la catégorie"
+
+msgid "langNoCategory"
+msgstr "Pas de catégorie"
+
+msgid "showall"
+msgstr "Afficher tout"
+
+msgid "shownone"
+msgstr "Masquer tout"
+
+msgid "langListDeleted"
+msgstr "La liste a été complètement effacée"
+
+msgid "langAddLink"
+msgstr "Ajouter un lien"
+
+msgid "langDelList"
+msgstr "Effacer complètement la liste"
+
+msgid "langModifyLink"
+msgstr "Modifier un lien"
+
+msgid "langCsvImport"
+msgstr "Import CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "Impossible d\'ouvrir le fichier CSV (vide? trop large?)"
+
+msgid "langCsvFileNoSeps"
+msgstr "Utilisez , ou ; pour séparer les colonnes dans le fichier CSV"
+
+msgid "langCsvFileNoURL"
+msgstr "Les colonnes \'URL\' et \'title\' sont obligatoires"
+
+msgid "langCsvFileLine1"
+msgstr "... - 1e ligne ="
+
+msgid "langCsvLinesFailed"
+msgstr "ligne(s) échouée(s) (pas de \'URL\' ou pas de \'title\')."
+
+msgid "langCsvLinesOld"
+msgstr "lien(s) mis à jour (même \'URL\' et \'category\')."
+
+msgid "langCsvLinesNew"
+msgstr "nouveau(x) lien(s)."
+
+msgid "langCsvExplain"
+msgstr "Le fichier doit se présenter comme ci-dessous, avec des noms de colonnes en anglais:<blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\";</pre></blockquote>Si \'URL\' et \'category\' sont ceux d\'un lien existant, il est mis à jour. Dans tous les autres cas, un nouveau lien est créé.<br /><br />Gras = obligatoire. L\'ordre des champs est sans importance, majuscules et minuscules sont permis. Champs non connus sont ajoutés à \'description\'.Séparez les valeurs avec des virgules ou des point-virgules.Les valeurs peuvent se trouver entre guillemets, mais pas les noms de colonne.Certains [b]tags HTML[/b] sont reconnus dans le champ \'description\'."
+
+msgid "langLinkUpdated"
+msgstr "Les données du lien ont été mises à jour"
+
+msgid "langAll_Link_Deleted"
+msgstr "Tous les liens ont été supprimés"
+
+msgid "langOnHomepage"
+msgstr "Sur la page d\'accueil"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Afficher ce lien sous forme d\'icône sur la page d\'accueil du cours"
+
+msgid "General"
+msgstr "Général"
+
+msgid "SearchFeatureDoIndexLink"
+msgstr "Indexer le titre et la description du lien?"
+
+msgid "langSaveLink"
+msgstr "Enregistrer le lien"
+
+msgid "langSaveCategory"
+msgstr "Enregistrer le dossier"
+
+msgid "BackToLinksOverview"
+msgstr "Retour à la vue globale des liens"
+
+msgid "AddTargetOfLinkOnHomepage"
+msgstr "Sélectionnez la cible du lien pour la page d\'accueil du cours"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "LinkOpenSelf"
+msgstr "Ouvrir dans la même fenêtre"
+
+msgid "LinkOpenBlank"
+msgstr "Ouvrir dans une nouvelle fenêtre"
+
+msgid "LinkOpenParent"
+msgstr "Ouvrir dans la fenêtre parente"
+
+msgid "LinkOpenTop"
+msgstr "Ouvrir dans page complète"
+
+msgid "LinkTarget"
+msgstr "Cible du lien"
+

@@ -1,0 +1,772 @@
+msgid "NewForumCreated"
+msgstr "O novo fórum acaba de ser criado"
+
+msgid "NewThreadCreated"
+msgstr "O novo assunto do fórum acaba de ser criado."
+
+msgid "AddHotpotatoes"
+msgstr "Adicionar HotPotatoes"
+
+msgid "HideAttemptView"
+msgstr "Ocultar visualização de tentativas"
+
+msgid "ExtendAttemptView"
+msgstr "Visão extendida de tentativas"
+
+msgid "LearnPathAddedTitle"
+msgstr "Bem-vindo a ferramenta de autoria de cursos do Chamilo!"
+
+msgid "BuildComment"
+msgstr "Acrescentar atividades à Rota de Aprendizagem"
+
+msgid "BasicOverviewComment"
+msgstr "Adicione comentários de áudio e outros objetos de aprendizagem em sua tabela de conteúdos"
+
+msgid "DisplayComment"
+msgstr "Permita que os estudantes possam registrar seu ponto de vista sobre o curso"
+
+msgid "NewChapterComment"
+msgstr "Capítulo 1, Capítulo 2 ou Semana 1, Semana 2..."
+
+msgid "NewStepComment"
+msgstr "Adicione testes, atividades e conteúdo multimídia"
+
+msgid "lang_learning_path"
+msgstr "Rota de Aprendizado"
+
+msgid "lang_learning_path_builder"
+msgstr "Construtor de Rotas de Aprendizado"
+
+msgid "lang_description"
+msgstr "descrição"
+
+msgid "LearnpathTitle"
+msgstr "título"
+
+msgid "LearnpathPrerequisites"
+msgstr "Pré-requisitos"
+
+msgid "LearnpathMoveUp"
+msgstr "Mover acima"
+
+msgid "LearnpathMoveDown"
+msgstr "Mover abaixo"
+
+msgid "langThisItem"
+msgstr "esse ítem"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Título & descrição"
+
+msgid "LearnpathChangeOrder"
+msgstr "Alterar ordem"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Adicionar pré-requisitos"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Editar título & desc."
+
+msgid "lang_delete"
+msgstr "Deletar"
+
+msgid "lang_add_chapter"
+msgstr "Adicionar módulo"
+
+msgid "langLearnpathMystatus"
+msgstr "Meu status"
+
+msgid "langLearnpathCompstatus"
+msgstr "completa"
+
+msgid "langLearnpathIncomplete"
+msgstr "incompleta"
+
+msgid "langLearnpathPassed"
+msgstr "aprovada"
+
+msgid "langLearnpathFailed"
+msgstr "reprovada"
+
+msgid "langLearnpathPrevious"
+msgstr "Anterior"
+
+msgid "langLearnpathNext"
+msgstr "Próxima"
+
+msgid "langLearnpathRestart"
+msgstr "Reiniciar"
+
+msgid "langLearnpathThisStatus"
+msgstr "Essa etapa no momento encontra-se"
+
+msgid "langLearnpathToEnter"
+msgstr "Para acessar"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "você primeiro precisa completar"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Título da etapa"
+
+msgid "langLearnpathStatus"
+msgstr "Status"
+
+msgid "langLearnpathScore"
+msgstr "Pontuação"
+
+msgid "langLearnpathTime"
+msgstr "Hora"
+
+msgid "langLearnpathVersion"
+msgstr "versão"
+
+msgid "langLearnpathRestarted"
+msgstr "Todas as etapas estão incompletas no momento."
+
+msgid "langLearnpathNoNext"
+msgstr "Essa é a última etapa."
+
+msgid "langLearnpathNoPrev"
+msgstr "Essa é a primeira etapa."
+
+msgid "LearnpathAddLearnpath"
+msgstr "Adicionar uma nova rota de aprendizado"
+
+msgid "lang_learnpath_added"
+msgstr "A nova rota de aprendizado foi criada com sucesso. Agora você pode adicionar módulos a ela clicando na cruz."
+
+msgid "LearnpathEditLearnpath"
+msgstr "Editar descrição/título da rota de aprendizado"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "Deletar rota de aprendizado"
+
+msgid "lang_learnpath_edited"
+msgstr "A rota de aprendizado foi editada com sucesso"
+
+msgid "lang_learnpath_deleted"
+msgstr "A rota de aprendizado e todos os seus módulos foram deletados"
+
+msgid "LearnpathDoNotPublish"
+msgstr "Ocultar dos estudantes"
+
+msgid "LearnpathPublish"
+msgstr "Exibir para os estudantes"
+
+msgid "LearnpathNotPublished"
+msgstr "agora está oculta aos estudantes"
+
+msgid "LearnpathPublished"
+msgstr "agora está visível aos estudantes"
+
+msgid "lang_add_learnpath_module"
+msgstr "Adicionar um novo módulo"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Adicionar um novo módulo a essa rota de aprendizado"
+
+msgid "lang_learnpath_module_added"
+msgstr "O novo módulo da rota de aprendizado foi criado com sucesso. Agora você pode adicionar etapas a ele clicando na cruz."
+
+msgid "LearnpathEditModule"
+msgstr "Editar descrição/título do módulo"
+
+msgid "LearnpathDeleteModule"
+msgstr "Deletar módulo"
+
+msgid "lang_learnpath_module_edited"
+msgstr "O módulo da rota de aprendizado foi editado com sucesso"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "O módulo da rota de aprendizado e todas as suas etapas foram deletados"
+
+msgid "LearnpathNoChapters"
+msgstr "Nenhum módulo foi adicionado ainda."
+
+msgid "LearnpathAddItem"
+msgstr "Adicionar etapas para esse módulo"
+
+msgid "LearnpathItemDeleted"
+msgstr "A etap da rota de aprendizado foi deletada"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "por favor atribua essas etapas da rota de aprendizado ao módulo:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Editar descrição/título adicional da etapa"
+
+msgid "lang_add_prereq"
+msgstr "Adicionar/editar pré-requisitos à essa etapa"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Deletar etapa"
+
+msgid "LearnpathItemEdited"
+msgstr "A etapa da rota de aprendizado foi modificada"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Foi modificada !"
+
+msgid "lang_none"
+msgstr "NENHUM"
+
+msgid "lang_forum_opened"
+msgstr "O fórum selecionado foi aberto em uma nova janela."
+
+msgid "lang_link_opened"
+msgstr "O link selecionado foi aberto em uma nova janela."
+
+msgid "lang_short_help"
+msgstr "Para adicionar uma etapa, clique na cruz; para adicionar um novo título/descrição, clique no lápis; para adicionar pré-requisitos clique no ícone com dois documentos. Você pode verificar o que os estudantes irão visualizar clicando na Visão do Estudante acima."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "Pré-requisitos incompletos."
+
+msgid "lang_author"
+msgstr "Autor"
+
+msgid "lang_date"
+msgstr "Data"
+
+msgid "langBasicOverview"
+msgstr "Visualização básica"
+
+msgid "langAdvanced"
+msgstr "Avançado"
+
+msgid "langDisplay"
+msgstr "Mostrar"
+
+msgid "langNewChapter"
+msgstr "Novo capítulo"
+
+msgid "langNewStep"
+msgstr "Nova etapa"
+
+msgid "langEditPrerequisites"
+msgstr "Editar os pré-requisitos do item atual"
+
+msgid "langTitleManipulateChapter"
+msgstr "Manipular o capítulo atual"
+
+msgid "langTitleManipulateModule"
+msgstr "Manipular o módulo atual"
+
+msgid "langTitleManipulateDocument"
+msgstr "Manipular o documento atual"
+
+msgid "langTitleManipulateLink"
+msgstr "Manipular a ligação atual"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Manipular o exercício atual"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Manipular o trabalho atual"
+
+msgid "langEnterDataNewChapter"
+msgstr "Enviar informação para o novo capítulo"
+
+msgid "langEnterDataNewModule"
+msgstr "Enviar informação para o novo módulo"
+
+msgid "langCreateNewStep"
+msgstr "Criar uma nova etapa:"
+
+msgid "langNewDocument"
+msgstr "Novo documento"
+
+msgid "langUseAnExistingResource"
+msgstr "Ou usar um recurso existente:"
+
+msgid "langParent"
+msgstr "Principal"
+
+msgid "langPosition"
+msgstr "Posição"
+
+msgid "langNewChapterCreated"
+msgstr "O novo capítulo foi criado. Agora pode acrescentar um novo capítulo ou etapa."
+
+msgid "langNewLinksCreated"
+msgstr "O novo link foi criado"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "O novo trabalho foi criado"
+
+msgid "langNewModuleCreated"
+msgstr "O novo módulo foi criado. Agora pode acrescentar um capítulo ou etapa."
+
+msgid "langNewExerciseCreated"
+msgstr "O novo exercício foi criado."
+
+msgid "langItemRemoved"
+msgstr "A etapa foi removida"
+
+msgid "langConverting"
+msgstr "Convertendo..."
+
+msgid "langPpt2lpError"
+msgstr "Erro ocorrido durante a conversão do PowerPoint"
+
+msgid "langBuild"
+msgstr "Construir"
+
+msgid "langViewModeEmbedded"
+msgstr "Modo visão: normal"
+
+msgid "langViewModeFullScreen"
+msgstr "Modo visão: Tela cheia"
+
+msgid "langShowDebug"
+msgstr "Mostrar códigos"
+
+msgid "langHideDebug"
+msgstr "Esconder códigos"
+
+msgid "langCantEditDocument"
+msgstr "Este documento não é editável."
+
+msgid "langAfter"
+msgstr "Depois"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Pré-requisitos (limite)"
+
+msgid "lang_loading"
+msgstr "Carregando página, por favor aguarde..."
+
+msgid "lang_empty"
+msgstr "Esta rota não contém nenhum passo."
+
+msgid "langHotPotatoesFinished"
+msgstr "Esse exercício do HotPotatoes foi fechado."
+
+msgid "langCompletionLimit"
+msgstr "Limite para conclusão (pontuação mínima)"
+
+msgid "langPrereqToEnter"
+msgstr "Para entrar"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "você primeiro deve completar"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Está faltando pelo menos 1 passo para"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "que está marcado como pré-requisito"
+
+msgid "langPrereqTestLimit1"
+msgstr "você precisa atingir o mínimo"
+
+msgid "langPrereqTestLimit2"
+msgstr "pontos para"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Você agora tem :"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "sair para a tela cheia ?????"
+
+msgid "langLearnpathFullScreen"
+msgstr "tela cheia"
+
+msgid "langItemMissing1"
+msgstr "Há um"
+
+msgid "langItemMissing2"
+msgstr "página (passo) aqui na Rota de Aprendizagem original do Chamilo."
+
+msgid "langDone"
+msgstr "Concluído"
+
+msgid "langNoItemSelected"
+msgstr "Para indicar algo, selecione por favor um ítem do menu ao lado."
+
+msgid "langNewDocumentCreated"
+msgstr "O novo documento foi criado."
+
+msgid "langEditCurrentChapter"
+msgstr "Editar o capítulo atual"
+
+msgid "langditCurrentModule"
+msgstr "Editar o módulo atual"
+
+msgid "langCreateTheDocument"
+msgstr "Criar o documento"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Mover documento atual"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Editar o documento atual"
+
+msgid "langWarning"
+msgstr "Atenção!"
+
+msgid "langWarningEditingDocument"
+msgstr "Quando edita um documento existente na Rota de Aprendizagem, a nova versão do documento não se sobrepõe à versão antiga, mas será guardada como novo documento. Se desejar editar um documento de maneira definitiva terá de o fazer a partir da ferramenta Documentos."
+
+msgid "langDirectory"
+msgstr "Diretório"
+
+msgid "langCreateTheExercise"
+msgstr "Criar exercício"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Mover o exercício atual"
+
+msgid "langEditCurrentExecice"
+msgstr "Editar o exercício atual"
+
+msgid "langUploadScorm"
+msgstr "Importação de SCORM, AICC e PowerPoint"
+
+msgid "langPowerPointConvert"
+msgstr "Conversão do PowerPoint"
+
+msgid "langLPCreatedToContinue"
+msgstr "Para continuar pode acrescentar um módulo, capítulo ou etapa à sua Rota de Aprendizagem a partir do menu da esquerda."
+
+msgid "langLPCreatedAddChapterStep"
+msgstr "Pode acrescentar um módulo, capítulo ou etapa à sua Rota de Aprendizagem a partir do menu da esquerda."
+
+msgid "langPrerequisitesAdded"
+msgstr "Os pré-requisitos para a presente etapa foram acrescentados."
+
+msgid "langAddEditPrerequisites"
+msgstr "Acrescentar/editar pré-requisitos"
+
+msgid "langMinimum"
+msgstr "mínimo"
+
+msgid "langMaximum"
+msgstr "máximo"
+
+msgid "langNoDocuments"
+msgstr "Nenhum documento"
+
+msgid "langNoExercisesAvailable"
+msgstr "Não há exercícios disponíveis"
+
+msgid "langNoLinksAvailable"
+msgstr "Nenhum link disponível"
+
+msgid "langNoItemsInLp"
+msgstr "No momento não existem itens na Rota de Aprendizagem. Clique em <b>Avançado</b> para acrescentar itens à sua Rota de Aprendizagem."
+
+msgid "FirstPosition"
+msgstr "Primeira posição"
+
+msgid "NewQuiz"
+msgstr "Novo Quiz"
+
+msgid "CreateTheForum"
+msgstr "Acrescentar o fórum"
+
+msgid "AddLpIntro"
+msgstr "<b>Bem-Vindo</b> a Ferramenta de criação de Rotas de Aprendizagem do Chamilo.<br>Você poderá criar suas rotas de aprendizagem passo a passo. A estrutura de sua rota de aprendizagem irá aparecer em um menu a esquerda."
+
+msgid "AddLpToStart"
+msgstr "Para iniciar, dê um nome para sua rota de aprendizagem"
+
+msgid "CreateTheLink"
+msgstr "Importar uma ligação"
+
+msgid "MoveCurrentLink"
+msgstr "Mover link"
+
+msgid "EditCurrentLink"
+msgstr "Editar o link"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "MoveCurrentStudentPublication"
+msgstr "Mover trabalho do aluno"
+
+msgid "EditCurrentStudentPublication"
+msgstr "Editar trabalho do estudante"
+
+msgid "AllowMultipleAttempts"
+msgstr "Permitir várias tentativas"
+
+msgid "PreventMultipleAttempts"
+msgstr "Impedir várias tentativas"
+
+msgid "MakeScormRecordingExtra"
+msgstr "Fazer gravações SCORM extra"
+
+msgid "MakeScormRecordingNormal"
+msgstr "Fazer gravações SCORM normais"
+
+msgid "DocumentHasBeenDeleted"
+msgstr "O documento não pode ser mostrado porque foi apagado."
+
+msgid "EditCurrentForum"
+msgstr "Editar este fórum"
+
+msgid "NoPrerequisites"
+msgstr "Sem pré-requisitos"
+
+msgid "NewExercise"
+msgstr "Novo exercício"
+
+msgid "CreateANewLink"
+msgstr "Criar novo link"
+
+msgid "CreateANewForum"
+msgstr "Criar novo fórum"
+
+msgid "LinkAdd"
+msgstr "Acrescentar link"
+
+msgid "WoogieConversionPowerPoint"
+msgstr "Woogie : conversão de Word"
+
+msgid "WelcomeWoogieSubtitle"
+msgstr "Conversor de Word em Rotas de Aprendizagem"
+
+msgid "WelcomeWoogieConverter"
+msgstr "Bem-Vindo ao conversor Woogie<ul type=\"1\"><li>Escolher um arquivo .doc, .sxw, .odt<li>Carregar o arquivo no Woogie. Será convertido numa Rota de Aprendizagem SCORM<li>Depois, poderá acrescentar comentários áudio em cada página e inserir questionários e outras actividades entre as páginas."
+
+msgid "WoogieError"
+msgstr "Erro durante a conversão de um documento Word. Por favor verificar se existe algum caractere especial no nome do seu documento."
+
+msgid "WordConvert"
+msgstr "Conversão de Word"
+
+msgid "Order"
+msgstr "Ordem"
+
+msgid "InteractionID"
+msgstr "Interação ID"
+
+msgid "TimeFinished"
+msgstr "Hora (finalizado em...)"
+
+msgid "CorrectAnswers"
+msgstr "Respostas Corretas"
+
+msgid "StudentResponse"
+msgstr "Respostas dos Alunos"
+
+msgid "LatencyTimeSpent"
+msgstr "Tempo Utilizado"
+
+msgid "Result"
+msgstr "Resultado"
+
+msgid "SplitStepsPerPage"
+msgstr "Uma etapa por página"
+
+msgid "SplitStepsPerChapter"
+msgstr "Um capítulo por etapa"
+
+msgid "TakeSlideName"
+msgstr "Usar o nome dos slides como etapas da Rota de Aprendizagem"
+
+msgid "CannotConnectToOpenOffice"
+msgstr "A conexão com o conversor de documentos falhou. Por favor entre em contato com o administrador da plataforma para resolver o problema."
+
+msgid "OogieConversionFailed"
+msgstr "A conversão falhou. <br />Alguns documentos são muito complexos para serem processados pelo conversor de documentos. <br />Estaremos tentando melhorar este serviço em breve."
+
+msgid "OogieUnknownError"
+msgstr "A conversão falhou por uma razão desconhecida. <br />Por favor ente em contato com o administrador da plataforma para obter maiores informações."
+
+msgid "OogieBadExtension"
+msgstr "Por favor envie apenas documentos de apresentação. Extensões permitidas: .ppt ou .odp"
+
+msgid "WoogieBadExtension"
+msgstr "Por favor envie somente documentos de texto. A extensão .doc, .docx ou .odt"
+
+msgid "ShowAudioRecorder"
+msgstr "Exibir gravador de áudio"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "A possibilidade de procura por texto completo não está habilitada no Chamilo. Por favor entre em contato com o administrador do Chamilo."
+
+msgid "SearchFeatureSearchExplanation"
+msgstr "Para pesquisar no banco de dados do curso, por favor, use a seguinte sintaxe:
+   term tag:tag_name -exclude +include \"exact phrase\"
+Por exemplo:
+   carro tag:caminhão -ferrari +ford \"alto consumo\".
+Isto irá mostrar todos os resultados para \'carro\' a palavra marcada como \"caminhão\", não incluindo a palavra \'ferrari\', mas incluindo a palavra \'Ford\' e frase exata \"alto consumo\"."
+
+msgid "ViewLearningPath"
+msgstr "Visualizar Rota de Aprendizagem"
+
+msgid "SearchFeatureDocumentTagsIfIndexing"
+msgstr "Etiquetas para acrescentar ao documento, para o caso de indexação"
+
+msgid "ReturnToLearningPaths"
+msgstr "Voltar à Rota de aprendizagem"
+
+msgid "UploadMp3audio"
+msgstr "Enviar áudio Mp3"
+
+msgid "UpdateAllAudioFragments"
+msgstr "Adicionar áudio"
+
+msgid "LeaveEmptyToKeepCurrentFile"
+msgstr "Deixe vazio para manter o arquivo atual"
+
+msgid "RemoveAudio"
+msgstr "Remover áudio"
+
+msgid "SaveAudio"
+msgstr "Validar"
+
+msgid "ChangesStored"
+msgstr "Áudio adicionado"
+
+msgid "ViewScoreChangeHistory"
+msgstr "Visualizar histórico das pontuações"
+
+msgid "ImageWillResizeMsg"
+msgstr "Se necessário a imagem do professor será redimensionada"
+
+msgid "ImagePreview"
+msgstr "Pré visualização da imagem"
+
+msgid "UplAlreadyExists"
+msgstr "já existe!"
+
+msgid "UplUnableToSaveFile"
+msgstr "O arquivo enviado não pode ser salvo (problema de permissão?)!"
+
+msgid "UnknownPackageFormat"
+msgstr "O formato deste pacote não pôde ser reconhecido. Por favor confira se este é um pacote válido."
+
+msgid "MoveDocument"
+msgstr "Mover documento"
+
+msgid "EditLPSettings"
+msgstr "Editar configurações do curso"
+
+msgid "SaveLPSettings"
+msgstr "Salvar configurações do curso"
+
+msgid "ShowAllAttempts"
+msgstr "Exibir todas as tentativas"
+
+msgid "HideAllAttempts"
+msgstr "Ocultar todas as tentativas"
+
+msgid "ShowAllAttemptsByExercise"
+msgstr "Mostrar todas as tentativas por exercício"
+
+msgid "ShowAttempt"
+msgstr "Mostrar tentativa"
+
+msgid "ShowAndQualifyAttempt"
+msgstr "Mostrar e marcar tentativa"
+
+msgid "langAddEdit"
+msgstr "Adicionar / Editar"
+
+msgid "ModifyPrerequisites"
+msgstr "Salvar alterações nos pré-requisitos"
+
+msgid "CreateLearningPath"
+msgstr "Continuar >"
+
+msgid "AddExercise"
+msgstr "Adicionar teste ao curso"
+
+msgid "AddForum"
+msgstr "Adicionar um novo fórum"
+
+msgid "LPCreateDocument"
+msgstr "Adicionar este documento para o curso"
+
+msgid "ObjectiveID"
+msgstr "ID do Objetivo"
+
+msgid "ObjectiveStatus"
+msgstr "Status do Objetivo"
+
+msgid "ObjectiveRawScore"
+msgstr "Pontuação básica do objetivo"
+
+msgid "ObjectiveMaxScore"
+msgstr "Pontuação máxima de objetivos"
+
+msgid "ObjectiveMinScore"
+msgstr "Pontuação mínima de objetivos"
+
+msgid "LPName"
+msgstr "Título do módulo"
+
+msgid "AuthoringOptions"
+msgstr "Opções de autoria"
+
+msgid "CourseSettings"
+msgstr "Configurações do curso"
+
+msgid "SaveSection"
+msgstr "Guardar sessão"
+
+msgid "AddLinkToCourse"
+msgstr "Adicionar Link ao curso"
+
+msgid "AddAssignmentToCourse"
+msgstr "Acrescentar tarefa ao curso"
+
+msgid "AddForumToCourse"
+msgstr "Acrescentar fórum ao curso"
+
+msgid "SaveAudioAndOrganization"
+msgstr "Salvar áudio e organização"
+
+msgid "UploadOnlyMp3Files"
+msgstr "Envie somente arquivos no formato MP3"
+
+msgid "ModifyHotPotatoes"
+msgstr "Modificar hotpotatoes"
+
+msgid "SaveHotpotatoes"
+msgstr "Salvar hotpotatoes"
+
+msgid "ReturnToLPList"
+msgstr "Retornar para a lista"
+
+msgid "LpPrerequisiteDescription"
+msgstr "Selecionando uma outra Rota de Aprendizagem como pré-requisito será escondida a condição atual de progresso, até o pré-requisito está totalmente concluído (100%)"
+
+msgid "ExerciseCantBeEditedAfterAddingToTheLP"
+msgstr "O exercício não pode ser editado depois de ser adicionado a uma Rota de Aprendizagem"
+
+msgid "EnableTimeLimits"
+msgstr "Ativar limites de disponibilidade"
+
+msgid "PublicationDate"
+msgstr "Data de publicação"
+
+msgid "UseMaxScore100"
+msgstr "Usar a pontuação máxima padrão de 100"
+
+msgid "EnableLPAutoLaunch"
+msgstr "Ativar o início automático de rota de aprendizagem"
+
+msgid "DisableLPAutoLaunch"
+msgstr "Desativar o início automático de Rota de Aprendizagem"
+
+msgid "ViewModeEmbedFrame"
+msgstr "Modo de exibição atual: Embed externo. Use somente para incorporação em sites externos."
+
+msgid "LPNotVisibleToStudent"
+msgstr "Estudantes não podem visualizar estar rota de aprendizagem"
+
+msgid "EditCurrentModule"
+msgstr "Editar o módulo atual"
+
+msgid "SearchFeatureTerms"
+msgstr "Condições para a ferramenta de pesquisa"
+
+msgid "PrerequisiteDeletedError"
+msgstr "Erro: o elemento definido como pré-requisito foi excluído."
+

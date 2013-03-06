@@ -1,0 +1,87 @@
+msgid "langActivate"
+msgstr "Rādīt"
+
+msgid "langDeactivate"
+msgstr "Slēpt"
+
+msgid "langInLnk"
+msgstr "Slēptie rīki un saites"
+
+msgid "langDelLk"
+msgstr "Vai tiešām vēlies dzēst šo vietni?"
+
+msgid "langCourseCreate"
+msgstr "Izveidot kursa mājas lapu"
+
+msgid "langNameOfTheLink"
+msgstr "Vientnes (saites) nosaukums"
+
+msgid "lang_main_categories_list"
+msgstr "Galvenais nodaļu saraksts"
+
+msgid "langCourseAdminOnly"
+msgstr "Tikai Lektoriem"
+
+msgid "PlatformAdminOnly"
+msgstr "Tikai Platformas administratoriem"
+
+msgid "langCombinedCourse"
+msgstr "Kombinētais kurss"
+
+msgid "ToolIsNowVisible"
+msgstr "Instruments ir redzams"
+
+msgid "ToolIsNowHidden"
+msgstr "Instruments ir slēpts"
+
+msgid "EditLink"
+msgstr "Labot vietni (saiti)"
+
+msgid "Blog_management"
+msgstr "Projekti"
+
+msgid "Forum"
+msgstr "Forums"
+
+msgid "Course_maintenance"
+msgstr "Kursa uzturēšana / rezerves kopija"
+
+msgid "TOOL_SURVEY"
+msgstr "Aptaujas"
+
+msgid "GreyIcons"
+msgstr "Darba instrumenti"
+
+msgid "Interaction"
+msgstr "Savstarpējā sadarbība vidē"
+
+msgid "Authoring"
+msgstr "Lektora instrumenti"
+
+msgid "Administration"
+msgstr "Administrācija"
+
+msgid "IntroductionTextUpdated"
+msgstr "Kursa ievada teksts tika atjaunināts"
+
+msgid "IntroductionTextDeleted"
+msgstr "Kursa ievada teksts tika dzēsts"
+
+msgid "SessionIdentifier"
+msgstr "Sesijas Identifikators"
+
+msgid "SessionName"
+msgstr "Sesijas nosaukums"
+
+msgid "SessionCategory"
+msgstr "Sesijas kategorijas"
+
+msgid "SessionData"
+msgstr "Sesiju dati"
+
+msgid "TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP"
+msgstr "Apmācības automātiskās palaišanas iestatījums ir IESLĒGTS. <br>Kad studenti atvērs šo kursu, tie tiks automātiski virzīti apmācības procesā."
+
+msgid "ToolSearch"
+msgstr "Meklēt"
+

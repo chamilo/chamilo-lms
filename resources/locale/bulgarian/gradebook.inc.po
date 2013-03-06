@@ -1,0 +1,562 @@
+msgid "ModifyEvaluation"
+msgstr "Запис на оценяването"
+
+msgid "CreateLink"
+msgstr "Добавяне на учебната дейност към оценяването"
+
+msgid "AddResultNoStudents"
+msgstr "Няма курсисти и резултати за"
+
+msgid "FlatView"
+msgstr "Оценки на курсистите"
+
+msgid "ScoreEdit"
+msgstr "Настройки за оценяването"
+
+msgid "ScoreColor"
+msgstr "Цвят за резултатите"
+
+msgid "ScoringSystem"
+msgstr "Система за оценки"
+
+msgid "EnableScoreColor"
+msgstr "Активиране на оцветяването на резултатите"
+
+msgid "Below"
+msgstr "Резултат под"
+
+msgid "WillColorRed"
+msgstr "ще бъде оцветен в червено"
+
+msgid "EnableScoringSystem"
+msgstr "Активиране на системата за оценки"
+
+msgid "IncludeUpperLimit"
+msgstr "Да се включи и горната граница"
+
+msgid "ScoreInfo"
+msgstr "Задайте оценка, ако резултатът е"
+
+msgid "Between"
+msgstr "между"
+
+msgid "CurrentCategory"
+msgstr "Текуща категория"
+
+msgid "RootCat"
+msgstr "Главна категория"
+
+msgid "NewCategory"
+msgstr "Нова категория"
+
+msgid "NewEvaluation"
+msgstr "Ново оценяване"
+
+msgid "Weight"
+msgstr "Тегло"
+
+msgid "PickACourse"
+msgstr "Изберете курс"
+
+msgid "CategoryName"
+msgstr "Наименование на категорията"
+
+msgid "CourseIndependent"
+msgstr "Няма отношение към курсовете"
+
+msgid "CourseIndependentEvaluation"
+msgstr "Независимо от курсовете оценяване"
+
+msgid "EvaluationName"
+msgstr "Име на оценяването"
+
+msgid "Max"
+msgstr "Максимум"
+
+msgid "DateEval"
+msgstr "Дата на оценяването"
+
+msgid "AddUserToEval"
+msgstr "Добавяне на потребители към оценяването"
+
+msgid "NewSubCategory"
+msgstr "Нова подкатегория"
+
+msgid "MakeLink"
+msgstr "Създаване на връзка"
+
+msgid "DeleteSelected"
+msgstr "Изтриване на избраните"
+
+msgid "SetVisible"
+msgstr "Да се покаже"
+
+msgid "SetInvisible"
+msgstr "Да се скрие"
+
+msgid "ChooseLink"
+msgstr "Избор на типа на връзката"
+
+msgid "DokeosExercises"
+msgstr "Тестове"
+
+msgid "DokeosDropbox"
+msgstr "Куриер"
+
+msgid "DokeosStudentPublications"
+msgstr "Работи на курсистите"
+
+msgid "DokeosLearningPaths"
+msgstr "Пътеки за обучение"
+
+msgid "ChooseExercise"
+msgstr "Избор на тест"
+
+msgid "AddResult"
+msgstr "Добавяне на резултати"
+
+msgid "BackToOverview"
+msgstr "Обратно към прегледа"
+
+msgid "ExportPDF"
+msgstr "Експортиране като PDF-файл"
+
+msgid "Print"
+msgstr "Печат"
+
+msgid "ChooseOrientation"
+msgstr "Избор на ориентацията"
+
+msgid "Portrait"
+msgstr "Портрет"
+
+msgid "Landscape"
+msgstr "Пейзаж"
+
+msgid "FilterCategory"
+msgstr "Филтриране по категория"
+
+msgid "DeleteAll"
+msgstr "Изтриване на всички"
+
+msgid "ScoringUpdated"
+msgstr "Настройките за оценяване са обновени."
+
+msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
+msgstr "%s уверява, че
+
+ %s 
+
+успешно е завършил(а) курса 
+
+ \'%s\' 
+
+ с оценка
+
+ \'%s\'"
+
+msgid "CertificateMinScore"
+msgstr "Минимален резултат за придобиване на сертификат"
+
+msgid "CategoryAdded"
+msgstr "Категорията е добавена."
+
+msgid "InViMod"
+msgstr "Категорията е скрита."
+
+msgid "ViMod"
+msgstr "Категорията ще се показва."
+
+msgid "ViewResult"
+msgstr "Преглед на резултатите"
+
+msgid "NoUser"
+msgstr "Няма патребители."
+
+msgid "NoResultsInEvaluation"
+msgstr "Засега няма резултати за оценяване."
+
+msgid "AddStudent"
+msgstr "Добавяне на потребители"
+
+msgid "ImportResult"
+msgstr "Импортиране на резултати"
+
+msgid "Score"
+msgstr "Резултат"
+
+msgid "ImportFileLocation"
+msgstr "Път на импортирания файл"
+
+msgid "Location"
+msgstr "Местоположение"
+
+msgid "FileType"
+msgstr "Тип на файла"
+
+msgid "ExampleCSVFile"
+msgstr "Примерен CSV-файл"
+
+msgid "ExampleXMLFile"
+msgstr "Примерен XML-файл"
+
+msgid "OverwriteScores"
+msgstr "Презаписване на резултатите"
+
+msgid "IgnoreErrors"
+msgstr "Да се игнорират грешките"
+
+msgid "ItemsVisible"
+msgstr "Ресурсите са видими."
+
+msgid "ItemsInVisible"
+msgstr "Ресурсите са скрити."
+
+msgid "NoItemsSelected"
+msgstr "Няма избрани ресурси."
+
+msgid "DeletedCategories"
+msgstr "Изтрити категории"
+
+msgid "DeletedEvaluations"
+msgstr "Изтрити оценявания"
+
+msgid "DeletedLinks"
+msgstr "Изтрити връзки"
+
+msgid "TotalItems"
+msgstr "Общо"
+
+msgid "LinkAdded"
+msgstr "Връзката е добавена."
+
+msgid "LinkDeleted"
+msgstr "Връзката е изтрита."
+
+msgid "EditEvaluation"
+msgstr "Редактиране на оценяването"
+
+msgid "DeleteResult"
+msgstr "Изтриване на резултата"
+
+msgid "Display"
+msgstr "Класация"
+
+msgid "Average"
+msgstr "Средно"
+
+msgid "ViewStatistics"
+msgstr "Преглед на статистиката"
+
+msgid "ResultAdded"
+msgstr "Добавен е резултат."
+
+msgid "EvaluationStatistics"
+msgstr "Статистика на оценките"
+
+msgid "ExportResult"
+msgstr "Експортиране на резултати"
+
+msgid "EditResult"
+msgstr "Редактиране на резултатите"
+
+msgid "GradebookWelcomeMessage"
+msgstr "Добре дошли. Тук се оценява постигането на целите на един или повече курсове в системата за обучение. Освен това, тук може да се въведе външна информация (оценки) от провени обучения."
+
+msgid "CreateAllCat"
+msgstr "Създаване на всички съответстващи на курсовете категории"
+
+msgid "AddAllCat"
+msgstr "Всички категории са добавени."
+
+msgid "StatsStudent"
+msgstr "Статистика за"
+
+msgid "Results"
+msgstr "Резултати"
+
+msgid "Certificates"
+msgstr "Сертификати"
+
+msgid "Certificate"
+msgstr "Сертификат"
+
+msgid "ChooseUser"
+msgstr "Изберете потребители за това оценяване"
+
+msgid "FirstLetter"
+msgstr "Първа буква от името"
+
+msgid "UserAdded"
+msgstr "Потребителят е регистриран в системата."
+
+msgid "ResultEdited"
+msgstr "Резултатът е редактиран."
+
+msgid "ChooseFormat"
+msgstr "Избор на формат"
+
+msgid "OutputFileType"
+msgstr "Тип на изходящия файл"
+
+msgid "OverMax"
+msgstr "Стойността, която се опитвате да запишете надхвърля максималната граница в това оценяване."
+
+msgid "MoreInfo"
+msgstr "Още информация"
+
+msgid "ResultsPerUser"
+msgstr "Резултати за потребител"
+
+msgid "TotalUser"
+msgstr "Общ резултат за потребителя"
+
+msgid "AverageTotal"
+msgstr "Среден общ резултат"
+
+msgid "Evaluation"
+msgstr "Оценяване"
+
+msgid "EvaluationAverage"
+msgstr "Средна оценка"
+
+msgid "EditCategory"
+msgstr "Редактиране на категорията"
+
+msgid "EditAllWeights"
+msgstr "Редактиране на теглата"
+
+msgid "GradebookQualificationTotal"
+msgstr "Общо"
+
+msgid "GradebookEvaluationDeleted"
+msgstr "Оценяването е изтрито."
+
+msgid "GradebookQualifyLog"
+msgstr "История на оценяването"
+
+msgid "GradebookNameLog"
+msgstr "Име на оценяването"
+
+msgid "GradebookDescriptionLog"
+msgstr "Описание на оценяването"
+
+msgid "GradebookVisibilityLog"
+msgstr "Видимост на оценяването"
+
+msgid "ResourceType"
+msgstr "Вид ресурс"
+
+msgid "GradebookWhoChangedItLog"
+msgstr "Кой е променял"
+
+msgid "EvaluationEdited"
+msgstr "Оценяването е редактирано."
+
+msgid "CategoryEdited"
+msgstr "Категорията е обновена."
+
+msgid "OnlyNumbers"
+msgstr "Допустими са само числа."
+
+msgid "IncorrectData"
+msgstr "Некоректни данни."
+
+msgid "Resource"
+msgstr "Оценяване"
+
+msgid "PleaseEnableScoringSystem"
+msgstr "Моля, активирайте оценяването на уменията."
+
+msgid "AllResultDeleted"
+msgstr "Всички резултати са изтрити."
+
+msgid "ImportNoFile"
+msgstr "Няма файл за импортиране."
+
+msgid "ProblemUploadingFile"
+msgstr "Проблем при качването на файла."
+
+msgid "AllResultsEdited"
+msgstr "Всички резултати са редактирани."
+
+msgid "FileUploadComplete"
+msgstr "Файлът е качен."
+
+msgid "NoResultsAvailable"
+msgstr "Няма резултати."
+
+msgid "CannotChangeTheMaxNote"
+msgstr "Максималният резултат не може да се промени."
+
+msgid "GradebookWeightUpdated"
+msgstr "Теглото е редактирано."
+
+msgid "ChooseItem"
+msgstr "Изберете учебна дейност за оценяване"
+
+msgid "AverageResultsVsResource"
+msgstr "Средни резултати по ресурси"
+
+msgid "ToViewGraphScoreRuleMustBeEnabled"
+msgstr "За да видите графика, системата за оценяване трябва да е активирана."
+
+msgid "GradebookPreviousWeight"
+msgstr "Предишно тегро на ресурса"
+
+msgid "AddAssessment"
+msgstr "Добавяне на тази учебна дейност за оценяване"
+
+msgid "FolderView"
+msgstr "Начална страница на оценяванията"
+
+msgid "GradebookSkillsRanking"
+msgstr "Оценка на уменията"
+
+msgid "SaveScoringRules"
+msgstr "Записване на правилата за оценяване"
+
+msgid "AttachCertificate"
+msgstr "Задаване на сертификат"
+
+msgid "GradebookSeeListOfStudentsCertificates"
+msgstr "Сертификати на курсистите"
+
+msgid "CreateCertificate"
+msgstr "Създаване на сертификат"
+
+msgid "UploadCertificate"
+msgstr "Качване на сертификат"
+
+msgid "CertificateName"
+msgstr "Име на сертификата"
+
+msgid "CertificateOverview"
+msgstr "преглед на сертификатите"
+
+msgid "CreateCertificateWithTags"
+msgstr "Създайте шаблон на сертификата, като използвате следните завестващи текстове"
+
+msgid "ViewPresenceSheets"
+msgstr "Преглед на присъствените листове"
+
+msgid "ViewEvaluations"
+msgstr "Преглед на оценяванията"
+
+msgid "NewPresenceSheet"
+msgstr "Нов присъствен списък"
+
+msgid "TitlePresenceSheet"
+msgstr "Заглавие на присъствения списък"
+
+msgid "Trainer"
+msgstr "Инструктор"
+
+msgid "PresenceSheetCreatedBy"
+msgstr "Присъственият списък е създаден от"
+
+msgid "SavePresence"
+msgstr "Записване на присъствения списък и продължаване със стъпка 2"
+
+msgid "NoCertificateAvailable"
+msgstr "Няма наличен сертификат."
+
+msgid "SaveCertificate"
+msgstr "Запис на сертификата"
+
+msgid "CertificateNotRemoved"
+msgstr "Сертификатът не може да се премахне."
+
+msgid "CertificateRemoved"
+msgstr "Сертификатът е премахнат."
+
+msgid "NoDefaultCertificate"
+msgstr "Няма сертификат по подразбиране."
+
+msgid "DefaultCertificate"
+msgstr "Сертификат по подразбиране"
+
+msgid "PreviewCertificate"
+msgstr "Преглед на сертификата"
+
+msgid "IsDefaultCertificate"
+msgstr "Сертификатът е зададен по подразбиране."
+
+msgid "ImportPresences"
+msgstr "Импортиране на присъствия"
+
+msgid "AddPresences"
+msgstr "Добавяне на присъствия"
+
+msgid "DeletePresences"
+msgstr "Изтриване на присъствия"
+
+msgid "GradebookListOfStudentsCertificates"
+msgstr "Сертификати на курсистите"
+
+msgid "NewPresence"
+msgstr "Ново присъствие"
+
+msgid "EditPresence"
+msgstr "Редактиране на присъствие"
+
+msgid "SavedEditPresence"
+msgstr "Записване на присъствието"
+
+msgid "ValidatePresenceSheet"
+msgstr "Валидиране на списък с присъствия"
+
+msgid "BackTo"
+msgstr "Обратно към"
+
+msgid "PresenceSheet"
+msgstr "Присъствен списък"
+
+msgid "PresenceSheets"
+msgstr "Присъствени списъци"
+
+msgid "Evaluations"
+msgstr "Оценявания"
+
+msgid "SaveEditPresence"
+msgstr "Запис на промените в присъствения списък"
+
+msgid "Training"
+msgstr "Курс"
+
+msgid "Present"
+msgstr "Присъствие"
+
+msgid "Numero"
+msgstr "N:"
+
+msgid "PresentAbsent"
+msgstr "0 = отсъства, 1 = присъства"
+
+msgid "ExampleXLSFile"
+msgstr "Примерен Excel (XLS) файл"
+
+msgid "NoResultsInPresenceSheet"
+msgstr "Присъствие не се изисква."
+
+msgid "EditPresences"
+msgstr "Промени в присъствения списък"
+
+msgid "TotalWeightMustNotBeMoreThan"
+msgstr "Общото тегло не може да е повече от"
+
+msgid "ThereIsNotACertificateAvailableByDefault"
+msgstr "Няма сертификат по подразбиране."
+
+msgid "CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan"
+msgstr "Минимален резултат се изисква за сертификата. Той не може да надвишава"
+
+msgid "LinkMod"
+msgstr "Запис"
+
+msgid "EditLink"
+msgstr "Редактиране на връзката"
+
+msgid "CategoryDeleted"
+msgstr "Категорията е изтрита."
+

@@ -1,0 +1,93 @@
+msgid "langMdCallingTool"
+msgstr "Dokumenty"
+
+msgid "langMdTitle"
+msgstr "Názov vyučovacieho predmetu"
+
+msgid "langMdDescription"
+msgstr "Pre uloženie tejto informácie stlačte Uložiť"
+
+msgid "langMdCoverage"
+msgstr "Univerzálny"
+
+msgid "langMdCopyright"
+msgstr "Gentská univerzita"
+
+msgid "langTool"
+msgstr "Metadáta dokumentu"
+
+msgid "langLanguageTip"
+msgstr "jazyk, v ktorom bol vyučovací predmet vytvorený"
+
+msgid "langIdentifier"
+msgstr "Identifikátor"
+
+msgid "langTitleTip"
+msgstr "názov alebo meno a jazyk tohto názvu alebo mena"
+
+msgid "langDescriptionTip"
+msgstr "popis alebo komentár a jazyk použitý pre popis tohto vyučovacieho predmetu"
+
+msgid "langKeyword"
+msgstr "Klúčové slová"
+
+msgid "langKeywordTip"
+msgstr "rozdeliť čiarkami (písmená, číslice, -.)"
+
+msgid "langCoverage"
+msgstr "Kategória"
+
+msgid "langKwNote"
+msgstr "Keď zmeníte jazyk popisu, nepridávajte súčasne kľúčové slová."
+
+msgid "langClickKw"
+msgstr "Pre označenie alebo zrušenie výberu kľúčového slova kliknite naň v štruktúre."
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "Klikom otvoríte predmet"
+
+msgid "langStore"
+msgstr "Uložiť"
+
+msgid "langDeleteAll"
+msgstr "Zmazať všetky metadáta"
+
+msgid "langConfirmDelete"
+msgstr "*Naozaj* chcete zmazať všetky metadáta?"
+
+msgid "langNotInDB"
+msgstr "žiadna taká kategória odkazov"
+
+msgid "langNotFolder"
+msgstr "nie je možné, ie je to priečinok..."
+
+msgid "langContinue"
+msgstr "Pokračovať s"
+
+msgid "langCreate"
+msgstr "vytvoriť"
+
+msgid "langRemove"
+msgstr "Odstrániť MDEs"
+
+msgid "langAllRemovedFor"
+msgstr "Všetky záznamy z kategórie odstránené"
+
+msgid "langRemainingFor"
+msgstr "zastarané záznamy odstránené z kategórie"
+
+msgid "langMainMD"
+msgstr "Otvoriť hlavné MDE"
+
+msgid "langOrElse"
+msgstr "Vybrať kategóriu odkazov"
+
+msgid "langWarningDups"
+msgstr "- duplicitné mená kategórií boli odstránené zo zoznamu!"
+
+msgid "langSLC"
+msgstr "Pracovať s kategóriou odkazov nazvanou"
+

@@ -1,0 +1,42 @@
+msgid "lang_new_item"
+msgstr "เพิ่มรายการแล้ว"
+
+msgid "TitleNotification"
+msgstr "นับตั้งแต่คุณเข้ามาครั้งสุดท้าย"
+
+msgid "lang_update_agenda"
+msgstr "ปรับปรุงกำหนดการที่มีอยู่แล้ว"
+
+msgid "lang_new_agenda"
+msgstr "เพิ่มกำหนดการใหม่แล้ว"
+
+msgid "lang_update_announcements"
+msgstr "ได้ปรับปรุงประกาศที่มีอยู่เดิมให้แล้ว"
+
+msgid "lang_new_announcements"
+msgstr "เพิ่มประกาศใหม่แล้ว"
+
+msgid "lang_new_document"
+msgstr "ได้เพิ่มเอกสารใหม่แล้ว"
+
+msgid "lang_new_exercise"
+msgstr "แบบทดสอบใหม่ สามารถใช้งานได้แลว"
+
+msgid "lang_update_link"
+msgstr "ได้ปรับปรุง รายการเชื่อมโยงข้อมูลให้แล้ว"
+
+msgid "lang_new_link"
+msgstr "เพิ่มการเชื่อมโยงใหม่แล้ว"
+
+msgid "lang_new_forum_topic"
+msgstr "ได้เพิ่มหัวข้อใหม่ให้แล้ว"
+
+msgid "lang_new_groupforum_topic"
+msgstr "ได้เพิ่มหัวข้อใหม่ในกลุ่มอภิปรายแล้ว"
+
+msgid "lang_new_dropbox_file"
+msgstr "ได้รับไฟล์ใหม่"
+
+msgid "lang_update_dropbox_file"
+msgstr "ปรับปรุงไฟล์ในกล่องส่งงานของคุณแล้ว"
+

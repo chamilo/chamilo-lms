@@ -1,0 +1,72 @@
+msgid "NewNote"
+msgstr "Új feljegyzés"
+
+msgid "Note"
+msgstr "Jegyzet"
+
+msgid "NoteDeleted"
+msgstr "Jegyzet törölve"
+
+msgid "NoteUpdated"
+msgstr "Jegyzet módosítva"
+
+msgid "NoteCreated"
+msgstr "Jegyzet létrehozva"
+
+msgid "YouMustWriteANote"
+msgstr "Kérem, adja meg jegyzetét"
+
+msgid "SaveNote"
+msgstr "Jegyzet mentése"
+
+msgid "WriteYourNoteHere"
+msgstr "Új jegyzet írásához kattintson ide"
+
+msgid "SearchByTitle"
+msgstr "Keresés cím szerint"
+
+msgid "WriteTheTitleHere"
+msgstr "Adja meg a címet"
+
+msgid "UpdateDate"
+msgstr "Módosítva"
+
+msgid "NoteAddNew"
+msgstr "Új jegyzet írása a személyes jegyzetfüzetbe"
+
+msgid "OrderByCreationDate"
+msgstr "Rendezés létrehozás dátuma szerint"
+
+msgid "OrderByModificationDate"
+msgstr "Rendezés utolsó módosítás dátuma szerint"
+
+msgid "OrderByTitle"
+msgstr "Rendezés cím szerint"
+
+msgid "NoteTitle"
+msgstr "Jegyzet címe"
+
+msgid "NoteComment"
+msgstr "Jegyzet részletei"
+
+msgid "NoteAdded"
+msgstr "Jegyzet hozzáadva"
+
+msgid "NoteConfirmDelete"
+msgstr "Biztosan törölni akarja ezt a jegyzetet?"
+
+msgid "AddNote"
+msgstr "Jegyzet létrehozása"
+
+msgid "ModifyNote"
+msgstr "Személyes jegyzetem szerkesztése"
+
+msgid "BackToNoteList"
+msgstr "Vissza a jegyzetlistához"
+
+msgid "NotebookManagement"
+msgstr "Jegyzetfüzetek kezelése"
+
+msgid "BackToNotesList"
+msgstr "Vissza a jegyzetlistához"
+

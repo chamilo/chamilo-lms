@@ -1,0 +1,90 @@
+msgid "langLineNumber"
+msgstr "Número de Líneas"
+
+msgid "langLine"
+msgstr "linea"
+
+msgid "langLines"
+msgstr "lineas"
+
+msgid "langLineOrLines"
+msgstr "linea(s)"
+
+msgid "langMoveUp"
+msgstr "Mover hacia arriba"
+
+msgid "langMoveDown"
+msgstr "Mover hacia abajo"
+
+msgid "langAddNewHeading"
+msgstr "Aagregar nuevo encabezamiento"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Solamente para administrador del curso"
+
+msgid "langDefineHeadings"
+msgstr "Definir Encabezados"
+
+msgid "langBackToUsersList"
+msgstr "Volver a la lista de usuarios"
+
+msgid "langTracking"
+msgstr "Seguimiento"
+
+msgid "langCourseManager"
+msgstr "Profesor"
+
+msgid "langModRight"
+msgstr "cambiar los derechos de"
+
+msgid "langNoAdmin"
+msgstr "desde ahora <b>no</b> tiene derecho de administración sobre este sitio"
+
+msgid "langAllAdmin"
+msgstr "ahora tiene <b>todos</b> los derechos de administración sobre esta página"
+
+msgid "langModRole"
+msgstr "Cambiar el rol de"
+
+msgid "langRole"
+msgstr "rol / estado"
+
+msgid "langIsNow"
+msgstr "es de ahora en adelante"
+
+msgid "langInC"
+msgstr "en este curso"
+
+msgid "langFilled"
+msgstr "No todos los campos fueron llenados"
+
+msgid "langUserNo"
+msgstr "Usuario No"
+
+msgid "langTaken"
+msgstr "ya está en uso. Por favor, haga otra selección"
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langUnreg"
+msgstr "Retirar suscripción"
+
+msgid "langGroupUserManagement"
+msgstr "Administración de grupo"
+
+msgid "langUnregister"
+msgstr "Desunscribir"
+
+msgid "langAddAUser"
+msgstr "Añadir usuarios"
+
+msgid "InvitationReceived"
+msgstr "Invitación recibida"
+
+msgid "InvitationSent"
+msgstr "Invitación envida"
+
+msgid "YouAlreadySentAnInvitation"
+msgstr "Ud. ya ha enviado una invitación"
+

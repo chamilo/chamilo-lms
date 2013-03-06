@@ -1,0 +1,288 @@
+msgid "Upload"
+msgstr "Lataa"
+
+msgid "BackList"
+msgstr "Takaisin"
+
+msgid "ShowFeedback"
+msgstr "Näytä palaute"
+
+msgid "GiveFeedback"
+msgstr "Anna / muokkaa palautetta"
+
+msgid "JustUploadInSelect"
+msgstr "Tallenna itsellesi"
+
+msgid "MailingNothingFor"
+msgstr "Nenio por"
+
+msgid "MailingFileNotRegistered"
+msgstr "(ei ole rekisteröitynyt tälle kurssille)"
+
+msgid "MailingFileSentTo"
+msgstr "vastaanottaja"
+
+msgid "MailingFileIsFor"
+msgstr "estas por  XX"
+
+msgid "MailingFileRecipDup"
+msgstr "pli ol unu studento trovis  XX"
+
+msgid "MailingFileRecipNotFound"
+msgstr "neniu studento trovis  XX"
+
+msgid "MailingFileNoRecip"
+msgstr "ne adresito-id en la nomo"
+
+msgid "MailingFileNoPostfix"
+msgstr "nomo ne finiĝas per"
+
+msgid "MailingFileNoPrefix"
+msgstr "nomo ne komenciĝas per"
+
+msgid "MailingFileFunny"
+msgstr "Neniu nomo, aŭ sufikso ne konsistanta el 1-4 literoj kaj ciferoj"
+
+msgid "MailingZipDups"
+msgstr "Mesaĝa zip-dosiero enhavas duoblaĵojn - transsendo maleblas"
+
+msgid "MailingZipPhp"
+msgstr "Mesaĝa zip-dosiero enhavas php-doiserojn - transsendo maleblas"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "Mesaĝa zip-dosiero estas malplena aŭ difekta"
+
+msgid "MailingWrongZipfile"
+msgstr "Sendotaĵo estu zip-dosiero kun STUDENTID aŭ LOGINNAME en la nomo"
+
+msgid "MailingConfirmSend"
+msgstr "Ĉu sendi dokumentojn al iliaj individuaj adresitoj?"
+
+msgid "MailingSend"
+msgstr "Sendi dokumentojn"
+
+msgid "MailingNotYetSent"
+msgstr "Sendotaĵoj estas ankoraŭ ne senditaj..."
+
+msgid "MailingInSelect"
+msgstr "--sähköpostilla--"
+
+msgid "MailingAsUsername"
+msgstr "Sähköpostilla"
+
+msgid "FileDeleted"
+msgstr "Valitut tiedostot on poistettu Dropboxistasi."
+
+msgid "DocAdd"
+msgstr "Tiedosto on lisätty onnistuneesti"
+
+msgid "Sender"
+msgstr "lähettäjä"
+
+msgid "Author"
+msgstr "tekijä"
+
+msgid "FileSize"
+msgstr "tiedostokoko"
+
+msgid "Title"
+msgstr "otsikko"
+
+msgid "OverwriteFile"
+msgstr "Korvaa aiemmin lähetetty tiedosto?"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Unknown"
+msgstr "tuntematon"
+
+msgid "SentTo"
+msgstr "Vastaanottaja"
+
+msgid "ConfirmDelete"
+msgstr "Tämä poistaa tiedon vain sinun listaltasi"
+
+msgid "SendTo"
+msgstr "Vastaanottaja"
+
+msgid "Description"
+msgstr "Dokumentin kuvaus"
+
+msgid "UploadFile"
+msgstr "Tallenna dokumentti"
+
+msgid "ErrorCreatingDir"
+msgstr "Tiedostorakennetta ei voitu luoda. Ota yhteyttä ylläpitoon."
+
+msgid "UploadError"
+msgstr "Lataus epäonnistui, tarkista maksimi tiedoston koko ja kansion oikeudet."
+
+msgid "TooBig"
+msgstr "Et valinnut tiedostoa tai tiedosto on liian iso."
+
+msgid "NoFileSpecified"
+msgstr "Et valinnut tiedostoa tallennettavaksi."
+
+msgid "NoUserSelected"
+msgstr "Valitse käyttäjä, jolle haluat tiedoston lähettää."
+
+msgid "BadFormData"
+msgstr "Lähetys epäonnistui: datavirhe. Ota yhteyttä ylläpitäjään."
+
+msgid "GeneralError"
+msgstr "VIrhe on tapahtunut. Ota yhteyttä ylläpitäjään."
+
+msgid "Dropbox"
+msgstr "Dropbox"
+
+msgid "Help"
+msgstr "Apua"
+
+msgid "ReceivedFiles"
+msgstr "Vastaanotetut Tiedostot"
+
+msgid "SentFiles"
+msgstr "Lähetetyt Tiedostot"
+
+msgid "ReceivedTitle"
+msgstr "Nimi"
+
+msgid "SentTitle"
+msgstr "Lähetetyt tiedostot"
+
+msgid "Authors"
+msgstr "Tekijä"
+
+msgid "Size"
+msgstr "Koko"
+
+msgid "LastResent"
+msgstr "Viimeisin"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Juuri"
+
+msgid "UploadNewFile"
+msgstr "Jaa uusi tiedosto"
+
+msgid "AreYouSureToDelete"
+msgstr "Haluatko varmasti poistaa"
+
+msgid "Feedback"
+msgstr "Palaute"
+
+msgid "CloseFeedback"
+msgstr "Sulje palaute"
+
+msgid "AddNewFeedback"
+msgstr "Lisää palaute"
+
+msgid "DropboxFeedbackStored"
+msgstr "Palaute tallennettu"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Kaikki käyttäjät ovat poistaneet tiedoston, joten kukaan ei nää lisäämääsi palautetta."
+
+msgid "FeedbackError"
+msgstr "Virhe palautteessa"
+
+msgid "PleaseTypeText"
+msgstr "Kirjoita jotain tekstiä."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "Et saa ladata tätä tiedostoa."
+
+msgid "CheckAtLeastOneFile"
+msgstr "Valitse vähintään yksi tiedosto."
+
+msgid "ReceivedFileDeleted"
+msgstr "Vastaanotettu tiedosto on poistettu."
+
+msgid "SentFileDeleted"
+msgstr "Lähetetty tiedosto on poistettu."
+
+msgid "FilesMoved"
+msgstr "Valitut tiedostot on siirretty."
+
+msgid "ReceivedFileMoved"
+msgstr "Vastaanotettu tiedosto on siirretty."
+
+msgid "SentFileMoved"
+msgstr "Lähetetty tiedosto on siirretty"
+
+msgid "NotMovedError"
+msgstr "Tiedosto(j)a ei voi siirtää."
+
+msgid "AddNewCategory"
+msgstr "Lisää uusi kansio"
+
+msgid "EditCategory"
+msgstr "Muokkaa tätä luokkaa"
+
+msgid "CategoryName"
+msgstr "Kansion nimi"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Anna luokalle nimi"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Luokka on jo olemassa, valitse toinen nimi"
+
+msgid "CurrentlySeeing"
+msgstr "Olet kansiossa"
+
+msgid "CategoryStored"
+msgstr "Kansio on luotu"
+
+msgid "CategoryModified"
+msgstr "Kategoriaa on muokattu"
+
+msgid "CategoryDeleted"
+msgstr "Kategoria on poistettu"
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "Tekijä kenttä ei voi olla tyhjä"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Valitse vähintään yksi vastaanottaja"
+
+msgid "DropboxFileTooBig"
+msgstr "Tiedosto on liian suuri."
+
+msgid "TheFileIsNotUploaded"
+msgstr "Tiedostoa ei ladattu."
+
+msgid "FileUploadSucces"
+msgstr "Tiedoston lataus onnistui."
+
+msgid "MailingSelectNoOther"
+msgstr "Sähköpostitukseen ei voi yhdistää useampia vastaanottajia"
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "Ainoastaan lataamista ei voi yhdistää muihin vastaanottajiin"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Uusi tiedosto on lähetetty tiedostoihin"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Uusi tiedosto on lähetetty tiedostoihin"
+
+msgid "langAddEdit"
+msgstr "Lisää / Muokkaa"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Tämä kansio on tyhjä"
+
+msgid "AddComment"
+msgstr "Tallenna kommentti"
+
+msgid "SentCatgoryDeleted"
+msgstr "Kansio poistettu"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "Kansio poistettu"
+

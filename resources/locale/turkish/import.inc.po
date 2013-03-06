@@ -1,0 +1,27 @@
+msgid "langExplanation"
+msgstr "OK tıkladığınızda, Forum, Gündem, Belge Yönetimi vs. araçlarla birlikte bu dersin sitesi yaratılır. Kullanıcı adınız ve şifrenizle giriş yaparak siteyi isteğiniz şekilde düzenleyebilirsiniz."
+
+msgid "langTooBig"
+msgstr "Gönderilecek dosyayı seçmediniz veya dosya boyutu çok büyük"
+
+msgid "langCouldNot"
+msgstr "Dosya gönderilemedi"
+
+msgid "langAddPageToSite"
+msgstr "Siteye sayfa ekle"
+
+msgid "langCouldNotSendPage"
+msgstr "Bu sayfa HTML formatýnda deðil bu nedenle gönderilemez. Eðer HTML olmayan bir dosya göndermek istiyorsanýz (PDF, Word, Power Point, Video, etc.) <a href=../document/document.php>Belge Araçlarýný kullanýnýz</a>"
+
+msgid "langSendPage"
+msgstr "Gönderilecek sayfa"
+
+msgid "langPageTitleModified"
+msgstr "Sayfa başlığı değiştirildi"
+
+msgid "langPageAdded"
+msgstr "Sayfa eklendi"
+
+msgid "Choose"
+msgstr "Seç"
+

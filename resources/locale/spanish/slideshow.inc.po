@@ -1,0 +1,54 @@
+msgid "Height"
+msgstr "Alto"
+
+msgid "ResizingComment"
+msgstr "Redimensionar temporalmente la presentación al siguiente tamaño (en pixeles)"
+
+msgid "Width"
+msgstr "Ancho"
+
+msgid "Resizing"
+msgstr "Presentación redimensionada"
+
+msgid "NoResizingComment"
+msgstr "Mostrar todas las imágenes de la presentación en su tamaño original. Las barras de desplazamiento aparecerán automáticamente si la imagen es mayor que el tamaño de su monitor."
+
+msgid "ShowThumbnails"
+msgstr "Mostrar miniaturas"
+
+msgid "SetSlideshowOptions"
+msgstr "Opciones de la presentación"
+
+msgid "SlideshowOptions"
+msgstr "Opciones de la presentación"
+
+msgid "NoResizing"
+msgstr "Presentación en su tamaño original"
+
+msgid "ExitSlideshow"
+msgstr "Salir de la presentación"
+
+msgid "SlideShow"
+msgstr "Presentación"
+
+msgid "PreviousSlide"
+msgstr "Diapositiva anterior"
+
+msgid "NextSlide"
+msgstr "Diapositiva siguiente"
+
+msgid "ViewSlideshow"
+msgstr "Ver presentación"
+
+msgid "FirstSlide"
+msgstr "Primera diapositiva"
+
+msgid "LastSlide"
+msgstr "Última diapositiva"
+
+msgid "ResizingAuto"
+msgstr "Presentación redimensionada automáticamente"
+
+msgid "ResizingAutoComment"
+msgstr "La presentación se redimensionará automáticamente al tamaño de su pantalla. Esta es la opción que siempre se cargará por defecto cada vez que entre en la plataforma."
+

@@ -1,0 +1,159 @@
+msgid "ResourceAdded"
+msgstr "Resource added. You can now go back to the path or add more resources."
+
+msgid "LearningPath"
+msgstr "Inlärningsvägar"
+
+msgid "LevelUp"
+msgstr "level up"
+
+msgid "AddIt"
+msgstr "Add it"
+
+msgid "MainCategory"
+msgstr "main category"
+
+msgid "lang_delete_added_resources"
+msgstr "Delete added resources"
+
+msgid "AddToLinks"
+msgstr "Add to the course links"
+
+msgid "DontAdd"
+msgstr "do not add"
+
+msgid "lang_show_all_added_resources"
+msgstr "Show all added resources"
+
+msgid "ResourcesAdded"
+msgstr "Added new resources"
+
+msgid "BackTo"
+msgstr "Back to"
+
+msgid "ExternalResources"
+msgstr "External resources"
+
+msgid "CourseResources"
+msgstr "Course resources"
+
+msgid "ExternalLink"
+msgstr "External link"
+
+msgid "DropboxAdd"
+msgstr "Add the dropbox page to this chapter."
+
+msgid "AddAssignmentPage"
+msgstr "Add the upload assignment page to this chapter."
+
+msgid "Exercise"
+msgstr "Test"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "AdValvas"
+msgstr "Ad Valvas"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "ShowDelete"
+msgstr "Visa / Radera"
+
+msgid "IntroductionText"
+msgstr "Introduktionstext"
+
+msgid "CourseDescription"
+msgstr "Kursbeskrivning"
+
+msgid "Groups"
+msgstr "Grupper"
+
+msgid "Users"
+msgstr "Användare"
+
+msgid "IntroductionTextAdd"
+msgstr "Lägg till sida som innehåller introduktions text till detta kapitel."
+
+msgid "CourseDescriptionAdd"
+msgstr "Lägg till en sida som innehåller beskrivning till detta kapitel."
+
+msgid "GroupsAdd"
+msgstr "Lägg till gruppsidan till detta kapitel."
+
+msgid "UsersAdd"
+msgstr "Lägg till användarsidan till detta kapitel."
+
+msgid "ExportableCourseResources"
+msgstr "Exportbara kurs resurser"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Chamilo relaterade kurs resurser"
+
+msgid "LinkTarget"
+msgstr "Länkmål"
+
+msgid "SameWindow"
+msgstr "I samma fönster"
+
+msgid "NewWindow"
+msgstr "I ett nytt fönster"
+
+msgid "StepDeleted1"
+msgstr "detta"
+
+msgid "StepDeleted2"
+msgstr "objekt blev raderat i det verktyget."
+
+msgid "Modify"
+msgstr "Modifiera / Ändra"
+
+msgid "Chapter"
+msgstr "Kapitel"
+
+msgid "NoAgendaItems"
+msgstr "Det finns inga Agenda objekt"
+
+msgid "AgendaAdd"
+msgstr "Lägg till kalenderpost"
+
+msgid "UserGroupFilter"
+msgstr "Filter på grupper/användare"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Sortera Agenda kronologiskt (upp)"
+
+msgid "ShowCurrent"
+msgstr "Visa kalenderposter i aktuell månad"
+
+msgid "ModifyCalendarItem"
+msgstr "Ändra en kalenderpost"
+
+msgid "ItemTitle"
+msgstr "Objekttitel"
+
+msgid "Detail"
+msgstr "Detalj"
+
+msgid "EditSuccess"
+msgstr "Kalenderposten har blivit ändrad"
+
+msgid "AddCalendarItem"
+msgstr "Lägg till kalenderpost"
+
+msgid "AddAnn"
+msgstr "Lägg till tillkännagivande"
+
+msgid "ForumAddNewTopic"
+msgstr "Forum: lägg till nytt ämne"
+
+msgid "ForumEditTopic"
+msgstr "Forum: ändra ämne"
+
+msgid "ExerciseAnswers"
+msgstr "Övningar: Svar"
+
+msgid "ForumReply"
+msgstr "Forum: svar"
+

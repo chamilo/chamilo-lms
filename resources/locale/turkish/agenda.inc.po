@@ -1,0 +1,219 @@
+msgid "AgendaAdd"
+msgstr "Yeni bir etkinlik ekle"
+
+msgid "ShowAllEvents"
+msgstr "Etkinliklerin hepsini göster"
+
+msgid "ShowCurrent"
+msgstr "Geçerli ayın etkinliklerini göster"
+
+msgid "AddCalendarItem"
+msgstr "Yeni bir etkinlik ekle"
+
+msgid "Day"
+msgstr "Gün"
+
+msgid "Month"
+msgstr "Ay"
+
+msgid "Year"
+msgstr "Yıl"
+
+msgid "Hour"
+msgstr "Saat"
+
+msgid "Minutes"
+msgstr "Dakika"
+
+msgid "Detail"
+msgstr "Detay"
+
+msgid "EditSuccess"
+msgstr "Etkinlik düzenlendi"
+
+msgid "AddSuccess"
+msgstr "Etkinlik eklendi"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Etkinlik silindi"
+
+msgid "NoAgendaItems"
+msgstr "Planlanm&#305;&#351; herhangi bir etkinlik bulunmuyor"
+
+msgid "lang_september"
+msgstr "Eylül"
+
+msgid "langClassName"
+msgstr "Sınıf"
+
+msgid "lang_agenda"
+msgstr "Ajanda"
+
+msgid "ModifyCalendarItem"
+msgstr "Etkinlik düzenle"
+
+msgid "ItemTitle"
+msgstr "Etkinlik başlığı"
+
+msgid "langDay"
+msgstr "gün"
+
+msgid "month_default"
+msgstr "Ön tanımlı ay"
+
+msgid "langYear"
+msgstr "Yıl"
+
+msgid "year_default"
+msgstr "Ön tanımlı yıl"
+
+msgid "langHour"
+msgstr "Saat"
+
+msgid "hour_default"
+msgstr "Ön tanımlı saat"
+
+msgid "langMinute"
+msgstr "dakika"
+
+msgid "langLasting"
+msgstr "süre"
+
+msgid "langOldToNew"
+msgstr "eskiden yeniye"
+
+msgid "langNewToOld"
+msgstr "yeniden eskiye"
+
+msgid "langNow"
+msgstr "&#351;imdi"
+
+msgid "langAddEvent"
+msgstr "Plan ekle"
+
+msgid "langDetail"
+msgstr "detay"
+
+msgid "MonthView"
+msgstr "Aylık görünüm"
+
+msgid "WeekView"
+msgstr "Haftalık görünüm"
+
+msgid "DayView"
+msgstr "Günlük görünüm"
+
+msgid "AddPersonalItem"
+msgstr "Kişisel etkinlik ekle"
+
+msgid "Week"
+msgstr "Hafta"
+
+msgid "Date"
+msgstr "Tarih"
+
+msgid "Time"
+msgstr "Saat"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Kişisel bir etkinlik ekle"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Kişisel bir etkinliği düzenle"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Etkinliğiniz eklendi"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Etkinliğiniz düzenlendi"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Etkinliğiniz silindi"
+
+msgid "ViewPersonalItem"
+msgstr "Kişisel etkinlikleri göster"
+
+msgid "UserGroupFilter"
+msgstr "Grup/Kullanıcılar filtresi"
+
+msgid "ShowAll"
+msgstr "Hepsini göster"
+
+msgid "Print"
+msgstr "Yazıcıya gönder"
+
+msgid "MyTextHere"
+msgstr "Benim metnim burada"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Duyuru olarak kopyalandı"
+
+msgid "NewAnnouncement"
+msgstr "Yeni duyuru"
+
+msgid "AddAnnouncement"
+msgstr "Duyuru olarak ekle"
+
+msgid "UpcomingEvent"
+msgstr "Gelecek Etkinlikler"
+
+msgid "RepeatedEvent"
+msgstr "Tekrarlanan etkinlik"
+
+msgid "RepeatType"
+msgstr "Tekrar türü"
+
+msgid "RepeatDaily"
+msgstr "Günlük"
+
+msgid "RepeatWeekly"
+msgstr "Haftalık"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Aylık, tarihe göre"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Aylık, güne göre"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Aylık, güne göre, kısıtlı"
+
+msgid "RepeatYearly"
+msgstr "Yıllık"
+
+msgid "RepeatEnd"
+msgstr "Tekrar bitiş tarihi"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Asıl etkinliği göster"
+
+msgid "ICalFileImport"
+msgstr "Outlooka aktar"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Tüm sistem kullanıcıları"
+
+msgid "GlobalEvent"
+msgstr "Genel etkinlik"
+
+msgid "ModifyEvent"
+msgstr "Etkinliği düzenle"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Bitiş tarihi başlangıç tarihinden önce olamaz"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Artan"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Azalan"
+
+msgid "ItemForUserSelection"
+msgstr "Kullanıcı seçim listesi"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Bu dosya iCal formatında değil"
+
+msgid "RepeatEvent"
+msgstr "Etkinliği tekrarla"
+

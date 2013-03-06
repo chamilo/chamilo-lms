@@ -1,0 +1,429 @@
+msgid "SurveyTitle"
+msgstr "Наслов на анкетата"
+
+msgid "SurveyIntroduction"
+msgstr "Вовед на анкетата"
+
+msgid "CreateNewSurvey"
+msgstr "Креирај анкета"
+
+msgid "Survey"
+msgstr "Анкета"
+
+msgid "SurveyTemplate"
+msgstr "Шаблон за анкета"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "Ве молиме внесете наслов на анкетата"
+
+msgid "PleaseEnterValidDate"
+msgstr "Ве молиме внесете валиден датум"
+
+msgid "NotPublished"
+msgstr "Необјавено"
+
+msgid "AdvancedReportDetails"
+msgstr "Напредниот извештај овозможува да се избере корисникот и прашањето за да се видат попрецизни информации"
+
+msgid "AdvancedReport"
+msgstr "Напреден извештај"
+
+msgid "CompleteReportDetails"
+msgstr "Комплетниот извештај допушта сите резултати добиени од испитаниците и да се извезе во csv (за Excel)"
+
+msgid "CompleteReport"
+msgstr "Комплетен извештај"
+
+msgid "OnlyThoseAddresses"
+msgstr "Испати ја анкетата само на овие адреси"
+
+msgid "BackToQuestions"
+msgstr "Назад до прашањата"
+
+msgid "SelectWhichLanguage"
+msgstr "Изберете јазик со кој треба да биде креирана анкетата"
+
+msgid "CreateInAnotherLanguage"
+msgstr "Креирај ја оваа анкета на друг јазик"
+
+msgid "ExportInExcel"
+msgstr "Извези во Excel формат"
+
+msgid "ComparativeResults"
+msgstr "Споредбени резултати"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "Изберете податок што сакате да се спореди"
+
+msgid "OrCopyPasteUrl"
+msgstr "Или копирај-залепи ја врската во url лентата на прелистувачот"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "Кликнете овде за да ја добиете анкетата"
+
+msgid "SurveyNotShared"
+msgstr "Сеуште нема споделени анкети"
+
+msgid "ViewSurvey"
+msgstr "Приказ на анкетата"
+
+msgid "SelectDisplayType"
+msgstr "Изберете обликот на прикажување:"
+
+msgid "Thanks"
+msgstr "Порака за повратна информација"
+
+msgid "SurveyReporting"
+msgstr "Извештај за анкета"
+
+msgid "NoSurveyAvailable"
+msgstr "Нема достапни анкети"
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "бил објавен"
+
+msgid "CreateFromExistingSurvey"
+msgstr "Креирај од постоечка анкета"
+
+msgid "Publish"
+msgstr "Објави анкета"
+
+msgid "SearchASurvey"
+msgstr "Барај анкета"
+
+msgid "CourseName"
+msgstr "Име на курсот"
+
+msgid "SurveysOfAllCourses"
+msgstr "Анкета(и) на Сите Курсеви"
+
+msgid "PleaseSelectAChoice"
+msgstr "Ве молиме изберете"
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "Нема прашања во базата со податоци"
+
+msgid "UpdateQuestionType"
+msgstr "Ажурирај Вид на Прашање:"
+
+msgid "AddAnotherQuestion"
+msgstr "Додај ново прашање"
+
+msgid "IsShareSurvey"
+msgstr "Сподели ја анкетата со другите"
+
+msgid "Proceed"
+msgstr "Понатаму"
+
+msgid "PleaseFillNumber"
+msgstr "Ве молиме пополнете бројни вредности за бодовите."
+
+msgid "PleaseFillAllPoints"
+msgstr "Ве молиме пополнете бодови од 1-5"
+
+msgid "PleasFillAllAnswer"
+msgstr "Ве молиме пополнете ги сите полиња за одговори."
+
+msgid "PleaseSelectFourTrue"
+msgstr "Ве молиме изберете најмалку Четири точни одговори."
+
+msgid "PleaseSelectFourDefault"
+msgstr "Ве молиме Селектирајте најмалку Ќетири Поставени Одговори."
+
+msgid "PleaseFillDefaultText"
+msgstr "Ве молиме пополнете поставен текст"
+
+msgid "ModifySurveyInformation"
+msgstr "Менувај ја информацијата за анкетата"
+
+msgid "ViewQuestions"
+msgstr "Поглед на прашањата"
+
+msgid "CreateSurvey"
+msgstr "Креирај анкета"
+
+msgid "FinishSurvey"
+msgstr "Заврши ја анкетата"
+
+msgid "QuestionsAdded"
+msgstr "Прашањата се додадени"
+
+msgid "DeleteSurvey"
+msgstr "Избриши анкета"
+
+msgid "SurveyCode"
+msgstr "Шифра на анкетата"
+
+msgid "SurveyList"
+msgstr "Список на анкети"
+
+msgid "SurveyAttached"
+msgstr "Анкетата е прикачена"
+
+msgid "QuestionByType"
+msgstr "Прашање од видот"
+
+msgid "SelectQuestionByType"
+msgstr "Избери прашање од видот"
+
+msgid "PleaseEnterAQuestion"
+msgstr "Ве молиме внесете прашање"
+
+msgid "NoOfQuestions"
+msgstr "Број на прашање"
+
+msgid "Question"
+msgstr "Прашање"
+
+msgid "ThisCodeAlradyExists"
+msgstr "Оваа шифра веќе постои"
+
+msgid "SaveAndExit"
+msgstr "Сними и излези"
+
+msgid "CreateExistingSurvey"
+msgstr "Креирај од постоечка анкета"
+
+msgid "SurveyName"
+msgstr "Име на анкетата"
+
+msgid "SurveySubTitle"
+msgstr "Поднаслов на анкетата"
+
+msgid "ShareSurvey"
+msgstr "Сподели ја анкетата"
+
+msgid "SurveyThanks"
+msgstr "Благодарност"
+
+msgid "EditSurvey"
+msgstr "Уредување на анкета"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "Или да се вратите на прегледот на анкетата"
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "Недостасуваат параметри во врската. Ве молиме искористете копирај и залепи"
+
+msgid "WrongInvitationCode"
+msgstr "Повиканата шифра е погрешна"
+
+msgid "SurveyFinished"
+msgstr "Ја завршивте оваа анкета."
+
+msgid "SurveyPreview"
+msgstr "Претходен поглед на анкетата"
+
+msgid "InvallidSurvey"
+msgstr "Неизправна анкета"
+
+msgid "AddQuestion"
+msgstr "Додај прашање"
+
+msgid "EditQuestion"
+msgstr "Уреди прашање"
+
+msgid "TypeDoesNotExist"
+msgstr "Ваков вид не постои"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "Анкетата беше успешно креирана"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Можете да додадете прашања на Вашата анкета"
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "Анкетата беше успешно ажурирана"
+
+msgid "QuestionAdded"
+msgstr "Прашањето беше додадено."
+
+msgid "QuestionUpdated"
+msgstr "Прашањето беше ажурирано."
+
+msgid "RemoveAnswer"
+msgstr "Опција за отстранување"
+
+msgid "AddAnswer"
+msgstr "Опција за додавање"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Опциии за прикажување"
+
+msgid "AnswerOptions"
+msgstr "Опции за одговор"
+
+msgid "YesNo"
+msgstr "Да / Не"
+
+msgid "MultipleResponse"
+msgstr "Повеќекратни одговори"
+
+msgid "Open"
+msgstr "отвори"
+
+msgid "Dropdown"
+msgstr "Паѓачко мени"
+
+msgid "Pagebreak"
+msgstr "Крај на страната"
+
+msgid "QuestionNumber"
+msgstr "Број на прашањето"
+
+msgid "NumberOfOptions"
+msgstr "Број на опции"
+
+msgid "SurveyInvitations"
+msgstr "Повици за анкета"
+
+msgid "InvitationCode"
+msgstr "Шифра на Повик"
+
+msgid "InvitationDate"
+msgstr "датум на Повикот"
+
+msgid "Answered"
+msgstr "Одговорено"
+
+msgid "AdditonalUsersComment"
+msgstr "Можете да повикате дополнително корисници да ја пополнат анкетата. За да го направите тоа, едноставно нели, внесете ги нивните e-mail адреси овде - одвоени со , или ;"
+
+msgid "MailTitle"
+msgstr "Наслов на пораката"
+
+msgid "InvitationsSend"
+msgstr "повиците се испратени."
+
+msgid "SurveyDeleted"
+msgstr "Анкетата беше избришана."
+
+msgid "NoSurveysSelected"
+msgstr "Нема селектирани анкети."
+
+msgid "NumberOfQuestions"
+msgstr "Број на прашања"
+
+msgid "Invited"
+msgstr "Повикан"
+
+msgid "SubmitQuestionFilter"
+msgstr "Поднеси Филтер"
+
+msgid "ResetQuestionFilter"
+msgstr "Поништи го филтрирањето"
+
+msgid "ExportCurrentReport"
+msgstr "Извези го тековниот извештај"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "Може да се користат само прашањата со предефинирани одговори"
+
+msgid "SelectXAxis"
+msgstr "Избери прашање на X оската"
+
+msgid "SelectYAxis"
+msgstr "Избери прашање на Y оската"
+
+msgid "ComparativeReport"
+msgstr "Споредбен извештај"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "Сите прашања се прикажани на една страна"
+
+msgid "SelectUser"
+msgstr "Селектирај корисник"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "Избери корисник кој ја пополнил анкетата"
+
+msgid "userreport"
+msgstr "Извештај за корисникот"
+
+msgid "VisualRepresentation"
+msgstr "Графика"
+
+msgid "AbsoluteTotal"
+msgstr "Апсолутен збир"
+
+msgid "NextQuestion"
+msgstr "Следно прашање"
+
+msgid "PreviousQuestion"
+msgstr "Претходно прашање"
+
+msgid "PeopleWhoAnswered"
+msgstr "Луѓе што го одбрале овој одговор"
+
+msgid "CourseUsers"
+msgstr "Корисници на курсот"
+
+msgid "SurveyPublication"
+msgstr "Објавување на анкетата"
+
+msgid "AdditonalUsers"
+msgstr "Дополнителни корисници"
+
+msgid "MailText"
+msgstr "Текст на e-mail пораката"
+
+msgid "UseLinkSyntax"
+msgstr "Селектираните корсиници ќе добијат e-mail порака со горниот текст и единствена врска на која мораат да кликнат за да ја пополнат анкетата. Ако сакате да ја сместите оваа врска некаде во текстот ќе морате да го вметнете следниот текст каде што сакате во Вашиот текст: **link** (ѕвездичка звездичка link ѕвездичка звездичка). Тогаш, тоа автоматски ќе биде заменето со единствена врска. Ако не додадете **link** на Вашиот текст, тогаш врската ќе биде додадена на крајот од Вашата порака. Единствена врска значи дека секој примач ќе добие различна, сопствена врска."
+
+msgid "DetailedReportByUser"
+msgstr "Детален извештај по корисник"
+
+msgid "DetailedReportByQuestion"
+msgstr "Детален извештај по прашање"
+
+msgid "ComparativeReportDetail"
+msgstr "Во извептајот можее да споредувате две прашања."
+
+msgid "CompleteReportDetail"
+msgstr "Во овој извештај добивате преглед на сите одговори на сите корисници за сите прашања. Исто така, имате можност да видите само избрани прашања. Може да ги извезите резултатите во CSV формат и да го користите  за процесирање во статистички апликации."
+
+msgid "DetailedReportByUserDetail"
+msgstr "Во овој извештај можете да ги видите сите одговори на одреден корисник."
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "Во овој извештај може да ги видите резултатите прашање по прашање. Понудени се основни статистички анализи и графикони."
+
+msgid "ReminderResendToAllUsers"
+msgstr "Потсети ги сите корисници за анкетата. Ако не ја штиклирате оваа кутија, тогаш само новите корисници ќе добијат e-mail порака."
+
+msgid "Multiplechoice"
+msgstr "Повеќечлен избор"
+
+msgid "Score"
+msgstr "Резултат"
+
+msgid "Shared"
+msgstr "Споделено"
+
+msgid "Invite"
+msgstr "Повикај"
+
+msgid "MaximumScore"
+msgstr "Максимален резултат"
+
+msgid "ViewInvited"
+msgstr "Приказ на повиканите"
+
+msgid "ViewAnswered"
+msgstr "Приказ на луѓето што одговориле"
+
+msgid "ViewUnanswered"
+msgstr "Приказ на луѓето што не одговориле"
+
+msgid "DeleteSurveyQuestion"
+msgstr "Сигурн ли да се избрише прашањето?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "Веќе ја пополнивте оваа анкета"
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "Кликнете овде за да одговорите на анкетата"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "или ископирајте ја следната URL адреса:"
+

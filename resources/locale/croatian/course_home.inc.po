@@ -1,0 +1,69 @@
+msgid "langActivate"
+msgstr "Aktiviraj"
+
+msgid "langDeactivate"
+msgstr "Deaktiviraj"
+
+msgid "langInLnk"
+msgstr "Skriveni alati i poveznice"
+
+msgid "langDelLk"
+msgstr "Želite li izbrisati poveznicu?"
+
+msgid "langCourseCreate"
+msgstr "Izradi web stranice kolegija"
+
+msgid "langNameOfTheLink"
+msgstr "Naziv poveznice"
+
+msgid "lang_main_categories_list"
+msgstr "Popis glavnih kategorija"
+
+msgid "langCourseAdminOnly"
+msgstr "Samo predavači"
+
+msgid "PlatformAdminOnly"
+msgstr "Samo nadzornici platforme"
+
+msgid "langCombinedCourse"
+msgstr "Kombinirani kolegij"
+
+msgid "ToolIsNowVisible"
+msgstr "Alat je sad vidljiv"
+
+msgid "ToolIsNowHidden"
+msgstr "Alat je sad nevidljiv"
+
+msgid "EditLink"
+msgstr "Uredi poveznicu"
+
+msgid "Blog_management"
+msgstr "Upravljanje blogovima"
+
+msgid "Forum"
+msgstr "Forumi"
+
+msgid "Course_maintenance"
+msgstr "Upravljanje kolegijom"
+
+msgid "TOOL_SURVEY"
+msgstr "Ankete"
+
+msgid "GreyIcons"
+msgstr "Moduli"
+
+msgid "Interaction"
+msgstr "Alati za interakciju"
+
+msgid "Authoring"
+msgstr "Autorski alati"
+
+msgid "Administration"
+msgstr "Alati za nadzor"
+
+msgid "IntroductionTextUpdated"
+msgstr "Uvodni tekst je ažuriran"
+
+msgid "IntroductionTextDeleted"
+msgstr "Uvodni tekst je obrisan"
+

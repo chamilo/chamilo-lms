@@ -1,0 +1,261 @@
+msgid "BackList"
+msgstr "回到你的投遞箱"
+
+msgid "ShowFeedback"
+msgstr "顯示回饋"
+
+msgid "GiveFeedback"
+msgstr "提出/編輯回饋"
+
+msgid "JustUploadInSelect"
+msgstr "---剛剛上傳---"
+
+msgid "MailingNothingFor"
+msgstr "靾餑淀券牶竻"
+
+msgid "MailingFileNotRegistered"
+msgstr "(沒有註冊本課程)"
+
+msgid "MailingFileSentTo"
+msgstr "已送給"
+
+msgid "MailingFileIsFor"
+msgstr "是為"
+
+msgid "MailingFileRecipDup"
+msgstr "多個使用者有"
+
+msgid "MailingFileNoRecip"
+msgstr "名字不能包含任何使用者ID"
+
+msgid "MailingFileNoPostfix"
+msgstr "檔名結尾不能是"
+
+msgid "MailingFileNoPrefix"
+msgstr "檔名開頭不能是"
+
+msgid "MailingFileFunny"
+msgstr "沒有檔名或延伸檔名非1-4位數字/英文字母"
+
+msgid "MailingZipDups"
+msgstr "郵件的ZIP檔案不可包含重覆的檔案 - 檔案不會被送出"
+
+msgid "MailingZipPhp"
+msgstr "郵件的ZIP檔案不可包含 php 檔案 - 檔案不會被送出"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "郵件的ZIP文件是空的或不是一個有效的ZIP文件"
+
+msgid "MailingWrongZipfile"
+msgstr "郵件須為壓縮檔並附有學員 ID 或登入名稱"
+
+msgid "MailingConfirmSend"
+msgstr "傳送內容文件給個別使用者?"
+
+msgid "MailingSend"
+msgstr "傳送內容檔案"
+
+msgid "MailingNotYetSent"
+msgstr "內容檔案未被傳送"
+
+msgid "MailingInSelect"
+msgstr "---郵件傳送---"
+
+msgid "MailingAsUsername"
+msgstr "郵件傳送"
+
+msgid "FileDeleted"
+msgstr "已從投遞箱成功移除選定之檔案"
+
+msgid "DocAdd"
+msgstr "已成功加入文件"
+
+msgid "Sender"
+msgstr "傳送者"
+
+msgid "Author"
+msgstr "作者"
+
+msgid "FileSize"
+msgstr "檔案大小"
+
+msgid "Title"
+msgstr "標題"
+
+msgid "OverwriteFile"
+msgstr "覆寫前一次傳送的檔案？"
+
+msgid "Ok"
+msgstr "確定"
+
+msgid "Unknown"
+msgstr "不明"
+
+msgid "SentOn"
+msgstr "在"
+
+msgid "SentTo"
+msgstr "收件人"
+
+msgid "ConfirmDelete"
+msgstr "這只會從你的清單上移除此資料登記項"
+
+msgid "SendTo"
+msgstr "送給"
+
+msgid "Description"
+msgstr "備註"
+
+msgid "UploadFile"
+msgstr "上傳文件"
+
+msgid "ErrorCreatingDir"
+msgstr "未能建立投遞箱目錄，請聯絡系統管理員。"
+
+msgid "UploadError"
+msgstr "上傳失敗，請檢查上傳檔案大小上限及資料夾權限。"
+
+msgid "TooBig"
+msgstr "你沒有選定要檔案或檔案過大"
+
+msgid "NoFileSpecified"
+msgstr "你沒有選定要上傳的檔案"
+
+msgid "NoUserSelected"
+msgstr "請選擇使用者以傳送文件"
+
+msgid "BadFormData"
+msgstr "提交失敗：檔案格式不正確，請聯絡系統管理員。"
+
+msgid "GeneralError"
+msgstr "發生問題。請聯絡系統管理員。"
+
+msgid "Dropbox"
+msgstr "投遞箱"
+
+msgid "Help"
+msgstr "幫助"
+
+msgid "ReceivedFiles"
+msgstr "收到的檔案"
+
+msgid "SentFiles"
+msgstr "已送出的檔案"
+
+msgid "ReceivedTitle"
+msgstr "標題"
+
+msgid "SentTitle"
+msgstr "送出的檔案"
+
+msgid "Authors"
+msgstr "提交者"
+
+msgid "Size"
+msgstr "檔案大小"
+
+msgid "LastResent"
+msgstr "最後重送時間"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "UploadNewFile"
+msgstr "送出新檔案"
+
+msgid "AreYouSureToDelete"
+msgstr "確定要刪除？"
+
+msgid "Feedback"
+msgstr "回饋"
+
+msgid "CloseFeedback"
+msgstr "關閉回饋"
+
+msgid "AddNewFeedback"
+msgstr "加入新的回饋"
+
+msgid "DropboxFeedbackStored"
+msgstr "回饋已被儲存"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "所有使用者已刪除此檔案，因此沒有人會看到你的回饋。"
+
+msgid "FeedbackError"
+msgstr "回饋錯誤"
+
+msgid "PleaseTypeText"
+msgstr "請輸入文字"
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "你不能下載本檔案"
+
+msgid "CheckAtLeastOneFile"
+msgstr "最少勾選一個檔案"
+
+msgid "ReceivedFileDeleted"
+msgstr "收到的檔案已被刪除"
+
+msgid "SentFileDeleted"
+msgstr "送出的檔案已被刪除"
+
+msgid "FilesMoved"
+msgstr "選取的檔案已被移動"
+
+msgid "ReceivedFileMoved"
+msgstr "收到的檔案已被移動"
+
+msgid "SentFileMoved"
+msgstr "送出的檔案已被移動"
+
+msgid "NotMovedError"
+msgstr "不能移動檔案"
+
+msgid "AddNewCategory"
+msgstr "加入新類別"
+
+msgid "EditCategory"
+msgstr "編輯新類別"
+
+msgid "CategoryName"
+msgstr "類別名稱"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "請填寫類別名稱"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "這類別名稱已存在，請另取新名"
+
+msgid "CurrentlySeeing"
+msgstr "你現在看到類別"
+
+msgid "CategoryStored"
+msgstr "類別已被儲存"
+
+msgid "CategoryModified"
+msgstr "類別已被修訂"
+
+msgid "CategoryDeleted"
+msgstr "類別已被刪除"
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "作者欄不可為空白"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "你最少要選擇一個收件人"
+
+msgid "DropboxFileTooBig"
+msgstr "投遞箱文件過大"
+
+msgid "TheFileIsNotUploaded"
+msgstr "檔案未被上傳"
+
+msgid "FileUploadSucces"
+msgstr "檔案已成功被上傳"
+
+msgid "NewDropboxFileUploaded"
+msgstr "投遞箱中有一個新檔案"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "你的課程所屬投遞箱收到一個新檔案"
+

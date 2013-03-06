@@ -1,0 +1,36 @@
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Microphone"
+msgstr "Mikrofon"
+
+msgid "Progress"
+msgstr "Postęp"
+
+msgid "Play"
+msgstr "Odtwórz"
+
+msgid "Stop"
+msgstr "Zatrzymaj"
+
+msgid "Record"
+msgstr "Nagraj"
+
+msgid "NoFileAvailable"
+msgstr "Plik niedostępny"
+
+msgid "UsersNow"
+msgstr "Użytkownicy on-line:"
+
+msgid "Italic"
+msgstr "Kursywa"
+
+msgid "Bold"
+msgstr "Pogrubiony"
+
+msgid "Trainer"
+msgstr "Prowadzący"
+
+msgid "Learner"
+msgstr "Student"
+

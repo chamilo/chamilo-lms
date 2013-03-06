@@ -1,0 +1,174 @@
+msgid "langOnlineConference"
+msgstr "Conference"
+
+msgid "langWash"
+msgstr "Wash"
+
+msgid "langReset"
+msgstr "Reset"
+
+msgid "langSave"
+msgstr "Send message"
+
+msgid "langRefresh"
+msgstr "Refresh"
+
+msgid "langIsNowInYourDocDir"
+msgstr "is now  in  your Documents tool. <br><B>This file is visible</B>"
+
+msgid "langCopyFailed"
+msgstr "Print failed"
+
+msgid "langTypeMessage"
+msgstr "Please type your message!"
+
+msgid "langConfirmReset"
+msgstr "Do you really want to delete all messages?"
+
+msgid "langHasResetChat"
+msgstr "has reset the Chat"
+
+msgid "langNoOnlineConference"
+msgstr "There is no conference for the moment ..."
+
+msgid "langMediaFile"
+msgstr "Live audio or video streaming"
+
+msgid "langContentFile"
+msgstr "Presentation"
+
+msgid "langListOfParticipants"
+msgstr "List of participants"
+
+msgid "langYourPicture"
+msgstr "Your picture"
+
+msgid "langOnlineDescription"
+msgstr "Conference description"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Please check this box only to ask an important question !"
+
+msgid "langQuestion"
+msgstr "question"
+
+msgid "langClearList"
+msgstr "Clear the chat"
+
+msgid "langWhiteBoard"
+msgstr "White board"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Word processor</h2>Cut and paste here from Ms-Word® then edit. Participants will see your modifications live."
+
+msgid "langStreaming"
+msgstr "Streaming"
+
+msgid "langStreamURL"
+msgstr "Stream URL"
+
+msgid "langStreamType"
+msgstr "Stream type"
+
+msgid "langLinkName"
+msgstr "Link name"
+
+msgid "langLinkURL"
+msgstr "Link URL"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Welcome to the <b>Online Conference</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "No Link available"
+
+msgid "langChat_reset_by"
+msgstr "reset chat"
+
+msgid "OrFile"
+msgstr "Or file"
+
+msgid "langCallSent"
+msgstr "Chat call has been sent. Waiting for the approval of your partner."
+
+msgid "langChatDenied"
+msgstr "Your call has been denied by your partner."
+
+msgid "Send"
+msgstr "Send message"
+
+msgid "Connected"
+msgstr "Chat partners"
+
+msgid "Think"
+msgstr "Think"
+
+msgid "BigGrin"
+msgstr "Big grin"
+
+msgid "Amazing"
+msgstr "Amazing"
+
+msgid "Confused"
+msgstr "Confused"
+
+msgid "Cool"
+msgstr "Cool"
+
+msgid "Surprised"
+msgstr "Surprised"
+
+msgid "Hand"
+msgstr "Hello"
+
+msgid "Wink"
+msgstr "Wink"
+
+msgid "Neutral"
+msgstr "Neutral"
+
+msgid "Angry"
+msgstr "Angry"
+
+msgid "Avid"
+msgstr "Avid"
+
+msgid "Redface"
+msgstr "To blush"
+
+msgid "Sad"
+msgstr "Sad"
+
+msgid "Silence"
+msgstr "Silence"
+
+msgid "Silenced"
+msgstr "Silenced"
+
+msgid "Smile"
+msgstr "Smile"
+
+msgid "Exclamation"
+msgstr "Exclamation"
+
+msgid "Arrow"
+msgstr "Arrow"
+
+msgid "Question"
+msgstr "Question"
+
+msgid "Idea"
+msgstr "Idea"
+
+msgid "AskPermissionSpeak"
+msgstr "Ask permission to speak"
+
+msgid "GiveTheFloorTo"
+msgstr "Give the floor to"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid "Stop"
+msgstr "Stop"
+

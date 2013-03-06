@@ -1,0 +1,6 @@
+msgid "ClearContent"
+msgstr "qsd"
+
+msgid "WCAGLink"
+msgstr "ბმული"
+

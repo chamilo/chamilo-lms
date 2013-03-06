@@ -1,0 +1,45 @@
+msgid "lang_new_item"
+msgstr "naujas įrašas įdėtas"
+
+msgid "TitleNotification"
+msgstr "Nuo Jūsų paskutinio vizito"
+
+msgid "lang_update_agenda"
+msgstr "esamas darbotvarkės įrašas atnaujintas"
+
+msgid "lang_new_agenda"
+msgstr "esamas darbotvarkės įrašas įdėtas"
+
+msgid "lang_update_announcements"
+msgstr "esamas skelbimas atnaujintas"
+
+msgid "lang_new_announcements"
+msgstr "esamas skelbimas įdėtas"
+
+msgid "lang_new_document"
+msgstr "naujas dokumentas įdėtas"
+
+msgid "lang_new_exercise"
+msgstr "naujas pratimas įjungtas"
+
+msgid "lang_update_link"
+msgstr "esama nuorodos informacija atnaujinta"
+
+msgid "lang_new_link"
+msgstr "nauja nuoroda įdėta"
+
+msgid "lang_new_forum_topic"
+msgstr "nauja tema įrašyta"
+
+msgid "lang_new_groupforum_topic"
+msgstr "grupės forume įrašyta nauja tema"
+
+msgid "lang_new_dropbox_file"
+msgstr "gautas naujas failas"
+
+msgid "lang_update_dropbox_file"
+msgstr "Jūsų failų saugykloje esantis failas atnaujintas"
+
+msgid "ForumCategoryAdded"
+msgstr "Forumo kategorija įrašyta"
+

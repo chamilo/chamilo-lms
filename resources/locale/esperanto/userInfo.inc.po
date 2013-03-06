@@ -1,0 +1,81 @@
+msgid "langLineNumber"
+msgstr "Lininumero"
+
+msgid "langLine"
+msgstr "linio"
+
+msgid "langLines"
+msgstr "Linioj"
+
+msgid "langLineOrLines"
+msgstr "linio(j)"
+
+msgid "langMoveUp"
+msgstr "Supren"
+
+msgid "langMoveDown"
+msgstr "Malsupren"
+
+msgid "langAddNewHeading"
+msgstr "Aldoni novan surskribon"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Nur por kursmastrumanto"
+
+msgid "langDefineHeadings"
+msgstr "Difini Aldonan Informon"
+
+msgid "langBackToUsersList"
+msgstr "Reiri al la uzula listo"
+
+msgid "langTracking"
+msgstr "Statistikoj"
+
+msgid "langCourseManager"
+msgstr "Kursmastrumanto"
+
+msgid "langModRight"
+msgstr "Ŝanĝi mastrumrajtojn de"
+
+msgid "langNoAdmin"
+msgstr "havas ekde nun <b>neniun</b> mastrumrajton de ĉi-paĝo"
+
+msgid "langAllAdmin"
+msgstr "havas ekde nun <b>ĉiujn</b> mastrumrajtojn de ĉi-paĝo"
+
+msgid "langModRole"
+msgstr "Modifi rolon de"
+
+msgid "langRole"
+msgstr "Rolo (fakultative)"
+
+msgid "langIsNow"
+msgstr "estas ekde nun"
+
+msgid "langInC"
+msgstr "en tiu kurso"
+
+msgid "langFilled"
+msgstr "Vi ne plenigis ĉiujn kampojn."
+
+msgid "langUserNo"
+msgstr "La eketita uzulnomo"
+
+msgid "langTaken"
+msgstr "jam estas uzata. Elektu alian."
+
+msgid "langTutor"
+msgstr "Akompananto (de grupoj)"
+
+msgid "langUnreg"
+msgstr "Malaliĝi"
+
+msgid "langGroupUserManagement"
+msgstr "Grupmastrumado"
+
+msgid "langUnregister"
+msgstr "Malaliĝi"
+
+msgid "langAddAUser"
+msgstr "aldoni uzulojn"
+

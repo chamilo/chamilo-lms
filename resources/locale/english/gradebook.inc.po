@@ -1,0 +1,721 @@
+msgid "ModifyEvaluation"
+msgstr "Save assessment"
+
+msgid "CreateLink"
+msgstr "Add this learning activity to the assessment"
+
+msgid "AddResultNoStudents"
+msgstr "There are no learners to add results for"
+
+msgid "FlatView"
+msgstr "List View"
+
+msgid "ScoreEdit"
+msgstr "Skills ranking"
+
+msgid "ScoreColor"
+msgstr "Competence thresholds colouring"
+
+msgid "ScoringSystem"
+msgstr "Skills ranking"
+
+msgid "EnableScoreColor"
+msgstr "Enable Competence thresholds"
+
+msgid "Below"
+msgstr "Below"
+
+msgid "WillColorRed"
+msgstr "The mark will be coloured in red"
+
+msgid "EnableScoringSystem"
+msgstr "Enable skills ranking"
+
+msgid "IncludeUpperLimit"
+msgstr "Include upper limit (e.g. 0-20 includes 20)"
+
+msgid "ScoreInfo"
+msgstr "Score info"
+
+msgid "Between"
+msgstr "Between"
+
+msgid "CurrentCategory"
+msgstr "Current training"
+
+msgid "RootCat"
+msgstr "Main folder"
+
+msgid "NewCategory"
+msgstr "New category"
+
+msgid "NewEvaluation"
+msgstr "Add classroom activity"
+
+msgid "Weight"
+msgstr "Weight"
+
+msgid "PickACourse"
+msgstr "Pick a course"
+
+msgid "CategoryName"
+msgstr "Folder name"
+
+msgid "CourseIndependent"
+msgstr "Independent from course"
+
+msgid "CourseIndependentEvaluation"
+msgstr "Course independent evaluation"
+
+msgid "EvaluationName"
+msgstr "Assessment"
+
+msgid "Max"
+msgstr "Maximum"
+
+msgid "DateEval"
+msgstr "Evaluation date"
+
+msgid "AddUserToEval"
+msgstr "Add users to evaluation"
+
+msgid "NewSubCategory"
+msgstr "New sub-category"
+
+msgid "MakeLink"
+msgstr "Add online activity"
+
+msgid "DeleteSelected"
+msgstr "Delete selected"
+
+msgid "SetVisible"
+msgstr "Set visible"
+
+msgid "SetInvisible"
+msgstr "Set invisible"
+
+msgid "ChooseLink"
+msgstr "Choose type of activity to assess"
+
+msgid "DokeosExercises"
+msgstr "Tests"
+
+msgid "DokeosDropbox"
+msgstr "Dropbox"
+
+msgid "DokeosStudentPublications"
+msgstr "Assignments"
+
+msgid "DokeosLearningPaths"
+msgstr "Learning paths"
+
+msgid "ChooseExercise"
+msgstr "Choose test"
+
+msgid "AddResult"
+msgstr "Grade learners"
+
+msgid "BackToOverview"
+msgstr "Back to folder view"
+
+msgid "ExportPDF"
+msgstr "Export to PDF"
+
+msgid "Print"
+msgstr "Print"
+
+msgid "ChooseOrientation"
+msgstr "Choose orientation"
+
+msgid "Portrait"
+msgstr "Portrait"
+
+msgid "Landscape"
+msgstr "Landscape"
+
+msgid "FilterCategory"
+msgstr "Filter category"
+
+msgid "DeleteAll"
+msgstr "Delete assessment?"
+
+msgid "ScoringUpdated"
+msgstr "Skills ranking updated"
+
+msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
+msgstr "%s certifies that
+
+ %s 
+
+has successfully completed the course 
+
+ \'%s\' 
+
+with a grade of
+
+ \'%s\'"
+
+msgid "CertificateMinScore"
+msgstr "Minimum certification score"
+
+msgid "CategoryAdded"
+msgstr "Category added"
+
+msgid "InViMod"
+msgstr "Assessment made invisible"
+
+msgid "ViMod"
+msgstr "Assessment made visible"
+
+msgid "ViewResult"
+msgstr "Assessment details"
+
+msgid "NoUser"
+msgstr "No user"
+
+msgid "NoResultsInEvaluation"
+msgstr "No results in evaluation for now"
+
+msgid "AddStudent"
+msgstr "Add learners"
+
+msgid "ImportResult"
+msgstr "Import marks"
+
+msgid "Score"
+msgstr "Performance"
+
+msgid "ImportFileLocation"
+msgstr "Import marks in an assessment"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "FileType"
+msgstr "File type"
+
+msgid "ExampleCSVFile"
+msgstr "Example CSV file"
+
+msgid "ExampleXMLFile"
+msgstr "Example XML file"
+
+msgid "OverwriteScores"
+msgstr "Overwrite scores"
+
+msgid "IgnoreErrors"
+msgstr "Ignore errors"
+
+msgid "ItemsVisible"
+msgstr "The resources became visible"
+
+msgid "ItemsInVisible"
+msgstr "The resources became invisible"
+
+msgid "NoItemsSelected"
+msgstr "No resource selected"
+
+msgid "DeletedCategories"
+msgstr "Deleted categories"
+
+msgid "DeletedEvaluations"
+msgstr "Deleted evaluations"
+
+msgid "DeletedLinks"
+msgstr "Deleted links"
+
+msgid "TotalItems"
+msgstr "Total resources"
+
+msgid "LinkAdded"
+msgstr "Assessment added"
+
+msgid "LinkDeleted"
+msgstr "Assessment deleted"
+
+msgid "EditEvaluation"
+msgstr "Edit evaluation"
+
+msgid "DeleteResult"
+msgstr "Delete marks"
+
+msgid "Display"
+msgstr "Ranking"
+
+msgid "Average"
+msgstr "Average"
+
+msgid "ViewStatistics"
+msgstr "Graphical view"
+
+msgid "ResultAdded"
+msgstr "Result added"
+
+msgid "EvaluationStatistics"
+msgstr "Evaluation statistics"
+
+msgid "ExportResult"
+msgstr "PDF Report"
+
+msgid "EditResult"
+msgstr "Grade learners"
+
+msgid "GradebookWelcomeMessage"
+msgstr "Welcome to the Assessments tool. This tool allows you to assess competences in your organization. Generate Competences Reports by merging the score of various learning activities including classroom and online activities. This will typically fit in a blended learning environment."
+
+msgid "CreateAllCat"
+msgstr "Create all the training categories"
+
+msgid "AddAllCat"
+msgstr "Added all categories"
+
+msgid "StatsStudent"
+msgstr "Statistics of"
+
+msgid "Results"
+msgstr "Results and feedback"
+
+msgid "Certificates"
+msgstr "Certificates"
+
+msgid "Certificate"
+msgstr "Certificate"
+
+msgid "ChooseUser"
+msgstr "Choose users for this evaluation"
+
+msgid "FirstLetter"
+msgstr "First letter of lastname"
+
+msgid "UserAdded"
+msgstr "The user is added"
+
+msgid "ResultEdited"
+msgstr "Result edited"
+
+msgid "ChooseFormat"
+msgstr "PDF report"
+
+msgid "OutputFileType"
+msgstr "Output file type"
+
+msgid "OverMax"
+msgstr "Value exceeds score."
+
+msgid "MoreInfo"
+msgstr "More info"
+
+msgid "ResultsPerUser"
+msgstr "Results per user"
+
+msgid "TotalUser"
+msgstr "Total for user"
+
+msgid "AverageTotal"
+msgstr "Average total"
+
+msgid "Evaluation"
+msgstr "Score"
+
+msgid "EvaluationAverage"
+msgstr "Assessment average"
+
+msgid "EditCategory"
+msgstr "Edit this category"
+
+msgid "EditAllWeights"
+msgstr "Weight in Report"
+
+msgid "GradebookQualificationTotal"
+msgstr "Total"
+
+msgid "GradebookEvaluationDeleted"
+msgstr "Assessment deleted"
+
+msgid "GradebookQualifyLog"
+msgstr "Assessment history"
+
+msgid "GradebookNameLog"
+msgstr "Assessment name"
+
+msgid "GradebookDescriptionLog"
+msgstr "Assessment description"
+
+msgid "GradebookVisibilityLog"
+msgstr "Assessment visibility"
+
+msgid "ResourceType"
+msgstr "Category"
+
+msgid "GradebookWhoChangedItLog"
+msgstr "Who changed it"
+
+msgid "EvaluationEdited"
+msgstr "The evaluation has been succesfully edited"
+
+msgid "CategoryEdited"
+msgstr "Category updated"
+
+msgid "OnlyNumbers"
+msgstr "Only numbers"
+
+msgid "IncorrectData"
+msgstr "Incorrect data"
+
+msgid "Resource"
+msgstr "Assessment"
+
+msgid "PleaseEnableScoringSystem"
+msgstr "Please enable Skills ranking"
+
+msgid "AllResultDeleted"
+msgstr "All results have been removed"
+
+msgid "ImportNoFile"
+msgstr "There is no file to import"
+
+msgid "ProblemUploadingFile"
+msgstr "There was a problem sending your file. Nothing has been received."
+
+msgid "AllResultsEdited"
+msgstr "All results have been edited"
+
+msgid "UserInfoDoesNotMatch"
+msgstr "The user info doesn\'t match."
+
+msgid "ScoreDoesNotMatch"
+msgstr "The score doesn\'t match"
+
+msgid "FileUploadComplete"
+msgstr "File upload successfull"
+
+msgid "NoResultsAvailable"
+msgstr "No results available"
+
+msgid "CannotChangeTheMaxNote"
+msgstr "Cannot change the score"
+
+msgid "GradebookWeightUpdated"
+msgstr "Weights updated successfully"
+
+msgid "ChooseItem"
+msgstr "Choose activity to assess"
+
+msgid "AverageResultsVsResource"
+msgstr "Average results vs resource"
+
+msgid "ToViewGraphScoreRuleMustBeEnabled"
+msgstr "To view graph score rule must be enabled"
+
+msgid "GradebookPreviousWeight"
+msgstr "Previous weight of resource"
+
+msgid "AddAssessment"
+msgstr "Add this classroom activity to the assessment"
+
+msgid "FolderView"
+msgstr "Assessment home"
+
+msgid "GradebookSkillsRanking"
+msgstr "Skills ranking"
+
+msgid "SaveScoringRules"
+msgstr "Save weights in report"
+
+msgid "AttachCertificate"
+msgstr "Attach certificate"
+
+msgid "GradebookSeeListOfStudentsCertificates"
+msgstr "See list of learner certificates"
+
+msgid "CreateCertificate"
+msgstr "Create certificate"
+
+msgid "UploadCertificate"
+msgstr "Upload certificate"
+
+msgid "CertificateName"
+msgstr "Certificate name"
+
+msgid "CertificateOverview"
+msgstr "Certificate overview"
+
+msgid "CreateCertificateWithTags"
+msgstr "Create certificate with this tags"
+
+msgid "ViewPresenceSheets"
+msgstr "View presence sheets"
+
+msgid "ViewEvaluations"
+msgstr "View evaluations"
+
+msgid "NewPresenceSheet"
+msgstr "New presence sheet"
+
+msgid "NewPresenceStep1"
+msgstr "New presence sheet: step 1/2 : fill in the details of the presence sheet"
+
+msgid "TitlePresenceSheet"
+msgstr "Title of the activity"
+
+msgid "Trainer"
+msgstr "Teacher"
+
+msgid "PresenceSheetCreatedBy"
+msgstr "Presence sheet created by"
+
+msgid "SavePresence"
+msgstr "Save presence sheet and continue to step 2"
+
+msgid "NewPresenceStep2"
+msgstr "New presence sheet: step 2/2 : check the trainees that are present"
+
+msgid "NoCertificateAvailable"
+msgstr "No certificate available"
+
+msgid "SaveCertificate"
+msgstr "Save certificate"
+
+msgid "CertificateNotRemoved"
+msgstr "Certificate can\'t be removed"
+
+msgid "CertificateRemoved"
+msgstr "Certificate removed"
+
+msgid "NoDefaultCertificate"
+msgstr "No default"
+
+msgid "DefaultCertificate"
+msgstr "Default certificate"
+
+msgid "PreviewCertificate"
+msgstr "Preview certificate"
+
+msgid "IsDefaultCertificate"
+msgstr "Certificate set to default"
+
+msgid "ImportPresences"
+msgstr "Import presences"
+
+msgid "AddPresences"
+msgstr "Add presences"
+
+msgid "DeletePresences"
+msgstr "Delete presences"
+
+msgid "GradebookListOfStudentsCertificates"
+msgstr "List of learner certificates"
+
+msgid "NewPresence"
+msgstr "New presence"
+
+msgid "EditPresence"
+msgstr "Edit presence"
+
+msgid "SavedEditPresence"
+msgstr "Saved edit presence"
+
+msgid "PresenceSheetFormatExplanation"
+msgstr "You should use the presence sheet that you can download above. This presence sheet contains a list of all the learners in this course. The first column of the XLS file is the official code of the learner, followed by the lastname and the firstname. You should only change the 4th column and note 0 = absent, 1 = present"
+
+msgid "ValidatePresenceSheet"
+msgstr "Validate presence sheet"
+
+msgid "BackTo"
+msgstr "Back to"
+
+msgid "PresenceSheet"
+msgstr "Presence sheet"
+
+msgid "PresenceSheets"
+msgstr "Presence sheets"
+
+msgid "Evaluations"
+msgstr "Evaluations"
+
+msgid "SaveEditPresence"
+msgstr "Save changes in presence sheet"
+
+msgid "Training"
+msgstr "Course"
+
+msgid "Present"
+msgstr "Present"
+
+msgid "Numero"
+msgstr "N"
+
+msgid "PresentAbsent"
+msgstr "0 = absent, 1 = present"
+
+msgid "ExampleXLSFile"
+msgstr "Example Excel (XLS) file"
+
+msgid "NoResultsInPresenceSheet"
+msgstr "No presence registered"
+
+msgid "EditPresences"
+msgstr "Modify presences"
+
+msgid "TotalWeightMustNotBeMoreThan"
+msgstr "Total weight must not be more than"
+
+msgid "ThereIsNotACertificateAvailableByDefault"
+msgstr "There is no certificate available by default"
+
+msgid "CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan"
+msgstr "Certificate minimun score is required and must not be more than"
+
+msgid "LinkMod"
+msgstr "Save"
+
+msgid "EditLink"
+msgstr "Edit link"
+
+msgid "CategoryDeleted"
+msgstr "The category has been deleted."
+
+msgid "GenerateCertificates"
+msgstr "Generate certificates"
+
+msgid "ExportAllCertificatesToPDF"
+msgstr "Export all certificates to PDF"
+
+msgid "DeleteAllCertificates"
+msgstr "Delete all certificates"
+
+msgid "AreYouSureToLockedTheEvaluation"
+msgstr "Are you sure you want to lock the evaluation?"
+
+msgid "AreYouSureToUnLockedTheEvaluation"
+msgstr "Are you sure you want to unlock the evaluation?"
+
+msgid "EvaluationHasBeenUnLocked"
+msgstr "Evaluation has been unlocked"
+
+msgid "EvaluationHasBeenLocked"
+msgstr "Evaluation has been locked"
+
+msgid "Over100"
+msgstr "Over 100"
+
+msgid "UnderMin"
+msgstr "Under the minimum."
+
+msgid "MoveWarning"
+msgstr "Warning: moving gradebook elements can be dangerous for the data inside your gradebook."
+
+msgid "CategoryMoved"
+msgstr "The gradebook has been moved."
+
+msgid "EvaluationMoved"
+msgstr "The gradebook component has been moved."
+
+msgid "NoLinkItems"
+msgstr "There are not linked components."
+
+msgid "NoUniqueScoreRanges"
+msgstr "There is no unique score range possibility."
+
+msgid "DidNotTakeTheExamAcronym"
+msgstr "The user did not take the exam."
+
+msgid "DidNotTakeTheExam"
+msgstr "The user did not take the exam."
+
+msgid "DeleteUser"
+msgstr "Delete user"
+
+msgid "ResultDeleted"
+msgstr "Result deleted."
+
+msgid "ResultsDeleted"
+msgstr "Results deleted."
+
+msgid "OverWriteMax"
+msgstr "Overwrite the maximum."
+
+msgid "ImportOverWriteScore"
+msgstr "The import should overwrite the score."
+
+msgid "NoDecimals"
+msgstr "No decimals"
+
+msgid "NegativeValue"
+msgstr "Negative value"
+
+msgid "ToExportMustLockEvaluation"
+msgstr "To export, you must lock the evaluation."
+
+msgid "ShowLinks"
+msgstr "Show links"
+
+msgid "TotalForThisCategory"
+msgstr "Total for this category."
+
+msgid "OpenDocument"
+msgstr "Open document"
+
+msgid "LockEvaluation"
+msgstr "Lock evaluation"
+
+msgid "UnLockEvaluation"
+msgstr "Unlock evaluation."
+
+msgid "TheEvaluationIsLocked"
+msgstr "The evaluation is locked."
+
+msgid "BackToEvaluation"
+msgstr "Back to evaluation."
+
+msgid "TotalWeight"
+msgstr "Total weight"
+
+msgid "SumOfActivitiesWeightMustBeEqualToTotalWeight"
+msgstr "The sum of all activity weights must be equal to the total weight indicated in your assessment settings, otherwise the learners will not be able to reach the sufficient score to achieve their certification."
+
+msgid "TotalSumOfWeights"
+msgstr "The sum of all weights of activities inside this assessment has to be equivalent to this number."
+
+msgid "TotalWeightMustBeX"
+msgstr "The sum of all weights of activities must be %s"
+
+msgid "ExportAsDOC"
+msgstr "Export as .doc"
+
+msgid "SelectGradebook"
+msgstr "Select assessment"
+
+msgid "CheckYourGradingModelValues"
+msgstr "Please check your grading model values"
+
+msgid "SkillsAchievedWhenAchievingThisGradebook"
+msgstr "Skills obtained when achieving this assessment"
+
+msgid "AddGradebook"
+msgstr "Add assessment"
+
+msgid "SelectGradeModel"
+msgstr "Select a calification model"
+
+msgid "AllMustWeight100"
+msgstr "The sum of all values must be 100"
+
+msgid "Components"
+msgstr "Components"
+
+msgid "OnlyActiveWhenThereAreAnyComponents"
+msgstr "This option is enabled if you have any evaluations or categories"
+
+msgid "GradebookLockedAlert"
+msgstr "This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt)."
+
+msgid "NoStudentCertificatesAvailableYet"
+msgstr "No learner certificate available yet. Please note that, to generate his certificate, a learner has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives."
+
+msgid "CertificateExistsButNotPublic"
+msgstr "The requested certificate exists on this portal, but it has not been made public. Please login to view it."
+
+msgid "ConfirmToUnlockElement"
+msgstr "Confirm to unlock element"
+

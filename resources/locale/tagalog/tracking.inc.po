@@ -1,0 +1,294 @@
+msgid "InactivesStudents"
+msgstr "Mga mag-aaral na hindi konektado nang isang linggo o higit pa"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Oras na inilaan sa portal"
+
+msgid "AverageCoursePerStudent"
+msgstr "Mga kurso ayon sa mag-aaral"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Pag-unlad sa mga kurso"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Score sa mga pagsusulit"
+
+msgid "SeeStudentList"
+msgstr "Tingnan ang listahan ng mga mag-aaral"
+
+msgid "langCourseAccess"
+msgstr "Access sa kurso"
+
+msgid "langLinksDetails"
+msgstr "Na-access na mga link"
+
+msgid "langDocumentsDetails"
+msgstr "Na-download na mga dokumento"
+
+msgid "langCountUsers"
+msgstr "Bilang ng mga gumagamit"
+
+msgid "langCountCours"
+msgstr "Pagsasanay"
+
+msgid "Trainers"
+msgstr "Mga Guro"
+
+msgid "Time"
+msgstr "Oras"
+
+msgid "Score"
+msgstr "Pagganap"
+
+msgid "LastConnexion"
+msgstr "Pinakahuling login"
+
+msgid "NoExercise"
+msgstr "Walang pagsusulit"
+
+msgid "LatestLogin"
+msgstr "Pinakahuli"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Oras na inilaan sa portal"
+
+msgid "AveragePostsInForum"
+msgstr "Mga post sa forum"
+
+msgid "AverageAssignments"
+msgstr "Average na takdang-aralin bawat mag-aaral"
+
+msgid "StudentDetails"
+msgstr "Mga detalye ng mga mag-aaral"
+
+msgid "Learnpaths"
+msgstr "Mga learning path"
+
+msgid "OtherTools"
+msgstr "Ulat sa mga setting na OTI (Online Training Interaction)"
+
+msgid "DetailsStudentInCourse"
+msgstr "Detalye ng mag-aaral sa kurso"
+
+msgid "CourseTitle"
+msgstr "Pamagat ng kurso"
+
+msgid "NbStudents"
+msgstr "Mga Mag-aaral"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Oras na inilaan sa kurso"
+
+msgid "AvgStudentsProgress"
+msgstr "Progreso"
+
+msgid "AvgCourseScore"
+msgstr "Average na score sa mga learening path"
+
+msgid "AvgMessages"
+msgstr "Mga mensahe sa bawat mag-aaral"
+
+msgid "ToolsMostUsed"
+msgstr "Mga tool na madalas gamitin"
+
+msgid "StudentsTracking"
+msgstr "Ulat sa mga mag-aaral"
+
+msgid "CourseTracking"
+msgstr "Ulat sa kurso"
+
+msgid "LinksMostClicked"
+msgstr "Mga link na madalas bisitahin"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Mga dokumentong madalas i-download"
+
+msgid "NoConnexion"
+msgstr "Walang koneksyon"
+
+msgid "TeacherInterface"
+msgstr "Trainer na tanaw"
+
+msgid "AdminInterface"
+msgstr "Admin na tanaw"
+
+msgid "NumberOfSessions"
+msgstr "Bilang ng mga sesyon"
+
+msgid "YourCourseList"
+msgstr "Ang iyong mga kurso"
+
+msgid "CoachList"
+msgstr "Listahan ng trainer"
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Oras"
+
+msgid "FirstLogin"
+msgstr "Unang koneksyon"
+
+msgid "AccessDetails"
+msgstr "Detalye sa access"
+
+msgid "DisplayCoaches"
+msgstr "Overview ng mga Trainer"
+
+msgid "DisplayUserOverview"
+msgstr "Overview ng gumagamit"
+
+msgid "ExportUserOverviewOptions"
+msgstr "Overview ng gumagamit sa mga opsyon sa pag-export"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "Kabuuang score nakuha para sa mga pagsusulit"
+
+msgid "TotalExercisesAnswered"
+msgstr "Bilang ng mga pagsusulit na nasagutan"
+
+msgid "ForumForumsNumber"
+msgstr "Numero ng Mga Forum"
+
+msgid "ForumThreadsNumber"
+msgstr "Numero ng mga thread"
+
+msgid "ForumPostsNumber"
+msgstr "Numero ng Mga Post"
+
+msgid "ChatConnectionsDuringLastXDays"
+msgstr "Mga koneksyon sa chat sa huling %s mga araw"
+
+msgid "ChatLastConnection"
+msgstr "Pinakahuling koneksyon ng chat"
+
+msgid "langSendNotification"
+msgstr "Ipagbigay-alam"
+
+msgid "TimeOfActiveByTraining"
+msgstr "Oras sa kurso"
+
+msgid "AvgAllUsersInAllCourses"
+msgstr "Average ng lahat ng mga mag-aaral sa lahat ng mga kurso"
+
+msgid "AvgExercisesScore"
+msgstr "Score ng mga pagsusulit"
+
+msgid "TrainingTime"
+msgstr "Oras"
+
+msgid "CourseProgress"
+msgstr "Progreso"
+
+msgid "ResourcesTracking"
+msgstr "Ulat sa pinagkukunan"
+
+msgid "SelectFieldToAdd"
+msgstr "Pumili ng profile field ng gumagamit na idadagdag"
+
+msgid "ThereIsNoInformationAboutYourSessions"
+msgstr "Walang magagamit na impormasyon tungkol sa mga sesyon"
+
+msgid "TimeSpentLastWeek"
+msgstr "Oras na inilaan noong nakaraang linggo"
+
+msgid "FolderCreated"
+msgstr "Bagong folder na nilikha"
+
+msgid "Minutes"
+msgstr "Minuto"
+
+msgid "DisplayCourseOverview"
+msgstr "Overview ng mga kurso"
+
+msgid "DisplaySessionOverview"
+msgstr "Overview ng mga sesyon"
+
+msgid "TotalNumberOfMessages"
+msgstr "Kabuuang bilang ng mga mensahe"
+
+msgid "TotalNumberOfAssignments"
+msgstr "Kabuuang bilang ng mga takdang-aralin"
+
+msgid "LPExerciseResultsBySession"
+msgstr "Mga resulta ng mga pagsasanay sa learning path ayon sa sesyon"
+
+msgid "LPQuestionListResults"
+msgstr "Lista ng mga resulta ng mga pagsasanay sa learning path"
+
+msgid "PleaseSelectACourse"
+msgstr "Mangyaring pumili ng isang kurso"
+
+msgid "StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts"
+msgstr "Ang average na score ng mag-aaral ay tinatasa batay sa lahat ng mga learning path at lahat ng mga pagtatangka"
+
+msgid "AverageScore"
+msgstr "Average na score"
+
+msgid "LastConnexionDate"
+msgstr "Huling petsa ng koneksyon"
+
+msgid "UploadedDocuments"
+msgstr "Mga dokumentong nai-upload"
+
+msgid "ExerciseProgress"
+msgstr "Progresos ng pagsasanay"
+
+msgid "NumberOfStudents"
+msgstr "Bilang ng mga mag-aaral"
+
+msgid "NumberStudentsAccessingCourse"
+msgstr "Bilang ng mga mag-aaral na may access sa kurso"
+
+msgid "PercentageStudentsAccessingCourse"
+msgstr "Porsyento ng mga mag-aaral na may access sa kurso"
+
+msgid "NumberStudentsCompleteAllActivities"
+msgstr "Bilang ng mga mag-aaral na nakapagkumpleto ng lahat ng mga aktibidad (100% progreso)"
+
+msgid "PercentageStudentsCompleteAllActivities"
+msgstr "Porsyento ng mga mag-aaral na nakapagkumpleto ng lahat ng mga aktibidad (100% progreso)"
+
+msgid "AverageOfActivitiesCompletedPerStudent"
+msgstr "Average na bilang ng mga aktibidad na nakumpleto sa bawat mag-aaral"
+
+msgid "TotalTimeSpentInTheCourse"
+msgstr "Kabuuang oras na inilaan sa kurso"
+
+msgid "AverageTimePerStudentInCourse"
+msgstr "Average na oras na inilaan sa bawat mag-aaral sa kurso"
+
+msgid "NumberOfDocumentsInLearnpath"
+msgstr "Bilang ng mga dokumento sa learning path"
+
+msgid "NumberOfExercisesInLearnpath"
+msgstr "Bilang ng mga pagsasanay sa learning path"
+
+msgid "NumberOfLinksInLearnpath"
+msgstr "Bilang ng mga link sa learning path"
+
+msgid "NumberOfForumsInLearnpath"
+msgstr "Bilang ng mga forum sa learning path"
+
+msgid "NumberOfAssignmentsInLearnpath"
+msgstr "Bilang ng mga takdang-aralin sa learning path"
+
+msgid "NumberOfAnnouncementsInCourse"
+msgstr "Bilang ng mga anunsyo sa kurso"
+
+msgid "CurrentCoursesReport"
+msgstr "Kasalukuyang ulat ng mga kurso"
+
+msgid "EventType"
+msgstr "Uri ng mga event"
+
+msgid "FollowedSessions"
+msgstr "Sinusundan na mga sesyon"
+
+msgid "FollowedCourses"
+msgstr "Sinusundan na mga kurso"
+
+msgid "FollowedUsers"
+msgstr "Sinusundan na mga gumagamit"
+
+msgid "Timeline"
+msgstr "Timeline"
+

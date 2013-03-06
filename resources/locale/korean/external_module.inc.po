@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "전송할 파일을 선택하지 않았거나, 파일사이즈가 너무 큽니다"
+
+msgid "langLinkTarget"
+msgstr "링크 타겟"
+
+msgid "langSameWindow"
+msgstr "같은 창에서"
+
+msgid "langNewWindow"
+msgstr "새 창에서"
+
+msgid "langAdded"
+msgstr "추가되었음"
+
+msgid "langAddLink"
+msgstr "링크 추가"
+
+msgid "langEditLink"
+msgstr "과정 홈페이지 링크 수정"
+

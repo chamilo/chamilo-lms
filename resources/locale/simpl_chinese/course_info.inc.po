@@ -1,0 +1,321 @@
+msgid "ModifInfo"
+msgstr "设置"
+
+msgid "langModifDone"
+msgstr "课程信息已更新"
+
+msgid "langDelCourse"
+msgstr "删除课程"
+
+msgid "langProfessors"
+msgstr "教师"
+
+msgid "langFaculty"
+msgstr "分类"
+
+msgid "langConfidentiality"
+msgstr "访问限制策略"
+
+msgid "langPublic"
+msgstr "公共访问-用户不从登录也可访问。"
+
+msgid "langUnsubscription"
+msgstr "注销"
+
+msgid "langPrivOpen"
+msgstr "内部访问-对注册用户开放"
+
+msgid "langPrivate"
+msgstr "访问限制 - 仅对选定的用户开放访问"
+
+msgid "langForbidden"
+msgstr "禁止"
+
+msgid "CourseAccessConfigTip"
+msgstr "课程默认为开放. 你可以自定义开放级别."
+
+msgid "langOpenToTheWorld"
+msgstr "开放 - 允许任何人访问"
+
+msgid "OpenToThePlatform"
+msgstr "开放 - 允许平台注册用户访问"
+
+msgid "langOpenToThePlatform"
+msgstr "开放－允许注册用户访问"
+
+msgid "langTipLang"
+msgstr "将此语言设为课程的默认语言。"
+
+msgid "langVid"
+msgstr "视频"
+
+msgid "langWork"
+msgstr "作业论文"
+
+msgid "langProgramMenu"
+msgstr "教学大纲"
+
+msgid "langAnnouncement"
+msgstr "公告通知"
+
+msgid "langExercise"
+msgstr "测验"
+
+msgid "langStats"
+msgstr "统计信息"
+
+msgid "langUplPage"
+msgstr "上传网页和链接"
+
+msgid "langLinkSite"
+msgstr "添加链接"
+
+msgid "langCourse"
+msgstr "网站"
+
+msgid "langHasDel"
+msgstr "已删除"
+
+msgid "langBackHome"
+msgstr "返回主页"
+
+msgid "langByDel"
+msgstr "删除课程将永久删除这门课程的所有内容(文档、链接...) 及所有成员的注册信息(不会删除他们在其他课程的注册信息)。<P>确定要删除课程吗？"
+
+msgid "langY"
+msgstr "是"
+
+msgid "langN"
+msgstr "否"
+
+msgid "langDepartmentUrl"
+msgstr "部门链接"
+
+msgid "langDepartmentUrlName"
+msgstr "部门"
+
+msgid "langBackupCourse"
+msgstr "备份该课程"
+
+msgid "langModifGroups"
+msgstr "小组"
+
+msgid "langProfessor"
+msgstr "教师"
+
+msgid "langGroups"
+msgstr "小组"
+
+msgid "langDescriptionCours"
+msgstr "教学大纲"
+
+msgid "langArchiveCourse"
+msgstr "课程备份"
+
+msgid "langRestoreCourse"
+msgstr "还原课程备份"
+
+msgid "langRestore"
+msgstr "还原"
+
+msgid "langCreatedIn"
+msgstr "在这里创建"
+
+msgid "langCreateMissingDirectories"
+msgstr "创建丢失的目录"
+
+msgid "langCopyDirectoryCourse"
+msgstr "复制课程文件"
+
+msgid "langDisk_free_space"
+msgstr "剩余空间"
+
+msgid "langBuildTheCompressedFile"
+msgstr "创建备份文件"
+
+msgid "langFileCopied"
+msgstr "文件已复制"
+
+msgid "langArchiveLocation"
+msgstr "备份位置"
+
+msgid "langSizeOf"
+msgstr "大小"
+
+msgid "langArchiveName"
+msgstr "文件名"
+
+msgid "langBackupSuccesfull"
+msgstr "成功备份"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "课程数据在主数据库备份"
+
+msgid "langBUUsersInMainBase"
+msgstr "用户的数据已经在主数据库备份"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "公告已经在主数据库备份"
+
+msgid "langBackupOfDataBase"
+msgstr "备份数据库"
+
+msgid "langCreationDate"
+msgstr "创建"
+
+msgid "langExpirationDate"
+msgstr "过期"
+
+msgid "langPostPone"
+msgstr "电话"
+
+msgid "langLastEdit"
+msgstr "最近一次修改"
+
+msgid "langLastVisit"
+msgstr "最近一次登录"
+
+msgid "langSubscription"
+msgstr "注册"
+
+msgid "langCourseAccess"
+msgstr "课程访问"
+
+msgid "langConfirmBackup"
+msgstr "你要备份这个课程吗?"
+
+msgid "langCreateSite"
+msgstr "创建一个课程站点"
+
+msgid "langRestoreDescription"
+msgstr "这个课程的备份件如下：<br /><br />当你点击 \"恢复 \"，备份文件会被解压缩并创建课程。"
+
+msgid "langRestoreNotice"
+msgstr "此脚本无能自动恢复用户列表，但是数据存储在\"用户.csv\"中，管理员可以手动操作。"
+
+msgid "langAvailableArchives"
+msgstr "备份列表"
+
+msgid "langNoArchive"
+msgstr "没有选择备份文件"
+
+msgid "langArchiveNotFound"
+msgstr "找不到该备份"
+
+msgid "langArchiveUncompressed"
+msgstr "该备份已经解压缩并且安装。"
+
+msgid "langCsvPutIntoDocTool"
+msgstr "文件 \"users.csv\" 已经放入文档工具中。"
+
+msgid "langBackH"
+msgstr "返回主页"
+
+msgid "langOtherCategory"
+msgstr "其它分类"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "允许"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "拒绝"
+
+msgid "langCourseVisibilityClosed"
+msgstr "完全关闭 - 仅对课程管理员开放访问"
+
+msgid "CourseVisibilityClosed"
+msgstr "已关闭-这个课程只对讲师开放"
+
+msgid "CourseVisibilityModified"
+msgstr "已修改 (更详细的设置已通过正确的系统角色修改)"
+
+msgid "WorkEmailAlert"
+msgstr "任务提交发送邮件报告"
+
+msgid "WorkEmailAlertActivate"
+msgstr "激活邮件提交错误报告"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "关闭邮件提交错误报告"
+
+msgid "DropboxEmailAlert"
+msgstr "当下拉列表提交时邮件报告功能"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "激活下拉列表提交时电子邮件错误报告"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "关闭下拉列表提交时电子邮件错误报告"
+
+msgid "AllowUserEditAgenda"
+msgstr "允许用户编辑课程议程"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "激活用户编辑课程议程功能"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "关闭用户编辑课程议程功能"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "允许用户编辑课程公告"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "激活用户编辑课程公告功能"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "关闭"
+
+msgid "OrInTime"
+msgstr "或在"
+
+msgid "CourseRegistrationPassword"
+msgstr "课程注册密码"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "点击链接后将会提示永久删除该课程。<br /><br />请谨慎使用该功能！"
+
+msgid "langDescriptionCopyCourse"
+msgstr "系统允许您将课程整个或部分的复制到另一个空的课程，<br /><br />复制的前提是必需有一门课程包含内容，同时另一门课程是空的！"
+
+msgid "DescriptionRecycleCourse"
+msgstr "此工具将清除文档,论坛,链接, 你可以选择其中某些部分或者全部的内容."
+
+msgid "QuizEmailAlert"
+msgstr "已提交新考试通知电子邮件提醒"
+
+msgid "QuizEmailAlertActivate"
+msgstr "当用户提交新的测试答案时，激活邮件发送功能"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "禁用新测试答案提交的邮件提醒功能"
+
+msgid "AllowUserImageForum"
+msgstr "允许论坛自定义图片"
+
+msgid "AllowUserImageForumActivate"
+msgstr "论坛中显示用户图片"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "隐藏用户图片"
+
+msgid "AllowLearningPathTheme"
+msgstr "允许培训主题"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "允许"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "禁止"
+
+msgid "ConfigChat"
+msgstr "聊天设置"
+
+msgid "AllowOpenchatWindow"
+msgstr "在新窗口聊天"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "打开并跳转到新聊天窗口"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "取消打开新聊天窗口的功能"
+

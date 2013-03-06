@@ -1,0 +1,60 @@
+msgid "select"
+msgstr "Apstiprināt"
+
+msgid "square"
+msgstr "Kvadrāts"
+
+msgid "circle"
+msgstr "Elipse"
+
+msgid "poly"
+msgstr "Daudzstūris"
+
+msgid "status1"
+msgstr "Zīmēt \" karsto punktu\""
+
+msgid "status2_poly"
+msgstr "Labais klikšķis, lai slēgtu daudzstūri"
+
+msgid "status2_other"
+msgstr "Atlaidiet peles pogu, lai saglabātu \" karsto punktu\""
+
+msgid "status3"
+msgstr "\"Karstais punkts\" saglabāts"
+
+msgid "exercise_status_1"
+msgstr "Atbilde, klikojot uz attēlu zemāk"
+
+msgid "exercise_status_2"
+msgstr "Apstipriniet atbildes"
+
+msgid "exercise_status_3"
+msgstr "Statuss: Jautājums slēgts"
+
+msgid "showUserPoints"
+msgstr "Rādīt / Slēpt kursantu klikojumus"
+
+msgid "showHotspots"
+msgstr "Rādīt / Slēpt \"karstos punktus\""
+
+msgid "labelPolyMenu"
+msgstr "Slēgt daudzstūri"
+
+msgid "triesleft"
+msgstr "Mēģinājumi ir beigušies"
+
+msgid "exeFinished"
+msgstr "Tagad, lai apstiprinātu Jūsu atbildes, nospiediet pogu apakšā"
+
+msgid "nextAnswer"
+msgstr "Tagad ar klikšķi atbildi:"
+
+msgid "delineation"
+msgstr "Uzmetums / plāns"
+
+msgid "labelDelineationMenu"
+msgstr "Slēgt uzmetumu / plānu"
+
+msgid "oar"
+msgstr "Riska laukums"
+

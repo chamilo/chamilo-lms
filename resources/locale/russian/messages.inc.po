@@ -1,0 +1,60 @@
+msgid "Inbox"
+msgstr "Входящие"
+
+msgid "Messages"
+msgstr "Сообщения"
+
+msgid "SendMessage"
+msgstr "Отправить сообщение"
+
+msgid "NewMessage"
+msgstr "Новое сообщение"
+
+msgid "ComposeMessage"
+msgstr "Написать сообщение"
+
+msgid "DeleteSelectedMessages"
+msgstr "Удалить выделенные сообщения"
+
+msgid "SelectAll"
+msgstr "Выбрать все"
+
+msgid "DeselectAll"
+msgstr "Отменить выбор всех"
+
+msgid "ReplyToMessage"
+msgstr "Ответить на это сообщение"
+
+msgid "BackToInbox"
+msgstr "Вернуться во входящие"
+
+msgid "MessageSentTo"
+msgstr "Сообщение отправлено"
+
+msgid "SendMessageTo"
+msgstr "Отправить"
+
+msgid "Myself"
+msgstr "себе"
+
+msgid "From"
+msgstr "От"
+
+msgid "To"
+msgstr "Кому"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "InvalidMessageId"
+msgstr "ID ответного сообщения не действительно"
+
+msgid "ErrorSendingMessage"
+msgstr "Произошла ошибка при отправлении сообщения"
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Вы уверены, что хотите удалить выбранные сообщения?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "Выбранные сообщения удалены"
+

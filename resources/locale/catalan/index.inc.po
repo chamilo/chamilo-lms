@@ -1,0 +1,246 @@
+msgid "langInvalidId"
+msgstr "Accés invàlid.<BR>Si no estàs enregistrat, utilitza el <a href=\'claroline/auth/inscription.php\'>formulari per enregistrar-te</a></font color>"
+
+msgid "langWelcome"
+msgstr "Benvingut !"
+
+msgid "langPass"
+msgstr "Contrasenya"
+
+msgid "langEnter"
+msgstr "Retorna a la llista dels meus cursos"
+
+msgid "langReg"
+msgstr "Registre"
+
+msgid "langMenu"
+msgstr "Menú"
+
+msgid "langAdvises"
+msgstr "Advertiments"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Atenció :</b> Aquest curs no existeix"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "cliqueu aquí per obtenir aquest curs del seu antic portal"
+
+msgid "langOtherCourses"
+msgstr "Altres cursos"
+
+msgid "langSupportForum"
+msgstr "Fòrum de suport"
+
+msgid "langCategories"
+msgstr "Categories"
+
+msgid "langBackToHomePage"
+msgstr "Torna enrera"
+
+msgid "lang_No_course_publicly_available"
+msgstr "No hi ha cursos públics disponibles"
+
+msgid "langLostPassword"
+msgstr "Contrasenya oblidada"
+
+msgid "lang_edit_my_course_list"
+msgstr "Llista de cursos"
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langValvas"
+msgstr "Darrers anuncis"
+
+msgid "langUp"
+msgstr "Amunt"
+
+msgid "langCatList"
+msgstr "Categories"
+
+msgid "langCourseList"
+msgstr "Llistat de cursos"
+
+msgid "langHelptwo"
+msgstr "Ajuda d\'usuari"
+
+msgid "langRegAll"
+msgstr "Registre"
+
+msgid "EussMenu"
+msgstr "menú"
+
+msgid "Opinio"
+msgstr "Dona\'ns la teva opinió"
+
+msgid "Intranet"
+msgstr "Intranet"
+
+msgid "Englin"
+msgstr "Anglès"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Accés denegat. Si no està registrat ompli el <a href=claroline/auth/inscription.php>formulari de registre</a>"
+
+msgid "langSubCat"
+msgstr "Subcategories"
+
+msgid "langMenuGeneral"
+msgstr "General"
+
+msgid "langMenuUser"
+msgstr "Usuari"
+
+msgid "langMenuAdmin"
+msgstr "Administrador de la plataforma"
+
+msgid "langUsersOnLineList"
+msgstr "Llista d\'usuaris en línia"
+
+msgid "langTotalOnLine"
+msgstr "Total connectats"
+
+msgid "langRefresh"
+msgstr "Actualitza"
+
+msgid "langMe"
+msgstr "jo"
+
+msgid "langSystemAnnouncements"
+msgstr "Anuncis del sistema"
+
+msgid "langHelpMaj"
+msgstr "Ajuda"
+
+msgid "langNotRegistered"
+msgstr "No registrat"
+
+msgid "langAdmin"
+msgstr "Administració de la plataforma"
+
+msgid "Login"
+msgstr "Identificador (login)"
+
+msgid "langRegisterForCourse"
+msgstr "Registre pel curs"
+
+msgid "langUnregisterForCourse"
+msgstr "Anul·lar la inscripció al curs"
+
+msgid "langCombinedCourse"
+msgstr "Curs combinat"
+
+msgid "Platform"
+msgstr "Plataforma"
+
+msgid "Refresh"
+msgstr "Actualitzar"
+
+msgid "TotalOnLine"
+msgstr "Usuaris totals en línia"
+
+msgid "langCourseClosed"
+msgstr "(actualment aquest curs està tancat)"
+
+msgid "ViewOpenCourses"
+msgstr "Veure els cursos oberts"
+
+msgid "langCompetences"
+msgstr "Competències"
+
+msgid "langDiplomas"
+msgstr "Diplomes"
+
+msgid "langTeach"
+msgstr "Que pot ensenyar el/ella?"
+
+msgid "langProductions"
+msgstr "Produccions"
+
+msgid "langSendChatRequest"
+msgstr "Enviar una sol·licitud de xat a aquesta persona"
+
+msgid "langRequestDenied"
+msgstr "Aquesta petició ha estat rebutjada"
+
+msgid "UsageDatacreated"
+msgstr "Dades d\'utilització creades"
+
+msgid "SessionView"
+msgstr "Mostrar els cursos ordenats per sessions"
+
+msgid "CourseView"
+msgstr "Mostrar tota la llista de cursos"
+
+msgid "DropboxFileAdded"
+msgstr "S\'ha enviat un fitxer a la bústia de compartició"
+
+msgid "NewMessageInForum"
+msgstr "Un nou missatge ha estat publicat en el fòrum"
+
+msgid "FolderCreated"
+msgstr "S\'ha creat un nou directori"
+
+msgid "LinkAdded"
+msgstr "Enllaç afegit"
+
+msgid "AnnouncementAdded"
+msgstr "L\'anunci ha estat afegit"
+
+msgid "AgendaAdded"
+msgstr "S\'ha afegit un esdeveniment de l\'agenda"
+
+msgid "LoginEnter"
+msgstr "Accedeix"
+
+msgid "Messages"
+msgstr "Missatges"
+
+msgid "Inbox"
+msgstr "Safata d\'entrada"
+
+msgid "Comppose"
+msgstr "Redacta"
+
+msgid "PendingInvitations"
+msgstr "Invitacions pendents"
+
+msgid "YouDoNotHaveAnySessionInItsHistory"
+msgstr "En el seu historial no hi ha cap sessió de formació"
+
+msgid "PortalHomepageDefaultIntroduction"
+msgstr "<h2>Enhorabona, heu instal·lat satisfactòriament el seu portal de formació en línia!</h2>
+
+Ara podeu completar la instal·lació seguint tres passos ben senzills:
+
+<ol>
+<li>Configureu el portal: aneu a la secció d\'Administració de la plataforma i seleccioneu Plataforma -> <a href=\"main/admin/settings.php\">Paràmetres de configuració de Chamilo</a></li>
+<li>Doneu vida al seu portal amb la creació d\'usuaris i cursos. Podeu fer-ho convidant a d\'altres usuaris a crear el seu compte, o creant-los vostè mateix mitjançant les seccions d\'usuaris i cursos de la <a href=\"main/admin/\">pàgina d\'administració</a></li>
+<li>Editeu aquesta pàgina a través de l\'entrada <a href=\"main/admin/configure_homepage.php\">Configuració de la pàgina principal</a></li>
+</ol>
+
+Sempre podreu trobar més informació en quant aquest programari al nostre lloc web: <a href=\"http://www.chamilo.org\">http://www.chamilo.org</a>.
+
+Divertiu-vos, no dubteu en unir-vos a la comunitat i doneu-vos la vostra opinió a través del nostre <a href=\"http://www.chamilo.org/forum\">fòrum</a>."
+
+msgid "li>Configureu el portal: aneu a la secció d\'Administració de la plataforma i seleccioneu Plataforma -> <a href"
+msgstr ""
+
+msgid "li>Doneu vida al seu portal amb la creació d\'usuaris i cursos. Podeu fer-ho convidant a d\'altres usuaris a crear el seu compte, o creant-los vostè mateix mitjançant les seccions d\'usuaris i cursos de la <a href"
+msgstr ""
+
+msgid "li>Editeu aquesta pàgina a través de l\'entrada <a href"
+msgstr ""
+
+msgid "empre podreu trobar més informació en quant aquest programari al nostre lloc web: <a href"
+msgstr ""
+
+msgid "ivertiu-vos, no dubteu en unir-vos a la comunitat i doneu-vos la vostra opinió a través del nostre <a href"
+msgstr ""
+
+msgid "Username"
+msgstr "Nom d\'usuari"
+
+msgid "Profile"
+msgstr "Perfil"
+

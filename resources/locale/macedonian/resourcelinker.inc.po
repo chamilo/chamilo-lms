@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Ресурсот е додаден. Можете да се вратите на патеката или да додадете уште ресурси."
+
+msgid "LearningPath"
+msgstr "Патека на учењето"
+
+msgid "LevelUp"
+msgstr "ниво погоре"
+
+msgid "AddIt"
+msgstr "Додај го"
+
+msgid "MainCategory"
+msgstr "главна категорија"
+
+msgid "lang_delete_added_resources"
+msgstr "Избриши ги додадените ресурси"
+
+msgid "AddToLinks"
+msgstr "Додај на врските на курсот"
+
+msgid "DontAdd"
+msgstr "не додавај"
+
+msgid "lang_show_all_added_resources"
+msgstr "Покажи ги сите додадени ресурси"
+
+msgid "ResourcesAdded"
+msgstr "Додадени ресурси"
+
+msgid "BackTo"
+msgstr "Назад до"
+
+msgid "ExternalResources"
+msgstr "Надворешни ресурси"
+
+msgid "CourseResources"
+msgstr "Ресурси на курсот"
+
+msgid "ExternalLink"
+msgstr "Надворешни врски"
+
+msgid "DropboxAdd"
+msgstr "Додај ја страната на Паѓачка кутија на ова поглавје."
+
+msgid "AddAssignmentPage"
+msgstr "Додај ја страната на Публикации на курсистите на ова поглавје"
+
+msgid "Exercise"
+msgstr "Тестови"
+
+msgid "Link"
+msgstr "Врска"
+
+msgid "AdValvas"
+msgstr "Известувања"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "ShowDelete"
+msgstr "Покажи / Избриши"
+
+msgid "IntroductionText"
+msgstr "Воведен текст"
+
+msgid "CourseDescription"
+msgstr "Опис на курсот"
+
+msgid "Groups"
+msgstr "Групи"
+
+msgid "Users"
+msgstr "Корисници"
+
+msgid "IntroductionTextAdd"
+msgstr "Додај страна што го содржи воведниот текст на ова поглавје."
+
+msgid "CourseDescriptionAdd"
+msgstr "Додај страна што го содржи описот на курсот во ова поглавје."
+
+msgid "GroupsAdd"
+msgstr "Додај ја страната Групи на ова поглавје"
+
+msgid "UsersAdd"
+msgstr "Додај ја страната Корисници на ова поглавје."
+
+msgid "ExportableCourseResources"
+msgstr "Ресурси на курсот кои може да се извезуваат"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Ресурси по курсот кои имаат врска со Chamilo"
+
+msgid "LinkTarget"
+msgstr "Цел на врската"
+
+msgid "SameWindow"
+msgstr "Во истиот прозорец"
+
+msgid "NewWindow"
+msgstr "Во нов прозорец"
+
+msgid "StepDeleted1"
+msgstr "&#1054;&#1074;&#1086;&#1112;"
+
+msgid "StepDeleted2"
+msgstr "елемент беше избришан во оваа алатка."
+
+msgid "Modify"
+msgstr "менување"
+
+msgid "Chapter"
+msgstr "Поглавје"
+
+msgid "NoAgendaItems"
+msgstr "&#1053;&#1077;&#1084;&#1072; &#1077;&#1083;&#1077;&#1084;&#1077;&#1085;&#1090;&#1080; &#1085;&#1072; &#1050;&#1072;&#1083;&#1077;&#1085;&#1076;&#1072;&#1088;&#1086;&#1090;"
+
+msgid "AgendaAdd"
+msgstr "Додај нов елемент во распоредот"
+
+msgid "UserGroupFilter"
+msgstr "Филтер на групи/корисници"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Подреди го Календарот хронолошки (нагоре)"
+
+msgid "ShowCurrent"
+msgstr "Прикажи ги елементите на распоредот за тековниот месец"
+
+msgid "ModifyCalendarItem"
+msgstr "Измени го елементот на распоредот"
+
+msgid "ItemTitle"
+msgstr "Наслов на елементот"
+
+msgid "Detail"
+msgstr "Подробност"
+
+msgid "EditSuccess"
+msgstr "Елементот на распоредот беше уреден"
+
+msgid "AddCalendarItem"
+msgstr "Додај нов елемент во распоредот"
+
+msgid "AddAnn"
+msgstr "Додај известување"
+
+msgid "ForumAddNewTopic"
+msgstr "Форум: додај нова тема"
+
+msgid "ForumEditTopic"
+msgstr "Форум: уреди ја темата"
+
+msgid "ExerciseAnswers"
+msgstr "Вежба: Одговори"
+
+msgid "ForumReply"
+msgstr "Форум: реплицирај"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Сортирај го календарот хронолошки (надолу)"
+

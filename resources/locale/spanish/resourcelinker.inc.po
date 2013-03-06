@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Recurso agregado"
+
+msgid "LearningPath"
+msgstr "Lecciones"
+
+msgid "LevelUp"
+msgstr "nivel superior"
+
+msgid "AddIt"
+msgstr "Añadir"
+
+msgid "MainCategory"
+msgstr "categoría principal"
+
+msgid "lang_delete_added_resources"
+msgstr "Borrar los recursos añadidos"
+
+msgid "AddToLinks"
+msgstr "Añadir a los enlaces del curso"
+
+msgid "DontAdd"
+msgstr "no añadir"
+
+msgid "lang_show_all_added_resources"
+msgstr "Mostrar todos los recursos añadidos"
+
+msgid "ResourcesAdded"
+msgstr "Recursos añadidos"
+
+msgid "BackTo"
+msgstr "Regresar a"
+
+msgid "ExternalResources"
+msgstr "Recursos externos"
+
+msgid "CourseResources"
+msgstr "Recursos del curso"
+
+msgid "ExternalLink"
+msgstr "Enlace externo"
+
+msgid "DropboxAdd"
+msgstr "Añadir la herramienta Compartir Documentos a este capítulo"
+
+msgid "AddAssignmentPage"
+msgstr "Incorpore a su lección el envío de tareas"
+
+msgid "Exercise"
+msgstr "Ejercicios"
+
+msgid "Link"
+msgstr "Enlace"
+
+msgid "AdValvas"
+msgstr "Añadir anuncio"
+
+msgid "Document"
+msgstr "Documento"
+
+msgid "ShowDelete"
+msgstr "Mostrar / Borrar"
+
+msgid "IntroductionText"
+msgstr "Texto de introducción"
+
+msgid "CourseDescription"
+msgstr "Descripción del curso"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "Users"
+msgstr "Usuarios"
+
+msgid "IntroductionTextAdd"
+msgstr "Añadir una página que contenga el texto de introducción a este capítulo"
+
+msgid "CourseDescriptionAdd"
+msgstr "Añadir una página que contenga la Descripción del curso a este capítulo"
+
+msgid "GroupsAdd"
+msgstr "Añadir una página con los Grupos a este capítulo"
+
+msgid "UsersAdd"
+msgstr "Añadir una página de los Usuarios a este capítulo"
+
+msgid "ExportableCourseResources"
+msgstr "Recursos del curso exportables al formato SCORM"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Recursos relacionados. No exportables al formato SCORM"
+
+msgid "LinkTarget"
+msgstr "Destino del enlace"
+
+msgid "SameWindow"
+msgstr "En la misma ventana"
+
+msgid "NewWindow"
+msgstr "En una nueva ventana"
+
+msgid "StepDeleted1"
+msgstr "Este"
+
+msgid "StepDeleted2"
+msgstr "el elemento fue suprimido en esta herramienta."
+
+msgid "Modify"
+msgstr "modificar"
+
+msgid "Chapter"
+msgstr "Capítulo"
+
+msgid "NoAgendaItems"
+msgstr "No hay eventos en la Agenda"
+
+msgid "AgendaAdd"
+msgstr "Añadir un nuevo evento"
+
+msgid "UserGroupFilter"
+msgstr "Filtrar por grupos/usuarios"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ordenar eventos (antiguos / recientes)"
+
+msgid "ShowCurrent"
+msgstr "Eventos del mes"
+
+msgid "ModifyCalendarItem"
+msgstr "Modificar un evento de la agenda"
+
+msgid "ItemTitle"
+msgstr "Título del evento"
+
+msgid "Detail"
+msgstr "Detalles"
+
+msgid "EditSuccess"
+msgstr "El evento ha sido modificado"
+
+msgid "AddCalendarItem"
+msgstr "Añadir un nuevo evento a la agenda"
+
+msgid "AddAnn"
+msgstr "Añadir un anuncio"
+
+msgid "ForumAddNewTopic"
+msgstr "Foro: añadir un tema"
+
+msgid "ForumEditTopic"
+msgstr "Foro: editar un tema"
+
+msgid "ExerciseAnswers"
+msgstr "Ejercicio: Respuestas"
+
+msgid "ForumReply"
+msgstr "Foro: responder"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Ordenar eventos (recientes / antiguos)"
+

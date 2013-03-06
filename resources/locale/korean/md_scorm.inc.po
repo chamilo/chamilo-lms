@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "더 이상 쓰이지 않는 언어 함수"
+
+msgid "langMdCallingTool"
+msgstr "문서"
+
+msgid "langTool"
+msgstr "문서 메타데이터"
+
+msgid "langNotInDB"
+msgstr "그런 링크 카테고리가 없습니다"
+
+msgid "langManifestSyntax"
+msgstr "(syntax error in manifest file...)"
+
+msgid "langEmptyManifest"
+msgstr "(empty manifest file...)"
+
+msgid "langNoManifest"
+msgstr "(no manifest file...)"
+
+msgid "langNotFolder"
+msgstr "불가능합니다, 폴더가 아닙니다..."
+
+msgid "langUploadHtt"
+msgstr "HTT 파일 업로드"
+
+msgid "langHttFileNotFound"
+msgstr "새  HTT 파일을 열 수 없습니다 (e.g. 비어 있거나, 너무 큽니다)"
+
+msgid "langHttOk"
+msgstr "새  HTT 파일이 업로드 되었습니다"
+
+msgid "langHttNotOk"
+msgstr "HTT 파일 업로드가 실패하였습니다"
+
+msgid "langRemoveHtt"
+msgstr "HTT 파일 삭제"
+
+msgid "langHttRmvOk"
+msgstr "HTT 파일이 삭제되었습니다"
+
+msgid "langHttRmvNotOk"
+msgstr "HTT 파일 삭제가 실패하였습니다"
+
+msgid "langImport"
+msgstr "불러오기"
+
+msgid "langRemove"
+msgstr "MDEs 삭제"
+
+msgid "langAllRemovedFor"
+msgstr "카테고리의 모든 항목이 삭제되었습니다"
+
+msgid "langIndex"
+msgstr "색인 용어"
+
+msgid "langTotalMDEs"
+msgstr "MD 항목의 전체 링크 수:"
+
+msgid "langMainMD"
+msgstr "메인 MDE 열기"
+
+msgid "langLines"
+msgstr "라인"
+
+msgid "langPlay"
+msgstr "index.php 동작"
+
+msgid "langNonePossible"
+msgstr "MD 동작이 불가능합니다"
+
+msgid "langOrElse"
+msgstr "링크 카테고리 선택"
+
+msgid "langWorkWith"
+msgstr "스콤 디렉토리에서 동작"
+
+msgid "langSDI"
+msgstr ".....SD-id와 스콤 디렉토리(and split manifest - or leave empty)"
+
+msgid "langRoot"
+msgstr "root"
+
+msgid "langSplitData"
+msgstr "Split manifests, and #MDe, if any:"
+
+msgid "langMffNotOk"
+msgstr "Manifest 파일 교체가 실패하였습니다"
+
+msgid "langMffOk"
+msgstr "Manifest 파일이 교체되었습니다"
+
+msgid "langMffFileNotFound"
+msgstr "새 Manifest 파일을 열 수가 없습니다 (e.g. 비어있거나, 너무 큽니다)"
+
+msgid "langUploadMff"
+msgstr "Manifest 파일 교체"
+

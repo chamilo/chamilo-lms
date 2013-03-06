@@ -1,0 +1,243 @@
+msgid "ForumDeleted"
+msgstr "Forum er slettet"
+
+msgid "ForumCategoryDeleted"
+msgstr "Forumkategorien er slettet"
+
+msgid "ForumLocked"
+msgstr "Forum er lukket"
+
+msgid "Forum"
+msgstr "Diskussionsfora"
+
+msgid "AddForumCategory"
+msgstr "Tilføj en ny forumkategori"
+
+msgid "AddForum"
+msgstr "Tilføj et nyt diskussionsforum"
+
+msgid "Topics"
+msgstr "Emner"
+
+msgid "Posts"
+msgstr "Indlæg"
+
+msgid "LastPosts"
+msgstr "Seneste indlæg"
+
+msgid "Message"
+msgstr "besked"
+
+msgid "NoForumInThisCategory"
+msgstr "Der er ingen diskussionsfora tilknyttet denne kategori"
+
+msgid "InForumCategory"
+msgstr "Opret i kategorien"
+
+msgid "AllowAnonymousPosts"
+msgstr "Tillad anonyme indlæg?"
+
+msgid "StudentsCanEdit"
+msgstr "Skal deltagere kunne redigere deres egne indlæg?"
+
+msgid "ApprovalDirect"
+msgstr "Tilladelse/ Anvis indlæg"
+
+msgid "AllowNewThreads"
+msgstr "Tillad deltagere at starte nye diskussionstråde"
+
+msgid "DefaultViewType"
+msgstr "Standard-visning"
+
+msgid "GroupSettings"
+msgstr "Gruppeindstillinger"
+
+msgid "NotAGroupForum"
+msgstr "Ikke et gruppeforum"
+
+msgid "PublicPrivateGroupForum"
+msgstr "Åben eller lukket gruppeforum?"
+
+msgid "Public"
+msgstr "For alle på kursets deltagerliste"
+
+msgid "Private"
+msgstr "Kun for gruppemedlemmerne"
+
+msgid "NewPostStored"
+msgstr "Dit indlæg er gemt"
+
+msgid "ReturnTo"
+msgstr "Vend tilbage til"
+
+msgid "Or"
+msgstr "eller"
+
+msgid "ReplyToThread"
+msgstr "Svar til denne tråd"
+
+msgid "ReplyToMessage"
+msgstr "Besvar dette indlæg"
+
+msgid "QuoteMessage"
+msgstr "Citér indlægget i eget svar"
+
+msgid "NewTopic"
+msgstr "Ny tråd"
+
+msgid "Replies"
+msgstr "Svar"
+
+msgid "Views"
+msgstr "Oversigtsmuligheder"
+
+msgid "LastPost"
+msgstr "Seneste indlæg"
+
+msgid "Quoting"
+msgstr "Brug af citater"
+
+msgid "NotifyByEmail"
+msgstr "Send mig en e-mail, når mit indlæg besvares"
+
+msgid "StickyPost"
+msgstr "Dette er et overordnet indlæg (vises øverst på siden og med et specielt ikon)"
+
+msgid "ReplyShort"
+msgstr "SV:"
+
+msgid "DeletePost"
+msgstr "Er du sikker på, at du vil slette indlægget? Hvis du sletter det, sletter du samtidig svarene til indlægget. Klik på \"Trådet\" for at finde ud af, hvilke indlæg der knytter sig til dette."
+
+msgid "Locked"
+msgstr "Låst: Deltagerne kan ikke længere skrive indlæg inden for denne forumkategori, forum eller tråd, men de kan stadigvæk læse de indlæg, der er kommet"
+
+msgid "Unlocked"
+msgstr "Lås op: Deltagerne kan skrive nye indlæg i denne forumkategori, forum eller tråd"
+
+msgid "Flat"
+msgstr "Liste"
+
+msgid "Threaded"
+msgstr "Hierarki"
+
+msgid "Nested"
+msgstr "Kombination"
+
+msgid "FlatView"
+msgstr "Liste-visning"
+
+msgid "ThreadedView"
+msgstr "Hierarkisk visning"
+
+msgid "NestedView"
+msgstr "Kombineret visning"
+
+msgid "Structure"
+msgstr "Struktur"
+
+msgid "ForumCategoryAdded"
+msgstr "Forumkategorien er tilføjet"
+
+msgid "ForumCategoryEdited"
+msgstr "Forumkategorien er ændret"
+
+msgid "ForumAdded"
+msgstr "Forummet er tilføjet"
+
+msgid "ForumEdited"
+msgstr "Forummet er ændret"
+
+msgid "NewThreadStored"
+msgstr "En ny tråd er tilføjet"
+
+msgid "Approval"
+msgstr "Tilladelse"
+
+msgid "Direct"
+msgstr "Anvis"
+
+msgid "ForGroup"
+msgstr "til gruppe"
+
+msgid "ThreadLocked"
+msgstr "Tråden er låst."
+
+msgid "NotAllowedHere"
+msgstr "Du har ikke tilladelse til denne del."
+
+msgid "ReplyAdded"
+msgstr "Svaret er tilføjet"
+
+msgid "EditPost"
+msgstr "Rediger et indlæg"
+
+msgid "EditPostStored"
+msgstr "Indlægget er ændret"
+
+msgid "NewForumPost"
+msgstr "Nyt indlæg i forummet"
+
+msgid "YouWantedToStayInformed"
+msgstr "Du har bedt om at modtage en e-mail, når dit indlæg besvares"
+
+msgid "MessageHasToBeApproved"
+msgstr "Dit indlæg skal godkendes, inden andre kan se det"
+
+msgid "AllowAttachments"
+msgstr "Tillad attachments"
+
+msgid "EditForumCategory"
+msgstr "Rediger forumkategori"
+
+msgid "MovePost"
+msgstr "Flyt indlæg"
+
+msgid "MoveToThread"
+msgstr "Flyt til en anden tråd"
+
+msgid "ANewThread"
+msgstr "En ny tråd"
+
+msgid "Reply"
+msgstr "Svar"
+
+msgid "DeleteForum"
+msgstr "Slet forum?"
+
+msgid "DeleteForumCategory"
+msgstr "Slet forumkategori?"
+
+msgid "Lock"
+msgstr "Lås"
+
+msgid "Unlock"
+msgstr "Lås op"
+
+msgid "MoveThread"
+msgstr "Flyt tråd"
+
+msgid "PostVisibilityChanged"
+msgstr "Indlæggets synlighed er ændret"
+
+msgid "PostDeleted"
+msgstr "Indlægget er slettet"
+
+msgid "MakeInvisible"
+msgstr "Gør usynlig/skjul"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "Tråden kan findes her"
+
+msgid "MakeVisible"
+msgstr "Gør synlig/vis"
+
+msgid "DeleteCompleteThread"
+msgstr "Slet hele tråden?"
+
+msgid "PostDeletedSpecial"
+msgstr "Indlægget er slettet"
+
+msgid "ThreadDeleted"
+msgstr "Tråd slettet"
+

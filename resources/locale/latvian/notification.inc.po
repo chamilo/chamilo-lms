@@ -1,0 +1,96 @@
+msgid "lang_new_item"
+msgstr "Pievienots jauns objekts"
+
+msgid "TitleNotification"
+msgstr "Kopš Jūsu pēdējā apmeklējuma"
+
+msgid "lang_update_agenda"
+msgstr "Esošais plānotāja objekts ir papildināts"
+
+msgid "lang_new_agenda"
+msgstr "Pievienots jauns plānotāja objekts"
+
+msgid "lang_update_announcements"
+msgstr "Papildināts esošs paziņojums"
+
+msgid "lang_new_announcements"
+msgstr "Pievienots jauns paziņojums"
+
+msgid "lang_new_document"
+msgstr "Pievienots(i) jauns(i) dokuments(i)"
+
+msgid "lang_new_exercise"
+msgstr "Pievienots jauns uzdevums"
+
+msgid "lang_update_link"
+msgstr "Papildināta esošas hipersaites informācija"
+
+msgid "lang_new_link"
+msgstr "Pievienota jauna hipersaite"
+
+msgid "lang_new_forum_topic"
+msgstr "Pievienota jauna tēma"
+
+msgid "lang_new_groupforum_topic"
+msgstr "Grupas diskusijai pievienota jauna tēma"
+
+msgid "lang_new_dropbox_file"
+msgstr "Saņemts jauns fails"
+
+msgid "lang_update_dropbox_file"
+msgstr "fails Jūsu apmaiņas kastē tika atjaunots"
+
+msgid "ForumCategoryAdded"
+msgstr "Diskusiju kategorija ir pievienota"
+
+msgid "LearnpathAdded"
+msgstr "Tēma veiksmīgi ir pievienota"
+
+msgid "GlossaryAdded"
+msgstr "Pievienots jauns termins Paskaidrojumu Vārdnīcā"
+
+msgid "QuizQuestionAdded"
+msgstr "Pievienots jauns jautājums viktorīnā"
+
+msgid "QuizQuestionUpdated"
+msgstr "Viktorīnā atjaunināts jauns jautājums"
+
+msgid "QuizQuestionDeleted"
+msgstr "Viktorīnā jauns jautājums izdzēsts."
+
+msgid "QuizUpdated"
+msgstr "Viktorīna atjaunināta."
+
+msgid "QuizAdded"
+msgstr "Viktorīna pievienota."
+
+msgid "QuizDeleted"
+msgstr "Viktorīna izdzēsta"
+
+msgid "DocumentInvisible"
+msgstr "Dokuments nav redzams"
+
+msgid "DocumentVisible"
+msgstr "Dokuments ir redzams"
+
+msgid "CourseDescriptionAdded"
+msgstr "Kursa apraksts pievienots"
+
+msgid "WikiAdded"
+msgstr "Wiki pievienots"
+
+msgid "SurveyAdded"
+msgstr "Aptauja ir pievienota"
+
+msgid "NotebookAdded"
+msgstr "Piezīme pievienota"
+
+msgid "NotebookUpdated"
+msgstr "Piezīme atjaunināta"
+
+msgid "NotebookDeleted"
+msgstr "Piezīme izdzēsta"
+
+msgid "LearnpathUpdated"
+msgstr "Mācību kurss ir atjaunināts."
+

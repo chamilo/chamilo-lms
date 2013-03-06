@@ -1,0 +1,393 @@
+msgid "langToolName"
+msgstr "Uvezi Blackboard kurseve"
+
+msgid "TrackingDisabled"
+msgstr "Praćenje je onemogućio sistem adminitrator."
+
+msgid "InactivesStudents"
+msgstr "Neaktivni polaznici"
+
+msgid "langShowNone"
+msgstr "Ne prikazuj nijedan"
+
+msgid "langCourseStats"
+msgstr "Statistike kursa"
+
+msgid "langToolsAccess"
+msgstr "Pristup alatima"
+
+msgid "langCourseAccess"
+msgstr "Pristup kursu"
+
+msgid "langLinksAccess"
+msgstr "Linkovi"
+
+msgid "langDocumentsAccess"
+msgstr "Dokumenta"
+
+msgid "langScormAccess"
+msgstr "Putanja učenja – kurs u Scorm formatu"
+
+msgid "langLinksDetails"
+msgstr "Linkovi kojima su pristupali korisnici"
+
+msgid "langWorksDetails"
+msgstr "Radovi koje su postavili korisnici pod imenom \'Autori\'"
+
+msgid "langLoginsDetails"
+msgstr "Kliknite na ime meseca za više detalja"
+
+msgid "langDocumentsDetails"
+msgstr "Dokumenti koje su korisnici preuzeli"
+
+msgid "langExercicesDetails"
+msgstr "Rezultat urađenih testova"
+
+msgid "langBackToList"
+msgstr "Nazad na listu korisnika"
+
+msgid "langDetails"
+msgstr "Detalji"
+
+msgid "langStatsOfCourse"
+msgstr "Statistike okruženja kursa"
+
+msgid "langStatsOfUser"
+msgstr "Statistike korisnika"
+
+msgid "langStatsOfCampus"
+msgstr "Statistike portala"
+
+msgid "langCountUsers"
+msgstr "Broj korisnika"
+
+msgid "langCountToolAccess"
+msgstr "Ukupan broj povezivanja na ovaj kurs"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Mesec"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Broj prijava"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Ime alata"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Posete korisnika"
+
+msgid "langToolTitleCountColumn"
+msgstr "Ukupni klikovi"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Link"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Posete korisnika"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Ukupne posete"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Test"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Rezultat"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Dokument"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Preuzimanja korisnika"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Ukupna preuzimanja"
+
+msgid "langScormContentColumn"
+msgstr "Naslov"
+
+msgid "langScormStudentColumn"
+msgstr "Korinici"
+
+msgid "langScormTitleColumn"
+msgstr "Lekcija/Korak"
+
+msgid "langScormStatusColumn"
+msgstr "Status"
+
+msgid "langScormScoreColumn"
+msgstr "Rezultat"
+
+msgid "langScormTimeColumn"
+msgstr "Vreme"
+
+msgid "langScormNeverOpened"
+msgstr "Ovaj korisnik nikada nije otvorio ovaj kurs."
+
+msgid "langWorkTitle"
+msgstr "Naslov"
+
+msgid "langWorkAuthors"
+msgstr "Autori"
+
+msgid "langWorkDescription"
+msgstr "Opis"
+
+msgid "informationsAbout"
+msgstr "Praćenje"
+
+msgid "langNoEmail"
+msgstr "E-mail adresa nije određena"
+
+msgid "langNoResult"
+msgstr "Još uvek nema rezultata"
+
+msgid "langCourse"
+msgstr "Okruženje"
+
+msgid "langHits"
+msgstr "Pogoci"
+
+msgid "langTotal"
+msgstr "Ukupno"
+
+msgid "langHour"
+msgstr "Sat"
+
+msgid "langDay"
+msgstr "dan"
+
+msgid "langLittleHour"
+msgstr "h."
+
+msgid "langLast31days"
+msgstr "Poslednjih 31 dana"
+
+msgid "langLast7days"
+msgstr "Poslednjih 7 dana"
+
+msgid "langThisday"
+msgstr "Danas"
+
+msgid "langLogins"
+msgstr "Prijavljivanja"
+
+msgid "langLoginsExplaination"
+msgstr "Ovde je lista vaih poslednjih prijavljivanja sa alatima koje ste koristili tokom tih sesija."
+
+msgid "langExercicesResults"
+msgstr "Rezultat testa je završen"
+
+msgid "langVisits"
+msgstr "posete"
+
+msgid "langAt"
+msgstr "na"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Datum"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Posete"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Prijavljivanja i pristup alatima"
+
+msgid "langWorkUploads"
+msgstr "Doprinosi učitavanja"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Pogrešno korisničko ime: ovo korisničko ime ne postoji u vašoj grupi"
+
+msgid "langListStudents"
+msgstr "Lista korisnika u ovoj grupi"
+
+msgid "langPeriodHour"
+msgstr "Sat"
+
+msgid "langPeriodDay"
+msgstr "Dan"
+
+msgid "langPeriodWeek"
+msgstr "Nedelja"
+
+msgid "langPeriodMonth"
+msgstr "Mesec"
+
+msgid "langPeriodYear"
+msgstr "Godina"
+
+msgid "langNextDay"
+msgstr "Sledeći dan"
+
+msgid "langPreviousDay"
+msgstr "Prethodni dan"
+
+msgid "langNextWeek"
+msgstr "Sledeća nedelja"
+
+msgid "langPreviousWeek"
+msgstr "Prethodna nedelja"
+
+msgid "langNextMonth"
+msgstr "Sledeći mesec"
+
+msgid "langPreviousMonth"
+msgstr "Prethodni mesec"
+
+msgid "langNextYear"
+msgstr "Sledeća godina"
+
+msgid "langPreviousYear"
+msgstr "Prethodna godina"
+
+msgid "langViewToolList"
+msgstr "Pogled na listu svih alata"
+
+msgid "langToolList"
+msgstr "Lista svih alata"
+
+msgid "langFrom"
+msgstr "Od"
+
+msgid "langTo"
+msgstr "u"
+
+msgid "langPeriodToDisplay"
+msgstr "Period"
+
+msgid "langDetailView"
+msgstr "Videli su"
+
+msgid "langBredCrumpGroups"
+msgstr "Grupe"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Okruženje grupe"
+
+msgid "langBredCrumpUsers"
+msgstr "Korisnici"
+
+msgid "langAdminToolName"
+msgstr "Statistike administratora"
+
+msgid "langPlatformStats"
+msgstr "Paltforma za statistike"
+
+msgid "langStatsDatabase"
+msgstr "Statistike baze podataka"
+
+msgid "langPlatformAccess"
+msgstr "Pristup portalu"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Pristup kursu"
+
+msgid "langPlatformToolAccess"
+msgstr "Pristup alatima"
+
+msgid "langHardAndSoftUsed"
+msgstr "Zemlje, provajderi, pretraživači, reference operativnih sistema"
+
+msgid "langStrangeCases"
+msgstr "Problematični slučajevi"
+
+msgid "langStatsDatabaseLink"
+msgstr "Kliknite ovde"
+
+msgid "langCountCours"
+msgstr "Broj kurseva"
+
+msgid "langCountCourseByFaculte"
+msgstr "Broj kurseva po kategoriji"
+
+msgid "langCountCourseByLanguage"
+msgstr "Broj kurseva po jeziku"
+
+msgid "langCountCourseByVisibility"
+msgstr "Broj kurseva po vidljivosti"
+
+msgid "langCountUsersByCourse"
+msgstr "Broj polaznika po kursu"
+
+msgid "langCountUsersByFaculte"
+msgstr "Broj korisnika po kategoriji"
+
+msgid "langCountUsersByStatus"
+msgstr "Broj korisnika po statusu"
+
+msgid "langAccess"
+msgstr "Pristup"
+
+msgid "langCountries"
+msgstr "Zemlje"
+
+msgid "langProviders"
+msgstr "Provajderi"
+
+msgid "langOS"
+msgstr "OS"
+
+msgid "langBrowsers"
+msgstr "Pretraživači"
+
+msgid "langReferers"
+msgstr "Pozvani"
+
+msgid "langAccessExplain"
+msgstr "(Kada korisnik otvori index portala)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Ukupno"
+
+msgid "langTotalPlatformLogin"
+msgstr "Ukupno"
+
+msgid "langMultipleLogins"
+msgstr "Nalozi sa istim <i>Korisničkim imenom</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Nalozi sa istim <i>Korisničkim imenom</i> i istom <i>Lozinkom</i>"
+
+msgid "langMultipleEmails"
+msgstr "Nalozi sa istim <i>mail-om</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Kursevi bez rukovodioca"
+
+msgid "langCourseWithoutAccess"
+msgstr "Kursevi koji nisu korišćeni"
+
+msgid "langLoginWithoutAccess"
+msgstr "Korisnička imena koja nisu korišćena"
+
+msgid "langAllRight"
+msgstr "Ovde nema &#269;udnog slu&#269;aja"
+
+msgid "langDefcon"
+msgstr "Problematični slučajevi su detektovani!"
+
+msgid "langNULLValue"
+msgstr "Prazno (ili nula)"
+
+msgid "langTrafficDetails"
+msgstr "Detalji saobraćaja"
+
+msgid "langSeeIndividualTracking"
+msgstr "Za pojedinačno praćenje pogledajte alat <a href=../user/user.php>Korisnici</a>."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Ovu putanju niko nikad nije otvorio."
+
+msgid "SynthesisView"
+msgstr "Sintetički pogled"
+
+msgid "Visited"
+msgstr "Posećeno"
+
+msgid "FirstAccess"
+msgstr "Prvi pristup"
+
+msgid "LastAccess"
+msgstr "Poslednji pristup"
+

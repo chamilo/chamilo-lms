@@ -1,0 +1,36 @@
+msgid "WikiSearchResults"
+msgstr "نتائج البحث في الموسوعة"
+
+msgid "Wiki"
+msgstr "Group wiki"
+
+msgid "StartPage"
+msgstr "صفحة البداية"
+
+msgid "EditThisPage"
+msgstr "تعديل الصفحة"
+
+msgid "RecentChanges"
+msgstr "آخر التعديلات"
+
+msgid "AllPages"
+msgstr "كافة الصفحات"
+
+msgid "AddNew"
+msgstr "إضافة"
+
+msgid "ChangesStored"
+msgstr "تم حفظ التغييرات"
+
+msgid "DefaultContent"
+msgstr "المحتوى الافتراضي"
+
+msgid "CourseWikiPages"
+msgstr "صفحات الدرس في الموسوعة"
+
+msgid "GroupWikiPages"
+msgstr "صفحات المجموعة في الموسوعة"
+
+msgid "NoWikiPageTitle"
+msgstr "لايوجد عنوات لهاته الصفحة"
+

@@ -1,0 +1,255 @@
+msgid "ModifInfo"
+msgstr "Configurar lo cors"
+
+msgid "langModifDone"
+msgstr "La configuracion es estada modificada"
+
+msgid "langDelCourse"
+msgstr "Eliminar lo sit web dau cors"
+
+msgid "langProfessors"
+msgstr "Professors"
+
+msgid "langConfidentiality"
+msgstr "Confidencialitat"
+
+msgid "langPublic"
+msgstr "Accès public sensa identificacion (partent de la pagina principala dau campus)"
+
+msgid "langUnsubscription"
+msgstr "Anullar l\'inscripcion"
+
+msgid "langPrivOpen"
+msgstr "Accès privat, enregistrament dobèrt"
+
+msgid "langPrivate"
+msgstr "Accès privat, enregistrament serrat ( sit accessible solament ai marcats de la <a href=../user/user.php>lista</a>)"
+
+msgid "langForbidden"
+msgstr "Accès defendut"
+
+msgid "langOpenToTheWorld"
+msgstr "Dobèrt en totei"
+
+msgid "OpenToThePlatform"
+msgstr "Dobèrt - accès autorizat autorizat ais usanciers de la plataforma"
+
+msgid "langOpenToThePlatform"
+msgstr "Dobèrt - accès autorizat ais usanciers enregistrats de la plataforma"
+
+msgid "langTipLang"
+msgstr "Aquesta serà la lenga que totei leis visitaires dau cors veiràn."
+
+msgid "langWork"
+msgstr "Trabalhs deis estudiants"
+
+msgid "langUplPage"
+msgstr "Mandar una pagina e la liar amb la principala"
+
+msgid "langLinkSite"
+msgstr "Ajustar un liame a la pagina principala"
+
+msgid "langCourse"
+msgstr "Lo cors"
+
+msgid "langHasDel"
+msgstr "es estat eliminat"
+
+msgid "langBackHome"
+msgstr "Tornar a la Pagina d\'Intrada de"
+
+msgid "langByDel"
+msgstr "D\'escafar lo sit web d\'aqueste cors s\'eliminaràn definitivament totei lei documents que contèn e totei marcats ne\'n seràn levats. (Aquò tòca pas l\'inscripcion en d\'autrei cors.) Siatz segur que volètz eliminar aquest cors ?"
+
+msgid "langDepartmentUrl"
+msgstr "URL dau Despartement"
+
+msgid "langBackupCourse"
+msgstr "Gardar aqueste cors"
+
+msgid "langDescriptionCours"
+msgstr "Descripcion d\'aqueste cors"
+
+msgid "langRestoreCourse"
+msgstr "Restaurar lo cors"
+
+msgid "langRestore"
+msgstr "Restaurar"
+
+msgid "langCreatedIn"
+msgstr "creat lo"
+
+msgid "langCreateMissingDirectories"
+msgstr "Creacion dei repertòris que mancan"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Còpia dei fiquiers dau cors"
+
+msgid "langDisk_free_space"
+msgstr "espaci liure"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Creacion d\'una còpia de seguretat dei fiquiers"
+
+msgid "langFileCopied"
+msgstr "fiquier copiat"
+
+msgid "langArchiveLocation"
+msgstr "Localizacion de l\'archiu"
+
+msgid "langSizeOf"
+msgstr "Dimension de"
+
+msgid "langArchiveName"
+msgstr "Nom de l\'archiu"
+
+msgid "langBackupSuccesfull"
+msgstr "Còpia de seguretat realizada"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Còpia de seguretat dei donadas dau cors dins la basa de donadas principala per"
+
+msgid "langBUUsersInMainBase"
+msgstr "Còpia de seguretat dei donadas deis usanciers dins la basa de donadas principala per"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Còpia de seguretat dei donadas deis anóncias dins la basa de donadas principala per"
+
+msgid "langBackupOfDataBase"
+msgstr "Còpia de seguretat de la basa de donadas"
+
+msgid "langCreationDate"
+msgstr "Creat"
+
+msgid "langExpirationDate"
+msgstr "Vengut a l\'escasença"
+
+msgid "langPostPone"
+msgstr "Remandar l\'escasença"
+
+msgid "langLastEdit"
+msgstr "Darriera edicion"
+
+msgid "langSubscription"
+msgstr "Inscripcion"
+
+msgid "langCourseAccess"
+msgstr "Accès au cors"
+
+msgid "langConfirmBackup"
+msgstr "Volètz vertadierament realizar un còpia de seguretat dau cors ?"
+
+msgid "langRestoreDescription"
+msgstr "Lo cors es dins un fiquier que podètz causir çai-sota.<br><br>Quaora clicatz \"Restaurar\", l\'archiu serà descomprimit e lo cors se crearà de nòu."
+
+msgid "langRestoreNotice"
+msgstr "Aquest script permet pas de restaurar leis usanciers, mai lei donadas enregistradas de \"user.csv\" sufison a l\'administrator per restaurar leis inscrichs a la man."
+
+msgid "langAvailableArchives"
+msgstr "Lista de fiquiers disponibles"
+
+msgid "langNoArchive"
+msgstr "Ges de fiquier es estat seleccionat"
+
+msgid "langArchiveNotFound"
+msgstr "Lo fiquier es pas estat trobat enluòc"
+
+msgid "langArchiveUncompressed"
+msgstr "Lo fiquier es bèn estat descomprimit e installat."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "Lo fichier \"user.csv\" es estat plaçat dins aisina de documents."
+
+msgid "langBackH"
+msgstr "Tornar a la pagina d\'intrada"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Leis usanciers pòdon anullar son inscripcion au cors"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Leis usanciers pòdon pas anullar son inscripcion au cors"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Clavat, lo cors es solament accessible a l\'administrator dau cors"
+
+msgid "CourseVisibilityClosed"
+msgstr "Serrat - ges d\'accès au cors"
+
+msgid "CourseVisibilityModified"
+msgstr "Modificat (per mai de detalhs veire lo sotasistèma dei ròtles e dei permés)"
+
+msgid "WorkEmailAlert"
+msgstr "Avisar dau mandadís d\'un pretzfach novèu per corriel"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Activar una alèrta per corriel qu\'un pretzfach novèu es estat mandat"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Desactivar l\'alèrta per corriel dau mandadís d\'un pretzfach"
+
+msgid "DropboxEmailAlert"
+msgstr "Alèrta per corriel qu\'un document nòu es estat mandat dins lo repertòri compartit"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Activar l\'alèrta per corriel qu\'un document nòu es estat mandat dins lo repertòri compartit"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Desactivar l\'alèrta per corriel que de document nòus son estats mandats dins lo repertòri compartit"
+
+msgid "AllowUserEditAgenda"
+msgstr "Autorizar leis usanciers de modificar l\'agenda dau cors"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Activar l\'autorisacion donada ais usanciers de modificar l\'agenda dau cors"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Desactivar l\'autorisacion donada ais usanciers de modificar l\'agenda dau cors"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Autorizar leis usanciers de modificar leis anóncias dau cors"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Activar l\'autorizacion donada ais usanciers de modificar leis anóncias dau cors"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Desactivar l\'autorizacion donada ais usanciers de modificar leis anóncias dau cors"
+
+msgid "OrInTime"
+msgstr "Ò dins"
+
+msgid "CourseRegistrationPassword"
+msgstr "Senha de registrament au cors"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Clicatz subre lo liame per fin d\'eliminar tota traça dau cors dins lo servidor. <br> <br> Aquesta funcionalitat se deu manejar amb una extrema precaucion !"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Chamilo introduís la possibilitat de duplicar tot ò  part d\'un cors existent en un autre cors, que pòt èstre inicialament vueg. <br> L\'unica causa necessària per aquesta manipulacion es de dispausar d\'un cors ambe de documents, d\'anóncias, de fòrums... e d\'un segon cors que contengue pas leis elements dau premier !"
+
+msgid "DescriptionRecycleCourse"
+msgstr "Aquesta aisina voida lo cors deis elements causits, ò de l\'ensems deis elements que contèn. Elimina leis documents, lei fòrums, lei liames… Aquest procediment se pòt aplicar après una activitat de formacion ò una annada escolària.<br>Per precaucion, vos fau realizar una còpia de seguretat completa dau cors !"
+
+msgid "QuizEmailAlert"
+msgstr "Avisar per lo mejan d\'un corriel quora se manda un exercici nòu"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Activar l\'avís per corriel dau liurament dei respònsas a un exercici"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Desactivar l\'avís per corriel dau liurament dei respònsas a un exercici"
+
+msgid "AllowUserImageForum"
+msgstr "Imatge de l\'usanciers sus lo fòrum"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Mostrar leis imatges deis usanciers sus lo fòrum"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Amagar leis imatges deis usanciers sus lo fòrum"
+
+msgid "AllowLearningPathTheme"
+msgstr "Permetre de tèmas dins leis itineraris de formacion"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Pas permés"
+

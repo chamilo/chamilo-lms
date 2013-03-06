@@ -1,0 +1,63 @@
+msgid "langActivate"
+msgstr "Activar"
+
+msgid "langDeactivate"
+msgstr "Desactivar"
+
+msgid "langInLnk"
+msgstr "Liames desactivats"
+
+msgid "langDelLk"
+msgstr "Voletz vertadierament eliminar aqueste liame ?"
+
+msgid "langCourseCreate"
+msgstr "Crear un cors web"
+
+msgid "langNameOfTheLink"
+msgstr "Nom dau liame"
+
+msgid "lang_main_categories_list"
+msgstr "Lista dei categorias principalas"
+
+msgid "langCourseAdminOnly"
+msgstr "Noms dei professors"
+
+msgid "PlatformAdminOnly"
+msgstr "Nom deis administrators"
+
+msgid "langCombinedCourse"
+msgstr "Cors combinat"
+
+msgid "ToolIsNowVisible"
+msgstr "L\'aisina es actualament visibla"
+
+msgid "ToolIsNowHidden"
+msgstr "L\'aisina es actualament invisibla"
+
+msgid "EditLink"
+msgstr "Editar lo liame"
+
+msgid "Blog_management"
+msgstr "Gestion dei blòcs"
+
+msgid "Course_maintenance"
+msgstr "Manteniment dau cors"
+
+msgid "TOOL_SURVEY"
+msgstr "Enquistas"
+
+msgid "GreyIcons"
+msgstr "Instruments"
+
+msgid "Interaction"
+msgstr "Interaccion"
+
+msgid "Authoring"
+msgstr "Creacion de contenguts"
+
+msgid "IntroductionTextUpdated"
+msgstr "Lo tèxt d\'introduccion es estat actualizat"
+
+msgid "IntroductionTextDeleted"
+msgstr "Lo tèxt d\'introduccion es estat eliminat"
+

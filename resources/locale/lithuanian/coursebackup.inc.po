@@ -1,0 +1,129 @@
+msgid "langSelectOptionForBackup"
+msgstr "Prašome parinkti archyvavimo nustatymus."
+
+msgid "langLetMeSelectItems"
+msgstr "Leisti parinkti kurso komponentus"
+
+msgid "langCreateFullBackup"
+msgstr "Pilnai suarchyvuoti šį kursą"
+
+msgid "langCreateBackup"
+msgstr "sukurti archyvą"
+
+msgid "langBackupCreated"
+msgstr "Šio kurso archyvas sukurtas. Tuoj šis failas bus parsiųstas į jūsų kompiuterį. Jei parsiuntimas neprasidėjo, spauskite ant šios nuorodos"
+
+msgid "langSelectBackupFile"
+msgstr "išrinkti archyvą"
+
+msgid "langImportBackup"
+msgstr "Importuoti archyvą"
+
+msgid "langImportFullBackup"
+msgstr "Importuoti pilną archyvą"
+
+msgid "langImportFinished"
+msgstr "Importas pabaigtas"
+
+msgid "langEvents"
+msgstr "Įvykiai"
+
+msgid "langAnnouncements"
+msgstr "Pranešimai"
+
+msgid "langDocuments"
+msgstr "Dokumentai"
+
+msgid "langTests"
+msgstr "Testai"
+
+msgid "langLearnpaths"
+msgstr "Teorinė kursų medžiaga"
+
+msgid "langCopyCourse"
+msgstr "Kopijuoti kursą"
+
+msgid "langSelectItemsToCopy"
+msgstr "Išrinkti įrašus kopijavimui"
+
+msgid "langCopyFinished"
+msgstr "Kopijavimas baigtas"
+
+msgid "langFullRecycle"
+msgstr "Visiškai ištrinti"
+
+msgid "langRecycleCourse"
+msgstr "Ištrinti kursą"
+
+msgid "langRecycleFinished"
+msgstr "Ištrynimas baigtas"
+
+msgid "langRecycleWarning"
+msgstr "Dėmesio: naudojant šį įrašą bus neatstatomai ištrintos kai kurios kurso dalys. Siūlome sukurti <a href=\"create_backup.php\">archyvą</a> prieš naudojant ištrynimo įrankį."
+
+msgid "langSameFilename"
+msgstr "Kokie veiksmai su importuotais failais tuo pačiu pavadinimu kaip egzistuojantys failai?"
+
+msgid "langSameFilenameSkip"
+msgstr "Peršokti"
+
+msgid "langSameFilenameRename"
+msgstr "Pervadinti failą (pvz.: file.pdf taps file_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Perrašyti failą"
+
+msgid "langSelectDestinationCourse"
+msgstr "Išrinkti paskirties kursą"
+
+msgid "langFullCopy"
+msgstr "Pilna kopija"
+
+msgid "langCourseDescription"
+msgstr "Kurso aprašymas"
+
+msgid "langNoResourcesToBackup"
+msgstr "Nėra jokių resursų archyvavimui"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Archyve nėra resursų"
+
+msgid "langSelectResources"
+msgstr "Išrinkti resursus"
+
+msgid "langNoResourcesToRecycles"
+msgstr "Nėra resursų ištrynimui"
+
+msgid "langIncludeQuestionPool"
+msgstr "Įtraukti klausimų archyvą"
+
+msgid "langLocalFile"
+msgstr "lokalus failas"
+
+msgid "langServerFile"
+msgstr "failas serveryje"
+
+msgid "langNoBackupsAvailable"
+msgstr "archyvo nėra"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "Paskirties kurso nėra"
+
+msgid "langBackup"
+msgstr "Archyvuoti"
+
+msgid "langImportBackupInfo"
+msgstr "Importuoti archyvą. Galite įkrauti archyvą iš savo kompiuterio arba esantį serveryje."
+
+msgid "langCreateBackupInfo"
+msgstr "Archyvuoti šį kursą. Galite išrinkti kursų turinį archyvavimui."
+
+msgid "ToolIntro"
+msgstr "Įrankio apibūdinimas"
+
+msgid "UploadError"
+msgstr "Įkėlimas nepavyko, patikrinkite įrašymo teises ir maksimalų leistiną įkeliamų failų dydį."
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Documents will be added too"
+

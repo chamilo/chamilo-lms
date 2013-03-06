@@ -1,0 +1,273 @@
+msgid "langNewGroupCreate"
+msgstr "Yeni grup(lar) yarat"
+
+msgid "langGroupCreation"
+msgstr "Yeni grup yaratma"
+
+msgid "langCreate"
+msgstr "yarat"
+
+msgid "langNewGroups"
+msgstr "Yeni grup(lar)"
+
+msgid "langMax"
+msgstr "en çok 12 harf olmalıdır, ara verilmez ve (ş,Ş,ğ,Ğ,İ,ı,Ç,ç,Ö,ö,Ü,ü) Türkçe harfler kullanılmaz. Örnek: <i>FIZIK601</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "kişi (seçimlik)"
+
+msgid "langGroupsAdded"
+msgstr "grup(lar) eklendi"
+
+msgid "langGroupDel"
+msgstr "Grup silindi"
+
+msgid "langDocuments"
+msgstr "Belgeler"
+
+msgid "langExistingGroups"
+msgstr "Gruplar"
+
+msgid "langRegistered"
+msgstr "Kayıtlı"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Öğrenciler gruplara kendi kendilerine kaydolabilir"
+
+msgid "langGroupTools"
+msgstr "Araçlar"
+
+msgid "langGroupDocument"
+msgstr "Belgeler"
+
+msgid "langGroupPropertiesModified"
+msgstr "Grup ayarları değiştirildi"
+
+msgid "langGroupSpace"
+msgstr "Grup alanı"
+
+msgid "langGroupName"
+msgstr "Adı"
+
+msgid "langGroupDescription"
+msgstr "Açıklama"
+
+msgid "langGroupMembers"
+msgstr "Grup üyeleri"
+
+msgid "langEditGroup"
+msgstr "Bu grubu düzenle"
+
+msgid "Optional"
+msgstr "(seçimlik)"
+
+msgid "langGroupSettingsModified"
+msgstr "Grup ayarları değiştirildi"
+
+msgid "langGroupTooMuchMembers"
+msgstr "İzin verdiğiniz max. değer aşıldı(Aşağıda değiştirebilirsinz). Grup bileşimi değiştirilmedi"
+
+msgid "langGroupTutor"
+msgstr "Sorumlu"
+
+msgid "langGroupNoTutor"
+msgstr "(yok)"
+
+msgid "langGroupNone"
+msgstr "(yok)"
+
+msgid "langGroupNoneMasc"
+msgstr "(yok)"
+
+msgid "langAddTutors"
+msgstr "Yönetici kullanıcılar listesi"
+
+msgid "langMyGroup"
+msgstr "Grubum"
+
+msgid "langOneMyGroups"
+msgstr "Grup Yöneticisiyim"
+
+msgid "langGroupSelfRegistration"
+msgstr "Kayıt"
+
+msgid "langGroupSelfRegInf"
+msgstr "Kaydol"
+
+msgid "langRegIntoGroup"
+msgstr "Beni bu gruba ekle"
+
+msgid "langGroupNowMember"
+msgstr "Bu grubun üyesi oldunuz"
+
+msgid "langPrivate"
+msgstr "Özel erişim - sadece kullanıcı listesindekilere erişim izni"
+
+msgid "langPublic"
+msgstr "Kayıtlı olmadan da Ana Sayfadan giriş yapılabilir"
+
+msgid "langPropModify"
+msgstr "Ayarları değiştir"
+
+msgid "langState"
+msgstr "Durum"
+
+msgid "langGroupFilledGroups"
+msgstr "Groups have been filled (or completed) by students present in the \'Users\' list."
+
+msgid "langSubscribed"
+msgstr "bu derse kayıtlı kişiler"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Bu grupta olmayan kullanıcıllar"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Bir kullanıcı en fazla"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr " gruba üye olabilir"
+
+msgid "langGroupLimit"
+msgstr "Sınır"
+
+msgid "CreateGroup"
+msgstr "Grup(lar) yarat"
+
+msgid "ProceedToCreateGroup"
+msgstr "Grup(lar) yaratmak için ilerle"
+
+msgid "langStudentRegAllowed"
+msgstr "Kullanıcılara gruplara kendi kendilerine kaydolabilmeleri için tekrar izin verildi"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Kullanıcılara gruptan kayıtlarını silme izni verildi"
+
+msgid "langAllGroups"
+msgstr "Bütün Gruplar"
+
+msgid "langStudentUnsubscribe"
+msgstr "Bu gruptan kaydımı sil"
+
+msgid "langStudentDeletesHimself"
+msgstr "Kaydınız silindi"
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Yeni gruplar için varsayılan ayarlar"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Seçilen grupların hepsi silindi"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Seçilen grupların hepsi boş"
+
+msgid "langGroupEmptied"
+msgstr "Grup &#351;imdi bo&#351;"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Seçilen grupların hepsi dolduruldu"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "kayıt sil"
+
+msgid "langSameForAll"
+msgstr "hepsi için aynı"
+
+msgid "langNoLimit"
+msgstr "Sınırsız"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Lütfen istediğiniz grup sayısını yazınız"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Sanal Derslerdeki bütün kullanıcılardan gruplar oluştur"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "Bu ders gerçek bir ders ile bir veya daha fazla sanal dersin birle&#351;imidir.E&#287;er takip eden butona basarsan&#305;z, (sanal) derslere ba&#287;l&#305; yeni gruplar olu&#351;turulacak ve ö&#287;rencilerin hepsi bu gruplara kaydedilecektir."
+
+msgid "langNoGroupsAvailable"
+msgstr "Kullanıma açık herhangi bir grup bulunmuyor"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "Sanal Dersler"
+
+msgid "NotAvailable"
+msgstr "Kullanımda değil"
+
+msgid "CreateSubgroups"
+msgstr "Alt gruplar oluştur"
+
+msgid "CreateSubgroupsInfo"
+msgstr "Bu seçenek var olan grup alt&#305;nda yeni grup olu&#351;turman&#305;za izin verir. Gruplar&#305;n say&#305;s&#305;n&#305; verin ve bir grup seçin. Verilen grup say&#305;s&#305; kadar grup olu&#351;turulacak ve seçilen gruptaki tüm üyeler yeni grublara da"
+
+msgid "CreateNumberOfGroups"
+msgstr "Oluştur"
+
+msgid "WithUsersFrom"
+msgstr "groups with members from"
+
+msgid "CategoryDeleted"
+msgstr "Kategori silindi"
+
+msgid "Empty"
+msgstr "Boş"
+
+msgid "FillGroup"
+msgstr "kullanıcı ekle"
+
+msgid "EmptyGroup"
+msgstr "Kullanıcıların kaydını sil"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "Yazdığınız, kullanıcı başına en fazla grup sayısı geçerli değil.Belirttiğiniz sayıdan daha fazla gruba üye olmuş kullanıcılar mevcut."
+
+msgid "GroupOverview"
+msgstr "Grup görünüşü"
+
+msgid "GroupCategory"
+msgstr "Grup kategorisi"
+
+msgid "NoTitleGiven"
+msgstr "Lütfen bir başlık yazınız."
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "Lütfen en fazla üye sayısı için geçerli bir sayı yazınız"
+
+msgid "CategoryOrderChanged"
+msgstr "Kategori sırası değiştirildi"
+
+msgid "Wiki"
+msgstr "Grup Wiki"
+
+msgid "CategoryCreated"
+msgstr "Kategori oluşturuldu"
+
+msgid "GroupTutors"
+msgstr "Koçlar"
+
+msgid "GroupWork"
+msgstr "Ödevler"
+
+msgid "GroupCalendar"
+msgstr "Takvim"
+
+msgid "GroupAnnouncements"
+msgstr "Duyurular"
+
+msgid "NoCategoriesDefined"
+msgstr "Kategori tanımsız"
+
+msgid "GroupsFromClasses"
+msgstr "Sınıflardan grup"
+
+msgid "GroupsFromClassesInfo"
+msgstr "Bu seçenek ile dersinize kayıtlı sınıflardan gruplar oluşturabilirsiniz"
+
+msgid "Group"
+msgstr "Grup"
+
+msgid "ForumOfGroup"
+msgstr "Forumun Grubu:"
+
+msgid "BackToGroupList"
+msgstr "Gruplar listesine dön"
+

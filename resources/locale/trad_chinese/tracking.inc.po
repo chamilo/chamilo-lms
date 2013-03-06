@@ -1,0 +1,639 @@
+msgid "langToolName"
+msgstr "匯入畢博課程"
+
+msgid "TrackingDisabled"
+msgstr "追報告已被管理員停用"
+
+msgid "InactivesStudents"
+msgstr "未啟動的使用者"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "用於平台之平均時間"
+
+msgid "AverageCoursePerStudent"
+msgstr "使用者平均參與課程數量"
+
+msgid "AverageProgressInLearnpath"
+msgstr "SCORM 課程平均進程"
+
+msgid "AverageResultsToTheExercices"
+msgstr "測驗平均分數"
+
+msgid "SeeStudentList"
+msgstr "檢視使用者單"
+
+msgid "NbActiveSessions"
+msgstr "現學期"
+
+msgid "NbPastSessions"
+msgstr "過去學期"
+
+msgid "NbFutureSessions"
+msgstr "未來學期"
+
+msgid "NbStudentPerSession"
+msgstr "每學期中的使用者數量"
+
+msgid "NbCoursesPerSession"
+msgstr "每學期中的課程數量"
+
+msgid "SeeSessionList"
+msgstr "檢視學期清單"
+
+msgid "langShowNone"
+msgstr "不顯示"
+
+msgid "langCourseStats"
+msgstr "課程統計"
+
+msgid "langToolsAccess"
+msgstr "工具使用"
+
+msgid "langCourseAccess"
+msgstr "課程訪問"
+
+msgid "langLinksAccess"
+msgstr "鏈接"
+
+msgid "langDocumentsAccess"
+msgstr "文檔"
+
+msgid "langScormAccess"
+msgstr "學習路徑- Scorm 格式課程"
+
+msgid "langLinksDetails"
+msgstr "用戶鏈接"
+
+msgid "langWorksDetails"
+msgstr "用戶上傳的作品命名為\'作者\'"
+
+msgid "langLoginsDetails"
+msgstr "點擊月名以遊覽更多資料"
+
+msgid "langDocumentsDetails"
+msgstr "用戶下載的文檔"
+
+msgid "langExercicesDetails"
+msgstr "測驗成績已完成"
+
+msgid "langBackToList"
+msgstr "返回清單"
+
+msgid "langDetails"
+msgstr "詳細訊息"
+
+msgid "langStatsOfCourse"
+msgstr "課程範圍統計"
+
+msgid "langStatsOfUser"
+msgstr "用戶統計"
+
+msgid "langStatsOfCampus"
+msgstr "系統統計"
+
+msgid "langCountUsers"
+msgstr "用戶數量"
+
+msgid "langCountToolAccess"
+msgstr "與此課程關聯的總數"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "月"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "已登錄用戶"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "工具名稱"
+
+msgid "langToolTitleUsersColumn"
+msgstr "用戶點擊"
+
+msgid "langToolTitleCountColumn"
+msgstr "總點擊量"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "鏈接"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "用戶點擊"
+
+msgid "langLinksTitleCountColumn"
+msgstr "總點擊量"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "測驗"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "得分"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "文檔"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "用戶下載"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "總下載量"
+
+msgid "langScormContentColumn"
+msgstr "標題"
+
+msgid "langScormStudentColumn"
+msgstr "用戶"
+
+msgid "langScormTitleColumn"
+msgstr "課程/步驟"
+
+msgid "langScormStatusColumn"
+msgstr "狀態"
+
+msgid "langScormScoreColumn"
+msgstr "得分"
+
+msgid "langScormTimeColumn"
+msgstr "時間"
+
+msgid "langScormNeverOpened"
+msgstr "該課程不向此用戶開放."
+
+msgid "langWorkTitle"
+msgstr "標題"
+
+msgid "langWorkAuthors"
+msgstr "作者"
+
+msgid "langWorkDescription"
+msgstr "描述"
+
+msgid "informationsAbout"
+msgstr "追踪"
+
+msgid "langNoEmail"
+msgstr "未提供電子郵件"
+
+msgid "langNoResult"
+msgstr "沒有結果"
+
+msgid "langCourse"
+msgstr "網站"
+
+msgid "langHits"
+msgstr "提示"
+
+msgid "langTotal"
+msgstr "總計"
+
+msgid "langHour"
+msgstr "時"
+
+msgid "langDay"
+msgstr "日"
+
+msgid "langLittleHour"
+msgstr "時"
+
+msgid "langLast31days"
+msgstr "在最後的31天內"
+
+msgid "langLast7days"
+msgstr "在最後的7天內"
+
+msgid "langThisday"
+msgstr "今天"
+
+msgid "langLogins"
+msgstr "登錄"
+
+msgid "langLoginsExplaination"
+msgstr "這是你在這段時間內用這個工具最後註冊訪問的清單."
+
+msgid "langExercicesResults"
+msgstr "測試成績"
+
+msgid "langVisits"
+msgstr "訪問"
+
+msgid "langAt"
+msgstr "在"
+
+msgid "langLoginTitleDateColumn"
+msgstr "日期"
+
+msgid "langLoginTitleCountColumn"
+msgstr "訪問"
+
+msgid "langLoginsAndAccessTools"
+msgstr "登錄並使用工具"
+
+msgid "langWorkUploads"
+msgstr "上傳貢獻"
+
+msgid "langErrorUserNotInGroup"
+msgstr "非法用戶: 此用戶在小組中不存在."
+
+msgid "langListStudents"
+msgstr "小組中的用戶清單"
+
+msgid "langPeriodHour"
+msgstr "小時"
+
+msgid "langPeriodDay"
+msgstr "日"
+
+msgid "langPeriodWeek"
+msgstr "周"
+
+msgid "langPeriodMonth"
+msgstr "月"
+
+msgid "langPeriodYear"
+msgstr "年"
+
+msgid "langNextDay"
+msgstr "明天"
+
+msgid "langPreviousDay"
+msgstr "昨天"
+
+msgid "langNextWeek"
+msgstr "下周"
+
+msgid "langPreviousWeek"
+msgstr "上周"
+
+msgid "langNextMonth"
+msgstr "下月"
+
+msgid "langPreviousMonth"
+msgstr "上月"
+
+msgid "langNextYear"
+msgstr "明年"
+
+msgid "langPreviousYear"
+msgstr "去年"
+
+msgid "langViewToolList"
+msgstr "檢視所有工具清單"
+
+msgid "langToolList"
+msgstr "所有工具清單"
+
+msgid "langFrom"
+msgstr "從"
+
+msgid "langTo"
+msgstr "到"
+
+msgid "langPeriodToDisplay"
+msgstr "期限"
+
+msgid "langDetailView"
+msgstr "檢視模式"
+
+msgid "langBredCrumpGroups"
+msgstr "小組"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "小組區"
+
+msgid "langBredCrumpUsers"
+msgstr "用戶"
+
+msgid "langAdminToolName"
+msgstr "管理統計"
+
+msgid "langPlatformStats"
+msgstr "系統統計"
+
+msgid "langStatsDatabase"
+msgstr "統計數據庫"
+
+msgid "langPlatformAccess"
+msgstr "系統權限"
+
+msgid "langPlatformCoursesAccess"
+msgstr "課程權限"
+
+msgid "langPlatformToolAccess"
+msgstr "按工具"
+
+msgid "langHardAndSoftUsed"
+msgstr "國家 提供者 瀏覽器 作業系統 介紹者"
+
+msgid "langStrangeCases"
+msgstr "問題個案"
+
+msgid "langStatsDatabaseLink"
+msgstr "點擊此處"
+
+msgid "langCountCours"
+msgstr "按數量"
+
+msgid "langCountCourseByFaculte"
+msgstr "課程數量-按分類排序"
+
+msgid "langCountCourseByLanguage"
+msgstr "按語言"
+
+msgid "langCountCourseByVisibility"
+msgstr "課程數量-按顯示隱藏排序"
+
+msgid "langCountUsersByCourse"
+msgstr "用戶數量-按課程排序"
+
+msgid "langCountUsersByFaculte"
+msgstr "用戶數量-按分類排序"
+
+msgid "langCountUsersByStatus"
+msgstr "用戶數量-按狀態排序"
+
+msgid "langAccess"
+msgstr "訪問"
+
+msgid "langCountries"
+msgstr "國家"
+
+msgid "langProviders"
+msgstr "提供者"
+
+msgid "langOS"
+msgstr "作業系統"
+
+msgid "langBrowsers"
+msgstr "瀏覽器"
+
+msgid "langReferers"
+msgstr "介紹者"
+
+msgid "langAccessExplain"
+msgstr "(當一位用戶打開系統首頁時)"
+
+msgid "langTotalPlatformAccess"
+msgstr "總數"
+
+msgid "langTotalPlatformLogin"
+msgstr "總數"
+
+msgid "langMultipleLogins"
+msgstr "擁有相同<I>用戶名</I>的帳號"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "擁有相同<I>用戶名</I>和相同<I>密碼</I>的用戶"
+
+msgid "langMultipleEmails"
+msgstr "擁有相同<I>電子郵件</I>的帳戶"
+
+msgid "langCourseWithoutProf"
+msgstr "沒有領導的課程"
+
+msgid "langCourseWithoutAccess"
+msgstr "未使用課程"
+
+msgid "langLoginWithoutAccess"
+msgstr "未使用登錄"
+
+msgid "langAllRight"
+msgstr "未發現問題"
+
+msgid "langDefcon"
+msgstr "出現錯誤!!"
+
+msgid "langNULLValue"
+msgstr "空(或NULL)"
+
+msgid "langTrafficDetails"
+msgstr "流量明細"
+
+msgid "langSeeIndividualTracking"
+msgstr "個別追蹤請使用<A href=\"../user/user.php\">用戶</A>工具."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "本路徑從未開放."
+
+msgid "SynthesisView"
+msgstr "綜合檢視"
+
+msgid "Visited"
+msgstr "曾到訪"
+
+msgid "FirstAccess"
+msgstr "第一次進入"
+
+msgid "LastAccess"
+msgstr "最後一次進入"
+
+msgid "langProbationers"
+msgstr "學生"
+
+msgid "MoyenneTest"
+msgstr "平均測驗"
+
+msgid "exportExcel"
+msgstr "以 Excel 格式匯出"
+
+msgid "MoyCourse"
+msgstr "課程平均值"
+
+msgid "MoyenneExamen"
+msgstr "考試平均值"
+
+msgid "MoySession"
+msgstr "學期平均值"
+
+msgid "TakenSessions"
+msgstr "已選學期"
+
+msgid "FollowUp"
+msgstr "跟進"
+
+msgid "Trainers"
+msgstr "教師"
+
+msgid "Administrators"
+msgstr "管理員"
+
+msgid "Tracks"
+msgstr "追踪"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "ExcelFormat"
+msgstr "Excel 格式"
+
+msgid "MyLearnpath"
+msgstr "我的學習路徑"
+
+msgid "Time"
+msgstr "時間"
+
+msgid "Score"
+msgstr "評分"
+
+msgid "LastConnexion"
+msgstr "最後連線"
+
+msgid "ConnectionTime"
+msgstr "連線時間"
+
+msgid "ConnectionsToThisCourse"
+msgstr "連線到本課程的時間"
+
+msgid "StudentTutors"
+msgstr "學員導師"
+
+msgid "StudentSessions"
+msgstr "學員所選學期"
+
+msgid "StudentCourses"
+msgstr "學員所選課程"
+
+msgid "NoLearnpath"
+msgstr "沒有學習路徑"
+
+msgid "Attempts"
+msgstr "嘗試"
+
+msgid "Correction"
+msgstr "改正"
+
+msgid "NoExercise"
+msgstr "沒有練習"
+
+msgid "LimitDate"
+msgstr "限定日期"
+
+msgid "SentDate"
+msgstr "送出日期"
+
+msgid "Annotate"
+msgstr "通知"
+
+msgid "DayOfDelay"
+msgstr "延緩日期"
+
+msgid "NoProduction"
+msgstr "沒有作品"
+
+msgid "NoComment"
+msgstr "沒有意見"
+
+msgid "LatestLogin"
+msgstr "最後連線"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "用於平台之平均時間"
+
+msgid "Messages"
+msgstr "訊息"
+
+msgid "AveragePostsInForum"
+msgstr "討論區帖子平均數量"
+
+msgid "AverageAssignments"
+msgstr "平均課業數量"
+
+msgid "Print"
+msgstr "列印"
+
+msgid "StudentDetails"
+msgstr "學員詳細資料"
+
+msgid "StudentDetailsInCourse"
+msgstr "課程學員詳細資料"
+
+msgid "Learnpaths"
+msgstr "學習路徑"
+
+msgid "OtherTools"
+msgstr "其他工具"
+
+msgid "DetailsStudentInCourse"
+msgstr "課程學員詳細資料"
+
+msgid "CourseTitle"
+msgstr "課程標題"
+
+msgid "NbStudents"
+msgstr "學員數量"
+
+msgid "TimeSpentInTheCourse"
+msgstr "在課程中使用的時間"
+
+msgid "AvgStudentsProgress"
+msgstr "平均學員進度"
+
+msgid "AvgCourseScore"
+msgstr "平均學員分數"
+
+msgid "AvgMessages"
+msgstr "學員平均訊息"
+
+msgid "AvgAssignments"
+msgstr "學員平均課業"
+
+msgid "ToolsMostUsed"
+msgstr "最常用工具"
+
+msgid "StudentsTracking"
+msgstr "追踪學員"
+
+msgid "CourseTracking"
+msgstr "追踪課程"
+
+msgid "LinksMostClicked"
+msgstr "最常被探訪之連結"
+
+msgid "DocumentsMostDownloaded"
+msgstr "最常被下載的文件"
+
+msgid "LearningPathDetails"
+msgstr "學習路徑詳情"
+
+msgid "NoConnexion"
+msgstr "沒有連線"
+
+msgid "TeacherInterface"
+msgstr "教師界面"
+
+msgid "CoachInterface"
+msgstr "指導員界面"
+
+msgid "AdminInterface"
+msgstr "管理者界面"
+
+msgid "NumberOfSessions"
+msgstr "學期數量"
+
+msgid "YourCourseList"
+msgstr "你的課程清單"
+
+msgid "YourStatistics"
+msgstr "你的統計"
+
+msgid "CoachList"
+msgstr "指導員清單"
+
+msgid "CoachStudents"
+msgstr "這指導員的學員"
+
+msgid "NoLearningPath"
+msgstr "沒有數位學習(SCORM)課程"
+
+msgid "SessionCourses"
+msgstr "課程學期"
+
+msgid "NoUsersInCourseTracking"
+msgstr "你可以在這兒看到已加入你的課程的學生追踪資料。"
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "在課程中使用的時間"
+
+msgid "RemindInactiveUser"
+msgstr "提醒未啟動的使用者"
+
+msgid "FirstLogin"
+msgstr "第一次連線"
+

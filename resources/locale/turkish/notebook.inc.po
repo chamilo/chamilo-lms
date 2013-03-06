@@ -1,0 +1,90 @@
+msgid "NewNote"
+msgstr "Yeni not"
+
+msgid "Note"
+msgstr "Not"
+
+msgid "NoteDeleted"
+msgstr "Not silindi"
+
+msgid "NoteUpdated"
+msgstr "Not güncellendi"
+
+msgid "NoteCreated"
+msgstr "Not oluşturuldu"
+
+msgid "YouMustWriteANote"
+msgstr "Lütfen bir not yazın"
+
+msgid "SaveNote"
+msgstr "Notu kaydet"
+
+msgid "WriteYourNoteHere"
+msgstr "Buraya tıklayarak yeni not yazın"
+
+msgid "SearchByTitle"
+msgstr "Başlığa göre ara"
+
+msgid "WriteTheTitleHere"
+msgstr "Başlığı buraya yazın"
+
+msgid "UpdateDate"
+msgstr "Güncellendi"
+
+msgid "NoteAddNew"
+msgstr "Defterime not ekle"
+
+msgid "OrderByCreationDate"
+msgstr "Oluşturma tarihine göre"
+
+msgid "OrderByModificationDate"
+msgstr "Son güncelleme tarihine göre"
+
+msgid "OrderByTitle"
+msgstr "Başlığa göre"
+
+msgid "NoteTitle"
+msgstr "Not başlığı"
+
+msgid "NoteComment"
+msgstr "Not detayları"
+
+msgid "NoteAdded"
+msgstr "Not eklendi"
+
+msgid "NoteConfirmDelete"
+msgstr "Notu silmek istiyor musunuz ?"
+
+msgid "AddNote"
+msgstr "Not oluştur"
+
+msgid "ModifyNote"
+msgstr "Kişisel notlarımı düzenle"
+
+msgid "BackToNoteList"
+msgstr "Not listesine geri dön"
+
+msgid "NotebookManagement"
+msgstr "Not Defteri yönetimi"
+
+msgid "BackToNotesList"
+msgstr "Not listesine geri dön"
+
+msgid "NotesSortedByTitleAsc"
+msgstr "Notları başlığa göre sırala (A-Z)"
+
+msgid "NotesSortedByTitleDESC"
+msgstr "Notları başlığa göre sırala (Z-A)"
+
+msgid "NotesSortedByUpdateDateAsc"
+msgstr "Notları güncelleme tarihine göre sırala (1-9)"
+
+msgid "NotesSortedByUpdateDateDESC"
+msgstr "Notları güncelleme tarihine göre sırala (9-1)"
+
+msgid "NotesSortedByCreationDateAsc"
+msgstr "Notları oluşturma tarihine göre sırala (1-9)"
+
+msgid "NotesSortedByCreationDateDESC"
+msgstr "Notları güncelleme tarihine göre sırala (9-1)"
+

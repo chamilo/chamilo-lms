@@ -1,0 +1,294 @@
+msgid "Upload"
+msgstr "Uploaden"
+
+msgid "BackList"
+msgstr "Terug naar uw dropbox"
+
+msgid "ShowFeedback"
+msgstr "Feedback weergeven"
+
+msgid "GiveFeedback"
+msgstr "Geef/editeer feedback"
+
+msgid "JustUploadInSelect"
+msgstr "---EnkelUpload---"
+
+msgid "MailingNothingFor"
+msgstr "Niets voor"
+
+msgid "MailingFileNotRegistered"
+msgstr "(niet geregistreerd voor deze cursus)"
+
+msgid "MailingFileSentTo"
+msgstr "verzonden naar"
+
+msgid "MailingFileIsFor"
+msgstr "is voor"
+
+msgid "MailingFileRecipDup"
+msgstr "meer dan ëën student heeft"
+
+msgid "MailingFileRecipNotFound"
+msgstr "geen student met"
+
+msgid "MailingFileNoRecip"
+msgstr "geen bestemmeling-id in de naam"
+
+msgid "MailingFileNoPostfix"
+msgstr "naam eindigt niet op"
+
+msgid "MailingFileNoPrefix"
+msgstr "naam begint niet met"
+
+msgid "MailingFileFunny"
+msgstr "geen naam, of een extensie die niet uit 1-4 letters of cijfers bestaat"
+
+msgid "MailingZipDups"
+msgstr ".zip bestand voor mailing bevat dubbels – verzenden onmogelijk"
+
+msgid "MailingZipPhp"
+msgstr ".zip bestand voor mailing bevat PHP-bestanden – verzenden onmogelijk"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr ".zip bestand voor mailing is leeg of corrupt."
+
+msgid "MailingWrongZipfile"
+msgstr "Mailing moet een .zip bestand zijn met STUDENTID of LOGINNAME in de naam."
+
+msgid "MailingConfirmSend"
+msgstr "Documenten naar hun indivuele bestemmelingen sturen?"
+
+msgid "MailingSend"
+msgstr "Verzend documenten"
+
+msgid "MailingNotYetSent"
+msgstr "Mailingdocumenten zijn nog niet verzonden..."
+
+msgid "MailingInSelect"
+msgstr "---Mailing---"
+
+msgid "MailingAsUsername"
+msgstr "Mailing"
+
+msgid "FileDeleted"
+msgstr "Het geselecteerde bestand is verwijderd uit de dropbox."
+
+msgid "DocAdd"
+msgstr "Het bestand is toegevoegd."
+
+msgid "Sender"
+msgstr "zender"
+
+msgid "Author"
+msgstr "auteur"
+
+msgid "FileSize"
+msgstr "grootte"
+
+msgid "Title"
+msgstr "titel"
+
+msgid "OverwriteFile"
+msgstr "Vorige versie vervangen?"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Unknown"
+msgstr "onbekend"
+
+msgid "SentOn"
+msgstr "op"
+
+msgid "SentTo"
+msgstr "Verzonden naar"
+
+msgid "ConfirmDelete"
+msgstr "Het bestand verdwijnt enkel uit uw lijst"
+
+msgid "SendTo"
+msgstr "Verzend naar"
+
+msgid "Description"
+msgstr "Beschrijving"
+
+msgid "UploadFile"
+msgstr "Document verzenden"
+
+msgid "ErrorCreatingDir"
+msgstr "Fout bij het aanmaken van de dropboxmap. Gelieve de platformbeheerder te contacteren."
+
+msgid "UploadError"
+msgstr "Het uploaden is mislukt. Controleer de maximum bestandsgrootte en de folderrechten."
+
+msgid "TooBig"
+msgstr "U hebt geen bestand aangeduid om te verzenden of het bestand is te groot."
+
+msgid "NoFileSpecified"
+msgstr "U hebt geen bestand aangeduid om te verzenden."
+
+msgid "NoUserSelected"
+msgstr "Gelieve een gebruiker te selecteren alvorens het bestand te zenden."
+
+msgid "BadFormData"
+msgstr "Submit is mislukt: de gegevens hebben niet het juiste formaat. Gelieve de platformbeheerder te contacteren."
+
+msgid "GeneralError"
+msgstr "Er is een fout opgetreden. Gelieve de platformbeheerder te contacteren."
+
+msgid "Dropbox"
+msgstr "Dropbox"
+
+msgid "Help"
+msgstr "Help"
+
+msgid "ReceivedFiles"
+msgstr "Ontvangen bestanden"
+
+msgid "SentFiles"
+msgstr "Verstuurde bestanden"
+
+msgid "ReceivedTitle"
+msgstr "Titel"
+
+msgid "SentTitle"
+msgstr "Verzonden bestanden"
+
+msgid "Authors"
+msgstr "Auteurs"
+
+msgid "Size"
+msgstr "Grootte"
+
+msgid "LastResent"
+msgstr "Laatst verzonden op"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Hoofdmap"
+
+msgid "UploadNewFile"
+msgstr "Nieuw bestand versturen"
+
+msgid "AreYouSureToDelete"
+msgstr "Bent u zeker dat u wenst te verwijderen"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "CloseFeedback"
+msgstr "Feedback sluiten"
+
+msgid "AddNewFeedback"
+msgstr "Nieuwe feedback toevoegen"
+
+msgid "DropboxFeedbackStored"
+msgstr "Het feedback bericht is opgeslagen."
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Alle gebruikers hebben het bestand verwijderd waardoor niemand de feedback te zien zal krijgen."
+
+msgid "FeedbackError"
+msgstr "Feedback fout"
+
+msgid "PleaseTypeText"
+msgstr "Gelieve een beetje tekst te tikken."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "U mag dit bestand niet downloaden"
+
+msgid "CheckAtLeastOneFile"
+msgstr "Gelieve ten minste één bestand aan te vinken"
+
+msgid "ReceivedFileDeleted"
+msgstr "Het ontvangen bestand is verwijderd."
+
+msgid "SentFileDeleted"
+msgstr "het verstuurde bestand is verwijderd"
+
+msgid "FilesMoved"
+msgstr "De geselecteerde bestanden zijn verplaatst"
+
+msgid "ReceivedFileMoved"
+msgstr "Het ontvangen bestand werd verplaatst"
+
+msgid "SentFileMoved"
+msgstr "Het verstuurde bestand werd verplaatst"
+
+msgid "NotMovedError"
+msgstr "Het bestand kan niet verplaatst worden."
+
+msgid "AddNewCategory"
+msgstr "Nieuwe categorie toevoegen"
+
+msgid "EditCategory"
+msgstr "Deze categorie wijzigen"
+
+msgid "CategoryName"
+msgstr "Categorienaam"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Gelieve een categorienaam in te geven"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Deze categorie bestaat reeds. Gelieve een andere naam in te geven."
+
+msgid "CurrentlySeeing"
+msgstr "U bekijkt categorie"
+
+msgid "CategoryStored"
+msgstr "De category is opgeslagen."
+
+msgid "CategoryModified"
+msgstr "De categorie is gewijzigd."
+
+msgid "CategoryDeleted"
+msgstr "De categorie is verwijderd."
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "Het auteursveld mag niet leeg zijn."
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "U dient ten minste één bestemmeling te kiezen."
+
+msgid "DropboxFileTooBig"
+msgstr "Het bestand is te groot."
+
+msgid "TheFileIsNotUploaded"
+msgstr "Het bestand is niet geüpload"
+
+msgid "FileUploadSucces"
+msgstr "Het bestand is met succes geüpload."
+
+msgid "MailingNonMailingError"
+msgstr "Mailing kan niet vervangen worden door niet-mailing en vice versa."
+
+msgid "MailingSelectNoOther"
+msgstr "Mailing kan niet gecombineerd worden met andere bestemmelingen."
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "Enkel upload kan niet gecombineerd worden met andere bestemmelingen."
+
+msgid "NewDropboxFileUploaded"
+msgstr "Er werd een nieuw bestand verzonden naar de dropbox tool"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Er werd een nieuw bestand verzonden naar de dropbox van uw cursus"
+
+msgid "langAddEdit"
+msgstr "Toevoegen / wijzigen"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Deze map is leeg"
+
+msgid "AddComment"
+msgstr "Commentaar toevoegen"
+
+msgid "SentCatgoryDeleted"
+msgstr "De categorie is verwijderd"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "De categorie is verwijderd"
+

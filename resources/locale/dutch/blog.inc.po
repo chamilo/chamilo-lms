@@ -1,0 +1,300 @@
+msgid "MyTasks"
+msgstr "Mijn taken"
+
+msgid "FavoriteBlogs"
+msgstr "Mijn favoriete projecten"
+
+msgid "Navigation"
+msgstr "Navigatie"
+
+msgid "TopTen"
+msgstr "Top tien van projecten"
+
+msgid "Subtitle"
+msgstr "Ondertitel"
+
+msgid "ThisBlog"
+msgstr "Dit project"
+
+msgid "NewPost"
+msgstr "Nieuw artikel"
+
+msgid "TaskManager"
+msgstr "Taakbeheer"
+
+msgid "MemberManager"
+msgstr "Gebruikersbeheer"
+
+msgid "PostFullText"
+msgstr "Tekst"
+
+msgid "ReadPost"
+msgstr "Dit artikel lezen"
+
+msgid "Home"
+msgstr "Start"
+
+msgid "FirstPostText"
+msgstr "Dit is een eerste artikel in dit project Iedereen die ingeschreven is voor dit project kan deelnemen."
+
+msgid "AddNewComment"
+msgstr "Commentaar toevoegen"
+
+msgid "ReplyToThisComment"
+msgstr "Commentaar toevoegen aan deze commentaar"
+
+msgid "ManageTasks"
+msgstr "Taakbeheer in dit project"
+
+msgid "ManageMembers"
+msgstr "Een gebruiker inschrijven / uitschrijven voor dit project"
+
+msgid "Register"
+msgstr "Zich inschrijven voor dit project"
+
+msgid "UnRegister"
+msgstr "Zich uitschrijven uit dit project"
+
+msgid "SubscribeMembers"
+msgstr "Gebruikers inschrijven"
+
+msgid "UnsubscribeMembers"
+msgstr "Gebruikers uitschrijven"
+
+msgid "RightsManager"
+msgstr "Rechten van de gebruikers beheren"
+
+msgid "ManageRights"
+msgstr "Controleer de rechten en de rollen van de gebruikers in dit project"
+
+msgid "Task"
+msgstr "Taak"
+
+msgid "Tasks"
+msgstr "Taken"
+
+msgid "Member"
+msgstr "Gebruiker"
+
+msgid "Members"
+msgstr "Gebruikers"
+
+msgid "Role"
+msgstr "Rol"
+
+msgid "Rate"
+msgstr "Score"
+
+msgid "Roles"
+msgstr "Rollen"
+
+msgid "AddTask"
+msgstr "Nieuwe taak"
+
+msgid "AddTasks"
+msgstr "Nieuwe taak toevoegen"
+
+msgid "AssignTask"
+msgstr "Een taak toekennen"
+
+msgid "AssignTasks"
+msgstr "Een taak toekennen"
+
+msgid "EditTask"
+msgstr "Deze taak wijzigen"
+
+msgid "DeleteTask"
+msgstr "Deze taak verwijderen"
+
+msgid "DeleteSystemTask"
+msgstr "Dit is een voorgedefinieerde taak. U kunt een voorgedefinieerde taak niet verwijderen."
+
+msgid "SelectUser"
+msgstr "Gebruiker"
+
+msgid "SelectTask"
+msgstr "Taak"
+
+msgid "SelectTargetDate"
+msgstr "Datum"
+
+msgid "TargetDate"
+msgstr "Datum"
+
+msgid "Color"
+msgstr "Kleur"
+
+msgid "TaskList"
+msgstr "Taken in dit project"
+
+msgid "AssignedTasks"
+msgstr "Toegekende taken"
+
+msgid "ArticleManager"
+msgstr "Artikel beheer"
+
+msgid "CommentManager"
+msgstr "Beheer van commentaar"
+
+msgid "BlogManager"
+msgstr "Projectbeheerder"
+
+msgid "ReadMore"
+msgstr "lees meer..."
+
+msgid "DeleteThisArticle"
+msgstr "Dit artikel verwijderen"
+
+msgid "EditThisPost"
+msgstr "Dit artikel wijzigen"
+
+msgid "DeleteThisComment"
+msgstr "Deze commentaar verwijderen"
+
+msgid "NoArticles"
+msgstr "Er is momenteel geen enkel artikel in dit project. Als u een auteur bent in dit project kunt u op de link \'Nieuw artikel\' klikken om een nieuw artikel te schrijven."
+
+msgid "NoTasks"
+msgstr "Geen taken"
+
+msgid "Rating"
+msgstr "Score"
+
+msgid "RateThis"
+msgstr "Geef een score aan dit artikel"
+
+msgid "SelectTaskArticle"
+msgstr "Kies een artikel voor deze taak."
+
+msgid "ExecuteThisTask"
+msgstr "Deze taak uitvoeren"
+
+msgid "WrittenBy"
+msgstr "geschreven door"
+
+msgid "InBlog"
+msgstr "in dit project"
+
+msgid "ViewPostsOfThisDay"
+msgstr "Artikels van vandaag bekijken"
+
+msgid "PostsOf"
+msgstr "Artikels van"
+
+msgid "NoArticleMatches"
+msgstr "We hebben géén artikels gevonden die voldoen aan uw zoekcriteria. Gelieve een ruimere zoekopdracht uit te voeren."
+
+msgid "SaveProject"
+msgstr "Project bewaren"
+
+msgid "langTask1"
+msgstr "Taak 1"
+
+msgid "langTask2"
+msgstr "Taak 2"
+
+msgid "langTask3"
+msgstr "Taak 3"
+
+msgid "langTask1Desc"
+msgstr "Beschrijving van taak 1"
+
+msgid "langTask2Desc"
+msgstr "Beschrijving van taak 2"
+
+msgid "langTask3Desc"
+msgstr "Beschrijving van taak 3"
+
+msgid "blog_management"
+msgstr "Projectbeheer"
+
+msgid "langWelcome"
+msgstr "Welkom !"
+
+msgid "langModule"
+msgstr "Module"
+
+msgid "langUserHasPermissionNot"
+msgstr "De gebruiker heeft de rechten niet."
+
+msgid "langUserHasPermission"
+msgstr "De gebruiker heeft de rechten"
+
+msgid "langLegend"
+msgstr "Legende"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "De gebruiker heeft de rechten van zijn groep."
+
+msgid "EditPost"
+msgstr "Een artikel wijzigen"
+
+msgid "AddBlog"
+msgstr "Maak een nieuw project"
+
+msgid "EditBlog"
+msgstr "Project wijzigen"
+
+msgid "DeleteBlog"
+msgstr "Dit project verwijderen"
+
+msgid "Shared"
+msgstr "Gedeeld"
+
+msgid "PermissionGrantedByGroupOrRole"
+msgstr "Rechten toegekend per groep of rol"
+
+msgid "Reader"
+msgstr "Lezer"
+
+msgid "SeeBlog"
+msgstr "Project bekijken"
+
+msgid "BlogDeleted"
+msgstr "Het project is verwijderd."
+
+msgid "BlogEdited"
+msgstr "Het project is aangepast."
+
+msgid "BlogStored"
+msgstr "Het project is opgeslagen."
+
+msgid "CommentCreated"
+msgstr "Uw opmerking is opgeslagen."
+
+msgid "BlogAdded"
+msgstr "Het artikel is toegevoegd."
+
+msgid "TaskCreated"
+msgstr "De taak is aangemaakt"
+
+msgid "TaskEdited"
+msgstr "De taak is gewijzigd."
+
+msgid "TaskAssigned"
+msgstr "De taak is toegekend."
+
+msgid "AssignedTaskEdited"
+msgstr "De toegekende taak is gewijzigd"
+
+msgid "UserRegistered"
+msgstr "De gebruiker is geregistreerd."
+
+msgid "TaskDeleted"
+msgstr "De taak is verwijderd"
+
+msgid "TaskAssignmentDeleted"
+msgstr "De toekenning van de taak is verwijderd."
+
+msgid "CommentDeleted"
+msgstr "De opmerking is verwijderd."
+
+msgid "RatingAdded"
+msgstr "Een score is toegevoegd."
+
+msgid "BlogPosts"
+msgstr "Blog Posts"
+
+msgid "BlogComments"
+msgstr "Blog commentaren"
+

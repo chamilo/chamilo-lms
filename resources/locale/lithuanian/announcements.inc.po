@@ -1,0 +1,141 @@
+msgid "Announcement"
+msgstr "Skelbimai"
+
+msgid "langAnnEmpty"
+msgstr "Skelbimų sąrašas ištrintas"
+
+msgid "AnnouncementModified"
+msgstr "Skelbimas modifikuotas"
+
+msgid "AnnouncementAdded"
+msgstr "Skelbimas idėtas"
+
+msgid "AnnouncementDeleted"
+msgstr "Skelbimas ištrintas"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Paskelbta"
+
+msgid "AddAnnouncement"
+msgstr "Add as an announcement"
+
+msgid "langContent"
+msgstr "Turinys"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Išvalyti skelbimų sąrašą"
+
+msgid "professorMessage"
+msgstr "Žinutė nuo dėstytojo"
+
+msgid "langEmailSent"
+msgstr " ir isšsiųsta registruotiems studentams"
+
+msgid "EmailOption"
+msgstr "Siųsti šį skelbimą elektroniniu paštu pasirinktai grupei / vartotojams"
+
+msgid "langOn"
+msgstr "Įjungta"
+
+msgid "langRegUser"
+msgstr "registruoti vartotojai"
+
+msgid "langUnvalid"
+msgstr "turi neteisingą arba neegzistuojantį el. pašto adresą"
+
+msgid "langModifAnn"
+msgstr "Redaguoti šį skelbimą"
+
+msgid "langModify"
+msgstr "redaguoti"
+
+msgid "langDelete"
+msgstr "trinti"
+
+msgid "langTitle"
+msgstr "Pavadinimas"
+
+msgid "langHelp"
+msgstr "pagalba"
+
+msgid "langOk"
+msgstr "Taip"
+
+msgid "langAddIntro"
+msgstr "Įdėti įžanginį tekstą"
+
+msgid "langBackList"
+msgstr "Grįžti į sąrašą"
+
+msgid "langSelMess"
+msgstr "Įspėjimai vartotojams"
+
+msgid "EmailTitle"
+msgstr "Šio laiško tema"
+
+msgid "langUserlist"
+msgstr "Grupių ir vartotojų sąrašas"
+
+msgid "langSelectedUsers"
+msgstr "Išrinkti vartotojai"
+
+msgid "langSubmit"
+msgstr "Tvirtinti"
+
+msgid "langPleaseEnterMessage"
+msgstr "Jūs turite įrašyti žinutės tekstą."
+
+msgid "langPleaseSelectUsers"
+msgstr "Jūs turite išrinkti vartotoją."
+
+msgid "Teachersubject"
+msgstr "Žinutė nusiųsta jūsų studentams"
+
+msgid "langMessages"
+msgstr "Žinutės"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Žinutės išrinktiems vartotojams"
+
+msgid "langIntroText"
+msgstr "Žinutės išsiuntimui išrinkite vartotojų grupę (pažymeta raide G) arba atskirus vartotojus iš sarašo kairėje."
+
+msgid "langDown"
+msgstr "žemyn"
+
+msgid "langMsgSent"
+msgstr "Žinutė išsiųsta pasirinktiems studentams"
+
+msgid "langSelUser"
+msgstr "išrinkti varotojai"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Žinutė pasirinktoms grupėms"
+
+msgid "langSelectedGroups"
+msgstr "pasirinktos grupės"
+
+msgid "langMsg"
+msgstr "Žinutės"
+
+msgid "langYes"
+msgstr "taip"
+
+msgid "MsgText"
+msgstr "Žinutė"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Visi skelbimai ištrinti"
+
+msgid "AnnouncementMoved"
+msgstr "Skelbimas perkeltas"
+
+msgid "NoAnnouncements"
+msgstr "Skelbimų nėra."
+
+msgid "SelectEverybody"
+msgstr "Išrinti bet ka"
+
+msgid "SelectedUsersGroups"
+msgstr "parinktos vartotojų grupės"
+

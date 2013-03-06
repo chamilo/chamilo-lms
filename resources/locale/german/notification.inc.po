@@ -1,0 +1,96 @@
+msgid "lang_new_item"
+msgstr "neuer Eintrag hinzugefügt"
+
+msgid "TitleNotification"
+msgstr "seit Ihrem letzten Besuch"
+
+msgid "lang_update_agenda"
+msgstr "Kalender aktualisiert"
+
+msgid "lang_new_agenda"
+msgstr "neuer Eintrag dem Kalender hinzugefügt"
+
+msgid "lang_update_announcements"
+msgstr "Ankündigung aktualisiert"
+
+msgid "lang_new_announcements"
+msgstr "neue Ankündigung hinzugefügt"
+
+msgid "lang_new_document"
+msgstr "neue(s) Dokument(e) hinzugefügt"
+
+msgid "lang_new_exercise"
+msgstr "neuer Test hinzugefügt"
+
+msgid "lang_update_link"
+msgstr "Linkinformationen aktualisiert"
+
+msgid "lang_new_link"
+msgstr "neuer Link hinzugefügt"
+
+msgid "lang_new_forum_topic"
+msgstr "neues Thema dem Forum hinzugefügt"
+
+msgid "lang_new_groupforum_topic"
+msgstr "neues Thema dem Gruppenforum hinzugefügt"
+
+msgid "lang_new_dropbox_file"
+msgstr "Neue Datei angekommen"
+
+msgid "lang_update_dropbox_file"
+msgstr "Datei in der Dateikiste wurde aktualisiert"
+
+msgid "ForumCategoryAdded"
+msgstr "Forum-Kategorie wurde hinzugefügt"
+
+msgid "LearnpathAdded"
+msgstr "Lernpfad wurde hinzugefügt"
+
+msgid "GlossaryAdded"
+msgstr "Neuer Begriff ins Lexikon aufgenommen"
+
+msgid "QuizQuestionAdded"
+msgstr "Eine neue Frage wurde dem Test hinzugefügt"
+
+msgid "QuizQuestionUpdated"
+msgstr "Die Testfragen wurden aktualisiert"
+
+msgid "QuizQuestionDeleted"
+msgstr "Die Frage wurde im Test gelöscht"
+
+msgid "QuizUpdated"
+msgstr "Test aktualisiert"
+
+msgid "QuizAdded"
+msgstr "Test hinzugefügt"
+
+msgid "QuizDeleted"
+msgstr "Test gelöscht"
+
+msgid "DocumentInvisible"
+msgstr "Dokument unsichtbar"
+
+msgid "DocumentVisible"
+msgstr "Dokument sichtbar"
+
+msgid "CourseDescriptionAdded"
+msgstr "Kursbeschreibung hinzugefügt"
+
+msgid "WikiAdded"
+msgstr "Wiki hinzugefügt"
+
+msgid "SurveyAdded"
+msgstr "Umfrage hinzugefügt"
+
+msgid "NotebookAdded"
+msgstr "Notiz hinzugefügt"
+
+msgid "NotebookUpdated"
+msgstr "Notiz aktualisiert"
+
+msgid "NotebookDeleted"
+msgstr "Notiz gelöscht"
+
+msgid "LearnpathUpdated"
+msgstr "Lernpfad aktualisiert"
+

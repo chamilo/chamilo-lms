@@ -1,0 +1,360 @@
+msgid "lang_learning_path"
+msgstr "Learning Path"
+
+msgid "lang_learning_path_builder"
+msgstr "Learning Path builder"
+
+msgid "lang_description"
+msgstr "deskripsi"
+
+msgid "LearnpathTitle"
+msgstr "judul"
+
+msgid "LearnpathPrerequisites"
+msgstr "Prasyarat"
+
+msgid "LearnpathMoveUp"
+msgstr "Keataskan"
+
+msgid "LearnpathMoveDown"
+msgstr "Kebawahkan"
+
+msgid "langThisItem"
+msgstr "this item"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Judul & deskripsi"
+
+msgid "LearnpathChangeOrder"
+msgstr "Ubah urutan"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Tambah prasyarat"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Edit Judul dan deskripsi"
+
+msgid "lang_delete"
+msgstr "Hapus"
+
+msgid "lang_add_chapter"
+msgstr "Tambah modul"
+
+msgid "langLearnpathMystatus"
+msgstr "Status-ku"
+
+msgid "langLearnpathCompstatus"
+msgstr "lengkap"
+
+msgid "langLearnpathIncomplete"
+msgstr "tindak lengkap"
+
+msgid "langLearnpathPassed"
+msgstr "berhasil"
+
+msgid "langLearnpathFailed"
+msgstr "gagal"
+
+msgid "langLearnpathPrevious"
+msgstr "Sebelumnya"
+
+msgid "langLearnpathNext"
+msgstr "Berikutnya"
+
+msgid "langLearnpathRestart"
+msgstr "Ulang"
+
+msgid "langLearnpathThisStatus"
+msgstr "Tahapan sekarang"
+
+msgid "langLearnpathToEnter"
+msgstr "Untuk memasuki"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "anda harus menyelesaikan"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Judul tahapan"
+
+msgid "langLearnpathStatus"
+msgstr "Status"
+
+msgid "langLearnpathScore"
+msgstr "Nilai"
+
+msgid "langLearnpathTime"
+msgstr "Waktu"
+
+msgid "langLearnpathVersion"
+msgstr "versi"
+
+msgid "langLearnpathRestarted"
+msgstr "Semua tahapan kini tidak lengkap."
+
+msgid "langLearnpathNoNext"
+msgstr "Ini langkah terakhir."
+
+msgid "langLearnpathNoPrev"
+msgstr "Ini langkah awal."
+
+msgid "LearnpathAddLearnpath"
+msgstr "Tambah learning path baru"
+
+msgid "lang_learnpath_added"
+msgstr "Learning path baru berhasil dibuat. Kini anda dapat menambah modul dengan meng-klik tanda tambah."
+
+msgid "LearnpathEditLearnpath"
+msgstr "Edit deskripsi/judul learning path"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "Hapus learning path"
+
+msgid "lang_learnpath_edited"
+msgstr "Learning path berhasil diedit"
+
+msgid "lang_learnpath_deleted"
+msgstr "Learning path dan modul di dalamnya dihapus"
+
+msgid "LearnpathDoNotPublish"
+msgstr "Sembunyikan dari siswa"
+
+msgid "LearnpathPublish"
+msgstr "Tampilkan untuk siswa"
+
+msgid "LearnpathNotPublished"
+msgstr "kini sekarang disembunyikan dari siswa"
+
+msgid "LearnpathPublished"
+msgstr "kini dapat diakses siswa"
+
+msgid "lang_add_learnpath_module"
+msgstr "Tambah modul baru"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Tambah modul baru ke learning path ini"
+
+msgid "lang_learnpath_module_added"
+msgstr "Modul learning path sukses dibuat. Kini anda dapat menambahkan tahapan dengan meng-klik tanda tambah."
+
+msgid "LearnpathEditModule"
+msgstr "Edit deskripsi dan judul modul"
+
+msgid "LearnpathDeleteModule"
+msgstr "Hapus modul"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Modul learning path sukses diedit"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Modul learning path dan semua tahapan di dalamnya dihapus"
+
+msgid "LearnpathNoChapters"
+msgstr "Belum ada modul."
+
+msgid "LearnpathAddItem"
+msgstr "Tambah tahapan di modul ini"
+
+msgid "LearnpathItemDeleted"
+msgstr "Tahapan learning path telah dihapus"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "silahkan letakkan tahapan learning path ini ke modul:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Edit judul/deskripsi tambahan tahapan"
+
+msgid "lang_add_prereq"
+msgstr "Tambah/edit prasyarat ke tahapan ini"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Hapus Tahapan"
+
+msgid "LearnpathItemEdited"
+msgstr "Tahapan learning path telah diubah"
+
+msgid "lang_prereq_deleted_error"
+msgstr "telah dihapus !"
+
+msgid "lang_none"
+msgstr "TIDAK ADA"
+
+msgid "lang_forum_opened"
+msgstr "Forum tersebut telah dibuka di jendela baru."
+
+msgid "lang_link_opened"
+msgstr "Link tersebut telah dibuka di jendela baru."
+
+msgid "lang_short_help"
+msgstr "Untuk menambah tahapan, klik tanda tambah; untuk menambah judul/deskripsi baru, klik pada pensil; untuk menambah prasyarat klik pada ikon dua dokumen. Anda dapat memeriksa apa yang akan tampak di layar siswa dengan mengklik Jendela Siswa di bagian atas layar."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "Prasyarat tidak lengkap."
+
+msgid "lang_author"
+msgstr "Pengarang"
+
+msgid "lang_date"
+msgstr "Tanggal"
+
+msgid "langBasicOverview"
+msgstr "Overview dasar"
+
+msgid "langAdvanced"
+msgstr "Tingkat Lanjut"
+
+msgid "langDisplay"
+msgstr "Tampilan"
+
+msgid "langNewChapter"
+msgstr "Bab baru"
+
+msgid "langNewStep"
+msgstr "Langkah/step baru"
+
+msgid "langEditPrerequisites"
+msgstr "Edit prasyarat pada item ini"
+
+msgid "langTitleManipulateChapter"
+msgstr "Ubah bab ini"
+
+msgid "langTitleManipulateModule"
+msgstr "Ubah modul ini"
+
+msgid "langTitleManipulateDocument"
+msgstr "Ubah dokumen ini"
+
+msgid "langTitleManipulateLink"
+msgstr "Ubah link ini"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Ubah latihan ini"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Ubah publikasi siswa ini"
+
+msgid "langEnterDataNewChapter"
+msgstr "Masukkan data pada bab baru"
+
+msgid "langEnterDataNewModule"
+msgstr "Masukkan data ke modul baru"
+
+msgid "langCreateNewStep"
+msgstr "Buat sebuah langkah/step baru :"
+
+msgid "langNewDocument"
+msgstr "Dokumen baru"
+
+msgid "langUseAnExistingResource"
+msgstr "Atau gunakan sumberdaya yang ada :"
+
+msgid "langParent"
+msgstr "Induk"
+
+msgid "langPosition"
+msgstr "Posisi"
+
+msgid "langNewChapterCreated"
+msgstr "Bab baru telah dibuat.  Anda kini dapat menambah bab lain atau langkah pada bab tsb."
+
+msgid "langNewLinksCreated"
+msgstr "Link baru telah dibuat"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "Publikas baru siswa telah dibuat"
+
+msgid "langNewModuleCreated"
+msgstr "Modul baru telah dibuat. Kini anda dapat menambah bab atau langkah padanya."
+
+msgid "langNewExerciseCreated"
+msgstr "Latihan baru telah dibuat."
+
+msgid "langItemRemoved"
+msgstr "Item tsb telah dihapus"
+
+msgid "langConverting"
+msgstr "Sedang mengubah ..."
+
+msgid "langPpt2lpError"
+msgstr "Error selama konversi ke PowerPoint. Silahkan periksa kalau-kalau ada karakter khusus di nama file PowerPoint tsb."
+
+msgid "langBuild"
+msgstr "Buat"
+
+msgid "langViewModeEmbedded"
+msgstr "Mode Tamplian : embedded"
+
+msgid "langViewModeFullScreen"
+msgstr "Mode Tampilan : fullscreen"
+
+msgid "langShowDebug"
+msgstr "Tampilkan debug"
+
+msgid "langHideDebug"
+msgstr "Sembunyikan debug"
+
+msgid "langAfter"
+msgstr "Setelah"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Prasyarat (batas)"
+
+msgid "lang_loading"
+msgstr "Memuat halaman, silahkan tunggu ...."
+
+msgid "lang_empty"
+msgstr "Path ini tidak berisi tahapan/langkah."
+
+msgid "langHotPotatoesFinished"
+msgstr "Tes HotPotatoes ini telah ditutup."
+
+msgid "langCompletionLimit"
+msgstr "Batas Penyelesaian (poin minimum)"
+
+msgid "langPrereqToEnter"
+msgstr "Untuk memasuki"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "anda pertama-tama butuh menyelesaikan"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Minimum 1 tahapan/langkah hilang dari"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "yang merupakan set sebagai prasyarat."
+
+msgid "langPrereqTestLimit1"
+msgstr "anda mesti mencapai minimum"
+
+msgid "langPrereqTestLimit2"
+msgstr "poin dalam"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Sekarang anda memiliki :"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "kembali ke layar normal"
+
+msgid "langLearnpathFullScreen"
+msgstr "full screen"
+
+msgid "langItemMissing1"
+msgstr "Ada sebuah"
+
+msgid "langItemMissing2"
+msgstr "halaman (langkah) disini pada Chamilo Learning Path orisinil."
+
+msgid "langDone"
+msgstr "Dilakukan"
+
+msgid "langNoItemSelected"
+msgstr "Untuk menampilkan sesuatu disini, silahkan pilih sebuah item dari menu di samping"
+
+msgid "langNewDocumentCreated"
+msgstr "Dokumen baru telah dibuat."
+
+msgid "langEditCurrentChapter"
+msgstr "Edit bab ini"
+
+msgid "langCreateTheDocument"
+msgstr "Buat dokumen"
+

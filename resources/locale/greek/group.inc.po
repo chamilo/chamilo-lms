@@ -1,0 +1,279 @@
+msgid "langNewGroupCreate"
+msgstr "Δημιουργία καινούριας ομάδας χρηστών"
+
+msgid "langGroupCreation"
+msgstr "Δημιουργία καινούριας ομάδας χρηστών"
+
+msgid "langCreate"
+msgstr "Δημιουργία"
+
+msgid "langNewGroups"
+msgstr "ομάδα(ες) χρηστών"
+
+msgid "langMax"
+msgstr "με λατινικά γράμματα μέχρι 12 χαρακτήρες, π.χ. <i>FYS1234</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "Θέσεις (προαιρετικό)"
+
+msgid "langGroupsAdded"
+msgstr "Η ομάδα χρηστών έχει προστεθεί"
+
+msgid "langGroupDel"
+msgstr "Η ομάδα χρηστών έχει διαγραφεί"
+
+msgid "langDocuments"
+msgstr "Έγγραφα"
+
+msgid "langExistingGroups"
+msgstr "Ομάδες Χρηστών"
+
+msgid "langRegistered"
+msgstr "Εγγεγραμμένοι"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Οι εκπαιδευόμενοι επιτρέπεται να εγγραφούν στις ομάδες χρηστών"
+
+msgid "langGroupTools"
+msgstr "Εργαλεία"
+
+msgid "langGroupDocument"
+msgstr "Έγγραφα"
+
+msgid "langGroupPropertiesModified"
+msgstr "Αλλάχθηκαν οι ρυθμίσεις της ομάδας χρηστών"
+
+msgid "langGroupSpace"
+msgstr "Περιοχή ομάδας χρηστών"
+
+msgid "langGroupName"
+msgstr "Όνομα ομάδας"
+
+msgid "langGroupDescription"
+msgstr "Περιγραφή ομάδας"
+
+msgid "langGroupMembers"
+msgstr "Μέλη ομάδας χρηστών"
+
+msgid "langEditGroup"
+msgstr "Διόρθωση της ομάδας χρηστών"
+
+msgid "Optional"
+msgstr "(προαιρετικό)"
+
+msgid "langGroupSettingsModified"
+msgstr "Οι ρυθμίσεις της ομάδας χρηστών έχουν αλλάξει"
+
+msgid "langGroupTooMuchMembers"
+msgstr "Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω). 	Η σύνθεση της ομάδας δεν άλλαξε"
+
+msgid "langGroupTutor"
+msgstr "Επιβλέπων ομάδας"
+
+msgid "langGroupNoTutor"
+msgstr "(κανένας)"
+
+msgid "langGroupNone"
+msgstr "(κανένας)"
+
+msgid "langGroupNoneMasc"
+msgstr "(κανένας)"
+
+msgid "langAddTutors"
+msgstr "Διαχείριση καταλόγου χρηστών"
+
+msgid "langMyGroup"
+msgstr "η ομάδα μου"
+
+msgid "langOneMyGroups"
+msgstr "η επίβλεψή μου"
+
+msgid "langGroupSelfRegistration"
+msgstr "Εγγραφή"
+
+msgid "langGroupSelfRegInf"
+msgstr "Εγγραφείτε"
+
+msgid "langRegIntoGroup"
+msgstr "Προσθέστε με στην ομάδα"
+
+msgid "langGroupNowMember"
+msgstr "Είσαι τώρα μέλος της ομάδας"
+
+msgid "langPrivate"
+msgstr "Κλειστό (Πρόσβαση στο μάθημα έχουν μόνο οι χρήστες που ανήκουν στην ομάδα)"
+
+msgid "langPublic"
+msgstr "Ελεύθερη Πρόσβαση (για οποιοδήποτε μέλος αυτής της σειράς μαθημάτων)"
+
+msgid "langPropModify"
+msgstr "Επεξεργασία ρυθμίσεων"
+
+msgid "langState"
+msgstr "Κατάσταση"
+
+msgid "langGroupFilledGroups"
+msgstr "Οι ομάδες χρηστών έχουν συμπληρωθεί από εκπαιδευόμενους που βρίσκονται στον κατάλογο «Χρήστες»."
+
+msgid "langSubscribed"
+msgstr "οι χρήστες έχουν εγγραφεί σ\'αυτό το μάθημα"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Εκπαιδευόμενοι που δεν ανήκουν σε αυτή την ομάδα"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Ένας χρήστης μπορεί να εγγραφεί ως μέλος το πολύ σε"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr "Ομάδες"
+
+msgid "langGroupLimit"
+msgstr "Όριο"
+
+msgid "CreateGroup"
+msgstr "Δημιουργία ομάδων"
+
+msgid "ProceedToCreateGroup"
+msgstr "Προχωρήστε με τη δημιουργία ομάδας (ομάδων)"
+
+msgid "langStudentRegAllowed"
+msgstr "Οι φοιτητές επιτρέπεται να γραφτούν στις ομάδες"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Επιτρέπεται στους εκπαιδευόμενους να διαγράφονται από τις ομάδες"
+
+msgid "langAllGroups"
+msgstr "όλες οι ομάδες"
+
+msgid "langStudentUnsubscribe"
+msgstr "Διαγράψτεμε από αυτή την ομάδα."
+
+msgid "langStudentDeletesHimself"
+msgstr "Τώρα έχετε διαγραφεί."
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Αρχικές ρυθμίσεις για νέες ομάδες"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Όλες οι ομάδες που επιλέχθηκαν έχουν διαγραφεί"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Όλες οι ομάδες που επιλέχθηκαν είναι τώρα άδειες"
+
+msgid "langGroupEmptied"
+msgstr "Η ομάδα είναι τώρα άδεια"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Όλες οι ομάδες που επιλέχθηκαν έχουν συμπληρωθεί"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "Διαγραφείτε"
+
+msgid "langSameForAll"
+msgstr "το ίδιο για όλους"
+
+msgid "langNoLimit"
+msgstr "Χωρίς περιορισμό"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Παρακαλώ εισάγετε τον επιθυμητό αριθμό ομάδων"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Δημιουργία ομάδων από όλους τους χρήστες τεου εικονικού μαθήματος"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "Αυτή η σειρά μαθημάτων αποτελεί έναν συνδυασμό μιας πραγματικής σειράς μαθημάτων και μιας ή περισσοτέρων σειρών εικονικών μαθημάτων. Αν πατήσετε το επόμενο κοπυμπί, θα δημιουργηθούν νέες ομάδες, ανάλογα μα αυτές τις (εικονικές) σειρές μαθημάτων. Όλοι οι εκπαιδευόμενοι θα εγγραφούν στις ομάδες."
+
+msgid "langNoGroupsAvailable"
+msgstr "Δεν υπάρχουν διαθέσιμες ομάδες"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "Εικονικά μαθήματα"
+
+msgid "NotAvailable"
+msgstr "Δεν είναι διαθέσιμες"
+
+msgid "CreateSubgroups"
+msgstr "Δημιουργία υποομάδων"
+
+msgid "CreateSubgroupsInfo"
+msgstr "Αυτή η δυνατότητα σας επιτρέπει τη δημιουργία νέων ομάδων που βασίζονται σε μια προϋπάρχουσα ομάδα. Ο δεδομένος αριθμός ομάδων θα δημιουργηθούν και όλα τα μέλη της υπάρχουσας ομάδας θα εγγραφούν σε αυτές τις νέες ομάδες. Η προϋπάρχουσα ομάδα θα παραμείνει απαράλλαχτη."
+
+msgid "CreateNumberOfGroups"
+msgstr "Δημιουργία"
+
+msgid "WithUsersFrom"
+msgstr "Ομάδες με Μέλη από"
+
+msgid "CategoryDeleted"
+msgstr "Η κατηγορία διαγράφηκε"
+
+msgid "Empty"
+msgstr "Κενή"
+
+msgid "FillGroup"
+msgstr "προσθήκη χρηστών"
+
+msgid "EmptyGroup"
+msgstr "Διαγραφή όλων των χρηστών"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "Ο ανώτατος αριθμός ομάδων ανά χρήστη που υποβάλατε δεν είναι έγκυρος. Τώρα, υπάρχουν χρήστες που είναι εγγεργαμμένοι σε περισσότερες ομάδες από όσες έχετε προτείνει εσείς."
+
+msgid "GroupOverview"
+msgstr "Ανασκόπηση ομάδων"
+
+msgid "GroupCategory"
+msgstr "Κατηγορία ομάδας"
+
+msgid "NoTitleGiven"
+msgstr "Παρακαλώ δώστε έναν τίτλο"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "Παρακαλώ εισάγετε έναν έγκυρο αριθμό για τον ανώτατο αριθμό μελών."
+
+msgid "Wiki"
+msgstr "Το wiki της ομάδας"
+
+msgid "CategoryCreated"
+msgstr "Δημιουργήθηκε Κατηγορία"
+
+msgid "GroupTutors"
+msgstr "Εκπαιδευτές της ομάδας"
+
+msgid "GroupWork"
+msgstr "Αναθέσεις"
+
+msgid "GroupCalendar"
+msgstr "Ατζέντα"
+
+msgid "GroupAnnouncements"
+msgstr "Αναγγελίες"
+
+msgid "NoCategoriesDefined"
+msgstr "Δεν ορίσθηκαν κατηγορίες"
+
+msgid "GroupsFromClassesInfo"
+msgstr "Χρησιμοποιώντας αυτή την επιλογή, μπορείτε να δημιουργήσετε ομάδες βασισμένες στις τάξεις που γράφτηκαν στα μαθήματά σας."
+
+msgid "Group"
+msgstr "Ομάδα"
+
+msgid "ForumOfGroup"
+msgstr "Forum της ομάδας:"
+
+msgid "BackToGroupList"
+msgstr "Επιστροφή στον κατάλογο των ομάδων"
+
+msgid "EditGroupCategory"
+msgstr "Επεξεργασία της κατηγορίας ομάδας"
+
+msgid "NoStudents"
+msgstr "Κανένας εκπαιδευόμενος"
+
+msgid "NoData"
+msgstr "Δεν υπάρχουν διαθέσιμα δεδομένα"
+
+msgid "AllGroups"
+msgstr "Όλες οι ομάδες"
+

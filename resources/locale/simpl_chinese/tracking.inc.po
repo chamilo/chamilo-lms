@@ -1,0 +1,585 @@
+msgid "langToolName"
+msgstr "导入毕博课程"
+
+msgid "TrackingDisabled"
+msgstr "系统管理员已禁止学习跟踪功能."
+
+msgid "InactivesStudents"
+msgstr "活动用户"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "平均占用时间"
+
+msgid "AverageProgressInLearnpath"
+msgstr "课程进度"
+
+msgid "AverageResultsToTheExercices"
+msgstr "测试成绩"
+
+msgid "langShowNone"
+msgstr "不显示"
+
+msgid "langCourseStats"
+msgstr "课程统计"
+
+msgid "langToolsAccess"
+msgstr "工具使用"
+
+msgid "langCourseAccess"
+msgstr "课程访问"
+
+msgid "langLinksAccess"
+msgstr "链接"
+
+msgid "langDocumentsAccess"
+msgstr "文档"
+
+msgid "langScormAccess"
+msgstr "学习路径- Scorm 格式课程"
+
+msgid "langLinksDetails"
+msgstr "用户链接"
+
+msgid "langWorksDetails"
+msgstr "用户上传的作品命名为\'作者\'"
+
+msgid "langLoginsDetails"
+msgstr "点击月名以游览更多资料"
+
+msgid "langDocumentsDetails"
+msgstr "用户下载的文档"
+
+msgid "langExercicesDetails"
+msgstr "测验成绩已完成"
+
+msgid "langBackToList"
+msgstr "返回列表"
+
+msgid "langDetails"
+msgstr "详细信息"
+
+msgid "langStatsOfCourse"
+msgstr "课程范围统计"
+
+msgid "langStatsOfUser"
+msgstr "用户统计"
+
+msgid "langStatsOfCampus"
+msgstr "系统统计"
+
+msgid "langCountUsers"
+msgstr "用户数量"
+
+msgid "langCountToolAccess"
+msgstr "与此课程关联的总数"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "月"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "已登录用户"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "工具名称"
+
+msgid "langToolTitleUsersColumn"
+msgstr "用户点击"
+
+msgid "langToolTitleCountColumn"
+msgstr "总点击量"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "链接"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "用户点击"
+
+msgid "langLinksTitleCountColumn"
+msgstr "总点击量"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "测验"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "得分"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "文档"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "用户下载"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "总下载量"
+
+msgid "langScormContentColumn"
+msgstr "标题"
+
+msgid "langScormStudentColumn"
+msgstr "用户"
+
+msgid "langScormTitleColumn"
+msgstr "课程/步骤"
+
+msgid "langScormStatusColumn"
+msgstr "状态"
+
+msgid "langScormScoreColumn"
+msgstr "得分"
+
+msgid "langScormTimeColumn"
+msgstr "时间"
+
+msgid "langScormNeverOpened"
+msgstr "该课程不向此用户开放."
+
+msgid "langWorkTitle"
+msgstr "标题"
+
+msgid "langWorkAuthors"
+msgstr "作者"
+
+msgid "langWorkDescription"
+msgstr "描述"
+
+msgid "informationsAbout"
+msgstr "学习跟踪"
+
+msgid "langNoEmail"
+msgstr "未提供电子邮件"
+
+msgid "langNoResult"
+msgstr "没有结果"
+
+msgid "langCourse"
+msgstr "网站"
+
+msgid "langHits"
+msgstr "提示"
+
+msgid "langTotal"
+msgstr "总计"
+
+msgid "langHour"
+msgstr "时"
+
+msgid "langDay"
+msgstr "日"
+
+msgid "langLittleHour"
+msgstr "时"
+
+msgid "langLast31days"
+msgstr "在最后的31天内"
+
+msgid "langLast7days"
+msgstr "在最后的7天内"
+
+msgid "langThisday"
+msgstr "今天"
+
+msgid "langLogins"
+msgstr "登录"
+
+msgid "langLoginsExplaination"
+msgstr "这是你在这段时间内用这个工具最后注册访问的列表."
+
+msgid "langExercicesResults"
+msgstr "测试成绩"
+
+msgid "langVisits"
+msgstr "访问"
+
+msgid "langAt"
+msgstr "在"
+
+msgid "langLoginTitleDateColumn"
+msgstr "日期"
+
+msgid "langLoginTitleCountColumn"
+msgstr "访问"
+
+msgid "langLoginsAndAccessTools"
+msgstr "登录并使用工具"
+
+msgid "langWorkUploads"
+msgstr "上传贡献"
+
+msgid "langErrorUserNotInGroup"
+msgstr "非法用户: 此用户在小组中不存在."
+
+msgid "langListStudents"
+msgstr "小组中的用户列表"
+
+msgid "langPeriodHour"
+msgstr "小时"
+
+msgid "langPeriodDay"
+msgstr "日"
+
+msgid "langPeriodWeek"
+msgstr "周"
+
+msgid "langPeriodMonth"
+msgstr "月"
+
+msgid "langPeriodYear"
+msgstr "年"
+
+msgid "langNextDay"
+msgstr "明天"
+
+msgid "langPreviousDay"
+msgstr "昨天"
+
+msgid "langNextWeek"
+msgstr "下周"
+
+msgid "langPreviousWeek"
+msgstr "上周"
+
+msgid "langNextMonth"
+msgstr "下月"
+
+msgid "langPreviousMonth"
+msgstr "上月"
+
+msgid "langNextYear"
+msgstr "明年"
+
+msgid "langPreviousYear"
+msgstr "去年"
+
+msgid "langViewToolList"
+msgstr "查看所有工具列表"
+
+msgid "langToolList"
+msgstr "所有工具列表"
+
+msgid "langFrom"
+msgstr "从"
+
+msgid "langTo"
+msgstr "到"
+
+msgid "langPeriodToDisplay"
+msgstr "期限"
+
+msgid "langDetailView"
+msgstr "查看方式"
+
+msgid "langBredCrumpGroups"
+msgstr "小组"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "小组区"
+
+msgid "langBredCrumpUsers"
+msgstr "用户"
+
+msgid "langAdminToolName"
+msgstr "管理统计"
+
+msgid "langPlatformStats"
+msgstr "系统统计"
+
+msgid "langStatsDatabase"
+msgstr "统计数据库"
+
+msgid "langPlatformAccess"
+msgstr "系统权限"
+
+msgid "langPlatformCoursesAccess"
+msgstr "课程权限"
+
+msgid "langPlatformToolAccess"
+msgstr "按工具"
+
+msgid "langHardAndSoftUsed"
+msgstr "国家 提供者 浏览器 操作系统 介绍者"
+
+msgid "langStrangeCases"
+msgstr "问题个案"
+
+msgid "langStatsDatabaseLink"
+msgstr "点击此处"
+
+msgid "langCountCours"
+msgstr "按数量"
+
+msgid "langCountCourseByFaculte"
+msgstr "课程数量-按分类排序"
+
+msgid "langCountCourseByLanguage"
+msgstr "按语言"
+
+msgid "langCountCourseByVisibility"
+msgstr "课程数量-按显示隐藏排序"
+
+msgid "langCountUsersByCourse"
+msgstr "用户数量-按课程排序"
+
+msgid "langCountUsersByFaculte"
+msgstr "用户数量-按分类排序"
+
+msgid "langCountUsersByStatus"
+msgstr "用户数量-按状态排序"
+
+msgid "langAccess"
+msgstr "访问"
+
+msgid "langCountries"
+msgstr "国家"
+
+msgid "langProviders"
+msgstr "提供者"
+
+msgid "langOS"
+msgstr "操作系统"
+
+msgid "langBrowsers"
+msgstr "浏览器"
+
+msgid "langReferers"
+msgstr "介绍者"
+
+msgid "langAccessExplain"
+msgstr "(当一位用户打开系统首页时)"
+
+msgid "langTotalPlatformAccess"
+msgstr "总数"
+
+msgid "langTotalPlatformLogin"
+msgstr "总数"
+
+msgid "langMultipleLogins"
+msgstr "拥有相同<I>用户名</I>的帐号"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "拥有相同<I>用户名</I>和相同<I>密码</I>的用户"
+
+msgid "langMultipleEmails"
+msgstr "拥有相同<I>电子邮件</I>的帐户"
+
+msgid "langCourseWithoutProf"
+msgstr "没有领导的课程"
+
+msgid "langCourseWithoutAccess"
+msgstr "未使用课程"
+
+msgid "langLoginWithoutAccess"
+msgstr "未使用登录"
+
+msgid "langAllRight"
+msgstr "未发现问题"
+
+msgid "langDefcon"
+msgstr "出现错误!!"
+
+msgid "langNULLValue"
+msgstr "空(或NULL)"
+
+msgid "langTrafficDetails"
+msgstr "流量明细"
+
+msgid "langSeeIndividualTracking"
+msgstr "个别追踪请使用<A href=\"../user/user.php\">用户</A>工具."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "本路径从未开放."
+
+msgid "SynthesisView"
+msgstr "综合查看"
+
+msgid "Visited"
+msgstr "已访问"
+
+msgid "FirstAccess"
+msgstr "首次使用"
+
+msgid "LastAccess"
+msgstr "最后使用"
+
+msgid "langProbationers"
+msgstr "学生"
+
+msgid "MoyenneTest"
+msgstr "测验平均"
+
+msgid "exportExcel"
+msgstr "输出至 Excel 格式"
+
+msgid "MoyCourse"
+msgstr "课程平均"
+
+msgid "MoyenneExamen"
+msgstr "测验平均"
+
+msgid "MoySession"
+msgstr "session 平均"
+
+msgid "TakenSessions"
+msgstr "被用 session"
+
+msgid "FollowUp"
+msgstr "跟进"
+
+msgid "Trainers"
+msgstr "导师"
+
+msgid "Administrators"
+msgstr "管理员"
+
+msgid "Tracks"
+msgstr "跟踪"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "ExcelFormat"
+msgstr "Excel 格式"
+
+msgid "MyLearnpath"
+msgstr "我的学习路径"
+
+msgid "LastConnexion"
+msgstr "最近登录"
+
+msgid "LatestLogin"
+msgstr "最近登录"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "用在平台上的时间"
+
+msgid "Print"
+msgstr "打印"
+
+msgid "CourseTitle"
+msgstr "课程名称"
+
+msgid "NbStudents"
+msgstr "学员"
+
+msgid "AvgStudentsProgress"
+msgstr "进度"
+
+msgid "AvgCourseScore"
+msgstr "得分"
+
+msgid "AvgMessages"
+msgstr "信息"
+
+msgid "AvgAssignments"
+msgstr "作业"
+
+msgid "ToolsMostUsed"
+msgstr "最常使用工具"
+
+msgid "StudentsTracking"
+msgstr "学员报表"
+
+msgid "CourseTracking"
+msgstr "导师报表"
+
+msgid "LinksMostClicked"
+msgstr "最多访问链接"
+
+msgid "DocumentsMostDownloaded"
+msgstr "最多下载文档"
+
+msgid "TeacherInterface"
+msgstr "导师视图"
+
+msgid "AdminInterface"
+msgstr "管理视图"
+
+msgid "NumberOfSessions"
+msgstr "讲习班数目"
+
+msgid "YourCourseList"
+msgstr "你培训的平均值"
+
+msgid "CoachList"
+msgstr "导师列表"
+
+msgid "NoUsersInCourseTracking"
+msgstr "已注册到此课程的学员跟踪"
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "时间"
+
+msgid "DisplayCoaches"
+msgstr "导师概要"
+
+msgid "DisplayUserOverview"
+msgstr "用户概要"
+
+msgid "ExportUserOverviewOptions"
+msgstr "用户概要导出选项"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "所得总分"
+
+msgid "TotalExercisesScorePossible"
+msgstr "可能得分"
+
+msgid "TotalExercisesAnswered"
+msgstr "回答数目"
+
+msgid "TotalExercisesScorePercentage"
+msgstr "分数比例"
+
+msgid "ForumForumsNumber"
+msgstr "论坛数目"
+
+msgid "ForumThreadsNumber"
+msgstr "话题数目"
+
+msgid "ForumPostsNumber"
+msgstr "回复数目"
+
+msgid "ChatConnectionsDuringLastXDays"
+msgstr "距离上次到聊天室的日子%s天"
+
+msgid "CourseInformation"
+msgstr "课程信息"
+
+msgid "langSendNotification"
+msgstr "通知"
+
+msgid "TimeOfActiveByTraining"
+msgstr "培训时间"
+
+msgid "AvgAllUsersInAllCourses"
+msgstr "全部学员的平均值"
+
+msgid "AvgExercisesScore"
+msgstr "测试成绩"
+
+msgid "ResourcesTracking"
+msgstr "资源使用报表"
+
+msgid "SelectFieldToAdd"
+msgstr "选择用户资料名称以添加"
+
+msgid "AddAdditionalProfileField"
+msgstr "添加用户资料名称"
+
+msgid "ConfigureExtensions"
+msgstr "插件配置"
+
+msgid "DashboardBlocks"
+msgstr "资料卡"
+
+msgid "DashboardList"
+msgstr "资料卡列表"
+
+msgid "YouHaveNotEnabledBlocks"
+msgstr "还没有允许的卡片"
+
+msgid "BlocksHaveBeenUpdatedSuccessfully"
+msgstr "卡片已更新"
+
+msgid "FolderCreated"
+msgstr "创建文件夹"
+

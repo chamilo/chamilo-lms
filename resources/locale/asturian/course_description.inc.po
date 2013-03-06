@@ -1,0 +1,45 @@
+msgid "langCourseProgram"
+msgstr "Descripción del cursu"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Descripción non disponible"
+
+msgid "langEditCourseProgram"
+msgstr "Crear o editar el programa del cursu"
+
+msgid "QuestionPlan"
+msgstr "Entrugues pal mayestru"
+
+msgid "langInfo2Say"
+msgstr "Información pa los estudiantes"
+
+msgid "langOuAutreTitre"
+msgstr "Títulu"
+
+msgid "langNewBloc"
+msgstr "Apartáu personalizáu"
+
+msgid "langAddCat"
+msgstr "Amestar apartáu"
+
+msgid "langAdd"
+msgstr "Amestar"
+
+msgid "langValid"
+msgstr "Validar"
+
+msgid "langBackAndForget"
+msgstr "Volver y descartar"
+
+msgid "CourseDescriptionUpdated"
+msgstr "La descripción del cursu actualizóse"
+
+msgid "CourseDescriptionDeleted"
+msgstr "La descripción del cursu esborróse"
+
+msgid "CourseDescriptionIntro"
+msgstr "Pa crear la descripción d\'un cursu calque nos apartaos que quier que tenga y complételos."
+
+msgid "langSaveDescription"
+msgstr "Guardar descripción"
+

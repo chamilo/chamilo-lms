@@ -1,0 +1,366 @@
+msgid "langLineNumber"
+msgstr "Radnummer"
+
+msgid "langLine"
+msgstr "rad"
+
+msgid "langLines"
+msgstr "rader"
+
+msgid "langLineOrLines"
+msgstr "rad(er)"
+
+msgid "langMoveUp"
+msgstr "Flytta upp"
+
+msgid "langMoveDown"
+msgstr "Flytta ned"
+
+msgid "langAddNewHeading"
+msgstr "Lägg till ny rubrik"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Lärare enbart"
+
+msgid "langDefineHeadings"
+msgstr "Definiera överskrifter"
+
+msgid "langBackToUsersList"
+msgstr "Tillbaka till användarlistan"
+
+msgid "langTracking"
+msgstr "Spårning"
+
+msgid "langCourseManager"
+msgstr "Kursansvarig"
+
+msgid "langModRight"
+msgstr "ändra rättigheter för"
+
+msgid "langNoAdmin"
+msgstr "har från och med nu <b>inga</a> rättigheter på denna sida"
+
+msgid "langAllAdmin"
+msgstr "har från och med nu <b>fullständiga</b> rättigheter på denna sida"
+
+msgid "langModRole"
+msgstr "Ändra rollen för"
+
+msgid "langRole"
+msgstr "Roll"
+
+msgid "langIsNow"
+msgstr "är från och med nu"
+
+msgid "langInC"
+msgstr "i denna kurs"
+
+msgid "langFilled"
+msgstr "Du har lämnat några fält tomma."
+
+msgid "langUserNo"
+msgstr "Användarnamnet som du valt"
+
+msgid "langTaken"
+msgstr "är redan upptaget. Välj ett annat."
+
+msgid "langTutor"
+msgstr "Lärare"
+
+msgid "langUnreg"
+msgstr "Avsluta prenumeration"
+
+msgid "langGroupUserManagement"
+msgstr "Grupphantering"
+
+msgid "langUnregister"
+msgstr "Avregistrera"
+
+msgid "langAddAUser"
+msgstr "Lägg till användare"
+
+msgid "UsersUnsubscribed"
+msgstr "Den valda användaren har avregistrerats från kursen"
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "Denna användare har registrerats till denna kurs via en session. Du kan inte ändra hans/hennes information"
+
+msgid "NoDataAvailable"
+msgstr "Ingen information finns"
+
+msgid "AddToFriends"
+msgstr "Är du säker på att du vill lägga till kontakten till Vänner?"
+
+msgid "AddPersonalMessage"
+msgstr "Lägg till personligt meddelande"
+
+msgid "Friends"
+msgstr "Vänner"
+
+msgid "PersonalData"
+msgstr "Profil"
+
+msgid "Contacts"
+msgstr "Kontakter"
+
+msgid "SocialInformationComment"
+msgstr "Skärmbilden låter dig organisera dina kontakter"
+
+msgid "AttachContactsToGroup"
+msgstr "Koppla kontakt till grupp"
+
+msgid "ContactsList"
+msgstr "Kontaktlista"
+
+msgid "AttachToGroup"
+msgstr "Lägg till i en grupp"
+
+msgid "SelectOneContact"
+msgstr "Välj en kontakt"
+
+msgid "SelectOneGroup"
+msgstr "Välj en grupp"
+
+msgid "AttachContactsPersonal"
+msgstr "Lägg till personliga kontakter"
+
+msgid "AttachContactsToGroupSuccesfuly"
+msgstr "Lyckades lägga till kontakter till grupp"
+
+msgid "InvitationDenied"
+msgstr "Inbjudan nekad"
+
+msgid "AddedContactToList"
+msgstr "Lagt till kontakten i listan"
+
+msgid "ContactsGroupsComment"
+msgstr "Skärmbilden listar kontakter sorterade efter grupp"
+
+msgid "YouDontHaveContactsInThisGroup"
+msgstr "Inga kontakter hittades"
+
+msgid "SelectTheCheckbox"
+msgstr "Välj kryssrutan"
+
+msgid "YouDontHaveInvites"
+msgstr "Inga inbjudningar"
+
+msgid "SocialInvitesComment"
+msgstr "Inbjudan avvaktar svar"
+
+msgid "InvitationSentBy"
+msgstr "Inbjudan skickad av"
+
+msgid "RequestContact"
+msgstr "Efterfråga kontakt"
+
+msgid "SocialUnknow"
+msgstr "Okänd"
+
+msgid "SocialParent"
+msgstr "Mina föräldrar"
+
+msgid "SocialFriend"
+msgstr "Mina vänner"
+
+msgid "SocialGoodFriend"
+msgstr "Mina bästa vänner"
+
+msgid "SocialEnemy"
+msgstr "Mina ovänner"
+
+msgid "SocialDeleted"
+msgstr "Kontakt borttagen"
+
+msgid "MessageOutboxComment"
+msgstr "Meddelande skickat."
+
+msgid "MyPersonalData"
+msgstr "Min personliga information"
+
+msgid "AlterPersonalData"
+msgstr "Ändra personlig information"
+
+msgid "Invites"
+msgstr "Inbjudningar"
+
+msgid "ContactsGroups"
+msgstr "Gruppkontakter"
+
+msgid "ErrorSendingMessage"
+msgstr "Det uppstod ett fel när meddelandet försökte skickas"
+
+msgid "PendingInvitations"
+msgstr "Obesvarade inbjudningar"
+
+msgid "MyInbox"
+msgstr "Min inbox"
+
+msgid "ViewSharedProfile"
+msgstr "Visa delad profil"
+
+msgid "SeeAll"
+msgstr "Visa allt"
+
+msgid "ImagesUploaded"
+msgstr "Uppladdade bilder"
+
+msgid "ExtraInformation"
+msgstr "Extra information"
+
+msgid "SearchContacts"
+msgstr "Sök kontakter"
+
+msgid "SocialSeeContacts"
+msgstr "Visa kontakter"
+
+msgid "SocialUserInformationAttach"
+msgstr "Vänligen, skriv ett meddelande innan du skickar en förfrågan"
+
+msgid "MessageInvitationNotSent"
+msgstr "ditt inbjudningsmeddelande har inte blivit skickad"
+
+msgid "SocialAddToFriends"
+msgstr "Lägg till i mina kontakter"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "Användaren är inte registrerad i den här kursen"
+
+msgid "ChangeContactGroup"
+msgstr "Byt grupp för kontakt"
+
+msgid "Friend"
+msgstr "Vänner"
+
+msgid "ViewMySharedProfile"
+msgstr "Min delade profil"
+
+msgid "UserStatistics"
+msgstr "Statistik för användaren"
+
+msgid "EditUser"
+msgstr "Ändra användaren"
+
+msgid "ViewUser"
+msgstr "Visa användaren"
+
+msgid "RSSFeeds"
+msgstr "Rss feed"
+
+msgid "NoFriendsInYourContactList"
+msgstr "Inga vänner i din kontaktlista"
+
+msgid "TryAndFindSomeFriends"
+msgstr "Hitta vänner"
+
+msgid "ClearSearchResults"
+msgstr "Töm sökresultat"
+
+msgid "SendInvitation"
+msgstr "Skicka inbjudan"
+
+msgid "MyCertificates"
+msgstr "Mina certifikat"
+
+msgid "ToChangeYourEmailMustTypeYourPassword"
+msgstr "För att ändra din e-postadress, måste du bekräfta ditt lösenord"
+
+msgid "Invitations"
+msgstr "Inbjudningar"
+
+msgid "MyGroups"
+msgstr "Mina grupper"
+
+msgid "EditProfile"
+msgstr "Redigera Profil"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "MyFriends"
+msgstr "Mina vänner"
+
+msgid "Messages"
+msgstr "Meddelande"
+
+msgid "CreateAgroup"
+msgstr "Skapa en grupp"
+
+msgid "UsersGroups"
+msgstr "Användare, grupper"
+
+msgid "SorryNoResults"
+msgstr "Tyvärr inga resultat"
+
+msgid "AddPicture"
+msgstr "Lägg till en bild"
+
+msgid "Closed"
+msgstr "Stängt"
+
+msgid "AddGroup"
+msgstr "Lägg till en grupp"
+
+msgid "ThisIsAnOpenGroup"
+msgstr "Detta är en öppen grupp"
+
+msgid "YouShouldCreateATopic"
+msgstr "Du bör skapa ett ämne"
+
+msgid "IAmAnAdmin"
+msgstr "Jag är en admin"
+
+msgid "NewTopic"
+msgstr "Skapa tråd"
+
+msgid "EditGroup"
+msgstr "Redigera Grupp"
+
+msgid "MemberList"
+msgstr "Medlemslistan"
+
+msgid "Members"
+msgstr "Medlemmar"
+
+msgid "Admin"
+msgstr "Administratör"
+
+msgid "AttachmentFiles"
+msgstr "Bilagor"
+
+msgid "ModifyInformation"
+msgstr "Redigera information"
+
+msgid "GroupList"
+msgstr "Grupp Lista"
+
+msgid "GroupEdit"
+msgstr "Redigera grupp"
+
+msgid "SendInvitationTo"
+msgstr "Skicka inbjudan till"
+
+msgid "Reply"
+msgstr "Svara"
+
+msgid "Newest"
+msgstr "Nyaste"
+
+msgid "Popular"
+msgstr "Populär"
+
+msgid "Member"
+msgstr "Medlem"
+
+msgid "Open"
+msgstr "Öppen"
+
+msgid "AcceptInvitation"
+msgstr "Acceptera Inbjudan"
+
+msgid "MyFiles"
+msgstr "Mina filer"
+
+msgid "SocialGroups"
+msgstr "Sociala grupper"
+

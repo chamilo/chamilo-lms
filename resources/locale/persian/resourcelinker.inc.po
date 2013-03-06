@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "منبع مورد نظر افزوده شد"
+
+msgid "LearningPath"
+msgstr "مسیر آموزشی"
+
+msgid "LevelUp"
+msgstr "سطح بالاتر"
+
+msgid "AddIt"
+msgstr "اضافه کردن"
+
+msgid "MainCategory"
+msgstr "دسته اصلی"
+
+msgid "lang_delete_added_resources"
+msgstr "حذف منابع افزوده شده"
+
+msgid "AddToLinks"
+msgstr "افزودن به پیوندهای درس"
+
+msgid "DontAdd"
+msgstr "اضافه نکردن"
+
+msgid "lang_show_all_added_resources"
+msgstr "نمایش تمامی منابع افزوده شد"
+
+msgid "ResourcesAdded"
+msgstr "منابع مورد نظر افزوده شدند"
+
+msgid "BackTo"
+msgstr "بازگشت به"
+
+msgid "ExternalResources"
+msgstr "منابع خارج از درس"
+
+msgid "CourseResources"
+msgstr "منابع درسی"
+
+msgid "ExternalLink"
+msgstr "پیوند به خارج از درس"
+
+msgid "DropboxAdd"
+msgstr "افزودن صفحۀ تبادل مدارک به این فصل"
+
+msgid "AddAssignmentPage"
+msgstr " افزودن صفحۀ فعالیتهای درسی به این فصل"
+
+msgid "Exercise"
+msgstr "آزمون ها"
+
+msgid "Link"
+msgstr "پیوند ها"
+
+msgid "AdValvas"
+msgstr "اطلاعیه ها"
+
+msgid "Document"
+msgstr "اسناد"
+
+msgid "ShowDelete"
+msgstr "نمایش / حذف"
+
+msgid "IntroductionText"
+msgstr "متن مقدمه"
+
+msgid "CourseDescription"
+msgstr "توضیحات در مورد درس"
+
+msgid "Groups"
+msgstr "گروه ها"
+
+msgid "Users"
+msgstr "کاربران"
+
+msgid "IntroductionTextAdd"
+msgstr "افزودن صفحه حاوی متن مقدمه به این فصل"
+
+msgid "CourseDescriptionAdd"
+msgstr "افزودن صفحه توضیحات درس  به این فصل"
+
+msgid "GroupsAdd"
+msgstr "افزودن صفحه گروهها به این فصل"
+
+msgid "UsersAdd"
+msgstr "افزودن صفحه  کاربران به این فصل"
+
+msgid "ExportableCourseResources"
+msgstr "محتوای آموزشی قابل صدور به صورت  <br>SCORM <br>"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "محتوای آموزشی غیر قابل صدور به صورت  <br>SCORM <br>"
+
+msgid "LinkTarget"
+msgstr "مقصد پیوند"
+
+msgid "SameWindow"
+msgstr "باز شدن صفحه مقصد در همان پنجره"
+
+msgid "NewWindow"
+msgstr "بازشدن صفحه مقصددر پنجره ایجدید"
+
+msgid "StepDeleted1"
+msgstr "&#1575;&#1740;&#1606;"
+
+msgid "StepDeleted2"
+msgstr "مورد انتخابی  از این ابزار آموزشی حذف شد"
+
+msgid "Modify"
+msgstr "ویرایش"
+
+msgid "Chapter"
+msgstr "فصل"
+
+msgid "NoAgendaItems"
+msgstr "هیچ رویدادی وجود ندارد"
+
+msgid "AgendaAdd"
+msgstr "افزودن رویداد"
+
+msgid "UserGroupFilter"
+msgstr "فیلتر کردن گروه ها/کاربران"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "صعودی"
+
+msgid "ShowCurrent"
+msgstr "نمایش رویدادهای ماه جاری"
+
+msgid "ModifyCalendarItem"
+msgstr "ویرایش رویداد"
+
+msgid "ItemTitle"
+msgstr "نام رویداد"
+
+msgid "Detail"
+msgstr "جزئیات"
+
+msgid "EditSuccess"
+msgstr "رویداد ویرایش شد"
+
+msgid "AddCalendarItem"
+msgstr "افزودن رویداد در تقویم"
+
+msgid "AddAnn"
+msgstr "افزودن اطلاعیه"
+
+msgid "ForumAddNewTopic"
+msgstr "انجمن : افزودن موضوع جدید"
+
+msgid "ForumEditTopic"
+msgstr "انجمن : تغییر موضوع"
+
+msgid "ExerciseAnswers"
+msgstr "تمرین : پاسخ ها"
+
+msgid "ForumReply"
+msgstr "انجمن : پاسخ"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "نزولی"
+

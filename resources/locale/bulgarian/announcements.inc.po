@@ -1,0 +1,165 @@
+msgid "Announcement"
+msgstr "Обяви"
+
+msgid "langAnnEmpty"
+msgstr "Списъкът с обявите е празен."
+
+msgid "AnnouncementModified"
+msgstr "Обявата е променена."
+
+msgid "AnnouncementAdded"
+msgstr "Създадена е обява."
+
+msgid "AnnouncementDeleted"
+msgstr "Обявата е изтрита."
+
+msgid "AnnouncementPublishedOn"
+msgstr "Обявата е публикувана на"
+
+msgid "AddAnnouncement"
+msgstr "Добавяне на обява"
+
+msgid "langContent"
+msgstr "Съдържание"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Изчисти списъка с обявите"
+
+msgid "professorMessage"
+msgstr "Съобщение от вашия преподавател"
+
+msgid "langEmailSent"
+msgstr " и е изпратена по e-mail на регистрираните студенти"
+
+msgid "EmailOption"
+msgstr "Да се изпрати тази обява чрез e-mail"
+
+msgid "langOn"
+msgstr "Включени"
+
+msgid "langRegUser"
+msgstr "Регистрирани потребители"
+
+msgid "langUnvalid"
+msgstr "имат невалиден e-mail адрес"
+
+msgid "langModifAnn"
+msgstr "Промяна на обявата"
+
+msgid "langModify"
+msgstr "Промяна"
+
+msgid "langDelete"
+msgstr "Изтриване"
+
+msgid "langTitle"
+msgstr "Заглавие"
+
+msgid "langHelp"
+msgstr "Помощ"
+
+msgid "langOk"
+msgstr "Добре (OK)"
+
+msgid "langAddIntro"
+msgstr "Добавяне на въведение"
+
+msgid "langBackList"
+msgstr "Връщане към списъка"
+
+msgid "langSelMess"
+msgstr "Предупреждение към някои потребители"
+
+msgid "EmailTitle"
+msgstr "Заглавие"
+
+msgid "langUserlist"
+msgstr "Списък с групи и потребители"
+
+msgid "langSelectedUsers"
+msgstr "Избрани потребители"
+
+msgid "langSubmit"
+msgstr "Изпращане"
+
+msgid "langPleaseEnterMessage"
+msgstr "Трябва да въведете текста на съобщението."
+
+msgid "langPleaseSelectUsers"
+msgstr "Трябва да изберете няколко потребители."
+
+msgid "Teachersubject"
+msgstr "Съобщение, изпратено към потребителите"
+
+msgid "langMessages"
+msgstr "Съобщения"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Съобщение за някои потребители"
+
+msgid "langIntroText"
+msgstr "За да изпратите съобщение, изберете група потребители (маркирани с G отпред) или един потребител от списъка вляво. Прилагайте щракване с мишката с едновременно натиснат клавиш CTRL, за да маркирате повече от един елемент. След това щракнете върху стрелката \"дясно\" между двата списъка, въведете вашето съобщение и щракнете \"OK\"."
+
+msgid "langDown"
+msgstr "Надолу"
+
+msgid "langMsgSent"
+msgstr "Съобщението беше изпратено на избраните потребители"
+
+msgid "langSelUser"
+msgstr "избрани потребители"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Съобщение към избраните групи"
+
+msgid "langSelectedGroups"
+msgstr "Избрани групи"
+
+msgid "langMsg"
+msgstr "Съобщения"
+
+msgid "langYes"
+msgstr "Да"
+
+msgid "MsgText"
+msgstr "Съобщение"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Всички обяви бяха изтрити"
+
+msgid "AnnouncementMoved"
+msgstr "Обявата беше преместена"
+
+msgid "NoAnnouncements"
+msgstr "Няма обяви."
+
+msgid "SelectEverybody"
+msgstr "Всички"
+
+msgid "SelectedUsersGroups"
+msgstr "Избрани групи"
+
+msgid "LearnerMessage"
+msgstr "Съобщение от курсист"
+
+msgid "TitleIsRequired"
+msgstr "Въведете заглавие."
+
+msgid "AnnounceSentByEmail"
+msgstr "Обявата е изпратена по e-mail."
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Обявата е изпратена до избраните потребители."
+
+msgid "SendAnnouncement"
+msgstr "Изпращане на обявата"
+
+msgid "ModifyAnnouncement"
+msgstr "Редактиране на обявата"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Изпращане на обявата"
+
+msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
+msgstr "Уважаеми господине / Уважаема госпожо, профилът ви в системата е активиран. Можете да влезете с потребителското си име и парола. Приятно участие в курсовете."
+

@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "elavult nyelvi változó"
+
+msgid "langMdCallingTool"
+msgstr "Dokumentumok"
+
+msgid "langTool"
+msgstr "Dokumentum metaadat"
+
+msgid "langNotInDB"
+msgstr "nincs ilyen Hivatkozások kategória"
+
+msgid "langManifestSyntax"
+msgstr "(nyelvtani hiba a manifest fájlban...)"
+
+msgid "langEmptyManifest"
+msgstr "(üres manifest fájl...)"
+
+msgid "langNoManifest"
+msgstr "(nincs manifest fájl...)"
+
+msgid "langNotFolder"
+msgstr "nem lehetséges, ez nem egy mappa..."
+
+msgid "langUploadHtt"
+msgstr "HTT fájl feltöltése"
+
+msgid "langHttFileNotFound"
+msgstr "Az új HTT fájlt nem lehetett megnyitni (pl. üres, túl nagy)"
+
+msgid "langHttOk"
+msgstr "Az új HTT fájl feltöltve"
+
+msgid "langHttNotOk"
+msgstr "HTT fájl feltöltése sikertelen"
+
+msgid "langRemoveHtt"
+msgstr "HTT fájl eltávolítása"
+
+msgid "langHttRmvOk"
+msgstr "HTT fájl el lett távolítva"
+
+msgid "langHttRmvNotOk"
+msgstr "HTT fájl eltávolítása sikertelen"
+
+msgid "langImport"
+msgstr "Importálás"
+
+msgid "langRemove"
+msgstr "Metaadat bejegyzések törlése"
+
+msgid "langAllRemovedFor"
+msgstr "Az összes bejegyzés eltávolítva a következő kategóriában:"
+
+msgid "langIndex"
+msgstr "Szavak indexelése"
+
+msgid "langTotalMDEs"
+msgstr "A hivatkozások metaadat bejegyzéseinek száma összesen:"
+
+msgid "langMainMD"
+msgstr "Fő metaadat bejegyzés megnyitása"
+
+msgid "langLines"
+msgstr "sor"
+
+msgid "langPlay"
+msgstr "index.php lejátszása"
+
+msgid "langNonePossible"
+msgstr "Nem lehet metaadat műveleteket végezni"
+
+msgid "langOrElse"
+msgstr "Egy hivatkozások kategória kiválsaztása"
+
+msgid "langWorkWith"
+msgstr "Scorm könyvtár felhasználása"
+
+msgid "langSDI"
+msgstr "... SCORM mappa SCORM mappa azonosítóval (manifest feldarabolása vagy üresen hagyása)"
+
+msgid "langRoot"
+msgstr "gyökérkönyvtár"
+
+msgid "langSplitData"
+msgstr "Manifest és metaadat bejegyzés darabolása, ha van ilyen:"
+
+msgid "langMffNotOk"
+msgstr "A manifest fájl cseréje sikertelen"
+
+msgid "langMffOk"
+msgstr "A manifest fájl ki lett cserélve"
+
+msgid "langMffFileNotFound"
+msgstr "Az új manifest fájlt nem lehetett megnyitni (pl. üres, túl nagy)"
+
+msgid "langUploadMff"
+msgstr "Manifest fájl cseréje"
+

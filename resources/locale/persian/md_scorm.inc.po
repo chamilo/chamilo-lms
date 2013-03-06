@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "متغییرهای زبانی خارج از استفاده"
+
+msgid "langMdCallingTool"
+msgstr "مدارک آموزشی"
+
+msgid "langTool"
+msgstr "اطلاعات در مورد ابرداده های قسمت مدارک"
+
+msgid "langNotInDB"
+msgstr "طبقه مورد نظر یافت نشد"
+
+msgid "langManifestSyntax"
+msgstr " <br>manifest ظاهراً در کدهای فایل<br> یک اشتباه رخ داده است"
+
+msgid "langEmptyManifest"
+msgstr "manifest فایل<br> خالی است"
+
+msgid "langNoManifest"
+msgstr "manifest فایل<br>در این زیر مجموعۀ آموزشی یافت نشد"
+
+msgid "langNotFolder"
+msgstr "غیر ممکن است. ظاهراً این یک پرونده نیست"
+
+msgid "langUploadHtt"
+msgstr "HTT ارسال یک فایل"
+
+msgid "langHttFileNotFound"
+msgstr "HTTبازکردن فایل<br>  مورد نظر شما امکان پذیر نیست. فایل موردنظر خالی است یا وزن آن بیش از حد مجاز است"
+
+msgid "langHttOk"
+msgstr "HTT فایل <br> مورد نظر با موفقیت ارسال گردید"
+
+msgid "langHttNotOk"
+msgstr "HTT عملیات ارسال فایل<br> مورد نظر شما بی ثمرماند"
+
+msgid "langRemoveHtt"
+msgstr "HTT حذف فایل"
+
+msgid "langHttRmvOk"
+msgstr "HTT فایل<br> مورد نظر حذف گردید"
+
+msgid "langHttRmvNotOk"
+msgstr "HTT حذف فایل<br> مورد نظر شما بی ثمرماند"
+
+msgid "langImport"
+msgstr "وارد کردن"
+
+msgid "langRemove"
+msgstr "حذف برخی از ابرداده ها"
+
+msgid "langAllRemovedFor"
+msgstr "تمامی ابرداده ها از این طبقه حذف شدند"
+
+msgid "langIndex"
+msgstr "صفحۀ اصلی"
+
+msgid "langTotalMDEs"
+msgstr "تعداد کل ابرداده ها"
+
+msgid "langMainMD"
+msgstr "صلی ابرداده باز کردن"
+
+msgid "langLines"
+msgstr "خط"
+
+msgid "langPlay"
+msgstr "index.php نمایش فایل"
+
+msgid "langNonePossible"
+msgstr "انجام این عملیات بر روی ابرداده ها غیر ممکن است"
+
+msgid "langOrElse"
+msgstr "لطفاً طبقۀ خاصی از پیوندها را انتخاب کنید"
+
+msgid "langWorkWith"
+msgstr "SCORM کارکردن با پرونده"
+
+msgid "langSDI"
+msgstr "... SCORM Directory with SD-id (and split manifest - or leave empty)"
+
+msgid "langRoot"
+msgstr "ریشه"
+
+msgid "langSplitData"
+msgstr "Split manifests, and #MDe, if any:"
+
+msgid "langMffNotOk"
+msgstr "manifeste عملیات جایگزینی فایل<br> بی ثمر ماند"
+
+msgid "langMffOk"
+msgstr "manifest فایل <br> با موفقیت جایگزین شد"
+
+msgid "langMffFileNotFound"
+msgstr "manifest بازکردن فایل <br> مورد نظر شما غیرممکن است. فایل مورد نظر خالی ست یا وزن آن بیش از حد مجاز است"
+
+msgid "langUploadMff"
+msgstr "manifest  جایگزینی فایل"
+

@@ -1,0 +1,303 @@
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Microphone"
+msgstr "Mikrofon"
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "DeleteStream"
+msgstr "Avsluta strömning"
+
+msgid "Progress"
+msgstr "Framsteg"
+
+msgid "Play"
+msgstr "Spela"
+
+msgid "Stop"
+msgstr "Stopp"
+
+msgid "Record"
+msgstr "Spela in"
+
+msgid "NoFileAvailable"
+msgstr "Ingen fil tillgänglig"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Inspelning endast för lärare"
+
+msgid "UsersNow"
+msgstr "Användare just nu:"
+
+msgid "StartConference"
+msgstr "Starta konferens"
+
+msgid "MyName"
+msgstr "Mitt namn"
+
+msgid "OrganisationSVideoconference"
+msgstr "Chamilo videokonferens"
+
+msgid "ImportPresentation"
+msgstr "Importera presentation"
+
+msgid "RefreshList"
+msgstr "Uppdatera lista"
+
+msgid "GoToTop"
+msgstr "Gå till toppen"
+
+msgid "NewPoll"
+msgstr "Ny omröstning"
+
+msgid "CreateNewPoll"
+msgstr "Skapa ny omröstning för rummet"
+
+msgid "Question"
+msgstr "Fråga:"
+
+msgid "PollType"
+msgstr "Omröstningstyp:"
+
+msgid "Create"
+msgstr "Skapa"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Info: Alla uppkopplade användare i rummet får ett meddelande om den nya omröstningen."
+
+msgid "YesNo"
+msgstr "Ja/Nej"
+
+msgid "Numeric1To10"
+msgstr "Numerisk 1-10"
+
+msgid "Poll"
+msgstr "Omröstning"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Du måste vara moderator för rummet för att skapa omröstningar."
+
+msgid "YourVoteHasBeenSent"
+msgstr "Du har nu röstat"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Du har redan röstat i omröstningen"
+
+msgid "VoteButton"
+msgstr "Rösta!"
+
+msgid "YourAnswer"
+msgstr "Ditt svar:"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "WantsToKnow"
+msgstr "vill veta:"
+
+msgid "PollResults"
+msgstr "Omröstningsresultat"
+
+msgid "Votes"
+msgstr "Röster:"
+
+msgid "Result"
+msgstr "Resultat:"
+
+msgid "ThereIsNoPoll"
+msgstr "Det finns ingen omröstning."
+
+msgid "MeetingMode"
+msgstr "Möte (max 4 platser)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Konferens (max 50 platser)"
+
+msgid "RemainingSeats"
+msgstr "Platser kvar"
+
+msgid "AlreadyIn"
+msgstr "Redan inne"
+
+msgid "TheModeratorHasLeft"
+msgstr "Moderatorn för konferensen har lämnat rummet."
+
+msgid "SystemMessage"
+msgstr "Systemmeddelande"
+
+msgid "ChooseDevices"
+msgstr "Välj enheter"
+
+msgid "ChooseCam"
+msgstr "Välj Webbkamera:"
+
+msgid "ChooseMic"
+msgstr "Välj mikrofon:"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Du måste koppla upp dig igen för att ändringarna ska ge effekt."
+
+msgid "ChangeSettings"
+msgstr "Ändra inställningar"
+
+msgid "Course"
+msgstr "Kurs"
+
+msgid "CourseLanguage"
+msgstr "Välj språk:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Godkänn rensning av whiteboard"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Ska whiteboarden rensas innan jag lägger till en ny bild?"
+
+msgid "DontAskMeAgain"
+msgstr "Fråga mig inte igen"
+
+msgid "EditSettings"
+msgstr "Ändra inställningar"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Fråga efter bekräftelse innan whiteboard rensas"
+
+msgid "UserInfo"
+msgstr "användarinformation"
+
+msgid "ClearDrawArea"
+msgstr "Rensa ritytan"
+
+msgid "Undo"
+msgstr "Ångra"
+
+msgid "Redo"
+msgstr "Gör om"
+
+msgid "SelectAnObject"
+msgstr "Välj ett objekt"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Paint"
+msgstr "Måla"
+
+msgid "DrawLine"
+msgstr "Rita linje"
+
+msgid "DrawUnderline"
+msgstr "Rita understrykning"
+
+msgid "Rectangle"
+msgstr "Rektangel"
+
+msgid "Elipse"
+msgstr "Elips"
+
+msgid "Arrow"
+msgstr "Pil"
+
+msgid "DeleteChosenItem"
+msgstr "Radera den valda resursen"
+
+msgid "BecomeModerator"
+msgstr "Bli moderator"
+
+msgid "Close"
+msgstr "stäng"
+
+msgid "Italic"
+msgstr "Kursiv"
+
+msgid "Bold"
+msgstr "Fet"
+
+msgid "Waiting"
+msgstr "Väntar"
+
+msgid "Accept"
+msgstr "Acceptera"
+
+msgid "Reject"
+msgstr "Avvisa"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Skickar förfrågan till följande användare"
+
+msgid "Accepted"
+msgstr "Accepterad"
+
+msgid "Rejected"
+msgstr "Avvisad"
+
+msgid "ChangeModerator"
+msgstr "Byt moderator"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "Du är inte moderator för kursen!"
+
+msgid "Moderator"
+msgstr "Moderator:"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "Rummet är tyvärr fullt, försök senare."
+
+msgid "Loading"
+msgstr "Laddar"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Vänta medan bild laddas"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "Synkronisera konferensdeltagare"
+
+msgid "Trainer"
+msgstr "Lärare"
+
+msgid "Learner"
+msgstr "Student"
+
+msgid "Chat"
+msgstr "Chatt"
+
+msgid "Slides"
+msgstr "Bilder"
+
+msgid "WaitingForParticipants"
+msgstr "Väntar på deltagare"
+
+msgid "Send"
+msgstr "Skicka"
+
+msgid "Browse"
+msgstr "Bläddra"
+
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgid "ChooseFile"
+msgstr "Välj en fil att importera"
+
+msgid "ConvertingDocument"
+msgstr "Konverterar dokument"
+
+msgid "Disconnected"
+msgstr "Bortkopplad"
+
+msgid "FineStroke"
+msgstr "Tunn"
+
+msgid "MediumStroke"
+msgstr "Medium"
+
+msgid "ThickStroke"
+msgstr "Bred"
+

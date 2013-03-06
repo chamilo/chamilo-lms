@@ -1,0 +1,553 @@
+msgid "langShouldBeCSVFormat"
+msgstr "L\'arxiu ha d\'estar format CSV. No afegeixi espais. L\'estructura ha de ser exactament:"
+
+msgid "langTracking"
+msgstr "Seguiment"
+
+msgid "langEnter2passToChange"
+msgstr "Per a canviar la contrasenya, introdueixi la nova contrasenya en aquests dos camps. Si desitja mantenir l\'actual, deixi buits els dos camps."
+
+msgid "langAuthInfo"
+msgstr "Autentificació"
+
+msgid "langUpdateImage"
+msgstr "Canviar foto"
+
+msgid "langImageWrong"
+msgstr "L\'arxiu ha de tenir una grandària menor de"
+
+msgid "langAddImage"
+msgstr "Incloure foto"
+
+msgid "langCourseManager"
+msgstr "Administrador del curs"
+
+msgid "NewPass"
+msgstr "Nova contrasenya"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "La contrasenya actual està buida o és incorrecta"
+
+msgid "password_request"
+msgstr "A través del campus virtual ha sol·licitat la reexpedició de la seva contrasenya. Si no ho ha sol·licitat o ja ha recuperat la seva contrasenya pot ignorar aquest correu."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "El teu password t\'ha sigut enviat."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Escriu el teu número de matrícula i la teva adresa i nosaltres t\'enviarem el teu password."
+
+msgid "langLogin"
+msgstr "Entrar"
+
+msgid "langAction"
+msgstr "Acció"
+
+msgid "langPreserved"
+msgstr "Preservat"
+
+msgid "langDeleted"
+msgstr "Esborrat"
+
+msgid "langAdded"
+msgstr "Afegit"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Confirmació de la no subscripció del usuari"
+
+msgid "langCourseName"
+msgstr "Nom del curs"
+
+msgid "langSubscribe"
+msgstr "Subscripció"
+
+msgid "langSee"
+msgstr "Ves a"
+
+msgid "langLastVisits"
+msgstr "Les meves darreres visites"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Si vols afegir una llista d\'usuaris en el teu curs, contacta amb l\'administrador web d\'aquest campus."
+
+msgid "langPassTooEasy"
+msgstr "aquest password és massa simple. Utilitza un password com aquest"
+
+msgid "langGroupUserManagement"
+msgstr "Gestió de grups"
+
+msgid "langAddedToCourse"
+msgstr "ja es troba enregistrat al campus però no en aquest curs. S\'ha fet ara."
+
+msgid "langUserAlreadyRegistered"
+msgstr "Ja existeix un/a usuari/a amb el mateix nom/cognom enregistrat			en aquest curs. No pots enregistrar-lo/a dues vegades."
+
+msgid "langBackUser"
+msgstr "Retorna a llista d\'usuaris"
+
+msgid "langUserOneByOneExplanation"
+msgstr "Ell o (ella) rebrà confirmació per e-mail amb nom d\'usuari i password"
+
+msgid "langGiveTutor"
+msgstr "Fes tutor"
+
+msgid "langRemoveRight"
+msgstr "Elimina aquest dret"
+
+msgid "langGiveAdmin"
+msgstr "Fes admin"
+
+msgid "langUserNumber"
+msgstr "número"
+
+msgid "langDownloadUserList"
+msgstr "Puja llista"
+
+msgid "langSend"
+msgstr "Envia"
+
+msgid "langUserAddExplanation"
+msgstr "cada linia de fitxer a enviar ha d\'incloure de forma necessaria i		única 5 camps: <b>Nom   Cognom   		Usuari   Password 		  E-mail</b> separats per tabuladors i en aquest ordre.		Els usuaris rebran un e-mail de confirmació amb els seus nom d\'usuari/password."
+
+msgid "langUserMany"
+msgstr "Importa llista d\'usuaris a través d\'un fitxer de text"
+
+msgid "langOneByOne"
+msgstr "Afegeix un usuari manualment"
+
+msgid "langNow"
+msgstr "Ara"
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langTitular"
+msgstr "Responsable"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>Modifica llistat de cursos</big><br><br>Selecciona els cursos que vols seguir.<br>Deselecciona els que ja no vols seguir.<br> I punxa sobre D\'acord a sota de la llista"
+
+msgid "langStudent"
+msgstr "Alumne"
+
+msgid "langImportUserList"
+msgstr "Importar una llista d\'usuaris"
+
+msgid "langAddAU"
+msgstr "Afegeix un usuari"
+
+msgid "langAddedU"
+msgstr "ha estat afegit. S\'ha enviat un e-mail per donar-li el seu nom d\'usuari"
+
+msgid "langTheU"
+msgstr "L\'usuari"
+
+msgid "langRegYou"
+msgstr "t\'ha enregistrat en aquest curs"
+
+msgid "langOneResp"
+msgstr "Un dels administradors del curs"
+
+msgid "langTaken"
+msgstr "ja es troba prés. Escull-ne un altre."
+
+msgid "langUserNo"
+msgstr "El nom d\'usuari que has escollit"
+
+msgid "langFilled"
+msgstr "Has deixat alguns camps en blanc."
+
+msgid "langInC"
+msgstr "en aquest curs"
+
+msgid "langRole"
+msgstr "Rol"
+
+msgid "UserPicture"
+msgstr "Imatge"
+
+msgid "langProfileReg"
+msgstr "El teu nou perfil ha estat guardat"
+
+msgid "langEmailWrong"
+msgstr "L\'adresa de e-mail no està complerta o conté alguns caracters invàlids"
+
+msgid "langUserTaken"
+msgstr "Aquest nom d\'usuari ja es troba enregistrat"
+
+msgid "langFields"
+msgstr "Has deixat alguns camps en blanc"
+
+msgid "langAgain"
+msgstr "Prova un altre cop!"
+
+msgid "langPassTwo"
+msgstr "Has entrat dos passwords diferents"
+
+msgid "langViewProfile"
+msgstr "Veure el meu perfil (no es pot modificar)"
+
+msgid "langModifProfile"
+msgstr "Edita el meu perfil"
+
+msgid "langIsReg"
+msgstr "Les teves modificacions han estat enregistrades"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Ara pot crear un curs"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Ara pot anar a la llista de cursos i seleccionar els quals desitgi"
+
+msgid "langMailHasBeenSent"
+msgstr "Rebrà un correu electrònic recordant-li el seu nom d\'usuari i contrasenya."
+
+msgid "langPersonalSettings"
+msgstr "Les seves dades han estat registrades"
+
+msgid "langManager"
+msgstr "Responsable"
+
+msgid "langFormula"
+msgstr "Atentament, el professor"
+
+msgid "langProblem"
+msgstr "En cas de problemes, contacta\'ns."
+
+msgid "langIs"
+msgstr "és"
+
+msgid "langAddress"
+msgstr "L\'adresa de"
+
+msgid "langSettings"
+msgstr "amb els seguents detalls:
+Número de matrícula:"
+
+msgid "langYouAreReg"
+msgstr "Estàs enregistrat/da a"
+
+msgid "langYourReg"
+msgstr "El teu enregistrament a"
+
+msgid "langUserFree"
+msgstr "Aquest número de matrícula ja es troba enregistrat. Utilitza el bot enrera del teu navegador i escull-ne un altre."
+
+msgid "langEmptyFields"
+msgstr "Has deixat alguns camps buits. Utilitza el bot enrera del teu navegador i prova un altre cop."
+
+msgid "langPassTwice"
+msgstr "Has escrit dos passwords diferents. Utilitza el bot enrera del teu navegador i escriu-los un altre cop."
+
+msgid "langRegAdmin"
+msgstr "Professor"
+
+msgid "langRegStudent"
+msgstr "Estudiant"
+
+msgid "langConfirmation"
+msgstr "Confirmació"
+
+msgid "langPass"
+msgstr "Contrasenya"
+
+msgid "langSurname"
+msgstr "Cognom"
+
+msgid "langRegistration"
+msgstr "Enregistrament"
+
+msgid "langYourAccountParam"
+msgstr "Aquest és el teu nom d\'usuari/pasword"
+
+msgid "langLoginRequest"
+msgstr "Petició de conexió"
+
+msgid "langDefineHeadings"
+msgstr "Definir encapçalaments"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Només professors"
+
+msgid "langLostPassword"
+msgstr "Contrasenya oblidada"
+
+msgid "langAdminOfCourse"
+msgstr "administrador"
+
+msgid "langSimpleUserOfCourse"
+msgstr "normal"
+
+msgid "langIsTutor"
+msgstr "tutor"
+
+msgid "langParamInTheCourse"
+msgstr "Estat"
+
+msgid "langMember"
+msgstr "enregistrat"
+
+msgid "langLock"
+msgstr "activat"
+
+msgid "langUnlock"
+msgstr "desactivat"
+
+msgid "langHaveNoCourse"
+msgstr "no hi ha curs"
+
+msgid "langManage"
+msgstr "Administració del campus"
+
+msgid "langAdministrationTools"
+msgstr "Eines d\'administració"
+
+msgid "langUserProfileReg"
+msgstr "Actualitzat"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "No existeix cap compta amb aquesta adresa de correu o amb aquest número de matrícula."
+
+msgid "langCourses4User"
+msgstr "Cursos per aquest usuari"
+
+msgid "langCoursesByUser"
+msgstr "Cursos per usuari"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Inscriure alumnes"
+
+msgid "langPreced100"
+msgstr "100 anteriors"
+
+msgid "langAddmore"
+msgstr "Afegir usuaris"
+
+msgid "langAddback"
+msgstr "Anar a la llista d\'usuaris"
+
+msgid "langreg"
+msgstr "Inscriure"
+
+msgid "langQuit"
+msgstr "Sortir"
+
+msgid "your_password_has_been_reset"
+msgstr "La seva contrasenya ha estat generada de nou"
+
+msgid "langSex"
+msgstr "Sexe"
+
+msgid "langClass"
+msgstr "Classe"
+
+msgid "langEdit"
+msgstr "Editar"
+
+msgid "required"
+msgstr "Contingut obligatori"
+
+msgid "langOptionalTextFields"
+msgstr "Camps opcionals"
+
+msgid "langMyProductions"
+msgstr "Les meves tasques"
+
+msgid "langFileDeleted"
+msgstr "L\'arxiu ha estat esborrat"
+
+msgid "FullUserName"
+msgstr "Nom complet"
+
+msgid "SearchForUser"
+msgstr "Cercar per usuari"
+
+msgid "SearchButton"
+msgstr "Cercar"
+
+msgid "SearchNoResultsFound"
+msgstr "No s\'han trobat resultats en la recerca"
+
+msgid "UsernameWrong"
+msgstr "El seu nom d\'usuari ha de contenir lletres, nombres i els següents caràcters_.-"
+
+msgid "PasswordRequestFrom"
+msgstr "Aquesta és una petició de la contrasenya per a l\'adreça de correu electrònic"
+
+msgid "CorrespondsToAccount"
+msgstr "Aquesta adreça de correu electrònic correspon al següent compte d\'usuari."
+
+msgid "CorrespondsToAccounts"
+msgstr "Aquesta adreça de correu electrònic correspon als següents comptes d\'usuari."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo no pot gestionar la petició automàticament perquè el compte té una font d\'autorització externa. Per favor, prengui les mesures apropiades i notifique-les a l\'usuari."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo no pot gestionar automàticament la petició perquè almenys una dels comptes té una font d\'autorització externa. Per favor, prengui les mesures apropiades en totes els comptes (incloent les quals tenen autorització de la plataforma) i notifique-les a l\'usuari."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo no pot gestionar automàticament la petició per a aquest tipus de compte. La seva petició s\'ha enviat a l\'administrador de la plataforma, que prendrà les mesures apropiades i li notificarà el resultat."
+
+msgid "langphone"
+msgstr "Telèfon"
+
+msgid "Unreg"
+msgstr "Donar de baixa"
+
+msgid "MyProgress"
+msgstr "El meu progrès"
+
+msgid "ProgressIntroduction"
+msgstr "Seleccioni una sessió del curs.<br/>Podrà veure el seu progrés en cadascun dels cursos en els quals estigui inscrit."
+
+msgid "Select"
+msgstr "Seleccionar"
+
+msgid "NeverExpires"
+msgstr "Mai caduca"
+
+msgid "On"
+msgstr "En"
+
+msgid "ExpirationDate"
+msgstr "Data de caducitat"
+
+msgid "ActiveAccount"
+msgstr "Activar compte"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "El seu registre haurà de ser aprovat posteriorment"
+
+msgid "ApprovalForNewAccount"
+msgstr "Validació d\'un nou compte"
+
+msgid "ManageUser"
+msgstr "Gestió d\'usuari"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Inscriure professors"
+
+msgid "SendMessage"
+msgstr "Enviar missatge"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "La seva contrasenya està encriptada per a la seva seguretat. Per això, quan hagi premut en l\'enllaç per a regenerar la seva clau se li remetrà un nou correu que contindrà la seva contrasenya."
+
+msgid "UsersUnsubscribed"
+msgstr "Els usuaris seleccionats han estat donats de baixa en el curs"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "El sistema no ha pogut enviar-li el correu electrònic"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "Aquest OpenID no es troba en la nostra base de dades. Per favor, registri\'s per a obtenir un compte. Si ja té un compte amb nosaltres, editi el seu perfil en la mateixa per a afegir aquest OpenID"
+
+msgid "UsernameMaxXCharacters"
+msgstr "El nom d\'usuari pot tenir com a màxim una longitud de %s caràcters"
+
+msgid "PictureUploaded"
+msgstr "La seva imatge ha estat enviada"
+
+msgid "ProductionUploaded"
+msgstr "La seva tasca ha estat enviada"
+
+msgid "FolderUpdated"
+msgstr "Carpeta actualitzada"
+
+msgid "UsersRegistered"
+msgstr "Els següents usuaris han estat registrats"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "L\'usuari ja ha estat registrat per altre tutor"
+
+msgid "UserCreatedPlatform"
+msgstr "Usuari creat en la plataforma"
+
+msgid "UserInSession"
+msgstr "Usuari agregat a la sessió"
+
+msgid "UserNotAdded"
+msgstr "Usuari no agregat"
+
+msgid "NoSessionId"
+msgstr "La sessió no ha estat identificada"
+
+msgid "NoUsersRead"
+msgstr "Per favor verifiqui el seu fitxer XML/CVS"
+
+msgid "UserImportFileMessage"
+msgstr "Si en l\'arxiu XML/CVS els noms d\'usuaris (username) són omesos, aquests s\'obtindran d\'una barreja del Nom (Firstname) i el Cognom (Lastname) de l\'usuari. Per exemple, per al nom Julio Montoya el nom d\'usuari serà jmontoya"
+
+msgid "UserAlreadyRegisteredByOtherCreator"
+msgstr "L\'usuari ja ha estat registrar per altre tutor"
+
+msgid "NewUserInTheCourse"
+msgstr "Nou usuari registrat en el curs"
+
+msgid "MessageNewUserInTheCourse"
+msgstr "Aquest és un missatge per a informar-li que s\'ha subscrit un nou usuari en el curs"
+
+msgid "EditNormalProfile"
+msgstr "Edició bàsica del perfil"
+
+msgid "EditExtendProfile"
+msgstr "Edició ampliada del perfil"
+
+msgid "EditInformation"
+msgstr "Editar informació"
+
+msgid "RegisterUser"
+msgstr "Enregistrar usuari"
+
+msgid "IHaveReadAndAgree"
+msgstr "He llegit i estic d\'acord amb els"
+
+msgid "ByClickingRegisterYouAgreeTermsAndConditions"
+msgstr "Al fer clic en el botó \'Registrar\' que apareix a continuació, accepta els Termes i Condicions"
+
+msgid "User"
+msgstr "Usuari"
+
+msgid "LostPass"
+msgstr "Ha oblidat la seva contrasenya?"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "Introdueixi l\'usuari i l\'adreça de correu electrònic amb la qual està registrat i li remetrem la seva contrasenya."
+
+msgid "NoUserAccountWithThisEmailAddress"
+msgstr "No existeix un compte amb aquest usuari i/o adreça de correu electrònic"
+
+msgid "CouldNotResetPassword"
+msgstr "No podeu restablir la contrasenya"
+
+msgid "WithTheFollowingSettings"
+msgstr "amb els paràmetres següents:"
+
+msgid "YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators"
+msgstr "El seu compte a %s ha estat aprovat per un dels nostres administradors."
+
+msgid "HaveFun"
+msgstr "Divertiu-vos,"
+
+msgid "YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided"
+msgstr "Ara podeu autenticar-se a % utilitzant el nom d\'usuari i contrasenya que li han estat facilitats"
+
+msgid "AreYouSureToEditTheUserStatus"
+msgstr "Esteu segur de voler editar l\'estat d\'usuari?"
+
+msgid "TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse"
+msgstr "L\'assistent només pot realitzar el seguiment dels estudiants registrats al curs."
+
+msgid "TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse"
+msgstr "El professor pot qualificar, avaluar i realitzar el seguiment de totes els estudiants registrats al curs."
+
+msgid "LoginOrEmailAddress"
+msgstr "Nom d\'usuari o adreça de correu electrònic"
+
+msgid "AtOnce"
+msgstr "A la recepció"
+
+msgid "Daily"
+msgstr "A diari"
+

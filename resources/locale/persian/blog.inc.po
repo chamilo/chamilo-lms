@@ -1,0 +1,18 @@
+msgid "PostFullText"
+msgstr "نوشته"
+
+msgid "Home"
+msgstr "صفحه آغازین"
+
+msgid "Role"
+msgstr "مسئولیت"
+
+msgid "Roles"
+msgstr "مسئولیت ها"
+
+msgid "SelectTargetDate"
+msgstr "تاریخ"
+
+msgid "TargetDate"
+msgstr "تاریخ"
+

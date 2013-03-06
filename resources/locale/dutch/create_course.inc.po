@@ -1,0 +1,312 @@
+msgid "langProfessors"
+msgstr "Lesgevers"
+
+msgid "langExplanation"
+msgstr "Wanneer u op OK klikt, wordt een cursuspagina aangemaakt met o.a. de onderdelen: forum, links, oefeningen, agenda en cursusmateriaal. Met uw log-in kan u de inhoud later wijzigen."
+
+msgid "langEmpty"
+msgstr "U hebt niet alle velden ingevuld.<br />Gebruik de terugknop en herbegin.<br />Als u uw cursuscode niet kent, kunt u de cursuslijst raadplegen."
+
+msgid "langCodeTaken"
+msgstr "Deze cursuscode is al in gebruik. Gebruik de terugknop en herbegin."
+
+msgid "langFormula"
+msgstr "Vriendelijke groeten, uw lesgever"
+
+msgid "langMessage"
+msgstr "Wanneer u het testforum verwijdert, zal ook elk onderwerp hierin verwijderd worden."
+
+msgid "langExerciceEx"
+msgstr "Voorbeeldoefening"
+
+msgid "langAntique"
+msgstr "Oude filosofie geschiedenis"
+
+msgid "langSocraticIrony"
+msgstr "Socratische ironie is..."
+
+msgid "langManyAnswers"
+msgstr "(meerdere juiste antwoorden mogelijk)"
+
+msgid "langRidiculise"
+msgstr "de gesprekspartner belachelijk maken teneinde hem zijn fouten te doen inzien."
+
+msgid "langNoPsychology"
+msgstr "Nee. Socratische ironie heeft niets te maken met psychologie maar wel met argumentatie."
+
+msgid "langAdmitError"
+msgstr "de eigen vergissingen erkennen om zijn gesprekspartner uit te nodigen hetzelfde te doen."
+
+msgid "langNoSeduction"
+msgstr "Nee. Socratische ironie is geen verleidingsstrategie of een methode gebaseerd op voorbeelden."
+
+msgid "langForce"
+msgstr "Zijn gesprekspartner dwingen, door een reeks vragen en bijvragen, te erkennen dat hij niet kent wat hij denkt te kennen."
+
+msgid "langIndeed"
+msgstr "Juist. Socratische ironie is inderdaad een ondervragende methode. Het Griekse woord \"eirotao\" betekent trouwens \"ondervragen\"."
+
+msgid "langContradiction"
+msgstr "Het principe van tegenstrijdigheid gebruiken om de gesprekspartner in de tang te krijgen."
+
+msgid "langNotFalse"
+msgstr "Dit antwoord is niet onjuist. Het is waar dat het tonen van de onwetendheid van zijn gesprekspartner gebeurt dankzij het tonen van de tegenstrijdige conclusies van zijn veronderstellingen."
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langVideo"
+msgstr "Video"
+
+msgid "langCourseProgram"
+msgstr "Cursus: situering en randinformatie"
+
+msgid "langAnnouncements"
+msgstr "Aankondigingen"
+
+msgid "langAddPageHome"
+msgstr "Pagina uploaden en linken met startpagina"
+
+msgid "langLinkSite"
+msgstr "Link toevoegen en verbinden met startpagina"
+
+msgid "langModifyInfo"
+msgstr "Cursuseigenschappen"
+
+msgid "langCourseDesc"
+msgstr "Cursusbeschrijving"
+
+msgid "langAgendaTitle"
+msgstr "Dinsdag 11 december 14u00 : cursus filosofie (1) - Locaal : Sud 18"
+
+msgid "langAgendaText"
+msgstr "Algemene inleiding tot de filosofie en verklaring van de cursuswerking"
+
+msgid "langMicro"
+msgstr "Micro-trottoir"
+
+msgid "langGoogle"
+msgstr "Handige zoekmachine"
+
+msgid "langIntroductionText"
+msgstr "Dit is de inleidingstekst van deze cursus. Cursusbeheerders kunnen deze wijzigen door op het potloodicoontje onderaan te klikken."
+
+msgid "langIntroductionTwo"
+msgstr "Hier kunnen studenten documenten plaatsen. Via deze pagina is het mogelijk documenten uit te wisselen tussen studenten, studentengroepen en lesgevers.Als u via de groepsruimte een document publiceert (optie = publiceren), zal een verwijzing aangemaakt worden naar uw document, zonder dit te verplaatsen."
+
+msgid "langCourseDescription"
+msgstr "Cursusbeschrijving"
+
+msgid "langProfessor"
+msgstr "Lesgever"
+
+msgid "langAnnouncementEx"
+msgstr "Dit is een voorbeeld van een mededeling."
+
+msgid "langJustCreated"
+msgstr "De site van de cursus is aangemaakt."
+
+msgid "langEnter"
+msgstr "Terug naar uw cursuslijst"
+
+msgid "langGroups"
+msgstr "Groepen"
+
+msgid "langCreateCourseGroups"
+msgstr "Groepen"
+
+msgid "langCatagoryMain"
+msgstr "Algemeen"
+
+msgid "langCatagoryGroup"
+msgstr "Forums van groepen"
+
+msgid "langLn"
+msgstr "Taal"
+
+msgid "langCreateSite"
+msgstr "Cursussite aanmaken"
+
+msgid "langFieldsRequ"
+msgstr "Alle velden moeten ingevuld worden"
+
+msgid "langEx"
+msgstr "bv. <i>Literatuurgeschiedenis</i>"
+
+msgid "langFac"
+msgstr "Categorie"
+
+msgid "langTargetFac"
+msgstr "Vul hier de naam in van de faculteit waar de cursus wordt gedoceerd"
+
+msgid "langMax"
+msgstr "max. 20 lettertekens, bv. <i>ROM2121</i>"
+
+msgid "langDoubt"
+msgstr "Indien u twijfelt over de juiste titel of code van uw cursus, kunt u deze in de cursuslijst raadplegen."
+
+msgid "langProgram"
+msgstr "Cursusprogramma</a>. Als de startpagina die u wil creëren niet overeenkomt met een bestaande cursuscode, dan mag u deze verzinnen. Bijvoorbeeld <i>INNOVATIE</i> als het over een opleidingsprogramma gaat betreffend innovatiebeheer."
+
+msgid "langScormtool"
+msgstr "Leerpad"
+
+msgid "langScormbuildertool"
+msgstr "Constructie van SCORM-leerpad"
+
+msgid "langPathbuildertool"
+msgstr "Constructie van leerpaden"
+
+msgid "langOnlineConference"
+msgstr "Onlineconferentie"
+
+msgid "langAgendaCreationTitle"
+msgstr "Aanmaken van cursus"
+
+msgid "langAgendaCreationContenu"
+msgstr "Deze cursus werd op dit tijdstip aangemaakt."
+
+msgid "langOnlineDescription"
+msgstr "Beschrijving van de conferentie"
+
+msgid "langDropbox"
+msgstr "Dropbox"
+
+msgid "langOnly"
+msgstr "Enkel"
+
+msgid "langRandomLanguage"
+msgstr "Random selectie uit beschikbare talen"
+
+msgid "langImages"
+msgstr "Afbeeldingen"
+
+msgid "langAudio"
+msgstr "Audio"
+
+msgid "langFlash"
+msgstr "Flash"
+
+msgid "langForumLanguage"
+msgstr "Nederlands"
+
+msgid "langNewCourse"
+msgstr "Nieuwe cursussite"
+
+msgid "langAddNewCourse"
+msgstr "Maak een nieuwe cursussite"
+
+msgid "langRestoreCourse"
+msgstr "Herstel een cursussite"
+
+msgid "langOtherProperties"
+msgstr "Andere eigenschappen gevonden in archief"
+
+msgid "langSysId"
+msgstr "Systeem-ID"
+
+msgid "langDepartment"
+msgstr "Departement"
+
+msgid "langDepartmentUrl"
+msgstr "URL van uw faculteit of vakgroep"
+
+msgid "langScoreShow"
+msgstr "Score weergeven"
+
+msgid "langVisibility"
+msgstr "Zichtbaarheid"
+
+msgid "langVersionDb"
+msgstr "Databankversie gebruikt bij de archivering"
+
+msgid "langLastVisit"
+msgstr "Laatste bezoek"
+
+msgid "langLastEdit"
+msgstr "Laatst gewijzigd"
+
+msgid "langExpire"
+msgstr "Afloop"
+
+msgid "langChoseFile"
+msgstr "Kies bestand"
+
+msgid "langFtpFileTips"
+msgstr "Bestand op een FTP-server"
+
+msgid "langHttpFileTips"
+msgstr "Bestand op een HTTP- of webserver"
+
+msgid "langLocalFileTips"
+msgstr "Bestand op de platformserver"
+
+msgid "langPostFileTips"
+msgstr "Bestand op uw lokale computer"
+
+msgid "langOtherCategory"
+msgstr "Andere categorie"
+
+msgid "langMinimum"
+msgstr "minimum"
+
+msgid "langMaximum"
+msgstr "maximum"
+
+msgid "langRestoreACourse"
+msgstr "herstel een cursussite"
+
+msgid "langBackup"
+msgstr "Back-up"
+
+msgid "langCopy"
+msgstr "Kopieer cursusinhoud"
+
+msgid "langRecycle"
+msgstr "Recycleer cursus"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Dit is een voorbeeldbericht."
+
+msgid "Wikipedia"
+msgstr "Gratis online-encyclopedie"
+
+msgid "DefaultGroupCategory"
+msgstr "Standaardgroepen"
+
+msgid "DefaultCourseImages"
+msgstr "Standaard afbeeldingen"
+
+msgid "ExampleForumCategory"
+msgstr "Voorbeeld forumcategorie"
+
+msgid "ExampleForum"
+msgstr "Voorbeeldforum"
+
+msgid "ExampleThread"
+msgstr "Voorbeelddiscussie"
+
+msgid "ExampleThreadContent"
+msgstr "Voorbeeldinhoud"
+
+msgid "IntroductionWiki"
+msgstr "Het woord Wiki is een afkorting van WikiWikiWeb, een woord dat komt van het Hawaiaans en snel of snelheid betekent. In een wiki kunnen mensen samen aan paginas schrijven. Als een bepaald iemand iets verkeerds schrijft dan kan een andere persoon dit corrigeren en eventueel ook iets nieuws toevoegen aan de pagina. Hierdoor wordt de inhoud telkens beter als er iets gewijzigd wordt."
+
+msgid "CreateCourseArea"
+msgstr "Maak deze training aan"
+
+msgid "CreateCourse"
+msgstr "Training aanmaken"
+
+msgid "Create"
+msgstr "Aanmaken"
+
+msgid "MessageOfNewCourseToAdmin"
+msgstr "Er werd een nieuwe cursus aangemaakt op het platform:"
+
+msgid "NewCourseCreatedIn"
+msgstr "Er werd een nieuwe cursus aangemaakt in"
+
+msgid "ExplicationTrainers"
+msgstr "Je staat op dit moment ingesteld als cursusbeheerder. Je kan dit later aanpassen via de cursuseigenschappen."
+

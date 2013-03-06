@@ -1,0 +1,42 @@
+msgid "lang_new_item"
+msgstr "new item added"
+
+msgid "TitleNotification"
+msgstr "Since your last visit"
+
+msgid "lang_update_agenda"
+msgstr "existing agenda item updated"
+
+msgid "lang_new_agenda"
+msgstr "new agenda item added"
+
+msgid "lang_update_announcements"
+msgstr "existing announcement updated"
+
+msgid "lang_new_announcements"
+msgstr "new announcement added"
+
+msgid "lang_new_document"
+msgstr "new document(s) added"
+
+msgid "lang_new_exercise"
+msgstr "new exercise enabled"
+
+msgid "lang_update_link"
+msgstr "existing link information updated"
+
+msgid "lang_new_link"
+msgstr "new link added"
+
+msgid "lang_new_forum_topic"
+msgstr "new topic added"
+
+msgid "lang_new_groupforum_topic"
+msgstr "new topic added to group forum"
+
+msgid "lang_new_dropbox_file"
+msgstr "nuevo archivo recibido"
+
+msgid "lang_update_dropbox_file"
+msgstr "el archivo en su Baúl de Tareas fue actualizado"
+

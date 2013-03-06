@@ -1,0 +1,156 @@
+msgid "AgendaAdd"
+msgstr "أضف حدث جديد للأجندة"
+
+msgid "ShowAllEvents"
+msgstr "أظهر الكل"
+
+msgid "ShowCurrent"
+msgstr "أظهر جميع الأحداث الخاصة بهذا الشهر"
+
+msgid "AddCalendarItem"
+msgstr "أضف حدث لجدول الأعمال"
+
+msgid "Day"
+msgstr "اليوم"
+
+msgid "Month"
+msgstr "الشهر"
+
+msgid "Year"
+msgstr "السنة"
+
+msgid "Hour"
+msgstr "الساعة"
+
+msgid "Minutes"
+msgstr "الدقائق"
+
+msgid "Detail"
+msgstr "تفاصيل"
+
+msgid "EditSuccess"
+msgstr "لقد تم تحرير الحدث بنجاح"
+
+msgid "AddSuccess"
+msgstr "لقد تم إضافة الحدث بنجاح"
+
+msgid "AgendaDeleteSuccess"
+msgstr "لقد تم حذف المذكرة من الأجندة"
+
+msgid "NoAgendaItems"
+msgstr "لا يوجد هناك أي حدث"
+
+msgid "lang_september"
+msgstr "سبتمبر"
+
+msgid "langClassName"
+msgstr "اسم الفصل"
+
+msgid "lang_agenda"
+msgstr "الأجندة"
+
+msgid "ModifyCalendarItem"
+msgstr "تحرير حدث"
+
+msgid "ItemTitle"
+msgstr "عنوان الحدث"
+
+msgid "langDay"
+msgstr "اليوم"
+
+msgid "month_default"
+msgstr "الشهر الإفتراضي"
+
+msgid "langYear"
+msgstr "السنة"
+
+msgid "year_default"
+msgstr "السنة الإفتراضية"
+
+msgid "langHour"
+msgstr "الساعة"
+
+msgid "hour_default"
+msgstr "الساعة الإفتراضية"
+
+msgid "langMinute"
+msgstr "الدقيقة"
+
+msgid "langLasting"
+msgstr "lasting"
+
+msgid "langOldToNew"
+msgstr "الأقدم إلى الأحدث"
+
+msgid "langNewToOld"
+msgstr "الأحدث إلى الأقدم"
+
+msgid "langNow"
+msgstr "الآن"
+
+msgid "langAddEvent"
+msgstr "أضف حدث جديد"
+
+msgid "langDetail"
+msgstr "تفاصيل"
+
+msgid "MonthView"
+msgstr "تفاصيل الشهر"
+
+msgid "WeekView"
+msgstr "نفاصيل الأسبوع"
+
+msgid "DayView"
+msgstr "تفاصيل اليوم"
+
+msgid "AddPersonalItem"
+msgstr "أضف حدث شخصي"
+
+msgid "Week"
+msgstr "أسبوع"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Time"
+msgstr "الوقت"
+
+msgid "AddPersonalCalendarItem"
+msgstr "أضف حدث شخصي"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "تحرير الحدث الشخصي"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "لقد تم إضافة الحدث الشخصي بنجاح"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "لقد تم تحرير الحدث الشخصي بنجاح"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "لقد تم حذف الحدث الشخصي بنجاح"
+
+msgid "ViewPersonalItem"
+msgstr "معاينة الأحداث الشخصية"
+
+msgid "UserGroupFilter"
+msgstr "مرشح (فلتر) على المجموعات  / المستخدمين"
+
+msgid "ShowAll"
+msgstr "أظهر الكل"
+
+msgid "Print"
+msgstr "طباعة"
+
+msgid "MyTextHere"
+msgstr " هنا نصي"
+
+msgid "CopiedAsAnnouncement"
+msgstr "إعلان تم نسخه"
+
+msgid "NewAnnouncement"
+msgstr "إعلان جديد"
+
+msgid "AddAnnouncement"
+msgstr "أضف كإعلان"
+

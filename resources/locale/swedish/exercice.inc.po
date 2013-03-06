@@ -1,0 +1,673 @@
+msgid "langExercice"
+msgstr "Prov"
+
+msgid "langActivate"
+msgstr "aktivera"
+
+msgid "langDeactivate"
+msgstr "deaktivera"
+
+msgid "langNoEx"
+msgstr "Det finns inga prov för tillfället"
+
+msgid "langNewEx"
+msgstr "Nytt prov"
+
+msgid "langQuestion"
+msgstr "fråga"
+
+msgid "langQuestions"
+msgstr "Frågor"
+
+msgid "langAnswers"
+msgstr "Svar"
+
+msgid "langTrue"
+msgstr "Sant"
+
+msgid "langAnswer"
+msgstr "Svar"
+
+msgid "langResult"
+msgstr "Resultat"
+
+msgid "langNoResult"
+msgstr "Det finns inga resultat ännu"
+
+msgid "langYourResults"
+msgstr "Dina resultat"
+
+msgid "langStudentResults"
+msgstr "Studenternas resultat"
+
+msgid "langExerciseType"
+msgstr "Typ av prov"
+
+msgid "langExerciseName"
+msgstr "Provnamn"
+
+msgid "langExerciseDescription"
+msgstr "Beskrivning +bild, ljud, video"
+
+msgid "langSimpleExercise"
+msgstr "På samma sida"
+
+msgid "langSequentialExercise"
+msgstr "En fråga per sida (sekventiell)"
+
+msgid "langRandomQuestions"
+msgstr "Slumpvisa frågor"
+
+msgid "langGiveExerciseName"
+msgstr "Var snäll och ange provets namn"
+
+msgid "langSound"
+msgstr "Ljud eller video fil"
+
+msgid "langDeleteSound"
+msgstr "Radera ljud eller video filen"
+
+msgid "langNoAnswer"
+msgstr "Det finns inga svar just nu"
+
+msgid "langGoBackToQuestionPool"
+msgstr "Tillbaka till frågepoolen"
+
+msgid "langGoBackToQuestionList"
+msgstr "Tillbaka till frågelistan"
+
+msgid "langQuestionAnswers"
+msgstr "Svar till frågan"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Varning ! Denna fråga och dess svar används i flera prov. Vill du modifiera den"
+
+msgid "langModifyInAllExercises"
+msgstr "i alla prov"
+
+msgid "langModifyInThisExercise"
+msgstr "bara i nuvarande prov"
+
+msgid "langAnswerType"
+msgstr "Svarstyp"
+
+msgid "langMultipleSelect"
+msgstr "Multipla val (Multipla svar)"
+
+msgid "langFillBlanks"
+msgstr "Fyll i blanka"
+
+msgid "langMatching"
+msgstr "Matchning"
+
+msgid "langAddPicture"
+msgstr "Lägg till en bild"
+
+msgid "langReplacePicture"
+msgstr "By ut bilden"
+
+msgid "langDeletePicture"
+msgstr "Radera bilden"
+
+msgid "langQuestionDescription"
+msgstr "Valfri kommentar"
+
+msgid "langGiveQuestion"
+msgstr "Var snäll och ge frågan"
+
+msgid "langWeightingForEachBlank"
+msgstr "Please give a weighting to each blank"
+
+msgid "langUseTagForBlank"
+msgstr "använd hakparanteser [...] för att definiera en eller flera blanka"
+
+msgid "langQuestionWeighting"
+msgstr "Viktning"
+
+msgid "langMoreAnswers"
+msgstr "+svar"
+
+msgid "langLessAnswers"
+msgstr "-svar"
+
+msgid "langMoreElements"
+msgstr "+elem"
+
+msgid "langLessElements"
+msgstr "-elem"
+
+msgid "langTypeTextBelow"
+msgstr "Var snäll och skriv in texten nedan"
+
+msgid "langDefaultTextInBlanks"
+msgstr "[Brittiska människor] lever i [Storbrittanien]."
+
+msgid "langDefaultMatchingOptA"
+msgstr "rik"
+
+msgid "langDefaultMatchingOptB"
+msgstr "bra utseende"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Din pappa är"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Din mamma är"
+
+msgid "langDefineOptions"
+msgstr "Var snäll och definiera valen"
+
+msgid "langMakeCorrespond"
+msgstr "Skapa svar"
+
+msgid "langFillLists"
+msgstr "Var snäll och fyll i de två listorna nedan"
+
+msgid "langGiveText"
+msgstr "Skriv in texten"
+
+msgid "langDefineBlanks"
+msgstr "Var snäll och definiera minst en blank med hakparanteser [...]"
+
+msgid "langGiveAnswers"
+msgstr "Ange frågans svar"
+
+msgid "langChooseGoodAnswer"
+msgstr "Var snäll och välj ett rätt svar"
+
+msgid "langChooseGoodAnswers"
+msgstr "Var snäll och välj ett eller flera rätta svar"
+
+msgid "langQuestionList"
+msgstr "Frågelista för provet"
+
+msgid "langMoveUp"
+msgstr "Flytta upp"
+
+msgid "langMoveDown"
+msgstr "Flytta ned"
+
+msgid "langGetExistingQuestion"
+msgstr "Hämta en fråga från ett annat prov"
+
+msgid "langFinishTest"
+msgstr "Avsluta prov"
+
+msgid "langQuestionPool"
+msgstr "Frågepool"
+
+msgid "langOrphanQuestions"
+msgstr "Föräldralösa frågor"
+
+msgid "langNoQuestion"
+msgstr "Det finn ingen fråga för tillfället"
+
+msgid "langAllExercises"
+msgstr "Alla prov"
+
+msgid "langFilter"
+msgstr "Filtrera"
+
+msgid "langGoBackToEx"
+msgstr "Tillbaka till provet"
+
+msgid "langReuse"
+msgstr "Återanvänd"
+
+msgid "langExerciseManagement"
+msgstr "Hantera prov"
+
+msgid "langQuestionManagement"
+msgstr "Fråga- / Svarshanterare"
+
+msgid "langQuestionNotFound"
+msgstr "Frågan hittades ej"
+
+msgid "langExerciseNotFound"
+msgstr "Provet hittades inte eller visas ej"
+
+msgid "langAlreadyAnswered"
+msgstr "Du har redan svarat på frågan"
+
+msgid "langElementList"
+msgstr "Elementlista"
+
+msgid "langScore"
+msgstr "poäng"
+
+msgid "langCorrespondsTo"
+msgstr "Motsvarar"
+
+msgid "langExpectedChoice"
+msgstr "Förväntat val"
+
+msgid "langYourTotalScore"
+msgstr "Din totala poäng är"
+
+msgid "langExerciseAdded"
+msgstr "Övning tillagd"
+
+msgid "Build"
+msgstr "Bygg"
+
+msgid "langEvalSet"
+msgstr "utvärderings parametrar"
+
+msgid "langActive"
+msgstr "aktiv"
+
+msgid "langInactive"
+msgstr "inaktiv"
+
+msgid "langQuestCreate"
+msgstr "skapa fråga"
+
+msgid "langExRecord"
+msgstr "ditt prov har sparats"
+
+msgid "langBackModif"
+msgstr "tillbaka till ändrings sidan för frågor"
+
+msgid "langDoEx"
+msgstr "skriv prov"
+
+msgid "langDefScor"
+msgstr "beskriv utvärderings parametrar"
+
+msgid "langCreateModif"
+msgstr "skapa / ändra frågor"
+
+msgid "langSub"
+msgstr "undertext"
+
+msgid "langMyAnswer"
+msgstr "Mitt svar"
+
+msgid "langMorA"
+msgstr "+ svar"
+
+msgid "langLesA"
+msgstr "- svar"
+
+msgid "langRecEx"
+msgstr "spara provet"
+
+msgid "langRecQu"
+msgstr "Spara fråga"
+
+msgid "langRecAns"
+msgstr "Spara svaren"
+
+msgid "langIntroduction"
+msgstr "Introduktion"
+
+msgid "langTitleAssistant"
+msgstr "Medhjälpare för provskapande"
+
+msgid "langQuesList"
+msgstr "frågelista"
+
+msgid "langSaveEx"
+msgstr "spara prov"
+
+msgid "langFinish"
+msgstr "Avsluta"
+
+msgid "langCancel"
+msgstr "Avbryt"
+
+msgid "langQImage"
+msgstr "Fråga med en bild"
+
+msgid "langAddQ"
+msgstr "Lägg till en fråga"
+
+msgid "langDoAnEx"
+msgstr "Genomför ett prov"
+
+msgid "langGenerator"
+msgstr "Provlista"
+
+msgid "langChoice"
+msgstr "Ditt val"
+
+msgid "langCorrect"
+msgstr "Korrekt"
+
+msgid "langPossAnsw"
+msgstr "Antal bra svar för en fråga"
+
+msgid "langStudAnsw"
+msgstr "antal fel av eleven"
+
+msgid "langDetermine"
+msgstr "Avgöra (Beräkna)"
+
+msgid "langNonNumber"
+msgstr "ett icke numeriskt värde"
+
+msgid "langReplaced"
+msgstr "Ersatt"
+
+msgid "langSuperior"
+msgstr "ett värde större än 20"
+
+msgid "langRep20"
+msgstr "Ersätt 20"
+
+msgid "langDefault"
+msgstr "Standardvärden *"
+
+msgid "langDefComment"
+msgstr "tidigare värden ersätts genom att klicka på knappen \"Standardvärden\""
+
+msgid "langScoreGet"
+msgstr "svarta nummer = poäng"
+
+msgid "langShowScor"
+msgstr "Visa utvärdering för eleven:"
+
+msgid "langStep1"
+msgstr "Steg 1"
+
+msgid "langStep2"
+msgstr "Steg 2"
+
+msgid "langTake"
+msgstr "ta"
+
+msgid "langAmong"
+msgstr "bland"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Importera HotPotatoestest"
+
+msgid "langHotPotatoesTests"
+msgstr "Importera HotPotatoestest"
+
+msgid "langDownloadFile"
+msgstr "Ladda filen till servern"
+
+msgid "langDownloadImg"
+msgstr "Ladda upp bildfil till servern"
+
+msgid "langDownloadEnd"
+msgstr "Uppladdningen är klar."
+
+msgid "langNoSpace"
+msgstr "Uppladdningen har misslyckats. Det finns inte tillräckligt med diskutrymme i din mapp."
+
+msgid "langZipNoPhp"
+msgstr "ZIP-filen kan inte innehålla .PHP-filer"
+
+msgid "langNoImg"
+msgstr "Prova utan bilder"
+
+msgid "langImgNote_st"
+msgstr "<br> Du behöver fortfarande ladda upp"
+
+msgid "langImgNote_en"
+msgstr "bild(er):"
+
+msgid "langDocDeleted"
+msgstr "dokument raderat"
+
+msgid "langViMod"
+msgstr "Synlighet modifierad"
+
+msgid "langNameNotEqual"
+msgstr "är inte den giltiga filen!"
+
+msgid "langIndice"
+msgstr "Index"
+
+msgid "langIndices"
+msgstr "Flera index"
+
+msgid "langDateExo"
+msgstr "Datum"
+
+msgid "langShowQuestion"
+msgstr "Visa fråga"
+
+msgid "langUnknownExercise"
+msgstr "Okänt prov"
+
+msgid "langReuseQuestion"
+msgstr "Återanvänd fråga"
+
+msgid "langCreateExercise"
+msgstr "Skapa prov"
+
+msgid "langCreateQuestion"
+msgstr "Skapa fråga"
+
+msgid "langCreateAnswers"
+msgstr "Skapa svar"
+
+msgid "langModifyExercise"
+msgstr "Ändra test"
+
+msgid "langModifyAnswers"
+msgstr "Ändra svar"
+
+msgid "langForExercise"
+msgstr "för prov"
+
+msgid "langUseExistantQuestion"
+msgstr "Använd en redan existerande fråga"
+
+msgid "FreeAnswer"
+msgstr "Svara fritt"
+
+msgid "notCorrectedYet"
+msgstr "Detta svar har �nnu inte blivit r�ttat. Under tiden �r ditt resultat f�r denna fr�ga 0, detta p�verkar det totala resultatet."
+
+msgid "adminHP"
+msgstr "Hot Potatoes Administratör"
+
+msgid "NewQu"
+msgstr "Ny fråga"
+
+msgid "NoImage"
+msgstr "Välj en bild"
+
+msgid "langAnswerHotspot"
+msgstr "Beskrivning och poängsättning krävs för varje bildkarta -återkoppling är valfri"
+
+msgid "langMinHotspot"
+msgstr "Du måste skapa minst en (1) bildkarta."
+
+msgid "langMaxHotspot"
+msgstr "Du kan skapa max tolv (12) bildkartor."
+
+msgid "langHotspotError"
+msgstr "Var vänlig och skriv en beskrivning och poängvägning för varje bildkarta."
+
+msgid "langMoreHotspots"
+msgstr "+bildkarta"
+
+msgid "langLessHotspots"
+msgstr "-bildkarta"
+
+msgid "langHotspotZones"
+msgstr "Bildområde"
+
+msgid "langNextQuestion"
+msgstr "Nästa fråga"
+
+msgid "langCorrectAnswer"
+msgstr "Korrekt svar"
+
+msgid "langHotspotHit"
+msgstr "Ditt svar var"
+
+msgid "langOnlyJPG"
+msgstr "Du kan bara använda JPG (el. JPEG) bilder för bildkartor"
+
+msgid "langFinishThisTest"
+msgstr "Visa rätt svar för varje fråga och poäng för testet"
+
+msgid "langAllQuestions"
+msgstr "Alla frågor"
+
+msgid "langModifyTitleDescription"
+msgstr "Ändra rubrik och beskrivning"
+
+msgid "langModifyHotspots"
+msgstr "Ändra svar/bildkarta"
+
+msgid "langHotspotNotDrawn"
+msgstr "Du har inte ritat alla dina bildkartor ännu"
+
+msgid "langHotspotWeightingError"
+msgstr "Du måste ge ett positiv (>0) värde för varje bildkarta"
+
+msgid "langHotspotValidateError1"
+msgstr "Du måste ge ett fullständigt svar på frågan ("
+
+msgid "langHotspotValidateError2"
+msgstr "klick krävs på bilden) innan du får se resultaten"
+
+msgid "langHotspotRequired"
+msgstr "Beskrivning och poängsättning krävs för varje bildkarta -återkoppling är valfri"
+
+msgid "Fault"
+msgstr "Fel"
+
+msgid "HotSpot"
+msgstr "Bild zoner"
+
+msgid "ClickNumber"
+msgstr "Klicka nummer"
+
+msgid "HotspotGiveAnswers"
+msgstr "Lämna svar tack"
+
+msgid "Addlimits"
+msgstr "Lägg till gränser"
+
+msgid "AreYouSure"
+msgstr "Är du säker?"
+
+msgid "StudentScore"
+msgstr "Elevens resultat"
+
+msgid "backtoTesthome"
+msgstr "Tillbaks till provets sida"
+
+msgid "Feedback"
+msgstr "Återkoppling"
+
+msgid "Number"
+msgstr "Nr"
+
+msgid "Weighting"
+msgstr "Poäng"
+
+msgid "CorrectTest"
+msgstr "Rätta provet"
+
+msgid "ViewTest"
+msgstr "Visa"
+
+msgid "State"
+msgstr "Status"
+
+msgid "NotAttempted"
+msgstr "Ej skrivet"
+
+msgid "YourScore"
+msgstr "Ditt resultat"
+
+msgid "Attempted"
+msgstr "Skrivet"
+
+msgid "Results"
+msgstr "Resultat"
+
+msgid "ExerciseStored"
+msgstr "Provet har lagrats"
+
+msgid "ChooseAtLeastOneCheckbox"
+msgstr "Välj minst ett bra svar"
+
+msgid "ExerciseEdited"
+msgstr "Provet har ändrats"
+
+msgid "ExerciseDeleted"
+msgstr "Provet har tagits bort"
+
+msgid "ClickToCommentAndGiveFeedback"
+msgstr "Klicka på följande länk för att kontrollera svaret och ge feedback"
+
+msgid "StudentEmail"
+msgstr "Elevens e-post"
+
+msgid "CourseName"
+msgstr "Kursnamn"
+
+msgid "AttemptVCC"
+msgstr "Följande uppgift har kontrollerats av din lärare."
+
+msgid "Regards"
+msgstr "Hälsningar"
+
+msgid "AttemptVCCLong"
+msgstr "Följande uppgift %s har kontrollerats av din lärare.
+Klicka på länken nedanför för att se ditt resultat"
+
+msgid "DearStudentEmailIntroduction"
+msgstr "Hej,"
+
+msgid "EnableResults"
+msgstr "Visa resultat för elever"
+
+msgid "ValidateAnswer"
+msgstr "Spara och rätta mina svar"
+
+msgid "ExerciseAttempts"
+msgstr "Max antal försök"
+
+msgid "DeleteAttempt"
+msgstr "Radera försök?"
+
+msgid "ExitTest"
+msgstr "Avsluta provet"
+
+msgid "CantViewResults"
+msgstr "Ej tillgänglig"
+
+msgid "HideResultsToStudents"
+msgstr "Dölj resultat"
+
+msgid "ShowResultsToStudents"
+msgstr "Visa poäng till eleven"
+
+msgid "XResultsCleaned"
+msgstr "resultat rensat"
+
+msgid "LimitedAttempts"
+msgstr "Begränsat antal försök"
+
+msgid "StartTest"
+msgstr "Starta test"
+
+msgid "SaveForNow"
+msgstr "Spara och fortsätta"
+
+msgid "ContinueTest"
+msgstr "Fortsätt med testet"
+
+msgid "PreviousQuestion"
+msgstr "Föregående fråga"
+
+msgid "CongratulationsYouPassedTheTest"
+msgstr "Grattis, du klarade provet"
+
+msgid "YouDidNotReachTheMinimumScore"
+msgstr "Du har inte uppnått lägsta kunskaps kraven."
+
+msgid "EndTest"
+msgstr "Avsluta prov"
+

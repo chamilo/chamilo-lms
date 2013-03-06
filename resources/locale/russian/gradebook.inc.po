@@ -1,0 +1,148 @@
+msgid "FlatView"
+msgstr "Плоскостной вид"
+
+msgid "ScoreEdit"
+msgstr "Правила формирования результата"
+
+msgid "ScoreColor"
+msgstr "Цвет результата"
+
+msgid "ScoringSystem"
+msgstr "Система баллов (формирования результата)"
+
+msgid "EnableScoreColor"
+msgstr "Включить окрашивание результата"
+
+msgid "Below"
+msgstr "Внизу"
+
+msgid "WillColorRed"
+msgstr "Будет окрашено в красный"
+
+msgid "EnableScoringSystem"
+msgstr "Включить систему формирования результата"
+
+msgid "IncludeUpperLimit"
+msgstr "Включить верхний предел колебания"
+
+msgid "ScoreInfo"
+msgstr "Информация результата"
+
+msgid "Between"
+msgstr "между"
+
+msgid "CurrentCategory"
+msgstr "Текущий раздел"
+
+msgid "RootCat"
+msgstr "Корневой раздел"
+
+msgid "NewCategory"
+msgstr "Новый раздел"
+
+msgid "NewEvaluation"
+msgstr "Новый процесс оценивания"
+
+msgid "Weight"
+msgstr "Удельный вес"
+
+msgid "PickACourse"
+msgstr "Выбрать курс"
+
+msgid "CategoryName"
+msgstr "Имя раздела"
+
+msgid "CourseIndependent"
+msgstr "Независимый курс"
+
+msgid "CourseIndependentEvaluation"
+msgstr "Оценивание независимого курса"
+
+msgid "EvaluationName"
+msgstr "Название процесса оценки"
+
+msgid "Max"
+msgstr "Максимум"
+
+msgid "DateEval"
+msgstr "Дата оценки"
+
+msgid "AddUserToEval"
+msgstr "Добавить пользователей для оценивания"
+
+msgid "NewSubCategory"
+msgstr "Новый подраздел"
+
+msgid "MakeLink"
+msgstr "Создать ссылку"
+
+msgid "DeleteSelected"
+msgstr "Удалить выбранное"
+
+msgid "SetVisible"
+msgstr "Совокупность видима"
+
+msgid "SetInvisible"
+msgstr "Совокупность невидима"
+
+msgid "ChooseLink"
+msgstr "Выбрать тип ссылки"
+
+msgid "DokeosExercises"
+msgstr "Упражнения системы Chamilo"
+
+msgid "DokeosDropbox"
+msgstr "Ящик для содержимого системы Chamilo"
+
+msgid "DokeosStudentPublications"
+msgstr "Публикации студентов в системе Chamilo"
+
+msgid "DokeosLearningPaths"
+msgstr "Учебные планы системы Chamilo"
+
+msgid "ChooseExercise"
+msgstr "Выбрать упражнение"
+
+msgid "AddResult"
+msgstr "Добавить результаты"
+
+msgid "BackToOverview"
+msgstr "Вернуться к обзору"
+
+msgid "ExportPDF"
+msgstr "Экспортировать в формат PDF"
+
+msgid "Print"
+msgstr "Печать"
+
+msgid "ChooseOrientation"
+msgstr "Выбрать направление"
+
+msgid "Portrait"
+msgstr "Портрет"
+
+msgid "Landscape"
+msgstr "Пейзаж"
+
+msgid "FilterCategory"
+msgstr "Фильтрующий раздел"
+
+msgid "DeleteAll"
+msgstr "Удалить все"
+
+msgid "ScoringUpdated"
+msgstr "Результат обновлен"
+
+msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
+msgstr "%s аттестованных, что 
+
+ %s 
+
+ успешно закончили курс 
+
+ \"%s\" 
+
+ с результатом 
+
+ \"%s\""
+

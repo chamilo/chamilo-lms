@@ -1,0 +1,243 @@
+msgid "ForumDeleted"
+msgstr "حذف المنتدى"
+
+msgid "ForumCategoryDeleted"
+msgstr "فئة المنتدى محذوفه"
+
+msgid "ForumLocked"
+msgstr "حظر المنتدى"
+
+msgid "Forum"
+msgstr " المنتديات"
+
+msgid "AddForumCategory"
+msgstr "أضف تصنيف منتدى جديد"
+
+msgid "AddForum"
+msgstr "أضف منتدى جديد"
+
+msgid "Topics"
+msgstr "المواضيع"
+
+msgid "Posts"
+msgstr "مشاركات"
+
+msgid "LastPosts"
+msgstr "أخر مشاركة"
+
+msgid "Message"
+msgstr "الرسالة"
+
+msgid "NoForumInThisCategory"
+msgstr "لا يوجد أي منتدى في هذا التصنيف"
+
+msgid "InForumCategory"
+msgstr "أضف في التصنيف"
+
+msgid "AllowAnonymousPosts"
+msgstr "السماح للجميع بإرسال مشاركات"
+
+msgid "StudentsCanEdit"
+msgstr " هل يمكن للمستخدمين من تحرير مشاركاتهم؟"
+
+msgid "ApprovalDirect"
+msgstr "الإعتماد / إضافة مباشرة"
+
+msgid "AllowNewThreads"
+msgstr "السماح للمستخدمين بإضافة موضوعات جديدة"
+
+msgid "DefaultViewType"
+msgstr "نوع العرض الإفتراضي"
+
+msgid "GroupSettings"
+msgstr "إعدادات المجموعة"
+
+msgid "NotAGroupForum"
+msgstr "ليست مجموعة منتدى"
+
+msgid "PublicPrivateGroupForum"
+msgstr "مجموعة منتدى خاصة أم عامة؟"
+
+msgid "Public"
+msgstr "لجميع أعضاء المقرر"
+
+msgid "Private"
+msgstr "لأعضاء المجموعة فقط"
+
+msgid "NewPostStored"
+msgstr "لقد تم حفظ رسالتك"
+
+msgid "ReturnTo"
+msgstr "يمكنك الرجوع الأن إلى"
+
+msgid "Or"
+msgstr "أو"
+
+msgid "ReplyToThread"
+msgstr "الرد على هذا الموضوع"
+
+msgid "ReplyToMessage"
+msgstr "الرد على هذه الرسالة"
+
+msgid "QuoteMessage"
+msgstr "اقتبس هذه الرسالة"
+
+msgid "NewTopic"
+msgstr "موضوع جديد"
+
+msgid "Replies"
+msgstr "الردود"
+
+msgid "Views"
+msgstr "القراءات"
+
+msgid "LastPost"
+msgstr "أخر مشاركة"
+
+msgid "Quoting"
+msgstr "اقتباس"
+
+msgid "NotifyByEmail"
+msgstr "أعلمني بواسطة البريد الإلكتروني في حال الرد من قبل أي شخص"
+
+msgid "StickyPost"
+msgstr "هذه رسالة مثبتة (تظهر دائما في الأعلى مع أيقونة التثبيت )"
+
+msgid "ReplyShort"
+msgstr " رد:"
+
+msgid "DeletePost"
+msgstr " هل أنت متأكد من أنك تريد حذف هذه المشاركة؟ حذف هذه المشاركة يعني حذف جميع الردود المتعلقة بهذه المشاركة. فضلا انقر على معاينة الموضوع لمشاهدة المشاركات التي سيتم حذفها"
+
+msgid "Locked"
+msgstr "مقفل: لا يمكن للطلبة إضافة مشاركة في التصنيف أو المنتدى أو الموضوع"
+
+msgid "Unlocked"
+msgstr "غير مقفل: بإمكان الطلبة إضافة رسائل جديدة في هذا التصنيف أو المنتدى أو الموضوع"
+
+msgid "Flat"
+msgstr "مباشر"
+
+msgid "Threaded"
+msgstr "مترابط"
+
+msgid "Nested"
+msgstr "متداخل"
+
+msgid "FlatView"
+msgstr "عرض مسطح"
+
+msgid "ThreadedView"
+msgstr "Threaded View"
+
+msgid "NestedView"
+msgstr "عرض متداخل"
+
+msgid "Structure"
+msgstr "الهيكل"
+
+msgid "ForumCategoryAdded"
+msgstr "لقد تم إضافة تصنيف منتدى"
+
+msgid "ForumCategoryEdited"
+msgstr "لقد تم تعديل تصنيف منتدى"
+
+msgid "ForumAdded"
+msgstr "لقد تم إضافة المنتدى"
+
+msgid "ForumEdited"
+msgstr "لقد تم تعديل المنتدى"
+
+msgid "NewThreadStored"
+msgstr "لقد تم إضافة الموضوع"
+
+msgid "Approval"
+msgstr "إعتماد"
+
+msgid "Direct"
+msgstr "مباشر"
+
+msgid "ForGroup"
+msgstr "للمجموعة"
+
+msgid "ThreadLocked"
+msgstr "الموضوع مغلق"
+
+msgid "NotAllowedHere"
+msgstr "غير مسموح لك هنا"
+
+msgid "ReplyAdded"
+msgstr "لقد تم إضافة الرد"
+
+msgid "EditPost"
+msgstr "تحرير مقال"
+
+msgid "EditPostStored"
+msgstr "تم تحرير المشاكة"
+
+msgid "NewForumPost"
+msgstr "مشاركة جديدة في المنتدى"
+
+msgid "YouWantedToStayInformed"
+msgstr "ذكرت أنك تريد إعلامك بواسطة البريد الإلكتروني في حين قام شخص بالرد على الموضوع"
+
+msgid "MessageHasToBeApproved"
+msgstr "يجب إعتماد رسالتك قبل نشرها"
+
+msgid "AllowAttachments"
+msgstr "السماح بالمرفقات"
+
+msgid "EditForumCategory"
+msgstr "تحرير تصنيف المنتدى"
+
+msgid "MovePost"
+msgstr "نقل مشاركة"
+
+msgid "MoveToThread"
+msgstr "نقل إلى موضوع"
+
+msgid "ANewThread"
+msgstr "موضوع جديد"
+
+msgid "Reply"
+msgstr "رد"
+
+msgid "DeleteForum"
+msgstr "حذف منتدى ؟"
+
+msgid "DeleteForumCategory"
+msgstr "حذف تصنيف منتدى ؟"
+
+msgid "Lock"
+msgstr "قفل"
+
+msgid "Unlock"
+msgstr "إلغاء القفل"
+
+msgid "MoveThread"
+msgstr "نقل الموضوع"
+
+msgid "PostVisibilityChanged"
+msgstr "تم تغيير خاصية ظهور المشاركة"
+
+msgid "PostDeleted"
+msgstr "تم حذف المشاركة"
+
+msgid "MakeInvisible"
+msgstr "اجعلها غير مرئية"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "يمكن إيجاد الموضوع هنا"
+
+msgid "MakeVisible"
+msgstr "جعله مرئي"
+
+msgid "DeleteCompleteThread"
+msgstr "حذف الموضوع بشكل كامل؟"
+
+msgid "PostDeletedSpecial"
+msgstr "الرسالة الخاصة محذوفة"
+
+msgid "ThreadDeleted"
+msgstr "الموضوع محذوف"
+

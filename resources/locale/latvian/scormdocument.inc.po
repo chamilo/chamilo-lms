@@ -1,0 +1,180 @@
+msgid "langChapter"
+msgstr "Nodaļa"
+
+msgid "langDocumentList"
+msgstr "Visu dokumentu saraksts"
+
+msgid "langOrganisationList"
+msgstr "Saturs"
+
+msgid "langEditTOC"
+msgstr "Labot saturu"
+
+msgid "langEditDocument"
+msgstr "Labot"
+
+msgid "langCreateDocument"
+msgstr "Izveidot saturā bagātu mēdiju lapu/aktivitāti"
+
+msgid "langMissingImagesDetected"
+msgstr "Tika konstatēts: ir zuduši attēli"
+
+msgid "langPublish"
+msgstr "Publicēt"
+
+msgid "langScormcontentstudent"
+msgstr "Šis ir <i>Scorm</i> formāta kurss. Ja Jūs vēlaties to apskatīt klikšķiniet <input type=button name=scormbutton value=\'Aiziet !\' =\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "Pieeja <i>Scorm</i>  sistēmai<br><input type=button name=scormbutton value=\'Sākt darbu !\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr "ZIP fails tika augšupielādēts un atpakots"
+
+msgid "langZipNoPhp"
+msgstr "ZIP failā nedrīkst būt iekļauti .PHP faili"
+
+msgid "langGroupForumLink"
+msgstr "Grupas diskusijas"
+
+msgid "langGroupSpace"
+msgstr "Grupas apraksts"
+
+msgid "langNotScormContent"
+msgstr "Šis nav Scorm formāta ZIP fails!"
+
+msgid "langNoText"
+msgstr "Lūdzu, ievadiet tekstuālo / HTML informāciju"
+
+msgid "langNoFileName"
+msgstr "Lūdzu, norādiet faila nosaukumu"
+
+msgid "langMaxFileSize"
+msgstr "Maksimāli pieļaujamais faila izmērs ir"
+
+msgid "langFileName"
+msgstr "Faila nosaukums"
+
+msgid "langFileError"
+msgstr "Augšuplādējamais fails neatbilst priekšnosacījumiem."
+
+msgid "langDown"
+msgstr "lejā"
+
+msgid "langViMod"
+msgstr "Pieejamība pārskatīta"
+
+msgid "langAddComment"
+msgstr "Pievienot/labot komentāru"
+
+msgid "langImpossible"
+msgstr "Darbība ir neiespējama"
+
+msgid "langNewDir"
+msgstr "Jaunās direktorijas nosaukums"
+
+msgid "langTo"
+msgstr "uz"
+
+msgid "langNoSpace"
+msgstr "Augšupielāde notika neveiksmīgi. Jūsu direktorijā nav pietiekami daudz vietas"
+
+msgid "langDownloadEnd"
+msgstr "Augšupielāde notika veiksmīgi"
+
+msgid "langFileExists"
+msgstr "Veicamā darbība ir neiespējama - fails ar tādu nosaukumu jau eksistē."
+
+msgid "langDocCopied"
+msgstr "Dokuments nokopēts"
+
+msgid "langDocDeleted"
+msgstr "Dokuments izdzēsts"
+
+msgid "langElRen"
+msgstr "Elements pārsaukts"
+
+msgid "langDirMv"
+msgstr "Elements pārvietots"
+
+msgid "langComMod"
+msgstr "Komentārs papildināts"
+
+msgid "langRename"
+msgstr "Pārsaukt"
+
+msgid "langCopy"
+msgstr "Kopēt kursa saturu"
+
+msgid "langNameDir"
+msgstr "Jaunās direktorijas nosaukums"
+
+msgid "langDownloadFile"
+msgstr "Augšupielādēt IMS vai Scorm mācību plāna kursu ZIP formātā"
+
+msgid "learning_path_access"
+msgstr "Noklikšķini uz \'Izveidot jaunu kursu\' lai: dzēstu/pārveidotu/aktivizētu/slēptu/veidotu/pievienotu mācību programmu"
+
+msgid "langRoot"
+msgstr "Izcelsmes / pamatdirektorija"
+
+msgid "langBuilder"
+msgstr "Mācību programmas veidotājs"
+
+msgid "lang_edit_learnpath"
+msgstr "Labot mācību kursu - tēmas, macību soļus"
+
+msgid "lang_add_title_and_desc"
+msgstr "Labot virsrakstu un aprakstu"
+
+msgid "lang_add_learnpath"
+msgstr "Izveidot kursu ( Lektora instrumenti)"
+
+msgid "lang_learnpath_added"
+msgstr "Jauns mācību kurss ir izveidots. <br>Tagad Jūs varat tam pievienot satura elementus - tēmas, tēmu tematiskās satura lapas, testus u.t.t. <br>Noklikšķieniet uz kursa nosaukuma, lai veiktu izmaiņas."
+
+msgid "lang_delete_learnpath"
+msgstr "Izdzēst kursu"
+
+msgid "lang_learnpath_edited"
+msgstr "Kursa saturs tika labots"
+
+msgid "lang_learnpath_deleted"
+msgstr "Kurss tika izdzēsts"
+
+msgid "lang_no_publish"
+msgstr "nepublicēt"
+
+msgid "lang_publish"
+msgstr "publicēt"
+
+msgid "lang_no_published"
+msgstr "nav publicēts"
+
+msgid "lang_published"
+msgstr "publicēts"
+
+msgid "lang_description"
+msgstr "Kursa iesatījumi"
+
+msgid "lang_title"
+msgstr "virsraksts"
+
+msgid "langScormBuilder"
+msgstr "Plāna veidotājs - <i>Scorm</i> formāta kursa veidotājs"
+
+msgid "langCreateDoc"
+msgstr "Izveidot dokumentu"
+
+msgid "langOrganiseDocuments"
+msgstr "Izveidot satura koku"
+
+msgid "langUncompress"
+msgstr "atarhivēt ZIP failu"
+
+msgid "ExportShort"
+msgstr "Eksportēt kā SCORM"
+
+msgid "progress"
+msgstr "Attīstība"
+

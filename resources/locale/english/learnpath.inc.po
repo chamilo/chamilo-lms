@@ -1,0 +1,780 @@
+msgid "NewForumCreated"
+msgstr "A new forum has now been created"
+
+msgid "NewThreadCreated"
+msgstr "A new forum thread has now been created"
+
+msgid "AddHotpotatoes"
+msgstr "Add hotpotatoes"
+
+msgid "HideAttemptView"
+msgstr "Hide attempt view"
+
+msgid "ExtendAttemptView"
+msgstr "Extend attempt view"
+
+msgid "LearnPathAddedTitle"
+msgstr "Welcome to the Chamilo course authoring tool !"
+
+msgid "BuildComment"
+msgstr "Add learning objects and activities to your course"
+
+msgid "BasicOverviewComment"
+msgstr "Add audio comments and order learning objects in the table of contents"
+
+msgid "DisplayComment"
+msgstr "Watch the course from learner\'s viewpoint"
+
+msgid "NewChapterComment"
+msgstr "Chapter 1, Chapter 2 or Week 1, Week 2..."
+
+msgid "NewStepComment"
+msgstr "Add tests, activities and multimedia content"
+
+msgid "lang_learning_path"
+msgstr "Courses"
+
+msgid "lang_learning_path_builder"
+msgstr "Authoring tool"
+
+msgid "lang_description"
+msgstr "Course settings"
+
+msgid "LearnpathTitle"
+msgstr "Title"
+
+msgid "LearnpathPrerequisites"
+msgstr "Prerequisites"
+
+msgid "LearnpathMoveUp"
+msgstr "Up"
+
+msgid "LearnpathMoveDown"
+msgstr "Down"
+
+msgid "langThisItem"
+msgstr "this learning object"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Name & description"
+
+msgid "LearnpathChangeOrder"
+msgstr "Change order"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Add prerequisities"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Edit name & desc."
+
+msgid "lang_delete"
+msgstr "Delete"
+
+msgid "lang_add_chapter"
+msgstr "Add section"
+
+msgid "langLearnpathMystatus"
+msgstr "My progress in this course"
+
+msgid "langLearnpathCompstatus"
+msgstr "completed"
+
+msgid "langLearnpathIncomplete"
+msgstr "incomplete"
+
+msgid "langLearnpathPassed"
+msgstr "passed"
+
+msgid "langLearnpathFailed"
+msgstr "failed"
+
+msgid "langLearnpathPrevious"
+msgstr "Previous learning object"
+
+msgid "langLearnpathNext"
+msgstr "Next learning object"
+
+msgid "langLearnpathRestart"
+msgstr "Restart"
+
+msgid "langLearnpathThisStatus"
+msgstr "This learning object is now"
+
+msgid "langLearnpathToEnter"
+msgstr "To enter"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "you need first accomplish"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Section name"
+
+msgid "langLearnpathStatus"
+msgstr "Status"
+
+msgid "langLearnpathScore"
+msgstr "Score"
+
+msgid "langLearnpathTime"
+msgstr "Time"
+
+msgid "langLearnpathVersion"
+msgstr "version"
+
+msgid "langLearnpathRestarted"
+msgstr "No learning object is completed."
+
+msgid "langLearnpathNoNext"
+msgstr "This is the last learning object."
+
+msgid "langLearnpathNoPrev"
+msgstr "This is the first learning object."
+
+msgid "LearnpathAddLearnpath"
+msgstr "Create new course (Chamilo AUTHOR)"
+
+msgid "lang_learnpath_added"
+msgstr "The course was created. Add sections and learning objects to build the course."
+
+msgid "LearnpathEditLearnpath"
+msgstr "Edit learnpath"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "Delete course"
+
+msgid "lang_learnpath_edited"
+msgstr "Course has been edited"
+
+msgid "lang_learnpath_deleted"
+msgstr "Course has been deleted"
+
+msgid "LearnpathDoNotPublish"
+msgstr "do not publish"
+
+msgid "LearnpathPublish"
+msgstr "Publish on training homepage"
+
+msgid "LearnpathNotPublished"
+msgstr "not published"
+
+msgid "LearnpathPublished"
+msgstr "published"
+
+msgid "lang_add_learnpath_module"
+msgstr "Add a section"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Add a section to this course"
+
+msgid "lang_learnpath_module_added"
+msgstr "The section was successfully created. Add learning object by clicking on the corresponding icon."
+
+msgid "LearnpathEditModule"
+msgstr "Edit section description/name"
+
+msgid "LearnpathDeleteModule"
+msgstr "Delete section"
+
+msgid "lang_learnpath_module_edited"
+msgstr "The course section was edited"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "The course section and the learning objects it contains have been deleted"
+
+msgid "LearnpathNoChapters"
+msgstr "No sectionss added yet."
+
+msgid "LearnpathAddItem"
+msgstr "Add learning objects to this section"
+
+msgid "LearnpathItemDeleted"
+msgstr "The learning object has been deleted"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "Assign these learning objects to a section:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Edit learning object name and description"
+
+msgid "lang_add_prereq"
+msgstr "Add/edit prerequisites to this learning object"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Delete learning object"
+
+msgid "LearnpathItemEdited"
+msgstr "The learning object has been edited"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Deleted !"
+
+msgid "lang_none"
+msgstr "NONE"
+
+msgid "lang_forum_opened"
+msgstr "The selected forum has been opened in a new window."
+
+msgid "lang_link_opened"
+msgstr "The selected link has been opened in a new window."
+
+msgid "lang_short_help"
+msgstr "To see course from learner viewpoint, select Display"
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps."
+
+msgid "lang_author"
+msgstr "Author"
+
+msgid "lang_date"
+msgstr "Date"
+
+msgid "langBasicOverview"
+msgstr "Organize"
+
+msgid "langAdvanced"
+msgstr "Authoring"
+
+msgid "langDisplay"
+msgstr "Display"
+
+msgid "langNewChapter"
+msgstr "Add section"
+
+msgid "langNewStep"
+msgstr "Add learning object or activity"
+
+msgid "langEditPrerequisites"
+msgstr "Edit the prerequisites of the current LO"
+
+msgid "langTitleManipulateChapter"
+msgstr "Edit section"
+
+msgid "langTitleManipulateModule"
+msgstr "Edit section"
+
+msgid "langTitleManipulateDocument"
+msgstr "Edit document"
+
+msgid "langTitleManipulateLink"
+msgstr "Edit link"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Edit test structure"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Edit assignment"
+
+msgid "langEnterDataNewChapter"
+msgstr "Adding a section to the course"
+
+msgid "langEnterDataNewModule"
+msgstr "Enter information for section"
+
+msgid "langCreateNewStep"
+msgstr "Create new rich media page"
+
+msgid "langNewDocument"
+msgstr "Rich media page / activity"
+
+msgid "langUseAnExistingResource"
+msgstr "Or use an existing resource :"
+
+msgid "langParent"
+msgstr "Section"
+
+msgid "langPosition"
+msgstr "In table of contents"
+
+msgid "langNewChapterCreated"
+msgstr "A new section has now been created. You may continue by adding a section or step."
+
+msgid "langNewLinksCreated"
+msgstr "The new link has been created"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "The new assignment has been created"
+
+msgid "langNewModuleCreated"
+msgstr "The new section has been created. You can now add a section or a learning object to it."
+
+msgid "langNewExerciseCreated"
+msgstr "The test has been added to the course"
+
+msgid "langItemRemoved"
+msgstr "The learning object has been removed"
+
+msgid "langConverting"
+msgstr "Converting..."
+
+msgid "langPpt2lpError"
+msgstr "Error during the conversion of PowerPoint. Please check if there are special characters in the name of your PowerPoint."
+
+msgid "langBuild"
+msgstr "Build"
+
+msgid "langViewModeEmbedded"
+msgstr "Current view mode: embedded"
+
+msgid "langViewModeFullScreen"
+msgstr "Current view mode: fullscreen"
+
+msgid "langShowDebug"
+msgstr "Show debug"
+
+msgid "langHideDebug"
+msgstr "Hide debug"
+
+msgid "langCantEditDocument"
+msgstr "This document is not editable"
+
+msgid "langAfter"
+msgstr "After"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Prerequisities (limit)"
+
+msgid "lang_loading"
+msgstr "Loading page, please wait ..."
+
+msgid "lang_empty"
+msgstr "This course includes no learning object."
+
+msgid "langHotPotatoesFinished"
+msgstr "This HotPotatoes test has been closed."
+
+msgid "langCompletionLimit"
+msgstr "Completion limit (minimum points)"
+
+msgid "langPrereqToEnter"
+msgstr "To enter"
+
+msgid "langPrereqFirstNeedTo"
+msgstr " you need first accomplish"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "At least 1 step is missing from"
+
+msgid "langPrereqModuleMinimum2"
+msgstr " which is set as prerequisities."
+
+msgid "langPrereqTestLimit1"
+msgstr " you must reach minimum"
+
+msgid "langPrereqTestLimit2"
+msgstr " points in"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Now you have :"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "back to normal screen"
+
+msgid "langLearnpathFullScreen"
+msgstr "full screen"
+
+msgid "langItemMissing1"
+msgstr "There was a"
+
+msgid "langItemMissing2"
+msgstr "page (step) here in the original Chamilo Learning Path."
+
+msgid "langDone"
+msgstr "Done"
+
+msgid "langNoItemSelected"
+msgstr "Select a learning object in the table of contents"
+
+msgid "langNewDocumentCreated"
+msgstr "The rich media page/activity has been added to the course"
+
+msgid "langEditCurrentChapter"
+msgstr "Edit the current section"
+
+msgid "langditCurrentModule"
+msgstr "Edit the current section"
+
+msgid "langCreateTheDocument"
+msgstr "Adding a rich media page/activity to the course"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Move the current document"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Edit the current document"
+
+msgid "langWarning"
+msgstr "Warning !"
+
+msgid "langWarningEditingDocument"
+msgstr "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
+
+msgid "langDirectory"
+msgstr "Folder"
+
+msgid "langCreateTheExercise"
+msgstr "Adding a test to the course"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Move the current test"
+
+msgid "langEditCurrentExecice"
+msgstr "Edit the current test"
+
+msgid "langUploadScorm"
+msgstr "Import SCORM course"
+
+msgid "langPowerPointConvert"
+msgstr "Chamilo RAPID"
+
+msgid "langLPCreatedToContinue"
+msgstr "To continue add a section or a learning object or activity to your course."
+
+msgid "langLPCreatedAddChapterStep"
+msgstr "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner\'s viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
+
+msgid "langPrerequisitesAdded"
+msgstr "Prerequisites to the current learning object have been added."
+
+msgid "langAddEditPrerequisites"
+msgstr "Add/edit prerequisites"
+
+msgid "langMinimum"
+msgstr "minimum"
+
+msgid "langMaximum"
+msgstr "maximum"
+
+msgid "langNoDocuments"
+msgstr "No documents"
+
+msgid "langNoExercisesAvailable"
+msgstr "No tests available"
+
+msgid "langNoLinksAvailable"
+msgstr "No links available"
+
+msgid "langNoItemsInLp"
+msgstr "There are no learning objects in the course. Click on \"Build\" to enter authoring mode."
+
+msgid "FirstPosition"
+msgstr "First position"
+
+msgid "NewQuiz"
+msgstr "New test"
+
+msgid "CreateTheForum"
+msgstr "Adding a forum to the course"
+
+msgid "AddLpIntro"
+msgstr "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left."
+
+msgid "AddLpToStart"
+msgstr "To start, give a title to your course"
+
+msgid "CreateTheLink"
+msgstr "Adding a link to the course"
+
+msgid "MoveCurrentLink"
+msgstr "Move the current link"
+
+msgid "EditCurrentLink"
+msgstr "Edit the current link"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "MoveCurrentStudentPublication"
+msgstr "Move the current assignment"
+
+msgid "EditCurrentStudentPublication"
+msgstr "Edit the current assignment"
+
+msgid "AllowMultipleAttempts"
+msgstr "Allow multiple attempts"
+
+msgid "PreventMultipleAttempts"
+msgstr "Prevent multiple attempts"
+
+msgid "MakeScormRecordingExtra"
+msgstr "Make SCORM recordings extra"
+
+msgid "MakeScormRecordingNormal"
+msgstr "Make SCORM recordings normal"
+
+msgid "DocumentHasBeenDeleted"
+msgstr "The document cannot be displayed because it has been deleted"
+
+msgid "EditCurrentForum"
+msgstr "Edit the current forum"
+
+msgid "NoPrerequisites"
+msgstr "No prerequisites"
+
+msgid "NewExercise"
+msgstr "New test"
+
+msgid "CreateANewLink"
+msgstr "Create a new link"
+
+msgid "CreateANewForum"
+msgstr "Create a new forum"
+
+msgid "LinkAdd"
+msgstr "Add link"
+
+msgid "WoogieConversionPowerPoint"
+msgstr "Woogie : Word conversion"
+
+msgid "WelcomeWoogieSubtitle"
+msgstr "MS Word to course converter"
+
+msgid "WelcomeWoogieConverter"
+msgstr "Welcome to Woogie Rapid Learning<ul type=\"1\"><li>Choose a file .doc, .sxw, .odt<li>Upload it to Woogie. It will be convert to a SCORM course<li>You will then be able to add audio comments on each page and insert quizzes and other activities between pages</ul>"
+
+msgid "WoogieError"
+msgstr "Error during the conversion of the word document. Please check if there are special characters in the name of your document.."
+
+msgid "WordConvert"
+msgstr "MS Word conversion"
+
+msgid "Order"
+msgstr "Order"
+
+msgid "InteractionID"
+msgstr "Interaction ID"
+
+msgid "TimeFinished"
+msgstr "Time (finished at...)"
+
+msgid "CorrectAnswers"
+msgstr "Correct answers"
+
+msgid "StudentResponse"
+msgstr "Learner answers"
+
+msgid "LatencyTimeSpent"
+msgstr "Time spent"
+
+msgid "Result"
+msgstr "Result"
+
+msgid "SplitStepsPerPage"
+msgstr "A page, a learning object"
+
+msgid "SplitStepsPerChapter"
+msgstr "A section, a learning object"
+
+msgid "TakeSlideName"
+msgstr "Use the slides names as course learning object names"
+
+msgid "CannotConnectToOpenOffice"
+msgstr "The connection to the document converter failed. Please contact your platform administrator to fix the problem."
+
+msgid "OogieConversionFailed"
+msgstr "The conversion failed. <br />Some documents are too complex to be threated automatically by the document converter. <br />We try to improve it."
+
+msgid "OogieUnknownError"
+msgstr "The conversion failed for an unknown reason.<br />Please contact your administrator to get more information."
+
+msgid "OogieBadExtension"
+msgstr "Please upload presentations only. Filename should end with .ppt or .odp"
+
+msgid "WoogieBadExtension"
+msgstr "Please upload text documents only. Filename should end with .doc, .docx or .odt"
+
+msgid "ShowAudioRecorder"
+msgstr "Show audio recorder"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "The full-text search feature is not enabled in Chamilo. Please contact the Chamilo administrator."
+
+msgid "SearchFeatureSearchExplanation"
+msgstr "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word \'car\' tagged as \'truck\', not     including the word \'ferrari\' but including the word \'ford\' and the exact  phrase \'high consumption\'."
+
+msgid "ViewLearningPath"
+msgstr "View course"
+
+msgid "SearchFeatureDocumentTagsIfIndexing"
+msgstr "Tags to add to the document, if indexing"
+
+msgid "ReturnToLearningPaths"
+msgstr "Back to learning paths"
+
+msgid "UploadMp3audio"
+msgstr "Upload Mp3 audio"
+
+msgid "UpdateAllAudioFragments"
+msgstr "Add audio"
+
+msgid "LeaveEmptyToKeepCurrentFile"
+msgstr "Leave import form empty to keep current audio file"
+
+msgid "RemoveAudio"
+msgstr "Remove audio"
+
+msgid "SaveAudio"
+msgstr "Validate"
+
+msgid "ChangesStored"
+msgstr "Audio added"
+
+msgid "ViewScoreChangeHistory"
+msgstr "View score change history"
+
+msgid "ImageWillResizeMsg"
+msgstr "Trainer picture will resize if needed"
+
+msgid "ImagePreview"
+msgstr "Image preview"
+
+msgid "UplAlreadyExists"
+msgstr " already exists."
+
+msgid "UplUnableToSaveFile"
+msgstr "The uploaded file could not be saved (perhaps a permission problem?)"
+
+msgid "UnknownPackageFormat"
+msgstr "The format of this package could not be recognized. Please check this is a valid package."
+
+msgid "MoveDocument"
+msgstr "Move document"
+
+msgid "EditLPSettings"
+msgstr "Edit course settings"
+
+msgid "SaveLPSettings"
+msgstr "Save course settings"
+
+msgid "ShowAllAttempts"
+msgstr "Show all attempts"
+
+msgid "HideAllAttempts"
+msgstr "Hide all attempts"
+
+msgid "ShowAllAttemptsByExercise"
+msgstr "Show all attempts by test"
+
+msgid "ShowAttempt"
+msgstr "Show attempt"
+
+msgid "ShowAndQualifyAttempt"
+msgstr "Show and grade attempt"
+
+msgid "langAddEdit"
+msgstr "Add / Edit"
+
+msgid "ModifyPrerequisites"
+msgstr "Save prerequisites settings"
+
+msgid "CreateLearningPath"
+msgstr "Continue"
+
+msgid "AddExercise"
+msgstr "Add test to course"
+
+msgid "AddForum"
+msgstr "Add a forum"
+
+msgid "LPCreateDocument"
+msgstr "Add this document to the course"
+
+msgid "ObjectiveID"
+msgstr "Objective ID"
+
+msgid "ObjectiveStatus"
+msgstr "Objective status"
+
+msgid "ObjectiveRawScore"
+msgstr "Objective raw score"
+
+msgid "ObjectiveMaxScore"
+msgstr "Objective max score"
+
+msgid "ObjectiveMinScore"
+msgstr "Objective min score"
+
+msgid "LPName"
+msgstr "Course name"
+
+msgid "AuthoringOptions"
+msgstr "Authoring options"
+
+msgid "CourseSettings"
+msgstr "Course settings"
+
+msgid "SaveSection"
+msgstr "Save section"
+
+msgid "AddLinkToCourse"
+msgstr "Add link to course"
+
+msgid "AddAssignmentToCourse"
+msgstr "Add assignment to course"
+
+msgid "AddForumToCourse"
+msgstr "Add forum to course"
+
+msgid "SaveAudioAndOrganization"
+msgstr "Save audio and organization"
+
+msgid "UploadOnlyMp3Files"
+msgstr "Please upload mp3 files only"
+
+msgid "ModifyHotPotatoes"
+msgstr "Modify hotpotatoes"
+
+msgid "SaveHotpotatoes"
+msgstr "Save hotpotatoes"
+
+msgid "ReturnToLPList"
+msgstr "Return to list"
+
+msgid "LpPrerequisiteDescription"
+msgstr "Selecting another learning path as a prerequisite will hide the current prerequisite until the one in prerequisite is fully completed (100%)"
+
+msgid "PrerequisitesOptions"
+msgstr "Prerequisites options"
+
+msgid "ClearAllPrerequisites"
+msgstr "Clear all prerequisites"
+
+msgid "SetPrerequisiteForEachItem"
+msgstr "Set previous step as prerequisite for each step"
+
+msgid "ClickOnTheLearnerViewToSeeYourLearningPath"
+msgstr "Click on the [Learner view] button to see your learning path"
+
+msgid "ExerciseCantBeEditedAfterAddingToTheLP"
+msgstr "Exercise can\'t be edited after being added to the Learning Path"
+
+msgid "EnableTimeLimits"
+msgstr "Enable availability limits"
+
+msgid "PublicationDate"
+msgstr "Publication date"
+
+msgid "UseMaxScore100"
+msgstr "Use default maximum score of 100"
+
+msgid "EnableLPAutoLaunch"
+msgstr "Enable learning path auto-launch"
+
+msgid "DisableLPAutoLaunch"
+msgstr "Disable learning path auto-launch"
+
+msgid "ViewModeEmbedFrame"
+msgstr "Current view mode: external embed. Use only for embedding in external sites."
+
+msgid "LPNotVisibleToStudent"
+msgstr "Learners cannot see this learning path"
+
+msgid "EditCurrentModule"
+msgstr "Edit current module"
+
+msgid "SearchFeatureTerms"
+msgstr "Terms for the search feature"
+
+msgid "PrerequisiteDeletedError"
+msgstr "Error: the element defined as prerequisite has been deleted."
+

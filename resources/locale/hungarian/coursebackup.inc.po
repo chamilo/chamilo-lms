@@ -1,0 +1,138 @@
+msgid "langSelectOptionForBackup"
+msgstr "Válassza ki a biztonsági mentés módját."
+
+msgid "langLetMeSelectItems"
+msgstr "Engedje a rendszer, hogy én válasszam ki a kurzus összetevőit."
+
+msgid "langCreateFullBackup"
+msgstr "Teljes mentés az egész kurzusról"
+
+msgid "langCreateBackup"
+msgstr "Mentés létrehozása"
+
+msgid "langBackupCreated"
+msgstr "A kurzus biztonsági mentése létrejött. A fájl letöltési ablaka rövidesen megjelenik. Ha ez nem történne meg automatikusan, kattintson a következő hivatkozásra."
+
+msgid "langSelectBackupFile"
+msgstr "Biztonsági mentés kiválasztása"
+
+msgid "langImportBackup"
+msgstr "Biztonsági mentés importálása"
+
+msgid "langImportFullBackup"
+msgstr "Teljes biztonsági mentés importálása"
+
+msgid "langImportFinished"
+msgstr "Importálás befejezve"
+
+msgid "langEvents"
+msgstr "Események"
+
+msgid "langAnnouncements"
+msgstr "Hirdetmények"
+
+msgid "langDocuments"
+msgstr "Dokumentumok"
+
+msgid "langTests"
+msgstr "Tesztek"
+
+msgid "langLearnpaths"
+msgstr "Tanulási programok"
+
+msgid "langCopyCourse"
+msgstr "Kurzus másolása"
+
+msgid "langSelectItemsToCopy"
+msgstr "Elem kiválasztása másoláshoz"
+
+msgid "langCopyFinished"
+msgstr "A másolás befejeződött"
+
+msgid "langFullRecycle"
+msgstr "Teljes kiürítés"
+
+msgid "langRecycleCourse"
+msgstr "Kurzus kiürítése"
+
+msgid "langRecycleFinished"
+msgstr "Kiürítés befejeződött"
+
+msgid "langRecycleWarning"
+msgstr "Figyelem: az eszköz használatakor a kurzus néhány eleme törlődni fog. A művelet NEM visszavonható. Ezért javasoljuk, hogy a kiürítés előtt használja a <a href=\"create_backup.php\">mentés</a> eszközt."
+
+msgid "langSameFilename"
+msgstr "Mi legyen azokkal a másolandó fájlokkal, amelyekkel azonos elnevezésű már létezik a célkurzuson belül?"
+
+msgid "langSameFilenameSkip"
+msgstr "Megegyező nevű fájl kihagyása"
+
+msgid "langSameFilenameRename"
+msgstr "Fájl átnevezése (pl. fajl.pdf -> fajl_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Fájl felülírása"
+
+msgid "langSelectDestinationCourse"
+msgstr "Célkurzus kiválasztása"
+
+msgid "langFullCopy"
+msgstr "Teljes másolat"
+
+msgid "langCourseDescription"
+msgstr "Kurzus leírás"
+
+msgid "langNoResourcesToBackup"
+msgstr "Nincsenek visszaállítható erőforrások"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Nincsenek erőforrások mentett fájlban"
+
+msgid "langSelectResources"
+msgstr "Erőforrások kiválasztása"
+
+msgid "langNoResourcesToRecycles"
+msgstr "Nincsenek újra hasznosítható erőforrások"
+
+msgid "langIncludeQuestionPool"
+msgstr "Kérdésbank csatolása"
+
+msgid "langLocalFile"
+msgstr "lokális fájl"
+
+msgid "langServerFile"
+msgstr "szerveren levő fájl"
+
+msgid "langNoBackupsAvailable"
+msgstr "nincs használható mentés"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "Nincs használható célkurzus"
+
+msgid "langBackup"
+msgstr "Visszaállítás"
+
+msgid "langImportBackupInfo"
+msgstr "Biztonsági mentés importálása. Lehetősége van feltölteni egy mentés fájlt a gépéről, vagy egy a szerveren levő mentést használni."
+
+msgid "langCreateBackupInfo"
+msgstr "Biztonsági mentés készítése kurzusáról. Megadhatja, hogy milyen kurzuselemek kerüljenek bele a mentés állományba."
+
+msgid "ToolIntro"
+msgstr "Eszközismertető"
+
+msgid "UploadError"
+msgstr "Sikertelen feltöltés. Kérjük, ellenőrizze a fájlnagyság limitjét és a mappa jogosultságait!"
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Dokumentumok szintén hozzá lesznek adva"
+
+msgid "ToExportLearnpathWithQuizYouHaveToSelectQuiz"
+msgstr "Ha tesztet tartalmazó tanösvényt szeretne exportálni, győződjön meg róla, hogy a kívánt teszteket tartalmazza az exportálás. Ehhez ki kell jelölnie a teszteket a listából."
+
+msgid "ArchivesDirectoryNotWriteableContactAdmin"
+msgstr "Az archíválás célkönyvtára nem írható. Lépjen kapcsolatba a rendszergazdával."
+
+msgid "DestinationCourse"
+msgstr "Cél kurzus"
+

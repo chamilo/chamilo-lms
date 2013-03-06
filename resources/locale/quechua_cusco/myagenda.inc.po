@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Ruwanay"
+
+msgid "langToday"
+msgstr "Kunan"
+

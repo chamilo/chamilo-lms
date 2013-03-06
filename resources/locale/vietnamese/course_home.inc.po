@@ -1,0 +1,21 @@
+msgid "langActivate"
+msgstr "Kích hoạt"
+
+msgid "langDeactivate"
+msgstr "Tạm ngưng"
+
+msgid "langInLnk"
+msgstr "Tạm ngưng hoạt động"
+
+msgid "langDelLk"
+msgstr "Bạn muốn xoá liên kết này?"
+
+msgid "langCourseCreate"
+msgstr "Tạo một khoá học"
+
+msgid "langNameOfTheLink"
+msgstr "Tên của liên kết"
+
+msgid "lang_main_categories_list"
+msgstr "Danh mục chính"
+

@@ -1,0 +1,84 @@
+msgid "langEnter2passToChange"
+msgstr "Upang baguhin ang iyong password, ipasok ang iyong kasalukuyang password sa field sa itaas at ang iyong bagong password sa parehong field sa ibaba. Upang mapanatili ang kasalukuyang password, iwanan ang tatlong mga field ng bakante."
+
+msgid "NewPass"
+msgstr "Bagong password"
+
+msgid "UserPicture"
+msgstr "Larawan"
+
+msgid "langProfileReg"
+msgstr "Ang iyong bagong profile ay nai-save"
+
+msgid "langEmailWrong"
+msgstr "Ang e-mail address ay hindi kumpleto o naglalaman ng ilang maling mga character"
+
+msgid "langUserTaken"
+msgstr "Ang login na ito ay ginagamit na"
+
+msgid "langPassTwo"
+msgstr "Ikaw ay nag-type ng dalawang magkaibang password"
+
+msgid "langModifProfile"
+msgstr "I-edit ang Profile"
+
+msgid "langRegAdmin"
+msgstr "Lumikha ng pagsasanay"
+
+msgid "langRegStudent"
+msgstr "Sundan ang pagsasanay"
+
+msgid "langConfirmation"
+msgstr "Kumpirmahin ang password"
+
+msgid "langSubscribeUserToCourse"
+msgstr "I-enroll ang mga gumagamit sa kurso"
+
+msgid "SearchButton"
+msgstr "Hanapin"
+
+msgid "UsernameWrong"
+msgstr "Ang iyong login ay maaari lamang maglaman ng mga letra, numero at _.-"
+
+msgid "Unreg"
+msgstr "I-unregister"
+
+msgid "NeverExpires"
+msgstr "Hindi pumapaso"
+
+msgid "On"
+msgstr "On"
+
+msgid "ExpirationDate"
+msgstr "Petsa ng pagkapaso"
+
+msgid "ActiveAccount"
+msgstr "Account"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "I-enroll ang mga guro"
+
+msgid "UsernameMaxXCharacters"
+msgstr "Ang login ay kailangan ng maximum na %s character ang haba"
+
+msgid "RegisterUser"
+msgstr "Magrehistro"
+
+msgid "LostPass"
+msgstr "Nakalimutan ang iyong password ?"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "Ipasok ang username o ang e-mail address na iyong inirehistro at aming ipapadala ang iyong password."
+
+msgid "NoUserAccountWithThisEmailAddress"
+msgstr "Walang account na may ganitong gumagamit at/o e-mail address"
+
+msgid "AreYouSureToEditTheUserStatus"
+msgstr "Sigurado ka bang i-edit ang estado ng gumagamit?"
+
+msgid "AtOnce"
+msgstr "Sa sandaling matanggap"
+
+msgid "Daily"
+msgstr "Isang beses sa isang araw"
+

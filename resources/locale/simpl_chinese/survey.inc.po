@@ -1,0 +1,603 @@
+msgid "PublishSurvey"
+msgstr "公布调查报告"
+
+msgid "CompareQuestions"
+msgstr "对比问题"
+
+msgid "InformationUpdated"
+msgstr "信息已更新"
+
+msgid "SurveyTitle"
+msgstr "调查标题"
+
+msgid "SurveyIntroduction"
+msgstr "调查介绍"
+
+msgid "CreateNewSurvey"
+msgstr "创建调查"
+
+msgid "Survey"
+msgstr "调查报告"
+
+msgid "SurveyTemplate"
+msgstr "调查报告模板"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "请输入调查报告的标题"
+
+msgid "PleaseEnterValidDate"
+msgstr "请输入有较日期"
+
+msgid "NotPublished"
+msgstr "未公布"
+
+msgid "AdvancedReportDetails"
+msgstr "高阶报告允许选择用户和问题以查看更多摘要信息"
+
+msgid "AdvancedReport"
+msgstr "高阶报告"
+
+msgid "CompleteReportDetails"
+msgstr "完成报告以查看问题的结果, 和导出到csv (用于Excel)"
+
+msgid "CompleteReport"
+msgstr "完成报告"
+
+msgid "OnlyThoseAddresses"
+msgstr "报告只发送到以下地址"
+
+msgid "BackToQuestions"
+msgstr "返回问题"
+
+msgid "SelectWhichLanguage"
+msgstr "选择调查报告使用的语言"
+
+msgid "CreateInAnotherLanguage"
+msgstr "用另一种语言创建调查报告"
+
+msgid "ExportInExcel"
+msgstr "导出到Excel格式"
+
+msgid "ComparativeResults"
+msgstr "可对比的结果"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "选择你需要对比的结果"
+
+msgid "OrCopyPasteUrl"
+msgstr "或者复制链接到地址栏 :"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "点击开始填写调报告"
+
+msgid "SurveyNotShared"
+msgstr "还没有调查报告被共享"
+
+msgid "ViewSurvey"
+msgstr "查看调查报告"
+
+msgid "SelectDisplayType"
+msgstr "选择显示的类型 :"
+
+msgid "Thanks"
+msgstr "反馈信息"
+
+msgid "SurveyReporting"
+msgstr "调查报告生成中"
+
+msgid "NoSurveyAvailable"
+msgstr "没可用的调查问卷"
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "已公布"
+
+msgid "CreateFromExistingSurvey"
+msgstr "从现有的调查报告中创建"
+
+msgid "Publish"
+msgstr "公布调查报告"
+
+msgid "SearchASurvey"
+msgstr "搜索调查"
+
+msgid "CourseName"
+msgstr "培训名称"
+
+msgid "SurveysOfAllCourses"
+msgstr "全部的调查"
+
+msgid "PleaseSelectAChoice"
+msgstr "请作出选择"
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "目前数据库中没有题目"
+
+msgid "UpdateQuestionType"
+msgstr "更新题目类型 :"
+
+msgid "AddAnotherQuestion"
+msgstr "添加新题目"
+
+msgid "IsShareSurvey"
+msgstr "和他人共享调查报告"
+
+msgid "Proceed"
+msgstr "继续"
+
+msgid "PleaseFillNumber"
+msgstr "请填入点数"
+
+msgid "PleaseFillAllPoints"
+msgstr "点数范围 1-5"
+
+msgid "PleasFillAllAnswer"
+msgstr "请填入答案."
+
+msgid "PleaseSelectFourTrue"
+msgstr "请选择至少四个正确答案."
+
+msgid "PleaseSelectFourDefault"
+msgstr "请选择至少四个默认答案."
+
+msgid "PleaseFillDefaultText"
+msgstr "请填入默认文本"
+
+msgid "ModifySurveyInformation"
+msgstr "修改调查信息"
+
+msgid "ViewQuestions"
+msgstr "查看题目"
+
+msgid "CreateSurvey"
+msgstr "创建调查"
+
+msgid "FinishSurvey"
+msgstr "完成调查"
+
+msgid "QuestionsAdded"
+msgstr "已添加题目"
+
+msgid "DeleteSurvey"
+msgstr "删除调查"
+
+msgid "SurveyCode"
+msgstr "代码"
+
+msgid "SurveyList"
+msgstr "调查列表"
+
+msgid "SurveyAttached"
+msgstr "调查已附加"
+
+msgid "QuestionByType"
+msgstr "题目类型"
+
+msgid "SelectQuestionByType"
+msgstr "选择题目类型"
+
+msgid "PleaseEnterAQuestion"
+msgstr "输入题目"
+
+msgid "NoOfQuestions"
+msgstr "问题数目"
+
+msgid "Question"
+msgstr "问题"
+
+msgid "ThisCodeAlradyExists"
+msgstr "代码已存在"
+
+msgid "SaveAndExit"
+msgstr "保存并退出"
+
+msgid "ViewAnswers"
+msgstr "查看答案"
+
+msgid "CreateExistingSurvey"
+msgstr "从已有的调查中生成"
+
+msgid "SurveyName"
+msgstr "调查名称"
+
+msgid "SurveySubTitle"
+msgstr "调查子标题"
+
+msgid "ShareSurvey"
+msgstr "共享调查"
+
+msgid "SurveyThanks"
+msgstr "谢谢完成"
+
+msgid "EditSurvey"
+msgstr "修改调查"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "或者返回调查概要"
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "链接中有参数缺失. 请用复制和粘贴"
+
+msgid "WrongInvitationCode"
+msgstr "错误的邀请代码"
+
+msgid "SurveyFinished"
+msgstr "你已经完成这个调查."
+
+msgid "SurveyPreview"
+msgstr "调查预览"
+
+msgid "InvallidSurvey"
+msgstr "无效的调查"
+
+msgid "AddQuestion"
+msgstr "添加一个题目"
+
+msgid "EditQuestion"
+msgstr "修改题目"
+
+msgid "TypeDoesNotExist"
+msgstr "此类型不存在"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "调查成功创建"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "你现在可添加问题到调查中"
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "调查成功更新"
+
+msgid "QuestionAdded"
+msgstr "题目已添加."
+
+msgid "QuestionUpdated"
+msgstr "题目已更新."
+
+msgid "RemoveAnswer"
+msgstr "删除选项"
+
+msgid "AddAnswer"
+msgstr "添加选项"
+
+msgid "DisplayAnswersHorVert"
+msgstr "显示"
+
+msgid "AnswerOptions"
+msgstr "答案选项"
+
+msgid "YesNo"
+msgstr "是 / 否"
+
+msgid "MultipleResponse"
+msgstr "多项选择"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Dropdown"
+msgstr "下拉"
+
+msgid "Pagebreak"
+msgstr "分页 (独立问题)"
+
+msgid "QuestionNumber"
+msgstr "序号"
+
+msgid "NumberOfOptions"
+msgstr "选项"
+
+msgid "SurveyInvitations"
+msgstr "调查邀请"
+
+msgid "InvitationCode"
+msgstr "邀请代码"
+
+msgid "InvitationDate"
+msgstr "邀请日期"
+
+msgid "Answered"
+msgstr "已回答"
+
+msgid "AdditonalUsersComment"
+msgstr "你可以邀请其他用户去填写此调查. 去完成这步, 你可以在这里填写他们的电邮地址, 通过\',\'或者\';\' 去分隔多个地址"
+
+msgid "MailTitle"
+msgstr "邮件标题"
+
+msgid "InvitationsSend"
+msgstr "邀请已发送."
+
+msgid "SurveyDeleted"
+msgstr "调查已删除."
+
+msgid "NoSurveysSelected"
+msgstr "没选中调查."
+
+msgid "NumberOfQuestions"
+msgstr "问题"
+
+msgid "Invited"
+msgstr "已邀请"
+
+msgid "SubmitQuestionFilter"
+msgstr "筛选"
+
+msgid "ResetQuestionFilter"
+msgstr "重设筛选条件"
+
+msgid "ExportCurrentReport"
+msgstr "导出目前的报告"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "只有带答案的题目才能使用"
+
+msgid "SelectXAxis"
+msgstr "选择在X轴上的问题"
+
+msgid "SelectYAxis"
+msgstr "选择在Y轴上的问题"
+
+msgid "ComparativeReport"
+msgstr "相当的报告"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "这个页面显示用户所填表格"
+
+msgid "SelectUser"
+msgstr "用户"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "选择填写此调查的用户"
+
+msgid "userreport"
+msgstr "用户报告"
+
+msgid "VisualRepresentation"
+msgstr "图表"
+
+msgid "AbsoluteTotal"
+msgstr "绝对总数"
+
+msgid "NextQuestion"
+msgstr "下个问题"
+
+msgid "PreviousQuestion"
+msgstr "前个问题"
+
+msgid "PeopleWhoAnswered"
+msgstr "选择这个答案的人群"
+
+msgid "CourseUsers"
+msgstr "培训的用户"
+
+msgid "SurveyPublication"
+msgstr "公布调查"
+
+msgid "AdditonalUsers"
+msgstr "其他用户"
+
+msgid "MailText"
+msgstr "邮件信息"
+
+msgid "UseLinkSyntax"
+msgstr "已选择用户将收到一封邮件, 包含上述文件和唯一的链接作为问卷调查. 假如你需要放置链接到其它文本中, 文本中需包含如: **链接** . 这将自动替换成唯的链接. 如果不添加这样的格式 **链接**, 电子邮件的链接将附加到邮件底部."
+
+msgid "DetailedReportByUser"
+msgstr "按用户方式显示详细报告"
+
+msgid "DetailedReportByQuestion"
+msgstr "按题目方式显示详细报告"
+
+msgid "ComparativeReportDetail"
+msgstr "在这份报告中, 你可以对照两个问题."
+
+msgid "CompleteReportDetail"
+msgstr "在这份报告中, 你可以得到一个概述关于全部用户在所有问题上的答案. 你也可以选择只看想要的问题. 也可以导出到CSV格式的文件用于其它的统计程序中"
+
+msgid "DetailedReportByUserDetail"
+msgstr "在这份报告中, 你可以查看指定用户的全部答案."
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "在这份报告中, 你可以查看题目的结果. 提供了基本统计信息和图表"
+
+msgid "ReminderResendToAllUsers"
+msgstr "提醒全部用户关于这次的调查. 如果你不选择这个, 只有新加入用户会收到此提醒."
+
+msgid "Multiplechoice"
+msgstr "多选"
+
+msgid "Score"
+msgstr "得分"
+
+msgid "Shared"
+msgstr "已共享"
+
+msgid "Invite"
+msgstr "邀请"
+
+msgid "MaximumScore"
+msgstr "分数"
+
+msgid "ViewInvited"
+msgstr "查看已邀请"
+
+msgid "ViewAnswered"
+msgstr "查看已回答用户"
+
+msgid "ViewUnanswered"
+msgstr "查看未回答用户"
+
+msgid "DeleteSurveyQuestion"
+msgstr "是否确定删除此问题?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "你已填过此调查"
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "点击回答调查问卷"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "或者复制下面的URL :"
+
+msgid "UnknowUser"
+msgstr "未知用户"
+
+msgid "MoveDown"
+msgstr "下移"
+
+msgid "MoveUp"
+msgstr "上移"
+
+msgid "HaveAnswered"
+msgstr "已回答"
+
+msgid "WereInvited"
+msgstr "已被邀请"
+
+msgid "PagebreakNotFirst"
+msgstr "此页面不能作为首页面"
+
+msgid "PagebreakNotLast"
+msgstr "此页面不能作为末页面"
+
+msgid "SurveyNotAvailableAnymore"
+msgstr "对不起, 调查服务暂时无法使用. 请稍后尝试."
+
+msgid "DuplicateSurvey"
+msgstr "复制调查"
+
+msgid "EmptySurvey"
+msgstr "清空调查"
+
+msgid "SurveyEmptied"
+msgstr "答案已成功删除"
+
+msgid "SurveyNotAvailableYet"
+msgstr "调查暂时无法使用. 请稍后尝试. 谢谢."
+
+msgid "PeopleAnswered"
+msgstr "已作答的用户"
+
+msgid "AnonymousSurveyCannotKnowWhoAnswered"
+msgstr "匿名调查. 你不能查看作答用户."
+
+msgid "IllegalSurveyId"
+msgstr "未知调查ID"
+
+msgid "SurveyQuestionMoved"
+msgstr "题目已移动"
+
+msgid "IdenticalSurveycodeWarning"
+msgstr "调查的代码已存在. 这意味着调查存在于其它语系中. 被邀请用户可选择不同语言."
+
+msgid "ThisSurveyCodeSoonExistsInThisLanguage"
+msgstr "将添加此调查代码到这个语言中"
+
+msgid "SurveyUserAnswersHaveBeenRemovedSuccessfully"
+msgstr "成功删除用户答案."
+
+msgid "DeleteSurveyByUser"
+msgstr "删除用户答案"
+
+msgid "SelectType"
+msgstr "选择类型"
+
+msgid "Conditional"
+msgstr "条件"
+
+msgid "ParentSurvey"
+msgstr "家长调查"
+
+msgid "OneQuestionPerPage"
+msgstr "每页一个问题"
+
+msgid "ActivateShuffle"
+msgstr "允许乱序模式"
+
+msgid "ShowFormProfile"
+msgstr "显示概要表格"
+
+msgid "PersonalityQuestion"
+msgstr "编辑问题"
+
+msgid "YouNeedToCreateGroups"
+msgstr "你需要创建组别"
+
+msgid "ManageGroups"
+msgstr "管理级别"
+
+msgid "Create"
+msgstr "创建"
+
+msgid "GroupCreatedSuccessfully"
+msgstr "级别成功创建"
+
+msgid "GroupNeedName"
+msgstr "需要名称"
+
+msgid "Personality"
+msgstr "个性化"
+
+msgid "Condition"
+msgstr "条件"
+
+msgid "Primary"
+msgstr "主要的"
+
+msgid "Secondary"
+msgstr "次要的"
+
+msgid "CourseSettings"
+msgstr "课程设置"
+
+msgid "PleaseChooseACondition"
+msgstr "请选择一个条件"
+
+msgid "ChooseDifferentCategories"
+msgstr "选择不同类别"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Normal"
+msgstr "正常"
+
+msgid "NoLogOfDuration"
+msgstr "此期间找不到记录"
+
+msgid "AutoInviteLink"
+msgstr "未被邀请用户可使用这个链接填写调查 :"
+
+msgid "CompleteTheSurveysQuestions"
+msgstr "完成调查题目"
+
+msgid "SurveysDeleted"
+msgstr "调查已删除"
+
+msgid "RemindUnanswered"
+msgstr "只提醒未作答用户"
+
+msgid "ModifySurvey"
+msgstr "编辑调查"
+
+msgid "CreateQuestionSurvey"
+msgstr "创建问题"
+
+msgid "ModifyQuestionSurvey"
+msgstr "编辑问题"
+
+msgid "BackToSurvey"
+msgstr "返回调查"
+
+msgid "UpdateInformation"
+msgstr "更新信息"
+
+msgid "PleaseFillSurvey"
+msgstr "请填写调查"
+
+msgid "ReportingOverview"
+msgstr "报告概述"
+
+msgid "ThereAreNotQuestionsForthisSurvey"
+msgstr "此调查没相关的题目"
+

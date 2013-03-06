@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Moje Agenda"
+
+msgid "langToday"
+msgstr "Dnes"
+

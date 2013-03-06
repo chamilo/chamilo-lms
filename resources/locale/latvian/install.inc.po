@@ -1,0 +1,393 @@
+msgid "langStatDB"
+msgstr "Sekot datubāzes darbībai."
+
+msgid "langEnableTracking"
+msgstr "Ieslēgt sekošanu"
+
+msgid "langInstituteShortName"
+msgstr "Jūsu organizācijas nosaukuma saīsinājums"
+
+msgid "langWarningResponsible"
+msgstr "Lietojiet"
+
+msgid "langAllowSelfRegProf"
+msgstr "Atļaut pašreģistrēšanos, kā Lektoram"
+
+msgid "langEG"
+msgstr "piem."
+
+msgid "langDBHost"
+msgstr "Datubāžu serveris"
+
+msgid "langDBLogin"
+msgstr "Datubāzes lietotājvārds"
+
+msgid "langDBPassword"
+msgstr "Datubāzes parole"
+
+msgid "langMainDB"
+msgstr "Galvenā CHAMILO datubāze (DB)"
+
+msgid "langAllFieldsRequired"
+msgstr "visi lauciņi ir obligāti aizpildāmi"
+
+msgid "langPrintVers"
+msgstr "Izdrukas versija"
+
+msgid "langLocalPath"
+msgstr "Attiecīgā vietējā norāde (<i>local path</i>)"
+
+msgid "langAdminEmail"
+msgstr "Administratora e-pasts"
+
+msgid "langAdminName"
+msgstr "Administratora vārds"
+
+msgid "langAdminSurname"
+msgstr "Administratora uzvārds"
+
+msgid "langAdminLogin"
+msgstr "Administratora autorizēšanās vārds"
+
+msgid "langAdminPass"
+msgstr "Administratora parole (<font color=\"red\">jūs to varat mainīt)"
+
+msgid "langEducationManager"
+msgstr "Projekta vadītājs"
+
+msgid "langCampusName"
+msgstr "Jūsu portāla nosaukums"
+
+msgid "langDBSettingIntro"
+msgstr "Instalācijas skripts izveidos Chamilo galveno datubāzi(es). Ņemiet vērā, ka Chamilo vajadzēs izveidot vairākas datubāzes. Ja Jūsu Interneta lapas uzturētājs ļauj Jums izmantot tikai vienu datubāzi, tad Chamilo sistēma nestrādās, ja vien Jūs izvēlēsieties papildus iespēju \"Vienā datubāzē\"."
+
+msgid "langStep1"
+msgstr "1. solis"
+
+msgid "langStep2"
+msgstr "2. solis"
+
+msgid "langStep3"
+msgstr "Posms Nr.3 no 6"
+
+msgid "langStep4"
+msgstr "Posms Nr.4 no 6"
+
+msgid "langStep5"
+msgstr "Posms Nr.5 no 6"
+
+msgid "langStep6"
+msgstr "Posms Nr.6 no 6"
+
+msgid "langCfgSetting"
+msgstr "Konfigurācijas iestatījumi"
+
+msgid "langDBSetting"
+msgstr "MySQL datubāzes iestatījumi"
+
+msgid "langMainLang"
+msgstr "Pamata saziņas valoda"
+
+msgid "langLicence"
+msgstr "Licenze"
+
+msgid "langLastCheck"
+msgstr "Pēdējā pārbaude pirms izveides"
+
+msgid "langRequirements"
+msgstr "Prasības"
+
+msgid "langDbPrefixForm"
+msgstr "MySQL datubāzes prefikss"
+
+msgid "langDbPrefixCom"
+msgstr "Atstājiet tukšu, ja netiek pieprasīts"
+
+msgid "langEncryptUserPass"
+msgstr "Veikt lietotāju paroļu kriptēšanu"
+
+msgid "langSingleDb"
+msgstr "Lietot vienu vai vairākas datubāzes DOKEOS sistēmai"
+
+msgid "langAllowSelfReg"
+msgstr "Atļaut pašreģistrāciju"
+
+msgid "langRecommended"
+msgstr "(ieteicamais)"
+
+msgid "langScormDB"
+msgstr "<i>SCORM</i> datubāze"
+
+msgid "langAdminLastName"
+msgstr "Administratora uzvārds"
+
+msgid "langAdminPhone"
+msgstr "Administratora tālrunis"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "langAdminFirstName"
+msgstr "Administratora vārds"
+
+msgid "langInstituteURL"
+msgstr "Uzņēmuma Interneta lapa"
+
+msgid "langDokeosURL"
+msgstr "Chamilo Interneta lapa"
+
+msgid "langUserDB"
+msgstr "Lietotāju datubāze"
+
+msgid "PleaseWait"
+msgstr "Lūdzu gaidīt"
+
+msgid "PleaseCheckTheseValues"
+msgstr "Lūdzu, pārbaudiet šīs vērtības"
+
+msgid "PleasGoBackToStep1"
+msgstr "Lūdzu atgriezieties uz soli Nr.1"
+
+msgid "langInstallationLanguage"
+msgstr "Instalācijas valoda"
+
+msgid "ReadThoroughly"
+msgstr "Lasiet uzmanīgi"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "Lai Chamilo darbotos, uz Jūsu servera jābūt sekojošam"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "Uzmanību!<br>Instalētājs atrada jūsu sistēmā eksistējošu Chamilo platformu"
+
+msgid "NewInstallation"
+msgstr "Jauna instalācija"
+
+msgid "CheckDatabaseConnection"
+msgstr "Pārbaudīt datubāzes savienojuma esamību"
+
+msgid "PrintOverview"
+msgstr "Rādīt pārskatu"
+
+msgid "Installing"
+msgstr "Instalēt"
+
+msgid "of"
+msgstr "vai"
+
+msgid "Step"
+msgstr "Solis"
+
+msgid "MoreDetails"
+msgstr "Lai iegūtu sīkāku informāciju"
+
+msgid "ServerRequirements"
+msgstr "Servera vajadzības"
+
+msgid "ServerRequirementsInfo"
+msgstr "Bibliotēkām un servera funkcijām ir jānodrošina izmantot Chamilo pilnā apmērā"
+
+msgid "PHPVersion"
+msgstr "PHP versija"
+
+msgid "support"
+msgstr "atbalsts"
+
+msgid "PHPVersionOK"
+msgstr "PHP versija ir OK"
+
+msgid "RecommendedSettings"
+msgstr "Rekomendētie iestatījumi"
+
+msgid "RecommendedSettingsInfo"
+msgstr "Ieteicamie iestatījumi servera konfigurācijai. Šie iestatījumi ir noteikti php.ini konfigurācijas failā uz jūsu servera."
+
+msgid "Setting"
+msgstr "Iestatījums"
+
+msgid "Actual"
+msgstr "Patreizējais"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "Direktoriju un failu atļaujas"
+
+msgid "DirectoryAndFilePermissionsInfo"
+msgstr "Daži katalogi un faili, ko tie satur, ir rakstāmi web serverī, lai Chamilo tos palaistu (lietotāju augšupielādēto failu, mājas lapu html failus, ...). Tas varētu nozīmēt manāulas izmaiņas jūsu serverī (ārpus šī saskarnes)."
+
+msgid "NotWritable"
+msgstr "Neierakstāms"
+
+msgid "Writable"
+msgstr "Ierakstāms"
+
+msgid "ExtensionLDAPNotAvailable"
+msgstr "LDAP paplašinājumi nav pieejami."
+
+msgid "ExtensionGDNotAvailable"
+msgstr "GD paplašinājumi nav pieejami"
+
+msgid "DokeosLicenseInfo"
+msgstr "Chamilo ir bezmaksas programmatūra, ko izplata saskaņā ar GNU General Public Licence (GPL)"
+
+msgid "IAccept"
+msgstr "Piekrītu"
+
+msgid "ConfigSettingsInfo"
+msgstr "Sekojošas vērtības tiks ierakstītas jūsu konfigurācijas failā"
+
+msgid "DokeosInstallation"
+msgstr "Chamilo instalācija"
+
+msgid "InstallDokeos"
+msgstr "Instalēt Chamilo"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "Dodieties uz savu jaunizveidoto portālu"
+
+msgid "FirstUseTip"
+msgstr "Kad jūs ieiesiet savā portālā pirmo reizi, labākais veids, kā to izprast, ir reģistrēt  opciju \"Izveidot jaunu kursu\" un pēc tam sekojiet norādēm."
+
+msgid "Version_"
+msgstr "Versija"
+
+msgid "UpdateFromDokeosVersion"
+msgstr "Modernizēt no Chamilo"
+
+msgid "WelcomToTheDokeosInstaller"
+msgstr "Laipni lūdzam Chamilo Instalētājā."
+
+msgid "PleaseSelectInstallationProcessLanguage"
+msgstr "Lūdzu izvēlieties instalācijas valodu"
+
+msgid "ReadTheInstallGuide"
+msgstr "Lasiet instalācijas pamācību"
+
+msgid "HereAreTheValuesYouEntered"
+msgstr "Šeit ir jūsu ievadītie parametri"
+
+msgid "PrintThisPageToRememberPassAndOthers"
+msgstr "Izdrukājiet šo lapu, lai atcerētos jūsu paroli un citus uzstādījumus"
+
+msgid "TheInstallScriptWillEraseAllTables"
+msgstr "Instalācijas skripts izdzēsīs visas tabulas no izvēlētajām datu bāzēm. Mēs ļoti iesakām jums izveidot pilnu dublējumkopiju no tām, pirms apstiprināt šo pēdējo instalēšanas soli."
+
+msgid "Warning"
+msgstr "Uzmanību"
+
+msgid "ReadWarningBelow"
+msgstr "Lasi brīdinājumu zemāk"
+
+msgid "SecurityAdvice"
+msgstr "Drošības konsultācijas"
+
+msgid "YouHaveMoreThanXCourses"
+msgstr "Jūsu Chamilo platformā  ir vairāk kā %d kursu! Tikai %d kursu ir atjaunināti. Lai atjauninātu citu kursus, %s spiediet šeit %s"
+
+msgid "ToProtectYourSiteMakeXAndYReadOnly"
+msgstr "Lai aizsargātu jūsu vietni, izdariet lai %s un %s (bet ne to direktorijas) ir read-only (CHMOD 444)."
+
+msgid "Error"
+msgstr "Kļūda"
+
+msgid "Back"
+msgstr "Atpakaļ"
+
+msgid "HasNotBeenFound"
+msgstr "netika atrasts"
+
+msgid "PleaseGoBackToStep1"
+msgstr "Lūdzu atgriezties uz Soli Nr.1"
+
+msgid "HasNotBeenFoundInThatDir"
+msgstr "nav atrasts šajā direktorijā"
+
+msgid "OldVersionRootPath"
+msgstr "Vecās versijas pamata ceļš"
+
+msgid "NoWritePermissionPleaseReadInstallGuide"
+msgstr "Dažiem failiem vai mapēm nav rakstīšanas atļaujas. Lai varētu instalēt Chamilo vispirms jāmaina atļaujas (izmantojot CHMOD). Lūdzu, izlasiet %s uzstādīšanas rokasgrāmatu %s"
+
+msgid "DBServerDoesntWorkOrLoginPassIsWrong"
+msgstr "Datu bāzes serveris nestrādā, vai login / pass ir kļūdaini"
+
+msgid "PleaseGoBackToStep"
+msgstr "Lūdzu atgriezties uz Soli Nr."
+
+msgid "DBSettingUpgradeIntro"
+msgstr "Atjaunināšanas skripts pārrakstīs un atjaunos Chamilo datubāzi (-es). Lai to izdarītu, šis skripts izmantos datubāzes un iestatījumus, kas noteiktas zemāk. sakarā ar to, ka mūsu programma darbojas plašā sistēmu spektrā un iespējams, ka  visas no tām varētu nebūt pārbaudītas, mēs iesakām jums veikt pilnu dublējumkopiju datu bāzes, pirms Jūs turpināt atjaunināt!"
+
+msgid "ExtensionMBStringNotAvailable"
+msgstr "MBString papla"
+
+msgid "ExtensionMySQLNotAvailable"
+msgstr "MySQL papla"
+
+msgid "DokeosArtLicense"
+msgstr "Attēli un mediju galerijās, Chamilo izmantot attēlus no Nuvola, Crystal Clear un Tango ikonu galerijas. Citi attēli un mediji, piemēram, diagrammas un Flash animācijas aizgūti no Wikimedia un Ali Pakdel\'s un Deniss Hoa kursiem ar viņu piekrišanu un atbrīvoti saskaņā BY-SA Creative Commons licenci. Jūs varat atrast licences detaļas <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">the CC mājaslapā</a>, kur saite, uz pilnu licences tekstu, ir sniegta lapas apakšā."
+
+msgid "OptionalParameters"
+msgstr "Izvēles parametri"
+
+msgid "FailedConectionDatabase"
+msgstr "Savienojums ar datubāzi nav izdevies. Tas galvenokārt ir saistīts ar nepareizu lietotāja vārdu, nepareizu paroli vai nepareizu datu bāzes prefiksu noteikšanu iepriekš. Lūdzu, pārskatiet šos iestatījumus un mēģiniet vēlreiz."
+
+msgid "EncryptMethodUserPass"
+msgstr "Šifrēšanas metode"
+
+msgid "UpgradeFromDokeos16x"
+msgstr "Atjauninājums no Chamilo 1.6.x"
+
+msgid "UpgradeFromDokeos18x"
+msgstr "Atjauninājums no Chamilo 1.8.x"
+
+msgid "Step7"
+msgstr "Solis Nr.7"
+
+msgid "SuggestionOnlyToEnableCSSUploadFeature"
+msgstr "Ieteikums tikai tad, ja jūs vēlaties aktivizēt CSS augšupielādes funkciju"
+
+msgid "SuggestionOnlyToEnableSubLanguageFeature"
+msgstr "Ieteikums tikai tad, ja jūs vēlaties aktivizēt apakš-valodas funkciju"
+
+msgid "IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog"
+msgstr "Ja jūs plānojat, lai uzlabotu sistēmu no vecākas Chamilo versijas, jūs varētu vēlēties apskatīt izmaiņu sarakstā lai zinātu, kas jauns un kas ir mainīts"
+
+msgid "WelcomeToTheDokeosInstaller"
+msgstr "Laipni lūdzam Chamilo uzstādītājā"
+
+msgid "PHPVersionError"
+msgstr "Jūsu PHP versija nesakrīt prasību attiecībā uz šo programmatūru. Lūdzu, pārbaudiet vai jums ir pieejama jaunākā versija, tad mēģiniet vēlreiz."
+
+msgid "ExtensionSessionsNotAvailable"
+msgstr "Sesijas paplašinājums nav pieejams"
+
+msgid "ExtensionZlibNotAvailable"
+msgstr "Zlib paplašinājums nav pieejams"
+
+msgid "ExtensionPCRENotAvailable"
+msgstr "PCRE paplašinājums nav pieejams"
+
+msgid "DatabaseXWillBeCreated"
+msgstr "Datubāze %s tiks izveidota"
+
+msgid "ADatabaseWithTheSameNameAlreadyExists"
+msgstr "Datubāze ar šādu nosaukumu, jau eksistē"
+
+msgid "UserXCantHaveAccessInTheDatabaseX"
+msgstr "Lietotājam %s nav pieeja datubāzei %s"
+
+msgid "DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions"
+msgstr "Datubāze %s nevar tikt izveidota, jo lietotājam %s nav pietiekams piešķirto tiesību līmenis"
+
+msgid "CourseTestWasCreated"
+msgstr "Testa kurss ir sekmīgi izveidots"
+
+msgid "InstallExecution"
+msgstr "Izpildīt instalācijas procesu"
+
+msgid "UpdateExecution"
+msgstr "Izpildīt atjaunināšanas procesu"
+
+msgid "PleaseWaitThisCouldTakeAWhile"
+msgstr "Lūdzu uzgaidiet. Tas var aizņemt kādu laiku ..."
+

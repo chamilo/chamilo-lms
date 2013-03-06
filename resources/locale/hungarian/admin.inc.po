@@ -1,0 +1,2007 @@
+msgid "AdminBy"
+msgstr "Felügyeli"
+
+msgid "AdministrationTools"
+msgstr "Adminisztráció"
+
+msgid "State"
+msgstr "Rendszer állapota"
+
+msgid "Statistiques"
+msgstr "Statisztikák"
+
+msgid "VisioHostLocal"
+msgstr "Videókonferencia kiszolgáló"
+
+msgid "VisioRTMPIsWeb"
+msgstr "A videókonferencia protokoll web alapú-e (a legtöbbször a válasz hamis)"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Jelenjen meg Visszalapozás hivatkozás a kategóriák/kurzusok struktúra megtekintésekor. Egy hivatkozás a lista alján mindenképpen látszani fog."
+
+msgid "langUsed"
+msgstr "használatban"
+
+msgid "langPresent"
+msgstr "Ok"
+
+msgid "langMissing"
+msgstr "hiányzó"
+
+msgid "langExist"
+msgstr "létező"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Visszalapozás hivatkozás megjelenítése a kategóriák/kurzusok listánál"
+
+msgid "ShowNumberOfCourses"
+msgstr "A kurzusok számának megjelenítése"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Tanár nevének megjelenítése a kurzus címében"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Tanár nevének megjelenítése a kurzuslista megjegyzésében"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Kurzus kódjának megjelenítése a kurzuslista megjegyzésében"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Kurzuskód megjelenítése a kurzus címében"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "A portálon nincsenek virtuális kurzusok."
+
+msgid "ConfigureHomePage"
+msgstr "A honlap konfigurálása"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Aktív modulok a kurzus létrehozása után"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Alapértelmezésben mely eszközök legyenek aktiválva (láthatóak) egy új kurzus létrehozásakor?"
+
+msgid "SearchUsers"
+msgstr "Felhasználó keresése"
+
+msgid "CreateUser"
+msgstr "Felhasználó létrehozása"
+
+msgid "ModifyInformation"
+msgstr "Információ szerkesztése"
+
+msgid "ModifyUser"
+msgstr "Felhasználó módosítása"
+
+msgid "buttonEditUserField"
+msgstr "Felhasználói mező szerkesztése"
+
+msgid "ModifyCoach"
+msgstr "Tanár módosítása"
+
+msgid "langCourseBackup"
+msgstr "Biztonsági másolat készítése erről a kurzusról"
+
+msgid "langCourseTitular"
+msgstr "Tanár"
+
+msgid "langCourseTitle"
+msgstr "Kurzus címe"
+
+msgid "langCourseFaculty"
+msgstr "Kurzus kategóriája"
+
+msgid "langCourseDepartment"
+msgstr "Kurzust gondozó tanszék"
+
+msgid "langCourseDepartmentURL"
+msgstr "Részleg URL-je"
+
+msgid "langCourseLanguage"
+msgstr "Kurzus nyelv"
+
+msgid "langCourseAccess"
+msgstr "Kurzus elérés"
+
+msgid "langCourseSubscription"
+msgstr "Kurzus feliratkozás"
+
+msgid "langPublicAccess"
+msgstr "Nyilvános elérés"
+
+msgid "langPrivateAccess"
+msgstr "Privát elérés"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Az adatbázis kezelése csak a szerver adminisztrátora számára elérhető"
+
+msgid "langShowUsersOfCourse"
+msgstr "A kurzusra feliratkozott felhasználók mutatása"
+
+msgid "langShowClassesOfCourse"
+msgstr "A kurzusra feliratkozott osztályok mutatása"
+
+msgid "langShowGroupsOfCourse"
+msgstr "A kurzus csoportjainak mutatása"
+
+msgid "langPhone"
+msgstr "Telefon"
+
+msgid "langPhoneNumber"
+msgstr "Telefonszám"
+
+msgid "langActions"
+msgstr "Műveletek"
+
+msgid "langAddToCourse"
+msgstr "Kurzushoz hozzáad"
+
+msgid "langDeleteFromPlatform"
+msgstr "Eltávolít a platform-ról"
+
+msgid "langDeleteCourse"
+msgstr "Kurzus(ok) törlése"
+
+msgid "langDeleteFromCourse"
+msgstr "Leiratkozás a kurzus(ok)ról"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Kiválasztott osztályok törlése"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Kiválasztott csoportok törlése"
+
+msgid "langAdministrator"
+msgstr "Adminisztrátor"
+
+msgid "langAddPicture"
+msgstr "Képet hozzáad"
+
+msgid "langChangePicture"
+msgstr "Képet cserél"
+
+msgid "langDeletePicture"
+msgstr "Képet töröl"
+
+msgid "langAddUsers"
+msgstr "Felhasználók hozzáadása"
+
+msgid "langAddGroups"
+msgstr "Csoportok hozzáadása"
+
+msgid "langAddClasses"
+msgstr "Osztályok hozzáadása"
+
+msgid "langExportUsers"
+msgstr "Felhasználói lista exportálása"
+
+msgid "langKeyword"
+msgstr "Kulcsszó"
+
+msgid "langGroupName"
+msgstr "Csoport neve"
+
+msgid "langGroupTutor"
+msgstr "Csoport oktatója"
+
+msgid "langGroupDescription"
+msgstr "Csoport leírása"
+
+msgid "langNumberOfParticipants"
+msgstr "Résztvevők száma"
+
+msgid "langNumberOfUsers"
+msgstr "Felhasználók száma"
+
+msgid "langMaximum"
+msgstr "maximum"
+
+msgid "langMaximumOfParticipants"
+msgstr "Résztvevők maximális száma"
+
+msgid "langParticipants"
+msgstr "résztvevők"
+
+msgid "langFirstLetterClass"
+msgstr "Első betű (csoportnév)"
+
+msgid "langFirstLetterUser"
+msgstr "Első betű (vezetéknév)"
+
+msgid "langFirstLetterCourse"
+msgstr "Első betű (kód)"
+
+msgid "langModifyUserInfo"
+msgstr "Felhasználói információ módosítása"
+
+msgid "langModifyClassInfo"
+msgstr "Osztály információ módosítása"
+
+msgid "langModifyGroupInfo"
+msgstr "Csoport információ módosítása"
+
+msgid "langModifyCourseInfo"
+msgstr "Kurzus információ módosítása"
+
+msgid "langPleaseEnterClassName"
+msgstr "Kérjük, írja be az osztály nevét !"
+
+msgid "langPleaseEnterLastName"
+msgstr "Kérjük, írja be a felhasználó vezetéknevét !"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Kérjük, írja be a felhasználó keresztnevét !"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Kérjük, írjon be érvényes e-mail címet !"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Kérjük, írjon be érvényes logint !"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Kérjük, írja be a kurzus kódját !"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Kérjük, írja be a tanár kereszt- és vezetéknevét !"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Kérjük, írja be a kurzus címét !"
+
+msgid "langAcceptedPictureFormats"
+msgstr "A JPG, PNG és GIF az elfogadott formátumok !"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Ez a login már foglalt !"
+
+msgid "langImportUserListXMLCSV"
+msgstr "felhasználók importálása XML/CSV fájlból"
+
+msgid "langExportUserListXMLCSV"
+msgstr "XML/CSV file-ba felhasználók exportálása"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Csak ennek a kurzusnak a felhasználói"
+
+msgid "langAddClassesToACourse"
+msgstr "Osztályok hozzáadása egy kurzushoz"
+
+msgid "langAddUsersToACourse"
+msgstr "Felhasználók hozzáadása egy kurzushoz"
+
+msgid "langAddUsersToAClass"
+msgstr "Felhasználók hozzáadása egy osztályhoz"
+
+msgid "langAddUsersToAGroup"
+msgstr "Felhasználók hozzáadása egy csoporthoz"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Legalább egy osztályt és egy kurzust ki kell választania !"
+
+msgid "AtLeastOneUser"
+msgstr "Legalább egy felhasználót ki kell választania !"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Legalább egy felhasználót és egy kurzust ki kell választania !"
+
+msgid "langClassList"
+msgstr "Osztályok listája"
+
+msgid "langUserList"
+msgstr "Felhasználók listája"
+
+msgid "langCourseList"
+msgstr "Kurzusok listája"
+
+msgid "langAddToThatCourse"
+msgstr "Hozzáad ahhoz (azokhoz) a kurzus(ok)hoz"
+
+msgid "langAddToClass"
+msgstr "Osztályhoz hozzáad"
+
+msgid "langRemoveFromClass"
+msgstr "Osztályból töröl"
+
+msgid "langAddToGroup"
+msgstr "Csoporthoz hozzáad"
+
+msgid "langRemoveFromGroup"
+msgstr "Csoportból eltávolít"
+
+msgid "langUsersOutsideClass"
+msgstr "Felhasználók az osztályon kívül"
+
+msgid "langUsersInsideClass"
+msgstr "Felhasználók az osztályban"
+
+msgid "langUsersOutsideGroup"
+msgstr "Felhasználók a csoporton kívül"
+
+msgid "langUsersInsideGroup"
+msgstr "Felhasználók a csoportban"
+
+msgid "langImportFileLocation"
+msgstr "A CSV / XML fájl helye"
+
+msgid "langFileType"
+msgstr "Fájl típusa"
+
+msgid "langOutputFileType"
+msgstr "Eredmény fájl típusa"
+
+msgid "langMustUseSeparator"
+msgstr "a \';\' karaktert kell elválasztóként használni"
+
+msgid "langCSVMustLookLike"
+msgstr "A CSV file-nak így kell kinéznie"
+
+msgid "langXMLMustLookLike"
+msgstr "Az XML file-nak így kell kinéznie"
+
+msgid "langMandatoryFields"
+msgstr "a <b>kövér</b> mezők kötelezőek"
+
+msgid "langNotXML"
+msgstr "A megadott fájl nem XML formátumú !"
+
+msgid "langNotCSV"
+msgstr "A megadott file nem CSV formátumú !"
+
+msgid "langNoNeededData"
+msgstr "A megadott file nem tartalmazza az összes szükséges adatot !"
+
+msgid "langMaxImportUsers"
+msgstr "500-nál több felhasználót egyszerre nem lehet importálni !"
+
+msgid "langAdminDatabases"
+msgstr "Adatbázisok (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Felhasználók"
+
+msgid "langAdminClasses"
+msgstr "Felhasználók osztályai"
+
+msgid "langAdminGroups"
+msgstr "Felhasználók csoportjai"
+
+msgid "langAdminCourses"
+msgstr "Kurzusok"
+
+msgid "langAdminCategories"
+msgstr "Kurzusok kategóriái"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Felhasználót vagy csoportot felvesz a kurzus hallgatói közé"
+
+msgid "AddACategory"
+msgstr "Kategória hozzáadása"
+
+msgid "langInto"
+msgstr "ide"
+
+msgid "langNoCategories"
+msgstr "Itt nincsenek kategóriák"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Engedélyezi a kurzusok hozzáadását ehhez a kategóriához ?"
+
+msgid "langGoToForum"
+msgstr "Ugrás a következő fórumra"
+
+msgid "langCategoryCode"
+msgstr "Kategória kód"
+
+msgid "langCategoryName"
+msgstr "Kategória név"
+
+msgid "langCategories"
+msgstr "kategóriák"
+
+msgid "langEditNode"
+msgstr "Kategória szerkesztése"
+
+msgid "langOpenNode"
+msgstr "Kategória megnyitása"
+
+msgid "langDeleteNode"
+msgstr "Kategória törlése"
+
+msgid "langAddChildNode"
+msgstr "Alkategória hozzáadása"
+
+msgid "langViewChildren"
+msgstr "Gyerekek megtekintése"
+
+msgid "langTreeRebuildedIn"
+msgstr "Fa újraépítve itt"
+
+msgid "langTreeRecountedIn"
+msgstr "Fa újraszámolva itt"
+
+msgid "langRebuildTree"
+msgstr "Építsd újra a fát"
+
+msgid "langRefreshNbChildren"
+msgstr "Gyerekek számának frissítése"
+
+msgid "langShowTree"
+msgstr "Mutasd a fát"
+
+msgid "langBack"
+msgstr "Vissza az előző oldalra"
+
+msgid "langLogDeleteCat"
+msgstr "Kategória törölve"
+
+msgid "langRecountChildren"
+msgstr "Gyerekek újraszámolása"
+
+msgid "langUpInSameLevel"
+msgstr "Fel azonos szintre"
+
+msgid "langSeconds"
+msgstr "másodpercek"
+
+msgid "langMailTo"
+msgstr "Címzett:"
+
+msgid "lang_no_access_here"
+msgstr "Itt nincs belépés"
+
+msgid "lang_php_info"
+msgstr "információ a rendszerről"
+
+msgid "langAddAdminInApache"
+msgstr "Adminisztrátor hozzáadása"
+
+msgid "langAddFaculties"
+msgstr "Kategória hozzáadása"
+
+msgid "langSearchACourse"
+msgstr "Kurzus keresése"
+
+msgid "langSearchAUser"
+msgstr "Felhasználó keresése"
+
+msgid "langTechnicalTools"
+msgstr "Technikai"
+
+msgid "langConfig"
+msgstr "Rendszer beállítások"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Belépési lista (bővített)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "A gördíthető listán egyszerre mutatott felhasználók maximális száma"
+
+msgid "NoTimeLimits"
+msgstr "Nincs időkorlát"
+
+msgid "GeneralCoach"
+msgstr "Általános tréner"
+
+msgid "GeneralProperties"
+msgstr "Általános jellemzők"
+
+msgid "CourseCoach"
+msgstr "Kurzus tréner"
+
+msgid "UsersNumber"
+msgstr "Felhasználószám"
+
+msgid "DokeosClassic"
+msgstr "Chamilo Classic"
+
+msgid "PublicAdmin"
+msgstr "Nyilvános adminisztrátor"
+
+msgid "PageAfterLoginTitle"
+msgstr "Bejelentkezés utáni oldal"
+
+msgid "PageAfterLoginComment"
+msgstr "A bejelentkező felhasználó számára megjelenített oldal"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Chamilo honlap"
+
+msgid "TabsMyProfile"
+msgstr "Profilom fül"
+
+msgid "GlobalRole"
+msgstr "Globális szerep"
+
+msgid "langNomOutilTodo"
+msgstr "Tennivalólista kezelése"
+
+msgid "langNomPageAdmin"
+msgstr "Adminisztráció"
+
+msgid "langSysInfo"
+msgstr "Rendszerinformáció"
+
+msgid "langDiffTranslation"
+msgstr "Fordítások összehasonlítása"
+
+msgid "langStatOf"
+msgstr "Statisztikája ennek"
+
+msgid "langSpeeSubscribe"
+msgstr "Kurzusellenőrként való gyors feliratkozás"
+
+msgid "langLogIdentLogout"
+msgstr "Belépési lista"
+
+msgid "langServerStatus"
+msgstr "MySQL szerver állapota :"
+
+msgid "langDataBase"
+msgstr "Adatbázis"
+
+msgid "langRun"
+msgstr "működik"
+
+msgid "langClient"
+msgstr "MySql Kliens"
+
+msgid "langServer"
+msgstr "MySql Szerver"
+
+msgid "langtitulary"
+msgstr "Tulajdonos"
+
+msgid "langUpgradeBase"
+msgstr "Adatbázis felújítása"
+
+msgid "langManage"
+msgstr "Portál menedszment"
+
+msgid "langErrorsFound"
+msgstr "hibákat találtam"
+
+msgid "langMaintenance"
+msgstr "Karbantartás"
+
+msgid "langUpgrade"
+msgstr "Chamilo frissítése"
+
+msgid "langWebsite"
+msgstr "Chamilo honlap"
+
+msgid "langDocumentation"
+msgstr "Dokumentáció"
+
+msgid "langContribute"
+msgstr "Hozzájárulás"
+
+msgid "langInfoServer"
+msgstr "Szerver Információ"
+
+msgid "langOtherCategory"
+msgstr "Egyéb kategória"
+
+msgid "langSendMailToUsers"
+msgstr "Levél küldése a felhasználóknak"
+
+msgid "langExampleXMLFile"
+msgstr "XML mintafájl"
+
+msgid "langExampleCSVFile"
+msgstr "CSV mintafájl"
+
+msgid "langCourseSystemCode"
+msgstr "Rendszerkód"
+
+msgid "langCourseVisualCode"
+msgstr "Látható kód"
+
+msgid "langSystemCode"
+msgstr "Rendszerkód"
+
+msgid "langVisualCode"
+msgstr "látható kód"
+
+msgid "langAddCourse"
+msgstr "Kurzus létrehozása"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Virtuális kurzusok kezelése"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Virtuális kurzus létrehozása"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "A virtuális kurzus megosztva fogja használni a tárolóhelyet (könyvtárak és adatbázis) a meglevő, \'valódi\' kurzussal"
+
+msgid "langRealCourseCode"
+msgstr "Valódi kurzus kód"
+
+msgid "langCourseCreationSucceeded"
+msgstr "A kurzus sikeresen létrejött."
+
+msgid "langYourDokeosUses"
+msgstr "A Chamilo telepítése jelenleg"
+
+msgid "langOnTheHardDisk"
+msgstr "helyet foglal a merevlemezen"
+
+msgid "langIsVirtualCourse"
+msgstr "virtuális kurzus-e"
+
+msgid "langSystemAnnouncements"
+msgstr "Rendszer hirdetmények"
+
+msgid "langAddAnnouncement"
+msgstr "Új hirdetmény létrehozása"
+
+msgid "langAnnouncementAdded"
+msgstr "A hirdetmény rögzítésre került"
+
+msgid "langAnnouncementUpdated"
+msgstr "A hirdetmény frissítése megtörtént"
+
+msgid "langAnnouncementDeleted"
+msgstr "A hirdetmény törlése megtörtént"
+
+msgid "langContent"
+msgstr "Tartalom"
+
+msgid "PermissionsForNewFiles"
+msgstr "Az új fájlok hozzáférési jogai"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "Annak a lehetősége, hogy minden egyes állományhoz egyedi hozzáférési jogokat adhat meg, javítja a biztonságot olyan hackerekkel szemben, akik veszélyes tartalmakat töltenének fel a rendszerére. Az alapértelmezett beállítás (0550) megfelelő a szerver elfogadható védelméhez. A megadás formátuma a UNIX terminológiát használja:  Tulajdonos-Csoport-Mások felhasználók Olvasás-írás-Végrehajtás jogokkal. Ha használja au Oogie eszközt, győződjön meg róla, hogy az OpenOffice-t futtató felhasználó írhat a kurzus mappáiba."
+
+msgid "langStudent"
+msgstr "Diák"
+
+msgid "Guest"
+msgstr "Vendég"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Belépés, mint"
+
+msgid "langLoginAsThisUser"
+msgstr "Belépés"
+
+msgid "SelectPicture"
+msgstr "Kép kiválasztása..."
+
+msgid "DontResetPassword"
+msgstr "Ne módosítsa a jelszót"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Résztvesz a fejlesztésben"
+
+msgid "langCourseAdmin"
+msgstr "Kurzus adminisztrátor"
+
+msgid "langOtherCourses"
+msgstr "más kurzusok"
+
+msgid "PlatformLanguageTitle"
+msgstr "Portál nyelve"
+
+msgid "ServerStatusComment"
+msgstr "Milyen tipusú is a szerver? Ezzel lehet néhány specifikus opciót be- illetve kikapcsolni. A fejlesztői szerveren be lehet kapcsolni egy fordítási lehetőséget, amivel a még lefordítatlan feliratokat a rendszer kiemeli."
+
+msgid "ServerStatusTitle"
+msgstr "Szerver típus"
+
+msgid "PlatformLanguages"
+msgstr "A Chamilo felület nyelvei"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Ez az eszköz a bejelentkező oldalon található nyelvválasztó menű beállítását teszi lehetővé. Portál adminisztrátorként eldöntheti, hogy a felhasználók számára milyen nyelvek legyenek elérhetőek."
+
+msgid "OriginalName"
+msgstr "Eredeti név"
+
+msgid "EnglishName"
+msgstr "Angol név"
+
+msgid "DokeosFolder"
+msgstr "Chamilo mappa"
+
+msgid "Properties"
+msgstr "Tulajdonságok"
+
+msgid "PlatformConfigSettings"
+msgstr "Chamilo Konfigurációs Beállítások"
+
+msgid "SettingsStored"
+msgstr "A beállításokat a rendszer elmentette."
+
+msgid "InstitutionTitle"
+msgstr "Intézmény Név"
+
+msgid "InstitutionComment"
+msgstr "Az intézmény neve (a fejlécben jobb oldalon jelenik meg)"
+
+msgid "InstitutionUrlTitle"
+msgstr "Intézményi URL"
+
+msgid "InstitutionUrlComment"
+msgstr "Az intézmények URL-je (a fejléc jobb oldalán megjelenő hiperhivatkozás)"
+
+msgid "SiteNameTitle"
+msgstr "Chamilo Campus Név"
+
+msgid "SiteNameComment"
+msgstr "A Chamilo képzőhelyének neve (a fejlécben ez fog megjelenni)"
+
+msgid "emailAdministratorTitle"
+msgstr "Portál adminisztrátor: e-mail cím"
+
+msgid "emailAdministratorComment"
+msgstr "A felület adminsztrátorának e-mail címe (a lábléc bal oldali részén fog megjelenni)"
+
+msgid "administratorSurnameTitle"
+msgstr "Felület adminsztrátor: Családnév"
+
+msgid "administratorSurnameComment"
+msgstr "A Felület adminsztrátorának családneve (a lábléc bal oldalán fog megjelenni)"
+
+msgid "administratorNameTitle"
+msgstr "Felület adminsztrátor: Keresztnév"
+
+msgid "administratorNameComment"
+msgstr "A Felület adminsztrátorának keresztneve (a lábléc bal oldalán fog megjelenni)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Portál adminisztrátor tulajdonságainak megjelenítése a láblécben."
+
+msgid "ShowAdministratorDataComment"
+msgstr "Megjelenjenek a portál adminisztrátorának adatai a láblécben ?"
+
+msgid "HomepageViewTitle"
+msgstr "Kezdőoldal Nézet"
+
+msgid "HomepageViewComment"
+msgstr "Mit szeretne, hogyan nézzen ki a kurzus kedzőoldala?"
+
+msgid "HomepageViewDefault"
+msgstr "Kétoszlopos elrendezés. A nem aktivált eszközök rejtettek."
+
+msgid "HomepageViewFixed"
+msgstr "Háromoszlopos elrendezés. A nem aktivált eszközök szürkén jelennek meg (az ikonok a helyükön maradnak)."
+
+msgid "Yes"
+msgstr "Igen"
+
+msgid "No"
+msgstr "Nem"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Eszközök parancsikonjai"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Az eszközök parancsikonjai megjelenjenek a fejlécnél?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Diák nézet"
+
+msgid "ShowStudentViewComment"
+msgstr "Engedélyezi a diák nézetet?<br>Ez a funkció engedélyezi a tanárnak, hogy a diákok számára megjelenített felületett lássa."
+
+msgid "AllowGroupCategories"
+msgstr "Csoport kategóriák"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Engedélyezi a kurzusgazdáknak, hogy a csoport modulban új kategóriákat hozhassanak létre?"
+
+msgid "PlatformLanguageComment"
+msgstr "Megadhatja a felület nyelvét az adminisztrációs felület más részéről is a <a href=\"languages.php\">Dokeos felület nyelvek</a> hivatkozásra kattintva."
+
+msgid "ProductionServer"
+msgstr "\'Éles\' szerver"
+
+msgid "TestServer"
+msgstr "Teszt szerver"
+
+msgid "ShowOnlineTitle"
+msgstr "Ki van bejelentkezve"
+
+msgid "AsPlatformLanguage"
+msgstr "a felület nyelveként"
+
+msgid "ShowOnlineComment"
+msgstr "Mutassa az online felhasználók számát?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Engedélyezi a név változtatását a profilban?"
+
+msgid "AllowNameChangeComment"
+msgstr "Megváltoztathatja a felhasználó a család/keresztnevét?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Alapértelmezett dokumentum kvóta"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Mekkora az alapértemezett, felhasználható lemezterület a dokumentumok eszközben? Kurzusonként felülbírtálhatja ezt az értéket a felület adminisztráció > Kurzusok > módosítás menüpontban."
+
+msgid "ProfileChangesTitle"
+msgstr "Profil"
+
+msgid "ProfileChangesComment"
+msgstr "A profil mely elemei változtathatók meg?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Regisztáció: közelezően kitöltendő mezők"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Mely mezők kitöltése kötelező (a vezetéknév, keresztnév, login és jelszó mezőkön kívül)?"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Alapértelmezett csoport kvóta"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Mekkora a felhasználható lemezterület (kvóta) mérete a csoportok Dokumentumok eszközében?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Elfelejtett jelszó"
+
+msgid "AllowLostPasswordComment"
+msgstr "Kérheti a felhasználó elfelejtett jelszava pótlását?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Regisztráció"
+
+msgid "AllowRegistrationComment"
+msgstr "Engedélyezett új felhasználó regisztrációja? Létrehozhatnak a felhasználók új fiókokat?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Regisztráció tanárként"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Regisztrálhatja magát a felhasználó tanárként (létrehozhat kurzusokat)?"
+
+msgid "PlatformLanguage"
+msgstr "Portál nyelve"
+
+msgid "Tuning"
+msgstr "Teljesítmény"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "Felhasználók feltöltési könyvtárának szétválasztása"
+
+msgid "SplitUsersUploadDirectoryComment"
+msgstr "Sokfelhasználós rendszereken, ahol a regisztrált felhasználók feltölthetik képeiket a feltöltési könyvtárba (main/upload/users/) előfordulhat, hogy a mappa több állományt tartalmaz, mint amit a fájlrendszer kezelni képes (ezt jelezték Debian szerveren 36000 állomány esetében). Ennek a beállításnak az alkalmazása a feltöltés mappa egy szintű szétválasztását teszi lehetővé 9 mappába. A változtatás bekapcsolása csak a Chamilo működését befolyásolja, a fájlrendszert változatlanul hagyja, ezért Önnek kell létrehoznia a mappákat és áthelyezni a már meglévő  1-9 felhasználói mappákat az azonos nevű  almappákba. Ha nem biztos a beállítás működésében, ne aktíválja."
+
+msgid "CourseQuota"
+msgstr "Kurzus kvóta"
+
+msgid "EditNotice"
+msgstr "Hirdetmény szerkesztése"
+
+msgid "General"
+msgstr "általános"
+
+msgid "LostPassword"
+msgstr "Elfelejtett jelszó"
+
+msgid "Registration"
+msgstr "Regisztráció"
+
+msgid "Password"
+msgstr "jelszó"
+
+msgid "InsertLink"
+msgstr "link beillesztése"
+
+msgid "EditNews"
+msgstr "Hírek szerkesztése"
+
+msgid "EditCategories"
+msgstr "kategóriák módosítása"
+
+msgid "EditHomePage"
+msgstr "Honlap szerkesztése"
+
+msgid "AllowUserHeadingsComment"
+msgstr "A kurzus adminisztrátora definiálhat címsorokat a felhasználók egyéb adatainak megadásához?"
+
+msgid "Platform"
+msgstr "Portál"
+
+msgid "Course"
+msgstr "Kurzus"
+
+msgid "Languages"
+msgstr "Nyelvek"
+
+msgid "Privacy"
+msgstr "Magánélet"
+
+msgid "NoticeTitle"
+msgstr "Hirdetmény címe"
+
+msgid "NoticeText"
+msgstr "Hirdetmény szövege"
+
+msgid "LinkName"
+msgstr "Hivatkozás szövege"
+
+msgid "LinkURL"
+msgstr "A hivatkozás URL-je"
+
+msgid "OpenInNewWindow"
+msgstr "Megnyitás új ablakban"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "Ha a felhasználók osztályokhoz vagy kurzusokhoz történő hozzáadását lehetővé tévő oldalak valamelyikén az első szűretlen lista az itt megadott számnál több felhasználót tartalmaz, akkor az alapértelmezett szűrés az első betű szerint (A) történik."
+
+msgid "Plugins"
+msgstr "Beépülő modulok"
+
+msgid "HideDLTTMarkupComment"
+msgstr "[= ... =] jelölés elrejtése, ha egy nyelvi változó nincs lefordítva."
+
+msgid "Info"
+msgstr "Információ"
+
+msgid "UserAdded"
+msgstr "A felhasználó hozzáadva"
+
+msgid "NoSearchResults"
+msgstr "Nincs eredménye a keresésnek."
+
+msgid "UserDeleted"
+msgstr "A felhasználó törölve lett"
+
+msgid "NoClassesForThisCourse"
+msgstr "Erre a kurzusra egy osztály sem iratkozott fel"
+
+msgid "CourseUsage"
+msgstr "Kurzus használat"
+
+msgid "NoCoursesForThisUser"
+msgstr "Ez a felhasználó nincs feliratkozva kurzusra"
+
+msgid "NoClassesForThisUser"
+msgstr "Ez a felhasználó nincs beliratkozva osztályba"
+
+msgid "NoCoursesForThisClass"
+msgstr "Ez az osztály nincs feliratkozva kurzusra"
+
+msgid "langOpenToTheWorld"
+msgstr "Nyitott - elérhető az egész világ számára"
+
+msgid "OpenToThePlatform"
+msgstr "Nyitott - regisztrált felhasználók számára elérhető"
+
+msgid "langPrivate"
+msgstr "Zártkörű hozzáférés (az oldalt csak azok tekinthetik meg, akik a felhasználói listán szerepelnek)"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Teljesen zárt; a kurzus csak a kurzus adminisztrátora számára elérhető."
+
+msgid "langSubscription"
+msgstr "Beiratkozás"
+
+msgid "langUnsubscription"
+msgstr "Leiratkozás"
+
+msgid "CourseAccessConfigTip"
+msgstr "Alapértelmezésként a kurzus nyilvános, de ezt korlátozhatja az alábbi opciókkal."
+
+msgid "Tool"
+msgstr "eszköz"
+
+msgid "NumberOfItems"
+msgstr "elemek száma"
+
+msgid "DocumentsAndFolders"
+msgstr "Dokumentumok és mappák"
+
+msgid "Learnpath"
+msgstr "Tanulási programok"
+
+msgid "Exercises"
+msgstr "Feladatok"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Személyes naptár"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "Hozzáadhat a felhasználó személyes naptárbejegyzéseket a naptárához?"
+
+msgid "CurrentValue"
+msgstr "jelenlegi érték"
+
+msgid "CourseDescription"
+msgstr "Kurzus leírás"
+
+msgid "OnlineConference"
+msgstr "Online konferencia"
+
+msgid "Chat"
+msgstr "Csevegő"
+
+msgid "Quiz"
+msgstr "Tesztek"
+
+msgid "Announcements"
+msgstr "Hirdetmények"
+
+msgid "Links"
+msgstr "Hivatkozások"
+
+msgid "LearningPath"
+msgstr "Tanulási programok"
+
+msgid "Documents"
+msgstr "Dokumentumok"
+
+msgid "UserPicture"
+msgstr "Kép"
+
+msgid "officialcode"
+msgstr "Hivatalos kód"
+
+msgid "Login"
+msgstr "Bejelentkezés"
+
+msgid "UserPassword"
+msgstr "Jelszó"
+
+msgid "SubscriptionAllowed"
+msgstr "A beiratkozás engedélyezett"
+
+msgid "UnsubscriptionAllowed"
+msgstr "A leiratkozás engedélyezett"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Megengedett"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Tiltott"
+
+msgid "AddDummyContentToCourse"
+msgstr "Adjon hozzá a kurzushoz néhány (példa) tartalmat."
+
+msgid "DummyCourseCreator"
+msgstr "Minta kurzus tartalom létrehozása"
+
+msgid "DummyCourseDescription"
+msgstr "Ez a funkció példa tartalommal tölti meg a kurzust. Ezek a példa elemek kipróbálási, tesztelési szándékkal kerültek feltöltésre."
+
+msgid "AvailablePlugins"
+msgstr "Ezek a rendszerén érzékelt beépülő modulok. Letölthet további modulokat a <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>címről."
+
+msgid "CreateVirtualCourse"
+msgstr "Virtuális kurzus létrehozása"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Virtuális kurzusok megtekintése"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Kapcsolva valódi kurzushoz"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Virtuális kurzus létrehozása engedélyezett..."
+
+msgid "WantedCourseCode"
+msgstr "Kívánt kurzus kód"
+
+msgid "ResetPassword"
+msgstr "Jelszó visszaállítása"
+
+msgid "CheckToSendNewPassword"
+msgstr "új jelszó küldéséhez bejelölni"
+
+msgid "AutoGeneratePassword"
+msgstr "Új jelszó automatikus generálása"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Használjon egy címet a dokumentum névnek"
+
+msgid "UseDocumentTitleComment"
+msgstr "Ez engedélyezi, hogy a fájlnév (pl. fajlnev.txt) helyett más nevet rendelhessünk az állományokhoz."
+
+msgid "StudentPublications"
+msgstr "Hallgatói publikációk"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "A törölt fájlokat nem lehet visszaállítani."
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Az állományok törlése a dokumentumok eszközből visszafordíthatatlan. A fájlokat nem lehet visszaállítani."
+
+msgid "ClassName"
+msgstr "Osztály neve"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Fájl posta: Megengedett fájlméret a fájl posta dokumentumainál"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Mekkora lehet (bájtban) egy fájl postában használt dokumentum?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Fájl posta: a dokumentumok felülírhatók."
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "Megengedi, hogy az azonos névvel feltöltendő dokumentum felülírjon egy már korábban feltöltött dokumentumot? Ha a válasza igen, akkor elveszti a verziószámozás lehetőségét."
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Fájl posta: Feltöltés a saját fiókba?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Lehetővé teszi a tanárok és tanulók számára, hogy feltöltsék dokumentumaikat anélkül, hogy bárkinek elküldenék (= saját maguknak küldenek állományokat)"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Fájl posta: Hallgató <-> Hallgató"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Engedélyezi a hallgatók közötti fájlcserét. Ezt a hallgatók egyéb, kevésbé fontos állományok cseréjére is felhasználhatják. Ha kikapcsolja ezt a lehetőséget, akkor a tanulók csak a tanárnak tudnak fájlokat küldeni."
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Fájl Posta: levelezés engedélyezése"
+
+msgid "DropboxAllowMailingComment"
+msgstr "A levelezési funkcióval minden tanulónak személyes dokumentumokat küldhet"
+
+msgid "PermissionsForNewDirs"
+msgstr "Új könyvtárak hozzáférési jogai"
+
+msgid "PermissionsForNewDirsComment"
+msgstr "Annak a lehetősége, hogy minden egyes mappához egyedi hozzáférési jogokat adhat meg, javítja a biztonságot olyan hackerekkel szemben, akik veszélyes tartalmakat töltenének fel a rendszerére. Az alapértelmezett beállítás (0770) megfelelő a szerver elfogadható védelméhez. A megadás formátuma a UNIX terminológiát használja: Tulajdonos-Csoport-Mások felhasználók Olvasás-írás-Végrehajtás jogokkal."
+
+msgid "UserListHasBeenExported"
+msgstr "A felhasználói lista exportálása sikerült."
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "A fájl letöltéséhez kattintson ide."
+
+msgid "administratorTelephoneTitle"
+msgstr "Felület adminisztrátor: Telefon"
+
+msgid "administratorTelephoneComment"
+msgstr "A felület adminisztrátorának telefonszáma."
+
+msgid "SendMailToNewUser"
+msgstr "Levél küldése az új felhasználónak."
+
+msgid "ExtendedProfileTitle"
+msgstr "Kibővített profil"
+
+msgid "ExtendedProfileComment"
+msgstr "Ha ez a beállíás \'igaz\'-ra van állítva, a felhasználók megadhatnak opcionális adatokat: \'Kompetenciáim\', \'Végzettségeim\', \'Mit tudok oktatni\', és \'A személyes oldalam\'"
+
+msgid "Classes"
+msgstr "Osztályok"
+
+msgid "UserUnsubscribed"
+msgstr "A felhasználó kijelentkeztetve"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "A felhasználó nem iratkozhat le a kurzusokról. Ez a felhasználó a kurzus adminisztrátora."
+
+msgid "InvalidStartDate"
+msgstr "Érvénytelenül megadott kezdő dátum."
+
+msgid "InvalidEndDate"
+msgstr "Érvénytelenül megadott befejezési dátum."
+
+msgid "DateFormatLabel"
+msgstr "(év/hó/nap óra:perc)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "A honlap állományai nem írhatóak felül!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Kérem adjon meg figyelmeztető szöveget"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Kérem adja meg a figyelmeztetés címét"
+
+msgid "PleaseEnterLinkName"
+msgstr "Kérem adja meg a hivatkozás nevét"
+
+msgid "InsertThisLink"
+msgstr "Illessze be ezt a linket"
+
+msgid "FirstPlace"
+msgstr "Első hely"
+
+msgid "After"
+msgstr "után"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Fájlposta: csoport engedélyezés"
+
+msgid "DropboxAllowGroupComment"
+msgstr "A felhasználók fájlokat tudnak egymásnak küldeni"
+
+msgid "ClassDeleted"
+msgstr "Az osztály törölve"
+
+msgid "ClassesDeleted"
+msgstr "Az osztályok törölve"
+
+msgid "NoUsersInClass"
+msgstr "Ennek az osztálynak nincsenek tagjai"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "A kiválasztott felhasználók be lettek iratva a megadott kurzusokba."
+
+msgid "InvalidTitle"
+msgstr "Kérem, adja meg a címet"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "A kategória már használatban van"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Adjon meg egy kódot és a kategória nevét"
+
+msgid "DokeosHomepage"
+msgstr "Chamilo kezdőoldal"
+
+msgid "DokeosForum"
+msgstr "Chamilo Fórum"
+
+msgid "RegisterYourPortal"
+msgstr "Regisztrálja oktatási portálját!"
+
+msgid "DokeosExtensions"
+msgstr "Chamilo bővítmények"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Mutassa a kurzus navigácós menüt"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Mutassa a kurzus navigácós menüt, ami megkönnyíti a kurzus különböző felületeinek az elérését."
+
+msgid "LoginAs"
+msgstr "Bejelentkezés mint"
+
+msgid "ImportClassListCSV"
+msgstr "Osztálylista importálása CSV formátumból"
+
+msgid "ShowOnlineWorld"
+msgstr "Belépett felhasználók számának megjelenítése a bejelentkező oldalon (világszerte látható)"
+
+msgid "ShowOnlineUsers"
+msgstr "Mutassa a bejelentkezett felhasználók számát minden oldalon (azok láthatják, akik bejelentkeztek)"
+
+msgid "ShowOnlineCourse"
+msgstr "Mutassa az erre a kurzusra bejelentkezett felhasználók számát"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Látsszanak az ikonok a navigációs menüben?"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Fókusz a jogokon"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Fókusz a helyszínen"
+
+msgid "ClassesUnsubscribed"
+msgstr "A kijelölt osztályok le lettek iratva a megadott kurzusokról"
+
+msgid "ClassesSubscribed"
+msgstr "A kijelölt osztályok fel lettek iratva a megadott kurzusokra"
+
+msgid "RoleId"
+msgstr "Szerep azonosító"
+
+msgid "RoleName"
+msgstr "Szerep név"
+
+msgid "RoleType"
+msgstr "Típus"
+
+msgid "RightValueModified"
+msgstr "Az érték módosításra került."
+
+msgid "MakeAvailable"
+msgstr "Legyen hozzáférhető"
+
+msgid "MakeUnavailable"
+msgstr "Legyen elérhetetlen"
+
+msgid "Stylesheets"
+msgstr "stíluslapok"
+
+msgid "DefaultDokeosStyle"
+msgstr "Alapértelmezett Chamilo stílus"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Tartalmazza a navigációs menű a különböző eszközök ikonjait?"
+
+msgid "Plugin"
+msgstr "Bővítmény"
+
+msgid "MainMenu"
+msgstr "Főmenű"
+
+msgid "MainMenuLogged"
+msgstr "Főmenű belépés után"
+
+msgid "Banner"
+msgstr "Címsor (banner)"
+
+msgid "ImageResizeTitle"
+msgstr "A feltöltött felhasználói képek átméretezése"
+
+msgid "ImageResizeComment"
+msgstr "A felhasználói képeket át lehet méretezni feltöltéskor, ha a PHP a <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD függvénytárral</a> együtt lett telepítve.  Ha a GD nem elérhető, ez a lehetőség észrevétlenül figyelmen kívül lesz hagyva."
+
+msgid "MaxImageWidthTitle"
+msgstr "Felhasználói kép maximális szélessége"
+
+msgid "MaxImageWidthComment"
+msgstr "A felhasználói kép maximális szélessége képpontban (pixel). Ez a beállítás csak akkor lesz figyelembe véve, ha a kép feltöltésekor ki lesz választva az átméretezés."
+
+msgid "MaxImageHeightTitle"
+msgstr "Felhasználói kép maximális magassága"
+
+msgid "MaxImageHeightComment"
+msgstr "A felhasználói kép maximális magassága képpontban (pixel). Ez a beállítás csak akkor lesz figyelembe véve, ha a kép feltöltésekor ki lesz választva az átméretezés."
+
+msgid "YourVersionNotUpToDate"
+msgstr "Az ön által használt verzió nem naprakész."
+
+msgid "YourVersionIs"
+msgstr "Az ön által használt verzió:"
+
+msgid "PleaseVisitDokeos"
+msgstr "Kérjük látogassa meg a Chamilo honlapját"
+
+msgid "VersionUpToDate"
+msgstr "Ön a portál legfirssebb verzióját használja."
+
+msgid "ConnectSocketError"
+msgstr "Socket csatlakozási hiba."
+
+msgid "SocketFunctionsDisabled"
+msgstr "Socket csatlakozási lehetőségek letiltva."
+
+msgid "ShowEmailAddresses"
+msgstr "Email címek megjelenítése"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Email címek megjelenítése a felhasználók számára"
+
+msgid "LatestVersionIs"
+msgstr "A legújabb verzió a következő:"
+
+msgid "langConfigureExtensions"
+msgstr "Szolgáltatások konfigurálása"
+
+msgid "langActiveExtensions"
+msgstr "Szolgáltatás aktiválása"
+
+msgid "langVisioconf"
+msgstr "Videokonferencia"
+
+msgid "langVisioconfDescription"
+msgstr "A Chamilo Live Conferencing® eszköz élő videokonferencia lebonyolítását teszi lehetővé az alábbi lehetőségek biztosításával: diasorozatok bemutatása, tábla írása és olvasása, csevegés és kétirányú audió és videó átvitel. Az eszköz mindössze a Flash® lejátszó telepítését igényli és három üzemmódban használható: egy-egy, egy-több, több-több."
+
+msgid "langPpt2lp"
+msgstr "PowerPoint-ból Tanösvény"
+
+msgid "langPpt2lpDescription"
+msgstr "A \"PowerPoint-ból Tanösvény\" eszköz lehetővé teszi, hogy egy Powerpoint bemutatót néhány kattintás segítségével tanösvénnyé alakítson át."
+
+msgid "langBandWidthStatistics"
+msgstr "Sávszélesség statisztika"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "Az MGRT eszköz lehetővé teszi részletesebb statisztikák megjelenítését a szerver működéséről az elmúlt 24 órában."
+
+msgid "ServerStatistics"
+msgstr "Szerver statisztikák"
+
+msgid "langServerStatisticsDescription"
+msgstr "Az AWStats eszköz lehetővé teszi, hogy megjelenítse a portál statisztikáit: látogatók, megtekintett oldalak, hivatkozások, stb."
+
+msgid "SearchEngine"
+msgstr "Teljes szöveget vizsgáló keresőmotor"
+
+msgid "langSearchEngineDescription"
+msgstr "A teljes szöveget vizsgáló keresőmotor egy szó keresését teszi lehetővé a teljes portálon. A feltöltött tartalmak napi indexelése biztosítja az találatok megfelelő minőségét."
+
+msgid "langListSession"
+msgstr "Munkamenetek listája"
+
+msgid "AddSession"
+msgstr "Munkamenet hozzáadása"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Munkamenetek importálása XML/CSV formátumban"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Munkamenetek exportálása XML/CSV formátumban"
+
+msgid "SessionName"
+msgstr "Munkamenet neve"
+
+msgid "langNbCourses"
+msgstr "Kurzusok száma"
+
+msgid "DateStart"
+msgstr "Indulás dátuma"
+
+msgid "DateEnd"
+msgstr "Befejezés dátuma"
+
+msgid "CoachName"
+msgstr "Instruktor neve"
+
+msgid "SessionList"
+msgstr "Munkamenetek listája"
+
+msgid "SessionNameIsRequired"
+msgstr "A munkamenetnek nevet kell adni"
+
+msgid "NextStep"
+msgstr "Következő lépés"
+
+msgid "keyword"
+msgstr "Kulcsszó"
+
+msgid "Confirm"
+msgstr "Megerősít"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Felhasználók eltávolítása a kurzusról"
+
+msgid "MissingClassName"
+msgstr "Hiányzó osztálynév"
+
+msgid "ClassNameExists"
+msgstr "Létező osztálynév"
+
+msgid "ImportCSVFileLocation"
+msgstr "importálandó CVS fájlok helye"
+
+msgid "ClassesCreated"
+msgstr "Létrehozott osztályok"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Állomány importálásakor keletkezett hibák"
+
+msgid "ServiceActivated"
+msgstr "Szolgáltatás aktiválva"
+
+msgid "ActivateExtension"
+msgstr "Szolgáltatás bekapcsolása"
+
+msgid "InvalidExtension"
+msgstr "Érvénytelen kiterjesztés"
+
+msgid "VersionCheckExplanation"
+msgstr "Az autómatikus verziószám ellenőrzéshez portálját regisztrálnia kell a chamilo.com oldalon. A gombnyomásra kapott információk csak belső használatra szolgálnak és csak összegzett adatok kerülnek nyilvánosságra (portálok teljes száma, chamilo kurzusok teljes száma, chamilo hallgatók teljes száma, stb.), lásd <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>. Regisztrálás után az Ön portálja megjelenik a világszerte telepített chamilo portálok listáján <a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php.</a> Ha nem kíván ezen a listán megjelenni jelezze az alábbi opció kijelölésével. A regisztráció a lehető legegyszerűbb, csak az alábbi gombra kell kattintania:  <br />"
+
+msgid "AfterApproval"
+msgstr "Jóváhagyás után"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Tanulói nézet engedélyezése"
+
+msgid "StudentViewEnabledComment"
+msgstr "Tanulói nézet engedélyezésével megengedheti oktatóinak vagy adminisztrátorainak, hogy megnézzék, a hallgatók hogyan látják a kurzusokat."
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Időtúllépés értéke a \"KiVanBejelentkezve\" nézethez"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Ez az időkorlát határozza meg, hogy az utolsó felhasználói tevékenységtől kezdve mennyi másodpercig számítson a felhasználó bejelentkezettnek."
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Példaanyagok kurzuslétrehozáskor"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Példák létrehozása új kurzusok készítésekor"
+
+msgid "AccountValidDurationTitle"
+msgstr "Fiók érvényesség"
+
+msgid "AccountValidDurationComment"
+msgstr "A felhasználói fiók ennyi napig éljen a létrehozástól számítva"
+
+msgid "UseSessionModeTitle"
+msgstr "Találkozó mód használata"
+
+msgid "UseSessionModeComment"
+msgstr "A találkozók használatával eltérő módon kezelhetjük kurzusainkat. Ebben az esetben a kurzusnak létrehozója, konzulense és tanulói lesznek. Minden konzulens létrehozhat a tanulók egyes csoportjainak adott időszakot, amit találkozónak hívnak."
+
+msgid "HomepageViewActivity"
+msgstr "Tevékenység nézet"
+
+msgid "HomepageView2column"
+msgstr "Kétoszlopos nézet"
+
+msgid "HomepageView3column"
+msgstr "Háromoszlopos nézet"
+
+msgid "AllowUserHeadings"
+msgstr "Felhasználói címsorok engedélyezése"
+
+msgid "IconsOnly"
+msgstr "Csak kép"
+
+msgid "TextOnly"
+msgstr "Csak szöveg"
+
+msgid "IconsText"
+msgstr "Kép és szöveg"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Eszközök bemutatásának engedélyezése"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Minden eszköz bemutatásának engedélyezésea kezdőoldalon"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Kurzus kezdőoldalának nyomonkövetése"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "A nyomonkövetés egy vízszintes navigációs rendszer, általában az oldal bal felső részén. Ezzel a lehetőséggel adhatja meg, hogy milyen formában jelenjen meg a kurzus kezdőoldalán."
+
+msgid "Comment"
+msgstr "Megjegyzés"
+
+msgid "Version"
+msgstr "Verzió"
+
+msgid "LoginPageMainArea"
+msgstr "Belépési oldal fő terület"
+
+msgid "LoginPageMenu"
+msgstr "Belépési oldal menü"
+
+msgid "CampusHomepageMainArea"
+msgstr "Képzőhely kezdőoldalának fő területe"
+
+msgid "CampusHomepageMenu"
+msgstr "Képzőhely kezdőoldal menü"
+
+msgid "MyCoursesMainArea"
+msgstr "Kurzusok fő terület"
+
+msgid "MyCoursesMenu"
+msgstr "Kurzusok menü"
+
+msgid "Header"
+msgstr "Fejléc"
+
+msgid "Footer"
+msgstr "Lábléc"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "A nyilvános oldalak feleljenek meg a WAI-nek"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Web Elérhetőségi Kezdeményezés) egy kezdeményezés a web használhatóságának kiszélesítésére, akadálymentesítésére. Ennek bekapcsolásakor a Chamilo rendszer akadálymentesebb lesz. Ez azt is eredményezi, hogy az oldalak tartalma és a rendszer nyilvános oldalai az eddigiektől eltérően fognak megjelenni."
+
+msgid "VersionCheck"
+msgstr "Verzióellenőrzés"
+
+msgid "Active"
+msgstr "Aktív"
+
+msgid "Inactive"
+msgstr "Inaktív"
+
+msgid "SessionOverview"
+msgstr "Találkozó leírása"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Felhasználó feliratása, ha még nincs feliratkozva."
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Felhasználó leiratása, ha a feliratkozás nincs dokumentálva ???"
+
+msgid "DeleteSelectedSessions"
+msgstr "Kijelölt találkozók törlése"
+
+msgid "CourseListInSession"
+msgstr "Kurzusok listája ezen a találkozón"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Kijelölt kurzusok leiratása erről a találkozóról"
+
+msgid "NbUsers"
+msgstr "Felhasználók"
+
+msgid "SubscribeUsersToSession"
+msgstr "Felhasználók feljelentkeztetése erre a találkozóra"
+
+msgid "UserListInPlatform"
+msgstr "A rendszer felhasználóinak listája"
+
+msgid "UserListInSession"
+msgstr "Erre a találkozóra feljelentkezett felhasználók listája"
+
+msgid "CourseListInPlatform"
+msgstr "Kurzuslista"
+
+msgid "Host"
+msgstr "Kiszolgáló"
+
+msgid "UserOnHost"
+msgstr "Felhasználónév"
+
+msgid "FtpPassword"
+msgstr "FTP jelszó"
+
+msgid "PathToLzx"
+msgstr "Az LZX állományok elérési útvonala"
+
+msgid "WCAGContent"
+msgstr "Szöveg"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Kurzusok feljelentkeztetése erre a találkozóra"
+
+msgid "DateStartSession"
+msgstr "Találkozó kezdődátuma"
+
+msgid "DateEndSession"
+msgstr "Találkozó befejező dátuma"
+
+msgid "EditSession"
+msgstr "Találkozó szerkesztése"
+
+msgid "VideoConferenceUrl"
+msgstr "Az Élő konferencia elérési útvonala"
+
+msgid "VideoClassroomUrl"
+msgstr "Az Élő konferencia (osztályterem) elérési útvonala"
+
+msgid "ReconfigureExtension"
+msgstr "Bővítmény újrakonfigurálása"
+
+msgid "ServiceReconfigured"
+msgstr "Szolgáltatás újrakonfigurálva"
+
+msgid "ChooseNewsLanguage"
+msgstr "hírek nyelvének kiválasztása"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "összegezi a kurzusban eltöltött időt"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Ezzel a beállítással lehet kiszámolni azt az időt amit a felhasználó valóban a kurzusban töltött el. A mező értéke a frissítés gyakorisága másodpercben megadva. A lehetőség kikapcsolásához írjon 0-t a mezőbe."
+
+msgid "EditLink"
+msgstr "Hivatkozás szerkesztése"
+
+msgid "FinishSessionCreation"
+msgstr "Találkozó létrehozásának befejezése"
+
+msgid "VisioRTMPPort"
+msgstr "A videókonferencia RTMP protokoll portja"
+
+msgid "SessionNameAlreadyExists"
+msgstr "A találkozó neve hamarosan létrejön"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "Nem készültek osztályok!"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Numerikus mező"
+
+msgid "UserLocked"
+msgstr "Zárolt felhasználó"
+
+msgid "UserUnlocked"
+msgstr "Zárolatlan felhasználó"
+
+msgid "CannotDeleteUser"
+msgstr "A felhasználó nem törölhető"
+
+msgid "SelectedUsersDeleted"
+msgstr "A kiválasztott felhasználók törölve"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Néhány felhasználó nem került törlésre"
+
+msgid "ExternalAuthentication"
+msgstr "Külső hitelesítés"
+
+msgid "RegistrationDate"
+msgstr "Regisztráció dátuma"
+
+msgid "UserUpdated"
+msgstr "Felhasználó frissítve"
+
+msgid "HomePageFilesNotReadable"
+msgstr "A honlap fájlai nem olvashatóak!"
+
+msgid "Choose"
+msgstr "Válassz!"
+
+msgid "ModifySessionCourse"
+msgstr "Kurzus találkozó módosítása"
+
+msgid "CourseSessionList"
+msgstr "Találkozó kurzusainak listája"
+
+msgid "SelectACoach"
+msgstr "Tréner választása"
+
+msgid "UserNameUsedTwice"
+msgstr "A felhasználónév kétszer használt"
+
+msgid "UserNameNotAvailable"
+msgstr "Ez a felhasználónév nem hozzáférhető"
+
+msgid "UserNameTooLong"
+msgstr "A felhasználónév túl hosszú"
+
+msgid "WrongStatus"
+msgstr "Ez a státusz nem létezik"
+
+msgid "ClassNameNotAvailable"
+msgstr "Az osztálynév nem hozzáférhető"
+
+msgid "FileImported"
+msgstr "Importált fájl"
+
+msgid "WhichSessionToExport"
+msgstr "Válassza ki a találkozót az exportáláshoz"
+
+msgid "AllSessions"
+msgstr "Az összes találkozó"
+
+msgid "CodeDoesNotExists"
+msgstr "Ez a kód nem létezik"
+
+msgid "UnknownUser"
+msgstr "Ismeretlen felhasználó"
+
+msgid "UnknownStatus"
+msgstr "Ismeretlen státusz"
+
+msgid "SessionDeleted"
+msgstr "A találkozó törölve lett"
+
+msgid "CourseDoesNotExist"
+msgstr "Nemlétező kurzus"
+
+msgid "UserDoesNotExist"
+msgstr "A felhasználó nem létezik"
+
+msgid "ButProblemsOccured"
+msgstr "de probléma jelentkezett"
+
+msgid "UsernameTooLongWasCut"
+msgstr "A felhasználónév vége le lett vágva"
+
+msgid "NoInputFile"
+msgstr "Nem történt fájlküldés"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "Felhasználói státusz hozzárendelve kihez:"
+
+msgid "WrongDate"
+msgstr "Helytelen dátum formátum (yyyy-mm-dd)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Ez egy automatikus üzenet. Kérem, ne válaszoljon rá!"
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "Hamarosan emailben értesítést kap konzulensétől."
+
+msgid "SlideSize"
+msgstr "Diák mérete"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Plagizálás megelőzése az Ephorus-szal"
+
+msgid "CourseTeachers"
+msgstr "Kurzus tanárok"
+
+msgid "UnknownTeacher"
+msgstr "Ismeretlen oktató"
+
+msgid "HideDLTTMarkup"
+msgstr "DLTT jelölések elrejtése"
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "Az üres kurzus kategóriák is jelenjenek meg a kezdőoldalon"
+
+msgid "ShowEmptyCourseCategories"
+msgstr "Üres kurzuskategóriák megjelenítése"
+
+msgid "XMLNotValid"
+msgstr "Az XML dokumentum nem valid."
+
+msgid "AllowEmailEditorTitle"
+msgstr "Aktív online email szerkesztő"
+
+msgid "AllowEmailEditorComment"
+msgstr "Ha ez a lehetőség aktíválva van, az email címekre rákattintva megnyílik egy online email szerkesztő."
+
+msgid "AddCSVHeader"
+msgstr "CSV fejléc sor hozzáadása?"
+
+msgid "YesAddCSVHeader"
+msgstr "Igen, adja hozzá a CSV fejléceket <br />Ez a sor tartalmazza a szükséges mezőket, amikor különböző Chamilo rendszerekbe akarja importálni adatait."
+
+msgid "NumberOfCourses"
+msgstr "Kurzusok száma"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Kurzus nyelvek megtekintése"
+
+msgid "VisioRTMPTunnelPort"
+msgstr "A videókonferencia RTMP protokoll tunell portja"
+
+msgid "name"
+msgstr "Név"
+
+msgid "Security"
+msgstr "Biztonság"
+
+msgid "UploadExtensionsListType"
+msgstr "A dokumentumfeltöltésre alkalmazott szűrés típusa"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "A fekete/fehérlista szűrő használata. Olvassa el a fekete és fehérlista leírását a további részletekért."
+
+msgid "Blacklist"
+msgstr "Feketelista"
+
+msgid "Whitelist"
+msgstr "Fehér lista"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "Feketelista - beállítások"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "Fehér lista - beállítások"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "A feketelista használatakor a listán szereplő kiterjesztéssel rendelkező állományok eltávolításra (vagy átnevezésre) kerülnek. A megadott kiterjesztéseket a fáljnévben a kiterjesztés előtti pont (.) nélkül és pontosvesszővel (;) elválasztva kell megadni, például az alábbiak szerint: exe;com;bat;scr;php. A kiterjesztés nélküli fájlok nem kerülnek törlésre (átnevezésre). Kis- és naygbetűk között a szűrő nem tesz különbséget."
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "A fehér lista használatakor az összes olyan fájl eltávolításra (vagy átnevezésre) kerül, amelynek kiterjesztése _NEM_ szerepel a listán. A fehér lista alkalmzása általában korlátozóbb, mint a feketelistáé, de ez utóbbinál biztonságosabbnak tekintett szűrési módszer. A kiterjesztéseket a fájlnévben szereplő pont (.) nélkül és pontosvesszővel (;) elválasztva kell megadni, például az alábbi formában: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. A kiterjesztés nélküli állományok nem kerülnek szűrésre. Kis- és nagybetűk között szűréskor nincs különbség."
+
+msgid "UploadExtensionsSkip"
+msgstr "Szűrés viselkedése (kihagyja/átnevezi)"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "Ha a kihagyást választja, azok az állományok amiket a fekete/fehérlista alapján a rendszer kiszűr, nem fognak feltöltődni. Ha az átnevezést választja, az állomány kiterjesztése módosulni fog a kiterjesztés lecserélő beállítások szerint. Figyelem: az átnevezés nem nyújt teljes védelmet, ezen kívül felülírhatja a meglévő, megegyező nevű állományokat, ha több állománynak is ugyanaz a neve, csak a kiterjesztése eltérő."
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "Cseréül megadott kiterjesztés"
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "Adja meg azt a kiterjesztést, amire le akarja cserélni a szűrő által veszélyesnek talált kiterjesztéssel feltöltött állományokat. Csak akkor kell megadnia, ha a kiterjesztés cseréjét választotta."
+
+msgid "Remove"
+msgstr "Eltávolít"
+
+msgid "Rename"
+msgstr "Átnevez"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "A kezdőoldalon jelenjen megminden a kategória mellett a kurzusok száma"
+
+msgid "NameOfTheSession"
+msgstr "Találkozó neve"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "Kategóriák megjelenítése a kezdőoldalon"
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "Ezzel a kapcsolóval lehet a nyitólapon elrejteni/megmutatni a képzéskategóriákat"
+
+msgid "ShowTabsTitle"
+msgstr "Fülek a fejlécen"
+
+msgid "ShowTabsComment"
+msgstr "Jelölje meg azokat a füleket, amiket meg akar jeleníteni a fejlécen. A nem megjelölt fülek a rendszer kezdőoldalán a jobb oldali menüben fognak megjelenni, illetve a kurzus oldalán, amikor szükség van rájuk."
+
+msgid "DefaultForumViewTitle"
+msgstr "Alapértelmezett fórum nézet"
+
+msgid "DefaultForumViewComment"
+msgstr "Mi legyen az alapértelmezett megjelenési formája az új fórumnak. Bármelyik kurzus adminisztrátor módosíthatja bármelyik fórum nézetét."
+
+msgid "TabsMyCourses"
+msgstr "Kurzusaim fül"
+
+msgid "TabsCampusHomepage"
+msgstr "Kezdőoldal fül"
+
+msgid "TabsReporting"
+msgstr "Jelentések fül"
+
+msgid "TabsPlatformAdministration"
+msgstr "Rendszeradminisztráció fül"
+
+msgid "LastNameMandatory"
+msgstr "A keresztnév nem lehet üres"
+
+msgid "FirstNameMandatory"
+msgstr "A családnév nem maradhat üres"
+
+msgid "EmailMandatory"
+msgstr "Az email cím nem maradhat üres"
+
+msgid "TabsMyAgenda"
+msgstr "Naptáram fül"
+
+msgid "PlatformCharsetTitle"
+msgstr "Karakterkészlet"
+
+msgid "PlatformCharsetComment"
+msgstr "A karakterkészlet határozza meg az egyes nyelvek megjelenését a felületen. Az összes angol, latin, nyugat-európai nyelvnek pl. az UTF-8 megfelelő (ha a magyarral gondok lennének, az iso-8859-2 a magyar készlet kódja)."
+
+msgid "Nested"
+msgstr "Beágyazott"
+
+msgid "VersionCheckEnabled"
+msgstr "Verzióellenőrzés bekapcsolva"
+
+msgid "InstallDirAccessibleSecurityThreat"
+msgstr "A Chamilo rendszer main/install mappája elérhető a webről. Ez biztonsági kockázatokat rejthet magában. Javasoljuk, hogy törölje ezt a mappát, vagy módosítsa a hozzáférési jogokat úgy, hogy a webről érkezők ne érhessék el a tartalmát."
+
+msgid "VisioHost"
+msgstr "Videókonferencia streaming kiszolgáló neve vagy IP címe"
+
+msgid "VisioPort"
+msgstr "Videókonferencia streaming kiszolgáló portja"
+
+msgid "VisioPassword"
+msgstr "Videókonferencia streaming kiszolgáló jelszó"
+
+msgid "Port"
+msgstr "Portszám"
+
+msgid "EphorusClickHereForADemoAccount"
+msgstr "Kattintson ide demó hozzáféréshez"
+
+msgid "ManageUserFields"
+msgstr "Felhasználói mezők kezelése"
+
+msgid "FieldType"
+msgstr "Mező típus"
+
+msgid "FieldOrder"
+msgstr "Sorrend"
+
+msgid "FieldTypeText"
+msgstr "Szöveg"
+
+msgid "FieldTypeTextarea"
+msgstr "Szövegterület"
+
+msgid "AddUserFields"
+msgstr "Felhasználói mezők hozzáadása"
+
+msgid "LDAPConnectionError"
+msgstr "LDAP kapcsolódási hiba"
+
+msgid "LDAP"
+msgstr "LDAP"
+
+msgid "LDAPEnableTitle"
+msgstr "LDAP bekapcsolása"
+
+msgid "LDAPVersion2"
+msgstr "LDAP 2"
+
+msgid "LDAPVersion3"
+msgstr "LDAP 3"
+
+msgid "AllSlashNone"
+msgstr "Összes/semmi"
+
+msgid "TabsMyGradebook"
+msgstr "Leckekönyvem fül"
+
+msgid "VisioUseRtmptTitle"
+msgstr "Használja az rtmpt protokollt"
+
+msgid "EnableSearchTitle"
+msgstr "Full-text keresési lehetőség"
+
+msgid "AddUrl"
+msgstr "URL hozzáadása"
+

@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "zastarele jezičke varijable"
+
+msgid "langMdCallingTool"
+msgstr "Dokumenta"
+
+msgid "langTool"
+msgstr "Dokument – Opisna definicuja"
+
+msgid "langNotInDB"
+msgstr "nema takve kategorije linkova"
+
+msgid "langManifestSyntax"
+msgstr "(greška u sintaksi manifest fajla...)"
+
+msgid "langEmptyManifest"
+msgstr "(prazan manifest fajl...)"
+
+msgid "langNoManifest"
+msgstr "(nema manifest fajla...)"
+
+msgid "langNotFolder"
+msgstr "je nemoguće, nije folder..."
+
+msgid "langUploadHtt"
+msgstr "Učitajte HTT fajl"
+
+msgid "langHttFileNotFound"
+msgstr "novi HTT  fajl se nije otvorio (ili je prazan ili je prevelik)"
+
+msgid "langHttOk"
+msgstr "Novi HTT fajl se učitao"
+
+msgid "langHttNotOk"
+msgstr "Učitavanje HTT fajla nije uspelo"
+
+msgid "langRemoveHtt"
+msgstr "Ukloni HTT fajl"
+
+msgid "langHttRmvOk"
+msgstr "HTT fajl je uklonjen"
+
+msgid "langHttRmvNotOk"
+msgstr "Uklanjanje HTT fajla nije uspelo"
+
+msgid "langImport"
+msgstr "Uvezi"
+
+msgid "langRemove"
+msgstr "Ukloni MDE"
+
+msgid "langAllRemovedFor"
+msgstr "Svi unosi su uklonjeni za kategoriju"
+
+msgid "langIndex"
+msgstr "Indeks reči"
+
+msgid "langTotalMDEs"
+msgstr "Ukupan broj linkova MD unosa:"
+
+msgid "langMainMD"
+msgstr "Otvori glavni MDE"
+
+msgid "langLines"
+msgstr "linije"
+
+msgid "langPlay"
+msgstr "Pokreni index.php"
+
+msgid "langNonePossible"
+msgstr "MD operacije nisu moguće"
+
+msgid "langOrElse"
+msgstr "Odaberite kategoriju linkova"
+
+msgid "langWorkWith"
+msgstr "Rad sa Scorm  direktorujumom"
+
+msgid "langSDI"
+msgstr "... Scorm Direktorijum sa SD-id (i podeli manifest  ili ga ostavi praznog)"
+
+msgid "langRoot"
+msgstr "root"
+
+msgid "langSplitData"
+msgstr "Podeli manifests i #MDe ako ih ima:"
+
+msgid "langMffNotOk"
+msgstr "Zamena manifest fajla nije uspela"
+
+msgid "langMffOk"
+msgstr "Manifest fajl je zamenjen"
+
+msgid "langMffFileNotFound"
+msgstr "Novi manifest fajl nije mogao da se otvori (ili je prazan ili je preveliki)"
+
+msgid "langUploadMff"
+msgstr "Zameni manifest fajl"
+

@@ -1,0 +1,129 @@
+msgid "langMdCallingTool"
+msgstr "Dokumenter"
+
+msgid "langMdTitle"
+msgstr "Titel på læringsobjekt"
+
+msgid "langMdDescription"
+msgstr "Klik på knappen Gem for at gemme denne information"
+
+msgid "langMdCoverage"
+msgstr "fx Bachelor i.."
+
+msgid "langMdCopyright"
+msgstr "forudsat at kilden er godkendt"
+
+msgid "langTool"
+msgstr "Metadata for dokumentet"
+
+msgid "langNoScript"
+msgstr "Script er ikke slået til i din browser,  venligst ignorerer skærmbilledet nedenfor denne tekst, det virker ikke..."
+
+msgid "langPressAgain"
+msgstr "Klik på Gem igen"
+
+msgid "langLanguageTip"
+msgstr "det sprog, som læringsobjektet er lavet i"
+
+msgid "langIdentifier"
+msgstr "Identificér"
+
+msgid "langIdentifierTip"
+msgstr "unik identifikation til dette lærigsobjekt, bestående af bogstaver, tal, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "titel eller navn og sprog til denne titel eller dette navn"
+
+msgid "langDescriptionTip"
+msgstr "beskrivelse eller kommentar og sprog brugt til beskrivelse af dette læringsobjekt"
+
+msgid "langKeyword"
+msgstr "Nøgleord"
+
+msgid "langKeywordTip"
+msgstr "delt af komma (bogstvaer, tal, -.)"
+
+msgid "langCoverage"
+msgstr "Omfang"
+
+msgid "langCoverageTip"
+msgstr "fx. bachelor xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Du kan IKKE ændre sprogbeskrivelse og tilføj nøgleord samtidig."
+
+msgid "langClickKw"
+msgstr "Klik på et nøgleord i træet for at vælge/fravælge det"
+
+msgid "langKwHelp"
+msgstr "Klik på \'+\' knappen for at åbne, klik på \'-\' knappen for at lukke, klik 2 gange på \'++\' knappen for at åbne alt, klik 2 gange på \'--\' knappen for at lukke alt.Fravælg alle valgte nøgleord ved at lukke \"træet\" og åbn det igen ved at klikke på \'+\' knappen.Alt-klik \'+\' søger på originale nøgleord i \"træet\".Alt-klik nøgleord vælger et nøgleord uden yderligere begreber eller fravælg et nøgleord uden yderlgere begreber.Hvis du ændrer sprogbeskrivelsen, så tilføj ikke nøgleord på samme tid."
+
+msgid "langRights"
+msgstr "Rettigheder"
+
+msgid "langRightsTip"
+msgstr "beskriv i ord"
+
+msgid "langVersion"
+msgstr "Version"
+
+msgid "langVersionTip"
+msgstr "nummer eller beskrivelse"
+
+msgid "langStatusTip"
+msgstr "vælg fra liste"
+
+msgid "langCreatedSize"
+msgstr "Oprettet, størrelse"
+
+msgid "langCreatedSizeTip"
+msgstr "oprettet ÅÅÅÅ-MM-DD , størrelse i bytes"
+
+msgid "langAuthorTip"
+msgstr "i VCARD format"
+
+msgid "langFormat"
+msgstr "Format"
+
+msgid "langFormatTip"
+msgstr "vælg fra liste"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "Klik her for at åbne objektet"
+
+msgid "langStore"
+msgstr "Gem"
+
+msgid "langDeleteAll"
+msgstr "Slet alle metadata?"
+
+msgid "langConfirmDelete"
+msgstr "Vil du virkelig slette alle metadata?"
+
+msgid "langCourseKwds"
+msgstr "Dette dokument indeholder kursussidens nøgleord"
+
+msgid "langSearch"
+msgstr "Søg"
+
+msgid "langSearchCrit"
+msgstr "Et ord per linie!"
+
+msgid "langStatuses"
+msgstr ":draft:udkast,, final:endelige,, revised:revideret,, unavailable:utilgængelig"
+
+msgid "langCosts"
+msgstr ":nej:gratis, ingen betaling,, ja:ikke gratis, betaling"
+
+msgid "langCopyrights"
+msgstr ":ja:Copyright,, nej:ingen Copyright"
+
+msgid "langFormats"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+
+msgid "langLngResTypes"
+msgstr ":exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture"
+

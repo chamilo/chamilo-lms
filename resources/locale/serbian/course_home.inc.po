@@ -1,0 +1,81 @@
+msgid "langActivate"
+msgstr "Prikaži"
+
+msgid "langDeactivate"
+msgstr "Sakrij"
+
+msgid "langInLnk"
+msgstr "Sakriveni alati i linkovi"
+
+msgid "langDelLk"
+msgstr "Da li zaista želite da obrišete ovaj link?"
+
+msgid "langCourseCreate"
+msgstr "Kreiranje Web sajta kursa"
+
+msgid "langNameOfTheLink"
+msgstr "Ime linka"
+
+msgid "lang_main_categories_list"
+msgstr "Lista glavne kategorije"
+
+msgid "langCourseAdminOnly"
+msgstr "Samo predavači"
+
+msgid "PlatformAdminOnly"
+msgstr "Samo za administratore platforme"
+
+msgid "langCombinedCourse"
+msgstr "Kombinovani kurs"
+
+msgid "ToolIsNowVisible"
+msgstr "Alatka je sada vidljiva"
+
+msgid "ToolIsNowHidden"
+msgstr "Alatka je sada nevidljiva"
+
+msgid "EditLink"
+msgstr "Edituj link"
+
+msgid "Blog_management"
+msgstr "Projekti"
+
+msgid "Forum"
+msgstr "Forumi"
+
+msgid "Course_maintenance"
+msgstr "Bekap"
+
+msgid "TOOL_SURVEY"
+msgstr "Ankete"
+
+msgid "GreyIcons"
+msgstr "Moduli"
+
+msgid "Interaction"
+msgstr "Alati za interakciju"
+
+msgid "Authoring"
+msgstr "Autorski alati"
+
+msgid "Administration"
+msgstr "Administracija"
+
+msgid "IntroductionTextUpdated"
+msgstr "Ažuriran uvodni tekst"
+
+msgid "IntroductionTextDeleted"
+msgstr "Obrisan uvodni tekst"
+
+msgid "SessionIdentifier"
+msgstr "Identifikator sesije"
+
+msgid "SessionName"
+msgstr "Naziv sesije"
+
+msgid "SessionCategory"
+msgstr "Kategorija sesije"
+
+msgid "SessionData"
+msgstr "Podaci sesije"
+

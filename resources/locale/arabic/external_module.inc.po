@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "إنك لم تختر أي ملف لإرساله ، أو إنها كبيرة جداً"
+
+msgid "langLinkTarget"
+msgstr "الرابط المستهدف"
+
+msgid "langSameWindow"
+msgstr "في نفس النافذة"
+
+msgid "langNewWindow"
+msgstr "في نافذة جديدة"
+
+msgid "langAdded"
+msgstr " أضيف"
+
+msgid "langAddLink"
+msgstr "إضافة الرابط"
+
+msgid "langEditLink"
+msgstr "حرر رابط صفحة المقرر"
+

@@ -1,0 +1,99 @@
+msgid "Wiki"
+msgstr "Grupp wiki"
+
+msgid "StartPage"
+msgstr "Huvudsida"
+
+msgid "EditThisPage"
+msgstr "Redigera den här sidan"
+
+msgid "ShowPageHistory"
+msgstr "Historik"
+
+msgid "RecentChanges"
+msgstr "Senast ändrad"
+
+msgid "AllPages"
+msgstr "Alla sidor"
+
+msgid "AddNew"
+msgstr "Lägg till sida"
+
+msgid "ChangesStored"
+msgstr "Dina ändringar sparades"
+
+msgid "NewWikiSaved"
+msgstr "Wikisidan sparades. Du kan se den på:"
+
+msgid "DefaultContent"
+msgstr "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">För att redigera sidan, klicka här --> </p>"
+
+msgid "CourseWikiPages"
+msgstr "Wikisidor"
+
+msgid "GroupWikiPages"
+msgstr "Gruppera wikisidor"
+
+msgid "NoWikiPageTitle"
+msgstr "Dina ändringar sparades. Du måste dessutom ge sidan ett namn"
+
+msgid "WikiPageTitleExist"
+msgstr "Sidnamnet finns redan. För att redigera sidan klicka här:"
+
+msgid "WikiDiffAddedLine"
+msgstr "En rad har lagts till"
+
+msgid "WikiDiffDeletedLine"
+msgstr "En rad togs bort"
+
+msgid "WikiDiffMovedLine"
+msgstr "En rad är flyttad"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "Rad utan ändringar"
+
+msgid "DifferencesNew"
+msgstr "Versionsändringar"
+
+msgid "DifferencesOld"
+msgstr "gammal version av"
+
+msgid "Differences"
+msgstr "Skillnader"
+
+msgid "MostRecentVersion"
+msgstr "Visa senast valda versionen"
+
+msgid "ShowDifferences"
+msgstr "Jämför valda versioner"
+
+msgid "SearchPages"
+msgstr "Sök"
+
+msgid "Discuss"
+msgstr "Diskutera"
+
+msgid "History"
+msgstr "Historik"
+
+msgid "ShowThisPage"
+msgstr "Visa sidan"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "Endast kurs- och gruppmedlemmar kan redigera gruppwikin"
+
+msgid "PageUnlockedExtra"
+msgstr "Sidan är oskyddad. Alla kurs- eller gruppmedlemmar kan redigera den."
+
+msgid "AddOptionProtected"
+msgstr "Möjligheten att lägga till sidor är endast för lärare i den här wikin. Men kurs- och gruppmedlemmar kan redigera sidor som redan finns."
+
+msgid "NotifyByEmail"
+msgstr "Meddela mig via e-post när någon svarar"
+
+msgid "CancelNotifyByEmail"
+msgstr "Skicka inga meddelanden om ändringar på sidan"
+
+msgid "Visits"
+msgstr "Besök"
+

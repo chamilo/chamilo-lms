@@ -1,0 +1,102 @@
+msgid "langOnlineConference"
+msgstr "Konferens"
+
+msgid "langWash"
+msgstr "Tvätta"
+
+msgid "langReset"
+msgstr "Återställ"
+
+msgid "langSave"
+msgstr "Spara"
+
+msgid "langRefresh"
+msgstr "Ladda om"
+
+msgid "langIsNowInYourDocDir"
+msgstr "�r nu i ditt dokumentverktyg. <br /><B>Denna fil �r synlig</B>"
+
+msgid "langCopyFailed"
+msgstr "Utskrift misslyckades"
+
+msgid "langTypeMessage"
+msgstr "Var vänlig skriv ditt meddelande!"
+
+msgid "langConfirmReset"
+msgstr "Vill du verkligen radera alla meddelanden?"
+
+msgid "langHasResetChat"
+msgstr "har återställt chatten"
+
+msgid "langNoOnlineConference"
+msgstr "Det p�g�r ingen konferens f�r tillf�llet..."
+
+msgid "langMediaFile"
+msgstr "Direktljud eller videoströmning"
+
+msgid "langContentFile"
+msgstr "Presentation"
+
+msgid "langListOfParticipants"
+msgstr "Lista på deltagare"
+
+msgid "langYourPicture"
+msgstr "Din bild"
+
+msgid "langOnlineDescription"
+msgstr "Konferensbeskrivning"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Var vänlig markera denna kryssruta endast om du har en viktig fråga!"
+
+msgid "langQuestion"
+msgstr "fråga"
+
+msgid "langClearList"
+msgstr "Töm listan"
+
+msgid "langWhiteBoard"
+msgstr "Whiteboard"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Ordbehandlare</h2>Klipp ut och klistra in här från MS-word® och ändra. Deltagare kan se dina ändringar i realtid."
+
+msgid "langStreaming"
+msgstr "Direktuppspelning"
+
+msgid "langStreamURL"
+msgstr "URL för direktuppspelning"
+
+msgid "langStreamType"
+msgstr "Direktuppspelningstyp"
+
+msgid "langLinkName"
+msgstr "Länknamn"
+
+msgid "langLinkURL"
+msgstr "Länka URL"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Välkommen till <b>Onlinekonferens</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Ingen tillgänglig länk"
+
+msgid "langChat_reset_by"
+msgstr "återställt chatt"
+
+msgid "OrFile"
+msgstr "Eller fil"
+
+msgid "langCallSent"
+msgstr "Chattanrop har skickats. Väntar på godkännande från din partner."
+
+msgid "langChatDenied"
+msgstr "Ditt anrop har blivit avvisat av din partner."
+
+msgid "Send"
+msgstr "Skicka"
+
+msgid "Connected"
+msgstr "Ansluten"
+

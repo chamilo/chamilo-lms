@@ -1,0 +1,240 @@
+msgid "lang_already_enrolled"
+msgstr "zaten kay&#305;tl&#305;."
+
+msgid "lang_my_personnal_course_list"
+msgstr "Ders listem"
+
+msgid "lang_course_enrollment"
+msgstr "Kullanıcının dersleri"
+
+msgid "lang_course_not_available"
+msgstr "Bu ders kullan&#305;mda de&#287;il veya mevcut de&#287;il."
+
+msgid "lang_enroll"
+msgstr "KAYIT OL"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Yeni bir derse kaydol"
+
+msgid "lang_my_present_course_list"
+msgstr "Geçerli ders listem"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Bu kategoride kay&#305;t olunacak ders bulunmuyor."
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "veya KODu ile araştır"
+
+msgid "lang_search"
+msgstr "Araştır"
+
+msgid "lang_select_course_among_categories"
+msgstr "Kategorilerden ders seç"
+
+msgid "lang_select_course_in"
+msgstr "Ders seçilecek yer"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Araştırma sonuçlarından ders seç"
+
+msgid "Unsubscribe"
+msgstr "Kayıt Sil"
+
+msgid "lang_back_to_my_home_page"
+msgstr "AnaSayfa"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Ders listeme dön"
+
+msgid "langTitular"
+msgstr "Sorumlu"
+
+msgid "langBackToListOfThisUser"
+msgstr "Derslerin listesine dön"
+
+msgid "langAdministrationTools"
+msgstr "Yönetim Araçları"
+
+msgid "lang_back_to_parent_category"
+msgstr "Ana Kategoriye dön"
+
+msgid "lang_back_to_course_selection"
+msgstr "Ders seçimine dön"
+
+msgid "lang_up"
+msgstr "Ana Kategoriye dön"
+
+msgid "langCatList"
+msgstr "Kategoriler"
+
+msgid "langCourseList"
+msgstr "Ders listesi"
+
+msgid "Subscribe"
+msgstr "Kaydet"
+
+msgid "AlreadySubscribed"
+msgstr "Zaten kayıtlı"
+
+msgid "CodeMandatory"
+msgstr "Zorunlu kod"
+
+msgid "CourseCategoryMandatory"
+msgstr "Zorunlu ders kategorisi"
+
+msgid "TeacherMandatory"
+msgstr "Öğretmen zorunlu"
+
+msgid "CourseCategoryStored"
+msgstr "Ders kategorisi oluşturuldu"
+
+msgid "langWithoutTimeLimits"
+msgstr "Zaman kısıtı yok"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Ana kategori listesine dön"
+
+msgid "langAdded"
+msgstr "Eklendi"
+
+msgid "langDeleted"
+msgstr "Silindi"
+
+msgid "langKeeped"
+msgstr "Muhafaza edildi"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Görülmez / Kapalı"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Görülmez / Açık"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Görülür / Açık"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Görülür / Kapalı"
+
+msgid "langAdminThisUser"
+msgstr "Kullanıcıya dön"
+
+msgid "langManage"
+msgstr "Öğretim yönetimi"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Derse kaydınız yapıldı"
+
+msgid "langSubCat"
+msgstr "alt kategori"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Bu ders için kayıt silme izni bulunmuyor"
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Bu dersin Yetkilisisiniz."
+
+msgid "CourseManagement"
+msgstr "Ders Yönetimi"
+
+msgid "SortMyCourses"
+msgstr "Derslerimi sırala"
+
+msgid "SubscribeToCourse"
+msgstr "Derslere kaydet"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Derslerden kaydını sil"
+
+msgid "CreateCourseCategory"
+msgstr "Ders kategorisi oluştur"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Bu kategoriyi silmek istiyormusunuz ? Kategori içindeki dersler Ders Kategorilerinin dışına taşınacak."
+
+msgid "CourseCategories"
+msgstr "Ders Kategorileri"
+
+msgid "CoursesInCategory"
+msgstr "Bu kategorideki dersler"
+
+msgid "SearchCourse"
+msgstr "Ders Araştır"
+
+msgid "UpOneCategory"
+msgstr "<- Bir kategori yukarı"
+
+msgid "SearchResultsFor"
+msgstr "Araştırılan:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Bu dersten kaydınızı silmek istiyormusunuz ?"
+
+msgid "NoCourseCategory"
+msgstr "Herhangi bir ders kategorisi bulunmuyor."
+
+msgid "EditCourseCategorySucces"
+msgstr "Ders ilgili kategoriye eklendi."
+
+msgid "SubscribingNotAllowed"
+msgstr "Kayıt silme işlemine izin verilmiyor."
+
+msgid "CourseSortingDone"
+msgstr "Ders sıralaması tamamlandı"
+
+msgid "ExistingCourseCategories"
+msgstr "Mevcut ders kategorileri"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Ders kaydınız silindi."
+
+msgid "ViewOpenCourses"
+msgstr "Kullanılabilen dersleri göster"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Bilinmeyen bir hata oluştu. Lütfen platform yöneticisine başvurun"
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "Eğitim kodu yanlış"
+
+msgid "CourseRequiresPassword"
+msgstr "Eğitim için şifre gerekli"
+
+msgid "SubmitRegistrationCode"
+msgstr "Kayıt kodunu gönder"
+
+msgid "CourseCategoryDeleted"
+msgstr "Kategori silinmiş"
+
+msgid "CategorySortingDone"
+msgstr "Kategori sıralama yapıldı"
+
+msgid "CourseCategoryEditStored"
+msgstr "Kategori güncellendi"
+
+msgid "buttonCreateCourseCategory"
+msgstr "Eğitim kategorisini kaydet"
+
+msgid "buttonSaveCategory"
+msgstr "Kategoriyi kaydet"
+
+msgid "buttonChangeCategory"
+msgstr "Kategoriyi değiştir"
+
+msgid "SessionName"
+msgstr "Dönem ismi"
+
+msgid "SessionCategory"
+msgstr "Sömestr Kategorisi"
+
+msgid "Expand"
+msgstr "Genişlet"
+
+msgid "Collapse"
+msgstr "Daralt"
+
+msgid "CourseDetails"
+msgstr "Kurs detayları"
+
+msgid "GroupPendingInvitations"
+msgstr "Bekleyen Grup Davetleri"
+

@@ -1,0 +1,42 @@
+msgid "langCourseProgram"
+msgstr "  وصف المقرر"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "  لم يتم إضافة نبذة عن هذا المقرر حاليا."
+
+msgid "langEditCourseProgram"
+msgstr "  إضافة وتعديل وصف المقرر"
+
+msgid "QuestionPlan"
+msgstr "  سؤال للمدرس"
+
+msgid "langInfo2Say"
+msgstr "  معلومات للمستخدمين"
+
+msgid "langOuAutreTitre"
+msgstr "  العنوان"
+
+msgid "langNewBloc"
+msgstr "  أخرى"
+
+msgid "langAddCat"
+msgstr "  أضف تصنيف"
+
+msgid "langAdd"
+msgstr "  أضف"
+
+msgid "langValid"
+msgstr "  متاح"
+
+msgid "langBackAndForget"
+msgstr "  تراجع و انس الأمر"
+
+msgid "CourseDescriptionUpdated"
+msgstr "  تم تحديث وصف المقرر"
+
+msgid "CourseDescriptionDeleted"
+msgstr "  تم حذف وصف المقرر"
+
+msgid "CourseDescriptionIntro"
+msgstr "  لإنشاء توصيف المقرر, أنقر على العنوان و قم بتعبئة الحقوق المناسبة. <br /><br /> بعدها انقر على موافق وقم بتعبئة عنوان أخر"
+

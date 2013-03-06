@@ -1,0 +1,24 @@
+msgid "langExplanation"
+msgstr "Begitu anda klik  OK, Situs berisi Forum, Agenda, Document manager dll. dibuat. Login anda sebagai kreator situs,  memungkinkan untuk memodifikasinya sesuai kebutuhan anda."
+
+msgid "langTooBig"
+msgstr "Anda tidak memilih file untuk dikirim, atau itu terlalu besar"
+
+msgid "langCouldNot"
+msgstr "File tidak dapat dikirim"
+
+msgid "langAddPageToSite"
+msgstr "Tambah halaman ke situs"
+
+msgid "langCouldNotSendPage"
+msgstr "File ini tidak dalam format HTML dan tidak dapat diupload. Jika anda ingin mengirim dokumen non-HTML (PDF, Word, Power Point, Video, dll.) gunakan <a href=../document/document.php>Tool Dokumen</a>"
+
+msgid "langSendPage"
+msgstr "Halaman untuk dikirim"
+
+msgid "langPageTitleModified"
+msgstr "Judul halaman telah diubah"
+
+msgid "langPageAdded"
+msgstr "Halaman ditambahkan"
+

@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Mano darbotvarkė"
+
+msgid "langToday"
+msgstr "Šiandien"
+

@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Du valde ingen fil att sända, eller så var den för stor"
+
+msgid "langLinkTarget"
+msgstr "Länkens mål"
+
+msgid "langSameWindow"
+msgstr "I samma fönster"
+
+msgid "langNewWindow"
+msgstr "I ett nytt fönster"
+
+msgid "langAdded"
+msgstr "Tillagd"
+
+msgid "langAddLink"
+msgstr "Lägg till en länk"
+
+msgid "langEditLink"
+msgstr "Ändra Kurshemsidans länk"
+

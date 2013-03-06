@@ -1,0 +1,414 @@
+msgid "ForumDeleted"
+msgstr "Το Forum έχει διαγραφεί"
+
+msgid "ForumCategoryDeleted"
+msgstr "Η κατηγορία Forum έχει διαγραφεί"
+
+msgid "ForumLocked"
+msgstr "Το Forum μπλοκαρίστηκε"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "AddForumCategory"
+msgstr "Προσθήκη κατηγορίας Forum"
+
+msgid "AddForum"
+msgstr "Προσθήκη ενός Forum"
+
+msgid "Topics"
+msgstr "Θέματα"
+
+msgid "Posts"
+msgstr "Μηνύματα που αναρτήθηκαν / Posts"
+
+msgid "LastPosts"
+msgstr "Η πιο πρόσφατη ανάρτηση"
+
+msgid "Message"
+msgstr "Μύνημα"
+
+msgid "NoForumInThisCategory"
+msgstr "Δεν υπάρχουν Forum σε αυτή την κατηγορία"
+
+msgid "InForumCategory"
+msgstr "Δημιουργία μιας κατηγορίας"
+
+msgid "AllowAnonymousPosts"
+msgstr "Να επιτρέπονται οι ανώνυμες αναρτήσεις;"
+
+msgid "StudentsCanEdit"
+msgstr "Μπορούν οι εκπαιδευόμενοι να επεξεργάζονται τις δικές τους αναρτήσεις;"
+
+msgid "ApprovalDirect"
+msgstr "Έγκριση/ Άμεση ανάρτηση"
+
+msgid "AllowNewThreads"
+msgstr "Να επιτρέπεται στους εκπαιδευόμενους να αρχίζουν νέα νήματα"
+
+msgid "DefaultViewType"
+msgstr "Είδος προεπιλεγμένης εμφάνισης"
+
+msgid "GroupSettings"
+msgstr "Ρυθμίσεις ομάδας"
+
+msgid "NotAGroupForum"
+msgstr "Δεν είναι ένα Forum ομάδας"
+
+msgid "PublicPrivateGroupForum"
+msgstr "Πρόκειται για μία δημόσια ή ιδιωτική ομάδα του Forum;"
+
+msgid "Public"
+msgstr "Για όλους τους εκπαιδευόμενους"
+
+msgid "Private"
+msgstr "Μόνο για τα μέλη της ομάδας"
+
+msgid "NewPostStored"
+msgstr "Το μήνυμά σας αποθηκεύθηκε"
+
+msgid "ReturnTo"
+msgstr "Τώρα μπορείτε να επιστρέψετε στο"
+
+msgid "Or"
+msgstr "ή"
+
+msgid "ReplyToThread"
+msgstr "Απάντηση σε αυτό το νήμα"
+
+msgid "ReplyToMessage"
+msgstr "Απάντηση σε αυτό το μήνυμα"
+
+msgid "QuoteMessage"
+msgstr "Να παρατίθεται αυτό το μήνυμα"
+
+msgid "NewTopic"
+msgstr "Δημιουργία νήματος"
+
+msgid "Replies"
+msgstr "Απαντήσεις"
+
+msgid "Views"
+msgstr "Εμφανίσεις"
+
+msgid "LastPost"
+msgstr "Η πιο πρόσφατη ανάρτηση"
+
+msgid "NotifyByEmail"
+msgstr "Να ειδοποιούμαι μέσω e-mail όταν κάποιος απαντά"
+
+msgid "StickyPost"
+msgstr "Αυτό είναι έν αυτοκόλλητο μήνυμα/ sticky message (εμφανίζεται πάντοτε από πάνω και έχει ένα ειδκό αυτοκόλλητο εικονίδιο)"
+
+msgid "ReplyShort"
+msgstr "Σχετ.:"
+
+msgid "DeletePost"
+msgstr "Είστε σίγουρος/η ότι θέλετε να διαγράψετε αυτή τη ανάρτηση; Διαγράφοντάς την, θα διαγραφούν και όλες οι απαντήσεις σε αυτήν. Παρακαλώ ελέγξτε την εμφάνιση του νήματος, για να δείτε ποιες αναρτήσεις θα διαγραφούν."
+
+msgid "Locked"
+msgstr "Κλειδώθηκε: οι εκπαιδευόμενοι δεν μπορούν πλέον να αναρτούν μηνύματα σε αυτή την κατηγορία Forum, ή νήματος, αλλά μπορούν ακόμη να διαβάζουν τα μηνύματα που είχαν ήδη αναρτηθεί."
+
+msgid "Unlocked"
+msgstr "Ξεκλειδώθηκε: οι εκπαιδευόμενοι μπορούν να αναρτούν νέα μηνύματα σε αυτή την κατηγορία forum, ή νήματος."
+
+msgid "FlatView"
+msgstr "Εμφάνιση λίστας"
+
+msgid "ThreadedView"
+msgstr "Εμφάνιση σε Νήματα"
+
+msgid "Structure"
+msgstr "Δομή"
+
+msgid "ForumCategoryAdded"
+msgstr "Προστέθηκε η κατηγορία forum"
+
+msgid "ForumCategoryEdited"
+msgstr "H κατηγορία forum τροποποιήθηκε"
+
+msgid "ForumAdded"
+msgstr "To Forum προστέθηκε"
+
+msgid "ForumEdited"
+msgstr "Το Forum τροποποιήθηκε"
+
+msgid "NewThreadStored"
+msgstr "Το νέο νήμα προστέθηκε"
+
+msgid "Approval"
+msgstr "Έγκριση"
+
+msgid "Direct"
+msgstr "Άμεση"
+
+msgid "ForGroup"
+msgstr "Για την Ομάδα"
+
+msgid "ThreadLocked"
+msgstr "Το νήμα είναι μπλοκαρισμένο."
+
+msgid "NotAllowedHere"
+msgstr "Δεν επιτρέπεται η πρόσβασή σας εδώ."
+
+msgid "ReplyAdded"
+msgstr "Η απάντηση προστέθηκε"
+
+msgid "EditPost"
+msgstr "Επεξεργασία μιας ανάρτησης"
+
+msgid "EditPostStored"
+msgstr "Η ανάρτηση τροποποιήθηκε"
+
+msgid "NewForumPost"
+msgstr "Νέα ανάρτηση στο Forum"
+
+msgid "YouWantedToStayInformed"
+msgstr "Δηλώσατε ότι θέλατε να ειδοποιείσθε μέσω e-mail όταν κάποιος απαντά στο νήμα"
+
+msgid "MessageHasToBeApproved"
+msgstr "Το μήνυμά σας πρέπει πρώτα να εγκριθεί πριν εμφανισθεί δημοσίως."
+
+msgid "AllowAttachments"
+msgstr "Να επιτρέπονται τα συνημμένα αρχεία"
+
+msgid "EditForumCategory"
+msgstr "Επεξεργασία κατηγορίας Forum"
+
+msgid "MovePost"
+msgstr "Μετακίνηση ανάρτησης"
+
+msgid "MoveToThread"
+msgstr "Μετακίνηση σε ένα νήμα"
+
+msgid "ANewThread"
+msgstr "Ένα νέο νήμα"
+
+msgid "Reply"
+msgstr "Απάντηση"
+
+msgid "DeleteForum"
+msgstr "Διαγραφή του Forum;"
+
+msgid "DeleteForumCategory"
+msgstr "Διαγραφή κατηγορίας Forum;"
+
+msgid "Lock"
+msgstr "Κλείδωμα"
+
+msgid "Unlock"
+msgstr "Ξεκλείδωμα"
+
+msgid "MoveThread"
+msgstr "Μετακίνηση νήματος"
+
+msgid "PostVisibilityChanged"
+msgstr "Η ορατότητα της ανάρτησης άλλαξε"
+
+msgid "PostDeleted"
+msgstr "Η ανάρτηση έχει διαγραφεί"
+
+msgid "MakeInvisible"
+msgstr "Να γίνει αόρατο"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "Μπορείτε να βρείτε το νήμα εδώ"
+
+msgid "MakeVisible"
+msgstr "Να γίνει ορατό"
+
+msgid "DeleteCompleteThread"
+msgstr "Διαγραφή ολόκληρου του νήματος;"
+
+msgid "PostDeletedSpecial"
+msgstr "Η ειδική ανάρτηση έχει διαγραφεί"
+
+msgid "ThreadDeleted"
+msgstr "Το νήμα έχει διαγραφεί"
+
+msgid "NextMessage"
+msgstr "Επόμενο μήνυμα"
+
+msgid "PrevMessage"
+msgstr "Προηγούμενο μήνυμα"
+
+msgid "FirstMessage"
+msgstr "Πρώτο μήνυμα"
+
+msgid "LastMessage"
+msgstr "Τελευταίο μήνυμα"
+
+msgid "ForumSearch"
+msgstr "Αναζήτηση στο Forum"
+
+msgid "SearchTerm"
+msgstr "Αναζήτηση όρου"
+
+msgid "ForumSearchResults"
+msgstr "Αποτελέσματα αναζήτησης στο Forum"
+
+msgid "ForumSearchInformation"
+msgstr "Μπορείτε να κάνετε αναζήτηση πολλαπλών λέξεων με τη χρήση του συμβόλου +"
+
+msgid "YouWillBeNotifiedOfNewPosts"
+msgstr "Θα ειδοποιηθείτε για νέες αναρτήσεις μέσω e-mail."
+
+msgid "YouWillNoLongerBeNotifiedOfNewPosts"
+msgstr "Δεν θα ειδοποιείσθε πλέον για τις νέες αναρτήσεις μέσω e-mail"
+
+msgid "AddImage"
+msgstr "Προσθήκη εικόνας"
+
+msgid "QualifyThread"
+msgstr "Αξιολόγηση νήματος"
+
+msgid "ThreadUsersList"
+msgstr "Κατάλογος χρηστών αυτού του νήματος"
+
+msgid "StudentList"
+msgstr "Κατάλογος εκπαιδευόμενων"
+
+msgid "QualifyThisThread"
+msgstr "Αξιολόγηση αυτού του νήματος"
+
+msgid "CourseUsers"
+msgstr "Χρήστες αυτής της σειράς μαθημάτων"
+
+msgid "PostsNumber"
+msgstr "Αριθμός αναρτήσεων"
+
+msgid "NumberOfPostsForThisUser"
+msgstr "Αριθμός αναρτήσεων για αυτόν τον χρήστη"
+
+msgid "AveragePostPerUser"
+msgstr "Αναρτήσεις ανά χρήστη"
+
+msgid "QualificationChangesHistory"
+msgstr "Ιστορικό αλλαγών αξιολόγησης"
+
+msgid "MoreRecent"
+msgstr "Οι πιο πρόσφατες"
+
+msgid "Older"
+msgstr "Οι παλιότερες"
+
+msgid "OrderBy"
+msgstr "Κατάταξη ανά"
+
+msgid "WhoChanged"
+msgstr "Ποιος άλλαξε"
+
+msgid "NoteChanged"
+msgstr "Η Σημείωση άλλαξε"
+
+msgid "DateChanged"
+msgstr "Η ημερομηνία άλλαξε"
+
+msgid "ViewComentPost"
+msgstr "Εμφάνιση σχολίων στα μηνύματα"
+
+msgid "AllStudents"
+msgstr "Όλοι οι εκπαιδευόμενοι"
+
+msgid "NamesAndLastNames"
+msgstr "Ονόματα και Επίθετα"
+
+msgid "MaxScore"
+msgstr "Βαθμολογία"
+
+msgid "QualificationCanNotBeGreaterThanMaxScore"
+msgstr "Η βαθμολογία δεν μπορεί να υπερβαίνει την μέγιστη βαθμολογία"
+
+msgid "ThreadStatistics"
+msgstr "Στατιστικές για τα νήματα"
+
+msgid "Thread"
+msgstr "Νήμα"
+
+msgid "NotifyMe"
+msgstr "Να ειδοποιούμαι"
+
+msgid "ConfirmUserQualification"
+msgstr "Επιβεβαίωση βαθμού"
+
+msgid "NotChanged"
+msgstr "Δεν άλλαξε"
+
+msgid "QualifyThreadGradebook"
+msgstr "Αξιολόγηση αυτού του νήματος"
+
+msgid "QualifyWeight"
+msgstr "Βαρύτητα/ Στάθμιση στην Αναφορά"
+
+msgid "QualifyNumeric"
+msgstr "Βαθμολογία"
+
+msgid "AlterQualifyThread"
+msgstr "Επεξεργασία βαθμολογίας νήματος"
+
+msgid "ForumMoved"
+msgstr "Το forum μετακινήθηκε"
+
+msgid "YouMustAssignWeightOfQualification"
+msgstr "Πρέπει να δώσετε έναν βαθμό σε αυτή την δραστηριότητα"
+
+msgid "DeleteAttachmentFile"
+msgstr "Διαγραφή συνημμένου αρχείου"
+
+msgid "EditAnAttachment"
+msgstr "Επεξεργασία ενός συνημμένου"
+
+msgid "SeeForum"
+msgstr "Προβολή του Forum"
+
+msgid "CreateForum"
+msgstr "Δημιουργία Forum"
+
+msgid "ModifyForum"
+msgstr "Επεξεργασία Forum"
+
+msgid "CreateThread"
+msgstr "Δημιουργία νήματος"
+
+msgid "ModifyThread"
+msgstr "Επεξεργασία νήματος"
+
+msgid "EditForum"
+msgstr "Επεξεργασία Forum"
+
+msgid "BackToForum"
+msgstr "Επιστροφή στο Forum"
+
+msgid "BackToForumOverview"
+msgstr "Επισκόπηση επιστροφής στο Forum"
+
+msgid "BackToThread"
+msgstr "Επιστροφή στο Νήμα"
+
+msgid "ForumcategoryLocked"
+msgstr "Αυτή η κατηγορία Forum είναι κλειδωμένη"
+
+msgid "PreviewImage"
+msgstr "Προεπισκόπηση εικόνας"
+
+msgid "UpdateImage"
+msgstr "Ενημέρωση εικόνας"
+
+msgid "EnableTimeLimits"
+msgstr "Ενεργοποίηση χρονικών ορίων"
+
+msgid "RemoveSearchResults"
+msgstr "Διαγραφή αποτελεσμάτων αναζήτησης"
+
+msgid "ThreadMoved"
+msgstr "Το νήμα μετακινήθηκε"
+
+msgid "MigrateForum"
+msgstr "Μετακόμιση Forum"
+
+msgid "YouWillBeNotified"
+msgstr "Θα ειδοποιηθείτε"
+
+msgid "ForumCategories"
+msgstr "Κατηγορίες Forum"
+

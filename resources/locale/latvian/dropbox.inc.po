@@ -1,0 +1,303 @@
+msgid "Upload"
+msgstr "Augšupielādēt"
+
+msgid "BackList"
+msgstr "Atgriezties pie Jūsu Dokumentu un failu apmaiņas instrumenta"
+
+msgid "ShowFeedback"
+msgstr "Parādīt atsauksmi"
+
+msgid "GiveFeedback"
+msgstr "Rakstīt / Labot atsauksmi"
+
+msgid "JustUploadInSelect"
+msgstr "Vienkārši augšupielādēt"
+
+msgid "MailingNothingFor"
+msgstr "Nav nekā priekš"
+
+msgid "MailingFileNotRegistered"
+msgstr "(nav reģistrēts šajā Kursā)"
+
+msgid "MailingFileSentTo"
+msgstr "nosūtīts"
+
+msgid "MailingFileIsFor"
+msgstr "ir priekš"
+
+msgid "MailingFileRecipDup"
+msgstr "vairākiem lietotājiem ir"
+
+msgid "MailingFileRecipNotFound"
+msgstr "Šāds students neeksistē"
+
+msgid "MailingFileNoRecip"
+msgstr "nosaukumā nav ietverts saņēmēja ID"
+
+msgid "MailingFileNoPostfix"
+msgstr "nosaukums nebeidzas ar"
+
+msgid "MailingFileNoPrefix"
+msgstr "nosaukums nesākas ar"
+
+msgid "MailingFileFunny"
+msgstr "nav nosaukuma, vai paplašinājumā nav 1-4 burtu vai ciparu"
+
+msgid "MailingZipDups"
+msgstr "Ziņu apmaiņas ZIP failā nedrīkst atrasties vienādi faili - tas netiks nosūtīts"
+
+msgid "MailingZipPhp"
+msgstr "Ziņu apmaiņas ZIP failā nedrīkst atrasties PHP faili - savādāk tas netiks nosūtīts"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "Ziņu apmaiņas ZIP fails ir tukšs vai nav ZIP fails"
+
+msgid "MailingWrongZipfile"
+msgstr "Ziņu apmaiņai jābūt ZIP failam ar STUDENTID vai LOGINNAME"
+
+msgid "MailingConfirmSend"
+msgstr "Sūtīt ietvertos failus dažādiem saņēmējiem?"
+
+msgid "MailingSend"
+msgstr "Sūtīt ietvertos failus"
+
+msgid "MailingNotYetSent"
+msgstr "Ziņu apmaiņas faili vēl netika izsūtīti..."
+
+msgid "MailingInSelect"
+msgstr "---Ziņu apmaiņa---"
+
+msgid "MailingAsUsername"
+msgstr "Ziņu apmaiņa"
+
+msgid "FileDeleted"
+msgstr "Iezīmētais fails tika izdzēsts no Jūsu Dokumentu un failu apmaiņas instrumenta"
+
+msgid "DocAdd"
+msgstr "Raksts tika veiksmīgi pievienots"
+
+msgid "Sender"
+msgstr "sūtītājs"
+
+msgid "Author"
+msgstr "autors"
+
+msgid "FileSize"
+msgstr "faila izmērs"
+
+msgid "Title"
+msgstr "virsraksts"
+
+msgid "OverwriteFile"
+msgstr "Vai pārrakstīt iepriekš sūtīto failu?"
+
+msgid "Ok"
+msgstr "Darīts!"
+
+msgid "Unknown"
+msgstr "nezināms"
+
+msgid "SentOn"
+msgstr "uz"
+
+msgid "SentTo"
+msgstr "Nosūtīts"
+
+msgid "ConfirmDelete"
+msgstr "Ar šo darbību tiks izdzēsts ieraksts tikai no Jūsu saraksta"
+
+msgid "SendTo"
+msgstr "Nosūtīt"
+
+msgid "Description"
+msgstr "Dokumenta apraksts"
+
+msgid "UploadFile"
+msgstr "Augšupielādēt dokumentu"
+
+msgid "ErrorCreatingDir"
+msgstr "Nav iespējams izveidot Dokumentu un failu apmaiņas instrumenta direktoriju. Lūdzu, sazinieties ar sistēmas administratoru."
+
+msgid "UploadError"
+msgstr "Augšupielāde neizdevās! Lūdzu, pārbaudiet maksimālos faila izmēru ierobežojumus un mapes tiesības."
+
+msgid "TooBig"
+msgstr "Jūs neizvēlējāties failu vai arī faila izmērs pārsniedz pieļaujamo."
+
+msgid "NoFileSpecified"
+msgstr "Jūs nenorādījāt failu, ko augšupielādēt!"
+
+msgid "NoUserSelected"
+msgstr "Lūdzu, izvēlieties lietotāju, kam nosūtīt failu."
+
+msgid "BadFormData"
+msgstr "Augšupielāde nenotika: nekorektu datu kopa. Lūdzu, sazinieties ar sistēmas administratoru."
+
+msgid "GeneralError"
+msgstr "Ir notikusi darbības kļūda. Lūdzu, sazinieties ar sistēmas administratoru."
+
+msgid "Dropbox"
+msgstr "Dokumentu un failu apmaiņa"
+
+msgid "Help"
+msgstr "Palīgs"
+
+msgid "ReceivedFiles"
+msgstr "Saņemtie faili"
+
+msgid "SentFiles"
+msgstr "Sūtīt failus"
+
+msgid "ReceivedTitle"
+msgstr "Nosaukums"
+
+msgid "SentTitle"
+msgstr "Nosūtītie faili"
+
+msgid "Authors"
+msgstr "Autori"
+
+msgid "Size"
+msgstr "Izmērs"
+
+msgid "LastResent"
+msgstr "Pēdējoreiz pārsūtīts"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Izcelsmes vieta"
+
+msgid "UploadNewFile"
+msgstr "Koplietot failu / dokumentu"
+
+msgid "AreYouSureToDelete"
+msgstr "Jūs esat pārliecināts par vēlmi to dzēst ?"
+
+msgid "Feedback"
+msgstr "Atgriezeniskā saite / atsauksme"
+
+msgid "CloseFeedback"
+msgstr "Aizvērt atgriezeniskās saites / atsauksmes logu"
+
+msgid "AddNewFeedback"
+msgstr "Pievienot atgriezenisko saiti / atsauksmi"
+
+msgid "DropboxFeedbackStored"
+msgstr "Atgriezeniskās saites (atsauksmes) ziņojums ir saglabāts"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Visi lietotāji šo failu ir izdzēsuši, tādēļ tie neviens neredzēs atgriezenisko saiti (atsauksmi), kuru Jūs tam pievienojat."
+
+msgid "FeedbackError"
+msgstr "Atsauksmes kļūda"
+
+msgid "PleaseTypeText"
+msgstr "Lūdzu ierakstiet kādu tekstu"
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "Jums ir liegts lejupielādēt šo failu"
+
+msgid "CheckAtLeastOneFile"
+msgstr "Atzīmējiet vismaz vienu failu"
+
+msgid "ReceivedFileDeleted"
+msgstr "Saņemtais fails tika izdzēsts"
+
+msgid "SentFileDeleted"
+msgstr "Nosūtītais fails tika izdzēsts"
+
+msgid "FilesMoved"
+msgstr "Atzīmētie faili tika pārvietoti"
+
+msgid "ReceivedFileMoved"
+msgstr "Saņemtie faili tika pārvietoti"
+
+msgid "SentFileMoved"
+msgstr "Nosūtītie faili tika pārvietoti"
+
+msgid "NotMovedError"
+msgstr "Faili nav pārvietojami"
+
+msgid "AddNewCategory"
+msgstr "Pievienot jaunu mapi"
+
+msgid "EditCategory"
+msgstr "Rediģēt šo kategoriju"
+
+msgid "CategoryName"
+msgstr "Mapes nosaukums"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Lūdzu piešķiriet kategorijai nosaukumu"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Šāda kategorija jau eksistē. Lūdzu lietojiet citu nosaukumu."
+
+msgid "CurrentlySeeing"
+msgstr "Jūs esat atvēruši mapi"
+
+msgid "CategoryStored"
+msgstr "Mape ir izveidota"
+
+msgid "CategoryModified"
+msgstr "Kategorija tika pārveidota"
+
+msgid "CategoryDeleted"
+msgstr "Kategorija tika izdzēsta"
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "Autora lauciņam jābūt aizpildītam"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Jums ir jāizvēlas vismaz viens galamērķis"
+
+msgid "DropboxFileTooBig"
+msgstr "Faila izmērs ir <b>par lielu</b>"
+
+msgid "TheFileIsNotUploaded"
+msgstr "Fails nav augšupielādēts"
+
+msgid "FileUploadSucces"
+msgstr "Fails ir veiksmīgi augšupielādēts"
+
+msgid "MailingNonMailingError"
+msgstr "Ziņu apmaiņu nav iespējams pārrakstīt ar ne-ziņu apmaiņu un <i>vice-versa</i>"
+
+msgid "MailingSelectNoOther"
+msgstr "Ziņu apmaiņu nebija iespējams kombinēt ar citiem saņēmējiem"
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "Tikai augšupielāde. To nevar apvienot ar citiem saņēmējiem"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Dokumentu apmaiņas vietnē ievietots jauns, Jums paredzēts,dokuments!"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Jaunais fails ir nosūtīts Dokumentu un failu apmaiņas vietni"
+
+msgid "langAddEdit"
+msgstr "Pievienot / Rediģēt"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Mape ir tukša"
+
+msgid "AddComment"
+msgstr "Saglabāt atgriezenisko saiti"
+
+msgid "SentCatgoryDeleted"
+msgstr "Mape ir izdzēsta"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "Mape ir izdzēsta"
+
+msgid "InvalideUserDetected"
+msgstr "Konstatēts nederīgs lietotājs"
+
+msgid "InvalideGroupDetected"
+msgstr "Konstatēta nederīga grupa"
+
+msgid "OverviewOfFilesInThisZip"
+msgstr "Pārskats par failiem šajā Zip"
+

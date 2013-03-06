@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Resource added. You can now go back to the path or add more resources."
+
+msgid "LearningPath"
+msgstr "Ścieżka nauczania"
+
+msgid "LevelUp"
+msgstr "level up"
+
+msgid "AddIt"
+msgstr "Add it"
+
+msgid "MainCategory"
+msgstr "main category"
+
+msgid "lang_delete_added_resources"
+msgstr "Delete added resources"
+
+msgid "AddToLinks"
+msgstr "Add to the course links"
+
+msgid "DontAdd"
+msgstr "do not add"
+
+msgid "lang_show_all_added_resources"
+msgstr "Show all added resources"
+
+msgid "ResourcesAdded"
+msgstr "Added new resources"
+
+msgid "BackTo"
+msgstr "Back to"
+
+msgid "ExternalResources"
+msgstr "External resources"
+
+msgid "CourseResources"
+msgstr "Course resources"
+
+msgid "ExternalLink"
+msgstr "External link"
+
+msgid "DropboxAdd"
+msgstr "Add the dropbox page to this chapter."
+
+msgid "AddAssignmentPage"
+msgstr "Add the upload assignment page to this chapter."
+
+msgid "Exercise"
+msgstr "Test"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "AdValvas"
+msgstr "Ad Valvas"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "ShowDelete"
+msgstr "Pokaż / Skasuj"
+
+msgid "IntroductionText"
+msgstr "Tekst wprowadzający"
+
+msgid "CourseDescription"
+msgstr "Opis kursu"
+
+msgid "Groups"
+msgstr "Grupy"
+
+msgid "Users"
+msgstr "Użytkownicy"
+
+msgid "IntroductionTextAdd"
+msgstr "Dodaj stronę zawierającą tekst wprowadzający do tego rozdziału."
+
+msgid "CourseDescriptionAdd"
+msgstr "Dodaj stronę zawierającą opis tego rozdziału kursu."
+
+msgid "GroupsAdd"
+msgstr "Dodaj do tego rozdziału stronę zawierającą grupy."
+
+msgid "UsersAdd"
+msgstr "Dodaj do tego rozdziału stronę zawierającą użytkowników."
+
+msgid "ExportableCourseResources"
+msgstr "Eksportowalne zasoby kursu"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Zasoby kursu związane z Chamilo\'em"
+
+msgid "LinkTarget"
+msgstr "Cel linka"
+
+msgid "SameWindow"
+msgstr "W tym samym oknie"
+
+msgid "NewWindow"
+msgstr "W nowym oknie"
+
+msgid "StepDeleted1"
+msgstr "Ten"
+
+msgid "StepDeleted2"
+msgstr "element w tym narzędziu został skasowany."
+
+msgid "Modify"
+msgstr "modyfikuj"
+
+msgid "Chapter"
+msgstr "Rozdział"
+
+msgid "NoAgendaItems"
+msgstr "Nie ma &#380;adnych elementów Agendy"
+
+msgid "AgendaAdd"
+msgstr "Dodaj nowy element agendy"
+
+msgid "UserGroupFilter"
+msgstr "Filtr grup/użytkowników"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Sortuj Agendę chronologicznie (góra)"
+
+msgid "ShowCurrent"
+msgstr "Pokaż elementy agendy w bieżącym miesiącu"
+
+msgid "ModifyCalendarItem"
+msgstr "Modyfikuj element agendy"
+
+msgid "ItemTitle"
+msgstr "Tytuł elementu"
+
+msgid "Detail"
+msgstr "Szczegóły"
+
+msgid "EditSuccess"
+msgstr "Element agendy został wyedytowany"
+
+msgid "AddCalendarItem"
+msgstr "Dodaj nowy element agendy"
+
+msgid "AddAnn"
+msgstr "Dodaj ogłoszenie"
+
+msgid "ForumAddNewTopic"
+msgstr "Forum: dodaj nowy temat"
+
+msgid "ForumEditTopic"
+msgstr "Forum: edytuj temat"
+
+msgid "ExerciseAnswers"
+msgstr "Ćwiczenie: Odpowiedzi"
+
+msgid "ForumReply"
+msgstr "Forum: odpowiedz"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Sortuj Agendę chronologicznie (dół)"
+

@@ -1,0 +1,453 @@
+msgid "SurveyTitle"
+msgstr "Apklausos pavadinimas"
+
+msgid "SurveyIntroduction"
+msgstr "Apklausos apibūdinimas"
+
+msgid "CreateNewSurvey"
+msgstr "Sukurti naują apklausą"
+
+msgid "Survey"
+msgstr "Apklausa"
+
+msgid "SurveyTemplate"
+msgstr "Apklausos šablonas"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "Įveskite apklausos antraštę"
+
+msgid "PleaseEnterValidDate"
+msgstr "Įveskite teisingą datą"
+
+msgid "NotPublished"
+msgstr "Nepublikuojama"
+
+msgid "AdvancedReportDetails"
+msgstr "Advanced report allows to choose the user and the questions to see more precis informations"
+
+msgid "AdvancedReport"
+msgstr "Išplėstinė ataskaita"
+
+msgid "CompleteReportDetails"
+msgstr "Complete report allows to see all the results given by the people questioned, and export it in csv (for Excel)"
+
+msgid "CompleteReport"
+msgstr "Užbaigti ataskaitą"
+
+msgid "OnlyThoseAddresses"
+msgstr "Siūsti ataskaitą tik šiais adresais"
+
+msgid "BackToQuestions"
+msgstr "Atgal į klausimus"
+
+msgid "SelectWhichLanguage"
+msgstr "Parinkti apklausos kalbą"
+
+msgid "CreateInAnotherLanguage"
+msgstr "Sukurti šią apklausą kita kalba"
+
+msgid "ExportInExcel"
+msgstr "Eksportuoti Excel formatu"
+
+msgid "ComparativeResults"
+msgstr "Palyginimo rezultatai"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "Išrinkite duomenis, kuriuos norite palyginti"
+
+msgid "OrCopyPasteUrl"
+msgstr "Or copy paste the link into the url bar of your browser :"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "Apklausa"
+
+msgid "SurveyNotShared"
+msgstr "Kol kas apklausų nėra"
+
+msgid "ViewSurvey"
+msgstr "peržiūrėti apklausą"
+
+msgid "SelectDisplayType"
+msgstr "Išsirinkti peržiūros tipą :"
+
+msgid "Thanks"
+msgstr "Grįžtamasis ryšys"
+
+msgid "SurveyReporting"
+msgstr "Apklausos ataskaitos"
+
+msgid "NoSurveyAvailable"
+msgstr "Apklausos nėra"
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "publikuota"
+
+msgid "CreateFromExistingSurvey"
+msgstr "Sukurti iš egzistuojančios apklausos"
+
+msgid "Publish"
+msgstr "Publikuoti apklausą"
+
+msgid "SearchASurvey"
+msgstr "Ieškoti apklausos"
+
+msgid "CourseName"
+msgstr "Course name"
+
+msgid "SurveysOfAllCourses"
+msgstr "Visų kursų apklausos"
+
+msgid "PleaseSelectAChoice"
+msgstr "Pasirinkite"
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "Duomenų bazėje nėra klausimų"
+
+msgid "UpdateQuestionType"
+msgstr "Atnaujinti klausimo tipą:"
+
+msgid "AddAnotherQuestion"
+msgstr "Įrašyti naują klausimą"
+
+msgid "IsShareSurvey"
+msgstr "Dalintis apklausa su kitais"
+
+msgid "Proceed"
+msgstr "Tęsti"
+
+msgid "PleaseFillNumber"
+msgstr "Užpildykite taškus skaičiais."
+
+msgid "PleaseFillAllPoints"
+msgstr "Užpildykite taškais nuo 1 iki 5"
+
+msgid "PleasFillAllAnswer"
+msgstr "Užpildykite visus atsakymų laukelius."
+
+msgid "PleaseSelectFourTrue"
+msgstr "Prašome išrinkti mažiausiai keturis teisingus atsakymus."
+
+msgid "PleaseSelectFourDefault"
+msgstr "Prašome išrinkti mažiausiai keturis atsakymus pagal nutylėjimą."
+
+msgid "PleaseFillDefaultText"
+msgstr "Prašome įrašyti tekstą pagal nutylėjimą"
+
+msgid "ModifySurveyInformation"
+msgstr "Redaguoti apklausos informaciją"
+
+msgid "ViewQuestions"
+msgstr "Peržiūrėti klausimus"
+
+msgid "CreateSurvey"
+msgstr "Sukurti apklausą"
+
+msgid "FinishSurvey"
+msgstr "Užbaigti apklausą"
+
+msgid "QuestionsAdded"
+msgstr "Klausimai įrašyti"
+
+msgid "DeleteSurvey"
+msgstr "Ištrinti apklausą"
+
+msgid "SurveyCode"
+msgstr "Apklausos kodas"
+
+msgid "SurveyList"
+msgstr "Apklausų sąrašas"
+
+msgid "SurveyAttached"
+msgstr "Apklausa prijungta"
+
+msgid "QuestionByType"
+msgstr "Klausimai pagal tipą"
+
+msgid "SelectQuestionByType"
+msgstr "Išrinkti klausimą pagal tipą"
+
+msgid "PleaseEnterAQuestion"
+msgstr "Įrašykite klausimą"
+
+msgid "NoOfQuestions"
+msgstr "Klausimų skaičius"
+
+msgid "Question"
+msgstr "Klausimas"
+
+msgid "ThisCodeAlradyExists"
+msgstr "Toks kodas jau yra"
+
+msgid "SaveAndExit"
+msgstr "Išsaugoti ir išeiti"
+
+msgid "ViewAnswers"
+msgstr "View answers"
+
+msgid "CreateExistingSurvey"
+msgstr "Sukurti iš jau egzistuojančios apklausos"
+
+msgid "SurveyName"
+msgstr "Apklausos pavadinimas"
+
+msgid "SurveySubTitle"
+msgstr "Survey subtitle"
+
+msgid "ShareSurvey"
+msgstr "Dalintis apklausa"
+
+msgid "SurveyThanks"
+msgstr "Apklausos padėkos tekstas"
+
+msgid "EditSurvey"
+msgstr "Redaguoti apklausą"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "arba grįžkite į apklausos peržiūrą"
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "There is a parameter missing in the link. Please use copy and past"
+
+msgid "WrongInvitationCode"
+msgstr "Neteisingas pakvietimo kodas"
+
+msgid "SurveyFinished"
+msgstr "Jūs sėkmingai užpildėte apklausą."
+
+msgid "SurveyPreview"
+msgstr "Apklausos peržiūra"
+
+msgid "InvallidSurvey"
+msgstr "Neteisinga apklausa"
+
+msgid "AddQuestion"
+msgstr "Įdėti klausimą"
+
+msgid "EditQuestion"
+msgstr "Redaguoti klausimą"
+
+msgid "TypeDoesNotExist"
+msgstr "Šis tipas neegzistuoja"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "Apklausa sėkmingai sukurta"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Dabar galite įdėti klausimus į apklausą"
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "Apklausa sėkmingai atnaujinta"
+
+msgid "QuestionAdded"
+msgstr "Klausimas įrašytas."
+
+msgid "QuestionUpdated"
+msgstr "Klausimas atnaujintas."
+
+msgid "RemoveAnswer"
+msgstr "Pašalinti punktą"
+
+msgid "AddAnswer"
+msgstr "Pridėti punktą"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Rodyti nustatymus"
+
+msgid "AnswerOptions"
+msgstr "Atsakymo nustatymai"
+
+msgid "YesNo"
+msgstr "Taip / Ne"
+
+msgid "MultipleResponse"
+msgstr "Daugkartiniai atsakymai"
+
+msgid "Open"
+msgstr "Atviras"
+
+msgid "Dropdown"
+msgstr "Iškrentantis meniu"
+
+msgid "Pagebreak"
+msgstr "Puslapio pabaiga"
+
+msgid "QuestionNumber"
+msgstr "Klausimo numeris"
+
+msgid "NumberOfOptions"
+msgstr "Nustatymai"
+
+msgid "SurveyInvitations"
+msgstr "Survey invitations"
+
+msgid "InvitationCode"
+msgstr "Pakvietimo kodas"
+
+msgid "InvitationDate"
+msgstr "Pakvietimo data"
+
+msgid "Answered"
+msgstr "Atsakyta"
+
+msgid "AdditonalUsersComment"
+msgstr "Galite pakviesti papildomus ne kurso vartotojus į apklausą įvesdami jų el. pašto adresus, atskirtus kableliu arba kabliataškiu"
+
+msgid "MailTitle"
+msgstr "Laiško antraštė"
+
+msgid "InvitationsSend"
+msgstr "Pakvietimai išsiųsti."
+
+msgid "SurveyDeleted"
+msgstr "Apklausa ištrinta."
+
+msgid "NoSurveysSelected"
+msgstr "Apklausa nepasirinkta."
+
+msgid "NumberOfQuestions"
+msgstr "Klausimų skaičius"
+
+msgid "Invited"
+msgstr "Pakviestas"
+
+msgid "SubmitQuestionFilter"
+msgstr "Patvirtinimo filtras"
+
+msgid "ResetQuestionFilter"
+msgstr "Atmetimo filtras"
+
+msgid "ExportCurrentReport"
+msgstr "Eksportuoti ataskaitą"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "Tik klausimai su paruoštais atsakymais gali būti naudojami"
+
+msgid "SelectXAxis"
+msgstr "Išrinkti klausimą X ašyje"
+
+msgid "SelectYAxis"
+msgstr "Išrinkti klausimą Y ašyje"
+
+msgid "ComparativeReport"
+msgstr "Lyginamoji ataskaita"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "Visi klausimai rodomi viename puslapyje"
+
+msgid "SelectUser"
+msgstr "Vartotojas"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "Išrinkti vartotoją, kuris užpildė apklausą"
+
+msgid "userreport"
+msgstr "Vartotojo ataskaita"
+
+msgid "VisualRepresentation"
+msgstr "Grafinis"
+
+msgid "AbsoluteTotal"
+msgstr "Visiškai absoliučiai"
+
+msgid "NextQuestion"
+msgstr "Kitas klausimas"
+
+msgid "PreviousQuestion"
+msgstr "Ankstesnis klausimas"
+
+msgid "PeopleWhoAnswered"
+msgstr "Žmonės, pasirinkę šį atsakymą"
+
+msgid "CourseUsers"
+msgstr "Kurso vartotojai"
+
+msgid "SurveyPublication"
+msgstr "Apklausos publikavimas"
+
+msgid "AdditonalUsers"
+msgstr "Papildomi vartotojai"
+
+msgid "MailText"
+msgstr "Laiško tekstas"
+
+msgid "UseLinkSyntax"
+msgstr "Išrinkti vartotojai gaus el. laišką su tekstu aukščiau ir unikalia nuoroda į apklausą, kuria užpildys. Jei norite įterpti nuorodą bet kur tekste, įterpkite **link**. Jei neįterpsite **link**, nuoroda bus pavaizduota teksto gale."
+
+msgid "DetailedReportByUser"
+msgstr "Detali ataskaita pagal vartotojus"
+
+msgid "DetailedReportByQuestion"
+msgstr "Detali ataskaita pagal klausimus"
+
+msgid "ComparativeReportDetail"
+msgstr "Šioje ataskaitoje galite palyginti du klausimus."
+
+msgid "CompleteReportDetail"
+msgstr "In this report you get an overview of all the answers of all users on all questions. You also have the option to see only a selection of questions. You can export the results in CSV format and use this for processing in a statistical application"
+
+msgid "DetailedReportByUserDetail"
+msgstr "Šioje ataskaitoje galite matyti visus konkretaus vartotojo atsakymus."
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "In this report you see the results question by question. Basic statistical analysis and graphics are provided"
+
+msgid "ReminderResendToAllUsers"
+msgstr "Pranešti visiems apklausos dalyviams. Kitu atveju laišką gaus tik naujai įtraukti apklausos dalyviai."
+
+msgid "Multiplechoice"
+msgstr "Daugkartinis pasirinkimas"
+
+msgid "Score"
+msgstr "Įvertinimai"
+
+msgid "Shared"
+msgstr "Padalinta"
+
+msgid "Invite"
+msgstr "Pakviesti"
+
+msgid "MaximumScore"
+msgstr "Maksimalus įvertinimas"
+
+msgid "ViewInvited"
+msgstr "Peržiūrėti pakviestus"
+
+msgid "ViewAnswered"
+msgstr "Peržiūrėti atsakiusius"
+
+msgid "ViewUnanswered"
+msgstr "Peržiūrėti atsakiusius"
+
+msgid "DeleteSurveyQuestion"
+msgstr "Are you sure to delete the question ?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "You already filled this survey"
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "Click here to answer the survey"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "or copy paste the following url :"
+
+msgid "UnknowUser"
+msgstr "Unknow user"
+
+msgid "MoveDown"
+msgstr "Move down"
+
+msgid "MoveUp"
+msgstr "Move up"
+
+msgid "HaveAnswered"
+msgstr "have answered"
+
+msgid "WereInvited"
+msgstr "were invited"
+
+msgid "PagebreakNotFirst"
+msgstr "The page break cannot be the first"
+
+msgid "PagebreakNotLast"
+msgstr "The page break cannot be the last one"
+

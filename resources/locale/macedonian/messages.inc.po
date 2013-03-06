@@ -1,0 +1,60 @@
+msgid "Inbox"
+msgstr "Сандаче за примање"
+
+msgid "Messages"
+msgstr "Пораки"
+
+msgid "SendMessage"
+msgstr "Испрати порака"
+
+msgid "NewMessage"
+msgstr "Нова порака"
+
+msgid "ComposeMessage"
+msgstr "Состави порака"
+
+msgid "DeleteSelectedMessages"
+msgstr "Избриши ги селектираните пораки"
+
+msgid "SelectAll"
+msgstr "Селектирај се\'"
+
+msgid "DeselectAll"
+msgstr "Одселектирај се\'"
+
+msgid "ReplyToMessage"
+msgstr "Одговори на оваа порака"
+
+msgid "BackToInbox"
+msgstr "Назад до Сандачето за примање"
+
+msgid "MessageSentTo"
+msgstr "Поракате била испратена до"
+
+msgid "SendMessageTo"
+msgstr "Испрати до"
+
+msgid "Myself"
+msgstr "мене самиот"
+
+msgid "From"
+msgstr "Од"
+
+msgid "To"
+msgstr "До"
+
+msgid "Date"
+msgstr "Датум"
+
+msgid "InvalidMessageId"
+msgstr "Идентификацијата на пораката за одговор - не е валидна."
+
+msgid "ErrorSendingMessage"
+msgstr "Се појави грешка при обидот да се испрати пораката."
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Сигурно ли сакате да се избришат селектираните пораки?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "Избраната порака беше избришана"
+

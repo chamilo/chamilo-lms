@@ -1,0 +1,39 @@
+msgid "langActivate"
+msgstr "보여주기"
+
+msgid "langDeactivate"
+msgstr "숨김"
+
+msgid "langInLnk"
+msgstr "숨김 도구와 링크"
+
+msgid "langDelLk"
+msgstr "정말로 이 링크를 삭제하겠습니까?"
+
+msgid "langCourseCreate"
+msgstr "과정 웹사이트 생성"
+
+msgid "langNameOfTheLink"
+msgstr "링크 명"
+
+msgid "lang_main_categories_list"
+msgstr "주 카테코리 목록"
+
+msgid "langCourseAdminOnly"
+msgstr "담당교사만 가능"
+
+msgid "PlatformAdminOnly"
+msgstr "플랫폼 관리자만 가능"
+
+msgid "langCombinedCourse"
+msgstr "결합된 과정"
+
+msgid "ToolIsNowVisible"
+msgstr "이 도구가 보여집니다"
+
+msgid "ToolIsNowHidden"
+msgstr "이 도구가 이제 보여집니다"
+
+msgid "EditLink"
+msgstr "링크 수정"
+

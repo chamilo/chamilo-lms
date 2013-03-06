@@ -1,0 +1,441 @@
+msgid "ForumDeleted"
+msgstr "Forums izdzēsts"
+
+msgid "ForumCategoryDeleted"
+msgstr "Foruma kategorija izdzēsta"
+
+msgid "ForumLocked"
+msgstr "Forums bloķēts"
+
+msgid "Forum"
+msgstr "Forums"
+
+msgid "AddForumCategory"
+msgstr "Izveidot jaunu forumu kategoriju. Piemēram: Forumu kategorija būs - Baltijas valstis, kurā veidosiet  forumus - Latvija, Lietuva, Igaunija."
+
+msgid "AddForum"
+msgstr "Pievienot jaunu forumu"
+
+msgid "Topics"
+msgstr "Tematu skaits forumā"
+
+msgid "Posts"
+msgstr "Ierakstu skaits"
+
+msgid "LastPosts"
+msgstr "Jaunākais ieraksts"
+
+msgid "Message"
+msgstr "tikko izveidoto tematu"
+
+msgid "NoForumInThisCategory"
+msgstr "Šajā kategorijā nav neviena foruma"
+
+msgid "InForumCategory"
+msgstr "Jauno forumu ievietot kategorijā -"
+
+msgid "AllowAnonymousPosts"
+msgstr "Atļaut anonīmus ierakstus?"
+
+msgid "StudentsCanEdit"
+msgstr "Vai lietotāji var rediģēt savus ierakstus?"
+
+msgid "ApprovalDirect"
+msgstr "Apstiprinājums / Tiešais ieraksts"
+
+msgid "AllowNewThreads"
+msgstr "Ļaut lietotājiem veidot jaunus tematus"
+
+msgid "DefaultViewType"
+msgstr "Noklusētais temata un atbilžu skatījuma veids"
+
+msgid "GroupSettings"
+msgstr "Grupas iestatījumi"
+
+msgid "NotAGroupForum"
+msgstr "Nav grupas forums"
+
+msgid "PublicPrivateGroupForum"
+msgstr "Publisks, vai privāts grupas forums"
+
+msgid "Public"
+msgstr "Pieejams visiem kursantiem"
+
+msgid "Private"
+msgstr "Pieejams tikai grupas biedriem"
+
+msgid "NewPostStored"
+msgstr "Jūsu ziņojums ir saglabāts"
+
+msgid "ReturnTo"
+msgstr "Tagad varat atgriezties uz :"
+
+msgid "Or"
+msgstr "vai"
+
+msgid "ReplyToThread"
+msgstr "Atbildēt uz šo tematu"
+
+msgid "ReplyToMessage"
+msgstr "Atbildēt uz šo ziņojumu"
+
+msgid "QuoteMessage"
+msgstr "Citēt šo ziņojumu"
+
+msgid "NewTopic"
+msgstr "Izveidot jaunu diskusiju tematu"
+
+msgid "Replies"
+msgstr "Atbildes"
+
+msgid "Views"
+msgstr "Skatīts"
+
+msgid "LastPost"
+msgstr "Jaunākais ieraksts"
+
+msgid "Quoting"
+msgstr "Citējumi"
+
+msgid "NotifyByEmail"
+msgstr "Paziņot uz e-pastu, kad kāds uz tematu atbild"
+
+msgid "StickyPost"
+msgstr "Izcelt šī temata svarīgumu. Pie šī temata tiks pievienota izsaukuma zīme <b>!</b> un tas vienmēr atradīsies tematu saraksta augšā"
+
+msgid "ReplyShort"
+msgstr "Atbildēt:"
+
+msgid "DeletePost"
+msgstr "Vai tiešām vēlaties dzēst šo ierakstu? <br>Kopā ar ierakstu tiks izdzēstas visas atbildes. Lūdzu apskatīties temata skatu, lai redzētu visus ierakstus, kas tiks izdzēsti."
+
+msgid "Locked"
+msgstr "Slēgts: kursanti vairs nevar publicēt jaunus ziņojumus šajā foruma kategorijā, forumā vai tematā, bet viņi joprojām var lasīt līdz šim ievadītos ziņojumus."
+
+msgid "Unlocked"
+msgstr "Atvērts: kursanti var publicēt jaunus ziņojumus šajā forumu kategorijā, forumā vai tematā."
+
+msgid "Flat"
+msgstr "Plakans"
+
+msgid "Threaded"
+msgstr "Sazarots"
+
+msgid "Nested"
+msgstr "Iegults"
+
+msgid "FlatView"
+msgstr "Organizēt tematu un atbildes,<br>vienu zem otra, saraksta veidā"
+
+msgid "ThreadedView"
+msgstr "Organizēt tematu un atbildes,<br>horizontālas struktūras veidā"
+
+msgid "NestedView"
+msgstr "Organizēt tematu un atbildes, <br>vienu zem otra, saraksta veidā, <br>ar nobīdi atbildēšanas secībā"
+
+msgid "Structure"
+msgstr "Atbilžu hronoloģiskā struktūra"
+
+msgid "ForumCategoryAdded"
+msgstr "Pievienota jauna foruma kategorija"
+
+msgid "ForumCategoryEdited"
+msgstr "Foruma kategorija izmainīta"
+
+msgid "ForumAdded"
+msgstr "Jauns forums pievienots"
+
+msgid "ForumEdited"
+msgstr "Forums izmainīts"
+
+msgid "NewThreadStored"
+msgstr "Pievienots jauns diskusiju temats"
+
+msgid "Approval"
+msgstr "Apstiprinājums"
+
+msgid "Direct"
+msgstr "Tiešs"
+
+msgid "ForGroup"
+msgstr "Grupai"
+
+msgid "ThreadLocked"
+msgstr "Temats ir slēgts."
+
+msgid "NotAllowedHere"
+msgstr "Jums nav atļauts šeit ienākt."
+
+msgid "ReplyAdded"
+msgstr "Pievienota jauna atbilde"
+
+msgid "EditPost"
+msgstr "Rediģēt ierakstu"
+
+msgid "EditPostStored"
+msgstr "Ieraksts izmainīts"
+
+msgid "NewForumPost"
+msgstr "Jauns ieraksts forumā"
+
+msgid "YouWantedToStayInformed"
+msgstr "Jūs norādījāt, ka vēlaties saņemt e-pastu, kad tiek saņemta jauna atbilde uz šo tematu"
+
+msgid "MessageHasToBeApproved"
+msgstr "Nepieciešams saņemt apstiprinājumu, pirms jūsu ziņojums kļūst visiem redzams."
+
+msgid "AllowAttachments"
+msgstr "Atļaut pielikumus"
+
+msgid "EditForumCategory"
+msgstr "Rediģēt foruma kategorijas"
+
+msgid "MovePost"
+msgstr "Pārvietot ierakstu"
+
+msgid "MoveToThread"
+msgstr "Pārvietot uz tematu"
+
+msgid "ANewThread"
+msgstr "Jauns temats"
+
+msgid "Reply"
+msgstr "Atbilde"
+
+msgid "DeleteForum"
+msgstr "Dzēst forumu ?      <br><b>UZMANĪBU !!! </b>Izdzēšot forumu, tiks izdzēsti arī tajā esošie temati ! <br><b>ZINĀŠANAI! </b> Gatavos tematus var pārvietot uz citu forumu."
+
+msgid "DeleteForumCategory"
+msgstr "Dzēst foruma kategoriju ?    <br><b>UZMANĪBU !!! </b>Izdzēšot kategoriju, tiks izdzēsti arī kategorijā esošie forumi un tajos esošie temati !  <br><b> ZINĀŠANAI ! </b> Gatavos tematus var pārvietot uz citu forumu."
+
+msgid "Lock"
+msgstr "Slēgt"
+
+msgid "Unlock"
+msgstr "Atvērt"
+
+msgid "MoveThread"
+msgstr "Pārvietot tematu"
+
+msgid "PostVisibilityChanged"
+msgstr "Izmainīta ieraksta redzamība"
+
+msgid "PostDeleted"
+msgstr "Ieraksts izdzēsts"
+
+msgid "MakeInvisible"
+msgstr "Padarīt neredzamu"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "Temats ir atrodams šeit"
+
+msgid "MakeVisible"
+msgstr "Padarīt redzamu"
+
+msgid "DeleteCompleteThread"
+msgstr "Dzēst visu tematu ?"
+
+msgid "PostDeletedSpecial"
+msgstr "Izdzēsts īpašs ieraksts"
+
+msgid "ThreadDeleted"
+msgstr "Temats izdzēsts"
+
+msgid "NextMessage"
+msgstr "Nākamā atbilde"
+
+msgid "PrevMessage"
+msgstr "Iepriekšējā atbilde"
+
+msgid "FirstMessage"
+msgstr "Pirmā atbilde"
+
+msgid "LastMessage"
+msgstr "Pēdējā atbilde"
+
+msgid "ForumSearch"
+msgstr "Meklēt forumā"
+
+msgid "SearchTerm"
+msgstr "Meklējamā frāze"
+
+msgid "ForumSearchResults"
+msgstr "Meklēšanas forumā rezultāti"
+
+msgid "ForumSearchInformation"
+msgstr "Jūs varat meklēt vairākus vārdus izmantojot + zīmi"
+
+msgid "YouWillBeNotifiedOfNewPosts"
+msgstr "Jūs saņemsiet paziņojumu uz e-pastu, par jauniem ierakstiem"
+
+msgid "YouWillNoLongerBeNotifiedOfNewPosts"
+msgstr "Jūs vairs nesaņemsiet paziņojumus, par jauniem ierakstiem, uz e-pastu"
+
+msgid "AddImage"
+msgstr "Pievienot attēlu"
+
+msgid "QualifyThread"
+msgstr "Atzīmēt tematu"
+
+msgid "ThreadUsersList"
+msgstr "Temata lietotāju saraksts"
+
+msgid "StudentList"
+msgstr "Kursantu saraksts"
+
+msgid "QualifyThisThread"
+msgstr "Piedalīšanās diskusijā par šo tematu, <b>tiks vērtēta ieskaišu grāmatiņā</b>"
+
+msgid "CourseUsers"
+msgstr "Lietotāji kursā"
+
+msgid "PostsNumber"
+msgstr "Ierakstu skaits"
+
+msgid "NumberOfPostsForThisUser"
+msgstr "Šī lietotāja ierakstu skaits"
+
+msgid "AveragePostPerUser"
+msgstr "Ievadīja lietotājs"
+
+msgid "QualificationChangesHistory"
+msgstr "Novērtējuma izmaiņu vēsture"
+
+msgid "MoreRecent"
+msgstr "jaunāks"
+
+msgid "Older"
+msgstr "vecāks"
+
+msgid "OrderBy"
+msgstr "Kārtot pēc"
+
+msgid "WhoChanged"
+msgstr "Kurš izmainīja"
+
+msgid "NoteChanged"
+msgstr "Izmainīšanas piezīme"
+
+msgid "DateChanged"
+msgstr "Izmainīšanas datums"
+
+msgid "ViewComentPost"
+msgstr "Skatīt ziņojuma komentārus"
+
+msgid "AllStudents"
+msgstr "Visi kursanti"
+
+msgid "StudentsQualified"
+msgstr "Kvalificēti kursanti"
+
+msgid "StudentsNotQualified"
+msgstr "Nekvalificēti kursanti"
+
+msgid "NamesAndLastNames"
+msgstr "Vārdi un uzvārdi"
+
+msgid "MaxScore"
+msgstr "Punkti"
+
+msgid "QualificationCanNotBeGreaterThanMaxScore"
+msgstr "Atzīme nevar pārsniegt maksimālo rezultātu"
+
+msgid "ThreadStatistics"
+msgstr "Temata statistika"
+
+msgid "Thread"
+msgstr "Temats"
+
+msgid "NotifyMe"
+msgstr "Paziņot man par atbildi.(Zaļš kāsītis)"
+
+msgid "ConfirmUserQualification"
+msgstr "Apstiprināt atzīmi"
+
+msgid "NotChanged"
+msgstr "Nemainīts"
+
+msgid "TitleColumnGradebook"
+msgstr "Kolonas virsraksts,<br>ieskaišu kopsavilkuma atskaitē"
+
+msgid "QualifyThreadGradebook"
+msgstr "<b>Piedalīšanās</b> diskusijā par šo tematu, <b>tiks vērtēta </b>ieskaišu grāmatiņā"
+
+msgid "QualifyWeight"
+msgstr "Max. vērtējums ieskaitē"
+
+msgid "QualifyNumeric"
+msgstr "Punkti"
+
+msgid "AlterQualifyThread"
+msgstr "Nosacījumi, diskusijā par tematu"
+
+msgid "ForumMoved"
+msgstr "Forums ir pārvietots"
+
+msgid "YouMustAssignWeightOfQualification"
+msgstr "Jums šai darbībai ir jāpiešķir vērtējuma vērtība"
+
+msgid "DeleteAttachmentFile"
+msgstr "Dzēst pievienoto failu"
+
+msgid "EditAnAttachment"
+msgstr "Rediģēt pievienoto failu"
+
+msgid "SeeForum"
+msgstr "Skatīt forumu"
+
+msgid "CreateForum"
+msgstr "Izveidot forumu"
+
+msgid "ModifyForum"
+msgstr "Rediģēt forumu"
+
+msgid "CreateThread"
+msgstr "Izveidot tematu"
+
+msgid "ModifyThread"
+msgstr "Rediģēt tematu"
+
+msgid "EditForum"
+msgstr "Rediģēt forumu"
+
+msgid "BackToForum"
+msgstr "Atpakaļ uz forumu"
+
+msgid "BackToForumOverview"
+msgstr "Atpakaļ uz forumu sarakstu"
+
+msgid "BackToThread"
+msgstr "Atpakaļ uz tematu"
+
+msgid "ForumcategoryLocked"
+msgstr "Foruma kategorija Slēgta"
+
+msgid "PreviewImage"
+msgstr "Priekšskatījuma attēls"
+
+msgid "UpdateImage"
+msgstr "Atjaunojuma attēls"
+
+msgid "EnableTimeLimits"
+msgstr "Uzstādīt laika limitu"
+
+msgid "RemoveSearchResults"
+msgstr "Nodzēst meklēšanas rezultātus"
+
+msgid "InsertQualificationCorrespondingToMaxScore"
+msgstr "Ievietot kvalifikāciju atbilstošu maksimālajam novērtējumam"
+
+msgid "ThreadMoved"
+msgstr "Temats pārvietots"
+
+msgid "MigrateForum"
+msgstr "Pārvietots forums"
+
+msgid "YouWillBeNotified"
+msgstr "Jums tiks paziņots"
+
+msgid "ForumCategories"
+msgstr "Foruma Kategorijas"
+

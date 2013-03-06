@@ -1,0 +1,159 @@
+msgid "ResourceAdded"
+msgstr "Resurs je dodat. Sada se možete vratiti nazad na putanju i dodati još resursa."
+
+msgid "LearningPath"
+msgstr "Putanja učenja"
+
+msgid "LevelUp"
+msgstr "jedan nivo gore"
+
+msgid "AddIt"
+msgstr "Dodaj"
+
+msgid "MainCategory"
+msgstr "glavna kategorija"
+
+msgid "lang_delete_added_resources"
+msgstr "Obriši dodate kurseve"
+
+msgid "AddToLinks"
+msgstr "Dodaj linkovima kursa"
+
+msgid "DontAdd"
+msgstr "ne dodaj"
+
+msgid "lang_show_all_added_resources"
+msgstr "Pokaži sve dodate resurse"
+
+msgid "ResourcesAdded"
+msgstr "Resursi su dodati"
+
+msgid "BackTo"
+msgstr "Nazad na"
+
+msgid "ExternalResources"
+msgstr "Spoljašnji resursi"
+
+msgid "CourseResources"
+msgstr "Resursi kursa"
+
+msgid "ExternalLink"
+msgstr "Externi link"
+
+msgid "DropboxAdd"
+msgstr "Dodaj Dropbox stranicu u ovo poglavlje."
+
+msgid "AddAssignmentPage"
+msgstr "Dodaj stranicu Publikacije studenata u ovo poglavlje."
+
+msgid "Exercise"
+msgstr "Testovi"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "AdValvas"
+msgstr "Obaveštenja"
+
+msgid "Document"
+msgstr "Dokument"
+
+msgid "ShowDelete"
+msgstr "Pokaži/Obriši"
+
+msgid "IntroductionText"
+msgstr "Uvodni tekst"
+
+msgid "CourseDescription"
+msgstr "Opis kursa"
+
+msgid "Groups"
+msgstr "Grupe"
+
+msgid "Users"
+msgstr "Korisnici"
+
+msgid "IntroductionTextAdd"
+msgstr "Dodaj stranicu koja sadrži uvodni tekst za ovo poglavlje."
+
+msgid "CourseDescriptionAdd"
+msgstr "Dodaj kursu stranicu koja sadrži opis ovog poglavlja."
+
+msgid "GroupsAdd"
+msgstr "Dodaj stranicu Grupe ovom poglavlju."
+
+msgid "UsersAdd"
+msgstr "Dodaj stranu Korisnici ovom poglavlju."
+
+msgid "ExportableCourseResources"
+msgstr "Resursi kursa koji mogu da se izvezu"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Resursi kursa koji su u vezi sa Chamiloom"
+
+msgid "LinkTarget"
+msgstr "Meta linka"
+
+msgid "SameWindow"
+msgstr "U istom prozoru"
+
+msgid "NewWindow"
+msgstr "U novom prozoru"
+
+msgid "StepDeleted1"
+msgstr "Ova"
+
+msgid "StepDeleted2"
+msgstr "stavka je obrisana u tom alatu."
+
+msgid "Modify"
+msgstr "modifikuj"
+
+msgid "Chapter"
+msgstr "Poglavlje"
+
+msgid "NoAgendaItems"
+msgstr "Nema stavki u Agendi"
+
+msgid "AgendaAdd"
+msgstr "Dodaj novu stavku u Agendu"
+
+msgid "UserGroupFilter"
+msgstr "Filter za grupe/korisnike"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Sortiraj zapise rasporeda po rastucem nizu"
+
+msgid "ShowCurrent"
+msgstr "Prikaži stavke iz tekućeg meseca"
+
+msgid "ModifyCalendarItem"
+msgstr "Modifikuj stavku Agende"
+
+msgid "ItemTitle"
+msgstr "Naslov stavke"
+
+msgid "Detail"
+msgstr "Detalj"
+
+msgid "EditSuccess"
+msgstr "Stava Agende je izmenjena"
+
+msgid "AddCalendarItem"
+msgstr "Dodaj novu stavku u Agendu"
+
+msgid "AddAnn"
+msgstr "Dodaj obaveštenje"
+
+msgid "ForumAddNewTopic"
+msgstr "Forum: dodaj novu temu"
+
+msgid "ForumEditTopic"
+msgstr "Forum: izmeni novu temu"
+
+msgid "ExerciseAnswers"
+msgstr "Vežba: Odgovori"
+
+msgid "ForumReply"
+msgstr "Forum: odgovor"
+

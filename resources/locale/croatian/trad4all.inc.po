@@ -1,0 +1,1776 @@
+msgid "Title"
+msgstr "Naslov"
+
+msgid "By"
+msgstr "Od"
+
+msgid "UsersOnline"
+msgstr "Aktivnih korisnika"
+
+msgid "Remove"
+msgstr "Ukloni"
+
+msgid "langEnter"
+msgstr "Povratak na popis kolegija"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Links"
+msgstr "Poveznice"
+
+msgid "langWorks"
+msgstr "Studentski radovi"
+
+msgid "Forums"
+msgstr "Forumi"
+
+msgid "langExercices"
+msgstr "Vježbe"
+
+msgid "langCreateDir"
+msgstr "Izrada mape"
+
+msgid "Name"
+msgstr "Naziv"
+
+msgid "langComment"
+msgstr "Opaska"
+
+msgid "langVisible"
+msgstr "Vidljivo/nevidljivo"
+
+msgid "langNewDir"
+msgstr "Ime nove mape"
+
+msgid "langDirCr"
+msgstr "Mapa izrađena"
+
+msgid "Download"
+msgstr "Učitati"
+
+msgid "langGroup"
+msgstr "Skupina"
+
+msgid "langEdit"
+msgstr "uredi"
+
+msgid "langGroupForum"
+msgstr "Forum skupine"
+
+msgid "Language"
+msgstr "Jezične postavke"
+
+msgid "LoginName"
+msgstr "Korisničko ime"
+
+msgid "AutostartMp3"
+msgstr "Odaberite OK ukoliko želite pokrenuti audio datoteku automatski"
+
+msgid "Assignments"
+msgstr "Studentski radovi"
+
+msgid "Forum"
+msgstr "Forumi"
+
+msgid "langDelImage"
+msgstr "Ukloni sliku"
+
+msgid "langCode"
+msgstr "Šifra kolegija"
+
+msgid "langUp"
+msgstr "Gore"
+
+msgid "Down"
+msgstr "dolje"
+
+msgid "Up"
+msgstr "gore"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "TheListIsEmpty"
+msgstr "Popis prazan."
+
+msgid "langUniqueSelect"
+msgstr "Višestruki izbor (Jedan odgovor)"
+
+msgid "langCourseCreate"
+msgstr "Izradi web stranice kolegija"
+
+msgid "langTodo"
+msgstr "Učiniti"
+
+msgid "UserName"
+msgstr "Korisničko ime"
+
+msgid "lang_show_hide"
+msgstr "Prikaži/sakrij"
+
+msgid "langCategoryMod"
+msgstr "Izmijeni kategoriju"
+
+msgid "Hide"
+msgstr "Sakrij"
+
+msgid "langDear"
+msgstr "Poštovani"
+
+msgid "langArchive"
+msgstr "Arhiva"
+
+msgid "langCourseCode"
+msgstr "Šifra kolegija"
+
+msgid "langNoDescription"
+msgstr "Bez opisa"
+
+msgid "langOfficialCode"
+msgstr "Službena šifra"
+
+msgid "FirstName"
+msgstr "Ime"
+
+msgid "LastName"
+msgstr "Prezime"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "langEmail"
+msgstr "Elektronička pošta"
+
+msgid "SlideshowConversion"
+msgstr "Pretvorba prezentacije"
+
+msgid "UploadFile"
+msgstr "Prijenos datoteke"
+
+msgid "AvailableFrom"
+msgstr "Raspoloživ od"
+
+msgid "AvailableTill"
+msgstr "Raspoloživ do"
+
+msgid "Preview"
+msgstr "Pregled"
+
+msgid "Type"
+msgstr "Vrsta"
+
+msgid "EmailAddress"
+msgstr "E-pošta adresa"
+
+msgid "Organisation"
+msgstr "Organizacija"
+
+msgid "Reporting"
+msgstr "Izvještavanje"
+
+msgid "Code"
+msgstr "Šifra"
+
+msgid "Update"
+msgstr "Ažuriraj"
+
+msgid "CurrentCourse"
+msgstr "Trenutni kolegij"
+
+msgid "Back"
+msgstr "Nazad"
+
+msgid "Info"
+msgstr "podatci"
+
+msgid "Search"
+msgstr "Traži"
+
+msgid "AdvancedSearch"
+msgstr "Napredno pretraživanje"
+
+msgid "Open"
+msgstr "Otvori"
+
+msgid "Import"
+msgstr "Prijenos"
+
+msgid "AddAnother"
+msgstr "Dodaj sljedeći"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "TrueFalse"
+msgstr "Točno / Netočno"
+
+msgid "QuestionType"
+msgstr "Vrsta pitanja"
+
+msgid "NoSearchResults"
+msgstr "Potraga bez rezultata"
+
+msgid "SelectQuestion"
+msgstr "Odaberi pitanje"
+
+msgid "AddNewQuestionType"
+msgstr "Dodaj novi tip pitanja"
+
+msgid "Numbered"
+msgstr "Pobrojan"
+
+msgid "iso639_2_code"
+msgstr "HR"
+
+msgid "iso639_1_code"
+msgstr "HR"
+
+msgid "charset"
+msgstr "iso-1250"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr ","
+
+msgid "number_decimal_separator"
+msgstr "."
+
+msgid "dateFormatShort"
+msgstr "%b %d, %y"
+
+msgid "dateFormatLong"
+msgstr "%A %B %d, %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%B %d, %Y at %I:%M %p"
+
+msgid "timeNoSecFormat"
+msgstr "%I:%M %p"
+
+msgid "langYes"
+msgstr "da"
+
+msgid "langNo"
+msgstr "Ne"
+
+msgid "Next"
+msgstr "Sljedeći"
+
+msgid "langAllowed"
+msgstr "Dopušteno"
+
+msgid "langBackHome"
+msgstr "Povratak na početnu stranicu"
+
+msgid "langPropositions"
+msgstr "Prijedlozi poboljšanja"
+
+msgid "langMaj"
+msgstr "Ažuriraj"
+
+msgid "langModify"
+msgstr "izmijeni"
+
+msgid "langDelete"
+msgstr "izbriši"
+
+msgid "langInvisible"
+msgstr "Učini nevidljivim"
+
+msgid "langSave"
+msgstr "Spremi"
+
+msgid "langMove"
+msgstr "Premjesti"
+
+msgid "Help"
+msgstr "Pomoć"
+
+msgid "langOk"
+msgstr "U redu"
+
+msgid "langAdd"
+msgstr "Dodaj"
+
+msgid "langAddIntro"
+msgstr "Dodaj uvodni tekst"
+
+msgid "langBackList"
+msgstr "Povratak na popis"
+
+msgid "langText"
+msgstr "Tekst"
+
+msgid "langEmpty"
+msgstr " Niste ispunili sve podatke.<br> Tipkom <b>Back</b> vratite se i pokušajte ponovno.<br>Ne sjećate li se šifre kolegija, pogledajte u Program kolegija"
+
+msgid "langConfirmYourChoice"
+msgstr "Molim potvrdite odabir"
+
+msgid "langAnd"
+msgstr "i"
+
+msgid "langChoice"
+msgstr "Vaš izbor"
+
+msgid "langFinish"
+msgstr "Kraj"
+
+msgid "langCancel"
+msgstr "Odustani"
+
+msgid "langNotAllowed"
+msgstr "Nije dopušteno"
+
+msgid "langNotLogged"
+msgstr "Niste prijavljeni na kolegij"
+
+msgid "langManager"
+msgstr "Manager"
+
+msgid "langOptional"
+msgstr "Neobvezno"
+
+msgid "NextPage"
+msgstr "Sljedeća stranica"
+
+msgid "PreviousPage"
+msgstr "Prethodna stranica"
+
+msgid "langUse"
+msgstr "Uporaba"
+
+msgid "langTotal"
+msgstr "Ukupno"
+
+msgid "langTake"
+msgstr "uzmi"
+
+msgid "langOne"
+msgstr "Jedan"
+
+msgid "langSeveral"
+msgstr "Više"
+
+msgid "langNotice"
+msgstr "Obavijest"
+
+msgid "langDate"
+msgstr "Nadnevak"
+
+msgid "langAmong"
+msgstr "među"
+
+msgid "langShow"
+msgstr "Prikaži"
+
+msgid "langMyCourses"
+msgstr "Moji predmeti"
+
+msgid "langModifyProfile"
+msgstr "Izmijeni profil"
+
+msgid "langMyStats"
+msgstr "Pogled u moju statistiku"
+
+msgid "langLogout"
+msgstr "Odjava"
+
+msgid "langMyAgenda"
+msgstr "Moj raspored"
+
+msgid "langCourseHomepage"
+msgstr "Početna stranica kolegija"
+
+msgid "langCourseManagerview"
+msgstr "Predavačev pogled"
+
+msgid "langStudentView"
+msgstr "Studentov pogled"
+
+msgid "AddResource"
+msgstr "Dodaj"
+
+msgid "AddedResources"
+msgstr "Prilozi"
+
+msgid "lang_modify_resource"
+msgstr "Izmijeni/Dodaj resurse"
+
+msgid "lang_resource"
+msgstr "Resurs"
+
+msgid "lang_resources"
+msgstr "Resursi"
+
+msgid "langNameOfLang[\'arabic\']"
+msgstr ""
+
+msgid "langNameOfLang[\'brazilian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'bulgarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'catalan\']"
+msgstr ""
+
+msgid "langNameOfLang[\'croatian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'danish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english\']"
+msgstr ""
+
+msgid "langNameOfLang[\'finnish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_KM\']"
+msgstr ""
+
+msgid "langNameOfLang[\'galician\']"
+msgstr ""
+
+msgid "langNameOfLang[\'german\']"
+msgstr ""
+
+msgid "langNameOfLang[\'greek\']"
+msgstr ""
+
+msgid "langNameOfLang[\'italian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'japanese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'polish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'portuguese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'russian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'simpl_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish\']"
+msgstr ""
+
+msgid "Close"
+msgstr "Zatvorite"
+
+msgid "langPlatform"
+msgstr "Platforma"
+
+msgid "localLangName"
+msgstr "jezik"
+
+msgid "email"
+msgstr "elektronička pošta"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "Žao nam je, ali ta je šifra kolegija već u uporabi. Molimo odaberite drugu."
+
+msgid "Statistics"
+msgstr "Statistika"
+
+msgid "langGrouplist"
+msgstr "popis skupina"
+
+msgid "langPrevious"
+msgstr "prethodni"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "Odabrana mapa ne postoji"
+
+msgid "Courses"
+msgstr "kolegiji"
+
+msgid "In"
+msgstr "u"
+
+msgid "langShowAll"
+msgstr "Prikaži sve"
+
+msgid "langPage"
+msgstr "Stranica"
+
+msgid "englishLangName"
+msgstr "engleski"
+
+msgid "Home"
+msgstr "Početna stranica"
+
+msgid "langAreYouSureToDelete"
+msgstr "Želite li doista izbrisati"
+
+msgid "SelectAll"
+msgstr "Označi sve"
+
+msgid "UnSelectAll"
+msgstr "poništi odabir svega"
+
+msgid "WithSelected"
+msgstr "S odabranim"
+
+msgid "langOnLine"
+msgstr "Aktivnih"
+
+msgid "langUsers"
+msgstr "Korisnici"
+
+msgid "langPlatformAdmin"
+msgstr "Nadzor platforme"
+
+msgid "langNameOfLang[\'hungarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'indonesian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'malay\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovenian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish_latin\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swedish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'thai\']"
+msgstr ""
+
+msgid "langNameOfLang[\'turkce\']"
+msgstr ""
+
+msgid "langNameOfLang[\'vietnamese\']"
+msgstr ""
+
+msgid "UserInfo"
+msgstr "podatci o korisniku"
+
+msgid "langModifyQuestion"
+msgstr "Izmijeni pitanje"
+
+msgid "langCheckAll"
+msgstr "Označi sve"
+
+msgid "langNbAnnoucement"
+msgstr "Obavijest"
+
+msgid "lang_no_access_here"
+msgstr "Zabranjen pristup"
+
+msgid "langOtherCourses"
+msgstr "drugi kolegiji"
+
+msgid "Doc"
+msgstr "dokument"
+
+msgid "PlataformAdmin"
+msgstr "Nadzornik platforme"
+
+msgid "Groups"
+msgstr "Skupine"
+
+msgid "GroupManagement"
+msgstr "Upravljanje skupinom"
+
+msgid "All"
+msgstr "sve"
+
+msgid "None"
+msgstr "ništa"
+
+msgid "langSorry"
+msgstr "Najprije odaberite kolegij"
+
+msgid "langDenied"
+msgstr "Funkcija je dostupna samo nadzornicima kolegija"
+
+msgid "Today"
+msgstr "danas"
+
+msgid "langCourseHomepageLink"
+msgstr "Aktualni kolegij"
+
+msgid "Attachment"
+msgstr "prilog"
+
+msgid "User"
+msgstr "Korisnik"
+
+msgid "MondayInit"
+msgstr "P"
+
+msgid "TuesdayInit"
+msgstr "U"
+
+msgid "WednesdayInit"
+msgstr "S"
+
+msgid "ThursdayInit"
+msgstr "Č"
+
+msgid "FridayInit"
+msgstr "P"
+
+msgid "SaturdayInit"
+msgstr "S"
+
+msgid "SundayInit"
+msgstr "N"
+
+msgid "MondayShort"
+msgstr "Pon"
+
+msgid "TuesdayShort"
+msgstr "Uto"
+
+msgid "WednesdayShort"
+msgstr "Sri"
+
+msgid "ThursdayShort"
+msgstr "Čet"
+
+msgid "FridayShort"
+msgstr "Pet"
+
+msgid "SaturdayShort"
+msgstr "Sub"
+
+msgid "SundayShort"
+msgstr "Ned"
+
+msgid "MondayLong"
+msgstr "Ponedjeljak"
+
+msgid "TuesdayLong"
+msgstr "Utorak"
+
+msgid "WednesdayLong"
+msgstr "Srijeda"
+
+msgid "ThursdayLong"
+msgstr "Četvrtak"
+
+msgid "FridayLong"
+msgstr "Petak"
+
+msgid "SaturdayLong"
+msgstr "Subota"
+
+msgid "SundayLong"
+msgstr "Nedjelja"
+
+msgid "JanuaryInit"
+msgstr "S"
+
+msgid "FebruaryInit"
+msgstr "V"
+
+msgid "MarchInit"
+msgstr "O"
+
+msgid "AprilInit"
+msgstr "T"
+
+msgid "MayInit"
+msgstr "S"
+
+msgid "JuneInit"
+msgstr "L"
+
+msgid "JulyInit"
+msgstr "S"
+
+msgid "AugustInit"
+msgstr "K"
+
+msgid "SeptemberInit"
+msgstr "R"
+
+msgid "OctoberInit"
+msgstr "L"
+
+msgid "NovemberInit"
+msgstr "S"
+
+msgid "DecemberInit"
+msgstr "P"
+
+msgid "JanuaryShort"
+msgstr "Sij"
+
+msgid "FebruaryShort"
+msgstr "Velj"
+
+msgid "MarchShort"
+msgstr "Ožu"
+
+msgid "AprilShort"
+msgstr "Tra"
+
+msgid "MayShort"
+msgstr "Svi"
+
+msgid "JuneShort"
+msgstr "Lip"
+
+msgid "JulyShort"
+msgstr "Srp"
+
+msgid "AugustShort"
+msgstr "Kol"
+
+msgid "SeptemberShort"
+msgstr "Ruj"
+
+msgid "OctoberShort"
+msgstr "Lis"
+
+msgid "NovemberShort"
+msgstr "Stu"
+
+msgid "DecemberShort"
+msgstr "Pro"
+
+msgid "JanuaryLong"
+msgstr "Siječanj"
+
+msgid "FebruaryLong"
+msgstr "Veljača"
+
+msgid "MarchLong"
+msgstr "Ožujak"
+
+msgid "AprilLong"
+msgstr "Travanj"
+
+msgid "MayLong"
+msgstr "Svibanj"
+
+msgid "JuneLong"
+msgstr "Lipanj"
+
+msgid "JulyLong"
+msgstr "Srpanj"
+
+msgid "AugustLong"
+msgstr "Kolovoz"
+
+msgid "SeptemberLong"
+msgstr "Rujan"
+
+msgid "OctoberLong"
+msgstr "Listopad"
+
+msgid "NovemberLong"
+msgstr "Studeni"
+
+msgid "DecemberLong"
+msgstr "Prosinac"
+
+msgid "langMyCompetences"
+msgstr "Moje vještine"
+
+msgid "langMyDiplomas"
+msgstr "Moje svjedodžbe"
+
+msgid "langMyPersonalOpenArea"
+msgstr "Moje osobno otvoreno područje"
+
+msgid "langMyTeach"
+msgstr "Što mogu podučavati"
+
+msgid "Agenda"
+msgstr "Raspored"
+
+msgid "HourShort"
+msgstr ":"
+
+msgid "PleaseTryAgain"
+msgstr "Molim pkušajte ponovno!"
+
+msgid "UplNoFileUploaded"
+msgstr "Nijedna datoteka nije predana."
+
+msgid "UplSelectFileFirst"
+msgstr "Molim odaberite datoteku prije pritiska tipke za predaju."
+
+msgid "UplNotAZip"
+msgstr "Odabrana datoteka nije bila formata zip."
+
+msgid "UplUploadSucceeded"
+msgstr "Učitavanje datoteke uspješno!"
+
+msgid "ExportAsCSV"
+msgstr "Prenesi datoteku u formatu CSV"
+
+msgid "ExportAsXLS"
+msgstr "Prenesi datoteku u formatu XLS"
+
+msgid "langOpenarea"
+msgstr "Osobi otvoreni prostor"
+
+msgid "Done"
+msgstr "Dovršeno"
+
+msgid "Documents"
+msgstr "Dokumenti"
+
+msgid "DocumentAdded"
+msgstr "Dokument dodan"
+
+msgid "DocumentUpdated"
+msgstr "Dokument ažuriran"
+
+msgid "DocumentInFolderUpdated"
+msgstr "Dokument ažuriran u mapi"
+
+msgid "Course_description"
+msgstr "Opis kolegija"
+
+msgid "Document"
+msgstr "Dokument"
+
+msgid "Learnpath"
+msgstr "Put učenja"
+
+msgid "Link"
+msgstr "Poveznica"
+
+msgid "Announcement"
+msgstr "Obavijesti"
+
+msgid "Dropbox"
+msgstr "Pretinac"
+
+msgid "Quiz"
+msgstr "Vježbe"
+
+msgid "langChat"
+msgstr "Chat"
+
+msgid "Conference"
+msgstr "Konferencija"
+
+msgid "Student_publication"
+msgstr "Studentski radovi"
+
+msgid "Tracking"
+msgstr "Praćenje"
+
+msgid "langhomepage_link"
+msgstr "Dodaj poveznicu na ovu stranicu"
+
+msgid "Course_setting"
+msgstr "Postavke kolegija"
+
+msgid "langbackup"
+msgstr "Pričuvni primjerak kolegija"
+
+msgid "langcopy_course_content"
+msgstr "Preslikaj sadržaj kolegija"
+
+msgid "langrecycle_course"
+msgstr "Recikliraj kolegij"
+
+msgid "StartDate"
+msgstr "Nadnevak početka"
+
+msgid "EndDate"
+msgstr "Nadnevak svršetka"
+
+msgid "StartTime"
+msgstr "Vrijeme početka"
+
+msgid "EndTime"
+msgstr "Vrijeme svršetka"
+
+msgid "langYouWereCalled"
+msgstr "Pozvani ste na chat s"
+
+msgid "langDoYouAccept"
+msgstr "Prihvaćate li?"
+
+msgid "Everybody"
+msgstr "Svi"
+
+msgid "SentTo"
+msgstr "Vidljivo"
+
+msgid "Export"
+msgstr "Prenesi"
+
+msgid "Tools"
+msgstr "Alati"
+
+msgid "Everyone"
+msgstr "Svi"
+
+msgid "SelectGroupsUsers"
+msgstr "Odaberi skupine/korisnike"
+
+msgid "Student"
+msgstr "Student"
+
+msgid "Teacher"
+msgstr "Predavač"
+
+msgid "Send2All"
+msgstr "Niste odabrali korisnika/skupinu. Element je vidljiv svim korisnicima"
+
+msgid "Wiki"
+msgstr "Wiki"
+
+msgid "Complete"
+msgstr "Dovršeno"
+
+msgid "Incomplete"
+msgstr "Nedovršeno"
+
+msgid "reservation"
+msgstr "predbilježba"
+
+msgid "StartTimeWindow"
+msgstr "Kreni"
+
+msgid "EndTimeWindow"
+msgstr "Završi"
+
+msgid "AccessNotAllowed"
+msgstr "Pristup ovoj stranici nije dopušten"
+
+msgid "InThisCourse"
+msgstr "U ovom kolegiju"
+
+msgid "ThisFieldIsRequired"
+msgstr "Obvezno polje"
+
+msgid "AllowedHTMLTags"
+msgstr "Dozvoli HTML oznake"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "Forma sadrži netočne ili nepotpune podatke. Molim provjerite vaš unos."
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "Početni datum mora biti prije završnog datuma"
+
+msgid "InvalidDate"
+msgstr "Netočan datum"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "Dozvoljeni su samo slova i brojevi"
+
+msgid "langBasicOverview"
+msgstr "Organiziraj"
+
+msgid "CourseAdminRole"
+msgstr "Upravitelj kolegija"
+
+msgid "UserRole"
+msgstr "Status"
+
+msgid "OnlyImagesAllowed"
+msgstr "Dozvoljene su slike samo PNG, JPG ili GIF formata"
+
+msgid "ViewRight"
+msgstr "Pogled"
+
+msgid "EditRight"
+msgstr "Uredi"
+
+msgid "DeleteRight"
+msgstr "Izbriši"
+
+msgid "OverviewCourseRights"
+msgstr "Pregled statusa i prava"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "Izdvoji prema statusu"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Izdvoji prema pravu"
+
+msgid "langAdvanced"
+msgstr "Napredni način"
+
+msgid "RightValueModified"
+msgstr "Vrijednost je promijenjena"
+
+msgid "course_rights"
+msgstr "Pregled statusa i prava"
+
+msgid "Visio_conference"
+msgstr "Video konferencija"
+
+msgid "CourseAdminRoleDescription"
+msgstr "Upravitelj kolegija"
+
+msgid "Move"
+msgstr "Premjesti"
+
+msgid "MoveTo"
+msgstr "Premjesti u"
+
+msgid "Delete"
+msgstr "Obriši"
+
+msgid "MoveFileTo"
+msgstr "Premjesti datoteku u"
+
+msgid "Save"
+msgstr "Spremi"
+
+msgid "Error"
+msgstr "Greška"
+
+msgid "Anonymous"
+msgstr "Anonimno"
+
+msgid "h"
+msgstr "h"
+
+msgid "CreateNewGlobalRole"
+msgstr "Izradi novi globalni status"
+
+msgid "CreateNewLocalRole"
+msgstr "Izradi novi lokalni staus"
+
+msgid "Actions"
+msgstr "Akcija"
+
+msgid "Inbox"
+msgstr "Pretinac"
+
+msgid "ComposeMessage"
+msgstr "Napiši poruku"
+
+msgid "Other"
+msgstr "Ostalo"
+
+msgid "AddRight"
+msgstr "Dodaj"
+
+msgid "CampusHomepage"
+msgstr "Početna stranica portala"
+
+msgid "YouHaveNewMessage"
+msgstr "Imate novu poruku !"
+
+msgid "myActiveSessions"
+msgstr "Moje aktivne sesije"
+
+msgid "myInactiveSessions"
+msgstr "Moje neaktivne sesije"
+
+msgid "FileUpload"
+msgstr "Prijenos datoteke"
+
+msgid "langMyActiveSessions"
+msgstr "Moje aktivne sesije"
+
+msgid "langMyInActiveSessions"
+msgstr "Moje neaktivne sesije"
+
+msgid "langMySpace"
+msgstr "Izvještaj"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "Ovo proširenje je aktivirano, ali trenutno nije u funkciji."
+
+msgid "MyStudents"
+msgstr "Moji studenti"
+
+msgid "Progress"
+msgstr "Napredovanje"
+
+msgid "Or"
+msgstr "ili"
+
+msgid "Uploading"
+msgstr "Učitavanje...."
+
+msgid "AccountExpired"
+msgstr "Korisnički račun je istekao"
+
+msgid "AccountInactive"
+msgstr "Korisnički račun je neaktivan"
+
+msgid "ActionNotAllowed"
+msgstr "Akcija nije dozvoljena"
+
+msgid "SubTitle"
+msgstr "Podnaslov"
+
+msgid "NoResourcesToRecycle"
+msgstr "Ne postoji ništa za recikliranje"
+
+msgid "noOpen"
+msgstr "Ne može se otvoriti"
+
+msgid "TempsFrequentation"
+msgstr "Vrijeme pristupa"
+
+msgid "Progression"
+msgstr "Napredovanje"
+
+msgid "NoCourse"
+msgstr "Traženi kolegij se ne može pronaći"
+
+msgid "Teachers"
+msgstr "Nastavnici"
+
+msgid "Session"
+msgstr "Sesija"
+
+msgid "Sessions"
+msgstr "Sesije"
+
+msgid "NoSession"
+msgstr "Tražena sesija se ne može pronaći"
+
+msgid "NoStudent"
+msgstr "Traženi student se ne može pronaći"
+
+msgid "Students"
+msgstr "Studenti"
+
+msgid "NoResults"
+msgstr "Pretraga bez rezultata"
+
+msgid "Tutors"
+msgstr "Tutori"
+
+msgid "Tel"
+msgstr "Tel"
+
+msgid "NoTel"
+msgstr "nema tel"
+
+msgid "SendMail"
+msgstr "Pošalji e-poštu"
+
+msgid "RdvAgenda"
+msgstr "Zapis u rasporedu"
+
+msgid "VideoConf"
+msgstr "Video konferencija"
+
+msgid "MyProgress"
+msgstr "Moj napredak"
+
+msgid "NoOnlineStudents"
+msgstr "Nema aktivnih studenata"
+
+msgid "InCourse"
+msgstr "u kolegiju"
+
+msgid "UserOnlineListSession"
+msgstr "Popis trenutno aktivnih studenata - Sesija"
+
+msgid "From"
+msgstr "Od"
+
+msgid "To"
+msgstr "Za"
+
+msgid "Content"
+msgstr "Sadržaj"
+
+msgid "year"
+msgstr "godina"
+
+msgid "Years"
+msgstr "godine"
+
+msgid "Day"
+msgstr "Dan"
+
+msgid "Days"
+msgstr "dani"
+
+msgid "PleaseStandBy"
+msgstr "Molim pričekajte...."
+
+msgid "AvailableUntil"
+msgstr "Dostupno do"
+
+msgid "HourMinuteDivider"
+msgstr ":"
+
+msgid "Visio_classroom"
+msgstr "virtualna učionica"
+
+msgid "Survey"
+msgstr "Anketa"
+
+msgid "More"
+msgstr "Više"
+
+msgid "ClickHere"
+msgstr "Klikni ovdje"
+
+msgid "Here"
+msgstr "ovdje"
+
+msgid "SaveQuestion"
+msgstr "Spremi pitanje"
+
+msgid "ReturnTo"
+msgstr "Možeš se vratiti na"
+
+msgid "Horizontal"
+msgstr "Horizontalno"
+
+msgid "Vertical"
+msgstr "Vertikalno"
+
+msgid "DisplaySearchResults"
+msgstr "Prikaži rezultate pretrage"
+
+msgid "DisplayAll"
+msgstr "Prikaži sve"
+
+msgid "File_upload"
+msgstr "Prijenos datoteke"
+
+msgid "NoUsersInCourse"
+msgstr "Nema korisnika unutar kolegija"
+
+msgid "Percentage"
+msgstr "Postotak"
+
+msgid "Information"
+msgstr "Informacije"
+
+msgid "EmailDestination"
+msgstr "Primatelj"
+
+msgid "SendEmail"
+msgstr "Pošalji e-poštu"
+
+msgid "EmailTitle"
+msgstr "Tema elektroničke pošte"
+
+msgid "EmailText"
+msgstr "Sadržaj e-pošte"
+
+msgid "Send"
+msgstr "Pošalji"
+
+msgid "Comments"
+msgstr "Komentari"
+
+msgid "ModifyRecipientList"
+msgstr "Promijeni popis primatelja"
+
+msgid "Line"
+msgstr "Redak"
+
+msgid "NoLinkVisited"
+msgstr "Niti jedna poveznica nije bila odabrana"
+
+msgid "NoDocumentDownloaded"
+msgstr "Niti jedna datoteka nije bila preuzeta"
+
+msgid "Clicks"
+msgstr "broj klikova"
+
+msgid "SearchResults"
+msgstr "Rezultati pretrage"
+
+msgid "SessionPast"
+msgstr "Prošla"
+
+msgid "SessionActive"
+msgstr "Aktivna"
+
+msgid "SessionFuture"
+msgstr "Buduća"
+
+msgid "DateFormatLongWithoutDay"
+msgstr "%B %d, %Y"
+
+msgid "InvalidDirectoryPleaseCreateAnImagesFolder"
+msgstr "Nedozvoljena mapa: Molim napravite mapu s imenom <b>images</b> u vašem dokument alatu da se mogu slike prenjeti u mapu"
+
+msgid "UsersConnectedToMySessions"
+msgstr "Pregled svih korisnika spojenih na moju sesiju"
+
+msgid "Category"
+msgstr "Kategorija"
+
+msgid "DearUser"
+msgstr "Poštovani korisniče"
+
+msgid "YourRegistrationData"
+msgstr "Vaši unešeni podaci"
+
+msgid "ResetLink"
+msgstr "Kliknite ovdje za ponovno dobivanje vaše zaporke"
+
+msgid "VisibilityChanged"
+msgstr "Vidljivost je promijenjena."
+
+msgid "MainNavigation"
+msgstr "Osnovno upravljanje"
+
+msgid "SeeDetail"
+msgstr "Pogledaj pojedinosti"
+
+msgid "GroupSingle"
+msgstr "Skupina"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "Molim pokušajte se prijaviti ponovno koristeći početnu stranicu"
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "Molim pokušajte se prijaviti ponovno koristeći dolje postavljenu formu."
+
+msgid "AccessToFaq"
+msgstr "Pristup često postavljenim pitanjima (FAQ)"
+
+msgid "Faq"
+msgstr "Često postavljena pitanja (FAQ)"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "Podsjeti korisnike neaktivne od"
+
+msgid "RemindInactiveLearnersMailSubject"
+msgstr "Neaktivnost o okviru %s"
+
+msgid "RemindInactiveLearnersMailContent"
+msgstr "Poštovani korisniče,<br /><br />niste pristupili %s više od %s dana."
+
+msgid "OpenIdAuthentication"
+msgstr "OpenID autentifikacija"
+
+msgid "UploadMaxSize"
+msgstr "Najveća dozvoljena veličina učitavanja datoteka"
+
+msgid "Unknown"
+msgstr "Nepoznat"
+
+msgid "MoveUp"
+msgstr "Pomakni gore"
+
+msgid "MoveDown"
+msgstr "Pomakni dolje"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "Prijenos datoteke nije upješno završen: tip ili proširenje datoteke je zabranjen"
+
+msgid "OpenIDURL"
+msgstr "OpenID URL"
+
+msgid "UplFileTooBig"
+msgstr "Datoteka je prevelika za prijenos."
+
+msgid "UplGenericError"
+msgstr "Prijenos datoteke nije upješno završen. Molim pokušajte ponovno kasnije ili kontaktirajte nadzornika portala."
+
+msgid "MyGradebook"
+msgstr "Moj dnevnik ocjena"
+
+msgid "Gradebook"
+msgstr "Dnevnik ocjena"
+
+msgid "OpenIDWhatIs"
+msgstr "Što je OpenID?"
+
+msgid "OpenIDDescription"
+msgstr "OpenID uklanja potrebu za otvaranje višestrukih korisničkih imena za različite Internet stranice (portale), pojednostavljajući vaš boravak na Internetu. Odaberite OpenID davatelja usluge koji odgovara vašim potrebama i u kojeg imate povjerenje. Ukoliko i promjenite davatelja OpenID usluge vaš otvoreni OpenID prenosite sa sobom. OpenID je besplatna tehnologija bez ikakvih licenci ili vlasništva. U poslovnom svijetu to znači manji troškovi u administriranju korisničkih računa i zaporki.<br /><br /><a href=\"http://openid.net/what/\">Više na...</a>"
+
+msgid "NoManager"
+msgstr "Bez upravitelja"
+
+msgid "ExportiCal"
+msgstr "Prenesi u  iCal format"
+
+msgid "ExportiCalPublic"
+msgstr "Prenesi u iCal format - javno"
+
+msgid "ExportiCalPrivate"
+msgstr "Prenesi u iCal format - privatno"
+
+msgid "ExportiCalConfidential"
+msgstr "Prenesi u iCal format  - povjerljivo"
+
+msgid "MoreStats"
+msgstr "Više podataka"
+
+msgid "Drh"
+msgstr "Upravitelj ljudskim potencijalima"
+
+msgid "MinDecade"
+msgstr "desetljeće"
+
+msgid "MinYear"
+msgstr "godina"
+
+msgid "MinMonth"
+msgstr "mjesec"
+
+msgid "MinWeek"
+msgstr "tjedan"
+
+msgid "MinDay"
+msgstr "dan"
+
+msgid "MinHour"
+msgstr "sat"
+
+msgid "MinMinute"
+msgstr "minuta"
+
+msgid "MinDecades"
+msgstr "desetljeća"
+
+msgid "MinYears"
+msgstr "godine"
+
+msgid "MinMonths"
+msgstr "mjeseci"
+
+msgid "MinWeeks"
+msgstr "tjedni"
+
+msgid "MinDays"
+msgstr "dani"
+
+msgid "MinHours"
+msgstr "sati"
+
+msgid "MinMinutes"
+msgstr "minute"
+
+msgid "HomeDirectory"
+msgstr "Početna mapa"
+
+msgid "DocumentCreated"
+msgstr "Napravljen dokument"
+
+msgid "ForumAdded"
+msgstr "Forum je dodan"
+
+msgid "ForumThreadAdded"
+msgstr "Tema sa foruma dodana"
+
+msgid "ForumAttachmentAdded"
+msgstr "Forum privitak dodan"
+
+msgid "directory"
+msgstr "mapa"
+
+msgid "Directories"
+msgstr "mape"
+
+msgid "UserAge"
+msgstr "Starost"
+
+msgid "UserBirthday"
+msgstr "Rođendan"
+
+msgid "Course"
+msgstr "Kolegij"
+
+msgid "FilesUpload"
+msgstr "dokumenti"
+
+msgid "ExerciseFinished"
+msgstr "Vježba je završena"
+
+msgid "UserSex"
+msgstr "Spol"
+
+msgid "UserNativeLanguage"
+msgstr "Materinji jezik"
+
+msgid "UserResidenceCountry"
+msgstr "Država prebivališta"
+
+msgid "AddAnAttachment"
+msgstr "Dodaj privitak"
+
+msgid "FileComment"
+msgstr "Komentar datoteke"
+
+msgid "FileName"
+msgstr "Naziv datoteke"
+
+msgid "SessionsAdmin"
+msgstr "Upravitelj sesija"
+
+msgid "MakeChangeable"
+msgstr "Napravi promjenljivo"
+
+msgid "MakeUnchangeable"
+msgstr "Napravi nepromjenljivo"
+
+msgid "UserFields"
+msgstr "Korisnička polja"
+
+msgid "FieldShown"
+msgstr "Prikazano polje"
+
+msgid "CannotShowField"
+msgstr "Polje se ne može prikazati"
+
+msgid "FieldHidden"
+msgstr "Polje je sakriveno"
+
+msgid "CannotHideField"
+msgstr "Polje se ne može sakriti"
+
+msgid "FieldMadeChangeable"
+msgstr "Polje se može mijenjati"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "Polje nije moguće mijenjati"
+
+msgid "FieldMadeUnchangeable"
+msgstr "Polje napravljeno nepromjenjivo"
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "Polje nije moguće napraviti nepromjenjivo"
+
+msgid "Folder"
+msgstr "Mapa"
+
+msgid "CloseOtherSession"
+msgstr "Chat je nedostupan jer je drugi kolegij aktivan na drugoj stranici. Da biste ovo izbjegli ostanite unutar kolegija u kojem želite pokrenuti chat. Za ponovno povezivanje pokrenite ponovno chat sa početne stranice kolegija."
+
+msgid "FileUploadSucces"
+msgstr "Datoteka je prenesena."
+
+msgid "Yesterday"
+msgstr "Jučer"
+
+msgid "Submit"
+msgstr "Pošalji"
+
+msgid "Department"
+msgstr "Zavod"
+
+msgid "BackToNewSearch"
+msgstr "Započni novu pretragu"
+
+msgid "Step"
+msgstr "Korak"
+
+msgid "SomethingFemininAddedSuccessfully"
+msgstr "dodano uspješno"
+
+msgid "SomethingMasculinAddedSuccessfully"
+msgstr "dodano uspješno"
+
+msgid "DeleteError"
+msgstr "Greška prilikom brisanja"
+
+msgid "StepsList"
+msgstr "Popis koraka"
+
+msgid "AddStep"
+msgstr "Dodaj korak"
+
+msgid "StepCode"
+msgstr "Šifra koraka"
+
+msgid "Label"
+msgstr "Oznaka"
+
+msgid "UnableToConnectTo"
+msgstr "Povezivanje nije moguće prema"
+
+msgid "NoUser"
+msgstr "Nema studenta"
+
+msgid "SearchResultsFor"
+msgstr "Rezultati pretrage za:"
+
+msgid "SelectFile"
+msgstr "Odaberi datoteku"
+
+msgid "WarningFaqFileNonWriteable"
+msgstr "Upzorenje - FAQ datoteka postavljena u /home/ mapi nema postavljena prava za pisanje. Vaš tekst se ne može spremiti dok se pravo na pisanje ne promijeni."
+
+msgid "AddCategory"
+msgstr "Dodaj kategoriju"
+
+msgid "NoExercises"
+msgstr "Nema niti jedne vježbe"
+
+msgid "NotAllowedClickBack"
+msgstr "Nemate prava za pristup ovoj stranici. Molim odaberite \"nazad\" na vašem pregledniku ili odaberite poveznicu ispod za povratak na prethodnu stranicu."
+
+msgid "Exercise"
+msgstr "Vježbe"
+
+msgid "Result"
+msgstr "Rezultat"
+
+msgid "AttemptingToLoginAs"
+msgstr "Pokušaj prijave kao %s %s (id %s)"
+
+msgid "LoginSuccessfulGoToX"
+msgstr "Prijava uspješna. Idi na %s"
+
+msgid "FckMp3Autostart"
+msgstr "Automatski pokreni audio zapis"
+
+msgid "Learner"
+msgstr "Polaznik"
+
+msgid "IntroductionTextUpdated"
+msgstr "Uvodni tekst je ažuriran"
+
+msgid "Align"
+msgstr "Poravnaj"
+
+msgid "Width"
+msgstr "Širina"
+
+msgid "VSpace"
+msgstr "V prostor"
+
+msgid "HSpace"
+msgstr "H prostor"
+
+msgid "Border"
+msgstr "Granica"
+
+msgid "Alt"
+msgstr "Alt"
+
+msgid "Height"
+msgstr "Visina"
+
+msgid "ImageManager"
+msgstr "Program za rukovanje slikovnim datotekama"
+
+msgid "ImageFile"
+msgstr "Slika"
+
+msgid "ConstrainProportions"
+msgstr "Ograniči proporcije"
+
+msgid "InsertImage"
+msgstr "Umetni sliku"
+
+msgid "AccountActive"
+msgstr "Korisnički račun je aktivan"
+
+msgid "GroupSpace"
+msgstr "Područje skupine"
+
+msgid "GroupWiki"
+msgstr "Wiki"
+
+msgid "ExportToPDF"
+msgstr "Prenesi datoteku u formatu PDF"
+
+msgid "CommentAdded"
+msgstr "Vaš komentar je dodan"
+
+msgid "BackToPreviousPage"
+msgstr "Povratak na prethodnu stranicu"
+
+msgid "ListView"
+msgstr "Prikaži kao listu"
+
+msgid "NoOfficialCode"
+msgstr "Nema službene šifre"
+
+msgid "Owner"
+msgstr "Vlasnik"
+
+msgid "GeneralDescription"
+msgstr "Opći opis"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "Koje mjesto kolegij ima u programu? Postoje li kakvi preduvjeti? Kako je kolegij povezan s drugim kolegijima?"
+
+msgid "GeneralDescriptionInformation"
+msgstr "Opišite kolegij (broj sati, službena šifra, prostorija...) i predavača (prezime, ime, ured, broj telefona, elektronička pošta...)."
+
+msgid "Objectives"
+msgstr "Ciljevi"
+
+msgid "ObjectivesInformation"
+msgstr "Prikaz općih i pojedinačnih ciljeva kolegija."
+
+msgid "ObjectivesQuestions"
+msgstr "Koje će vještine korisnici steći do kraja kolegija? Što trebaju činiti tijekom kolegija?"
+
+msgid "Topics"
+msgstr "Teme"
+
+msgid "TopicsInformation"
+msgstr "Popis tema od kojih se sastoji kolegij. Važnost pojedine teme. Razina težine. Struktura i međuovisnost različitih elemenata."
+
+msgid "TopicsQuestions"
+msgstr "Kako će se razvijati tijek kolegija? Na koje elemente korisnici trebaju posebno obratiti pozornost? Postoje li određeni problemi u shvaćanju pojedinih poglavlja? Koliko vremena treba posvetiti pojedinim elementima kolegija?"
+
+msgid "Methodology"
+msgstr "Metodologija"
+
+msgid "MethodologyQuestions"
+msgstr "Koje metode i aktivnosti mogu pomoći pri postizanju ciljeva kolegija? Kakav je njihov raspored?"
+
+msgid "MethodologyInformation"
+msgstr "Prikaz aktivnosti (konferencije, radovi, istraživanje u skupinama, laboratorijske vježbe...)."
+
+msgid "CourseMaterial"
+msgstr "Gradivo"
+
+msgid "CourseMaterialQuestions"
+msgstr "Postoji li udžbenik, zbornik, popis literature, popis poveznica na Internetu?"
+
+msgid "CourseMaterialInformation"
+msgstr "Kratki opis gradiva."
+
+msgid "HumanAndTechnicalResources"
+msgstr "Ljudski i tehnički resursi"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "Postoje li predavači, tutori, tehnička potpora, asistenti, informatičke sobe?"
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "Kratki opis za identifikaciju različitih osoba za kontakt i dostupnih tehničkih uređaja."
+
+msgid "Assessment"
+msgstr "Ocjenjivanje"
+
+msgid "AssessmentQuestions"
+msgstr "Kako će korisnici biti ocjenjivani? Postoje li određene tehnike za svladavanje pojedinih tema?"
+
+msgid "AssessmentInformation"
+msgstr "Primjer ispitnog pitanja. Kriteriji uspješnosti. Savjeti i naputci."
+

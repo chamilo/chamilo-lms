@@ -1,0 +1,466 @@
+msgid "langShouldBeCSVFormat"
+msgstr "Filen skall vara i CSV format. Lägg inte till mellanrum. Strukturen skall hållas exakt:"
+
+msgid "langTracking"
+msgstr "Spårning"
+
+msgid "langEnter2passToChange"
+msgstr "För att ändra ditt lösenord, skriv in ditt nuvarande lösenord i fältet ovan och ditt nya lösenord i båda fälten nedan. För att bibehålla det aktuella lösenordet, lämna de tre fält tomma."
+
+msgid "langAuthInfo"
+msgstr "Legitimering"
+
+msgid "langUpdateImage"
+msgstr "Ändra bild"
+
+msgid "langImageWrong"
+msgstr "Filstorleken skall vara mindre än"
+
+msgid "langAddImage"
+msgstr "Bild"
+
+msgid "langCourseManager"
+msgstr "Kursansvarig"
+
+msgid "NewPass"
+msgstr "Nytt lösenord"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "Lösenordet är felaktigt"
+
+msgid "password_request"
+msgstr "Du har fått en förfrågan att byta ditt lösenord. Har du inte frågat, skall du ignorera detta e-post. För att återställa ditt lösenord skall du klicka på reset link,(återställ länken)."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Ditt lösenord har e-postats till dig."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Skriv din e-post adress som du angivit när du registrerat dig och vi skickar dig ditt lösenord."
+
+msgid "langLogin"
+msgstr "Logga in"
+
+msgid "langAction"
+msgstr "Utför"
+
+msgid "langPreserved"
+msgstr "Bevarad"
+
+msgid "langDeleted"
+msgstr "Raderad"
+
+msgid "langAdded"
+msgstr "Tillagd"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Bekräfta avregistrering"
+
+msgid "langCourseName"
+msgstr "Kursnamn"
+
+msgid "langSubscribe"
+msgstr "Registrera"
+
+msgid "langSee"
+msgstr "Gå till"
+
+msgid "langLastVisits"
+msgstr "Mina senaste besök"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Om du vill lägga till en lista med användare, kontakta din webbadministratör."
+
+msgid "langPassTooEasy"
+msgstr "detta l�senord �r f�r enkelt. Anv�nd ett som liknar detta:"
+
+msgid "langGroupUserManagement"
+msgstr "Grupphantering"
+
+msgid "langAddedToCourse"
+msgstr "har registrerats till din kurs"
+
+msgid "langUserAlreadyRegistered"
+msgstr "En användare med samma namn/förnamn är redan registrerad i denna kurs. Du kan inte registrera honom (henne) dubbelt."
+
+msgid "langBackUser"
+msgstr "Tillbaka till användarlistan"
+
+msgid "langUserOneByOneExplanation"
+msgstr "Han (hon) kommer att erhålla en bekräftelse med användarnamn och lösenord via emejl."
+
+msgid "langGiveTutor"
+msgstr "Gör till lärare"
+
+msgid "langRemoveRight"
+msgstr "Radera rättighet"
+
+msgid "langGiveAdmin"
+msgstr "Gör till admin"
+
+msgid "langUserNumber"
+msgstr "nummer"
+
+msgid "langDownloadUserList"
+msgstr "Ladda ner användarlistan"
+
+msgid "langSend"
+msgstr "Sänd"
+
+msgid "langUserAddExplanation"
+msgstr "varje rad i filen behöver 5 fält: <b>Efternamn   Förnamn   Användarnamn   Lösenord   Emejl</b> separerade med tabbar och i ovanstående ordning. Användarna får bekräftelse via emejl med användarnamn och lösenord."
+
+msgid "langUserMany"
+msgstr "Importera användarlista via textfil"
+
+msgid "langOneByOne"
+msgstr "Lägg till användare manuellt"
+
+msgid "langNow"
+msgstr "nu"
+
+msgid "langTutor"
+msgstr "Lärare"
+
+msgid "langTitular"
+msgstr "Ledare"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>Ändra i kurslistan</big><br><br>Markera de kurser som du önskar följa.Avmarkera de kurser som du inte önska följa längre. Klicka därefter på Ok längst ner i kurslistan"
+
+msgid "langStudent"
+msgstr "Student"
+
+msgid "langImportUserList"
+msgstr "Importera en lista på användare"
+
+msgid "langAddAU"
+msgstr "Lägg till en användare"
+
+msgid "langAddedU"
+msgstr "har lagts till. Ett emejl har skickats ut för att ge personen ett användarnamn"
+
+msgid "langTheU"
+msgstr "Användaren"
+
+msgid "langRegYou"
+msgstr "har registrerat dig på denna kurs"
+
+msgid "langOneResp"
+msgstr "En av kursadministratörerna"
+
+msgid "langTaken"
+msgstr "är redan upptaget. Välj ett annat."
+
+msgid "langUserNo"
+msgstr "Användarnamnet som du valt"
+
+msgid "langFilled"
+msgstr "Du har lämnat några fält tomma."
+
+msgid "langInC"
+msgstr "i denna kurs"
+
+msgid "langRole"
+msgstr "Roll"
+
+msgid "UserPicture"
+msgstr "Bild"
+
+msgid "langProfileReg"
+msgstr "Din nya profil har sparats"
+
+msgid "langEmailWrong"
+msgstr "Emejl address är inte komplett eller så innehåller den otillåtna tecken"
+
+msgid "langUserTaken"
+msgstr "Anv�ndarnamnet �r upptaget"
+
+msgid "langFields"
+msgstr "Du har lämnat några fält tomma"
+
+msgid "langAgain"
+msgstr "Försök igen!"
+
+msgid "langPassTwo"
+msgstr "Du har skrivit in två olika lösenord"
+
+msgid "langViewProfile"
+msgstr "Visa min e-portfolio"
+
+msgid "langModifProfile"
+msgstr "Ändra i min profil"
+
+msgid "langIsReg"
+msgstr "kurser är registrerade"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Du kan nu skapa din kurs"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Du kan nu välja, i listan, de kurser du vill deltaga i."
+
+msgid "langMailHasBeenSent"
+msgstr "Ett e-post meddelande har skickats till dig för att hjälpa dig att komma ihåg ditt användarnamn och lösenord."
+
+msgid "langPersonalSettings"
+msgstr "Dina personliga inställningar har registrerats och emejlats till dig för att hjälpa dig komma ihåg användarnamn och lösenord.</p>Välj i listan vilka kurser som du vill deltaga i."
+
+msgid "langManager"
+msgstr "Ansvarig"
+
+msgid "langFormula"
+msgstr "Med vänlig hälsning"
+
+msgid "langProblem"
+msgstr "I händelse av problem, kontakta oss."
+
+msgid "langIs"
+msgstr "är"
+
+msgid "langAddress"
+msgstr "Adressen till"
+
+msgid "langSettings"
+msgstr "med följande inställningar:
+Användarnamn:"
+
+msgid "langYouAreReg"
+msgstr "Du registrerades vid"
+
+msgid "langYourReg"
+msgstr "Din registrering vid"
+
+msgid "langUserFree"
+msgstr "Ditt anv�ndarnamn �r redan upptaget. Anv�nda webbl�saren tillbakaknapp och f�rs�k igen med ett annat."
+
+msgid "langEmptyFields"
+msgstr "Du har lämnat några fält tomma. Använda webbläsaren tillbakaknapp och fyll i dem och försök igen."
+
+msgid "langPassTwice"
+msgstr "Du skrev in två skilda lösenord. Använda webbläsaren tillbakaknapp och försök igen."
+
+msgid "langRegAdmin"
+msgstr "Skapa kurser (lärare)"
+
+msgid "langRegStudent"
+msgstr "Följ kurser (elev)"
+
+msgid "langConfirmation"
+msgstr "Bekräfta"
+
+msgid "langPass"
+msgstr "Lösenord"
+
+msgid "langSurname"
+msgstr "Förnamn"
+
+msgid "langRegistration"
+msgstr "Registrering"
+
+msgid "langYourAccountParam"
+msgstr "Detta är lösenord och inloggningsnamn för ditt konto"
+
+msgid "langLoginRequest"
+msgstr "Inloggningsförfrågan"
+
+msgid "langDefineHeadings"
+msgstr "Definiera överskrifter"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Lärare enbart"
+
+msgid "langLostPassword"
+msgstr "Glömt inloggningsuppgifter?"
+
+msgid "langAdminOfCourse"
+msgstr "admin"
+
+msgid "langSimpleUserOfCourse"
+msgstr "normal"
+
+msgid "langIsTutor"
+msgstr "lärare"
+
+msgid "langParamInTheCourse"
+msgstr "Status"
+
+msgid "langMember"
+msgstr "registrerad"
+
+msgid "langLock"
+msgstr "lås"
+
+msgid "langUnlock"
+msgstr "lås upp"
+
+msgid "langHaveNoCourse"
+msgstr "ingen kurs"
+
+msgid "langManage"
+msgstr "Hantera portal"
+
+msgid "langAdministrationTools"
+msgstr "Administratörsverktyg"
+
+msgid "langUserProfileReg"
+msgstr "Användar e-portfolio har blivit registrerad"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Det existerar inget konto med denna e-post adress"
+
+msgid "langCourses4User"
+msgstr "Användarens kurser"
+
+msgid "langCoursesByUser"
+msgstr "Användarnas kurser"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Registrera användare i kursen"
+
+msgid "langPreced100"
+msgstr "Tidigare 100"
+
+msgid "langAddmore"
+msgstr "Lägg till registrerade  användare"
+
+msgid "langAddback"
+msgstr "Gå till användarlistan"
+
+msgid "langreg"
+msgstr "Registrera"
+
+msgid "langQuit"
+msgstr "Avsluta"
+
+msgid "your_password_has_been_reset"
+msgstr "Ditt lösenord är återställt"
+
+msgid "langSex"
+msgstr "Kön"
+
+msgid "langClass"
+msgstr "Klass"
+
+msgid "langEdit"
+msgstr "ändra"
+
+msgid "required"
+msgstr "obligatoriskt"
+
+msgid "langOptionalTextFields"
+msgstr "Valfria fält"
+
+msgid "langMyProductions"
+msgstr "Mina arbetsprover"
+
+msgid "langFileDeleted"
+msgstr "Filen har raderats."
+
+msgid "FullUserName"
+msgstr "Fullständigt namn"
+
+msgid "SearchForUser"
+msgstr "Sök efter användare"
+
+msgid "SearchButton"
+msgstr "Sök"
+
+msgid "SearchNoResultsFound"
+msgstr "Inga sökta objekt funna"
+
+msgid "UsernameWrong"
+msgstr "Ditt användarnamn kan bara innehålla bokstäver, siffror och _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "Detta är lösenords fråga för e-post adressen"
+
+msgid "CorrespondsToAccount"
+msgstr "Denna e-post adress stämmer överens med följande användar konto."
+
+msgid "CorrespondsToAccounts"
+msgstr "Denna e-post adress stämmer överens med följande användar konton."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo kan inte hantera begäran automatiskt för kontot har en extern autentiserings källa. Var vänlig notera detta och meddela användaren."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo kan inte hantera begäran automatiskt för att åtminstone ett av de konton har extern autentiserings källa. Var vänlig notera detta och vidtag åtgärder för samtliga konton, även de med plattforms identifiering. Meddela användaren."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo kan inte hantera begäran automatiskt för denna typ av konto. Din begäran har skickats till plattforms administratören, som kommer att vidta lämpliga åtgärder och meddela dig resultatet."
+
+msgid "langphone"
+msgstr "Telefon"
+
+msgid "Unreg"
+msgstr "Avregistrera"
+
+msgid "MyProgress"
+msgstr "Mina framsteg"
+
+msgid "ProgressIntroduction"
+msgstr "Välj en av dina kurser nedan.<br />Därifrån kan du sedan se dina framsteg i varje kurs du är registrerad i."
+
+msgid "Select"
+msgstr "Välj"
+
+msgid "NeverExpires"
+msgstr "Upphör aldrig"
+
+msgid "On"
+msgstr "På"
+
+msgid "ExpirationDate"
+msgstr "Upphör (datum)"
+
+msgid "ActiveAccount"
+msgstr "Aktivt konto"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "Ditt konto måste godkännas"
+
+msgid "ApprovalForNewAccount"
+msgstr "Godkännande av nytt konto"
+
+msgid "ManageUser"
+msgstr "Hantera användare"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Lägg till lärare till kursen"
+
+msgid "SendMessage"
+msgstr "Skicka meddelande"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "Ditt lösenord blir krypterat av säkerhetsskäl. När du klickar på länken skickas e-post till dig med ditt lösenord."
+
+msgid "UsersUnsubscribed"
+msgstr "Den valda användaren har avregistrerats från kursen"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "Systemet kunde inte skicka e-posten"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "Angivet OpenID kunde inte hittas i vår databas. Om du redan finns registrerad hos oss kan du ändra i din profil för att lägga till inloggning med OpenID, annars behöver du registrera ett nytt konto."
+
+msgid "UsernameMaxXCharacters"
+msgstr "Användarnamnet kan vara max %s tecken långt"
+
+msgid "PictureUploaded"
+msgstr "Din bild blev uppladdad"
+
+msgid "ProductionUploaded"
+msgstr "Ditt arbetsprov blev uppladdat"
+
+msgid "FolderUpdated"
+msgstr "Mappen uppdaterad"
+
+msgid "EditInformation"
+msgstr "Redigera Profil"
+
+msgid "AtOnce"
+msgstr "Omedelbar"
+
+msgid "Daily"
+msgstr "Dagligen"
+

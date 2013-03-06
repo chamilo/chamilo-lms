@@ -1,0 +1,27 @@
+msgid "langTool"
+msgstr "Metadáta dokumentu"
+
+msgid "langAdvanced"
+msgstr "Vytvoriť"
+
+msgid "langSearch"
+msgstr "Vyhľadať"
+
+msgid "langNoKeywords"
+msgstr "Tento kurz nemá kľúčové slová"
+
+msgid "langKwCacheProblem"
+msgstr "Zásoba kľúčových slov nemôže byť otvorená"
+
+msgid "langCourseKwds"
+msgstr "Tento dokument obsahuje kľ�čov� slov� kurzu"
+
+msgid "langKwdsInMD"
+msgstr "kľúčové slová použité v MD"
+
+msgid "langKwdsUse"
+msgstr "Kľúčové slová kurzu (tučné = nepoužívané)"
+
+msgid "langTotalMDEs"
+msgstr "Celkový počet MD záznamov:"
+

@@ -1,0 +1,318 @@
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Microphone"
+msgstr "Mikrofon"
+
+msgid "Name"
+msgstr "Név"
+
+msgid "DeleteStream"
+msgstr "Adatfolyam törlése"
+
+msgid "Progress"
+msgstr "Haladás"
+
+msgid "Play"
+msgstr "Lejátszás"
+
+msgid "Stop"
+msgstr "Állj"
+
+msgid "Record"
+msgstr "Felvétel"
+
+msgid "NoFileAvailable"
+msgstr "Nincs felhasználható állomány"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Felvétel csak oktatók számára"
+
+msgid "UsersNow"
+msgstr "Felhasználók ebben a pillanatban:"
+
+msgid "StartConference"
+msgstr "Konferencia indítása"
+
+msgid "MyName"
+msgstr "A nevem"
+
+msgid "OrganisationSVideoconference"
+msgstr "Chamilo Videókonferencia"
+
+msgid "ImportPresentation"
+msgstr "Prezentáció importálása"
+
+msgid "RefreshList"
+msgstr "Lista frissítése"
+
+msgid "GoToTop"
+msgstr "A tetejére"
+
+msgid "NewPoll"
+msgstr "Új szavazás"
+
+msgid "CreateNewPoll"
+msgstr "Új szavazás létrehozása ehhez a szobához"
+
+msgid "Question"
+msgstr "Kérdés"
+
+msgid "PollType"
+msgstr "Szavazástípus:"
+
+msgid "Create"
+msgstr "Létrehoz"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Infó: a szobában tartózkodó összes felhasználó értesítés kap az új szavazásról."
+
+msgid "YesNo"
+msgstr "Igen / Nem"
+
+msgid "Numeric1To10"
+msgstr "Numerikus érték (1-10)"
+
+msgid "Poll"
+msgstr "Szavazás"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Moderátornak kell lennie ahhoz, hogy szavazásokat hozzon lérte."
+
+msgid "YourVoteHasBeenSent"
+msgstr "Szavazatát elmentettük."
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Erre már leadta szavazatát"
+
+msgid "VoteButton"
+msgstr "Szavazok!"
+
+msgid "YourAnswer"
+msgstr "A válasza:"
+
+msgid "Yes"
+msgstr "Igen"
+
+msgid "No"
+msgstr "Nem"
+
+msgid "WantsToKnow"
+msgstr "tudni akarja:"
+
+msgid "PollResults"
+msgstr "Szavazás eredményei"
+
+msgid "Votes"
+msgstr "Szavazat:"
+
+msgid "Result"
+msgstr "Eredmény"
+
+msgid "ThereIsNoPoll"
+msgstr "Jelenleg nincs szavazás."
+
+msgid "MeetingMode"
+msgstr "Találkozó (max. 4 férőhely)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Találkozó (max. 50 férőhely)"
+
+msgid "Mode"
+msgstr "Mód"
+
+msgid "RemainingSeats"
+msgstr "Szabad férőhely"
+
+msgid "AlreadyIn"
+msgstr "már tagja"
+
+msgid "CheckIn"
+msgstr "bejelentkezés"
+
+msgid "TheModeratorHasLeft"
+msgstr "A konferencia moderátora elhagyta a szobát."
+
+msgid "SystemMessage"
+msgstr "Rendszerüzenet"
+
+msgid "ChooseDevices"
+msgstr "Eszközök kiválasztása"
+
+msgid "ChooseCam"
+msgstr "Válasszon kamerát:"
+
+msgid "ChooseMic"
+msgstr "Válasszon mikrofont:"
+
+msgid "OK"
+msgstr "Rendben."
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Újra be kell jelentkeznie a változások életbe lépéséhez."
+
+msgid "ChangeSettings"
+msgstr "Beállítások megváltoztatása"
+
+msgid "Course"
+msgstr "Kurzus"
+
+msgid "CourseLanguage"
+msgstr "A kurzus nyelve:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Tábla törlésének engedélyezése"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Törlődjön a tábla tartalma, mielőtt hozzáadja az új képet?"
+
+msgid "DontAskMeAgain"
+msgstr "Ne kérdezzen meg többet."
+
+msgid "EditSettings"
+msgstr "Beállítások szerkesztése"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Kérjen engedélyt a rendszer a tábla törlése előtt"
+
+msgid "UserInfo"
+msgstr "Felhasználói információ"
+
+msgid "ClearDrawArea"
+msgstr "Rajzterület törlése"
+
+msgid "Undo"
+msgstr "Visszavonás"
+
+msgid "Redo"
+msgstr "Újra"
+
+msgid "SelectAnObject"
+msgstr "Objektum kiválasztása"
+
+msgid "Text"
+msgstr "Szöveg"
+
+msgid "Paint"
+msgstr "Ecset"
+
+msgid "DrawLine"
+msgstr "Vonal rajzolása"
+
+msgid "DrawUnderline"
+msgstr "Aláhúzás rajzolása"
+
+msgid "Rectangle"
+msgstr "Négyszög"
+
+msgid "Elipse"
+msgstr "Ellipszis"
+
+msgid "Arrow"
+msgstr "Nyíl"
+
+msgid "DeleteChosenItem"
+msgstr "Kiválasztott elem törlése"
+
+msgid "ApplyForModeration"
+msgstr "Jelentkezés moderátornak"
+
+msgid "Apply"
+msgstr "Alkalmaz"
+
+msgid "BecomeModerator"
+msgstr "Moderátornak jelentkezem"
+
+msgid "Close"
+msgstr "bezár"
+
+msgid "Italic"
+msgstr "Dőlt"
+
+msgid "Bold"
+msgstr "Kövér"
+
+msgid "Waiting"
+msgstr "Várakozás"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "Egy felhasználó jelentkezik moderátornak:"
+
+msgid "Accept"
+msgstr "Elfogad"
+
+msgid "Reject"
+msgstr "Visszautasít"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Felkérés küldése a következő felhasználóknak"
+
+msgid "Accepted"
+msgstr "Elfogadva"
+
+msgid "Rejected"
+msgstr "Visszautasítva"
+
+msgid "ChangeModerator"
+msgstr "Moderátor módosítása"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "Ön nem moderátora ennek a kurzusnak!"
+
+msgid "Moderator"
+msgstr "Moderátor:"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "A szoba megtelt. Kérem, jöjjön vissza később."
+
+msgid "Loading"
+msgstr "Betöltés"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Kérem várjon, amíg a kép betöltődik"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "A konferencia résztvevőinek szinkronizálása"
+
+msgid "Trainer"
+msgstr "Edző"
+
+msgid "Learner"
+msgstr "Tanuló"
+
+msgid "Chat"
+msgstr "Csevegő"
+
+msgid "Slides"
+msgstr "Diák"
+
+msgid "WaitingForParticipants"
+msgstr "Várakozás résztvevőkre"
+
+msgid "Send"
+msgstr "Küld"
+
+msgid "Browse"
+msgstr "Keresés"
+
+msgid "Cancel"
+msgstr "Mégsem"
+
+msgid "ChooseFile"
+msgstr "Válasszon ki egy állományt az importáláshoz"
+
+msgid "ConvertingDocument"
+msgstr "Dokumentum átalakítása"
+
+msgid "Disconnected"
+msgstr "Szétkapcsolva"
+
+msgid "FineStroke"
+msgstr "Vékony"
+
+msgid "MediumStroke"
+msgstr "Közepes"
+
+msgid "ThickStroke"
+msgstr "Vékony"
+

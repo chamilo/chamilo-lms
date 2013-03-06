@@ -1,0 +1,123 @@
+msgid "langSelectOptionForBackup"
+msgstr "백업 옵션을 선택하여 주십시요."
+
+msgid "langLetMeSelectItems"
+msgstr "과정 컴포넌트를 선택할 수 있도록 해주십시요"
+
+msgid "langCreateFullBackup"
+msgstr "이 과정의 전체 백업 생성"
+
+msgid "langCreateBackup"
+msgstr "백업 생성"
+
+msgid "langBackupCreated"
+msgstr "이 과정의 백업이 생성되었습니다. 이 파일의 다운로드가 시작되는 데는 약간의 시간이 소요됩니다. 만일 다운로드가 시작되지 않을 시에는, 다음 링크를 클릭하십시요."
+
+msgid "langSelectBackupFile"
+msgstr "백업 파일 선택"
+
+msgid "langImportBackup"
+msgstr "백업 불러오기"
+
+msgid "langImportFullBackup"
+msgstr "전체 백업 불러오기"
+
+msgid "langImportFinished"
+msgstr "불러오기가 종료되었습니다"
+
+msgid "langEvents"
+msgstr "이벤트"
+
+msgid "langAnnouncements"
+msgstr "공지사항"
+
+msgid "langDocuments"
+msgstr "문서"
+
+msgid "langTests"
+msgstr "테스트"
+
+msgid "langLearnpaths"
+msgstr "Learnpaths"
+
+msgid "langCopyCourse"
+msgstr "과정 복사"
+
+msgid "langSelectItemsToCopy"
+msgstr "복사 할 항목 선택"
+
+msgid "langCopyFinished"
+msgstr "복사하기가 종료되었습니다"
+
+msgid "langFullRecycle"
+msgstr "전체 재사용"
+
+msgid "langRecycleCourse"
+msgstr "과정 재사용"
+
+msgid "langRecycleFinished"
+msgstr "재사용이 종료되었습니다"
+
+msgid "langRecycleWarning"
+msgstr "경고: 이 툴을 사용할 경우, 과정의 일부를 삭제하게 됩니다. 취소도 불가능합니다. 이 재활용 툴을 사용하기 전에 <a href=\"create_backup.php\">백업</a> 하기 바랍니다."
+
+msgid "langSameFilename"
+msgstr "불러온 파일과 같은 파일 명이 존재하면 어떻게 하시겠습니까?"
+
+msgid "langSameFilenameSkip"
+msgstr "불러오기 취소"
+
+msgid "langSameFilenameRename"
+msgstr "파일명 재작성 (eg file.pdf 인 경우 file_1.pdf로)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "덮어쓰기"
+
+msgid "langSelectDestinationCourse"
+msgstr "대상 과정을 선택"
+
+msgid "langFullCopy"
+msgstr "전체 복사"
+
+msgid "langCourseDescription"
+msgstr "과정 설명"
+
+msgid "langNoResourcesToBackup"
+msgstr "백업 할 리소스가 존재하지 않습니다"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "백업 파일에 리소스가 존재하지 않습니다"
+
+msgid "langSelectResources"
+msgstr "리소스 선택"
+
+msgid "langNoResourcesToRecycles"
+msgstr "재사용 할 리소스가 존재하지 않습니다"
+
+msgid "langIncludeQuestionPool"
+msgstr "질문 풀 삽입"
+
+msgid "langLocalFile"
+msgstr "로컬 파일"
+
+msgid "langServerFile"
+msgstr "서버 파일"
+
+msgid "langNoBackupsAvailable"
+msgstr "백업이 불가능합니다"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "대상 과정이 존재하지 않습니다"
+
+msgid "langBackup"
+msgstr "백업"
+
+msgid "langImportBackupInfo"
+msgstr "백업 불러오기. 로컬 드라이브 또는 서버 상의 팩업 파일을 업로드 하는 것이 가능합니다."
+
+msgid "langCreateBackupInfo"
+msgstr "이 과정의 백업을 생성합니다. 과정 컨텐츠를 선택적으로 백업 파일에 넣을 수 있습니다."
+
+msgid "ToolIntro"
+msgstr "툴 개요"
+

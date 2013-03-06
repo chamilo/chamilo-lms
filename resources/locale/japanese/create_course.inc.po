@@ -1,0 +1,132 @@
+msgid "langProfessors"
+msgstr "么碰兜镑"
+
+msgid "langExplanation"
+msgstr "办搀OKをクリックすると、柴的技や徒年、矢今マネ〖ジャ〖烧のサイトが叫丸ます。サイト侯喇荚としてログインすると、サイトを饯赖することが叫丸ます。"
+
+msgid "langEmpty"
+msgstr "踏淡掐腕があります。<br />もどるボタンでもどって、浩刨活してください。<br />もしもコ〖スコ〖ドを梦らないなら、コ〖スプログラムを啼い圭わせてください"
+
+msgid "langCodeTaken"
+msgstr "このコ〖スコ〖ドは贷に蝗われています。<br />提るボタンを病して、浩刨活してください。"
+
+msgid "langFormula"
+msgstr "Yours sincerely"
+
+msgid "langMessage"
+msgstr "テスト柴的技を猴近するとこのメッセ〖ジも猴近されます"
+
+msgid "langExerciceEx"
+msgstr "遍浆啼玛毋"
+
+msgid "langAntique"
+msgstr "概洛暖池凰"
+
+msgid "langSocraticIrony"
+msgstr "Socratic irony is..."
+
+msgid "langManyAnswers"
+msgstr "(more than one answer can be true)"
+
+msgid "langRidiculise"
+msgstr "Ridiculise one\'s interlocutor in order to have him concede he is wrong."
+
+msgid "langNoPsychology"
+msgstr "No. Socratic irony is not a matter of psychology, it concerns argumentation."
+
+msgid "langAdmitError"
+msgstr "Admit one\'s own errors to invite one\'s interlocutor to do the same."
+
+msgid "langNoSeduction"
+msgstr "No. Socratic irony is not a seduction strategy or a method based on the example."
+
+msgid "langForce"
+msgstr "Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know."
+
+msgid "langIndeed"
+msgstr "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\""
+
+msgid "langContradiction"
+msgstr "Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end."
+
+msgid "langNotFalse"
+msgstr "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses."
+
+msgid "langAgenda"
+msgstr "徒年"
+
+msgid "langVideo"
+msgstr "ヴィデオ"
+
+msgid "langCourseProgram"
+msgstr "コ〖スプログラム"
+
+msgid "langAnnouncements"
+msgstr "お梦らせ"
+
+msgid "langAddPageHome"
+msgstr "ペ〖ジをアップロ〖ドし、ホ〖ムペ〖ジにリンクをはる"
+
+msgid "langLinkSite"
+msgstr "サイトをリンク"
+
+msgid "langModifyInfo"
+msgstr "コ〖スの攫鼠を柠赖"
+
+msgid "langAgendaTitle"
+msgstr "Tuesday the 11th of December - First lesson : Newton 18"
+
+msgid "langAgendaText"
+msgstr "General introduction to philosophy and methodology principles"
+
+msgid "langGoogle"
+msgstr "Quick and powerfull search engine"
+
+msgid "langIntroductionText"
+msgstr "∈この眷疥はあなたのコ〖スの疽拆矢今の眷疥です。恃构する箕は......<b>饯赖</b>をクリック∷"
+
+msgid "langIntroductionTwo"
+msgstr "池栏、壬が矢今をアップロ〖ド叫丸るペ〖ジです。HTMLのみで茶咙は叫丸ません。"
+
+msgid "langCourseDescription"
+msgstr "コ〖スのリスト豺棱を今いてください。"
+
+msgid "langProfessor"
+msgstr "兜徽"
+
+msgid "langAnnouncementEx"
+msgstr "お梦らせの毋:コ〖スの兜徽か瓷妄荚のみが今けます。"
+
+msgid "langJustCreated"
+msgstr "コ〖スのウエブサイトを侯りました"
+
+msgid "langEnter"
+msgstr "Entrer"
+
+msgid "langLn"
+msgstr "咐胳"
+
+msgid "langCreateSite"
+msgstr "コ〖スのウエブサイトを侯る"
+
+msgid "langFieldsRequ"
+msgstr "すべての腕の淡掐が涩妥"
+
+msgid "langEx"
+msgstr "毋¨<i>矢池凰</i>"
+
+msgid "langFac"
+msgstr "池彩"
+
+msgid "langTargetFac"
+msgstr "このコ〖スの池彩、池婶"
+
+msgid "langMax"
+msgstr "呵络１バイト矢机で12矢机 e.g. <i>ROM2121</i>"
+
+msgid "langDoubt"
+msgstr "コ〖ス戎规が悼わしいなら、碰澈婶金に息晚してください"
+
+msgid "langProgram"
+msgstr "コ〖スプログラム"
+

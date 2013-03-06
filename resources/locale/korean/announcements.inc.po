@@ -1,0 +1,135 @@
+msgid "Announcement"
+msgstr "공지사항"
+
+msgid "langAnnEmpty"
+msgstr "공지사항 목록이 초기화되었습니다"
+
+msgid "AnnouncementModified"
+msgstr "공지사항이 변경되었습니다"
+
+msgid "AnnouncementAdded"
+msgstr "공지사항이 추가되었습니다"
+
+msgid "AnnouncementDeleted"
+msgstr "공지사항이 삭제되었습니다"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Published on"
+
+msgid "AddAnnouncement"
+msgstr "공지사항 추가"
+
+msgid "langContent"
+msgstr "내용"
+
+msgid "AnnouncementDeleteAll"
+msgstr "공지사항 목록 모두 삭제"
+
+msgid "professorMessage"
+msgstr "담당교사 메시지"
+
+msgid "langEmailSent"
+msgstr "그리고 등록한 학생들에게 메일전송"
+
+msgid "EmailOption"
+msgstr "이 공지사항을 지정한 그룹과 유저에게 메일로 전송"
+
+msgid "langOn"
+msgstr "On"
+
+msgid "langRegUser"
+msgstr "이 사이트에 회원가입한 유저"
+
+msgid "langUnvalid"
+msgstr "메일주소가 잘못되었거나 존재하지 않습니다"
+
+msgid "langModifAnn"
+msgstr "이 공지사항 변경"
+
+msgid "langModify"
+msgstr "변경"
+
+msgid "langDelete"
+msgstr "삭제"
+
+msgid "langTitle"
+msgstr "제목"
+
+msgid "langHelp"
+msgstr "도움말"
+
+msgid "langOk"
+msgstr "확인"
+
+msgid "langAddIntro"
+msgstr "개요문 추가"
+
+msgid "langBackList"
+msgstr "목록으로 되돌아가기"
+
+msgid "langSelMess"
+msgstr "특정유저에게 경고하기"
+
+msgid "EmailTitle"
+msgstr "이 메일의 주제"
+
+msgid "langUserlist"
+msgstr "그룹과 유저 목록"
+
+msgid "langSelectedUsers"
+msgstr "지정 유저"
+
+msgid "langSubmit"
+msgstr "submit"
+
+msgid "langPleaseEnterMessage"
+msgstr "메세지를 반드시 남겨야합니다."
+
+msgid "langPleaseSelectUsers"
+msgstr "유저를 선택해야 합니다."
+
+msgid "Teachersubject"
+msgstr "학생에게 메세지가 전달되었습니다"
+
+msgid "langMessages"
+msgstr "메세지"
+
+msgid "langMessageToSelectedUsers"
+msgstr "유저들에게 메세지 보내기"
+
+msgid "langIntroText"
+msgstr "메세지를 보내기 위해서는, 왼쪽의 리스트에서 유저의 그룹을 선택하거나(앞에 G로 표기) 개별 유저를 선택한다."
+
+msgid "langDown"
+msgstr "down"
+
+msgid "langMsgSent"
+msgstr "메세지가 지정한 학생들에게 전송되었습니다"
+
+msgid "langSelUser"
+msgstr "사이트의 지정된 유저"
+
+msgid "langMessageToSelectedGroups"
+msgstr "지정된 그룹에게 메세지 보내기"
+
+msgid "langSelectedGroups"
+msgstr "지정 그룹"
+
+msgid "langMsg"
+msgstr "메세지"
+
+msgid "langYes"
+msgstr "예"
+
+msgid "MsgText"
+msgstr "메세지"
+
+msgid "AnnouncementDeletedAll"
+msgstr "모든 공지사항이 삭제되었습니다"
+
+msgid "AnnouncementMoved"
+msgstr "공지사항을 이동하였습니다"
+
+msgid "NoAnnouncements"
+msgstr "공지사항이 없습니다"
+

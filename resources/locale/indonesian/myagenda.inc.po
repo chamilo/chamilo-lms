@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Agenda-ku"
+
+msgid "langToday"
+msgstr "Hari Ini"
+

@@ -1,0 +1,255 @@
+msgid "langLineNumber"
+msgstr "Sor száma"
+
+msgid "langLine"
+msgstr "sor"
+
+msgid "langLines"
+msgstr "sor"
+
+msgid "langLineOrLines"
+msgstr "sor(ok)"
+
+msgid "langMoveUp"
+msgstr "Fel"
+
+msgid "langMoveDown"
+msgstr "Le"
+
+msgid "langAddNewHeading"
+msgstr "Új mező hozzáadása"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Csak tanár"
+
+msgid "langDefineHeadings"
+msgstr "Címsorok létrehozása"
+
+msgid "langBackToUsersList"
+msgstr "Vissza a felhasználók listájához"
+
+msgid "langTracking"
+msgstr "Naplózás"
+
+msgid "langCourseManager"
+msgstr "Tanár"
+
+msgid "langModRight"
+msgstr "Jogok megváltoztatása"
+
+msgid "langNoAdmin"
+msgstr "Már nincs jogosultsága ezen az oldalon"
+
+msgid "langAllAdmin"
+msgstr "Minden jogosultsággal rendelkezik az oldalon"
+
+msgid "langModRole"
+msgstr "Szerepváltás"
+
+msgid "langRole"
+msgstr "Leírás"
+
+msgid "langIsNow"
+msgstr "mostantól kezdve"
+
+msgid "langInC"
+msgstr "ebben a kurzusban"
+
+msgid "langFilled"
+msgstr "Néhány mezőt üresen hagyott."
+
+msgid "langUserNo"
+msgstr "A választott felhasználói neve"
+
+msgid "langTaken"
+msgstr "már foglalt. Válasszon másikat."
+
+msgid "langTutor"
+msgstr "Oktató"
+
+msgid "langUnreg"
+msgstr "Leiratkozás"
+
+msgid "langGroupUserManagement"
+msgstr "Csoport menedszment"
+
+msgid "langUnregister"
+msgstr "Regisztráció törlése"
+
+msgid "langAddAUser"
+msgstr "Felhasználók hozzáadása"
+
+msgid "UsersUnsubscribed"
+msgstr "A kiválasztott felhasználókat eltávolította a kurzusból"
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "Ez a tanuló egy oktatási munkaszakaszon keresztül iratkozott fel. Nem módosíthatja ezt az információt."
+
+msgid "NoDataAvailable"
+msgstr "Nincs megjeleníthető adat"
+
+msgid "AddToFriends"
+msgstr "Biztosan hozz akarja adni ezt a kapcsolatot a barátaihoz?"
+
+msgid "AddPersonalMessage"
+msgstr "Személyes üzenet hozzáadása"
+
+msgid "Friends"
+msgstr "Barátok"
+
+msgid "PersonalData"
+msgstr "Profil"
+
+msgid "Contacts"
+msgstr "Kapcsolatok"
+
+msgid "SocialInformationComment"
+msgstr "Ezen az oldalon rendszerezheti kapcsolatait"
+
+msgid "AttachContactsToGroup"
+msgstr "Kapcsolatok csoporthoz kapcsolása"
+
+msgid "ContactsList"
+msgstr "Kapcsolatok lista"
+
+msgid "AttachToGroup"
+msgstr "Hozzáadás egy csoporthoz"
+
+msgid "SelectOneContact"
+msgstr "Egy kapcsolat kiválasztása"
+
+msgid "SelectOneGroup"
+msgstr "Egy csoport kiválasztása"
+
+msgid "AttachContactsPersonal"
+msgstr "Személyes kapcsolatok hozzáadása"
+
+msgid "AttachContactsToGroupSuccesfuly"
+msgstr "Kapcsolatok sikeresen hozzáadva a csoporthoz"
+
+msgid "InvitationDenied"
+msgstr "Meghívás elutasítva"
+
+msgid "AddedContactToList"
+msgstr "Kapcsolat hozzáadása a listához"
+
+msgid "ContactsGroupsComment"
+msgstr "Ezen az oldalon a kapcsolatok láthatók csoportosítva"
+
+msgid "YouDontHaveContactsInThisGroup"
+msgstr "Nem találhatók kapcsolatok"
+
+msgid "SelectTheCheckbox"
+msgstr "Kattintson a jelölőnégyzetre"
+
+msgid "YouDontHaveInvites"
+msgstr "Üres"
+
+msgid "SocialInvitesComment"
+msgstr "Függőben lévő meghívások."
+
+msgid "InvitationSentBy"
+msgstr "A meghívót küldte"
+
+msgid "RequestContact"
+msgstr "Kapcsolat kérése"
+
+msgid "SocialUnknow"
+msgstr "Ismeretlen"
+
+msgid "SocialParent"
+msgstr "Szüleim"
+
+msgid "SocialFriend"
+msgstr "Barátaim"
+
+msgid "SocialGoodFriend"
+msgstr "Az igazi barátaim"
+
+msgid "SocialEnemy"
+msgstr "Ellenségeim"
+
+msgid "SocialDeleted"
+msgstr "Kapcsolat törölve"
+
+msgid "MessageOutboxComment"
+msgstr "Üzenet elküldve."
+
+msgid "MyPersonalData"
+msgstr "Személyes adataim"
+
+msgid "AlterPersonalData"
+msgstr "Személyes adat módosítása"
+
+msgid "Invites"
+msgstr "Meghívók"
+
+msgid "ContactsGroups"
+msgstr "Csoport kapcsolatok"
+
+msgid "ErrorSendingMessage"
+msgstr "Az üzenet elküldése közben hiba lépett fel."
+
+msgid "PendingInvitations"
+msgstr "Függőben lévő meghívások"
+
+msgid "MyInbox"
+msgstr "Beérkezett üzeneteim"
+
+msgid "ViewSharedProfile"
+msgstr "Megosztott profil megtekintése"
+
+msgid "SeeAll"
+msgstr "Az összes megtekintése"
+
+msgid "ImagesUploaded"
+msgstr "Feltöltött képek"
+
+msgid "ExtraInformation"
+msgstr "Extra információ"
+
+msgid "SearchContacts"
+msgstr "Kapcsolatok keresése"
+
+msgid "SocialSeeContacts"
+msgstr "Kapcsolatok megtekintése"
+
+msgid "SocialUserInformationAttach"
+msgstr "Kérem, adjon meg egy szöveget mielőtt elküldené a kérését"
+
+msgid "MessageInvitationNotSent"
+msgstr "A meghívásról szóló üzenete nem lett elküldve"
+
+msgid "SocialAddToFriends"
+msgstr "Hozzáadás a kapcsolataimhoz"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "A felhasználó nincs feliratkozva ehhez a képzéshez"
+
+msgid "ChangeContactGroup"
+msgstr "Kapcsolatcsoport módosítása"
+
+msgid "Friend"
+msgstr "Barát"
+
+msgid "ViewMySharedProfile"
+msgstr "Megosztott profilom"
+
+msgid "UserStatistics"
+msgstr "A felhasználóhoz tartozó jelentések"
+
+msgid "EditUser"
+msgstr "A felhasználó szerkesztése"
+
+msgid "ViewUser"
+msgstr "A felhasználó megtekintése"
+
+msgid "RSSFeeds"
+msgstr "RSS forrás"
+
+msgid "NoFriendsInYourContactList"
+msgstr "A kapcsolatok listában még nincsenek barátok."
+
+msgid "TryAndFindSomeFriends"
+msgstr "Próbálja ki és keressen barátokat"
+

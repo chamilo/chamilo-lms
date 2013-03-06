@@ -1,0 +1,129 @@
+msgid "langMdCallingTool"
+msgstr "Dokument"
+
+msgid "langMdTitle"
+msgstr "Learning Object Titel"
+
+msgid "langMdDescription"
+msgstr "För att lagra denna information, tryck Lagra"
+
+msgid "langMdCoverage"
+msgstr "ex. Filosofie kandidat ..."
+
+msgid "langMdCopyright"
+msgstr "ex. under förutsättning att källan är känd"
+
+msgid "langTool"
+msgstr "Dokument Metadata"
+
+msgid "langNoScript"
+msgstr "Skripthantering är inte aktivt i den webläsare, var vänlig ignorera skärmdelen nedanför denna text, det kommer inte att fungera..."
+
+msgid "langPressAgain"
+msgstr "Tryck \"Lagra\" igen..."
+
+msgid "langLanguageTip"
+msgstr "det språk som detta Learning object var skrivet i."
+
+msgid "langIdentifier"
+msgstr "Identifierare"
+
+msgid "langIdentifierTip"
+msgstr "unik identifiering för detta learning object, sammansatt av bokstäver, siffror, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "titel eller namn och språket på titeln eller namn."
+
+msgid "langDescriptionTip"
+msgstr "beskrivning eller kommentar, och språket som används för att beskriva detta learning object"
+
+msgid "langKeyword"
+msgstr "Nyckelord"
+
+msgid "langKeywordTip"
+msgstr "separerad av komma (bokstäver, siffror, -.)"
+
+msgid "langCoverage"
+msgstr "Täckning"
+
+msgid "langCoverageTip"
+msgstr "tex. examen i xxx:yyy"
+
+msgid "langKwNote"
+msgstr "Om du ändrar språkbeskrivning, lägg inte till nyckelord samtidigt."
+
+msgid "langClickKw"
+msgstr "Klicka på ett nyckelord i trädet för att välja eller välja bort."
+
+msgid "langKwHelp"
+msgstr "<br/> Klicka \'+\' knappen för att öppna, \'-\' knappen för att stänga, \'++\' knappen för att öppna alla, \'--\' knappen för att stänga alla.<br/> <br/> Ta bort alla valda nyckelord genom att  stänga trädet och öppna det igen med \'+\' knappen.<br/> Alt-klick \'+\' söker original nyckelord i träden.<br/> <br/> Alt-click nyckelord väljer ett nyckelord utan bredare sökning eller avaktiverar en bredare sökning.<br/> <br/>Om du ändrar språket på beskrivningen, lägg inte till nya nyckelord på samma gång.<br/> <br/>"
+
+msgid "langRights"
+msgstr "Användar rättigheter"
+
+msgid "langRightsTip"
+msgstr "beskriv i ord"
+
+msgid "langVersion"
+msgstr "Version"
+
+msgid "langVersionTip"
+msgstr "nummer eller beskrivning"
+
+msgid "langStatusTip"
+msgstr "välj från lista"
+
+msgid "langCreatedSize"
+msgstr "Skapad, storlek"
+
+msgid "langCreatedSizeTip"
+msgstr "ÅÅÅÅ-MM-DD när den skapades, storlek i octets (bytes)"
+
+msgid "langAuthorTip"
+msgstr "i VCARD format"
+
+msgid "langFormat"
+msgstr "Format"
+
+msgid "langFormatTip"
+msgstr "välj från lista"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "klicka för att öppna object"
+
+msgid "langStore"
+msgstr "Lagra"
+
+msgid "langDeleteAll"
+msgstr "Radera alla Metadata"
+
+msgid "langConfirmDelete"
+msgstr "Vill du *verkligen* radera alla metadata?"
+
+msgid "langCourseKwds"
+msgstr "Detta dokument inneh�ller kursens nyckelord"
+
+msgid "langSearch"
+msgstr "Sök"
+
+msgid "langSearchCrit"
+msgstr "Ett ord per rad!"
+
+msgid "langStatuses"
+msgstr ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable"
+
+msgid "langCosts"
+msgstr ":nej:fri, ingen avgift,, ja:inte fri, avgift"
+
+msgid "langCopyrights"
+msgstr ":ja:copyright,, nej:ingen copyright"
+
+msgid "langFormats"
+msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+
+msgid "langLngResTypes"
+msgstr ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning"
+

@@ -1,0 +1,123 @@
+msgid "langLineNumber"
+msgstr "行数"
+
+msgid "langLine"
+msgstr "行"
+
+msgid "langLines"
+msgstr "行"
+
+msgid "langLineOrLines"
+msgstr "行"
+
+msgid "langMoveUp"
+msgstr "上移"
+
+msgid "langMoveDown"
+msgstr "下移"
+
+msgid "langAddNewHeading"
+msgstr "添加新标题"
+
+msgid "langCourseAdministratorOnly"
+msgstr "仅教师使用"
+
+msgid "langDefineHeadings"
+msgstr "定义标题"
+
+msgid "langBackToUsersList"
+msgstr "返回列表"
+
+msgid "langTracking"
+msgstr "学习进度"
+
+msgid "langCourseManager"
+msgstr "课程管理员"
+
+msgid "langModRight"
+msgstr "更改权限"
+
+msgid "langNoAdmin"
+msgstr "从现在开始<B>无权</B>查看本页"
+
+msgid "langAllAdmin"
+msgstr "从现在开始<b>有权</b>查看此页"
+
+msgid "langModRole"
+msgstr "改变角色"
+
+msgid "langRole"
+msgstr "职务"
+
+msgid "langIsNow"
+msgstr "是从现在开始的"
+
+msgid "langInC"
+msgstr "在本课程中"
+
+msgid "langFilled"
+msgstr "您有些选项没有填写。"
+
+msgid "langUserNo"
+msgstr "您选择的用户名"
+
+msgid "langTaken"
+msgstr "已被占用，请选择其他的用户名。"
+
+msgid "langTutor"
+msgstr "教师"
+
+msgid "langUnreg"
+msgstr "注销"
+
+msgid "langGroupUserManagement"
+msgstr "小组管理"
+
+msgid "langUnregister"
+msgstr "注销"
+
+msgid "langAddAUser"
+msgstr "添加用户"
+
+msgid "UsersUnsubscribed"
+msgstr "用户已经注销"
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "学生已经从本课程注销，你不能编辑此类信息"
+
+msgid "NoDataAvailable"
+msgstr "无可用数据"
+
+msgid "AddToFriends"
+msgstr "是否确定添加此联系人为你朋友?"
+
+msgid "AddPersonalMessage"
+msgstr "添加个人消息"
+
+msgid "Friends"
+msgstr "好友"
+
+msgid "PersonalData"
+msgstr "个人资料"
+
+msgid "Contacts"
+msgstr "联系人"
+
+msgid "SocialInformationComment"
+msgstr "此画面允许编辑你的联系人"
+
+msgid "AttachContactsToGroup"
+msgstr "添加联系人到组别中"
+
+msgid "ContactsList"
+msgstr "联系人列表"
+
+msgid "Social"
+msgstr "社交"
+
+msgid "EditNormalProfile"
+msgstr "编辑基本资料"
+
+msgid "MyProductions"
+msgstr "我的作品"
+

@@ -1,0 +1,222 @@
+msgid "MyTasks"
+msgstr "Mis tareas"
+
+msgid "FavoriteBlogs"
+msgstr "Mis blogs favoritos"
+
+msgid "Navigation"
+msgstr "Navegación"
+
+msgid "TopTen"
+msgstr "Los 10 mejores blogs"
+
+msgid "Subtitle"
+msgstr "Subtítulo"
+
+msgid "ThisBlog"
+msgstr "Este blog"
+
+msgid "NewPost"
+msgstr "Nuevo artículo"
+
+msgid "TaskManager"
+msgstr "Administración de tareas"
+
+msgid "MemberManager"
+msgstr "Administración de usuarios"
+
+msgid "PostFullText"
+msgstr "Texto"
+
+msgid "ReadPost"
+msgstr "Leer artículo"
+
+msgid "Home"
+msgstr "Principal"
+
+msgid "FirstPostText"
+msgstr "¡ Este es el primer artículo en el blog ! En adelante, todo el mundo que esté suscrito a este blog puede participar."
+
+msgid "AddNewComment"
+msgstr "Añadir un comentario"
+
+msgid "ReplyToThisComment"
+msgstr "Contestar a este comentario"
+
+msgid "ManageTasks"
+msgstr "Administrar tareas"
+
+msgid "ManageMembers"
+msgstr "Administrar usuarios"
+
+msgid "Register"
+msgstr "Inscribirse en este blog"
+
+msgid "UnRegister"
+msgstr "Anular la inscripción en este blog"
+
+msgid "SubscribeMembers"
+msgstr "Inscribir usuarios"
+
+msgid "UnsubscribeMembers"
+msgstr "Dar de baja a usuarios"
+
+msgid "RightsManager"
+msgstr "Administrar los derechos de los usuarios"
+
+msgid "ManageRights"
+msgstr "Administrar los perfiles y derechos de los usuarios de este blog"
+
+msgid "Task"
+msgstr "Tarea"
+
+msgid "Tasks"
+msgstr "Tareas"
+
+msgid "Member"
+msgstr "Usuario"
+
+msgid "Members"
+msgstr "Usuarios"
+
+msgid "Role"
+msgstr "Perfil"
+
+msgid "Rate"
+msgstr "Puntuación"
+
+msgid "Roles"
+msgstr "Perfiles"
+
+msgid "AddTask"
+msgstr "Nueva tarea"
+
+msgid "AddTasks"
+msgstr "Añadir nuevas tareas"
+
+msgid "AssignTask"
+msgstr "Asignar una tarea"
+
+msgid "AssignTasks"
+msgstr "Asignar tareas"
+
+msgid "EditTask"
+msgstr "Editar esta tarea"
+
+msgid "DeleteTask"
+msgstr "Borrar esta tarea"
+
+msgid "DeleteSystemTask"
+msgstr "Esta es una tarea predefinida. Ud., no puede borrar una tarea predefinida."
+
+msgid "SelectUser"
+msgstr "Usuario"
+
+msgid "SelectTask"
+msgstr "Tarea"
+
+msgid "SelectTargetDate"
+msgstr "Fecha"
+
+msgid "TargetDate"
+msgstr "Fecha"
+
+msgid "Color"
+msgstr "Color"
+
+msgid "TaskList"
+msgstr "Lista de tareas"
+
+msgid "AssignedTasks"
+msgstr "Tareas asignadas"
+
+msgid "ArticleManager"
+msgstr "Administración de artículos"
+
+msgid "CommentManager"
+msgstr "Administración de comentarios"
+
+msgid "BlogManager"
+msgstr "Administración del blog"
+
+msgid "ReadMore"
+msgstr "Leer más..."
+
+msgid "DeleteThisArticle"
+msgstr "Borrar este artículo"
+
+msgid "EditThisPost"
+msgstr "Editar este artículo"
+
+msgid "DeleteThisComment"
+msgstr "Borrar este comentario"
+
+msgid "NoArticles"
+msgstr "No hay ningún artículo en el blog. Si Ud. es un autor en este blog, haga click sobre el enlace \'nuevo artículo\' para escribir uno."
+
+msgid "NoTasks"
+msgstr "No hay tareas disponibles"
+
+msgid "Rating"
+msgstr "Valor"
+
+msgid "RateThis"
+msgstr "Calificar"
+
+msgid "SelectTaskArticle"
+msgstr "Seleccionar un artículo para esta tarea"
+
+msgid "ExecuteThisTask"
+msgstr "Ejecutar la tarea"
+
+msgid "WrittenBy"
+msgstr "Escrito por"
+
+msgid "InBlog"
+msgstr "en el blog"
+
+msgid "ViewPostsOfThisDay"
+msgstr "Ver los artículos de este día"
+
+msgid "PostsOf"
+msgstr "Artículos de"
+
+msgid "NoArticleMatches"
+msgstr "No se encuentran artículos que se ajusten a sus criterios de búsqueda. Probablemente haya escrito incorrectamente algo o su búsqueda es poco concreta. Realice las modificaciones que estime oportunas y ejecute una nueva búsqueda."
+
+msgid "langTask1"
+msgstr "Tarea 1"
+
+msgid "blog_management"
+msgstr "Administrar blogs"
+
+msgid "langWelcome"
+msgstr "Bienvenido !"
+
+msgid "langModule"
+msgstr "Módulo"
+
+msgid "langUserHasPermissionNot"
+msgstr "El usuario no posee los privilegios"
+
+msgid "langUserHasPermission"
+msgstr "El usuario posee privilegios"
+
+msgid "langLegend"
+msgstr "Leyenda"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "El usuario tiene los privilegios de su grupo"
+
+msgid "EditPost"
+msgstr "Editar artículo"
+
+msgid "AddBlog"
+msgstr "Crear un nuevo blog"
+
+msgid "EditBlog"
+msgstr "Editar título y subtítulo"
+
+msgid "DeleteBlog"
+msgstr "Borrar este blog"
+

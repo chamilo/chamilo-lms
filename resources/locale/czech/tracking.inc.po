@@ -1,0 +1,6 @@
+msgid "langToolName"
+msgstr "Importuj kurzy z Blackboard-u"
+
+msgid "TrackingDisabled"
+msgstr "Statistika byla deaktivována správcem systému."
+

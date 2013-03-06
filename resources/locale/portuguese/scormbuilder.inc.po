@@ -1,0 +1,3 @@
+msgid "langScormBuilder"
+msgstr "Criar um curso (ferramenta de autoría)"
+

@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Dokumenter"
+
+msgid "langMdTitle"
+msgstr "Titel på læringsobjekt"
+
+msgid "langMdDescription"
+msgstr "Klik på knappen Gem for at gemme denne information"
+
+msgid "langMdCoverage"
+msgstr "fx Bachelor i.."
+
+msgid "langMdCopyright"
+msgstr "forudsat at kilden er godkendt"
+
+msgid "nameTools"
+msgstr "Forældet sprogvariabel"
+
+msgid "langTool"
+msgstr "Metadata for dokumentet"
+
+msgid "langNoScript"
+msgstr "Script er ikke slået til i din browser,  venligst ignorerer skærmbilledet nedenfor denne tekst, det virker ikke..."
+
+msgid "langLanguageTip"
+msgstr "det sprog, som læringsobjektet er lavet i"
+
+msgid "langIdentifier"
+msgstr "Identificér"
+
+msgid "langIdentifierTip"
+msgstr "unik identifikation til dette lærigsobjekt, bestående af bogstaver, tal, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "titel eller navn og sprog til denne titel eller dette navn"
+
+msgid "langDescriptionTip"
+msgstr "beskrivelse eller kommentar og sprog brugt til beskrivelse af dette læringsobjekt"
+
+msgid "langKeyword"
+msgstr "Nøgleord"
+
+msgid "langKeywordTip"
+msgstr "delt af komma (bogstvaer, tal, -.)"
+
+msgid "langCoverage"
+msgstr "Omfang"
+
+msgid "langCoverageTip"
+msgstr "fx. bachelor xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Du kan IKKE ændre sprogbeskrivelse og tilføj nøgleord samtidig."
+
+msgid "langClickKw"
+msgstr "Klik på et nøgleord i træet for at vælge/fravælge det"
+
+msgid "langKwHelp"
+msgstr "Klik på \'+\' knappen for at åbne, klik på \'-\' knappen for at lukke, klik 2 gange på \'++\' knappen for at åbne alt, klik 2 gange på \'--\' knappen for at lukke alt.Fravælg alle valgte nøgleord ved at lukke \"træet\" og åbn det igen ved at klikke på \'+\' knappen.Alt-klik \'+\' søger på originale nøgleord i \"træet\".Alt-klik nøgleord vælger et nøgleord uden yderligere begreber eller fravælg et nøgleord uden yderlgere begreber.Hvis du ændrer sprogbeskrivelsen, så tilføj ikke nøgleord på samme tid."
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "Klik her for at åbne objektet"
+
+msgid "langStore"
+msgstr "Gem"
+
+msgid "langDeleteAll"
+msgstr "Slet alle metadata?"
+
+msgid "langConfirmDelete"
+msgstr "Vil du virkelig slette alle metadata?"
+
+msgid "langWorkOn"
+msgstr "med"
+
+msgid "langNotInDB"
+msgstr "linkkategorien findes ikke"
+
+msgid "langManifestSyntax"
+msgstr "(syntaksfejl i manifestfil...)"
+
+msgid "langEmptyManifest"
+msgstr "(tøm manifestfil...)"
+
+msgid "langNoManifest"
+msgstr "(ingen manifestfil..."
+
+msgid "langNotFolder"
+msgstr "er ikke muligt, det er ikke en mappe..."
+
+msgid "langContinue"
+msgstr "Fortsæt med"
+
+msgid "langCreate"
+msgstr "opret"
+
+msgid "langRemove"
+msgstr "Fjern MDE\'er"
+
+msgid "langAllRemovedFor"
+msgstr "Alle indtastninger er slettet"
+
+msgid "langRemainingFor"
+msgstr "Forældede indtasterne er blevet flyttet til kategori"
+
+msgid "langIndex"
+msgstr "Index ord"
+
+msgid "langTotalMDEs"
+msgstr "Total antal links MD indtastninger"
+
+msgid "langMainMD"
+msgstr "Åbn MDE"
+
+msgid "langOrElse"
+msgstr "Vælg linkkategori"
+
+msgid "langWarningDups"
+msgstr "- dublikerede kategorinavne er slettet fra listen"
+
+msgid "langSLC"
+msgstr "Arbejd med kategori-links benævnt"
+

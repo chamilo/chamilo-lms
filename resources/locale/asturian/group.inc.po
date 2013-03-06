@@ -1,0 +1,276 @@
+msgid "langNewGroupCreate"
+msgstr "Crear grupos"
+
+msgid "langGroupCreation"
+msgstr "Creación de grupos"
+
+msgid "langCreate"
+msgstr "Crear"
+
+msgid "langNewGroups"
+msgstr "grupu(os) nuevu(os)"
+
+msgid "langMax"
+msgstr "mas. 20 carauteres, p. ex. <i>INNOV21</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "places (opcional)"
+
+msgid "langGroupsAdded"
+msgstr "grupu(os) creáu/os"
+
+msgid "langGroupDel"
+msgstr "Grupu esborráu"
+
+msgid "langDocuments"
+msgstr "Documentos"
+
+msgid "langExistingGroups"
+msgstr "Grupos"
+
+msgid "langRegistered"
+msgstr "Matriculaos"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Los usuarios puen sumase al grupu que quieran"
+
+msgid "langGroupTools"
+msgstr "Ferramientes"
+
+msgid "langGroupDocument"
+msgstr "Documentos"
+
+msgid "langGroupPropertiesModified"
+msgstr "La configuración del grupu modificóse"
+
+msgid "langGroupSpace"
+msgstr "Área de grupu"
+
+msgid "langGroupName"
+msgstr "Nome del grupu"
+
+msgid "langGroupDescription"
+msgstr "Descripción del grupu"
+
+msgid "langGroupMembers"
+msgstr "Miembros del grupu"
+
+msgid "langEditGroup"
+msgstr "Modificar esti grupu"
+
+msgid "Optional"
+msgstr "(opcional)"
+
+msgid "langGroupSettingsModified"
+msgstr "Configuración de grupu modificada"
+
+msgid "langGroupTooMuchMembers"
+msgstr "El númberu escritu ye más grande que\'l másimu autorizáu por usté (pue cambialu embaxu). La composición del grupu nun se modificó."
+
+msgid "langGroupTutor"
+msgstr "Tutor del grupu"
+
+msgid "langGroupNoTutor"
+msgstr "(nengún)"
+
+msgid "langGroupNone"
+msgstr "(nengún)"
+
+msgid "langGroupNoneMasc"
+msgstr "(nengún)"
+
+msgid "langAddTutors"
+msgstr "Ferramienta de xestión d\'usuarios"
+
+msgid "langMyGroup"
+msgstr "el mio grupu"
+
+msgid "langOneMyGroups"
+msgstr "Al mio cargu"
+
+msgid "langGroupSelfRegistration"
+msgstr "Rexistrase"
+
+msgid "langGroupSelfRegInf"
+msgstr "Rexistrar"
+
+msgid "langRegIntoGroup"
+msgstr "Apuntase a esti grupu"
+
+msgid "langGroupNowMember"
+msgstr "Yá ye miembru d\'esti grupu"
+
+msgid "langPrivate"
+msgstr "Priváu - entrada permitida namás a los matriculaos nel cursu"
+
+msgid "langPublic"
+msgstr "Entrada pública ensin identificación (dende la páxina d\'entamu del campus)"
+
+msgid "langPropModify"
+msgstr "Modificar configuración"
+
+msgid "langState"
+msgstr "Estáu"
+
+msgid "langGroupFilledGroups"
+msgstr "Los grupos completárense colos miembros del llistáu d\'usuarios."
+
+msgid "langSubscribed"
+msgstr "uauriaos rexistraos nesti cursu"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Usuarios que nun son d\'esti grupu"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Un usuariu pue ser miembru d\'un másimu de"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr " grupos"
+
+msgid "langGroupLimit"
+msgstr "Llende"
+
+msgid "CreateGroup"
+msgstr "Criar grupu(os)"
+
+msgid "ProceedToCreateGroup"
+msgstr "Confirmar la criación de grupu(os)"
+
+msgid "langStudentRegAllowed"
+msgstr "Los estudiantes puen matriculase nos grupos"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Los usuarios puen esborrase d\'un grupu"
+
+msgid "langAllGroups"
+msgstr "Tolos grupos"
+
+msgid "langStudentUnsubscribe"
+msgstr "Esborrame d\'esti grupu."
+
+msgid "langStudentDeletesHimself"
+msgstr "Ta esborráu d\'esti grupu"
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Configuración por defeutu pa los grupos nuevos"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Tolos grupos seleicionaos esborrárense"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Tolos grupos seleicionaos tán vacíos"
+
+msgid "langGroupEmptied"
+msgstr "El grupu ta vacíu"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Tolos grupos seleicionaos enllenárense"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "Cancelar rexistru"
+
+msgid "langSameForAll"
+msgstr "igual pa toos"
+
+msgid "langNoLimit"
+msgstr "Ensin llende"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Por favor, escriba\'l númberu de grupos que quier"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Crear grupos pa tolos usuarios nos cursos virtuales"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "Esti cursu ye un amestáu d\'un cursu real y ún o más virtuales. Si calca nel botón que pue atopar darréu, van crease grupos nuevos colos datos de los cursos virtuales. Tolos estudiantes van ser matriculaos nesos grupos."
+
+msgid "langNoGroupsAvailable"
+msgstr "Nun hai grupos disponibles"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "Cursos virtuales"
+
+msgid "NotAvailable"
+msgstr "Non disponible"
+
+msgid "CreateSubgroups"
+msgstr "Crear sogrupos"
+
+msgid "CreateSubgroupsInfo"
+msgstr "Esta opción permite crear grupos nuevos según los que yá esisten. Indique\'l númberu de grupos que quier y escueya un grupu esistente. Van crease\'l númberu de grupos escoyíu y tolos miembros del grupu primeru van quedar matriculaos nos demás. El grupu primeru queda como ta."
+
+msgid "CreateNumberOfGroups"
+msgstr "Crear"
+
+msgid "WithUsersFrom"
+msgstr "grupos con miembros de"
+
+msgid "CategoryDeleted"
+msgstr "La categoría esborróse."
+
+msgid "Empty"
+msgstr "Vaciar"
+
+msgid "FillGroup"
+msgstr "Amestar usuarios"
+
+msgid "EmptyGroup"
+msgstr "Esborrar la matrícula de tolos usuarios"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "El númberu másimu de grupos por usuariu qu\'unvió nun val. Hai yá matriculaos más usuarios de los debíos según la configuración propuesta."
+
+msgid "GroupOverview"
+msgstr "Resume de grupos"
+
+msgid "GroupCategory"
+msgstr "Categoría del grupu"
+
+msgid "NoTitleGiven"
+msgstr "Por favor, escriba un títulu"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "Por favor, escriba un númberu válidu pal númberu másimu de miembros"
+
+msgid "CategoryOrderChanged"
+msgstr "L\'orde de les categoríes cambió"
+
+msgid "Wiki"
+msgstr "Wiki del grupu"
+
+msgid "CategoryCreated"
+msgstr "Categoría creada"
+
+msgid "GroupTutors"
+msgstr "Tutores del grupu"
+
+msgid "GroupWork"
+msgstr "Trabayos"
+
+msgid "GroupCalendar"
+msgstr "Axenda"
+
+msgid "GroupAnnouncements"
+msgstr "Anuncies"
+
+msgid "NoCategoriesDefined"
+msgstr "Ensin categoríes definíes"
+
+msgid "GroupsFromClasses"
+msgstr "Grupos de clases"
+
+msgid "GroupsFromClassesInfo"
+msgstr "Información de grupos de clases"
+
+msgid "Group"
+msgstr "Grupu"
+
+msgid "ForumOfGroup"
+msgstr "Foru del grupu:"
+
+msgid "BackToGroupList"
+msgstr "Volver a la llista de grupos"
+
+msgid "EditGroupCategory"
+msgstr "Camudar categoría de grupu"
+

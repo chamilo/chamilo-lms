@@ -1,0 +1,118 @@
+msgid "langLinkName"
+msgstr "Nomo"
+
+msgid "langLinkAdd"
+msgstr "Aldoni ligilon"
+
+msgid "langLinkAdded"
+msgstr "Ligilo estas aldonita"
+
+msgid "langLinkMod"
+msgstr "Ŝanĝi ligilon"
+
+msgid "langLinkModded"
+msgstr "Ligilo estas ŝanĝita"
+
+msgid "langLinkDel"
+msgstr "Forigi ligilon"
+
+msgid "langLinkDeleted"
+msgstr "Ligilo estas forigita"
+
+msgid "langLinkDelconfirm"
+msgstr "Ĉu vi deziras forigi ĉi-ligilon?"
+
+msgid "langAllLinksDel"
+msgstr "Forigi ĉiujn ligilojn en ĉi-kategorio"
+
+msgid "langCategoryName"
+msgstr "Kategoria nomo"
+
+msgid "langCategoryAdd"
+msgstr "Aldoni kategorion"
+
+msgid "langCategoryAdded"
+msgstr "Kategorio estas aldonita"
+
+msgid "langCategoryModded"
+msgstr "Kategorio estas ŝanĝita"
+
+msgid "langCategoryDel"
+msgstr "Forigi kategorion"
+
+msgid "langCategoryDeleted"
+msgstr "Kategorio kaj akompanantaj ligiloj estas forigitaj"
+
+msgid "langCategoryDelconfirm"
+msgstr "Se vi forigas kategorion, ĉiu ĝiaj ligiloj ankaŭ estos forigataj. 
+Ĉu vi deziras forigi la kategorion kaj akompanantajn ligilojn?"
+
+msgid "langAllCategoryDel"
+msgstr "Forigi ĉiujn kategoriojn kaj ligilojn"
+
+msgid "langGiveURL"
+msgstr "Bonvolu enigi URLn"
+
+msgid "langGiveCategoryName"
+msgstr "Bonvolu enigi kategorian nomon"
+
+msgid "langNoCategory"
+msgstr "Neniu kategorio"
+
+msgid "showall"
+msgstr "Montru ĉiujn"
+
+msgid "shownone"
+msgstr "Montru neniun"
+
+msgid "langListDeleted"
+msgstr "Listo forigita"
+
+msgid "langAddLink"
+msgstr "Aldoni ligilon"
+
+msgid "langDelList"
+msgstr "Forigi liston"
+
+msgid "langModifyLink"
+msgstr "Ŝanĝi ligilon"
+
+msgid "langCsvImport"
+msgstr "Importi CSV-dosieron"
+
+msgid "langCsvFileNotFound"
+msgstr "CSV-dosiero ne povis esti malfermata (ekz. ĉar malplena, tro granda)"
+
+msgid "langCsvFileNoSeps"
+msgstr "CSV-dosiero uzu , aŭ ; inter la kolumnoj"
+
+msgid "langCsvFileNoURL"
+msgstr "CSV-dosiero enhvau almenaŭ kolumnojn \'URL\' kaj \'titolo\'"
+
+msgid "langCsvFileLine1"
+msgstr "... - 1a linio ="
+
+msgid "langCsvLinesFailed"
+msgstr "linio(j) ne importitaj (ne \'URL\' aŭ ne \'titolo\')."
+
+msgid "langCsvLinesOld"
+msgstr "ekzistanta(j) ligilo(j) modifitaj (sama \'URL\' kaj \'kategorio\')."
+
+msgid "langCsvLinesNew"
+msgstr "nova(j) ligilo(j) kreita(j)."
+
+msgid "langCsvExplain"
+msgstr "La dosiero aspektu jene, kun anglalingva kolumnonomoj: <blockquote><pre> <b>URL</b>;category;<b>title</b>;description; <b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1; <b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\"; </pre></blockquote> Kiam  jam ekzistas ligilo kun sama \'URL\' kaj \'category\', tiam \'title\' kaj \'description\' estas modifataj. En ĉiuj aliaj kazoj nova ligilo estas farata.<br><br> Grase = devigate. La sekvanta linio estas libera, ankaŭ la usklado. Kromaj kampoj estas aldonataj ĉe  \'description\'. Apartigi kolumnojn per komo aŭ punktokomo. Enhavo povas aperi inter citiloj, kampnomoj ne. Kelkaj [b]HTML tags[/b] estas rekonataj en la kampo \'description\'."
+
+msgid "langLinkUpdated"
+msgstr "La ligilo estas ĝisdatigita"
+
+msgid "langAll_Link_Deleted"
+msgstr "Ligilo estas forigita"
+
+msgid "langOnHomepage"
+msgstr "En startpaĝo"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Vidigi ĉi-ligilon kiel bildsimbolon sur la ĉefpaĝo"
+

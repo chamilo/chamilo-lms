@@ -1,0 +1,153 @@
+msgid "langScormVersion"
+msgstr "verzió"
+
+msgid "langScormRestarted"
+msgstr "Az összes lecke teljesítetlen."
+
+msgid "langScormNoNext"
+msgstr "Ez az utolsó lecke."
+
+msgid "langScormNoPrev"
+msgstr "Ez az első lecke."
+
+msgid "langScormTime"
+msgstr "Idő"
+
+msgid "langScormNoOrder"
+msgstr "Nincs megadott sorrend, bármelyik leckét kiválaszthatja."
+
+msgid "langScormScore"
+msgstr "Pontszám"
+
+msgid "langScormLessonTitle"
+msgstr "Lecke címe"
+
+msgid "langScormStatus"
+msgstr "Eredmény"
+
+msgid "langScormToEnter"
+msgstr "Ahhoz hogy elkezdhese ezt :"
+
+msgid "langScormFirstNeedTo"
+msgstr ", először el kell végeznie ezt :"
+
+msgid "langScormThisStatus"
+msgstr "Ez a lecke"
+
+msgid "langScormClose"
+msgstr "Megszakít"
+
+msgid "langScormRestart"
+msgstr "Újraindít"
+
+msgid "langScormCompstatus"
+msgstr "Teljesített"
+
+msgid "langScormIncomplete"
+msgstr "Nem teljesített"
+
+msgid "langScormPassed"
+msgstr "Átment"
+
+msgid "langScormFailed"
+msgstr "Megbukott"
+
+msgid "langScormPrevious"
+msgstr "Előző"
+
+msgid "langScormNext"
+msgstr "Következő"
+
+msgid "langScormTitle"
+msgstr "Chamilo Scorm lejátszó"
+
+msgid "langScormMystatus"
+msgstr "Eredményem"
+
+msgid "langScormNoItems"
+msgstr "Ez a tartalom nem tartalmaz elemeket"
+
+msgid "langScormNoStatus"
+msgstr "A korai 1.1-es Scorm verziókban az eredmények nincsenek tárolva."
+
+msgid "langScormLoggedout"
+msgstr "kijelentkezett a Scorm területről"
+
+msgid "langScormCloseWindow"
+msgstr "Ablakok bezárása"
+
+msgid "ScormBrowsed"
+msgstr "Látogatott"
+
+msgid "langScormExitFullScreen"
+msgstr "Vissza normál módba"
+
+msgid "langScormFullScreen"
+msgstr "Teljes képernyő"
+
+msgid "langScormNotAttempted"
+msgstr "Nincs próbálkozás."
+
+msgid "langCharset"
+msgstr "Karakterkészlet"
+
+msgid "langLocal"
+msgstr "Lokális"
+
+msgid "langRemote"
+msgstr "Távoli"
+
+msgid "langAutodetect"
+msgstr "Automatikus felismerés"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Az összes eddig megtett lépés"
+
+msgid "langUnknown"
+msgstr "Ismeretlen"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "Biztos, hogy törölni kívánja ezeket a lépéseket?"
+
+msgid "Origin"
+msgstr "Számazási hely"
+
+msgid "Local"
+msgstr "Helyi"
+
+msgid "Remote"
+msgstr "Távoli"
+
+msgid "FileToUpload"
+msgstr "Feltöltendő állomány"
+
+msgid "ContentMaker"
+msgstr "Tartalom készítő"
+
+msgid "ContentProximity"
+msgstr "Kapcsolódó tartalom"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "Helyi állomány feltöltése a fő/lomtár könyvtárból"
+
+msgid "ThisItemIsNotExportable"
+msgstr "Ez az elem jelenleg (még) nem Scorm kompatibilis, ezért nem exportálható."
+
+msgid "MoveCurrentChapter"
+msgstr "A jelenlegi fejezet áthelyezése"
+
+msgid "GenericScorm"
+msgstr "Általános Scorm"
+
+msgid "UnknownPackageFormat"
+msgstr "A csomag fármátumát nem sikerült meghatározni. Kérem győződjön meg róla. hogy helyesen lett összeállítva, illetve nem hibás-e. A hibák jelentkezhetnek nagy fájlok átvitelekor vagy speciális zip tömörítési beállítások használatakor is, ezért lehetőleg minimális kapcsolókkal tömörítse tananyagait."
+
+msgid "Attempt"
+msgstr "Próbálkozás"
+
+msgid "MoveTheCurrentForum"
+msgstr "A jelenlegi fórum áthelyezése"
+
+msgid "WarningWhenEditingScorm"
+msgstr "Figyelem! <br /> Amikor módosítja egy scorm lépcsőfok tartalmát, az kihatással lehet a tanösvény jelentéseire,  vagy elronthatja a lépcsőfokot."
+

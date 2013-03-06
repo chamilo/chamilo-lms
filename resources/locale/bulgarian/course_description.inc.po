@@ -1,0 +1,45 @@
+msgid "langCourseProgram"
+msgstr "Описание на курса"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Няма описание на този курс."
+
+msgid "langEditCourseProgram"
+msgstr "Създаване/редактиране на описание на курса"
+
+msgid "QuestionPlan"
+msgstr "Въпроси към преподавателя"
+
+msgid "langInfo2Say"
+msgstr "Информация, която ще предоставите на курсистите"
+
+msgid "langOuAutreTitre"
+msgstr "Заглавие"
+
+msgid "langNewBloc"
+msgstr "Други"
+
+msgid "langAddCat"
+msgstr "Добави категория"
+
+msgid "langAdd"
+msgstr "Добави"
+
+msgid "langValid"
+msgstr "ОК"
+
+msgid "langBackAndForget"
+msgstr "Назад"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Описанието на курса е обновено."
+
+msgid "CourseDescriptionDeleted"
+msgstr "Описанието на курса е изтрито."
+
+msgid "CourseDescriptionIntro"
+msgstr "За да създадете описание на курса, изберете по-долу тематичен раздел на описанието и попълнете появилия се формуляр. Щракнете \"OK\".<br/><br/>След това изберете друг тематичен раздел, попълнете го по същия начин и така нататък. Не е задължително да попълните всички раздели."
+
+msgid "langSaveDescription"
+msgstr "Запис на описанието"
+

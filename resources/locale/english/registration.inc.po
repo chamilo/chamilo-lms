@@ -1,0 +1,556 @@
+msgid "langShouldBeCSVFormat"
+msgstr "File should be CSV format. Do not add spaces. Structure should be exactly :"
+
+msgid "langTracking"
+msgstr "Reporting"
+
+msgid "langEnter2passToChange"
+msgstr "To change your password, enter your current password in the field above and your new password in both fields below. To maintain the current password, leave the three fields empty."
+
+msgid "langAuthInfo"
+msgstr "Authentication"
+
+msgid "langUpdateImage"
+msgstr "Change picture"
+
+msgid "langImageWrong"
+msgstr "The file size should be smaller than"
+
+msgid "langAddImage"
+msgstr "Picture"
+
+msgid "langCourseManager"
+msgstr "Teacher"
+
+msgid "NewPass"
+msgstr "New password"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "The current password is incorrect"
+
+msgid "password_request"
+msgstr "You have asked to reset your password. If you did not ask, then ignore this mail."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Your password has been emailed to you."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Enter the e-mail address that you used to register and we will send you your password back."
+
+msgid "langLogin"
+msgstr "Log In"
+
+msgid "langAction"
+msgstr "Action"
+
+msgid "langPreserved"
+msgstr "Preserved"
+
+msgid "langDeleted"
+msgstr "Deleted"
+
+msgid "langAdded"
+msgstr "Added"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Confirm user unsubscription"
+
+msgid "langCourseName"
+msgstr "Course name"
+
+msgid "langSubscribe"
+msgstr "Subscribe"
+
+msgid "langSee"
+msgstr "Go to"
+
+msgid "langLastVisits"
+msgstr "My latest visits"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "If you want to add a list of users in			your training, please contact your web administrator."
+
+msgid "langPassTooEasy"
+msgstr "this password  is too simple. Use a pass like this"
+
+msgid "langGroupUserManagement"
+msgstr "Groups management"
+
+msgid "langAddedToCourse"
+msgstr "has been registered to your course"
+
+msgid "langUserAlreadyRegistered"
+msgstr "A user with same name is already registered	in this training."
+
+msgid "langBackUser"
+msgstr "Back to users list"
+
+msgid "langUserOneByOneExplanation"
+msgstr "He (she) will receive email confirmation with login and password"
+
+msgid "langGiveTutor"
+msgstr "Make coach"
+
+msgid "langRemoveRight"
+msgstr "Remove this right"
+
+msgid "langGiveAdmin"
+msgstr "Make admin"
+
+msgid "langUserNumber"
+msgstr "number"
+
+msgid "langDownloadUserList"
+msgstr "Upload the list"
+
+msgid "langSend"
+msgstr "Send request for a new password"
+
+msgid "langUserAddExplanation"
+msgstr "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   Email</b> separated by tabs and in this order. Users will receive email confirmation with login/password."
+
+msgid "langUserMany"
+msgstr "Import a users list"
+
+msgid "langOneByOne"
+msgstr "Add user manually"
+
+msgid "langNow"
+msgstr "now"
+
+msgid "langTutor"
+msgstr "Coach"
+
+msgid "langTitular"
+msgstr "Leader"
+
+msgid "langAddHereSomeCourses"
+msgstr "<big>Edit courses list</big><br><br>Check the courses you want to follow.<br>Uncheck the ones you don\'t want to follow anymore.<br> Then click Ok at the bottom of the list"
+
+msgid "langStudent"
+msgstr "Learner"
+
+msgid "langImportUserList"
+msgstr "Import list of users"
+
+msgid "langAddAU"
+msgstr "Add a user"
+
+msgid "langAddedU"
+msgstr "has been added. An email has been sent to give him his login"
+
+msgid "langTheU"
+msgstr "The user"
+
+msgid "langRegYou"
+msgstr "has registered you to this training"
+
+msgid "langOneResp"
+msgstr "One of the trainingdministrators"
+
+msgid "langTaken"
+msgstr "is already in use. Choose another one."
+
+msgid "langUserNo"
+msgstr "The login you chose"
+
+msgid "langFilled"
+msgstr "You have left some fields empty."
+
+msgid "langInC"
+msgstr "in this training"
+
+msgid "langRole"
+msgstr "Description"
+
+msgid "UserPicture"
+msgstr "Picture"
+
+msgid "langProfileReg"
+msgstr "Your new profile has been saved"
+
+msgid "langEmailWrong"
+msgstr "The email address is not complete or contains some invalid characters"
+
+msgid "langUserTaken"
+msgstr "This login is already in use"
+
+msgid "langFields"
+msgstr "You left some fields empty"
+
+msgid "langAgain"
+msgstr "Try again!"
+
+msgid "langPassTwo"
+msgstr "You have typed two different passwords"
+
+msgid "langViewProfile"
+msgstr "View my e-portfolio"
+
+msgid "langModifProfile"
+msgstr "Edit Profile"
+
+msgid "langIsReg"
+msgstr "Your modifications have been registered"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "You can now create your course"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "You can now select, in the list, the course you want access to"
+
+msgid "langMailHasBeenSent"
+msgstr "An email has been sent to help you remember your login and password"
+
+msgid "langPersonalSettings"
+msgstr "Your personal settings have been registered"
+
+msgid "langManager"
+msgstr "Administrator"
+
+msgid "langFormula"
+msgstr "Yours sincerely"
+
+msgid "langProblem"
+msgstr "In case of trouble, contact us."
+
+msgid "langIs"
+msgstr "is"
+
+msgid "langAddress"
+msgstr "The address of"
+
+msgid "langSettings"
+msgstr "with the following settings : 
+Login :"
+
+msgid "langYouAreReg"
+msgstr "You are registered on"
+
+msgid "langYourReg"
+msgstr "Your registration on"
+
+msgid "langUserFree"
+msgstr "This login is already taken. Use your browser\'s back button and choose another."
+
+msgid "langEmptyFields"
+msgstr "You left some fields empty. Use your browser\'s back button and try again."
+
+msgid "langPassTwice"
+msgstr "You typed two different passwords. Use your browser\'s back button and try again."
+
+msgid "langRegAdmin"
+msgstr "Create training"
+
+msgid "langRegStudent"
+msgstr "Follow training"
+
+msgid "langConfirmation"
+msgstr "Confirm password"
+
+msgid "langPass"
+msgstr "Pass"
+
+msgid "langSurname"
+msgstr "Last name"
+
+msgid "langRegistration"
+msgstr "Registration"
+
+msgid "langYourAccountParam"
+msgstr "This is your information to connect to"
+
+msgid "langLoginRequest"
+msgstr "Login request"
+
+msgid "langDefineHeadings"
+msgstr "Define Headings"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Teachers only"
+
+msgid "langLostPassword"
+msgstr "I lost my password"
+
+msgid "langAdminOfCourse"
+msgstr "Admin"
+
+msgid "langSimpleUserOfCourse"
+msgstr "User of course"
+
+msgid "langIsTutor"
+msgstr "Coach"
+
+msgid "langParamInTheCourse"
+msgstr "Status in course"
+
+msgid "langMember"
+msgstr "member"
+
+msgid "langLock"
+msgstr "locked"
+
+msgid "langUnlock"
+msgstr "unlocked"
+
+msgid "langHaveNoCourse"
+msgstr "No course available"
+
+msgid "langManage"
+msgstr "Manage Portal"
+
+msgid "langAdministrationTools"
+msgstr "Administration Tools"
+
+msgid "langUserProfileReg"
+msgstr "User e-portfolio has been registered"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "There is no user account with this e-mail address"
+
+msgid "langCourses4User"
+msgstr "User\'s courses"
+
+msgid "langCoursesByUser"
+msgstr "Courses by user"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Enroll users to course"
+
+msgid "langPreced100"
+msgstr "Previous 100"
+
+msgid "langAddmore"
+msgstr "Add registered users"
+
+msgid "langAddback"
+msgstr "Go to users list"
+
+msgid "langreg"
+msgstr "Register"
+
+msgid "langQuit"
+msgstr "Quit"
+
+msgid "your_password_has_been_reset"
+msgstr "Your password has been reset"
+
+msgid "langSex"
+msgstr "Sex"
+
+msgid "langClass"
+msgstr "Class"
+
+msgid "langEdit"
+msgstr "Edit"
+
+msgid "required"
+msgstr "required"
+
+msgid "langOptionalTextFields"
+msgstr "Optional fields"
+
+msgid "langMyProductions"
+msgstr "My productions"
+
+msgid "langFileDeleted"
+msgstr "File has been deleted."
+
+msgid "FullUserName"
+msgstr "Full name"
+
+msgid "SearchForUser"
+msgstr "Search for user"
+
+msgid "SearchButton"
+msgstr "Search"
+
+msgid "SearchNoResultsFound"
+msgstr "No search results found"
+
+msgid "UsernameWrong"
+msgstr "Your login can only contain letters, numbers and _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "This is a password request for the e-mail address"
+
+msgid "CorrespondsToAccount"
+msgstr "This e-mail address corresponds to the following user account."
+
+msgid "CorrespondsToAccounts"
+msgstr "This e-mail address corresponds to the following user accounts."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo can\'t handle the request automatically because the account has an external authentication source. Please take appropriate measures and notify the user."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo can\'t handle the request automatically because at least one of the accounts has an external authentication source. Please take appropriate measures for all accounts (including those with platform authentication) and notify the user."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo can\'t handle the request automatically for this type of account. Your request has been sent to the platform administrator, who will take appropriate measures and notify you of the result."
+
+msgid "langphone"
+msgstr "Phone"
+
+msgid "Unreg"
+msgstr "Unregister"
+
+msgid "MyProgress"
+msgstr "Progress"
+
+msgid "ProgressIntroduction"
+msgstr "Start with selecting a training session below.<br />You can then see your progress for every training you are subscribed to."
+
+msgid "Select"
+msgstr "Validate"
+
+msgid "NeverExpires"
+msgstr "Never expires"
+
+msgid "On"
+msgstr "On"
+
+msgid "ExpirationDate"
+msgstr "Expiration date"
+
+msgid "ActiveAccount"
+msgstr "Account"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "Your account has to be approved"
+
+msgid "ApprovalForNewAccount"
+msgstr "Approval for new account"
+
+msgid "ManageUser"
+msgstr "Manage user"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Enroll teachers"
+
+msgid "SendMessage"
+msgstr "Send message"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password."
+
+msgid "UsersUnsubscribed"
+msgstr "The selected users have been unsubscribed from the training"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "This platform was unable to send the email. Please contact"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID"
+
+msgid "UsernameMaxXCharacters"
+msgstr "The login needs to be maximum %s characters long"
+
+msgid "PictureUploaded"
+msgstr "Your picture has been uploaded"
+
+msgid "ProductionUploaded"
+msgstr "Your production file has been uploaded"
+
+msgid "FolderUpdated"
+msgstr "Folder updated"
+
+msgid "UsersRegistered"
+msgstr "These users have been registered into the training"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "User already register by other coach."
+
+msgid "UserCreatedPlatform"
+msgstr "User created in portal"
+
+msgid "UserInSession"
+msgstr "User added into the session"
+
+msgid "UserNotAdded"
+msgstr "User not added."
+
+msgid "NoSessionId"
+msgstr "The session was not identified"
+
+msgid "NoUsersRead"
+msgstr "Please verify your XML/CVS file"
+
+msgid "UserImportFileMessage"
+msgstr "If in the XML/CVS file the logins are missing, the firstname and the lastname will merge to create a login, i.e Julio Montoya into jmontoya"
+
+msgid "UserAlreadyRegisteredByOtherCreator"
+msgstr "User already register by other coach."
+
+msgid "NewUserInTheCourse"
+msgstr "New user in the course"
+
+msgid "MessageNewUserInTheCourse"
+msgstr "There is a new user in the course"
+
+msgid "EditNormalProfile"
+msgstr "Edit normal profile"
+
+msgid "EditExtendProfile"
+msgstr "Edit extended profile"
+
+msgid "EditInformation"
+msgstr "Edit profile"
+
+msgid "RegisterUser"
+msgstr "Register"
+
+msgid "IHaveReadAndAgree"
+msgstr "I have read and agree to the"
+
+msgid "ByClickingRegisterYouAgreeTermsAndConditions"
+msgstr "By clicking on \'Register\' below you are agreeing to the Terms and Conditions"
+
+msgid "User"
+msgstr "User"
+
+msgid "LostPass"
+msgstr "Forgot your password ?"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "Enter the username or the email address with which you registered and we will send your password."
+
+msgid "NoUserAccountWithThisEmailAddress"
+msgstr "There is no account with this user and/or e-mail address"
+
+msgid "CouldNotResetPassword"
+msgstr "Could not reset password"
+
+msgid "WithTheFollowingSettings"
+msgstr "with the following settings:"
+
+msgid "UnsubscribeUsersAlreadyAddedInCourse"
+msgstr "Unsubscribe users already added"
+
+msgid "YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators"
+msgstr "Your account on %s has just been approved by one of our administrators."
+
+msgid "HaveFun"
+msgstr "Have fun,"
+
+msgid "YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided"
+msgstr "You can now login at %s using the login and the password you have provided."
+
+msgid "AreYouSureToEditTheUserStatus"
+msgstr "Are you sure to edit the user status?"
+
+msgid "TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse"
+msgstr "The assistant can only keep track of all progress of learners registered to the course."
+
+msgid "TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse"
+msgstr "The teacher can grade, evaluate and keep track of all learners enrolled in the course."
+
+msgid "LoginOrEmailAddress"
+msgstr "User name or e-mail address"
+
+msgid "AtOnce"
+msgstr "Upon reception"
+
+msgid "Daily"
+msgstr "Once a day"
+

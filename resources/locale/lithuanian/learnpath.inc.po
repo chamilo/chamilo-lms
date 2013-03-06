@@ -1,0 +1,534 @@
+msgid "NewForumCreated"
+msgstr "Sukurtas naujas forumas"
+
+msgid "NewThreadCreated"
+msgstr "Sukurta nauja forumo gija."
+
+msgid "lang_learning_path"
+msgstr "Teorinė kurso medžiaga"
+
+msgid "lang_learning_path_builder"
+msgstr "LearningPathbuilder"
+
+msgid "lang_description"
+msgstr "apibūdinimas"
+
+msgid "LearnpathTitle"
+msgstr "antraštė"
+
+msgid "LearnpathPrerequisites"
+msgstr "Būrinos sąlygos"
+
+msgid "LearnpathMoveUp"
+msgstr "Kelti į viršų"
+
+msgid "LearnpathMoveDown"
+msgstr "Kelti žemyn"
+
+msgid "langThisItem"
+msgstr "šis įrašas"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Antraštė ir aprašymas"
+
+msgid "LearnpathChangeOrder"
+msgstr "Pakeisti eiliškumą"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Įterpti sąlygas"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Redaguoti antraštę ir aprašymą"
+
+msgid "lang_delete"
+msgstr "Ištrinti"
+
+msgid "lang_add_chapter"
+msgstr "Įterpti modulį"
+
+msgid "langLearnpathMystatus"
+msgstr "Mano būsena"
+
+msgid "langLearnpathCompstatus"
+msgstr "baigta"
+
+msgid "langLearnpathIncomplete"
+msgstr "nebaigta"
+
+msgid "langLearnpathPassed"
+msgstr "išlaikyta"
+
+msgid "langLearnpathFailed"
+msgstr "neišlaikyta"
+
+msgid "langLearnpathPrevious"
+msgstr "Ankstesnis"
+
+msgid "langLearnpathNext"
+msgstr "Kitas"
+
+msgid "langLearnpathRestart"
+msgstr "Iš naujo"
+
+msgid "langLearnpathThisStatus"
+msgstr "Dabar šis žingsnis"
+
+msgid "langLearnpathToEnter"
+msgstr "Kad įeiti į"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "Jums pirmiausia reikia atlikti"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Žingsnio antraštė"
+
+msgid "langLearnpathStatus"
+msgstr "Būsena"
+
+msgid "langLearnpathScore"
+msgstr "Įvertinimas"
+
+msgid "langLearnpathTime"
+msgstr "Laikas"
+
+msgid "langLearnpathVersion"
+msgstr "versija"
+
+msgid "langLearnpathRestarted"
+msgstr "Visi žingsniai užbaigti."
+
+msgid "langLearnpathNoNext"
+msgstr "Paskutinis žingsnis."
+
+msgid "langLearnpathNoPrev"
+msgstr "Pirmas žingsnis."
+
+msgid "LearnpathAddLearnpath"
+msgstr "Sukurti naują skyrių"
+
+msgid "lang_learnpath_added"
+msgstr "Nauja mokymosi medžiaga sėkmingai sukurta. Dabar galite pridėti į ją modulius."
+
+msgid "LearnpathEditLearnpath"
+msgstr "redaguoti"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "ištrinti"
+
+msgid "lang_learnpath_edited"
+msgstr "teorinė medžiaga redaguota"
+
+msgid "lang_learnpath_deleted"
+msgstr "teorinė medžiaga ištrinta"
+
+msgid "LearnpathDoNotPublish"
+msgstr "nepublikuoti"
+
+msgid "LearnpathPublish"
+msgstr "publikuoti"
+
+msgid "LearnpathNotPublished"
+msgstr "nepublikuotas"
+
+msgid "LearnpathPublished"
+msgstr "publikuotas"
+
+msgid "lang_add_learnpath_module"
+msgstr "Įdėti naują modulį"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Sukurti naują modulį"
+
+msgid "lang_learnpath_module_added"
+msgstr "Naujas modulis sėkmingai sukurtas. Dabar galite dėti į jį žingsnius."
+
+msgid "LearnpathEditModule"
+msgstr "Redaguoti modulio aprašymą/antraštę"
+
+msgid "LearnpathDeleteModule"
+msgstr "Ištrinti modulį"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Modulis sėkmingai redaguotas"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Modulis su visais žingsniais ištrintas"
+
+msgid "LearnpathNoChapters"
+msgstr "Kol kas modulių nėra."
+
+msgid "LearnpathAddItem"
+msgstr "Įterpti žingsnius į šį modulį"
+
+msgid "LearnpathItemDeleted"
+msgstr "Žingsnis ištrintas"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "prašome priskirti šį/šiuos žingsnius moduliui:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Redaguoti žingsnio aprašymą/antarštę"
+
+msgid "lang_add_prereq"
+msgstr "Pridėti/redaguoti būtinas sąlygas šiam žingsniui"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Ištrinti žingsnį"
+
+msgid "LearnpathItemEdited"
+msgstr "Žingsnis modifikuotas"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Ištrinta!"
+
+msgid "lang_none"
+msgstr "Nėra"
+
+msgid "lang_forum_opened"
+msgstr "Pasirinktas forumas atidarytas naujame lange."
+
+msgid "lang_link_opened"
+msgstr "Pasirinkta nuoroda atidaryta naujame lange."
+
+msgid "lang_short_help"
+msgstr "Kad įrašyti naują žingsnį, spauskite ant kryželio; kad įrašyti naują antraštę/aprašymą, spauskite ant pieštuko; Galite peržiūrėti tai ką matys studentai spausdami ant Studento aplinka viršuje."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "būtinos sąlygos nebaigtos"
+
+msgid "lang_author"
+msgstr "Autorius"
+
+msgid "lang_date"
+msgstr "Data"
+
+msgid "langBasicOverview"
+msgstr "Tvarkymas"
+
+msgid "langAdvanced"
+msgstr "Sudarymas"
+
+msgid "langDisplay"
+msgstr "Rodymas"
+
+msgid "langNewChapter"
+msgstr "Naujas modulis"
+
+msgid "langNewStep"
+msgstr "Naujas žingsnis"
+
+msgid "langEditPrerequisites"
+msgstr "Redaguoti esamo įrašo būtinasias sąlygas"
+
+msgid "langTitleManipulateChapter"
+msgstr "Redaguoti šį skyrių"
+
+msgid "langTitleManipulateModule"
+msgstr "Redaguoti šį modulį"
+
+msgid "langTitleManipulateDocument"
+msgstr "Dokumento redagavimas"
+
+msgid "langTitleManipulateLink"
+msgstr "Redaguoti šią nuorodą"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Redaguoti šį testą"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Redaguoti šią studento publikaciją"
+
+msgid "langEnterDataNewChapter"
+msgstr "Įrašyti naujo skyriaus duomenis"
+
+msgid "langEnterDataNewModule"
+msgstr "Įrašyti naujo modulio duomenis"
+
+msgid "langCreateNewStep"
+msgstr "Sukurti naują žingsnį:"
+
+msgid "langNewDocument"
+msgstr "Naujas dokumentas"
+
+msgid "langUseAnExistingResource"
+msgstr "arba naudoti jau esamą resursą:"
+
+msgid "langParent"
+msgstr "Tėvinis"
+
+msgid "langPosition"
+msgstr "Pozicija"
+
+msgid "langNewChapterCreated"
+msgstr "Naujas skyrius sukurtas. Dabar galite į jį įterpti kitą  skyrių arba žingsnį."
+
+msgid "langNewLinksCreated"
+msgstr "Sukurta nauja nuoroda"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "Nauja studento publikacija sukurta"
+
+msgid "langNewModuleCreated"
+msgstr "Naujas modulis sukurtas. Galite įterpti į jį naują skyrių arba žingsnį."
+
+msgid "langNewExerciseCreated"
+msgstr "Naujas pratimas sukurtas."
+
+msgid "langItemRemoved"
+msgstr "Įrašas ištrintas"
+
+msgid "langConverting"
+msgstr "Konvertuojama..."
+
+msgid "langPpt2lpError"
+msgstr "Error during the conversion of PowerPoint. Please check if there are special characters in the name of your PowerPoint."
+
+msgid "langBuild"
+msgstr "Sudarymas"
+
+msgid "langViewModeEmbedded"
+msgstr "Peržiūros būdas: įterptas"
+
+msgid "langViewModeFullScreen"
+msgstr "Peržiūros būdas: per visą ekraną"
+
+msgid "langShowDebug"
+msgstr "Show debug"
+
+msgid "langHideDebug"
+msgstr "Hide debug"
+
+msgid "langCantEditDocument"
+msgstr "Šis dokumentas neredaguojamas"
+
+msgid "langAfter"
+msgstr "Po"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Būtinoji sąlyga (limitas)"
+
+msgid "lang_loading"
+msgstr "Kraunama, prašome palaukti..."
+
+msgid "lang_empty"
+msgstr "Čia nėra jokių žingsnių."
+
+msgid "langHotPotatoesFinished"
+msgstr "Šis HotPotatoes testas uždarytas."
+
+msgid "langCompletionLimit"
+msgstr "Įveikimo limitas (mažiausia taškų)"
+
+msgid "langPrereqToEnter"
+msgstr "Kad įeiti"
+
+msgid "langPrereqFirstNeedTo"
+msgstr " pirmiausia reikia užbaigti"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Minimum 1 step is missing from"
+
+msgid "langPrereqModuleMinimum2"
+msgstr " which is set as prerequisities."
+
+msgid "langPrereqTestLimit1"
+msgstr " turite surinkti minimaliai"
+
+msgid "langPrereqTestLimit2"
+msgstr " taškų"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Dabar turite:"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "atgal į normalų atvaizdavimą"
+
+msgid "langLearnpathFullScreen"
+msgstr "pilnas ekranas"
+
+msgid "langItemMissing1"
+msgstr "There was a"
+
+msgid "langItemMissing2"
+msgstr "page (step) here in the original Chamilo Learning Path."
+
+msgid "langDone"
+msgstr "Baigta"
+
+msgid "langNoItemSelected"
+msgstr "To display something here, please select an item from the side menu"
+
+msgid "langNewDocumentCreated"
+msgstr "Naujas dokumentas sukurtas."
+
+msgid "langEditCurrentChapter"
+msgstr "Redaguoti šį modulį"
+
+msgid "langditCurrentModule"
+msgstr "Redaguoti šį modulį"
+
+msgid "langCreateTheDocument"
+msgstr "Sukurti dokumentą"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Perkelti šį dokumentą"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Redaguoti šį dokumentą"
+
+msgid "langWarning"
+msgstr "Dėmesio!"
+
+msgid "langWarningEditingDocument"
+msgstr "When you edit an existing document in the Learning Path, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
+
+msgid "langDirectory"
+msgstr "Katalogas"
+
+msgid "langCreateTheExercise"
+msgstr "Sukurti pratimą"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Perkelti šį pratimą"
+
+msgid "langEditCurrentExecice"
+msgstr "Redaguoti šį pratimą"
+
+msgid "langUploadScorm"
+msgstr "SCORM ir AICC importavimas"
+
+msgid "langPowerPointConvert"
+msgstr "PowerPoint konvertavimas"
+
+msgid "langLPCreatedToContinue"
+msgstr "Galite įdėti skyrių, modulį arba žingsnį kairėje esančiame meniu."
+
+msgid "langLPCreatedAddChapterStep"
+msgstr "Galite įdėti skyrių, modulį arba žingsnį kairėje esančiame meniu."
+
+msgid "langPrerequisitesAdded"
+msgstr "Prerequisites to the current step have been added."
+
+msgid "langAddEditPrerequisites"
+msgstr "Įrašyti/redaguoti būtinasias sąlygas"
+
+msgid "langMinimum"
+msgstr "minimumas"
+
+msgid "langMaximum"
+msgstr "maksimalus"
+
+msgid "langNoDocuments"
+msgstr "Dokumentų nėra"
+
+msgid "langNoExercisesAvailable"
+msgstr "Pratimų nėra"
+
+msgid "langNoLinksAvailable"
+msgstr "Nuorodų nėra"
+
+msgid "langNoItemsInLp"
+msgstr "Kol kas čia nėra jokių įrašų. Spauskite \"Kurti\" naujiems įrašams įdėti."
+
+msgid "FirstPosition"
+msgstr "Pirma pozicija"
+
+msgid "NewQuiz"
+msgstr "Naujas testas"
+
+msgid "CreateTheForum"
+msgstr "Įdėti forumą"
+
+msgid "AddLpIntro"
+msgstr "Čia žingsnis po žingsnio galite sukurti teorinę medžiagą jūsų kurse."
+
+msgid "AddLpToStart"
+msgstr "Įrašykite antraštę"
+
+msgid "CreateTheLink"
+msgstr "Importuoti nuorodą"
+
+msgid "MoveCurrentLink"
+msgstr "Perkelti šią nuorodą"
+
+msgid "EditCurrentLink"
+msgstr "Redaguoti šią nuorodą"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "MoveCurrentStudentPublication"
+msgstr "Perkelti šią studento publikaciją"
+
+msgid "EditCurrentStudentPublication"
+msgstr "Redaguoti šią studento publikaciją"
+
+msgid "AllowMultipleAttempts"
+msgstr "Leisti kelis bandymus"
+
+msgid "PreventMultipleAttempts"
+msgstr "Drausti kelis bandymus"
+
+msgid "MakeScormRecordingExtra"
+msgstr "Make SCORM recordings extra"
+
+msgid "MakeScormRecordingNormal"
+msgstr "Make SCORM recordings normal"
+
+msgid "DocumentHasBeenDeleted"
+msgstr "Dokumentas nerodomas nes yra ištrintas"
+
+msgid "EditCurrentForum"
+msgstr "Redaguoti forumą"
+
+msgid "NoPrerequisites"
+msgstr "Būtinųjų sąlygų nėra"
+
+msgid "NewExercise"
+msgstr "New test"
+
+msgid "CreateANewLink"
+msgstr "Create a new link"
+
+msgid "CreateANewForum"
+msgstr "Create a new forum"
+
+msgid "LinkAdd"
+msgstr "Add link"
+
+msgid "WoogieConversionPowerPoint"
+msgstr "Woogie : Word conversion"
+
+msgid "WelcomeWoogieSubtitle"
+msgstr "A Word to learnpath converter"
+
+msgid "WelcomeWoogieConverter"
+msgstr "Welcome in the Woogie converter<ul type=\"1\"><li>Choose a file .doc, .sxw, .odt<li>Upload it in Woogie. It will be convert in a SCORM learningpath<li>Then, you will be able to add audio comments on each page and insert quizz and other activities between the pages</ul>"
+
+msgid "WoogieError"
+msgstr "Error during the conversion of the word document. Please check if there are special characters in the name of your document.."
+
+msgid "WordConvert"
+msgstr "Word conversion"
+
+msgid "Order"
+msgstr "Order"
+
+msgid "InteractionID"
+msgstr "Interaction ID"
+
+msgid "TimeFinished"
+msgstr "Time (finished at...)"
+
+msgid "CorrectAnswers"
+msgstr "Correct answers"
+
+msgid "StudentResponse"
+msgstr "Student responses"
+
+msgid "LatencyTimeSpent"
+msgstr "Time spent"
+
+msgid "Result"
+msgstr "Result"
+

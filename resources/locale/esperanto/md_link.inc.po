@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Dokumentoj"
+
+msgid "langMdTitle"
+msgstr "Titolo de la lernobjekto"
+
+msgid "langMdDescription"
+msgstr "Por konservi la datumojn, klaku sur \'Konservi\'"
+
+msgid "langMdCoverage"
+msgstr "ekz. bakalaŭro pri ..."
+
+msgid "langMdCopyright"
+msgstr "ekz. kun mencio de fonto"
+
+msgid "nameTools"
+msgstr "arkaiĝinta lingvovariablo"
+
+msgid "langTool"
+msgstr "Dokumentaj metadatumoj"
+
+msgid "langNoScript"
+msgstr "Skript ne disponebla en foliumilo, ne atentu la reston de la ekrano, ĝi ne funkcios ..."
+
+msgid "langLanguageTip"
+msgstr "La lingvo, en kiu ĉi-lernobjekto estas farita"
+
+msgid "langIdentifier"
+msgstr "Identigo"
+
+msgid "langIdentifierTip"
+msgstr "unika identigo de ĉi-lernobjekto, konsistanta el literoj, ciferoj, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "titolo aŭ nomo, kaj lingvo de la titolo aŭ nomo"
+
+msgid "langDescriptionTip"
+msgstr "priskribo aŭ komentario, kaj lingvo uzata por la priskribo"
+
+msgid "langKeyword"
+msgstr "Kaptovorto"
+
+msgid "langKeywordTip"
+msgstr "kun komoj inter ili (literoj, ciferoj, -.)"
+
+msgid "langCoverage"
+msgstr "Celareo"
+
+msgid "langCoverageTip"
+msgstr "ekz. bakalaŭro en ..."
+
+msgid "langKwNote"
+msgstr "Se vi volas ŝanĝi la lingvon de priskribo, ne samtempe aldonu novajn ŝlosilvortojn."
+
+msgid "langClickKw"
+msgstr "Musklaku sur ŝlosilvorton por elekti aŭ nuligi ĝin."
+
+msgid "langKwHelp"
+msgstr "<br/> Klaku sur \'+\' por malfermi, \'-\' por fermi, \'++\' por malfermi ĉion, \'--\' por fermi ĉion.<br/> <br/> Fermu la arbostrukturon kaj malfermu ĝin per \'+\' por nuligi antaŭajn elektojn.<br/> Malfermu per Alt-klaku \'+\' por remeti la originalajn ŝlosilvortojn.<br/> <br/> Alt-klako sur ŝlosilvorto elektas la ŝlosilvorton sen akompanantaj konceptoj akj nuligas elekton kun akompanantaj konceptoj.<br/> <br/> Se vi volas ŝanĝi la lingvon de la priskribo, ne samtempe aldonu novajn ŝlosilvortojn.<br/> <br/>"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "musklaku por malfermi la objekton"
+
+msgid "langStore"
+msgstr "Konservi"
+
+msgid "langDeleteAll"
+msgstr "Forigi ĉiujn metadatumojn"
+
+msgid "langConfirmDelete"
+msgstr "Ĉu *vere* vi volas forigi ĉiujn metadatumojn?"
+
+msgid "langWorkOn"
+msgstr "je"
+
+msgid "langNotInDB"
+msgstr "ne ligila kategorio"
+
+msgid "langManifestSyntax"
+msgstr "(sintakseraro en manifesta dosiero ...)"
+
+msgid "langEmptyManifest"
+msgstr "(malplena manifesta dosiero ...)"
+
+msgid "langNoManifest"
+msgstr "(ne manifesta dosiero ...)"
+
+msgid "langNotFolder"
+msgstr "ne eblas, ne estas dosierujo ..."
+
+msgid "langContinue"
+msgstr "Daŭrigu per"
+
+msgid "langCreate"
+msgstr "krei"
+
+msgid "langRemove"
+msgstr "Forigi MDEojn"
+
+msgid "langAllRemovedFor"
+msgstr "Ĉiuj datumoj forigitaj el la kategorio"
+
+msgid "langRemainingFor"
+msgstr "arkaiĝintaj datumoj estas forigitaj por la kategorio"
+
+msgid "langIndex"
+msgstr "Indicvortoj"
+
+msgid "langTotalMDEs"
+msgstr "Totala nombro da Ligil-MDaj datumoj :"
+
+msgid "langMainMD"
+msgstr "Malfermu Ĉefan MDEn  XX"
+
+msgid "langOrElse"
+msgstr "Elektu ligilan kategorion"
+
+msgid "langWarningDups"
+msgstr "- duoblaj kategorinomoj estas forigitaj el la listo!"
+
+msgid "langSLC"
+msgstr "Uzu ligilan kategorion nomitan"
+

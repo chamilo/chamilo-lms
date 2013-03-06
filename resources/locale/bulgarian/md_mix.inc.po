@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Метаданни за документ"
+
+msgid "langClickKw"
+msgstr "Щракнете ключова дума от дървото, за да я изберете или за да я откажете."
+
+msgid "langKwHelp"
+msgstr "<br/>Предназначение на бутоните: \"+\" - за отваряне, \"-\" - за затваряне, \"++\" за отваряне на всички, \"--\" - за затваряне на всички.<br/><br/>Ако променяте езика на описанието, не добавяйте в същото време ключови думи.<br/><br/>"
+
+msgid "langAdvanced"
+msgstr "Създаване"
+
+msgid "langSearch"
+msgstr "Търсене"
+
+msgid "langSearchCrit"
+msgstr "Само една дума на ред!"
+
+msgid "langNoKeywords"
+msgstr "Този курс няма ключови думи."
+
+msgid "langKwCacheProblem"
+msgstr "Кешът с ключови думи не може да се отвори."
+
+msgid "langCourseKwds"
+msgstr "Този документ съдържа ключови думи за курс"
+
+msgid "langKwdsInMD"
+msgstr "Ключови думи, използвани в метаданните"
+
+msgid "langKwdRefs"
+msgstr "Препратки за ключовата дума"
+
+msgid "langNonCourseKwds"
+msgstr "Ключови думи извън курса"
+
+msgid "langKwdsUse"
+msgstr "Ключови думи в курса (подчертаните още не са използвани)"
+
+msgid "langTotalMDEs"
+msgstr "Брой записи с метаданни:"
+

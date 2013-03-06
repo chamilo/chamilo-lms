@@ -1,0 +1,441 @@
+msgid "ForumDeleted"
+msgstr "Forum verwijderd"
+
+msgid "ForumCategoryDeleted"
+msgstr "Forumcategorie verwijderd"
+
+msgid "ForumLocked"
+msgstr "Forum geblokkeerd"
+
+msgid "Forum"
+msgstr "Forums"
+
+msgid "AddForumCategory"
+msgstr "Nieuwe forumcategorie toevoegen"
+
+msgid "AddForum"
+msgstr "Nieuw forum toevoegen"
+
+msgid "Topics"
+msgstr "Discussies"
+
+msgid "Posts"
+msgstr "Berichten"
+
+msgid "LastPosts"
+msgstr "Laatste bericht"
+
+msgid "Message"
+msgstr "bericht"
+
+msgid "NoForumInThisCategory"
+msgstr "Er zijn geen fora in deze categorie"
+
+msgid "InForumCategory"
+msgstr "Creëer in categorie"
+
+msgid "AllowAnonymousPosts"
+msgstr "Anonieme berichten toelaten?"
+
+msgid "StudentsCanEdit"
+msgstr "Mogen studenten hun eigen berichten wijzigen?"
+
+msgid "ApprovalDirect"
+msgstr "Goedkeuring / onmiddellijk plaatsen"
+
+msgid "AllowNewThreads"
+msgstr "Studenten nieuwe discussies laten starten?"
+
+msgid "DefaultViewType"
+msgstr "Standaardweergave"
+
+msgid "GroupSettings"
+msgstr "Groupseigenschappen"
+
+msgid "NotAGroupForum"
+msgstr "Geen groepenforum"
+
+msgid "PublicPrivateGroupForum"
+msgstr "Publiek of privé groepenforum?"
+
+msgid "Public"
+msgstr "Voor alle cursusleden"
+
+msgid "Private"
+msgstr "Uitsluitend voor groepsleden"
+
+msgid "NewPostStored"
+msgstr "Uw bericht werd opgeslagen"
+
+msgid "ReturnTo"
+msgstr "U kunt nu terugkeren naar"
+
+msgid "Or"
+msgstr "of"
+
+msgid "ReplyToThread"
+msgstr "Antwoorden op deze discussie"
+
+msgid "ReplyToMessage"
+msgstr "Antwoorden op dit bericht"
+
+msgid "QuoteMessage"
+msgstr "Dit bericht aanhalen"
+
+msgid "NewTopic"
+msgstr "Nieuwe discussie"
+
+msgid "Replies"
+msgstr "Antwoorden"
+
+msgid "Views"
+msgstr "aantal keer bekeken"
+
+msgid "LastPost"
+msgstr "Laatste bericht"
+
+msgid "Quoting"
+msgstr "Quote"
+
+msgid "NotifyByEmail"
+msgstr "Hou me via e-mail op de hoogte als iemand antwoordt"
+
+msgid "StickyPost"
+msgstr "Dit is een vast bericht (verschijnt altijd bovenaan en wordt aangeduid met een speciaal icoon)"
+
+msgid "ReplyShort"
+msgstr "Antwoord:"
+
+msgid "DeletePost"
+msgstr "Bent u zeker dat u dit bericht wenst te verwijderen?"
+
+msgid "Locked"
+msgstr "Vergrendeld: Studenten kunnen geen nieuwe berichten meer plaatsen in deze forumcategorie, forum of discussie maar ze kunnen de reeds geplaatste berichten wel nog lezen"
+
+msgid "Unlocked"
+msgstr "Ontgrendeld: Studenten kunnen terug nieuwe berichten plaatsen in deze forumcategorie, forum of discussie."
+
+msgid "Flat"
+msgstr "Vlakke weergave"
+
+msgid "Threaded"
+msgstr "Gestructureerde weergave"
+
+msgid "Nested"
+msgstr "Geneste weergave"
+
+msgid "FlatView"
+msgstr "Vlakke weergave"
+
+msgid "ThreadedView"
+msgstr "Gestructureerde weergave"
+
+msgid "NestedView"
+msgstr "Geneste weergave"
+
+msgid "Structure"
+msgstr "Structuur"
+
+msgid "ForumCategoryAdded"
+msgstr "De forumcategorie is toegevoegd"
+
+msgid "ForumCategoryEdited"
+msgstr "De forumcategorie is gewijzigd"
+
+msgid "ForumAdded"
+msgstr "Het forum is toegevoegd"
+
+msgid "ForumEdited"
+msgstr "Het forum is gewijzigd"
+
+msgid "NewThreadStored"
+msgstr "De nieuwe discussie is toegevoegd"
+
+msgid "Approval"
+msgstr "Goedkeuring"
+
+msgid "Direct"
+msgstr "Direct"
+
+msgid "ForGroup"
+msgstr "Voor groep"
+
+msgid "ThreadLocked"
+msgstr "De discussie is vergrendeld."
+
+msgid "NotAllowedHere"
+msgstr "U hebt niet voldoende machtiging om deze handeling te stellen."
+
+msgid "ReplyAdded"
+msgstr "Uw antwoord is toegevoegd"
+
+msgid "EditPost"
+msgstr "Een artikel wijzigen"
+
+msgid "EditPostStored"
+msgstr "Het bericht is gewijzigd"
+
+msgid "NewForumPost"
+msgstr "Nieuw bericht in het forum"
+
+msgid "YouWantedToStayInformed"
+msgstr "U hebt aangegeven dat u via e-mail op de hoogte gehouden wilde worden wanneer er iemand antwoordt op de discussie"
+
+msgid "MessageHasToBeApproved"
+msgstr "Uw bericht dient goedgekeurd te worden vooraleer anderen het kunnen lezen."
+
+msgid "AllowAttachments"
+msgstr "Sta bijlagen toe"
+
+msgid "EditForumCategory"
+msgstr "Wijzig forumcategorie"
+
+msgid "MovePost"
+msgstr "Verplaats post"
+
+msgid "MoveToThread"
+msgstr "Verplaats een discussie"
+
+msgid "ANewThread"
+msgstr "Een nieuwe discussie"
+
+msgid "Reply"
+msgstr "Antwoord"
+
+msgid "DeleteForum"
+msgstr "Forum verwijderen?"
+
+msgid "DeleteForumCategory"
+msgstr "Verwijder deze forumcategorie?"
+
+msgid "Lock"
+msgstr "Blokkeer"
+
+msgid "Unlock"
+msgstr "Deblokkeer"
+
+msgid "MoveThread"
+msgstr "Verplaats discussie"
+
+msgid "PostVisibilityChanged"
+msgstr "Zichtbaarheid van he bericht gewijzigd"
+
+msgid "PostDeleted"
+msgstr "Bericht verwijderd"
+
+msgid "MakeInvisible"
+msgstr "Maak onzichtbaar"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "De discussie kan hier gevonden worden"
+
+msgid "MakeVisible"
+msgstr "Maak zichtbaar"
+
+msgid "DeleteCompleteThread"
+msgstr "Volledige discussie verwijderen?"
+
+msgid "PostDeletedSpecial"
+msgstr "Speciaal bericht verwijderd"
+
+msgid "ThreadDeleted"
+msgstr "Discussie verwijderd"
+
+msgid "NextMessage"
+msgstr "Volgend bericht"
+
+msgid "PrevMessage"
+msgstr "Vorig bericht"
+
+msgid "FirstMessage"
+msgstr "Eerste bericht"
+
+msgid "LastMessage"
+msgstr "Laatste bericht"
+
+msgid "ForumSearch"
+msgstr "Zoek in de forum module"
+
+msgid "SearchTerm"
+msgstr "Zoekterm"
+
+msgid "ForumSearchResults"
+msgstr "Forum zoekresultaten"
+
+msgid "ForumSearchInformation"
+msgstr "U kunt op meerdere zoektermen zoeken door gebruik te maken van het + teken"
+
+msgid "YouWillBeNotifiedOfNewPosts"
+msgstr "U zal via email op de hoogte gebracht worden van nieuwe berichten."
+
+msgid "YouWillNoLongerBeNotifiedOfNewPosts"
+msgstr "U zal niet langer via email op de hoogte gebracht worden van nieuwe berichten."
+
+msgid "AddImage"
+msgstr "Voeg afbeelding toe"
+
+msgid "QualifyThread"
+msgstr "Kwalificatiegraad"
+
+msgid "ThreadUsersList"
+msgstr "Gebruikerslijst"
+
+msgid "StudentList"
+msgstr "lijst van cursisten"
+
+msgid "QualifyThisThread"
+msgstr "Beoordeel deze discussie"
+
+msgid "CourseUsers"
+msgstr "Gebruikers in de training"
+
+msgid "PostsNumber"
+msgstr "Aantal berichten"
+
+msgid "NumberOfPostsForThisUser"
+msgstr "Aantal inzendingen van deze gebruiker"
+
+msgid "AveragePostPerUser"
+msgstr "Inzendingen per gebruiker"
+
+msgid "QualificationChangesHistory"
+msgstr "Assessment wijzigingengescheidenis"
+
+msgid "MoreRecent"
+msgstr "Meest recent"
+
+msgid "Older"
+msgstr "ouder"
+
+msgid "OrderBy"
+msgstr "sorteer op"
+
+msgid "WhoChanged"
+msgstr "gewijzigd door"
+
+msgid "NoteChanged"
+msgstr "Notitie gewijzigd"
+
+msgid "DateChanged"
+msgstr "Datum gewijzigd"
+
+msgid "ViewComentPost"
+msgstr "Toon commentaren op dit bericht"
+
+msgid "AllStudents"
+msgstr "Alle studenten"
+
+msgid "StudentsQualified"
+msgstr "Gekwalificeerde studenten"
+
+msgid "StudentsNotQualified"
+msgstr "Niet gekwalificeerde studenten"
+
+msgid "NamesAndLastNames"
+msgstr "Voor- en familienamen"
+
+msgid "MaxScore"
+msgstr "Punten"
+
+msgid "QualificationCanNotBeGreaterThanMaxScore"
+msgstr "Beoordeling kan niet hoger zijn dan de maximum score"
+
+msgid "ThreadStatistics"
+msgstr "Statistieken van de discussie"
+
+msgid "Thread"
+msgstr "Discussie"
+
+msgid "NotifyMe"
+msgstr "Hou me op de hoogte"
+
+msgid "ConfirmUserQualification"
+msgstr "Bevestig beoordeling"
+
+msgid "NotChanged"
+msgstr "Ongewijzigd"
+
+msgid "TitleColumnGradebook"
+msgstr "Kolomhoofding in competenties rapport"
+
+msgid "QualifyThreadGradebook"
+msgstr "Beoordeel deze inzending"
+
+msgid "QualifyWeight"
+msgstr "Gewicht in rapport"
+
+msgid "QualifyNumeric"
+msgstr "Score"
+
+msgid "AlterQualifyThread"
+msgstr "Wijzig score van de inzending"
+
+msgid "ForumMoved"
+msgstr "Het forum werd verplaatst"
+
+msgid "YouMustAssignWeightOfQualification"
+msgstr "U moet een score toewijzen aan deze activiteit"
+
+msgid "DeleteAttachmentFile"
+msgstr "Verwijder het bestand in bijlage"
+
+msgid "EditAnAttachment"
+msgstr "Wijzig een bijlage"
+
+msgid "SeeForum"
+msgstr "Zie forum"
+
+msgid "CreateForum"
+msgstr "Forum aanmaken"
+
+msgid "ModifyForum"
+msgstr "Forum wijzigen"
+
+msgid "CreateThread"
+msgstr "Nieuwe inzending"
+
+msgid "ModifyThread"
+msgstr "Inzending wijzigen"
+
+msgid "EditForum"
+msgstr "Forum wijzigen"
+
+msgid "BackToForum"
+msgstr "Terug naar het forum"
+
+msgid "BackToForumOverview"
+msgstr "Terug naar het forum overzicht"
+
+msgid "BackToThread"
+msgstr "Terug naar inzending"
+
+msgid "ForumcategoryLocked"
+msgstr "Forum categorie vergrendeld"
+
+msgid "PreviewImage"
+msgstr "Afbeelding voorvertonen"
+
+msgid "UpdateImage"
+msgstr "Afbeelding wijzigen"
+
+msgid "EnableTimeLimits"
+msgstr "Tijdslimieten aanzetten"
+
+msgid "RemoveSearchResults"
+msgstr "Zoekresultaten opruimen"
+
+msgid "InsertQualificationCorrespondingToMaxScore"
+msgstr "Voeg een kwalificatie toe die hoort bij de maximum score"
+
+msgid "ThreadMoved"
+msgstr "Inzending verplaatst"
+
+msgid "MigrateForum"
+msgstr "Forum migreren"
+
+msgid "YouWillBeNotified"
+msgstr "U wordt op de hoogte gebracht"
+
+msgid "ForumCategories"
+msgstr "Forum categorieën"
+

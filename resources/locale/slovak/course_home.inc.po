@@ -1,0 +1,69 @@
+msgid "langActivate"
+msgstr "Ukáž"
+
+msgid "langDeactivate"
+msgstr "Schovaj"
+
+msgid "langInLnk"
+msgstr "Skryté nástroje a odkazy"
+
+msgid "langDelLk"
+msgstr "Naozaj zmazať odkaz?"
+
+msgid "langCourseCreate"
+msgstr "Vytvor  webstránku kurzu"
+
+msgid "langNameOfTheLink"
+msgstr "Názov pre odkaz"
+
+msgid "lang_main_categories_list"
+msgstr "Zoznam hlavných kategórii"
+
+msgid "langCourseAdminOnly"
+msgstr "Len pre lektorov"
+
+msgid "PlatformAdminOnly"
+msgstr "Len pre platformových administrátorov"
+
+msgid "langCombinedCourse"
+msgstr "Kombinovaný kurz"
+
+msgid "ToolIsNowVisible"
+msgstr "Nástroj je teraz viditeľný"
+
+msgid "ToolIsNowHidden"
+msgstr "Nástroj je teraz neviditeľný"
+
+msgid "EditLink"
+msgstr "Upraviť odkaz"
+
+msgid "Blog_management"
+msgstr "Správa blogov"
+
+msgid "Forum"
+msgstr "Fórum"
+
+msgid "Course_maintenance"
+msgstr "Spravovať kurz"
+
+msgid "TOOL_SURVEY"
+msgstr "Ankety"
+
+msgid "GreyIcons"
+msgstr "Sada nástrojov"
+
+msgid "Interaction"
+msgstr "Interakcie"
+
+msgid "Authoring"
+msgstr "Autori"
+
+msgid "Administration"
+msgstr "Administrácia"
+
+msgid "IntroductionTextUpdated"
+msgstr "Úvodný text bol aktualizovaný"
+
+msgid "IntroductionTextDeleted"
+msgstr "Úvodný text je zmazaný"
+

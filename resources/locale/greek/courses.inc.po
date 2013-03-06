@@ -1,0 +1,243 @@
+msgid "AlreadyRegisteredToCourse"
+msgstr "Έχει ήδη εγγραφεί στη σειρά μαθημάτων"
+
+msgid "lang_already_enrolled"
+msgstr "Έχει ήδη εγγραφεί"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Η προσωπική μου λίστα μαθημάτων"
+
+msgid "lang_course_enrollment"
+msgstr "Μαθήματα χρήστη"
+
+msgid "lang_course_not_available"
+msgstr "Αυτό το μάθημα δεν είναι διαθέσιμο ή δεν υπάρχει"
+
+msgid "lang_enroll"
+msgstr "Εγγραφή"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Εγγραφή σε νέο μάθημα"
+
+msgid "lang_my_present_course_list"
+msgstr "Η παρούσα λίστα μαθημάτων μου"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Δεν υπάρχει μάθημα για εγγραφή σε αυτήν την κατηγορία"
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Η αναζήτησε με βάση τον κωδικό"
+
+msgid "lang_search"
+msgstr "Αναζήτηση"
+
+msgid "lang_select_course_among_categories"
+msgstr "Επέλεξε μάθημα από τις κατηγορίες"
+
+msgid "lang_select_course_in"
+msgstr "Επέλεξε μάθημα από"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Επέλεξε μάθημα από τα αποτελέσματα της αναζήτησης"
+
+msgid "Unsubscribe"
+msgstr "Διαγραφείτε"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Πίσω στην αρχική μου σελίδα"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Επιστροφή στην προσωπική μου λίστα μαθημάτων"
+
+msgid "langTitular"
+msgstr "Επικεφαλής"
+
+msgid "langBackToListOfThisUser"
+msgstr "Επιστροφή στη λίστα μαθημάτων"
+
+msgid "langAdministrationTools"
+msgstr "Εργαλεία Διαχειριστή"
+
+msgid "lang_back_to_parent_category"
+msgstr "Επιστροφή στην κύρια κατηγορία"
+
+msgid "lang_back_to_course_selection"
+msgstr "Επιστροφή στην επιλογή μαθήματος"
+
+msgid "lang_up"
+msgstr "Επιστροφή στην κύρια κατηγορία"
+
+msgid "langCatList"
+msgstr "Κατηγορίες"
+
+msgid "langCourseList"
+msgstr "Λίστα μαθημάτων"
+
+msgid "Subscribe"
+msgstr "Εγγραφή"
+
+msgid "AlreadySubscribed"
+msgstr "Ήδη εγγεγραμμένος"
+
+msgid "CodeMandatory"
+msgstr "Είναι υποχρεωτικός ο κωδικός"
+
+msgid "CourseCategoryMandatory"
+msgstr "Είναι υποχρεωτική η κατηγορία της σειράς μαθημάτων"
+
+msgid "TeacherMandatory"
+msgstr "Υποχρεωτικός ο δάσκαλος"
+
+msgid "CourseCategoryStored"
+msgstr "Η κατηγορία του μαθήματος δημιουργήθηκε"
+
+msgid "langWithoutTimeLimits"
+msgstr "Χωρίς χρονικά όρια"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Επιστροφή στη λίστα βασικών κατηγοριών"
+
+msgid "langAdded"
+msgstr "Προστέθηκε"
+
+msgid "langDeleted"
+msgstr "Διαγράφηκε"
+
+msgid "langKeeped"
+msgstr "Κρατήθηκε"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Κρυφό/Έκλεισε"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Κρυφό / Ανοιχτό"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Ορατό / Ανοιχτό"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Ορατό / Έκλεισε"
+
+msgid "langAdminThisUser"
+msgstr "Επιστροφή στο χρήστη"
+
+msgid "langManage"
+msgstr "Διαχείριση Πύλης"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Έχετε εγγραφεί στο μάθημα"
+
+msgid "langSubCat"
+msgstr "υποκατηγορίες"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Δεν επιτρέπεται η διαγραφή από το μάθημα"
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Είσαι ο διαχειριστής σε αυτό το μάθημα"
+
+msgid "CourseManagement"
+msgstr "Διαχείρηση μαθημάτων"
+
+msgid "SortMyCourses"
+msgstr "Επιλογή των μαθημάτων μου"
+
+msgid "SubscribeToCourse"
+msgstr "συμμετοχή σε μάθημα"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Διαγραφή από τα μαθήματα"
+
+msgid "CreateCourseCategory"
+msgstr "Δημιουργία κατηγορίας μαθημάτων"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτήν την κατηγορία μαθημάτων; Τα μαθήματα αυτής της κατηγορίας θα μετακινηθούν έξω από τις κατηγορίες των μαθημάτων."
+
+msgid "CourseCategories"
+msgstr "Κατηγορίες Μαθημάτων"
+
+msgid "CoursesInCategory"
+msgstr "Μαθήματα στην κατηγορία"
+
+msgid "SearchCourse"
+msgstr "Αναζήτηση μαθημάτων"
+
+msgid "UpOneCategory"
+msgstr "< - Μία κατηγορία πίσω"
+
+msgid "SearchResultsFor"
+msgstr "Αναζήτηση αποτελεσμάτων για:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Θέλετε να διαγραφείτε από αυτό το μάθημα"
+
+msgid "NoCourseCategory"
+msgstr "Δεν υπάρχουν μαθήματα σ\'αυτή την κατηγορία"
+
+msgid "EditCourseCategorySucces"
+msgstr "Το μάθημα προστέθηκε στην κατηγορία"
+
+msgid "SubscribingNotAllowed"
+msgstr "Η εγγραφή δεν επιτρέπεται"
+
+msgid "CourseSortingDone"
+msgstr "Έγινε ταξινόμηση μαθημάτων"
+
+msgid "ExistingCourseCategories"
+msgstr "Υπάρχουσες Κατηγορίες Μαθημάτων"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Διαγραφήκατε από το μάθημα"
+
+msgid "ViewOpenCourses"
+msgstr "Προβολή ελεύθερων μαθημάτων"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Συνέβη ένα άγνωστο σφάλμα. Παρακαλώ επικοινωνήστε με τον διαχειριστή της πλατφόρμας."
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "Ο κωδικός του μαθήματος είναι λανθασμένος"
+
+msgid "CourseRequiresPassword"
+msgstr "Απαιτείται κωδικός για το μάθημα"
+
+msgid "SubmitRegistrationCode"
+msgstr "Υποβολή του κωδικού εγγραφής"
+
+msgid "CourseCategoryDeleted"
+msgstr "Η κατηγορία έχει διαγραφεί"
+
+msgid "CategorySortingDone"
+msgstr "Έγινε η κατάταξη των κατηγοριών"
+
+msgid "CourseCategoryEditStored"
+msgstr "Η κατηγορία ενημερώθηκε"
+
+msgid "buttonCreateCourseCategory"
+msgstr "Αποθήκευση αυτής της κατηγορίας σειράς μαθημάτων"
+
+msgid "buttonSaveCategory"
+msgstr "Αποθήκευση της κατηγορίας"
+
+msgid "buttonChangeCategory"
+msgstr "Αλλαγή κατηγορίας"
+
+msgid "SessionName"
+msgstr "Όνομα συνεδρίας"
+
+msgid "SessionCategory"
+msgstr "Κατηγορίες συνεδριών"
+
+msgid "Expand"
+msgstr "Επέκταση"
+
+msgid "CourseDetails"
+msgstr "Περιγραφή σειράς μαθημάτων"
+
+msgid "Compose"
+msgstr "Σύνθεση"
+
+msgid "ThereAreNoCoursesInThisCategory"
+msgstr "Δεν υπάρχει σειρά μαθημάτων σε αυτή την κατηγορία"
+

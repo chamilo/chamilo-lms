@@ -1,0 +1,202 @@
+msgid "langChapter"
+msgstr "فصل"
+
+msgid "langDocumentList"
+msgstr "لیستکلیه فایل ها"
+
+msgid "langOrganisationList"
+msgstr "فهرست"
+
+msgid "langEditTOC"
+msgstr "تغییر
+فهرست"
+
+msgid "langEditDocument"
+msgstr "تغییر"
+
+msgid "langCreateDocument"
+msgstr "آفرینشفایل جدید"
+
+msgid "langMissingImagesDetected"
+msgstr "  برای نمایش صفحه ای که هم اکنون ارسال کردید، به عکسهای زیر نیاز است. لطفاً آنها را نیز بفرستید"
+
+msgid "langPublish"
+msgstr "منتشر
+کردن"
+
+msgid "langScormcontentstudent"
+msgstr "این یک محتوای آموزشی مطابق با استاندارد <br>است  SCORM<br> برای راه اندازی آن، لطفاً بر روی دکمه زیر فشار دهید<br><input type=button name=scormbutton value=\'راه اندازی\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "این یک محتوای آموزشی مطابق با استاندارد <br>است  SCORM<br> برای راه اندازی آن، لطفاً بر روی دکمه زیر فشار دهید<br><input type=button name=scormbutton value=\'راه اندازی\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr "عملیات ارسال و نامتراکم سازی فایل فشرده (زیپ) با موفّقیّت انجام شد"
+
+msgid "langZipNoPhp"
+msgstr "عملیات ارسال فایل با شکست روبرو شد. فایل فشرده (زیپ) نباید فایل های پی اچ پی در بر داشته باشد"
+
+msgid "langGroupForumLink"
+msgstr "پیامگاه
+گروه"
+
+msgid "langGroupSpace"
+msgstr "قلمروی
+گروه"
+
+msgid "langNotScormContent"
+msgstr "ظاهراً پروندۀ مورد نظر شما یک پروندۀ فشرده زیپ و مطابق با استاندارد <br />نیست  SCORM<br />"
+
+msgid "langNoText"
+msgstr "خود
+را وارد کنید
+HTML لطفاً
+متن ساده یا متن"
+
+msgid "langNoFileName"
+msgstr "لطفاًنام فایل راوارد کنید"
+
+msgid "langMaxFileSize"
+msgstr "(upload) حدأکثر
+بار مورد قبول
+برای باردهی"
+
+msgid "langFileName"
+msgstr "نامفایل"
+
+msgid "langFileError"
+msgstr " فایل  مورد نظر برای ارسال فایل معتبری نیست"
+
+msgid "langDown"
+msgstr "پایین رفتن"
+
+msgid "langViMod"
+msgstr "تغییر
+قابلیّت رؤیت
+انجام شد"
+
+msgid "langAddComment"
+msgstr "اضافه
+کردن یا تغییر
+توضیح"
+
+msgid "langImpossible"
+msgstr "! عملیاتغیر ممکن"
+
+msgid "langNewDir"
+msgstr "نام پوشه جدید"
+
+msgid "langTo"
+msgstr "به"
+
+msgid "langNoSpace"
+msgstr " ارسال فایل به دلیل کمبود فضا در این پرونده با شکست روبرو شد"
+
+msgid "langDownloadEnd"
+msgstr " بارگیری با موفقیّت به پایان رسید"
+
+msgid "langFileExists"
+msgstr "عملیاتغیر ممکن !فایلی با این نام وجوددارد.لطفاًنام دیگری انتخابکنید"
+
+msgid "langDocCopied"
+msgstr "فایل مورد نظر کپیشد"
+
+msgid "langDocDeleted"
+msgstr "فایل/ پروندهمورد نظرحذف شد"
+
+msgid "langElRen"
+msgstr "تغییر
+نام انجام شد"
+
+msgid "langDirMv"
+msgstr "تغییر
+مکان انجام شد"
+
+msgid "langComMod"
+msgstr "توضیح
+تغییر یافت"
+
+msgid "langRename"
+msgstr "تغییر
+نام"
+
+msgid "langCopy"
+msgstr "محتوای درس را کپی کنید"
+
+msgid "langNameDir"
+msgstr "نامپرونده"
+
+msgid "langDownloadFile"
+msgstr "ارسال فایلبه سرور"
+
+msgid "learning_path_access"
+msgstr "برای آفرینش، تغییر، آشکار کردن یا اضافه نمودن یک خط سیر آموزشی روی <b>آفرینش یک خط سیر آموزشی</b> فشار دهید"
+
+msgid "langRoot"
+msgstr "ریشه"
+
+msgid "langBuilder"
+msgstr "خط
+سیر ساز"
+
+msgid "lang_edit_learnpath"
+msgstr "تغییر نام و توضیحات مربوط به خط سیر آموزشی"
+
+msgid "lang_add_title_and_desc"
+msgstr "تغییر
+عنوان و توضیح"
+
+msgid "lang_add_learnpath"
+msgstr "افزودن
+خط سیر آموزشی"
+
+msgid "lang_learnpath_added"
+msgstr "خط سیر آموزشی جدید با موفقیت ایجاد شد. هم اکنون می توانید با فشار دادن روی علامت به اضافه  فصول و بخشهای مختلف این خط سیر را به آن بیافزایید"
+
+msgid "lang_delete_learnpath"
+msgstr "حذف خط سیر آموزشی"
+
+msgid "lang_learnpath_edited"
+msgstr "خط سیر تغییر یافت"
+
+msgid "lang_learnpath_deleted"
+msgstr "خط سیر آموزشی و همامی قسمتهای آن حذف شدند"
+
+msgid "lang_no_publish"
+msgstr "پنهان کردن از دید دانشجویان"
+
+msgid "lang_publish"
+msgstr "آشکار کردن برای دانشجویان"
+
+msgid "lang_no_published"
+msgstr "هم اکنون از دید دانشجویان پنهان می باشد"
+
+msgid "lang_published"
+msgstr "هم اکنون قابل دسترسی برای دانشجویان می باشد"
+
+msgid "lang_description"
+msgstr "توضیحات"
+
+msgid "lang_title"
+msgstr "عنوان"
+
+msgid "langScormBuilder"
+msgstr "خط سیر ساز: با قابلیت ایجاد خطوط سیر آمورشی مظابق با استاندارد <br>SCORM<br>"
+
+msgid "langCreateDoc"
+msgstr "آفرینشفایل جدید"
+
+msgid "langOrganiseDocuments"
+msgstr "آفرینش
+فهرست"
+
+msgid "langUncompress"
+msgstr "(zip) نامتراکم
+سازی فایل فشرده"
+
+msgid "ExportShort"
+msgstr "صادر کردن  به صورت <br>SCORM<br>"
+
+msgid "progress"
+msgstr "پیشرفت"
+

@@ -1,0 +1,177 @@
+msgid "langChapter"
+msgstr "Rozdział"
+
+msgid "langDocumentList"
+msgstr "Lista wszystkich dokumentów"
+
+msgid "langOrganisationList"
+msgstr "Spis treści"
+
+msgid "langEditTOC"
+msgstr "Edycja spisu treści"
+
+msgid "langEditDocument"
+msgstr "Edytuj"
+
+msgid "langCreateDocument"
+msgstr "Utwórz dokument"
+
+msgid "langMissingImagesDetected"
+msgstr "Wykryto brakujące obrazki"
+
+msgid "langPublish"
+msgstr "Publikowanie"
+
+msgid "langScormcontentstudent"
+msgstr "To jest kurs w formacie SCORM. Aby uruchomić naciśnij:<input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "To jest zawartość pliku SCORM<br><input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr " Plik zip załadowany i rozpakowany"
+
+msgid "langZipNoPhp"
+msgstr "Plik zip nie może zawierać plików .PHP"
+
+msgid "langGroupForumLink"
+msgstr "Fora grup"
+
+msgid "langGroupSpace"
+msgstr "Obszar grup"
+
+msgid "langNotScormContent"
+msgstr "To nie jest plik ZIP w formacie Scorm!"
+
+msgid "langNoText"
+msgstr "Wpisz zawartość - tekst/HTML"
+
+msgid "langNoFileName"
+msgstr "Podaj nazwę pliku"
+
+msgid "langMaxFileSize"
+msgstr "Maksymalna wielkość pliku"
+
+msgid "langFileName"
+msgstr "Nazwa pliku"
+
+msgid "langFileError"
+msgstr "Nieprawdłowy plik do załadowania."
+
+msgid "langDown"
+msgstr "dół"
+
+msgid "langViMod"
+msgstr "Widoczność zmodyfikowana"
+
+msgid "langAddComment"
+msgstr "Dodaj/modyfikuj komentarz do"
+
+msgid "langImpossible"
+msgstr "Czynność niemożliwa"
+
+msgid "langNewDir"
+msgstr "Nazwa nowego katalogu"
+
+msgid "langTo"
+msgstr "do"
+
+msgid "langNoSpace"
+msgstr "Ładowanie pliku nie powiodło się. Nie ma wystarczającej przestrzeni w Twoim katalogu"
+
+msgid "langDownloadEnd"
+msgstr "Ładowanie pliku zakończone"
+
+msgid "langFileExists"
+msgstr "Czynność niemożliwa.<br>Plik o tej nazwie już istnieje."
+
+msgid "langDocCopied"
+msgstr "Dokument skopiowany"
+
+msgid "langDocDeleted"
+msgstr "Dokument usunięty"
+
+msgid "langElRen"
+msgstr "Zmieniono nazwę elementu"
+
+msgid "langDirMv"
+msgstr "Element przeniesiony"
+
+msgid "langComMod"
+msgstr "Komentarz zmodyfikowany"
+
+msgid "langRename"
+msgstr "Zmień nazwę"
+
+msgid "langCopy"
+msgstr "Kopiuj zawartość kursu"
+
+msgid "langNameDir"
+msgstr "Nazwa nowego katalogu"
+
+msgid "langDownloadFile"
+msgstr "Załaduj plik do serwera"
+
+msgid "learning_path_access"
+msgstr "kliknij \'Stwórz ścieżkę nauki\' aby usuwać/modyfikować/pokazywać/ukrywać/tworzyć/dodawać ścieżki nauki"
+
+msgid "langRoot"
+msgstr "root"
+
+msgid "lang_edit_learnpath"
+msgstr "edytuj ścieżkę nauki"
+
+msgid "lang_add_title_and_desc"
+msgstr "Edytuj tytuł i opis"
+
+msgid "lang_add_learnpath"
+msgstr "Dodaj nową ścieżkę nauki"
+
+msgid "lang_learnpath_added"
+msgstr "Nowa ścieżka nauki została poprawnie stworzona. Teraz, klikając na krzyżyk, możesz dodać do niej moduły."
+
+msgid "lang_delete_learnpath"
+msgstr "usuń ścieżkę nauki"
+
+msgid "lang_learnpath_edited"
+msgstr "edycja ścieżki nauki została przeprowadzona"
+
+msgid "lang_learnpath_deleted"
+msgstr "ścieżka nauki została usunięta"
+
+msgid "lang_no_publish"
+msgstr "nie publikować"
+
+msgid "lang_publish"
+msgstr "publikować"
+
+msgid "lang_no_published"
+msgstr "nie opublikowane"
+
+msgid "lang_published"
+msgstr "opublikowane"
+
+msgid "lang_description"
+msgstr "opis"
+
+msgid "lang_title"
+msgstr "tytuł"
+
+msgid "langScormBuilder"
+msgstr "Narzędzie do budowy ścieżek - narzędzie do budowy kursów w formacie Scorm"
+
+msgid "langCreateDoc"
+msgstr "Utwórz dokument"
+
+msgid "langOrganiseDocuments"
+msgstr "Tworzenie spisu treści"
+
+msgid "langUncompress"
+msgstr "rozpakuj plik archiwum (.zip) w serwerze"
+
+msgid "ExportShort"
+msgstr "Eksportuj krótko"
+
+msgid "progress"
+msgstr "Postęp"
+

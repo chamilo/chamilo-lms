@@ -1,0 +1,162 @@
+msgid "Announcement"
+msgstr "Oznámení"
+
+msgid "langAnnEmpty"
+msgstr "Seznam oznámení byl vyčistěn"
+
+msgid "AnnouncementModified"
+msgstr "Oznámení bylo upraveno"
+
+msgid "AnnouncementAdded"
+msgstr "Oznámení bylo přidáno"
+
+msgid "AnnouncementDeleted"
+msgstr "Oznámení bylo vymazáno"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Zveřejněné na"
+
+msgid "AddAnnouncement"
+msgstr "Přidat toto oznámení"
+
+msgid "langContent"
+msgstr "Obsah"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Vyčistit seznam oznámení"
+
+msgid "professorMessage"
+msgstr "Odkaz od učitele"
+
+msgid "langEmailSent"
+msgstr "a odeslaný email zaregistrovaným studentům"
+
+msgid "EmailOption"
+msgstr "Pošli toto oznámení emailom vybraným skupinám/uživatelům"
+
+msgid "langOn"
+msgstr "Na"
+
+msgid "langRegUser"
+msgstr "registrovaný uživatelé kurzu"
+
+msgid "langUnvalid"
+msgstr "máte neplatnou nebo neexistující emailovou adresu"
+
+msgid "langModifAnn"
+msgstr "Uprav toto oznámení"
+
+msgid "langModify"
+msgstr "upravit"
+
+msgid "langDelete"
+msgstr "vymazat"
+
+msgid "langTitle"
+msgstr "Název"
+
+msgid "langHelp"
+msgstr "Nápověda"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAddIntro"
+msgstr "Přidat úvodní text"
+
+msgid "langBackList"
+msgstr "Zpět na seznam"
+
+msgid "langSelMess"
+msgstr "Varování někteřím uživatelům"
+
+msgid "EmailTitle"
+msgstr "Předmět tohoto emailu"
+
+msgid "langUserlist"
+msgstr "Seznam skupin a uživatelů"
+
+msgid "langSelectedUsers"
+msgstr "Vybraný uživatelé"
+
+msgid "langSubmit"
+msgstr "Pošli"
+
+msgid "langPleaseEnterMessage"
+msgstr "Musíte napsát text správy."
+
+msgid "langPleaseSelectUsers"
+msgstr "Musíte zvolit užívatele."
+
+msgid "Teachersubject"
+msgstr "Správa byla odeslána Vašim studentům"
+
+msgid "langMessages"
+msgstr "Správy"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Správy vybraným uživatelům"
+
+msgid "langIntroText"
+msgstr "Pro odeslání správy zvolte skupinu uživatelů (označenou s G na začátku) nebo jednotlivé uživatele se seznamu v levo."
+
+msgid "langDown"
+msgstr "dolů"
+
+msgid "langMsgSent"
+msgstr "Správa byla odeslána vybraným studentům"
+
+msgid "langSelUser"
+msgstr "vybraní uživatelé kurzu"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Správa pro vybrané skupiny"
+
+msgid "langSelectedGroups"
+msgstr "vybrané skupiny"
+
+msgid "langMsg"
+msgstr "Správy"
+
+msgid "langYes"
+msgstr "ano"
+
+msgid "MsgText"
+msgstr "Správa"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Všechna oznámení byla smazána"
+
+msgid "AnnouncementMoved"
+msgstr "Oznámení bylo přesunuto"
+
+msgid "NoAnnouncements"
+msgstr "Tam nejsou žádné oznámení."
+
+msgid "SelectEverybody"
+msgstr "Vyber všechny"
+
+msgid "SelectedUsersGroups"
+msgstr "Vybrané skupiny uživatelů"
+
+msgid "LearnerMessage"
+msgstr "Zpráva od studenta"
+
+msgid "TitleIsRequired"
+msgstr "Název je povinný"
+
+msgid "AnnounceSentByEmail"
+msgstr "Oznámení zasláno emailem"
+
+msgid "AnnounceSentToUserSelection"
+msgstr "Oznámení zasláno zvoleným uživatelům"
+
+msgid "SendAnnouncement"
+msgstr "Poslat oznámení"
+
+msgid "ModifyAnnouncement"
+msgstr "Upravit oznámení"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Poslat oznámení"
+

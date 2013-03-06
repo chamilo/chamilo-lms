@@ -1,0 +1,180 @@
+msgid "langChapter"
+msgstr "Kapitel"
+
+msgid "langDocumentList"
+msgstr "Lista på alla dokument"
+
+msgid "langOrganisationList"
+msgstr "Innehållsförteckning"
+
+msgid "langEditTOC"
+msgstr "Ändra innehållsförteckning"
+
+msgid "langEditDocument"
+msgstr "Ändra"
+
+msgid "langCreateDocument"
+msgstr "Skapa ett dokument"
+
+msgid "langMissingImagesDetected"
+msgstr "Saknade bilder har detekterats"
+
+msgid "langPublish"
+msgstr "Publicera"
+
+msgid "langScormcontentstudent"
+msgstr "Detta är ett SCORM format kurs. För att spela upp det, klicka här : <input type=button name=scormbutton value=\'Starta !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "Detta är ett SCORM innehåll <br><input type=button name=scormbutton value=\'Starta !\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr ".ZIP-fil uppladdad och dekomprimerad"
+
+msgid "langZipNoPhp"
+msgstr "ZIP-filen kan inte innehålla .PHP-filer"
+
+msgid "langGroupForumLink"
+msgstr "Gruppforum"
+
+msgid "langGroupSpace"
+msgstr "Grupparea"
+
+msgid "langNotScormContent"
+msgstr "Detta �r ingen scorm zip-fil !"
+
+msgid "langNoText"
+msgstr "Var vänlig skriv din text / HTML innehåll"
+
+msgid "langNoFileName"
+msgstr "Var vänlig skriv filnamn"
+
+msgid "langMaxFileSize"
+msgstr "Max filstorlek är"
+
+msgid "langFileName"
+msgstr "Filnamn"
+
+msgid "langFileError"
+msgstr "Filen för uppladdning är inte tillåten."
+
+msgid "langDown"
+msgstr "ner"
+
+msgid "langViMod"
+msgstr "Synlighet modifierad"
+
+msgid "langAddComment"
+msgstr "lägg till/modifiera kommentar till"
+
+msgid "langImpossible"
+msgstr "Operation omöjlig"
+
+msgid "langNewDir"
+msgstr "Namn på ny folder"
+
+msgid "langTo"
+msgstr "till"
+
+msgid "langNoSpace"
+msgstr "Uppladdningen har misslyckats. Det finns inte tillräckligt med diskutrymme i din mapp."
+
+msgid "langDownloadEnd"
+msgstr "Uppladdningen är klar."
+
+msgid "langFileExists"
+msgstr "Operationen är omöjlig.<br>En fil med detta namn existerar redan."
+
+msgid "langDocCopied"
+msgstr "dokument kopierat"
+
+msgid "langDocDeleted"
+msgstr "dokument raderat"
+
+msgid "langElRen"
+msgstr "filen bytte namn"
+
+msgid "langDirMv"
+msgstr "mapp flyttad"
+
+msgid "langComMod"
+msgstr "kommentar modifierades"
+
+msgid "langRename"
+msgstr "Byt namn"
+
+msgid "langCopy"
+msgstr "Kopiera kursinnehållet"
+
+msgid "langNameDir"
+msgstr "Namn på den nya mappen"
+
+msgid "langDownloadFile"
+msgstr "Ladda filen till servern"
+
+msgid "learning_path_access"
+msgstr "Klicka \'skapa learning path\' för att radera/ändra/visa/göm/skapa/lägga till learning path"
+
+msgid "langRoot"
+msgstr "rot"
+
+msgid "langBuilder"
+msgstr "Learning Path byggare"
+
+msgid "lang_edit_learnpath"
+msgstr "ändra inlärningsväg"
+
+msgid "lang_add_title_and_desc"
+msgstr "Ändra titel och beskrivning"
+
+msgid "lang_add_learnpath"
+msgstr "Lägg till ny inlärningsväg"
+
+msgid "lang_learnpath_added"
+msgstr "Den nya inlärningsvägen har skapats. Nu kan du lägga till moduler genom att klicka på kryssen."
+
+msgid "lang_delete_learnpath"
+msgstr "Ta bort inlärningsväg"
+
+msgid "lang_learnpath_edited"
+msgstr "inlärningsvägen har ändrats"
+
+msgid "lang_learnpath_deleted"
+msgstr "inlärningsvägen har tagits bort"
+
+msgid "lang_no_publish"
+msgstr "publicera inte"
+
+msgid "lang_publish"
+msgstr "publicera"
+
+msgid "lang_no_published"
+msgstr "ej publicerad"
+
+msgid "lang_published"
+msgstr "publicerad"
+
+msgid "lang_description"
+msgstr "beskrivning"
+
+msgid "lang_title"
+msgstr "titel"
+
+msgid "langScormBuilder"
+msgstr "Path byggare - Scorm format kursbyggare"
+
+msgid "langCreateDoc"
+msgstr "Skapa ett dokument"
+
+msgid "langOrganiseDocuments"
+msgstr "Skapa innehållsförteckning"
+
+msgid "langUncompress"
+msgstr "dekomprimera zippad (.ZIP) fil på servern"
+
+msgid "ExportShort"
+msgstr "Exportera kort"
+
+msgid "progress"
+msgstr "Framsteg"
+

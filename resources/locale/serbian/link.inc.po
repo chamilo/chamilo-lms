@@ -1,0 +1,120 @@
+msgid "LinkMoved"
+msgstr "Link je promenjen"
+
+msgid "langLinkName"
+msgstr "Ime linka"
+
+msgid "langLinkAdd"
+msgstr "Dodaj link"
+
+msgid "langLinkAdded"
+msgstr "Link je dodat"
+
+msgid "langLinkMod"
+msgstr "Modifikuj link"
+
+msgid "langLinkModded"
+msgstr "Link je modifikovan."
+
+msgid "langLinkDel"
+msgstr "Obriši link"
+
+msgid "langLinkDeleted"
+msgstr "Link je obrisan"
+
+msgid "langLinkDelconfirm"
+msgstr "Da li želite da obrišete ovaj link?"
+
+msgid "langAllLinksDel"
+msgstr "Obriši sve linkove iz ove kategorije"
+
+msgid "langCategoryName"
+msgstr "Ime kategorije"
+
+msgid "langCategoryAdd"
+msgstr "Dodaj kategoriju"
+
+msgid "langCategoryAdded"
+msgstr "Kategorija je dodata."
+
+msgid "langCategoryModded"
+msgstr "Kategorija je modifikovana."
+
+msgid "langCategoryDel"
+msgstr "Obriši kategoriju"
+
+msgid "langCategoryDeleted"
+msgstr "Kategorija i svi njeni linkovi su obrisani."
+
+msgid "langCategoryDelconfirm"
+msgstr "Kada brišete kategoriju svi linkovi katerije se takođe brišu. Da li zaista želite da obrišete kategoriju i sve njene linkove?"
+
+msgid "langAllCategoryDel"
+msgstr "Obriši sve kategorije i sve linkove"
+
+msgid "langGiveURL"
+msgstr "Molim Vas, dajte linku URL"
+
+msgid "langGiveCategoryName"
+msgstr "Molim Vas, dajte kategoriji ime"
+
+msgid "langNoCategory"
+msgstr "Nema kategorije"
+
+msgid "showall"
+msgstr "Otovri sve kategorije"
+
+msgid "shownone"
+msgstr "Zatvori sve kategorije"
+
+msgid "langListDeleted"
+msgstr "Lista je obrisana"
+
+msgid "langAddLink"
+msgstr "Dodavanje linka"
+
+msgid "langDelList"
+msgstr "Obriši listu"
+
+msgid "langModifyLink"
+msgstr "Izmeni link"
+
+msgid "langCsvImport"
+msgstr "CSV uvoz"
+
+msgid "langCsvFileNotFound"
+msgstr "CSV fajl nije mogao da se otvori (npr. prazan, prevelik)"
+
+msgid "langCsvFileNoSeps"
+msgstr "CSV faj mora da koristi , ili ; kao separator listi"
+
+msgid "langCsvFileNoURL"
+msgstr "CSV fal mora bar da ima URL i naslovnu kolonu"
+
+msgid "langCsvFileLine1"
+msgstr "... - linija 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "linija/e nije uspela da uveze link (nema URL-a ili nema naslova)"
+
+msgid "langCsvLinesOld"
+msgstr "postojeći link/ovi su ažurirani (isti URL i kategorija)"
+
+msgid "langCsvLinesNew"
+msgstr "Novi link je kreiran."
+
+msgid "langCsvExplain"
+msgstr "Fajl treba da izgleda ovako: <blockquote><pre> <b>URL</b>;kategorija;<b>title</b>;opis; <b>http://www.aaa.org/...</b>;Važni linkovi;<b>Ime 1</b>;Opis 1; <b>http://www.bbb.net/...</b>;;<b>Ime  2</b>;\"Opis 2\"; </pre></blockquote> Ako su URL i kategorija ist kao i postojeći link, njegovo ime i opis su ažurni. U svim drugim slučajevima kreiran je novi link.<br><br> Bold = obavezno. polja mogu da budu bilokakvig redosleda a imena velikim ili malim slovima. Dodatna polja su dodata u opis. Separator: zarez ili tačka i zarez. Vrednosti mogu da budu citirane ali ne imena polja. Neki [b]HTML tagovi[/b] mogu da se uvezu u polje Opis."
+
+msgid "langLinkUpdated"
+msgstr "Link je ažuriran"
+
+msgid "langAll_Link_Deleted"
+msgstr "Link je obrisan"
+
+msgid "langOnHomepage"
+msgstr "Prikaži link na početnoj stranici"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Poka�i ovaj link kao ikonicu na početnoj stranici kursa"
+

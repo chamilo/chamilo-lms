@@ -1,0 +1,237 @@
+msgid "AgendaAdd"
+msgstr "Ierakstīt jaunu notikumu plānotājā"
+
+msgid "ShowAllEvents"
+msgstr "Parādīt visus notikumus"
+
+msgid "ShowCurrent"
+msgstr "Parādīt šī mēneša notikumus"
+
+msgid "AddCalendarItem"
+msgstr "Ierakstīt jaunu notikumu plānotājā"
+
+msgid "Day"
+msgstr "Diena"
+
+msgid "Month"
+msgstr "Mēnesis"
+
+msgid "Year"
+msgstr "Gads"
+
+msgid "Hour"
+msgstr "Stunda"
+
+msgid "Minutes"
+msgstr "Minūtes"
+
+msgid "Detail"
+msgstr "Sīkāk"
+
+msgid "EditSuccess"
+msgstr "Notikums plānotājā tika izlabots"
+
+msgid "AddSuccess"
+msgstr "Notikums plānotāja tika ierakstīts"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Notikums no plānotāja tika izdzēsts"
+
+msgid "NoAgendaItems"
+msgstr "Šeit nav neviena ieraksta"
+
+msgid "lang_september"
+msgstr "Septembris"
+
+msgid "langClassName"
+msgstr "Klases nosaukums"
+
+msgid "lang_agenda"
+msgstr "Plānotājs"
+
+msgid "ModifyCalendarItem"
+msgstr "Labot plānotāja notikuma ierakstu"
+
+msgid "ItemTitle"
+msgstr "Notikuma virsraksts"
+
+msgid "langDay"
+msgstr "diena"
+
+msgid "month_default"
+msgstr "mēnesis, pēc noklusējuma"
+
+msgid "langYear"
+msgstr "Gads"
+
+msgid "year_default"
+msgstr "gads, pēc noklusējuma"
+
+msgid "langHour"
+msgstr "Stunda"
+
+msgid "hour_default"
+msgstr "stunda, pēc noklusējuma"
+
+msgid "langMinute"
+msgstr "minūte"
+
+msgid "langLasting"
+msgstr "ilgums"
+
+msgid "langOldToNew"
+msgstr "no vecākā uz jaunāko"
+
+msgid "langNewToOld"
+msgstr "no jaunākā uz vecāko"
+
+msgid "langNow"
+msgstr "šobrīd"
+
+msgid "langAddEvent"
+msgstr "Saglabāt ierakstu"
+
+msgid "langDetail"
+msgstr "sīkāk"
+
+msgid "MonthView"
+msgstr "Mēneša griezumā"
+
+msgid "WeekView"
+msgstr "Nedēļas griezumā"
+
+msgid "DayView"
+msgstr "Dienas griezumā"
+
+msgid "AddPersonalItem"
+msgstr "Ierakstīt personīgu ierakstu"
+
+msgid "Week"
+msgstr "Nedēļa"
+
+msgid "Date"
+msgstr "Datums"
+
+msgid "Time"
+msgstr "Laiks"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Ierakstīt personīgu ierakstu"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Labot personīgo ierakstu"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Personīgais ieraksts tika ierakstīts plānotājā"
+
+msgid "PeronalAgendaItemEdited"
+msgstr " Personīgais ieraksts tika labots plānotājā"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr " Personīgais ieraksts tika izdzēsts no plānotāja"
+
+msgid "ViewPersonalItem"
+msgstr "Parādīt personīgos ierakstus"
+
+msgid "UserGroupFilter"
+msgstr "Grupu un lietotāju filtrs"
+
+msgid "ShowAll"
+msgstr "Rādīt visus"
+
+msgid "Print"
+msgstr "Drukāt"
+
+msgid "MyTextHere"
+msgstr "Mans ieraksts šeit"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Kopēts, kā paziņojums"
+
+msgid "NewAnnouncement"
+msgstr "Jauns paziņojums"
+
+msgid "AddAnnouncement"
+msgstr "Pievienot, kā paziņojumu"
+
+msgid "UpcomingEvent"
+msgstr "Tuvākie notikumi"
+
+msgid "RepeatedEvent"
+msgstr "Atkārtotie notikumi"
+
+msgid "RepeatType"
+msgstr "Atkārtošanās veids"
+
+msgid "RepeatDaily"
+msgstr "Dienas griezumā"
+
+msgid "RepeatWeekly"
+msgstr "Nedēļas griezumā"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Mēneša, pa datumiem"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Mēneša, pa dienām"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Mēneša griezumā, pa dienām, saīsināts"
+
+msgid "RepeatYearly"
+msgstr "Gada griezumā"
+
+msgid "RepeatEnd"
+msgstr "Atkārtot beigu datumu"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Skatīt tiešo notikumu"
+
+msgid "ICalFileImport"
+msgstr "Importēt nākotnes notikumus"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Visi sistēmas lietotāji"
+
+msgid "GlobalEvent"
+msgstr "Notikums visā platformā"
+
+msgid "ModifyEvent"
+msgstr "Rediģēt notikumu"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Beigu datums nevar būt pirms sākuma datuma"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Vispirms vēlākos notikumus"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Vispirms agrākos notikumus"
+
+msgid "ItemForUserSelection"
+msgstr "Atlasīto lietotāju saraksts"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Šis fails nav iCal formātā"
+
+msgid "RepeatEvent"
+msgstr "Atkārtot notikumu"
+
+msgid "RepeatDate"
+msgstr "Atkārtot datumu"
+
+msgid "EndDateMustBeMoreThanStartDate"
+msgstr "Beigu datumam ir jābūt lielākam par sākuma datumu"
+
+msgid "SelectACourse"
+msgstr "Izvēlēties kursu"
+
+msgid "PleaseSelectACourseOrASessionInTheLeftColumn"
+msgstr "Lūdzu izvēlieties kursu vai sesiju sānjoslā"
+
+msgid "DisableEndDate"
+msgstr "Atslēgt beigu datumu"
+
+msgid "AllEvents"
+msgstr "Visi notikumi"
+

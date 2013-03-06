@@ -1,0 +1,165 @@
+msgid "langInvalidId"
+msgstr "การเข้าสู่ระบบล้มเหลว รหัสผู้ใช้และระหัสผ่านไม่ถูกต้อง"
+
+msgid "langWelcome"
+msgstr "รายวิชาที่เปิดให้เลือกเรียนได้ทุกคนอยู่ด้านล่าง รายวิชาอื่นนอกเหนือจากนี้ ต้องการชื่อผู้ใช้และรหัสผ่าน  ซึ่งท่านสามารถได้จากการ \'ลงทะเบียน\'   สำหรับอาจารย์ สามารถสร้างรายวิชาของท่านได้ โดยคลิกที่หน้าลงทะเบียนเช่นกัน แต่ให้เลือก\'สร้างรายวิชา\'"
+
+msgid "langPass"
+msgstr "รหัสผ่าน"
+
+msgid "langEnter"
+msgstr "ย้อนกลับ"
+
+msgid "langReg"
+msgstr "ลงทะเบียน"
+
+msgid "langMenu"
+msgstr "เมนู"
+
+msgid "langAdvises"
+msgstr "แนะนำ"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>คำเตือน: </b> ไม่มีรายวิชานี้"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "คลิกที่นี่เพื่อรับวิชานี้ จากระบบควบคุมเดิมของท่าน"
+
+msgid "langOtherCourses"
+msgstr "รายวิชาอื่น"
+
+msgid "langSupportForum"
+msgstr "อภิปรายปรึกษา"
+
+msgid "langCategories"
+msgstr "ประเภทวิชา"
+
+msgid "langBackToHomePage"
+msgstr "กลับไปที่หน้าแรก"
+
+msgid "lang_No_course_publicly_available"
+msgstr "ยังไม่มีวิชาที่เปิดเพื่อสาธารณะ"
+
+msgid "langLostPassword"
+msgstr "แจ้งลืมรหัสผ่าน"
+
+msgid "lang_edit_my_course_list"
+msgstr "สร้างสารบัญวิชาของเรา"
+
+msgid "langAgenda"
+msgstr "กำหนดการ"
+
+msgid "langValvas"
+msgstr "ประกาศที่ผ่านมา"
+
+msgid "langUp"
+msgstr "ขึ้น"
+
+msgid "langCatList"
+msgstr "ประเภทรายวิชา"
+
+msgid "langCourseList"
+msgstr "รายชื่อวิชา"
+
+msgid "langHelptwo"
+msgstr "ระบบช่วยเหลือ"
+
+msgid "langRegAll"
+msgstr "ลงทะเบียน"
+
+msgid "EussMenu"
+msgstr "รายการเชื่อมโยง"
+
+msgid "Opinio"
+msgstr "ความคิดเห็น"
+
+msgid "Intranet"
+msgstr "เครือข่ายภายใน"
+
+msgid "Englin"
+msgstr "อังกฤษ"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "การเข้าสู่ระบบล้มเหลว หากยังไม่ลงทะเบียน กรุณาคลิกที่<a href=claroline/auth/inscription.php>แบบฟอร์มการลงทะเบียนนี้</a>"
+
+msgid "langSubCat"
+msgstr "หัวข้อย่อยในรายการ"
+
+msgid "langMenuGeneral"
+msgstr "รายการเชื่อมโยงทั่วไป"
+
+msgid "langMenuUser"
+msgstr "เมนูของผู้เข้าใช้ระบบ"
+
+msgid "langMenuAdmin"
+msgstr "ระบบการจัดการ"
+
+msgid "langUsersOnLineList"
+msgstr "��ª��ͼ��������ѧ��ҹ�к�"
+
+msgid "langTotalOnLine"
+msgstr "กำลังใช้งานระบบทั้งสิ้น"
+
+msgid "langRefresh"
+msgstr "กะพริบหน้าจอใหม่"
+
+msgid "langMe"
+msgstr "ตัวเรา"
+
+msgid "langSystemAnnouncements"
+msgstr "ประกาศข่าวภายในระบบ"
+
+msgid "langHelpMaj"
+msgstr "ระบบช่วยเหลือ"
+
+msgid "langNotRegistered"
+msgstr "ยังไม่ลงทะเบียน"
+
+msgid "langAdmin"
+msgstr "ระบบ"
+
+msgid "Login"
+msgstr "เข้าสู่ระบบ"
+
+msgid "langRegisterForCourse"
+msgstr "ลงทะเบียนวิชา"
+
+msgid "langUnregisterForCourse"
+msgstr "ถอนการลงทะเบียนวิชา"
+
+msgid "langCombinedCourse"
+msgstr "บูรณาการวิชา"
+
+msgid "Platform"
+msgstr "ระบบ"
+
+msgid "Refresh"
+msgstr "ล้างหน้าจอใหม่"
+
+msgid "TotalOnLine"
+msgstr "จำนวนผู้ที่กำลังใช้งานระบบรวมทั้งสิ้น"
+
+msgid "langCourseClosed"
+msgstr "ยังไม่เปิดวิชา"
+
+msgid "ViewOpenCourses"
+msgstr "ดูวิชาที่เปิดเรียน"
+
+msgid "langCompetences"
+msgstr "ความสามารถพิเศษ"
+
+msgid "langDiplomas"
+msgstr "คุณวุฒิ"
+
+msgid "langTeach"
+msgstr "วิชาที่สามารถสอนได้"
+
+msgid "langProductions"
+msgstr "ผลงาน"
+
+msgid "langSendChatRequest"
+msgstr "ส่งข้อความเชิญร่วมสนทนาออนไลน์"
+
+msgid "langRequestDenied"
+msgstr "ไม่รับคำเชิญ"
+

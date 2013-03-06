@@ -1,0 +1,174 @@
+msgid "langOnlineConference"
+msgstr "Konferenssi"
+
+msgid "langWash"
+msgstr "Pese"
+
+msgid "langReset"
+msgstr "Tyhjennä"
+
+msgid "langSave"
+msgstr "Tallenna"
+
+msgid "langRefresh"
+msgstr "Järjestä"
+
+msgid "langIsNowInYourDocDir"
+msgstr "on nyt sinun dokumenttityökalussa. <br><B>Tämä tiedosto on näkyvä</B>"
+
+msgid "langCopyFailed"
+msgstr "Tulostus epäonnistui"
+
+msgid "langTypeMessage"
+msgstr "Kirjoita viestisi!"
+
+msgid "langConfirmReset"
+msgstr "Tahdotko varmasti poistaa kaikki viestit?"
+
+msgid "langHasResetChat"
+msgstr "on tyhjentänyt chatin"
+
+msgid "langNoOnlineConference"
+msgstr "Täälä ei ole konfrenssia vähään aikaan ..."
+
+msgid "langMediaFile"
+msgstr "Live audio- tai videovirtaus"
+
+msgid "langContentFile"
+msgstr "Presentaatio"
+
+msgid "langListOfParticipants"
+msgstr "Osallistujalista"
+
+msgid "langYourPicture"
+msgstr "Sinun kuvasi"
+
+msgid "langOnlineDescription"
+msgstr "Konferenssin kuvaus"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Merkitse tämä laatikko vain, jos sinulla on erittäin tärkeä kysymys!"
+
+msgid "langQuestion"
+msgstr "kysymys"
+
+msgid "langClearList"
+msgstr "Tyhjennä lista"
+
+msgid "langWhiteBoard"
+msgstr "Liitutaulu"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Tekstin käsittelijä</h2>Kopioi ja liitä tähän Ms-Word® -ohjelmasta ja editoi. Osanottajat näkevät muutoksesi livenä."
+
+msgid "langStreaming"
+msgstr "Virtaava"
+
+msgid "langStreamURL"
+msgstr "Virta URL"
+
+msgid "langStreamType"
+msgstr "Virtatyyppi"
+
+msgid "langLinkName"
+msgstr "Linkin nimi"
+
+msgid "langLinkURL"
+msgstr "Linkin URL"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Tervetuloa online <b>konfrenssiin</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "Ei linkkiä saatavilla"
+
+msgid "langChat_reset_by"
+msgstr "tyhjennä chatti"
+
+msgid "OrFile"
+msgstr "Tai tiedosto"
+
+msgid "langCallSent"
+msgstr "Chatti kutsu on lähetetty. Odottaa kumppanisi hyväksyntää."
+
+msgid "langChatDenied"
+msgstr "Kumppanisi on hylännyt kutsusi."
+
+msgid "Send"
+msgstr "Lähetä"
+
+msgid "Connected"
+msgstr "Keskustelussa"
+
+msgid "Think"
+msgstr "Miettii"
+
+msgid "BigGrin"
+msgstr "Iso virnistys"
+
+msgid "Amazing"
+msgstr "Hämmästynyt"
+
+msgid "Confused"
+msgstr "Hämmentynyt"
+
+msgid "Cool"
+msgstr "Viileä"
+
+msgid "Surprised"
+msgstr "Yllättynyt"
+
+msgid "Hand"
+msgstr "Heippa"
+
+msgid "Wink"
+msgstr "Silmänisku"
+
+msgid "Neutral"
+msgstr "Neutraali"
+
+msgid "Angry"
+msgstr "Vihainen"
+
+msgid "Avid"
+msgstr "Innostunut"
+
+msgid "Redface"
+msgstr "Punastunut"
+
+msgid "Sad"
+msgstr "Surullinen"
+
+msgid "Silence"
+msgstr "Vaienna"
+
+msgid "Silenced"
+msgstr "Vaiennettu"
+
+msgid "Smile"
+msgstr "Hymy"
+
+msgid "Exclamation"
+msgstr "Huudahdus"
+
+msgid "Arrow"
+msgstr "Nuoli"
+
+msgid "Question"
+msgstr "Kysymys"
+
+msgid "Idea"
+msgstr "Idea"
+
+msgid "AskPermissionSpeak"
+msgstr "Pyydä puhevuoro"
+
+msgid "GiveTheFloorTo"
+msgstr "Anna puheenvuoro"
+
+msgid "Pause"
+msgstr "Tauko"
+
+msgid "Stop"
+msgstr "Pysäytä"
+

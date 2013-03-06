@@ -1,0 +1,216 @@
+msgid "AgendaAdd"
+msgstr "Új naptár-bejegyzés hozzáadása"
+
+msgid "ShowAllEvents"
+msgstr "Az összes naptár bejegyzés megmutatása"
+
+msgid "ShowCurrent"
+msgstr "Az ehavi naptár bejegyzések megmutatása"
+
+msgid "AddCalendarItem"
+msgstr "Új naptárbejegyzés hozzáadása"
+
+msgid "Day"
+msgstr "Nap"
+
+msgid "Month"
+msgstr "Hónap"
+
+msgid "Year"
+msgstr "Év"
+
+msgid "Hour"
+msgstr "Óra"
+
+msgid "Minutes"
+msgstr "Perc"
+
+msgid "Detail"
+msgstr "Részletek"
+
+msgid "EditSuccess"
+msgstr "A naptárelem szerkesztése megtörtént"
+
+msgid "AddSuccess"
+msgstr "Naptárelem hozzáadva"
+
+msgid "AgendaDeleteSuccess"
+msgstr "A naptárbejegyzés törölve"
+
+msgid "NoAgendaItems"
+msgstr "Nincsenek naptár-bejegyzések"
+
+msgid "lang_september"
+msgstr "Szeptember"
+
+msgid "langClassName"
+msgstr "Osztály neve"
+
+msgid "lang_agenda"
+msgstr "Naptár"
+
+msgid "ModifyCalendarItem"
+msgstr "Naptár elem módosítása"
+
+msgid "ItemTitle"
+msgstr "Elem címe"
+
+msgid "langDay"
+msgstr "Nap"
+
+msgid "month_default"
+msgstr "Hónap"
+
+msgid "langYear"
+msgstr "Év"
+
+msgid "year_default"
+msgstr "Év"
+
+msgid "langHour"
+msgstr "Óra"
+
+msgid "hour_default"
+msgstr "Óra"
+
+msgid "langMinute"
+msgstr "Percek"
+
+msgid "langLasting"
+msgstr "Tartam"
+
+msgid "langOldToNew"
+msgstr "Legrégebbi előre"
+
+msgid "langNewToOld"
+msgstr "Legújabb előre"
+
+msgid "langNow"
+msgstr "Ma"
+
+msgid "langAddEvent"
+msgstr "Esemény hozzáadása"
+
+msgid "langDetail"
+msgstr "Részlet"
+
+msgid "MonthView"
+msgstr "Havi nézet"
+
+msgid "WeekView"
+msgstr "Heti nézet"
+
+msgid "DayView"
+msgstr "Napi nézet"
+
+msgid "AddPersonalItem"
+msgstr "Személyes elem hozzáadása"
+
+msgid "Week"
+msgstr "Hét"
+
+msgid "Date"
+msgstr "Dátum"
+
+msgid "Time"
+msgstr "Idő"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Személyes naptár elem hozzáadása"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Személyes naptár elem módosítása"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "A személyes naptár eleme hozzáadva."
+
+msgid "PeronalAgendaItemEdited"
+msgstr "A személyes naptár eleme módosítva."
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "A személyes naptár eleme törölve."
+
+msgid "ViewPersonalItem"
+msgstr "Személyes elemek megtekintése"
+
+msgid "UserGroupFilter"
+msgstr "Szűrő a csoportokon/felhasználókon"
+
+msgid "ShowAll"
+msgstr "Mutat mindet"
+
+msgid "Print"
+msgstr "Nyomtat"
+
+msgid "MyTextHere"
+msgstr "a szövegem helye"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Átmásolás felhívásként"
+
+msgid "NewAnnouncement"
+msgstr "Új felhívás"
+
+msgid "AddAnnouncement"
+msgstr "Hozzáadás felhívásként"
+
+msgid "UpcomingEvent"
+msgstr "Következő esemény"
+
+msgid "RepeatedEvent"
+msgstr "Megismétlődött esemény"
+
+msgid "RepeatType"
+msgstr "Ismétlődés típusa"
+
+msgid "RepeatDaily"
+msgstr "Naponta"
+
+msgid "RepeatWeekly"
+msgstr "Hetente"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Havonta, adott dátumkor"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Havonta, adott napon"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Havonta adott napon, korlátozva"
+
+msgid "RepeatYearly"
+msgstr "Évente"
+
+msgid "RepeatEnd"
+msgstr "Ismétlődés és dátum"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Eredeti esemény megtekintése"
+
+msgid "ICalFileImport"
+msgstr "iCal/ics állomány importálása"
+
+msgid "AllUsersOfThePlatform"
+msgstr "A rendszer összes felhasználója"
+
+msgid "GlobalEvent"
+msgstr "Globális esemény"
+
+msgid "ModifyEvent"
+msgstr "Esemény szerkesztése"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "A befejezés dátuma nem lehet korábbi a kezdés dátumánál"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Növekvő sorrend"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Csökkenő sorrend"
+
+msgid "ItemForUserSelection"
+msgstr "Felhasználó kiválasztása lista"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Ez az állomány nem iCal formátumú"
+

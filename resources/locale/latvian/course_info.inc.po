@@ -1,0 +1,387 @@
+msgid "ModifInfo"
+msgstr "Kursa iestatījumi"
+
+msgid "langModifDone"
+msgstr "Informācija tika labota"
+
+msgid "langDelCourse"
+msgstr "Izdzēst kursu"
+
+msgid "langProfessors"
+msgstr "Lektori"
+
+msgid "langFaculty"
+msgstr "Kategorija"
+
+msgid "langConfidentiality"
+msgstr "Konfidencialitāte"
+
+msgid "langPublic"
+msgstr "Publiska pieeja no portāla sākumlapas bez autorizācijas pieprasījuma"
+
+msgid "langUnsubscription"
+msgstr "Atteikties"
+
+msgid "langPrivOpen"
+msgstr "Ierobežota pieeja, reģistrēšanās atļauta"
+
+msgid "langPrivate"
+msgstr "Limitēta pieeja (lapa pieejama tikai <a href=../user/user.php>lietotāju sarakstā</a> esošajiem)"
+
+msgid "langForbidden"
+msgstr "Nav atļauts"
+
+msgid "CourseAccessConfigTip"
+msgstr "Pēc noklusējuma, Jūsu apmācības kurss ir publisks, bet Jūs varat noteikt augstāku konfidencialitātes līmeni."
+
+msgid "langOpenToTheWorld"
+msgstr "Atklātā pieeja - iespējama no jebkuras vietas pasaulē!"
+
+msgid "OpenToThePlatform"
+msgstr "Daļēji atklātā pieeja - iespējama lietotājiem, kas reģistrējušies portālā"
+
+msgid "langOpenToThePlatform"
+msgstr "Atklātā pieeja - iespējama lietotājiem, kas reģistrējušies portālā"
+
+msgid "langTipLang"
+msgstr "Atverot kursu mācībām, mācību vides darba virsma būs <b>izvēlētājā valodā</b>!"
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Raksti"
+
+msgid "langProgramMenu"
+msgstr "Kursa programma"
+
+msgid "langAnnouncement"
+msgstr "Paziņojumi kursa lietotājiem"
+
+msgid "langExercise"
+msgstr "Kontroldarbi"
+
+msgid "langStats"
+msgstr "Statistika"
+
+msgid "langUplPage"
+msgstr "Augšupielādēt lapu un saistīt to ar kursa sākumlapu"
+
+msgid "langLinkSite"
+msgstr "Pievienot hipersaiti sākumlapā"
+
+msgid "langCourse"
+msgstr "Apraksts"
+
+msgid "langHasDel"
+msgstr "tika izdzēsts"
+
+msgid "langBackHome"
+msgstr "Uz sākumlapu"
+
+msgid "langByDel"
+msgstr "zdzēšot šo sadaļu, tiks neatgriezeniski dzēsts viss saturs (dokumenti, saites, ...), un tiks atteikta reģistrācija visiem dalībniekiem (nedzēšot tos no citām sadaļām). Tāpat tiks dzēsti arī visi virtuālie kursi, kas ir saistīti ar šo kursu.<p>Vai Jūs tiešām vēlaties dzēst šo kursu un tā saturu?"
+
+msgid "langY"
+msgstr "Jā!"
+
+msgid "langN"
+msgstr "Nē!"
+
+msgid "langDepartmentUrl"
+msgstr "Nodaļas URL"
+
+msgid "langDepartmentUrlName"
+msgstr "Nodaļa"
+
+msgid "langBackupCourse"
+msgstr "Veikt šīs kursa daļas arhivēšanu"
+
+msgid "langModifGroups"
+msgstr "Grupas"
+
+msgid "langProfessor"
+msgstr "Lektors"
+
+msgid "langGroups"
+msgstr "Grupas"
+
+msgid "langDescriptionCours"
+msgstr "Kursa apraksts"
+
+msgid "langArchiveCourse"
+msgstr "Kursa rezerves kopija"
+
+msgid "langRestoreCourse"
+msgstr "Atjaunot kursu"
+
+msgid "langRestore"
+msgstr "Atjaunot"
+
+msgid "langCreatedIn"
+msgstr "izveidots"
+
+msgid "langCreateMissingDirectories"
+msgstr "Neeksistējošo direktoriju izveide"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Kursa failu kopija"
+
+msgid "langDisk_free_space"
+msgstr "Brīvā vieta uz cietā diska"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Rezerves kopijas faila izveide"
+
+msgid "langFileCopied"
+msgstr "fails nokopēts"
+
+msgid "langArchiveLocation"
+msgstr "Arhīva atrašanās vieta"
+
+msgid "langSizeOf"
+msgstr "Izmērs"
+
+msgid "langArchiveName"
+msgstr "Arhīva nosaukums"
+
+msgid "langBackupSuccesfull"
+msgstr "Rezerves kopijas izveide pabeigta veiksmīgi"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Kursa datu no galvenās datubāzes rezerves kopijas"
+
+msgid "langBUUsersInMainBase"
+msgstr "Lietotāju datu no galvenās datubāzes rezerves kopijas"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Paziņojumu datu no galvenās datubāzes rezerves kopijas"
+
+msgid "langBackupOfDataBase"
+msgstr "Datubāzes rezerves kopija"
+
+msgid "langCreationDate"
+msgstr "Izveidots"
+
+msgid "langExpirationDate"
+msgstr "Termiņa beigu datums"
+
+msgid "langPostPone"
+msgstr "Atlikt uz nezināmu laiku"
+
+msgid "langLastEdit"
+msgstr "Pēdējais labojums"
+
+msgid "langLastVisit"
+msgstr "Pēdējais apmeklējums"
+
+msgid "langSubscription"
+msgstr "Pierakstīšanās"
+
+msgid "langCourseAccess"
+msgstr "Piekļuve kursam"
+
+msgid "langConfirmBackup"
+msgstr "Vai Jūs tiešām vēlaties veikt kursa apraksta rezerves kopijas izveidi?"
+
+msgid "langCreateSite"
+msgstr "Izveidot kursa aprakstu"
+
+msgid "langRestoreDescription"
+msgstr "Kurss atrodas arhīva failā, ko iespējams izvēlēties zemāk.<br><br>Tiklīdz noklikšķināsiet uz \"Atjaunot\", arhīva fails tiks atarhivēts un kurss tiks atjaunots."
+
+msgid "langRestoreNotice"
+msgstr "Šis skripts vēl nedod Jums iespēju atjaunot lietotājus automātiski, taču saglabātā informācija \"users.csv\" ir pietiekama, lai administrators to varētu paveikt Jūsu vietā."
+
+msgid "langAvailableArchives"
+msgstr "Pieejamo arhīvu saraksts"
+
+msgid "langNoArchive"
+msgstr "Neviens arhīvs netika iezīmēts"
+
+msgid "langArchiveNotFound"
+msgstr "Arhīvs netika atrasts"
+
+msgid "langArchiveUncompressed"
+msgstr "Arhīvs tika atarhivēts un dati pievienoti kopējai datubāzei."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "Fails \"users.csv\" tika novietots <i>Dokumentu</i> rīkā."
+
+msgid "langBackH"
+msgstr "atpakaļ uz sākumlapu"
+
+msgid "langOtherCategory"
+msgstr "Cita kategorija"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Lietotājiem ir iespēja atteikties no šī kursa"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Lietotājiem ir liegta iespēja atteikties no šī kursa"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Pilnībā noslēgts. Šis kurss būs pieejams tikai kursa administratoram."
+
+msgid "CourseVisibilityClosed"
+msgstr "Pieeja šim kursam ir noslēgta. Kurss pieejams tikai Lektoriem"
+
+msgid "CourseVisibilityModified"
+msgstr "Tika labots (sīkāki iestatījumu parametri redzami pieejas tiesību sistēmā)"
+
+msgid "WorkEmailAlert"
+msgstr "Atgādinājums caur e-pastu, par darba iesniegšanu"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Aktivizēt e-pasta brīdinājumu par jaunu darba iesniegšanu"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Atslēgt e-pasta brīdinājumu par jaunu darba iesniegšanu"
+
+msgid "DropboxEmailAlert"
+msgstr "Brīdināt ar e-pasta ziņojumu, par dokumenta iesniegšanu Dokumentu / failu apmaiņas instrumentā"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Aktivizēt e-pasta ziņojumu par dokumenta iesniegšanu Dokumentu / failu apmaiņas instrumentā"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Atslēgt e-pasta ziņojumus par dokumenta iesniegšanu Dokumentu / failu apmaiņas instrumentā"
+
+msgid "AllowUserEditAgenda"
+msgstr "Atļaut lietotājiem rediģēt dienas kārtību"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Aktivizēt lietotāju iespēju rediģēt mācību norises plānu"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Liegt lietotājiem iespēju rediģēt mācību kārtību"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Atļaut lietotājiem rediģēt, veidot jaunus paziņojumus"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Atļaut lietotājiem rediģēt"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Liegt lietotājiem rediģēt"
+
+msgid "OrInTime"
+msgstr "Vai laikā"
+
+msgid "CourseRegistrationPassword"
+msgstr "Reģistrācijas parole Kursā"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Klikojiet uz šīs saites, pilnai apmācību kursa izdzēšanai no servera.     <b> Esiet uzmanīgi</b>, atpakaļceļa nav !"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Dublicēt mācību kursu vai tā daļas citā mācību kursā. <br>Lai to paveiktu, Jums vajadzīgi divi kursi - oriģinālais un kurss, kurā vēlaties ievietot satura kopijas."
+
+msgid "DescriptionRecycleCourse"
+msgstr "Šis instruments izdzēš no kursa to saturu, kas ir izveidots mācību procesa laikā. <br>Izdzēst var visus, vai arī tikai Jūsu izvēlētos materiālus. <br>Tas izdzēsīs dokumentus, forumus, saites,u.t.t... Šo darbību var veikt pēc kursa apguves beigām, vai arī piem. noslēdzot akadēmisko gadu.<br> Protams, pirms dzēšanas, jāparūpējas, lai visi vajadzīgie kursa materiāli ir saglabāti!"
+
+msgid "QuizEmailAlert"
+msgstr "E-pasta brīdinājums par jaunu testu iesniegšanu"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Aktivizēt e-pasta sūtīšanu, kad lietotājs iesniedz jaunu testu atbildes"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Atslēgt e-pasta sūtīšanu, kad lietotājs iesniedz jaunu testu atbildes"
+
+msgid "AllowUserImageForum"
+msgstr "Lietotāja portrets diskusijā"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Rādīt lietotāju portretus diskusijā"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Slēpt lietotāju attēlus diskusijā"
+
+msgid "AllowLearningPathTheme"
+msgstr "Atļaut apgūt mācību tēmu"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "Atļauts"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Noraidīts"
+
+msgid "ConfigChat"
+msgstr "Tērzēšanas iestatījumi"
+
+msgid "AllowOpenchatWindow"
+msgstr "Atvērt tērzēšanai jaunu logu"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "Aktivizēt iespēju atvērt tērzēšanai jaunu logu"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "Atslēgt iespēju atvērt tērzēšanai jaunu logu"
+
+msgid "NewUserEmailAlert"
+msgstr "E- pasta paziņojums mācību spēkam, par jauna lietotāja automātisku piereģistrēšanos"
+
+msgid "NewUserEmailAlertEnable"
+msgstr "Aktivizēt e- pasta paziņojumu sūtīšanu mācību spēkam <b>un līdzautoriem</b>, par jauna lietotāja automātisku piereģistrēšanos"
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "Aktivizēt e- pasta paziņojumu sūtīšanu Lektoram <b>un mācību satura līdzautoriem</b>, par jauna lietotāja automātisku piereģistrēšanos"
+
+msgid "NewUserEmailAlertDisable"
+msgstr "Atslēgt e-pasta brīdinājumu par jaunu lietotāju pieteikšanos apmācībai"
+
+msgid "AllowUserViewUserList"
+msgstr "Ļauj lietotājam apskatīt lietotāju sarakstu"
+
+msgid "AllowUserViewUserListActivate"
+msgstr "Ieslēgt lietotāju sarakstu"
+
+msgid "AllowUserViewUserListDeactivate"
+msgstr "Atslēgt lietotāju sarakstu"
+
+msgid "DoNotDisplayAnyAdvance"
+msgstr "Nerādīt kursa apguves progressu"
+
+msgid "NewHomeworkEmailAlert"
+msgstr "E-pasts lietotājiem par mājasdarbu izveidi"
+
+msgid "NewHomeworkEmailAlertEnable"
+msgstr "Ieslēgt e-pasta ziņojumus Kursantiem par mājasdarbu iesniegšanu."
+
+msgid "NewHomeworkEmailAlertDisable"
+msgstr "Izslēgt e-pasta ziņojumus Kursantiem par mājasdarbu iesniegšanu."
+
+msgid "DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance"
+msgstr "Parādīt pēdējo izpildīto soli un nākamo nepabeigto soli"
+
+msgid "AddPicture"
+msgstr "Pievienot attēlu"
+
+msgid "LPAutoLaunch"
+msgstr "Atļaut mācību procesa automātisku uzsākšanu"
+
+msgid "ConfigLearnpath"
+msgstr "Kursa mācību norises iestatījumi"
+
+msgid "PDFWaterMarkHeader"
+msgstr "Ūdenszīmes attēls PDF eksporta dokumenta galvenē"
+
+msgid "RedirectToALearningPath"
+msgstr "Novirzīt uz izvēlēto apmācības procesu"
+
+msgid "RedirectToTheLearningPathList"
+msgstr "Novirzīt uz mācību procesa sarakstu"
+
+msgid "ActivateLegal"
+msgstr "Aktivizēt juridiskos nosacījumus"
+
+msgid "ShowALegalNoticeWhenEnteringTheCourse"
+msgstr "Rādīt juridisku paziņojumu, kad tiek ieiets Kursā"
+
+msgid "CourseLegalAgreement"
+msgstr "Kursa juridiskie noteikumi"
+
+msgid "AcceptLegal"
+msgstr "Apstiprināt noteikumus"
+

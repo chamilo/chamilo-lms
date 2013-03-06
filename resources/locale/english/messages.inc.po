@@ -1,0 +1,105 @@
+msgid "MessageEmptyMessageOrSubject"
+msgstr "Please provide a subject or message"
+
+msgid "Inbox"
+msgstr "Inbox"
+
+msgid "Messages"
+msgstr "Messages"
+
+msgid "SendMessage"
+msgstr "Send message"
+
+msgid "NewMessage"
+msgstr "New message"
+
+msgid "ComposeMessage"
+msgstr "Compose message"
+
+msgid "DeleteSelectedMessages"
+msgstr "Delete selected messages"
+
+msgid "SelectAll"
+msgstr "Select all"
+
+msgid "DeselectAll"
+msgstr "Deselect all"
+
+msgid "ReplyToMessage"
+msgstr "Reply to this message"
+
+msgid "BackToInbox"
+msgstr "Back to inbox"
+
+msgid "MessageSentTo"
+msgstr "The message has been sent to"
+
+msgid "SendMessageTo"
+msgstr "Send to"
+
+msgid "Myself"
+msgstr "myself"
+
+msgid "From"
+msgstr "From"
+
+msgid "To"
+msgstr "To"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "InvalidMessageId"
+msgstr "The id of the message to reply to is not valid."
+
+msgid "ErrorSendingMessage"
+msgstr "There was an error while trying to send the message."
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Are you sure you want to delete the selected messages?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "The selected messages have been deleted"
+
+msgid "EnterTitle"
+msgstr "Please enter a title"
+
+msgid "TypeYourMessage"
+msgstr "Type your message here"
+
+msgid "MessageDeleted"
+msgstr "The message has been deleted"
+
+msgid "ConfirmDeleteMessage"
+msgstr "Are you sure you want to delete the selected message?"
+
+msgid "DeleteMessage"
+msgstr "Delete message"
+
+msgid "ReadMessage"
+msgstr "Read message"
+
+msgid "SendInviteMessage"
+msgstr "Send invitation message"
+
+msgid "SendMessageInvitation"
+msgstr "Are you sure that you wish to send these invitations ?"
+
+msgid "MessageTool"
+msgstr "Messages tool"
+
+msgid "WriteAMessage"
+msgstr "Write a message"
+
+msgid "AlreadyReadMessage"
+msgstr "Message already read"
+
+msgid "UnReadMessage"
+msgstr "Message without reading"
+
+msgid "MessageSent"
+msgstr "Message Sent"
+
+msgid "YouShouldWriteAMessage"
+msgstr "You should write a message"
+

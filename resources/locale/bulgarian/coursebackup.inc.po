@@ -1,0 +1,138 @@
+msgid "langSelectOptionForBackup"
+msgstr "Изберете опция за архивирането."
+
+msgid "langLetMeSelectItems"
+msgstr "Нека аз да избера ресурсите на курса."
+
+msgid "langCreateFullBackup"
+msgstr "Създаване на пълен резервен архив на този курс."
+
+msgid "langCreateBackup"
+msgstr "Създаване на архив"
+
+msgid "langBackupCreated"
+msgstr "За този курс е създаден резервен архив. Свалянето на архивния файл ще започне във всеки момент. Ако свалянето не започва, щракнете следната връзка:"
+
+msgid "langSelectBackupFile"
+msgstr "Изберете архивен файл"
+
+msgid "langImportBackup"
+msgstr "Възстановяване от архивен файл"
+
+msgid "langImportFullBackup"
+msgstr "Пълно възстановяване от архив"
+
+msgid "langImportFinished"
+msgstr "Възстановяването е извършено."
+
+msgid "langEvents"
+msgstr "Събития"
+
+msgid "langAnnouncements"
+msgstr "Обяви"
+
+msgid "langDocuments"
+msgstr "Документи"
+
+msgid "langTests"
+msgstr "Тестове"
+
+msgid "langLearnpaths"
+msgstr "Пътеки за обучение"
+
+msgid "langCopyCourse"
+msgstr "Копиране на курса"
+
+msgid "langSelectItemsToCopy"
+msgstr "Изберете ресурсите за копиране"
+
+msgid "langCopyFinished"
+msgstr "Копирането е извършено."
+
+msgid "langFullRecycle"
+msgstr "Пълно изтриване на съдържанието (всички ресурси) на курса."
+
+msgid "langRecycleCourse"
+msgstr "Рециклиране на курса"
+
+msgid "langRecycleFinished"
+msgstr "Рециклирането на курса е извършено."
+
+msgid "langRecycleWarning"
+msgstr "Предупреждение: Ще изтриете напълно или някои ресурси от съдържанието на курса. Изтриването е необратимо. Съветваме ви преди това да използвате инструмента <a href=\"create_backup.php\">\"Създаване на архив\"</a>."
+
+msgid "langSameFilename"
+msgstr "Какво да се прави с импортираните файлове, които имат същите имена като на вече съществуващите файлове?"
+
+msgid "langSameFilenameSkip"
+msgstr "Не презаписвай файла със същото име"
+
+msgid "langSameFilenameRename"
+msgstr "Преименувай файла (т.е. file.pdf става file_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Презапиши файла"
+
+msgid "langSelectDestinationCourse"
+msgstr "Изберете, къде да се копира курса"
+
+msgid "langFullCopy"
+msgstr "Пълно копие"
+
+msgid "langCourseDescription"
+msgstr "Описание на курса"
+
+msgid "langNoResourcesToBackup"
+msgstr "Няма ресурси за архивиране."
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Няма записани ресурси в архивния файл."
+
+msgid "langSelectResources"
+msgstr "Изберете ресурси."
+
+msgid "langNoResourcesToRecycles"
+msgstr "Няма ресурси за рециклиране."
+
+msgid "langIncludeQuestionPool"
+msgstr "Да се включат ли и предварително подготвените въпроси?"
+
+msgid "langLocalFile"
+msgstr "Локален файл"
+
+msgid "langServerFile"
+msgstr "Файл на сървъра"
+
+msgid "langNoBackupsAvailable"
+msgstr "Няма резервни архивни файлове."
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "Няма курс-приемник."
+
+msgid "langBackup"
+msgstr "Работа с архиви"
+
+msgid "langImportBackupInfo"
+msgstr "Възстановяване от резервен архивен файл. Можете да използвате файл от вашия компютър или файл, намиращ се на сървъра."
+
+msgid "langCreateBackupInfo"
+msgstr "Създаване на резервен архив на този курс. Можете да изберете видовете ресурси на курса, които да се архивират."
+
+msgid "ToolIntro"
+msgstr "Встъпителен текст"
+
+msgid "UploadError"
+msgstr "Качването на файла не е успешно. Моля, проверете лимита за максимален размер на файла и правата за съхраняващата папка."
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Ще се добавят също и свързаните документи."
+
+msgid "ToExportLearnpathWithQuizYouHaveToSelectQuiz"
+msgstr "Ако експортирате пътека за обучение, която съдържа тестове, те трябва също да бъдат включени в експортирането. Изберете съответните тестове от списъка."
+
+msgid "ArchivesDirectoryNotWriteableContactAdmin"
+msgstr "Не може да се записва в директорията за архиви, която се ползва от този инструмент. Моля, потърсете администратора на системата, за да отстрани проблема."
+
+msgid "DestinationCourse"
+msgstr "Курс-приемник"
+

@@ -1,0 +1,192 @@
+msgid "langInvalidId"
+msgstr "Вход не удался - неверное имя пользователя или пароль"
+
+msgid "langWelcome"
+msgstr "Добро пожаловать!"
+
+msgid "langPass"
+msgstr "Пароль"
+
+msgid "langEnter"
+msgstr "Вернуться к моему списку курсов"
+
+msgid "langReg"
+msgstr "Регистрация"
+
+msgid "langMenu"
+msgstr "Меню"
+
+msgid "langAdvises"
+msgstr "Советы"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Предупреждение:</b> Этот курс не существут"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "Щелкнуть здесь, чтобы получить этот курс с Вашего старого портала"
+
+msgid "langOtherCourses"
+msgstr "другие курсы"
+
+msgid "langSupportForum"
+msgstr "Форум поддержки"
+
+msgid "langCategories"
+msgstr "категории"
+
+msgid "langBackToHomePage"
+msgstr "Обзор разделов"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Нет курсов в свободном доступе"
+
+msgid "langLostPassword"
+msgstr "Утерян пароль"
+
+msgid "lang_edit_my_course_list"
+msgstr "Редактировать мой список курсов"
+
+msgid "langAgenda"
+msgstr "Повестка дня (расписание)"
+
+msgid "langValvas"
+msgstr "Последние объявления"
+
+msgid "langUp"
+msgstr "Вверх"
+
+msgid "langCatList"
+msgstr "Разделы"
+
+msgid "langCourseList"
+msgstr "Список курса"
+
+msgid "langHelptwo"
+msgstr "Помощь"
+
+msgid "langRegAll"
+msgstr "журнал регистрации"
+
+msgid "EussMenu"
+msgstr "меню"
+
+msgid "Opinio"
+msgstr "Мнение"
+
+msgid "Intranet"
+msgstr "Интранет"
+
+msgid "Englin"
+msgstr "Английский"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Вход не удался - если Вы не зарегистрированы, Вы можете сделать это используя <a href=claroline/auth/inscription.php>регистрационная форма</a>"
+
+msgid "langSubCat"
+msgstr "подразделы"
+
+msgid "langMenuGeneral"
+msgstr "Общее"
+
+msgid "langMenuUser"
+msgstr "Пользователь"
+
+msgid "langMenuAdmin"
+msgstr "Администратор платформы"
+
+msgid "langUsersOnLineList"
+msgstr "Спосок пользователя онлайн"
+
+msgid "langTotalOnLine"
+msgstr "Полностью онлайн"
+
+msgid "langRefresh"
+msgstr "Обновить"
+
+msgid "langMe"
+msgstr "я, меня"
+
+msgid "langSystemAnnouncements"
+msgstr "Системные объявления"
+
+msgid "langHelpMaj"
+msgstr "Помощь"
+
+msgid "langNotRegistered"
+msgstr "Не зарегистрирован"
+
+msgid "langAdmin"
+msgstr "Администратор платформы"
+
+msgid "Login"
+msgstr "Регистрационное имя пользователя (логин)"
+
+msgid "langRegisterForCourse"
+msgstr "Регистрироваться на курс"
+
+msgid "langUnregisterForCourse"
+msgstr "Отказаться от регистрации на курс"
+
+msgid "langCombinedCourse"
+msgstr "Объединенный курс"
+
+msgid "Platform"
+msgstr "Платформа"
+
+msgid "Refresh"
+msgstr "Обновить"
+
+msgid "TotalOnLine"
+msgstr "пользователи полного онлайна"
+
+msgid "langCourseClosed"
+msgstr "(курс временно закрыт)"
+
+msgid "ViewOpenCourses"
+msgstr "Просмотреть открытые курсы"
+
+msgid "langCompetences"
+msgstr "Компетентность"
+
+msgid "langDiplomas"
+msgstr "Диплом"
+
+msgid "langTeach"
+msgstr "Что он(а) может преподавать"
+
+msgid "langProductions"
+msgstr "Продукция"
+
+msgid "langSendChatRequest"
+msgstr "Послать предложение о разговоре в чате этому человеку"
+
+msgid "langRequestDenied"
+msgstr "Приглашение отклонено"
+
+msgid "UsageDatacreated"
+msgstr "Эксплуатационная характеристика создана"
+
+msgid "SessionView"
+msgstr "Отобразить курсы, сортированные по сессиям"
+
+msgid "CourseView"
+msgstr "Отобразить полный список курсов"
+
+msgid "DropboxFileAdded"
+msgstr "Файл ящика для содержимого добавлен"
+
+msgid "NewMessageInForum"
+msgstr "Новое сообщение разослано на форуме"
+
+msgid "FolderCreated"
+msgstr "Новая папка создана"
+
+msgid "LinkAdded"
+msgstr "Новая ссылка добавлена"
+
+msgid "AnnouncementAdded"
+msgstr "Объявление добавлено"
+
+msgid "AgendaAdded"
+msgstr "Пункты повестки дня добавлены"
+

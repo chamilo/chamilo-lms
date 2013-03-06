@@ -1,0 +1,921 @@
+msgid "langExercice"
+msgstr "Test"
+
+msgid "langActivate"
+msgstr "Ukázat"
+
+msgid "langDeactivate"
+msgstr "Skrýt"
+
+msgid "langNoEx"
+msgstr "Nyní není žádný dostupný test"
+
+msgid "langNewEx"
+msgstr "Vytvořit nový test"
+
+msgid "langQuestion"
+msgstr "otázka"
+
+msgid "langQuestions"
+msgstr "Otázky"
+
+msgid "langAnswers"
+msgstr "Odpovědi"
+
+msgid "langTrue"
+msgstr "Pravda"
+
+msgid "langAnswer"
+msgstr "Odpověď"
+
+msgid "langResult"
+msgstr "Výsledek"
+
+msgid "langNoResult"
+msgstr "Není tu ještě žádný výsledek"
+
+msgid "langYourResults"
+msgstr "Vaše výsledky"
+
+msgid "langStudentResults"
+msgstr "Výsledky studentů"
+
+msgid "langExerciseType"
+msgstr "Typ testu"
+
+msgid "langExerciseName"
+msgstr "Název testu"
+
+msgid "langExerciseDescription"
+msgstr "Popis testu + obrázek nebo audio (video)"
+
+msgid "langSimpleExercise"
+msgstr "Všechny otázky na jednu stránku"
+
+msgid "langSequentialExercise"
+msgstr "Jedna otázka na stránku"
+
+msgid "langRandomQuestions"
+msgstr "Náhodně vybrané otázky"
+
+msgid "langGiveExerciseName"
+msgstr "Prosím zadejte název testu"
+
+msgid "langSound"
+msgstr "Audio nebo video soubor"
+
+msgid "langDeleteSound"
+msgstr "Smazat audio nebo video soubor"
+
+msgid "langNoAnswer"
+msgstr "Nyní tu není žádná odpověd"
+
+msgid "langGoBackToQuestionPool"
+msgstr "Jít zpět na zásobník otázek"
+
+msgid "langGoBackToQuestionList"
+msgstr "Jít zpět na seznam otázek"
+
+msgid "langQuestionAnswers"
+msgstr "Odpovědi na otázku"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Upozornění! Tato otázka a její odpovědi jsou použity v několika testech. Chcete je změnit?"
+
+msgid "langModifyInAllExercises"
+msgstr "ve všech testech"
+
+msgid "langModifyInThisExercise"
+msgstr "pouze ve stávajícím testu"
+
+msgid "langAnswerType"
+msgstr "Typ odpovědi"
+
+msgid "langMultipleSelect"
+msgstr "Výběr z více možností"
+
+msgid "langFillBlanks"
+msgstr "Vyplnění prázdných míst"
+
+msgid "langMatching"
+msgstr "Párování"
+
+msgid "langAddPicture"
+msgstr "Přidat obrázek"
+
+msgid "langReplacePicture"
+msgstr "Nahradit obrázek"
+
+msgid "langDeletePicture"
+msgstr "Smazat obrázek"
+
+msgid "langQuestionDescription"
+msgstr "Dodatečný text, obrázek, audio nebo video"
+
+msgid "langGiveQuestion"
+msgstr "Prosím zadejte otázku"
+
+msgid "langWeightingForEachBlank"
+msgstr "Prosím napište skóre pro každé pole"
+
+msgid "langUseTagForBlank"
+msgstr "použít hranaté závorky [...] na definování jednoho anebo více prázdných míst"
+
+msgid "langQuestionWeighting"
+msgstr "Váha"
+
+msgid "langMoreAnswers"
+msgstr "+odp"
+
+msgid "langLessAnswers"
+msgstr "-odp"
+
+msgid "langMoreElements"
+msgstr "+elem"
+
+msgid "langLessElements"
+msgstr "-elem"
+
+msgid "langTypeTextBelow"
+msgstr "Prosím napište váš text níže"
+
+msgid "langDefaultTextInBlanks"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\"> <tbody> <tr> <td colspan=\"2\"> <h3>Příklad vyplnění formuláře: Výpočet svalové hmoty</h3> </td> </tr> <tr> <td style=\"text-align: right;\"><strong>Věk</strong></td> <td width=\"75%\" style=\"\">[25]</td> </tr> <tr> <td style=\"text-align: right;\"><strong>Pohlaví</strong></td> <td style=\"\" text-align:=\"\">[M] (M or Ž)</td> </tr> <tr> <td style=\"text-align: right;\"><strong>Váha</strong></td> <td style=\"\" text-align:=\"\">95 Kg</td> </tr> <tr> <td style=\"vertical-align: top; text-align: right;\"><strong>Výška</strong></td> <td style=\"vertical-align: top;\">1.81 m</td> </tr> <tr> <td style=\"vertical-align: top; text-align: right;\"><strong>Svalová hmota</strong></td> <td style=\"vertical-align: top;\">[29] SH=Váha/Výška<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,\'\',\'resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status\'); return false\"> Wikipedia article</a>)</td> </tr> </tbody> </table>"
+
+msgid "langDefaultMatchingOptA"
+msgstr "bohatý"
+
+msgid "langDefaultMatchingOptB"
+msgstr "pěkný"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Tvůj otec je"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Tvoje matka je"
+
+msgid "langDefineOptions"
+msgstr "Prosím definujte možnosti"
+
+msgid "langMakeCorrespond"
+msgstr "Porovnat"
+
+msgid "langFillLists"
+msgstr "Prosím vyplňte dva seznamy níže"
+
+msgid "langGiveText"
+msgstr "Prosím napište text"
+
+msgid "langDefineBlanks"
+msgstr "Prosím zvolte nejméně jednu možnost"
+
+msgid "langGiveAnswers"
+msgstr "Prosím napište odpověď na otázku"
+
+msgid "langChooseGoodAnswer"
+msgstr "Prosím zvolte správnou odpověď"
+
+msgid "langChooseGoodAnswers"
+msgstr "Prosím zaškrtněte jednu nebo více správných odpovědí"
+
+msgid "langQuestionList"
+msgstr "Seznam testových otázek"
+
+msgid "langMoveUp"
+msgstr "Posunout nahoru"
+
+msgid "langMoveDown"
+msgstr "Posunout dolů"
+
+msgid "langGetExistingQuestion"
+msgstr "Zásobník otázek"
+
+msgid "langFinishTest"
+msgstr "Ukončit test"
+
+msgid "langQuestionPool"
+msgstr "Zásobník otázek"
+
+msgid "langOrphanQuestions"
+msgstr "Osiřelé otázky"
+
+msgid "langNoQuestion"
+msgstr "Seznam otázek (momentálně nejsou žádné otázky)"
+
+msgid "langAllExercises"
+msgstr "Všechny testy"
+
+msgid "langFilter"
+msgstr "Filtr"
+
+msgid "langGoBackToEx"
+msgstr "Jít zpět na test"
+
+msgid "langReuse"
+msgstr "Znovu použít"
+
+msgid "langExerciseManagement"
+msgstr "Správa testů"
+
+msgid "langQuestionManagement"
+msgstr "Správa Otázek/Odpovědí"
+
+msgid "langQuestionNotFound"
+msgstr "Test nenalezen"
+
+msgid "langExerciseNotFound"
+msgstr "Test nenalezen nebo není viditelný"
+
+msgid "langAlreadyAnswered"
+msgstr "Již jste odpověděl na otázku"
+
+msgid "langElementList"
+msgstr "Seznam elementů"
+
+msgid "langScore"
+msgstr "Skóre"
+
+msgid "langCorrespondsTo"
+msgstr "Odpovídá"
+
+msgid "langExpectedChoice"
+msgstr "Očekávaná volba"
+
+msgid "langYourTotalScore"
+msgstr "Vaše celkové skóre je"
+
+msgid "ReachedMaxAttemptsAdmin"
+msgstr "Dosáhl jste maxima pokusů pro tento test Pokud jste cvičitel, můžete dále zkoušet, ale váš výsledek se již nebude počítat."
+
+msgid "langExerciseAdded"
+msgstr "Cvičení přidáno"
+
+msgid "Build"
+msgstr "Postavit"
+
+msgid "langEvalSet"
+msgstr "Nastavení hodnocení"
+
+msgid "langActive"
+msgstr "aktivní"
+
+msgid "langInactive"
+msgstr "neaktivní"
+
+msgid "langQuestCreate"
+msgstr "Vytvořit otázku"
+
+msgid "langExRecord"
+msgstr "Váš test byl uložen"
+
+msgid "langBackModif"
+msgstr "zpět k editaci otázek"
+
+msgid "langDoEx"
+msgstr "udělat test"
+
+msgid "langDefScor"
+msgstr "Popis nastavení hodnocení"
+
+msgid "langCreateModif"
+msgstr "Vytvořit/Upravit otázky"
+
+msgid "langSub"
+msgstr "Podtitul"
+
+msgid "langMyAnswer"
+msgstr "Moje odpověď"
+
+msgid "langMorA"
+msgstr "+ odpověd"
+
+msgid "langLesA"
+msgstr "- odpověď"
+
+msgid "langRecEx"
+msgstr "Uložit test"
+
+msgid "langRecQu"
+msgstr "Přidat otázku testu"
+
+msgid "langRecAns"
+msgstr "Uložit odpovědi"
+
+msgid "langIntroduction"
+msgstr "Předmluva"
+
+msgid "langTitleAssistant"
+msgstr "Pomocník pro tvorbu testů"
+
+msgid "langQuesList"
+msgstr "Seznam otázek"
+
+msgid "langSaveEx"
+msgstr "uložit testy"
+
+msgid "langFinish"
+msgstr "Ukončit test"
+
+msgid "langCancel"
+msgstr "Zrušit"
+
+msgid "langQImage"
+msgstr "Otázka s obrázkem"
+
+msgid "langAddQ"
+msgstr "Přidat otázku"
+
+msgid "langDoAnEx"
+msgstr "Dělat test"
+
+msgid "langGenerator"
+msgstr "Seznam cvičení"
+
+msgid "langChoice"
+msgstr "Vaše volba"
+
+msgid "langCorrect"
+msgstr "Správně"
+
+msgid "langPossAnsw"
+msgstr "Počet spráných odpovědí pro jednu otázku"
+
+msgid "langStudAnsw"
+msgstr "Počet chyb studenta"
+
+msgid "langDetermine"
+msgstr "Určit"
+
+msgid "langNonNumber"
+msgstr "ne číselná hodnota"
+
+msgid "langReplaced"
+msgstr "Nahrazený"
+
+msgid "langSuperior"
+msgstr "hodnota větší než 20"
+
+msgid "langRep20"
+msgstr "Nahradit 20"
+
+msgid "langDefault"
+msgstr "Výchozí hodnoty *"
+
+msgid "langDefComment"
+msgstr "Předchozí hodnoty budou nahrazeny kliknutím na tlačítko \"výchozí hodnoty\""
+
+msgid "langScoreGet"
+msgstr "černá čísla = skóre"
+
+msgid "langShowScor"
+msgstr "Ukázat skóre studentům:"
+
+msgid "langStep1"
+msgstr "Krok 1"
+
+msgid "langStep2"
+msgstr "Krok 2"
+
+msgid "langTake"
+msgstr "vzít"
+
+msgid "langAmong"
+msgstr "mezi"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Importovat Hotpotatoes testy"
+
+msgid "langHotPotatoesTests"
+msgstr "Importovat Hotpotatoes testy"
+
+msgid "langDownloadFile"
+msgstr "Uložit soubor na server"
+
+msgid "langDownloadImg"
+msgstr "Nahrát obrázek na server"
+
+msgid "langDownloadEnd"
+msgstr "Uložení na server je dokončeno"
+
+msgid "langNoSpace"
+msgstr "Uložení na server se nezdařilo. Překročili jste maximální kvótu, nebo tam není místo na disku."
+
+msgid "langZipNoPhp"
+msgstr "Zip soubor nemůže obsahovat soubory .PHP"
+
+msgid "langNoImg"
+msgstr "Test bez obrázků"
+
+msgid "langImgNote_st"
+msgstr "Ještě musíte načíst"
+
+msgid "langImgNote_en"
+msgstr "obrázek:"
+
+msgid "langDocDeleted"
+msgstr "Dokument je vymazaný"
+
+msgid "langViMod"
+msgstr "Viditelnost je upravená"
+
+msgid "langNameNotEqual"
+msgstr "není platný soubor!"
+
+msgid "langIndice"
+msgstr "Index"
+
+msgid "langIndices"
+msgstr "Indexy"
+
+msgid "langDateExo"
+msgstr "Datum"
+
+msgid "langShowQuestion"
+msgstr "Ukázat otázku"
+
+msgid "langUnknownExercise"
+msgstr "Neznámý test"
+
+msgid "langReuseQuestion"
+msgstr "Znovu použít otázku"
+
+msgid "langCreateExercise"
+msgstr "Vytvořit cvičení"
+
+msgid "langCreateQuestion"
+msgstr "Vytvořit otázku"
+
+msgid "langCreateAnswers"
+msgstr "Vytvořit odpovědi"
+
+msgid "langModifyExercise"
+msgstr "Upravit název cvičení a nastavení"
+
+msgid "langModifyAnswers"
+msgstr "Upravit odpovědi"
+
+msgid "langForExercise"
+msgstr "pro cvičení"
+
+msgid "langUseExistantQuestion"
+msgstr "Použít existující otázku"
+
+msgid "FreeAnswer"
+msgstr "Otevřená otázka"
+
+msgid "notCorrectedYet"
+msgstr "Tato odpověď ještě nebyla opravená. Prozatím vaše skóre pro tuto otázku je 0 a ovliňuje celkové skóre."
+
+msgid "adminHP"
+msgstr "Admin HotPotatoes"
+
+msgid "NewQu"
+msgstr "Nová otázka"
+
+msgid "NoImage"
+msgstr "Prosím vyberte obrázek"
+
+msgid "langAnswerHotspot"
+msgstr "Popis a skóre je požadováno pro každý hotspot - zpětná vazba je volitelná"
+
+msgid "langMinHotspot"
+msgstr "Musíte vytvořit nejméně jeden hotspot"
+
+msgid "langMaxHotspot"
+msgstr "Maximum hotspotů, které můžete vytvořit je 12"
+
+msgid "langHotspotError"
+msgstr "Prosím opatřete popis a váhu pro každý hotspot"
+
+msgid "langMoreHotspots"
+msgstr "Přidat hotspot"
+
+msgid "langLessHotspots"
+msgstr "Odebrat hotspot"
+
+msgid "langHotspotZones"
+msgstr "Zóny obrázků"
+
+msgid "langNextQuestion"
+msgstr "Další otázka"
+
+msgid "langCorrectAnswer"
+msgstr "Správná odpověď"
+
+msgid "langHotspotHit"
+msgstr "Vaše odpověď byla"
+
+msgid "langOnlyJPG"
+msgstr "Pro hotspoty můžete použít pouze JPG (JPEG) obrázky"
+
+msgid "langFinishThisTest"
+msgstr "Ukaž správné odpovědi pro každou otázku a skóre pro test"
+
+msgid "langAllQuestions"
+msgstr "Všechny otázky"
+
+msgid "langModifyTitleDescription"
+msgstr "Upravit titulek a popis"
+
+msgid "langModifyHotspots"
+msgstr "Upravit odpovědi/hotspoty"
+
+msgid "langHotspotNotDrawn"
+msgstr "Ještě jste nevykreslil všechny vaše hotspoty"
+
+msgid "langHotspotWeightingError"
+msgstr "Musíte dát plusové skóre pro každý hotspot"
+
+msgid "langHotspotValidateError1"
+msgstr "Měl byste úplně odpovědět na otázku ("
+
+msgid "langHotspotValidateError2"
+msgstr "požadováno kliknout na obrázek) než uvidíte výsledky"
+
+msgid "langHotspotRequired"
+msgstr "Popis a skóre je požadováno pro každý hotspot."
+
+msgid "langHotspotChoose"
+msgstr "Vytvoření hotspotu: vybrat tvar vedle barev a nakreslit hotspot. Přesunout hotspot, vybrat barvu, kliknout na další bod na obrázku a nakreslit hotspot. Přidání hotspotu: klikněte na tlačítko Přidat hotspot. Uzavření tvaru polygonu: klikněte pravým tlačítkem a zvolte Uzavřít polygon."
+
+msgid "Fault"
+msgstr "Chybné"
+
+msgid "HotSpot"
+msgstr "Hotspot"
+
+msgid "ClickNumber"
+msgstr "Kliknout číslo"
+
+msgid "HotspotGiveAnswers"
+msgstr "Prosím zadejte odpověď"
+
+msgid "Addlimits"
+msgstr "Přidat limity"
+
+msgid "AreYouSure"
+msgstr "Jste si jistý?"
+
+msgid "StudentScore"
+msgstr "Studentovo skóre"
+
+msgid "backtoTesthome"
+msgstr "Zpět na hlavní stránku testu"
+
+msgid "Feedback"
+msgstr "Zpětná vazba"
+
+msgid "MarkIsUpdated"
+msgstr "Známka byla aktualizovaná"
+
+msgid "MarkInserted"
+msgstr "Známka vložena"
+
+msgid "PleaseGiveAMark"
+msgstr "Prosím zadejte známku"
+
+msgid "EditCommentsAndMarks"
+msgstr "Upravit komentář a známky"
+
+msgid "AddComments"
+msgstr "Přidat samostatnou zpětnou vazbu"
+
+msgid "Number"
+msgstr "Číslo"
+
+msgid "Weighting"
+msgstr "Skóre"
+
+msgid "ChooseQuestionType"
+msgstr "Vytvořit novou otázku, zvolte typ výše"
+
+msgid "MatchesTo"
+msgstr "Odpovídá"
+
+msgid "CorrectTest"
+msgstr "Více detailů"
+
+msgid "ViewTest"
+msgstr "Zobrazit"
+
+msgid "State"
+msgstr "Stav systému"
+
+msgid "NotAttempted"
+msgstr "Nevyzkoušené"
+
+msgid "AddElem"
+msgstr "Přidat element"
+
+msgid "DelElem"
+msgstr "Odebrat element"
+
+msgid "PlusAnswer"
+msgstr "+ odpověď"
+
+msgid "LessAnswer"
+msgstr "- odpověď"
+
+msgid "YourScore"
+msgstr "Vaše skóre"
+
+msgid "Attempted"
+msgstr "Pokusů"
+
+msgid "AssignMarks"
+msgstr "Oznámkovat"
+
+msgid "Results"
+msgstr "Výsledky"
+
+msgid "ExerciseStored"
+msgstr "Cvičení bylo uloženo"
+
+msgid "ChooseAtLeastOneCheckbox"
+msgstr "Vyberte nejméně jednu správnou odpověď"
+
+msgid "ExerciseEdited"
+msgstr "Cvičení bylo upraveno"
+
+msgid "ExerciseDeleted"
+msgstr "Cvičení bylo smazáno"
+
+msgid "ClickToCommentAndGiveFeedback"
+msgstr "Pokud chcete zkontrolovat odpověď, klikněte na následující odkaz"
+
+msgid "OpenQuestionsAttempted"
+msgstr "Student odpověděl na otevřenou otázku"
+
+msgid "AttemptDetails"
+msgstr "Podrobnosti pokusů"
+
+msgid "TestAttempted"
+msgstr "Pokusné cvičení"
+
+msgid "StudentName"
+msgstr "Jméno studenta"
+
+msgid "StudentEmail"
+msgstr "email studenta"
+
+msgid "OpenQuestionsAttemptedAre"
+msgstr "Otevřená pokusná otázka je"
+
+msgid "CourseName"
+msgstr "Název kurzu"
+
+msgid "UploadJpgPicture"
+msgstr "Nahrát obrázek (jpg, png, gif)"
+
+msgid "HotspotDescription"
+msgstr "Nyní klikni na: (...)"
+
+msgid "ExamSheetVCC"
+msgstr "List cvičení byl zobrazen/upraven/komentován školitelem"
+
+msgid "AttemptVCC"
+msgstr "Váš následující pokus byl zobrazen/komentován/upraven školitelem"
+
+msgid "ClickLinkToViewComment"
+msgstr "Pro přístup do vašeho účtu a zobrazení komentovaného listu cvičení, klikněte dole"
+
+msgid "Regards"
+msgstr "Pozdrav"
+
+msgid "AttemptVCCLong"
+msgstr "Váš výsledek testu %s byl zobrazen/komentován/upraven školitelem. Kliknutím na odkaz níže se dostanete k vašemu účtu a zobrazení vaší zkoušky"
+
+msgid "DearStudentEmailIntroduction"
+msgstr "Vážený studente,"
+
+msgid "ExerciseFinished"
+msgstr "Test ukončen"
+
+msgid "ResultsEnabled"
+msgstr "Výsledky zpřístupněné studentům"
+
+msgid "ResultsDisabled"
+msgstr "Výsledky jsou pro studenty zablokované"
+
+msgid "ExportWithUserFields"
+msgstr "Zahrnout do exportu uživatelského pole"
+
+msgid "ExportWithoutUserFields"
+msgstr "Vyjmout z exportu uživatelského pole"
+
+msgid "DisableResults"
+msgstr "Nezobrazovat výsledky"
+
+msgid "EnableResults"
+msgstr "Ukázat výsledky studentům"
+
+msgid "ValidateAnswer"
+msgstr "Potvrdit odpovědi"
+
+msgid "FillInBlankSwitchable"
+msgstr "Povolit změnu pořadí odpovědí"
+
+msgid "ReachedMaxAttempts"
+msgstr "Nemůžete již spustit test <b>%s</b> %s, protože jste dosáhli maximálního počtu pokusů"
+
+msgid "AdvancedParameters"
+msgstr "Rozšířené nastavení"
+
+msgid "RandomQuestionsToDisplay"
+msgstr "Počet náhodných zobrazených otázek"
+
+msgid "RandomQuestionsHelp"
+msgstr "Pro náhodnost otázek zvolte 10. Pro zákaz náhodnosti, zvolte \"Nedělat náhodnost otázek\""
+
+msgid "ExerciseAttempts"
+msgstr "Maximální počet pokusů"
+
+msgid "DoNotRandomize"
+msgstr "Nedělat náhodnost otázek"
+
+msgid "Infinite"
+msgstr "Nekonečný"
+
+msgid "BackToExercisesList"
+msgstr "Zpět na cvičení"
+
+msgid "ViewScoreChangeHistory"
+msgstr "Zobrazit historii změn skóre"
+
+msgid "NoStartDate"
+msgstr "Bez datumu začátku"
+
+msgid "NoLogOfDuration"
+msgstr "Žádný záznam trvání"
+
+msgid "EnableTimeLimits"
+msgstr "Aktivovat časové limity"
+
+msgid "ExeStartTime"
+msgstr "Datum počátku"
+
+msgid "ExeEndTime"
+msgstr "Datum konce"
+
+msgid "Value"
+msgstr "Hodnota"
+
+msgid "DeleteAttempt"
+msgstr "Smazat pokus?"
+
+msgid "WithoutComment"
+msgstr "Bez komentáře"
+
+msgid "QuantityQuestions"
+msgstr "Otázky"
+
+msgid "FilterExercices"
+msgstr "Filtrovat testy"
+
+msgid "FilterByNotRevised"
+msgstr "Pouze nekvalifikované"
+
+msgid "FilterByRevised"
+msgstr "Pouze kvalifikované"
+
+msgid "Duration"
+msgstr "Trvání"
+
+msgid "ReachedTimeLimit"
+msgstr "Dosažení časového limitu"
+
+msgid "TryAgain"
+msgstr "Zkus znovu"
+
+msgid "SeeTheory"
+msgstr "Odkaz na teorii"
+
+msgid "EndActivity"
+msgstr "Konec aktivity"
+
+msgid "NoFeedback"
+msgstr "Zkouška (bez zpětné vazby)"
+
+msgid "DirectFeedback"
+msgstr "Samohodnocení (okamžitá zpětná vazba)"
+
+msgid "FeedbackType"
+msgstr "Hodnocení:"
+
+msgid "Scenario"
+msgstr "Scénář"
+
+msgid "VisitUrl"
+msgstr "Zobrazit tento odkaz"
+
+msgid "ExitTest"
+msgstr "Ukončit test"
+
+msgid "DurationFormat"
+msgstr "%1 sekund"
+
+msgid "Difficulty"
+msgstr "Obtížnost"
+
+msgid "NewScore"
+msgstr "Nové skóre"
+
+msgid "NewComment"
+msgstr "Nový komentář"
+
+msgid "ExerciseNoStartedYet"
+msgstr "Test ještě nezačal"
+
+msgid "ExerciseNoStartedAdmin"
+msgstr "Školitel ještě nepovolit začít test"
+
+msgid "SelectTargetLP"
+msgstr "Vybrat cíl školení"
+
+msgid "SelectTargetQuestion"
+msgstr "Vybrat cíl otázky"
+
+msgid "CantShowResults"
+msgstr "Není dostupné"
+
+msgid "CantViewResults"
+msgstr "Nelze zobrazit výsledky"
+
+msgid "ShowCorrectedOnly"
+msgstr "S individuální zpětnou vazbou"
+
+msgid "ShowUnCorrectedOnly"
+msgstr "Neopravené výsledky"
+
+msgid "HideResultsToStudents"
+msgstr "Schovat výsledky"
+
+msgid "ShowResultsToStudents"
+msgstr "Ukázat skóre studentům"
+
+msgid "ProcedToQuestions"
+msgstr "Postoupit k otázkám >"
+
+msgid "AddQuestionToExercise"
+msgstr "Přidat tuto otázku k testu"
+
+msgid "PresentationQuestions"
+msgstr "Zobrazení otázek"
+
+msgid "UniqueAnswer"
+msgstr "Více možností"
+
+msgid "MultipleAnswer"
+msgstr "Více odpovědí"
+
+msgid "ReachedOneAttempt"
+msgstr "Nemůžete vstoupit do tohoto testu, protože jste již test provedl"
+
+msgid "QuestionsPerPage"
+msgstr "Počet otázek na stránku"
+
+msgid "QuestionsPerPageOne"
+msgstr "Jedna"
+
+msgid "QuestionsPerPageAll"
+msgstr "Všechny"
+
+msgid "EditIndividualComment"
+msgstr "Upravit individuální zpětnou vazbu"
+
+msgid "ThankYouForPassingTheTest"
+msgstr "Děkujeme, že jste prošel testem."
+
+msgid "ExerciseAtTheEndOfTheTest"
+msgstr "Na konec testu"
+
+msgid "EnrichQuestion"
+msgstr "Rozšířit otázku"
+
+msgid "langDefaultUniqueQuestion"
+msgstr "Vybrat správné zdůvodnění"
+
+msgid "langDefaultUniqueAnswer1"
+msgstr "A potom B potom C"
+
+msgid "langMoreHotspotsImage"
+msgstr "Přidat/Upravit hotspoty na obrázku"
+
+msgid "ReachedTimeLimitAdmin"
+msgstr "Nastavení časového omezení"
+
+msgid "LastScoreTest"
+msgstr "Poslední skóre cvičení"
+
+msgid "BackToResultList"
+msgstr "Zpět na seznam výsledků"
+
+msgid "EditingScoreCauseProblemsToExercisesInLP"
+msgstr "Pokud upravíte skóre otázky, nezapomeňte nat přidání tohoto cvičení do kurzu"
+
+msgid "SelectExercice"
+msgstr "Vybrat cvičení"
+
+msgid "YouHaveToSelectATest"
+msgstr "Musíte vybrat test"
+

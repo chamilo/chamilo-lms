@@ -1,0 +1,577 @@
+msgid "ModifyEvaluation"
+msgstr "保存评估"
+
+msgid "CreateLink"
+msgstr "添加学习活动到评估中"
+
+msgid "AddResultNoStudents"
+msgstr "没学员可以添加结果"
+
+msgid "FlatView"
+msgstr "列表视图"
+
+msgid "ScoreEdit"
+msgstr "技能排行"
+
+msgid "ScoreColor"
+msgstr "技能熟练度颜色标记"
+
+msgid "ScoringSystem"
+msgstr "技能排行"
+
+msgid "EnableScoreColor"
+msgstr "开启技能熟练度"
+
+msgid "Below"
+msgstr "低于"
+
+msgid "WillColorRed"
+msgstr "标记红色"
+
+msgid "EnableScoringSystem"
+msgstr "允许技能排行"
+
+msgid "IncludeUpperLimit"
+msgstr "包括上限 (如 0-20 包括 20)"
+
+msgid "ScoreInfo"
+msgstr "分数"
+
+msgid "Between"
+msgstr "在之间"
+
+msgid "CurrentCategory"
+msgstr "目前培训"
+
+msgid "RootCat"
+msgstr "主目录"
+
+msgid "NewCategory"
+msgstr "新分类"
+
+msgid "NewEvaluation"
+msgstr "添加课室评估"
+
+msgid "Weight"
+msgstr "权重"
+
+msgid "PickACourse"
+msgstr "选择一个培训"
+
+msgid "CategoryName"
+msgstr "文件夹名"
+
+msgid "CourseIndependent"
+msgstr "独立于培训"
+
+msgid "CourseIndependentEvaluation"
+msgstr "独立于培训的评测"
+
+msgid "EvaluationName"
+msgstr "评测"
+
+msgid "Max"
+msgstr "最大值"
+
+msgid "DateEval"
+msgstr "评估日期"
+
+msgid "AddUserToEval"
+msgstr "添加评估用户"
+
+msgid "NewSubCategory"
+msgstr "新的子分类"
+
+msgid "MakeLink"
+msgstr "添加在线活动"
+
+msgid "DeleteSelected"
+msgstr "删除选择的"
+
+msgid "SetVisible"
+msgstr "可视"
+
+msgid "SetInvisible"
+msgstr "不可视"
+
+msgid "ChooseLink"
+msgstr "选择评估的活动类型"
+
+msgid "DokeosExercises"
+msgstr "测验"
+
+msgid "DokeosDropbox"
+msgstr "投递箱"
+
+msgid "DokeosStudentPublications"
+msgstr "作业"
+
+msgid "DokeosLearningPaths"
+msgstr "课程"
+
+msgid "ChooseExercise"
+msgstr "选择测验"
+
+msgid "AddResult"
+msgstr "标记学员"
+
+msgid "BackToOverview"
+msgstr "返回目录视图"
+
+msgid "ExportPDF"
+msgstr "导出PDF"
+
+msgid "Print"
+msgstr "打印"
+
+msgid "ChooseOrientation"
+msgstr "选择方向"
+
+msgid "Portrait"
+msgstr "直打"
+
+msgid "Landscape"
+msgstr "横打"
+
+msgid "FilterCategory"
+msgstr "过滤分类"
+
+msgid "DeleteAll"
+msgstr "删除成绩?"
+
+msgid "ScoringUpdated"
+msgstr "更新技能排行"
+
+msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
+msgstr "%s 授予证书
+
+ %s 
+
+已完成培训 
+
+ \'%s\' 
+
+分数
+
+ \'%s\'"
+
+msgid "CertificateMinScore"
+msgstr "最低通过分数"
+
+msgid "CategoryAdded"
+msgstr "添加分类"
+
+msgid "InViMod"
+msgstr "评估不可以视"
+
+msgid "ViMod"
+msgstr "评估可视"
+
+msgid "ViewResult"
+msgstr "评估详情"
+
+msgid "NoUser"
+msgstr "没用户"
+
+msgid "NoResultsInEvaluation"
+msgstr "目前没评测结果"
+
+msgid "AddStudent"
+msgstr "添加用户"
+
+msgid "ImportResult"
+msgstr "导入成绩"
+
+msgid "Score"
+msgstr "成绩"
+
+msgid "ImportFileLocation"
+msgstr "导入成绩到评估中"
+
+msgid "Location"
+msgstr "位置"
+
+msgid "FileType"
+msgstr "文件类型"
+
+msgid "ExampleCSVFile"
+msgstr "CSV 文件样例"
+
+msgid "ExampleXMLFile"
+msgstr "XML 文件样例"
+
+msgid "OverwriteScores"
+msgstr "覆盖分数"
+
+msgid "IgnoreErrors"
+msgstr "忽略错误"
+
+msgid "ItemsVisible"
+msgstr "资源可视"
+
+msgid "ItemsInVisible"
+msgstr "资源不可视"
+
+msgid "NoItemsSelected"
+msgstr "无资源选择"
+
+msgid "DeletedCategories"
+msgstr "分类已删除"
+
+msgid "DeletedEvaluations"
+msgstr "评测已删除"
+
+msgid "DeletedLinks"
+msgstr "链接已删除"
+
+msgid "TotalItems"
+msgstr "全部资源"
+
+msgid "LinkAdded"
+msgstr "评估已添加"
+
+msgid "LinkDeleted"
+msgstr "评估已删除"
+
+msgid "EditEvaluation"
+msgstr "修改评测"
+
+msgid "DeleteResult"
+msgstr "删除成绩"
+
+msgid "Display"
+msgstr "排行"
+
+msgid "Average"
+msgstr "平均"
+
+msgid "ViewStatistics"
+msgstr "图形视图"
+
+msgid "ResultAdded"
+msgstr "结果已添加"
+
+msgid "EvaluationStatistics"
+msgstr "评测统计"
+
+msgid "ExportResult"
+msgstr "PDF 报表"
+
+msgid "EditResult"
+msgstr "学员成绩"
+
+msgid "GradebookWelcomeMessage"
+msgstr "欢迎使用评估工具. 此工具允许你评测个人在组织中能力. 根据学习活动(课堂学习和在线学习)生成能力报表. 这个可以适合多样化教学的环境."
+
+msgid "CreateAllCat"
+msgstr "创建培训分类"
+
+msgid "AddAllCat"
+msgstr "添加全部分类"
+
+msgid "StatsStudent"
+msgstr "统计"
+
+msgid "Results"
+msgstr "结果和反馈"
+
+msgid "Certificates"
+msgstr "证书"
+
+msgid "Certificate"
+msgstr "证书"
+
+msgid "ChooseUser"
+msgstr "选择评测的学生"
+
+msgid "FirstLetter"
+msgstr "名字的第一个字母"
+
+msgid "UserAdded"
+msgstr "用户已添加"
+
+msgid "ResultEdited"
+msgstr "结果已修改"
+
+msgid "ChooseFormat"
+msgstr "PDF 报表"
+
+msgid "OutputFileType"
+msgstr "输出文件类型"
+
+msgid "OverMax"
+msgstr "数值超过最大分数."
+
+msgid "MoreInfo"
+msgstr "更多信息"
+
+msgid "ResultsPerUser"
+msgstr "每个用户的结果"
+
+msgid "TotalUser"
+msgstr "全部用户"
+
+msgid "AverageTotal"
+msgstr "全体的平均值"
+
+msgid "Evaluation"
+msgstr "分数"
+
+msgid "EvaluationAverage"
+msgstr "平均水平评估"
+
+msgid "EditCategory"
+msgstr "修改分类"
+
+msgid "EditAllWeights"
+msgstr "报表中的权重"
+
+msgid "GradebookQualificationTotal"
+msgstr "全部"
+
+msgid "GradebookEvaluationDeleted"
+msgstr "评估已删"
+
+msgid "GradebookQualifyLog"
+msgstr "评估历史"
+
+msgid "GradebookNameLog"
+msgstr "评估名称"
+
+msgid "GradebookDescriptionLog"
+msgstr "评估描述"
+
+msgid "GradebookVisibilityLog"
+msgstr "评估可视"
+
+msgid "ResourceType"
+msgstr "分类"
+
+msgid "GradebookWhoChangedItLog"
+msgstr "更改记录"
+
+msgid "EvaluationEdited"
+msgstr "测评已成功修改"
+
+msgid "CategoryEdited"
+msgstr "分类已更新"
+
+msgid "OnlyNumbers"
+msgstr "只接受数字"
+
+msgid "IncorrectData"
+msgstr "不正常的数据"
+
+msgid "Resource"
+msgstr "评估"
+
+msgid "PleaseEnableScoringSystem"
+msgstr "请开启技能排行功能"
+
+msgid "AllResultDeleted"
+msgstr "全部结果已删除"
+
+msgid "ImportNoFile"
+msgstr "没文件可导入"
+
+msgid "ProblemUploadingFile"
+msgstr "上传文件过程出错."
+
+msgid "AllResultsEdited"
+msgstr "全部结果已修改"
+
+msgid "UserInfoDoesNotMatch"
+msgstr "用户信息不符合."
+
+msgid "ScoreDoesNotMatch"
+msgstr "分数不符合"
+
+msgid "FileUploadComplete"
+msgstr "文件上传成功"
+
+msgid "NoResultsAvailable"
+msgstr "没可用的结果"
+
+msgid "CannotChangeTheMaxNote"
+msgstr "不能改变分数"
+
+msgid "GradebookWeightUpdated"
+msgstr "权重成功更新"
+
+msgid "ChooseItem"
+msgstr "选择活动访问"
+
+msgid "AverageResultsVsResource"
+msgstr "平衡结果和资源"
+
+msgid "ToViewGraphScoreRuleMustBeEnabled"
+msgstr "需要开启分数规则以查看图表"
+
+msgid "GradebookPreviousWeight"
+msgstr "预览资源的权重"
+
+msgid "AddAssessment"
+msgstr "添加课室活动到评估"
+
+msgid "FolderView"
+msgstr "评估视图"
+
+msgid "GradebookSkillsRanking"
+msgstr "技能排行"
+
+msgid "SaveScoringRules"
+msgstr "保存权重到报表中"
+
+msgid "AttachCertificate"
+msgstr "添加证书"
+
+msgid "GradebookSeeListOfStudentsCertificates"
+msgstr "查看学生证书"
+
+msgid "CreateCertificate"
+msgstr "创建证书"
+
+msgid "UploadCertificate"
+msgstr "上传证书"
+
+msgid "CertificateName"
+msgstr "证书名称"
+
+msgid "CertificateOverview"
+msgstr "证书概述"
+
+msgid "CreateCertificateWithTags"
+msgstr "创建证书并加入此标识"
+
+msgid "ViewPresenceSheets"
+msgstr "查看考席表"
+
+msgid "ViewEvaluations"
+msgstr "查看评测"
+
+msgid "NewPresenceSheet"
+msgstr "新的考席表"
+
+msgid "NewPresenceStep1"
+msgstr "新的考席表: 步骤 1/2 : 详细填写考勤表"
+
+msgid "TitlePresenceSheet"
+msgstr "活动标题"
+
+msgid "Trainer"
+msgstr "老师"
+
+msgid "PresenceSheetCreatedBy"
+msgstr "考勤表填写人"
+
+msgid "SavePresence"
+msgstr "保存考勤表, 然后进行下一步"
+
+msgid "NewPresenceStep2"
+msgstr "新的考勤表: 步骤 2/2 : 查看学员是否出席"
+
+msgid "NoCertificateAvailable"
+msgstr "无可用证书"
+
+msgid "SaveCertificate"
+msgstr "保存证书"
+
+msgid "CertificateNotRemoved"
+msgstr "不能删除证书"
+
+msgid "CertificateRemoved"
+msgstr "证书已删除"
+
+msgid "NoDefaultCertificate"
+msgstr "无默认证书"
+
+msgid "DefaultCertificate"
+msgstr "默认证书"
+
+msgid "PreviewCertificate"
+msgstr "预览证书"
+
+msgid "IsDefaultCertificate"
+msgstr "设为默认"
+
+msgid "ImportPresences"
+msgstr "导入考勤表"
+
+msgid "AddPresences"
+msgstr "添加考勤"
+
+msgid "DeletePresences"
+msgstr "删除考勤"
+
+msgid "GradebookListOfStudentsCertificates"
+msgstr "成绩单 学生证书列表"
+
+msgid "NewPresence"
+msgstr "新的考勤表"
+
+msgid "EditPresence"
+msgstr "修改考勤表"
+
+msgid "SavedEditPresence"
+msgstr "保存考勤表"
+
+msgid "PresenceSheetFormatExplanation"
+msgstr "你可以下载考勤表. 考勤表中包含课程的学员信息. XLS 文件的第一栏是学生代码, 跟着的是学生姓名. 你只需修改第4列标记为 0 = 缺席, 1 = 出席"
+
+msgid "ValidatePresenceSheet"
+msgstr "校验考勤表"
+
+msgid "BackTo"
+msgstr "返回"
+
+msgid "PresenceSheet"
+msgstr "考勤表"
+
+msgid "PresenceSheets"
+msgstr "考勤表"
+
+msgid "Evaluations"
+msgstr "评测"
+
+msgid "SaveEditPresence"
+msgstr "保存考勤表变更"
+
+msgid "Training"
+msgstr "培训"
+
+msgid "Present"
+msgstr "考席"
+
+msgid "Numero"
+msgstr "序号"
+
+msgid "PresentAbsent"
+msgstr "0 = 缺席, 1 = 出席"
+
+msgid "ExampleXLSFile"
+msgstr "Excel (XLS) 文件样例"
+
+msgid "NoResultsInPresenceSheet"
+msgstr "无考勤表"
+
+msgid "EditPresences"
+msgstr "修改考席"
+
+msgid "TotalWeightMustNotBeMoreThan"
+msgstr "全部的权利不能高于"
+
+msgid "ThereIsNotACertificateAvailableByDefault"
+msgstr "默认没有可用证书"
+
+msgid "CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan"
+msgstr "需要最低通过分数也不能超过"
+
+msgid "LinkMod"
+msgstr "保存"
+
+msgid "EditLink"
+msgstr "修改链接"
+
+msgid "CategoryDeleted"
+msgstr "此分类已被删除"
+

@@ -1,0 +1,30 @@
+msgid "ClearContent"
+msgstr "<p><b>Instructor</b></p><p>Dokeos es un Sistema de Gestión del Aprendizaje y Conocimiento. Permite a los instructores organizar material e itinerarios de aprendizaje y administrar las interacciones con sus alumnos, todo mediante un simple navegador web. <"
+
+msgid "WCAGImage"
+msgstr "Imagen"
+
+msgid "WCAGLabel"
+msgstr "Etiqueta de Imagen"
+
+msgid "WCAGLink"
+msgstr "Vínculo"
+
+msgid "WCAGLinkLabel"
+msgstr "Etiqueta de Vínculo"
+
+msgid "ErrorNoLabel"
+msgstr "No hay etiqueta en la imagen"
+
+msgid "AllLanguages"
+msgstr "todos las idiomas"
+
+msgid "WCAGEditor"
+msgstr "Editor WACG"
+
+msgid "WCAGGoMenu"
+msgstr "Ir al menú"
+
+msgid "WCAGGoContent"
+msgstr "Ir al contenido"
+

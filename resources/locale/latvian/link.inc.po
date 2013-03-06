@@ -1,0 +1,156 @@
+msgid "LinkMoved"
+msgstr "Hipersaite tika pārvietota"
+
+msgid "langLinkName"
+msgstr "Hipersaites nosaukums"
+
+msgid "langLinkAdd"
+msgstr "Pievienot hipersaiti"
+
+msgid "langLinkAdded"
+msgstr "Hipersaite tika pievienota."
+
+msgid "langLinkMod"
+msgstr "Labot hipersaiti"
+
+msgid "langLinkModded"
+msgstr "Hipersaite tika labota."
+
+msgid "langLinkDel"
+msgstr "Dzēst hipersaiti"
+
+msgid "langLinkDeleted"
+msgstr "Hipersaite tika dzēsta"
+
+msgid "langLinkDelconfirm"
+msgstr "Vai Jūs vēlaties dzēst šo hipersaiti?"
+
+msgid "langAllLinksDel"
+msgstr "Dzēst visas hipersaites šajā direktorijā"
+
+msgid "langCategoryName"
+msgstr "Kategorijas nosaukums"
+
+msgid "langCategoryAdd"
+msgstr "Pievienot kategoriju"
+
+msgid "langCategoryAdded"
+msgstr "Kategorija tika pievienota."
+
+msgid "langCategoryModded"
+msgstr "Kategorija tika labota."
+
+msgid "langCategoryDel"
+msgstr "Dzēst kategoriju"
+
+msgid "langCategoryDeleted"
+msgstr "Kategorija un visas tās hipersaites tika izdzēstas."
+
+msgid "langCategoryDelconfirm"
+msgstr "Kad tiek dzēsta kategorija, visas hipersaites tajā tiek dzēsti.<br>Vai Jūs vēlaties dzēst šo kategoriju un visas tās hipersaites?"
+
+msgid "langAllCategoryDel"
+msgstr "Dzēst visas kategorijas un visas saites"
+
+msgid "langGiveURL"
+msgstr "Lūdzu, norādiet hipersaites URL"
+
+msgid "langGiveCategoryName"
+msgstr "Lūdzu, norādiet kategorijas nosaukumu"
+
+msgid "langNoCategory"
+msgstr "Nav nevienas kategorijas"
+
+msgid "showall"
+msgstr "Atvērt visas kategorijas"
+
+msgid "shownone"
+msgstr "AIzvērt visas kategorijas"
+
+msgid "langListDeleted"
+msgstr "Saraksts tika dzēsts"
+
+msgid "langAddLink"
+msgstr "Pievienot hipersaiti"
+
+msgid "langDelList"
+msgstr "Dzēst sarakstu"
+
+msgid "langModifyLink"
+msgstr "Labot saiti"
+
+msgid "langCsvImport"
+msgstr "CSV importēšana"
+
+msgid "langCsvFileNotFound"
+msgstr "Importējamo CSV failu nebija iespējams atvērt (tas ir tukšs vai pārāk liels)"
+
+msgid "langCsvFileNoSeps"
+msgstr "Importējamam CSV failā kā atdalītājsimbolu jālieto \",\" vai \";\""
+
+msgid "langCsvFileNoURL"
+msgstr "Importējamajā CSV failā jābūt vismaz URL un nosaukuma kolonnām"
+
+msgid "langCsvFileLine1"
+msgstr "... - line 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "rindā(s) netika veikta importa procedūra (nav URL vai nosaukuma)"
+
+msgid "langCsvLinesOld"
+msgstr "esošās hipersaites tika atjaunotas/papildinātas (vienādi URL un kategorija)"
+
+msgid "langCsvLinesNew"
+msgstr "jauna(s) hipersaite(s) tika izveidota(s)."
+
+msgid "langCsvExplain"
+msgstr "Failam jāizskatās šādi: <blockquote><pre> <b>URL</b>;category;<b>title</b>;description; <b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1; <b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\"; </pre></blockquote> Ja URL un kategorija ir vienādas ar kādu jau agrāk pievienotu hipersaites objektu, tad tā virsraksts un apraksts tiks atjaunoti. Visos citos gadījumos jauns ieraksts tiks izveidots.<br><br> Bold = nav obligāti. Lauki var atrasties jebkurā secībā, nosaukumi ar lielajiem vai mazajiem burtiem. Papildus lauki tiek pievienoti aprakstam. Atdalītājs: komats vai semikols. Vērtības, pretēji lauku nosaukumiem, var tikt ievietotas pēdiņās. Daži [b]HTML tagi[/b] var tikt importēti apraksta laukā."
+
+msgid "langLinkUpdated"
+msgstr "Hipersaite tika atjaunota"
+
+msgid "langAll_Link_Deleted"
+msgstr "Hipersaite tika dzēsta"
+
+msgid "langOnHomepage"
+msgstr "Rādīt hipersaiti sākumlapā"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Šo hipersaiti rādīt, kā ikonu kursa sākumlapā"
+
+msgid "General"
+msgstr "Galvenais"
+
+msgid "SearchFeatureDoIndexLink"
+msgstr "Rādīt saites nosaukumu un aprakstu?"
+
+msgid "langSaveLink"
+msgstr "Saglabāt hipersaiti"
+
+msgid "langSaveCategory"
+msgstr "Saglabāt mapi"
+
+msgid "BackToLinksOverview"
+msgstr "Atgriezties uz saišu pārskatu"
+
+msgid "AddTargetOfLinkOnHomepage"
+msgstr "Izvēlieties mērķi, kas parāda hipersaiti kursa mājas lapā"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "LinkOpenSelf"
+msgstr "Open self"
+
+msgid "LinkOpenBlank"
+msgstr "Atvērt tukšā logā"
+
+msgid "LinkOpenParent"
+msgstr "Open parent"
+
+msgid "LinkOpenTop"
+msgstr "Open top"
+
+msgid "LinkTarget"
+msgstr "Hipersaites mērķis"
+

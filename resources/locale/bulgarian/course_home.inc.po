@@ -1,0 +1,81 @@
+msgid "langActivate"
+msgstr "Активиране"
+
+msgid "langDeactivate"
+msgstr "Дезактивиране"
+
+msgid "langInLnk"
+msgstr "Дезактивирани инструменти"
+
+msgid "langDelLk"
+msgstr "Желаете да изтриете тази връзка?"
+
+msgid "langCourseCreate"
+msgstr "Създаване на нов курс"
+
+msgid "langNameOfTheLink"
+msgstr "Име на връзката"
+
+msgid "lang_main_categories_list"
+msgstr "Основни категории"
+
+msgid "langCourseAdminOnly"
+msgstr "Само за преподаватели"
+
+msgid "PlatformAdminOnly"
+msgstr "Само за администратори на системата"
+
+msgid "langCombinedCourse"
+msgstr "Комбиниран курс -"
+
+msgid "ToolIsNowVisible"
+msgstr "Инструментът е активиран."
+
+msgid "ToolIsNowHidden"
+msgstr "Инструментът е дезактивиран."
+
+msgid "EditLink"
+msgstr "Редактиране на връзката"
+
+msgid "Blog_management"
+msgstr "Управление на проектите"
+
+msgid "Forum"
+msgstr "Форуми"
+
+msgid "Course_maintenance"
+msgstr "Поддръжка"
+
+msgid "TOOL_SURVEY"
+msgstr "Анкети"
+
+msgid "GreyIcons"
+msgstr "Дезактивирани инструменти"
+
+msgid "Interaction"
+msgstr "Учебен процес"
+
+msgid "Authoring"
+msgstr "Учебни материали"
+
+msgid "Administration"
+msgstr "Администриране"
+
+msgid "IntroductionTextUpdated"
+msgstr "Встъпителният текст е актуализиран."
+
+msgid "IntroductionTextDeleted"
+msgstr "Встъпителният текст е изтрит."
+
+msgid "SessionIdentifier"
+msgstr "Идентификатор на сесията"
+
+msgid "SessionName"
+msgstr "Име на сесията"
+
+msgid "SessionCategory"
+msgstr "Категории сесии"
+
+msgid "SessionData"
+msgstr "Информация за сесията"
+

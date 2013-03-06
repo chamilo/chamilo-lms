@@ -1,0 +1,657 @@
+msgid "langExercice"
+msgstr "測驗"
+
+msgid "langActivate"
+msgstr "公開"
+
+msgid "langDeactivate"
+msgstr "隱藏"
+
+msgid "langNoEx"
+msgstr "沒有測驗"
+
+msgid "langNewEx"
+msgstr "添加測驗"
+
+msgid "langQuestion"
+msgstr "問題"
+
+msgid "langQuestions"
+msgstr "題目"
+
+msgid "langAnswers"
+msgstr "答案"
+
+msgid "langTrue"
+msgstr "正確"
+
+msgid "langAnswer"
+msgstr "答案"
+
+msgid "langResult"
+msgstr "結果"
+
+msgid "langNoResult"
+msgstr "沒有結果"
+
+msgid "langYourResults"
+msgstr "你的結果"
+
+msgid "langStudentResults"
+msgstr "學生得分"
+
+msgid "langExerciseType"
+msgstr "測驗類型"
+
+msgid "langExerciseName"
+msgstr "測驗名稱"
+
+msgid "langExerciseDescription"
+msgstr "測驗介簡 + 圖像/音訊/視訊"
+
+msgid "langSimpleExercise"
+msgstr "在單一頁面"
+
+msgid "langSequentialExercise"
+msgstr "每題一頁"
+
+msgid "langRandomQuestions"
+msgstr "隨機題目"
+
+msgid "langGiveExerciseName"
+msgstr "請輸入測驗名稱"
+
+msgid "langSound"
+msgstr "音頻或視頻檔案"
+
+msgid "langDeleteSound"
+msgstr "刪除音頻或視頻檔案"
+
+msgid "langNoAnswer"
+msgstr "該題目沒有提供答案"
+
+msgid "langGoBackToQuestionPool"
+msgstr "返回"
+
+msgid "langGoBackToQuestionList"
+msgstr "返回題目清單"
+
+msgid "langQuestionAnswers"
+msgstr "題目的答案"
+
+msgid "langUsedInSeveralExercises"
+msgstr "警告﹗這個題目和答案已經用於多個測驗，你確定要修改它嗎？"
+
+msgid "langModifyInAllExercises"
+msgstr "在所有測驗中"
+
+msgid "langModifyInThisExercise"
+msgstr "僅在當前測驗中"
+
+msgid "langAnswerType"
+msgstr "答案類型"
+
+msgid "langMultipleSelect"
+msgstr "多答案選擇題"
+
+msgid "langFillBlanks"
+msgstr "填空題"
+
+msgid "langMatching"
+msgstr "配對題"
+
+msgid "langAddPicture"
+msgstr "加入圖片"
+
+msgid "langReplacePicture"
+msgstr "替換圖片"
+
+msgid "langDeletePicture"
+msgstr "刪除圖片"
+
+msgid "langQuestionDescription"
+msgstr "描述"
+
+msgid "langGiveQuestion"
+msgstr "請輸入題目"
+
+msgid "langWeightingForEachBlank"
+msgstr "請輸入空白處的分數"
+
+msgid "langUseTagForBlank"
+msgstr "用方括號 [...] 定義一個或多個空"
+
+msgid "langQuestionWeighting"
+msgstr "分數"
+
+msgid "langMoreAnswers"
+msgstr "增加答案"
+
+msgid "langLessAnswers"
+msgstr "減少答案"
+
+msgid "langMoreElements"
+msgstr "增加項目"
+
+msgid "langLessElements"
+msgstr "減少項目"
+
+msgid "langTypeTextBelow"
+msgstr "請在下面輸入文本"
+
+msgid "langDefaultTextInBlanks"
+msgstr "[中國民眾]生活在[中國]."
+
+msgid "langDefaultMatchingOptA"
+msgstr "富有"
+
+msgid "langDefaultMatchingOptB"
+msgstr "英俊"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "你父親是"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "你母親是"
+
+msgid "langDefineOptions"
+msgstr "請定義選項"
+
+msgid "langMakeCorrespond"
+msgstr "配對答案"
+
+msgid "langFillLists"
+msgstr "請填寫下面的兩個清單"
+
+msgid "langGiveText"
+msgstr "請輸入文本"
+
+msgid "langDefineBlanks"
+msgstr "請用方括號[...]定義至少一個空白"
+
+msgid "langGiveAnswers"
+msgstr "請給出題目答案"
+
+msgid "langChooseGoodAnswer"
+msgstr "請選擇正確答案"
+
+msgid "langChooseGoodAnswers"
+msgstr "請選擇一個或多個正確答案"
+
+msgid "langQuestionList"
+msgstr "測驗的題目清單"
+
+msgid "langMoveUp"
+msgstr "上移"
+
+msgid "langMoveDown"
+msgstr "下移"
+
+msgid "langGetExistingQuestion"
+msgstr "從題庫選擇"
+
+msgid "langFinishTest"
+msgstr "完成測驗"
+
+msgid "langQuestionPool"
+msgstr "題庫"
+
+msgid "langOrphanQuestions"
+msgstr "獨立的題目"
+
+msgid "langNoQuestion"
+msgstr "目前沒有題目"
+
+msgid "langAllExercises"
+msgstr "所有測驗"
+
+msgid "langFilter"
+msgstr "篩選"
+
+msgid "langGoBackToEx"
+msgstr "返回"
+
+msgid "langReuse"
+msgstr "重新使用"
+
+msgid "langExerciseManagement"
+msgstr "測驗題目"
+
+msgid "langQuestionManagement"
+msgstr "題目與答案"
+
+msgid "langQuestionNotFound"
+msgstr "沒有找到答案"
+
+msgid "langExerciseNotFound"
+msgstr "沒有測驗或隱藏"
+
+msgid "langAlreadyAnswered"
+msgstr "您已經回答了這個題目"
+
+msgid "langElementList"
+msgstr "匹配項目"
+
+msgid "langScore"
+msgstr "得分"
+
+msgid "langCorrespondsTo"
+msgstr "答案"
+
+msgid "langExpectedChoice"
+msgstr "正確答案"
+
+msgid "langYourTotalScore"
+msgstr "您的總分︰"
+
+msgid "Build"
+msgstr "建立"
+
+msgid "langEvalSet"
+msgstr "評分設定"
+
+msgid "langActive"
+msgstr "顯示"
+
+msgid "langInactive"
+msgstr "隱藏"
+
+msgid "langQuestCreate"
+msgstr "新建題目"
+
+msgid "langExRecord"
+msgstr "您的題目已儲存"
+
+msgid "langBackModif"
+msgstr "返回題目編輯頁面"
+
+msgid "langDoEx"
+msgstr "開始做題"
+
+msgid "langDefScor"
+msgstr "定義評分設定"
+
+msgid "langCreateModif"
+msgstr "創建/更新題目"
+
+msgid "langSub"
+msgstr "副標題"
+
+msgid "langMyAnswer"
+msgstr "我的答案"
+
+msgid "langMorA"
+msgstr "增加答案"
+
+msgid "langLesA"
+msgstr "減少答案"
+
+msgid "langRecEx"
+msgstr "儲存練習"
+
+msgid "langRecQu"
+msgstr "儲存題目"
+
+msgid "langRecAns"
+msgstr "儲存答案"
+
+msgid "langIntroduction"
+msgstr "介紹"
+
+msgid "langTitleAssistant"
+msgstr "習題創建助手"
+
+msgid "langQuesList"
+msgstr "題目清單"
+
+msgid "langSaveEx"
+msgstr "儲存練習"
+
+msgid "langFinish"
+msgstr "完成"
+
+msgid "langCancel"
+msgstr "取消"
+
+msgid "langQImage"
+msgstr "圖像題目"
+
+msgid "langAddQ"
+msgstr "添加題目"
+
+msgid "langDoAnEx"
+msgstr "開始做題"
+
+msgid "langGenerator"
+msgstr "練習清單"
+
+msgid "langChoice"
+msgstr "選擇答案"
+
+msgid "langCorrect"
+msgstr "答案"
+
+msgid "langPossAnsw"
+msgstr "正確答案數"
+
+msgid "langStudAnsw"
+msgstr "錯誤答案數"
+
+msgid "langDetermine"
+msgstr "確認"
+
+msgid "langNonNumber"
+msgstr "存在非數值項目"
+
+msgid "langReplaced"
+msgstr "已替換"
+
+msgid "langSuperior"
+msgstr "存在超過 20 的值"
+
+msgid "langRep20"
+msgstr "替換 20 處"
+
+msgid "langDefault"
+msgstr "缺省設定 *"
+
+msgid "langDefComment"
+msgstr "如果點擊\"缺省設定\"按鈕，您原先的設定將被永久替代。"
+
+msgid "langScoreGet"
+msgstr "黑色數字=分數"
+
+msgid "langShowScor"
+msgstr "學生分數︰"
+
+msgid "langStep1"
+msgstr "步驟一"
+
+msgid "langStep2"
+msgstr "步驟二"
+
+msgid "langTake"
+msgstr "參與"
+
+msgid "langAmong"
+msgstr "在"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "匯入 HotPotatoes 測驗"
+
+msgid "langHotPotatoesTests"
+msgstr "匯入 HotPotatoes 測驗"
+
+msgid "langDownloadFile"
+msgstr "上傳檔案至伺服器"
+
+msgid "langDownloadImg"
+msgstr "上傳圖像到伺服器"
+
+msgid "langDownloadEnd"
+msgstr "上傳結束"
+
+msgid "langNoSpace"
+msgstr "上傳失敗﹗超過最大上傳檔案大小或磁片空間不足."
+
+msgid "langZipNoPhp"
+msgstr "Zip檔案不能包含.php檔案"
+
+msgid "langNoImg"
+msgstr "測驗沒有圖像"
+
+msgid "langImgNote_st"
+msgstr "<br />是否仍然要上傳"
+
+msgid "langImgNote_en"
+msgstr "圖像︰"
+
+msgid "langDocDeleted"
+msgstr "檔案已刪除"
+
+msgid "langViMod"
+msgstr "已修改顯示/隱藏屬性"
+
+msgid "langNameNotEqual"
+msgstr "是非法檔案!"
+
+msgid "langIndice"
+msgstr "索引"
+
+msgid "langIndices"
+msgstr "索引"
+
+msgid "langDateExo"
+msgstr "日期"
+
+msgid "langShowQuestion"
+msgstr "顯示題目"
+
+msgid "langUnknownExercise"
+msgstr "未知練習"
+
+msgid "langReuseQuestion"
+msgstr "重新使用題目"
+
+msgid "langCreateExercise"
+msgstr "新建練習"
+
+msgid "langCreateQuestion"
+msgstr "新建題目"
+
+msgid "langCreateAnswers"
+msgstr "新建答案"
+
+msgid "langModifyExercise"
+msgstr "修改練習"
+
+msgid "langModifyAnswers"
+msgstr "修改答案"
+
+msgid "langForExercise"
+msgstr "做練習"
+
+msgid "langUseExistantQuestion"
+msgstr "用一個現有題目"
+
+msgid "FreeAnswer"
+msgstr "開放式問題"
+
+msgid "notCorrectedYet"
+msgstr "答案不正確，本題得到 0 分，會影響總分。"
+
+msgid "adminHP"
+msgstr "Hot Potatoes 管理"
+
+msgid "NewQu"
+msgstr "新問題"
+
+msgid "NoImage"
+msgstr "請選擇圖像"
+
+msgid "langAnswerHotspot"
+msgstr "題目和分數是必需的，回饋是選擇性的。"
+
+msgid "langMinHotspot"
+msgstr "你必須創建至少一個熱點。"
+
+msgid "langMaxHotspot"
+msgstr "你可創建最多12個熱點。"
+
+msgid "langHotspotError"
+msgstr "請輸入題目和分數。"
+
+msgid "langMoreHotspots"
+msgstr "增加熱點"
+
+msgid "langLessHotspots"
+msgstr "減少熱點"
+
+msgid "langHotspotZones"
+msgstr "熱點"
+
+msgid "langNextQuestion"
+msgstr "下一題"
+
+msgid "langCorrectAnswer"
+msgstr "正確答案"
+
+msgid "langHotspotHit"
+msgstr "答案"
+
+msgid "langOnlyJPG"
+msgstr "你只能使用 JPG（或JPEG）圖片"
+
+msgid "langFinishThisTest"
+msgstr "顯示每道題目的正確答案和分數"
+
+msgid "langAllQuestions"
+msgstr "全部題目"
+
+msgid "langModifyTitleDescription"
+msgstr "修改標題和備注"
+
+msgid "langModifyHotspots"
+msgstr "修改答案/熱點"
+
+msgid "langHotspotNotDrawn"
+msgstr "沒有畫完所有的熱點"
+
+msgid "langHotspotWeightingError"
+msgstr "You must give a positive (>0) weighing for all hotspots"
+
+msgid "langHotspotValidateError1"
+msgstr "你應完全回答題目（"
+
+msgid "langHotspotValidateError2"
+msgstr " click(s) required on the image) before seeing the results"
+
+msgid "langHotspotRequired"
+msgstr "題目和分數是必需的，摘要是可選的。"
+
+msgid "langHotspotChoose"
+msgstr "<div style=\"padding:2px 3px;\">創建熱點︰先選擇顏色對應的圖形然後畫出熱點</div><div style=\"padding:2px 3px;\">移動熱點︰先選擇顏色對應的圖形然後畫出新的熱點</div><div style=\"padding:2px 3px;\">關閉多邊形︰點擊右鍵然後選擇關閉多邊形</div><div style=\"padding:2px 3px;\"></div>"
+
+msgid "Fault"
+msgstr "不正確"
+
+msgid "HotSpot"
+msgstr "圖像區"
+
+msgid "ClickNumber"
+msgstr "按數字"
+
+msgid "HotspotGiveAnswers"
+msgstr "請填寫答案"
+
+msgid "Addlimits"
+msgstr "加入限制"
+
+msgid "AreYouSure"
+msgstr "你肯定嗎？"
+
+msgid "StudentScore"
+msgstr "學員分數"
+
+msgid "backtoTesthome"
+msgstr "回到測驗主頁"
+
+msgid "Feedback"
+msgstr "回饋"
+
+msgid "MarkIsUpdated"
+msgstr "已更新分數"
+
+msgid "MarkInserted"
+msgstr "已加入分數"
+
+msgid "PleaseGiveAMark"
+msgstr "請填寫分數"
+
+msgid "EditCommentsAndMarks"
+msgstr "編輯回饋及分數"
+
+msgid "AddComments"
+msgstr "加入回饋"
+
+msgid "Weighting"
+msgstr "積分"
+
+msgid "ChooseQuestionType"
+msgstr "從上挑選類型以創建新題目。"
+
+msgid "CorrectTest"
+msgstr "改正本測驗"
+
+msgid "ViewTest"
+msgstr "檢視"
+
+msgid "NotAttempted"
+msgstr "未嘗試"
+
+msgid "PlusAnswer"
+msgstr "+ 答案"
+
+msgid "LessAnswer"
+msgstr "- 答案"
+
+msgid "YourScore"
+msgstr "你的積分"
+
+msgid "Attempted"
+msgstr "已嘗試"
+
+msgid "AssignMarks"
+msgstr "指派一個分數"
+
+msgid "Results"
+msgstr "結果"
+
+msgid "ExerciseStored"
+msgstr "練習已被儲存"
+
+msgid "ChooseAtLeastOneCheckbox"
+msgstr "最少選擇一個好的答案"
+
+msgid "ExerciseEdited"
+msgstr "本練習已被編輯"
+
+msgid "ExerciseDeleted"
+msgstr "本練習已被刪除"
+
+msgid "ClickToCommentAndGiveFeedback"
+msgstr "按以下連結以檢查答案並加入回饋"
+
+msgid "OpenQuestionsAttempted"
+msgstr "有學員回答了開放式題目"
+
+msgid "TestAttempted"
+msgstr "已嘗試的測驗"
+
+msgid "StudentName"
+msgstr "學員姓名"
+
+msgid "StudentEmail"
+msgstr "學員電郵"
+
+msgid "CourseName"
+msgstr "課程名稱"
+
+msgid "UploadJpgPicture"
+msgstr "上載 JPG 圖片"
+
+msgid "ExamSheetVCC"
+msgstr "老師已檢視/訂正/評鑑之考卷"
+
+msgid "AttemptVCC"
+msgstr "你以下的嘗試已被老師檢視/訂正/評鑑"
+
+msgid "ClickLinkToViewComment"
+msgstr "按以下連結以進入你的帳戶並檢視已評鑑的考卷"
+
+msgid "AttemptVCCLong"
+msgstr "你嘗試了的測驗 %s 已由老師檢視/評審/訂正。按以下的連結來檢視你的考卷。"
+
+msgid "DearStudentEmailIntroduction"
+msgstr "親愛的學員："
+

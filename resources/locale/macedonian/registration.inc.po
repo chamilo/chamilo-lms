@@ -1,0 +1,432 @@
+msgid "langShouldBeCSVFormat"
+msgstr "Датотеката реба да биде во CSV формат. Не додавајте празни места. Структирата треба да е точно:"
+
+msgid "langTracking"
+msgstr "Следење"
+
+msgid "langEnter2passToChange"
+msgstr "Внесете ја вашата лозинка двапати за да ја промените. Во спротивно, оставете ги полињата празни."
+
+msgid "langAuthInfo"
+msgstr "Проверка на автентичноста"
+
+msgid "langUpdateImage"
+msgstr "Промени ја сликата"
+
+msgid "langImageWrong"
+msgstr "Гоемината на датотеката треба да е помала од"
+
+msgid "langAddImage"
+msgstr "Слика"
+
+msgid "langCourseManager"
+msgstr "Учител"
+
+msgid "password_request"
+msgstr "Побаравте да преправите Вашата лозинка. Ако не сте побарале, тогаш игнорирајте ја оваа порака. За да ја преправите Вашата лозинка кликнете на врската преправи."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Вашата лозинка Ви беше испратена по e-mail."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Внесете e-mail адреса што ја искористивте при регистрирањето и ќе Ви ја испратиме назад Вашата лозинка."
+
+msgid "langLogin"
+msgstr "Најави се"
+
+msgid "langAction"
+msgstr "Дејство"
+
+msgid "langPreserved"
+msgstr "Заштитено"
+
+msgid "langDeleted"
+msgstr "Избришано"
+
+msgid "langAdded"
+msgstr "Додадено"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Потврдете го отпишувањето на корисникот"
+
+msgid "langCourseName"
+msgstr "Име на курсот"
+
+msgid "langSubscribe"
+msgstr "Запишување"
+
+msgid "langSee"
+msgstr "Оди до"
+
+msgid "langLastVisits"
+msgstr "Мои последни посети"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Ако сакате да се додаде список на корисници во Вашиот курс, контактирајте со Вашиот веб управувач."
+
+msgid "langPassTooEasy"
+msgstr "оваа лозинка е преедноставна. Ползувајте лозинка како оваа"
+
+msgid "langGroupUserManagement"
+msgstr "Управување со групата"
+
+msgid "langAddedToCourse"
+msgstr "беше регистриран на Вашиот курс"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Корисник со истото име веќе е регистриран во овој курс."
+
+msgid "langBackUser"
+msgstr "Назад до список со корисници"
+
+msgid "langUserOneByOneExplanation"
+msgstr "Тој (таа) ќе добие потврда по e-mail со корисничко_име и лозинка."
+
+msgid "langGiveTutor"
+msgstr "Направи обучувач"
+
+msgid "langRemoveRight"
+msgstr "Отстрани го овој правец"
+
+msgid "langGiveAdmin"
+msgstr "Направи управувач"
+
+msgid "langUserNumber"
+msgstr "број"
+
+msgid "langDownloadUserList"
+msgstr "Качи го списокот"
+
+msgid "langSend"
+msgstr "Испрати"
+
+msgid "langUserAddExplanation"
+msgstr "секој ред од датотеката за испраќање е неопходно да содржи само 5 полиња. <b>Име   Презиме    Корисничко_име   Лозинка    E-mail</b> разделени со табови и по овој редослед. Корисниците ќе добијат потврда по e-mail со корисничко_име и лозинка."
+
+msgid "langUserMany"
+msgstr "Увези список на корисници преку CSV / XML датотека"
+
+msgid "langOneByOne"
+msgstr "Додај корисник рачно"
+
+msgid "langNow"
+msgstr "&#1089;&#1077;&#1075;&#1072;"
+
+msgid "langTutor"
+msgstr "Обучувач"
+
+msgid "langTitular"
+msgstr "Водач"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>Менување на списокот на корисници</big><br><br>Штиклирајте ги курсвите што сакате да ги следите.<br>Одштиклирајте ги оние кои повеќе не сакате да ги следите.<br> Потоа кликнете на копчето Добро, на дното на списокот."
+
+msgid "langStudent"
+msgstr "Курсист"
+
+msgid "langImportUserList"
+msgstr "Увези список на корисници"
+
+msgid "langAddAU"
+msgstr "Додај корисник"
+
+msgid "langAddedU"
+msgstr "беше додаден. Му беше испратена e-mail порака со неговото корисничко_име"
+
+msgid "langTheU"
+msgstr "Корисникот"
+
+msgid "langRegYou"
+msgstr "беше регистриран на Вашиот курс"
+
+msgid "langOneResp"
+msgstr "Еден од управувачите со курсот"
+
+msgid "langTaken"
+msgstr "веќе е во употреба. Изберете друго."
+
+msgid "langUserNo"
+msgstr "Корисничкото_имешто го избравте"
+
+msgid "langFilled"
+msgstr "Некои полиња ги имате оставено празни."
+
+msgid "langInC"
+msgstr "во овој курс"
+
+msgid "langRole"
+msgstr "Опис"
+
+msgid "UserPicture"
+msgstr "Слика"
+
+msgid "langProfileReg"
+msgstr "Вашиот нов профил беше снимен"
+
+msgid "langEmailWrong"
+msgstr "E-mail адресата не е потполна или содржи некои неисправни карактери"
+
+msgid "langUserTaken"
+msgstr "Ова корисничко_име е веќе во употреба"
+
+msgid "langFields"
+msgstr "Некои полиња ги оставивте празни"
+
+msgid "langAgain"
+msgstr "Обидете се поворно!"
+
+msgid "langPassTwo"
+msgstr "Внесовте две различни лозинки"
+
+msgid "langViewProfile"
+msgstr "Поглед на моето е-досие"
+
+msgid "langModifProfile"
+msgstr "Менување на Профилот"
+
+msgid "langIsReg"
+msgstr "Вашите промени се регистрирани"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Сега може да одите и да го креирате курсот"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Сега можете да одите во списокот, да го означите курсот на кој сакате да пристапите"
+
+msgid "langMailHasBeenSent"
+msgstr "Ви беше испратена e-mail порака за да Ви помогне да го запомните корисничкото_име и лозинката"
+
+msgid "langPersonalSettings"
+msgstr "Вашите лични поставки беа регистрирани"
+
+msgid "langManager"
+msgstr "Раководител"
+
+msgid "langFormula"
+msgstr "Искрено Ваш"
+
+msgid "langProblem"
+msgstr "Во случај на проблеми, контактирјте не\'."
+
+msgid "langIs"
+msgstr "e"
+
+msgid "langAddress"
+msgstr "Адресата на"
+
+msgid "langSettings"
+msgstr "со следните поставки: Корисничко_име:"
+
+msgid "langYouAreReg"
+msgstr "Вие сте регистрирани на"
+
+msgid "langYourReg"
+msgstr "Вашата регистрација на"
+
+msgid "langUserFree"
+msgstr "Ова корисничко_име веќе е земено. Ползувајте го копчето Назад на Вашиот прелистувач и изберете друго."
+
+msgid "langEmptyFields"
+msgstr "Оставивте некои празни полиња. Ползувајте го копчето Назад на Вашиот прелистувач и обидете се повторно."
+
+msgid "langPassTwice"
+msgstr "Внесовте две различни лозинки. Ползувајте го копчето Назад на Вашиот прелистувач и обидете се повторно."
+
+msgid "langRegAdmin"
+msgstr "Креирајте опкружувања на курсот"
+
+msgid "langRegStudent"
+msgstr "Ги следите курсевите"
+
+msgid "langConfirmation"
+msgstr "Потврда"
+
+msgid "langPass"
+msgstr "Лозинка"
+
+msgid "langSurname"
+msgstr "Презиме"
+
+msgid "langRegistration"
+msgstr "Регистрација"
+
+msgid "langYourAccountParam"
+msgstr "Ова е Ваша информација за поврзување со"
+
+msgid "langLoginRequest"
+msgstr "Барање за најава"
+
+msgid "langDefineHeadings"
+msgstr "Дефинирај Заглавија"
+
+msgid "langCourseAdministratorOnly"
+msgstr "само за учителот"
+
+msgid "langLostPassword"
+msgstr "Ја загубивте Лозинката?"
+
+msgid "langAdminOfCourse"
+msgstr "Управувач со курсот"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Корисник на курсот"
+
+msgid "langIsTutor"
+msgstr "Обучувач"
+
+msgid "langParamInTheCourse"
+msgstr "Статус во курсот"
+
+msgid "langMember"
+msgstr "член"
+
+msgid "langLock"
+msgstr "заклучено"
+
+msgid "langUnlock"
+msgstr "отклучено"
+
+msgid "langHaveNoCourse"
+msgstr "нема курсеви"
+
+msgid "langManage"
+msgstr "Управувај со Порталот"
+
+msgid "langAdministrationTools"
+msgstr "Алатки за управување"
+
+msgid "langUserProfileReg"
+msgstr "Е-досието на корисникот беше регистрирано"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Нема корисничко досие со оваа e-mail адреса"
+
+msgid "langCourses4User"
+msgstr "Курсевите на овој корисник"
+
+msgid "langCoursesByUser"
+msgstr "Курсеви по корисник"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Запиши корисници на овој курс"
+
+msgid "langPreced100"
+msgstr "Претходните 100"
+
+msgid "langAddmore"
+msgstr "Додај ги регистрираните корисници"
+
+msgid "langAddback"
+msgstr "Оди на списокот на корисници"
+
+msgid "langreg"
+msgstr "Регистрирај"
+
+msgid "langQuit"
+msgstr "Се откажувам"
+
+msgid "your_password_has_been_reset"
+msgstr "Вашата лозинка беше предефинирана"
+
+msgid "langSex"
+msgstr "Пол"
+
+msgid "langClass"
+msgstr "Паралелка"
+
+msgid "langEdit"
+msgstr "уредување"
+
+msgid "required"
+msgstr "задолжително"
+
+msgid "langOptionalTextFields"
+msgstr "Незадолжителни полиња"
+
+msgid "langMyProductions"
+msgstr "Мои дела"
+
+msgid "langFileDeleted"
+msgstr "датотеката беше избришана."
+
+msgid "FullUserName"
+msgstr "Целосно име"
+
+msgid "SearchForUser"
+msgstr "Пребарување на корисник"
+
+msgid "SearchButton"
+msgstr "Барај"
+
+msgid "SearchNoResultsFound"
+msgstr "Не се пронајдени резултати"
+
+msgid "UsernameWrong"
+msgstr "Вашето корисничко_име може да содржи само букви, цифри и _."
+
+msgid "PasswordRequestFrom"
+msgstr "Ова е барање на лозинка за e-mail адреса."
+
+msgid "CorrespondsToAccount"
+msgstr "Оваа e-mail адреса одговара на следното корисничко досие."
+
+msgid "CorrespondsToAccounts"
+msgstr "Оваа e-mail адреса одговара на следните кориснички досиеа."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo не може автоматски да ракува со барањето, бидејќи досието има надворешен извор на автентичност. Ве молиме преземете соодветни мерки и известете го корисникот."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo не може автоматски да ракува со барањето, бидејќи најмалку едно од досиеата имаат надворешен извор на автентичност. Ве молиме преземете соодветни мерки за сите досиеа (вклучувајќи ги и тие со автентичност на платформата) и известете ги корисниците."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo не може автоматски да ракува со барањетоза овој тип на досие. Вашето барање беше испратено до управувачот на платформата кој ќе соодветни мерки и ѓе Ве извести за резултатите."
+
+msgid "langphone"
+msgstr "Телефон"
+
+msgid "Unreg"
+msgstr "Одрегистрирање"
+
+msgid "MyProgress"
+msgstr "Мој напредок"
+
+msgid "ProgressIntroduction"
+msgstr "Почнете со избирање на сесии на курсот долу.<br /> Потоа можете да го видите Вашиот напредок за секој курс за кој сте запишани."
+
+msgid "Select"
+msgstr "Избери"
+
+msgid "NeverExpires"
+msgstr "Не истекува никогаш"
+
+msgid "On"
+msgstr "На"
+
+msgid "ExpirationDate"
+msgstr "Датум на истекување"
+
+msgid "ActiveAccount"
+msgstr "Активно досие"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "Вашето досие мора да биде одобрено"
+
+msgid "ApprovalForNewAccount"
+msgstr "Одобрување за ново досие"
+
+msgid "ManageUser"
+msgstr "Раководи со корисникот"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Запиши ги корсиниците на овој курс како учители"
+
+msgid "SendMessage"
+msgstr "Испрати порака"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "Вашата лозинка е кодирана од безбедносни причини. Така, по притискањето на врската ќе Ви биде испратен e-mail со Вашата лозинка."
+
+msgid "UsersUnsubscribed"
+msgstr "Одбраните корисници се одјавени од овој курс."
+

@@ -1,0 +1,315 @@
+msgid "MoveTo"
+msgstr "Translokigi al"
+
+msgid "langDownloadFile"
+msgstr "Alŝuti sekvantan dosieron al la servilo"
+
+msgid "langNameDir"
+msgstr "Nomo de nova dosierujo"
+
+msgid "langSize"
+msgstr "Grando"
+
+msgid "langRename"
+msgstr "Ŝanĝi nomon"
+
+msgid "langCopy"
+msgstr "Kopii kursan enhavon"
+
+msgid "langTo"
+msgstr "al"
+
+msgid "langNoSpace"
+msgstr "La alŝuto malsukcesis. La konservokvoto por via kurso estas superita aŭ ne estas sufiĉa spaco sur via fiksita disko."
+
+msgid "langDownloadEnd"
+msgstr "La alŝuto sukcesis."
+
+msgid "langFileExists"
+msgstr "Neeblas. <br>Jam ekzistas samnoma dosiero."
+
+msgid "langImpossible"
+msgstr "Maleblas"
+
+msgid "langAddComment"
+msgstr "Aldoni/ modifi komentarion"
+
+msgid "langDocCopied"
+msgstr "La dosiero estas kopiita"
+
+msgid "langDocDeleted"
+msgstr "Dosiero/ dosierujo estas forigita."
+
+msgid "langElRen"
+msgstr "Nomo de dosiero/ dosierujo estas ŝanĝita"
+
+msgid "langDirMv"
+msgstr "Dosierujo/ dosiero estas translokita"
+
+msgid "langComMod"
+msgstr "Komentario estas ŝanĝita"
+
+msgid "langViMod"
+msgstr "La videblo estas ŝanĝita."
+
+msgid "langGroupSpace"
+msgstr "Grupspaco"
+
+msgid "langGroupSpaceLink"
+msgstr "Spaco de ĉi-grupo"
+
+msgid "langGroupForumLink"
+msgstr "Forumo de ĉi-grupo"
+
+msgid "langZipNoPhp"
+msgstr "La ZIP-dosiero ne povas enhavi php-dosierojn"
+
+msgid "langUncompress"
+msgstr "Malkunpremi ZIP-dosieron"
+
+msgid "langDownloadAndZipEnd"
+msgstr "ZIP-dosiero estas transsendita kaj malkunpremita"
+
+msgid "langRoot"
+msgstr "bazo"
+
+msgid "CreateDoc"
+msgstr "Nova dokumento"
+
+msgid "langDown"
+msgstr "Malsupren"
+
+msgid "langFileError"
+msgstr "La alŝutenda dosiero estas ne valida."
+
+msgid "langMaxFileSize"
+msgstr "Maksimuma dosiergrando"
+
+msgid "langFileName"
+msgstr "Dosiernomo"
+
+msgid "langNoFileName"
+msgstr "Bonvolu doni dosiernomon"
+
+msgid "langNoText"
+msgstr "Tajpu la tekstan/ HTMLan enhavon ĉi tien"
+
+msgid "langAreYouSureToDelete"
+msgstr "Ĉu vi volas forigi ĉi-dokumenton:"
+
+msgid "langScormcontent"
+msgstr "Tio ĉi estas SCORM-paketo.<br><input type=button name=scormbutton value=\'Ludi\' onclick=\'openscorm()\'>  XX"
+
+msgid "langScormcontentstudent"
+msgstr "Tio ĉi estas Scorm-formata kursos. Por ludi ĝin, klaku ĉi tien: <input type=button name=scormbutton value=Lanĉu! onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Publikigi"
+
+msgid "langMissingImagesDetected"
+msgstr "Mankantaj bildoj detektitaj"
+
+msgid "langCreateDocument"
+msgstr "Nova dokumento"
+
+msgid "langEditDocument"
+msgstr "Ŝanĝi"
+
+msgid "langDocuments"
+msgstr "Dokumentoj"
+
+msgid "langOrganiseDocuments"
+msgstr "Fari enhavotabelon"
+
+msgid "langEditTOC"
+msgstr "Ŝanĝi enhavotabelon"
+
+msgid "langChapter"
+msgstr "Ĉapitro"
+
+msgid "langDocumentList"
+msgstr "Listo de ĉiuj dokumentoj"
+
+msgid "langOrganisationList"
+msgstr "Enhavotabelo"
+
+msgid "langCreationSucces"
+msgstr "La enhavotabelo estas kreita"
+
+msgid "langCanViewOrganisation"
+msgstr "Vi povas ĝin legi:"
+
+msgid "langHere"
+msgstr "Rigardi al enhavotabelo"
+
+msgid "langViewDocument"
+msgstr "Legi"
+
+msgid "langHtmlTitle"
+msgstr "Enhavotabelo"
+
+msgid "langAddToTOC"
+msgstr "Aldoni elementon"
+
+msgid "langAddChapter"
+msgstr "Aldoni ĉapitron"
+
+msgid "langReady"
+msgstr "Preta - krei la enhavotabelon"
+
+msgid "langStoreDocuments"
+msgstr "Konservi dokumentojn"
+
+msgid "langTocDown"
+msgstr "Malsupren"
+
+msgid "langTocUp"
+msgstr "Supren"
+
+msgid "CutPasteLink"
+msgstr "Ne framoj   XX"
+
+msgid "langCreatePath"
+msgstr "Nova lernopado"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "Oogie : Powerpoint konverso"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "Konversaplikado transformanta Powerpoint-prezentadon en lernopadon."
+
+msgid "langAddMetadata"
+msgstr "Alrigardi/ ŝanĝi metadatumojn"
+
+msgid "langGoMetadata"
+msgstr "Ek"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "La kvoto por ĉi-kurso estas"
+
+msgid "langDel"
+msgstr "Forigi"
+
+msgid "langUp"
+msgstr "Supren"
+
+msgid "langDate"
+msgstr "Dato"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Vidigu kursan kvoton"
+
+msgid "CourseCurrentlyUses"
+msgstr "Ĉi kurso nun uzas"
+
+msgid "MaximumAllowedQuota"
+msgstr "Via makximuma rezerva kapacito  XX"
+
+msgid "PercentageQuotaInUse"
+msgstr "Procento de via kvoto nun uzata"
+
+msgid "PercentageQuotaFree"
+msgstr "Disponebla procento de via kvoto"
+
+msgid "CurrentDirectory"
+msgstr "Nuna dosierujo"
+
+msgid "UplUploadDocument"
+msgstr "Alŝuti dokumenton"
+
+msgid "UplPartialUpload"
+msgstr "La dosiero estas nur parte transsendita."
+
+msgid "UplExceedMaxPostSize"
+msgstr "La dosiergrando superas la maksimume permesitan agordon:"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "La dosiergrando superas la maksimume permesitan agordon:"
+
+msgid "UplFileTooBig"
+msgstr "Dosiero tro granda por transsendiĝi!"
+
+msgid "UplUploadFailed"
+msgstr "La transsendo de la dosiero malsukcesis!"
+
+msgid "UplUnableToSaveFile"
+msgstr "La transsendita dosiero ne povis esti konservata (ĉu problemo pri permeso?)!"
+
+msgid "UplNotEnoughSpace"
+msgstr "Ne sufiĉa spaco por konservi ĉi-dosieron!"
+
+msgid "UplNoSCORMContent"
+msgstr "Ne trovita SCORM-enhavo."
+
+msgid "UplZipExtractSuccess"
+msgstr "Zidosiero sukcese elpakita!"
+
+msgid "UplZipCorrupt"
+msgstr "Ne sukcesas malpaki la zip-dosieron (ĉu difektita dosiero?)."
+
+msgid "UplAlreadyExists"
+msgstr "jam ekzistas!"
+
+msgid "UplFileSavedAs"
+msgstr "Dosiero konservata kiel"
+
+msgid "UplFileOverwritten"
+msgstr "estas anstataŭigita."
+
+msgid "CannotCreateDir"
+msgstr "Ne sukcesas krei la dosierujon!"
+
+msgid "UplUpload"
+msgstr "Alŝuti"
+
+msgid "UplWhatIfFileExists"
+msgstr "Kion fari se la dosiero jam ekzistas:"
+
+msgid "UplDoNothing"
+msgstr "Fari nenion"
+
+msgid "UplDoNothingLong"
+msgstr "Ne anstataŭigi ekzistantan dosieron kaj ne renomi ĝin."
+
+msgid "UplOverwrite"
+msgstr "Anstataŭigi"
+
+msgid "UplOverwriteLong"
+msgstr "Anstataŭigi ekzistantan dosieron, se ĝi jam ekzistas  XX"
+
+msgid "UplRename"
+msgstr "Renomi"
+
+msgid "UplRenameLong"
+msgstr "Konservi la dosieron kun nova nomo se ĝi jam ekzistas."
+
+msgid "Metadata"
+msgstr "Metadatumoj"
+
+msgid "DocumentQuota"
+msgstr "Dokumanta kvoto"
+
+msgid "NoDocsInFolder"
+msgstr "Neniu dosiero en ĉi-dosierujo!"
+
+msgid "UploadTo"
+msgstr "Alŝuti al"
+
+msgid "fileModified"
+msgstr "La dosiero estas ŝanĝita"
+
+msgid "DocumentsOverview"
+msgstr "Dokumenta supervido"
+
+msgid "ViewSlideshow"
+msgstr "Rigardi al bildoprojekcio"
+
+msgid "Options"
+msgstr "Opcioj"
+
+msgid "WelcomeOogieConverter"
+msgstr "Bonvenon en la konversaplikado Oogie<br /> 1. Elektu .ppt aŭ .odp -dosieron <br/> 2. Sendu tiun dosieron al Oogie. Ĝi estos transformata en Scorm-lernopadon <br /> 3. Vi povas aldoni aŭdan komentarion al ĉi bildo kaj intermeti testojn inter la diversaj bildoj"
+
+msgid "ConvertToLP"
+msgstr "Konverti en lernopadon"
+

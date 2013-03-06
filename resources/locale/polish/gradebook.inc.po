@@ -1,0 +1,27 @@
+msgid "NewCategory"
+msgstr "Nowa kategoria"
+
+msgid "Weight"
+msgstr "Waga"
+
+msgid "Print"
+msgstr "Drukuj"
+
+msgid "DeleteAll"
+msgstr "Usuń wszystko"
+
+msgid "CategoryAdded"
+msgstr "Dodano kategorię"
+
+msgid "NoUser"
+msgstr "Brak użytkownika"
+
+msgid "StatsStudent"
+msgstr "Statystyki dla"
+
+msgid "Certificates"
+msgstr "Certyfikaty"
+
+msgid "Certificate"
+msgstr "Certyfikat"
+

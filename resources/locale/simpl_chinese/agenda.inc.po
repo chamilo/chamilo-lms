@@ -1,0 +1,225 @@
+msgid "AgendaAdd"
+msgstr "添加新日程"
+
+msgid "ShowAllEvents"
+msgstr "显示所有日程"
+
+msgid "ShowCurrent"
+msgstr "显示本月日程"
+
+msgid "AddCalendarItem"
+msgstr "添加新日程"
+
+msgid "Day"
+msgstr "日"
+
+msgid "Month"
+msgstr "月"
+
+msgid "Year"
+msgstr "年"
+
+msgid "Hour"
+msgstr "ʱ"
+
+msgid "Minutes"
+msgstr "分"
+
+msgid "Detail"
+msgstr "详细内容"
+
+msgid "EditSuccess"
+msgstr "日程已被编辑"
+
+msgid "AddSuccess"
+msgstr "已加入新日程"
+
+msgid "AgendaDeleteSuccess"
+msgstr "日程已被删除"
+
+msgid "NoAgendaItems"
+msgstr "没有事件"
+
+msgid "lang_september"
+msgstr "九月"
+
+msgid "langClassName"
+msgstr "班级名称"
+
+msgid "lang_agenda"
+msgstr "日程"
+
+msgid "ModifyCalendarItem"
+msgstr "修改日程"
+
+msgid "ItemTitle"
+msgstr "日程标题"
+
+msgid "langDay"
+msgstr "日"
+
+msgid "month_default"
+msgstr "默认月"
+
+msgid "langYear"
+msgstr "年"
+
+msgid "year_default"
+msgstr "默认年"
+
+msgid "langHour"
+msgstr "时"
+
+msgid "hour_default"
+msgstr "默认时"
+
+msgid "langMinute"
+msgstr "分"
+
+msgid "langLasting"
+msgstr "持续时间"
+
+msgid "langOldToNew"
+msgstr "旧到新"
+
+msgid "langNewToOld"
+msgstr "新到旧"
+
+msgid "langNow"
+msgstr "现在"
+
+msgid "langAddEvent"
+msgstr "添加事件"
+
+msgid "langDetail"
+msgstr "详细内容"
+
+msgid "MonthView"
+msgstr "按月浏览"
+
+msgid "WeekView"
+msgstr "按周浏览"
+
+msgid "DayView"
+msgstr "按日浏览"
+
+msgid "AddPersonalItem"
+msgstr "添加个人议项"
+
+msgid "Week"
+msgstr "周"
+
+msgid "Date"
+msgstr "日期"
+
+msgid "Time"
+msgstr "时间"
+
+msgid "AddPersonalCalendarItem"
+msgstr "添加个人议项"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "修改个人议项"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "已成功添加个人议项"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "已成功修改个人议项"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "已成功删除个人议项"
+
+msgid "ViewPersonalItem"
+msgstr "浏览个人议项"
+
+msgid "UserGroupFilter"
+msgstr "组/用户过滤"
+
+msgid "ShowAll"
+msgstr "显示所有"
+
+msgid "Print"
+msgstr "打印"
+
+msgid "MyTextHere"
+msgstr "我的文本"
+
+msgid "CopiedAsAnnouncement"
+msgstr "已经复制成为公告"
+
+msgid "NewAnnouncement"
+msgstr "新的公告"
+
+msgid "AddAnnouncement"
+msgstr "添加公告"
+
+msgid "UpcomingEvent"
+msgstr "预定的事件"
+
+msgid "RepeatedEvent"
+msgstr "重复的事件"
+
+msgid "RepeatType"
+msgstr "重复的类型"
+
+msgid "RepeatDaily"
+msgstr "每天"
+
+msgid "RepeatWeekly"
+msgstr "每周"
+
+msgid "RepeatMonthlyByDate"
+msgstr "按日期每月重复"
+
+msgid "RepeatMonthlyByDay"
+msgstr "按天数每月重复"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "按特定的天数每月重复"
+
+msgid "RepeatYearly"
+msgstr "每年"
+
+msgid "RepeatEnd"
+msgstr "重复结束的日期"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "查看初始的事件"
+
+msgid "ICalFileImport"
+msgstr "从Outlook导入"
+
+msgid "AllUsersOfThePlatform"
+msgstr "全部用户"
+
+msgid "GlobalEvent"
+msgstr "世界性的事件"
+
+msgid "ModifyEvent"
+msgstr "修改事件"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "结束日期不能早于开始日期"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "顺序排列"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "降序排列"
+
+msgid "ItemForUserSelection"
+msgstr "用户选择列表"
+
+msgid "IsNotiCalFormatFile"
+msgstr "文件不符合iCal格式"
+
+msgid "RepeatEvent"
+msgstr "重复事件"
+
+msgid "RepeatDate"
+msgstr "重复日期"
+
+msgid "EndDateMustBeMoreThanStartDate"
+msgstr "结束日期需迟于开始日期"
+

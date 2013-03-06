@@ -1,0 +1,124 @@
+msgid "langLinkName"
+msgstr "链接名称"
+
+msgid "langLinkAdd"
+msgstr "添加链接"
+
+msgid "langLinkAdded"
+msgstr "链接已添加。"
+
+msgid "langLinkMod"
+msgstr "修改链接"
+
+msgid "langLinkModded"
+msgstr "链接已修改。"
+
+msgid "langLinkDel"
+msgstr "删除链接"
+
+msgid "langLinkDeleted"
+msgstr "链接已被删除。"
+
+msgid "langLinkDelconfirm"
+msgstr "你要删除这个链接吗？"
+
+msgid "langAllLinksDel"
+msgstr "删除这个分类中的所有链接"
+
+msgid "langCategoryName"
+msgstr "分类名"
+
+msgid "langCategoryAdd"
+msgstr "添加分类"
+
+msgid "langCategoryAdded"
+msgstr "分类已添加。"
+
+msgid "langCategoryModded"
+msgstr "分类已修改。"
+
+msgid "langCategoryDel"
+msgstr "删除分类"
+
+msgid "langCategoryDeleted"
+msgstr "分类及其中所有链接都已被删除。"
+
+msgid "langCategoryDelconfirm"
+msgstr "当您删除分类时，分类中的所有链接也被删除，
+确定要删除此分类及其链接吗？"
+
+msgid "langAllCategoryDel"
+msgstr "删除所有分类及其链接"
+
+msgid "langGiveURL"
+msgstr "请输入链接网址"
+
+msgid "langGiveCategoryName"
+msgstr "请输入分类名称"
+
+msgid "langNoCategory"
+msgstr "无分类"
+
+msgid "showall"
+msgstr "打开所有分类"
+
+msgid "shownone"
+msgstr "关闭所有分类"
+
+msgid "langListDeleted"
+msgstr "列表已删除"
+
+msgid "langAddLink"
+msgstr "添加一个链接"
+
+msgid "langDelList"
+msgstr "删除链接"
+
+msgid "langModifyLink"
+msgstr "修改链接"
+
+msgid "langCsvImport"
+msgstr "导入-CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "导入的CSV文件不能被打开（例如：空或太大）"
+
+msgid "langCsvFileNoSeps"
+msgstr "导入的CSV文件正在使用或 ; 作为行的分隔符"
+
+msgid "langCsvFileNoURL"
+msgstr "导入的CSV文件必须有网址和标题列"
+
+msgid "langCsvFileLine1"
+msgstr "... -第一行="
+
+msgid "langCsvLinesFailed"
+msgstr "导入链接到行失败（无网址或标题）。"
+
+msgid "langCsvLinesOld"
+msgstr "现有链接已更新（相同网址与分类）。"
+
+msgid "langCsvLinesNew"
+msgstr "链接已创建。"
+
+msgid "langCsvExplain"
+msgstr "文件的特征是：  <BLOCKQUOTE><PRE><B>URL</B>;category;<B>title</B>;description;<B>http://www.aaa.org/...</B>;Important links;<B>Name 1</B>;Description 1;<B>http://www.bbb.net/...</B>;;<B>Name 2</B>;\"Description 2\";</PRE></BLOCKQUOTE>如果网页或分类与已经存在的那些链接相同，它的标题和描述已经升级，在其他的情况下新链接已经被创建。<br /><br />粗体=强制，其他领域需添加附加描述。分隔符为：逗号或分号。有的[b]HTML 标签[/b]   可以导入到这些描述中。"
+
+msgid "langLinkUpdated"
+msgstr "链接已更新"
+
+msgid "langAll_Link_Deleted"
+msgstr "链接已删除"
+
+msgid "langOnHomepage"
+msgstr "主页中显示"
+
+msgid "langShowLinkOnHomepage"
+msgstr "在课程主页将链接显示为一个图标"
+
+msgid "langSaveLink"
+msgstr "保存链接"
+
+msgid "langSaveCategory"
+msgstr "保存分类"
+

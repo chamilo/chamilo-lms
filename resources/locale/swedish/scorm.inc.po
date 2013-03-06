@@ -1,0 +1,144 @@
+msgid "langScormVersion"
+msgstr "version"
+
+msgid "langScormRestarted"
+msgstr "Alla lektioner är nu ofullständiga"
+
+msgid "langScormNoNext"
+msgstr "Detta är den sista lektionen."
+
+msgid "langScormNoPrev"
+msgstr "Detta är den första lektionen."
+
+msgid "langScormTime"
+msgstr "Tid"
+
+msgid "langScormNoOrder"
+msgstr "Det finns ingen given ordning, du kan välja vilken lektion du vill."
+
+msgid "langScormScore"
+msgstr "Poäng"
+
+msgid "langScormLessonTitle"
+msgstr "Lektions titel"
+
+msgid "langScormStatus"
+msgstr "Status"
+
+msgid "langScormToEnter"
+msgstr "Att gå in"
+
+msgid "langScormFirstNeedTo"
+msgstr "du behöver först slutföra"
+
+msgid "langScormThisStatus"
+msgstr "Denna lektion är nu"
+
+msgid "langScormClose"
+msgstr "Avbryt"
+
+msgid "langScormRestart"
+msgstr "Starta om"
+
+msgid "langScormCompstatus"
+msgstr "Slutförd"
+
+msgid "langScormIncomplete"
+msgstr "Ej slutförd"
+
+msgid "langScormPassed"
+msgstr "Avklarad"
+
+msgid "langScormFailed"
+msgstr "Ej godkänd"
+
+msgid "langScormPrevious"
+msgstr "Föregående"
+
+msgid "langScormNext"
+msgstr "Nästa"
+
+msgid "langScormTitle"
+msgstr "Chamilo Scorm spelare"
+
+msgid "langScormMystatus"
+msgstr "Min status"
+
+msgid "langScormNoItems"
+msgstr "Detta innehåll innehåller inga objekt."
+
+msgid "langScormNoStatus"
+msgstr "Ingen status för detta innehåll"
+
+msgid "langScormLoggedout"
+msgstr "utloggad från Scorm arean"
+
+msgid "langScormCloseWindow"
+msgstr "Stäng fönster"
+
+msgid "ScormBrowsed"
+msgstr "Läst"
+
+msgid "langScormExitFullScreen"
+msgstr "Tillbaka till normal skärm"
+
+msgid "langScormFullScreen"
+msgstr "Helskärm"
+
+msgid "langScormNotAttempted"
+msgstr "ej försökt"
+
+msgid "langCharset"
+msgstr "Tecken snitt"
+
+msgid "langLocal"
+msgstr "Lokal"
+
+msgid "langRemote"
+msgstr "Fjärr"
+
+msgid "langAutodetect"
+msgstr "Automatisk"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Totalt antal slutförda steg"
+
+msgid "langUnknown"
+msgstr "Okänd"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "Är du säker på att du vill radera stegen?"
+
+msgid "Local"
+msgstr "Lokal"
+
+msgid "Remote"
+msgstr "Fjärr"
+
+msgid "FileToUpload"
+msgstr "SCORM- eller AICC-paket att ladda upp"
+
+msgid "ContentMaker"
+msgstr "Innehållets ursprung"
+
+msgid "ContentProximity"
+msgstr "Kursplacering"
+
+msgid "MoveCurrentChapter"
+msgstr "Flytta detta kapitel"
+
+msgid "UnknownPackageFormat"
+msgstr "Paketets format känns inte igen. Se till att det är välformaterat och inte innehåller fel. Problem kan också uppstå med vissa proprietära zip-format. Försök då att packa om paketet med ett enklare zipprogram (t ex 7zip)."
+
+msgid "Attempt"
+msgstr "Försök"
+
+msgid "MoveTheCurrentForum"
+msgstr "Flytta detta forum"
+
+msgid "WarningWhenEditingScorm"
+msgstr "Varning!<br /> När du ändrar i innehållet för ett SCORM-steg kanske du ändrar rapportdelen för inlärningsvägen eller funktionen i steget."
+
+msgid "ScormUnknownPackageFormat"
+msgstr "Det paket du försöker ladda upp har ett okänt format. Vänligen kontrollera att paketet har format som stöds."
+

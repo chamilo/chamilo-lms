@@ -1,0 +1,333 @@
+msgid "ModifInfo"
+msgstr "Configuración del cursu"
+
+msgid "langModifDone"
+msgstr "Les carauterístiques modificárense"
+
+msgid "langDelCourse"
+msgstr "Esborrar el sitiu web d\'esti cursu"
+
+msgid "langProfessors"
+msgstr "Profesores"
+
+msgid "langFaculty"
+msgstr "Categoría"
+
+msgid "langConfidentiality"
+msgstr "Confidencialidá"
+
+msgid "langPublic"
+msgstr "Entrada pública ensin identificación (dende la páxina d\'entamu del campus)"
+
+msgid "langUnsubscription"
+msgstr "Anular matricula"
+
+msgid "langPrivOpen"
+msgstr "Accesu priváu, matrícula abierta"
+
+msgid "langPrivate"
+msgstr "Priváu - entrada permitida namás a los matriculaos nel cursu"
+
+msgid "langForbidden"
+msgstr "Usté ta ensin rexistrar como responsable d\'esti cursu"
+
+msgid "CourseAccessConfigTip"
+msgstr "Por defeutu el cursu ye públicu, pero definir el nivel de confidencialidá nos botones d\'enriba."
+
+msgid "langOpenToTheWorld"
+msgstr "Abiertu - Entrada autorizada a tol mundu"
+
+msgid "OpenToThePlatform"
+msgstr "Abiertu - entrada permitida namás a los usuarios rexistraos na plataforma"
+
+msgid "langOpenToThePlatform"
+msgstr "Públicu - accesu permitíu namás a los usuarios rexistraos na plataforma"
+
+msgid "langTipLang"
+msgstr "Esti va ser l\'idioma que van ver los visitantes del cursu."
+
+msgid "langVid"
+msgstr "Videu"
+
+msgid "langWork"
+msgstr "Trabayos"
+
+msgid "langProgramMenu"
+msgstr "Programa del cursu"
+
+msgid "langAnnouncement"
+msgstr "Anuncies"
+
+msgid "langExercise"
+msgstr "Exercicios"
+
+msgid "langStats"
+msgstr "Estadístiques"
+
+msgid "langUplPage"
+msgstr "Unviar una páxina y enllazala cola d\'entamu"
+
+msgid "langLinkSite"
+msgstr "Amestar un enllaz web na páxina d\'entamu"
+
+msgid "langCourse"
+msgstr "El cursu"
+
+msgid "langHasDel"
+msgstr "esborróse"
+
+msgid "langBackHome"
+msgstr "Tornar a la páxina d\'entamu de"
+
+msgid "langByDel"
+msgstr "Si esborra\'l sitiu web d\'esti cursu, va esborrar tolos documentos que tien dientro y tolos sos miembros van quedar ensin matrícula nél. <p> ¿ Ta seguru de que quier esborrar esti cursu ?"
+
+msgid "langY"
+msgstr "SI"
+
+msgid "langN"
+msgstr "NON"
+
+msgid "langDepartmentUrl"
+msgstr "URL del departamentu"
+
+msgid "langDepartmentUrlName"
+msgstr "Departamentu"
+
+msgid "langBackupCourse"
+msgstr "Guardar esti cursu"
+
+msgid "langModifGroups"
+msgstr "Grupos"
+
+msgid "langProfessor"
+msgstr "Profesor"
+
+msgid "langGroups"
+msgstr "Grupos"
+
+msgid "langDescriptionCours"
+msgstr "Descripción del cursu"
+
+msgid "langArchiveCourse"
+msgstr "Copia de seguridá del cursu"
+
+msgid "langRestoreCourse"
+msgstr "Restaurar un cursu"
+
+msgid "langRestore"
+msgstr "Restaurar"
+
+msgid "langCreatedIn"
+msgstr "creau en"
+
+msgid "langCreateMissingDirectories"
+msgstr "Crear los direutorios que falten"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Copiar los archivos del cursu"
+
+msgid "langDisk_free_space"
+msgstr "espaciu llibre"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Crear una copia de seguridá de los archivos"
+
+msgid "langFileCopied"
+msgstr "archivu copiáu"
+
+msgid "langArchiveLocation"
+msgstr "Allugamientu del archivu"
+
+msgid "langSizeOf"
+msgstr "tamañu de"
+
+msgid "langArchiveName"
+msgstr "Nome del archivu"
+
+msgid "langBackupSuccesfull"
+msgstr "Copia de seguridá iguada"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Copia de seguridá de los datos del cursu na base datos principal"
+
+msgid "langBUUsersInMainBase"
+msgstr "Copia de seguridá de los datos de los usuarios na base datos principal"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Copia de seguridá de los datos de les anuncies na base datos principal"
+
+msgid "langBackupOfDataBase"
+msgstr "Copia de seguridá de la base datos"
+
+msgid "langCreationDate"
+msgstr "Creáu"
+
+msgid "langExpirationDate"
+msgstr "Acabáu"
+
+msgid "langPostPone"
+msgstr "Aplazáu"
+
+msgid "langLastEdit"
+msgstr "Última edición"
+
+msgid "langLastVisit"
+msgstr "Última visita"
+
+msgid "langSubscription"
+msgstr "Matriculación"
+
+msgid "langCourseAccess"
+msgstr "Entrada al cursu"
+
+msgid "langConfirmBackup"
+msgstr "¿ De verdá quier facer una copia de seguridá del cursu ?"
+
+msgid "langCreateSite"
+msgstr "Crear un cursu"
+
+msgid "langRestoreDescription"
+msgstr "El cursu ta nun archivu que se pue seleicionar embaxu. <br><br>Si calca en \'Restaurar\', l\'archivu va descomprimise y el cursu va volver crease."
+
+msgid "langRestoreNotice"
+msgstr "Esti script nun permite restaurar de manera automática los usuarios, pero los datos guardaos de \'usuarios.csv\' son bastantes pal alministrador."
+
+msgid "langAvailableArchives"
+msgstr "Llistáu d\'archivos disponible"
+
+msgid "langNoArchive"
+msgstr "Nun escoyó nengún archivu"
+
+msgid "langArchiveNotFound"
+msgstr "Nun s\'atopó nengún archivu"
+
+msgid "langArchiveUncompressed"
+msgstr "Descomprimióse y instalóse l\'archivu."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "L\'archivu \'usuarios.csv\' allugóse dientro la ferramienta documentos."
+
+msgid "langBackH"
+msgstr "tornar a la páxina d\'entamu"
+
+msgid "langOtherCategory"
+msgstr "Otra categoría"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Los usuarios puen anular la so matrícula nesti cursu"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Los usuarios nun puen anular la so matrícula nesti cursu"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Pelláu - entrada permitida namás al alministrador del cursu"
+
+msgid "CourseVisibilityClosed"
+msgstr "Peslláu - nun hai accesu a esti cursu"
+
+msgid "CourseVisibilityModified"
+msgstr "Modificáu (axustes más detallaos especificaos pel traviés de roles-permisos del sistema)"
+
+msgid "WorkEmailAlert"
+msgstr "Avisar per corréu electrónicu del unvíu d\'un trabayu"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Activar l\'avisu per corréu electrónicu del unvíu d\'un trabayu nuevu"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Desactivar l\'avisu per corréu electrónicu del unvíu d\'un trabayu nuevu"
+
+msgid "DropboxEmailAlert"
+msgstr "Avisar per corréu electrónicu si se recibe un recáu nel Buzón de llabores/deberes"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Activar l\'avisu per corréu electrónicu de que se recibieren unvíos nel Buzón de llabores/deberes"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Desactivar l\'avisu per corréu electrónicu de que se recibieren unvíos nel Buzón de llabores/deberes"
+
+msgid "AllowUserEditAgenda"
+msgstr "Dar permisu pa que los usuarios editen l\'axenda del cursu"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Activar la edición de l\'axenda del cursu polos usuarios"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Desactivar la edición de l\'axenda del cursu polos usuarios"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Dar permisu pa que los usuarios editen les anuncies del cursu"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Dar permisu pa que los usuarios editen les anuncies"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Desactivar la edición d\'anuncies polos usuarios"
+
+msgid "OrInTime"
+msgstr "o dientro\'l plazu"
+
+msgid "CourseRegistrationPassword"
+msgstr "Seña de rexistru nel cursu"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Calque equí pa esborrar dafechu\'l cursu nel servidor....<br><br>Esta función debe usase con munchu cuidáu."
+
+msgid "langDescriptionCopyCourse"
+msgstr "Chamilo permite copiar, parcial o dafechu, un cursu n\'otru. Pa facelo\'l cursu de destín tien de tar vacíu. <br><br>La única condición ye tener un cursu que tenga dalgunos documentos, anuncies, foros... y un segundu cursu que nun tenga los elementos del primeru."
+
+msgid "DescriptionRecycleCourse"
+msgstr "Esta utilidá esanicia dafechu o parcialmente los conteníos de les distintes ferramientes d\'un cursu. Esborra documentos, foros, enllaces.... Esta utilidá pue executase a la fin d\'una aición formativa o d\'un añu académicu. Enantes \"reciclar\" tenga cuidáu y faiga una copia seguridá completa del cursu."
+
+msgid "QuizEmailAlert"
+msgstr "Avisar per corréu electrónicu si s\'unvía un exerciciu nuevu"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Activar l\'avisu per corréu electrónicu de que s\'unviaren les soluciones a un exerciciu."
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Desactivar l\'avisu per corréu electrónicu de que s\'unviaren les soluciones d\'un exerciciu"
+
+msgid "AllowUserImageForum"
+msgstr "Imaxe de los usuarios nel foru"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Amuesa les imáxenes de los usuarios nel foru"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Escuende les imáxenes de los usuarios nel foru"
+
+msgid "AllowLearningPathTheme"
+msgstr "Dar permisu pa que los temes apaezan nos Itinerarios d\'aprendizaxe"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "Dar permisu"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "Permisu denegáu"
+
+msgid "ConfigChat"
+msgstr "Configuración del chat"
+
+msgid "AllowOpenchatWindow"
+msgstr "Abrir el chat nuna ventana nueva"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "Activar abrir el chat nuna ventana nueva"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "Desactivar abrir el chat nuna ventana nueva"
+
+msgid "NewUserEmailAlert"
+msgstr "Avisar per e-mail de qu\'un usuariu nuevu automatriculóse."
+
+msgid "NewUserEmailAlertEnable"
+msgstr "Activar l\'avisu per e-mail pal profesor de qu\'un usuariu nuevu automatriculóse."
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "Activar l\'avisu per e-mail pal profesor y pa los tutores de qu\'un usuariu nuevu automatriculóse."
+
+msgid "NewUserEmailAlertDisable"
+msgstr "Desactivar l\'avisu per e-mail de qu\'un usuariu nuevu automatriculóse nel cursu."
+

@@ -1,0 +1,51 @@
+msgid "select"
+msgstr "Select"
+
+msgid "square"
+msgstr "Square"
+
+msgid "circle"
+msgstr "Elipse"
+
+msgid "poly"
+msgstr "Polygon"
+
+msgid "status1"
+msgstr "Draw a hotspot."
+
+msgid "status2_poly"
+msgstr "Use right-click to close the polygon."
+
+msgid "status2_other"
+msgstr "Release the mousebutton to save the hotspot."
+
+msgid "status3"
+msgstr "Hotspot saved"
+
+msgid "exercise_status_1"
+msgstr "Status: Question not yet terminated"
+
+msgid "exercise_status_2"
+msgstr "Click to submit your answers to the question"
+
+msgid "exercise_status_3"
+msgstr "Status: Question terminated"
+
+msgid "showUserPoints"
+msgstr "Show/Hide userclicks"
+
+msgid "showHotspots"
+msgstr "Show / Hide hotspots"
+
+msgid "labelPolyMenu"
+msgstr "Close polygon"
+
+msgid "triesleft"
+msgstr "Attempts left"
+
+msgid "exeFinished"
+msgstr "All answers done. You can now rearrange the hotspots or click button below image to submit"
+
+msgid "nextAnswer"
+msgstr "Now click on: &done=done"
+

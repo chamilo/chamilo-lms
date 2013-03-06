@@ -1,0 +1,394 @@
+msgid "langShouldBeCSVFormat"
+msgstr "Dosya CSV formatında olmalıdır.Boşluk bırakmayın, yapı kesinlikle şu şekilde olmalıdır:"
+
+msgid "langTracking"
+msgstr "İzleme"
+
+msgid "langEnter2passToChange"
+msgstr "Şifre değişikliği için yeni şifrenizi iki kere girmelisiniz, aksi taktirde bu alanı boş bırakınız."
+
+msgid "langAuthInfo"
+msgstr "Giriş"
+
+msgid "langUpdateImage"
+msgstr "Resmi değiştir"
+
+msgid "langImageWrong"
+msgstr "Dosya boyutunun olabileceği büyüklük:"
+
+msgid "langAddImage"
+msgstr "Resim"
+
+msgid "langCourseManager"
+msgstr "Öğretmen"
+
+msgid "NewPass"
+msgstr "Yeni şifre"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "Şifreniz uyumlu değil"
+
+msgid "password_request"
+msgstr "Sistemimizdeki Şifrenizi değiştirmek istemişsiniz, eğer böyle bir istekte bulunmadınız ise bu postayı dikkate almayın lütfen. Şifrenizi değiştirmek istiyorsanız ilgili bağlantıya tıklayınız."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Şifreniz e-posta adresinize gönderildi."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Kayıt esnasında belirttiğiniz e-posta adresinizi yazın lütfen. Şifreniz e-posta adresinize gönderilecek."
+
+msgid "langLogin"
+msgstr "Giriş"
+
+msgid "langAction"
+msgstr "Aksiyon"
+
+msgid "langPreserved"
+msgstr "Korundu"
+
+msgid "langDeleted"
+msgstr "Silindi"
+
+msgid "langAdded"
+msgstr "Eklendi"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Kullanıcı abonelik iptalini onayla"
+
+msgid "langCourseName"
+msgstr "Dersin adı"
+
+msgid "langSubscribe"
+msgstr "Abone ol"
+
+msgid "langSee"
+msgstr "Git"
+
+msgid "langLastVisits"
+msgstr "Son ziyaretim"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Eğer dersinize bir kullanıcı listesi eklemek istiyorsanız yöneticinizle irtibata geçiniz."
+
+msgid "langPassTooEasy"
+msgstr "bu �ifre �ok basit. B�yle bir �ey �nerilir"
+
+msgid "langGroupUserManagement"
+msgstr "Grup yönetimi"
+
+msgid "langAddedToCourse"
+msgstr "kampüse kaydolmuş fakat bu derse kaydedilmemişti. Şimdi kaydedildi."
+
+msgid "langUserAlreadyRegistered"
+msgstr "Bu isim veya soyisimde bir başka kullanıcı var. İki kere kaydedilemez."
+
+msgid "langBackUser"
+msgstr "Kullanıcı listesine dön"
+
+msgid "langUserOneByOneExplanation"
+msgstr "İlgili kişi, kullanıcı adı ve şifresinin bulunduğu bir eposta teyidi alacaktır"
+
+msgid "langGiveTutor"
+msgstr "Eğitmen yap"
+
+msgid "langRemoveRight"
+msgstr "Bu yetkiyi kaldır"
+
+msgid "langGiveAdmin"
+msgstr "Yönetici yap"
+
+msgid "langUserNumber"
+msgstr "numara"
+
+msgid "langDownloadUserList"
+msgstr "Listeyi yükle"
+
+msgid "langSend"
+msgstr "Gönder"
+
+msgid "langUserAddExplanation"
+msgstr "gönderilecek dosyadaki her satır şu 5 alanı kapsamak zorundadır: 		<b>Adı   Soyadı   		Kullanıcı adı   Şifresi 		  Epostası</b>  tab ile ayrılmış ve bu sırada olşmalıdır.		Kullanıcılar, kullanıcı adı ve şifrelerinin gönderildiği bir eposta teyidi alacaklardır."
+
+msgid "langUserMany"
+msgstr "metin dosyasından kullanıcı aktar"
+
+msgid "langOneByOne"
+msgstr "Kullanıcı ekle"
+
+msgid "langNow"
+msgstr "þimdi"
+
+msgid "langTutor"
+msgstr "Eğitmen"
+
+msgid "langTitular"
+msgstr "Sorumlu"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>Ders listesini değiştir</big><br><br>Almak istediğiniz dersleri şeçiniz.<br>İstemediğiniz dersleri iptal ediniz.<br> Sonra listenin altındaki tamam tuşunu tıklayınız"
+
+msgid "langStudent"
+msgstr "Öğrenci"
+
+msgid "langImportUserList"
+msgstr "Kullanıcıların listesi içeri al"
+
+msgid "langAddAU"
+msgstr "Kullanıcı ekle"
+
+msgid "langAddedU"
+msgstr "eklendi. Kullanıcı adını bildiren bir email gönderildi."
+
+msgid "langTheU"
+msgstr "Kullanıcı"
+
+msgid "langRegYou"
+msgstr " bu derse sizi kaydetmiştir"
+
+msgid "langOneResp"
+msgstr "Ders yöneticilerinden biri"
+
+msgid "langTaken"
+msgstr " daha önce alınmıştır. Başka bir ad yazınız."
+
+msgid "langUserNo"
+msgstr "Seçtiğiniz kullanıcı adı"
+
+msgid "langFilled"
+msgstr "Bazı alanları boş bıraktınız."
+
+msgid "langInC"
+msgstr "bu derste"
+
+msgid "langRole"
+msgstr "Rolü"
+
+msgid "UserPicture"
+msgstr "Resim"
+
+msgid "langProfileReg"
+msgstr "Yeni profiliniz kaydedildi"
+
+msgid "langEmailWrong"
+msgstr "Eposta adresi eksik veya geçersiz"
+
+msgid "langUserTaken"
+msgstr "Bu kullan�c� ad� daha �nce al�nm��t�r."
+
+msgid "langFields"
+msgstr "Bazı alanları boş bıraktınız"
+
+msgid "langAgain"
+msgstr "Tekrar deneyin!"
+
+msgid "langPassTwo"
+msgstr "İki farklı şifre yazdınız"
+
+msgid "langViewProfile"
+msgstr "e-portföyümü göster"
+
+msgid "langModifProfile"
+msgstr "Profilimi düzenle"
+
+msgid "langIsReg"
+msgstr "Değişiklikleriniz kaydedildi"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Artık ilk dersinizi yaratabilirsiniz"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Artık, görmek istediğiniz dersleri listeden seçebilirsiniz"
+
+msgid "langMailHasBeenSent"
+msgstr "Kullanıcı adınızı ve parolanızı hatırlamanıza yardımcı olacak email, email adresinize gönderilmiştir."
+
+msgid "langPersonalSettings"
+msgstr "Kişisel ayarlarınız kaydedildi, kullanıcı adınız ve şifreniz eposta adresinize gönderildi. Ayrıca Ders eğitmenleri tarafından yapılan duyurular da bu adresinize gönderilecektir.</p>Şimdi girmek istediğiniz dersi listeden seçebilirsiniz."
+
+msgid "langManager"
+msgstr "Yönetici"
+
+msgid "langFormula"
+msgstr "Merhaba, Ders Yetkilisi"
+
+msgid "langProblem"
+msgstr "Herhangi bir problem durumunda irtibata geçeceğiniz kişi:"
+
+msgid "langIs"
+msgstr "dır"
+
+msgid "langAddress"
+msgstr "Adres"
+
+msgid "langSettings"
+msgstr "Kayıt bilgileriniz şunlardır:
+Username:"
+
+msgid "langYouAreReg"
+msgstr "Kaydolduğunuz ders:"
+
+msgid "langYourReg"
+msgstr "Kaydınız"
+
+msgid "langUserFree"
+msgstr "Bu kullan�c� ad� daha �nce al�nm��t�r. Geri d�n�p ba�ka bir ad yaz�n�z."
+
+msgid "langEmptyFields"
+msgstr "Bazı alanları boş bıraktınız. Geri dönüp doldurunuz."
+
+msgid "langPassTwice"
+msgstr "Şifrenizi farklı yazdınız. Geri dönüp tekrar yazınız."
+
+msgid "langRegAdmin"
+msgstr "Hoca"
+
+msgid "langRegStudent"
+msgstr "Öğrenci"
+
+msgid "langConfirmation"
+msgstr "Şifrenizi tekrar yazınız"
+
+msgid "langPass"
+msgstr "Şifre"
+
+msgid "langSurname"
+msgstr "Soyadınız"
+
+msgid "langRegistration"
+msgstr "Kayıt"
+
+msgid "langYourAccountParam"
+msgstr "Bağlantıda kullanılacak bilgileriniz"
+
+msgid "langLoginRequest"
+msgstr "Giriş isteği"
+
+msgid "langDefineHeadings"
+msgstr "Başlıkları Tanımla"
+
+msgid "langCourseAdministratorOnly"
+msgstr "sadece öğretmen"
+
+msgid "langLostPassword"
+msgstr "Kayıp Şifre"
+
+msgid "langAdminOfCourse"
+msgstr "Ders Yetkilisi"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Ders kullanıcısı"
+
+msgid "langIsTutor"
+msgstr "Özel Ders"
+
+msgid "langParamInTheCourse"
+msgstr "Dersteki statü"
+
+msgid "langMember"
+msgstr "üye"
+
+msgid "langLock"
+msgstr "kilitli"
+
+msgid "langUnlock"
+msgstr "kilitli değil"
+
+msgid "langHaveNoCourse"
+msgstr "ders bulunmuyor"
+
+msgid "langManage"
+msgstr "Öğretim yönetimi"
+
+msgid "langAdministrationTools"
+msgstr "Yönetim Araçları"
+
+msgid "langUserProfileReg"
+msgstr "Kullanıcı e-portföyü kaydedildi"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Bu e-mail adresiyle bir kullanıcı kayıtlı değil."
+
+msgid "langCourses4User"
+msgstr "Bu kullanıcının dersleri"
+
+msgid "langCoursesByUser"
+msgstr "Kullanıcılar tarafından hazırlanan dersler"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Kullanıcıları bu derse kaydet"
+
+msgid "langPreced100"
+msgstr "Önceki 100"
+
+msgid "langAddmore"
+msgstr "Kayıtlı kullanıcıları ekle"
+
+msgid "langAddback"
+msgstr "Kullanıcı listesine git"
+
+msgid "langreg"
+msgstr "Kayıt ol"
+
+msgid "langQuit"
+msgstr "Çık"
+
+msgid "your_password_has_been_reset"
+msgstr "Şifreniz sıfırlandı"
+
+msgid "langSex"
+msgstr "Cinsiyet"
+
+msgid "langClass"
+msgstr "Sınıf"
+
+msgid "langEdit"
+msgstr "düzenle"
+
+msgid "required"
+msgstr "gerekli"
+
+msgid "langOptionalTextFields"
+msgstr "Isteğe bağlı alanlar"
+
+msgid "langMyProductions"
+msgstr "Prodüksiyonlarım"
+
+msgid "langFileDeleted"
+msgstr "Dosya silindi"
+
+msgid "FullUserName"
+msgstr "Tam isim"
+
+msgid "SearchForUser"
+msgstr "Kullanıcı ara"
+
+msgid "SearchButton"
+msgstr "Ara"
+
+msgid "SearchNoResultsFound"
+msgstr "Aramada hiç bir sonuç bulunamadı"
+
+msgid "UsernameWrong"
+msgstr "Kullanıcı adı sadece harfler ve rakamlardan oluşmalıdır ...."
+
+msgid "PasswordRequestFrom"
+msgstr "E-Posta adresi için şifre isteği"
+
+msgid "CorrespondsToAccount"
+msgstr "Bu e-posta adresi aşağıdaki kullanıcıya aittir."
+
+msgid "CorrespondsToAccounts"
+msgstr "Bu e-posta adresi aşağıdaki kullanıcılara aittir."
+
+msgid "langphone"
+msgstr "Telefon"
+
+msgid "ActiveAccount"
+msgstr "Hesap"
+
+msgid "User"
+msgstr "Kullanıcı"
+
+msgid "LostPass"
+msgstr "Şifrenizi mi unuttunuz ?"
+

@@ -1,0 +1,273 @@
+msgid "ForumDeleted"
+msgstr "Fórum törölve"
+
+msgid "ForumCategoryDeleted"
+msgstr "Fórum kategória törölve"
+
+msgid "ForumLocked"
+msgstr "Fórum blokkolva"
+
+msgid "Forum"
+msgstr "Fórumok"
+
+msgid "AddForumCategory"
+msgstr "Új fórum kategória hozzáadása"
+
+msgid "AddForum"
+msgstr "Új fórum hozzáadása"
+
+msgid "Topics"
+msgstr "Témák"
+
+msgid "Posts"
+msgstr "Üzenetek"
+
+msgid "LastPosts"
+msgstr "Utolsó Üzenet"
+
+msgid "Message"
+msgstr "üzenet"
+
+msgid "NoForumInThisCategory"
+msgstr "Nincs fórum ebben a kategóriában"
+
+msgid "InForumCategory"
+msgstr "Létrehozás a kategóriában"
+
+msgid "AllowAnonymousPosts"
+msgstr "Engedélyez névtelen üzeneteket?"
+
+msgid "StudentsCanEdit"
+msgstr "Módosíthatják a hallgatók saját üzeneteiket?"
+
+msgid "ApprovalDirect"
+msgstr "Engedélyezett / Közvetlen Üzenet"
+
+msgid "AllowNewThreads"
+msgstr "Engedélyezi a hallgatóknak új témák létrehoását"
+
+msgid "DefaultViewType"
+msgstr "Alapértelmezett megjelenítési forma"
+
+msgid "GroupSettings"
+msgstr "Csoport beállítások"
+
+msgid "NotAGroupForum"
+msgstr "Nem csoporthoz tartozó fórum"
+
+msgid "PublicPrivateGroupForum"
+msgstr "Publikus vagy privát csoport fórum?"
+
+msgid "Public"
+msgstr "Az összes kurzusfelhasználó számára"
+
+msgid "Private"
+msgstr "Csak csoporttagoknak"
+
+msgid "NewPostStored"
+msgstr "Üzenete mentésre került"
+
+msgid "ReturnTo"
+msgstr "Most visszatérhet ide:"
+
+msgid "Or"
+msgstr "vagy"
+
+msgid "ReplyToThread"
+msgstr "Válasz erre a témára"
+
+msgid "ReplyToMessage"
+msgstr "Válasz erre az üzenetre"
+
+msgid "QuoteMessage"
+msgstr "Üzenet idézése"
+
+msgid "NewTopic"
+msgstr "Új téma"
+
+msgid "Replies"
+msgstr "Válaszok"
+
+msgid "Views"
+msgstr "Nézetek"
+
+msgid "LastPost"
+msgstr "Utolsó üzenet"
+
+msgid "Quoting"
+msgstr "Idézve"
+
+msgid "NotifyByEmail"
+msgstr "Kérek email értesítést, ha valaki reagál"
+
+msgid "StickyPost"
+msgstr "Ez egy ragadós üzenet (mindíg a lista eleján szerepel különleges ikonnal)"
+
+msgid "ReplyShort"
+msgstr "Vá:"
+
+msgid "DeletePost"
+msgstr "Biztos benne, hogy törölni szeretné ezt az üzenetet? Az üzenet törlésével a rá érkezett válaszokat is törölni fogja. A téma szerinti megjelenítés módban ellenőrizheti, hogy milyen üzeneteket töröl ezzel egyidejűleg."
+
+msgid "Locked"
+msgstr "Zárolva: a hallgatók a továbbiakban nem küldhetnek üzeneteket erre a fórum kategóriára, de továbbra is olvashatják a korábban elküldött üzeneteket."
+
+msgid "Unlocked"
+msgstr "Nincs zárolva: a hallgatók küldhetnek új üzeneteket a kategóriára, fórumra, vagy témára"
+
+msgid "Flat"
+msgstr "Alap"
+
+msgid "Threaded"
+msgstr "Téma szerinti"
+
+msgid "Nested"
+msgstr "Beágyazott"
+
+msgid "FlatView"
+msgstr "Alapnézet"
+
+msgid "ThreadedView"
+msgstr "Témák szerint nézet"
+
+msgid "NestedView"
+msgstr "Kevert nézet"
+
+msgid "Structure"
+msgstr "Struktúra"
+
+msgid "ForumCategoryAdded"
+msgstr "A fórum kategória hozzáadva"
+
+msgid "ForumCategoryEdited"
+msgstr "A fórum kategória módosítva"
+
+msgid "ForumAdded"
+msgstr "Fórum hozzáadva"
+
+msgid "ForumEdited"
+msgstr "Fórum módosítva"
+
+msgid "NewThreadStored"
+msgstr "Új téma hozzáadva"
+
+msgid "Approval"
+msgstr "Engedélyezés"
+
+msgid "Direct"
+msgstr "Közvetlen"
+
+msgid "ForGroup"
+msgstr "Csoportnak"
+
+msgid "ThreadLocked"
+msgstr "Téma zárolva."
+
+msgid "NotAllowedHere"
+msgstr "Ide nem tekinthet be."
+
+msgid "ReplyAdded"
+msgstr "A válasz házzáadva"
+
+msgid "EditPost"
+msgstr "Üzenet szerkesztése"
+
+msgid "EditPostStored"
+msgstr "Az üzenet módosítva"
+
+msgid "NewForumPost"
+msgstr "Új üzenet az alábbi fórumban:"
+
+msgid "YouWantedToStayInformed"
+msgstr "Email érteítést kért arra az esetre, ha valaki az alábbi témában reagál:"
+
+msgid "MessageHasToBeApproved"
+msgstr "Üzenetét engedélyezni kell, mielőtt a mások is hozzáférnek."
+
+msgid "AllowAttachments"
+msgstr "Csatolások engedélyezése"
+
+msgid "EditForumCategory"
+msgstr "Fórum kategória szerkesztése"
+
+msgid "MovePost"
+msgstr "Üzenet áthelyezése"
+
+msgid "MoveToThread"
+msgstr "Áthelyezési ebbea a szálba"
+
+msgid "ANewThread"
+msgstr "Új szálba"
+
+msgid "Reply"
+msgstr "Válasz"
+
+msgid "DeleteForum"
+msgstr "Törli a fórumot?"
+
+msgid "DeleteForumCategory"
+msgstr "Törli a fórum kategóriát?"
+
+msgid "Lock"
+msgstr "Lezár"
+
+msgid "Unlock"
+msgstr "Megnyit"
+
+msgid "MoveThread"
+msgstr "Szál áthelyezése"
+
+msgid "PostVisibilityChanged"
+msgstr "Üzenet láthatósága megváltoztatva"
+
+msgid "PostDeleted"
+msgstr "Üzenet törölve"
+
+msgid "MakeInvisible"
+msgstr "Ne legyen látható"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "Ez a téma itt található"
+
+msgid "MakeVisible"
+msgstr "Tegyük láthatóvá"
+
+msgid "DeleteCompleteThread"
+msgstr "Törölni akarja az egész fórum szálat?"
+
+msgid "PostDeletedSpecial"
+msgstr "A különleges üzenet törölve"
+
+msgid "ThreadDeleted"
+msgstr "Szál törölve"
+
+msgid "NextMessage"
+msgstr "Következő üzenet"
+
+msgid "PrevMessage"
+msgstr "Előző üzenet"
+
+msgid "FirstMessage"
+msgstr "Első üzenet"
+
+msgid "LastMessage"
+msgstr "Utolsó üzenet"
+
+msgid "ForumSearch"
+msgstr "Keresés a Fórumban"
+
+msgid "SearchTerm"
+msgstr "Keresett szó"
+
+msgid "ForumSearchResults"
+msgstr "A  Fórumban keresés eredménye"
+
+msgid "ForumSearchInformation"
+msgstr "Több szóra is kereshet, ha + jellel kezdi azokat"
+
+msgid "YouWillBeNotifiedOfNewPosts"
+msgstr "E-mailben értesítést fog kapni az új hozzászólásokról."
+
+msgid "YouWillNoLongerBeNotifiedOfNewPosts"
+msgstr "Ezután e-mailben nem fog értesítést fog kapni az új hozzászólásokról."
+

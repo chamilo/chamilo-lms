@@ -1,0 +1,276 @@
+msgid "Camera"
+msgstr "كاميرا"
+
+msgid "Microphone"
+msgstr "مايكروفون"
+
+msgid "Name"
+msgstr "الإسم"
+
+msgid "DeleteStream"
+msgstr "حذف"
+
+msgid "Progress"
+msgstr "الإجراء"
+
+msgid "Play"
+msgstr "تشغيل"
+
+msgid "Stop"
+msgstr "توقف"
+
+msgid "Record"
+msgstr "تسجيل"
+
+msgid "NoFileAvailable"
+msgstr "عدم توفر أي ملف"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "التسجيل فقط للأساتذة"
+
+msgid "UsersNow"
+msgstr "المستخدمون الحاليون"
+
+msgid "StartConference"
+msgstr "ابدا الاتصال"
+
+msgid "MyName"
+msgstr "اسمي"
+
+msgid "OrganisationSVideoconference"
+msgstr "مؤتمر فيديو دوكيوس"
+
+msgid "ImportPresentation"
+msgstr "استيراد عرض تقديمي"
+
+msgid "RefreshList"
+msgstr "جدد اللائحة"
+
+msgid "GoToTop"
+msgstr "اذهب الى أعلى"
+
+msgid "NewPoll"
+msgstr "استبيان جديد"
+
+msgid "CreateNewPoll"
+msgstr "انشاء استبيان جديد لهذه الغرفة"
+
+msgid "Question"
+msgstr " سؤال"
+
+msgid "PollType"
+msgstr "نوع الاستبيان"
+
+msgid "Create"
+msgstr "إنشاء"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "معلومة: كل مستخدم متصل في هذه الغرفة سيحصل على اشعار لهذه الاستبانة الجديدة ."
+
+msgid "YesNo"
+msgstr "نعم / لا"
+
+msgid "Numeric1To10"
+msgstr "الأعداد واحد الى عشرة"
+
+msgid "Poll"
+msgstr "استبيان"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "يجب عليك أن تصبح وسيطا في هذه الغرفة كي يمكنك عمل استبيان"
+
+msgid "YourVoteHasBeenSent"
+msgstr "لقد تم ارسال تصويتك"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "لقد صوت الآن لهذا الاستفتاء"
+
+msgid "VoteButton"
+msgstr "تصويت!"
+
+msgid "YourAnswer"
+msgstr "اجابتك:"
+
+msgid "Yes"
+msgstr " نعم"
+
+msgid "No"
+msgstr " لا"
+
+msgid "WantsToKnow"
+msgstr "يريد أن يعرف :"
+
+msgid "PollResults"
+msgstr "نتائج الاستبيان"
+
+msgid "Votes"
+msgstr "التصويتات:"
+
+msgid "Result"
+msgstr "نتيجة"
+
+msgid "ThereIsNoPoll"
+msgstr "ليس هناك استبيان"
+
+msgid "MeetingMode"
+msgstr "اجتماع حد أعلى 4 مقاعد"
+
+msgid "ConferenceMaxSeats"
+msgstr "اتصال حد أعلى 50 مقعدا"
+
+msgid "Mode"
+msgstr "نمط"
+
+msgid "RemainingSeats"
+msgstr "المقاعد المتبقية"
+
+msgid "AlreadyIn"
+msgstr "بالفعل موجود"
+
+msgid "CheckIn"
+msgstr "افحص"
+
+msgid "TheModeratorHasLeft"
+msgstr "الوسيط لهذا المؤتمر غادر الغرفة"
+
+msgid "SystemMessage"
+msgstr "رسالة نظامِ"
+
+msgid "ChooseDevices"
+msgstr "اختر أجهزة"
+
+msgid "ChooseCam"
+msgstr "اختر الكاميرا"
+
+msgid "ChooseMic"
+msgstr "اختر المايكروفون"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "عليك إعادة الاتصال كي تكون التغييرات فعالة"
+
+msgid "ChangeSettings"
+msgstr "تغيير الاعدادات"
+
+msgid "Course"
+msgstr " مقرر"
+
+msgid "CourseLanguage"
+msgstr "لغة المقرر"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "أكد مسح اللوحة البيضاء"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "هل يجب مسح اللوحة قبل إضافة صورة جديدة"
+
+msgid "DontAskMeAgain"
+msgstr "لا تسألني مجددا"
+
+msgid "EditSettings"
+msgstr "تعديل الاعدادات"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "احصل على توكيد قبل مسح اللوحة البيضاء"
+
+msgid "UserInfo"
+msgstr "معلومات المستخدم"
+
+msgid "ClearDrawArea"
+msgstr "مسح منطقة الرسم"
+
+msgid "Undo"
+msgstr "تراجع"
+
+msgid "Redo"
+msgstr "اعادة"
+
+msgid "SelectAnObject"
+msgstr "اختر موضوعا"
+
+msgid "Text"
+msgstr "نص"
+
+msgid "Paint"
+msgstr "رسام"
+
+msgid "DrawLine"
+msgstr "رسم خط"
+
+msgid "DrawUnderline"
+msgstr "رسم خط تحتي"
+
+msgid "Rectangle"
+msgstr "مستطيل"
+
+msgid "Elipse"
+msgstr "حذف"
+
+msgid "Arrow"
+msgstr "سهم"
+
+msgid "DeleteChosenItem"
+msgstr "حذف الفقرة المختارة"
+
+msgid "ApplyForModeration"
+msgstr "قدّمْ طلب للحصول على الإعتدالِ"
+
+msgid "Apply"
+msgstr "تطبيق"
+
+msgid "BecomeModerator"
+msgstr "يصيح وسيط"
+
+msgid "Close"
+msgstr "اغلق"
+
+msgid "Italic"
+msgstr "خط مائل"
+
+msgid "Bold"
+msgstr "عريض"
+
+msgid "Waiting"
+msgstr "انتظار"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "المستخدم يريد ان يتقدم بطلب التوسط"
+
+msgid "Accept"
+msgstr "قبول"
+
+msgid "Reject"
+msgstr "رفض"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "ارسال طلب للمستخدميين الاتيين"
+
+msgid "Accepted"
+msgstr "مقبول"
+
+msgid "Rejected"
+msgstr "مرفوض"
+
+msgid "ChangeModerator"
+msgstr "تغيير الوسيط"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "أنت لا تدير هذا المقرر"
+
+msgid "Moderator"
+msgstr "الوسيط"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "المساحة ممتلئة . نأسف حاول لاحقا ."
+
+msgid "Loading"
+msgstr "تحميل"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "فضلا اتظر حتى يتم تحميل الصورة"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "تزامن أعضاء الاتصال"
+

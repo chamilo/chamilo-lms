@@ -1,0 +1,573 @@
+msgid "langExercice"
+msgstr "Ekzerco"
+
+msgid "langActivate"
+msgstr "Aktivigi"
+
+msgid "langDeactivate"
+msgstr "Malaktivigi"
+
+msgid "langNoEx"
+msgstr "Ĉi-momente ne estas ekzerco"
+
+msgid "langNewEx"
+msgstr "Nova ekzerco"
+
+msgid "langQuestion"
+msgstr "demando"
+
+msgid "langQuestions"
+msgstr "Demandoj"
+
+msgid "langAnswers"
+msgstr "Respondoj"
+
+msgid "langTrue"
+msgstr "Vera"
+
+msgid "langAnswer"
+msgstr "Respondo"
+
+msgid "langResult"
+msgstr "Rezulto"
+
+msgid "langNoResult"
+msgstr "Ne ankoraŭ estas rezulto"
+
+msgid "langYourResults"
+msgstr "Via rezulto"
+
+msgid "langStudentResults"
+msgstr "Studentaj rezultoj"
+
+msgid "langExerciseType"
+msgstr "Ekzerca tipo"
+
+msgid "langExerciseName"
+msgstr "Ekzerca nomo"
+
+msgid "langExerciseDescription"
+msgstr "Ekzerca priskribo"
+
+msgid "langSimpleExercise"
+msgstr "En 1 paĝo"
+
+msgid "langSequentialExercise"
+msgstr "Po unu demando en paĝo (sinsekve)"
+
+msgid "langRandomQuestions"
+msgstr "Laŭhazardaj demandoj"
+
+msgid "langGiveExerciseName"
+msgstr "Bonvolu atribui nomon al la ekzerco"
+
+msgid "langSound"
+msgstr "Sona aŭ videa dosiero"
+
+msgid "langDeleteSound"
+msgstr "Forigi la sonan au videan dosieron"
+
+msgid "langNoAnswer"
+msgstr "Ĉi-momente ne estas respondo."
+
+msgid "langGoBackToQuestionPool"
+msgstr "Reiri al la listo de ĉiuj demandoj"
+
+msgid "langGoBackToQuestionList"
+msgstr "Reiri al la demandlisto de la ekzerco"
+
+msgid "langQuestionAnswers"
+msgstr "Respondoj al la demandoj"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Averto: Ĉi-demando kaj ties respondoj estas uzataj en diversaj ekzercoj. Ĉu vi volas ŝanĝi la demandon?"
+
+msgid "langModifyInAllExercises"
+msgstr "en ĉiuj ekzercoj"
+
+msgid "langModifyInThisExercise"
+msgstr "nur en la nuna ekzerco"
+
+msgid "langAnswerType"
+msgstr "Responda tipo"
+
+msgid "langMultipleSelect"
+msgstr "Plurelekta (pluraj respondoj)"
+
+msgid "langFillBlanks"
+msgstr "Plenigi"
+
+msgid "langMatching"
+msgstr "Svati   XX"
+
+msgid "langAddPicture"
+msgstr "Aldoni bildon"
+
+msgid "langReplacePicture"
+msgstr "Ŝanĝi desegnaĵon"
+
+msgid "langDeletePicture"
+msgstr "Forigi bildon"
+
+msgid "langQuestionDescription"
+msgstr "Komentario (fakultativa)"
+
+msgid "langGiveQuestion"
+msgstr "Bonvolu starigi demandon"
+
+msgid "langWeightingForEachBlank"
+msgstr "Bonvolu atribui gravecon al ĉiu plenigujo"
+
+msgid "langUseTagForBlank"
+msgstr "Uzu kvadratajn hokojn [...] por difini unu aŭ plurajn plenigujojn"
+
+msgid "langQuestionWeighting"
+msgstr "Gravecoj"
+
+msgid "langMoreAnswers"
+msgstr "+ respondo"
+
+msgid "langLessAnswers"
+msgstr "- respondo"
+
+msgid "langMoreElements"
+msgstr "+ elemento"
+
+msgid "langLessElements"
+msgstr "- elemento"
+
+msgid "langTypeTextBelow"
+msgstr "Tajpu vian tekston ĉi-suben"
+
+msgid "langDefaultTextInBlanks"
+msgstr "El ĉiuj [Gaŭloj] la plej sentimaj estas la [belgoj]."
+
+msgid "langDefaultMatchingOptA"
+msgstr "riĉa"
+
+msgid "langDefaultMatchingOptB"
+msgstr "alloga"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Via patro estas"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Via patrino estas"
+
+msgid "langDefineOptions"
+msgstr "Difini la elektojn"
+
+msgid "langMakeCorrespond"
+msgstr "Akordigi"
+
+msgid "langFillLists"
+msgstr "Bonvolu plenigi la du ĉi-subajn listojn"
+
+msgid "langGiveText"
+msgstr "Bonvolu tajpi tekston"
+
+msgid "langDefineBlanks"
+msgstr "Bonvolu difini almenaŭ unu malplenan ujon kun hokoj [...]"
+
+msgid "langGiveAnswers"
+msgstr "Bonvolu respondi la demandon"
+
+msgid "langChooseGoodAnswer"
+msgstr "Elektu bonan respondon"
+
+msgid "langChooseGoodAnswers"
+msgstr "Elektu unu aŭ plurajn bonajn respondojn."
+
+msgid "langQuestionList"
+msgstr "Demandaro de la ekzerco"
+
+msgid "langMoveUp"
+msgstr "Supren"
+
+msgid "langMoveDown"
+msgstr "Malsupren"
+
+msgid "langGetExistingQuestion"
+msgstr "Uzu demandon el la aro  XX"
+
+msgid "langFinishTest"
+msgstr "Fini la teston"
+
+msgid "langQuestionPool"
+msgstr "Listo kun ĉiuj demandoj"
+
+msgid "langOrphanQuestions"
+msgstr "Demandoj ekster ekzerco (\'orfaj\')"
+
+msgid "langNoQuestion"
+msgstr "Ĉi-momente ne estas demandoj (en ĉi-kategorio)"
+
+msgid "langAllExercises"
+msgstr "Ĉiuj demandoj"
+
+msgid "langFilter"
+msgstr "Filtri"
+
+msgid "langGoBackToEx"
+msgstr "Reiri al ekzerco"
+
+msgid "langReuse"
+msgstr "Reuzu"
+
+msgid "langExerciseManagement"
+msgstr "Ekzerca mastrumado"
+
+msgid "langQuestionManagement"
+msgstr "Demando / Demandara mastrumado"
+
+msgid "langQuestionNotFound"
+msgstr "Demando ne trovita"
+
+msgid "langExerciseNotFound"
+msgstr "Ekzerco ne trovita"
+
+msgid "langAlreadyAnswered"
+msgstr "Vi jam respondis ĉi-demandon."
+
+msgid "langElementList"
+msgstr "Elementoj"
+
+msgid "langScore"
+msgstr "Poentotabulo"
+
+msgid "langCorrespondsTo"
+msgstr "Akordiĝas kun"
+
+msgid "langExpectedChoice"
+msgstr "Ĝusta respondo"
+
+msgid "langYourTotalScore"
+msgstr "Via totala poentaro estas"
+
+msgid "langEvalSet"
+msgstr "Valortaksaj parametroj"
+
+msgid "langActive"
+msgstr "aktiva"
+
+msgid "langInactive"
+msgstr "malŝaltita"
+
+msgid "langQuestCreate"
+msgstr "Kreo de demandoj"
+
+msgid "langExRecord"
+msgstr "Via ekzerco estas konservita"
+
+msgid "langBackModif"
+msgstr "Reiri al la ŝanĝo de demandoj"
+
+msgid "langDoEx"
+msgstr "Fari ekzercon"
+
+msgid "langDefScor"
+msgstr "Priskribi valortaksajn parametrojn"
+
+msgid "langCreateModif"
+msgstr "Kreo / ŝanĝo de demandoj"
+
+msgid "langSub"
+msgstr "Sub-titolo"
+
+msgid "langMyAnswer"
+msgstr "Mia respondo"
+
+msgid "langMorA"
+msgstr "+respondo"
+
+msgid "langLesA"
+msgstr "-respondo"
+
+msgid "langRecEx"
+msgstr "Konservi ekzercon"
+
+msgid "langRecQu"
+msgstr "Konservi demandon"
+
+msgid "langRecAns"
+msgstr "Konservi respondojn"
+
+msgid "langIntroduction"
+msgstr "Enkonduko"
+
+msgid "langTitleAssistant"
+msgstr "Asistilo por kreo de ekzercoj"
+
+msgid "langQuesList"
+msgstr "Demandaro"
+
+msgid "langSaveEx"
+msgstr "Konservi ekzercon"
+
+msgid "langFinish"
+msgstr "Fini"
+
+msgid "langCancel"
+msgstr "Nuligi"
+
+msgid "langQImage"
+msgstr "Bilddemando"
+
+msgid "langAddQ"
+msgstr "Aldoni demandon"
+
+msgid "langDoAnEx"
+msgstr "Fari ekzercon"
+
+msgid "langGenerator"
+msgstr "Ekzercaro"
+
+msgid "langChoice"
+msgstr "Via elekto"
+
+msgid "langCorrect"
+msgstr "Ĝusta"
+
+msgid "langPossAnsw"
+msgstr "Kiom da ĝustaj respondoj al sama demando"
+
+msgid "langStudAnsw"
+msgstr "Kiom da eraroj farataj de la studento"
+
+msgid "langDetermine"
+msgstr "Elektu mem la valoron de la valortaksado per ŝanĝo de la ĉi-suba tabelo. Poste klaku sur \"validigi\""
+
+msgid "langNonNumber"
+msgstr "Ne-cifera valoro"
+
+msgid "langReplaced"
+msgstr "estas enigita. Estas anstataŭigita per 0"
+
+msgid "langSuperior"
+msgstr "Valoro superanta 20"
+
+msgid "langRep20"
+msgstr "estas entajpita, anstataŭigita per 20."
+
+msgid "langDefault"
+msgstr "Defaŭltaj valoroj *"
+
+msgid "langDefComment"
+msgstr "* Per musklako sur la butonon \"Defaŭltaj valoroj\" la antaŭaj estos anstataŭigataj"
+
+msgid "langScoreGet"
+msgstr "La nigraj ciferoj = rezultanta nombro da poentoj"
+
+msgid "langShowScor"
+msgstr "Montras la valortakson al la studento:"
+
+msgid "langStep1"
+msgstr "Bonvenon ĉe la asistilo por kreado de plurelektaj demandoj. Vi estos plukondukata. Klaku sur \'sekvanta\' por pluiri."
+
+msgid "langStep2"
+msgstr "Aldoni/ŝanĝi titolon de la ekzerco kaj priskribon. Klaku sur \'sekvanta\' post pretigo."
+
+msgid "langTake"
+msgstr "prenu"
+
+msgid "langAmong"
+msgstr "el"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Importu HotPotatoes-ekzercojn"
+
+msgid "langHotPotatoesTests"
+msgstr "Importu HotPotatoes-testojn"
+
+msgid "langDownloadFile"
+msgstr "Alŝuti sekvantan dosieron al la servilo"
+
+msgid "langDownloadImg"
+msgstr "Alŝuti bildon al la servilo"
+
+msgid "langDownloadEnd"
+msgstr "La alŝuto sukcesis."
+
+msgid "langNoSpace"
+msgstr "La alŝuto malsukcesis. La konservokvoto por via kurso estas superita aŭ ne estas sufiĉa spaco sur via fiksita disko."
+
+msgid "langZipNoPhp"
+msgstr "La ZIP-dosiero ne povas enhavi php-dosierojn"
+
+msgid "langNoImg"
+msgstr "Testoj sen bildoj"
+
+msgid "langImgNote_st"
+msgstr "Vi ankoraŭ devas alŝuti"
+
+msgid "langImgNote_en"
+msgstr "bildo(j) :"
+
+msgid "langDocDeleted"
+msgstr "Dosiero/ dosierujo estas forigita."
+
+msgid "langViMod"
+msgstr "La videblo estas ŝanĝita."
+
+msgid "langNameNotEqual"
+msgstr "estas nevalida dosiero !"
+
+msgid "langIndice"
+msgstr "indico  XX"
+
+msgid "langIndices"
+msgstr "Indicoj  XX"
+
+msgid "langDateExo"
+msgstr "Dato"
+
+msgid "langShowQuestion"
+msgstr "Vidigi demandon"
+
+msgid "langUnknownExercise"
+msgstr "Nekonata ekzerco"
+
+msgid "langReuseQuestion"
+msgstr "Reuzi la demandon"
+
+msgid "langCreateExercise"
+msgstr "Krei ekzercon"
+
+msgid "langCreateQuestion"
+msgstr "krei demandon"
+
+msgid "langCreateAnswers"
+msgstr "Krei respondojn"
+
+msgid "langModifyExercise"
+msgstr "Ŝanĝi ekzercon"
+
+msgid "langModifyAnswers"
+msgstr "Ŝanĝi respondojn"
+
+msgid "langForExercise"
+msgstr "por ekzerco"
+
+msgid "langUseExistantQuestion"
+msgstr "Uzi ekzistantan demandon"
+
+msgid "FreeAnswer"
+msgstr "Malferma respondo"
+
+msgid "notCorrectedYet"
+msgstr "Ĉi-respondo ankoraŭ ne estas korektita. Provizore viaj poentoj por ĝi kalkuliĝas nul."
+
+msgid "adminHP"
+msgstr "Administranto de \"Hot Potatoes\""
+
+msgid "NewQu"
+msgstr "Nova demando"
+
+msgid "NoImage"
+msgstr "Bonvolu elekti bildon."
+
+msgid "langAnswerHotspot"
+msgstr "Priskribo kaj viŝiĝo estas devigataj por ĉiu tujaĵo - komentario estas laŭdezira"
+
+msgid "langMinHotspot"
+msgstr "Vi preparu almenaŭ unu atentilon"
+
+msgid "langMaxHotspot"
+msgstr "La maksimuman nombron da atentiloj fareblaj estas dekdu (12)"
+
+msgid "langHotspotError"
+msgstr "Vi enigu priskribon kaj pezon por ĉiu atentilo"
+
+msgid "langMoreHotspots"
+msgstr "+atentilo"
+
+msgid "langLessHotspots"
+msgstr "-atentilo"
+
+msgid "langHotspotZones"
+msgstr "Atentiloj"
+
+msgid "langNextQuestion"
+msgstr "Sekvanta demando"
+
+msgid "langCorrectAnswer"
+msgstr "Ĝusta respondo"
+
+msgid "langHotspotHit"
+msgstr "Via respondo estis"
+
+msgid "langOnlyJPG"
+msgstr "Vi povas uzi nur JPG- (aŭ JPEG)-aj bildoj por atentiloj"
+
+msgid "langFinishThisTest"
+msgstr "Montri la ĝustajn respondojn al ĉiu demando kaj la poentaron de la testo"
+
+msgid "langAllQuestions"
+msgstr "Ĉiuj demandoj"
+
+msgid "langModifyTitleDescription"
+msgstr "Ŝanĝi titolon kaj priskribon"
+
+msgid "langModifyHotspots"
+msgstr "Ŝanĝu respondojn/atentilojn"
+
+msgid "langHotspotNotDrawn"
+msgstr "Vi ankoraŭ ne desegnis ĉiujn atentilojn"
+
+msgid "langHotspotWeightingError"
+msgstr "Vi donu positivan (>0) pezon por ĉiuj atentiloj"
+
+msgid "langHotspotValidateError1"
+msgstr "Vi komplete respondu la demandon ("
+
+msgid "langHotspotValidateError2"
+msgstr "Necesa nombro da musklakoj antaŭ vido de la rezulto"
+
+msgid "langHotspotRequired"
+msgstr "Priskribo kaj viŝo estas devigaj por ĉiu atentilo - komentario estas laŭdezira"
+
+msgid "langHotspotChoose"
+msgstr "<div style=\"padding:2px 3px;\">• Por ekfari atentilon: elektu formon apud la koloroj kaj desegnu la atentilon sur la bildon.</div><div style=\"padding:2px 3px;\">• Por translokigi atentilon, elektu la koloron, musklaku sur alian lokon en la bildo kaj desegnu la atentilon.</div><div style=\"padding:2px 3px;\">• Por aldoni atentilon:musklaku sur la [+atentilo] butonon.</div><div style=\"padding:2px 3px;\">• Por fini plurangulan fomon: dekstre musklaku kaj elektu \"Fini plurangulon\".</div>"
+
+msgid "Fault"
+msgstr "Eraro"
+
+msgid "HotSpot"
+msgstr "Atentilo"
+
+msgid "ClickNumber"
+msgstr "Nombro da musklakoj"
+
+msgid "HotspotGiveAnswers"
+msgstr "Bonvolu doni respondon"
+
+msgid "Addlimits"
+msgstr "Aldoni limojn"
+
+msgid "AreYouSure"
+msgstr "Ĉu vi certas"
+
+msgid "StudentScore"
+msgstr "Poentaro de la studento"
+
+msgid "backtoTesthome"
+msgstr "Retroiri al la startpaĝo de la testo"
+
+msgid "Feedback"
+msgstr "Retroinformo"
+
+msgid "MarkIsUpdated"
+msgstr "La poentaro ŝanĝiĝis"
+
+msgid "MarkInserted"
+msgstr "Poentaro aldoniĝis"
+
+msgid "PleaseGiveAMark"
+msgstr "Bonvolu doni poentaron"
+
+msgid "EditCommentsAndMarks"
+msgstr "Ŝanĝi komentarion kaj poentaron"
+
+msgid "AddComments"
+msgstr "Aldoni komentarion"
+

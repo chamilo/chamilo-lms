@@ -1,0 +1,2253 @@
+msgid "Title"
+msgstr "Nadpis"
+
+msgid "By"
+msgstr "Od"
+
+msgid "UsersOnline"
+msgstr "Používatelia online"
+
+msgid "Remove"
+msgstr "Odstrániť"
+
+msgid "langEnter"
+msgstr "Späť na zoznam mojích kurzov"
+
+msgid "Description"
+msgstr "Popis"
+
+msgid "Links"
+msgstr "Odkazy"
+
+msgid "langWorks"
+msgstr "Publikácie študentov"
+
+msgid "Forums"
+msgstr "Fórum"
+
+msgid "langExercices"
+msgstr "Testy"
+
+msgid "langCreateDir"
+msgstr "Vytvoriť zložku"
+
+msgid "Name"
+msgstr "Názov"
+
+msgid "langComment"
+msgstr "Komentár"
+
+msgid "langVisible"
+msgstr "Viditelný/neviditelný"
+
+msgid "langNewDir"
+msgstr "Názov nového priečinku"
+
+msgid "langDirCr"
+msgstr "Zložka vytvorená"
+
+msgid "Download"
+msgstr "Stiahnutie"
+
+msgid "langGroup"
+msgstr "Skupina"
+
+msgid "langEdit"
+msgstr "upraviť"
+
+msgid "langGroupForum"
+msgstr "Diskusná skupina"
+
+msgid "Language"
+msgstr "Jazyk"
+
+msgid "LoginName"
+msgstr "Prihasovacie meno"
+
+msgid "AutostartMp3"
+msgstr "Kliknite na OK, ak si želáte, aby bol zvukový súbor spustený automaticky."
+
+msgid "Assignments"
+msgstr "Zadania"
+
+msgid "Forum"
+msgstr "Fórum"
+
+msgid "langDelImage"
+msgstr "Odstrániť obrázok"
+
+msgid "langCode"
+msgstr "Kód kurzu"
+
+msgid "langUp"
+msgstr "Hore"
+
+msgid "Down"
+msgstr "dole"
+
+msgid "Up"
+msgstr "hore"
+
+msgid "Theme"
+msgstr "Téma"
+
+msgid "TheListIsEmpty"
+msgstr "Prázdny zoznam."
+
+msgid "langUniqueSelect"
+msgstr "Výber z viacerých možností (jediná správna odpoveď)"
+
+msgid "CreateCategory"
+msgstr "Vytvoriť priečinok"
+
+msgid "SendFile"
+msgstr "Upload dokumentu"
+
+msgid "SaveChanges"
+msgstr "Uložiť zmeny"
+
+msgid "SearchTerm"
+msgstr "Vyhľadať výraz"
+
+msgid "TooShort"
+msgstr "Príliš krátke"
+
+msgid "langCourseCreate"
+msgstr "Vytvor  webstránku kurzu"
+
+msgid "langTodo"
+msgstr "Urobiť"
+
+msgid "UserName"
+msgstr "Prihlasovacie meno"
+
+msgid "lang_show_hide"
+msgstr "Ukázať / skryť"
+
+msgid "langCategoryMod"
+msgstr "Zmeniť kategóriu"
+
+msgid "Hide"
+msgstr "Skryť"
+
+msgid "langDear"
+msgstr "Vážená(ý)"
+
+msgid "langArchive"
+msgstr "archív"
+
+msgid "langCourseCode"
+msgstr "Kód kurzu"
+
+msgid "langNoDescription"
+msgstr "Žiadny popis"
+
+msgid "langOfficialCode"
+msgstr "Oficiálny kód"
+
+msgid "FirstName"
+msgstr "Krstné meno"
+
+msgid "LastName"
+msgstr "Priezvisko"
+
+msgid "Status"
+msgstr "Stav"
+
+msgid "langEmail"
+msgstr "E-mail"
+
+msgid "SlideshowConversion"
+msgstr "Konverzia pre slideshow"
+
+msgid "UploadFile"
+msgstr "Nahratie súboru"
+
+msgid "AvailableFrom"
+msgstr "Prístupný od"
+
+msgid "AvailableTill"
+msgstr "Prístupný do"
+
+msgid "Preview"
+msgstr "Ukážka"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "EmailAddress"
+msgstr "E-mailová adresa"
+
+msgid "Organisation"
+msgstr "Organizácia"
+
+msgid "Reporting"
+msgstr "Hlásenie"
+
+msgid "Code"
+msgstr "Kód"
+
+msgid "Update"
+msgstr "Aktualizovať"
+
+msgid "SelectQuestionType"
+msgstr "Zvoľte typ otázky"
+
+msgid "CurrentCourse"
+msgstr "Aktuálny kurz"
+
+msgid "Back"
+msgstr "Späť"
+
+msgid "Info"
+msgstr "Informácia"
+
+msgid "Search"
+msgstr "Vyhľadávanie"
+
+msgid "AdvancedSearch"
+msgstr "Rozšírené vyhľadávanie"
+
+msgid "Open"
+msgstr "otvorený"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "AddAnother"
+msgstr "Pridať ďaľší"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "TrueFalse"
+msgstr "Pravda/Nepravda"
+
+msgid "QuestionType"
+msgstr "Typ otázky"
+
+msgid "NoSearchResults"
+msgstr "Žiadne výsledky vyhľadávania"
+
+msgid "SelectQuestion"
+msgstr "Vyberte otázku"
+
+msgid "AddNewQuestionType"
+msgstr "Pridaj nový typ otázky"
+
+msgid "Numbered"
+msgstr "Číslovaný"
+
+msgid "iso639_2_code"
+msgstr "sk"
+
+msgid "iso639_1_code"
+msgstr "slk"
+
+msgid "charset"
+msgstr "windows-1250"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr "."
+
+msgid "number_decimal_separator"
+msgstr ","
+
+msgid "dateFormatShort"
+msgstr "%d %b, %y"
+
+msgid "dateFormatLong"
+msgstr "%A %d %B, %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%d %B, %Y o %I:%M %p"
+
+msgid "timeNoSecFormat"
+msgstr "%I:%M %p"
+
+msgid "langYes"
+msgstr "áno"
+
+msgid "langNo"
+msgstr "Nie"
+
+msgid "Next"
+msgstr "Ďalej"
+
+msgid "langAllowed"
+msgstr "Povolené"
+
+msgid "langBackHome"
+msgstr "Späť na domovskú stránku"
+
+msgid "langPropositions"
+msgstr "Návrhy na zlepšenie"
+
+msgid "langMaj"
+msgstr "Aktualizovať"
+
+msgid "langModify"
+msgstr "zmeniť"
+
+msgid "langDelete"
+msgstr "zmazať"
+
+msgid "langInvisible"
+msgstr "Skryť"
+
+msgid "langSave"
+msgstr "Uložiť"
+
+msgid "langMove"
+msgstr "Presunúť"
+
+msgid "Help"
+msgstr "Pomoc"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAdd"
+msgstr "Pridať"
+
+msgid "langAddIntro"
+msgstr "Pridať úvodný text"
+
+msgid "langBackList"
+msgstr "Späť na zoznam"
+
+msgid "langText"
+msgstr "Text"
+
+msgid "langEmpty"
+msgstr "Nevyplnili ste niektore políčka.<br>Pomocou gombíka  <b>Späť</b> vo vašom prehliadači sa vráťte a skúste to znovu.<br>If you ignore your course code, see the Course Program"
+
+msgid "langConfirmYourChoice"
+msgstr "Prosím potvrdiť voľbu"
+
+msgid "langAnd"
+msgstr "a"
+
+msgid "langChoice"
+msgstr "Vaša voľba"
+
+msgid "langFinish"
+msgstr "Ukončiť"
+
+msgid "langCancel"
+msgstr "Zrušiť"
+
+msgid "langNotAllowed"
+msgstr "Nepovolené"
+
+msgid "langNotLogged"
+msgstr "Neprihlásený do kurzu"
+
+msgid "langManager"
+msgstr "Správca"
+
+msgid "langOptional"
+msgstr "Volitelné"
+
+msgid "NextPage"
+msgstr "Nasledujúca strana"
+
+msgid "PreviousPage"
+msgstr "Predošlá strana"
+
+msgid "langUse"
+msgstr "Použité"
+
+msgid "langTotal"
+msgstr "Celkový"
+
+msgid "langTake"
+msgstr "vziať"
+
+msgid "langOne"
+msgstr "Jeden"
+
+msgid "langSeveral"
+msgstr "Niekoľko"
+
+msgid "langNotice"
+msgstr "Oznam"
+
+msgid "langDate"
+msgstr "Dátum"
+
+msgid "langAmong"
+msgstr "medzi"
+
+msgid "langShow"
+msgstr "Ukáž"
+
+msgid "langMyCourses"
+msgstr "Moje kurzy"
+
+msgid "langModifyProfile"
+msgstr "Môj profil"
+
+msgid "langMyStats"
+msgstr "Pozrieť moju štatistiku"
+
+msgid "langLogout"
+msgstr "Odhlásenie"
+
+msgid "langMyAgenda"
+msgstr "Moja agenda"
+
+msgid "langCourseHomepage"
+msgstr "Domov kurzu"
+
+msgid "langCourseManagerview"
+msgstr "Náhľad lektora"
+
+msgid "langStudentView"
+msgstr "Náhľad študenta"
+
+msgid "AddResource"
+msgstr "Pridať zdroj"
+
+msgid "AddedResources"
+msgstr "Pridané zdroje"
+
+msgid "lang_modify_resource"
+msgstr "Upraviť / pridať zdroj"
+
+msgid "lang_resource"
+msgstr "Zdroj"
+
+msgid "lang_resources"
+msgstr "Zdroje"
+
+msgid "langNameOfLang[\'arabic\']"
+msgstr ""
+
+msgid "langNameOfLang[\'brazilian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'bulgarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'catalan\']"
+msgstr ""
+
+msgid "langNameOfLang[\'croatian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'danish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english\']"
+msgstr ""
+
+msgid "langNameOfLang[\'finnish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_KM\']"
+msgstr ""
+
+msgid "langNameOfLang[\'galician\']"
+msgstr ""
+
+msgid "langNameOfLang[\'german\']"
+msgstr ""
+
+msgid "langNameOfLang[\'greek\']"
+msgstr ""
+
+msgid "langNameOfLang[\'italian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'japanese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'polish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'portuguese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'russian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'simpl_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish\']"
+msgstr ""
+
+msgid "Close"
+msgstr "zavriet"
+
+msgid "langPlatform"
+msgstr "Platforma"
+
+msgid "localLangName"
+msgstr "jazyk"
+
+msgid "email"
+msgstr "e-mail"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "Prepáčte, ale tento kód kurzu je už použitý. Zvolte prosím iný."
+
+msgid "Statistics"
+msgstr "Štatistika"
+
+msgid "langGrouplist"
+msgstr "zoznam skupín"
+
+msgid "langPrevious"
+msgstr "predošlý"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "Cieľová zložka neexistuje"
+
+msgid "Courses"
+msgstr "kurzy"
+
+msgid "In"
+msgstr "v"
+
+msgid "langShowAll"
+msgstr "Ukáž všetko"
+
+msgid "langPage"
+msgstr "Strana"
+
+msgid "englishLangName"
+msgstr "Anglicky"
+
+msgid "Home"
+msgstr "Domov"
+
+msgid "langAreYouSureToDelete"
+msgstr "Naozaj to chcete zmazať?"
+
+msgid "SelectAll"
+msgstr "Označiť všetko"
+
+msgid "UnSelectAll"
+msgstr "odznač všetko"
+
+msgid "WithSelected"
+msgstr "Označené"
+
+msgid "langOnLine"
+msgstr "Online"
+
+msgid "langUsers"
+msgstr "Používatelia"
+
+msgid "langPlatformAdmin"
+msgstr "Administrácia platformy"
+
+msgid "langNameOfLang[\'hungarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'indonesian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'malay\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovenian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish_latin\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swedish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'thai\']"
+msgstr ""
+
+msgid "langNameOfLang[\'turkce\']"
+msgstr ""
+
+msgid "langNameOfLang[\'vietnamese\']"
+msgstr ""
+
+msgid "UserInfo"
+msgstr "informácie o používateľovi"
+
+msgid "langModifyQuestion"
+msgstr "Zmeniť otázku"
+
+msgid "langCheckAll"
+msgstr "zaškrtni všetko"
+
+msgid "langNbAnnoucement"
+msgstr "Oznam"
+
+msgid "lang_no_access_here"
+msgstr "Bez prístupu"
+
+msgid "langOtherCourses"
+msgstr "ostatné kurzy"
+
+msgid "Doc"
+msgstr "dokument"
+
+msgid "PlataformAdmin"
+msgstr "Administrátor platformy"
+
+msgid "Groups"
+msgstr "Skupiny"
+
+msgid "GroupManagement"
+msgstr "Správa skupín"
+
+msgid "All"
+msgstr "Všetko"
+
+msgid "None"
+msgstr "Žiadny"
+
+msgid "langSorry"
+msgstr "Najskôr vyberte kurz"
+
+msgid "langDenied"
+msgstr "Táto funkcia je prístupná len administrátorom kurzu"
+
+msgid "Today"
+msgstr "dnes"
+
+msgid "langCourseHomepageLink"
+msgstr "Domovská stránka kurzu"
+
+msgid "Attachment"
+msgstr "príloha"
+
+msgid "User"
+msgstr "Používateľ"
+
+msgid "MondayInit"
+msgstr "P"
+
+msgid "TuesdayInit"
+msgstr "U"
+
+msgid "WednesdayInit"
+msgstr "S"
+
+msgid "ThursdayInit"
+msgstr "Š"
+
+msgid "FridayInit"
+msgstr "P"
+
+msgid "SaturdayInit"
+msgstr "S"
+
+msgid "SundayInit"
+msgstr "N"
+
+msgid "MondayShort"
+msgstr "Po"
+
+msgid "TuesdayShort"
+msgstr "Ut"
+
+msgid "WednesdayShort"
+msgstr "St"
+
+msgid "ThursdayShort"
+msgstr "Št"
+
+msgid "FridayShort"
+msgstr "Pi"
+
+msgid "SaturdayShort"
+msgstr "So"
+
+msgid "SundayShort"
+msgstr "Ne"
+
+msgid "MondayLong"
+msgstr "Pondelok"
+
+msgid "TuesdayLong"
+msgstr "Utorok"
+
+msgid "WednesdayLong"
+msgstr "Streda"
+
+msgid "ThursdayLong"
+msgstr "Štvrtok"
+
+msgid "FridayLong"
+msgstr "Piatok"
+
+msgid "SaturdayLong"
+msgstr "Sobota"
+
+msgid "SundayLong"
+msgstr "Nedela"
+
+msgid "JanuaryInit"
+msgstr "J"
+
+msgid "FebruaryInit"
+msgstr "F"
+
+msgid "MarchInit"
+msgstr "M"
+
+msgid "AprilInit"
+msgstr "A"
+
+msgid "MayInit"
+msgstr "M"
+
+msgid "JuneInit"
+msgstr "J"
+
+msgid "JulyInit"
+msgstr "J"
+
+msgid "AugustInit"
+msgstr "A"
+
+msgid "SeptemberInit"
+msgstr "S"
+
+msgid "OctoberInit"
+msgstr "O"
+
+msgid "NovemberInit"
+msgstr "N"
+
+msgid "DecemberInit"
+msgstr "D"
+
+msgid "JanuaryShort"
+msgstr "Jan"
+
+msgid "FebruaryShort"
+msgstr "Feb"
+
+msgid "MarchShort"
+msgstr "Mar"
+
+msgid "AprilShort"
+msgstr "Apr"
+
+msgid "MayShort"
+msgstr "Máj"
+
+msgid "JuneShort"
+msgstr "Jún"
+
+msgid "JulyShort"
+msgstr "Júl"
+
+msgid "AugustShort"
+msgstr "Aug"
+
+msgid "SeptemberShort"
+msgstr "Sep"
+
+msgid "OctoberShort"
+msgstr "Okt"
+
+msgid "NovemberShort"
+msgstr "Nov"
+
+msgid "DecemberShort"
+msgstr "Dec"
+
+msgid "JanuaryLong"
+msgstr "Január"
+
+msgid "FebruaryLong"
+msgstr "Február"
+
+msgid "MarchLong"
+msgstr "Marec"
+
+msgid "AprilLong"
+msgstr "Apríl"
+
+msgid "MayLong"
+msgstr "Máj"
+
+msgid "JuneLong"
+msgstr "Jún"
+
+msgid "JulyLong"
+msgstr "Júl"
+
+msgid "AugustLong"
+msgstr "August"
+
+msgid "SeptemberLong"
+msgstr "September"
+
+msgid "OctoberLong"
+msgstr "Október"
+
+msgid "NovemberLong"
+msgstr "November"
+
+msgid "DecemberLong"
+msgstr "December"
+
+msgid "langMyCompetences"
+msgstr "Moja kvalifikácia"
+
+msgid "langMyDiplomas"
+msgstr "Moje diplomy"
+
+msgid "langMyPersonalOpenArea"
+msgstr "Môj osobný priestor"
+
+msgid "langMyTeach"
+msgstr "Čo môžem učiť"
+
+msgid "Agenda"
+msgstr "Agenda"
+
+msgid "HourShort"
+msgstr "h"
+
+msgid "PleaseTryAgain"
+msgstr "Prosím skus znovu!"
+
+msgid "UplNoFileUploaded"
+msgstr "Žiadny súbor nebol načítaný."
+
+msgid "UplSelectFileFirst"
+msgstr "Pred klikom na tlačidlo načítavania, prosím, vyberte súbor."
+
+msgid "UplNotAZip"
+msgstr "Vybraný súbor nie zip archív."
+
+msgid "UplUploadSucceeded"
+msgstr "Súbor uložený úspešne!"
+
+msgid "ExportAsCSV"
+msgstr "Exportovať ako súbor CSV"
+
+msgid "ExportAsXLS"
+msgstr "Exportovať ako súbor XLS"
+
+msgid "langOpenarea"
+msgstr "Osobná zóna"
+
+msgid "Done"
+msgstr "Hotovo"
+
+msgid "Documents"
+msgstr "Dokumenty"
+
+msgid "DocumentAdded"
+msgstr "Dokument bol pridaný"
+
+msgid "DocumentUpdated"
+msgstr "Dokument bol aktualizovaný"
+
+msgid "DocumentInFolderUpdated"
+msgstr "Dokument bol aktualizovaný v priečinku"
+
+msgid "Course_description"
+msgstr "Popis kurzu"
+
+msgid "Document"
+msgstr "Dokument"
+
+msgid "Learnpath"
+msgstr "Učebná osnova"
+
+msgid "Link"
+msgstr "Odkazy"
+
+msgid "Announcement"
+msgstr "Oznamy"
+
+msgid "Dropbox"
+msgstr "Schránka na dokumenty"
+
+msgid "Quiz"
+msgstr "Kvíz"
+
+msgid "langChat"
+msgstr "Pokec"
+
+msgid "Conference"
+msgstr "Konferencia"
+
+msgid "Student_publication"
+msgstr "Publikácie študentov"
+
+msgid "Tracking"
+msgstr "Štatistika"
+
+msgid "langhomepage_link"
+msgstr "Pridaj odkaz na túto stránku"
+
+msgid "Course_setting"
+msgstr "Nastavenie kurzu"
+
+msgid "langbackup"
+msgstr "Zálohovanie kurzu"
+
+msgid "langcopy_course_content"
+msgstr "Kopíruj obsah tohto kurzu"
+
+msgid "langrecycle_course"
+msgstr "Recykluj tento kurz"
+
+msgid "StartDate"
+msgstr "Dátum začiatku"
+
+msgid "EndDate"
+msgstr "Dátum konca"
+
+msgid "StartTime"
+msgstr "Čas začiatku"
+
+msgid "EndTime"
+msgstr "Čas konca"
+
+msgid "langYouWereCalled"
+msgstr "Na pokec Vas pozýva"
+
+msgid "langDoYouAccept"
+msgstr "Akceptujete to?"
+
+msgid "Everybody"
+msgstr "Všetci"
+
+msgid "SentTo"
+msgstr "Viditeľný pre"
+
+msgid "Export"
+msgstr "Export"
+
+msgid "Tools"
+msgstr "nástroje"
+
+msgid "Everyone"
+msgstr "Všetci"
+
+msgid "SelectGroupsUsers"
+msgstr "Vyznačiť skupiny/používateľov"
+
+msgid "Student"
+msgstr "Študent"
+
+msgid "Teacher"
+msgstr "Lektor"
+
+msgid "Send2All"
+msgstr "Nevybrali ste skupinu/používateľa. Položka bude viditeľná pre všetkých."
+
+msgid "Wiki"
+msgstr "Skupina wiki"
+
+msgid "Complete"
+msgstr "Kompletné"
+
+msgid "Incomplete"
+msgstr "Nekompleté"
+
+msgid "reservation"
+msgstr "rezervácia"
+
+msgid "StartTimeWindow"
+msgstr "Začiatok"
+
+msgid "EndTimeWindow"
+msgstr "Koniec"
+
+msgid "AccessNotAllowed"
+msgstr "Prístup na túto stránku je zakázaný"
+
+msgid "InThisCourse"
+msgstr "V tomto kurze"
+
+msgid "ThisFieldIsRequired"
+msgstr "vyžadované"
+
+msgid "AllowedHTMLTags"
+msgstr "povolené HTML značky"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "Formulár obsahuje nesprávne alebo neúplné údaje. Prosím skontrolujte zadané údaje.."
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "Začiatočný dátum musí byť pred dátumom konca"
+
+msgid "InvalidDate"
+msgstr "Nesprávny dátum"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "Povolené sú len čísla a písmená."
+
+msgid "langBasicOverview"
+msgstr "Usporiadať"
+
+msgid "CourseAdminRole"
+msgstr "Administrátor kurzu"
+
+msgid "UserRole"
+msgstr "Rola"
+
+msgid "OnlyImagesAllowed"
+msgstr "Povolené len obrázky typu PNG, JPG alebo GIF"
+
+msgid "ViewRight"
+msgstr "Prezerat"
+
+msgid "EditRight"
+msgstr "Upravovať"
+
+msgid "DeleteRight"
+msgstr "Mazať"
+
+msgid "OverviewCourseRights"
+msgstr "Roles & prehľad práv"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "Prehľad pšetkých práv pre rolu"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Zobraziť všetky funkcie a oblasti pre špecifické právo"
+
+msgid "langAdvanced"
+msgstr "Vytvoriť"
+
+msgid "RightValueModified"
+msgstr "Hodnota bola zmenená."
+
+msgid "course_rights"
+msgstr "Prehlad rolí & práv"
+
+msgid "Visio_conference"
+msgstr "Virtuálne stretnutie"
+
+msgid "CourseAdminRoleDescription"
+msgstr "Administrátor kurzu"
+
+msgid "Move"
+msgstr "Presunúť"
+
+msgid "MoveTo"
+msgstr "Presunúť"
+
+msgid "Delete"
+msgstr "Zmazať"
+
+msgid "MoveFileTo"
+msgstr "Presunúť súbor do"
+
+msgid "Save"
+msgstr "Uložiť"
+
+msgid "Error"
+msgstr "Chyba"
+
+msgid "Anonymous"
+msgstr "Anonymný"
+
+msgid "h"
+msgstr "h"
+
+msgid "CreateNewGlobalRole"
+msgstr "Vytvoriť novú globálnu rolu"
+
+msgid "CreateNewLocalRole"
+msgstr "Vytvoriť novú lokálnu rolu"
+
+msgid "Actions"
+msgstr "Akcie"
+
+msgid "Inbox"
+msgstr "Inbox"
+
+msgid "ComposeMessage"
+msgstr "Napísať správu"
+
+msgid "Other"
+msgstr "Iný"
+
+msgid "AddRight"
+msgstr "Pridať"
+
+msgid "CampusHomepage"
+msgstr "Domovská stránka portálu"
+
+msgid "YouHaveNewMessage"
+msgstr "Máte novú správu!"
+
+msgid "myActiveSessions"
+msgstr "Moje aktívne stretnutia"
+
+msgid "myInactiveSessions"
+msgstr "Moje neaktívne stretnutia"
+
+msgid "FileUpload"
+msgstr "Nahranie súboru"
+
+msgid "langMyActiveSessions"
+msgstr "Moje aktívne stretnutia"
+
+msgid "langMyInActiveSessions"
+msgstr "Moje neaktívne stretnutia"
+
+msgid "langMySpace"
+msgstr "Hlásenie"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "Rozšírenie bolo aktivované ale zatiaľ nemôže byť použité."
+
+msgid "MyStudents"
+msgstr "Moji študenti"
+
+msgid "Progress"
+msgstr "Postup"
+
+msgid "Or"
+msgstr "alebo"
+
+msgid "Uploading"
+msgstr "Nahrávam..."
+
+msgid "AccountExpired"
+msgstr "Účet expiroval"
+
+msgid "AccountInactive"
+msgstr "Účet neaktívny"
+
+msgid "ActionNotAllowed"
+msgstr "Nepovolená akcia"
+
+msgid "SubTitle"
+msgstr "Podtitulok"
+
+msgid "NoResourcesToRecycle"
+msgstr "Žiadny zdroj k recyklácii"
+
+msgid "noOpen"
+msgstr "Nie je možné otvoriť"
+
+msgid "TempsFrequentation"
+msgstr "Prístupová doba"
+
+msgid "Progression"
+msgstr "Pokroky"
+
+msgid "NoCourse"
+msgstr "Kurz nenájdený"
+
+msgid "Teachers"
+msgstr "Lektori"
+
+msgid "Session"
+msgstr "Stretnutie"
+
+msgid "Sessions"
+msgstr "Stretnutia"
+
+msgid "NoSession"
+msgstr "Stretnutie nenájdené"
+
+msgid "NoStudent"
+msgstr "Študent nenájdený"
+
+msgid "Students"
+msgstr "Študenti"
+
+msgid "NoResults"
+msgstr "Výsledok nenájdený"
+
+msgid "Tutors"
+msgstr "Tútori"
+
+msgid "Tel"
+msgstr "Tel"
+
+msgid "NoTel"
+msgstr "Žiadny telefón"
+
+msgid "SendMail"
+msgstr "Poslať mail"
+
+msgid "RdvAgenda"
+msgstr "Naplánovaná schôdzka"
+
+msgid "VideoConf"
+msgstr "Video konferencia"
+
+msgid "MyProgress"
+msgstr "Moje pokroky"
+
+msgid "NoOnlineStudents"
+msgstr "Žiadni prihlásení študenti"
+
+msgid "InCourse"
+msgstr "v kurze"
+
+msgid "UserOnlineListSession"
+msgstr "Zoznam aktuálne prihlásených študentov - stretnutie"
+
+msgid "From"
+msgstr "Od"
+
+msgid "To"
+msgstr "Komu"
+
+msgid "Content"
+msgstr "Obsah"
+
+msgid "year"
+msgstr "rok"
+
+msgid "Years"
+msgstr "roky"
+
+msgid "Day"
+msgstr "Deň"
+
+msgid "Days"
+msgstr "dni"
+
+msgid "PleaseStandBy"
+msgstr "Čakajte prosím..."
+
+msgid "AvailableUntil"
+msgstr "Dostupný do"
+
+msgid "HourMinuteDivider"
+msgstr ":"
+
+msgid "Visio_classroom"
+msgstr "Virtuálna trieda"
+
+msgid "Survey"
+msgstr "Prieskum"
+
+msgid "More"
+msgstr "Viac"
+
+msgid "ClickHere"
+msgstr "Klikni sem"
+
+msgid "Here"
+msgstr "tu"
+
+msgid "SaveQuestion"
+msgstr "Uložiť otázku"
+
+msgid "ReturnTo"
+msgstr "Teraz sa môžete vrátiť na"
+
+msgid "Horizontal"
+msgstr "Horizontálny"
+
+msgid "Vertical"
+msgstr "Vertikálny"
+
+msgid "DisplaySearchResults"
+msgstr "Zobraziť výsledky vyhľadávania"
+
+msgid "DisplayAll"
+msgstr "Zobraziť všetko"
+
+msgid "File_upload"
+msgstr "Načítanie súboru"
+
+msgid "NoUsersInCourse"
+msgstr "Žiadny používateľ v kurze"
+
+msgid "Percentage"
+msgstr "Percentá"
+
+msgid "Information"
+msgstr "Informácie"
+
+msgid "EmailDestination"
+msgstr "Príjemca"
+
+msgid "SendEmail"
+msgstr "Poslať e-mail"
+
+msgid "EmailTitle"
+msgstr "Predmet pre tento e-mail"
+
+msgid "EmailText"
+msgstr "Obsah emailu"
+
+msgid "Send"
+msgstr "Poslať"
+
+msgid "Comments"
+msgstr "Poznámky"
+
+msgid "ModifyRecipientList"
+msgstr "Upraviť zoznam príjemcov"
+
+msgid "Line"
+msgstr "Riadok"
+
+msgid "NoLinkVisited"
+msgstr "Žiadna linka nebola navštívená"
+
+msgid "NoDocumentDownloaded"
+msgstr "Žiadny dokument nebol načítaný"
+
+msgid "Clicks"
+msgstr "Kliknutia"
+
+msgid "SearchResults"
+msgstr "Výsledky vyhľadávania"
+
+msgid "SessionPast"
+msgstr "Posledné"
+
+msgid "SessionActive"
+msgstr "Aktívne"
+
+msgid "SessionFuture"
+msgstr "Ešte nezačala"
+
+msgid "DateFormatLongWithoutDay"
+msgstr "%d. %B. %Y"
+
+msgid "InvalidDirectoryPleaseCreateAnImagesFolder"
+msgstr "Neplatná zložka: Prosím vytvorte priečinok s názvom \"Obrázky\" v sekcii dokumentov, aby obrázky mohli byť uploadované v tejto zložke"
+
+msgid "UsersConnectedToMySessions"
+msgstr "Zobraziť všetkých používateľov pripojených k môjmu sedeniu"
+
+msgid "Category"
+msgstr "Kategória"
+
+msgid "DearUser"
+msgstr "Vážený používateľ"
+
+msgid "YourRegistrationData"
+msgstr "Vaše registračné údaje"
+
+msgid "ResetLink"
+msgstr "Kliknite pre obnovu hesla"
+
+msgid "VisibilityChanged"
+msgstr "Viditeľnosť bola zmenená"
+
+msgid "MainNavigation"
+msgstr "Hlavná navigácia"
+
+msgid "SeeDetail"
+msgstr "Bližšie informácie"
+
+msgid "GroupSingle"
+msgstr "Skupina"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "Prosím, skúste sa prihlásiť znova z domovskej stránky"
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "Prosím, skúste sa prihlásiť znova prostredníctvom formulára nižšie"
+
+msgid "AccessToFaq"
+msgstr "Prístup na najčastejšie otázky"
+
+msgid "Faq"
+msgstr "Najčastejšie otázky"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "Upozorniť používateľov neaktívnych od"
+
+msgid "RemindInactiveLearnersMailSubject"
+msgstr "Nečinnosť na %s"
+
+msgid "RemindInactiveLearnersMailContent"
+msgstr "Vážený užívateľ,<br /><br /> oznamujeme Vám, že nie ste aktívny na %s viac ako %s dní."
+
+msgid "OpenIdAuthentication"
+msgstr "OpenID authentication"
+
+msgid "UploadMaxSize"
+msgstr "Uploadovať maximálnu veľkosť"
+
+msgid "Unknown"
+msgstr "Neznámy"
+
+msgid "MoveUp"
+msgstr "Posun hore"
+
+msgid "MoveDown"
+msgstr "Posun dole"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "Načítanie súboru neúspešné: rozsah súboru alebo jeho typ je zakázaný"
+
+msgid "OpenIDURL"
+msgstr "URL OpenID"
+
+msgid "UplFileTooBig"
+msgstr "Súbor je príliš veľký."
+
+msgid "UplGenericError"
+msgstr "Nahrávanie súboru bolo neúspešné. Prosím skúste to znova alebo kontaktujte administrátora portálu."
+
+msgid "MyGradebook"
+msgstr "Môj klasifikačný hárok"
+
+msgid "Gradebook"
+msgstr "Klasifikačný hárok"
+
+msgid "OpenIDWhatIs"
+msgstr "Čo je OpenID?"
+
+msgid "OpenIDDescription"
+msgstr "OpenID eliminuje potrebuje viacnásobného prihlasovania do rôznych webových stránok, uľahčujúc Vaše online aktivity. Môžete si vybrať OpenID Provider, ktorý najlepšie spĺňa Vaše potreby a čo je najdôležitejšie, môžete mu dôverovať. Zároveň, Váš OpenID môže zostať s Vami, bez ohľadu akého poskytovateľa si vyberiete. Najlepšie zo všetkého je, že technológia OpenID je úplne zadarmo. Pre podniky to znamená nižšie náklady na správu účtu a heslo a poskytuje novú web prevádzku. OpenID znižuje frustráciu užívateľa tým, že necháva užívateľov mať kontrolu nad ich prihlásením.<br /> <br /> <a Href=\"http://openid.net/what/\"> Prečítajte si na ...</ a>"
+
+msgid "NoManager"
+msgstr "Žiadny správca"
+
+msgid "ExportiCal"
+msgstr "Exportovať vo formáte iCal"
+
+msgid "ExportiCalPublic"
+msgstr "Exportovať vo formáte iCal ako verejnú udalosť"
+
+msgid "ExportiCalPrivate"
+msgstr "Exportovať vo formáte iCal ako súkromnú udalosť"
+
+msgid "ExportiCalConfidential"
+msgstr "Exportovať vo formáte iCal ako dôvernú udalosť"
+
+msgid "MoreStats"
+msgstr "Viac štatistiky"
+
+msgid "Drh"
+msgstr "Manažér ľudských zdrojov"
+
+msgid "MinDecade"
+msgstr "desaťročie"
+
+msgid "MinYear"
+msgstr "rok"
+
+msgid "MinMonth"
+msgstr "mesiac"
+
+msgid "MinWeek"
+msgstr "týždeň"
+
+msgid "MinDay"
+msgstr "deň"
+
+msgid "MinHour"
+msgstr "hodina"
+
+msgid "MinMinute"
+msgstr "minúta"
+
+msgid "MinDecades"
+msgstr "desaťročia"
+
+msgid "MinYears"
+msgstr "roky"
+
+msgid "MinMonths"
+msgstr "mesiace"
+
+msgid "MinWeeks"
+msgstr "týždne"
+
+msgid "MinDays"
+msgstr "dni"
+
+msgid "MinHours"
+msgstr "hodiny"
+
+msgid "MinMinutes"
+msgstr "minúty"
+
+msgid "HomeDirectory"
+msgstr "Domov"
+
+msgid "DocumentCreated"
+msgstr "Dokument vytvorený"
+
+msgid "ForumAdded"
+msgstr "Fórum bolo pridané"
+
+msgid "ForumThreadAdded"
+msgstr "Téma fóra pridaná"
+
+msgid "ForumAttachmentAdded"
+msgstr "Príloha fóra pridaná"
+
+msgid "directory"
+msgstr "katalóg"
+
+msgid "Directories"
+msgstr "katalógy"
+
+msgid "UserAge"
+msgstr "Vek"
+
+msgid "UserBirthday"
+msgstr "Dátum narodenia"
+
+msgid "Course"
+msgstr "Kurz"
+
+msgid "FilesUpload"
+msgstr "dokumenty"
+
+msgid "ExerciseFinished"
+msgstr "Cvičenie je ukončené"
+
+msgid "UserSex"
+msgstr "Pohlavie"
+
+msgid "UserNativeLanguage"
+msgstr "Materinský jazyk"
+
+msgid "UserResidenceCountry"
+msgstr "Krajina trvalého pobytu"
+
+msgid "AddAnAttachment"
+msgstr "Pridať prílohu"
+
+msgid "FileComment"
+msgstr "Komentár súboru"
+
+msgid "FileName"
+msgstr "Názov súboru"
+
+msgid "SessionsAdmin"
+msgstr "Administrátor stretnutia"
+
+msgid "MakeChangeable"
+msgstr "Umožniť zmeny"
+
+msgid "MakeUnchangeable"
+msgstr "Neumožniť zmeny"
+
+msgid "UserFields"
+msgstr "Používateľské polia"
+
+msgid "FieldShown"
+msgstr "Pole je teraz viditeľné pre používateľa."
+
+msgid "CannotShowField"
+msgstr "Nie je možné pole zviditeľniť."
+
+msgid "FieldHidden"
+msgstr "Pole je teraz pre používateľa neviditeľné."
+
+msgid "CannotHideField"
+msgstr "Nie je možné pole ukryť"
+
+msgid "FieldMadeChangeable"
+msgstr "Teraz môže používateľ pole zmeniť: používateľ môže vyplniť alebo zmeniť pole"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "Pole nemôže byť zmeniteľné."
+
+msgid "FieldMadeUnchangeable"
+msgstr "Pole je teraz nezmeniteľné: používateľ ho nemôže vyplniť ani zmeniť."
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "Pole nemôže byť nezmeniteľné"
+
+msgid "Folder"
+msgstr "Zložka"
+
+msgid "CloseOtherSession"
+msgstr "Pokec nie je dostupný pretože na inej stránke je otvorený iný kurz. Aby ste tomu predišli, preverte si, či ste počas stretnutia v Pokece zostali v tom istom kurze. Ak sa chcete znova pripojiť k stretnutiu na Pokeci, opätovne spustite Pokec z domovskej stránky kurzu."
+
+msgid "FileUploadSucces"
+msgstr "Súbor bol úspešne načítaný."
+
+msgid "Yesterday"
+msgstr "Včera"
+
+msgid "Submit"
+msgstr "Odoslať"
+
+msgid "Department"
+msgstr "Oddelenie"
+
+msgid "BackToNewSearch"
+msgstr "Späť na nové vyhľadávanie"
+
+msgid "Step"
+msgstr "Etapa"
+
+msgid "SomethingFemininAddedSuccessfully"
+msgstr "úspešne pridané"
+
+msgid "SomethingMasculinAddedSuccessfully"
+msgstr "úspešne pridané"
+
+msgid "DeleteError"
+msgstr "Chyba počas mazania"
+
+msgid "StepsList"
+msgstr "Zoznam etáp"
+
+msgid "AddStep"
+msgstr "Pridať etapu"
+
+msgid "StepCode"
+msgstr "Kód etapy"
+
+msgid "Label"
+msgstr "Etiketa"
+
+msgid "UnableToConnectTo"
+msgstr "Nie je možné sa pripojiť na"
+
+msgid "NoUser"
+msgstr "Žiadny používateľ"
+
+msgid "SearchResultsFor"
+msgstr "Výsledky vyhľadávania pre:"
+
+msgid "SelectFile"
+msgstr "Vybrať súbor"
+
+msgid "WarningFaqFileNonWriteable"
+msgstr "Upozornenie - FAQ súbor , ktorý sa nachádza v /home/ adresári Vášho portálu, nie je zapisovateľný. Váš text nebude uložený pokiaľ sa nezmení nastavenie súboru."
+
+msgid "AddCategory"
+msgstr "Pridať kategóriu"
+
+msgid "NoExercises"
+msgstr "Žiadne cvičenia"
+
+msgid "NotAllowedClickBack"
+msgstr "Prepáčte, nemáte povolenie prístupu na túto stránku. Vrátiť sa na predchádzajúcu stránku môžete klikom na tlačidlo \"Späť\" vo Vašom prehliadači alebo nasledujte odkaz nižšie."
+
+msgid "Exercise"
+msgstr "Testy"
+
+msgid "Result"
+msgstr "Výsledok"
+
+msgid "AttemptingToLoginAs"
+msgstr "Pokus o prihlásenie ako %s %s (id %s)"
+
+msgid "LoginSuccessfulGoToX"
+msgstr "Prihlásenie úspešné. Choď na %s"
+
+msgid "FckMp3Autostart"
+msgstr "Automaticky spustiť audio"
+
+msgid "Learner"
+msgstr "Študent"
+
+msgid "IntroductionTextUpdated"
+msgstr "Úvodný text bol aktualizovaný"
+
+msgid "Align"
+msgstr "Zarovnanie"
+
+msgid "Width"
+msgstr "Šírka"
+
+msgid "VSpace"
+msgstr "V priestor"
+
+msgid "HSpace"
+msgstr "H priestor"
+
+msgid "Border"
+msgstr "Rám"
+
+msgid "Alt"
+msgstr "Alternatíva"
+
+msgid "Height"
+msgstr "Výška"
+
+msgid "ImageManager"
+msgstr "Správca obrázkov"
+
+msgid "ImageFile"
+msgstr "Súbor obrázkov"
+
+msgid "ConstrainProportions"
+msgstr "Obmedziť rozmery"
+
+msgid "InsertImage"
+msgstr "Vložiť obrázok"
+
+msgid "AccountActive"
+msgstr "Konto je akívne"
+
+msgid "GroupSpace"
+msgstr "Priestor skupiny"
+
+msgid "GroupWiki"
+msgstr "Wiki"
+
+msgid "ExportToPDF"
+msgstr "Exportovať do PDF"
+
+msgid "CommentAdded"
+msgstr "Váš komentár je pridaný"
+
+msgid "BackToPreviousPage"
+msgstr "Späť na predchádzajúcu stránku"
+
+msgid "ListView"
+msgstr "Zobraziť ako zoznam"
+
+msgid "NoOfficialCode"
+msgstr "Žiadny oficiálny kód"
+
+msgid "Owner"
+msgstr "Vlastník"
+
+msgid "DisplayOrder"
+msgstr "Poradie zobrazenia"
+
+msgid "SearchFeatureDoIndexDocument"
+msgstr "Indexovať text dokumentu?"
+
+msgid "With"
+msgstr "s"
+
+msgid "GeneralCoach"
+msgstr "Hlavný tútor"
+
+msgid "SaveDocument"
+msgstr "Uložiť dokument"
+
+msgid "CategoryDeleted"
+msgstr "Kategória je zmazaná."
+
+msgid "CategoryAdded"
+msgstr "Kategória pridaná"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Qualify"
+msgstr "Posúdiť"
+
+msgid "Words"
+msgstr "Slová"
+
+msgid "GoBack"
+msgstr "Späť"
+
+msgid "Details"
+msgstr "Detaily"
+
+msgid "EditLink"
+msgstr "Upraviť odkaz"
+
+msgid "LinkEdited"
+msgstr "Odkaz úspešne upravený"
+
+msgid "ForumThreads"
+msgstr "Témy fóra"
+
+msgid "GradebookVisible"
+msgstr "Viditeľný"
+
+msgid "GradebookInvisible"
+msgstr "Neviditeľný"
+
+msgid "Phone"
+msgstr "Telefón"
+
+msgid "InfoMessage"
+msgstr "Informačná správa"
+
+msgid "ConfirmationMessage"
+msgstr "Potvrdzujúca správa"
+
+msgid "WarningMessage"
+msgstr "Varovná správa"
+
+msgid "ErrorMessage"
+msgstr "Chybová správa"
+
+msgid "Glossary"
+msgstr "Slovník"
+
+msgid "Coach"
+msgstr "Tútor"
+
+msgid "Condition"
+msgstr "Podmienka"
+
+msgid "CourseSettings"
+msgstr "Nastavenie kurzu"
+
+msgid "EmailNotifications"
+msgstr "Emailová notifikácia"
+
+msgid "UserRights"
+msgstr "Používateľské práva"
+
+msgid "Theming"
+msgstr "Grafická téma"
+
+msgid "Qualification"
+msgstr "Kvalifikácia"
+
+msgid "OnlyNumbers"
+msgstr "Len čísla"
+
+msgid "ReorderOptions"
+msgstr "Znovu usporiadať možnosti"
+
+msgid "EditUserFields"
+msgstr "Upraviť používateľské polia"
+
+msgid "OptionText"
+msgstr "Text"
+
+msgid "FieldTypeDoubleSelect"
+msgstr "Dvojitý výber"
+
+msgid "ScormUnknownPackageFormat"
+msgstr "Neznámy formát balenia"
+
+msgid "ResourceDeleted"
+msgstr "Zdroj bol zmazaný"
+
+msgid "AdvancedParameters"
+msgstr "Rozšírené parametre"
+
+msgid "GoTo"
+msgstr "Ísť na"
+
+msgid "SessionNameAndCourseTitle"
+msgstr "Názov stretnutia a kurzu"
+
+msgid "CreationDate"
+msgstr "Dátum vytvorenia"
+
+msgid "LastUpdateDate"
+msgstr "Posledná aktualizácia"
+
+msgid "ViewHistoryChange"
+msgstr "Prezerať históriu zmien"
+
+msgid "langNameOfLang[\'asturian\']"
+msgstr ""
+
+msgid "SearchGoToLearningPath"
+msgstr "Ísť na učebnú osnovu"
+
+msgid "SearchLectureLibrary"
+msgstr "Knižnica prednášok"
+
+msgid "SearchImagePreview"
+msgstr "Náhľad obrázku"
+
+msgid "SearchAdvancedOptions"
+msgstr "Rozšírené vyhľadávanie"
+
+msgid "SearchResetKeywords"
+msgstr "Vynulovať kľúčové slová"
+
+msgid "SearchKeywords"
+msgstr "Kľúčové slová"
+
+msgid "IntroductionTextDeleted"
+msgstr "Úvodný text je zmazaný"
+
+msgid "SearchKeywordsHelpTitle"
+msgstr "Pomoc pri vyhľadávaní kľúčových slov"
+
+msgid "SearchKeywordsHelpComment"
+msgstr "Vyberte kľúčov slová v jednom alebo vo viacerých poliach a kliknite na tlačidlo vyhľadávania.<br /><br />Pre vybratie viac ako jedného kľúčového slova v poli použite Ctrl+klik."
+
+msgid "Validate"
+msgstr "Potvrdiť"
+
+msgid "SearchCombineSearchWith"
+msgstr "Kombinovať kľúčové slová s"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "Funkcia vyhľadávania v celom texte nie je v Chamilo-e aktívna. Prosím kontaktujte administrátora Chamilo-u."
+
+msgid "Top"
+msgstr "Vrchol"
+
+msgid "YourTextHere"
+msgstr "Váš text sem"
+
+msgid "OrderBy"
+msgstr "Zoradiť podľa"
+
+msgid "Notebook"
+msgstr "Zápisník"
+
+msgid "FieldRequired"
+msgstr "Povinné pole"
+
+msgid "BookingSystem"
+msgstr "Rezervačný systém"
+
+msgid "Any"
+msgstr "Nejaký"
+
+msgid "SpecificSearchFields"
+msgstr "Špecifické polia vyhľadávania"
+
+msgid "SpecificSearchFieldsIntro"
+msgstr "Tu môžete definovať polia, ktoré chcete použiť pre indexáciu obsahu. Ak chcete rozdeliť jednu časť, mali by ste pridať jeden alebo viac výrazov oddelených čiarkami do každého poľa."
+
+msgid "AddSpecificSearchField"
+msgstr "Pridať špecifické pole vyhľadávania"
+
+msgid "SaveSettings"
+msgstr "Uložiť nastavenia"
+
+msgid "NoParticipation"
+msgstr "Nie sú žiadni účastníci"
+
+msgid "Subscribers"
+msgstr "Prihlásení"
+
+msgid "Accept"
+msgstr "Akceptovať"
+
+msgid "Reserved"
+msgstr "Rezervovaný"
+
+msgid "SharedDocumentsDirectory"
+msgstr "Katalóg zdieľaných dokumentov"
+
+msgid "Gallery"
+msgstr "Galéria"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "GoToQuestion"
+msgstr "Choď na otázku"
+
+msgid "Level"
+msgstr "Úroveň"
+
+msgid "Duration"
+msgstr "Trvanie"
+
+msgid "MaxTimeAllowed"
+msgstr "Maximálny povolený čas (min)"
+
+msgid "Class"
+msgstr "Trieda"
+
+msgid "Select"
+msgstr "Vybrať"
+
+msgid "Booking"
+msgstr "Rezervovanie"
+
+msgid "ManageReservations"
+msgstr "Riadiť rezervácie"
+
+msgid "DestinationUsers"
+msgstr "Cieľoví používatelia"
+
+msgid "AttachmentFileDeleteSuccess"
+msgstr "Pripojený súbor bol zmazaný"
+
+msgid "AccountURLInactive"
+msgstr "Konto neaktívne pre túto URL"
+
+msgid "MaxFileSize"
+msgstr "Maximálna veľkosť súboru"
+
+msgid "SendFileError"
+msgstr "Počas prijímania Vášho súboru bola zaznamenaná chyba. Prosím skontrolujte či súbor nie je poškodený a skúste to ešte raz."
+
+msgid "Expired"
+msgstr "Vypršaný"
+
+msgid "InvitationHasBeenSent"
+msgstr "Pozvánka bola odoslaná"
+
+msgid "InvitationHasBeenNotSent"
+msgstr "Pozvánka nebola odoslaná"
+
+msgid "Outbox"
+msgstr "Odoslané správy"
+
+msgid "Overview"
+msgstr "Prehľad"
+
+msgid "ApiKeys"
+msgstr "API kľúče"
+
+msgid "GenerateApiKey"
+msgstr "Vytvor API kľúč"
+
+msgid "MyApiKey"
+msgstr "Môj API key"
+
+msgid "Deny"
+msgstr "Odmietnúť"
+
+msgid "ThereIsNotQualifiedLearners"
+msgstr "Nie sú k dispozícii žiadni kvalifikovaní študenti"
+
+msgid "ThereIsNotUnqualifiedLearners"
+msgstr "Nie sú k žiadni nekvalifikovaní študenti"
+
+msgid "SocialNetwork"
+msgstr "Sociálna sieť"
+
+msgid "BackToOutbox"
+msgstr "Späť do schránky odoslanej pošty"
+
+msgid "Invitation"
+msgstr "Pozvanie"
+
+msgid "SeeMoreOptions"
+msgstr "Ďaľšie možnosti"
+
+msgid "TemplatePreview"
+msgstr "Náhľad šablóny"
+
+msgid "NoTemplatePreview"
+msgstr "Náhľad nie je k dispozícii"
+
+msgid "ModifyCategory"
+msgstr "Zmeniť kategóriu"
+
+msgid "Photo"
+msgstr "Fotografia"
+
+msgid "MoveFile"
+msgstr "Preložiť súbor"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Subject"
+msgstr "Predmet"
+
+msgid "Message"
+msgstr "správa"
+
+msgid "MoreInformation"
+msgstr "Viac informácií"
+
+msgid "MakeInvisible"
+msgstr "Skryť"
+
+msgid "MakeVisible"
+msgstr "Zviditeľniť"
+
+msgid "Image"
+msgstr "Obrázok"
+
+msgid "SaveIntroText"
+msgstr "Uložiť úvodný text"
+
+msgid "CourseName"
+msgstr "Názov kurzu"
+
+msgid "SendAMessage"
+msgstr "Poslať správu"
+
+msgid "Menu"
+msgstr "Menu"
+
+msgid "BackToUserList"
+msgstr "Späť na zoznam užívateľov"
+
+msgid "GraphicNotAvailable"
+msgstr "Grafika nie je k dispozícii"
+
+msgid "BackTo"
+msgstr "Späť do"
+
+msgid "ConversionFailled"
+msgstr "Prevod zrušený"
+
+msgid "AlreadyExists"
+msgstr "Už existuje"
+
+msgid "TheNewWordHasBeenAdded"
+msgstr "Nové slovo bolo pridané"
+
+msgid "CommentErrorExportDocument"
+msgstr "Niektoré dokumenty sú príliš zložité aby boli automaticky spracované konvertorom dokumentu."
+
+msgid "DataType"
+msgstr "Typ údajov"
+
+msgid "Value"
+msgstr "Hodnota"
+
+msgid "System"
+msgstr "Systém"
+
+msgid "ImportantActivities"
+msgstr "Dôležité činnosti"
+
+msgid "GeneralDescription"
+msgstr "Všeobecná charakteristika"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "Aké je miesto kurzu v programe? Sú nejaké predpoklady? Ako je kurz spojený s inými kurzami?"
+
+msgid "GeneralDescriptionInformation"
+msgstr "Opísať kurz (počet hodín, oficiálny kód, miesto, kde sa to koná) a lektora (meno, priezvisko, kancelária, telefón, e-mail...)."
+
+msgid "Objectives"
+msgstr "Ciele"
+
+msgid "ObjectivesInformation"
+msgstr "Prezentácia globálnych a podrobných cieľov kurzu."
+
+msgid "ObjectivesQuestions"
+msgstr "Čo budú môcť používatelia urobiť na konci kurzu. Čo majú vytvoriť počas kurzu?"
+
+msgid "Topics"
+msgstr "Témy"
+
+msgid "TopicsInformation"
+msgstr "Zoznam tém zahrnutých do kurzu. Dôležitosť každej témy. Úroveň obtiažnosti. Štruktúra a vzájomná závislosť rôznych častí."
+
+msgid "TopicsQuestions"
+msgstr "Ako kurz postupuje? Na čo majú dať používatelia pozor? Boli identifikované problémy v pochopení v rôznych kapitolách? Koľko času treba venovať jednotlivým častiam kurzu?"
+
+msgid "Methodology"
+msgstr "Metodika"
+
+msgid "MethodologyQuestions"
+msgstr "Aké metódy a aktivity môžu pomôcť pri dosahovaní cieľov kurzu? Podľa akého harmonogramu?"
+
+msgid "MethodologyInformation"
+msgstr "Prezentácia aktivít (konferencie, práce, skupinové výskumy, laboratóriá...)."
+
+msgid "CourseMaterial"
+msgstr "Študijný materiál"
+
+msgid "CourseMaterialQuestions"
+msgstr "Je tam učebnica, zborník dokumentov, bibliografia, zoznam odkazov na internete?"
+
+msgid "CourseMaterialInformation"
+msgstr "Krátky popis materiálov kurzu."
+
+msgid "HumanAndTechnicalResources"
+msgstr "Ľudské zdroje a technické zabezpečenie"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "Sú tam lektori, tútori, technická pomoc, asistenti, počítačové učebne?"
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "Krátky popis identifikácie rôznych kontaktných osôb a dostupných technických prostriedkov."
+
+msgid "Assessment"
+msgstr "Hodnotenie"
+
+msgid "AssessmentQuestions"
+msgstr "Ako budú používatelia hodnotení? Je možné rozvíjať stratégie na zvládnutie témy?"
+
+msgid "AssessmentInformation"
+msgstr "Príklad skúškových otázok. Kritériá úspechu. Tipy a triky."
+
+msgid "langNameOfLang[\'bosnian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'czech\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dari\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english_org\']"
+msgstr ""
+
+msgid "langNameOfLang[\'friulian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'georgian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'hebrew\']"
+msgstr ""
+
+msgid "langNameOfLang[\'korean\']"
+msgstr ""
+
+msgid "langNameOfLang[\'latvian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'lithuanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'macedonian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'norwegian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'pashto\']"
+msgstr ""
+
+msgid "langNameOfLang[\'persian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'quechua_cusco\']"
+msgstr ""
+
+msgid "langNameOfLang[\'romanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'serbian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovak\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swahili\']"
+msgstr ""
+
+msgid "langNameOfLang[\'trad_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'ukrainian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'yoruba\']"
+msgstr ""
+
+msgid "QualifyWeight"
+msgstr "Hodnota kvalifikácie"
+

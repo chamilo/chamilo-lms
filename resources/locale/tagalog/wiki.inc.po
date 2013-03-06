@@ -1,0 +1,72 @@
+msgid "Wiki"
+msgstr "Grupo ng wiki"
+
+msgid "EditThisPage"
+msgstr "I-edit ang pahinang ito"
+
+msgid "ShowPageHistory"
+msgstr "Kasaysayan"
+
+msgid "RecentChanges"
+msgstr "Pinakahuling mga pagbabago"
+
+msgid "AllPages"
+msgstr "Lahat ng mga pahina"
+
+msgid "AddNew"
+msgstr "Magdagdag ng bagong pahina"
+
+msgid "DefaultContent"
+msgstr " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Working as a team\" title=\"Working as a team\" /></p> <p align=\"center\">Upang magsimula sa pag-edit ng pahina na ito at tanggalin ang tekstong ito</p>"
+
+msgid "SearchPages"
+msgstr "Maghanap"
+
+msgid "ShowThisPage"
+msgstr "Tingnan ang pahinang ito"
+
+msgid "DeleteThisPage"
+msgstr "Tanggalin ang pahinang ito"
+
+msgid "DiscussThisPage"
+msgstr "Talakayin ang pahinang ito"
+
+msgid "HomeWiki"
+msgstr "Wiki home"
+
+msgid "DeleteWiki"
+msgstr "Tanggalin lahat"
+
+msgid "PageUnlockedExtra"
+msgstr "Ang pahinang ito ay hindi protektado. Lahat ng gumagamit sa kurso o mga miyembro ng grupo ay maaaring i-edit ang pahinang ito."
+
+msgid "AddOptionProtected"
+msgstr "Ang opsyon na"
+
+msgid "CancelNotifyByEmail"
+msgstr "Huwag ipaalam sa akin sa e-mail kapag ang pahinang ito ay ini-edit"
+
+msgid "Rating"
+msgstr "Rating"
+
+msgid "LinksPages"
+msgstr "Anong mga link dito"
+
+msgid "DefaultTitle"
+msgstr "Home"
+
+msgid "Print"
+msgstr "I-print"
+
+msgid "GroupTutor"
+msgstr "Tutor ng grupo"
+
+msgid "ShowPageExtra"
+msgstr "Ang pahina ngayon ay nakikita ng lahat ng gumagamit"
+
+msgid "Visits"
+msgstr "mga pagbisita"
+
+msgid "Feedback"
+msgstr "Feedback"
+

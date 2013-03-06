@@ -1,0 +1,441 @@
+msgid "ForumDeleted"
+msgstr "Fórum excluido"
+
+msgid "ForumCategoryDeleted"
+msgstr "Categoria do fórum foi excluida"
+
+msgid "ForumLocked"
+msgstr "Fórum bloqueado"
+
+msgid "Forum"
+msgstr "Fóruns"
+
+msgid "AddForumCategory"
+msgstr "Adicionar uma nova categoria ao fórum"
+
+msgid "AddForum"
+msgstr "Adicionar um novo fórum"
+
+msgid "Topics"
+msgstr "Tópicos"
+
+msgid "Posts"
+msgstr "Mensagens"
+
+msgid "LastPosts"
+msgstr "Última Mensagem"
+
+msgid "Message"
+msgstr "mensagem"
+
+msgid "NoForumInThisCategory"
+msgstr "Não existem fóruns nesta categoria"
+
+msgid "InForumCategory"
+msgstr "Criar na categoria"
+
+msgid "AllowAnonymousPosts"
+msgstr "Permitir mensagens de anônimos?"
+
+msgid "StudentsCanEdit"
+msgstr "Os usuários podem editar suas próprias mensagens?"
+
+msgid "ApprovalDirect"
+msgstr "Aprovação / Publicação Automática"
+
+msgid "AllowNewThreads"
+msgstr "Permitir aos usuários iniciarem novas discussões"
+
+msgid "DefaultViewType"
+msgstr "Tipo de visualização padrão"
+
+msgid "GroupSettings"
+msgstr "Configurações do Grupo"
+
+msgid "NotAGroupForum"
+msgstr "Não é um fórum de grupo"
+
+msgid "PublicPrivateGroupForum"
+msgstr "Fórum de Grupo privado ou público?"
+
+msgid "Public"
+msgstr "Para todos os membros do curso"
+
+msgid "Private"
+msgstr "Somente para membros do grupo"
+
+msgid "NewPostStored"
+msgstr "A sua mensagem foi gravada"
+
+msgid "ReturnTo"
+msgstr "Agora você pode voltar para"
+
+msgid "Or"
+msgstr "ou"
+
+msgid "ReplyToThread"
+msgstr "Responder a esta discussão"
+
+msgid "ReplyToMessage"
+msgstr "Responder esta mensagem"
+
+msgid "QuoteMessage"
+msgstr "Citar essa mensagem"
+
+msgid "NewTopic"
+msgstr "Nova discussão"
+
+msgid "Replies"
+msgstr "Respostas"
+
+msgid "Views"
+msgstr "Visualização"
+
+msgid "LastPost"
+msgstr "Última Mensagem"
+
+msgid "Quoting"
+msgstr "Citação"
+
+msgid "NotifyByEmail"
+msgstr "Gostaria de ser informado por email sempre que alguém responder a esta mensagem"
+
+msgid "StickyPost"
+msgstr "Mensagem fixa (aparece sempre no topo e tem um ícone especial)"
+
+msgid "ReplyShort"
+msgstr "Re:"
+
+msgid "DeletePost"
+msgstr "Tem certeza que deseja excluir esta mensagem? Ao excluila, apagará igualmente todas as respostas. Por favor, verifique as discussões encadeadas que serão excluidas."
+
+msgid "Locked"
+msgstr "Bloqueado: os ususários não podem publicar mais mensagens nesta categoria, fórum ou discussões, mas podem visualizar e ler as mensagens publicadas."
+
+msgid "Unlocked"
+msgstr "Desbloqueado: os usuários podem publicar novas mensagens nesta categoria, fórum ou discussões."
+
+msgid "Flat"
+msgstr "Linear"
+
+msgid "Threaded"
+msgstr "Hierarquia"
+
+msgid "Nested"
+msgstr "Hierarquizada"
+
+msgid "FlatView"
+msgstr "Vista Linear"
+
+msgid "ThreadedView"
+msgstr "Visão Encadeada"
+
+msgid "NestedView"
+msgstr "Visão Hierarquizada"
+
+msgid "Structure"
+msgstr "Estrutura"
+
+msgid "ForumCategoryAdded"
+msgstr "A categoria do forum foi adicionada"
+
+msgid "ForumCategoryEdited"
+msgstr "A categoria foi alterada."
+
+msgid "ForumAdded"
+msgstr "Novo fórum acrescentado"
+
+msgid "ForumEdited"
+msgstr "O fórum foi alterado"
+
+msgid "NewThreadStored"
+msgstr "Nova discussão foi adicionada"
+
+msgid "Approval"
+msgstr "Aprovação"
+
+msgid "Direct"
+msgstr "Direto"
+
+msgid "ForGroup"
+msgstr "Para Grupo"
+
+msgid "ThreadLocked"
+msgstr "Discussão bloqueada."
+
+msgid "NotAllowedHere"
+msgstr "Você não possui permissão"
+
+msgid "ReplyAdded"
+msgstr "A resposta foi adicionada"
+
+msgid "EditPost"
+msgstr "Editar artigo"
+
+msgid "EditPostStored"
+msgstr "A mensagem foi alterada com sucesso"
+
+msgid "NewForumPost"
+msgstr "Nova mensagem publicada no fórum"
+
+msgid "YouWantedToStayInformed"
+msgstr "Você escolheu ser informado todas as vezes que alguém publicasse uma mensagem neste fórum"
+
+msgid "MessageHasToBeApproved"
+msgstr "A mensagem tem que ser aprovada para ser visualizada por todos."
+
+msgid "AllowAttachments"
+msgstr "Permitir anexos"
+
+msgid "EditForumCategory"
+msgstr "Editar categoria do fórum"
+
+msgid "MovePost"
+msgstr "Mover mensagem"
+
+msgid "MoveToThread"
+msgstr "Mover para a discussão"
+
+msgid "ANewThread"
+msgstr "Nova discussão"
+
+msgid "Reply"
+msgstr "Responder"
+
+msgid "DeleteForum"
+msgstr "Excluir fórum?"
+
+msgid "DeleteForumCategory"
+msgstr "Excluir categoria do fórum?"
+
+msgid "Lock"
+msgstr "Bloquear"
+
+msgid "Unlock"
+msgstr "Desbloquear"
+
+msgid "MoveThread"
+msgstr "Mover discussão"
+
+msgid "PostVisibilityChanged"
+msgstr "Visibilidade da mensagem alterada"
+
+msgid "PostDeleted"
+msgstr "Mensagem foi excluida"
+
+msgid "MakeInvisible"
+msgstr "Tornar invisível"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "A discussão pode ser encontrada aqui"
+
+msgid "MakeVisible"
+msgstr "Tornar visível"
+
+msgid "DeleteCompleteThread"
+msgstr "Tem certeza que deseja excluir toda a discussão?"
+
+msgid "PostDeletedSpecial"
+msgstr "Mensagem de aviso excluida."
+
+msgid "ThreadDeleted"
+msgstr "Discussão excluida"
+
+msgid "NextMessage"
+msgstr "Próxima mensagem"
+
+msgid "PrevMessage"
+msgstr "Mensagem anterior"
+
+msgid "FirstMessage"
+msgstr "Primeira mensagem"
+
+msgid "LastMessage"
+msgstr "Última mensagem"
+
+msgid "ForumSearch"
+msgstr "Pesquisar no fórum"
+
+msgid "SearchTerm"
+msgstr "Pesquisar palavra"
+
+msgid "ForumSearchResults"
+msgstr "Resultados da pesquisa do fórum"
+
+msgid "ForumSearchInformation"
+msgstr "Pode pesquisar múltiplas palavras usando o sinal + entre elas"
+
+msgid "YouWillBeNotifiedOfNewPosts"
+msgstr "Será notificado por email sobre novas mensagens."
+
+msgid "YouWillNoLongerBeNotifiedOfNewPosts"
+msgstr "Não será mais notificado por email sobre novas mensagens."
+
+msgid "AddImage"
+msgstr "Adicionar imagem"
+
+msgid "QualifyThread"
+msgstr "Assinalar discussão"
+
+msgid "ThreadUsersList"
+msgstr "Lista de usuários desta discussão"
+
+msgid "StudentList"
+msgstr "Lista de usuários"
+
+msgid "QualifyThisThread"
+msgstr "Assinalar esta discussão"
+
+msgid "CourseUsers"
+msgstr "Usuários do curso"
+
+msgid "PostsNumber"
+msgstr "Número de mensagens"
+
+msgid "NumberOfPostsForThisUser"
+msgstr "Número de mensagens do usuários"
+
+msgid "AveragePostPerUser"
+msgstr "Média de mensagens por usuários"
+
+msgid "QualificationChangesHistory"
+msgstr "Avaliação do histórico de alterações"
+
+msgid "MoreRecent"
+msgstr "mais recentes"
+
+msgid "Older"
+msgstr "mais antigas"
+
+msgid "OrderBy"
+msgstr "Ordenar por"
+
+msgid "WhoChanged"
+msgstr "Quem alterou"
+
+msgid "NoteChanged"
+msgstr "Nota de alteração"
+
+msgid "DateChanged"
+msgstr "Data da alteração"
+
+msgid "ViewComentPost"
+msgstr "Visualizar comentarios das mensagens"
+
+msgid "AllStudents"
+msgstr "Todos os usuários"
+
+msgid "StudentsQualified"
+msgstr "Usuários qualificados"
+
+msgid "StudentsNotQualified"
+msgstr "Usuários desqualificados"
+
+msgid "NamesAndLastNames"
+msgstr "Nome e primeiro nome"
+
+msgid "MaxScore"
+msgstr "Pontuação"
+
+msgid "QualificationCanNotBeGreaterThanMaxScore"
+msgstr "A avaliação não pode ultrapassar a pontuação máxima"
+
+msgid "ThreadStatistics"
+msgstr "Estatísticas da discussão"
+
+msgid "Thread"
+msgstr "Discussão"
+
+msgid "NotifyMe"
+msgstr "Notifique-me"
+
+msgid "ConfirmUserQualification"
+msgstr "Confirmar avaliação do usuário?"
+
+msgid "NotChanged"
+msgstr "Inalterado"
+
+msgid "TitleColumnGradebook"
+msgstr "Título da coluna no relatório de avaliação"
+
+msgid "QualifyThreadGradebook"
+msgstr "Avaliar esta discussão"
+
+msgid "QualifyWeight"
+msgstr "Peso da pontuação"
+
+msgid "QualifyNumeric"
+msgstr "Pontuação"
+
+msgid "AlterQualifyThread"
+msgstr "Editar a pontuação da discussão"
+
+msgid "ForumMoved"
+msgstr "O fórum foi movido"
+
+msgid "YouMustAssignWeightOfQualification"
+msgstr "Você deve atribuir uma pontuação para esta atividade"
+
+msgid "DeleteAttachmentFile"
+msgstr "Excluir arquivos em anexo"
+
+msgid "EditAnAttachment"
+msgstr "Editar um anexo"
+
+msgid "SeeForum"
+msgstr "Ver fórum"
+
+msgid "CreateForum"
+msgstr "Criar fórum"
+
+msgid "ModifyForum"
+msgstr "Editar fórum"
+
+msgid "CreateThread"
+msgstr "Criar discussão"
+
+msgid "ModifyThread"
+msgstr "Editar mensagem"
+
+msgid "EditForum"
+msgstr "Editar fórum"
+
+msgid "BackToForum"
+msgstr "Voltar ao fórum"
+
+msgid "BackToForumOverview"
+msgstr "Voltar a visão geral do fórum"
+
+msgid "BackToThread"
+msgstr "Voltar a discussão"
+
+msgid "ForumcategoryLocked"
+msgstr "Categoria de fórum Bloqueado"
+
+msgid "PreviewImage"
+msgstr "Preview da imagem"
+
+msgid "UpdateImage"
+msgstr "Update da imagem"
+
+msgid "EnableTimeLimits"
+msgstr "Ativar limite de tempo"
+
+msgid "RemoveSearchResults"
+msgstr "Limpar o resultado da pesquisa"
+
+msgid "InsertQualificationCorrespondingToMaxScore"
+msgstr "Insira a qualificação correspondente à pontuação máxima."
+
+msgid "ThreadMoved"
+msgstr "Discussão movida"
+
+msgid "MigrateForum"
+msgstr "Migrar fórum"
+
+msgid "YouWillBeNotified"
+msgstr "Você será notificado"
+
+msgid "ForumCategories"
+msgstr "Categorias de Fórum"
+

@@ -1,0 +1,255 @@
+msgid "langProfessors"
+msgstr "교사"
+
+msgid "langExplanation"
+msgstr "OK를 클릭하면, 포럼, 일정, 문서 관리자 등을 가진 웹사이트를 생성하게 됩니다. 웹사이트의 생성자로 로그인하면, 자신의 필요에 따라 변경이 가능합니다."
+
+msgid "langEmpty"
+msgstr "채우지 않은 필드가 있습니다. .<br>브라우저의<b>Back</b> 버튼을 이용하여 다시 시도하십시요..<br>만약 과정 코드를 생략한다면, Course Program을 보십시요."
+
+msgid "langCodeTaken"
+msgstr "이 과정 코드는 이미 사용중입니다. <br><b>Back</b>버튼을 이용하여 다시 지정하십시요."
+
+msgid "langFormula"
+msgstr "친애하는"
+
+msgid "langMessage"
+msgstr "테스트포럼을 삭제하게 되면, 포럼의 메세지들도 함께 삭제됩니다."
+
+msgid "langExerciceEx"
+msgstr "샘플 테스트"
+
+msgid "langAntique"
+msgstr "Irony"
+
+msgid "langSocraticIrony"
+msgstr "Socratic irony is..."
+
+msgid "langManyAnswers"
+msgstr "(하나 이상의 응답이 참이 될 수 있다)"
+
+msgid "langRidiculise"
+msgstr "Ridiculise one\'s interlocutor in order to have him concede he is wrong."
+
+msgid "langNoPsychology"
+msgstr "No. Socratic irony is not a matter of psychology, it concerns argumentation."
+
+msgid "langAdmitError"
+msgstr "Admit one\'s own errors to invite one\'s interlocutor to do the same."
+
+msgid "langNoSeduction"
+msgstr "No. Socratic irony is not a seduction strategy or a method based on the example."
+
+msgid "langForce"
+msgstr "Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know."
+
+msgid "langIndeed"
+msgstr "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\""
+
+msgid "langContradiction"
+msgstr "Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end."
+
+msgid "langNotFalse"
+msgstr "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses."
+
+msgid "langAgenda"
+msgstr "일정"
+
+msgid "langVideo"
+msgstr "비디오"
+
+msgid "langCourseProgram"
+msgstr "과정 설명"
+
+msgid "langAnnouncements"
+msgstr "공지사항"
+
+msgid "langAddPageHome"
+msgstr "페이지를 업로드하고 홈페이지에 링크"
+
+msgid "langLinkSite"
+msgstr "홈페이지의 페이지에 링크 추가"
+
+msgid "langModifyInfo"
+msgstr "과정 세팅"
+
+msgid "langCourseDesc"
+msgstr "과정 설명"
+
+msgid "langAgendaTitle"
+msgstr "Tuesday the 11th of December - First meeting. Room: LIN 18"
+
+msgid "langAgendaText"
+msgstr "프로젝트 관리의 일반 개요"
+
+msgid "langMicro"
+msgstr "길거리 인터뷰"
+
+msgid "langGoogle"
+msgstr "빠르고 강력한 검색 엔진"
+
+msgid "langIntroductionText"
+msgstr "이것은 소개 글입니다. 원하는 글로 변경하고자 한다면, 아래의 연필아이콘을 클릭하십시요.(과정 관리자만 가능)"
+
+msgid "langIntroductionTwo"
+msgstr "이 페이지는 유저와 그룹이 문서 게시하는 것을 허용합니다."
+
+msgid "langCourseDescription"
+msgstr "과정 설명"
+
+msgid "langProfessor"
+msgstr "교사"
+
+msgid "langAnnouncementEx"
+msgstr "이는 공지사항 예시입니다. 과정 교사들만이 공지사항을 게시할 수 있습니다."
+
+msgid "langJustCreated"
+msgstr "과정 영역을 생성하였습니다"
+
+msgid "langEnter"
+msgstr "과정 목록으로 돌아가기"
+
+msgid "langGroups"
+msgstr "그룹"
+
+msgid "langCatagoryMain"
+msgstr "메인"
+
+msgid "langCatagoryGroup"
+msgstr "그룹 포럼"
+
+msgid "langLn"
+msgstr "언어"
+
+msgid "langCreateSite"
+msgstr "과정 영역 생성"
+
+msgid "langFieldsRequ"
+msgstr "모든 필드가 필요합니다"
+
+msgid "langEx"
+msgstr "e.g. <i>Innovation management</i>"
+
+msgid "langFac"
+msgstr "카테고리"
+
+msgid "langTargetFac"
+msgstr "이것은 과정이 전달되는 특정 카테고리의 일부입니다."
+
+msgid "langMax"
+msgstr "최대. 20 자, e.g. <i>INNOV21</i>"
+
+msgid "langScormtool"
+msgstr "Learning Path"
+
+msgid "langPathbuildertool"
+msgstr "Learning Path builder"
+
+msgid "langOnlineConference"
+msgstr "컨퍼런스"
+
+msgid "langAgendaCreationTitle"
+msgstr "과정 생성"
+
+msgid "langAgendaCreationContenu"
+msgstr "이 과정이 지금생성되었습니다."
+
+msgid "langOnlineDescription"
+msgstr "컨퍼런스 설명"
+
+msgid "langDropbox"
+msgstr "Dropbox"
+
+msgid "langOnly"
+msgstr "Only"
+
+msgid "langRandomLanguage"
+msgstr "적절한 언어로 선택을 변경"
+
+msgid "langForumLanguage"
+msgstr "영어"
+
+msgid "langNewCourse"
+msgstr "새 과정 영역"
+
+msgid "langAddNewCourse"
+msgstr "새 과정 영역에 추가"
+
+msgid "langRestoreCourse"
+msgstr "과정 복구"
+
+msgid "langOtherProperties"
+msgstr "백업파일의 또 다른 특성이 발견되었습니다"
+
+msgid "langSysId"
+msgstr "시스템 ID"
+
+msgid "langDepartment"
+msgstr "Department"
+
+msgid "langDepartmentUrl"
+msgstr "단과 URL"
+
+msgid "langScoreShow"
+msgstr "점수 보기"
+
+msgid "langVisibility"
+msgstr "가시성"
+
+msgid "langVersionDb"
+msgstr "백업 시에 데이터베이스 버전 사용"
+
+msgid "langLastVisit"
+msgstr "마지막 방문"
+
+msgid "langLastEdit"
+msgstr "마지막 변경"
+
+msgid "langExpire"
+msgstr "만료"
+
+msgid "langChoseFile"
+msgstr "파일 선택"
+
+msgid "langFtpFileTips"
+msgstr "FTP 서버의 파일"
+
+msgid "langHttpFileTips"
+msgstr "웹(HTTP)서버의 파일"
+
+msgid "langLocalFileTips"
+msgstr "플랫폼 서버의 파일"
+
+msgid "langPostFileTips"
+msgstr "로컬 컴퓨터의 파일"
+
+msgid "langOtherCategory"
+msgstr "다른 카테고리"
+
+msgid "langMinimum"
+msgstr "최소"
+
+msgid "langMaximum"
+msgstr "최대"
+
+msgid "langRestoreACourse"
+msgstr "과정 복구"
+
+msgid "langBackup"
+msgstr "백업"
+
+msgid "langCopy"
+msgstr "과정 내용 복사"
+
+msgid "langRecycle"
+msgstr "과정 재사용"
+
+msgid "AnnouncementExampleTitle"
+msgstr "이것은 공지사항 예시입니다"
+
+msgid "Wikipedia"
+msgstr "무료 온라인 백과사전"
+
+msgid "DefaultGroupCategory"
+msgstr "기본 그룹"
+

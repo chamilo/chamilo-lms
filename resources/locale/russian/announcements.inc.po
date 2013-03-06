@@ -1,0 +1,144 @@
+msgid "Announcement"
+msgstr "Объявления"
+
+msgid "langAnnEmpty"
+msgstr "Все объявления были удалены"
+
+msgid "AnnouncementModified"
+msgstr "Объявление изменено"
+
+msgid "AnnouncementAdded"
+msgstr "Объявление добавлено"
+
+msgid "AnnouncementDeleted"
+msgstr "Объявление удалено"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Опубликовано на"
+
+msgid "AddAnnouncement"
+msgstr "Добавить как объявление"
+
+msgid "langContent"
+msgstr "Содержание (суть)"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Очистить список объявлений"
+
+msgid "professorMessage"
+msgstr "Сообщение от вашего преподавателя"
+
+msgid "langEmailSent"
+msgstr "и утправлено по эл. почте зарегистрированным студентам"
+
+msgid "EmailOption"
+msgstr "Отправить это объявление по электронной почте выбранным группам/студентам"
+
+msgid "langOn"
+msgstr "На"
+
+msgid "langRegUser"
+msgstr "эти пользователи"
+
+msgid "langUnvalid"
+msgstr "имеют недействующий электронный адрес или не имеют адреса"
+
+msgid "langModifAnn"
+msgstr "Изменить это объявление"
+
+msgid "langModify"
+msgstr "изменить"
+
+msgid "langDelete"
+msgstr "удалить"
+
+msgid "langTitle"
+msgstr "Заголовок"
+
+msgid "langHelp"
+msgstr "Помощь"
+
+msgid "langOk"
+msgstr "Хорошо (правильно)"
+
+msgid "langAddIntro"
+msgstr "Добавить во введение"
+
+msgid "langBackList"
+msgstr "Вернуться к списку"
+
+msgid "langSelMess"
+msgstr "Предупреждения некоторым пользователям"
+
+msgid "EmailTitle"
+msgstr "Тема для этого сообщения"
+
+msgid "langUserlist"
+msgstr "Список групп и пользователей"
+
+msgid "langSelectedUsers"
+msgstr "Выбранные пользователи"
+
+msgid "langSubmit"
+msgstr "Отправить"
+
+msgid "langPleaseEnterMessage"
+msgstr "Вам должны ввести текст сообщения"
+
+msgid "langPleaseSelectUsers"
+msgstr "Вы должны выбрать несколько пользователей"
+
+msgid "Teachersubject"
+msgstr "Сообщение отправлено вашим студентам"
+
+msgid "langMessages"
+msgstr "Сообщения"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Сообщения выбранным пользователям"
+
+msgid "langIntroText"
+msgstr "Чтобы послать сообщение, выберите группы пользователей (помеченные спереди буквой G) или отдельных пользователей из списка слева."
+
+msgid "langDown"
+msgstr "вниз"
+
+msgid "langMsgSent"
+msgstr "сообщение выбранным студентам отправлено"
+
+msgid "langSelUser"
+msgstr "Выбранные пользователи сайта"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Сообщение выбранным группам"
+
+msgid "langSelectedGroups"
+msgstr "выбранные группы"
+
+msgid "langMsg"
+msgstr "Сообщения"
+
+msgid "langYes"
+msgstr "да"
+
+msgid "MsgText"
+msgstr "Сообщение"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Все объявления удалены"
+
+msgid "AnnouncementMoved"
+msgstr "Объявление перемещено"
+
+msgid "NoAnnouncements"
+msgstr "Объявления отсутствуют"
+
+msgid "SelectEverybody"
+msgstr "Выбрать всех"
+
+msgid "SelectedUsersGroups"
+msgstr "выбранные группы пользователей"
+
+msgid "LearnerMessage"
+msgstr "Сообщение от учащегося"
+

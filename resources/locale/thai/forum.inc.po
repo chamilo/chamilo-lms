@@ -1,0 +1,177 @@
+msgid "Forum"
+msgstr "การอภิปราย"
+
+msgid "AddForumCategory"
+msgstr "เพิ่มหมวดหมู่การอภิปรายใหม่"
+
+msgid "AddForum"
+msgstr "เพิ่มรายการอภิปรายใหม่"
+
+msgid "Topics"
+msgstr "หัวข้อ"
+
+msgid "Posts"
+msgstr "กระทู้"
+
+msgid "LastPosts"
+msgstr "กระทู้ล่าสุด"
+
+msgid "Message"
+msgstr "ข้อความ"
+
+msgid "NoForumInThisCategory"
+msgstr "ยังไม่มีการอภิปรายในหมวดนี้"
+
+msgid "InForumCategory"
+msgstr "สร้างเอาไว้ในหมวด"
+
+msgid "AllowAnonymousPosts"
+msgstr "อนุญาตให้บุคลทั่วไปส่งกระทู้เข้าได้"
+
+msgid "StudentsCanEdit"
+msgstr "ผู้เรียนสามารถแก้ไขกระทู้ของตนเองได้หรือไม่"
+
+msgid "ApprovalDirect"
+msgstr "ตรวจสอบ/กระทู้ที่ส่งโดยตรง"
+
+msgid "AllowNewThreads"
+msgstr "อนุญาตให้ผู้เรียนตั้งกระทู้เองได้"
+
+msgid "DefaultViewType"
+msgstr "มุมมองปกติ"
+
+msgid "GroupSettings"
+msgstr "ตั้งค่ากลุ่ม"
+
+msgid "NotAGroupForum"
+msgstr "ไม่ใช่กลุ่มอภิปราย"
+
+msgid "PublicPrivateGroupForum"
+msgstr "อภิปรายเฉพาะกลุ่มหรือเป็นกลุ่มสาธารณะ"
+
+msgid "Public"
+msgstr "สำหรับผู้เรียนทุกวิชา"
+
+msgid "Private"
+msgstr "เฉพาะสมาชิกในกลุ่มเท่านั้น"
+
+msgid "NewPostStored"
+msgstr "บันทึกข้อความกระทู้เอาไว้แล้ว"
+
+msgid "ReturnTo"
+msgstr "คุณพร้อมย้อนกลับไปที่"
+
+msgid "Or"
+msgstr "หรือ"
+
+msgid "ReplyToThread"
+msgstr "ตอบกระทู้นี้"
+
+msgid "ReplyToMessage"
+msgstr "ตอบกลับข้อความ"
+
+msgid "QuoteMessage"
+msgstr "คัดลอกข้อความ"
+
+msgid "NewTopic"
+msgstr "กระทู้ที่ตั้งเข้า"
+
+msgid "Replies"
+msgstr "มีผู้ตอบ"
+
+msgid "Views"
+msgstr "มีผู้อ่าน"
+
+msgid "LastPost"
+msgstr "กระทู้ล่าสุด"
+
+msgid "Quoting"
+msgstr "Quoting"
+
+msgid "NotifyByEmail"
+msgstr "แจ้งข่าวทางอีเมลเมื่อมีผู้ตอบกระทู้"
+
+msgid "StickyPost"
+msgstr "เป็นข้อความที่เกาะติด(จะแสดงเป็นข้อความเริ่มแรกเสมอและมีสัญรูปเกาะติดข่าวด้วย)"
+
+msgid "ReplyShort"
+msgstr "ตอบ"
+
+msgid "DeletePost"
+msgstr "คุณแน่ใจว่าต้องการจะลบกระทู้นี้ การลบกระทู้จะเป็นการลบเอากระทู้ตอบที่เกี่ยวข้องออกไปด้วย กรุณาตรวจสอบก่อนลบ"
+
+msgid "Locked"
+msgstr "ล๊อค:ผู้เรียนจะไม่สามารถส่งกระทู้เข้าสู่หมวดการอภิปรายได้แต่สามารถเข้าอ่านกระทู้ที่มีแล้วได้"
+
+msgid "Unlocked"
+msgstr "ปลดล๊อค:ผู้เรียนสามารถส่งกระทู้และอภิปรายเข้าหมวดหมู่ต่างๆได้"
+
+msgid "Flat"
+msgstr "Flat"
+
+msgid "Threaded"
+msgstr "ส่งเข้าแล้ว"
+
+msgid "Nested"
+msgstr "Nested"
+
+msgid "FlatView"
+msgstr "Flat View"
+
+msgid "ThreadedView"
+msgstr "ดูกระทู้เข้า"
+
+msgid "NestedView"
+msgstr "ดูกระทู้ที่เกี่ยวข้อง"
+
+msgid "Structure"
+msgstr "โครงสร้าง"
+
+msgid "ForumCategoryAdded"
+msgstr "ได้เพิ่มหมวดหมู่การอภิปรายให้แล้ว"
+
+msgid "ForumCategoryEdited"
+msgstr "ได้แก้ไขหัวข้อหมวดหมู่การอภิปรายให้แล้ว"
+
+msgid "ForumAdded"
+msgstr "เพิ่มกระทู้อภิปรายแล้ว"
+
+msgid "ForumEdited"
+msgstr "ได้แก้ไขกระทู้ให้แล้ว"
+
+msgid "NewThreadStored"
+msgstr "เพิ่มกระทู้อภิปรายใหม่เข้าให้แล้ว"
+
+msgid "Approval"
+msgstr "การตรวจสอบ"
+
+msgid "Direct"
+msgstr "โดยตรง"
+
+msgid "ForGroup"
+msgstr "สำหรับกลุ่ม"
+
+msgid "ThreadLocked"
+msgstr "ล๊อคกระทู้แล้ว"
+
+msgid "NotAllowedHere"
+msgstr "คุณไม่ได้รับอนุญาต"
+
+msgid "ReplyAdded"
+msgstr "เพิ่มกระทู้ตอบเรียบร้อยแล้ว"
+
+msgid "EditPost"
+msgstr "แก้ไขกระทู้"
+
+msgid "EditPostStored"
+msgstr "ได้แก้ไขกระทู้ให้แล้ว"
+
+msgid "NewForumPost"
+msgstr "กระทู้ใหม่ในการอภิปราย"
+
+msgid "YouWantedToStayInformed"
+msgstr "คุณต้องการให้มีการแจ้งข่าวทางอีเมลเมื่อมีผู้เข้าตอบกระทู้"
+
+msgid "MessageHasToBeApproved"
+msgstr "กระทู้ของคุณจะได้รับการตรวจสอบก่อนการนำเผยแพร่"
+

@@ -1,0 +1,789 @@
+msgid "MoveTo"
+msgstr "Pārvietot uz"
+
+msgid "langDownloadFile"
+msgstr "Augšupielādēt failu serverī"
+
+msgid "langNameDir"
+msgstr "Jaunās direktorijas nosaukums"
+
+msgid "langSize"
+msgstr "Izmērs"
+
+msgid "langRename"
+msgstr "Pārsaukt"
+
+msgid "langCopy"
+msgstr "Kopēt kursa saturu"
+
+msgid "langTo"
+msgstr "uz"
+
+msgid "langNoSpace"
+msgstr "Augšupielāde netika veikta ! <br>Iespējams, ka: <br>1) Jums pieejamā datu kvota ir pārsniegta; vai<br> 2) datu vieta uz servera ir pilna."
+
+msgid "langDownloadEnd"
+msgstr "Augšupielāde ir pabeigta"
+
+msgid "langFileExists"
+msgstr "Veicamā darbība ir neiespējama - fails ar tādu nosaukumu jau eksistē."
+
+msgid "langImpossible"
+msgstr "Darbība ir neiespējama"
+
+msgid "langAddComment"
+msgstr "Pievienot/labot komentāru"
+
+msgid "langDocCopied"
+msgstr "Dokuments nokopēts"
+
+msgid "langDocDeleted"
+msgstr "Dokuments izdzēsts"
+
+msgid "langElRen"
+msgstr "Elements pārsaukts"
+
+msgid "langDirMv"
+msgstr "Elements pārvietots"
+
+msgid "langComMod"
+msgstr "Komentārs papildināts"
+
+msgid "langViMod"
+msgstr "Pieejamība pārskatīta"
+
+msgid "langGroupSpace"
+msgstr "Grupas apraksts"
+
+msgid "langGroupSpaceLink"
+msgstr "Grupas apraksts"
+
+msgid "langGroupForumLink"
+msgstr "Grupas diskusijas"
+
+msgid "langZipNoPhp"
+msgstr "ZIP failā nedrīkst būt iekļauti .PHP faili"
+
+msgid "langUncompress"
+msgstr "atarhivēt ZIP failu"
+
+msgid "langDownloadAndZipEnd"
+msgstr "ZIP fails augšuplādēts un atarhivēts"
+
+msgid "langRoot"
+msgstr "pamatdirektorija"
+
+msgid "CreateDoc"
+msgstr "Izveidot jaunu mājas lapu / mācību lapas šablonu"
+
+msgid "langDown"
+msgstr "Zemāk"
+
+msgid "langFileError"
+msgstr "Augšupielādējamā faila formāts nav derīgs"
+
+msgid "langMaxFileSize"
+msgstr "Maksimāli pieļaujamais faila izmērs ir"
+
+msgid "langFileName"
+msgstr "Faila nosaukums"
+
+msgid "langNoFileName"
+msgstr "Lūdzu, norādiet faila nosaukumu"
+
+msgid "langNoText"
+msgstr "Lūdzu, ievadiet tekstuālo / HTML informāciju"
+
+msgid "langAreYouSureToDelete"
+msgstr "Vai tiešām vēlaties dzēst?"
+
+msgid "langScormcontent"
+msgstr "Pieeja <i>Scorm</i>  sistēmai<br><input type=button name=scormbutton value=\'Sākt darbu !\' =\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr "Pieeja <i>Scorm</i> formāta kursam. Pieejai klikšķiniet uz šīs pogas: <input type=button name=scormbutton value=\'Sākt darbu !\' =\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Publicēt"
+
+msgid "langMissingImagesDetected"
+msgstr "Konstatēti iztrūksto"
+
+msgid "langCreateDocument"
+msgstr "Izveidot dokumentu"
+
+msgid "langEditDocument"
+msgstr "Labot"
+
+msgid "langDocuments"
+msgstr "Dokumenti"
+
+msgid "langOrganiseDocuments"
+msgstr "Izveidot satura koku"
+
+msgid "langEditTOC"
+msgstr "Labot satura koku"
+
+msgid "langChapter"
+msgstr "Nodaļa"
+
+msgid "langDocumentList"
+msgstr "Visu dokumentu saraksts"
+
+msgid "langOrganisationList"
+msgstr "Saturs"
+
+msgid "langCreationSucces"
+msgstr "Satura koks izveidots veiksmīgi."
+
+msgid "langCanViewOrganisation"
+msgstr "Jūs varat apskatīt Jūsu uzņēmumu"
+
+msgid "langHere"
+msgstr "šeit."
+
+msgid "langViewDocument"
+msgstr "Skatīt"
+
+msgid "langHtmlTitle"
+msgstr "Saturs"
+
+msgid "langAddToTOC"
+msgstr "Pievienot tekstam"
+
+msgid "langAddChapter"
+msgstr "Pievienot nodaļu"
+
+msgid "langReady"
+msgstr "Izveidot satura koku"
+
+msgid "langStoreDocuments"
+msgstr "Uzglabāt dokumentus"
+
+msgid "langTocDown"
+msgstr "Lejup"
+
+msgid "langTocUp"
+msgstr "Augšup"
+
+msgid "CutPasteLink"
+msgstr "Likvidēt rāmjus"
+
+msgid "langCreatePath"
+msgstr "Izveidot saiti"
+
+msgid "SendDocument"
+msgstr "Augšupielādēt failu"
+
+msgid "ThisFolderCannotBeDeleted"
+msgstr "Mapi nevar izdzēst"
+
+msgid "ChangeVisibility"
+msgstr "Mainīt redzamību"
+
+msgid "VisibilityCannotBeChanged"
+msgstr "Redzamību nevar izmainīt"
+
+msgid "DocumentCannotBeMoved"
+msgstr "Dokumentu nevar pārvietot"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "Chamilo RAPID : PowerPoint konvertētājs"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "PowerPoint prezentāciju konvertēšana uz SCORM kursu"
+
+msgid "langAddMetadata"
+msgstr "Skatīt/Labot META datus"
+
+msgid "langGoMetadata"
+msgstr "AIZIET"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "Šī kursa kvota ir"
+
+msgid "langDel"
+msgstr "izdzēst"
+
+msgid "langUp"
+msgstr "Augšup"
+
+msgid "langDate"
+msgstr "Datums"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Rādīt kursa kvotu"
+
+msgid "CourseCurrentlyUses"
+msgstr "Šis kurss patlaban izmanto"
+
+msgid "MaximumAllowedQuota"
+msgstr "Jūsu datu vietas limits ir"
+
+msgid "PercentageQuotaInUse"
+msgstr "Jūsu izmantoto datu kvotas attēlojums procentuāli ir"
+
+msgid "PercentageQuotaFree"
+msgstr " Jūsu brīvās datu kvotas attēlojums procentuāli ir"
+
+msgid "CurrentDirectory"
+msgstr "Patlaban Jūs atrodaties"
+
+msgid "UplUploadDocument"
+msgstr "Augšupielādēt dokumentu"
+
+msgid "UplPartialUpload"
+msgstr "Augšupielādējamais fails uzlādējās tikai daļēji."
+
+msgid "UplExceedMaxPostSize"
+msgstr "Faila izmērs pārsniedz maksimāli pieļaujamo:"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "Augšupielādētais fails pārsniedz uz servera maksimāli pieļaujamo faila izmēru:"
+
+msgid "UplFileTooBig"
+msgstr "Faila izmērs ir pārsniedz pieļaujamo augšupielādes izmēru."
+
+msgid "UplUploadFailed"
+msgstr "Faila augšupielāde beidzās neveiksmīgi."
+
+msgid "UplUnableToSaveFile"
+msgstr "Augšupielādētais fails netika saglabāts (iespējams, atļauju problēma?)"
+
+msgid "UplNotEnoughSpace"
+msgstr "Nepietiek brīvās vietas uz servera, lai augšupielādētu failu."
+
+msgid "UplNoSCORMContent"
+msgstr "<i>SCORM</i> elementi netika atrasti."
+
+msgid "UplZipExtractSuccess"
+msgstr "ZIP fails tika veiksmīgi atarhivēts."
+
+msgid "UplZipCorrupt"
+msgstr "Nav iespējams atarhivēt ZIP failu (fails varētu būt bojāts?)"
+
+msgid "UplAlreadyExists"
+msgstr "jau eksistē."
+
+msgid "UplFileSavedAs"
+msgstr "Fails tika saglabāts kā"
+
+msgid "UplFileOverwritten"
+msgstr "tika pārrakstīts pa virsu."
+
+msgid "CannotCreateDir"
+msgstr "Direktorijas izveide nenotika."
+
+msgid "UplUpload"
+msgstr "Augšupielādēt"
+
+msgid "UplWhatIfFileExists"
+msgstr "Ja fails eksistē:"
+
+msgid "UplDoNothing"
+msgstr "Nedarīt neko"
+
+msgid "UplDoNothingLong"
+msgstr "Augšupielādi neveikt, ja fails eksistē"
+
+msgid "UplOverwrite"
+msgstr "Rakstīt pa virsu"
+
+msgid "UplOverwriteLong"
+msgstr "Rakstīt pa virsu eksistējošam failam"
+
+msgid "UplRename"
+msgstr "Pārsaukt"
+
+msgid "UplRenameLong"
+msgstr "Pārsaukt augšupielādējamo failu, ja tāds jau eksistē"
+
+msgid "Metadata"
+msgstr "META dati"
+
+msgid "DocumentQuota"
+msgstr "Dokumenta kvota"
+
+msgid "NoDocsInFolder"
+msgstr "Nav dokumentu, ko varētu parādīt."
+
+msgid "UploadTo"
+msgstr "Augšupielādēt uz"
+
+msgid "fileModified"
+msgstr "Fails tika pārveidots"
+
+msgid "DocumentsOverview"
+msgstr "dokumentu pārskats"
+
+msgid "ViewSlideshow"
+msgstr "Skatīt attēlu galeriju"
+
+msgid "Options"
+msgstr "Iespējas"
+
+msgid "WelcomeOogieConverter"
+msgstr "Laipni lūdzam <b>Chamilo Rapid (Oogie)</b><ul type=\"1\"><li>Izvēlieties datu bāzē tādu faila tipu kā ppt. vai .odp<li>Augšupielādējiet to uz  Oogie. Tas tiks pārveidots SCORM kursā. Katrs prezentācijas slaids, būs, kā viens satura solis mācību tēmā <li>Pēc konversācijas, katru satura soli Jūs variet neierobežoti papildināt, pievienojot audio komentārus, ievietojot  jebkuru mācību elementu - attēlu, tekstu, tabulu, video u.t.t </ul>"
+
+msgid "ConvertToLP"
+msgstr "Konvertēt kursā"
+
+msgid "AdvancedSettings"
+msgstr "Paplašināti iestatījumi"
+
+msgid "File"
+msgstr "Fails"
+
+msgid "DocDeleteError"
+msgstr "Kļūda dokumenta dzēšanas laikā"
+
+msgid "ViModProb"
+msgstr "Atjaunojot redzamību ir radusies kļūda"
+
+msgid "DirDeleted"
+msgstr "Mape ir izdzēsta"
+
+msgid "TemplateName"
+msgstr "Veidnes / šablona nosaukums"
+
+msgid "TemplateDescription"
+msgstr "Dokuments lietojams, kā jauna veidne / šablons"
+
+msgid "DocumentSetAsTemplate"
+msgstr "Dokuments lietojams, kā jauna veidne / šablons"
+
+msgid "DocumentUnsetAsTemplate"
+msgstr "Atcelt dokumenta lietošanu, kā jaunu veidni / šablonu"
+
+msgid "AddAsTemplate"
+msgstr "Pievienot, kā veidni / šablonu"
+
+msgid "RemoveAsTemplate"
+msgstr "Noņemt, kā veidni / šablonu"
+
+msgid "ReadOnly"
+msgstr "Tikai lasīšanai"
+
+msgid "ReadOnlyFile"
+msgstr "Fails ir tikai lasāms"
+
+msgid "FileNotFound"
+msgstr "Fails nav atrasts"
+
+msgid "TemplateTitleFirstPage"
+msgstr "Pirmā lapa"
+
+msgid "TemplateTitleFirstPageDescription"
+msgstr "Tā ir Jūsu kursa tēmas sākuma lapa"
+
+msgid "TemplateTitleDedicatory"
+msgstr "Veltījums"
+
+msgid "TemplateTitleDedicatoryDescription"
+msgstr "Izveidojiet savu veltījumu"
+
+msgid "TemplateTitlePreface"
+msgstr "Kursa / tēmas priekšvārds"
+
+msgid "TemplateTitlePrefaceDescription"
+msgstr "Priekšvārds"
+
+msgid "TemplateTitleIntroduction"
+msgstr "Ievads"
+
+msgid "TemplateTitleIntroductionDescription"
+msgstr "Ierakstiet ievada tekstu"
+
+msgid "TemplateTitlePlan"
+msgstr "Plāns"
+
+msgid "TemplateTitlePlanDescription"
+msgstr "Tas ir satura rādītājs"
+
+msgid "TemplateTitleMrDokeos"
+msgstr "Mr Chamilo mazie paskaidrojumi"
+
+msgid "TemplateTitleMrDokeosDescription"
+msgstr "Zemāk, dialogs ar Mr. Chamilo"
+
+msgid "TemplateTitleTeacher"
+msgstr "Jūsu instruktors"
+
+msgid "TemplateTitleTeacherDescription"
+msgstr "Zemāk, dialogs ar pasniedzēju"
+
+msgid "TemplateTitleProduction"
+msgstr "Producēšana"
+
+msgid "TemplateTitleProductionDescription"
+msgstr "Piedalīties producēšanas aprakstā"
+
+msgid "TemplateTitleAnalyze"
+msgstr "Analīze"
+
+msgid "TemplateTitleAnalyzeDescription"
+msgstr "Analizēt aprakstu"
+
+msgid "TemplateTitleSynthetize"
+msgstr "Sintēze"
+
+msgid "TemplateTitleSynthetizeDescription"
+msgstr "Sintēzes apraksts"
+
+msgid "TemplateTitleText"
+msgstr "Teksta lapa"
+
+msgid "TemplateTitleTextDescription"
+msgstr "Vienkārša teksta lapa"
+
+msgid "TemplateTitleLeftImage"
+msgstr "Atstātais attēls"
+
+msgid "TemplateTitleLeftImageDescription"
+msgstr "Atstātā attēla apraksts"
+
+msgid "TemplateTitleTextCentered"
+msgstr "Teksts un attēls ir centrēti"
+
+msgid "TemplateTitleTextCenteredDescription"
+msgstr "Tas ir teksts ar centrētu attēlu un leģendu"
+
+msgid "TemplateTitleComparison"
+msgstr "Salīdzināt"
+
+msgid "TemplateTitleComparisonDescription"
+msgstr "2 kolonu teksta lapa"
+
+msgid "TemplateTitleDiagram"
+msgstr "Paskaidrota diagramma"
+
+msgid "TemplateTitleDiagramDescription"
+msgstr "Attēls pa kreisi, komentārs pa labi"
+
+msgid "TemplateTitleImage"
+msgstr "Viens attēls"
+
+msgid "TemplateTitleImageDescription"
+msgstr "Tikai attēls"
+
+msgid "TemplateTitleFlash"
+msgstr "Flash animācija"
+
+msgid "TemplateTitleFlashDescription"
+msgstr "Animācija + ievada teksts"
+
+msgid "TemplateTitleAudio"
+msgstr "Audio komentārs"
+
+msgid "TemplateTitleAudioDescription"
+msgstr "Audio + attēls + teksts: izpratne klausoties"
+
+msgid "TemplateTitleSchema"
+msgstr "Shēma ar audio paskaidrojumu"
+
+msgid "TemplateTitleSchemaDescription"
+msgstr "Shēmas skaidrojums ar lektora attēlu"
+
+msgid "TemplateTitleVideo"
+msgstr "Video lapa"
+
+msgid "TemplateTitleVideoDescription"
+msgstr "Pēc pieprasījuma video + teksts"
+
+msgid "TemplateTitleVideoFullscreen"
+msgstr "Pilnekrāna video lapa"
+
+msgid "TemplateTitleVideoFullscreenDescription"
+msgstr "Pēc pieprasījuma video pa visu ekrānu"
+
+msgid "TemplateTitleTable"
+msgstr "Lapa: Ievietot Tabulu"
+
+msgid "TemplateTitleTableDescription"
+msgstr "Darba lapas(excell) tipa lapa"
+
+msgid "TemplateTitleAssigment"
+msgstr "Mājas darba apraksts"
+
+msgid "TemplateTitleAssigmentDescription"
+msgstr "Izskaidrot mērķi, lomas, darba kārtību"
+
+msgid "TemplateTitleResources"
+msgstr "Resursi"
+
+msgid "TemplateTitleResourcesDescription"
+msgstr "Grāmatas, hipersaites, instrumenti"
+
+msgid "TemplateTitleBibliography"
+msgstr "Bibliogrāfija"
+
+msgid "TemplateTitleBibliographyDescription"
+msgstr "Grāmatas, hipersaites, instrumenti"
+
+msgid "TemplateTitleFAQ"
+msgstr "Biežāk uzdotie jautājumi"
+
+msgid "TemplateTitleFAQDescription"
+msgstr "Lapa: Jautājumi un atbildes"
+
+msgid "TemplateTitleGlossary"
+msgstr "Terminu skaidrojumu vārdnīca"
+
+msgid "TemplateTitleGlossaryDescription"
+msgstr "Sadaļas terminu saraksts"
+
+msgid "TemplateTitleEvaluation"
+msgstr "Evolūcija"
+
+msgid "TemplateTitleEvaluationDescription"
+msgstr "Evolūcijas apraksts"
+
+msgid "TemplateTitleCertificate"
+msgstr "Gatavības Sertifikāts"
+
+msgid "TemplateTitleCertificateDescription"
+msgstr "Lai parādītos kursa beigās"
+
+msgid "TemplateTitleCheckList"
+msgstr "Kontroles lapa"
+
+msgid "TemplateTitleCourseTitle"
+msgstr "Kursa nosaukums"
+
+msgid "TemplateTitleLeftList"
+msgstr "Saraksts kreisajā pusē"
+
+msgid "TemplateTitleLeftListDescription"
+msgstr "Saraksts kreisajā pusē ar instruktoru"
+
+msgid "TemplateTitleCheckListDescription"
+msgstr "Resursu saraksts"
+
+msgid "TemplateTitleCourseTitleDescription"
+msgstr "Treniņa nosaukums ar logotipu"
+
+msgid "TemplateTitleRightList"
+msgstr "Saraksts labajā pusē"
+
+msgid "TemplateTitleRightListDescription"
+msgstr "Saraksts labajā pusē ar instruktoru"
+
+msgid "TemplateTitleLeftRightList"
+msgstr "Saraksts kreisajā un labajā pusē"
+
+msgid "TemplateTitleLeftRightListDescription"
+msgstr "Saraksts kreisajā un labajā pusē ar instruktoru"
+
+msgid "TemplateTitleDesc"
+msgstr "Apraksts"
+
+msgid "TemplateTitleDescDescription"
+msgstr "Resursu apraksts"
+
+msgid "TemplateTitleObjectives"
+msgstr "Kursa mērķi"
+
+msgid "TemplateTitleObjectivesDescription"
+msgstr "Aprakstiet apmācības mērķus"
+
+msgid "TemplateTitleCycle"
+msgstr "Cikla diagramma"
+
+msgid "TemplateTitleCycleDescription"
+msgstr "2 lapas ar cikla bultiņām"
+
+msgid "TemplateTitleLearnerWonder"
+msgstr "Kursanta izcilība"
+
+msgid "TemplateTitleLearnerWonderDescription"
+msgstr "Kursanta izcilības apraksts"
+
+msgid "TemplateTitleTimeline"
+msgstr "Laika grafika fāzes"
+
+msgid "TemplateTitleTimelineDescription"
+msgstr "3 saraksti ar bultām"
+
+msgid "TemplateTitleStopAndThink"
+msgstr "Apstājies un padomā"
+
+msgid "TemplateTitleListLeftListDescription"
+msgstr "Saraksts kreisajā pusē ar instruktoru"
+
+msgid "TemplateTitleStopAndThinkDescription"
+msgstr "Uzmetums ar uzmundrinājumu apstāties un padomāt"
+
+msgid "CreateTheDocument"
+msgstr "Apstiprināt"
+
+msgid "CreateTemplate"
+msgstr "Veidot sagatavi / šablonu"
+
+msgid "SharedFolder"
+msgstr "Koplietojama mape"
+
+msgid "CreateFolder"
+msgstr "Izveidot mapi"
+
+msgid "HelpDefaultDirDocuments"
+msgstr "<b>TIKAI LEKTORAM REDZAMA INFORMĀCIJA</b><br>Šajā direktorijā ir noklusētie arhīvi. Jūs varat izdzēst šos failus vai pievienot jaunus, bet, ja fails,kad tas tiek ievietots web dokumentā, ir paslēpts, tad kursanti nevarēs to redzēt. Pirms ievietojiet failu web dokumentā, pārliecinieties, ka tas ir redzams. Direktorijas var būt paslēptas."
+
+msgid "HelpSharedFolder"
+msgstr "Šajā direktorijā ir faili, kurus jūs vai citi kursanti saglabā kursā no redaktora (vai no kursantu grupas). Pēc noklusējuma šie faili ir redzami visiem lektoriem, bet nav redzami citiem kursantiem (izņemot, ja viņi piekļūst tiem pa taisno pēc adreses). Ja padarīsiet direktoriju redzamu, citi lietotāji redzēs visu tās saturu."
+
+msgid "TemplateImage"
+msgstr "Sagataves / šablona ikona"
+
+msgid "ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile"
+msgstr "Lai atskaņotu multivides failus, Jums ir nepieciešams, vai nu atjaunināt savu pārlūkprogrammu uz jaunāku versiju, vai atjaunināt Flash spraudni. Pārbaudiet arī, vai failam ir pareizs paplašinājums."
+
+msgid "UpdateRequire"
+msgstr "Nepieciešams atjaunināt programmu"
+
+msgid "MoveElement"
+msgstr "Pārvietot elementu"
+
+msgid "CertificateName"
+msgstr "Nosaukums"
+
+msgid "CopyToMyFiles"
+msgstr "Kopēt manā privātajā failu vietnē"
+
+msgid "Export2PDF"
+msgstr "Eksportēt PDF formātā"
+
+msgid "ResourceShared"
+msgstr "Koplietojams resurss"
+
+msgid "CopyAlreadyDone"
+msgstr "Šeit ir fails ar tādu pašu nosaukumu, kāds atrodas Jūsu privātajā failu apgabalā. Vai vēlaties to aizvietot?"
+
+msgid "CopyFailed"
+msgstr "Kopēšana neizdevās"
+
+msgid "CopyMade"
+msgstr "Kopija ir izveidota"
+
+msgid "OverwritenFile"
+msgstr "Pārrakstītais fails"
+
+msgid "Draw"
+msgstr "Zīmēt"
+
+msgid "FileExistsChangeToSave"
+msgstr "Šāds nosaukums jau eksistē. Lai saglabātu attēlu, izvēlieties citu."
+
+msgid "FileSavedAs"
+msgstr "Fails saglabāts kā"
+
+msgid "FileExportAs"
+msgstr "Fails eksportēts kā"
+
+msgid "UserFolder"
+msgstr "Lietotāja mape"
+
+msgid "HelpUsersFolder"
+msgstr "NFORMĀCIJA, KAS REDZAMA TIKAI LEKTORIEM :<br>Lietotāju mapē atrodas mape katram Lietotājam, kas saņēmis pieeju šai mapei:<br>a) caur Dokumentu instrumentu, jeb, <br>b)kad tas ir veicis jebkāda dokumenta vai faila apmaiņu kursa ietvaros, tiešsaistes redaktorā.<br>Ja netiek realizētas nekādas aktivitātes saistībā ar dokumentiem un failiem, tad Lietotāja mape netiek izveidota.<br><br>Grupu gadījumos, dokumenti, kas tiek nosūtīti online redaktora ietvaros, tiek  izvietoti izveidotajā grupas mapē. Pieeja šai mapei ir tikai šīs grupas locekļiem.<br><br>Pēc noklusējuma,  Lietotāju mape un tajā iekļautās Lietotāju individuālās mapes, ir paslēptas visiem studentiem, bet katrs students var redzēt savu mapes saturu, izmantojot tiešsaistes redaktoru. Tomēr, ja students zina citā studenta faila, vai mapes adresi, viņam ir iespēja tai piekļūt.</br><br>Ja Lietotāja mape ir redzama, tad citi Lietotāji var redzēt, ko tā satur. <br><br>Students, kuram pieder mape, var arī (caur dokumentu instrumentu un tikai viņa mapē): izveidot un rediģēt web dokumentus, konvertēt dokumentu par veidni personīgai lietošanai, veidot vai rediģēt zīmējumi SVG un PNG formātos, sūtīt dokumentus, veidot mapes, pārvietot mapes un failus, dzēst mapes un failus, kā arī lejupielādēt rezerves kopiju (backup) viņa mapē. <br><br>Tai pašā laikā, dokumentu instruments  tiešsaistes redaktorā ir sinhronizēts ar failu pārvaldnieku, tāpēc izmaiņas dokumentos, izraisīs izmaiņas jebkurā no tiem.<br><br>Lietotāju mape nav tikai vieta kur ievietot failus, tā kļūst par dokumentu plūsmas menedžeri visā mācību procesa garumā.<br><br>Tāpat arī jāatceras, ka jebkurš lietotājs, var pārkopēt failu, kas ir redzams Dokumentu instrumenta  jebkurā mapē, neatkarīgi no tā,  vai viņš ir, vai nav dokumenta īpašnieks, savā mapē, vai Sociālā tīkla dokumentu vietnē, kas Lietotājam ir pieejama visu mācību laiku, arī citu kursu apguvē."
+
+msgid "HelpFolderChat"
+msgstr "INFORMĀCIJA, KAS REDZAMA TIKAI LEKTORIEM :<br>Šajā mapē atrodas visas sesijas, kas ir  bijušas atvērtas tērzēšanas laikā. <br>Kaut arī tērzēšanas sesijas bieži vien var būt maznozīmīgas, tomēr citas var būt patiesi interesantas un vērts tās iekļaut, kā papildu darba dokumentu. <br>Lai to izdarītu, nemainot šīs mapes redzamību, padariet failu redzamu un saistīt to vietu, kuru jūs uzskatāt par piemērotu. Nav ieteicams padarīt šo mapi redzamu visiem."
+
+msgid "HelpFolderCertificates"
+msgstr "INFORMĀCIJA, KAS REDZAMA TIKAI LEKTORIEM :<br>Šajā mapē atrodas dažādu sertifikātu veidnes / šabloni, kas ir radītas ieskaišu instrumentam. <br>Nav ieteicams padarīt šo mapi redzamu visiem."
+
+msgid "DestinationDirectory"
+msgstr "Mērķa mape"
+
+msgid "CreateAudio"
+msgstr "Veidot audio"
+
+msgid "InsertText2Audio"
+msgstr "Ievadiet tekstu, kuru Jūs vēlaties pārveidot audio formātā."
+
+msgid "HelpText2Audio"
+msgstr "Pārveidot tekstu runā"
+
+msgid "BuildMP3"
+msgstr "Veidot mp3"
+
+msgid "Voice"
+msgstr "Balss"
+
+msgid "Female"
+msgstr "Sievietes"
+
+msgid "Male"
+msgstr "Vīrieša"
+
+msgid "GoogleAudio"
+msgstr "Lietot Google audio servisu"
+
+msgid "vozMe"
+msgstr "Izmantot vozMe audio servisu"
+
+msgid "HelpGoogleAudio"
+msgstr "Atbalsta līdz 100 rakstu zīmēm, dažādas valodas. <br>Faili tiek ģenerēti un automātiski saglabāti Chamilo direktorijā, kurā pašlaik atrodaties."
+
+msgid "HelpvozMe"
+msgstr "Atbalsta vairāk, kā tūkstoti teksta rakstzīmju. <br>Jūs varat arī izvēlēties balss veidu :  vīrieša vai sievietes. <br>Tas darbojas ar mazāk populārās valodās, bet ar zemāku skaņas kvalitāti.<br> Visbeidzot, Jums ir lejupjāielādē faili manuāli no jaunā loga."
+
+msgid "SaveMP3"
+msgstr "Saglabāt mp3"
+
+msgid "Speed"
+msgstr "Ātrums"
+
+msgid "GoFaster"
+msgstr "Ātrāk"
+
+msgid "Fast"
+msgstr "Ātri"
+
+msgid "Normal"
+msgstr "Normāli"
+
+msgid "Slow"
+msgstr "Lēnām"
+
+msgid "SlowDown"
+msgstr "Lēnāk"
+
+msgid "Pediaphon"
+msgstr "Lietot Pediaphon audio servisu"
+
+msgid "HelpPediaphon"
+msgstr "Atbalsta tekstu ar vairākiem tūkstošiem burtu veidu. <br>Atskaņo dažāda veida vīriešu un sieviešu balsīs (atkarībā no valodas). <br>Audio faili tiks ģenerēti un automātiski saglabāti Chamilo direktorijā, kurā Jūs atrodaties."
+
+msgid "FirstSelectALanguage"
+msgstr "Lūdzu izvēlēties valodu."
+
+msgid "RenameAndComment"
+msgstr "Pārsauciet un nokomentējiet."
+
+msgid "YouAreCurrentlyUsingXOfYourX"
+msgstr "Patreiz Jūs izmantojat %s MB (%s) no Jūsu %s MB"
+
+msgid "UplUploadFailedSizeIsZero"
+msgstr "Radās problēma, augšupielādējot jūsu dokumentu: saņemto failu izmērs uz servera ir 0 baitu. Lūdzu, pārskatiet savu augšupielādējamo failu, vai tas nav bojāts un tad, lūdzu, mēģiniet vēlreiz."
+
+msgid "NewImage"
+msgstr "Jauns attēls"
+
+msgid "DirExists"
+msgstr "Darbība nav iespējama, jo direktorija ar šādu nosaukumu jau eksistē"
+
+msgid "DocMv"
+msgstr "Dokuments ir pārvietots"
+
+msgid "NoSVGImagesInImagesGalleryPath"
+msgstr "Šeit nav SVG attēlu, Jūsu attēlu galerijas katalogā"
+
+msgid "NoSVGImages"
+msgstr "Nav SVG attēlu"
+
+msgid "WamiNeedFilename"
+msgstr "Pirms Jūs aktivizējat ierakstu, tam ir nepieciešams izveidot faila nosaukumu."
+
+msgid "SelectAnAudioFileFromDocuments"
+msgstr "Izvēlieties audio failu no mapes Dokumenti"
+

@@ -1,0 +1,138 @@
+msgid "langSelectOptionForBackup"
+msgstr "Prosím zvolte možosti zálohování."
+
+msgid "langLetMeSelectItems"
+msgstr "Dovolte mi zvolit části kurzu"
+
+msgid "langCreateFullBackup"
+msgstr "Vytvořit kompletní zálohu tohoto kurzu"
+
+msgid "langCreateBackup"
+msgstr "vytvořit zálohu"
+
+msgid "langBackupCreated"
+msgstr "Byla vytvořena záloha tohoto kurzu. Přenos dát začne za okamžik. Jest-li Váš přenos nefunguje, klikněte na nasledujíci odkaz"
+
+msgid "langSelectBackupFile"
+msgstr "vyberte soubor se zálohou"
+
+msgid "langImportBackup"
+msgstr "Importuj zálohu"
+
+msgid "langImportFullBackup"
+msgstr "Importuj kompletní zálohu"
+
+msgid "langImportFinished"
+msgstr "Import dokončen"
+
+msgid "langEvents"
+msgstr "Události"
+
+msgid "langAnnouncements"
+msgstr "Oznámení"
+
+msgid "langDocuments"
+msgstr "Dokumenty"
+
+msgid "langTests"
+msgstr "Testy"
+
+msgid "langLearnpaths"
+msgstr "Learn-paths (spůsob učení)"
+
+msgid "langCopyCourse"
+msgstr "Kopírovat kurz"
+
+msgid "langSelectItemsToCopy"
+msgstr "Zvolte položky pro kopírování"
+
+msgid "langCopyFinished"
+msgstr "Kopírování je dokončeno"
+
+msgid "langFullRecycle"
+msgstr "Kompletní recyklace"
+
+msgid "langRecycleCourse"
+msgstr "Recyklace kurzu"
+
+msgid "langRecycleFinished"
+msgstr "Recyklace je dokončena"
+
+msgid "langRecycleWarning"
+msgstr "Varování: použitím této funkce smažete některé části vašeho kurzu, a to nenávratně. Proto Vám doporučujeme udělat <a href=\"create_backup.php\">zálohu</a> před použitím tohoto recyklovacího nástroje."
+
+msgid "langSameFilename"
+msgstr "Co udělat když importováné soubory mají stejné jméno jako existující soubory?"
+
+msgid "langSameFilenameSkip"
+msgstr "Přeskočit soubory se stejným jménem"
+
+msgid "langSameFilenameRename"
+msgstr "Přejmenovat soubor (např. Soubor.pdf se stáva Soubor_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Přepsat soubor"
+
+msgid "langSelectDestinationCourse"
+msgstr "Zvolte cílový kurz"
+
+msgid "langFullCopy"
+msgstr "Kopírovat všechno"
+
+msgid "langCourseDescription"
+msgstr "Popis kurzu"
+
+msgid "langNoResourcesToBackup"
+msgstr "Nejsou zdroje pro zálohování"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Nejsou zdroje v souboru zálohy"
+
+msgid "langSelectResources"
+msgstr "Vybrat zdroje"
+
+msgid "langNoResourcesToRecycles"
+msgstr "Nejsou zdroje pro recyklaci"
+
+msgid "langIncludeQuestionPool"
+msgstr "Zhrnout do sbírky otázek"
+
+msgid "langLocalFile"
+msgstr "lokální soubor"
+
+msgid "langServerFile"
+msgstr "soubor na serveru"
+
+msgid "langNoBackupsAvailable"
+msgstr "není přístupná žádná záloha"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "Žádný cílový kurz"
+
+msgid "langBackup"
+msgstr "Záloha"
+
+msgid "langImportBackupInfo"
+msgstr "Import zálohy. Budete schopni nahrát soubor z vašeho lokálního disku nebo můžete použít zálohu dostupnou na serveru."
+
+msgid "langCreateBackupInfo"
+msgstr "Vytvořit zálohu tohoto kurzu. Můžete zvolit obsah kurzu a vložit ho zálohovacího souboru."
+
+msgid "ToolIntro"
+msgstr "Představení nástroje"
+
+msgid "UploadError"
+msgstr "Nahrání neúspěšné, prosím zkontrolujte maximální povolenou velikost souboru a práva adresáře"
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Dokumenty budou také přidány"
+
+msgid "ToExportLearnpathWithQuizYouHaveToSelectQuiz"
+msgstr "Pokud chcete exportovat kurz, který obsahuje test, pak si musíte být jisti, že odpovídající testy jsou součástí exportu, tak že jej musíte označit v seznamu testů"
+
+msgid "ArchivesDirectoryNotWriteableContactAdmin"
+msgstr "Archivní katalog používaný tímto nástrojem není možné přepsat. Kontaktujte prosím svého admina platformy."
+
+msgid "DestinationCourse"
+msgstr "Cílový kurz"
+

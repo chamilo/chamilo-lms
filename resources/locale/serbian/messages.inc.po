@@ -1,0 +1,102 @@
+msgid "MessageEmptyMessageOrSubject"
+msgstr "Navedite temu ili poruku"
+
+msgid "Inbox"
+msgstr "Inbox"
+
+msgid "Messages"
+msgstr "Poruke"
+
+msgid "SendMessage"
+msgstr "Pošalji poruku"
+
+msgid "NewMessage"
+msgstr "Nova poruka"
+
+msgid "ComposeMessage"
+msgstr "Nova poruka"
+
+msgid "DeleteSelectedMessages"
+msgstr "Brisanje izabrane poruke"
+
+msgid "SelectAll"
+msgstr "Izaberi sve"
+
+msgid "DeselectAll"
+msgstr "Poništite sve"
+
+msgid "ReplyToMessage"
+msgstr "Odgovori na ovu poruku"
+
+msgid "BackToInbox"
+msgstr "Nazad u inbox"
+
+msgid "MessageSentTo"
+msgstr "Poruka je poslata"
+
+msgid "SendMessageTo"
+msgstr "Pošalji"
+
+msgid "Myself"
+msgstr "mene"
+
+msgid "From"
+msgstr "Od"
+
+msgid "To"
+msgstr "Za"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "ErrorSendingMessage"
+msgstr " Došlo je do pogreške prilikom pokušaja slanja poruke."
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Jeste li sigurni da želite obrisati označene poruke?"
+
+msgid "SelectedMessagesDeleted"
+msgstr " Označene poruke su obrisane"
+
+msgid "EnterTitle"
+msgstr "Molimo unesite naslov"
+
+msgid "TypeYourMessage"
+msgstr "Otkucajte svoju poruku ovde"
+
+msgid "MessageDeleted"
+msgstr "Poruka je izbrisana"
+
+msgid "ConfirmDeleteMessage"
+msgstr "Jeste li sigurni da li želite da izbrišete odabrane poruke?"
+
+msgid "DeleteMessage"
+msgstr "Izbriši poruku"
+
+msgid "ReadMessage"
+msgstr "Pročitajte poruku"
+
+msgid "SendInviteMessage"
+msgstr "Pošalji pozivnicu"
+
+msgid "SendMessageInvitation"
+msgstr "Jeste li sigurni da želite da pošaljete ove pozivnice?"
+
+msgid "MessageTool"
+msgstr "Alat za poruke"
+
+msgid "WriteAMessage"
+msgstr "Napišite poruku"
+
+msgid "AlreadyReadMessage"
+msgstr "Poruka je već pročitana"
+
+msgid "UnReadMessage"
+msgstr "Poruka bez čitanja"
+
+msgid "MessageSent"
+msgstr "Poruka poslata"
+
+msgid "YouShouldWriteAMessage"
+msgstr "Trebalo bi da napišete poruku"
+

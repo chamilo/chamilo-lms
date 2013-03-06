@@ -1,0 +1,60 @@
+msgid "Inbox"
+msgstr "收件箱"
+
+msgid "Messages"
+msgstr "訊息"
+
+msgid "SendMessage"
+msgstr "傳送訊息"
+
+msgid "NewMessage"
+msgstr "新訊息"
+
+msgid "ComposeMessage"
+msgstr "編寫訊息"
+
+msgid "DeleteSelectedMessages"
+msgstr "刪除已選訊息"
+
+msgid "SelectAll"
+msgstr "全選"
+
+msgid "DeselectAll"
+msgstr "全部不選"
+
+msgid "ReplyToMessage"
+msgstr "回覆這訊息"
+
+msgid "BackToInbox"
+msgstr "返回收件箱"
+
+msgid "MessageSentTo"
+msgstr "訊息已被發送給"
+
+msgid "SendMessageTo"
+msgstr "送給"
+
+msgid "Myself"
+msgstr "自己"
+
+msgid "From"
+msgstr "由"
+
+msgid "To"
+msgstr "給"
+
+msgid "Date"
+msgstr "日"
+
+msgid "InvalidMessageId"
+msgstr "要回覆郵件的 ID 無效"
+
+msgid "ErrorSendingMessage"
+msgstr "傳送訊息時發生問題。"
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "你真的要刪除已選訊息嗎？"
+
+msgid "SelectedMessagesDeleted"
+msgstr "所選訊息已被刪除"
+

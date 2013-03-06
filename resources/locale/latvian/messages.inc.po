@@ -1,0 +1,105 @@
+msgid "MessageEmptyMessageOrSubject"
+msgstr "Lūdzu norādiet vēstules saņēmēju"
+
+msgid "Inbox"
+msgstr "Pastkaste"
+
+msgid "Messages"
+msgstr "Ziņojumi"
+
+msgid "SendMessage"
+msgstr "Sūtīt ziņu"
+
+msgid "NewMessage"
+msgstr "Jauna vēstule"
+
+msgid "ComposeMessage"
+msgstr "Rakstīt vēstuli"
+
+msgid "DeleteSelectedMessages"
+msgstr "Dzēst iezīmētās vēstules"
+
+msgid "SelectAll"
+msgstr "Iezīmēt visus"
+
+msgid "DeselectAll"
+msgstr "Atcelt visu iezīmēto"
+
+msgid "ReplyToMessage"
+msgstr "Atbildēt uz šo vēstuli"
+
+msgid "BackToInbox"
+msgstr "Atgriezties uz pastkasti"
+
+msgid "MessageSentTo"
+msgstr "Vēstule ir nosūtīta"
+
+msgid "SendMessageTo"
+msgstr "Adresāts"
+
+msgid "Myself"
+msgstr "Pats"
+
+msgid "From"
+msgstr "No kā"
+
+msgid "To"
+msgstr "Kam"
+
+msgid "Date"
+msgstr "Datums"
+
+msgid "InvalidMessageId"
+msgstr "Šīs vēstules ID nav derīgs, lai uz to atbildētu"
+
+msgid "ErrorSendingMessage"
+msgstr "Vēstules sūtīšanas laikā ir notikusi sistēmas kļūda"
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Jūs esat pārliecināts par vēlmi dzēst iezīmētās vēstules?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "Iezīmētās vēstules ir izdzēstas"
+
+msgid "EnterTitle"
+msgstr "Lūdzu norādiet vēstules virsrakstu"
+
+msgid "TypeYourMessage"
+msgstr "Rakstiet Jūsu vēstuli šeit"
+
+msgid "MessageDeleted"
+msgstr "Vēstule ir izdzēsta"
+
+msgid "ConfirmDeleteMessage"
+msgstr "Jūs esat pārliecināts par vēlmi dzēst iezīmētās vēstules?"
+
+msgid "DeleteMessage"
+msgstr "Dzēst vēstuli"
+
+msgid "ReadMessage"
+msgstr "Lasīt vēstuli"
+
+msgid "SendInviteMessage"
+msgstr "Sūtīt ielūguma vēstuli"
+
+msgid "SendMessageInvitation"
+msgstr "Jūs esat pārliecināts par vēlmi nosūtīt šos ielūgumus ?"
+
+msgid "MessageTool"
+msgstr "Vēstules veidošanas instruments"
+
+msgid "WriteAMessage"
+msgstr "Rakstīt vēstuli"
+
+msgid "AlreadyReadMessage"
+msgstr "Vēstule jau ir lasīta"
+
+msgid "UnReadMessage"
+msgstr "Vēstule nav lasīta"
+
+msgid "MessageSent"
+msgstr "Nosūtītās vēstules"
+
+msgid "YouShouldWriteAMessage"
+msgstr "Jums vajadzētu rakstīt ziņu"
+

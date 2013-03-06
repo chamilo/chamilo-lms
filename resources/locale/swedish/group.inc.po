@@ -1,0 +1,252 @@
+msgid "langNewGroupCreate"
+msgstr "Skapa ny(a) grupp(er)"
+
+msgid "langGroupCreation"
+msgstr "Nya grupper att skapa"
+
+msgid "langCreate"
+msgstr "skapa"
+
+msgid "langNewGroups"
+msgstr "ny(a) grupp(er)"
+
+msgid "langMax"
+msgstr "max. 12 tecken, e.g. <i>SV1201</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "platser (frivillig)"
+
+msgid "langGroupsAdded"
+msgstr "grupp(erna) har lagts till"
+
+msgid "langGroupDel"
+msgstr "Grupp raderad"
+
+msgid "langDocuments"
+msgstr "Dokument"
+
+msgid "langExistingGroups"
+msgstr "Grupper"
+
+msgid "langRegistered"
+msgstr "Registrerade"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Elever tillåts självregistrera sig i grupper."
+
+msgid "langGroupTools"
+msgstr "Verktyg"
+
+msgid "langGroupDocument"
+msgstr "Dokument"
+
+msgid "langGroupPropertiesModified"
+msgstr "Gruppinställningar har modifierats"
+
+msgid "langGroupSpace"
+msgstr "Grupparea"
+
+msgid "langGroupName"
+msgstr "Gruppnamn"
+
+msgid "langGroupDescription"
+msgstr "Gruppbeskrivning"
+
+msgid "langGroupMembers"
+msgstr "Gruppmedlemmar"
+
+msgid "langEditGroup"
+msgstr "Redigera denna grupp"
+
+msgid "Optional"
+msgstr "(frivillig)"
+
+msgid "langGroupSettingsModified"
+msgstr "Gruppinställningar har modifierats"
+
+msgid "langGroupTooMuchMembers"
+msgstr "Antal föreslagna överstiger max. som är tillåtet (du kan modifiera de nedan). 				Gruppsammansättningen har not inte ändrats"
+
+msgid "langGroupTutor"
+msgstr "Gruppens lärare"
+
+msgid "langGroupNoTutor"
+msgstr "(ingen)"
+
+msgid "langGroupNone"
+msgstr "(ingen)"
+
+msgid "langGroupNoneMasc"
+msgstr "(ingen)"
+
+msgid "langAddTutors"
+msgstr "Administrera användarlistan"
+
+msgid "langMyGroup"
+msgstr "min grupp"
+
+msgid "langOneMyGroups"
+msgstr "mitt ansvar"
+
+msgid "langGroupSelfRegistration"
+msgstr "Registrering"
+
+msgid "langGroupSelfRegInf"
+msgstr "registrera"
+
+msgid "langRegIntoGroup"
+msgstr "Lägg till mig i denna grupp"
+
+msgid "langGroupNowMember"
+msgstr "Du är nu medlem av denna grupp"
+
+msgid "langPrivate"
+msgstr "Privat access (endast tillgänglig för personer på användarlistan)"
+
+msgid "langPublic"
+msgstr "Publik åtkomst från campus hemsida även utan inloggning"
+
+msgid "langPropModify"
+msgstr "Modifiera inställningar"
+
+msgid "langState"
+msgstr "Status"
+
+msgid "langGroupFilledGroups"
+msgstr "Grupper har fyllts (eller kompletterats) med studenter från \'Användarlistan\'."
+
+msgid "langSubscribed"
+msgstr "registrerad(e) deltagare i denna kurs"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Användarna är ej i denna grupp"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "En användare kan max vara medlem i"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr " grupper"
+
+msgid "langGroupLimit"
+msgstr "Begränsning"
+
+msgid "langStudentRegAllowed"
+msgstr "Elever kan självregistrera sig i grupper"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Användare är tillåtna att avregistrera sig själva från grupper"
+
+msgid "langAllGroups"
+msgstr "Alla grupper"
+
+msgid "langStudentUnsubscribe"
+msgstr "Avsluta prenumeration på denna grupp"
+
+msgid "langStudentDeletesHimself"
+msgstr "Du har nu avslutat prenumerationen."
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Aktuella inställningar för nya grupper"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Alla valda grupper har blivit raderade"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Alla valda grupper är nu tomma"
+
+msgid "langGroupEmptied"
+msgstr "Gruppen är nu tom"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Alla valda grupper har blivit fyllda"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "avregistrera"
+
+msgid "langSameForAll"
+msgstr "likadant för alla"
+
+msgid "langNoLimit"
+msgstr "Ingen begränsning"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Var snäll ange önskat antal grupper"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Skapa grupper från alla användare i de virtuella kurserna"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "Denna kurs är en kombination av riktig kurs och en eller flera virtuella kurser. Om du klickar på följande knapp, nya grupper kommer att skapas med anknytning till dessa (virtuella) kurser. Alla studernade kommer att bli prenumeranter på dessa grupper."
+
+msgid "langNoGroupsAvailable"
+msgstr "Inga grupper tillgängliga"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "Virtuella kurser"
+
+msgid "NotAvailable"
+msgstr "Ej tillgänglig"
+
+msgid "CreateSubgroups"
+msgstr "Skapa subgrupper (undergrupper)"
+
+msgid "CreateSubgroupsInfo"
+msgstr "Detta alternativ ger dig möjlighet att skapa grupper baserat på existerande grupp. Ange ett antal grupper och välj en redan existerande grupp. Det angivna antalet grupper kommer att skapas och alla i de existerande grupperna kommer att bli prenumeranter i"
+
+msgid "CreateNumberOfGroups"
+msgstr "Skapa"
+
+msgid "WithUsersFrom"
+msgstr "grupper med medlemmar från"
+
+msgid "CategoryDeleted"
+msgstr "Kategorin är raderad"
+
+msgid "Empty"
+msgstr "Tom"
+
+msgid "FillGroup"
+msgstr "Lägg till användare"
+
+msgid "EmptyGroup"
+msgstr "avsluta prenumeration för alla användare"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "Maximalt antal grupper per användare som du angett är otillåtet. Det är nu användare som prenumererar i mer grupper än det antal du angett."
+
+msgid "GroupOverview"
+msgstr "Grupp översikt"
+
+msgid "GroupCategory"
+msgstr "Grupp kategori"
+
+msgid "NoTitleGiven"
+msgstr "Var snäll ange en titel"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "Var vänlig ange ett tillåtet antal maximalt antal medlemmar."
+
+msgid "CategoryOrderChanged"
+msgstr "Kategorins ordningsföljd är ändrad"
+
+msgid "Wiki"
+msgstr "Grupp wiki"
+
+msgid "CategoryCreated"
+msgstr "Kategori skapad"
+
+msgid "GroupTutors"
+msgstr "Handledare"
+
+msgid "GroupCalendar"
+msgstr "Kalender"
+
+msgid "GroupAnnouncements"
+msgstr "Information"
+
+msgid "Group"
+msgstr "Grupp"
+
+msgid "ForumOfGroup"
+msgstr "Gruppforum:"
+

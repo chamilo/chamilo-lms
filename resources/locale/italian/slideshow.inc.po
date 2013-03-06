@@ -1,0 +1,48 @@
+msgid "Height"
+msgstr "Altezza"
+
+msgid "ResizingComment"
+msgstr "ridimensiona l\'immagine con le seguenti dimensioni (in pixels)"
+
+msgid "Width"
+msgstr "Larghezza"
+
+msgid "Resizing"
+msgstr "Ridimensiona"
+
+msgid "NoResizingComment"
+msgstr "Mostra tutte le immagini nella loro dimensione originale. Se necessario, le barre di scorrimento appariranno automaticamente."
+
+msgid "ShowThumbnails"
+msgstr "Mostra miniature"
+
+msgid "SetSlideshowOptions"
+msgstr "Imposta le opzioni della presentazione"
+
+msgid "SlideshowOptions"
+msgstr "Opzioni della presentazione"
+
+msgid "NoResizing"
+msgstr "Non ridimensionare (predefinita)"
+
+msgid "ExitSlideshow"
+msgstr "Esci dalla presentazione"
+
+msgid "SlideShow"
+msgstr "Presentazione"
+
+msgid "PreviousSlide"
+msgstr "Diapositiva precedente"
+
+msgid "NextSlide"
+msgstr "Prossima Diapositiva"
+
+msgid "ViewSlideshow"
+msgstr "Mostra presentazione"
+
+msgid "FirstSlide"
+msgstr "Prima diapositiva"
+
+msgid "LastSlide"
+msgstr "Ultima diapositiva"
+

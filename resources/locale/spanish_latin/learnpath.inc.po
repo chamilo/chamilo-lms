@@ -1,0 +1,426 @@
+msgid "lang_learning_path"
+msgstr "Ruta de Aprendizaje"
+
+msgid "lang_learning_path_builder"
+msgstr "Constructor de Itinerarios de Aprendizaje"
+
+msgid "lang_description"
+msgstr "Descripción"
+
+msgid "LearnpathTitle"
+msgstr "título"
+
+msgid "LearnpathPrerequisites"
+msgstr "Prerequisitos"
+
+msgid "LearnpathMoveUp"
+msgstr "Elevar"
+
+msgid "LearnpathMoveDown"
+msgstr "Bajar"
+
+msgid "langThisItem"
+msgstr "este ítem"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Título y descripción"
+
+msgid "LearnpathChangeOrder"
+msgstr "Cambiar orden"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Añadir prerrequisitos"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Editar título y descripción"
+
+msgid "lang_delete"
+msgstr "Eliminar"
+
+msgid "lang_add_chapter"
+msgstr "Añadir módulo"
+
+msgid "langLearnpathMystatus"
+msgstr "Mi estatus"
+
+msgid "langLearnpathCompstatus"
+msgstr "completado"
+
+msgid "langLearnpathIncomplete"
+msgstr "incompleto"
+
+msgid "langLearnpathPassed"
+msgstr "aprobado"
+
+msgid "langLearnpathFailed"
+msgstr "sin aprobar"
+
+msgid "langLearnpathPrevious"
+msgstr "Previo"
+
+msgid "langLearnpathNext"
+msgstr "Siguiente"
+
+msgid "langLearnpathRestart"
+msgstr "Reiniciar"
+
+msgid "langLearnpathThisStatus"
+msgstr "Este módulo ha sido"
+
+msgid "langLearnpathToEnter"
+msgstr "Entrar"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "primero necesita terminar"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Tìtulo del módulo"
+
+msgid "langLearnpathStatus"
+msgstr "Estatus"
+
+msgid "langLearnpathScore"
+msgstr "Puntaje"
+
+msgid "langLearnpathTime"
+msgstr "Tiempo"
+
+msgid "langLearnpathVersion"
+msgstr "versión"
+
+msgid "langLearnpathRestarted"
+msgstr "Todos los módulos están incompletos"
+
+msgid "langLearnpathNoNext"
+msgstr "Este es el último módulo"
+
+msgid "langLearnpathNoPrev"
+msgstr "Este es el primer módulo"
+
+msgid "LearnpathAddLearnpath"
+msgstr "Añadir una nueva ruta de aprendizaje"
+
+msgid "lang_learnpath_added"
+msgstr "La nueva Ruta ha sido creada. Ahora puede añadir múdlos con un click en el símbolo +"
+
+msgid "LearnpathEditLearnpath"
+msgstr "Editar la Ruta"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "Eliminar la ruta"
+
+msgid "lang_learnpath_edited"
+msgstr "la ruta ha sido editada"
+
+msgid "lang_learnpath_deleted"
+msgstr "se ha eliminado la ruta"
+
+msgid "LearnpathDoNotPublish"
+msgstr "no publicar"
+
+msgid "LearnpathPublish"
+msgstr "publicar"
+
+msgid "LearnpathNotPublished"
+msgstr "no publicado"
+
+msgid "LearnpathPublished"
+msgstr "publicado"
+
+msgid "lang_add_learnpath_module"
+msgstr "Añadir un nuevo módulo"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Añadir un nuevo módulo a esta ruta de aprendizaje"
+
+msgid "lang_learnpath_module_added"
+msgstr "El nuevo módulo de la ruta fue creado exitosamente. Ahora puede crear los capítulos dando click en la +"
+
+msgid "LearnpathEditModule"
+msgstr "Editar el título y descripción del módulo"
+
+msgid "LearnpathDeleteModule"
+msgstr "Borrar módulo"
+
+msgid "lang_learnpath_module_edited"
+msgstr "El módulo fue editado exitosamente"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "La ruta y sus módulos han sido eliminados"
+
+msgid "LearnpathNoChapters"
+msgstr "No hay módulos añadidos"
+
+msgid "LearnpathAddItem"
+msgstr "Añadir capìtulos al módulo"
+
+msgid "LearnpathItemDeleted"
+msgstr "El capítulo ha sido eliminado"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "Por favor asigne este / estos capitulo (s) al módulo"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Editar titulo o descripcion del capítulo adicional"
+
+msgid "lang_add_prereq"
+msgstr "Añadir o deitar prerrequisitos del capítulo"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Eliminar capítulo"
+
+msgid "LearnpathItemEdited"
+msgstr "El capítulo ha sido modificado"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Ha sido eliminado"
+
+msgid "lang_none"
+msgstr "NINGUNO"
+
+msgid "lang_forum_opened"
+msgstr "El foro seleccionado se ha abierto en una nueva ventana"
+
+msgid "lang_link_opened"
+msgstr "El enlace seleccionado se ha abierto en una nueva ventana"
+
+msgid "lang_short_help"
+msgstr "Para añadir un capítulo, click en el símbolo +Para añadir una nueva descripción / título, click en el lápizPara añadir prerrequisitos, click en el ícono con dos documentosUsted puede visualizar lo que los alumnos verán con la herramienta de Vista del Alum"
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "pre-requisitos no completados."
+
+msgid "lang_author"
+msgstr "Autor"
+
+msgid "lang_date"
+msgstr "Fecha"
+
+msgid "langBasicOverview"
+msgstr "Vista básica"
+
+msgid "langAdvanced"
+msgstr "Avanzado"
+
+msgid "langDisplay"
+msgstr "Mostrar"
+
+msgid "langNewChapter"
+msgstr "Nuevo capítulo"
+
+msgid "langNewStep"
+msgstr "Nuevo paso"
+
+msgid "langEditPrerequisites"
+msgstr "Editar los prerequisitos del item actual"
+
+msgid "langTitleManipulateChapter"
+msgstr "Manipular el capítulo actual"
+
+msgid "langTitleManipulateModule"
+msgstr "Manipular el módulo actual"
+
+msgid "langTitleManipulateDocument"
+msgstr "Manipular el documento actual"
+
+msgid "langTitleManipulateLink"
+msgstr "Manipular el enlace actual"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Manipular el ejercicio actual"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Manipular la publicación actual del estudiante"
+
+msgid "langEnterDataNewChapter"
+msgstr "Ingrese la información del nuevo capítulo"
+
+msgid "langEnterDataNewModule"
+msgstr "Ingrese la información del nuevo módulo"
+
+msgid "langCreateNewStep"
+msgstr "Crear un nuevo paso :"
+
+msgid "langNewDocument"
+msgstr "Nuevo documento"
+
+msgid "langUseAnExistingResource"
+msgstr "O utilizar un recurso existente :"
+
+msgid "langParent"
+msgstr "Principal"
+
+msgid "langPosition"
+msgstr "Posición"
+
+msgid "langNewChapterCreated"
+msgstr "El nuevo capítulo ha sido creado. Ahora puede agregar otro capítulo o paso en él."
+
+msgid "langNewLinksCreated"
+msgstr "El nuevo vínculo ha sido creado"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "La nueva publicacion del estudiante ha sido creada"
+
+msgid "langNewModuleCreated"
+msgstr "El nuevo módulo ha sido creado. Ahora puede agregar un capítulo o un paso."
+
+msgid "langNewExerciseCreated"
+msgstr "El nuevo ejercicio ha sido creado."
+
+msgid "langItemRemoved"
+msgstr "El ítem ha sido eliminado"
+
+msgid "langConverting"
+msgstr "Convirtiendo..."
+
+msgid "langPpt2lpError"
+msgstr "Error durante la conversión de PowerPoint. Por favor verifique si hay carácteres especiales en el nombre de su PowerPoint."
+
+msgid "langBuild"
+msgstr "Construir"
+
+msgid "langViewModeEmbedded"
+msgstr "Vista: embebida"
+
+msgid "langViewModeFullScreen"
+msgstr "Vista: pantalla completa"
+
+msgid "langShowDebug"
+msgstr "Mostrar debug"
+
+msgid "langHideDebug"
+msgstr "Ocultar debug"
+
+msgid "langCantEditDocument"
+msgstr "Este documento no es editable"
+
+msgid "langAfter"
+msgstr "Después"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Prerrequisitos (límite)"
+
+msgid "lang_loading"
+msgstr "Cargando la página.... un momento por favor"
+
+msgid "lang_empty"
+msgstr "Esta ruta no contiene capítulos"
+
+msgid "langHotPotatoesFinished"
+msgstr "Esta prueba de HotPotatoes ha sido cerrada"
+
+msgid "langCompletionLimit"
+msgstr "Límite de tiempo (puntos mínimos)"
+
+msgid "langPrereqToEnter"
+msgstr "Ingresar"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "usted primero debe cumplir con"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Por lo menos falta 1 paso"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "que se fija como pre-requisito."
+
+msgid "langPrereqTestLimit1"
+msgstr "debe alcanzar un mínimo"
+
+msgid "langPrereqTestLimit2"
+msgstr "puntos en"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Ahora usted tiene:"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "regresar a la pantalla normal"
+
+msgid "langLearnpathFullScreen"
+msgstr "pantalla completa"
+
+msgid "langItemMissing1"
+msgstr "Hubo un"
+
+msgid "langItemMissing2"
+msgstr "un capítulo en la Ruta de Aprendizaje de Chamilo"
+
+msgid "langDone"
+msgstr "Hecho"
+
+msgid "langNoItemSelected"
+msgstr "Para mostrar algo aquí, por favor seleccione un item del menú lateral"
+
+msgid "langNewDocumentCreated"
+msgstr "El nuevo documento ha sido creado."
+
+msgid "langEditCurrentChapter"
+msgstr "Editar el capítulo actual"
+
+msgid "langditCurrentModule"
+msgstr "Editar el módulo actual"
+
+msgid "langCreateTheDocument"
+msgstr "Crear el documento"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Mover el documento actual"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Editar el documento actual"
+
+msgid "langWarning"
+msgstr "¡ Advertencia !"
+
+msgid "langWarningEditingDocument"
+msgstr "Cuando edita un documento existente en el itinerario formativo, la nueva versión del documento no sobreescribirá la versión anterior sino que será guardada como un nuevo documento. Si desea editar un documento definitivamente, puede hacerlo con la herrami"
+
+msgid "langDirectory"
+msgstr "Directorio"
+
+msgid "langCreateTheExercise"
+msgstr "Crear el ejercicio"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Mover el ejercicio actual"
+
+msgid "langEditCurrentExecice"
+msgstr "Editar el ejercicio actual"
+
+msgid "langUploadScorm"
+msgstr "Importación SCORM y AICC"
+
+msgid "langPowerPointConvert"
+msgstr "Conversor PowerPoint"
+
+msgid "langLPCreatedToContinue"
+msgstr "Para continuar puede agregar un módulo, capítulo o paso a su itinerario formativo desde el menu izquierdo."
+
+msgid "langLPCreatedAddChapterStep"
+msgstr "Puede agregar un módulo, capítulo o paso a su itinerario formativo desde el menú izquierdo."
+
+msgid "langPrerequisitesAdded"
+msgstr "Prerequisitos para el paso actual han sido agregados."
+
+msgid "langAddEditPrerequisites"
+msgstr "Agregar/editar prerequisitos"
+
+msgid "langMinimum"
+msgstr "Mínimo"
+
+msgid "langMaximum"
+msgstr "Máximo"
+
+msgid "langNoDocuments"
+msgstr "No hay documentos"
+
+msgid "langNoExercisesAvailable"
+msgstr "No hay ejercicios disponibles"
+
+msgid "langNoLinksAvailable"
+msgstr "No hay vínculos disponibles"
+
+msgid "langNoItemsInLp"
+msgstr "No hay items en el itinerario de aprendizaje en este momento. Click en \"Avanzado\" para crear items en su itinerario de aprendizaje"
+

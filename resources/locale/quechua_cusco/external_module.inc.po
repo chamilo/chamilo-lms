@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Manan ajllankichu khipu apachinapaq utan sinchi hatunmi khipuqa"
+
+msgid "langLinkTarget"
+msgstr "Waskhanaq chayanan"
+
+msgid "langSameWindow"
+msgstr "Kikin  whawarinapi"
+
+msgid "langNewWindow"
+msgstr "Musuq whawarinapi"
+
+msgid "langAdded"
+msgstr "Yapasqaña"
+
+msgid "langAddLink"
+msgstr "Yapay waskhanata"
+
+msgid "langEditLink"
+msgstr "Ruwapay yachachinaq raphi qallariypi waskhana kaqta"
+

@@ -1,0 +1,557 @@
+msgid "langShouldBeCSVFormat"
+msgstr "فایل مورد نظر باید از نوع سی اس وی باشد. هیچ فاصلۀ اضافی نمی بایست افزوده شود . ساختار باید عیناً به صورت زیر باشد"
+
+msgid "langTracking"
+msgstr "گزارش گیری"
+
+msgid "langEnter2passToChange"
+msgstr "در صورتی که می خواهید رمز ورود خود را تغییر دهید، می بایست رمز جدید خود را دو بار وارد کنید. اگر نمی خواهید رمز ورود خود را تغییر دهید خانه های مربوط به تغییر رمز ورود را خالی بگذارید"
+
+msgid "langAuthInfo"
+msgstr "تصدیق"
+
+msgid "langUpdateImage"
+msgstr "تعویض تصویر"
+
+msgid "langImageWrong"
+msgstr "حجم فایل مورد نظر باید کاهش یابد"
+
+msgid "langAddImage"
+msgstr "تصویر"
+
+msgid "langCourseManager"
+msgstr "استاد"
+
+msgid "NewPass"
+msgstr "کلمه عبور جدید"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "کلمه عبور فعلی اشتباه است"
+
+msgid "password_request"
+msgstr "شما درخواست بازیابی کلمه عبور داده اید. اگر شما درخواست نداده اید، به این نامه توجهی نکنید."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "کلمه عبور شما به پست الکترونیک شما فرستاده شد."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "پست الکترونیک که برای ثبت نام استفاده کرده اید را وارد نمایید و ما کلمه عبور را برایتان ارسال خواهیم کرد."
+
+msgid "langLogin"
+msgstr "ورود"
+
+msgid "langAction"
+msgstr "عملیات"
+
+msgid "langPreserved"
+msgstr "حفظ شد"
+
+msgid "langDeleted"
+msgstr "حذف شد"
+
+msgid "langAdded"
+msgstr "اضافه شد"
+
+msgid "langConfirmUnsubscribe"
+msgstr "تأیید ابطال ثبت نام کاربر"
+
+msgid "langCourseName"
+msgstr "نام درس"
+
+msgid "langSubscribe"
+msgstr "ثبت نام"
+
+msgid "langSee"
+msgstr "برو به"
+
+msgid "langLastVisits"
+msgstr "آخرین بازدید های من"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "اگر می خواهید لیستی از کاربران را وارد کنید، لطفاً با مدیر شبکه تماس بگیرید."
+
+msgid "langPassTooEasy"
+msgstr "این کلمه عبور ساده به نظر می رسد. لطفاً رمزی شبیه به این انتخاب کنید"
+
+msgid "langGroupUserManagement"
+msgstr "مدیریت گروه"
+
+msgid "langAddedToCourse"
+msgstr "در درس شما ثبت نام شده"
+
+msgid "langUserAlreadyRegistered"
+msgstr "کاربری با همین نام قبلاً در این درس ثبت نام شده است."
+
+msgid "langBackUser"
+msgstr "بازگشت به فهرست کاربران"
+
+msgid "langUserOneByOneExplanation"
+msgstr "ایشان نام کاربری و کلمه عبور خود را از طریق ایمیل دریافت خواهد کرد"
+
+msgid "langGiveTutor"
+msgstr "اعطای حقوق مربی"
+
+msgid "langRemoveRight"
+msgstr "سلب این حقوق"
+
+msgid "langGiveAdmin"
+msgstr "اعطای حقوق مدیر"
+
+msgid "langUserNumber"
+msgstr "تعداد"
+
+msgid "langDownloadUserList"
+msgstr "ارسال فهرست کاربران"
+
+msgid "langSend"
+msgstr "ارسال درخواست برای کلمه عبور جدید"
+
+msgid "langUserAddExplanation"
+msgstr " هر خط از فایلی که فرستاده می شود الزاماً باید پنج مورد زیر را در بر بگیرد و تنها پنج مورد زیر و به  ترتیب زیر<br /><b>نام نام خانوادگی نام کاربری رمز عبور ایمیل</b><br /> این مواردباید به وسیلۀ کلید تب از هم جدا شوند. کاربران از طریق ایمیل نام کاربری و رمز عبور خود را دریافت خواهند کرد"
+
+msgid "langUserMany"
+msgstr "درون ریزی یک فهرست کاربر"
+
+msgid "langOneByOne"
+msgstr "افزودن دستی کاربر"
+
+msgid "langNow"
+msgstr "الان"
+
+msgid "langTutor"
+msgstr "مربی"
+
+msgid "langTitular"
+msgstr "رهبر"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'arial, helvetica\'><big>تغییر فهرست دروس</big><br><br>دروسی را که می خواهید بگذرانید علامت بزنید و علامت دروسی را که احیاناً می خواهید از گذراندن آنها انصراف دهید را بر دارید. سپس بر روی دکمۀ تأیید فشار دهید"
+
+msgid "langStudent"
+msgstr "دانشجو"
+
+msgid "langImportUserList"
+msgstr "درون ریزی فهرست کاربران"
+
+msgid "langAddAU"
+msgstr "افزودن کاربر"
+
+msgid "langAddedU"
+msgstr "افزوده شد و نام کاربری او از طریق پست الکترونیک برایش فرستاده شد"
+
+msgid "langTheU"
+msgstr "کاربر"
+
+msgid "langRegYou"
+msgstr "شما را در این درس ثبت نام کرده است"
+
+msgid "langOneResp"
+msgstr "یکی از مدیران آموزشی"
+
+msgid "langTaken"
+msgstr "قبلاً توسط فرد دیگری استفاده شده است، لطفاً نام کاربری دیگری انتخاب کنید."
+
+msgid "langUserNo"
+msgstr "نام کاربری ای که انتخاب کرده اید"
+
+msgid "langFilled"
+msgstr "ظاهراً بعضی از گزینه را پر نکرده اید"
+
+msgid "langInC"
+msgstr "در این درس"
+
+msgid "langRole"
+msgstr "توضیحات"
+
+msgid "UserPicture"
+msgstr "تصویر"
+
+msgid "langProfileReg"
+msgstr "مشخصات جدید شما ذخیره شد"
+
+msgid "langEmailWrong"
+msgstr "آدرس پست الکترونیک مورد نظر کامل نیست یا حاوی حروف غیر معتبر می باشد"
+
+msgid "langUserTaken"
+msgstr "این نام کاربری قبلاً انتخاب شده است"
+
+msgid "langFields"
+msgstr "ظاهراً بعضی از گزینه ها را پر نکرده اید"
+
+msgid "langAgain"
+msgstr "لطفاً دوباره امتحان کنید!"
+
+msgid "langPassTwo"
+msgstr "شما دو کلمه عبور متفاوت وارد کرده اید"
+
+msgid "langViewProfile"
+msgstr "نمایش مشخصات من"
+
+msgid "langModifProfile"
+msgstr "تغییر مشخصات"
+
+msgid "langIsReg"
+msgstr "تغییرات به عمل آمده ثبت شده اند"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "اکنون می توانید به قسمت مربوط به ساخت دروس بروید"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "اکنون می توانید با مراجعه به فهرست دروس به درس مورد نظر خود دسترسی پیدا کنید"
+
+msgid "langMailHasBeenSent"
+msgstr "برای سهولت در به خاطر سپاری نام کاربری و رمز عبورتان یک ایمیل حاوی این دو برای شما فرستاده شد"
+
+msgid "langPersonalSettings"
+msgstr "تنظیمات و مشخصات فردی شما ثبت گردید"
+
+msgid "langManager"
+msgstr "مدير"
+
+msgid "langFormula"
+msgstr "با آرزوی موفقیت"
+
+msgid "langProblem"
+msgstr "در صورت بروز مشکل با ما تماس بگیرید."
+
+msgid "langIs"
+msgstr "هست"
+
+msgid "langAddress"
+msgstr "آدرس"
+
+msgid "langSettings"
+msgstr "با تنظیمات روبرو : 
+Login :"
+
+msgid "langYouAreReg"
+msgstr "شما ثبت نام شده اید در"
+
+msgid "langYourReg"
+msgstr "ثبت نام شما در"
+
+msgid "langUserFree"
+msgstr "  این نام کاربری قبلاً به وسیله فرد دیگری انتخاب شده است. لطفاً با استفاده از دکمۀ بازگشت بر روی مرورگر خود به عقب بازگردید و نام دیگری وارد کنید"
+
+msgid "langEmptyFields"
+msgstr "  ظاهراً بعضی از خانه ها را پر نکرده اید. لطفاً با استفاده از دکمۀ بازگشت بر روی مرورگر خود به عقب باز گردید و آنها را پر کنید"
+
+msgid "langPassTwice"
+msgstr " شما دو رمز عبور متفاوت وارد کرده اید. لطفاً با استفاده از دکمۀ بازگشت بر روی مرورگر خود به عقب بازگردید و دوباره این کار را انجام دهید"
+
+msgid "langRegAdmin"
+msgstr "ساخت دروس"
+
+msgid "langRegStudent"
+msgstr "گذراندن دروس"
+
+msgid "langConfirmation"
+msgstr "تأیید کلمه عبور"
+
+msgid "langPass"
+msgstr "کلمه عبور"
+
+msgid "langSurname"
+msgstr "نام خانوادگی"
+
+msgid "langRegistration"
+msgstr "ثبت نام"
+
+msgid "langYourAccountParam"
+msgstr "این اطلاعات مورد نیاز شماست برای متصل شدن به"
+
+msgid "langLoginRequest"
+msgstr "درخواست ورود"
+
+msgid "langDefineHeadings"
+msgstr "تعیین عنوان ها"
+
+msgid "langCourseAdministratorOnly"
+msgstr "فقط اساتید"
+
+msgid "langLostPassword"
+msgstr "کلمه عبور خود را فراموش کرده ام"
+
+msgid "langAdminOfCourse"
+msgstr "مدیر"
+
+msgid "langSimpleUserOfCourse"
+msgstr "کاربر درس"
+
+msgid "langIsTutor"
+msgstr "مربی"
+
+msgid "langParamInTheCourse"
+msgstr "وضعیت در درس"
+
+msgid "langMember"
+msgstr "اعضا"
+
+msgid "langLock"
+msgstr "قفل کردن"
+
+msgid "langUnlock"
+msgstr "آزاد کردن"
+
+msgid "langHaveNoCourse"
+msgstr "درسی موجود نمی باشد"
+
+msgid "langManage"
+msgstr "مدیریت پرتال"
+
+msgid "langAdministrationTools"
+msgstr "ابزار مدیریت"
+
+msgid "langUserProfileReg"
+msgstr "تغییرات مربوط به مشخصات شخصی انجام گردید"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "هیچ کاربری با این آدرس ایمیل ثبت نام نمی باشد"
+
+msgid "langCourses4User"
+msgstr "دروس این کاربر"
+
+msgid "langCoursesByUser"
+msgstr "دروس کاربر"
+
+msgid "langSubscribeUserToCourse"
+msgstr "ثبت نام کاربران در درس"
+
+msgid "langPreced100"
+msgstr "صدتای قبلی"
+
+msgid "langAddmore"
+msgstr "افزودن کاربران ثبت نام شده"
+
+msgid "langAddback"
+msgstr "رفتن به فهرست کاربران"
+
+msgid "langreg"
+msgstr "ثبت نام"
+
+msgid "langQuit"
+msgstr "خروج"
+
+msgid "your_password_has_been_reset"
+msgstr "کلمه ورود جدید شما از طریق ایمیل برای شما فرستاده شد"
+
+msgid "langSex"
+msgstr "جنسیت"
+
+msgid "langClass"
+msgstr "کلاس"
+
+msgid "langEdit"
+msgstr "ویرایش"
+
+msgid "required"
+msgstr "مورد نیاز"
+
+msgid "langOptionalTextFields"
+msgstr "گزینه های اختیاری"
+
+msgid "langMyProductions"
+msgstr "محصولات من"
+
+msgid "langFileDeleted"
+msgstr "فایل مورد نظر حذف شد."
+
+msgid "FullUserName"
+msgstr "نام کامل"
+
+msgid "SearchForUser"
+msgstr "جستجوی کاربر"
+
+msgid "SearchButton"
+msgstr "جستجو"
+
+msgid "SearchNoResultsFound"
+msgstr "جستجو نتیجه ای در بر نداشت"
+
+msgid "UsernameWrong"
+msgstr "نام کاربری فقط می تواند شامل حروف، عدد و  _.-  باشد"
+
+msgid "PasswordRequestFrom"
+msgstr "این رمز عبور برای این آدرس ایمیل درخواست شده است"
+
+msgid "CorrespondsToAccount"
+msgstr "این پست الکترونیک مربوط به حساب کاربری ذیل می باشد."
+
+msgid "CorrespondsToAccounts"
+msgstr "این پست الکترونیک مربوط به حساب کاربری ذیل می باشد."
+
+msgid "AccountExternalAuthSource"
+msgstr "سیستم قادر به انجام درخواست بصورت اتوماتیک نبود چون حساب کاربری یک مجوز ورودی خارجی دارد. لطفا اقدامات مناسب را مبذول داشته و به کاربر اطلاع دهید."
+
+msgid "AccountsExternalAuthSource"
+msgstr "سیستم قادر به انجام درخواست بصورت اتوماتیک نبود چون حداقل یکی از حساب های کاربری یک مجوز ورودی خارجی دارد. لطفا اقدامات مناسب را برای همه حساب های کاربرب مبذول داشته و به کاربر اطلاع دهید."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "سیستم قادر به انجام درخواست شما برای این نوع حساب کاربری نیست. درخواست شما برای مدیر سیستم ارسال شد که اقدامات مناسب را مبذول داشته و نتیجه را به شما اطلاع خواهند داد."
+
+msgid "langphone"
+msgstr "تلفن"
+
+msgid "Unreg"
+msgstr "ابطال ثبت نام"
+
+msgid "MyProgress"
+msgstr "روند پیشرفت"
+
+msgid "ProgressIntroduction"
+msgstr "با انتخاب یک جلسه آموزشی در پایین شروع کنید.
+شما بعد از آن قادر به مشاهده روند پیشرفت هر یک دروس ثبت نام شده خواهد بود."
+
+msgid "Select"
+msgstr "معتبر ساختن"
+
+msgid "NeverExpires"
+msgstr "هرگز منقضی نمی شود"
+
+msgid "On"
+msgstr "روشن"
+
+msgid "ExpirationDate"
+msgstr "تاریخ انتقضاء"
+
+msgid "ActiveAccount"
+msgstr "حساب کاربری"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "حساب کاربری شما باید تایید شود"
+
+msgid "ApprovalForNewAccount"
+msgstr "تاییدیه برای حساب کاربری جدید"
+
+msgid "ManageUser"
+msgstr "مدیریت کاربر"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "ثبت نام اساتید"
+
+msgid "SendMessage"
+msgstr "ارسال پیام"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "کلمه عبور شما جهت امنیت بیشتر کد گذاری شد. البته پس از فشردن پیوند یک نامه الکترونیک بهمراه کلمه عبور برای شما مجددا ارسال می شود."
+
+msgid "UsersUnsubscribed"
+msgstr "کاربران انتخاب شده از درس مورد نظر لغو ثبت نام شدند"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "این سیستم قادر به ارسال نامه الکترونیک نبود. لطفا تماس بگیرید"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "این OpenID  در پایگاه داده وجود ندارد. لطفا یک حساب کاربری جدید ثبت کنید. اگر هم اکنون یک حساب کاربری در سایت دارید، لطفا مشخصات خود در حساب کاربری را ویرایش نموده و این OpenID  را اضافه نمایید."
+
+msgid "UsernameMaxXCharacters"
+msgstr "نام کاربری باید حداکثر %s کاراکتر طول داشته باشد"
+
+msgid "PictureUploaded"
+msgstr "تصویر شما آپلود شد"
+
+msgid "ProductionUploaded"
+msgstr "فایل محصول شما آپلود شده است"
+
+msgid "FolderUpdated"
+msgstr "پوشه بروز رسانی شد"
+
+msgid "UsersRegistered"
+msgstr "این کاربران در این درس ثبت نام شده است"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "کاربر قبلا توسط مربی دیگری ثبت نام شده است."
+
+msgid "UserCreatedPlatform"
+msgstr "کاربر در پرتال ساخته شد"
+
+msgid "UserInSession"
+msgstr "کاربر در جلسه اضافه شد"
+
+msgid "UserNotAdded"
+msgstr "کاربر اضافه نشد."
+
+msgid "NoSessionId"
+msgstr "جلسه مشخص نشده است"
+
+msgid "NoUsersRead"
+msgstr "لطفا فایل XML/CVS خود را تایید کنید"
+
+msgid "UserImportFileMessage"
+msgstr "اگر در فایل XML/CVS نام کاربری وجود نداشته باشد، نام و نام خانوادگی ترکیب شده و یک نام کاربری ایجاد می شود."
+
+msgid "UserAlreadyRegisteredByOtherCreator"
+msgstr "کاربر قبلا توسط مربی دیگر ثبت نام شده است."
+
+msgid "NewUserInTheCourse"
+msgstr "کاربر جدید در درس"
+
+msgid "MessageNewUserInTheCourse"
+msgstr "یک کاربر جدید در درس وجود دارد"
+
+msgid "EditNormalProfile"
+msgstr "ویرایش مشخصات معمول"
+
+msgid "EditExtendProfile"
+msgstr "ویرایش وشخصات اضافه"
+
+msgid "EditInformation"
+msgstr "ویرایش مشخصات"
+
+msgid "RegisterUser"
+msgstr "ثبت نام"
+
+msgid "IHaveReadAndAgree"
+msgstr "من مطالعه کرده و موافقت می کنم"
+
+msgid "ByClickingRegisterYouAgreeTermsAndConditions"
+msgstr "با کلیک بر روی گزینه \"ثبت نام\" شما با شرایط و ضوابط ما موافقت کرده اید"
+
+msgid "User"
+msgstr "کاربر"
+
+msgid "LostPass"
+msgstr "کلمه عبور خود را فراموش کرده اید؟"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "نام کاربری و یا پست الکترونیک که توسط آن ثبت نام کرده اید را وارد نمایید تا ما کلمه عبور را برایتان ارسال کنیم."
+
+msgid "NoUserAccountWithThisEmailAddress"
+msgstr "هیچ حساب کاربری مربوط این کاربر یا پست الکترونیک وجود ندارد"
+
+msgid "CouldNotResetPassword"
+msgstr "قادر به بازیابی کلمه عبور نبودیم"
+
+msgid "WithTheFollowingSettings"
+msgstr "بهمراه تنظیمات ذیل:"
+
+msgid "UnsubscribeUsersAlreadyAddedInCourse"
+msgstr "کاربران لغو شده قبلا اضافه شده اند"
+
+msgid "YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators"
+msgstr "حساب کاربری شما در %s هم اکنون توسط یکی از مدیران تایید شد."
+
+msgid "HaveFun"
+msgstr "خوش باشید،"
+
+msgid "YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided"
+msgstr "شما هم اکنون می توانید با استفاده از نام کاربری و کلمه عبور که ارائه شده است به %s وارد شوید."
+
+msgid "AreYouSureToEditTheUserStatus"
+msgstr "آیا مطمئن هستید که قصد ویرایش وضعیت کاربر را دارید؟"
+
+msgid "TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse"
+msgstr "راهنما فقط قادر به پیگیری روند پیشرفت دانشجو های ثبت نام شده در درس را دارد."
+
+msgid "TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse"
+msgstr "اساتید قادر به نمره دهی، ارزیابی و پیگیری تمامی دانشجویان ثبت نام کرده در درس را دارد."
+
+msgid "LoginOrEmailAddress"
+msgstr "نام کاربری یا پست الکترونیک"
+
+msgid "AtOnce"
+msgstr "بعد از پذیرش"
+
+msgid "Daily"
+msgstr "یکبار در روز"
+

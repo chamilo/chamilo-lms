@@ -1,0 +1,552 @@
+msgid "langShouldBeCSVFormat"
+msgstr "Failam jābūt CSV formātā. Nepievienojiet tukšumus. Struktūrai jābūt tieši šādai:"
+
+msgid "langTracking"
+msgstr "Atskaites"
+
+msgid "langEnter2passToChange"
+msgstr "Lai veiktu paroles maiņu, ievadiet to abos lauciņos zemāk. Ja nevēlaties to darīt, atstājiet lauciņus tukšus."
+
+msgid "langAuthInfo"
+msgstr "Autorizēšanās"
+
+msgid "langUpdateImage"
+msgstr "Mainīt profila attēlu"
+
+msgid "langImageWrong"
+msgstr "Dokumenta izmēram jābūt mazākam par"
+
+msgid "langAddImage"
+msgstr "Attēls"
+
+msgid "langCourseManager"
+msgstr "Lektors"
+
+msgid "NewPass"
+msgstr "Jauna parole"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "Šī parole nav korekta"
+
+msgid "password_request"
+msgstr "Jūs esat veicis paroles nomaiņas pieprasījumu. Ja Jūs to neesat darījis, tad ignorējiet šo epastu. Lai veiktu paroles nomaiņu, klikšķieniet uz nomaiņas hipersaites."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Jūsu parole tika Jums nosūtīta ar e-pasta starpniecību."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Norādiet e-pasta adresi, ko norādījāt veicot reģistrāciju un Jums tiks nosūtīta sistēmas parole."
+
+msgid "langLogin"
+msgstr "Autorizēties"
+
+msgid "langAction"
+msgstr "Darbība"
+
+msgid "langPreserved"
+msgstr "Rezervēts"
+
+msgid "langDeleted"
+msgstr "Izdzēsts"
+
+msgid "langAdded"
+msgstr "Pievienots"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Apstiprināt lietotāja atreģistrēšanu"
+
+msgid "langCourseName"
+msgstr "Kursa nosaukums"
+
+msgid "langSubscribe"
+msgstr "Reģistrēties"
+
+msgid "langSee"
+msgstr "Doties uz"
+
+msgid "langLastVisits"
+msgstr "Mani pēdējie apmeklējumi"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Ja Jūs savam kursam vēlaties pievienot tā lietotāju sarakstu, lūdzu, sazinieties ar sistēmas administratoru."
+
+msgid "langPassTooEasy"
+msgstr "Šī parole ir pārāk vienkārša. Vēlams lietot paroli, kas līdzinās šai"
+
+msgid "langGroupUserManagement"
+msgstr "Grupu administrēšana"
+
+msgid "langAddedToCourse"
+msgstr "tika reģistrēts Jūsu kursā"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Lietotājs ar šādu vārdu, kursā jau ir reģistrēts."
+
+msgid "langBackUser"
+msgstr "Atpakaļ pie lietotāju saraksta"
+
+msgid "langUserOneByOneExplanation"
+msgstr "Viņa/-š saņems apstiprinājumu e-pasta veidā ar lietotājvārdu un paroli"
+
+msgid "langGiveTutor"
+msgstr "Veidot Lektoru"
+
+msgid "langRemoveRight"
+msgstr "Dzēst šīs tiesības"
+
+msgid "langGiveAdmin"
+msgstr "Iecelt par administratoru"
+
+msgid "langUserNumber"
+msgstr "skaits"
+
+msgid "langDownloadUserList"
+msgstr "Augšupielādes saraksts"
+
+msgid "langSend"
+msgstr "Sūtīt jaunas paroles pieprasījumu"
+
+msgid "langUserAddExplanation"
+msgstr "Katrai lietotāju faila rindai svarīgi ir saturēt 5 informācijas laukus sekojošā kārtībā: <b>Vārds   Uzvārds Lietotājvārds  Parole  E-pasts</b> kas atdalīti ar tab. Lietotāji saņems e-pasta apstiprinājumus ar Lietotājvārdu / Paroli."
+
+msgid "langUserMany"
+msgstr "Veikt lietotāju saraksta importēšanu no CSV / XML faila"
+
+msgid "langOneByOne"
+msgstr "Pievienot lietotājus pa vienam"
+
+msgid "langNow"
+msgstr "t&#363;li&#326;"
+
+msgid "langTutor"
+msgstr "Metodiķe/-is"
+
+msgid "langTitular"
+msgstr "Līderis"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\\\'Arial, Helvetica\\\'><big>Veikt izmaiņas kursu sarakstā</big><br><br>Atzīmējiet kursus, kurus vēlaties apmeklēt.<br>Atsakieties no tiem, kurus Jūs vairs nevēlaties apmeklēt.<br>Tad klikšķiniet uz pogas \"Darīts\" saraksta apakšā"
+
+msgid "langStudent"
+msgstr "Kursants"
+
+msgid "langImportUserList"
+msgstr "Veikt lietotāju saraksta importu"
+
+msgid "langAddAU"
+msgstr "Pievienot lietotāju"
+
+msgid "langAddedU"
+msgstr "tika pievienots. Šim lietotājam tika nosūtīts e-pasts, lai darītu zināmu lietotājvārdu"
+
+msgid "langTheU"
+msgstr "Lietotājs"
+
+msgid "langRegYou"
+msgstr "reģistrējis Jūs šim kursam"
+
+msgid "langOneResp"
+msgstr "Viens no kursa administratoriem"
+
+msgid "langTaken"
+msgstr "patlaban jau ir aizņemts. Lūdzu, izvēlieties citu."
+
+msgid "langUserNo"
+msgstr "Izvēlētais lietotājvārds"
+
+msgid "langFilled"
+msgstr "Daži aizpildāmie lauciņi tika atstāti tukši."
+
+msgid "langInC"
+msgstr "šajā kursā"
+
+msgid "langRole"
+msgstr "Apraksts"
+
+msgid "UserPicture"
+msgstr "Attēls"
+
+msgid "langProfileReg"
+msgstr "Jūsu jaunais profils tika saglabāts"
+
+msgid "langEmailWrong"
+msgstr "E-pasta adrese ir nepilnīga vai satur neatļautus simbolus"
+
+msgid "langUserTaken"
+msgstr "Šis lietotājvārds jau ir aizņemts"
+
+msgid "langFields"
+msgstr "Daži aizpildāmie lauciņi tika atstāti tukši"
+
+msgid "langAgain"
+msgstr "Mēģiniet vēlreiz!"
+
+msgid "langPassTwo"
+msgstr "Jūs norādījāt divas dažādas paroles"
+
+msgid "langViewProfile"
+msgstr "Skatīt manu e-portfolio"
+
+msgid "langModifProfile"
+msgstr "Veikt izmaiņas e-portfolio"
+
+msgid "langIsReg"
+msgstr "Veiktās izmaiņas tika saglabātas"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Tagad Jūs varat izveidot mācību kursu"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Tagad Jūs sarakstā varat izvēlēties kursus, kuriem vēlaties piekļūt"
+
+msgid "langMailHasBeenSent"
+msgstr "Jums tika nosūtīts e-pasts, lai palīdzētu atcerēties Jūsu lietotājvārdu un paroli"
+
+msgid "langPersonalSettings"
+msgstr "Jūsu individuālie iestatījumi tika saglabāti"
+
+msgid "langManager"
+msgstr "Vadības panelis"
+
+msgid "langFormula"
+msgstr "Ar sveicieniem"
+
+msgid "langProblem"
+msgstr "Problēmu gadījumā, sazinieties ar mums."
+
+msgid "langIs"
+msgstr "ir"
+
+msgid "langAddress"
+msgstr "Interneta adrese, e-mācību videi"
+
+msgid "langSettings"
+msgstr "ar sekojošiem iestatījumiem : Lietotājvārds :"
+
+msgid "langYouAreReg"
+msgstr "Jūs esat reģistrēts e-mācību vidē"
+
+msgid "langYourReg"
+msgstr "Jūsu reģistrācija e-mācību vidē"
+
+msgid "langUserFree"
+msgstr "Šis lietotājvārds jau ir aizņemts. Noklikšķiniet pārlūkprogrammas \"Back\" pogu un izvēlieties citu."
+
+msgid "langEmptyFields"
+msgstr "Daži aizpildāmie lauciņi tika atstāti tukši. Noklikšķiniet pārlūkprogrammas \"Back\" pogu un izvēlieties citu."
+
+msgid "langPassTwice"
+msgstr "Jūs norādījāt divas dažādas paroles. Noklikšķiniet pārlūkprogrammas \"Back\" pogu un izvēlieties citu."
+
+msgid "langRegAdmin"
+msgstr "Izveidot kursu"
+
+msgid "langRegStudent"
+msgstr "Sekot kursiem"
+
+msgid "langConfirmation"
+msgstr "Apstiprināt paroli atkārtoti"
+
+msgid "langPass"
+msgstr "Parole"
+
+msgid "langSurname"
+msgstr "Uzvārds"
+
+msgid "langRegistration"
+msgstr "Reģistrācija"
+
+msgid "langYourAccountParam"
+msgstr "Šī ir informācija, kā Jums pieslēgties"
+
+msgid "langLoginRequest"
+msgstr "Autorizēšanās pieprasījums"
+
+msgid "langDefineHeadings"
+msgstr "Definēt virsrakstus"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Tikai Lektoram"
+
+msgid "langLostPassword"
+msgstr "Piejas paroles atjaunošana"
+
+msgid "langAdminOfCourse"
+msgstr "Kursa administrators"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Kursa lietotājs"
+
+msgid "langIsTutor"
+msgstr "Metodiķe/is"
+
+msgid "langParamInTheCourse"
+msgstr "Statuss kursa ietvaros"
+
+msgid "langMember"
+msgstr "dalībnieks"
+
+msgid "langLock"
+msgstr "noslēgts"
+
+msgid "langUnlock"
+msgstr "atvērts"
+
+msgid "langHaveNoCourse"
+msgstr "Pieejamu kursu nav"
+
+msgid "langManage"
+msgstr "Administrēt portālu"
+
+msgid "langAdministrationTools"
+msgstr "Administrēšanas instrumenti"
+
+msgid "langUserProfileReg"
+msgstr "Lietotāja e-portfolio tika reģistrēts"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Lietotājs ar norādītu e-pasta adresi neeksistē"
+
+msgid "langCourses4User"
+msgstr "Šī lietotāja kursi"
+
+msgid "langCoursesByUser"
+msgstr "Kursi sakārtoti pēc lietotāja"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Pievienot lietotājus šim kursam"
+
+msgid "langPreced100"
+msgstr "Iepriekšējie 100"
+
+msgid "langAddmore"
+msgstr "Pievienot jau reģistrētus lietotājus"
+
+msgid "langAddback"
+msgstr "Uz lietotāju sarakstu"
+
+msgid "langreg"
+msgstr "Reģistrēt"
+
+msgid "langQuit"
+msgstr "Beigt darbu"
+
+msgid "your_password_has_been_reset"
+msgstr "Jūsu parole tika nomainīta"
+
+msgid "langSex"
+msgstr "Dzimums"
+
+msgid "langClass"
+msgstr "Grupa"
+
+msgid "langEdit"
+msgstr "labot"
+
+msgid "required"
+msgstr "obligāts"
+
+msgid "langOptionalTextFields"
+msgstr "Papildus informācija"
+
+msgid "langMyProductions"
+msgstr "Manis paveiktais"
+
+msgid "langFileDeleted"
+msgstr "Fails tika izdzēsts."
+
+msgid "FullUserName"
+msgstr "Pilns vārds"
+
+msgid "SearchForUser"
+msgstr "Meklēt lietotāju"
+
+msgid "SearchButton"
+msgstr "Meklēt"
+
+msgid "SearchNoResultsFound"
+msgstr "Meklējot nekas netika atrasts"
+
+msgid "UsernameWrong"
+msgstr "Jūsu lietotājvārds drīkst saturēt tikai burtus, ciparus un _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "Šis ir e-pasta pieprasījums parolei"
+
+msgid "CorrespondsToAccount"
+msgstr "Šī e-pasta adrese sakrīt ar sekojošu lietotāja kontu"
+
+msgid "CorrespondsToAccounts"
+msgstr "Šī e-pasta adrese sakrīt ar šādu lietotāja kontu."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo nevar nosūtīt pieprasījumu automātiski, jo kontā ir ārējais autentificēšanas avots. Lūdzu, veikt atbilstošus pasākumus un paziņojiet to lietotājam."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo nevar nosūtīt pieprasījuma automātiski, jo vismaz vienam no kontiem ir ārējais autentificēšanas avots. Lūdzu, veikt atbilstošus pasākumus visiem kontiem (ieskaitot arī tos, kas definēti ar platformas autentifikāciju) un paziņo to lietotājam."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo nevar nodrošināt šāda veida kontam pieprasījumu automātiski. Jūsu pieprasījums ir nosūtīts platformas administratoram, kurš veiks atbilstošus pasākumus un informēs Jūs par rezultātu."
+
+msgid "langphone"
+msgstr "Tālrunis"
+
+msgid "Unreg"
+msgstr "Atreģistrēt"
+
+msgid "MyProgress"
+msgstr "Padarītā apjoms un rezultāti Manos kursos"
+
+msgid "ProgressIntroduction"
+msgstr "Sāciet ar mācību sesijas izvēli zemāk. Pēc tam Jūs varat redzēt savu virzību katrā mācību kursā,"
+
+msgid "Select"
+msgstr "Apstiprināt"
+
+msgid "NeverExpires"
+msgstr "Termiņa beigu datuma nav"
+
+msgid "On"
+msgstr "Uz"
+
+msgid "ExpirationDate"
+msgstr "Saturs pieejams līdz :"
+
+msgid "ActiveAccount"
+msgstr "Konts"
+
+msgid "YourAccountHasToBeApproved"
+msgstr " Jūsu konts ir jāapstiprina"
+
+msgid "ApprovalForNewAccount"
+msgstr "Jauna konta apstiprinājums"
+
+msgid "ManageUser"
+msgstr "Organizēt lietotāju"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Reģistrēt Lektorus"
+
+msgid "SendMessage"
+msgstr "Sūtīt vēstuli"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "Drošības apsvērumu dēļ, Jūsu parole tiek šifrēta. Tādējādi, nospiežot uz e-pasta saites, Jums tiks nosūtīta atkārtota parole."
+
+msgid "UsersUnsubscribed"
+msgstr "Izvēlētie lietotāji ir izņemti no mācību kursa"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "Portāls nevar nosūtīt e-pastu"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "Šis OpenID nav atrodams mūsu datu bāzē. Lūdzu reģistrēties jauna konta izveidei. Ja Jums jau ir konts mūsu sistēmā, lūdzu, rediģējiet savu profilu konta iekšienē, lai pievienotu šo OpenID"
+
+msgid "UsernameMaxXCharacters"
+msgstr "Lietotājvārdam jābūt %s burtu garam"
+
+msgid "PictureUploaded"
+msgstr "Jūsu attēli ir augšupielādēti"
+
+msgid "ProductionUploaded"
+msgstr "Jūsu produktivitātes fails tika augšupielādēts"
+
+msgid "FolderUpdated"
+msgstr "Mape atjaunināta"
+
+msgid "UsersRegistered"
+msgstr "Šie lietotāji tika piereģistrēti apmācībām"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "Lietotāju jau piereģistrējis cits lektors"
+
+msgid "UserCreatedPlatform"
+msgstr "Lietotājs portālā izveidots"
+
+msgid "UserInSession"
+msgstr "Lietotājs pievienots sesijai"
+
+msgid "UserNotAdded"
+msgstr "Lietotājs nav pievienots"
+
+msgid "NoSessionId"
+msgstr "Sesija netika identificēta"
+
+msgid "NoUsersRead"
+msgstr "Lūdzu, apstipriniet savu XML / CSV failu"
+
+msgid "UserImportFileMessage"
+msgstr "Ja XML / CVS failā  trūks Lietotājvārda, Vārds un Uzvārds apvienosies, lai izveidotu Lietotājvārdu, piemēram <b> Julio Montoya </b>  tiks pārvērsts <b>jmontoya</b>"
+
+msgid "UserAlreadyRegisteredByOtherCreator"
+msgstr "Lietotāju jau piereģistrējis cits lektors"
+
+msgid "NewUserInTheCourse"
+msgstr "Jauns lietotājs kursā"
+
+msgid "MessageNewUserInTheCourse"
+msgstr "Kursā ir jauns lietotājs"
+
+msgid "EditNormalProfile"
+msgstr "Rediģēt vienkāršu profilu"
+
+msgid "EditExtendProfile"
+msgstr "Rediģēt paplašinātu profilu"
+
+msgid "EditInformation"
+msgstr "Rediģēt profilu"
+
+msgid "RegisterUser"
+msgstr "Reģistrēties"
+
+msgid "IHaveReadAndAgree"
+msgstr "Esmu izlasījis /-usi un apstiprinu"
+
+msgid "ByClickingRegisterYouAgreeTermsAndConditions"
+msgstr "Uzklikšķinot uz pogas \"<b>Reģistrēties</b>\" zemāk, Jūs piekrītat augstāk minētajiem Noteikumiem un Nosacījumiem."
+
+msgid "User"
+msgstr "Lietotājvārds"
+
+msgid "LostPass"
+msgstr "Aizmirsāt savu paroli?"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "Ievadiet lietotājvārdu vai e-pasta adresi, ar kuru jūs reģistrējāties, un mēs nosūtīsim Jums paroli."
+
+msgid "NoUserAccountWithThisEmailAddress"
+msgstr "Šeit nav kontu ar šādu lietotājvārdu un/vai e-pasta adresi."
+
+msgid "CouldNotResetPassword"
+msgstr "Paroli atiestatīt nevar"
+
+msgid "WithTheFollowingSettings"
+msgstr "ar šādiem iestatījumiem:"
+
+msgid "YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators"
+msgstr "Jūsu kontu %s tikko ir apstiprinājis viens no mūsu administratoriem."
+
+msgid "HaveFun"
+msgstr "Izbaudiet,"
+
+msgid "YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided"
+msgstr "Tagad Jūs varat ielogoties %s, izmantojot Jums izsniegto lietotājvārdu un paroli."
+
+msgid "AreYouSureToEditTheUserStatus"
+msgstr "Vai esat pārliecināts, ka vēlaties rediģēt lietotāja statusu?"
+
+msgid "TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse"
+msgstr "Tikai Lektori var redzēt, visu Kursā reģistrēto Lietotāju, mācību apjoma apguves atskaiti"
+
+msgid "TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse"
+msgstr "Lektors var kvalificēt, vērtēt un sekot izpildei, visiem Kursā reģistrētajiem Lietotājiem"
+
+msgid "LoginOrEmailAddress"
+msgstr "Lietotājvārds vai e-pasta adrese"
+
+msgid "AtOnce"
+msgstr "Saņemot"
+
+msgid "Daily"
+msgstr "Vienreiz dienā"
+

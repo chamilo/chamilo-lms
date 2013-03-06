@@ -1,0 +1,33 @@
+msgid "langCourseProgram"
+msgstr "과정 설명"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "이 과정에 대한 설명이 존재하지 않습니다."
+
+msgid "langEditCourseProgram"
+msgstr "과정 설명 생성과 수정"
+
+msgid "QuestionPlan"
+msgstr "관리자에게 질문"
+
+msgid "langInfo2Say"
+msgstr "유저에게 제공하는 정보"
+
+msgid "langOuAutreTitre"
+msgstr "제목"
+
+msgid "langNewBloc"
+msgstr "그 외"
+
+msgid "langAddCat"
+msgstr "카테고리 추가"
+
+msgid "langAdd"
+msgstr "추가"
+
+msgid "langValid"
+msgstr "유효함"
+
+msgid "langBackAndForget"
+msgstr "back and forget"
+

@@ -1,0 +1,522 @@
+msgid "WikiSearchResults"
+msgstr "Resultaos de la gueta nel Wiki"
+
+msgid "Wiki"
+msgstr "Wiki del grupu"
+
+msgid "StartPage"
+msgstr "Páxina d\'entamu del Wiki"
+
+msgid "EditThisPage"
+msgstr "Editar esta páxina"
+
+msgid "ShowPageHistory"
+msgstr "Historial de la páxina"
+
+msgid "RecentChanges"
+msgstr "Cambios recientes"
+
+msgid "AllPages"
+msgstr "Toles páxines"
+
+msgid "AddNew"
+msgstr "Amestar una páxina"
+
+msgid "ChangesStored"
+msgstr "Cambios almancenaos"
+
+msgid "NewWikiSaved"
+msgstr "La entrada nueva nel wiki guardóse. Pue vela calcando en:"
+
+msgid "DefaultContent"
+msgstr "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Pa entamar edite esta páxina y esborre esti testu.</p>"
+
+msgid "CourseWikiPages"
+msgstr "Páxines Wiki del cursu"
+
+msgid "GroupWikiPages"
+msgstr "Páxines Wiki del grupu"
+
+msgid "NoWikiPageTitle"
+msgstr "Los cambios nun se guardaren. Tien de poner un títulu a esta páxina"
+
+msgid "WikiPageTitleExist"
+msgstr "Esti títulu de páxina ya ta creau. Edite\'l conteníu esistente calcando en:"
+
+msgid "WikiDiffAddedLine"
+msgstr "Ringlera amestada"
+
+msgid "WikiDiffDeletedLine"
+msgstr "Ringlera esborrada"
+
+msgid "WikiDiffMovedLine"
+msgstr "Ringlera movida"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "Ringlera ensin cambios"
+
+msgid "DifferencesNew"
+msgstr "cambios na versión"
+
+msgid "DifferencesOld"
+msgstr "respeutu a la versión de"
+
+msgid "Differences"
+msgstr "Diferencies"
+
+msgid "MostRecentVersion"
+msgstr "Vista de la versión más última de les seleicionaes"
+
+msgid "Legend"
+msgstr "Lleenda"
+
+msgid "ShowDifferences"
+msgstr "Comparar versiones"
+
+msgid "SearchPages"
+msgstr "Buscar páxines"
+
+msgid "Discuss"
+msgstr "Discutir"
+
+msgid "History"
+msgstr "Historial"
+
+msgid "ShowThisPage"
+msgstr "Ver esta páxina"
+
+msgid "DeleteThisPage"
+msgstr "Esborrar esta páxina"
+
+msgid "DiscussThisPage"
+msgstr "Discutir esta páxina"
+
+msgid "HomeWiki"
+msgstr "Portada"
+
+msgid "DeleteWiki"
+msgstr "Esborrar el Wiki"
+
+msgid "WikiDeleted"
+msgstr "Wiki esborráu"
+
+msgid "WikiPageDeleted"
+msgstr "La páxina esborróse y tamién tol so historial"
+
+msgid "NumLine"
+msgstr "Númb. de ringlera"
+
+msgid "DeletePageHistory"
+msgstr "Esborrar esta páxina y toles sos versiones"
+
+msgid "OnlyAdminDeleteWiki"
+msgstr "Namás los profesores del cursu puen esborrar el Wiki"
+
+msgid "OnlyAdminDeletePageWiki"
+msgstr "Namás los profesores del cursu puen esborrar una páxina"
+
+msgid "OnlyAddPagesGroupMembers"
+msgstr "Namás los profesores del cursu y los miembros d\'esti grupu puen amestar páxines al Wiki del grupu"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "Namás los profesores del cursu y los miembros d\'esti grupu puen editar les páxines del Wiki del grupu."
+
+msgid "ConfirmDeleteWiki"
+msgstr "¿ Ta seguru de que quier esborrar esti Wiki ?"
+
+msgid "ConfirmDeletePage"
+msgstr "¿ Ta seguru de que quier esborrar esta páxina y toles sos versiones ?"
+
+msgid "AlsoSearchContent"
+msgstr "Buscar tamién nel conteníu"
+
+msgid "PageLocked"
+msgstr "Páxina protexida"
+
+msgid "PageUnlocked"
+msgstr "Páxina ensin protexer"
+
+msgid "PageLockedExtra"
+msgstr "Esta páxina ta protexida. Namás los profesores del cursu puen cambiala."
+
+msgid "PageUnlockedExtra"
+msgstr "Esta páxina nun ta protexida, polo que tolos miembros del cursu o, nel so casu, del grupu, van poder modificala."
+
+msgid "ShowAddOption"
+msgstr "Activar amestar"
+
+msgid "HideAddOption"
+msgstr "Desactivar amestar"
+
+msgid "AddOptionProtected"
+msgstr "La posibilidá d\'amestar páxines desactivóse. Dende agora los profesores del cursu puen amestar páxines nesta Wiki. Así y too, el restu los usuarios va poder siguir editando les páxines yá esistentes."
+
+msgid "AddOptionUnprotected"
+msgstr "La posibilidá d\'amestar páxines ta habilitada pa tolos miembros del Wiki."
+
+msgid "NotifyChanges"
+msgstr "Dar anuncia de cambios"
+
+msgid "NotNotifyChanges"
+msgstr "Nun anunciar cambios"
+
+msgid "NotifyByEmail"
+msgstr "Notificar per e-mail de la que daquién retruque"
+
+msgid "CancelNotifyByEmail"
+msgstr "La anuncia per corréu electrónicu de les modificaciones de la páxina ta deshabiliada."
+
+msgid "MostRecentVersionBy"
+msgstr "La postrer versión d\'esta páxina fízola"
+
+msgid "Rating"
+msgstr "Puntos"
+
+msgid "RatingMedia"
+msgstr "La puntuación media de la páxina ye"
+
+msgid "NumComments"
+msgstr "El númberu de comentarios a esta páxina ye"
+
+msgid "NumCommentsScore"
+msgstr "El númberu de comentarios evaluaos ye"
+
+msgid "AddPagesLocked"
+msgstr "La opción amestar páxines desctivóla temporalmente\'l responsable del cursu"
+
+msgid "LinksPages"
+msgstr "Referencies"
+
+msgid "ShowLinksPages"
+msgstr "Amuesa les páxines que tienen enllaces a esta páxina"
+
+msgid "MoreWikiOptions"
+msgstr "Más opciones Wiki"
+
+msgid "DefaultTitle"
+msgstr "Páxina d\'entamu"
+
+msgid "DiscussNotAvailable"
+msgstr "Discutiniu non disponible"
+
+msgid "Print"
+msgstr "Emprentar"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "EditPage"
+msgstr "Editar"
+
+msgid "AddedBy"
+msgstr "amestada por"
+
+msgid "EditedBy"
+msgstr "editada por"
+
+msgid "DeletedBy"
+msgstr "esborrada por"
+
+msgid "WikiStandardMode"
+msgstr "Mou Wiki"
+
+msgid "GroupTutorAndMember"
+msgstr "Tutor y miembru del grupu"
+
+msgid "GroupTutor"
+msgstr "Tutor del grupu"
+
+msgid "GroupStandardMember"
+msgstr "Miembru del grupu"
+
+msgid "AssignmentMode"
+msgstr "Mou llabor individual"
+
+msgid "ConfigDefault"
+msgstr "Configuración por defeutu"
+
+msgid "UnlockPage"
+msgstr "Desprotexer"
+
+msgid "LockPage"
+msgstr "Protexer"
+
+msgid "NotifyDiscussChanges"
+msgstr "Anunciar comentarios"
+
+msgid "NotNotifyDiscussChanges"
+msgstr "Nun anunciar comentarios"
+
+msgid "AssignmentWork"
+msgstr "Trabayu del alumnu"
+
+msgid "AssignmentDesc"
+msgstr "Llabor / Deber  propuestu pol profesor"
+
+msgid "WikiDiffAddedTex"
+msgstr "Testu amestáu"
+
+msgid "WikiDiffDeletedTex"
+msgstr "Testu esborráu"
+
+msgid "WordsDiff"
+msgstr "palabra a palabra"
+
+msgid "LinesDiff"
+msgstr "ringlera a ringlera"
+
+msgid "MustSelectPage"
+msgstr "Primero tien d\'escoyer una páxina"
+
+msgid "Export2ZIP"
+msgstr "Esportar a un ficheru ZIP"
+
+msgid "HidePage"
+msgstr "Esconder páxina"
+
+msgid "ShowPage"
+msgstr "Amosar páxina"
+
+msgid "GoAndEditMainPage"
+msgstr "P\'arrancar el Wiki vaya a la páxina d\'entamu y edítela"
+
+msgid "UnlockDiscuss"
+msgstr "Desbloquear discutiniu"
+
+msgid "LockDiscuss"
+msgstr "Bloquear discutiniu"
+
+msgid "HideDiscuss"
+msgstr "Esconder discutiniu"
+
+msgid "ShowDiscuss"
+msgstr "Amosar discutiniu"
+
+msgid "UnlockRatingDiscuss"
+msgstr "Activar puntuar"
+
+msgid "LockRatingDiscuss"
+msgstr "Desactivar puntuar"
+
+msgid "EditAssignmentWarning"
+msgstr "Pue editar esta páxina, pero les páxines de los sos alumnos nun van cambiar."
+
+msgid "ExportToDocArea"
+msgstr "Esportar la postrer versión de la páxina al área de documentos del cursu"
+
+msgid "LockByTeacher"
+msgstr "Desactiváu pol profesor"
+
+msgid "LinksPagesFrom"
+msgstr "Páxines qu\'enllacen la páxina"
+
+msgid "DefineAssignmentPage"
+msgstr "Definir esta páxina como un llabor / deber individual"
+
+msgid "AssignmentDescription"
+msgstr "Descripción de llabores / deberes"
+
+msgid "UnlockRatingDiscussExtra"
+msgstr "Agora tolos miembros puen puntuar la páxina"
+
+msgid "LockRatingDiscussExtra"
+msgstr "Agora namás los profesores del cursu puen puntuar la páxina"
+
+msgid "HidePageExtra"
+msgstr "La páxina ta agora visible pa los profesores del cursu"
+
+msgid "ShowPageExtra"
+msgstr "La páxina agora puen vela tolos usuarios"
+
+msgid "OnlyEditPagesCourseManager"
+msgstr "La páxina d\'entamu namás pue modificala un profesor del cursu."
+
+msgid "AssignmentLinktoTeacherPage"
+msgstr "Entrada a la páxina del profesor"
+
+msgid "HideDiscussExtra"
+msgstr "El discutiniu ta agora visible namás pa los profesores del cursu"
+
+msgid "ShowDiscussExtra"
+msgstr "El discutiniu ta visible agora pa tolos usuarios"
+
+msgid "LockDiscussExtra"
+msgstr "Agoar namás los profesores van poder amestar comentarios a esti discutiniu"
+
+msgid "UnlockDiscussExtra"
+msgstr "Agora tolos miembros puen amestar comentarios a esti discutiniu"
+
+msgid "AssignmentDescExtra"
+msgstr "Esta páxina ye un llabor / deber propuestu por un profesor"
+
+msgid "AssignmentWorkExtra"
+msgstr "Esta páxina ye\'l trabayu d\'un alumnu pa un llabor /deber"
+
+msgid "NoAreSeeingTheLastVersion"
+msgstr "Cuidáu, nun ta viendo la postrer versión de la páxina"
+
+msgid "AssignmentFirstComToStudent"
+msgstr "Modifica esta páxina pa poder facer el so trabayu del llabor / deber propuestu"
+
+msgid "AssignmentLinkstoStudentsPage"
+msgstr "Entrada a los llabores / deberes fechos polos alumnos al llabor / deber propuestu nesta páxina"
+
+msgid "AllowLaterSends"
+msgstr "Permitir unvíos retrasaos"
+
+msgid "WikiStandBy"
+msgstr "El Wiki ta esperando qu\'un profesor lu arranque"
+
+msgid "NotifyDiscussByEmail"
+msgstr "L\'anuncia per corréu electrónicu de comentarios nuevos pa esta páxina ta habilitada"
+
+msgid "CancelNotifyDiscussByEmail"
+msgstr "L\'anuncia per corréu electrónicu de comentarios nuevos a la páxina ta deshabilitada"
+
+msgid "EmailWikiChanges"
+msgstr "Anuncia de cambios nel Wiki"
+
+msgid "EmailWikipageModified"
+msgstr "Modificóse la páxina"
+
+msgid "EmailWikiPageAdded"
+msgstr "Nun s\'amestó la páxina"
+
+msgid "EmailWikipageDedeleted"
+msgstr "Una páxina esborróse nel Wiki"
+
+msgid "EmailWikiPageDiscAdded"
+msgstr "Hubo una intervención nueva nel discutiniu de la páxina"
+
+msgid "FullNotifyByEmail"
+msgstr "Recibir una anuncia per corréu electrónicu cada vez qu\'haya un cambiu nel Wiki."
+
+msgid "FullCancelNotifyByEmail"
+msgstr "Dexar de recibir anuncies per corréu electrónicu cada vez qu\'haya un cambiu na Wiki."
+
+msgid "EmailWikiChangesExt_1"
+msgstr "Esta anuncia fízose según la so petición de ver los cambios nel Wiki. Activó esta opción de la que calcó\'l botón"
+
+msgid "EmailWikiChangesExt_2"
+msgstr "Si quies nun volver a recibir anuncies de los cambios nel Wiki, escueyi les pestañes <strong>Cambios recientes</strong>, <strong>Páxina actual</strong>, <strong>Discutiniu</strong>, según el casu y darréu calque\'l botón."
+
+msgid "Visits"
+msgstr "visites"
+
+msgid "OrphanedPages"
+msgstr "Páxines guérfanes"
+
+msgid "WantedPages"
+msgstr "Páxines solicitaes"
+
+msgid "MostVisitedPages"
+msgstr "Páxines más visitaes"
+
+msgid "MostChangedPages"
+msgstr "Páxines con más cambios"
+
+msgid "Changes"
+msgstr "Cambeos"
+
+msgid "MostActiveUsers"
+msgstr "Usuarios más activos"
+
+msgid "Contributions"
+msgstr "contribuciones"
+
+msgid "UserContributions"
+msgstr "Contribuciones del usuariu"
+
+msgid "WarningDeleteMainPage"
+msgstr "Nun se recomienda esborrar la Páxina d\'entamu del Wiki porque ye la entrada primera a la estructura xerárquica.<br>Si, así y too, tien de la esborrar, nun escaeza volver crear esta Páxina d\'entamu. Hasta que nun lo faiga los demás usuarios nun van poder amestar páxines nueves al Wiki."
+
+msgid "ConvertToLastVersion"
+msgstr "Pa convertir esta versión na última calque en"
+
+msgid "Restore"
+msgstr "Restaurar"
+
+msgid "CurrentVersion"
+msgstr "Versión actual"
+
+msgid "LastVersion"
+msgstr "Última versión"
+
+msgid "PageRestored"
+msgstr "La páxina restauróse. Pue vela calcando en"
+
+msgid "RestoredFromVersion"
+msgstr "Páxina restaurada dende la versión"
+
+msgid "HWiki"
+msgstr "Aida: Wiki"
+
+msgid "FirstSelectOnepage"
+msgstr "Primero seleiciona una páxina"
+
+msgid "DefineTask"
+msgstr "Si escribes dalgún conteníu na descripción, la páxina consideraráse como una páxina especial pa facer una tarea"
+
+msgid "ThisPageisBeginEditedBy"
+msgstr "Nesti momentu esta páxina ta siendo editada por"
+
+msgid "ThisPageisBeginEditedTryLater"
+msgstr "Por favor, inténtalo más tarde. Si l\'usuariu qu\'actualmente ta editando la páxina nun la guarda, esta páxina quedará disponible nun másimu de"
+
+msgid "EditedByAnotherUser"
+msgstr "Los tos cambeos nun serán guardaos porque otru usuariu camudó la páxina mientres la editabes"
+
+msgid "WarningMaxEditingTime"
+msgstr "Tienes 20 minutos pa editar esta páxina. Transcurríu esi tiempu, si nun guardaste la páxina, otru usuariu podrá camudala y perderás los tos cambeos"
+
+msgid "TheTaskDoesNotBeginUntil"
+msgstr "Tovía nun ye la fecha d\'aniciu"
+
+msgid "TheDeadlineHasBeenCompleted"
+msgstr "Sobrepasastete de la data llímite"
+
+msgid "HasReachedMaxNumWords"
+msgstr "Sobrepasastete del númberu de pallabres permitíes"
+
+msgid "HasReachedMaxiNumVersions"
+msgstr "Pasastete del númberu de versiones permitíes"
+
+msgid "DescriptionOfTheTask"
+msgstr "Descripción de la tarea"
+
+msgid "OtherSettings"
+msgstr "Otros requerimientos"
+
+msgid "NMaxWords"
+msgstr "Númberu másimu de pallabres"
+
+msgid "NMaxVersion"
+msgstr "Númberu másimu de versiones"
+
+msgid "Feedback"
+msgstr "Comentarios"
+
+msgid "AddFeedback"
+msgstr "Amestar mensaxes d\'orientación asociaos al progresu na páxina"
+
+msgid "Feedback1"
+msgstr "Primer mensax"
+
+msgid "Feedback2"
+msgstr "Segundu mensax"
+
+msgid "Feedback3"
+msgstr "Tercer mensax"
+
+msgid "FProgress"
+msgstr "Progresu"
+
+msgid "PutATimeLimit"
+msgstr "Afitar una llimitación temporal"
+
+msgid "StandardTask"
+msgstr "Tarea standard"
+
+msgid "ThePageHasBeenExportedToDocArea"
+msgstr "La páxina esportóse al área de documentos"
+

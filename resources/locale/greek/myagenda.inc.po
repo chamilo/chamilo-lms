@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Η αντζέντα μου"
+
+msgid "langToday"
+msgstr "Σήμερα"
+

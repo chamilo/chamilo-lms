@@ -1,0 +1,27 @@
+msgid "langExplanation"
+msgstr "Kad pritisnete OK web stranice će biti izrađene, uključujući forum, raspored, upravljanje dokumentima, itd. Vašom prijavom, kao tvorcu web stranice, omogućava vam se izmjena stranice prema vlastitim zahtjevima."
+
+msgid "langTooBig"
+msgstr "Niste odabrali datoteku za slanje ili je ona prevelika"
+
+msgid "langCouldNot"
+msgstr "Predaja datoteke nije bila moguća"
+
+msgid "langAddPageToSite"
+msgstr "Dodajte stranicu na okruženje"
+
+msgid "langCouldNotSendPage"
+msgstr "Ovaj dokument nije u formatu HTML i ne može se poslati. Ako želite poslati dokumente drugog formata (PDF, Word, Power Point, Video, itd.) koristite <a href=../document/document.php>Dokumenti</a>"
+
+msgid "langSendPage"
+msgstr "Stranica za predaju"
+
+msgid "langPageTitleModified"
+msgstr "Naslov ove stranice je izmijenjen"
+
+msgid "langPageAdded"
+msgstr "Stranica dodana"
+
+msgid "Choose"
+msgstr "Pretraživanje"
+

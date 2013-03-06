@@ -1,0 +1,63 @@
+msgid "langActivate"
+msgstr "Aktivigi"
+
+msgid "langDeactivate"
+msgstr "Malaktivigi"
+
+msgid "langInLnk"
+msgstr "Tiuj ĉi moduloj kaj ligiloj estas nun ne aktivaj"
+
+msgid "langDelLk"
+msgstr "Ĉu vi volas forigi ĉi-ligilon?"
+
+msgid "langCourseCreate"
+msgstr "Krei retkurson"
+
+msgid "langNameOfTheLink"
+msgstr "Nomo de la ligilo"
+
+msgid "lang_main_categories_list"
+msgstr "Ĝenerala kategorilisto"
+
+msgid "langCourseAdminOnly"
+msgstr "Rezervita al kursmastrumantoj"
+
+msgid "PlatformAdminOnly"
+msgstr "Rezervita al platforma mastrumanto"
+
+msgid "langCombinedCourse"
+msgstr "Kombinita:"
+
+msgid "ToolIsNowVisible"
+msgstr "La modulo nun videblas"
+
+msgid "ToolIsNowHidden"
+msgstr "La modulo nun estas nevidebla"
+
+msgid "EditLink"
+msgstr "Redakti ĉi tiun ligilon"
+
+msgid "Blog_management"
+msgstr "Bloga mastrumado"
+
+msgid "Forum"
+msgstr "Forumoj"
+
+msgid "Course_maintenance"
+msgstr "Kursmastrumado"
+
+msgid "TOOL_SURVEY"
+msgstr "Enketoj"
+
+msgid "GreyIcons"
+msgstr "Moduloj"
+
+msgid "Interaction"
+msgstr "Interago"
+
+msgid "Authoring"
+msgstr "Redakti"
+
+msgid "Administration"
+msgstr "Administrado"
+

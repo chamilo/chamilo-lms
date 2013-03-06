@@ -1,0 +1,81 @@
+msgid "langLineNumber"
+msgstr "Rivinumero"
+
+msgid "langLine"
+msgstr "rivi"
+
+msgid "langLines"
+msgstr "rivit"
+
+msgid "langLineOrLines"
+msgstr "rivi(t)"
+
+msgid "langMoveUp"
+msgstr "Siirrä ylöspäin"
+
+msgid "langMoveDown"
+msgstr "Siirrä alaspäin"
+
+msgid "langAddNewHeading"
+msgstr "Lisää uusi otsikko"
+
+msgid "langCourseAdministratorOnly"
+msgstr "vain opettaja"
+
+msgid "langDefineHeadings"
+msgstr "Määrittele otsikot"
+
+msgid "langBackToUsersList"
+msgstr "Takaisin käyttäjälistaan"
+
+msgid "langTracking"
+msgstr "Seuranta"
+
+msgid "langCourseManager"
+msgstr "Opettaja"
+
+msgid "langModRight"
+msgstr "muuta oikeuksia"
+
+msgid "langNoAdmin"
+msgstr "ei omista enää oikeuksia tälle sivulle"
+
+msgid "langAllAdmin"
+msgstr "omistaa tästä eteenpäin kaikki oikeudet tälle sivulle"
+
+msgid "langModRole"
+msgstr "Vaihda roolia"
+
+msgid "langRole"
+msgstr "Rooli"
+
+msgid "langIsNow"
+msgstr "on tästä eteenpäin"
+
+msgid "langInC"
+msgstr "tällä kurssilla"
+
+msgid "langFilled"
+msgstr "Jätit jotkut kentistä tyhjiksi."
+
+msgid "langUserNo"
+msgstr "Valitsemasi käyttäjänimi"
+
+msgid "langTaken"
+msgstr "on jo käytössä. valitse uusi."
+
+msgid "langTutor"
+msgstr "Tutor"
+
+msgid "langUnreg"
+msgstr "Peruuta"
+
+msgid "langGroupUserManagement"
+msgstr "Ryhmän hallinta"
+
+msgid "langUnregister"
+msgstr "Poista"
+
+msgid "langAddAUser"
+msgstr "Lisää käyttäjä"
+

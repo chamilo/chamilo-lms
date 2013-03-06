@@ -1,0 +1,144 @@
+msgid "AgendaAdd"
+msgstr "Añadir un nuevo evento a la agenda"
+
+msgid "ShowAllEvents"
+msgstr "Mostrar todos los eventos"
+
+msgid "ShowCurrent"
+msgstr "Mostrar todos los eventos del mes en curso"
+
+msgid "AddCalendarItem"
+msgstr "Añadir un nuevo evento a la agenda"
+
+msgid "Day"
+msgstr "Dia"
+
+msgid "Month"
+msgstr "Mes"
+
+msgid "Year"
+msgstr "Año"
+
+msgid "Hour"
+msgstr "Hora"
+
+msgid "Minutes"
+msgstr "Minutos"
+
+msgid "Detail"
+msgstr "Detalles"
+
+msgid "EditSuccess"
+msgstr "El evento de la agenda ha sido editado"
+
+msgid "AddSuccess"
+msgstr "Evento de la agenda añadido"
+
+msgid "AgendaDeleteSuccess"
+msgstr "El evento de la agenda ha sido borrado"
+
+msgid "NoAgendaItems"
+msgstr "No hay eventos en la agenda"
+
+msgid "lang_september"
+msgstr "Septiembre"
+
+msgid "langClassName"
+msgstr "Nombre de la clase"
+
+msgid "lang_agenda"
+msgstr "Agenda"
+
+msgid "ModifyCalendarItem"
+msgstr "Modificar un evento de la Agenda"
+
+msgid "ItemTitle"
+msgstr "Título del evento"
+
+msgid "langDay"
+msgstr "Día"
+
+msgid "month_default"
+msgstr "Mes por defecto"
+
+msgid "langYear"
+msgstr "Año"
+
+msgid "year_default"
+msgstr "Año por defecto"
+
+msgid "langHour"
+msgstr "Hora"
+
+msgid "hour_default"
+msgstr "hora por defecto"
+
+msgid "langMinute"
+msgstr "minuto"
+
+msgid "langLasting"
+msgstr "duración"
+
+msgid "langOldToNew"
+msgstr "antiguo a reciente"
+
+msgid "langNewToOld"
+msgstr "reciente a antiguo"
+
+msgid "langNow"
+msgstr "Ahora"
+
+msgid "langAddEvent"
+msgstr "Añadir un evento"
+
+msgid "langDetail"
+msgstr "detalles"
+
+msgid "MonthView"
+msgstr "Vista por mes"
+
+msgid "WeekView"
+msgstr "Vista por semana"
+
+msgid "DayView"
+msgstr "Vista por día"
+
+msgid "AddPersonalItem"
+msgstr "Añadir evento personal"
+
+msgid "Week"
+msgstr "Semana"
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Añadir un evento personal a la agenda"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Modificar un evento personal en la agenda"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "El evento personal ha sido añadido a su agenda"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "El evento personal de su agenda ha sido editado"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "El evento personal ha sido borrado de su agenda"
+
+msgid "ViewPersonalItem"
+msgstr "Ver eventos personales"
+
+msgid "UserGroupFilter"
+msgstr "Filtrar por grupos/usuarios"
+
+msgid "ShowAll"
+msgstr "Mostrar todo"
+
+msgid "Print"
+msgstr "Imprimir"
+

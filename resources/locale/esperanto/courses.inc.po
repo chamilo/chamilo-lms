@@ -1,0 +1,183 @@
+msgid "lang_already_enrolled"
+msgstr "jam enskribitaj"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Mia kurslisto"
+
+msgid "lang_course_enrollment"
+msgstr "Aliĝi/ malaliĝi por kursoj"
+
+msgid "lang_course_not_available"
+msgstr "Ĉi-kurso estas ne (plu) disponebla aŭ ne (plu) ekzistas."
+
+msgid "lang_enroll"
+msgstr "Aliĝi"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Aliĝi al nova kurso"
+
+msgid "lang_my_present_course_list"
+msgstr "Mia aktuala kurslisto"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Ne estas disponeblaj kursoj en ĉi-kategorio."
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Serĉi lau kurskodo"
+
+msgid "lang_search"
+msgstr "Serĉi"
+
+msgid "lang_select_course_among_categories"
+msgstr "Elektu kurson el la kategorioj"
+
+msgid "lang_select_course_in"
+msgstr "Elektu kurson el"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Elektu kurson el serĉrezultoj"
+
+msgid "Unsubscribe"
+msgstr "Malaliĝu"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Reiri al mia hejmpaĝo"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Reiri al mia kurslisto"
+
+msgid "langTitular"
+msgstr "Instruisto"
+
+msgid "langBackToListOfThisUser"
+msgstr "Reiru al kurslisto"
+
+msgid "langAdministrationTools"
+msgstr "Mastrumada ilaro XX"
+
+msgid "lang_back_to_parent_category"
+msgstr "Reiri al antaŭa kategorio"
+
+msgid "lang_back_to_course_selection"
+msgstr "Reiri al kurselekto"
+
+msgid "lang_up"
+msgstr "Reiri al antaŭa kategorio"
+
+msgid "langCatList"
+msgstr "Kategorioj"
+
+msgid "langCourseList"
+msgstr "Kurslisto"
+
+msgid "Subscribe"
+msgstr "Aliĝi"
+
+msgid "AlreadySubscribed"
+msgstr "Jam aliĝintaj"
+
+msgid "CourseCategoryStored"
+msgstr "La nova kurskategorio estas kreita"
+
+msgid "langWithoutTimeLimits"
+msgstr "Sen templimo"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Reiri al supervido de kategorioj"
+
+msgid "langAdded"
+msgstr "Aldonite"
+
+msgid "langDeleted"
+msgstr "Forigite"
+
+msgid "langKeeped"
+msgstr "Konservite"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Kaŝite / Fermite"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Kaŝite / Malferme"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Videble / Malferme"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Videble / Ferme"
+
+msgid "langAdminThisUser"
+msgstr "Reiru al uzulo"
+
+msgid "langManage"
+msgstr "Mastrumi Portalon"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Vi estas aligita al la kurso"
+
+msgid "langSubCat"
+msgstr "sub-kategorioj"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Malaliĝo ne estas permesita por ĉi-kurso"
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Vi estas mastrumanto de ĉi-kurso"
+
+msgid "CourseManagement"
+msgstr "Kursmastrumado"
+
+msgid "SortMyCourses"
+msgstr "Aranĝi miajn kursojn"
+
+msgid "SubscribeToCourse"
+msgstr "Aliĝi al kursoj"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Malaliĝi al kursoj"
+
+msgid "CreateCourseCategory"
+msgstr "Krei kurskategorion"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Ĉu certe ke vi volas forigi ĉi-kategorion? La kursoj de ĉi-kategorio estas translokigitaj ekster la kurskategoriojn"
+
+msgid "CourseCategories"
+msgstr "Kurskategorioj"
+
+msgid "CoursesInCategory"
+msgstr "Kursoj en ĉi-kategorioj"
+
+msgid "SearchCourse"
+msgstr "Serĉi kursojn"
+
+msgid "UpOneCategory"
+msgstr "<- supran kategorion"
+
+msgid "SearchResultsFor"
+msgstr "Serĉrezultoj por:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Ĉu certe, ke vi volas malaliĝi al ĉi-kurso?"
+
+msgid "NoCourseCategory"
+msgstr "Neniu kurskategorio"
+
+msgid "EditCourseCategorySucces"
+msgstr "La kurso estas lokigita en la elektita kategorio"
+
+msgid "SubscribingNotAllowed"
+msgstr "Aliĝo ne permesita"
+
+msgid "CourseSortingDone"
+msgstr "La kurso estas rearaĝita"
+
+msgid "ExistingCourseCategories"
+msgstr "Jam ekzistantaj kurskategorioj"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Vi nun malaliĝis al la kurso"
+
+msgid "ViewOpenCourses"
+msgstr "Pririgardi malfermajn kursojn"
+

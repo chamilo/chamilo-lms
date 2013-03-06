@@ -1,0 +1,333 @@
+msgid "ModifInfo"
+msgstr "Ders bilgilerini değiştir"
+
+msgid "langModifDone"
+msgstr "Bilgiler değişti"
+
+msgid "langDelCourse"
+msgstr "Ders sitesini sil"
+
+msgid "langProfessors"
+msgstr "Öğretmenler"
+
+msgid "langFaculty"
+msgstr "Kategori"
+
+msgid "langConfidentiality"
+msgstr "Gizlilik"
+
+msgid "langPublic"
+msgstr "Kayıtlı olmadan da Ana Sayfadan giriş yapılabilir"
+
+msgid "langUnsubscription"
+msgstr "Kayıt sil"
+
+msgid "langPrivOpen"
+msgstr "Özel giriş, kayıtlar açıktır"
+
+msgid "langPrivate"
+msgstr "Özel erişim - sadece kullanıcı listesindekilere erişim izni"
+
+msgid "langForbidden"
+msgstr "İzinli değil"
+
+msgid "CourseAccessConfigTip"
+msgstr "Varsayılan olarak bu ders genel erişime açıktır.Erişim seviyesini yukarıda belirleyebilirsiniz."
+
+msgid "langOpenToTheWorld"
+msgstr "Açık - Genel Erişim"
+
+msgid "OpenToThePlatform"
+msgstr "Açık - Platform üyelerine erişim izni"
+
+msgid "langOpenToThePlatform"
+msgstr "Açık - sadece platforma kayıtlı kullanıcılara erişim hakkı"
+
+msgid "langTipLang"
+msgstr "Seçtiğiniz dil her ziyaretçi için geçerli olacaktır."
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Öğrenci Yazıları"
+
+msgid "langProgramMenu"
+msgstr "Ders Programı"
+
+msgid "langAnnouncement"
+msgstr "Duyurular"
+
+msgid "langExercise"
+msgstr "Testler"
+
+msgid "langStats"
+msgstr "İstatistikler"
+
+msgid "langUplPage"
+msgstr "Sayfa yükle ve Ana Sayfaya bağla"
+
+msgid "langLinkSite"
+msgstr "Ana Sayfaya Bağlantı ekle"
+
+msgid "langCourse"
+msgstr "Web sitesi"
+
+msgid "langHasDel"
+msgstr "silindi"
+
+msgid "langBackHome"
+msgstr "Dönülecek AnaSayfa:"
+
+msgid "langByDel"
+msgstr "Bu dersin websitesi silindiğinde, içindeki tüm belgeler ve öğrenci kayıtları da silinir.<p>Silmek istediğinizden emin misiniz?"
+
+msgid "langY"
+msgstr "EVET"
+
+msgid "langN"
+msgstr "HAYIR"
+
+msgid "langDepartmentUrl"
+msgstr "Bölüm URL"
+
+msgid "langDepartmentUrlName"
+msgstr "Bölüm"
+
+msgid "langBackupCourse"
+msgstr "Bu dersi arşivle"
+
+msgid "langModifGroups"
+msgstr "Gruplar"
+
+msgid "langProfessor"
+msgstr "Öğretmen"
+
+msgid "langGroups"
+msgstr "Gruplar"
+
+msgid "langDescriptionCours"
+msgstr "Ders açıklaması"
+
+msgid "langArchiveCourse"
+msgstr "Ders yedekleme"
+
+msgid "langRestoreCourse"
+msgstr "Arşivden ders yükle"
+
+msgid "langRestore"
+msgstr "Geri Yükle"
+
+msgid "langCreatedIn"
+msgstr "Yaratıldığı yer"
+
+msgid "langCreateMissingDirectories"
+msgstr "Kayıp dizinlerin yaratılması"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Eğitim dosyalarının kopyaları"
+
+msgid "langDisk_free_space"
+msgstr "Boş alan"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Yedek dosyasının yaratılması"
+
+msgid "langFileCopied"
+msgstr "dosya kopyalandı"
+
+msgid "langArchiveLocation"
+msgstr "Arşiv yeri"
+
+msgid "langSizeOf"
+msgstr "Boyut"
+
+msgid "langArchiveName"
+msgstr "Arşiv adı"
+
+msgid "langBackupSuccesfull"
+msgstr "Yedekleme başarılı"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "Ana veri tabanında yedeklenen ders"
+
+msgid "langBUUsersInMainBase"
+msgstr "Ana veri tabanında yedeklenen kullanıcılar"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "Ana veri tabanında yedeklenen duyurular"
+
+msgid "langBackupOfDataBase"
+msgstr "Yedeklenen veritabanı"
+
+msgid "langCreationDate"
+msgstr "Oluşturulduğu Tarih"
+
+msgid "langExpirationDate"
+msgstr "Geçerlilik tarihi"
+
+msgid "langPostPone"
+msgstr "Ertele"
+
+msgid "langLastEdit"
+msgstr "Son düzenleme"
+
+msgid "langLastVisit"
+msgstr "Son Ziyaret"
+
+msgid "langSubscription"
+msgstr "Kayıt"
+
+msgid "langCourseAccess"
+msgstr "Erişim"
+
+msgid "langConfirmBackup"
+msgstr "Bu dersi yedeklemek istiyormusunuz?"
+
+msgid "langCreateSite"
+msgstr "Ders oluştur"
+
+msgid "langRestoreDescription"
+msgstr "Bu ders aşağıdaki listeden seçebileceğiniz bir arşiv dosyasıdır.<br><br>\"Geri Al\",komutuna tıkladığınızda dosya açılacak ve ders tekrar oluşturulacaktır."
+
+msgid "langRestoreNotice"
+msgstr "Bu yazılım hen�z kullanıcıları otomatik olarak tekrar y�klemek i�in elverişli değildir ama yetkili tarafından \"users.csv\" dosyası kullanılarak elle bu işlem yapılabilir"
+
+msgid "langAvailableArchives"
+msgstr "Kullanılabilen arşiv listesi"
+
+msgid "langNoArchive"
+msgstr "Herhangi bir arşiv seçilmedi"
+
+msgid "langArchiveNotFound"
+msgstr "Bu arşiv bulunmuyor."
+
+msgid "langArchiveUncompressed"
+msgstr "Arşiv yüklendi."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "\"users.csv\" dosyası Belgeler aracına konuldu."
+
+msgid "langBackH"
+msgstr "AnaSayfaya dön"
+
+msgid "langOtherCategory"
+msgstr "Başka kategori"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "Kullanıcılara bu dersten kayıt silebilir"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "Kullanıcılar bu dersten kayıtlarını silemez"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Tamamen Kapalı - sadece ders yetkilisine erişim izni"
+
+msgid "CourseVisibilityClosed"
+msgstr "Kapalı - bu derse erişim yok"
+
+msgid "CourseVisibilityModified"
+msgstr "Değiştirildi (roller-haklar sisteminden, daha fazla detaylı ayarlar)"
+
+msgid "WorkEmailAlert"
+msgstr "Ödev sunumunda e-posta ile uyar"
+
+msgid "WorkEmailAlertActivate"
+msgstr "Yeni ödev sunumunda e-posta ile uyarıyı aktifleştir"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "Yeni ödev sunumunda e-posta ile uyarıyı kaldır"
+
+msgid "DropboxEmailAlert"
+msgstr "Dropbox sunumunda e-posta ile uyar"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "Dropbox sunumunda e-posta ile uyarıyı aktifleştir"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "Dropbox sunumunda e-posta ile uyarıyı kaldır"
+
+msgid "AllowUserEditAgenda"
+msgstr "Öğrencilerin ajandayı düzenlemesine izin ver"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "Eğitim ajandasının kullanıcı tarafından düzenlenmesini aktifleştir"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "Öğrenciler tarafından ajanda düzenlemeyi iptal et"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "Öğrencilerin bildirileri düzenlemesine izin ver"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "Kullanıcılar tarafından yayınlamaya izin"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "Kullanıcılar tarafında yayınlamayı kaldır"
+
+msgid "OrInTime"
+msgstr "yada içinde"
+
+msgid "CourseRegistrationPassword"
+msgstr "Eğitim kayıt şifresi"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "Ana makinadan eğitimi kaldırmak içn bu bağlantı üzerine tıklayın<br><br>Dikkatli olun, geri dönüş yoktur!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "Eğitimin yada başka eğitimlerdeki bazı eğitim objelerinin kopyasını çıkar. Bu özelliği kullanmak için 2 eğitime ihtiyacınız var: Biri orijinal diğeri hedef eğitim"
+
+msgid "DescriptionRecycleCourse"
+msgstr "Bu araç eğitimi boşaltır. Dokümanları, forumları, bağlantıları uzaklaştırır. Ve size silmek istediğiniz parçayı yada tamamını silmenize karar vermenize izin verir."
+
+msgid "QuizEmailAlert"
+msgstr "Yeni test sunulduğunda e-posta alarmı"
+
+msgid "QuizEmailAlertActivate"
+msgstr "Bir kullanıcı yeni bir test cevabı sunduğunda e-posta gönderimini aktifleştir."
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "Yeni test cevabı sunumunda e-posta alarmını devre dışı bırak"
+
+msgid "AllowUserImageForum"
+msgstr "Forumda kullanıcı resmine izin ver"
+
+msgid "AllowUserImageForumActivate"
+msgstr "Forumda kullanıcıların resimlerini göster"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "Forumda kullanıcıların resimlerini gizle"
+
+msgid "AllowLearningPathTheme"
+msgstr "Eğitim temasına izin ver"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "İzin verildi"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "İzin kaldırıldı"
+
+msgid "ConfigChat"
+msgstr "Sohbet ayarları"
+
+msgid "AllowOpenchatWindow"
+msgstr "Sohbeti yeni pencerede aç"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "Sohbeti yeni pencerede açmayı aktifleştir"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "Sohbeti yeni pencerede açmayı pasifleştir"
+
+msgid "NewUserEmailAlert"
+msgstr "Yeni bir kullanıcının otomatik kaydında eğitimciyi e-posta ile bilgilendir"
+
+msgid "NewUserEmailAlertEnable"
+msgstr "Yeni bir kullanıcının otomatik kaydında eğitimcinin e-posta ile bilgilendirilmesini aktifleştir"
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "Yeni bir kullanıcının otomatik kaydında eğitimciyi ve yazarların e-posta ile bilgilendirilmesini aktifleştir"
+
+msgid "NewUserEmailAlertDisable"
+msgstr "Yeni bir kullanıcının otomatik kaydında eğitimcinin e-posta ile bilgilendirilmesini devre dışı bırak"
+

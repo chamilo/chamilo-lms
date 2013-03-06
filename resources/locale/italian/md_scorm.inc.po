@@ -1,0 +1,99 @@
+msgid "nameTools"
+msgstr "variabile di lingua obsoleta"
+
+msgid "langMdCallingTool"
+msgstr "Documenti"
+
+msgid "langTool"
+msgstr "Metadati del documento"
+
+msgid "langNotInDB"
+msgstr "non esiste questa categoria per i Collegamenti"
+
+msgid "langManifestSyntax"
+msgstr "(errore di sintassi nel file manifest...)"
+
+msgid "langEmptyManifest"
+msgstr "(file manifest vuoto...)"
+
+msgid "langNoManifest"
+msgstr "(il file manifest non esiste...)"
+
+msgid "langNotFolder"
+msgstr "non sono possibili, non si tratta di una cartella..."
+
+msgid "langUploadHtt"
+msgstr "Carica un file HTT"
+
+msgid "langHttFileNotFound"
+msgstr "Il nuovo file HTT non può essere aperto (vuoto? troppo pesante?...)"
+
+msgid "langHttOk"
+msgstr "Il nuovo file HTT è stato caricato"
+
+msgid "langHttNotOk"
+msgstr "Il caricamento del file HTT è fallito"
+
+msgid "langRemoveHtt"
+msgstr "Elimina il file HTT"
+
+msgid "langHttRmvOk"
+msgstr "Il file HTT è stato eliminato"
+
+msgid "langHttRmvNotOk"
+msgstr "Non è stato possibile eliminare il file HTT"
+
+msgid "langImport"
+msgstr "Importa"
+
+msgid "langRemove"
+msgstr "Elimina Metadati"
+
+msgid "langAllRemovedFor"
+msgstr "Tutte le voci sono state eliminate dalla categoria"
+
+msgid "langIndex"
+msgstr "Indice"
+
+msgid "langTotalMDEs"
+msgstr "Numero totale di MD dei Collegamenti:"
+
+msgid "langMainMD"
+msgstr "Apri la pagina principale dei MD"
+
+msgid "langLines"
+msgstr "linee"
+
+msgid "langPlay"
+msgstr "Esegui index.php"
+
+msgid "langNonePossible"
+msgstr "Non ci sono operazioni MD possibili"
+
+msgid "langOrElse"
+msgstr "Seleziona una categora di Collegamento"
+
+msgid "langWorkWith"
+msgstr "Lavora con le cartelle Scorm"
+
+msgid "langSDI"
+msgstr "...Cartella Scorm con SD-id (dividi il manifest o lascialo vuoto)"
+
+msgid "langRoot"
+msgstr "root"
+
+msgid "langSplitData"
+msgstr "Dividi il manifest e il #MDe, se ce ne sono"
+
+msgid "langMffNotOk"
+msgstr "Non è stato possibile sostituire il file manifest"
+
+msgid "langMffOk"
+msgstr "Il file manifest è stato sostituito"
+
+msgid "langMffFileNotFound"
+msgstr "Il nuovo manifest non può essere aperto (vuoto? molto grande)..."
+
+msgid "langUploadMff"
+msgstr "Sostituisci il file manifest"
+

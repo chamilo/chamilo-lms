@@ -1,0 +1,252 @@
+msgid "lang_learning_path"
+msgstr "Putanja učenja"
+
+msgid "lang_learning_path_builder"
+msgstr "Alatka za pravljenje putanje učenja"
+
+msgid "lang_description"
+msgstr "opis"
+
+msgid "LearnpathTitle"
+msgstr "naslov"
+
+msgid "LearnpathPrerequisites"
+msgstr "Zahtev"
+
+msgid "LearnpathMoveUp"
+msgstr "Pomeri gore"
+
+msgid "LearnpathMoveDown"
+msgstr "Pomeri dole"
+
+msgid "langThisItem"
+msgstr "ovu stavku"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Naslov & opis"
+
+msgid "LearnpathChangeOrder"
+msgstr "Promeni redosled"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Dodaj zahtev"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Izmeni naslov & opis"
+
+msgid "lang_delete"
+msgstr "obriši"
+
+msgid "lang_add_chapter"
+msgstr "Dodavanja modula"
+
+msgid "langLearnpathMystatus"
+msgstr "Moj status"
+
+msgid "langLearnpathCompstatus"
+msgstr "završeno"
+
+msgid "langLearnpathIncomplete"
+msgstr "nezavršeno"
+
+msgid "langLearnpathPassed"
+msgstr "prošao"
+
+msgid "langLearnpathFailed"
+msgstr "pao"
+
+msgid "langLearnpathPrevious"
+msgstr "Prethodna"
+
+msgid "langLearnpathNext"
+msgstr "Sledeća"
+
+msgid "langLearnpathRestart"
+msgstr "Resetuj"
+
+msgid "langLearnpathThisStatus"
+msgstr "Ovaj korak je sada"
+
+msgid "langLearnpathToEnter"
+msgstr "Za ulazak"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "morate prvo da dostignete"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Naslov koraka"
+
+msgid "langLearnpathStatus"
+msgstr "Status"
+
+msgid "langLearnpathScore"
+msgstr "Rezultat"
+
+msgid "langLearnpathTime"
+msgstr "Vreme"
+
+msgid "langLearnpathVersion"
+msgstr "verzija"
+
+msgid "langLearnpathRestarted"
+msgstr "Svi koraci su sada ne završeni"
+
+msgid "langLearnpathNoNext"
+msgstr "Ovo je poslednji korak"
+
+msgid "langLearnpathNoPrev"
+msgstr "Ovo je prvi korak"
+
+msgid "LearnpathAddLearnpath"
+msgstr "Dodaj novu putanju učenja"
+
+msgid "lang_learnpath_added"
+msgstr "Nova putanja učenja je uspešno kreirana. Sada možete da joj dodajete module klikom na plusić."
+
+msgid "LearnpathEditLearnpath"
+msgstr "izmeni putanju učenja"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "obriši putanju učenja"
+
+msgid "lang_learnpath_edited"
+msgstr "putanja učenja je izmenjena"
+
+msgid "lang_learnpath_deleted"
+msgstr "putanja učenja je obrisana"
+
+msgid "LearnpathDoNotPublish"
+msgstr "ne objavljuj"
+
+msgid "LearnpathPublish"
+msgstr "objavi"
+
+msgid "LearnpathNotPublished"
+msgstr "nije objavljeno"
+
+msgid "LearnpathPublished"
+msgstr "objavljeno"
+
+msgid "lang_add_learnpath_module"
+msgstr "Dodaj novi modul"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Dodaj novi model ovoj putanji učenja"
+
+msgid "lang_learnpath_module_added"
+msgstr "Nova putanja učenja je uspešno kreirana. Sada možete da joj dodajete korake klikom na plusić."
+
+msgid "LearnpathEditModule"
+msgstr "Izmeni modul opis/naslov"
+
+msgid "LearnpathDeleteModule"
+msgstr "Obriši modul"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Modul putanje učenja je uspešno izmenjen"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Modul putanje učenja i svi njegovi koraci su uspešno obrisani"
+
+msgid "LearnpathNoChapters"
+msgstr "Nijedan modul još nije dodat"
+
+msgid "LearnpathAddItem"
+msgstr "Dodaj korake u ovaj modul"
+
+msgid "LearnpathItemDeleted"
+msgstr "Korak iz putanje učenja je obrisan"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "molim Vas, pripišite ovaj/ove korake putanje učenja modulu:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Izmeni dodatni opis/naslov koraka"
+
+msgid "lang_add_prereq"
+msgstr "Dodavanje/Izmena zahteva za ovaj korak"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Obriši korak"
+
+msgid "LearnpathItemEdited"
+msgstr "Korak putanje učenja je modifikovan"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Obrisano!"
+
+msgid "lang_none"
+msgstr "NIJEDAN"
+
+msgid "lang_forum_opened"
+msgstr "Selektovani forum je otvoren u novom prozoru."
+
+msgid "lang_link_opened"
+msgstr "Selektovani link je otvoren u novom prozoru."
+
+msgid "lang_short_help"
+msgstr "Da biste dodali korak, kliknite na krstić. Da biste dodali naslov/opis, kliknite na olovku. Da biste dodali obavezna predznanja kliknite na ikonicu sa dva dokumenta. Šta će polaznici videti možete proveriti klikom na Pogled polaznika na vrhu stranice."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "ono [tio je yahtevano nije završeno"
+
+msgid "lang_author"
+msgstr "Autor"
+
+msgid "lang_date"
+msgstr "Datum"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Zahtevano (granica)"
+
+msgid "lang_loading"
+msgstr "Stranica se učitava, molim Vas sačekajte..."
+
+msgid "lang_empty"
+msgstr "Ova putanja nema korake."
+
+msgid "langHotPotatoesFinished"
+msgstr "Ovaj HotPotatoes test je zatvoren"
+
+msgid "langCompletionLimit"
+msgstr "Donji prag (minimum poena)"
+
+msgid "langPrereqToEnter"
+msgstr "Da biste ušli"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "prvo morate da dostignete"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Minimum 1 korak nedostaje od"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "onoga što je podešeno kao obavezno."
+
+msgid "langPrereqTestLimit1"
+msgstr "morate imati minimum"
+
+msgid "langPrereqTestLimit2"
+msgstr "poena u"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Sada imate:"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "povratak na normalan ekran"
+
+msgid "langLearnpathFullScreen"
+msgstr "full screen"
+
+msgid "langItemMissing1"
+msgstr "Bila je"
+
+msgid "langItemMissing2"
+msgstr "stranica (korak) ovde u originalnoj Chamiloovoj putanji učenja."
+
+msgid "langDone"
+msgstr "Urađeno"
+
+msgid "langNoItemSelected"
+msgstr "Da bi ovde nešto bilo prikazano, molim Vas izaberite stavku sa slajd menija"
+

@@ -1,0 +1,63 @@
+msgid "langActivate"
+msgstr "Activar"
+
+msgid "langDeactivate"
+msgstr "Desactivar"
+
+msgid "langInLnk"
+msgstr "Enlaces desactivados"
+
+msgid "langDelLk"
+msgstr "¿Está seguro de que quiere borrar este enlace?"
+
+msgid "langCourseCreate"
+msgstr "Crear el sitio web de un curso"
+
+msgid "langNameOfTheLink"
+msgstr "Nombre del enlace"
+
+msgid "lang_main_categories_list"
+msgstr "Categoríia Principal"
+
+msgid "langCourseAdminOnly"
+msgstr "Solo profesores"
+
+msgid "PlatformAdminOnly"
+msgstr "Solo administradores"
+
+msgid "langCombinedCourse"
+msgstr "Curso combinado"
+
+msgid "ToolIsNowVisible"
+msgstr "La herramienta es ahora visible"
+
+msgid "ToolIsNowHidden"
+msgstr "La herramienta es ahora invisible"
+
+msgid "EditLink"
+msgstr "Editar enlace"
+
+msgid "Blog_management"
+msgstr "Administración de blogs"
+
+msgid "Forum"
+msgstr "Foros"
+
+msgid "Course_maintenance"
+msgstr "Mantenimiento del curso"
+
+msgid "TOOL_SURVEY"
+msgstr "Encuestas"
+
+msgid "GreyIcons"
+msgstr "Caja de herramientas"
+
+msgid "Interaction"
+msgstr "Interacción"
+
+msgid "Authoring"
+msgstr "Creación de contenidos"
+
+msgid "Administration"
+msgstr "Administración"
+

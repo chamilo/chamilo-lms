@@ -1,0 +1,133 @@
+msgid "langMdCallingTool"
+msgstr "Dokumente"
+
+msgid "langMdTitle"
+msgstr "Element-Titel"
+
+msgid "langMdDescription"
+msgstr "Um diese Informationen zu sichern, klicken Sie auch speichern\'"
+
+msgid "langMdCoverage"
+msgstr "z.B. Erwachsenenbildung, Sekundarstufe 2"
+
+msgid "langMdCopyright"
+msgstr "z.B. wenn die Quelle erwähnt wird"
+
+msgid "langTool"
+msgstr "Dokumenten-Metadaten"
+
+msgid "langNoScript"
+msgstr "Script ist in Ihrem Browser nicht aktiviert; bitte ignorieren Sie den Teil des Bildschirms unter diesem Text, es wird nicht funktionieren ..."
+
+msgid "langPressAgain"
+msgstr "Bitte nochmals \'speichern\' klicken"
+
+msgid "langLanguageTip"
+msgstr "die Sprache, in der dieses Element erstellt wurde"
+
+msgid "langIdentifier"
+msgstr "Erkennungszeichen / ID"
+
+msgid "langIdentifierTip"
+msgstr "Ein einzigartiges Erkennungszeichen / ID für dieses Element, bestehend aus Buchstaben, Ziffern,_-.()\'|*"
+
+msgid "langTitleTip"
+msgstr "Titel oder Name, Sprache des Titels oder Namens"
+
+msgid "langDescriptionTip"
+msgstr "Bescheibung oder Kommentar und Sprache für die Beschreibung dieses Elements"
+
+msgid "langKeyword"
+msgstr "Schlagwort"
+
+msgid "langKeywordTip"
+msgstr "Durch Kommata trennen (Buchstaben, Ziffern,-)"
+
+msgid "langCoverage"
+msgstr "Geeignet für"
+
+msgid "langCoverageTip"
+msgstr "z.B. Erwachsenenbildung, Sekundarstufe 2"
+
+msgid "langKwNote"
+msgstr "Wenn Sie die Sprache für die Beschreibung ändern, bitte gleichzeitig keine Schlagwörter  hinzufügen"
+
+msgid "langClickKw"
+msgstr "Ein Schlagwort anklicken, um es aus- oder abzuwählen"
+
+msgid "langKwHelp"
+msgstr "<br/>Zum Öffnen den \'+\' Button klicken, \'-\' Button zum Schließen, \'++\' Button um alle zu öffnen, \'--\' Button um alle zu schließen.<br/><br/>
+Schlagwort-Auswahl aufheben: Baum  einklappen und anschileßend  mit dem \'+\' Knopf Öffnen.<br/>
+Original Schlagwort im Baum suchen: Alt-Klick \'+\' <br/><br/>
+Alt-Klick Schlagwort wählt ein Schlagwort ohne weitere Begriffe aus oder hebt eine Schlagwort-Markierung  mit weiteren Begriffen auf.<br/><br/>Wenn Sie die Sprache für die Beschreibung ändern, fügen Sie bitte zur gleichen Zeit keine Schlagworte hinzu.<br/><br/>"
+
+msgid "langRights"
+msgstr "Verwendungsrechte"
+
+msgid "langRightsTip"
+msgstr "Mit Worten beschreiben"
+
+msgid "langVersion"
+msgstr "Version"
+
+msgid "langVersionTip"
+msgstr "Zahl oder Beschreibung"
+
+msgid "langStatusTip"
+msgstr "Aus Liste auswählen"
+
+msgid "langCreatedSize"
+msgstr "Erstellt, Größe"
+
+msgid "langCreatedSizeTip"
+msgstr "JJJJ-MM-TT der Erstellung, Größe in Bytes"
+
+msgid "langAuthorTip"
+msgstr "im VCARD Format"
+
+msgid "langFormat"
+msgstr "Format"
+
+msgid "langFormatTip"
+msgstr "aus Liste auswählen"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "Zum Öffnen des Objekts klicken"
+
+msgid "langStore"
+msgstr "speichern"
+
+msgid "langDeleteAll"
+msgstr "Alle Metadaten löschen"
+
+msgid "langConfirmDelete"
+msgstr "Wollen Sie *wirklich* alle Metadaten löschen?"
+
+msgid "langCourseKwds"
+msgstr "Dieses Dokument enthält die Schlagworte für den Kurs"
+
+msgid "langSearch"
+msgstr "Suchen"
+
+msgid "langSearchCrit"
+msgstr "Ein Wort pro Zeile!"
+
+msgid "langStatuses"
+msgstr ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable
+"
+
+msgid "langCosts"
+msgstr " :nein:frei, umsonst,, ja:nicht frei, kostenpflichtig"
+
+msgid "langCopyrights"
+msgstr ":ja:Copyright,, nein:kein Copyright"
+
+msgid "langFormats"
+msgstr "  	 :text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, audio/basic:audio/basic,, audio/midi:audio/midi,, audio/mpeg:audio/mpeg,, audio/x-wav:audio/x-wav,, image/gif:image/gif,, image/jpeg:image/jpeg,, image/png:image/png,, image/tiff:image/tiff,, video/mpeg:video/mpeg,, video/quicktime:video/quicktime,, video/x-msvideo:video/x-msvideo,, message/rfc822:message/rfc822,, inode/directory:inode/directory,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+
+msgid "langLngResTypes"
+msgstr " :exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture"
+

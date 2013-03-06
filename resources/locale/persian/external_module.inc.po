@@ -1,0 +1,28 @@
+msgid "langTooBig"
+msgstr "ظاهراً مدرکی را برای ارسال انتخاب نکرده اید یا مدرک انتخابی سنگین تر از حد قابل قبول است"
+
+msgid "langLinkTarget"
+msgstr "مقصد
+پیوند"
+
+msgid "langSameWindow"
+msgstr "باز
+شدن صفحۀ مقصد
+در همان پنجره"
+
+msgid "langNewWindow"
+msgstr "باز
+شدن صفحۀ مقصد
+در پنجره ای
+جدید"
+
+msgid "langAdded"
+msgstr "اضافه
+شد"
+
+msgid "langAddLink"
+msgstr "افزودنیک پیوند"
+
+msgid "langEditLink"
+msgstr "تغییر پیوند صفحه آغازین"
+

@@ -1,0 +1,81 @@
+msgid "Tools"
+msgstr "เครื่องมือ"
+
+msgid "SendWork"
+msgstr "ส่งไฟล์ขึ้นระบบ"
+
+msgid "langTooBig"
+msgstr "คุณไม่ได้เลือกไฟล์ที่จะส่งหรือไฟล์มีขนาดใหญ่เกินไป"
+
+msgid "langListDeleted"
+msgstr "รายการถูกลบแล้ว"
+
+msgid "langDocModif"
+msgstr "ปรับปรุงชื่อเรื่องแล้ว"
+
+msgid "langDocAdd"
+msgstr "เพิ่มเอกสารแล้ว"
+
+msgid "langDocDel"
+msgstr "ลบเอกสารแล้ว"
+
+msgid "langTitleWork"
+msgstr "ชื่อไฟล์"
+
+msgid "langAuthors"
+msgstr "ผู้เขียน/เจ้าของผลงาน"
+
+msgid "langDelList"
+msgstr "ลบรายการทั้งหมด"
+
+msgid "langWorkDelete"
+msgstr "ลบงาน"
+
+msgid "langWorkModify"
+msgstr "แก้ไขงาน"
+
+msgid "langWorkConfirmDelete"
+msgstr "คุณต้องการที่จะลบไฟล์งานนี้"
+
+msgid "langAllFiles"
+msgstr "ปฏิบัติเหมือนกันทุกไฟล์"
+
+msgid "DefaultUpload"
+msgstr "ตั้งค่าเริ่มต้นแสดงโดยปริยายให้กับไฟล์ที่โพสท์เข้ามาใหม่"
+
+msgid "NewVisible"
+msgstr "ให้ทุกคนมองเห็นไฟล์เอกสารใหม่"
+
+msgid "NewUnvisible"
+msgstr "ให้มองเห็นเอกสารใหม่เฉพาะผู้จัดการรายวิชา"
+
+msgid "lang_doc_unvisible"
+msgstr "ไฟล์ของคุณจะเห็นเฉพาะอาจารย์ผู้สอนวิชาดังนั้นคุณก็จะมองไม่เห็นเช่นกัน"
+
+msgid "langDelLk"
+msgstr "คุณแน่ใจว่าจะลบรายการ การเชื่อมโยงนี้"
+
+msgid "langMustBeRegisteredUser"
+msgstr "อนุญาตให้ส่งไฟล์เอกสารได้เฉพาะผู้ที่ลงทะเบียนในรายวิชานี้"
+
+msgid "langListDel"
+msgstr "ลบรายการ"
+
+msgid "langNameDir"
+msgstr "ชื่อแฟ้มเก็บไฟล์ใหม่"
+
+msgid "langFileExists"
+msgstr "ไม่สามารถปฏิบัติได้<br>มีไฟล์ชื่อนี้อยู่แล้ว"
+
+msgid "CreateDirectory"
+msgstr "สร้างแฟ้มเอกสาร"
+
+msgid "langCurrentDir"
+msgstr "แฟ้มปัจจุบัน"
+
+msgid "UploadADocument"
+msgstr "โอนย้ายไฟล์เอกสารขึ้นสู่ระบบ"
+
+msgid "EditToolOptions"
+msgstr "แก้ไขคุณสมบัติของเครื่องมือ"
+

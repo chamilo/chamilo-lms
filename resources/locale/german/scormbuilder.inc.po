@@ -1,0 +1,3 @@
+msgid "langScormBuilder"
+msgstr "Lernpfad-Baukasten - Baukasten für Scorm-unterstützte Kurse"
+

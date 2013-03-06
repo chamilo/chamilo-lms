@@ -1,0 +1,204 @@
+msgid "lang_already_enrolled"
+msgstr "jau užregistruotas"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Mano kursų sąrašas"
+
+msgid "lang_course_enrollment"
+msgstr "Vartotojų kursai"
+
+msgid "lang_course_not_available"
+msgstr "Kursas neegzistuoja arba neprieinamas."
+
+msgid "lang_enroll"
+msgstr "Užregistruoti"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Užregistruoti naujame kurse"
+
+msgid "lang_my_present_course_list"
+msgstr "Mano dabartinių kursų sąrašas"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "Šioje kategorijoje nėra kursų, į kuriuos būtų galima užsiregistruoti."
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "arba ieškoti pagal kodą"
+
+msgid "lang_search"
+msgstr "Ieškoti"
+
+msgid "lang_select_course_among_categories"
+msgstr "Ieškoti kurso tarp kategorijų"
+
+msgid "lang_select_course_in"
+msgstr "Išrinkti kursą"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Išrinkti kursą paieškos rezultatuose"
+
+msgid "Unsubscribe"
+msgstr "Atsisakyti"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Atgal į pradinį puslapį"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Atgal į mano kursų sąrašą"
+
+msgid "langTitular"
+msgstr "Vadovas"
+
+msgid "langBackToListOfThisUser"
+msgstr "Atgal į kursų sąrašą"
+
+msgid "langAdministrationTools"
+msgstr "Administravimo įrankiai"
+
+msgid "lang_back_to_parent_category"
+msgstr "Atgal į tėvinę kategoriją"
+
+msgid "lang_back_to_course_selection"
+msgstr "Atgal į kursų pasirinkimus"
+
+msgid "lang_up"
+msgstr "Atgal į tėvinę kategoriją"
+
+msgid "langCatList"
+msgstr "Kategorijos"
+
+msgid "langCourseList"
+msgstr "Kursų sąrašas"
+
+msgid "Subscribe"
+msgstr "Užsisakyti"
+
+msgid "AlreadySubscribed"
+msgstr "Jau užsisakytas"
+
+msgid "CourseCategoryStored"
+msgstr "Kursų kategorija sukurta"
+
+msgid "langWithoutTimeLimits"
+msgstr "Be laiko limitų"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Atgal į pagrindinį kategorijų sąrašą"
+
+msgid "langAdded"
+msgstr "Pridėta"
+
+msgid "langDeleted"
+msgstr "Ištrinta"
+
+msgid "langKeeped"
+msgstr "Laikomas"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Paslėptas / Uždarytas"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Paslėptas / Atidarytas"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Matomas / Atidarytas"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Matomas / Uždarytas"
+
+msgid "langAdminThisUser"
+msgstr "Atgal prie vartotojo"
+
+msgid "langManage"
+msgstr "Portalo valdymas"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Jūs užregistruotas/a kurse"
+
+msgid "langSubCat"
+msgstr "sub-kategorijos"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Atsisakymas yra negalimas šiame kurse."
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Jūs esate kurso vadovas šiame kurse."
+
+msgid "CourseManagement"
+msgstr "Kursų valdymas"
+
+msgid "SortMyCourses"
+msgstr "Rūšiuoti mano kursus"
+
+msgid "SubscribeToCourse"
+msgstr "Užsiregistruoti kursuose"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Išsiregistruoti iš kursų"
+
+msgid "CreateCourseCategory"
+msgstr "Sukurti kursų kategoriją"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Ar tikrai norite ištrinti šią kursų kategoriją? Iš šios kategorijos kursai bus perkelti"
+
+msgid "CourseCategories"
+msgstr "Kursų kategorijos"
+
+msgid "CoursesInCategory"
+msgstr "Kursai kategorijoje"
+
+msgid "SearchCourse"
+msgstr "Ieškoti kursų"
+
+msgid "UpOneCategory"
+msgstr "Viena kategorija aukščiau"
+
+msgid "SearchResultsFor"
+msgstr "Paieškos rezultatai:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Ar tikrai norite išsiregistruoti iš šio kurso?"
+
+msgid "NoCourseCategory"
+msgstr "Kurso kategorija nenurodyta"
+
+msgid "EditCourseCategorySucces"
+msgstr "Prie kategorijos pridėtas kursas"
+
+msgid "SubscribingNotAllowed"
+msgstr "Registracija į kursą neleidžiama"
+
+msgid "CourseSortingDone"
+msgstr "Kursų rūšiavimas baigtas"
+
+msgid "ExistingCourseCategories"
+msgstr "Esamos kursų kategorijos"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Jūs dabar išsiregistravote iš kursų"
+
+msgid "ViewOpenCourses"
+msgstr "Rodyti atvirus kursus"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Nežinoma klaida. Susisiekite su sistemos administratoriumi."
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "Kurso kodas neteisingas"
+
+msgid "CourseRequiresPassword"
+msgstr "Reikalaujamas slaptažodis"
+
+msgid "SubmitRegistrationCode"
+msgstr "Patvirtinti registracijos kodą"
+
+msgid "CourseCategoryDeleted"
+msgstr "Kursų kategorija ištrinta"
+
+msgid "CategorySortingDone"
+msgstr "Kategorijos rūšiavimas baigtas"
+
+msgid "CourseCategoryEditStored"
+msgstr "Kategorija atnaujinta"
+

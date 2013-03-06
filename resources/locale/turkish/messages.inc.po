@@ -1,0 +1,102 @@
+msgid "MessageEmptyMessageOrSubject"
+msgstr "Lütfen konu yada mesajı boş bırakmayınız"
+
+msgid "Inbox"
+msgstr "Gelen Kutusu"
+
+msgid "Messages"
+msgstr "Mesajlar"
+
+msgid "SendMessage"
+msgstr "Mesaj gönder"
+
+msgid "NewMessage"
+msgstr "Yeni mesaj"
+
+msgid "ComposeMessage"
+msgstr "Mesaj yaz"
+
+msgid "DeleteSelectedMessages"
+msgstr "Seçili mesajları sil"
+
+msgid "SelectAll"
+msgstr "Tümünü seç"
+
+msgid "DeselectAll"
+msgstr "Seçimleri kaldır"
+
+msgid "ReplyToMessage"
+msgstr "Bu mesajı cevapla"
+
+msgid "BackToInbox"
+msgstr "Gelen kutusuna dön"
+
+msgid "MessageSentTo"
+msgstr "Mesaj gönderilen"
+
+msgid "SendMessageTo"
+msgstr "Gönderilen"
+
+msgid "Myself"
+msgstr "Ben"
+
+msgid "From"
+msgstr "Gönderen"
+
+msgid "To"
+msgstr "Alıcı"
+
+msgid "Date"
+msgstr "Tarih"
+
+msgid "InvalidMessageId"
+msgstr "Mesajın id cevap için geçerli değil."
+
+msgid "ErrorSendingMessage"
+msgstr "Mesaj yollanırken bir hata oluştu"
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Seçilen mesajları silmek istediğinizden emin misiniz?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "Seçilen mesajlar silindi"
+
+msgid "EnterTitle"
+msgstr "Lütfen başlık girin"
+
+msgid "TypeYourMessage"
+msgstr "Mesajınızı buraya yazın"
+
+msgid "MessageDeleted"
+msgstr "Mesaj silindi"
+
+msgid "ConfirmDeleteMessage"
+msgstr "Seçili mesajı silmek istediğinizden emin misiniz?"
+
+msgid "DeleteMessage"
+msgstr "Mesajı sil"
+
+msgid "ReadMessage"
+msgstr "Mesajı oku"
+
+msgid "SendInviteMessage"
+msgstr "Davet mesajı gönder"
+
+msgid "SendMessageInvitation"
+msgstr "Bu davetiyeleri göndermek istediğinize emin misiniz?"
+
+msgid "MessageTool"
+msgstr "Mesaj araçları"
+
+msgid "WriteAMessage"
+msgstr "Mesaj yaz"
+
+msgid "AlreadyReadMessage"
+msgstr "Okunmuş mesaj"
+
+msgid "UnReadMessage"
+msgstr "Okunmamış mesaj"
+
+msgid "MessageSent"
+msgstr "Mesaj gönderildi"
+

@@ -1,0 +1,42 @@
+msgid "select"
+msgstr "Έγκριση"
+
+msgid "square"
+msgstr "Τετράγωνο"
+
+msgid "circle"
+msgstr "Έλλειψη"
+
+msgid "poly"
+msgstr "Πολύγωνο"
+
+msgid "status2_poly"
+msgstr "Χρησιμοπιήστε το δεξί κλικ για να κλείσετε το πολύγωνο."
+
+msgid "status2_other"
+msgstr "Ελευθερωτε το κουμπί του ποντικιού για την αποθήκευση του Καυτού θέματος."
+
+msgid "exercise_status_1"
+msgstr "Απαντήστε κάνοντας κλικ στην παρακάτω εικόνα"
+
+msgid "exercise_status_2"
+msgstr "Έγκριση απαντήσεων"
+
+msgid "exercise_status_3"
+msgstr "Κατάσταση: η ερώτηση ολοκληρώθηκε"
+
+msgid "showUserPoints"
+msgstr "Εμφάνιση/ Απόκρυψη των κλικ των χρηστών"
+
+msgid "labelPolyMenu"
+msgstr "Κλείσιμο του πολυγώνου"
+
+msgid "triesleft"
+msgstr "Αριθμός προσπαθειών που απομένουν"
+
+msgid "exeFinished"
+msgstr "Τώρα, κάντε κλικ στο παρακάτω κουμπί για να επικυρώσετε τις απαντήσεις σας"
+
+msgid "oar"
+msgstr "Περιοχή υπό κίνδυνο"
+

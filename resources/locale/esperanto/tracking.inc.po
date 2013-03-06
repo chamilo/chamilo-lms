@@ -1,0 +1,390 @@
+msgid "langToolName"
+msgstr "Importado de Nigratabulaj kursoj"
+
+msgid "TrackingDisabled"
+msgstr "Spurado estas malŝaltita far la platformmastrumanto."
+
+msgid "langShowNone"
+msgstr "Ne montri"
+
+msgid "langCourseStats"
+msgstr "Kursaj statistikoj"
+
+msgid "langToolsAccess"
+msgstr "Aliro al moduloj"
+
+msgid "langCourseAccess"
+msgstr "Aliro"
+
+msgid "langLinksAccess"
+msgstr "Ligiloj"
+
+msgid "langDocumentsAccess"
+msgstr "Dokumentoj"
+
+msgid "langScormAccess"
+msgstr "Lernpada Scorm-formataj kursoj"
+
+msgid "langLinksDetails"
+msgstr "Ligiloj viditaj de la studento"
+
+msgid "langWorksDetails"
+msgstr "Publikaĵoj alŝutitaj far la studentoj"
+
+msgid "langLoginsDetails"
+msgstr "Muslkalku sur la nomon de monato por plia informo"
+
+msgid "langDocumentsDetails"
+msgstr "Dokumentoj elŝutitaj far la studento"
+
+msgid "langExercicesDetails"
+msgstr "Poentaro de faritaj ekzercoj"
+
+msgid "langBackToList"
+msgstr "Reiri al la uzullisto"
+
+msgid "langDetails"
+msgstr "Detaloj"
+
+msgid "langStatsOfCourse"
+msgstr "Statistikoj de kurso"
+
+msgid "langStatsOfUser"
+msgstr "Statistikoj de uzulo"
+
+msgid "langStatsOfCampus"
+msgstr "Statistikoj de kampo  XX"
+
+msgid "langCountUsers"
+msgstr "Nombro da uzuloj"
+
+msgid "langCountToolAccess"
+msgstr "Entuta nombro da konektoj al ĉi-kurso"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Monato"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Nombro da ensalutoj"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Modulnomo"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Musklakoj de uzuloj"
+
+msgid "langToolTitleCountColumn"
+msgstr "Totalo de musklakoj"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Ligilo"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Musklakoj de uzuloj"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Totalo da musklakoj"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Ekzerco"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Poentaro"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Dokumento"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Elŝutoj faritaj de uzuloj"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Totalo da elŝutoj"
+
+msgid "langScormContentColumn"
+msgstr "Titolo"
+
+msgid "langScormStudentColumn"
+msgstr "Uzuloj"
+
+msgid "langScormTitleColumn"
+msgstr "Leciono/Paŝo"
+
+msgid "langScormStatusColumn"
+msgstr "Statuso"
+
+msgid "langScormScoreColumn"
+msgstr "Poentaro"
+
+msgid "langScormTimeColumn"
+msgstr "Tempo"
+
+msgid "langScormNeverOpened"
+msgstr "Ĉi-kurso estas neniam malfermita far uzulo"
+
+msgid "langWorkTitle"
+msgstr "Titolo"
+
+msgid "langWorkAuthors"
+msgstr "Aŭtoroj"
+
+msgid "langWorkDescription"
+msgstr "Priskribo"
+
+msgid "informationsAbout"
+msgstr "Spurado de"
+
+msgid "langNoEmail"
+msgstr "Retpoŝtadreso ne donita"
+
+msgid "langNoResult"
+msgstr "Ne ankoraŭ estas rezulto"
+
+msgid "langCourse"
+msgstr "La kurso"
+
+msgid "langHits"
+msgstr "Sukcesoj  XX"
+
+msgid "langTotal"
+msgstr "Sumo"
+
+msgid "langHour"
+msgstr "horo"
+
+msgid "langDay"
+msgstr "tago"
+
+msgid "langLittleHour"
+msgstr "h"
+
+msgid "langLast31days"
+msgstr "Lastaj 31 tagoj"
+
+msgid "langLast7days"
+msgstr "Lasta 7 tagoj"
+
+msgid "langThisday"
+msgstr "Hodiaŭ"
+
+msgid "langLogins"
+msgstr "Ensalutoj"
+
+msgid "langLoginsExplaination"
+msgstr "Listo de la lastaj ensalutoj kun la moduloj vizititaj de vi:"
+
+msgid "langExercicesResults"
+msgstr "Rezultoj de la faritaj ekzercoj"
+
+msgid "langVisits"
+msgstr "vizitoj"
+
+msgid "langAt"
+msgstr "ĉe"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Dato"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Vizitoj"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Ensalutoj kaj aliroj al moduloj"
+
+msgid "langWorkUploads"
+msgstr "Enigitaj taskoj"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Ne valida uzulo: ĉi-uzulo ne ekzistas en ĉi-grupo"
+
+msgid "langListStudents"
+msgstr "Listo de uzuloj en ĉi-grupo"
+
+msgid "langPeriodHour"
+msgstr "Horo"
+
+msgid "langPeriodDay"
+msgstr "Tago"
+
+msgid "langPeriodWeek"
+msgstr "Semajno"
+
+msgid "langPeriodMonth"
+msgstr "Monato"
+
+msgid "langPeriodYear"
+msgstr "Jaro"
+
+msgid "langNextDay"
+msgstr "Venonta tago"
+
+msgid "langPreviousDay"
+msgstr "Antaŭa tago"
+
+msgid "langNextWeek"
+msgstr "Venonta semajno"
+
+msgid "langPreviousWeek"
+msgstr "Pasinta semajno"
+
+msgid "langNextMonth"
+msgstr "Venonta monato"
+
+msgid "langPreviousMonth"
+msgstr "Pasinta monato"
+
+msgid "langNextYear"
+msgstr "Venonta jaro"
+
+msgid "langPreviousYear"
+msgstr "Pasinta jaro"
+
+msgid "langViewToolList"
+msgstr "Montri liston de ĉiuj moduloj"
+
+msgid "langToolList"
+msgstr "Listo de ĉiuj moduloj"
+
+msgid "langFrom"
+msgstr "De"
+
+msgid "langTo"
+msgstr "al"
+
+msgid "langPeriodToDisplay"
+msgstr "Periodo"
+
+msgid "langDetailView"
+msgstr "Supervido laŭ"
+
+msgid "langBredCrumpGroups"
+msgstr "Grupoj"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Grupa areo"
+
+msgid "langBredCrumpUsers"
+msgstr "Uzuloj"
+
+msgid "langAdminToolName"
+msgstr "Mastrumantaj statistikoj"
+
+msgid "langPlatformStats"
+msgstr "Platformaj statistikoj"
+
+msgid "langStatsDatabase"
+msgstr "Statistika datumbenko"
+
+msgid "langPlatformAccess"
+msgstr "Platformaliro"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Kursaliro"
+
+msgid "langPlatformToolAccess"
+msgstr "Aliro al ilaro"
+
+msgid "langHardAndSoftUsed"
+msgstr "Landoj Perantoj Foliuiloj Regsistemoj Referencantoj"
+
+msgid "langStrangeCases"
+msgstr "Speciala kazoj"
+
+msgid "langStatsDatabaseLink"
+msgstr "Alklaku ĉi-tie"
+
+msgid "langCountCours"
+msgstr "Nombro da kursoj"
+
+msgid "langCountCourseByFaculte"
+msgstr "Nombro da uzuloj laŭ fakultatoj"
+
+msgid "langCountCourseByLanguage"
+msgstr "Nombro da kursoj laŭ lingvoj"
+
+msgid "langCountCourseByVisibility"
+msgstr "Nombro da kursoj laŭ videblo"
+
+msgid "langCountUsersByCourse"
+msgstr "Nombro da uzuloj laŭ kursoj"
+
+msgid "langCountUsersByFaculte"
+msgstr "Nombro da uzuloj laŭ fakultatoj"
+
+msgid "langCountUsersByStatus"
+msgstr "Nombro da uzuloj laŭ statuso"
+
+msgid "langAccess"
+msgstr "Aliro"
+
+msgid "langCountries"
+msgstr "Landoj"
+
+msgid "langProviders"
+msgstr "Perantoj"
+
+msgid "langOS"
+msgstr "OS (Regosistemo)"
+
+msgid "langBrowsers"
+msgstr "Foliumiloj"
+
+msgid "langReferers"
+msgstr "Referencantoj"
+
+msgid "langAccessExplain"
+msgstr "(Kiam uzulo malfermas la indekson de la kampo)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Totalo"
+
+msgid "langTotalPlatformLogin"
+msgstr "Totalo"
+
+msgid "langMultipleLogins"
+msgstr "Kontoj kun la sama <i>Uzulnomo</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Kontoj kun sama <i>Uzulnomo</i> KAJ sama <i>Pasvorto</i>"
+
+msgid "langMultipleEmails"
+msgstr "Kontoj kun sama <i>Retpoŝto</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Kursoj sen instruisto"
+
+msgid "langCourseWithoutAccess"
+msgstr "Neuzataj kursoj"
+
+msgid "langLoginWithoutAccess"
+msgstr "Neuzataj ensalutoj"
+
+msgid "langAllRight"
+msgstr "Neniu speciala kazo"
+
+msgid "langDefcon"
+msgstr "Estas specialaj kazoj!"
+
+msgid "langNULLValue"
+msgstr "Malplena (aŭ NULA)"
+
+msgid "langTrafficDetails"
+msgstr "Trafikdetaloj"
+
+msgid "langSeeIndividualTracking"
+msgstr "Pri individua spurado: vidu al la <a href=../user/user.php>uzuloj</a> modulo."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Tiu pado neniam estis malfermata far iu."
+
+msgid "SynthesisView"
+msgstr "Resuma tabelo"
+
+msgid "Visited"
+msgstr "Travidita"
+
+msgid "FirstAccess"
+msgstr "Unua aliro"
+
+msgid "LastAccess"
+msgstr "Lasta aliro"
+

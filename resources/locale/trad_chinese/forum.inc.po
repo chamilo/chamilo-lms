@@ -1,0 +1,255 @@
+msgid "ForumDeleted"
+msgstr "已移除討論區"
+
+msgid "ForumCategoryDeleted"
+msgstr "已移除討論區類別"
+
+msgid "ForumLocked"
+msgstr "已封鎖討論區"
+
+msgid "Forum"
+msgstr "討論區"
+
+msgid "AddForumCategory"
+msgstr "新增討論區類別"
+
+msgid "AddForum"
+msgstr "新增討論區"
+
+msgid "Topics"
+msgstr "議題"
+
+msgid "Posts"
+msgstr "帖子"
+
+msgid "LastPosts"
+msgstr "最新帖子"
+
+msgid "Message"
+msgstr "訊息"
+
+msgid "NoForumInThisCategory"
+msgstr "本類別中沒有討論區"
+
+msgid "InForumCategory"
+msgstr "在類別中創建"
+
+msgid "AllowAnonymousPosts"
+msgstr "允許匿名帖子？"
+
+msgid "StudentsCanEdit"
+msgstr "是否讓使用者修訂自己的帖子？"
+
+msgid "ApprovalDirect"
+msgstr "須待批 / 直接張貼"
+
+msgid "AllowNewThreads"
+msgstr "允許使用者開始新討論"
+
+msgid "DefaultViewType"
+msgstr "預設檢視類型"
+
+msgid "GroupSettings"
+msgstr "組別設定"
+
+msgid "NotAGroupForum"
+msgstr "非小組討論區"
+
+msgid "PublicPrivateGroupForum"
+msgstr "公開或私人小組討論區？"
+
+msgid "Public"
+msgstr "供所有課程會員"
+
+msgid "Private"
+msgstr "僅供小組會員"
+
+msgid "NewPostStored"
+msgstr "你的訊息已被儲存"
+
+msgid "ReturnTo"
+msgstr "你現在可以回到"
+
+msgid "Or"
+msgstr "或"
+
+msgid "ReplyToThread"
+msgstr "回覆這論題"
+
+msgid "ReplyToMessage"
+msgstr "回覆這訊息"
+
+msgid "QuoteMessage"
+msgstr "引用這訊息"
+
+msgid "NewTopic"
+msgstr "新論題"
+
+msgid "Replies"
+msgstr "回覆"
+
+msgid "Views"
+msgstr "檢視"
+
+msgid "LastPost"
+msgstr "最新帖子"
+
+msgid "Quoting"
+msgstr "引用"
+
+msgid "NotifyByEmail"
+msgstr "有人回應時用電郵通知我"
+
+msgid "StickyPost"
+msgstr "黏貼訊息(永遠貼附在頂部並附有特別的貼紙圖案)"
+
+msgid "ReplyShort"
+msgstr "回覆："
+
+msgid "DeletePost"
+msgstr "你肯定要移除這帖子？移除這帖子會把它的回覆也一併刪除。請檢查論題樹看看有那些帖子會被移除。"
+
+msgid "Locked"
+msgstr "封鎖：學員不能在本討論區類別、討論區或論題張貼新訊息，但可以閱讀已貼出的訊息。"
+
+msgid "Unlocked"
+msgstr "解封：學員可以在本討論區類別、討論區或論題張貼新訊息。"
+
+msgid "Flat"
+msgstr "平排"
+
+msgid "Threaded"
+msgstr "樹狀"
+
+msgid "Nested"
+msgstr "巢狀"
+
+msgid "FlatView"
+msgstr "平排檢視"
+
+msgid "ThreadedView"
+msgstr "樹狀檢視"
+
+msgid "NestedView"
+msgstr "巢狀檢視"
+
+msgid "Structure"
+msgstr "結構"
+
+msgid "ForumCategoryAdded"
+msgstr "已新增討論區類別"
+
+msgid "ForumCategoryEdited"
+msgstr "已修訂討論區類別"
+
+msgid "ForumAdded"
+msgstr "已新增討論區"
+
+msgid "ForumEdited"
+msgstr "已修訂討論區"
+
+msgid "NewThreadStored"
+msgstr "已新增論題"
+
+msgid "Approval"
+msgstr "待批"
+
+msgid "Direct"
+msgstr "直接"
+
+msgid "ForGroup"
+msgstr "供小組"
+
+msgid "ThreadLocked"
+msgstr "論題被封鎖"
+
+msgid "NotAllowedHere"
+msgstr "你不能到此"
+
+msgid "ReplyAdded"
+msgstr "已加入回應"
+
+msgid "EditPost"
+msgstr "編輯文章"
+
+msgid "EditPostStored"
+msgstr "帖子已被修訂"
+
+msgid "NewForumPost"
+msgstr "討論區新帖子"
+
+msgid "YouWantedToStayInformed"
+msgstr "你聲明你想在有人回應此帖子時收到通知。"
+
+msgid "MessageHasToBeApproved"
+msgstr "你的訊息須經批核才能供其他人閱讀。"
+
+msgid "AllowAttachments"
+msgstr "允許附件"
+
+msgid "EditForumCategory"
+msgstr "修訂討論區類別"
+
+msgid "MovePost"
+msgstr "移動帖子"
+
+msgid "MoveToThread"
+msgstr "移到論題"
+
+msgid "ANewThread"
+msgstr "新論題"
+
+msgid "Reply"
+msgstr "回覆"
+
+msgid "DeleteForum"
+msgstr "刪除討論區？"
+
+msgid "DeleteForumCategory"
+msgstr "刪除討論區類別？"
+
+msgid "Lock"
+msgstr "封鎖"
+
+msgid "Unlock"
+msgstr "解封"
+
+msgid "MoveThread"
+msgstr "移動論題"
+
+msgid "PostVisibilityChanged"
+msgstr "已變更帖子顯設定"
+
+msgid "PostDeleted"
+msgstr "已刪除帖子"
+
+msgid "MakeInvisible"
+msgstr "設為隱藏"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "在此可找到這論題"
+
+msgid "MakeVisible"
+msgstr "設為可見"
+
+msgid "DeleteCompleteThread"
+msgstr "刪除整個論題樹？"
+
+msgid "PostDeletedSpecial"
+msgstr "已刪除指定帖子"
+
+msgid "ThreadDeleted"
+msgstr "已刪除論題"
+
+msgid "NextMessage"
+msgstr "下一段訊息"
+
+msgid "PrevMessage"
+msgstr "上一段訊息"
+
+msgid "FirstMessage"
+msgstr "第一段訊息"
+
+msgid "LastMessage"
+msgstr "最後一段訊息"
+

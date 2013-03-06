@@ -1,0 +1,3961 @@
+msgid "ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher"
+msgstr "Šis postenis skolēniem ir neredzams, bet Jums, kā skolotājam ir pieejams"
+
+msgid "DeleteAllAttendances"
+msgstr "Dzēst visu klātienes reģistru"
+
+msgid "Unsubscribe"
+msgstr "Atrakstīties"
+
+msgid "SearchXapianModuleNotInstalled"
+msgstr "Xapian meklēšanas modulis nav instalēts"
+
+msgid "Title"
+msgstr "Virsraksts"
+
+msgid "By"
+msgstr "Autors"
+
+msgid "UsersOnline"
+msgstr "Lietotāji tiešsaistē"
+
+msgid "Remove"
+msgstr "Izņemt"
+
+msgid "langEnter"
+msgstr "Atpakaļ uz manu kursu sarakstu"
+
+msgid "Description"
+msgstr "Apraksts"
+
+msgid "Links"
+msgstr "Ievietot Hipersaišu arhīvā esošas tīmekļa hipersaites"
+
+msgid "langWorks"
+msgstr "Pievienot saturam patstāvīgos darbus"
+
+msgid "Forums"
+msgstr "Ievietot mācību saturā, Kursa Forumos apspriežamu tematu"
+
+msgid "langExercices"
+msgstr "Testi / Kontroldarbi"
+
+msgid "langCreateDir"
+msgstr "Izveidot mapi"
+
+msgid "Name"
+msgstr "Nosaukums/vārds (aktivitātei; elementam)"
+
+msgid "langComment"
+msgstr "Papildus komentārs"
+
+msgid "langVisible"
+msgstr "Redzams"
+
+msgid "langNewDir"
+msgstr "Jaunās mapes nosaukums"
+
+msgid "langDirCr"
+msgstr "Mape ir izveidota"
+
+msgid "Download"
+msgstr "Lejupielāde"
+
+msgid "langGroup"
+msgstr "Kursantu grupas"
+
+msgid "langEdit"
+msgstr "Labot"
+
+msgid "langGroupForum"
+msgstr "Grupas diskusija"
+
+msgid "Language"
+msgstr "Valoda"
+
+msgid "LoginName"
+msgstr "Lietotājvārds"
+
+msgid "AutostartMp3"
+msgstr "Vai Jūs vēlaties, lai audio fails sāktos automātiski?"
+
+msgid "Assignments"
+msgstr "Referāti / Mājas darbi"
+
+msgid "Forum"
+msgstr "Diskusijas kursā"
+
+msgid "langDelImage"
+msgstr "Dzēst attēlu"
+
+msgid "langCode"
+msgstr "Kursa kods"
+
+msgid "langUp"
+msgstr "Augšup"
+
+msgid "Down"
+msgstr "Lejup"
+
+msgid "Up"
+msgstr "Augšup"
+
+msgid "Theme"
+msgstr "Darba loga vizuālais izskats"
+
+msgid "TheListIsEmpty"
+msgstr "Saraksts ir tukšs"
+
+msgid "langUniqueSelect"
+msgstr "Vienas atbildes izvēle no vairākām"
+
+msgid "CreateCategory"
+msgstr "Pievienot Kategoriju"
+
+msgid "SendFile"
+msgstr "Augšupielādēt dokumentu"
+
+msgid "SaveChanges"
+msgstr "Saglabāt izmaiņas"
+
+msgid "SearchTerm"
+msgstr "Meklēt vārdu"
+
+msgid "TooShort"
+msgstr "Par īsu"
+
+msgid "langCourseCreate"
+msgstr "<b>Izveidot</b> jaunu Kursu"
+
+msgid "langTodo"
+msgstr "Uzdevumi"
+
+msgid "UserName"
+msgstr "Lietotājvārds"
+
+msgid "lang_show_hide"
+msgstr "Redzams / neredzams"
+
+msgid "langCategoryMod"
+msgstr "Rediģēt kursu kategorijas"
+
+msgid "Hide"
+msgstr "Paslēpt"
+
+msgid "langDear"
+msgstr "Cien."
+
+msgid "langArchive"
+msgstr "arhīvs"
+
+msgid "langCourseCode"
+msgstr "Kursa kods"
+
+msgid "langNoDescription"
+msgstr "nav apraksta"
+
+msgid "langOfficialCode"
+msgstr "Dienesta kods"
+
+msgid "FirstName"
+msgstr "Vārds"
+
+msgid "LastName"
+msgstr "Uzvārds"
+
+msgid "Status"
+msgstr "Statuss"
+
+msgid "langEmail"
+msgstr "e-pasts"
+
+msgid "SlideshowConversion"
+msgstr "Slaidu demonstrācijas konvertācija"
+
+msgid "UploadFile"
+msgstr "Failu augšupielāde"
+
+msgid "AvailableFrom"
+msgstr "Pieejams no"
+
+msgid "AvailableTill"
+msgstr "Pieejams līdz"
+
+msgid "Preview"
+msgstr "Priekšskatījums"
+
+msgid "Type"
+msgstr "Veids"
+
+msgid "EmailAddress"
+msgstr "E-pasta adrese"
+
+msgid "Organisation"
+msgstr "Organizācija"
+
+msgid "Reporting"
+msgstr "Atskaites"
+
+msgid "Code"
+msgstr "Kods"
+
+msgid "Update"
+msgstr "Atjaunināt"
+
+msgid "SelectQuestionType"
+msgstr "Izvēlēties jautājuma veidu"
+
+msgid "CurrentCourse"
+msgstr "Pašreizējais kurss"
+
+msgid "Back"
+msgstr "Atpakaļ"
+
+msgid "Info"
+msgstr "informācija"
+
+msgid "Search"
+msgstr "Meklēt"
+
+msgid "AdvancedSearch"
+msgstr "Paplašinātā meklēšana"
+
+msgid "Open"
+msgstr "Atvērt"
+
+msgid "Import"
+msgstr "Apstiprināt"
+
+msgid "AddAnother"
+msgstr "Pievienot citu"
+
+msgid "Author"
+msgstr "Autors"
+
+msgid "TrueFalse"
+msgstr "Pareizi / Nepareizi"
+
+msgid "QuestionType"
+msgstr "Jautājuma veids"
+
+msgid "NoSearchResults"
+msgstr "Nekas netika atrasts"
+
+msgid "SelectQuestion"
+msgstr "Atzīmēt jautājumu"
+
+msgid "AddNewQuestionType"
+msgstr "Pievienot jaunu jautājuma veidu"
+
+msgid "Numbered"
+msgstr "Numurēts"
+
+msgid "iso639_2_code"
+msgstr "en"
+
+msgid "iso639_1_code"
+msgstr "eng"
+
+msgid "charset"
+msgstr "utf-8"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "verdana, helvetica, arial, geneva, sans-serif"
+
+msgid "right_font_family"
+msgstr "helvetica, arial, geneva, sans-serif"
+
+msgid "number_thousands_separator"
+msgstr ","
+
+msgid "number_decimal_separator"
+msgstr "."
+
+msgid "dateFormatShort"
+msgstr "%b %d, %y"
+
+msgid "dateFormatLong"
+msgstr "%A %B %d, %Y"
+
+msgid "dateTimeFormatLong"
+msgstr "%B %d, %Y at %I:%M %p"
+
+msgid "timeNoSecFormat"
+msgstr "%I:%M %p"
+
+msgid "langYes"
+msgstr "Jā"
+
+msgid "langNo"
+msgstr "Nē!"
+
+msgid "Next"
+msgstr "Nākošais"
+
+msgid "langAllowed"
+msgstr "Atļauts"
+
+msgid "langBackHome"
+msgstr "Uz sākumlapu"
+
+msgid "langPropositions"
+msgstr "Ieteikumi uzlabojumu veikšanai"
+
+msgid "langMaj"
+msgstr "Atjaunot"
+
+msgid "langModify"
+msgstr "Veikt izmaiņas"
+
+msgid "langDelete"
+msgstr "Izdzēst"
+
+msgid "langInvisible"
+msgstr "Padarīt neredzamu"
+
+msgid "langSave"
+msgstr "Saglabāt"
+
+msgid "langMove"
+msgstr "Pārvietot"
+
+msgid "Help"
+msgstr "Palīgs"
+
+msgid "langOk"
+msgstr "Darīts!"
+
+msgid "langAdd"
+msgstr "Pievienot"
+
+msgid "langAddIntro"
+msgstr "Pievienot Kursa ievada tekstu un attēlus"
+
+msgid "langBackList"
+msgstr "Atpakaļ uz sarakstu"
+
+msgid "langText"
+msgstr "Teksts"
+
+msgid "langEmpty"
+msgstr "Jūs atstājāt dažus laukus tukšus.<br>Izmantojiet <b>Atpakaļ</b> pogu pārlūkprogrammā un mēģiniet vēlreiz. <br>Ja jūs neziniet Jūsu kursa kodu, skatieties Kursu Programmā."
+
+msgid "langConfirmYourChoice"
+msgstr "Lūdzu, apstipriniet savu izvēli"
+
+msgid "langAnd"
+msgstr "un"
+
+msgid "langChoice"
+msgstr "Jūsu izvēle"
+
+msgid "langFinish"
+msgstr "Pabeigt !"
+
+msgid "langCancel"
+msgstr "Atcelt!"
+
+msgid "langNotAllowed"
+msgstr "<b>Jūsu sesijas pieejas laiks ir beidzies</b>, <br>vai arī, Jums nav pieejas tiesību. <br><br><b>Lūdzu, autorizējieties atkārtoti!</b>"
+
+msgid "langNotLogged"
+msgstr "Jūs neesat autorizējies šim kursam"
+
+msgid "langManager"
+msgstr "Platformas vadība"
+
+msgid "langOptional"
+msgstr "Izvēles"
+
+msgid "NextPage"
+msgstr "Nākošā lapa"
+
+msgid "PreviousPage"
+msgstr "Iepriekšējā lapa"
+
+msgid "langUse"
+msgstr "Lietot"
+
+msgid "langTotal"
+msgstr "Kopumā"
+
+msgid "langTake"
+msgstr "paņem"
+
+msgid "langOne"
+msgstr "Viens"
+
+msgid "langSeveral"
+msgstr "Vairāki"
+
+msgid "langNotice"
+msgstr "Piezīme"
+
+msgid "langDate"
+msgstr "Datums"
+
+msgid "langAmong"
+msgstr "starp"
+
+msgid "langShow"
+msgstr "Parādīt"
+
+msgid "langMyCourses"
+msgstr "Mani kursi"
+
+msgid "langModifyProfile"
+msgstr "Dati par mani"
+
+msgid "langMyStats"
+msgstr "Statistika par manām darbībām kursos"
+
+msgid "langLogout"
+msgstr "Beigt darbu!"
+
+msgid "langMyAgenda"
+msgstr "Mans plānotājs"
+
+msgid "langCourseHomepage"
+msgstr "Uz Kursa sākuma lapu"
+
+msgid "langCourseManagerview"
+msgstr "Skatīt, kā Lektoram"
+
+msgid "langStudentView"
+msgstr "Skatīt, kā Kursantam"
+
+msgid "AddResource"
+msgstr "Pievienot to"
+
+msgid "AddedResources"
+msgstr "Pielikumi"
+
+msgid "lang_modify_resource"
+msgstr "Izmainīt / Pievienot avotus"
+
+msgid "lang_resource"
+msgstr "Avots"
+
+msgid "lang_resources"
+msgstr "Avoti"
+
+msgid "langNameOfLang[\'arabic\']"
+msgstr ""
+
+msgid "langNameOfLang[\'brazilian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'bulgarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'catalan\']"
+msgstr ""
+
+msgid "langNameOfLang[\'croatian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'danish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english\']"
+msgstr ""
+
+msgid "langNameOfLang[\'finnish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'french_KM\']"
+msgstr ""
+
+msgid "langNameOfLang[\'galician\']"
+msgstr ""
+
+msgid "langNameOfLang[\'german\']"
+msgstr ""
+
+msgid "langNameOfLang[\'greek\']"
+msgstr ""
+
+msgid "langNameOfLang[\'italian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'japanese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'polish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'portuguese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'russian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'simpl_chinese\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish\']"
+msgstr ""
+
+msgid "Close"
+msgstr "aizvērt"
+
+msgid "langPlatform"
+msgstr "Platforma"
+
+msgid "localLangName"
+msgstr "valoda"
+
+msgid "email"
+msgstr "e-pasts"
+
+msgid "langCourseCodeAlreadyExists"
+msgstr "Hmm, bet šis kursa kods jau eksistē. Lūdzu izvēlies citu codu."
+
+msgid "Statistics"
+msgstr "Statistika"
+
+msgid "langGrouplist"
+msgstr "grupas saraksts"
+
+msgid "langPrevious"
+msgstr "iepriekšējo"
+
+msgid "DestDirectoryDoesntExist"
+msgstr "Saņēmēj direktorija neeksistē"
+
+msgid "Courses"
+msgstr "kursi"
+
+msgid "In"
+msgstr "iekš"
+
+msgid "langShowAll"
+msgstr "Parādīt visu"
+
+msgid "langPage"
+msgstr "Lapa"
+
+msgid "englishLangName"
+msgstr "Angļu"
+
+msgid "Home"
+msgstr "Mana profila lapas sākums"
+
+msgid "langAreYouSureToDelete"
+msgstr "Vai esat pārliecināti par dzēšanas nepieciešamību ?"
+
+msgid "SelectAll"
+msgstr "<b>Iezīmēt</b> visu"
+
+msgid "UnSelectAll"
+msgstr "<b>Atcelt</b> iezīmējumu"
+
+msgid "WithSelected"
+msgstr "Ar iezīmēto"
+
+msgid "langOnLine"
+msgstr "Tiešsaistē"
+
+msgid "langUsers"
+msgstr "Lietotāji"
+
+msgid "langPlatformAdmin"
+msgstr "Platformas administrēšana"
+
+msgid "langNameOfLang[\'hungarian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'indonesian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'malay\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovenian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'spanish_latin\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swedish\']"
+msgstr ""
+
+msgid "langNameOfLang[\'thai\']"
+msgstr ""
+
+msgid "langNameOfLang[\'turkce\']"
+msgstr ""
+
+msgid "langNameOfLang[\'vietnamese\']"
+msgstr ""
+
+msgid "UserInfo"
+msgstr "Informācija par lietotāju"
+
+msgid "langModifyQuestion"
+msgstr "Saglabāt jautājumu"
+
+msgid "langCheckAll"
+msgstr "Atzīmēt visus"
+
+msgid "langNbAnnoucement"
+msgstr "Paziņojums"
+
+msgid "lang_no_access_here"
+msgstr "JUMS NAV PIEEJAS TIESĪBU!"
+
+msgid "langOtherCourses"
+msgstr "citi kursi"
+
+msgid "Doc"
+msgstr "Kurss"
+
+msgid "PlataformAdmin"
+msgstr "Platformas administrators"
+
+msgid "Groups"
+msgstr "Grupas"
+
+msgid "GroupManagement"
+msgstr "Grupu administrēšana"
+
+msgid "All"
+msgstr "Visi vienā sarakstā"
+
+msgid "None"
+msgstr "neviens"
+
+msgid "langSorry"
+msgstr "Izvēlieties vispirms kursu"
+
+msgid "langDenied"
+msgstr "Šī funkcija ir pieejama tikai kursa administratoriem"
+
+msgid "Today"
+msgstr "Šodien"
+
+msgid "langCourseHomepageLink"
+msgstr "Atgriezties kursa sākuma lapā"
+
+msgid "Attachment"
+msgstr "pielikums"
+
+msgid "User"
+msgstr "Lietotājvārds"
+
+msgid "MondayInit"
+msgstr "P"
+
+msgid "TuesdayInit"
+msgstr "O"
+
+msgid "WednesdayInit"
+msgstr "T"
+
+msgid "ThursdayInit"
+msgstr "C"
+
+msgid "FridayInit"
+msgstr "P"
+
+msgid "SaturdayInit"
+msgstr "S"
+
+msgid "SundayInit"
+msgstr "Sv"
+
+msgid "MondayShort"
+msgstr "Pirm"
+
+msgid "TuesdayShort"
+msgstr "Otr"
+
+msgid "WednesdayShort"
+msgstr "Tre"
+
+msgid "ThursdayShort"
+msgstr "Cet"
+
+msgid "FridayShort"
+msgstr "Piekt"
+
+msgid "SaturdayShort"
+msgstr "Sest"
+
+msgid "SundayShort"
+msgstr "Svēt"
+
+msgid "MondayLong"
+msgstr "Pirmdiena"
+
+msgid "TuesdayLong"
+msgstr "Otrdiena"
+
+msgid "WednesdayLong"
+msgstr "Trešdiena"
+
+msgid "ThursdayLong"
+msgstr "Ceturtdiena"
+
+msgid "FridayLong"
+msgstr "Piektdiena"
+
+msgid "SaturdayLong"
+msgstr "Sestdiena"
+
+msgid "SundayLong"
+msgstr "Svētdiena"
+
+msgid "JanuaryInit"
+msgstr "J"
+
+msgid "FebruaryInit"
+msgstr "F"
+
+msgid "MarchInit"
+msgstr "M"
+
+msgid "AprilInit"
+msgstr "A"
+
+msgid "MayInit"
+msgstr "M"
+
+msgid "JuneInit"
+msgstr "J"
+
+msgid "JulyInit"
+msgstr "J"
+
+msgid "AugustInit"
+msgstr "A"
+
+msgid "SeptemberInit"
+msgstr "S"
+
+msgid "OctoberInit"
+msgstr "O"
+
+msgid "NovemberInit"
+msgstr "N"
+
+msgid "DecemberInit"
+msgstr "D"
+
+msgid "JanuaryShort"
+msgstr "Jan"
+
+msgid "FebruaryShort"
+msgstr "Feb"
+
+msgid "MarchShort"
+msgstr "Mar"
+
+msgid "AprilShort"
+msgstr "Apr"
+
+msgid "MayShort"
+msgstr "Maijs"
+
+msgid "JuneShort"
+msgstr "Jūn"
+
+msgid "JulyShort"
+msgstr "Jūl"
+
+msgid "AugustShort"
+msgstr "Aug"
+
+msgid "SeptemberShort"
+msgstr "Sep"
+
+msgid "OctoberShort"
+msgstr "Okt"
+
+msgid "NovemberShort"
+msgstr "Nov"
+
+msgid "DecemberShort"
+msgstr "Dec"
+
+msgid "JanuaryLong"
+msgstr "Janvāris"
+
+msgid "FebruaryLong"
+msgstr "Februāris"
+
+msgid "MarchLong"
+msgstr "Marts"
+
+msgid "AprilLong"
+msgstr "Aprilis"
+
+msgid "MayLong"
+msgstr "Maijs"
+
+msgid "JuneLong"
+msgstr "Jūnijs"
+
+msgid "JulyLong"
+msgstr "Jūlijs"
+
+msgid "AugustLong"
+msgstr "Augusts"
+
+msgid "SeptemberLong"
+msgstr "Septembris"
+
+msgid "OctoberLong"
+msgstr "Oktobris"
+
+msgid "NovemberLong"
+msgstr "Novembris"
+
+msgid "DecemberLong"
+msgstr "Decembris"
+
+msgid "langMyCompetences"
+msgstr "Manas kompetences"
+
+msgid "langMyDiplomas"
+msgstr "Mani sasniegumi / diplomi"
+
+msgid "langMyPersonalOpenArea"
+msgstr "Papildus informācija, ko vēlos sniegt par sevi"
+
+msgid "langMyTeach"
+msgstr "Papildus informācija:<br>- Kādus priekšmetus es varu mācīt? <br>- Kādas vēl ir manas prasmes?"
+
+msgid "Agenda"
+msgstr "Kursa notikumu plānotājs"
+
+msgid "HourShort"
+msgstr "st."
+
+msgid "PleaseTryAgain"
+msgstr "Lūdzu, mēģiniet vēlreiz!"
+
+msgid "UplNoFileUploaded"
+msgstr "Neviens Fails netika augšupielādēts."
+
+msgid "UplSelectFileFirst"
+msgstr "Lūdzu izvēlēties failu, pirms spiežat augšupielādes pogu."
+
+msgid "UplNotAZip"
+msgstr "Dokuments, ko izvēlējāties, nav ZIP fails."
+
+msgid "UplUploadSucceeded"
+msgstr "Fails augšupielādēts veiksmīgi!"
+
+msgid "ExportAsCSV"
+msgstr "Izeksportēt kā CSV failu"
+
+msgid "ExportAsXLS"
+msgstr "Izeksportēt kā XLS failu"
+
+msgid "langOpenarea"
+msgstr "Personīgais lauciņš"
+
+msgid "Done"
+msgstr "Darīts!"
+
+msgid "Documents"
+msgstr "Mape “Dokumenti” (html,doc,pdf,attēlu,mediju u.c. faili)"
+
+msgid "DocumentAdded"
+msgstr "Dokuments pievienots"
+
+msgid "DocumentUpdated"
+msgstr "Dokuments papildināts"
+
+msgid "DocumentInFolderUpdated"
+msgstr "Dokuments papildināts mapītē"
+
+msgid "Course_description"
+msgstr "Kursa satura un mērķu apraksts"
+
+msgid "Average"
+msgstr "Vidējais"
+
+msgid "Document"
+msgstr "Kursam pievienotie dokumenti"
+
+msgid "Learnpath"
+msgstr "Kursa tēmas"
+
+msgid "Link"
+msgstr "Hipersaites"
+
+msgid "Announcement"
+msgstr "Paziņojumi kursa lietotājiem"
+
+msgid "Dropbox"
+msgstr "Dokumentu / failu apmaiņa"
+
+msgid "Quiz"
+msgstr "Ievietot saturā jaunu kontroldarbu / testu, jeb ievietot jau iepriekš izveidotu"
+
+msgid "langChat"
+msgstr "Tērzēšana"
+
+msgid "Conference"
+msgstr "Konference"
+
+msgid "Student_publication"
+msgstr "Patstāvīgi veicams, mājas darbs"
+
+msgid "Tracking"
+msgstr "Atskaites"
+
+msgid "langhomepage_link"
+msgstr "Pievienot hipersaiti šai lapai"
+
+msgid "Course_setting"
+msgstr "Kursa iestatījumi"
+
+msgid "langbackup"
+msgstr "Kursa rezerves kopija"
+
+msgid "langcopy_course_content"
+msgstr "Kopēt šī kursa saturu"
+
+msgid "langrecycle_course"
+msgstr "Atjaunot šī kursa darbību, jeb iztīrīt visu iepriekšējo mācību procesa informāciju."
+
+msgid "StartDate"
+msgstr "Sākuma datums"
+
+msgid "EndDate"
+msgstr "Beigu datums"
+
+msgid "StartTime"
+msgstr "Sākšanas laiks"
+
+msgid "EndTime"
+msgstr "Beigšanas laiks"
+
+msgid "langYouWereCalled"
+msgstr "Jūs uz sarunu uzaicināja"
+
+msgid "langDoYouAccept"
+msgstr "Vai Jūs tam piekrītat?"
+
+msgid "Everybody"
+msgstr "Visi kursā reģistrētie"
+
+msgid "SentTo"
+msgstr "Pieejams"
+
+msgid "Export"
+msgstr "Eksportēt"
+
+msgid "Tools"
+msgstr "Instrumenti"
+
+msgid "Everyone"
+msgstr "Katrs"
+
+msgid "SelectGroupsUsers"
+msgstr "Izvēlēties grupas/lietotājus"
+
+msgid "Student"
+msgstr "Kursants"
+
+msgid "Teacher"
+msgstr "Lektors"
+
+msgid "Send2All"
+msgstr "Jūs nenorādījāt lietotāju/grupu. Paziņojums ir redzams katram kursā reģistrētajam kursantam"
+
+msgid "Wiki"
+msgstr "Wiki grupa"
+
+msgid "Complete"
+msgstr "Pabeigts"
+
+msgid "Incomplete"
+msgstr "Nepabeigts"
+
+msgid "reservation"
+msgstr "rezervācija"
+
+msgid "StartTimeWindow"
+msgstr "Sākt!"
+
+msgid "EndTimeWindow"
+msgstr "Beigt!"
+
+msgid "AccessNotAllowed"
+msgstr "Pieeja šai lapai ir liegta"
+
+msgid "InThisCourse"
+msgstr "Šajā kursā"
+
+msgid "ThisFieldIsRequired"
+msgstr "Šis lauciņš ir jāaizpilda obligāti"
+
+msgid "AllowedHTMLTags"
+msgstr "Pieļaujamās HTML koda frāzes"
+
+msgid "FormHasErrorsPleaseComplete"
+msgstr "Formas lauciņos norādīti nekorekti dati, vai tie ir nepilnīgi aizpildīti. Lūdzu, pārbaudiet ievadīto informāciju."
+
+msgid "StartDateShouldBeBeforeEndDate"
+msgstr "Sākuma datumam vajadzētu būt norādītam agrāk par beigu datumu"
+
+msgid "InvalidDate"
+msgstr "Nekorekts datums"
+
+msgid "OnlyLettersAndNumbersAllowed"
+msgstr "Ir atļauti tikai burti un cipari"
+
+msgid "langBasicOverview"
+msgstr "Pamat pārskats"
+
+msgid "CourseAdminRole"
+msgstr "Kursa administrators"
+
+msgid "UserRole"
+msgstr "Loma"
+
+msgid "OnlyImagesAllowed"
+msgstr "Tikai PNG, JPG vai GIF formāta attēli ir atļauti"
+
+msgid "ViewRight"
+msgstr "Skatīt"
+
+msgid "EditRight"
+msgstr "Mainīt"
+
+msgid "DeleteRight"
+msgstr "Dzēst"
+
+msgid "OverviewCourseRights"
+msgstr "Lomu & tiesību pārskats"
+
+msgid "SeeAllRightsAllLocationsForSpecificRole"
+msgstr "Fokuss uz lomu"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Fokuss uz tiesībām"
+
+msgid "langAdvanced"
+msgstr "Papildus iespējas"
+
+msgid "RightValueModified"
+msgstr "Vērtība tika izmainīta."
+
+msgid "course_rights"
+msgstr "Lomu & tiesību pārskats"
+
+msgid "Visio_conference"
+msgstr "Virtuālā konference"
+
+msgid "CourseAdminRoleDescription"
+msgstr "Lektors"
+
+msgid "Move"
+msgstr "Pārvietot"
+
+msgid "MoveTo"
+msgstr "Pārvietot uz"
+
+msgid "Delete"
+msgstr "Dzēst"
+
+msgid "MoveFileTo"
+msgstr "Pārvietot failu uz"
+
+msgid "Save"
+msgstr "Saglabāt"
+
+msgid "Error"
+msgstr "Kļūda"
+
+msgid "Anonymous"
+msgstr "Aptauja ir anonīma"
+
+msgid "h"
+msgstr "h"
+
+msgid "CreateNewGlobalRole"
+msgstr "Veidot jaunu visaptverošu lomu"
+
+msgid "CreateNewLocalRole"
+msgstr "Veidot jaunu lokālu lomu"
+
+msgid "Actions"
+msgstr "Rediģēt, izdzēst"
+
+msgid "Inbox"
+msgstr "Iesūtne"
+
+msgid "ComposeMessage"
+msgstr "Sastādīt vēstuli"
+
+msgid "Other"
+msgstr "Papildus informācijas bloks"
+
+msgid "AddRight"
+msgstr "Pievienot"
+
+msgid "CampusHomepage"
+msgstr "Mācību vides sākumlapa"
+
+msgid "YouHaveNewMessage"
+msgstr "Tev ir vēstule !"
+
+msgid "myActiveSessions"
+msgstr "Manas aktīvās sesijas"
+
+msgid "myInactiveSessions"
+msgstr "Manas neaktīvās sesijas"
+
+msgid "FileUpload"
+msgstr "Faila augšupielādēšana"
+
+msgid "langMyActiveSessions"
+msgstr "Manas aktīvās sesijas"
+
+msgid "langMyInActiveSessions"
+msgstr "Manas neaktīvās sesijas"
+
+msgid "langMySpace"
+msgstr "Atskaites par padarīto manos kursos"
+
+msgid "ExtensionActivedButNotYetOperational"
+msgstr "Šis paplašinājums ir aktivizēts, bet šajā brīdī nav pielietojams"
+
+msgid "MyStudents"
+msgstr "Mani Kursanti"
+
+msgid "Progress"
+msgstr "Apgūtais apjoms"
+
+msgid "Or"
+msgstr "vai"
+
+msgid "Uploading"
+msgstr "Augšupielāde..."
+
+msgid "AccountExpired"
+msgstr "Konta pieejas tiesību termiņš beidzies"
+
+msgid "AccountInactive"
+msgstr "Konts nav aktizvizēts"
+
+msgid "ActionNotAllowed"
+msgstr "Darbība nav atļauta"
+
+msgid "SubTitle"
+msgstr "Apakšvirsraksts"
+
+msgid "NoResourcesToRecycle"
+msgstr "Nav resursu pārstrādāšanai"
+
+msgid "noOpen"
+msgstr "Nevarēja atvērt"
+
+msgid "TempsFrequentation"
+msgstr "Atkārtošanās laiks"
+
+msgid "Progression"
+msgstr "Attīstība"
+
+msgid "NoCourse"
+msgstr "Kurss nav atrasts"
+
+msgid "Teachers"
+msgstr "Lektori"
+
+msgid "Session"
+msgstr "Sesija"
+
+msgid "Sessions"
+msgstr "Kursu sesijas"
+
+msgid "NoSession"
+msgstr "Sesiju nevar atrast"
+
+msgid "NoStudent"
+msgstr "Kursantu nevar atrast"
+
+msgid "Students"
+msgstr "Kursanti"
+
+msgid "NoResults"
+msgstr "Rezultāti nav atrasti"
+
+msgid "Tutors"
+msgstr "Mācību spēki"
+
+msgid "Tel"
+msgstr "Telefona Nr."
+
+msgid "NoTel"
+msgstr "No tel"
+
+msgid "SendMail"
+msgstr "Sūtīt vēstuli"
+
+msgid "RdvAgenda"
+msgstr "Dienaskārtības pieraksts"
+
+msgid "VideoConf"
+msgstr "Video konference"
+
+msgid "MyProgress"
+msgstr "Mans izglītības progress<br>(apgūtais apjoms)"
+
+msgid "NoOnlineStudents"
+msgstr "Tiešsaistē neviena nav"
+
+msgid "InCourse"
+msgstr "kursā"
+
+msgid "UserOnlineListSession"
+msgstr "Manu kursu sesijās - tiešsaistē esošie kursanti"
+
+msgid "From"
+msgstr "no"
+
+msgid "To"
+msgstr "uz"
+
+msgid "Content"
+msgstr "Saturs"
+
+msgid "year"
+msgstr "gads"
+
+msgid "Years"
+msgstr "gadi"
+
+msgid "Day"
+msgstr "Diena"
+
+msgid "Days"
+msgstr "dienas"
+
+msgid "PleaseStandBy"
+msgstr "Lūdzu palieciet..."
+
+msgid "AvailableUntil"
+msgstr "Pieejams līdz"
+
+msgid "HourMinuteDivider"
+msgstr "h"
+
+msgid "Visio_classroom"
+msgstr "Virtuālā klase"
+
+msgid "Survey"
+msgstr "Aptaujas kursā"
+
+msgid "More"
+msgstr "Skatīt paziņojuma saturu plašāk"
+
+msgid "ClickHere"
+msgstr "Spiest šeit"
+
+msgid "Here"
+msgstr "šeit"
+
+msgid "SaveQuestion"
+msgstr "Saglabāt jautājumu"
+
+msgid "ReturnTo"
+msgstr "Atgriezties uz"
+
+msgid "Horizontal"
+msgstr "Horizontāls"
+
+msgid "Vertical"
+msgstr "Vertikāls"
+
+msgid "DisplaySearchResults"
+msgstr "Rādīt meklēšanas rezultātus"
+
+msgid "DisplayAll"
+msgstr "Parādīt visu"
+
+msgid "File_upload"
+msgstr "Faila augšupielādēšana"
+
+msgid "NoUsersInCourse"
+msgstr "Kursā nav lietotāju."
+
+msgid "Percentage"
+msgstr "Vērtēt jautājumu %os no100"
+
+msgid "Information"
+msgstr "Informācija"
+
+msgid "EmailDestination"
+msgstr "Saņēmējs"
+
+msgid "SendEmail"
+msgstr "Sūtīt vēstuli"
+
+msgid "EmailTitle"
+msgstr "E-pasta vēstules nosaukums"
+
+msgid "EmailText"
+msgstr "e-pasta saturs"
+
+msgid "Send"
+msgstr "Sūtīt"
+
+msgid "Comments"
+msgstr "Komentāri"
+
+msgid "ModifyRecipientList"
+msgstr "Izmainīt saņēmēju sarakstu"
+
+msgid "Line"
+msgstr "Līnija"
+
+msgid "NoLinkVisited"
+msgstr "Hipersaite nav apmeklēta"
+
+msgid "NoDocumentDownloaded"
+msgstr "Dokuments nav lejupielādēts"
+
+msgid "Clicks"
+msgstr "Klikšķi"
+
+msgid "SearchResults"
+msgstr "Meklēšanas rezultāti"
+
+msgid "SessionPast"
+msgstr "Pagājis"
+
+msgid "SessionActive"
+msgstr "Darbojas"
+
+msgid "SessionFuture"
+msgstr "Patreiz nesāksies"
+
+msgid "DateFormatLongWithoutDay"
+msgstr "%B %d, %Y"
+
+msgid "InvalidDirectoryPleaseCreateAnImagesFolder"
+msgstr "Nederīga mape: Lūdzu izveidojiet, dokumentu instrumentā, mapi attēliem, lai attēlus var lejupielādēt tieši šajā mapē."
+
+msgid "UsersConnectedToMySessions"
+msgstr "Redzēt visus manu sesiju apmeklētājus"
+
+msgid "Category"
+msgstr "Kategorija"
+
+msgid "DearUser"
+msgstr "Cienījamais Kursant,"
+
+msgid "YourRegistrationData"
+msgstr "Jūsu reģistrācijas dati"
+
+msgid "ResetLink"
+msgstr "Uzklikšķināt šeit, lai atgūtu savu paroli"
+
+msgid "VisibilityChanged"
+msgstr "Redzamības statuss tika izmainīts"
+
+msgid "MainNavigation"
+msgstr "Galvenā navigācija"
+
+msgid "SeeDetail"
+msgstr "Skatīt detaļas"
+
+msgid "GroupSingle"
+msgstr "Grupa"
+
+msgid "PleaseLoginAgainFromHomepage"
+msgstr "Lūdzu mēģiniet reģistrēties atkārtoti, no sākuma lapas"
+
+msgid "PleaseLoginAgainFromFormBelow"
+msgstr "Lūdzu, mēģiniet iereģistrēties vēlreiz, izmantojot zemāk esošo formu,"
+
+msgid "AccessToFaq"
+msgstr "Pieeja Biežāk Uzdotajiem Jautājumiem"
+
+msgid "Faq"
+msgstr "Biežāk Uzdotie Jautājumi"
+
+msgid "RemindInactivesLearnersSince"
+msgstr "Atgādināt Kursantiem, kuri ir neaktīvi jau"
+
+msgid "RemindInactiveLearnersMailSubject"
+msgstr "Jūsu pasivitāte e-mācību vidē %s !"
+
+msgid "RemindInactiveLearnersMailContent"
+msgstr "Cienījamais Lietotāj,  e-mācību vidē \" %s \", <b> vairāk kā  %s dienas <b/> nav reģistrēta neviena Jūsu aktivitāte !"
+
+msgid "OpenIdAuthentication"
+msgstr "OpenID autentifikācija"
+
+msgid "UploadMaxSize"
+msgstr "Augšupielādes Max. izmērs"
+
+msgid "Unknown"
+msgstr "Nezināms"
+
+msgid "MoveUp"
+msgstr "Pārvietot uz augšu"
+
+msgid "MoveDown"
+msgstr "Pārvietot uz leju"
+
+msgid "UplUnableToSaveFileFilteredExtension"
+msgstr "Failu augšupielāde ir atcelta: šo failu paplašinājums vai faila tips ir aizliegts"
+
+msgid "OpenIDURL"
+msgstr "OpenID URL"
+
+msgid "UplFileTooBig"
+msgstr "Fails, ko Jūs augšupielādējat ir pārāk liels attiecībā pret pašreizējiem platformas iestatījumiem (% MB). Lūdzu, sazinieties ar portāla administratoru, lai apspriestu šo jautājumu."
+
+msgid "UplGenericError"
+msgstr "Fails, ko jūs augšupielādējāt, netika saņemts. Lūdzu, mēģiniet vēlāk vēlreiz, vai sazinieties par šo jautājumu ar portāla administratoru."
+
+msgid "MyGradebook"
+msgstr "Ieskaišu grāmatiņas iestatījumi"
+
+msgid "Gradebook"
+msgstr "Ieskaišu grāmatiņas iestatījumi"
+
+msgid "OpenIDWhatIs"
+msgstr "Kas ir OpenID?"
+
+msgid "OpenIDDescription"
+msgstr "OpenID novērš vajadzību pēc vairākiem pieteikumiem dažādās mājas lapās, kā arī vienkāršo Jūsu tiešsaistes pieredzi. Jums tikai jāizvēlas OpenID sniedzējs, kas vislabāk atbilst jūsu vajadzībām un vissvarīgākais, kam jūs uzticaties. 
+<br>Tajā pašā laikā, jūsu OpenID var palikt ar Jums, neatkarīgu kādu pārvaldītāju Jūs izvēlaties.
+<br>Visabākās no visiām  OpenID tehnoloģijām, ir tās kuras tas nav patentētas un ir pilnīgi bezmaksas. Uzņēmumam tas nozīmē zemākas izmaksas paroles un konta pārvaldību, kamēr ievieš jaunu  interneta satiksmi. 
+<br>OpenID pazemina lietotāju neapmierinātību, ļaujot lietotājiem kontrolēt savu reģistrācijas parametrus <br /> <br /> <a href=\"http://openid.net/what/\">   lasiet vairāk ...</ a>."
+
+msgid "br>OpenID pazemina lietotāju neapmierinātību, ļaujot lietotājiem kontrolēt savu reģistrācijas parametrus <br /> <br /> <a href"
+msgstr ""
+
+msgid "NoManager"
+msgstr "Nav vadītāja"
+
+msgid "ExportiCal"
+msgstr "iCal eksports"
+
+msgid "ExportiCalPublic"
+msgstr "Eksportēt iCal formātā, kā publisku notikumu"
+
+msgid "ExportiCalPrivate"
+msgstr "Eksportēt iCal formātā, kā privātu notikumu"
+
+msgid "ExportiCalConfidential"
+msgstr "Eksportēt iCal formātā, kā konfidenciālu notikumu"
+
+msgid "MoreStats"
+msgstr "Vairāk valstu"
+
+msgid "Drh"
+msgstr "Personāla daļas vadītājs"
+
+msgid "MinDecade"
+msgstr "dekāde"
+
+msgid "MinYear"
+msgstr "Gads"
+
+msgid "MinMonth"
+msgstr "Mēnesis"
+
+msgid "MinWeek"
+msgstr "Nedēļa"
+
+msgid "MinDay"
+msgstr "Diena"
+
+msgid "MinHour"
+msgstr "Stunda"
+
+msgid "MinMinute"
+msgstr "Minūte"
+
+msgid "MinDecades"
+msgstr "Dekādes"
+
+msgid "MinYears"
+msgstr "Gadi"
+
+msgid "MinMonths"
+msgstr "Mēneši"
+
+msgid "MinWeeks"
+msgstr "Nedēļas"
+
+msgid "MinDays"
+msgstr "Dienas"
+
+msgid "MinHours"
+msgstr "Stundas"
+
+msgid "MinMinutes"
+msgstr "Minūtes"
+
+msgid "HomeDirectory"
+msgstr "Atgriezties sākumā"
+
+msgid "DocumentCreated"
+msgstr "Dokuments izveidots"
+
+msgid "ForumAdded"
+msgstr "Diskusija pievienota"
+
+msgid "ForumThreadAdded"
+msgstr "Diskusijas tēma pievienota"
+
+msgid "ForumAttachmentAdded"
+msgstr "Diskusijas pielikumi pievienoti"
+
+msgid "directory"
+msgstr "Direktorija"
+
+msgid "Directories"
+msgstr "Direktorijas"
+
+msgid "UserAge"
+msgstr "Vecums"
+
+msgid "UserBirthday"
+msgstr "Dzimšanas diena"
+
+msgid "Course"
+msgstr "Kursa nosaukums"
+
+msgid "FilesUpload"
+msgstr "Dokumenti"
+
+msgid "ExerciseFinished"
+msgstr "Tests / kontroldarbs pabeigts"
+
+msgid "UserSex"
+msgstr "Dzimums"
+
+msgid "UserNativeLanguage"
+msgstr "Dzimtā valoda"
+
+msgid "UserResidenceCountry"
+msgstr "Dzīvesvietas valsts"
+
+msgid "AddAnAttachment"
+msgstr "Pievienot pielikumu"
+
+msgid "FileComment"
+msgstr "Faila komentārs"
+
+msgid "FileName"
+msgstr "Faila nosaukums"
+
+msgid "SessionsAdmin"
+msgstr "Kursu sesijas administrātors"
+
+msgid "MakeChangeable"
+msgstr "Padarīt izmaināmu"
+
+msgid "MakeUnchangeable"
+msgstr "Padarīt neizmaināmu"
+
+msgid "UserFields"
+msgstr "Profila atribūti/lauki"
+
+msgid "FieldShown"
+msgstr "Lauks tagad ir Lietotājam redzams"
+
+msgid "CannotShowField"
+msgstr "Nav iespējams padarīt lauku redzamu"
+
+msgid "FieldHidden"
+msgstr "Lauks tagad ir Lietotājam <b>neredzams</b>"
+
+msgid "CannotHideField"
+msgstr "Lauku padarīt neredzamu nav iespējams"
+
+msgid "FieldMadeChangeable"
+msgstr "Lauks ir padarīts izmaināms, Lietotājs var aizpildīt vai rediģēt lauka saturu."
+
+msgid "CannotMakeFieldChangeable"
+msgstr "Lauku padarīt maināmu nav iespējams"
+
+msgid "FieldMadeUnchangeable"
+msgstr "Lauks ir padarīts neizmaināms, Lietotājs nevar aizpildīt vai rediģēt lauka saturu."
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "Lauku padarīt nemaināmu nav iespējams"
+
+msgid "Folder"
+msgstr "Mape"
+
+msgid "CloseOtherSession"
+msgstr "Tērzēšana nav pieejama tāpēc, ka cits kurss ir atvērts kādā citā lapā. <br>Lai no tā izvairītos, lūdzu, pārliecinieties, vai paliksiet tajā pašā kursā, visā tērzēšanas sesijas garumā. <br>Lai pievienotos tērzēšanas sesijai atkal, lūdzu, vēlreiz sākt tērzēšanu no kursa mājas lapas."
+
+msgid "FileUploadSucces"
+msgstr "Fails ir veiksmīgi augšupielādēts"
+
+msgid "Yesterday"
+msgstr "Vakar"
+
+msgid "Submit"
+msgstr "Iesniegt"
+
+msgid "Department"
+msgstr "Departaments / Nodaļa"
+
+msgid "BackToNewSearch"
+msgstr "Atgriezties, lai uzsāktu jaunu meklēšanu."
+
+msgid "Step"
+msgstr "Solis"
+
+msgid "SomethingFemininAddedSuccessfully"
+msgstr "Veiksmīgi pievienots"
+
+msgid "SomethingMasculinAddedSuccessfully"
+msgstr "Veiksmīgi pievienots"
+
+msgid "DeleteError"
+msgstr "Dzēst kļūdu"
+
+msgid "StepsList"
+msgstr "Veikto soļu saraksts"
+
+msgid "AddStep"
+msgstr "Pievienot soli"
+
+msgid "StepCode"
+msgstr "Soļa kods"
+
+msgid "Label"
+msgstr "Etiķete / iezīme"
+
+msgid "UnableToConnectTo"
+msgstr "Nav iespējams pieslēgties pie"
+
+msgid "NoUser"
+msgstr "Nav lietotājs"
+
+msgid "SearchResultsFor"
+msgstr "Meklēšanas rezultāti:"
+
+msgid "SelectFile"
+msgstr "Iezīmēt failu"
+
+msgid "WarningFaqFileNonWriteable"
+msgstr "<b>Brīdinājums!</b> <br> BUJ fails, kas atrodas portāla / home / direktorijā, nav rediģējams. Jūsu teksts netiks saglabāts, līdz netiks izmainītas failu rediģēšanas atļaujas."
+
+msgid "AddCategory"
+msgstr "Pievienot kategoriju"
+
+msgid "NoExercises"
+msgstr "Nav testu"
+
+msgid "NotAllowedClickBack"
+msgstr "Atvainojiet. Jums nav piešķirtas tiesības piekļūt šai lapai. <br><br>Lūdzu, klikšķiniet:<br>-  Jūsu pārlūkprogrammā  vadības pogu “<b>Atpakaļ</b>”, <br>vai<br>- uz <b>zemāk novietoto saiti</b>, lai atgrieztos iepriekšējā lapā"
+
+msgid "Exercise"
+msgstr "Tests / kontroldarbs"
+
+msgid "Result"
+msgstr "Rezultāts"
+
+msgid "AttemptingToLoginAs"
+msgstr "Mēģinājums autorizēties kā %s %s (id %s)"
+
+msgid "LoginSuccessfulGoToX"
+msgstr "Autorizēšanās veiksmīga. Dodieties uz %s"
+
+msgid "FckMp3Autostart"
+msgstr "Audio ieslēgt automātiski."
+
+msgid "Learner"
+msgstr "Kursants"
+
+msgid "IntroductionTextUpdated"
+msgstr "Intro tika atjaunināts"
+
+msgid "Align"
+msgstr "Izlīdzināt"
+
+msgid "Width"
+msgstr "Platums"
+
+msgid "VSpace"
+msgstr "Vertikālais izmērs"
+
+msgid "HSpace"
+msgstr "Horizontālais izmērs"
+
+msgid "Border"
+msgstr "Apmales"
+
+msgid "Alt"
+msgstr "Alt"
+
+msgid "Height"
+msgstr "Augstums"
+
+msgid "ImageManager"
+msgstr "Attēlu vadība"
+
+msgid "ImageFile"
+msgstr "Attēlu fails"
+
+msgid "ConstrainProportions"
+msgstr "Definējiet proporcijas"
+
+msgid "InsertImage"
+msgstr "Ievietot attēlu"
+
+msgid "AccountActive"
+msgstr "Lietotājkonts aktīvs"
+
+msgid "GroupSpace"
+msgstr "Grupas lauks"
+
+msgid "GroupWiki"
+msgstr "Wiki grupa"
+
+msgid "ExportToPDF"
+msgstr "Eksportēt PDF formātā"
+
+msgid "CommentAdded"
+msgstr "Jūsu komentārs pievienots"
+
+msgid "BackToPreviousPage"
+msgstr "Atpakaļ uz iepriekšējo lapu"
+
+msgid "ListView"
+msgstr "Saraksta skats"
+
+msgid "NoOfficialCode"
+msgstr "Nav koda"
+
+msgid "Owner"
+msgstr "Pārvaldītājs"
+
+msgid "DisplayOrder"
+msgstr "N.P.K."
+
+msgid "SearchFeatureDoIndexDocument"
+msgstr "Indeksēt dokumenta tekstu?"
+
+msgid "SearchFeatureDocumentLanguage"
+msgstr "Dokumenta valoda indeksēšanai"
+
+msgid "With"
+msgstr "ar"
+
+msgid "GeneralCoach"
+msgstr "Galvenais mācību spēks"
+
+msgid "SaveDocument"
+msgstr "Saglabāt dokumentu"
+
+msgid "CategoryDeleted"
+msgstr "Kategorija tika izdzēsta"
+
+msgid "CategoryAdded"
+msgstr "Kategorija ir pievienota"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Qualify"
+msgstr "Iezīmēt aktivitāti"
+
+msgid "Words"
+msgstr "Vārdi"
+
+msgid "GoBack"
+msgstr "Doties atpakaļ"
+
+msgid "Details"
+msgstr "Papildus informācija"
+
+msgid "EditLink"
+msgstr "Rediģēt saiti"
+
+msgid "LinkEdited"
+msgstr "Rediģētais novērtējums"
+
+msgid "ForumThreads"
+msgstr "Diskusiju temati"
+
+msgid "GradebookVisible"
+msgstr "Redzams"
+
+msgid "GradebookInvisible"
+msgstr "Neredzams"
+
+msgid "Phone"
+msgstr "Tālrunis"
+
+msgid "InfoMessage"
+msgstr "Informatīvs ziņojums."
+
+msgid "ConfirmationMessage"
+msgstr "Apstiprinājuma ziņojums"
+
+msgid "WarningMessage"
+msgstr "Brīdinājuma ziņojums"
+
+msgid "ErrorMessage"
+msgstr "Kļūdas / bojājuma ziņojums"
+
+msgid "Glossary"
+msgstr "Terminu skaidrojumu vārdnīca"
+
+msgid "Coach"
+msgstr "Kursa izstrādātājs"
+
+msgid "Condition"
+msgstr "Gatavības pakāpe"
+
+msgid "CourseSettings"
+msgstr "Kursa iestatījumi"
+
+msgid "EmailNotifications"
+msgstr "E-pasta paziņojumi"
+
+msgid "UserRights"
+msgstr "Lietotāja tiesības"
+
+msgid "Theming"
+msgstr "Darba virsmas dizaina grafiskā tēma"
+
+msgid "Qualification"
+msgstr "Punktu skaits"
+
+msgid "OnlyNumbers"
+msgstr "Tikai skaitļi"
+
+msgid "ReorderOptions"
+msgstr "Pārkārtot iespējas"
+
+msgid "EditUserFields"
+msgstr "Rediģēt lietotāja laukus"
+
+msgid "OptionText"
+msgstr "Teksts"
+
+msgid "FieldTypeDoubleSelect"
+msgstr "Dubultā atlase"
+
+msgid "FieldTypeDivider"
+msgstr "Vizuālais dalītājs"
+
+msgid "ScormUnknownPackageFormat"
+msgstr "Nezināms paketes formāts"
+
+msgid "ResourceDeleted"
+msgstr "Resurss izdzēsts"
+
+msgid "AdvancedParameters"
+msgstr "Izvērstie parametri"
+
+msgid "GoTo"
+msgstr "Doties uz"
+
+msgid "SessionNameAndCourseTitle"
+msgstr "Sesijas un kursa nosaukums"
+
+msgid "CreationDate"
+msgstr "Izveides datums"
+
+msgid "LastUpdateDate"
+msgstr "Pēdējie atjauninājumi"
+
+msgid "ViewHistoryChange"
+msgstr "Rādīt izmaiņu vēsturi"
+
+msgid "langNameOfLang[\'asturian\']"
+msgstr ""
+
+msgid "SearchGoToLearningPath"
+msgstr "Doties uz tēmu"
+
+msgid "SearchLectureLibrary"
+msgstr "Lekcijas bibliotēka"
+
+msgid "SearchImagePreview"
+msgstr "Priekšskatījuma attēls"
+
+msgid "SearchAdvancedOptions"
+msgstr "Progresīvās meklēšanas opcijas"
+
+msgid "SearchResetKeywords"
+msgstr "Atjaunot atslēgas vārdus"
+
+msgid "SearchKeywords"
+msgstr "Atslēgas vārdi"
+
+msgid "IntroductionTextDeleted"
+msgstr "Ievada teksts ir izdzēsts"
+
+msgid "SearchKeywordsHelpTitle"
+msgstr "Atslēgas vārdu meklēšanas palīdzība."
+
+msgid "SearchKeywordsHelpComment"
+msgstr "Izvēlieties atslēgvārdus, vienā vai vairākos laukos, un noklikšķiniet uz meklēšanas pogas.  <br>Lai atlasītu vairāk nekā vienu atslēgvārdu laukā, izmantot Ctrl + klikšķi."
+
+msgid "Validate"
+msgstr "Apstiprināt"
+
+msgid "SearchCombineSearchWith"
+msgstr "Kombinēt atslēgas vārdus ar"
+
+msgid "SearchFeatureNotEnabledComment"
+msgstr "Pilna teksta meklēšanas funkcija Chamilo nav pieejama. Lūdzu sazinieties ar Chamilo Administratoru"
+
+msgid "Top"
+msgstr "Augša"
+
+msgid "YourTextHere"
+msgstr "Sastādiet Jums nepieciešamo tekstu, ievietojiet attēlus u.t.t. šeit:"
+
+msgid "OrderBy"
+msgstr "Kārtot pēc"
+
+msgid "Notebook"
+msgstr "Personīgās piezīmes"
+
+msgid "FieldRequired"
+msgstr "Obligāti aizpildāmais lauks"
+
+msgid "BookingSystem"
+msgstr "Rezervēšanas sistēma"
+
+msgid "Any"
+msgstr "Jebkurš"
+
+msgid "SpecificSearchFields"
+msgstr "Īpaši meklēšanas lauki"
+
+msgid "SpecificSearchFieldsIntro"
+msgstr "Šeit jūs varat definēt laukus, kurus vēlaties izmantot satura indeksācijai. Kad esat indeksējuši vienu no elementiem, jums vajadzēs pievienot vienu vai vairākus noteikumus, kuru laukus atdala ar komatu."
+
+msgid "AddSpecificSearchField"
+msgstr "Pievienot īpašu meklēšanas lauku"
+
+msgid "SaveSettings"
+msgstr "Saglabāt iestatījumus"
+
+msgid "NoParticipation"
+msgstr "Šeit nav dalībnieku"
+
+msgid "Subscribers"
+msgstr "Abonenti"
+
+msgid "Accept"
+msgstr "Pieņemt"
+
+msgid "Reserved"
+msgstr "Rezervēts"
+
+msgid "SharedDocumentsDirectory"
+msgstr "Koplietošanas dokumentu mape"
+
+msgid "Gallery"
+msgstr "Galerija"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "GoToQuestion"
+msgstr "Doties uz jautājumu"
+
+msgid "Level"
+msgstr "Līmenis"
+
+msgid "Duration"
+msgstr "Ilgums"
+
+msgid "SearchPrefilterPrefix"
+msgstr "Speciāls lauks priekšfiltrēšanai"
+
+msgid "SearchPrefilterPrefixComment"
+msgstr "Šī opcija ļauj jums izvēlēties īpašu lauku, ko izmantot pirmsfiltra meklēšanai."
+
+msgid "MaxTimeAllowed"
+msgstr "Max. laiks (minūtes)"
+
+msgid "Class"
+msgstr "Grupa"
+
+msgid "Select"
+msgstr "Apstiprināt"
+
+msgid "Booking"
+msgstr "Rezervēšana"
+
+msgid "ManageReservations"
+msgstr "Rezervēšana"
+
+msgid "DestinationUsers"
+msgstr "Gala lietotāji"
+
+msgid "AttachmentFileDeleteSuccess"
+msgstr "Pievienotie faili tika izdzēsti"
+
+msgid "AccountURLInactive"
+msgstr "Šim URL konts nav aktīvs"
+
+msgid "MaxFileSize"
+msgstr "Maksimālais faila lielums"
+
+msgid "SendFileError"
+msgstr "Saņemot Jūsu failu, tika konstatēta kļūda. Lūdzu pārbaudiet vai Jūsu fails nav bojāts. Tad mēģiniet atkārtoti."
+
+msgid "Expired"
+msgstr "Izbeidzies"
+
+msgid "InvitationHasBeenSent"
+msgstr "Ielūgums ir nosūtīts"
+
+msgid "InvitationHasBeenNotSent"
+msgstr "Ielūgums nav nosūtīts"
+
+msgid "Outbox"
+msgstr "Nosūtītās vēstules"
+
+msgid "Overview"
+msgstr "Pārskats"
+
+msgid "ApiKeys"
+msgstr "API atslēga"
+
+msgid "GenerateApiKey"
+msgstr "Ģenerēt API atslēgu"
+
+msgid "MyApiKey"
+msgstr "Mana API atslēga"
+
+msgid "DateSend"
+msgstr "Datums, kad nosūtīts"
+
+msgid "Deny"
+msgstr "Atteikts"
+
+msgid "ThereIsNotQualifiedLearners"
+msgstr "Šeit nav kvalificētu kursantu"
+
+msgid "ThereIsNotUnqualifiedLearners"
+msgstr "Šeit nav nekvalificētu kursantu"
+
+msgid "SocialNetwork"
+msgstr "Mans profils un iekšējais sociālais tīkls"
+
+msgid "BackToOutbox"
+msgstr "Atgriezties uz izejošo pastkasti"
+
+msgid "Invitation"
+msgstr "Ielūgums"
+
+msgid "SeeMoreOptions"
+msgstr "Skatīt vairāk iespēju"
+
+msgid "TemplatePreview"
+msgstr "Šablonu priekšskatījums"
+
+msgid "NoTemplatePreview"
+msgstr "Priekšskatījums nav pieejams"
+
+msgid "ModifyCategory"
+msgstr "Rediģēt kategoriju"
+
+msgid "Photo"
+msgstr "Foto"
+
+msgid "MoveFile"
+msgstr "Pārvietot failu"
+
+msgid "Filter"
+msgstr "Filtrs"
+
+msgid "Subject"
+msgstr "Satura temats"
+
+msgid "Message"
+msgstr "Vēstule"
+
+msgid "MoreInformation"
+msgstr "Vairāk informācijas"
+
+msgid "MakeInvisible"
+msgstr "Padarīt neredzamu"
+
+msgid "MakeVisible"
+msgstr "Padarīt redzamu"
+
+msgid "Image"
+msgstr "Attēls"
+
+msgid "SaveIntroText"
+msgstr "Saglabāt ievada tekstu"
+
+msgid "CourseName"
+msgstr "Kursa nosaukums"
+
+msgid "SendAMessage"
+msgstr "Sūtīt ziņu"
+
+msgid "Menu"
+msgstr "Izvēlne"
+
+msgid "BackToUserList"
+msgstr "Atpakaļ uz lietotāju sarakstu"
+
+msgid "GraphicNotAvailable"
+msgstr "Grafiks nav pieejams"
+
+msgid "BackTo"
+msgstr "Atgriezties uz"
+
+msgid "HistoryTrainingSessions"
+msgstr "Mācību sesiju vēsture"
+
+msgid "ConversionFailled"
+msgstr "Konvertācija nav izdevusies"
+
+msgid "AlreadyExists"
+msgstr "Jau eksistē."
+
+msgid "TheNewWordHasBeenAdded"
+msgstr "Jaunais vārds ir pievienots"
+
+msgid "CommentErrorExportDocument"
+msgstr "Daži dokumenti ir pārāk sarežģīti, lai dokumentu pārveidotājs tos izskatītu automātiski."
+
+msgid "DataType"
+msgstr "Datu tips"
+
+msgid "Value"
+msgstr "Vērtība"
+
+msgid "System"
+msgstr "Sistēma"
+
+msgid "ImportantActivities"
+msgstr "Svarīgas darbības"
+
+msgid "SearchActivities"
+msgstr "Meklēt aktivitātes"
+
+msgid "Parent"
+msgstr "Izcelsme"
+
+msgid "SurveyAdded"
+msgstr "Aptauja pievienota"
+
+msgid "WikiAdded"
+msgstr "Wiki pievienots"
+
+msgid "ReadOnly"
+msgstr "Tikai lasāms"
+
+msgid "Unacceptable"
+msgstr "Nav akceptējams"
+
+msgid "DisplayTrainingList"
+msgstr "Rādīt mācību kursu sarakstu"
+
+msgid "HistoryTrainingSession"
+msgstr "Mācību vēsture"
+
+msgid "Until"
+msgstr "Līdz"
+
+msgid "FirstPage"
+msgstr "Pirmā lapa"
+
+msgid "LastPage"
+msgstr "Pēdējā lapa"
+
+msgid "Coachs"
+msgstr "Mācību spēki"
+
+msgid "DragAndDropAnElementHere"
+msgstr "Vilkt un nomest elementu šeit"
+
+msgid "ThereAreNoRegisteredDatetimeYet"
+msgstr "Šeit vēl nav datuma / laika reģistra"
+
+msgid "CalendarList"
+msgstr "Plānoto Klātienes nodarbību diena un laiks"
+
+msgid "AttendanceCalendarDescription"
+msgstr "<br><b>Klātienes nodarbību kalendārs</b>, hronoloģiskā uzskaites veidā, ļauj reģistrēt Kursantu klātbūtni šī kursa klātienes nodarbībās.<br>Lai izveidotu aktivitātes reģistru, ir nepieciešams vismaz viens reāls Kursants nodarbībā.<br>Pievienot nodarbībai laiku un datumu, var izmantojot augstāk novietoto pogu - <b>Pievienot datumu un laiku</b>"
+
+msgid "CleanCalendar"
+msgstr "Dzēst visus, šeit esošos, kalendāra datus"
+
+msgid "AddDateAndTime"
+msgstr "<b>Pievienot datumu un laiku</b>"
+
+msgid "AttendanceSheet"
+msgstr "Kursantu reģistrs klātienes nodarbībā"
+
+msgid "GoToAttendanceCalendar"
+msgstr "Doties uz <b>Klātienes nodarbību kalendāru</b>"
+
+msgid "AttendanceCalendar"
+msgstr "<b>Klātienes nodarbību kalendārs</b> (pievienot /noņemt nodarbības datumu un laiku)"
+
+msgid "QualifyAttendanceGradebook"
+msgstr "Iekļaut, šīs klātienes nodarbības apmeklējumu, kā ieskaiti kopējā sarakstā"
+
+msgid "CreateANewAttendance"
+msgstr "Veidot jaunu klātienes nodarbības reģistra lapu"
+
+msgid "Attendance"
+msgstr "Klātienes nodarbības"
+
+msgid "GeneralDescription"
+msgstr "Kursa satura vispārējs apraksts"
+
+msgid "GeneralDescriptionQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Cik svarīgs ir šis kurss kopējā programmas ietvarā? Vai ir kādi priekšnoteikumi? Kā šis kurss ir saistīts ar citiem kursiem?"
+
+msgid "GeneralDescriptionInformation"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Aprakstiet kursu (stundu skaits, oficiālais kods, auditorijas numurs...) un Lektora (vārds, uzvārds, atrašanās vieta, tālrunis, e-pasts...)"
+
+msgid "Objectives"
+msgstr "Kursā sasniedzamie mērķi"
+
+msgid "ObjectivesInformation"
+msgstr "Kopējo un sīkāk detalizēto kursa mērķu prezentācija."
+
+msgid "ObjectivesQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Ko Kursanti spēs veikt pabeidzot šo kursu? Kas viņiem būtu jāveic šī kursa ietvaros?"
+
+msgid "Topics"
+msgstr "Kursa tēmu apraksts"
+
+msgid "TopicsInformation"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Pastāstiet par Kursā iekļautajām tēmām. Katras tēmas svarīgums. Grūtības pakāpe. Tēmu apguves struktūra. Tēmu savstarpējā saistība."
+
+msgid "TopicsQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Kāda ir kursa virzība? Kam būtu jāpievērš vairāk uzmanības? Vai ir jau identificētas problēmas dotās vielas uztveršanai? Cik laika būtu jāvelta atsevišķām kursa daļām?"
+
+msgid "Methodology"
+msgstr "Kursa apguves Metodoloģija"
+
+msgid "MethodologyQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Kādas metodes un aktivitātes palīdzēs sasniegt kursā nospraustos mērķus? Pēc kāda plāna tie būtu sasniedzami?"
+
+msgid "MethodologyInformation"
+msgstr "Aktivitāšu prezentācija (konference, izdales materiāli, izpēte grupās, laboratorijas darbi...)."
+
+msgid "CourseMaterial"
+msgstr "Kursa materiāls"
+
+msgid "CourseMaterialQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Vai ir pieejams kursa materiāls drukātā veidā, izdales materiālu kopums, lasāmā literatūra, apmeklējamo hipersaišu saraksts?"
+
+msgid "CourseMaterialInformation"
+msgstr "Kursa materiālu īss apraksts."
+
+msgid "HumanAndTechnicalResources"
+msgstr "Cilvēku un tehniskie resursi"
+
+msgid "HumanAndTechnicalResourcesQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Aprakstiet, kādi Pasniedzēji, metodiķi, tehniskais atbalsts, laboranti, datorklases un citi resursi ir pieejami Kursa apguvē."
+
+msgid "HumanAndTechnicalResourcesInformation"
+msgstr "Īss apraksts, kurā uzskaitītas kontaktpersonas un pieejamās tehniskās iekārtas."
+
+msgid "Assessment"
+msgstr "Novērtējums. Atskaišu grāmatiņa"
+
+msgid "AssessmentQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Kā Kursanti tiks vērtēti? Vai ir vajadzīgas īpašas iemaņas, lai pārzinātu tēmu?"
+
+msgid "AssessmentInformation"
+msgstr "Eksāmena jautājumu piemērs. Veiksmes kritēriji. Padomi un pamācības."
+
+msgid "langNameOfLang[\'bosnian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'czech\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dari\']"
+msgstr ""
+
+msgid "langNameOfLang[\'dutch_corporate\']"
+msgstr ""
+
+msgid "langNameOfLang[\'english_org\']"
+msgstr ""
+
+msgid "langNameOfLang[\'friulian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'georgian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'hebrew\']"
+msgstr ""
+
+msgid "langNameOfLang[\'korean\']"
+msgstr ""
+
+msgid "langNameOfLang[\'latvian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'lithuanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'macedonian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'norwegian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'pashto\']"
+msgstr ""
+
+msgid "langNameOfLang[\'persian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'quechua_cusco\']"
+msgstr ""
+
+msgid "langNameOfLang[\'romanian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'serbian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'slovak\']"
+msgstr ""
+
+msgid "langNameOfLang[\'swahili\']"
+msgstr ""
+
+msgid "langNameOfLang[\'trad_chinese\']"
+msgstr ""
+
+msgid "ChamiloInstallation"
+msgstr "Chamilo instalēšana"
+
+msgid "langNameOfLang[\'ukrainian\']"
+msgstr ""
+
+msgid "langNameOfLang[\'yoruba\']"
+msgstr ""
+
+msgid "New"
+msgstr "Jauns"
+
+msgid "YouMustToInstallTheExtensionLDAP"
+msgstr "Jums ir jāinstalē papildinājums LDAP"
+
+msgid "AddAdditionalProfileField"
+msgstr "Pievienot info lauku Lietotāja profilam"
+
+msgid "InvitationDenied"
+msgstr "Uzaicinājums liegts"
+
+msgid "UserAdded"
+msgstr "Lietotājs ir pievienots"
+
+msgid "UpdatedIn"
+msgstr "Atjaunināts"
+
+msgid "Metadata"
+msgstr "Metadati"
+
+msgid "langAddMetadata"
+msgstr "Skatīt / Labot Metadatus"
+
+msgid "SendMessage"
+msgstr "Sūtīt vēstuli"
+
+msgid "SeeForum"
+msgstr "Skatīt forumu"
+
+msgid "SeeMore"
+msgstr "Skatīt vairāk"
+
+msgid "NoDataAvailable"
+msgstr "Dati nav pieejami"
+
+msgid "Created"
+msgstr "Izveidots"
+
+msgid "LastUpdate"
+msgstr "Pēdējā atjaunināšana"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "Lietotājs nav reģistrēts kursā"
+
+msgid "EditMyProfile"
+msgstr "Rediģēt manu profilu"
+
+msgid "Announcements"
+msgstr "Paziņojumi"
+
+msgid "Password"
+msgstr "Parole"
+
+msgid "DescriptionGroup"
+msgstr "Grupas apraksts"
+
+msgid "Installation"
+msgstr "Instalācija"
+
+msgid "ReadTheInstallationGuide"
+msgstr "Lasīt instalācijas instrukciju"
+
+msgid "SeeBlog"
+msgstr "Skatīt blogu"
+
+msgid "Blog"
+msgstr "Blogs"
+
+msgid "BlogPosts"
+msgstr "Paziņojumi blogā"
+
+msgid "BlogComments"
+msgstr "Komentāri blogā"
+
+msgid "ThereAreNotExtrafieldsAvailable"
+msgstr "Papildus lauki nav pieejami"
+
+msgid "StartToType"
+msgstr "Sāciet rakstīt, tad noklikšķiniet uz šīs joslas, lai apstiprinātu adresātu."
+
+msgid "InstallChamilo"
+msgstr "Instalēt Chamilo"
+
+msgid "ChamiloURL"
+msgstr "Chamilo URL"
+
+msgid "TitleColumnGradebook"
+msgstr "Nodarbības nosaukums, kas redzams ieskaišu kopsavilkuma kolonas virsrakstā"
+
+msgid "QualifyWeight"
+msgstr "Nodarbības vērtība (punkti) atskaitē"
+
+msgid "ThematicAdvance"
+msgstr "Priekšskatījums pa tematiem"
+
+msgid "EditProfile"
+msgstr "Rediģēt savu profilu"
+
+msgid "TabsDashboard"
+msgstr "Cilne - Atskaišu panelis"
+
+msgid "Dashboard"
+msgstr "Atskaišu panelis"
+
+msgid "DashboardPlugins"
+msgstr "Paneļa spraudņi"
+
+msgid "SelectBlockForDisplayingInsideBlocksDashboardView"
+msgstr "Izvēlēties blokus, lai tos izvietotu uz Paneļa"
+
+msgid "ColumnPosition"
+msgstr "Novietojums - kolonnās [1][2]"
+
+msgid "EnableDashboardBlock"
+msgstr "Ieslēgt paneļa blokus"
+
+msgid "ThereAreNoEnabledDashboardPlugins"
+msgstr "Paneļa spraudnis nav pieejams"
+
+msgid "Enabled"
+msgstr "Ieslēgts"
+
+msgid "ThematicAdvanceQuestions"
+msgstr "Kāds ir pašreizējais Kursantu sasniegtais progress Jūsu kursā? Cik daudz vēl ir jāapgūst, salīdzinot ar pilnu programmu?"
+
+msgid "ThematicAdvanceHistory"
+msgstr "Notikumu priekšskatījums"
+
+msgid "Homepage"
+msgstr "Mācību vides sākumlapa"
+
+msgid "Attendances"
+msgstr "Klātienes nodarbības"
+
+msgid "CountDoneAttendance"
+msgstr "# ir apmeklējuši"
+
+msgid "AssignUsers"
+msgstr "Nozīmēt lietotājus"
+
+msgid "AssignCourses"
+msgstr "Nozīmēt kursus"
+
+msgid "AssignSessions"
+msgstr "Nozīmēt sesijas"
+
+msgid "Timezone"
+msgstr "Laika zona."
+
+msgid "DashboardPluginsHaveBeenUpdatedSucesslly"
+msgstr "Paneļa spraudņi ir veiksmīgi atjaunināti"
+
+msgid "LoginEnter"
+msgstr "Login"
+
+msgid "AttendanceSheetDescription"
+msgstr "Klātienes nodarbību reģistrs, ļauj Jums veidot sarakstu ar datumiem, kuros Jūs vēlaties apkopot ziņas par apmeklējumu klātienes nodarbībās"
+
+msgid "ThereAreNoRegisteredLearnersInsidetheCourse"
+msgstr "<b>Uzmanību !</b><br><b>Kursā nav reģistrēts neviens Kursants !</b><br>Spiediet uz šī paziņojuma, lai atvērtu Kursantu reģistra instrumentu un pievienotu kursam Kursantus"
+
+msgid "GoToAttendanceCalendarList"
+msgstr "Doties uz Klātienes nodarbību reģistrācijas kalendāru"
+
+msgid "ToolCourseDescription"
+msgstr "Kursa satura, mērķu, uzdevumu u.c. apraksts"
+
+msgid "ToolDocument"
+msgstr "Dokumenti"
+
+msgid "ToolLearnpath"
+msgstr "Veidot mācību tēmas"
+
+msgid "ToolLink"
+msgstr "Hipersaišu arhīvs"
+
+msgid "ToolQuiz"
+msgstr "Veidot kontroldarbus / testus"
+
+msgid "ToolAnnouncement"
+msgstr "Paziņojumi kursā"
+
+msgid "ToolGradebook"
+msgstr "Kursa ieskaišu grāmatiņa"
+
+msgid "ToolGlossary"
+msgstr "Terminu skaidrojumu vārdnīca"
+
+msgid "ToolAttendance"
+msgstr "Klātienes nodarbību apmeklējuma reģistrs"
+
+msgid "ToolCalendarEvent"
+msgstr "Kursa notikumu plānotājs"
+
+msgid "ToolForum"
+msgstr "Forumi"
+
+msgid "ToolDropbox"
+msgstr "Dokumentu un failu apmaiņa"
+
+msgid "ToolUser"
+msgstr "Kursantu vadība"
+
+msgid "ToolGroup"
+msgstr "Kursantu grupu vadība"
+
+msgid "ToolChat"
+msgstr "Čats"
+
+msgid "ToolStudentPublication"
+msgstr "Kursantu patstāvīgie darbi"
+
+msgid "ToolSurvey"
+msgstr "Aptaujas"
+
+msgid "ToolWiki"
+msgstr "Wiki - grupā veidots dokuments"
+
+msgid "ToolNotebook"
+msgstr "Personīgās piezīmes"
+
+msgid "ToolBlogManagement"
+msgstr "Projekti"
+
+msgid "ToolTracking"
+msgstr "Kursa atskaites"
+
+msgid "ToolCourseSetting"
+msgstr "Kursa iestatījumi"
+
+msgid "ToolCourseMaintenance"
+msgstr "Kursa uzturēšana"
+
+msgid "AreYouSureToDeleteAllDates"
+msgstr "Jūs esat pārliecināti, ka vēlaties izdzēst visus datus?"
+
+msgid "AddADateTime"
+msgstr "Pievienot datumu un laiku"
+
+msgid "ThematicControl"
+msgstr "Tematiskā plāna apskats"
+
+msgid "ThematicDetails"
+msgstr "Tematiskais plāns (ar satura detaļām)"
+
+msgid "ThematicList"
+msgstr "Tematiskais plāns (saraksta skats) + iespēja <b>Izdzēst</b> plāna nodaļu)"
+
+msgid "Thematic"
+msgstr "Tematiskā plāna nodaļas"
+
+msgid "ThematicPlan"
+msgstr "Tematiskā plāna elementi"
+
+msgid "EditThematicPlan"
+msgstr "Rediģēt tematiskā plāna elementus"
+
+msgid "EditThematicAdvance"
+msgstr "Rediģēt tematiskā plāna elementus"
+
+msgid "ThereIsNoStillAthematicSection"
+msgstr "Šeit joprojām nav nevienas tematiskā plāna nodaļas"
+
+msgid "NewThematicSection"
+msgstr "Veidot jaunu tematiskā plāna nodaļu"
+
+msgid "DeleteAllThematics"
+msgstr "Dzēst visas tematiskā plāna nodaļas"
+
+msgid "ThematicDetailsDescription"
+msgstr "<b>Kursa apguves tematiskais plāns</b> ir viens no Lektora  instrumentiem ar kuru veikt papildus informācijas apmaiņu ar Kursantiem.<br><br><b>Tematiskā plāna realizācijas principi.</b><br>- Lektors sagatavo secīgu kursu apguves plānu ar nodaļām un svarīgiem elementiem tajās.<br>- Svarīgos elementus Lektors veido, kā paziņojumus.<br>- Kad Lektors vēlas informēt / atgādināt par gaidāmo notikumu, tas atzīmē to, kā nodotu izpildei. Šajā mirklī, kursa sākuma lapā, ir redzama <b>Līmlapiņa</b> ar informāciju par notikumu. <br>- Atkārtojot šo soli, Līmlapiņas tiek nomainītas.<br><br>Kursants jebkurā brīdī var patstāvīgi apmeklēt sagatavoto Mācību apguves tematisko plānu un uzzināt par visiem Kursā paredzētajiem notikumiem.<br>Ja tematiskā plāna nodaļa ir realizēta visa, atzīmējiet tās pirmo izveidoto hronoloģisko elementu un sistēma parādīs visus iepriekšējos, kā pabeigtus.<br><br>Šajā lapā tiek veidota un ir pieejama visa paplašināta informācija par plānoto aktivitāšu tematiem un to izpildes progresu."
+
+msgid "SkillToAcquireQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Kādām prasmēm ir jābūt, tematiskā plāna nodaļas beigās ? Vai tās tiks vērtētas īpaši ?"
+
+msgid "SkillToAcquire"
+msgstr "Noteikti apgūstamās prasmes"
+
+msgid "InfrastructureQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Kā izpildāma Tematiskā plānā noteiktā mācību struktūra ? Kādām tēmām, testiem u.t.t  ir jāpievērš papildus uzmanība ? Kāds gala rezultāts tiek sagaidīts"
+
+msgid "Infrastructure"
+msgstr "Tematiskā plāna mācību struktūra"
+
+msgid "AditionalNotesQuestions"
+msgstr "<br><b>Informējiet Kursantu :</b><br>Kādi citi papildus nosacījumi ir jāņem vērā ?"
+
+msgid "DurationInHours"
+msgstr "Norises ilgums stundās"
+
+msgid "ThereAreNoAttendancesInsideCourse"
+msgstr "Kursā nav izveidots klātienes nodarbības apmeklējuma reģistrs. [ Izvēlamies neatkarīgu sākuma datumu]"
+
+msgid "YouMustSelectAtleastAStartDate"
+msgstr "Norises ilgums stundās"
+
+msgid "EditTematicAdvance"
+msgstr "Rediģēt Tematiskā plāna gaitu"
+
+msgid "AditionalNotes"
+msgstr "Svarīgas papildu piezīmes"
+
+msgid "StartDateFromAnAttendance"
+msgstr "Sākuma datumu ņemt no plānotās klātienes nodarbības dienas"
+
+msgid "StartDateCustom"
+msgstr "Neatkarīgi izvēlēts sākuma datums"
+
+msgid "StartDateOptions"
+msgstr "Sākuma datuma iespējas"
+
+msgid "ThematicAdvanceConfiguration"
+msgstr "Tematiskās plāna norises konfigurācija"
+
+msgid "InfoAboutAdvanceInsideHomeCourse"
+msgstr "Rādīt informāciju par tematiskā plāna gaitu kursa sākuma lapā"
+
+msgid "DisplayAboutLastDoneAdvance"
+msgstr "Rādīt informāciju par pēdējo pabeigto tēmu"
+
+msgid "DisplayAboutNextAdvanceNotDone"
+msgstr "Parādīt informāciju par nākošo nepabeigto tēmu"
+
+msgid "InfoAboutLastDoneAdvance"
+msgstr "Informācija par pēdējo pabeigto tēmu"
+
+msgid "InfoAboutNextAdvanceNotDone"
+msgstr "Informācija par pēdējā nākošo nepabeigto tēmu"
+
+msgid "ThereIsNoAThematicSection"
+msgstr "Patreiz šeit nav neviena tematiskā plānojuma"
+
+msgid "ThereIsNoAThematicAdvance"
+msgstr "Piešķiriet soļiem izpildes laiku un citus informatīvos parametrus"
+
+msgid "StillDoNotHaveAThematicPlan"
+msgstr "Sastādiet tematiskos soļus un nosacījumus kursa sekmīgai apguvei"
+
+msgid "NewThematicAdvance"
+msgstr "Paziņojums (<b>līmlapiņa</b>)par jaunu tematisku aktivitāti."
+
+msgid "DurationInHoursMustBeNumeric"
+msgstr "Ilgumam ir jābūt ciparu formātā"
+
+msgid "CreateAThematicSection"
+msgstr "Veidot tematisko plānojumu"
+
+msgid "EditThematicSection"
+msgstr "Rediģēt tematisko plānojumu"
+
+msgid "ToolCourseProgress"
+msgstr "Kursa apguves tematiskais plāns"
+
+msgid "SelectAnAttendance"
+msgstr "Atzīmēt klātesošo"
+
+msgid "ResultsHiddenByExerciseSetting"
+msgstr "Rezultāti paslēpti izmantojot uzdevuma iestatījumus"
+
+msgid "ThematicSectionHasBeenCreatedSuccessfull"
+msgstr "Tematiskā plāna nodaļa ir izveidota veiksmīgi"
+
+msgid "NowYouShouldAddThematicPlanXAndThematicAdvanceX"
+msgstr "Tagad Jūs varat sastādīt tematisko plānu, vadītai kursa pakāpeniskai apgūšanai. Izstrādājiet Kursantam svarīgākos pieturas punktus, kas veicinās mācību rezultātus %s .<br>Papildiniet plānu ar konkrētu darbību uzskaiti konkrētā laikā un saturā %s. <br>Par aktuālo darbību un plāna izpildi kopumā, Kursantu informēs <b>“līmlapiņa”</b> Kursa sākuma lapā."
+
+msgid "QualificationNumeric"
+msgstr "Maksimālais punktu skaits"
+
+msgid "Literal0"
+msgstr "nulle"
+
+msgid "Literal1"
+msgstr "viens"
+
+msgid "Literal2"
+msgstr "divi"
+
+msgid "Literal3"
+msgstr "trīs"
+
+msgid "Literal4"
+msgstr "četri"
+
+msgid "Literal5"
+msgstr "pieci"
+
+msgid "Literal6"
+msgstr "seši"
+
+msgid "Literal7"
+msgstr "septiņi"
+
+msgid "Literal8"
+msgstr "astoņi"
+
+msgid "Literal9"
+msgstr "deviņi"
+
+msgid "Literal10"
+msgstr "desmit"
+
+msgid "Literal11"
+msgstr "vienpadsmit"
+
+msgid "Literal12"
+msgstr "divpadsmit"
+
+msgid "Literal13"
+msgstr "trīspadsmit"
+
+msgid "Literal14"
+msgstr "četrpadsmit"
+
+msgid "Literal15"
+msgstr "piecpadsmit"
+
+msgid "Literal16"
+msgstr "sešpadsmit"
+
+msgid "Literal17"
+msgstr "septiņpadsmit"
+
+msgid "Literal18"
+msgstr "astoņpadsmit"
+
+msgid "Literal19"
+msgstr "deviņpadsmit"
+
+msgid "Literal20"
+msgstr "divdesmit"
+
+msgid "DateTime"
+msgstr "Datums un laiks"
+
+msgid "Item"
+msgstr "punkts"
+
+msgid "Never"
+msgstr "Nekad"
+
+msgid "ReportABug"
+msgstr "Paziņot par kļūdu"
+
+msgid "Letters"
+msgstr "Burti"
+
+msgid "MaximumOfParticipants"
+msgstr "Maksimālais biedru skaits"
+
+msgid "ContactInformation"
+msgstr "Kontaktu informācija"
+
+msgid "PersonName"
+msgstr "Tavs vārds"
+
+msgid "CompanyName"
+msgstr "Jūsu uzņēmuma nosaukums"
+
+msgid "PersonRole"
+msgstr "Jūsu darba apraksts"
+
+msgid "HaveYouThePowerToTakeFinancialDecisions"
+msgstr "Vai jums ir tiesības pieņemt finansiālus lēmumus jūsu uzņēmuma vārdā?"
+
+msgid "CompanyCountry"
+msgstr "Jūsu uzņēmuma mītnes valsts"
+
+msgid "CompanyCity"
+msgstr "Pilsēta, kurā atrodas Uzņēmums"
+
+msgid "WhichLanguageWouldYouLikeToUseWhenContactingYou"
+msgstr "Vēlamā kontaktu valoda"
+
+msgid "SendInformation"
+msgstr "Sūtīt informāciju"
+
+msgid "YouMustAcceptLicence"
+msgstr "Jums ir jāakceptē licence"
+
+msgid "SelectOne"
+msgstr "Izvēlieties vienu"
+
+msgid "ContactInformationHasBeenSent"
+msgstr "Kontaktinformācija ir nosūtīta"
+
+msgid "ContactInformationDescription"
+msgstr "Cienījamais lietotāj,
+
+Jūs gatavojaties sākt izmantot vienu no labākajām atvērtā koda e-apmācības platformām tirgū. Tāpat, kā daudzi citi atvērtā koda projekti, šis projekts ir pamatots ar plašu studentu, skolotāju, izstrādātāju un satura veidotāju sabiedrības darbu, kuri vēlētos, lai projekta attīstība noritētu labāk.
+
+Zinot, mazliet vairāk par jums, kā ir vienu no mūsu svarīgajiem lietotājiem, kas vadīs šo e-apmācības sistēmu, mēs varēsim ļaut cilvēkiem zināt, kā mūsu programmatūra tiek izmantota, un dos mums iespēju jums paziņot, kad mēs organizēsim pasākumus, kas varētu būt nozīmīgi jums.<br>
+Aizpildot šo veidlapu, jūs piekrītat, ka Chamilo asociācija vai tās locekļi var nosūtīt jums informāciju pa e-pastu, par svarīgiem notikumiem, vai jaunumiem Chamilo programmatūrā, vai sabiedrībā. Tas palīdzēs sabiedrībai attīstīties, jo organizēs informācijas plūsmu, ar pastāvīgu attieksmi pret jūsu laiku un jūsu privātumu.<br>
+Ņemiet vērā, ka Jums <b>nav nepieciešams</b> aizpildīt šo veidlapu. Tikai, ja jūs vēlaties palikt anonīms, mēs zaudēsim iespēju piedāvāt jums visas privilēģijas, kādas ir reģistrētiem portāla administratoriem, bet mēs respektēsim jūsu lēmumu. Vienkārši atstājiet šo formu tukšu un noklikšķiniet uz \"Next\"."
+
+msgid "CompanyActivity"
+msgstr "Jūsu uzņēmuma darbības veids"
+
+msgid "DateUnLock"
+msgstr "Atbloķēt datumus"
+
+msgid "DateLock"
+msgstr "Slēgt datumus"
+
+msgid "GoToStudentDetails"
+msgstr "Doties uz studentu detaļām"
+
+msgid "RepeatDate"
+msgstr "Atkārtošanas diena"
+
+msgid "ToAttend"
+msgstr "Apmeklēt"
+
+msgid "HaveFun"
+msgstr "Izbaudiet,"
+
+msgid "ClearSearchResults"
+msgstr "Nodzēst meklēšanas rezultātus"
+
+msgid "TestServerMode"
+msgstr "Testa servera režīmā"
+
+msgid "PageExecutionTimeWas"
+msgstr "Lapas izpildes laiks bija"
+
+msgid "MemoryUsage"
+msgstr "Atmiņas izmantošana"
+
+msgid "MemoryUsagePeak"
+msgstr "Maksimālā Atmiņas izmantošana"
+
+msgid "Seconds"
+msgstr "Sekundes"
+
+msgid "QualifyInGradebook"
+msgstr "Kvalificēties ieskaitēs"
+
+msgid "SessionSpecificResource"
+msgstr "Specifisks Sesijas resurss"
+
+msgid "EditionNotAvailableFromSession"
+msgstr "Redakcija nav pieejama no sesijas, lūdzu, labojiet no pamata kursa."
+
+msgid "HandingOverOfTaskX"
+msgstr "Uzdevuma %s nodošana"
+
+msgid "ProtectedDocument"
+msgstr "Aizsargāts dokuments"
+
+msgid "ConnectionsLastMonth"
+msgstr "Pieslēgšanās pēdējā mēneša laikā"
+
+msgid "TotalStudents"
+msgstr "Kopējais kursantu skaits"
+
+msgid "FilteringWithScoreX"
+msgstr "Atlasīt ar rezultātu %s"
+
+msgid "ExamTaken"
+msgstr "Nokārtots"
+
+msgid "ExamNotTaken"
+msgstr "Nenokārtots"
+
+msgid "ExamPassX"
+msgstr "Nokārtots minimums %s"
+
+msgid "ExamFail"
+msgstr "Nav izdevies"
+
+msgid "ExamTracking"
+msgstr "Eksāmenu uzskaites"
+
+msgid "NoAttempt"
+msgstr "Mēģinājumu nav"
+
+msgid "PassExam"
+msgstr "Nokārtots"
+
+msgid "CreateCourseRequest"
+msgstr "Izveidot kursu pieprasījumu"
+
+msgid "TermsAndConditions"
+msgstr "Vides lietošanas \"Noteikumi un Nosacījumi\" Lietotājiem"
+
+msgid "ReadTermsAndConditions"
+msgstr "Lasīt \"Noteikumus un Nosacījumus\""
+
+msgid "IAcceptTermsAndConditions"
+msgstr "Esmu lasījis un Es piekrītu platformas lietošanas \"Noteikumiem un Nosacījumiem\""
+
+msgid "YouHaveToAcceptTermsAndConditions"
+msgstr "Jums ir jāpieņem mūsu platformas lietošanas \"Noteikumi un Nosacījumi\", lai turpinātu..."
+
+msgid "BrowserDontSupportsSVG"
+msgstr "Jūsu pārlūkprogramma neatbalsta SVG failus. Lai izmantotu zīmēšanas rīku, jums ir jābūt augstāka līmeņa pārlūkprogrammai, piemēram: Firefox vai Chrome"
+
+msgid "FillWithExemplaryContent"
+msgstr "Piepildīt kursu ar satura piemēriem"
+
+msgid "ToolVideoconference"
+msgstr "Videokonference"
+
+msgid "SelectSVGEditImage"
+msgstr "Izvēlēties attēlu"
+
+msgid "OnlyAccessFromYourGroup"
+msgstr "Pieejams tikai no jūsu grupas"
+
+msgid "UserFolders"
+msgstr "Lietotāju mapes"
+
+msgid "CertificatesFiles"
+msgstr "Sertifikāti"
+
+msgid "ChatFiles"
+msgstr "Sarunu vēsture čatā"
+
+msgid "Flash"
+msgstr "Flash"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Images"
+msgstr "Attēli"
+
+msgid "OpenInANewWindow"
+msgstr "Atvērt jaunā logā"
+
+msgid "ExamNotAvailableAtThisTime"
+msgstr "Eksāmens patreiz nav pieejams"
+
+msgid "LoginOrEmailAddress"
+msgstr "Lietotājvārds jeb e-pasta adrese"
+
+msgid "Activate"
+msgstr "Aktivizēt"
+
+msgid "Deactivate"
+msgstr "Deaktivizēt"
+
+msgid "Profile"
+msgstr "Profils"
+
+msgid "CreatedAt"
+msgstr "Izveidots"
+
+msgid "UpdatedAt"
+msgstr "Atjaunots"
+
+msgid "CreatedOn"
+msgstr "Izveidots"
+
+msgid "UpdatedOn"
+msgstr "Atjaunots"
+
+msgid "Paint"
+msgstr "Zīmēt"
+
+msgid "MyResults"
+msgstr "Mani rezultāti"
+
+msgid "LearningPaths"
+msgstr "Kursi"
+
+msgid "AllLearningPaths"
+msgstr "Visi kursi"
+
+msgid "ByCourse"
+msgstr "Pēc kursa"
+
+msgid "MyQCM"
+msgstr "Mans MCQ"
+
+msgid "AddACourse"
+msgstr "Pievienot kursu"
+
+msgid "PerWeek"
+msgstr "Par nedēļu"
+
+msgid "PhotoRetouching"
+msgstr "Foto retušēšana"
+
+msgid "SeeAll"
+msgstr "Skatīt visu"
+
+msgid "SeeOnlyArchived"
+msgstr "Skatīt tikai arhivēto"
+
+msgid "SeeOnlyUnarchived"
+msgstr "Skatīt tikai nearhivēto"
+
+msgid "LatestAttempt"
+msgstr "Pēdējais mēģinājums"
+
+msgid "ContactInformationHasNotBeenSent"
+msgstr "Jūsu kontaktu informāciju nevar nosūtīt. To iespējams radīja, īslaicīgu tīkla problēma. Lūdzu, mēģiniet vēlreiz pēc dažām sekundēm. Ja problēma saglabājas, ignorēt šo reģistrācijas procesu un vienkārši noklikšķiniet uz pogas, lai pārietu uz nākamo soli."
+
+msgid "FileDeleted"
+msgstr "Fails izdzēsts"
+
+msgid "MyClasses"
+msgstr "Manas klases"
+
+msgid "PublicationDate"
+msgstr "Publicēšanas datums"
+
+msgid "CorrectAndRate"
+msgstr "Koriģēt un vērtēt"
+
+msgid "ItemAdded"
+msgstr "Punkts pievienots"
+
+msgid "ItemDeleted"
+msgstr "Saturs izdzēsts"
+
+msgid "ItemUpdated"
+msgstr "Saturs atjaunināts"
+
+msgid "ItemCopied"
+msgstr "Saturs pārkopēts"
+
+msgid "MyStatistics"
+msgstr "Mana statistika"
+
+msgid "FromDateXToDateY"
+msgstr "No %s uz %s"
+
+msgid "CourseThematicAdvance"
+msgstr "Kursa apguves progress"
+
+msgid "Clean"
+msgstr "Iztīrīt"
+
+msgid "MailNotifyInvitation"
+msgstr "Paziņot man e-pastā, par jauna ielūguma saņemšanu"
+
+msgid "MailNotifyMessage"
+msgstr "Paziņot man e-pastā, par jaunas personīgas vēstules saņemšanu"
+
+msgid "MailNotifyGroupMessage"
+msgstr "Paziņot man e-pastā, par jaunas vēstules saņemšanu grupā"
+
+msgid "ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField"
+msgstr "Noklikšķiniet lodziņā zemāk, lai atlasītu failus no sava datora (var izmantot CTRL + clic, lai vienlaikus atlasītu dažādus failus), vai vilkt un nomest dažus failus no Jūsu darbvirsmas tieši uz lodziņu. Sistēma veiks pārējo!"
+
+msgid "Simple"
+msgstr "Vienkāršs"
+
+msgid "Multiple"
+msgstr "Salikts"
+
+msgid "UploadFiles"
+msgstr "Iekopē, vai velc un nomet failus šeit, lai augšupielādētu tos"
+
+msgid "SupportedFormatsForIndex"
+msgstr "Atbalstītie formāti indeksēšanai"
+
+msgid "Installed"
+msgstr "Instalēts"
+
+msgid "NotInstalled"
+msgstr "Nav instalēts"
+
+msgid "Settings"
+msgstr "Iestatījumi"
+
+msgid "OnlyLettersAndNumbers"
+msgstr "Tikai burti (a-z)un cipari (0-9)"
+
+msgid "CheckFilePermissions"
+msgstr "Pārbaudiet faila atļaujas"
+
+msgid "AddedToALP"
+msgstr "Pievienots LP"
+
+msgid "NotAvailable"
+msgstr "Nav pieejams"
+
+msgid "NanogongNoApplet"
+msgstr "Nevar atrast Nanogong sīklietotni"
+
+msgid "NanogongRecordBeforeSave"
+msgstr "Pirms mēģināt nosūtīt failu, jums vajadzētu veikt tā ierakstīšanu"
+
+msgid "NanogongGiveTitle"
+msgstr "Jūs neesat failu nosaukuši"
+
+msgid "NanogongFailledToSubmit"
+msgstr "Balss ierakstu neizdevās iesniegt"
+
+msgid "NanogongSubmitted"
+msgstr "Balss ieraksts ir iesniegts"
+
+msgid "RecordMyVoice"
+msgstr "Ierakstīt manu balsi"
+
+msgid "PressRecordButton"
+msgstr "Lai sāktu ierakstu, nospiediet sarkano pogu"
+
+msgid "VoiceRecord"
+msgstr "Balss ieraksts"
+
+msgid "BrowserNotSupportNanogongSend"
+msgstr "Jūsu interneta pārlūkprogramma nevar nosūtīt ierakstu uz platformu. Jūs variet ierakstu saglabāt datora diskā un nosūtīt to vēlāk. Lai izmantotu visas iespējas, ieteicams izmantot attīstītākas pārlūkprogrammas, kā piemēram, Firefox vai Chrome."
+
+msgid "FileExistRename"
+msgstr "Fails ar šādu nosaukumu jau eksistē. Lūdzu izvēlieties citu faila nosaukumu."
+
+msgid "GradebookAndAttendances"
+msgstr "Ieskaites un klātienes reģistrs"
+
+msgid "SelectADateRange"
+msgstr "Izvēlēties datu diapazonu"
+
+msgid "AllDone"
+msgstr "Viss paveikts"
+
+msgid "AllNotDone"
+msgstr "Vēl viss nav paveikts"
+
+msgid "GroupUpdated"
+msgstr "Grupa atjaunināta"
+
+msgid "AuthSourceNotAvailable"
+msgstr "Autentificēšanas avots nav pieejams"
+
+msgid "Responsable"
+msgstr "Atbildīgs"
+
+msgid "TheAttendanceSheetIsLocked"
+msgstr "Klātienes reģistrs ir slēgts"
+
+msgid "Presence"
+msgstr "Atbalsts"
+
+msgid "ACourseCategoryWithThisNameAlreadyExists"
+msgstr "Kursa kategorija ar šādu nosaukumu, jau eksistē"
+
+msgid "OpenIDRedirect"
+msgstr "Pārstūtīt OpenID"
+
+msgid "Blogs"
+msgstr "Blogs"
+
+msgid "Others"
+msgstr "Pārējie"
+
+msgid "BackToCourseDesriptionList"
+msgstr "Atgriezties pie Kursa apraksta"
+
+msgid "Postpone"
+msgstr "Atlikt"
+
+msgid "NotHavePermission"
+msgstr "Lietotājam nav atļaujas veikt pieprasīto operāciju"
+
+msgid "CourseCodeAlreadyExistExplained"
+msgstr "Datu bāzes sistēma pārbauda kursa kodu, vai tāds jau nepastāv, un neļauj izveidot dublikātu. Lūdzu, pārliecinieties, vai nav kursa kods, jau nav pielietots."
+
+msgid "CantDeleteReadonlyFiles"
+msgstr "Nevar izdzēst failu, kas konfigurēts tikai lasīšanas režīmā"
+
+msgid "Uploaded"
+msgstr "Augšupielādēts"
+
+msgid "Saved"
+msgstr "Saglabāts"
+
+msgid "Reset"
+msgstr "Atiestatīt"
+
+msgid "EmailSentFromDokeos"
+msgstr "E - vēstule, no platformas ir nosūtīta"
+
+msgid "InfoAboutLastDoneAdvanceAndNextAdvanceNotDone"
+msgstr "Informācija par pēdējo pabeigto soli un nākošo nepabeigto soli"
+
+msgid "LatexCode"
+msgstr "LaTEX kods"
+
+msgid "LatexFormula"
+msgstr "LaTeX formula"
+
+msgid "AreYouSureToLockTheAttendance"
+msgstr "Vai tiešām vēlaties slēgt klātienes reģistru ?"
+
+msgid "UnlockMessageInformation"
+msgstr "Klātienes reģistrs nav slēgts, tas nozīmē, ka jūsu Lektors  joprojām var to izmainīt"
+
+msgid "LockAttendance"
+msgstr "Slēgt klātienes reģistru"
+
+msgid "AreYouSureToUnlockTheAttendance"
+msgstr "Vai tiešām vēlaties atbloķēt klātienes reģistru ?"
+
+msgid "UnlockAttendance"
+msgstr "Atbloķēt klātienes reģistru"
+
+msgid "LockedAttendance"
+msgstr "Slēgt klātienes reģistru"
+
+msgid "DecreaseFontSize"
+msgstr "Samazināt fonta izmēru"
+
+msgid "ResetFontSize"
+msgstr "Atiestatīt fontu lielumu"
+
+msgid "IncreaseFontSize"
+msgstr "Palielināt fonta izmēru"
+
+msgid "LoggedInAsX"
+msgstr "Ielogoties, kā %s"
+
+msgid "AttachmentUpload"
+msgstr "Pielikumu ielāde"
+
+msgid "CourseAutoRegister"
+msgstr "Kurss ar auto-reģistrāciju"
+
+msgid "ThematicAdvanceInformation"
+msgstr "Tematiskā progresa instruments ļauj jums organizēt jūsu apmācību, izmantojot laika plānojumu"
+
+msgid "RequestURIInfo"
+msgstr "Pieprasītais URL, lai iegūtu šo lapu, bez domēna definīcijas"
+
+msgid "DiskFreeSpace"
+msgstr "Brīvā vieta uz diska"
+
+msgid "ProtectFolder"
+msgstr "Aizsargāta mape"
+
+msgid "SomeHTMLNotAllowed"
+msgstr "Daži HTML atribūti nav atļauti"
+
+msgid "MyOtherGroups"
+msgstr "Citas manas Grupas"
+
+msgid "XLSFileNotValid"
+msgstr "Piedāvātais XLS fails nav derīgs"
+
+msgid "YouAreRegisterToSessionX"
+msgstr "Jūs esat piereģistrēts sesijai: %s"
+
+msgid "NextBis"
+msgstr "Nākošais"
+
+msgid "Prev"
+msgstr "Iepriekšējais"
+
+msgid "Configuration"
+msgstr "Konfigurācija"
+
+msgid "ToGroup"
+msgstr "Uz sociālo grupu"
+
+msgid "XWroteY"
+msgstr "%s rakstīja:
+%s"
+
+msgid "BackToGroup"
+msgstr "Atgriezties Grupā"
+
+msgid "GoAttendance"
+msgstr "Doties uz Klātienes reģistru"
+
+msgid "GoAssessments"
+msgstr "Doties uz Ieskaišu grāmatiņu"
+
+msgid "UserRoles"
+msgstr "Lietotāju lomas"
+
+msgid "GroupRoles"
+msgstr "Grupu lomas"
+
+msgid "StorePermissions"
+msgstr "Saglabāt Atļaujas"
+
+msgid "PendingInvitation"
+msgstr "Neatvērtie uzaicinājumi"
+
+msgid "MaximunFileSizeXMB"
+msgstr "Maksimālais faila izmērs: %sMB"
+
+msgid "MessageHasBeenSent"
+msgstr "Jūsu vēstule ir nosūtīta"
+
+msgid "Tags"
+msgstr "Pazīmes"
+
+msgid "ClassesUnSubscribed"
+msgstr "Reģistrācijai atceltās Grupas"
+
+msgid "NotAddedToCourse"
+msgstr "Kursam nav pievienots"
+
+msgid "UsersNotRegistered"
+msgstr "Kursanti, kas nav pievienoti"
+
+msgid "ClearFilterResults"
+msgstr "Dzēst filtru informāciju"
+
+msgid "SelectFilter"
+msgstr "Izvēlēties filtru"
+
+msgid "ThereIsNoClassScheduledTodayTryPickingAnotherDay"
+msgstr "Šodien grupas nav plānotas, mēģiniet apskatīties citā dienā, vai pievienojiet jūsu dalību pats,izmantojot darbību ikonas"
+
+msgid "AddToCalendar"
+msgstr "Pievienot kalendāram"
+
+msgid "RandomPick"
+msgstr "Brīva visu kursu apskate"
+
+msgid "YouHaveANewInvitationFromX"
+msgstr "Jums ir jauns ielūgums no %s"
+
+msgid "YouHaveANewMessageFromGroupX"
+msgstr "Jums ir jauns ziņojums no %s grupas"
+
+msgid "YouHaveANewMessageFromX"
+msgstr "Jums ir jauns ziņojums no %s"
+
+msgid "SeeMessage"
+msgstr "Skatīt ziņojumu"
+
+msgid "SeeInvitation"
+msgstr "Skatīt ielūgumu"
+
+msgid "YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX"
+msgstr "Jūs esat saņēmis šo paziņojumu, jo esat parakstījušies, vai iesaistīti tā saņemšanā. Lai mainītu savu paziņojumu preferences klikšķiniet šeit: %s"
+
+msgid "Replies"
+msgstr "Atbildes"
+
+msgid "Reply"
+msgstr "Atbildēt"
+
+msgid "Broken"
+msgstr "Bojāts"
+
+msgid "CheckURL"
+msgstr "Pārbaudīt saiti"
+
+msgid "NoItem"
+msgstr "Vēl nav satura"
+
+msgid "LoadExtraData"
+msgstr "Ielādējiet papildus datu laukus (lai tie parādītos, tie ir jāatzīmē, kā \"filtrs\")"
+
+msgid "CourseAssistant"
+msgstr "Kursa asistents"
+
+msgid "SupportedScormContentMakers"
+msgstr "atbalsta SCORM autorēšanas instrumentus"
+
+msgid "Copy"
+msgstr "Kopēt"
+
+msgid "EnableStartTime"
+msgstr "Aktivizēt sākuma laiku"
+
+msgid "EnableEndTime"
+msgstr "Aktivizēt beigu laiku"
+
+msgid "Wrong"
+msgstr "Nepareizs"
+
+msgid "Certification"
+msgstr "Sertifikācija"
+
+msgid "CertificateOnlineLink"
+msgstr "Links tiešsaistes sertifikācijai"
+
+msgid "NewExercises"
+msgstr "Jauni uzdevumi"
+
+msgid "MyAverage"
+msgstr "Mani vidējie"
+
+msgid "AllAttempts"
+msgstr "Visi mēģinājumi"
+
+msgid "NoCookies"
+msgstr "Jūsu pārlūkprogrammā nav iespējots sīkfailu atbalsts. Chamilo balstās uz tā saukto sīkdatņu (cookies) funkcijām, lai saglabātu Jūsu savienojumu detaļas. Tas nozīmē, ka jūs nevarēsiet ielogoties, ja sīkfaili nav iespējoti. Lūdzu, nomainiet pārlūkprogrammu konfigurāciju (parasti izvēlē Edit -> Preferences) un pārlādējiet šo lapu."
+
+msgid "NoJavascript"
+msgstr "Jūsu pārlūkprogrammā nav iespējots JavaScript atbalsts . Chamilo lielā mērā ir atkarīga no JavaScript, lai nodrošinātu Jūs ar dinamiskāku interfeisu. Ir iespējams, ka vairums funkciju darbosies, taču jūs nevarēsiet izmantot jaunākos uzlabojumu izmantojamību. Mēs iesakām Jums mainīt jūsu pārlūka konfigurāciju, (parasti izvēlē Edit -> Preferences) un pārlādēt šo lapu."
+
+msgid "NoFlash"
+msgstr "Jūsu pārlūkprogrammā nav iespējots Flash atbalsts. Chamilo atsaucas tikai uz Flash. Ja Jūs vēlaties gūt labumu no Chamilo instrumentu komplekta, mēs iesakām Jums instalēt Flash spraudni un pārstartēt Jūsu pārlūkprogrammu."
+
+msgid "Attempt"
+msgstr "Mēģinājums"
+
+msgid "SaveForNow"
+msgstr "Saglabāt un turpināt vēlāk"
+
+msgid "NoQuicktime"
+msgstr "Jūsu pārlūkprogrammā nav instalēts QuickTime spraudnis. Jūs joprojām varat izmantot šo platformu, bet lai izpildītu lielāku skaitu mediju failus, mēs iesakām to uzinstalēt."
+
+msgid "NoJavaSun"
+msgstr "Jūsu pārlūkprogrammā nav instalēts Java Sun spraudnis. Jūs joprojām varat izmantot platformu, bet tā zaudēs daļu savu spēju."
+
+msgid "NoJava"
+msgstr "Jūsu pārlūkprogramma neatbalsta Java programmu"
+
+msgid "JavaSun24"
+msgstr "Jūsu pārlūkprogrammai ir Java versija, kas neatbalsta šo instrumentu. To to izmantotu, jums ir jāuzinstalē Java Sun versija, kas ir jaunāka nekā 24"
+
+msgid "NoMessageAnywere"
+msgstr "Ja nevēlaties vēlreiz šajā sesijā, redzēt šo ziņojumu, noklikšķiniet šeit"
+
+msgid "Attempts"
+msgstr "Mēģinājumi"
+
+msgid "SeeResults"
+msgstr "Skatīt rezultātus"
+
+msgid "Loading"
+msgstr "Ielādēt"
+
+msgid "AreYouSureToRestore"
+msgstr "Vai tiešām vēlaties atjaunot šo elementu?"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Šis ir automātiskā e-pasta ziņojums. Lūdzu, neatbildiet uz to."
+
+msgid "PersonalCalendar"
+msgstr "Personālais kalendārs"
+
+msgid "SkillsTree"
+msgstr "Prasmju koks"
+
+msgid "Skills"
+msgstr "Prasmes"
+
+msgid "SkillsProfile"
+msgstr "Prasmju profili"
+
+msgid "WithCertificate"
+msgstr "Ar sertifikātiem"
+
+msgid "AdminCalendar"
+msgstr "Administratora kalendārs"
+
+msgid "CourseCalendar"
+msgstr "Kursa kalendārs"
+
+msgid "Reports"
+msgstr "Atskaites"
+
+msgid "dateFormatShortNumber"
+msgstr "%m/%d/%Y"
+
+msgid "dateTimeFormatLong24H"
+msgstr "%B %d, %Y at %H:%M"
+
+msgid "GradingModelTitle"
+msgstr "Vērtēšanas modelis"
+
+msgid "Discussions"
+msgstr "Diskusijas"
+
+msgid "GradeModel"
+msgstr "Vērtēšanas modelis"
+
+msgid "ViewSkillsTree"
+msgstr "Skatīt prasmju koku"
+
+msgid "MySkills"
+msgstr "Manas prasmes"
+
+msgid "SeeFile"
+msgstr "Skatīt failu"
+
+msgid "UserList"
+msgstr "Lietotāju saraksts"
+
+msgid "SearchUsers"
+msgstr "Meklēt Lietotājus"
+
+msgid "Administration"
+msgstr "Administrācija"
+
+msgid "SkillsAndGradebooks"
+msgstr "Prasmes un novērtējums"
+
+msgid "AddSkill"
+msgstr "Pievienot prasmi"
+
+msgid "AcceptLegal"
+msgstr "Pieņemt juridisku vienošanos"
+
+msgid "CourseLegalAgreement"
+msgstr "Juridiska vienošanās šim kursam"
+
+msgid "SkillDoesNotExist"
+msgstr "Nav tādu prasmju"
+
+msgid "SkillRootName"
+msgstr "Absolūtās prasmes"
+
+msgid "Option"
+msgstr "Opcija"
+
+msgid "Updates"
+msgstr "Atjauninājumi"
+
+msgid "Teaching"
+msgstr "Mācību"
+
+msgid "CoursesReporting"
+msgstr "Kursu atskaites"
+
+msgid "AdminReports"
+msgstr "Administrācijas atskaites"
+
+msgid "ExamsReporting"
+msgstr "Eksāmenu atskaites"
+
+msgid "MyReporting"
+msgstr "Manas atskaites"
+
+msgid "SearchSkills"
+msgstr "Meklēt prasmes"
+
+msgid "SaveThisSearch"
+msgstr "Saglabāt šo meklējumu"
+
+msgid "SkillProfiles"
+msgstr "Saglabātie prasmju profili"
+
+msgid "Matches"
+msgstr "Sakritības"
+
+msgid "WelcomeUserXToTheSiteX"
+msgstr "%s, laipni aicināti %s"
+
+msgid "CheckUsersWithId"
+msgstr "Lai pierakstītu Lietotāju izmantot Lietotāja ID no faila"
+
+msgid "MB"
+msgstr "MB"
+
+msgid "SessionList"
+msgstr "Sesiju saraksts"
+
+msgid "StudentList"
+msgstr "Lietotāju saraksts"
+
+msgid "GroupReply"
+msgstr "Atkārtot"
+
+msgid "GroupReplies"
+msgstr "Atbildes"
+
+msgid "SkillNotFound"
+msgstr "Prasmes nav atrastas"
+
+msgid "IHaveThisSkill"
+msgstr "Man piemīt šī prasme"
+
+msgid "Me"
+msgstr "Man"
+
+msgid "Vote"
+msgstr "Balsot"
+
+msgid "Votes"
+msgstr "Balsojumi"
+
+msgid "XStarsOutOf5"
+msgstr "%s zvaigznes no 5"
+
+msgid "Visit"
+msgstr "Apmeklējumi"
+
+msgid "Visits"
+msgstr "Apmeklējumi"
+
+msgid "YourVote"
+msgstr "Tava balss"
+
+msgid "HottestCourses"
+msgstr "Vispopulārākie kursi"
+
+msgid "SentAtX"
+msgstr "Nosūtīti: %s"
+
+msgid "dateTimeFormatShort"
+msgstr "%b %d, %Y at %I:%M %p"
+
+msgid "dateTimeFormatShortTimeFirst"
+msgstr "%I:%M %p, %b %d %Y"
+
+msgid "LoginToVote"
+msgstr "Pieteikties balsojumam"
+
+msgid "DoNotShow"
+msgstr "Nerādīt"
+
+msgid "ShowToAdminsOnly"
+msgstr "Rādīt tikai Administrācijai"
+
+msgid "ShowToAdminsAndTeachers"
+msgstr "Rādīt Administrācijai un skolotājiem"
+
+msgid "ShowToAllUsers"
+msgstr "Rādīt visiem Lietotājiem"
+
+msgid "SelectAnAction"
+msgstr "Izvēlieties darbību"
+
+msgid "LoginX"
+msgstr "Ielogoties: %s"
+
+msgid "ChatConnected"
+msgstr "Čats (Savienots)"
+
+msgid "ChatDisconnected"
+msgstr "Čats (Atvienots)"
+
+msgid "ThingsToDo"
+msgstr "Lietas, kuras darīt nākošās"
+
+msgid "WamiFlashDialog"
+msgstr "Tas būs redzams, kā dialoglodziņš, kas lūgs Jūsu atļauju piekļūt mikrofonam, atbildiet Jā un aizveriet dialoglodziņu. (Ja jūs nevēlaties, lai tas parādās atkal, pirms aizvēršanas atzīmējiet - atcerēties)"
+
+msgid "WamiStartRecorder"
+msgstr "Sāciet ierakstīšanu, nospiežot mikrofona ikonu un apturiet to, nospiežot ikonu vēlreiz. Katru reizi, kad jūs to izdarīsiet, tiks radīts fails."
+
+msgid "InputNameHere"
+msgstr "Ierakstiet vārdu šeit"
+
+msgid "Reload"
+msgstr "Pārlādēt"
+
+msgid "TimeSpentLastXDays"
+msgstr "Laiks, kas pavadīts iepriekšējās %s dienās"
+
+msgid "TimeSpentBetweenXAndY"
+msgstr "Laiks, kas pavadīts starp %s un %s"
+
+msgid "GoToCourse"
+msgstr "Doties uz kursu"
+
+msgid "SubTotal"
+msgstr "Starpsumma"
+
+msgid "Configure"
+msgstr "Konfigurēt"
+
+msgid "Regions"
+msgstr "Reģions"
+
+msgid "CourseList"
+msgstr "Kursu saraksts"
+
+msgid "NumberAbbreviation"
+msgstr "Nr."
+
+msgid "FirstnameAndLastname"
+msgstr "Vārds un Uzvārds"
+
+msgid "LastnameAndFirstname"
+msgstr "Uzvārds un Vārds"
+
+msgid "Plugins"
+msgstr "Spraudņi"
+
+msgid "Detailed"
+msgstr "Detalizēti"
+
+msgid "ResourceLockedByGradebook"
+msgstr "Šī opcija nav pieejama, jo šī darbība ir iekļauta novērtējuma instrumentā, kas šobrīd ir izslēgts. Lai aktivizētu novērtējumu, jautājiet savam platformas administratoram."
+
+msgid "ConfirmToLockElement"
+msgstr "Vai tiešām vēlaties bloķēt šo vienumu? Pēc šī vienuma slēgšanas, nevarēs rediģēt lietotāja rezultātus. Lai to atbloķētu, jums būs jāsazinās ar platformu administratoru"
+
+msgid "ConfirmToUnLockElement"
+msgstr "Vai tiešām vēlaties atslēgt šo vienumu?"
+
+msgid "Default"
+msgstr "Pēc noklusējuma"
+
+msgid "ReturnToCourseHomepage"
+msgstr "Atgriezties Kursa mājaslapā"
+
+msgid "WebCamClip"
+msgstr "WebCam klips"
+
+msgid "Snapshot"
+msgstr "Momentuzņēmums"
+
+msgid "TakeYourPhotos"
+msgstr "Veiciet savas fotogrāfijas"
+
+msgid "LocalInputImage"
+msgstr "Vietējā attēlu ievade"
+
+msgid "ClipSent"
+msgstr "Klips nosūtīts"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "YouHaveSomeUnsavedChanges"
+msgstr "Jums ir dažas nesaglabātās izmaiņas. Vai jūs vēlaties atteikties no viņām?"
+
+msgid "ActivateEvent"
+msgstr "Aktivizēt notikumu"
+
+msgid "AvailableEventKeys"
+msgstr "Pieejamie notikumu taustiņi. Izmantojiet tos starp (( ))."
+
+msgid "Events"
+msgstr "Notikumi"
+
+msgid "EventTypeName"
+msgstr "Notikuma veida nosaukums"
+
+msgid "ExportToPDFOnlyHTMLAndImages"
+msgstr "Eksportēt tīmekļa lapas un attēlus uz PDF"
+
+msgid "CourseCatalog"
+msgstr "Kursa katalogs"
+
+msgid "Go"
+msgstr "Doties"
+
+msgid "ImportThematic"
+msgstr "Importēt kursa progresu"
+
+msgid "ExportThematic"
+msgstr "Eksportēt kursa progresu"
+
+msgid "DeleteAllThematic"
+msgstr "Izdzēst visu kursa progresu"
+
+msgid "ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation"
+msgstr "Šī platforma nevar sūtīt e-pastu. Plašākai informācijai,lūdzu, sazinieties ar %s ."
+
+msgid "FirstLoginChangePassword"
+msgstr "Šī ir Jūsu pirmā pieteikšanās. Lūdzu, atjauniniet savu paroli, izveidojot to,izmantojiet tādus elementus, lai tos jūs spētu atcerēties pēc kāda laika."
+
+msgid "NeedContactAdmin"
+msgstr "Noklikšķiniet šeit, lai sazinātos ar administratoru"
+
+msgid "MarkAll"
+msgstr "Iezīmēt visu"
+
+msgid "UnmarkAll"
+msgstr "Noņemt iezīmējumu visam"
+
+msgid "NotAuthorized"
+msgstr "Nav piekļuves tiesību"
+
+msgid "UnknownAction"
+msgstr "Nezināma aktivitāte"
+
+msgid "First"
+msgstr "Pirmais"
+
+msgid "Last"
+msgstr "Pēdējais"
+
+msgid "YouAreNotAuthorized"
+msgstr "Jums nav atļauts to darīt"
+
+msgid "NoImplementation"
+msgstr "Šai darbībai, neviena īstenošana vēl nav pieejama"
+
+msgid "ReplaceExistingEntries"
+msgstr "Aizstāt esošos ierakstus"
+
+msgid "AddItems"
+msgstr "Pievienot vienumus"
+
+msgid "NotFound"
+msgstr "Nav atrasts"
+
+msgid "SentSuccessfully"
+msgstr "Veiksmīgi nosūtīts"
+
+msgid "SentFailed"
+msgstr "Nosūtīt neizdevās"
+
+msgid "PortalSessionsLimitReached"
+msgstr "Sesiju ierobežojumu skaits šajā portālā ir sasniegts"
+
+msgid "ANewSessionWasCreated"
+msgstr "Jauna sesija ir izveidota"
+
+msgid "Online"
+msgstr "Tiešsaiste"
+
+msgid "Offline"
+msgstr "Bezsaistē"
+
+msgid "TimelineItemText"
+msgstr "Teksts"
+
+msgid "TimelineItemMedia"
+msgstr "Mediji"
+
+msgid "TimelineItemMediaCaption"
+msgstr "Virsraksts"
+
+msgid "TimelineItemMediaCredit"
+msgstr "Punkti"
+
+msgid "TimelineItemTitleSlide"
+msgstr "Slīdņa nosaukums"
+
+msgid "SSOError"
+msgstr "Individuālo pierakstu kļūdas"
+
+msgid "Sent"
+msgstr "Nosūtīts"
+
+msgid "TimelineItem"
+msgstr "Vienums"
+
+msgid "Listing"
+msgstr "Klausīties"
+
+msgid "CourseRssTitle"
+msgstr "Kursa RSS"
+
+msgid "CourseRssDescription"
+msgstr "RSS saite visiem kursu paziņojumiem"
+
+msgid "AllowPublicCertificates"
+msgstr "Lietotāju apliecības ir publiskotas"
+
+msgid "PortalHomepageEdited"
+msgstr "Portāla mājaslapa ir atjaunināta"
+
+msgid "UserRegistrationTitle"
+msgstr "Lietotāja reģistrācija"
+
+msgid "UserRegistrationComment"
+msgstr "Aktivizētās darbības, kad lietotājs reģistrējas platformā"
+
+msgid "Disabled"
+msgstr "Atspējots"
+
+msgid "Required"
+msgstr "Nepieciešams"
+
+msgid "CategorySaved"
+msgstr "Kategorija saglabāta"
+
+msgid "CategoryRemoved"
+msgstr "Kategorija ir noņemta"
+
+msgid "BrowserDoesNotSupportNanogongPlayer"
+msgstr "Jūsu pārlūkprogramma neatbalsta Nanogong atskaņotāju"
+
+msgid "ImportCSV"
+msgstr "Importēt CSV"
+
+msgid "DataTableLengthMenu"
+msgstr "Tabulas garums"
+
+msgid "DataTableZeroRecords"
+msgstr "Ieraksti nav atrasti"
+
+msgid "MalformedUrl"
+msgstr "Slikti veidojas URL"
+
+msgid "DataTableInfo"
+msgstr "Info"
+
+msgid "DataTableInfoEmpty"
+msgstr "Tukšs"
+
+msgid "DataTableInfoFiltered"
+msgstr "Atfiltrēts"
+
+msgid "DataTableSearch"
+msgstr "Meklēt"
+
+msgid "HideColumn"
+msgstr "Slēpt kolonu"
+
+msgid "DisplayColumn"
+msgstr "Rādīt kolonu"
+
+msgid "LegalAgreementAccepted"
+msgstr "Tiesiskais līgums pieņemts"
+

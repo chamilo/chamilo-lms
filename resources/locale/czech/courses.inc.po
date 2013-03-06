@@ -1,0 +1,222 @@
+msgid "lang_already_enrolled"
+msgstr "již přihlášený"
+
+msgid "lang_my_personnal_course_list"
+msgstr "Můj osobní seznam kurzů"
+
+msgid "lang_course_enrollment"
+msgstr "Kurzy uživatele"
+
+msgid "lang_course_not_available"
+msgstr "Tento kurz není přístupný nebo neexistuje."
+
+msgid "lang_enroll"
+msgstr "Zapsat se"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "Zapsat se do nového kurzu"
+
+msgid "lang_my_present_course_list"
+msgstr "Můj aktuální seznam kurzů"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "V této kategorii neexistuje žádný kurz, do kterého by se dalo přihlásit."
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "Nebo vyhledat dle kódu"
+
+msgid "lang_search"
+msgstr "Vyhledávaní"
+
+msgid "lang_select_course_among_categories"
+msgstr "Vybrat kurz z kategorií"
+
+msgid "lang_select_course_in"
+msgstr "Vybrat kurz v"
+
+msgid "lang_select_course_in_search_results"
+msgstr "Vybrat kurz z výsledku hledání"
+
+msgid "Unsubscribe"
+msgstr "Odepsat se z kurzu"
+
+msgid "lang_back_to_my_home_page"
+msgstr "Zpět na moji domácí stránku"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "Zpět na můj osobní seznam kurzů"
+
+msgid "langTitular"
+msgstr "Vedoucí"
+
+msgid "langBackToListOfThisUser"
+msgstr "Zpět na seznam kurzů"
+
+msgid "langAdministrationTools"
+msgstr "Nástroje pro administraci"
+
+msgid "lang_back_to_parent_category"
+msgstr "Zpět na nadřazenou kategorii"
+
+msgid "lang_back_to_course_selection"
+msgstr "Zpět na výběr kurzu"
+
+msgid "lang_up"
+msgstr "Zpět na nadřazenou kategorii"
+
+msgid "langCatList"
+msgstr "Kategorie"
+
+msgid "langCourseList"
+msgstr "Seznam kurzů"
+
+msgid "Subscribe"
+msgstr "Zápis do kurzu"
+
+msgid "AlreadySubscribed"
+msgstr "Již zapsaný do kurzu"
+
+msgid "CodeMandatory"
+msgstr "Kód (povinný)"
+
+msgid "CourseCategoryMandatory"
+msgstr "Kategorie kurzu (povinné)"
+
+msgid "TeacherMandatory"
+msgstr "Vedoucí (povinné)"
+
+msgid "CourseCategoryStored"
+msgstr "Kategorie kurzu je vytvořená"
+
+msgid "langWithoutTimeLimits"
+msgstr "Bez časového limitu"
+
+msgid "lang_back_to_main_category_list"
+msgstr "Zpět na seznam hlavních kategorií"
+
+msgid "langAdded"
+msgstr "Přidaný"
+
+msgid "langDeleted"
+msgstr "Vymazaný"
+
+msgid "langKeeped"
+msgstr "Podržený"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "Skrytý / Zavřený"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "Skrytý / Otevřený"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "Viditelný / Otevřený"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "Viditelný / Zavřený"
+
+msgid "langAdminThisUser"
+msgstr "Zpět na uživatele"
+
+msgid "langManage"
+msgstr "Spravovat Portál"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "Jste zaregistrovaný do kurzu"
+
+msgid "langSubCat"
+msgstr "podkategorie"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "Nemůžete se odepsat z tohoto kurzu."
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "Jste administrátor tohoto kurzu."
+
+msgid "CourseManagement"
+msgstr "Správa kurzů"
+
+msgid "SortMyCourses"
+msgstr "Uspořádat moje kurzy"
+
+msgid "SubscribeToCourse"
+msgstr "Zápis do kurzů"
+
+msgid "UnsubscribeFromCourse"
+msgstr "Odhlášení z kurzů"
+
+msgid "CreateCourseCategory"
+msgstr "Vytvoř kategorii kurzu"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "Opravdu chcete smazat kategorii tohoto kurzu? Kurzy uvnitř této kategorie kurzu budou přesunuty mimo kategorie kurzu."
+
+msgid "CourseCategories"
+msgstr "Kategorie kurzu"
+
+msgid "CoursesInCategory"
+msgstr "Kurzy v této kategorii"
+
+msgid "SearchCourse"
+msgstr "Vyhledat kurzy"
+
+msgid "UpOneCategory"
+msgstr "O jednu kategorii nahoru"
+
+msgid "SearchResultsFor"
+msgstr "Výsledky hledání pro:"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "Opravdu se chcete odepsat z tohoto kurzu?"
+
+msgid "NoCourseCategory"
+msgstr "Žádná kategorie kurzů"
+
+msgid "EditCourseCategorySucces"
+msgstr "Kurz byl přidán do kategorie"
+
+msgid "SubscribingNotAllowed"
+msgstr "Přihlášení do kurzu není povolené"
+
+msgid "CourseSortingDone"
+msgstr "Dokončeno uspořádání kurzů"
+
+msgid "ExistingCourseCategories"
+msgstr "Existujíci kategorie kurzu"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "Jste odepsán z tohoto kurzu"
+
+msgid "ViewOpenCourses"
+msgstr "Zobraz otevřené kurzy"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "Nastala neznámá chyba. Prosím kontaktujte administrátora platformy"
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "Kód kurzu je špatný"
+
+msgid "CourseRequiresPassword"
+msgstr "Kurz vyžaduje heslo"
+
+msgid "SubmitRegistrationCode"
+msgstr "Odeslat registrační kód"
+
+msgid "CourseCategoryDeleted"
+msgstr "Kategorie byla smazána"
+
+msgid "CategorySortingDone"
+msgstr "Třídění kategorie ukončeno"
+
+msgid "CourseCategoryEditStored"
+msgstr "Kategorie aktualizovaná"
+
+msgid "buttonCreateCourseCategory"
+msgstr "Uložit kategorii kurzu"
+
+msgid "buttonSaveCategory"
+msgstr "Uložit kategorii"
+
+msgid "buttonChangeCategory"
+msgstr "Změnit kategorii"
+

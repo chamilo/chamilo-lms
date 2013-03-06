@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Personal agenda"
+
+msgid "langToday"
+msgstr "Today"
+

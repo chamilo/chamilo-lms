@@ -1,0 +1,369 @@
+msgid "langLineNumber"
+msgstr "Брой редове"
+
+msgid "langLine"
+msgstr "ред"
+
+msgid "langLines"
+msgstr "редове"
+
+msgid "langLineOrLines"
+msgstr "ред(ове)"
+
+msgid "langMoveUp"
+msgstr "Преместване нагоре"
+
+msgid "langMoveDown"
+msgstr "Преместване надолу"
+
+msgid "langAddNewHeading"
+msgstr "Добавяне на раздел"
+
+msgid "langCourseAdministratorOnly"
+msgstr "Само за преподаватели"
+
+msgid "langDefineHeadings"
+msgstr "Допълнителна информация - дефиниране"
+
+msgid "langBackToUsersList"
+msgstr "Обратно към списъка с потребители"
+
+msgid "langTracking"
+msgstr "Преглед на посещенията"
+
+msgid "langCourseManager"
+msgstr "Преподавател"
+
+msgid "langModRight"
+msgstr "Промяня на правата на"
+
+msgid "langNoAdmin"
+msgstr "от този момент <b>няма</b> права за тази страница."
+
+msgid "langAllAdmin"
+msgstr "отсега нататък има <b>всякакви</b> права за тази страница."
+
+msgid "langModRole"
+msgstr "Промяна на ролята на"
+
+msgid "langRole"
+msgstr "Описание"
+
+msgid "langIsNow"
+msgstr "от този момент е"
+
+msgid "langInC"
+msgstr "в този курс"
+
+msgid "langFilled"
+msgstr "Оставили сте някои полета празни."
+
+msgid "langUserNo"
+msgstr "Потребителско име, което сте избрали"
+
+msgid "langTaken"
+msgstr "вече е заето. Моля, изберете друго."
+
+msgid "langTutor"
+msgstr "Инструктор"
+
+msgid "langUnreg"
+msgstr "Отписване"
+
+msgid "langGroupUserManagement"
+msgstr "Управление на групите"
+
+msgid "langUnregister"
+msgstr "Заличаване на регистрацията"
+
+msgid "langAddAUser"
+msgstr "Добавяне на потребители"
+
+msgid "UsersUnsubscribed"
+msgstr "Избраните потребители са отписани от курса."
+
+msgid "ThisStudentIsSubscribeThroughASession"
+msgstr "Курсистът е записан в този курс в рамките на сесия. Не можете да редактирате неговата информация."
+
+msgid "NoDataAvailable"
+msgstr "Няма информация."
+
+msgid "AddToFriends"
+msgstr "Да се добави ли този контакт към списъка с приятели?"
+
+msgid "AddPersonalMessage"
+msgstr "Създаване на лично съобщение"
+
+msgid "Friends"
+msgstr "Приятели"
+
+msgid "PersonalData"
+msgstr "Профил"
+
+msgid "Contacts"
+msgstr "Контакти"
+
+msgid "SocialInformationComment"
+msgstr "На тази страница можете да организирате своите контакти."
+
+msgid "AttachContactsToGroup"
+msgstr "Прибавяне на контактите към групата"
+
+msgid "ContactsList"
+msgstr "Контакти"
+
+msgid "AttachToGroup"
+msgstr "Добавяне в групата"
+
+msgid "SelectOneContact"
+msgstr "Изберете контакт"
+
+msgid "SelectOneGroup"
+msgstr "Изберете група"
+
+msgid "AttachContactsPersonal"
+msgstr "Добавяне на личен контакт"
+
+msgid "AttachContactsToGroupSuccesfuly"
+msgstr "Контактите са добавени към групата."
+
+msgid "InvitationDenied"
+msgstr "Поканата е отказана."
+
+msgid "AddedContactToList"
+msgstr "Добавен е контакт в списъка."
+
+msgid "ContactsGroupsComment"
+msgstr "Тук са показани контактите сортирани по групи."
+
+msgid "YouDontHaveContactsInThisGroup"
+msgstr "Не са намерени контакти."
+
+msgid "YouDontHaveInvites"
+msgstr "Нямате покани."
+
+msgid "SocialInvitesComment"
+msgstr "Отправени покани"
+
+msgid "InvitationSentBy"
+msgstr "Поканата е изпратена от"
+
+msgid "RequestContact"
+msgstr "Искане на данни за контакт"
+
+msgid "SocialUnknow"
+msgstr "Непознат"
+
+msgid "SocialParent"
+msgstr "Моите родители"
+
+msgid "SocialFriend"
+msgstr "Моите приятели"
+
+msgid "SocialGoodFriend"
+msgstr "Моите истински приятели"
+
+msgid "SocialEnemy"
+msgstr "Моите \"врагове\""
+
+msgid "SocialDeleted"
+msgstr "Контактът е изтрит."
+
+msgid "MessageOutboxComment"
+msgstr "Изпратени съобщения"
+
+msgid "MyPersonalData"
+msgstr "Информация за мен"
+
+msgid "AlterPersonalData"
+msgstr "Добавяне на информация за мен"
+
+msgid "Invites"
+msgstr "Моите покани"
+
+msgid "ContactsGroups"
+msgstr "Групи контакти"
+
+msgid "ErrorSendingMessage"
+msgstr "Появи се грешка при опита за изпращане на съобщението."
+
+msgid "PendingInvitations"
+msgstr "Отправени покани"
+
+msgid "MyInbox"
+msgstr "Входящи съобщения"
+
+msgid "ViewSharedProfile"
+msgstr "Преглед на публичния профил"
+
+msgid "SeeAll"
+msgstr "Преглед на всички"
+
+msgid "ImagesUploaded"
+msgstr "Качени изображения"
+
+msgid "ExtraInformation"
+msgstr "Допълнителна информация"
+
+msgid "SearchContacts"
+msgstr "Търсене на контакти"
+
+msgid "SocialSeeContacts"
+msgstr "Преглед на контактите"
+
+msgid "SocialUserInformationAttach"
+msgstr "Моля, напишете съобщение преди да изпратите заявката."
+
+msgid "MessageInvitationNotSent"
+msgstr "Вашата покана не беше изпратена."
+
+msgid "SocialAddToFriends"
+msgstr "Добавяне към моите контакти"
+
+msgid "UserNonRegisteredAtTheCourse"
+msgstr "Потребителят не е регистриран в този курс."
+
+msgid "ChangeContactGroup"
+msgstr "Промяна на групата контакти"
+
+msgid "Friend"
+msgstr "Приятел"
+
+msgid "ViewMySharedProfile"
+msgstr "Моят публичен профил"
+
+msgid "UserStatistics"
+msgstr "Справка/статистика за потребителя"
+
+msgid "EditUser"
+msgstr "Редактиране на потребителя"
+
+msgid "ViewUser"
+msgstr "Преглед на информацията за потребителя"
+
+msgid "RSSFeeds"
+msgstr "RSS новини"
+
+msgid "NoFriendsInYourContactList"
+msgstr "Няма приятели в списъка с контакти."
+
+msgid "TryAndFindSomeFriends"
+msgstr "Опитайте да намерите приятели."
+
+msgid "ClearSearchResults"
+msgstr "Изчистване на резултатите от търсене"
+
+msgid "SendInvitation"
+msgstr "Изпращане на покана"
+
+msgid "SocialInvitationToFriends"
+msgstr "Покана за включване в моята група приятели"
+
+msgid "MyCertificates"
+msgstr "Моите сертификати"
+
+msgid "ToChangeYourEmailMustTypeYourPassword"
+msgstr "За да промените своя e-mail адрес е необходимо да въведете своята парола."
+
+msgid "Invitations"
+msgstr "Покани"
+
+msgid "MyGroups"
+msgstr "Моите групи"
+
+msgid "EditProfile"
+msgstr "Редактиране на профила"
+
+msgid "Social"
+msgstr "Социална мрежа"
+
+msgid "Profile"
+msgstr "Профил"
+
+msgid "MyFriends"
+msgstr "Моите приятели"
+
+msgid "Messages"
+msgstr "Съобщения"
+
+msgid "CreateAgroup"
+msgstr "Създаване на група"
+
+msgid "UsersGroups"
+msgstr "Потребители, групи"
+
+msgid "SorryNoResults"
+msgstr "Няма резултати."
+
+msgid "URL"
+msgstr "Интернет-адрес"
+
+msgid "AddPicture"
+msgstr "Добавяне на изображение"
+
+msgid "AddGroup"
+msgstr "Добавяне на група"
+
+msgid "NewTopic"
+msgstr "Нова тема"
+
+msgid "MessageList"
+msgstr "Съобщения"
+
+msgid "EditGroup"
+msgstr "Редактиране на групата"
+
+msgid "MemberList"
+msgstr "Членове"
+
+msgid "Members"
+msgstr "Членове"
+
+msgid "Admin"
+msgstr "Администратор"
+
+msgid "GroupList"
+msgstr "Групи"
+
+msgid "GroupEdit"
+msgstr "Редактиране на групата"
+
+msgid "Reply"
+msgstr "Отговор"
+
+msgid "Moderator"
+msgstr "Модератор"
+
+msgid "AddModerator"
+msgstr "Добавяне на модератор"
+
+msgid "GroupMembers"
+msgstr "Членове на групата"
+
+msgid "ReturnToInbox"
+msgstr "Към входящите съобщения"
+
+msgid "Me"
+msgstr "Аз"
+
+msgid "LeaveGroup"
+msgstr "Напускане на групата"
+
+msgid "UserAdded"
+msgstr "Потребителят е регистриран в системата."
+
+msgid "Topics"
+msgstr "Теми"
+
+msgid "StatusInThisGroup"
+msgstr "Статус в групата"
+
+msgid "GroupDescription"
+msgstr "Описание на групата"
+
+msgid "MyProductions"
+msgstr "Моите работи"
+
+msgid "YouNeedToHaveFriendsInYourSocialNetwork"
+msgstr "Трябва да имате приятели във Вашата социална мрежа."
+

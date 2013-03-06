@@ -1,0 +1,963 @@
+msgid "AssignSessionsTo"
+msgstr "Assigna sessions a"
+
+msgid "langToolName"
+msgstr "Importar cursos de la pissarra"
+
+msgid "TrackingDisabled"
+msgstr "Seguir ha estat impossibilitat per administrador de sistema"
+
+msgid "InactivesStudents"
+msgstr "Alumnes inactius"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Temps mitjà de connexió a la plataforma"
+
+msgid "AverageCoursePerStudent"
+msgstr "Mitjana de cursos per usuari"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Progrès mig en els cursos"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Puntuació en els exercicis"
+
+msgid "SeeStudentList"
+msgstr "Veure la llista d\'usuaris"
+
+msgid "NbActiveSessions"
+msgstr "Sessions actives"
+
+msgid "NbPastSessions"
+msgstr "Sessions passades"
+
+msgid "NbFutureSessions"
+msgstr "Sessions futures"
+
+msgid "NbStudentPerSession"
+msgstr "Nombre d\'alumnes per sessió"
+
+msgid "NbCoursesPerSession"
+msgstr "Nombre de cursos per sessió"
+
+msgid "SeeSessionList"
+msgstr "Veure la llista de sessions"
+
+msgid "langShowNone"
+msgstr "No mostrar"
+
+msgid "langCourseStats"
+msgstr "Estadístiques del curs"
+
+msgid "langToolsAccess"
+msgstr "Accés a les eines"
+
+msgid "langCourseAccess"
+msgstr "Accés al curs"
+
+msgid "langLinksAccess"
+msgstr "Enllaços"
+
+msgid "langDocumentsAccess"
+msgstr "Documents"
+
+msgid "langScormAccess"
+msgstr "Itinerari formatiu-Cursos amb format SCORM"
+
+msgid "langLinksDetails"
+msgstr "Enllaços visitats per l\'usuari"
+
+msgid "langWorksDetails"
+msgstr "Treballs|Feines|Obres carregats per l\'usuari en nom d\'\'Autors\'"
+
+msgid "langLoginsDetails"
+msgstr "Clicar damunt del nom del mes per a més detalls"
+
+msgid "langDocumentsDetails"
+msgstr "documents descarregats per l\'usuari"
+
+msgid "langExercicesDetails"
+msgstr "Puntuacions dels exercicis realitzats"
+
+msgid "langBackToList"
+msgstr "Tornar a la llista d\'usuaris"
+
+msgid "langDetails"
+msgstr "Detalls"
+
+msgid "langStatsOfCourse"
+msgstr "Estadístiques de l\'àrea del curs"
+
+msgid "langStatsOfUser"
+msgstr "Estadístiques de l\'ususari"
+
+msgid "langStatsOfCampus"
+msgstr "Estadístiques del portal"
+
+msgid "langCountUsers"
+msgstr "Nombre d\'usuaris"
+
+msgid "langCountToolAccess"
+msgstr "Nombre total de connexions a aquest curs"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Mes"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Nombre d\'accesos"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Nom de l\'eina"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Clics dels usuaris"
+
+msgid "langToolTitleCountColumn"
+msgstr "Clics totals"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Enllaç"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Clics dels usuaris"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Clics totals"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Test"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Puntuació"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Document"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Descàrregues del usuaris"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Descàrregues totals"
+
+msgid "langScormContentColumn"
+msgstr "Títol"
+
+msgid "langScormStudentColumn"
+msgstr "Usuaris"
+
+msgid "langScormTitleColumn"
+msgstr "Lliçó/etapa"
+
+msgid "langScormStatusColumn"
+msgstr "Estat"
+
+msgid "langScormScoreColumn"
+msgstr "Puntuació"
+
+msgid "langScormTimeColumn"
+msgstr "Temps"
+
+msgid "langScormNeverOpened"
+msgstr "Aquest curs mai ha estat obert per aquest usuari."
+
+msgid "langWorkTitle"
+msgstr "Títol"
+
+msgid "langWorkAuthors"
+msgstr "Autors"
+
+msgid "langWorkDescription"
+msgstr "Descripció"
+
+msgid "informationsAbout"
+msgstr "Seguiment de"
+
+msgid "langNoEmail"
+msgstr "Adreça de correu no especificada"
+
+msgid "langNoResult"
+msgstr "Encara no hi ha resultats"
+
+msgid "langCourse"
+msgstr "El curs"
+
+msgid "langHits"
+msgstr "Accesos"
+
+msgid "langTotal"
+msgstr "Total"
+
+msgid "langHour"
+msgstr "Hora"
+
+msgid "langDay"
+msgstr "Dia"
+
+msgid "langLittleHour"
+msgstr "h."
+
+msgid "langLast31days"
+msgstr "Als darrers 31 dies"
+
+msgid "langLast7days"
+msgstr "Als darrers 7 dies"
+
+msgid "langThisday"
+msgstr "Aquest dia"
+
+msgid "langLogins"
+msgstr "Accesos"
+
+msgid "langLoginsExplaination"
+msgstr "Aquí és la llista de les seves últimes connexions amb les eines que visitava durant aquestes sessions."
+
+msgid "langExercicesResults"
+msgstr "Puntuació dels tests realitzats"
+
+msgid "langVisits"
+msgstr "Visites"
+
+msgid "langAt"
+msgstr "A"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Data"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Visites"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Conexions i accesos a les eines"
+
+msgid "langWorkUploads"
+msgstr "Treballs enviats"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Usuari invàlid: aquest usuari no existeix  en el teu grup"
+
+msgid "langListStudents"
+msgstr "Liista d\'usuaris en aquest grup"
+
+msgid "langPeriodHour"
+msgstr "Hora"
+
+msgid "langPeriodDay"
+msgstr "Dia"
+
+msgid "langPeriodWeek"
+msgstr "Setmana"
+
+msgid "langPeriodMonth"
+msgstr "Mes"
+
+msgid "langPeriodYear"
+msgstr "Any"
+
+msgid "langNextDay"
+msgstr "Pròxim dia"
+
+msgid "langPreviousDay"
+msgstr "Dia anterior"
+
+msgid "langNextWeek"
+msgstr "Pròxima setmana"
+
+msgid "langPreviousWeek"
+msgstr "Setmana anterior"
+
+msgid "langNextMonth"
+msgstr "Pròxim mes"
+
+msgid "langPreviousMonth"
+msgstr "Mes anterior"
+
+msgid "langNextYear"
+msgstr "Any següent"
+
+msgid "langPreviousYear"
+msgstr "Any anterior"
+
+msgid "langViewToolList"
+msgstr "Vista de la llista de totes les eines"
+
+msgid "langToolList"
+msgstr "Llista de totes les eines"
+
+msgid "langFrom"
+msgstr "De"
+
+msgid "langTo"
+msgstr "a"
+
+msgid "langPeriodToDisplay"
+msgstr "Període"
+
+msgid "langDetailView"
+msgstr "Visualitzat per"
+
+msgid "langBredCrumpGroups"
+msgstr "Grups"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Àrea del grup"
+
+msgid "langBredCrumpUsers"
+msgstr "Usuaris"
+
+msgid "langAdminToolName"
+msgstr "Estadístiques de l\'administrador"
+
+msgid "langPlatformStats"
+msgstr "Plataforma d\'estadístiques"
+
+msgid "langStatsDatabase"
+msgstr "Estadístiques de la base de dades"
+
+msgid "langPlatformAccess"
+msgstr "Accés al portal"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Accés als cursos"
+
+msgid "langPlatformToolAccess"
+msgstr "Accés a les eines"
+
+msgid "langHardAndSoftUsed"
+msgstr "Països Proveedors Navegadors S.O. Referenciadors"
+
+msgid "langStrangeCases"
+msgstr "Casos problemàtics"
+
+msgid "langStatsDatabaseLink"
+msgstr "Clicar aquí"
+
+msgid "langCountCours"
+msgstr "Nombre de cursos"
+
+msgid "langCountCourseByFaculte"
+msgstr "Nombre de cursos per categoria"
+
+msgid "langCountCourseByLanguage"
+msgstr "Nombre de cursos per llengua"
+
+msgid "langCountCourseByVisibility"
+msgstr "Nombre de cursos per visibilitat"
+
+msgid "langCountUsersByCourse"
+msgstr "Nombre d\'usuaris per curs"
+
+msgid "langCountUsersByFaculte"
+msgstr "Nombre d\'usuaris per categoria"
+
+msgid "langCountUsersByStatus"
+msgstr "Nombre d\'usuaris per estat"
+
+msgid "langAccess"
+msgstr "Accés"
+
+msgid "langCountries"
+msgstr "Països"
+
+msgid "langProviders"
+msgstr "Proveïdors"
+
+msgid "langOS"
+msgstr "OS"
+
+msgid "langBrowsers"
+msgstr "Navegadors"
+
+msgid "langReferers"
+msgstr "Referenciadors"
+
+msgid "langAccessExplain"
+msgstr "(Quan un usuari ore l\'índex del portal)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Total"
+
+msgid "langTotalPlatformLogin"
+msgstr "Total"
+
+msgid "langMultipleLogins"
+msgstr "Comptes amb el mateix nom d\'usuari"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Comptes amb el mateix nom d\'usuari i contrasenya"
+
+msgid "langMultipleEmails"
+msgstr "Comptes amb el mateix correu"
+
+msgid "langCourseWithoutProf"
+msgstr "Cursos sense tutor"
+
+msgid "langCourseWithoutAccess"
+msgstr "Cursos no utilitzats"
+
+msgid "langLoginWithoutAccess"
+msgstr "Logins no utilitzats"
+
+msgid "langAllRight"
+msgstr "No hi ha casos problemàtics"
+
+msgid "langDefcon"
+msgstr "Oh, casos problemàtics detectats!!"
+
+msgid "langNULLValue"
+msgstr "Buit o (nul)"
+
+msgid "langTrafficDetails"
+msgstr "Detalls de trànsit"
+
+msgid "langSeeIndividualTracking"
+msgstr "Per un seguiment individual veure<a href=../usuari/usuari.php>Usuaris</a>eina."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Aquest itinerari va ser obert per ningú."
+
+msgid "SynthesisView"
+msgstr "Vista sintètica"
+
+msgid "Visited"
+msgstr "Visitada"
+
+msgid "FirstAccess"
+msgstr "Primer accès"
+
+msgid "LastAccess"
+msgstr "Darrer accès"
+
+msgid "langProbationers"
+msgstr "Alumnes"
+
+msgid "MoyenneTest"
+msgstr "Mitjana dels exercicis"
+
+msgid "exportExcel"
+msgstr "Exportar en format Excel"
+
+msgid "MoyCourse"
+msgstr "Mitjana de curs"
+
+msgid "MoyenneExamen"
+msgstr "Mitjana d\'examen"
+
+msgid "MoySession"
+msgstr "Mitjana de sessió"
+
+msgid "TakenSessions"
+msgstr "Sessions realitzades"
+
+msgid "FollowUp"
+msgstr "Seguiment"
+
+msgid "Trainers"
+msgstr "Professors"
+
+msgid "Administrators"
+msgstr "Administradors"
+
+msgid "Tracks"
+msgstr "Seguiment"
+
+msgid "Success"
+msgstr "Qualificació"
+
+msgid "ExcelFormat"
+msgstr "Format Excel"
+
+msgid "MyLearnpath"
+msgstr "El meu itinerari d\'aprenentatge"
+
+msgid "Time"
+msgstr "Hora"
+
+msgid "Score"
+msgstr "Puntuació"
+
+msgid "LastConnexion"
+msgstr "Última connexió"
+
+msgid "ConnectionTime"
+msgstr "Temps de connexió"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Connexions a aquest curs"
+
+msgid "StudentTutors"
+msgstr "Tutors de l\'alumne"
+
+msgid "StudentSessions"
+msgstr "Sessions de l\'alumne"
+
+msgid "StudentCourses"
+msgstr "Cursos de l\'alumne"
+
+msgid "NoLearnpath"
+msgstr "Sense itinerari d\'aprenentatge"
+
+msgid "Attempts"
+msgstr "Intents"
+
+msgid "Correction"
+msgstr "Correcció"
+
+msgid "NoExercise"
+msgstr "Sense exercicis"
+
+msgid "LimitDate"
+msgstr "Data límit"
+
+msgid "SentDate"
+msgstr "Data d\'enviament"
+
+msgid "Annotate"
+msgstr "Anotar"
+
+msgid "DayOfDelay"
+msgstr "Díes de retard"
+
+msgid "NoProduction"
+msgstr "Sense productes"
+
+msgid "NoComment"
+msgstr "Sense comentaris"
+
+msgid "LatestLogin"
+msgstr "Última connexió"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Temps de permanència en la plataforma"
+
+msgid "Messages"
+msgstr "Missatges instantanis"
+
+msgid "AveragePostsInForum"
+msgstr "Nombre de missatges en el foro"
+
+msgid "AverageAssignments"
+msgstr "Nombre de tasques"
+
+msgid "Print"
+msgstr "Imprimir"
+
+msgid "StudentDetails"
+msgstr "Detalls de l\'alumne"
+
+msgid "StudentDetailsInCourse"
+msgstr "Detalls de l\'alumne en el curs"
+
+msgid "Learnpaths"
+msgstr "Itineraris d\'aprenentatge"
+
+msgid "OtherTools"
+msgstr "Altres eines"
+
+msgid "DetailsStudentInCourse"
+msgstr "Detalls de l\'alumne en el curs"
+
+msgid "CourseTitle"
+msgstr "Títol del curs"
+
+msgid "NbStudents"
+msgstr "Nombre d\'alumnes"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Temps de permanència en el curs"
+
+msgid "AvgStudentsProgress"
+msgstr "Progrès"
+
+msgid "AvgCourseScore"
+msgstr "Puntuació mitjana dels alumnes del curs"
+
+msgid "AvgMessages"
+msgstr "Missatges per alumne"
+
+msgid "AvgAssignments"
+msgstr "Tasques per alumne"
+
+msgid "ToolsMostUsed"
+msgstr "Eines més utilitzades"
+
+msgid "StudentsTracking"
+msgstr "Seguiment dels alumnes"
+
+msgid "CourseTracking"
+msgstr "Seguiment del curs"
+
+msgid "LinksMostClicked"
+msgstr "Enllaços més visitats"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Documents més descarregats"
+
+msgid "LearningPathDetails"
+msgstr "Detalls de l\'itinerari d\'aprenentatge"
+
+msgid "NoConnexion"
+msgstr "Cap connexió"
+
+msgid "TeacherInterface"
+msgstr "Interfície de professor"
+
+msgid "CoachInterface"
+msgstr "Interfície de tutor"
+
+msgid "AdminInterface"
+msgstr "Interfície d\'administrador"
+
+msgid "NumberOfSessions"
+msgstr "Nombre de sessions"
+
+msgid "YourCourseList"
+msgstr "Valors mitjos per a la seva formació"
+
+msgid "YourStatistics"
+msgstr "Les seves estadístiques"
+
+msgid "CoachList"
+msgstr "Llista de tutors"
+
+msgid "CoachStudents"
+msgstr "Alumnes del tutor"
+
+msgid "NoLearningPath"
+msgstr "No hi ha cap curs disponible"
+
+msgid "SessionCourses"
+msgstr "Sessions de cursos"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Seguiment dels alumnes inscrits en aquest curs"
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Temps"
+
+msgid "RemindInactiveUser"
+msgstr "Recordatori per als usuaris sense activitat"
+
+msgid "FirstLogin"
+msgstr "Primer accés"
+
+msgid "AccessDetails"
+msgstr "Detalls d\'accés"
+
+msgid "DateAndTimeOfAccess"
+msgstr "Data i hora d\'accés"
+
+msgid "Duration"
+msgstr "Duració"
+
+msgid "WrongDatasForTimeSpentOnThePlatform"
+msgstr "Dades sobre l\'usuari que estava registrat quan el càlcul de temps de permanència en la plataforma no era possible."
+
+msgid "DisplayCoaches"
+msgstr "Sumari de tutors"
+
+msgid "DisplayUserOverview"
+msgstr "Sumari d\'usuaris"
+
+msgid "ExportUserOverviewOptions"
+msgstr "Opció d\'exportació del sumari d\'usuari"
+
+msgid "FollowingFieldsWillAlsoBeExported"
+msgstr "Els següents camps també seran exportats"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "Puntuació total de l\'exercici"
+
+msgid "TotalExercisesScorePossible"
+msgstr "Màxima puntuació total possible"
+
+msgid "TotalExercisesAnswered"
+msgstr "Nombre d\'exercicis contestats"
+
+msgid "TotalExercisesScorePercentage"
+msgstr "Percentatge total de la puntuació dels exercicis"
+
+msgid "ForumForumsNumber"
+msgstr "Nombre de foros"
+
+msgid "ForumThreadsNumber"
+msgstr "Nombre de temes"
+
+msgid "ForumPostsNumber"
+msgstr "Nombre de missatges"
+
+msgid "ChatConnectionsDuringLastXDays"
+msgstr "Connexions al xat en els últims %s dies"
+
+msgid "ChatLastConnection"
+msgstr "Última connexió al xat"
+
+msgid "CourseInformation"
+msgstr "Informació del curs"
+
+msgid "NoAdditionalFieldsWillBeExported"
+msgstr "Els camps adicionals no seran exportats"
+
+msgid "langSendNotification"
+msgstr "Enviar les notificacions"
+
+msgid "TimeOfActiveByTraining"
+msgstr "Temps de formació (suma del temps de permanència de tots els alumnes)"
+
+msgid "AvgAllUsersInAllCourses"
+msgstr "Terme mitjà de tots els alumnes"
+
+msgid "AvgExercisesScore"
+msgstr "Puntuació en els exercicis"
+
+msgid "TrainingTime"
+msgstr "Temps en el curs"
+
+msgid "CourseProgress"
+msgstr "Progrès en la lliçó"
+
+msgid "ViewMinus"
+msgstr "Veure reducció"
+
+msgid "ResourcesTracking"
+msgstr "Informe sobre recursos"
+
+msgid "SelectFieldToAdd"
+msgstr "Seleccioneu un camp del perfil d\'usuari"
+
+msgid "AddAdditionalProfileField"
+msgstr "Afegeix un camp del perfil d\'usuari"
+
+msgid "ConfigureExtensions"
+msgstr "Configura els serveis"
+
+msgid "DashboardBlocks"
+msgstr "Blocs del tauler de control"
+
+msgid "DashboardList"
+msgstr "Llista del tauler de control"
+
+msgid "YouHaveNotEnabledBlocks"
+msgstr "No heu habilitat cap bloc"
+
+msgid "BlocksHaveBeenUpdatedSuccessfully"
+msgstr "Els blocs han estat actualitzats"
+
+msgid "AttendanceSheetDescription"
+msgstr "Les llistes d\'assistència permeten registrar les faltes d\'assistència dels estudiants. En cas d\'absència d\'un estudiant, el professor ha d\'enregistrar manualment a la casella corresponent. És possible crear més d\'una llista d\'assistència per cada curs, així per exemple, podrà registrar separadament l\'assistència a les classes teòriques i pràctiques."
+
+msgid "AttendanceSheetReport"
+msgstr "Informe de fulls d\'assistència"
+
+msgid "YouDoNotHaveDoneAttendances"
+msgstr "No teniu assistències"
+
+msgid "GoToAttendanceCalendarList"
+msgstr "Vés a la vista calendari de les assistències"
+
+msgid "AddADateTime"
+msgstr "Afegeix una data i una hora"
+
+msgid "AreYouSureToDeleteAllDates"
+msgstr "Esteu segur de voler eliminar totes les dates?"
+
+msgid "DashboardPluginsHaveBeenUpdatedSuccessfully"
+msgstr "Els connectors del tauler de control han estat actualitzats correctament"
+
+msgid "ThereIsNoInformationAboutYourCourses"
+msgstr "No hi ha informació disponible sobre els seus cursos"
+
+msgid "ThereIsNoInformationAboutYourSessions"
+msgstr "No hi ha informació disponible sobre les seves sessions"
+
+msgid "ThereIsNoInformationAboutYourTeachers"
+msgstr "No hi ha informació disponible sobre els seus professors"
+
+msgid "ThereIsNoInformationAboutYourStudents"
+msgstr "No hi ha informació disponible sobre els seus estudiants"
+
+msgid "TimeSpentLastWeek"
+msgstr "Temps emprat la setmana passada"
+
+msgid "DateLock"
+msgstr "Bloqueig de data"
+
+msgid "FolderCreated"
+msgstr "Carpeta nova creada"
+
+msgid "LearnpathVisible"
+msgstr "Lliçó feta visible"
+
+msgid "LinkInvisible"
+msgstr "Enllaç fet visible"
+
+msgid "LinkAdded"
+msgstr "Enllaç afegit"
+
+msgid "Minutes"
+msgstr "Minuts"
+
+msgid "BackupCreated"
+msgstr "Còpia de seguretat creada"
+
+msgid "DisplayCourseOverview"
+msgstr "Resum dels cursos"
+
+msgid "DisplaySessionOverview"
+msgstr "Resum de les sessions"
+
+msgid "TotalNumberOfMessages"
+msgstr "Nombre total de missatges"
+
+msgid "TotalNumberOfAssignments"
+msgstr "Nombre total de tasques"
+
+msgid "LastLogins"
+msgstr "Darrera connexió"
+
+msgid "AllLogins"
+msgstr "Totes les connexions"
+
+msgid "LPExerciseResultsBySession"
+msgstr "Resultats dels exercicis de les lliçons per sessió"
+
+msgid "LPQuestionListResults"
+msgstr "Llista de resultats dels exercicis de les lliçons"
+
+msgid "PleaseSelectACourse"
+msgstr "Seleccioneu un curs"
+
+msgid "StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts"
+msgstr "La puntuació mitjana de l\'estudiant és calculada sobre el conjunt de les lliçons i dels intents"
+
+msgid "AverageScore"
+msgstr "Puntuació mitjana"
+
+msgid "LastConnexionDate"
+msgstr "Data de la darrera connexió"
+
+msgid "QuestionsAreTakenFromLPExercises"
+msgstr "Aquestes preguntes han estat agafades de les lliçons"
+
+msgid "AllStudentsAttemptsAreConsidered"
+msgstr "Tots els intents dels estudiants són considerats"
+
+msgid "PublishedExercises"
+msgstr "Exercicis disponibles"
+
+msgid "DoneExercises"
+msgstr "Exercicis realitzats"
+
+msgid "AverageExerciseResult"
+msgstr "Resultat mig de l\'exercici"
+
+msgid "LPProgress"
+msgstr "Progrés de les lliçons"
+
+msgid "Ranking"
+msgstr "Classificació"
+
+msgid "BestResultInCourse"
+msgstr "Millor resultat del curs"
+
+msgid "ExerciseStartDate"
+msgstr "Data de publicació"
+
+msgid "OnlyBestResultsPerStudent"
+msgstr "En cas d\'intents múltiples, només mostra el millor resultat per estudiant"
+
+msgid "BestAttempt"
+msgstr "Millor intent"
+
+msgid "ExercisesInTimeProgressChart"
+msgstr "El progrés dels resultats dels exercicis propis a través del temps, contra la mitjana dels estudiants"
+
+msgid "AverageIsCalculatedBasedInAllAttempts"
+msgstr "La mitjana es basa en tots els intents realitzats"
+
+msgid "AverageIsCalculatedBasedInTheLatestAttempts"
+msgstr "La mitjana es basa en els últims intents realitzats"
+
+msgid "LatestAttemptAverageScore"
+msgstr "Mitjana dels últims resultats"
+
+msgid "Untitled"
+msgstr "Sense títol"
+
+msgid "Quantity"
+msgstr "Quantitat"
+
+msgid "UploadedDocuments"
+msgstr "Documents enviats"
+
+msgid "ExerciseProgress"
+msgstr "Progrés de l\'exercici"
+
+msgid "NumberOfStudents"
+msgstr "Nombre d\'estudiants"
+
+msgid "NumberStudentsAccessingCourse"
+msgstr "Nombre d\'estudiants que han accedit al curs"
+
+msgid "PercentageStudentsAccessingCourse"
+msgstr "Percentatge d\'estudiants accedint al curs"
+
+msgid "NumberStudentsCompleteAllActivities"
+msgstr "Nombre d\'estudiants que han completat totes les activitats (progrés del 100%)"
+
+msgid "PercentageStudentsCompleteAllActivities"
+msgstr "Percentatge d\'estudiants que han completat totes les activitats (progrés del 100%)"
+
+msgid "AverageOfActivitiesCompletedPerStudent"
+msgstr "Nombre mig d\'activitats completades per estudiant"
+
+msgid "TotalTimeSpentInTheCourse"
+msgstr "Temps total emprat en el curs"
+
+msgid "AverageTimePerStudentInCourse"
+msgstr "Temps mig emprat en el curs, per estudiant"
+
+msgid "NumberOfDocumentsInLearnpath"
+msgstr "Nombre de documents a la lliçó"
+
+msgid "NumberOfExercisesInLearnpath"
+msgstr "Nombre d\'exercicis a la lliçó"
+
+msgid "NumberOfLinksInLearnpath"
+msgstr "Nombre d\'enllaços a la lliçó"
+
+msgid "NumberOfForumsInLearnpath"
+msgstr "Nombre de fòrums a la lliçó"
+
+msgid "NumberOfAssignmentsInLearnpath"
+msgstr "Nombre de tasques a la lliçó"
+
+msgid "NumberOfAnnouncementsInCourse"
+msgstr "Nombre d\'anuncis al curs"
+
+msgid "CurrentCoursesReport"
+msgstr "Informes de cursos actuals"
+
+msgid "NumberOfPublishedExercises"
+msgstr "Nombre d\'exercicis publicats"
+
+msgid "NumberOfPublishedLps"
+msgstr "Nombre de lliçons publicades"
+
+msgid "EventType"
+msgstr "Tipus d\'esdeveniment"
+
+msgid "NbInactiveSessions"
+msgstr "Nombre de sessions inactives"
+
+msgid "FollowedSessions"
+msgstr "Sessions seguides"
+
+msgid "FollowedCourses"
+msgstr "Cursos seguits"
+
+msgid "FollowedUsers"
+msgstr "Usuaris seguits"
+
+msgid "Timeline"
+msgstr "Línia del temps"
+

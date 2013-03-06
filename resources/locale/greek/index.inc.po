@@ -1,0 +1,141 @@
+msgid "langInvalidId"
+msgstr "Λάθος στοιχεία. Αν δεν είστε γραμμένος, συμπληρωστε τη <a href=\'claroline/auth/inscription.php\'>φόρμα εγγραφής</a></font color>"
+
+msgid "langWelcome"
+msgstr "Καλως ήλθατε!"
+
+msgid "langPass"
+msgstr "Συνθηματικό"
+
+msgid "langEnter"
+msgstr "Εισοδος"
+
+msgid "langReg"
+msgstr "Εγγραφή"
+
+msgid "langMenu"
+msgstr "Μενού"
+
+msgid "langAdvises"
+msgstr "Συμβουλές"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Προσοχή:</b>  το μάθημα δεν υπάρχει"
+
+msgid "langOtherCourses"
+msgstr "άλλα μαθήματα"
+
+msgid "langSupportForum"
+msgstr "Περιοχή υποστήριξης"
+
+msgid "langCategories"
+msgstr "Κατηγορίες"
+
+msgid "langBackToHomePage"
+msgstr "Επιστροφή στην κεντρική σελίδα"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Δεν υπάρχει διαθέσιμο σε όλους μάθημα"
+
+msgid "langLostPassword"
+msgstr "Ξέχασες το συνθηματικό;"
+
+msgid "langAgenda"
+msgstr "Ατζέντα"
+
+msgid "langValvas"
+msgstr "Τελευταίες ανακοινώσεις"
+
+msgid "langUp"
+msgstr "Πάνω"
+
+msgid "langCatList"
+msgstr "Κατηγορίες"
+
+msgid "langCourseList"
+msgstr "Λίστα μαθημάτων"
+
+msgid "langHelptwo"
+msgstr "Βοήθεια"
+
+msgid "langRegAll"
+msgstr "εγγραφή"
+
+msgid "EussMenu"
+msgstr "μενού"
+
+msgid "Opinio"
+msgstr "Γνώμη"
+
+msgid "Englin"
+msgstr "Αγγλικά"
+
+msgid "langSubCat"
+msgstr "υποκατηγορίες"
+
+msgid "langMenuGeneral"
+msgstr "Γενικά"
+
+msgid "langMenuUser"
+msgstr "Χρήστης"
+
+msgid "langMenuAdmin"
+msgstr " Διαχειριστής"
+
+msgid "langUsersOnLineList"
+msgstr "Συνδεδεμένοι χρήστες"
+
+msgid "langTotalOnLine"
+msgstr "Συνδεδεμένοι συνολικά"
+
+msgid "langRefresh"
+msgstr "Ανανέωση"
+
+msgid "langMe"
+msgstr "εγώ"
+
+msgid "langSystemAnnouncements"
+msgstr "Ανακοινώσεις του Συστήματος"
+
+msgid "langHelpMaj"
+msgstr "Βοήθεια"
+
+msgid "langAdmin"
+msgstr " Διαχειριστής"
+
+msgid "langRegisterForCourse"
+msgstr "Εγγραφή σε καινούριο μάθημα"
+
+msgid "langUnregisterForCourse"
+msgstr "Τα μαθήματά μου: Διαγραφή"
+
+msgid "langCombinedCourse"
+msgstr "Συνδυασμένο μάθημα"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Refresh"
+msgstr "Ανανέωση"
+
+msgid "TotalOnLine"
+msgstr "χρήστες συνδεδεμένοι συνολικά"
+
+msgid "langCourseClosed"
+msgstr "(προς το παρόν, το μάθημα είναι κλειστό)"
+
+msgid "langCompetences"
+msgstr "Δυνατότητες"
+
+msgid "langDiplomas"
+msgstr "Διπλόματα"
+
+msgid "langTeach"
+msgstr "Τι μπορώ να διδάσκω"
+
+msgid "langProductions"
+msgstr "Παραγωγές"
+
+msgid "langRequestDenied"
+msgstr "Η κλήση έχει απορριφθεί"
+

@@ -1,0 +1,737 @@
+msgid "MoveTo"
+msgstr "Siirrä"
+
+msgid "langDownloadFile"
+msgstr "Lisää tiedostot palvelimelle."
+
+msgid "langNameDir"
+msgstr "Uuden hakemiston nimi"
+
+msgid "langSize"
+msgstr "Koko"
+
+msgid "langRename"
+msgstr "Nimeä uudelleen"
+
+msgid "langCopy"
+msgstr "Kopioi kurssin sisältö"
+
+msgid "langTo"
+msgstr "Hakemistoon"
+
+msgid "langNoSpace"
+msgstr "Lataus epäonnistui, hakemistossa ei ole riittävästi tilaa."
+
+msgid "langDownloadEnd"
+msgstr "Lataus on päättynyt"
+
+msgid "langFileExists"
+msgstr "Toiminto on mahdoton.<br>Samanniminen tiedosto on olemassa."
+
+msgid "langImpossible"
+msgstr "Toiminto on mahdoton"
+
+msgid "langAddComment"
+msgstr "Lisää kommentti:"
+
+msgid "langDocCopied"
+msgstr "Dokumentti on kopioitu"
+
+msgid "langDocDeleted"
+msgstr "Dokumentti on poistettu"
+
+msgid "langElRen"
+msgstr "Elementti on nimetty uudelleen"
+
+msgid "langDirMv"
+msgstr "Hakemisto on siirretty"
+
+msgid "langComMod"
+msgstr "Kommenttia on muutettu"
+
+msgid "langViMod"
+msgstr "Näkyvyyttä on muutettu"
+
+msgid "langGroupSpace"
+msgstr "Ryhmän alue"
+
+msgid "langGroupSpaceLink"
+msgstr "Ryhmän alue"
+
+msgid "langGroupForumLink"
+msgstr "Ryhmän keskustelu"
+
+msgid "langZipNoPhp"
+msgstr "Pakattujen tiedostojen joukossa ei saa olla PHP.tiedostoja"
+
+msgid "langUncompress"
+msgstr "Pura zip-tiedosto"
+
+msgid "langDownloadAndZipEnd"
+msgstr "Zip-tiedosto tallennettu ja purettu"
+
+msgid "langRoot"
+msgstr "root"
+
+msgid "CreateDoc"
+msgstr "Luo dokumentti"
+
+msgid "langDown"
+msgstr "alas"
+
+msgid "langFileError"
+msgstr "Tiedosto ei ole kelvollinen"
+
+msgid "langMaxFileSize"
+msgstr "Maksimi tiedostokoko on"
+
+msgid "langFileName"
+msgstr "Tiedoston nimi"
+
+msgid "langNoFileName"
+msgstr "Ole hyvä ja anna tiedostolle nimi"
+
+msgid "langNoText"
+msgstr "Ole hyvä ja kirjoita tekstiä tai HTML-sisältöä"
+
+msgid "langAreYouSureToDelete"
+msgstr "Haluatko varmasti poistaa"
+
+msgid "langScormcontent"
+msgstr "Tämä on Scorm sisältöä<br><input type=button name=scormbutton value=\'Aloita\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr "Tämä on Scorm tyylinen kurssi. Aloittaaksesi klikkaa painiketta<input type=button name=scormbutton value=\'Aloita\' onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Julkaise"
+
+msgid "langMissingImagesDetected"
+msgstr "Kuvia puuttuu"
+
+msgid "langCreateDocument"
+msgstr "Luo dokumentti"
+
+msgid "langEditDocument"
+msgstr "Muokkaa"
+
+msgid "langDocuments"
+msgstr "Dokumentit"
+
+msgid "langOrganiseDocuments"
+msgstr "Luo sisällysluettelo"
+
+msgid "langEditTOC"
+msgstr "Muokkaa sisällysluetteloa"
+
+msgid "langChapter"
+msgstr "Kappale"
+
+msgid "langDocumentList"
+msgstr "Lista kaikista dokumenteista"
+
+msgid "langOrganisationList"
+msgstr "Sisällysluettelo"
+
+msgid "langCreationSucces"
+msgstr "Sisällysluettelo onnistuneesti luotu"
+
+msgid "langCanViewOrganisation"
+msgstr "Voit tarkastella organisaatiotasi"
+
+msgid "langHere"
+msgstr "tänne"
+
+msgid "langViewDocument"
+msgstr "Katso"
+
+msgid "langHtmlTitle"
+msgstr "Sisällysluettelo"
+
+msgid "langAddToTOC"
+msgstr "Lisää sisältöön"
+
+msgid "langAddChapter"
+msgstr "Lisää kappale"
+
+msgid "langReady"
+msgstr "Luo sisällysluettelo automaattisesti"
+
+msgid "langStoreDocuments"
+msgstr "Tallenna dokumentit"
+
+msgid "langTocDown"
+msgstr "Alas"
+
+msgid "langTocUp"
+msgstr "Ylös"
+
+msgid "CutPasteLink"
+msgstr "Ei kehyksiä"
+
+msgid "langCreatePath"
+msgstr "Luo polku"
+
+msgid "SendDocument"
+msgstr "Lataa tiedosto"
+
+msgid "ThisFolderCannotBeDeleted"
+msgstr "Tätä kansiota ei voi poistaa"
+
+msgid "ChangeVisibility"
+msgstr "Muuta näkyvyyttä"
+
+msgid "VisibilityCannotBeChanged"
+msgstr "Näkyvyyttä ei voi muuttaa"
+
+msgid "DocumentCannotBeMoved"
+msgstr "Dokumenttia ei voi siirtää"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "Oogie: PowerPoint muunnos"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "PowerPointista oppimispoluksi muunnin"
+
+msgid "langAddMetadata"
+msgstr "Katso/muokkaa metadataa"
+
+msgid "langGoMetadata"
+msgstr "Mene"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "Tämän kurssin kapasiteetti on"
+
+msgid "langDel"
+msgstr "poista"
+
+msgid "langUp"
+msgstr "Ylös"
+
+msgid "langDate"
+msgstr "Päivämäärä"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Näytä kurssin kapasiteetti"
+
+msgid "CourseCurrentlyUses"
+msgstr "Tällä hetkellä kurssilla käytössä"
+
+msgid "MaximumAllowedQuota"
+msgstr "Tallennuskapasiteettisi on"
+
+msgid "PercentageQuotaInUse"
+msgstr "Kapasiteetista käytössä prosentteina"
+
+msgid "PercentageQuotaFree"
+msgstr "Kapasiteettia vapaana prosentteina"
+
+msgid "CurrentDirectory"
+msgstr "Nykyinen hakemisto"
+
+msgid "UplUploadDocument"
+msgstr "Tallenna dokumentti"
+
+msgid "UplPartialUpload"
+msgstr "Tallennettava tiedosto tallentui vain osittain."
+
+msgid "UplExceedMaxPostSize"
+msgstr "Tiedoston koko ylitti sallitun:"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "Tallennettavan tiedoston koko ylitti koko kapasiteetin:"
+
+msgid "UplFileTooBig"
+msgstr "Tiedosto liian iso tallennettavaksi!"
+
+msgid "UplUploadFailed"
+msgstr "Tiedoston tallentaminen epäonnistui!"
+
+msgid "UplUnableToSaveFile"
+msgstr "Tallennettavaa tiedostoa ei voitu tallentaa!"
+
+msgid "UplNotEnoughSpace"
+msgstr "Tilaa ei ole tarpeeksi tiedoston tallentamiseen!"
+
+msgid "UplNoSCORMContent"
+msgstr "SCORM sisältöä ei löytynyt!"
+
+msgid "UplZipExtractSuccess"
+msgstr "Zip-tiedosto onnistuneesti purettu!"
+
+msgid "UplZipCorrupt"
+msgstr "Tiedoston purkaminen epäonnistui."
+
+msgid "UplAlreadyExists"
+msgstr "on jo olemassa!"
+
+msgid "UplFileSavedAs"
+msgstr "Tiedosto tallennettu"
+
+msgid "UplFileOverwritten"
+msgstr "on tallennettu päälle."
+
+msgid "CannotCreateDir"
+msgstr "Hakemiston luominen ei onnistu"
+
+msgid "UplUpload"
+msgstr "Tallenna"
+
+msgid "UplWhatIfFileExists"
+msgstr "Jos tiedosto on jo olemassa:"
+
+msgid "UplDoNothing"
+msgstr "Älä tee mitään"
+
+msgid "UplDoNothingLong"
+msgstr "Älä tallenna, jos tiedosto on jo olemassa"
+
+msgid "UplOverwrite"
+msgstr "Tallenna päälle"
+
+msgid "UplOverwriteLong"
+msgstr "Tallenna vanhan tiedoston päälle"
+
+msgid "UplRename"
+msgstr "Uudelleennimeä"
+
+msgid "UplRenameLong"
+msgstr "Uudelleennimeä tallennetava tiedosto, jos sellainen jo on"
+
+msgid "Metadata"
+msgstr "Metadata"
+
+msgid "DocumentQuota"
+msgstr "Dokumenttien määrä"
+
+msgid "NoDocsInFolder"
+msgstr "Tässä kansiossa ei dokumentteja"
+
+msgid "UploadTo"
+msgstr "Tallenna"
+
+msgid "fileModified"
+msgstr "Tiedostoa on muokattu"
+
+msgid "DocumentsOverview"
+msgstr "dokumenttien esikatselu"
+
+msgid "ViewSlideshow"
+msgstr "Katso kuvat diaesityksenä"
+
+msgid "Options"
+msgstr "Vaihtoehdot"
+
+msgid "WelcomeOogieConverter"
+msgstr "Tervetuloa Oogie PowerPoint muuntimeen<ul type=\"1\"><li>Hae kovalevyltä .ppt tai .odp tiedosto<li>Lataa se Oogieen. Se muunnetaan Scorm oppimispoluksi.<li>Voit sen jälkeen lisätä äänikommentteja jokaiseen diaan ja lisätä harjoituksia ja testejä diojen väliin.	"
+
+msgid "ConvertToLP"
+msgstr "Muunna oppimispoluksi"
+
+msgid "AdvancedSettings"
+msgstr "Lisäasetukset"
+
+msgid "File"
+msgstr "Tiedosto"
+
+msgid "DocDeleteError"
+msgstr "Virhe poistettaessa tiedostoa"
+
+msgid "ViModProb"
+msgstr "Virhe päivitettäessä näkyvyyttä"
+
+msgid "DirDeleted"
+msgstr "Kansio poistettu"
+
+msgid "TemplateName"
+msgstr "Mallin nimi"
+
+msgid "TemplateDescription"
+msgstr "Mallin kuvaus"
+
+msgid "DocumentSetAsTemplate"
+msgstr "Dokumentti on määritetty uudeksi malliksi"
+
+msgid "DocumentUnsetAsTemplate"
+msgstr "Dokumentti poistettu malleista"
+
+msgid "AddAsTemplate"
+msgstr "Lisää malliksi"
+
+msgid "RemoveAsTemplate"
+msgstr "Poista malli"
+
+msgid "ReadOnly"
+msgstr "Vain luku"
+
+msgid "ReadOnlyFile"
+msgstr "Tiedosto on vain luku"
+
+msgid "FileNotFound"
+msgstr "Tiedostoa ei löytynyt"
+
+msgid "TemplateTitleFirstPage"
+msgstr "Ensimmäinen sivu"
+
+msgid "TemplateTitleFirstPageDescription"
+msgstr "Kurssisi ensimmäinen sivu"
+
+msgid "TemplateTitleDedicatory"
+msgstr "Omistus"
+
+msgid "TemplateTitleDedicatoryDescription"
+msgstr "Tee oma omistus"
+
+msgid "TemplateTitlePreface"
+msgstr "Kurssin alkusanat"
+
+msgid "TemplateTitlePrefaceDescription"
+msgstr "Alkusanat"
+
+msgid "TemplateTitleIntroduction"
+msgstr "Johdanto"
+
+msgid "TemplateTitleIntroductionDescription"
+msgstr "Lisää johdanto teksti"
+
+msgid "TemplateTitlePlan"
+msgstr "Suunnitelma"
+
+msgid "TemplateTitlePlanDescription"
+msgstr "Sisällysluettelo"
+
+msgid "TemplateTitleMrDokeos"
+msgstr "Herra Chamilo selittää"
+
+msgid "TemplateTitleMrDokeosDescription"
+msgstr "Dialogi Herra Chamilo alhaalla"
+
+msgid "TemplateTitleTeacher"
+msgstr "Kouluttaja"
+
+msgid "TemplateTitleTeacherDescription"
+msgstr "oppijan kanssa"
+
+msgid "TemplateTitleProduction"
+msgstr "Tuotanto"
+
+msgid "TemplateTitleProductionDescription"
+msgstr "Tuotannon kuvaus"
+
+msgid "TemplateTitleAnalyze"
+msgstr "Analyysi"
+
+msgid "TemplateTitleAnalyzeDescription"
+msgstr "Analyysin kuvaus"
+
+msgid "TemplateTitleSynthetize"
+msgstr "Synthetize"
+
+msgid "TemplateTitleSynthetizeDescription"
+msgstr "Synthetize kuvaus"
+
+msgid "TemplateTitleText"
+msgstr "Teksti"
+
+msgid "TemplateTitleTextDescription"
+msgstr "Pelkkä teksti"
+
+msgid "TemplateTitleLeftImage"
+msgstr "Kuva vasemmalla"
+
+msgid "TemplateTitleLeftImageDescription"
+msgstr "Kuva vasemmalla"
+
+msgid "TemplateTitleTextCentered"
+msgstr "Teksti ja kuva keskellä"
+
+msgid "TemplateTitleTextCenteredDescription"
+msgstr "Teksti ja kuva keskellä ja seloste"
+
+msgid "TemplateTitleComparison"
+msgstr "Vertailu"
+
+msgid "TemplateTitleComparisonDescription"
+msgstr "2 sarakkeinen tekstisivu"
+
+msgid "TemplateTitleDiagram"
+msgstr "Kaavio selitettynä"
+
+msgid "TemplateTitleDiagramDescription"
+msgstr "Kuva vasemmalla teksti oikealla"
+
+msgid "TemplateTitleImage"
+msgstr "Pelkkä kuva"
+
+msgid "TemplateTitleImageDescription"
+msgstr "Pelkkä kuva"
+
+msgid "TemplateTitleFlash"
+msgstr "Flash animaatio"
+
+msgid "TemplateTitleFlashDescription"
+msgstr "Flash animaatio ja teksti"
+
+msgid "TemplateTitleAudio"
+msgstr "Ääniraidalla"
+
+msgid "TemplateTitleAudioDescription"
+msgstr "Ääni+ kuva+ teksti: kuunteluharjoitus"
+
+msgid "TemplateTitleSchema"
+msgstr "Kaavio äänellä"
+
+msgid "TemplateTitleSchemaDescription"
+msgstr "Kaavio jota selostaa ohjaaja"
+
+msgid "TemplateTitleVideo"
+msgstr "Video sivu"
+
+msgid "TemplateTitleVideoDescription"
+msgstr "Video ja teksti"
+
+msgid "TemplateTitleVideoFullscreen"
+msgstr "Video koko ruutu"
+
+msgid "TemplateTitleVideoFullscreenDescription"
+msgstr "video kokoruutu"
+
+msgid "TemplateTitleTable"
+msgstr "Taulukko"
+
+msgid "TemplateTitleTableDescription"
+msgstr "Taulukkolaskenta tyyppinen"
+
+msgid "TemplateTitleAssigment"
+msgstr "Tehtävän kuvaus"
+
+msgid "TemplateTitleAssigmentDescription"
+msgstr "Selvittää tavoitteet, roolit, aikataulun"
+
+msgid "TemplateTitleResources"
+msgstr "Resurssit"
+
+msgid "TemplateTitleResourcesDescription"
+msgstr "Kirjat, linkit, työkalut"
+
+msgid "TemplateTitleBibliography"
+msgstr "Lähdeluettelo"
+
+msgid "TemplateTitleBibliographyDescription"
+msgstr "Kirat, linkit, työkalut"
+
+msgid "TemplateTitleFAQ"
+msgstr "Usein kysytyt kysymykset"
+
+msgid "TemplateTitleFAQDescription"
+msgstr "Kysymysten ja vastausten lista"
+
+msgid "TemplateTitleGlossary"
+msgstr "Sanasto"
+
+msgid "TemplateTitleGlossaryDescription"
+msgstr "Lista termeistä"
+
+msgid "TemplateTitleEvaluation"
+msgstr "Arvionti"
+
+msgid "TemplateTitleEvaluationDescription"
+msgstr "Arviointi"
+
+msgid "TemplateTitleCertificate"
+msgstr "Suoritustodistus"
+
+msgid "TemplateTitleCertificateDescription"
+msgstr "Näytetään kurssin lopuksi"
+
+msgid "TemplateTitleCheckList"
+msgstr "Tarkistuslista"
+
+msgid "TemplateTitleCourseTitle"
+msgstr "Kurssin nimi"
+
+msgid "TemplateTitleLeftList"
+msgstr "Luettelo vasemmalla"
+
+msgid "TemplateTitleLeftListDescription"
+msgstr "Luettelo vasemmalla ohjaajan kanssa"
+
+msgid "TemplateTitleCheckListDescription"
+msgstr "Luettelo resursseista"
+
+msgid "TemplateTitleCourseTitleDescription"
+msgstr "Kurssin nimi ja logo"
+
+msgid "TemplateTitleRightList"
+msgstr "Lista oikealla"
+
+msgid "TemplateTitleRightListDescription"
+msgstr "Lista oikealla ohjaajan kanssa"
+
+msgid "TemplateTitleLeftRightList"
+msgstr "Lista vasemmalla ja oikealla"
+
+msgid "TemplateTitleLeftRightListDescription"
+msgstr "Lista vasemmalla ja oikealla ohjaajan kanssa"
+
+msgid "TemplateTitleDesc"
+msgstr "Kuvaus"
+
+msgid "TemplateTitleDescDescription"
+msgstr "Kuvaile resurssi"
+
+msgid "TemplateTitleObjectives"
+msgstr "Kurssin tavoitteet"
+
+msgid "TemplateTitleObjectivesDescription"
+msgstr "Kuvaile kurssin tavoitteet"
+
+msgid "TemplateTitleCycle"
+msgstr "Piirakkakaavio"
+
+msgid "TemplateTitleCycleDescription"
+msgstr "2 listaa pyörivillä nuolilla"
+
+msgid "TemplateTitleLearnerWonder"
+msgstr "Oppija pohtii"
+
+msgid "TemplateTitleLearnerWonderDescription"
+msgstr "Pohtivan oppijan kuvaus"
+
+msgid "TemplateTitleTimeline"
+msgstr "Aikajana"
+
+msgid "TemplateTitleTimelineDescription"
+msgstr "3 listaa ja nuoli"
+
+msgid "TemplateTitleStopAndThink"
+msgstr "Pysähdy ja pohdi"
+
+msgid "TemplateTitleListLeftListDescription"
+msgstr "Lista vasemmalla ja ohjaaja"
+
+msgid "TemplateTitleStopAndThinkDescription"
+msgstr "Pohja joka rohkaisee pysähtymään ja pohtimaan"
+
+msgid "CreateTheDocument"
+msgstr "Vahvista"
+
+msgid "CreateTemplate"
+msgstr "Luo sivupohja"
+
+msgid "SharedFolder"
+msgstr "Jaettu kansio"
+
+msgid "CreateFolder"
+msgstr "Luo kansio"
+
+msgid "HelpDefaultDirDocuments"
+msgstr "TÄMÄ NÄKYY VAIN OPETTAJILLE: Tämä kansio sisältää oletustiedostot. Voit poistaa tiedostoja tai lisätä uusia, mutta jos tiedosto on piilotettu ja se lisätään dokumenttiin se ei näy dokumentissa oppijoille. Jos lisäät tiedoston dokumenttiin muuta se ensin näkyväksi. Kansio voi olla piilotettu."
+
+msgid "HelpSharedFolder"
+msgstr "Tämä kansio sisältää tiedostoja joita muut oppijat (tai sinä) lähettää kurssille editorila. Oletuksena ne näkyvät kaikille oppijoille, mutta ne voidaan myös piilottaa toisilta. Jos teet yhden oppijan kansion näkyväksi toiset oppijat näkevät sen kaiken sisällön."
+
+msgid "TemplateImage"
+msgstr "Sivupohjan kuvake"
+
+msgid "MoveElement"
+msgstr "Siirrä elementtiä"
+
+msgid "CertificateName"
+msgstr "Nimi"
+
+msgid "CopyToMyFiles"
+msgstr "Kopioi henkilökohtaisele alueelle"
+
+msgid "Export2PDF"
+msgstr "Vie PDF tiedostoksi"
+
+msgid "ResourceShared"
+msgstr "Resurssi jaettu"
+
+msgid "CopyAlreadyDone"
+msgstr "Yksityisellä alueellasi on jo tämän niminen tiedosto. Haluatko korvata sen?"
+
+msgid "CopyFailed"
+msgstr "Kopiointi epäonnistui"
+
+msgid "CopyMade"
+msgstr "Kopioitu"
+
+msgid "OverwritenFile"
+msgstr "Tiedosto korvattu"
+
+msgid "Draw"
+msgstr "Piirä"
+
+msgid "FileExistsChangeToSave"
+msgstr "Tämän niminen tiedosto on jo olemassa. Valitse toinen nimi tallettaaksesi kuvasi."
+
+msgid "FileSavedAs"
+msgstr "Tiedosto tallennettu nimellä"
+
+msgid "FileExportAs"
+msgstr "Vie tiedosto"
+
+msgid "UserFolder"
+msgstr "Käyttäjän kansio"
+
+msgid "HelpFolderCertificates"
+msgstr "TÄMÄ NÄKYY VAIN OHJAAJILLE:
+
+Tämä kansio sisältää todistuspohjia jotka on tehty arvostelutyökalua varten. Tätä ei kannata muuttaa näkyväksi kaikille."
+
+msgid "DestinationDirectory"
+msgstr "Kohde kansio"
+
+msgid "BuildMP3"
+msgstr "Tee mp3"
+
+msgid "HelpGoogleAudio"
+msgstr "Tukee 100 merkkiä usealla kielellä. Tiedosto luodaan ja tallennetaan siihen kansioon missä juuri olet."
+
+msgid "HelpvozMe"
+msgstr "Tukee useita tuhansia merkkiä pitkiä tekstejä. Voit myös valita mies- tai naisäänen. Tukee vähemmän eri kieliä ja äänen laatu on huonompi. Sinun pitää käsin kopioida tiedostot."
+
+msgid "SaveMP3"
+msgstr "Tallenna mp3"
+
+msgid "Speed"
+msgstr "Nopeus"
+
+msgid "GoFaster"
+msgstr "Nopeammin"
+
+msgid "Fast"
+msgstr "Nopea"
+
+msgid "Normal"
+msgstr "Normaali"
+
+msgid "Slow"
+msgstr "Hidas"
+
+msgid "SlowDown"
+msgstr "Hitaampi"
+
+msgid "Pediaphon"
+msgstr "Käytä Pediaphon äänipalvelua"
+
+msgid "HelpPediaphon"
+msgstr "Tukee useita tuhansia merkkejä pitkiä tekstejä. Erityyppisiä ääniä riippuen kielestä. Äänitiedostot luodaan ja tallennetaan Chamilo kansioon missä olet automaattisesti."
+
+msgid "FirstSelectALanguage"
+msgstr "Valitse kieli"
+
+msgid "RenameAndComment"
+msgstr "Nimeä uudellen ja kommentoi"
+
+msgid "NewImage"
+msgstr "Uusi kuva"
+
+msgid "DirExists"
+msgstr "Ei onnistu, tämän niminen kansio on jo olemassa."
+
+msgid "DocMv"
+msgstr "Tiedosto siirretty"
+

@@ -1,0 +1,318 @@
+msgid "Camera"
+msgstr "Cámara"
+
+msgid "Microphone"
+msgstr "Micrófono"
+
+msgid "Name"
+msgstr "Suti"
+
+msgid "DeleteStream"
+msgstr "Pichay stream nisqata"
+
+msgid "Progress"
+msgstr "Purisqa"
+
+msgid "Play"
+msgstr "Puririchiy"
+
+msgid "Stop"
+msgstr "Harkay"
+
+msgid "Record"
+msgstr "Allchay"
+
+msgid "NoFileAvailable"
+msgstr "Manan kashanchu khipukunaqa"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Yachachiqkunallan allchayta atinqaku"
+
+msgid "UsersNow"
+msgstr "Kunan kaq haykuqmasikuna:"
+
+msgid "StartConference"
+msgstr "Qallariy rimarinakuta"
+
+msgid "MyName"
+msgstr "Sutiy"
+
+msgid "OrganisationSVideoconference"
+msgstr "Video-rimarinakuy Chamilo"
+
+msgid "ImportPresentation"
+msgstr "Apachimuy rikuchiyta"
+
+msgid "RefreshList"
+msgstr "Kunanyachiy sinrita"
+
+msgid "GoToTop"
+msgstr "Riy qallariyman"
+
+msgid "NewPoll"
+msgstr "Musuq tapukuy"
+
+msgid "CreateNewPoll"
+msgstr "Kamariy kay k\'itipi musuq tapukuyta"
+
+msgid "Question"
+msgstr "Tapuy"
+
+msgid "PollType"
+msgstr "Imayna tapukuy:"
+
+msgid "Create"
+msgstr "Kamay"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Willa: Kay k\'itiman sapanka haykuqmasi haykuqqa, chaskinqan kay musuq tapukuymanta hoq willata."
+
+msgid "YesNo"
+msgstr "Ari / Mana"
+
+msgid "Numeric1To10"
+msgstr "Yupaykuna hujmanta 1chunkakama 10"
+
+msgid "Poll"
+msgstr "Tapukuy"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Kuskachaq kawaq kay k\'itipi tapukukunata ruwaykinapaq."
+
+msgid "YourVoteHasBeenSent"
+msgstr "Wijch\'uykiqa apachikunñan"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Qanqa kay tapukuypiqa ña wijch\'unki"
+
+msgid "VoteButton"
+msgstr "Wijchuy"
+
+msgid "YourAnswer"
+msgstr "Tapuyniyki:"
+
+msgid "Yes"
+msgstr "Ari"
+
+msgid "No"
+msgstr "Mana"
+
+msgid "WantsToKnow"
+msgstr "yachayta munani"
+
+msgid "PollResults"
+msgstr "Tapukuymanta hoqarisqa"
+
+msgid "Votes"
+msgstr "Wijch\'ukuna:"
+
+msgid "Result"
+msgstr "Resultado"
+
+msgid "ThereIsNoPoll"
+msgstr "Manan kashanchu ima tapukuypas."
+
+msgid "MeetingMode"
+msgstr "Huñunakuy hina (askha. 4 k\'itikunalla)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Rimarinakuy (askha. 50 k\'itikunalla)"
+
+msgid "Mode"
+msgstr "Imayna Hina"
+
+msgid "RemainingSeats"
+msgstr "K\'iti puchuqkuna"
+
+msgid "AlreadyIn"
+msgstr "Ña hap\'inachisqan"
+
+msgid "CheckIn"
+msgstr "Mallipay hap\'inachiyta"
+
+msgid "TheModeratorHasLeft"
+msgstr "Kay rimanakuypa kuskachasqqa lloqsirun k\'itimanta."
+
+msgid "SystemMessage"
+msgstr "Sistema nisqaq willanan"
+
+msgid "ChooseDevices"
+msgstr "Ajllay imaymanakunata"
+
+msgid "ChooseCam"
+msgstr "Ajllay cámara nisqata"
+
+msgid "ChooseMic"
+msgstr "Ajllay Micro nisqata:"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Hoqmanta haykuwaq imaymanakuna t\'ijrasqa rikurinanpaq."
+
+msgid "ChangeSettings"
+msgstr "T\'ijray imaynakunata"
+
+msgid "Course"
+msgstr "Yachachina"
+
+msgid "CourseLanguage"
+msgstr "Yachachinaq simin:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Cheqaqchay qelqanapaq pichakunanpaq"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Manaraq musuq wankita yapaspa, munashankichu qelqanapaq pichakunanta ?"
+
+msgid "DontAskMeAgain"
+msgstr "Ama hoqmanta tapuychu"
+
+msgid "EditSettings"
+msgstr "Ruwapay imaymanakunata"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Amaraq qelqanapaqta pichaspaqa mañakuy cheqaqchanata"
+
+msgid "UserInfo"
+msgstr "haykuqmasimanta willay"
+
+msgid "ClearDrawArea"
+msgstr "Qelqanapaqta pichay"
+
+msgid "Undo"
+msgstr "Urmachiy"
+
+msgid "Redo"
+msgstr "Ruwarparichiy"
+
+msgid "SelectAnObject"
+msgstr "Ajllay hoq imaymanata"
+
+msgid "Text"
+msgstr "Qelqa"
+
+msgid "Paint"
+msgstr "Llinphiy"
+
+msgid "DrawLine"
+msgstr "Seq\'echay hoq seq\'eta"
+
+msgid "DrawUnderline"
+msgstr "Seq\'echay ura seq\'echayuqta"
+
+msgid "Rectangle"
+msgstr "Rectángulo"
+
+msgid "Elipse"
+msgstr "Muyu"
+
+msgid "Arrow"
+msgstr "Chuki"
+
+msgid "DeleteChosenItem"
+msgstr "Pichay imaymana ajllasqata"
+
+msgid "ApplyForModeration"
+msgstr "Ruway kuskanchaq kananpaq"
+
+msgid "Apply"
+msgstr "Ruway"
+
+msgid "BecomeModerator"
+msgstr "T\'ijrapay kuskanchaq kananpaq"
+
+msgid "Close"
+msgstr "wisqay"
+
+msgid "Italic"
+msgstr "T\'ijsuchasqa"
+
+msgid "Bold"
+msgstr "Yanachasqa"
+
+msgid "Waiting"
+msgstr "Suyashaspa"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "Hoq haykuqmasin kuskanchaq kayta munashan"
+
+msgid "Accept"
+msgstr "Chaskiy"
+
+msgid "Reject"
+msgstr "Ama chaskiychu"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Apachiy mañakuyta kay haykuqmasikunaman"
+
+msgid "Accepted"
+msgstr "Chaskisqa"
+
+msgid "Rejected"
+msgstr "Mana chaskisqa"
+
+msgid "ChangeModerator"
+msgstr "Hoq kuskanchaqta ajllay"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "Qanqa manan kashankichu kay yachachinaq kuskanchaq"
+
+msgid "Moderator"
+msgstr "Kuskanchaq:"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "Kan k\'itiqa hunt\'an kashan. Ama hina kaychu, chaymantañan haykuwaq"
+
+msgid "Loading"
+msgstr "Aparichishan"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Ama hina kaychu, wanki aparichikusaqtinqa suyariy"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "Haykuqmasikunaq tinkuchinan"
+
+msgid "Trainer"
+msgstr "Pusaq"
+
+msgid "Learner"
+msgstr "Yachaqe"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Slides"
+msgstr "Diapositivas nisqakuna"
+
+msgid "WaitingForParticipants"
+msgstr "Haykuqmasikunata suyashaspa"
+
+msgid "Send"
+msgstr "Apachiy"
+
+msgid "Browse"
+msgstr "Qhawaruy"
+
+msgid "Cancel"
+msgstr "Utichiy"
+
+msgid "ChooseFile"
+msgstr "Ajllay khipu apachinapaq"
+
+msgid "ConvertingDocument"
+msgstr "Qelqa khiputa t\'ijrapachispa"
+
+msgid "Disconnected"
+msgstr "Mana hap\'inachisqa"
+
+msgid "FineStroke"
+msgstr "Ñañu"
+
+msgid "MediumStroke"
+msgstr "Tajsa"
+
+msgid "ThickStroke"
+msgstr "Rakhu"
+

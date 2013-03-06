@@ -1,0 +1,180 @@
+msgid "langChapter"
+msgstr "Capítulo"
+
+msgid "langDocumentList"
+msgstr "Listar todos os documentos"
+
+msgid "langOrganisationList"
+msgstr "Tabela de conteúdos"
+
+msgid "langEditTOC"
+msgstr "Editar a tabela de conteúdos"
+
+msgid "langEditDocument"
+msgstr "Editar"
+
+msgid "langCreateDocument"
+msgstr "Criar um documento"
+
+msgid "langMissingImagesDetected"
+msgstr "Detectada ausência de imagens"
+
+msgid "langPublish"
+msgstr "Publicar"
+
+msgid "langScormcontentstudent"
+msgstr "Este é um curso no formato Scorm. Para executá-lo, clique aqui : <input type=button name=scormbutton value=\'Executar !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "Esse é um conteúdo SCORM<br><input type=button name=scormbutton value=\'Carregar !\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr " Arquivo Zip enviado e descompactado"
+
+msgid "langZipNoPhp"
+msgstr "O arquivo zip não pode conter arquivos .PHP"
+
+msgid "langGroupForumLink"
+msgstr "Fórum do grupo"
+
+msgid "langGroupSpace"
+msgstr "Área do grupo"
+
+msgid "langNotScormContent"
+msgstr "Esse não é um arquivo ZIP scorm !"
+
+msgid "langNoText"
+msgstr "Por favor, digite o conteúdo texto / HTML"
+
+msgid "langNoFileName"
+msgstr "Por favor, informe o nome do arquivo"
+
+msgid "langMaxFileSize"
+msgstr "O tamanho máximo do arquivo é"
+
+msgid "langFileName"
+msgstr "Nome do arquivo"
+
+msgid "langFileError"
+msgstr "O arquivo a ser enviado não é válido."
+
+msgid "langDown"
+msgstr "abaixo"
+
+msgid "langViMod"
+msgstr "Visibilidade modificada"
+
+msgid "langAddComment"
+msgstr "Adicionar/Editar um comentário para"
+
+msgid "langImpossible"
+msgstr "Operação impossível"
+
+msgid "langNewDir"
+msgstr "Nome do novo diretório"
+
+msgid "langTo"
+msgstr "para"
+
+msgid "langNoSpace"
+msgstr "O envio falhou. Não há espaço em disco suficiente em seu diretório"
+
+msgid "langDownloadEnd"
+msgstr "O envio terminou"
+
+msgid "langFileExists"
+msgstr "Operação impossível.<br>Um arquivo com o mesmo nome já existe."
+
+msgid "langDocCopied"
+msgstr "Documento copiado"
+
+msgid "langDocDeleted"
+msgstr "Documento excluido"
+
+msgid "langElRen"
+msgstr "Arquivo renomeado"
+
+msgid "langDirMv"
+msgstr "Diretório movido"
+
+msgid "langComMod"
+msgstr "Comentário modificado"
+
+msgid "langRename"
+msgstr "Renomear"
+
+msgid "langCopy"
+msgstr "Copiar conteúdo do Curso"
+
+msgid "langNameDir"
+msgstr "Nome do novo diretório"
+
+msgid "langDownloadFile"
+msgstr "Enviar arquivo para o servidor"
+
+msgid "learning_path_access"
+msgstr "Para deletar/modificar/exibir/ocultar/editar/adicionar uma rota de aprendizado com o ícone dos blocos, clique no \'Construtor de Rotas de Aprendizado\'."
+
+msgid "langRoot"
+msgstr "raiz"
+
+msgid "langBuilder"
+msgstr "Construtor de Rotas de Aprendizado"
+
+msgid "lang_edit_learnpath"
+msgstr "Editar descrição/título da rota de aprendizado"
+
+msgid "lang_add_title_and_desc"
+msgstr "Editar título & desc."
+
+msgid "lang_add_learnpath"
+msgstr "Adicionar uma nova rota de aprendizado"
+
+msgid "lang_learnpath_added"
+msgstr "A nova rota de aprendizado foi criada com sucesso. Agora você pode adicionar módulos a ela clicando na cruz."
+
+msgid "lang_delete_learnpath"
+msgstr "Deletar rota de aprendizado"
+
+msgid "lang_learnpath_edited"
+msgstr "A rota de aprendizado foi editada com sucesso"
+
+msgid "lang_learnpath_deleted"
+msgstr "A rota de aprendizado e todos os seus módulos foram deletados"
+
+msgid "lang_no_publish"
+msgstr "Ocultar dos estudantes"
+
+msgid "lang_publish"
+msgstr "Exibir para os estudantes"
+
+msgid "lang_no_published"
+msgstr "agora está oculta aos estudantes"
+
+msgid "lang_published"
+msgstr "agora está visível aos estudantes"
+
+msgid "lang_description"
+msgstr "descrição"
+
+msgid "lang_title"
+msgstr "título"
+
+msgid "langScormBuilder"
+msgstr "Construtor de rotas - Construtor de cursos no formato Scorm"
+
+msgid "langCreateDoc"
+msgstr "Criar um documento"
+
+msgid "langOrganiseDocuments"
+msgstr "Criar tabela de conteúdos"
+
+msgid "langUncompress"
+msgstr "descompactar arquivos (.zip)"
+
+msgid "ExportShort"
+msgstr "Exportação rápida"
+
+msgid "progress"
+msgstr "Progresso"
+

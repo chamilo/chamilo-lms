@@ -1,0 +1,288 @@
+msgid "Tools"
+msgstr "Ferramentas"
+
+msgid "SendWork"
+msgstr "Enviar o documento"
+
+msgid "langTooBig"
+msgstr "Non seleccionaches o arquivo para enviar, ou é demasiado grande"
+
+msgid "langListDeleted"
+msgstr "A lista borrouse completamente"
+
+msgid "langDocModif"
+msgstr "Modificouse o documento"
+
+msgid "langDocAdd"
+msgstr "Engadíuse o documento"
+
+msgid "langDocDel"
+msgstr "Borrouse o traballo"
+
+msgid "langTitleWork"
+msgstr "Título do traballo"
+
+msgid "langAuthors"
+msgstr "Autores"
+
+msgid "langDelList"
+msgstr "Borrar a lista"
+
+msgid "langWorkDelete"
+msgstr "Borrar"
+
+msgid "langWorkModify"
+msgstr "Modificar"
+
+msgid "langWorkConfirmDelete"
+msgstr "Realmente queres borrar este documento"
+
+msgid "langAllFiles"
+msgstr "Todos os ficheiros"
+
+msgid "DefaultUpload"
+msgstr "Configuración de visibilidade establecida por defecto para os novos documentos"
+
+msgid "NewVisible"
+msgstr "Os novos documentos están visibles  para todos os usuarios"
+
+msgid "NewUnvisible"
+msgstr "Os novos documentos están só visibles para o profesor(es)"
+
+msgid "lang_doc_unvisible"
+msgstr "Este ficheiro só é visible para o/s profesor/es deste curso e, polo tanto, non será visíble para ti."
+
+msgid "langDelLk"
+msgstr "¿Estás seguro de que queres desactivar esta ligazón?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Só os usuarios rexistrados no curso poden publicar documentos."
+
+msgid "langListDel"
+msgstr "Borrar lista"
+
+msgid "langNameDir"
+msgstr "Nome do novo directorio"
+
+msgid "langFileExists"
+msgstr "Operación imposible: Xa existe un ficheiro co mesmo nome."
+
+msgid "CreateDirectory"
+msgstr "Crear un directorio"
+
+msgid "langCurrentDir"
+msgstr "directorio actual"
+
+msgid "UploadADocument"
+msgstr "Subir documento"
+
+msgid "EditToolOptions"
+msgstr "Editar opcións da ferramenta"
+
+msgid "DocumentDeleted"
+msgstr "Documento borrado"
+
+msgid "SendMailBody"
+msgstr "Un usuario publicou un documento na ferramenta traballos do seu curso."
+
+msgid "DirDelete"
+msgstr "Borrar o directorio"
+
+msgid "ValidateChanges"
+msgstr "Confirmar os cambios"
+
+msgid "FolderUpdated"
+msgstr "Cartafol actualizado"
+
+msgid "EndsAt"
+msgstr "Finaliza o (completamente pechado)"
+
+msgid "QualificationOfAssignment"
+msgstr "Puntuación de tarefa"
+
+msgid "MakeQualifiable"
+msgstr "Permitir cualificar na ferramente de avaliación"
+
+msgid "QualificationNumberOver"
+msgstr "Puntuación"
+
+msgid "WeightInTheGradebook"
+msgstr "Ponderación no promedio da avaliación"
+
+msgid "DatesAvailables"
+msgstr "Datas dispoñibles"
+
+msgid "ExpiresAt"
+msgstr "Finaliza o"
+
+msgid "AddToCalendar"
+msgstr "Engadir ó calendario"
+
+msgid "DirectoryCreated"
+msgstr "Directorio creado"
+
+msgid "Assignment"
+msgstr "Tarefas"
+
+msgid "AdvancedParameters"
+msgstr "Configuración avanzada"
+
+msgid "ExpiryDateToSendWorkIs"
+msgstr "Data límite para tarefas"
+
+msgid "EnableExpiryDate"
+msgstr "Activar data de expiración"
+
+msgid "EnableEndDate"
+msgstr "Activar data de fin"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "imposible gardar o documento"
+
+msgid "EndDateCannotBeBeforeTheExpireDate"
+msgstr "A data de fin non pode ser anterior á data de inicio"
+
+msgid "SelectAFilter"
+msgstr "Seleccione un filtro"
+
+msgid "FilterByNotExpired"
+msgstr "Filtrar por non expirados"
+
+msgid "FilterAssignments"
+msgstr "Filtrar tarefas"
+
+msgid "WeightNecessary"
+msgstr "Mínima puntuación agardada"
+
+msgid "QualificationOver"
+msgstr "Puntuación"
+
+msgid "ExpiryDateAlreadyPassed"
+msgstr "A data de expiración xa finalizou"
+
+msgid "EndDateAlreadyPassed"
+msgstr "A data final xa pasou"
+
+msgid "MoveXTo"
+msgstr "Mover %s A"
+
+msgid "QualificationMustNotBeMoreThanQualificationOver"
+msgstr "A marca non pode exceder a puntuación máxima"
+
+msgid "ModifyDirectory"
+msgstr "Validar"
+
+msgid "DeleteAllFiles"
+msgstr "Eliminar tódolos papeis"
+
+msgid "BackToWorksList"
+msgstr "Voltar á lista de tarefas"
+
+msgid "EditMedia"
+msgstr "Editar e marcar papel"
+
+msgid "AllFilesInvisible"
+msgstr "Tódolos papeis son agora visibles"
+
+msgid "FileInvisible"
+msgstr "O arquivo é agora invisible"
+
+msgid "AllFilesVisible"
+msgstr "Tódolos papeis son agora visibles"
+
+msgid "FileVisible"
+msgstr "O arquivo é agora visible"
+
+msgid "ButtonCreateAssignment"
+msgstr "Crear"
+
+msgid "AssignmentName"
+msgstr "Nome da tarefa"
+
+msgid "CreateAssignment"
+msgstr "Crear tarefa"
+
+msgid "FolderEdited"
+msgstr "Directorio editado"
+
+msgid "UpdateWork"
+msgstr "Actualizar esta tarefa"
+
+msgid "MakeAllPapersInvisible"
+msgstr "Facer tódolos papeis invisibles"
+
+msgid "MakeAllPapersVisible"
+msgstr "Facer todos os documentos visibles"
+
+msgid "TheDocumentHasBeenDeleted"
+msgstr "O documento foi eliminado"
+
+msgid "YouAreNotAllowedToDeleteThisDocument"
+msgstr "Non ten permitido eliminar este documento"
+
+msgid "StudentAllowedToDeleteOwnPublication"
+msgstr "Permitir ós estudiantes eliminar as súas propias publicacións"
+
+msgid "ConfirmYourChoiceDeleteAllfiles"
+msgstr "Por favor confirme a súa elección. Isto eliminará tódolos arquivos sen posibilidade de recuperación"
+
+msgid "WorkName"
+msgstr "Nome da tarefa"
+
+msgid "ReminderToSubmitPendingTask"
+msgstr "Por favor recorde que aínda ten que enviar unha tarefa"
+
+msgid "MessageConfirmSendingOfTask"
+msgstr "Esta é unha mensaxe confirmando a recepción correcta da tarefa"
+
+msgid "DataSent"
+msgstr "Data de envío"
+
+msgid "DownloadLink"
+msgstr "Enlace de descarga"
+
+msgid "ViewUsersWithTask"
+msgstr "Tarefas recibidas"
+
+msgid "ReminderMessage"
+msgstr "Enviar un recordatorio"
+
+msgid "DateSent"
+msgstr "Data de envío"
+
+msgid "ViewUsersWithoutTask"
+msgstr "Ver tarefas perdidas"
+
+msgid "HomeworkCreated"
+msgstr "Unha tarefa foi creada"
+
+msgid "HomeworkHasBeenCreatedForTheCourse"
+msgstr "Unha tarefa foi creada para o curso"
+
+msgid "PleaseCheckHomeworkPage"
+msgstr "Por favor comprobe a páxina de tarefas"
+
+msgid "IncludedInEvaluation"
+msgstr "Incluido na avaliación"
+
+msgid "DateExpiredNotBeLessDeadLine"
+msgstr "A data de caducidade non pode ser menor que a data límite"
+
+msgid "NotRevised"
+msgstr "Non se revisou"
+
+msgid "MaxWeightNeedToBeProvided"
+msgstr "Necesita indicar o peso máximo"
+
+msgid "ContainsAfile"
+msgstr "Contén un arquivo"
+
+msgid "AllowTextAssignments"
+msgstr "Permitir tarefas a través do editor en liña"
+
+msgid "YouAlreadySentAPaperYouCantUpload"
+msgstr "Xa enviou unha tarefa, non pode subir unha nova"
+
+msgid "CantUploadDeleteYourPaperFirst"
+msgstr "Non pode subir esta tarefa. Por favor elimine a tarefa anterior antes"
+

@@ -1,0 +1,264 @@
+msgid "langNewGroupCreate"
+msgstr "Izradi novu/e skupinu/e"
+
+msgid "langGroupCreation"
+msgstr "Izrada novih skupina"
+
+msgid "langCreate"
+msgstr "izradi"
+
+msgid "langNewGroups"
+msgstr "Nova/e skupina/e"
+
+msgid "langMax"
+msgstr "najviše 12 znakova, npr. <i>ROM2121</i>"
+
+msgid "langGroupPlacesThis"
+msgstr "broj sudionika (mogućnost)"
+
+msgid "langGroupsAdded"
+msgstr "Skupina(e) je(su) dodana(e)"
+
+msgid "langGroupDel"
+msgstr "Skupina izbrisana"
+
+msgid "langDocuments"
+msgstr "Dokumenti"
+
+msgid "langExistingGroups"
+msgstr "Skupine"
+
+msgid "langRegistered"
+msgstr "Registrirano"
+
+msgid "langGroupAllowStudentRegistration"
+msgstr "Korisnicima je omogućeno samostalno prijavljivanje u skupine"
+
+msgid "langGroupTools"
+msgstr "Alati"
+
+msgid "langGroupDocument"
+msgstr "Dokumenti"
+
+msgid "langGroupPropertiesModified"
+msgstr "Postavke skupine su izmijenjene"
+
+msgid "langGroupSpace"
+msgstr "Okruženje skupine"
+
+msgid "langGroupName"
+msgstr "Naziv skupine"
+
+msgid "langGroupDescription"
+msgstr "Opis skupine"
+
+msgid "langGroupMembers"
+msgstr "Članovi skupine"
+
+msgid "langEditGroup"
+msgstr "Uredi skupinu"
+
+msgid "Optional"
+msgstr "(mogućnost)"
+
+msgid "langGroupSettingsModified"
+msgstr "Postavke grupe izmijenjene"
+
+msgid "langGroupTooMuchMembers"
+msgstr "Predloženi broj članova premašuje najveći broj koji ste dopustili (možete ga izmijeniti niže). Sastav skupine nije izmijenjen"
+
+msgid "langGroupTutor"
+msgstr "Tutor skupine"
+
+msgid "langGroupNoTutor"
+msgstr "(ništa)"
+
+msgid "langGroupNone"
+msgstr "(ništa)"
+
+msgid "langGroupNoneMasc"
+msgstr "(ništa)"
+
+msgid "langAddTutors"
+msgstr "Popis nadzornika"
+
+msgid "langMyGroup"
+msgstr "Moja skupina"
+
+msgid "langOneMyGroups"
+msgstr "Moj nadzor"
+
+msgid "langGroupSelfRegistration"
+msgstr "Prijava"
+
+msgid "langGroupSelfRegInf"
+msgstr "prijavi"
+
+msgid "langRegIntoGroup"
+msgstr "Dodaj me u skupinu"
+
+msgid "langGroupNowMember"
+msgstr "Sada ste član ove skupine."
+
+msgid "langPrivate"
+msgstr "Privatni pristup (stranica dostupna samo osobama na popisu korisnika)"
+
+msgid "langPublic"
+msgstr "Javni pristup s početne stranice portala bez prijave"
+
+msgid "langPropModify"
+msgstr "Izmijeni postavke"
+
+msgid "langState"
+msgstr "Stanje"
+
+msgid "langGroupFilledGroups"
+msgstr "Skupine su popunjene (ili upotpunjene) korisnicima s popisa \'Korisnici\'."
+
+msgid "langSubscribed"
+msgstr "korisnici prijavljeni na ovaj kolegij"
+
+msgid "langStudentsNotInThisGroups"
+msgstr "Korisnici izvan skupine"
+
+msgid "langQtyOfUserCanSubscribe_PartBeforeNumber"
+msgstr "Korisnik može biti član najviše"
+
+msgid "langQtyOfUserCanSubscribe_PartAfterNumber"
+msgstr "skupine"
+
+msgid "langGroupLimit"
+msgstr "Ograničenje"
+
+msgid "langStudentRegAllowed"
+msgstr "Studentima je omogućeno samostalno prijavljivanje u skupine"
+
+msgid "langGroupAllowStudentUnregistration"
+msgstr "Korisnicima je omogućeno samostalno ispisivanje iz skupina"
+
+msgid "langAllGroups"
+msgstr "Sve skupine"
+
+msgid "langStudentUnsubscribe"
+msgstr "Ispiši me iz skupine."
+
+msgid "langStudentDeletesHimself"
+msgstr "Ispisani ste."
+
+msgid "langDefaultSettingsForNewGroups"
+msgstr "Izvorne postavke za nove skupine"
+
+msgid "langSelectedGroupsDeleted"
+msgstr "Sve odabrane skupine su izbrisane"
+
+msgid "langSelectedGroupsEmptied"
+msgstr "Sve su odabrane skupine prazne"
+
+msgid "langGroupEmptied"
+msgstr "Skupina je prazna"
+
+msgid "langSelectedGroupsFilled"
+msgstr "Sve odabrane skupine su dopunjene"
+
+msgid "langGroupSelfUnRegInf"
+msgstr "ispiši"
+
+msgid "langSameForAll"
+msgstr "isto za sve"
+
+msgid "langNoLimit"
+msgstr "Bez ograničenja"
+
+msgid "langPleaseEnterValidNumber"
+msgstr "Molim upišite željeni broj skupina"
+
+msgid "langCreateGroupsFromVirtualCourses"
+msgstr "Izradi skupine od svih korisnika uključenih na virtualne kolegije"
+
+msgid "langCreateGroupsFromVirtualCoursesInfo"
+msgstr "Kolegij je kombinacija stvarnoga kolegija i jednoga ili više virtualnih kolegija. Pritisnete li sljedeću tipku, nove će skupine biti izrađene prema tim (virtualnim) kolegijima. Svi će studenti biti upisani u skupine."
+
+msgid "langNoGroupsAvailable"
+msgstr "Nema dostupnih skupina"
+
+msgid "langGroupsFromVirtualCourses"
+msgstr "Virtualni kolegiji"
+
+msgid "NotAvailable"
+msgstr "Nedostupno"
+
+msgid "CreateSubgroups"
+msgstr "Izradi podskupine"
+
+msgid "CreateSubgroupsInfo"
+msgstr "Ovime se omogućuje izrada novih skupina temeljena na postojećoj skupini. Označite željeni broj skupina i odaberite postojeću skupinu. Izradit će se zadati broj skupina i svi članovi postojeće skupine bit će upisani u nove skupine. Postojeća skupina ostaje neizmijenjena."
+
+msgid "CreateNumberOfGroups"
+msgstr "Izradi"
+
+msgid "WithUsersFrom"
+msgstr "skupine s članovima iz"
+
+msgid "CategoryDeleted"
+msgstr "Kategorija je obrisana."
+
+msgid "Empty"
+msgstr "Prazno"
+
+msgid "FillGroup"
+msgstr "dodaj korisnike"
+
+msgid "EmptyGroup"
+msgstr "ispiši sve korisnike"
+
+msgid "MaxGroupsPerUserInvalid"
+msgstr "Najveći broj skupina po korisniku koji ste upisali je nevaljan. Postoje korisnici koji su upisani u više skupina od broja koji predlažete."
+
+msgid "GroupOverview"
+msgstr "Pregled skupine"
+
+msgid "GroupCategory"
+msgstr "Kategorija skupine"
+
+msgid "NoTitleGiven"
+msgstr "Molim upišite naslov"
+
+msgid "InvalidMaxNumberOfMembers"
+msgstr "Molim upišite valjan broj kao najveći broj članova."
+
+msgid "CategoryOrderChanged"
+msgstr "Redoslijed kategorija je preinačen"
+
+msgid "Wiki"
+msgstr "Skupina wiki"
+
+msgid "CategoryCreated"
+msgstr "Kategorija izrađena"
+
+msgid "GroupTutors"
+msgstr "Tutori"
+
+msgid "GroupWork"
+msgstr "Studentski radovi"
+
+msgid "GroupCalendar"
+msgstr "Raspored"
+
+msgid "GroupAnnouncements"
+msgstr "Obavijesti"
+
+msgid "NoCategoriesDefined"
+msgstr "Kategorija nije definirana"
+
+msgid "GroupsFromClasses"
+msgstr "Skupine iz istih razreda"
+
+msgid "GroupsFromClassesInfo"
+msgstr "Odabir ove opcije omogučava stvaranje skupine temeljene na razredima upisanih u vaš kolegij"
+
+msgid "Group"
+msgstr "Skupina"
+
+msgid "ForumOfGroup"
+msgstr "Forum skupine:"
+

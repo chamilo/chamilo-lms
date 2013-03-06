@@ -1,0 +1,576 @@
+msgid "ReservationPeriodToSmall"
+msgstr "Die reservierte Zeitspanne ist zu kurz"
+
+msgid "BookingSystem"
+msgstr "Buchungssystem"
+
+msgid "BookingPeriodList"
+msgstr "Liste gebuchter Zeitspannen"
+
+msgid "BookingListView"
+msgstr "Buchungsliste"
+
+msgid "BookingCalendarView"
+msgstr "Kalenderansicht der Buchungen"
+
+msgid "BookingPeriods"
+msgstr "Zeitspannen werden gebucht"
+
+msgid "ResourceList"
+msgstr "Ressourcenliste"
+
+msgid "GoToCalendarView"
+msgstr "Kalenderansicht öffnen"
+
+msgid "GoToListView"
+msgstr "Listenansicht öffnen"
+
+msgid "ManageResources"
+msgstr "Ressourcen verwalten"
+
+msgid "EditResource"
+msgstr "Ressourcen bearbeiten"
+
+msgid "BookIt"
+msgstr "Buchen Sie eine Ressource"
+
+msgid "GoTo"
+msgstr "Gehe zu"
+
+msgid "NoTimePicker"
+msgstr "Kein Zeitwähler"
+
+msgid "TimePicker"
+msgstr "Zeitwähler"
+
+msgid "ManageBookingPeriods"
+msgstr "Buchungszeiträume verwalten"
+
+msgid "BookingPeriodToSmall"
+msgstr "Der Buchungszeitraum ist zu kurz"
+
+msgid "BookingPeriodToBig"
+msgstr "Der Buchungszeitraum ist zu lang"
+
+msgid "BookingPeriodTimePickerError1"
+msgstr "Ein Buchungszeitraum kann ohne Zeitwähler nur ganztägig erstellt werden."
+
+msgid "BookingPeriodTimePickerError2"
+msgstr "Ein Buchungszeitraum kann mit einem Zeitwähler nicht erstellt werden, wenn die Maximalzeit kleiner als die Minimalzeit eines Teils ist."
+
+msgid "BookingPeriodTimePickerError3"
+msgstr "Ein Buchungszeitraum mit Zeitwähler kann nicht erstellt werden, wenn die Maximalzeit eines Teils die Dauer zwischen Start- und Enddatum übersteigt."
+
+msgid "BookingPeriodHasSubscriptions"
+msgstr "Der Buchungszeitraum hat #NUM# aktive Einträge, ein Bearbeiten ist nicht möglich."
+
+msgid "TimePickerMaxUsers"
+msgstr "*Falls ein Zeitwähler benutzt wird, wird die maximale Anzahl von Anmeldungen ignoriert."
+
+msgid "TimePickerMinMaxNull"
+msgstr "*Wenn Minimum und Maximum des Zeitwählers Null sind, können die Zeiten variabel vergeben werden."
+
+msgid "DeleteSelectedBookingPeriod"
+msgstr "Buchungszeitraum löschen"
+
+msgid "EditNewBookingPeriod"
+msgstr "Buchungszeitraum bearbeiten"
+
+msgid "BookingPeriodAdded"
+msgstr "Der Buchungszeitraum wurde hinzugefügt"
+
+msgid "BookingPeriodDeleted"
+msgstr "Der Buchungszeitraum wurde gelöscht"
+
+msgid "ConfirmDeleteBookingPeriod"
+msgstr "Wollen Sie den Buchungszeitraum endgültig löschen?"
+
+msgid "DeleteBookingPeriod"
+msgstr "Entferne diesen Buchungszeitraum"
+
+msgid "BookingPeriodEdited"
+msgstr "Der Buchungszeitraum wurde bearbeitet"
+
+msgid "BookingPeriodDateOverlap"
+msgstr "Ein Teil des Buchungszeitraums wird bereits von #START# bis #END# benutzt."
+
+msgid "BookingPeriodSubscribeUntilAfterStart"
+msgstr "Das Anmeldedatum liegt nach dem Startdatum"
+
+msgid "RepeatFor"
+msgstr "Wiederhole jeden"
+
+msgid "RepeatUntil"
+msgstr "Wiederhole bis"
+
+msgid "BookingPeriodPast"
+msgstr "Reservierungen für die Vergangenheit sind nicht möglich"
+
+msgid "ReservationMaxUsersOverrun"
+msgstr "Die Anzahl der Anmeldungen übersteigt Ihre ausgewählte Höchstanzahl von Benutzern"
+
+msgid "AddNewBookingPeriod"
+msgstr "neuen Buchungszeitraum hinzufügen"
+
+msgid "BookingPeriodTimePickerLimitation"
+msgstr "Begrenzung des Buchungszeitraum-Zeitwählers"
+
+msgid "ResourceTypeName"
+msgstr "Ressourcentyp"
+
+msgid "AddNewResourceType"
+msgstr "neuen Ressourcentyp hinzufügen"
+
+msgid "ResourceTypeAdded"
+msgstr "Der Ressourcentyp wurde hinzugefügt."
+
+msgid "ResourceTypeEdited"
+msgstr "Der Ressourcentyp wurde bearbeitet."
+
+msgid "ResourceTypeDeleted"
+msgstr "Der Ressourcentyp wurde gelöscht."
+
+msgid "ConfirmDeleteResourceType"
+msgstr "Wollen Sie diesen Ressourcentyp endgültig löschen?"
+
+msgid "EditResourceType"
+msgstr "Ressourcentyp bearbeiten"
+
+msgid "DeleteResourceType"
+msgstr "Ressourcentyp löschen"
+
+msgid "DeleteSelectedCategories"
+msgstr "Ausgewählte Ressourcen löschen"
+
+msgid "NoResourcesType"
+msgstr "Kein Ressourcentyp bisher"
+
+msgid "ResourceType"
+msgstr "Kategorie"
+
+msgid "ResourceTypeExist"
+msgstr "Dieser Ressourcentyp existiert bereits"
+
+msgid "ResourceTypeHasItems"
+msgstr "Der Ressourcentyp hat #NUM# Inhalte! Löschen abgebrochen"
+
+msgid "ResourceTypeNotDeleted"
+msgstr "Einige Kategorien können nicht gelöscht werden, da sie Ressourcen enthalten."
+
+msgid "DeleteSelectedSubscriptions"
+msgstr "Ausgewählte Reservierung löschen"
+
+msgid "DeleteSubscription"
+msgstr "Reservierung löschen"
+
+msgid "SubscriptionDeleted"
+msgstr "Ihre Reservierung wurde gelöscht."
+
+msgid "ConfirmDeleteSubscription"
+msgstr "Wollen Sie diese Reservierung wirklich löschen?"
+
+msgid "SubscribeInformation"
+msgstr "Bitte bestätigen Sie die Reservierung von #START# bis #END# für #NAME#"
+
+msgid "SubscribeTimePickerInformation"
+msgstr "Bitte wählen Sie für #name# einen Zeitraum #from_till# zwischen: #start_end#"
+
+msgid "ReservationAdded"
+msgstr "Reservierung hinzugefügt"
+
+msgid "ReservationTresspassing"
+msgstr "Reservierung abgeschlossen, keine Berechtigung für diese Seite."
+
+msgid "ReservationOutOfDate"
+msgstr "Das gewählte Datum ist bereits besetzt und/oder liegt nicht zwischen #START# und #END#."
+
+msgid "ReservationAlready"
+msgstr "Sie haben diese Ressource bereits reserviert."
+
+msgid "ReservationMadeTitle"
+msgstr "#ITEM# wurde gebucht."
+
+msgid "ReservationMadeMessage"
+msgstr "Hallo, 
+#ITEM# wurde von #START# bis #END# für Sie reserviert."
+
+msgid "ReservationDeleteTitle"
+msgstr "Ein Buchungszeitraum von #NAME# wurde gelöscht"
+
+msgid "ReservationDeleteMessage"
+msgstr "Hallo, 
+#die Reservierung von #NAME# von #START# bis #END# wurde gelöscht."
+
+msgid "OutPeriod"
+msgstr "Ausserhalb des Buchungszeitraums"
+
+msgid "ReservationFromUntilError"
+msgstr "Der Buchungszeitraum von #START# bisl #END# wurde nicht angelegt, das ein Teil des  Buchungszeitraums bereits belegt ist. 
+"
+
+msgid "Recurrence"
+msgstr "Woiederholung"
+
+msgid "NoRecurrence"
+msgstr "Keine Wiederholung"
+
+msgid "UntilRecurrence"
+msgstr "Wiederholung verwenden"
+
+msgid "TimePickerLimitation"
+msgstr "* Wenn der Zeitwähler verwendet wird, müssen Start- und Enddatum identisch sein."
+
+msgid "OverviewSubscriptions"
+msgstr "Buchungsübersicht"
+
+msgid "OverviewReservedPeriods"
+msgstr "Übersicht gebuchter Zeiträume"
+
+msgid "SubscribedStartDate"
+msgstr "Gebucht vom Startzeitpunkt"
+
+msgid "SubscribedEndDate"
+msgstr "Gebucht bis Endzeitpunkt"
+
+msgid "SubscribedPerson"
+msgstr "Gebucht von Benutzer"
+
+msgid "BookingView"
+msgstr "Buchungsansicht"
+
+msgid "SubscribeUntil"
+msgstr "Gebucht bis"
+
+msgid "SubscribeFrom"
+msgstr "Gebucht von"
+
+msgid "Notes"
+msgstr "Bemerkungen"
+
+msgid "SubscriptionPeriod"
+msgstr " Buchungszeitraum"
+
+msgid "NoPeriod"
+msgstr "Kein  Buchungszeitraum"
+
+msgid "FixedPeriod"
+msgstr "Feststehender  Buchungszeitraum"
+
+msgid "ResourceFilter"
+msgstr "Ressourcen-Filter"
+
+msgid "NoReservation"
+msgstr "Keine Buchung vorhanden"
+
+msgid "MaxUsers"
+msgstr "Maximal Anzahl von Benutzern die buchen dürfen"
+
+msgid "AutoAccept"
+msgstr "Benutzer automatisch akzeptieren"
+
+msgid "ResourceName"
+msgstr "Ressource"
+
+msgid "ResourceAdded"
+msgstr "Ressource hinzugefügt"
+
+msgid "ResourceEdited"
+msgstr "Ressource aktualisiert"
+
+msgid "ResourceDeleted"
+msgstr "Ressource gelöscht"
+
+msgid "AddNewResource"
+msgstr "Neue Ressource hinzufügen"
+
+msgid "ConfirmDeleteResource"
+msgstr "Sind Sie sicher, dass Sie diese Ressource löschen möchten?"
+
+msgid "ResourceInactivated"
+msgstr "Ressource gesperrt"
+
+msgid "ResourceActivated"
+msgstr "Ressource wurde entsperrt"
+
+msgid "Resource"
+msgstr "Ressource"
+
+msgid "OpenBooking"
+msgstr "Buchung öffnen"
+
+msgid "DeleteResource"
+msgstr "Ressource löschen"
+
+msgid "DeleteSelectedResources"
+msgstr "Ausgewählte Ressourcen löschen"
+
+msgid "ResourceExist"
+msgstr "Ressource existiert bereits"
+
+msgid "AcceptUsers"
+msgstr "Benutzer akzeptieren"
+
+msgid "UnacceptedUsers"
+msgstr "Benutzer ablehnen"
+
+msgid "DeleteSubscriptions"
+msgstr " Buchungszeitraum löschen"
+
+msgid "NoItems"
+msgstr "Keien Ressourcen vorhanden"
+
+msgid "ItemNotDeleted"
+msgstr "Einige Ressourcen wurden nicht gelöscht, das Sie Bestandteil von bevorstehenden Buchungen sind."
+
+msgid "ItemHasReservations"
+msgstr "Die Ressource hat  noch #NUM# aktive Buchung(en)"
+
+msgid "NoItemsReservation"
+msgstr "Hier gibt es keine für Sie verfügbaren Ressourcen"
+
+msgid "ReservationAccepted"
+msgstr "Ihre Buchung von #ITEM# wurde genehmigt"
+
+msgid "ReservationDenied"
+msgstr "Ihre Buchung von #ITEM# wurde abgelehnt"
+
+msgid "ReservationForItemAccepted"
+msgstr "Hallo,
+
+Ihre Reservierung für #ITEM# vom #BEGIN bis #END wurde genehmigt."
+
+msgid "ReservationForItemDenied"
+msgstr "Hallo,
+
+Ihre Reservierung für #ITEM# vom #BEGIN bis #END wurde abgelehnt."
+
+msgid "ReservationCancelled"
+msgstr "Reservierung abgebrochen, #NAME# ist zur Zeit nicht verfügbar."
+
+msgid "ReservationActive"
+msgstr "Reservierungist wieder aktiv, #NAME# ist wieder verfügbar"
+
+msgid "ReservationUnavailable"
+msgstr "Hallo,
+
+ die Ressource #NAME# ist vorübergehend nicht verfügbar, dadurch musste Ihre Buchung vom #BEGIN# bis #END# storniert werden.
+Sie erhalten eine Email, wenn die Ressource wieder verfügbar ist."
+
+msgid "ReservationAvailable"
+msgstr "Hallo,
+
+ es freut uns, Ihnen mitteilen zu können, dass die Ressource #NAME# wieder verfügbar ist. Ihre Buchung vom #BEGIN# bis #END# ist wieder aktiv."
+
+msgid "Resources"
+msgstr "Ressourcen"
+
+msgid "EditBookingPeriod"
+msgstr "Buchungszeitraum bearbeiten"
+
+msgid "CreateResourceType"
+msgstr "Ressource Typ anlegen"
+
+msgid "ModifyResourceType"
+msgstr "Ressource Typ bearbeiten"
+
+msgid "ViewResourceTypes"
+msgstr "Ressource-Typen anzeigen"
+
+msgid "ViewResources"
+msgstr "Ressourcen anzeigen"
+
+msgid "ViewBookingPeriods"
+msgstr "Buchungszeiträume anzeigen"
+
+msgid "AlwaysAvailable"
+msgstr "Immer verfügbar"
+
+msgid "SelectResourceTypeAndResource"
+msgstr "Ressource Typ auswählen"
+
+msgid "Step1SelectResourceType"
+msgstr "Schritt 1: Ressource Typ auswählen"
+
+msgid "Step2SelectResource"
+msgstr "Schritt 2: Ressource auswählen"
+
+msgid "Step3SelectBookingPeriod"
+msgstr "Schritt 3: Buchungszeitraum auswählen"
+
+msgid "NoReservations"
+msgstr "Keine Reservierungen"
+
+msgid "ItemRightDeleted"
+msgstr "Objekt Rechte entfernt"
+
+msgid "MItemRights"
+msgstr "Objekt Rechte"
+
+msgid "MReservationRight"
+msgstr "Buchungsrechte"
+
+msgid "ItemRightEdited"
+msgstr "Objekt Rechte aktualisiert"
+
+msgid "NoRights"
+msgstr "Keine Rechte"
+
+msgid "MItemRights2"
+msgstr "Objekt Rechte"
+
+msgid "MAddClassgroup"
+msgstr "Klasse / Gruppe hinzufügen"
+
+msgid "EditItemRight"
+msgstr "Objekt Rechte bearbeiten"
+
+msgid "DeleteItemRight"
+msgstr "Objekt Rechte löschen"
+
+msgid "MBookingPeriodsRight"
+msgstr "Buchungszeitraum Rechte"
+
+msgid "ViewItemRight"
+msgstr "Objekt Rechte anzeigen"
+
+msgid "DeleteSelectedItemRights"
+msgstr "Alle Objekt Rechte löschen"
+
+msgid "SetEditRights"
+msgstr "Bearbeitungs-Rechte (JA)"
+
+msgid "UnsetEditRights"
+msgstr "Bearbeitungs-Rechte (NEIN)"
+
+msgid "SetDeleteRights"
+msgstr "Lösch-Rechte (JA)"
+
+msgid "UnsetDeleteRights"
+msgstr "Lösch-Rechte (NEIN)"
+
+msgid "SetMresRights"
+msgstr "Reservierungsrecht (JA)"
+
+msgid "UnsetMresRights"
+msgstr "Reservierungsrecht (NEIN)"
+
+msgid "SetViewRights"
+msgstr "Lesen / Ansehen  (JA)"
+
+msgid "UnsetViewRights"
+msgstr "Lesen / Ansehen  (NEIN)"
+
+msgid "SetAllRights"
+msgstr "Alle Rechte  (JA)"
+
+msgid "UnsetAllRights"
+msgstr "Alle Rechte  (NEIN)"
+
+msgid "ItemCourse"
+msgstr "Kurs Inhalte"
+
+msgid "MItemRight"
+msgstr "Inhalte Rechte"
+
+msgid "EditItem2"
+msgstr "Inhalt bearbeiten"
+
+msgid "ItemManagerHeader"
+msgstr "Inhalte Manager"
+
+msgid "LangClass"
+msgstr "Klasse"
+
+msgid "MReservationPeriodsRight"
+msgstr "Reservierungszeitraum Recht"
+
+msgid "AddNewItem"
+msgstr "Neuen Inhalt hinzufügen"
+
+msgid "ItemName"
+msgstr "Inhalt Name"
+
+msgid "ItemDescription"
+msgstr "Inhalt Beschreibung"
+
+msgid "ItemExist"
+msgstr "Inhalt existiert bereits"
+
+msgid "EditItem"
+msgstr "Inhalt bearbeiten"
+
+msgid "ItemEdited"
+msgstr "Inhalt aktualisiert"
+
+msgid "CategoryFilter"
+msgstr "Kategorie Filter"
+
+msgid "ItemCreator"
+msgstr "Inhalt Ersteller"
+
+msgid "DeleteSelectedItems"
+msgstr "Ausgewählte Inhalte löschen"
+
+msgid "BookingPeriodTimepickerLimitation"
+msgstr "Beschränkung des Zeitfensters"
+
+msgid "Blackout"
+msgstr "Ausfall"
+
+msgid "EveryDay"
+msgstr "Jeden Tag"
+
+msgid "EveryWeek"
+msgstr "Jede Woche"
+
+msgid "EveryMonth"
+msgstr "Jeden Monat"
+
+msgid "ReservationForDenied"
+msgstr "Buchung verboten"
+
+msgid "BookingPeriodTooSmall"
+msgstr "Der Buchungszeitraum ist zu kurz."
+
+msgid "BookingPeriodTooBig"
+msgstr "Der Buchungszeitraum ist zu lang."
+
+msgid "PermissionsStored"
+msgstr "Rechte gespeichert"
+
+msgid "PermissionGranted"
+msgstr "Recht zugewiesen"
+
+msgid "PermissionRevoked"
+msgstr "Recht entfernt"
+
+msgid "RoleGranted"
+msgstr "Rolle zugewiesen"
+
+msgid "RoleRevoked"
+msgstr "Rolle entfernt"
+
+msgid "ErrorPleaseGiveRoleName"
+msgstr "Bitte der Rolle eine Bezeichnung geben"
+
+msgid "RoleDeleted"
+msgstr "Rolle gelöscht"
+
+msgid "AddRole"
+msgstr "Rolle hinzufügen"
+
+msgid "RoleComment"
+msgstr "Die Rolle ist das Objekt, was Ihnen erlaubt bestimmte Rechte einer Person oder Gruppe einzuräumen."
+
+msgid "DefaultRole"
+msgstr "Standard Rolle"
+
+msgid "PermissionsOfRole"
+msgstr "Rechte der Rolle"
+
+msgid "IsPlatformRoleNotEditable"
+msgstr "Ist die Portal-Rolle nicht veränderbar?"
+
+msgid "UserPermissions"
+msgstr "Rechte des Benutzers"
+

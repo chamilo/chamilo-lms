@@ -1,0 +1,87 @@
+msgid "langScormVersion"
+msgstr "wersja"
+
+msgid "langScormRestarted"
+msgstr "Wszystkie lekcje są teraz niekompletne."
+
+msgid "langScormNoNext"
+msgstr "To jest ostatnia lekcja."
+
+msgid "langScormNoPrev"
+msgstr "To jest pierwsza lekcja."
+
+msgid "langScormTime"
+msgstr "Czas"
+
+msgid "langScormNoOrder"
+msgstr "Nie ma zadanego porządku. Możesz zacząć w dowolnym miejscu."
+
+msgid "langScormScore"
+msgstr "Wynik"
+
+msgid "langScormLessonTitle"
+msgstr "Temat lekcji"
+
+msgid "langScormStatus"
+msgstr "Status"
+
+msgid "langScormToEnter"
+msgstr "Aby wejść"
+
+msgid "langScormFirstNeedTo"
+msgstr "najpierw musisz ukończyć"
+
+msgid "langScormThisStatus"
+msgstr "Ta lekcja jest teraz"
+
+msgid "langScormClose"
+msgstr "Zakończ"
+
+msgid "langScormRestart"
+msgstr "Zacznij od początku"
+
+msgid "langScormCompstatus"
+msgstr "Ukończono"
+
+msgid "langScormIncomplete"
+msgstr "Nie ukończono"
+
+msgid "langScormPassed"
+msgstr "Zaliczony"
+
+msgid "langScormFailed"
+msgstr "Niezaliczony"
+
+msgid "langScormPrevious"
+msgstr "Poprzedni"
+
+msgid "langScormNext"
+msgstr "Następny"
+
+msgid "langScormTitle"
+msgstr "Gracz Chamilo Scorm"
+
+msgid "langScormMystatus"
+msgstr "Mój status"
+
+msgid "langScormNoItems"
+msgstr "Nie ma tu &#380;adnych elementów."
+
+msgid "langScormNoStatus"
+msgstr "Ta zawarto&#347;&#263; nie posiada statusu"
+
+msgid "langScormLoggedout"
+msgstr "Wylogowany(-a) z obszaru Scorm"
+
+msgid "langScormCloseWindow"
+msgstr "Zamknij okna"
+
+msgid "langScormExitFullScreen"
+msgstr "Powrót do standardowego ekranu"
+
+msgid "langScormFullScreen"
+msgstr "pełny ekran"
+
+msgid "langScormNotAttempted"
+msgstr "Nie próbowano"
+

@@ -1,0 +1,3306 @@
+msgid "AdminBy"
+msgstr "Administração por"
+
+msgid "AdministrationTools"
+msgstr "Administração"
+
+msgid "State"
+msgstr "Estado/status do portal"
+
+msgid "Statistiques"
+msgstr "Estatísticas"
+
+msgid "VisioHostLocal"
+msgstr "Hosting/alojamento da vídeoconferência"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Ou o protocolo da vídeoconferência é baseado na web (web-based) - falso a maior parte do tempo"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Apresentar uma ligação para voltar à hierarquia dos cursos. De qualquer forma, estará sempre disponível no final da lista uma ligação."
+
+msgid "langUsed"
+msgstr "em utilização"
+
+msgid "langPresent"
+msgstr "Validar"
+
+msgid "langMissing"
+msgstr "em falta/inexistente"
+
+msgid "langExist"
+msgstr "existente"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Apresentar ligações para voltar a partir das categorias/cursos"
+
+msgid "ShowNumberOfCourses"
+msgstr "Apresentar o número de cursos"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Exibir o nome do instrutor no nome do curso"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Exibir o nome do instrutor na lista do curso"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Exibir o Código do Curso na lista do curso"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Exibir o Código no nome do Curso"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "N�o existem cursos pseud�nimos/virtuais na plataforma/sistema."
+
+msgid "ConfigureHomePage"
+msgstr "Configurar a página inicial/homepage do portal"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Activar os módulos no momento da criação de um curso"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Que ferramentas têm de ser activadas (visíveis), por pré-definição, quando é criado um novo curso?"
+
+msgid "SearchUsers"
+msgstr "Pesquisar utilizadores"
+
+msgid "CreateUser"
+msgstr "Criar utilizador"
+
+msgid "ModifyInformation"
+msgstr "Editar informação"
+
+msgid "ModifyUser"
+msgstr "Editar utilizador"
+
+msgid "buttonEditUserField"
+msgstr "Editar campo do utilizador"
+
+msgid "ModifyCoach"
+msgstr "Editar tutor"
+
+msgid "ModifyThisSession"
+msgstr "Editar esta sessão"
+
+msgid "ExportSession"
+msgstr "Exportar sessão(ões)"
+
+msgid "ImportSession"
+msgstr "Importar sessão(ões)"
+
+msgid "langCourseBackup"
+msgstr "Criar uma cópia de segurança/backup deste curso"
+
+msgid "langCourseTitular"
+msgstr "Instrutor"
+
+msgid "langCourseTitle"
+msgstr "Curso"
+
+msgid "langCourseFaculty"
+msgstr "Categoria"
+
+msgid "langCourseDepartment"
+msgstr "Departamento"
+
+msgid "langCourseDepartmentURL"
+msgstr "URL(caminho) do Departamento"
+
+msgid "langCourseLanguage"
+msgstr "Idioma"
+
+msgid "langCourseAccess"
+msgstr "Acesso ao curso"
+
+msgid "langCourseSubscription"
+msgstr "Inscrição no curso"
+
+msgid "langPublicAccess"
+msgstr "Acesso público"
+
+msgid "langPrivateAccess"
+msgstr "Acesso privado"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "A gestão da base-de-dados encontra-se apenas disponível para o administrador da plataforma/sistema"
+
+msgid "langShowUsersOfCourse"
+msgstr "Apresentaros utilizadores inscritos neste curso"
+
+msgid "langShowClassesOfCourse"
+msgstr "Apresentar as turmas inscritas neste curso"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Apresentar os grupos deste curso"
+
+msgid "langPhone"
+msgstr "Telefone"
+
+msgid "langPhoneNumber"
+msgstr "Número de Telefone"
+
+msgid "langActions"
+msgstr "Interacção de tutoria"
+
+msgid "langAddToCourse"
+msgstr "Adicionar a um curso"
+
+msgid "langDeleteFromPlatform"
+msgstr "Remover do portal"
+
+msgid "langDeleteCourse"
+msgstr "Eliminar o(s) curso(s) seleccionado(s)"
+
+msgid "langDeleteFromCourse"
+msgstr "Anular/cancelar a inscrição do(s) curso(s)"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Eliminar as turmas seleccionadas"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Eliminar os grupos seleccionados"
+
+msgid "langAdministrator"
+msgstr "Administrador"
+
+msgid "langAddPicture"
+msgstr "Adicionar uma foto"
+
+msgid "langChangePicture"
+msgstr "Substituir/modificar foto"
+
+msgid "langDeletePicture"
+msgstr "Eliminar foto"
+
+msgid "langAddUsers"
+msgstr "Adicionar utilizador"
+
+msgid "langAddGroups"
+msgstr "Adicionar grupos"
+
+msgid "langAddClasses"
+msgstr "Adicionar turmas"
+
+msgid "langExportUsers"
+msgstr "Exportar lista de utilizadores"
+
+msgid "langKeyword"
+msgstr "Palavra-chave"
+
+msgid "langGroupName"
+msgstr "Nome do grupo"
+
+msgid "langGroupTutor"
+msgstr "Tutor do grupo"
+
+msgid "langGroupDescription"
+msgstr "Descrição do grupo"
+
+msgid "langNumberOfParticipants"
+msgstr "Número de membros"
+
+msgid "langNumberOfUsers"
+msgstr "Número de utilizadores"
+
+msgid "langMaximum"
+msgstr "máximo"
+
+msgid "langMaximumOfParticipants"
+msgstr "Número máximo de membros"
+
+msgid "langParticipants"
+msgstr "membros"
+
+msgid "langFirstLetterClass"
+msgstr "Primeira letra (nome da turma)"
+
+msgid "langFirstLetterUser"
+msgstr "Primeira letra (último nome)"
+
+msgid "langFirstLetterCourse"
+msgstr "Primeira letra (código)"
+
+msgid "langModifyUserInfo"
+msgstr "Editar informações do utilizador"
+
+msgid "langModifyClassInfo"
+msgstr "Editar informações da turma"
+
+msgid "langModifyGroupInfo"
+msgstr "Editar informações do grupo"
+
+msgid "langModifyCourseInfo"
+msgstr "Editar informações do curso"
+
+msgid "langPleaseEnterClassName"
+msgstr "Por favor, introduza o nome da turma !"
+
+msgid "langPleaseEnterLastName"
+msgstr "Por favor, introduza o último nome do utilizador !"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Por favor, introduza o primeiro nome do utilizador !"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Por favor, introduza um endereço de e-mail válido !"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Por favor, introduza um login/acesso válido !"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Por favor, introduza o código do curso."
+
+msgid "langPleaseEnterTitularName"
+msgstr "Por favor, introduza o Primeiro e Último Nome do instrutor !"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Por favor, introduza o título da formação"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Os formatos aceites são: JPG, PNG e GIF !"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Este login/acesso j� se encontra atribu�do !"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Importar lista de utilizadores"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Exportar lista de utilizadores"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Apenas utilizadores do curso"
+
+msgid "langAddClassesToACourse"
+msgstr "Adicionar turmas a um curso"
+
+msgid "langAddUsersToACourse"
+msgstr "Adicionar utilizadores a um curso"
+
+msgid "langAddUsersToAClass"
+msgstr "Adicionar utilizadores a uma turma"
+
+msgid "langAddUsersToAGroup"
+msgstr "Adicionar utilizadores a um grupo"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Deverá seleccionar pelo menos uma turma e um curso"
+
+msgid "AtLeastOneUser"
+msgstr "Deverá seleccionar pelo menos um utilizador !"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Deverá seleccionar pelo menos um utilizador e um curso"
+
+msgid "langClassList"
+msgstr "Lista de turmas"
+
+msgid "langUserList"
+msgstr "Lista de utilizadores"
+
+msgid "langCourseList"
+msgstr "Lista de cursos"
+
+msgid "langAddToThatCourse"
+msgstr "Adicionar ao(s) curso(s)"
+
+msgid "langAddToClass"
+msgstr "Adicionar à turma"
+
+msgid "langRemoveFromClass"
+msgstr "Remover da turma"
+
+msgid "langAddToGroup"
+msgstr "Adicionar ao grupo"
+
+msgid "langRemoveFromGroup"
+msgstr "Remover do grupo"
+
+msgid "langUsersOutsideClass"
+msgstr "Utilizadores não pertencentes à turma"
+
+msgid "langUsersInsideClass"
+msgstr "Utilizadores pertencentes à turma"
+
+msgid "langUsersOutsideGroup"
+msgstr "Utilizadores não pertencentes ao grupo"
+
+msgid "langUsersInsideGroup"
+msgstr "Utilizadores pertencentes ao grupo"
+
+msgid "langImportFileLocation"
+msgstr "Localização do ficheiro CSV / XML"
+
+msgid "langFileType"
+msgstr "Tipo de ficheiro"
+
+msgid "langOutputFileType"
+msgstr "Tipo do ficheiro de saída"
+
+msgid "langMustUseSeparator"
+msgstr "tem de usar o caracter \';\' como separador"
+
+msgid "langCSVMustLookLike"
+msgstr "O ficheiro CSV deve ser semelhante a este"
+
+msgid "langXMLMustLookLike"
+msgstr "O ficheiro XML deve ser semelhante a este"
+
+msgid "langMandatoryFields"
+msgstr "Os campos em <b>negrito</b> são obrigatórios."
+
+msgid "langNotXML"
+msgstr "O ficheiro especificado não está no formato XML !"
+
+msgid "langNotCSV"
+msgstr "O ficheiro especificado não está no formato CSV !"
+
+msgid "langNoNeededData"
+msgstr "O ficheiro especificado não contém todos os dados necessários !"
+
+msgid "langMaxImportUsers"
+msgstr "Não pode importar mais de 500 utilizadores de uma só vez !"
+
+msgid "langAdminDatabases"
+msgstr "Bases-de-dados (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Utilizadores"
+
+msgid "langAdminClasses"
+msgstr "Turmas de utilizadores"
+
+msgid "langAdminGroups"
+msgstr "Grupos"
+
+msgid "langAdminCourses"
+msgstr "Cursos"
+
+msgid "langAdminCategories"
+msgstr "Categorias de cursos"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Inscrever um utilizador / grupo num curso"
+
+msgid "AddACategory"
+msgstr "Adicionar uma categoria"
+
+msgid "langInto"
+msgstr "para dentro de/em"
+
+msgid "langNoCategories"
+msgstr "N�o existem categorias aqui"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Permitir adicionar cursos nesta categoria?"
+
+msgid "langGoToForum"
+msgstr "Ir para o fórum"
+
+msgid "langCategoryCode"
+msgstr "Código da categoria"
+
+msgid "langCategoryName"
+msgstr "Nome da categoria"
+
+msgid "langCategories"
+msgstr "categorias"
+
+msgid "langEditNode"
+msgstr "Editar esta categoria"
+
+msgid "langOpenNode"
+msgstr "Abrir esta categoria"
+
+msgid "langDeleteNode"
+msgstr "Eliminar esta categoria"
+
+msgid "langAddChildNode"
+msgstr "Adicionar uma sub-categoria"
+
+msgid "langViewChildren"
+msgstr "Visualizar os discípulos/ramos"
+
+msgid "langTreeRebuildedIn"
+msgstr "Árvore reconstruída em"
+
+msgid "langTreeRecountedIn"
+msgstr "Árvore recontada em"
+
+msgid "langRebuildTree"
+msgstr "Reconstruir árvore"
+
+msgid "langRefreshNbChildren"
+msgstr "Actualizar número de discípulos/ramos"
+
+msgid "langShowTree"
+msgstr "Apresentar árvore"
+
+msgid "langBack"
+msgstr "Voltar à página anterior"
+
+msgid "langLogDeleteCat"
+msgstr "Categoria eliminada"
+
+msgid "langRecountChildren"
+msgstr "Recontar discípulos/ramos"
+
+msgid "langUpInSameLevel"
+msgstr "Subir no mesmo nível"
+
+msgid "langSeconds"
+msgstr "segundos"
+
+msgid "langMailTo"
+msgstr "Enviar para:"
+
+msgid "lang_no_access_here"
+msgstr "Sem acesso aqui"
+
+msgid "lang_php_info"
+msgstr "informações sobre a plataforma/sistema"
+
+msgid "langAddAdminInApache"
+msgstr "Adicionar um administrador"
+
+msgid "langAddFaculties"
+msgstr "Adicionar categorias"
+
+msgid "langSearchACourse"
+msgstr "Pesquisar um curso"
+
+msgid "langSearchAUser"
+msgstr "Pesquisar um utilizador"
+
+msgid "langTechnicalTools"
+msgstr "Técnico"
+
+msgid "langConfig"
+msgstr "Configuração da plataforma/sistema"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Lista de logins/acessos (alargada)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Número máximo de utilizadores a ser apresentado no inventário da lista"
+
+msgid "NoTimeLimits"
+msgstr "Sem limite de tempo"
+
+msgid "GeneralCoach"
+msgstr "Tutor geral"
+
+msgid "GeneralProperties"
+msgstr "Propriedades gerais"
+
+msgid "CourseCoach"
+msgstr "Tutor do curso"
+
+msgid "UsersNumber"
+msgstr "Número de utilizadores"
+
+msgid "DokeosClassic"
+msgstr "Chamilo clássico"
+
+msgid "PublicAdmin"
+msgstr "Public administration"
+
+msgid "PageAfterLoginTitle"
+msgstr "Página após login/acesso"
+
+msgid "PageAfterLoginComment"
+msgstr "A página que é visualizada pelo utilizador ao entrar na plataforma"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Chamilo Web"
+
+msgid "TabsMyProfile"
+msgstr "Separador Meu Perfil"
+
+msgid "GlobalRole"
+msgstr "Função Global"
+
+msgid "langNomOutilTodo"
+msgstr "Gerir lista de Tarefas"
+
+msgid "langNomPageAdmin"
+msgstr "Administração"
+
+msgid "langSysInfo"
+msgstr "Informações sobre a plataforma/sistema"
+
+msgid "langDiffTranslation"
+msgstr "Comparar as traduções"
+
+msgid "langStatOf"
+msgstr "Relatório para"
+
+msgid "langSpeeSubscribe"
+msgstr "Inscrição rápida como verificador de cursos"
+
+msgid "langLogIdentLogout"
+msgstr "Lista de acessos"
+
+msgid "langServerStatus"
+msgstr "Estado/status do servidor MySQL :"
+
+msgid "langDataBase"
+msgstr "Base-de-dados"
+
+msgid "langRun"
+msgstr "funciona"
+
+msgid "langClient"
+msgstr " Cliente MySql"
+
+msgid "langServer"
+msgstr "Servidor MySql"
+
+msgid "langtitulary"
+msgstr "Proprietário"
+
+msgid "langUpgradeBase"
+msgstr "Upgrade/actualizar a base-de-dados"
+
+msgid "langManage"
+msgstr "Gerir o Portal"
+
+msgid "langErrorsFound"
+msgstr "erros encontrados"
+
+msgid "langMaintenance"
+msgstr "Backup/cópia de segurança"
+
+msgid "langUpgrade"
+msgstr "Upgrade/actualizar o Chamilo"
+
+msgid "langWebsite"
+msgstr "Página web do Chamilo"
+
+msgid "langDocumentation"
+msgstr "Documentação"
+
+msgid "langContribute"
+msgstr "Contribuir"
+
+msgid "langInfoServer"
+msgstr "Informação do Servidor"
+
+msgid "langOtherCategory"
+msgstr "Outra categoria"
+
+msgid "langSendMailToUsers"
+msgstr "Enviar um e-mail para os utilizadores"
+
+msgid "langExampleXMLFile"
+msgstr "Exemplo de ficheiro XML"
+
+msgid "langExampleCSVFile"
+msgstr "Exemplo de ficheiro CSV"
+
+msgid "langCourseSystemCode"
+msgstr "Código da plataforma/sistema"
+
+msgid "langCourseVisualCode"
+msgstr "Código visual"
+
+msgid "langSystemCode"
+msgstr "Código da plataforma/sistema"
+
+msgid "langVisualCode"
+msgstr "Código Visual"
+
+msgid "langAddCourse"
+msgstr "Criar um curso"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Gerir cursos virtuais"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Criar um curso virtual"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "O curso virtual irá partilhar espaço de armazenamento (directório e base-de-dados) com um curso \'real\' existente."
+
+msgid "langRealCourseCode"
+msgstr "Código do curso real"
+
+msgid "langCourseCreationSucceeded"
+msgstr "O curso foi criado com sucesso."
+
+msgid "langYourDokeosUses"
+msgstr "Sua instalação do Chamilo utiliza actualmente"
+
+msgid "langOnTheHardDisk"
+msgstr "no disco rígido"
+
+msgid "langIsVirtualCourse"
+msgstr "Curso virtual?"
+
+msgid "langSystemAnnouncements"
+msgstr "Notícias do Portal"
+
+msgid "langAddAnnouncement"
+msgstr "Adicionar uma notícia"
+
+msgid "langAnnouncementAdded"
+msgstr "O anúncio foi adicionado"
+
+msgid "langAnnouncementUpdated"
+msgstr "O anúncio foi actualizado"
+
+msgid "langAnnouncementDeleted"
+msgstr "O anúncio foi eliminado"
+
+msgid "langContent"
+msgstr "Conteúdo"
+
+msgid "PermissionsForNewFiles"
+msgstr "Permissões para novos ficheiros"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "A capacidade de definir níveis de permissões a atribuir a todos os novos ficheiros criados permite aumentar a segurança contra ataques de hackers e o envio de conteúdo perigoso para o portal. A configuração pré-definida (0550) deve ser suficiente para manter o servidor num nível razoável de protecção. O formato atribuído usa uma terminologia UNIX do género Proprietário-Grupo-Outros (Owner-Group-Others) com permissões de Escrita-Leitura-Executar (Read-Write-Execute). Se utilizar o Oogie, tenha em atenção para que o utilizador que iniciar o OpenOffice possa escrever ficheiros na pasta do curso."
+
+msgid "langStudent"
+msgstr "Aluno"
+
+msgid "Guest"
+msgstr "Convidado"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Login/aceder como"
+
+msgid "langLoginAsThisUser"
+msgstr "Login/acesso"
+
+msgid "SelectPicture"
+msgstr "Seleccione imagem..."
+
+msgid "DontResetPassword"
+msgstr "Não redefinir a password/senha"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Participar no desenvolvimento"
+
+msgid "langCourseAdmin"
+msgstr "Instrutor"
+
+msgid "langOtherCourses"
+msgstr "outros cursos"
+
+msgid "PlatformLanguageTitle"
+msgstr "Idioma do Portal"
+
+msgid "ServerStatusComment"
+msgstr "Que tipo de servidor é este? Esta opção activa ou desactiva algumas opções específicas. Num servidor de desenvolvimento, existe uma funcionalidade de tradução que indica parâmetros não traduzidos"
+
+msgid "ServerStatusTitle"
+msgstr "Tipo de Servidor"
+
+msgid "PlatformLanguages"
+msgstr "Idiomas do Portal Chamilo"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Esta ferramenta permite gerir e seleccionar o idioma directamente na p�gina de login/acesso. Como administrador da plataforma pode decidir quais ser�o os idiomas que dever�o estar dispon�veis para os utilizadores."
+
+msgid "OriginalName"
+msgstr "Nome original"
+
+msgid "EnglishName"
+msgstr "Nome em inglês"
+
+msgid "DokeosFolder"
+msgstr "Pasta do Chamilo"
+
+msgid "Properties"
+msgstr "Propriedades"
+
+msgid "PlatformConfigSettings"
+msgstr "Definições de configuração"
+
+msgid "SettingsStored"
+msgstr "As definições foram armazenadas"
+
+msgid "InstitutionTitle"
+msgstr "Nome da organização"
+
+msgid "InstitutionComment"
+msgstr "O nome da organização (aparece no cabeçalho, à direita)"
+
+msgid "InstitutionUrlTitle"
+msgstr "URL(caminho) da organização (endereço web/web address)"
+
+msgid "InstitutionUrlComment"
+msgstr "O URL(caminho) das instituições (a ligação/link que aparece no topo do cabeçalho, à direita)"
+
+msgid "SiteNameTitle"
+msgstr "Nome do portal de E-learning"
+
+msgid "SiteNameComment"
+msgstr " Nome do Portal Chamilo (aparece no topo do cabeçalho, à esquerda)"
+
+msgid "emailAdministratorTitle"
+msgstr "Administrador do Portal: E-mail"
+
+msgid "emailAdministratorComment"
+msgstr "O endereço de e-mail do Administrador da Plataforma (aparece no rodapé, à esquerda)"
+
+msgid "administratorSurnameTitle"
+msgstr "Administrador do Portal: Último Nome"
+
+msgid "administratorSurnameComment"
+msgstr "O Nome de família do Administrador da Plataforma (aparece no rodapé, à esquerda)"
+
+msgid "administratorNameTitle"
+msgstr "Administrador da Plataforma: Primeiro Nome"
+
+msgid "administratorNameComment"
+msgstr "O Primeiro Nome do Administrador da Plataforma (aparece no rodapé, à esquerda)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Informações sobre o Administrador da Plataforma no rodapé"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Apresentar as informações do Administrador da Plataforma no rodapé?"
+
+msgid "HomepageViewTitle"
+msgstr "Desenho da página inicial/homepage dos cursos"
+
+msgid "HomepageViewComment"
+msgstr "Como gostaria que fosse a aparência página inicial/homepage de um curso?"
+
+msgid "HomepageViewDefault"
+msgstr "Desenho/layout de duas colunas. As ferramentas inactivas estão ocultas/escondidas"
+
+msgid "HomepageViewFixed"
+msgstr "Desenho/layout de três colunas. As ferramentas inactivas têm aparência acinzentada (os ícones mantém-se no respectivo lugar)"
+
+msgid "Yes"
+msgstr "Sim"
+
+msgid "No"
+msgstr "Não"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Atalhos para as ferramentas"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Apresentar os atalhos para as ferramentas na área de banner/manchete da página?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Visualização do Aluno"
+
+msgid "ShowStudentViewComment"
+msgstr "Activar o modo de visualização do aluno?<br>Esta especificação permite ao instrutor conseguir aceder a um modo de visualização como aluno."
+
+msgid "AllowGroupCategories"
+msgstr "Categorias do Grupo"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Permitir aos instrutores a possibilidade de criar categorias na ferramenta de Grupos?"
+
+msgid "PlatformLanguageComment"
+msgstr "Pode defenir o idioma da plataforma num outro local da área de administração, nomeadamente em: <a href=\"languages.php\">Idiomas da Plataforma Chamilo</a>"
+
+msgid "ProductionServer"
+msgstr "Servidor de Produção"
+
+msgid "TestServer"
+msgstr "Servidor de Teste"
+
+msgid "ShowOnlineTitle"
+msgstr "Quem está online?"
+
+msgid "AsPlatformLanguage"
+msgstr "como idioma da plataforma"
+
+msgid "ShowOnlineComment"
+msgstr "Mostrar número de pessoas que estão online?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Permitir alterar o Nome no perfil?"
+
+msgid "AllowNameChangeComment"
+msgstr "É permitido ao utilizador alterar o primeiro e último nome?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Espaço pré-definido em disco"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Qual é o espaço disponível em disco? Pode definir o espaço limite a exceder para cursos específicos através de: Administração de plataforma > Cursos > modificar"
+
+msgid "ProfileChangesTitle"
+msgstr "Perfil"
+
+msgid "ProfileChangesComment"
+msgstr "Quais as partes do perfil que podem ser alteradas?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Registro/inscrição: campos obrigatórios"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Quais são os campos necessários (além do apelido, nome, login/acesso e password/senha)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Espaço disponível em disco para Grupos"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Qual é o espaço pré-definido em disco disponível para a ferramenta de documentos dos grupos?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Password/senha perdida/esquecida"
+
+msgid "AllowLostPasswordComment"
+msgstr "Os utilizadores estão autorizados a solititar a sua password/senha perdida/esquecida?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Registro/inscrição"
+
+msgid "AllowRegistrationComment"
+msgstr "É permitido o registro/inscrição como um novo utilizador? Podem os utilizadores criar novas contas de utilizador?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Registro/inscrição como Instrutor"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Pode qualquer utilizador registar-se como instrutor (com permissões para criar cursos)?"
+
+msgid "PlatformLanguage"
+msgstr "Idioma do portal"
+
+msgid "Tuning"
+msgstr "Melhorar/aperfeiçoar"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "Dividir a pasta/directório de envio dos utilizadores"
+
+msgid "SplitUsersUploadDirectoryComment"
+msgstr "Em portais com uma utilização intensiva, onde existe um elevado número de utilizadores registados que submetem/enviam imagens, a pasta/directório de envio (main/upload/users) poderá conter demasiados ficheiros para poderem ser geridos pelo sistema de ficheiros do servidor (foi reportado para mais de 36000 ficheiros num servidor Debian). Modificando esta opção irá permitir, num primeiro nível, uma divisão em várias pastas/directórios na pasta/directório de envio. 9 pastas/directórios serão utilizadas na pasta/directório base e todas as sub-pastas/directórios de utilizadores ficarão armazenadas numa das 9 pastas/directórios. Modificando esta opção não irá afectar a estrutura das pastas/directórios em disco, mas afectará o comportamento do código Chamilo, por isso, se modificar esta opção, deverá criar as novas pastas/directórios e mover manualmente as pastas/directórios existentes no servidor. Tenha em atenção que ao criar e mover essas pastas/directórios, deverá mover as pastas/directórios de utilizadores de 1 a 9 para as sub-pastas/directórios com o mesmo nome. Se não tiver a certeza sobre esta opção, é melhor não a activar."
+
+msgid "CourseQuota"
+msgstr "Espaço em disco"
+
+msgid "EditNotice"
+msgstr "Editar notificação/aviso"
+
+msgid "General"
+msgstr "geral"
+
+msgid "LostPassword"
+msgstr "Password/senha perdida"
+
+msgid "Registration"
+msgstr "registro/inscrição"
+
+msgid "Password"
+msgstr "password/senha"
+
+msgid "InsertLink"
+msgstr "Adicionar uma página (CMS)"
+
+msgid "EditNews"
+msgstr "Editar Notícias"
+
+msgid "EditCategories"
+msgstr "Editar categorias dos cursos"
+
+msgid "EditHomePage"
+msgstr "Editar área central da Página inicial/homepage"
+
+msgid "AllowUserHeadingsComment"
+msgstr "O instrutor pode definir campos no perfil do aluno para recolher informação adicional?"
+
+msgid "Platform"
+msgstr "Portal"
+
+msgid "Course"
+msgstr "Curso"
+
+msgid "Languages"
+msgstr "Idiomas"
+
+msgid "Privacy"
+msgstr "Privacidade"
+
+msgid "NoticeTitle"
+msgstr "Título da notificação/aviso"
+
+msgid "NoticeText"
+msgstr "Texto da notificação/aviso"
+
+msgid "LinkName"
+msgstr "Texto da ligação/link"
+
+msgid "LinkURL"
+msgstr "Caminho (URL) da ligação/link"
+
+msgid "OpenInNewWindow"
+msgstr "Abrir numa nova janela"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "Nos ecrãs onde se permite adicionar utilizadores a cursos ou turmas, se a primeira lista não filtrada mais do que este número de utilizadores, então será pré-definido para a primeira letra (A)"
+
+msgid "Plugins"
+msgstr "Plugins"
+
+msgid "HideDLTTMarkupComment"
+msgstr "Ocultar/esconder a marcação [= ... =] quando a variável de um idioma não estiver traduzida"
+
+msgid "Info"
+msgstr "Informação"
+
+msgid "UserAdded"
+msgstr "O utilizador foi adicionado"
+
+msgid "NoSearchResults"
+msgstr "Não existem resultados da pesquisa"
+
+msgid "UserDeleted"
+msgstr "O utilizador foi eliminado"
+
+msgid "NoClassesForThisCourse"
+msgstr "Não existem turmas inscritas neste curso"
+
+msgid "CourseUsage"
+msgstr "Utilização do curso"
+
+msgid "NoCoursesForThisUser"
+msgstr "Este utilizador n�o est� inscrito em nenhum curso"
+
+msgid "NoClassesForThisUser"
+msgstr "Este utilizador n�o est� inscrito em nenhuma turma"
+
+msgid "NoCoursesForThisClass"
+msgstr "Esta turma n�o est� inscrita em nenhum curso"
+
+msgid "langOpenToTheWorld"
+msgstr "Aberto - permitido o acesso a todos os utilizadores"
+
+msgid "OpenToThePlatform"
+msgstr "Aberto - permitido o acesso aos utilizadores registados na plataforma"
+
+msgid "langPrivate"
+msgstr "Acesso restrito (curso acessível apenas aos utilizadores da lista de utilizadores)"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Completamente fechado: o curso encontra-se apenas acessível a instrutores."
+
+msgid "langSubscription"
+msgstr "Inscrição"
+
+msgid "langUnsubscription"
+msgstr "Anular/cancelar inscrição"
+
+msgid "CourseAccessConfigTip"
+msgstr "Por pré-definição o seu curso é público. Mas pode definir o nível de confidencialidade acima."
+
+msgid "Tool"
+msgstr "ferramenta"
+
+msgid "NumberOfItems"
+msgstr "número de itens"
+
+msgid "DocumentsAndFolders"
+msgstr "Documentos e pastas"
+
+msgid "Learnpath"
+msgstr "Cursos"
+
+msgid "Exercises"
+msgstr "Exercícios"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Agenda pessoal"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "O aluno pode adicionar eventos pessoais à Agenda?"
+
+msgid "CurrentValue"
+msgstr "valor actual"
+
+msgid "CourseDescription"
+msgstr "Descrição do Curso"
+
+msgid "OnlineConference"
+msgstr "Conferência online"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Quiz"
+msgstr "Exercícios"
+
+msgid "Announcements"
+msgstr "Anúncios"
+
+msgid "Links"
+msgstr "Ligações/links"
+
+msgid "LearningPath"
+msgstr "Cursos"
+
+msgid "Documents"
+msgstr "Documentos"
+
+msgid "UserPicture"
+msgstr "Imagem"
+
+msgid "officialcode"
+msgstr "Código"
+
+msgid "Login"
+msgstr "Login/acesso"
+
+msgid "UserPassword"
+msgstr "Password/senha"
+
+msgid "SubscriptionAllowed"
+msgstr "Permitido o registro"
+
+msgid "UnsubscriptionAllowed"
+msgstr "Permitido anular/cancelar registro"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Permitido"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Negado"
+
+msgid "AddDummyContentToCourse"
+msgstr "Adicionar alguns exemplos de conteúdos a este curso"
+
+msgid "DummyCourseCreator"
+msgstr "Criar exemplo de conteúdos para um curso"
+
+msgid "DummyCourseDescription"
+msgstr "Isto ir� adicionar alguns exemplos de conte�dos a este curso. Destina-se apenas para fins de teste."
+
+msgid "AvailablePlugins"
+msgstr "Estes s�o alguns dos plugins que foram encontrados no sistema. Poder� realizar o download de plugins adicionais em <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
+
+msgid "CreateVirtualCourse"
+msgstr "Criar um curso virtual"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Exibir/mostrar lista dos cursos virtuais"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Associado a um código verdadeiro de um curso real"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Tentativa de criação de um  curso virtual ..."
+
+msgid "WantedCourseCode"
+msgstr "Código de curso desejado"
+
+msgid "ResetPassword"
+msgstr "Redefinir password/senha"
+
+msgid "CheckToSendNewPassword"
+msgstr "Verificar para enviar uma nova password/senha"
+
+msgid "AutoGeneratePassword"
+msgstr "Gerar automaticamente uma nova password/senha"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Utilizar um título para o nome do documento"
+
+msgid "UseDocumentTitleComment"
+msgstr "Permite a utiliza��o de um t�tulo para os nomes de documentos em vez do nome do pr�prio ficheiro (document_name.ext)"
+
+msgid "StudentPublications"
+msgstr "Tarefas/trabalhos"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "Ficheiros eliminados não podem ser restaurados"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Eliminar um ficheiro através da ferramenta de documentos, elimina-o permanentemente. O ficheiro não poderá ser restaurado."
+
+msgid "ClassName"
+msgstr "Nome da Turma"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Caixa de entrega: Tamanho máximo para o ficheiro de um documento"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Qual o tamanho (em bytes) que um documento na caixa de entrega pode ter?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Caixa de entrega: Os documentos podem ser substituídos"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "O documento original pode ser substituído quando um utilizador ou um instrutor enviam um documento com o mesmo nome do já existente? Se responder Sim, perderá a versão do mecanismo."
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Caixa de entrega: Enviar para a caixa de entrega pessoal?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Permitir aos instrutores e aos utilizadores o envio de documentos para as caixas de entrega respectivas sem que sejam novamente enviados para os próprios"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Caixa de entrega: Aluno <-> Aluno"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Permitir que os utilizadores enviem documentos para outros utilizadores (peer 2 peer). Os utilizadores poderão utilizar esta funcionalidade para documentos menos relevantes (mp3, soluções de exercícios, ...). Desactivando esta funcionalidade, os utilizadores apenas poderão enviar documentos para o instrutor."
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Caixa de entrega: Permitir envio"
+
+msgid "DropboxAllowMailingComment"
+msgstr "Com a funcionalidade de envio poderá enviar a cada aluno um documento pessoal"
+
+msgid "PermissionsForNewDirs"
+msgstr "Permissões para novas pastas/directórios"
+
+msgid "PermissionsForNewDirsComment"
+msgstr "A capacidade de definir os níveis de permissões a atribuir às novas pastas/diretórios criados, permite aumentar o nível de segurança contra ataques de hackers que poderão enviar conteúdos ilícitos e perigosos para o portal. A configuração pré-definida (0770) deverá ser suficiente para atribuir ao servidor um nível protecção razoável. O formato atribuído utiliza uma terminologia UNIX do tipo Proprietário-Grupo-Outros (Owner-Group-Others) com permissões de Ler-Escrever-Executar (Read-Write-Execute)."
+
+msgid "UserListHasBeenExported"
+msgstr "A lista de utilizadores foi exportada."
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Download/descarregar o ficheiro"
+
+msgid "administratorTelephoneTitle"
+msgstr "Administrador do Portal: Telefone"
+
+msgid "administratorTelephoneComment"
+msgstr "Número de telefone do administrador da plataforma"
+
+msgid "SendMailToNewUser"
+msgstr "Enviar e-mail ao novo utilizador"
+
+msgid "ExtendedProfileTitle"
+msgstr "Perfil ampliado/alargado"
+
+msgid "ExtendedProfileComment"
+msgstr "Se esta configuração estiver definida para \'Verdadeiro\' (True), o utilizador poderá preencher os seguintes campos (opcionais): \'As minha competências\',\'As minhas certificações\', \'As minhas habilitações\' e \'A minha área pessoal\'"
+
+msgid "Classes"
+msgstr "Turmas"
+
+msgid "UserUnsubscribed"
+msgstr "A inscrição do utilizador foi anulada/cancelada"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "A inscri��o do utilizador n�o pode ser anulada/cancelada porque � um dos instrutores."
+
+msgid "InvalidStartDate"
+msgstr "Foi atribuida uma data de início inválida."
+
+msgid "InvalidEndDate"
+msgstr "Foi atribuida uma data de conclusão inválida."
+
+msgid "DateFormatLabel"
+msgstr "(d/m/a h:m)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "Os ficheiros da página inicial/homepage não são editáveis!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Por favor, atribua um texto à notificação/aviso"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Por favor, atribua um título à notificação/aviso"
+
+msgid "PleaseEnterLinkName"
+msgstr "Por favor, atribua um nome à ligação/link"
+
+msgid "InsertThisLink"
+msgstr "Inserir esta ligação/link"
+
+msgid "FirstPlace"
+msgstr "Primeiro lugar"
+
+msgid "After"
+msgstr "depois"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Caixa de entrega: permitir grupo"
+
+msgid "DropboxAllowGroupComment"
+msgstr "Os utilizadores podem enviar ficheiros para os grupos"
+
+msgid "ClassDeleted"
+msgstr "A turma foi eliminada"
+
+msgid "ClassesDeleted"
+msgstr "As turmas foram eliminadas"
+
+msgid "NoUsersInClass"
+msgstr "Não há utilizadores nesta turma"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "Os utilizadores seleccionados estão inscritos nos seguintes cursos"
+
+msgid "InvalidTitle"
+msgstr "Por favor, escreva um título"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Esta categoria j� se encontra em utiliza��o"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Por favor, introduza um código e um nome para a categoria"
+
+msgid "DokeosHomepage"
+msgstr "Site/página na internet do Chamilo"
+
+msgid "DokeosForum"
+msgstr "Fórum da comunidade"
+
+msgid "RegisterYourPortal"
+msgstr "Registe o seu portal"
+
+msgid "DokeosExtensions"
+msgstr "Extensões da comunidade"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Mostrar menu de navegação do curso"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Mostrar o menu de navegação que proporcione um acesso mais rápido às diferentes áreas do curso."
+
+msgid "LoginAs"
+msgstr "Login/aceder como"
+
+msgid "ImportClassListCSV"
+msgstr "Importar lista de turmas via CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "Mostrar número de utilizadores online na página de entrada (visível para todos)"
+
+msgid "ShowOnlineUsers"
+msgstr "Mostrar número de utilizadores online em todas as páginas (visível para quem acedeu à plataforma)"
+
+msgid "ShowOnlineCourse"
+msgstr "Mostrar número de utilizadores online neste curso"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Mostrar ícones no menu de navegação?"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Realçar à direita"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Realçar sobre a localização"
+
+msgid "ClassesUnsubscribed"
+msgstr "As inscrições das turmas seleccionadas foram anuladas/canceladas dos cursos seleccionados"
+
+msgid "ClassesSubscribed"
+msgstr "As turmas seleccionadas foram inscritas nos cursos seleccionados"
+
+msgid "RoleId"
+msgstr "ID da função"
+
+msgid "RoleName"
+msgstr "Nome da função"
+
+msgid "RoleType"
+msgstr "Tipo"
+
+msgid "RightValueModified"
+msgstr "O valor foi modificado."
+
+msgid "MakeAvailable"
+msgstr "Tornar disponível"
+
+msgid "MakeUnavailable"
+msgstr "Tornar indisponível"
+
+msgid "Stylesheets"
+msgstr "Estilos de páginas"
+
+msgid "DefaultDokeosStyle"
+msgstr "Estilo pré-definido do Chamilo"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Deverá o menu de navegação mostrar/exibir os ícones das várias ferramentas?"
+
+msgid "Plugin"
+msgstr "Plugin"
+
+msgid "MainMenu"
+msgstr "Menu principal"
+
+msgid "MainMenuLogged"
+msgstr "Menu principal depois do login/aceder"
+
+msgid "Banner"
+msgstr "Banner/anúncio"
+
+msgid "ImageResizeTitle"
+msgstr "Redimensionar as imagens submetidas/enviadas pelos utilizadores"
+
+msgid "ImageResizeComment"
+msgstr "As imagens dos utilizadores podem ser redimensionadas no envio se o PHP for compilado com a <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">Biblioteca GD</a>. Se a <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">Biblioteca GD</a> não estiver disponível, esta opção será ignorada."
+
+msgid "MaxImageWidthTitle"
+msgstr "Tamanho máximo da imagem do utilizador em largura"
+
+msgid "MaxImageWidthComment"
+msgstr "Tamanho máximo da largura da imagem de um utilizador em pixels. Esta opção só se aplica se as imagens do utilizador estiverem definidas para serem redimensionada no momento do envio."
+
+msgid "MaxImageHeightTitle"
+msgstr "Tamanho máximo da imagem do utilizador em altura"
+
+msgid "MaxImageHeightComment"
+msgstr "Tamanho de altura máximo de uma imagem do utilizador em pixels. Esta opção só se aplica se as imagens do utilizador estiverem definidas para serem redimensionada no momento do envio."
+
+msgid "YourVersionNotUpToDate"
+msgstr "A sua versão não se encontra actualizada"
+
+msgid "YourVersionIs"
+msgstr "A sua versão é"
+
+msgid "PleaseVisitDokeos"
+msgstr "Por favor, visite o site do Chamilo"
+
+msgid "VersionUpToDate"
+msgstr "A sua versão encontra-se actualizada"
+
+msgid "ConnectSocketError"
+msgstr "Erro de ligação (Socket)"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Ligações (sockets) externas estão desactivadas"
+
+msgid "ShowEmailAddresses"
+msgstr "Apresentar endereços de e-mail"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Apresentar endereços de e-mail aos utilizadores"
+
+msgid "LatestVersionIs"
+msgstr "A última versão é"
+
+msgid "langConfigureExtensions"
+msgstr "Chamilo PRO"
+
+msgid "langActiveExtensions"
+msgstr "Activar este serviço"
+
+msgid "langVisioconf"
+msgstr "Chamilo LIVE"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo LIVE é uma ferramenta de videoconferência que oferece: partilha de slides/apresentações, quadro branco/whiteboard para desenhar e escrever em cima de slides/apresentações, vídeo/áudio em duplex e chat. Requer o Adobe Flash Player 9.x e oferece 2 modos de utilização: um para muitos e muitos para muitos."
+
+msgid "langPpt2lp"
+msgstr "Chamilo RAPID"
+
+msgid "langPpt2lpDescription"
+msgstr "Chamilo RAPID é uma ferramenta de autoria de Rapid Learning disponível no Chamilo Pro e no Chamilo Medical. Permite converter apresentações em Powerpoint e Openoffice para cursos compatíveis com a norma SCORM (SCORM-compliant). Após a conversão, com a ferramenta de autoria de Cursos poderá adicionar áudio a slides ou páginas, testes/exercícios e actividades entre slides ou páginas e ainda actividades de interação como fóruns de discussão ou realizar o envio de documentos/trabalhos. Qualquer passo torna-se um objecto de aprendizagem independente e removível. No global o curso gerará relatórios detalhados SCORM para um acompanhamento posterior."
+
+msgid "langBandWidthStatistics"
+msgstr "Estatísticas da largura de banda/tráfego"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG permite consultar estatísticas detalhadas sobre do estado do servidor nas últimas 24 horas."
+
+msgid "ServerStatistics"
+msgstr "Estatísticas do Servidor"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats permite consultar as estatísticas da plataforma sobre: nº de visitantes, nº de páginas vistas,..."
+
+msgid "SearchEngine"
+msgstr "Chamilo LIBRARY"
+
+msgid "langSearchEngineDescription"
+msgstr "Chamilo LIBRARY é um Motor de Busca que oferece uma indexação e pesquisa multi-critérios. Faz parte das funcionalidades do Chamilo Medical."
+
+msgid "langListSession"
+msgstr "Lista das sessões do curso"
+
+msgid "AddSession"
+msgstr "Adicionar uma sessão ao curso"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Importar lista de sessões"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Exportar lista de sessões"
+
+msgid "SessionName"
+msgstr "Nome da sessão"
+
+msgid "langNbCourses"
+msgstr "Cursos"
+
+msgid "DateStart"
+msgstr "Data de início"
+
+msgid "DateEnd"
+msgstr "Data de conclusão"
+
+msgid "CoachName"
+msgstr "Nome do tutor"
+
+msgid "SessionList"
+msgstr "Lista das sessões do curso"
+
+msgid "SessionNameIsRequired"
+msgstr "É necessário atribuir um nome à sessão"
+
+msgid "NextStep"
+msgstr "Próxima etapa"
+
+msgid "keyword"
+msgstr "Palavra-chave"
+
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Anular/cancelar inscrição dos utilizadores no curso"
+
+msgid "MissingClassName"
+msgstr "Nome da turma em falta"
+
+msgid "ClassNameExists"
+msgstr "Nome de turma já existente"
+
+msgid "ImportCSVFileLocation"
+msgstr "Local do ficheiro CSV a importar"
+
+msgid "ClassesCreated"
+msgstr "Turmas criadas"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Erros ao importar o ficheiro"
+
+msgid "ServiceActivated"
+msgstr "Serviço activado"
+
+msgid "ActivateExtension"
+msgstr "Activar serviço"
+
+msgid "InvalidExtension"
+msgstr "Extensão inválida"
+
+msgid "VersionCheckExplanation"
+msgstr "Para permitir a verificação automática da versão deverá registar o portal em chamilo.com. As informações obtidas ao clicar neste botão serão apenas para uso interno e apenas os dados agregados serão disponibilizados publicamente (número total de portais, número total de cursos chamilo, número total de utilizadores chamilo, ...) (ver <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>.)  Ao registar-se irá também aparecer na lista global (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>). Se  deseja não constar da lista global, seleccione a caixa abaixo. O registo não poderia ser mais fácil: apenas terá de clicar neste botão: <br />"
+
+msgid "AfterApproval"
+msgstr "Após a aprovação"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Permitir visualização como aluno"
+
+msgid "StudentViewEnabledComment"
+msgstr "Activar a visualização como aluno, permite que como instrutor ou como administrador possa visualizar um curso como se fosse um aluno ou um utilizador"
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Limite de tempo para Quem estiver Online"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Este limite de tempo define quantos segundos após a última acção o utilizador será considerado com o estado *online*"
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Exemplo de materiais na criação de um curso"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Criar automaticamente exemplo de materiais no momento de criação de um curso"
+
+msgid "AccountValidDurationTitle"
+msgstr "Validade da conta"
+
+msgid "AccountValidDurationComment"
+msgstr "Uma conta de utilizador é válida para este número de dias após a criação."
+
+msgid "UseSessionModeTitle"
+msgstr "Utilizar sessões do curso"
+
+msgid "UseSessionModeComment"
+msgstr "As sessões de um curso, permitem uma forma diferente de lidar com os cursos que possuem um autor, um tutor e alunos. Cada instrutor disponibiliza um curso para um determinado grupo de alunos num determinado período de tempo a que chamamos *sessão do curso*. O conjunto de alunos anexados a essa *sessão do curso* não se associará a outros grupos de alunos anexados a uma outra sessão do curso."
+
+msgid "HomepageViewActivity"
+msgstr "Visualização da actividade (pré-definição)"
+
+msgid "HomepageView2column"
+msgstr "Visualização em duas colunas"
+
+msgid "HomepageView3column"
+msgstr "Visualização em três colunas"
+
+msgid "AllowUserHeadings"
+msgstr "Permitir perfis de utilizadores no curso"
+
+msgid "IconsOnly"
+msgstr "Apenas ícones"
+
+msgid "TextOnly"
+msgstr "Apenas texto"
+
+msgid "IconsText"
+msgstr "Ícones e texto"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Activar a introdução das ferramentas"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Activar introduções nas página de cada ferramenta"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Ligações/links auxiliares de navegação (Breadcrumb) da página inicial/homepage do curso"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "O breadcrumb é o sistema de ligações/links de navegação horizontais, normalmente localizado no topo do lado esquerdo da página. Esta opção selecciona o que deseja que apareça no breadcrumb das páginas iniciais/homepages dos cursos."
+
+msgid "Comment"
+msgstr "Comentário"
+
+msgid "Version"
+msgstr "Versão"
+
+msgid "LoginPageMainArea"
+msgstr "Área principal da página de login/acesso"
+
+msgid "LoginPageMenu"
+msgstr "Menu da página de login/acesso"
+
+msgid "CampusHomepageMainArea"
+msgstr "Área principal da página inicial/homepage do portal"
+
+msgid "CampusHomepageMenu"
+msgstr "Menu da página inicial/homepage do portal"
+
+msgid "MyCoursesMainArea"
+msgstr "Área principal dos cursos"
+
+msgid "MyCoursesMenu"
+msgstr "Menu do curso"
+
+msgid "Header"
+msgstr "Cabeçalho"
+
+msgid "Footer"
+msgstr "Rodapé"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "Páginas públicas em conformidade com WAI"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Web Accessibility Initiative) é uma iniciativa para tornar a web mais acessível. Seleccionando esta opção, as páginas públicas do Chamilo tornar-se-ão mais fáceis de aceder. Isto significa que alguns dos conteúdos nas páginas públicas do portal poderão aparecer de maneira diferente."
+
+msgid "VersionCheck"
+msgstr "Verificar a versão"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Inactive"
+msgstr "Inactivo"
+
+msgid "SessionOverview"
+msgstr "Resumo da sessão"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Adicionar utilizador ao curso caso ainda não esteja"
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Remover/eliminar o utilizador do curso se o seu nome não constar na lista"
+
+msgid "DeleteSelectedSessions"
+msgstr "Eliminar as sessões seleccionadas"
+
+msgid "CourseListInSession"
+msgstr "Cursos nesta sessão"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Anular/cancelar inscrição dos cursos seleccionados a partir desta sessão do curso"
+
+msgid "NbUsers"
+msgstr "Utilizadores"
+
+msgid "SubscribeUsersToSession"
+msgstr "Inscrever utilizadores nesta sessão"
+
+msgid "UserListInPlatform"
+msgstr "Lista dos utilizadores do portal"
+
+msgid "UserListInSession"
+msgstr "Lista dos utilizadores registados nesta sessão"
+
+msgid "CourseListInPlatform"
+msgstr "Lista de cursos"
+
+msgid "Host"
+msgstr "Alojamento/host"
+
+msgid "UserOnHost"
+msgstr "Acesso/login"
+
+msgid "FtpPassword"
+msgstr "Senha/password FTP"
+
+msgid "PathToLzx"
+msgstr "Caminho/atalho para ficheiros LZX"
+
+msgid "WCAGContent"
+msgstr "Texto"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Adicionar cursos a esta sessão"
+
+msgid "DateStartSession"
+msgstr "Data de início"
+
+msgid "DateEndSession"
+msgstr "Data de conclusão"
+
+msgid "EditSession"
+msgstr "Editar esta sessão"
+
+msgid "VideoConferenceUrl"
+msgstr "Caminho/atalho para a conferência ao vivo"
+
+msgid "VideoClassroomUrl"
+msgstr "Caminho/atalho para a sala de videoconferência"
+
+msgid "ReconfigureExtension"
+msgstr "Reconfigurar extensão"
+
+msgid "ServiceReconfigured"
+msgstr "Serviço reconfigurado"
+
+msgid "ChooseNewsLanguage"
+msgstr "Seleccionar idioma para notícias/novidades"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "Tempo total dispendido num curso"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Esta opção é utilizada para calcular em tempo real o tempo que um utilizador despende num curso. O valor apresentado no campo é o intervalo em segundos em que o valor é actualizado. Para desactivar esta função, deixar \'0\' como valor pré-definido no campo."
+
+msgid "EditLink"
+msgstr "Editar ligação/link"
+
+msgid "FinishSessionCreation"
+msgstr "Concluir a criação da sessão"
+
+msgid "VisioRTMPPort"
+msgstr "Porta de protocolo RTMTP da videoconferência"
+
+msgid "SessionNameAlreadyExists"
+msgstr "O nome da sessão já existe"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "Não foram criadas turmas"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Este campo deve ser numérico"
+
+msgid "UserLocked"
+msgstr "Utilizador bloqueado"
+
+msgid "UserUnlocked"
+msgstr "Utilizador desbloqueado"
+
+msgid "CannotDeleteUser"
+msgstr "Não pode eliminar este utilizador"
+
+msgid "SelectedUsersDeleted"
+msgstr "Utilizadores seleccionados foram eliminados"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Alguns utilizadores não foram eliminados"
+
+msgid "ExternalAuthentication"
+msgstr "Autenticação externa"
+
+msgid "RegistrationDate"
+msgstr "Data do registo"
+
+msgid "UserUpdated"
+msgstr "Utilizador actualizado"
+
+msgid "HomePageFilesNotReadable"
+msgstr "Os ficheiros da página inicial/homepage não podem ser lidos ou não têm permissões de leitura"
+
+msgid "Choose"
+msgstr "Seleccione"
+
+msgid "ModifySessionCourse"
+msgstr "Editar a sessão do curso"
+
+msgid "CourseSessionList"
+msgstr "Cursos nesta sessão"
+
+msgid "SelectACoach"
+msgstr "Seleccione um tutor"
+
+msgid "UserNameUsedTwice"
+msgstr "Login/acesso está a ser duas vezes utilizado"
+
+msgid "UserNameNotAvailable"
+msgstr "Este login/acesso não está disponível"
+
+msgid "UserNameTooLong"
+msgstr "Este login/acesso é demasiado longo"
+
+msgid "WrongStatus"
+msgstr "Este status/estado não existe"
+
+msgid "ClassNameNotAvailable"
+msgstr "Este nome de turma não está disponível"
+
+msgid "FileImported"
+msgstr "Ficheiro importado"
+
+msgid "WhichSessionToExport"
+msgstr "Seleccione a sessão a exportar"
+
+msgid "AllSessions"
+msgstr "Todas as sessões"
+
+msgid "CodeDoesNotExists"
+msgstr "Este código não existe"
+
+msgid "UnknownUser"
+msgstr "Utilizador desconhecido"
+
+msgid "UnknownStatus"
+msgstr "Status/estado desconhecido"
+
+msgid "SessionDeleted"
+msgstr "A sessão foi eliminada"
+
+msgid "CourseDoesNotExist"
+msgstr "Este curso não existe"
+
+msgid "UserDoesNotExist"
+msgstr "Este utilizador não existe"
+
+msgid "ButProblemsOccured"
+msgstr "mas ocorreram problemas"
+
+msgid "UsernameTooLongWasCut"
+msgstr "Este login/acesso foi cortado"
+
+msgid "NoInputFile"
+msgstr "Não foi enviado nenhum ficheiro"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "O status/estado do aluno foi atribuido a"
+
+msgid "WrongDate"
+msgstr "Formato de data incorrecto (yyyy-mm-dd)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Esta é uma mensagem de e-mail automática. Por favor não responda."
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "Brevemente irá receber um e-mail do seu tutor."
+
+msgid "SlideSize"
+msgstr "Tamanho dos slides/apresentação"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Prevenção de plágio Ephorus (verificar se os alunos plagiaram/copiaram trabalho uns dos outros)"
+
+msgid "CourseTeachers"
+msgstr "Instrutores"
+
+msgid "UnknownTeacher"
+msgstr "Instrutor desconhecido"
+
+msgid "HideDLTTMarkup"
+msgstr "Ocultar/esconder caracteres DLTT"
+
+msgid "ListOfCoursesOfSession"
+msgstr "Lista de cursos para a sessão"
+
+msgid "UnsubscribeSelectedUsersFromSession"
+msgstr "Anular/cancelar inscrição dos utilizadores seleccionados na sessão"
+
+msgid "ShowDifferentCourseLanguageComment"
+msgstr "Apresentar o idioma de cada curso, a seguir ao título do curso, na página inicial/homepage da lista de cursos"
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "Apresentar as categorias dos cursos na página inicial/homepage, mesmo que estejam vazias"
+
+msgid "ShowEmptyCourseCategories"
+msgstr "Apresentar as categorias de cursos vazias"
+
+msgid "XMLNotValid"
+msgstr "O documento XML não é válido"
+
+msgid "ForTheSession"
+msgstr "para a sessão"
+
+msgid "AllowEmailEditorTitle"
+msgstr "Activar o editor de e-mail online"
+
+msgid "AllowEmailEditorComment"
+msgstr "Se esta opção estiver activada, ao clicar num endereço de e-mail o editor de e-mail online será aberto."
+
+msgid "AddCSVHeader"
+msgstr "Adicionar a linha de cabeçalho CVS?"
+
+msgid "YesAddCSVHeader"
+msgstr "Sim, adicionar o cabeçalho CVS.<br /> Esta linha define os campos e é necessária sempre que desejar importar o ficheiro para um outro portal Chamilo."
+
+msgid "ListOfUsersSubscribedToCourse"
+msgstr "Lista de utilizadores inscritos no curso"
+
+msgid "NumberOfCourses"
+msgstr "Cursos"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Apresentar idiomas dos cursos"
+
+msgid "VisioRTMPTunnelPort"
+msgstr "Porta do túnel de protocolo RTMTP da videoconferência"
+
+msgid "name"
+msgstr "Nome"
+
+msgid "Security"
+msgstr "Segurança"
+
+msgid "UploadExtensionsListType"
+msgstr "Tipo de filtragem no envio de documentos"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "Se desejar usar a filtragem da lista negra (blacklist) ou da lista branca (whitelist). Ver abaixo a descrição da lista negra (blacklist) ou da lista branca (whitelist) para mais detalhes."
+
+msgid "Blacklist"
+msgstr "Lista negra (Blacklist)"
+
+msgid "Whitelist"
+msgstr "Lista branca (Whitelist)"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "Lista negra (Blacklist) - configuração"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "Lista branca (Whitelist) - configuração"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "A lista negra (Blacklist) é usada para filtrar as extensões dos ficheiros, removendo (ou renomeando) os ficheiros com extensões que fazem parte da lista negra abaixo. As extensões devem figurar sem o ponto (.) e separadas por pontos e vírgulas (;) tal como se exemplifica: exe;com;bat;scr;php. Ficheiros sem extensão serão aceites. Caracteres maiúsculos ou minúsculos no nome dos ficheiros é irrelevante."
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "A lista branca (Whitelist) é usada para filtrar as extensões dos ficheiros, removendo (ou renomeando) qualquer ficheiro com extensões que *NÃO* fazem parte da lista branca abaixo. Considera-se geralmente como mais segura, mas também como uma aproximação de filtragem mais restritiva. As extensões devem figurar sem o ponto (.) e separadas por pontos e vírgulas (;) tal como se exemplifica: exe;com;bat;scr;php. Ficheiros sem extensão serão aceites. Letras maiúsculas ou minúsculas no nome dos ficheiros é irrelevante."
+
+msgid "UploadExtensionsSkip"
+msgstr "Comportamento do filtro (omitir/renomear)"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "Se escolheu omitir, os ficheiros filtrados pela lista negra ou branca não serão carregados ou enviados pelo sistema. Se escolheu renomeá-los, a extensão será substituída por outra definida na configuração de substituição de extensões. No entanto, renomear não o protege e pode ainda entrar em conflito com outros ficheiros com o mesmo nome, mas com extensões diferentes."
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "Substituição da extensão"
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "Introduza a extensão que deseja usar para substituir as extensões perigosas detectadas pelo filtro. Só é necessário caso tenha seleccionado um filtro por substituição."
+
+msgid "Remove"
+msgstr "Remover"
+
+msgid "Rename"
+msgstr "Renomear"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "Mostrar o número de cursos em cada categoria na secção de categorias do curso na página inicial/homepage"
+
+msgid "EphorusDescription"
+msgstr "Comece a utilizar o serviço anti-plágio Ephorus no Chamilo.<br /> <STRONG>Com o Ephorus e sem qualquer esforço adicional, impedirá o plágio através da Internet.</STRONG><br /> Pode utilizar o nosso serviço web para construir a sua própria integração ou utilizar um dos módulos de integração do Chamilo."
+
+msgid "EphorusLeadersInAntiPlagiarism"
+msgstr "<STRONG>Líderes  <BR>anti-plágio</STRONG>"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "Clicar aqui para mais informações e preços"
+
+msgid "NameOfTheSession"
+msgstr "Nome da sessão"
+
+msgid "NoSessionsForThisUser"
+msgstr "Este utilizador não está inscrito em nenhuma sessão"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "Mostrar categorias na página inicial/homepage"
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "Esta opção permitirá mostrar ou ocultar as categorias dos cursos na página inicial/homepage do portal"
+
+msgid "ShowTabsTitle"
+msgstr "Separadores no cabeçalho"
+
+msgid "ShowTabsComment"
+msgstr "Seleccione os separadores que deseja visualizar no cabeçalho. Os separadores que não forem seleccionados irão aparecer no menu do lado direito da página inicial/homepage do portal e na página de \'Meus cursos\' caso seja necessário visualizar"
+
+msgid "DefaultForumViewTitle"
+msgstr "Visualização pré-definida do fórum"
+
+msgid "DefaultForumViewComment"
+msgstr "Qual deverá ser a opção pré-definida na criação de um novo fórum. No entanto, qualquer instrutor poderá seleccionar uma visualização diferente para cada fórum individual."
+
+msgid "TabsMyCourses"
+msgstr "Separador Cursos"
+
+msgid "TabsCampusHomepage"
+msgstr "Separador página inicial/homepage do portal"
+
+msgid "TabsReporting"
+msgstr "Separador Relatórios"
+
+msgid "TabsPlatformAdministration"
+msgstr "Separador Administração da Plataforma"
+
+msgid "NoCoursesForThisSession"
+msgstr "Não existem cursos para esta sessão"
+
+msgid "NoUsersForThisSession"
+msgstr "Não existem utilizadores para esta sessão"
+
+msgid "LastNameMandatory"
+msgstr "Último nome não pode estar vazio"
+
+msgid "FirstNameMandatory"
+msgstr "O primeiro nome não pode estar vazio"
+
+msgid "EmailMandatory"
+msgstr "O e-mail não pode estar vazio"
+
+msgid "TabsMyAgenda"
+msgstr "Separador Agenda"
+
+msgid "NoticeWillBeNotDisplayed"
+msgstr "A notificação/aviso não será mostrada na página inicial/homepage"
+
+msgid "LetThoseFieldsEmptyToHideTheNotice"
+msgstr "Deixe os campos vazios para esconder a notificação/aviso"
+
+msgid "Ppt2lpVoiceRecordingNeedsRed5"
+msgstr "A funcionalidade de gravação de voz no editor do curso depende de um servidor de streaming Red5. Os parâmetros deste servidor podem ser configurados na secção de videoconferência na página actual."
+
+msgid "PlatformCharsetTitle"
+msgstr "Conjunto de caracteres"
+
+msgid "PlatformCharsetComment"
+msgstr "O conjunto de caracteres é o define a forma como alguns idiomas específicos podem ser exibidos no Chamilo. Se utilizar caracteres russos ou japoneses, por exemplo, poderá querer alterá-los. Para todos os caracteres em inglês, latim e ocidentais da europa, a pré-definição UTF-8 deverá funcionar."
+
+msgid "ExtendedProfileRegistrationTitle"
+msgstr "Campos do perfil ampliado/alargado no registo"
+
+msgid "ExtendedProfileRegistrationComment"
+msgstr "Qual dos seguintes campos do perfil ampliado/alargado devem estar disponíveis no processo de registo dos utilizadores? É necessário a activação do registo com perfil ampliado/alargado (ver acima)."
+
+msgid "ExtendedProfileRegistrationRequiredTitle"
+msgstr "Campos necessários do perfil ampliado/alargado no registo"
+
+msgid "ExtendedProfileRegistrationRequiredComment"
+msgstr "Quais dos seguintes campos do perfil ampliado/alargado são necessários no processo de registo dos utilizadores? É necessário a activação do registo com perfil ampliado/alargado e que o campo esteja igualmente disponível no formulário de registo (ver acima)."
+
+msgid "NoReplyEmailAddress"
+msgstr "Não responder a este endereço de e-mail"
+
+msgid "NoReplyEmailAddressComment"
+msgstr "Este endereço de e-mail deverá ser utilizado quando é necessário enviar um e-mail a solicitar para não devolver a resposta ou responder de volta (no reply). Em geral, este endereço de e-mail deve ser configurado no servidor para ignorar ou eliminar qualquer e-mail que seja recebido."
+
+msgid "SurveyEmailSenderNoReply"
+msgstr "E-mail do remetente do questionário (não responder/no-reply)"
+
+msgid "SurveyEmailSenderNoReplyComment"
+msgstr "Os convites para responder a questionários deverão utilizar o endereço de e-mail do tutor ou o endereço de e-mail de não-responder (no-reply) definido na área principal de configuração?"
+
+msgid "CourseCoachEmailSender"
+msgstr "Endereço de e-mail do tutor"
+
+msgid "NoReplyEmailSender"
+msgstr "Não responder para o endereço de e-mail (no-reply)"
+
+msgid "Flat"
+msgstr "Plano"
+
+msgid "Threaded"
+msgstr "Colunas"
+
+msgid "Nested"
+msgstr "Hierarquias"
+
+msgid "OpenIdAuthenticationComment"
+msgstr "Activar a autenticação baseada em OpenID URL (mostra um campo de login/acesso adicional na página inicial/homepage)."
+
+msgid "VersionCheckEnabled"
+msgstr "Verificar a versão activado"
+
+msgid "InstallDirAccessibleSecurityThreat"
+msgstr "A pasta/directório principal de instalação do Chamilo ainda se encontra acessível a qualquer utilizador da web. Este status/estado pode representar uma ameaça à segurança da sua instalação. Recomendamos que elimine esta pasta/directório ou então que altere as permissões de acesso, para que os utilizadores da web não possam aceder aos scripts/documentos ou ficheiros contidos nessa pasta/diretório."
+
+msgid "GradebookActivation"
+msgstr "Activação da ferramenta de Avaliações"
+
+msgid "GradebookActivationComment"
+msgstr "A ferramenta de Avaliações permite avaliar competências na sua organização integrando a formação em sala e as avaliações das actividades on-line em relatórios de Desempenho. Deseja activar esta ferramenta?"
+
+msgid "UserTheme"
+msgstr "Tema (estilos de página)"
+
+msgid "UserThemeSelection"
+msgstr "Selecção do tema pelo utilizador"
+
+msgid "UserThemeSelectionComment"
+msgstr "Permitir que os utilizadores possam seleccionar o tema visual do seu perfil. Alterará o aspecto visual do Chamilo no perfil desse utilizador, mas deixará intacto o estilo de página pré-definido do portal. Se um curso específico ou uma sessão tiverem um tema específico atribuído, esta definição terá prioridade sobre o tema seleccionado pelo utilizador para o seu perfil."
+
+msgid "AllowurlfopenIsSetToOff"
+msgstr "A configuração PHP \"allow_url_fopen\" está definida para \'off\'. Essa configuração evita que o mecanismo de registro funcione correctamente. Esta configuração pode ser alterada no ficheiro de configuração PHP (php.ini), ou na configuração do servidor virtual Apache, utilizando a directiva php_admin_value"
+
+msgid "VisioHost"
+msgstr "Endereço IP ou o nome do alojamento do servidor de streaming para videoconferência"
+
+msgid "VisioPort"
+msgstr "Porta do servidor de streaming para videoconferência"
+
+msgid "VisioPassword"
+msgstr "Senha/password do servidor de streaming para videoconferência"
+
+msgid "Port"
+msgstr "Porta"
+
+msgid "EphorusClickHereForADemoAccount"
+msgstr "Clique aqui para uma conta de demonstração"
+
+msgid "ManageUserFields"
+msgstr "Perfis"
+
+msgid "UserFields"
+msgstr "Atributos do perfil"
+
+msgid "AddUserField"
+msgstr "Adicionar um campo no perfil"
+
+msgid "FieldLabel"
+msgstr "Identificação do campo"
+
+msgid "FieldType"
+msgstr "Tipo de campo"
+
+msgid "FieldTitle"
+msgstr "Título do campo"
+
+msgid "FieldDefaultValue"
+msgstr "Valor pré-definido"
+
+msgid "FieldOrder"
+msgstr "Ordenação"
+
+msgid "FieldVisibility"
+msgstr "Visível?"
+
+msgid "FieldChangeability"
+msgstr "Pode modificar/substituir"
+
+msgid "FieldTypeText"
+msgstr "Texto"
+
+msgid "FieldTypeTextarea"
+msgstr "Área de texto"
+
+msgid "FieldTypeRadio"
+msgstr "Botões de rádio"
+
+msgid "FieldTypeSelect"
+msgstr "Seleccionar drop-down"
+
+msgid "FieldTypeSelectMultiple"
+msgstr "Selecção  drop-down múltipla"
+
+msgid "FieldAdded"
+msgstr "Campo adicionado com sucesso"
+
+msgid "GradebookScoreDisplayColoring"
+msgstr "Coloração do valor mínimo para as Competências"
+
+msgid "GradebookScoreDisplayColoringComment"
+msgstr "Marque a caixa para activar o valor mínimo para as Competências"
+
+msgid "TabsGradebookEnableColoring"
+msgstr "Activar o valor mínimo para as Competências"
+
+msgid "GradebookScoreDisplayCustom"
+msgstr "Identificação dos níveis de Competência"
+
+msgid "GradebookScoreDisplayCustomComment"
+msgstr "Marque a caixa para activar a identificação dos níveis de Competência"
+
+msgid "TabsGradebookEnableCustom"
+msgstr "Activar identificação dos níveis de Competência"
+
+msgid "GradebookScoreDisplayColorSplit"
+msgstr "Valor mínimo/limite"
+
+msgid "GradebookScoreDisplayColorSplitComment"
+msgstr "O valor mínimo (em %) no qual a pontuação será colorida a vermelho"
+
+msgid "GradebookScoreDisplayUpperLimit"
+msgstr "Mostrar pontuação máxima"
+
+msgid "GradebookScoreDisplayUpperLimitComment"
+msgstr "Marque a caixa para mostrar a pontuação máxima"
+
+msgid "TabsGradebookEnableUpperLimit"
+msgstr "Activar a exibição da pontuação máxima"
+
+msgid "AddUserFields"
+msgstr "Adicionar um campo no perfil"
+
+msgid "FieldPossibleValues"
+msgstr "Valores possíveis"
+
+msgid "FieldPossibleValuesComment"
+msgstr "Apenas atribuído para campos repetitivos, separados por ponto e vírgula (;)"
+
+msgid "FieldTypeDate"
+msgstr "Data"
+
+msgid "FieldTypeDatetime"
+msgstr "Data e Hora"
+
+msgid "UserFieldsAddHelp"
+msgstr "Adicionar um campo de utilizador é muito fácil:<br /><br />- Seleccione uma palavra em letras minúsculas como elemento identificador,<br />- Seleccionar um tipo,<br />- Seleccione um texto que deverá aparecer ao utilizador (se utilizar uma palavra num idioma diferente como p.ex. BirthDate\' ou \'UserSex\', serão automaticamente  traduzidas para qualquer idioma),<br /> - Se seleccionou do tipo escolha múltipla (rádio, escolha, escolha múltipla), deverá indicar as opções possíveis (uma vez mais, poderá fazer uso das várias variedades de idiomas definidos no Chamilo), separados por caracteres ponto-e-vírgula (;),<br />- Para tipos de texto, poderá escolher um valor pré-definido..<br /><br />Assim que tiver terminado, adicione o campo e seleccione se pretende torná-lo visível e editável. Se o tornar editável, mas não visível será inútil."
+
+msgid "AllowCourseThemeTitle"
+msgstr "Permitir temas dos cursos"
+
+msgid "AllowCourseThemeComment"
+msgstr "Permite a utilização de temas gráficos nos cursos e a possibilidade de alterar o estilo de página utilizado por um outro diferente disponível no Chamilo. Quando um utilizador acede ao curso, o estilo de página do curso terá prioridade sobre o estilo de página definido pelo utilizador e sobre o estilo de página pré-definido da plataforma."
+
+msgid "DisplayMiniMonthCalendarTitle"
+msgstr "Mostrar em pequeno o calendário mensal na ferramenta agenda"
+
+msgid "DisplayMiniMonthCalendarComment"
+msgstr "Esta configuração activa ou desactiva o pequeno calendário mensal que aparece na coluna da esquerda da ferramenta agenda"
+
+msgid "DisplayUpcomingEventsTitle"
+msgstr "Mostrar os próximos eventos na ferramenta agenda"
+
+msgid "DisplayUpcomingEventsComment"
+msgstr "Esta configuração activa ou desactiva os próximos eventos que aparecem na coluna da esquerda na ferramenta agenda do curso"
+
+msgid "NumberOfUpcomingEventsTitle"
+msgstr "Número de próximos eventos que devem ser mostrados."
+
+msgid "NumberOfUpcomingEventsComment"
+msgstr "Número de próximos eventos que serão mostrados na agenda. É necessário que a funcionalidade próximos eventos esteja activada (ver configuração acima)."
+
+msgid "ShowClosedCoursesTitle"
+msgstr "Mostrar os cursos encerrados na página de login/acesso e na página de entrada/inicial do portal?"
+
+msgid "ShowClosedCoursesComment"
+msgstr "Mostrar os cursos encerrados na página de login/acesso e na página de entrada/inicial do curso? Na página de entrada/inicial do portal aparecerá um ícone junto ao curso para se poder inscrever no mesmo. Isto só acontece na página de entrada/inicial do portal sempre que um aluno que tenha acedido ainda não se encontrar inscrito no portal."
+
+msgid "LDAPConnectionError"
+msgstr "Erro de conexão do LDAP"
+
+msgid "LDAP"
+msgstr "LDAP"
+
+msgid "LDAPEnableTitle"
+msgstr "Activar o LDAP"
+
+msgid "LDAPEnableComment"
+msgstr "Se tiver um servidor LDAP (Lightweight Directory Access Protocol), deverá de configurar as respectivas definições abaixo e modificar o ficheiro de configuração, tal como está descrito no \'Guia de Instalação\' e, em seguida, activá-lo. Irá permitir aos utilizadores autentiquem-se utilizando os seus logins/acessos LDAP. Se não sabe o que é o LDAP, por favor deixe-o desactivado"
+
+msgid "LDAPMainServerAddressTitle"
+msgstr "Endereço do principal servidor LDAP"
+
+msgid "LDAPMainServerAddressComment"
+msgstr "O endereço IP ou URL/caminho do seu principal servidor LDAP"
+
+msgid "LDAPMainServerPortTitle"
+msgstr "Porta do principal servidor LDAP."
+
+msgid "LDAPMainServerPortComment"
+msgstr "A porta na qual o principal servidor LDAP irá responder (normalmente a 389). Esta configuração é obrigatória."
+
+msgid "LDAPDomainTitle"
+msgstr "Domínio do LDAP"
+
+msgid "LDAPDomainComment"
+msgstr "Este é o domínio LDAP (dc) que será utilizado para procurar os contactos no servidor LDAP. Por exemplo: dc=xx, dc=yy, dc=zz"
+
+msgid "LDAPReplicateServerAddressTitle"
+msgstr "Replicar o endereço do servidor"
+
+msgid "LDAPReplicateServerAddressComment"
+msgstr "Quando o servidor principal não estiver disponível, este servidor será acedido. Deixa o campo vazio ou utilize o mesmo valor do servidor principal se não tiver um servidor para replicar."
+
+msgid "LDAPReplicateServerPortTitle"
+msgstr "Replicar a porta do servidor"
+
+msgid "LDAPReplicateServerPortComment"
+msgstr "Porta em que o servidor de replicar irá responder."
+
+msgid "LDAPSearchTermTitle"
+msgstr "Termo de pesquisa"
+
+msgid "LDAPSearchTermComment"
+msgstr "Este termo será usado para filtrar a pesquisa de contactos no servidor LDAP. Se não tem a certeza do que introduzir aqui, consulte a documentação e configuração referente ao seu servidor LDAP."
+
+msgid "LDAPVersionTitle"
+msgstr "Versão LDAP"
+
+msgid "LDAPVersionComment"
+msgstr "Por favor, seleccione a versão do servidor LDAP que deseja usar. O uso da versão correcta depende da configuração do servidor LDAP."
+
+msgid "LDAPVersion2"
+msgstr "LDAP 2"
+
+msgid "LDAPVersion3"
+msgstr "LDAP 3"
+
+msgid "LDAPFilledTutorFieldTitle"
+msgstr "Campo de identificação do tutor"
+
+msgid "LDAPFilledTutorFieldComment"
+msgstr "Será realizada uma verificação sobre o campo de contacto LDAP aquando da inserção de novos utilizadores. Se este campo não estiver vazio, o utilizador será considerado tutor e inserido no Chamilo como tal. Se desejar que todos os seus utilizadores sejam reconhecidos como simples utilizadores, deixe este campo vazio. Pode alterar este comportamento alterando o código. Por favor, leia o <a href=\"../../documentation/installation_guide.html\">Guia de Instalação</a> para mais informações."
+
+msgid "LDAPAuthenticationLoginTitle"
+msgstr "Autenticação do login/acesso"
+
+msgid "LDAPAuthenticationLoginComment"
+msgstr "Se está a utilizar um servidor LDAP que não suporta ou aceita acessos anónimos, preencha o campo seguinte com um nome de utilizador que deverá ser usado. Não inclua \"cn=\". Deixe vazio para acessos anónimos."
+
+msgid "LDAPAuthenticationPasswordTitle"
+msgstr "Autenticação de senha/password"
+
+msgid "LDAPAuthenticationPasswordComment"
+msgstr "Se está a usar um servidor LDAP que não suporta ou aceita acessos anónimos, preencha o campo seguinte com a senha/password do utilizador que deverá ser utilizado."
+
+msgid "LDAPImport"
+msgstr "Importar LDAP"
+
+msgid "EmailNotifySubscription"
+msgstr "Notificar os utilizadores inscritos por e-mail"
+
+msgid "DontUncheck"
+msgstr "Não desmarcar"
+
+msgid "AllSlashNone"
+msgstr "Todos/Nenhum"
+
+msgid "LDAPImportUsersSteps"
+msgstr "Importar LDAP: Utilizadores/Etapas"
+
+msgid "EnterStepToAddToYourSession"
+msgstr "Introduza a etapa a adicionar à sua sessão"
+
+msgid "ToDoThisYouMustEnterYearDepartmentAndStep"
+msgstr "Para poder realizar isto, deverá introduzir o ano, o departamento e a etapa"
+
+msgid "FollowEachOfTheseStepsStepByStep"
+msgstr "Siga cada uma destas etapas, passo a passo"
+
+msgid "RegistrationYearExample"
+msgstr "Ano de registo/inscrição. Exemplo: %s para o ano académico %s-%s"
+
+msgid "SelectDepartment"
+msgstr "Seleccionar departamento"
+
+msgid "RegistrationYear"
+msgstr "Ano de registo/inscrição"
+
+msgid "SelectStepAcademicYear"
+msgstr "Seleccionar etapa (ano académico)"
+
+msgid "ErrorExistingStep"
+msgstr "Erro: esta etapa já existe"
+
+msgid "ErrorStepNotFoundOnLDAP"
+msgstr "Erro: etapa não encontrada no servidor LDAP"
+
+msgid "StepDeletedSuccessfully"
+msgstr "Etapa eliminada com sucesso"
+
+msgid "StepUsersDeletedSuccessfully"
+msgstr "Utilizadores da etapa removidos com sucesso"
+
+msgid "NoStepForThisSession"
+msgstr "Nenhuma LOs nesta sessão"
+
+msgid "DeleteStepUsers"
+msgstr "Remover utilizadores da etapa"
+
+msgid "ImportStudentsOfAllSteps"
+msgstr "Importar alunos para todas as etapas"
+
+msgid "ImportLDAPUsersIntoPlatform"
+msgstr "Importar utilizadores no LDAP para a plataforma"
+
+msgid "NoUserInThisSession"
+msgstr "Não existe nenhum utilizador nesta sessão"
+
+msgid "SubscribeSomeUsersToThisSession"
+msgstr "Inscrever alguns utilizadores para esta sessão"
+
+msgid "EnterStudentsToSubscribeToCourse"
+msgstr "Introduza os alunos que gostaria de registar no seu curso"
+
+msgid "ToDoThisYouMustEnterYearComponentAndComponentStep"
+msgstr "Para poder realizar isto, deverá introduzir o ano, a componente e a etapa do componente"
+
+msgid "SelectComponent"
+msgstr "Seleccionar componente"
+
+msgid "Component"
+msgstr "Componente"
+
+msgid "SelectStudents"
+msgstr "Seleccionar alunos"
+
+msgid "LDAPUsersAdded"
+msgstr "Os utilizadores no LDAP foram adicionados"
+
+msgid "NoUserAdded"
+msgstr "Não foi adicionado nenhum utilizador"
+
+msgid "ImportLDAPUsersIntoCourse"
+msgstr "Importar utilizadores no LDAP para um curso"
+
+msgid "ImportLDAPUsersAndStepIntoSession"
+msgstr "Importar utilizadores no LDAP e uma etapa para esta sessão"
+
+msgid "LDAPSynchroImportUsersAndStepsInSessions"
+msgstr "Sincronização LDAP: importar alunos/etapas para as sessões do curso"
+
+msgid "TabsMyGradebook"
+msgstr "Separador Avaliações"
+
+msgid "LDAPUsersAddedOrUpdated"
+msgstr "Utilizadores no LDAP adicionados ou actualizados"
+
+msgid "SearchLDAPUsers"
+msgstr "Pesquisar utilizadores no LDAP"
+
+msgid "SelectCourseToImportUsersTo"
+msgstr "Seleccione um curso no qual deseja registar os utilizadores que irá seleccionar em seguida"
+
+msgid "ImportLDAPUsersIntoSession"
+msgstr "Importar utilizadores no LDAP para uma sessão"
+
+msgid "LDAPSelectFilterOnUsersOU"
+msgstr "Seleccione um filtro para procurar uma correspondência no código no final do atributo OU"
+
+msgid "LDAPOUAttributeFilter"
+msgstr "O filtro do atributo OU"
+
+msgid "SelectSessionToImportUsersTo"
+msgstr "Seleccione a sessão para a qual deseja importar estes utilizadores"
+
+msgid "VisioUseRtmptTitle"
+msgstr "Utilizar o protocolo rtmtp"
+
+msgid "VisioUseRtmptComment"
+msgstr "O protocolo rtmpt o permite acesso à videoconferência por trás de um firewall, redireccionando as comunicações através da porta 80. No entanto, irá tornar mais lento o streaming, por isso é recomendado não usar o protocolo a menos que seja necessário."
+
+msgid "UploadNewStylesheet"
+msgstr "Novo ficheiro de estilo de página"
+
+msgid "NameStylesheet"
+msgstr "Nome do estilo de página"
+
+msgid "StylesheetAdded"
+msgstr "O estilo de página foi adicionado"
+
+msgid "LDAPFilledTutorFieldValueTitle"
+msgstr "Valor de identificação do tutor"
+
+msgid "LDAPFilledTutorFieldValueComment"
+msgstr "Quando é feita uma seleccão no campo do tutor fornecido acima, este valor deverá estar dentro de um dos sub-elementos dos campos do tutor para que o utilizador possa ser considerado como um instrutor. Ao deixar este campo vazio, o campo só irá existir para este utilizador no LDAP para poder ser considerado como um instrutor. Por exemplo, se o campo for \"membro de\" o valor para o procurar poderá ser \"CN = G_TRAINER, OU = Trainer\"."
+
+msgid "IsNotWritable"
+msgstr "não tem permissões para ser escrito/não está editável"
+
+msgid "FieldMovedDown"
+msgstr "O campo foi movido para baixo com sucesso"
+
+msgid "CannotMoveField"
+msgstr "O campo não pode ser movido."
+
+msgid "FieldMovedUp"
+msgstr "O campo foi movido para cima com sucesso"
+
+msgid "FieldShown"
+msgstr "O campo encontra-se agora visível para o utilizador."
+
+msgid "CannotShowField"
+msgstr "Não se pode tornar o campo visível"
+
+msgid "FieldHidden"
+msgstr "O campo agora é visível para o utilizador"
+
+msgid "CannotHideField"
+msgstr "Não se pode tornar o campo invisível"
+
+msgid "FieldMadeChangeable"
+msgstr "O campo foi alterado para ser modificado pelo utilizador: o utilizador pode agora preencher ou editar o campo"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "O campo não se pode ser alterado para editável."
+
+msgid "FieldMadeUnchangeable"
+msgstr "O campo foi alterado para não ser editável: o utilizador não pode editar ou preencher o campo."
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "O campo não se pode ser alterado para ser não editável."
+
+msgid "FieldDeleted"
+msgstr "O campo foi eliminado"
+
+msgid "CannotDeleteField"
+msgstr "Não pode eliminar o campo"
+
+msgid "AddUsersByCoachTitle"
+msgstr "Registar utilizadores por Tutor"
+
+msgid "AddUsersByCoachComment"
+msgstr "Os utilizadores com perfil de tutor podem criar utilizadores na plataforma e inscrever utilizadores numa sessão."
+
+msgid "UserFieldsSortOptions"
+msgstr "Ordenar as opções dos campos do perfil"
+
+msgid "FieldOptionMovedUp"
+msgstr "A opção foi movida para cima."
+
+msgid "CannotMoveFieldOption"
+msgstr "A opção não pode ser movida."
+
+msgid "FieldOptionMovedDown"
+msgstr "A opção foi movida para baixo"
+
+msgid "DefineSessionOptions"
+msgstr "Definir limites de acesso para o tutor"
+
+msgid "DaysBefore"
+msgstr "dias antes da sessão começar"
+
+msgid "DaysAfter"
+msgstr "dias depois"
+
+msgid "SessionAddTypeUnique"
+msgstr "Inscrição individual"
+
+msgid "SessionAddTypeMultiple"
+msgstr "Inscrições múltiplas"
+
+msgid "EnableSearchTitle"
+msgstr "Funcionalidade de pesquisa integral/completo de texto"
+
+msgid "EnableSearchComment"
+msgstr "Seleccione \"Sim\" para activar esta funcionalidade. Esta funcionalidade está altamente dependente da extensão Xapian para PHP, pelo que não irá funcionar se esta extensão não estiver instalada no servidor, na versão mínima 1.x ."
+
+msgid "SearchASession"
+msgstr "Pesquisar a sessão de um curso"
+
+msgid "ActiveSession"
+msgstr "Activar sessão"
+
+msgid "AddUrl"
+msgstr "Adicionar Url/caminho"
+
+msgid "ShowSessionCoachTitle"
+msgstr "Apresentar tutor na sessão"
+
+msgid "ShowSessionCoachComment"
+msgstr "Apresentar o nome do tutor da sessão completa na caixa de título da sessão na lista de cursos"
+
+msgid "ExtendRightsForCoachTitle"
+msgstr "Ampliar/alargar os direitos para o tutor"
+
+msgid "ExtendRightsForCoachComment"
+msgstr "Ao activar esta opção dará aos tutores as mesmas permissões que tem um instrutor sobre as ferramentas de autoria"
+
+msgid "ExtendRightsForCoachOnSurveyComment"
+msgstr "Ao activar desta opção dará aos tutores a possibilidade de criar e editar questionários"
+
+msgid "ExtendRightsForCoachOnSurveyTitle"
+msgstr "Ampliar/alargar as permissões para os tutores nos questionários"
+
+msgid "CannotDeleteUserBecauseOwnsCourse"
+msgstr "Este utilizador não pode ser eliminado porque é instrutor num curso. Pode remover o seu status/estado de instrutor desses cursos e em seguida, eliminar a conta, ou desativá-la em vez de a eliminar."
+
+msgid "AllowUsersToCreateCoursesTitle"
+msgstr "Permitir a utilizadores que não sejam administradores de criar cursos"
+
+msgid "AllowUsersToCreateCoursesComment"
+msgstr "Permitir a instrutores que não sejam administradores de criar novos cursos no portal"
+
+msgid "AllowStudentsToBrowseCoursesComment"
+msgstr "Permitir aos alunos navegarem no catálogo de cursos e de se poderem inscrever nos cursos disponíveis"
+
+msgid "YesWillDeletePermanently"
+msgstr "Sim (os ficheiros serão eliminados permanentemente e não poderão voltar a ser recuperados)"
+
+msgid "NoWillDeletePermanently"
+msgstr "Não (os ficheiros serão eliminados da aplicação mas poderão ser recuperados manualmente pelo administrador do sistema/servidor)"
+
+msgid "SelectAResponsible"
+msgstr "Seleccione um gestor"
+
+msgid "ThereIsNotStillAResponsible"
+msgstr "Não existe um gestor de RH disponível"
+
+msgid "AllowStudentsToBrowseCoursesTitle"
+msgstr "Acesso dos alunos ao catálogo de cursos"
+
+msgid "SharedSettingIconComment"
+msgstr "Esta é uma configuração partilhada"
+
+msgid "GlobalAgenda"
+msgstr "Agenda Global."
+
+msgid "AdvancedFileManagerTitle"
+msgstr "Gestor de ficheiros avançado para o editor WYSIWYG"
+
+msgid "AdvancedFileManagerComment"
+msgstr "Activar o gestor de ficheiros avançado para o editor WYSIWYG? Irá adicionar um considerável número de opções adicionais ao gestor de ficheiros que abrem numa janela pop-up quando se enviam ficheiros para o servidor."
+
+msgid "ScormAndLPProgressTotalAverage"
+msgstr "Média de progresso nos cursos"
+
+msgid "MultipleAccessURLs"
+msgstr "Acesso múltiplo de URL / Branding"
+
+msgid "SearchShowUnlinkedResultsTitle"
+msgstr "Pesquisa integral/completo de texto: apresentar resultados desvinculados"
+
+msgid "SearchShowUnlinkedResultsComment"
+msgstr "Quando se apresentam os resultados de uma pesquisa integral/completa de texto, o que se deverá fazer com os resultados que não são acessíveis ao utilizador actual?"
+
+msgid "SearchHideUnlinkedResults"
+msgstr "Não mostrar"
+
+msgid "SearchShowUnlinkedResults"
+msgstr "Mostrá-los mas sem a ligação/link para os recursos"
+
+msgid "Templates"
+msgstr "Modelos/templates"
+
+msgid "HideCampusFromPublicDokeosPlatformsList"
+msgstr "Não mostrar o meu portal na lista dos portais Chamilo"
+
+msgid "EnableVersionCheck"
+msgstr "Activar a verificação da versão"
+
+msgid "AllowMessageToolTitle"
+msgstr "Ferramenta interna de mensagens"
+
+msgid "AllowReservationTitle"
+msgstr "Reservas"
+
+msgid "AllowReservationComment"
+msgstr "O sistema de reservas permite reservar recursos para os cursos (salas, mesas, livros, ecrãs, ...). Esta ferramenta necessita de estar ativada (através do Admin) para que apareça no menu do utilizador."
+
+msgid "ConfigureResourceType"
+msgstr "Configurar"
+
+msgid "ConfigureMultipleAccessURLs"
+msgstr "Configurar acesso múltiplo ao URL/caminho."
+
+msgid "URLAdded"
+msgstr "O URL/caminho foi adicionado"
+
+msgid "URLAlreadyAdded"
+msgstr "Este URL/caminho já existe, por favor seleccione outro URL/caminho"
+
+msgid "AreYouSureYouWantToSetThisLanguageAsThePortalDefault"
+msgstr "Tem a certeza de que deseja que este idioma seja o idioma por defeito da plataforma?"
+
+msgid "CurrentLanguagesPortal"
+msgstr "Idioma actual do portal."
+
+msgid "EditUsersToURL"
+msgstr "Editar utilizadores e URLs/caminhos"
+
+msgid "AddUsersToURL"
+msgstr "Adicionar utilizadores a um URL/caminho"
+
+msgid "URLList"
+msgstr "Lista do URL/caminho"
+
+msgid "AddToThatURL"
+msgstr "Adicionar utilizadores a esse URL/caminho"
+
+msgid "SelectUrl"
+msgstr "Selecione um URL/caminho"
+
+msgid "UserListInURL"
+msgstr "Utilizadores inscritos neste URL/caminho"
+
+msgid "UsersWereEdited"
+msgstr "As contas dos utilizadores foram actualizadas"
+
+msgid "AtLeastOneUserAndOneURL"
+msgstr "Tem de seleccionar, no mínimo, um utilizador e um URL/caminho"
+
+msgid "UsersBelongURL"
+msgstr "As contas dos utilizadores estão agora anexadas ao URL/caminho"
+
+msgid "LPTestScore"
+msgstr "Pontuação do curso"
+
+msgid "ScormAndLPTestTotalAverage"
+msgstr "Média dos testes/exercícios nos cursos"
+
+msgid "ImportUsersToACourse"
+msgstr "Importar lista de utilizadores"
+
+msgid "ImportCourses"
+msgstr "Importar lista de cursos"
+
+msgid "ManageUsers"
+msgstr "Gerir utilizadores"
+
+msgid "ManageCourses"
+msgstr "Gerir cursos"
+
+msgid "UserListIn"
+msgstr "Utilizadores de"
+
+msgid "URLInactive"
+msgstr "O URL/caminho foi desactivado"
+
+msgid "URLActive"
+msgstr "O URL/caminho foi activado"
+
+msgid "EditUsers"
+msgstr "Editar utilizadores"
+
+msgid "EditCourses"
+msgstr "Editar cursos"
+
+msgid "CourseListIn"
+msgstr "Cursos de"
+
+msgid "AddCoursesToURL"
+msgstr "Adicionar cursos a um URL/caminho"
+
+msgid "EditCoursesToURL"
+msgstr "Editar cursos de um URL/caminho"
+
+msgid "AddCoursesToThatURL"
+msgstr "Adicionar cursos a esse URL/caminho"
+
+msgid "EnablePlugins"
+msgstr "Activar os plugins seleccionados"
+
+msgid "AtLeastOneCourseAndOneURL"
+msgstr "Pelo menos um curso e um URL/caminho"
+
+msgid "ClickToRegisterAdmin"
+msgstr "Clique aqui para registar o admin em todos os sites"
+
+msgid "AdminShouldBeRegisterInSite"
+msgstr "O Administrador deve ser registado aqui"
+
+msgid "URLNotConfiguredPleaseChangedTo"
+msgstr "URL/caminho ainda não configurado, por favor adicione este URL/caminho :"
+
+msgid "AdminUserRegisteredToThisURL"
+msgstr "Utilizador Admin atribuído a este URL/caminho"
+
+msgid "CoursesWereEdited"
+msgstr "Cursos actualizados com sucesso"
+
+msgid "URLEdited"
+msgstr "O URL/caminho foi editado"
+
+msgid "AddSessionToURL"
+msgstr "Adicionar sessão a um URL/caminho"
+
+msgid "FirstLetterSession"
+msgstr "Primeira letra do nome da sessão"
+
+msgid "EditSessionToURL"
+msgstr "Editar sessão"
+
+msgid "AddSessionsToThatURL"
+msgstr "Adicionar sessões a esse URL/caminho"
+
+msgid "SessionBelongURL"
+msgstr "As sessões foram editadas"
+
+msgid "ManageSessions"
+msgstr "Gerir sessões"
+
+msgid "AllowMessageToolComment"
+msgstr "Activando a ferramenta interna de mensagens permitirá aos utilizadores enviarem mensagens a outros utilizadores da plataforma e de obterem uma caixa de entrada/inbox de mensagens."
+
+msgid "AllowSocialToolTitle"
+msgstr "Ferramenta de colaboração/rede social (tipo Facebook)"
+
+msgid "AllowSocialToolComment"
+msgstr "A ferramenta de colaboração/social networking (redes sociais) permite que os utilizadores criem/definam relações com outros utilizadores, criando grupos de amigos. Combinando esta ferramenta com a ferramenta interna de mensagens/chat, as comunicações com esses grupos de amigos tornam-se mais estreitas, dentro do ambiente do portal."
+
+msgid "SetLanguageAsDefault"
+msgstr "Definir como idioma pré-definido"
+
+msgid "FieldFilter"
+msgstr "Filtro"
+
+msgid "FilterOn"
+msgstr "Filtro ligado/activado"
+
+msgid "FilterOff"
+msgstr "Filtro desligado/desactivado"
+
+msgid "FieldFilterSetOn"
+msgstr "Pode agora utilizar este campo como um filtro"
+
+msgid "FieldFilterSetOff"
+msgstr "Não pode utilizar este campo como um filtro"
+
+msgid "buttonAddUserField"
+msgstr "Adicionar campo de utilizador"
+
+msgid "UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses"
+msgstr "Os utilizadores foram inscritos nos seguintes cursos porque existem outros cursos que partilham o mesmo código visual"
+
+msgid "TheFollowingCoursesAlreadyUseThisVisualCode"
+msgstr "Os seguintes cursos já utilizam este código"
+
+msgid "UsersSubscribedToBecauseVisualCode"
+msgstr "Os utilizadores foram inscritos nos seguintes cursos porque existem outros cursos que partilham o mesmo código visual"
+
+msgid "UsersUnsubscribedFromBecauseVisualCode"
+msgstr "A inscrição dos utilizadores foi anulada/cancelada nos seguintes cursos porque existem outros cursos que partilham o mesmo código visual"
+
+msgid "FilterUsers"
+msgstr "Filtro de utilizadores"
+
+msgid "SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode"
+msgstr "Vários cursos foram inscritos na sessão devido a uma duplicação do código de curso"
+
+msgid "CoachIsRequired"
+msgstr "Deverá seleccionar um tutor"
+
+msgid "EncryptMethodUserPass"
+msgstr "Método de encriptação"
+
+msgid "AddTemplate"
+msgstr "Adicionar um modelo/template"
+
+msgid "TemplateImageComment100x70"
+msgstr "Esta imagem irá apresentar o modelo/template na lista de modelos/templates. Não deverá ter uma dimensão superior a 100x70 pixels"
+
+msgid "TemplateAdded"
+msgstr "Modelo/template adicionado"
+
+msgid "TemplateDeleted"
+msgstr "Modelo/template eliminado"
+
+msgid "EditTemplate"
+msgstr "Edição de modelo/template"
+
+msgid "FileImportedJustUsersThatAreNotRegistered"
+msgstr "Os utilizadores que não foram registados na plataforma/sistema foram importados"
+
+msgid "YouMustImportAFileAccordingToSelectedOption"
+msgstr "Deverá importar um ficheiro que corresponda ao formato seleccionado"
+
+msgid "ShowEmailOfTeacherOrTutorTitle"
+msgstr "Apresentar o endereço de e-mail do instrutor ou do tutor no rodapé"
+
+msgid "ShowEmailOfTeacherOrTutorComent"
+msgstr "Apresentar o e-mail do instrutor ou tutor no rodapé?"
+
+msgid "Created"
+msgstr "Criado"
+
+msgid "AddSystemAnnouncement"
+msgstr "Adicionar um aviso/alerta do sistema"
+
+msgid "EditSystemAnnouncement"
+msgstr "Editar aviso/alerta do sistema"
+
+msgid "LPProgressScore"
+msgstr "% de objectos de aprendizagem visitados"
+
+msgid "TotalTimeByCourse"
+msgstr "Tempo total no curso"
+
+msgid "LastTimeTheCourseWasUsed"
+msgstr "Último utilizador que acedeu ao curso"
+
+msgid "AnnouncementAvailable"
+msgstr "O aviso/alerta está disponível"
+
+msgid "AnnouncementNotAvailable"
+msgstr "O aviso/alerta não está disponível"
+
+msgid "Searching"
+msgstr "Perquisar"
+
+msgid "AddLDAPUsers"
+msgstr "Adicionar utilizadores do LDAP"
+
+msgid "Academica"
+msgstr "Academica"
+
+msgid "AddNews"
+msgstr "Adicionar notícias/novidades"
+
+msgid "SearchDatabaseOpeningError"
+msgstr "Erro ao tentar abrir a base-de-dados"
+
+msgid "SearchDatabaseVersionError"
+msgstr "A base-de-dados encontra-se num formato não suportado"
+
+msgid "SearchDatabaseModifiedError"
+msgstr "A base-de-dados foi modificada"
+
+msgid "SearchDatabaseLockError"
+msgstr "Erro ao tentar bloquear a base-de-dados"
+
+msgid "SearchDatabaseCreateError"
+msgstr "Erro ao tentar criar a base-de-dados"
+
+msgid "SearchDatabaseCorruptError"
+msgstr "Foi detectado um erro corrompido na base-de-dados"
+
+msgid "SearchNetworkTimeoutError"
+msgstr "O tempo expirado ao tentar comunicar com a base-de-dados remotamente"
+
+msgid "SearchOtherXapianError"
+msgstr "Erro no motor de pesquisa"
+
+msgid "FieldRemoved"
+msgstr "Campo removido/eliminado"
+
+msgid "TheNewSubLanguageHasBeenAdded"
+msgstr "O novo sub-idioma foi adicionado"
+
+msgid "DeleteSubLanguage"
+msgstr "Eliminar sub-idioma"
+
+msgid "CreateSubLanguageForLanguage"
+msgstr "Criar um sub-idioma para este idioma"
+
+msgid "DeleteSubLanguageFromLanguage"
+msgstr "Eliminar este sub-idioma"
+
+msgid "CreateSubLanguage"
+msgstr "Criar sub-idioma"
+
+msgid "RegisterTermsOfSubLanguageForLanguage"
+msgstr "Definir termos novos para este sub-idioma"
+
+msgid "AddTermsOfThisSubLanguage"
+msgstr "Termos do sub-idioma"
+
+msgid "LoadLanguageFile"
+msgstr "Carregar ficheiro de idioma"
+
+msgid "AllowUseSubLanguageTitle"
+msgstr "Permitir a utilização e definição de sub-idiomas"
+
+msgid "AllowUseSubLanguageComment"
+msgstr "Ao activar esta opção, poderá definir variações para cada um dos termos do idioma utilizado no interface da plataforma, sob a forma de uma novo idioma com base neste e como uma extenção de um idioma já existente. Esta opção encontra-se disponível na secção de idiomas do painel de administração."
+
+msgid "AddWordForTheSubLanguage"
+msgstr "Adicionar termos ao sub-idioma"
+
+msgid "TemplateEdited"
+msgstr "Modelo/template editado"
+
+msgid "SubLanguage"
+msgstr "Sub-idioma"
+
+msgid "LanguageIsNowVisible"
+msgstr "O idioma foi tornado visível e pode ser utilizado em toda a plataforma."
+
+msgid "LanguageIsNowHidden"
+msgstr "O idioma foi escondido. Não será possível usá-lo até o tornar novamente visível."
+
+msgid "LanguageDirectoryNotWriteableContactAdmin"
+msgstr "O directório/pasta principal de idiomas, utilizada neste portal para armazenar os idiomas, não é editável. Por favor contacte o administrador da plataforma para reportar esta mensagem."
+
+msgid "ShowGlossaryInDocumentsTitle"
+msgstr "Apresentar o glossário de termos nos documentos"
+
+msgid "ShowGlossaryInDocumentsComment"
+msgstr "Nesta área poderá configurar como adicionar ligações/links dos documentos para o glossário de termos"
+
+msgid "ShowGlossaryInDocumentsIsAutomatic"
+msgstr "Automático: adiciona ligações/links para todos os termos definidos no glossário de termos encontrados no documento"
+
+msgid "ShowGlossaryInDocumentsIsManual"
+msgstr "Manual: apresenta um ícone do glossário no editor online, para poder marcar os termos que se encontram no glossário, aos que pretende ligar"
+
+msgid "ShowGlossaryInDocumentsIsNone"
+msgstr "Nenhum: não adiciona nenhum termo do glossário aos documentos"
+
+msgid "LanguageVariable"
+msgstr "Variável de idioma"
+
+msgid "ToExportDocumentsWithGlossaryYouHaveToSelectGlossary"
+msgstr "Para exportar um documento com um glossário de termos incluído e com as suas ligações para o glossário, deverá de incluir também a ferramenta glossário na exportação"
+
+msgid "ShowTutorDataTitle"
+msgstr "Os dados da sessão do Tutor são apresentados no rodapé."
+
+msgid "ShowTutorDataComment"
+msgstr "Apresentar no rodapé da sessão as referências do tutor (nome e e-mail se disponíveis)?"
+
+msgid "ShowTeacherDataTitle"
+msgstr "Apresentar informação sobre o instrutor no rodapé"
+
+msgid "ShowTeacherDataComment"
+msgstr "Apresentar no rodapé as referências do instrutor (nome e e-mail se disponíveis)?"
+
+msgid "TermsAndConditions"
+msgstr "Termos e condições"
+
+msgid "HTMLText"
+msgstr "HTML"
+
+msgid "PageLink"
+msgstr "Ligação/link para página"
+
+msgid "DisplayTermsConditions"
+msgstr "Apresentar a declaração de Termos & Condições na página de registo, requerendo ao visitante para aceitar os T&C para se registar."
+
+msgid "AllowTermsAndConditionsTitle"
+msgstr "Activar termos e condições"
+
+msgid "AllowTermsAndConditionsComment"
+msgstr "Esta opção irá exibir os Termos e Condições no formulário de registo para novos utilizadores"
+
+msgid "Load"
+msgstr "Carregar"
+
+msgid "AllVersions"
+msgstr "Todas as versões"
+
+msgid "EditTermsAndConditions"
+msgstr "Editar os termos e condições"
+
+msgid "Changes"
+msgstr "Alterações"
+
+msgid "ExplainChanges"
+msgstr "Explicar alterações"
+
+msgid "TermAndConditionNotSaved"
+msgstr "Termos e Condições não foram guardados"
+
+msgid "TheSubLanguageHasBeenRemoved"
+msgstr "O sub-idioma foi removido"
+
+msgid "AddTermsAndConditions"
+msgstr "Adicionar termos e condições"
+
+msgid "TermAndConditionSaved"
+msgstr "Termos e Condições foram guardados"
+
+msgid "Visibility"
+msgstr "Visibilidade"
+
+msgid "SessionCategory"
+msgstr "Categorias das sessões"
+
+msgid "ListSessionCategory"
+msgstr "Lista das categorias das sessões"
+
+msgid "AddSessionCategory"
+msgstr "Adicionar categoria"
+
+msgid "SessionCategoryName"
+msgstr "Nome da categoria"
+
+msgid "EditSessionCategory"
+msgstr "Editar categoria da sessão"
+
+msgid "SessionCategoryAdded"
+msgstr "A categoria foi adicionada"
+
+msgid "SessionCategoryUpdate"
+msgstr "Actualização da categoria"
+
+msgid "SessionCategoryDelete"
+msgstr "As categorias seleccionadas foram eliminadas"
+
+msgid "SessionCategoryNameIsRequired"
+msgstr "Por favor, atribua um nome à categoria das sessões"
+
+msgid "ThereIsNotStillASession"
+msgstr "Não existem sessões disponíveis"
+
+msgid "SelectASession"
+msgstr "Seleccione a sessão"
+
+msgid "OriginCoursesFromSession"
+msgstr "Cursos da sessão origem"
+
+msgid "DestinationCoursesFromSession"
+msgstr "Cursos da sessão destino"
+
+msgid "CopyCourseFromSessionToSessionExplanation"
+msgstr "Ajuda para a cópia de cursos de uma sessão para outra sessão:<br></br>Para copiar cursos entre várias sessões, deverá em primeiro lugar, seleccionar um curso da lista da sessão de origem. Poderá copiar os conteúdos das ferramentas de descrição do curso, documentos, glossário, ligações/links, exercícios e avaliações, de forma directa ou seleccionando os componentes do curso;"
+
+msgid "TypeOfCopy"
+msgstr "Tipo de cópia"
+
+msgid "CopyFromCourseInSessionToAnotherSession"
+msgstr "Copiar do curso em sessão para uma outra sessão"
+
+msgid "YouMustSelectACourseFromOriginalSession"
+msgstr "Deverá seleccionar um curso da sessão origem"
+
+msgid "MaybeYouWantToDeleteThisUserFromSession"
+msgstr "Talvez deseje eliminar o utilizador, em vez de cancelar a sua incrição de todos os cursos...?"
+
+msgid "EditSessionCoursesByUser"
+msgstr "Editar cursos de sessão por utilizador"
+
+msgid "CoursesUpdated"
+msgstr "Cursos actualizados"
+
+msgid "CurrentCourses"
+msgstr "Cursos actuais"
+
+msgid "CoursesToAvoid"
+msgstr "Cursos inacessíveis"
+
+msgid "EditSessionCourses"
+msgstr "Editar cursos da sessão"
+
+msgid "SessionVisibility"
+msgstr "Visibilidade após a data final"
+
+msgid "BlockCoursesForThisUser"
+msgstr "Bloquear utilizador nos cursos desta sessão"
+
+msgid "LanguageFile"
+msgstr "Ficheiro de idioma"
+
+msgid "ShowCoursesDescriptionsInCatalogTitle"
+msgstr "Apresentar a descrição dos cursos no catálogo"
+
+msgid "ShowCoursesDescriptionsInCatalogComment"
+msgstr "Apresentar a descrição dos cursos numa janela popup quando se clicar no ícone de informação do cursos no catálogo de cursos"
+
+msgid "StylesheetNotHasBeenAdded"
+msgstr "O estilo de página não pode ser adicionado. <br></br>Provavelmente, o ficheiro zip poderá conter ficheiros que não são permitidos. Os tipos de ficheiros permitidos são: \'png\', \'jpg\', \'gif\', \'css\'."
+
+msgid "AddSessionsInCategories"
+msgstr "Adicionar sessões em categorias"
+
+msgid "ItIsRecommendedInstallImagickExtension"
+msgstr "É recomendada a instalação da extensão imagick do PHP para se obter uma melhor definição na resolução das imagens, no momento da criação dos modelos de imagem em miniatura (thumbnails), caso contrário poderão ficar pouco perceptíveis. Se a extenção não estiver instalada por pré-definição, será utilizada a extenção php-gd."
+
+msgid "EditSpecificSearchField"
+msgstr "Edite o campo de pesquisa específico"
+
+msgid "FieldName"
+msgstr "Nome do campo"
+
+msgid "SpecialExports"
+msgstr "Exportações especiais"
+
+msgid "SpecialCreateFullBackup"
+msgstr "Criar cópia de segurança/backup completo especial"
+
+msgid "SpecialLetMeSelectItems"
+msgstr "Deixar-me seleccionar itens especiais"
+
+msgid "CreateBackup"
+msgstr "Criar cópia de segurança/backup"
+
+msgid "AllowCoachsToEditInsideTrainingSessions"
+msgstr "Permitir aos tutores editar dentro das sessões dos cursos"
+
+msgid "AllowCoachsToEditInsideTrainingSessionsComment"
+msgstr "Permitir aos tutores editar comentários dentro das sessões dos cursos"
+
+msgid "ShowSessionDataTitle"
+msgstr "Apresentar título dos dados da sessão"
+
+msgid "ShowSessionDataComment"
+msgstr "Apresentar comentários dos dados da sessão"
+
+msgid "SubscribeSessionsToCategory"
+msgstr "Subscrever sessões na categoria"
+
+msgid "SessionListInPlatform"
+msgstr "Lista das sessões na plataforma/sistema"
+
+msgid "SessionListInCategory"
+msgstr "Lista das sessões nas categorias"
+
+msgid "ToExportSpecialSelect"
+msgstr "Se desejar exportar cursos com sessões, terá de garantir que essas sessões serão incluídas na exportação para qualquer um dos que escolher na lista."
+
+msgid "ErrorMsgSpecialExport"
+msgstr "Não havia nenhum curso registado ou pode não ter sido feita a associação com as sessões."
+
+msgid "ConfigureInscription"
+msgstr "Configurar/definir a página de registo"
+
+msgid "MsgErrorSessionCategory"
+msgstr "Seleccione a categoria e as sessões"
+
+msgid "NumberOfSession"
+msgstr "Número de sessões"
+
+msgid "DeleteSelectedSessionCategory"
+msgstr "Eliminar apenas as categorias seleccionadas sem as sessões"
+
+msgid "DeleteSelectedFullSessionCategory"
+msgstr "Eliminar as categorias seleccionadas para as sessões"
+
+msgid "EditTopRegister"
+msgstr "Editar Nota"
+
+msgid "InsertTabs"
+msgstr "Adicionar Separadores"
+
+msgid "EditTabs"
+msgstr "Editar Separadores"
+
+msgid "BabyOrange"
+msgstr "Baby Orange"
+
+msgid "BlueLagoon"
+msgstr "Blue lagoon"
+
+msgid "CoolBlue"
+msgstr "Cool blue"
+
+msgid "Corporate"
+msgstr "Corporate"
+
+msgid "CosmicCampus"
+msgstr "Cosmic campus"
+
+msgid "DeliciousBordeaux"
+msgstr "Delicious Bordeaux"
+
+msgid "DokeosClassic2D"
+msgstr "Chamilo classic 2D"
+
+msgid "DokeosBlue"
+msgstr "Chamilo blue"
+
+msgid "EmpireGreen"
+msgstr "Empire green"
+
+msgid "FruityOrange"
+msgstr "Fruity orange"
+
+msgid "Medical"
+msgstr "Medical"
+
+msgid "RoyalPurple"
+msgstr "Royal purple"
+
+msgid "SilverLine"
+msgstr "Silver line"
+
+msgid "SoberBrown"
+msgstr "Sober brown"
+
+msgid "SteelGrey"
+msgstr "Steel grey"
+
+msgid "TastyOlive"
+msgstr "Tasty olive"
+
+msgid "ExportCourses"
+msgstr "Exportar cursos"
+
+msgid "IsAdministrator"
+msgstr "É administrador"
+
+msgid "IsNotAdministrator"
+msgstr "Não é administrador"
+
+msgid "AddTimeLimit"
+msgstr "Adicionar limite de tempo"
+
+msgid "EditTimeLimit"
+msgstr "Editar limite de tempo"
+
+msgid "TheTimeLimitsAreReferential"
+msgstr "O limite de tempo de uma categoria é referencial, não irá afectar os limites de tempo de uma sessão de um curso"
+
+msgid "ShowGlossaryInExtraToolsTitle"
+msgstr "Mostrar o glossário de termos nas ferramentas extra"
+
+msgid "ShowGlossaryInExtraToolsComment"
+msgstr "Neste local pode configurar como adicionar o glossário de termos nas ferramentas extras como um percurso/caminho de aprendizagem e ferramenta de exercício"
+
+msgid "FieldTypeTag"
+msgstr "Etiqueta/comando do utilizador"
+
+msgid "SendEmailToAdminTitle"
+msgstr "E-mail de alerta, de criação de um novo curso"
+
+msgid "SendEmailToAdminComment"
+msgstr "Enviar um e-mail para o administardor da plataforma, de cada vez que um instrutor registrar um novo curso"
+
+msgid "UserTag"
+msgstr "Etiqueta/comando do utilizador"
+
+msgid "SelectSession"
+msgstr "Seleccionar sessão"
+
+msgid "GroupPermissions"
+msgstr "Permissões do Grupo"
+
+msgid "SpecialCourse"
+msgstr "Curso especial"
+
+msgid "MathMimetexTitle"
+msgstr "Editor matemático mimeTEX"
+
+msgid "MathMimetexComment"
+msgstr "Activar editor matemático mimeTEX"
+
+msgid "MathASCIImathMLTitle"
+msgstr "Editor matemático SCIImathML"
+
+msgid "MathASCIImathMLComment"
+msgstr "Activar editor matemático SCIImathML"
+
+msgid "YoutubeForStudentsTitle"
+msgstr "Permitir aos alunos inserir videos do YouTube"
+
+msgid "YoutubeForStudentsComment"
+msgstr "Activar a possibilidade dos alunos poderem inserir videos do YouTube"
+
+msgid "BlockCopyPasteForStudentsTitle"
+msgstr "Bloquear aos alunos a opção de copiar e colar"
+
+msgid "BlockCopyPasteForStudentsComment"
+msgstr "Bloquear aos alunos a opção de copiar e colar para dentro do editor WYSIWYG"
+
+msgid "MoreButtonsForMaximizedModeTitle"
+msgstr "Barra de botões extendida"
+
+msgid "MoreButtonsForMaximizedModeComment"
+msgstr "Activar a barra de botões extendida quando o editor WYSIWYG se encontrar maximizado"
+
+msgid "Editor"
+msgstr "Editor WYSIWYG"
+
+msgid "GoToCourseAfterLoginTitle"
+msgstr "Ir directamente para o curso após efectuar o login/acesso"
+
+msgid "GoToCourseAfterLoginComment"
+msgstr "Quando um utilizador se encontra registado num curso, ir directamente para o curso após o login/acesso"
+
+msgid "GroupList"
+msgstr "Lista do Grupo"
+
+msgid "AllowStudentsDownloadFoldersTitle"
+msgstr "Permitir aos alunos descarregar pastas/directórios"
+
+msgid "AllowStudentsDownloadFoldersComment"
+msgstr "Permitir aos alunos criar um pacote e descarregar uma pasta/directório completo na ferramenta documentos"
+

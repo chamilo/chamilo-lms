@@ -1,0 +1,462 @@
+msgid "langExercice"
+msgstr "테스트"
+
+msgid "langActivate"
+msgstr "보여주기"
+
+msgid "langDeactivate"
+msgstr "숨김"
+
+msgid "langNoEx"
+msgstr "이번에는 테스트가 없습니다"
+
+msgid "langNewEx"
+msgstr "새 테스트"
+
+msgid "langQuestion"
+msgstr "질문"
+
+msgid "langQuestions"
+msgstr "문제들"
+
+msgid "langAnswers"
+msgstr "해답"
+
+msgid "langTrue"
+msgstr "참"
+
+msgid "langAnswer"
+msgstr "해답"
+
+msgid "langResult"
+msgstr "결과"
+
+msgid "langNoResult"
+msgstr "아직 결과가 나오지 않았습니다"
+
+msgid "langYourResults"
+msgstr "당신의 결과"
+
+msgid "langStudentResults"
+msgstr "학생 점수"
+
+msgid "langExerciseType"
+msgstr "테스트 유형"
+
+msgid "langExerciseName"
+msgstr "테스트 명"
+
+msgid "langExerciseDescription"
+msgstr "테스트 설명"
+
+msgid "langSimpleExercise"
+msgstr "단독 페이지에서"
+
+msgid "langSequentialExercise"
+msgstr "페이지 당 한 문제 (순서대로)"
+
+msgid "langRandomQuestions"
+msgstr "랜덤 출제"
+
+msgid "langGiveExerciseName"
+msgstr "테스트 명을 기입하십시요"
+
+msgid "langSound"
+msgstr "오디오 또는 비디오 파일"
+
+msgid "langDeleteSound"
+msgstr "오디오 또는 비디오 파일 삭제"
+
+msgid "langNoAnswer"
+msgstr "현재 해답이 없습니다."
+
+msgid "langGoBackToQuestionPool"
+msgstr "문제 풀로 돌아가기"
+
+msgid "langGoBackToQuestionList"
+msgstr "문제 목록으로 돌아가기"
+
+msgid "langQuestionAnswers"
+msgstr "문제의 해답"
+
+msgid "langUsedInSeveralExercises"
+msgstr "경고! 이 문제와 해답은 여러 테스트에서 사용되었습니다. 이를 수정하시겠습니까?"
+
+msgid "langModifyInAllExercises"
+msgstr "모든 테스트에서"
+
+msgid "langModifyInThisExercise"
+msgstr "현재 테스트에서만"
+
+msgid "langAnswerType"
+msgstr "해답 유형"
+
+msgid "langMultipleSelect"
+msgstr "Multiple choice (여러개의 답)"
+
+msgid "langFillBlanks"
+msgstr "Fill in blanks"
+
+msgid "langMatching"
+msgstr "Matching"
+
+msgid "langAddPicture"
+msgstr "사진 추가"
+
+msgid "langReplacePicture"
+msgstr "그림 대체"
+
+msgid "langDeletePicture"
+msgstr "사진 삭제"
+
+msgid "langQuestionDescription"
+msgstr "부연설명"
+
+msgid "langGiveQuestion"
+msgstr "문제를 입력하십시요"
+
+msgid "langWeightingForEachBlank"
+msgstr "모든 공란의 wighting을 입력하십시요"
+
+msgid "langUseTagForBlank"
+msgstr "하나 또는 그 이상의 공란을 지정할 때는 대괄호[...]를 사용하십시요"
+
+msgid "langQuestionWeighting"
+msgstr "wighting"
+
+msgid "langMoreAnswers"
+msgstr "+answ"
+
+msgid "langLessAnswers"
+msgstr "-answ"
+
+msgid "langMoreElements"
+msgstr "+elem"
+
+msgid "langLessElements"
+msgstr "-elem"
+
+msgid "langTypeTextBelow"
+msgstr "답을 아래에 입력하십시요"
+
+msgid "langDefaultTextInBlanks"
+msgstr "[British people] live in the [United Kingdom]."
+
+msgid "langDefaultMatchingOptA"
+msgstr "rich"
+
+msgid "langDefaultMatchingOptB"
+msgstr "good looking"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Your daddy is"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Your mother is"
+
+msgid "langDefineOptions"
+msgstr "옵션을 지정하십시요"
+
+msgid "langMakeCorrespond"
+msgstr "다음을 매치시키십시요"
+
+msgid "langFillLists"
+msgstr "아래의 두 목록을 채우십시요"
+
+msgid "langGiveText"
+msgstr "다음을 입력하십시요"
+
+msgid "langDefineBlanks"
+msgstr "대괄호[...] 안의 최소 하나의 공란을 지정하십시요"
+
+msgid "langGiveAnswers"
+msgstr "질문의 답을 입력하십시요"
+
+msgid "langChooseGoodAnswer"
+msgstr "정답을 체크하십시요"
+
+msgid "langChooseGoodAnswers"
+msgstr "하나 또는 하나 이상의 정답을 체크하십시요"
+
+msgid "langQuestionList"
+msgstr "테스트의 문제 목록"
+
+msgid "langMoveUp"
+msgstr "위로 옮기기"
+
+msgid "langMoveDown"
+msgstr "아래로 내리기"
+
+msgid "langGetExistingQuestion"
+msgstr "문제 풀에서 문제 가져오기"
+
+msgid "langFinishTest"
+msgstr "테스트 종료"
+
+msgid "langQuestionPool"
+msgstr "문제 풀"
+
+msgid "langOrphanQuestions"
+msgstr "잘못된 문제"
+
+msgid "langNoQuestion"
+msgstr "문제가 존재하지 않습니다"
+
+msgid "langAllExercises"
+msgstr "모든 테스트"
+
+msgid "langFilter"
+msgstr "필터"
+
+msgid "langGoBackToEx"
+msgstr "테스트로 돌아가기"
+
+msgid "langReuse"
+msgstr "재사용"
+
+msgid "langExerciseManagement"
+msgstr "테스트 관리"
+
+msgid "langQuestionManagement"
+msgstr "문제 / 해답 관리"
+
+msgid "langQuestionNotFound"
+msgstr "문제를 찾을 수 없습니다"
+
+msgid "langExerciseNotFound"
+msgstr "테스트를 찾을 수 없거나 보여지지 않습니다"
+
+msgid "langAlreadyAnswered"
+msgstr "이미 문제를 풀었습니다"
+
+msgid "langElementList"
+msgstr "요소 목록"
+
+msgid "langScore"
+msgstr "점수"
+
+msgid "langCorrespondsTo"
+msgstr "상응하는"
+
+msgid "langExpectedChoice"
+msgstr "예상 해답"
+
+msgid "langYourTotalScore"
+msgstr "당신의 총점은"
+
+msgid "langEvalSet"
+msgstr "평가 파라미터"
+
+msgid "langActive"
+msgstr "활성화"
+
+msgid "langInactive"
+msgstr "비활성화"
+
+msgid "langQuestCreate"
+msgstr "문제 생성"
+
+msgid "langExRecord"
+msgstr "당신의 학습결과가 저장되었습니다"
+
+msgid "langBackModif"
+msgstr "문제들이 있는 페이지로 되돌아가기"
+
+msgid "langDoEx"
+msgstr "연습문제 만들기"
+
+msgid "langDefScor"
+msgstr "평가 파라미터 설명"
+
+msgid "langCreateModif"
+msgstr "문제 생성 / 수정"
+
+msgid "langSub"
+msgstr "부제"
+
+msgid "langMyAnswer"
+msgstr "나의 답"
+
+msgid "langMorA"
+msgstr "+ answer"
+
+msgid "langLesA"
+msgstr "- answer"
+
+msgid "langRecEx"
+msgstr "시험 저장"
+
+msgid "langRecQu"
+msgstr "문제 저장"
+
+msgid "langRecAns"
+msgstr "답안 저장"
+
+msgid "langIntroduction"
+msgstr "개요"
+
+msgid "langTitleAssistant"
+msgstr "연습문제 생성 보조"
+
+msgid "langQuesList"
+msgstr "문제 목록"
+
+msgid "langSaveEx"
+msgstr "연습문제 저장"
+
+msgid "langFinish"
+msgstr "종료"
+
+msgid "langCancel"
+msgstr "취소"
+
+msgid "langQImage"
+msgstr "이미지를 포함한 문제"
+
+msgid "langAddQ"
+msgstr "문제 추가"
+
+msgid "langDoAnEx"
+msgstr "연습문제 풀기"
+
+msgid "langGenerator"
+msgstr "연습문제 목록"
+
+msgid "langChoice"
+msgstr "선택한 답"
+
+msgid "langCorrect"
+msgstr "정답"
+
+msgid "langPossAnsw"
+msgstr "한 문제에 대한 여러 개의 모범답안"
+
+msgid "langStudAnsw"
+msgstr "학생에 의한 에러 수"
+
+msgid "langDetermine"
+msgstr "결정"
+
+msgid "langNonNumber"
+msgstr "숫자가 아닌 값"
+
+msgid "langReplaced"
+msgstr "대체"
+
+msgid "langSuperior"
+msgstr "20 이상의 값"
+
+msgid "langRep20"
+msgstr "20 대체"
+
+msgid "langDefault"
+msgstr "기본 값 *"
+
+msgid "langDefComment"
+msgstr "\"기본 값\" 버튼을 누르게 되면 기존 값이 대체"
+
+msgid "langScoreGet"
+msgstr "검은 수 = 점수"
+
+msgid "langShowScor"
+msgstr "학생에게 평가를 보여주기"
+
+msgid "langStep1"
+msgstr "Step 1"
+
+msgid "langStep2"
+msgstr "Step 2"
+
+msgid "langTake"
+msgstr "take"
+
+msgid "langAmong"
+msgstr "among"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "HotPotatoes 테스트 불러오기"
+
+msgid "langHotPotatoesTests"
+msgstr "HotPotatoes 테스트 불러오기"
+
+msgid "langDownloadFile"
+msgstr "서버에 파일 올리기"
+
+msgid "langDownloadImg"
+msgstr "이미지 파일 서버에 업로드하기"
+
+msgid "langDownloadEnd"
+msgstr "파일 올리기가 종료되었습니다"
+
+msgid "langNoSpace"
+msgstr "파일 올리기가 실패하였습니다. 제한 사용량을 넘었거나, 디스크 공간이 충분하지 않을 수 있습니다."
+
+msgid "langZipNoPhp"
+msgstr "압축 파일은 .PHP 파일을 포함할 수 없습니다"
+
+msgid "langNoImg"
+msgstr "이미지 없이 테스트"
+
+msgid "langImgNote_st"
+msgstr "<br> 업로드 해야 합니다"
+
+msgid "langImgNote_en"
+msgstr "이미지 :"
+
+msgid "langDocDeleted"
+msgstr "문서가 삭제되었습니다"
+
+msgid "langViMod"
+msgstr "가시성이 변경되었습니다"
+
+msgid "langNameNotEqual"
+msgstr "유효한 파일이 아닙니다 !"
+
+msgid "langIndice"
+msgstr "색인"
+
+msgid "langIndices"
+msgstr "색인"
+
+msgid "langDateExo"
+msgstr "날짜"
+
+msgid "langShowQuestion"
+msgstr "문제 보기"
+
+msgid "langUnknownExercise"
+msgstr "알수 없는 연습문제"
+
+msgid "langReuseQuestion"
+msgstr "문제 재사용"
+
+msgid "langCreateExercise"
+msgstr "연습문제 생성"
+
+msgid "langCreateQuestion"
+msgstr "문제 생성"
+
+msgid "langCreateAnswers"
+msgstr "해답 생성"
+
+msgid "langModifyExercise"
+msgstr "연습문제 수정"
+
+msgid "langModifyAnswers"
+msgstr "해답 수정"
+
+msgid "langForExercise"
+msgstr "연습문제를 위한"
+
+msgid "langUseExistantQuestion"
+msgstr "기존 문제 사용"
+
+msgid "FreeAnswer"
+msgstr "자유 답안"
+
+msgid "notCorrectedYet"
+msgstr "이 답은 정답이 아닙니다. 이로 인해, 이 문제에 대한 점수는 0점이고, 전체 점수에 반영될 것입니다."
+
+msgid "adminHP"
+msgstr "Hot Potatoes 관리"
+

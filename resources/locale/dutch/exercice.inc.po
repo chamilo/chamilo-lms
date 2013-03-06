@@ -1,0 +1,1500 @@
+msgid "AddedToLPCannotBeAccessed"
+msgstr "Deze oefening werd toegevoegd in een leerpad. Het kan dus niet direct geopend worden door cursisten vanaf hier. Indien u dezelfde oefening wenst toegankelijk te maken in de oefeningen-module, maak dan een kopie van de huidige oefening door gebruik te maken van het kopieer-icoon."
+
+msgid "langExercice"
+msgstr "Oefening"
+
+msgid "langActivate"
+msgstr "Zichtbaar maken"
+
+msgid "langDeactivate"
+msgstr "Verbergen"
+
+msgid "langNoEx"
+msgstr "Er is momenteel geen oefening."
+
+msgid "langNewEx"
+msgstr "Nieuwe oefening"
+
+msgid "langQuestion"
+msgstr "vraag"
+
+msgid "langQuestions"
+msgstr "Vragen"
+
+msgid "langAnswers"
+msgstr "Antwoorden"
+
+msgid "langTrue"
+msgstr "Waar"
+
+msgid "langAnswer"
+msgstr "Antwoord"
+
+msgid "langResult"
+msgstr "Resultaat"
+
+msgid "langNoResult"
+msgstr "Er is nog geen resultaat."
+
+msgid "langYourResults"
+msgstr "Uw resultaat"
+
+msgid "langStudentResults"
+msgstr "Resultaten studenten"
+
+msgid "langExerciseType"
+msgstr "Type oefening"
+
+msgid "langExerciseName"
+msgstr "Naam oefening"
+
+msgid "langExerciseDescription"
+msgstr "Beschrijving oefening"
+
+msgid "langSimpleExercise"
+msgstr "Op één pagina"
+
+msgid "langSequentialExercise"
+msgstr "Eén vraag per pagina (sequentieel)"
+
+msgid "langRandomQuestions"
+msgstr "Willekeurige vragen"
+
+msgid "langGiveExerciseName"
+msgstr "Geef een naam aan de oefening."
+
+msgid "langSound"
+msgstr "Audio- of videobestand"
+
+msgid "langDeleteSound"
+msgstr "Verwijder het audio- of videobestand"
+
+msgid "langNoAnswer"
+msgstr "Er is momenteel geen antwoord."
+
+msgid "langGoBackToQuestionPool"
+msgstr "Terug naar de lijst van alle vragen"
+
+msgid "langGoBackToQuestionList"
+msgstr "Terug naar de vragenlijst van de oefening"
+
+msgid "langQuestionAnswers"
+msgstr "Antwoorden op de vraag"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Waarschuwing: Deze vraag en zijn antwoorden worden in verschillende oefeningen gebruikt. Wilt u de vraag wijzigen?"
+
+msgid "langModifyInAllExercises"
+msgstr "in alle oefeningen"
+
+msgid "langModifyInThisExercise"
+msgstr "enkel in de huidige oefening"
+
+msgid "langAnswerType"
+msgstr "Type antwoord"
+
+msgid "langMultipleSelect"
+msgstr "Meerkeuze (meerdere antwoorden)"
+
+msgid "langFillBlanks"
+msgstr "Invullen"
+
+msgid "langMatching"
+msgstr "Koppelen (\'matching\')"
+
+msgid "langAddPicture"
+msgstr "Foto toevoegen"
+
+msgid "langReplacePicture"
+msgstr "Wijzig tekening"
+
+msgid "langDeletePicture"
+msgstr "Verwijder foto"
+
+msgid "langQuestionDescription"
+msgstr "Commentaar (optioneel)"
+
+msgid "langGiveQuestion"
+msgstr "Stel een vraag."
+
+msgid "langWeightingForEachBlank"
+msgstr "Geef een gewicht aan elke invulruimte."
+
+msgid "langUseTagForBlank"
+msgstr "gebruik vierkante haken [...] om een of meerdere invulruimtes te definiëren"
+
+msgid "langQuestionWeighting"
+msgstr "Gewichten"
+
+msgid "langMoreAnswers"
+msgstr "+ antwoord"
+
+msgid "langLessAnswers"
+msgstr "− antwoord"
+
+msgid "langMoreElements"
+msgstr "+ element"
+
+msgid "langLessElements"
+msgstr "− element"
+
+msgid "langTypeTextBelow"
+msgstr "Tik hieronder uw tekst."
+
+msgid "langDefaultTextInBlanks"
+msgstr "Van alle [Galliërs] zijn de [Belgen] het dapperst."
+
+msgid "langDefaultMatchingOptA"
+msgstr "rijk"
+
+msgid "langDefaultMatchingOptB"
+msgstr "aantrekkelijk"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Uw vader is"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Uw moeder is"
+
+msgid "langDefineOptions"
+msgstr "Definieer de keuzes."
+
+msgid "langMakeCorrespond"
+msgstr "Laat overeenstemmen"
+
+msgid "langFillLists"
+msgstr "Vul de twee onderstaande lijsten in."
+
+msgid "langGiveText"
+msgstr "Tik een tekst."
+
+msgid "langDefineBlanks"
+msgstr "Definieer minstens één invulveld met vierkante haken [...]."
+
+msgid "langGiveAnswers"
+msgstr "Geef de antwoorden op de vraag."
+
+msgid "langChooseGoodAnswer"
+msgstr "Kies een goed antwoord."
+
+msgid "langChooseGoodAnswers"
+msgstr "Kies één of meerdere goede antwoorden."
+
+msgid "langQuestionList"
+msgstr "Vragenlijst van de oefening"
+
+msgid "langMoveUp"
+msgstr "Omhoog"
+
+msgid "langMoveDown"
+msgstr "Omlaag"
+
+msgid "langGetExistingQuestion"
+msgstr "Gebruik een vraag van de base."
+
+msgid "langFinishTest"
+msgstr "Test eindigen"
+
+msgid "langQuestionPool"
+msgstr "Lijst met alle vragen"
+
+msgid "langOrphanQuestions"
+msgstr "Vragen niet in een oefening (\'wezen\')"
+
+msgid "langNoQuestion"
+msgstr "Er zijn momenteel geen vragen (in deze categorie)."
+
+msgid "langAllExercises"
+msgstr "Alle vragen"
+
+msgid "langFilter"
+msgstr "Filter"
+
+msgid "langGoBackToEx"
+msgstr "Terug naar de oefening"
+
+msgid "langReuse"
+msgstr "Hergebruik"
+
+msgid "langExerciseManagement"
+msgstr "Oefeningenbeheer"
+
+msgid "langQuestionManagement"
+msgstr "Vragen-/antwoordenbeheer"
+
+msgid "langQuestionNotFound"
+msgstr "Vraag niet gevonden"
+
+msgid "langExerciseNotFound"
+msgstr "Oefening niet gevonden"
+
+msgid "langAlreadyAnswered"
+msgstr "U hebt deze vraag al beantwoord."
+
+msgid "langElementList"
+msgstr "Elementen"
+
+msgid "langScore"
+msgstr "Score"
+
+msgid "langCorrespondsTo"
+msgstr "Correspondeert met"
+
+msgid "langExpectedChoice"
+msgstr "Correct antwoord"
+
+msgid "langYourTotalScore"
+msgstr "Uw totale score is"
+
+msgid "ReachedMaxAttemptsAdmin"
+msgstr "U hebt het maximaal aantal toegelaten pogingen voor de test bereikt. U kunt echter, omdat u beheerder bent van deze cursus,  de test nog uitvoeren maar de resultaten zullen niet opgenomen worden in de resultaten pagina."
+
+msgid "langExerciseAdded"
+msgstr "Oefening toegevoegd"
+
+msgid "Build"
+msgstr "Gemaakt"
+
+msgid "langEvalSet"
+msgstr "Evaluatieparameters"
+
+msgid "langActive"
+msgstr "actief"
+
+msgid "langInactive"
+msgstr "inactief"
+
+msgid "langQuestCreate"
+msgstr "Aanmaak van vragen"
+
+msgid "langExRecord"
+msgstr "Uw oefening is opgeslagen."
+
+msgid "langBackModif"
+msgstr "Terug naar de wijziging van vragen"
+
+msgid "langDoEx"
+msgstr "Oefening maken"
+
+msgid "langDefScor"
+msgstr "Evaluatieparameters omschrijven"
+
+msgid "langCreateModif"
+msgstr "Aanmaak/wijzigingen van vragen"
+
+msgid "langSub"
+msgstr "Ondertitel"
+
+msgid "langMyAnswer"
+msgstr "Mijn antwoord"
+
+msgid "langMorA"
+msgstr "+ antwoord"
+
+msgid "langLesA"
+msgstr "− antwoord"
+
+msgid "langRecEx"
+msgstr "Oefening opslaan"
+
+msgid "langRecQu"
+msgstr "Vraag opslaan"
+
+msgid "langRecAns"
+msgstr "Antwoorden opslaan"
+
+msgid "langIntroduction"
+msgstr "Inleiding"
+
+msgid "langTitleAssistant"
+msgstr "Assistent voor de aanmaak van oefeningen"
+
+msgid "langQuesList"
+msgstr "Vragenlijst"
+
+msgid "langSaveEx"
+msgstr "Oefening opslaan"
+
+msgid "langFinish"
+msgstr "Eindigen"
+
+msgid "langCancel"
+msgstr "Annuleren"
+
+msgid "langQImage"
+msgstr "Beeldvraag"
+
+msgid "langAddQ"
+msgstr "Vraag toevoegen"
+
+msgid "langDoAnEx"
+msgstr "Oefening maken"
+
+msgid "langGenerator"
+msgstr "Oefeningenlijst"
+
+msgid "langChoice"
+msgstr "Uw keuze"
+
+msgid "langCorrect"
+msgstr "Juist"
+
+msgid "langPossAnsw"
+msgstr "Aantal juiste antwoorden voor eenzelfde vraag"
+
+msgid "langStudAnsw"
+msgstr "Aantal fouten door de student gemaakt"
+
+msgid "langDetermine"
+msgstr "Kies zelf de waarde van de evaluatie door de tabel hieronder te wijzigen. Klik dan op \"valideren\"."
+
+msgid "langNonNumber"
+msgstr "Een niet-numerieke waarde"
+
+msgid "langReplaced"
+msgstr "werd ingetikt, vervangen door 0."
+
+msgid "langSuperior"
+msgstr "Een waarde boven 20"
+
+msgid "langRep20"
+msgstr "werd ingetikt, vervangen door 20."
+
+msgid "langDefault"
+msgstr "Standaardwaarden *"
+
+msgid "langDefComment"
+msgstr "* Door te klikken op de knop \"Standaardwaarden\", zullen de vorige waarden vervangen worden."
+
+msgid "langScoreGet"
+msgstr "De cijfers in het zwart = aantal punten gescoord"
+
+msgid "langShowScor"
+msgstr "Toon evaluatie aan student:"
+
+msgid "langStep1"
+msgstr "Welkom bij de assistent voor de aanmaak van meerkeuzevragen.            U wordt verder geleid.						Druk op volgende om door te gaan."
+
+msgid "langStep2"
+msgstr "Titel van de oefening en beschrijving toevoegen/wijzigen. Druk op volgende wanneer u klaar bent."
+
+msgid "langTake"
+msgstr "neem"
+
+msgid "langAmong"
+msgstr "uit"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Importeer Hot Potatoesoefeningen"
+
+msgid "langHotPotatoesTests"
+msgstr "Importeer Hot Potatoestesten"
+
+msgid "langDownloadFile"
+msgstr "Upload volgend bestand naar de server"
+
+msgid "langDownloadImg"
+msgstr "Upload afbeelding naar de server"
+
+msgid "langDownloadEnd"
+msgstr "Het uploaden is geslaagd."
+
+msgid "langNoSpace"
+msgstr "Het uploaden is niet geslaagd. Het opslagquotum voor uw cursus is overschreden, of er is niet genoeg ruimte op de harde schijf."
+
+msgid "langZipNoPhp"
+msgstr "Het .zip betand mag geen PHP-bestanden bevatten."
+
+msgid "langNoImg"
+msgstr "Testen zonder afbeeldingen"
+
+msgid "langImgNote_st"
+msgstr "U moet nog uploaden"
+
+msgid "langImgNote_en"
+msgstr "afbeelding(en):"
+
+msgid "langDocDeleted"
+msgstr "Map/bestand is verwijderd."
+
+msgid "langViMod"
+msgstr "Zichtbaarheid is gewijzigd."
+
+msgid "langNameNotEqual"
+msgstr "is geen geldig bestand!"
+
+msgid "langIndice"
+msgstr "index"
+
+msgid "langIndices"
+msgstr "Indexen"
+
+msgid "langDateExo"
+msgstr "Datum"
+
+msgid "langShowQuestion"
+msgstr "Toon vraag"
+
+msgid "langUnknownExercise"
+msgstr "Onbekende oefenining"
+
+msgid "langReuseQuestion"
+msgstr "Hergebruik de vraag"
+
+msgid "langCreateExercise"
+msgstr "Maak oefening aan"
+
+msgid "langCreateQuestion"
+msgstr "Maak vraag aan"
+
+msgid "langCreateAnswers"
+msgstr "Maak antwoorden aan"
+
+msgid "langModifyExercise"
+msgstr "Wijzig oefening"
+
+msgid "langModifyAnswers"
+msgstr "Wijzig antwoorden"
+
+msgid "langForExercise"
+msgstr "voor oefening"
+
+msgid "langUseExistantQuestion"
+msgstr "Gebruik bestaande vraag"
+
+msgid "FreeAnswer"
+msgstr "Open vraag"
+
+msgid "notCorrectedYet"
+msgstr "Dit antwoord is nog niet verbeterd. Tot dit gebeurt, wordt uw score voor deze vraag als 0 gerekend."
+
+msgid "adminHP"
+msgstr "Hot Potatoes Admin"
+
+msgid "NewQu"
+msgstr "Nieuwe vraag"
+
+msgid "NoImage"
+msgstr "Gelieve een afbeelding te selecteren."
+
+msgid "langAnswerHotspot"
+msgstr "Beschrijving en gewist zijn verplicht voor elke hotspot - commentaar is optioneel"
+
+msgid "langMinHotspot"
+msgstr "Je dient ten minste één (1) hotspot aan te maken"
+
+msgid "langMaxHotspot"
+msgstr "Het maximum aantal hotspots die je kunt aanmaken is twaalf (12)"
+
+msgid "langHotspotError"
+msgstr "Je dient een beschrijving en gewicht op te geven voor elke hotspot"
+
+msgid "langMoreHotspots"
+msgstr "+hotspot"
+
+msgid "langLessHotspots"
+msgstr "-hotspot"
+
+msgid "langHotspotZones"
+msgstr "Hotspots"
+
+msgid "langNextQuestion"
+msgstr "Volgende vraag"
+
+msgid "langCorrectAnswer"
+msgstr "Juist antwoord"
+
+msgid "langHotspotHit"
+msgstr "Je antwoord was"
+
+msgid "langOnlyJPG"
+msgstr "Je kunt enkel JPG (of JPEG) afbeeldingen gebruiken voor hotspots"
+
+msgid "langFinishThisTest"
+msgstr "Toon de juiste antwoorden voor elke vraag en de score van de test"
+
+msgid "langAllQuestions"
+msgstr "Alle vragen"
+
+msgid "langModifyTitleDescription"
+msgstr "Wijzig titel en beschrijving"
+
+msgid "langModifyHotspots"
+msgstr "Wijzig antwoorden/hotspots"
+
+msgid "langHotspotNotDrawn"
+msgstr "Je hebt nog niet alle hotspots getekend"
+
+msgid "langHotspotWeightingError"
+msgstr "U moet een positief (>0) gewicht opgeven voor alle hotspots"
+
+msgid "langHotspotValidateError1"
+msgstr "Je dient de vraag volledig te beantwoorden ("
+
+msgid "langHotspotValidateError2"
+msgstr "Vereiste aantal muiskliks op de afbeelding voor het resultaat getoond wordt"
+
+msgid "langHotspotRequired"
+msgstr "Beschrijving en gewist zijn verplicht voor elke hotspot - commentaar is optioneel"
+
+msgid "langHotspotChoose"
+msgstr "<div style=\"padding:2px 3px;\">• Om een hotspot aan te maken: selecteer een vorm naast de kleuren en teken de hotspot op de afbeelding.</div><div style=\"padding:2px 3px;\">• Om een hotspot te verplaatsen, selecteer de kleur, klik op een andere plaats in de afbeelding en teken de hotspot.</div><div style=\"padding:2px 3px;\">• Om een hotspot bij te voegen: klik op de [+hotspot] knop.</div><div style=\"padding:2px 3px;\">• Om een polygoon vorm te sluiten: rechtsklikken en selecteer \"Sluit polygoon\".</div>"
+
+msgid "Fault"
+msgstr "Fout"
+
+msgid "HotSpot"
+msgstr "Hot spot"
+
+msgid "ClickNumber"
+msgstr "Aantal klikken."
+
+msgid "HotspotGiveAnswers"
+msgstr "Gelieve een antwoord op te geven"
+
+msgid "Addlimits"
+msgstr "Grenzen toevoegen"
+
+msgid "AreYouSure"
+msgstr "Weet u zeker"
+
+msgid "StudentScore"
+msgstr "Score student"
+
+msgid "backtoTesthome"
+msgstr "Terug naar startpagina test"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "MarkIsUpdated"
+msgstr "De score is gewijzigd"
+
+msgid "MarkInserted"
+msgstr "Score toegevoegd"
+
+msgid "PleaseGiveAMark"
+msgstr "Gelieve een score op te geven"
+
+msgid "EditCommentsAndMarks"
+msgstr "Wijzig commentaar en score"
+
+msgid "AddComments"
+msgstr "Voeg commentaar toe"
+
+msgid "Number"
+msgstr "Nummer"
+
+msgid "Weighting"
+msgstr "Gewicht"
+
+msgid "ChooseQuestionType"
+msgstr "Om een nieuwe vraag aan te maken, kies hierboven het tpe"
+
+msgid "MatchesTo"
+msgstr "Komt overeen met"
+
+msgid "CorrectTest"
+msgstr "Verbeter deze test"
+
+msgid "ViewTest"
+msgstr "Bekijk"
+
+msgid "State"
+msgstr "Overzicht"
+
+msgid "NotAttempted"
+msgstr "Niet geprobeerd"
+
+msgid "AddElem"
+msgstr "+ element"
+
+msgid "DelElem"
+msgstr "- element"
+
+msgid "PlusAnswer"
+msgstr "+ antwoord"
+
+msgid "LessAnswer"
+msgstr "- antwoord"
+
+msgid "YourScore"
+msgstr "Uw score"
+
+msgid "Attempted"
+msgstr "Geprobeerd"
+
+msgid "AssignMarks"
+msgstr "Punten toekennen"
+
+msgid "Results"
+msgstr "resultaten"
+
+msgid "ExerciseStored"
+msgstr "De oefening is opgeslagen"
+
+msgid "ChooseAtLeastOneCheckbox"
+msgstr "Kies minimum één correct antwoord"
+
+msgid "ExerciseEdited"
+msgstr "De oefening is gewijzigd"
+
+msgid "ExerciseDeleted"
+msgstr "De oefening is verwijderd"
+
+msgid "ClickToCommentAndGiveFeedback"
+msgstr "Klik op de link om het antwoord te controleren en feedback te geven"
+
+msgid "OpenQuestionsAttempted"
+msgstr "Een student heeft een open vraag beantwoord"
+
+msgid "AttemptDetails"
+msgstr "Details van de pogingen"
+
+msgid "TestAttempted"
+msgstr "Geprobeerde test"
+
+msgid "StudentName"
+msgstr "Naam van de student"
+
+msgid "StudentEmail"
+msgstr "Email van de student"
+
+msgid "OpenQuestionsAttemptedAre"
+msgstr "De gepoogde open vraag is"
+
+msgid "CourseName"
+msgstr "Cursusnaam"
+
+msgid "UploadJpgPicture"
+msgstr "Een afbeelding van de JPG, PNG of GIF formaaten opladen"
+
+msgid "HotspotDescription"
+msgstr "Hotspot beschrijving"
+
+msgid "ExamSheetVCC"
+msgstr "De toets is door de docent gelezen/gecorrigeerd/becommentarieerd"
+
+msgid "AttemptVCC"
+msgstr "Uw hierna beschreven poging is door de docent gelezen/becommentarieerd/gecorrigeerd/"
+
+msgid "ClickLinkToViewComment"
+msgstr "Klik op onderstaande link om uw account te openen, en uw toets-met-commentaar te bekijken"
+
+msgid "Regards"
+msgstr "Hoogachtend"
+
+msgid "AttemptVCCLong"
+msgstr "Uw poging voor de toets %s is door de docent gelezen/becommentarieerd/gecorrigeerd. Klik op onderstaande link om uw account te openen en uw toets te bekijken."
+
+msgid "DearStudentEmailIntroduction"
+msgstr "Beste student,"
+
+msgid "ExerciseFinished"
+msgstr "De oefening is afgelopen."
+
+msgid "ResultsEnabled"
+msgstr "Resultaten zijn geactiveerd voor cursisten"
+
+msgid "ResultsDisabled"
+msgstr "Resultaten zijn gedesactiveerd voor cursisten"
+
+msgid "ExportWithUserFields"
+msgstr "Neem de velden van de gebruikers mee in de export"
+
+msgid "ExportWithoutUserFields"
+msgstr "Neem de velden van de gebruikers niet mee in de export"
+
+msgid "DisableResults"
+msgstr "Resultaten niet weergeven aan de cursisten"
+
+msgid "EnableResults"
+msgstr "Resultaten weergeven aan de cursisten"
+
+msgid "ValidateAnswer"
+msgstr "Antwoorden valideren"
+
+msgid "FillInBlankSwitchable"
+msgstr "Sta het sorteren van de antwoorden toe"
+
+msgid "ReachedMaxAttempts"
+msgstr "U kan test %s niet maken omdat u het maximum aantal van %s pogingen hebt bereikt."
+
+msgid "AdvancedParameters"
+msgstr "Geavanceerde instellingen"
+
+msgid "RandomQuestionsToDisplay"
+msgstr "Aantal weer te geven willekeurige vragen"
+
+msgid "RandomQuestionsHelp"
+msgstr "Om alle vragen in en willekeurige volgorde te stellen, kies 10. Om willekeurige volgorde uit te schakelen kies \'Niet door elkaar schudden\'."
+
+msgid "ExerciseAttempts"
+msgstr "Max aantal pogingen"
+
+msgid "DoNotRandomize"
+msgstr "Niet randomiseren"
+
+msgid "Infinite"
+msgstr "Onbeperkt"
+
+msgid "BackToExercisesList"
+msgstr "Terug naar de oefeningen module"
+
+msgid "ViewScoreChangeHistory"
+msgstr "Bekijke de historiek van de scores"
+
+msgid "NoStartDate"
+msgstr "Géén start datum"
+
+msgid "NoLogOfDuration"
+msgstr "Geen log van duurtijd"
+
+msgid "EnableTimeLimits"
+msgstr "Kalender limiet opleggen"
+
+msgid "ExeStartTime"
+msgstr "startdatum"
+
+msgid "ExeEndTime"
+msgstr "einddatum"
+
+msgid "Value"
+msgstr "waarde"
+
+msgid "DeleteAttempt"
+msgstr "Poging verwijderen?"
+
+msgid "WithoutComment"
+msgstr "Zonder commentaar"
+
+msgid "QuantityQuestions"
+msgstr "Vragen"
+
+msgid "FilterExercices"
+msgstr "Tests filtered"
+
+msgid "FilterByNotRevised"
+msgstr "Enkel ongeldige"
+
+msgid "FilterByRevised"
+msgstr "Enkel geldige"
+
+msgid "Duration"
+msgstr "Duur"
+
+msgid "ReachedTimeLimit"
+msgstr "Tijdslimiet bereikt"
+
+msgid "TryAgain"
+msgstr "Probeer opnieuw"
+
+msgid "SeeTheory"
+msgstr "link naar de theorie"
+
+msgid "EndActivity"
+msgstr "Einde van de activiteit"
+
+msgid "NoFeedback"
+msgstr "Examen (géén feedback)"
+
+msgid "DirectFeedback"
+msgstr "Zelfevaluatie (onmiddellijke feedback)"
+
+msgid "FeedbackType"
+msgstr "Feedback"
+
+msgid "Scenario"
+msgstr "Scenario"
+
+msgid "VisitUrl"
+msgstr "Bezoek deze link"
+
+msgid "ExitTest"
+msgstr "Verlaat test"
+
+msgid "DurationFormat"
+msgstr "%1 seconden"
+
+msgid "Difficulty"
+msgstr "Moeilijkheidsgraad"
+
+msgid "NewScore"
+msgstr "Nieuwe score"
+
+msgid "NewComment"
+msgstr "Nieuw commentaar"
+
+msgid "ExerciseNoStartedYet"
+msgstr "Deze test werd nog niet gestart"
+
+msgid "ExerciseNoStartedAdmin"
+msgstr "Het is nog niet toegestaan om de test te starten"
+
+msgid "SelectTargetLP"
+msgstr "Selecteer doelopleiding"
+
+msgid "SelectTargetQuestion"
+msgstr "Selecteer doelvraag"
+
+msgid "DirectFeedbackCantModifyTypeQuestion"
+msgstr "Het type van de test kan niet gewijzigd worden omdat het een zelfevaluatie betreft. Zelfevaluatie geeft u de mogelijkheid om directe feedback te geven aan de gebruiker, maar het is niet compatibel met alle vraagtypes. Daarom kan deze test niet achteraf gewijzigd worden."
+
+msgid "CantShowResults"
+msgstr "Niet beschikbaar"
+
+msgid "CantViewResults"
+msgstr "Kan de resultaten niet weergeven"
+
+msgid "ShowCorrectedOnly"
+msgstr "Met individuele feedback"
+
+msgid "ShowUnCorrectedOnly"
+msgstr "Niet gecorrigeerd resultaten"
+
+msgid "HideResultsToStudents"
+msgstr "resultaten verbergen"
+
+msgid "ShowResultsToStudents"
+msgstr "Score tonen aan cursist"
+
+msgid "ProcedToQuestions"
+msgstr "Doorgaan naar de vragen"
+
+msgid "AddQuestionToExercise"
+msgstr "Voeg een vraag toe aan de test"
+
+msgid "PresentationQuestions"
+msgstr "Toon"
+
+msgid "UniqueAnswer"
+msgstr "Multiple choice"
+
+msgid "MultipleAnswer"
+msgstr "Multiple answer"
+
+msgid "ReachedOneAttempt"
+msgstr "U kan deze test niet maken omdat u al een poging hebt ondernomen"
+
+msgid "QuestionsPerPage"
+msgstr "Vragen per pagina"
+
+msgid "QuestionsPerPageOne"
+msgstr "één"
+
+msgid "QuestionsPerPageAll"
+msgstr "Allemaal"
+
+msgid "EditIndividualComment"
+msgstr "Individuele feedback wijzigen"
+
+msgid "ThankYouForPassingTheTest"
+msgstr "Bedankt om de vragenlijst in te vullen"
+
+msgid "ExerciseAtTheEndOfTheTest"
+msgstr "Op het einde van de test"
+
+msgid "EnrichQuestion"
+msgstr "Vraag verrijken"
+
+msgid "langDefaultUniqueQuestion"
+msgstr "Selecteer de beredenering"
+
+msgid "langDefaultUniqueAnswer1"
+msgstr "A dan B dan C"
+
+msgid "langDefaultUniqueComment1"
+msgstr "Melk is de basis van heel wat dagelijkse producten, zoals boter, kaas en yoghurt."
+
+msgid "langDefaultUniqueAnswer2"
+msgstr "A dan C dan B"
+
+msgid "langDefaultUniqueComment2"
+msgstr "Haverkorrels zijn de meest voorkomende granen. Door hun energie- en voedingskwaliteiten zijn de de basis geworden van het voedsel."
+
+msgid "langDefaultMultipleQuestion"
+msgstr "Ondervoeding is een gevolg van"
+
+msgid "langDefaultMultipleAnswer1"
+msgstr "Gebrek aan calcium"
+
+msgid "langDefaultMultipleComment1"
+msgstr "Calcium vervult de rol van..."
+
+msgid "langDefaultMultipleAnswer2"
+msgstr "Peru"
+
+msgid "langDefaultMultipleComment2"
+msgstr "Vitamine A is verantwoordelijk voor..."
+
+msgid "langDefaultFillBlankQuestion"
+msgstr "Bereken de BMI"
+
+msgid "langDefaultMathingQuestion"
+msgstr "Rangschik de bewerkingen"
+
+msgid "langDefaultOpenQuestion"
+msgstr "Som de 10 topkwaliteiten op die een goede projectmanager moet hebben volgens jou"
+
+msgid "langMoreHotspotsImage"
+msgstr "Hotspots op de afbeelding toevoegen/wijzigen"
+
+msgid "ReachedTimeLimitAdmin"
+msgstr "Tijdslimiet bereikt admin"
+
+msgid "LastScoreTest"
+msgstr "Laatste score  van een oefening"
+
+msgid "BackToResultList"
+msgstr "Terg naar resultatenlijst"
+
+msgid "EditingScoreCauseProblemsToExercisesInLP"
+msgstr "Als u een de score van een vraag wijzigt, vergeet niet dat dit een oefening is die in een cursus werd toegevoegd."
+
+msgid "SelectExercice"
+msgstr "Oefening selecteren"
+
+msgid "YouHaveToSelectATest"
+msgstr "U moet een test selecteren"
+
+msgid "HotspotDelineation"
+msgstr "Hotspot contour"
+
+msgid "CreateQuestions"
+msgstr "Vragen maken"
+
+msgid "MoreOAR"
+msgstr "Meer gebieden op eigen risico"
+
+msgid "LessOAR"
+msgstr "Minder gebieden op risico"
+
+msgid "LearnerIsInformed"
+msgstr "Deze boodschap en de resultatentabel zal aan de cursist getoond worden als hij in deze stap faalt."
+
+msgid "MinOverlap"
+msgstr "Minimum overlap"
+
+msgid "MaxExcess"
+msgstr "Maximum teveel"
+
+msgid "MaxMissing"
+msgstr "Maximum ontbrekend"
+
+msgid "IfNoError"
+msgstr "Indien geen fout"
+
+msgid "LearnerHasNoMistake"
+msgstr "De cursist heeft geen fout gemaakt"
+
+msgid "YourAnswer"
+msgstr "Uw antwoord"
+
+msgid "YourDelineation"
+msgstr "Uw contour"
+
+msgid "ResultIs"
+msgstr "Uw resultaat is:"
+
+msgid "Overlap"
+msgstr "Overlappend gebied:"
+
+msgid "Missing"
+msgstr "Ontbrekend gebied"
+
+msgid "Excess"
+msgstr "Gebied te veel"
+
+msgid "Min"
+msgstr "Minimum"
+
+msgid "Max"
+msgstr "Maximum"
+
+msgid "Requirements"
+msgstr "Eisen"
+
+msgid "OARHit"
+msgstr "Eén (of meer) risicogebieden werden aangeraakt"
+
+msgid "TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons"
+msgstr "Te veel iteraties tijdens het berekenen van uw antwoord. Probeer het even opnieuw op een vloeiende manier."
+
+msgid "Thresholds"
+msgstr "Drempels"
+
+msgid "Delineation"
+msgstr "Schets"
+
+msgid "QuestionTypeDoesNotBelongToFeedbackTypeInExercise"
+msgstr "Vraagtype kan geen feedback gevatten in de oefening"
+
+msgid "XResultsCleaned"
+msgstr "%d resultaten opgeschoond"
+
+msgid "AreYouSureToDeleteResults"
+msgstr "Bent u zeker dat u de resultaten wenst te verwijderen"
+
+msgid "ExerciseCopied"
+msgstr "Oefening gekopieerd"
+
+msgid "AreYouSureToCopy"
+msgstr "Bent u zeker dat u dit wenst te kopiëren"
+
+msgid "EditingExerciseCauseProblemsInLP"
+msgstr "Het wijzigen van de oefening geeft problemen in het leerpad"
+
+msgid "SessionIsReadOnly"
+msgstr "De sessie is \'alleen-lezen\'"
+
+msgid "EnableTimerControl"
+msgstr "Tijdscontrole aanzetten"
+
+msgid "ExerciseTotalDurationInMinutes"
+msgstr "Totale duur van de test in minuten"
+
+msgid "ToContinueUseMenu"
+msgstr "Om deze cursus verder te zetten, gelieve het zij-menu te gebruiken."
+
+msgid "RandomAnswers"
+msgstr "Antwoorden door elkaar schudden"
+
+msgid "NotMarkActivity"
+msgstr "Deze activiteit kan niet beoordeeld worden"
+
+msgid "YouHaveToCreateAtLeastOneAnswer"
+msgstr "U moet minstens 1 antwoord maken"
+
+msgid "ExerciseAttempted"
+msgstr "Een cursist opende de oefening"
+
+msgid "MultipleSelectCombination"
+msgstr "Exacte selectie"
+
+msgid "MultipleAnswerCombination"
+msgstr "Exacte combinatie van antwoorden"
+
+msgid "ExerciceExpiredTimeMessage"
+msgstr "De oefentijd is voorbij"
+
+msgid "CopyExercise"
+msgstr "Kopieer deze oefening als een nieuwe"
+
+msgid "CleanStudentResults"
+msgstr "Maak alle resultaten leeg voor deze oefening"
+
+msgid "ImportQtiQuiz"
+msgstr "Importeer oefeningen Qti2"
+
+msgid "ReUseACopyInCurrentTest"
+msgstr "Hergebruik een kopie in de huidige test"
+
+msgid "Copy"
+msgstr "Kopieer"
+
+msgid "ScoreAverageFromAllAttempts"
+msgstr "Gemiddelde score van alle pogingen"
+
+msgid "DefaultContent"
+msgstr "Standaardinhoud genereren"
+
+msgid "ExerciseDescriptionLabel"
+msgstr "Beschrijving"
+
+msgid "ExerciseEditionNotAvailableInSession"
+msgstr "U kan deze cursusoefening niet wijzigen binnenin een sessie"
+
+msgid "UniqueAnswerNoOption"
+msgstr "Uniek antwoord met onbekend"
+
+msgid "MultipleAnswerTrueFalse"
+msgstr "Meerkeuze met waar/nietwaar/ik weet het niet"
+
+msgid "MultipleAnswerCombinationTrueFalse"
+msgstr "Combinatie waar/niet waar/ik weet het niet"
+
+msgid "DontKnow"
+msgstr "Ik weet het niet"
+
+msgid "False"
+msgstr "Niet waar"
+
+msgid "DoubtScore"
+msgstr "Ik weet het niet"
+
+msgid "HotSpotDelineation"
+msgstr "Hotspot schets"
+
+msgid "PropagateNegativeResults"
+msgstr "Verspreid negatieve resultaten tussen vragen"
+
+msgid "InsertALinkToThisQuestionInTheExercise"
+msgstr "Gebruik deze vraag in de test als een koppeling (geen kopie)"
+
+msgid "OnlyShowScore"
+msgstr "Oefenmode: toon score alleen"
+
+msgid "ImportExcelQuiz"
+msgstr "Importeer quiz uit Excel"
+
+msgid "DownloadExcelTemplate"
+msgstr "Download het Excel sjabloon"
+
+msgid "ExerciseWillBeActivatedFromXToY"
+msgstr "De oefening zal geactiveerd worden van %s tot %s"
+
+msgid "EnableStartTime"
+msgstr "Starttijd gebruiken"
+
+msgid "EnableEndTime"
+msgstr "Eindtijd gebruiken"
+
+msgid "ExerciseAvailableFromX"
+msgstr "Oefening beschikbaar van %s"
+
+msgid "ExerciseAvailableUntilX"
+msgstr "Oefening beschikbaar tot %s"
+
+msgid "TestLimitsAdded"
+msgstr "Testbegrenzing toegevoegd"
+
+msgid "AddLimits"
+msgstr "Begrenzing toevoegen"
+
+msgid "Unlimited"
+msgstr "Onbegrensd"
+
+msgid "LimitedTime"
+msgstr "Beperkte tijd"
+
+msgid "LimitedAttempts"
+msgstr "Beperkt aantal pogingen"
+
+msgid "Times"
+msgstr "Pogingen"
+
+msgid "Random"
+msgstr "Willekeurig"
+
+msgid "ExerciseTimerControlMinutes"
+msgstr "Oefentijdcontrole aanzetten"
+
+msgid "Numeric"
+msgstr "Numeriek"
+
+msgid "Acceptable"
+msgstr "Aanvaardbaar"
+
+msgid "Hotspot"
+msgstr "Hotspot"
+
+msgid "ChangeTheVisibilityOfTheCurrentImage"
+msgstr "Wijzig de zichtbaarheid van de huidige afbeelding"
+
+msgid "Steps"
+msgstr "Stappen"
+
+msgid "OriginalValue"
+msgstr "Originele waarde"
+
+msgid "ChooseAnAnswer"
+msgstr "Kies een antwoord"
+
+msgid "ImportExercise"
+msgstr "Importeer oefening"
+
+msgid "MultipleChoiceMultipleAnswers"
+msgstr "Meerkeuze, meerdere antwoorden"
+
+msgid "MultipleChoiceUniqueAnswer"
+msgstr "Meerkeuze, 1 antwoord"
+
+msgid "HotPotatoesFiles"
+msgstr "HotPotatoes bestanden"
+
+msgid "HotPotatoes"
+msgstr "HotPotatoes"
+
+msgid "OAR"
+msgstr "Te vermijden gebied"
+
+msgid "TotalScoreTooBig"
+msgstr "Totale score is te groot"
+
+msgid "InvalidQuestionType"
+msgstr "Ongeldig vraagtype"
+
+msgid "ShowScoreAndRightAnswer"
+msgstr "Zelfevaluatie mode: toon score en verwachte antwoorden"
+
+msgid "DoNotShowScoreNorRightAnswer"
+msgstr "Examen mode: Toon geen score noch antwoorden"
+
+msgid "LoadUsersExtraData"
+msgstr "Laad gebruikers\' extra data"
+
+msgid "StartTest"
+msgstr "Start de test"
+
+msgid "SaveForNow"
+msgstr "Bewaren en verder gaan"
+
+msgid "QuestionsToReview"
+msgstr "Te beoordelen vragen"
+
+msgid "QuestionWithNoAnswer"
+msgstr "Vragen zonder antwoord"
+
+msgid "ValidateAnswers"
+msgstr "Antwoorden valideren"
+
+msgid "ReviewQuestions"
+msgstr "Geselecteerde antwoorden nakijken"
+
+msgid "YouTriedToResolveThisExerciseEarlier"
+msgstr "U hebt vroeger reeds geprobeerd om deze oefening op te lossen"
+
+msgid "ThereAreNoQuestionsForThisExercise"
+msgstr "Er zijn geen vragen voor deze oefening"
+
+msgid "ContinueTest"
+msgstr "Ga verder met de test"
+
+msgid "XQuestionsWithTotalScoreY"
+msgstr "%d vragen, goed voor een totale score (op alle vragen) van %s"
+
+msgid "QuestionLowerCase"
+msgstr "vraag"
+
+msgid "QuestionsLowerCase"
+msgstr "vragen"
+
+msgid "Category"
+msgstr "Categorie"
+
+msgid "BackToTestList"
+msgstr "Terug naar de test lijst"
+
+msgid "CategoryDescription"
+msgstr "Categorie omschrijving"
+
+msgid "BackToCategoryList"
+msgstr "Terug naar de categorielijst"
+
+msgid "AddCategoryNameAlreadyExists"
+msgstr "De naam van de categorie bestaat reeds. Gelieve een andere naam te gebruiken."
+
+msgid "CannotDeleteCategory"
+msgstr "De categorie kan niet verwijderd worden"
+
+msgid "CannotDeleteCategoryError"
+msgstr "Fout: kan de categorie niet verwijderen"
+
+msgid "CannotEditCategory"
+msgstr "Kan de categorie niet wijzigen"
+
+msgid "ModifyCategory"
+msgstr "Categorie wijzigen"
+
+msgid "ModifyCategoryError"
+msgstr "Kan de categorie niet wijzigen"
+
+msgid "AllCategories"
+msgstr "Alle categorieën"
+
+msgid "AllGroups"
+msgstr "Alle groepen"
+
+msgid "FilterByGroup"
+msgstr "Filteren op groep"
+
+msgid "CreateQuestionOutsideExercice"
+msgstr "Maak vragen aan buiten de oefening"
+
+msgid "ChoiceQuestionType"
+msgstr "Kies vraagtype"
+
+msgid "YesWithCategoriesSorted"
+msgstr "Ja, met gesorteerde categorieën"
+
+msgid "YesWithCategoriesShuffled"
+msgstr "Ja, met categorieën door elkaar geschud"
+
+msgid "ManageAllQuestions"
+msgstr "Alle vragen beheren"
+
+msgid "MustBeInATest"
+msgstr "Moet zich in de test bevinden"
+
+msgid "PleaseSelectSomeRandomQuestion"
+msgstr "Gelieve een willekeurige vraag te selecteren"
+
+msgid "RemoveFromTest"
+msgstr "Verwijderen van test"
+
+msgid "AddQuestionToTest"
+msgstr "Vraag aan de test toevoegen"
+
+msgid "QuestionByCategory"
+msgstr "Vraag per categorie"
+
+msgid "QuestionUpperCaseFirstLetter"
+msgstr "Vraag"
+
+msgid "QuestionCategory"
+msgstr "Vragen Categorie"
+
+msgid "AddACategory"
+msgstr "Categorie toevoegen"
+
+msgid "CategoryName"
+msgstr "Categorienaam"
+
+msgid "AddTestCategory"
+msgstr "Voeg testcategorie toe"
+
+msgid "AddCategoryDone"
+msgstr "Categorie toegevoegd"
+
+msgid "NbCategory"
+msgstr "Nb categories"
+
+msgid "DeleteCategoryAreYouSure"
+msgstr "Bent u zeker dat u deze categorie wenst te verwijderen?"
+
+msgid "DeleteCategoryDone"
+msgstr "Categorie verwijderd"
+
+msgid "EditCategory"
+msgstr "Categorie wijzigen"
+
+msgid "MofidfyCategoryDone"
+msgstr "Categorie gewijzigd"
+
+msgid "NoCategory"
+msgstr "Geen categorie"
+
+msgid "NotInAGroup"
+msgstr "Niet in een groep"
+
+msgid "DoFilter"
+msgstr "Filteren"
+
+msgid "ByCategory"
+msgstr "Per categorie"
+
+msgid "ResultsNotRevised"
+msgstr "Resultaten niet beoordeeld"
+
+msgid "ResultNotRevised"
+msgstr "Resultaat niet beoordeeld"
+
+msgid "NumberOfStudentsWhoTryTheExercise"
+msgstr "Aantal cursisten die de oefening hebben gemaakt"
+
+msgid "LowestScore"
+msgstr "Laagste score"
+
+msgid "HighestScore"
+msgstr "Hoogste score"
+
+msgid "MaximumScore"
+msgstr "Maximum score"
+
+msgid "NotRevised"
+msgstr "Niet beoordeeld"
+
+msgid "PreviousQuestion"
+msgstr "Vorige vraag"
+
+msgid "Options"
+msgstr "Opties"
+
+msgid "RandomQuestionByCategory"
+msgstr "Willekeurige vraag per categorie"
+
+msgid "QuestionDisplayCategoryName"
+msgstr "Toon vragen categorie"
+
+msgid "ReviewAnswers"
+msgstr "Beoordeel mijn antwoorden"
+
+msgid "TextWhenFinished"
+msgstr "Tekst die verschijnt onderaan het einde van de test"
+
+msgid "Validated"
+msgstr "Nagezien"
+
+msgid "NotValidated"
+msgstr "Niet nagezien"
+
+msgid "Revised"
+msgstr "Gereviseerd"
+
+msgid "SelectAQuestionToReview"
+msgstr "Selecteer een vraag om te reviseren"
+
+msgid "ReviewQuestionLater"
+msgstr "Vraag later reviseren"
+
+msgid "NumberStudentWhoSelectedIt"
+msgstr "Aantal cursisten die het selecteerden"
+
+msgid "QuestionsAlreadyAnswered"
+msgstr "Reeds beantwoorde vragen"
+
+msgid "StudentsWhoAreTakingTheExerciseRightNow"
+msgstr "Aantal cursisten die momenteel de oefening maken"
+
+msgid "ReportByQuestion"
+msgstr "Rapporteren per vraag"
+
+msgid "LiveResults"
+msgstr "Live resultaten"
+
+msgid "RecordAnswer"
+msgstr "Antwoord opnemen"
+
+msgid "UseTheMessageBelowToAddSomeComments"
+msgstr "Gebruik onderstaand bericht om een commentaar toe te voegen"
+
+msgid "SendRecord"
+msgstr "Record verzenden"
+
+msgid "DownloadLatestRecord"
+msgstr "Record downloaden"
+
+msgid "OralExpression"
+msgstr "Mondelinge expressie"
+
+msgid "CongratulationsYouPassedTheTest"
+msgstr "Gefeliciteerd. U bent geslaagd!"
+
+msgid "YouDidNotReachTheMinimumScore"
+msgstr "U hebt de minimumscore niet gehaald."
+
+msgid "EndTest"
+msgstr "Einde van de test"
+
+msgid "PassPercentage"
+msgstr "Slagingspercentage"
+
+msgid "NoCategorySelected"
+msgstr "Geen categorie geselecteerd"
+
+msgid "ExerciseAverage"
+msgstr "Gemiddelde van de oefening"
+
+msgid "NoNegativeScore"
+msgstr "Geen negatieve score"
+
+msgid "GlobalMultipleAnswer"
+msgstr "Globale meerdere antwoorden"
+
+msgid "AllQuestionsShort"
+msgstr "Alle"
+
+msgid "ProblemsRecordingUploadYourOwnAudioFile"
+msgstr "Problemen bij het opnemen? Upload uw eigen geluidsbestand."
+

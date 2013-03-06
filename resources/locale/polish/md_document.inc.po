@@ -1,0 +1,129 @@
+msgid "langMdCallingTool"
+msgstr "Dokumenty"
+
+msgid "langMdTitle"
+msgstr "Tytuł Obiektu do Nauki"
+
+msgid "langMdDescription"
+msgstr "Aby zachować tę informację, naciśnij Zachowaj"
+
+msgid "langMdCoverage"
+msgstr "np. Posiada tytuł magistra dziedziny ..."
+
+msgid "langMdCopyright"
+msgstr "np. wiedząc, że źródło jest honorowane"
+
+msgid "langTool"
+msgstr "Dokument Metadane"
+
+msgid "langNoScript"
+msgstr "Skrypt jest teraz uruchomiony w Twojej przeglądarce, proszę zignorować część ekranu pod tym tekstem, to nie zadziała ..."
+
+msgid "langPressAgain"
+msgstr "Powtórnie naciśnij \'Zachowaj\'"
+
+msgid "langLanguageTip"
+msgstr "język, w którym utworzony został ten obiekt"
+
+msgid "langIdentifier"
+msgstr "Identyfikator"
+
+msgid "langIdentifierTip"
+msgstr "unikalna identyfikacja dla tego obiektu do nauki, składająca się z liter, cyfr, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "tytuł lub nazwa oraz język tego tytułu lub nazwy"
+
+msgid "langDescriptionTip"
+msgstr "opis lub komentarz oraz język użyty do opisu tego obiektu do nauki"
+
+msgid "langKeyword"
+msgstr "Słowo kluczowe"
+
+msgid "langKeywordTip"
+msgstr "oddzielone za pomocą przecinków (litery, cyfry, -.)"
+
+msgid "langCoverage"
+msgstr "Zasięg"
+
+msgid "langCoverageTip"
+msgstr "na przykład magister z dziedziny xxx: rok rrr"
+
+msgid "langKwNote"
+msgstr "Jeśli zmieniono język opisu, nie dodawać w tym samym czasie słów kluczowych"
+
+msgid "langClickKw"
+msgstr "Kliknij na słowo kluczowe w drzewie, aby je zaznaczyć lub odznaczyć."
+
+msgid "langKwHelp"
+msgstr "<br/> Kliknij przycisk \'+\' aby otworzyć, przycisk \'-\' aby zamknąć, przycisk \'++\' aby otworzyć wszystkie,  przycisk \'--\' aby zamknąć wszystkie.<br/> <br/> Wyczyść wszystkie zaznaczone słowa kluczowe poprzez zamknięcie drzewa oraz otworzenie go ponowne za pomocą przycisku \'+\'.<br/> Kliknięcie \'+\' trzymając Alt pozwala znaleźć oryginalne słowa kluczowe w drzewie.<br/> <br/> Kliknięcie na słowo kluczowe trzymając Alt, zaznacza to słowo bez szerszych określeń lub odznacza słowo z szerszymi określeniami.<br/> <br/> Jeśli zmieniasz język opisu, nie dodawaj w tym samym czasie słów kluczowych.<br/> <br/>"
+
+msgid "langRights"
+msgstr "Prawa Użytkowania"
+
+msgid "langRightsTip"
+msgstr "opisz w słowach"
+
+msgid "langVersion"
+msgstr "Wersja"
+
+msgid "langVersionTip"
+msgstr "numer lub opis"
+
+msgid "langStatusTip"
+msgstr "wybierz z listy"
+
+msgid "langCreatedSize"
+msgstr "Utworzony, rozmiar"
+
+msgid "langCreatedSizeTip"
+msgstr "RRRR-MM-DD (rok-miesiąc-dzień) utworzenia, rozmiar (w bajtach)"
+
+msgid "langAuthorTip"
+msgstr "w formacie VCARD"
+
+msgid "langFormat"
+msgstr "Format"
+
+msgid "langFormatTip"
+msgstr "wybierz z listy"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "kliknij, żeby otworzyć obiekt"
+
+msgid "langStore"
+msgstr "Zachowaj"
+
+msgid "langDeleteAll"
+msgstr "Skasuj wszystkie metadane"
+
+msgid "langConfirmDelete"
+msgstr "Czy *na pewno* chcesz skasować wszystkie metadane?"
+
+msgid "langCourseKwds"
+msgstr "Ten dokument zawiera słowa kluczowe kursu"
+
+msgid "langSearch"
+msgstr "Szukaj"
+
+msgid "langSearchCrit"
+msgstr "Jedno słowo w linijce!"
+
+msgid "langStatuses"
+msgstr ":projekt:projekt,, ostateczny:ostateczny,, zrewidowany:zrewidowany,, niedostępny:niedostępny"
+
+msgid "langCosts"
+msgstr ":nie:darmowy, brak kosztów,, tak:niedarmowy, koszt"
+
+msgid "langCopyrights"
+msgstr ":tak:prawo autorskie,, nie:brak praw autorskich"
+
+msgid "langFormats"
+msgstr ":tekst/zwykły;iso-8859-1:tekst/zwykły;iso-8859-1,, tekst/zwykły;utf-8:tekst/zwykły;utf-8,, tekst/html;iso-8859-1:tekst/html;iso-8859-1,, tekst/html;utf-8:tekst/html;utf-8,, inode/dostęp:Katalog,, aplikacja/msword:MsWord,, aplikacja/octet-stream:Octet stream,, aplikacja/pdf:PDF,, aplikacja/postscript:PostScript,, aplikacja/rtf:RTF,, aplikacja/vnd.ms-excel:MsExcel,, aplikacja/vnd.ms-powerpoint:MsPowerpoint,, aplikacja/xml;iso-8859-1:XML;iso-8859-1,, aplikacja/xml;utf-8:XML;utf-8,, aplikacja/zip:ZIP"
+
+msgid "langLngResTypes"
+msgstr ":ćwiczenie:ćwiczenie,, symulacja:symulacja,, kwestionariusz:kwestionariusz,, diagram:diagram,, rysunek:rysunek,, graf:graf,, indeks:indeks,, slajd:slajd,, tabela:tabela,,  tekst narracyjny:tekst narracyjny,, egzamin:egzamin,, eksperyment:eksperyment,, sformułowanie problemu:sformułowanie problemu,, ocena własnych możliwości:ocena własnych możliwości,, wykład:wykład"
+

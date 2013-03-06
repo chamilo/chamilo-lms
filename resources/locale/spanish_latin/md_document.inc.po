@@ -1,0 +1,129 @@
+msgid "langMdCallingTool"
+msgstr "Documentos"
+
+msgid "langMdTitle"
+msgstr "Título del objeto de aprendizaje"
+
+msgid "langMdDescription"
+msgstr "Para almacenar esta información, presione Almacenar"
+
+msgid "langMdCoverage"
+msgstr "por ej., Licenciado en..."
+
+msgid "langMdCopyright"
+msgstr "por ej., el proveedor de la fuente es reconocido"
+
+msgid "langTool"
+msgstr "Metadatos del documento"
+
+msgid "langNoScript"
+msgstr "Su navegador no permite scripts, por favor ignore la parte inferior de la pantalla, esta no funcionará..."
+
+msgid "langPressAgain"
+msgstr "Pulse de nuevo \'Almacenar\' ..."
+
+msgid "langLanguageTip"
+msgstr "lenguaje en el que el objeto de aprendizaje fue hecho"
+
+msgid "langIdentifier"
+msgstr "Identificador"
+
+msgid "langIdentifierTip"
+msgstr "identificador único para este objeto de aprendizaje, compuesto de letras, números, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "título o nombre, e idioma del título o del nombre"
+
+msgid "langDescriptionTip"
+msgstr "descripción o comentario, e idioma usado para describir este objeto de aprendizaje"
+
+msgid "langKeyword"
+msgstr "Palabras clave"
+
+msgid "langKeywordTip"
+msgstr "separar mediante comas (letras, dígitos, -.)"
+
+msgid "langCoverage"
+msgstr "Destino"
+
+msgid "langCoverageTip"
+msgstr "por ejemplo licenciado en xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Si cambia la descripción del idioma, no añada otras palabras clave al mismo tiempo."
+
+msgid "langClickKw"
+msgstr "Presione la palabra clave del árbol para seleccionarla o deseleccionarla"
+
+msgid "langKwHelp"
+msgstr "\"<br />Presione el botón \'+\' para abrir, en el botón \'-\' para cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrarlo todo.<br /> Deseleccione todas las palabras clave cerrando el árbol y abriéndolo de nuevo con el botón \'+\'.<br/"
+
+msgid "langRights"
+msgstr "Derechos de uso"
+
+msgid "langRightsTip"
+msgstr "describir con palabras"
+
+msgid "langVersion"
+msgstr "Versión"
+
+msgid "langVersionTip"
+msgstr "número o descripción"
+
+msgid "langStatusTip"
+msgstr "seleccionar de la lista"
+
+msgid "langCreatedSize"
+msgstr "Creado, tamaño"
+
+msgid "langCreatedSizeTip"
+msgstr "YYYY-MM-DD de creación, tamaño en bytes"
+
+msgid "langAuthorTip"
+msgstr "en formato VCARD"
+
+msgid "langFormat"
+msgstr "Formato"
+
+msgid "langFormatTip"
+msgstr "seleccionar de la lista"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "haga clic para abrir el objeto"
+
+msgid "langStore"
+msgstr "Almacenar"
+
+msgid "langDeleteAll"
+msgstr "Borrar todos los metadatos"
+
+msgid "langConfirmDelete"
+msgstr "¿ Está *completamente seguro* de querer borrar todos los metadatos ?"
+
+msgid "langCourseKwds"
+msgstr "Este documento contiene las palabras clave del curso"
+
+msgid "langSearch"
+msgstr "Buscar"
+
+msgid "langSearchCrit"
+msgstr "¡ Una palabra por línea !"
+
+msgid "langStatuses"
+msgstr ":draft:esbozo,, final:final,, revised:revisado,, unavailable:no disponible"
+
+msgid "langCosts"
+msgstr ":no:gratuito,, yes:no es gratuito, debe pagarse"
+
+msgid "langCopyrights"
+msgstr ":sí:copyright,, no:sin copyright"
+
+msgid "langFormats"
+msgstr ":text/plain;iso-8859-1:texto/plano;iso-8859-1,, text/plain;utf-8:texto/plano;utf-8,, text/html;iso-8859-1:texto/html;iso-8859-1,, text/html;utf-8:texto/html;utf-8,, inode/directory:Directorio,, application/msword:MsWord,, application/octet-stream:Octet st"
+
+msgid "langLngResTypes"
+msgstr ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,"
+

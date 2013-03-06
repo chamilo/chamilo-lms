@@ -1,0 +1,117 @@
+msgid "langLinkName"
+msgstr "Nombre del enlace"
+
+msgid "langLinkAdd"
+msgstr "El enlace ha sido agregado"
+
+msgid "langLinkAdded"
+msgstr "El enlace ha sido añadido"
+
+msgid "langLinkMod"
+msgstr "El enlace ha sido modificado"
+
+msgid "langLinkModded"
+msgstr "El enlace ha sido modificado"
+
+msgid "langLinkDel"
+msgstr "El enlace ha sido borrado"
+
+msgid "langLinkDeleted"
+msgstr "El enlace ha sido eliminado"
+
+msgid "langLinkDelconfirm"
+msgstr "¿Usted desea eliminar este enlace?"
+
+msgid "langAllLinksDel"
+msgstr "Eliminar todos los enlaces en esta categoría"
+
+msgid "langCategoryName"
+msgstr "Nombre de la categoría"
+
+msgid "langCategoryAdd"
+msgstr "Añadir una categoría"
+
+msgid "langCategoryAdded"
+msgstr "La categoría ha sido añadida"
+
+msgid "langCategoryModded"
+msgstr "La categoría ha sido modificada"
+
+msgid "langCategoryDel"
+msgstr "Eliminar categoría"
+
+msgid "langCategoryDeleted"
+msgstr "La categoría y todos sus enlaces se ha eliminado"
+
+msgid "langCategoryDelconfirm"
+msgstr "Cuando elimine una categoría, todos los enlaces de esta categoría se eliminan. ¿Desea eliminar la categoría y sus enlaces?"
+
+msgid "langAllCategoryDel"
+msgstr " Borrar todas las categorías y sus enlaces"
+
+msgid "langGiveURL"
+msgstr "Por favor indique la URL del elnace"
+
+msgid "langGiveCategoryName"
+msgstr "Por favor signe un nombre  a la categoría"
+
+msgid "langNoCategory"
+msgstr "No hay categorías"
+
+msgid "showall"
+msgstr "Abrir todas las categorías"
+
+msgid "shownone"
+msgstr "Cerrar todas las categorías"
+
+msgid "langListDeleted"
+msgstr "La lista ha sido borrada"
+
+msgid "langAddLink"
+msgstr "Agregar un enlace"
+
+msgid "langDelList"
+msgstr "Borrar completamente la lista"
+
+msgid "langModifyLink"
+msgstr "Modificar un enlace"
+
+msgid "langCsvImport"
+msgstr "Importación CSV"
+
+msgid "langCsvFileNotFound"
+msgstr "El archivo CSV importado no pudo abrirse (p.ej. vacìo, demasiado grande, etc)"
+
+msgid "langCsvFileNoSeps"
+msgstr "El archivo de importación CSV debe usar , o ; como separador de lista"
+
+msgid "langCsvFileNoURL"
+msgstr "El archivo CSV debe al menos tener las columnas URL y título"
+
+msgid "langCsvFileLine1"
+msgstr " 	... - línea 1 ="
+
+msgid "langCsvLinesFailed"
+msgstr "falla al importar el enlace (no hay URL o título)"
+
+msgid "langCsvLinesOld"
+msgstr "los enlaces existentes se han actualizado"
+
+msgid "langCsvLinesNew"
+msgstr "nuevo(s) enlace(s) creados"
+
+msgid "langCsvExplain"
+msgstr "El archivo debe presentar el siguiente formato: URL;categoría;título;descripción;http://www.aaa.org/...;Enlaces importantes;Nombre 1;Descripción 1;http://www.bbb.net/...;;Nombre 2;\"Descripción 2\";Si la \'URL\' y la \'categoría\' pertenecen a un enlace y"
+
+msgid "langLinkUpdated"
+msgstr "El enlace ha sido actualizado"
+
+msgid "langAll_Link_Deleted"
+msgstr "El enlace ha sido eliminado"
+
+msgid "langOnHomepage"
+msgstr "Mostrar el enlace en la página de inicio"
+
+msgid "langShowLinkOnHomepage"
+msgstr "Mostrar este enlace como un ícono en la página de inicio"
+

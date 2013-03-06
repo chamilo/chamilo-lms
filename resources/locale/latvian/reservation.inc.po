@@ -1,0 +1,576 @@
+msgid "ReservationPeriodToSmall"
+msgstr "Rezervācijas periods ir pārāk īss."
+
+msgid "BookingSystem"
+msgstr "Rezervācijas sistēma"
+
+msgid "BookingPeriodList"
+msgstr "Rezervācijas periodu saraksts"
+
+msgid "BookingListView"
+msgstr "Rezervāciju saraksts"
+
+msgid "BookingCalendarView"
+msgstr "Rezervācijas kalendāra skats"
+
+msgid "BookingPeriods"
+msgstr "Rezervācijas perioda plānošana"
+
+msgid "ResourceList"
+msgstr "Resursu saraksts"
+
+msgid "GoToCalendarView"
+msgstr "Kalendāra skats"
+
+msgid "GoToListView"
+msgstr "Saraksta skats"
+
+msgid "ManageResources"
+msgstr "Pārvaldīt - vadīt resursus"
+
+msgid "EditResource"
+msgstr "Rediģēt resursus"
+
+msgid "BookIt"
+msgstr "Rezervējamais resurss"
+
+msgid "GoTo"
+msgstr "Doties uz"
+
+msgid "NoTimePicker"
+msgstr "Laika atlasītāja nav"
+
+msgid "TimePicker"
+msgstr "Laika - perioda izvēle"
+
+msgid "ManageBookingPeriods"
+msgstr "Pārvaldīt rezervēšanas termiņus"
+
+msgid "BookingPeriodToSmall"
+msgstr "Rezervēšanas termiņš ir par mazu"
+
+msgid "BookingPeriodToBig"
+msgstr "Rezervēšanas termiņš ir par garu"
+
+msgid "BookingPeriodTimePickerError1"
+msgstr "Bez laika izvēles rezervācijas periodu nevar iesniegt, ja minimālais un maksimālais laika periods atšķiras no nulles."
+
+msgid "BookingPeriodTimePickerError2"
+msgstr "Rezervācijas periodu ar laika noteicēju nevar iesniegt, ja maksimālais laiks ir mazāks par minimālo laiku."
+
+msgid "BookingPeriodTimePickerError3"
+msgstr "Rezervācijas periodu ar laika noteicēju nevar iesniegt, ja maksimālais laiks neiekļaujas starp sākuma un beigu datumu."
+
+msgid "BookingPeriodHasSubscriptions"
+msgstr "Rezervācijas periods ir #NUM# aktīvās rezervācijas, rediģēt rezervēšanas laiku nav iespējams"
+
+msgid "TimePickerMaxUsers"
+msgstr "Kad tiek lietots laika koordinātors, maksimālais parakstīšanās skaits tiek ignorēts."
+
+msgid "TimePickerMinMaxNull"
+msgstr "* Ja laika koordinatora minimālā un maksimālā vērtība  ir nulle, tad laika izvēle var būt mainīga"
+
+msgid "DeleteSelectedBookingPeriod"
+msgstr "Izdzēst atzīmētos rezervācijas perodus"
+
+msgid "EditNewBookingPeriod"
+msgstr "Labot atzīmētos rezervācijas periodus"
+
+msgid "BookingPeriodAdded"
+msgstr "Rezervācijas periods tika pievienots"
+
+msgid "BookingPeriodDeleted"
+msgstr "Rezervācijas periods tika dzēsts"
+
+msgid "ConfirmDeleteBookingPeriod"
+msgstr "Jūs esat pārliecināts, ka vēlaties izdzēst rezervāciju?"
+
+msgid "DeleteBookingPeriod"
+msgstr "Izdzēst šo rezervāciju"
+
+msgid "BookingPeriodEdited"
+msgstr "Rezervācijas periods tika izmainīts"
+
+msgid "BookingPeriodDateOverlap"
+msgstr "Šī rezervēšanas perioda daļa jau tiek izmantota laika posmā no #START# līdz #END#"
+
+msgid "BookingPeriodSubscribeUntilAfterStart"
+msgstr "Pieraksta datums ir lielāks,kā sākuma datums"
+
+msgid "RepeatFor"
+msgstr "Atkārtot katru"
+
+msgid "RepeatUntil"
+msgstr "Atkārtot līdz"
+
+msgid "BookingPeriodPast"
+msgstr "Pirms šī datuma, nav iespējams veikt rezervāciju"
+
+msgid "ReservationMaxUsersOverrun"
+msgstr "Ir jau vairāk cilvēku parakstījušies, nekā atzzīmēts MAX lietotāju skaitā"
+
+msgid "AddNewBookingPeriod"
+msgstr "Pievienot jaunu pasūtīšanas termiņu"
+
+msgid "BookingPeriodTimePickerLimitation"
+msgstr "Nav iespējams veikt rezervāciju ar laika sastādītāju, ja sākuma un beigu datums nav tas pats."
+
+msgid "ResourceTypeName"
+msgstr "Resursa veids"
+
+msgid "AddNewResourceType"
+msgstr "Pievienot jaunu resursa veidu / tipu"
+
+msgid "ResourceTypeAdded"
+msgstr "Resursu veids ir pievienots"
+
+msgid "ResourceTypeEdited"
+msgstr "Resursu veids ir izmainīts"
+
+msgid "ResourceTypeDeleted"
+msgstr "Resursu veids ir izdzēsts"
+
+msgid "ConfirmDeleteResourceType"
+msgstr "Vai esat pārliecināts, ka Jūs vēlaties, lai pilnībā izdzēstu šo resursa veidu?"
+
+msgid "EditResourceType"
+msgstr "Rediģēt /izmainīt resursa veidu"
+
+msgid "DeleteResourceType"
+msgstr "Dzēst resursa veidu"
+
+msgid "DeleteSelectedCategories"
+msgstr "Dzēst atzīmētos resursus"
+
+msgid "NoResourcesType"
+msgstr "Vēl nav neviena resursa veida"
+
+msgid "ResourceType"
+msgstr "Kategorija"
+
+msgid "ResourceTypeExist"
+msgstr "Šāds resursa veids jau eksistē"
+
+msgid "ResourceTypeHasItems"
+msgstr "Resursu veids satur #NUM# vienumu! Dzēšanas process ir pārtraukts"
+
+msgid "ResourceTypeNotDeleted"
+msgstr "Dažas kategorijas nevar noņemt, jo tās satur resursus"
+
+msgid "DeleteSelectedSubscriptions"
+msgstr "Dzēst atzīmētās rezervācijas"
+
+msgid "DeleteSubscription"
+msgstr "Dzēst rezervāciju"
+
+msgid "SubscriptionDeleted"
+msgstr "Jūsu rezervācija tika izdzēsta"
+
+msgid "ConfirmDeleteSubscription"
+msgstr "Vai esat pārliecināts, ka vēlaties dzēst šīs rezervācijas?"
+
+msgid "SubscribeInformation"
+msgstr "Lūdzu, apstipriniet, ka Jūs esat pieteicis rezervāciju no #start# līdz #end# , vienumam #name#"
+
+msgid "SubscribeTimePickerInformation"
+msgstr "Lūdzu, izvēlieties rezervāciju uz #name# , periodā no #from_till starp: #start_end"
+
+msgid "ReservationAdded"
+msgstr "Rezervācija ir pievienota"
+
+msgid "ReservationTresspassing"
+msgstr "Šī rezervācija ir jau pilna, Jums nav tiesību dalībai šajā lapā"
+
+msgid "ReservationOutOfDate"
+msgstr "Datums, ko esat izvēlējies, ir jau izmantots un/vai nav rezervācijas periodā no #START# līdz #END#"
+
+msgid "ReservationAlready"
+msgstr "Šo resursu, Jūs jau esat rezervējis"
+
+msgid "ReservationMadeTitle"
+msgstr "Jūsu rezervācija vienumam  #ITEM# bija veiksmīga"
+
+msgid "ReservationMadeMessage"
+msgstr "Godātais K-gs/K-dze,
+
+ Jūsu rezervācija #Item# no #START# līdz #END# ir sekmīga."
+
+msgid "ReservationDeleteTitle"
+msgstr "Rezervācijas periods vienumam #NAME# ir izdzēsts"
+
+msgid "ReservationDeleteMessage"
+msgstr "Godājamais K-gs / K-dze, 
+ Rezervēšanas periods vienumam #NAME# no #START# līdz #END# ir noņemts."
+
+msgid "OutPeriod"
+msgstr "Pārtraukums"
+
+msgid "ReservationFromUntilError"
+msgstr "Rezervācijas periods no #START# līdz #END# netika izveidots, jo no rezervēšanas perioda daļa ir jau izmantota.
+"
+
+msgid "Recurrence"
+msgstr "Atkārtošanās"
+
+msgid "NoRecurrence"
+msgstr "Atkārtošanās nav"
+
+msgid "UntilRecurrence"
+msgstr "Lietot atkārtošanu"
+
+msgid "TimePickerLimitation"
+msgstr "* Kad tiek lietots Laika sastādītājs, starta un beigu datumiem ir jābūt vienādiem."
+
+msgid "OverviewSubscriptions"
+msgstr "Abonēšanas pārskats"
+
+msgid "OverviewReservedPeriods"
+msgstr "Pārskatīt pieraksta periodus"
+
+msgid "SubscribedStartDate"
+msgstr "Parakstītais attiecībā pret beigu datumu"
+
+msgid "SubscribedEndDate"
+msgstr "Parakstītais līdz beigu datumam"
+
+msgid "SubscribedPerson"
+msgstr "Pierakstījušos personu skaits"
+
+msgid "BookingView"
+msgstr "Rezervācijas skats"
+
+msgid "SubscribeUntil"
+msgstr "Pieraksts līdz"
+
+msgid "SubscribeFrom"
+msgstr "Pieraksts no"
+
+msgid "Notes"
+msgstr "Piezīmes"
+
+msgid "SubscriptionPeriod"
+msgstr "Pieraksta periods"
+
+msgid "NoPeriod"
+msgstr "Nav pieraksta perioda"
+
+msgid "FixedPeriod"
+msgstr "Fiksētais pieraksta periods"
+
+msgid "ResourceFilter"
+msgstr "Resursu filtrs"
+
+msgid "NoReservation"
+msgstr "Vēl nav rezervācijas perioda"
+
+msgid "MaxUsers"
+msgstr "Maksimālais rezervāciju skaits"
+
+msgid "AutoAccept"
+msgstr "Akceptēt lietotājus automātiski"
+
+msgid "ResourceName"
+msgstr "Resurss"
+
+msgid "ResourceAdded"
+msgstr "Resurss pievienots"
+
+msgid "ResourceEdited"
+msgstr "Resurss ir rediģēts"
+
+msgid "ResourceDeleted"
+msgstr "Resurs ir izdzēsts"
+
+msgid "AddNewResource"
+msgstr "Pievienot jaunu resursu"
+
+msgid "ConfirmDeleteResource"
+msgstr "Vai esat pārliecināts, ka jūs vēlaties, lai pilnībā izdzēst šo resursu?"
+
+msgid "ResourceInactivated"
+msgstr "Resurss ir atspējots"
+
+msgid "ResourceActivated"
+msgstr "Resurss ir iespējots"
+
+msgid "Resource"
+msgstr "Novērtējums"
+
+msgid "OpenBooking"
+msgstr "Atvērt rezervāciju"
+
+msgid "DeleteResource"
+msgstr "Dzēst resursu"
+
+msgid "DeleteSelectedResources"
+msgstr "Dzēst atzīmētos resursus"
+
+msgid "ResourceExist"
+msgstr "Šāds resurss jau eksistē"
+
+msgid "AcceptUsers"
+msgstr "Apstiprināt Lietotājus"
+
+msgid "UnacceptedUsers"
+msgstr "Neakceptējamie lietotāji"
+
+msgid "DeleteSubscriptions"
+msgstr "Svītrot abonementus"
+
+msgid "NoItems"
+msgstr "Vēl nav resursu"
+
+msgid "ItemNotDeleted"
+msgstr "Daži resursi netiek izņemti, jo tiem ir veikta rezervēšana"
+
+msgid "ItemHasReservations"
+msgstr "Šim Resursam joprojām ir #NUM# aktīvu rezervāciju"
+
+msgid "NoItemsReservation"
+msgstr "Šeit nav Jums pieejamu resursu."
+
+msgid "ReservationAccepted"
+msgstr "Jūsu rezervācija vienumam #ITEM# tiek pieņemta"
+
+msgid "ReservationDenied"
+msgstr "Jūsu rezervācija vienumam #ITEM# tika atteikta"
+
+msgid "ReservationForItemAccepted"
+msgstr "Cienītais K-gs / K-dze, 
+
+ Jūsu rezervācija vienumam #ITEM# no #BEGIN# līdz #END# ir pieņemta."
+
+msgid "ReservationForItemDenied"
+msgstr "Cienītais K-gs / K-dze, 
+\\ Jūsu rezervēšana vienumam #ITEM# no #BEGIN# līdz #END# nav pieņemta."
+
+msgid "ReservationCancelled"
+msgstr "Rezervēšana atcelta,vienums #NAME# īslaicīgi nav pieejams"
+
+msgid "ReservationActive"
+msgstr "Rezervēšana ir aktivizēta,vienums #NAME# atkal ir pieejams"
+
+msgid "ReservationUnavailable"
+msgstr "Godājamais K-gs / K-dze, 
+
+Vienums #NAME# īslaicīgi nav pieejams, tādēļ Jūsu rezervācija no #BEGIN# līdz #END# ir atcelta.
+ Jūs saņemsiet e-pastu, kad tas būs atkal pieejams"
+
+msgid "ReservationAvailable"
+msgstr "Godājamais K-gs / K-dze, 
+
+Mēs vēlamies Jūs informēt, ka #NAME# ir atkal pieejams, tādēļ jūsu rezervācija no #BEGIN# līdz #END# ir aktīva atkal."
+
+msgid "Resources"
+msgstr "Resursi"
+
+msgid "EditBookingPeriod"
+msgstr "Izmainīt rezervācijas periodu"
+
+msgid "CreateResourceType"
+msgstr "Izveidot resursa veidu"
+
+msgid "ModifyResourceType"
+msgstr "Rediģēt resursa veidu"
+
+msgid "ViewResourceTypes"
+msgstr "Skatīt resursu veidus"
+
+msgid "ViewResources"
+msgstr "Skatīt resursus"
+
+msgid "ViewBookingPeriods"
+msgstr "Skatīt rezervācijas periodus"
+
+msgid "AlwaysAvailable"
+msgstr "Vienmēr pieejams"
+
+msgid "SelectResourceTypeAndResource"
+msgstr "Atzīmēt resursa veidu"
+
+msgid "Step1SelectResourceType"
+msgstr "Solis Nr.1: Atzīmēt resursa veidu"
+
+msgid "Step2SelectResource"
+msgstr "Solis Nr.2: Atzīmēt resursu"
+
+msgid "Step3SelectBookingPeriod"
+msgstr "Solis Nr.2: Atzīmēt rezervācijas periodu"
+
+msgid "NoReservations"
+msgstr "Rezervāciju nav"
+
+msgid "ItemRightDeleted"
+msgstr "Ierobežojumi  noņemti."
+
+msgid "MItemRights"
+msgstr "Vienumu tiesības"
+
+msgid "MReservationRight"
+msgstr "Rezervācijas atļaujas"
+
+msgid "ItemRightEdited"
+msgstr "Vienumu atļaujas atjaunotas"
+
+msgid "NoRights"
+msgstr "Atļauju nav"
+
+msgid "MItemRights2"
+msgstr "Vienumu atļaujas"
+
+msgid "MAddClassgroup"
+msgstr "Pievienot klasi/ grupu"
+
+msgid "EditItemRight"
+msgstr "Rediģēt vienumu atļaujas"
+
+msgid "DeleteItemRight"
+msgstr "Dzēst vienumu atļaujas"
+
+msgid "MBookingPeriodsRight"
+msgstr "Atļaujas rezervācijas periodam"
+
+msgid "ViewItemRight"
+msgstr "Skatīt vienumu atļaujas"
+
+msgid "DeleteSelectedItemRights"
+msgstr "Dzēst atzīmētās vienumu atļaujas"
+
+msgid "SetEditRights"
+msgstr "Uzstādīt atļauju rediģēšanu"
+
+msgid "UnsetEditRights"
+msgstr "Noņemt atļauju rediģēšanu"
+
+msgid "SetDeleteRights"
+msgstr "Atļaut dzēst atļaujas"
+
+msgid "UnsetDeleteRights"
+msgstr "Liegt atļauju dzēšanu"
+
+msgid "SetMresRights"
+msgstr "Noteikt rezervēšanas atļaujas"
+
+msgid "UnsetMresRights"
+msgstr "Noņemt rezervēšanas atļaujas"
+
+msgid "SetViewRights"
+msgstr "Piešķirt apskatīt atļaujas"
+
+msgid "UnsetViewRights"
+msgstr "Noņemt apskates atļaujas"
+
+msgid "SetAllRights"
+msgstr "Piešķirt visas atļaujas"
+
+msgid "UnsetAllRights"
+msgstr "Noņemt visas atļaujas"
+
+msgid "ItemCourse"
+msgstr "Kursa vienums"
+
+msgid "MItemRight"
+msgstr "Vienuma atļaujas"
+
+msgid "EditItem2"
+msgstr "Rediģēt vienumu"
+
+msgid "ItemManagerHeader"
+msgstr "Vienuma vadītājs"
+
+msgid "LangClass"
+msgstr "Klase"
+
+msgid "MReservationPeriodsRight"
+msgstr "Atļaujas rezervēšanas termiņiem"
+
+msgid "AddNewItem"
+msgstr "Pievienot jaunu vienumu"
+
+msgid "ItemName"
+msgstr "Vienuma nosaukums"
+
+msgid "ItemDescription"
+msgstr "Vienuma apraksts"
+
+msgid "ItemExist"
+msgstr "Šāds vienums eksistē"
+
+msgid "EditItem"
+msgstr "Rediģēt vienumu"
+
+msgid "ItemEdited"
+msgstr "Vienums atjaunināts"
+
+msgid "CategoryFilter"
+msgstr "Kategoriju filtrs"
+
+msgid "ItemCreator"
+msgstr "Vienumu veidotājs"
+
+msgid "DeleteSelectedItems"
+msgstr "Dzēst atzīmētos vienumus"
+
+msgid "BookingPeriodTimepickerLimitation"
+msgstr "Rezervēšanas perioda laika plānotāja ierobežojumi"
+
+msgid "Blackout"
+msgstr "Aptumšošana"
+
+msgid "EveryDay"
+msgstr "Katru dienu"
+
+msgid "EveryWeek"
+msgstr "Katru nedēļu"
+
+msgid "EveryMonth"
+msgstr "Katru mēnesi"
+
+msgid "ReservationForDenied"
+msgstr "Rezervācija nav atļauta"
+
+msgid "BookingPeriodTooSmall"
+msgstr "Rezervēšanas periods ir par mazu"
+
+msgid "BookingPeriodTooBig"
+msgstr "Rezervēšanas periods ir par garu"
+
+msgid "PermissionsStored"
+msgstr "Atļaujas saglabātas"
+
+msgid "PermissionGranted"
+msgstr "Atļauja piešķirta"
+
+msgid "PermissionRevoked"
+msgstr "Atļauja atsaukta"
+
+msgid "RoleGranted"
+msgstr "Loma piešķirta"
+
+msgid "RoleRevoked"
+msgstr "Loma anulēta"
+
+msgid "ErrorPleaseGiveRoleName"
+msgstr "Lūdzu piešķiriet šai lomai nosaukumu"
+
+msgid "RoleDeleted"
+msgstr "Loma ir izdzēsta"
+
+msgid "AddRole"
+msgstr "Pievienot lomu"
+
+msgid "RoleComment"
+msgstr "Loma ir postenis, kas ļaus jums piešķirt tiesības personai vai cilvēku grupai."
+
+msgid "DefaultRole"
+msgstr "Noklusētā loma"
+
+msgid "PermissionsOfRole"
+msgstr "Lomas atļaujas"
+
+msgid "IsPlatformRoleNotEditable"
+msgstr "Vai platformas lomas nav rediģējamas?"
+
+msgid "UserPermissions"
+msgstr "Lietotāju atļaujas"
+

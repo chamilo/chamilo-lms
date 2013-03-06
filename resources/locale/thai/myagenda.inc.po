@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "กำหนดการของเรา"
+
+msgid "langToday"
+msgstr "ÇÑ¹¹Õé"
+

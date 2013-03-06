@@ -1,0 +1,948 @@
+msgid "AssignSessionsTo"
+msgstr "Kurs-Session zurordnen zu"
+
+msgid "langToolName"
+msgstr "Blackboard-Kurse importieren"
+
+msgid "TrackingDisabled"
+msgstr "Auswertung wurde deaktiviert"
+
+msgid "InactivesStudents"
+msgstr "Benutzer die sich länger als eine Woche nicht angemeldet haben"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Durchschnittliche Zeit, die jemand auf dem Portal war"
+
+msgid "AverageCoursePerStudent"
+msgstr "Anzahl Kurse pro Teilnehmer"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Fortschritt in Lernpfaden"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Test-Ergebnisse"
+
+msgid "SeeStudentList"
+msgstr "Teilnehmerlisten"
+
+msgid "NbActiveSessions"
+msgstr "Aktive Kurs-Sessions"
+
+msgid "NbPastSessions"
+msgstr "Abgelaufene Kurs-Sessions"
+
+msgid "NbFutureSessions"
+msgstr "Zukünftige Kurs-Sessions"
+
+msgid "NbStudentPerSession"
+msgstr "Teilnehmer pro Kurs-Session"
+
+msgid "NbCoursesPerSession"
+msgstr "Kurse pro Kurs-Session"
+
+msgid "SeeSessionList"
+msgstr "Kurs-Session-Liste"
+
+msgid "langShowNone"
+msgstr "Zeige keine(n)"
+
+msgid "langCourseStats"
+msgstr "Kursstatistik"
+
+msgid "langToolsAccess"
+msgstr "Zugriff auf Werkzeuge"
+
+msgid "langCourseAccess"
+msgstr "Kurszugriff"
+
+msgid "langLinksAccess"
+msgstr "Zugriff auf Links"
+
+msgid "langDocumentsAccess"
+msgstr "Zugriff auf Dokumente"
+
+msgid "langScormAccess"
+msgstr "Zugriff auf Lernpfad/Scorm"
+
+msgid "langLinksDetails"
+msgstr "Aufgefufene Links"
+
+msgid "langWorksDetails"
+msgstr "Details für Ausarbeitungen der Teilnehmer"
+
+msgid "langLoginsDetails"
+msgstr "Logins (klicken Sie auf den Monat für weitere Details)"
+
+msgid "langDocumentsDetails"
+msgstr "Download von Dokumenten"
+
+msgid "langExercicesDetails"
+msgstr "Test-Ergebnisse"
+
+msgid "langBackToList"
+msgstr "Zurück zur Liste"
+
+msgid "langDetails"
+msgstr "Details"
+
+msgid "langStatsOfCourse"
+msgstr "Kursstatistik"
+
+msgid "langStatsOfUser"
+msgstr "Teilnehmerstatistik"
+
+msgid "langStatsOfCampus"
+msgstr "Portalstatistik"
+
+msgid "langCountUsers"
+msgstr "Anzahl Teilnehmer"
+
+msgid "langCountToolAccess"
+msgstr "Gesamtzahl der Zugriffe für diesen Kurs"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Monat"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Anzahl Logins"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Name des Werkzeugs"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Zugriffe Teilnehmer"
+
+msgid "langToolTitleCountColumn"
+msgstr "Zugriffe gesamt"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Link"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Teilnehmer-Klicks"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Gesamt-Klicks"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Test"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Punkte"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Dokument"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Teilnehmer-Downloads"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Gesamt-Downloads"
+
+msgid "langScormContentColumn"
+msgstr "Titel"
+
+msgid "langScormStudentColumn"
+msgstr "Benutzer"
+
+msgid "langScormTitleColumn"
+msgstr "Einheiten/Schritte"
+
+msgid "langScormStatusColumn"
+msgstr "Status"
+
+msgid "langScormScoreColumn"
+msgstr "Punkte"
+
+msgid "langScormTimeColumn"
+msgstr "Zeit"
+
+msgid "langScormNeverOpened"
+msgstr "Der Teilnehmer hat diesen Kurs niemals geöffnet."
+
+msgid "langWorkTitle"
+msgstr "Titel"
+
+msgid "langWorkAuthors"
+msgstr "Autor"
+
+msgid "langWorkDescription"
+msgstr "Beschreibung"
+
+msgid "informationsAbout"
+msgstr "Statistiken für"
+
+msgid "langNoEmail"
+msgstr "Keine E-Mail Adresse eingetragen"
+
+msgid "langNoResult"
+msgstr "Es liegt noch kein Ergebnis vor"
+
+msgid "langCourse"
+msgstr "Der Kurs"
+
+msgid "langHits"
+msgstr "Hits"
+
+msgid "langTotal"
+msgstr "Gesamt"
+
+msgid "langHour"
+msgstr "Stunde"
+
+msgid "langDay"
+msgstr "Tag"
+
+msgid "langLittleHour"
+msgstr "h"
+
+msgid "langLast31days"
+msgstr "In den letzten 31 Tagen"
+
+msgid "langLast7days"
+msgstr "In den letzten 7 Tagen"
+
+msgid "langThisday"
+msgstr "heute"
+
+msgid "langLogins"
+msgstr "Logins"
+
+msgid "langLoginsExplaination"
+msgstr "Liste Ihrer letzten Logins und der Werkzeuge, die Sie dabei benutzt haben."
+
+msgid "langExercicesResults"
+msgstr "Testergebnisse"
+
+msgid "langVisits"
+msgstr "Besuche"
+
+msgid "langAt"
+msgstr "bei"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Datum"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Besuche"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Logins und Zugriff zu den Werkleugen"
+
+msgid "langWorkUploads"
+msgstr "Aufgabenupload"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Dieser Teilnehmer ist nicht Mitglied in Ihrer Gruppe"
+
+msgid "langListStudents"
+msgstr "Liste der Gruppenmitglieder"
+
+msgid "langPeriodHour"
+msgstr "Stunde"
+
+msgid "langPeriodDay"
+msgstr "Tag"
+
+msgid "langPeriodWeek"
+msgstr "Woche"
+
+msgid "langPeriodMonth"
+msgstr "Monat"
+
+msgid "langPeriodYear"
+msgstr "Jahr"
+
+msgid "langNextDay"
+msgstr "Nächster Tag"
+
+msgid "langPreviousDay"
+msgstr "Vorheriger Tag"
+
+msgid "langNextWeek"
+msgstr "Nächste Woche"
+
+msgid "langPreviousWeek"
+msgstr "Vorherige Woche"
+
+msgid "langNextMonth"
+msgstr "Nächster Monat"
+
+msgid "langPreviousMonth"
+msgstr "Vorheriger Monat"
+
+msgid "langNextYear"
+msgstr "Nächstes Jahr"
+
+msgid "langPreviousYear"
+msgstr "Vorheriges Jahr"
+
+msgid "langViewToolList"
+msgstr "Zeige Liste aller Werkzeuge"
+
+msgid "langToolList"
+msgstr "Liste aller Werkzeuge"
+
+msgid "langFrom"
+msgstr "von"
+
+msgid "langTo"
+msgstr "nach"
+
+msgid "langPeriodToDisplay"
+msgstr "Zeitraum"
+
+msgid "langDetailView"
+msgstr "Gesehen von"
+
+msgid "langBredCrumpGroups"
+msgstr "Gruppe"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Gruppenbereich"
+
+msgid "langBredCrumpUsers"
+msgstr "Teilnehmer"
+
+msgid "langAdminToolName"
+msgstr "Administration Statistik"
+
+msgid "langPlatformStats"
+msgstr "Portalstatistik"
+
+msgid "langStatsDatabase"
+msgstr "Statistik Datenbank"
+
+msgid "langPlatformAccess"
+msgstr "Zugrif auf das Portal"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Zugriff zu den Kursen"
+
+msgid "langPlatformToolAccess"
+msgstr "Zugriff auf die Werkzeuge"
+
+msgid "langHardAndSoftUsed"
+msgstr "Länder, Provider, Betriebssysteme"
+
+msgid "langStrangeCases"
+msgstr "Auffälligkeiten, Ungewöhliches"
+
+msgid "langStatsDatabaseLink"
+msgstr "Hier klicken"
+
+msgid "langCountCours"
+msgstr "Kurs"
+
+msgid "langCountCourseByFaculte"
+msgstr "Kurse nach Kategorien"
+
+msgid "langCountCourseByLanguage"
+msgstr "Kurse nach Sprachen"
+
+msgid "langCountCourseByVisibility"
+msgstr "Sichtbare Kurse"
+
+msgid "langCountUsersByCourse"
+msgstr "Teilnehmer pro Kurs"
+
+msgid "langCountUsersByFaculte"
+msgstr "Teilnehmer pro Kategorie"
+
+msgid "langCountUsersByStatus"
+msgstr "Teilnehmer nach Status"
+
+msgid "langAccess"
+msgstr "Zugang"
+
+msgid "langCountries"
+msgstr "Länder"
+
+msgid "langProviders"
+msgstr "Provider"
+
+msgid "langOS"
+msgstr "Betriebssystem"
+
+msgid "langBrowsers"
+msgstr "Browser"
+
+msgid "langReferers"
+msgstr "Referers"
+
+msgid "langAccessExplain"
+msgstr "(Wenn ein Teilnehmer den Index aufruft)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Gesamt"
+
+msgid "langTotalPlatformLogin"
+msgstr "Gesamt"
+
+msgid "langMultipleLogins"
+msgstr "Zugänge mit dem gleichen <i>Benutzernamen</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Zugänge mit dem gleichen <i>Benutzernamen</i> UND dem gleichen <i>Passwort</i>"
+
+msgid "langMultipleEmails"
+msgstr "Zugänge mit der gleichen <i>E-Mail-Adresse</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Kurse ohne Kursleiter"
+
+msgid "langCourseWithoutAccess"
+msgstr "nicht genutzte Kurse"
+
+msgid "langLoginWithoutAccess"
+msgstr "nicht genutzte Zugänge"
+
+msgid "langAllRight"
+msgstr "Es gibt keine ungewöhnlichen Fälle"
+
+msgid "langDefcon"
+msgstr "Uuuups, ungewöhnlicher Fall entdeckt !!"
+
+msgid "langNULLValue"
+msgstr "Leer (or NULL)"
+
+msgid "langTrafficDetails"
+msgstr "Traffic Details"
+
+msgid "langSeeIndividualTracking"
+msgstr "Für individuelle Auswertungen siehe <a href=../user/user.php>Nutzer-Verwaltung</a>."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Dieser Pfad wurde niemals geöffnet."
+
+msgid "SynthesisView"
+msgstr "Entstehung (Synthesis)"
+
+msgid "Visited"
+msgstr "besucht"
+
+msgid "FirstAccess"
+msgstr "Erster Zugriff"
+
+msgid "LastAccess"
+msgstr "Letzter Zugriff"
+
+msgid "langProbationers"
+msgstr "Teilnehmer"
+
+msgid "MoyenneTest"
+msgstr "Testdurchschnitt"
+
+msgid "exportExcel"
+msgstr "Export im Excel Format"
+
+msgid "MoyCourse"
+msgstr "Kursdurchschnitt"
+
+msgid "MoyenneExamen"
+msgstr "Examensdurchschnitt"
+
+msgid "MoySession"
+msgstr "Session-Kursdurchschnitt"
+
+msgid "TakenSessions"
+msgstr "Benutzte Session-Kurse"
+
+msgid "FollowUp"
+msgstr "Follow up"
+
+msgid "Trainers"
+msgstr "Kursleiter"
+
+msgid "Administrators"
+msgstr "Administratoren"
+
+msgid "Tracks"
+msgstr "Tracks"
+
+msgid "Success"
+msgstr "Erfolg"
+
+msgid "ExcelFormat"
+msgstr "Excel Format"
+
+msgid "MyLearnpath"
+msgstr "Mein Lernpfad"
+
+msgid "Time"
+msgstr "Uhrzeit"
+
+msgid "Score"
+msgstr "Ergebnis"
+
+msgid "LastConnexion"
+msgstr "Letzte Verbindung"
+
+msgid "ConnectionTime"
+msgstr "Verbindungsdauer"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Verbindung zu diesem Kurs"
+
+msgid "StudentTutors"
+msgstr "Trainer für Studenten"
+
+msgid "StudentSessions"
+msgstr "Teilnehmer-Sitzungen"
+
+msgid "StudentCourses"
+msgstr "Kurse für Teilnehmer"
+
+msgid "NoLearnpath"
+msgstr "Kein Lernpfad"
+
+msgid "Attempts"
+msgstr "Versuche"
+
+msgid "Correction"
+msgstr "Berichtigung"
+
+msgid "NoExercise"
+msgstr "Keine Tests"
+
+msgid "LimitDate"
+msgstr "Datum begrenzen"
+
+msgid "SentDate"
+msgstr "Datum senden"
+
+msgid "Annotate"
+msgstr "Notiz hinzufügen"
+
+msgid "DayOfDelay"
+msgstr "Tag der Verzögerung"
+
+msgid "NoProduction"
+msgstr "Keine Produktion"
+
+msgid "NoComment"
+msgstr "Kein Kommentar"
+
+msgid "LatestLogin"
+msgstr "Letztes Login"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Auf dem Portal verbrachte Zeit"
+
+msgid "Messages"
+msgstr "Nachrichten"
+
+msgid "AveragePostsInForum"
+msgstr "Nachrichten im Forum"
+
+msgid "AverageAssignments"
+msgstr "Ausarbeitungen"
+
+msgid "Print"
+msgstr "Drucken"
+
+msgid "StudentDetails"
+msgstr "Details zu Teilnehmern"
+
+msgid "StudentDetailsInCourse"
+msgstr "Details zu Teilnehmern im Kurs"
+
+msgid "Learnpaths"
+msgstr "Lernpfade"
+
+msgid "OtherTools"
+msgstr "Andere Aktivitäten"
+
+msgid "DetailsStudentInCourse"
+msgstr "Details zu Teilnehmer im Kurs"
+
+msgid "CourseTitle"
+msgstr "Kurstitel"
+
+msgid "NbStudents"
+msgstr "Teilnehmer"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Im Kurs verbrachte Zeit"
+
+msgid "AvgStudentsProgress"
+msgstr "Teilnehmer-Fortschritt"
+
+msgid "AvgCourseScore"
+msgstr "Teilnehmer-Testergebnisse"
+
+msgid "AvgMessages"
+msgstr "Teilnehmer-Nachrichten"
+
+msgid "AvgAssignments"
+msgstr "Teilnehmer-Ausarbeitungen"
+
+msgid "ToolsMostUsed"
+msgstr "Meist genutzte Werkzeuge"
+
+msgid "StudentsTracking"
+msgstr "Auswertung der Teilnehmer"
+
+msgid "CourseTracking"
+msgstr "Kurs-Auswertung"
+
+msgid "LinksMostClicked"
+msgstr "Meist besuchte Links"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Meist herunter geladene Dokumente"
+
+msgid "LearningPathDetails"
+msgstr "Lernpfad Details"
+
+msgid "NoConnexion"
+msgstr "Keine Verbindung"
+
+msgid "TeacherInterface"
+msgstr "Kursleiter-Ansicht"
+
+msgid "CoachInterface"
+msgstr "Tutor-Ansicht"
+
+msgid "AdminInterface"
+msgstr "Administrator Ansicht"
+
+msgid "NumberOfSessions"
+msgstr "Kurs-Sessions"
+
+msgid "YourCourseList"
+msgstr "Ihre Kurse"
+
+msgid "YourStatistics"
+msgstr "Ihre Statistiken"
+
+msgid "CoachList"
+msgstr "Kursleiter"
+
+msgid "CoachStudents"
+msgstr "Teilnehmer von Kursleiter"
+
+msgid "NoLearningPath"
+msgstr "Keine Lernpfade"
+
+msgid "SessionCourses"
+msgstr "Kurs-Sessions"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Auswertung der Teilnehmer"
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Durchschnittliche Zeit, die in einem Kurs verbracht wurde"
+
+msgid "RemindInactiveUser"
+msgstr "Erinnerung inaktiver Teilnehmer"
+
+msgid "FirstLogin"
+msgstr "Erstes Login"
+
+msgid "AccessDetails"
+msgstr "Details zum Zugang"
+
+msgid "DateAndTimeOfAccess"
+msgstr "Datum und Uhrzeit des Zugangs"
+
+msgid "Duration"
+msgstr "Dauer"
+
+msgid "WrongDatasForTimeSpentOnThePlatform"
+msgstr "Die Daten dieses Benutzers wurden dann erfaßt, als die Berechnung der Dauer auf dem Portal nicht möglich war."
+
+msgid "DisplayCoaches"
+msgstr "Kursleiter Übersicht"
+
+msgid "DisplayUserOverview"
+msgstr "Teilnehmer Übersicht"
+
+msgid "ExportUserOverviewOptions"
+msgstr "Export-Optionen der Teilnehmer-Übersicht"
+
+msgid "FollowingFieldsWillAlsoBeExported"
+msgstr "Die folgenden Felder werden ebenfalls exportiert"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "Gesamt-Wertung in den Tests"
+
+msgid "TotalExercisesScorePossible"
+msgstr "mögliche Maximalwertung der Tests"
+
+msgid "TotalExercisesAnswered"
+msgstr "Anzahl der beantworteten Tests"
+
+msgid "TotalExercisesScorePercentage"
+msgstr "Gesamtwertung der Tests in Prozent"
+
+msgid "ForumForumsNumber"
+msgstr "Foren"
+
+msgid "ForumThreadsNumber"
+msgstr "Themen"
+
+msgid "ForumPostsNumber"
+msgstr "Beiträge"
+
+msgid "ChatConnectionsDuringLastXDays"
+msgstr "Anwesenheit im Chat während der letzten %s Tage"
+
+msgid "ChatLastConnection"
+msgstr "Letzte Chat-Teilnahme"
+
+msgid "CourseInformation"
+msgstr "Kurs-Information"
+
+msgid "NoAdditionalFieldsWillBeExported"
+msgstr "Es werden keine zusätzlichen Felder exportiert"
+
+msgid "langSendNotification"
+msgstr "Benachrichtigen"
+
+msgid "TimeOfActiveByTraining"
+msgstr "Zeit im Kurs"
+
+msgid "AvgAllUsersInAllCourses"
+msgstr "Durschnitt aller Teilnehmer in allen Kursen"
+
+msgid "AvgExercisesScore"
+msgstr "Test Ergebnisse"
+
+msgid "TrainingTime"
+msgstr "Zeit"
+
+msgid "CourseProgress"
+msgstr "Fortschritt"
+
+msgid "ViewMinus"
+msgstr "Negative Werte anzeigen"
+
+msgid "ResourcesTracking"
+msgstr "Auswertung pro Element"
+
+msgid "SelectFieldToAdd"
+msgstr "Feld aus User-Profil auswählen"
+
+msgid "AddAdditionalProfileField"
+msgstr "Feld aus User-Profil hinzufügen"
+
+msgid "ConfigureExtensions"
+msgstr "Erweiterung konfigurieren"
+
+msgid "DashboardBlocks"
+msgstr "Elemente der Kontroll-Anzeige"
+
+msgid "DashboardList"
+msgstr "Liste Kontroll-Anzeige"
+
+msgid "YouHaveNotEnabledBlocks"
+msgstr "Sie haben kein Element aktiviert"
+
+msgid "BlocksHaveBeenUpdatedSuccessfully"
+msgstr "Die Elemente wurde aktualisiert"
+
+msgid "AttendanceSheetDescription"
+msgstr "Anwesenheits-Bögen erlauben es Ihnen die Anwesenheiten in den Kursen zu gruppieren. Z.B.: Sie möchten die Anwesenheiten von Theorie- und Praxiskursen unterscheiden. Die Listen werde alle Teilnehmer als anwesend darstellen. Evtl. fehlende Teilnehmer können Sie durch einen Kikck manuell hinzufügen."
+
+msgid "AttendanceSheetReport"
+msgstr "Auswertung der Anwesenheitslisten"
+
+msgid "YouDoNotHaveDoneAttendances"
+msgstr "Sie haben keine Anwesenheiten"
+
+msgid "GoToAttendanceCalendarList"
+msgstr "Zur Kalenderansicht der Anwesenheiten"
+
+msgid "AddADateTime"
+msgstr "Uhrzeit und Datum hinzufügen"
+
+msgid "AreYouSureToDeleteAllDates"
+msgstr "Sind Sie sicher, dass Sie alle Daten löschen möchten?"
+
+msgid "DashboardPluginsHaveBeenUpdatedSuccessfully"
+msgstr "Die Kontroll-Anzeige wurde erfolgreich aktualisiert"
+
+msgid "ThereIsNoInformationAboutYourCourses"
+msgstr "Es stehen keine Informationen zu Kursen zur Verfügung"
+
+msgid "ThereIsNoInformationAboutYourSessions"
+msgstr "Es stehen keine Informationen zu Session-Kursen zur Verfügung"
+
+msgid "ThereIsNoInformationAboutYourTeachers"
+msgstr "Es stehen keine Informationen zu Kursleitern zur Verfügung"
+
+msgid "ThereIsNoInformationAboutYourStudents"
+msgstr "Es stehen keine Informationen zu Teilnehmern zur Verfügung"
+
+msgid "TimeSpentLastWeek"
+msgstr "Aktivität der letzten Woche"
+
+msgid "DateLock"
+msgstr "Festes Datum"
+
+msgid "FolderCreated"
+msgstr "Neues Verzeichnis angelegt"
+
+msgid "LearnpathVisible"
+msgstr "Lernpfad wurde sichtbar gemacht"
+
+msgid "LinkInvisible"
+msgstr "Link wurde nicht sichtbar gemacht"
+
+msgid "LinkAdded"
+msgstr "Link hinzugefügt"
+
+msgid "Minutes"
+msgstr "Minuten"
+
+msgid "BackupCreated"
+msgstr "Backup erstellt"
+
+msgid "DisplayCourseOverview"
+msgstr "Kursübersicht"
+
+msgid "DisplaySessionOverview"
+msgstr "Session-Kurs-Übersicht"
+
+msgid "TotalNumberOfMessages"
+msgstr "Anzahl Nachrichten"
+
+msgid "TotalNumberOfAssignments"
+msgstr "Anzahl Ausarbeitungen"
+
+msgid "LastLogins"
+msgstr "Letzte Logins"
+
+msgid "AllLogins"
+msgstr "Alle Logins"
+
+msgid "LPExerciseResultsBySession"
+msgstr "Ergebnisse der Tests aus den Lernpfaden pro Sitzung"
+
+msgid "LPQuestionListResults"
+msgstr "Ergbenisliste Lernpfad-Tests"
+
+msgid "PleaseSelectACourse"
+msgstr "Bitte einen Kurs wählen"
+
+msgid "StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts"
+msgstr "Die Durchschnittsbewertung errechnet sich aus allen Lernpfaden und allen Versuchen"
+
+msgid "AverageScore"
+msgstr "Durchschnitt"
+
+msgid "LastConnexionDate"
+msgstr "Datum der letzten Anmeldung"
+
+msgid "QuestionsAreTakenFromLPExercises"
+msgstr "Diese Fragen wurden aus dem Lernpfad genommen"
+
+msgid "AllStudentsAttemptsAreConsidered"
+msgstr "Alle Versuche sind berücksichtigt"
+
+msgid "PublishedExercises"
+msgstr "Verfügbare Tests"
+
+msgid "DoneExercises"
+msgstr "Abslovierte Prüfungen"
+
+msgid "AverageExerciseResult"
+msgstr "Durchschnittliches Prüfunsgergebnis"
+
+msgid "LPProgress"
+msgstr "Lernpfad-Fortschritt"
+
+msgid "Ranking"
+msgstr "Reihenfolge"
+
+msgid "BestResultInCourse"
+msgstr "Bestes Ergebnis im Kurs"
+
+msgid "ExerciseStartDate"
+msgstr "Veröffentlichungsdatum"
+
+msgid "OnlyBestResultsPerStudent"
+msgstr "Im Fall meherer Vesuche, wird das jeweils beste Ergebnis angezeigt."
+
+msgid "BestAttempt"
+msgstr "Bester Versuch"
+
+msgid "ExercisesInTimeProgressChart"
+msgstr "Fortschritt der eigenen Testergebnisse im Verhältnis zum Duchschnittsergebnis aller Teilnehmer."
+
+msgid "AverageIsCalculatedBasedInAllAttempts"
+msgstr "Durchschnitt berechnet  aus allen Versuchen"
+
+msgid "AverageIsCalculatedBasedInTheLatestAttempts"
+msgstr "Durchschnitt berechnet  aus den letzten Versuchen"
+
+msgid "LatestAttemptAverageScore"
+msgstr "Durchschnittsergebnis letzter Versuch"
+
+msgid "Untitled"
+msgstr "Ohne Bezeichnung"
+
+msgid "Quantity"
+msgstr "Menge"
+
+msgid "UploadedDocuments"
+msgstr "Hochgeladene Dokumente"
+
+msgid "ExerciseProgress"
+msgstr "Prüfungsfortschritt"
+
+msgid "NumberOfStudents"
+msgstr "Anzahl Teilnehmer"
+
+msgid "NumberStudentsAccessingCourse"
+msgstr "Anzahl Teilnehmer die den Kurs aufgerufen haben"
+
+msgid "PercentageStudentsAccessingCourse"
+msgstr "Prozent der Teilnehmer die den Kurs aufgerufen haben"
+
+msgid "NumberStudentsCompleteAllActivities"
+msgstr "Anzahl der Teilnehmer die alle Kursaktivitäten durchgeführt haben (100% Fortscharitt)"
+
+msgid "PercentageStudentsCompleteAllActivities"
+msgstr "Prozent der Teilnehmer die alle Kursaktivitäten durchgeführt haben (100% Fortscharitt)"
+
+msgid "AverageOfActivitiesCompletedPerStudent"
+msgstr "Durchschnitt der Aktivitäten die von den Teilnehmern zu 100% durchgeführt wurden"
+
+msgid "TotalTimeSpentInTheCourse"
+msgstr "Gesamtzeit, die im Kurs verbracht wurde"
+
+msgid "AverageTimePerStudentInCourse"
+msgstr "Durchschnittliche Dauer eines Kursbesuchs pro Teilnehmer"
+
+msgid "NumberOfDocumentsInLearnpath"
+msgstr "Anzahl Dokumente im Lernpfad"
+
+msgid "NumberOfExercisesInLearnpath"
+msgstr "Anzahl Tests im Lernpfad"
+
+msgid "NumberOfLinksInLearnpath"
+msgstr "Anzahl Links im Lernpfad"
+
+msgid "NumberOfForumsInLearnpath"
+msgstr "Anzahl  Foren im Lernpfad"
+
+msgid "NumberOfAssignmentsInLearnpath"
+msgstr "Anzahl Ausarbeitungen im Lernpfad"
+
+msgid "NumberOfAnnouncementsInCourse"
+msgstr "Anzahl Ankündigungen im Lernpfad"
+
+msgid "CurrentCoursesReport"
+msgstr "Aktuelle Kursauswertung"
+
+msgid "NumberOfPublishedExercises"
+msgstr "Anzahl veröffentlicher Tests"
+
+msgid "NumberOfPublishedLps"
+msgstr "Anzahl veröffentlicher Lernpfade"
+
+msgid "EventType"
+msgstr "Ereignis Typ"
+

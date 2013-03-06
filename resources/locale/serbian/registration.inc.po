@@ -1,0 +1,519 @@
+msgid "langShouldBeCSVFormat"
+msgstr "Fajl treba da bude u CSV formatu. Nemojte dodavati razmake. Struktura bi trebala da bude baš ovakva:"
+
+msgid "langTracking"
+msgstr "Praćenje"
+
+msgid "langEnter2passToChange"
+msgstr "Unesite vašu lozinku dva puta da biste je promenili. U suprotnom ostavite polja prazna."
+
+msgid "langAuthInfo"
+msgstr "Autorizacija"
+
+msgid "langUpdateImage"
+msgstr "Promeni sliku"
+
+msgid "langImageWrong"
+msgstr "Veličina fajla bi trebala da bude manja od"
+
+msgid "langAddImage"
+msgstr "Slika"
+
+msgid "langCourseManager"
+msgstr "Predavač"
+
+msgid "NewPass"
+msgstr "Nova Lozinka"
+
+msgid "CurrentPasswordEmptyOrIncorrect"
+msgstr "Trenutna lozinka nije tačna"
+
+msgid "password_request"
+msgstr "Trazili ste da restartujete vasu lozinku. Ako to niste Vi tražili, ignorisite ovaj e-mail. Da biste restartovali vasu lozinku kliknite na link za restartovanje."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Lozinka Vam je poslata mail-om."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Unesite e-mail adresu koju ste koristili prilikom registrovanja i mi ćemo Vam poslati lozinku."
+
+msgid "langLogin"
+msgstr "Prijava"
+
+msgid "langAction"
+msgstr "Akcija"
+
+msgid "langPreserved"
+msgstr "Sačuvano"
+
+msgid "langDeleted"
+msgstr "Obrisano"
+
+msgid "langAdded"
+msgstr "Dodato"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Potvrdi odjavu korisnika"
+
+msgid "langCourseName"
+msgstr "Ime kursa"
+
+msgid "langSubscribe"
+msgstr "Prijavi"
+
+msgid "langSee"
+msgstr "Idi na"
+
+msgid "langLastVisits"
+msgstr "Moja poslednja poseta"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Ako želite da dodate listu korisnika na vaš kurs, molim Vas, kontaktirajte vašeg administratora"
+
+msgid "langPassTooEasy"
+msgstr "ova lozinka je suvi�e jednostavna. Koristite ovakvu lozinku"
+
+msgid "langGroupUserManagement"
+msgstr "Administracija grupa"
+
+msgid "langAddedToCourse"
+msgstr "je prijavljen na vaš kurs"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Korisnik sa istim imenom je već prijavljen na ovaj kurs."
+
+msgid "langBackUser"
+msgstr "Nazad na listu korisnika"
+
+msgid "langUserOneByOneExplanation"
+msgstr "On (ona) će primiti e-mail potvrdu sa korisničkim imenom i lozinkom"
+
+msgid "langGiveTutor"
+msgstr "Razgledanje"
+
+msgid "langRemoveRight"
+msgstr "Ukloni ovo pravo"
+
+msgid "langGiveAdmin"
+msgstr "Napravi administratora"
+
+msgid "langUserNumber"
+msgstr "broj"
+
+msgid "langDownloadUserList"
+msgstr "Učitaj listu"
+
+msgid "langSend"
+msgstr "Pošalji"
+
+msgid "langUserAddExplanation"
+msgstr "Svaka linija u fajlu će morati i sadržati samo 5 polja: <b>Ime   Prezime    Korisničko ime   Lozinka    E-mail</b> razdvojeno tab-ovima i ovim redom. Korisnici će primiti potvrdu sa korisničkim imenom i lozinkom putem mail-a."
+
+msgid "langUserMany"
+msgstr "Uvezi listu korinika preko CSV/XML fajla"
+
+msgid "langOneByOne"
+msgstr "Dodaj korisnika ručno"
+
+msgid "langNow"
+msgstr "sad"
+
+msgid "langTutor"
+msgstr "Mentor"
+
+msgid "langTitular"
+msgstr "Mentor"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>Izmeni listu kurseva</big><br><br>Obeležite kurseve koje želite da pratite.<br>Oni koje ne želite više da pratite treba da budu neobeleženi.<br> Potom kliknite na Ok dugme na dnu liste."
+
+msgid "langStudent"
+msgstr "Polaznik"
+
+msgid "langImportUserList"
+msgstr "Uvezi listu korisnika"
+
+msgid "langAddAU"
+msgstr "Dodaj korisnika"
+
+msgid "langAddedU"
+msgstr "je dodat. Poslat mu je e-mail sa korisničkim imenom."
+
+msgid "langTheU"
+msgstr "Korisnik"
+
+msgid "langRegYou"
+msgstr "vas je prijavio na kurs."
+
+msgid "langOneResp"
+msgstr "Jedan od administratora kursa"
+
+msgid "langTaken"
+msgstr " je već u upotrebi. Izaberite drugi."
+
+msgid "langUserNo"
+msgstr "Korisničko ime koje ste izabrali"
+
+msgid "langFilled"
+msgstr "Neka polja su Vam ostala prazna."
+
+msgid "langInC"
+msgstr "na ovom kursu"
+
+msgid "langRole"
+msgstr "Opis"
+
+msgid "UserPicture"
+msgstr "Slika"
+
+msgid "langProfileReg"
+msgstr "Vaš novi profil je snimljen"
+
+msgid "langEmailWrong"
+msgstr "E-mail adresa nije kompletna ili sadrži pogrešne karaktere"
+
+msgid "langUserTaken"
+msgstr "Korisničko ime je već u upotrebi"
+
+msgid "langFields"
+msgstr "Neka polja su Vam ostala prazna."
+
+msgid "langAgain"
+msgstr "Pokušajte ponovo!"
+
+msgid "langPassTwo"
+msgstr "Otkucali ste dve različite lozinke"
+
+msgid "langViewProfile"
+msgstr "Pogled na moj e-profil"
+
+msgid "langModifProfile"
+msgstr "Modifikuj profil"
+
+msgid "langIsReg"
+msgstr "Vaše modifikacije su snimljene"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Sada možete da kreirate vaš kurs"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Sada možete da selektujete, na listi, kurseve kojima želite da pratite"
+
+msgid "langMailHasBeenSent"
+msgstr "Poslat Vam je e-mail da Vam pomogne da zapamtite vaše korisničko ime i lozinku"
+
+msgid "langPersonalSettings"
+msgstr "Vaša lična podešavanja su snimljena"
+
+msgid "langManager"
+msgstr "Administrator"
+
+msgid "langFormula"
+msgstr "Srdacno vas"
+
+msgid "langProblem"
+msgstr "U slučaju problema kontaktirajte nas."
+
+msgid "langIs"
+msgstr "je"
+
+msgid "langAddress"
+msgstr "Adresa"
+
+msgid "langSettings"
+msgstr "Sa sledećim podešavanjema:Korisničko ime:"
+
+msgid "langYouAreReg"
+msgstr "Prijavljeni ste na"
+
+msgid "langYourReg"
+msgstr "Vaša prijava na"
+
+msgid "langUserFree"
+msgstr "Ovo korisničko ime je već zauzeto. Upotrebite dugme Back va�eg pretra�ivača i izaberite drugo."
+
+msgid "langEmptyFields"
+msgstr "Neka polja su Vam ostala prazna. Upotrebite dugme Back vašeg pretraživača i probajte ponovo."
+
+msgid "langPassTwice"
+msgstr "Otkucali ste dve različite lozinke. Upotrebite dugme Back vašeg pretraživača i izaberite drugo."
+
+msgid "langRegAdmin"
+msgstr "Kreirajte okruženje kursa"
+
+msgid "langRegStudent"
+msgstr "Pratite kurseve"
+
+msgid "langConfirmation"
+msgstr "Potvrda"
+
+msgid "langPass"
+msgstr "Lozinka"
+
+msgid "langSurname"
+msgstr "Prezime"
+
+msgid "langRegistration"
+msgstr "Registracija"
+
+msgid "langYourAccountParam"
+msgstr "Ovo je va�a informacija za povezivanje na"
+
+msgid "langLoginRequest"
+msgstr "Zahtev za korisničkim imenom"
+
+msgid "langDefineHeadings"
+msgstr "Definiši naslove"
+
+msgid "langCourseAdministratorOnly"
+msgstr "samo predavač"
+
+msgid "langLostPassword"
+msgstr "Izgubljena lozinka"
+
+msgid "langAdminOfCourse"
+msgstr "Administrator kursa"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Korisnik kursa"
+
+msgid "langIsTutor"
+msgstr "Mentor"
+
+msgid "langParamInTheCourse"
+msgstr "Status na kursu"
+
+msgid "langMember"
+msgstr "član"
+
+msgid "langLock"
+msgstr "zaključano"
+
+msgid "langUnlock"
+msgstr "otključano"
+
+msgid "langHaveNoCourse"
+msgstr "nema kursa"
+
+msgid "langManage"
+msgstr "Upravljanje portalom"
+
+msgid "langAdministrationTools"
+msgstr "Administrativni alati"
+
+msgid "langUserProfileReg"
+msgstr "Korisnikov profil je snimljen"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "Nema korisničkog naloga koji je registovan sa ovom e-mail adresom."
+
+msgid "langCourses4User"
+msgstr "Kursevi ovog korisnika"
+
+msgid "langCoursesByUser"
+msgstr "Kursevi koje su pravili korisnici"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Prijavite korisnike na ovaj kurs"
+
+msgid "langPreced100"
+msgstr "Prethodnih 100"
+
+msgid "langAddmore"
+msgstr "Dodaj registrovane korisnike"
+
+msgid "langAddback"
+msgstr "Idi na listu korisnika"
+
+msgid "langreg"
+msgstr "Registruj"
+
+msgid "langQuit"
+msgstr "Odustani"
+
+msgid "your_password_has_been_reset"
+msgstr "Vaša lozinka je restartovana"
+
+msgid "langSex"
+msgstr "Pol"
+
+msgid "langClass"
+msgstr "Razred"
+
+msgid "langEdit"
+msgstr "izmeni"
+
+msgid "required"
+msgstr "obavezno"
+
+msgid "langOptionalTextFields"
+msgstr "Opcionalna polja"
+
+msgid "langMyProductions"
+msgstr "Moji radovi"
+
+msgid "langFileDeleted"
+msgstr "Fajl je obrisan"
+
+msgid "FullUserName"
+msgstr "Puno ime"
+
+msgid "SearchForUser"
+msgstr "Pretraga korisnika"
+
+msgid "SearchButton"
+msgstr "Traži"
+
+msgid "SearchNoResultsFound"
+msgstr "Nema rezultata za ovu pretragu"
+
+msgid "UsernameWrong"
+msgstr "Vaše korisnićko ime može da sadrži samo slova, brojeve i _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "To je zahtev za lozinku za e-mail adresu"
+
+msgid "CorrespondsToAccount"
+msgstr "Ova e-mail adresa odnosi se na sledeći račun korisnika."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo ne može da obradi zahtev automatski, jer nalog ima spoljni autentičnosti izvor. Molimo Vas da preduzmete odgovarajuće mere i obavestite korisnika."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo ne može da obradi zahtev automatski, jer barem jedan od računa ima spoljni  izvor autentičnosti. Molimo Vas da preduzmete odgovarajuće mere za sve račune (uključujući i one sa platformom autentikacije) i obavestite korisnika."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo ne može da obradi zahtev automatski za ovu vrstu računa. Vaš zahtev je poslat administratoru platforme, koji će preuzeti odgovarajuće mere i obavestiti vas o rezultatima."
+
+msgid "langphone"
+msgstr "Telefon"
+
+msgid "Unreg"
+msgstr "Odjaviti"
+
+msgid "MyProgress"
+msgstr "Moj napredak"
+
+msgid "ProgressIntroduction"
+msgstr "Počnite sa izborom treninga ispod <br />. Nakon toga možete videti napredak za svaku obuku za koju ste se prijavili."
+
+msgid "Select"
+msgstr "Odaberi"
+
+msgid "NeverExpires"
+msgstr "Nikada ne ističe"
+
+msgid "On"
+msgstr "Uključeno"
+
+msgid "ExpirationDate"
+msgstr "Datum isteka"
+
+msgid "ActiveAccount"
+msgstr "Aktivan nalog"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "Vaš nalog mora biti odobren"
+
+msgid "ApprovalForNewAccount"
+msgstr "Odobrenje za novi nalog"
+
+msgid "ManageUser"
+msgstr "Upravljanje korisnika"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Upisati trenera"
+
+msgid "SendMessage"
+msgstr "Pošalji poruku"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "Vaša lozinka je šifrovana iz bezbednosnih razloga. Nakon što pritisnete link e-mail će vam poslati ponovo lozinku."
+
+msgid "UsersUnsubscribed"
+msgstr "Odabrani korisnici su se odJavili iz obuke"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "Portal nije u mogućnosti da pošalje e-mail kontakt"
+
+msgid "OpenIDCouldNotBeFoundPleaseRegister"
+msgstr "Ovaj otvoreni ID nije bilo moguće pronaći u našoj bazi. Molimo Vas da se prijavite za novi nalog. Ako već imate nalog kod nas, molimo vas uredite svoj profil na svom računu dodavanjem ovog otvorenog ID"
+
+msgid "UsernameMaxXCharacters"
+msgstr "Korisničko ime treba da bude dugačko najviše %s znakova"
+
+msgid "PictureUploaded"
+msgstr "Vaša slika je bila učitana"
+
+msgid "ProductionUploaded"
+msgstr "Vaša (produkcijska) datoteka je učitana"
+
+msgid "FolderUpdated"
+msgstr "Direktorijum je ažuriran"
+
+msgid "UsersRegistered"
+msgstr "Ovi korisnici su upisani u trening"
+
+msgid "UserAlreadyRegisterByOtherCreator"
+msgstr "Korisnik je već registrovan kod drugog trenera."
+
+msgid "UserCreatedPlatform"
+msgstr " Korisnik dodan u platformi"
+
+msgid "UserInSession"
+msgstr "Korisnik je dodanu sesiju"
+
+msgid "UserNotAdded"
+msgstr "Koristnik nije dodan."
+
+msgid "NoSessionId"
+msgstr "Ova sednica nije identifikovana"
+
+msgid "NoUsersRead"
+msgstr "Molimo Vas da potvrdite svoju XML /CVS datoteku"
+
+msgid "UserImportFileMessage"
+msgstr "Ako su u XML /CVS datotekama lozinke nestale, ime i prezime će se objediniti da biste kreirali prijavu, i.e Julio Montoja u jmontoya"
+
+msgid "UserAlreadyRegisteredByOtherCreator"
+msgstr "Korisnika je već registrovao drugi trener."
+
+msgid "NewUserInTheCourse"
+msgstr "Novi korisnik na treningu"
+
+msgid "MessageNewUserInTheCourse"
+msgstr "Postoji novi korisnik na obuci"
+
+msgid "EditNormalProfile"
+msgstr "Uredi normalni profil"
+
+msgid "EditExtendProfile"
+msgstr " Uredi prošireni profil"
+
+msgid "EditInformation"
+msgstr "Izmeni profil"
+
+msgid "RegisterUser"
+msgstr "Registrujte se"
+
+msgid "IHaveReadAndAgree"
+msgstr "Pročitao sam i prihvatam"
+
+msgid "ByClickingRegisterYouAgreeTermsAndConditions"
+msgstr "Klikom na dugme \'Registrujte se\' ispod, slažete se sa uslovima i načinom koriščenja"
+
+msgid "User"
+msgstr "Koristnik"
+
+msgid "LostPass"
+msgstr "Zaboravili ste lozinku?"
+
+msgid "EnterEmailUserAndWellSendYouPassword"
+msgstr "Unesite korisničko ime ili email adresu sa kojom ste se registrovali i mi ćemo vam poslati lozinku."
+
+msgid "NoUserAccountWithThisEmailAddress"
+msgstr "Nema naloga sa ovim korisnikom i / ili e-mail adresom"
+
+msgid "WithTheFollowingSettings"
+msgstr "sa sledećim podešavanjima:"
+

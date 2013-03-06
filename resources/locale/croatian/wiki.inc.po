@@ -1,0 +1,246 @@
+msgid "WikiSearchResults"
+msgstr "Rezultat Wiki pretrage"
+
+msgid "Wiki"
+msgstr "Skupina wiki"
+
+msgid "StartPage"
+msgstr "Početna stranica"
+
+msgid "EditThisPage"
+msgstr "Uredi ovu stranicu"
+
+msgid "ShowPageHistory"
+msgstr "Kronologija"
+
+msgid "RecentChanges"
+msgstr "Nedavne promjene"
+
+msgid "AllPages"
+msgstr "Sve stranice"
+
+msgid "AddNew"
+msgstr "Dodaj novu stranicu"
+
+msgid "ChangesStored"
+msgstr "Vaše promjene su ažurirane"
+
+msgid "NewWikiSaved"
+msgstr "Nova wiki početna stranica je spremljena. Možete ju pogledati odabirom :"
+
+msgid "DefaultContent"
+msgstr "<br/> <br/> <p align=\"center\"> <img src=\"\'.api_get_path(WEB_IMG_PATH).\'wiki/wcollaborative.png\" alt=\"Gosp. Chamilo\" title=\"Gosp. Chamilo\" /></p> <p align=\"center\">Započnite uređivanjem ove stranice</p>"
+
+msgid "CourseWikiPages"
+msgstr "Wiki stranice kolegija"
+
+msgid "GroupWikiPages"
+msgstr "Stranice Wiki skupine"
+
+msgid "NoWikiPageTitle"
+msgstr "Vaše promjene su ažurirane. Morate dati naslov ovoj stranici."
+
+msgid "WikiPageTitleExist"
+msgstr "Odabrani naslov stranice već postoji, za uređivanje sadržaja istog odaberite:"
+
+msgid "WikiDiffAddedLine"
+msgstr "Dodan je redak"
+
+msgid "WikiDiffDeletedLine"
+msgstr "Obrisan je redak"
+
+msgid "WikiDiffMovedLine"
+msgstr "Redak je premješten"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "Redak bez promjene"
+
+msgid "DifferencesNew"
+msgstr "promjene u inačici"
+
+msgid "DifferencesOld"
+msgstr "stara inačica"
+
+msgid "Differences"
+msgstr "Razlike"
+
+msgid "MostRecentVersion"
+msgstr "Pogledaj posljednji sadržaj odabrane inačice"
+
+msgid "Legend"
+msgstr "Kazalo"
+
+msgid "ShowDifferences"
+msgstr "Usporedi odabrane inačice"
+
+msgid "SearchPages"
+msgstr "Pretraga stranica"
+
+msgid "Discuss"
+msgstr "Rasprava"
+
+msgid "History"
+msgstr "Kronologija"
+
+msgid "ShowThisPage"
+msgstr "Pogledaj ovu stranicu"
+
+msgid "DeleteThisPage"
+msgstr "Obriši ovu stranicu"
+
+msgid "DiscussThisPage"
+msgstr "Diskutiraj ovu stranicu"
+
+msgid "HomeWiki"
+msgstr "Wiki početna stranica"
+
+msgid "DeleteWiki"
+msgstr "Obriši cijeli Wiki sadržaj"
+
+msgid "WikiDeleted"
+msgstr "Vaš Wiki sadržaj je obrisan"
+
+msgid "WikiPageDeleted"
+msgstr "Stranica je obrisana sa cijelom kronologijom"
+
+msgid "NumLine"
+msgstr "Broj redka"
+
+msgid "DeletePageHistory"
+msgstr "Obriši ovu stranicu i sve njezine inačice"
+
+msgid "OnlyAdminDeleteWiki"
+msgstr "Jedino upravitelj kolegija može obrisati cijeli Wiki sadržaj"
+
+msgid "OnlyAdminDeletePageWiki"
+msgstr "Jedino upravitelj kolegija može obrisati stranicu"
+
+msgid "OnlyAddPagesGroupMembers"
+msgstr "Jedino upravitelji kolegija i članovi ove skupine smiju dodavati nove stranice"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "Jedino upravitelji kolegija i članovi ove skupine smiju uređivati ove stranice"
+
+msgid "ConfirmDeleteWiki"
+msgstr "Jesi li siguran da želiš obrisati ovaj Wiki?"
+
+msgid "ConfirmDeletePage"
+msgstr "Jesi li siguran da želiš obrisati ovu stranicu i njenu kronologiju?"
+
+msgid "AlsoSearchContent"
+msgstr "Pretraži također i sadržaj"
+
+msgid "PageLocked"
+msgstr "Stranica je zaštićena"
+
+msgid "PageUnlocked"
+msgstr "Stranica je nezaštićena"
+
+msgid "PageLockedExtra"
+msgstr "Ova stranica je zaštićena. Jedino upravitelji kolegija smiju uređivati ovu stranicu"
+
+msgid "PageUnlockedExtra"
+msgstr "Ova stranica je nezaštićena. Svi polaznici kolegija i članovi skupine smiju uređivati ovu stranicu"
+
+msgid "ShowAddOption"
+msgstr "Prikaži opciju dodaj"
+
+msgid "HideAddOption"
+msgstr "Sakrij opciju dodaj"
+
+msgid "AddOptionProtected"
+msgstr "Opcija dodaj je zaštićena. Jedino upravitelji kolegija smiju dodavati nove stranice. Polaznici kolegija i članovi skupine imaju pravo samo uređivati postojeće stranice"
+
+msgid "AddOptionUnprotected"
+msgstr "Opcija dodaj je omogućena za sve polaznike kolegija i članove skupine"
+
+msgid "NotifyChanges"
+msgstr "Obavijestiti me ukoliko bude promjena"
+
+msgid "NotNotifyChanges"
+msgstr "Nemoj me obavijestiti ukoliko bude promjena"
+
+msgid "NotifyByEmail"
+msgstr "Ukoliko netko napiše komentar obavijesti me putem elektroničke pošte"
+
+msgid "CancelNotifyByEmail"
+msgstr "Ne šalji mi obavijest elektroničkom poštom ukoliko bude promjena ove stranice"
+
+msgid "MostRecentVersionBy"
+msgstr "Zadnju inačicu je uređivao"
+
+msgid "Rating"
+msgstr "Ocjena"
+
+msgid "RatingMedia"
+msgstr "Srednja ocjena ove stranice je"
+
+msgid "NumComments"
+msgstr "Komentari ove stranice"
+
+msgid "NumCommentsScore"
+msgstr "Broj komentara na ovoj stranici:"
+
+msgid "AddPagesLocked"
+msgstr "Opciju dodaj je privremeno onemogućio upravitelj kolegija"
+
+msgid "LinksPages"
+msgstr "Reference"
+
+msgid "ShowLinksPages"
+msgstr "Prikaži stranice koje imaju poveznice na ovu stranicu"
+
+msgid "MoreWikiOptions"
+msgstr "Dodatne Wiki mogućnosti"
+
+msgid "DefaultTitle"
+msgstr "Početna stranica"
+
+msgid "DiscussNotAvailable"
+msgstr "Rasprava nije moguća"
+
+msgid "Print"
+msgstr "Tiskanje"
+
+msgid "Version"
+msgstr "Verzija"
+
+msgid "EditPage"
+msgstr "Uredi"
+
+msgid "AddedBy"
+msgstr "dodao(la)"
+
+msgid "EditedBy"
+msgstr "uredio(la)"
+
+msgid "DeletedBy"
+msgstr "obrisao(la)"
+
+msgid "WikiStandardMode"
+msgstr "Wiki oblik rada"
+
+msgid "GroupTutorAndMember"
+msgstr "Tutor i član skupine"
+
+msgid "GroupTutor"
+msgstr "Tutor skupine"
+
+msgid "GroupStandardMember"
+msgstr "Član skupine"
+
+msgid "AssignmentMode"
+msgstr "Individualni način rada"
+
+msgid "ConfigDefault"
+msgstr "Temeljna postavka"
+
+msgid "UnlockPage"
+msgstr "Ukloni zaštitu"
+
+msgid "LockPage"
+msgstr "Zaštiti"
+
+msgid "HWiki"
+msgstr "Pomoć: Wiki"
+

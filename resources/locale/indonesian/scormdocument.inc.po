@@ -1,0 +1,180 @@
+msgid "langChapter"
+msgstr "Bab"
+
+msgid "langDocumentList"
+msgstr "daftar seluruh dokumen"
+
+msgid "langOrganisationList"
+msgstr "Daftar Isi"
+
+msgid "langEditTOC"
+msgstr "Edit Daftar Isi"
+
+msgid "langEditDocument"
+msgstr "Edit"
+
+msgid "langCreateDocument"
+msgstr "Buat dokumen"
+
+msgid "langMissingImagesDetected"
+msgstr "Ada citra yang hilang terdeteksi"
+
+msgid "langPublish"
+msgstr "Terbitkan"
+
+msgid "langScormcontentstudent"
+msgstr "Ini adalah mata kuliah dengan format Scorm. Untuk meminkannya, klik disini : <input type=button name=scormbutton value=\'Luncurkan!\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontent"
+msgstr "Ini adalah Scorm content<br><input type=button name=scormbutton value=\'Luncurkan!\' onclick=\'openscorm()\'>"
+
+msgid "langDownloadAndZipEnd"
+msgstr " file Zip di-upload dan di-uncompress"
+
+msgid "langZipNoPhp"
+msgstr "File zip tidak dapat berisi file .PHP"
+
+msgid "langGroupForumLink"
+msgstr "Forum Group"
+
+msgid "langGroupSpace"
+msgstr "ArealGroup"
+
+msgid "langNotScormContent"
+msgstr "Ini bukan file scorm ZIP !"
+
+msgid "langNoText"
+msgstr "Silahkan ketikkan text / HTML"
+
+msgid "langNoFileName"
+msgstr "Silahkan isi nama file"
+
+msgid "langMaxFileSize"
+msgstr "Ukuran maximum file adalah"
+
+msgid "langFileName"
+msgstr "Nama File"
+
+msgid "langFileError"
+msgstr "File yang di-upload tidak sah."
+
+msgid "langDown"
+msgstr "turun"
+
+msgid "langViMod"
+msgstr "Kenampakan diubah"
+
+msgid "langAddComment"
+msgstr "Tambah/ubah komentar"
+
+msgid "langImpossible"
+msgstr "Operasi tidak mungkin"
+
+msgid "langNewDir"
+msgstr "Nama directori baru"
+
+msgid "langTo"
+msgstr "ke"
+
+msgid "langNoSpace"
+msgstr "Upload gagal. Tempat penyimpanan di direktori tidak cukup"
+
+msgid "langDownloadEnd"
+msgstr "Upload selesai"
+
+msgid "langFileExists"
+msgstr "Operasi tidak mungkin.<br>File dengan nama sama sudah ada terlebih dulu."
+
+msgid "langDocCopied"
+msgstr "Dokumen di-copy"
+
+msgid "langDocDeleted"
+msgstr "Dokumen dihapus"
+
+msgid "langElRen"
+msgstr "Elemen diganti nama"
+
+msgid "langDirMv"
+msgstr "Elemen dipindah"
+
+msgid "langComMod"
+msgstr "Komentar diubah"
+
+msgid "langRename"
+msgstr "Ganti nama"
+
+msgid "langCopy"
+msgstr "Copy isi mata kuliah"
+
+msgid "langNameDir"
+msgstr "Nama direktori baru"
+
+msgid "langDownloadFile"
+msgstr "Upload file ke server"
+
+msgid "learning_path_access"
+msgstr "Untuk menghapus/mengubah/menampilkan/menyembunyikan/mengedit/menambahkan learning path dengan ikon bricks, klik \'Learning Path builder\'."
+
+msgid "langRoot"
+msgstr "root"
+
+msgid "langBuilder"
+msgstr "Learning Path builder"
+
+msgid "lang_edit_learnpath"
+msgstr "Edit deskripsi/judul learning path"
+
+msgid "lang_add_title_and_desc"
+msgstr "Edit Judul dan deskripsi"
+
+msgid "lang_add_learnpath"
+msgstr "Tambah learning path baru"
+
+msgid "lang_learnpath_added"
+msgstr "Learning path baru berhasil dibuat. Kini anda dapat menambah modul dengan meng-klik tanda tambah."
+
+msgid "lang_delete_learnpath"
+msgstr "Hapus learning path"
+
+msgid "lang_learnpath_edited"
+msgstr "Learning path berhasil diedit"
+
+msgid "lang_learnpath_deleted"
+msgstr "Learning path dan modul di dalamnya dihapus"
+
+msgid "lang_no_publish"
+msgstr "Sembunyikan dari siswa"
+
+msgid "lang_publish"
+msgstr "Tampilkan untuk siswa"
+
+msgid "lang_no_published"
+msgstr "kini sekarang disembunyikan dari siswa"
+
+msgid "lang_published"
+msgstr "kini dapat diakses siswa"
+
+msgid "lang_description"
+msgstr "deskripsi"
+
+msgid "lang_title"
+msgstr "judul"
+
+msgid "langScormBuilder"
+msgstr "Path builder - Scorm format area builder"
+
+msgid "langCreateDoc"
+msgstr "Buat dokumen"
+
+msgid "langOrganiseDocuments"
+msgstr "Buat Daftar Isi"
+
+msgid "langUncompress"
+msgstr "uncompress file zip(.zip) di server"
+
+msgid "ExportShort"
+msgstr "Export short"
+
+msgid "progress"
+msgstr "Progres"
+

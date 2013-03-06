@@ -1,0 +1,231 @@
+msgid "AgendaAdd"
+msgstr "Lisää uusi merkintä"
+
+msgid "ShowAllEvents"
+msgstr "Näytä kaikki kalenterimerkinnät"
+
+msgid "ShowCurrent"
+msgstr "Näytä tämän kuun kalenterimerkinnät"
+
+msgid "AddCalendarItem"
+msgstr "Lisää uusi merkintä"
+
+msgid "Day"
+msgstr "Päivä"
+
+msgid "Month"
+msgstr "Kuukausi"
+
+msgid "Year"
+msgstr "Vuosi"
+
+msgid "Hour"
+msgstr "Tunti"
+
+msgid "Minutes"
+msgstr "Minuutit"
+
+msgid "Detail"
+msgstr "Yksityiskohdat"
+
+msgid "EditSuccess"
+msgstr "Merkintää on muokattu"
+
+msgid "AddSuccess"
+msgstr "Merkintä on lisätty"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Merkintä on poistettu"
+
+msgid "NoAgendaItems"
+msgstr "Kalenterimerkintöjä ei ole"
+
+msgid "lang_september"
+msgstr "lokakuu"
+
+msgid "langClassName"
+msgstr "Luokkan nimi"
+
+msgid "lang_agenda"
+msgstr "Kalenteri"
+
+msgid "ModifyCalendarItem"
+msgstr "Muokkaa merkintää"
+
+msgid "ItemTitle"
+msgstr "Merkinnän otsikko"
+
+msgid "langDay"
+msgstr "päivä"
+
+msgid "month_default"
+msgstr "oletus kuukausi"
+
+msgid "langYear"
+msgstr "Vuosi"
+
+msgid "year_default"
+msgstr "oletus vuosi"
+
+msgid "langHour"
+msgstr "Tunti"
+
+msgid "hour_default"
+msgstr "oletus tunti"
+
+msgid "langMinute"
+msgstr "minuutit"
+
+msgid "langLasting"
+msgstr "kesto"
+
+msgid "langOldToNew"
+msgstr "vanhimmasta uusimpaan"
+
+msgid "langNewToOld"
+msgstr "uusimmasta vanhimpaan"
+
+msgid "langNow"
+msgstr "Nyt"
+
+msgid "langAddEvent"
+msgstr "Lisää merkintä"
+
+msgid "langDetail"
+msgstr "yksityiskohdat"
+
+msgid "MonthView"
+msgstr "Kuukausinäkymä"
+
+msgid "WeekView"
+msgstr "Viikkonäkymä"
+
+msgid "DayView"
+msgstr "Päivänäkymä"
+
+msgid "AddPersonalItem"
+msgstr "Lisää henkilökohtainen merkintä"
+
+msgid "Week"
+msgstr "Viikko"
+
+msgid "Date"
+msgstr "Päivä"
+
+msgid "Time"
+msgstr "Aika"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Lisää henkilökohtainen merkintä"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Muokkaa henkilökohtaista merkintää"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Merkintä on lisätty"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Merkintää on muokattu"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Merkintä on poistettu"
+
+msgid "ViewPersonalItem"
+msgstr "Tarkastele henkilökohtaisia merkintöjä"
+
+msgid "UserGroupFilter"
+msgstr "Suodatin ryhmisä/kättäjissä"
+
+msgid "ShowAll"
+msgstr "Näytä kaikki"
+
+msgid "Print"
+msgstr "Tulosta"
+
+msgid "MyTextHere"
+msgstr "minun tekstini tähän"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Kopioi ilmoituksena"
+
+msgid "NewAnnouncement"
+msgstr "Uusi ilmoitus"
+
+msgid "AddAnnouncement"
+msgstr "Lisää ilmoituksena"
+
+msgid "UpcomingEvent"
+msgstr "Tuleva tapahtuma"
+
+msgid "RepeatedEvent"
+msgstr "Toistuva tapahtuma"
+
+msgid "RepeatType"
+msgstr "Toistuva tyyppi"
+
+msgid "RepeatDaily"
+msgstr "Päivittäin"
+
+msgid "RepeatWeekly"
+msgstr "Viikottain"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Kuukausittain, päivämäärän mukaan"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Kuukausittain, päivän mukaan"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Kuukausi-, päivänäkymä estetty"
+
+msgid "RepeatYearly"
+msgstr "Vuosittain"
+
+msgid "RepeatEnd"
+msgstr "Toistuvuus päättyy"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Näytä alkuperäinen tapahtuma"
+
+msgid "ICalFileImport"
+msgstr "Tuo iCal/ics tiedosto"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Kaikki käyttäjät"
+
+msgid "GlobalEvent"
+msgstr "Yleinen tapahtuma"
+
+msgid "ModifyEvent"
+msgstr "Muokkaa tapahtumaa"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Päättymispäivä ei voi olla ennen alkamispäivää"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Nouseva"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Laskeva"
+
+msgid "ItemForUserSelection"
+msgstr "Käyttäjien poiminta lista"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Tiedosto ei ole iCal formaatissa"
+
+msgid "RepeatEvent"
+msgstr "Toista tapahtuma"
+
+msgid "RepeatDate"
+msgstr "Toistuva päivä"
+
+msgid "EndDateMustBeMoreThanStartDate"
+msgstr "Päättymispäivän pitää olla myöhemmin kun alkamispäivän."
+
+msgid "SelectACourse"
+msgstr "Valitse kurssi"
+
+msgid "AllEvents"
+msgstr "Kaikki tapahtumat"
+

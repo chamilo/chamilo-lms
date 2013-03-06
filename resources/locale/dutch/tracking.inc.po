@@ -1,0 +1,696 @@
+msgid "langToolName"
+msgstr "Importeren van Blackboardcursussen"
+
+msgid "TrackingDisabled"
+msgstr "Statistieken zijn uitgeschakeld door de platformbeheerder."
+
+msgid "InactivesStudents"
+msgstr "Inactive studenten"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Gemiddelde tijd doorgebracht op het platform"
+
+msgid "AverageCoursePerStudent"
+msgstr "Gemiddeld aantal cursussen per student"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Gemiddelde vorderingen in de leerpaden"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Gemiddeld resultaat voor de oefeningen"
+
+msgid "SeeStudentList"
+msgstr "Toon de studentenlijst"
+
+msgid "NbActiveSessions"
+msgstr "Actieve sessies"
+
+msgid "NbPastSessions"
+msgstr "Voorbije sessies"
+
+msgid "NbFutureSessions"
+msgstr "Toekomstige sessies"
+
+msgid "NbStudentPerSession"
+msgstr "Aantal studenten per sessie"
+
+msgid "NbCoursesPerSession"
+msgstr "Aantal curssusen per sessie"
+
+msgid "SeeSessionList"
+msgstr "Bekijk de sessielijst"
+
+msgid "langShowNone"
+msgstr "Toon niets"
+
+msgid "langCourseStats"
+msgstr "Cursusstatistieken"
+
+msgid "langToolsAccess"
+msgstr "Toegang tot modules"
+
+msgid "langCourseAccess"
+msgstr "Toegang"
+
+msgid "langLinksAccess"
+msgstr "Links"
+
+msgid "langDocumentsAccess"
+msgstr "Documenten"
+
+msgid "langScormAccess"
+msgstr "Leerpad – cursussen in SCORM-formaat"
+
+msgid "langLinksDetails"
+msgstr "Links die door de student bekeken werden"
+
+msgid "langWorksDetails"
+msgstr "Publicaties die geüpload werden door de studenten"
+
+msgid "langLoginsDetails"
+msgstr "Klik op de naam v.e. maand voor meer informatie"
+
+msgid "langDocumentsDetails"
+msgstr "Documenten gedownload door de student"
+
+msgid "langExercicesDetails"
+msgstr "Scores van gemaakte oefeningen"
+
+msgid "langBackToList"
+msgstr "Terug naar gebruikerslijst"
+
+msgid "langDetails"
+msgstr "Details"
+
+msgid "langStatsOfCourse"
+msgstr "Statistieken van cursus"
+
+msgid "langStatsOfUser"
+msgstr "Statistieken van gebruiker"
+
+msgid "langStatsOfCampus"
+msgstr "Statistieken van campus"
+
+msgid "langCountUsers"
+msgstr "Aantal gebruikers"
+
+msgid "langCountToolAccess"
+msgstr "Totaal aantal verbindingen met deze cursus"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Maand"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Aantal logins"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Modulenaam"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Muisklikken van gebruikers"
+
+msgid "langToolTitleCountColumn"
+msgstr "Totaal aantal muisklikken"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Link"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Muisklikken van gebruikers"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Totaal aantal muisklikken"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Oefening"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Score"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Document"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Downloads door gebruikers"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Totaal aantal downloads"
+
+msgid "langScormContentColumn"
+msgstr "Titel"
+
+msgid "langScormStudentColumn"
+msgstr "Gebruikers"
+
+msgid "langScormTitleColumn"
+msgstr "Les/stap"
+
+msgid "langScormStatusColumn"
+msgstr "Status"
+
+msgid "langScormScoreColumn"
+msgstr "Score"
+
+msgid "langScormTimeColumn"
+msgstr "Tijd"
+
+msgid "langScormNeverOpened"
+msgstr "Deze cursus is nooit geopend door een gebruiker."
+
+msgid "langWorkTitle"
+msgstr "Titel"
+
+msgid "langWorkAuthors"
+msgstr "Auteurs"
+
+msgid "langWorkDescription"
+msgstr "Beschrijving"
+
+msgid "informationsAbout"
+msgstr "Tracken van"
+
+msgid "langNoEmail"
+msgstr "Geen e-mailadres opgegeven"
+
+msgid "langNoResult"
+msgstr "Er is nog geen resultaat."
+
+msgid "langCourse"
+msgstr "De cursus"
+
+msgid "langHits"
+msgstr "Hits"
+
+msgid "langTotal"
+msgstr "Totaal"
+
+msgid "langHour"
+msgstr "uur"
+
+msgid "langDay"
+msgstr "dag"
+
+msgid "langLittleHour"
+msgstr "u."
+
+msgid "langLast31days"
+msgstr "Laatste 31 dagen"
+
+msgid "langLast7days"
+msgstr "Laatste 7 dagen"
+
+msgid "langThisday"
+msgstr "Vandaag"
+
+msgid "langLogins"
+msgstr "Logins"
+
+msgid "langLoginsExplaination"
+msgstr "Lijst van de laatste logins met de modules die je bezocht hebt:"
+
+msgid "langExercicesResults"
+msgstr "Resultaten van de gemaakte oefeningen"
+
+msgid "langVisits"
+msgstr "bezoeken"
+
+msgid "langAt"
+msgstr "om"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Datum"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Bezoeken"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Logins en toegang tot modules"
+
+msgid "langWorkUploads"
+msgstr "Ingediende taken"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Ongeldige gebruiker: deze gebruiker bestaat niet in deze groep."
+
+msgid "langListStudents"
+msgstr "Lijst van gebruikers in deze groep"
+
+msgid "langPeriodHour"
+msgstr "Uur"
+
+msgid "langPeriodDay"
+msgstr "Dag"
+
+msgid "langPeriodWeek"
+msgstr "Week"
+
+msgid "langPeriodMonth"
+msgstr "Maand"
+
+msgid "langPeriodYear"
+msgstr "Jaar"
+
+msgid "langNextDay"
+msgstr "Volgende dag"
+
+msgid "langPreviousDay"
+msgstr "Vorige dag"
+
+msgid "langNextWeek"
+msgstr "Volgende week"
+
+msgid "langPreviousWeek"
+msgstr "Vorige week"
+
+msgid "langNextMonth"
+msgstr "Volgende maand"
+
+msgid "langPreviousMonth"
+msgstr "Vorige maand"
+
+msgid "langNextYear"
+msgstr "Volgend jaar"
+
+msgid "langPreviousYear"
+msgstr "Vorig jaar"
+
+msgid "langViewToolList"
+msgstr "Toon lijst van alle modules"
+
+msgid "langToolList"
+msgstr "Lijst van alle modules"
+
+msgid "langFrom"
+msgstr "Van"
+
+msgid "langTo"
+msgstr "naar"
+
+msgid "langPeriodToDisplay"
+msgstr "Periode"
+
+msgid "langDetailView"
+msgstr "Overzicht volgens"
+
+msgid "langBredCrumpGroups"
+msgstr "Groepen"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Groepsruimte"
+
+msgid "langBredCrumpUsers"
+msgstr "Gebruikers"
+
+msgid "langAdminToolName"
+msgstr "Beheerdersstatistieken"
+
+msgid "langPlatformStats"
+msgstr "Platformstatistieken"
+
+msgid "langStatsDatabase"
+msgstr "Statistiekendatabank"
+
+msgid "langPlatformAccess"
+msgstr "Toegang tot platform"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Toegang tot cursussen"
+
+msgid "langPlatformToolAccess"
+msgstr "Toegang tot tools"
+
+msgid "langHardAndSoftUsed"
+msgstr "Landen Providers Browsers Os Referers"
+
+msgid "langStrangeCases"
+msgstr "Speciale gevallen"
+
+msgid "langStatsDatabaseLink"
+msgstr "Klik hier"
+
+msgid "langCountCours"
+msgstr "Aantal cursussen"
+
+msgid "langCountCourseByFaculte"
+msgstr "Aantal cursussen per faculteit"
+
+msgid "langCountCourseByLanguage"
+msgstr "Aantal cursussen per taal"
+
+msgid "langCountCourseByVisibility"
+msgstr "Aantal cursussen per zichtbaarheid"
+
+msgid "langCountUsersByCourse"
+msgstr "Aantal gebruikers per cursus"
+
+msgid "langCountUsersByFaculte"
+msgstr "Aantal gebruikers per faculteit"
+
+msgid "langCountUsersByStatus"
+msgstr "Aantal gebruikers per status"
+
+msgid "langAccess"
+msgstr "Toegang"
+
+msgid "langCountries"
+msgstr "Landen"
+
+msgid "langProviders"
+msgstr "Providers"
+
+msgid "langOS"
+msgstr "OS"
+
+msgid "langBrowsers"
+msgstr "Browsers"
+
+msgid "langReferers"
+msgstr "Referers"
+
+msgid "langAccessExplain"
+msgstr "(Als een gebruiker de index van de campus opent)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Totaal"
+
+msgid "langTotalPlatformLogin"
+msgstr "Totaal"
+
+msgid "langMultipleLogins"
+msgstr "Accounts met dezelfde <i>Gebruikersnaam</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Accounts met dezelfde <i>Gebruikersnaam</i> <b>en</b> hetzelfde <i>Paswoord</i>"
+
+msgid "langMultipleEmails"
+msgstr "Accounts met hetzelfde <i>E-mailadres</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Cursussen zonder lesgever"
+
+msgid "langCourseWithoutAccess"
+msgstr "Niet gebruikte cursussen"
+
+msgid "langLoginWithoutAccess"
+msgstr "Niet gebruikte log-ins"
+
+msgid "langAllRight"
+msgstr "Geen speciale gevallen"
+
+msgid "langDefcon"
+msgstr "Er komen speciale gevallen voor!"
+
+msgid "langNULLValue"
+msgstr "Leeg (of NULL)"
+
+msgid "langTrafficDetails"
+msgstr "Trafiekdetails"
+
+msgid "langSeeIndividualTracking"
+msgstr "Zie de <a href=\"../user/user.php\">gebruikersmodule</a> voor individuele statistieken."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Dit pad is nog nooit geopend door iemand."
+
+msgid "SynthesisView"
+msgstr "Samenvattende tabel"
+
+msgid "Visited"
+msgstr "Doorlopen"
+
+msgid "FirstAccess"
+msgstr "Eerste toegang"
+
+msgid "LastAccess"
+msgstr "Laatste toegang"
+
+msgid "langProbationers"
+msgstr "Leerders"
+
+msgid "MoyenneTest"
+msgstr "Testgemiddelde"
+
+msgid "exportExcel"
+msgstr "Export in Excel-formaat"
+
+msgid "MoyCourse"
+msgstr "Cursusgemiddelde"
+
+msgid "MoyenneExamen"
+msgstr "Examengemiddelde"
+
+msgid "MoySession"
+msgstr "Sessiegemiddelde"
+
+msgid "TakenSessions"
+msgstr "Gevolgde sessies"
+
+msgid "FollowUp"
+msgstr "Opvolging"
+
+msgid "Trainers"
+msgstr "Opleider / docent"
+
+msgid "Administrators"
+msgstr "Beheerders"
+
+msgid "Tracks"
+msgstr "Parcours"
+
+msgid "Success"
+msgstr "Succes"
+
+msgid "ExcelFormat"
+msgstr "Excel-formaat"
+
+msgid "MyLearnpath"
+msgstr "Mijn traject"
+
+msgid "Time"
+msgstr "Tijd"
+
+msgid "Score"
+msgstr "Score"
+
+msgid "LastConnexion"
+msgstr "Laatste connectie"
+
+msgid "ConnectionTime"
+msgstr "connectietijd"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Aantal connecties voor deze cursus"
+
+msgid "StudentTutors"
+msgstr "Begeleiders van de student"
+
+msgid "StudentSessions"
+msgstr "Sessies van een student"
+
+msgid "StudentCourses"
+msgstr "Cursussen van de student"
+
+msgid "NoLearnpath"
+msgstr "Geen leerpad"
+
+msgid "Attempts"
+msgstr "Pogingen"
+
+msgid "Correction"
+msgstr "Correctie"
+
+msgid "NoExercise"
+msgstr "Geen oefeningen"
+
+msgid "LimitDate"
+msgstr "Uiterste datum"
+
+msgid "SentDate"
+msgstr "Datum van verzending"
+
+msgid "Annotate"
+msgstr "Aantekening"
+
+msgid "DayOfDelay"
+msgstr "Aantal dagen vertraging"
+
+msgid "NoProduction"
+msgstr "Geen productie"
+
+msgid "NoComment"
+msgstr "Geen opmerkingen"
+
+msgid "LatestLogin"
+msgstr "Laatste verbinding"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Tijd doorgebracht op het platform"
+
+msgid "Messages"
+msgstr "Berichten"
+
+msgid "AveragePostsInForum"
+msgstr "Gemiddeld aantal berichten in het forum"
+
+msgid "AverageAssignments"
+msgstr "Gemiddeld aantal opdrachten"
+
+msgid "Print"
+msgstr "Afdrukken"
+
+msgid "StudentDetails"
+msgstr "Details van de student"
+
+msgid "StudentDetailsInCourse"
+msgstr "Details van de cursist in deze cursus"
+
+msgid "Learnpaths"
+msgstr "Leerpaden"
+
+msgid "OtherTools"
+msgstr "Andere modules"
+
+msgid "DetailsStudentInCourse"
+msgstr "Details van de student in deze cursus"
+
+msgid "CourseTitle"
+msgstr "Titel van de cursus"
+
+msgid "NbStudents"
+msgstr "Aantal studenten"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Tijd doorgebracht in de cursus"
+
+msgid "AvgStudentsProgress"
+msgstr "Gemiddelde vooruitgang van de cursisten"
+
+msgid "AvgCourseScore"
+msgstr "Gemiddelde score van de studenten"
+
+msgid "AvgMessages"
+msgstr "Berichten per student"
+
+msgid "AvgAssignments"
+msgstr "Opdrachten per student"
+
+msgid "ToolsMostUsed"
+msgstr "Meest gebruikte diensten"
+
+msgid "StudentsTracking"
+msgstr "Studentenopvolging"
+
+msgid "CourseTracking"
+msgstr "Cursusopvolging"
+
+msgid "LinksMostClicked"
+msgstr "Meest bezochte links"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Meest gedownloade documenten"
+
+msgid "LearningPathDetails"
+msgstr "Details van het leerpad"
+
+msgid "NoConnexion"
+msgstr "Geen verbinding"
+
+msgid "TeacherInterface"
+msgstr "Lerareninterface"
+
+msgid "CoachInterface"
+msgstr "Coachinterface"
+
+msgid "AdminInterface"
+msgstr "Beheerderinterface"
+
+msgid "NumberOfSessions"
+msgstr "Aantal sessies"
+
+msgid "YourCourseList"
+msgstr "Uw cursuslijst"
+
+msgid "YourStatistics"
+msgstr "Uw statistieken"
+
+msgid "CoachList"
+msgstr "Coachlijst"
+
+msgid "CoachStudents"
+msgstr "Begeleid studenten"
+
+msgid "NoLearningPath"
+msgstr "Geen leerpaden"
+
+msgid "SessionCourses"
+msgstr "Sessie van cursussen"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Hier vind je de opvolging voor jouw studenten, ingeschreven in deze cursus."
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Gemiddeld gespendeerde tijd in een cursus"
+
+msgid "RemindInactiveUser"
+msgstr "Inactieve gebruiker herinneren"
+
+msgid "FirstLogin"
+msgstr "Eerste login"
+
+msgid "AccessDetails"
+msgstr "Toegangsdetails"
+
+msgid "DateAndTimeOfAccess"
+msgstr "Datum en tijd van toegang"
+
+msgid "Duration"
+msgstr "Duur"
+
+msgid "DisplayCoaches"
+msgstr "Coaches overzicht"
+
+msgid "DisplayUserOverview"
+msgstr "gebruikersoverzicht"
+
+msgid "ExportUserOverviewOptions"
+msgstr "Export opties voor het gebruiksersoverzicht"
+
+msgid "FollowingFieldsWillAlsoBeExported"
+msgstr "De volgende velden worden mee geëxporteerd"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "Totaal behaalde score van de oefeningen"
+
+msgid "TotalExercisesScorePossible"
+msgstr "Totaal mogelijke score van de oefeningen"
+
+msgid "TotalExercisesAnswered"
+msgstr "Aantal oefeningen beantwoord"
+
+msgid "TotalExercisesScorePercentage"
+msgstr "Procentuele totale score van de oefeningen"
+
+msgid "ForumForumsNumber"
+msgstr "Aantal fora"
+
+msgid "ForumThreadsNumber"
+msgstr "aantal discussies"
+
+msgid "ForumPostsNumber"
+msgstr "Aantal berichten"
+
+msgid "CourseInformation"
+msgstr "Training informatie"
+
+msgid "NoAdditionalFieldsWillBeExported"
+msgstr "De extra velden worden niet geëxporteerd"
+
+msgid "CourseProgress"
+msgstr "Voortgang"
+
+msgid "SelectFieldToAdd"
+msgstr "Kies het gebruikersprofiel veld om toe te voegen"
+
+msgid "AddAdditionalProfileField"
+msgstr "Voeg het veld van het gebruikersprofiel toe"
+

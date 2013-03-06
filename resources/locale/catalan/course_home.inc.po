@@ -1,0 +1,87 @@
+msgid "langActivate"
+msgstr "Activa"
+
+msgid "langDeactivate"
+msgstr "Desactiva"
+
+msgid "langInLnk"
+msgstr "Enllaços desactivats"
+
+msgid "langDelLk"
+msgstr "Voleu realment esborrar aquest enllaç?"
+
+msgid "langCourseCreate"
+msgstr "Crear un curs web"
+
+msgid "langNameOfTheLink"
+msgstr "Nom de l\'enllaç"
+
+msgid "lang_main_categories_list"
+msgstr "Llista de categories principal"
+
+msgid "langCourseAdminOnly"
+msgstr "Només professors"
+
+msgid "PlatformAdminOnly"
+msgstr "Només administradors"
+
+msgid "langCombinedCourse"
+msgstr "Curs combinat"
+
+msgid "ToolIsNowVisible"
+msgstr "L\'eina és actualment visible"
+
+msgid "ToolIsNowHidden"
+msgstr "L\'eina és actualment no visible"
+
+msgid "EditLink"
+msgstr "Editar l\'enllaç"
+
+msgid "Blog_management"
+msgstr "Gestió de blocs"
+
+msgid "Forum"
+msgstr "Fòrums"
+
+msgid "Course_maintenance"
+msgstr "Manteniment del curs"
+
+msgid "TOOL_SURVEY"
+msgstr "Enquestes"
+
+msgid "GreyIcons"
+msgstr "Caixa d\'eines"
+
+msgid "Interaction"
+msgstr "Interacció"
+
+msgid "Authoring"
+msgstr "Creació de continguts"
+
+msgid "Administration"
+msgstr "Administració"
+
+msgid "IntroductionTextUpdated"
+msgstr "El text d\'introducció ha estat actualitzat"
+
+msgid "IntroductionTextDeleted"
+msgstr "El text d\'introducció ha estat eliminat"
+
+msgid "SessionIdentifier"
+msgstr "Identificador de la sesión"
+
+msgid "SessionName"
+msgstr "Nom de la sessió"
+
+msgid "SessionCategory"
+msgstr "Categoria de la sessió"
+
+msgid "SessionData"
+msgstr "Dades de la sessió"
+
+msgid "TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP"
+msgstr "La configuració per al desplegament automàtic de lliçons està activada. Quan els estudiants entrin al curs, seran redirigits a la lliçó seleccionada perquè es desplegui automàticament."
+
+msgid "ToolSearch"
+msgstr "Cerca"
+

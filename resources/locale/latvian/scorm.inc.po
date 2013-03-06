@@ -1,0 +1,169 @@
+msgid "langScormVersion"
+msgstr "versija"
+
+msgid "langScormRestarted"
+msgstr "Visas nodarbības tagad ir nepabeigtas."
+
+msgid "langScormNoNext"
+msgstr "Šī ir pēdējā nodarbība."
+
+msgid "langScormNoPrev"
+msgstr "Šī ir pirmā nodarbība."
+
+msgid "langScormTime"
+msgstr "Laiks"
+
+msgid "langScormNoOrder"
+msgstr "Nav norādīta nekāda kārtība, Jūs varat klikšķināt uz jebkura no mācību elementiem."
+
+msgid "langScormScore"
+msgstr "Rezultāts"
+
+msgid "langScormLessonTitle"
+msgstr "Nodarbības nosaukums"
+
+msgid "langScormStatus"
+msgstr "Statuss"
+
+msgid "langScormToEnter"
+msgstr "Lai piedalītos"
+
+msgid "langScormFirstNeedTo"
+msgstr "Jums vispirms jāveic"
+
+msgid "langScormThisStatus"
+msgstr "Šī nodarbība ir"
+
+msgid "langScormClose"
+msgstr "Pārtraukt"
+
+msgid "langScormRestart"
+msgstr "Sākt no jauna"
+
+msgid "langScormCompstatus"
+msgstr "Pabeigts"
+
+msgid "langScormIncomplete"
+msgstr "Nepabeigts"
+
+msgid "langScormPassed"
+msgstr "Ieskaitīts"
+
+msgid "langScormFailed"
+msgstr "Neieskaitīts"
+
+msgid "langScormPrevious"
+msgstr "Iepriekšējais"
+
+msgid "langScormNext"
+msgstr "Nākošais"
+
+msgid "langScormTitle"
+msgstr "Chamilo <i>Scorm</i> spēlētājs"
+
+msgid "langScormMystatus"
+msgstr "Mans apgūtais mācību apjoms"
+
+msgid "langScormNoItems"
+msgstr "Šeit ierakstu nav."
+
+msgid "langScormNoStatus"
+msgstr "Šim objektam statuss nav pieejams"
+
+msgid "langScormLoggedout"
+msgstr "notika atteikšanās no <i>SCORM</i> sadaļas"
+
+msgid "langScormCloseWindow"
+msgstr "Aizvērt logus"
+
+msgid "ScormBrowsed"
+msgstr "Pārlūkots"
+
+msgid "langScormExitFullScreen"
+msgstr "Atpakaļ pie normāla izmēra ekrāna"
+
+msgid "langScormFullScreen"
+msgstr "Skatīt pilnā ekrānā"
+
+msgid "langScormNotAttempted"
+msgstr "Netika mēģināts"
+
+msgid "langCharset"
+msgstr "Rakstzīmju kodējums
+( lietot UTF-8 !)"
+
+msgid "langLocal"
+msgstr "Vietējs"
+
+msgid "langRemote"
+msgstr "Attālināts"
+
+msgid "langAutodetect"
+msgstr "Auto-detect"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "<b>Kopējais rezultāts / izpilde</b>"
+
+msgid "langUnknown"
+msgstr "Nezināms"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "Jūs tiešām vēlaties dzēst šos soļus?"
+
+msgid "Origin"
+msgstr "Autora izstrādes instruments"
+
+msgid "Local"
+msgstr "Vietējs"
+
+msgid "Remote"
+msgstr "Attālināts"
+
+msgid "FileToUpload"
+msgstr "SCORM vai AICC fails augšupielādēšanai"
+
+msgid "ContentMaker"
+msgstr "Lektora instrumenti"
+
+msgid "ContentProximity"
+msgstr "Kursa atrašanās vieta"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "Augšupielādēt lokālo failu no main/archive direktorijas"
+
+msgid "ThisItemIsNotExportable"
+msgstr "Šis mācību objekts vai aktivitāte nav SCORM savienojams. Tādēļ tas nav eksportējams."
+
+msgid "MoveCurrentChapter"
+msgstr "Pārvietot uz aktuālo sadaļu"
+
+msgid "GenericScorm"
+msgstr "Ģenerēt SCORM"
+
+msgid "UnknownPackageFormat"
+msgstr "Pakotnes formāts nav atpazīstams. Lūdzu pārliecinieties, ka tā ir pareizi formēta un nesatur kļūdas. Iespējams problēmas rada īpašs ZIP formāts, vai pārāk lielu failu sūtīšana. Ja neesiet pārliecināti par ZIP, lietojiet minimālus saspiešanas iestatījumus."
+
+msgid "Attempt"
+msgstr "Mēģinājums"
+
+msgid "MoveTheCurrentForum"
+msgstr "Pārvietot šo diskusiju"
+
+msgid "WarningWhenEditingScorm"
+msgstr "UZMANĪBU! Rediģējot mācību objekta saturu, jūs variet izmainīt kursa senāku kursa atskaiti, vai bojāt pašu mācību objektu."
+
+msgid "AdditionalProfileField"
+msgstr "Pievienot info lauku Lietotāja profilam"
+
+msgid "ScormUnknownPackageFormat"
+msgstr "Paketei, kuru Jūs mēģinājāt augšupielādēt, ir nezināms paketes formāts. Lūdzu pārbaudiet atbilstību."
+
+msgid "ScormNotEnoughSpaceInCourseToInstallPackage"
+msgstr "Nav pietiekami daudz brīvas vietas paketes atvēršanai (uncompressing)"
+
+msgid "ScormPackageFormatNotScorm"
+msgstr "Pakete, ko jūs augšupielādējat neatbilst SCORM formātam. Lūdzu, pārbaudiet, vai sekojošs fails -<b> imsmanifest.xml </b>- ir ZIP failā, kuru jūs mēģināt augšupielādēt."
+
+msgid "HideTocFrame"
+msgstr "Paslēpt tabulas apmales"
+

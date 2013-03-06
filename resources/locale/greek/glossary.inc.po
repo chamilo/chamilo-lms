@@ -1,0 +1,96 @@
+msgid "TermAddNew"
+msgstr "Προσθήκη νεόυ όρου στο γλωσσάρι"
+
+msgid "TermName"
+msgstr "Όρος"
+
+msgid "TermDefinition"
+msgstr "Ορισμός του όρου"
+
+msgid "TermDeleted"
+msgstr "Ο όρος έχει διαγραφεί"
+
+msgid "TermUpdated"
+msgstr "Ο όρος ενημερώθηκε"
+
+msgid "TermConfirmDelete"
+msgstr "Θέλετε πραγματικά να διαγράψετε αυτό τον όρο;"
+
+msgid "TermAddButton"
+msgstr "Αποθήκευση όρου"
+
+msgid "TermUpdateButton"
+msgstr "Ενημέρωση όρου"
+
+msgid "TermEdit"
+msgstr "Επεξεργασία όρου"
+
+msgid "TermDeleteAction"
+msgstr "Διαγραφή όρου"
+
+msgid "OrderBy"
+msgstr "Κατάταξη ανά"
+
+msgid "CreationDate"
+msgstr "Ημερομηνία δημιουργίας"
+
+msgid "UpdateDate"
+msgstr "Ενημερώθηκε"
+
+msgid "PreSelectedOrder"
+msgstr "Προκαθορισμένη"
+
+msgid "TermAdded"
+msgstr "Προστέθηκε όρος"
+
+msgid "YouMustEnterATermName"
+msgstr "Πρέπει να εισάγετε έναν όρο"
+
+msgid "YouMustEnterATermDefinition"
+msgstr "Πρέπει να εισάγετε τον ορισμό ενός όρου"
+
+msgid "TableView"
+msgstr "Εμφάνιση πίνακα"
+
+msgid "GlossaryTermAlreadyExistsYouShouldEditIt"
+msgstr "Αυτός ο όρος υπάρχει ήδη στο γλωσσάρι. Παρακαλώ αλλάξτε το όνομα του όρου."
+
+msgid "GlossaryManagement"
+msgstr "Διαχείριση Γλωσσαρίου"
+
+msgid "TermMoved"
+msgstr "Ο όρος μετακινήθηκε"
+
+msgid "ShowGlossaryInExtraToolsTitle"
+msgstr "Εμφάνιση των όρων του γλωσσαρίου στα πρόσθετα εργαλεία"
+
+msgid "ShowGlossaryInExtraToolsComment"
+msgstr "Από εδώ μπορείτε να ρυθμίσετε πως να προσθέτετε όρους στο γλωσσάρι μέσα στα πρόσθετα εργαλεία, σαν εκπαιδευτική διαδρομή και εργαλείο ασκήσεων."
+
+msgid "ImportGlossary"
+msgstr "Εισαγωγή γλωσσαρίου"
+
+msgid "ReplaceGlossary"
+msgstr "Αντικατάσταση γλωσσαρίου"
+
+msgid "CannotDeleteGlossary"
+msgstr "Αδύνατη η διαγραφή γλωσσαρίου"
+
+msgid "TermsImported"
+msgstr "Οι όροι έχουν εισαχθεί"
+
+msgid "TermsNotImported"
+msgstr "Οι όροι δεν έχουν εισαχθεί"
+
+msgid "ExportGlossaryAsCSV"
+msgstr "Εξαγωγή γλωσσαρίου υπό μορφή αρχείου CVS"
+
+msgid "List"
+msgstr "Κατάλογος"
+
+msgid "GlossaryTermUpdated"
+msgstr "Ο όρος ενημερώθηκε"
+
+msgid "DeleteAllGlossaryTerms"
+msgstr "Διαγραφή όλων των όρων"
+

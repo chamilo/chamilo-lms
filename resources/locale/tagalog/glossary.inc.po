@@ -1,0 +1,27 @@
+msgid "TermAddNew"
+msgstr "Magdagdag ng bagong salita sa talahulugan"
+
+msgid "TermName"
+msgstr "Salita"
+
+msgid "TermDefinition"
+msgstr "Kahulugan ng salita"
+
+msgid "TermConfirmDelete"
+msgstr "Nais mo bang tanggalin ang salitang ito"
+
+msgid "TermAddButton"
+msgstr "I-save ang salita"
+
+msgid "ShowGlossaryInExtraToolsTitle"
+msgstr "Ipakita ang mga salita sa talahulugan sa mga karagdagang tool"
+
+msgid "ShowGlossaryInExtraToolsComment"
+msgstr "Mula rito, maaari mo nang i-configure kung paano magdagdag ng mga salita sa talahulugan sa mga karagdagang tool bilang learning path at tool sa pagsasanay"
+
+msgid "ImportGlossary"
+msgstr "I-import ang talahulugan"
+
+msgid "ExportGlossaryAsCSV"
+msgstr "I-export ang talahulugan bilang isang CSV file"
+

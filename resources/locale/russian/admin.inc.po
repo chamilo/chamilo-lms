@@ -1,0 +1,2169 @@
+msgid "AdminBy"
+msgstr "Управляется"
+
+msgid "AdministrationTools"
+msgstr "Управление"
+
+msgid "State"
+msgstr "Состояние системы"
+
+msgid "Statistiques"
+msgstr "Статистика"
+
+msgid "VisioHostLocal"
+msgstr "Сервер для видеоконференции"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Базируется ли протокол конференции на Интернет-технологиях (неверно большую часть времени)"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Показывать ссылку для возврата к структуре курса. Ссылка доступна внизу страницы в любом случае."
+
+msgid "langUsed"
+msgstr "использованный"
+
+msgid "langPresent"
+msgstr "Правильно"
+
+msgid "langMissing"
+msgstr "отсутствующий"
+
+msgid "langExist"
+msgstr "существующий"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Показывать ссылку возврата к дереву категорий/курсов"
+
+msgid "ShowNumberOfCourses"
+msgstr "Показать количество курсов"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Показать имя преподавателя в названии курса"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Показать имя преподавателя в списке курса"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Показать Код Курса в списке курсов"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Показать Код Курса в названии Курса"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "Нет виртуальных курсов на платформе"
+
+msgid "ConfigureHomePage"
+msgstr "Конфигурировать Главную Страницу"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Активные модули при создании курса"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Какие инструменты должны быть активированы (видимы) по умолчании при создании нового курса?"
+
+msgid "langCourseBackup"
+msgstr "Сделать дубликат этого курса"
+
+msgid "langCourseTitular"
+msgstr "Преподаватель"
+
+msgid "langCourseTitle"
+msgstr "Название курса"
+
+msgid "langCourseFaculty"
+msgstr "Категория курса"
+
+msgid "langCourseDepartment"
+msgstr "Отдел курса"
+
+msgid "langCourseDepartmentURL"
+msgstr "Отдел URL"
+
+msgid "langCourseLanguage"
+msgstr "Язык курса"
+
+msgid "langCourseAccess"
+msgstr "Доступ к курсу"
+
+msgid "langCourseSubscription"
+msgstr "Подписка на курс"
+
+msgid "langPublicAccess"
+msgstr "Публичный доступ"
+
+msgid "langPrivateAccess"
+msgstr "Индивидуальный доступ"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Управление базой данный доступно только администратору сервера"
+
+msgid "langShowUsersOfCourse"
+msgstr "Показать подписанных на этот курс пользователей"
+
+msgid "langShowClassesOfCourse"
+msgstr "Показать подписанные группы на этот курс"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Показать группы этого курса"
+
+msgid "langPhone"
+msgstr "Телефон"
+
+msgid "langPhoneNumber"
+msgstr "Номер телефона"
+
+msgid "langActions"
+msgstr "Действия"
+
+msgid "langAddToCourse"
+msgstr "Добавить на курс"
+
+msgid "langDeleteFromPlatform"
+msgstr "Удалить из системы"
+
+msgid "langDeleteCourse"
+msgstr "Удалить выбранный(е) курс(ы)"
+
+msgid "langDeleteFromCourse"
+msgstr "Прекратить подписку на курс(ы)"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Удалить выбранные классы"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Удалить выбранные группы"
+
+msgid "langAdministrator"
+msgstr "Администратор"
+
+msgid "langAddPicture"
+msgstr "Добавить рисунок"
+
+msgid "langChangePicture"
+msgstr "Заменить рисунок"
+
+msgid "langDeletePicture"
+msgstr "Удалить рисунок"
+
+msgid "langAddUsers"
+msgstr "Добавить пользователей"
+
+msgid "langAddGroups"
+msgstr "Добавить группы"
+
+msgid "langAddClasses"
+msgstr "Добавить классы"
+
+msgid "langExportUsers"
+msgstr "Экспортировать список пользователей"
+
+msgid "langKeyword"
+msgstr "Ключевое слово"
+
+msgid "langGroupName"
+msgstr "Название группы"
+
+msgid "langGroupTutor"
+msgstr "Руководитель группы"
+
+msgid "langGroupDescription"
+msgstr "Описание группы"
+
+msgid "langNumberOfParticipants"
+msgstr "Число участников"
+
+msgid "langNumberOfUsers"
+msgstr "Число пользователей"
+
+msgid "langMaximum"
+msgstr "максимум"
+
+msgid "langMaximumOfParticipants"
+msgstr "Максимальное число участников"
+
+msgid "langParticipants"
+msgstr "Участники"
+
+msgid "langFirstLetterClass"
+msgstr "Первая буква (название класса)"
+
+msgid "langFirstLetterUser"
+msgstr "Первая буква фамилии"
+
+msgid "langFirstLetterCourse"
+msgstr "Первая буква (код)"
+
+msgid "langModifyUserInfo"
+msgstr "Редактировать информацию пользователя"
+
+msgid "langModifyClassInfo"
+msgstr "Редактировать информацию класса"
+
+msgid "langModifyGroupInfo"
+msgstr "Редактировать информацию группы"
+
+msgid "langModifyCourseInfo"
+msgstr "Редактировать информацию курса"
+
+msgid "langPleaseEnterClassName"
+msgstr "Пожалуйста, введите название класса!"
+
+msgid "langPleaseEnterLastName"
+msgstr "Пожалуйста, введите фамилию пользователя!"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Пожалуйста, введите имя пользователя!"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Пожалуйста, введите действительный электронный адрес!"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Пожалуйста, введите действительное регистрационное имя пользователя!"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Пожалуйста, введите код курса!"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Пожалуйста, введите имя и фамилию преподавателя!"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Пожалуйста, введите название курса!"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Допустимые форматы файлов: JPG, PNG, GIF!"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Данное регистрационное имя пользователя уже занято!"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Импортировать список пользователей из XML/CSV файлов"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Экспортировать лист пользователей в XML/CSV файл"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Только пользователям курса"
+
+msgid "langAddClassesToACourse"
+msgstr "Добавить классы на курс"
+
+msgid "langAddUsersToACourse"
+msgstr "Добавить пользователей на курс"
+
+msgid "langAddUsersToAClass"
+msgstr "Добавить пользователей в класс"
+
+msgid "langAddUsersToAGroup"
+msgstr "Добавить пользователей в группу"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Вы должны выбрать как минимум один класс или один курс!"
+
+msgid "AtLeastOneUser"
+msgstr "Вы должны выбрать как минимум одного пользователя!"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Вы должны выбрать как минимум одного пользователя и один курс!"
+
+msgid "langClassList"
+msgstr "Список класса"
+
+msgid "langUserList"
+msgstr "Список пользователей"
+
+msgid "langCourseList"
+msgstr "Список курса"
+
+msgid "langAddToThatCourse"
+msgstr "Добавить на этот (эти) курс(ы)"
+
+msgid "langAddToClass"
+msgstr "Добавить в класс"
+
+msgid "langRemoveFromClass"
+msgstr "Удалить из класса"
+
+msgid "langAddToGroup"
+msgstr "Добавить в группу"
+
+msgid "langRemoveFromGroup"
+msgstr "Удалить из группы"
+
+msgid "langUsersOutsideClass"
+msgstr "Пользователи вне класса"
+
+msgid "langUsersInsideClass"
+msgstr "Пользователи внутри класса"
+
+msgid "langUsersOutsideGroup"
+msgstr "Пользователи вне группы"
+
+msgid "langUsersInsideGroup"
+msgstr "Пользователи внутри группы"
+
+msgid "langImportFileLocation"
+msgstr "Расположение XML/CSV файла"
+
+msgid "langFileType"
+msgstr "Тип файла"
+
+msgid "langOutputFileType"
+msgstr "Тип файла вывода"
+
+msgid "langMustUseSeparator"
+msgstr "Должны использовать знак \';\'  как разделитель"
+
+msgid "langCSVMustLookLike"
+msgstr "CSV файл должен выглядеть так"
+
+msgid "langXMLMustLookLike"
+msgstr "XML файл должен выглядеть так"
+
+msgid "langMandatoryFields"
+msgstr "Поля, выделенные полужирным, обязательны"
+
+msgid "langNotXML"
+msgstr "Указанный файл не в формате XML !"
+
+msgid "langNotCSV"
+msgstr "Указанный файл не в формате CSV!"
+
+msgid "langNoNeededData"
+msgstr "Указанный файл не содержит всех необходимых данных!"
+
+msgid "langMaxImportUsers"
+msgstr "Вы не можете импортировать более 500 пользователей одновременно!"
+
+msgid "langAdminDatabases"
+msgstr "Базы данных (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Пользователи"
+
+msgid "langAdminClasses"
+msgstr "Классы пользователей"
+
+msgid "langAdminGroups"
+msgstr "Группы пользователей"
+
+msgid "langAdminCourses"
+msgstr "Курсы"
+
+msgid "langAdminCategories"
+msgstr "Категории курсов"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Подписать пользователя/группу на курс"
+
+msgid "AddACategory"
+msgstr "Добавить категорию"
+
+msgid "langInto"
+msgstr "в"
+
+msgid "langNoCategories"
+msgstr "Здесь категорий нет"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Разрешить добавить курсы в эту категорию?"
+
+msgid "langGoToForum"
+msgstr "Идти на форум"
+
+msgid "langCategoryCode"
+msgstr "Код категории"
+
+msgid "langCategoryName"
+msgstr "Наименование категории"
+
+msgid "langCategories"
+msgstr "категории"
+
+msgid "langEditNode"
+msgstr "Редактировать эту категорию"
+
+msgid "langOpenNode"
+msgstr "Открыть эту категорию"
+
+msgid "langDeleteNode"
+msgstr "Удалить эту категорию"
+
+msgid "langAddChildNode"
+msgstr "Добавить подкатегорию"
+
+msgid "langViewChildren"
+msgstr "Осмотреть детей"
+
+msgid "langTreeRebuildedIn"
+msgstr "Дерево реконструировано в"
+
+msgid "langTreeRecountedIn"
+msgstr "Дерево изложено подробно в"
+
+msgid "langRebuildTree"
+msgstr "Реконструировать дерево"
+
+msgid "langRefreshNbChildren"
+msgstr "Обновить число детей"
+
+msgid "langShowTree"
+msgstr "Показать дерево"
+
+msgid "langBack"
+msgstr "Вернуться к предыдущей странице"
+
+msgid "langLogDeleteCat"
+msgstr "Категория удалена"
+
+msgid "langRecountChildren"
+msgstr "Пересчитать детей"
+
+msgid "langUpInSameLevel"
+msgstr "Вверх на том же уровне"
+
+msgid "langSeconds"
+msgstr "секунды"
+
+msgid "langMailTo"
+msgstr "Послать e-mail на:"
+
+msgid "lang_no_access_here"
+msgstr "Здесь доступа нет"
+
+msgid "lang_php_info"
+msgstr "Информация о системе"
+
+msgid "langAddAdminInApache"
+msgstr "Добавить администратора"
+
+msgid "langAddFaculties"
+msgstr "Добавить категории"
+
+msgid "langSearchACourse"
+msgstr "Поиск курса"
+
+msgid "langSearchAUser"
+msgstr "Поиск пользователя"
+
+msgid "langTechnicalTools"
+msgstr "Технический"
+
+msgid "langConfig"
+msgstr "Конфигурация системы"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Список зарегистрированных пользователей (расширенный)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Максимальное число пользователей, отображаемых на странице"
+
+msgid "NoTimeLimits"
+msgstr "Время не ограничено"
+
+msgid "GeneralCoach"
+msgstr "Главный инструктор"
+
+msgid "GeneralProperties"
+msgstr "Основные свойства"
+
+msgid "CourseCoach"
+msgstr "Инструктор курса"
+
+msgid "UsersNumber"
+msgstr "Номер пользователя"
+
+msgid "PageAfterLoginTitle"
+msgstr "Страница после login"
+
+msgid "PageAfterLoginComment"
+msgstr "Страница, которую видит пользователь после входа на платформу"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Сайт Chamilo"
+
+msgid "TabsMyProfile"
+msgstr "Этикетка моего Профайла"
+
+msgid "GlobalRole"
+msgstr "Глобальная Роль"
+
+msgid "langNomOutilTodo"
+msgstr "Управление списком задач"
+
+msgid "langNomPageAdmin"
+msgstr "Администрация"
+
+msgid "langSysInfo"
+msgstr "Информация о Системе"
+
+msgid "langDiffTranslation"
+msgstr "Сравнить переводы"
+
+msgid "langStatOf"
+msgstr "Статистика"
+
+msgid "langSpeeSubscribe"
+msgstr "Быстрая подписка в качестве ревизора курса"
+
+msgid "langLogIdentLogout"
+msgstr "Список регистрационных имен (логинов)"
+
+msgid "langServerStatus"
+msgstr "Состояние сервера MySQL"
+
+msgid "langDataBase"
+msgstr "База данных"
+
+msgid "langRun"
+msgstr "работы"
+
+msgid "langClient"
+msgstr "Клиент MySql"
+
+msgid "langServer"
+msgstr "Сервет MySql"
+
+msgid "langtitulary"
+msgstr "Владелец"
+
+msgid "langUpgradeBase"
+msgstr "Обновить базу данных"
+
+msgid "langManage"
+msgstr "Управление порталом"
+
+msgid "langErrorsFound"
+msgstr "ошибки найдены"
+
+msgid "langMaintenance"
+msgstr "Поддержание"
+
+msgid "langUpgrade"
+msgstr "Обновить Chamilo"
+
+msgid "langWebsite"
+msgstr "Вебсайт Chamilo"
+
+msgid "langDocumentation"
+msgstr "Документация"
+
+msgid "langContribute"
+msgstr "Вклад (содействие)"
+
+msgid "langInfoServer"
+msgstr "Информация сервера"
+
+msgid "langOtherCategory"
+msgstr "Другая категория"
+
+msgid "langSendMailToUsers"
+msgstr "Послать почту пользователям"
+
+msgid "langExampleXMLFile"
+msgstr "Пример XML файла"
+
+msgid "langExampleCSVFile"
+msgstr "Пример CSV файла"
+
+msgid "langCourseSystemCode"
+msgstr "Системный код"
+
+msgid "langCourseVisualCode"
+msgstr "Видимый код"
+
+msgid "langSystemCode"
+msgstr "Системный Код"
+
+msgid "langVisualCode"
+msgstr "видимый код"
+
+msgid "langAddCourse"
+msgstr "Создать курс"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Управлять виртуальными курсами"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Создать виртуальный курс"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "Виртуальный рурс будет делить область памяти(директория и база данных) с существующим \"реальным\" курсом"
+
+msgid "langRealCourseCode"
+msgstr "Код реального курса"
+
+msgid "langCourseCreationSucceeded"
+msgstr "Курс был успешно создан"
+
+msgid "langYourDokeosUses"
+msgstr "Ваша Chamilo установка используется сейчас"
+
+msgid "langOnTheHardDisk"
+msgstr "на жестком диске"
+
+msgid "langIsVirtualCourse"
+msgstr "Это виртуальный курс"
+
+msgid "langSystemAnnouncements"
+msgstr "Системные объявления"
+
+msgid "langAddAnnouncement"
+msgstr "Добавить новое объявление"
+
+msgid "langAnnouncementAdded"
+msgstr "Объявление было добавлено"
+
+msgid "langAnnouncementUpdated"
+msgstr "Объявление было обновлено"
+
+msgid "langAnnouncementDeleted"
+msgstr "Объявление было удалено"
+
+msgid "langContent"
+msgstr "Содержание (суть)"
+
+msgid "PermissionsForNewFiles"
+msgstr "Разрешения для новых файлов"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "Возможность определять права настроек для каждого нового создаваемого файла позволяет Вам повышать уровень безопасности против атак хакеров, которые могут загружать файлы сомнительного содержания на Ваш портал. Стандартной настройки (0550) должно быть достаточно для обеспечения вашего сервера приемлемым уровнем защиты. Данный формат использует терминологию UNIX Владелец-Группа-Другие с правами Читать-Писать-Выполнять. Если Вы используете Oogie, позаботьтесь, что пользователь, который запускает OpenOffice сможет писать файлы в каталоге курса."
+
+msgid "langStudent"
+msgstr "Студент"
+
+msgid "Guest"
+msgstr "Гость"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Логин (войти) как"
+
+msgid "langLoginAsThisUser"
+msgstr "Логин (регистрационное имя)"
+
+msgid "SelectPicture"
+msgstr "Выбрать рисунок..."
+
+msgid "DontResetPassword"
+msgstr "Не меняйте пароль"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Принимать участие в разработке"
+
+msgid "langCourseAdmin"
+msgstr "руководитель курса"
+
+msgid "langOtherCourses"
+msgstr "другие курсы"
+
+msgid "PlatformLanguageTitle"
+msgstr "Язык платформы"
+
+msgid "ServerStatusComment"
+msgstr "Какого типа этот сервер? Он включает или выключает какие-то специфические опции. На разрабатываемом сервере функционируют такие возможности перевода, которые определяют непереведенные цепочки (строки)"
+
+msgid "ServerStatusTitle"
+msgstr "Тип сервера"
+
+msgid "PlatformLanguages"
+msgstr "Языки платформ Chamilo"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Этот инструмент управляет меню выбора языка на странице входа (логина). Как администратор платформы Вы можете решать, какие языки могут быть доступны для ваших пользователей."
+
+msgid "OriginalName"
+msgstr "Исходное (оригинальное) имя"
+
+msgid "EnglishName"
+msgstr "Английское имя"
+
+msgid "DokeosFolder"
+msgstr "Каталог Chamilo"
+
+msgid "Properties"
+msgstr "Свойства"
+
+msgid "PlatformConfigSettings"
+msgstr "Настройки Chamilo"
+
+msgid "SettingsStored"
+msgstr "Настройки были сохранены"
+
+msgid "InstitutionTitle"
+msgstr "Название установки"
+
+msgid "InstitutionComment"
+msgstr "Имя организации - собственника портала(появляется в заголовке справа)"
+
+msgid "InstitutionUrlTitle"
+msgstr "Установки URL"
+
+msgid "InstitutionUrlComment"
+msgstr "Установки URL  (ссылка появляется в заголовке справа)"
+
+msgid "SiteNameTitle"
+msgstr "Название портала Chamilo"
+
+msgid "SiteNameComment"
+msgstr "Название вашего портала Chamilo (появляется в заголовке)"
+
+msgid "emailAdministratorTitle"
+msgstr "Администратор платформы: эл. почта"
+
+msgid "emailAdministratorComment"
+msgstr "Эл. адрес администратора платформы (появляется внизу слева)"
+
+msgid "administratorSurnameTitle"
+msgstr "Администратор платформы: фамилия"
+
+msgid "administratorSurnameComment"
+msgstr "Фамилия администратора платформы (появляется внизу слева)"
+
+msgid "administratorNameTitle"
+msgstr "Администратор платформы: имя"
+
+msgid "administratorNameComment"
+msgstr "Имя администратора платформы (появляется внизу слева)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Информация об администраторе платформы внизу"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Показывать информацию об администраторе платформы внизу?"
+
+msgid "HomepageViewTitle"
+msgstr "Вид домашней страницы"
+
+msgid "HomepageViewComment"
+msgstr "Как бы Вы хотели, чтобы выглядела домашняя страница курса?"
+
+msgid "HomepageViewDefault"
+msgstr "Макет двух колонок (столбцов). Неактивные инструменты спрятаны"
+
+msgid "HomepageViewFixed"
+msgstr "Макет трех колонок (столбцов). Неактивные инструменты маркированы серым (иконки на своих местах)"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Ярлыки инструментов"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Показывать ярлыки инструментов на баннере?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Вид студента"
+
+msgid "ShowStudentViewComment"
+msgstr "Включить вид студента?<br />Данная опция позволяет преподавателю видеть, что собирается посмотреть студент."
+
+msgid "AllowGroupCategories"
+msgstr "Категории групп"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Позволять администратору курса создавать категории в модуле групп?"
+
+msgid "PlatformLanguageComment"
+msgstr "Вы можете устанавливать языки платформы в разных частях управления платформой, а именно  <a href=\"languages.php\">Dokeos Platform Languages</a>"
+
+msgid "ProductionServer"
+msgstr "Выпускающий сервер"
+
+msgid "TestServer"
+msgstr "Тестовый сервер"
+
+msgid "ShowOnlineTitle"
+msgstr "Кто на связи (онлайн)"
+
+msgid "AsPlatformLanguage"
+msgstr "как язык платформы"
+
+msgid "ShowOnlineComment"
+msgstr "Показать число человек, кто в настоящий момент на связи (онлайн)?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Разрешить изменение имени в профиле?"
+
+msgid "AllowNameChangeComment"
+msgstr "Разрешено ли пользователю изменить свое имя и фамилию?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Размер документа по умолчанию"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Что означает инструмент \"размер документа по умолчанию\"? Это означает, что Вы можете задать размер документа для отдельных курсов следующим образом: управление платформой > курсы > изменить"
+
+msgid "ProfileChangesTitle"
+msgstr "Профиль (краткая характеристика)"
+
+msgid "ProfileChangesComment"
+msgstr "Какие части профиля могут быть изменены?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Регистрация: обязательные поля"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Какие поля обязательны (помимо короткого имени, имени, имени пользователя (логина) и пароля)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Размер группы по умолчанию"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Что означает инструмент (опция) \"размер группы по умолчанию\"?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Пароль утерян"
+
+msgid "AllowLostPasswordComment"
+msgstr "Разрешено ли пользователю просить свой утерянный пароль?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Регистрация"
+
+msgid "AllowRegistrationComment"
+msgstr "Регистрация как новый пользователь разрешена? Могут ли пользователи создать новые счета?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Регистрация в качестве преподавателя"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Можно ли регистрироваться в качестве преподавателя (который создает курсы)?"
+
+msgid "PlatformLanguage"
+msgstr "Язык платформы"
+
+msgid "Tuning"
+msgstr "Настройка"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "Разделить направляющую директорию пользователей"
+
+msgid "SplitUsersUploadDirectoryComment"
+msgstr "На каждом часто посещаемом портале, где много пользователей регистрируется и посылает свои фото, директория пересылки (главная/пересылка/пользователи/) может содержать слишком много файлов для управления системными файлами (например, на сервере Debain было найдено более, чем 36000 таких файлов). Изменение данной опции включит одноуровневое разделение каталогов в каталоге пересылки. 9 каталогов будут использоваться как базовые и все подкаталоги пользователей будут храниться в одном из этих 9 каталогов. Изменение данной опции не приведет к изменениям порядка каталогов на диске, но внесет изменения в поведение кода Chamilo. Таким образом, если Вы изменяете эту опцию, Вам необходимо создать новые каталоги и перенести вручную существующие категории на сервер. Будьте внимательны при создании и переносе этих каталогов, Вы должны будете перенести каталоги пользователей с 1 по 9 в подкаталоги под тем же самым названием. Если Вы не совсем уверены по поводу данной опции, то лучше ее не активировать."
+
+msgid "CourseQuota"
+msgstr "Размер курса"
+
+msgid "EditNotice"
+msgstr "Редактировать сообщение (извещение)"
+
+msgid "General"
+msgstr "общий (основной)"
+
+msgid "LostPassword"
+msgstr "Утерянный пароль"
+
+msgid "Registration"
+msgstr "регистрация"
+
+msgid "Password"
+msgstr "пароль"
+
+msgid "InsertLink"
+msgstr "вставка ссылки"
+
+msgid "EditNews"
+msgstr "Редактировать новости"
+
+msgid "EditCategories"
+msgstr "редактировать категории"
+
+msgid "EditHomePage"
+msgstr "Редактировать домашнюю страницу"
+
+msgid "AllowUserHeadingsComment"
+msgstr "Может ли администратор курса определять загаловки пользователя для того, чтобы извлекать дополнительную информацию о нем?"
+
+msgid "Platform"
+msgstr "Платформа"
+
+msgid "Course"
+msgstr "Курс"
+
+msgid "Languages"
+msgstr "Языки"
+
+msgid "Privacy"
+msgstr "Уединение"
+
+msgid "NoticeTitle"
+msgstr "Название сообщения (извещения)"
+
+msgid "NoticeText"
+msgstr "Текст сообщения (извещения)"
+
+msgid "LinkName"
+msgstr "Текст ссылки"
+
+msgid "LinkURL"
+msgstr "URL ссылка"
+
+msgid "OpenInNewWindow"
+msgstr "Открыть в новом окне"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "На странице, где разрешено добавлять пользователей на курсы или классы, если первый не отфильтрованный список содержит больше, чем данное число пользователей, тогда фильтрация проводится по первой букве (А)"
+
+msgid "Plugins"
+msgstr "Расширение возможностей системы"
+
+msgid "HideDLTTMarkupComment"
+msgstr "Спрятать  [= ... =] маркер, когда  переменная языка не переведена"
+
+msgid "Info"
+msgstr "информация"
+
+msgid "UserAdded"
+msgstr "пользователь добавлен"
+
+msgid "NoSearchResults"
+msgstr "Поиск не дал результатов"
+
+msgid "UserDeleted"
+msgstr "пользователь удален"
+
+msgid "NoClassesForThisCourse"
+msgstr "Нет подписанных классов на этот курс"
+
+msgid "CourseUsage"
+msgstr "Использование курса"
+
+msgid "NoCoursesForThisUser"
+msgstr "Этот пользователь не подписан на курс"
+
+msgid "NoClassesForThisUser"
+msgstr "Этот пользователь не записан в класс"
+
+msgid "NoCoursesForThisClass"
+msgstr "Этот класс не подписан на курс"
+
+msgid "langOpenToTheWorld"
+msgstr "Открытый доступ разрешен для всех"
+
+msgid "OpenToThePlatform"
+msgstr "Открытый доступ разрешен для пользователей, зарегистрированных на платформе"
+
+msgid "langPrivate"
+msgstr "Частный доступ (сайт доступен только людям из списка пользователей)"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Полностью закрыт; курс доступен только для администратора курса"
+
+msgid "langSubscription"
+msgstr "Подписка"
+
+msgid "langUnsubscription"
+msgstr "Отказаться от подписки"
+
+msgid "CourseAccessConfigTip"
+msgstr "По умолчянию Ваш курс является публичным, но Вы можете определить более высокий уровень конфиденциальности."
+
+msgid "Tool"
+msgstr "инструмент"
+
+msgid "NumberOfItems"
+msgstr "количество элементов"
+
+msgid "DocumentsAndFolders"
+msgstr "Документы и каталоги"
+
+msgid "Learnpath"
+msgstr "План обучения"
+
+msgid "Exercises"
+msgstr "Упражнения"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Индивидуальное расписание"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "Может ли пользователь добавлять элементы персональной повестки дня (расписания) на страницу Моя повестка дня (расписание)?"
+
+msgid "CurrentValue"
+msgstr "текущая ценность"
+
+msgid "CourseDescription"
+msgstr "Описание курса"
+
+msgid "OnlineConference"
+msgstr "Конференция в сети (онлайн)"
+
+msgid "Chat"
+msgstr "разговор онлайн"
+
+msgid "Quiz"
+msgstr "Вопросы (короткий тест)"
+
+msgid "Announcements"
+msgstr "Объявления"
+
+msgid "Links"
+msgstr "Ссылки"
+
+msgid "LearningPath"
+msgstr "Учебный план"
+
+msgid "Documents"
+msgstr "Документы"
+
+msgid "UserPicture"
+msgstr "Рисунок (фото)"
+
+msgid "officialcode"
+msgstr "Официальный (служебный) код"
+
+msgid "Login"
+msgstr "Регистрационное имя пользователя (логин)"
+
+msgid "UserPassword"
+msgstr "Пароль"
+
+msgid "SubscriptionAllowed"
+msgstr "Подписка разрешена"
+
+msgid "UnsubscriptionAllowed"
+msgstr "Отказ от подписки разрешен"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Разрешено"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Запрещено"
+
+msgid "AddDummyContentToCourse"
+msgstr "Добавить какой-нибудь пример содержания в этот курс"
+
+msgid "DummyCourseCreator"
+msgstr "Создать пример содержания курса"
+
+msgid "DummyCourseDescription"
+msgstr "Это добавит пример содержания в этот курс. Это только для пробы."
+
+msgid "AvailablePlugins"
+msgstr "Это все те плагины, которые были найдены в Вашей системе. Вы можете скачать дополнительные плагины с <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
+
+msgid "CreateVirtualCourse"
+msgstr "Создать виртуальный курс"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Отобразить список виртуальных курсов"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Связано с кодом реального курса"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Попытка создания виртуального курса..."
+
+msgid "WantedCourseCode"
+msgstr "Требуется код курса"
+
+msgid "ResetPassword"
+msgstr "Сменить пароль"
+
+msgid "CheckToSendNewPassword"
+msgstr "Задержать отправление нового пароля"
+
+msgid "AutoGeneratePassword"
+msgstr "Автоматически создать новый пароль"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Используйте название как имя документа"
+
+msgid "UseDocumentTitleComment"
+msgstr "Это позволит использовать название для имени документа вместо документ_имя.ext"
+
+msgid "StudentPublications"
+msgstr "Публикации студента"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "Удаленные файлы не могут быть восстановлены"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Удаление файла в настройках документов удаляет его навсегда. Файл восстановлению не подлежит."
+
+msgid "ClassName"
+msgstr "Название (имя) класса"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Ящик для содержимого: максимальный размер файла (документа) для расположения в этом ящике"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Насколько большой (в байтах) может быть ящик для документов?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Ящик для содержимого: можно ли перезаписывать имеющиеся документы?"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "Может ли оригинальный документ быть перезаписан когда студенты или преподаватель скачивают документ под тем же именем, что и существующий? Если Вы ответите \"да\" Вы потеряете механизм контроля версий."
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Ящик для содержимого: закачать в собственный ящик?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Разрешить преподавателям и студенту выгружать документы в их собственные ящики для содержимого без отсылки их кому-то (=посылать документы самим себе)"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Ящик для содержимого: Студент <-> Студент"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Разрешить студентам посылать документы другим студентам (равный равному, обмен между равными). Студенты могут использовать эту функцию и для менее значимых документов (музыка, видео...). Если Вы эту функцию отключите, то студент сможет посылать документы только преподавателям."
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Коробка содержания: разрешена рассылка"
+
+msgid "DropboxAllowMailingComment"
+msgstr "Пользуясь функцией почтовых отправлений Вы можете послать каждому студенты личный документ"
+
+msgid "PermissionsForNewDirs"
+msgstr "Права для новых директориев (папок)"
+
+msgid "PermissionsForNewDirsComment"
+msgstr "Возможность определять набор прав при создании каждой новой директории (папки) позволяет Вам повысить безопасность и защититься от аттак хакеров, которые могут скачивать документы сомнительного содержания на Ваш портал. Настроек по умолчанию (0770) должно быть достаточно, чтобы придать вашему серверу разумный уровень защиты. Данный формат использует UNIX терминологию Владелец-Группа-Другие с правами Читать-Писать-Выполнять."
+
+msgid "UserListHasBeenExported"
+msgstr "Список пользователей был экспортирован"
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Щелкнуть здесь, чтобы скачать файл"
+
+msgid "administratorTelephoneTitle"
+msgstr "Администратор платформы: телефон"
+
+msgid "administratorTelephoneComment"
+msgstr "Номер телефона администратора платформы"
+
+msgid "SendMailToNewUser"
+msgstr "Послать письмо новому пользователю"
+
+msgid "ExtendedProfileTitle"
+msgstr "Расширенный профиль"
+
+msgid "ExtendedProfileComment"
+msgstr "Если этоа настройка является настроить опцию \"Правда\", пользователь можеть заполнить следующие (необязательные) поля: \"Мои способности, знания\", \"Мой диплом\", \"Что я могу преподавать\", \"Моя личная открытая территория\""
+
+msgid "Classes"
+msgstr "Классы"
+
+msgid "UserUnsubscribed"
+msgstr "Пользователь на настоящий момент не подписан на курс"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "Пользователь не может отменить подпискуи на курс. Этот пользователь является администратором курса."
+
+msgid "InvalidStartDate"
+msgstr "Введена неправильная дата начала"
+
+msgid "InvalidEndDate"
+msgstr "Введена неправильная дата окончания"
+
+msgid "DateFormatLabel"
+msgstr "(д/м/г ч:м)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "Файлы домашней страницы не перезаписываемы!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Пожалуйста, дайте сопроводительный текст"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Пожалуйста, дайте название уведомлению"
+
+msgid "PleaseEnterLinkName"
+msgstr "Пожалуйста, дайте имя ссылки"
+
+msgid "InsertThisLink"
+msgstr "Вставить эту ссылку"
+
+msgid "FirstPlace"
+msgstr "Первое место"
+
+msgid "After"
+msgstr "после"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Ящик для содержимого: разрешить группе"
+
+msgid "DropboxAllowGroupComment"
+msgstr "Пользователи могут посылать файлы группам"
+
+msgid "ClassDeleted"
+msgstr "Класс удален"
+
+msgid "ClassesDeleted"
+msgstr "Классы удалены"
+
+msgid "NoUsersInClass"
+msgstr "В этом классе нет пользователей"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "Выбранные пользователи подписаны на выбранные курсы"
+
+msgid "InvalidTitle"
+msgstr "Пожалуйста, введите заголовок"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Эта категория уже используется"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Пожалуйста, введите код и название категории"
+
+msgid "DokeosHomepage"
+msgstr "Домашняя страница Chamilo (Chamilo)"
+
+msgid "DokeosForum"
+msgstr "Форум Chamilo"
+
+msgid "RegisterYourPortal"
+msgstr "Зарегистрируйте свой портал"
+
+msgid "DokeosExtensions"
+msgstr "Расширения Chamilo"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Показать меню навигации курса"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Показать меню навигации, которое упрощает посещение различных областей курса"
+
+msgid "LoginAs"
+msgstr "Войти (логин) как"
+
+msgid "ImportClassListCSV"
+msgstr "Импортировать список класса через CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "Показать число пользователей онлайн на странице входа (логина) (видно для всех)"
+
+msgid "ShowOnlineUsers"
+msgstr "Показать число пользователей онлайн со всех страниц (видно для тех, кто в системе)"
+
+msgid "ShowOnlineCourse"
+msgstr "Показать число пользователей онлайн на этом курсе"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Показывать иконки в меню навигации?"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Фокус на право (правоту)"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Фокус на местоположение"
+
+msgid "ClassesUnsubscribed"
+msgstr "Выбранные классы были отписаны от выбранных курсов"
+
+msgid "ClassesSubscribed"
+msgstr "Выбранные класс были подписаны на выбранные курсы"
+
+msgid "RoleId"
+msgstr "Роль ID (идентификации)"
+
+msgid "RoleName"
+msgstr "Название (имя) роли"
+
+msgid "RoleType"
+msgstr "Тип"
+
+msgid "RightValueModified"
+msgstr "Величена была изменена"
+
+msgid "MakeAvailable"
+msgstr "Сделать доступным"
+
+msgid "MakeUnavailable"
+msgstr "Сделать недоступным"
+
+msgid "Stylesheets"
+msgstr "Таблицы стилей"
+
+msgid "DefaultDokeosStyle"
+msgstr "Стиль Chamilo по умолчанию"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Нужно ли, чтобы меню навигации показывало разные иконки инструментов?"
+
+msgid "Plugin"
+msgstr "Подключить (встроить)"
+
+msgid "MainMenu"
+msgstr "Главное меню"
+
+msgid "MainMenuLogged"
+msgstr "Главное меню после входа в систему"
+
+msgid "Banner"
+msgstr "Баннер (знамя, транспарант)"
+
+msgid "ImageResizeTitle"
+msgstr "Изменить размер скаченных пользователем образов (рисунков)"
+
+msgid "ImageResizeComment"
+msgstr "Изображения пользователя могут быть изменять размеры при загрузке если PHP компилирован с <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD библиотека</a>. Если GD недоступно, эта опция будет игнорирова."
+
+msgid "MaxImageWidthTitle"
+msgstr "Максимальная ширина изображения пользователя"
+
+msgid "MaxImageWidthComment"
+msgstr "Максимальная ширина изображения пользователя в пикселях . Эта опция применяется только, если изменяются размеры изображения пользователя при его загрузке."
+
+msgid "MaxImageHeightTitle"
+msgstr "Максимальная высота изображения пользователя"
+
+msgid "MaxImageHeightComment"
+msgstr "Максимальная высота изображения пользователя в пикселях . Эта опция применяется только, если изменяются размеры изображения пользователя при его загрузке."
+
+msgid "YourVersionNotUpToDate"
+msgstr "Ваша версия не новейшая"
+
+msgid "YourVersionIs"
+msgstr "Ваша версия"
+
+msgid "PleaseVisitDokeos"
+msgstr "Пожалуйста, посетите Chamilo"
+
+msgid "VersionUpToDate"
+msgstr "Ваша версия новейшая"
+
+msgid "ConnectSocketError"
+msgstr "Ошибка соединения с разъемом Сокет"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Соединения с разъемом Сокет нарушено"
+
+msgid "ShowEmailAddresses"
+msgstr "Показать адреса эл. почты"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Показать адреса эл. почты пользователям"
+
+msgid "LatestVersionIs"
+msgstr "Последняя версия"
+
+msgid "langConfigureExtensions"
+msgstr "Настроить обслуживание"
+
+msgid "langActiveExtensions"
+msgstr "Активировать эту службу"
+
+msgid "langVisioconf"
+msgstr "Видеоконференция"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo конференция  в прямом эфире® - это стандартный инструмент видеоконференции, который предлагает: показ слайдов, белая доска для рисования или записей фломастерами, спаренное аудио/видео, чат. Она требует только Flash® плеер и позволяет использовать три режима: один на один, один со многими, многие с многими."
+
+msgid "langPpt2lp"
+msgstr "oogie - презентация в стратегию обучения"
+
+msgid "langPpt2lpDescription"
+msgstr "Опция Презентация в Стратегию Обучения позволяет Вам трансформировать PowerPoint презентацию в стратегию обучения за несколько щелчков."
+
+msgid "langBandWidthStatistics"
+msgstr "Статистика пропускной способности"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG позволяет Вам просматривать статистику повышенного уровня по состоянию сервера за последние 24 часа."
+
+msgid "ServerStatistics"
+msgstr "Статистика сервера"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats позволяет Вам просматривать статистику вашей платформы: посетители, количество просмотров страницы, перенаправления..."
+
+msgid "SearchEngine"
+msgstr "Устройство полнотекстового поиска"
+
+msgid "langSearchEngineDescription"
+msgstr "Устройство полнотекстового поиска позволяет Вам искать слово по всей платформе. Ежедневная индексация содержимого гарантирует качество результатов."
+
+msgid "langListSession"
+msgstr "Список сессий"
+
+msgid "AddSession"
+msgstr "Добавить сессию"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Импортировать сессии в формате XML/CSV"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Экспортировать сессии в формате XML/CSV"
+
+msgid "SessionName"
+msgstr "Название сессии"
+
+msgid "langNbCourses"
+msgstr "количество курсов"
+
+msgid "DateStart"
+msgstr "Дата начала"
+
+msgid "DateEnd"
+msgstr "Дата окончания"
+
+msgid "CoachName"
+msgstr "Имя инструктора"
+
+msgid "SessionList"
+msgstr "Список сессий"
+
+msgid "SessionNameIsRequired"
+msgstr "Требуется название сессии"
+
+msgid "NextStep"
+msgstr "Следующий шаг"
+
+msgid "keyword"
+msgstr "Ключевое слово"
+
+msgid "Confirm"
+msgstr "Подтвердить"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Выписать пользователей с курса"
+
+msgid "MissingClassName"
+msgstr "Пропущено (утеряно) название класса"
+
+msgid "ClassNameExists"
+msgstr "Название класса есть"
+
+msgid "ImportCSVFileLocation"
+msgstr "Месторасположение импорта CSV файла"
+
+msgid "ClassesCreated"
+msgstr "Классы созданы"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Ошибки при импортировании файла"
+
+msgid "ServiceActivated"
+msgstr "Служба активирована"
+
+msgid "ActivateExtension"
+msgstr "Активировать услуги"
+
+msgid "InvalidExtension"
+msgstr "Расширение неверно"
+
+msgid "VersionCheckExplanation"
+msgstr "Для того чтобы, включать автоматическую проверку версии Вы должны зарегистрировать свой портал на chamilo.com. Информация, получаемая с помощью щелчка по этой кнопке, только для внутреннего пользования и только содержит данные открытого доступа (общее количество порталов, общее количество курсов в системе Chamilo , общее число студентов в Chamilo системе, ...) смотри <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>.  Зарегистрировавшись Вы также появитель во всемирном списке (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>. Если Вы не хотите быть в этом списке Вы должны проверить ящик для содержимого ниже. Регистрация на столько проста, на сколько возможно: Вам необходимо щелкнуть только эту кнопку: <br />"
+
+msgid "AfterApproval"
+msgstr "После подтверждения"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Включить вид студента"
+
+msgid "StudentViewEnabledComment"
+msgstr "Включить вид студента - эта функция позволяет преподавателю или администратору видеть курс, как его видит студент"
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Время ограничено для тех, кто онлайн (WhoIsOnline)"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Это ограничение во времени означает сколько еще секунд после последнего действия пользователь будет считаться онлайн."
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Материал для примера по созданию курса"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Создать материал для примера автоматически при создании нового курса"
+
+msgid "AccountValidDurationTitle"
+msgstr "Действительность счета"
+
+msgid "AccountValidDurationComment"
+msgstr "Счет пользователя действителен на такое количество дней после его создания"
+
+msgid "UseSessionModeTitle"
+msgstr "Использовать режим сессии"
+
+msgid "UseSessionModeComment"
+msgstr "Сессии предлагают разные возможные способы работы с курсами, где курс имеет создателя, инструктора и студентов.  Каждый инструктор проводит курс на протяжении определенного времени, которое называется сессией, определенному числу студентов"
+
+msgid "HomepageViewActivity"
+msgstr "Вид активности"
+
+msgid "HomepageView2column"
+msgstr "Вид в две колонки"
+
+msgid "HomepageView3column"
+msgstr "Вид в три колонки"
+
+msgid "AllowUserHeadings"
+msgstr "Разрешить заголовки пользователя"
+
+msgid "IconsOnly"
+msgstr "Только иконки"
+
+msgid "TextOnly"
+msgstr "Только текст"
+
+msgid "IconsText"
+msgstr "Иконки и текст"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Включить вводную информацию по инструментам"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Включить вводную информацию для каждого инструмента домашней страницы"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Отладочный оператор (\"хлебные крошки\") домашней страницы курса"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "Отладочный оператор находится на горизонтальных ссылках навигационной системы сверху следва на вашей странице. Эта опция выбирает, что вы хотите, чтобы появлялось в отделочном операторе (\"хлебных крошках\") домашней страницы курса"
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "LoginPageMainArea"
+msgstr "Главная зона страницы входа (логина)"
+
+msgid "LoginPageMenu"
+msgstr "Меню страницы входа (логина)"
+
+msgid "CampusHomepageMainArea"
+msgstr "Главная зона домашней страницы портала"
+
+msgid "CampusHomepageMenu"
+msgstr "Меню домашней страницы портала"
+
+msgid "MyCoursesMainArea"
+msgstr "Главная зона курсов"
+
+msgid "MyCoursesMenu"
+msgstr "Меню курсов"
+
+msgid "Header"
+msgstr "Заголовок"
+
+msgid "Footer"
+msgstr "Нижняя подпись"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "Страницы общего доступа в соответствии с WAI"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Интернет Доступность Инициатива) - инициатива, делающая интернет более доступным. Выбирая эту опцию, страницы общего доступа Chamilo станут еще доступнее. Это также означает, что некоторое содержимое этой страницы портала может отображаться по-разному."
+
+msgid "VersionCheck"
+msgstr "Проверка версии"
+
+msgid "Active"
+msgstr "Активный"
+
+msgid "Inactive"
+msgstr "Неактивный"
+
+msgid "SessionOverview"
+msgstr "Обзор сессии"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Подписать пользователя, если он еще не подписан"
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Выписать пользователя, если подписка не в файле"
+
+msgid "DeleteSelectedSessions"
+msgstr "Удалить выбранные сессии"
+
+msgid "CourseListInSession"
+msgstr "Список курса этой сессии"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Выписать выбранные курсы с этой сессии"
+
+msgid "NbUsers"
+msgstr "Пользователи"
+
+msgid "SubscribeUsersToSession"
+msgstr "Подписать пользователей на эту сессию"
+
+msgid "UserListInPlatform"
+msgstr "Список пользователей платформы"
+
+msgid "UserListInSession"
+msgstr "Список пользователей, подписанных на эту сессию"
+
+msgid "CourseListInPlatform"
+msgstr "Список курсов платформы"
+
+msgid "Host"
+msgstr "Хозяин"
+
+msgid "UserOnHost"
+msgstr "Имя пользователя"
+
+msgid "FtpPassword"
+msgstr "Пароль FTP"
+
+msgid "PathToLzx"
+msgstr "Путь к файлам LZX"
+
+msgid "WCAGContent"
+msgstr "Текст"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Подписать курсы на эту сессию"
+
+msgid "DateStartSession"
+msgstr "Дата начала сессии"
+
+msgid "DateEndSession"
+msgstr "Дата окончания сессии"
+
+msgid "EditSession"
+msgstr "Редактировать эту сессию"
+
+msgid "VideoConferenceUrl"
+msgstr "Путь на конференцию в прямом эфире"
+
+msgid "VideoClassroomUrl"
+msgstr "Путь в класс конференции в прямом эфире"
+
+msgid "ReconfigureExtension"
+msgstr "Переконфигурировать расширения"
+
+msgid "ServiceReconfigured"
+msgstr "Служба переконфигурирована"
+
+msgid "ChooseNewsLanguage"
+msgstr "Выбрать язык новостей"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "Суммарное количество времени, проведенного на курсе"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Эта опция используется для подсчета в режиме реального времени время, которое пользователь проводит на курсе. Значение в поле обновляется через интервал в секундах. Чтобы не активировать эту опцию, задайте по умолчанию значение 0 в поле."
+
+msgid "EditLink"
+msgstr "Редактировать ссылку"
+
+msgid "FinishSessionCreation"
+msgstr "Завершить создание сессии"
+
+msgid "VisioRTMPPort"
+msgstr "Порт протокола видеоконференции RTMTP"
+
+msgid "SessionNameAlreadyExists"
+msgstr "Название сессии скоро существовать"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "Ни одного класса создано не было"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Это поле должно содержать только цифры"
+
+msgid "UserLocked"
+msgstr "Пользователь заблокирован"
+
+msgid "UserUnlocked"
+msgstr "Пользователь разблокирован"
+
+msgid "CannotDeleteUser"
+msgstr "Вы не можете удалить этого пользователя"
+
+msgid "SelectedUsersDeleted"
+msgstr "Выбранные пользователи удалены"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Некоторые пользователи не удалены"
+
+msgid "ExternalAuthentication"
+msgstr "Внешняя подлинность"
+
+msgid "RegistrationDate"
+msgstr "Дата регистрации"
+
+msgid "UserUpdated"
+msgstr "Пользователен обновлен"
+
+msgid "HomePageFilesNotReadable"
+msgstr "Файлы домашней страницы не читаются"
+
+msgid "Choose"
+msgstr "Выбрать"
+
+msgid "ModifySessionCourse"
+msgstr "Модифицировать курс сессии"
+
+msgid "CourseSessionList"
+msgstr "Список курсов сессии"
+
+msgid "SelectACoach"
+msgstr "Выбрать инструктора"
+
+msgid "UserNameUsedTwice"
+msgstr "Имя пользователя использовалось дважды"
+
+msgid "UserNameNotAvailable"
+msgstr "Это имя пользователя не доступно"
+
+msgid "UserNameTooLong"
+msgstr "Это имя пользователя слишком длинное"
+
+msgid "WrongStatus"
+msgstr "Такой статус не существует"
+
+msgid "ClassNameNotAvailable"
+msgstr "Такое название класса не доступно"
+
+msgid "FileImported"
+msgstr "Файл импортирован"
+
+msgid "WhichSessionToExport"
+msgstr "Выбрать сессию для экспорта"
+
+msgid "AllSessions"
+msgstr "Все сессии"
+
+msgid "CodeDoesNotExists"
+msgstr "Такого кода не существует"
+
+msgid "UnknownUser"
+msgstr "Неизвестный пользователь"
+
+msgid "UnknownStatus"
+msgstr "Неизвестный статус"
+
+msgid "SessionDeleted"
+msgstr "Сессия удалена"
+
+msgid "CourseDoesNotExist"
+msgstr "Такого курса не существует"
+
+msgid "UserDoesNotExist"
+msgstr "Такого пользователя не существует"
+
+msgid "ButProblemsOccured"
+msgstr "но проблемы возникли"
+
+msgid "UsernameTooLongWasCut"
+msgstr "Это имя пользователя было обрезано"
+
+msgid "NoInputFile"
+msgstr "Ни одного файла не было послано"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "Статус студента был дан"
+
+msgid "WrongDate"
+msgstr "Неверный формат даты (гггг-мм-дд)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Это автоматическое эл. сообщение. Пожалуйста, не отвечайте на этот адрес."
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "Вы скоро получите эл. письмо от Вашего инструктора"
+
+msgid "SlideSize"
+msgstr "Размер слайдов"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Профилактика плагиата Ephorus"
+
+msgid "CourseTeachers"
+msgstr "Преподаватели курса"
+
+msgid "UnknownTeacher"
+msgstr "Неизвестный преподаватель"
+
+msgid "HideDLTTMarkup"
+msgstr "Спрятать DLTT разметку"
+
+msgid "ListOfCoursesOfSession"
+msgstr "Список курсов для сессии"
+
+msgid "UnsubscribeSelectedUsersFromSession"
+msgstr "Выписать выбранных пользователей с курса"
+
+msgid "ShowDifferentCourseLanguageComment"
+msgstr "Показать язык каждого курса  следующим после заголовка курса на домашней странице списка курсов"
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "Показать разделы курсов на домашней странице даже если они пустые"
+
+msgid "ShowEmptyCourseCategories"
+msgstr "Показать пустые разделы курсов"
+
+msgid "XMLNotValid"
+msgstr "XML документ не действителен"
+
+msgid "ForTheSession"
+msgstr "для сессии"
+
+msgid "AllowEmailEditorTitle"
+msgstr "Активировать онлайновый редактор эл. почты"
+
+msgid "AllowEmailEditorComment"
+msgstr "Если эта опция активирована, то кликните на эл. адрес, который откроет онлайновый редактор эл. почты"
+
+msgid "AddCSVHeader"
+msgstr "Добавить полосу заголовка в файле CSV?"
+
+msgid "YesAddCSVHeader"
+msgstr "Да, добавить CSV заголовок<br />Эта линия определяет поля и необходима, когда вы хотите импортировать файл в разные порталы Chamilo"
+
+msgid "ListOfUsersSubscribedToCourse"
+msgstr "Список пользователей подписанных на курс"
+
+msgid "NumberOfCourses"
+msgstr "Количество курсов"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Показать языки курса"
+
+msgid "VisioRTMPTunnelPort"
+msgstr "Тунельный порт протокола RTMTP видеоконференции"
+
+msgid "name"
+msgstr "Имя (название)"
+
+msgid "Security"
+msgstr "Безопасность"
+
+msgid "UploadExtensionsListType"
+msgstr "Типы фильтров для скачиваемых документов"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "Хотете ли Вы использовать черный или белый список для фильтра. Смотрите описание белого или черного списка ниже."
+
+msgid "Blacklist"
+msgstr "Черный список"
+
+msgid "Whitelist"
+msgstr "Белый список"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "Черный список - установки"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "Белый лист - установки"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "Черный список используется для фильтрации расширений (типов) файлов с помощью удаления (или переименования) любого файла, расширение которого имеется в черном списке ниже. Расширение должно быть без точки (.), разделяться точкой с запятой (;) как следующие: exe;com;bat;scr;php. Файлы без расширения принимаются. Тип букв (прописные/строчные) не имеет значения."
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "Белый список используется для фильтрации расширений (типов) файлов с помощью удаления (или переименования) любого файла, расширение которого \"НЕ\" имеется в белом списке ниже. Это считается наиболее безопасным способом фильтрации, но в тоже время и наиболее ограничиввающим. Расширение должно быть без точки (.), разделяться точкой с запятой (;) как следующие: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. Файлы без расширения принимаются. Тип букв (прописные/строчные) не имеет значения."
+
+msgid "UploadExtensionsSkip"
+msgstr "Поведение фильтрования (пропустить/переименовать)"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "Если вы выбирите опцию пропустить, файлы, фильтруемые через черный или белый список не будут загружены в систему. Если Вы выбирите опцию переименовать их, их расширения будут заменены на одно из расширений из настроек замены. Знайте, что переименование файла на самом деле не защищает Вас, и может стать причиной конфликта имен, когда существует несколько файлов с одним и тем же именем, но с разными расширениями."
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "Замена расширения"
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "Введите расширение, которое Вы хотите использовать для замены опасных расширений, выявленных с помощью фильтра. Это необходимо только, если Вы выбрали фильтр замены."
+
+msgid "Remove"
+msgstr "Удалить"
+
+msgid "Rename"
+msgstr "Переименовать"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "Показать количество курсов в каждом разделе в разделах курсов на домашней странице"
+
+msgid "EphorusDescription"
+msgstr "Начать использовать антиплагиатную службу Ephorus в Chamilo.<br /> <strong>С Ephorus Вы предотвратите интернет плагиат без дополнительных усилий.</strong><br /> Вы можете использовать нашу уникальную открытую стандартную интернет службу для постройки своей собственной системы или использовать один из наших Chamilo модулей."
+
+msgid "EphorusLeadersInAntiPlagiarism"
+msgstr "<strong>Лидеры в�<br />против плагиата </strong>"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "Щелкнуть здесь для получения дополнительной информации и цен"
+
+msgid "NameOfTheSession"
+msgstr "Название сессии"
+
+msgid "NoSessionsForThisUser"
+msgstr "Этот пользователь подписанотписан на эту сессию"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "Отображать разделы на домашней странице"
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "Эта опция будет отображать или прятать разделы курсов на домашней странице"
+
+msgid "ShowTabsTitle"
+msgstr "Закладки в заголовке"
+
+msgid "ShowTabsComment"
+msgstr "Обозначьте закладки, которые Вы хотите, чтобы появились в заголовке. Необозначенные закладки появятся справа в меню на домашней странице системы и на Вашей личной странице курса, если это необходимо"
+
+msgid "DefaultForumViewTitle"
+msgstr "Вид форума по умолчанию"
+
+msgid "DefaultForumViewComment"
+msgstr "Какие опции должны быть по умочнанию, когда создается новый форум. Однако любой администратор курса может выбрать разные виды для каждого индивидуального форума"
+
+msgid "TabsMyCourses"
+msgstr "Мои курсовые закладки (ярлыки)"
+
+msgid "TabsCampusHomepage"
+msgstr "Закладка (ярлык) \"Домашняя страница\""
+
+msgid "TabsReporting"
+msgstr "Закладка (ярлык) \"Отчет\""
+
+msgid "TabsPlatformAdministration"
+msgstr "Закладка \"Администратор\""
+
+msgid "NoCoursesForThisSession"
+msgstr "Нет курсов в этой сессии"
+
+msgid "NoUsersForThisSession"
+msgstr "Нет пользователей в этой сессии"
+
+msgid "LastNameMandatory"
+msgstr "Фамилия не может быть пустой"
+
+msgid "FirstNameMandatory"
+msgstr "Имя не должно быть пустым"
+
+msgid "EmailMandatory"
+msgstr "Адрес эл. почты не может быть пустым"
+
+msgid "TabsMyAgenda"
+msgstr "Закладка \"Моя повестка дня\""
+
+msgid "NoticeWillBeNotDisplayed"
+msgstr "Сообщение не будет отображаться на домашней странице"
+
+msgid "LetThoseFieldsEmptyToHideTheNotice"
+msgstr "Оставить эти поля пустыми для скрытия сообщений"
+
+msgid "Ppt2lpVoiceRecordingNeedsRed5"
+msgstr "Детали записи голоса в редакторе учебных программ зависят от потокового сервера Red5. Эти параметры сервера могут быть настроены в секции видеоконференции на текущей странице."
+
+msgid "PlatformCharsetTitle"
+msgstr "Набор символов"
+
+msgid "PlatformCharsetComment"
+msgstr "Набор символов - кодировка, которая настраивает отображение определенного языка в Chamilo. Если Вы используете Русский или Японский наборы, например, Вы можете захотеть их сменить. Для всех английских, латинских и западно-европейских наборов по умолчанию установлен код UTF-8."
+
+msgid "ExtendedProfileRegistrationTitle"
+msgstr "Расширенные поля профиля при регистрации"
+
+msgid "ExtendedProfileRegistrationComment"
+msgstr "Какие из следующих полей расширенного профиля должны быть доступны в процессе регистрации пользователя? Это требуется, если расширенный профиль активирован (смотрите ниже)."
+
+msgid "ExtendedProfileRegistrationRequiredTitle"
+msgstr "Требуемые расширенные поля профиля при регистрации"
+
+msgid "ExtendedProfileRegistrationRequiredComment"
+msgstr "Какие из следующих полей из расширенного профиля требуются в процессе регистрации пользователя? Это требуется, если расширенный профиль активирован и поле также доступно в регистрационной форме (смотрите ниже)."
+
+msgid "NoReplyEmailAddress"
+msgstr "Эл. адрес без права обратного ответа"
+
+msgid "NoReplyEmailAddressComment"
+msgstr "Этот эл. адрес предназначен для использования в случае, когда в посланном письме оговаривалось, что на этот адрес не следует посылать ответ. В общем, этот эл. адрес должен быть настроен на вашем сервере так, чтобы не принимать во внимание/игнорировать любое ответное письмо."
+
+msgid "SurveyEmailSenderNoReply"
+msgstr "Обзор эл. адресов отправителей (не для ответа)"
+
+msgid "SurveyEmailSenderNoReplyComment"
+msgstr "Нужно ли для эл. писем, посланных для участия в анкетировании, использовать эл. адрес наставника или специальный адрес без права обратного ответа (определено в разделе главных настроек)?"
+
+msgid "CourseCoachEmailSender"
+msgstr "эл. адрес руководителя/наставника"
+
+msgid "NoReplyEmailSender"
+msgstr "эл. адрес не для ответа"
+
+msgid "Flat"
+msgstr "Плоскость"
+
+msgid "Threaded"
+msgstr "Переплетенный"
+
+msgid "Nested"
+msgstr "Вложенный"
+
+msgid "OpenIdAuthenticationComment"
+msgstr "Дать право ОткрытьID идентификации, основанной на URL (выводит дополнительную форму для логина на домашней странице)"
+
+msgid "VersionCheckEnabled"
+msgstr "Проверка версии задействована"
+
+msgid "InstallDirAccessibleSecurityThreat"
+msgstr "Главная/установленная директория (папка) Вашей системы Chamilo до сих пор остается доступной для пользователей сети интернета. Это может послужить угрозой безопасности для ваших установок. Мы рекомендуем убрать эту директорию (папку) или изменить ее права доступа так, чтобы пользователи интернета не могди бы использовать то, что там содержиться."
+
+msgid "GradebookActivation"
+msgstr "Инструменты активации журнала оценок"
+
+msgid "GradebookActivationComment"
+msgstr "Запуск инструментов журнала оценок добавит Вам возможность формулировать учебные цели с помощью баллов, но если Вам это не нужно, то это только усложнит интерфейс. Желаете активизировать этот инструмент?"
+
+msgid "UserTheme"
+msgstr "Тема (таблица стилей)"
+
+msgid "UserThemeSelection"
+msgstr "Выбор темы пользователем"
+
+msgid "UserThemeSelectionComment"
+msgstr "Позволяет пользователям выбирать их собственную визуальную тему в своем профиле. Это изменит вид Chamilo для них, но дизайн портала по умолчанию останется нетронутым. Если конкретному курсу или сессии присваивается конкретная тема, это дает ей преимущество над вышестоящими определенными пользователями темами."
+
+msgid "AllowurlfopenIsSetToOff"
+msgstr "PHP настройка \"allow_url_fopen\" означает «выключено». Это не позволяет механизму регистрации работать правильно. Эта настройка может быть изменена в Вашем конфигурационном PHP файле (php.ini) или в конфигурациях виртуального хоста Apache, используя php_admin_value указатель."
+
+msgid "VisioHost"
+msgstr "Имя главного узла (хост имя) или IP-адрес сервера прямой видеоконференции"
+
+msgid "VisioPort"
+msgstr "Порт сервера потоковой видеоконференции"
+
+msgid "VisioPassword"
+msgstr "Пароль сервера потоковой видеоконференции"
+
+msgid "Port"
+msgstr "Порт"
+
+msgid "EphorusClickHereForADemoAccount"
+msgstr "Щелкните здесь для демонстрационного счета"
+
+msgid "ManageUserFields"
+msgstr "Управление полями пользователя"
+
+msgid "UserFields"
+msgstr "Поля пользователя"
+
+msgid "AddUserField"
+msgstr "Добавить поле пользователя"
+
+msgid "FieldLabel"
+msgstr "Метка поля"
+
+msgid "FieldType"
+msgstr "Тип поля"
+
+msgid "FieldTitle"
+msgstr "Заголовок поля"
+
+msgid "FieldDefaultValue"
+msgstr "Значение поля по умолчанию"
+
+msgid "FieldOrder"
+msgstr "Очередность поля"
+
+msgid "FieldVisibility"
+msgstr "Видимость поля"
+
+msgid "FieldChangeability"
+msgstr "Изменить возможность"
+
+msgid "FieldTypeText"
+msgstr "Текст"
+
+msgid "FieldTypeTextarea"
+msgstr "Область текста"
+
+msgid "FieldTypeRadio"
+msgstr "Кнопки радио"
+
+msgid "FieldTypeSelect"
+msgstr "Выбрать ниспадающий просмотр"
+
+msgid "FieldTypeSelectMultiple"
+msgstr "Множественный выбор ниспадающего просмотра"
+
+msgid "FieldAdded"
+msgstr "Поле успешно добавлено"
+
+msgid "GradebookScoreDisplayColoring"
+msgstr "Окраска результата"
+
+msgid "GradebookScoreDisplayColoringComment"
+msgstr "Отметьте галочкой блок (прямоугольник) для разрешения окрашивания результата (вам нужно будет определить какой результат вы будете выделять красным, например)"
+
+msgid "TabsGradebookEnableColoring"
+msgstr "Разрешить окраску результата"
+
+msgid "GradebookScoreDisplayCustom"
+msgstr "Дисплей обычного результата"
+
+msgid "GradebookScoreDisplayCustomComment"
+msgstr "Отметьте галочкой блок (прямоугольник) для разрешения изготовления заказных схем результата (выберите какая оценка соответствует какому результату)"
+
+msgid "TabsGradebookEnableCustom"
+msgstr "Разрешить изготовление заказных схем результата"
+
+msgid "GradebookScoreDisplayColorSplit"
+msgstr "Отобразить разбиение цвета"
+
+msgid "GradebookScoreDisplayColorSplitComment"
+msgstr "Процентный лимит, до которого результат будет окрашен красным"
+
+msgid "GradebookScoreDisplayUpperLimit"
+msgstr "Отобразить верхний лимит результата"
+
+msgid "GradebookScoreDisplayUpperLimitComment"
+msgstr "Отметьте галочкой блок (прямоугольник) для отображения верхнего лимита результата"
+
+msgid "TabsGradebookEnableUpperLimit"
+msgstr "Разрешить отображение верхнего лимита результата"
+
+msgid "AddUserFields"
+msgstr "Добавить поля пользователя"
+
+msgid "FieldPossibleValues"
+msgstr "Возможные значения"
+
+msgid "FieldPossibleValuesComment"
+msgstr "Заданно только для повторяющихся полей, разделять точкой с запятой (;)"
+
+msgid "FieldTypeDate"
+msgstr "Дата"
+
+msgid "FieldTypeDatetime"
+msgstr "Дата и время"
+
+msgid "FieldDeleted"
+msgstr "Поле удалено"
+
+msgid "CannotDeleteField"
+msgstr "Невозможно удалить поле"
+
+msgid "AddUsersByCoachTitle"
+msgstr "Регистрация пользователей инструктором"
+
+msgid "AddUsersByCoachComment"
+msgstr "Инструктор пользователей может создавать пользователей для платформы и подписывать пользователей для сессии"
+
+msgid "UserFieldsSortOptions"
+msgstr "Сортировать пункты меню профиля зон"
+
+msgid "FieldOptionMovedUp"
+msgstr "Пункт меню перемещен наверх"
+
+msgid "CannotMoveFieldOption"
+msgstr "Невозможно переместить пункт меню"
+
+msgid "FieldOptionMovedDown"
+msgstr "Пункт меню перемещен вниз"
+
+msgid "DefineSessionOptions"
+msgstr "Определить задержку доступа инструктора"
+
+msgid "DaysBefore"
+msgstr "дни до"
+
+msgid "DaysAfter"
+msgstr "Дни после"
+
+msgid "SessionAddTypeUnique"
+msgstr "Однократная регистрация"
+
+msgid "SessionAddTypeMultiple"
+msgstr "Многократная регистрация"
+

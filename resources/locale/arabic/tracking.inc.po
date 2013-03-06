@@ -1,0 +1,639 @@
+msgid "langToolName"
+msgstr "قم باستيراد مقررات السبورة"
+
+msgid "TrackingDisabled"
+msgstr "لقد تم إيقاف التقرير من قبل إدارة النظام"
+
+msgid "InactivesStudents"
+msgstr "المستخدمين غير النشطين"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "متوسط الوقت المستغرق في النظام"
+
+msgid "AverageCoursePerStudent"
+msgstr "متوسط  المقررات لكل مستخدم"
+
+msgid "AverageProgressInLearnpath"
+msgstr "متوسط التقدم (الإستخدام) في مقررات سكورم"
+
+msgid "AverageResultsToTheExercices"
+msgstr "متوسط نقاط الإختبارات"
+
+msgid "SeeStudentList"
+msgstr "مشاهدة قائمة المستخدمين"
+
+msgid "NbActiveSessions"
+msgstr "الجلسات النشطة"
+
+msgid "NbPastSessions"
+msgstr "الجلسات الماضية"
+
+msgid "NbFutureSessions"
+msgstr "الجلسات المستقبلية"
+
+msgid "NbStudentPerSession"
+msgstr "عدد المستخدمين بالجلسة"
+
+msgid "NbCoursesPerSession"
+msgstr "عدد المقررات بالجلسة"
+
+msgid "SeeSessionList"
+msgstr "مشاهدة قائمة الجلسات"
+
+msgid "langShowNone"
+msgstr "إخفاء الكل"
+
+msgid "langCourseStats"
+msgstr "حالة المقرر"
+
+msgid "langToolsAccess"
+msgstr "الوصول إلى الأدوات"
+
+msgid "langCourseAccess"
+msgstr "  الوصول إلى المقر"
+
+msgid "langLinksAccess"
+msgstr "الروابط"
+
+msgid "langDocumentsAccess"
+msgstr "المستندات"
+
+msgid "langScormAccess"
+msgstr "مسار التّعلم - مقررات على هيئة Scorm"
+
+msgid "langLinksDetails"
+msgstr "الروابط التي تم الوصول إليها من قبل المستخدم"
+
+msgid "langWorksDetails"
+msgstr "Works uploaded by the user in the name of \'Authors\'"
+
+msgid "langLoginsDetails"
+msgstr "انقر فوق اسم الشهر لمزيد من التفاصيل"
+
+msgid "langDocumentsDetails"
+msgstr "المستندات التي تم تحميلها من قبل المستخدم"
+
+msgid "langExercicesDetails"
+msgstr "نقاط الإختبارات التي تمت"
+
+msgid "langBackToList"
+msgstr "الرجوع إلى قائمة المستخدمين"
+
+msgid "langDetails"
+msgstr "تفاصيل"
+
+msgid "langStatsOfCourse"
+msgstr "حركة قسم المقررات"
+
+msgid "langStatsOfUser"
+msgstr "حركة المستخدم"
+
+msgid "langStatsOfCampus"
+msgstr "إحصائيات البوابة"
+
+msgid "langCountUsers"
+msgstr "عدد المستخدمين"
+
+msgid "langCountToolAccess"
+msgstr "إجمالي الإتصالات بهذا المقرر"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "الشهر"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "عدد مرات الدخول"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "اسم الأداة"
+
+msgid "langToolTitleUsersColumn"
+msgstr "نقرات المستخدمين"
+
+msgid "langToolTitleCountColumn"
+msgstr "إجمالي النقرات"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "الرابط"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "نقرات المستخدمين"
+
+msgid "langLinksTitleCountColumn"
+msgstr "إجمالي النقرات"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "الإختبار"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "النقاط"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "المستند"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "تحميل المستخدمين"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "إجمالي مرات التحميل"
+
+msgid "langScormContentColumn"
+msgstr "العنوان"
+
+msgid "langScormStudentColumn"
+msgstr "المستخدمين"
+
+msgid "langScormTitleColumn"
+msgstr "الدرس / الخطوة"
+
+msgid "langScormStatusColumn"
+msgstr "الحالة"
+
+msgid "langScormScoreColumn"
+msgstr "النقاط"
+
+msgid "langScormTimeColumn"
+msgstr "الوقت"
+
+msgid "langScormNeverOpened"
+msgstr "هذا المقرر لم يتم فتحه أبدا من قبل هذا المستخدم"
+
+msgid "langWorkTitle"
+msgstr "العنوان"
+
+msgid "langWorkAuthors"
+msgstr "الكتاب"
+
+msgid "langWorkDescription"
+msgstr "نبذة"
+
+msgid "informationsAbout"
+msgstr "متابعة"
+
+msgid "langNoEmail"
+msgstr "لم يتم تحديد أي بريد إلكتروني"
+
+msgid "langNoResult"
+msgstr "لا توجد هناك نتائج بعد"
+
+msgid "langCourse"
+msgstr "المنطقة"
+
+msgid "langHits"
+msgstr "النقرات"
+
+msgid "langTotal"
+msgstr "الإجمالي"
+
+msgid "langHour"
+msgstr "الساعة"
+
+msgid "langDay"
+msgstr "اليوم"
+
+msgid "langLittleHour"
+msgstr "h."
+
+msgid "langLast31days"
+msgstr " في ال 31 يوم الأخيرة"
+
+msgid "langLast7days"
+msgstr " في ال 7 أيام الأخيرة"
+
+msgid "langThisday"
+msgstr "هذا اليوم"
+
+msgid "langLogins"
+msgstr "مرات الدخول"
+
+msgid "langLoginsExplaination"
+msgstr "هنا قائمة بتفاصيل أخر دخولك مع الأداة التي قمت بالدخول عليها في تلك الجلسات"
+
+msgid "langExercicesResults"
+msgstr "نقاط الإختبارات التي تمت"
+
+msgid "langVisits"
+msgstr "الزيارات"
+
+msgid "langAt"
+msgstr "في"
+
+msgid "langLoginTitleDateColumn"
+msgstr "التاريخ"
+
+msgid "langLoginTitleCountColumn"
+msgstr "الزيارات"
+
+msgid "langLoginsAndAccessTools"
+msgstr "مرات الدخول والوصول إلى الأدوات"
+
+msgid "langWorkUploads"
+msgstr "Contributions uploads"
+
+msgid "langErrorUserNotInGroup"
+msgstr "مستخدم غير صالح : هذا المستخدم غير موجود ضمن مجموعتك"
+
+msgid "langListStudents"
+msgstr "قائمة المستخدمين في هذه المجموعة"
+
+msgid "langPeriodHour"
+msgstr "الساعة"
+
+msgid "langPeriodDay"
+msgstr "اليوم"
+
+msgid "langPeriodWeek"
+msgstr "الأسبوع"
+
+msgid "langPeriodMonth"
+msgstr "الشهر"
+
+msgid "langPeriodYear"
+msgstr "السنة"
+
+msgid "langNextDay"
+msgstr "اليوم التالي"
+
+msgid "langPreviousDay"
+msgstr "اليوم السابق"
+
+msgid "langNextWeek"
+msgstr "الأسبوع التالي"
+
+msgid "langPreviousWeek"
+msgstr "الأسبوع الماضي"
+
+msgid "langNextMonth"
+msgstr "الشهر التالي"
+
+msgid "langPreviousMonth"
+msgstr "الشهر الماضي"
+
+msgid "langNextYear"
+msgstr "السنة التالية"
+
+msgid "langPreviousYear"
+msgstr "السنة الماضية"
+
+msgid "langViewToolList"
+msgstr "أزهر قائمة جميع الأدوات"
+
+msgid "langToolList"
+msgstr "قائمة جميع الأدوات"
+
+msgid "langFrom"
+msgstr "من"
+
+msgid "langTo"
+msgstr "إلى"
+
+msgid "langPeriodToDisplay"
+msgstr "الفترة"
+
+msgid "langDetailView"
+msgstr "أظهر ب"
+
+msgid "langBredCrumpGroups"
+msgstr "المجموعات"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "منطقة المجموعة"
+
+msgid "langBredCrumpUsers"
+msgstr "المستخدمين"
+
+msgid "langAdminToolName"
+msgstr "حالة المدير"
+
+msgid "langPlatformStats"
+msgstr "إحصائيات النظام"
+
+msgid "langStatsDatabase"
+msgstr "حالة قاعدة البيانات"
+
+msgid "langPlatformAccess"
+msgstr "الوصول إلى البوابة"
+
+msgid "langPlatformCoursesAccess"
+msgstr "الوصول إلى المقررات"
+
+msgid "langPlatformToolAccess"
+msgstr "الوصول إلى الأدوات"
+
+msgid "langHardAndSoftUsed"
+msgstr "دول مزودي الخدمة متصفحات أنظمة تشغيل"
+
+msgid "langStrangeCases"
+msgstr "Problematic cases"
+
+msgid "langStatsDatabaseLink"
+msgstr "انقر هنا"
+
+msgid "langCountCours"
+msgstr "عدد المقررات"
+
+msgid "langCountCourseByFaculte"
+msgstr "عدد المقررات حسب التصنيف"
+
+msgid "langCountCourseByLanguage"
+msgstr "عدد المقررات حسب اللغة"
+
+msgid "langCountCourseByVisibility"
+msgstr "عدد المقررات حسب خاصية الظهور"
+
+msgid "langCountUsersByCourse"
+msgstr "عدد المستخدمين حسب المقرر"
+
+msgid "langCountUsersByFaculte"
+msgstr "عدد المستخدمين حسب التصنيف"
+
+msgid "langCountUsersByStatus"
+msgstr "عدد المستخدمين حسب الحالة"
+
+msgid "langAccess"
+msgstr "الوصول"
+
+msgid "langCountries"
+msgstr "البلدان"
+
+msgid "langProviders"
+msgstr "مزودي الخدمة"
+
+msgid "langOS"
+msgstr "نظام التشغييل"
+
+msgid "langBrowsers"
+msgstr "المتصفحات"
+
+msgid "langReferers"
+msgstr "التوجيهات"
+
+msgid "langAccessExplain"
+msgstr "(عندما يفتح مستخدم الصفحة الرئيسية للبوابة )"
+
+msgid "langTotalPlatformAccess"
+msgstr "الإجمالي"
+
+msgid "langTotalPlatformLogin"
+msgstr "الإجمالي"
+
+msgid "langMultipleLogins"
+msgstr "حسابات بنفس اسم المستخدم"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "حسابات بنفس اسم المستخدم ونفس كلمة المرور"
+
+msgid "langMultipleEmails"
+msgstr "حسابات بنفس  عنوان البريد"
+
+msgid "langCourseWithoutProf"
+msgstr "مقررات من غير مسؤول"
+
+msgid "langCourseWithoutAccess"
+msgstr "مقررات غير مستخدمة"
+
+msgid "langLoginWithoutAccess"
+msgstr "حسابات دخول غير مستخدمة"
+
+msgid "langAllRight"
+msgstr "لا يوجد حالة غريبة هنا"
+
+msgid "langDefcon"
+msgstr "Ooops, problematic cases detected !!"
+
+msgid "langNULLValue"
+msgstr "فارغة"
+
+msgid "langTrafficDetails"
+msgstr " تفاصيل كمية البيانات"
+
+msgid "langSeeIndividualTracking"
+msgstr "للمتابعة الشخصية اذهب إلى <a href=../user/user.php>أداة المستخدمين.</a>"
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "هذا المسار لم يتم فتحه من قبل أي شخص"
+
+msgid "SynthesisView"
+msgstr "عرض الخلاصة"
+
+msgid "Visited"
+msgstr "تم زيارتها"
+
+msgid "FirstAccess"
+msgstr "أول وصول"
+
+msgid "LastAccess"
+msgstr "أخر وصول"
+
+msgid "langProbationers"
+msgstr "المتعلمين"
+
+msgid "MoyenneTest"
+msgstr "متوسط الإختبار"
+
+msgid "exportExcel"
+msgstr "تصدير بتنسيق إكسل"
+
+msgid "MoyCourse"
+msgstr "متوسط المقررات"
+
+msgid "MoyenneExamen"
+msgstr "متوسط الإختبار"
+
+msgid "MoySession"
+msgstr "متوسط الجلسات"
+
+msgid "TakenSessions"
+msgstr "الجلسات المأخوذة"
+
+msgid "FollowUp"
+msgstr "متابعة"
+
+msgid "Trainers"
+msgstr "المعلمين"
+
+msgid "Administrators"
+msgstr "الإداريين"
+
+msgid "Tracks"
+msgstr "التتبعات"
+
+msgid "Success"
+msgstr "النجاح"
+
+msgid "ExcelFormat"
+msgstr "تنسيق إكسل"
+
+msgid "MyLearnpath"
+msgstr "مسار تعلمي"
+
+msgid "Time"
+msgstr "الوقت"
+
+msgid "Score"
+msgstr " نتيجة"
+
+msgid "LastConnexion"
+msgstr "احدث اتصال"
+
+msgid "ConnectionTime"
+msgstr "اخر اتصال"
+
+msgid "ConnectionsToThisCourse"
+msgstr "اتصالات لهذا المقرر"
+
+msgid "StudentTutors"
+msgstr "Student\'s coaches"
+
+msgid "StudentSessions"
+msgstr "جلسات الطالب"
+
+msgid "StudentCourses"
+msgstr "مقررات الطالب"
+
+msgid "NoLearnpath"
+msgstr "لا مسار تعلم"
+
+msgid "Attempts"
+msgstr "محاولة"
+
+msgid "Correction"
+msgstr "التصحيح"
+
+msgid "NoExercise"
+msgstr "لا يوجد تمارين"
+
+msgid "LimitDate"
+msgstr "Limit date"
+
+msgid "SentDate"
+msgstr "تاريخ الإرسال"
+
+msgid "Annotate"
+msgstr "الإعلام"
+
+msgid "DayOfDelay"
+msgstr "Day of delay"
+
+msgid "NoProduction"
+msgstr "No production"
+
+msgid "NoComment"
+msgstr "لا تعليق"
+
+msgid "LatestLogin"
+msgstr "احدث إتصال"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "وقت مستغرق في النظام"
+
+msgid "Messages"
+msgstr "الرسائل"
+
+msgid "AveragePostsInForum"
+msgstr "Average posts number in the forum"
+
+msgid "AverageAssignments"
+msgstr "Average assignments number"
+
+msgid "Print"
+msgstr "طباعة"
+
+msgid "StudentDetails"
+msgstr "تفاصيل المتعلمين"
+
+msgid "StudentDetailsInCourse"
+msgstr "تفاصيل المتعلم في المقرر"
+
+msgid "Learnpaths"
+msgstr "مسارات التعلم"
+
+msgid "OtherTools"
+msgstr "أدوات أخرى"
+
+msgid "DetailsStudentInCourse"
+msgstr "تفاصيل الطالب في المقرر"
+
+msgid "CourseTitle"
+msgstr "عنوان المقرر"
+
+msgid "NbStudents"
+msgstr "عدد المتعلمين"
+
+msgid "TimeSpentInTheCourse"
+msgstr "الوقت المستغرق في المقرر"
+
+msgid "AvgStudentsProgress"
+msgstr "متوسط تقدم المتعلمين"
+
+msgid "AvgCourseScore"
+msgstr "متوسط نقاط المتعلمين"
+
+msgid "AvgMessages"
+msgstr "الرسائل لكل متعلم"
+
+msgid "AvgAssignments"
+msgstr "الواجبات لكل متعلم"
+
+msgid "ToolsMostUsed"
+msgstr "الأدوات الأكثر استخداما"
+
+msgid "StudentsTracking"
+msgstr "تتبع المتعلمين"
+
+msgid "CourseTracking"
+msgstr "تتبع المقرر"
+
+msgid "LinksMostClicked"
+msgstr "الروابط الأكثر زيارة"
+
+msgid "DocumentsMostDownloaded"
+msgstr "المستندات الأكثر تنزيلا"
+
+msgid "LearningPathDetails"
+msgstr "تفاصيل مسار التعلم"
+
+msgid "NoConnexion"
+msgstr "لا اتصال"
+
+msgid "TeacherInterface"
+msgstr "واجهة المدرس"
+
+msgid "CoachInterface"
+msgstr "Coach interface"
+
+msgid "AdminInterface"
+msgstr "واجهة الإدارة"
+
+msgid "NumberOfSessions"
+msgstr "عدد الجلسات"
+
+msgid "YourCourseList"
+msgstr "قائمة مقرراتك"
+
+msgid "YourStatistics"
+msgstr "احصائياتك"
+
+msgid "CoachList"
+msgstr "Coaches list"
+
+msgid "CoachStudents"
+msgstr "Students for this coach"
+
+msgid "NoLearningPath"
+msgstr "No SCORM courses"
+
+msgid "SessionCourses"
+msgstr "جلسة المقررات"
+
+msgid "NoUsersInCourseTracking"
+msgstr "هنا يمكنك تتبع حركة الطلاب المسجلين في هذا المقرر"
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "معدل الوقت المستهلك في الدرس"
+
+msgid "RemindInactiveUser"
+msgstr "اذكر المستخدم الغير نشط"
+
+msgid "FirstLogin"
+msgstr "الاتصال الأول"
+

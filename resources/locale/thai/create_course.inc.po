@@ -1,0 +1,267 @@
+msgid "langProfessors"
+msgstr "อาจารย์ผู้สอน"
+
+msgid "langExplanation"
+msgstr "เมื่อคุณคลิกปุ่ม ตกลง ระบบจะทำการสร้างโฮมเพจที่มีเครื่องมือสำหรับการกำหนดค่าของระบบบริหารจัดการในส่วนประกอบต่างๆของรายวิชา เช่นการจัดการเอกสารของรายวิชา จัดกลุ่มการอภิปราย , กำหนดการของรายวิชา และ ฯลฯ ที่คุณสามารถเลือกกำหนด เพิ่มเติม ปรับปรุงหรือเปลี่ยนแปลงหัวข้อใดๆ ภายในรายวิชาของคุณได้เมื่อต้องการ ในฐานะของผู้สร้างวิชา."
+
+msgid "langEmpty"
+msgstr "คุณกรอกรายการที่ต้องการยังไม่ครบ.<br>ให้กดปุ่ม Back ของโปรแกรมดูอินเตอร์เน็ตที่คุณกำลังใช้อยู่ เพื่อย้อนกลับไปตรวจสอบและกรอกรายการให้ครบตามที่ระบบต้องการหรือที่มีเครื่องหมายดอกจันกำกับไว้*<br>หากวิชาของคุณไม่มีรหัสวิชาตามหลักสูตรของสถานศึกษา โปรดกำหนดขึ้นเองหรือใช้ชื่อวิชาแทนไปก่อน"
+
+msgid "langCodeTaken"
+msgstr "�����Ԫҹ��١�������<br />��ԡ���� ��͹��Ѻ ����ͧ�����ա����"
+
+msgid "langFormula"
+msgstr "ด้วยความปรารถนาดี"
+
+msgid "langMessage"
+msgstr "เมื่อท่านลบตัวอย่างการอภิปรายออก ข้อมูลภายในทั้งหมดจะถูกลบไปด้วย"
+
+msgid "langExerciceEx"
+msgstr "ตัวอย่างแบบฝึกหัด"
+
+msgid "langAntique"
+msgstr "ประวัติศาสตร์ปรัชญา"
+
+msgid "langSocraticIrony"
+msgstr "Socratic irony is..."
+
+msgid "langManyAnswers"
+msgstr "(มีคำตอบถูกต้องมากกว่าหนึ่งคำตอบ)"
+
+msgid "langRidiculise"
+msgstr "Ridiculise one\'s interlocutor in order to have him concede he is wrong."
+
+msgid "langNoPsychology"
+msgstr "No. Socratic irony is not a matter of psychology, it concerns argumentation."
+
+msgid "langAdmitError"
+msgstr "Admit one\'s own errors to invite one\'s interlocutor to do the same."
+
+msgid "langNoSeduction"
+msgstr "No. Socratic irony is not a seduction strategy or a method based on the example."
+
+msgid "langForce"
+msgstr "Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know."
+
+msgid "langIndeed"
+msgstr "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\""
+
+msgid "langContradiction"
+msgstr "Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end."
+
+msgid "langNotFalse"
+msgstr "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses."
+
+msgid "langAgenda"
+msgstr "กำหนดการ"
+
+msgid "langVideo"
+msgstr "วิดีทัศน์"
+
+msgid "langCourseProgram"
+msgstr "คำอธิบายรายวิชา"
+
+msgid "langAnnouncements"
+msgstr "ประกาศ"
+
+msgid "langAddPageHome"
+msgstr "โอนย้ายไฟล์เอกสารเข้าเป็นรายการเชื่อมโยงในหน้าโฮมเพจ"
+
+msgid "langLinkSite"
+msgstr "เพิ่มการเชื่อมโยงต่อไปหน้าโฮมเพจ"
+
+msgid "langModifyInfo"
+msgstr "แก้ไขและตั้งค่าของรายวิชา"
+
+msgid "langCourseDesc"
+msgstr "คำอธิบายรายวิชา"
+
+msgid "langAgendaTitle"
+msgstr "ในวันอังคารที่ 11 ธันวาคม - ปฐมนิเทศวิชาและเตรียมความพร้อมก่อนเรียน : อาคาร 3/1 312/1 (ห้องคอมพิวเตอร์กราฟิก) ภาควิชาศิลปกรรม มหาวิทยาลัยราชภัฏจันทรเกษม ถนนรัชดาภิเษก เขตจตุจักร กทม. เวลา 9.00 -11.00 น.แจ้งลงทะเบียนล่วงหน้าได้ที่http://amd.chandra.ac.th(ตัวอย่างการแจ้งกำหนดการ)"
+
+msgid "langAgendaText"
+msgstr "เกริ่นนำทั่วไปถึงการบริหารจัดการโครงการ"
+
+msgid "langMicro"
+msgstr "บทสัมภาษณ์"
+
+msgid "langGoogle"
+msgstr "ค้นหาด้วย search engine เช่น Google.com"
+
+msgid "langIntroductionText"
+msgstr "��ǹ����ͤӹӢͧ����Ԫ� �����䢢�ͤ��� �ô��ԡ�������ѭ�ѡɳ��ٻ�Թ��(��Ѻ��ا) ��ҧ��ҧ���(����Ѻ�������èѴ����Ԫ���ҹ��)"
+
+msgid "langIntroductionTwo"
+msgstr "˹�ҹ����˹�ҷ��͹حҵ������������/������¹�觧ҹ/������͡��âͧ����"
+
+msgid "langCourseDescription"
+msgstr "คำอธิบายรายวิชา"
+
+msgid "langProfessor"
+msgstr "อาจารย์ผู้สอน"
+
+msgid "langAnnouncementEx"
+msgstr "����͵�����ҧ��С�� ͹حҵ�����������С����੾���Ҩ������м��Ѵ����к���ҹ��"
+
+msgid "langJustCreated"
+msgstr "คุณได้สร้างโฮมเพจวิชาไว้ในระบบแล้ว"
+
+msgid "langEnter"
+msgstr "ย้อนกลับ"
+
+msgid "langGroups"
+msgstr "กลุ่มเรียน"
+
+msgid "langCreateCourseGroups"
+msgstr "กลุ่ม"
+
+msgid "langCatagoryMain"
+msgstr "ประเภทหลัก"
+
+msgid "langCatagoryGroup"
+msgstr "กลุ่มอภิปราย"
+
+msgid "langLn"
+msgstr "ภาษา"
+
+msgid "langCreateSite"
+msgstr "สร้างขอบข่ายรายวิชา"
+
+msgid "langFieldsRequ"
+msgstr "ต้องกรอกข้อมูลทุกช่อง"
+
+msgid "langEx"
+msgstr "ตัวอย่างเช่น <b>การออกแบบบรรจุภัณฑ์(Package Design)</b>"
+
+msgid "langFac"
+msgstr "จัดอยู่ในประเภทวิชา"
+
+msgid "langTargetFac"
+msgstr "ภาควิชา/หมวดวิชา"
+
+msgid "langMax"
+msgstr "ตั้งได้จำนวนสูงสุด 12 ตัวอักษรเช่น<b>AD2032106</b>"
+
+msgid "langDoubt"
+msgstr "ุถ้าท่านสงสัยเกี่ยวกับชื่อรหัสวิชา โปรดปรึกษา"
+
+msgid "langProgram"
+msgstr "โปรแกรมวิชา </a>ถ้ารายวิชาของท่านไม่มีรหัสวิชา ไม่ว่าด้วยสาเหตุใด ให้เลือกคำใดคำหนึ่งที่สื่อความหมายแทน เช่น <b>Design </b>สำหรับรายวิชาชื่อ <b>Visual Communication Design</b>"
+
+msgid "langScormtool"
+msgstr "แผนการเรียน"
+
+msgid "langScormbuildertool"
+msgstr "เครื่องมือสร้างแบบมาตรฐานScorm"
+
+msgid "langPathbuildertool"
+msgstr "กำหนดแนวทางการเรียน:Learning Path builder"
+
+msgid "langOnlineConference"
+msgstr "การสัมมนาออนไลน์"
+
+msgid "langAgendaCreationTitle"
+msgstr "การสร้างวิชา"
+
+msgid "langAgendaCreationContenu"
+msgstr "ได้สร้างวิชาแล้ว"
+
+msgid "langOnlineDescription"
+msgstr "รายละเอียดการสัมมนา"
+
+msgid "langDropbox"
+msgstr "กล่องรับส่งงาน"
+
+msgid "langOnly"
+msgstr "เท่านั้น"
+
+msgid "langRandomLanguage"
+msgstr "เลือกภาษา"
+
+msgid "langForumLanguage"
+msgstr "อังกฤษ"
+
+msgid "langNewCourse"
+msgstr "เพิ่มเติมขอบข่ายวิชาอีก"
+
+msgid "langAddNewCourse"
+msgstr "เพิ่มเติมขอบข่ายวิชา"
+
+msgid "langRestoreCourse"
+msgstr "กู้คืนรายวิชา"
+
+msgid "langOtherProperties"
+msgstr "คุณลักษณะอื่นๆของเอกสารที่รวบรวมไว้"
+
+msgid "langSysId"
+msgstr "รหัสของระบบ"
+
+msgid "langDepartment"
+msgstr "หน่วยงาน(Department)"
+
+msgid "langDepartmentUrl"
+msgstr "ที่อยู่เว็ปไซท์ของหน่วยงาน"
+
+msgid "langScoreShow"
+msgstr "แสดงคะแนน"
+
+msgid "langVisibility"
+msgstr "มองเห็น"
+
+msgid "langVersionDb"
+msgstr "เวอร์ชันของฐานข้อมูลที่ใช้เก็บรวบรวมเอกสาร"
+
+msgid "langLastVisit"
+msgstr "เข้ามาครั้งล่าสุด"
+
+msgid "langLastEdit"
+msgstr "แก้ไขครั้งล่าสุด"
+
+msgid "langExpire"
+msgstr "หมดอายุ"
+
+msgid "langChoseFile"
+msgstr "เลือกไฟล์"
+
+msgid "langFtpFileTips"
+msgstr "ไฟล์บน FTP Server"
+
+msgid "langHttpFileTips"
+msgstr "ไฟล์บนเว็ปไซท์"
+
+msgid "langLocalFileTips"
+msgstr "ไฟล์บนระบบเครื่องแม่ข่าย"
+
+msgid "langPostFileTips"
+msgstr "ไฟล์ในเครื่องลูกข่าย"
+
+msgid "langOtherCategory"
+msgstr "ประเภทอื่น"
+
+msgid "langMinimum"
+msgstr "อย่างต่ำ"
+
+msgid "langMaximum"
+msgstr "มากที่สุด"
+
+msgid "langRestoreACourse"
+msgstr "กู้คืนวิชา"
+
+msgid "langBackup"
+msgstr "สำรอง"
+
+msgid "langCopy"
+msgstr "ทำสำเนาเนื้อหารายวิชา"
+
+msgid "langRecycle"
+msgstr "นำวิชาเดิมมาเปิดใหม่"
+
+msgid "AnnouncementExampleTitle"
+msgstr "<b>��С��</b> : �Թ�յ�͹�Ѻ�����Ѥ����¹�Ԫ��͹�Ź���к��ء��ҹ ������¹��к��͹�Ź��� ������¹����֡�Ҥ���觵�ҧ���к�������� ��������ö��ԺѵԵ����鹵͹����к��Ѵ������¹����͹ �ҡ��ҹ�բ��ʧ����� ���Դ��ͼ��Ѵ����к�������ͷ���ʴ��˹���á ���͵Դ����Ҩ�����Ш��ԪҢͧ��ҹ<br />����С�� : ��.��ЪԴ �Գ�ص� ��������Ͷ��.0 96670091 website : http://www.tinnabutr.com �Դ�������ŷ�� : prachid@ tinnabutr.com"
+
+msgid "Wikipedia"
+msgstr "สารานุกรมออนไลน์(wikipedia)"
+
+msgid "DefaultGroupCategory"
+msgstr "กลุ่มแรก"
+

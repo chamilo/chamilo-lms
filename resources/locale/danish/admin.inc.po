@@ -1,0 +1,1956 @@
+msgid "AdminBy"
+msgstr "Administreret af"
+
+msgid "AdministrationTools"
+msgstr "Administrative værktøjer"
+
+msgid "State"
+msgstr "Systemstatus"
+
+msgid "Statistiques"
+msgstr "Statistik"
+
+msgid "VisioHostLocal"
+msgstr "Vært for videokonference"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Om videokonferencens protokol er webbaseret"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Vis et link, som gør det muligt at gå tilbage i kursushierarkiet. Et sådan link er uanset hvad tilgængeligt nederst på siden"
+
+msgid "langUsed"
+msgstr "anvendt"
+
+msgid "langPresent"
+msgstr "Ok"
+
+msgid "langMissing"
+msgstr "mangler"
+
+msgid "langExist"
+msgstr "findes"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Vis et link tilbage til niveauet over det aktuelle"
+
+msgid "ShowNumberOfCourses"
+msgstr "Vis antal kursussider"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Vis underviserens navn ved kursets titel"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Vis underviserens navn i oversigten over kursussider"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Vis kursuskode i oversigten over kursussider"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Vis kursuskoden i kursustitlen"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "Der er ingen virtuelle kurser på platformen."
+
+msgid "ConfigureHomePage"
+msgstr "Konfigurer hjemmeside"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Aktive funktioner ved oprettelse af kursusside"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Hvilke funktioner skal være aktive (synlige) som standard, når et nyt kursus oprettes?"
+
+msgid "langCourseBackup"
+msgstr "Lav en backup af dette kursus"
+
+msgid "langCourseTitular"
+msgstr "Underviser"
+
+msgid "langCourseTitle"
+msgstr "Titel"
+
+msgid "langCourseFaculty"
+msgstr "Kategori"
+
+msgid "langCourseDepartment"
+msgstr "Institut/afdeling"
+
+msgid "langCourseDepartmentURL"
+msgstr "Instituttets/afdelingens URL"
+
+msgid "langCourseLanguage"
+msgstr "Sprog"
+
+msgid "langCourseAccess"
+msgstr "Adgang til kurset"
+
+msgid "langCourseSubscription"
+msgstr "Tilmelding"
+
+msgid "langPublicAccess"
+msgstr "Offentlig adgang"
+
+msgid "langPrivateAccess"
+msgstr "Privat adgang"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Database-håndtering er kun tilgængelig for server administratoren"
+
+msgid "langShowUsersOfCourse"
+msgstr "Vis brugerne på deltagerlisten"
+
+msgid "langShowClassesOfCourse"
+msgstr "Vis klasserne tilknyttet kursussiden"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Vis grupperne i dette kursus"
+
+msgid "langPhone"
+msgstr "Telefon"
+
+msgid "langPhoneNumber"
+msgstr "Telefonnummer"
+
+msgid "langActions"
+msgstr "Handlinger"
+
+msgid "langAddToCourse"
+msgstr "Tilføj til et kursus"
+
+msgid "langDeleteFromPlatform"
+msgstr "Slet fra platformen"
+
+msgid "langDeleteCourse"
+msgstr "Slet den/de valgte kurser"
+
+msgid "langDeleteFromCourse"
+msgstr "Afmeld kursus/kurser"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Slet valgte klasser"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Slet valgte grupper"
+
+msgid "langAdministrator"
+msgstr "Administrator"
+
+msgid "langAddPicture"
+msgstr "Tilføj et billede"
+
+msgid "langChangePicture"
+msgstr "Ændre billedet"
+
+msgid "langDeletePicture"
+msgstr "Slet billedet"
+
+msgid "langAddUsers"
+msgstr "Tilføj deltagere"
+
+msgid "langAddGroups"
+msgstr "Tilføj grupper"
+
+msgid "langAddClasses"
+msgstr "Tilføj klasser"
+
+msgid "langExportUsers"
+msgstr "Eksporter bruger-listen"
+
+msgid "langKeyword"
+msgstr "Nøgleord"
+
+msgid "langGroupName"
+msgstr "Gruppens navn"
+
+msgid "langGroupTutor"
+msgstr "Gruppens instruktor"
+
+msgid "langGroupDescription"
+msgstr "Beskrivelse af gruppen"
+
+msgid "langNumberOfParticipants"
+msgstr "Antal deltagere"
+
+msgid "langNumberOfUsers"
+msgstr "Antal brugere"
+
+msgid "langMaximum"
+msgstr "maks."
+
+msgid "langMaximumOfParticipants"
+msgstr "Maks. antal deltagere"
+
+msgid "langParticipants"
+msgstr "deltagere"
+
+msgid "langFirstLetterClass"
+msgstr "Fornavn"
+
+msgid "langFirstLetterUser"
+msgstr "Efternavn"
+
+msgid "langFirstLetterCourse"
+msgstr "Fornavn (kode)"
+
+msgid "langModifyUserInfo"
+msgstr "Rediger brugerinfo"
+
+msgid "langModifyClassInfo"
+msgstr "Rediger klasseinfo"
+
+msgid "langModifyGroupInfo"
+msgstr "Rediger gruppeinfo"
+
+msgid "langModifyCourseInfo"
+msgstr "Rediger kursusinfo"
+
+msgid "langPleaseEnterClassName"
+msgstr "Indtast venligst navn på klassen"
+
+msgid "langPleaseEnterLastName"
+msgstr "Indtast venligst deltagerens efternavn"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Indtast venligst deltagerens fornavn!"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Indtast venligst en gyldig e-mail adresse!"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Indtast venligst et gyldigt login!"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Indtast venligst kursuskoden!"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Indtast venligst underviserens navn og fornavn!"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Indtast venligst kursustitlen!"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Godkendte formater er JPG, PNG og GIF!"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Dette brugernavn er allerede taget!"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Importer en liste af brugere fra en XML/CSV fil"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Eksporter deltagerlisten til en XML/CSV fil"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Kun deltagere fra kurset"
+
+msgid "langAddClassesToACourse"
+msgstr "Tilføj klasser til et kursus"
+
+msgid "langAddUsersToACourse"
+msgstr "Tilføj brugere til et kursus"
+
+msgid "langAddUsersToAClass"
+msgstr "Tilføj brugere til en klasse"
+
+msgid "langAddUsersToAGroup"
+msgstr "Tilføj deltagere til en gruppe"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Du skal vælge minimum en klasse og et kursus!"
+
+msgid "AtLeastOneUser"
+msgstr "Du skal som min. vælge en bruger"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Du skal vælge mindst en bruger og et kursus!"
+
+msgid "langClassList"
+msgstr "Klasseliste"
+
+msgid "langUserList"
+msgstr "Deltagerliste"
+
+msgid "langCourseList"
+msgstr "Oversigt over kursusside"
+
+msgid "langAddToThatCourse"
+msgstr "Tilføj til dette/disse kurser"
+
+msgid "langAddToClass"
+msgstr "Tilføj til klassen"
+
+msgid "langRemoveFromClass"
+msgstr "Fjern fra klassen"
+
+msgid "langAddToGroup"
+msgstr "Tilføj til gruppen"
+
+msgid "langRemoveFromGroup"
+msgstr "Fjern fra gruppen"
+
+msgid "langUsersOutsideClass"
+msgstr "Brugere uden for klassen"
+
+msgid "langUsersInsideClass"
+msgstr "Brugere i klassen"
+
+msgid "langUsersOutsideGroup"
+msgstr "Brugere udenfor gruppen"
+
+msgid "langUsersInsideGroup"
+msgstr "Gruppedeltagere"
+
+msgid "langImportFileLocation"
+msgstr "Placering af CSV / XML filen"
+
+msgid "langFileType"
+msgstr "Filtype"
+
+msgid "langOutputFileType"
+msgstr "Destinationens filtype"
+
+msgid "langMustUseSeparator"
+msgstr "skal bruge \';\' som seperator"
+
+msgid "langCSVMustLookLike"
+msgstr "CSV filen skal se således ud"
+
+msgid "langXMLMustLookLike"
+msgstr "XML filen skal se således ud"
+
+msgid "langMandatoryFields"
+msgstr "Felter med <strong>fed skrift</strong> er obligatoriske."
+
+msgid "langNotXML"
+msgstr "Den valgte fil er ikke en gyldig XML fil!"
+
+msgid "langNotCSV"
+msgstr "Den valgte fil er ikke en gyldig CSV fil!"
+
+msgid "langNoNeededData"
+msgstr "Den valgte fil indeholder ikke alle de nødvendige data!"
+
+msgid "langMaxImportUsers"
+msgstr "Du kan ikke importere mere end 500 brugere ad gangen!"
+
+msgid "langAdminDatabases"
+msgstr "Databaser (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Brugere"
+
+msgid "langAdminClasses"
+msgstr "Klasser med brugere"
+
+msgid "langAdminGroups"
+msgstr "Grupper med brugere"
+
+msgid "langAdminCourses"
+msgstr "Kurser"
+
+msgid "langAdminCategories"
+msgstr "Kursuskategorier"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Tilmeld en bruger / gruppe til et kursus"
+
+msgid "AddACategory"
+msgstr "Tilføj en kategori"
+
+msgid "langInto"
+msgstr "i"
+
+msgid "langNoCategories"
+msgstr "Der er ingen kategorier her"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Tillad tilføjelse af kurser i denne kategori?"
+
+msgid "langGoToForum"
+msgstr "Gå til forummet"
+
+msgid "langCategoryCode"
+msgstr "Kategorikode"
+
+msgid "langCategoryName"
+msgstr "Kategorinavn"
+
+msgid "langCategories"
+msgstr "kategorier"
+
+msgid "langEditNode"
+msgstr "Rediger denne kategori"
+
+msgid "langOpenNode"
+msgstr "Åbn denne kategori"
+
+msgid "langDeleteNode"
+msgstr "Slet denne kategori"
+
+msgid "langAddChildNode"
+msgstr "Tilføj en underkategori"
+
+msgid "langViewChildren"
+msgstr "Se underpunkter"
+
+msgid "langTreeRebuildedIn"
+msgstr "Træ genskabt i"
+
+msgid "langTreeRecountedIn"
+msgstr "Træ-omtælling tog"
+
+msgid "langRebuildTree"
+msgstr "Genopbyg træ"
+
+msgid "langRefreshNbChildren"
+msgstr "Genindlæs antal underpunkter"
+
+msgid "langShowTree"
+msgstr "Vis træ"
+
+msgid "langBack"
+msgstr "Tilbage til forrige side"
+
+msgid "langLogDeleteCat"
+msgstr "Kategori slettet"
+
+msgid "langRecountChildren"
+msgstr "Tæl underpunkter igen"
+
+msgid "langUpInSameLevel"
+msgstr "Op i samme niveau"
+
+msgid "langSeconds"
+msgstr "sekunder"
+
+msgid "langMailTo"
+msgstr "Send e-mail til:"
+
+msgid "lang_no_access_here"
+msgstr "Ingen adgang"
+
+msgid "lang_php_info"
+msgstr "information om systemet"
+
+msgid "langAddAdminInApache"
+msgstr "Tilføj en administrator"
+
+msgid "langAddFaculties"
+msgstr "Tilføj kategorier"
+
+msgid "langSearchACourse"
+msgstr "Søg efter kursus"
+
+msgid "langSearchAUser"
+msgstr "Søg efter bruger"
+
+msgid "langTechnicalTools"
+msgstr "Teknisk"
+
+msgid "langConfig"
+msgstr "System config"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Login liste (udvidet)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Det højeste antal brugere vist på listen"
+
+msgid "NoTimeLimits"
+msgstr "Ingen tidsbegrænsning"
+
+msgid "GeneralCoach"
+msgstr "Instruktor"
+
+msgid "GeneralProperties"
+msgstr "Overordnede rettigheder"
+
+msgid "CourseCoach"
+msgstr "Kursussidens instruktor"
+
+msgid "UsersNumber"
+msgstr "Brugernes numre"
+
+msgid "PageAfterLoginTitle"
+msgstr "Personlig forside"
+
+msgid "PageAfterLoginComment"
+msgstr "Siden som ses af brugeren i mødet med platformen"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Chamilo Web"
+
+msgid "TabsMyProfile"
+msgstr "Faneblade til Min profil"
+
+msgid "GlobalRole"
+msgstr "Globale rolle"
+
+msgid "langNomOutilTodo"
+msgstr "Håndter huskeliste"
+
+msgid "langNomPageAdmin"
+msgstr "Administration"
+
+msgid "langSysInfo"
+msgstr "Info om systemet"
+
+msgid "langDiffTranslation"
+msgstr "Sammenlign oversættelser"
+
+msgid "langStatOf"
+msgstr "Statistik for"
+
+msgid "langSpeeSubscribe"
+msgstr "Hurtig registrering som kursusovervåger"
+
+msgid "langLogIdentLogout"
+msgstr "Login liste"
+
+msgid "langServerStatus"
+msgstr "Status på mysql serveren :"
+
+msgid "langDataBase"
+msgstr "Database"
+
+msgid "langRun"
+msgstr "arbejde"
+
+msgid "langClient"
+msgstr "MySql Klient"
+
+msgid "langServer"
+msgstr "MySql Server"
+
+msgid "langtitulary"
+msgstr "Ejer"
+
+msgid "langUpgradeBase"
+msgstr "Opgrader database"
+
+msgid "langManage"
+msgstr "Bestyrer"
+
+msgid "langErrorsFound"
+msgstr "fundet fejl"
+
+msgid "langMaintenance"
+msgstr "Vedligeholdelse"
+
+msgid "langUpgrade"
+msgstr "Opgrader Chamilo"
+
+msgid "langWebsite"
+msgstr "Chamilo website"
+
+msgid "langDocumentation"
+msgstr "Dokumentation"
+
+msgid "langContribute"
+msgstr "Bidrag"
+
+msgid "langInfoServer"
+msgstr "Server Information"
+
+msgid "langOtherCategory"
+msgstr "Anden kategori"
+
+msgid "langSendMailToUsers"
+msgstr "Send en e-mail til brugere"
+
+msgid "langExampleXMLFile"
+msgstr "Eksempel på en XML fil"
+
+msgid "langExampleCSVFile"
+msgstr "Eksempel på en CSV fil"
+
+msgid "langCourseSystemCode"
+msgstr "Systemkode"
+
+msgid "langCourseVisualCode"
+msgstr "Visuel kode"
+
+msgid "langSystemCode"
+msgstr "Systemkode"
+
+msgid "langVisualCode"
+msgstr "visuel kode"
+
+msgid "langAddCourse"
+msgstr "Opret en kursusside"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Håndtering af virtuelle kurser"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Opret et virtuelt kursus"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "Det virtuelle kursus vil dele plads (mappe og database) med et eksisterende \'ægte\' kursus."
+
+msgid "langRealCourseCode"
+msgstr "Ægte kursuskode"
+
+msgid "langCourseCreationSucceeded"
+msgstr "Kurset blev korrekt oprettet."
+
+msgid "langYourDokeosUses"
+msgstr "Din Chamilo installation bruger lige nu"
+
+msgid "langOnTheHardDisk"
+msgstr "på disken"
+
+msgid "langIsVirtualCourse"
+msgstr "Er et virtuelt kursus"
+
+msgid "langSystemAnnouncements"
+msgstr "Systemmeddelelser"
+
+msgid "langAddAnnouncement"
+msgstr "Tilføj ny systemmeddelelse"
+
+msgid "langAnnouncementAdded"
+msgstr "Meddelelsen er tilføjet"
+
+msgid "langAnnouncementUpdated"
+msgstr "Meddelelsen er opdateret"
+
+msgid "langAnnouncementDeleted"
+msgstr "Meddelelsen er slettet"
+
+msgid "langContent"
+msgstr "Indhold"
+
+msgid "PermissionsForNewFiles"
+msgstr "Tilladelser i forbindelse med nye filer"
+
+msgid "langStudent"
+msgstr "Studerende"
+
+msgid "Guest"
+msgstr "Gæst"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Login som"
+
+msgid "langLoginAsThisUser"
+msgstr "Login"
+
+msgid "SelectPicture"
+msgstr "Vælg billede"
+
+msgid "DontResetPassword"
+msgstr "Nulstil ikke adgangskode"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Deltag i udviklingen"
+
+msgid "langCourseAdmin"
+msgstr "kursusadministrator/underviser"
+
+msgid "langOtherCourses"
+msgstr "andre kurser"
+
+msgid "PlatformLanguageTitle"
+msgstr "Platform Sprog"
+
+msgid "ServerStatusComment"
+msgstr "Hvilken type server er dette? Dette aktiverer eller deaktiverer specifikke indstillinger. På en udviklings-server er der en oversættelses-funktion som indikerer ikke oversatte tekst-strenge"
+
+msgid "ServerStatusTitle"
+msgstr "Server Type"
+
+msgid "PlatformLanguages"
+msgstr "Chamilo Platform Sprog"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Dette værktøj håndterer sprogvalgs menuen på login-siden. Som platforms-administrator bestemmer du hvilke sprog skal være tilgængelig for dine brugere."
+
+msgid "OriginalName"
+msgstr "Oprindeligt navn"
+
+msgid "EnglishName"
+msgstr "Engelsk navn"
+
+msgid "DokeosFolder"
+msgstr "Chamilo mappe"
+
+msgid "Properties"
+msgstr "Egenskaber"
+
+msgid "PlatformConfigSettings"
+msgstr "Chamilo Konfigurations-indstillinger"
+
+msgid "SettingsStored"
+msgstr "Indstillingerne er gemt"
+
+msgid "InstitutionTitle"
+msgstr "Institutionens navn"
+
+msgid "InstitutionComment"
+msgstr "Institutionens navn (fremstår i overskriften til højre)"
+
+msgid "InstitutionUrlTitle"
+msgstr "Institutionens URL"
+
+msgid "InstitutionUrlComment"
+msgstr "Institutionens URL (linket som fremstår i overskriften til højre)"
+
+msgid "SiteNameTitle"
+msgstr "Titel på Chamilo Platform"
+
+msgid "SiteNameComment"
+msgstr "Navnet på din Chamilo Platform (fremstår i overskriften til venstre)"
+
+msgid "emailAdministratorTitle"
+msgstr "Platformadministrator: E-mail"
+
+msgid "emailAdministratorComment"
+msgstr "Platformadministratorens e-mail adresse (fremstår i sidefoden til venstre)"
+
+msgid "administratorSurnameTitle"
+msgstr "Platformadministrator: Efternavn"
+
+msgid "administratorSurnameComment"
+msgstr "Platformadministratorens efternavn (fremstår i sidefoden til venstre)"
+
+msgid "administratorNameTitle"
+msgstr "Platformadministrator: Fornavn"
+
+msgid "administratorNameComment"
+msgstr "Platformadministratorens fornavn (fremstår i sidefoden til venstre)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Information om platformadministrator i sidefoden"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Vis informationer om platformadministratoren i sidefoden?"
+
+msgid "HomepageViewTitle"
+msgstr "Hjemmesidens layout"
+
+msgid "HomepageViewComment"
+msgstr "Hvordan ønsker du, at en kursusside skal se ud?"
+
+msgid "HomepageViewDefault"
+msgstr "To kolonner. Inaktive værktøjer skjules"
+
+msgid "HomepageViewFixed"
+msgstr "Tre kolonner. Inaktive værktøjer er i gråtoner (Ikoner beholder deres plads)"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Værktøjsgenveje"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Vis genveje til værktøjer i banneret?"
+
+msgid "ShowStudentViewTitle"
+msgstr "Se siden som studerende"
+
+msgid "ShowStudentViewComment"
+msgstr "Aktiver Se siden som studerende?<br>Denne egenskab gør det muligt for en underviser at se siden som en studerende ville se den."
+
+msgid "AllowGroupCategories"
+msgstr "Gruppe-kategorier"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Tillad kursus-administratorer at oprette kategorier i gruppe-modulet?"
+
+msgid "PlatformLanguageComment"
+msgstr "Du kan bestemme platformens sprog i en anden del af platforms-administreringen, nemlig: <a href=\"languages.php\">Dokeos Platform Sprog</a>"
+
+msgid "ProductionServer"
+msgstr "Produktions server"
+
+msgid "TestServer"
+msgstr "Test server"
+
+msgid "ShowOnlineTitle"
+msgstr "Hvem er online"
+
+msgid "AsPlatformLanguage"
+msgstr "som platformsprog"
+
+msgid "ShowOnlineComment"
+msgstr "Vis antal online personer?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Tillad ændring af navn i profilen?"
+
+msgid "AllowNameChangeComment"
+msgstr "Må brugeren ændre sit for- og efternavn?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Standardkvote for dokumenter"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Hvad er standard kvote for dokument-værktøjet? Du kan overskrive kvote for specifikke kurser igennem: platform administrering > Kurser > modificer"
+
+msgid "ProfileChangesTitle"
+msgstr "Profil"
+
+msgid "ProfileChangesComment"
+msgstr "Hvilke dele af profilen kan ændres?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Registrering: påkrævede felter"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Hvilke felter er påkrævede (udover navn, fornavn, brugernavn og adgangskode)"
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Standard gruppe kvote"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Hvad er standard kvote for en gruppes dokument-værktøj?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Glemt adgangskode"
+
+msgid "AllowLostPasswordComment"
+msgstr "Må brugeren udbede sig sin adgangskode?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Registrering"
+
+msgid "AllowRegistrationComment"
+msgstr "Er registreringen som ny bruger tilladt? Kan brugere oprette nye konti?"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Registrering som underviser"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Kan brugere selv registrere sig som underviser (som kan oprette kurser)?"
+
+msgid "PlatformLanguage"
+msgstr "Sprog på platformen"
+
+msgid "Tuning"
+msgstr "Justering"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "Adskil mapper til upload per bruger"
+
+msgid "CourseQuota"
+msgstr "Kursuskvote"
+
+msgid "EditNotice"
+msgstr "Rediger notits"
+
+msgid "General"
+msgstr "generelt"
+
+msgid "LostPassword"
+msgstr "Glemt adgangskode"
+
+msgid "Registration"
+msgstr "registrering"
+
+msgid "Password"
+msgstr "adgangskode"
+
+msgid "InsertLink"
+msgstr "indsæt link"
+
+msgid "EditNews"
+msgstr "Rediger nyheder"
+
+msgid "EditCategories"
+msgstr "rediger kategorier"
+
+msgid "EditHomePage"
+msgstr "Rediger startside"
+
+msgid "AllowUserHeadingsComment"
+msgstr "Kan en kursus administrator definere bruger-overskrifter for at hente yderligere bruger-information?"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Course"
+msgstr "Kursus"
+
+msgid "Languages"
+msgstr "Sprog"
+
+msgid "Privacy"
+msgstr "Fortrolighed"
+
+msgid "NoticeTitle"
+msgstr "Notits Titel"
+
+msgid "NoticeText"
+msgstr "Notits Tekst"
+
+msgid "LinkName"
+msgstr "Linktekst"
+
+msgid "LinkURL"
+msgstr "Link URL"
+
+msgid "OpenInNewWindow"
+msgstr "Åbn i nyt vindue"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "Hvis den første ikke-filtreret oversigt indeholder flere end dette antal brugere på de sider, hvor man kan tilføje brugere til en klasse eller kursusside, skal default-indstilling være at vise dem efter det første bogstav (A)"
+
+msgid "Plugins"
+msgstr "Plugin"
+
+msgid "HideDLTTMarkupComment"
+msgstr "Skjul [=...=] markup når en sprogvariable ikke er oversat"
+
+msgid "Info"
+msgstr "information"
+
+msgid "UserAdded"
+msgstr "Brugeren er tilføjet"
+
+msgid "NoSearchResults"
+msgstr "Ingen resultat af søgningen"
+
+msgid "UserDeleted"
+msgstr "Brugeren er slettet"
+
+msgid "NoClassesForThisCourse"
+msgstr "Der er ingen klasser tilmeldt dette kursus"
+
+msgid "CourseUsage"
+msgstr "Kursusbrug"
+
+msgid "NoCoursesForThisUser"
+msgstr "Denne bruger er ikke tilmeldt noget kursus"
+
+msgid "NoClassesForThisUser"
+msgstr "Denne bruger er ikke tilmeldt nogen klasse"
+
+msgid "NoCoursesForThisClass"
+msgstr "Denne klasse er ikke tilmeldt noget kursus"
+
+msgid "langOpenToTheWorld"
+msgstr "Åben - siden kan ses af alle på internettet"
+
+msgid "OpenToThePlatform"
+msgstr "Åben - siden kan efter login ses af de, der følger et direkte link eller de, der står på sidens deltagerliste"
+
+msgid "langPrivate"
+msgstr "Privat adgang - siden er kun tilgængelig for personer på deltagerlisten"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Fuldstændig lukket - siden er kun tilgængelig for underviseren eller kursusadministratoren"
+
+msgid "langSubscription"
+msgstr "Tilmelding"
+
+msgid "langUnsubscription"
+msgstr "Afmelding"
+
+msgid "CourseAccessConfigTip"
+msgstr "Som standard er dit kursus tilgængeligt for registrerede brugere på platformen. Ønsker du en vis fortrolighed omkring adgang til kursussiden, er det lettest at åbne for tilmeldinger i f.eks. en uge (vælg: Fortrolig adgang, Kursustilmelding Tilladt) og bede de studerende om i første lektion at tilmelde sig. Derefter lukker du siden for tilmeldinger (vælg: Kursustilmelding Nægtet). Du kan nu se de tilmeldte på deltagerlisten og slette evt. uvelkomne. Kursussiden er nu kun tilgængelig via login."
+
+msgid "Tool"
+msgstr "værktøj"
+
+msgid "NumberOfItems"
+msgstr "antal objekter"
+
+msgid "DocumentsAndFolders"
+msgstr "Dokumenter og mapper"
+
+msgid "Learnpath"
+msgstr "Læringssti"
+
+msgid "Exercises"
+msgstr "Øvelser"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Personlig kalender"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "Can brugeren tilføje personlige punkter på Min Kalender siden?"
+
+msgid "CurrentValue"
+msgstr "nuværende værdi"
+
+msgid "CourseDescription"
+msgstr "Kursusbeskrivelse"
+
+msgid "OnlineConference"
+msgstr "Konference"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Quiz"
+msgstr "Øvelser"
+
+msgid "Announcements"
+msgstr "Meddelelser"
+
+msgid "Links"
+msgstr "Links"
+
+msgid "LearningPath"
+msgstr "Læringssti"
+
+msgid "Documents"
+msgstr "Dokumenter"
+
+msgid "UserPicture"
+msgstr "Billede"
+
+msgid "officialcode"
+msgstr "Officiel Kode"
+
+msgid "Login"
+msgstr "Brugernavn"
+
+msgid "UserPassword"
+msgstr "Adgangskode"
+
+msgid "SubscriptionAllowed"
+msgstr "Tilmelding tilladt"
+
+msgid "UnsubscriptionAllowed"
+msgstr "Afmelding tilladt"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Tilladt"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Nægtet"
+
+msgid "AddDummyContentToCourse"
+msgstr "Tilføj eksempel indhold til dette kursus"
+
+msgid "DummyCourseCreator"
+msgstr "Opret eksempel kursus indhold"
+
+msgid "DummyCourseDescription"
+msgstr "Dette vil tilføje eksempel indhold til dette kursus. Dette er kun beregnet til test."
+
+msgid "AvailablePlugins"
+msgstr "De følgende plugins er fundet i systemet."
+
+msgid "CreateVirtualCourse"
+msgstr "Opret et virtuelt kursus"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Vis liste over virtuelle kurser"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Sammenkædet med ægte kursus kode"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Forsøgte at oprette virtuelt kursus..."
+
+msgid "WantedCourseCode"
+msgstr "Ønsker kursuskode"
+
+msgid "ResetPassword"
+msgstr "Nulstil adgangskode"
+
+msgid "CheckToSendNewPassword"
+msgstr "Sæt kryds for at få tilsendt ny adgangskode"
+
+msgid "AutoGeneratePassword"
+msgstr "Generer ny tilfældig adgangskode"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Benyt dokumenttitel som dokumentnavn"
+
+msgid "UseDocumentTitleComment"
+msgstr "Dette vil tillade brugen af en titel som document navn istedet for dokument_navn.ext"
+
+msgid "StudentPublications"
+msgstr "Studerendes afleveringer"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "Slettede filer kan ikke genskabes"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Slettes en fil med dokumentværktøjet, slettes den permanent. Filen kan altså ikke genskabes"
+
+msgid "ClassName"
+msgstr "Klassenavn"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Dueslag: Maks. filstørrelse for et dokument i dueslaget"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Hvor stor (i bytes) kan et dokument i dueslaget være?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Dueslag: Kan dokumenter overskrives"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "Kan det originale dokument overskrives, når en studerende eller underviser uploader et dokument med samme navn som de originale dokument? Hvis du svarer ja, mister du versionsstyringen"
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Dueslag: Upload til eget dueslag?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Tillad undervisere og studerende at uploade dokumenter til eget dueslag og kun sende dokumenter til sig selv"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Dueslag: Studerende <-> Studerende"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Tillad studerende at sende dokumenter til andre studerende (P2P udveksling). Studerende kan også bruge dette til irrelevante dokumenter (mp3, løsninger, ...). Hvis du deaktiverer denne mulighed kan studerende kun sende dokumenter til undervisere"
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Dueslag: Tillad e-mails"
+
+msgid "DropboxAllowMailingComment"
+msgstr "Via dueslaget kan du sende studerende personlige dokumenter, som vil være at finde for dem i deres dueslag"
+
+msgid "PermissionsForNewDirs"
+msgstr "Tilladelser forbundet nye mapper"
+
+msgid "UserListHasBeenExported"
+msgstr "Deltagerlisten er eksporteret."
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Klik her for at downloade filen."
+
+msgid "administratorTelephoneTitle"
+msgstr "Platform Administrator: Telefon"
+
+msgid "administratorTelephoneComment"
+msgstr "Platform Administratorens telefonnummer"
+
+msgid "SendMailToNewUser"
+msgstr "Send e-mail til ny bruger"
+
+msgid "ExtendedProfileTitle"
+msgstr "Udvidet profil"
+
+msgid "ExtendedProfileComment"
+msgstr "Hvis denne indstilling er sat til \'Sand\', kan en bruger udfylde følgende (valgfrie) felter: \'Mine kompetencer\', \'Mine diplomer\', \'Hvad jeg kan undervise i\', og \'Mit personlige åbne område\'"
+
+msgid "Classes"
+msgstr "Klasser"
+
+msgid "UserUnsubscribed"
+msgstr "Brugeren er nu afmeldt"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "Bruger kan ikke afmeldes kurset. Brugeren er  kursusadministrator og skal afmeldes af en anden kursusadministrator på siden."
+
+msgid "InvalidStartDate"
+msgstr "Du angav en ikke-gyldig startdato"
+
+msgid "InvalidEndDate"
+msgstr "Du angav en ikke-gyldig slutdato"
+
+msgid "DateFormatLabel"
+msgstr "(d/m/å t:m)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "Kan ikke skrive til hjemmeside-filer!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Angiv venligst notits tekst"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Angiv venligst notits titel"
+
+msgid "PleaseEnterLinkName"
+msgstr "Angiv venligst linkets navn"
+
+msgid "InsertThisLink"
+msgstr "Indsæt dette link"
+
+msgid "FirstPlace"
+msgstr "Første placering"
+
+msgid "After"
+msgstr "efter"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Dueslag: tillad at sende til grupper"
+
+msgid "DropboxAllowGroupComment"
+msgstr "Brugere kan sende filer til grupper"
+
+msgid "ClassDeleted"
+msgstr "Klassen er slettet"
+
+msgid "ClassesDeleted"
+msgstr "Klasserne er slettet"
+
+msgid "NoUsersInClass"
+msgstr "Ingen brugere i denne klasse"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "De valgte brugere er tilmeldt de valgte kurser"
+
+msgid "InvalidTitle"
+msgstr "Indtast venligst en titel"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Denne kategori er allerede brugt"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Indtast venligst en kode samt et navn for denne kategori"
+
+msgid "DokeosHomepage"
+msgstr "Start"
+
+msgid "DokeosForum"
+msgstr "Chamilo Forum"
+
+msgid "RegisterYourPortal"
+msgstr "Registrer din portal"
+
+msgid "DokeosExtensions"
+msgstr "Chamilo Udvidelser"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Vis Kursusmenu"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Vis en menu, som gør det let at navigere rundt i dette kursusforløb"
+
+msgid "LoginAs"
+msgstr "Login som"
+
+msgid "ImportClassListCSV"
+msgstr "Importer klasseliste via CSV"
+
+msgid "ShowOnlineWorld"
+msgstr "Vis antal brugere online på denne login side (synlig for alle)"
+
+msgid "ShowOnlineUsers"
+msgstr "Vis antal brugere online på alle sider (synlig for brugere, der er logget ind)"
+
+msgid "ShowOnlineCourse"
+msgstr "Vis antal brugere online til dette kursusforløb"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Vis ikoner i navigationsmenu?"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Fokus på højre"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Fokus på sted"
+
+msgid "ClassesUnsubscribed"
+msgstr "De valgte klasser er afmeldt fra de valgte kurser"
+
+msgid "ClassesSubscribed"
+msgstr "De valgte klasser er tilmeldt de valgte kurser"
+
+msgid "RoleId"
+msgstr "Rolle ID"
+
+msgid "RoleName"
+msgstr "Rolle navn"
+
+msgid "RoleType"
+msgstr "Rolle type"
+
+msgid "RightValueModified"
+msgstr "Værdien er blevet ændret"
+
+msgid "MakeAvailable"
+msgstr "Gør tilgængelig"
+
+msgid "MakeUnavailable"
+msgstr "Gør utilgængelig"
+
+msgid "Stylesheets"
+msgstr "Style sheets"
+
+msgid "DefaultDokeosStyle"
+msgstr "Standard Chamilo stil"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Bør navigations menu vise de forskellige væktøjs ikoner?"
+
+msgid "Plugin"
+msgstr "Plugin"
+
+msgid "MainMenu"
+msgstr "Hoved menu"
+
+msgid "MainMenuLogged"
+msgstr "Hoved menu efter login"
+
+msgid "Banner"
+msgstr "Banner"
+
+msgid "ImageResizeTitle"
+msgstr "Ændre størrelsen på billeder uploadet af bruger"
+
+msgid "ImageResizeComment"
+msgstr "Billeders størrelse kan ændres ved upload, hvis PHP er kompileret med <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. Hvis GD er utilgængelig, vil indstillingen blive ignoreret."
+
+msgid "MaxImageWidthTitle"
+msgstr "Maksimum bredde"
+
+msgid "MaxImageWidthComment"
+msgstr "Maksimum bredde i pixels. Indstillingen gør sig kun gældende, hvis man ved upload har bedt om at ændre billedets størrelse."
+
+msgid "MaxImageHeightTitle"
+msgstr "Maksimum højde"
+
+msgid "MaxImageHeightComment"
+msgstr "Maksimum højde i pixels. Indstillingen gør sig kun gældende, hvis billedet ved upload skal ændre størrelse."
+
+msgid "YourVersionNotUpToDate"
+msgstr "Din version er ikke opdateret"
+
+msgid "YourVersionIs"
+msgstr "Din version er"
+
+msgid "PleaseVisitDokeos"
+msgstr "Besøg venligst DOKEOS"
+
+msgid "VersionUpToDate"
+msgstr "Din version er opdateret"
+
+msgid "ConnectSocketError"
+msgstr "Fejl ved connection"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Socket connections are deaktiverede"
+
+msgid "ShowEmailAddresses"
+msgstr "Vis e-mailadresser"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Vis e-mailadresser til deltagerne"
+
+msgid "LatestVersionIs"
+msgstr "Den seneste version er"
+
+msgid "langConfigureExtensions"
+msgstr "Konfiguration af service"
+
+msgid "langActiveExtensions"
+msgstr "Aktiver denne service"
+
+msgid "langVisioconf"
+msgstr "Visio-konference"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo Live Conferencing® er et standardiseret videokonference-værktøj. Værktøjer tilbyder følgende: Visning af diapos, whiteboard der kan tegnes og skrives på, audio/video og chat. Du skal have en Flash® player installeret på computeren for at kunne benytte dig af det. Værktøjet kan bruges på ter måder: En-til-en, en-til-mange eller mange-til-mange."
+
+msgid "langPpt2lp"
+msgstr "oogie"
+
+msgid "langPpt2lpDescription"
+msgstr "Funktionen, hvormed du kan lave en PowerPoint om til en læringssti, gør det muligt for dig at lave en læringssti ud af din PowerPoint-præsentation på kun få klik"
+
+msgid "langBandWidthStatistics"
+msgstr "Bandwidth statistik"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG muliggør, at du kan tilgå avanceret statistik om server-driften de seneste 24 timer."
+
+msgid "ServerStatistics"
+msgstr "Server-statistik"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats gør det muligt for dig at konsultere platformstatistikken: besøgende på siden, sidevisninger, referencer mm."
+
+msgid "SearchEngine"
+msgstr "Full Text søgemaskine"
+
+msgid "langSearchEngineDescription"
+msgstr "Fuld tekst søgemaskine gør det muligt for dig at søge efter et ord på hele platformen. En daglig indeksregulering er med til at sikre en opdateret søgning."
+
+msgid "langListSession"
+msgstr "Oversigt over sessioner"
+
+msgid "AddSession"
+msgstr "Tilføj en session"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Importer sessioner i XML/CSV format"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Eksporter sessioner i XML/CSV format"
+
+msgid "SessionName"
+msgstr "Navn på session"
+
+msgid "langNbCourses"
+msgstr "Kursusside-nummer"
+
+msgid "DateStart"
+msgstr "Startdato"
+
+msgid "DateEnd"
+msgstr "Slutdato"
+
+msgid "CoachName"
+msgstr "Instruktors navn"
+
+msgid "SessionList"
+msgstr "Oversigt over sessions"
+
+msgid "SessionNameIsRequired"
+msgstr "Du bliver nødt til at indtaste et navn til sessionen"
+
+msgid "NextStep"
+msgstr "Næste trin"
+
+msgid "keyword"
+msgstr "Nøgleord"
+
+msgid "Confirm"
+msgstr "Bekræft"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Afmeld deltagere fra kursussiden"
+
+msgid "MissingClassName"
+msgstr "Manglende klassenavn"
+
+msgid "ClassNameExists"
+msgstr "Klassenavn eksisterer"
+
+msgid "ImportCSVFileLocation"
+msgstr "Placering af importeret CSV fil"
+
+msgid "ClassesCreated"
+msgstr "Du har nu oprettet klasserne"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Fejl under importering af fil"
+
+msgid "ServiceActivated"
+msgstr "Service aktiveret"
+
+msgid "ActivateExtension"
+msgstr "Aktiverede services"
+
+msgid "InvalidExtension"
+msgstr "Ugyldig filtype"
+
+msgid "AfterApproval"
+msgstr "Efter godkendelse"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Muliggør visning af siden som studerende"
+
+msgid "StudentViewEnabledComment"
+msgstr "Muliggør visning af siden som studerende, hvorved underviseren eller kursusadministration kan se kursussiden, som en studerende vil se kursussiden"
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Tidsbegrænsning ved Hvem-er-online"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Tidsbegrænsningen definerer hvor mange sekunder efter en sidste handling den pågældende bruger anses for værende *online*"
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Ekempel på indhold ved oprettelse af kursusside"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Opret automatisk eksempel på indhold, der ligger på kursussiden ved oprettelse af ny kursusside"
+
+msgid "AccountValidDurationTitle"
+msgstr "Profil-validitet"
+
+msgid "AccountValidDurationComment"
+msgstr "Profilen er valid i dette antal dage efter oprettelse"
+
+msgid "UseSessionModeTitle"
+msgstr "Anvend session-tilstand"
+
+msgid "UseSessionModeComment"
+msgstr "Sessioner giver en alternativ mulighed for at administrere kursussider, hvor der en opretter/underviser, en instruktor og deltagere. Hver instruktor vælger, hvor lang tid en gruppe deltagere skal have adgang til en kursusside. Tidsperioden kaldes en *session*"
+
+msgid "HomepageViewActivity"
+msgstr "Visning af aktivitet"
+
+msgid "HomepageView2column"
+msgstr "Visning med to kolonner"
+
+msgid "HomepageView3column"
+msgstr "Visning med tre kolonner"
+
+msgid "AllowUserHeadings"
+msgstr "Tillad deltagerspørgsmål"
+
+msgid "IconsOnly"
+msgstr "Kun ikoner"
+
+msgid "TextOnly"
+msgstr "Kun tekst"
+
+msgid "IconsText"
+msgstr "Ikoner og tekst"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Aktiver værktøjs-introduktioner"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Aktiver introduktioner på hver side med et værktøj/funktion"
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Kursussidens krummesti"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "Via krummestien kan man navigere (gå tilbage i ens handlinger) ud fra et horisontalt link-struktur. Krummestien vises normalt øverst til venstre på siden. Krummestien viser, hvilken side du er på og giver dig links tilbage til trinnet/trinnene forinden det aktuelle."
+
+msgid "Comment"
+msgstr "Kommentar"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "LoginPageMainArea"
+msgstr "Login-område"
+
+msgid "LoginPageMenu"
+msgstr "Menu på login-siden"
+
+msgid "CampusHomepageMainArea"
+msgstr "Forsidens hovedområde"
+
+msgid "CampusHomepageMenu"
+msgstr "Forsidemenu"
+
+msgid "MyCoursesMainArea"
+msgstr "Kursussidens hovedside"
+
+msgid "MyCoursesMenu"
+msgstr "Kursussiders menu"
+
+msgid "Header"
+msgstr "Sidehoved"
+
+msgid "Footer"
+msgstr "Fodnote"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "Offentlig side, der efterlever WAI"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Web Accessibility Initiative) står for et initiativ i forhold til at gøre internettet mere tilgængeligt. Ved at vælge denne mulighed, bliver DOKEOS siderne mere tilgængelige. Dette betyder derudover, at indholdet på de åbne kursussider kan fremstå anderledes."
+
+msgid "VersionCheck"
+msgstr "Tjek af version"
+
+msgid "Active"
+msgstr "Synlig"
+
+msgid "Inactive"
+msgstr "Usynlig"
+
+msgid "SessionOverview"
+msgstr "Overblik over session"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Tilmeld deltager, hvis han/hun ikke allerede er tilmeldt"
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Afmeld bruger, hvis tilmelding ikke er forkert"
+
+msgid "DeleteSelectedSessions"
+msgstr "Slet de valgte sessioner"
+
+msgid "CourseListInSession"
+msgstr "Kursusoversigt i denne session"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Afmeld de valgte kurser fra denne session"
+
+msgid "NbUsers"
+msgstr "Deltagere"
+
+msgid "SubscribeUsersToSession"
+msgstr "Tilmeld deltagere denne session"
+
+msgid "UserListInPlatform"
+msgstr "Oversigt over bruger på platformen"
+
+msgid "UserListInSession"
+msgstr "Oversigt over brugere tilmeldt denne session"
+
+msgid "CourseListInPlatform"
+msgstr "Kursusoversigt på platformen"
+
+msgid "Host"
+msgstr "Vært"
+
+msgid "UserOnHost"
+msgstr "Brugernavn"
+
+msgid "FtpPassword"
+msgstr "FTP adgangskode"
+
+msgid "PathToLzx"
+msgstr "Sti til LZX filer"
+
+msgid "WCAGContent"
+msgstr "Tekst"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Tilmeld kursussider denne session"
+
+msgid "DateStartSession"
+msgstr "Startdato for session"
+
+msgid "DateEndSession"
+msgstr "Slutdato for session"
+
+msgid "EditSession"
+msgstr "Rediger denne session"
+
+msgid "VideoConferenceUrl"
+msgstr "Sti til live konference"
+
+msgid "VideoClassroomUrl"
+msgstr "Sti til liv konference"
+
+msgid "ReconfigureExtension"
+msgstr "Rekonfigurer extension"
+
+msgid "ServiceReconfigured"
+msgstr "Service rekonfigureret"
+
+msgid "ChooseNewsLanguage"
+msgstr "Vælg nyt sprog"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "Tid anvendt på kurset ialt"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Muligheden anvendes i forhold til at lave en real-time beregning af den tid, som deltageren anvendte på kursussiden. Værdien til formularen viser intervallet (opdateret) i sekunder. For at deaktivere denne mulighed, skal default-værdien være sat til 0 i formularen"
+
+msgid "EditLink"
+msgstr "Rediger link"
+
+msgid "FinishSessionCreation"
+msgstr "Oprettelse af session er færdig"
+
+msgid "VisioRTMPPort"
+msgstr "Videokonference RTMTP protocol port"
+
+msgid "SessionNameAlreadyExists"
+msgstr "Navnet på sessionen er snart oprettet"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "Der er ikke oprettet klasser"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Dette felt skal bestå af nummeriske værdier"
+
+msgid "UserLocked"
+msgstr "Brugerprofil er låst"
+
+msgid "UserUnlocked"
+msgstr "Brugerprofil er låst op"
+
+msgid "CannotDeleteUser"
+msgstr "Det er ikke muligt at slette denne bruger"
+
+msgid "SelectedUsersDeleted"
+msgstr "De valgte brugere er blevet slettet"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Ikke alle brugere blev slettet"
+
+msgid "ExternalAuthentication"
+msgstr "Ekstern autentificering"
+
+msgid "RegistrationDate"
+msgstr "Registreringsdato"
+
+msgid "UserUpdated"
+msgstr "Brugeroplysninger er ændret"
+
+msgid "HomePageFilesNotReadable"
+msgstr "Filerne kan ikke læses"
+
+msgid "Choose"
+msgstr "Vælg"
+
+msgid "ModifySessionCourse"
+msgstr "Rediger session kursusside"
+
+msgid "CourseSessionList"
+msgstr "Oversigt over kursussider emd sessioner"
+
+msgid "SelectACoach"
+msgstr "Vælg en instruktor"
+
+msgid "UserNameUsedTwice"
+msgstr "Brugernavnet er anvendt 2 gange"
+
+msgid "UserNameNotAvailable"
+msgstr "Brugernavnet er ikke længere tilgængeligt"
+
+msgid "UserNameTooLong"
+msgstr "Brugernavnet må højst indeholde 20 tegn. Bemærk at alle specialtegn, såsom æ, ø, å, $, +, @, osv. bliver omdøbt til under score ( _ )"
+
+msgid "WrongStatus"
+msgstr "Status findes ikke"
+
+msgid "ClassNameNotAvailable"
+msgstr "Navnet på klassen er ikke tilgængeligt"
+
+msgid "FileImported"
+msgstr "Filen er importeret"
+
+msgid "WhichSessionToExport"
+msgstr "Udvælg den session, der skal eksporteres"
+
+msgid "AllSessions"
+msgstr "Alle sessioner"
+
+msgid "CodeDoesNotExists"
+msgstr "Koden eksisterer ikke"
+
+msgid "UnknownUser"
+msgstr "Ukendt brugerprofil"
+
+msgid "UnknownStatus"
+msgstr "Ukendt status"
+
+msgid "SessionDeleted"
+msgstr "Sessionen er blevet slettet"
+
+msgid "CourseDoesNotExist"
+msgstr "Kursussiden findes ikke"
+
+msgid "UserDoesNotExist"
+msgstr "Brugerprofilen findes ikke"
+
+msgid "ButProblemsOccured"
+msgstr "men der opstod problemer"
+
+msgid "UsernameTooLongWasCut"
+msgstr "Brugernavnet blev ikke færddiggjort"
+
+msgid "NoInputFile"
+msgstr "Ingen filer blev sendt"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "Status som studerende blev givet til"
+
+msgid "WrongDate"
+msgstr "Forkert datoformat (åååå-mm-dd)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Dette er en standard e-mailbesked. Besvar den venligst ikke."
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "Du vil snart modtage en e-mail fra din instruktor"
+
+msgid "SlideSize"
+msgstr "Sildes størrelse"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Ephorus plagiarism prevention"
+
+msgid "CourseTeachers"
+msgstr "Undervisere"
+
+msgid "UnknownTeacher"
+msgstr "Ukendt underviser"
+
+msgid "HideDLTTMarkup"
+msgstr "Skjul DLTT Markup"
+
+msgid "ListOfCoursesOfSession"
+msgstr "Oversigt over kursussider tilknyttet sessionen"
+
+msgid "UnsubscribeSelectedUsersFromSession"
+msgstr "Afmeld valgte brugere fra session"
+
+msgid "ShowDifferentCourseLanguageComment"
+msgstr "Vis hver kursussides sprog ved siden af kursets titel på oversigten over kursussider"
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "Vis kursuskategorier på startsiden - også selv om kategorierne er tomme"
+
+msgid "ShowEmptyCourseCategories"
+msgstr "Vis tomme kursuskategorier"
+
+msgid "XMLNotValid"
+msgstr "XML dokumentet er ikke gyldigt"
+
+msgid "ForTheSession"
+msgstr "for/i sessionen"
+
+msgid "AllowEmailEditorTitle"
+msgstr "Aktiv online e-maileditor"
+
+msgid "AllowEmailEditorComment"
+msgstr "Hvis denne funktion er aktiv, vil et klik på en e-mailadresse åbne en online e-maileditor"
+
+msgid "AddCSVHeader"
+msgstr "Tilføj sidehovedet i CSV filen?"
+
+msgid "YesAddCSVHeader"
+msgstr "Ja, tilføj CSV sidehoved. <br /> Dette område definerer felterne i din fil og er nødvendig, når du vil importere filen til en anden e-læringsplatform"
+
+msgid "ListOfUsersSubscribedToCourse"
+msgstr "Oversigt over brugere tilmeldt kursussiden"
+
+msgid "NumberOfCourses"
+msgstr "Antal kursussider"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Vis kursussprog"
+
+msgid "UploadExtensionsSkipComment"
+msgstr "If you choose to skip, the files filtered through the blacklist or whitelist will not be uploaded to the system. If you choose to rename them, their extension will be replaced by the one defined in the extension replacement setting. Beware that renaming doesn\'t really protect you, and may cause name collision if several files of the same name but different extensions exist."
+
+msgid "UploadExtensionsReplaceByComment"
+msgstr "Enter the extension that you want to use to replace the dangerous extensions detected by the filter. Only needed if you have selected a filter by replacement."
+
+msgid "Remove"
+msgstr "Flyt"
+
+msgid "Rename"
+msgstr "Omdøb"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "Vis antallet af kurser under hver kategori i kategorioversigten på startsiden"
+
+msgid "EphorusDescription"
+msgstr "Start using the Ephorus anti plagiarism service in Chamilo.With Ephorus, you will prevent internet plagiarism without any additional effort.You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
+
+msgid "EphorusLeadersInAntiPlagiarism"
+msgstr "Leaders in anti plagiarism"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "Klik her for flere oplysninger og priser"
+
+msgid "NameOfTheSession"
+msgstr "Navn på session"
+
+msgid "NoSessionsForThisUser"
+msgstr "Denne bruger er (ikke) tilmeldt en session"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "Vis kategorier på startsiden"
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "Dette valg vil vise eller skjulte kursuskategorier på startsiden"
+
+msgid "ShowTabsTitle"
+msgstr "Faneblade"
+
+msgid "ShowTabsComment"
+msgstr "Check the tabs you want to see appear in the header. The unchecked tabs will appear on the right hand menu on the campus homepage and my courses page if these need to appear"
+
+msgid "DefaultForumViewTitle"
+msgstr "Default-visning af forum"
+
+msgid "DefaultForumViewComment"
+msgstr "Hvad skal være default-valg ved oprettelse af nyt diskussionsforum. Kursusadministrator kan dog vælge en anden visning til hver forum"
+
+msgid "TabsMyCourses"
+msgstr "Mine kursussider-faneblad"
+
+msgid "TabsCampusHomepage"
+msgstr "Start-faneblad"
+
+msgid "TabsReporting"
+msgstr "Rapportering-faneblad"
+
+msgid "TabsPlatformAdministration"
+msgstr "Administration af platform-faneblad"
+
+msgid "NoCoursesForThisSession"
+msgstr "Ingen kursussider i denne session"
+
+msgid "NoUsersForThisSession"
+msgstr "Ingen brugere i denne session"
+
+msgid "LastNameMandatory"
+msgstr "Det sidste navn kan ikke fjernes"
+
+msgid "FirstNameMandatory"
+msgstr "Det første navn kan ikke fjernes"
+
+msgid "EmailMandatory"
+msgstr "E-mailen kan ikke tømmes"
+
+msgid "TabsMyAgenda"
+msgstr "Min kalender-faneblad"
+
+msgid "NoticeWillBeNotDisplayed"
+msgstr "Beskeden vil ikke blive vist på start-siden"
+
+msgid "LetThoseFieldsEmptyToHideTheNotice"
+msgstr "Lad felterne stå tomme for at skjule beskeden"
+
+msgid "Ppt2lpVoiceRecordingNeedsRed5"
+msgstr "Optagelse af lyd i læringsstien beror på en Red5 streaming server. Serverens parametre kan konfigureres i videkokonference-sektionen på den aktuelle side"
+
+msgid "PlatformCharsetTitle"
+msgstr "Bogstavssystem"
+
+msgid "PlatformCharsetComment"
+msgstr "The character set is what pilots the way specific languages can be displayed in Chamilo. If you use Russian or Japanese characters, for example, you might want to change this. For all english, latin and west-european characters, the default UTF-8 should be alright."
+
+msgid "ExtendedProfileRegistrationTitle"
+msgstr "Felter til udvidet profil ved registrering"
+
+msgid "ExtendedProfileRegistrationComment"
+msgstr "Hvilke af de følgende felter i den udvidet profil skal være synlige i registreringsformularen? Dette kræver, at den udvidet profil er aktiveret (se ovenfor)."
+
+msgid "ExtendedProfileRegistrationRequiredTitle"
+msgstr "Påkrævede felter i registreringsformularen i forbindelse med udvidet profil"
+
+msgid "ExtendedProfileRegistrationRequiredComment"
+msgstr "Hvilke af de følgende felter i den udvidet profil er nødvendige at udfylde ved registrering? Dette kræver, at den udvidet profil er aktivieret og at felterne er synlige i registreringsformularen (se ovenfor)."
+
+msgid "NoReplyEmailAddress"
+msgstr "No-reply e-mailadresse"
+
+msgid "NoReplyEmailAddressComment"
+msgstr "Dette er e-mailadressen, der skal anvendes, når man ikke ønsker, at deltagernes skal besvare den e-mail, der sendes ud."
+
+msgid "SurveyEmailSenderNoReply"
+msgstr "Afsenders e-mailadresse (no-reply)"
+
+msgid "SurveyEmailSenderNoReplyComment"
+msgstr "Skal e-mails med invitation til undersøgelsen anvende instruktorens e-mailadresse eller no-reply e-mailadresse?"
+
+msgid "CourseCoachEmailSender"
+msgstr "Instruktors e-mailadresse"
+
+msgid "NoReplyEmailSender"
+msgstr "no-reply e-mailadresse"
+
+msgid "Flat"
+msgstr "Liste"
+
+msgid "Threaded"
+msgstr "Hierarki"
+
+msgid "Nested"
+msgstr "Kombination"
+
+msgid "OpenIdAuthenticationComment"
+msgstr "Enable the OpenID URL-based authentication (displays an additional login form on the homepage)"
+
+msgid "VersionCheckEnabled"
+msgstr "Muligt at tjekke version"
+
+msgid "InstallDirAccessibleSecurityThreat"
+msgstr "The main/install directory of your Chamilo system is still accessible to web users. This might represent a security threat for your installation. We recommend that you remove this directory or that you change its permissions so web users cannot use the scripts it contains."
+
+msgid "GradebookActivation"
+msgstr "Karakterbog aktiveret"
+
+msgid "GradebookActivationComment"
+msgstr "Aktivering af karakterbogen vil tilføje mulighed for at koble læringsmål med karakterer. Hvis du ikke har brug for det, skal den fjernes, da den kan forstyrre brugergræsnefladen. Ønsker du at aktivere funktionen?"
+

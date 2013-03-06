@@ -1,0 +1,24 @@
+msgid "langExplanation"
+msgstr "Når du klikker ok, vil der blive oprettet en kursusside indeholdende Diskussionforum, Kalender, Dokumenter osv. Som administrator af siden kan du til enhver tid redigere kursussiden efter behov og ønsker"
+
+msgid "langTooBig"
+msgstr "Du valgte enten ikke en fil, eller filen er for stor til at blive sendt"
+
+msgid "langCouldNot"
+msgstr "Filen kunne ikke uploades"
+
+msgid "langAddPageToSite"
+msgstr "Tilføj en tekst til kursussiden"
+
+msgid "langCouldNotSendPage"
+msgstr "Denne fil er ikke i HTML format and kunne derfor ikke uploades. Ønsker at du at lægge ikke-HTML tekster (PDF, Word, Power Point, Video, osv.) ud, brug <a href=../document/document.php>Værktøjet til håndtering af dokumenter</a>"
+
+msgid "langSendPage"
+msgstr "Fil der skal uploades"
+
+msgid "langPageTitleModified"
+msgstr "Tekstens titel er blevet ændret"
+
+msgid "langPageAdded"
+msgstr "Teksten er tilføjet"
+

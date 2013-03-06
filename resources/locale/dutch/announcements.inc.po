@@ -1,0 +1,171 @@
+msgid "Announcement"
+msgstr "Aankondigingen"
+
+msgid "langAnnEmpty"
+msgstr "Alle aankondigingen zijn verwijderd."
+
+msgid "AnnouncementModified"
+msgstr "De aankondiging is gewijzigd."
+
+msgid "AnnouncementAdded"
+msgstr "De aankondiging is toegevoegd."
+
+msgid "AnnouncementDeleted"
+msgstr "De aankondiging is verwijderd."
+
+msgid "AnnouncementPublishedOn"
+msgstr "Aangekondigd op"
+
+msgid "AddAnnouncement"
+msgstr "Toevoegen als aankondiging"
+
+msgid "langContent"
+msgstr "Boodschap"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Alle aankondigingen verwijderen"
+
+msgid "professorMessage"
+msgstr "Bericht van uw lesgever"
+
+msgid "langEmailSent"
+msgstr " en per e-mail opgestuurd naar de ingeschreven studenten."
+
+msgid "EmailOption"
+msgstr "Stuur deze aankondiging per e-mail naar alle geselecteerde groepen/gebruikers"
+
+msgid "langOn"
+msgstr "Op"
+
+msgid "langRegUser"
+msgstr "ingeschreven gebruikers"
+
+msgid "langUnvalid"
+msgstr "hebben een ongeldig e-mailadres of hebben geen adres."
+
+msgid "langModifAnn"
+msgstr "Wijzig deze aankondiging"
+
+msgid "langModify"
+msgstr "Wijzigen"
+
+msgid "langDelete"
+msgstr "Verwijderen"
+
+msgid "langTitle"
+msgstr "Titel"
+
+msgid "langHelp"
+msgstr "Hulp"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAddIntro"
+msgstr "Inleiding toevoegen"
+
+msgid "langBackList"
+msgstr "Terug naar de lijst"
+
+msgid "langSelMess"
+msgstr "Waarschuwing aan enkele gebruikers"
+
+msgid "EmailTitle"
+msgstr "Onderwerp"
+
+msgid "langUserlist"
+msgstr "Lijst van gebruikers en groepen"
+
+msgid "langSelectedUsers"
+msgstr "Geselecteerde gebruikers"
+
+msgid "langSubmit"
+msgstr "Verzenden"
+
+msgid "langPleaseEnterMessage"
+msgstr "Geef een boodschap om te versturen."
+
+msgid "langPleaseSelectUsers"
+msgstr "Selecteer eerst gebruikers om de boodschap aan te versturen."
+
+msgid "Teachersubject"
+msgstr "Aankondiging verzonden naar studenten."
+
+msgid "langMessages"
+msgstr "Berichten"
+
+msgid "langMessageToSelectedUsers"
+msgstr "Berichten naar specifieke gebruikers of groepen"
+
+msgid "langIntroText"
+msgstr "Selecteer eerst groepen (met een G vooraan) of gebruikers om het bericht aan te sturen, uit de lijst aan de linkerkant. Gebruik de controltoets om meerdere gebruikers tegelijk aan te duiden. Klik vervolgens op de \'>>\'-knop."
+
+msgid "langDown"
+msgstr "Omlaag"
+
+msgid "langMsgSent"
+msgstr "Het bericht is verzonden."
+
+msgid "langSelUser"
+msgstr "gebruikers"
+
+msgid "langMessageToSelectedGroups"
+msgstr "Berichten naar specifieke groepen"
+
+msgid "langSelectedGroups"
+msgstr "Geselecteerde groepen"
+
+msgid "langMsg"
+msgstr "Boodschappen"
+
+msgid "langYes"
+msgstr "Ja"
+
+msgid "MsgText"
+msgstr "Inhoud bericht"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Alle aankondigingen zijn verwijderd."
+
+msgid "AnnouncementMoved"
+msgstr "De aankondiging is verplaatst."
+
+msgid "NoAnnouncements"
+msgstr "Er zijn geen aankondigingen."
+
+msgid "SelectEverybody"
+msgstr "Selecteer iedereen"
+
+msgid "SelectedUsersGroups"
+msgstr "Gebruikers van de geselecteerde groepen"
+
+msgid "LearnerMessage"
+msgstr "Bericht van een student"
+
+msgid "TitleIsRequired"
+msgstr "Titel is verplicht"
+
+msgid "AnnounceSentByEmail"
+msgstr "De aankondiging is via email verstuurd."
+
+msgid "AnnounceSentToUserSelection"
+msgstr "De aankondiging is gestuurd naar de geslecteerde gebruikers."
+
+msgid "SendAnnouncement"
+msgstr "Stuur aankondiging"
+
+msgid "ModifyAnnouncement"
+msgstr "Wijzig aankondiging"
+
+msgid "ButtonPublishAnnouncement"
+msgstr "Plaats aankondiging"
+
+msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
+msgstr "Beste, Uw account werd nu geactiveerd op het platform. Gelieve u aan te melden. Veel plezier met uw opleidingen."
+
+msgid "AddAsAnnouncement"
+msgstr "Toevoegen als aankondiging"
+
+msgid "AnnouncementForGroup"
+msgstr "Aankondiging voor een groep"
+

@@ -1,0 +1,318 @@
+msgid "Camera"
+msgstr "Camera"
+
+msgid "Microphone"
+msgstr "Microphone"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "DeleteStream"
+msgstr "Delete stream"
+
+msgid "Progress"
+msgstr "Progress"
+
+msgid "Play"
+msgstr "Play"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "Record"
+msgstr "Record"
+
+msgid "NoFileAvailable"
+msgstr "No File availible"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Recording only for trainers"
+
+msgid "UsersNow"
+msgstr "Users at the moment:"
+
+msgid "StartConference"
+msgstr "Start conference"
+
+msgid "MyName"
+msgstr "My name"
+
+msgid "OrganisationSVideoconference"
+msgstr "Chamilo LIVE"
+
+msgid "ImportPresentation"
+msgstr "Import presentation"
+
+msgid "RefreshList"
+msgstr "Refresh list"
+
+msgid "GoToTop"
+msgstr "Go to Top"
+
+msgid "NewPoll"
+msgstr "New poll"
+
+msgid "CreateNewPoll"
+msgstr "Create a new poll for this room"
+
+msgid "Question"
+msgstr "Question"
+
+msgid "PollType"
+msgstr "Polltype:"
+
+msgid "Create"
+msgstr "Create"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Info: Every connected User in this room will get a notification of this new Poll."
+
+msgid "YesNo"
+msgstr "Yes / No"
+
+msgid "Numeric1To10"
+msgstr "Numeric 1-10"
+
+msgid "Poll"
+msgstr "Poll"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "You have to become Moderator of this Room to make polls."
+
+msgid "YourVoteHasBeenSent"
+msgstr "Your vote has been sent"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "You\'ve already voted for this poll"
+
+msgid "VoteButton"
+msgstr "Vote!"
+
+msgid "YourAnswer"
+msgstr "Your answer"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "WantsToKnow"
+msgstr "wants to know:"
+
+msgid "PollResults"
+msgstr "Poll results"
+
+msgid "Votes"
+msgstr "Votes:"
+
+msgid "Result"
+msgstr "Result"
+
+msgid "ThereIsNoPoll"
+msgstr "There is no Poll."
+
+msgid "MeetingMode"
+msgstr "Meeting (max 4 seats)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Conference (max 50 seats)"
+
+msgid "Mode"
+msgstr "Mode"
+
+msgid "RemainingSeats"
+msgstr "Remaining seats"
+
+msgid "AlreadyIn"
+msgstr "Already in"
+
+msgid "CheckIn"
+msgstr "Check in"
+
+msgid "TheModeratorHasLeft"
+msgstr "The Moderator of this Conference has left the room."
+
+msgid "SystemMessage"
+msgstr "System message"
+
+msgid "ChooseDevices"
+msgstr "Choose devices"
+
+msgid "ChooseCam"
+msgstr "Choose Cam:"
+
+msgid "ChooseMic"
+msgstr "Choose Mic:"
+
+msgid "OK"
+msgstr "Validate"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "You have to reconnect so that the changes take effect."
+
+msgid "ChangeSettings"
+msgstr "Change settings"
+
+msgid "Course"
+msgstr "Course"
+
+msgid "CourseLanguage"
+msgstr "Language:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Confirm Clear Whiteboard"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "Should the whiteboard be cleared before I add a new Image?"
+
+msgid "DontAskMeAgain"
+msgstr "Don\'t ask me again"
+
+msgid "EditSettings"
+msgstr "Edit Settings"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Ask confirmation before clearing whiteboard"
+
+msgid "UserInfo"
+msgstr "user information"
+
+msgid "ClearDrawArea"
+msgstr "Clear Draw Area"
+
+msgid "Undo"
+msgstr "Undo"
+
+msgid "Redo"
+msgstr "Redo"
+
+msgid "SelectAnObject"
+msgstr "Select an Object"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Paint"
+msgstr "Paint"
+
+msgid "DrawLine"
+msgstr "Draw line"
+
+msgid "DrawUnderline"
+msgstr "Draw underline"
+
+msgid "Rectangle"
+msgstr "Rectangle"
+
+msgid "Elipse"
+msgstr "Ellipse"
+
+msgid "Arrow"
+msgstr "Arrow"
+
+msgid "DeleteChosenItem"
+msgstr "Delete selected resource"
+
+msgid "ApplyForModeration"
+msgstr "Apply for moderation"
+
+msgid "Apply"
+msgstr "Apply"
+
+msgid "BecomeModerator"
+msgstr "Become moderator"
+
+msgid "Close"
+msgstr "close"
+
+msgid "Italic"
+msgstr "Italic"
+
+msgid "Bold"
+msgstr "Bold"
+
+msgid "Waiting"
+msgstr "Waiting"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "A User wants to apply for moderation:"
+
+msgid "Accept"
+msgstr "Accept"
+
+msgid "Reject"
+msgstr "Reject"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Sending request to the following users"
+
+msgid "Accepted"
+msgstr "Accepted"
+
+msgid "Rejected"
+msgstr "Rejected"
+
+msgid "ChangeModerator"
+msgstr "Change Moderator"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "You are not moderator."
+
+msgid "Moderator"
+msgstr "Moderator"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "This Room is full. Sorry please try again later."
+
+msgid "Loading"
+msgstr "Loading"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Please wait while loading image"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "Synchronizing conference members"
+
+msgid "Trainer"
+msgstr "Teacher"
+
+msgid "Learner"
+msgstr "Learner"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Slides"
+msgstr "Slides"
+
+msgid "WaitingForParticipants"
+msgstr "Waiting for participants"
+
+msgid "Send"
+msgstr "Send message"
+
+msgid "Browse"
+msgstr "Browse"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "ChooseFile"
+msgstr "Choose a file to import"
+
+msgid "ConvertingDocument"
+msgstr "Converting document"
+
+msgid "Disconnected"
+msgstr "Disconnected"
+
+msgid "FineStroke"
+msgstr "Thin"
+
+msgid "MediumStroke"
+msgstr "Medium"
+
+msgid "ThickStroke"
+msgstr "Thick"
+

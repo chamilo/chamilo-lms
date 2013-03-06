@@ -1,0 +1,54 @@
+msgid "AdminBy"
+msgstr "管理者"
+
+msgid "AdministrationTools"
+msgstr "管理ツール"
+
+msgid "State"
+msgstr "システム状況"
+
+msgid "Statistiques"
+msgstr "統計"
+
+msgid "VisioHostLocal"
+msgstr "ビデオ会議サーバ"
+
+msgid "langPresent"
+msgstr "有効にする"
+
+msgid "SearchUsers"
+msgstr "ユーザ検索"
+
+msgid "CreateUser"
+msgstr "ユーザ作成"
+
+msgid "ModifyUser"
+msgstr "ユーザ編集"
+
+msgid "langPhoneNumber"
+msgstr "電話番号"
+
+msgid "langAddToCourse"
+msgstr "コースを追加"
+
+msgid "langDeleteCourse"
+msgstr "選択されたコースを削除"
+
+msgid "langDeleteSelectedClasses"
+msgstr "選択されたクラスを削除"
+
+msgid "langKeyword"
+msgstr "キーワード"
+
+msgid "langGroupName"
+msgstr "グループ名"
+
+msgid "langExportUserListXMLCSV"
+msgstr "ＸＭＬ／ＣＳＣファイルへユーザリストをエキスポート"
+
+msgid "Plugin"
+msgstr "プラグイン"
+
+msgid "MainMenu"
+msgstr "メインメニュー"
+

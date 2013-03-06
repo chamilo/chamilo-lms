@@ -1,0 +1,204 @@
+msgid "lang_already_enrolled"
+msgstr "已經註冊"
+
+msgid "lang_my_personnal_course_list"
+msgstr "我的課程清單"
+
+msgid "lang_course_enrollment"
+msgstr "用戶的課程"
+
+msgid "lang_course_not_available"
+msgstr "課程不可用或不存在"
+
+msgid "lang_enroll"
+msgstr "註冊"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr "登記到新課程"
+
+msgid "lang_my_present_course_list"
+msgstr "我的當前課程清單"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr "該分類沒有課程"
+
+msgid "lang_or_search_from_the_course_code"
+msgstr "或透過代碼搜索"
+
+msgid "lang_search"
+msgstr "搜索"
+
+msgid "lang_select_course_among_categories"
+msgstr "在分類中選擇課程"
+
+msgid "lang_select_course_in"
+msgstr "選擇課程"
+
+msgid "lang_select_course_in_search_results"
+msgstr "在搜索結果中選擇課程"
+
+msgid "Unsubscribe"
+msgstr "取消註冊"
+
+msgid "lang_back_to_my_home_page"
+msgstr "返回我的主頁"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr "返回我的個人課程清單"
+
+msgid "langTitular"
+msgstr "領導"
+
+msgid "langBackToListOfThisUser"
+msgstr "返回到課程清單"
+
+msgid "langAdministrationTools"
+msgstr "管理工具"
+
+msgid "lang_back_to_parent_category"
+msgstr "返回上級分類"
+
+msgid "lang_back_to_course_selection"
+msgstr "返回課程選擇"
+
+msgid "lang_up"
+msgstr "返回上級分類"
+
+msgid "langCatList"
+msgstr "分類"
+
+msgid "langCourseList"
+msgstr "課程清單"
+
+msgid "Subscribe"
+msgstr "選修"
+
+msgid "AlreadySubscribed"
+msgstr "已選修"
+
+msgid "CourseCategoryStored"
+msgstr "已創建課程類別"
+
+msgid "langWithoutTimeLimits"
+msgstr "沒有時間限制"
+
+msgid "lang_back_to_main_category_list"
+msgstr "返回主分類清單"
+
+msgid "langAdded"
+msgstr "添加"
+
+msgid "langDeleted"
+msgstr "刪除"
+
+msgid "langKeeped"
+msgstr "保持"
+
+msgid "langHideAndSubscribeClosed"
+msgstr "隱藏/關閉"
+
+msgid "langHideAndSubscribeOpen"
+msgstr "隱藏/打開"
+
+msgid "langShowAndSubscribeOpen"
+msgstr "顯示/打開"
+
+msgid "langShowAndSubscribeClosed"
+msgstr "顯示/關閉"
+
+msgid "langAdminThisUser"
+msgstr "返回用戶"
+
+msgid "langManage"
+msgstr "管理入口"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr "您已經註冊了該課程"
+
+msgid "langSubCat"
+msgstr "子分類"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr "不允許取消註冊"
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr "您是課程管理員"
+
+msgid "CourseManagement"
+msgstr "課程管理"
+
+msgid "SortMyCourses"
+msgstr "排列我的課程"
+
+msgid "SubscribeToCourse"
+msgstr "選修課程"
+
+msgid "UnsubscribeFromCourse"
+msgstr "退修課程"
+
+msgid "CreateCourseCategory"
+msgstr "創建課程類別"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "你是否想刪除這個課程類別？本類別中的課程會被移送到類別外層。"
+
+msgid "CourseCategories"
+msgstr "課程類別"
+
+msgid "CoursesInCategory"
+msgstr "本類別中的課程"
+
+msgid "SearchCourse"
+msgstr "搜尋課程"
+
+msgid "UpOneCategory"
+msgstr "移上一個類別層級"
+
+msgid "SearchResultsFor"
+msgstr "搜尋相關字詞："
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr "你是否確定要退選這門課程呢？"
+
+msgid "NoCourseCategory"
+msgstr "沒有課程類別"
+
+msgid "EditCourseCategorySucces"
+msgstr "課程已新增到此類別中"
+
+msgid "SubscribingNotAllowed"
+msgstr "不允許選修"
+
+msgid "CourseSortingDone"
+msgstr "已完成課程排序"
+
+msgid "ExistingCourseCategories"
+msgstr "現有的課程類別"
+
+msgid "YouAreNowUnsubscribed"
+msgstr "你已退修此課程"
+
+msgid "ViewOpenCourses"
+msgstr "檢視公開課程"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr "發生不明錯誤，請聯絡系統管理員"
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr "課程編號不正確"
+
+msgid "CourseRequiresPassword"
+msgstr "課程需要密碼"
+
+msgid "SubmitRegistrationCode"
+msgstr "提交註冊編號"
+
+msgid "CourseCategoryDeleted"
+msgstr "課程類別被刪除"
+
+msgid "CategorySortingDone"
+msgstr "已完成類別排序"
+
+msgid "CourseCategoryEditStored"
+msgstr "已更新類別"
+

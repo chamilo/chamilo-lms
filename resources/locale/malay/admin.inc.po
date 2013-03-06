@@ -1,0 +1,114 @@
+msgid "AdminBy"
+msgstr "Ditadbir oleh"
+
+msgid "AdministrationTools"
+msgstr "Alat Bantu Pentadbiran"
+
+msgid "State"
+msgstr "Status Sistem"
+
+msgid "Statistiques"
+msgstr "Statistik"
+
+msgid "VisioHostLocal"
+msgstr "Pelayan sidang video"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Samada protokol sidang video adalah melalui web (kebiasaannya tidak)"
+
+msgid "langUsed"
+msgstr "used"
+
+msgid "langPresent"
+msgstr "Ok"
+
+msgid "langMissing"
+msgstr "missing"
+
+msgid "langExist"
+msgstr "exists"
+
+msgid "langAddAdminInApache"
+msgstr "Tambah Pentadbir Sistem"
+
+msgid "langAddFaculties"
+msgstr "Tambah Pusat Pengajian"
+
+msgid "langSearchACourse"
+msgstr "Cari Subjek"
+
+msgid "langSearchAUser"
+msgstr "Cari Pengguna"
+
+msgid "langTechnicalTools"
+msgstr "Pentadbiran Teknikal"
+
+msgid "langConfig"
+msgstr "Konfigurasi Sistem"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Login list (extended)"
+
+msgid "langNomOutilTodo"
+msgstr "Menguruskan Senarai Tugas"
+
+msgid "langNomPageAdmin"
+msgstr "Pentadbiran"
+
+msgid "langSysInfo"
+msgstr "Info tentang sistem"
+
+msgid "langDiffTranslation"
+msgstr "Perbandingan Terjemahan"
+
+msgid "langStatOf"
+msgstr "Statistik"
+
+msgid "langSpeeSubscribe"
+msgstr "Quick subscribe as Course Checker"
+
+msgid "langLogIdentLogout"
+msgstr "Senarai Login"
+
+msgid "langServerStatus"
+msgstr "Status of MySQL server :"
+
+msgid "langDataBase"
+msgstr "Database"
+
+msgid "langRun"
+msgstr "work"
+
+msgid "langClient"
+msgstr "MySql Client"
+
+msgid "langServer"
+msgstr "MySql Server"
+
+msgid "langtitulary"
+msgstr "Pemilik"
+
+msgid "langUpgradeBase"
+msgstr "Menambah-baik Pangkalan Data"
+
+msgid "langManage"
+msgstr "Menguruskan Kampus"
+
+msgid "langErrorsFound"
+msgstr "Ralat Ditemui"
+
+msgid "langMaintenance"
+msgstr "Penyelenggaraan"
+
+msgid "langUpgrade"
+msgstr "Upgrade Claroline"
+
+msgid "langWebsite"
+msgstr "Website Claroline"
+
+msgid "langDocumentation"
+msgstr "Dokumentasi"
+
+msgid "langContribute"
+msgstr "Sumbangan"
+

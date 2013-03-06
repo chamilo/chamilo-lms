@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Du valgte enten ikke en fil, eller filen er for stor til at blive sendt"
+
+msgid "langLinkTarget"
+msgstr "Linkets destination"
+
+msgid "langSameWindow"
+msgstr "I samme vindue"
+
+msgid "langNewWindow"
+msgstr "I nyt vindue"
+
+msgid "langAdded"
+msgstr "Tilføjet"
+
+msgid "langAddLink"
+msgstr "Tilføj link"
+
+msgid "langEditLink"
+msgstr "Rediger linket"
+

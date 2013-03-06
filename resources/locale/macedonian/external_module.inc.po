@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Не избравте ниедна датотека, или таа е преголема"
+
+msgid "langLinkTarget"
+msgstr "Цел на Врската"
+
+msgid "langSameWindow"
+msgstr "Во истиот прозорец"
+
+msgid "langNewWindow"
+msgstr "Во нов прозорец"
+
+msgid "langAdded"
+msgstr "Додадено"
+
+msgid "langAddLink"
+msgstr "Додај врска"
+
+msgid "langEditLink"
+msgstr "Уредување на Врската кон Почетна_страна на Курсот"
+

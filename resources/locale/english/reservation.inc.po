@@ -1,0 +1,577 @@
+msgid "ReservationPeriodToSmall"
+msgstr "The reservation period is to short."
+
+msgid "BookingSystem"
+msgstr "Booking system"
+
+msgid "BookingPeriodList"
+msgstr "Booking period list"
+
+msgid "BookingListView"
+msgstr "Booking list"
+
+msgid "BookingCalendarView"
+msgstr "Booking calendar view"
+
+msgid "BookingPeriods"
+msgstr "Scheduling"
+
+msgid "ResourceList"
+msgstr "Resource list"
+
+msgid "GoToCalendarView"
+msgstr "Calendar view"
+
+msgid "GoToListView"
+msgstr "List view"
+
+msgid "ManageResources"
+msgstr "Manage resources"
+
+msgid "EditResource"
+msgstr "Edit resource"
+
+msgid "BookIt"
+msgstr "Book a resource"
+
+msgid "GoTo"
+msgstr "Go to"
+
+msgid "NoTimePicker"
+msgstr "No time picker"
+
+msgid "TimePicker"
+msgstr "Time picker"
+
+msgid "ManageBookingPeriods"
+msgstr "Manage booking periods"
+
+msgid "BookingPeriodToSmall"
+msgstr "The booking period is to small."
+
+msgid "BookingPeriodToBig"
+msgstr "The booking period is to big."
+
+msgid "BookingPeriodTimePickerError1"
+msgstr "A booking period without a timepicker can not be made if the minimum and maximum time of a chunck differs from zero."
+
+msgid "BookingPeriodTimePickerError2"
+msgstr "A booking period with a timepicker can not be made if the maximum time is smaller than the minimum time of a chunck."
+
+msgid "BookingPeriodTimePickerError3"
+msgstr "A booking period with a timepicker can not be made if the maximum time of a chunck doesn\'t fit between the start and end date."
+
+msgid "BookingPeriodHasSubscriptions"
+msgstr "The booking period has #NUM# active bookings, editing the booking period is not possible"
+
+msgid "TimePickerMaxUsers"
+msgstr "* When the timepicker is being used, the maximum number of subscriptions is being ignored."
+
+msgid "TimePickerMinMaxNull"
+msgstr "* If the minimum and maximum value of the timepicker is zero, the time can be chosen variably."
+
+msgid "DeleteSelectedBookingPeriod"
+msgstr "Delete selected booking periods"
+
+msgid "EditNewBookingPeriod"
+msgstr "Edit a booking period"
+
+msgid "BookingPeriodAdded"
+msgstr "The booking period has been added"
+
+msgid "BookingPeriodDeleted"
+msgstr "The booking period has been deleted"
+
+msgid "ConfirmDeleteBookingPeriod"
+msgstr "Are you sure that you want to permantly delete this booking period?"
+
+msgid "DeleteBookingPeriod"
+msgstr "Remove this booking period"
+
+msgid "BookingPeriodEdited"
+msgstr "The booking period has been edited"
+
+msgid "BookingPeriodDateOverlap"
+msgstr "A part of the booking period is already in use in the period from #START# until #END#"
+
+msgid "BookingPeriodSubscribeUntilAfterStart"
+msgstr "The subscribe until date is greater then the startdate"
+
+msgid "RepeatFor"
+msgstr "Repeat every"
+
+msgid "RepeatUntil"
+msgstr "Repeat until"
+
+msgid "BookingPeriodPast"
+msgstr "Its not possible to make reservations before the current time"
+
+msgid "ReservationMaxUsersOverrun"
+msgstr "The are already more people subscribed then the Max Users you selected"
+
+msgid "AddNewBookingPeriod"
+msgstr "Add a new booking period"
+
+msgid "BookingPeriodTimePickerLimitation"
+msgstr "It is not possible to make reservations with a timepicker if the start and end date are not the same."
+
+msgid "ResourceTypeName"
+msgstr "Resource type"
+
+msgid "AddNewResourceType"
+msgstr "Add new resource type"
+
+msgid "ResourceTypeAdded"
+msgstr "The resource type has been added"
+
+msgid "ResourceTypeEdited"
+msgstr "The resource type has been edited"
+
+msgid "ResourceTypeDeleted"
+msgstr "The resource type has been deleted"
+
+msgid "ConfirmDeleteResourceType"
+msgstr "Are you sure that you want to permantly delete this resource type?"
+
+msgid "EditResourceType"
+msgstr "Edit resource type"
+
+msgid "DeleteResourceType"
+msgstr "Delete resource type"
+
+msgid "DeleteSelectedCategories"
+msgstr "Delete selected resources"
+
+msgid "NoResourcesType"
+msgstr "No resource type yet"
+
+msgid "ResourceType"
+msgstr "Category"
+
+msgid "ResourceTypeExist"
+msgstr "This resource type already exists"
+
+msgid "ResourceTypeHasItems"
+msgstr "The resource type has #NUM# items ! Delete has been aborted"
+
+msgid "ResourceTypeNotDeleted"
+msgstr "Some categories could not be removed because they contain resources"
+
+msgid "DeleteSelectedSubscriptions"
+msgstr "Delete selected reservation"
+
+msgid "DeleteSubscription"
+msgstr "Delete reservation"
+
+msgid "SubscriptionDeleted"
+msgstr "Your reservation has been deleted"
+
+msgid "ConfirmDeleteSubscription"
+msgstr "Are you sure that you want to delete this reservations?"
+
+msgid "SubscribeInformation"
+msgstr "Please confirm if you want to make a reservation from #start# until #end# for #name#"
+
+msgid "SubscribeTimePickerInformation"
+msgstr "Please select for #name# a period #from_till between: #start_end"
+
+msgid "ReservationAdded"
+msgstr "Reservation added"
+
+msgid "ReservationTresspassing"
+msgstr "This reservation is already full, you are not allowed on this page"
+
+msgid "ReservationOutOfDate"
+msgstr "The date you have choosen is already in use and/or is not the reservation period from #START# until #END#"
+
+msgid "ReservationAlready"
+msgstr "You already booked this resource"
+
+msgid "ReservationMadeTitle"
+msgstr "Your booking of #ITEM# was successfull"
+
+msgid "ReservationMadeMessage"
+msgstr "Dear Sir/Madam,
+
+Your booking for #ITEM# from #START# until #END# is successfull."
+
+msgid "ReservationDeleteTitle"
+msgstr "A booking period of #NAME# has been deleted"
+
+msgid "ReservationDeleteMessage"
+msgstr "Dear Sir/Madam,
+The reservation period of #NAME# from #START# until #END# has been removed."
+
+msgid "OutPeriod"
+msgstr "Out period"
+
+msgid "ReservationFromUntilError"
+msgstr "The booking period from #START# until #END# hasn\'t been made because a part of the booking period is already taken.
+"
+
+msgid "Recurrence"
+msgstr "Recurrence"
+
+msgid "NoRecurrence"
+msgstr "No recurrence"
+
+msgid "UntilRecurrence"
+msgstr "Use recurrence"
+
+msgid "TimePickerLimitation"
+msgstr "* When the timepicker is being used, the start and enddate must be the same."
+
+msgid "OverviewSubscriptions"
+msgstr "Overview subscriptions"
+
+msgid "OverviewReservedPeriods"
+msgstr "Overview subscribed periods"
+
+msgid "SubscribedStartDate"
+msgstr "Subscribed from end date"
+
+msgid "SubscribedEndDate"
+msgstr "Subscribed till end date"
+
+msgid "SubscribedPerson"
+msgstr "Subscribed person"
+
+msgid "BookingView"
+msgstr "Booking view"
+
+msgid "SubscribeUntil"
+msgstr "Subscribe until"
+
+msgid "SubscribeFrom"
+msgstr "Subscribe from"
+
+msgid "Notes"
+msgstr "Notes"
+
+msgid "SubscriptionPeriod"
+msgstr "Subscription Period"
+
+msgid "NoPeriod"
+msgstr "No subscription period"
+
+msgid "FixedPeriod"
+msgstr "Fixed subscription period"
+
+msgid "ResourceFilter"
+msgstr "Resource filter"
+
+msgid "NoReservation"
+msgstr "No booking period yet"
+
+msgid "MaxUsers"
+msgstr "Maximum subscriptions"
+
+msgid "AutoAccept"
+msgstr "Accept users automatically"
+
+msgid "ResourceName"
+msgstr "Resource"
+
+msgid "ResourceAdded"
+msgstr "Resource added"
+
+msgid "ResourceEdited"
+msgstr "Resource edited"
+
+msgid "ResourceDeleted"
+msgstr "The resource has been deleted"
+
+msgid "AddNewResource"
+msgstr "Add new resource"
+
+msgid "ConfirmDeleteResource"
+msgstr "Are you sure that you want to permantly delete this resource?"
+
+msgid "ResourceInactivated"
+msgstr "The resource has been disabled"
+
+msgid "ResourceActivated"
+msgstr "The resource has been enabled"
+
+msgid "Resource"
+msgstr "Assessment"
+
+msgid "OpenBooking"
+msgstr "Open booking"
+
+msgid "DeleteResource"
+msgstr "Delete resource"
+
+msgid "DeleteSelectedResources"
+msgstr "Delete selected resources"
+
+msgid "ResourceExist"
+msgstr "The resource already exists"
+
+msgid "AcceptUsers"
+msgstr "Accepting users"
+
+msgid "UnacceptedUsers"
+msgstr "Unaccepting users"
+
+msgid "DeleteSubscriptions"
+msgstr "Deleting subscriptions"
+
+msgid "NoItems"
+msgstr "No resources yet"
+
+msgid "ItemNotDeleted"
+msgstr "Some resources are not removed because there are pending bookings"
+
+msgid "ItemHasReservations"
+msgstr "The resource still has #NUM# active booking(s)"
+
+msgid "NoItemsReservation"
+msgstr "There are no resources available for you in here"
+
+msgid "ReservationAccepted"
+msgstr "Your booking of #ITEM# is accepted"
+
+msgid "ReservationDenied"
+msgstr "Your booking for #ITEM# was refused"
+
+msgid "ReservationForItemAccepted"
+msgstr "Dear Sir/Madam,
+
+Your reservation for #ITEM# from #BEGIN till #END has been accepted."
+
+msgid "ReservationForItemDenied"
+msgstr "Dear Sir/Madam,
+
+Your booking for #ITEM# from #BEGIN till #END has been rejected."
+
+msgid "ReservationCancelled"
+msgstr "Reservation cancelled, #NAME# is temporary unavailable"
+
+msgid "ReservationActive"
+msgstr "Reservation is active again, #NAME# is available again"
+
+msgid "ReservationUnavailable"
+msgstr "Dear Sir/Madam,
+
+Resource #NAME# is temporarily unavailable so your booking from #BEGIN# till #END# has been cancelled.
+You will get an email when it is available again."
+
+msgid "ReservationAvailable"
+msgstr "Dear Sir/Madam,
+
+We wish to inform you that #NAME# is available again, so your reservation from #BEGIN# till #END# is active again."
+
+msgid "Resources"
+msgstr "Resources"
+
+msgid "EditBookingPeriod"
+msgstr "Edit booking period"
+
+msgid "CreateResourceType"
+msgstr "Create resource type"
+
+msgid "ModifyResourceType"
+msgstr "Edit resource type"
+
+msgid "ViewResourceTypes"
+msgstr "View the resource types"
+
+msgid "ViewResources"
+msgstr "View the resources"
+
+msgid "ViewBookingPeriods"
+msgstr "View the booking periods"
+
+msgid "AlwaysAvailable"
+msgstr "Always available"
+
+msgid "SelectResourceTypeAndResource"
+msgstr "Select the resource type"
+
+msgid "Step1SelectResourceType"
+msgstr "Step 1: Select resource type"
+
+msgid "Step2SelectResource"
+msgstr "Step 2: select the resource"
+
+msgid "Step3SelectBookingPeriod"
+msgstr "Step 3: select the booking period"
+
+msgid "NoReservations"
+msgstr "No reservations"
+
+msgid "ItemRightDeleted"
+msgstr "Item permissions removed."
+
+msgid "MItemRights"
+msgstr "Item rights"
+
+msgid "MReservationRight"
+msgstr "Booking permissions"
+
+msgid "ItemRightEdited"
+msgstr "Item permissions updated."
+
+msgid "NoRights"
+msgstr "No rights"
+
+msgid "MItemRights2"
+msgstr "Item permissions"
+
+msgid "MAddClassgroup"
+msgstr "Add class/group"
+
+msgid "EditItemRight"
+msgstr "Edit item permissions"
+
+msgid "DeleteItemRight"
+msgstr "Delete item permissions"
+
+msgid "MBookingPeriodsRight"
+msgstr "Booking period permissions"
+
+msgid "ViewItemRight"
+msgstr "View item permissions"
+
+msgid "DeleteSelectedItemRights"
+msgstr "Delete selected item permissions"
+
+msgid "SetEditRights"
+msgstr "Set edit permissions"
+
+msgid "UnsetEditRights"
+msgstr "Remove edit permissions"
+
+msgid "SetDeleteRights"
+msgstr "Assign delete permissions"
+
+msgid "UnsetDeleteRights"
+msgstr "Remove delete permissions"
+
+msgid "SetMresRights"
+msgstr "Set reservation permissions"
+
+msgid "UnsetMresRights"
+msgstr "Remove reservation permissions"
+
+msgid "SetViewRights"
+msgstr "Assign view permissions"
+
+msgid "UnsetViewRights"
+msgstr "Remove viewing permissions"
+
+msgid "SetAllRights"
+msgstr "Assign all permissions"
+
+msgid "UnsetAllRights"
+msgstr "Remove all permissions"
+
+msgid "ItemCourse"
+msgstr "Course item"
+
+msgid "MItemRight"
+msgstr "Item permissions"
+
+msgid "EditItem2"
+msgstr "Edit item"
+
+msgid "ItemManagerHeader"
+msgstr "Item manager"
+
+msgid "LangClass"
+msgstr "Class"
+
+msgid "MReservationPeriodsRight"
+msgstr "Reservation periods permissions"
+
+msgid "AddNewItem"
+msgstr "Add a new item"
+
+msgid "ItemName"
+msgstr "Item name"
+
+msgid "ItemDescription"
+msgstr "Item description"
+
+msgid "ItemExist"
+msgstr "The item exists"
+
+msgid "EditItem"
+msgstr "Edit item"
+
+msgid "ItemEdited"
+msgstr "Item updated."
+
+msgid "CategoryFilter"
+msgstr "Category filter"
+
+msgid "ItemCreator"
+msgstr "Item creator"
+
+msgid "DeleteSelectedItems"
+msgstr "Delete selected items"
+
+msgid "BookingPeriodTimepickerLimitation"
+msgstr "Limitation on booking period timepicker"
+
+msgid "Blackout"
+msgstr "Blackout"
+
+msgid "EveryDay"
+msgstr "Every day"
+
+msgid "EveryWeek"
+msgstr "Every week"
+
+msgid "EveryMonth"
+msgstr "Every month"
+
+msgid "ReservationForDenied"
+msgstr "Booking denied"
+
+msgid "BookingPeriodTooSmall"
+msgstr "The booking period is too small."
+
+msgid "BookingPeriodTooBig"
+msgstr "Booking period too long."
+
+msgid "PermissionsStored"
+msgstr "Permissions stored"
+
+msgid "PermissionGranted"
+msgstr "Permission granted"
+
+msgid "PermissionRevoked"
+msgstr "Permission revoked"
+
+msgid "RoleGranted"
+msgstr "Role granted"
+
+msgid "RoleRevoked"
+msgstr "Role revoked"
+
+msgid "ErrorPleaseGiveRoleName"
+msgstr "Please give this role a name"
+
+msgid "RoleDeleted"
+msgstr "Role deleted"
+
+msgid "AddRole"
+msgstr "Add role"
+
+msgid "RoleComment"
+msgstr "The role is the item which will allow you to assign rights to a person or group of people."
+
+msgid "DefaultRole"
+msgstr "Default role"
+
+msgid "PermissionsOfRole"
+msgstr "Permissions of role"
+
+msgid "IsPlatformRoleNotEditable"
+msgstr "Is the platform role not editable?"
+
+msgid "UserPermissions"
+msgstr "User\'s permissions"
+

@@ -1,0 +1,96 @@
+msgid "lang_new_item"
+msgstr "new item added"
+
+msgid "TitleNotification"
+msgstr "Since your last visit"
+
+msgid "lang_update_agenda"
+msgstr "existing agenda item updated"
+
+msgid "lang_new_agenda"
+msgstr "new agenda item added"
+
+msgid "lang_update_announcements"
+msgstr "existing announcement updated"
+
+msgid "lang_new_announcements"
+msgstr "new announcement added"
+
+msgid "lang_new_document"
+msgstr "new document(s) added"
+
+msgid "lang_new_exercise"
+msgstr "new exercise enabled"
+
+msgid "lang_update_link"
+msgstr "existing link information updated"
+
+msgid "lang_new_link"
+msgstr "new link added"
+
+msgid "lang_new_forum_topic"
+msgstr "new topic added"
+
+msgid "lang_new_groupforum_topic"
+msgstr "new topic added to group forum"
+
+msgid "lang_new_dropbox_file"
+msgstr "nou arxiu rebut"
+
+msgid "lang_update_dropbox_file"
+msgstr "un arxiu dels seus documents compartits ha estat actualitzat"
+
+msgid "ForumCategoryAdded"
+msgstr "La categoria del fòrum ha estat afegida"
+
+msgid "LearnpathAdded"
+msgstr "Curs afegit"
+
+msgid "GlossaryAdded"
+msgstr "Nou terme afegit al glossari"
+
+msgid "QuizQuestionAdded"
+msgstr "Nova qüestió afegida en l\'exercici"
+
+msgid "QuizQuestionUpdated"
+msgstr "Nova qüestió actualitzada en l\'exercici"
+
+msgid "QuizQuestionDeleted"
+msgstr "Nova qüestió eliminada en l\'exercici"
+
+msgid "QuizUpdated"
+msgstr "Exercici actualitzat"
+
+msgid "QuizAdded"
+msgstr "Exercici afegit"
+
+msgid "QuizDeleted"
+msgstr "Exercici eliminat"
+
+msgid "DocumentInvisible"
+msgstr "Document invisible"
+
+msgid "DocumentVisible"
+msgstr "Document visible"
+
+msgid "CourseDescriptionAdded"
+msgstr "Descripció del curs afegit"
+
+msgid "WikiAdded"
+msgstr "Wiki afegit"
+
+msgid "SurveyAdded"
+msgstr "Enquesta afegida"
+
+msgid "NotebookAdded"
+msgstr "Nota afegida"
+
+msgid "NotebookUpdated"
+msgstr "Nota actualitzada"
+
+msgid "NotebookDeleted"
+msgstr "Nota eliminada"
+
+msgid "LearnpathUpdated"
+msgstr "La ruta d\'aprenentatge s\'ha actualitzat"
+

@@ -1,0 +1,216 @@
+msgid "langStatDB"
+msgstr "&#1662;&#1575;&#1740;&#1711;&#1575;&#160"
+
+msgid "langEnableTracking"
+msgstr "فعّال کردن سیستم ذخیره آمار و ارقام تحصیلی"
+
+msgid "langInstituteShortName"
+msgstr "نام
+سازمان شما"
+
+msgid "langWarningResponsible"
+msgstr "از
+این برنامه فقط
+پس از ذخیره
+سازی داده های
+خود استفاده
+کنید. گروه
+دوکئوس مسئولیت
+از بین رفتن
+داده های شما
+را به عهده نخواهد
+گرفت"
+
+msgid "langAllowSelfRegProf"
+msgstr "واگذاری
+اجازۀ ثبت نام
+توسط آفرینندگان
+درس"
+
+msgid "langEG"
+msgstr "مثال"
+
+msgid "langDBHost"
+msgstr " پایگاه داده های میزبان"
+
+msgid "langDBLogin"
+msgstr "نام
+کاربری پایگاه
+داده ها"
+
+msgid "langDBPassword"
+msgstr "رمز
+ورود پایگاه
+داده ها"
+
+msgid "langMainDB"
+msgstr "پایگاهداده های اصلیدوکئوس"
+
+msgid "langAllFieldsRequired"
+msgstr "تمامی
+خانه ها پر شوند"
+
+msgid "langPrintVers"
+msgstr "نسخۀ
+قابل چاپ"
+
+msgid "langLocalPath"
+msgstr "مسیر مربوطه"
+
+msgid "langAdminEmail"
+msgstr "رایانامۀ
+(ایمیل)
+مدیر فضای
+آموزشی"
+
+msgid "langAdminName"
+msgstr "نام اداره کننده محیط"
+
+msgid "langAdminSurname"
+msgstr "نام خانوادگی اداره کننده محیط"
+
+msgid "langAdminLogin"
+msgstr "نام
+کاربری مدیر
+فضای آموزشی"
+
+msgid "langAdminPass"
+msgstr "رمز ورودمدیر فضای آموزشی : <font color=\"red\">برایسهولت در بهخاطر سپاری میتوانید این رمزرا تغییر دهید"
+
+msgid "langEducationManager"
+msgstr "مسئول محتویات آموزشی"
+
+msgid "langCampusName"
+msgstr "نام
+فضای آموزشی
+شما"
+
+msgid "langDBSettingIntro"
+msgstr " &#1662;&#1575;&#1740;&#1711;&#1575;&#1607; &#1575;&#1589;&#1604;&#1740; &#1583;&#1575;&#1583;&#1607; &#1607;&#1575; &#1607;&#1605; &#1575;&#1705;&#1606;&#1608;&#1606; &#1575;&#1740;&#1580;&#1575;&#1583; &#1582;&#1608;&#1575;&#1607;&#1583; &#1588;&#1583;."
+
+msgid "langStep1"
+msgstr "به قسمت کمکی در طرح سؤالات چند گزینه ای خوش آمدید"
+
+msgid "langStep2"
+msgstr "لطفاً عنوان و توضیحات تمرین را اضافه کنید یا آنها را تعییر دهید"
+
+msgid "langStep3"
+msgstr "مرحلۀ
+٣ از ٦"
+
+msgid "langStep4"
+msgstr "مرحلۀ
+٤ از ٦"
+
+msgid "langStep5"
+msgstr "مرحلۀ
+٥ از ٦"
+
+msgid "langStep6"
+msgstr "مرحلۀ
+٦ از ٦"
+
+msgid "langCfgSetting"
+msgstr "تنظیمات"
+
+msgid "langDBSetting"
+msgstr "MySQL تنظیماتپایگاههای"
+
+msgid "langMainLang"
+msgstr "زبان
+اصلی"
+
+msgid "langLicence"
+msgstr "شرایط و ضوابط استفاده"
+
+msgid "langLastCheck"
+msgstr "آخرین
+بررسی قبل از
+نصب"
+
+msgid "langRequirements"
+msgstr "الزامات
+فنی"
+
+msgid "langDbPrefixForm"
+msgstr "MySQL  پیشوندمورد استفادهدر پایگاه"
+
+msgid "langDbPrefixCom"
+msgstr "در
+صورتی که بر پر
+کردن خانه ها
+تأکید نشده،
+می توانید آنها
+را خالی بگذارید"
+
+msgid "langEncryptUserPass"
+msgstr "مخفی
+کردن رمز عبور
+در پایگاه داده
+ها"
+
+msgid "langSingleDb"
+msgstr "ایجادیک یا چند پایگاهداده ها برایدوکئوس"
+
+msgid "langAllowSelfReg"
+msgstr "همۀ
+افراد می توانند
+خود را ثبت نام
+کنند"
+
+msgid "langRecommended"
+msgstr "(این
+گزینه توصیه
+می شود)"
+
+msgid "langScormDB"
+msgstr "Scorm پایگاهداده های دروسمطابق با استاندارد"
+
+msgid "langAdminLastName"
+msgstr "نام
+مدیر فضای آموزشی"
+
+msgid "langAdminPhone"
+msgstr "تلفن
+مدیر فضای آموزشی"
+
+msgid "langAdminFirstName"
+msgstr "نام
+خانوادگی مدیر
+فضای آموزشی"
+
+msgid "langInstituteURL"
+msgstr "آدرس
+اینترنتی سازمان
+شما"
+
+msgid "langDokeosURL"
+msgstr "آدرساینترنتی دوکئوس"
+
+msgid "langUserDB"
+msgstr "پایگاه داده های کاربران"
+
+msgid "langInstallationLanguage"
+msgstr "نصب زبان"
+
+msgid "ReadThoroughly"
+msgstr "به طور کامل بخوانید"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "برای اینکه دوکئوس بتواند کار کند باید موارد زیر را قبلا روی سرور نصب کرده باشید"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "توجه ! ظاهرا بر روی سرور شما یک نسخه از دوکئوس قبلا نصب شده است"
+
+msgid "NewInstallation"
+msgstr "نصب جدید"
+
+msgid "CheckDatabaseConnection"
+msgstr "چک کردن ارتباط با بانک اطلاعاتی"
+
+msgid "Installing"
+msgstr "نصب"
+
+msgid "of"
+msgstr "از"
+

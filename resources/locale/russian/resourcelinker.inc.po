@@ -1,0 +1,162 @@
+msgid "ResourceAdded"
+msgstr "Ресурс добавлен. сейчас Вы можете вернуться к своему учебному плану или добавить еще больше ресурсов."
+
+msgid "LearningPath"
+msgstr "Учебный план"
+
+msgid "LevelUp"
+msgstr "Повышать до уровня"
+
+msgid "AddIt"
+msgstr "Добавить это"
+
+msgid "MainCategory"
+msgstr "главный раздел"
+
+msgid "lang_delete_added_resources"
+msgstr "Удалить добавленные ресурсы"
+
+msgid "AddToLinks"
+msgstr "Добавить к ссылкам курса"
+
+msgid "DontAdd"
+msgstr "не добавлять"
+
+msgid "lang_show_all_added_resources"
+msgstr "Показать все добавленные ресурсы"
+
+msgid "ResourcesAdded"
+msgstr "Добавленные ресурсы"
+
+msgid "BackTo"
+msgstr "Вернуться к"
+
+msgid "ExternalResources"
+msgstr "Внешние ресурсы"
+
+msgid "CourseResources"
+msgstr "Ресурсы курса"
+
+msgid "ExternalLink"
+msgstr "Внешняя ссылка"
+
+msgid "DropboxAdd"
+msgstr "Добавить страницу Ящика для содержимого в эту главу."
+
+msgid "AddAssignmentPage"
+msgstr "Добавить инструменты для выполнения заданий в эту главу."
+
+msgid "Exercise"
+msgstr "Тесты"
+
+msgid "Link"
+msgstr "Ссылки"
+
+msgid "AdValvas"
+msgstr "Объявления"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "ShowDelete"
+msgstr "Показать / Удалить"
+
+msgid "IntroductionText"
+msgstr "Введение"
+
+msgid "CourseDescription"
+msgstr "Описание курса"
+
+msgid "Groups"
+msgstr "Группы"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "IntroductionTextAdd"
+msgstr "Добавить страницу, содержащую введение, в эту главу."
+
+msgid "CourseDescriptionAdd"
+msgstr "Добавить страницу, содержащую описание курса, в эту главу."
+
+msgid "GroupsAdd"
+msgstr "Добавьте Инструменты Группы в эту главу."
+
+msgid "UsersAdd"
+msgstr "Добавьте Инструменты Пользователя в эту главу."
+
+msgid "ExportableCourseResources"
+msgstr "Экспортируемые ресурсы курса"
+
+msgid "DokeosRelatedCourseMaterial"
+msgstr "Ресурсы курса связанные с Chamilo программой"
+
+msgid "LinkTarget"
+msgstr "Цель ссылки"
+
+msgid "SameWindow"
+msgstr "В том же окне"
+
+msgid "NewWindow"
+msgstr "В новом окне"
+
+msgid "StepDeleted1"
+msgstr "Этот"
+
+msgid "StepDeleted2"
+msgstr "пункт был удален в этом инструменте."
+
+msgid "Modify"
+msgstr "изменить"
+
+msgid "Chapter"
+msgstr "Глава"
+
+msgid "NoAgendaItems"
+msgstr "Расписания занятий нет"
+
+msgid "AgendaAdd"
+msgstr "Добавить новое занятие в расписание"
+
+msgid "UserGroupFilter"
+msgstr "Фильтр по группам/пользователям"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Сортировать повестку дня хронологически (по направлению вверх)"
+
+msgid "ShowCurrent"
+msgstr "Просмотр расписания занятий в текущем месяце"
+
+msgid "ModifyCalendarItem"
+msgstr "Измените расписание занятий"
+
+msgid "ItemTitle"
+msgstr "Название занятия"
+
+msgid "Detail"
+msgstr "Подробно"
+
+msgid "EditSuccess"
+msgstr "Расписание занятий отредактировано"
+
+msgid "AddCalendarItem"
+msgstr "Добавьте новое занятие в расписание"
+
+msgid "AddAnn"
+msgstr "Добавить объявление"
+
+msgid "ForumAddNewTopic"
+msgstr "Форум: добавить новую тему"
+
+msgid "ForumEditTopic"
+msgstr "Форум: редактировать тему"
+
+msgid "ExerciseAnswers"
+msgstr "Тест: Ответы"
+
+msgid "ForumReply"
+msgstr "Форум: ответ"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Сортировать расписание хронологически (вниз)"
+

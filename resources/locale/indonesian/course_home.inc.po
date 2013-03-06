@@ -1,0 +1,63 @@
+msgid "langActivate"
+msgstr "Aktifkan"
+
+msgid "langDeactivate"
+msgstr "Non-aktifkan"
+
+msgid "langInLnk"
+msgstr "Non-aktif link"
+
+msgid "langDelLk"
+msgstr "Apakah anda sungguh-sungguh ingin menghapus link ini?"
+
+msgid "langCourseCreate"
+msgstr "Buat situs mata kuliah"
+
+msgid "langNameOfTheLink"
+msgstr "Judul link"
+
+msgid "lang_main_categories_list"
+msgstr "Daftar kategori utama"
+
+msgid "langCourseAdminOnly"
+msgstr "Hanya untuk Pengajar"
+
+msgid "PlatformAdminOnly"
+msgstr "Hanya untuk Administrator Platform"
+
+msgid "langCombinedCourse"
+msgstr "Mata kuliah gabungan"
+
+msgid "ToolIsNowVisible"
+msgstr "Tool tersebur kini nampak"
+
+msgid "ToolIsNowHidden"
+msgstr "Tool tersebut kini tersembunyi"
+
+msgid "EditLink"
+msgstr "Edit link"
+
+msgid "Blog_management"
+msgstr "Pengelolaan Blog"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "Course_maintenance"
+msgstr "Perawatan Mata kuliah"
+
+msgid "TOOL_SURVEY"
+msgstr "Survai"
+
+msgid "GreyIcons"
+msgstr "Kotak Tool"
+
+msgid "Interaction"
+msgstr "Interaksi"
+
+msgid "Authoring"
+msgstr "Authoring"
+
+msgid "Administration"
+msgstr "Administrasi"
+

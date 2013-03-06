@@ -1,0 +1,198 @@
+msgid "ModifInfo"
+msgstr "Các xác lập cho khóa học"
+
+msgid "langModifDone"
+msgstr "Thông tin đã được hiệu chỉnh"
+
+msgid "langDelCourse"
+msgstr "Xóa toàn bộ website của khóa học"
+
+msgid "langProfessors"
+msgstr "Giáo viên"
+
+msgid "langFaculty"
+msgstr "Bộ môn"
+
+msgid "langConfidentiality"
+msgstr "Bảo mật"
+
+msgid "langPublic"
+msgstr "Truy cập không cần login"
+
+msgid "langPrivOpen"
+msgstr "Truy cập có điều kiện hạn chế, đăng kí tự do"
+
+msgid "langPrivate"
+msgstr "Truy cập chỉ với <a href=../user/user.php>danh sách người dùng</a>)"
+
+msgid "langForbidden"
+msgstr "Không có quyền"
+
+msgid "CourseAccessConfigTip"
+msgstr "Mặc định, chỉ có người dùng mới có thể truy cập đến khóa học mà mình đã đăng kí. Nếu bạn muốn bảo mật,các đơn giản nhất là cho phép đăng kí trong vòng 1 tuần, yêu cầu chính học sinh tự đăng kí, sau đó không cho phép đăng kí thêm và kiểm tra kẻ xâm nhập có thể có trong danh sách"
+
+msgid "langTipLang"
+msgstr "Ngôn ngữ này sẽ được hiển thị đối với tất cả các website khóa học của bạn"
+
+msgid "langVid"
+msgstr "Video"
+
+msgid "langWork"
+msgstr "Bài viết của học sinh"
+
+msgid "langProgramMenu"
+msgstr "Chương trình khóa học"
+
+msgid "langAnnouncement"
+msgstr "Thông báo"
+
+msgid "langExercise"
+msgstr "Bài tập"
+
+msgid "langStats"
+msgstr "Thống kê"
+
+msgid "langUplPage"
+msgstr "Upload trang và tạo liên kết tại trang chủ"
+
+msgid "langLinkSite"
+msgstr "Thêm liên kết vào trang chính"
+
+msgid "langCourse"
+msgstr "Website"
+
+msgid "langHasDel"
+msgstr "Đã bị xóa"
+
+msgid "langBackHome"
+msgstr "Trở về trang chủ"
+
+msgid "langByDel"
+msgstr "Xóa website khóa học này sẽ xóa vĩnh viễn tất cả dữ liệu(không xóa chúng từ khóa học khác).<p>Bạn có thực sự muốn xóa khóa học này"
+
+msgid "langY"
+msgstr "YES"
+
+msgid "langN"
+msgstr "NO"
+
+msgid "langDepartmentUrl"
+msgstr "Đương dẫn trang chủ của khoa"
+
+msgid "langDepartmentUrlName"
+msgstr "Trường/Khoa"
+
+msgid "langBackupCourse"
+msgstr "Lưu trữ khóa học này"
+
+msgid "langModifGroups"
+msgstr "Sửa Nhóm"
+
+msgid "langProfessor"
+msgstr "Giáo viên"
+
+msgid "langGroups"
+msgstr "Nhóm"
+
+msgid "langDescriptionCours"
+msgstr "Mô tả khóa học"
+
+msgid "langArchiveCourse"
+msgstr "BackUp khóa học"
+
+msgid "langRestoreCourse"
+msgstr "Restore khóa học"
+
+msgid "langRestore"
+msgstr "Restore"
+
+msgid "langCreatedIn"
+msgstr "Tạo mới"
+
+msgid "langCreateMissingDirectories"
+msgstr "Creation of missing directories"
+
+msgid "langCopyDirectoryCourse"
+msgstr "Copy thư mục khóa học"
+
+msgid "langDisk_free_space"
+msgstr "Dung lượng còn trống"
+
+msgid "langBuildTheCompressedFile"
+msgstr "Creation of backup file"
+
+msgid "langFileCopied"
+msgstr "Đã sao chép file"
+
+msgid "langArchiveLocation"
+msgstr "Vị trí lưu trữ tài liệu"
+
+msgid "langSizeOf"
+msgstr "Dung lượng của"
+
+msgid "langArchiveName"
+msgstr "Tên tài liệu"
+
+msgid "langBackupSuccesfull"
+msgstr "BackUp thành công"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "BackUp dữ liệu khóa học tại cơ sở dữ liệu chính"
+
+msgid "langBUUsersInMainBase"
+msgstr "BackUp dữ liệu người dùng tại cơ sở dữ liệu chính"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "BackUp thông báo tại cơ sở dữ liệu chính"
+
+msgid "langBackupOfDataBase"
+msgstr "BackUp cơ sở dữ liệu"
+
+msgid "langCreationDate"
+msgstr "Tạo"
+
+msgid "langExpirationDate"
+msgstr "Ngày hết hạn"
+
+msgid "langPostPone"
+msgstr "Post pone"
+
+msgid "langLastEdit"
+msgstr "Chỉnh sửa trước"
+
+msgid "langLastVisit"
+msgstr "Lần ghé thăm trước"
+
+msgid "langSubscription"
+msgstr "đăng kí"
+
+msgid "langCourseAccess"
+msgstr "Truy cập khóa học"
+
+msgid "langConfirmBackup"
+msgstr "Bạn có thực sự muốn BackUp khóa học này"
+
+msgid "langCreateSite"
+msgstr "Tạo website cho khóa học mới"
+
+msgid "langRestoreDescription"
+msgstr "Khóa học được lưu trong tệp tin mà bạn có thể lựa chọn dưới đấy<br><br>Khi bạn nhấn vào nút \"Restore\", các kho lưu trữ sẽ được giải nén và tái tạo quá trình"
+
+msgid "langRestoreNotice"
+msgstr "Kịch bản này không cho phép có thể tự động khôi phục lại người dùng, nhưng dữ liệu được lưu trữ trong \"users.csv\" cho phép quản trị viên thao tác công việc đó bằng tay"
+
+msgid "langAvailableArchives"
+msgstr "Danh sách lưu trữ sẵn sàng"
+
+msgid "langNoArchive"
+msgstr "Chưa lưa chọn dữ liệu"
+
+msgid "langArchiveNotFound"
+msgstr "Không tìm thấy dữ liệu"
+
+msgid "langArchiveUncompressed"
+msgstr "Lưu trữ đã được giải nén và cài đặt"
+
+msgid "langCsvPutIntoDocTool"
+msgstr "File \"users.csv\" đã được đưa vào công cụ tài liệu."
+

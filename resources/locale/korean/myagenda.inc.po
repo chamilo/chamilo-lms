@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "내 일정"
+
+msgid "langToday"
+msgstr "오늘"
+

@@ -1,0 +1,96 @@
+msgid "lang_new_item"
+msgstr "nouvel élément ajouté"
+
+msgid "TitleNotification"
+msgstr "Depuis votre dernière visite"
+
+msgid "lang_update_agenda"
+msgstr "événements mis à jour"
+
+msgid "lang_new_agenda"
+msgstr "nouvel événement ajouté"
+
+msgid "lang_update_announcements"
+msgstr "annonces mises à jour"
+
+msgid "lang_new_announcements"
+msgstr "nouvelles annonces ajoutées"
+
+msgid "lang_new_document"
+msgstr "nouveaux documents ajoutés"
+
+msgid "lang_new_exercise"
+msgstr "nouvel exercice activé"
+
+msgid "lang_update_link"
+msgstr "liens mis à jour"
+
+msgid "lang_new_link"
+msgstr "nouveau lien ajouté"
+
+msgid "lang_new_forum_topic"
+msgstr "nouveau sujet ajouté"
+
+msgid "lang_new_groupforum_topic"
+msgstr "nouveau sujet ajouté dans un forum de groupe"
+
+msgid "lang_new_dropbox_file"
+msgstr "nouveau fichier reçu"
+
+msgid "lang_update_dropbox_file"
+msgstr "fichier de la section de partage de fichier a été mis à jour"
+
+msgid "ForumCategoryAdded"
+msgstr "La catégorie de forum a été ajoutée"
+
+msgid "LearnpathAdded"
+msgstr "Parcours d\'apprentissage ajouté"
+
+msgid "GlossaryAdded"
+msgstr "Nouveau terme ajouté dans le glossaire"
+
+msgid "QuizQuestionAdded"
+msgstr "Nouvelle question ajoutée à l\'exercice"
+
+msgid "QuizQuestionUpdated"
+msgstr "Question mise à jour dans l\'exercice"
+
+msgid "QuizQuestionDeleted"
+msgstr "Question supprimée de l\'exercice"
+
+msgid "QuizUpdated"
+msgstr "Exercice mis à jour"
+
+msgid "QuizAdded"
+msgstr "Exercice ajouté"
+
+msgid "QuizDeleted"
+msgstr "Exercice supprimé"
+
+msgid "DocumentInvisible"
+msgstr "Document rendu invisible"
+
+msgid "DocumentVisible"
+msgstr "Document rendu visible"
+
+msgid "CourseDescriptionAdded"
+msgstr "Description de cours ajoutée"
+
+msgid "WikiAdded"
+msgstr "Wiki ajouté"
+
+msgid "SurveyAdded"
+msgstr "Enquête ajoutée"
+
+msgid "NotebookAdded"
+msgstr "Note ajoutée"
+
+msgid "NotebookUpdated"
+msgstr "Note mise à jour"
+
+msgid "NotebookDeleted"
+msgstr "Note supprimée"
+
+msgid "LearnpathUpdated"
+msgstr "Parcours mis à jour"
+

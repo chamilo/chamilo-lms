@@ -1,0 +1,72 @@
+msgid "DokeosLearningPaths"
+msgstr "Utbildningsväg"
+
+msgid "AddResult"
+msgstr "Lägg till resultat"
+
+msgid "ExportPDF"
+msgstr "Exportera till PDF"
+
+msgid "Print"
+msgstr "Skriv ut"
+
+msgid "ChooseOrientation"
+msgstr "Välj orientering"
+
+msgid "Portrait"
+msgstr "Stående"
+
+msgid "Landscape"
+msgstr "Liggande"
+
+msgid "DeleteAll"
+msgstr "Ta bort alla"
+
+msgid "ViewResult"
+msgstr "Visa resultat"
+
+msgid "AddStudent"
+msgstr "Lägg till användare"
+
+msgid "Score"
+msgstr "Presterat"
+
+msgid "Location"
+msgstr "Plats"
+
+msgid "FileType"
+msgstr "Filtyp"
+
+msgid "ExampleCSVFile"
+msgstr "CSV-filexempel"
+
+msgid "ExampleXMLFile"
+msgstr "XML-filexempel"
+
+msgid "IgnoreErrors"
+msgstr "Ignorera fel"
+
+msgid "LinkAdded"
+msgstr "Länk tillagd"
+
+msgid "LinkDeleted"
+msgstr "Länk borttagen"
+
+msgid "Average"
+msgstr "Genomsnitt"
+
+msgid "ViewStatistics"
+msgstr "Visa statistik"
+
+msgid "ResultAdded"
+msgstr "Resultat tillagd"
+
+msgid "TotalUser"
+msgstr "Totalt för användaren"
+
+msgid "AverageTotal"
+msgstr "Genomsnitt totalt"
+
+msgid "ResultDeleted"
+msgstr "Resultat raderat"
+

@@ -1,0 +1,681 @@
+msgid "langToolName"
+msgstr "Importovať kurzy z Blackboard-u"
+
+msgid "TrackingDisabled"
+msgstr "Štatistika bol deaktivovaná administrátorom systému."
+
+msgid "InactivesStudents"
+msgstr "Neaktívni používatelia"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Priemerný čas strávený na portáli"
+
+msgid "AverageCoursePerStudent"
+msgstr "Priemer kurzov na používateľa"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Priemerné pokroky v SCORM kurzoch"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Priemerné skóre v testoch"
+
+msgid "SeeStudentList"
+msgstr "Pozrieť zoznam používateľov"
+
+msgid "NbActiveSessions"
+msgstr "Aktívne stretnutia"
+
+msgid "NbPastSessions"
+msgstr "Minulé stretnutia"
+
+msgid "NbFutureSessions"
+msgstr "Budúce stretnutia"
+
+msgid "NbStudentPerSession"
+msgstr "Počet používateľov na stretnutie"
+
+msgid "NbCoursesPerSession"
+msgstr "Počet kurzov na stretnutie"
+
+msgid "SeeSessionList"
+msgstr "Pozrieť zoznam stretnutí"
+
+msgid "langShowNone"
+msgstr "Neukázať"
+
+msgid "langCourseStats"
+msgstr "Štatistiky kurzu"
+
+msgid "langToolsAccess"
+msgstr "Prístup k nástrojom"
+
+msgid "langCourseAccess"
+msgstr "Prístup ku kurzu"
+
+msgid "langLinksAccess"
+msgstr "Odkazy"
+
+msgid "langDocumentsAccess"
+msgstr "Dokumenty"
+
+msgid "langScormAccess"
+msgstr "Kurzy vo formáte SCORM"
+
+msgid "langLinksDetails"
+msgstr "Odkazy sprístupnené"
+
+msgid "langWorksDetails"
+msgstr "zadania načítané"
+
+msgid "langLoginsDetails"
+msgstr "Pre ďalšie detaily kliknite na názov mesiaca"
+
+msgid "langDocumentsDetails"
+msgstr "Dokumenty načítané"
+
+msgid "langExercicesDetails"
+msgstr "Skóre testov hotové"
+
+msgid "langBackToList"
+msgstr "Späť na zoznam používateľov"
+
+msgid "langDetails"
+msgstr "Podrobnosti"
+
+msgid "langStatsOfCourse"
+msgstr "Štatistika kurzu"
+
+msgid "langStatsOfUser"
+msgstr "Štatistiky používateľa"
+
+msgid "langStatsOfCampus"
+msgstr "Štatistiky portálu"
+
+msgid "langCountUsers"
+msgstr "Počet používateľov"
+
+msgid "langCountToolAccess"
+msgstr "Počet pripojení na tento kurz"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Mesiac"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Počet prihlásení"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Názov nástroja"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Kliky používateľov"
+
+msgid "langToolTitleCountColumn"
+msgstr "Všetky kliky"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Odkaz"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Kliky používateľov"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Všetky kliky"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Test"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Skóre"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Dokument"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Načítania používateľov"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Celkové načítania"
+
+msgid "langScormContentColumn"
+msgstr "Názov"
+
+msgid "langScormStudentColumn"
+msgstr "Používatelia"
+
+msgid "langScormTitleColumn"
+msgstr "Etapa"
+
+msgid "langScormStatusColumn"
+msgstr "Stav"
+
+msgid "langScormScoreColumn"
+msgstr "Skóre"
+
+msgid "langScormTimeColumn"
+msgstr "Čas"
+
+msgid "langScormNeverOpened"
+msgstr "Tento kurz nebol nikdy otvorený týmto pouívate&#318;om."
+
+msgid "langWorkTitle"
+msgstr "Názov"
+
+msgid "langWorkAuthors"
+msgstr "Autori"
+
+msgid "langWorkDescription"
+msgstr "Popis"
+
+msgid "informationsAbout"
+msgstr "Štatistika"
+
+msgid "langNoEmail"
+msgstr "Nešpecifikovaná emailová adresa"
+
+msgid "langNoResult"
+msgstr "Zatiaľ bez výsledku"
+
+msgid "langCourse"
+msgstr "Kurz"
+
+msgid "langHits"
+msgstr "Zásahy"
+
+msgid "langTotal"
+msgstr "Celkový"
+
+msgid "langHour"
+msgstr "Hodina"
+
+msgid "langDay"
+msgstr "deň"
+
+msgid "langLittleHour"
+msgstr "h."
+
+msgid "langLast31days"
+msgstr "Za posledných 31 dní"
+
+msgid "langLast7days"
+msgstr "Za posledných 7 dní"
+
+msgid "langThisday"
+msgstr "Dnes"
+
+msgid "langLogins"
+msgstr "Prihlásenia"
+
+msgid "langLoginsExplaination"
+msgstr "Tu je zoznam Vaich posledných prihlásení s nástrojmi, ktoré ste po&#269;as stretnutí pouili."
+
+msgid "langExercicesResults"
+msgstr "Skóre testov hotové"
+
+msgid "langVisits"
+msgstr "návštevy"
+
+msgid "langAt"
+msgstr "v"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Dátum"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Návštevy"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Prihlásenia a prístupy k nástrojom"
+
+msgid "langWorkUploads"
+msgstr "Načítanie prác"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Neplatný používateľ : tento používateľ neexistuje vo Vašej skupine"
+
+msgid "langListStudents"
+msgstr "Zoznam používateľov v tejto skupine"
+
+msgid "langPeriodHour"
+msgstr "Hodina"
+
+msgid "langPeriodDay"
+msgstr "Deň"
+
+msgid "langPeriodWeek"
+msgstr "Týždeň"
+
+msgid "langPeriodMonth"
+msgstr "Mesiac"
+
+msgid "langPeriodYear"
+msgstr "Rok"
+
+msgid "langNextDay"
+msgstr "Nasledujúci deň"
+
+msgid "langPreviousDay"
+msgstr "Predchádzajúci deň"
+
+msgid "langNextWeek"
+msgstr "Nasledujúci týždeň"
+
+msgid "langPreviousWeek"
+msgstr "Predchádzajúci týždeň"
+
+msgid "langNextMonth"
+msgstr "Nasledujúci mesiac"
+
+msgid "langPreviousMonth"
+msgstr "Predchádzajúci mesiac"
+
+msgid "langNextYear"
+msgstr "Nasledujúci rok"
+
+msgid "langPreviousYear"
+msgstr "Predchádzajúci rok"
+
+msgid "langViewToolList"
+msgstr "Prezrieť zoznam všetkých nástrojov"
+
+msgid "langToolList"
+msgstr "Zoznam všetkých nástrojov"
+
+msgid "langFrom"
+msgstr "Od"
+
+msgid "langTo"
+msgstr "do"
+
+msgid "langPeriodToDisplay"
+msgstr "Doba"
+
+msgid "langDetailView"
+msgstr "Zobrazenie podľa"
+
+msgid "langBredCrumpGroups"
+msgstr "Skupiny"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Skupinový priestor"
+
+msgid "langBredCrumpUsers"
+msgstr "Požívatelia"
+
+msgid "langAdminToolName"
+msgstr "Štatistiky administrácie"
+
+msgid "langPlatformStats"
+msgstr "Štatistiky platformy"
+
+msgid "langStatsDatabase"
+msgstr "Štatistika databázy"
+
+msgid "langPlatformAccess"
+msgstr "Prístup na portál"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Prístup na kurzy"
+
+msgid "langPlatformToolAccess"
+msgstr "Prístup k nástrojom"
+
+msgid "langStrangeCases"
+msgstr "Problematické prípady"
+
+msgid "langStatsDatabaseLink"
+msgstr "Kliknúť sem"
+
+msgid "langCountCours"
+msgstr "Počet kurzov"
+
+msgid "langCountCourseByFaculte"
+msgstr "Počet kurzov podľa kategórie"
+
+msgid "langCountCourseByLanguage"
+msgstr "Počet kurzov podľa jazyka"
+
+msgid "langCountCourseByVisibility"
+msgstr "Počet kurzov podľa viditeľnosti"
+
+msgid "langCountUsersByCourse"
+msgstr "Počet používateľov podľa kurzu"
+
+msgid "langCountUsersByFaculte"
+msgstr "Počet používateľov podľa kategórie"
+
+msgid "langCountUsersByStatus"
+msgstr "Počet používateľov podľa stavu"
+
+msgid "langAccess"
+msgstr "Prístup"
+
+msgid "langCountries"
+msgstr "Krajiny"
+
+msgid "langProviders"
+msgstr "Poskytovatelia"
+
+msgid "langOS"
+msgstr "OS"
+
+msgid "langBrowsers"
+msgstr "Prehliadače"
+
+msgid "langAccessExplain"
+msgstr "(Keď používateľ otvorí index portálu)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Celkový"
+
+msgid "langTotalPlatformLogin"
+msgstr "Celkový"
+
+msgid "langMultipleLogins"
+msgstr "Kontá s rovnakým <i>menom používateľa</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Kontá s rovnakým <i>menom používateľa</i> A rovnakým <i>heslom</i>"
+
+msgid "langMultipleEmails"
+msgstr "Kontá s rovnakým <i>Emailom</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Kurzy bez lektora"
+
+msgid "langCourseWithoutAccess"
+msgstr "Nepoužívané kurzy"
+
+msgid "langLoginWithoutAccess"
+msgstr "Nepoužívané prihlasovacie mená"
+
+msgid "langAllRight"
+msgstr "Nie je tu iadny nezvy&#269;ajný prípad"
+
+msgid "langDefcon"
+msgstr "Objavené problematické prípady !!"
+
+msgid "langNULLValue"
+msgstr "Prázdny (alebo NULA)"
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "Táto osnova nebola nikdy otvorená."
+
+msgid "Visited"
+msgstr "Navštívený"
+
+msgid "FirstAccess"
+msgstr "Prvý prístup"
+
+msgid "LastAccess"
+msgstr "Posledný prístup"
+
+msgid "langProbationers"
+msgstr "Študenti"
+
+msgid "MoyenneTest"
+msgstr "Priemer testu"
+
+msgid "exportExcel"
+msgstr "Exportovať vo formáte Excel"
+
+msgid "MoyCourse"
+msgstr "Priemer kurzu"
+
+msgid "MoyenneExamen"
+msgstr "Priemer skúšky"
+
+msgid "MoySession"
+msgstr "Priemer stretnutia"
+
+msgid "TakenSessions"
+msgstr "Obsadené stretnutia"
+
+msgid "FollowUp"
+msgstr "Sledovať"
+
+msgid "Trainers"
+msgstr "Lektori"
+
+msgid "Administrators"
+msgstr "Administrátori"
+
+msgid "Tracks"
+msgstr "Stopy"
+
+msgid "Success"
+msgstr "Úspech"
+
+msgid "ExcelFormat"
+msgstr "Formát Excel"
+
+msgid "MyLearnpath"
+msgstr "Moja učebná osnova"
+
+msgid "Time"
+msgstr "Čas"
+
+msgid "Score"
+msgstr "Klasifikácia"
+
+msgid "LastConnexion"
+msgstr "Posledné spojenie"
+
+msgid "ConnectionTime"
+msgstr "Čas pripojenia"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Pripojenia na tento kurz"
+
+msgid "StudentTutors"
+msgstr "Študentskí tútori"
+
+msgid "StudentSessions"
+msgstr "Študentské stretnutia"
+
+msgid "StudentCourses"
+msgstr "Študentské kurzy"
+
+msgid "NoLearnpath"
+msgstr "Žiadna učebná osnova"
+
+msgid "Attempts"
+msgstr "Pokusy"
+
+msgid "Correction"
+msgstr "Oprava"
+
+msgid "NoExercise"
+msgstr "Žiadne cvičenia"
+
+msgid "LimitDate"
+msgstr "Hraničný dátum"
+
+msgid "SentDate"
+msgstr "Dátum odoslania"
+
+msgid "Annotate"
+msgstr "Oznamovať"
+
+msgid "DayOfDelay"
+msgstr "Deň odkladu"
+
+msgid "NoProduction"
+msgstr "Žiadna práca"
+
+msgid "NoComment"
+msgstr "Žiadny komentár"
+
+msgid "LatestLogin"
+msgstr "Posledné pripojenie"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Čas strávený na platforme"
+
+msgid "Messages"
+msgstr "Správy"
+
+msgid "AveragePostsInForum"
+msgstr "Priemerný počet správ vo fóre"
+
+msgid "AverageAssignments"
+msgstr "Priemerný počet zadaní"
+
+msgid "Print"
+msgstr "Tlač"
+
+msgid "StudentDetails"
+msgstr "Detaily študenta"
+
+msgid "StudentDetailsInCourse"
+msgstr "Detaily študenta v kurze"
+
+msgid "Learnpaths"
+msgstr "Učebné osnovy"
+
+msgid "OtherTools"
+msgstr "Ďalšie nástroje"
+
+msgid "DetailsStudentInCourse"
+msgstr "Detaily študenta v kurze"
+
+msgid "CourseTitle"
+msgstr "Názov kurzu"
+
+msgid "NbStudents"
+msgstr "Počet študentov"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Čas strávený v kurze"
+
+msgid "AvgStudentsProgress"
+msgstr "Priemerné pokroky študentov"
+
+msgid "AvgCourseScore"
+msgstr "Priemerné skóre študentov"
+
+msgid "AvgMessages"
+msgstr "Počet správ na študenta"
+
+msgid "AvgAssignments"
+msgstr "Počet zadaní na študenta"
+
+msgid "ToolsMostUsed"
+msgstr "Najčastejšie používané nástroje"
+
+msgid "StudentsTracking"
+msgstr "Štatistika študenta"
+
+msgid "CourseTracking"
+msgstr "Štatistika kurzu"
+
+msgid "LinksMostClicked"
+msgstr "Najčastejšie navštevované odkazy"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Najčastejšie načítané dokumenty"
+
+msgid "LearningPathDetails"
+msgstr "Detaily učebnej osnovy"
+
+msgid "NoConnexion"
+msgstr "Bez pripojenia"
+
+msgid "TeacherInterface"
+msgstr "Lektorské rozhranie"
+
+msgid "CoachInterface"
+msgstr "Rozhranie tútora"
+
+msgid "AdminInterface"
+msgstr "Administrátorské rozhranie"
+
+msgid "NumberOfSessions"
+msgstr "Počet stretnutí"
+
+msgid "YourCourseList"
+msgstr "Váš zoznam kurzov"
+
+msgid "YourStatistics"
+msgstr "Vaša štatistika"
+
+msgid "CoachList"
+msgstr "Zoznam tútorov"
+
+msgid "CoachStudents"
+msgstr "Študenti tohto tútora"
+
+msgid "NoLearningPath"
+msgstr "Žiadne SCORM kurzy"
+
+msgid "SessionCourses"
+msgstr "Stretnutie kurzov"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Tu nájdete štatistiku Vašich študentov zaradených v tomto kurze."
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Priemerný čas strávený v kurze"
+
+msgid "RemindInactiveUser"
+msgstr "Upozorniť neaktívnych používateľov"
+
+msgid "FirstLogin"
+msgstr "Prvé pripojenie"
+
+msgid "AccessDetails"
+msgstr "Detaily prístupu"
+
+msgid "DateAndTimeOfAccess"
+msgstr "Dátum a čas prístupu"
+
+msgid "Duration"
+msgstr "Trvanie"
+
+msgid "WrongDatasForTimeSpentOnThePlatform"
+msgstr "Údaje o tomto používateľovi boli zaregistrované v čase, keď nebol k dispozícii výpočet času stráveného na platforme."
+
+msgid "DisplayCoaches"
+msgstr "Prehľad tútorov"
+
+msgid "DisplayUserOverview"
+msgstr "Prehľad používateľa"
+
+msgid "ExportUserOverviewOptions"
+msgstr "Možnosti exportu prehľadu používateľa"
+
+msgid "FollowingFieldsWillAlsoBeExported"
+msgstr "Nasledujúce polia budú tiež exportované"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "Celkové skóre získané z cvičení"
+
+msgid "TotalExercisesScorePossible"
+msgstr "Celkové možné skóre cvičení"
+
+msgid "TotalExercisesAnswered"
+msgstr "Počet zodpovedaných cvičení"
+
+msgid "ForumForumsNumber"
+msgstr "Počet fór"
+
+msgid "ForumThreadsNumber"
+msgstr "Počet tém"
+
+msgid "ForumPostsNumber"
+msgstr "Počet správ"
+
+msgid "ChatConnectionsDuringLastXDays"
+msgstr "Pripojenia k Pokecu počas posledných # dní"
+
+msgid "ChatLastConnection"
+msgstr "Posledné prihlásenie do Pokecu"
+
+msgid "CourseInformation"
+msgstr "Informácie o kurze"
+
+msgid "NoAdditionalFieldsWillBeExported"
+msgstr "Žiadne ďalšie polia nebudú exportované"
+
+msgid "langSendNotification"
+msgstr "Poslať oznámenia"
+

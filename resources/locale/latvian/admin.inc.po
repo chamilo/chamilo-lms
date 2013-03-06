@@ -1,0 +1,3102 @@
+msgid "UsersRegisteredInAnyGroup"
+msgstr "Jebkurā grupā reģistrētie Lietotāji"
+
+msgid "AdminBy"
+msgstr "Administrē"
+
+msgid "AdministrationTools"
+msgstr "Administrēšana"
+
+msgid "State"
+msgstr "Sistēmas status"
+
+msgid "Statistiques"
+msgstr "Statistika"
+
+msgid "VisioHostLocal"
+msgstr "Videokonferences uzturēšana"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Vai videokonference protokols ir tīkla-balstīts (lielāko daļu laika maldīgs)"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Rādīt saites, lai dotos atpakaļ mācību hierarhijā. Jebkurā gadījumā saite ir pieejama saraksta apakšā."
+
+msgid "langUsed"
+msgstr "aizņemts"
+
+msgid "langPresent"
+msgstr "Darīts!"
+
+msgid "langMissing"
+msgstr "trūkst"
+
+msgid "langExist"
+msgstr "eksistē"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Rādīt atgriezeniskās saites uz kursiem"
+
+msgid "ShowNumberOfCourses"
+msgstr "Rādīt kursu skaitu"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Pievienot lektora vārdu pie kursa nosaukuma"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Kopējā kursu sarakstā, pievienot lektora vārdu pie kursa nosaukuma"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Kopējā kursu sarakstā, pievienot kursa kodu pie pie kursa nosaukuma"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr " Pievienot kursa kodu pie kursu virsraksta"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "Šajā platformā nav neviena virtuālā kursa."
+
+msgid "ConfigureHomePage"
+msgstr "Galvenās lapas saturs un dizains"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Aktīvie kursa satura veidošanas instrumenti"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Kuri Kursa satura veidošanas instrumenti ir aktīvi (ir redzami Kursantiem), pēc noklusējuma, kad tiek izveidots jauns kurss<br>Lektoram, satura veidošanai, ir pieejami arī neaktīvie instrumenti."
+
+msgid "SearchUsers"
+msgstr "Meklēt lietotājus"
+
+msgid "CreateUser"
+msgstr "Veidot lietotāju"
+
+msgid "ModifyInformation"
+msgstr "Rediģēt informāciju"
+
+msgid "ModifyUser"
+msgstr "Rediģēt lietotāju"
+
+msgid "buttonEditUserField"
+msgstr "Rediģēt lietotāja anketu"
+
+msgid "ModifyCoach"
+msgstr "Rediģēt asistentu"
+
+msgid "ModifyThisSession"
+msgstr "Rediģēt šo sesiju"
+
+msgid "ExportSession"
+msgstr "Sesijas(u) eksports"
+
+msgid "ImportSession"
+msgstr "Sesijas(u) imports"
+
+msgid "langCourseBackup"
+msgstr "Izveidot"
+
+msgid "langCourseTitular"
+msgstr "Lektors"
+
+msgid "langCourseTitle"
+msgstr "Kursa nosaukums"
+
+msgid "langCourseFaculty"
+msgstr "Kategorija"
+
+msgid "langCourseDepartment"
+msgstr "Kursu nodaļa"
+
+msgid "langCourseDepartmentURL"
+msgstr "Nodaļas URL"
+
+msgid "langCourseLanguage"
+msgstr "Kursa valoda"
+
+msgid "langCourseAccess"
+msgstr "Piekļuve kursam"
+
+msgid "langCourseSubscription"
+msgstr "Pieteikšanās kursam"
+
+msgid "langPublicAccess"
+msgstr "Publiska pieeja visiem"
+
+msgid "langPrivateAccess"
+msgstr "Privāta pieeja"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Datubazes administrēšana ir atļauta tikai servera administratoram"
+
+msgid "langShowUsersOfCourse"
+msgstr "Parādīt šajā kursā pierakstītos lietotājus"
+
+msgid "langShowClassesOfCourse"
+msgstr "Parādīt klases šajā kursā"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Parādīt grupas šajā kursā"
+
+msgid "langPhone"
+msgstr "Telefons"
+
+msgid "langPhoneNumber"
+msgstr "Telefona Nr."
+
+msgid "langActions"
+msgstr "Darbības"
+
+msgid "langAddToCourse"
+msgstr "Pievienot kursam"
+
+msgid "langDeleteFromPlatform"
+msgstr "Izdzēst no platformas"
+
+msgid "langDeleteCourse"
+msgstr "Dzēst iezīmētos kursus"
+
+msgid "langDeleteFromCourse"
+msgstr "Atreģistrēt no kursa(iem)"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Dzēst iezīmētās klases"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Dzēst iezīmētās grupas"
+
+msgid "langAdministrator"
+msgstr "Administrators"
+
+msgid "langAddPicture"
+msgstr "Pievienot ģīmetni"
+
+msgid "langChangePicture"
+msgstr "Mainīt profila attēlu"
+
+msgid "langDeletePicture"
+msgstr "Dzēst ģīmetni"
+
+msgid "langAddUsers"
+msgstr "Pievienot lietotājus"
+
+msgid "langAddGroups"
+msgstr "Pievienot grupas"
+
+msgid "langAddClasses"
+msgstr "Pievienot klases"
+
+msgid "langExportUsers"
+msgstr "Eksportēt lietotāju sarakstu"
+
+msgid "langKeyword"
+msgstr "Atslēgvārds"
+
+msgid "langGroupName"
+msgstr "Grupas nosaukums"
+
+msgid "langGroupTutor"
+msgstr "Grupas Lektors"
+
+msgid "langGroupDescription"
+msgstr "Grupas apraksts"
+
+msgid "langNumberOfParticipants"
+msgstr "dalībnieku skaits"
+
+msgid "langNumberOfUsers"
+msgstr "lietotāju skaits"
+
+msgid "langMaximum"
+msgstr "maksimums"
+
+msgid "langMaximumOfParticipants"
+msgstr "Maksimālais dalībnieku skaits"
+
+msgid "langParticipants"
+msgstr "dalībnieki"
+
+msgid "langFirstLetterClass"
+msgstr "Pirmais burts (klases nosaukums)"
+
+msgid "langFirstLetterUser"
+msgstr "Pirmais burts (uzvārds)"
+
+msgid "langFirstLetterCourse"
+msgstr "Pirmais burts (kods)"
+
+msgid "langModifyUserInfo"
+msgstr "Labot lietotāja datus"
+
+msgid "langModifyClassInfo"
+msgstr "Labot klases datus"
+
+msgid "langModifyGroupInfo"
+msgstr "Labot grupas datus"
+
+msgid "langModifyCourseInfo"
+msgstr "Labot kursa datus"
+
+msgid "langPleaseEnterClassName"
+msgstr "Lūdzu ievadiet klases nosaukumu!"
+
+msgid "langPleaseEnterLastName"
+msgstr "Lūdzu ievadiet lietotāja uzvārdu !"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Lūdzu ievadiet lietotāja vārdu !"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Lūdzu ievadiet pareizu e-pasta adresi ! (ar maziem burtiem) !"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Lūdzu ievadiet pareizu lietotājvārdu !"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Lūdzu ievadiet kursa kodu !"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Lūdzu, norādiet Lektora vārdu un uzvārdu !"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Lūdzu ievadiet kursa nosaukumu !"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Atļautie formāti ir JPG, PNG and GIF !"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Šis lietotājvārds jau eksistē ! Izvēlies citu."
+
+msgid "langImportUserListXMLCSV"
+msgstr "Importēt lietotāju sarakstu no XML/CSV faila"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Eksportēt lietotāju sarakstu uz XML/CSV failu.(<b>xls./scalc.</b>)"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Tikai kursa lietotāji"
+
+msgid "langAddClassesToACourse"
+msgstr "Pievienot kursā klases"
+
+msgid "langAddUsersToACourse"
+msgstr "Pievienot kursā lietotājus"
+
+msgid "langAddUsersToAClass"
+msgstr "Pievienot lietotājus klasei"
+
+msgid "langAddUsersToAGroup"
+msgstr "Pievienot lietotājus grupai"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Jums jāiezīmā vismaz viena klase un viens kurss !"
+
+msgid "AtLeastOneUser"
+msgstr "Jums jāiezīmē vismaz viens lietotājs !"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Jums jāiezīmē vismaz viens lietotājs un viens kurss"
+
+msgid "langClassList"
+msgstr "Klases saraksts"
+
+msgid "langUserList"
+msgstr "Lietotāju saraksts"
+
+msgid "langCourseList"
+msgstr "Kursu saraksts"
+
+msgid "langAddToThatCourse"
+msgstr "Pievienot šim/šiem kursam/iem"
+
+msgid "langAddToClass"
+msgstr "Pievienot klasei"
+
+msgid "langRemoveFromClass"
+msgstr "Atreģistrēt no klases"
+
+msgid "langAddToGroup"
+msgstr "Pievienot grupai"
+
+msgid "langRemoveFromGroup"
+msgstr "Atreģistrēt no grupas"
+
+msgid "langUsersOutsideClass"
+msgstr "Lietotāji ārpus klases"
+
+msgid "langUsersInsideClass"
+msgstr "Lietotāji klasē"
+
+msgid "langUsersOutsideGroup"
+msgstr "Lietotāji ārpus grupas"
+
+msgid "langUsersInsideGroup"
+msgstr "Lietotāji grupā"
+
+msgid "langImportFileLocation"
+msgstr "CSV/XML faila lokācija datorā"
+
+msgid "langFileType"
+msgstr "Faila tips"
+
+msgid "langOutputFileType"
+msgstr "Exporta faila tips"
+
+msgid "langMustUseSeparator"
+msgstr "jābūt \';\' simbolam kā atdalītājam"
+
+msgid "langCSVMustLookLike"
+msgstr "CSV ( xls, scalc formāts ) failam jāizskatās līdzīgi šim"
+
+msgid "langXMLMustLookLike"
+msgstr "XML failam jāizskatās līdzīgi šim"
+
+msgid "langMandatoryFields"
+msgstr "Laukiem <strong>treknā</strong> jābut obligāti"
+
+msgid "langNotXML"
+msgstr "Dotais fails nav īsti XML formātā !"
+
+msgid "langNotCSV"
+msgstr "Dotais fails nav īsti CSV formātā !"
+
+msgid "langNoNeededData"
+msgstr "Dotais fails nesatur visus nepieciešamos datus !"
+
+msgid "langMaxImportUsers"
+msgstr "Jūs nevarat importēt vairāk kā 500 lietotājus vienā reizē !"
+
+msgid "langAdminDatabases"
+msgstr "Datubāzes (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Lietotāji"
+
+msgid "langAdminClasses"
+msgstr "Lietotāju klases"
+
+msgid "langAdminGroups"
+msgstr "Lietotāju grupas"
+
+msgid "langAdminCourses"
+msgstr "Kursi"
+
+msgid "langAdminCategories"
+msgstr "Mācību priekšmetu kategorijas"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Pievienot lietotājus vai grupas kursam"
+
+msgid "AddACategory"
+msgstr "Pievienot jaunu kursu nodaļu / kategoriju"
+
+msgid "langInto"
+msgstr "iekš"
+
+msgid "langNoCategories"
+msgstr "Šeit nav nevienas kursu nodaļas / kategorijas"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Vai atļaut pievienot kursus šai nodaļai?"
+
+msgid "langGoToForum"
+msgstr "Doties uz forumu"
+
+msgid "langCategoryCode"
+msgstr "Nodaļas kods"
+
+msgid "langCategoryName"
+msgstr "Nodaļas nosaukums"
+
+msgid "langCategories"
+msgstr "nodaļas"
+
+msgid "langEditNode"
+msgstr "Labot šo nodaļu"
+
+msgid "langOpenNode"
+msgstr "Atvērt šo nodaļu"
+
+msgid "langDeleteNode"
+msgstr "Dzēst šo nodaļu / kategoriju"
+
+msgid "langAddChildNode"
+msgstr "Pievienot apakšnodaļu"
+
+msgid "langViewChildren"
+msgstr "Rādīt apakšnodaļu"
+
+msgid "langTreeRebuildedIn"
+msgstr "Koks pārtaisīts iekš"
+
+msgid "langTreeRecountedIn"
+msgstr "Koks pārskaitīts iekš"
+
+msgid "langRebuildTree"
+msgstr "Pārtaisīt koku"
+
+msgid "langRefreshNbChildren"
+msgstr "Saskaitīt apakšnodaļas"
+
+msgid "langShowTree"
+msgstr "Rādīt koku"
+
+msgid "langBack"
+msgstr "Atgriezties iepriekšējā lapā"
+
+msgid "langLogDeleteCat"
+msgstr "Nodaļa izdzēsta"
+
+msgid "langRecountChildren"
+msgstr "Pārskaitīt nodaļas"
+
+msgid "langUpInSameLevel"
+msgstr "Uz augšu šajā līmenī"
+
+msgid "langSeconds"
+msgstr "sekundes"
+
+msgid "langMailTo"
+msgstr "Rakstīt e-pastu :"
+
+msgid "lang_no_access_here"
+msgstr "Nav vajadzīgo atļauju pieejai šeit"
+
+msgid "lang_php_info"
+msgstr "Informācija par sistēmu"
+
+msgid "langAddAdminInApache"
+msgstr "Pievienot administratoru"
+
+msgid "langAddFaculties"
+msgstr "Pievienot nodaļas"
+
+msgid "langSearchACourse"
+msgstr "Meklēt kursu"
+
+msgid "langSearchAUser"
+msgstr "Meklēt lietotāju"
+
+msgid "langTechnicalTools"
+msgstr "Tehniskie rīki"
+
+msgid "langConfig"
+msgstr "Sistēmas konfigurācija"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Pieteikšanos saraksts (paplašināts)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Lietotāju maksimums redzams ritinot sarakstu"
+
+msgid "NoTimeLimits"
+msgstr "Bez laika ierobežojuma"
+
+msgid "GeneralCoach"
+msgstr "Galvenais mācībspēks"
+
+msgid "GeneralProperties"
+msgstr "Galvenās īpašības"
+
+msgid "CourseCoach"
+msgstr "Kursa Lektors"
+
+msgid "UsersNumber"
+msgstr "lietotāja nummurs"
+
+msgid "DokeosClassic"
+msgstr "Chamilo classic"
+
+msgid "PublicAdmin"
+msgstr "Publiskā administrācija"
+
+msgid "PageAfterLoginTitle"
+msgstr "Lapa, ko redz, pēc pieteikšanās vidē"
+
+msgid "PageAfterLoginComment"
+msgstr "Lapa, kas ir redzama Lietotājiem, pēc pieteikšanās - ielogošanās platformā"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Chamilo tīkls"
+
+msgid "TabsMyProfile"
+msgstr "Sadaļa Mans Profils"
+
+msgid "GlobalRole"
+msgstr "Loma sistēmā (platformā)"
+
+msgid "langNomOutilTodo"
+msgstr "Veicamo darbu saraksts (Todo)"
+
+msgid "langNomPageAdmin"
+msgstr "Administrēšana"
+
+msgid "langSysInfo"
+msgstr "Informācija par sistēmu"
+
+msgid "langDiffTranslation"
+msgstr "Salīdzināt tulkojumus"
+
+msgid "langStatOf"
+msgstr "Statistika par"
+
+msgid "langSpeeSubscribe"
+msgstr "Ātrā piereģistrēšanās, kā Kursa Pārbaudītājs"
+
+msgid "langLogIdentLogout"
+msgstr "Pieteikšanos (loginu) saraksts"
+
+msgid "langServerStatus"
+msgstr "MySQL servera status"
+
+msgid "langDataBase"
+msgstr "Datubāze"
+
+msgid "langRun"
+msgstr "darbojas"
+
+msgid "langClient"
+msgstr "MySql klients"
+
+msgid "langServer"
+msgstr "MySQL serveris"
+
+msgid "langtitulary"
+msgstr "Portāla pārvaldītājs"
+
+msgid "langUpgradeBase"
+msgstr "Atjaununāt datubāzi (upgrade)"
+
+msgid "langManage"
+msgstr "Administrēt portālu"
+
+msgid "langErrorsFound"
+msgstr "atrastas kļūdas"
+
+msgid "langMaintenance"
+msgstr "Kursa uzturēšana"
+
+msgid "langUpgrade"
+msgstr "Atjaunināt Chamilo (upgrade)"
+
+msgid "langWebsite"
+msgstr "Chamilo mājas lapa"
+
+msgid "langDocumentation"
+msgstr "Dokumentācija"
+
+msgid "langContribute"
+msgstr "Veicināt / atbalstīt"
+
+msgid "langInfoServer"
+msgstr "Informācija par serveri"
+
+msgid "langOtherCategory"
+msgstr "Cita nodaļa"
+
+msgid "langSendMailToUsers"
+msgstr "Sūtīt e-pastu lietotājiem"
+
+msgid "langExampleXMLFile"
+msgstr "XML faila piemērs"
+
+msgid "langExampleCSVFile"
+msgstr "CSV faila piemērs"
+
+msgid "langCourseSystemCode"
+msgstr "Sistēmas kursa kods"
+
+msgid "langCourseVisualCode"
+msgstr "Kursa vizuālais kods"
+
+msgid "langSystemCode"
+msgstr "Sistēmas kods"
+
+msgid "langVisualCode"
+msgstr "vizuālais kods"
+
+msgid "langAddCourse"
+msgstr "Izveidot kursu"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Administrēt virtuālos kursus"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Izveidot virtuālo kursu"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "Virtuālais kurss lietos to pašu vietu uz servera diska (mapēm un datubāzēm) ko eksistējošais \\\'reālais\\\' kurss"
+
+msgid "langRealCourseCode"
+msgstr "Reālā kursa kods"
+
+msgid "langCourseCreationSucceeded"
+msgstr "Kurss tika veiksmīgi izveidots."
+
+msgid "langYourDokeosUses"
+msgstr "Jūsu Chamilo instalācija izmanto"
+
+msgid "langOnTheHardDisk"
+msgstr "uz cietņa"
+
+msgid "langIsVirtualCourse"
+msgstr "Ir virtuāls kurss"
+
+msgid "langSystemAnnouncements"
+msgstr "Sistēmas paziņojumi"
+
+msgid "langAddAnnouncement"
+msgstr "Ierakstīt jaunu paziņojumu"
+
+msgid "langAnnouncementAdded"
+msgstr "Paziņojums tika pievienots"
+
+msgid "langAnnouncementUpdated"
+msgstr "Paziņojums tika labots"
+
+msgid "langAnnouncementDeleted"
+msgstr "Paziņojums tika izdzēsts"
+
+msgid "langContent"
+msgstr "Saturs"
+
+msgid "PermissionsForNewFiles"
+msgstr "Atļauja jauniem failiem"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "Spēja definēt atļaujas iestatījumus, katram jaunizveidotam failam, ļauj uzlabot drošību pret uzbrukumiem ar hakeriem, augšupielādējot bīstamu saturu uz jūsu portālā. <br>Noklusējuma iestatījums (0550) būtu pietiekams, lai dotu savam serverim saprātīgu aizsardzības līmeni. 
+Esošais formāts izmanto UNIX terminoloģiju Owner-Group-Others with Read-Write-Execute atļaujas. 
+<br>Ja jūs izmantojat Oogie, parūpējaties, lai tie Lietotāji, kuri lietos OpenOffice, var ierakstīt failus Kursa mapē."
+
+msgid "langStudent"
+msgstr "Kursants"
+
+msgid "Guest"
+msgstr "Viesis"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Pieteikties kā"
+
+msgid "langLoginAsThisUser"
+msgstr "Pieteikties"
+
+msgid "SelectPicture"
+msgstr "Atlasīt attēlu"
+
+msgid "DontResetPassword"
+msgstr "Nemainīt paroli"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Līdzdalība attīstībā"
+
+msgid "langCourseAdmin"
+msgstr "kursa administrators"
+
+msgid "langOtherCourses"
+msgstr "citi kursi"
+
+msgid "PlatformLanguageTitle"
+msgstr "Platformas Valoda"
+
+msgid "ServerStatusComment"
+msgstr "Kāda veida serveris ir šis? Šis ieslēgs un izslēgs dažas specifiskas opcijas. Uz izstrādātāju servera ir tulkošanas funkcija, kas parādīs neiztulkotās rindiņas."
+
+msgid "ServerStatusTitle"
+msgstr "Servera tips"
+
+msgid "PlatformLanguages"
+msgstr "Chamilo platformas valoda"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Šis instruments ļauj administrēt valodu izvēlni pieteikšanās (login) lapā. <br>Kā platformas administrators, Jūs nosakiet, kuras valodas būs pieejamas Lietotājiem."
+
+msgid "OriginalName"
+msgstr "Vārds (dzimtajā rakstā)"
+
+msgid "EnglishName"
+msgstr "Vārds (Angļu rakstā)"
+
+msgid "DokeosFolder"
+msgstr "Chamilo mape"
+
+msgid "Properties"
+msgstr "Iestādījumi"
+
+msgid "PlatformConfigSettings"
+msgstr "Chamilo konfigurācijas iestatījumi"
+
+msgid "SettingsStored"
+msgstr "Iestādījumi tika saglabāti"
+
+msgid "InstitutionTitle"
+msgstr "Mācību iestādes / organizācijas nosaukums"
+
+msgid "InstitutionComment"
+msgstr "Mācību iestādes / organizācijas nosaukums (parādīsies augšā pa labi)"
+
+msgid "InstitutionUrlTitle"
+msgstr "Mācību iestādes / organizācijas URL"
+
+msgid "InstitutionUrlComment"
+msgstr "Mācību iestādes / organizācijas URL (saite parādīsies augšā pa labi)"
+
+msgid "SiteNameTitle"
+msgstr "E - macību vides nosaukums"
+
+msgid "SiteNameComment"
+msgstr "E - macību vides nosaukums (parādīsies augšā)"
+
+msgid "emailAdministratorTitle"
+msgstr "Platformas administrators: e-pasts"
+
+msgid "emailAdministratorComment"
+msgstr "Platformas administratora e-pasts (būs redzams apakšā pa kreisi)"
+
+msgid "administratorSurnameTitle"
+msgstr "Platformas administrators: Uzvārds"
+
+msgid "administratorSurnameComment"
+msgstr "Platformas administratora uzvārds (būs redzams apakšā pa kreisi)"
+
+msgid "administratorNameTitle"
+msgstr "Platformas Administrators: Vārds"
+
+msgid "administratorNameComment"
+msgstr "Platformas administratora vārds (būs redzams apakšā ka kreisi)"
+
+msgid "ShowAdministratorDataTitle"
+msgstr "Informācija par Platformas Administratoru lapas apakšā"
+
+msgid "ShowAdministratorDataComment"
+msgstr "Vai rādīt informāciju par Platformas administratoru lapas apakšā?"
+
+msgid "HomepageViewTitle"
+msgstr "Kursa mājas lapas izskats"
+
+msgid "HomepageViewComment"
+msgstr "Kā jūs vēlaties, lai izskatās kursa mājas lapa?"
+
+msgid "HomepageViewDefault"
+msgstr "Izkārtojums divās kolonās. Neaktīvie instrumenti neredzami."
+
+msgid "HomepageViewFixed"
+msgstr "Izkārtojums trijās kolonās. Neaktīvās lietas ir pelēkas (Ikonas paliek savās vietās)"
+
+msgid "Yes"
+msgstr "Jā"
+
+msgid "No"
+msgstr "Nē"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Satura vadības instrumentu saīsne (shortcuts)"
+
+msgid "ShowToolShortcutsComment"
+msgstr "Rādīt Satura vadības instrumentu saīsnes bannerī? <br>[Ļauj pa tiešo pārvietoties starp dažādiem satura instrumentiem kursā]"
+
+msgid "ShowStudentViewTitle"
+msgstr "Kursanta skats"
+
+msgid "ShowStudentViewComment"
+msgstr "Aktivizēt Kursanta skatu? 
+<br>[ Šāda iespēja ļauj Lektoram, mācību satura izstrādes laikā, redzēt kursu tā, kā to redzēs students.]"
+
+msgid "AllowGroupCategories"
+msgstr "Atļaut veidot Grupu nodaļas"
+
+msgid "AllowGroupCategoriesComment"
+msgstr "Atļaut kursu administratoriem veidot nodaļas grupu modulī?"
+
+msgid "PlatformLanguageComment"
+msgstr "Tu vari noteikt platformas valodu citā platformas administrēšanas vietā, arī šeit : <a href=\"languages.php\">Chamilo Platformas Valodas</a>"
+
+msgid "ProductionServer"
+msgstr "Darba serveris"
+
+msgid "TestServer"
+msgstr "Testa Serveris"
+
+msgid "ShowOnlineTitle"
+msgstr "Kuri Lietotāji ir tiešsaistē?"
+
+msgid "AsPlatformLanguage"
+msgstr "kā platformas valoda"
+
+msgid "ShowOnlineComment"
+msgstr "Rādīt personu skaitu, cik ir tiešsaistē?"
+
+msgid "AllowNameChangeTitle"
+msgstr "Atļaut mainīt Lietotājiem viņu Lietotājvārdus ?"
+
+msgid "AllowNameChangeComment"
+msgstr "Vai atļaut lietotājiem mainīt viņu vārdu un uzvārdu?"
+
+msgid "DefaultDocumentQuotumTitle"
+msgstr "Dokumentu instrumenta apjoma kvota (vieta uz cietā diska) pēc noklusējuma"
+
+msgid "DefaultDocumentQuotumComment"
+msgstr "Kāda pēc noklusējuma ir Dokumentu instrumenta kvota?<br> Vēlāk, pēc Kursa izveides,  Jūs <b>varēsiet mainīt</b> šo lielumu <b>katram kursam atsevišķi</b>, dodoties uz sadaļu: Platformas administrēšana > Kursu saraksts > Labot [zīmulīša attēls)"
+
+msgid "ProfileChangesTitle"
+msgstr "Mani dati"
+
+msgid "ProfileChangesComment"
+msgstr "Kuri dati no lietotāju datiem var tikt mainīti?"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Reģistrācija: obligātie lauciņi"
+
+msgid "RegistrationRequiredFormsComment"
+msgstr "Atzīmējiet lauciņus, kuri reģistrējoties ir jāaizpilda obligāti."
+
+msgid "DefaultGroupQuotumTitle"
+msgstr "Grupas kvota pēc noklusējuma"
+
+msgid "DefaultGroupQuotumComment"
+msgstr "Cik liela ir grupas dokumentu rīku kvota pēc noklusējuma?"
+
+msgid "AllowLostPasswordTitle"
+msgstr "Aizmirsusies parole"
+
+msgid "AllowLostPasswordComment"
+msgstr "Vai atļaut lietotājiem pieprasīt aizmirstās paroles?"
+
+msgid "AllowRegistrationTitle"
+msgstr "Reģistrācija platformā"
+
+msgid "AllowRegistrationComment"
+msgstr "Vai atļaut jaunu lietotāju reģistrāciju? Vai lietotāji drīkst veidot jaunus kontus?.<br><b>Jā</b> - nozīmē, ka reģistrācija ir brīvi pieejama mācību vides galvenajā lapā. Pēc reģistrācijas var pieteikties pieejamajos Kursos <br><b>Nē</b> - mācību vides galvenajā lapā reģistrācijas uzraksts vispār nav redzams<br><b>Pēc apstiprināšanas</b> - pieeja kursiem iespējama tikai pēc administrācijas apstiprinājuma ( tas notiek manuāli katra Lietotāja kontā)"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Reģistrēties, kā Lektoram"
+
+msgid "AllowRegistrationAsTeacherComment"
+msgstr "Vai drīkst reģistrēties, kā Lektors (tāds, kas var veidot kursus)?"
+
+msgid "PlatformLanguage"
+msgstr "Platformas valoda"
+
+msgid "Tuning"
+msgstr "Ātrdarbības uzlabošana"
+
+msgid "SplitUsersUploadDirectory"
+msgstr "Split users\' upload directory"
+
+msgid "SplitUsersUploadDirectoryComment"
+msgstr "On high-load portals, where a lot of users are registered and send their pictures, the upload directory (main/upload/users/) might contain too many files for the filesystem to handle (it has been reported with more than 36000 files on a Debian server). Changing this option will enable a one-level splitting of the directories in the upload directory. 9 directories will be used in the base directory and all subsequent users\' directories will be stored into one of these 9 directories. The change of this option will not affect the directories structure on disk, but will affect the behaviour of the Chamilo code, so if you change this option, you have to create the new directories and move the existing directories by yourself on te server. Be aware that when creating and moving those directories, you will have to move the directories of users 1 to 9 into subdirectories of the same name. If you are not sure about this option, it is best not to activate it."
+
+msgid "CourseQuota"
+msgstr "Kursa Kvota <br>( Kursam atvēlētais apjoms uz kopējā cietā diska)"
+
+msgid "EditNotice"
+msgstr "Veidot / Labot galvenās lapas informatīvo tekstu"
+
+msgid "General"
+msgstr "galvenais"
+
+msgid "LostPassword"
+msgstr "Aizmirsusies parole?"
+
+msgid "Registration"
+msgstr "Reģistrācija"
+
+msgid "Password"
+msgstr "Parole"
+
+msgid "InsertLink"
+msgstr "Pievienot vietni (saiti)"
+
+msgid "EditNews"
+msgstr "Labot Ziņas"
+
+msgid "EditCategories"
+msgstr "Labot nodaļas / kategorijas"
+
+msgid "EditHomePage"
+msgstr "Veidot / rediģēt portāla mājas lapas saturu"
+
+msgid "AllowUserHeadingsComment"
+msgstr "Vai atļaut kursu administratoriem definēt lietotāju galvenes, lai varētu saņemt papildus informāciju par Lietotājiem?"
+
+msgid "Platform"
+msgstr "Platforma"
+
+msgid "Course"
+msgstr "Kurss"
+
+msgid "Languages"
+msgstr "Platformā lietotās Valodas"
+
+msgid "Privacy"
+msgstr "Privāttiesības"
+
+msgid "NoticeTitle"
+msgstr "Piezīmes virsraksts"
+
+msgid "NoticeText"
+msgstr "Piezīmes teksts"
+
+msgid "LinkName"
+msgstr "Vietnes (saites) teksts"
+
+msgid "LinkURL"
+msgstr "Vietnes (saites) URL / tīmekļa adrese"
+
+msgid "OpenInNewWindow"
+msgstr "Atvērt jaunā logā"
+
+msgid "langLimitUsersListDefaultMaxComment"
+msgstr "Ekrāni ļauj pievienot Lietotājus kursiem un arī klasēm. Ja saraksts ir garāks par Lietotāju skaitu un nav speciāli filtrēts, tad pēc noklusējuma saraksts sākas ar burtu A"
+
+msgid "Plugins"
+msgstr "Paplašinājumi / Spraudņi"
+
+msgid "HideDLTTMarkupComment"
+msgstr "Paslēpt iezīmi [=...=] , ja valodas mainīgais nav iztulkots"
+
+msgid "Info"
+msgstr "informācija"
+
+msgid "UserAdded"
+msgstr "Lietotājs tika pievienots"
+
+msgid "NoSearchResults"
+msgstr "Nekas netika atrasts"
+
+msgid "UserDeleted"
+msgstr "Lietotājs tika izdzēsts"
+
+msgid "NoClassesForThisCourse"
+msgstr "Nav nevienas klases, kas būtu reģistrētas šajā kursā"
+
+msgid "CourseUsage"
+msgstr "Kursu lietošana"
+
+msgid "NoCoursesForThisUser"
+msgstr "Šis lietotājs nav reģistrējies šajā kursā"
+
+msgid "NoClassesForThisUser"
+msgstr "Šis lietotājs nav reģistrējies šajā klasē"
+
+msgid "NoCoursesForThisClass"
+msgstr "Šī klase nav pievienota šim kursam"
+
+msgid "langOpenToTheWorld"
+msgstr "Brīva pieeja - iespējama no jebkuras vietas pasaulē!"
+
+msgid "OpenToThePlatform"
+msgstr "Atvērta - pieeja atļauta visiem sistēmā reģistrētajiem lietotājiem"
+
+msgid "langPrivate"
+msgstr "Privāta pieeja (saite pieejama lietotājiem no īpaša saraksta)"
+
+msgid "langCourseVisibilityClosed"
+msgstr "Pilnīgi privāti; kurss ir pieejams tikai kursa administratoriem"
+
+msgid "langSubscription"
+msgstr "Reģistrēšanās"
+
+msgid "langUnsubscription"
+msgstr "Atteikšanās"
+
+msgid "CourseAccessConfigTip"
+msgstr "Pēc noklusējuma Jūsu kurss ir publiski pieejams visiem, bet Jūs varat definēt augstāku konfidencialitātes līmeni."
+
+msgid "Tool"
+msgstr "Instruments"
+
+msgid "NumberOfItems"
+msgstr "lietu skaits"
+
+msgid "DocumentsAndFolders"
+msgstr "Dokumenti un mapes"
+
+msgid "Learnpath"
+msgstr "Tēmas nosaukums"
+
+msgid "Exercises"
+msgstr "Uzdevumi"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Mans Plānotājs"
+
+msgid "AllowPersonalAgendaComment"
+msgstr "Vai Lietotājs drīkst ierakstīt personīgos ierakstus <b>\"Kursa notikumu plānotājā\"</b>"
+
+msgid "CurrentValue"
+msgstr "patreizējais stāvoklis"
+
+msgid "CourseDescription"
+msgstr "Kursa apraksts"
+
+msgid "OnlineConference"
+msgstr "Tiešsaistes konference"
+
+msgid "Chat"
+msgstr "Tērzēšana"
+
+msgid "Quiz"
+msgstr "Testi"
+
+msgid "Announcements"
+msgstr "Paziņojumi kursa lietotājiem"
+
+msgid "Links"
+msgstr "Vietnes"
+
+msgid "LearningPath"
+msgstr "Mācību gaita"
+
+msgid "Documents"
+msgstr "Dokumenti"
+
+msgid "UserPicture"
+msgstr "Attēls"
+
+msgid "officialcode"
+msgstr "Kursanata kods"
+
+msgid "Login"
+msgstr "Lietotājvārds"
+
+msgid "UserPassword"
+msgstr "Parole"
+
+msgid "SubscriptionAllowed"
+msgstr "Reģistrēšanās kursā ir atļauta"
+
+msgid "UnsubscriptionAllowed"
+msgstr "Atteikšanās no kursa nav atļauta"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Atļauta"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Aizliegta"
+
+msgid "AddDummyContentToCourse"
+msgstr "Ierakstīt kādus piemēru tekstus šajā kursā"
+
+msgid "DummyCourseCreator"
+msgstr "Izveidot testa kursu ar piemēriem"
+
+msgid "DummyCourseDescription"
+msgstr "Šis iestatījums, šai kursa saturā ievietos piemērus, kas vēlāk jāaizvieto ar īstiem. Tas ir tikai, kā testa pielietojums."
+
+msgid "AvailablePlugins"
+msgstr "Šie ir papildus instalētie sistēmas moduļi. Iespējams piemeklēt papildus moduļus <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
+
+msgid "CreateVirtualCourse"
+msgstr "Izveidot virtuālo kursu"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Parādīt virtuālo kursu sarakstu"
+
+msgid "LinkedToRealCourseCode"
+msgstr "Sasaistīts ar reālā kursa kodu"
+
+msgid "AttemptedCreationVirtualCourse"
+msgstr "Virtulālā kursa veidošana..."
+
+msgid "WantedCourseCode"
+msgstr "Vajadzīgs kursa kods"
+
+msgid "ResetPassword"
+msgstr "Izdomāt jaunu paroli"
+
+msgid "CheckToSendNewPassword"
+msgstr "Pārbaudīt jaunas paroles nosūtīšanu"
+
+msgid "AutoGeneratePassword"
+msgstr "Ģenerēt jaunu paroli automātiski"
+
+msgid "UseDocumentTitleTitle"
+msgstr "Veidojot virsrakstu, izmantot dokumenta nosaukumu"
+
+msgid "UseDocumentTitleComment"
+msgstr "Šis ļaus izmantot virsrakstu dokumenta nosaukumam, nevis dokumenta_vards.ext"
+
+msgid "StudentPublications"
+msgstr "Referāti / Mājas darbi"
+
+msgid "PermanentlyRemoveFilesTitle"
+msgstr "Pavisam izdzēstie faili nevar tikt atjaunoti"
+
+msgid "PermanentlyRemoveFilesComment"
+msgstr "Izdzēšot failu no instrumenta <b>Dokumenti</b>, Jūs to izdzēsīsiet pavisam. <br><b>Atjaunot to vairs nevarēs !</b>."
+
+msgid "ClassName"
+msgstr "Klases nosaukums"
+
+msgid "DropboxMaxFilesizeTitle"
+msgstr "Failu apmaiņas vieta: Maksimālais faila izmērs"
+
+msgid "DropboxMaxFilesizeComment"
+msgstr "Cik liels (baitos) var būt lielākais fails, failu apmaiņas vietā?"
+
+msgid "DropboxAllowOverwriteTitle"
+msgstr "Failu apmaiņas vieta: Vai dokumenti var tikt pārrakstīti ?"
+
+msgid "DropboxAllowOverwriteComment"
+msgstr "Vai oriģinālais dokuments var tikt pārrakstīts, ko kursants vai Lektors augšupielādējis, ja dokumentu nosaukums sakrīt? <br>Ja atbildēsiet \\\'jā\\\' tad nevarēsiet izmantot dokumentu versiju mehānismu."
+
+msgid "DropboxAllowJustUploadTitle"
+msgstr "Failu apmaiņas vieta: Augšupielādēt failu  \"Failu apmaiņas vietas\" savā personīgajā sadaļā (nedaloties ar citiem)?"
+
+msgid "DropboxAllowJustUploadComment"
+msgstr "Atļaut Lektoriem un kursantiem augšupielādēt dokumentus viņu pašu apmaiņas kastēs, nesūtot tos kādam citam.<br>Tas nozīmē = <b>atļaut sūtīt dokumentus sev pašiem</b>"
+
+msgid "DropboxAllowStudentToStudentTitle"
+msgstr "Failu apmaiņas vieta: Kursants <-> Kursants"
+
+msgid "DropboxAllowStudentToStudentComment"
+msgstr "Atļaut kursantiem sūtīt dokumentus savā starpā (peer 2 peer, P2P) Kursanti varēs izmantot šo vietni mazāk svarīgu dokumentu, anketu, risinājumu, sūtīšanai. <br>Ja Jūs to neatļaujat, tad kursanti varēs sūtīt dokumentus tikai Lektoriem."
+
+msgid "DropboxAllowMailingTitle"
+msgstr "Failu apmaiņas vieta: Atļauta sūtīšana"
+
+msgid "DropboxAllowMailingComment"
+msgstr "Ar sūtīšanas funkcijas palīdzību, Jūs varat sūtīt katram Kursantam personīgu dokumentu."
+
+msgid "PermissionsForNewDirs"
+msgstr "Atļaujas jauniem katalogiem / mapēm"
+
+msgid "PermissionsForNewDirsComment"
+msgstr "Spēja definēt atļaujas iestatījumus, katram jaunizveidotam failam, ļauj uzlabot drošību pret uzbrukumiem ar hakeriem, augšupielādējot bīstamu saturu uz jūsu portālā.<br>Noklusējuma iestatījums (0770) būtu pietiekams, lai dotu savam serverim saprātīgu aizsardzības līmeni. Esošais formāts izmanto UNIX terminoloģiju Owner-Group-Others with Read-Write-Execute atļaujas."
+
+msgid "UserListHasBeenExported"
+msgstr "Lietotāju saraksts tika exportēts"
+
+msgid "ClickHereToDownloadTheFile"
+msgstr "Klikšķini šeit, lai lejupielādētu failu"
+
+msgid "administratorTelephoneTitle"
+msgstr "Platformas administrators: Tālrunis"
+
+msgid "administratorTelephoneComment"
+msgstr "Platformas administratora tālruņa numurs"
+
+msgid "SendMailToNewUser"
+msgstr "Sūtīt e-pastu jaunam lietotājam"
+
+msgid "ExtendedProfileTitle"
+msgstr "Izvērstie lietotāja dati"
+
+msgid "ExtendedProfileComment"
+msgstr "Ja šis ir ieslēgts, Lietotāji var aizpildīt papildus datus par sevi: Sadaļās: Mani sertifikāti / Mani diplomi / Ko es varu papildus darīt ... un  Personīgie sasniegumi."
+
+msgid "Classes"
+msgstr "Klases"
+
+msgid "UserUnsubscribed"
+msgstr "Lietotājs ir izdzēsts no sistēmas"
+
+msgid "CannotUnsubscribeUserFromCourse"
+msgstr "Šis Lietotājs nevar attiekties no kursa, jo viņš ir viens no kursa administratoriem - Lektoriem."
+
+msgid "InvalidStartDate"
+msgstr "Ir iestatīts nepareizs sākuma datums."
+
+msgid "InvalidEndDate"
+msgstr "Ir iestatīts nepareizs beigu datums"
+
+msgid "DateFormatLabel"
+msgstr "(diena/mēn/gads st:min)"
+
+msgid "HomePageFilesNotWritable"
+msgstr "Mājas lapas faili nav ar rakstīšanas tiesībām!"
+
+msgid "PleaseEnterNoticeText"
+msgstr "Lūdzu rakstiet piezīmes tekstu"
+
+msgid "PleaseEnterNoticeTitle"
+msgstr "Lūdzu rakstiet piezīmes virsrakstu"
+
+msgid "PleaseEnterLinkName"
+msgstr "Lūdzu rakstiet vietnes (saites) nosaukumu"
+
+msgid "InsertThisLink"
+msgstr "Ievietot šo vietni (saiti)"
+
+msgid "FirstPlace"
+msgstr "Pirmajā vietā"
+
+msgid "After"
+msgstr "pēc"
+
+msgid "DropboxAllowGroupTitle"
+msgstr "Failu apmaiņas vieta: grupa atļauta"
+
+msgid "DropboxAllowGroupComment"
+msgstr "Lietotāji var sūtīt failus grupām"
+
+msgid "ClassDeleted"
+msgstr "Klase tika izdzēsta"
+
+msgid "ClassesDeleted"
+msgstr "Klases tika izdzēstas"
+
+msgid "NoUsersInClass"
+msgstr "Klasē nav neviena lietotāja"
+
+msgid "UsersAreSubscibedToCourse"
+msgstr "Iezīmētie lietotāji tika piereģistrēti atzīmētajos kursos"
+
+msgid "InvalidTitle"
+msgstr "Lūdzu ierakstiet virsrakstu"
+
+msgid "CatCodeAlreadyUsed"
+msgstr "Šī nodaļa jau tiek izmantota"
+
+msgid "PleaseEnterCategoryInfo"
+msgstr "Lūdzu ievadiet nodaļas kodu un nosaukumu"
+
+msgid "DokeosHomepage"
+msgstr "Chamilo mājaslapa"
+
+msgid "DokeosForum"
+msgstr "Chamilo forums"
+
+msgid "RegisterYourPortal"
+msgstr "Piereģistrējiet savu portālu"
+
+msgid "DokeosExtensions"
+msgstr "Chamilo paplašinājumi"
+
+msgid "ShowNavigationMenuTitle"
+msgstr "Rādīt kursa navigācijas izvēlni"
+
+msgid "ShowNavigationMenuComment"
+msgstr "Rādīt navigācijas izvēlni, kas ļauj vieglāk pārvietoties no vienas kursa sadaļas uz otru."
+
+msgid "LoginAs"
+msgstr "Pieteikties kā cits lietotājs"
+
+msgid "ImportClassListCSV"
+msgstr "Importēt klases sarakstu ar CSV palīdzību"
+
+msgid "ShowOnlineWorld"
+msgstr "Parādīt online lietotāju skaitu platformas autorizācijas lapā <br>(redzams visiem platformas apmeklētājiem <b>no visas pasaules</b>)"
+
+msgid "ShowOnlineUsers"
+msgstr "Parādīt online lietotāju skaitu visās platformas lapās (redzams apmeklētājiem, kas autorizējušies)"
+
+msgid "ShowOnlineCourse"
+msgstr "Parādīt online lietotāju skaitu šajā kursā"
+
+msgid "ShowIconsInNavigationsMenuTitle"
+msgstr "Vai navigācijas izvēlnē rādīt ikonas?<br>(Ikonas - pieejamo kursa instrumentu raksturojošie attēli. Parādās augšā kreisā pusē)"
+
+msgid "SeeAllRolesAllLocationsForSpecificRight"
+msgstr "Skatīt visus darbības veidus un pielietojuma vietas konkrētam pieejas nosacījumam"
+
+msgid "SeeAllRightsAllRolesForSpecificLocation"
+msgstr "Skatīt visus darbības veidus un pieejas nosacījumus konkrētai pielietojuma vietai"
+
+msgid "ClassesUnsubscribed"
+msgstr "Izvēlētās klases tika atreģistrētas no izvēlētajiem kursiem"
+
+msgid "ClassesSubscribed"
+msgstr "Izvēlētās klases tika piereģistrētas izvēlētajiem kursiem"
+
+msgid "RoleId"
+msgstr "Darbības veida ID"
+
+msgid "RoleName"
+msgstr "Darbības veida nosaukums"
+
+msgid "RoleType"
+msgstr "Veids"
+
+msgid "RightValueModified"
+msgstr "Vērtība tika izmainīta."
+
+msgid "MakeAvailable"
+msgstr "Padarīt pieejamu"
+
+msgid "MakeUnavailable"
+msgstr "Padarīt nepieejamu"
+
+msgid "Stylesheets"
+msgstr "Lapas noformējums (CSS)"
+
+msgid "DefaultDokeosStyle"
+msgstr "Klasiskais / noklusētais Chamilo stils"
+
+msgid "ShowIconsInNavigationsMenuComment"
+msgstr "Vai navigācijas izvēlnei būtu jārāda savādākas rīku ikonas?"
+
+msgid "Plugin"
+msgstr "Spraudnis"
+
+msgid "MainMenu"
+msgstr "Galvenā izvēlne"
+
+msgid "MainMenuLogged"
+msgstr "Galvenā izvēlne pēc autorizēšanās"
+
+msgid "Banner"
+msgstr "Baneris"
+
+msgid "ImageResizeTitle"
+msgstr "Izmainīt lietotāja augšupielādēto attēlu izmērus"
+
+msgid "ImageResizeComment"
+msgstr "Lietotāja attēlu izmēri var tikt mainīti augšupielādējot, ja PHP ir savienots ar <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD bibliotēku</a>. Ja GD nav pieejams, tad šis iestatījums tiks  ignorēts."
+
+msgid "MaxImageWidthTitle"
+msgstr "Maksimālais lietotāja attēla platums"
+
+msgid "MaxImageWidthComment"
+msgstr "Lietotāja portreta maksimālais platums pikseļos. <br>Šis uzstādījums attiecas tikai tad, ja lietotāja attēla izmēri ir jāmaina to augšupielādējot."
+
+msgid "MaxImageHeightTitle"
+msgstr "Maksimālais lietotāja attēla augstums"
+
+msgid "MaxImageHeightComment"
+msgstr "Lietotāja portreta maksimālais augstums pikseļos. <br>Šis uzstādījums attiecas tikai tad, ja lietotāja attēla izmēri ir jāmaina to augšupielādējot."
+
+msgid "YourVersionNotUpToDate"
+msgstr "Jūsu versija nav atjaunināta"
+
+msgid "YourVersionIs"
+msgstr "Jūsu versija ir"
+
+msgid "PleaseVisitDokeos"
+msgstr "Lūdzu apmeklējiet Chamilo mājas lapu"
+
+msgid "VersionUpToDate"
+msgstr "Jūsu versija ir atjaunināta"
+
+msgid "ConnectSocketError"
+msgstr "Tīkla pieslēguma kļūda"
+
+msgid "SocketFunctionsDisabled"
+msgstr "Tīkla pieslēgums ir atjaunots"
+
+msgid "ShowEmailAddresses"
+msgstr "Rādīt epasta adreses"
+
+msgid "ShowEmailAddressesComment"
+msgstr "Rādīt e-pasta adreses lietotājiem"
+
+msgid "LatestVersionIs"
+msgstr "Pēdējā versija ir"
+
+msgid "langConfigureExtensions"
+msgstr "Chamilo PRO"
+
+msgid "langActiveExtensions"
+msgstr "Aktivizēt šo servisu"
+
+msgid "langVisioconf"
+msgstr "Chamilo LIVE"
+
+msgid "langVisioconfDescription"
+msgstr "Chamilo LIVE ir videokonferenču rīks, kas piedāvā: prezentāciju slaidu apmaiņu, tāfele ar iespēju zīmēt un rakstīt virsū slaidiem, audio / video duplekss un tērzēšana. Tā nodrošināšanai ir nepieciešams vismaz Flash Player 9 vai augstāks. Instruments piedāvā 2 veidu konferences iespējas: viens daudziem, un daudzi daudziem."
+
+msgid "langPpt2lp"
+msgstr "Chamilo RAPID"
+
+msgid "langPpt2lpDescription"
+msgstr "Chamilo RAPID ir ātrs un spēcīgs Mācību satura veidošanas līdzeklis. Tas ļauj jums pārvērst Powerpoint prezentācijas un OpenOffice ekvivalenti, SCORM saskanīgos e-kursos. 
+Pēc konversijas, Jums ir iespēja slaidiem pievienot audio piezīmes par to saturu. Starp slaidiem pievienot lapas, testus un mijiedarbību darbības, piemēram, forumu diskusijām un mājas darbu augšupielādi. Katrs prezentācijas slaids kļūst par neatkarīgu mācību kursa stundu . Viss jaunizveidotais kurss rada precīzu SCORM ziņojumu turpmākam mācību procesam."
+
+msgid "langBandWidthStatistics"
+msgstr "Joslas izmantošanas statistika"
+
+msgid "langBandWidthStatisticsDescription"
+msgstr "MRTG ļauj iepazīties ar uzlabotas statistikas datiem par servera stāvokli pēdējo 24 stundu laikā."
+
+msgid "ServerStatistics"
+msgstr "Servera statistika"
+
+msgid "langServerStatisticsDescription"
+msgstr "AWStats ļauj iepazīties ar statistiku par platformu: apmeklētāji, lapu apskati, atsauces ..."
+
+msgid "SearchEngine"
+msgstr "Chamilo LIBRARY"
+
+msgid "langSearchEngineDescription"
+msgstr "Chamilo LIBRARY ir Meklēšanas instruments, kas piedāvā daudzkritēriju indeksācija un meklēšanu. Tā ir daļa no paplašinājuma \"Chamilo Medicīna\""
+
+msgid "langListSession"
+msgstr "Kursa sesiju saraksts"
+
+msgid "AddSession"
+msgstr "Pievienot mācību sesiju"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Importēt sesiju sarakstu"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Eksportēt sesiju sarakstu"
+
+msgid "SessionName"
+msgstr "Sesijas nosaukums"
+
+msgid "langNbCourses"
+msgstr "Kursi"
+
+msgid "DateStart"
+msgstr "Sākuma datums"
+
+msgid "DateEnd"
+msgstr "Beigu datums"
+
+msgid "CoachName"
+msgstr "Asistenta vārds"
+
+msgid "SessionList"
+msgstr "Kursu sesiju saraksts"
+
+msgid "SessionNameIsRequired"
+msgstr "Sesijai ir nepieciešams nosaukums"
+
+msgid "NextStep"
+msgstr "Nākošais solis"
+
+msgid "keyword"
+msgstr "Atslēgas vārds"
+
+msgid "Confirm"
+msgstr "Apstiprināt"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Dzēst lietotājus no kursa"
+
+msgid "MissingClassName"
+msgstr "Pazudis grupas nosaukums"
+
+msgid "ClassNameExists"
+msgstr "Grupas nosaukums jau eksistē"
+
+msgid "ImportCSVFileLocation"
+msgstr "CSV faila importēšanas vieta"
+
+msgid "ClassesCreated"
+msgstr "Grupas ir izveidotas"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Kļūda failu importēšanas laikā"
+
+msgid "ServiceActivated"
+msgstr "Serviss aktivizēts"
+
+msgid "ActivateExtension"
+msgstr "Pieslēgt pakalpojumu / servisu"
+
+msgid "InvalidExtension"
+msgstr "Kļūdains faila paplašinājums"
+
+msgid "VersionCheckExplanation"
+msgstr "Lai ļautu versiju pārbaudīt automātiski, Jums portāls ir jāreģistrē vietnē <b>chamilo.org.</b><br> Reģistrācijā iegūtā informācija ir tikai iekšējai lietošanai un tikai apkopos datus, kas būs publiski pieejami ( portālu kopskaits, kopējais Chamilo kursu skaits, kopējais Chamilo lietotāju skaits, ...) (skatīt <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>)<br>Reģistrējoties, arī Jūs tiksiet iekļauti kopējā pasaules sarakstā -    (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>)<br>Tai pašā laikā Reģistrācija ir viegla: Jums tikai jāuzklikšķina uz versijas pārbaudes pogas.<br>
+Ja Jūs nevēlaties, lai dati par Jums parādās šajā sarakstā, Jums ir jāiezīmē rūtiņa zemāk."
+
+msgid "AfterApproval"
+msgstr "Pēc apstiprināšanas"
+
+msgid "StudentViewEnabledTitle"
+msgstr "Ieslēgt kursanta skatu"
+
+msgid "StudentViewEnabledComment"
+msgstr "Ieslēgt \'Kursanta skatu\' kursa un platformas administratoriem"
+
+msgid "TimeLimitWhosonlineTitle"
+msgstr "Laika limits \"ON-LINE\" bezdarbības (pēdējais taustiņa klikšķis) periodam"
+
+msgid "TimeLimitWhosonlineComment"
+msgstr "Šis termiņš noteiks, cik sekundes pēc Lietotāja pēdējās darbības portālā, Lietotājs tiks uzskatīts par izgājušu no *online*"
+
+msgid "ExampleMaterialCourseCreationTitle"
+msgstr "Piemēra materiāls par mācību izveidi"
+
+msgid "ExampleMaterialCourseCreationComment"
+msgstr "Ievietot automātiski saturā, piemēra materiālu, kad ir izveidots jauns kurss"
+
+msgid "AccountValidDurationTitle"
+msgstr "Konta derīgums"
+
+msgid "AccountValidDurationComment"
+msgstr "Lietotāja konts ir derīgs šo dienu skaitu pēc izveides"
+
+msgid "UseSessionModeTitle"
+msgstr "Lietot apmācību sesijas"
+
+msgid "UseSessionModeComment"
+msgstr "Treniņu sesijas izmanto citus mācību principus kursu ietvaros. <br>Sesijās ir dažādu lomu sadalījums - Autors, Lektors, Kursants. Katrs treneris dod apmācību noteiktā laika posmā, ko sauc par * mācību sesiju *, konkrētām Kursantu kopumam, kurš nav sajaukts ar citām Kursantu grupām."
+
+msgid "HomepageViewActivity"
+msgstr "Aktivitātes skats (pēc noklusējuma)<br> [Instrumentu sadalījums horizontāli pa pielietojuma grupām]"
+
+msgid "HomepageView2column"
+msgstr "Skats - instrumentu izvietojums divās kolonās"
+
+msgid "HomepageView3column"
+msgstr "Skats - instrumentu izvietojums trīs kolonās"
+
+msgid "AllowUserHeadings"
+msgstr "Atļaut lietotāju galvenes (headings)"
+
+msgid "IconsOnly"
+msgstr "Tikai ikonas"
+
+msgid "TextOnly"
+msgstr "Tikai teksts"
+
+msgid "IconsText"
+msgstr "Ikonas un teksts"
+
+msgid "EnableToolIntroductionTitle"
+msgstr "Dot iespēju apgūt instrumentu pielietojumu (HELP\'s)"
+
+msgid "EnableToolIntroductionComment"
+msgstr "Ieslēgt iespēju apgūt instrumentu pielietojumu katra instrumenta mājas lapā."
+
+msgid "BreadCrumbsCourseHomepageTitle"
+msgstr "Atpakaļ ceļš uz kursa mājas lapu"
+
+msgid "BreadCrumbsCourseHomepageComment"
+msgstr "Atpakaļ ceļš ir horizontāla saite - navigācija, parasti novietots kursa lapas kreisā augšējā daļā. Atzīmējot šo opciju, navigācija būs redzama"
+
+msgid "Comment"
+msgstr "Komentārs"
+
+msgid "Version"
+msgstr "Versija"
+
+msgid "LoginPageMainArea"
+msgstr "Pieteikšanās lapas galvenais lauks"
+
+msgid "LoginPageMenu"
+msgstr "Pieteikšanās lapas izvēlne"
+
+msgid "CampusHomepageMainArea"
+msgstr "Portāla mājas lapas galvenais lauks"
+
+msgid "CampusHomepageMenu"
+msgstr "Portāla mājaslapas izvēlne"
+
+msgid "MyCoursesMainArea"
+msgstr "Kursu galvenais lauks"
+
+msgid "MyCoursesMenu"
+msgstr "Kursu izvēlne"
+
+msgid "Header"
+msgstr "Galvene"
+
+msgid "Footer"
+msgstr "Kājene (portāla lapas apakšējā daļa)"
+
+msgid "PublicPagesComplyToWAITitle"
+msgstr "Publisko lapu atbilstība WAI"
+
+msgid "PublicPagesComplyToWAIComment"
+msgstr "WAI (Web Accessibility Initiative) ir iniciatīva, padarīt internetu daudz pieejamāku. Izvēloties šo opciju, publiskās Chamilo lapas kļūs daudz pieejamākas. Tas arī nozīmē, ka dažu portālu publisko lapu saturs var būt atšķirīgs."
+
+msgid "VersionCheck"
+msgstr "Pārbaudīt platformas versiju"
+
+msgid "Active"
+msgstr "Aktīvs"
+
+msgid "Inactive"
+msgstr "Pasīvs"
+
+msgid "SessionOverview"
+msgstr "Sesiju pārskats"
+
+msgid "SubscribeUserIfNotAllreadySubscribed"
+msgstr "Pievienot lietotāju apmācībai tikai tad, ja tas vēl nav šeit reģistrēts"
+
+msgid "UnsubscribeUserIfSubscriptionIsNotInFile"
+msgstr "Izņemt lietotāju no mācībām, ja viņa vārds nav sarakstā"
+
+msgid "DeleteSelectedSessions"
+msgstr "Dzēst atzīmētās sesijas"
+
+msgid "CourseListInSession"
+msgstr "Kursi šajā sesijā"
+
+msgid "UnsubscribeCoursesFromSession"
+msgstr "Atvienot atzīmētos kursus no šīs sesijas"
+
+msgid "NbUsers"
+msgstr "Lietotāji"
+
+msgid "SubscribeUsersToSession"
+msgstr "Pievienot lietotājus šai sesijai"
+
+msgid "UserListInPlatform"
+msgstr "Portāla lietotāju saraksts"
+
+msgid "UserListInSession"
+msgstr "Šajā sesijā reģistrēto Lietotāju Saraksts"
+
+msgid "CourseListInPlatform"
+msgstr "Kursu saraksts"
+
+msgid "Host"
+msgstr "Procesa vadība"
+
+msgid "UserOnHost"
+msgstr "Lietotāja vārds"
+
+msgid "FtpPassword"
+msgstr "FTP parole"
+
+msgid "PathToLzx"
+msgstr "Ceļš uz LZX failiem"
+
+msgid "WCAGContent"
+msgstr "Teksts"
+
+msgid "SubscribeCoursesToSession"
+msgstr "Pievienot Kursus šai sesijai."
+
+msgid "DateStartSession"
+msgstr "Sākuma datums"
+
+msgid "DateEndSession"
+msgstr "Beigu datums"
+
+msgid "EditSession"
+msgstr "Rediģēt šo sesiju"
+
+msgid "VideoConferenceUrl"
+msgstr "Ceļš uz dzīvo konferenci"
+
+msgid "VideoClassroomUrl"
+msgstr "Ceļš uz tiešo konferenci klasē"
+
+msgid "ReconfigureExtension"
+msgstr "Pārveidot paplašinājumus"
+
+msgid "ServiceReconfigured"
+msgstr "Pārveidotie servisi"
+
+msgid "ChooseNewsLanguage"
+msgstr "Izvēlēties ziņu valodu"
+
+msgid "Ajax_course_tracking_refresh"
+msgstr "Kopējais kursā patērētais laiks"
+
+msgid "Ajax_course_tracking_refresh_comment"
+msgstr "Šī iespēja tiek izmantota, lai aprēķinātu reālo laiku, ko lietotājs pavadījis apmācību procesā. <br>Laukā vērtību atjaunināšanas intervāls ir sekundēs. Lai deaktivizētu šo iespēju, atstājiet  noklusējuma vērtību 0 ."
+
+msgid "EditLink"
+msgstr "Rediģēt hipersaiti"
+
+msgid "FinishSessionCreation"
+msgstr "Beigt sesijas izveidi"
+
+msgid "VisioRTMPPort"
+msgstr "Videokonferences RTMTP protokola ports"
+
+msgid "SessionNameAlreadyExists"
+msgstr "Sesijas nosaukums jau eksistē"
+
+msgid "NoClassesHaveBeenCreated"
+msgstr "Klases netika izveidotas"
+
+msgid "ThisFieldShouldBeNumeric"
+msgstr "Šim laukam jābūt ciparos"
+
+msgid "UserLocked"
+msgstr "Lietotājs bloķēts"
+
+msgid "UserUnlocked"
+msgstr "Lietotājs atbloķēts"
+
+msgid "CannotDeleteUser"
+msgstr "Tu nevari dzēst šo lietotāju"
+
+msgid "SelectedUsersDeleted"
+msgstr "Atzīmētie lietotāji izdzēsti"
+
+msgid "SomeUsersNotDeleted"
+msgstr "Daži lietotāji netika izdzēsti"
+
+msgid "ExternalAuthentication"
+msgstr "Ārējā autentifikācija"
+
+msgid "RegistrationDate"
+msgstr "Reģistrācijas datums"
+
+msgid "UserUpdated"
+msgstr "Lietotājs atjaunināts"
+
+msgid "HomePageFilesNotReadable"
+msgstr "Mājas lapas faili nav lasāmi"
+
+msgid "Choose"
+msgstr "Izvēlies"
+
+msgid "ModifySessionCourse"
+msgstr "Rediģēt sesijas apmācības"
+
+msgid "CourseSessionList"
+msgstr "Kursi šajā sesijā"
+
+msgid "SelectACoach"
+msgstr "Atzīmēt Lektoru"
+
+msgid "UserNameUsedTwice"
+msgstr "Lietotājvārds ir lietots divreiz"
+
+msgid "UserNameNotAvailable"
+msgstr "Šis Lietotājvārds nav pieejams"
+
+msgid "UserNameTooLong"
+msgstr "Lietotāja vārds ir par garu"
+
+msgid "WrongStatus"
+msgstr "Šis statuss neeksistē"
+
+msgid "ClassNameNotAvailable"
+msgstr "Šis grupas nosaukums nav pieejams"
+
+msgid "FileImported"
+msgstr "Fails ir importēts"
+
+msgid "WhichSessionToExport"
+msgstr "Izvēlēties sesiju eksportam"
+
+msgid "AllSessions"
+msgstr "Visas sesijas"
+
+msgid "CodeDoesNotExists"
+msgstr "Šis kods neeksistē"
+
+msgid "UnknownUser"
+msgstr "Nezināms lietotājs"
+
+msgid "UnknownStatus"
+msgstr "Nezināms statuss"
+
+msgid "SessionDeleted"
+msgstr "Sesija ir izdzēsta"
+
+msgid "CourseDoesNotExist"
+msgstr "Šis Kurss neeksistē"
+
+msgid "UserDoesNotExist"
+msgstr "Šis lietotājs neeksistē"
+
+msgid "ButProblemsOccured"
+msgstr "bet problēmas radās"
+
+msgid "UsernameTooLongWasCut"
+msgstr "Šis Lietotājvārds tika saīsināts"
+
+msgid "NoInputFile"
+msgstr "Fails netika nosūtīts"
+
+msgid "StudentStatusWasGivenTo"
+msgstr "Izglītojamā statuss ir piešķirts"
+
+msgid "WrongDate"
+msgstr "Nepareizs datuma formāts (yyyy-mm-dd)"
+
+msgid "ThisIsAutomaticEmailNoReply"
+msgstr "Šis ir automātiski veidots e-pasta ziņojums. <br>Lūdzu uz to neatbildēt."
+
+msgid "YouWillSoonReceiveMailFromCoach"
+msgstr "Jūs drīz saņemsiet e-pastu no sava Kursu vadītāja"
+
+msgid "SlideSize"
+msgstr "Slaidu izmērs"
+
+msgid "EphorusPlagiarismPrevention"
+msgstr "Ephorus plaģiāta profilakse"
+
+msgid "CourseTeachers"
+msgstr "Kursa Lektori"
+
+msgid "UnknownTeacher"
+msgstr "Nezināms Lektors"
+
+msgid "HideDLTTMarkup"
+msgstr "Slēpt DLTT marķējumu"
+
+msgid "ListOfCoursesOfSession"
+msgstr "Kursu saraksts sesijā"
+
+msgid "UnsubscribeSelectedUsersFromSession"
+msgstr "Atreģistrēt atzīmētos Lietotājus no sesijas"
+
+msgid "ShowDifferentCourseLanguageComment"
+msgstr "Galvenajā lapā eksponētajā apmācību sarakstā, rādīt pie kursa nosaukuma, kādā valodā tas ir."
+
+msgid "ShowEmptyCourseCategoriesComment"
+msgstr "Rādīt galvenajā lapā Mācību/priekšmetu kategorijas, pat ja tās ir tukšas."
+
+msgid "ShowEmptyCourseCategories"
+msgstr "Rādīt tukšās kursu kategorijas"
+
+msgid "XMLNotValid"
+msgstr "XML dokuments nav derīgs"
+
+msgid "ForTheSession"
+msgstr "sesijai"
+
+msgid "AllowEmailEditorTitle"
+msgstr "Aktivizēts tiešsaistes e-pasta redaktors"
+
+msgid "AllowEmailEditorComment"
+msgstr "Ja šī opcija ir aktivizēta, noklikšķinot uz e-pasta adreses, tiks atvērts online pasta redaktors."
+
+msgid "AddCSVHeader"
+msgstr "Pievienot CSV galveni?"
+
+msgid "YesAddCSVHeader"
+msgstr "Jā, pievienot CSV galveni. Tā definēs lauku, kurš ir svarīgs, ja Jūs vēlaties importēt failu citā Chamilo portālā."
+
+msgid "ListOfUsersSubscribedToCourse"
+msgstr "Lietotāju saraksts, kuri ir pierakstījušies uz apmācībām"
+
+msgid "NumberOfCourses"
+msgstr "Kursi"
+
+msgid "ShowDifferentCourseLanguage"
+msgstr "Rādīt mācību valodas"
+
+msgid "VisioRTMPTunnelPort"
+msgstr "Videokonferences RTMTP protokola tuneļa ports"
+
+msgid "name"
+msgstr "Vārds"
+
+msgid "Security"
+msgstr "Drošība"
+
+msgid "UploadExtensionsListType"
+msgstr "Filtrēšanas veids dokumentu augšupielādēšanai"
+
+msgid "UploadExtensionsListTypeComment"
+msgstr "Vai vēlaties izmantot filtrēšanai melno vai balto sarakstu ?  Lai saņemtu sīkāku informāciju, skatīt melnā vai baltā saraksta aprakstu zemāk"
+
+msgid "Blacklist"
+msgstr "Melnais saraksts"
+
+msgid "Whitelist"
+msgstr "Baltais saraksts"
+
+msgid "UploadExtensionsBlacklist"
+msgstr "Melnā saraksta iestatījumi"
+
+msgid "UploadExtensionsWhitelist"
+msgstr "Baltā saraksta iestatījumi"
+
+msgid "UploadExtensionsBlacklistComment"
+msgstr "Melnais saraksts tiek izmantots, lai filtrētu failu paplašinājumus, jebkuru failu atdalīšanai, kuru paplašinājumi atrodas melnajā sarakstā zemāk. <br><br>The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following: exe;com;bat;scr;php. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn\\\'t matter."
+
+msgid "UploadExtensionsWhitelistComment"
+msgstr "Baltais saraksts<br><br>The whitelist is used to filter the files extensions by removing (or renaming) any file which extension does *NOT* figure in the whitelist below. It is generally considered as a safer but more restrictive approach to filtering. The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following: htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw . Files without extension are accepted. Letter casing (uppercase/lowercase) doesn\'t matter."
+
+msgid "UploadExtensionsSkip"
+msgstr "Uzvedības filtrēšana ( izlaist / pārsaukt)"
+
+msgid "UploadExtensionsReplaceBy"
+msgstr "Paplašinājuma nomaiņa"
+
+msgid "Remove"
+msgstr "Izņemt"
+
+msgid "Rename"
+msgstr "Pārdēvēt"
+
+msgid "ShowNumberOfCoursesComment"
+msgstr "Pie mācību priekšmetu/kategoriju mapēm, rādīt tajās esošo Kursu skaitu."
+
+msgid "EphorusLeadersInAntiPlagiarism"
+msgstr "<b>Līderi kustībā pret plaģiātismu</b>"
+
+msgid "EphorusClickHereForInformationsAndPrices"
+msgstr "Noklikšķiniet šeit, lai iegūtu vairāk informācijas un cenas"
+
+msgid "NameOfTheSession"
+msgstr "Sesijas nosaukums"
+
+msgid "NoSessionsForThisUser"
+msgstr "Lietotājs nav piereģistrēts sesijai"
+
+msgid "DisplayCategoriesOnHomepageTitle"
+msgstr "Rādīt kategorijas mācību vides sākuma lapā."
+
+msgid "DisplayCategoriesOnHomepageComment"
+msgstr "Šī opcija dod iespēju rādīt, vai paslēpt, apmācību kategorijas portāla galvenajā lapā - mācību vides sākumlapā"
+
+msgid "ShowTabsTitle"
+msgstr "Cilnes ( sadaļas) Lietotāja darba vides galvenē - augšējā daļā"
+
+msgid "ShowTabsComment"
+msgstr "Atzīmējiet lauciņos tās darba lapu cilnes, kuras vēlaties redzēt Lietotāja darba vides galvenē. <br>Pieeja neatzīmētajām cilnēm parādīsies Portāla galvenās lapas labās puses izvēlnē un lapā Mani kursi."
+
+msgid "DefaultForumViewTitle"
+msgstr "Diskusijas skats pēc noklusējuma"
+
+msgid "DefaultForumViewComment"
+msgstr "Izvēlēties, kura būtu noklusējuma opcija, veidojot jaunu forumu.<br> Jebkurš Lektors tomēr var izvēlēties atšķirīgu skatījumu uz katru atsevišķu forumu"
+
+msgid "TabsMyCourses"
+msgstr "Cilne - Mani kursi"
+
+msgid "TabsCampusHomepage"
+msgstr "Cilne - Mācību vides sākumlapa"
+
+msgid "TabsReporting"
+msgstr "Cilne - Atskaites par padarīto manos kursos"
+
+msgid "TabsPlatformAdministration"
+msgstr "Cilne - Platformas Administrēšana"
+
+msgid "NoCoursesForThisSession"
+msgstr "Šajā sesijā nav kursu"
+
+msgid "NoUsersForThisSession"
+msgstr "Nav Lietotāju šajā sesijā"
+
+msgid "LastNameMandatory"
+msgstr "Uzvārda laiciņš ir jāaizpilda"
+
+msgid "FirstNameMandatory"
+msgstr "Vārda lauciņš ir jāaizpilda"
+
+msgid "EmailMandatory"
+msgstr "E-pasta lauciņš ir jāaizpilda"
+
+msgid "TabsMyAgenda"
+msgstr "Cilne - Mans plānotājs"
+
+msgid "NoticeWillBeNotDisplayed"
+msgstr "Piezīme netiks parādīta Mācību vides sākuma lapā."
+
+msgid "LetThoseFieldsEmptyToHideTheNotice"
+msgstr "Lai piezīme nebūtu redzama, atstājiet šos lauciņus tukšus"
+
+msgid "PlatformCharsetTitle"
+msgstr "Rakstzīmju kopa"
+
+msgid "PlatformCharsetComment"
+msgstr "Rakstzīmju kopa ir tas, ko kodēšanas sistēma, kā atsevišķu valodu var parādīt Chamilo platformā. Piemēram, ja jūs izmantojat krievu vai japāņu rakstzīmes, jūs varētu būt nepieciešamība kodējumu mainīt. Visām angļu, latīņu un Rietumeiropas rakstzīmēm, noklusējuma kods ir UTF-8. <b>Latviešu burtu rādīšanai jālieto UTF-8</b>"
+
+msgid "ExtendedProfileRegistrationTitle"
+msgstr "Papildus informatīvie lauki profila reģistra lapā."
+
+msgid "ExtendedProfileRegistrationComment"
+msgstr "Kuri no šiem paplašinātā profila laukiem ir pieejami lietotājiem reģistrācijas procesā? Tas nozīmē, ka paplašinātais profils ir jāaktivizē (sk. iepriekš)."
+
+msgid "ExtendedProfileRegistrationRequiredTitle"
+msgstr "Nepieciešamie paplašinātā profila lauki reģistrācijas lapā"
+
+msgid "ExtendedProfileRegistrationRequiredComment"
+msgstr "Kurš no šiem laukiem paplašinātajā profilā ir nepieciešams lietotāja reģistrācijas procesā? <br>Tas nozīmē, ka paplašinātais profils ir aktivizēts un ka lauks ir pieejams arī reģistrācijas veidlapā (sk. iepriekš)."
+
+msgid "NoReplyEmailAddress"
+msgstr "E-pasta adrese vēstulēm, uz kurām nav jāatbild"
+
+msgid "NoReplyEmailAddressComment"
+msgstr "Šī ir e-pasta adrese, ko izmanto, tiešai e-pasta sūtīšnai bez atbildes vēstules.
+<br>Vispārīgi skatoties, šī e-pasta adrese ir konfigurēta uz servera ar iestatījumu ignorēt jebkuru ienākošo e-pastu."
+
+msgid "SurveyEmailSenderNoReply"
+msgstr "Aptaujas uzaicinājuma e-pasta sūtītājs (bez atbildes)"
+
+msgid "SurveyEmailSenderNoReplyComment"
+msgstr "Izsūtot aptaujas uzaicinājumus lietot Lektora e-pasta adresi, jeb bez atbildes e-pasta adresi?"
+
+msgid "CourseCoachEmailSender"
+msgstr "Lektora e-pasta adrese"
+
+msgid "NoReplyEmailSender"
+msgstr "E-pasta adrese bez atbildes"
+
+msgid "OpenIdAuthenticationComment"
+msgstr "Iespējot OpenID URL balstītu autentifikāciju (attēlo papildu pieteikšanās veidlapu mājaslapā)"
+
+msgid "VersionCheckEnabled"
+msgstr "Versijas pārbaude iespējota"
+
+msgid "InstallDirAccessibleSecurityThreat"
+msgstr "Galvenā / instalācijas direktorija jūsu Chamilo sistēmai joprojām ir pieejama interneta lietotājiem. Tas varētu nozīmēt drošības draudus Jūsu iekārtai. Mēs iesakām izdzēst šo direktoriju, vai arī iesakām jJums mainīt savas atļaujas, lai interneta lietotāji nevar izmantot skriptus, ko tā satur."
+
+msgid "GradebookActivation"
+msgstr "Novērtējuma instrumenta aktivizēšana"
+
+msgid "GradebookActivationComment"
+msgstr "Novērtējuma instruments ļauj jums novērtēt prasmes, apvienojot klases un klātienes darbību izvērtējumu kopējos veiktspējas pārskatos. Vai vēlaties to aktivizēt?"
+
+msgid "UserTheme"
+msgstr "Tēma (platformas dizaina stilu mape)"
+
+msgid "UserThemeSelection"
+msgstr "Lietotāja tēmas izvēle"
+
+msgid "UserThemeSelectionComment"
+msgstr "Ļauj lietotājiem izvēlēties savu vizuālo tēmu savā profilā.<br> Tas ļaus mainīt Chamilo izskatu konkrētajam Lietotājam, bet atstās portāla noklusējuma stilu neskartu. Ja kursam, vai sesijai, ir īpaši piešķirta tēma, tad tai ir prioritāte attiecībā pret lietotāja definēto motīvu.<br><br><b> Patreizējā pieredze liecina, ka šo opciju nevajag ļaut Lietotājiem lietot !</b> <br>Bet vari pamēģināt, varbūt kodējums ir uzlabots.:)"
+
+msgid "Port"
+msgstr "Ports"
+
+msgid "EphorusClickHereForADemoAccount"
+msgstr "Noklikšķiniet šeit, lai saņemtu demo kontu"
+
+msgid "ManageUserFields"
+msgstr "Esošās un Papildus Ailes Lietotāja reģistrā"
+
+msgid "UserFields"
+msgstr "Ailes Lietotāja Profila anketā"
+
+msgid "AddUserField"
+msgstr "Pievienot reģistram jaunu aili"
+
+msgid "FieldLabel"
+msgstr "Ailes nosaukums"
+
+msgid "FieldType"
+msgstr "Ailes satura veids"
+
+msgid "FieldTitle"
+msgstr "Ailes info teksts"
+
+msgid "FieldDefaultValue"
+msgstr "Noklusējuma vērtība"
+
+msgid "FieldOrder"
+msgstr "Secība"
+
+msgid "FieldVisibility"
+msgstr "Redzamība (+/-)"
+
+msgid "FieldChangeability"
+msgstr "Var/Nevar rediģēt"
+
+msgid "FieldTypeText"
+msgstr "Lauka tips - Teksts"
+
+msgid "FieldTypeTextarea"
+msgstr "Lauka tips - teksta lauks"
+
+msgid "FieldTypeRadio"
+msgstr "Lauka tips - izvēli atzīmēt ar punktiņu"
+
+msgid "FieldTypeSelect"
+msgstr "Lauka tips - atzīmēt no izkrītošās izvēles"
+
+msgid "FieldTypeSelectMultiple"
+msgstr "Lauka tips - vairākkārtēja izkrītošā izvēle"
+
+msgid "FieldAdded"
+msgstr "Lauks ir veiksmīgi pievienots"
+
+msgid "GradebookScoreDisplayColoring"
+msgstr "Ieskaites sliekšņa iekrāsošana"
+
+msgid "GradebookScoreDisplayColoringComment"
+msgstr "Atzīmējiet rūtiņu, lai aktivizētu ieskaites robežas"
+
+msgid "TabsGradebookEnableColoring"
+msgstr "Ieslēgt Ieskaites robežas"
+
+msgid "GradebookScoreDisplayCustom"
+msgstr "Ieskaites līmeņu marķēšana"
+
+msgid "GradebookScoreDisplayCustomComment"
+msgstr "Atzīmējiet rūtiņu, lai aktivizētu Ieskaites līmeņa marķēšanu"
+
+msgid "TabsGradebookEnableCustom"
+msgstr "Ieslēgt Ieskaites līmeņa marķēšanu"
+
+msgid "GradebookScoreDisplayColorSplit"
+msgstr "Slieksnis"
+
+msgid "GradebookScoreDisplayColorSplitComment"
+msgstr "Slieksnis (izteikts %) zem kura, iegūto punktu summa būs sarkanā krāsā"
+
+msgid "GradebookScoreDisplayUpperLimit"
+msgstr "Rādīt punktu summas augšējo robežu"
+
+msgid "GradebookScoreDisplayUpperLimitComment"
+msgstr "Atzīmējiet rūtiņu, lai parādītu rezultātu augšējo robežu"
+
+msgid "TabsGradebookEnableUpperLimit"
+msgstr "Ieslēgt rezultāta tu augšējo robežu rādīšanu"
+
+msgid "AddUserFields"
+msgstr "Pievienot profila informatīvo lauku"
+
+msgid "FieldPossibleValues"
+msgstr "Iespējamās vērtības"
+
+msgid "FieldPossibleValuesComment"
+msgstr "Izkrītošo izvēlņu informatīvo tekstu, ierakstīt vienu pēc otra, atdalot ar semikolu (;)"
+
+msgid "FieldTypeDate"
+msgstr "Datums"
+
+msgid "FieldTypeDatetime"
+msgstr "Datums un laiks"
+
+msgid "UserFieldsAddHelp"
+msgstr "Lietotāja informatīvā lauka pievienošana ir vienkārša:<br>- pick a one-word, lowercase identifier,
+- select a type,
+<br>- pick a text that should appear to the user (if you use an existing translated name like BirthDate or UserSex, it will automatically get translated to any language),
+<br>- if you picked a multiple type (radio, select, multiple select), provide the possible choices (again, it can make use of the language variables defined in Chamilo), split by semi-column characters,
+<br>- for text types, you can choose a default value.<br><br>Once you\'re done, add the field and choose whether you want to make it visible and modifiable. Making it modifiable but not visible is useless."
+
+msgid "AllowCourseThemeTitle"
+msgstr "Atļaut mainīt Kursa dizaina tēmas"
+
+msgid "AllowCourseThemeComment"
+msgstr "Dod pieeju kursa grafiskajiem dizainiem un ļauj mainīt stilu lapām, ko izmanto kurss pamatojoties uz kādu no iespējamajām stilu lapām kas pieejamas Chamilo. Kad lietotājs atvērs kursu, definētajai kursa stila lapai būs prioritāte pār lietotāja paša stila lapām un platformas noklusējuma stila lapām."
+
+msgid "DisplayMiniMonthCalendarTitle"
+msgstr "Rādīt mazu mēneša kalendāru \"Kursa plānotājā\""
+
+msgid "DisplayMiniMonthCalendarComment"
+msgstr "Šis iestatījums, ieslēdz vai atslēdz nelielu mēneša kalendāru, kas parādās Kursa plānotāja kreisajā slejā"
+
+msgid "DisplayUpcomingEventsTitle"
+msgstr "Attēlot gaidāmos notikumus instrumentā \"Kursa plānotājs\""
+
+msgid "DisplayUpcomingEventsComment"
+msgstr "Šis iestatījums ieslēdz vai atslēdz gaidāmo notikumu attēlojumu, kas parādās instrumenta \"Kursa Plānotājs\" kreisajā slejā"
+
+msgid "NumberOfUpcomingEventsTitle"
+msgstr "Gaidāmiem notikumu skaits, kas tiek attēlots."
+
+msgid "NumberOfUpcomingEventsComment"
+msgstr "Gaidāmo notikumu skaits tiek attēlots Kursa plānotājā.<br>
+Tas nozīmē, ka notikumu funkcionalitāte ir aktivizēta (skatīt iestatījumu iepriekš)."
+
+msgid "ShowClosedCoursesTitle"
+msgstr "Rādīt slēgtos apmācības kursus galvenajā reģistrācijas lapā un portāla sākuma lapā?"
+
+msgid "ShowClosedCoursesComment"
+msgstr "Rādīt slēgtos kursus Portāla sākuma lapā un kursu sarakstā ? Portāla sākuma lapā ikona parādīsies blakus kategorijām, lai ātri varētu pierakstīties uz kursiem. <br>Ikonas parādās portālā sākuma lapā tikai tad, kad lietotājs ir ielogojies."
+
+msgid "LDAPConnectionError"
+msgstr "LDAP savienojuma kļūda"
+
+msgid "LDAP"
+msgstr "LDAP"
+
+msgid "LDAPEnableTitle"
+msgstr "Iespējot LDAP"
+
+msgid "LDAPMainServerAddressTitle"
+msgstr "Galvenā LDAP servera adrese"
+
+msgid "LDAPMainServerAddressComment"
+msgstr "Jūsu galvenā LDAP servera IP adrese vai URL"
+
+msgid "LDAPMainServerPortTitle"
+msgstr "Galvenā LDAP servera ports."
+
+msgid "LDAPReplicateServerAddressTitle"
+msgstr "Atkārtot servera adresi"
+
+msgid "LDAPVersionTitle"
+msgstr "LDAP versija"
+
+msgid "LDAPVersion2"
+msgstr "LDAP 2"
+
+msgid "LDAPVersion3"
+msgstr "LDAP 3"
+
+msgid "LDAPFilledTutorFieldTitle"
+msgstr "Privātskolotāja identifikācijas lauks"
+
+msgid "LDAPAuthenticationLoginTitle"
+msgstr "Autentifikācijas pieteikšanās"
+
+msgid "LDAPAuthenticationPasswordTitle"
+msgstr "Autentifikācijas parole"
+
+msgid "LDAPImport"
+msgstr "LDAP imports"
+
+msgid "EmailNotifySubscription"
+msgstr "Paziņot reģistrētajiem lietotājiem pa e-pastu"
+
+msgid "DontUncheck"
+msgstr "Neatķeksējiet/ neatzīmējiet"
+
+msgid "AllSlashNone"
+msgstr "Visi / Neviens"
+
+msgid "LDAPImportUsersSteps"
+msgstr "LDAP Imports: Lietotāji/Soļi"
+
+msgid "EnterStepToAddToYourSession"
+msgstr "Ievadiet soli, lai to pievienotu jūsu sesijai"
+
+msgid "ToDoThisYouMustEnterYearDepartmentAndStep"
+msgstr "Lai to izdarītu secīgi, jums ir jāievada gads, tad departaments un solis"
+
+msgid "FollowEachOfTheseStepsStepByStep"
+msgstr "Soli pa solim sekojiet katram no šiem pasākumiem"
+
+msgid "RegistrationYearExample"
+msgstr "Reģistrācijas gads. Piemērs: %s akadēmiskajam gadam %s-%s"
+
+msgid "SelectDepartment"
+msgstr "Izvēlieties nodaļu"
+
+msgid "RegistrationYear"
+msgstr "Registrācijas gads"
+
+msgid "SelectStepAcademicYear"
+msgstr "Izvēlieties soli (akadēmiskais gads)"
+
+msgid "ErrorExistingStep"
+msgstr "Kļūda: šis solis jau pastāv"
+
+msgid "ErrorStepNotFoundOnLDAP"
+msgstr "Kļūda: solis nav atrasts LDAP serverī"
+
+msgid "StepDeletedSuccessfully"
+msgstr "Solis veiksmīgi izdzēsts"
+
+msgid "StepUsersDeletedSuccessfully"
+msgstr "Lietotāju soļi noņemti veiksmīgi"
+
+msgid "NoUserInThisSession"
+msgstr "Šajā sesijā nav Lietotāju"
+
+msgid "SubscribeSomeUsersToThisSession"
+msgstr "Pierakstīt kādu Lietotāju šajā sesijā"
+
+msgid "EnterStudentsToSubscribeToCourse"
+msgstr "Ievadiet audzēkņus kurus jūs vēlētos, reģistrēt savā kursā"
+
+msgid "SelectComponent"
+msgstr "Izvēlieties detaļas"
+
+msgid "Component"
+msgstr "Komponents"
+
+msgid "SelectStudents"
+msgstr "Atzīmēt Kursantus"
+
+msgid "TabsMyGradebook"
+msgstr "Novērtējumu aile"
+
+msgid "UploadNewStylesheet"
+msgstr "Jauns e-vides interfeisa dizaina fails"
+
+msgid "NameStylesheet"
+msgstr "E-vides Dizaina nosaukums"
+
+msgid "StylesheetAdded"
+msgstr "Jauns E-vides dizains tika pievienots"
+
+msgid "IsNotWritable"
+msgstr "Nav ierakstāms"
+
+msgid "FieldMovedDown"
+msgstr "Lauks veiksmīgi tika pārvietots uz leju"
+
+msgid "CannotMoveField"
+msgstr "Lauku nevar pārvietot"
+
+msgid "FieldMovedUp"
+msgstr "Lauks ir veiksmīgi pārvietots uz augšu"
+
+msgid "FieldShown"
+msgstr "Šis lauks tagad lietotājam ir redzams"
+
+msgid "CannotShowField"
+msgstr "Lauku padarīt redzamu nav iespējams"
+
+msgid "FieldHidden"
+msgstr "Šis lauks tagad lietotājam ir neredzams"
+
+msgid "CannotHideField"
+msgstr "Lauku padarīt neredzamu nav iespējams"
+
+msgid "FieldMadeChangeable"
+msgstr "Šo lauku lietotājs var izmainīt, to aizpildot vai rediģējot"
+
+msgid "CannotMakeFieldChangeable"
+msgstr "Šo lauku nav iespējams padarīt izmaināmu"
+
+msgid "FieldMadeUnchangeable"
+msgstr "Lauks ir padarīts neizmaināms, lietotājs nevar to aizpildīt vai rediģēt"
+
+msgid "CannotMakeFieldUnchangeable"
+msgstr "Lauku nevar padarīt neizmaināmu"
+
+msgid "FieldDeleted"
+msgstr "Lauks ir izdzēsts"
+
+msgid "CannotDeleteField"
+msgstr "Lauks nevar izdzēst"
+
+msgid "AddUsersByCoachTitle"
+msgstr "Lektors var reģistrēt Lietotājus"
+
+msgid "AddUsersByCoachComment"
+msgstr "Lektors var veidot Lietotājus platformā un tos reģistrēt sesijās"
+
+msgid "UserFieldsSortOptions"
+msgstr "Kārtot profila lauku opcijas"
+
+msgid "FieldOptionMovedUp"
+msgstr "Opcija ir pārvietota uz augšu"
+
+msgid "CannotMoveFieldOption"
+msgstr "Opciju nevar pārvietot"
+
+msgid "FieldOptionMovedDown"
+msgstr "Opcija ir pārvietota uz leju"
+
+msgid "DefineSessionOptions"
+msgstr "Definēt Lektora pieejas limitus"
+
+msgid "DaysBefore"
+msgstr "Dienas pirms sesijas sākuma"
+
+msgid "DaysAfter"
+msgstr "Dienas pēc"
+
+msgid "SessionAddTypeUnique"
+msgstr "Individuāls reģistrs"
+
+msgid "SessionAddTypeMultiple"
+msgstr "Kolektīvs reģistrs"
+
+msgid "EnableSearchTitle"
+msgstr "Pilna teksta meklēšanas funkcija"
+
+msgid "EnableSearchComment"
+msgstr "Izvēlieties \"Jā\", lai nodrošinātu šo funkciju.<br> Funkcijas darbība ir ļoti atkarīga no Xapian paplašinājuma PHP, tāpēc tā nevar darboties, ja šis paplašinājuma nav instalēts jūsu serverī. Minimālā versija 1.x ."
+
+msgid "SearchASession"
+msgstr "Meklēt mācību sesiju"
+
+msgid "ActiveSession"
+msgstr "Sesiju sesija"
+
+msgid "AddUrl"
+msgstr "Pievienot URL"
+
+msgid "ShowSessionCoachTitle"
+msgstr "Rādīt sesijas vadītāju"
+
+msgid "ShowSessionCoachComment"
+msgstr "Rādīt kopējās sesijas Lektora vārdu, pie sesijas nosaukuma mācību sarakstā"
+
+msgid "ExtendRightsForCoachTitle"
+msgstr "Palielināt tiesības Asistentam"
+
+msgid "ExtendRightsForCoachComment"
+msgstr "Aktivizējot šo opciju, Asistentam tiks dotas tādas pašas iespējas, kā Lektoram, lietojot Kursa veidošanas instrumentus"
+
+msgid "ExtendRightsForCoachOnSurveyComment"
+msgstr "Aktivizējot šo opciju, Asistentam tiks dotas iespējas, veidot un rediģēt Aptaujas"
+
+msgid "ExtendRightsForCoachOnSurveyTitle"
+msgstr "Paplašināt Aptauju veidošanas tiesības Asistentam"
+
+msgid "CannotDeleteUserBecauseOwnsCourse"
+msgstr "Šo lietotāju nevar izdzēst, jo viņš joprojām ir, kā Lektors, kādā no Kursiem . Jūs varat:<br>- vai nu noņemt Lektora statusu šajā kursā, un pēc tam izdzēsiet šo kontu, <br>- vai atslēgt kontu, nevis dzēst to."
+
+msgid "AllowUsersToCreateCoursesTitle"
+msgstr "Ļaut personām, kuras nav platformas administratori, izveidot apmācības"
+
+msgid "AllowUsersToCreateCoursesComment"
+msgstr "Ļauj ārpuskopienas administratoriem ( Lektoriem ), izveidot jaunus mācību kursus portālā"
+
+msgid "AllowStudentsToBrowseCoursesComment"
+msgstr "Atļaut Lietotājie, pārlūkot apmācības kursu katalogu un parakstīties uz pieejamajiem kursiem."
+
+msgid "YesWillDeletePermanently"
+msgstr "Jā (faili tiks pilnībā izdzēsti un nebūs atgūstami)"
+
+msgid "NoWillDeletePermanently"
+msgstr "Nē (faili tiks izdzēsti no aplikācijas, bet būs manuāli atgūstami ar servera administratora palīdzību)"
+
+msgid "SelectAResponsible"
+msgstr "Izvēlēties vadītāju"
+
+msgid "ThereIsNotStillAResponsible"
+msgstr "Personāla daļas vadītājs nav pieejams"
+
+msgid "AllowStudentsToBrowseCoursesTitle"
+msgstr "Atļaut izglītojamajiem piekļūt apmācību kursu katalogam"
+
+msgid "SharedSettingIconComment"
+msgstr "Tas ir koplietošanas iestatījums"
+
+msgid "GlobalAgenda"
+msgstr "Platformas kopīgais notikumu plānotājs."
+
+msgid "AdvancedFileManagerTitle"
+msgstr "Paplašinātais failu pārvaldnieks WYSIWYG redaktoram"
+
+msgid "AdvancedFileManagerComment"
+msgstr "Nodrošināt WYSIWYG redaktorā uzlabotu failu pārvaldi? Tas pievienos ievērojamas papildu iespējas failu pārvaldē, kas atvērsies kā pop-up logs, augšupielādējot failus uz servera."
+
+msgid "ScormAndLPProgressTotalAverage"
+msgstr "Vidējais satura apguves progress Kursos"
+
+msgid "SearchHideUnlinkedResults"
+msgstr "Tos nerādīt"
+
+msgid "Templates"
+msgstr "Mācību lapu satura organizācijas šabloni"
+
+msgid "HideCampusFromPublicDokeosPlatformsList"
+msgstr "Nerādīt šo portālu kopējā Chamilo portālu sarakstā"
+
+msgid "EnableVersionCheck"
+msgstr "Veikt uzstādītās versijas pārbaudi"
+
+msgid "AllowMessageToolTitle"
+msgstr "Iekšējās ziņojumu apmaiņas instruments"
+
+msgid "AllowReservationTitle"
+msgstr "Rezervēšana"
+
+msgid "AllowReservationComment"
+msgstr "Rezervācijas sistēma ļauj rezervēt līdzekļus savā apmācībā (telpas, galdi, grāmatas, ekrāni, ...). Jums ir nepieciešams lai šis instruments ir iespējots (caur Admin), un lai tas parādās Lietotāja izvēlnē."
+
+msgid "AreYouSureYouWantToSetThisLanguageAsThePortalDefault"
+msgstr "Jūs esat pārliecināts, iestatīt šo valodu, kā portāla pamatvalodu?"
+
+msgid "CurrentLanguagesPortal"
+msgstr "Pašreizējā portāla valoda"
+
+msgid "LPTestScore"
+msgstr "Kursu rezultāti"
+
+msgid "ScormAndLPTestTotalAverage"
+msgstr "Vidējie testu rezultāti Kursos"
+
+msgid "ImportUsersToACourse"
+msgstr "Importēt lietotāju sarakstu"
+
+msgid "ImportCourses"
+msgstr "Importēt kursu sarakstu"
+
+msgid "ManageUsers"
+msgstr "Organizēt lietotājus"
+
+msgid "ManageCourses"
+msgstr "Organizēt Kursus"
+
+msgid "UserListIn"
+msgstr "Kursi no"
+
+msgid "EditUsers"
+msgstr "Rediģēt lietotājus"
+
+msgid "EditCourses"
+msgstr "Rediģēt kursus"
+
+msgid "CourseListIn"
+msgstr "Kursi no"
+
+msgid "EditSessionToURL"
+msgstr "Rediģēt sesiju"
+
+msgid "SessionBelongURL"
+msgstr "Sesijas tika rediģētas"
+
+msgid "ManageSessions"
+msgstr "Vadīt / koordinēt sesijas"
+
+msgid "AllowMessageToolComment"
+msgstr "Ieslēgt iekšējo ziņojumu apmaiņas instrumentu, ļaujot lietotājiem sūtīt ziņojumus citiem platformas lietotājiem un izveidot ziņojuma apmaiņas pastkasti."
+
+msgid "AllowSocialToolTitle"
+msgstr "Sociālais tīkls ( līdzīgi Facebook )"
+
+msgid "AllowSocialToolComment"
+msgstr "Sociālā tīkla instruments ļauj lietotājiem organizēt attiecības ar citiem lietotājiem. To var darīt arī veidojot draugu grupas. Apvienojumā ar iekšējās ziņojumapmaiņas instrumentu, šis rīks ļauj veidot cieši sakarus ar draugiem, portāla vides iekšienē."
+
+msgid "SetLanguageAsDefault"
+msgstr "Iestatīt valodu, kā noklusēto platformas pamata valodu"
+
+msgid "FieldFilter"
+msgstr "Filtrēt"
+
+msgid "FilterOn"
+msgstr "Filtru ieslēgt"
+
+msgid "FilterOff"
+msgstr "Filtru izslēgt"
+
+msgid "FieldFilterSetOn"
+msgstr "Tagad varat izmantot šo lauku, kā filtru"
+
+msgid "FieldFilterSetOff"
+msgstr "Jūs nevarat izmantot šo lauku, kā filtru"
+
+msgid "buttonAddUserField"
+msgstr "Pievienot Lietotāja lauku"
+
+msgid "FilterUsers"
+msgstr "Filtrēt lietotājus"
+
+msgid "CoachIsRequired"
+msgstr "Jums jāatzīmē asistents"
+
+msgid "EncryptMethodUserPass"
+msgstr "Šifrēšanas metode"
+
+msgid "AddTemplate"
+msgstr "Pievienot mācību satura vadības šablonu"
+
+msgid "TemplateImageComment100x70"
+msgstr "Šis attēls reprezentēs šablonu visu šablonu sarakstā. Tas <b>nevar būt</b> lielāks par 100x70 pikseļiem"
+
+msgid "TemplateAdded"
+msgstr "Šablons pievienots"
+
+msgid "TemplateDeleted"
+msgstr "Šablons izdzēsts"
+
+msgid "EditTemplate"
+msgstr "Rediģēt šablonu"
+
+msgid "FileImportedJustUsersThatAreNotRegistered"
+msgstr "Šeit ir importēti lietotāji, kuri nav reģistrēti platformā."
+
+msgid "YouMustImportAFileAccordingToSelectedOption"
+msgstr "Jums ir jāimportē fails, kurš atbilst izvēlētajam formātam."
+
+msgid "ShowEmailOfTeacherOrTutorTitle"
+msgstr "Rādīt Lektora e-pastu kājenē"
+
+msgid "ShowEmailOfTeacherOrTutorComent"
+msgstr "Rādīt Lektora e-pastu kājenē?"
+
+msgid "Created"
+msgstr "Izveidots"
+
+msgid "AddSystemAnnouncement"
+msgstr "Pievienot sistēmas paziņojumu"
+
+msgid "EditSystemAnnouncement"
+msgstr "Rediģēt sistēmas paziņojumu"
+
+msgid "LPProgressScore"
+msgstr "Mācību objektu procentuālais apmeklējums"
+
+msgid "TotalTimeByCourse"
+msgstr "Viss kursā pavadītais laiks"
+
+msgid "LastTimeTheCourseWasUsed"
+msgstr "Pēdējais kursu apmeklējušais kursants"
+
+msgid "AnnouncementAvailable"
+msgstr "Paziņojums ir pieejams"
+
+msgid "AnnouncementNotAvailable"
+msgstr "Paziņojums nav pieejams"
+
+msgid "Searching"
+msgstr "Meklēšana"
+
+msgid "AddLDAPUsers"
+msgstr "Pievienot LDAP lietotājus"
+
+msgid "Academica"
+msgstr "Akadēmisks"
+
+msgid "AddNews"
+msgstr "Pievienot ziņas"
+
+msgid "SearchDatabaseOpeningError"
+msgstr "Neizdevās atvērt meklēšanas datu bāzi"
+
+msgid "FieldRemoved"
+msgstr "Lauks ir pārvietots"
+
+msgid "TheNewSubLanguageHasBeenAdded"
+msgstr "Jauna apakš-valoda ir pievienota"
+
+msgid "DeleteSubLanguage"
+msgstr "Dzēst apakš-valodu"
+
+msgid "TemplateEdited"
+msgstr "Šablons ir izmainīts"
+
+msgid "ShowGlossaryInDocumentsTitle"
+msgstr "Rādīt Skaidrojuma vārdnīcas terminus dokumentos"
+
+msgid "ShowGlossaryInDocumentsComment"
+msgstr "No šejienes jūs varat konfigurēt, kā pievienot saites uz Skaidrojuma vārdnīcas terminiem no dokumentiem"
+
+msgid "ShowGlossaryInDocumentsIsAutomatic"
+msgstr "Automātiskā: pievieno saites uz visiem noteiktajiem Skaidrojuma vārdnīcas terminiem, kas atrodami dokumentā"
+
+msgid "ShowGlossaryInDocumentsIsManual"
+msgstr "Manuāli: parāda glosārija ikonu tiešsaistes redaktorā, lai jūs varētu atzīmēt terminus, kas ir glosārijā un kam jūs vēlaties izveidot saiti"
+
+msgid "ShowGlossaryInDocumentsIsNone"
+msgstr "Neviens: dokumentā nav neviena glossary termina"
+
+msgid "LanguageVariable"
+msgstr "Mainīgā valoda"
+
+msgid "ShowTutorDataTitle"
+msgstr "Sesijas(u) Pasniedzēju dati ir redzami kājenē."
+
+msgid "ShowTutorDataComment"
+msgstr "Rādīt kājenē, atsauces par sesijas vadītāju (vārdu un e-pastu, ja ir pieejams)?"
+
+msgid "ShowTeacherDataTitle"
+msgstr "Parādīt informāciju par Lektoru kājenē"
+
+msgid "ShowTeacherDataComment"
+msgstr "Rādīt atsauces par Lektoru (vārdu un e-pastu, ja ir pieejams),kājenē."
+
+msgid "TermsAndConditions"
+msgstr "Vides lietošanas \"Noteikumi un Nosacījumi\" Lietotājiem"
+
+msgid "HTMLText"
+msgstr "HTML"
+
+msgid "PageLink"
+msgstr "Lapas hipersaite"
+
+msgid "DisplayTermsConditions"
+msgstr "Platformas lietošanas Nosacījumu un Noteikumu saturs, ko lai reģistrētos, var pieprasīt apmeklētājam akceptēt."
+
+msgid "AllowTermsAndConditionsTitle"
+msgstr "Pievienot jauna Lietotāja reģistra formai \" Lietošanas Noteikumus un Nosacījumus\""
+
+msgid "AllowTermsAndConditionsComment"
+msgstr "Šī opcija parādīs jauno Lietotāju reģistrā lapā \"Platformas lietošanas Noteikumus un Nosacījumus\" jauniem Lietotājiem, lai tie ar tiem iepazītos un tos apstiprinātu"
+
+msgid "Load"
+msgstr "Ievietot"
+
+msgid "AllVersions"
+msgstr "Visas versijas"
+
+msgid "EditTermsAndConditions"
+msgstr "Rediģēt Noteikumus un Nosacījumus"
+
+msgid "Changes"
+msgstr "Veiktās izmaiņas"
+
+msgid "ExplainChanges"
+msgstr "Izskaidrojiet/ pamatojiet veiktās izmaiņas Noteikumos"
+
+msgid "TermAndConditionNotSaved"
+msgstr "\"Noteikumi un Nosacījumi\" nav saglabāti"
+
+msgid "AddTermsAndConditions"
+msgstr "Pievienot Noteikumus un Nosacījumus"
+
+msgid "TermAndConditionSaved"
+msgstr "Noteikumi un nosacījumi ir saglabāti."
+
+msgid "Visibility"
+msgstr "Redzamība"
+
+msgid "SessionCategory"
+msgstr "Sesiju kategorijas"
+
+msgid "ListSessionCategory"
+msgstr "Sesiju kategoriju saraksts"
+
+msgid "AddSessionCategory"
+msgstr "Pievienot kategoriju"
+
+msgid "SessionCategoryName"
+msgstr "Kategorijas nosaukums"
+
+msgid "EditSessionCategory"
+msgstr "Rediģēt sesijas kategoriju"
+
+msgid "SessionCategoryAdded"
+msgstr "Kategorija pievienota"
+
+msgid "SessionCategoryUpdate"
+msgstr "Atjaunināt kategoriju"
+
+msgid "SessionCategoryDelete"
+msgstr "Atzīmētās kategorijas ir izdzēstas"
+
+msgid "SessionCategoryNameIsRequired"
+msgstr "Lūdzu, piešķiriet sesijas kategorijai nosaukumu"
+
+msgid "ThereIsNotStillASession"
+msgstr "Šeit nav pieejamu sesiju"
+
+msgid "SelectASession"
+msgstr "Atzīmēt sesiju"
+
+msgid "OriginCoursesFromSession"
+msgstr "Kursi oriģinālajā sesijā"
+
+msgid "DestinationCoursesFromSession"
+msgstr "Kursi no galamērķa sesijas"
+
+msgid "CopyCourseFromSessionToSessionExplanation"
+msgstr "Palīg instruments kursu iekšējai pārvietošanai / kopēšanai no sesijas uz sesiju"
+
+msgid "TypeOfCopy"
+msgstr "Kopēšanas iespējas"
+
+msgid "CopyFromCourseInSessionToAnotherSession"
+msgstr "Kopēt kursu no vienas sesijas otrā"
+
+msgid "StylesheetNotHasBeenAdded"
+msgstr "Stilu nevar pievienot"
+
+msgid "SpecialExports"
+msgstr "Speciālais satura eksports <b>(tikai ADMIN)</b>"
+
+msgid "CreateBackup"
+msgstr "Izveidot rezerves kopiju"
+
+msgid "ConfigureInscription"
+msgstr "Papildus teksts / komentārs Reģistrācijas lapā"
+
+msgid "EditTopRegister"
+msgstr "Rediģēt piezīmi"
+
+msgid "InsertTabs"
+msgstr "Pievienot cilni"
+
+msgid "EditTabs"
+msgstr "Rediģēt cilni"
+
+msgid "BabyOrange"
+msgstr "Gaiši oranžs"
+
+msgid "BlueLagoon"
+msgstr "Zilā lagūna"
+
+msgid "CoolBlue"
+msgstr "Auksti zils"
+
+msgid "Corporate"
+msgstr "Korporatīvais"
+
+msgid "CosmicCampus"
+msgstr "Kosmiskais"
+
+msgid "DeliciousBordeaux"
+msgstr "Delikātais bordo"
+
+msgid "DokeosClassic2D"
+msgstr "Klasiskais Dokeos 2D"
+
+msgid "DokeosBlue"
+msgstr "Dokeos zils"
+
+msgid "EmpireGreen"
+msgstr "Majestātiski zaļš"
+
+msgid "FruityOrange"
+msgstr "Apelsīnu oranžs"
+
+msgid "Medical"
+msgstr "Medikāls"
+
+msgid "RoyalPurple"
+msgstr "Karaliski sarkans"
+
+msgid "SilverLine"
+msgstr "Sudrabains"
+
+msgid "SoberBrown"
+msgstr "Brūns"
+
+msgid "SteelGrey"
+msgstr "Tērauda pelēks"
+
+msgid "TastyOlive"
+msgstr "Olīvju zaļš"
+
+msgid "ExportCourses"
+msgstr "Eksportēt kursus"
+
+msgid "IsAdministrator"
+msgstr "Ir Administrators"
+
+msgid "IsNotAdministrator"
+msgstr "Tas nav administrators"
+
+msgid "AddTimeLimit"
+msgstr "Pievienot laika ierobežojumus"
+
+msgid "EditTimeLimit"
+msgstr "Rediģēt laika limitu"
+
+msgid "SendEmailToAdminTitle"
+msgstr "E-pasta brīdinājums, par jauna Kursa izveidi platformā."
+
+msgid "SendEmailToAdminComment"
+msgstr "Nosūtīt e-pastu platformas administratoram, katru reizi kad Lektors reģistrē jaunu kursu."
+
+msgid "MathMimetexTitle"
+msgstr "mime TEX matemātiskais redaktors"
+
+msgid "MathMimetexComment"
+msgstr "Ieslēgt mimeTeX matemātisko redaktoru.
+The activation is not fully realized if not previously installed on the server the executable MimeTex file. See the Chamilo installation guide"
+
+msgid "MathASCIImathMLTitle"
+msgstr "ASCIIMathML matemātiskais redaktors"
+
+msgid "MathASCIImathMLComment"
+msgstr "Ieslēgt ASCIIMathML matemātisko redaktoru"
+
+msgid "YoutubeForStudentsTitle"
+msgstr "Ļaut Kursantiem ievietot video no YouTube"
+
+msgid "YoutubeForStudentsComment"
+msgstr "Nodrošināt iespēju, ka studenti var ievietot YouTube video"
+
+msgid "BlockCopyPasteForStudentsTitle"
+msgstr "Bloķēt studentiem iespēju kopēt un ielīmēt"
+
+msgid "BlockCopyPasteForStudentsComment"
+msgstr "Bloķēt studentiem iespēju kopēt un ielīmēt WYSIWYG redaktorā"
+
+msgid "MoreButtonsForMaximizedModeTitle"
+msgstr "Rīku pogu josla ir pagarināta"
+
+msgid "MoreButtonsForMaximizedModeComment"
+msgstr "Ieslēgt instrumentu taustiņu paplašinājumu, kad WYSIWYG redaktors ir maksimizēts"
+
+msgid "Editor"
+msgstr "HTML Redaktors"
+
+msgid "GoToCourseAfterLoginTitle"
+msgstr "Pēc Ielogošanās doties tieši uz Kursu."
+
+msgid "GoToCourseAfterLoginComment"
+msgstr "Ja lietotājs ir reģistrēts vienā kursā, pēc ielogošanās , doties tieši uz šo Kursu"
+
+msgid "GroupList"
+msgstr "Grupu saraksts"
+
+msgid "AllowStudentsDownloadFoldersTitle"
+msgstr "Ļaut Kursantiem lejupielādēt visu direktoriju/mapi"
+
+msgid "AllowStudentsDownloadFoldersComment"
+msgstr "Ļaut Kursantiem zipot un lejupielādēt pilnu direktoriju/mapi no Dokumentu instrumenta"
+
+msgid "AllowStudentsToCreateGroupsInSocialTitle"
+msgstr "Atļaut Lietotājiem veidot grupas Sociālajā tīklā"
+
+msgid "AllowStudentsToCreateGroupsInSocialComment"
+msgstr "Ļaut Kursantiem sociālajā tīklā veidot grupas"
+
+msgid "AllowSendMessageToAllPlatformUsersTitle"
+msgstr "Ļaut nosūtīt ziņu visiem platformas lietotājiem"
+
+msgid "AllowSendMessageToAllPlatformUsersComment"
+msgstr "Ļaut nosūtīt ziņu visiem platformas lietotājiem"
+
+msgid "TabsSocial"
+msgstr "Cilne - Mans profils un iekšējais sociālais tīkls"
+
+msgid "MessageMaxUploadFilesizeTitle"
+msgstr "Maksimālā augšupielādējamā faila izmērs vēstulēs"
+
+msgid "MessageMaxUploadFilesizeComment"
+msgstr "Maksimālais izmērs failu augšupielādei, ziņojumu/vēstuļu apmaiņas rīkā (baitos)"
+
+msgid "AddAdditionalProfileField"
+msgstr "Pievienot Lietotāja profila lauku"
+
+msgid "Username"
+msgstr "Lietotāja vārds"
+
+msgid "ChamiloHomepage"
+msgstr "Chamilo mājaslapa."
+
+msgid "ChamiloForum"
+msgstr "Chamilo forums"
+
+msgid "ChamiloExtensions"
+msgstr "Chamilo paplašinājumi"
+
+msgid "ImpossibleToContactVersionServerPleaseTryAgain"
+msgstr "Nebūtu iespējams patreiz sazināties ar versijas serveri. Lūdzu, mēģiniet vēlāk vēlreiz."
+
+msgid "ChamiloGreen"
+msgstr "Chamilo Zaļš"
+
+msgid "ChamiloRed"
+msgstr "Chamilo sarkans"
+
+msgid "MessagesSent"
+msgstr "Nosūtīto vēstuļu skaits"
+
+msgid "MessagesReceived"
+msgstr "Saņemto vēstuļu skaits"
+
+msgid "CountFriends"
+msgstr "Kontaktu skaits"
+
+msgid "ThisPluginHasbeenDeletedFromDashboardPluginDirectory"
+msgstr "Šis spraudnis ir dzēsts no paneļa spraudņu kataloga."
+
+msgid "EnableDashboardPlugins"
+msgstr "Ieslēgt paneļa spraudņus"
+
+msgid "TimezoneValueTitle"
+msgstr "Laika joslas vērtības"
+
+msgid "TimezoneValueComment"
+msgstr "Šī ir portāla laika josla. Ja to atstāj tukšu, tā izmantos servera joslu. Ja ir uzstādīti konkrēti parametri, visi sistēmas laiki tiks parādīti, pamatojoties uz šo joslu. Šim uzstādījumam ir zemāka prioritāte nekā Lietotāja izvēlētā un aktivizētā laika josla datorā."
+
+msgid "UseUsersTimezoneTitle"
+msgstr "Izmantot Lietotāja laika zonu."
+
+msgid "UseUsersTimezoneComment"
+msgstr "Nodrošināt iespēju lietotājiem izvēlēties savu laika joslu. Pirms lietotāji var izvēlēties savu, Laika josla ir jānosaka administrēšanas sadaļā. Kad tā ir konfigurēta, lietotāji varēs to redzēt un rediģēt."
+
+msgid "FieldTypeTimezone"
+msgstr "Laika zona"
+
+msgid "Lock"
+msgstr "Noslēgt"
+
+msgid "SessionsListInPlatform"
+msgstr "Platformā esošos sesiju saraksts"
+
+msgid "SessionsInformation"
+msgstr "Atskaite par sesijām"
+
+msgid "YourSessionsList"
+msgstr "Jūsu sesijas"
+
+msgid "TeachersInformationsList"
+msgstr "Atskaite par Lektoriem"
+
+msgid "YourTeachers"
+msgstr "Jūsu lektori"
+
+msgid "StudentsInformationsList"
+msgstr "Atskaite par Kursantiem"
+
+msgid "YourStudents"
+msgstr "Jūsu kursanti"
+
+msgid "TeachersInformationsGraph"
+msgstr "Skolotāju atskaites diagramma"
+
+msgid "StudentsInformationsGraph"
+msgstr "Studentu atskaites diagramma"
+
+msgid "Timezones"
+msgstr "Laika zonas"
+
+msgid "TimeSpentOnThePlatformLastWeekByDay"
+msgstr "Pagājušajā nedēļā Platformā pavadītais laiks, pa dienām"
+
+msgid "GraphicNotAvailable"
+msgstr "Grafika nav pieejama"
+
+msgid "AttendancesFaults"
+msgstr "Kavējumi"
+
+msgid "SystemStatus"
+msgstr "Sistēmas statuss <b>(tikai ADMIN)</b>"
+
+msgid "IsWritable"
+msgstr "Ir ierakstāms"
+
+msgid "DirectoryExists"
+msgstr "Direktorija eksistē"
+
+msgid "CategoriesNumber"
+msgstr "Kategorijas"
+
+msgid "AllowUserCourseSubscriptionByCourseAdminTitle"
+msgstr "Atļaut Kursa Lietotājam piereģistrēties, kā Kursa Administratoram"
+
+msgid "AllowUserCourseSubscriptionByCourseAdminComment"
+msgstr "Aktivizējot šo iespēju, tā ļaus kursu administratoram pievienot lietotājus kursa iekšpusē."
+
+msgid "ConfigureDashboardPlugin"
+msgstr "Konfigurēt Paneļa spraudņus"
+
+msgid "EditBlocks"
+msgstr "Pievienot / rediģēt blokus"
+
+msgid "ShowLinkBugNotificationTitle"
+msgstr "Rādīt saiti, lai ziņotu par kļūdu"
+
+msgid "ShowLinkBugNotificationComment"
+msgstr "Rādīt saiti platformas galvenē, lai ziņotu par kļūdu darbībā mūsu atbalsta platformai (http://support.chamilo.org). Nospiežot uz saites, Lietotājs nosūtīta uz wiki lapu, atbalsta platformā, informāciju, kas apraksta kļūdu."
+
+msgid "GradebookActivateScoreDisplayCustom"
+msgstr "Ieslēgt Ieskaites līmeņa marķēšanu, lai varētu uzstādīt informāciju par individuālajiem rezultātiem"
+
+msgid "GradebookScoreDisplayCustomValues"
+msgstr "Ieskaišu līmeņu pašiestatāmās vērtības"
+
+msgid "GradebookNumberDecimals"
+msgstr "Ciparu skaits aiz komata"
+
+msgid "GradebookNumberDecimalsComment"
+msgstr "Ļauj iestatīt skaitļu decimāldaļas rezultātos"
+
+msgid "FillUsers"
+msgstr "Ierakstīt Lietotājus"
+
+msgid "AssignCoach"
+msgstr "Nozīmēt mācību spēku"
+
+msgid "Social"
+msgstr "Sociālais tīkls"
+
+msgid "BackupCreated"
+msgstr "Rezerves kopija ir izveidota"
+
+msgid "NotInserted"
+msgstr "Nav ievietots"
+
+msgid "phone"
+msgstr "Telefons"
+
+msgid "ResetLP"
+msgstr "Atkārtot / atjaunot tēmas apguvi <b>(reset)</b>"
+
+msgid "LPWasReset"
+msgstr "Mācību satura apguve Kursantam ir atjaunināta."
+
+msgid "AnnouncementVisible"
+msgstr "Paziņojums redzams"
+
+msgid "AnnouncementInvisible"
+msgstr "Paziņojums nav redzams"
+
+msgid "GlossaryDeleted"
+msgstr "Glosārijs (Terminu Vārdnīca) izdzēsts"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Kursa apraksts atjaunināts."
+
+msgid "SessionReadOnly"
+msgstr "Tikai lasāms"
+
+msgid "SessionAccessible"
+msgstr "Pieejams"
+
+msgid "SessionNotAccessible"
+msgstr "Nav pieejams"
+
+msgid "GroupAdded"
+msgstr "Grupa pievienota"
+
+msgid "AddUsersToGroup"
+msgstr "Pievienot Lietotājus grupai"
+
+msgid "YouNeedToAddASessionCategoryFirst"
+msgstr "Vispirms Jums ir jāizveido sesiju kategorija"
+

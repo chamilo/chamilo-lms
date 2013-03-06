@@ -1,0 +1,237 @@
+msgid "MyTasks"
+msgstr "Miaj taskoj"
+
+msgid "FavoriteBlogs"
+msgstr "Mia ŝatataj blogoj"
+
+msgid "Navigation"
+msgstr "Navigado"
+
+msgid "TopTen"
+msgstr "Precipa deko el la blogaro"
+
+msgid "Subtitle"
+msgstr "Subtitolo"
+
+msgid "ThisBlog"
+msgstr "Ĉi-blogo"
+
+msgid "NewPost"
+msgstr "Nova artikolo"
+
+msgid "TaskManager"
+msgstr "Taskmastrumado"
+
+msgid "MemberManager"
+msgstr "Membromastrumado"
+
+msgid "PostFullText"
+msgstr "Teksto"
+
+msgid "ReadPost"
+msgstr "Legi ĉi tiun artikolon"
+
+msgid "Home"
+msgstr "Komenco"
+
+msgid "FirstPostText"
+msgstr "Ĉi tio estas unua artikolo en ĉi tiu blogo!Ĉiu aliĝintao por tiu blogo povas partopreni."
+
+msgid "AddNewComment"
+msgstr "Aldoni komenton"
+
+msgid "ReplyToThisComment"
+msgstr "Aldoni komenton al ĉi tiu komento"
+
+msgid "ManageTasks"
+msgstr "Tekstomastrumado en ĉi tiu blogo"
+
+msgid "ManageMembers"
+msgstr "Enskribi / malenstribi uzanton por ĉi tiu blogo"
+
+msgid "Register"
+msgstr "Enskribi en ĉi tiun blogon"
+
+msgid "UnRegister"
+msgstr "Malenskribi sin el ĉi tiu blogo"
+
+msgid "SubscribeMembers"
+msgstr "Enskribi uzantojn"
+
+msgid "UnsubscribeMembers"
+msgstr "Malenskribi uzantojn"
+
+msgid "RightsManager"
+msgstr "Mastrumi uzantajn rajtojn"
+
+msgid "ManageRights"
+msgstr "Kontroli la rajtojn kaj rolojn de la uzantoj en ĉi tiu blogo"
+
+msgid "Task"
+msgstr "Tasko"
+
+msgid "Tasks"
+msgstr "Taskoj"
+
+msgid "Member"
+msgstr "Uzanto"
+
+msgid "Members"
+msgstr "Uzantoj"
+
+msgid "Role"
+msgstr "Rolo"
+
+msgid "Rate"
+msgstr "Poentaro"
+
+msgid "Roles"
+msgstr "Roloj"
+
+msgid "AddTask"
+msgstr "Nova tasko"
+
+msgid "AddTasks"
+msgstr "Aldoni novan taskon"
+
+msgid "AssignTask"
+msgstr "Atribui taskon"
+
+msgid "AssignTasks"
+msgstr "Atribui taskojn"
+
+msgid "EditTask"
+msgstr "Ŝanĝi ĉi tiun taskon"
+
+msgid "DeleteTask"
+msgstr "Viŝi taskon"
+
+msgid "DeleteSystemTask"
+msgstr "Ĉi tio estas antaŭdifinita takso. Vi ne povas viŝi antaŭdifinitan taskon."
+
+msgid "SelectUser"
+msgstr "Uzanto"
+
+msgid "SelectTask"
+msgstr "Tasko"
+
+msgid "SelectTargetDate"
+msgstr "Dato"
+
+msgid "TargetDate"
+msgstr "Dato"
+
+msgid "Color"
+msgstr "Koloro"
+
+msgid "TaskList"
+msgstr "Taskoj en ĉi tiu blogo"
+
+msgid "AssignedTasks"
+msgstr "Atribuitaj taskoj"
+
+msgid "ArticleManager"
+msgstr "Artikola mastrumado"
+
+msgid "CommentManager"
+msgstr "Komentraria mastrumado"
+
+msgid "BlogManager"
+msgstr "Mastrumado de ĉi tiu blogo"
+
+msgid "ReadMore"
+msgstr "legi pli..."
+
+msgid "DeleteThisArticle"
+msgstr "Viŝi ĉi tiun artikolon"
+
+msgid "EditThisPost"
+msgstr "Ŝanĝi ĉi tiun artikolon"
+
+msgid "DeleteThisComment"
+msgstr "Viŝi ĉi tiun komentarion"
+
+msgid "NoArticles"
+msgstr "Ĉi-momente estas neniu artikolo en ĉi tiu blogo. Se vi estas aŭtoro en ĉi tiu blogo, vi povas musklaki sur la ligilon \'Nova artikolo\' por verki novan artikolon."
+
+msgid "NoTasks"
+msgstr "Ĉi-momente vi ne havas malfermajn taskojn"
+
+msgid "Rating"
+msgstr "Poentaro"
+
+msgid "RateThis"
+msgstr "Atribui poentojn al ĉi tiu artikolo"
+
+msgid "SelectTaskArticle"
+msgstr "Elektu artikolon por tiu tasko"
+
+msgid "ExecuteThisTask"
+msgstr "Plenumi ĉi tiun taskon"
+
+msgid "WrittenBy"
+msgstr "verkita de"
+
+msgid "InBlog"
+msgstr "en ĉi tiu blogo"
+
+msgid "ViewPostsOfThisDay"
+msgstr "Rigardi al la hodiaŭaj artikoloj"
+
+msgid "PostsOf"
+msgstr "Artikoloj de"
+
+msgid "NoArticleMatches"
+msgstr "Ni ne trovis artikolojn respondajn al viaj serĉkriterioj. Bonvolu fari pli vastan serĉpeton."
+
+msgid "langTask1"
+msgstr "Tasko 1"
+
+msgid "langTask2"
+msgstr "Tasko 2"
+
+msgid "langTask3"
+msgstr "Tasko 3"
+
+msgid "langTask1Desc"
+msgstr "Priskribo de tasko 1"
+
+msgid "langTask2Desc"
+msgstr "Priskribo de tasko 2"
+
+msgid "langTask3Desc"
+msgstr "Priskribo de tasko 3"
+
+msgid "blog_management"
+msgstr "Bloga mastrumado"
+
+msgid "langWelcome"
+msgstr "Bonvenon!"
+
+msgid "langModule"
+msgstr "Modulo"
+
+msgid "langUserHasPermissionNot"
+msgstr "La uzanto ne havas la rajtojn."
+
+msgid "langUserHasPermission"
+msgstr "La uzanto havas la rajtojn"
+
+msgid "langLegend"
+msgstr "Legendo"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "La uzanto havas la rajtojn de sia grupo."
+
+msgid "EditPost"
+msgstr "Ŝanĝi artikolon"
+
+msgid "AddBlog"
+msgstr "Fari novan blogon"
+
+msgid "EditBlog"
+msgstr "Redakti titolon kaj subtitolon"
+
+msgid "DeleteBlog"
+msgstr "Viŝi ĉi tiun blogon"
+

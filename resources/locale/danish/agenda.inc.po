@@ -1,0 +1,156 @@
+msgid "AgendaAdd"
+msgstr "Tilføj ny kalenderaftale"
+
+msgid "ShowAllEvents"
+msgstr "Vis alle kalenderaftaler"
+
+msgid "ShowCurrent"
+msgstr "Vis kalenderaftaler for indeværende måned"
+
+msgid "AddCalendarItem"
+msgstr "Tilføj ny aftale"
+
+msgid "Day"
+msgstr "Dag"
+
+msgid "Month"
+msgstr "Måned"
+
+msgid "Year"
+msgstr "År"
+
+msgid "Hour"
+msgstr "Time"
+
+msgid "Minutes"
+msgstr "Minutter"
+
+msgid "Detail"
+msgstr "Detaljer"
+
+msgid "EditSuccess"
+msgstr "Aftalen er blevet ændret"
+
+msgid "AddSuccess"
+msgstr "Aftale tilføjet"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Aftalen er slettet"
+
+msgid "NoAgendaItems"
+msgstr "Der er ingen aftaler"
+
+msgid "lang_september"
+msgstr "September"
+
+msgid "langClassName"
+msgstr "Klassenavn"
+
+msgid "lang_agenda"
+msgstr "Kalender"
+
+msgid "ModifyCalendarItem"
+msgstr "Rediger aftale"
+
+msgid "ItemTitle"
+msgstr "Titel på aftale"
+
+msgid "langDay"
+msgstr "dag"
+
+msgid "month_default"
+msgstr "forvalgt måned"
+
+msgid "langYear"
+msgstr "År"
+
+msgid "year_default"
+msgstr "forvalgt år"
+
+msgid "langHour"
+msgstr "Time"
+
+msgid "hour_default"
+msgstr "forvalgt time"
+
+msgid "langMinute"
+msgstr "minut"
+
+msgid "langLasting"
+msgstr "varende"
+
+msgid "langOldToNew"
+msgstr "gammel til ny"
+
+msgid "langNewToOld"
+msgstr "ny til gammel"
+
+msgid "langNow"
+msgstr "nu"
+
+msgid "langAddEvent"
+msgstr "Tilføj aftale"
+
+msgid "langDetail"
+msgstr "detalje"
+
+msgid "MonthView"
+msgstr "Månedsoversigt"
+
+msgid "WeekView"
+msgstr "Ugeoversigt"
+
+msgid "DayView"
+msgstr "Dagsoversigt"
+
+msgid "AddPersonalItem"
+msgstr "Tilføj personlig aftale"
+
+msgid "Week"
+msgstr "Uge"
+
+msgid "Date"
+msgstr "Dato"
+
+msgid "Time"
+msgstr "Tid"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Tilføj en personlig aftale"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Rediger en personlig aftale"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Din personlige aftale er tilføjet"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Din personlige aftale er gemt"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Din personlige aftale er slettet"
+
+msgid "ViewPersonalItem"
+msgstr "Se personlige aftaler"
+
+msgid "UserGroupFilter"
+msgstr "Filtrer på grupper/brugere"
+
+msgid "ShowAll"
+msgstr "Vis alle"
+
+msgid "Print"
+msgstr "Udskriv"
+
+msgid "MyTextHere"
+msgstr "min tekst her"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Kopieret som meddelelse"
+
+msgid "NewAnnouncement"
+msgstr "Ny meddelelse"
+
+msgid "AddAnnouncement"
+msgstr "tilføj som en meddelelse"
+

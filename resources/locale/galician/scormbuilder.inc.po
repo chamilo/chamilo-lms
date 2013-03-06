@@ -1,0 +1,3 @@
+msgid "langScormBuilder"
+msgstr "Construtor de itinerarios - Construtor de cursos con formato Scorm"
+

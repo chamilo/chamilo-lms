@@ -1,0 +1,192 @@
+msgid "langInvalidId"
+msgstr "فشلت عملية تسجيل الدخول - اسم المستخدم أو كلمة المرور غير صحيحة"
+
+msgid "langWelcome"
+msgstr "مرحبا !"
+
+msgid "langPass"
+msgstr "كلمة المرور"
+
+msgid "langEnter"
+msgstr " الرجوع إلى قائمة مقرراتي"
+
+msgid "langReg"
+msgstr "التسجيل"
+
+msgid "langMenu"
+msgstr "القائمة"
+
+msgid "langAdvises"
+msgstr "نصائح"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>تحذير :</b> هذا المقرر غير موجود"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "انقر هنا للحصول على هذا المقرر من بوابتك السابقة"
+
+msgid "langOtherCourses"
+msgstr " مقررات أخرى"
+
+msgid "langSupportForum"
+msgstr "منتدى الدعم"
+
+msgid "langCategories"
+msgstr " أصناف"
+
+msgid "langBackToHomePage"
+msgstr "نظرة عامة على التصانيف"
+
+msgid "lang_No_course_publicly_available"
+msgstr "لا يوجد مقرر متوفر للجميع"
+
+msgid "langLostPassword"
+msgstr "استرجاع كلمة المرور"
+
+msgid "lang_edit_my_course_list"
+msgstr "حرر قائمة مقرراتي"
+
+msgid "langAgenda"
+msgstr " الأجندة"
+
+msgid "langValvas"
+msgstr "الإعلانات الأخيرة"
+
+msgid "langUp"
+msgstr "أعلى"
+
+msgid "langCatList"
+msgstr " التصانيف"
+
+msgid "langCourseList"
+msgstr " قائمة المقررات"
+
+msgid "langHelptwo"
+msgstr "مساعدة"
+
+msgid "langRegAll"
+msgstr "تسجيل"
+
+msgid "EussMenu"
+msgstr "قائمة"
+
+msgid "Opinio"
+msgstr "رأي"
+
+msgid "Intranet"
+msgstr "انترانت"
+
+msgid "Englin"
+msgstr "الإنجليزية"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "فشلت عملية تسجيل الدخول - إذا لم تكن مسجلا . يمكنك التسجيل  عبر  <a href=claroline/auth/inscription.php>نموذج التسجيل </a>"
+
+msgid "langSubCat"
+msgstr " التصانيف الفرعية"
+
+msgid "langMenuGeneral"
+msgstr "عامة"
+
+msgid "langMenuUser"
+msgstr "المستخدمون"
+
+msgid "langMenuAdmin"
+msgstr "لوحة تحكم الإدارة"
+
+msgid "langUsersOnLineList"
+msgstr "قائمة المستخدمين المتصلين"
+
+msgid "langTotalOnLine"
+msgstr "إجمالي المتصلين"
+
+msgid "langRefresh"
+msgstr "تحديث"
+
+msgid "langMe"
+msgstr "أنا"
+
+msgid "langSystemAnnouncements"
+msgstr " اعلانات النظام"
+
+msgid "langHelpMaj"
+msgstr "مساعدة"
+
+msgid "langNotRegistered"
+msgstr "غير مسجل"
+
+msgid "langAdmin"
+msgstr "لوحة تحكم الإدارة"
+
+msgid "Login"
+msgstr " تسجيل الدخول"
+
+msgid "langRegisterForCourse"
+msgstr "تسجيل في مقرر"
+
+msgid "langUnregisterForCourse"
+msgstr "إلغاء التسجيل من مقرر"
+
+msgid "langCombinedCourse"
+msgstr " المقرر المددمج"
+
+msgid "Platform"
+msgstr " ركيزة"
+
+msgid "Refresh"
+msgstr "نحديث"
+
+msgid "TotalOnLine"
+msgstr "إجمالي الأعضاء المتصلين"
+
+msgid "langCourseClosed"
+msgstr "(المقرر مغلق حاليا )"
+
+msgid "ViewOpenCourses"
+msgstr " عرض المقررات المفتوجة"
+
+msgid "langCompetences"
+msgstr "القدرات"
+
+msgid "langDiplomas"
+msgstr "الشهادات"
+
+msgid "langTeach"
+msgstr "ماالذي يمكنه / يمكنها تدريسه"
+
+msgid "langProductions"
+msgstr "المنتجات"
+
+msgid "langSendChatRequest"
+msgstr "أرسل طلب محادثة إلى هذا الشخص"
+
+msgid "langRequestDenied"
+msgstr "لقد تم حظر  المكالمة"
+
+msgid "UsageDatacreated"
+msgstr "Usage data created"
+
+msgid "SessionView"
+msgstr "عرض المقررات مرتبة حسب الجلسات"
+
+msgid "CourseView"
+msgstr "عرض قائمة بجميع المقررات"
+
+msgid "DropboxFileAdded"
+msgstr "ملف Dropbox مضاف"
+
+msgid "NewMessageInForum"
+msgstr "نشر رسالة جديدة في المنتدى"
+
+msgid "FolderCreated"
+msgstr "تم إنشاء مجلد جديد"
+
+msgid "LinkAdded"
+msgstr "تمت إضافة رابط جديد"
+
+msgid "AnnouncementAdded"
+msgstr "لقد تم إضافة الإعلان بنجاح"
+
+msgid "AgendaAdded"
+msgstr "إضافة موضوع الأجندة"
+

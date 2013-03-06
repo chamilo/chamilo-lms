@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Vi ne elektis sendotan dosieron aŭ la dosiero estas tro granda."
+
+msgid "langLinkTarget"
+msgstr "Celo de la ligilo"
+
+msgid "langSameWindow"
+msgstr "En la sama fenestro"
+
+msgid "langNewWindow"
+msgstr "En nova fenestro"
+
+msgid "langAdded"
+msgstr "Aldonite"
+
+msgid "langAddLink"
+msgstr "Aldoni ligilon"
+
+msgid "langEditLink"
+msgstr "Ŝanĝi kursan ligilon en hejmpaĝo"
+

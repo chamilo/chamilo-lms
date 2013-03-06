@@ -1,0 +1,448 @@
+msgid "langProfessors"
+msgstr "Преподаватели"
+
+msgid "langExplanation"
+msgstr "След като щракнете бутона \"OK\" ще се създаде сайт на курса. Ше можете да променяте курса както пожелаете, защото сте негов създател."
+
+msgid "langEmpty"
+msgstr "Оставили сте някои полета празни.<br/>Използвайте бутона <b>\"Назад\"</b> на вашия браузър и опитайте отново."
+
+msgid "langCodeTaken"
+msgstr "Този код вече е вече зает.<br/>Използвайте бутона <b>\"Назад\"</b> на вашия браузър и опитайте отново."
+
+msgid "langFormula"
+msgstr "Искрено ваш,"
+
+msgid "langMessage"
+msgstr "Надяваме се да извлечете полза от Вашето участие във форумите. Успех!"
+
+msgid "langExerciceEx"
+msgstr "Примерен тест"
+
+msgid "langAntique"
+msgstr "Иронията"
+
+msgid "langSocraticIrony"
+msgstr "Иронията на Сократ е..."
+
+msgid "langManyAnswers"
+msgstr "(повече от един отговор може да е верен)"
+
+msgid "langRidiculise"
+msgstr "Да се присмееш на събеседника си, за да го накараш да допусне, че греши."
+
+msgid "langNoPsychology"
+msgstr "Не. Иронията на Сократ няма нищо общо с психологията, тя разчита на аргументи."
+
+msgid "langAdmitError"
+msgstr "Да признаеш собствените си грешки и да накараш събеседника си да направи същото."
+
+msgid "langNoSeduction"
+msgstr "Не, иронията на Сократ не е подвеждаща тактика или нещо подобно."
+
+msgid "langForce"
+msgstr "Да засипеш събеседника си с въпроси и под-въпроси, за да го накараш да признае, че не знае, каквото твърди, че знае."
+
+msgid "langIndeed"
+msgstr "Да, наистина. Иронията на Сократ е метод на \"разпитване\". Гръцката дума \"иротао\" означава \"да задавам въпроси\"."
+
+msgid "langContradiction"
+msgstr "Да не се противопоставяш, като оставиш събеседника си сам да влезе в \"задънена улица\"."
+
+msgid "langNotFalse"
+msgstr "Това не е грешен отговор. Вярно е, че разкриването на невежество означава - опонентът да изведе противоречиви твърдения, на базата на изходните твърдения на събеседника."
+
+msgid "langAgenda"
+msgstr "Програма"
+
+msgid "langVideo"
+msgstr "Видео"
+
+msgid "langCourseProgram"
+msgstr "Описание на курса"
+
+msgid "langAnnouncements"
+msgstr "Обяви"
+
+msgid "langAddPageHome"
+msgstr "Запиши HTML-страницата и добави връзка в началната страница"
+
+msgid "langLinkSite"
+msgstr "Добави връзка към началната страница"
+
+msgid "langModifyInfo"
+msgstr "Настройки на курса"
+
+msgid "langCourseDesc"
+msgstr "Описание на курса"
+
+msgid "langAgendaTitle"
+msgstr "11-ти септември, вторник - Първо занятие. Стая 18"
+
+msgid "langAgendaText"
+msgstr "Въведение в управлението на проекти"
+
+msgid "langMicro"
+msgstr "Теренни интервюта"
+
+msgid "langGoogle"
+msgstr "Най-използваната търсачка в света"
+
+msgid "langIntroductionText"
+msgstr "Това е встъпителният текст за вашия курс.<br/><br/>За да го промените, непосредствено по-долу щракнете иконката <strong>\"Промяна\" (<img src=\"../../main/img/edit.gif\" align=\"absmiddle\" border=\"0\"/>)</strong>.<br/><br/>Ще запишете направените промени, като щракнете бутона <strong>\"Запис\"</strong>, който ще се появи под редактора."
+
+msgid "langIntroductionTwo"
+msgstr "Тази страница позволява на курсистите да качват документи в сайта на курса. Ако изпращате HTML-файлове - те не трябва да съдържат изображения."
+
+msgid "langCourseDescription"
+msgstr "Описание на курса"
+
+msgid "langProfessor"
+msgstr "Преподавател"
+
+msgid "langAnnouncementEx"
+msgstr "Това е примерна обява. Само преподавателите и администраторите могат да публикуват обяви."
+
+msgid "langJustCreated"
+msgstr "Вие току-що създадохте сайт на курса"
+
+msgid "langEnter"
+msgstr "<< Обратно към списъка с курсовете"
+
+msgid "langGroups"
+msgstr "Групи"
+
+msgid "langCreateCourseGroups"
+msgstr "Групи"
+
+msgid "langCatagoryMain"
+msgstr "Основна"
+
+msgid "langCatagoryGroup"
+msgstr "Форуми на групите"
+
+msgid "langLn"
+msgstr "Език"
+
+msgid "langCreateSite"
+msgstr "Създаване сайт на курса"
+
+msgid "langFieldsRequ"
+msgstr "Всички полета са задължителни."
+
+msgid "langEx"
+msgstr "Заглавие в свободен текст (по-кратък, ако е възможно)"
+
+msgid "langFac"
+msgstr "Категория"
+
+msgid "langTargetFac"
+msgstr "Изберете категорията на курса."
+
+msgid "langMax"
+msgstr "Максимум 12 символа, напр. <i>AB2121</i>"
+
+msgid "langDoubt"
+msgstr "Ако се съмнявате за кода на курса, обсъдете го с подходящите хора,"
+
+msgid "langProgram"
+msgstr "със списъка на курсовете</a>. Ако вашият курс няма код, измислете такъв. Например <i>HISTORY</i> ако курсът ви е за История на България."
+
+msgid "langScormtool"
+msgstr "Пътеки за обучение"
+
+msgid "langScormbuildertool"
+msgstr "Създател на пътеки за обучение"
+
+msgid "langPathbuildertool"
+msgstr "Редактор на пътеки за обучение"
+
+msgid "langOnlineConference"
+msgstr "Конференция"
+
+msgid "langAgendaCreationTitle"
+msgstr "Създаване на курса"
+
+msgid "langAgendaCreationContenu"
+msgstr "В този момент е създаден курса."
+
+msgid "langOnlineDescription"
+msgstr "Информация за конференцията"
+
+msgid "langDropbox"
+msgstr "Куриер"
+
+msgid "langOnly"
+msgstr "Само"
+
+msgid "langRandomLanguage"
+msgstr "Случаен избор от достъпните езици"
+
+msgid "langImages"
+msgstr "Изображения"
+
+msgid "langAudio"
+msgstr "Аудио"
+
+msgid "langFlash"
+msgstr "Флаш-анимации"
+
+msgid "langForumLanguage"
+msgstr "Български"
+
+msgid "langNewCourse"
+msgstr "Нов курс"
+
+msgid "langAddNewCourse"
+msgstr "Добавяне на нов курс"
+
+msgid "langRestoreCourse"
+msgstr "Възстановяване на курса"
+
+msgid "langOtherProperties"
+msgstr "Други свойства, намерени в архива"
+
+msgid "langSysId"
+msgstr "Системен идентификатор"
+
+msgid "langDepartment"
+msgstr "Отдел (катедра)"
+
+msgid "langDepartmentUrl"
+msgstr "Сайт на отдела (катедрата)"
+
+msgid "langScoreShow"
+msgstr "Показване на резултата"
+
+msgid "langVisibility"
+msgstr "Видимост"
+
+msgid "langVersionDb"
+msgstr "Версия на базата данни по време на архивирането"
+
+msgid "langLastVisit"
+msgstr "Последно посещение"
+
+msgid "langLastEdit"
+msgstr "Последно редактиране"
+
+msgid "langExpire"
+msgstr "Краен срок"
+
+msgid "langChoseFile"
+msgstr "Изберете файл"
+
+msgid "langFtpFileTips"
+msgstr "Файл на FTP-сървър"
+
+msgid "langHttpFileTips"
+msgstr "Файл на Web (HTTP) сървър"
+
+msgid "langLocalFileTips"
+msgstr "Файл на системния сървър"
+
+msgid "langPostFileTips"
+msgstr "Файл на вашия локален компютър"
+
+msgid "langOtherCategory"
+msgstr "Друга категория"
+
+msgid "langMinimum"
+msgstr "минимален"
+
+msgid "langMaximum"
+msgstr "максимален"
+
+msgid "langRestoreACourse"
+msgstr "Възстановяване на курс"
+
+msgid "langBackup"
+msgstr "Работа с архиви"
+
+msgid "langCopy"
+msgstr "Копиране на курса"
+
+msgid "langRecycle"
+msgstr "Рециклиране на курс"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Това е пример за обява"
+
+msgid "Wikipedia"
+msgstr "Безплатна енциклопедия"
+
+msgid "DefaultGroupCategory"
+msgstr "Група по подразбиране"
+
+msgid "DefaultCourseImages"
+msgstr "Галерия"
+
+msgid "ExampleForumCategory"
+msgstr "Примерна категория"
+
+msgid "ExampleForum"
+msgstr "Примерен форум"
+
+msgid "ExampleThread"
+msgstr "Примерна тема"
+
+msgid "ExampleThreadContent"
+msgstr "Примерно съдържание"
+
+msgid "IntroductionWiki"
+msgstr "Думата Wiki е съкращение от WikiWikiWeb. Wikiwiki на хавайски език означава \"бързо\".<br />Чрез инструмента Wiki няколко човека могат да създават страници заедно. Ако някой допусне грешки, друг човек може да ги коригира. Трети може да добави допълнителен текст и т.н. Благодарение на тези последователни корекции качеството на страниците става по-добро."
+
+msgid "CreateCourseArea"
+msgstr "Създаване на курс"
+
+msgid "CreateCourse"
+msgstr "Създаване на курс"
+
+msgid "Create"
+msgstr "Създаване"
+
+msgid "MessageOfNewCourseToAdmin"
+msgstr "С това съобщение Ви информираме, че сте създали в системата за обучение нов курс"
+
+msgid "NewCourseCreatedIn"
+msgstr "Нов курс създаден в"
+
+msgid "ExplicationTrainers"
+msgstr "Вие сте преподавател в курса. Можете да промените преподавателя в страницата за настройки на курса."
+
+msgid "Objectives"
+msgstr "Цели на курса"
+
+msgid "TargetAudience"
+msgstr "Целева аудитория"
+
+msgid "YouHaveToAcceptTermsAndConditions"
+msgstr "Трабва да приемете нашите Условия за ползване, за да заявите нов курс."
+
+msgid "CourseRequestCreated"
+msgstr "Вашата заявка за нов курс е изпратена. Може да получите отговор по нея скоро, в рамките на 1-2 дена."
+
+msgid "CreateThisCourseRequest"
+msgstr "Създаване на заявката"
+
+msgid "CourseRequestDate"
+msgstr "Дата на заявката"
+
+msgid "AcceptThisCourseRequest"
+msgstr "Одобряване и създаване на курса"
+
+msgid "ANewCourseWillBeCreated"
+msgstr "Ще се създаде нов курс %s. Да се изпълни ли това действие?"
+
+msgid "AdditionalInfoWillBeAsked"
+msgstr "Ще се изпрати e-mail с искане за допълнителна информация относно заявката %s. Да се изпълни ли това действие?"
+
+msgid "AskAdditionalInfo"
+msgstr "Искане на допълнителна информация"
+
+msgid "DeleteThisCourseRequest"
+msgstr "Изтриване на заявката"
+
+msgid "ACourseRequestWillBeDeleted"
+msgstr "Заявката %s ще бъде изтрита. Да се изпълни ли това действие?"
+
+msgid "RejectThisCourseRequest"
+msgstr "Отхвърляне на заявката"
+
+msgid "ACourseRequestWillBeRejected"
+msgstr "Заявката %s ще бъде отхвърлена. Да се изпълни ли това действие?"
+
+msgid "CourseRequestAccepted"
+msgstr "Заявката %s е одобрена. Създаден е нов курс %s."
+
+msgid "CourseRequestAcceptanceFailed"
+msgstr "Заявката %s не можа да бъде одобрена поради появила се грешка."
+
+msgid "CourseRequestRejected"
+msgstr "Заявката %s е отхвърлена."
+
+msgid "CourseRequestRejectionFailed"
+msgstr "Заявката %s не можа да бъде отхвърлена поради появила се грешка."
+
+msgid "CourseRequestInfoAsked"
+msgstr "Изпратено е искане за допълнителна информация по заявката %s."
+
+msgid "CourseRequestInfoFailed"
+msgstr "Искане за допълнителна информация по заявката %s не беше изпратено поради появила се грешка."
+
+msgid "CourseRequestDeleted"
+msgstr "Заявката %s е изтрита."
+
+msgid "CourseRequestDeletionFailed"
+msgstr "Заявката %s не можа да бъде изтрита поради появила се грешка."
+
+msgid "DeleteCourseRequests"
+msgstr "Изтриване на избраните заявки за курсове"
+
+msgid "SelectedCourseRequestsDeleted"
+msgstr "Избраните заявки за курсове са изтрити."
+
+msgid "SomeCourseRequestsNotDeleted"
+msgstr "Някои от избраните заявки за курсове не са изтрити поради появила се грешка."
+
+msgid "CourseRequestEmailSubject"
+msgstr "%s Заявка за нов курс %s"
+
+msgid "CourseRequestMailOpening"
+msgstr "Регистрирана е следната заявка за нов курс:"
+
+msgid "CourseRequestPageForApproval"
+msgstr "Тази заявка може да бъде одобрена на страницата:"
+
+msgid "PleaseActivateCourseValidationFeature"
+msgstr "Функцията \"Одобряване на курсове\" не е активна в момента. За да я активирате използвайте настройката %s."
+
+msgid "CourseRequestLegalNote"
+msgstr "Информацията в тази заявка е защитена; тя може да служи само за обслужване на процедурата по откриване на нов учебен курс в нашия учебен портал; тя не може да бъде разкривана пред трети страни."
+
+msgid "CourseRequestAskInfoEmailSubject"
+msgstr "%s Искане за допълнителна информация относно заявката за нов курс %s"
+
+msgid "CourseRequestAskInfoEmailText"
+msgstr "Получихме вашата заявка за нов курс с код %s. За да я разгледаме за одобрение, ние се нуждаем от допълнителна информация.
+
+Моля, изпратете ни информация относно съдържанието на курса (описание), относно целите на курса и относно курсистите (целевата аудитория). Ако е приложимо, споменете институцията или организационното звено, от чието име сте подали заявката."
+
+msgid "CourseRequestAcceptedEmailSubject"
+msgstr "%s Заявката за нов курс %s е одобрена"
+
+msgid "CourseRequestAcceptedEmailText"
+msgstr "Вашата заявка %s е одобрена. Създаден е нов курс %s за който сте регистрирани като преподавател.
+
+Можете да получите достъп до своя курс оттук: %s"
+
+msgid "CourseRequestRejectedEmailSubject"
+msgstr "%s Заявката за нов курс %s е отхвърлена"
+
+msgid "CourseRequestRejectedEmailText"
+msgstr "За съжаление Вашата заявка за нов курс %s е отхвърлена, тъй като не отговаря на нашите Условия за ползване."
+
+msgid "CourseCreationFailed"
+msgstr "Курсът не е създаден поради появила се грешка."
+
+msgid "CourseRequestCreationFailed"
+msgstr "Заявката за нов курс не е създадена поради появила се грешка."
+
+msgid "CourseRequestEdit"
+msgstr "Редактиране на заявка за нов курс"
+
+msgid "CourseRequestHasNotBeenFound"
+msgstr "Заявката за нов курс, до която искате достъп не е намерена или не съществува."
+
+msgid "Accept"
+msgstr "Одобряване"
+
+msgid "Reject"
+msgstr "Отхвърляне"
+
+msgid "CourseRequestUpdateFailed"
+msgstr "Заявката %s не можа да бъде актуализирана поради появила се грешка."
+
+msgid "CourseRequestUpdated"
+msgstr "Заявката за нов курс %s е актуализирана."
+

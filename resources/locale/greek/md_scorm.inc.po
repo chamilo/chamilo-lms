@@ -1,0 +1,9 @@
+msgid "langMdCallingTool"
+msgstr "Έγγραφα"
+
+msgid "langUploadHtt"
+msgstr "Ανέβασμα HTT αρχείου"
+
+msgid "langRemove"
+msgstr "διαγραφή MDEs"
+

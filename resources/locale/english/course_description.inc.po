@@ -1,0 +1,54 @@
+msgid "langCourseProgram"
+msgstr "Description"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "There is no course description so far."
+
+msgid "langEditCourseProgram"
+msgstr "Create or edit a description."
+
+msgid "QuestionPlan"
+msgstr "Help"
+
+msgid "langInfo2Say"
+msgstr "Information to give to users"
+
+msgid "langOuAutreTitre"
+msgstr "Title"
+
+msgid "langNewBloc"
+msgstr "Other"
+
+msgid "langAddCat"
+msgstr "Add a category"
+
+msgid "langAdd"
+msgstr "Add"
+
+msgid "langValid"
+msgstr "Valid"
+
+msgid "langBackAndForget"
+msgstr "Cancel"
+
+msgid "CourseDescriptionUpdated"
+msgstr "The description has been updated"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Description has been deleted"
+
+msgid "CourseDescriptionIntro"
+msgstr "To create a description, click on a heading and complete the field.<br><br> Click OK to continue."
+
+msgid "langSaveDescription"
+msgstr "Save description"
+
+msgid "AddCourseDescription"
+msgstr "Add course description"
+
+msgid "DescriptionUpdated"
+msgstr "Description updated"
+
+msgid "CourseDescriptions"
+msgstr "Course descriptions"
+

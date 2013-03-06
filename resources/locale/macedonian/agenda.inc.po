@@ -1,0 +1,147 @@
+msgid "AgendaAdd"
+msgstr "Додај нов елемент во распоредот"
+
+msgid "ShowAllEvents"
+msgstr "Прикажи ги сите елементи на распоредот"
+
+msgid "ShowCurrent"
+msgstr "Прикажи ги елементите на распоредот за тековниот месец"
+
+msgid "AddCalendarItem"
+msgstr "Додај нов елемент во распоредот"
+
+msgid "Day"
+msgstr "Ден"
+
+msgid "Month"
+msgstr "Месец"
+
+msgid "Year"
+msgstr "Година"
+
+msgid "Hour"
+msgstr "Час"
+
+msgid "Minutes"
+msgstr "Минути"
+
+msgid "Detail"
+msgstr "Подробност"
+
+msgid "EditSuccess"
+msgstr "Елементот на распоредот беше уреден"
+
+msgid "AddSuccess"
+msgstr "Елементот на распоредот е додаден"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Елементот на распоредот беше избришан"
+
+msgid "NoAgendaItems"
+msgstr "&#1053;&#1077; &#1087;&#1086;&#1089;&#1090;&#1086;&#1112;&#1072;&#1090; &#1077;&#1083;&#1077;&#1084;&#1077;&#1085;&#1090;&#1080; &#1085;&#1072; &#1088;&#1072;&#1089;&#1087;&#1086;&#1088;&#1077;&#1076;&#1086;&#1090;"
+
+msgid "lang_september"
+msgstr "Септември"
+
+msgid "langClassName"
+msgstr "Име на паралелка"
+
+msgid "lang_agenda"
+msgstr "Распоред"
+
+msgid "ModifyCalendarItem"
+msgstr "Измени го елементот на распоредот"
+
+msgid "ItemTitle"
+msgstr "Наслов на елементот"
+
+msgid "langDay"
+msgstr "ден"
+
+msgid "month_default"
+msgstr "поставен масец"
+
+msgid "langYear"
+msgstr "Година"
+
+msgid "year_default"
+msgstr "поставена година"
+
+msgid "langHour"
+msgstr "Час"
+
+msgid "hour_default"
+msgstr "поставен час"
+
+msgid "langMinute"
+msgstr "минута"
+
+msgid "langLasting"
+msgstr "траен"
+
+msgid "langOldToNew"
+msgstr "стар на нов"
+
+msgid "langNewToOld"
+msgstr "нов на стар"
+
+msgid "langNow"
+msgstr "&#1089;&#1077;&#1075;&#1072;"
+
+msgid "langAddEvent"
+msgstr "Додај настан"
+
+msgid "langDetail"
+msgstr "подробност"
+
+msgid "MonthView"
+msgstr "Месечен приказ"
+
+msgid "WeekView"
+msgstr "Седмичен приказ"
+
+msgid "DayView"
+msgstr "Дневен приказ"
+
+msgid "AddPersonalItem"
+msgstr "Додај личен елемент"
+
+msgid "Week"
+msgstr "Седмица"
+
+msgid "Date"
+msgstr "Датум"
+
+msgid "Time"
+msgstr "Време"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Додај личен елемент на распоредот"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Измени личен елемент на распоредот"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Вашиот личен елемент на распоредот беше успешно додаден"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Вашиот личен елемент на распоредот беше успешно уреден"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Вашиот личен елемент на распоредот беше успешно избришан"
+
+msgid "ViewPersonalItem"
+msgstr "Приказ на личните елементи"
+
+msgid "UserGroupFilter"
+msgstr "Филтер на групи/корисници"
+
+msgid "ShowAll"
+msgstr "Прикажи се\'"
+
+msgid "Print"
+msgstr "Печати"
+
+msgid "MyTextHere"
+msgstr "мојот текст овде"
+

@@ -1,0 +1,294 @@
+msgid "langProfessors"
+msgstr "Predavači"
+
+msgid "langExplanation"
+msgstr "Kad pritisnete OK web stranice će biti izrađene, uključujući forum, raspored, upravljanje dokumentima, itd. Vašom prijavom, kao tvorcu web stranice, omogućava vam se izmjena stranice prema vlastitim zahtjevima."
+
+msgid "langEmpty"
+msgstr " Niste ispunili sve podatke.<br> Tipkom <b>Back</b> vratite se i pokušajte ponovno.<br>Ne sjećate li se šifre kolegija, pogledajte u Program kolegija"
+
+msgid "langCodeTaken"
+msgstr "Ova šifra već postoji.  <br> Tipkom <b>Back</b> vratite se i ispravite.<br>"
+
+msgid "langFormula"
+msgstr "Sa štovanjem, Vaš predavač"
+
+msgid "langMessage"
+msgstr "Pri uklanjanju pokusnog foruma, uklonit će se i sve poruke u njemu"
+
+msgid "langExerciceEx"
+msgstr "Uzorak vježbe"
+
+msgid "langAntique"
+msgstr "Povijest antičke filozofije"
+
+msgid "langSocraticIrony"
+msgstr "Sokratovska ironija je..."
+
+msgid "langManyAnswers"
+msgstr "(više odgovora može biti točno)"
+
+msgid "langRidiculise"
+msgstr "Ismijavajte sugovornika kako bi shvatio da je u krivu."
+
+msgid "langNoPsychology"
+msgstr "Ne. Sokratovska ironija nije predmet psihologije, ona se tiče argumentacije."
+
+msgid "langAdmitError"
+msgstr "Priznajte vlastitu grešku kako biste sugovornika potaknuli da učini isto."
+
+msgid "langNoSeduction"
+msgstr "Ne. Sokratovska ironija nije strategija zavođenja ili metoda temeljena na primjeru."
+
+msgid "langForce"
+msgstr "Prinudite sugovornika, nizom pitanja i podpitanja, da ne zna ono što tvrdi da zna."
+
+msgid "langIndeed"
+msgstr "Doista. Sokratovska ironija je metoda ispitivanja. Grčki  \"eirotao\" znači \"postavljati pitanja\""
+
+msgid "langContradiction"
+msgstr "Koristite načela neopovrgavanja kako biste stjerali sugovornika u kut."
+
+msgid "langNotFalse"
+msgstr "Ovaj odgovor nije netočan. Istina je da se otkriće sugovornikova neznanja postiže osvješćivanjem kontradiktornih zaključaka kojima su vođene njegove teze."
+
+msgid "langAgenda"
+msgstr "Raspored"
+
+msgid "langVideo"
+msgstr "Video"
+
+msgid "langCourseProgram"
+msgstr "Opis kolegija"
+
+msgid "langAnnouncements"
+msgstr "Obavijesti"
+
+msgid "langAddPageHome"
+msgstr "Prenesi stranicu i poveži s početnom stranicom"
+
+msgid "langLinkSite"
+msgstr "Postavi poveznicu na početnu stranicu"
+
+msgid "langModifyInfo"
+msgstr "Postavke kolegija"
+
+msgid "langCourseDesc"
+msgstr "Opis kolegija"
+
+msgid "langAgendaTitle"
+msgstr "Utorak, 11. prosinca - Prvi sastanak. Soba: LIN 18"
+
+msgid "langAgendaText"
+msgstr "Opći uvod u upravljanje projektima"
+
+msgid "langMicro"
+msgstr "Intervju proveden na ulici"
+
+msgid "langGoogle"
+msgstr "Brz i učinkovit pretraživač"
+
+msgid "langIntroductionText"
+msgstr "Ovo je uvodni tekst za vaš kolegij. Da biste ga zamjenili vlastitim tekstom, kliknite ispod na ikonu olovke (samo za nadzornike kolegija)."
+
+msgid "langIntroductionTwo"
+msgstr "Ova stranica omogućuje korisnicima i skupinama objavljivanje dokumenata."
+
+msgid "langCourseDescription"
+msgstr "Opis kolegija"
+
+msgid "langProfessor"
+msgstr "Predavač"
+
+msgid "langAnnouncementEx"
+msgstr "Ovo je primjer obavijesti. Samo predavači pojedinih kolegija mogu objavljivati obavijesti."
+
+msgid "langJustCreated"
+msgstr "Upravo ste izradili web stranicu kolegija"
+
+msgid "langEnter"
+msgstr "Povratak na popis kolegija"
+
+msgid "langGroups"
+msgstr "Skupine"
+
+msgid "langCreateCourseGroups"
+msgstr "Skupine"
+
+msgid "langCatagoryMain"
+msgstr "Glavna"
+
+msgid "langCatagoryGroup"
+msgstr "Forumi skupina"
+
+msgid "langLn"
+msgstr "Jezik"
+
+msgid "langCreateSite"
+msgstr "Izradi kolegij"
+
+msgid "langFieldsRequ"
+msgstr "Potrebno je ispuniti sve podatke"
+
+msgid "langEx"
+msgstr "primjerice. <i>Matematika I</i>"
+
+msgid "langFac"
+msgstr "Kategorija"
+
+msgid "langTargetFac"
+msgstr "Naziv fakulteta, odjela ili katedre"
+
+msgid "langMax"
+msgstr "najviše 12 znakova, npr. <i>ROM2121</i>"
+
+msgid "langDoubt"
+msgstr "Ako ne znate šifru kolegija, pogledajte ,"
+
+msgid "langProgram"
+msgstr "Nastavni program </a>. Ako ne postoji izmislite ga.  Primjerice <i>MATE1</i> za predmet MATEMATIKA I"
+
+msgid "langScormtool"
+msgstr "Put učenja"
+
+msgid "langScormbuildertool"
+msgstr "Program za izradu Scorm Path"
+
+msgid "langPathbuildertool"
+msgstr "Program za izradu Learning Path"
+
+msgid "langOnlineConference"
+msgstr "Konferencija"
+
+msgid "langAgendaCreationTitle"
+msgstr "Izrada kolegija"
+
+msgid "langAgendaCreationContenu"
+msgstr "Kolegij je izrađen tada"
+
+msgid "langOnlineDescription"
+msgstr "Opis konferencije"
+
+msgid "langDropbox"
+msgstr "Pretinac"
+
+msgid "langOnly"
+msgstr "Samo"
+
+msgid "langRandomLanguage"
+msgstr "Nasumični odabir u dostupnim jezicima"
+
+msgid "langImages"
+msgstr "Slike"
+
+msgid "langAudio"
+msgstr "Zvučni zapis"
+
+msgid "langFlash"
+msgstr "Flash format"
+
+msgid "langForumLanguage"
+msgstr "engleski"
+
+msgid "langNewCourse"
+msgstr "Novi kolegij"
+
+msgid "langAddNewCourse"
+msgstr "Dodaj novi kolegij"
+
+msgid "langRestoreCourse"
+msgstr "Obnovi kolegij"
+
+msgid "langOtherProperties"
+msgstr "Druga svojstva nađena u pohrani"
+
+msgid "langSysId"
+msgstr "Identifikacija sustava"
+
+msgid "langDepartment"
+msgstr "Odjel"
+
+msgid "langDepartmentUrl"
+msgstr "URL Odjela (Zavoda, Katedre)"
+
+msgid "langScoreShow"
+msgstr "Prikaži rezultat"
+
+msgid "langVisibility"
+msgstr "Vidljivost"
+
+msgid "langVersionDb"
+msgstr "Verzija baze podataka upotrijebljena u vrijeme pohrane"
+
+msgid "langLastVisit"
+msgstr "Posljednja posjeta"
+
+msgid "langLastEdit"
+msgstr "Posljednje izmjene"
+
+msgid "langExpire"
+msgstr "Rok istjecanja"
+
+msgid "langChoseFile"
+msgstr "Odaberi datoteku"
+
+msgid "langFtpFileTips"
+msgstr "Datoteka na poslužitelju FTP"
+
+msgid "langHttpFileTips"
+msgstr "Datoteka na poslužitelju weba (HTTP)"
+
+msgid "langLocalFileTips"
+msgstr "Datoteka na poslužitelju platforme"
+
+msgid "langPostFileTips"
+msgstr "Datoteka na lokalnom računalu"
+
+msgid "langOtherCategory"
+msgstr "Druga kategorija"
+
+msgid "langMinimum"
+msgstr "najmanje"
+
+msgid "langMaximum"
+msgstr "najviše"
+
+msgid "langRestoreACourse"
+msgstr "obnovi kolegij"
+
+msgid "langBackup"
+msgstr "Pričuvni primjerak"
+
+msgid "langCopy"
+msgstr "Preslikaj sadržaj kolegija"
+
+msgid "langRecycle"
+msgstr "Recikliraj kolegij"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Ovo je primjer obavijesti"
+
+msgid "Wikipedia"
+msgstr "Besplatna enciklopedija online"
+
+msgid "DefaultGroupCategory"
+msgstr "Postavljene skupine"
+
+msgid "DefaultCourseImages"
+msgstr "Galerija"
+
+msgid "ExampleForumCategory"
+msgstr "Primjer kategorije foruma"
+
+msgid "ExampleForum"
+msgstr "Primjer foruma"
+
+msgid "ExampleThread"
+msgstr "Primjer teme"
+
+msgid "ExampleThreadContent"
+msgstr "Primjer sadržaja"
+
+msgid "IntroductionWiki"
+msgstr "Riječ Wiki je kratica za WikiWikiWeb. Wikiwiki je Havajska riječ koja znači brzo ili brzina. Na Wiki stranicama ljudi pišu kolaborativno. Ukoliko netko napiše nešto pogrešno tada bilo tko ima priliku da to ispravi. Sljedeća osoba može nadopuniti stranicu i na taj način se poboljšava sadržaj stranice prilikom svake izmjene."
+

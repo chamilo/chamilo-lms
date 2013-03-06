@@ -1,0 +1,27 @@
+msgid "NoteAddNew"
+msgstr "Magdagdag ng bagong tala sa aking personal na notebook"
+
+msgid "OrderByCreationDate"
+msgstr "Ayusin ayon sa petsa nang inilikha"
+
+msgid "OrderByModificationDate"
+msgstr "Ayusin ayon sa petsa nang huling binago"
+
+msgid "OrderByTitle"
+msgstr "Ayusin ayon sa pamagat"
+
+msgid "NoteTitle"
+msgstr "Pamagat ng tala"
+
+msgid "NoteComment"
+msgstr "Mga detalye ng tala"
+
+msgid "NoteConfirmDelete"
+msgstr "Sigurado ka bang nais mong tanggalin ang tala na ito"
+
+msgid "AddNote"
+msgstr "Lumikha ng tala"
+
+msgid "BackToNotesList"
+msgstr "Bumalik sa listahan ng mga tala"
+

@@ -1,0 +1,360 @@
+msgid "langExercice"
+msgstr "Pagsusulit"
+
+msgid "langNewEx"
+msgstr "Lumikha ng bagong pagsusulit"
+
+msgid "langQuestions"
+msgstr "Mga Tanong"
+
+msgid "langAnswer"
+msgstr "Sagot"
+
+msgid "langExerciseName"
+msgstr "Pangalang ng pagsusulit"
+
+msgid "langExerciseDescription"
+msgstr "Magbigay ng konteksto sa pagsusulit"
+
+msgid "langSimpleExercise"
+msgstr "Lahat ng mga taong sa isang pahina"
+
+msgid "langSequentialExercise"
+msgstr "Isang tanong sa isang pahina"
+
+msgid "langRandomQuestions"
+msgstr "Sapalarang mga tanong"
+
+msgid "langGiveExerciseName"
+msgstr "Mangyaring ibigay ang pangalan ng pagsusulit"
+
+msgid "langGoBackToQuestionList"
+msgstr "Bumalik sa listahan ng mga tanong"
+
+msgid "langAnswerType"
+msgstr "Uri ng sagot"
+
+msgid "langMultipleSelect"
+msgstr "Maramihang mga sagot"
+
+msgid "langFillBlanks"
+msgstr "Punan ang mga blanko o form"
+
+msgid "langMatching"
+msgstr "Pagtutugma"
+
+msgid "langQuestionDescription"
+msgstr "Ganap na tanong"
+
+msgid "langGiveQuestion"
+msgstr "Mangyaring i-type ang tanong"
+
+msgid "langGetExistingQuestion"
+msgstr "I-recycle ang umiiral na mga tanong"
+
+msgid "langQuestionPool"
+msgstr "I-recycle ang umiiral na mga tanong"
+
+msgid "langOrphanQuestions"
+msgstr "Mga naulilang tanong"
+
+msgid "langAllExercises"
+msgstr "Lahat ng mga pagsusulit"
+
+msgid "langExerciseManagement"
+msgstr "Pangasiwaan ang mga pagsususlit"
+
+msgid "langQuestionManagement"
+msgstr "Tanong / Pangasiwaan ang tanong"
+
+msgid "langExpectedChoice"
+msgstr "Inaasahang pagpipilian"
+
+msgid "langYourTotalScore"
+msgstr "Score para sa pagsusulit"
+
+msgid "Build"
+msgstr "Gumawa"
+
+msgid "langAddQ"
+msgstr "Magdagdag ng katanungan"
+
+msgid "langCorrect"
+msgstr "Tama"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "I-import Hotpotatoes"
+
+msgid "langCreateQuestion"
+msgstr "Lumikha ng isang tanong"
+
+msgid "langModifyExercise"
+msgstr "I-edit ang pangalan ng pagsusulit at mga setting"
+
+msgid "FreeAnswer"
+msgstr "Buksan ang tanong"
+
+msgid "NewQu"
+msgstr "Mga bagong tanong"
+
+msgid "NoImage"
+msgstr "Mangyaring pumili ng isang imahe"
+
+msgid "HotSpot"
+msgstr "Mga sona ng imahe"
+
+msgid "StudentScore"
+msgstr "Score ng mag-aaral"
+
+msgid "Weighting"
+msgstr "Score"
+
+msgid "UploadJpgPicture"
+msgstr "Mag-upload ng imahe (jpg, png o gif) na gagamitin sa hotspots."
+
+msgid "RandomQuestionsHelp"
+msgstr "Upang isapalaran ang lahat ng mga tanong, piliin ang 10. Upang di-pagganahin ang pagsasapalaran, piliin ang \"Huwag isapalaran\"."
+
+msgid "ExerciseAttempts"
+msgstr "Maximum na bilang ng mga pagtatangka"
+
+msgid "Infinite"
+msgstr "Walang Katapusan"
+
+msgid "BackToExercisesList"
+msgstr "Bumalik sa tool ng Mga Pagsusulit"
+
+msgid "DeleteAttempt"
+msgstr "Tanggalin ang pagtatangka?"
+
+msgid "QuantityQuestions"
+msgstr "Mga Tanong"
+
+msgid "ReachedTimeLimit"
+msgstr "Naabot na ang limitasyon ng oras"
+
+msgid "NoFeedback"
+msgstr "Pagsusulit (walang feedback)"
+
+msgid "FeedbackType"
+msgstr "Feedback"
+
+msgid "Difficulty"
+msgstr "Kabigatan"
+
+msgid "ShowResultsToStudents"
+msgstr "Ipakita ang score sa mag-aaral"
+
+msgid "ProcedToQuestions"
+msgstr "Magpatuloy sa mga tanong"
+
+msgid "AddQuestionToExercise"
+msgstr "Idagdag ang tanong na ito sa pagsusulit"
+
+msgid "UniqueAnswer"
+msgstr "Maramihang pagpipilian"
+
+msgid "MultipleAnswer"
+msgstr "Maramihang sagot"
+
+msgid "QuestionsPerPage"
+msgstr "Mga tanong sa bawat pahina"
+
+msgid "ExerciseAtTheEndOfTheTest"
+msgstr "Sa pagtatapos ng pagsusulit"
+
+msgid "EnrichQuestion"
+msgstr "Ganap na tanong"
+
+msgid "SelectExercice"
+msgstr "Pumili ng pagsasanay"
+
+msgid "YouHaveToSelectATest"
+msgstr "Kailangan mong pumili ng pagsusulit"
+
+msgid "HotspotDelineation"
+msgstr "Hotspot delineation"
+
+msgid "AreYouSureToDeleteResults"
+msgstr "Sigurado ka bang tanggalin ang mga resulta"
+
+msgid "AreYouSureToCopy"
+msgstr "Sigurado ka bang kopyahin"
+
+msgid "EnableTimerControl"
+msgstr "Pagganahin ang time control"
+
+msgid "ExerciseTotalDurationInMinutes"
+msgstr "Kabuuang tagal sa minuto ng pagsusulit"
+
+msgid "RandomAnswers"
+msgstr "Balasahin ang mga sagot"
+
+msgid "MultipleSelectCombination"
+msgstr "Eksaktong Pagpipilian"
+
+msgid "MultipleAnswerCombination"
+msgstr "Kombinasyon ng eksaktong mga sagot"
+
+msgid "ExerciceExpiredTimeMessage"
+msgstr "Ang limit ng oras ng pagsasanay ay nag-expire na"
+
+msgid "CopyExercise"
+msgstr "Kopyahin ang pagsasanay na ito bilang bago"
+
+msgid "CleanStudentResults"
+msgstr "I-clear ang lahat ng mga resulta ng mga mag-aaral para sa pagsasanay na ito"
+
+msgid "ImportQtiQuiz"
+msgstr "I-import ang mga pagsasanay Qti2"
+
+msgid "UniqueAnswerNoOption"
+msgstr "Natatanging sagot kasama ang hindi batid"
+
+msgid "MultipleAnswerTrueFalse"
+msgstr "Maramihang sagot totoo/mali/hindi alam"
+
+msgid "MultipleAnswerCombinationTrueFalse"
+msgstr "Kombinasyon totoo/mali/hindi alam"
+
+msgid "PropagateNegativeResults"
+msgstr "I-propagate ang negatibong mga resulta sa pagitan ng mga tanong"
+
+msgid "OnlyShowScore"
+msgstr "Mode sa pagsasanay: Ipakita lamang ang score"
+
+msgid "ImportExcelQuiz"
+msgstr "I-import ang mga maikling pagsusulit mula sa Excel"
+
+msgid "Numeric"
+msgstr "Numerical"
+
+msgid "InvalidQuestionType"
+msgstr "Hindi tamang uri ng tanong"
+
+msgid "ShowScoreAndRightAnswer"
+msgstr "Auto-evaluation mode: ipakita ang score at inaasahang mga sagot"
+
+msgid "DoNotShowScoreNorRightAnswer"
+msgstr "Mode sa pagsusulit: Huwag ipakita ang score o ang mga sagot"
+
+msgid "StartTest"
+msgstr "Simulan ang pagsusulit"
+
+msgid "QuestionsToReview"
+msgstr "Mga tanong na rerapasuhin"
+
+msgid "QuestionWithNoAnswer"
+msgstr "Mga tanong na walang sagot"
+
+msgid "ReviewQuestions"
+msgstr "Repasuhin ang piniling mga katanungan"
+
+msgid "ContinueTest"
+msgstr "Ituloy ang pagsusulit"
+
+msgid "XQuestionsWithTotalScoreY"
+msgstr "%d mga tanong, na may kabuuang score (lahat ng mga tanong) na %s."
+
+msgid "YesWithCategoriesSorted"
+msgstr "Oo, kasama ang mga kategorya sa inayos"
+
+msgid "YesWithCategoriesShuffled"
+msgstr "Oo, kasama ang mga kategorya sa binalasa"
+
+msgid "ManageAllQuestions"
+msgstr "Pangasiwaan ang lahat ng mga tanong"
+
+msgid "RemoveFromTest"
+msgstr "Tanggalin mula sa pagsusulit"
+
+msgid "QuestionUpperCaseFirstLetter"
+msgstr "Tanong"
+
+msgid "QuestionCategory"
+msgstr "Kategorya ng mga katanungan"
+
+msgid "AddACategory"
+msgstr "Magdagdag ng kategorya"
+
+msgid "ResultsNotRevised"
+msgstr "Mga resulta hindi narepaso"
+
+msgid "ResultNotRevised"
+msgstr "Resulta hindi narepaso"
+
+msgid "LowestScore"
+msgstr "Pinakamababang score"
+
+msgid "HighestScore"
+msgstr "Pinakamataas na score"
+
+msgid "Options"
+msgstr "Mga Opsyon"
+
+msgid "RandomQuestionByCategory"
+msgstr "Sapalarang mga tanong ayon sa kategorya"
+
+msgid "QuestionDisplayCategoryName"
+msgstr "Ipakita ang kategorya ng mga tanong"
+
+msgid "ReviewAnswers"
+msgstr "Repasuhin ang aking mga sagot"
+
+msgid "TextWhenFinished"
+msgstr "Tekstong lumilitaw sa dulo ng pagsusulit"
+
+msgid "Validated"
+msgstr "Na-validate"
+
+msgid "NotValidated"
+msgstr "Hindi na-validate"
+
+msgid "SelectAQuestionToReview"
+msgstr "Pumili ng tanong na babaguhin"
+
+msgid "ReviewQuestionLater"
+msgstr "Baguhin ang tanong mamaya"
+
+msgid "NumberStudentWhoSelectedIt"
+msgstr "Bilang ng mga mag-aaral na pumili niyon"
+
+msgid "QuestionsAlreadyAnswered"
+msgstr "Mga tanong na nasagot na"
+
+msgid "StudentsWhoAreTakingTheExerciseRightNow"
+msgstr "Ang mga mag-aaral na kumukuha ng pagsasanay sa ngayon"
+
+msgid "ReportByQuestion"
+msgstr "Mag-ulat ayon sa tanong"
+
+msgid "LiveResults"
+msgstr "Kasalukuyang mga resulta"
+
+msgid "OralExpression"
+msgstr "Pasalitang pagpapahayag"
+
+msgid "CongratulationsYouPassedTheTest"
+msgstr "Congratulations, ikaw ay nakapasa sa pagsusulit!"
+
+msgid "YouDidNotReachTheMinimumScore"
+msgstr "Hindi mo naabot ang minimum na score"
+
+msgid "EndTest"
+msgstr "Tapusin ang pagsusulit"
+
+msgid "PassPercentage"
+msgstr "Porsyento na pasado"
+
+msgid "NoCategorySelected"
+msgstr "Walang kategoryang pinili"
+
+msgid "ExerciseAverage"
+msgstr "Average ng pagsasanay"
+
+msgid "GlobalMultipleAnswer"
+msgstr "Pandaigdigang maramihang sagot"
+
+msgid "AllQuestionsShort"
+msgstr "Lahat"
+

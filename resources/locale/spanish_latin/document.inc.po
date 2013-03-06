@@ -1,0 +1,315 @@
+msgid "MoveTo"
+msgstr "Mover a"
+
+msgid "langDownloadFile"
+msgstr "Enviar el archivo al servidor"
+
+msgid "langNameDir"
+msgstr "Nombre del directorio nuevo"
+
+msgid "langSize"
+msgstr "Tamaño"
+
+msgid "langRename"
+msgstr "Cambiar el nombre"
+
+msgid "langCopy"
+msgstr "Copiar"
+
+msgid "langTo"
+msgstr "hacia"
+
+msgid "langNoSpace"
+msgstr "No se ha podido subir el documento al servidor. No hay espacio suficiente en su directorio"
+
+msgid "langDownloadEnd"
+msgstr "Finalizó el envío"
+
+msgid "langFileExists"
+msgstr "Imposible realizar esta operación.<br /> Ya existe  un elemento con el mismo nombre."
+
+msgid "langImpossible"
+msgstr "Es imposible realizar esta operación"
+
+msgid "langAddComment"
+msgstr "Agregar/Modificar un comentario"
+
+msgid "langDocCopied"
+msgstr "Documento copiado"
+
+msgid "langDocDeleted"
+msgstr "Documento eliminado"
+
+msgid "langElRen"
+msgstr "Elemento renombrado"
+
+msgid "langDirMv"
+msgstr "Elemento movido"
+
+msgid "langComMod"
+msgstr "Comentario modificado"
+
+msgid "langViMod"
+msgstr "Visibilidad modificada"
+
+msgid "langGroupSpace"
+msgstr "Area del Grupo"
+
+msgid "langGroupSpaceLink"
+msgstr "Area del Grupo"
+
+msgid "langGroupForumLink"
+msgstr "Foro del Grupo"
+
+msgid "langZipNoPhp"
+msgstr "El archivo zip no puede contener archivos .PHP"
+
+msgid "langUncompress"
+msgstr "descomprimir archivos comprimidos (.zip) en el servidor"
+
+msgid "langDownloadAndZipEnd"
+msgstr " Archivo Zip levantado y descomprimido"
+
+msgid "langRoot"
+msgstr "raíz"
+
+msgid "CreateDoc"
+msgstr "Crear un documento"
+
+msgid "langDown"
+msgstr "Bajar"
+
+msgid "langFileError"
+msgstr "El archivo a enviar no es válido."
+
+msgid "langMaxFileSize"
+msgstr "El tamáño máximo de archivo es"
+
+msgid "langFileName"
+msgstr "Nombre del archivo"
+
+msgid "langNoFileName"
+msgstr "Por favor, introduzca el nombre del archivo"
+
+msgid "langNoText"
+msgstr "Por favor, introduzca el contenido de texto / HTML"
+
+msgid "langAreYouSureToDelete"
+msgstr "Está seguro que desea borrar"
+
+msgid "langScormcontent"
+msgstr "Este es un contenido SCORM<br /><input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>"
+
+msgid "langScormcontentstudent"
+msgstr "Este es un curso con formato SCORM. Si quiere verlo, haga clic aquí: <input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>"
+
+msgid "langPublish"
+msgstr "Publicar"
+
+msgid "langMissingImagesDetected"
+msgstr "Se detectó que faltan imágenes"
+
+msgid "langCreateDocument"
+msgstr "Crear un documento"
+
+msgid "langEditDocument"
+msgstr "Editar"
+
+msgid "langDocuments"
+msgstr "Documentos"
+
+msgid "langOrganiseDocuments"
+msgstr "Crear tabla de contenidos"
+
+msgid "langEditTOC"
+msgstr "Editar la tabla de contenidos"
+
+msgid "langChapter"
+msgstr "Capítulo"
+
+msgid "langDocumentList"
+msgstr "Lista de todos los documentos"
+
+msgid "langOrganisationList"
+msgstr "Tabla de contenidos"
+
+msgid "langCreationSucces"
+msgstr "Se ha creado la tabla de contenidos"
+
+msgid "langCanViewOrganisation"
+msgstr "Ya puede ver la organización de sus contenidos"
+
+msgid "langHere"
+msgstr "aquí."
+
+msgid "langViewDocument"
+msgstr "Ver"
+
+msgid "langHtmlTitle"
+msgstr "Tabla de contenidos"
+
+msgid "langAddToTOC"
+msgstr "Añadir a los contenidos"
+
+msgid "langAddChapter"
+msgstr "Añadir capítulo"
+
+msgid "langReady"
+msgstr "Generar tabla de contenidos"
+
+msgid "langStoreDocuments"
+msgstr "Almacenar documentos"
+
+msgid "langTocDown"
+msgstr "Abajo"
+
+msgid "langTocUp"
+msgstr "Arriba"
+
+msgid "CutPasteLink"
+msgstr "Sin marcos"
+
+msgid "langCreatePath"
+msgstr "Crear un itinerario"
+
+msgid "langOogieConversionPowerPoint"
+msgstr "Oogie: conversión PowerPoint"
+
+msgid "langWelcomeOogieSubtitle"
+msgstr "Un conversor de PowerPoint a Itinerarios de aprendizaje"
+
+msgid "langAddMetadata"
+msgstr "Ver/Editar metadatos"
+
+msgid "langGoMetadata"
+msgstr "Ir"
+
+msgid "langQuotaForThisCourseIs"
+msgstr "El tamaño de este curso en el servidor es de"
+
+msgid "langDel"
+msgstr "Borrar"
+
+msgid "langUp"
+msgstr "Arriba"
+
+msgid "langDate"
+msgstr "Fecha"
+
+msgid "ShowCourseQuotaUse"
+msgstr "Mostrar tamaño del curso en el servidor"
+
+msgid "CourseCurrentlyUses"
+msgstr "Este curso actualmente utiliza"
+
+msgid "MaximumAllowedQuota"
+msgstr "Su límite de espacio de almacenamiento es"
+
+msgid "PercentageQuotaInUse"
+msgstr "Porcentaje de espacio en uso"
+
+msgid "PercentageQuotaFree"
+msgstr "Porcentaje de espacio libre"
+
+msgid "CurrentDirectory"
+msgstr "Directorio actual"
+
+msgid "UplUploadDocument"
+msgstr "Enviar un documento"
+
+msgid "UplPartialUpload"
+msgstr "Sólo se ha enviado parcialmente el archivo"
+
+msgid "UplExceedMaxPostSize"
+msgstr "El tamaño del archivo excede el máximo permitido en la configuración:"
+
+msgid "UplExceedMaxServerUpload"
+msgstr "El archivo enviado excede el máximo de tamaño permitido por el servidor"
+
+msgid "UplFileTooBig"
+msgstr "¡ El archivo es demasiado grande para cargar !"
+
+msgid "UplUploadFailed"
+msgstr "¡ No se ha podido enviar el archivo !"
+
+msgid "UplUnableToSaveFile"
+msgstr "¡ El fichero enviado podría no estar guardado (¿problema de permisos?) !"
+
+msgid "UplNotEnoughSpace"
+msgstr "¡ No hay suficiente espacio para enviar este archivo !"
+
+msgid "UplNoSCORMContent"
+msgstr "¡ No se ha encontrado ningún contenido SCORM !"
+
+msgid "UplZipExtractSuccess"
+msgstr "¡ Archivo zip extraido !"
+
+msgid "UplZipCorrupt"
+msgstr "¡ No se puede extraer el archivo zip (¿ archivo corrupto ?) !"
+
+msgid "UplAlreadyExists"
+msgstr "¡ ya existe !"
+
+msgid "UplFileSavedAs"
+msgstr "Archivo guardado como"
+
+msgid "UplFileOverwritten"
+msgstr "fue sobreescrito"
+
+msgid "CannotCreateDir"
+msgstr "¡ No se puede crear el directorio !"
+
+msgid "UplUpload"
+msgstr "Enviar"
+
+msgid "UplWhatIfFileExists"
+msgstr "Si ya existe el archivo:"
+
+msgid "UplDoNothing"
+msgstr "Hacer nada"
+
+msgid "UplDoNothingLong"
+msgstr "No enviar si el archivo existe"
+
+msgid "UplOverwrite"
+msgstr "Sobreescribir"
+
+msgid "UplOverwriteLong"
+msgstr "Sobreescribir el archivo existente"
+
+msgid "UplRename"
+msgstr "Renombrar"
+
+msgid "UplRenameLong"
+msgstr "Renombrar el archivo enviado si ya existe"
+
+msgid "Metadata"
+msgstr "Metadatos"
+
+msgid "DocumentQuota"
+msgstr "Espacio del curso en el servidor"
+
+msgid "NoDocsInFolder"
+msgstr "¡ No hay documentos en esta carpeta !"
+
+msgid "UploadTo"
+msgstr "Enviar a"
+
+msgid "fileModified"
+msgstr "El archivo ha sido modificado"
+
+msgid "DocumentsOverview"
+msgstr "Sumario del documento"
+
+msgid "ViewSlideshow"
+msgstr "Ver presentación de imágenes"
+
+msgid "Options"
+msgstr "Opciones"
+
+msgid "WelcomeOogieConverter"
+msgstr "Bienvenido al conversor de PowerPoint Oogie<br />1. Explore su disco duro y busque cualquier archivo con las extensiones *.ppt u *.odp<br />2. Envíelo a Oogie. Este lo transformará en un Itinerario de aprendizaje Scorm.<br />3. Ud. ahora podrá añadir comentario"
+
+msgid "ConvertToLP"
+msgstr "Convertir a un Itinerario de aprendizaje"
+

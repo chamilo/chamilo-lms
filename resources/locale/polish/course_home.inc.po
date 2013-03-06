@@ -1,0 +1,69 @@
+msgid "langActivate"
+msgstr "aktywuj"
+
+msgid "langDeactivate"
+msgstr "deaktywuj"
+
+msgid "langInLnk"
+msgstr "Nieaktywne łącza"
+
+msgid "langDelLk"
+msgstr "Czy rzeczywiście chcesz usunąć ten odnośnik?"
+
+msgid "langCourseCreate"
+msgstr "Utwórz nowy kurs"
+
+msgid "langNameOfTheLink"
+msgstr "Nazwa odnośnika"
+
+msgid "lang_main_categories_list"
+msgstr "Lista Wydziałów/kategorii"
+
+msgid "langCourseAdminOnly"
+msgstr "Tylko dla prowadzących"
+
+msgid "PlatformAdminOnly"
+msgstr "Tylko dla Administratorów platformy"
+
+msgid "langCombinedCourse"
+msgstr "Kurs złożony"
+
+msgid "ToolIsNowVisible"
+msgstr "To narzędzie jest widoczne"
+
+msgid "ToolIsNowHidden"
+msgstr "To narzędzie jest niewodoczne"
+
+msgid "EditLink"
+msgstr "Edycja hiperłącza"
+
+msgid "Blog_management"
+msgstr "Zarządzanie blogami"
+
+msgid "Forum"
+msgstr "Fora"
+
+msgid "Course_maintenance"
+msgstr "Zarządzanie kursem"
+
+msgid "TOOL_SURVEY"
+msgstr "Ankiety"
+
+msgid "GreyIcons"
+msgstr "Narzędzia"
+
+msgid "Interaction"
+msgstr "Tylko dla prowadzących"
+
+msgid "Authoring"
+msgstr "Dostępne"
+
+msgid "Administration"
+msgstr "Administracyjne"
+
+msgid "IntroductionTextUpdated"
+msgstr "Tekst wprowadzający został zaktualizowany"
+
+msgid "IntroductionTextDeleted"
+msgstr "Tekst wprowadzający usunięty"
+

@@ -1,0 +1,51 @@
+msgid "langDownloadFile"
+msgstr "矢今のアップロ〖ド"
+
+msgid "langNameDir"
+msgstr "糠ディレクトリの叹涟"
+
+msgid "langSize"
+msgstr "サイズ"
+
+msgid "langRename"
+msgstr "叹涟を恃える"
+
+msgid "langCopy"
+msgstr "コピ〖"
+
+msgid "langTo"
+msgstr "to"
+
+msgid "langNoSpace"
+msgstr "アップロ〖ドが己窃しました。ディスクスペ〖スの稍颅です。"
+
+msgid "langDownloadEnd"
+msgstr "アップロ〖ド姜位"
+
+msgid "langFileExists"
+msgstr "稍材墙な拎侯です<br />票じ叹涟のファイルが赂哼しています。"
+
+msgid "langImpossible"
+msgstr "拎侯稍墙"
+
+msgid "langAddComment"
+msgstr "肌のものにコメントに烧裁あるいはコメント饯赖する。"
+
+msgid "langDocCopied"
+msgstr "矢今をコピ〖しました"
+
+msgid "langDocDeleted"
+msgstr "矢今を猴近しました"
+
+msgid "langElRen"
+msgstr "element renamed"
+
+msgid "langDirMv"
+msgstr "ディレクトリを败瓢"
+
+msgid "langComMod"
+msgstr "コメントを饯赖"
+
+msgid "langViMod"
+msgstr "材粕を饯赖"
+

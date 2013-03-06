@@ -1,0 +1,449 @@
+msgid "langProfessors"
+msgstr "Docenti"
+
+msgid "langExplanation"
+msgstr "Una volta cliccato su \'Conferma\' verrà creato un sito contenente Forum, Collegamenti, Test, Agenda, Documenti... . 	Potrai modificarne il contenuto accedendo con il tuo identificativo di creatore del corso."
+
+msgid "langEmpty"
+msgstr "Alcuni campi non sono stati compilati.<br>Utilizza il pulsante <b>Indietro</b> del browser e riprova.<br>Se non conosci il codice del Corso, consulta il Piano dei Corsi"
+
+msgid "langCodeTaken"
+msgstr "Il codice del corso è già in uso.<br>Utilizza il pulsante <b>Indietro</b> del browser e riprova."
+
+msgid "langFormula"
+msgstr "Cordialmente"
+
+msgid "langMessage"
+msgstr "Quando si elimina l\'esempio di Forum, verrà eliminato anche l\'argomento corrente che contiene solo il presente messaggio."
+
+msgid "langExerciceEx"
+msgstr "Esempio di Test"
+
+msgid "langAntique"
+msgstr "Storia della Filosofia antica"
+
+msgid "langSocraticIrony"
+msgstr "L\'ironia socratica consiste nel..."
+
+msgid "langManyAnswers"
+msgstr "(sono possibili più risposte esatte)"
+
+msgid "langRidiculise"
+msgstr "Mettere in ridicolo l\'interlocutore per fargli riconoscere il proprio errore."
+
+msgid "langNoPsychology"
+msgstr "No, l\'ironia socratica non si esplica sul campo della psicologia, bensì su quello dell\'argomentazione."
+
+msgid "langAdmitError"
+msgstr "Riconoscere i propri errori per invitare l\'interlocutore a fare altrettanto."
+
+msgid "langNoSeduction"
+msgstr "Non si tratta di una strategia seduttiva o di una metodica per esempi."
+
+msgid "langForce"
+msgstr "Obbligare l\'interlocutore tramite una serie di domande e sotto-domande, ad ammettere che egli non conosce affatto quanto pretende di conoscere."
+
+msgid "langIndeed"
+msgstr "In effetti, l\'ironia socratica è un metodo interrogativo. Il greco \"eirotao\" significa innanzitutto \"interrogare\"."
+
+msgid "langContradiction"
+msgstr "Utilizzare il principio di non contraddizione per portare l\'interlocutore ad un\'impasse."
+
+msgid "langNotFalse"
+msgstr "La risposta non è falsa: è vero che mettere in evidenza l\'ignoranza dell\'interlocutore si ottiene mettendo in evidenza le contraddizioni cui portano le sue tesi."
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langVideo"
+msgstr "Video"
+
+msgid "langCourseProgram"
+msgstr "Descrizione del Corso"
+
+msgid "langAnnouncements"
+msgstr "Avvisi"
+
+msgid "langAddPageHome"
+msgstr "Carica e collega una pagina"
+
+msgid "langLinkSite"
+msgstr "Inserisci una voce nella Pagina Principale"
+
+msgid "langModifyInfo"
+msgstr "Configurazione"
+
+msgid "langCourseDesc"
+msgstr "Descrizione"
+
+msgid "langAgendaTitle"
+msgstr "Martedì 11 dicembre 14h00 : Primo incontro.  Aula : INFO 2"
+
+msgid "langAgendaText"
+msgstr "Introduzione generale alla gestione delle risorse umane"
+
+msgid "langMicro"
+msgstr "Interviste dirette"
+
+msgid "langGoogle"
+msgstr "Motore di ricerca rapido e potente"
+
+msgid "langIntroductionText"
+msgstr "Questo è il testo introduttivo del Corso<br /> (è possibile modificarlo cliccando sulla <b>matita</b>)."
+
+msgid "langIntroductionTwo"
+msgstr "Questa pagina consente ad ogni corsista o gruppo di trasmettere documenti al corso."
+
+msgid "langCourseDescription"
+msgstr "Descrizione del corso"
+
+msgid "langProfessor"
+msgstr "Docente"
+
+msgid "langAnnouncementEx"
+msgstr "Esempio di avviso. Solamente il docente e gli altri amministratori del corso possono pubblicare avvisi"
+
+msgid "langJustCreated"
+msgstr "È stato creato il sito del corso"
+
+msgid "langEnter"
+msgstr "<< elenco dei corsi"
+
+msgid "langGroups"
+msgstr "Gruppi"
+
+msgid "langCreateCourseGroups"
+msgstr "Gruppi"
+
+msgid "langCatagoryMain"
+msgstr "Principale"
+
+msgid "langCatagoryGroup"
+msgstr "Forum di gruppo"
+
+msgid "langLn"
+msgstr "Lingua"
+
+msgid "langCreateSite"
+msgstr "Crea un sito del corso"
+
+msgid "langFieldsRequ"
+msgstr "Tutti i campi sono obbligatori"
+
+msgid "langEx"
+msgstr "es. <i>Gestione delle risorse umane</i>"
+
+msgid "langFac"
+msgstr "Categoria"
+
+msgid "langTargetFac"
+msgstr "Questa è la Facoltà, Dipartimento o Scuola presso cui il corso è tenuto"
+
+msgid "langMax"
+msgstr "max. 12 caratteri, es. <i>RISUM21</i>"
+
+msgid "langDoubt"
+msgstr "In caso di dubbio sulla denominazione esatta o sul codice del corso, consulta il,"
+
+msgid "langProgram"
+msgstr "Programma del corso</a>. Se non esiste un codice appropriato, puoi inventarne uno. Ad esempio <i>INNOVAZ01</i> se si tratta di un corso di formazione sulla gestione dell\'innovazione"
+
+msgid "langScormtool"
+msgstr "Moduli didattici"
+
+msgid "langScormbuildertool"
+msgstr "Sistema autore di moduli didattici"
+
+msgid "langPathbuildertool"
+msgstr "Sistema autore di moduli didattici"
+
+msgid "langOnlineConference"
+msgstr "Conferenza"
+
+msgid "langAgendaCreationTitle"
+msgstr "Creazione del corso"
+
+msgid "langAgendaCreationContenu"
+msgstr "Creazione del corso"
+
+msgid "langOnlineDescription"
+msgstr "Descrizione dell\'incontro online"
+
+msgid "langDropbox"
+msgstr "Scambio file"
+
+msgid "langOnly"
+msgstr "Solo"
+
+msgid "langRandomLanguage"
+msgstr "Selezione casuale tra le lingue disponibili"
+
+msgid "langImages"
+msgstr "Immagini"
+
+msgid "langAudio"
+msgstr "Audio"
+
+msgid "langFlash"
+msgstr "Flash"
+
+msgid "langForumLanguage"
+msgstr "Italiano"
+
+msgid "langNewCourse"
+msgstr "Nuovo Corso"
+
+msgid "langAddNewCourse"
+msgstr "Aggiungi un nuovo Corso"
+
+msgid "langRestoreCourse"
+msgstr "Ripristino di un corso"
+
+msgid "langOtherProperties"
+msgstr "Altre proprietà in archivio"
+
+msgid "langSysId"
+msgstr "Numero ID di sistema"
+
+msgid "langDepartment"
+msgstr "Dipartimento"
+
+msgid "langDepartmentUrl"
+msgstr "URL del Dipartimento"
+
+msgid "langScoreShow"
+msgstr "Visualizza i punteggi"
+
+msgid "langVisibility"
+msgstr "Visibilità"
+
+msgid "langVersionDb"
+msgstr "Versione del database al momento dell\'archiviazione"
+
+msgid "langLastVisit"
+msgstr "Ultimo accesso"
+
+msgid "langLastEdit"
+msgstr "Ultima modifica"
+
+msgid "langExpire"
+msgstr "Scadenza"
+
+msgid "langChoseFile"
+msgstr "Seleziona un file"
+
+msgid "langFtpFileTips"
+msgstr "Il file è accessibile via FTP"
+
+msgid "langHttpFileTips"
+msgstr "Il file è accessibile via HTTP"
+
+msgid "langLocalFileTips"
+msgstr "Il file si trova nel Server"
+
+msgid "langPostFileTips"
+msgstr "Il file si trova nel tuo computer"
+
+msgid "langOtherCategory"
+msgstr "Altre Categorie"
+
+msgid "langMinimum"
+msgstr "minimo"
+
+msgid "langMaximum"
+msgstr "Massimo"
+
+msgid "langRestoreACourse"
+msgstr "Ripristina un corso"
+
+msgid "langBackup"
+msgstr "Backup"
+
+msgid "langCopy"
+msgstr "Copia il corso"
+
+msgid "langRecycle"
+msgstr "Riazzera il corso"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Esempio di avviso"
+
+msgid "Wikipedia"
+msgstr "Libera Enciclopedia online"
+
+msgid "DefaultGroupCategory"
+msgstr "Gruppi di default"
+
+msgid "DefaultCourseImages"
+msgstr "Immagini"
+
+msgid "ExampleForumCategory"
+msgstr "Esempio di Categoria"
+
+msgid "ExampleForum"
+msgstr "Esempio di Forum"
+
+msgid "ExampleThread"
+msgstr "Esempio di Argomento"
+
+msgid "ExampleThreadContent"
+msgstr "Esempio di Messaggio"
+
+msgid "IntroductionWiki"
+msgstr "Il termine Wiki è un\'abbreviazione di WikiWikiWeb. WikiWiki significa \"rapido\", in hawaiano. Un Wiki permette la scrittura collaborativa di pagine. Se qualcuno ha scritto qualcosa di sbagliato o incompleto, qualcun altro può correggere o modificare il testo. Chiunque può aggiungere informazioni migliorando il contenuto, mentre delle versioni precedenti resta traccia nella cronologia della pagina."
+
+msgid "CreateCourseArea"
+msgstr "Crea il corso"
+
+msgid "CreateCourse"
+msgstr "Crea un corso"
+
+msgid "Create"
+msgstr "Crea"
+
+msgid "MessageOfNewCourseToAdmin"
+msgstr "Caro %s, nn questo messaggio ti informa che sulla piattaforma %s - %s nn è stato creato il nuovo corson Titolo: %s n Categoria: %s n Creato da: %s n Lingua: %s\";"
+
+msgid "NewCourseCreatedIn"
+msgstr "Nuovo corso creato in"
+
+msgid "ExplicationTrainers"
+msgstr "Ora sei tu il docente del corso; in seguito potrai configurare altre persone come docenti."
+
+msgid "Objectives"
+msgstr "Obiettivi"
+
+msgid "TargetAudience"
+msgstr "Destinatari"
+
+msgid "YouHaveToAcceptTermsAndConditions"
+msgstr "Per poter richiedere un corso devi accettare i Termini e le Condizioni d\'uso"
+
+msgid "CourseRequestCreated"
+msgstr "La tua richiesta di attivazione di un corso è stata inviata correttamente. Riceverai entro pochi giorni una risposta dal responsabile."
+
+msgid "CreateThisCourseRequest"
+msgstr "Invia la richiesta di attivazione"
+
+msgid "CourseRequestDate"
+msgstr "Data della richiesta"
+
+msgid "AcceptThisCourseRequest"
+msgstr "Conferma la creazione del corso"
+
+msgid "ANewCourseWillBeCreated"
+msgstr "Il corso %s sta per essere creato: Confermi?"
+
+msgid "AdditionalInfoWillBeAsked"
+msgstr "Invia un\'e-mail di richiesta di ulteriori informazioni (%s)"
+
+msgid "AskAdditionalInfo"
+msgstr "Chiedere ulteriori informazioni"
+
+msgid "DeleteThisCourseRequest"
+msgstr "Annullare la creazione del corso"
+
+msgid "ACourseRequestWillBeDeleted"
+msgstr "Sta per essere ANNULLATA la creazione del corso %s , Confermi?"
+
+msgid "RejectThisCourseRequest"
+msgstr "Respingi la richiesta di nuovo corso"
+
+msgid "ACourseRequestWillBeRejected"
+msgstr "La richiesta di creazione del corso %s sta per essere RESPINTA, Confermi?"
+
+msgid "CourseRequestAccepted"
+msgstr "La richiesta di creazione del corso %s è stata accettata. Il corso %s è ora disponibile."
+
+msgid "CourseRequestAcceptanceFailed"
+msgstr "La richiesta di creazione del corso %s non è stata accettata per un errore di sistema."
+
+msgid "CourseRequestRejected"
+msgstr "La richiesta di creazione del corso %s non è stata accettata."
+
+msgid "CourseRequestRejectionFailed"
+msgstr "La richiesta di creazione del corso %s non è stata portata a termine per un errore di sistema"
+
+msgid "CourseRequestInfoAsked"
+msgstr "Si richiedono ulteriori informazioni per poter accettare la richiesta di creazione del corso %s"
+
+msgid "CourseRequestInfoFailed"
+msgstr "La richiesta di ulteriori informazioni per poter accettare la richiesta di creazione del corso %s non è stata portata a termine a causa di un errore di sistema."
+
+msgid "CourseRequestDeleted"
+msgstr "La richiesta di creazione del corso %s  è stata eliminata"
+
+msgid "CourseRequestDeletionFailed"
+msgstr "La richiesta di creazione del corso %s è stata eliminata a causa di un errore di sistema."
+
+msgid "DeleteCourseRequests"
+msgstr "Elimina le seguenti richieste di creazione corsi"
+
+msgid "SelectedCourseRequestsDeleted"
+msgstr "Le richieste di creazione corsi selezionate sono state eliminate"
+
+msgid "SomeCourseRequestsNotDeleted"
+msgstr "Le richieste di creazione corsi selezionate sono state eliminate a causa di un errore di sistema."
+
+msgid "CourseRequestEmailSubject"
+msgstr "%s Richiesta apertura corso %s"
+
+msgid "CourseRequestMailOpening"
+msgstr "Si conferma la ricezione della richiesta di creazione di un nuovo corso:"
+
+msgid "CourseRequestPageForApproval"
+msgstr "La richiesta sarà approvata alla pagina"
+
+msgid "PleaseActivateCourseValidationFeature"
+msgstr "La \"Conferma di creazione corso\" non è al momento attiva; per usarla attivala usando la funzione di configurazione %s"
+
+msgid "CourseRequestLegalNote"
+msgstr "LE INFORMAZIONI RELATIVE ALLA RICHIESTA SONO CONFIDENZIALI. Per le norme sulla privacy esse possono essere usate solo per fini interni relativi all\'approvazione o al respingimento e non possono essere comunicate a terzi."
+
+msgid "CourseRequestAskInfoEmailSubject"
+msgstr "%s Richiesta di ulteriori informazioni sul corso %s"
+
+msgid "CourseRequestAskInfoEmailText"
+msgstr "E\' stata acquisita la richiesta di creazione del corso %s: prima di poter approvare la richiesta è necessario ottenere ulteriori informazioni.
+
+La preghiamo di fornire una breve descrizione del contenuto, degli obiettivi, degli utenti cui è rivolto. 
+Se applicabile è necessario indicare l\'istituzione o il dipartimento di competenza per l\'erogazione dei contenuti."
+
+msgid "CourseRequestAcceptedEmailSubject"
+msgstr "%s La richiesta di creazione del corso %s è stata approvata"
+
+msgid "CourseRequestAcceptedEmailText"
+msgstr "La Sua richiesta di creazione del corso %s è stata approvata, Il corso è stato creato la docenza è stata a Lei assegnata,
+
+E\' possibile accedere al corso da qui: %s"
+
+msgid "CourseRequestRejectedEmailSubject"
+msgstr "La Sua richiesta di creazione del corso %s non è stata approvata"
+
+msgid "CourseRequestRejectedEmailText"
+msgstr "Siamo spiacenti di comunicarLe che la Sua richiesta di creazione del corso %s non è stata approvata per non conformità ai termini e alle condizioni d\'uso del sistema."
+
+msgid "CourseCreationFailed"
+msgstr "Il corso non è stato creato a causa di un errore di sistema."
+
+msgid "CourseRequestCreationFailed"
+msgstr "La richiesta di creazione del corso non è stata inviata a causa di un errore di sistema."
+
+msgid "CourseRequestEdit"
+msgstr "Modifica la richiesta"
+
+msgid "CourseRequestHasNotBeenFound"
+msgstr "La richiesta di creazione cercata non è stata trovata o non esiste."
+
+msgid "Accept"
+msgstr "Approva"
+
+msgid "Reject"
+msgstr "Respingi"
+
+msgid "CourseRequestUpdateFailed"
+msgstr "La richiesta di creazione del corso %s non è stata aggiornata a causa di un errore di sistema."
+
+msgid "CourseRequestUpdated"
+msgstr "La richiesta di creazione del corso %s è stata aggiornata."
+

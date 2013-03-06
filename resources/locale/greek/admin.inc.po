@@ -1,0 +1,1032 @@
+msgid "CasMainActivateComment"
+msgstr "Η ενεργοποίηση της πιστοποίησης CAS θα επιτρέψει στους εκπαιδευόμενους να πιστοποιούνται με τα CAS διαπιστεύτηριά τους. Μεταβείτε στα Πρόσθετα (plugins) για να προσθέσετε ένα διαμορφώσιμο κουμπί \'Σύνδεση CAS\' για το Chamilo campus."
+
+msgid "UsersRegisteredInAnyGroup"
+msgstr "Χρήστες εγγεγραμμένοι σε οποιαδήποτε ομάδα"
+
+msgid "ShowHotCoursesComment"
+msgstr "Η σελίδα με τα Καυτά μαθήματα θα προστεθεί στη σελίδα ευρετηρίου"
+
+msgid "ShowHotCoursesTitle"
+msgstr "Εμφάνιση Καυτών μαθημάτων"
+
+msgid "EnableIframeInclusionTitle"
+msgstr "Να επιτρέπονται τα iframes στον HTML Editor"
+
+msgid "MailTemplateRegistrationTitle"
+msgstr "Νέος χρήστης στο ((όνομα ιστοτόπου))"
+
+msgid "AdminBy"
+msgstr "Διαχείριση από"
+
+msgid "AdministrationTools"
+msgstr "Εργαλεία Διαχείρισης"
+
+msgid "State"
+msgstr "Κατάσταση συστήματος"
+
+msgid "Statistiques"
+msgstr "Στατιστικά"
+
+msgid "VisioHostLocal"
+msgstr "Οικοδεσπότης βιντεοδιάσκεψης"
+
+msgid "VisioRTMPIsWeb"
+msgstr "Αν το πρωτόκολο βιντεοδιάσκεψης βασίζεται στον ιστό (ψευδές τις περισσότερες φορές)"
+
+msgid "ShowBackLinkOnTopOfCourseTreeComment"
+msgstr "Εμφάνιση ενός συνδέσμου που οδηγεί πίσω στην ιεραραρχία του μαθήματος. Ένας σύνδεσμος είναι πάντα διαθέσιμος στο κάτω μέρος της λίστας."
+
+msgid "langUsed"
+msgstr "Χρησιμοποείται από τον/την"
+
+msgid "langPresent"
+msgstr "ΟΚ"
+
+msgid "langMissing"
+msgstr "μη υπάρχον"
+
+msgid "langExist"
+msgstr "υπάρχον"
+
+msgid "ShowBackLinkOnTopOfCourseTree"
+msgstr "Εμφάνιση συνδέσμου για μετάβαση πίσω στην κορυφή του δένδρου των κατηγοριών/μαθημάτων"
+
+msgid "ShowNumberOfCourses"
+msgstr "Εμφάνιση του αριθμού των μαθημάτων"
+
+msgid "DisplayTeacherInCourselistTitle"
+msgstr "Εμφάνιση του Καθηγητή στον τίτλο του μαθήματος"
+
+msgid "DisplayTeacherInCourselistComment"
+msgstr "Εμφάνιση του Καθηγητή στη λίστα μαθημάτων"
+
+msgid "DisplayCourseCodeInCourselistComment"
+msgstr "Εμφάνιση του Κωδικού του Μαθήματος στη λίστα μαθημάτων"
+
+msgid "DisplayCourseCodeInCourselistTitle"
+msgstr "Εμφάνιση του Κωδικού του Μαθήματος στον τίτλο του μαθήματος"
+
+msgid "ThereAreNoVirtualCourses"
+msgstr "Δεν υπάρχουν εικονικά μαθήματα στην πλατφόρμα"
+
+msgid "ConfigureHomePage"
+msgstr "Διαμόρφωση αρχικής σελίδας"
+
+msgid "CourseCreateActiveToolsTitle"
+msgstr "Ενεργές ενότητες κατά την δημιουργία του μαθήματος"
+
+msgid "CourseCreateActiveToolsComment"
+msgstr "Ποια εργαλεία πρέπει να ενεργοποιηθούν εξ\' αρχής κατά την δημιουργία ενός νέου μαθήματος;"
+
+msgid "langCourseBackup"
+msgstr "Δημιουργία αντίγραφου μαθήματος"
+
+msgid "langCourseTitular"
+msgstr "Καθηγητής"
+
+msgid "langCourseTitle"
+msgstr "Τίτλος μαθήματος"
+
+msgid "langCourseFaculty"
+msgstr "Κατηγορία μαθήματος"
+
+msgid "langCourseDepartment"
+msgstr "Τμήμα"
+
+msgid "langCourseDepartmentURL"
+msgstr "URL τμήματος"
+
+msgid "langCourseLanguage"
+msgstr "Γλώσσα μαθήματος"
+
+msgid "langCourseAccess"
+msgstr "Πρόσβαση στο μάθημα"
+
+msgid "langCourseSubscription"
+msgstr "Εγγραφή στο μάθημα"
+
+msgid "langPublicAccess"
+msgstr "Δημόσια πρόσβαση"
+
+msgid "langPrivateAccess"
+msgstr "Ιδιωτική πρόσβαση"
+
+msgid "langDBManagementOnlyForServerAdmin"
+msgstr "Η διαχείριση της βάσης δεδομένων είναι διαθέσιμη μόνο για τον διαχειριστή του server"
+
+msgid "langShowUsersOfCourse"
+msgstr "Προβολή των εγγεγραμένων μαθήτων σ\'αυτό το μάθημα"
+
+msgid "langShowClassesOfCourse"
+msgstr "Προβολή των εγγεγραμένων τάξεων σ\'αυτό το μάθημα"
+
+msgid "langShowGroupsOfCourse"
+msgstr "Προβολή των ομάδων γι\'αυτό το μάθημα"
+
+msgid "langPhone"
+msgstr "Τηλέφωνο"
+
+msgid "langPhoneNumber"
+msgstr "Αριθμός τηλεφώνου"
+
+msgid "langActions"
+msgstr "Ενέργειες"
+
+msgid "langAddToCourse"
+msgstr "Προσθήκη σε ένα μάθημα"
+
+msgid "langDeleteFromPlatform"
+msgstr "Διαγραφή από την πλατφόρμα"
+
+msgid "langDeleteCourse"
+msgstr "Διαγραφή του(των) επιλεγμένου(-ων) μαθήματος (-ων)"
+
+msgid "langDeleteFromCourse"
+msgstr "Διαγραφή από το(τα) μάθημα(τα)"
+
+msgid "langDeleteSelectedClasses"
+msgstr "Διαγραφή των επιλεγμένων τάξεων"
+
+msgid "langDeleteSelectedGroups"
+msgstr "Διαγραφή των επιλεγμένων ομάδων"
+
+msgid "langAdministrator"
+msgstr "Διαχειριστής"
+
+msgid "langAddPicture"
+msgstr "Εισαγωγή εικόνας"
+
+msgid "langChangePicture"
+msgstr "Τροποποίηση εικόνας"
+
+msgid "langDeletePicture"
+msgstr "Διαγραφή εικόνας"
+
+msgid "langAddUsers"
+msgstr "Προσθήκη χρηστών"
+
+msgid "langAddGroups"
+msgstr "Προσθήκηομάδων"
+
+msgid "langAddClasses"
+msgstr "Προσθήκητάξεων"
+
+msgid "langExportUsers"
+msgstr "Εξαγωγή λίστας χρηστών"
+
+msgid "langKeyword"
+msgstr "Λέξη-κλειδί"
+
+msgid "langGroupName"
+msgstr "Όνομα ομάδας"
+
+msgid "langGroupTutor"
+msgstr "Επιβλέπων ομάδας"
+
+msgid "langGroupDescription"
+msgstr "Περιγραφή ομάδας"
+
+msgid "langNumberOfParticipants"
+msgstr "Αριθμός συμμετέχοντων"
+
+msgid "langNumberOfUsers"
+msgstr "Αριθμός χρηστών"
+
+msgid "langMaximum"
+msgstr "μέγιστος"
+
+msgid "langMaximumOfParticipants"
+msgstr "Μέγιστος αριθμός συμμετέχοντων"
+
+msgid "langParticipants"
+msgstr "Συμμετέχοντες"
+
+msgid "langFirstLetterClass"
+msgstr "Πρώτο γράμμα (όνομα τάξης)"
+
+msgid "langFirstLetterUser"
+msgstr "Πρώτο γράμμα (επώνυμο)"
+
+msgid "langFirstLetterCourse"
+msgstr "Πρώτο γράμμα (κωδικός μαθήματος)"
+
+msgid "langModifyUserInfo"
+msgstr "Τροποποίηση πληροφοριών χρήστη"
+
+msgid "langModifyClassInfo"
+msgstr "Τροποποίηση πληροφορίων τάξης"
+
+msgid "langModifyGroupInfo"
+msgstr "Τροποποίηση πληροφορίων ομάδας"
+
+msgid "langModifyCourseInfo"
+msgstr "Τροποποίηση πληροφορίων μαθήματος"
+
+msgid "langPleaseEnterClassName"
+msgstr "Παρακαλώ, εισάγετε το όνομα της τάξης!"
+
+msgid "langPleaseEnterLastName"
+msgstr "Παρακαλώ, εισάγετε το επώνυμο του χρήστη!"
+
+msgid "langPleaseEnterFirstName"
+msgstr "Παρακαλώ, εισάγετε το όνομα του χρήστη!"
+
+msgid "langPleaseEnterValidEmail"
+msgstr "Παρακαλώ, εισάγετε μια έγκυρη διεύθυνση e-mail!"
+
+msgid "langPleaseEnterValidLogin"
+msgstr "Παρακαλώ, εισάγετε ένα έγκυρο login!"
+
+msgid "langPleaseEnterCourseCode"
+msgstr "Παρακαλώ, εισάγετε τον κωδικό του μαθήματος!"
+
+msgid "langPleaseEnterTitularName"
+msgstr "Παρακαλώ, εισάγετε το ονοματεπώνυμο του καθηγητή!"
+
+msgid "langPleaseEnterCourseTitle"
+msgstr "Παρακαλώ, εισάγετε τον τίτλο του μαθήματος!"
+
+msgid "langAcceptedPictureFormats"
+msgstr "Αποδεκτά formats είναι τα εξής : JPG, PNG and GIF !"
+
+msgid "langLoginAlreadyTaken"
+msgstr "Αυτό το login χρησιμοποιείται ήδη!"
+
+msgid "langImportUserListXMLCSV"
+msgstr "Εισαγωγή λίστας χρηστών από αρχείο XML/CSV"
+
+msgid "langExportUserListXMLCSV"
+msgstr "Εξαγωγή λίστας χρηστών προς αρχείο XML/CSV"
+
+msgid "langOnlyUsersFromCourse"
+msgstr "Μόνο χρήστες από αυτό το μάθημα"
+
+msgid "langAddClassesToACourse"
+msgstr "Προσθήκη τάξεων στο μάθημα"
+
+msgid "langAddUsersToACourse"
+msgstr "Προσθήκη χρηστών στο μάθημα"
+
+msgid "langAddUsersToAClass"
+msgstr "Προσθήκη χρηστών στην τάξη"
+
+msgid "langAddUsersToAGroup"
+msgstr "Προσθήκη χρηστών στην ομάδα"
+
+msgid "langAtLeastOneClassAndOneCourse"
+msgstr "Πρέπει να επιλέξετε τουλάχιστον μία τάξη και ένα μάθημα!"
+
+msgid "AtLeastOneUser"
+msgstr "Πρέπει να επιλέξετε τουλάχιστον έναν χρήστη!"
+
+msgid "langAtLeastOneUserAndOneCourse"
+msgstr "Πρέπει να επιλέξετε τουλάχιστον έναν χρήστη και ένα μάθημα!"
+
+msgid "langClassList"
+msgstr "Λίστα τάξεων"
+
+msgid "langUserList"
+msgstr "Λίστα χρηστών"
+
+msgid "langCourseList"
+msgstr "Λίστα μαθημάτων"
+
+msgid "langAddToThatCourse"
+msgstr "Προσθήκη σε αυτό το μάθημα"
+
+msgid "langAddToClass"
+msgstr "Προσθήκη σε αυτή την τάξη"
+
+msgid "langRemoveFromClass"
+msgstr "Διαγραφή από αυτή την τάξη"
+
+msgid "langAddToGroup"
+msgstr "Προσθήκη σε αυτή την ομάδα"
+
+msgid "langRemoveFromGroup"
+msgstr "Διαγραφή από αυτή την ομάδα"
+
+msgid "langUsersOutsideClass"
+msgstr "Χρήστες εκτός τάξης"
+
+msgid "langUsersInsideClass"
+msgstr "Χρήστες εντός τάξης"
+
+msgid "langUsersOutsideGroup"
+msgstr "Χρήστες εκτός ομάδας"
+
+msgid "langUsersInsideGroup"
+msgstr "Χρήστες εντός ομάδας"
+
+msgid "langImportFileLocation"
+msgstr "Τοποθεσία του αρχείου CSV / XML"
+
+msgid "langFileType"
+msgstr "Τύπος αρχείου"
+
+msgid "langOutputFileType"
+msgstr "Τύπος αρχείου οutput"
+
+msgid "langMustUseSeparator"
+msgstr "Πρέπει να χρησιμοποιήσετε τον χαρακτήρα \';\' ως διαχωριστή"
+
+msgid "langCSVMustLookLike"
+msgstr "Το αρχείο CSV πρέπει να μοιάζει έτσι"
+
+msgid "langXMLMustLookLike"
+msgstr "Το αρχείο XML πρέπει να μοιάζει έτσι"
+
+msgid "langMandatoryFields"
+msgstr "Τα oνόματα πεδίων με έντονους χαρακτήρες είναι υποχρεωτικά."
+
+msgid "langNotXML"
+msgstr "Το συγκεκριμένο αρχείο δεν είναι αρχείο XML !"
+
+msgid "langNotCSV"
+msgstr "Το συγκεκριμένο αρχείο δεν είναι αρχείο CSV  !"
+
+msgid "langNoNeededData"
+msgstr "Το αρχείο δεν περιέχει όλα τα απαραίτητα δεδομένα !"
+
+msgid "langMaxImportUsers"
+msgstr "Δεν μπορείτε νε εισάγετε περισσότερους από 500 χρήστες με μια φορά"
+
+msgid "langAdminDatabases"
+msgstr "Βάσεις δεδομένων (phpMyAdmin)"
+
+msgid "langAdminUsers"
+msgstr "Χρήστες"
+
+msgid "langAdminClasses"
+msgstr "Τάξεις χρηστών"
+
+msgid "langAdminGroups"
+msgstr "Ομάδες χρηστών"
+
+msgid "langAdminCourses"
+msgstr "Μαθήματα"
+
+msgid "langAdminCategories"
+msgstr "Κατηγορίες μαθημάτων"
+
+msgid "langSubscribeUserGroupToCourse"
+msgstr "Εγγραφή χρήστη / ομάδας σε μάθημα"
+
+msgid "AddACategory"
+msgstr "Προσθήκη Κατηγορίας"
+
+msgid "langInto"
+msgstr "μέσα σε"
+
+msgid "langNoCategories"
+msgstr "Δεν υπάρχουν κατηγορίες εδώ"
+
+msgid "langAllowCoursesInCategory"
+msgstr "Επιτρέπεται η προσθήκη μαθημάτων σε αυτή την κατηγορία;"
+
+msgid "langGoToForum"
+msgstr "Μετάβαση στην Περιοχή Συζητήσεων"
+
+msgid "langCategoryCode"
+msgstr "Κωδικός κατηγορίας"
+
+msgid "langCategoryName"
+msgstr "Όνομα κατηγορίας"
+
+msgid "langCategories"
+msgstr "Κατηγορίες"
+
+msgid "langEditNode"
+msgstr "Επεξεργασία αυτής της κατηγορίας"
+
+msgid "langOpenNode"
+msgstr "Άνοιγμα αυτής της κατηγορίας"
+
+msgid "langDeleteNode"
+msgstr "Διαγραφή αυτής της κατηγορίας"
+
+msgid "langAddChildNode"
+msgstr "Προσθήκη υποκατηγορίας"
+
+msgid "langViewChildren"
+msgstr "Προβολή παιδιών"
+
+msgid "langTreeRebuildedIn"
+msgstr "Η δομή του δέντρου ξαναδημιουργήθηκε σε"
+
+msgid "langTreeRecountedIn"
+msgstr "Η δομή του δέντρου μερτήθηκε ξανά σε"
+
+msgid "langRebuildTree"
+msgstr "Ξαναφτιάξε το δέντρο"
+
+msgid "langRefreshNbChildren"
+msgstr "Ανανέωσε τον αριθμό των παιδιών"
+
+msgid "langShowTree"
+msgstr "Εμφάνιση σε δενδρική μορφή"
+
+msgid "langBack"
+msgstr "Προηγούμενη σελίδα"
+
+msgid "langLogDeleteCat"
+msgstr "Η κατηγορία διαγράφηκε"
+
+msgid "langRecountChildren"
+msgstr "Μέτρησε ξανά τα παιδιά"
+
+msgid "langUpInSameLevel"
+msgstr "Πάνω στο ίδιο επίπεδο"
+
+msgid "langSeconds"
+msgstr "δευτερόλεπτα"
+
+msgid "langMailTo"
+msgstr "Αποστολή μηνύματος σε:"
+
+msgid "lang_no_access_here"
+msgstr "Δεν επιτρέπεται η πρόσβαση εδώ"
+
+msgid "lang_php_info"
+msgstr "πληροφορίες για το σύστημα"
+
+msgid "langAddAdminInApache"
+msgstr "Προσθήκη διαχειριστή"
+
+msgid "langAddFaculties"
+msgstr "Προσθήκη κατηγοριών"
+
+msgid "langSearchACourse"
+msgstr "Αναζήτηση μαθήματος"
+
+msgid "langSearchAUser"
+msgstr "Αναζήτηση χρήστη"
+
+msgid "langTechnicalTools"
+msgstr "Τεχνικά"
+
+msgid "langConfig"
+msgstr "Ρυθμίσεις συστήματος"
+
+msgid "langLogIdentLogoutComplete"
+msgstr "Λίστα εισόδου (εκτεταμένη)"
+
+msgid "langLimitUsersListDefaultMax"
+msgstr "Μέγιστος αριθμός χρηστών που θα εμφανίζονται στη λίστα"
+
+msgid "NoTimeLimits"
+msgstr "Χωρίς χρονικό όριο"
+
+msgid "GeneralCoach"
+msgstr "Γενικός εκπαιδευτής"
+
+msgid "GeneralProperties"
+msgstr "Γενικές ιδιότητες"
+
+msgid "CourseCoach"
+msgstr "Εκπαιδευτής μαθήματος"
+
+msgid "UsersNumber"
+msgstr "Αριθμός χρηστών"
+
+msgid "PageAfterLoginTitle"
+msgstr "Σελίδα μετά την είσοδο στο σύστημα"
+
+msgid "PageAfterLoginComment"
+msgstr "Η σελίδα που εμφανίζεται με τη σύνδεση του χρήστη"
+
+msgid "DokeosAdminWebLinks"
+msgstr "Υπερσυνδέσεις Chamilo"
+
+msgid "TabsMyProfile"
+msgstr "Καρτέλα Προφίλ"
+
+msgid "GlobalRole"
+msgstr "Καθολικός Ρόλος"
+
+msgid "langNomOutilTodo"
+msgstr "Διαχείριση λίστας εκρεμοτήτων"
+
+msgid "langNomPageAdmin"
+msgstr "Διαχείριση"
+
+msgid "langSysInfo"
+msgstr "Πληροφορίες για το σύστημα"
+
+msgid "langDiffTranslation"
+msgstr "Σύγκριση μεταφράσεων"
+
+msgid "langStatOf"
+msgstr "Στατιστικά του"
+
+msgid "langSpeeSubscribe"
+msgstr "Γρήγορη εγγραφή ως ελεγκτής μαθήματος"
+
+msgid "langLogIdentLogout"
+msgstr "Λίστα συνδέσεων"
+
+msgid "langServerStatus"
+msgstr "Κατάσταση MySQL server :"
+
+msgid "langDataBase"
+msgstr "Βάση δεδομένων"
+
+msgid "langRun"
+msgstr "Εργασίες"
+
+msgid "langClient"
+msgstr "MySql Πελάτη"
+
+msgid "langServer"
+msgstr "MySql Εξυπηρετητή"
+
+msgid "langtitulary"
+msgstr "Ιδιοκτήτης"
+
+msgid "langUpgradeBase"
+msgstr "Αναβάθμιση βάσης δεδομένων"
+
+msgid "langManage"
+msgstr "Διαχείριση Πύλης"
+
+msgid "langErrorsFound"
+msgstr "βρέθηκαν σφάλματα"
+
+msgid "langMaintenance"
+msgstr "Συντήρηση"
+
+msgid "langUpgrade"
+msgstr "αναβάθμιση Chamilo"
+
+msgid "langWebsite"
+msgstr "Ιστοσελίδα Chamilo"
+
+msgid "langDocumentation"
+msgstr "Τεκμηρίωση"
+
+msgid "langContribute"
+msgstr "Συνεισφέρω"
+
+msgid "langInfoServer"
+msgstr "Πληροφορίες Εξυπηρετητή"
+
+msgid "langOtherCategory"
+msgstr "Άλλη κατηγορία"
+
+msgid "langSendMailToUsers"
+msgstr "Αποστολή email στους χρήστες"
+
+msgid "langExampleXMLFile"
+msgstr "Παράδειγμα αρχείου XML"
+
+msgid "langExampleCSVFile"
+msgstr "Παράδειγμα αρχείου CSV"
+
+msgid "langCourseSystemCode"
+msgstr "Κωδικός συστήματος"
+
+msgid "langCourseVisualCode"
+msgstr "Οπτικός κώδικας"
+
+msgid "langSystemCode"
+msgstr "Κώδικας Συστήματος"
+
+msgid "langVisualCode"
+msgstr "οπτικός κώδικας"
+
+msgid "langAddCourse"
+msgstr "Δημιουργία μαθήματος"
+
+msgid "langAdminManageVirtualCourses"
+msgstr "Διαχείριση εικονικών μαθημάτων"
+
+msgid "langAdminCreateVirtualCourse"
+msgstr "Δημιουργία εικονικού μαθήματος"
+
+msgid "langAdminCreateVirtualCourseExplanation"
+msgstr "Το εικονικό μάθημα θα μοιράζεται αποθηκευτικό χώρο (φάκελο και βάση δεδομένων) με ένα υπάρχον \"αληθινό\" μάθημα."
+
+msgid "langRealCourseCode"
+msgstr "Πραγματικός πηγαίος κώδικας"
+
+msgid "langCourseCreationSucceeded"
+msgstr "Το μάθημα δημιουργήθηκε με επιτυχία"
+
+msgid "langYourDokeosUses"
+msgstr "Η εγκατάστασή σας του Chamilo, αυτή τη στιγμή χρησιμοποιεί"
+
+msgid "langOnTheHardDisk"
+msgstr "στο σκληρό δίσκο"
+
+msgid "langIsVirtualCourse"
+msgstr "Είναι εικονικό μάθημα"
+
+msgid "langSystemAnnouncements"
+msgstr "Ανακοινώσεις του Συστήματος"
+
+msgid "langAddAnnouncement"
+msgstr "Προσθήκη νέας ανακοίνωσης"
+
+msgid "langAnnouncementAdded"
+msgstr "Η ανακοίνωση έχει προστεθεί"
+
+msgid "langAnnouncementUpdated"
+msgstr "Η ανακοίνωση έχει ενημερωθεί"
+
+msgid "langAnnouncementDeleted"
+msgstr "Η ανακοίνωση έχει διαγραφεί"
+
+msgid "langContent"
+msgstr "Περιεχόμενο"
+
+msgid "PermissionsForNewFiles"
+msgstr "Δικαιώματα για νέα αρχεία"
+
+msgid "PermissionsForNewFilesComment"
+msgstr "Η δυνατότητα να ορίζεις τα δικαιώματα για κάθε νέο αρχείο αυξάνει την ασφάλεια ενάντια στις κακόβουλες επιθέσεις από hackers που προσπαθούν να ανεβάσουν επικίνδυνο υλικό στην πύλη σας. Η προεπιλεγμένη τιμή (0550) είναι αρκετή για να δώσει στον εξυπηρετητή σας ένα λογικό επίπεδο προστασίας. Αν χρησιμοποιήτε το Oogie φροντίστε οι χρήστες που χρησιμοποιούν το OpenOffice μπορούν να γράψουν αρχεία στο φάκελο του μαθήματος."
+
+msgid "langStudent"
+msgstr "Μαθητής"
+
+msgid "Guest"
+msgstr "Επισκέπτης"
+
+msgid "langLoginAsThisUserColumnName"
+msgstr "Είσοδος ως"
+
+msgid "langLoginAsThisUser"
+msgstr "Είσοδος"
+
+msgid "SelectPicture"
+msgstr "Επιλογή εικόνας"
+
+msgid "DontResetPassword"
+msgstr "Όχι επαναφορά κωδικού"
+
+msgid "ParticipateInCommunityDevelopment"
+msgstr "Συμμετοχή στη δημιουργία"
+
+msgid "langCourseAdmin"
+msgstr "διαχειριστής μαθήματος"
+
+msgid "langOtherCourses"
+msgstr "άλλα μαθήματα"
+
+msgid "PlatformLanguageTitle"
+msgstr "Γλώσσα Πλατφόρμας"
+
+msgid "ServerStatusComment"
+msgstr "Τι είδους εξυπηρετητής είναι αυτός; Αυτό ενεργοποιεί ή απενεργοποιεί κάποιες επιλογές. Σε έναν εξυπηρετητή υπάρχει σε λειτουργία μια επιλογή μετάφρασης που προβάλει μη μεταφρασμένες συμβολοσειρές."
+
+msgid "ServerStatusTitle"
+msgstr "Τύπος Εξυπηρετητή"
+
+msgid "PlatformLanguages"
+msgstr "Γλώσσες Πλατφόρμας Chamilo"
+
+msgid "PlatformLanguagesExplanation"
+msgstr "Αυτό το εργαλείο διαχειρίζεται το μενού επιλογής γλώσσας στην σελίδα εισόδου. Σαν διαχειριστής μπορείτε να αποφασίσετε ποιες γλώσσες θα είναι διαθέσιμες για τους χρήστες σας."
+
+msgid "OriginalName"
+msgstr "Αρχικό όνομα"
+
+msgid "EnglishName"
+msgstr "Αγγλικό όνομα"
+
+msgid "DokeosFolder"
+msgstr "Φάκελος Chamilo"
+
+msgid "Properties"
+msgstr "Ιδιότητες"
+
+msgid "PlatformConfigSettings"
+msgstr "Ρυθμίσεις Chamilo"
+
+msgid "SettingsStored"
+msgstr "Οι ρυθμίσεις έχουν αποθηκευτεί"
+
+msgid "InstitutionTitle"
+msgstr "Τίτλος Ιδρύματος"
+
+msgid "InstitutionComment"
+msgstr "Όνομα του Ιδρύματος (εμφανίζεται στην πάνω δεξιά πλευρά)"
+
+msgid "InstitutionUrlTitle"
+msgstr "Διεύθυνση του Ιδρύματος στο Διαδίκτυο"
+
+msgid "InstitutionUrlComment"
+msgstr "Η διεύθυνση του Ιδρύματος στο Διαδίκτυο (ο υπερσύνδεσμος εμφανίζεται στην πάνω δεξιά πλευρά)"
+
+msgid "SiteNameTitle"
+msgstr "Τίτλος πανεπιστημιούπολης Chamilo"
+
+msgid "SiteNameComment"
+msgstr "Όνομα της Πανεπιστημιούπολης του Chamilo (εμφανίζεται στην πάνω δεξιά πλευρά)"
+
+msgid "emailAdministratorTitle"
+msgstr "Διαχειριστής Πλατφόρμας: E-mail"
+
+msgid "emailAdministratorComment"
+msgstr "Η διεύθυνση e-mail του Διαχειριστή Πλατφόρμας (εμφανίζεται στην κάτω αριστερά πλευρά)"
+
+msgid "administratorSurnameTitle"
+msgstr "Διαχειριστής Πλατφόρμας: Επώνυμο"
+
+msgid "administratorSurnameComment"
+msgstr "Το επώνυμο του Διαχειριστή Πλατφόρμας (εμφανίζεται κάτω αριστερά)"
+
+msgid "administratorNameTitle"
+msgstr "Διαχειριστής Πλατφόρμας: Όνομα"
+
+msgid "administratorNameComment"
+msgstr "Το όνομα του Διαχειριστή Πλατφόρμας (εμφανίζεται στην κάτω αριστερά πλευρά)"
+
+msgid "Yes"
+msgstr "Ναι"
+
+msgid "No"
+msgstr "Όχι"
+
+msgid "ShowToolShortcutsTitle"
+msgstr "Συντομεύσεις Εργαλείων"
+
+msgid "ShowStudentViewTitle"
+msgstr "Όψη φοιτητή"
+
+msgid "ShowStudentViewComment"
+msgstr "Όψη φοιτητή;<br>Αυτή η επιλογή επιπτρέπει στον διδάσκοντα να δει πως φαίνεται το περιβάλλον του φοιτητή"
+
+msgid "ShowOnlineComment"
+msgstr "Εμφάνιση προσώπων που είναι συνδεμένοι;"
+
+msgid "ProfileChangesTitle"
+msgstr "Προφίλ"
+
+msgid "RegistrationRequiredFormsTitle"
+msgstr "Εγγραφή:απαιτούμενα πεδία"
+
+msgid "AllowRegistrationTitle"
+msgstr "Εγγραφή"
+
+msgid "AllowRegistrationAsTeacherTitle"
+msgstr "Εγγραφή ως καθηγητής"
+
+msgid "PlatformLanguage"
+msgstr "Γλώσσα Πλατφόρμας"
+
+msgid "EditNotice"
+msgstr "Επεξεργασία ειδοποίησης"
+
+msgid "General"
+msgstr "Γενικά"
+
+msgid "Registration"
+msgstr "Εγγραφή"
+
+msgid "Password"
+msgstr "Συνθηματικό"
+
+msgid "InsertLink"
+msgstr "εισαγωγή συνδέσμου"
+
+msgid "EditNews"
+msgstr "Επεξεργασία Νέων"
+
+msgid "EditCategories"
+msgstr "Επεξεργασία κατηγοριών"
+
+msgid "EditHomePage"
+msgstr "Επεξεργασία αρχικής σελίδας"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Course"
+msgstr "Μάθημα"
+
+msgid "Languages"
+msgstr "Γλώσσες"
+
+msgid "NoticeTitle"
+msgstr "Τίτλος ειδοποίησης"
+
+msgid "NoticeText"
+msgstr "Κείμενο ειδοποίησης"
+
+msgid "LinkName"
+msgstr "Όνομα συνδέσμου"
+
+msgid "OpenInNewWindow"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+msgid "Info"
+msgstr "Πληροφορίες"
+
+msgid "UserAdded"
+msgstr "ο χρήστης προστέθηκε"
+
+msgid "UserDeleted"
+msgstr "Ο χρήστης διαγράφηκε"
+
+msgid "langPrivate"
+msgstr "Κλειστό (Πρόσβαση στο μάθημα έχουν μόνο οι χρήστες που βρίσκονται στη Λίστα Χρηστών)"
+
+msgid "CourseAccessConfigTip"
+msgstr "Εξ ορισμού, το μάθημα είναι ..."
+
+msgid "Tool"
+msgstr "εργαλείο"
+
+msgid "DocumentsAndFolders"
+msgstr "Αρχεία και φάκελοι"
+
+msgid "Learnpath"
+msgstr "Μονοπάτι γνώσης"
+
+msgid "Exercises"
+msgstr "Ασκήσεις"
+
+msgid "AllowPersonalAgendaTitle"
+msgstr "Προσωπική Ατζέντα"
+
+msgid "CourseDescription"
+msgstr "Περιγραφή Μαθήματος"
+
+msgid "Chat"
+msgstr "Συζήτηση"
+
+msgid "Quiz"
+msgstr "Κουίζ"
+
+msgid "Announcements"
+msgstr "Ανακοινώσεις"
+
+msgid "Links"
+msgstr "Σύνδεσμοι"
+
+msgid "LearningPath"
+msgstr "Εκπαιδευτική Διαδρομή"
+
+msgid "Documents"
+msgstr "Έγγραφα"
+
+msgid "UserPicture"
+msgstr "Εικόνα"
+
+msgid "Login"
+msgstr "Είσοδος"
+
+msgid "UserPassword"
+msgstr "Κωδικός χρήστη"
+
+msgid "SubscriptionAllowed"
+msgstr "Η εγγραφή επιτρέπεται"
+
+msgid "AllowedToUnsubscribe"
+msgstr "Επιτρέπεται"
+
+msgid "NotAllowedToUnsubscribe"
+msgstr "Απορρίπτεται"
+
+msgid "CreateVirtualCourse"
+msgstr "Δημιουργία εικονικού μαθήματος"
+
+msgid "DisplayListVirtualCourses"
+msgstr "Εμφάνιση καταλόγου εικονικών μαθημάτων"
+
+msgid "ServerStatistics"
+msgstr "Στατιστικά Server"
+
+msgid "langServerStatisticsDescription"
+msgstr "Μπορείτε να συμβουλευτείτε το AWStats  για στατιστικά της πλατφόρμα σας: επισκέπτες, προβολές σελίδων, αναφορές..."
+
+msgid "SearchEngine"
+msgstr "Μηχανή αναζήτησης στο πλήρες κείμενο"
+
+msgid "langSearchEngineDescription"
+msgstr "Η μηχανή αναζήτησης στο πλήρες κείμενο, σας επιτρέπει αναζήτηση λέξεων σε ολόκληρη τη πλατφόρμα. Η καθημερινή καταχώρηση σε ευρετήριο των περιεχομένων, κατοχυρώνει την ποιότητα των αποτελεσμάτων."
+
+msgid "langListSession"
+msgstr "Λίστα συνεδριών"
+
+msgid "AddSession"
+msgstr "Προσθήκη συνεδρίας"
+
+msgid "langImportSessionListXMLCSV"
+msgstr "Εισαγωγή συνεδριών από XML/CSV format"
+
+msgid "ExportSessionListXMLCSV"
+msgstr "Εξαγωγή συνεδριών σε XML/CSV format"
+
+msgid "SessionName"
+msgstr "Όνομα συνεδρίας"
+
+msgid "langNbCourses"
+msgstr "αριθμός μαθήματος"
+
+msgid "DateStart"
+msgstr "Ημερομηνία έναρξης"
+
+msgid "DateEnd"
+msgstr "Ημερομηνία λήξης"
+
+msgid "CoachName"
+msgstr "Όνομα συντονιστή"
+
+msgid "SessionList"
+msgstr "Λίστα συνεδριών"
+
+msgid "SessionNameIsRequired"
+msgstr "Πρέπει να δώσετε ένα όνομα σ\' αυτή τη συνεδρία"
+
+msgid "NextStep"
+msgstr "Επόμενο βήμα"
+
+msgid "keyword"
+msgstr "Λέξη κλειδί"
+
+msgid "Confirm"
+msgstr "Επιβεβαίωση"
+
+msgid "UnsubscribeUsersFromCourse"
+msgstr "Αφαίρεση χρηστών από το μάθημα"
+
+msgid "MissingClassName"
+msgstr "Δεν υπάρχει το όνομα της κλάσης"
+
+msgid "ClassNameExists"
+msgstr "Το όνομα της κλάσης υπάρχει"
+
+msgid "ImportCSVFileLocation"
+msgstr "Τοποθεσία του CVS αρχείου για εισαγωγή"
+
+msgid "ClassesCreated"
+msgstr "Οι τάξεις δημιουργήθηκαν"
+
+msgid "ErrorsWhenImportingFile"
+msgstr "Παρουσιάστηκαν σφάλματα κατά την εισαγωγή του αρχείου"
+
+msgid "ServiceActivated"
+msgstr "Η υπηρεσία ενεργοποιήθηκε"
+
+msgid "ActivateExtension"
+msgstr "Ενεργές υπηρεσίες"
+
+msgid "InvalidExtension"
+msgstr "Η επέκταση δεν είναι έγκυρη"
+
+msgid "VersionCheckExplanation"
+msgstr "Για να ενεργοποιήσετε τον αυτόματο έλεγχο έκδοσης, πρέπει να έχετε εγγραφεί στο campus του chamilo.com. Οι πληροφορίες που συλλέγονται είναι μόνο για εσωτερική χρήση και μόνο συγκεντρωτικά δεδομένα θα είναι διαθέσιμα δημόσια (συνολικός αριθμός παραρτημάτων, συνολικός αριθμός μαθημάτων, συνολικός αριθμός μαθητών, κλπ) (δείτε τα <a href=\"http://www.chamilo.org/stats/\">στατιστικά</a>). Μετά την εγγραφή σας θα εμφανίζεστε και στην  (<a href=\"http://www.chamilo.org/community.php\">παγκόσμια λίστα</a>). Αν δεν επιθυμείτε να εμφανίζεστε στη λίστα, πρέπει να επιλέξετε την επιλογή παρακάτω. Η εγγραφή είναι πολύ απλή, πατήστε μόνο αυτό το πλήκτρο: <br />"
+
+msgid "IconsOnly"
+msgstr "Μόνο εικόνες"
+
+msgid "FieldTypeDate"
+msgstr "Ημερομηνία"
+
+msgid "AllSlashNone"
+msgstr "Όλα/Κανένα"
+
+msgid "FollowEachOfTheseStepsStepByStep"
+msgstr "Ακολούθησε καθένα από αυτά τα βήματα, βήμα προς βήμα"
+
+msgid "SelectDepartment"
+msgstr "Επιλογή τμήματος"
+
+msgid "RegistrationYear"
+msgstr "Έτος εγγραφής"
+
+msgid "LDAPUsersAdded"
+msgstr "Προστέθηκαν LDAP χρήστες"
+
+msgid "NoUserAdded"
+msgstr "Δεν προστέθηκε κανείς χρήστης"
+
+msgid "ImportLDAPUsersIntoCourse"
+msgstr "Εισαγωγή LDAP χρηστών στο μάθημα"
+
+msgid "SearchLDAPUsers"
+msgstr "Αναζήτηση για χρήστες LDAP"
+
+msgid "CannotMoveField"
+msgstr "Αδυναμία μετακίνησης του πεδίου"
+
+msgid "FieldShown"
+msgstr "Το πεδίο είναι τώρα ορατό για τον χρήστη"
+
+msgid "FieldHidden"
+msgstr "Το πεδίο είναι τώρα αόρατο για τον χρήστη"
+
+msgid "FieldDeleted"
+msgstr "Το πεδίο έχει διαγραφεί"
+
+msgid "SessionAddTypeUnique"
+msgstr "Απλή εγγραφή"
+
+msgid "SessionAddTypeMultiple"
+msgstr "Πολλαπλή εγγραφή"
+
+msgid "AddUrl"
+msgstr "Προσθήκη υπερσυνδέσμου"
+

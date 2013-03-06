@@ -1,0 +1,252 @@
+msgid "Upload"
+msgstr "Načítať"
+
+msgid "BackList"
+msgstr "Ísť späť do schránky na dokumenty"
+
+msgid "ShowFeedback"
+msgstr "Ukázať spätnú väzbu"
+
+msgid "GiveFeedback"
+msgstr "Dať / Upraviť spätnú väzbu"
+
+msgid "JustUploadInSelect"
+msgstr "---Len načítať---"
+
+msgid "MailingNothingFor"
+msgstr "Nič pre"
+
+msgid "MailingFileNotRegistered"
+msgstr "(neregistrovaný na tento kurz)"
+
+msgid "MailingFileSentTo"
+msgstr "odoslané komu"
+
+msgid "MailingFileIsFor"
+msgstr "je pre"
+
+msgid "MailingFileRecipDup"
+msgstr "viacero používateľov má"
+
+msgid "MailingFileRecipNotFound"
+msgstr "nie je tudent s"
+
+msgid "MailingFileNoRecip"
+msgstr "meno neobsahuje žiadne id prijímateľa"
+
+msgid "MailingFileNoPostfix"
+msgstr "meno nekončí s"
+
+msgid "MailingFileNoPrefix"
+msgstr "meno nezačína s"
+
+msgid "MailingInSelect"
+msgstr "---Pošta---"
+
+msgid "MailingAsUsername"
+msgstr "Pošta"
+
+msgid "FileDeleted"
+msgstr "Označený súbor bol odstránený zo schránky na dokumenty"
+
+msgid "DocAdd"
+msgstr "Dokument je úspešne pridaný"
+
+msgid "Sender"
+msgstr "odosielateľa"
+
+msgid "Author"
+msgstr "autora"
+
+msgid "FileSize"
+msgstr "veľkosti"
+
+msgid "Title"
+msgstr "názvu"
+
+msgid "OverwriteFile"
+msgstr "Prepísať predtým uložené súbory."
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Unknown"
+msgstr "neznámy"
+
+msgid "SentTo"
+msgstr "Odoslané komu"
+
+msgid "ConfirmDelete"
+msgstr "Toto odstráni záznam len z vášho zoznamu"
+
+msgid "SendTo"
+msgstr "Poslať komu"
+
+msgid "Description"
+msgstr "Opis dokumentu"
+
+msgid "UploadFile"
+msgstr "Uložiť dokument na server"
+
+msgid "ErrorCreatingDir"
+msgstr "Katalóg nie je možné vytvoriť. Prosím kontaktujte svojho systémového administrátora."
+
+msgid "UploadError"
+msgstr "Načítanie neúspešné. Prosím skontrolujte obmedzenia maximálnej veľkosti súboru a práva zložky."
+
+msgid "TooBig"
+msgstr "Buď ste súbor nevybrali, alebo je veľmi veľký."
+
+msgid "NoFileSpecified"
+msgstr "Neurčili ste súbor na načítanie."
+
+msgid "NoUserSelected"
+msgstr "Prosím vyberte používateľa, ktorému chcete súbor poslať ."
+
+msgid "BadFormData"
+msgstr "Odovzdanie neúspešné: dáta v nesprávnom formáte. Kontaktujte prosím svojho systémového administrátora."
+
+msgid "GeneralError"
+msgstr "Objavila sa chyba. Prosím, kontaktujte svojho systémového administrátora."
+
+msgid "Dropbox"
+msgstr "Schránka na dokumenty"
+
+msgid "Help"
+msgstr "Pomoc"
+
+msgid "ReceivedFiles"
+msgstr "Prijaté súbory"
+
+msgid "SentFiles"
+msgstr "Poslané súbory"
+
+msgid "ReceivedTitle"
+msgstr "Názov"
+
+msgid "SentTitle"
+msgstr "Odoslané súbory"
+
+msgid "Authors"
+msgstr "Autori"
+
+msgid "Size"
+msgstr "Veľkosť"
+
+msgid "LastResent"
+msgstr "Naposledy preposlané"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Jadro"
+
+msgid "UploadNewFile"
+msgstr "Poslať nový súbor"
+
+msgid "AreYouSureToDelete"
+msgstr "Naozaj chcete zmazať"
+
+msgid "Feedback"
+msgstr "Spätná väzba"
+
+msgid "CloseFeedback"
+msgstr "Zavrieť spätnú väzbu"
+
+msgid "AddNewFeedback"
+msgstr "Pridať spätnú väzbu"
+
+msgid "DropboxFeedbackStored"
+msgstr "Spätná informácia je uložená"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Všetci používatelia zmazali súbor takže nikto nebude vidieť spätnú väzbu, ktorú ste pridali."
+
+msgid "FeedbackError"
+msgstr "Chyba spätnej väzby"
+
+msgid "PleaseTypeText"
+msgstr "Prosím napíšte nejaký text."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "Nemáte povolené načítať tento súbor."
+
+msgid "CheckAtLeastOneFile"
+msgstr "Skontrolovať najmenej jeden súbor."
+
+msgid "ReceivedFileDeleted"
+msgstr "Prijatý súbor je zmazaný."
+
+msgid "SentFileDeleted"
+msgstr "Poslaný súbor je zmazaný."
+
+msgid "FilesMoved"
+msgstr "Vybrané súbory sú presunuté."
+
+msgid "ReceivedFileMoved"
+msgstr "Prijatý súbor je presunutý."
+
+msgid "SentFileMoved"
+msgstr "Poslaný súbor je presunutý"
+
+msgid "NotMovedError"
+msgstr "Súbor(y) nemôže byť presunutý."
+
+msgid "AddNewCategory"
+msgstr "Pridať novú kategóriu"
+
+msgid "EditCategory"
+msgstr "Upraviť túto kategóriu"
+
+msgid "CategoryName"
+msgstr "Názov kategórie"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Prosím zadajte názov kategórie"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Táto kategória už existuje, prosím použite iný názov"
+
+msgid "CurrentlySeeing"
+msgstr "Práve si prezeráte kategóriu"
+
+msgid "CategoryStored"
+msgstr "Kategória je uložená."
+
+msgid "CategoryModified"
+msgstr "Kategória je zmenená."
+
+msgid "CategoryDeleted"
+msgstr "Kategória je zmazaná."
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "Pole autora nemôže byť prázdne"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Musíte vybrať aspoň jednu destináciu"
+
+msgid "DropboxFileTooBig"
+msgstr "Súbor je príliš veľký."
+
+msgid "TheFileIsNotUploaded"
+msgstr "Súbor nie je načítaný."
+
+msgid "FileUploadSucces"
+msgstr "Súbor bol úspešne načítaný."
+
+msgid "MailingSelectNoOther"
+msgstr "Pota sa nemôe kombinovať s inými prijímateľmi"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Nový súbor bol poslaný do schránky na dokumenty"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Nový súbor bol poslaný do schránky na dokumenty Vášho kurzu"
+
+msgid "langAddEdit"
+msgstr "Pridať / Upraviť"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Tento priečinok je prázdny"
+

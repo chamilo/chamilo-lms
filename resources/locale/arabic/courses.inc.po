@@ -1,0 +1,204 @@
+msgid "lang_already_enrolled"
+msgstr " مسجل مسبقا"
+
+msgid "lang_my_personnal_course_list"
+msgstr " قائمة مقرراتي الخاصة"
+
+msgid "lang_course_enrollment"
+msgstr " مقررات المستخدمين"
+
+msgid "lang_course_not_available"
+msgstr " هذا المقرر غير متاح أو غير موجود"
+
+msgid "lang_enroll"
+msgstr " تسجيل"
+
+msgid "lang_enroll_to_a_new_course"
+msgstr " سجل في مقرر جديد"
+
+msgid "lang_my_present_course_list"
+msgstr " قائمة مقرراتي الحالية"
+
+msgid "lang_no_course_to_enroll_in_this_category"
+msgstr " لا يوجد مقررات للتسجيل فيها في هذا التصنيف"
+
+msgid "lang_or_search_from_the_course_code"
+msgstr " أو ابحث بالرمز"
+
+msgid "lang_search"
+msgstr " بحث"
+
+msgid "lang_select_course_among_categories"
+msgstr " اختر مقرر بين التصنيفات"
+
+msgid "lang_select_course_in"
+msgstr "  اختر مقرر في"
+
+msgid "lang_select_course_in_search_results"
+msgstr " اختر مقرر في نتائج البحث"
+
+msgid "Unsubscribe"
+msgstr " إلغاء التسجيل"
+
+msgid "lang_back_to_my_home_page"
+msgstr " الرجوع إلى الصفحة الرئيسية"
+
+msgid "lang_back_to_my_personnal_course_list"
+msgstr " الرجوع إلى قائمة مقرراتي الخاصة"
+
+msgid "langTitular"
+msgstr " المسؤول"
+
+msgid "langBackToListOfThisUser"
+msgstr " الرجوع إلى قائمة المقررات"
+
+msgid "langAdministrationTools"
+msgstr " أدوات الإدارة"
+
+msgid "lang_back_to_parent_category"
+msgstr " الرجوع إلى التصنيف الرئيسي"
+
+msgid "lang_back_to_course_selection"
+msgstr " الرجوع لتحديد المقررات"
+
+msgid "lang_up"
+msgstr " الرجوع إلى التصنيف الرئيسي"
+
+msgid "langCatList"
+msgstr " التصانيف"
+
+msgid "langCourseList"
+msgstr " قائمة المقررات"
+
+msgid "Subscribe"
+msgstr " تسجيل"
+
+msgid "AlreadySubscribed"
+msgstr " مسجل بالفعل"
+
+msgid "CourseCategoryStored"
+msgstr " لقد تم إضافة التصنيف بنجاح"
+
+msgid "langWithoutTimeLimits"
+msgstr " من غير حدود زمنية"
+
+msgid "lang_back_to_main_category_list"
+msgstr " الرجوع إلى قائمة المقررات الأساسية"
+
+msgid "langAdded"
+msgstr " أضيف"
+
+msgid "langDeleted"
+msgstr " حذف"
+
+msgid "langKeeped"
+msgstr " Kept"
+
+msgid "langHideAndSubscribeClosed"
+msgstr " مخفي / مغلق"
+
+msgid "langHideAndSubscribeOpen"
+msgstr " مخفي / مفتوح"
+
+msgid "langShowAndSubscribeOpen"
+msgstr " ظاهر / مفتوح"
+
+msgid "langShowAndSubscribeClosed"
+msgstr " ظاهر / مغلق"
+
+msgid "langAdminThisUser"
+msgstr " Back to user"
+
+msgid "langManage"
+msgstr " Portal ادارة الـ"
+
+msgid "langEnrollToCourseSuccessful"
+msgstr " لقد تم تسجيلك في المقرر"
+
+msgid "langSubCat"
+msgstr " التصانيف الفرعية"
+
+msgid "langUnsubscribeNotAllowed"
+msgstr " إلغاء التسجيل غير متاح في هذا المقرر"
+
+msgid "langCourseAdminUnsubscribeNotAllowed"
+msgstr " أنت مدير هذا المقرر."
+
+msgid "CourseManagement"
+msgstr " إدارة المقررات"
+
+msgid "SortMyCourses"
+msgstr " رتب مقرراتي"
+
+msgid "SubscribeToCourse"
+msgstr " التسجيل في مقرر"
+
+msgid "UnsubscribeFromCourse"
+msgstr " إلغاء التسجيل من مقرر"
+
+msgid "CreateCourseCategory"
+msgstr " إنشاء تصنيف للمقررات"
+
+msgid "CourseCategoryAbout2bedeleted"
+msgstr "  هل أنت متأكد من أنك تريد حذف هذا التصنيف الخاص بالمقررات ؟ المقررات التابعة لهذا التصنيف سيتم إخراجها من هذا التصنيف"
+
+msgid "CourseCategories"
+msgstr " تصنيف المقررات"
+
+msgid "CoursesInCategory"
+msgstr " مقررات هذا التصنيف"
+
+msgid "SearchCourse"
+msgstr " بحث عن مقرر"
+
+msgid "UpOneCategory"
+msgstr " <- تصنيف واحد لأعلى"
+
+msgid "SearchResultsFor"
+msgstr " نتيجة البحث عن :"
+
+msgid "ConfirmUnsubscribeFromCourse"
+msgstr " هل أنت متأكد من أنك تريد إلغاء التسجيل من هذا المقرر؟"
+
+msgid "NoCourseCategory"
+msgstr " لا يوجد تصنيف"
+
+msgid "EditCourseCategorySucces"
+msgstr " لقد تم إضافة المقرر للتصنيف"
+
+msgid "SubscribingNotAllowed"
+msgstr " التسجيل غير متاح"
+
+msgid "CourseSortingDone"
+msgstr " تم ترتيب المقرر"
+
+msgid "ExistingCourseCategories"
+msgstr " التصنيفات المتوفرة"
+
+msgid "YouAreNowUnsubscribed"
+msgstr " أنت الأن غير مسجل في المقرر"
+
+msgid "ViewOpenCourses"
+msgstr " عرض المقررات المفتوجة"
+
+msgid "ErrorContactPlatformAdmin"
+msgstr " حدث هناك خطأ غير معروف. فضلا قم بالإتصال بمدير النظام"
+
+msgid "CourseRegistrationCodeIncorrect"
+msgstr " رمز المقرر غير صحيح"
+
+msgid "CourseRequiresPassword"
+msgstr " المقرر يتطلب كلمة مرور"
+
+msgid "SubmitRegistrationCode"
+msgstr " ارسل رمز التسجيل"
+
+msgid "CourseCategoryDeleted"
+msgstr " تم حذف تصنيف المقرر"
+
+msgid "CategorySortingDone"
+msgstr " تم ترتيب التصنيف"
+
+msgid "CourseCategoryEditStored"
+msgstr " تم تحديث التصنيف"
+

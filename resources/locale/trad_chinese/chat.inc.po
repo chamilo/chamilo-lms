@@ -1,0 +1,102 @@
+msgid "langOnlineConference"
+msgstr "線上會議"
+
+msgid "langWash"
+msgstr "洗刷"
+
+msgid "langReset"
+msgstr "重置"
+
+msgid "langSave"
+msgstr "儲存"
+
+msgid "langRefresh"
+msgstr "刷新"
+
+msgid "langIsNowInYourDocDir"
+msgstr "現下在你的文檔工具中，<br /><B>這個檔案是可見的</B>"
+
+msgid "langCopyFailed"
+msgstr "列印失敗"
+
+msgid "langTypeMessage"
+msgstr "請輸入你的消息!"
+
+msgid "langConfirmReset"
+msgstr "真的想要刪除所有消息嗎？"
+
+msgid "langHasResetChat"
+msgstr "已經重置聊天室"
+
+msgid "langNoOnlineConference"
+msgstr "現下還沒有會議..."
+
+msgid "langMediaFile"
+msgstr "直播音頻或視頻流"
+
+msgid "langContentFile"
+msgstr "介紹"
+
+msgid "langListOfParticipants"
+msgstr "成員清單"
+
+msgid "langYourPicture"
+msgstr "你的圖片"
+
+msgid "langOnlineDescription"
+msgstr "會議描述"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "當要提出重要問題時，請選中此框﹗"
+
+msgid "langQuestion"
+msgstr "問題"
+
+msgid "langClearList"
+msgstr "清除清單"
+
+msgid "langWhiteBoard"
+msgstr "白板"
+
+msgid "langTextEditorDefault"
+msgstr "<H2>文字處理</H2>從微軟Word中剪切和粘貼到這裡然後編輯，成員將會看到你的線上修改。"
+
+msgid "langStreaming"
+msgstr "流媒體"
+
+msgid "langStreamURL"
+msgstr "流媒體鏈接"
+
+msgid "langStreamType"
+msgstr "流媒體類型"
+
+msgid "langLinkName"
+msgstr "鏈接名稱"
+
+msgid "langLinkURL"
+msgstr "鏈接網址"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "歡迎來到<B>線上會議</B>"
+
+msgid "langNoLinkAvailable"
+msgstr "沒有鏈接可用"
+
+msgid "langChat_reset_by"
+msgstr "重置聊天室"
+
+msgid "OrFile"
+msgstr "或文件"
+
+msgid "langCallSent"
+msgstr "聊天請求已經發送，等待對方同意。"
+
+msgid "langChatDenied"
+msgstr "你的聊天請求已經被對方拒絕。"
+
+msgid "Send"
+msgstr "已傳送"
+
+msgid "Connected"
+msgstr "已連線"
+

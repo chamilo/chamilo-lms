@@ -1,0 +1,48 @@
+msgid "langCourseProgram"
+msgstr "Kurssin kuvaus"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "Kurssin kuvausta ei ole vielä tehty."
+
+msgid "langEditCourseProgram"
+msgstr "Luo ja muokkaa kurssin kuvausta"
+
+msgid "QuestionPlan"
+msgstr "Kysymyksiä opettajalle"
+
+msgid "langInfo2Say"
+msgstr "Käyttäjille annettava informaatio"
+
+msgid "langOuAutreTitre"
+msgstr "Otsikko"
+
+msgid "langNewBloc"
+msgstr "Muu"
+
+msgid "langAddCat"
+msgstr "Lisää aihe"
+
+msgid "langAdd"
+msgstr "Lisää"
+
+msgid "langValid"
+msgstr "Voimassaoleva"
+
+msgid "langBackAndForget"
+msgstr "Peruuta"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Kurssin kuvaus on päivitetty"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Kurssin kuvaus on poistettu"
+
+msgid "CourseDescriptionIntro"
+msgstr "Luodaksesi kurssikuvauksen, klikkaa otsikkoa ja täytä oikea kenttä.Klikkaa sitten OK ja täytä seuraava otsikko."
+
+msgid "langSaveDescription"
+msgstr "Tallenna kuvaus"
+
+msgid "AddCourseDescription"
+msgstr "Lisää kurssin kuvaus"
+

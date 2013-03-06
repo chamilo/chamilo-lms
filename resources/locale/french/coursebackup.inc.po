@@ -1,0 +1,144 @@
+msgid "langSelectOptionForBackup"
+msgstr "Veuillez sélectionner une option de sauvegarde."
+
+msgid "langLetMeSelectItems"
+msgstr "Me laisser sélectionner les sections de cours."
+
+msgid "langCreateFullBackup"
+msgstr "Faire un sauvegarde complète de ce cours"
+
+msgid "langCreateBackup"
+msgstr "Créer une sauvegarde"
+
+msgid "langBackupCreated"
+msgstr "La sauvegarde (backup) de ce cours a été effectuée. Le téléchargement de ce fichier démarrera dans quelques instants. Si rien ne se produit, veuillez cliquer sur le lien suivant."
+
+msgid "langSelectBackupFile"
+msgstr "Sélectionnez un fichier de sauvegarde"
+
+msgid "langImportBackup"
+msgstr "Importer les informations de sauvegarde"
+
+msgid "langImportFullBackup"
+msgstr "Importer toutes les sections contenues dans le fichier de sauvegarde"
+
+msgid "langImportFinished"
+msgstr "L\'importation du fichier de sauvegarde est terminée"
+
+msgid "langEvents"
+msgstr "Activités"
+
+msgid "langAnnouncements"
+msgstr "Annonces"
+
+msgid "langDocuments"
+msgstr "Documents"
+
+msgid "langTests"
+msgstr "Tests"
+
+msgid "langLearnpaths"
+msgstr "Parcours d\'apprentissage"
+
+msgid "langCopyCourse"
+msgstr "Copier un cours"
+
+msgid "langSelectItemsToCopy"
+msgstr "Sélectionnez les sections du cours à copier"
+
+msgid "langCopyFinished"
+msgstr "Copie terminée"
+
+msgid "langFullRecycle"
+msgstr "Vider toutes les sections du cours"
+
+msgid "langRecycleCourse"
+msgstr "Vider ce cours"
+
+msgid "langRecycleFinished"
+msgstr "Votre cours a été vidé"
+
+msgid "langRecycleWarning"
+msgstr "Avertissement: en utilisant cette fonctionnalité, vous allez supprimer certaines sections de votre cours. Cette suppression ne pourra pas être annulée. Nous vous conseillons fortement de commencer par <a href=\"create_backup.php\">faire une sauvegarde</a>."
+
+msgid "langSameFilename"
+msgstr "Que faire des fichiers importés qui ont le même nom que des fichiers existants?"
+
+msgid "langSameFilenameSkip"
+msgstr "Sauter les fichiers"
+
+msgid "langSameFilenameRename"
+msgstr "Renommer les fichiers (ex: fichier.pdf devient fichier_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Écraser les fichiers"
+
+msgid "langSelectDestinationCourse"
+msgstr "Sélectionnez un cours de destination"
+
+msgid "langFullCopy"
+msgstr "Copier toutes les sections de ce cours"
+
+msgid "langCourseDescription"
+msgstr "Description du cours"
+
+msgid "langNoResourcesToBackup"
+msgstr "Aucune section n\'est disponible pour une sauvegarde"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "Aucune section de cours disponible dans ce fichier de sauvegarde"
+
+msgid "langSelectResources"
+msgstr "Sélectionnez la section de cours désirée"
+
+msgid "langNoResourcesToRecycles"
+msgstr "Aucune section de cours disponible pour le recyclage"
+
+msgid "langIncludeQuestionPool"
+msgstr "Inclure toutes les questions disponibles"
+
+msgid "langLocalFile"
+msgstr "Charger un fichier depuis votre ordinateur"
+
+msgid "langServerFile"
+msgstr "Utiliser un fichier de sauvegarde qui se trouve sur le serveur"
+
+msgid "langNoBackupsAvailable"
+msgstr "Aucun fichier de sauvegarde n\'est disponible sur le serveur"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "Il n\'y a pas d\'autre cours dont vous soyez l\'administrateur. Vous ne pouvez donc pas copier de contenu vers un autre cours."
+
+msgid "langBackup"
+msgstr "Sauvegarde"
+
+msgid "langImportBackupInfo"
+msgstr "Importer un cours existant. Vous pouvez charger un fichier de sauvegarde depuis votre ordinateur ou choisir un des fichiers de sauvegarde qui se trouve sur le serveur."
+
+msgid "langCreateBackupInfo"
+msgstr "Créer un fichier de sauvegarde de ce cours. Vous pouvez sélectionner les sections du cours que vous voulez sauver dans ce fichier."
+
+msgid "ToolIntro"
+msgstr "Introduction"
+
+msgid "UploadError"
+msgstr "l\'upload n\'a pas fonctionné, veuillez vérifier les limites de taille de fichiers autorisée et les permissions de vos répertoires."
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Les documents seront également ajoutés"
+
+msgid "ToExportLearnpathWithQuizYouHaveToSelectQuiz"
+msgstr "Si vous désirez exporter un cours contenant des tests, il est nécessaire d\'inclure ces tests dans l\'export en les sélectionnant dans la liste des tests."
+
+msgid "ArchivesDirectoryNotWriteableContactAdmin"
+msgstr "Le répertoire d\'archives, utilisé par cet outil, ne dispose pas des accès en écriture attendus. Veuillez contacter l\'administrateur de la plateforme à ce sujet."
+
+msgid "DestinationCourse"
+msgstr "Cours de destination"
+
+msgid "IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments"
+msgstr "Si votre parcours inclut des fichiers audio, vous devriez les sélectionner dans les documents."
+
+msgid "DontForgetToSelectTheMediaFilesIfYourResourceNeedIt"
+msgstr "N\'oubliez pas de sélectionner les fichiers média utilisés par votre ressource si nécessaire"
+

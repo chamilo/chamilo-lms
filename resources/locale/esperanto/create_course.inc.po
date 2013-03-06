@@ -1,0 +1,267 @@
+msgid "langProfessors"
+msgstr "Instruistoj"
+
+msgid "langExplanation"
+msgstr "Kiam vi klakas sur \'en ordo\', kurspaĝo estas kreata kun interalie la eroj: forumo, ligiloj, ekzercoj, agendo kaj kursmaterialo. Ensalutinte vi poste povos ŝanĝi la enhavon"
+
+msgid "langEmpty"
+msgstr "Vi ne plenigis ĉiujn kampojn. <br> Premu la RETRO-klavon kaj rekomencu.<br>Se vi ne scias vian kurskodon, vi povas rigardi al la kurslisto"
+
+msgid "langCodeTaken"
+msgstr "Ĉi-kurskodo jam estas uzita. Uzu la RETRO-klavon kaj rekomencu"
+
+msgid "langFormula"
+msgstr "Afablajn salutojn, via instruisto"
+
+msgid "langMessage"
+msgstr "Kiam vi forigas la testforumon, ankaŭ ĉiu temo en ĝi estas forigata."
+
+msgid "langExerciceEx"
+msgstr "Ekzempla Ekzerco"
+
+msgid "langAntique"
+msgstr "Antikva filozofia historio"
+
+msgid "langSocraticIrony"
+msgstr "Ironio laŭ Sokrato estas ..."
+
+msgid "langManyAnswers"
+msgstr "(pliaj ĝustaj respondoj eblas)"
+
+msgid "langRidiculise"
+msgstr "Ridindigi sian konversacian partneron por lin konfesigi siajn erarojn."
+
+msgid "langNoPsychology"
+msgstr "Ne. Sokrata ironio neniel rilatas kun psikologio sed ja kun argumentado."
+
+msgid "langAdmitError"
+msgstr "Konfesi siajn erarojn por inviti sian interparolanton, ke li faru same."
+
+msgid "langNoSeduction"
+msgstr "Ne. Sokrata ironio ne estas deloga strategio nek metodo bazita sur ekzemploj."
+
+msgid "langForce"
+msgstr "Devigi sian konversacian partneron per aro da demandoj kaj kromaj demandoj, por ke li konfesu, ke li ne scias kion li pensas scii."
+
+msgid "langIndeed"
+msgstr "Precize. Sokrata ironio fakte estas esplordemanda metodo. La greka vorto \"eirotao\" cetere signifas \"esplordemandi\"."
+
+msgid "langContradiction"
+msgstr "Uzi la principon de antagonismo por kapti sian interparolanton."
+
+msgid "langNotFalse"
+msgstr "Tiu respondo ne estas malĝusta. Estas vere, ke la montro de la nescio de la interparolanto okazas danke al la montro de la malakordaj konkludoj de liaj supozoj."
+
+msgid "langAgenda"
+msgstr "Agendo"
+
+msgid "langVideo"
+msgstr "Vidbendo"
+
+msgid "langCourseProgram"
+msgstr "Kurso: lokiĝo kaj flanka informo"
+
+msgid "langAnnouncements"
+msgstr "Anoncoj"
+
+msgid "langAddPageHome"
+msgstr "Alŝuti paĝon kaj ligi al startprogramo"
+
+msgid "langLinkSite"
+msgstr "Aldoni ligilon kaj ligi al startpaĝo"
+
+msgid "langModifyInfo"
+msgstr "Kursaj ecoj"
+
+msgid "langCourseDesc"
+msgstr "Priskribo de la kurso"
+
+msgid "langAgendaTitle"
+msgstr "Mardon, la 11an de decembro, je 14h00: kurso pri filozofio (1) - Ejo : Sud 18"
+
+msgid "langAgendaText"
+msgstr "Ĝenerala enkonduko en la filozofion kaj klarigo de la kursa agado"
+
+msgid "langMicro"
+msgstr "Mikro-trotuaro  XX"
+
+msgid "langGoogle"
+msgstr "Lerta serĉilo"
+
+msgid "langIntroductionText"
+msgstr "Ĉi tio estas la enkonduka teksto de ĉi-kurso. Kursmastrumantoj povas ĝin ŝanĝi per klako sur la krajon-simbolon malsupre."
+
+msgid "langIntroductionTwo"
+msgstr "Ĉi tie studentoj povas loki dokumentojn. Per ĉi-paĝo eblas interŝanĝi dokumentojn inter studentoj, studentaj grupoj kaj instruistoj. Kiam vi publikigas dokumenton pere de la grupa spaco (opcio = publikigi), ligilo estos kreata al via dokumento sen translokigo de ĝi."
+
+msgid "langCourseDescription"
+msgstr "Kurspriskribo"
+
+msgid "langProfessor"
+msgstr "Instruisto"
+
+msgid "langAnnouncementEx"
+msgstr "Tio ĉi estas ekzemplo de anonco."
+
+msgid "langJustCreated"
+msgstr "La kursa TTT estas kreita"
+
+msgid "langEnter"
+msgstr "Reiru al via kurslisto"
+
+msgid "langGroups"
+msgstr "Grupoj"
+
+msgid "langCreateCourseGroups"
+msgstr "Grupoj"
+
+msgid "langCatagoryMain"
+msgstr "Ĝenerale"
+
+msgid "langCatagoryGroup"
+msgstr "Grupaj forumoj"
+
+msgid "langLn"
+msgstr "Lingvo"
+
+msgid "langCreateSite"
+msgstr "Krei kursan TTTn"
+
+msgid "langFieldsRequ"
+msgstr "Ĉiuj kampoj estu plenigitaj"
+
+msgid "langEx"
+msgstr "Ekz. <i>Literatura historio</i>"
+
+msgid "langFac"
+msgstr "Kategorio"
+
+msgid "langTargetFac"
+msgstr "Jen la nomo de la fakultato, kie la kurso estas instruata"
+
+msgid "langMax"
+msgstr "maks. 12 litersignoj, ekz. .<i>ROM2121</i>"
+
+msgid "langDoubt"
+msgstr "Se vi dubas pri la ĝusta titolo aŭ la kodo de via kurso, vi povas ĝin trovi en la kurslisto"
+
+msgid "langProgram"
+msgstr "Kursprogramo </a>. Se la startpaĝo, kiun vi volas krei, ne respondas al ekzistanta kurskodo, vi povas elpensi ĝin. Ekzemple <i>RENOVIGO</i> kiam temas pri kleriga programo pri renoviga mastrumado"
+
+msgid "langScormtool"
+msgstr "Lernopado"
+
+msgid "langScormbuildertool"
+msgstr "Konstruo de Scorm-lernopado"
+
+msgid "langPathbuildertool"
+msgstr "Konstruo de lernopadoj"
+
+msgid "langOnlineConference"
+msgstr "Interreta konferenco"
+
+msgid "langAgendaCreationTitle"
+msgstr "Kreo de kurso"
+
+msgid "langAgendaCreationContenu"
+msgstr "Ĉi-kurso estas kreita je ĉi-momento."
+
+msgid "langOnlineDescription"
+msgstr "Priskribo de la konferenco"
+
+msgid "langDropbox"
+msgstr "Demetujo"
+
+msgid "langOnly"
+msgstr "Nur"
+
+msgid "langRandomLanguage"
+msgstr "Laŭhazarda elekto el disponeblaj lingvoj"
+
+msgid "langForumLanguage"
+msgstr "nederlanda"
+
+msgid "langNewCourse"
+msgstr "Nova kursa TTT"
+
+msgid "langAddNewCourse"
+msgstr "Aldoni novan kursan TTTn"
+
+msgid "langRestoreCourse"
+msgstr "Ripari kursan TTTn"
+
+msgid "langOtherProperties"
+msgstr "Aliaj ecoj trovitaj en arkivo"
+
+msgid "langSysId"
+msgstr "Sistema ID"
+
+msgid "langDepartment"
+msgstr "Departemento"
+
+msgid "langDepartmentUrl"
+msgstr "URL de via fakultato aŭ fakgrupo"
+
+msgid "langScoreShow"
+msgstr "Montri poentotabulon"
+
+msgid "langVisibility"
+msgstr "Videblo"
+
+msgid "langVersionDb"
+msgstr "Datumbaza versio uzita en arkivado"
+
+msgid "langLastVisit"
+msgstr "Lasta vizito"
+
+msgid "langLastEdit"
+msgstr "Lasta ŝanĝo"
+
+msgid "langExpire"
+msgstr "Finiĝo"
+
+msgid "langChoseFile"
+msgstr "Elekti dosieron"
+
+msgid "langFtpFileTips"
+msgstr "Dosiero en FTP-servilo"
+
+msgid "langHttpFileTips"
+msgstr "Dosiero en HTTP-servilo"
+
+msgid "langLocalFileTips"
+msgstr "Dosiero en la platforma servilo"
+
+msgid "langPostFileTips"
+msgstr "Dosiero en via loka komputilo"
+
+msgid "langOtherCategory"
+msgstr "Alia kategorio"
+
+msgid "langMinimum"
+msgstr "Minimumo"
+
+msgid "langMaximum"
+msgstr "maksimumo"
+
+msgid "langRestoreACourse"
+msgstr "restaŭri kursan TTTn"
+
+msgid "langBackup"
+msgstr "Restaŭri XX"
+
+msgid "langCopy"
+msgstr "Kopii kursan enhavon"
+
+msgid "langRecycle"
+msgstr "Reuzi kurson"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Tio ĉi estas ekzempla mesaĝo"
+
+msgid "Wikipedia"
+msgstr "Senpaga interreta enciklopedio"
+
+msgid "DefaultGroupCategory"
+msgstr "Defaŭltaj grupoj"
+

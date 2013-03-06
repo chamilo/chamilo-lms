@@ -1,0 +1,238 @@
+msgid "langInvalidId"
+msgstr "Deze identificatie is niet geldig (verkeerde log-in of wachtwoord)."
+
+msgid "langWelcome"
+msgstr "Welkom !"
+
+msgid "langPass"
+msgstr "Wachtwoord"
+
+msgid "langEnter"
+msgstr "Terug naar uw cursuslijst"
+
+msgid "langReg"
+msgstr "Registratie"
+
+msgid "langMenu"
+msgstr "Menu"
+
+msgid "langAdvises"
+msgstr "Advies"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Opgepast:</b> Deze cursus bestaat niet."
+
+msgid "langGetCourseFromOldPortal"
+msgstr "Klik hier om de cursus op te halen uit de oude portaalsite"
+
+msgid "langOtherCourses"
+msgstr "Andere cursussen"
+
+msgid "langSupportForum"
+msgstr "Ondersteuningsforum"
+
+msgid "langCategories"
+msgstr "categorieën"
+
+msgid "langBackToHomePage"
+msgstr "Categorieoverzicht"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Geen vrij toegankelijke cursussen."
+
+msgid "langLostPassword"
+msgstr "Wachtwoord vergeten"
+
+msgid "lang_edit_my_course_list"
+msgstr "Ga naar cursusoverzicht"
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langValvas"
+msgstr "Recente aankondigingen"
+
+msgid "langUp"
+msgstr "Omhoog"
+
+msgid "langCatList"
+msgstr "Categorieën"
+
+msgid "langCourseList"
+msgstr "Cursuslijst"
+
+msgid "langHelptwo"
+msgstr "Help"
+
+msgid "langRegAll"
+msgstr "Registreer"
+
+msgid "EussMenu"
+msgstr "Menu"
+
+msgid "Opinio"
+msgstr "Mening"
+
+msgid "Intranet"
+msgstr "Intranet"
+
+msgid "Englin"
+msgstr "Engels"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Indien u nog niet ingeschreven bent, gelieve het <a href=\"claroline/auth/inscription.php\">registratieformulier</a> in te vullen."
+
+msgid "langSubCat"
+msgstr "subcategorieën"
+
+msgid "langMenuGeneral"
+msgstr "Algemeen"
+
+msgid "langMenuUser"
+msgstr "Gebruiker"
+
+msgid "langMenuAdmin"
+msgstr "Platformbeheerder"
+
+msgid "langUsersOnLineList"
+msgstr "Lijst van gebruikers die online zijn"
+
+msgid "langTotalOnLine"
+msgstr "Totaal online"
+
+msgid "langRefresh"
+msgstr "Bijwerken"
+
+msgid "langMe"
+msgstr "mezelf"
+
+msgid "langSystemAnnouncements"
+msgstr "Platformmededelingen"
+
+msgid "langHelpMaj"
+msgstr "Help"
+
+msgid "langNotRegistered"
+msgstr "Niet geregistreerd"
+
+msgid "langAdmin"
+msgstr "Platformbeheerder"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "langRegisterForCourse"
+msgstr "Inschrijven in nieuwe cursus"
+
+msgid "langUnregisterForCourse"
+msgstr "Uitschrijven uit cursussen"
+
+msgid "langCombinedCourse"
+msgstr "Gecombineerd:"
+
+msgid "Platform"
+msgstr "Platform"
+
+msgid "Refresh"
+msgstr "Vernieuw"
+
+msgid "TotalOnLine"
+msgstr "Aantal gebruikers online"
+
+msgid "langCourseClosed"
+msgstr "(de cursus is niet toegankelijk)"
+
+msgid "ViewOpenCourses"
+msgstr "Bekijk open cursussen"
+
+msgid "langCompetences"
+msgstr "Competenties"
+
+msgid "langDiplomas"
+msgstr "Diploma\'s"
+
+msgid "langTeach"
+msgstr "Waarin u kunt lesgeven"
+
+msgid "langProductions"
+msgstr "Producties"
+
+msgid "langSendChatRequest"
+msgstr "Zend een chatverzoek naar deze persoon"
+
+msgid "langRequestDenied"
+msgstr "Het verzoek is geweigerd."
+
+msgid "UsageDatacreated"
+msgstr "Gebruiksgegevens gecreëerd"
+
+msgid "SessionView"
+msgstr "De cursussen weergeven volgens sessies"
+
+msgid "CourseView"
+msgstr "De volledige lijst met cursussen weergeven"
+
+msgid "DropboxFileAdded"
+msgstr "Dropbox bestand toegevoegd"
+
+msgid "NewMessageInForum"
+msgstr "Nieuw bericht geplaatst in het forum"
+
+msgid "FolderCreated"
+msgstr "Nieuwe folder aangemaakt"
+
+msgid "LinkAdded"
+msgstr "Een link werd toegevoegd."
+
+msgid "AnnouncementAdded"
+msgstr "De aankondiging is toegevoegd."
+
+msgid "AgendaAdded"
+msgstr "Agenda item toegevoegd"
+
+msgid "LoginEnter"
+msgstr "Aanmelden"
+
+msgid "Messages"
+msgstr "Berichten"
+
+msgid "Inbox"
+msgstr "Postvak In"
+
+msgid "Comppose"
+msgstr "Opstellen"
+
+msgid "PendingInvitations"
+msgstr "Hangende uitnodigingen"
+
+msgid "YouDoNotHaveAnySessionInItsHistory"
+msgstr "U hebt geen sessie in uw sessie geschiedenis"
+
+msgid "PortalHomepageDefaultIntroduction"
+msgstr "Gefeliciteerd! U hebt uw leeromgeving succesvol geïnstalleerd!
+
+U kan nu de installatie voltooien door deze drie stappen te volgen:
+1. Configureer uw systeem door naar het administratie-gedeelte te gaan en selecteer Platform -> Chamiloinstellingen.
+2. Breng wat leven in uw systeem door gebruikers en/of opleidingen toe te voegen. U kan dit doen door gebruikers te verzoeken om zich te registreren of u kunt hen zelf inschrijven via onderdelen gebruikers en cursussen.
+3.Wijzig deze pagina via het onderdeel aanpassen startpagina in het administratie-gedeelte.
+
+U kan steeds meer informatie vinden over deze software op onze website: http://www.chamilo.org.
+
+Wij wensen u veel plezier. Aarzel niet om deel te nemen aan de Chamilo-gemeenschap en ons feedback te geven via ons forum."
+
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+msgid "GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX"
+msgstr "Blader gerust door onze cursuslijst %s om u aan te melden bij de gewenste cursus. Eens u geregistreerd bent, zal u de cursus zien verschijnen %s, in plaats van deze boodschap."
+
+msgid "HelloXAsYouCanSeeYourCourseListIsEmpty"
+msgstr "Welkom %s,
+Zoals u kan zien, is uw cursuslijst nog leeg. Dit is te wijten aan het feit dat u nog niet geregistreerd bent voor een cursus."
+
+msgid "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"
+msgstr "Gelieve even geduld te hebben zodat wij u kunnen inschrijven in één van onze cursussen. Indien u denkt dat wij dit vergeten zijn, contacteer de beheerder(s) van dit platform. U kan normaal gezien de gegevens terugvinden onderaan (in de voet) deze pagina."
+
+msgid "Profile"
+msgstr "Profiel"
+

@@ -1,0 +1,6 @@
+msgid "langRoot"
+msgstr "root"
+
+msgid "progress"
+msgstr "Edistyminen"
+

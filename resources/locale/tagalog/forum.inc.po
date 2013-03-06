@@ -1,0 +1,105 @@
+msgid "AddForumCategory"
+msgstr "Magdagdag ng kategorya ng forum"
+
+msgid "Posts"
+msgstr "Mga Post"
+
+msgid "LastPosts"
+msgstr "Pinakahuling Post"
+
+msgid "InForumCategory"
+msgstr "Maglikha sa kategorya"
+
+msgid "StudentsCanEdit"
+msgstr "Maaari bang mag-edit ang mga mag-aaral ng kanilang sariling mga post?"
+
+msgid "AllowNewThreads"
+msgstr "Payagan ang mga gumagamit na magsimula ng bagong mga thread"
+
+msgid "DefaultViewType"
+msgstr "Default sa uri ng tanaw"
+
+msgid "NotAGroupForum"
+msgstr "Hindi isang forum ng grupo"
+
+msgid "PublicPrivateGroupForum"
+msgstr "Pampubliko o pribadong grupo ng forum?"
+
+msgid "Public"
+msgstr "Para sa lahat ng mga mag-aaral"
+
+msgid "Private"
+msgstr "Para sa mga miyembro ng grupo lamang"
+
+msgid "Views"
+msgstr "Mga Tingin"
+
+msgid "LastPost"
+msgstr "Pinakahuling post"
+
+msgid "Flat"
+msgstr "Flat"
+
+msgid "Threaded"
+msgstr "Naka-thread"
+
+msgid "Nested"
+msgstr "Nested"
+
+msgid "Approval"
+msgstr "Pag-apruba"
+
+msgid "Direct"
+msgstr "Direkta"
+
+msgid "ForGroup"
+msgstr "Para sa Grupo"
+
+msgid "DeleteForum"
+msgstr "Tanggalin ang forum ?"
+
+msgid "DeleteForumCategory"
+msgstr "Tanggalin ang kategorya ng forum ?"
+
+msgid "Lock"
+msgstr "I-lock"
+
+msgid "Unlock"
+msgstr "I-unlock"
+
+msgid "MoveThread"
+msgstr "Ilipat ang Thread"
+
+msgid "DeleteCompleteThread"
+msgstr "Tanggalin ang kumpletong thread?"
+
+msgid "AddImage"
+msgstr "Magdagdag ng imahe"
+
+msgid "ThreadUsersList"
+msgstr "Listahan ng mga gumagamit sa thread"
+
+msgid "Thread"
+msgstr "Thread"
+
+msgid "NotifyMe"
+msgstr "Sabihan ako"
+
+msgid "CreateForum"
+msgstr "Lumikha ng forum"
+
+msgid "ModifyForum"
+msgstr "I-edit ang forum"
+
+msgid "EditForum"
+msgstr "I-edit ang forum"
+
+msgid "BackToForumOverview"
+msgstr "Bumalik sa forum overview"
+
+msgid "UpdateImage"
+msgstr "I-update ang Imahe"
+
+msgid "ForumCategories"
+msgstr "Mga Kategorya ng Forum"
+

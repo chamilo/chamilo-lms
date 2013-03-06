@@ -1,0 +1,318 @@
+msgid "Camera"
+msgstr "Cámara"
+
+msgid "Microphone"
+msgstr "Micrófonu"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "DeleteStream"
+msgstr "Esborrar stream"
+
+msgid "Progress"
+msgstr "Progresu"
+
+msgid "Play"
+msgstr "Reproducir"
+
+msgid "Stop"
+msgstr "Parar"
+
+msgid "Record"
+msgstr "Grabar"
+
+msgid "NoFileAvailable"
+msgstr "Nun hai archivos a disposición"
+
+msgid "RecordingOnlyForTeachers"
+msgstr "Namás los profesores puen grabar"
+
+msgid "UsersNow"
+msgstr "Usuarios actuales:"
+
+msgid "StartConference"
+msgstr "Entamar conferencia"
+
+msgid "MyName"
+msgstr "El mio nome"
+
+msgid "OrganisationSVideoconference"
+msgstr "Videoconferencia Chamilo"
+
+msgid "ImportPresentation"
+msgstr "Importar presentación"
+
+msgid "RefreshList"
+msgstr "Actualizar el llistáu"
+
+msgid "GoToTop"
+msgstr "Dir a entamu"
+
+msgid "NewPoll"
+msgstr "Encuesta nueva"
+
+msgid "CreateNewPoll"
+msgstr "Crear una encuesta nueva pa esta sala"
+
+msgid "Question"
+msgstr "Entruga"
+
+msgid "PollType"
+msgstr "Tipu d\'encuesta:"
+
+msgid "Create"
+msgstr "Crear"
+
+msgid "InfoConnectedUsersGetNotifiedOfThisPoll"
+msgstr "Info: Caún los usuarios coneutaos a esta sala va recibir una anuncia d\'esta encuesta."
+
+msgid "YesNo"
+msgstr "Si / Non"
+
+msgid "Numeric1To10"
+msgstr "Numbéricu de 1 a 10"
+
+msgid "Poll"
+msgstr "Encuesta"
+
+msgid "YouHaveToBecomeModeratorOfThisRoomToStartPolls"
+msgstr "Tien que ser moderador nesta sala pa facer encuestes."
+
+msgid "YourVoteHasBeenSent"
+msgstr "Unvióse\'l so votu"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Yá votó nesta encuesta"
+
+msgid "VoteButton"
+msgstr "Votar"
+
+msgid "YourAnswer"
+msgstr "La to rempuesta"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "No"
+msgstr "Non"
+
+msgid "WantsToKnow"
+msgstr "quiero saber:"
+
+msgid "PollResults"
+msgstr "Resultaos de la encuesta"
+
+msgid "Votes"
+msgstr "Votos:"
+
+msgid "Result"
+msgstr "Resultáu"
+
+msgid "ThereIsNoPoll"
+msgstr "Nun hai nenguna encuesta a disposición"
+
+msgid "MeetingMode"
+msgstr "Mou xunta (más. 4 places)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Conferencia (más. 50 places)"
+
+msgid "Mode"
+msgstr "Mou"
+
+msgid "RemainingSeats"
+msgstr "Places sobrantes"
+
+msgid "AlreadyIn"
+msgstr "Yá coneutáu"
+
+msgid "CheckIn"
+msgstr "Comprobar conesión"
+
+msgid "TheModeratorHasLeft"
+msgstr "El moderador d\'esta conferencia abandonó la sala."
+
+msgid "SystemMessage"
+msgstr "Mensaxe del sistema"
+
+msgid "ChooseDevices"
+msgstr "Escoyer dispositivos"
+
+msgid "ChooseCam"
+msgstr "Escoyer cámara"
+
+msgid "ChooseMic"
+msgstr "Escoyer micro:"
+
+msgid "OK"
+msgstr "Bien"
+
+msgid "YouHaveToReconnectSoThatTheChangesTakeEffect"
+msgstr "Tien de coneutase otra vez pa que los cambios funcionen."
+
+msgid "ChangeSettings"
+msgstr "Cambiar parámetros"
+
+msgid "Course"
+msgstr "Cursu"
+
+msgid "CourseLanguage"
+msgstr "Llingua del cursu:"
+
+msgid "ConfirmClearWhiteboard"
+msgstr "Confirmar llimpieza de pizarra"
+
+msgid "ShouldWitheboardBeClearedBeforeNewImage"
+msgstr "¿ Quier esborrar la pizarra enantes amestar una imaxe nueva ?"
+
+msgid "DontAskMeAgain"
+msgstr "Nun entrugar otra vez"
+
+msgid "EditSettings"
+msgstr "Editar parámetros"
+
+msgid "ShowConfirmationBeforeClearingWhiteboard"
+msgstr "Pida confirmación enantes esborrar la pizarra"
+
+msgid "UserInfo"
+msgstr "información del usuariu"
+
+msgid "ClearDrawArea"
+msgstr "Llimpiar la pizarra"
+
+msgid "Undo"
+msgstr "Desfacer"
+
+msgid "Redo"
+msgstr "Volver a facer"
+
+msgid "SelectAnObject"
+msgstr "Escoyer un oxetu"
+
+msgid "Text"
+msgstr "Testu"
+
+msgid "Paint"
+msgstr "Pintar"
+
+msgid "DrawLine"
+msgstr "Dibuxar una llinia"
+
+msgid "DrawUnderline"
+msgstr "Dibuxar sorrayáu"
+
+msgid "Rectangle"
+msgstr "Rectángulu"
+
+msgid "Elipse"
+msgstr "Elipse"
+
+msgid "Arrow"
+msgstr "Flecha"
+
+msgid "DeleteChosenItem"
+msgstr "Esborrar l\'elementu escoyíu"
+
+msgid "ApplyForModeration"
+msgstr "Facer moderador"
+
+msgid "Apply"
+msgstr "Facer"
+
+msgid "BecomeModerator"
+msgstr "Convertir en moderador"
+
+msgid "Close"
+msgstr "zarrar"
+
+msgid "Italic"
+msgstr "Cursiva"
+
+msgid "Bold"
+msgstr "Negrina"
+
+msgid "Waiting"
+msgstr "Esperando"
+
+msgid "AUserWantsToApplyForModeration"
+msgstr "Un usuariu quier ser moderador:"
+
+msgid "Accept"
+msgstr "Aceutar"
+
+msgid "Reject"
+msgstr "Rechazar"
+
+msgid "SendingRequestToFollowingUsers"
+msgstr "Unviar una solicitú a estos usuarios:"
+
+msgid "Accepted"
+msgstr "Aceutáu"
+
+msgid "Rejected"
+msgstr "Rechazáu"
+
+msgid "ChangeModerator"
+msgstr "Cambiar moderador"
+
+msgid "YouAreNotModeratingThisCourse"
+msgstr "Nun ye\'l moderador d\'esti cursu"
+
+msgid "Moderator"
+msgstr "Moderador"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "Esta sala ta completa. Por favor, vuelva más tarde"
+
+msgid "Loading"
+msgstr "Cargando"
+
+msgid "PleaseWaitWhileLoadingImage"
+msgstr "Por favor, espere en tantu se carga la imaxe"
+
+msgid "SynchronisingConferenceMembers"
+msgstr "Sincronización de los participantes"
+
+msgid "Trainer"
+msgstr "Mayestru"
+
+msgid "Learner"
+msgstr "Alumnu"
+
+msgid "Chat"
+msgstr "Chat"
+
+msgid "Slides"
+msgstr "Diapositives"
+
+msgid "WaitingForParticipants"
+msgstr "Esperando polos participantes"
+
+msgid "Send"
+msgstr "Unviar"
+
+msgid "Browse"
+msgstr "Echar una güeyada"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "ChooseFile"
+msgstr "Escoyer l\'archivu que va unviar"
+
+msgid "ConvertingDocument"
+msgstr "Convirtiendo\'l documentu"
+
+msgid "Disconnected"
+msgstr "Desconeutáu"
+
+msgid "FineStroke"
+msgstr "Finu"
+
+msgid "MediumStroke"
+msgstr "Mediu"
+
+msgid "ThickStroke"
+msgstr "Gordu"
+

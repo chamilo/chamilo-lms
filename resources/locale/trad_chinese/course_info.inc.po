@@ -1,0 +1,297 @@
+msgid "ModifInfo"
+msgstr "課程設定"
+
+msgid "langModifDone"
+msgstr "課程訊息已更新"
+
+msgid "langDelCourse"
+msgstr "刪除課程"
+
+msgid "langProfessors"
+msgstr "教師"
+
+msgid "langFaculty"
+msgstr "分類"
+
+msgid "langConfidentiality"
+msgstr "訪問限制策略"
+
+msgid "langPublic"
+msgstr "公共訪問-用戶不從登錄也可訪問。"
+
+msgid "langUnsubscription"
+msgstr "註銷"
+
+msgid "langPrivOpen"
+msgstr "內部訪問-對註冊用戶開放"
+
+msgid "langPrivate"
+msgstr "訪問限制 - 僅對選定的用戶開放訪問"
+
+msgid "langForbidden"
+msgstr "禁止"
+
+msgid "CourseAccessConfigTip"
+msgstr "課程預設為開放. 你可以自定義開放級別."
+
+msgid "langOpenToTheWorld"
+msgstr "開放 - 允許任何人訪問"
+
+msgid "OpenToThePlatform"
+msgstr "開放 - 僅供本平台已註冊的使用者"
+
+msgid "langOpenToThePlatform"
+msgstr "開放 - 允許已於本平台註冊人士進入"
+
+msgid "langTipLang"
+msgstr "將此語言設為課程的預設語言。"
+
+msgid "langVid"
+msgstr "視頻"
+
+msgid "langWork"
+msgstr "作業論文"
+
+msgid "langProgramMenu"
+msgstr "教學大綱"
+
+msgid "langAnnouncement"
+msgstr "公告通知"
+
+msgid "langExercise"
+msgstr "測驗"
+
+msgid "langStats"
+msgstr "統計訊息"
+
+msgid "langUplPage"
+msgstr "上傳網頁和鏈接"
+
+msgid "langLinkSite"
+msgstr "添加鏈接"
+
+msgid "langCourse"
+msgstr "網站"
+
+msgid "langHasDel"
+msgstr "已刪除"
+
+msgid "langBackHome"
+msgstr "返回主頁"
+
+msgid "langByDel"
+msgstr "刪除課程將永久刪除這門課程的所有內容(文檔、鏈接...) 及所有成員的註冊訊息(不會刪除他們在其他課程的註冊訊息)。<P>確定要刪除課程嗎？"
+
+msgid "langY"
+msgstr "是"
+
+msgid "langN"
+msgstr "否"
+
+msgid "langDepartmentUrl"
+msgstr "部門鏈接"
+
+msgid "langDepartmentUrlName"
+msgstr "部門"
+
+msgid "langBackupCourse"
+msgstr "備份該課程"
+
+msgid "langModifGroups"
+msgstr "小組"
+
+msgid "langProfessor"
+msgstr "教師"
+
+msgid "langGroups"
+msgstr "小組"
+
+msgid "langDescriptionCours"
+msgstr "教學大綱"
+
+msgid "langArchiveCourse"
+msgstr "課程備份"
+
+msgid "langRestoreCourse"
+msgstr "還原課程備份"
+
+msgid "langRestore"
+msgstr "還原"
+
+msgid "langCreatedIn"
+msgstr "在這裡創建"
+
+msgid "langCreateMissingDirectories"
+msgstr "創建丟失的目錄"
+
+msgid "langCopyDirectoryCourse"
+msgstr "複製課程檔案"
+
+msgid "langDisk_free_space"
+msgstr "剩餘空間"
+
+msgid "langBuildTheCompressedFile"
+msgstr "創建備份檔案"
+
+msgid "langFileCopied"
+msgstr "檔案已複製"
+
+msgid "langArchiveLocation"
+msgstr "備份位置"
+
+msgid "langSizeOf"
+msgstr "大小"
+
+msgid "langArchiveName"
+msgstr "檔案名"
+
+msgid "langBackupSuccesfull"
+msgstr "成功備份"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "課程數據在主數據庫備份"
+
+msgid "langBUUsersInMainBase"
+msgstr "用戶的數據已經在主數據庫備份"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "公告已經在主數據庫備份"
+
+msgid "langBackupOfDataBase"
+msgstr "備份數據庫"
+
+msgid "langCreationDate"
+msgstr "創建"
+
+msgid "langExpirationDate"
+msgstr "過期"
+
+msgid "langPostPone"
+msgstr "電話"
+
+msgid "langLastEdit"
+msgstr "最近一次修改"
+
+msgid "langLastVisit"
+msgstr "最近一次登錄"
+
+msgid "langSubscription"
+msgstr "註冊"
+
+msgid "langCourseAccess"
+msgstr "課程訪問"
+
+msgid "langConfirmBackup"
+msgstr "你要備份這個課程嗎?"
+
+msgid "langCreateSite"
+msgstr "創建一個課程站點"
+
+msgid "langRestoreDescription"
+msgstr "這個課程的備份件如下︰<br /><br />當你點擊 \"恢復 \"，備份檔案會被解壓縮並創建課程。"
+
+msgid "langRestoreNotice"
+msgstr "此腳本無能自動恢復用戶清單，但是數據存儲在\"用戶.csv\"中，管理員可以手動操作。"
+
+msgid "langAvailableArchives"
+msgstr "備份清單"
+
+msgid "langNoArchive"
+msgstr "沒有選擇備份檔案"
+
+msgid "langArchiveNotFound"
+msgstr "找不到該備份"
+
+msgid "langArchiveUncompressed"
+msgstr "該備份已經解壓縮並且安裝。"
+
+msgid "langCsvPutIntoDocTool"
+msgstr "檔案 \"users.csv\" 已經放入文檔工具中。"
+
+msgid "langBackH"
+msgstr "返回主頁"
+
+msgid "langOtherCategory"
+msgstr "其它分類"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "允許"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "拒絕"
+
+msgid "langCourseVisibilityClosed"
+msgstr "完全關閉 - 僅對課程管理員開放訪問"
+
+msgid "CourseVisibilityClosed"
+msgstr "關閉－僅允許管理員和助教進入這門課程"
+
+msgid "CourseVisibilityModified"
+msgstr "修訂(使用角色 - 權限系統進行詳細設定)"
+
+msgid "WorkEmailAlert"
+msgstr "提交工作時發出電郵通知"
+
+msgid "WorkEmailAlertActivate"
+msgstr "啟動提交工作時電郵通知服務"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "取消提交工作時電郵通知服務"
+
+msgid "DropboxEmailAlert"
+msgstr "於上傳檔案至投遞箱時發出電郵通知"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "啟動上傳檔案至投遞箱時發出電郵通知服務"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "取消上傳檔案至投遞箱時發出電郵通知服務"
+
+msgid "AllowUserEditAgenda"
+msgstr "允許所有使用者編輯課程日程"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "向使用者啟動課程日程編輯器"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "取消使用者課程日程編輯器"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "允許使用者編輯課程公告"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "允許使用者編輯"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "取消使用者編輯"
+
+msgid "CourseRegistrationPassword"
+msgstr "課程註冊密碼"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "點擊鏈接後將會提示永久刪除該課程。<br /><br />請謹慎使用該功能﹗"
+
+msgid "langDescriptionCopyCourse"
+msgstr "系統允許您將課程整個或部分的複製到另一個空的課程，<br /><br />複製的前提是必需有一門課程包含內容，同時另一門課程是空的﹗"
+
+msgid "DescriptionRecycleCourse"
+msgstr "本工具將清空所有課程中所有或已選取的項目，包括文件、討論區及連結，通常於課程、學期結束或有需要重整時進行。我們建議你在執行動作前先把整個課程備份！"
+
+msgid "QuizEmailAlert"
+msgstr "提交新測驗時發出電郵通知"
+
+msgid "QuizEmailAlertActivate"
+msgstr "當使用者提供新測驗答案時啟動郵件通知服務"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "取消提供新測驗答案時郵件通知服務"
+
+msgid "AllowUserImageForum"
+msgstr "討論區使用者圖像"
+
+msgid "AllowUserImageForumActivate"
+msgstr "在討論區顯示使用者圖像"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "在討論區隱藏使用者圖像"
+

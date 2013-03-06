@@ -1,0 +1,153 @@
+msgid "langScormVersion"
+msgstr "الإصدارة"
+
+msgid "langScormRestarted"
+msgstr "جميع الدروس الآن غير مكتملة"
+
+msgid "langScormNoNext"
+msgstr "هذا هو أخر درس"
+
+msgid "langScormNoPrev"
+msgstr "هذا هو الدرس الأول"
+
+msgid "langScormTime"
+msgstr "الوقت"
+
+msgid "langScormNoOrder"
+msgstr "لم يتم تحديد أي ترتيب , يمكنك النقر على أي درس"
+
+msgid "langScormScore"
+msgstr "النقاط"
+
+msgid "langScormLessonTitle"
+msgstr "عنوان الدرس"
+
+msgid "langScormStatus"
+msgstr "الحالة"
+
+msgid "langScormToEnter"
+msgstr "للدخول"
+
+msgid "langScormFirstNeedTo"
+msgstr "يجب الإنتهاء أولا"
+
+msgid "langScormThisStatus"
+msgstr "الدرس الحالي"
+
+msgid "langScormClose"
+msgstr "إنهاء"
+
+msgid "langScormRestart"
+msgstr "إعادة التشغيل"
+
+msgid "langScormCompstatus"
+msgstr "تم"
+
+msgid "langScormIncomplete"
+msgstr "لم تتم"
+
+msgid "langScormPassed"
+msgstr "تم"
+
+msgid "langScormFailed"
+msgstr "فشل"
+
+msgid "langScormPrevious"
+msgstr "السابق"
+
+msgid "langScormNext"
+msgstr "التالي"
+
+msgid "langScormTitle"
+msgstr "مشغل سكورم"
+
+msgid "langScormMystatus"
+msgstr "حالتي"
+
+msgid "langScormNoItems"
+msgstr "هذا المحتوى لا يحتوي على أي عنصر"
+
+msgid "langScormNoStatus"
+msgstr "لا يوجد حالة لهذا المحتوى"
+
+msgid "langScormLoggedout"
+msgstr "تم تسجيل الخروج من منطقة السكورم"
+
+msgid "langScormCloseWindow"
+msgstr "أغلق النافذة"
+
+msgid "ScormBrowsed"
+msgstr "Browsed"
+
+msgid "langScormExitFullScreen"
+msgstr "الرجوع إلى الشاشة العادية"
+
+msgid "langScormFullScreen"
+msgstr "كامل الشاشة"
+
+msgid "langScormNotAttempted"
+msgstr "لم تتم المحاولة"
+
+msgid "langCharset"
+msgstr "نوع المحارف"
+
+msgid "langLocal"
+msgstr "محلي"
+
+msgid "langRemote"
+msgstr "بعيد"
+
+msgid "langAutodetect"
+msgstr "كشف تلقائي"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "إجمالي الخطوات المنجزة"
+
+msgid "langUnknown"
+msgstr "غير معروف"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "هل أنت متأكد من أنك تريد حذف هذه الخطوات؟"
+
+msgid "Origin"
+msgstr "الأصل"
+
+msgid "Local"
+msgstr "محلي"
+
+msgid "Remote"
+msgstr "بعيد"
+
+msgid "FileToUpload"
+msgstr "  للتحميل SCORM أو AICC ملف"
+
+msgid "ContentMaker"
+msgstr "أصل المقرر"
+
+msgid "ContentProximity"
+msgstr "مكان المقرر"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "تحميل الملف المحلي من المسار الرئيسي / المهملات"
+
+msgid "ThisItemIsNotExportable"
+msgstr "هذا العنصر غير مطابق مواصفات سكورم الحالية. لهذا السبب لم يتم تصديرها"
+
+msgid "MoveCurrentChapter"
+msgstr "حرك الفصل(الجزء) الحالي"
+
+msgid "GenericScorm"
+msgstr "سكورم العامة"
+
+msgid "UnknownPackageFormat"
+msgstr "لايمكن التعرف على نوع التحزيم.تأكد من صحة التحزيم وعدم وجود اخطاء.تحدث الأخطاء من ملفات ZIP أو نسخ ملفات طويلة.اذا لم تكن متأكدا فضلا استخدم ضغط الملفات بأقل شكل"
+
+msgid "Attempt"
+msgstr "محاولة"
+
+msgid "MoveTheCurrentForum"
+msgstr "انقل المنتدى الحالي"
+
+msgid "WarningWhenEditingScorm"
+msgstr "تحذيرعندما تعدل في محتوى خطوة من خطوات سكورمقد تتسبب في تعديل او تدمير مسار التعلم لهذه الخطوة"
+

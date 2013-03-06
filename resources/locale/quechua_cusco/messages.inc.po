@@ -1,0 +1,99 @@
+msgid "Inbox"
+msgstr "Willana ch\'askiq"
+
+msgid "Messages"
+msgstr "Usqay willanakuna"
+
+msgid "SendMessage"
+msgstr "Apachiy willanakunata"
+
+msgid "NewMessage"
+msgstr "Musuq willana"
+
+msgid "ComposeMessage"
+msgstr "Qelqay"
+
+msgid "DeleteSelectedMessages"
+msgstr "Pichay ajllasqa willaykunata"
+
+msgid "SelectAll"
+msgstr "Ajllay llipinta"
+
+msgid "DeselectAll"
+msgstr "Amaña ajllaychu"
+
+msgid "ReplyToMessage"
+msgstr "Kutichiy kay willayman"
+
+msgid "BackToInbox"
+msgstr "Kutiy willana ch\'askiqman"
+
+msgid "MessageSentTo"
+msgstr "Willanaqa payman apachikun"
+
+msgid "SendMessageTo"
+msgstr "Apachiy, payman"
+
+msgid "Myself"
+msgstr "Noqapuni"
+
+msgid "From"
+msgstr "Pimanta"
+
+msgid "To"
+msgstr "Pipaq"
+
+msgid "Date"
+msgstr "Pacha"
+
+msgid "InvalidMessageId"
+msgstr "Willana kutichinapaqqa id nisqan mana allinchu."
+
+msgid "ErrorSendingMessage"
+msgstr "Pantarun willana apachikushaqtin."
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Cheqaychu kashanki willanakuna ajllasqata wañuchinapaq ?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "Willanakuna ajllasqaqa wañuchisqaña"
+
+msgid "EnterTitle"
+msgstr "Haykuchiy hoq sutinchayta"
+
+msgid "TypeYourMessage"
+msgstr "Qelqay hoq willanata"
+
+msgid "MessageDeleted"
+msgstr "Willanaqa pichachikunña"
+
+msgid "ConfirmDeleteMessage"
+msgstr "Cheqaychu kashanki kay willanata pichanaykipaq ?"
+
+msgid "DeleteMessage"
+msgstr "Pichay willanata"
+
+msgid "ReadMessage"
+msgstr "Ñawinchay"
+
+msgid "SendInviteMessage"
+msgstr "Apachiy mink\'aq willanata"
+
+msgid "SendMessageInvitation"
+msgstr "Cheqaychu kashanki mink\'ay willanata apachinapaq ajllasqa haykuqmasikunaman ?"
+
+msgid "MessageTool"
+msgstr "Willanamanta llank\'ana"
+
+msgid "WriteAMessage"
+msgstr "Qelqay hoq willanata"
+
+msgid "AlreadyReadMessage"
+msgstr "Willana ñawinchasqa"
+
+msgid "UnReadMessage"
+msgstr "Willana mana ñawinchasqa"
+
+msgid "MessageSent"
+msgstr "Willana apachisqa"
+

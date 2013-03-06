@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Documenti"
+
+msgid "langMdTitle"
+msgstr "Titolo del Learning Object"
+
+msgid "langMdDescription"
+msgstr "Per salvare l\'informazione, premi Salva"
+
+msgid "langMdCoverage"
+msgstr "Es. Diploma di..."
+
+msgid "langMdCopyright"
+msgstr "Es. si prega di citare la fonte"
+
+msgid "nameTools"
+msgstr "variabile di lingua obsoleta"
+
+msgid "langTool"
+msgstr "Metadati del documento"
+
+msgid "langNoScript"
+msgstr "Il tuo browser non permette l\'esecuzione di scripts, ignora la parte sottostante, non può funzionare..."
+
+msgid "langLanguageTip"
+msgstr "lingua impiegata nel learning object"
+
+msgid "langIdentifier"
+msgstr "Identificatore"
+
+msgid "langIdentifierTip"
+msgstr "identificativo univoco per il presente learning object, composta da lettere, cifre, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "titolo o nome e lingua del titolo o del nome"
+
+msgid "langDescriptionTip"
+msgstr "descrizione o commento e lingua usata per descrivere il learning object"
+
+msgid "langKeyword"
+msgstr "Parola chiave"
+
+msgid "langKeywordTip"
+msgstr "separatore: virgole (lettere, cifre, -.)"
+
+msgid "langCoverage"
+msgstr "Destinazione"
+
+msgid "langCoverageTip"
+msgstr "ad esempio diploma di xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Se cambi la lingua di descrizione, non aggiungere Parole chiave nello stesso momento"
+
+msgid "langClickKw"
+msgstr "Clicca sulla Parola chiave nell\'albero per selezionarla o deselezionarla."
+
+msgid "langKwHelp"
+msgstr "<br/> Fai Click sul pulsante \'+\' per aprire e su  \'-\' per chiudere; \'++\' apre tutto e \'--\' chiude tutto.<br/> <br/> Cancella le Parole chiave selezionate richiudendo l\'albero e riaprendolo di nuovo con il pulsante \'+\' .<br/> Alt-click \'+\' cerca le Parole chiave originali nell\'albero.<br/> <br/> Alt-click Parola chiave seleziona una parola chiave senzatermini più dettagliati o la deseleziona.<br/> <br/> Se cambi la lingua della descrizione non introdurre Parole chiave nello stesso tempo..<br/> <br/>"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "Fai click per aprire l\'oggetto"
+
+msgid "langStore"
+msgstr "Salva"
+
+msgid "langDeleteAll"
+msgstr "Elimina tutti i metadati"
+
+msgid "langConfirmDelete"
+msgstr "Sei *sicuro* di voler eliminare TUTTI i metadati?"
+
+msgid "langWorkOn"
+msgstr "su"
+
+msgid "langNotInDB"
+msgstr "non esiste questa categoria per i Collegamenti"
+
+msgid "langManifestSyntax"
+msgstr "(errore di sintassi nel file manifest...)"
+
+msgid "langEmptyManifest"
+msgstr "(file manifest vuoto...)"
+
+msgid "langNoManifest"
+msgstr "(il file manifest non esiste...)"
+
+msgid "langNotFolder"
+msgstr "non sono possibili, non si tratta di una cartella..."
+
+msgid "langContinue"
+msgstr "Continua con"
+
+msgid "langCreate"
+msgstr "Crea"
+
+msgid "langRemove"
+msgstr "Elimina Metadati"
+
+msgid "langAllRemovedFor"
+msgstr "Tutte le voci sono state eliminate dalla categoria"
+
+msgid "langRemainingFor"
+msgstr "le voci obsolete sono state eliminate dalla categoria"
+
+msgid "langIndex"
+msgstr "Indice"
+
+msgid "langTotalMDEs"
+msgstr "Numero totale di MD dei Collegamenti:"
+
+msgid "langMainMD"
+msgstr "Apri la pagina principale dei MD"
+
+msgid "langOrElse"
+msgstr "Seleziona una categora di Collegamento"
+
+msgid "langWarningDups"
+msgstr "- i nomi di categoria duplicato sono stati eliminati dall\'elenco !"
+
+msgid "langSLC"
+msgstr "Adopera la categoria di Collegamento nominata"
+

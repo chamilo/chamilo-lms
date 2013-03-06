@@ -1,0 +1,132 @@
+msgid "langScormVersion"
+msgstr "versión"
+
+msgid "langScormRestarted"
+msgstr "Todas las lecciones están por completar."
+
+msgid "langScormNoNext"
+msgstr "Esta es la última lección."
+
+msgid "langScormNoPrev"
+msgstr "Esta es la primera lección."
+
+msgid "langScormTime"
+msgstr "Tiempo"
+
+msgid "langScormNoOrder"
+msgstr "No hay un orden definido, puede acceder a cualquier lección."
+
+msgid "langScormScore"
+msgstr "Puntaje"
+
+msgid "langScormLessonTitle"
+msgstr "Título de la lección"
+
+msgid "langScormStatus"
+msgstr "Estatus"
+
+msgid "langScormToEnter"
+msgstr "Entrar"
+
+msgid "langScormFirstNeedTo"
+msgstr "Primero necesita finalizar"
+
+msgid "langScormThisStatus"
+msgstr "Esta lección está"
+
+msgid "langScormClose"
+msgstr "Cerrar aplicación"
+
+msgid "langScormRestart"
+msgstr "Reiniciar"
+
+msgid "langScormCompstatus"
+msgstr "Completada"
+
+msgid "langScormIncomplete"
+msgstr "Incompleta"
+
+msgid "langScormPassed"
+msgstr "Aprobada"
+
+msgid "langScormFailed"
+msgstr "Reprobada"
+
+msgid "langScormPrevious"
+msgstr "Anterior"
+
+msgid "langScormNext"
+msgstr "Siguiente"
+
+msgid "langScormTitle"
+msgstr "Visualizador de contenidos Scorm"
+
+msgid "langScormMystatus"
+msgstr "Mi estatus"
+
+msgid "langScormNoItems"
+msgstr "Este contenido no tiene elementos"
+
+msgid "langScormNoStatus"
+msgstr "No hay estatus para este contenido"
+
+msgid "langScormLoggedout"
+msgstr "Ha salido del área Scorm"
+
+msgid "langScormCloseWindow"
+msgstr "Está seguro de que terminó?"
+
+msgid "ScormBrowsed"
+msgstr "Visto"
+
+msgid "langScormExitFullScreen"
+msgstr "Volver a la pantalla normal"
+
+msgid "langScormFullScreen"
+msgstr "Pantalla completa"
+
+msgid "langScormNotAttempted"
+msgstr "Sin intentar"
+
+msgid "langCharset"
+msgstr "Juego de caracteres"
+
+msgid "langLocal"
+msgstr "Local"
+
+msgid "langRemote"
+msgstr "Remoto"
+
+msgid "langAutodetect"
+msgstr "Autodetectar"
+
+msgid "langAccomplishedStepsTotal"
+msgstr "Total de etapas realizadas"
+
+msgid "langUnknown"
+msgstr "Desconocido"
+
+msgid "AreYouSureToDeleteSteps"
+msgstr "¿ Está seguro de querer borrar estos pasos ?"
+
+msgid "Origin"
+msgstr "Origen"
+
+msgid "Local"
+msgstr "Local"
+
+msgid "Remote"
+msgstr "Remoto"
+
+msgid "FileToUpload"
+msgstr "Archivo a enviar"
+
+msgid "ContentMaker"
+msgstr "Creador de contenidos"
+
+msgid "ContentProximity"
+msgstr "Proximidad del contenido"
+
+msgid "UploadLocalFileFromGarbageDir"
+msgstr "Enviar archivo local desde el directorio main/garbage"
+

@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "文檔元數據"
+
+msgid "langClickKw"
+msgstr "點擊次目錄下關鍵字選擇或不選擇它。"
+
+msgid "langKwHelp"
+msgstr "點擊 \'+\'按鈕打開，\'-\'按鈕關閉，\'++\'按鈕打開所有，\'--\'按鈕關閉所有，<br /><br />透過關閉次目錄取消對所有關鍵字的選擇，再次打開點按鈕\'+\'。<br />按alt單擊\'+\'在次目錄中尋找原始關鍵字，<br /><br />按alt單擊選擇一個沒有broader terms 的關鍵字，或不選擇它，<br /><br />time. 如果您改變了描述語言，請不要同時加上關鍵字.<br />"
+
+msgid "langAdvanced"
+msgstr "進階"
+
+msgid "langSearch"
+msgstr "搜索"
+
+msgid "langSearchCrit"
+msgstr "每行一字﹗"
+
+msgid "langNoKeywords"
+msgstr "此課程無關鍵詞"
+
+msgid "langKwCacheProblem"
+msgstr "關鍵詞緩存無法打開"
+
+msgid "langCourseKwds"
+msgstr "此文檔包含課程關鍵字"
+
+msgid "langKwdsInMD"
+msgstr "MD 所使用的關鍵詞"
+
+msgid "langKwdRefs"
+msgstr "關鍵詞參考"
+
+msgid "langNonCourseKwds"
+msgstr "非課程關鍵詞"
+
+msgid "langKwdsUse"
+msgstr "課程關鍵字(粗體就是未被使用)"
+
+msgid "langTotalMDEs"
+msgstr "全部 MD 條目的鏈接數︰"
+

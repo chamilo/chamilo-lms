@@ -1,0 +1,240 @@
+msgid "AgendaAdd"
+msgstr "Add event"
+
+msgid "ShowAllEvents"
+msgstr "All events"
+
+msgid "ShowCurrent"
+msgstr "Current month"
+
+msgid "AddCalendarItem"
+msgstr "Add event to agenda"
+
+msgid "Day"
+msgstr "Day"
+
+msgid "Month"
+msgstr "Month"
+
+msgid "Year"
+msgstr "Annual View"
+
+msgid "Hour"
+msgstr "Hour"
+
+msgid "Minutes"
+msgstr "Minutes"
+
+msgid "Detail"
+msgstr "Detail"
+
+msgid "EditSuccess"
+msgstr "Event edited"
+
+msgid "AddSuccess"
+msgstr "Event added"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Event deleted"
+
+msgid "NoAgendaItems"
+msgstr "There are no events"
+
+msgid "lang_september"
+msgstr "September"
+
+msgid "langClassName"
+msgstr "Class name"
+
+msgid "lang_agenda"
+msgstr "Agenda"
+
+msgid "ModifyCalendarItem"
+msgstr "Edit event"
+
+msgid "ItemTitle"
+msgstr "Event name"
+
+msgid "langDay"
+msgstr "day"
+
+msgid "month_default"
+msgstr "default month"
+
+msgid "langYear"
+msgstr "Year"
+
+msgid "year_default"
+msgstr "default year"
+
+msgid "langHour"
+msgstr "Hour"
+
+msgid "hour_default"
+msgstr "default hour"
+
+msgid "langMinute"
+msgstr "minute"
+
+msgid "langLasting"
+msgstr "lasting"
+
+msgid "langOldToNew"
+msgstr "old to new"
+
+msgid "langNewToOld"
+msgstr "new to old"
+
+msgid "langNow"
+msgstr "now"
+
+msgid "langAddEvent"
+msgstr "Save the event"
+
+msgid "langDetail"
+msgstr "detail"
+
+msgid "MonthView"
+msgstr "Month view"
+
+msgid "WeekView"
+msgstr "Weekly"
+
+msgid "DayView"
+msgstr "Daily"
+
+msgid "AddPersonalItem"
+msgstr "Add event to the agenda"
+
+msgid "Week"
+msgstr "Week"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Time"
+msgstr "Time"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Add event to the agenda"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Edit personal event"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Event added"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Event saved"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "The event was deleted"
+
+msgid "ViewPersonalItem"
+msgstr "View perso events only"
+
+msgid "UserGroupFilter"
+msgstr "Filter on groups/users"
+
+msgid "ShowAll"
+msgstr "Show All"
+
+msgid "Print"
+msgstr "Print"
+
+msgid "MyTextHere"
+msgstr "my text here"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Copied as announcement"
+
+msgid "NewAnnouncement"
+msgstr "New announcement"
+
+msgid "AddAnnouncement"
+msgstr "Add as an announcement"
+
+msgid "UpcomingEvent"
+msgstr "Upcoming events"
+
+msgid "RepeatedEvent"
+msgstr "Repeated event"
+
+msgid "RepeatType"
+msgstr "Repeat type"
+
+msgid "RepeatDaily"
+msgstr "Daily"
+
+msgid "RepeatWeekly"
+msgstr "Weekly"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Monthly, by date"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Monthly, by day"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Monthly, by day, restricted"
+
+msgid "RepeatYearly"
+msgstr "Yearly"
+
+msgid "RepeatEnd"
+msgstr "Repeat end date"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "View original event"
+
+msgid "ICalFileImport"
+msgstr "Outlook import"
+
+msgid "AllUsersOfThePlatform"
+msgstr "All system users"
+
+msgid "GlobalEvent"
+msgstr "Platform event"
+
+msgid "ModifyEvent"
+msgstr "Edit event"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "The end date cannot be before the start date"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Ascending"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Descending"
+
+msgid "ItemForUserSelection"
+msgstr "Users selection list"
+
+msgid "IsNotiCalFormatFile"
+msgstr "This file is not in iCal format"
+
+msgid "RepeatEvent"
+msgstr "Repeat event"
+
+msgid "SessionCalendar"
+msgstr "Session calendar"
+
+msgid "RepeatDate"
+msgstr "Repeat date"
+
+msgid "EndDateMustBeMoreThanStartDate"
+msgstr "End date must be more than the start date"
+
+msgid "SelectACourse"
+msgstr "Select a course"
+
+msgid "PleaseSelectACourseOrASessionInTheLeftColumn"
+msgstr "Please select a course or a session in the sidebar."
+
+msgid "DisableEndDate"
+msgstr "Disable end date"
+
+msgid "AllEvents"
+msgstr "All events"
+

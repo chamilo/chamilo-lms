@@ -1,0 +1,93 @@
+msgid "lang_new_item"
+msgstr "Ново"
+
+msgid "TitleNotification"
+msgstr "След последното ваше посещение"
+
+msgid "lang_update_agenda"
+msgstr "Актуализирано е събитие в програмата"
+
+msgid "lang_new_agenda"
+msgstr "Ново събитие в програмата"
+
+msgid "lang_update_announcements"
+msgstr "Актуализирана е обява"
+
+msgid "lang_new_announcements"
+msgstr "Нова обява"
+
+msgid "lang_new_document"
+msgstr "Добавен е документ"
+
+msgid "lang_new_exercise"
+msgstr "Има нов тест"
+
+msgid "lang_update_link"
+msgstr "Актуализирана е интернет-връзка"
+
+msgid "lang_new_link"
+msgstr "Нова интернет-връзка"
+
+msgid "lang_new_forum_topic"
+msgstr "Добавена е нова тема във форума"
+
+msgid "lang_new_groupforum_topic"
+msgstr "Нова тема във форум на група"
+
+msgid "lang_new_dropbox_file"
+msgstr "Получен е файл"
+
+msgid "lang_update_dropbox_file"
+msgstr "Актуализиран е файл"
+
+msgid "ForumCategoryAdded"
+msgstr "Категорията е добавена."
+
+msgid "LearnpathAdded"
+msgstr "Добавена е пътека за обучение"
+
+msgid "GlossaryAdded"
+msgstr "Добавен е нов термин в речника."
+
+msgid "QuizQuestionAdded"
+msgstr "Добавен е нов въпрос в теста."
+
+msgid "QuizQuestionUpdated"
+msgstr "Въпросът е редактиран."
+
+msgid "QuizQuestionDeleted"
+msgstr "Въпросът е изтрит от теста."
+
+msgid "QuizUpdated"
+msgstr "Тестът е редактиран."
+
+msgid "QuizAdded"
+msgstr "Добавен е тест."
+
+msgid "QuizDeleted"
+msgstr "Тестът е изтрит."
+
+msgid "DocumentInvisible"
+msgstr "Документът е скрит."
+
+msgid "DocumentVisible"
+msgstr "Документът е видим."
+
+msgid "CourseDescriptionAdded"
+msgstr "Добавено е описание на курса."
+
+msgid "WikiAdded"
+msgstr "Добавено е Wiki."
+
+msgid "SurveyAdded"
+msgstr "Добавена е анкета."
+
+msgid "NotebookAdded"
+msgstr "Добавена е бележка."
+
+msgid "NotebookUpdated"
+msgstr "Бележката е редактирана."
+
+msgid "NotebookDeleted"
+msgstr "Бележката е изтрита."
+

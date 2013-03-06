@@ -1,0 +1,246 @@
+msgid "Upload"
+msgstr "Apachiy"
+
+msgid "BackList"
+msgstr "K\'itiyman kutiy qelqa khipukunata t\'apapanapaq"
+
+msgid "MailingFileNotRegistered"
+msgstr "(mana qelqachikusqa kay yachachinapi)"
+
+msgid "MailingFileSentTo"
+msgstr "piman apachisqa"
+
+msgid "MailingFileIsFor"
+msgstr "pipaq"
+
+msgid "MailingConfirmSend"
+msgstr "Wayaqakunapi kaqkunata apachinkichu man sapanqa e-ckaskikunaman?"
+
+msgid "MailingSend"
+msgstr "Apachiy wayaqakunapi kaqta"
+
+msgid "MailingNotYetSent"
+msgstr "E-chaskipi khipukuna kaqqa manan apachikusqachu..."
+
+msgid "MailingInSelect"
+msgstr "---E-chaskipi apachiy---"
+
+msgid "MailingAsUsername"
+msgstr "E-chaskipi apachiy"
+
+msgid "FileDeleted"
+msgstr "Wayaqa ajllasqaqa horqochikunña khipukuna t\'aqapasqa k\'itimantaqa"
+
+msgid "DocAdd"
+msgstr "Khipuqa yaparichikunña"
+
+msgid "Sender"
+msgstr "apachiq"
+
+msgid "Author"
+msgstr "ruwaq"
+
+msgid "FileSize"
+msgstr "Wayaqaq sayaynin"
+
+msgid "Title"
+msgstr "Sutinchaynin"
+
+msgid "OverwriteFile"
+msgstr "Ñaupaq khipu apachisqayki hoq sutiwachu churanki?"
+
+msgid "Ok"
+msgstr "Chaskiy"
+
+msgid "Unknown"
+msgstr "Mana reqsisqa"
+
+msgid "SentOn"
+msgstr "Pay"
+
+msgid "SentTo"
+msgstr "Piman apachisqa"
+
+msgid "ConfirmDelete"
+msgstr "Kayqa  pichachinqa yupachasqayniykiq haykusqallanta"
+
+msgid "SendTo"
+msgstr "Apachiy kayman"
+
+msgid "Description"
+msgstr "Nisqasqa"
+
+msgid "UploadFile"
+msgstr "Apachiy khiputa"
+
+msgid "ErrorCreatingDir"
+msgstr "Mana atikunchu wayaqa ruwachiyta. Ama hina kachu, sistemaq kachiqninta tapukuy."
+
+msgid "UploadError"
+msgstr "Error de envío, revise tamaño máximo del archivo y los permisos del directorio."
+
+msgid "TooBig"
+msgstr "Khipu ajllasqaqa sinchi hatunmi."
+
+msgid "NoFileSpecified"
+msgstr "Mana ajllankichu ni hoq khiputapas apachinapaqqa."
+
+msgid "NoUserSelected"
+msgstr "Ama hina kaychu ajllay, mayqen haykuqmasiman khiputa apachinki."
+
+msgid "BadFormData"
+msgstr "Apachiyqa waqllirun: formulario nisqapi qelqakuna pantasqan. Ama hina kachu sistemaq kachiqninta tapukuy."
+
+msgid "GeneralError"
+msgstr "Pantay rikurirun. Ama hina kachu, sistemaq kachiqninta tapukuy."
+
+msgid "Dropbox"
+msgstr "T\'aqapay qelqa khipukunata"
+
+msgid "Help"
+msgstr "Yanapa"
+
+msgid "ReceivedFiles"
+msgstr "Khipukuna chaskisqa"
+
+msgid "SentFiles"
+msgstr "Khipukuna apachisqa"
+
+msgid "ReceivedTitle"
+msgstr "Sutinchaynin"
+
+msgid "SentTitle"
+msgstr "Khipukuna apachisqa"
+
+msgid "Authors"
+msgstr "Ruwaq"
+
+msgid "Size"
+msgstr "Sayaynin"
+
+msgid "LastResent"
+msgstr "Qepa kuti apachisqa"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Qallariq"
+
+msgid "UploadNewFile"
+msgstr "Apachiy hoq khiputa"
+
+msgid "AreYouSureToDelete"
+msgstr " Cheqaychu kashanki kayta wañuchinapaq ?"
+
+msgid "Feedback"
+msgstr "Rimariykuna"
+
+msgid "CloseFeedback"
+msgstr "Wisqay rimariykunata"
+
+msgid "AddNewFeedback"
+msgstr "Yapay musuq rimariyta"
+
+msgid "DropboxFeedbackStored"
+msgstr "Rimariyqa allchasqaña"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Llipin haykuqmasikunan wañuchinku khiputa, chayrayku mana pipas rikunqachu rimariy yapasqaykita."
+
+msgid "FeedbackError"
+msgstr "Pantay kashan rimariypi"
+
+msgid "PleaseTypeText"
+msgstr "Ama hina kaychu, qelqay imatapas."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "Manan huñichayniyuq kashankichu kay khipu urayachinaykipaq."
+
+msgid "CheckAtLeastOneFile"
+msgstr "Kuskachay hoq khipullatapas."
+
+msgid "ReceivedFileDeleted"
+msgstr "Khipu chaskisqaqa wañuchisqaña."
+
+msgid "SentFileDeleted"
+msgstr "Khipu apachisqaqa wañuchikunña."
+
+msgid "FilesMoved"
+msgstr "Khipukuna ajllasqaqa kuyurichikusqañan."
+
+msgid "ReceivedFileMoved"
+msgstr "Khipukuna chaskisqaqa kuyurichikusqañan."
+
+msgid "SentFileMoved"
+msgstr "Khipu apachisqaqa kuyurichikusqañan"
+
+msgid "NotMovedError"
+msgstr "Kay khipu(kuna)qa mana atikunmanchu kuyunanpaq."
+
+msgid "AddNewCategory"
+msgstr "Yapay hoq mitata"
+
+msgid "EditCategory"
+msgstr "Ruwapay kay mitata"
+
+msgid "CategoryName"
+msgstr "Mitaq sutin"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Ama hina kaychu, mitapaq sutita ajllay"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Kay mitaqa ña kan, ama hina kaychu hoqniraq sutiyuqta hapipay"
+
+msgid "CurrentlySeeing"
+msgstr "Kunanqa mitata qhawashanki"
+
+msgid "CategoryStored"
+msgstr "Mitaqa yapachikunña."
+
+msgid "CategoryModified"
+msgstr "Mitaqa t\'ijrachisqaña."
+
+msgid "CategoryDeleted"
+msgstr "Mitaqa wañuchisqaña."
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "Kancha ruwaq nisqaqa manan ch\'usaq kanmanchu"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Huj chayanallatapas ajllawaq"
+
+msgid "DropboxFileTooBig"
+msgstr "Khipuqa sinchi hatunm."
+
+msgid "TheFileIsNotUploaded"
+msgstr "Khipuqa manaraq  apachikunchu"
+
+msgid "FileUploadSucces"
+msgstr "Khipuqa apachikunña"
+
+msgid "MailingNonMailingError"
+msgstr "E-chaskiqa mana qelqapachikunmanchu hoq mana e-chaskiwan nitaq kaypas e-chaskiwan"
+
+msgid "MailingSelectNoOther"
+msgstr "E-chaski apachiyqa mana chaqrokunmanchu hoq chaskikuqkunawanqa"
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "Noqa kikiyman apachiyqa mana chaqrukunmanchu hoq runaq chaskiqninwan"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Musuq khipu apachikun T\'aqapay Qelqa khipukunata nisqapi"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "Kay yachachinapiqa, musuq khipu apachikunña T\'aqapay Qelqa khipukunata nisqapi"
+
+msgid "langAddEdit"
+msgstr "Yapay / Ruwapay"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Kay wayaqaqa ch\'usaqmi kashan"
+
+msgid "AddComment"
+msgstr "Añadir comentario"
+

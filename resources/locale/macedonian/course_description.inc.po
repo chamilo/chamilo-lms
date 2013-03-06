@@ -1,0 +1,42 @@
+msgid "langCourseProgram"
+msgstr "Опис на курсот"
+
+msgid "langThisCourseDescriptionIsEmpty"
+msgstr "&#1044;&#1086; &#1089;&#1077;&#1075;&#1072; &#1085;&#1077; &#1077; &#1074;&#1085;&#1077;&#1089;&#1077;&#1085; &#1086;&#1087;&#1080;&#1089; &#1085;&#1072; &#1086;&#1074;&#1086;&#1112; &#1082;&#1091;&#1088;&#1089;."
+
+msgid "langEditCourseProgram"
+msgstr "Креирај и уреди го описот на курсот"
+
+msgid "QuestionPlan"
+msgstr "Прашање за водачот"
+
+msgid "langInfo2Say"
+msgstr "Информација за корисниците"
+
+msgid "langOuAutreTitre"
+msgstr "Наслов"
+
+msgid "langNewBloc"
+msgstr "Друго"
+
+msgid "langAddCat"
+msgstr "додај категорија"
+
+msgid "langAdd"
+msgstr "Додај"
+
+msgid "langValid"
+msgstr "Валидно"
+
+msgid "langBackAndForget"
+msgstr "Назад и заборави"
+
+msgid "CourseDescriptionUpdated"
+msgstr "Описот на курсот ќе биде ажуриран"
+
+msgid "CourseDescriptionDeleted"
+msgstr "Описот на курсот ќе биде избришан"
+
+msgid "CourseDescriptionIntro"
+msgstr "За да создадеш опис на курсот, кликни на насловот и пополни го правилно полето на формата.<br><br> Потоа кликни на ОК и пополни ги другите наслови"
+

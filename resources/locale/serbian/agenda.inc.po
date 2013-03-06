@@ -1,0 +1,219 @@
+msgid "AgendaAdd"
+msgstr "Dodaj novu stavku u Agendu"
+
+msgid "ShowAllEvents"
+msgstr "Prikaži sve stavke iz Agende"
+
+msgid "ShowCurrent"
+msgstr "Prikaži stavke iz tekućeg meseca"
+
+msgid "AddCalendarItem"
+msgstr "Dodaj novu stavku u Agendu"
+
+msgid "Day"
+msgstr "Dan"
+
+msgid "Month"
+msgstr "Mesec"
+
+msgid "Year"
+msgstr "Godina"
+
+msgid "Hour"
+msgstr "Sat"
+
+msgid "Minutes"
+msgstr "Minuti"
+
+msgid "Detail"
+msgstr "Detalj"
+
+msgid "EditSuccess"
+msgstr "Stava Agende je izmenjena"
+
+msgid "AddSuccess"
+msgstr "Stavka je dodata"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Stavka Agende je obrisana"
+
+msgid "NoAgendaItems"
+msgstr "Nema stavki u Agendi"
+
+msgid "lang_september"
+msgstr "Septembar"
+
+msgid "langClassName"
+msgstr "Ime razreda"
+
+msgid "lang_agenda"
+msgstr "Agenda"
+
+msgid "ModifyCalendarItem"
+msgstr "Modifikuj stavku Agende"
+
+msgid "ItemTitle"
+msgstr "Naslov stavke"
+
+msgid "langDay"
+msgstr "dan"
+
+msgid "month_default"
+msgstr "početni mesec"
+
+msgid "langYear"
+msgstr "Godina"
+
+msgid "year_default"
+msgstr "početna godina"
+
+msgid "langHour"
+msgstr "Sat"
+
+msgid "hour_default"
+msgstr "početni sat"
+
+msgid "langMinute"
+msgstr "minut"
+
+msgid "langLasting"
+msgstr "trajanje"
+
+msgid "langOldToNew"
+msgstr "staro u novo"
+
+msgid "langNewToOld"
+msgstr "novo u staro"
+
+msgid "langNow"
+msgstr "sad"
+
+msgid "langAddEvent"
+msgstr "Dodavanje događaja"
+
+msgid "langDetail"
+msgstr "detalj"
+
+msgid "MonthView"
+msgstr "Mesečni prikaz"
+
+msgid "WeekView"
+msgstr "Nedeljni prikaz"
+
+msgid "DayView"
+msgstr "Dnevni prikaz"
+
+msgid "AddPersonalItem"
+msgstr "Dodaj svoju stavku"
+
+msgid "Week"
+msgstr "Nedelja"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Time"
+msgstr "Vreme"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Dodaj ličnu stavku u Agendu"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Modifikuj ličnu stavku"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Lična stavka je uspešno dodata u Agendu"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Lična stavka je uspešno izmenjena u Agendi"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Lična stavka je uspešno izbrisana iz Agende"
+
+msgid "ViewPersonalItem"
+msgstr "Pregledaj lične stavke"
+
+msgid "UserGroupFilter"
+msgstr "Filter za grupe/korisnike"
+
+msgid "ShowAll"
+msgstr "Prikaži sve"
+
+msgid "Print"
+msgstr "Štampanje"
+
+msgid "MyTextHere"
+msgstr "moj tekst ovde"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Kopirano kao obaveštenje"
+
+msgid "NewAnnouncement"
+msgstr "Novo obaveštenje"
+
+msgid "AddAnnouncement"
+msgstr "Dodaj kao obaveštenje"
+
+msgid "UpcomingEvent"
+msgstr "Nastupajući događaj"
+
+msgid "RepeatedEvent"
+msgstr "Pnovljeni događaj"
+
+msgid "RepeatType"
+msgstr "Vrsta ponavaljanja"
+
+msgid "RepeatDaily"
+msgstr "Dnevno"
+
+msgid "RepeatWeekly"
+msgstr "Sedmično"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Mesečno, po datumu"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Mesečno, po danu"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Mesečno, po danu, ograničen"
+
+msgid "RepeatYearly"
+msgstr "Godišnje"
+
+msgid "RepeatEnd"
+msgstr "Ponovi završni datum"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Pogledaj originalni događaj"
+
+msgid "ICalFileImport"
+msgstr "Uvezi iCal/ics Outlook dokument"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Svi korisnici sistema"
+
+msgid "GlobalEvent"
+msgstr "Globalni dogadjaj"
+
+msgid "ModifyEvent"
+msgstr "Uredi dogadjaj"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Datum kraja  ne može biti pre datuma početka"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Sortiraj zapise rasporeda po rastucem nizu"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Sortiraj zapise rasporeda po opadajucem"
+
+msgid "ItemForUserSelection"
+msgstr "Selekcija korisnika"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Ova datoteka nije u formatu iCal"
+
+msgid "RepeatEvent"
+msgstr "Ponovi dogadjaj"
+

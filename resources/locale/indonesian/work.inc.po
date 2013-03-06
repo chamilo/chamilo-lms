@@ -1,0 +1,81 @@
+msgid "Tools"
+msgstr "Tools"
+
+msgid "SendWork"
+msgstr "Dokumen yg di-upload"
+
+msgid "langTooBig"
+msgstr "Anda tidak memilih file untuk dikirim, atau itu terlalu besar"
+
+msgid "langListDeleted"
+msgstr "Daftar tsb telah dihapus"
+
+msgid "langDocModif"
+msgstr "judul dokumen telah diubah"
+
+msgid "langDocAdd"
+msgstr "Dokumen disimpan"
+
+msgid "langDocDel"
+msgstr "Dokumen dihapus"
+
+msgid "langTitleWork"
+msgstr "Judul Dokumen"
+
+msgid "langAuthors"
+msgstr "Pengarang"
+
+msgid "langDelList"
+msgstr "Hapus daftar"
+
+msgid "langWorkDelete"
+msgstr "Hapus"
+
+msgid "langWorkModify"
+msgstr "Ubah"
+
+msgid "langWorkConfirmDelete"
+msgstr "Apakah anda benar-benar akan menghapus dokumen ini"
+
+msgid "langAllFiles"
+msgstr "Semua file"
+
+msgid "DefaultUpload"
+msgstr "Seting Default untuk kenampakan file yang baru diposting"
+
+msgid "NewVisible"
+msgstr "Dokumen yang baru nampak untuk semua user"
+
+msgid "NewUnvisible"
+msgstr "Dokumen yang baru hanya nampak untuk pengelola mata kuliah"
+
+msgid "lang_doc_unvisible"
+msgstr "File anda hanya nampak untuk pengajar dan karenanya tidak nampak untuk anda."
+
+msgid "langDelLk"
+msgstr "Apakah anda sungguh-sungguh ingin menghapus link ini?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Hanya user yang terdaftar pada mata kuliah ini yang dapat mempublikasi dokumen."
+
+msgid "langListDel"
+msgstr "Hapus daftar"
+
+msgid "langNameDir"
+msgstr "Nama direktori baru"
+
+msgid "langFileExists"
+msgstr "Operasi tidak mungkin.<br>File dengan nama sama sudah ada terlebih dulu."
+
+msgid "CreateDirectory"
+msgstr "Buat direktori"
+
+msgid "langCurrentDir"
+msgstr "folder aktif"
+
+msgid "UploadADocument"
+msgstr "Upload dokumen"
+
+msgid "EditToolOptions"
+msgstr "Edit pilihan Tool"
+

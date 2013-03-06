@@ -1,0 +1,165 @@
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Microphone"
+msgstr "Mikrofon"
+
+msgid "Name"
+msgstr "İsim"
+
+msgid "Progress"
+msgstr "İşleniyor"
+
+msgid "Play"
+msgstr "Başlat"
+
+msgid "Stop"
+msgstr "Dur"
+
+msgid "Record"
+msgstr "Kayıt"
+
+msgid "NoFileAvailable"
+msgstr "Etkin dosya yok"
+
+msgid "StartConference"
+msgstr "Konferansa başla"
+
+msgid "MyName"
+msgstr "Benim adım"
+
+msgid "OrganisationSVideoconference"
+msgstr "Chamilo Video Konferans"
+
+msgid "ImportPresentation"
+msgstr "İçeri sunum aktar"
+
+msgid "RefreshList"
+msgstr "Listeyi güncelle"
+
+msgid "GoToTop"
+msgstr "Yukarı git"
+
+msgid "NewPoll"
+msgstr "Yeni anket"
+
+msgid "CreateNewPoll"
+msgstr "Bu oda için yeni bir anket oluşturun"
+
+msgid "Question"
+msgstr "Soru"
+
+msgid "PollType"
+msgstr "Anket tipi:"
+
+msgid "Create"
+msgstr "Oluştur"
+
+msgid "YesNo"
+msgstr "Eve/Hayır"
+
+msgid "Numeric1To10"
+msgstr "Sayısal 1-10"
+
+msgid "Poll"
+msgstr "Anket"
+
+msgid "YourVoteHasBeenSent"
+msgstr "Oylarınız gönderildi"
+
+msgid "YouAlreadyVotedForThisPoll"
+msgstr "Daha öncede bu anket için oy kullandınız"
+
+msgid "VoteButton"
+msgstr "Oyla!"
+
+msgid "YourAnswer"
+msgstr "Cevabınız:"
+
+msgid "Yes"
+msgstr "Evet"
+
+msgid "No"
+msgstr "Hayır"
+
+msgid "WantsToKnow"
+msgstr "Bilmek isteyen:"
+
+msgid "PollResults"
+msgstr "Anket Sonuçları:"
+
+msgid "Votes"
+msgstr "Oylar:"
+
+msgid "Result"
+msgstr "Sonuçlar:"
+
+msgid "ThereIsNoPoll"
+msgstr "Anket yok."
+
+msgid "MeetingMode"
+msgstr "Tanışma (mak. 4 kişi)"
+
+msgid "ConferenceMaxSeats"
+msgstr "Konferans (mak. 50 kişi)"
+
+msgid "Mode"
+msgstr "Mod"
+
+msgid "SystemMessage"
+msgstr "Sistem Mesajı"
+
+msgid "ChooseDevices"
+msgstr "Aygıt seç"
+
+msgid "ChooseCam"
+msgstr "Kamera seç:"
+
+msgid "ChooseMic"
+msgstr "Mikrofon seç:"
+
+msgid "ChangeSettings"
+msgstr "Ayarları değiştir"
+
+msgid "CourseLanguage"
+msgstr "Dil:"
+
+msgid "DontAskMeAgain"
+msgstr "Bir daha bana sorma"
+
+msgid "EditSettings"
+msgstr "Ayarları düzenle"
+
+msgid "Undo"
+msgstr "Geri al"
+
+msgid "Redo"
+msgstr "İleri al"
+
+msgid "Arrow"
+msgstr "Ok"
+
+msgid "Italic"
+msgstr "İtalik"
+
+msgid "Waiting"
+msgstr "Bekliyor"
+
+msgid "Accept"
+msgstr "Kabul et"
+
+msgid "Moderator"
+msgstr "Yönetici:"
+
+msgid "ThisRoomIsFullPleaseTryAgain"
+msgstr "Üzgünüz oda dolu. Lütfen daha sonra deneyin."
+
+msgid "Chat"
+msgstr "Sohbet"
+
+msgid "Cancel"
+msgstr "Vazgeç"
+
+msgid "Disconnected"
+msgstr "Bağlantı kesildi"
+

@@ -1,0 +1,219 @@
+msgid "AgendaAdd"
+msgstr "Přidat novou položku do agendy"
+
+msgid "ShowAllEvents"
+msgstr "Zobraz všechny položky agendy"
+
+msgid "ShowCurrent"
+msgstr "Zobraz položky agendy pro tento měsíc"
+
+msgid "AddCalendarItem"
+msgstr "Přidej novou položku do agendy"
+
+msgid "Day"
+msgstr "Den"
+
+msgid "Month"
+msgstr "Měsíc"
+
+msgid "Year"
+msgstr "Rok"
+
+msgid "Hour"
+msgstr "Hodina"
+
+msgid "Minutes"
+msgstr "Minuta"
+
+msgid "Detail"
+msgstr "Detail"
+
+msgid "EditSuccess"
+msgstr "Položka agendy byla změněna"
+
+msgid "AddSuccess"
+msgstr "Předmět agendy přidán"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Položka agendy byla smazána"
+
+msgid "NoAgendaItems"
+msgstr "Zde nejsou žádné položky agendy"
+
+msgid "lang_september"
+msgstr "Září"
+
+msgid "langClassName"
+msgstr "Jméno třídy"
+
+msgid "lang_agenda"
+msgstr "Agenda"
+
+msgid "ModifyCalendarItem"
+msgstr "Změnit položku agendy"
+
+msgid "ItemTitle"
+msgstr "Název položky"
+
+msgid "langDay"
+msgstr "den"
+
+msgid "month_default"
+msgstr "výchozí měsíc"
+
+msgid "langYear"
+msgstr "Rok"
+
+msgid "year_default"
+msgstr "výchozí rok"
+
+msgid "langHour"
+msgstr "Hodina"
+
+msgid "hour_default"
+msgstr "výchozí hodina"
+
+msgid "langMinute"
+msgstr "minuta"
+
+msgid "langLasting"
+msgstr "trvalý"
+
+msgid "langOldToNew"
+msgstr "starý novému"
+
+msgid "langNewToOld"
+msgstr "nový starému"
+
+msgid "langNow"
+msgstr "nyní"
+
+msgid "langAddEvent"
+msgstr "Přidej událost"
+
+msgid "langDetail"
+msgstr "detail"
+
+msgid "MonthView"
+msgstr "Měsíční pohled"
+
+msgid "WeekView"
+msgstr "Týdenní pohled"
+
+msgid "DayView"
+msgstr "Denní pohled"
+
+msgid "AddPersonalItem"
+msgstr "Přidej soukromou položku"
+
+msgid "Week"
+msgstr "Týden"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Time"
+msgstr "Čas"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Přidej soukromou položku agendy"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Uprav soukromou položku agendy"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Tvoje soukromá položka byla přidána do agendy"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Tvoje soukromá položka agendy byla změněna"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Tvoje soukromá položka agendy byla smazána"
+
+msgid "ViewPersonalItem"
+msgstr "Zobraz soukromé položky"
+
+msgid "UserGroupFilter"
+msgstr "Filtr na skupiny/uživatele"
+
+msgid "ShowAll"
+msgstr "Zobraz vše"
+
+msgid "Print"
+msgstr "Tisk"
+
+msgid "MyTextHere"
+msgstr "můj text zde"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Kopírováno jako oznámení"
+
+msgid "NewAnnouncement"
+msgstr "Nové oznámení"
+
+msgid "AddAnnouncement"
+msgstr "Přidat toto oznámení"
+
+msgid "UpcomingEvent"
+msgstr "Nová událost"
+
+msgid "RepeatedEvent"
+msgstr "Opakovaná událost"
+
+msgid "RepeatType"
+msgstr "Periodicita"
+
+msgid "RepeatDaily"
+msgstr "Denně"
+
+msgid "RepeatWeekly"
+msgstr "Týdně"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Měsíčně, podle data"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Měsíčně, podle dne"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Měsíčně, podle dne, omezené"
+
+msgid "RepeatYearly"
+msgstr "Ročně"
+
+msgid "RepeatEnd"
+msgstr "Opakovat datum ukončení"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Zobrazit původní událost"
+
+msgid "ICalFileImport"
+msgstr "Outlook import"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Všichni systémoví uživatelé"
+
+msgid "GlobalEvent"
+msgstr "Globální událost"
+
+msgid "ModifyEvent"
+msgstr "Upravit událost"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Datum ukončení nemůže být před datumem začátku"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Seřadit agendu chronologicky (vzestupně)"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Seřadit agendu chronologicky (sestupně)"
+
+msgid "ItemForUserSelection"
+msgstr "Volba uživatelů"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Tento soubor není v iCal formátu"
+
+msgid "RepeatEvent"
+msgstr "Opakovaná událost"
+

@@ -1,0 +1,440 @@
+msgid "langProfessors"
+msgstr "Εκπαιδευτές"
+
+msgid "langExplanation"
+msgstr "Οταν πατήσετε το «Εντάξει», θα δημιουργηθεί μια ιστοσελίδα με Περιοχή συζητήσεων, Ατζέντα, κ.λπ.. Μπορείτε να τη τροποποιήσετε σύμφωνα με τις απαιτήσεις σας."
+
+msgid "langEmpty"
+msgstr "Αφήσατε μερικά πεδία κενά.<br>Πατήστε το πλήκτρο «Επιστροφή» του browser και ξαναδοκιμάστε."
+
+msgid "langCodeTaken"
+msgstr "Αυτός ο κωδικός μαθήματος χρησιμοποιείται ήδη.<br>Πατήστε το πλήκτρο «Επιστροφή» του browser και ξαναδοκιμάστε"
+
+msgid "langFormula"
+msgstr "Μετά τιμής"
+
+msgid "langMessage"
+msgstr "Οταν διαγράψετε τη δοκιμαστική περιοχή συζητήσεων, θα διαγραφτεί και το παρόν μήνυμα."
+
+msgid "langExerciceEx"
+msgstr "Υπόδειγμα Ασκησης"
+
+msgid "langAntique"
+msgstr "Ιστορία της αρχαίας φιλοσοφίας"
+
+msgid "langSocraticIrony"
+msgstr "Η Σωκρατική ειρωνεία είναι..."
+
+msgid "langManyAnswers"
+msgstr "(περισσότερες από μία απαντήσεις μπορεί να είναι σωστές)"
+
+msgid "langRidiculise"
+msgstr "Γελοιοποίηση του συνομιλητή σας προκειμένου να παραδεχτεί ότι κάνει λάθος."
+
+msgid "langNoPsychology"
+msgstr "Όχι, η Σωκρατική ειρωνεία δεν είναι θέμα ψυχολογίας, αλλά σχετίζεται με την επιχειρηματολογία."
+
+msgid "langAdmitError"
+msgstr "Παραδοχή των δικών σας σφαλμάτων ώστε να ενθαρρύνετε το συνομιλητή σας να κάνει το ίδιο."
+
+msgid "langNoSeduction"
+msgstr "Όχι, η Σωκρατική ειρωνεία δεν είναι μέθοδος αποπλάνησης, ούτε βασίζεται στο παράδειγμα."
+
+msgid "langForce"
+msgstr "Εξώθηση του συνομιλητή σας, με μια σειρά ερωτήσεων και υποερωτήσεων, να παραδεχτεί ότι δεν ξέρει ό,τι ισχυρίζεται πως ξέρει."
+
+msgid "langIndeed"
+msgstr "Πράγματι, η Σωκρατική ειρωνεία είναι μια μέθοδος ερωτημάτων."
+
+msgid "langContradiction"
+msgstr "Χρήση της αρχής της αποφυγής αντιφάσεων προκειμένου να οδηγήσετε τον συνομιλητή σας σε αδιέξοδο."
+
+msgid "langNotFalse"
+msgstr "Η απάντηση δεν είναι εσφαλμένη. Είναι αλήθεια ότι η αποκάλυψη της άγνοιας του συνομιλητή σας επιδεικνύει τα αντιφατικά συμπεράσματα που προκύπτουν από τις αρχικές παραδοχές του."
+
+msgid "langAgenda"
+msgstr "Ατζέντα"
+
+msgid "langVideo"
+msgstr "Βίντεο"
+
+msgid "langCourseProgram"
+msgstr "Περιγραφή μαθήματος"
+
+msgid "langAnnouncements"
+msgstr "Ανακοινώσεις"
+
+msgid "langAddPageHome"
+msgstr "Ανέβασμα σελίδας και δημιουργία συνδέσμου στην αρχική σελίδα"
+
+msgid "langLinkSite"
+msgstr "Προσθήκη συνδέσμου σελίδας στην αρχική σελίδα"
+
+msgid "langModifyInfo"
+msgstr "Αλλαγή πληροφοριών μαθήματος"
+
+msgid "langCourseDesc"
+msgstr "Περιγραφή Μαθήματος"
+
+msgid "langAgendaTitle"
+msgstr "Πρώτο Μάθημα"
+
+msgid "langAgendaText"
+msgstr "Εισαγωγή στην Αλγεβρα Αριθμών"
+
+msgid "langMicro"
+msgstr "Συνεντεύξεις"
+
+msgid "langGoogle"
+msgstr "Γρήγορη και Πανίσχυρη μηχανής αναζήτησης"
+
+msgid "langIntroductionText"
+msgstr "Εισαγωγικό κείμενο του μαθήματος. Αντικαταστήτε το με το δικό σας, κάνοντας κλίκ στην <b>Αλλαγή</b>."
+
+msgid "langIntroductionTwo"
+msgstr "Αυτή η σελίδα επιτρέπει οποιοδήποτε φοιτητή να ανεβάσει ένα αρχείο στο μάθημα. Μπορείτε να στείλετε αρχεία HTML, μόνο αν δεν έχουν εικόνες."
+
+msgid "langCourseDescription"
+msgstr "περιγραφή στο κατάλογο μαθημάτων"
+
+msgid "langProfessor"
+msgstr "Καθηγητής"
+
+msgid "langAnnouncementEx"
+msgstr "Παράδειγμα ανακοίνωσης. Μόνο ο καθηγητής και τυχόν άλλοι διαχειριστές του μαθήματος μπορεί να ανεβάσουν ανακοινώσεις."
+
+msgid "langJustCreated"
+msgstr "Μόλις δημιουργήσατε το μάθημα"
+
+msgid "langEnter"
+msgstr "Εισοδος"
+
+msgid "langGroups"
+msgstr "Ομάδες Χρηστών"
+
+msgid "langCreateCourseGroups"
+msgstr "Ομάδες Χρηστών"
+
+msgid "langCatagoryMain"
+msgstr "Αρχή"
+
+msgid "langCatagoryGroup"
+msgstr "Συζήτησεις Ομάδων χρηστών"
+
+msgid "langLn"
+msgstr "Γλώσσα"
+
+msgid "langCreateSite"
+msgstr "Δημιουργία ενός μαθήματος"
+
+msgid "langFieldsRequ"
+msgstr "Ολα τα πεδία είναι υποχρεωτικά"
+
+msgid "langEx"
+msgstr "π.χ. <i>Ιστορία της Τέχνης</i>"
+
+msgid "langFac"
+msgstr "Σχολή / Τμήμα"
+
+msgid "langTargetFac"
+msgstr "Η σχολή ή το τμήμα που αναφέρεται το μάθημα"
+
+msgid "langMax"
+msgstr "με λατινικά γράμματα μέχρι 12 χαρακτήρες, π.χ. <i>FYS1234</i>"
+
+msgid "langDoubt"
+msgstr "Αν δεν ξέρετε το κωδικό του μαθήματος συμβουλευτείτε"
+
+msgid "langProgram"
+msgstr "το Πρόγραμμα Μαθημάτων. Αν το μάθημα δεν έχει κωδικό βάλτε ένα της αρεσκεία σας. Για παράδειγμα<i>ΑΛΓΕΒΡΑ</i>"
+
+msgid "langScormtool"
+msgstr "Μονοπάτι γνώσης"
+
+msgid "langScormbuildertool"
+msgstr "Δημιουργός μονοπατιού Scorm"
+
+msgid "langPathbuildertool"
+msgstr "Δημιουργός μονοπατιού γνώσης"
+
+msgid "langOnlineConference"
+msgstr "Διάσκεψη"
+
+msgid "langAgendaCreationTitle"
+msgstr "Δημιουργία μαθήματος"
+
+msgid "langAgendaCreationContenu"
+msgstr "Το μάθημα μόλις δημιουργήθηκε"
+
+msgid "langOnlineDescription"
+msgstr "Αυτό είναι ένα παράδειγμα της περιγραφής του εργαλείου Διάσκεψης"
+
+msgid "langDropbox"
+msgstr "Χώρος Ανταλλαγής Αρχείων"
+
+msgid "langOnly"
+msgstr "Μόνο"
+
+msgid "langRandomLanguage"
+msgstr "Τυχαία επιλογή από διαθέσιμες γλώσσες"
+
+msgid "langImages"
+msgstr "Εικόνες"
+
+msgid "langAudio"
+msgstr "Ήχος"
+
+msgid "langForumLanguage"
+msgstr "Αγγλικά"
+
+msgid "langNewCourse"
+msgstr "Νέα σειρά μαθημάτων"
+
+msgid "langAddNewCourse"
+msgstr "Προσθήκη νέας σειράς μαθημάτων"
+
+msgid "langRestoreCourse"
+msgstr "Επαναφορά μαθήματος"
+
+msgid "langOtherProperties"
+msgstr "Άλλες ιδιότητες που βρέθηκαν στο αρχείο"
+
+msgid "langSysId"
+msgstr "Κωδικός ID συστήματος"
+
+msgid "langDepartment"
+msgstr "Τμήμα"
+
+msgid "langDepartmentUrl"
+msgstr "Ιστοσελίδα Τμήματος"
+
+msgid "langScoreShow"
+msgstr "Εμφάνιση βαθμολογίας"
+
+msgid "langVisibility"
+msgstr "Ορατότητα"
+
+msgid "langLastVisit"
+msgstr "Τελευταία επίσκεψη"
+
+msgid "langLastEdit"
+msgstr "Η πιο πρόσφατη επεξργασία"
+
+msgid "langExpire"
+msgstr "Λήξη προθεσμίας"
+
+msgid "langChoseFile"
+msgstr "Επιλογή αρχείου"
+
+msgid "langFtpFileTips"
+msgstr "Αρχείο σε έναν διακομιστή FTP"
+
+msgid "langHttpFileTips"
+msgstr "Αρχείο σε έναν διακομιστή Web (HTTP)"
+
+msgid "langLocalFileTips"
+msgstr "Αρχείο στον διακομιστή της πλατφόρμας"
+
+msgid "langPostFileTips"
+msgstr "Αρχείο στον τοπικό σας υπολογιστή"
+
+msgid "langOtherCategory"
+msgstr "Άλλη κατηγορία"
+
+msgid "langMinimum"
+msgstr "ελάχιστο"
+
+msgid "langMaximum"
+msgstr "μέγιστος"
+
+msgid "langRestoreACourse"
+msgstr "Ανάκτηση μίας σειράς μαθημάτων"
+
+msgid "langBackup"
+msgstr "Αρχείο ασφαλείας"
+
+msgid "langCopy"
+msgstr "Αντιγραφή περιεχομένου του μαθήματος"
+
+msgid "langRecycle"
+msgstr "Ανακύκλωση μαθήματος"
+
+msgid "AnnouncementExampleTitle"
+msgstr "Αυτό είναι ένα παράδειγμα αγγελίας"
+
+msgid "Wikipedia"
+msgstr "Ανοιχτή on line Εγκυκλοπαιδεία"
+
+msgid "DefaultGroupCategory"
+msgstr "Προεπιλεγμένες ομάδες"
+
+msgid "DefaultCourseImages"
+msgstr "Συλλογή εικόνων"
+
+msgid "ExampleForumCategory"
+msgstr "Παράδειγμα κατηγορίας Forum"
+
+msgid "ExampleForum"
+msgstr "Παράδειγμα Forum"
+
+msgid "ExampleThread"
+msgstr "Παράδειγμα Νήματος (thread)"
+
+msgid "ExampleThreadContent"
+msgstr "Παράδειγμα περιεχομένου"
+
+msgid "IntroductionWiki"
+msgstr "Ο όρος Wiki είναι μία συντόμευση της λέξης WikiWikiWeb. Ο όρος wikiwiki είναι μια Χαβανέζικη λέξη που σημαίνει \"γρήγορα\" ή \"ταχύτητα\". Σε ένα wiki, οι άνθρωποι δημιουργούν συνεργατικά διάφορες σελίδες. Αν ένας συμμετέχων γράψει κάτι λάθος, τότε, ο επόμενος μπορεί να το διορθώσει. Ο επόμενος μπορεί, επίσης, να να προσθέσει κάτι καινούργιο στη σελίδα. Με αυτό τον τρόπο, οι σελίδες βελτιώνονται συνεχώς."
+
+msgid "CreateCourseArea"
+msgstr "Δημιουργία αυτής της σειράς μαθημάτων"
+
+msgid "CreateCourse"
+msgstr "Δημιουργία μιας σειράς μαθημάτων"
+
+msgid "Create"
+msgstr "Δημιουργία"
+
+msgid "MessageOfNewCourseToAdmin"
+msgstr "Αυτό το μήνυμα είναι για να σας ενημερώσει ότι δημιουργήθηκε μια νέα σειρά μαθημάτων στην πλατφόρμα"
+
+msgid "NewCourseCreatedIn"
+msgstr "Δημιουργήθηκε μια νέα σειρά μαθηματων στο"
+
+msgid "ExplicationTrainers"
+msgstr "Προς το παρόν, έχετε ορισθεί εσείς ως Δάσκαλος (εκπαιδευτής). Αργότερα, μπορείτε να αλλάξετε αυτή τη ρύθμιση, από τις ρυθμίσεις της σειράς μαθημάτων."
+
+msgid "Objectives"
+msgstr "Στόχοι"
+
+msgid "TargetAudience"
+msgstr "Ακροατήριο στόχος"
+
+msgid "YouHaveToAcceptTermsAndConditions"
+msgstr "Πρέπει να αποδεχθείτε τους Όρους μας και τις Προϋποθέσεις συμμετοχής, για να μπορείτε να ζητήσετε μια νέα εκπαίδευση."
+
+msgid "CourseRequestCreated"
+msgstr "Το αίτημά σας για μια νέα σειρά μαθημάτων έχει σταλεί επιτυχώς. Μπορεί να λάβετε σύντομα μια απάντηση, εντός μίας ή δύο ημερών."
+
+msgid "CreateThisCourseRequest"
+msgstr "Δημιουργία αυτού του αιτήματος για σειρά μαθημάτων"
+
+msgid "CourseRequestDate"
+msgstr "Ημερομηνία αιτήματος"
+
+msgid "AcceptThisCourseRequest"
+msgstr "Αποδοχή αυτής της σειράς μαθημάτων"
+
+msgid "ANewCourseWillBeCreated"
+msgstr "Μια νέα σειρά μαθημάτων %s θα δημιουργηθεί. Είναι εντάξει να προχωρήσει αυτή η ενέργεια;"
+
+msgid "AdditionalInfoWillBeAsked"
+msgstr "Θα ζητηθούν πρόσθετες πληροφορίες, μέσω e-mail, σχετικά με το %s αίτημα  εκπαίδευσης (training). Είναι εντάξει να προχωρήσει αυτή η ενέργεια;"
+
+msgid "AskAdditionalInfo"
+msgstr "Αίτημα πρόσθετων πληροφοριών"
+
+msgid "DeleteThisCourseRequest"
+msgstr "Διαγραφή αυτού του αιτήματος μαθημάτων"
+
+msgid "ACourseRequestWillBeDeleted"
+msgstr "Το αίτημα μαθημάτων %s πρόκειται να διαγραφεί. Είναι εντάξει να προχωρήσει αυτή η ενέργεια;"
+
+msgid "RejectThisCourseRequest"
+msgstr "Απόρριψη αυτού του αιτήματος μαθημάτων"
+
+msgid "ACourseRequestWillBeRejected"
+msgstr "Το αίτημα μαθημάτων %s πρόκειται να απορριφθεί. Είναι εντάξει να προχωρήσει αυτή η ενέργεια;"
+
+msgid "CourseRequestAccepted"
+msgstr "Το αίτημα μαθημάτων %s έγινε αποδεκτό. Δημιουργήθηκε ένα νέο μάθημα %s"
+
+msgid "CourseRequestAcceptanceFailed"
+msgstr "Το αίτημα μαθημάτων %s δεν έγινε αποδεκτό, λόγω εσωτερικού σφάλματος."
+
+msgid "CourseRequestRejected"
+msgstr "Τι αίτημα μαθημάτων %s απορρίφθηκε."
+
+msgid "CourseRequestRejectionFailed"
+msgstr "Τι αίτημα μαθημάτων %s δεν απορρίφθηκε, λόγω εσωτερικού σφάλματος."
+
+msgid "CourseRequestInfoAsked"
+msgstr "Ζητήθηκαν πρόσθετες πληροφορίες για τη σειρά μαθημάτων %s"
+
+msgid "CourseRequestInfoFailed"
+msgstr "Δεν ζητήθηκαν πρόσθετες πληροφορίες για τη σειρά μαθημάτων %s λόγω εσωτερικού σφάλματος"
+
+msgid "CourseRequestDeleted"
+msgstr "Το αίτημα μαθημάτων %s έχει διαγραφεί."
+
+msgid "CourseRequestDeletionFailed"
+msgstr "Το αίτημα μαθημάτων %s δεν έχει διαγραφεί, λόγω  εσωτερικού σφάλματος."
+
+msgid "DeleteCourseRequests"
+msgstr "Διαγραφή των επιλεγμένων αιτημάτων μαθήματος."
+
+msgid "SelectedCourseRequestsDeleted"
+msgstr "Τα επιλεγμένα αιτήματα μαθήματος έχουν διαγραφεί."
+
+msgid "SomeCourseRequestsNotDeleted"
+msgstr "Μερικά από τα επιλεγμένα αιτήματα μαθημάτων δεν έχουν διαγραφεί λόγω εσωτερικού σφάλματος."
+
+msgid "CourseRequestEmailSubject"
+msgstr "%s Ένα αίτημα για μια νέα σειρά μαθημάτων %s"
+
+msgid "CourseRequestMailOpening"
+msgstr "Καταγράψαμε τα εξής αιτήματα για μια νέα σειρά μαθημάτων:"
+
+msgid "CourseRequestPageForApproval"
+msgstr "Αυτή η σειρά μαθημάτων μπορεί να εγκριθεί στην εξής σελίδα:"
+
+msgid "PleaseActivateCourseValidationFeature"
+msgstr "Το χαρακτηριστικό \"Έγκριση σειράς μαθημάτων\" δεν έχει, προς το παρόν, ενεργοποιηθεί. Για να το χρησιμοποιήσετε, παρακαλώ, ενεργοποιήστε το, μέσα από τις ρυθμίσεις %s"
+
+msgid "CourseRequestLegalNote"
+msgstr "Οι πληροφορίες που σχετίζονται με αυτή τη σειρά μαθημάτων θεωρούνται υπό προστασία. Μπορούν να χρησιμοποιηθούν μόνο μέσα στη δική μας ηλεκτρονική πλατφόρμα e-learning. Δεν θα πρέπει να αποκαλύπτονται προς τρίτους."
+
+msgid "CourseRequestAskInfoEmailSubject"
+msgstr "%s Ένα αίτημα για πρόσθετες πληροφορίες σχετικά με το αίτημα μαθημάτων %s"
+
+msgid "CourseRequestAskInfoEmailText"
+msgstr "Λάβαμε το αίτημά σας για μια νέα σειρά μαθημάτων με κωδικό %s. Πριν το λάβουμε υπ\' όψη προς έγκριση, χρειαζόμστε κάποιες πρόσθετες πληροφορίες.
+
+
+Παρακαλούμε, δώστε μας συνοπτικές πληροφορίες για το περιεχόμενο των μαθημάτων (περιγραφή), τους στόχους, τους εκπαιδευόμενους ή τους χρήστες που θα εμπλακούν στα εν λόγω μαθήματα. Αν ισχύει, αναφέρτε το όνομα του Ιδρύματος ή της Μονάδας, για λογαρισμό των οποίων υποβάλατε αυτό το αίτημα."
+
+msgid "CourseRequestAcceptedEmailSubject"
+msgstr "
+%s Το αίτημα για δημιουργία σειράς μαθημάτων %s εγκρίθηκε."
+
+msgid "CourseRequestAcceptedEmailText"
+msgstr "
+Το αίτημά σας για δημιουργία μαθημάτων %s εγκρίθηκε. Δημιουργήθηκε μια %s νέα σειρά μαθημάτων και εσείς εγγραφήκατε σε αυτήν ως Εκπαιδευτής (ή Δάσκαλος).
+
+Μπορείτε να προσπελάσετε την νεοδημιούργητη σειρά μαθημάτων σας από το: %s"
+
+msgid "CourseRequestRejectedEmailSubject"
+msgstr "
+%s Το αίτημα μαθημάτων %s απορρίφθηκε"
+
+msgid "CourseRequestRejectedEmailText"
+msgstr "Λυπούμαστε να σας ενημερώσουμε ότι το αίτημά σας για δημιουργία σειράς μαθημάτων απορρίφθηκε, λόγω του ότι δεν πληρούσε τις προϋποθέσεις που περιγράφονται στους Όρους και τις Προϋποθέσεις."
+
+msgid "CourseCreationFailed"
+msgstr "Το μάθημα δεν δημιουργήθηκε λόγω ενός εσωτερικού σφάλματος."
+
+msgid "CourseRequestCreationFailed"
+msgstr "Το αίτημα μαθημάτων δεν δημιουργήθηκε λόγω ενός εσωτερικού σφάλματος."
+
+msgid "CourseRequestEdit"
+msgstr "Επεξεργασία ενός αιτήματος μαθημάτων"
+
+msgid "CourseRequestHasNotBeenFound"
+msgstr "Η σειρά μαθημάτων προς την οποία ζητήσατε πρόσβαση, δεν βρέθηκε ή δεν υπάρχει."
+
+msgid "Accept"
+msgstr "Αποδοχή"
+
+msgid "Reject"
+msgstr "Απόρριψη"
+

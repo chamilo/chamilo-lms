@@ -1,0 +1,603 @@
+msgid "PublishSurvey"
+msgstr "Esplublizar encuesta"
+
+msgid "CompareQuestions"
+msgstr "Comparar entrugues"
+
+msgid "InformationUpdated"
+msgstr "Información anovada"
+
+msgid "SurveyTitle"
+msgstr "Títulu de la encuesta"
+
+msgid "SurveyIntroduction"
+msgstr "Introducción de la encuesta"
+
+msgid "CreateNewSurvey"
+msgstr "Crear encuesta"
+
+msgid "Survey"
+msgstr "Encuesta"
+
+msgid "SurveyTemplate"
+msgstr "Plantiya d\'encuesta"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "Por favor, escriba\'l títulu de la encuesta"
+
+msgid "PleaseEnterValidDate"
+msgstr "POr favor, escriba una fecha correuta"
+
+msgid "NotPublished"
+msgstr "Ensin espublizar"
+
+msgid "AdvancedReportDetails"
+msgstr "L\'informe avanzáu permite escoyer l\'usuariu y les entrugues pa ver informaciones más detallaes"
+
+msgid "AdvancedReport"
+msgstr "Informe avanzáu"
+
+msgid "CompleteReportDetails"
+msgstr "L\'informe completu permite ver tolos resultaos de la encuesta y esportalos a CSV (pa Excel)"
+
+msgid "CompleteReport"
+msgstr "Informe completu"
+
+msgid "OnlyThoseAddresses"
+msgstr "Unviar la encuesta namás a estes direiciones"
+
+msgid "BackToQuestions"
+msgstr "Tornar a les entrugues"
+
+msgid "SelectWhichLanguage"
+msgstr "Escueya l\'idoma nel que quier crear la encuesta"
+
+msgid "CreateInAnotherLanguage"
+msgstr "Crear esta encuesta n\'otru idioma"
+
+msgid "ExportInExcel"
+msgstr "Esportar en formatu Excel"
+
+msgid "ComparativeResults"
+msgstr "Resultaos comparativos"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "Escoyer los datos que quier comparar"
+
+msgid "OrCopyPasteUrl"
+msgstr "O copiar y pegar l\'enllaz na barra direiciones del so navegador:"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "Calcar equí pa facer una encuesta"
+
+msgid "SurveyNotShared"
+msgstr "Entá nun se compartió nenguna encuesta"
+
+msgid "ViewSurvey"
+msgstr "Ver encuesta"
+
+msgid "SelectDisplayType"
+msgstr "Escoyer el tipu de visualización:"
+
+msgid "Thanks"
+msgstr "Mensaxe de rempuesta"
+
+msgid "SurveyReporting"
+msgstr "Informe de la encuesta"
+
+msgid "NoSurveyAvailable"
+msgstr "Nun hai encuestes disponibles"
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "espublizóse"
+
+msgid "CreateFromExistingSurvey"
+msgstr "Crear dende otra encuesta esistente"
+
+msgid "Publish"
+msgstr "Espublizar encuesta"
+
+msgid "SearchASurvey"
+msgstr "Buscar encuesta"
+
+msgid "CourseName"
+msgstr "Nome del cursu"
+
+msgid "SurveysOfAllCourses"
+msgstr "Encuesta(es) de tolos cursos"
+
+msgid "PleaseSelectAChoice"
+msgstr "Por favor, escueya una opción"
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "Nun hai entrugues na base de datos"
+
+msgid "UpdateQuestionType"
+msgstr "Actualizar el tipu d\'entruga:"
+
+msgid "AddAnotherQuestion"
+msgstr "Amestar una entruga nueva"
+
+msgid "IsShareSurvey"
+msgstr "Compartir la encuesta"
+
+msgid "Proceed"
+msgstr "Continuar"
+
+msgid "PleaseFillNumber"
+msgstr "Por favor, escriba los valores de númberu pa los puntos."
+
+msgid "PleaseFillAllPoints"
+msgstr "Por favor, escriba puntos ente 1-5"
+
+msgid "PleasFillAllAnswer"
+msgstr "Por favor, escriba tolos campos de les rempuestes."
+
+msgid "PleaseSelectFourTrue"
+msgstr "Por favor, escueya polo menos cuatro entrugues verdaderes."
+
+msgid "PleaseSelectFourDefault"
+msgstr "Por favor, escueya polo menos cuatro rempuestes por defeutu."
+
+msgid "PleaseFillDefaultText"
+msgstr "Por favor, escriba\'l testu por defeutu"
+
+msgid "ModifySurveyInformation"
+msgstr "Modificar la información de la encuesta"
+
+msgid "ViewQuestions"
+msgstr "Ver entrugues"
+
+msgid "CreateSurvey"
+msgstr "Crear encuesta"
+
+msgid "FinishSurvey"
+msgstr "Acabar la encuesta"
+
+msgid "QuestionsAdded"
+msgstr "Les entrugues amiéstense"
+
+msgid "DeleteSurvey"
+msgstr "Esborrar encuesta"
+
+msgid "SurveyCode"
+msgstr "Códigu de la encuesta"
+
+msgid "SurveyList"
+msgstr "Encuestes"
+
+msgid "SurveyAttached"
+msgstr "Encuesta axunta"
+
+msgid "QuestionByType"
+msgstr "PEntrugues per tipu"
+
+msgid "SelectQuestionByType"
+msgstr "Escoyer una entruga per tipu"
+
+msgid "PleaseEnterAQuestion"
+msgstr "Por favor, escriba una entruga"
+
+msgid "NoOfQuestions"
+msgstr "Cantidá d\'entrugues"
+
+msgid "Question"
+msgstr "Entruga"
+
+msgid "ThisCodeAlradyExists"
+msgstr "Esti códigu yá esiste"
+
+msgid "SaveAndExit"
+msgstr "Guardar y marchar"
+
+msgid "ViewAnswers"
+msgstr "Ver retruques"
+
+msgid "CreateExistingSurvey"
+msgstr "Crear dende una encuesta esistente"
+
+msgid "SurveyName"
+msgstr "Nome de la encuesta"
+
+msgid "SurveySubTitle"
+msgstr "Sotítulu de la encuesta"
+
+msgid "ShareSurvey"
+msgstr "Compartir la encuesta"
+
+msgid "SurveyThanks"
+msgstr "Agradecimientos"
+
+msgid "EditSurvey"
+msgstr "Editar la encuesta"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "O tornar a la vista xeneral de la encuesta"
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "Hai un parámetru que falta nel enllaz. Por favor, use copiar y pegar."
+
+msgid "WrongInvitationCode"
+msgstr "Códigu d\'invitáu erroneu."
+
+msgid "SurveyFinished"
+msgstr "Acabó la encuesta."
+
+msgid "SurveyPreview"
+msgstr "Previsualización de la encuesta"
+
+msgid "InvallidSurvey"
+msgstr "Encuesta inválida"
+
+msgid "AddQuestion"
+msgstr "Amestar una entruga"
+
+msgid "EditQuestion"
+msgstr "Editar entruga"
+
+msgid "TypeDoesNotExist"
+msgstr "Esti tipu nun esiste"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "Creóse la encuesta"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Agora pue amestar entrugues a la so encuesta"
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "Actualizóse la encuesta"
+
+msgid "QuestionAdded"
+msgstr "Amestóse la entruga."
+
+msgid "QuestionUpdated"
+msgstr "Actualizóse la entruga."
+
+msgid "RemoveAnswer"
+msgstr "Quitar opción"
+
+msgid "AddAnswer"
+msgstr "Amestar opción"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Amosar"
+
+msgid "AnswerOptions"
+msgstr "Opciones de rempuesta"
+
+msgid "YesNo"
+msgstr "Si / Non"
+
+msgid "MultipleResponse"
+msgstr "Retruque múltiple"
+
+msgid "Open"
+msgstr "Retruque abiertu"
+
+msgid "Dropdown"
+msgstr "Llistáu desplegable"
+
+msgid "Pagebreak"
+msgstr "Fin de páxina"
+
+msgid "QuestionNumber"
+msgstr "Entruga númberu"
+
+msgid "NumberOfOptions"
+msgstr "Cantidá d\'opciones"
+
+msgid "SurveyInvitations"
+msgstr "Invitaciones a la encuesta"
+
+msgid "InvitationCode"
+msgstr "Códigu d\'invitación"
+
+msgid "InvitationDate"
+msgstr "Fecha d\'invitación"
+
+msgid "Answered"
+msgstr "Retrucada"
+
+msgid "AdditonalUsersComment"
+msgstr "Pue invitar a otros usuarios pa que faigan la encuesta. Nun tien más qu\'escribir los correos electrónicos d\'ellos separtaos por , o ;"
+
+msgid "MailTitle"
+msgstr "Asuntu del corréu"
+
+msgid "InvitationsSend"
+msgstr "invitaciones unviaes."
+
+msgid "SurveyDeleted"
+msgstr "Esborróse la encuesta."
+
+msgid "NoSurveysSelected"
+msgstr "Nun hai nenguna encuesta seleicionada."
+
+msgid "NumberOfQuestions"
+msgstr "Cantidá d\'entrugues"
+
+msgid "Invited"
+msgstr "Invitáu"
+
+msgid "SubmitQuestionFilter"
+msgstr "Filtrar"
+
+msgid "ResetQuestionFilter"
+msgstr "Cancelar filtru"
+
+msgid "ExportCurrentReport"
+msgstr "Esportar l\'informe actual"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "Namás puen usase entrugues coles rempuestes predefiníes."
+
+msgid "SelectXAxis"
+msgstr "Escueya la entruga de la exa X"
+
+msgid "SelectYAxis"
+msgstr "Escueya la entruga de la exa Y"
+
+msgid "ComparativeReport"
+msgstr "Informe comparativu"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "Toles entrugues van apaecer nuna páxina"
+
+msgid "SelectUser"
+msgstr "Usuariu"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "Escoyer l\'usuariu qu\'acabó la encuesta"
+
+msgid "userreport"
+msgstr "Informe del usuariu"
+
+msgid "VisualRepresentation"
+msgstr "Gráficu"
+
+msgid "AbsoluteTotal"
+msgstr "Total global"
+
+msgid "NextQuestion"
+msgstr "Entruga siguiente"
+
+msgid "PreviousQuestion"
+msgstr "Entruga anterior"
+
+msgid "PeopleWhoAnswered"
+msgstr "Persones qu\'escoyeren esta rempuesta"
+
+msgid "CourseUsers"
+msgstr "Usuarios del Cursu"
+
+msgid "SurveyPublication"
+msgstr "Espublizar la encuesta"
+
+msgid "AdditonalUsers"
+msgstr "Usuarios adicionales"
+
+msgid "MailText"
+msgstr "testu del corréu"
+
+msgid "UseLinkSyntax"
+msgstr "Los usuarios seleicionaos van recibir un corréu electrónicu col testu qu\'escribieren enriba y un enllaz nel que tienen de calcar pa enllenar la encuesta. Si quier poner esti enllaz en dalgún llugar del so testu, escriba lo siguiente **enllaz** (asteriscu asteriscu enllaz asteriscu asteriscu). Esta etiqueta va cambiala automáticamente\'l programa pol enllaz. Si nun escribe **enllaz** en nenguna parte\'l so testu, l\'enllaz allúgase a la fin del corréu."
+
+msgid "DetailedReportByUser"
+msgstr "Informe detalláu por usuariu"
+
+msgid "DetailedReportByQuestion"
+msgstr "Informe detalláu por entruga"
+
+msgid "ComparativeReportDetail"
+msgstr "Nesti informe pue comparar dos entrugues."
+
+msgid "CompleteReportDetail"
+msgstr "Nesti informe apaez un resume de les rempuestes de tolos alumnos a tolos retruques. Tamién tien la opción de ver namás una escoyeta d\'entrugues. Pue esportar los resultaos a un archivu CSV pa poder abrilos n\'aplicaciones estadístiques."
+
+msgid "DetailedReportByUserDetail"
+msgstr "Nesti informe apaecen toles rempuestes d\'un usuariu."
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "Nesti informe apaecen los resultaos entruga por entruga. Da un análisis estadísticu básicu y de gráficos."
+
+msgid "ReminderResendToAllUsers"
+msgstr "Unviar a tolos usuarios de la encuesta. Si nun marca\'l caxellu, namás los usuarios adicionales qu\'ameste van recibir la encuesta."
+
+msgid "Multiplechoice"
+msgstr "Escoyeta múltiple"
+
+msgid "Score"
+msgstr "Puntos"
+
+msgid "Shared"
+msgstr "Compartíu"
+
+msgid "Invite"
+msgstr "Invitaos"
+
+msgid "MaximumScore"
+msgstr "Másimos puntos posibles"
+
+msgid "ViewInvited"
+msgstr "Ver invitaos"
+
+msgid "ViewAnswered"
+msgstr "Ver les persones que retrucaren"
+
+msgid "ViewUnanswered"
+msgstr "Ver les persones que retrucaren"
+
+msgid "DeleteSurveyQuestion"
+msgstr "¿ Ta seguru de que quier esborrar esta entruga ?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "Yá tien fecha esta encuesta"
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "Calque equí pa retrucar la encuesta"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "o copie y peque la siguiente URL:"
+
+msgid "UnknowUser"
+msgstr "Usuariu desconocíu"
+
+msgid "MoveDown"
+msgstr "Mover pa embaxo"
+
+msgid "MoveUp"
+msgstr "Mover pa enriba"
+
+msgid "HaveAnswered"
+msgstr "contestaren"
+
+msgid "WereInvited"
+msgstr "fueren invitaos"
+
+msgid "PagebreakNotFirst"
+msgstr "El separtador de páxina nun pue tar nel entamu"
+
+msgid "PagebreakNotLast"
+msgstr "El separtador de páxina nun pue tar a la fin"
+
+msgid "SurveyNotAvailableAnymore"
+msgstr "Disculpe, pero esta encuesta yá nun ta disponible. Gracies pol so interés."
+
+msgid "DuplicateSurvey"
+msgstr "Duplicar la encuesta"
+
+msgid "EmptySurvey"
+msgstr "Vaciar la encuesta"
+
+msgid "SurveyEmptied"
+msgstr "Los retruques a esta encuesta esborrárense."
+
+msgid "SurveyNotAvailableYet"
+msgstr "Esta encuesta nun ta tovía disponible. Inténtelo más tarde. Gracies."
+
+msgid "PeopleAnswered"
+msgstr "Persones que retrucaren"
+
+msgid "AnonymousSurveyCannotKnowWhoAnswered"
+msgstr "Esta encuesta ye anónima. Nun pue ver quien retrucó."
+
+msgid "IllegalSurveyId"
+msgstr "Nun se conoz esti identificador d\'encuesta"
+
+msgid "SurveyQuestionMoved"
+msgstr "La entruga movióse."
+
+msgid "IdenticalSurveycodeWarning"
+msgstr "Esti códigu yá esiste. Ye posible qu\'ello seya porque esta encuesta esiste n\'otra llingua. Los usuairos van poder escoyer la llingua na que quieren la encuesta."
+
+msgid "ThisSurveyCodeSoonExistsInThisLanguage"
+msgstr "Esti códigu d\'encuesta yá esiste nesti idioma."
+
+msgid "SurveyUserAnswersHaveBeenRemovedSuccessfully"
+msgstr "Los retruques del usuariu esborrárense dafechu."
+
+msgid "DeleteSurveyByUser"
+msgstr "Esborrar les rempuestes d\'esti usuariu nesta encuesta."
+
+msgid "SelectType"
+msgstr "Escoyer el tipu"
+
+msgid "Conditional"
+msgstr "Condicional"
+
+msgid "ParentSurvey"
+msgstr "Encuesta madre"
+
+msgid "OneQuestionPerPage"
+msgstr "Una entruga per páxina"
+
+msgid "ActivateShuffle"
+msgstr "Activar modu aleatoriu"
+
+msgid "ShowFormProfile"
+msgstr "Amosar el formatu del perfil"
+
+msgid "PersonalityQuestion"
+msgstr "Editar entruga"
+
+msgid "YouNeedToCreateGroups"
+msgstr "Necesita crear grupos"
+
+msgid "ManageGroups"
+msgstr "Alministrar grupos"
+
+msgid "Create"
+msgstr "Crear"
+
+msgid "GroupCreatedSuccessfully"
+msgstr "Creóse el grupu"
+
+msgid "GroupNeedName"
+msgstr "Esti grupu necesita un nome"
+
+msgid "Personality"
+msgstr "Personalizar"
+
+msgid "Condition"
+msgstr "Condición"
+
+msgid "Primary"
+msgstr "Primariu"
+
+msgid "Secondary"
+msgstr "Secundariu"
+
+msgid "CourseSettings"
+msgstr "Configuración de la lleición"
+
+msgid "PleaseChooseACondition"
+msgstr "Por favor, escueya una condición"
+
+msgid "ChooseDifferentCategories"
+msgstr "Escueya otra categoría"
+
+msgid "Version"
+msgstr "Versión"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "NoLogOfDuration"
+msgstr "Nun hai nengún rexistru de duración"
+
+msgid "AutoInviteLink"
+msgstr "Los usuarios que nun tán invitaos puen usar esti enllaz pa facer la encuesta:"
+
+msgid "CompleteTheSurveysQuestions"
+msgstr "Respuenda a les entrugues de la encuesta"
+
+msgid "SurveysDeleted"
+msgstr "Encuestes esborraes"
+
+msgid "RemindUnanswered"
+msgstr "Remembrar sólo pa los usuarios que nun retrucaron"
+
+msgid "ModifySurvey"
+msgstr "Camudar encuesta"
+
+msgid "CreateQuestionSurvey"
+msgstr "Criar entruga"
+
+msgid "ModifyQuestionSurvey"
+msgstr "Camudar entruga"
+
+msgid "BackToSurvey"
+msgstr "Volver a la encuesta"
+
+msgid "UpdateInformation"
+msgstr "Anovamientu d\'información"
+
+msgid "PleaseFillSurvey"
+msgstr "Por favor, rellena la encuesta"
+
+msgid "ReportingOverview"
+msgstr "Sumariu d\'informes"
+
+msgid "ThereAreNotQuestionsForthisSurvey"
+msgstr "Nun ahi entrugues pa esta encuesta"
+

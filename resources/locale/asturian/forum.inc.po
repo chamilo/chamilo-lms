@@ -1,0 +1,414 @@
+msgid "ForumDeleted"
+msgstr "Foru esborráu"
+
+msgid "ForumCategoryDeleted"
+msgstr "Categoría de foru esborrada"
+
+msgid "ForumLocked"
+msgstr "Foru peslláu"
+
+msgid "Forum"
+msgstr "Foros"
+
+msgid "AddForumCategory"
+msgstr "Amestar una categoría de foros"
+
+msgid "AddForum"
+msgstr "Amestar un foru"
+
+msgid "Topics"
+msgstr "Temes"
+
+msgid "Posts"
+msgstr "Mensaxes"
+
+msgid "LastPosts"
+msgstr "Últimu mensaxe"
+
+msgid "Message"
+msgstr "mensaxe"
+
+msgid "NoForumInThisCategory"
+msgstr "Nun hai foros nesta categoría"
+
+msgid "InForumCategory"
+msgstr "Crear na categoría"
+
+msgid "AllowAnonymousPosts"
+msgstr "¿ Permitir mensaxes anónimos ?"
+
+msgid "StudentsCanEdit"
+msgstr "¿ PUen los estudiantes editar los sos mensaxes ?"
+
+msgid "ApprovalDirect"
+msgstr "Aprobar / Mensaxe direutu"
+
+msgid "AllowNewThreads"
+msgstr "Permitir a los estudiantes entamar temes nuevos"
+
+msgid "DefaultViewType"
+msgstr "Tipu de vista por defeutu"
+
+msgid "GroupSettings"
+msgstr "Configuración del grupu"
+
+msgid "NotAGroupForum"
+msgstr "Nun ye un foru de grupu"
+
+msgid "PublicPrivateGroupForum"
+msgstr "¿ Foru de grupu públicu o priváu ?"
+
+msgid "Public"
+msgstr "Pa tolos miembros del cursu"
+
+msgid "Private"
+msgstr "Namás pa los miembros del grupu"
+
+msgid "NewPostStored"
+msgstr "El so mensaxe guardóse"
+
+msgid "ReturnTo"
+msgstr "Agora pue tornar a"
+
+msgid "Or"
+msgstr "o"
+
+msgid "ReplyToThread"
+msgstr "Retrucar a esti tema"
+
+msgid "ReplyToMessage"
+msgstr "Retrucar a esti mensaxe"
+
+msgid "QuoteMessage"
+msgstr "Citar esti mensaxe"
+
+msgid "NewTopic"
+msgstr "Tema nuevu"
+
+msgid "Replies"
+msgstr "Rempuestes"
+
+msgid "Views"
+msgstr "Vistes"
+
+msgid "LastPost"
+msgstr "Últimu mensaxe"
+
+msgid "Quoting"
+msgstr "Cita"
+
+msgid "NotifyByEmail"
+msgstr "Notificar per e-mail de la que daquién retruque"
+
+msgid "StickyPost"
+msgstr "Esti ye un mensaxe d\'avisu (apaez siempre a lo primero, al llau d\'un iconu especial)"
+
+msgid "ReplyShort"
+msgstr "Re:"
+
+msgid "DeletePost"
+msgstr "¿ Ta seguru/a de querer esborrar esti mensaxe ? En esborrándolu va esborrar tamién tolos retruques que tenga. Por favor, pel traviés el visionáu n\'árbol, compruebe qué mensaxes se van esborrar."
+
+msgid "Locked"
+msgstr "Peslláu: los estudiantes nun puen espublizar más mensaxes nesta categoría, foru o tema, pero puen ver los mensaxes que s\'espublizaran enantes."
+
+msgid "Unlocked"
+msgstr "Abiertu: los estudiantes puen esbpublizar mensaxes nuevos nesta categoría, foru o tema"
+
+msgid "Flat"
+msgstr "Plana"
+
+msgid "Threaded"
+msgstr "En forma d\'árbol"
+
+msgid "Nested"
+msgstr "En forma ñeru"
+
+msgid "FlatView"
+msgstr "Vista plana"
+
+msgid "ThreadedView"
+msgstr "Vista n\'árbol"
+
+msgid "NestedView"
+msgstr "Vista xerárquica"
+
+msgid "Structure"
+msgstr "Estructura"
+
+msgid "ForumCategoryAdded"
+msgstr "La categoría nueva de foros amestóse"
+
+msgid "ForumCategoryEdited"
+msgstr "La categoría de foros modificóse"
+
+msgid "ForumAdded"
+msgstr "El foru nuevu amestóse"
+
+msgid "ForumEdited"
+msgstr "El foru modificóse"
+
+msgid "NewThreadStored"
+msgstr "El tema nuevu amestóse"
+
+msgid "Approval"
+msgstr "Aprobar"
+
+msgid "Direct"
+msgstr "Direutu"
+
+msgid "ForGroup"
+msgstr "Pa Grupu"
+
+msgid "ThreadLocked"
+msgstr "Tema peslláu"
+
+msgid "NotAllowedHere"
+msgstr "Equí nun pue entrar"
+
+msgid "ReplyAdded"
+msgstr "La rempuesta amestóse"
+
+msgid "EditPost"
+msgstr "Editar artículu"
+
+msgid "EditPostStored"
+msgstr "El mensaxe modificóse"
+
+msgid "NewForumPost"
+msgstr "Mensaxe nuevu nel foru"
+
+msgid "YouWantedToStayInformed"
+msgstr "Marcó que quier que se lu informe per e-mail si daquién retruca al tema"
+
+msgid "MessageHasToBeApproved"
+msgstr "El so mensaxe tien de s\'aprobar enantes d\'apaecer esplublizáu."
+
+msgid "AllowAttachments"
+msgstr "Permitir axuntos"
+
+msgid "EditForumCategory"
+msgstr "Editar la categoría de foros"
+
+msgid "MovePost"
+msgstr "Mover mensaxe"
+
+msgid "MoveToThread"
+msgstr "Mover a otru tema"
+
+msgid "ANewThread"
+msgstr "Debate nuevu"
+
+msgid "Reply"
+msgstr "Retrucar"
+
+msgid "DeleteForum"
+msgstr "¿ Esborrar el foru ?"
+
+msgid "DeleteForumCategory"
+msgstr "¿ Esborrar la categoría de foros ?"
+
+msgid "Lock"
+msgstr "Bloquear"
+
+msgid "Unlock"
+msgstr "Desbloquear"
+
+msgid "MoveThread"
+msgstr "Mover tema"
+
+msgid "PostVisibilityChanged"
+msgstr "La visibilidá del mensaxe cambió"
+
+msgid "PostDeleted"
+msgstr "El mensaxe esborróse"
+
+msgid "MakeInvisible"
+msgstr "Facer invisible"
+
+msgid "ThreadCanBeFoundHere"
+msgstr "El tema pue atopalu equí"
+
+msgid "MakeVisible"
+msgstr "Facer visible"
+
+msgid "DeleteCompleteThread"
+msgstr "¿ Esborrar el tema dafachu ?"
+
+msgid "PostDeletedSpecial"
+msgstr "El mensaxe d\'avisu esborróse"
+
+msgid "ThreadDeleted"
+msgstr "Tema esborráu"
+
+msgid "NextMessage"
+msgstr "Mensaxe siguiente"
+
+msgid "PrevMessage"
+msgstr "Mensaxe anterior"
+
+msgid "FirstMessage"
+msgstr "Primer mensaxe"
+
+msgid "LastMessage"
+msgstr "Últimu mensaxe"
+
+msgid "ForumSearch"
+msgstr "Buscar nos foros"
+
+msgid "SearchTerm"
+msgstr "Palabra pa buscar"
+
+msgid "ForumSearchResults"
+msgstr "resultaos de la busca nos foros"
+
+msgid "ForumSearchInformation"
+msgstr "Pue buscar varies palabes usando\'l signu +"
+
+msgid "YouWillBeNotifiedOfNewPosts"
+msgstr "Los mensaxes nuevos notificaránse-y per corréu electrónicu"
+
+msgid "YouWillNoLongerBeNotifiedOfNewPosts"
+msgstr "Los mensaxes nuevos nun se-y van notificar más per corréu electrónicu"
+
+msgid "AddImage"
+msgstr "Amestar imaxe"
+
+msgid "QualifyThread"
+msgstr "Poner nota al tema"
+
+msgid "ThreadUsersList"
+msgstr "Llistáu d\'usuarios del tema"
+
+msgid "StudentList"
+msgstr "Llistáu d\'estudiantes"
+
+msgid "QualifyThisThread"
+msgstr "Poner nota a esti tema"
+
+msgid "CourseUsers"
+msgstr "Usuarios del Cursu"
+
+msgid "PostsNumber"
+msgstr "Cantidá de mensaxes"
+
+msgid "NumberOfPostsForThisUser"
+msgstr "Cantidá de mensaxes del usuariu"
+
+msgid "AveragePostPerUser"
+msgstr "Promediu de mensaxes per usuariu"
+
+msgid "QualificationChangesHistory"
+msgstr "Historial de cambios nes notes"
+
+msgid "MoreRecent"
+msgstr "más reciente"
+
+msgid "Older"
+msgstr "más antiguu"
+
+msgid "OrderBy"
+msgstr "Ordenar por"
+
+msgid "WhoChanged"
+msgstr "Quién fizo\'l cambiu"
+
+msgid "NoteChanged"
+msgstr "Anuncia cambiada"
+
+msgid "DateChanged"
+msgstr "Fecha del cambiu"
+
+msgid "ViewComentPost"
+msgstr "Ver comentarios nos mensaxes"
+
+msgid "AllStudents"
+msgstr "Tolos alumnos"
+
+msgid "StudentsQualified"
+msgstr "Alumnos con nota"
+
+msgid "StudentsNotQualified"
+msgstr "Alumnos ensin nota"
+
+msgid "NamesAndLastNames"
+msgstr "Nomes y apellíos"
+
+msgid "MaxScore"
+msgstr "Puntos másimos"
+
+msgid "QualificationCanNotBeGreaterThanMaxScore"
+msgstr "La nota nun pue ser mayor que los puntos másimos"
+
+msgid "ThreadStatistics"
+msgstr "Estadístiques del tema"
+
+msgid "Thread"
+msgstr "Tema"
+
+msgid "NotifyMe"
+msgstr "Avisame"
+
+msgid "ConfirmUserQualification"
+msgstr "¿ Confirmar laa nota del usuariu ?"
+
+msgid "NotChanged"
+msgstr "Nun hai cambios"
+
+msgid "TitleColumnGradebook"
+msgstr "Títulu nel cuadernu de notes"
+
+msgid "QualifyThreadGradebook"
+msgstr "Poner nota nel cuadernu de notes"
+
+msgid "QualifyWeight"
+msgstr "Porcentaxe d\'esta nota na nota final"
+
+msgid "QualifyNumeric"
+msgstr "Nota numbérica pa"
+
+msgid "AlterQualifyThread"
+msgstr "Editar la nota del tema"
+
+msgid "ForumMoved"
+msgstr "Esti foru ta movíu a otru sitiu"
+
+msgid "YouMustAssignWeightOfQualification"
+msgstr "Tienes qu\'asignar el pesu de la cualificación"
+
+msgid "DeleteAttachmentFile"
+msgstr "Desaniciar ficheru axuntu"
+
+msgid "EditAnAttachment"
+msgstr "Editar un axuntu"
+
+msgid "SeeForum"
+msgstr "Ver foru"
+
+msgid "CreateForum"
+msgstr "Criar foru"
+
+msgid "ModifyForum"
+msgstr "Camudar foru"
+
+msgid "CreateThread"
+msgstr "Criar tema"
+
+msgid "ModifyThread"
+msgstr "Camudar tema"
+
+msgid "EditForum"
+msgstr "Editar foru"
+
+msgid "BackToForum"
+msgstr "Volver al foru"
+
+msgid "BackToForumOverview"
+msgstr "Volver a la vista xeneral del foru"
+
+msgid "BackToThread"
+msgstr "Volver al filo"
+
+msgid "ForumcategoryLocked"
+msgstr "Categoría de foru bloquiáu"
+

@@ -1,0 +1,60 @@
+msgid "TermAddNew"
+msgstr "Yapay hoq simita"
+
+msgid "TermName"
+msgstr "Simi"
+
+msgid "TermDefinition"
+msgstr "Simimanta nisqaynin"
+
+msgid "TermDeleted"
+msgstr "Simi pichachisqa"
+
+msgid "TermUpdated"
+msgstr "Simi kunanyachisqa"
+
+msgid "TermConfirmDelete"
+msgstr " Cheqaychu kashanki kay simi pichakunanpaq ?"
+
+msgid "TermAddButton"
+msgstr "Yapa kay simita"
+
+msgid "TermUpdateButton"
+msgstr "Kunanyachiy kay simita"
+
+msgid "TermEdit"
+msgstr "Ruwapay simita"
+
+msgid "TermDeleteAction"
+msgstr "Pichay simita"
+
+msgid "OrderBy"
+msgstr "Pipuwan allichasqa"
+
+msgid "CreationDate"
+msgstr "Pacha kamarichisqa"
+
+msgid "UpdateDate"
+msgstr "Qepa t\'jrapachisqan"
+
+msgid "PreSelectedOrder"
+msgstr "Allichasqa ajllaypi"
+
+msgid "TermAdded"
+msgstr "Simi yapasqa"
+
+msgid "YouMustEnterATermName"
+msgstr "Haykuchiwaq hoq simita"
+
+msgid "YouMustEnterATermDefinition"
+msgstr "Haykuchiwaq simiq nisqayninta"
+
+msgid "TableView"
+msgstr "Qhawariy llaqllapi hina"
+
+msgid "GlossaryTermAlreadyExistsYouShouldEditIt"
+msgstr "Kay simiqa glosario nisqapi kashanña, ama hina kaychu hoq sutiwan churay"
+
+msgid "GlossaryManagement"
+msgstr "Administración de glosario"
+

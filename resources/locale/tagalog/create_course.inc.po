@@ -1,0 +1,12 @@
+msgid "langCourseProgram"
+msgstr "Paglalarawan"
+
+msgid "langLn"
+msgstr "Wika"
+
+msgid "langFac"
+msgstr "Kategorya"
+
+msgid "langDepartmentUrl"
+msgstr "URL ng Departamento"
+

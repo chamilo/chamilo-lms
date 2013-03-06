@@ -1,0 +1,1113 @@
+msgid "langExercice"
+msgstr "Тест"
+
+msgid "langActivate"
+msgstr "Активиране"
+
+msgid "langDeactivate"
+msgstr "Дезактивиране"
+
+msgid "langNoEx"
+msgstr "Засега няма тестове."
+
+msgid "langNewEx"
+msgstr "Нов тест"
+
+msgid "langQuestion"
+msgstr "Въпрос"
+
+msgid "langQuestions"
+msgstr "Въпроси"
+
+msgid "langAnswers"
+msgstr "Отговори"
+
+msgid "langTrue"
+msgstr "Вярно"
+
+msgid "langAnswer"
+msgstr "Отговор"
+
+msgid "langResult"
+msgstr "Резултат"
+
+msgid "langNoResult"
+msgstr "Все още няма резултати."
+
+msgid "langYourResults"
+msgstr "Вашите резултати"
+
+msgid "langStudentResults"
+msgstr "Резултати на курсистите"
+
+msgid "langExerciseType"
+msgstr "Тип на теста"
+
+msgid "langExerciseName"
+msgstr "Име на теста"
+
+msgid "langExerciseDescription"
+msgstr "Описание на теста"
+
+msgid "langSimpleExercise"
+msgstr "Всички въпроси на една страница"
+
+msgid "langSequentialExercise"
+msgstr "Всеки въпрос на отделна страница"
+
+msgid "langRandomQuestions"
+msgstr "Случайни въпроси"
+
+msgid "langGiveExerciseName"
+msgstr "Моля, дайте име на теста."
+
+msgid "langSound"
+msgstr "Мултимедиен файл"
+
+msgid "langDeleteSound"
+msgstr "Изтриване на мултимедийния файл"
+
+msgid "langNoAnswer"
+msgstr "Все още няма отговор."
+
+msgid "langGoBackToQuestionPool"
+msgstr "Обратно към въпросите"
+
+msgid "langGoBackToQuestionList"
+msgstr "Обратно към списъка с въпроси"
+
+msgid "langQuestionAnswers"
+msgstr "Отговорете на въпроса"
+
+msgid "langUsedInSeveralExercises"
+msgstr "Внимание! Този въпрос и отговорите му се използват в няколко теста. Искате ли да го промените?"
+
+msgid "langModifyInAllExercises"
+msgstr "във всички тестове"
+
+msgid "langModifyInThisExercise"
+msgstr "само в текущия тест"
+
+msgid "langAnswerType"
+msgstr "Как се отговаря"
+
+msgid "langMultipleSelect"
+msgstr "Един или повече верни отговора"
+
+msgid "langFillBlanks"
+msgstr "Попълват се празните места"
+
+msgid "langMatching"
+msgstr "Съпоставяне"
+
+msgid "langAddPicture"
+msgstr "Добавяне на снимка"
+
+msgid "langReplacePicture"
+msgstr "Замяна на изображението"
+
+msgid "langDeletePicture"
+msgstr "Премахване на снимка"
+
+msgid "langQuestionDescription"
+msgstr "Допълнителен текст"
+
+msgid "langGiveQuestion"
+msgstr "Моля, въведете въпроса."
+
+msgid "langWeightingForEachBlank"
+msgstr "Моля, въведете теглото на всяко празно място"
+
+msgid "langUseTagForBlank"
+msgstr "като използвате квадратни скоби [...] за определянето на едно или повече празни места"
+
+msgid "langQuestionWeighting"
+msgstr "Тегло"
+
+msgid "langMoreAnswers"
+msgstr "+отговор"
+
+msgid "langLessAnswers"
+msgstr "-отговор"
+
+msgid "langMoreElements"
+msgstr "+елемент"
+
+msgid "langLessElements"
+msgstr "-елемент"
+
+msgid "langTypeTextBelow"
+msgstr "Моля, въведете вашия текст по-долу"
+
+msgid "langDefaultTextInBlanks"
+msgstr "<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\"> <tbody> <tr> <td colspan=\"2\"> <h3>Пример : Изчислете масовият индекс на човешкото тяло</h3> </td> </tr> <tr> <td style=\"text-align: right;\"><strong>Възраст</strong></td> <td width=\"75%\" style=\"\">[25] години</td> </tr> <tr> <td style=\"text-align: right;\"><strong>Пол</strong></td> <td style=\"\" text-align:=\"\">[M] (M или F)</td> </tr> <tr> <td style=\"text-align: right;\"><strong>Тегло</strong></td> <td style=\"\" text-align:=\"\">95 Kg</td> </tr> <tr> <td style=\"vertical-align: top; text-align: right;\"><strong>Височина</strong></td> <td style=\"vertical-align: top;\">1.81 m</td> </tr> <tr> <td style=\"vertical-align: top; text-align: right;\"><strong>Масов индекс на тялото (BMI)</strong></td> <td style=\"vertical-align: top;\">[29] BMI =Тегло/Височина<sup>2</sup> (вижте <a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,\'\',\'resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status\'); return false\"> статията във Wikipedia</a>)</td> </tr> </tbody> </table>"
+
+msgid "langDefaultMatchingOptA"
+msgstr "Да си запиша адреса."
+
+msgid "langDefaultMatchingOptB"
+msgstr "Да потърся \"Бърза помощ\"."
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "Първа стъпка"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "Втора стъпка"
+
+msgid "langDefineOptions"
+msgstr "с опциите"
+
+msgid "langMakeCorrespond"
+msgstr "Съпоставете"
+
+msgid "langFillLists"
+msgstr "Моля, попълнете двата списъка по-долу."
+
+msgid "langGiveText"
+msgstr "Моля, въведете текста"
+
+msgid "langDefineBlanks"
+msgstr "Моля, маркирайте поне едно празно място с квадратни скоби [...]."
+
+msgid "langGiveAnswers"
+msgstr "Моля, въведете отговорите на въпросите"
+
+msgid "langChooseGoodAnswer"
+msgstr "Моля, маркирайте верния отговор"
+
+msgid "langChooseGoodAnswers"
+msgstr "Моля, маркирайте един или повече верни отговора"
+
+msgid "langQuestionList"
+msgstr "Списък с въпроси за теста"
+
+msgid "langMoveUp"
+msgstr "Преместване нагоре"
+
+msgid "langMoveDown"
+msgstr "Преместване надолу"
+
+msgid "langGetExistingQuestion"
+msgstr "Използване на съществуващ въпрос"
+
+msgid "langFinishTest"
+msgstr "Край на теста"
+
+msgid "langQuestionPool"
+msgstr "Съществуващи въпроси"
+
+msgid "langOrphanQuestions"
+msgstr "Неизползвани въпроси"
+
+msgid "langNoQuestion"
+msgstr "Засега няма въпроси."
+
+msgid "langAllExercises"
+msgstr "Всички тестове"
+
+msgid "langFilter"
+msgstr "Филтър"
+
+msgid "langGoBackToEx"
+msgstr "Обратно към теста"
+
+msgid "langReuse"
+msgstr "Повторно използване"
+
+msgid "langExerciseManagement"
+msgstr "Редактиране на теста"
+
+msgid "langQuestionManagement"
+msgstr "Редактиране на въпросите и отговорите"
+
+msgid "langQuestionNotFound"
+msgstr "Въпросът не е намерен."
+
+msgid "langExerciseNotFound"
+msgstr "Тестът не съществува или не е достъпен."
+
+msgid "langAlreadyAnswered"
+msgstr "Вече сте отговорили на този въпрос."
+
+msgid "langElementList"
+msgstr "Списък на елементите"
+
+msgid "langScore"
+msgstr "Резултат"
+
+msgid "langCorrespondsTo"
+msgstr "Отговаря на"
+
+msgid "langExpectedChoice"
+msgstr "Очакван избор"
+
+msgid "langYourTotalScore"
+msgstr "Вашият общ резултат е"
+
+msgid "ReachedMaxAttemptsAdmin"
+msgstr "Достигнахте максималният брой опити за този тест. Ако сте инструктор, можете да продължите да практикевате теста, но вашите резултати няма да се отчитат."
+
+msgid "langExerciseAdded"
+msgstr "Добавен е тест."
+
+msgid "Build"
+msgstr "Създаване"
+
+msgid "langEvalSet"
+msgstr "Настройки на оценяването"
+
+msgid "langActive"
+msgstr "активно"
+
+msgid "langInactive"
+msgstr "неактивно"
+
+msgid "langQuestCreate"
+msgstr "Създаване на въпросите"
+
+msgid "langExRecord"
+msgstr "Вашият тест е записан."
+
+msgid "langBackModif"
+msgstr "Назад към редактиране на теста"
+
+msgid "langDoEx"
+msgstr "Направи теста"
+
+msgid "langDefScor"
+msgstr "Да се определи оценъчната система"
+
+msgid "langCreateModif"
+msgstr "Създаване/промени на въпросите"
+
+msgid "langSub"
+msgstr "Подзаглавие"
+
+msgid "langMyAnswer"
+msgstr "Моят отговор"
+
+msgid "langMorA"
+msgstr "+отговор"
+
+msgid "langLesA"
+msgstr "-отговор"
+
+msgid "langRecEx"
+msgstr "Запиши теста"
+
+msgid "langRecQu"
+msgstr "Запиши въпроса"
+
+msgid "langRecAns"
+msgstr "Запиши отговорите"
+
+msgid "langIntroduction"
+msgstr "Въведение"
+
+msgid "langTitleAssistant"
+msgstr "Сътрудник по създаването на тестовете"
+
+msgid "langQuesList"
+msgstr "Списък с въпроси"
+
+msgid "langSaveEx"
+msgstr "Запиши тестовете"
+
+msgid "langFinish"
+msgstr "Край"
+
+msgid "langCancel"
+msgstr "Отказ"
+
+msgid "langQImage"
+msgstr "Въпрос с изображение"
+
+msgid "langAddQ"
+msgstr "Добави въпрос"
+
+msgid "langDoAnEx"
+msgstr "Направи теста"
+
+msgid "langGenerator"
+msgstr "Тестове"
+
+msgid "langChoice"
+msgstr "Вашият избор"
+
+msgid "langCorrect"
+msgstr "Вярно"
+
+msgid "langPossAnsw"
+msgstr "Брой на верните отговори за един въпрос"
+
+msgid "langStudAnsw"
+msgstr "Брой на грешките, направени от курсиста"
+
+msgid "langDetermine"
+msgstr "Променете оценъчната система, като редактирате долната таблица. След това щракнете \"ОК\""
+
+msgid "langNonNumber"
+msgstr "Нецифрова стойност в"
+
+msgid "langReplaced"
+msgstr "е въведена. Тя е заместена с 0."
+
+msgid "langSuperior"
+msgstr "Стойност, по-голяма от 20 в"
+
+msgid "langRep20"
+msgstr "е въведена. Тя е заместена с 20."
+
+msgid "langDefault"
+msgstr "Стойности по подразбиране *"
+
+msgid "langDefComment"
+msgstr "* Ако изберете \"Стойности по подразбиране\", всички предишни стойности ще бъдат изтрити."
+
+msgid "langScoreGet"
+msgstr "Числата в черно = резултат"
+
+msgid "langShowScor"
+msgstr "Покажи резултата на курсиста:"
+
+msgid "langStep1"
+msgstr "Стъпка 1"
+
+msgid "langStep2"
+msgstr "Стъпка 2"
+
+msgid "langTake"
+msgstr "вземи"
+
+msgid "langAmong"
+msgstr "измежду"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "Импортиране на тестове от HotPotatoes"
+
+msgid "langHotPotatoesTests"
+msgstr "Импортиране на тестове от HotPotatoes"
+
+msgid "langDownloadFile"
+msgstr "Качване на файл"
+
+msgid "langDownloadImg"
+msgstr "Качване на изображение на сървъра"
+
+msgid "langDownloadEnd"
+msgstr "Качването е извършено."
+
+msgid "langNoSpace"
+msgstr "Качването не е успешно. Няма достатъчно свободно място в папката."
+
+msgid "langZipNoPhp"
+msgstr "ZIP-архивът не трябва да съдържа PHP-файлове."
+
+msgid "langNoImg"
+msgstr "Тест без изображения"
+
+msgid "langImgNote_st"
+msgstr "<br/> Все още трябва да качите"
+
+msgid "langImgNote_en"
+msgstr "изображение(я) :"
+
+msgid "langDocDeleted"
+msgstr "Документът е изтрит."
+
+msgid "langViMod"
+msgstr "Видимостта на файла е променена."
+
+msgid "langNameNotEqual"
+msgstr "е невалиден файл."
+
+msgid "langIndice"
+msgstr "Индекс"
+
+msgid "langIndices"
+msgstr "Индекси"
+
+msgid "langDateExo"
+msgstr "Дата"
+
+msgid "langShowQuestion"
+msgstr "Покажи въпроса"
+
+msgid "langUnknownExercise"
+msgstr "Неразпознат тест"
+
+msgid "langReuseQuestion"
+msgstr "Повторно използване на въпроса"
+
+msgid "langCreateExercise"
+msgstr "Създаване на упражнение"
+
+msgid "langCreateQuestion"
+msgstr "Създаване на въпрос"
+
+msgid "langCreateAnswers"
+msgstr "Създаване на отговори"
+
+msgid "langModifyExercise"
+msgstr "Промяна на теста"
+
+msgid "langModifyAnswers"
+msgstr "Промяна на отговорите"
+
+msgid "langForExercise"
+msgstr "за теста"
+
+msgid "langUseExistantQuestion"
+msgstr "Използване на вече съществуващи въпроси"
+
+msgid "FreeAnswer"
+msgstr "Свободен отговор"
+
+msgid "notCorrectedYet"
+msgstr "Този отговор все още не е проверен. Засега вашият резултат за този въпрос е 0 и не допринася към общия резултат."
+
+msgid "adminHP"
+msgstr "HotPotatoes администратор"
+
+msgid "NewQu"
+msgstr "Нов въпрос"
+
+msgid "NoImage"
+msgstr "Моля, изберете изображение в долния край на страницата."
+
+msgid "langAnswerHotspot"
+msgstr "Описание и тегло се изискват за всяка гореща зона. Коментарите са по желание."
+
+msgid "langMinHotspot"
+msgstr "Трябва да създадете поне една гореща зона."
+
+msgid "langMaxHotspot"
+msgstr "Максималният брой горещи зони, които можете да създадете е 12."
+
+msgid "langHotspotError"
+msgstr "Моля, въведете описание и тегло за всяка гореща зона."
+
+msgid "langMoreHotspots"
+msgstr "+гореща зона"
+
+msgid "langLessHotspots"
+msgstr "-гореща зона"
+
+msgid "langHotspotZones"
+msgstr "Горещи зони"
+
+msgid "langNextQuestion"
+msgstr "Следващ въпрос"
+
+msgid "langCorrectAnswer"
+msgstr "Верен отговор"
+
+msgid "langHotspotHit"
+msgstr "Вашият отговор е"
+
+msgid "langOnlyJPG"
+msgstr "За определянето на горещите зони можете да използвате само JPG (или JPEG) изображения."
+
+msgid "langFinishThisTest"
+msgstr "Показване на верните отговори за всеки въпрос и общия резултат от теста"
+
+msgid "langAllQuestions"
+msgstr "Всички въпроси"
+
+msgid "langModifyTitleDescription"
+msgstr "Редактиране на заглавието и описанието"
+
+msgid "langModifyHotspots"
+msgstr "Редактиране на отговорите и горещите зони"
+
+msgid "langHotspotNotDrawn"
+msgstr "Още не сте определили всичките си горещи зони."
+
+msgid "langHotspotWeightingError"
+msgstr "Трябва да зададете положително (>0) тегло за всичките горещи зони."
+
+msgid "langHotspotValidateError1"
+msgstr "Трябва да отговорите напълно на въпроса ("
+
+msgid "langHotspotValidateError2"
+msgstr "щракване(-ия) върху изображението се изискват), преди да видите резултатите."
+
+msgid "langHotspotRequired"
+msgstr "Описание и тегло се изискват за всяка гореща точка. Коментарите са по желание."
+
+msgid "langHotspotChoose"
+msgstr "<div style=\"padding:2px 3px;\">• За да създадете \"гореща зона\": изберете геометрична фигура и я начертайте.</div><div style=\"padding:2px 3px;\">• За да преместите \"гореща зона\": изберете цвета, щракнете върху друга \"гореща зона\" в изображението и я преначертайте.</div><div style=\"padding:2px 3px;\">• За да добавите \"гореща зона\": щракнете бутона [+гореща зона].</div><div style=\"padding:2px 3px;\">• За да затворите многоъгълник: щракнете с десния бутон и изберете \"Затваряне на многоъгълник\".</div>"
+
+msgid "Fault"
+msgstr "Грешен отговор"
+
+msgid "HotSpot"
+msgstr "Горещи зони"
+
+msgid "ClickNumber"
+msgstr "Щракване номер"
+
+msgid "HotspotGiveAnswers"
+msgstr "Моля, дайте отговор."
+
+msgid "Addlimits"
+msgstr "Добавяне на ограничения"
+
+msgid "AreYouSure"
+msgstr "Сигурни ли сте"
+
+msgid "StudentScore"
+msgstr "Резултат на курсиста"
+
+msgid "backtoTesthome"
+msgstr "Обратно към началната страница на теста"
+
+msgid "Feedback"
+msgstr "Коментар"
+
+msgid "MarkIsUpdated"
+msgstr "Оценката е актуализирана."
+
+msgid "MarkInserted"
+msgstr "Оценката е дадена."
+
+msgid "PleaseGiveAMark"
+msgstr "Моля, дайте оценка."
+
+msgid "EditCommentsAndMarks"
+msgstr "Отговори на теста"
+
+msgid "AddComments"
+msgstr "Добавяне на коментар"
+
+msgid "Number"
+msgstr "No"
+
+msgid "Weighting"
+msgstr "Тегло"
+
+msgid "ChooseQuestionType"
+msgstr "Изберете по-долу типа на въпроса"
+
+msgid "MatchesTo"
+msgstr "Отговаря на"
+
+msgid "CorrectTest"
+msgstr "Отговори на теста"
+
+msgid "ViewTest"
+msgstr "Преглед"
+
+msgid "State"
+msgstr "Статус"
+
+msgid "NotAttempted"
+msgstr "Не е пробван"
+
+msgid "AddElem"
+msgstr "+елемент"
+
+msgid "DelElem"
+msgstr "-елемент"
+
+msgid "PlusAnswer"
+msgstr "+отговор"
+
+msgid "LessAnswer"
+msgstr "-отговор"
+
+msgid "YourScore"
+msgstr "Вашият резултат"
+
+msgid "Attempted"
+msgstr "Пробван"
+
+msgid "AssignMarks"
+msgstr "Даване на оценка"
+
+msgid "Results"
+msgstr "Резултати"
+
+msgid "ExerciseStored"
+msgstr "Тестът е записан."
+
+msgid "ChooseAtLeastOneCheckbox"
+msgstr "Изберете поне един верен отговор."
+
+msgid "ExerciseEdited"
+msgstr "Тестът е променен."
+
+msgid "ExerciseDeleted"
+msgstr "Тестът е изтрит."
+
+msgid "ClickToCommentAndGiveFeedback"
+msgstr "Щракнете връзката, за да проверите отговора и да дадете коментар."
+
+msgid "OpenQuestionsAttempted"
+msgstr "Курсист е отговорил на въпрос със свободен отговор."
+
+msgid "AttemptDetails"
+msgstr "Информация за пробите"
+
+msgid "TestAttempted"
+msgstr "Тестът е пробван"
+
+msgid "StudentName"
+msgstr "Име на курсиста"
+
+msgid "StudentEmail"
+msgstr "E-mail на курсисга"
+
+msgid "OpenQuestionsAttemptedAre"
+msgstr "Дадените свободни отговори са"
+
+msgid "CourseName"
+msgstr "Име на курса"
+
+msgid "UploadJpgPicture"
+msgstr "Качване на изображение (JPG, JPEG)"
+
+msgid "HotspotDescription"
+msgstr "Hotspot описание"
+
+msgid "ExamSheetVCC"
+msgstr "Отговорите на теста са прегледани от преподавателя."
+
+msgid "AttemptVCC"
+msgstr "Вашият последен опит да решите тест е прегледан от преподавателя."
+
+msgid "ClickLinkToViewComment"
+msgstr "Щракнете връзката по-долу, за да видите отговорите на теста както и коментари и оценки от преподавателя (ако има такива)."
+
+msgid "Regards"
+msgstr "Поздрави"
+
+msgid "AttemptVCCLong"
+msgstr "Вашият опит за решаване на теста %s е прегледан от преподавателя. Щракнете връзката по-долу, за да видите отговорите на теста както и коментари и оценки от преподавателя (ако има такива)."
+
+msgid "DearStudentEmailIntroduction"
+msgstr "Уважаеми колега,"
+
+msgid "ExerciseFinished"
+msgstr "Тестът е завършен."
+
+msgid "ResultsEnabled"
+msgstr "Резултатите ще се показват на курсистите"
+
+msgid "ResultsDisabled"
+msgstr "Резултатите няма да се показват на курсистите"
+
+msgid "ExportWithUserFields"
+msgstr "Да се включат допълнителните полета за потребителя при експортирането"
+
+msgid "ExportWithoutUserFields"
+msgstr "Да не се включват допълнителните полета за потребителя при експортирането"
+
+msgid "DisableResults"
+msgstr "Да не се показват резултатите на курсистите"
+
+msgid "EnableResults"
+msgstr "Да се показват резултатите на курсистите"
+
+msgid "ValidateAnswer"
+msgstr "Проверка на отговорите"
+
+msgid "FillInBlankSwitchable"
+msgstr "Липсващите думи или словосъчетания могат да се попълват в произволен ред"
+
+msgid "ReachedMaxAttempts"
+msgstr "Не можете да започнете теста \'%s\' защото сте направили максималният брой опити - %s."
+
+msgid "AdvancedParameters"
+msgstr "Допълнителни опции"
+
+msgid "RandomQuestionsToDisplay"
+msgstr "Брой на показваните въпроси в случаен ред"
+
+msgid "RandomQuestionsHelp"
+msgstr "Брой на показваните въпроси в случаен ред, които ще се избират случайно измежду пълния списък с въпроси.<br />Изберете максималния брой, ако искате всички въпроси от теста да се показват в случаен ред."
+
+msgid "ExerciseAttempts"
+msgstr "Максимален брой опити"
+
+msgid "DoNotRandomize"
+msgstr "Всички въпроси в оригиналния ред"
+
+msgid "Infinite"
+msgstr "Не е ограничен"
+
+msgid "BackToExercisesList"
+msgstr "Обратно към тестовете"
+
+msgid "ViewScoreChangeHistory"
+msgstr "Преглед на историята с резултати"
+
+msgid "NoStartDate"
+msgstr "Няма начална дата."
+
+msgid "NoLogOfDuration"
+msgstr "Няма записи за продължителност."
+
+msgid "EnableTimeLimits"
+msgstr "Активиране на времеви ограничения"
+
+msgid "ExeStartTime"
+msgstr "Начална дата"
+
+msgid "ExeEndTime"
+msgstr "Крайна дата"
+
+msgid "Value"
+msgstr "Сойност"
+
+msgid "DeleteAttempt"
+msgstr "Да се изтрие ли този опит?"
+
+msgid "WithoutComment"
+msgstr "Без коментар"
+
+msgid "QuantityQuestions"
+msgstr "Брой въпроси"
+
+msgid "FilterExercices"
+msgstr "Филтър за тестовете"
+
+msgid "FilterByNotRevised"
+msgstr "Без оценка"
+
+msgid "FilterByRevised"
+msgstr "Само оценените"
+
+msgid "Duration"
+msgstr "Продължителност"
+
+msgid "ReachedTimeLimit"
+msgstr "Ограничението за време е преминато."
+
+msgid "TryAgain"
+msgstr "Опитайте отново."
+
+msgid "SeeTheory"
+msgstr "Теоретичен материал"
+
+msgid "EndActivity"
+msgstr "Край на дейността"
+
+msgid "NoFeedback"
+msgstr "Тест (резултатът не се показва)"
+
+msgid "DirectFeedback"
+msgstr "Упражнение (резултатът се показва незабавно)"
+
+msgid "FeedbackType"
+msgstr "Обратна връзка"
+
+msgid "Scenario"
+msgstr "Сценарий"
+
+msgid "VisitUrl"
+msgstr "Вижте връзката"
+
+msgid "ExitTest"
+msgstr "Изход от теста"
+
+msgid "DurationFormat"
+msgstr "%1 секунди"
+
+msgid "Difficulty"
+msgstr "Трудност"
+
+msgid "NewScore"
+msgstr "Нов резултат"
+
+msgid "NewComment"
+msgstr "Нов коментар"
+
+msgid "ExerciseNoStartedYet"
+msgstr "Тестът още не е започван."
+
+msgid "ExerciseNoStartedAdmin"
+msgstr "Тестът още не е разрешен от преподавателя за започване."
+
+msgid "SelectTargetLP"
+msgstr "Изберете пътека за обучение"
+
+msgid "SelectTargetQuestion"
+msgstr "Изберете въпрос"
+
+msgid "DirectFeedbackCantModifyTypeQuestion"
+msgstr "Не можете да промените типа на теста, защото той е зададен като упражнение за самостоятелна оценка. При упражнението за самостоятелна оценка можете да дадете коментари за обратна връзка, но то не е съвместимо с всичките възможни типове въпроси."
+
+msgid "CantShowResults"
+msgstr "Няма резултати."
+
+msgid "CantViewResults"
+msgstr "Резултатите не са достъпни."
+
+msgid "ShowCorrectedOnly"
+msgstr "Показване на прегледаните отговори"
+
+msgid "ShowUnCorrectedOnly"
+msgstr "Показване на непрегледаните отговори"
+
+msgid "HideResultsToStudents"
+msgstr "Скриване на резултатите"
+
+msgid "ShowResultsToStudents"
+msgstr "Показване на резултата на курсиста"
+
+msgid "ProcedToQuestions"
+msgstr "Продължаване с въпросите"
+
+msgid "AddQuestionToExercise"
+msgstr "Добавяне на въпроса към теста"
+
+msgid "PresentationQuestions"
+msgstr "Показване"
+
+msgid "UniqueAnswer"
+msgstr "Само един верен отговор"
+
+msgid "MultipleAnswer"
+msgstr "Един или повече верни отговора"
+
+msgid "ReachedOneAttempt"
+msgstr "Не можете да преминете този тест, защото опитахте веднъж."
+
+msgid "QuestionsPerPage"
+msgstr "Въпроси на страница"
+
+msgid "QuestionsPerPageOne"
+msgstr "Един"
+
+msgid "QuestionsPerPageAll"
+msgstr "Всички"
+
+msgid "EditIndividualComment"
+msgstr "Преглед и коментар на отговор"
+
+msgid "ThankYouForPassingTheTest"
+msgstr "Благодарим Ви, че преминахте теста."
+
+msgid "ExerciseAtTheEndOfTheTest"
+msgstr "В края ня теста"
+
+msgid "EnrichQuestion"
+msgstr "Допълване на въпроса"
+
+msgid "langDefaultUniqueQuestion"
+msgstr "Изберете правилното съждение"
+
+msgid "langDefaultUniqueAnswer1"
+msgstr "A, след това B, след това C"
+
+msgid "langDefaultUniqueComment1"
+msgstr "Млякото е суровина за много млечни продукти като масло, сирене, кисело мляко, както и"
+
+msgid "langDefaultUniqueAnswer2"
+msgstr "A, след това C, след това B"
+
+msgid "langDefaultUniqueComment2"
+msgstr "Овесът е една от най-разпространените зърнени храни. Заради калориите и хранителните си качества той е бил основен за изхранването на хората."
+
+msgid "langDefaultMultipleQuestion"
+msgstr "Крайното изтощение е следствие на ..."
+
+msgid "langDefaultMultipleAnswer1"
+msgstr "Недостиг на калций."
+
+msgid "langDefaultMultipleComment1"
+msgstr "Калцият има ролята на ..."
+
+msgid "langDefaultMultipleAnswer2"
+msgstr "Недостиг на витамин A."
+
+msgid "langDefaultMultipleComment2"
+msgstr "Витамин A е необходим за ..."
+
+msgid "langDefaultFillBlankQuestion"
+msgstr "Изчислете масовият индекс на човешкото тяло"
+
+msgid "langDefaultMathingQuestion"
+msgstr "Посочете ред на операциите"
+
+msgid "langDefaultOpenQuestion"
+msgstr "Напишете списък с 10-те най-важни качества на добрия мениджър на проекти."
+
+msgid "langMoreHotspotsImage"
+msgstr "Добавяне на \"горещи зони\" в изображението"
+
+msgid "ReachedTimeLimitAdmin"
+msgstr "Достигнат е времеви лимит, зададен от преподавател."
+
+msgid "LastScoreTest"
+msgstr "Последен резултат от теста"
+
+msgid "BackToResultList"
+msgstr "Обратно към списъка с резултатите"
+
+msgid "EditingScoreCauseProblemsToExercisesInLP"
+msgstr "Ако редактирате максималния резултат, имайте предвид, че тестът вече е добавен в пътека за обучение. Възможни са проблеми."
+
+msgid "SelectExercice"
+msgstr "Изберете тест"
+
+msgid "YouHaveToSelectATest"
+msgstr "Трябва да изберете тест."
+
+msgid "HotspotDelineation"
+msgstr "Очертаване"
+
+msgid "CreateQuestions"
+msgstr "Създаване на въпрос"
+
+msgid "MoreOAR"
+msgstr "Зони с висок риск"
+
+msgid "LessOAR"
+msgstr "Зони с нисък риск"
+
+msgid "LearnerIsInformed"
+msgstr "Това съобщение, както и таблицата с резилтатите ще се появи, ако курсистът не успее в тази стъпка"
+
+msgid "MinOverlap"
+msgstr "Минимално припокриване"
+
+msgid "MaxExcess"
+msgstr "Максимален излишък"
+
+msgid "MaxMissing"
+msgstr "Максимум липси"
+
+msgid "IfNoError"
+msgstr "Ако няма грешки"
+
+msgid "LearnerHasNoMistake"
+msgstr "Курсистът не допусна грешка."
+
+msgid "YourAnswer"
+msgstr "Вашият отговор"
+
+msgid "YourDelineation"
+msgstr "Вашето очертаване:"
+
+msgid "ResultIs"
+msgstr "Вашият резултат е:"
+
+msgid "Overlap"
+msgstr "Припокриване"
+
+msgid "Missing"
+msgstr "Липсваща зона"
+
+msgid "Excess"
+msgstr "Излишна зона"
+
+msgid "Min"
+msgstr "Минимум"
+
+msgid "Max"
+msgstr "Максимум"
+
+msgid "Requirements"
+msgstr "Изисквания"
+
+msgid "OARHit"
+msgstr "Една или повече зони с повишен риск са засегнати."
+
+msgid "TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons"
+msgstr "Твърде много изчисления са необходими за възприемане на вашия отговор. Моля, направете очертанието по-опростено."
+
+msgid "Thresholds"
+msgstr "Прагови стойности"
+
+msgid "Delineation"
+msgstr "Очертаване"
+
+msgid "QuestionTypeDoesNotBelongToFeedbackTypeInExercise"
+msgstr "Типът въпрос не изисква преглед и оценяване от преподавател."
+
+msgid "XResultsCleaned"
+msgstr "%d резултата са изтрити."
+
+msgid "AreYouSureToDeleteResults"
+msgstr "Сигурни ли сте, че искате да изтриете резултатите?"
+
+msgid "ExerciseCopied"
+msgstr "Тестът е копиран."
+
+msgid "AreYouSureToCopy"
+msgstr "Сигурни ли сте, че искате да копирате"
+
+msgid "EditingExerciseCauseProblemsInLP"
+msgstr "Редактирането на теста може да доведе до проблеми в пътеката за обучение."
+
+msgid "SessionIsReadOnly"
+msgstr "Сесията е само за четене."
+
+msgid "EnableTimerControl"
+msgstr "Включване на таймер"
+
+msgid "ExerciseTotalDurationInMinutes"
+msgstr "Продължителност на целия тест в минути"
+
+msgid "ToContinueUseMenu"
+msgstr "За продължение използвайте страничното меню."
+
+msgid "RandomAnswers"
+msgstr "Случаен ред на предложените отговори"
+
+msgid "NotMarkActivity"
+msgstr "Тази дейност не може да бъде оценена."
+
+msgid "YouHaveToCreateAtLeastOneAnswer"
+msgstr "Трябва да създадете поне един отговор."
+
+msgid "ExerciseAttempted"
+msgstr "Тестът е пробван."
+
+msgid "MultipleSelectCombination"
+msgstr "Същата избрана комбинация"
+
+msgid "MultipleAnswerCombination"
+msgstr "Същата комбинация от отговори"
+
+msgid "ExerciceExpiredTimeMessage"
+msgstr "Времевият лимит на теста е надхвърлен."
+
+msgid "CopyExercise"
+msgstr "Копиране на теста в нов"
+
+msgid "CleanStudentResults"
+msgstr "Изтриване на всички резултати на курсистите за теста"
+
+msgid "ImportQtiQuiz"
+msgstr "Qti2 импорт на тестове"
+
+msgid "ReUseACopyInCurrentTest"
+msgstr "Използване на ново копие в теста"
+
+msgid "Copy"
+msgstr "Копиране"
+
+msgid "ScoreAverageFromAllAttempts"
+msgstr "Среден резултат от всички опити"
+
+msgid "DefaultContent"
+msgstr "Създаване на примерно съдържание"
+
+msgid "ExerciseEditionNotAvailableInSession"
+msgstr "Не можете да редактирате този тест докато сте в сесия."
+
+msgid "UniqueAnswerNoOption"
+msgstr "Уникален отговор или \"не знам\""
+
+msgid "MultipleAnswerTrueFalse"
+msgstr "Повече от един верни отговора или \"не знам\""
+
+msgid "MultipleAnswerCombinationTrueFalse"
+msgstr "Комбинация истина/лъжа/не знам"
+
+msgid "DontKnow"
+msgstr "Не знам"
+

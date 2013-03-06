@@ -1,0 +1,330 @@
+msgid "langStatDB"
+msgstr "Naplózó adatbázis"
+
+msgid "langEnableTracking"
+msgstr "Naplózás engedélyezése"
+
+msgid "langInstituteShortName"
+msgstr "A szervezet/cég/egyesület rövid neve"
+
+msgid "langWarningResponsible"
+msgstr "Ezt a szkriptet csak helyreállítás után használja. A Chamilo csapat nem vállal felelősséget semmilyen adatvesztés vagy adatsérülés esetén."
+
+msgid "langAllowSelfRegProf"
+msgstr "Saját regisztráció kurzusvezetőként engedélyezett"
+
+msgid "langEG"
+msgstr "pl."
+
+msgid "langDBHost"
+msgstr "Adatbázis szerver"
+
+msgid "langDBLogin"
+msgstr "Adatbázis felhasználói név"
+
+msgid "langDBPassword"
+msgstr "Adatbázis jelszó"
+
+msgid "langMainDB"
+msgstr "Fő Chamilo adatbázis (DB)"
+
+msgid "langAllFieldsRequired"
+msgstr "minden mező kitöltése kötelező"
+
+msgid "langPrintVers"
+msgstr "Nyomtatható verzió"
+
+msgid "langLocalPath"
+msgstr "A helyi elérési úttal összhangban"
+
+msgid "langAdminEmail"
+msgstr "Adminisztrátor e-mail"
+
+msgid "langAdminName"
+msgstr "Adminisztrátor neve"
+
+msgid "langAdminSurname"
+msgstr "Adminisztrátor vezetékneve"
+
+msgid "langAdminLogin"
+msgstr "Adminisztrátor login"
+
+msgid "langAdminPass"
+msgstr "Adminisztrátor jelszó (<font color=\"red\">célszerű megváltoztatni</font>)"
+
+msgid "langEducationManager"
+msgstr "Projekt menedszer"
+
+msgid "langCampusName"
+msgstr "Az ön portáljának neve"
+
+msgid "langDBSettingIntro"
+msgstr "Az telepítő létrehozza a fő Chamilo adatbázis(oka)t. Kérjük vegye figyelembe, hogy a Chamilonak több adatbázist kell létrehoznia. Ha az ön domain vagy honlap szolgáltatója csak egy adatbázis használatát engedélyezi, akkor a Chamilo működéséhez az \"Egy adatbázis\" opciót válassza."
+
+msgid "langStep1"
+msgstr "1. lépés"
+
+msgid "langStep2"
+msgstr "2. lépés"
+
+msgid "langStep3"
+msgstr "3. lépés a 6-ból"
+
+msgid "langStep4"
+msgstr "4. lépés a 6-ból"
+
+msgid "langStep5"
+msgstr "5. lépés a 6-ból"
+
+msgid "langStep6"
+msgstr "6. lépés a 6-ból"
+
+msgid "langCfgSetting"
+msgstr "Beállítások szerkesztése"
+
+msgid "langDBSetting"
+msgstr "MySQL adatbázis beállításai"
+
+msgid "langMainLang"
+msgstr "Elsődleges nyelv"
+
+msgid "langLicence"
+msgstr "Licensz"
+
+msgid "langLastCheck"
+msgstr "Telepítés előtti utolsó ellenőrzés"
+
+msgid "langRequirements"
+msgstr "Követelmények"
+
+msgid "langDbPrefixForm"
+msgstr "MySQL adatbázis előtag"
+
+msgid "langDbPrefixCom"
+msgstr "Hagyja üresen, ha nem szükséges"
+
+msgid "langEncryptUserPass"
+msgstr "A felhasználók jelszavainak titkosítása az adatbázisban"
+
+msgid "langSingleDb"
+msgstr "Egy vagy több Chamilo adatbázis használata"
+
+msgid "langAllowSelfReg"
+msgstr "Önálló regisztráció engedélyezése"
+
+msgid "langRecommended"
+msgstr "(ajánlott)"
+
+msgid "langScormDB"
+msgstr "Scorm adatbázis"
+
+msgid "langAdminLastName"
+msgstr "Adminisztrátor vezetéknév"
+
+msgid "langAdminPhone"
+msgstr "Adminisztrátor telefon"
+
+msgid "OK"
+msgstr "Rendben."
+
+msgid "langAdminFirstName"
+msgstr "Adminisztrátor keresztnév"
+
+msgid "langInstituteURL"
+msgstr "Ennek a szervezetnek URL-je."
+
+msgid "langDokeosURL"
+msgstr "Chamilo URL-je"
+
+msgid "langUserDB"
+msgstr "Felhasználói adatbázis"
+
+msgid "PleaseWait"
+msgstr "Kérem várjon"
+
+msgid "PleaseCheckTheseValues"
+msgstr "Kérjük ellenőrizze ezeket az értékeket"
+
+msgid "PleasGoBackToStep1"
+msgstr "Kérem, menjen vissza az első lépéshez"
+
+msgid "langInstallationLanguage"
+msgstr "Telepítési nyelv"
+
+msgid "ReadThoroughly"
+msgstr "Olvassa el figyelmesen"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "A Chamilo működéséhez a következőket kell beállítania a szerverén"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "Figyelmeztetés!<br>A telepítő egy már létező Chamilo alkalmazást érzékelt a rendszerén."
+
+msgid "NewInstallation"
+msgstr "Új telepítés"
+
+msgid "CheckDatabaseConnection"
+msgstr "Adatbázis kapcsolat ellenőrzése"
+
+msgid "PrintOverview"
+msgstr "Tájékoztató megjelenítése"
+
+msgid "Installing"
+msgstr "Telepítés"
+
+msgid "of"
+msgstr "összesen"
+
+msgid "Step"
+msgstr "Lépés"
+
+msgid "MoreDetails"
+msgstr "Részletek"
+
+msgid "ServerRequirements"
+msgstr "Szerver kívánalmak"
+
+msgid "ServerRequirementsInfo"
+msgstr "A Chamilo teljes kiépítettségéhez tartozó összes szolgáltatáshoz az szervernek az alábbi könyvtárakkal és tulajdonságokkal kell rendelkeznie"
+
+msgid "PHPVersion"
+msgstr "PHP verzió"
+
+msgid "support"
+msgstr "Támogatás"
+
+msgid "PHPVersionOK"
+msgstr "A PHP verzió megfelel."
+
+msgid "RecommendedSettings"
+msgstr "Ajánlott beállítások"
+
+msgid "RecommendedSettingsInfo"
+msgstr "A szerver konfigurálásához tartozó ajánlott beállítások. Ezek értékei a php.ini állományban állíthatóak be."
+
+msgid "Setting"
+msgstr "Beállítás"
+
+msgid "Actual"
+msgstr "Jelenleg"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "Könyvtár és fájl jogosultságok"
+
+msgid "DirectoryAndFilePermissionsInfo"
+msgstr "Egyes könyvtáraknak és a bennük található állományoknak a web szerver számára írhatóaknak kell lenniük, hogy a Chamilo  egyes funkciói zavartalanul működhessenek (hallgatói állományok feltöltése, html állományok szerkesztése,stb. ). Lehetséges, hogy ehhez a szerveren egyes beállításokat kézzel kell módosítani (amelyre ez a felület nem ad lehetőséget)."
+
+msgid "NotWritable"
+msgstr "Nem írható"
+
+msgid "Writable"
+msgstr "Írható"
+
+msgid "ExtensionLDAPNotAvailable"
+msgstr "Az LDAP bővítmény nem áll rendelkezésre"
+
+msgid "ExtensionGDNotAvailable"
+msgstr "A GD bővítmény nem áll rendelkezésre"
+
+msgid "DokeosLicenseInfo"
+msgstr "A Chamilo egy GNU Általános Nyilvános Licensz (General Public Licence) alapján terjesztett szabad szofter."
+
+msgid "IAccept"
+msgstr "Elfogadom"
+
+msgid "ConfigSettingsInfo"
+msgstr "Az alábbi értékek kerülnek beállításra a <b>main/inc/conf/configuration.php</b> állományban:"
+
+msgid "DokeosInstallation"
+msgstr "Chamilo Telepítés"
+
+msgid "InstallDokeos"
+msgstr "Chamilo telepítése"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "Az újonnan létrehozott portál megtekintése"
+
+msgid "FirstUseTip"
+msgstr "Könnyen megértheti a portál működését, ha az első belépéskor a \'Kurzusterület létrehozása\' opció kijelölésével regisztrálja magát, majd követi a lépéseket."
+
+msgid "Version_"
+msgstr "Verzió"
+
+msgid "UpdateFromDokeosVersion"
+msgstr "Frissítés Chamilo-ról"
+
+msgid "WelcomToTheDokeosInstaller"
+msgstr "Üdvözli Önt a Chamilo telepítője"
+
+msgid "PleaseSelectInstallationProcessLanguage"
+msgstr "Kérjük válassza ki azt a nyelvet, amit telepítéskor használni szeretne."
+
+msgid "ReadTheInstallGuide"
+msgstr "a telepítési kézikönyv olvasása"
+
+msgid "HereAreTheValuesYouEntered"
+msgstr "Ezeket az adatokat adta meg"
+
+msgid "PrintThisPageToRememberPassAndOthers"
+msgstr "Nyomtassa ki az oldalt, így könnyen felhasználhatja a jelszavakat és egyéb információkat"
+
+msgid "TheInstallScriptWillEraseAllTables"
+msgstr "A telepítőprogram minden táblát (és adatot) törölni fog a megadott adatbázisokból. Nyomtatékosan javasoljuk, hogy végezzen el egy teljes biztonsági mentést, mielőtt elindítaná a telepítés utolsó fázisát."
+
+msgid "Warning"
+msgstr "Figyelem"
+
+msgid "ReadWarningBelow"
+msgstr "olvassa el az alábbi figyelmeztetéseket"
+
+msgid "SecurityAdvice"
+msgstr "Biztonsági javaslat"
+
+msgid "YouHaveMoreThanXCourses"
+msgstr "Önnek több mint %d kurzusa van a Chamilo rendszerén! Csak %d kurzus lett frissítve. A többi kurzus frissítéséhez %s kattintson ide %s"
+
+msgid "ToProtectYourSiteMakeXAndYReadOnly"
+msgstr "A rendszere védelmében %s és %s állományokat tegye csak olvashatóvá (CHMOD 444)."
+
+msgid "Error"
+msgstr "Hiba"
+
+msgid "Back"
+msgstr "Vissza"
+
+msgid "HasNotBeenFound"
+msgstr "nem található"
+
+msgid "PleaseGoBackToStep1"
+msgstr "Kérem térjen vissza az 1. lépéshez"
+
+msgid "HasNotBeenFoundInThatDir"
+msgstr "nem található abban a könyvtárban"
+
+msgid "OldVersionRootPath"
+msgstr "A korábbi verzió gyökérkönyvtára"
+
+msgid "NoWritePermissionPleaseReadInstallGuide"
+msgstr "Néhány könyvtárhoz vagy fájlhoz nem rendelkezik írási joggal. A Chamilo telepítéshez először változtassa meg a jogokat (a CHMOD használatával). Kérjük, olvassa el a %s telepítési kézikönyvet %s"
+
+msgid "DBServerDoesntWorkOrLoginPassIsWrong"
+msgstr "Az adatbázis szerver nem működik, vagy hibás a felhasználónév/jelszó."
+
+msgid "PleaseGoBackToStep"
+msgstr "Kérem térjen vissza a következő lépéshez:"
+
+msgid "DBSettingUpgradeIntro"
+msgstr "A frissítőprogram visszaállítja és frissíti a Chamilo adatbázis(oka)t. Ezek végrehajtásához a megadott adatbázis és egyéb információkat fogja felhasználni. Mivel a szofverünk számos operációs rendszeren és környezetben futtatható, de nem minden környezetben tudtuk tesztelni, ezért nyomtatékosan javasoljuk, hogy végezzen teljes biztonségi mentést, mielőtt továbbmenne a frissítéssel!"
+
+msgid "ExtensionMBStringNotAvailable"
+msgstr "Az MBString kiterjesztés nem használható"
+
+msgid "ExtensionMySQLNotAvailable"
+msgstr "A MySQL kiterjesztés nem érhető el"
+
+msgid "DokeosArtLicense"
+msgstr "A Chamiloban felhasznált és látható képek a Nuvola, Crystal Clear és Tango ikongyűjteményből származnak. Más képek, mint például a táblázatok és Flash animációk a Wikimedia és Ali Pakdel, Denis Hoa kurzusaiból származnak az engedélyükkel a BY-SA Creative Commons licensz oltalma alatt. A licensz réslzeteiről angolul <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">a CC weboldalán olvashat</a>, ahol elolvashatja a licensz teljes szövegét."
+
+msgid "OptionalParameters"
+msgstr "Opcionális paraméterek"
+

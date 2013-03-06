@@ -1,0 +1,561 @@
+msgid "NewForumCreated"
+msgstr "Napravljen je novi forum"
+
+msgid "NewThreadCreated"
+msgstr "Nova tema u forumu je otvorena."
+
+msgid "lang_learning_path"
+msgstr "Put učenja"
+
+msgid "lang_learning_path_builder"
+msgstr "Program za izradu puta učenja"
+
+msgid "lang_description"
+msgstr "opis"
+
+msgid "LearnpathTitle"
+msgstr "naslov"
+
+msgid "LearnpathPrerequisites"
+msgstr "Preduvjeti"
+
+msgid "LearnpathMoveUp"
+msgstr "Gore"
+
+msgid "LearnpathMoveDown"
+msgstr "Dolje"
+
+msgid "langThisItem"
+msgstr "ovaj element"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Naslov i opis"
+
+msgid "LearnpathChangeOrder"
+msgstr "Izmijeni redoslijed"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Dodaj preduvjete"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Uredi naslov i opis"
+
+msgid "lang_delete"
+msgstr "Izbriši"
+
+msgid "lang_add_chapter"
+msgstr "Dodaj poglavlje"
+
+msgid "langLearnpathMystatus"
+msgstr "Moj status"
+
+msgid "langLearnpathCompstatus"
+msgstr "dovršeno"
+
+msgid "langLearnpathIncomplete"
+msgstr "nedovršeno"
+
+msgid "langLearnpathPassed"
+msgstr "uspješno"
+
+msgid "langLearnpathFailed"
+msgstr "neuspješno"
+
+msgid "langLearnpathPrevious"
+msgstr "Prethodni"
+
+msgid "langLearnpathNext"
+msgstr "Sljedeći"
+
+msgid "langLearnpathRestart"
+msgstr "Kreni ponovno"
+
+msgid "langLearnpathThisStatus"
+msgstr "Ovaj je korak"
+
+msgid "langLearnpathToEnter"
+msgstr "Za ulaz"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "prvo morate dovršiti"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Naslov koraka"
+
+msgid "langLearnpathStatus"
+msgstr "Status"
+
+msgid "langLearnpathScore"
+msgstr "Rezultat"
+
+msgid "langLearnpathTime"
+msgstr "Vrijeme"
+
+msgid "langLearnpathVersion"
+msgstr "verzija"
+
+msgid "langLearnpathRestarted"
+msgstr "Svi su koraci dovršeni."
+
+msgid "langLearnpathNoNext"
+msgstr "Ovo je posljednji korak."
+
+msgid "langLearnpathNoPrev"
+msgstr "Ovo je prvi korak."
+
+msgid "LearnpathAddLearnpath"
+msgstr "Dodaj novi put učenja"
+
+msgid "lang_learnpath_added"
+msgstr "Novi put učenja uspješno je izrađen. Pritiskom na križić možete mu dodati nova poglavlja."
+
+msgid "LearnpathEditLearnpath"
+msgstr "uredi put učenja"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "izbriši put učenja"
+
+msgid "lang_learnpath_edited"
+msgstr "put učenja je uređen"
+
+msgid "lang_learnpath_deleted"
+msgstr "put učenja je izbrisan"
+
+msgid "LearnpathDoNotPublish"
+msgstr "ne objavljuj"
+
+msgid "LearnpathPublish"
+msgstr "objavi"
+
+msgid "LearnpathNotPublished"
+msgstr "neobjavljen"
+
+msgid "LearnpathPublished"
+msgstr "objavljen"
+
+msgid "lang_add_learnpath_module"
+msgstr "Dodaj novo poglavlje"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Dodaj novo poglavlje putu učenja"
+
+msgid "lang_learnpath_module_added"
+msgstr "Novo poglavlje puta učenja uspješno je izrađeno. Pritiskom na križić možete mu dodati korake."
+
+msgid "LearnpathEditModule"
+msgstr "Uredi opis/naslov poglavlja"
+
+msgid "LearnpathDeleteModule"
+msgstr "Izbriši poglavlje"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Poglavlje puta učenja uspješno je uređeno"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Poglavlje puta učenja i svi pridruženi koraci su izbrisani"
+
+msgid "LearnpathNoChapters"
+msgstr "Poglavlja još nisu dodana."
+
+msgid "LearnpathAddItem"
+msgstr "Dodaj korake poglavlju"
+
+msgid "LearnpathItemDeleted"
+msgstr "Korak puta učenja je izbrisan"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "molim pridruži ovaj/ove korak/e puta učenja poglavlju:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Uredi dodatni opis/naslov koraka"
+
+msgid "lang_add_prereq"
+msgstr "Dodaj/uredi preduvjete za korak"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Izbriši korak"
+
+msgid "LearnpathItemEdited"
+msgstr "Korak puta učenja izmijenjen"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Izbrisano!"
+
+msgid "lang_none"
+msgstr "NEMA"
+
+msgid "lang_forum_opened"
+msgstr "Odabrani forum otvoren je u novome prozoru."
+
+msgid "lang_link_opened"
+msgstr "Odabrana poveznica otvorena je u novom prozoru."
+
+msgid "lang_short_help"
+msgstr "Korak dodajete pritiskom na križić; naslov/opis dodajete pritiskom na olovku; preduvjete dodajete pritiskom na ikonu s dva dokumenta. Što će vidjeti studenti možete provjeriti pritiskom na Studentov pogled na vrhu."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "preduvjeti nepotpuni"
+
+msgid "lang_author"
+msgstr "Autor"
+
+msgid "lang_date"
+msgstr "Nadnevak"
+
+msgid "langBasicOverview"
+msgstr "Organiziraj"
+
+msgid "langAdvanced"
+msgstr "Napredni način"
+
+msgid "langDisplay"
+msgstr "Prikaži"
+
+msgid "langNewChapter"
+msgstr "Novo poglavlje"
+
+msgid "langNewStep"
+msgstr "Novi korak"
+
+msgid "langEditPrerequisites"
+msgstr "Uredi preduvjete za trenutni element"
+
+msgid "langTitleManipulateChapter"
+msgstr "Upravljanje s trenutnim poglavljem"
+
+msgid "langTitleManipulateModule"
+msgstr "Upravljanje s trenutnim poglavljem"
+
+msgid "langTitleManipulateDocument"
+msgstr "Upravljanje s trenutnim dokumentom"
+
+msgid "langTitleManipulateLink"
+msgstr "Upravljanje s trenutnom poveznicom"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Upravljanje s trenutnom vježbom"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Upravljanje s trenutnim studentskim radom"
+
+msgid "langEnterDataNewChapter"
+msgstr "Unesite podatke za novo poglavlje"
+
+msgid "langEnterDataNewModule"
+msgstr "Unesite podatke za novi modul"
+
+msgid "langCreateNewStep"
+msgstr "Napravi novi korak :"
+
+msgid "langNewDocument"
+msgstr "Novi dokument"
+
+msgid "langUseAnExistingResource"
+msgstr "Ili upotrijebite postojeći skup podataka :"
+
+msgid "langParent"
+msgstr "Nadređen"
+
+msgid "langPosition"
+msgstr "Pozicija"
+
+msgid "langNewChapterCreated"
+msgstr "Napravljeno je novo poglavlje. Sada mu možete pridodati sljedeće poglavlje ili korak."
+
+msgid "langNewLinksCreated"
+msgstr "Napravljena je nova poveznica"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "Napravljen je novi studentski rad"
+
+msgid "langNewModuleCreated"
+msgstr "Napravljen je novi modul. Sada mu možete pridodati sljedeći modul ili korak."
+
+msgid "langNewExerciseCreated"
+msgstr "Napravljena je nova vježba."
+
+msgid "langItemRemoved"
+msgstr "Element je odstranjen"
+
+msgid "langConverting"
+msgstr "Pretvorba..."
+
+msgid "langPpt2lpError"
+msgstr "Pogreška prilikom pretvorbe PowerPoint datoteke. Molim provjerite imate li posebnih znakova u nazivu PowerPoint datoteke."
+
+msgid "langBuild"
+msgstr "Izgradi"
+
+msgid "langViewModeEmbedded"
+msgstr "Prikaz: prozor"
+
+msgid "langViewModeFullScreen"
+msgstr "Prikaz : cijeli zaslon"
+
+msgid "langShowDebug"
+msgstr "Prikaži debug"
+
+msgid "langHideDebug"
+msgstr "Sakrij debug"
+
+msgid "langCantEditDocument"
+msgstr "Ovaj dokument se ne može uređivati"
+
+msgid "langAfter"
+msgstr "Poslije"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Preduvjeti (ograničenje)"
+
+msgid "lang_loading"
+msgstr "Stranica se učitava, molim pričekajte ..."
+
+msgid "lang_empty"
+msgstr "Ovaj put ne sadrži korake."
+
+msgid "langHotPotatoesFinished"
+msgstr "Ova vježba HotPotatoes je zatvorena."
+
+msgid "langCompletionLimit"
+msgstr "Najmanji broj bodova za prolaz"
+
+msgid "langPrereqToEnter"
+msgstr "Za ulaz"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "prvo morate dovršiti"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Najmanje jedan korak nedostaje od"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "koji su postavljeni kao preduvjeti."
+
+msgid "langPrereqTestLimit1"
+msgstr "morate dosegnuti najmanje"
+
+msgid "langPrereqTestLimit2"
+msgstr "bodova u"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Trenutno imate:"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "povratak u standardni prikaz"
+
+msgid "langLearnpathFullScreen"
+msgstr "prikaz preko cijeloga zaslona"
+
+msgid "langItemMissing1"
+msgstr "Postojala je"
+
+msgid "langItemMissing2"
+msgstr "stranica (korak) ovdje u izvornom putu učenja Chamiloa."
+
+msgid "langDone"
+msgstr "Dovršeno"
+
+msgid "langNoItemSelected"
+msgstr "Za prikaz sadržaja, molim odaberite element na izborniku sa strane"
+
+msgid "langNewDocumentCreated"
+msgstr "Napravljen je novi dokument."
+
+msgid "langEditCurrentChapter"
+msgstr "Uredi trenutno poglavlje"
+
+msgid "langditCurrentModule"
+msgstr "Uredi trenutni modul"
+
+msgid "langCreateTheDocument"
+msgstr "Napravi dokument"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Premjesti trenutni dokument"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Uredi trenutni dokument"
+
+msgid "langWarning"
+msgstr "Upozorenje !"
+
+msgid "langWarningEditingDocument"
+msgstr "Prilikom uređivanja dokumenta unutar Puta učenja, nova inačica dokumenta neće zamijeniti staru već će biti spremljena kao novi dokument. Ukoliko sigurno želite izmijeniti sadržaj postojećeg dokumenta to možete napraviti sa dokument alatom."
+
+msgid "langDirectory"
+msgstr "Mapa"
+
+msgid "langCreateTheExercise"
+msgstr "Napravi vježbu"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Premjesti trenutnu vježbu"
+
+msgid "langEditCurrentExecice"
+msgstr "Uredi trenutnu vježbu"
+
+msgid "langUploadScorm"
+msgstr "Preuzmi SCORM i AICC"
+
+msgid "langPowerPointConvert"
+msgstr "PowerPoint pretvorba"
+
+msgid "langLPCreatedToContinue"
+msgstr "Za nastavak možete dodati poglavlje ili korak vašem Putu učenja sa lijevog izbornika."
+
+msgid "langLPCreatedAddChapterStep"
+msgstr "Možete dodati poglavlje ili korak vašem Putu učenja sa lijevog izbornika."
+
+msgid "langPrerequisitesAdded"
+msgstr "Dodani su preduvjeti za trenutni korak."
+
+msgid "langAddEditPrerequisites"
+msgstr "Dodaj/Uredi preduvjete"
+
+msgid "langMinimum"
+msgstr "najmanje"
+
+msgid "langMaximum"
+msgstr "najviše"
+
+msgid "langNoDocuments"
+msgstr "Nema dokumenta"
+
+msgid "langNoExercisesAvailable"
+msgstr "Niti jedan test raspoloživ"
+
+msgid "langNoLinksAvailable"
+msgstr "Niti jedna poveznica raspoloživa"
+
+msgid "langNoItemsInLp"
+msgstr "Trenutno ne postoji niti jedna stavka u Putu učenja. Odaberite \"Izgradi\" da napravite potrebne stavke."
+
+msgid "FirstPosition"
+msgstr "Prvo mjesto"
+
+msgid "NewQuiz"
+msgstr "Novi test"
+
+msgid "CreateTheForum"
+msgstr "Napravi forum"
+
+msgid "AddLpIntro"
+msgstr "<strong>Dobrodošli</strong> u Chamilo autorske alate za Put učenja.<br />Ovdje možete napraviti Put učenja korak po korak. Struktura vašeg Puta učenja biti će prikazana na izborniku lijevo."
+
+msgid "AddLpToStart"
+msgstr "Za početak, dajte naziv vašem Putu učenja"
+
+msgid "CreateTheLink"
+msgstr "Preuzmi poveznicu"
+
+msgid "MoveCurrentLink"
+msgstr "Premjesti trenutnu poveznicu"
+
+msgid "EditCurrentLink"
+msgstr "Uredi trenutnu poveznicu"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "MoveCurrentStudentPublication"
+msgstr "Premjesti trenutni studentski rad"
+
+msgid "EditCurrentStudentPublication"
+msgstr "Uredi trenutni studentski rad"
+
+msgid "AllowMultipleAttempts"
+msgstr "Dozvoli višestruke pokušaje"
+
+msgid "PreventMultipleAttempts"
+msgstr "Zabrani višestruke pokušaje"
+
+msgid "MakeScormRecordingExtra"
+msgstr "Napravi SCORM prošireni zapis"
+
+msgid "MakeScormRecordingNormal"
+msgstr "Napravi SCORM standardni zapis"
+
+msgid "DocumentHasBeenDeleted"
+msgstr "Odabrani dokument se ne može prikazati jer je obrisan"
+
+msgid "EditCurrentForum"
+msgstr "Uredi trenutni forum"
+
+msgid "NoPrerequisites"
+msgstr "Bez preduvjeta"
+
+msgid "NewExercise"
+msgstr "Novi test"
+
+msgid "CreateANewLink"
+msgstr "Napravi novu poveznicu"
+
+msgid "CreateANewForum"
+msgstr "Napravi novi forum"
+
+msgid "LinkAdd"
+msgstr "Dodaj poveznicu"
+
+msgid "WoogieConversionPowerPoint"
+msgstr "Woogie : pretvorba datoteka MS Word formata"
+
+msgid "WelcomeWoogieSubtitle"
+msgstr "Pretvorba Word datoteka u Put učenja"
+
+msgid "WelcomeWoogieConverter"
+msgstr "Dobrodošli u Woogie pretvornik<ul type=\"1\"><li>Odaberite datoteku .doc, .sxw, .odt formata<li>Učitajte je u Woogie. Datoteka će biti prebačena u SCORM Put učenja.<li>Nakon pretvorbe možete dodavati audio komentare na svakoj stranici te testove i ostale aktivnosti između stranica</ul>"
+
+msgid "WoogieError"
+msgstr "Pogreška prilikom pretvorbe Word datoteke. Molim provjerite imate li posebnih znakova u nazivu odabrane datoteke."
+
+msgid "WordConvert"
+msgstr "Pretvorba Word datoteke"
+
+msgid "Order"
+msgstr "Redoslijed"
+
+msgid "InteractionID"
+msgstr "ID interakcije"
+
+msgid "TimeFinished"
+msgstr "Vrijeme (završeno u...)"
+
+msgid "CorrectAnswers"
+msgstr "Ispravni odgovori"
+
+msgid "StudentResponse"
+msgstr "Odgovori studenta"
+
+msgid "LatencyTimeSpent"
+msgstr "Vrijeme provedeno"
+
+msgid "Result"
+msgstr "Rezultat"
+
+msgid "SplitStepsPerPage"
+msgstr "Korak po stranici"
+
+msgid "SplitStepsPerChapter"
+msgstr "Korak po poglavlju"
+
+msgid "TakeSlideName"
+msgstr "Upotrebi nazive dijapozitiva za korake Puta učenja"
+
+msgid "CannotConnectToOpenOffice"
+msgstr "Povezivanje sa alatom za pretvorbu nije uspjelo. Molim kontaktirajte upravitelja sustava da riješi problem."
+
+msgid "OogieConversionFailed"
+msgstr "Pretvorba nije uspjela.<br />Neki dokumenti su presloženi za automatsku pretvorbu.<br />"
+
+msgid "OogieUnknownError"
+msgstr "Pretvorba nije uspjela zbog nepoznatog razloga.<br />Molim pitajte upravitelja sustava za više informacija."
+
+msgid "OogieBadExtension"
+msgstr "Molim učitajte isključivo prezentaciju. Datoteka mora biti .ppt ili .odp formata"
+
+msgid "WoogieBadExtension"
+msgstr "Molim učitajte isključivo tekst dokumente. Datoteka mora biti .doc, .docx ili .odt formata"
+
+msgid "ShowAudioRecorder"
+msgstr "Prikaži audio snimač"
+

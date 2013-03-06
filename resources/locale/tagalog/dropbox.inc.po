@@ -1,0 +1,45 @@
+msgid "MailingConfirmSend"
+msgstr "Ipadala ang nilalaman ng file sa mga indibidwal?"
+
+msgid "Ok"
+msgstr "I-validate"
+
+msgid "ConfirmDelete"
+msgstr "Tatanggalin nito ang entry mula sa iyong listahan lamang"
+
+msgid "NoFileSpecified"
+msgstr "Hindi mo tinukoy ang file na ia-upload."
+
+msgid "NoUserSelected"
+msgstr "Mangyaring piliin ang kung sinong gumagamit ipapadala ang file."
+
+msgid "ReceivedFiles"
+msgstr "Natanggap na Mga File"
+
+msgid "SentFiles"
+msgstr "Pinadalang Mga File"
+
+msgid "ReceivedTitle"
+msgstr "Pamagat"
+
+msgid "SentTitle"
+msgstr "Pinadalang Mga File"
+
+msgid "Authors"
+msgstr "Mga May-Akda"
+
+msgid "Size"
+msgstr "Laki"
+
+msgid "LastResent"
+msgstr "Ang pinakahuli ay ipinadala noong"
+
+msgid "UploadNewFile"
+msgstr "Magbahagi ng bagong file"
+
+msgid "AreYouSureToDelete"
+msgstr "Sigurado ka bang nais mong magtanggal"
+
+msgid "AddNewCategory"
+msgstr "Magdagdag ng bagong folder"
+

@@ -1,0 +1,24 @@
+msgid "langExplanation"
+msgstr "Esta página debe estar en formato HTML (por ejemplo \"mi_pagina.htm\"). Aparecerá  el enlace en la página principal de su sitio. Si usted desea enviar un documento que no está en formato HTML (PDF, Power Point, Word...) utilice la función <a href=../docum"
+
+msgid "langTooBig"
+msgstr "Usted no ha seleccionado ningún archivo para enviar, o el archivo es demasiado grande"
+
+msgid "langCouldNot"
+msgstr "El archivo no pudo ser enviado"
+
+msgid "langAddPageToSite"
+msgstr "Agregar una página al sitio"
+
+msgid "langCouldNotSendPage"
+msgstr "Este archivo no tiene formato HTML,   por lo tanto no puede ser enviado. Si usted desea subir al servidor documentos que no están en formato HTML (PDF, Word, Power Point, Video, etc.) utilice<a href=../document/document.php>Documentos</a>"
+
+msgid "langSendPage"
+msgstr "Enviar Página"
+
+msgid "langPageTitleModified"
+msgstr "El título de la página ha sido modificado"
+
+msgid "langPageAdded"
+msgstr "La página ha sido agregada"
+

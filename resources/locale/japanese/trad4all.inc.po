@@ -1,0 +1,171 @@
+msgid "Title"
+msgstr "タイトル"
+
+msgid "Remove"
+msgstr "败瓢"
+
+msgid "Description"
+msgstr "説明"
+
+msgid "Links"
+msgstr "リンク"
+
+msgid "langWorks"
+msgstr "池栏侯喇矢今"
+
+msgid "Forums"
+msgstr "柴的技"
+
+msgid "langExercices"
+msgstr "遍浆啼玛"
+
+msgid "langCreateDir"
+msgstr "フォルダの作成"
+
+msgid "Name"
+msgstr "叹疚"
+
+msgid "langComment"
+msgstr "コメント"
+
+msgid "langVisible"
+msgstr "斧えるようにする/斧えないようにする"
+
+msgid "langNewDir"
+msgstr "ディレクトリ侯喇"
+
+msgid "langDirCr"
+msgstr "ディレクトリ侯喇"
+
+msgid "Download"
+msgstr "アップロード"
+
+msgid "langGroup"
+msgstr "グループ"
+
+msgid "langEdit"
+msgstr "編集"
+
+msgid "langGroupForum"
+msgstr "グループ フォーラム"
+
+msgid "Language"
+msgstr "言語"
+
+msgid "LoginName"
+msgstr "ログイン"
+
+msgid "AutostartMp3"
+msgstr "音声を自動再生しますか？"
+
+msgid "Assignments"
+msgstr "Assignments"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "langCode"
+msgstr "コース コード"
+
+msgid "langUp"
+msgstr "Up"
+
+msgid "Down"
+msgstr "下へ"
+
+msgid "Up"
+msgstr "上へ"
+
+msgid "Theme"
+msgstr "テーマ"
+
+msgid "TheListIsEmpty"
+msgstr "何もありません"
+
+msgid "langCourseCreate"
+msgstr "コ〖スのウエブサイトを侯る"
+
+msgid "langTodo"
+msgstr "≈妥司∽"
+
+msgid "UserName"
+msgstr "ユ〖ザ叹"
+
+msgid "Hide"
+msgstr "隠す"
+
+msgid "langDear"
+msgstr "飞球"
+
+msgid "langArchive"
+msgstr "アーカイブ"
+
+msgid "langCourseCode"
+msgstr "コース コード"
+
+msgid "iso639_2_code"
+msgstr "ja"
+
+msgid "iso639_1_code"
+msgstr "jpn"
+
+msgid "charset"
+msgstr "UTF-8"
+
+msgid "text_dir"
+msgstr "ltr"
+
+msgid "left_font_family"
+msgstr "sans-serif"
+
+msgid "right_font_family"
+msgstr "sans-serif"
+
+msgid "number_thousands_separator"
+msgstr ","
+
+msgid "number_decimal_separator"
+msgstr "."
+
+msgid "dateFormatShort"
+msgstr "%Y钳%b%e泣"
+
+msgid "dateFormatLong"
+msgstr "%Y钳%B%e泣"
+
+msgid "dateTimeFormatLong"
+msgstr "%Y钳%B%e泣 %H:%M"
+
+msgid "timeNoSecFormat"
+msgstr "%H:%M"
+
+msgid "langModify"
+msgstr "饯赖"
+
+msgid "langDelete"
+msgstr "猴近"
+
+msgid "Help"
+msgstr "へルプ"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAddIntro"
+msgstr "Add introduction text"
+
+msgid "langBackList"
+msgstr "リストに提る"
+
+msgid "langMyCourses"
+msgstr "极尸のコ〖ス"
+
+msgid "langModifyProfile"
+msgstr "极尸のプロファイルを饯赖"
+
+msgid "langLogout"
+msgstr "ログアウト"
+
+msgid "langPlatform"
+msgstr "iCampus utilise la plate-forme"
+

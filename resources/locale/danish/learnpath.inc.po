@@ -1,0 +1,534 @@
+msgid "NewForumCreated"
+msgstr "Det nye forum er tilføjet"
+
+msgid "NewThreadCreated"
+msgstr "Den nye tråd i forummet er tilføjet"
+
+msgid "lang_learning_path"
+msgstr "Læringssti"
+
+msgid "lang_learning_path_builder"
+msgstr "Læringssti-opbygger"
+
+msgid "lang_description"
+msgstr "Beskrivelse"
+
+msgid "LearnpathTitle"
+msgstr "Titel"
+
+msgid "LearnpathPrerequisites"
+msgstr "Betingelser"
+
+msgid "LearnpathMoveUp"
+msgstr "Flyt op"
+
+msgid "LearnpathMoveDown"
+msgstr "Flyt ned"
+
+msgid "langThisItem"
+msgstr "dette element"
+
+msgid "LearnpathTitleAndDesc"
+msgstr "Titel & Beskrivelse"
+
+msgid "LearnpathChangeOrder"
+msgstr "Rette rækkefølge"
+
+msgid "LearnpathAddPrereqi"
+msgstr "Tilføj betingelser"
+
+msgid "LearnpathAddTitleAndDesc"
+msgstr "Ret titel & beskr."
+
+msgid "lang_delete"
+msgstr "Slet"
+
+msgid "lang_add_chapter"
+msgstr "Tilføj kapitel"
+
+msgid "langLearnpathMystatus"
+msgstr "Min status"
+
+msgid "langLearnpathCompstatus"
+msgstr "gennemført"
+
+msgid "langLearnpathIncomplete"
+msgstr "ufuldendt"
+
+msgid "langLearnpathPassed"
+msgstr "bestået"
+
+msgid "langLearnpathFailed"
+msgstr "ikke bestået"
+
+msgid "langLearnpathPrevious"
+msgstr "Forrige"
+
+msgid "langLearnpathNext"
+msgstr "Næste"
+
+msgid "langLearnpathRestart"
+msgstr "Start forfra"
+
+msgid "langLearnpathThisStatus"
+msgstr "Dette trin er nu"
+
+msgid "langLearnpathToEnter"
+msgstr "For at gå videre til"
+
+msgid "langLearnpathFirstNeedTo"
+msgstr "skal du først gennemføre"
+
+msgid "langLearnpathLessonTitle"
+msgstr "Trintitel"
+
+msgid "langLearnpathStatus"
+msgstr "Status"
+
+msgid "langLearnpathScore"
+msgstr "Point"
+
+msgid "langLearnpathTime"
+msgstr "Tid"
+
+msgid "langLearnpathVersion"
+msgstr "version"
+
+msgid "langLearnpathRestarted"
+msgstr "Alle trin står nu som ikke gennemførte"
+
+msgid "langLearnpathNoNext"
+msgstr "Dette er det sidste trin"
+
+msgid "langLearnpathNoPrev"
+msgstr "Dette er det første trin"
+
+msgid "LearnpathAddLearnpath"
+msgstr "Tilføj ny læringssti"
+
+msgid "lang_learnpath_added"
+msgstr "Den nye læringssti er nu oprettet. Nu kan du tilføje kapitler ved at klikke på plus-tegnet"
+
+msgid "LearnpathEditLearnpath"
+msgstr "Rediger læringssti"
+
+msgid "LearnpathDeleteLearnpath"
+msgstr "slet læringssti"
+
+msgid "lang_learnpath_edited"
+msgstr "læringsstien er nu ændret"
+
+msgid "lang_learnpath_deleted"
+msgstr "læringsstien er nu slettet"
+
+msgid "LearnpathDoNotPublish"
+msgstr "skal ikke publiceres"
+
+msgid "LearnpathPublish"
+msgstr "publicér"
+
+msgid "LearnpathNotPublished"
+msgstr "ikke publiceret"
+
+msgid "LearnpathPublished"
+msgstr "publiceret"
+
+msgid "lang_add_learnpath_module"
+msgstr "Tilføj nyt kapitel"
+
+msgid "lang_add_learnpath_chapter_to_path"
+msgstr "Tilføj nyt kapitel i læringsstien"
+
+msgid "lang_learnpath_module_added"
+msgstr "Det nye kapitel er nu oprettet. Nu kan du tilføje trin ved at klikke på plusset."
+
+msgid "LearnpathEditModule"
+msgstr "Ret kapitelbeskrivelse/-titel"
+
+msgid "LearnpathDeleteModule"
+msgstr "Slet kapitel"
+
+msgid "lang_learnpath_module_edited"
+msgstr "Kapitlet er nu ændret"
+
+msgid "lang_learnpath_module_deleted"
+msgstr "Kapitlet og tilhørende trin er nu slettet"
+
+msgid "LearnpathNoChapters"
+msgstr "Der er ingen kapitler er tilføjet endnu"
+
+msgid "LearnpathAddItem"
+msgstr "Tilføj trin til dette kapitel"
+
+msgid "LearnpathItemDeleted"
+msgstr "Læringsstiens trin er nu slettet"
+
+msgid "lang_assign_learnpath_items_to"
+msgstr "tilføj læringsplanens trin til kapitel:"
+
+msgid "lang_edit_learnpath_item"
+msgstr "Ret trin og tilhørende beskrivelse/trin"
+
+msgid "lang_add_prereq"
+msgstr "Tilføj/ret forkundskaber til dette trin"
+
+msgid "lang_delete_learnpath_item"
+msgstr "Slet trin"
+
+msgid "LearnpathItemEdited"
+msgstr "Læringsplanens trin er blevet ændret"
+
+msgid "lang_prereq_deleted_error"
+msgstr "Er slettet!"
+
+msgid "lang_none"
+msgstr "Ingen"
+
+msgid "lang_forum_opened"
+msgstr "Det valgte forum er åbnet i et nyt vindue"
+
+msgid "lang_link_opened"
+msgstr "Det valgte link er åbnet i et nyt vindue."
+
+msgid "lang_short_help"
+msgstr "Klik på plusset for at tilføje et trin; klik på blyant for at tilføje ny titel/beskrivelse; klik på ikonet med de to dokumenter for at tilføje betingelser. Du kan tjekke det , studerende kommer til at se ved at klikke Studerende."
+
+msgid "LearnpathPrereqNotCompleted"
+msgstr "betingelserne er ikke indfriet"
+
+msgid "lang_author"
+msgstr "Forfatter"
+
+msgid "lang_date"
+msgstr "Dato"
+
+msgid "langBasicOverview"
+msgstr "Rækkefølge"
+
+msgid "langAdvanced"
+msgstr "Opbyg"
+
+msgid "langDisplay"
+msgstr "Vis"
+
+msgid "langNewChapter"
+msgstr "Næste kapitel"
+
+msgid "langNewStep"
+msgstr "Nyt trin"
+
+msgid "langEditPrerequisites"
+msgstr "Rediger betingelserne for dette trin"
+
+msgid "langTitleManipulateChapter"
+msgstr "Håndter det aktuelle kapitel"
+
+msgid "langTitleManipulateModule"
+msgstr "Håndter det aktuelle kapitel"
+
+msgid "langTitleManipulateDocument"
+msgstr "Håndter det aktuelle dokument"
+
+msgid "langTitleManipulateLink"
+msgstr "Håndter det aktuelle link"
+
+msgid "langTitleManipulateQuiz"
+msgstr "Håndter den aktuelle øvelse"
+
+msgid "langTitleManipulateStudentPublication"
+msgstr "Håndter den aktuelle aflevering"
+
+msgid "langEnterDataNewChapter"
+msgstr "Indtast informationerne om det nye kapitel"
+
+msgid "langEnterDataNewModule"
+msgstr "Indtast informationerne om det nye kapitel"
+
+msgid "langCreateNewStep"
+msgstr "Opret et nyt trin"
+
+msgid "langNewDocument"
+msgstr "Nyt dokument"
+
+msgid "langUseAnExistingResource"
+msgstr "Eller anvend en eksisterende ressource"
+
+msgid "langParent"
+msgstr "Overordnet"
+
+msgid "langPosition"
+msgstr "Postition"
+
+msgid "langNewChapterCreated"
+msgstr "Det nye kapitel er oprettet. Du kan nu tilføje et nyt kapitel eller tilføje trin til kapitlet"
+
+msgid "langNewLinksCreated"
+msgstr "Det nye link er tilføjet"
+
+msgid "langNewStudentPublicationCreated"
+msgstr "Afleveringen er tilføjet"
+
+msgid "langNewModuleCreated"
+msgstr "Det nye kapitel er tilføjet. Du kan nu tilføje et nyt kapitel eller tilføje trin til kapitlet"
+
+msgid "langNewExerciseCreated"
+msgstr "Den nye øvelse er tilføjet"
+
+msgid "langItemRemoved"
+msgstr "Elementet er flyttet"
+
+msgid "langConverting"
+msgstr "Konvertering i gang..."
+
+msgid "langPpt2lpError"
+msgstr "Der opstod en fejl i forbindelse med konvertering af PowerPoint. Undersøg om der er specielle tegn i titlen på powerPointen, og omdøm den i såfald"
+
+msgid "langBuild"
+msgstr "Opbyg"
+
+msgid "langViewModeEmbedded"
+msgstr "Sidevisning: Normal"
+
+msgid "langViewModeFullScreen"
+msgstr "Sidevisning: Uden menu i nyt vindue"
+
+msgid "langShowDebug"
+msgstr "Vis debug"
+
+msgid "langHideDebug"
+msgstr "Skjul debug"
+
+msgid "langCantEditDocument"
+msgstr "Dokumentet er ikke redigerbart"
+
+msgid "langAfter"
+msgstr "Efter"
+
+msgid "LearnpathPrerequisitesLimit"
+msgstr "Betingelser (grænse)"
+
+msgid "lang_loading"
+msgstr "Henter siden, vent venligst..."
+
+msgid "lang_empty"
+msgstr "Læringsstien indeholder ikke trin"
+
+msgid "langHotPotatoesFinished"
+msgstr "Denne HotPotatoes test er lukket"
+
+msgid "langCompletionLimit"
+msgstr "Niveau for bestået (minimum point)"
+
+msgid "langPrereqToEnter"
+msgstr "Begynd"
+
+msgid "langPrereqFirstNeedTo"
+msgstr "skal du først fuldføre"
+
+msgid "langPrereqModuleMinimum1"
+msgstr "Minimum 1 trin mangler i"
+
+msgid "langPrereqModuleMinimum2"
+msgstr "som er angivet som betingelser"
+
+msgid "langPrereqTestLimit1"
+msgstr "som minimum skal du opnå"
+
+msgid "langPrereqTestLimit2"
+msgstr "point i"
+
+msgid "langPrereqTestLimitNow"
+msgstr "Du har nu:"
+
+msgid "langLearnpathExitFullScreen"
+msgstr "tilbage til normal visning"
+
+msgid "langLearnpathFullScreen"
+msgstr "Nyt vindue uden menuen til venstre"
+
+msgid "langItemMissing1"
+msgstr "Der var en"
+
+msgid "langItemMissing2"
+msgstr "side (trin) i den oprindelige læringssti"
+
+msgid "langDone"
+msgstr "Gennemført"
+
+msgid "langNoItemSelected"
+msgstr "For at vise noget her, vælg venligst et element fra sidemenuen"
+
+msgid "langNewDocumentCreated"
+msgstr "Det nye dokument er oprettet"
+
+msgid "langEditCurrentChapter"
+msgstr "Rediger det aktuelle kapitel"
+
+msgid "langditCurrentModule"
+msgstr "Rediger det aktuelle kapitel"
+
+msgid "langCreateTheDocument"
+msgstr "Opret dokumentet"
+
+msgid "langMoveTheCurrentDocument"
+msgstr "Flyt det aktuelle dokument"
+
+msgid "langEditTheCurrentDocument"
+msgstr "Rediger det aktuelle dokument"
+
+msgid "langWarning"
+msgstr "Advarsel!"
+
+msgid "langWarningEditingDocument"
+msgstr "Når du redigerer et eksisterende dokument i læringsstien, bliver det oprindelige dokument ikke overskrevet. Det oprindelige dokument vil blive gemt som et nyt dokument. Hvis du ønsker at redigere det oprindelige dokument, skal du gøre dette via dokument-værktøjet."
+
+msgid "langDirectory"
+msgstr "Mappe"
+
+msgid "langCreateTheExercise"
+msgstr "Opret øvelsen"
+
+msgid "langMoveTheCurrentExercise"
+msgstr "Flyt den aktuelle øvelse"
+
+msgid "langEditCurrentExecice"
+msgstr "Rediger den aktuelle øvelse"
+
+msgid "langUploadScorm"
+msgstr "Importer SCORM og AICC"
+
+msgid "langPowerPointConvert"
+msgstr "Konverter PowerPoint"
+
+msgid "langLPCreatedToContinue"
+msgstr "For at fortsætte kan du tilføje et kapitel eller et trin i læringsstien"
+
+msgid "langLPCreatedAddChapterStep"
+msgstr "Du kan via menuen til venstre tilføje et kapitel eller et trin i din læringssti"
+
+msgid "langPrerequisitesAdded"
+msgstr "Betingelserne til det aktuelle trin er blevet tilføjet"
+
+msgid "langAddEditPrerequisites"
+msgstr "Tilføj/rediger betingelser"
+
+msgid "langMinimum"
+msgstr "minimum"
+
+msgid "langMaximum"
+msgstr "maks."
+
+msgid "langNoDocuments"
+msgstr "Ingen dokumenter"
+
+msgid "langNoExercisesAvailable"
+msgstr "Ingen tilgængelige øvelser"
+
+msgid "langNoLinksAvailable"
+msgstr "Ingen tilgængeilge links"
+
+msgid "langNoItemsInLp"
+msgstr "Der er ingen elementer i læringsstien pt. Klik på \"Opbyg\" for at tilføje elementer"
+
+msgid "FirstPosition"
+msgstr "Første"
+
+msgid "NewQuiz"
+msgstr "Ny øvelse"
+
+msgid "CreateTheForum"
+msgstr "Tilføj forummet"
+
+msgid "AddLpIntro"
+msgstr "Læringsstien struktur vil kunne ses i menuen til venstre. Læringsstien kan løbende ændres."
+
+msgid "AddLpToStart"
+msgstr "Til at starte med skal du angive en titel til læringsstien"
+
+msgid "CreateTheLink"
+msgstr "Importer et link"
+
+msgid "MoveCurrentLink"
+msgstr "Flyt det valgte link"
+
+msgid "EditCurrentLink"
+msgstr "Rediger det aktuelle link"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "MoveCurrentStudentPublication"
+msgstr "Flyt den aktuelle aflevering"
+
+msgid "EditCurrentStudentPublication"
+msgstr "Rediger den aktuelle aflevering"
+
+msgid "AllowMultipleAttempts"
+msgstr "Læringsstien skal kunne gennemføres flere gange"
+
+msgid "PreventMultipleAttempts"
+msgstr "Læringsstien skal kun kunne gennemføres en gang"
+
+msgid "DocumentHasBeenDeleted"
+msgstr "Dokumentet kan ikke vises, da det er blevet slettet"
+
+msgid "EditCurrentForum"
+msgstr "Rediger det aktuelle forum"
+
+msgid "NoPrerequisites"
+msgstr "Ingen betingelser"
+
+msgid "NewExercise"
+msgstr "Ny øvelse"
+
+msgid "CreateANewLink"
+msgstr "Opret et nyt link"
+
+msgid "CreateANewForum"
+msgstr "Opret et nyt forum"
+
+msgid "LinkAdd"
+msgstr "Tilføj link"
+
+msgid "WoogieConversionPowerPoint"
+msgstr "Woogie: Word-konvertering"
+
+msgid "WelcomeWoogieSubtitle"
+msgstr "Konvertering af word-fil til læringssti"
+
+msgid "WelcomeWoogieConverter"
+msgstr "Dette er Woogie konverteringsprogram. <ul type=\"1\"><li>Vælg den fil, der skal konverteres. Formatet skal være: .doc, .sxw, .odt<li>Upload filen til Woogie. Filen bliver nu konverteret til en SCORM kompatibel læringssti<li>Du kan efterfølgende tilføje audio kommentarer på hver side og tilføje quiz eller andre aktiviteter</ul>"
+
+msgid "WoogieError"
+msgstr "Der opstod en fejl under konverteringen. Undersøg om der er specielle tegn i dokumentetnavnet. Er der det, skal du gemme dokumentet på ny under et gyldigt navn."
+
+msgid "WordConvert"
+msgstr "Word-konvertering"
+
+msgid "Order"
+msgstr "Rækkefølge"
+
+msgid "InteractionID"
+msgstr "Interaktion ID"
+
+msgid "TimeFinished"
+msgstr "Tidspunkt (fuldført kl...)"
+
+msgid "CorrectAnswers"
+msgstr "Rigtige svar"
+
+msgid "StudentResponse"
+msgstr "Deltagerens svar"
+
+msgid "LatencyTimeSpent"
+msgstr "Tidsforbrug"
+
+msgid "Result"
+msgstr "Resultat"
+
+msgid "SplitStepsPerPage"
+msgstr "En side et trin"
+
+msgid "SplitStepsPerChapter"
+msgstr "Et kapitel et trin"
+

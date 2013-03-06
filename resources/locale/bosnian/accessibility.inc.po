@@ -1,0 +1,3 @@
+msgid "WCAGImage"
+msgstr "Slika"
+

@@ -1,0 +1,105 @@
+msgid "MessageEmptyMessageOrSubject"
+msgstr "Per favor, escrigui el títol i el text del seu missatge"
+
+msgid "Inbox"
+msgstr "Safata d\'entrada"
+
+msgid "Messages"
+msgstr "Missatges instantanis"
+
+msgid "SendMessage"
+msgstr "Enviar missatge"
+
+msgid "NewMessage"
+msgstr "Nou missatge"
+
+msgid "ComposeMessage"
+msgstr "Redactar"
+
+msgid "DeleteSelectedMessages"
+msgstr "Esborrar els missatges seleccionats"
+
+msgid "SelectAll"
+msgstr "Seleccionar tot"
+
+msgid "DeselectAll"
+msgstr "Anul·lar selecció"
+
+msgid "ReplyToMessage"
+msgstr "Respondre a aquest missatge"
+
+msgid "BackToInbox"
+msgstr "Tornar a la safata d\'entrada"
+
+msgid "MessageSentTo"
+msgstr "El missatge ha estat enviat a"
+
+msgid "SendMessageTo"
+msgstr "Enviar a"
+
+msgid "Myself"
+msgstr "Jo mateix"
+
+msgid "From"
+msgstr "De"
+
+msgid "To"
+msgstr "Per a"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "InvalidMessageId"
+msgstr "L\'id del missatge a contestar no és vàlid."
+
+msgid "ErrorSendingMessage"
+msgstr "\'ha produït un error mentre s\'intentava enviar el missatge."
+
+msgid "SureYouWantToDeleteSelectedMessages"
+msgstr "Està segur de voler esborrar els missatges seleccionats ?"
+
+msgid "SelectedMessagesDeleted"
+msgstr "Els missatges seleccionats han estat suprimits"
+
+msgid "EnterTitle"
+msgstr "Ingressi un títol"
+
+msgid "TypeYourMessage"
+msgstr "Escriba el seu missatge"
+
+msgid "MessageDeleted"
+msgstr "El missatge ha estat eliminat"
+
+msgid "ConfirmDeleteMessage"
+msgstr "Està segur que desitja esborrar aquest missatge?"
+
+msgid "DeleteMessage"
+msgstr "Esborrar missatge"
+
+msgid "ReadMessage"
+msgstr "Leer"
+
+msgid "SendInviteMessage"
+msgstr "Enviar missatge d\'invitació"
+
+msgid "SendMessageInvitation"
+msgstr "Està segur que desitja enviar les invitacions als usuaris seleccionats ?"
+
+msgid "MessageTool"
+msgstr "Eina missatges"
+
+msgid "WriteAMessage"
+msgstr "Escriure un missatge"
+
+msgid "AlreadyReadMessage"
+msgstr "Missatge llegit"
+
+msgid "UnReadMessage"
+msgstr "Missatge sense llegir"
+
+msgid "MessageSent"
+msgstr "Missatge enviat"
+
+msgid "YouShouldWriteAMessage"
+msgstr "Escriviu un missatge"
+

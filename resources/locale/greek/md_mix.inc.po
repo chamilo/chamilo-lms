@@ -1,0 +1,3 @@
+msgid "langSearch"
+msgstr "Αναζήτηση"
+

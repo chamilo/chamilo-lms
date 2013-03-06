@@ -1,0 +1,174 @@
+msgid "langOnlineConference"
+msgstr "Konference"
+
+msgid "langWash"
+msgstr "Dzēst"
+
+msgid "langReset"
+msgstr "Atsākt"
+
+msgid "langSave"
+msgstr "Saglabāt"
+
+msgid "langRefresh"
+msgstr "Pārlādēt"
+
+msgid "langIsNowInYourDocDir"
+msgstr "šobrīd ir Jūsu Dokumentu rīkos. <br><B>Šis fails ir redzams</B>"
+
+msgid "langCopyFailed"
+msgstr "Drukāšana beidzās neveiksmīgi"
+
+msgid "langTypeMessage"
+msgstr "Rakstiet savu ziņu!"
+
+msgid "langConfirmReset"
+msgstr "Vai tiešām vēlaties dzēst visu saraksti?"
+
+msgid "langHasResetChat"
+msgstr "Tērzēšana tika atsāka no jauna"
+
+msgid "langNoOnlineConference"
+msgstr "Šobrīd nav nevienas konferences ..."
+
+msgid "langMediaFile"
+msgstr "Tiešsaistes audio un video straumēšana"
+
+msgid "langContentFile"
+msgstr "Prezentācija"
+
+msgid "langListOfParticipants"
+msgstr "Dalībnieku saraksts"
+
+msgid "langYourPicture"
+msgstr "Jūsu attēls"
+
+msgid "langOnlineDescription"
+msgstr "Konferences apraksts"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "Lūdzu, atzīmē šeit ar ķeksīti tikai tad, ja jautājums ir tiešām svarīgs!"
+
+msgid "langQuestion"
+msgstr "jautājums"
+
+msgid "langClearList"
+msgstr "Dzēst sarakstu"
+
+msgid "langWhiteBoard"
+msgstr "Baltā tāfele"
+
+msgid "langTextEditorDefault"
+msgstr "<h2>Teksta redaktors</h2>Izgriez un ielīmē šeit no Writer vai MS-Word un labo. Dalībnieki redzēs, kā Jūs to darāt \"dzīvajā\"."
+
+msgid "langStreaming"
+msgstr "Straumīte"
+
+msgid "langStreamURL"
+msgstr "Straumītes URL"
+
+msgid "langStreamType"
+msgstr "Straumītes tips"
+
+msgid "langLinkName"
+msgstr "Hipersaites nosaukums"
+
+msgid "langLinkURL"
+msgstr "Hipersaites URL"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "Laipni lūdzam <b>Tie"
+
+msgid "langNoLinkAvailable"
+msgstr "Nav neviena saite pieejama"
+
+msgid "langChat_reset_by"
+msgstr "pļāpāšanu atsāka"
+
+msgid "OrFile"
+msgstr "Vai fails"
+
+msgid "langCallSent"
+msgstr "Uzaicinājums pievienoties pļāpātuvei tika nosūtīts. Tagad jāuzgaida līdz aicinātais piekritīs piedalīties sarunā."
+
+msgid "langChatDenied"
+msgstr "Uzaicinājums tika noraidīts."
+
+msgid "Send"
+msgstr "Sūtīt"
+
+msgid "Connected"
+msgstr "Savienots"
+
+msgid "Think"
+msgstr "Domājošs"
+
+msgid "BigGrin"
+msgstr "Lielais smējiens"
+
+msgid "Amazing"
+msgstr "Pārsteigts"
+
+msgid "Confused"
+msgstr "Samulsis"
+
+msgid "Cool"
+msgstr "Vēsais"
+
+msgid "Surprised"
+msgstr "Pārsteigts"
+
+msgid "Hand"
+msgstr "Hello"
+
+msgid "Wink"
+msgstr "Piemiegt aci"
+
+msgid "Neutral"
+msgstr "Vienaldzīgs"
+
+msgid "Angry"
+msgstr "Dusmīgs"
+
+msgid "Avid"
+msgstr "Enerģisks"
+
+msgid "Redface"
+msgstr "Piesarcis"
+
+msgid "Sad"
+msgstr "Skumīgs"
+
+msgid "Silence"
+msgstr "Klusums"
+
+msgid "Silenced"
+msgstr "Apklusināts"
+
+msgid "Smile"
+msgstr "Smaids"
+
+msgid "Exclamation"
+msgstr "Izsaukums !"
+
+msgid "Arrow"
+msgstr "Bulta"
+
+msgid "Question"
+msgstr "Jautājums"
+
+msgid "Idea"
+msgstr "Ideja"
+
+msgid "AskPermissionSpeak"
+msgstr "Pajautājiet atļauju sarunai"
+
+msgid "GiveTheFloorTo"
+msgstr "Dot vārdu"
+
+msgid "Pause"
+msgstr "Pauze"
+
+msgid "Stop"
+msgstr "Stop"
+

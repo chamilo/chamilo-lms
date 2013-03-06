@@ -1,0 +1,229 @@
+msgid "langInvalidId"
+msgstr "Cet identifiant n\'est pas valide."
+
+msgid "langWelcome"
+msgstr "Bienvenue !"
+
+msgid "langPass"
+msgstr "Mot de passe"
+
+msgid "langEnter"
+msgstr "Retourner à votre liste de cours"
+
+msgid "langReg"
+msgstr "Inscription"
+
+msgid "langMenu"
+msgstr "Menu"
+
+msgid "langAdvises"
+msgstr "Suggestions"
+
+msgid "langCourseDoesntExist"
+msgstr "<b>Attention :</b> Ce cours n\'existe pas"
+
+msgid "langGetCourseFromOldPortal"
+msgstr "cliquez ici pour récupérer ce cours dans votre ancien portail"
+
+msgid "langOtherCourses"
+msgstr "autres cours"
+
+msgid "langSupportForum"
+msgstr "Forum de support"
+
+msgid "langCategories"
+msgstr "catégories"
+
+msgid "langBackToHomePage"
+msgstr "Retour à la page d\'accueil"
+
+msgid "lang_No_course_publicly_available"
+msgstr "Pas de cours en accès libre"
+
+msgid "langLostPassword"
+msgstr "Mot de passe perdu"
+
+msgid "lang_edit_my_course_list"
+msgstr "Modifier ma liste de cours"
+
+msgid "langAgenda"
+msgstr "Agenda"
+
+msgid "langValvas"
+msgstr "Dernières annonces"
+
+msgid "langUp"
+msgstr "Monter"
+
+msgid "langCatList"
+msgstr "Catégories"
+
+msgid "langCourseList"
+msgstr "Liste des cours"
+
+msgid "langHelptwo"
+msgstr "Aide"
+
+msgid "langRegAll"
+msgstr "S\'inscrire"
+
+msgid "EussMenu"
+msgstr "menu"
+
+msgid "Opinio"
+msgstr "Opinion"
+
+msgid "Intranet"
+msgstr "Intranet"
+
+msgid "Englin"
+msgstr "Anglais"
+
+msgid "langInvalidForSelfRegistration"
+msgstr "Échec du login - si vous n\'êtes pas enregistré, vous pouvez le faire en utilisant le <a href=claroline/auth/inscription.php>formulaire d\'enregistrement</a>"
+
+msgid "langSubCat"
+msgstr "sous-catégories"
+
+msgid "langMenuGeneral"
+msgstr "Général"
+
+msgid "langMenuUser"
+msgstr "Menu perso"
+
+msgid "langMenuAdmin"
+msgstr "Administration"
+
+msgid "langUsersOnLineList"
+msgstr "Liste des utilisateurs en ligne"
+
+msgid "langTotalOnLine"
+msgstr "Total en ligne"
+
+msgid "langRefresh"
+msgstr "Actualiser"
+
+msgid "langMe"
+msgstr "moi-même"
+
+msgid "langSystemAnnouncements"
+msgstr "Annonces du système"
+
+msgid "langHelpMaj"
+msgstr "Aide"
+
+msgid "langNotRegistered"
+msgstr "Non enregistré"
+
+msgid "langAdmin"
+msgstr "Administrateur de la plateforme"
+
+msgid "Login"
+msgstr "Identifiant (login)"
+
+msgid "langRegisterForCourse"
+msgstr "S\'inscrire à un nouveau cours"
+
+msgid "langUnregisterForCourse"
+msgstr "Se désinscrire d\'un cours"
+
+msgid "langCombinedCourse"
+msgstr "Cours combiné"
+
+msgid "Platform"
+msgstr "Plateforme"
+
+msgid "Refresh"
+msgstr "Rafraîchir"
+
+msgid "TotalOnLine"
+msgstr "Nombre total d\'utilisateurs connectés"
+
+msgid "langCourseClosed"
+msgstr "(cours fermé)"
+
+msgid "ViewOpenCourses"
+msgstr "Voir les cours ouverts"
+
+msgid "langCompetences"
+msgstr "Compétences"
+
+msgid "langDiplomas"
+msgstr "Diplômes"
+
+msgid "langTeach"
+msgstr "Ce qu\'il/elle peut enseigner"
+
+msgid "langProductions"
+msgstr "Productions"
+
+msgid "langSendChatRequest"
+msgstr "Envoyer une demande de \"chat\" à cette personne"
+
+msgid "langRequestDenied"
+msgstr "Cet appel a été refusé."
+
+msgid "UsageDatacreated"
+msgstr "Données d\'utilisation créées"
+
+msgid "SessionView"
+msgstr "Voir les cours par sessions"
+
+msgid "CourseView"
+msgstr "Voir la liste complète des cours"
+
+msgid "DropboxFileAdded"
+msgstr "Un fichier a été ajouté dans le partage de fichier"
+
+msgid "NewMessageInForum"
+msgstr "Un nouveau message a été posté dans le forum"
+
+msgid "FolderCreated"
+msgstr "Un nouveau dossier a été créé"
+
+msgid "LinkAdded"
+msgstr "Lien ajouté"
+
+msgid "AnnouncementAdded"
+msgstr "L\'annonce a été ajoutée"
+
+msgid "AgendaAdded"
+msgstr "Un évènement d\'agenda a été ajouté"
+
+msgid "LoginEnter"
+msgstr "S\'identifier"
+
+msgid "Messages"
+msgstr "Messages"
+
+msgid "Inbox"
+msgstr "Boîte de réception"
+
+msgid "Comppose"
+msgstr "Nouveau message"
+
+msgid "PendingInvitations"
+msgstr "Invitations en attente"
+
+msgid "YouDoNotHaveAnySessionInItsHistory"
+msgstr "Vous n\'avez pas de session dans votre historique"
+
+msgid "PortalHomepageDefaultIntroduction"
+msgstr "<h2>Félicitations! Vous avez installé votre portail e-learning avec succès!</h2>  <p>Il ne vous reste plus qu\'à compléter cette installation au travers de trois étapes simples mais importantes:<br /> <ol>     <li>Configurez votre portail au travers de la section d\'administration, en sélectionnant l\'entrée Portail -> <a href=\"main/admin/settings.php\">Configuration</a>. N\'oubliez pas d\'y configurer les langues acceptées sur ce portail.</li>     <li>Lancez la première étincelle de vie sur votre portail en y ajoutant utilisateurs et/ou cours. Vous pouvez le faire en invitant des nouveaux utilisateurs à créer eux-mêmes leur compte et en téléchargeant des contenus de cours intéressants, ou vous pouvez les inscrire vous-même au travers des sections Utilisateurs et Cours de la page d\'<a href=\"main/admin/\">administration</a>.</li>     <li>Finalement, éditez cette page d\'introduction au travers de l\'entrée <a href=\"main/admin/configure_homepage.php\">Modifier accueil</a> de la section d\'administration.</li> </ol> <p>Vous pourrez toujours trouver plus d\'information au sujet de le logiciel sur notre site web: <a href=\"http://www.chamilo.org\">http://www.chamilo.org</a>.</p> <p>Profitez au maximum de cette nouvelle aventure, et n\'hésitez pas à vous joindre à la communauté et à nous expliquer comment vous utilisez le logiciel au travers de <a href=\"http://www.chamilo.org/forum\">notre forum</a>.</p>"
+
+msgid "Username"
+msgstr "Nom d\'utilisateur"
+
+msgid "GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX"
+msgstr "Révisez notre catalogue de cours %s pour vous inscrire à votre cours préféré. Une fois inscrit(e), votre cours apparaîtra %s, à la place de ce message."
+
+msgid "HelloXAsYouCanSeeYourCourseListIsEmpty"
+msgstr "Bonjour %s, nous vous souhaitons la bienvenue,<br />
+Comme vous pouvez le voir, votre liste de cours est vide. C\'est parce que vous ne nous êtes pas encore inscrit à un cours!"
+
+msgid "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"
+msgstr "Merci de nous donner un moment pour vous inscrire à l\'un de nos cours. Si vous pensez avoir été oublié, merci de contacter les administrateurs du site. Vous pouvez généralement trouver leurs informations de contact dans le pied de page."
+
+msgid "Profile"
+msgstr "Profil"
+

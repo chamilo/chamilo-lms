@@ -1,0 +1,144 @@
+msgid "langSelectOptionForBackup"
+msgstr "Por favor, seleccione una opción de copia de seguridad"
+
+msgid "langLetMeSelectItems"
+msgstr "Seleccionar los componentes del curso"
+
+msgid "langCreateFullBackup"
+msgstr "Crear una copia de seguridad completa de este curso"
+
+msgid "langCreateBackup"
+msgstr "Crear una copia de seguridad"
+
+msgid "langBackupCreated"
+msgstr "Se ha generado la copia de seguridad del curso. La descarga de este archivo se producirá en breves instantes. Si la descarga no se inicia, haga clic en el siguiente enlace"
+
+msgid "langSelectBackupFile"
+msgstr "Seleccionar un fichero de copia de seguridad"
+
+msgid "langImportBackup"
+msgstr "Importar una copia de seguridad"
+
+msgid "langImportFullBackup"
+msgstr "Importar una copia de seguridad completa"
+
+msgid "langImportFinished"
+msgstr "Importación finalizada"
+
+msgid "langEvents"
+msgstr "Agenda"
+
+msgid "langAnnouncements"
+msgstr "Anuncios"
+
+msgid "langDocuments"
+msgstr "Documentos"
+
+msgid "langTests"
+msgstr "Ejercicios"
+
+msgid "langLearnpaths"
+msgstr "Lecciones"
+
+msgid "langCopyCourse"
+msgstr "Copiar el curso"
+
+msgid "langSelectItemsToCopy"
+msgstr "Seleccione los elementos que desea copiar"
+
+msgid "langCopyFinished"
+msgstr "La copia ha finalizado"
+
+msgid "langFullRecycle"
+msgstr "Reciclado completo"
+
+msgid "langRecycleCourse"
+msgstr "Reciclar el curso"
+
+msgid "langRecycleFinished"
+msgstr "El reciclado ha finalizado"
+
+msgid "langRecycleWarning"
+msgstr "Atención: al usar esta herramienta puede eliminar partes del curso que luego no podrá recuperar. Le aconsejamos que antes realice una <a href=\"create_backup.php\">copia de seguridad</a>"
+
+msgid "langSameFilename"
+msgstr "¿ Qué hacer con los ficheros importados que tengan el mismo nombre que otros existentes ?"
+
+msgid "langSameFilenameSkip"
+msgstr "Saltar los ficheros con el mismo nombre"
+
+msgid "langSameFilenameRename"
+msgstr "Renombrar el fichero (ej. archivo.pdf se convierte en  archivo_1.pdf)"
+
+msgid "langSameFilenameOverwrite"
+msgstr "Sobreescribir el fichero"
+
+msgid "langSelectDestinationCourse"
+msgstr "Seleccionar el curso de destino"
+
+msgid "langFullCopy"
+msgstr "Copia completa"
+
+msgid "langCourseDescription"
+msgstr "Descripción del curso"
+
+msgid "langNoResourcesToBackup"
+msgstr "No hay recursos para hacer una copia de seguridad"
+
+msgid "langNoResourcesInBackupFile"
+msgstr "No hay recursos disponibles en este fichero de copia de seguridad"
+
+msgid "langSelectResources"
+msgstr "Seleccione los recursos"
+
+msgid "langNoResourcesToRecycles"
+msgstr "No hay recursos para reciclar"
+
+msgid "langIncludeQuestionPool"
+msgstr "Incluir el repositorio de preguntas"
+
+msgid "langLocalFile"
+msgstr "Fichero local"
+
+msgid "langServerFile"
+msgstr "Fichero del servidor"
+
+msgid "langNoBackupsAvailable"
+msgstr "No hay una copia de seguridad disponible"
+
+msgid "langNoDestinationCoursesAvailable"
+msgstr "No hay disponible un curso de destino"
+
+msgid "langBackup"
+msgstr "Copia de seguridad"
+
+msgid "langImportBackupInfo"
+msgstr "Puede transferir una copia de seguridad desde su ordenador o bien usar una copia de seguridad ya disponible en el servidor."
+
+msgid "langCreateBackupInfo"
+msgstr "Puede seleccionar los contenidos del curso que constituirán la copia de seguridad."
+
+msgid "ToolIntro"
+msgstr "Textos de introducción"
+
+msgid "UploadError"
+msgstr "Error de envío, revise tamaño máximo del archivo y los permisos del directorio."
+
+msgid "DocumentsWillBeAddedToo"
+msgstr "Los documentos también serán añadidos"
+
+msgid "ToExportLearnpathWithQuizYouHaveToSelectQuiz"
+msgstr "Si quiere exportar una lección que contenga ejercicios, tendrá que  asegurarse de que estos ejercicios han sido incluidos en la exportación; para eso tendrá que haberlos seleccionado en la lista de ejercicios."
+
+msgid "ArchivesDirectoryNotWriteableContactAdmin"
+msgstr "El directorio \"archive\" utilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma."
+
+msgid "DestinationCourse"
+msgstr "Curso de destino"
+
+msgid "IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments"
+msgstr "Si su lección tiene archivos de audio incluidos, debería seleccionarlos desde los documentos."
+
+msgid "DontForgetToSelectTheMediaFilesIfYourResourceNeedIt"
+msgstr "No olvide seleccionar los archivos multimedia si su recurso los necesita"
+

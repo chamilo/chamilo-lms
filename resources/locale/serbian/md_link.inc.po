@@ -1,0 +1,126 @@
+msgid "langMdCallingTool"
+msgstr "Dokumenta"
+
+msgid "langMdTitle"
+msgstr "Nalov objekta za učenje"
+
+msgid "langMdDescription"
+msgstr "Da biste sačuvali ovu informaciju, pritisnite Sačuvaj"
+
+msgid "langMdCoverage"
+msgstr "npr. Diplomirani..."
+
+msgid "langMdCopyright"
+msgstr "npr. izvor je potvrđen"
+
+msgid "nameTools"
+msgstr "zastarele jezičke varijable"
+
+msgid "langTool"
+msgstr "Dokument – Opisna definicuja"
+
+msgid "langNoScript"
+msgstr "Skript nije dozvoljen u vašem pretraživaču, molim Vas, ne obraćajte pažnju na tekst ispod pošto neće raditi..."
+
+msgid "langLanguageTip"
+msgstr "jezik u kome je napravljen objekat učenja"
+
+msgid "langIdentifier"
+msgstr "Identifikator"
+
+msgid "langIdentifierTip"
+msgstr "jedinstvena identifikacija ovog objekta za učenje se satoji od slova, brojeva, _-.()\'!*"
+
+msgid "langTitleTip"
+msgstr "naslov ili ime, jezik naslova ili imena"
+
+msgid "langDescriptionTip"
+msgstr "opis komentara i jezik koji je korišćen za opisivanje objekta za učenje"
+
+msgid "langKeyword"
+msgstr "Ključna reč"
+
+msgid "langKeywordTip"
+msgstr "razdvojene zarezima (slova, cifre, -.)"
+
+msgid "langCoverage"
+msgstr "Rasprostranjenost"
+
+msgid "langCoverageTip"
+msgstr "na primer diplomirani xxx: yyy"
+
+msgid "langKwNote"
+msgstr "Ako promenite jezik opisa ne dodajte ključne reči u isto vreme."
+
+msgid "langClickKw"
+msgstr "Kliknite ne ključnu reč na drvetu da je selektujete ili deselektujete."
+
+msgid "langKwHelp"
+msgstr "<br/> Kliknite na \'+\' dugme da biste otvorili, \'-\' dugme da biste zatvorili, \'++\' dugme da otvorite sve, \'--\' dugme da zatvorite sve.<br/> <br/> Očistite sve selektovane ključne reči zatvaranjem drveta i otvaranjem ponovo sa \'+\' dugmetom.<br/> Alt-click \'+\' traži originalne ključne reči u drvetu.<br/> <br/> Alt-click ključna reč selektuje ključnu reč bez širih termina ili deselktuje ključnu reč sa širim terminima.<br/> <br/> Ako promenite jezik opisa ne dodajte ključne reči u isto vreme.<br/> <br/>"
+
+msgid "langLocation"
+msgstr "URL/URI"
+
+msgid "langLocationTip"
+msgstr "kliknite da otvorite objekat"
+
+msgid "langStore"
+msgstr "Sačuvaj"
+
+msgid "langDeleteAll"
+msgstr "Obriši sve Opisne definicije"
+
+msgid "langConfirmDelete"
+msgstr "Da li *stvarno* želite da obrišete sve Opisne definicije?"
+
+msgid "langWorkOn"
+msgstr "Uključeno"
+
+msgid "langNotInDB"
+msgstr "nema takve kategorije linkova"
+
+msgid "langManifestSyntax"
+msgstr "(greška u sintaksi manifest fajla...)"
+
+msgid "langEmptyManifest"
+msgstr "(prazan manifest fajl...)"
+
+msgid "langNoManifest"
+msgstr "(nema manifest fajla...)"
+
+msgid "langNotFolder"
+msgstr "je nemoguće, nije folder..."
+
+msgid "langContinue"
+msgstr "Nastavi sa"
+
+msgid "langCreate"
+msgstr "kreiraj"
+
+msgid "langRemove"
+msgstr "Ukloni MDE"
+
+msgid "langAllRemovedFor"
+msgstr "Svi unosi su uklonjeni za kategoriju"
+
+msgid "langRemainingFor"
+msgstr "zastareli unosi su uklonjeni za kategoriju"
+
+msgid "langIndex"
+msgstr "Indeks reči"
+
+msgid "langTotalMDEs"
+msgstr "Ukupan broj linkova MD unosa:"
+
+msgid "langMainMD"
+msgstr "Otvori glavni MDE"
+
+msgid "langOrElse"
+msgstr "Odaberite kategoriju linkova"
+
+msgid "langWarningDups"
+msgstr "– dupla imena kategorija su uklonjena sa liste!"
+
+msgid "langSLC"
+msgstr "Rad sa kategorijom linkova koja se zove"
+

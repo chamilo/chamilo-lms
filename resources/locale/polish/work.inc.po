@@ -1,0 +1,123 @@
+msgid "Tools"
+msgstr "Narzędzia"
+
+msgid "SendWork"
+msgstr "Załaduj dokument"
+
+msgid "langTooBig"
+msgstr "Nie wybrano żadnego pliku do wysłania lub jest on za duży"
+
+msgid "langListDeleted"
+msgstr "Lista została skasowana"
+
+msgid "langDocModif"
+msgstr "Modyfikacja tytułu pracy"
+
+msgid "langDocAdd"
+msgstr "Praca dodana"
+
+msgid "langDocDel"
+msgstr "Praca usunięta"
+
+msgid "langTitleWork"
+msgstr "Tytuł pracy"
+
+msgid "langAuthors"
+msgstr "Autorzy"
+
+msgid "langDelList"
+msgstr "Usuń link"
+
+msgid "langWorkDelete"
+msgstr "Usuń"
+
+msgid "langWorkModify"
+msgstr "Modyfikuj"
+
+msgid "langWorkConfirmDelete"
+msgstr "Czy na pewno chcesz usun±ć tę pracę?"
+
+msgid "langAllFiles"
+msgstr "Wszystkie pliki"
+
+msgid "DefaultUpload"
+msgstr "Domyślne właściwości wysłanych dokumentów"
+
+msgid "NewVisible"
+msgstr "Wysłane dokumenty widoczne dla wszystkich"
+
+msgid "NewUnvisible"
+msgstr "Wysłane dokumenty widoczne dla prowadzących"
+
+msgid "lang_doc_unvisible"
+msgstr "Prowadzący może zdecydować, że Twoje dokumenty będą początkowo widoczne tylko dla niego. Dlatego możesz nie widzieć swojego dokumentu!"
+
+msgid "langDelLk"
+msgstr "Czy rzeczywiście chcesz usunąć ten odnośnik?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Tylko zarejestrowani użytkownicy tego kursu mogą publikować dokumenty."
+
+msgid "langListDel"
+msgstr "Skasuj liste"
+
+msgid "langNameDir"
+msgstr "Nazwa nowego katalogu"
+
+msgid "langFileExists"
+msgstr "Czynność niemożliwa.<br>Plik o tej nazwie już istnieje."
+
+msgid "CreateDirectory"
+msgstr "Stwórz katalog"
+
+msgid "langCurrentDir"
+msgstr "obecny folder"
+
+msgid "UploadADocument"
+msgstr "Załaduj dokument"
+
+msgid "EditToolOptions"
+msgstr "Opcje narzędzi edycji"
+
+msgid "DocumentDeleted"
+msgstr "Dokument został skasowany"
+
+msgid "SendMailBody"
+msgstr "Użytkownik opublikował dokument w Publikacjach dla twojego kursu."
+
+msgid "DirDelete"
+msgstr "Usuń katalog"
+
+msgid "ValidateChanges"
+msgstr "Sprawdź zmiany"
+
+msgid "FolderUpdated"
+msgstr "Folder zaktualizowany"
+
+msgid "EndsAt"
+msgstr "Kończy się (zamknięcie)"
+
+msgid "DatesAvailables"
+msgstr "Dostępne daty"
+
+msgid "ExpiresAt"
+msgstr "Wygasa"
+
+msgid "AddToCalendar"
+msgstr "Dodaj do kalendarza"
+
+msgid "DirectoryCreated"
+msgstr "Katalog utworzony"
+
+msgid "AdvancedParameters"
+msgstr "Parametry zaawansowane"
+
+msgid "EnableExpiryDate"
+msgstr "Włącz datę wygaśnięcia"
+
+msgid "EnableEndDate"
+msgstr "Włącz date końca"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "Nie można zapisać dokumentu"
+

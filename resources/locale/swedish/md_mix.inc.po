@@ -1,0 +1,42 @@
+msgid "langTool"
+msgstr "Dokument Metadata"
+
+msgid "langClickKw"
+msgstr "Klicka på ett nyckelord i trädet för att välja eller välja bort."
+
+msgid "langKwHelp"
+msgstr "<br/> Klicka \'+\' knappen för att öppna, \'-\' knappen för att stänga, \'++\' knappen för att öppna alla, \'--\' knappen för att stänga alla.<br/> <br/> Ta bort alla valda nyckelord genom att  stänga trädet och öppna det igen med \'+\' knappen.<br/> Alt-klick \'+\' söker original nyckelord i träden.<br/> <br/> Alt-click nyckelord väljer ett nyckelord utan bredare sökning eller avaktiverar en bredare sökning.<br/> <br/>Om du ändrar språket på beskrivningen, lägg inte till nya nyckelord på samma gång.<br/> <br/>"
+
+msgid "langAdvanced"
+msgstr "Skapa"
+
+msgid "langSearch"
+msgstr "Sök"
+
+msgid "langSearchCrit"
+msgstr "Ett ord per rad!"
+
+msgid "langNoKeywords"
+msgstr "Denna kurs har inget nyckelord"
+
+msgid "langKwCacheProblem"
+msgstr "Nyckelords \"cache\" kan inte öppnas"
+
+msgid "langCourseKwds"
+msgstr "Detta dokument inneh�ller kursens nyckelord"
+
+msgid "langKwdsInMD"
+msgstr "nyckelord som används i MD"
+
+msgid "langKwdRefs"
+msgstr "nyckelords referenser"
+
+msgid "langNonCourseKwds"
+msgstr "Icke-kurs nyckelord"
+
+msgid "langKwdsUse"
+msgstr "Kurs nyckelord (fet = ej använd)"
+
+msgid "langTotalMDEs"
+msgstr "Sammanlagt antal Länkar MD inmatningar"
+

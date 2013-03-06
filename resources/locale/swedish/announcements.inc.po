@@ -1,0 +1,148 @@
+msgid "Announcement"
+msgstr "Tillkännagivanden"
+
+msgid "langAnnEmpty"
+msgstr "Listan över tillkännagivanden har rensats"
+
+msgid "AnnouncementModified"
+msgstr "Tillkännagivandet har modifierats"
+
+msgid "AnnouncementAdded"
+msgstr "Tillkännagivande har lagts till"
+
+msgid "AnnouncementDeleted"
+msgstr "Tillkännagivande har raderats"
+
+msgid "AnnouncementPublishedOn"
+msgstr "Publicerat den"
+
+msgid "AddAnnouncement"
+msgstr "Lägg till som ett tillkännagivande"
+
+msgid "langContent"
+msgstr "Innehåll"
+
+msgid "AnnouncementDeleteAll"
+msgstr "Rensa upp listan över tillkännagivanden"
+
+msgid "professorMessage"
+msgstr "Meddelande från din lärare"
+
+msgid "langEmailSent"
+msgstr " och emejlats till registrerade elever"
+
+msgid "EmailOption"
+msgstr "Sänd detta tillkännagivande med emejl till de registrerade eleverna."
+
+msgid "langOn"
+msgstr "På"
+
+msgid "langRegUser"
+msgstr "registrerade användare på denna sajt"
+
+msgid "langUnvalid"
+msgstr "har ogiltig eller saknar emejladress"
+
+msgid "langModifAnn"
+msgstr "Modifiera detta tillkännagivande"
+
+msgid "langModify"
+msgstr "ändra"
+
+msgid "langDelete"
+msgstr "radera"
+
+msgid "langTitle"
+msgstr "Titel"
+
+msgid "langHelp"
+msgstr "hjälp"
+
+msgid "langOk"
+msgstr "OK"
+
+msgid "langAddIntro"
+msgstr "Lägg till en inledningstext"
+
+msgid "langBackList"
+msgstr "Återgå till listan"
+
+msgid "langSelMess"
+msgstr "Varningar till vissa användare"
+
+msgid "EmailTitle"
+msgstr "Titel på detta mejl"
+
+msgid "langUserlist"
+msgstr "Lista på grupper och användare"
+
+msgid "langSelectedUsers"
+msgstr "Utvalda användare"
+
+msgid "langSubmit"
+msgstr "sänd"
+
+msgid "langPleaseEnterMessage"
+msgstr "Du måste introducera meddelande texten."
+
+msgid "langPleaseSelectUsers"
+msgstr "Du måste välja någon användare"
+
+msgid "Teachersubject"
+msgstr "meddelandet har skickats till dina elever"
+
+msgid "langMessages"
+msgstr "Meddelanden"
+
+msgid "langMessageToSelectedUsers"
+msgstr "meddelanden till markerade användare"
+
+msgid "langIntroText"
+msgstr "För att skicka ett meddelande, väljer du gruppanvändare (markerad med G framför) eller enstaka användare från listan till vänster."
+
+msgid "langDown"
+msgstr "ner"
+
+msgid "langMsgSent"
+msgstr "Detta meddelande har skickats till valda studenter"
+
+msgid "langSelUser"
+msgstr "valda användare från platsen"
+
+msgid "langMessageToSelectedGroups"
+msgstr "meddelande till markerade grupper"
+
+msgid "langSelectedGroups"
+msgstr "markerade grupper"
+
+msgid "langMsg"
+msgstr "Meddelanden"
+
+msgid "langYes"
+msgstr "ja"
+
+msgid "MsgText"
+msgstr "Meddelande"
+
+msgid "AnnouncementDeletedAll"
+msgstr "Alla tillkännagivanden har raderats"
+
+msgid "AnnouncementMoved"
+msgstr "Tillkännagivanden har flyttats"
+
+msgid "NoAnnouncements"
+msgstr "Det finns inga tillkännagivanden"
+
+msgid "SelectEverybody"
+msgstr "Välj alla"
+
+msgid "SelectedUsersGroups"
+msgstr "valda användargrupper"
+
+msgid "LearnerMessage"
+msgstr "Meddelande från en användare"
+
+msgid "YourAccountIsActiveYouCanLoginAndCheckYourCourses"
+msgstr "Hej,
+Ditt konto är nu aktiverat. Vänligen logga in för att förtsätta."
+

@@ -1,0 +1,96 @@
+msgid "langOnlineConference"
+msgstr "การสัมมนาออนไลน์"
+
+msgid "langWash"
+msgstr "ลบกระดานคำสนทนา"
+
+msgid "langReset"
+msgstr "เริ่มสนทนาใหม่"
+
+msgid "langSave"
+msgstr "บันทึกการสนทนา"
+
+msgid "langRefresh"
+msgstr "กะพริบหน้าจอใหม่"
+
+msgid "langIsNowInYourDocDir"
+msgstr "ในส่วนจอภาพของคุณ นี่คือข้อความที่คุณเห็น"
+
+msgid "langCopyFailed"
+msgstr "การพิมพ์ล้มเหลว"
+
+msgid "langTypeMessage"
+msgstr "กรุณาพิมพ์ข้อความ"
+
+msgid "langConfirmReset"
+msgstr "คุณต้องการลบข้อความทั้งหมดหรือไม่"
+
+msgid "langHasResetChat"
+msgstr "ได้เริ่มสนทนาใหม่"
+
+msgid "langNoOnlineConference"
+msgstr "ยังไม่มีการสัมมนาในขณะนี้"
+
+msgid "langMediaFile"
+msgstr "ถ่ายทอดสดการบรรยายหรือใช้ระบบ video streaming"
+
+msgid "langContentFile"
+msgstr "การนำเสนอ"
+
+msgid "langListOfParticipants"
+msgstr "รายชื่อของผู้เข้าร่วม"
+
+msgid "langYourPicture"
+msgstr "รูปภาพของคุณ"
+
+msgid "langOnlineDescription"
+msgstr "รายละเอียดการสัมมนา"
+
+msgid "langOnlyCheckForImportantQuestion"
+msgstr "โปรดคลิ๊กทำเครื่องหมายในกรอบสี่เหลี่ยม หากเป็นคำถามสำคัญ"
+
+msgid "langQuestion"
+msgstr "คำถามสำคัญ"
+
+msgid "langClearList"
+msgstr "ลบข้อความสนทนาทั้งหมด คลิกที่นี่"
+
+msgid "langWhiteBoard"
+msgstr "การนำเสนอ"
+
+msgid "langTextEditorDefault"
+msgstr "<b>เนื้อหาหรือการนำเสนอ(Presenting White Board)</b>"
+
+msgid "langStreaming"
+msgstr "สตรีมมิ่ง"
+
+msgid "langStreamURL"
+msgstr "ที่อยู่ไฟล์สตรีมมิ่ง"
+
+msgid "langStreamType"
+msgstr "ชนิดไฟล์สตรีมมิ่ง"
+
+msgid "langLinkName"
+msgstr "ชื่อเชื่อมโยง"
+
+msgid "langLinkURL"
+msgstr "เว็ปไซท์ที่เชื่อมโยง"
+
+msgid "langWelcomeToOnlineConf"
+msgstr "<b>ขอต้อนรับสู่การสัมมนาออนไลน์</b>"
+
+msgid "langNoLinkAvailable"
+msgstr "ไม่มีการเชื่อมโยง"
+
+msgid "langChat_reset_by"
+msgstr "เริ่มต้นสนทนาใหม่"
+
+msgid "OrFile"
+msgstr "หรือไฟล์"
+
+msgid "langCallSent"
+msgstr "ได้ส่งข้อความไปขอเชิญมาร่วมสนทนาออนไลน์แล้ว กรุณารอจนกว่าจะได้รับการตรวจสอบและตอบรับกลับจากผู้ที่คุณเชิญไป"
+
+msgid "langChatDenied"
+msgstr "คุณถูกปฏิเสธจากบุคคลที่คุณเชิญ"
+

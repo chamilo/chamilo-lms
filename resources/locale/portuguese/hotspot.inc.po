@@ -1,0 +1,60 @@
+msgid "select"
+msgstr "Validar"
+
+msgid "square"
+msgstr "Quadrado"
+
+msgid "circle"
+msgstr "Elipse"
+
+msgid "poly"
+msgstr "Polígono"
+
+msgid "status1"
+msgstr "Desenhe um hotspot (área clicável)."
+
+msgid "status2_poly"
+msgstr "Utilize o botão direito do rato para fechar o polígono."
+
+msgid "status2_other"
+msgstr "Libertar o botão do rato para guardar o hotspot (área clicável)."
+
+msgid "status3"
+msgstr "Hotspot (área clicável) guardado"
+
+msgid "exercise_status_1"
+msgstr "Responda clicando na imagem abaixo"
+
+msgid "exercise_status_2"
+msgstr "Validar respostas"
+
+msgid "exercise_status_3"
+msgstr "Estado: Pergunta encerrada"
+
+msgid "showUserPoints"
+msgstr "Mostrar/Esconder cliques do utilizador"
+
+msgid "showHotspots"
+msgstr "Mostrar / Esconder hotspots (áreas clicáveis)"
+
+msgid "labelPolyMenu"
+msgstr "Fechar polígono"
+
+msgid "triesleft"
+msgstr "Tentativas restantes"
+
+msgid "exeFinished"
+msgstr "Clique no botão abaixo para validar as suas respostas."
+
+msgid "nextAnswer"
+msgstr "Clique agora em: &done=done"
+
+msgid "delineation"
+msgstr "Delimitação"
+
+msgid "labelDelineationMenu"
+msgstr "Fechar delimitação"
+
+msgid "oar"
+msgstr "Área em risco"
+

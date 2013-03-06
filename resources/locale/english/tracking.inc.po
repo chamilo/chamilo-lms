@@ -1,0 +1,987 @@
+msgid "AssignSessionsTo"
+msgstr "Assign sessions to"
+
+msgid "langToolName"
+msgstr "Import Blackboard courses"
+
+msgid "TrackingDisabled"
+msgstr "Reporting has been disabled by system administrator."
+
+msgid "InactivesStudents"
+msgstr "Learners not connected for a week or more"
+
+msgid "AverageTimeSpentOnThePlatform"
+msgstr "Time spent on portal"
+
+msgid "AverageCoursePerStudent"
+msgstr "Courses by learner"
+
+msgid "AverageProgressInLearnpath"
+msgstr "Progress in courses"
+
+msgid "AverageResultsToTheExercices"
+msgstr "Tests score"
+
+msgid "SeeStudentList"
+msgstr "See the learners list"
+
+msgid "NbActiveSessions"
+msgstr "Active sessions"
+
+msgid "NbPastSessions"
+msgstr "Past sessions"
+
+msgid "NbFutureSessions"
+msgstr "Future sessions"
+
+msgid "NbStudentPerSession"
+msgstr "Number of learners by session"
+
+msgid "NbCoursesPerSession"
+msgstr "Number of courses per session"
+
+msgid "SeeSessionList"
+msgstr "See the sessions list"
+
+msgid "langShowNone"
+msgstr "Show none"
+
+msgid "langCourseStats"
+msgstr "Course Stats"
+
+msgid "langToolsAccess"
+msgstr "Tools access"
+
+msgid "langCourseAccess"
+msgstr "Course access"
+
+msgid "langLinksAccess"
+msgstr "Links"
+
+msgid "langDocumentsAccess"
+msgstr "Documents"
+
+msgid "langScormAccess"
+msgstr "Courses"
+
+msgid "langLinksDetails"
+msgstr "Links accessed"
+
+msgid "langWorksDetails"
+msgstr "assignments uploaded"
+
+msgid "langLoginsDetails"
+msgstr "Click on the month name for more details"
+
+msgid "langDocumentsDetails"
+msgstr "Documents downloaded"
+
+msgid "langExercicesDetails"
+msgstr "Tests score"
+
+msgid "langBackToList"
+msgstr "Back to users list"
+
+msgid "langDetails"
+msgstr "Details"
+
+msgid "langStatsOfCourse"
+msgstr "Course reporting data"
+
+msgid "langStatsOfUser"
+msgstr "Statistics of user"
+
+msgid "langStatsOfCampus"
+msgstr "Statistics of portal"
+
+msgid "langCountUsers"
+msgstr "Number of users"
+
+msgid "langCountToolAccess"
+msgstr "Number of connections to this training"
+
+msgid "langLoginsTitleMonthColumn"
+msgstr "Month"
+
+msgid "langLoginsTitleCountColumn"
+msgstr "Number of logins"
+
+msgid "langToolTitleToolnameColumn"
+msgstr "Name of the tool"
+
+msgid "langToolTitleUsersColumn"
+msgstr "Users Clicks"
+
+msgid "langToolTitleCountColumn"
+msgstr "Total Clicks"
+
+msgid "langLinksTitleLinkColumn"
+msgstr "Link"
+
+msgid "langLinksTitleUsersColumn"
+msgstr "Users Clicks"
+
+msgid "langLinksTitleCountColumn"
+msgstr "Total Clicks"
+
+msgid "langExercicesTitleExerciceColumn"
+msgstr "Test"
+
+msgid "langExercicesTitleScoreColumn"
+msgstr "Score"
+
+msgid "langDocumentsTitleDocumentColumn"
+msgstr "Document"
+
+msgid "langDocumentsTitleUsersColumn"
+msgstr "Users Downloads"
+
+msgid "langDocumentsTitleCountColumn"
+msgstr "Total Downloads"
+
+msgid "langScormContentColumn"
+msgstr "Title"
+
+msgid "langScormStudentColumn"
+msgstr "Learners"
+
+msgid "langScormTitleColumn"
+msgstr "Step"
+
+msgid "langScormStatusColumn"
+msgstr "Status"
+
+msgid "langScormScoreColumn"
+msgstr "Score"
+
+msgid "langScormTimeColumn"
+msgstr "Time"
+
+msgid "langScormNeverOpened"
+msgstr "The user never opened the course."
+
+msgid "langWorkTitle"
+msgstr "Title"
+
+msgid "langWorkAuthors"
+msgstr "Authors"
+
+msgid "langWorkDescription"
+msgstr "Description"
+
+msgid "informationsAbout"
+msgstr "Tracking of"
+
+msgid "langNoEmail"
+msgstr "No email address specified"
+
+msgid "langNoResult"
+msgstr "There is no result yet"
+
+msgid "langCourse"
+msgstr "The area"
+
+msgid "langHits"
+msgstr "Hits"
+
+msgid "langTotal"
+msgstr "Total"
+
+msgid "langHour"
+msgstr "Hour"
+
+msgid "langDay"
+msgstr "day"
+
+msgid "langLittleHour"
+msgstr "h."
+
+msgid "langLast31days"
+msgstr "In the last 31 days"
+
+msgid "langLast7days"
+msgstr "In the last 7 days"
+
+msgid "langThisday"
+msgstr "This day"
+
+msgid "langLogins"
+msgstr "Logins"
+
+msgid "langLoginsExplaination"
+msgstr "Here is the list of your latest logins with the tools you visited during these sessions."
+
+msgid "langExercicesResults"
+msgstr "Score for the tests done"
+
+msgid "langVisits"
+msgstr "visits"
+
+msgid "langAt"
+msgstr "at"
+
+msgid "langLoginTitleDateColumn"
+msgstr "Date"
+
+msgid "langLoginTitleCountColumn"
+msgstr "Visits"
+
+msgid "langLoginsAndAccessTools"
+msgstr "Logins and access to tools"
+
+msgid "langWorkUploads"
+msgstr "Contributions uploads"
+
+msgid "langErrorUserNotInGroup"
+msgstr "Invalid user : this user doesn\'t exist in your group"
+
+msgid "langListStudents"
+msgstr "List of learners in this group"
+
+msgid "langPeriodHour"
+msgstr "Hour"
+
+msgid "langPeriodDay"
+msgstr "Day"
+
+msgid "langPeriodWeek"
+msgstr "Week"
+
+msgid "langPeriodMonth"
+msgstr "Month"
+
+msgid "langPeriodYear"
+msgstr "Year"
+
+msgid "langNextDay"
+msgstr "Next Day"
+
+msgid "langPreviousDay"
+msgstr "Previous Day"
+
+msgid "langNextWeek"
+msgstr "Next Week"
+
+msgid "langPreviousWeek"
+msgstr "Previous Week"
+
+msgid "langNextMonth"
+msgstr "Next Month"
+
+msgid "langPreviousMonth"
+msgstr "Previous Month"
+
+msgid "langNextYear"
+msgstr "Next Year"
+
+msgid "langPreviousYear"
+msgstr "Previous Year"
+
+msgid "langViewToolList"
+msgstr "View List of All Tools"
+
+msgid "langToolList"
+msgstr "List of all tools"
+
+msgid "langFrom"
+msgstr "From"
+
+msgid "langTo"
+msgstr "to"
+
+msgid "langPeriodToDisplay"
+msgstr "Period"
+
+msgid "langDetailView"
+msgstr "View by"
+
+msgid "langBredCrumpGroups"
+msgstr "Groups"
+
+msgid "langBredCrumpGroupSpace"
+msgstr "Group Area"
+
+msgid "langBredCrumpUsers"
+msgstr "Users"
+
+msgid "langAdminToolName"
+msgstr "Admin Stats"
+
+msgid "langPlatformStats"
+msgstr "Portal Statistics"
+
+msgid "langStatsDatabase"
+msgstr "Stats Database"
+
+msgid "langPlatformAccess"
+msgstr "Access to portal"
+
+msgid "langPlatformCoursesAccess"
+msgstr "Access to courses"
+
+msgid "langPlatformToolAccess"
+msgstr "Tools access"
+
+msgid "langHardAndSoftUsed"
+msgstr "Countries Providers Browsers Os Referers"
+
+msgid "langStrangeCases"
+msgstr "Problematic cases"
+
+msgid "langStatsDatabaseLink"
+msgstr "Click Here"
+
+msgid "langCountCours"
+msgstr "Training"
+
+msgid "langCountCourseByFaculte"
+msgstr "Number of courses by category"
+
+msgid "langCountCourseByLanguage"
+msgstr "Number of courses by language"
+
+msgid "langCountCourseByVisibility"
+msgstr "Number of courses by visibility"
+
+msgid "langCountUsersByCourse"
+msgstr "Number of users by course"
+
+msgid "langCountUsersByFaculte"
+msgstr "Number of users by category"
+
+msgid "langCountUsersByStatus"
+msgstr "Number of users by status"
+
+msgid "langAccess"
+msgstr "Access"
+
+msgid "langCountries"
+msgstr "Countries"
+
+msgid "langProviders"
+msgstr "Providers"
+
+msgid "langOS"
+msgstr "OS"
+
+msgid "langBrowsers"
+msgstr "Browsers"
+
+msgid "langReferers"
+msgstr "Referers"
+
+msgid "langAccessExplain"
+msgstr "(When an user open the index of the portal)"
+
+msgid "langTotalPlatformAccess"
+msgstr "Total"
+
+msgid "langTotalPlatformLogin"
+msgstr "Total"
+
+msgid "langMultipleLogins"
+msgstr "Accounts with same <i>Login</i>"
+
+msgid "langMultipleUsernameAndPassword"
+msgstr "Accounts with same <i>Login</i> AND same <i>Password</i>"
+
+msgid "langMultipleEmails"
+msgstr "Accounts with same <i>Email</i>"
+
+msgid "langCourseWithoutProf"
+msgstr "Courses without teachers"
+
+msgid "langCourseWithoutAccess"
+msgstr "Unused courses"
+
+msgid "langLoginWithoutAccess"
+msgstr "Logins not used"
+
+msgid "langAllRight"
+msgstr "There is no strange case here"
+
+msgid "langDefcon"
+msgstr "Ooops, problematic cases detected !!"
+
+msgid "langNULLValue"
+msgstr "Empty (or NULL)"
+
+msgid "langTrafficDetails"
+msgstr "Traffic Details"
+
+msgid "langSeeIndividualTracking"
+msgstr "For individual tracking see <a href=../user/user.php>Users</a> tool."
+
+msgid "langPathNeverOpenedByAnybody"
+msgstr "This path was never opened by anybody."
+
+msgid "SynthesisView"
+msgstr "Synthesis view"
+
+msgid "Visited"
+msgstr "Visited"
+
+msgid "FirstAccess"
+msgstr "First access"
+
+msgid "LastAccess"
+msgstr "Latest access"
+
+msgid "langProbationers"
+msgstr "Learner"
+
+msgid "MoyenneTest"
+msgstr "Tests score"
+
+msgid "exportExcel"
+msgstr "Export in Excel format"
+
+msgid "MoyCourse"
+msgstr "Course average"
+
+msgid "MoyenneExamen"
+msgstr "Exam average"
+
+msgid "MoySession"
+msgstr "Session average"
+
+msgid "TakenSessions"
+msgstr "Taken sessions"
+
+msgid "FollowUp"
+msgstr "Follow-up"
+
+msgid "Trainers"
+msgstr "Teachers"
+
+msgid "Administrators"
+msgstr "Administrators"
+
+msgid "Tracks"
+msgstr "Tracks"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "ExcelFormat"
+msgstr "Excel format"
+
+msgid "MyLearnpath"
+msgstr "My learnpath"
+
+msgid "Time"
+msgstr "Time"
+
+msgid "Score"
+msgstr "Performance"
+
+msgid "LastConnexion"
+msgstr "Latest login"
+
+msgid "ConnectionTime"
+msgstr "Connection time"
+
+msgid "ConnectionsToThisCourse"
+msgstr "Connections to this course"
+
+msgid "StudentTutors"
+msgstr "Learner\'s coaches"
+
+msgid "StudentSessions"
+msgstr "Learner\'s sessions"
+
+msgid "StudentCourses"
+msgstr "Learner\'s courses"
+
+msgid "NoLearnpath"
+msgstr "No learning path"
+
+msgid "Attempts"
+msgstr "Attempts"
+
+msgid "Correction"
+msgstr "Correction"
+
+msgid "NoExercise"
+msgstr "No tests"
+
+msgid "LimitDate"
+msgstr "Limit date"
+
+msgid "SentDate"
+msgstr "Sent date"
+
+msgid "Annotate"
+msgstr "Notify"
+
+msgid "DayOfDelay"
+msgstr "Day of delay"
+
+msgid "NoProduction"
+msgstr "No production"
+
+msgid "NoComment"
+msgstr "No comment"
+
+msgid "LatestLogin"
+msgstr "Latest"
+
+msgid "TimeSpentOnThePlatform"
+msgstr "Time spent in portal"
+
+msgid "Messages"
+msgstr "Messages"
+
+msgid "AveragePostsInForum"
+msgstr "Posts in forum"
+
+msgid "AverageAssignments"
+msgstr "Average assignments per learner"
+
+msgid "Print"
+msgstr "Print"
+
+msgid "StudentDetails"
+msgstr "Learner details"
+
+msgid "StudentDetailsInCourse"
+msgstr "Learner details in course"
+
+msgid "Learnpaths"
+msgstr "Learning paths"
+
+msgid "OtherTools"
+msgstr "OTI (Online Training Interaction) settings report"
+
+msgid "DetailsStudentInCourse"
+msgstr "Learner details in course"
+
+msgid "CourseTitle"
+msgstr "Course title"
+
+msgid "NbStudents"
+msgstr "Learners"
+
+msgid "TimeSpentInTheCourse"
+msgstr "Time spent in the course"
+
+msgid "AvgStudentsProgress"
+msgstr "Progress"
+
+msgid "AvgCourseScore"
+msgstr "Average score in learning paths"
+
+msgid "AvgMessages"
+msgstr "Messages per learner"
+
+msgid "AvgAssignments"
+msgstr "Assignments"
+
+msgid "ToolsMostUsed"
+msgstr "Tools most used"
+
+msgid "StudentsTracking"
+msgstr "Report on learners"
+
+msgid "CourseTracking"
+msgstr "Course report"
+
+msgid "LinksMostClicked"
+msgstr "Links most visited"
+
+msgid "DocumentsMostDownloaded"
+msgstr "Documents most downloaded"
+
+msgid "LearningPathDetails"
+msgstr "Learnpath details"
+
+msgid "NoConnexion"
+msgstr "No connection"
+
+msgid "TeacherInterface"
+msgstr "Trainer View"
+
+msgid "CoachInterface"
+msgstr "Coach interface"
+
+msgid "AdminInterface"
+msgstr "Admin view"
+
+msgid "NumberOfSessions"
+msgstr "Number of sessions"
+
+msgid "YourCourseList"
+msgstr "Your courses"
+
+msgid "YourStatistics"
+msgstr "Your statistics"
+
+msgid "CoachList"
+msgstr "Trainer list"
+
+msgid "CoachStudents"
+msgstr "Learners of trainer"
+
+msgid "NoLearningPath"
+msgstr "No learning path available"
+
+msgid "SessionCourses"
+msgstr "Courses sessions"
+
+msgid "NoUsersInCourseTracking"
+msgstr "Tracking for the learners registered to this course"
+
+msgid "AvgTimeSpentInTheCourse"
+msgstr "Time"
+
+msgid "RemindInactiveUser"
+msgstr "Remind inactive user"
+
+msgid "FirstLogin"
+msgstr "First connection"
+
+msgid "AccessDetails"
+msgstr "Access details"
+
+msgid "DateAndTimeOfAccess"
+msgstr "Date and time of access"
+
+msgid "Duration"
+msgstr "Duration"
+
+msgid "WrongDatasForTimeSpentOnThePlatform"
+msgstr "The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible."
+
+msgid "DisplayCoaches"
+msgstr "Trainers Overview"
+
+msgid "DisplayUserOverview"
+msgstr "User overview"
+
+msgid "ExportUserOverviewOptions"
+msgstr "User overview export options"
+
+msgid "FollowingFieldsWillAlsoBeExported"
+msgstr "The following fields will also be exported"
+
+msgid "TotalExercisesScoreObtained"
+msgstr "Total score obtained for tests"
+
+msgid "TotalExercisesScorePossible"
+msgstr "Total possible score for tests"
+
+msgid "TotalExercisesAnswered"
+msgstr "Number of tests answered"
+
+msgid "TotalExercisesScorePercentage"
+msgstr "Total score percentage for tests"
+
+msgid "ForumForumsNumber"
+msgstr "Forums Number"
+
+msgid "ForumThreadsNumber"
+msgstr "Threads number"
+
+msgid "ForumPostsNumber"
+msgstr "Posts number"
+
+msgid "ChatConnectionsDuringLastXDays"
+msgstr "Connections to the chat during last %s days"
+
+msgid "ChatLastConnection"
+msgstr "Latest chat connection"
+
+msgid "CourseInformation"
+msgstr "Course Information"
+
+msgid "NoAdditionalFieldsWillBeExported"
+msgstr "No additional fields will be exported"
+
+msgid "langSendNotification"
+msgstr "Notify"
+
+msgid "TimeOfActiveByTraining"
+msgstr "Time in course"
+
+msgid "AvgAllUsersInAllCourses"
+msgstr "Average of all learners in all courses"
+
+msgid "AvgExercisesScore"
+msgstr "Tests score"
+
+msgid "TrainingTime"
+msgstr "Time"
+
+msgid "CourseProgress"
+msgstr "Progress"
+
+msgid "ViewMinus"
+msgstr "View minus"
+
+msgid "ResourcesTracking"
+msgstr "Report on resource"
+
+msgid "SelectFieldToAdd"
+msgstr "Select user profile field to add"
+
+msgid "AddAdditionalProfileField"
+msgstr "Add user profile field"
+
+msgid "ConfigureExtensions"
+msgstr "Configure extensions"
+
+msgid "DashboardBlocks"
+msgstr "Dashboard blocks"
+
+msgid "DashboardList"
+msgstr "Dashboard list"
+
+msgid "YouHaveNotEnabledBlocks"
+msgstr "You haven\'t enabled any block"
+
+msgid "BlocksHaveBeenUpdatedSuccessfully"
+msgstr "The blocks have been updated"
+
+msgid "AttendanceSheetDescription"
+msgstr "Attendance sheets allow you to gather all your courses attendances by groups. For example, you might want to take attendances to theory lessons separately from attendances to practical lessons. Each of them will show all learners as attending by default. It is up to you to register the missing learners by clicking the corresponding checkbox."
+
+msgid "AttendanceSheetReport"
+msgstr "Report of attendance sheets"
+
+msgid "YouDoNotHaveDoneAttendances"
+msgstr "You do not have attendances"
+
+msgid "GoToAttendanceCalendarList"
+msgstr "Go to attendances calendar view"
+
+msgid "AddADateTime"
+msgstr "Add a time and date"
+
+msgid "AreYouSureToDeleteAllDates"
+msgstr "Are you sure you want to delete all dates?"
+
+msgid "DashboardPluginsHaveBeenUpdatedSuccessfully"
+msgstr "The dashboard plugins have been updated successfully"
+
+msgid "ThereIsNoInformationAboutYourCourses"
+msgstr "There is no available information about your courses"
+
+msgid "ThereIsNoInformationAboutYourSessions"
+msgstr "There is no available information about your sessions"
+
+msgid "ThereIsNoInformationAboutYourTeachers"
+msgstr "There is no available information about your teachers"
+
+msgid "ThereIsNoInformationAboutYourStudents"
+msgstr "There is no available information about your learners"
+
+msgid "TimeSpentLastWeek"
+msgstr "Time spent last week"
+
+msgid "DateLock"
+msgstr "Date lock"
+
+msgid "CountOfUsers"
+msgstr "Users count"
+
+msgid "CountOfSubscriptions"
+msgstr "Subscriptions count"
+
+msgid "FolderCreated"
+msgstr "New folder created"
+
+msgid "LearnpathVisible"
+msgstr "Learning path made visible"
+
+msgid "LinkInvisible"
+msgstr "Link made invisible"
+
+msgid "LinkAdded"
+msgstr "Link added"
+
+msgid "Minutes"
+msgstr "Minutes"
+
+msgid "BackupCreated"
+msgstr "Backup created"
+
+msgid "CountCertificates"
+msgstr "Certificates count"
+
+msgid "AverageHoursPerStudent"
+msgstr "Avg hours/student"
+
+msgid "CountOfSubscribedUsers"
+msgstr "Subscribed users count"
+
+msgid "TrainingHoursAccumulated"
+msgstr "Training hours accumulated"
+
+msgid "ManHours"
+msgstr "Man hours"
+
+msgid "NotesObtained"
+msgstr "Notes obtained"
+
+msgid "DisplayCourseOverview"
+msgstr "Courses overview"
+
+msgid "DisplaySessionOverview"
+msgstr "Sessions overview"
+
+msgid "TotalNumberOfMessages"
+msgstr "Total number of messages"
+
+msgid "TotalNumberOfAssignments"
+msgstr "Total number of assignments"
+
+msgid "LastLogins"
+msgstr "Last logins"
+
+msgid "AllLogins"
+msgstr "All logins"
+
+msgid "LPExerciseResultsBySession"
+msgstr "Results of learning paths exercises by session"
+
+msgid "LPQuestionListResults"
+msgstr "Learning paths exercises results list"
+
+msgid "PleaseSelectACourse"
+msgstr "Please select a course"
+
+msgid "StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts"
+msgstr "Learner score average is calculated bases on all learning paths and all attempts"
+
+msgid "AverageScore"
+msgstr "Average score"
+
+msgid "LastConnexionDate"
+msgstr "Last connexion date"
+
+msgid "QuestionsAreTakenFromLPExercises"
+msgstr "These questions have been taken from the learning paths"
+
+msgid "AllStudentsAttemptsAreConsidered"
+msgstr "All learners attempts are considered"
+
+msgid "PublishedExercises"
+msgstr "Exercises available"
+
+msgid "DoneExercises"
+msgstr "Exercises taken"
+
+msgid "AverageExerciseResult"
+msgstr "Average exercise result"
+
+msgid "LPProgress"
+msgstr "Learning path progress"
+
+msgid "Ranking"
+msgstr "Ranking"
+
+msgid "BestResultInCourse"
+msgstr "Best result in course"
+
+msgid "ExerciseStartDate"
+msgstr "Publication date"
+
+msgid "OnlyBestResultsPerStudent"
+msgstr "In case of multiple attempts, only shows the best result of each learner"
+
+msgid "BestAttempt"
+msgstr "Best attempt"
+
+msgid "ExercisesInTimeProgressChart"
+msgstr "Progress of own exercises results over time, against learners average"
+
+msgid "AverageIsCalculatedBasedInAllAttempts"
+msgstr "Average is calculated based on all test attempts"
+
+msgid "AverageIsCalculatedBasedInTheLatestAttempts"
+msgstr "Average is calculated based on the latest attempts"
+
+msgid "LatestAttemptAverageScore"
+msgstr "Latest attempt average score"
+
+msgid "Untitled"
+msgstr "Untitled"
+
+msgid "Quantity"
+msgstr "Quantity"
+
+msgid "UploadedDocuments"
+msgstr "Uploaded documents"
+
+msgid "ExerciseProgress"
+msgstr "Exercise progress"
+
+msgid "NumberOfStudents"
+msgstr "Number of learners"
+
+msgid "NumberStudentsAccessingCourse"
+msgstr "Number of learners accessing the course"
+
+msgid "PercentageStudentsAccessingCourse"
+msgstr "Percentage of learners accessing the course"
+
+msgid "NumberStudentsCompleteAllActivities"
+msgstr "Number of learners who completed all activities (100% progress)"
+
+msgid "PercentageStudentsCompleteAllActivities"
+msgstr "Percentage of learners who completed all activities (100% progress)"
+
+msgid "AverageOfActivitiesCompletedPerStudent"
+msgstr "Average number of activities completed per learner"
+
+msgid "TotalTimeSpentInTheCourse"
+msgstr "Total time spent in the course"
+
+msgid "AverageTimePerStudentInCourse"
+msgstr "Average time spent per learner in the course"
+
+msgid "NumberOfDocumentsInLearnpath"
+msgstr "Number of documents in learning path"
+
+msgid "NumberOfExercisesInLearnpath"
+msgstr "Number of exercises in learning path"
+
+msgid "NumberOfLinksInLearnpath"
+msgstr "Number of links in learning path"
+
+msgid "NumberOfForumsInLearnpath"
+msgstr "Number of forums in learning path"
+
+msgid "NumberOfAssignmentsInLearnpath"
+msgstr "Number of assignments in learning path"
+
+msgid "NumberOfAnnouncementsInCourse"
+msgstr "Number of announcements in course"
+
+msgid "CurrentCoursesReport"
+msgstr "Current courses report"
+
+msgid "NumberOfPublishedExercises"
+msgstr "# of published exercises"
+
+msgid "NumberOfPublishedLps"
+msgstr "# of published Learning Paths"
+
+msgid "EventType"
+msgstr "Event type"
+
+msgid "NbInactiveSessions"
+msgstr "Number of inactive sessions"
+
+msgid "FollowedSessions"
+msgstr "Followed sessions"
+
+msgid "FollowedCourses"
+msgstr "Followed courses"
+
+msgid "FollowedUsers"
+msgstr "Followed users"
+
+msgid "Timeline"
+msgstr "Timeline"
+

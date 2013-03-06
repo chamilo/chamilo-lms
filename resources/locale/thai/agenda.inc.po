@@ -1,0 +1,144 @@
+msgid "AgendaAdd"
+msgstr "เพิ่มกำหนดการใหม่"
+
+msgid "ShowAllEvents"
+msgstr "แสดงกำหนดการทั้งหมด"
+
+msgid "ShowCurrent"
+msgstr "แสดงกำหนดการทั้งหมดของเดือนนี้"
+
+msgid "AddCalendarItem"
+msgstr "เพิ่มกำหนดการใหม่"
+
+msgid "Day"
+msgstr "วัน"
+
+msgid "Month"
+msgstr "เดือน"
+
+msgid "Year"
+msgstr "ปี"
+
+msgid "Hour"
+msgstr "ชั่วโมง"
+
+msgid "Minutes"
+msgstr "นาที"
+
+msgid "Detail"
+msgstr "รายละเอียด"
+
+msgid "EditSuccess"
+msgstr "แก้ไขกำหนดการแล้ว"
+
+msgid "AddSuccess"
+msgstr "เพิ่มกำหนดการแล้ว"
+
+msgid "AgendaDeleteSuccess"
+msgstr "ลบกำหนดการแล้ว"
+
+msgid "NoAgendaItems"
+msgstr "ÂÑ§äÁèÁÕ¡ÓË¹Ž¡ÒÃ"
+
+msgid "lang_september"
+msgstr "กันยายน"
+
+msgid "langClassName"
+msgstr "ชื่อหมู่เรียน"
+
+msgid "lang_agenda"
+msgstr "กำหนดการ"
+
+msgid "ModifyCalendarItem"
+msgstr "แก้ไขกำหนดการ"
+
+msgid "ItemTitle"
+msgstr "รายชื่อเรื่อง"
+
+msgid "langDay"
+msgstr "วัน"
+
+msgid "month_default"
+msgstr "เดือนที่เริ่มต้น"
+
+msgid "langYear"
+msgstr "ปี"
+
+msgid "year_default"
+msgstr "ปีเริ่มต้น"
+
+msgid "langHour"
+msgstr "ชั่วโมง"
+
+msgid "hour_default"
+msgstr "ชั่วโมงเริ่มต้น"
+
+msgid "langMinute"
+msgstr "นาที"
+
+msgid "langLasting"
+msgstr "ล่าสุด"
+
+msgid "langOldToNew"
+msgstr "แสดงรายการเก่าเริ่มต้นก่อน"
+
+msgid "langNewToOld"
+msgstr "แสดงรายการใหม่เริ่มต้นก่อน"
+
+msgid "langNow"
+msgstr "»ÑššØºÑ¹"
+
+msgid "langAddEvent"
+msgstr "บันทึกเหตุการณ์"
+
+msgid "langDetail"
+msgstr "รายละเอียด"
+
+msgid "MonthView"
+msgstr "ดูกำหนดการทั้งเดือน"
+
+msgid "WeekView"
+msgstr "ดูกำหนดการรายสัปดาห์"
+
+msgid "DayView"
+msgstr "ดูกำหนดการรายวัน"
+
+msgid "AddPersonalItem"
+msgstr "เพิ่มกำหนดการส่วนตัว"
+
+msgid "Week"
+msgstr "สัปดาห์"
+
+msgid "Date"
+msgstr "วัน"
+
+msgid "Time"
+msgstr "เวลา"
+
+msgid "AddPersonalCalendarItem"
+msgstr "เพิ่มกำหนดการส่วนตัว"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "ปรับแก้กำหนดการส่วนตัว"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "ได้เพิ่มกำหนดการส่วนตัวของคุณแล้ว"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "ได้แก้ไขกำหนดการส่วนตัวของคุณแล้ว"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "ได้ลบกำหนดการส่วนตัวของคุณแล้ว"
+
+msgid "ViewPersonalItem"
+msgstr "ดูกำหนดการส่วนตัวของเรา"
+
+msgid "UserGroupFilter"
+msgstr "กรองจากกลุ่ม/บัญชีผู้ใช้งาน"
+
+msgid "ShowAll"
+msgstr "แสดงทั้งหมด"
+
+msgid "Print"
+msgstr "พิมพ์"
+

@@ -1,0 +1,237 @@
+msgid "AgendaAdd"
+msgstr "Προσθήκη ενός γεγονότος"
+
+msgid "ShowAllEvents"
+msgstr "Προβολή όλων των γεγονότων"
+
+msgid "ShowCurrent"
+msgstr "Προβολή γεγονότων αυτού του μήνα"
+
+msgid "AddCalendarItem"
+msgstr "Προσθήκη ενός γεγονότος"
+
+msgid "Day"
+msgstr "Μέρα"
+
+msgid "Month"
+msgstr "Μήνας"
+
+msgid "Year"
+msgstr "Έτος"
+
+msgid "Hour"
+msgstr "Ώρα"
+
+msgid "Minutes"
+msgstr "Λεπτά"
+
+msgid "Detail"
+msgstr "Λεπτομέρεια"
+
+msgid "EditSuccess"
+msgstr "Το γεγονός τροποποιήθηκε"
+
+msgid "AddSuccess"
+msgstr "Το γεγονός προστέθηκε"
+
+msgid "AgendaDeleteSuccess"
+msgstr "Το γεγονός διαγράφηκε"
+
+msgid "NoAgendaItems"
+msgstr "Δεν υπάρχουν γεγονότα στην Αντζέντα"
+
+msgid "lang_september"
+msgstr "Σεπτέμβριος"
+
+msgid "langClassName"
+msgstr " Όνομα τάξης"
+
+msgid "lang_agenda"
+msgstr "Ατζέντα"
+
+msgid "ModifyCalendarItem"
+msgstr "Τροποποίηση"
+
+msgid "ItemTitle"
+msgstr "Τίτλος"
+
+msgid "langDay"
+msgstr "Μέρα"
+
+msgid "month_default"
+msgstr "Εξ ορισμού μήνας"
+
+msgid "langYear"
+msgstr "Έτος"
+
+msgid "year_default"
+msgstr "Εξ ορισμού έτος"
+
+msgid "langHour"
+msgstr "Ώρα"
+
+msgid "hour_default"
+msgstr "Εξ ορισμού ώρα"
+
+msgid "langMinute"
+msgstr "Λεπτά"
+
+msgid "langLasting"
+msgstr "Διάρκεια"
+
+msgid "langOldToNew"
+msgstr "Τα παλαιότερα πρώτα"
+
+msgid "langNewToOld"
+msgstr "Τα νεώτερα πρώτα"
+
+msgid "langNow"
+msgstr "τώρα"
+
+msgid "langAddEvent"
+msgstr "Προσθήκη ενός γεγονότος"
+
+msgid "langDetail"
+msgstr "Λεπτομέρειες"
+
+msgid "MonthView"
+msgstr "Mήνας"
+
+msgid "WeekView"
+msgstr "Εβδομάδα"
+
+msgid "DayView"
+msgstr "Ημέρα"
+
+msgid "AddPersonalItem"
+msgstr "Προσθήκη ενός προσωπικού γεγονότος"
+
+msgid "Week"
+msgstr "Εβδομάδα"
+
+msgid "Date"
+msgstr "Ημερομηνία"
+
+msgid "Time"
+msgstr "Ώρα"
+
+msgid "AddPersonalCalendarItem"
+msgstr "Προσθήκη ενός προσωπικού γεγονότος"
+
+msgid "ModifyPersonalCalendarItem"
+msgstr "Τροποποίηση προσωπικού γεγονότος"
+
+msgid "PeronalAgendaItemAdded"
+msgstr "Προστέθηκε επιτυχώς το προσωπικό γεγονός που καταχώρισες"
+
+msgid "PeronalAgendaItemEdited"
+msgstr "Τροποποιήθηκε επιτυχώς το προσωπικό γεγονός"
+
+msgid "PeronalAgendaItemDeleted"
+msgstr "Διαγράφηκε επιτυχώς το προσωπικό γεγονός"
+
+msgid "ViewPersonalItem"
+msgstr "Προβολή προσωπικών γεγονότων"
+
+msgid "UserGroupFilter"
+msgstr "Διαχώρισε βάση ομάδας/χρήστη"
+
+msgid "ShowAll"
+msgstr "Εμφάνιση Όλων"
+
+msgid "Print"
+msgstr "Εκτύπωση"
+
+msgid "MyTextHere"
+msgstr "Εδώ το κείμενό μου"
+
+msgid "CopiedAsAnnouncement"
+msgstr "Έχει αντιγραφεί ως Ανακοίνωση"
+
+msgid "NewAnnouncement"
+msgstr "Νέα ανακοίνωση"
+
+msgid "AddAnnouncement"
+msgstr "Προσθήκη σαν Ανακοίνωση"
+
+msgid "UpcomingEvent"
+msgstr "Επερχόμενα συμβάντα"
+
+msgid "RepeatedEvent"
+msgstr "Επαναλαμβανόμενο συμβάν"
+
+msgid "RepeatType"
+msgstr "Τύπος επανάληψης"
+
+msgid "RepeatDaily"
+msgstr "Καθημερινά"
+
+msgid "RepeatWeekly"
+msgstr "Εβδομαδιαία"
+
+msgid "RepeatMonthlyByDate"
+msgstr "Μηνιαία, ανά ημερομηνία"
+
+msgid "RepeatMonthlyByDay"
+msgstr "Μηνιαία, ανά ημέρα"
+
+msgid "RepeatMonthlyByDayR"
+msgstr "Ανά μήνα, ανά ημέρα, περιορισμένη"
+
+msgid "RepeatYearly"
+msgstr "Ετήσια"
+
+msgid "RepeatEnd"
+msgstr "Επανάληψη ημερομηνίας τέλους"
+
+msgid "RepeatedEventViewOriginalEvent"
+msgstr "Προβολή αρχικου συμβάντος"
+
+msgid "ICalFileImport"
+msgstr "Εισαγωγή Outlook"
+
+msgid "AllUsersOfThePlatform"
+msgstr "Όλοι οι χρήστες του συστήματος"
+
+msgid "GlobalEvent"
+msgstr "Συμβάν πλατφόρμας"
+
+msgid "ModifyEvent"
+msgstr "Επεξεργασία συμβάντος"
+
+msgid "EndDateCannotBeBeforeTheStartDate"
+msgstr "Η ημερομηνία τέλους δεν μπορεί να είναι πριν την ημερομηνία έναρξης"
+
+msgid "AgendaSortChronologicallyUp"
+msgstr "Σε αύξουσα σειρά"
+
+msgid "AgendaSortChronologicallyDown"
+msgstr "Σε κατιούσα σειρά"
+
+msgid "ItemForUserSelection"
+msgstr "Κατάλογος εππιλογής χρηστών"
+
+msgid "IsNotiCalFormatFile"
+msgstr "Το αρχείο δεν είναι σε μορφή iCal"
+
+msgid "RepeatEvent"
+msgstr "Επανάληψη συμβάντος"
+
+msgid "RepeatDate"
+msgstr "Ημερομηνία επανάληψης"
+
+msgid "EndDateMustBeMoreThanStartDate"
+msgstr "Η ημερομηνία τέλους πρέπει να είναι μεταγενέστερη από την ημερομηνία έναρξης"
+
+msgid "SelectACourse"
+msgstr "Επιλογή μίας σειράς μαθημάτων"
+
+msgid "PleaseSelectACourseOrASessionInTheLeftColumn"
+msgstr "Παρακαλώ επιλέξτε μία σειρά μαθημάτων ή μία συνεδρία, από την αριστερή πλάγια στήλη."
+
+msgid "DisableEndDate"
+msgstr "Απενεργοποίηση ημερομηνίας τέλους"
+
+msgid "AllEvents"
+msgstr "Όλα τα συμβάντα"
+

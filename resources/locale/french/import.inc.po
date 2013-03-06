@@ -1,0 +1,27 @@
+msgid "langExplanation"
+msgstr "Une fois que vous aurez cliqué sur OK, un cours contenant Tests, Documents, Parcours d\'Apprentissage SCORM... sera créé. Grâce à votre identifiant de responsable du cours vous pourrez en modifier le contenu"
+
+msgid "langTooBig"
+msgstr "Vous n\'avez choisi aucun fichier à envoyer, ou celui-ci est trop gros"
+
+msgid "langCouldNot"
+msgstr "Le fichier ne peut être envoyé"
+
+msgid "langAddPageToSite"
+msgstr "Ajouter une page au site"
+
+msgid "langCouldNotSendPage"
+msgstr "Ce fichier n\'est pas au format HTML et n\'a pu être envoyé. Si vous voulez envoyer vers le serveur des documents non HTML (PDF, Word, Power Point, Vidéo, etc.) utilisez <a href=../document/document.php>Documents</a>"
+
+msgid "langSendPage"
+msgstr "Page à envoyer"
+
+msgid "langPageTitleModified"
+msgstr "L\'intitulé de la page a été modifié"
+
+msgid "langPageAdded"
+msgstr "La page a été ajoutée"
+
+msgid "Choose"
+msgstr "Choisissez"
+

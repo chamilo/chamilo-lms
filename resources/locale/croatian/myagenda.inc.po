@@ -1,0 +1,6 @@
+msgid "langMyAgenda"
+msgstr "Moj raspored"
+
+msgid "langToday"
+msgstr "Danas"
+

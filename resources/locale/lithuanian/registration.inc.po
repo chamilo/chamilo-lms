@@ -1,0 +1,432 @@
+msgid "langShouldBeCSVFormat"
+msgstr "Failas turi buti CSV formato. Napalikite tarpų. Struktūra turi būti tiksli :"
+
+msgid "langTracking"
+msgstr "Įvertinimų sekimas"
+
+msgid "langEnter2passToChange"
+msgstr "Keisdami įveskite savo slaptažodį dukart. Kitaip palikite šiuos laukus tuščius."
+
+msgid "langAuthInfo"
+msgstr "Autentifikacija"
+
+msgid "langUpdateImage"
+msgstr "Pakeisti nuotrauką"
+
+msgid "langImageWrong"
+msgstr "Failo dydis turi buti mažesnis negu"
+
+msgid "langAddImage"
+msgstr "Nuotrauka"
+
+msgid "langCourseManager"
+msgstr "Dėstytojas"
+
+msgid "password_request"
+msgstr "Jūsų paprašė pakeisti slaptažodį į pradinį.Jei jūs neprašėte, ignoruokite šį laišką.Kad pakeisti slaptažodį į pradinį, spauskite ant nuorodos."
+
+msgid "YourPasswordHasBeenEmailed"
+msgstr "Jūsų slaptažodis išiūstas el.paštu."
+
+msgid "lang_enter_email_and_well_send_you_password"
+msgstr "Įveskite el.pašto adresą, kurį naudojote registruodamiesi, slaptažodis bus atsiųstas jums į šią pašto dėžutę."
+
+msgid "langLogin"
+msgstr "Prisijungti"
+
+msgid "langAction"
+msgstr "Veiksmai"
+
+msgid "langPreserved"
+msgstr "Išsaugotas"
+
+msgid "langDeleted"
+msgstr "Ištrinta"
+
+msgid "langAdded"
+msgstr "Pridėta"
+
+msgid "langConfirmUnsubscribe"
+msgstr "Patvirtinti vartotojo prisiregistravimą"
+
+msgid "langCourseName"
+msgstr "Kurso pavadinimas"
+
+msgid "langSubscribe"
+msgstr "Užsisakyti"
+
+msgid "langSee"
+msgstr "Eiti į"
+
+msgid "langLastVisits"
+msgstr "Mano paskutiniai apsilankymai"
+
+msgid "langIfYouWantToAddManyUsers"
+msgstr "Jei norite įsidėti vartotojų sąrašą į savo kursą, susisiekite su sitemos administratoriumi."
+
+msgid "langPassTooEasy"
+msgstr "šis slaptažodis per paprastas, naudokite pvz. tokį"
+
+msgid "langGroupUserManagement"
+msgstr "Grupės valdymas"
+
+msgid "langAddedToCourse"
+msgstr "priregistruotas prie Jūsų kurso"
+
+msgid "langUserAlreadyRegistered"
+msgstr "Tokiu vardu vartotojas jau yra."
+
+msgid "langBackUser"
+msgstr "Atgal į vartotojų sąrašą"
+
+msgid "langUserOneByOneExplanation"
+msgstr "Jis (ji) gaus patvirtinimo laišką su prisijungimo vardu ir slaptažodžiu"
+
+msgid "langGiveTutor"
+msgstr "Make coach"
+
+msgid "langRemoveRight"
+msgstr "Pašalinti šią teisę"
+
+msgid "langGiveAdmin"
+msgstr "Padaryti administratoriumi"
+
+msgid "langUserNumber"
+msgstr "numeris"
+
+msgid "langDownloadUserList"
+msgstr "Įkėlimo sąrašas"
+
+msgid "langSend"
+msgstr "Siųsti"
+
+msgid "langUserAddExplanation"
+msgstr "every line of file to send will necessarily an only		include 5 fields: <b>First nameLast name		LoginPassword		Email</b> separated by tabs and in this order.		Users will receive email confirmation with login/password."
+
+msgid "langUserMany"
+msgstr "Importuoti vartotojų sąrašą iš CSV / XML failų"
+
+msgid "langOneByOne"
+msgstr "Įrašyti vartotoją rankiniu būdu"
+
+msgid "langNow"
+msgstr "dabar"
+
+msgid "langTutor"
+msgstr "Kuratorius"
+
+msgid "langTitular"
+msgstr "Vadovas"
+
+msgid "langAddHereSomeCourses"
+msgstr "<font size=2 face=\'Arial, Helvetica\'><big>Redaguoti kursų sąrašą</big><br><br>Check the courses you want to follow.<br>Uncheck the ones you don\'t want to follow anymore.<br> Then click Ok at the bottom of the list"
+
+msgid "langStudent"
+msgstr "Studentas"
+
+msgid "langImportUserList"
+msgstr "Importuoti vartotojų sąrašą"
+
+msgid "langAddAU"
+msgstr "Įrašyti vartotoją"
+
+msgid "langAddedU"
+msgstr "įrašytas. Išsiųstas laiškas su prisijungimo vardu"
+
+msgid "langTheU"
+msgstr "Vartotojas"
+
+msgid "langRegYou"
+msgstr "registruotas Jūsų kurse"
+
+msgid "langOneResp"
+msgstr "Vienas iš kurso vadovų"
+
+msgid "langTaken"
+msgstr "jau naudojamas. Pasirinkite kitą."
+
+msgid "langUserNo"
+msgstr "Jūsų pasirinktas vartotojo vardas"
+
+msgid "langFilled"
+msgstr "Palikote kelis laukelius tuščius."
+
+msgid "langInC"
+msgstr "šiame kurse"
+
+msgid "langRole"
+msgstr "Aprašymas"
+
+msgid "UserPicture"
+msgstr "Paveikslėliai"
+
+msgid "langProfileReg"
+msgstr "Jūsų naujas profilis išsaugotas"
+
+msgid "langEmailWrong"
+msgstr "E. pašto adresas nepilnas arba turi netinkamų simbolių"
+
+msgid "langUserTaken"
+msgstr "Šis vartotojo vardas jau užimtas"
+
+msgid "langFields"
+msgstr "Palikote neužpildytus laukelius"
+
+msgid "langAgain"
+msgstr "Bandykite dar kartą!"
+
+msgid "langPassTwo"
+msgstr "Įrašėte skirtingus slaptažodžius"
+
+msgid "langViewProfile"
+msgstr "Peržiūrėti mano portfelį"
+
+msgid "langModifProfile"
+msgstr "Redaguoti profilį"
+
+msgid "langIsReg"
+msgstr "Your modifications have been registered"
+
+msgid "langNowGoCreateYourCourse"
+msgstr "Dabar galite kurti savo kursus"
+
+msgid "langNowGoChooseYourCourses"
+msgstr "Dabar galite išsirinkti prieinamus jums kursus iš sąrašo"
+
+msgid "langMailHasBeenSent"
+msgstr "Jums išsiųstas el. laiškas su Jūsų prisijungimo vardu ir slaptažodžiu"
+
+msgid "langPersonalSettings"
+msgstr "Jūsų asmeniniai nustatymai išsaugoti"
+
+msgid "langManager"
+msgstr "Vadovas"
+
+msgid "langFormula"
+msgstr "Pagarbiai"
+
+msgid "langProblem"
+msgstr "Iškilus problemoms, susisiekite su mumis."
+
+msgid "langIs"
+msgstr "yra"
+
+msgid "langAddress"
+msgstr "The address of"
+
+msgid "langSettings"
+msgstr "with the following settings :Username :"
+
+msgid "langYouAreReg"
+msgstr "Jūs užregistruotas"
+
+msgid "langYourReg"
+msgstr "Jūs užregistruotas"
+
+msgid "langUserFree"
+msgstr "Šis vartotojo vardas jau naudojamas. Spauskite naršyklės \"Atgal\" mygtuką ir bandykite dar kartą."
+
+msgid "langEmptyFields"
+msgstr "Neužpildėte visų laukelių. Spauskite naršyklės \"Atgal\" mygtuką ir bandykite dar kartą"
+
+msgid "langPassTwice"
+msgstr "Įvedėte du skirtingus slaptažodžius. Spauskite naršyklės \"Atgal\" mygtuką ir bandykite dar kartą."
+
+msgid "langRegAdmin"
+msgstr "Sukurti kursų sritis"
+
+msgid "langRegStudent"
+msgstr "Follow courses"
+
+msgid "langConfirmation"
+msgstr "Slaptažodžio patvirtinimas"
+
+msgid "langPass"
+msgstr "Slaptažodis"
+
+msgid "langSurname"
+msgstr "Pavardė"
+
+msgid "langRegistration"
+msgstr "Registracija"
+
+msgid "langYourAccountParam"
+msgstr "This is your information to connect to"
+
+msgid "langLoginRequest"
+msgstr "Prisijungimo reikalavimas"
+
+msgid "langDefineHeadings"
+msgstr "Define Headings"
+
+msgid "langCourseAdministratorOnly"
+msgstr "tik dėstytojas"
+
+msgid "langLostPassword"
+msgstr "Užmiršote slaptažodį"
+
+msgid "langAdminOfCourse"
+msgstr "Kurso vadovas"
+
+msgid "langSimpleUserOfCourse"
+msgstr "Kurso vartotojas"
+
+msgid "langIsTutor"
+msgstr "Coach"
+
+msgid "langParamInTheCourse"
+msgstr "Kurso būsena"
+
+msgid "langMember"
+msgstr "narys"
+
+msgid "langLock"
+msgstr "užrakinta"
+
+msgid "langUnlock"
+msgstr "atrakinta"
+
+msgid "langHaveNoCourse"
+msgstr "kursų nėra"
+
+msgid "langManage"
+msgstr "Portalo valdymas"
+
+msgid "langAdministrationTools"
+msgstr "Administravimo įrankiai"
+
+msgid "langUserProfileReg"
+msgstr "User e-portfolio has been registered"
+
+msgid "lang_no_user_account_with_this_email_address"
+msgstr "SU šiuo el. pašto adresu nėra sukurtos jokios sąskaitos"
+
+msgid "langCourses4User"
+msgstr "Šio vartotojo kursai"
+
+msgid "langCoursesByUser"
+msgstr "Kursai pagal vartotojus"
+
+msgid "langSubscribeUserToCourse"
+msgstr "Užregistruoti vartotojus į šį kursą"
+
+msgid "langPreced100"
+msgstr "Ankstesnieji 100"
+
+msgid "langAddmore"
+msgstr "Įtraukti registruotus vartotojus"
+
+msgid "langAddback"
+msgstr "Į vartotojų sąrašą"
+
+msgid "langreg"
+msgstr "Registruoti"
+
+msgid "langQuit"
+msgstr "Išeiti"
+
+msgid "your_password_has_been_reset"
+msgstr "Jūsų slaptažodis ištrintas"
+
+msgid "langSex"
+msgstr "Lytis"
+
+msgid "langClass"
+msgstr "Klasė"
+
+msgid "langEdit"
+msgstr "redaguoti"
+
+msgid "required"
+msgstr "būtina"
+
+msgid "langOptionalTextFields"
+msgstr "Nebūtini laukai"
+
+msgid "langMyProductions"
+msgstr "Mano darbai"
+
+msgid "langFileDeleted"
+msgstr "Failas ištrintas."
+
+msgid "FullUserName"
+msgstr "Pilnas vardas"
+
+msgid "SearchForUser"
+msgstr "Ieškoti vartotojo"
+
+msgid "SearchButton"
+msgstr "Paieška"
+
+msgid "SearchNoResultsFound"
+msgstr "Paieškos rezultatų nėra"
+
+msgid "UsernameWrong"
+msgstr "Vartotojo vardas gali turįti tik raides, skaičius ir  _.-"
+
+msgid "PasswordRequestFrom"
+msgstr "This is a password request for the e-mail address"
+
+msgid "CorrespondsToAccount"
+msgstr "Šis el. pašto adresas susijęs su šia vartotojo sąskaita."
+
+msgid "CorrespondsToAccounts"
+msgstr "Šis el. pašto adresas susijęs su šiomis vartotojo sąskaitomis."
+
+msgid "AccountExternalAuthSource"
+msgstr "Chamilo can\'t handle the request automatically because the account has an external authentication source. Please take appropriate measures and notify the user."
+
+msgid "AccountsExternalAuthSource"
+msgstr "Chamilo can\'t handle the request automatically because at least one of the accounts has an external authentication source. Please take appropriate measures for all accounts (including those with platform authentication) and notify the user."
+
+msgid "RequestSentToPlatformAdmin"
+msgstr "Chamilo can\'t handle the request automatically for this type of account. Your request has been sent to the platform administrator, who will take appropriate measures and notify you of the result."
+
+msgid "langphone"
+msgstr "Telefonas"
+
+msgid "Unreg"
+msgstr "Išregistruoti"
+
+msgid "MyProgress"
+msgstr "Mano progresas"
+
+msgid "ProgressIntroduction"
+msgstr "Galite peržiūrėti savo progresą kiekviename kurse. Žemiau pasirinkite sesiją:"
+
+msgid "Select"
+msgstr "Išrinkti"
+
+msgid "NeverExpires"
+msgstr "Amžinai galios"
+
+msgid "ExpirationDate"
+msgstr "Galiojimo pabaigos data"
+
+msgid "ActiveAccount"
+msgstr "Aktyvuotas sistemoje"
+
+msgid "YourAccountHasToBeApproved"
+msgstr "Jūsų sąskaita patvirtinta"
+
+msgid "ApprovalForNewAccount"
+msgstr "Naujos sąskaitos patvirtinimas"
+
+msgid "ManageUser"
+msgstr "Valdyti vartotoją"
+
+msgid "SubscribeUserToCourseAsTeacher"
+msgstr "Užregistruoti vartotojus šiame kurse kaip dėstytojus"
+
+msgid "SendMessage"
+msgstr "Siūsti žinutę"
+
+msgid "PasswordEncryptedForSecurity"
+msgstr "Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password."
+
+msgid "UsersUnsubscribed"
+msgstr "The selected users have been unsubscribed from the course"
+
+msgid "SystemUnableToSendEmailContact"
+msgstr "System unable to send email contact"
+

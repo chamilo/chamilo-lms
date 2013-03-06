@@ -1,0 +1,96 @@
+msgid "Tools"
+msgstr "Iloj"
+
+msgid "SendWork"
+msgstr "Elŝuti la dokumenton"
+
+msgid "langTooBig"
+msgstr "Vi ne elektis sendotan dosieron aŭ la dosiero estas tro granda."
+
+msgid "langListDeleted"
+msgstr "Listo forigita"
+
+msgid "langDocModif"
+msgstr "La dokumento estas ŝanĝita"
+
+msgid "langDocAdd"
+msgstr "La dokumento estas aldonita"
+
+msgid "langDocDel"
+msgstr "La dokumento estas forigita"
+
+msgid "langTitleWork"
+msgstr "Plena titolo de la verko"
+
+msgid "langAuthors"
+msgstr "aŭtoroj"
+
+msgid "langDelList"
+msgstr "Forigi liston"
+
+msgid "langWorkDelete"
+msgstr "Forigu"
+
+msgid "langWorkModify"
+msgstr "Modifi"
+
+msgid "langWorkConfirmDelete"
+msgstr "Ĉu certe, ke vi volas viŝi ĉi-dosieron?"
+
+msgid "langAllFiles"
+msgstr "Agadoj je ĉiuj dosieroj"
+
+msgid "DefaultUpload"
+msgstr "Apriora agordo pri la videbleco de alŝutitaj dokumentoj"
+
+msgid "NewVisible"
+msgstr "Novaj dokumentoj videblas al ĉiuj uzuloj"
+
+msgid "NewUnvisible"
+msgstr "Novaj dokumentoj videblas nur al kursmastrumanto(j)"
+
+msgid "lang_doc_unvisible"
+msgstr "Via instruisto tamen preferis videbligi la dokumenton nur al kursomastrumantoj kaj tial la dokumento ne videblos al vi."
+
+msgid "langDelLk"
+msgstr "Ĉu vi volas forigi ĉi-ligilon?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Vi registriĝu je ĉi-kurso por rajti publikigi verkon."
+
+msgid "langListDel"
+msgstr "Forigu liston"
+
+msgid "langNameDir"
+msgstr "Nomo de nova dosierujo"
+
+msgid "langFileExists"
+msgstr "Neeblas. <br>Jam ekzistas samnoma dosiero."
+
+msgid "CreateDirectory"
+msgstr "krei dosierujon"
+
+msgid "langCurrentDir"
+msgstr "aktuala dosierujo"
+
+msgid "UploadADocument"
+msgstr "alŝuti dokumenton"
+
+msgid "EditToolOptions"
+msgstr "ŝanĝi modulajn opciojn"
+
+msgid "DocumentDeleted"
+msgstr "La dokumento forigitas."
+
+msgid "SendMailBody"
+msgstr "Uzulo enpoŝtigis dokumenton en la publikigilon de via kurso"
+
+msgid "DirDelete"
+msgstr "Forigi dosierujon"
+
+msgid "ValidateChanges"
+msgstr "Validigi ŝanĝojn"
+
+msgid "FolderUpdated"
+msgstr "Dosierujo ĝisdatigitas."
+

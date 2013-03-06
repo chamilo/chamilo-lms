@@ -1,0 +1,60 @@
+msgid "Tools"
+msgstr "도구"
+
+msgid "SendWork"
+msgstr "파일 업로드"
+
+msgid "langTooBig"
+msgstr "전송할 파일을 선택하지 않았거나, 파일사이즈가 너무 큽니다"
+
+msgid "langDocAdd"
+msgstr "파일이 발행물의 목록에 추가되었습니다."
+
+msgid "langDocDel"
+msgstr "파일이 삭제되었습니다"
+
+msgid "langTitleWork"
+msgstr "파일 제목"
+
+msgid "langAuthors"
+msgstr "저자"
+
+msgid "langWorkDelete"
+msgstr "삭제"
+
+msgid "langAllFiles"
+msgstr "모든 파일에 동작"
+
+msgid "DefaultUpload"
+msgstr "기본 설정은 새로 추가된 파일은 모두 공개로 되어있습니다"
+
+msgid "NewVisible"
+msgstr "새 문서가 모두에게 공개됩니다"
+
+msgid "NewUnvisible"
+msgstr "새 문서가 과정 관리자에게만 보여집니다"
+
+msgid "lang_doc_unvisible"
+msgstr "파일이 과정의 교사에게만 공게되므로 당신에게는 보여지지 않을 것입니다."
+
+msgid "langDelLk"
+msgstr "정말로 이 링크를 삭제하겠습니까?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "이 과정에 등록한 유저만이 문서를 발행할 수 있습니다."
+
+msgid "langNameDir"
+msgstr "새 디렉토리 명"
+
+msgid "langFileExists"
+msgstr "작업진행이 불가능합니다. 동일한 이름의 파일이 존재합니다."
+
+msgid "CreateDirectory"
+msgstr "디렉토리 생성"
+
+msgid "UploadADocument"
+msgstr "문서 업로드"
+
+msgid "EditToolOptions"
+msgstr "도구 옵션 수정"
+

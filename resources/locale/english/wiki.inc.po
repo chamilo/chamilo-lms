@@ -1,0 +1,693 @@
+msgid "WikiSearchResults"
+msgstr "Wiki Search Results"
+
+msgid "Wiki"
+msgstr "Group wiki"
+
+msgid "StartPage"
+msgstr "Main page"
+
+msgid "EditThisPage"
+msgstr "Edit this page"
+
+msgid "ShowPageHistory"
+msgstr "History"
+
+msgid "RecentChanges"
+msgstr "Latest changes"
+
+msgid "AllPages"
+msgstr "All pages"
+
+msgid "AddNew"
+msgstr "Add new page"
+
+msgid "ChangesStored"
+msgstr "Audio added"
+
+msgid "NewWikiSaved"
+msgstr "The wiki page has been saved."
+
+msgid "DefaultContent"
+msgstr " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Working as a team\" title=\"Working as a team\" /></p> <p align=\"center\">To begin editing this page and remove this text</p>"
+
+msgid "CourseWikiPages"
+msgstr "Wiki pages"
+
+msgid "GroupWikiPages"
+msgstr "Group wiki pages"
+
+msgid "NoWikiPageTitle"
+msgstr "Your changes have been saved. You still have to give a name to the page"
+
+msgid "WikiPageTitleExist"
+msgstr "This page name already exists. To edit the page content, click here:"
+
+msgid "WikiDiffAddedLine"
+msgstr "A line has been added"
+
+msgid "WikiDiffDeletedLine"
+msgstr "A line has been deleted"
+
+msgid "WikiDiffMovedLine"
+msgstr "A line has been moved"
+
+msgid "WikiDiffUnchangedLine"
+msgstr "Line without changes"
+
+msgid "DifferencesNew"
+msgstr "Changes in version"
+
+msgid "DifferencesOld"
+msgstr "old version of"
+
+msgid "Differences"
+msgstr "Differences"
+
+msgid "MostRecentVersion"
+msgstr "View of the latest selected version"
+
+msgid "Legend"
+msgstr "Legend"
+
+msgid "ShowDifferences"
+msgstr "Compare selected versions"
+
+msgid "SearchPages"
+msgstr "Search"
+
+msgid "Discuss"
+msgstr "Discuss"
+
+msgid "History"
+msgstr "History"
+
+msgid "ShowThisPage"
+msgstr "View this page"
+
+msgid "DeleteThisPage"
+msgstr "Delete this page"
+
+msgid "DiscussThisPage"
+msgstr "Discuss this page"
+
+msgid "HomeWiki"
+msgstr "Wiki home"
+
+msgid "DeleteWiki"
+msgstr "Delete all"
+
+msgid "WikiDeleted"
+msgstr "Your Wiki has been deleted"
+
+msgid "WikiPageDeleted"
+msgstr "The page and its history have been deleted."
+
+msgid "NumLine"
+msgstr "Num line"
+
+msgid "DeletePageHistory"
+msgstr "Delete this page and all its versions"
+
+msgid "OnlyAdminDeleteWiki"
+msgstr "Trainers only can delete the Wiki"
+
+msgid "OnlyAdminDeletePageWiki"
+msgstr "Trainers only can delete a page"
+
+msgid "OnlyAddPagesGroupMembers"
+msgstr "Trainers and members of this group only can add pages to the group Wiki"
+
+msgid "OnlyEditPagesGroupMembers"
+msgstr "Trainers and group members only can edit pages of the group Wiki"
+
+msgid "ConfirmDeleteWiki"
+msgstr "Are you sure you want to delete this Wiki?"
+
+msgid "ConfirmDeletePage"
+msgstr "Are you sure you want to delete this page and its history?"
+
+msgid "AlsoSearchContent"
+msgstr "Search also in content"
+
+msgid "PageLocked"
+msgstr "Page protected"
+
+msgid "PageUnlocked"
+msgstr "Page unprotected"
+
+msgid "PageLockedExtra"
+msgstr "This page is protected. Trainers only can change it"
+
+msgid "PageUnlockedExtra"
+msgstr "This page is unprotected. All course users or group members can edit this page"
+
+msgid "ShowAddOption"
+msgstr "Show add option"
+
+msgid "HideAddOption"
+msgstr "Hide add option"
+
+msgid "AddOptionProtected"
+msgstr "The Add option has been protected. Trainers only can add pages to this Wiki. But learners and group members can still edit them"
+
+msgid "AddOptionUnprotected"
+msgstr "The add option has been enabled for all course users and group members"
+
+msgid "NotifyChanges"
+msgstr "Notify me of changes"
+
+msgid "NotNotifyChanges"
+msgstr "Do not notify me of changes"
+
+msgid "NotifyByEmail"
+msgstr "Notify me by e-mail when somebody makes a change to this page"
+
+msgid "CancelNotifyByEmail"
+msgstr "Do not notify me by email when this page is edited"
+
+msgid "MostRecentVersionBy"
+msgstr "The latest version was edited by"
+
+msgid "Rating"
+msgstr "Rating"
+
+msgid "RatingMedia"
+msgstr "The average rating for the page is"
+
+msgid "NumComments"
+msgstr "Comments on this page"
+
+msgid "NumCommentsScore"
+msgstr "Number of comments scored:"
+
+msgid "AddPagesLocked"
+msgstr "The add option has been temporarily disabled by the trainer"
+
+msgid "LinksPages"
+msgstr "What links here"
+
+msgid "ShowLinksPages"
+msgstr "Show the pages that have links to this page"
+
+msgid "MoreWikiOptions"
+msgstr "More Wiki options"
+
+msgid "DefaultTitle"
+msgstr "Home"
+
+msgid "DiscussNotAvailable"
+msgstr "Discuss not available"
+
+msgid "Print"
+msgstr "Print"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "EditPage"
+msgstr "Edit"
+
+msgid "AddedBy"
+msgstr "added by"
+
+msgid "EditedBy"
+msgstr "edited by"
+
+msgid "DeletedBy"
+msgstr "deleted by"
+
+msgid "WikiStandardMode"
+msgstr "Wiki mode"
+
+msgid "GroupTutorAndMember"
+msgstr "Coach and group member"
+
+msgid "GroupTutor"
+msgstr "Tutor of the group"
+
+msgid "GroupStandardMember"
+msgstr "Group member"
+
+msgid "AssignmentMode"
+msgstr "Individual assignment mode"
+
+msgid "ConfigDefault"
+msgstr "Default config"
+
+msgid "UnlockPage"
+msgstr "Unprotect"
+
+msgid "LockPage"
+msgstr "Protect"
+
+msgid "NotifyDiscussChanges"
+msgstr "Notify comment"
+
+msgid "NotNotifyDiscussChanges"
+msgstr "Don\'t notify comments"
+
+msgid "AssignmentWork"
+msgstr "Learner paper"
+
+msgid "AssignmentDesc"
+msgstr "Assignment proposed by the trainer"
+
+msgid "WikiDiffAddedTex"
+msgstr "Text added"
+
+msgid "WikiDiffDeletedTex"
+msgstr "Text deleted"
+
+msgid "WordsDiff"
+msgstr "word by word"
+
+msgid "LinesDiff"
+msgstr "line by line"
+
+msgid "MustSelectPage"
+msgstr "You must select a page first"
+
+msgid "Export2ZIP"
+msgstr "Export to ZIP"
+
+msgid "HidePage"
+msgstr "Hide Page"
+
+msgid "ShowPage"
+msgstr "Show Page"
+
+msgid "GoAndEditMainPage"
+msgstr "To start Wiki go and edit Main page"
+
+msgid "UnlockDiscuss"
+msgstr "Unlock discuss"
+
+msgid "LockDiscuss"
+msgstr "Lock discuss"
+
+msgid "HideDiscuss"
+msgstr "Hide discuss"
+
+msgid "ShowDiscuss"
+msgstr "Show discuss"
+
+msgid "UnlockRatingDiscuss"
+msgstr "Activate rate"
+
+msgid "LockRatingDiscuss"
+msgstr "Deactivate rating"
+
+msgid "EditAssignmentWarning"
+msgstr "You can edit this page, but the pages of learners will not be modified"
+
+msgid "ExportToDocArea"
+msgstr "Export latest version of this page to Documents"
+
+msgid "LockByTeacher"
+msgstr "Disabled by trainer"
+
+msgid "LinksPagesFrom"
+msgstr "Pages that link to this page"
+
+msgid "DefineAssignmentPage"
+msgstr "Define this page as an individual assignment"
+
+msgid "AssignmentDescription"
+msgstr "Assignment description"
+
+msgid "UnlockRatingDiscussExtra"
+msgstr "Now all members can rate this page"
+
+msgid "LockRatingDiscussExtra"
+msgstr "Now only trainers can rate this page"
+
+msgid "HidePageExtra"
+msgstr "Now the page only is visible by trainer"
+
+msgid "ShowPageExtra"
+msgstr "Now the page is visible by all users"
+
+msgid "OnlyEditPagesCourseManager"
+msgstr "The Main Page can be edited by a teacher only"
+
+msgid "AssignmentLinktoTeacherPage"
+msgstr "Acces to trainer page"
+
+msgid "HideDiscussExtra"
+msgstr "Now discussion is visible by trainers only"
+
+msgid "ShowDiscussExtra"
+msgstr "Now discussion is visible by all users"
+
+msgid "LockDiscussExtra"
+msgstr "Now only trainers can add comments to this discussion"
+
+msgid "UnlockDiscussExtra"
+msgstr "Now all members can add comments to this discussion"
+
+msgid "AssignmentDescExtra"
+msgstr "This page is an assignment proposed by a trainer"
+
+msgid "AssignmentWorkExtra"
+msgstr "This page is a learner work"
+
+msgid "NoAreSeeingTheLastVersion"
+msgstr "Warning you are not seeing the latest version of the page"
+
+msgid "AssignmentFirstComToStudent"
+msgstr "Change this page to make your work about the assignment proposed"
+
+msgid "AssignmentLinkstoStudentsPage"
+msgstr "Access to the papers written by learners"
+
+msgid "AllowLaterSends"
+msgstr "Allow delayed sending"
+
+msgid "WikiStandBy"
+msgstr "This Wiki is frozen so far. A trainer must start it."
+
+msgid "NotifyDiscussByEmail"
+msgstr "Notify by email of new comments about this page is allowed"
+
+msgid "CancelNotifyDiscussByEmail"
+msgstr "The email notification of new comments on this page is disabled"
+
+msgid "EmailWikiChanges"
+msgstr "Notify Wiki changes"
+
+msgid "EmailWikipageModified"
+msgstr "It has modified the page"
+
+msgid "EmailWikiPageAdded"
+msgstr "Page was added"
+
+msgid "EmailWikipageDedeleted"
+msgstr "One page has been deleted in the Wiki"
+
+msgid "EmailWikiPageDiscAdded"
+msgstr "New comment in the discussion of the page"
+
+msgid "FullNotifyByEmail"
+msgstr "Receive an e-mail notification every time there is a change in the Wiki"
+
+msgid "FullCancelNotifyByEmail"
+msgstr "Stop receiving notifications by e-mail every time there is a change in the Wiki"
+
+msgid "EmailWikiChangesExt_1"
+msgstr "This notification has been made in accordance with their desire to monitor changes in the Wiki. This option means you have activated the button"
+
+msgid "EmailWikiChangesExt_2"
+msgstr "If you want to stop being notified of changes in the Wiki, select the tabs<strong> Recent Changes</ strong>, <strong>Current page</ strong>, <strong>Talk</ strong> as appropriate and then push the button"
+
+msgid "Visits"
+msgstr "visits"
+
+msgid "OrphanedPages"
+msgstr "Orphaned pages"
+
+msgid "WantedPages"
+msgstr "Wanted pages"
+
+msgid "MostVisitedPages"
+msgstr "Most visited pages"
+
+msgid "MostChangedPages"
+msgstr "Most changed pages"
+
+msgid "Changes"
+msgstr "Changes"
+
+msgid "MostActiveUsers"
+msgstr "Most active users"
+
+msgid "Contributions"
+msgstr "contributions"
+
+msgid "UserContributions"
+msgstr "User contributions"
+
+msgid "WarningDeleteMainPage"
+msgstr "Deleting the homepage of the Wiki is not recommended because it is the main access to the wiki.<br />If, however, you need to do so, do not forget to re-create this Homepage. Until then, other users will not be able to add new pages."
+
+msgid "ConvertToLastVersion"
+msgstr "To set this version as the last one, click on"
+
+msgid "Restore"
+msgstr "Restore"
+
+msgid "CurrentVersion"
+msgstr "Current version"
+
+msgid "LastVersion"
+msgstr "Latest version"
+
+msgid "PageRestored"
+msgstr "The page has been restored. You can view it by clicking"
+
+msgid "RestoredFromVersion"
+msgstr "Restored from version"
+
+msgid "HWiki"
+msgstr "Help: wiki"
+
+msgid "FirstSelectOnepage"
+msgstr "Please select a page first"
+
+msgid "DefineTask"
+msgstr "If you enter a description, this page will be considered a special page that allows you to create a task"
+
+msgid "ThisPageisBeginEditedBy"
+msgstr "At this time, this page is being edited by"
+
+msgid "ThisPageisBeginEditedTryLater"
+msgstr "Please try again later. If the user who is currently editing the page does not save it, this page will be available to you around"
+
+msgid "EditedByAnotherUser"
+msgstr "Your changes will not be saved because another user has modified and saved the page while you were editing it yourself"
+
+msgid "WarningMaxEditingTime"
+msgstr "You have 20 minutes to edit this page. After this time, if you have not saved the page, another user will be able to edit it, and you might lose your changes"
+
+msgid "TheTaskDoesNotBeginUntil"
+msgstr "Still is not the start date"
+
+msgid "TheDeadlineHasBeenCompleted"
+msgstr "You have exceeded the deadline"
+
+msgid "HasReachedMaxNumWords"
+msgstr "You have exceeded the number of words allowed"
+
+msgid "HasReachedMaxiNumVersions"
+msgstr "You have exceeded the number of versions allowed"
+
+msgid "DescriptionOfTheTask"
+msgstr "Description of the assignment"
+
+msgid "OtherSettings"
+msgstr "Other requirements"
+
+msgid "NMaxWords"
+msgstr "Maximum number of words"
+
+msgid "NMaxVersion"
+msgstr "Maximum number of versions"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "AddFeedback"
+msgstr "Add guidance messages associated with the progress on the page"
+
+msgid "Feedback1"
+msgstr "First message"
+
+msgid "Feedback2"
+msgstr "Second message"
+
+msgid "Feedback3"
+msgstr "Third message"
+
+msgid "FProgress"
+msgstr "Progress"
+
+msgid "PutATimeLimit"
+msgstr "Set a time limit"
+
+msgid "StandardTask"
+msgstr "Standard Task"
+
+msgid "ThePageHasBeenExportedToDocArea"
+msgstr "The page has been exported to the document tool"
+
+msgid "CreateAssignmentPage"
+msgstr "This will create a special wiki page in which the teacher can describe the task and which will be automatically linked to the wiki pages where learners perform the task. Both the teacher\'s and the learners\' pages are created automatically. In these tasks, learners can only edit and view theirs pages, but this can be changed easily if you need to."
+
+msgid "MostLinkedPages"
+msgstr "Pages most linked"
+
+msgid "DeadEndPages"
+msgstr "Dead end pages"
+
+msgid "MostNewPages"
+msgstr "Newest pages"
+
+msgid "MostLongPages"
+msgstr "Longest pages"
+
+msgid "NotAddedToCourse"
+msgstr "Not added to course"
+
+msgid "UsersNotRegistered"
+msgstr "Users not registered"
+
+msgid "ClearFilterResults"
+msgstr "Clear filter results"
+
+msgid "SelectFilter"
+msgstr "Select filter"
+
+msgid "HiddenPages"
+msgstr "Hidden pages"
+
+msgid "MostDiscussPages"
+msgstr "Most discussed pages"
+
+msgid "BestScoredPages"
+msgstr "Best scores pages"
+
+msgid "MProgressPages"
+msgstr "Highest progress pages"
+
+msgid "MostDiscussUsers"
+msgstr "Most discussed users"
+
+msgid "RandomPage"
+msgstr "Random page"
+
+msgid "ProtectedPages"
+msgstr "Protected pages"
+
+msgid "IncludeAllVersions"
+msgstr "Also search in older versions of each page"
+
+msgid "TotalHiddenPages"
+msgstr "Total hidden pages"
+
+msgid "TotalPagesEditedAtThisTime"
+msgstr "Total pages edited at this time"
+
+msgid "TotalWikiUsers"
+msgstr "Total users that have participated in this Wiki"
+
+msgid "StudentAddNewPages"
+msgstr "Learners can add new pages to the Wiki"
+
+msgid "DateCreateOldestWikiPage"
+msgstr "Creation date of the oldest Wiki page"
+
+msgid "DateEditLatestWikiVersion"
+msgstr "Date of most recent edition of Wiki"
+
+msgid "AverageScoreAllPages"
+msgstr "Average rating of all pages"
+
+msgid "AverageMediaUserProgress"
+msgstr "Mean estimated progress by users on their pages"
+
+msgid "TotalIpAdress"
+msgstr "Total different IP addresses that have contributed to Wiki"
+
+msgid "Pages"
+msgstr "Pages"
+
+msgid "Versions"
+msgstr "Versions"
+
+msgid "EmptyPages"
+msgstr "Total of empty pages"
+
+msgid "LockedDiscussPages"
+msgstr "Number of discussion pages blocked"
+
+msgid "HiddenDiscussPages"
+msgstr "Number of discussion pages hidden"
+
+msgid "TotalComments"
+msgstr "Total comments on various versions of the pages"
+
+msgid "TotalOnlyRatingByTeacher"
+msgstr "Total pages can only be scored by a teacher"
+
+msgid "TotalRatingPeers"
+msgstr "Total pages that can be scored by other learners"
+
+msgid "TotalTeacherAssignments"
+msgstr "Number of assignments pages proposed by a teacher"
+
+msgid "TotalStudentAssignments"
+msgstr "Number of individual assignments learner pages"
+
+msgid "TotalTask"
+msgstr "Number of tasks"
+
+msgid "PortfolioMode"
+msgstr "Portfolio mode"
+
+msgid "StandardMode"
+msgstr "Standard Task mode"
+
+msgid "ContentPagesInfo"
+msgstr "Information about the content of the pages"
+
+msgid "InTheLastVersion"
+msgstr "In the last version"
+
+msgid "InAllVersions"
+msgstr "In all versions"
+
+msgid "NumContributions"
+msgstr "Number of contributions"
+
+msgid "NumAccess"
+msgstr "Number of visits"
+
+msgid "NumWords"
+msgstr "Number of words"
+
+msgid "NumlinksHtmlImagMedia"
+msgstr "Number of external html links inserted (text, images, ...)."
+
+msgid "NumWikilinks"
+msgstr "Number of wiki links"
+
+msgid "NumImages"
+msgstr "Number of inserted images"
+
+msgid "NumFlash"
+msgstr "Number of inserted flash files"
+
+msgid "NumMp3"
+msgstr "Number of mp3 audio files inserted"
+
+msgid "NumFlvVideo"
+msgstr "Number of FLV video files inserted"
+
+msgid "NumYoutubeVideo"
+msgstr "Number of Youtube video embedded"
+
+msgid "NumOtherAudioVideo"
+msgstr "Number of audio and video files inserted (except mp3 and flv)"
+
+msgid "NumTables"
+msgstr "Number of tables inserted"
+
+msgid "Anchors"
+msgstr "Anchors"
+
+msgid "NumProtectedPages"
+msgstr "Number of protected pages"
+
+msgid "WhoAndWhere"
+msgstr "Who and where"
+

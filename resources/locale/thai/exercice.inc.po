@@ -1,0 +1,462 @@
+msgid "langExercice"
+msgstr "แบบทดสอบ"
+
+msgid "langActivate"
+msgstr "แสดง"
+
+msgid "langDeactivate"
+msgstr "ซ่อน"
+
+msgid "langNoEx"
+msgstr "ขณะนี้ยังไม่มีการสอบ"
+
+msgid "langNewEx"
+msgstr "แบบทดสอบใหม่"
+
+msgid "langQuestion"
+msgstr "คำถามสำคัญ"
+
+msgid "langQuestions"
+msgstr "คำถามทั้งหมด"
+
+msgid "langAnswers"
+msgstr "ตัวเลือกตอบ"
+
+msgid "langTrue"
+msgstr "ถูกต้อง"
+
+msgid "langAnswer"
+msgstr "คำตอบ"
+
+msgid "langResult"
+msgstr "คะแนน"
+
+msgid "langNoResult"
+msgstr "ยังไม่มีผลคะแนน"
+
+msgid "langYourResults"
+msgstr "ผลคะแนนของคุณ"
+
+msgid "langStudentResults"
+msgstr "คะแนนผลสอบของผู้เรียน"
+
+msgid "langExerciseType"
+msgstr "ประเภทของแบบทดสอบ"
+
+msgid "langExerciseName"
+msgstr "ชื่อแบบทดสอบ"
+
+msgid "langExerciseDescription"
+msgstr "คำชี้แจง"
+
+msgid "langSimpleExercise"
+msgstr "ในหน้าเดียวกัน"
+
+msgid "langSequentialExercise"
+msgstr "คำถามเดียวต่อหนึ่งหน้า(เรียงตามลำดับ)"
+
+msgid "langRandomQuestions"
+msgstr "สุ่มคำถาม"
+
+msgid "langGiveExerciseName"
+msgstr "ตั้งชื่อแบบทดสอบ"
+
+msgid "langSound"
+msgstr "ไฟล์เสียงหรือวิดีทัศน์"
+
+msgid "langDeleteSound"
+msgstr "ลบไฟล์เสียงหรือวิดีทัศน์"
+
+msgid "langNoAnswer"
+msgstr "ยังไม่มีคำตอบ"
+
+msgid "langGoBackToQuestionPool"
+msgstr "กลับไปที่แบบสอบถาม"
+
+msgid "langGoBackToQuestionList"
+msgstr "กลับไปที่รายการคำถาม"
+
+msgid "langQuestionAnswers"
+msgstr "ตอบคำถาม"
+
+msgid "langUsedInSeveralExercises"
+msgstr "คำเตือน! คำถามและคำตอบนี้ จะถูกใช้ในแบบทดสอบหลายชุด. คุณต้องการที่จะแก้ไขหรือไม่"
+
+msgid "langModifyInAllExercises"
+msgstr "ในทุกแบบทดสอบ"
+
+msgid "langModifyInThisExercise"
+msgstr "ใช้ในแบบทดสอบนี้เท่านั้น"
+
+msgid "langAnswerType"
+msgstr "คำตอบประเภท"
+
+msgid "langMultipleSelect"
+msgstr "แบบปรนัย(สามารถตอบได้หลายข้อ)"
+
+msgid "langFillBlanks"
+msgstr "เติมคำในช่องว่าง"
+
+msgid "langMatching"
+msgstr "แบบจับคู่"
+
+msgid "langAddPicture"
+msgstr "ใส่ภาพ"
+
+msgid "langReplacePicture"
+msgstr "แทนที่รูปภาพ"
+
+msgid "langDeletePicture"
+msgstr "ลบภาพ"
+
+msgid "langQuestionDescription"
+msgstr "ความเห็นเพิ่มเติม"
+
+msgid "langGiveQuestion"
+msgstr "กรุณาพิมพ์คำถาม"
+
+msgid "langWeightingForEachBlank"
+msgstr "จงเติมคำในช่องว่าง"
+
+msgid "langUseTagForBlank"
+msgstr "ให้ใช้วงเล็บปีกกาเปิดแล้วปิด [...]ข้อคำตอบในส่วนที่ท่านอธิบายตอบคำถามในพื้นที่เกินกว่าที่กำหนดว่างไว้ให้"
+
+msgid "langQuestionWeighting"
+msgstr "ให้คะแนน"
+
+msgid "langMoreAnswers"
+msgstr "เพิ่มตัวเลือกตอบ"
+
+msgid "langLessAnswers"
+msgstr "ลบตัวเลือกตอบ"
+
+msgid "langMoreElements"
+msgstr "เพิ่มส่วนประกอบ"
+
+msgid "langLessElements"
+msgstr "ลบส่วนประกอบ"
+
+msgid "langTypeTextBelow"
+msgstr "กรุณาพิมพ์คำตอบด้านล่าง"
+
+msgid "langDefaultTextInBlanks"
+msgstr "[ประติมากรรม]จัดอยู่ในศิลปะประเภท[วิจิตรศิลป์]"
+
+msgid "langDefaultMatchingOptA"
+msgstr "มาก"
+
+msgid "langDefaultMatchingOptB"
+msgstr "ดูดี"
+
+msgid "langDefaultMakeCorrespond1"
+msgstr "บิดาของคุณคือ"
+
+msgid "langDefaultMakeCorrespond2"
+msgstr "มารดาของคุณคือ"
+
+msgid "langDefineOptions"
+msgstr "กรุณาให้คำจำกัดความเพิ่มเติม"
+
+msgid "langMakeCorrespond"
+msgstr "จงเลอกจับคู่ให้ถูกต้อง"
+
+msgid "langFillLists"
+msgstr "จงเติมคำในสองรายการข้างล่างนี้"
+
+msgid "langGiveText"
+msgstr "กรุณาพิมพ์ข้อความ"
+
+msgid "langDefineBlanks"
+msgstr "พิมพ์คำอธิบายตอบลงในเครื่องหมายวงเล็บปีกกา[...]อย่างน้อย 1 แห่ง"
+
+msgid "langGiveAnswers"
+msgstr "กรุณาพิมพ์คำตอบ"
+
+msgid "langChooseGoodAnswer"
+msgstr "กรุณาเช็คคำตอบที่ถูกต้อง"
+
+msgid "langChooseGoodAnswers"
+msgstr "กรุณาเลือกกำหนดว่า มีหนึ่งคำตอบหรือหลายคำตอบ"
+
+msgid "langQuestionList"
+msgstr "รายการคำถามของแบบทดสอบ"
+
+msgid "langMoveUp"
+msgstr "เลื่อนขึ้น"
+
+msgid "langMoveDown"
+msgstr "เลื่อนลง"
+
+msgid "langGetExistingQuestion"
+msgstr "เลือกคำถามที่มีจากฐานข้อมูล"
+
+msgid "langFinishTest"
+msgstr "สอบเสร็จ"
+
+msgid "langQuestionPool"
+msgstr "คลังข้อสอบ"
+
+msgid "langOrphanQuestions"
+msgstr "แบบทดสอบแยกชุด"
+
+msgid "langNoQuestion"
+msgstr "ไม่มีคำถามในตอนนี้"
+
+msgid "langAllExercises"
+msgstr "แบบทดสอบทั้งหมด"
+
+msgid "langFilter"
+msgstr "ตัวกรองค้นหา"
+
+msgid "langGoBackToEx"
+msgstr "กลับไปที่แบบทดสอบ"
+
+msgid "langReuse"
+msgstr "นำไปใช้อีก"
+
+msgid "langExerciseManagement"
+msgstr "การจัดการแบบทดสอบ"
+
+msgid "langQuestionManagement"
+msgstr "การจัดการ คำถาม/คำตอบ"
+
+msgid "langQuestionNotFound"
+msgstr "ไม่พบคำถาม"
+
+msgid "langExerciseNotFound"
+msgstr "ไม่พบแบบทดสอบหรือมองไม่เห็น"
+
+msgid "langAlreadyAnswered"
+msgstr "คุณตอบคำถามไปแล้ว"
+
+msgid "langElementList"
+msgstr "รายการประกอบ"
+
+msgid "langScore"
+msgstr "คะแนน"
+
+msgid "langCorrespondsTo"
+msgstr "สอดคล้องกับ"
+
+msgid "langExpectedChoice"
+msgstr "ตัวเลือกตอบที่ถูกต้อง"
+
+msgid "langYourTotalScore"
+msgstr "คะแนนรวมของคุณคือ"
+
+msgid "langEvalSet"
+msgstr "เกณฑ์การประเมินผล"
+
+msgid "langActive"
+msgstr "เปิด"
+
+msgid "langInactive"
+msgstr "ปิด"
+
+msgid "langQuestCreate"
+msgstr "สร้างคำถาม"
+
+msgid "langExRecord"
+msgstr "ได้บันทึกแบบทดสอบของคุณแล้ว"
+
+msgid "langBackModif"
+msgstr "กลับไปที่หน้าแก้ไขคำถาม"
+
+msgid "langDoEx"
+msgstr "ทำแบบทดสอบ"
+
+msgid "langDefScor"
+msgstr "อธิบายเกณฑ์การประเมินผล"
+
+msgid "langCreateModif"
+msgstr "สร้าง/แก้ไขคำถาม"
+
+msgid "langSub"
+msgstr "ชื่อเรื่องรอง"
+
+msgid "langMyAnswer"
+msgstr "คำตอบของเรา"
+
+msgid "langMorA"
+msgstr "เพิ่มตัวเลือกตอบ"
+
+msgid "langLesA"
+msgstr "ลบตัวเลือกตอบ"
+
+msgid "langRecEx"
+msgstr "บันทึกแบบทดสอบ"
+
+msgid "langRecQu"
+msgstr "บันทึกคำถาม"
+
+msgid "langRecAns"
+msgstr "บันทึกคำตอบ"
+
+msgid "langIntroduction"
+msgstr "คำนำ"
+
+msgid "langTitleAssistant"
+msgstr "ตัวช่วยสร้างแบบทดสอบ"
+
+msgid "langQuesList"
+msgstr "รายการคำถาม"
+
+msgid "langSaveEx"
+msgstr "บันทึกแบบทดสอบ"
+
+msgid "langFinish"
+msgstr "เสร็จสิ้น"
+
+msgid "langCancel"
+msgstr "ยกเลิก"
+
+msgid "langQImage"
+msgstr "รูปภาพ-คำถาม"
+
+msgid "langAddQ"
+msgstr "เพิ่มคำถาม"
+
+msgid "langDoAnEx"
+msgstr "ทำแบบทดสอบ"
+
+msgid "langGenerator"
+msgstr "รายชื่อแบบทดสอบ"
+
+msgid "langChoice"
+msgstr "ที่คุณเลือก"
+
+msgid "langCorrect"
+msgstr "เฉลย"
+
+msgid "langPossAnsw"
+msgstr "จำนวนคำตอบต่อหนึ่งคำถาม"
+
+msgid "langStudAnsw"
+msgstr "จำนวนการตอบผิดของนักศึกษา"
+
+msgid "langDetermine"
+msgstr "ประมาณการคะแนนของท่านกับตารางด้านล่าง คลิกเมื่อ \"ตกลง\""
+
+msgid "langNonNumber"
+msgstr "ไม่มีค่าตัวเลข"
+
+msgid "langReplaced"
+msgstr "แนะนำให้แทนที่ด้วย 0"
+
+msgid "langSuperior"
+msgstr "ค่ามากเกินกว่า 20"
+
+msgid "langRep20"
+msgstr "แนะนำให้แทนด้วยค่า 20"
+
+msgid "langDefault"
+msgstr "ค่าเริ่มต้น *"
+
+msgid "langDefComment"
+msgstr "* ถ้าคุณคลิกบน \"ค่าเริ่มต้น\", ตัวเลขค่าเก่าของท่าน จะถูกลบทิ้งอย่างถาวร"
+
+msgid "langScoreGet"
+msgstr "Numbers in black = คะแนน"
+
+msgid "langShowScor"
+msgstr "แสดงคะแนนให้นักศึกษาดู :"
+
+msgid "langStep1"
+msgstr "ขั้นที่1"
+
+msgid "langStep2"
+msgstr "ขั้นที่ 2"
+
+msgid "langTake"
+msgstr "เริ่ม take"
+
+msgid "langAmong"
+msgstr "ระหว่าง among"
+
+msgid "langImportHotPotatoesQuiz"
+msgstr "นำเข้าแบบทดสอบจาก HotPotatoes Tests"
+
+msgid "langHotPotatoesTests"
+msgstr "นำเข้าแบบทดสอบ HotPotatoes Tests"
+
+msgid "langDownloadFile"
+msgstr "อัพโหลดข้อมูลไปที่เครื่องแม่ข่าย"
+
+msgid "langDownloadImg"
+msgstr "โอนย้ายไฟล์รูปภาพขึ้นสู่เครื่องแม่ข่าย"
+
+msgid "langDownloadEnd"
+msgstr "สิ้นสุดการอัพโหลด"
+
+msgid "langNoSpace"
+msgstr "การอัพโหลดล้มเหลว มีเนื้อที่ไม่พอในไดเร็กทอรีของท่าน"
+
+msgid "langZipNoPhp"
+msgstr "ไฟล์ zip ไม่สามารถบรรจุ PHP filesได้"
+
+msgid "langNoImg"
+msgstr "แบบทดสอบไม่มีรูปภาพ"
+
+msgid "langImgNote_st"
+msgstr "<br>คุณยังต้องโอนย้ายไฟล์ You still have to upload"
+
+msgid "langImgNote_en"
+msgstr "รูปภาพ"
+
+msgid "langDocDeleted"
+msgstr "ลบเอกสารแล้ว"
+
+msgid "langViMod"
+msgstr "ปรับปรุงการให้เห็นเอกสารแล้ว"
+
+msgid "langNameNotEqual"
+msgstr "ไฟล์งานไม่ถูกต้อง/สมบูรณ์"
+
+msgid "langIndice"
+msgstr "ดัชนี Index"
+
+msgid "langIndices"
+msgstr "ดัชนีIndex"
+
+msgid "langDateExo"
+msgstr "วันที่"
+
+msgid "langShowQuestion"
+msgstr "แสดงคำถาม"
+
+msgid "langUnknownExercise"
+msgstr "ไม่รู้จักแบบฝึกหัด"
+
+msgid "langReuseQuestion"
+msgstr "ใช้คำถามเดิมอีก Reuse the question"
+
+msgid "langCreateExercise"
+msgstr "สร้างแบบฝึกหัด Create Exercise"
+
+msgid "langCreateQuestion"
+msgstr "ตั้งคำถาม"
+
+msgid "langCreateAnswers"
+msgstr "ตั้งคำตอบ"
+
+msgid "langModifyExercise"
+msgstr "แก้ไขแบบฝึกหัด"
+
+msgid "langModifyAnswers"
+msgstr "แก้ไขคำตอบ"
+
+msgid "langForExercise"
+msgstr "สำหรับแบบฝึกหัด for exercise"
+
+msgid "langUseExistantQuestion"
+msgstr "ใช้คำถามเดิมที่มีอยู่ Use an existing question"
+
+msgid "FreeAnswer"
+msgstr "ตอบคำถามแบบอัตนัย"
+
+msgid "notCorrectedYet"
+msgstr "�ӵͺ����ѧ���Ѻ��Ҷ١��ͧ �س�����ṹ�� 0 ��觡���繼ŵ�ͤ�ṹ������� This answer has not yet been corrected. Meanwhile, your score for this question is set to 0, affecting the total score."
+
+msgid "adminHP"
+msgstr "Hot Potatoes Admin"
+

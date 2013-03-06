@@ -1,0 +1,288 @@
+msgid "Tools"
+msgstr "Instrumenti"
+
+msgid "SendWork"
+msgstr "Augšupielādēt patstāvīgo darbu"
+
+msgid "langTooBig"
+msgstr "Jūs neizvēlējāties nevienu failu, ko nosūtīt, vai arī tas ir pārāk liela izmēra"
+
+msgid "langListDeleted"
+msgstr "Saraksts tika dzēsts"
+
+msgid "langDocModif"
+msgstr "Referāta / mājas darba virsraksts tika mainīts"
+
+msgid "langDocAdd"
+msgstr "Dokuments tika pievienots publikāciju sarakstam"
+
+msgid "langDocDel"
+msgstr "Dokuments tika izdzēsts"
+
+msgid "langTitleWork"
+msgstr "Dokumenta (faila) nosaukums"
+
+msgid "langAuthors"
+msgstr "Autori"
+
+msgid "langDelList"
+msgstr "Dzēst sarakstu"
+
+msgid "langWorkDelete"
+msgstr "Dzēst"
+
+msgid "langWorkModify"
+msgstr "Rediģēt"
+
+msgid "langWorkConfirmDelete"
+msgstr "Vai tiešām vēlaties dzēst šo failu ?"
+
+msgid "langAllFiles"
+msgstr "Darbības ar visiem failiem"
+
+msgid "DefaultUpload"
+msgstr "Iepriekšnoteikts veids, kā tiko pievienotie dokumenti tiek attēloti (redzami / neredzami)"
+
+msgid "NewVisible"
+msgstr "Jaunie dokumenti ir redzami visiem lietotājiem"
+
+msgid "NewUnvisible"
+msgstr "Jaunie dokumenti ir redzami, tikai kursu Lektoram / iem"
+
+msgid "lang_doc_unvisible"
+msgstr "Jūsu fails ir redzams tikai šī kursa Lektoram un tādēļ Jūs to vairs neredzat"
+
+msgid "langDelLk"
+msgstr "Vai jūs tiešām vēlaties izdzēst šo saiti?"
+
+msgid "langMustBeRegisteredUser"
+msgstr "Publicēt dokumentus, var tikai Kursā reģistrētie lietotāji"
+
+msgid "langListDel"
+msgstr "Dzēst sarakstu"
+
+msgid "langNameDir"
+msgstr "Jaunās direktorijas nosaukums"
+
+msgid "langFileExists"
+msgstr "Veicamā darbība ir neiespējama - fails ar tādu nosaukumu jau eksistē."
+
+msgid "CreateDirectory"
+msgstr "Izveidot mapi"
+
+msgid "langCurrentDir"
+msgstr "patreizējā mape"
+
+msgid "UploadADocument"
+msgstr "Augšupielādēt patstāvīgo darbu"
+
+msgid "EditToolOptions"
+msgstr "Mainīt mapes iestatījumus"
+
+msgid "DocumentDeleted"
+msgstr "Dokuments izdzēsts"
+
+msgid "SendMailBody"
+msgstr "Lietotājs iesniedzis Referātu / mājas darbu patstāvīgo darbu mapē"
+
+msgid "DirDelete"
+msgstr "Izdzēst direktoriju"
+
+msgid "ValidateChanges"
+msgstr "Apstiprināt izmaiņas"
+
+msgid "FolderUpdated"
+msgstr "Mape atjaunināta"
+
+msgid "EndsAt"
+msgstr "Beigu datums (pilnībā slēgts)"
+
+msgid "QualificationOfAssignment"
+msgstr "Patstāvīgā darba vērtējums"
+
+msgid "MakeQualifiable"
+msgstr "Pievienot ieskaitei"
+
+msgid "QualificationNumberOver"
+msgstr "Rezultāta - Ieskaitīts! - vērtība"
+
+msgid "WeightInTheGradebook"
+msgstr "Vērtējums Ieskaišu atskaitē"
+
+msgid "DatesAvailables"
+msgstr "Pieejamie dati"
+
+msgid "ExpiresAt"
+msgstr "Beidzas / derīgs līdz"
+
+msgid "AddToCalendar"
+msgstr "Pievienot patstāvīgā darba iesniegšanas (vai izveides) datumu kalendārā"
+
+msgid "DirectoryCreated"
+msgstr "Direktorija izveidota"
+
+msgid "Assignment"
+msgstr "Patstāvīgie darbi"
+
+msgid "AdvancedParameters"
+msgstr "Uzlabotie parametri"
+
+msgid "ExpiryDateToSendWorkIs"
+msgstr "Uzdevuma izpildes beigu datums"
+
+msgid "EnableExpiryDate"
+msgstr "Dot papildus laiku iesniegt darbus pēc termiņa (mape redzama kursantiem)"
+
+msgid "EnableEndDate"
+msgstr "Aktivizēt galīgo pieņemšanas datumu (kursantiem mape nav redzama)"
+
+msgid "IsNotPosibleSaveTheDocument"
+msgstr "Dokumentu saglabāt nav iespējams"
+
+msgid "EndDateCannotBeBeforeTheExpireDate"
+msgstr "Beigu datums nevar būt, pēc darbības termiņa beigu datuma"
+
+msgid "SelectAFilter"
+msgstr "Izvēlēties atlases kritērijus"
+
+msgid "FilterByNotExpired"
+msgstr "Atlasīt pēc \"vēl atļauts izpildīt\""
+
+msgid "FilterAssignments"
+msgstr "Atlasīt darbus"
+
+msgid "WeightNecessary"
+msgstr "Minimālais sagaidāmais vērtējums"
+
+msgid "QualificationOver"
+msgstr "Rezultāta - Ieskaitīts! - vērtība"
+
+msgid "ExpiryDateAlreadyPassed"
+msgstr "Termiņa beigu datums jau ir pagājis"
+
+msgid "EndDateAlreadyPassed"
+msgstr "Beigu datums jau ir pagājis"
+
+msgid "MoveXTo"
+msgstr "Pārvietot %s uz"
+
+msgid "QualificationMustNotBeMoreThanQualificationOver"
+msgstr "Marķējums nevar būt lielāks par maksimālo vērtējumu"
+
+msgid "ModifyDirectory"
+msgstr "Apstiprināt izmaiņas"
+
+msgid "DeleteAllFiles"
+msgstr "Dzēst visus iesniegtos darbus"
+
+msgid "BackToWorksList"
+msgstr "Atgriezties uz patstāvīgo darbu sarakstu"
+
+msgid "EditMedia"
+msgstr "Rediģēt un vērtēt patstāvīgo darbu"
+
+msgid "AllFilesInvisible"
+msgstr "Tagad visi dokumenti ir neredzami"
+
+msgid "FileInvisible"
+msgstr "Tagad fails ir neredzams"
+
+msgid "AllFilesVisible"
+msgstr "Tagad visi patstāvīgie darbi ir redzami"
+
+msgid "FileVisible"
+msgstr "Tagad fails ir redzams"
+
+msgid "ButtonCreateAssignment"
+msgstr "Izveidot mapi"
+
+msgid "AssignmentName"
+msgstr "Patstāvīgo darbu apmaiņas mapes nosaukums"
+
+msgid "CreateAssignment"
+msgstr "Izveidot patstāvīgo darbu apmaiņas mapi"
+
+msgid "FolderEdited"
+msgstr "Mape rediģēta"
+
+msgid "UpdateWork"
+msgstr "Atjaunināt šo uzdevumu"
+
+msgid "MakeAllPapersInvisible"
+msgstr "Nerādīt iesniegtos darbus"
+
+msgid "MakeAllPapersVisible"
+msgstr "Rādīt visus iesniegtos darbus"
+
+msgid "TheDocumentHasBeenDeleted"
+msgstr "Dokuments ir izdzēsts"
+
+msgid "YouAreNotAllowedToDeleteThisDocument"
+msgstr "Jums nav atļauts dzēst šo dokumentu"
+
+msgid "StudentAllowedToDeleteOwnPublication"
+msgstr "Ļaut Kursantiem izdzēst savas publikācijas"
+
+msgid "ConfirmYourChoiceDeleteAllfiles"
+msgstr "Lūdzu, apstipriniet savu izvēli. Tā būs komanda, izdzēst visus failus bez atgūšanas iespējām"
+
+msgid "WorkName"
+msgstr "Uzdevuma nosaukums"
+
+msgid "ReminderToSubmitPendingTask"
+msgstr "Lūdzu atcerieties! Jums vēl joprojām, Lektoram ir jānosūta izpildītais mājas darbs / uzdevums"
+
+msgid "MessageConfirmSendingOfTask"
+msgstr "Šī ir ziņojums, kas apliecina uzdevuma saņemšanu."
+
+msgid "DataSent"
+msgstr "Nosūtāmie Dati"
+
+msgid "DownloadLink"
+msgstr "Lejupielādes saite"
+
+msgid "ViewUsersWithTask"
+msgstr "Uzdevumi saņemti"
+
+msgid "ReminderMessage"
+msgstr "Nosūtīt atgādinājumu"
+
+msgid "DateSent"
+msgstr "Nosūtīšanas datums"
+
+msgid "ViewUsersWithoutTask"
+msgstr "Skatīt trūkstošos uzdevumus"
+
+msgid "HomeworkCreated"
+msgstr "Patstāvīgo darbu mape tika izveidota"
+
+msgid "HomeworkHasBeenCreatedForTheCourse"
+msgstr "Uzdevums tika izveidots Kursam"
+
+msgid "PleaseCheckHomeworkPage"
+msgstr "Lūdzu, pārbaudiet uzdevumu lapu"
+
+msgid "IncludedInEvaluation"
+msgstr "Iekļauts Novērtējumā"
+
+msgid "DateExpiredNotBeLessDeadLine"
+msgstr "Derīguma termiņa datums nevar būt mazāks par termiņa beigu datumu"
+
+msgid "NotRevised"
+msgstr "Nav pārskatīts"
+
+msgid "MaxWeightNeedToBeProvided"
+msgstr "Ir jāsasniedz maksimālā vērtība."
+
+msgid "ContainsAfile"
+msgstr "Satur failu"
+
+msgid "AllowTextAssignments"
+msgstr "Atļautu uzdevumu iesniegšanu, izmantojot tiešsaistes redaktoru"
+
+msgid "YouAlreadySentAPaperYouCantUpload"
+msgstr "Jūs jau esat nosūtījis uzdevumu, vēl vienu vairs nevar augšupielādēt"
+
+msgid "CantUploadDeleteYourPaperFirst"
+msgstr "Jūs nevarat augšupielādēt šo uzdevumu. Lūdzu, izdzēsiet kādu no iepriekšējiem."
+

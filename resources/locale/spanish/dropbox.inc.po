@@ -1,0 +1,303 @@
+msgid "Upload"
+msgstr "Enviar"
+
+msgid "BackList"
+msgstr "Volver a mi espacio para compartir documentos"
+
+msgid "ShowFeedback"
+msgstr "Mostrar comentario"
+
+msgid "GiveFeedback"
+msgstr "Añadir / Modificar un comentario"
+
+msgid "JustUploadInSelect"
+msgstr "---Transferir a mí mismo---"
+
+msgid "MailingNothingFor"
+msgstr "Nada para"
+
+msgid "MailingFileNotRegistered"
+msgstr "(no inscrito en este curso)"
+
+msgid "MailingFileSentTo"
+msgstr "enviado a"
+
+msgid "MailingFileIsFor"
+msgstr "es para"
+
+msgid "MailingFileRecipDup"
+msgstr "múltiples usuarios tienen"
+
+msgid "MailingFileRecipNotFound"
+msgstr "ningún estudiante con"
+
+msgid "MailingFileNoRecip"
+msgstr "el nombre no contiene ningún identificador del destinatario"
+
+msgid "MailingFileNoPostfix"
+msgstr "el nombre no termina con"
+
+msgid "MailingFileNoPrefix"
+msgstr "el nombre no comienza por"
+
+msgid "MailingFileFunny"
+msgstr "sin nombre o con una extensión que no tiene entre 1 y 4 caracteres"
+
+msgid "MailingZipDups"
+msgstr "El archivo ZIP de correo no debe contener archivos duplicados - de ser así no será enviado"
+
+msgid "MailingZipPhp"
+msgstr "El archivo ZIP de correo no puede contener archivos php - de ser así no será enviado"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "El archivo ZIP de correo está vacío o está en mal estado"
+
+msgid "MailingWrongZipfile"
+msgstr "El fichero de correo debe ser un fichero ZIP cuyo nombre contenga las palabras STUDENTID o LOGINNAME"
+
+msgid "MailingConfirmSend"
+msgstr "¿Enviar el contenido de los ficheros a direcciones específicas?"
+
+msgid "MailingSend"
+msgstr "Enviar el contenido de los ficheros"
+
+msgid "MailingNotYetSent"
+msgstr "Los ficheros contenidos en el correo no han sido enviados..."
+
+msgid "MailingInSelect"
+msgstr "---Envío por correo---"
+
+msgid "MailingAsUsername"
+msgstr "Envío por correo"
+
+msgid "FileDeleted"
+msgstr "El fichero seleccionado ha sido suprimido de su area de documentos compartidos."
+
+msgid "DocAdd"
+msgstr "El documento ha sido añadido"
+
+msgid "Sender"
+msgstr "remitente"
+
+msgid "Author"
+msgstr "autor"
+
+msgid "FileSize"
+msgstr "tamaño del fichero"
+
+msgid "Title"
+msgstr "título"
+
+msgid "OverwriteFile"
+msgstr "¿ Sobreescribir el archivo que anteriormente ha enviado con el mismo nombre ?"
+
+msgid "Ok"
+msgstr "Aceptar"
+
+msgid "Unknown"
+msgstr "desconocido"
+
+msgid "SentOn"
+msgstr "el"
+
+msgid "SentTo"
+msgstr "Enviado a"
+
+msgid "ConfirmDelete"
+msgstr "Esto solamente eliminará la entrada de su lista"
+
+msgid "SendTo"
+msgstr "Enviar a"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "UploadFile"
+msgstr "Enviar documento"
+
+msgid "ErrorCreatingDir"
+msgstr "No se puede crear el directorio. Por favor, contacte con el administrador del sistema."
+
+msgid "UploadError"
+msgstr "Error de envío, revise tamaño máximo del archivo y los permisos del directorio."
+
+msgid "TooBig"
+msgstr "El archivo seleccionado es demasiado grande."
+
+msgid "NoFileSpecified"
+msgstr "No ha seleccionado ningún archivo para su envío."
+
+msgid "NoUserSelected"
+msgstr "Por favor, seleccione el usuario al que desea enviar el archivo."
+
+msgid "BadFormData"
+msgstr "El envío ha fallado: datos del formulario erróneos. Por favor, contacte a su administrador del sistema."
+
+msgid "GeneralError"
+msgstr "Se ha producido un error. Por favor, consulte con el administrador del sistema"
+
+msgid "Dropbox"
+msgstr "Compartir documentos"
+
+msgid "Help"
+msgstr "Ayuda"
+
+msgid "ReceivedFiles"
+msgstr "Archivos recibidos"
+
+msgid "SentFiles"
+msgstr "Archivos enviados"
+
+msgid "ReceivedTitle"
+msgstr "Título"
+
+msgid "SentTitle"
+msgstr "Archivos enviados"
+
+msgid "Authors"
+msgstr "Autor"
+
+msgid "Size"
+msgstr "Tamaño"
+
+msgid "LastResent"
+msgstr "Último reenvío el"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "Principal"
+
+msgid "UploadNewFile"
+msgstr "Enviar un archivo"
+
+msgid "AreYouSureToDelete"
+msgstr "¿ Está seguro de querer eliminar"
+
+msgid "Feedback"
+msgstr "Comentarios"
+
+msgid "CloseFeedback"
+msgstr "Cerrar comentarios"
+
+msgid "AddNewFeedback"
+msgstr "Añadir un nuevo comentario"
+
+msgid "DropboxFeedbackStored"
+msgstr "El comentario ha sido guardado"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr "Todos los usuarios han eliminado el archivo por lo que nadie podrá ver el comentario que está añadiendo."
+
+msgid "FeedbackError"
+msgstr "Error en el comentario"
+
+msgid "PleaseTypeText"
+msgstr "Por favor, escriba algún texto."
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr "No tiene permiso para descargar este archivo."
+
+msgid "CheckAtLeastOneFile"
+msgstr "Compurebe al menos un archivo."
+
+msgid "ReceivedFileDeleted"
+msgstr "El archivo recibido ha sido eliminado."
+
+msgid "SentFileDeleted"
+msgstr "El archivo enviado ha sido eliminado."
+
+msgid "FilesMoved"
+msgstr "Los archivos seleccionados han sido movidos."
+
+msgid "ReceivedFileMoved"
+msgstr "Los archivos recibidos han sido movidos."
+
+msgid "SentFileMoved"
+msgstr "El archivo enviado ha sido movido"
+
+msgid "NotMovedError"
+msgstr "Este archivo(s) no puede moverse."
+
+msgid "AddNewCategory"
+msgstr "Añadir una categoría"
+
+msgid "EditCategory"
+msgstr "Editar esta categoría"
+
+msgid "CategoryName"
+msgstr "Nombre de la categoría"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "Por favor, escoja un nombre para la categoría"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr "Esta categoría ya existe, por favor use un nombre diferente"
+
+msgid "CurrentlySeeing"
+msgstr "Actualmente está viendo la categoría"
+
+msgid "CategoryStored"
+msgstr "La categoría ha sido añadida."
+
+msgid "CategoryModified"
+msgstr "La categoría ha sido modificada."
+
+msgid "CategoryDeleted"
+msgstr "La categoría ha sido eliminada."
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "El campo autor no puede estar vacío"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "Debe seleccionar al menos un destino"
+
+msgid "DropboxFileTooBig"
+msgstr "El archivo es demasiado grande."
+
+msgid "TheFileIsNotUploaded"
+msgstr "El archivo no ha sido enviado"
+
+msgid "FileUploadSucces"
+msgstr "El archivo ha sido enviado"
+
+msgid "MailingNonMailingError"
+msgstr "El envío por correo no puede ser sobreescrito por envíos que no sean de correo y viceversa"
+
+msgid "MailingSelectNoOther"
+msgstr "El envío por correo no puede ser combinado con otros destinatarios"
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "El envío a mi mismo no se puede combinar con otros recipientes"
+
+msgid "NewDropboxFileUploaded"
+msgstr "Un nuevo archivo ha sido enviado en Compartir Documentos"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "En su curso, un nuevo archivo ha sido enviado en Compartir Documentos"
+
+msgid "langAddEdit"
+msgstr "Añadir / Editar"
+
+msgid "ErrorNoFilesInFolder"
+msgstr "Este directorio está vacío"
+
+msgid "AddComment"
+msgstr "Añadir comentario"
+
+msgid "SentCatgoryDeleted"
+msgstr "La carpeta ha sido eliminada"
+
+msgid "ReceivedCatgoryDeleted"
+msgstr "La carpeta ha sido eliminada"
+
+msgid "InvalideUserDetected"
+msgstr "Usuario no válido detectado."
+
+msgid "InvalideGroupDetected"
+msgstr "Grupo no válido detectado"
+
+msgid "OverviewOfFilesInThisZip"
+msgstr "Listado de archivos en este Zip"
+

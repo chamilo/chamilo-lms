@@ -1,0 +1,288 @@
+msgid "langStatDB"
+msgstr "Štatistická databáza"
+
+msgid "langEnableTracking"
+msgstr "Aktivovať štatistiku"
+
+msgid "langAllowSelfRegProf"
+msgstr "Povoliť samo-registráciu ako tvorcu kurzu"
+
+msgid "langEG"
+msgstr "napr."
+
+msgid "langDBHost"
+msgstr "Hostiteľ databázy"
+
+msgid "langDBLogin"
+msgstr "Používateľské meno databázy"
+
+msgid "langDBPassword"
+msgstr "Databázové heslo"
+
+msgid "langMainDB"
+msgstr "Hlavná Chamilo databáza (DB)"
+
+msgid "langAllFieldsRequired"
+msgstr "všetky polia povinné"
+
+msgid "langPrintVers"
+msgstr "Verzia pre tlač"
+
+msgid "langAdminEmail"
+msgstr "Email administrátora"
+
+msgid "langAdminName"
+msgstr "Meno administrátora"
+
+msgid "langAdminSurname"
+msgstr "Priezvisko administrátora"
+
+msgid "langAdminLogin"
+msgstr "Prihlásenie administrátora"
+
+msgid "langAdminPass"
+msgstr "Heslo administrátora (<font color=\"red\">môžete ho zmeniť</font>)"
+
+msgid "langEducationManager"
+msgstr "Projektový manažér"
+
+msgid "langCampusName"
+msgstr "Meno portálu"
+
+msgid "langStep1"
+msgstr "Etapa 1"
+
+msgid "langStep2"
+msgstr "Etapa 2"
+
+msgid "langStep3"
+msgstr "Etapa 3 zo 6"
+
+msgid "langStep4"
+msgstr "Etapa 4 zo 6"
+
+msgid "langStep5"
+msgstr "Etapa 5 zo 6"
+
+msgid "langStep6"
+msgstr "Etapa 6 zo 6"
+
+msgid "langCfgSetting"
+msgstr "Konfiguračné nastavenia"
+
+msgid "langDBSetting"
+msgstr "Nastavenia MySQL databázy"
+
+msgid "langMainLang"
+msgstr "Hlavný jazyk"
+
+msgid "langLicence"
+msgstr "Licencia"
+
+msgid "langLastCheck"
+msgstr "Posledná kontrola pred inštaláciou"
+
+msgid "langRequirements"
+msgstr "Požiadavky"
+
+msgid "langDbPrefixForm"
+msgstr "Predpona MySQL databázy"
+
+msgid "langDbPrefixCom"
+msgstr "Nechať prázdne, ak to nie je požadované"
+
+msgid "langEncryptUserPass"
+msgstr "Zakódovať používateľské heslo v databáze"
+
+msgid "langSingleDb"
+msgstr "Použiť jednu alebo viacero DB pre Chamilo"
+
+msgid "langAllowSelfReg"
+msgstr "Povoliť samo-registráciu"
+
+msgid "langRecommended"
+msgstr "(doporučený)"
+
+msgid "langScormDB"
+msgstr "Scorm DB"
+
+msgid "langAdminLastName"
+msgstr "Priezvisko administrátora"
+
+msgid "langAdminPhone"
+msgstr "Telefónne číslo administrátora"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "langAdminFirstName"
+msgstr "Meno administrátora"
+
+msgid "langInstituteURL"
+msgstr "URL organizácie"
+
+msgid "langDokeosURL"
+msgstr "URL Chamilo-u"
+
+msgid "langUserDB"
+msgstr "Používateľ DB"
+
+msgid "PleaseWait"
+msgstr "Čakajte prosím"
+
+msgid "PleaseCheckTheseValues"
+msgstr "Prosím skontrolujte tieto hodnoty"
+
+msgid "PleasGoBackToStep1"
+msgstr "Prosím choďte späť na etapu 1"
+
+msgid "langInstallationLanguage"
+msgstr "Jazyk inštalácie"
+
+msgid "ReadThoroughly"
+msgstr "Čítajte dôkladne"
+
+msgid "DokeosNeedFollowingOnServer"
+msgstr "Aby Chamilo pracoval, potrebujete na svojom serveri nasledovné"
+
+msgid "WarningExistingDokeosInstallationDetected"
+msgstr "Upozornenie!<br />Inštalačný program zistil existujúcu Chamilo platformu v systéme."
+
+msgid "NewInstallation"
+msgstr "Nová inštalácia"
+
+msgid "CheckDatabaseConnection"
+msgstr "Overenie pripojenia databázy"
+
+msgid "PrintOverview"
+msgstr "Ukázať prehľad"
+
+msgid "Installing"
+msgstr "Inštalovať"
+
+msgid "of"
+msgstr "z"
+
+msgid "Step"
+msgstr "Etapa"
+
+msgid "MoreDetails"
+msgstr "Pre viac detailov"
+
+msgid "ServerRequirements"
+msgstr "Požiadavky serveru"
+
+msgid "PHPVersion"
+msgstr "PHP verzia"
+
+msgid "support"
+msgstr "podpora"
+
+msgid "PHPVersionOK"
+msgstr "PHP verzia je OK"
+
+msgid "RecommendedSettings"
+msgstr "Odporúčané nastavenia"
+
+msgid "RecommendedSettingsInfo"
+msgstr "Odporúčané nastavenia pre konfiguráciu Vášho servera. Tieto nastavenia sú dané v konfiguračnom súbore php.ini na Vašom serveri."
+
+msgid "Setting"
+msgstr "Nastavenie"
+
+msgid "Actual"
+msgstr "Aktuálne"
+
+msgid "DirectoryAndFilePermissions"
+msgstr "Povolenia pre katalógy a súbory"
+
+msgid "NotWritable"
+msgstr "Nie je možné prepísať"
+
+msgid "Writable"
+msgstr "Možnosť prepísať"
+
+msgid "ExtensionLDAPNotAvailable"
+msgstr "LDAP rozšírenie nedostupné"
+
+msgid "ExtensionGDNotAvailable"
+msgstr "GD rozšírenie nedostupné"
+
+msgid "IAccept"
+msgstr "Súhlasím"
+
+msgid "ConfigSettingsInfo"
+msgstr "Nasledujúce hodnoty budú zapísané vo Vašom konfiguračnom súbore"
+
+msgid "DokeosInstallation"
+msgstr "Chamilo inštalácia"
+
+msgid "InstallDokeos"
+msgstr "Inštalovať Chamilo"
+
+msgid "GoToYourNewlyCreatedPortal"
+msgstr "Choďte na Váš novo zriadený portál."
+
+msgid "Version_"
+msgstr "Verzia"
+
+msgid "UpdateFromDokeosVersion"
+msgstr "Aktualizácia z Chamilo-u"
+
+msgid "WelcomToTheDokeosInstaller"
+msgstr "Vitajte v inštalačnom programe Chamilo-u"
+
+msgid "PleaseSelectInstallationProcessLanguage"
+msgstr "Prosím vyberte jazyk, ktorý chcete použiť pri inštalácii"
+
+msgid "ReadTheInstallGuide"
+msgstr "čítať návod na inštaláciu"
+
+msgid "HereAreTheValuesYouEntered"
+msgstr "Tu sú hodnoty, ktoré ste zadali"
+
+msgid "PrintThisPageToRememberPassAndOthers"
+msgstr "Vytlačte túto stránku, aby ste nezabudli vaše heslo a ďalšie nastavenia"
+
+msgid "Warning"
+msgstr "Upozornenie"
+
+msgid "ReadWarningBelow"
+msgstr "Čítať upozornenie nižšie"
+
+msgid "SecurityAdvice"
+msgstr "Rada ohľadne bezpečnosti"
+
+msgid "Error"
+msgstr "Chyba"
+
+msgid "Back"
+msgstr "Späť"
+
+msgid "HasNotBeenFound"
+msgstr "nenájdený"
+
+msgid "PleaseGoBackToStep1"
+msgstr "Prosím choďte späť na etapu 1"
+
+msgid "HasNotBeenFoundInThatDir"
+msgstr "nebol nájdený v tomto katalógu"
+
+msgid "DBServerDoesntWorkOrLoginPassIsWrong"
+msgstr "Server databázy nefunguje alebo prihlasovacie meno / heslo nie je správne"
+
+msgid "PleaseGoBackToStep"
+msgstr "Prosím choďte späť na etapu"
+
+msgid "ExtensionMBStringNotAvailable"
+msgstr "MBString rozšírenie nedostupné"
+
+msgid "ExtensionMySQLNotAvailable"
+msgstr "MySQL rozšírenie nedostupné"
+
+msgid "OptionalParameters"
+msgstr "Nepovinné parametre"
+
+msgid "FailedConectionDatabase"
+msgstr "Pripojenie k databáze bolo neúspešné. Obvykle je to kvôli nesprávnemu používateľovi, heslu alebo predpone databázy zadanej hore. Skontrolujte prosím tieto nastavenia a skúste znova."
+

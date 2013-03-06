@@ -1,0 +1,90 @@
+msgid "NewNote"
+msgstr "Jauna piezīme"
+
+msgid "Note"
+msgstr "Piezīme"
+
+msgid "NoteDeleted"
+msgstr "Piezīme izdzēsta"
+
+msgid "NoteUpdated"
+msgstr "Piezīme atjaunota"
+
+msgid "NoteCreated"
+msgstr "Piezīme izveidota"
+
+msgid "YouMustWriteANote"
+msgstr "Lūdzu, ievadiet piezīmi"
+
+msgid "SaveNote"
+msgstr "Saglabāt piezīmi"
+
+msgid "WriteYourNoteHere"
+msgstr "Lai rakstītu jaunu piezīmi, klikojiet šeit"
+
+msgid "SearchByTitle"
+msgstr "Meklēt pēc nosaukuma"
+
+msgid "WriteTheTitleHere"
+msgstr "Nosaukumu rakstiet šeit"
+
+msgid "UpdateDate"
+msgstr "Pēdējās izmaiņas"
+
+msgid "NoteAddNew"
+msgstr "Pievienot jaunu ierakstu manā personālajā piezīmju grāmatā"
+
+msgid "OrderByCreationDate"
+msgstr "Kārtot pēc izveides datuma"
+
+msgid "OrderByModificationDate"
+msgstr "Kārtot pēc pēdējām izmaiņām"
+
+msgid "OrderByTitle"
+msgstr "Kārtot pēc nosaukuma"
+
+msgid "NoteTitle"
+msgstr "Piezīmes nosaukums"
+
+msgid "NoteComment"
+msgstr "Piezīmes detaļas"
+
+msgid "NoteAdded"
+msgstr "Piezīme pievienota"
+
+msgid "NoteConfirmDelete"
+msgstr "Jūs esat pārliecināts par vēlmi šo piezīmi dzēst ?"
+
+msgid "AddNote"
+msgstr "Veidot piezīmi"
+
+msgid "ModifyNote"
+msgstr "Rediģēt manas personīgās piezīmes"
+
+msgid "BackToNoteList"
+msgstr "Atpakaļ uz piezīmju sarakstu"
+
+msgid "NotebookManagement"
+msgstr "Piezīmju grāmatas vadība"
+
+msgid "BackToNotesList"
+msgstr "Atpakaļ uz piezīmju sarakstu"
+
+msgid "NotesSortedByTitleAsc"
+msgstr "Piezīmes sakārtotas pēc nosaukumiem augošā secībā <b>A</b>-><b>Z</b>"
+
+msgid "NotesSortedByTitleDESC"
+msgstr "Piezīmes sakārtotas pēc nosaukumiem dilstošā secībā <b>Z</b>-><b>A</b>"
+
+msgid "NotesSortedByUpdateDateAsc"
+msgstr "Piezīmes sakārtotas pēc atjaunošanas datuma augošā secībā"
+
+msgid "NotesSortedByUpdateDateDESC"
+msgstr "Piezīmes sakārtotas pēc atjaunošanas datuma dilstošā secībā"
+
+msgid "NotesSortedByCreationDateAsc"
+msgstr "Piezīmes sakārtotas pēc izveidošanas datuma augošā secībā"
+
+msgid "NotesSortedByCreationDateDESC"
+msgstr "Piezīmes sakārtotas pēc izveidošanas datuma dilstošā secībā"
+

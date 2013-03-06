@@ -1,0 +1,300 @@
+msgid "MyTasks"
+msgstr "Los mios deberes"
+
+msgid "FavoriteBlogs"
+msgstr "Los mios blogs favoritos"
+
+msgid "Navigation"
+msgstr "Navegación"
+
+msgid "TopTen"
+msgstr "Los 10 meyores blogs"
+
+msgid "Subtitle"
+msgstr "Sotítulu"
+
+msgid "ThisBlog"
+msgstr "Esti blog"
+
+msgid "NewPost"
+msgstr "Artículu nuevu"
+
+msgid "TaskManager"
+msgstr "Alministración de deberes"
+
+msgid "MemberManager"
+msgstr "Alministración d\'usuarios"
+
+msgid "PostFullText"
+msgstr "Testu"
+
+msgid "ReadPost"
+msgstr "Lleer esti artículu"
+
+msgid "Home"
+msgstr "Páxina d\'entamu"
+
+msgid "FirstPostText"
+msgstr "¡ Esti ye\'l primer artículu del blog ! D\'equí p\'alantre, tolos usuarios soscritos a esti blog puen participar"
+
+msgid "AddNewComment"
+msgstr "Amestar comentariu"
+
+msgid "ReplyToThisComment"
+msgstr "Retrucar a esti comentariu"
+
+msgid "ManageTasks"
+msgstr "Alministrar llabores del blog"
+
+msgid "ManageMembers"
+msgstr "Alministrar usuarios"
+
+msgid "Register"
+msgstr "Apuntase a esti blog"
+
+msgid "UnRegister"
+msgstr "Anular la soscripción a esti blog"
+
+msgid "SubscribeMembers"
+msgstr "Apuntar usuarios"
+
+msgid "UnsubscribeMembers"
+msgstr "Dar de baxa a usuarios"
+
+msgid "RightsManager"
+msgstr "Alministrar permisos de los usuarios"
+
+msgid "ManageRights"
+msgstr "Alministrar perfiles y permisos de los usuarios d\'esti blog"
+
+msgid "Task"
+msgstr "Llabor"
+
+msgid "Tasks"
+msgstr "Llabores"
+
+msgid "Member"
+msgstr "Usuariu"
+
+msgid "Members"
+msgstr "Usuarios"
+
+msgid "Role"
+msgstr "Perfil"
+
+msgid "Rate"
+msgstr "Puntos"
+
+msgid "Roles"
+msgstr "Perfiles"
+
+msgid "AddTask"
+msgstr "Llabor nuevu"
+
+msgid "AddTasks"
+msgstr "Amestar llabores nuevos"
+
+msgid "AssignTask"
+msgstr "Mandar un llabor/deber"
+
+msgid "AssignTasks"
+msgstr "Mandar llabores/deberes"
+
+msgid "EditTask"
+msgstr "Editar esti llabor"
+
+msgid "DeleteTask"
+msgstr "Esborrar esti llabor"
+
+msgid "DeleteSystemTask"
+msgstr "Esti ye un llabor predefiníu, nun se pue esborrar."
+
+msgid "SelectUser"
+msgstr "Usuariu"
+
+msgid "SelectTask"
+msgstr "Llabor/Deber"
+
+msgid "SelectTargetDate"
+msgstr "Fecha"
+
+msgid "TargetDate"
+msgstr "Fecha"
+
+msgid "Color"
+msgstr "Color"
+
+msgid "TaskList"
+msgstr "Llistáu de llabores/deberes"
+
+msgid "AssignedTasks"
+msgstr "Llabores asignaos"
+
+msgid "ArticleManager"
+msgstr "Alministración d\'artículos"
+
+msgid "CommentManager"
+msgstr "Alministración de comentarios"
+
+msgid "BlogManager"
+msgstr "Alministración del blog"
+
+msgid "ReadMore"
+msgstr "Lleer más..."
+
+msgid "DeleteThisArticle"
+msgstr "Esborrar esti artículu"
+
+msgid "EditThisPost"
+msgstr "Editar esti artículu"
+
+msgid "DeleteThisComment"
+msgstr "Esborrar esti comentariu"
+
+msgid "NoArticles"
+msgstr "Nun hai nengún artículu nel blog. Si ye l\'autor nesti blog, calque enriba l\'enllaz \'artículu nuevu\' pa escribir ún."
+
+msgid "NoTasks"
+msgstr "Ensin llabores/deberes"
+
+msgid "Rating"
+msgstr "Puntos"
+
+msgid "RateThis"
+msgstr "Puntuar esti artículu"
+
+msgid "SelectTaskArticle"
+msgstr "Escoyer un artículu pa esti llabor/deber"
+
+msgid "ExecuteThisTask"
+msgstr "Facer el llabor/deber"
+
+msgid "WrittenBy"
+msgstr "Escritu por"
+
+msgid "InBlog"
+msgstr "nel blog"
+
+msgid "ViewPostsOfThisDay"
+msgstr "Ver los artículos pa esti día"
+
+msgid "PostsOf"
+msgstr "Artículos de"
+
+msgid "NoArticleMatches"
+msgstr "Nun s\'atoparen artículos según los criterios de busca qu\'escribió. Lo más seguro ye qu\'escribiera mál dalgo o que fizo una busca poco concreta. Faiga les modificaciones oportunes y vuelva buscar."
+
+msgid "SaveProject"
+msgstr "Guardar blogue"
+
+msgid "langTask1"
+msgstr "Llabor 1"
+
+msgid "langTask2"
+msgstr "Llabor 2"
+
+msgid "langTask3"
+msgstr "Llabor 3"
+
+msgid "langTask1Desc"
+msgstr "Descripción del llabor 1"
+
+msgid "langTask2Desc"
+msgstr "Descripción del llabor 2"
+
+msgid "langTask3Desc"
+msgstr "Descripción del llabor 3"
+
+msgid "blog_management"
+msgstr "Xestión del blog"
+
+msgid "langWelcome"
+msgstr "Bienveníu/ida"
+
+msgid "langModule"
+msgstr "Módulu"
+
+msgid "langUserHasPermissionNot"
+msgstr "L\'usuariu nun tien permisos"
+
+msgid "langUserHasPermission"
+msgstr "L\'usuariu tien permisos"
+
+msgid "langLegend"
+msgstr "Lleenda"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "L\'usuariu tien los permisos del so grupu"
+
+msgid "EditPost"
+msgstr "Editar artículu"
+
+msgid "AddBlog"
+msgstr "Crear un blog"
+
+msgid "EditBlog"
+msgstr "Editar títulu y sotítulu"
+
+msgid "DeleteBlog"
+msgstr "Esborrar esti blog"
+
+msgid "Shared"
+msgstr "Compartíu"
+
+msgid "PermissionGrantedByGroupOrRole"
+msgstr "Permisu concedíu por grupu o usuariu con nivel"
+
+msgid "Reader"
+msgstr "Llector"
+
+msgid "SeeBlog"
+msgstr "Ver blogue"
+
+msgid "BlogDeleted"
+msgstr "El proyeutu foi desaniciáu"
+
+msgid "BlogEdited"
+msgstr "El proyeutu foi camudáu"
+
+msgid "BlogStored"
+msgstr "El blogue foi amestáu"
+
+msgid "CommentCreated"
+msgstr "El comentariu foi guardáu"
+
+msgid "BlogAdded"
+msgstr "L\'artículu foi amestáu"
+
+msgid "TaskCreated"
+msgstr "La tarea foi criada"
+
+msgid "TaskEdited"
+msgstr "La tarea foi camudada"
+
+msgid "TaskAssigned"
+msgstr "La tarea foi asignada"
+
+msgid "AssignedTaskEdited"
+msgstr "L\'asignación de la tarea foi camudada"
+
+msgid "UserRegistered"
+msgstr "L\'usuariu foi rexistráu"
+
+msgid "TaskDeleted"
+msgstr "La tarea foi desaniciada"
+
+msgid "TaskAssignmentDeleted"
+msgstr "L\'asignación de la tarea foi desaniciada"
+
+msgid "CommentDeleted"
+msgstr "El comentariu foi desaniciáu"
+
+msgid "RatingAdded"
+msgstr "La calificación foi amestada."
+
+msgid "BlogPosts"
+msgstr "Artículos nel blogue"
+
+msgid "BlogComments"
+msgstr "Comentarios de los blogues"
+

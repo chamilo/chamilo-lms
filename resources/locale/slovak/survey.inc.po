@@ -1,0 +1,564 @@
+msgid "SurveyTitle"
+msgstr "Názov prieskumu"
+
+msgid "SurveyIntroduction"
+msgstr "Úvod do prieskumu"
+
+msgid "CreateNewSurvey"
+msgstr "Vytvoriť prieskum"
+
+msgid "Survey"
+msgstr "Prieskum"
+
+msgid "SurveyTemplate"
+msgstr "Šablóna prieskumu"
+
+msgid "PleaseEnterSurveyTitle"
+msgstr "Prosím zadajte názov prieskumu"
+
+msgid "PleaseEnterValidDate"
+msgstr "Prosím zadajte platný dátum"
+
+msgid "NotPublished"
+msgstr "Nepublikovaný"
+
+msgid "AdvancedReportDetails"
+msgstr "Rozšírený report umožňuje vybrať používateľa a otázky pre zobrazenie presnejších informácií"
+
+msgid "AdvancedReport"
+msgstr "Rozšírený report"
+
+msgid "CompleteReportDetails"
+msgstr "Dokončiť report umožní vidieť všetky výsledky od ľudí, ktorí odpovedali a exportovať ich vo formáte csv (pre Excel)"
+
+msgid "CompleteReport"
+msgstr "Dokončiť report"
+
+msgid "OnlyThoseAddresses"
+msgstr "Prieskum poslať len na tieto adresy"
+
+msgid "BackToQuestions"
+msgstr "Späť na otázky"
+
+msgid "SelectWhichLanguage"
+msgstr "Vyberte jazyk, v ktorom by mal byť prieskum vytvorený"
+
+msgid "CreateInAnotherLanguage"
+msgstr "Vytvoriť prieskum v inom jazyku"
+
+msgid "ExportInExcel"
+msgstr "Exportovať vo formáte Excel"
+
+msgid "ComparativeResults"
+msgstr "Porovnateľné výsledky"
+
+msgid "SelectDataYouWantToCompare"
+msgstr "Vyberte údaje, ktoré chcete porovnať"
+
+msgid "OrCopyPasteUrl"
+msgstr "Alebo skopírovať a vložiť odkaz do url lišty vo Vašom prehliadači :"
+
+msgid "ClickHereToOpenSurvey"
+msgstr "Pre otvorenie prieskumu kliknite sem"
+
+msgid "SurveyNotShared"
+msgstr "Momentálne nie je spoločne používaný žiadny prieskum"
+
+msgid "ViewSurvey"
+msgstr "Prezrieť prieskum"
+
+msgid "SelectDisplayType"
+msgstr "Vybrať typ zobrazenia :"
+
+msgid "Thanks"
+msgstr "Spätná informácia"
+
+msgid "SurveyReporting"
+msgstr "Štatistika prieskumu"
+
+msgid "NoSurveyAvailable"
+msgstr "Žiadny prieskum k dispozícii"
+
+msgid "YourSurveyHasBeenPublished"
+msgstr "je publikovaný"
+
+msgid "CreateFromExistingSurvey"
+msgstr "Vytvoriť z existujúceho prieskumu"
+
+msgid "Publish"
+msgstr "Publikovať prieskum"
+
+msgid "SearchASurvey"
+msgstr "Vyhľadať prieskum"
+
+msgid "CourseName"
+msgstr "Názov kurzu"
+
+msgid "SurveysOfAllCourses"
+msgstr "Prieskum(y) zo všetkých kurzov"
+
+msgid "PleaseSelectAChoice"
+msgstr "Prosím, vyberte možnosť"
+
+msgid "ThereAreNoQuestionsInTheDatabase"
+msgstr "V databáze nie sú žiadne otázky"
+
+msgid "UpdateQuestionType"
+msgstr "Aktualizovať typ otázky :"
+
+msgid "AddAnotherQuestion"
+msgstr "Pridať novú otázku"
+
+msgid "IsShareSurvey"
+msgstr "Zdieľať prieskum s ostatnými"
+
+msgid "Proceed"
+msgstr "Pokračovať"
+
+msgid "PleaseFillNumber"
+msgstr "Prosím vyplnte číselné hodnoty pre body."
+
+msgid "PleaseFillAllPoints"
+msgstr "Prosím vyplňte body od 1 do 5"
+
+msgid "PleasFillAllAnswer"
+msgstr "Prosím vyplnte všetky polia na odpovede."
+
+msgid "PleaseSelectFourTrue"
+msgstr "Prosím vyberte aspoň 4 správne odpovede."
+
+msgid "PleaseSelectFourDefault"
+msgstr "Prosím vyberte aspoň 4 štandardné odpovede."
+
+msgid "PleaseFillDefaultText"
+msgstr "Vyplňte prosím štandardný text"
+
+msgid "ModifySurveyInformation"
+msgstr "Zmeniť informácie o prieskume"
+
+msgid "ViewQuestions"
+msgstr "Prezrieť otázky"
+
+msgid "CreateSurvey"
+msgstr "Vytvoriť prieskum"
+
+msgid "FinishSurvey"
+msgstr "Ukončiť prieskum"
+
+msgid "QuestionsAdded"
+msgstr "Otázky sú pridané"
+
+msgid "DeleteSurvey"
+msgstr "Zmazať prieskum"
+
+msgid "SurveyCode"
+msgstr "Kód prieskumu"
+
+msgid "SurveyList"
+msgstr "Zoznam prieskumov"
+
+msgid "SurveyAttached"
+msgstr "Prieskum pripojený"
+
+msgid "QuestionByType"
+msgstr "Otázky podľa typu"
+
+msgid "SelectQuestionByType"
+msgstr "Vybrať otázku podľa typu"
+
+msgid "PleaseEnterAQuestion"
+msgstr "Prosím zadajte otázku"
+
+msgid "NoOfQuestions"
+msgstr "Počet otázok"
+
+msgid "Question"
+msgstr "Otázka"
+
+msgid "ThisCodeAlradyExists"
+msgstr "Tento kód už existuje"
+
+msgid "SaveAndExit"
+msgstr "Uložiť a ukončiť"
+
+msgid "ViewAnswers"
+msgstr "Prezrieť odpovede"
+
+msgid "CreateExistingSurvey"
+msgstr "Vytvoriť z existujúceho prieskumu"
+
+msgid "SurveyName"
+msgstr "Názov prieskumu"
+
+msgid "SurveySubTitle"
+msgstr "Podtitul prieskumu"
+
+msgid "ShareSurvey"
+msgstr "Zdieľať prieskum"
+
+msgid "SurveyThanks"
+msgstr "Poďakovanie"
+
+msgid "EditSurvey"
+msgstr "Upraviť prieskum"
+
+msgid "OrReturnToSurveyOverview"
+msgstr "Alebo sa vrátiť na prehľad prieskumu"
+
+msgid "SurveyParametersMissingUseCopyPaste"
+msgstr "V odkaze chýba parameter. Prosím použite funkciu Kopírovať a Vložiť."
+
+msgid "WrongInvitationCode"
+msgstr "Nesprávny pozývací kód"
+
+msgid "SurveyFinished"
+msgstr "Ukončili ste tento prieskum."
+
+msgid "SurveyPreview"
+msgstr "Prehľad prieskumu"
+
+msgid "InvallidSurvey"
+msgstr "Neplatný prieskum"
+
+msgid "AddQuestion"
+msgstr "Pridať otázku"
+
+msgid "EditQuestion"
+msgstr "Upraviť otázku"
+
+msgid "TypeDoesNotExist"
+msgstr "Tento typ neexistuje"
+
+msgid "SurveyCreatedSuccesfully"
+msgstr "Prieskum je úspešne vytvorený"
+
+msgid "YouCanNowAddQuestionToYourSurvey"
+msgstr "Teraz môžete do svojho prieskumu pridať otázky"
+
+msgid "SurveyUpdatedSuccesfully"
+msgstr "Prieskum je úspešne aktualizovaný"
+
+msgid "QuestionAdded"
+msgstr "Otázka je pridaná."
+
+msgid "QuestionUpdated"
+msgstr "Otázka je aktualizovaná."
+
+msgid "RemoveAnswer"
+msgstr "Odstrániť možnosť"
+
+msgid "AddAnswer"
+msgstr "Pridať možnosť"
+
+msgid "DisplayAnswersHorVert"
+msgstr "Zobraziť možnosti"
+
+msgid "AnswerOptions"
+msgstr "Možnosti odpovede"
+
+msgid "YesNo"
+msgstr "Áno / Nie"
+
+msgid "MultipleResponse"
+msgstr "Viacnásobné odpovede"
+
+msgid "Open"
+msgstr "otvorený"
+
+msgid "Dropdown"
+msgstr "Rozotváracia ponuka"
+
+msgid "Pagebreak"
+msgstr "Koniec stránky"
+
+msgid "QuestionNumber"
+msgstr "Číslo otázky"
+
+msgid "NumberOfOptions"
+msgstr "Počet možností"
+
+msgid "SurveyInvitations"
+msgstr "Pozvanie na prieskum"
+
+msgid "InvitationCode"
+msgstr "Kód pozvania"
+
+msgid "InvitationDate"
+msgstr "Dátum pozvania"
+
+msgid "Answered"
+msgstr "Odpovedané"
+
+msgid "AdditonalUsersComment"
+msgstr "Môžete pozvať ďalších používateľov k vyplneniu prieskumu. Sem napíšte ich emailové adresy a oddeľte ich pomocou , alebo ;"
+
+msgid "MailTitle"
+msgstr "Názov mailu"
+
+msgid "InvitationsSend"
+msgstr "pozvania poslané."
+
+msgid "SurveyDeleted"
+msgstr "Prieskum je zmazaný."
+
+msgid "NoSurveysSelected"
+msgstr "Žiadny prieskum nie je vybraný."
+
+msgid "NumberOfQuestions"
+msgstr "Počet otázok"
+
+msgid "Invited"
+msgstr "Pozvaný"
+
+msgid "SubmitQuestionFilter"
+msgstr "Uviesť filter"
+
+msgid "ResetQuestionFilter"
+msgstr "Vynulovať filter"
+
+msgid "ExportCurrentReport"
+msgstr "Exportovať aktuálny report"
+
+msgid "OnlyQuestionsWithPredefinedAnswers"
+msgstr "Použité môžu byť len otázky s vopred stanovenými odpoveďami"
+
+msgid "SelectXAxis"
+msgstr "Vybrať otázku na X-ovej osi"
+
+msgid "SelectYAxis"
+msgstr "Vybrať otázku na Y-ovej osi"
+
+msgid "ComparativeReport"
+msgstr "Porovnateľný report"
+
+msgid "AllQuestionsOnOnePage"
+msgstr "Všetky otázky sú zobrazené na jednej strane"
+
+msgid "SelectUser"
+msgstr "Používateľ"
+
+msgid "SelectUserWhoFilledSurvey"
+msgstr "Vybrať používateľa, ktorý vyplnil prieskum"
+
+msgid "userreport"
+msgstr "Používateľský report"
+
+msgid "VisualRepresentation"
+msgstr "Grafika"
+
+msgid "AbsoluteTotal"
+msgstr "Celková suma"
+
+msgid "NextQuestion"
+msgstr "Ďalšia otázka"
+
+msgid "PreviousQuestion"
+msgstr "Predchádzajúca otázka"
+
+msgid "PeopleWhoAnswered"
+msgstr "Ľudia, ktorí vybrali túto odpoveď"
+
+msgid "CourseUsers"
+msgstr "Používatelia v kurze"
+
+msgid "SurveyPublication"
+msgstr "Publikovanie prieskumu"
+
+msgid "AdditonalUsers"
+msgstr "Ďalší používatelia"
+
+msgid "MailText"
+msgstr "Text emailu"
+
+msgid "UseLinkSyntax"
+msgstr "Vybraní používatelia dostanú e-mail s textom hore a jedinečným odkazom, na ktorý musia kliknúť pre vyplnenie prieskumu. Ak chcete dať odkaz niekde do textu, musíte dať nasledovný text kamkoľvek do Vášho textu: **odkaz** (hviezdička hviezdička odkaz hviezdička hviezdička). To bude automaticky nahradené jedinečným odkazom. Ak nepridáte **odkaz** do Vášho textu, odkaz bude pridaný na koniec e-mailu."
+
+msgid "DetailedReportByUser"
+msgstr "Podrobný report podľa používateľa"
+
+msgid "DetailedReportByQuestion"
+msgstr "Podrobný report podľa otázky"
+
+msgid "ComparativeReportDetail"
+msgstr "V tomto reporte môžete porovnať dve otázky."
+
+msgid "CompleteReportDetail"
+msgstr "V tomto reporte získate prehľad všetkých otázok všetkých používateľov na všetky otázky. Tiež máte možnosť vidieť len vybrané otázky. Výsledky môžete exportovať vo formáte CSV a použiť ich na spracovanie v štatistickej aplikácii"
+
+msgid "DetailedReportByUserDetail"
+msgstr "V tomto reporte môžete vidieť všetky odpovede jednotlivých používateľov."
+
+msgid "DetailedReportByQuestionDetail"
+msgstr "V tomto reporte môžete vidieť výsledky otázku po otázke. Poskytnutá je základná štatistická analýza a grafika."
+
+msgid "ReminderResendToAllUsers"
+msgstr "Upozorniť všetkých používateľov prieskumu. Pokiaľ neoznačíte túto možnosť, e-mail dostanú len novo pridaní používatelia."
+
+msgid "Multiplechoice"
+msgstr "Výber z viacerých možností"
+
+msgid "Score"
+msgstr "Klasifikácia"
+
+msgid "Shared"
+msgstr "Zdieľaný"
+
+msgid "Invite"
+msgstr "Pozvať"
+
+msgid "MaximumScore"
+msgstr "Maximálne skóre"
+
+msgid "ViewInvited"
+msgstr "Prehľad pozvaných"
+
+msgid "ViewAnswered"
+msgstr "Prehľad odpovedjúcich"
+
+msgid "ViewUnanswered"
+msgstr "Prehľad odpovedajúcich"
+
+msgid "DeleteSurveyQuestion"
+msgstr "Naozaj chcete zmazať otázku?"
+
+msgid "YouAlreadyFilledThisSurvey"
+msgstr "Tento prieskum ste už vyplnili"
+
+msgid "ClickHereToAnswerTheSurvey"
+msgstr "Ak chcete odpovedať na prieskum, kliknite sem"
+
+msgid "OrCopyPasteTheFollowingUrl"
+msgstr "alebo skopírovať a vložiť nasledujúcu url :"
+
+msgid "UnknowUser"
+msgstr "Neznámy používateľ"
+
+msgid "MoveDown"
+msgstr "Posun dole"
+
+msgid "MoveUp"
+msgstr "Posun hore"
+
+msgid "HaveAnswered"
+msgstr "je zodpovedaný"
+
+msgid "WereInvited"
+msgstr "boli pozvaní"
+
+msgid "PagebreakNotFirst"
+msgstr "Oddelenie strany nemôže byť prvé"
+
+msgid "PagebreakNotLast"
+msgstr "Oddelenie strany nemôže byť posledné"
+
+msgid "SurveyNotAvailableAnymore"
+msgstr "Prepáčte tento prieskum už nie je k dispozícii. Ďakujeme za pokus."
+
+msgid "DuplicateSurvey"
+msgstr "Kópia prieskumu"
+
+msgid "EmptySurvey"
+msgstr "Prázdny prieskum"
+
+msgid "SurveyEmptied"
+msgstr "Odpovede na prieskum úspešne vymazané"
+
+msgid "SurveyNotAvailableYet"
+msgstr "Tento prieskum nie je momentálne k dispozícii. Skúste neskôr prosím. Ďakujeme."
+
+msgid "PeopleAnswered"
+msgstr "ľudia, ktorí odpovedali"
+
+msgid "AnonymousSurveyCannotKnowWhoAnswered"
+msgstr "Tento prieskum je anonymný. Nemôžete vidieť, kto odpovedal."
+
+msgid "IllegalSurveyId"
+msgstr "Neznáme ID prieskumu"
+
+msgid "SurveyQuestionMoved"
+msgstr "Otázka je presunutá"
+
+msgid "IdenticalSurveycodeWarning"
+msgstr "Tento kód prieskumu už existuje. To znamená, že prieskum pravdepodobne existuje v iných jazykoch. Pozvaní ľudia si budú môcť vybrať medzi rôznymi jazykmi."
+
+msgid "ThisSurveyCodeSoonExistsInThisLanguage"
+msgstr "Tento kód prieskumu bude onedlho existovať v tomto jazyku"
+
+msgid "SurveyUserAnswersHaveBeenRemovedSuccessfully"
+msgstr "Odpovede používateľov na tento prieskum sú úspešne odstránené."
+
+msgid "DeleteSurveyByUser"
+msgstr "Zmazať odpovede tohto používateľa z tohto prieskumu"
+
+msgid "SelectType"
+msgstr "Vybrať typ"
+
+msgid "Conditional"
+msgstr "Podmienečný"
+
+msgid "ParentSurvey"
+msgstr "Zdrojový prieskum"
+
+msgid "OneQuestionPerPage"
+msgstr "Jedna otázka na stranu"
+
+msgid "ShowFormProfile"
+msgstr "Ukázať formulár profilu"
+
+msgid "PersonalityQuestion"
+msgstr "Upraviť otázku"
+
+msgid "YouNeedToCreateGroups"
+msgstr "Musíte vytvoriť skupiny"
+
+msgid "ManageGroups"
+msgstr "Spravovať skupiny"
+
+msgid "Create"
+msgstr "Vytvoriť"
+
+msgid "GroupCreatedSuccessfully"
+msgstr "Skupina úspešne vytvorená"
+
+msgid "GroupNeedName"
+msgstr "Skupina potrebuje názov"
+
+msgid "Personality"
+msgstr "Personalizácia"
+
+msgid "Condition"
+msgstr "Podmienka"
+
+msgid "Primary"
+msgstr "Primárny"
+
+msgid "Secondary"
+msgstr "Sekundárny"
+
+msgid "CourseSettings"
+msgstr "Nastavenie kurzu"
+
+msgid "PleaseChooseACondition"
+msgstr "Prosím vyberte podmienku"
+
+msgid "ChooseDifferentCategories"
+msgstr "Vybrať rozdielne kategórie"
+
+msgid "Version"
+msgstr "Verzia"
+
+msgid "Normal"
+msgstr "Normálny"
+
+msgid "NoLogOfDuration"
+msgstr "Žiadny záznam trvania"
+
+msgid "AutoInviteLink"
+msgstr "Používatelia, ktorí neboli pozvaní môžu na vstup do prieskumu použiť tento odkaz:"
+
+msgid "CompleteTheSurveysQuestions"
+msgstr "Dokončiť otázky prieskumu"
+
+msgid "SurveysDeleted"
+msgstr "Prieskumy zmazané"
+

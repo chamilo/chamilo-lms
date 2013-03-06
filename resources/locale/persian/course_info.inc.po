@@ -1,0 +1,416 @@
+msgid "ModifInfo"
+msgstr "تنظیمات"
+
+msgid "langModifDone"
+msgstr "اطلاعات مورد نظر تغییر یافت"
+
+msgid "langDelCourse"
+msgstr "حذف ناحیه درس"
+
+msgid "langProfessors"
+msgstr "اساتید"
+
+msgid "langFaculty"
+msgstr "دسته بندی"
+
+msgid "langConfidentiality"
+msgstr "محرمانه"
+
+msgid "langPublic"
+msgstr "دسترسی عمومی از صفحه آغازین محیط آموزشی حتی بدون رمز ورود"
+
+msgid "langUnsubscription"
+msgstr "ابطال ثبت نام"
+
+msgid "langPrivOpen"
+msgstr "دسترسی محدود، ثبت نام آزاد"
+
+msgid "langPrivate"
+msgstr " دسترسی خصوصی، قابل دسترسی تنها برای کاربران ثبت نام شده در فهرست کاربران این درس"
+
+msgid "langForbidden"
+msgstr "سلب اجازه"
+
+msgid "CourseAccessConfigTip"
+msgstr "درس شما در حالت کلی قابل دسترسی برای عموم است. اما شما می توانید میزان قابل دسترسی بودن آن را تعیین کنید."
+
+msgid "langOpenToTheWorld"
+msgstr "دسترسی عمومی، قابل دسترسی همگانی"
+
+msgid "OpenToThePlatform"
+msgstr "دسترسی عمومی محدود، قابل دسترسی تنها برای کاربران ثبت نام شده در محیط آموزشی مجازی"
+
+msgid "langOpenToThePlatform"
+msgstr "قابل دسترسی در کل محیط آموزشی"
+
+msgid "langTipLang"
+msgstr "این زبان برای تمامی کاربران درس شما مورد استفاده قرار خواهد گرفت."
+
+msgid "langVid"
+msgstr "سیستم زنده"
+
+msgid "langWork"
+msgstr "فعالیت های درسی"
+
+msgid "langProgramMenu"
+msgstr "برنامه درسی"
+
+msgid "langAnnouncement"
+msgstr "اطلاعیه ها"
+
+msgid "langExercise"
+msgstr "آزمون ها"
+
+msgid "langStats"
+msgstr "آمار"
+
+msgid "langUplPage"
+msgstr "فرستادن این صفحه و پیوند دادن آن با صفحۀ آغازین"
+
+msgid "langLinkSite"
+msgstr "افزودن پیوندی به سوی این صفحه روی صفحۀ آغازین"
+
+msgid "langCourse"
+msgstr "ناحیه مورد نظر"
+
+msgid "langHasDel"
+msgstr "حذف شد"
+
+msgid "langBackHome"
+msgstr "بازگشت به صفحۀ آغازین"
+
+msgid "langByDel"
+msgstr "آیا واقعاً می خواهید ادامه دهید؟ حذف این درس، حذف تمامی مدارک آن و ابطال ثبت نام تمامی کاربران آن را به دنبال خواهد داشت"
+
+msgid "langY"
+msgstr "بله"
+
+msgid "langN"
+msgstr "خیر"
+
+msgid "langDepartmentUrl"
+msgstr "آدرس اینترنتی گروه آموزشی"
+
+msgid "langDepartmentUrlName"
+msgstr "گروه آموزشی"
+
+msgid "langBackupCourse"
+msgstr "این درس را روی رایانۀ خود بایگانی کنید"
+
+msgid "langModifGroups"
+msgstr "گروه ها"
+
+msgid "langProfessor"
+msgstr "استاد"
+
+msgid "langGroups"
+msgstr "گروه ها"
+
+msgid "langDescriptionCours"
+msgstr "توضیحات"
+
+msgid "langArchiveCourse"
+msgstr "نسخه پشتیبان درس"
+
+msgid "langRestoreCourse"
+msgstr "بازیابی یک درس"
+
+msgid "langRestore"
+msgstr "بازیابی"
+
+msgid "langCreatedIn"
+msgstr "ایجاد شده در"
+
+msgid "langCreateMissingDirectories"
+msgstr "آفرینش پرونده های لازم"
+
+msgid "langCopyDirectoryCourse"
+msgstr "کپی فایل های این درس"
+
+msgid "langDisk_free_space"
+msgstr "فضای خالی برای ذخیره"
+
+msgid "langBuildTheCompressedFile"
+msgstr "آفرینش فایل پشتیبان"
+
+msgid "langFileCopied"
+msgstr "فایل کپی شد"
+
+msgid "langArchiveLocation"
+msgstr "محل بایگانی"
+
+msgid "langSizeOf"
+msgstr "حجم"
+
+msgid "langArchiveName"
+msgstr "عنوان بایگانی"
+
+msgid "langBackupSuccesfull"
+msgstr "نسخه پشتیبان ذخیره شد"
+
+msgid "langBUCourseDataOfMainBase"
+msgstr "نسخه پشتیبان از اطلاعات درس در پایگاه داده اصلی تهیه شد"
+
+msgid "langBUUsersInMainBase"
+msgstr "تهیه نسخه پشتیبان از اطلاعات کاربر در پایگاه داده برای"
+
+msgid "langBUAnnounceInMainBase"
+msgstr "ذخیره سازی داده های مربوط به اطلاعیه ها در پایگاه اصلی داده ها برای"
+
+msgid "langBackupOfDataBase"
+msgstr "نسخه پشتیبان از پایگاه داده"
+
+msgid "langCreationDate"
+msgstr "آفریده شد"
+
+msgid "langExpirationDate"
+msgstr "تاریخ انقضاء"
+
+msgid "langPostPone"
+msgstr "بتعویق انداختن"
+
+msgid "langLastEdit"
+msgstr "آخرین ویرایش"
+
+msgid "langLastVisit"
+msgstr "آخرین بازدید"
+
+msgid "langSubscription"
+msgstr "ثبت نام"
+
+msgid "langCourseAccess"
+msgstr "دسترسی به درس"
+
+msgid "langConfirmBackup"
+msgstr "آیا واقعاً می خواهید این درس را روی رایانۀ خود ذخیره نمایید؟"
+
+msgid "langCreateSite"
+msgstr "آفرینش درس"
+
+msgid "langRestoreDescription"
+msgstr "با
+فشار دادن روی
+کلمۀ �بازسازی�
+پروندۀ
+بایگانی دوباره
+نافشرده و محیط
+درسی دوباره
+آفریده می شود
+<br /><br />در
+زیر می توانید
+پروندۀ بایگانی
+درس مورد نظر
+را انتخاب کنید."
+
+msgid "langRestoreNotice"
+msgstr "امکان
+بازسازی خودکار
+فهرست کاربران
+وجود ندارد اما
+مسئول ادارۀ
+نرم افزاری محیط
+آموزشی می تواند
+به کمک داده های
+ این عمل را انجام
+دهد users.cvsموجود
+در."
+
+msgid "langAvailableArchives"
+msgstr "فهرست پرونده های بایگانی موجود"
+
+msgid "langNoArchive"
+msgstr "هیچ پروندۀ بایگانی شده ای انتخاب نشده است"
+
+msgid "langArchiveNotFound"
+msgstr "پروندۀ بایگانی مورد نظر یافت نشد"
+
+msgid "langArchiveUncompressed"
+msgstr "پروندۀ بایگانی مورد نظر نافشرده و نصب گردید."
+
+msgid "langCsvPutIntoDocTool"
+msgstr "در قسمت مدارک قرار داده شد users.cvs"
+
+msgid "langBackH"
+msgstr "بازگشت به صفحه آغازین"
+
+msgid "langOtherCategory"
+msgstr "دسته های دیگر"
+
+msgid "langAllowedToUnsubscribe"
+msgstr "کاربران مجاز به ابطال ثبت نام این درس هستند"
+
+msgid "langNotAllowedToUnsubscribe"
+msgstr "کاربران مجاز به ابطال ثبت نام این درس نیستند"
+
+msgid "langCourseVisibilityClosed"
+msgstr "عدم دسترسی، قابل دسترسی تنها برای اساتید درس"
+
+msgid "CourseVisibilityClosed"
+msgstr "بسته شد - این درس فقط در دسترس اساتید می باشد"
+
+msgid "CourseVisibilityModified"
+msgstr "تغییر یافت (جزئیات تنظیمات بیشتری از طریق حقوق دسترسی سیستم)"
+
+msgid "WorkEmailAlert"
+msgstr "اخطار از طریق ایمیل بهنگام ثبت نام کار"
+
+msgid "WorkEmailAlertActivate"
+msgstr "فعال سازی اخطار ایمیل بهنگام ثبت نام کار جدید"
+
+msgid "WorkEmailAlertDeactivate"
+msgstr "غیر فعال کردن اخطار از طریق ایمیل بهنگام ثبت نام کار"
+
+msgid "DropboxEmailAlert"
+msgstr "اخطار از طریق ایمیل بهنگام ثبت نام تبادل فایل"
+
+msgid "DropboxEmailAlertActivate"
+msgstr "فعال سازی اخطار ایمیل بهنگام ثبت نام تبادل فایل"
+
+msgid "DropboxEmailAlertDeactivate"
+msgstr "غیر فعال کردن اخطار ایمیل بهنگام ثبت نام تبادل فایل"
+
+msgid "AllowUserEditAgenda"
+msgstr "اجازه ویرایش تقویم به دانشجویان"
+
+msgid "AllowUserEditAgendaActivate"
+msgstr "فعال سازی نسخه تقویم آموزشی توسط کاربران"
+
+msgid "AllowUserEditAgendaDeactivate"
+msgstr "غیر فعال کردن ویرایش تقویم توسط کاربران"
+
+msgid "AllowUserEditAnnouncement"
+msgstr "اجازه ویرایش اطلاعیه ها به کاربران"
+
+msgid "AllowUserEditAnnouncementActivate"
+msgstr "فعال سازی نسخه توسط کاربر"
+
+msgid "AllowUserEditAnnouncementDeactivate"
+msgstr "غیر فعال کردن نسخه توسط کاربر"
+
+msgid "OrInTime"
+msgstr "یا در"
+
+msgid "CourseRegistrationPassword"
+msgstr "کلمه عبور ثبت نام درس"
+
+msgid "langDescriptionDeleteCourse"
+msgstr "جهت حذف کامل درس از روی سرور بر روی این پیوند کلیک کنید.
+مواظب باشید، هیچ راه برگشتی وجود ندارد!"
+
+msgid "langDescriptionCopyCourse"
+msgstr "کپی کردن درس و یا ابزار های آموزشی در یک درس دیگر. شما به دو درس جهت انجام این کار نیاز دارید: یک درس اصلی و دیگر درس مقصد."
+
+msgid "DescriptionRecycleCourse"
+msgstr "این ابزار درس را خالی می کند. یعنی اسناد، انجمن ها، پیوندها و غیره را حذف می کند. البته به شما اجازه انتخاب بخش های جهت حذف داده می شود و یا اینکه قصد حذف کل آن را دارید."
+
+msgid "QuizEmailAlert"
+msgstr "اخطار ایمیل در آزمون جدید ثبت شد"
+
+msgid "QuizEmailAlertActivate"
+msgstr "فعال سازی ارسال ایمیل بهنگام ارسال پاسخ های جدید به آزمون"
+
+msgid "QuizEmailAlertDeactivate"
+msgstr "غیر فعال کردن اخطار ایمیل در ثبت نام پاسخ های جدید آزمون"
+
+msgid "AllowUserImageForum"
+msgstr "تصویر کاربر در انجمن"
+
+msgid "AllowUserImageForumActivate"
+msgstr "نمایش تصاویر کاربران در انجمن"
+
+msgid "AllowUserImageForumDeactivate"
+msgstr "پنهان کردن تصاویر کاربران در انجمن"
+
+msgid "AllowLearningPathTheme"
+msgstr "صدور مجوز قالب آموزشی"
+
+msgid "AllowLearningPathThemeAllow"
+msgstr "مجوز صادر شد"
+
+msgid "AllowLearningPathThemeDisallow"
+msgstr "مجوز باطل شد"
+
+msgid "ConfigChat"
+msgstr "تنظیمات گفتگو"
+
+msgid "AllowOpenchatWindow"
+msgstr "باز کردن گفتگو در پنجره جدید"
+
+msgid "AllowOpenChatWindowActivate"
+msgstr "فعال سازی باز کردن گفتگو در پنجره جدید"
+
+msgid "AllowOpenChatWindowDeactivate"
+msgstr "غیر فعال کردن باز کردن گفتگو در پنجره جدید"
+
+msgid "NewUserEmailAlert"
+msgstr "اطلاع رسانی به استاد از طریق ایمیل بهنگام ثبت نام اتوماتیک یک کاربر"
+
+msgid "NewUserEmailAlertEnable"
+msgstr "فعال سازی اطلاع رسانی به استاد از طریق ایمیل بهنگام ثبت نام اتوماتیک یک کاربر"
+
+msgid "NewUserEmailAlertToTeacharAndTutor"
+msgstr "اطلاع رسانی به استاد و مربی از طریق ایمیل بهنگام ثبت نام اتوماتیک یک کاربر"
+
+msgid "NewUserEmailAlertDisable"
+msgstr "غیر فعال کردن اخطار ایمیل برای ثبت نام کاربران جدید در درس"
+
+msgid "AllowUserViewUserList"
+msgstr "مجوز کاربر جهت دیدن فهرست کاربر"
+
+msgid "AllowUserViewUserListActivate"
+msgstr "فعال سازی فهرست کاربر"
+
+msgid "AllowUserViewUserListDeactivate"
+msgstr "غیر فعال کردن فهرست کاربر"
+
+msgid "DoNotDisplayAnyAdvance"
+msgstr "عدم نمایش روند پیشرفت"
+
+msgid "CourseSettingsRegisterDirectLink"
+msgstr "اگر درس شما عمومی و باز هست، شما می توانید از پیوند مستقیم جهت ارسال دعوتنامه به کاربران جدید استفاده کنید، بنابراین بعد از ثبت نام آنها بصورت مستقیم به درس فرستاده می شوند."
+
+msgid "DirectLink"
+msgstr "پیوند مستقیم"
+
+msgid "NewHomeworkEmailAlert"
+msgstr "بهنگام ساخت تکالیف به کاربران ایمیل بفرست"
+
+msgid "NewHomeworkEmailAlertEnable"
+msgstr "فعال سازی ارسال ایمیل به کاربران بهنگام ثبت تکالیف"
+
+msgid "NewHomeworkEmailAlertDisable"
+msgstr "غیر فعال کردن ارسال ایمیل به کاربران بهنگام ثبت تکالیف"
+
+msgid "DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance"
+msgstr "نمایش آخرین گام اجرا شده و گام تمام نشده بعدی"
+
+msgid "AddPicture"
+msgstr "افزودن تصویر"
+
+msgid "LPAutoLaunch"
+msgstr "فعال سازی اجرای اتوماتیک مسیر آموزشی"
+
+msgid "ConfigLearnpath"
+msgstr "تنظیمات مسیر آموزشی"
+
+msgid "PDFWaterMarkHeader"
+msgstr "علامت واترمارک بهنگام صدور پی دی اف"
+
+msgid "RedirectToALearningPath"
+msgstr "تغییر مسیر به مسیرهای آموزشی انتخاب شده"
+
+msgid "RedirectToTheLearningPathList"
+msgstr "تغییر مسیر به فهرست مسیرهای آموزشی"
+
+msgid "ActivateLegal"
+msgstr "فعال سازی شرایط و ضوابط"
+
+msgid "ShowALegalNoticeWhenEnteringTheCourse"
+msgstr "بهنگام ورود به درس شرایط و ضوابط را نمایش داده شود"
+
+msgid "CourseLegalAgreement"
+msgstr "شرایط و ضوابط این درس"
+
+msgid "AcceptLegal"
+msgstr "پذیرش شرایط و ضوابط"
+

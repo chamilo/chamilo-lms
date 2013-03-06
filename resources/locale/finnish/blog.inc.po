@@ -1,0 +1,300 @@
+msgid "MyTasks"
+msgstr "Tehtäväni"
+
+msgid "FavoriteBlogs"
+msgstr "Projektini"
+
+msgid "Navigation"
+msgstr "Navigointi"
+
+msgid "TopTen"
+msgstr "Top 10"
+
+msgid "Subtitle"
+msgstr "Projektin kuvaus"
+
+msgid "ThisBlog"
+msgstr "Tämä projekti"
+
+msgid "NewPost"
+msgstr "Uusi tehtävä"
+
+msgid "TaskManager"
+msgstr "Roolien hallinta"
+
+msgid "MemberManager"
+msgstr "Käyttäjien hallinta"
+
+msgid "PostFullText"
+msgstr "Tehtävä"
+
+msgid "ReadPost"
+msgstr "Lue tämä viesti"
+
+msgid "Home"
+msgstr "Projektin kotisivu"
+
+msgid "FirstPostText"
+msgstr "Tämä on projektin ensimmäinen tehtävä. Kaikki projektin jäsenet voivat osallistua."
+
+msgid "AddNewComment"
+msgstr "Lisää kommentti"
+
+msgid "ReplyToThisComment"
+msgstr "Vastaa"
+
+msgid "ManageTasks"
+msgstr "Hallitse rooleja"
+
+msgid "ManageMembers"
+msgstr "Liisä / poista käyttäjiä tähän projektiin"
+
+msgid "Register"
+msgstr "Rekisteröidy"
+
+msgid "UnRegister"
+msgstr "Poista rekisteröinti"
+
+msgid "SubscribeMembers"
+msgstr "Valitse käyttäjiä"
+
+msgid "UnsubscribeMembers"
+msgstr "Poista käyttäjiä"
+
+msgid "RightsManager"
+msgstr "käyttöoikeuksienhallinta"
+
+msgid "ManageRights"
+msgstr "Hallitse käyttäjien rooleja ja oikeuksia tässä projektissa"
+
+msgid "Task"
+msgstr "Tehtävä"
+
+msgid "Tasks"
+msgstr "Tehtävät"
+
+msgid "Member"
+msgstr "Jäsen"
+
+msgid "Members"
+msgstr "Jäsenet"
+
+msgid "Role"
+msgstr "Rooli"
+
+msgid "Rate"
+msgstr "Arvostele"
+
+msgid "Roles"
+msgstr "Roolit"
+
+msgid "AddTask"
+msgstr "Lisää uusi rooli"
+
+msgid "AddTasks"
+msgstr "Lisää uusi rooli"
+
+msgid "AssignTask"
+msgstr "Lisää rooli"
+
+msgid "AssignTasks"
+msgstr "Lisää rooleja"
+
+msgid "EditTask"
+msgstr "Muokkaa tätä tehtävää"
+
+msgid "DeleteTask"
+msgstr "Poista tämä tehtävä"
+
+msgid "DeleteSystemTask"
+msgstr "Tämä on ennalta asetettu tehtävä. Tätä ei voi poistaa."
+
+msgid "SelectUser"
+msgstr "Käyttäjä"
+
+msgid "SelectTask"
+msgstr "Tehtävä"
+
+msgid "SelectTargetDate"
+msgstr "Pvm"
+
+msgid "TargetDate"
+msgstr "Pvm"
+
+msgid "Color"
+msgstr "Väri"
+
+msgid "TaskList"
+msgstr "Roolit tässä projektissa"
+
+msgid "AssignedTasks"
+msgstr "Määritetyt tehtävät"
+
+msgid "ArticleManager"
+msgstr "Tehtävien hallinta"
+
+msgid "CommentManager"
+msgstr "Kommenttien hallinta"
+
+msgid "BlogManager"
+msgstr "Projektipäällikkö"
+
+msgid "ReadMore"
+msgstr "Lue lisää..."
+
+msgid "DeleteThisArticle"
+msgstr "Poista tämä tehtävä"
+
+msgid "EditThisPost"
+msgstr "Muokkaa tätä tehtävää"
+
+msgid "DeleteThisComment"
+msgstr "Poista tämä kommentti"
+
+msgid "NoArticles"
+msgstr "Tässä projektissa ei ole tehtäviä. Jos olet projektinpäällikkö, klikkaa linkkiä \"Uusi tehtävä\" lisätäksesi tehtävän."
+
+msgid "NoTasks"
+msgstr "Ei tehtäviä"
+
+msgid "Rating"
+msgstr "Arvostelu"
+
+msgid "RateThis"
+msgstr "Arvioi tämä tehtävä"
+
+msgid "SelectTaskArticle"
+msgstr "Valitse tehtävä tälle roolille"
+
+msgid "ExecuteThisTask"
+msgstr "Tehtävä minulle"
+
+msgid "WrittenBy"
+msgstr "Kirjoittanut"
+
+msgid "InBlog"
+msgstr "projektissa"
+
+msgid "ViewPostsOfThisDay"
+msgstr "Näytä tämän päivän tehtävä"
+
+msgid "PostsOf"
+msgstr "Tehtävät"
+
+msgid "NoArticleMatches"
+msgstr "Tehtäviä ei löytynyt. Kokeile toista hakutermiä."
+
+msgid "SaveProject"
+msgstr "Tallenna projekti"
+
+msgid "langTask1"
+msgstr "Tehtävä 1"
+
+msgid "langTask2"
+msgstr "Tehtävä 2"
+
+msgid "langTask3"
+msgstr "Tehtävä 3"
+
+msgid "langTask1Desc"
+msgstr "Tehtävän 1 kuvaus"
+
+msgid "langTask2Desc"
+msgstr "Tehtävän 2 kuvaus"
+
+msgid "langTask3Desc"
+msgstr "Tehtävän 3 kuvaus"
+
+msgid "blog_management"
+msgstr "Projektin hallinta"
+
+msgid "langWelcome"
+msgstr "Tervetuloa!"
+
+msgid "langModule"
+msgstr "Moduli"
+
+msgid "langUserHasPermissionNot"
+msgstr "Käyttäjällä ei ole oikeuksia"
+
+msgid "langUserHasPermission"
+msgstr "Käyttäjällä on oikeus"
+
+msgid "langLegend"
+msgstr "Selitys"
+
+msgid "langUserHasPermissionByRoleGroup"
+msgstr "Käyttäjä ryhmällä on oikeus"
+
+msgid "EditPost"
+msgstr "Muokkaa tehtävää"
+
+msgid "AddBlog"
+msgstr "Luo uusi projekti"
+
+msgid "EditBlog"
+msgstr "Muokkaa projektia"
+
+msgid "DeleteBlog"
+msgstr "Poista tämä projekti"
+
+msgid "Shared"
+msgstr "Jaettu"
+
+msgid "PermissionGrantedByGroupOrRole"
+msgstr "Ryhmälle tai roolille annettu oikeudet"
+
+msgid "Reader"
+msgstr "Lukija"
+
+msgid "SeeBlog"
+msgstr "Näytä blogi"
+
+msgid "BlogDeleted"
+msgstr "Projekti on poistettu"
+
+msgid "BlogEdited"
+msgstr "Projektia on muokattu."
+
+msgid "BlogStored"
+msgstr "Projekti on lisätty."
+
+msgid "CommentCreated"
+msgstr "Kommentti on tallennettu"
+
+msgid "BlogAdded"
+msgstr "Artikkeli on lisätty."
+
+msgid "TaskCreated"
+msgstr "Tehtävä on luotu."
+
+msgid "TaskEdited"
+msgstr "Tehtävää on muokattu."
+
+msgid "TaskAssigned"
+msgstr "Tehtävä annettu."
+
+msgid "AssignedTaskEdited"
+msgstr "Annettua tehtävää muokattu."
+
+msgid "UserRegistered"
+msgstr "Käyttäjä on rekisteröity"
+
+msgid "TaskDeleted"
+msgstr "Tehtävä on poistettu."
+
+msgid "TaskAssignmentDeleted"
+msgstr "Tehtävänanto on poistettu"
+
+msgid "CommentDeleted"
+msgstr "Kommentti on poistettu."
+
+msgid "RatingAdded"
+msgstr "Arviointi on lisätty."
+
+msgid "BlogPosts"
+msgstr "Blogi kirjoitukset"
+
+msgid "BlogComments"
+msgstr "Blogin kommentit"
+

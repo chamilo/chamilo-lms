@@ -1,0 +1,276 @@
+msgid "BackList"
+msgstr "عودة إلى صندوق التجميع الخاص بك"
+
+msgid "ShowFeedback"
+msgstr "عرض الاقتراحات"
+
+msgid "GiveFeedback"
+msgstr "إدراج / تحرير إقتراحات"
+
+msgid "JustUploadInSelect"
+msgstr "رفع فقط"
+
+msgid "MailingNothingFor"
+msgstr "لا شيء لـ"
+
+msgid "MailingFileNotRegistered"
+msgstr "غير مسجل في هذا المقرر"
+
+msgid "MailingFileSentTo"
+msgstr "إرسال إلى"
+
+msgid "MailingFileIsFor"
+msgstr "لـ"
+
+msgid "MailingFileRecipDup"
+msgstr "مستخدمين عده لديهم"
+
+msgid "MailingFileRecipNotFound"
+msgstr "لا يوجد طالب مماثل لـ"
+
+msgid "MailingFileNoRecip"
+msgstr "الاسم لا يتضمن معرفات المستقبلين"
+
+msgid "MailingFileNoPostfix"
+msgstr "لا ينتهي الاسم  بـ"
+
+msgid "MailingFileNoPrefix"
+msgstr "لا يبدأ الاسم بـ"
+
+msgid "MailingFileFunny"
+msgstr "لا يوجد اسم، أو السعة ليست 1-4 أرقام / حروف"
+
+msgid "MailingZipDups"
+msgstr "ارسال zipfile يجب ألا يتضمن ملفات مزدوجة – لن يتم إرساله"
+
+msgid "MailingZipPhp"
+msgstr "ارسال zipfile يجب أن يتضمن ملفات php – لن يتم إرساله"
+
+msgid "MailingZipEmptyOrCorrupt"
+msgstr "ارسال zipfile خالي أو غير سليم"
+
+msgid "MailingWrongZipfile"
+msgstr "الإرسال يجب أن يكون zipfile برقم الطالب أو اسم الدخول"
+
+msgid "MailingConfirmSend"
+msgstr "ارسل ملفات المحتوى إلى وجهات فردية"
+
+msgid "MailingSend"
+msgstr "ارسل ملفات محتويات"
+
+msgid "MailingNotYetSent"
+msgstr "ملفات محتوى الإرسال لم يتم إرسالها بعد"
+
+msgid "MailingInSelect"
+msgstr "---إرسال---"
+
+msgid "MailingAsUsername"
+msgstr "إرسال"
+
+msgid "FileDeleted"
+msgstr "تم حذف الملف المختار من صندوق التجميع الخاص بك"
+
+msgid "DocAdd"
+msgstr "تم إضافة المستند بنجاح"
+
+msgid "Sender"
+msgstr "المرسل"
+
+msgid "Author"
+msgstr "المؤلف"
+
+msgid "FileSize"
+msgstr "حجم الملف"
+
+msgid "Title"
+msgstr "العنوان"
+
+msgid "OverwriteFile"
+msgstr "اعادة كتابة ملف مرسل سابقا"
+
+msgid "Ok"
+msgstr "موافق"
+
+msgid "Unknown"
+msgstr "غير معروف"
+
+msgid "SentOn"
+msgstr "مفتوح - متاح"
+
+msgid "SentTo"
+msgstr "ارسل إلى"
+
+msgid "ConfirmDelete"
+msgstr "هذا سيحذف الدخول من قائمتك فقط"
+
+msgid "SendTo"
+msgstr "إرسال إلى"
+
+msgid "Description"
+msgstr "ملاحظات"
+
+msgid "UploadFile"
+msgstr "تحميل مستند"
+
+msgid "ErrorCreatingDir"
+msgstr "لا يمكن إنشاء دليل صندوق التجميع. رجاءاً، اتصل بمدير نظامك."
+
+msgid "UploadError"
+msgstr ". فشلت عملية التحميل, فضلا تأكد من حجم الملف المسموح له وتصريحات المجلد"
+
+msgid "TooBig"
+msgstr "أنت لم تختر ملفا أو الملف كبير جدا"
+
+msgid "NoFileSpecified"
+msgstr "أنت لم تحدد ملفا لتحميله"
+
+msgid "NoUserSelected"
+msgstr "فضلاً اختر مستخدم لارسال ملف له"
+
+msgid "BadFormData"
+msgstr "خطأ في التقديم: بيانات نموذج خطأ. رجاءاً، اتصل بمدير نظامك."
+
+msgid "GeneralError"
+msgstr "هناك خطأ حدث. رجاءاً اتصل بمدير نظامك."
+
+msgid "Dropbox"
+msgstr "صندوق التجميع"
+
+msgid "Help"
+msgstr "مساعدة"
+
+msgid "ReceivedFiles"
+msgstr "الملفات المستلمة"
+
+msgid "SentFiles"
+msgstr "الملفات المرسلة"
+
+msgid "ReceivedTitle"
+msgstr "العنوان"
+
+msgid "SentTitle"
+msgstr "العنوان"
+
+msgid "Authors"
+msgstr "المؤلفين"
+
+msgid "Size"
+msgstr "الحجم"
+
+msgid "LastResent"
+msgstr "آخر إعادة إرسال على"
+
+msgid "kB"
+msgstr "kB"
+
+msgid "Root"
+msgstr "الجذر"
+
+msgid "UploadNewFile"
+msgstr "أرسل ملف جديد"
+
+msgid "AreYouSureToDelete"
+msgstr "هل أنت متأكد من حذف"
+
+msgid "Feedback"
+msgstr "استجابة"
+
+msgid "CloseFeedback"
+msgstr "أغلق الاستجابة"
+
+msgid "AddNewFeedback"
+msgstr "أضف الاستجابة التالية"
+
+msgid "DropboxFeedbackStored"
+msgstr "تم تخزين رسالة الاستجابة"
+
+msgid "AllUsersHaveDeletedTheFileAndWillNotSeeFeedback"
+msgstr " .لقد تم حذف الملف من طرف جميع المستخدمين و لهذا لا يمكن لأحد مشاهدة الاستجابة التي تقوم بإضافتها"
+
+msgid "FeedbackError"
+msgstr "خطأ في الاستجابة"
+
+msgid "PleaseTypeText"
+msgstr ".فضلا، أكتب بعض النص"
+
+msgid "YouAreNotAllowedToDownloadThisFile"
+msgstr ". غير مسموح لك بتحميل هذا الملف"
+
+msgid "CheckAtLeastOneFile"
+msgstr ".تحقق على الأقل من ملف واحد"
+
+msgid "ReceivedFileDeleted"
+msgstr ".لقد تم حذف الملف المستلم"
+
+msgid "SentFileDeleted"
+msgstr ".لقد تم حذف الملف المرسل"
+
+msgid "FilesMoved"
+msgstr ".لقد تم نقل الملفات المحددة"
+
+msgid "ReceivedFileMoved"
+msgstr ".لقد تم نقل الملف المستلم"
+
+msgid "SentFileMoved"
+msgstr ".لقد تم نقل الملف المرسل"
+
+msgid "NotMovedError"
+msgstr ".(لا يمكن نقل الملف(ات"
+
+msgid "AddNewCategory"
+msgstr "أضف صنفا جديدا"
+
+msgid "EditCategory"
+msgstr "قم بتحرير هذا الصنف"
+
+msgid "CategoryName"
+msgstr "اسم الصنف"
+
+msgid "ErrorPleaseGiveCategoryName"
+msgstr "فضلا، أدخل اسم الصنف"
+
+msgid "CategoryAlreadyExistsEditIt"
+msgstr " اهذا الصنف موجود مسبقا، فضلا استخدم اسما آخرا"
+
+msgid "CurrentlySeeing"
+msgstr " أنت حاليا تقوم بمشاهدة صنفا"
+
+msgid "CategoryStored"
+msgstr ".لقد تم تخزين الصنف"
+
+msgid "CategoryModified"
+msgstr ".لقد تم تعديل الصنف"
+
+msgid "CategoryDeleted"
+msgstr ".لقد تم حذف الصنف"
+
+msgid "AuthorFieldCannotBeEmpty"
+msgstr "لا يمكن لحقل المؤلف ان يكون فارغا"
+
+msgid "YouMustSelectAtLeastOneDestinee"
+msgstr "لا بد أن تختار على الأقل مستقبل واحد"
+
+msgid "DropboxFileTooBig"
+msgstr ".لف صندوق المشاركات كبير جدا"
+
+msgid "TheFileIsNotUploaded"
+msgstr ". لم يتم تحميل الملف"
+
+msgid "FileUploadSucces"
+msgstr ".لقد تم تحميل الملف بنجاح"
+
+msgid "MailingNonMailingError"
+msgstr "لا يمكن استبدال الإرسال بعدم الإرسال و العكس بالعكس"
+
+msgid "MailingSelectNoOther"
+msgstr "لا يمكن دمج الإرسال مع مستلمات أخرى"
+
+msgid "MailingJustUploadSelectNoOther"
+msgstr "هكذا، لا يمكن دمج التحميل مع مستلمات أخرى"
+
+msgid "NewDropboxFileUploaded"
+msgstr "ملف جديد تم إرساله في أداة صندوق التجميع"
+
+msgid "NewDropboxFileUploadedContent"
+msgstr "ملف جديد تم إرساله في أداة صندوق التجميع من مقررك"
+

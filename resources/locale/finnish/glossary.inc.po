@@ -1,0 +1,54 @@
+msgid "TermAddNew"
+msgstr "Lisää uusi termi"
+
+msgid "TermName"
+msgstr "Termin nimi"
+
+msgid "TermDefinition"
+msgstr "Termin määritelmä"
+
+msgid "TermDeleted"
+msgstr "Termi poistettu"
+
+msgid "TermUpdated"
+msgstr "Termi päivitetty"
+
+msgid "TermConfirmDelete"
+msgstr "Haluatko varmasti poistaa tämän termin"
+
+msgid "TermAddButton"
+msgstr "Lisää tämä termi"
+
+msgid "TermUpdateButton"
+msgstr "Termin päivitys"
+
+msgid "TermEdit"
+msgstr "Termin muokkaus"
+
+msgid "TermDeleteAction"
+msgstr "Termin poisto"
+
+msgid "OrderBy"
+msgstr "Järjestä"
+
+msgid "CreationDate"
+msgstr "Luonti pvm"
+
+msgid "UpdateDate"
+msgstr "Muokkaus päivä"
+
+msgid "PreSelectedOrder"
+msgstr "Ennalta määritetty"
+
+msgid "TermAdded"
+msgstr "Termi lisättty"
+
+msgid "YouMustEnterATermName"
+msgstr "Termille täytyy antaa nimi"
+
+msgid "YouMustEnterATermDefinition"
+msgstr "Termille täytyy antaa kuvaus"
+
+msgid "TableView"
+msgstr "Taulukko näkymä"
+

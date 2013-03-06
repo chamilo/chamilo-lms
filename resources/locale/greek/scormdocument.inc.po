@@ -1,0 +1,72 @@
+msgid "langChapter"
+msgstr "Κεφάλαιο"
+
+msgid "langDocumentList"
+msgstr "Λίστα όλων των εγγράφων"
+
+msgid "langEditDocument"
+msgstr "Επεξεργασία"
+
+msgid "langCreateDocument"
+msgstr "Δημιουργία ενός έγγραφο"
+
+msgid "langPublish"
+msgstr "Δημοσίευση"
+
+msgid "langMaxFileSize"
+msgstr "Το μέγιστο μέγεθος αρχείου είναι:"
+
+msgid "langFileName"
+msgstr "Όνομα του αρχείου"
+
+msgid "langDown"
+msgstr "κάτω"
+
+msgid "langAddComment"
+msgstr "Προσθήκη / αλλαγή σχολίου στο"
+
+msgid "langNewDir"
+msgstr "Όνομα νέου φακέλλου"
+
+msgid "langDownloadEnd"
+msgstr "Ολοκληρώθηκε το ανέβασμα"
+
+msgid "langComMod"
+msgstr "Τα σχόλια τροποποιήθηκαν"
+
+msgid "langCopy"
+msgstr "Αντιγραφή περιεχομένου του μαθήματος"
+
+msgid "lang_edit_learnpath"
+msgstr "επεξεργασία μονοπατιού γνώσης"
+
+msgid "lang_add_title_and_desc"
+msgstr "Επεξεργασία τίτλου και περιγραφής"
+
+msgid "lang_add_learnpath"
+msgstr "Προσθήκη νέου μονοπατιού γνώσης"
+
+msgid "lang_delete_learnpath"
+msgstr "διαγραφή μονοπατιού γνώσης"
+
+msgid "lang_no_publish"
+msgstr "Κρυφό στους φοιτητές"
+
+msgid "lang_publish"
+msgstr "δημοσίευση"
+
+msgid "lang_description"
+msgstr "περιγραφή"
+
+msgid "lang_title"
+msgstr "τίτλος"
+
+msgid "langCreateDoc"
+msgstr "Δημιουργία ενός έγγραφο"
+
+msgid "langOrganiseDocuments"
+msgstr "Δημιούργησε πίνακα περιεχομένων"
+
+msgid "langUncompress"
+msgstr "αποσυμπίεση του αρχείο (.zip) στον εξυπηρέτη"
+

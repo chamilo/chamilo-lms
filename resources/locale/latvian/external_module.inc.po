@@ -1,0 +1,21 @@
+msgid "langTooBig"
+msgstr "Jūs neizvēlējāties nevienu failu, ko nosūtīt, vai arī tas ir pārāk liela izmēra"
+
+msgid "langLinkTarget"
+msgstr "Saites galamērķis"
+
+msgid "langSameWindow"
+msgstr "Atveras tanī pašā logā"
+
+msgid "langNewWindow"
+msgstr "Atveras jaunā logā"
+
+msgid "langAdded"
+msgstr "Pievienots"
+
+msgid "langAddLink"
+msgstr "Pievienot hipersaiti"
+
+msgid "langEditLink"
+msgstr "Labot Kursa apraksta lapas saiti"
+

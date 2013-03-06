@@ -1,0 +1,42 @@
+msgid "Height"
+msgstr "高度"
+
+msgid "ResizingComment"
+msgstr "将图像的尺寸改编为下面的尺寸(用像素表示)"
+
+msgid "Width"
+msgstr "宽度"
+
+msgid "Resizing"
+msgstr "重新定义尺寸"
+
+msgid "NoResizingComment"
+msgstr "显示所有图像的原始尺寸, 没有重新定义尺寸, 如果图像大于显示器的尺寸滚动条将自动显示."
+
+msgid "ShowThumbnails"
+msgstr "显示略图"
+
+msgid "SetSlideshowOptions"
+msgstr "幻灯设置"
+
+msgid "SlideshowOptions"
+msgstr "幻灯选项"
+
+msgid "NoResizing"
+msgstr "不可重新定义尺寸(默认)"
+
+msgid "ExitSlideshow"
+msgstr "退出幻灯"
+
+msgid "SlideShow"
+msgstr "幻灯"
+
+msgid "PreviousSlide"
+msgstr "上一张"
+
+msgid "NextSlide"
+msgstr "下一张"
+
+msgid "ViewSlideshow"
+msgstr "查看幻灯"
+

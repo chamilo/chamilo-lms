@@ -35,7 +35,7 @@ class Document extends Resource
 	 */
 	function Document($id,$path,$comment,$title,$file_type,$size)
 	{
-		parent::Resource($id,RESOURCE_DOCUMENT);
+		parent::Resource($id, RESOURCE_DOCUMENT);
 		$this->path = 'document'.$path;
 		$this->comment = $comment;
 		$this->title = $title;

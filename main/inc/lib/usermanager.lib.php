@@ -320,7 +320,7 @@ class UserManager {
                 $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
                 $email_admin = api_get_setting('emailAdministrator');
 
-                if ($_configuration['multiple_access_urls']) {
+                if (api_is_multiple_url_enabled()) {
                     $access_url_id = api_get_current_access_url_id();
                     if ($access_url_id != -1) {
                         $url = api_get_access_url($access_url_id);
@@ -1516,7 +1516,7 @@ class UserManager {
                 case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     $sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
                     $resuo = Database::query($sqluo);
-                    $values = split(';',$fvalues);
+                    $values = explode(';',$fvalues);
                     if (Database::num_rows($resuo) > 0) {
                         $check = false;
                         while ($rowuo = Database::fetch_array($resuo)) {

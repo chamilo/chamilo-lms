@@ -299,9 +299,7 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['items'] = null;
 }
 
-
 $tpl = new Template();
-
 $tpl->assign('blocks', $blocks);
 $tpl->display('default/admin/settings_index.tpl');
 

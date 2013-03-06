@@ -23,16 +23,17 @@
  * 3) Read files and directories from the directory defined in part 2
  * 4) Display all of that on an HTML page
  *
- * @todo eliminate code duplication with document/document.php, scormdocument.php
  *
  * @package chamilo.document
  */
 /**
  * Code
  */
+
 // Language files that need to be included
 $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
 require_once '../inc/global.inc.php';
+
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 
@@ -617,6 +618,7 @@ $(document).ready( function() {
 </script>';
 
 Display::display_header('', 'Doc');
+
 
 // Lib for event log, stats & tracking & record of the access
 event_access_tool(TOOL_DOCUMENT);

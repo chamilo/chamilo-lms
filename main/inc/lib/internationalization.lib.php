@@ -125,16 +125,23 @@ $_api_is_translated_call = false;
  */
 function get_lang($variable, $reserved = null, $language = null)
 {
+    global $app;
+    $translated = $app['translator']->trans($variable);
+    if ($translated == $variable) {
+        $translated = $app['translator']->trans("lang$variable");
+    }
+    return $translated;
+
+    $language_interface = api_get_language_interface();
     global
     // For serving some old hacks:
     // By manipulating this global variable the translation may be done in different languages too (not the elegant way).
-    $language_interface,
+    //$language_interface,
         // Because of possibility for manipulations of the global variable $language_interface, we need its initial value.
     $language_interface_initial_value,
         // For serving the function is_translated()
-    $_api_is_translated, $_api_is_translated_call;
+    $_api_is_translated, $_api_is_translated_call, $used_lang_vars, $_configuration;
 
-    global $used_lang_vars, $_configuration;
     // add language_measure_frequency to your main/inc/conf/configuration.php in order to generate language
     // variables frequency measurements (you can then see them trhough main/cron/lang/langstats.php)
     // The $langstats object is instanciated at the end of main/inc/global.inc.php
@@ -153,7 +160,8 @@ function get_lang($variable, $reserved = null, $language = null)
         $encoding = api_get_system_encoding();
         $is_utf8_encoding = api_is_utf8($encoding);
         $langpath = api_get_path(SYS_LANG_PATH);
-        $test_server_mode = api_get_setting('server_type') == 'test';
+        //$test_server_mode = api_get_setting('server_type') == 'test';
+        $test_server_mode = false;
         $show_special_markup = api_get_setting('hide_dltt_markup') != 'true' || $test_server_mode;
         $initialized = true;
     }
@@ -186,8 +194,10 @@ function get_lang($variable, $reserved = null, $language = null)
     $read_global_variables = $is_interface_language && !$test_server_mode && !$_api_is_translated_call;
 
     // Reloading the language files when it is necessary.
-    if (!$read_global_variables) {
+
+    /*if (!$read_global_variables) {
         global $language_files;
+        var_dump($language_files);exit;
         if (isset($language_files)) {
             $parent_language = null;
             if (api_get_setting('allow_use_sub_language') == 'true') {
@@ -209,9 +219,10 @@ function get_lang($variable, $reserved = null, $language = null)
             }
         }
     }
+*/
 
     // Translation mode for production servers.
-    if (!$test_server_mode) {
+    if (!$test_server_mode) { $read_global_variables = false;
         if ($read_global_variables) {
             if (isset($GLOBALS[$variable])) {
                 $langvar = $GLOBALS[$variable];
@@ -430,7 +441,6 @@ function api_get_platform_isocodes()
     );
     if (Database::num_rows($sql_result)) {
         while ($row = Database::fetch_array($sql_result)) {
-            ;
             $iso_code[] = trim($row['isocode']);
         }
     }

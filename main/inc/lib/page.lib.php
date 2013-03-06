@@ -39,9 +39,9 @@ class PageController
 
         if (api_get_setting('allow_social_tool') == 'true') {
             if (!$no_image) {
-                $profile_content .='<a style="text-align:center" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a>';
+                $profile_content .='<a style="text-align:center" href="'.api_get_path(WEB_CODE_PATH).'social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a>';
             } else {
-                $profile_content .='<a style="text-align:center"  href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a>';
+                $profile_content .='<a style="text-align:center"  href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a>';
             }
         }
         self::show_right_block(null, null, 'user_image_block', array('content' => $profile_content));
@@ -80,25 +80,39 @@ class PageController
         $my_account_content = array();
 
         if ($show_create_link) {
-            $my_account_content[] = array('href' => 'main/create_course/add_course.php', 'title' => api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate'));
+            $my_account_content[] = array(
+                'href' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
+                'title' => api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate'));
         }
 
         //Sort courses
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $my_account_content[] = array('href' => $url, 'title' => get_lang('SortMyCourses'));
+        $my_account_content[] = array(
+            'href' => $url,
+            'title' => get_lang('SortMyCourses')
+        );
 
         //Course management
         if ($show_course_link) {
             if (!api_is_drh()) {
-                $my_account_content[] = array('href' => 'main/auth/courses.php', 'title' => get_lang('CourseCatalog'));
+                $my_account_content[] = array('href' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'title' => get_lang('CourseCatalog'));
 
                 if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-                    $my_account_content [] = array('href' => 'user_portal.php', 'title' => get_lang('DisplayTrainingList'));
+                    $my_account_content [] = array(
+                        'href' => 'user_portal.php',
+                        'title' => get_lang('DisplayTrainingList')
+                    );
                 } else {
-                    $my_account_content [] = array('href' => 'user_portal.php?history=1', 'title' => get_lang('HistoryTrainingSessions'));
+                    $my_account_content [] = array(
+                        'href' => 'user_portal.php?history=1',
+                        'title' => get_lang('HistoryTrainingSessions')
+                    );
                 }
             } else {
-                $my_account_content .= array('href' => 'main/dashboard/index.php', 'title' => get_lang('Dashboard'));
+                $my_account_content .= array(
+                    'href' => api_get_path(WEB_CODE_PATH).'dashboard/index.php',
+                    'title' => get_lang('Dashboard')
+                );
             }
         }
         self::show_right_block(get_lang('Courses'), $my_account_content, 'course_block');
@@ -111,6 +125,7 @@ class PageController
      * @assert () != ''
      */
     static function return_profile_block() {
+        global $app;
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
             if (api_get_setting('allow_social_tool') == 'true') {
@@ -464,14 +479,15 @@ class PageController
         $elements = array();
         if ($show_menu) {
             if ($show_create_link) {
-                $elements[] = array('href' => 'main/create_course/add_course.php', 'title' => (api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')));
+                $elements[] = array('href' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
+                                    'title' => (api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')));
             }
 
             if ($show_course_link) {
                 if (!api_is_drh() && !api_is_session_admin()) {
-                    $elements[] = array('href' => 'main/auth/courses.php', 'title' => get_lang('CourseCatalog'));
+                    $elements[] = array('href' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'title' => get_lang('CourseCatalog'));
                 } else {
-                    $elements[] = array('href' => 'main/dashboard/index.php', 'title' => get_lang('Dashboard'));
+                    $elements[] = array('href' => api_get_path(WEB_CODE_PATH).'dashboard/index.php', 'title' => get_lang('Dashboard'));
                 }
             }
         }

@@ -67,15 +67,18 @@ if (!array_key_exists($install_language, get_language_folder_list())) {
 require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
 require api_get_path(SYS_LANG_PATH).'english/admin.inc.php';
 require api_get_path(SYS_LANG_PATH).'english/install.inc.php';
+
 if ($install_language != 'english') {
     include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
     include_once api_get_path(SYS_LANG_PATH).$install_language.'/install.inc.php';
     include_once api_get_path(SYS_LANG_PATH).$install_language.'/admin.inc.php';
 }
 
+
 // These global variables must be set for proper working of the function get_lang(...) during the installation.
 $language_interface = $install_language;
-$language_interface_initial_value = $install_language;
+
+///$language_interface_initial_value = $install_language;
 
 // Character set during the installation, it is always to be 'UTF-8'.
 $charset = 'UTF-8';

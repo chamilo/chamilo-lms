@@ -11,23 +11,69 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class IndexController
 {
+    public $section;
+
+    /**
+     * Handles default Chamilo scripts handled by Display::display_header() and display_footer()
+     *
+     * @param \Silex\Application $app
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response|void
+     */
+    public function classicAction(Application $app)
+    {
+        //User is not allowed
+        if ($app['allowed'] == false) {
+            return $app->abort(403);
+        }
+        //Rendering page
+        $response = $app['twig']->render($app['default_layout']);
+
+        //Classic style
+        if ($app['classic_layout'] == true) {
+            //assign('content', already done in display::display_header() and display_footer()
+
+        } else {
+           return $app->redirect('index');
+        }
+        return new Response($response, 200, array());
+    }
+
+    function logoutAction(Application $app) {
+        $this->logout();
+        return $app->redirect($app['url_generator']->generator('index'));
+    }
+
     /**
      * @param \Silex\Application $app
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Application $app)
     {
+        $extraJS = array();
+        $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
+        $extraJS[] = '<script>
+            $(document).ready(function(){
+                $("#slider").bxSlider({
+                    infiniteLoop	: true,
+                    auto			: true,
+                    pager			: true,
+                    autoHover		: true,
+                pause			: 10000
+                });
+            });
+        </script>';
+
+        $app['this_section'] = SECTION_CAMPUS;
+        $app['extraJS'] = $extraJS;
         $request = $app['request'];
+        $app['languages_file'] = array('courses', 'index', 'admin');
+        $app['cidReset'] = true;
+
+        //echo $app['translator']->trans('Wiki Search Results');
+        //echo $app['translator']->trans('Profile');
 
         //$token = $app['security']->getToken();
-
-        //Actions
-        $logout = $request->get('logout');
-
-        if (!empty($logout)) {
-            $this->logout();
-            $app->redirect($app['url_generator']->generator('index'));
-        }
 
         //$article = $app['orm.em']->getRepository('Entity\EntityCourse');
         //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
@@ -53,12 +99,12 @@ class IndexController
         }
 
         //If we are not logged in and customapages activated
-        if (!api_get_user_id() && CustomPages::enabled()) {
-            $logged_out = $request->get('loggedout');
-            if ($logged_out) {
-                CustomPages::display(CustomPages::LOGGED_OUT);
+        if (!api_get_user_id() && \CustomPages::enabled()) {
+            $loggedOut = $request->get('loggedout');
+            if ($loggedOut) {
+                \CustomPages::display(\CustomPages::LOGGED_OUT);
             } else {
-                CustomPages::display(CustomPages::INDEX_UNLOGGED);
+                \CustomPages::display(\CustomPages::INDEX_UNLOGGED);
             }
         }
 
@@ -87,28 +133,28 @@ class IndexController
         }
 
         //Hot courses & announcements
-        $hot_courses         = null;
-        $announcements_block = null;
+        $hotCourses         = null;
+        $announcementsBlock = null;
 
         // When loading a chamilo page do not include the hot courses and news
         if (!isset($_REQUEST['include'])) {
             if (api_get_setting('show_hot_courses') == 'true') {
-                $hot_courses = \PageController::return_hot_courses();
+                $hotCourses = \PageController::return_hot_courses();
             }
-            $announcements_block = \PageController::return_announcements();
+            $announcementsBlock = \PageController::return_announcements();
         }
 
-        $app['template']->assign('hot_courses', $hot_courses);
-        $app['template']->assign('announcements_block', $announcements_block);
+        $app['template']->assign('hot_courses', $hotCourses);
+        $app['template']->assign('announcements_block', $announcementsBlock);
 
         //Homepage
         $app['template']->assign('home_page_block', \PageController::return_home_page());
 
         //Navigation links
-        $nav_links = $app['template']->return_navigation_links();
+        $navLinks = $app['template']->return_navigation_links();
 
-        $app['template']->assign('navigation_course_links', $nav_links);
-        $app['template']->assign('main_navigation_block', $nav_links);
+        $app['template']->assign('navigation_course_links', $navLinks);
+        $app['template']->assign('main_navigation_block', $navLinks);
 
         \PageController::return_notice();
         \PageController::return_help();
@@ -163,42 +209,44 @@ class IndexController
     }
 
     /**
-     * @param Silex\Application $app
+     * @param \Silex\Application $app
      */
     function set_login_form(Application $app)
     {
-        $user_id    = api_get_user_id();
-        $login_form = null;
-        if (!$user_id || api_is_anonymous($user_id)) {
+        $userId    = api_get_user_id();
+        $loginForm = null;
+        if (!$userId || api_is_anonymous($userId)) {
 
             // Only display if the user isn't logged in.
             $app['template']->assign('login_language_form', api_display_language_form(true));
-            //self::display_login_form($app);
-
             $app['template']->assign('login_form', self::display_login_form($app));
 
             if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-                $login_form .= '<ul class="nav nav-list">';
+                $loginForm .= '<ul class="nav nav-list">';
                 if (api_get_setting('allow_registration') != 'false') {
-                    $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
+                    $loginForm .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'auth/inscription.php">'.get_lang('Reg').'</a></li>';
                 }
                 if (api_get_setting('allow_lostpassword') == 'true') {
-                    $login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
+                    $loginForm .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
                 }
-                $login_form .= '</ul>';
+                $loginForm .= '</ul>';
             }
-            $app['template']->assign('login_options', $login_form);
+            $app['template']->assign('login_options', $loginForm);
         }
     }
 
+    /**
+     *
+     */
     function logout()
     {
-        $user_id = api_get_user_id();
-        online_logout($user_id, true);
+        $userId = api_get_user_id();
+        online_logout($userId, true);
     }
 
     /**
      * @param \Silex\Application $app
+     *
      * @return string
      */
     function display_login_form(Application $app)

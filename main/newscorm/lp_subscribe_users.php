@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 require_once '../inc/global.inc.php';
 
-class SubscribeUserToLP {
+class LearnpathController {
 
     function indexAction(Application $app) {
         $request = $app['request'];
@@ -16,7 +16,6 @@ class SubscribeUserToLP {
 
         if (empty($lpId)) {
             var_dump($lpId);
-            //return $app->redirect('lp_controller.php');
         }
 
         $course = $app['orm.em']->getRepository('Entity\EntityCourse')->find(api_get_course_int_id());

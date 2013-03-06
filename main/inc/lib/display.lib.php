@@ -33,17 +33,24 @@ class Display
      */
     public static function display_header($tool_name = '', $help = null, $page_header = null)
     {
+        global $app;
+        $app['classic_layout'] = true;
+
+        /*
         self::$global_template = new Template($tool_name);
         self::$global_template->set_help($help);
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->set_css_files();
             self::$global_template->set_js_files();
+        }*/
+
+        if ($app['allowed'] == true) {
+            ob_start(array($app['template'], 'manage_display'));
+        } else {
+            $app->run();
+            exit;
         }
-        if (!empty($page_header)) {
-            self::$global_template->assign('header', $page_header);
-        }
-        echo self::$global_template->show_header_template();
     }
 
     /**
@@ -51,6 +58,7 @@ class Display
      */
     public static function display_reduced_header()
     {
+        $app['classic_layout'] = true;
         global $show_learnpath, $tool_name, $app;
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
@@ -61,6 +69,7 @@ class Display
 
     public static function display_no_header()
     {
+        $app['classic_layout'] = true;
         global $tool_name, $app, $show_learnpath;
         $disable_js_and_css_files       = true;
         $app['template.show_header']    = false;
@@ -86,7 +95,12 @@ class Display
      */
     public static function display_footer()
     {
-        echo self::$global_template->show_footer_template();
+        global $app;
+        $out = ob_get_contents();
+        ob_end_clean();
+        $app['template']->assign('content', $out);
+        $app->run();
+        //echo self::$global_template->show_footer_template();
     }
 
     public static function page()

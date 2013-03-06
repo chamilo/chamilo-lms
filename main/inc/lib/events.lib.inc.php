@@ -73,7 +73,6 @@ function event_open()
  */
 function event_login()
 {
-
     global $_user;
     global $TABLETRACK_LOGIN;
 
@@ -85,11 +84,11 @@ function event_login()
         		'".$reallyNow."'
         		)";
     Database::query($sql);
+
     // auto subscribe
-    $user_status = $_user['status'];
     $user_status = $_user['status'] == SESSIONADMIN ? 'sessionadmin' :
-        $_user['status'] == COURSEMANAGER ? 'teacher' :
-            $_user['status'] == DRH ? 'DRH' : 'student';
+    $_user['status'] == COURSEMANAGER ? 'teacher' :
+    $_user['status'] == DRH ? 'DRH' : 'student';
     $autoSubscribe = api_get_setting($user_status.'_autosubscribe');
     if ($autoSubscribe) {
         $autoSubscribe = explode('|', $autoSubscribe);

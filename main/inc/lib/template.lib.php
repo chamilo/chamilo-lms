@@ -27,19 +27,24 @@ class Template
     public $load_plugins = false; /* Loads chamilo plugins */
     public $force_plugin_load = true;
     public $app;
+    public $navigation_array;
 
     function __construct($title = null, $app = null)
     {
         if (empty($app)) {
             global $app;
-            $this->app = $app;
+            $this->app = &$app;
         } else {
             //ugly fix just for now
-            $this->app = $app;
+            $this->app = &$app;
         }
 
-        $this->app['template_style'] = 'default';
-        $this->app['default_layout'] = 'layout_1_col.tpl';
+        $this->app['classic_layout'] = true;
+
+        $this->navigation_array = $this->return_navigation_array();
+
+//      $this->app['template_style'] = 'default';
+//        $this->app['default_layout'] = $this->app['template_style'].'/layout/layout_1_col.tpl';
 
         $show_header = $app['template.show_header'];
         $show_footer = $app['template.show_footer'];
@@ -133,7 +138,10 @@ class Template
         return $result;
     }
 
-    function set_help($help_input = null)
+    /**
+     * @param string $help_input
+     */
+    public function set_help($help_input = null)
     {
         if (!empty($help_input)) {
             $help = $help_input;
@@ -146,9 +154,7 @@ class Template
             if (!empty($help)) {
                 $help = Security::remove_XSS($help);
                 $help_content = '<li class="help">';
-                $help_content .= '<a href="'.api_get_path(
-                    WEB_CODE_PATH
-                ).'help/help.php?open='.$help.'&height=400&width=600" class="ajax" title="'.get_lang('Help').'">';
+                $help_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600" class="ajax" title="'.get_lang('Help').'">';
                 $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang(
                     'Help'
                 ).'" title="'.get_lang('Help').'" />';
@@ -467,7 +473,13 @@ class Template
 
             $extra_headers = null;
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
-                foreach ($htmlHeadXtra as & $this_html_head) {
+                foreach ($htmlHeadXtra as $this_html_head) {
+                    $extra_headers .= $this_html_head."\n";
+                }
+            }
+
+            if (isset($this->app['extraJS'])) {
+                foreach ($this->app['extraJS'] as $this_html_head) {
                     $extra_headers .= $this_html_head."\n";
                 }
             }
@@ -478,11 +490,15 @@ class Template
     /**
      * Set header parameters
      */
-    private function set_header_parameters()
-    {
-        global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $_configuration, $this_section;
+    private function set_header_parameters() {
+        global $interbreadcrumb;
+        $_course = api_get_course_info();
+        $_configuration = $this->app['configuration'];
+        $this_section = $this->app['this_section'];
+
+
         $nameTools = $this->title;
-        $navigation = $this->return_navigation_array();
+        $navigation = $this->navigation_array;
 
         $this->menu_navigation = $navigation['menu_navigation'];
 
@@ -494,7 +510,7 @@ class Template
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());
 
-        $course_title = $_course['name'];
+        $course_title = isset($_course['name']) ? $_course['name'] : null;
 
         $title_list = array();
 
@@ -568,9 +584,7 @@ class Template
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
             $bug_notification_link = '<li class="report">
 		        						<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
-		        						<img src="'.api_get_path(
-                WEB_IMG_PATH
-            ).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang(
+		        						<img src="'.api_get_path(WEB_IMG_PATH).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang(
                 'ReportABug'
             ).'"/></a>
 		    						  </li>';
@@ -583,7 +597,7 @@ class Template
         //Preparing values for the menu
 
         //Logout link
-        $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id());
+        $this->assign('logout_link', api_get_path(WEB_PUBLIC_PATH).'logout');
 
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
@@ -611,7 +625,7 @@ class Template
         $this->assign('menu', $menu);
 
         //Breadcrumb
-        $breadcrumb = $this->return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
+        $breadcrumb = $this->return_breadcrumb($interbreadcrumb, $nameTools);
         $this->assign('breadcrumb', $breadcrumb);
 
         //Extra content
@@ -698,8 +712,6 @@ class Template
                 $this->assign('teachers', $teacher_data);
             }
         }
-        /* $stats = '';
-          $this->assign('execution_stats', $stats); */
     }
 
     function show_header_template()
@@ -712,6 +724,11 @@ class Template
     {
         $tpl = $this->get_template('layout/show_footer.tpl');
         $this->display($tpl);
+    }
+
+    function manage_display($content)
+    {
+        //$this->assign('content', $content);
     }
 
     /* Sets the plugin content in a template variable */
@@ -739,9 +756,12 @@ class Template
         $this->app['twig']->addGlobal($key, $value);
     }
 
-    public function display($template)
+    public function display($template = null)
     {
-        echo $this->app['twig']->render($template);
+        if (!empty($template)) {
+            $this->app['default_layout'] = $template;
+        }
+        $this->app->run();
     }
 
     function show_page_loaded_info()
@@ -758,7 +778,7 @@ class Template
 
     function return_menu()
     {
-        $navigation = $this->return_navigation_array();
+        $navigation = $this->navigation_array;
         $navigation = $navigation['navigation'];
 
         // Displaying the tabs
@@ -905,7 +925,6 @@ class Template
         $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
         $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
-
         // My Courses
 
         if (api_is_allowed_to_create_course()) {
@@ -919,9 +938,7 @@ class Template
         }
 
         // My Profile
-        $navigation['myprofile']['url'] = api_get_path(
-            WEB_CODE_PATH
-        ).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
+        $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
         $navigation['myprofile']['title'] = get_lang('ModifyProfile');
 
         // Link to my agenda
@@ -1050,7 +1067,6 @@ class Template
 
     function return_notification_menu()
     {
-
         $_course = api_get_course_info();
         $course_id = api_get_course_id();
         $user_id = api_get_user_id();
@@ -1141,7 +1157,6 @@ class Template
 
     function return_navigation_array()
     {
-
         $navigation = array();
         $menu_navigation = array();
         $possible_tabs = $this->get_tabs();
@@ -1263,9 +1278,10 @@ class Template
         return $return;
     }
 
-    function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
-    {
 
+
+    function return_breadcrumb($interbreadcrumb)
+    {
         $session_id = api_get_session_id();
         $session_name = api_get_session_name($session_id);
         $_course = api_get_course_info();
@@ -1373,11 +1389,12 @@ class Template
 
         // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
         // is the same as the first part of the breadcrumbs (see part 1)
+        /*
         if (isset($nameTools) && $language_file != 'course_home') { // TODO: This condition $language_file != 'course_home' might bring surprises.
             $navigation_item['url'] = '#';
             $navigation_item['title'] = $nameTools;
             $navigation[] = $navigation_item;
-        }
+        }*/
 
         $final_navigation = array();
         $counter = 0;

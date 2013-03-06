@@ -115,9 +115,12 @@ require_once __DIR__.'../../../vendor/autoload.php';
 //Start Silex
 use Silex\Application;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+
 $app = new Application();
 $app['configuration_file'] = $main_configuration_file_path;
-$app['conf'] = $_configuration;
+$app['configuration'] = $_configuration;
 
 //require_once __DIR__.'/../../resources/config/prod.php';
 require_once __DIR__.'/../../resources/config/dev.php';
@@ -201,12 +204,37 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-$app->register(
-    new Silex\Provider\TranslationServiceProvider(),
-    array(
-        'locale_fallback' => 'en'
-    )
-);
+$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+    'locale' => 'en',
+    'locale_fallback' => 'en'
+));
+
+//Handling po files
+
+use Symfony\Component\Translation\Loader\PoFileLoader;
+use Symfony\Component\Translation\Dumper\PoFileDumper;
+
+$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+    $translator->addLoader('pofile', new PoFileLoader());
+
+    $language = api_get_language_interface();
+    $iterator = new FilesystemIterator(api_get_path(SYS_PATH).'resources/locale/'.$language);
+    $filter = new RegexIterator($iterator, '/\.(po)$/');
+
+    foreach ($filter as $entry) {
+        //$domain = $entry->getBasename('.inc.po');
+        $locale = api_get_language_isocode($language); //'es_ES';
+        //var_dump($locale);exit;
+        //$translator->addResource('pofile', $entry->getPathname(), $locale, $domain);
+        $translator->addResource('pofile', $entry->getPathname(), $locale, 'messages');
+    }
+    return $translator;
+}));
+
+//$app['translator.domains'] = array();
+
+// Classic way or Controllers ways
+$app['classic_layout'] = false;
 
 //Form provider
 $app->register(new Silex\Provider\FormServiceProvider());
@@ -262,7 +290,9 @@ $app['monolog']->addDebug('Testing the Monolog logging.');
 $app['monolog']->addInfo('Testing the Monolog logging.');
 $app['monolog']->addError('Testing the Monolog logging.');
 */
-$app['translator.messages'] = array();
+
+//The script is allowed?
+$app['allowed'] = true;
 
 //Setting the Twig service provider
 $app->register(
@@ -286,64 +316,53 @@ $app->register(
 
 //Setting Twig options
 $app['twig'] = $app->share(
-    $app->extend(
-        'twig',
-        function ($twig, $app) {
-            $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
-            $twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
-            $twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
-            $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
-            $twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
-            $twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
-            $twig->addFilter(
-                'display_page_subheader',
-                new Twig_Filter_Function('Display::page_subheader_and_translate')
-            );
-            $twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
-            $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
+    $app->extend('twig', function ($twig, $app) {
+        $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
+        $twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
+        $twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
+        $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
+        $twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
+        $twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
+        $twig->addFilter(
+            'display_page_subheader',
+            new Twig_Filter_Function('Display::page_subheader_and_translate')
+        );
+        $twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
+        $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
 
-            return $twig;
-        }
-    )
+        return $twig;
+    })
 );
 
 //Setting Doctrine service provider (DBAL)
 if (isset($_configuration['main_database'])) {
-
-    $app->register(
-        new Silex\Provider\DoctrineServiceProvider(),
-        array(
-            'db.options' => array(
-                'driver' => 'pdo_mysql',
-                'dbname' => $_configuration['main_database'],
-                'user' => $_configuration['db_user'],
-                'password' => $_configuration['db_password'],
-                'host' => $_configuration['db_host'],
-            )
+    $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+        'db.options' => array(
+            'driver' => 'pdo_mysql',
+            'dbname' => $_configuration['main_database'],
+            'user' => $_configuration['db_user'],
+            'password' => $_configuration['db_password'],
+            'host' => $_configuration['db_host'],
         )
-    );
+    ));
 
     //Setting Doctrine ORM
-    $app->register(
-        new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider,
-        array(
-            'orm.auto_generate_proxies' => true,
-            "orm.proxies_dir" => $app['db.orm.proxies_dir'],
-            //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
-            "orm.em.options" => array(
-                "mappings" => array(
-                    array(
-                        "type" => "annotation",
-                        "namespace" => "Entity",
-                        "path" => api_get_path(INCLUDE_PATH).'Entity',
-                    )
-                ),
+    $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
+        'orm.auto_generate_proxies' => true,
+        "orm.proxies_dir" => $app['db.orm.proxies_dir'],
+        //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
+        "orm.em.options" => array(
+            "mappings" => array(
+                array(
+                    "type" => "annotation",
+                    "namespace" => "Entity",
+                    "path" => api_get_path(INCLUDE_PATH).'Entity',
+                )
             ),
-        )
-    );
+        ),
+    ));
 
     //Setting Doctrine2 extensions
-
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
     $app['db.event_manager']->addEventSubscriber($timestampableListener);
 
@@ -362,22 +381,21 @@ class ChamiloServiceProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         //Template
-        $app['template'] = $app->share(
-            function () use ($app) {
-                return new Template(null, $app);
-            }
-        );
+        $app['template'] = $app->share(function () use ($app) {
+            $template = new Template(null, $app);
+            return $template;
+        });
     }
 
     public function boot(Application $app)
     {
     }
 }
-
 //Registering Chamilo service provider
 $app->register(new ChamiloServiceProvider(), array());
 
 //Manage error messages
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 $app->error(
     function (\Exception $e, $code) use ($app) {
@@ -401,36 +419,21 @@ $app->error(
         //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
         $app['template']->assign('error_code', $code);
         $app['template']->assign('error_message', $message);
-        $response = $app['template']->render_layout('error.tpl');
 
+        $response = $app['template']->render_layout('error.tpl');
         return new Response($response);
     }
 );
-
 /*
-use Symfony\Component\HttpKernel\Debug\ErrorHandler;
-ErrorHandler::register();
-*/
-use Symfony\Component\HttpFoundation\RedirectResponse;
+$app->error(function (\LogicException $e, $code) {
+    var_dump($code);
+    // this handler will only \LogicException exceptions
+    // and exceptions that extends \LogicException
+});*/
 
-//Filters
-$app->before(
-    function () use ($app) {
 
-        if (!file_exists($app['configuration_file'])) {
-            return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
-        }
-
-        //Check the PHP version
-        if (api_check_php_version() == false) {
-            $app->abort(500, "Incorrect PHP version");
-        }
-        if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-            $app->abort(500, "archive folder must be writeable");
-        }
-        //$app['request']->getSession()->start();
-    }
-);
+/*use Symfony\Component\HttpKernel\Debug\ErrorHandler;
+ErrorHandler::register();*/
 
 if ($app['debug']) {
     $logger = new Doctrine\DBAL\Logging\DebugStack();
@@ -444,22 +447,6 @@ if ($app['debug']) {
     });
 }
 
-$app->finish(
-    function () use ($app) {
-        //@todo will be removed before a stable release
-        $mtime = microtime();
-        $mtime = explode(" ", $mtime);
-        $mtime = $mtime[1] + $mtime[0]; /*
-
-        $message = "Page loaded in:".($mtime - START);
-        $app['monolog']->addInfo($message);
-        $message = "memory_get_usage: ".format_file_size(memory_get_usage(true));
-        $app['monolog']->addInfo($message);
-        $message = "memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true));
-        $app['monolog']->addInfo($message);*/
-    }
-);
-
 $app['template.show_header'] = true;
 $app['template.show_footer'] = true;
 $app['template.show_learnpath'] = true;
@@ -468,8 +455,8 @@ $app['template.load_plugins'] = true;
 
 //Default template style
 $app['template_style'] = 'default';
-$app['default_layout'] = 'layout_1_col.tpl';
-
+//Default layout
+$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
 //Database constants
 require_once $lib_path.'database.constants.inc.php';
@@ -499,7 +486,6 @@ if (!($conn_return = @Database::connect(
 if (!$_configuration['db_host']) {
     //$app->abort(500, "Database is unavailable"); //error 3
 }*/
-
 
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
 if (!empty($_configuration['multiple_access_urls'])) {
@@ -533,7 +519,7 @@ if (isset($_configuration['main_database']) && !Database::select_db(
 /*   Initialization of the default encodings */
 
 // The platform's character set must be retrieved at this early moment.
-$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
+/*$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
 
 $result = Database::query($sql);
 while ($row = @Database::fetch_array($result)) {
@@ -541,7 +527,9 @@ while ($row = @Database::fetch_array($result)) {
 }
 if (empty($charset)) {
     $charset = 'UTF-8';
-}
+}*/
+//Charset is UTF-8
+$charset = 'UTF-8';
 
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
@@ -587,12 +575,9 @@ if ($already_installed) {
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
-// Load HTMLPurifier.
-//require_once $lib_path.'htmlpurifier/library/HTMLPurifier.auto.php'; // It will be loaded later, in a lazy manner.
 
-// Before we call local.inc.php, let's define a global $this_section variable
 // which will then be usable from the banner and header scripts
-$this_section = SECTION_GLOBAL;
+$app['this_section'] = SECTION_GLOBAL;
 
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
@@ -603,42 +588,37 @@ require $includePath.'/local.inc.php';
 $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
 $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
+//Including mail settings
 $mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
-
 if (file_exists($mail_conf)) {
     require_once $mail_conf;
 }
 
 $mail_settings = array();
 
-$app->register(
-    new Silex\Provider\SwiftmailerServiceProvider(),
-    array(
-        'swiftmailer.options' => array(
-            'host' => isset($platform_email['SMTP_HOST']) ? $platform_email['SMTP_HOST'] : null,
-            'port' => isset($platform_email['SMTP_PORT']) ? $platform_email['SMTP_PORT'] : null,
-            'username' => isset($platform_email['SMTP_USER']) ? $platform_email['SMTP_USER'] : null,
-            'password' => isset($platform_email['SMTP_PASS']) ? $platform_email['SMTP_PASS'] : null,
-            'encryption' => null,
-            'auth_mode' => null
-        )
+$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
+    'swiftmailer.options' => array(
+        'host' => isset($platform_email['SMTP_HOST']) ? $platform_email['SMTP_HOST'] : null,
+        'port' => isset($platform_email['SMTP_PORT']) ? $platform_email['SMTP_PORT'] : null,
+        'username' => isset($platform_email['SMTP_USER']) ? $platform_email['SMTP_USER'] : null,
+        'password' => isset($platform_email['SMTP_PASS']) ? $platform_email['SMTP_PASS'] : null,
+        'encryption' => null,
+        'auth_mode' => null
     )
-);
+));
 
 //if (isset($platform_email['SMTP_MAILER']) && $platform_email['SMTP_MAILER'] == 'smtp') {
-$app['mailer'] = $app->share(
-    function ($app) {
-        return new \Swift_Mailer($app['swiftmailer.transport']);
-    }
-);
+$app['mailer'] = $app->share(function ($app) {
+    return new \Swift_Mailer($app['swiftmailer.transport']);
+});
 
-
-// check and modify the date of user in the track.e.online table
+// Check and modify the date of user in the track.e.online table
 if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
 error_reporting(-1);
+
 if (api_get_setting('server_type') == 'test') {
     //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 } else {
@@ -693,194 +673,56 @@ if (api_get_setting('server_type') == 'test') {
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
-$user_language = '';
-if (!empty($_GET['language'])) {
-    $user_language = $_GET['language'];
-}
-
-if (!empty($_POST['language_list'])) {
-    $user_language = str_replace('index.php?language=', '', $_POST['language_list']);
-}
+$user_language = api_get_user_language();
 
 // Include all files (first english and then current interface language)
-
-$langpath = api_get_path(SYS_LANG_PATH);
-
-/* This will only work if we are in the page to edit a sub_language */
-if (isset($this_script) && $this_script == 'sub_language') {
-    require_once '../admin/sub_language.class.php';
-    // getting the arrays of files i.e notification, trad4all, etc
-    $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
-        api_get_path(SYS_LANG_PATH).'english',
-        true
-    );
-    //getting parent info
-    $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
-    //getting sub language info
-    $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);
-
-    $english_language_array = $parent_language_array = $sub_language_array = array();
-
-    foreach ($language_files_to_load as $language_file_item) {
-        $lang_list_pre = array_keys($GLOBALS);
-        //loading english
-        $path = $langpath.'english/'.$language_file_item.'.inc.php';
-        if (file_exists($path)) {
-            include $path;
-        }
-
-        $lang_list_post = array_keys($GLOBALS);
-        $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
-        unset($lang_list_pre);
-
-        //  english language array
-        $english_language_array[$language_file_item] = compact($lang_list_result);
-
-        //cleaning the variables
-        foreach ($lang_list_result as $item) {
-            unset(${$item});
-        }
-        $parent_file = $langpath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-
-        if (file_exists($parent_file) && is_file($parent_file)) {
-            include_once $parent_file;
-        }
-        //  parent language array
-        $parent_language_array[$language_file_item] = compact($lang_list_result);
-
-        //cleaning the variables
-        foreach ($lang_list_result as $item) {
-            unset(${$item});
-        }
-
-        $sub_file = $langpath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-        if (file_exists($sub_file) && is_file($sub_file)) {
-            include $sub_file;
-        }
-
-        //  sub language array
-        $sub_language_array[$language_file_item] = compact($lang_list_result);
-
-        //cleaning the variables
-        foreach ($lang_list_result as $item) {
-            unset(${$item});
-        }
-    }
-}
+$app['this_script'] = isset($this_script) ? $this_script : null;
 
 // Checking if we have a valid language. If not we set it to the platform language.
-
-$valid_languages = api_get_languages();
-
-if (!empty($valid_languages)) {
-
-    if (!in_array($user_language, $valid_languages['folder'])) {
-        $user_language = api_get_setting('platformLanguage');
-    }
-    $language_priority1 = api_get_setting('languagePriority1');
-    $language_priority2 = api_get_setting('languagePriority2');
-    $language_priority3 = api_get_setting('languagePriority3');
-    $language_priority4 = api_get_setting('languagePriority4');
-
-    if (in_array(
-        $user_language,
-        $valid_languages['folder']
-    ) && (isset($_GET['language']) || isset($_POST['language_list']))
-    ) {
-        $user_selected_language = $user_language; // $_GET['language'];
-        $_SESSION['user_language_choice'] = $user_selected_language;
-        $platformLanguage = $user_selected_language;
-    }
-
-    if (!empty($language_priority4) && api_get_language_from_type($language_priority4) !== false) {
-        $language_interface = api_get_language_from_type($language_priority4);
-    } else {
-        $language_interface = api_get_setting('platformLanguage');
-    }
-
-    if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
-        $language_interface = api_get_language_from_type($language_priority3);
-    } else {
-        if (isset($_SESSION['user_language_choice'])) {
-            $language_interface = $_SESSION['user_language_choice'];
-        }
-    }
-
-    if (!empty($language_priority2) && api_get_language_from_type($language_priority2) !== false) {
-        $language_interface = api_get_language_from_type($language_priority2);
-    } else {
-        if (isset($_user['language'])) {
-            $language_interface = $_user['language'];
-        }
-    }
-    if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false) {
-        $language_interface = api_get_language_from_type($language_priority1);
-    } else {
-        if ($_course['language']) {
-            $language_interface = $_course['language'];
-        }
-    }
-}
+$app['language_interface'] = $language_interface = api_get_language_interface();
 
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.
 // We need to save the genuine value of this variable and
 // to use it within the function get_lang(...).
-$language_interface_initial_value = $language_interface;
+//$language_interface_initial_value = $language_interface;
 
-/**
- * Include all necessary language files
- * - trad4all
- * - notification
- * - custom tool language files
- */
-$language_files = array();
-$language_files[] = 'trad4all';
-$language_files[] = 'notification';
-$language_files[] = 'accessibility';
+//load_translations($app);
 
-if (isset($language_file)) {
-    if (!is_array($language_file)) {
-        $language_files[] = $language_file;
-    } else {
-        $language_files = array_merge($language_files, $language_file);
-    }
-}
-// if a set of language files has been properly defined
-if (is_array($language_files)) {
-    // if the sub-language feature is on
-    if (api_get_setting('allow_use_sub_language') == 'true') {
-        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
-        $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
-        foreach ($language_files as $index => $language_file) {
-            // include English
-            include $langpath.'english/'.$language_file.'.inc.php';
-            // prepare string for current language and its parent
-            $lang_file = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-            $parent_lang_file = $langpath.$parent_path.'/'.$language_file.'.inc.php';
-            // load the parent language file first
-            if (file_exists($parent_lang_file)) {
-                include $parent_lang_file;
-            }
-            // overwrite the parent language translations if there is a child
-            if (file_exists($lang_file)) {
-                include $lang_file;
-            }
+//Filters
+$app->before(
+    function () use ($app) {
+        if (!file_exists($app['configuration_file'])) {
+            return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
         }
-    } else {
-        // if the sub-languages feature is not on, then just load the
-        // set language interface
-        foreach ($language_files as $index => $language_file) {
-            // include English
-            include $langpath.'english/'.$language_file.'.inc.php';
-            // prepare string for current language
-            $langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-            if (file_exists($langfile)) {
-                include $langfile;
-            }
+
+        //Check the PHP version
+        if (api_check_php_version() == false) {
+            $app->abort(500, "Incorrect PHP version");
         }
+        if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+            $app->abort(500, "archive folder must be writeable");
+        }
+        //$app['request']->getSession()->start();
     }
-}
+);
+
+$app->finish(
+    function () use ($app) {
+        //@todo will be removed before a stable release
+        $mtime = microtime();
+        $mtime = explode(" ", $mtime);
+        $mtime = $mtime[1] + $mtime[0];
+
+        $message = "Page loaded in:".($mtime - START);
+        $app['monolog']->addInfo($message);
+        $message = "memory_get_usage: ".format_file_size(memory_get_usage(true));
+        $app['monolog']->addInfo($message);
+        $message = "memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true));
+        $app['monolog']->addInfo($message);
+    }
+);
+
 
 // The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
 // So, we have to reassign this variable again in order to keep its value right.
@@ -977,11 +819,19 @@ $app['posts.controller'] = $app->share(function() use ($app) {
 });
 $app->mount('/', "posts.controller");*/
 
+//All old stuff
+$app->get('/', 'index.controller:classicAction');
+$app->post('/', 'index.controller:classicAction');
+
 //index.php
-$app->get('/', 'index.controller:indexAction');
+$app->get('/index', 'index.controller:indexAction')->bind('index');
+
 //user_portal.php
 $app->get('/userportal', 'userportal.controller:indexAction');
+//Logout
+$app->get('/logout', 'index.controller:logoutAction');
 
+//LP controller
 $app->get('/learnpath/subscribe_users/{id}', 'learnpath.controller:indexAction')->bind('subscribe_users');
 $app->post('/learnpath/subscribe_users/{id}', 'learnpath.controller:indexAction')->bind('subscribe_users');
 

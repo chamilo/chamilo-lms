@@ -220,6 +220,7 @@ define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path
 
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 define('WEB_PATH', 'WEB_PATH');
+define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
@@ -588,6 +589,7 @@ function api_get_path($path_type, $path = null) {
 
         // Initialization of a table taht contains common-purpose paths.
         $paths[WEB_PATH]                = $root_web;
+        $paths[WEB_PUBLIC_PATH]         = $root_web."web/";
         $paths[SYS_PATH]                = $root_sys;
         $paths[REL_PATH]                = $root_rel;
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
@@ -959,7 +961,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     			$is_visible = true;
     			break;
     	}
-        //If pasword is set and user is not registered to the course then the course is not visible
+        //If password is set and user is not registered to the course then the course is not visible
         if ($is_allowed_in_course == false & isset($course_info['registration_code']) && !empty($course_info['registration_code'])) {
             $is_visible = false;
     	}
@@ -3009,7 +3011,7 @@ function api_not_allowed($print_headers = false, $message = null) {
             $osso->logout();
         }
     }
-    Header::response_code(403);
+
     $home_url   = api_get_path(WEB_PATH);
     $user_id    = api_get_user_id();
     $course     = api_get_course_id();
@@ -3045,15 +3047,19 @@ function api_not_allowed($print_headers = false, $message = null) {
     $app['template.show_header'] = $show_headers;
     $app['template.show_footer'] = $show_headers;
 
-    $tpl = new Template();
-    $tpl->assign('content', $msg);
+//    $tpl = new Template();
+    //$tpl->assign('content', $msg);
+    $app['template']->assign('content', $msg);
+    $app['allowed'] = true;
 
     if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
         // if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
         // to the user_portal
-        $tpl->display_one_col_template();
-        exit;
+        //$tpl->display_one_col_template();
+        //$app->abort('403');
+        $app['allowed'] = false;
+        return false;
     }
 
     if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
@@ -3061,9 +3067,10 @@ function api_not_allowed($print_headers = false, $message = null) {
         //only display form and return to the previous URL if there was a course ID included
         if ($user_id != 0 && !api_is_anonymous()) {
             //if there is a user ID, then the user is not allowed but the session is still there. Say so and exit
-            $tpl->assign('content', $msg);
-            $tpl->display_one_col_template();
-            exit;
+            //$tpl->assign('content', $msg);
+            $app['template']->assign('content', $msg);
+            $app['allowed'] = false;
+            return false;
         }
 
         // If the user has no user ID, then his session has expired
@@ -3085,14 +3092,15 @@ function api_not_allowed($print_headers = false, $message = null) {
         $content .= $form->return_form();
         $content .='</div>';
 
-        $tpl->assign('content', $content);
-        $tpl->display_one_col_template();
-        exit;
+        $app['template']->assign('content', $content);
+        $app['allowed'] = false;
+        return false;
+        //$app->abort(403);
     }
 
     if ($user_id !=0 && !api_is_anonymous()) {
-        $tpl->display_one_col_template();
-        exit;
+        $app['allowed'] = false;
+        return false;
     }
     $msg = null;
     // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
@@ -3102,9 +3110,9 @@ function api_not_allowed($print_headers = false, $message = null) {
 		$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
 	}
     $msg = Display::div($msg, array('align'=>'center'));
-    $tpl->assign('content', $msg);
-    $tpl->display_one_col_template();
-    exit;
+    $app['template']->assign('content', $msg);
+    $app['allowed'] = false;
+    return false;
 }
 
 
@@ -3623,7 +3631,7 @@ function api_get_language_from_type($lang_type){
                 $toreturn = ($_SESSION['user_language_choice']);
             break;
         case 'course_lang' :
-            if ($_course['language'] && !empty($_course['language']) )
+            if (isset($_course['language']) && !empty($_course['language']) )
                 $toreturn = $_course['language'];
             break;
         default :
@@ -6814,4 +6822,204 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
     $mail->ClearAddresses();
 
     return 1;
+}
+
+function api_get_user_language() {
+    $user_language = null;
+
+    if (!empty($_GET['language'])) {
+        $user_language = $_GET['language'];
+    }
+
+    if (!empty($_POST['language_list'])) {
+        $user_language = str_replace('index.php?language=', '', $_POST['language_list']);
+    }
+    return $user_language;
+}
+
+function api_get_language_interface() {
+    $valid_languages = api_get_languages();
+    $user_language = api_get_user_language();
+    $_course = api_get_course_info();
+
+    if (!empty($valid_languages)) {
+
+        if (!in_array($user_language, $valid_languages['folder'])) {
+            $user_language = api_get_setting('platformLanguage');
+        }
+        $language_priority1 = api_get_setting('languagePriority1');
+        $language_priority2 = api_get_setting('languagePriority2');
+        $language_priority3 = api_get_setting('languagePriority3');
+        $language_priority4 = api_get_setting('languagePriority4');
+
+        if (in_array(
+            $user_language,
+            $valid_languages['folder']
+        ) && (isset($_GET['language']) || isset($_POST['language_list']))
+        ) {
+            $user_selected_language = $user_language;
+            $_SESSION['user_language_choice'] = $user_selected_language;
+            $platformLanguage = $user_selected_language;
+        }
+
+        if (!empty($language_priority4) && api_get_language_from_type($language_priority4) !== false) {
+            $language_interface = api_get_language_from_type($language_priority4);
+        } else {
+            $language_interface = api_get_setting('platformLanguage');
+        }
+
+        if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
+            $language_interface = api_get_language_from_type($language_priority3);
+        } else {
+            if (isset($_SESSION['user_language_choice'])) {
+                $language_interface = $_SESSION['user_language_choice'];
+            }
+        }
+
+        if (!empty($language_priority2) && api_get_language_from_type($language_priority2) !== false) {
+            $language_interface = api_get_language_from_type($language_priority2);
+        } else {
+            if (isset($_user['language'])) {
+                $language_interface = $_user['language'];
+            }
+        }
+        if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false) {
+            $language_interface = api_get_language_from_type($language_priority1);
+        } else {
+            if (isset($_course['language']) && !empty($_course['language'])) {
+                $language_interface = $_course['language'];
+            }
+        }
+    }
+    return $language_interface;
+}
+
+function load_translations($app) {
+    $langPath = api_get_path(SYS_LANG_PATH);
+
+    $this_script = $app['this_script'];
+    $language_interface = $app['language_interface'];
+
+    /* This will only work if we are in the page to edit a sub_language */
+    if (isset($this_script) && $this_script == 'sub_language') {
+        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
+        // getting the arrays of files i.e notification, trad4all, etc
+        $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
+            api_get_path(SYS_LANG_PATH).'english',
+            true
+        );
+        //getting parent info
+        $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
+        //getting sub language info
+        $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);
+
+        $english_language_array = $parent_language_array = $sub_language_array = array();
+
+        foreach ($language_files_to_load as $language_file_item) {
+            $lang_list_pre = array_keys($GLOBALS);
+            //loading english
+            $path = $langPath.'english/'.$language_file_item.'.inc.php';
+            if (file_exists($path)) {
+                include $path;
+            }
+
+            $lang_list_post = array_keys($GLOBALS);
+            $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
+            unset($lang_list_pre);
+
+            //  english language array
+            $english_language_array[$language_file_item] = compact($lang_list_result);
+
+            //cleaning the variables
+            foreach ($lang_list_result as $item) {
+                unset(${$item});
+            }
+            $parent_file = $langPath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+
+            if (file_exists($parent_file) && is_file($parent_file)) {
+                include_once $parent_file;
+            }
+            //  parent language array
+            $parent_language_array[$language_file_item] = compact($lang_list_result);
+
+            //cleaning the variables
+            foreach ($lang_list_result as $item) {
+                unset(${$item});
+            }
+
+            $sub_file = $langPath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+            if (file_exists($sub_file) && is_file($sub_file)) {
+                include $sub_file;
+            }
+
+            //  sub language array
+            $sub_language_array[$language_file_item] = compact($lang_list_result);
+
+            //cleaning the variables
+            foreach ($lang_list_result as $item) {
+                unset(${$item});
+            }
+        }
+    }
+
+    /**
+     * Include all necessary language files
+     * - trad4all
+     * - notification
+     * - custom tool language files
+     */
+
+    $language_files = array();
+    $language_files[] = 'trad4all';
+    $language_files[] = 'notification';
+    $language_files[] = 'accessibility';
+
+    if (isset($language_file)) {
+        if (!is_array($language_file)) {
+            $language_files[] = $language_file;
+        } else {
+            $language_files = array_merge($language_files, $language_file);
+        }
+    }
+
+    if (isset($app['languages_file'])) {
+        $language_files = array_merge($language_files, $this->app['languages_file']);
+    }
+
+    // if a set of language files has been properly defined
+    if (is_array($language_files)) {
+        // if the sub-language feature is on
+        if (api_get_setting('allow_use_sub_language') == 'true') {
+            require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
+            $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
+            foreach ($language_files as $index => $language_file) {
+                // include English
+                include $langPath.'english/'.$language_file.'.inc.php';
+                // prepare string for current language and its parent
+                $lang_file = $langPath.$language_interface.'/'.$language_file.'.inc.php';
+                $parent_lang_file = $langPath.$parent_path.'/'.$language_file.'.inc.php';
+                // load the parent language file first
+                if (file_exists($parent_lang_file)) {
+                    include $parent_lang_file;
+                }
+                // overwrite the parent language translations if there is a child
+                if (file_exists($lang_file)) {
+                    include $lang_file;
+                }
+            }
+        } else {
+            // if the sub-languages feature is not on, then just load the
+            // set language interface
+            foreach ($language_files as $index => $language_file) {
+                // include English
+                include $langPath.'english/'.$language_file.'.inc.php';
+                // prepare string for current language
+                $langFile = $langPath.$language_interface.'/'.$language_file.'.inc.php';
+
+                if (file_exists($langFile)) {
+                    include $langFile;
+                }
+            }
+        }
+    }
 }

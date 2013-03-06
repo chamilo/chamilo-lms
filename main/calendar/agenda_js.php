@@ -43,8 +43,6 @@ if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
     $type = 'course';
 }
 
-
-
 $is_group_tutor = false;
 $session_id = api_get_session_id();
 $group_id = api_get_group_id();
@@ -110,10 +108,12 @@ $tpl->assign('month_names', json_encode($months));
 $tpl->assign('month_names_short', json_encode($months_short));
 $tpl->assign('day_names', json_encode($days));
 $tpl->assign('day_names_short', json_encode($day_short));
-$tpl->assign('button_text', json_encode(array('today' => get_lang('Today'),
-        'month' => get_lang('Month'),
-        'week' => get_lang('Week'),
-        'day' => get_lang('Day'))));
+$tpl->assign('button_text', json_encode(array(
+    'today' => get_lang('Today'),
+    'month' => get_lang('Month'),
+    'week' => get_lang('Week'),
+    'day' => get_lang('Day')
+)));
 
 //see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
 
@@ -124,7 +124,6 @@ if ($region_value == 'en') {
     $region_value = 'en-GB';
 }
 $tpl->assign('region_value', $region_value);
-
 
 $export_icon = '../img/export.png';
 $export_icon_low = '../img/export_low_fade.png';

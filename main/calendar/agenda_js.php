@@ -179,6 +179,7 @@ if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $ty
     if (api_is_western_name_order()) {
         $order = 'firstname';
     }
+
     if (!empty($group_id)) {
         $group_list = array($group_id => $group_properties);
         $user_list = GroupManager::get_subscribed_users($group_id);
@@ -189,7 +190,7 @@ if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $ty
 
     $agenda = new Agenda();
     //This will fill the select called #users_to_send_id
-    $select = $agenda->construct_not_selected_select_form($group_list, $user_list);
+    $select = $agenda->construct_not_selected_select_form($group_list, $user_list, array());
     $tpl->assign('visible_to', $select);
 }
 

@@ -192,6 +192,8 @@ class Agenda
                 $attributes['content'] = $content;
                 $attributes['start_date'] = $start;
                 $attributes['end_date'] = $end;
+                $attributes['all_day'] = $all_day;
+
                 if (!empty($course_id)) {
                     Database::update($this->tbl_course_agenda, $attributes, array('id = ? AND c_id = ?' => array($id, $course_id)));
                 }
@@ -202,7 +204,6 @@ class Agenda
                 $attributes['start_date'] = $start;
                 $attributes['end_date'] = $end;
                 Database::update($this->tbl_global_agenda, $attributes, array('id = ?' => $id));
-                break;
                 break;
         }
     }
@@ -717,7 +718,12 @@ class Agenda
     {
         $html = '<select id="users_to_send_id" data-placeholder="'.get_lang('Select').'" name="users_to_send[]" multiple="multiple" style="width:250px" class="chzn-select">';
 
-        $html .= '<option value="everyone">'.get_lang('Everyone').'</option>';
+
+        if ($to_already_selected == 'everyone') {
+            $html .= '<option value="everyone" checked="checked">'.get_lang('Everyone').'</option>';
+        } else {
+            $html .= '<option value="everyone">'.get_lang('Everyone').'</option>';
+        }
 
         if (is_array($group_list)) {
             $html .= '<optgroup label="'.get_lang('Groups').'">';
@@ -728,7 +734,6 @@ class Agenda
                     $count_users = " &ndash; $count_users ".get_lang('Users');
 
                     $html .= '<option value="GROUP:'.$this_group['id'].'"> '.$this_group['name'].$count_users.'</option>';
-                    //$html .= "<option value=\"GROUP:".$this_group['id']."\"> ".$this_group['name']." ".get_lang('Users')."</option>";
                 }
             }
             $html .= '</optgroup>';
@@ -743,7 +748,6 @@ class Agenda
             if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'], $to_already_selected)) {
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
                 // @todo : add title attribute $username in the jqdialog window. wait for a chosen version to inherit title attribute
-                // from <option> to <li>
                 $html .= '<option title="'.$username.'" value="USER:'.$this_user['user_id'].'">'.api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].') </option>';
             }
         }

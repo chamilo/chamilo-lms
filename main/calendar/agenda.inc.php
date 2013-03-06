@@ -24,15 +24,13 @@ function setFocus(){
 }
 $(function() {
     setFocus();
-    $("#selected_form_id").change(function() {
-        var temp ="&user_id="+$("#selected_form_id").val();
+    $("#selected_form_id_search").change(function() {
+        var temp ="&user_id="+$("#selected_form_id_search").val();
         url = window.location+temp;
         window.location.replace(url);
     });
 });
 </script>';
-
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 /**
  * Retrieves all the agenda items from the table
@@ -937,12 +935,11 @@ function get_course_groups()
 /**
  * this function shows the form for sending a message to a specific group or user.
  * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ *
  * @return html code
  */
 function show_to_form($to_already_selected)
 {
-    /* $user_list     = get_course_users();
-      $group_list    = get_course_groups(); */
     $order = 'lastname';
     if (api_is_western_name_order()) {
         $order = 'firstname';
@@ -950,7 +947,6 @@ function show_to_form($to_already_selected)
 
     $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);
     $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
-
     construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
 }
 
@@ -963,44 +959,45 @@ function construct_not_selected_select_form($group_list = null, $user_list = nul
 {
     echo '<select data-placeholder="'.get_lang('Select').'" style="width:150px;" class="chzn-select" id="selected_form_id" name="selected_form[]" multiple="multiple">';
 
-    // adding the groups to the select form
-    echo '<option value="everyone">'.get_lang('Everyone').'</option>';
-
+    // Adding the groups to the select form
     if (isset($to_already_selected) && $to_already_selected === 'everyone') {
-
+        echo '<option selected="selected" value="everyone">'.get_lang('Everyone').'</option>';
+    //} else {
     } else {
-        if (is_array($group_list)) {
-            echo '<optgroup label="'.get_lang('Groups').'">';
-            foreach ($group_list as $this_group) {
-                //api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-                if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'], $to_already_selected)) {
-                    // $to_already_selected is the array containing the groups (and users) that are already selected
-                    echo "<option value=\"GROUP:".$this_group['id']."\">",
-                    "G: ", $this_group['name'], " &ndash; ".$this_group['userNb']." ".get_lang('Users').
-                    "</option>";
-                }
+        echo '<option value="everyone">'.get_lang('Everyone').'</option>';
+    }
+
+    if (is_array($group_list)) {
+        echo '<optgroup label="'.get_lang('Groups').'">';
+        foreach ($group_list as $this_group) {
+            //api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
+            if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'], $to_already_selected)) {
+                // $to_already_selected is the array containing the groups (and users) that are already selected
+                echo "<option value=\"GROUP:".$this_group['id']."\">",
+                "G: ", $this_group['name'], " &ndash; ".$this_group['userNb']." ".get_lang('Users').
+                "</option>";
             }
-            // a divider
+        }
+        // a divider
+    }
+    echo "</optgroup>";
+    // adding the individual users to the select form
+    if (!empty($user_list)) {
+        echo '<optgroup label="'.get_lang('Users').'">';
+        foreach ($user_list as $this_user) {
+            // $to_already_selected is the array containing the users (and groups) that are already selected
+            if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'], $to_already_selected)) {
+                $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
+                $user_info = api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].')';
+                echo "<option title='$username' value='USER:".$this_user['user_id']."'>$user_info</option>";
+            }
         }
         echo "</optgroup>";
-        // adding the individual users to the select form
-        if (!empty($user_list)) {
-            echo '<optgroup label="'.get_lang('Users').'">';
-            foreach ($user_list as $this_user) {
-                // $to_already_selected is the array containing the users (and groups) that are already selected
-                if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'], $to_already_selected)) {
-                    $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
-                    $user_info = api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].')';
-                    echo "<option title='$username' value='USER:".$this_user['user_id']."'>$user_info</option>";
-                }
-            }
-            echo "</optgroup>";
-        }
     }
     echo "</select>";
 }
 
-function show_to($filter = 0)
+function show_to($filter = 0, $id = null)
 {
     $order = 'lastname';
     if (api_is_western_name_order()) {
@@ -1010,13 +1007,16 @@ function show_to($filter = 0)
     $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);
     $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
 
-    return construct_to_select_form($group_list, $user_list, $filter);
+    return construct_to_select_form($group_list, $user_list, $filter, $id);
 }
 
-function construct_to_select_form($group_list = null, $user_list = null, $filter = 0)
+function construct_to_select_form($group_list = null, $user_list = null, $filter = 0, $id = null)
 {
     $result = '<form class="form-search">';
-    $result .= '<select data-placeholder= "'.get_lang('Everyone').'" name="sel_to" class="chzn-select" id="selected_form_id">';
+    if (empty($id)) {
+        $id = 'selected_form_id';
+    }
+    $result .= '<select data-placeholder= "'.get_lang('Everyone').'" name="sel_to" class="chzn-select" id="'.$id.'">';
 
     // adding the groups to the select form
     $result .= '<option value=""></option>';
@@ -1503,8 +1503,9 @@ function load_edit_users($tool, $id)
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
     $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $course_id = api_get_course_int_id();
 
-    $sql = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='$tool' AND ref='$id'";
+    $sql = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
     $result = Database::query($sql) or die(Database::error());
     while ($row = Database::fetch_array($result)) {
         $to_group = $row['to_group_id'];
@@ -1557,7 +1558,7 @@ function display_courseadmin_links($filter = 0)
 {
     $form = null;
     if (!isset($_GET['action'])) {
-        $form = show_to($filter);
+        $form = show_to($filter, 'selected_form_id_search');
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar_na.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     } else {
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
@@ -1588,10 +1589,6 @@ function display_student_links()
     $day_url = '&month='.date('m').'&year='.date('Y').'&view='.Security::remove_XSS($_GET['view']);
     $today_url = api_get_self()."?action=view".$day_url."&toolgroup=".api_get_group_id();
     echo Display::url(get_lang('Today'), $today_url, array('class' => 'btn'));
-
-    //@todo Add next events and all events?  ...
-    //echo Display::url(get_lang('AllEvents'), $all_url, array('class'=>'a_button white medium'));
-    //echo Display::url(get_lang('Next events'), $all_url, array('class'=>'a_button white medium'));
 }
 
 /**
@@ -1630,7 +1627,7 @@ function get_agenda_item($id)
         $_SESSION['allow_individual_calendar'] = "show";
     }
     $item['repeat'] = false;
-    $sql = "SELECT * FROM $t_agenda_repeat WHERE cal_id = $id";
+    $sql = "SELECT * FROM $t_agenda_repeat WHERE c_id = $course_id AND cal_id = $id";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
         //this event is repetitive
@@ -1641,6 +1638,7 @@ function get_agenda_item($id)
         $item['repeat_frequency'] = $row['cal_frequency']; //unused in 1.8.5 RC1 - will be used later to say if once every 2 or 3 weeks, for example
         $item['repeat_days'] = $row['cal_days']; //unused in 1.8.5 RC1 - will be used later
     }
+
     //TODO - add management of repeat exceptions
     return $item;
 }
@@ -1669,15 +1667,22 @@ function store_edited_agenda_item($id_attach, $file_comment)
     $end_date = (int) $_POST['end_fyear']."-".(int) $_POST['end_fmonth']."-".(int) $_POST['end_fday']." ".(int) $_POST['end_fhour'].":".(int) $_POST['end_fminute'].":00";
     $to = $_POST['selectedform'];
 
-    $start_date = api_get_utc_datetime($start_date);
-    $end_date = api_get_utc_datetime($end_date);
-
     if ($_POST['empty_end_date'] == 'on') {
         $end_date = "0000-00-00 00:00:00";
     }
 
+    $course_id = api_get_course_int_id();
+
     // 1.b. the actual saving in calendar_event table
-    $edit_result = save_edit_agenda_item($id, $title, $content, $start_date, $end_date);
+    $agendaObj = new Agenda();
+    $agendaObj->set_course(api_get_course_info());
+    $agendaObj->type = 'course';
+    $all_day = isset($_REQUEST['all_day']) && !empty($_REQUEST['all_day']) ? 1 : 0;
+
+    $agendaObj->edit_event($id, $start_date, $end_date, $all_day, null, $title, $content);
+
+    $start_date = api_get_utc_datetime($start_date);
+    $end_date = api_get_utc_datetime($end_date);
 
     if (empty($id_attach)) {
         add_agenda_attachment_file($file_comment, $id);
@@ -1685,10 +1690,10 @@ function store_edited_agenda_item($id_attach, $file_comment)
         edit_agenda_attachment_file($file_comment, $id, $id_attach);
     }
 
-    // step 2: editing the item_propery table (=delete all and add the new destination users/groups)
-    if ($edit_result = true) {
+    // step 2: editing the item_property table (=delete all and add the new destination users/groups)
+    /*if ($edit_result = true) {
         // 2.a. delete everything for the users
-        $sql_delete = "DELETE FROM ".$TABLE_ITEM_PROPERTY." WHERE ref='$id' AND tool='".TOOL_CALENDAR_EVENT."'";
+        $sql_delete = "DELETE FROM ".$TABLE_ITEM_PROPERTY." WHERE c_id = $course_id AND ref='$id' AND tool='".TOOL_CALENDAR_EVENT."'";
 
         $result = Database::query($sql_delete) or die(Database::error());
         // 2.b. storing the new users/groups
@@ -1710,7 +1715,7 @@ function store_edited_agenda_item($id_attach, $file_comment)
             // the message is sent to everyone, so we set the group to 0
             api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id, "AgendaModified", api_get_user_id(), '', '', $start_date, $end_date);
         }
-    } //if ($edit_result=true)
+    }*/
     // step 3: update the attachments (=delete all and add those in the session
     update_added_resources("Agenda", $id);
 
@@ -2220,7 +2225,6 @@ function display_one_agenda_item($agenda_id)
  */
 function show_add_form($id = '')
 {
-
     global $MonthsLong;
     $htmlHeadXtra[] = to_javascript();
     // the default values for the forms
@@ -2285,8 +2289,13 @@ function show_add_form($id = '')
 
     // if the id is set then we are editing an agenda item
     if (!empty($id)) {
-        //echo "before get_agenda_item".$_SESSION['allow_individual_calendar'];
+
         $item_2_edit = get_agenda_item($id);
+
+        $agendaObj = new Agenda();
+        $agendaObj->set_course(api_get_course_info());
+        $agendaObj->type = 'course';
+        $agendaItem = $agendaObj->get_event($id);
 
         $title = $item_2_edit['title'];
         $content = $item_2_edit['content'];
@@ -2294,7 +2303,7 @@ function show_add_form($id = '')
         // start date
         if ($item_2_edit['start_date'] != '0000-00-00 00:00:00') {
             $item_2_edit['start_date'] = api_get_local_time($item_2_edit['start_date']);
-            list($datepart, $timepart) = split(" ", $item_2_edit['start_date']);
+            list($datepart, $timepart) = explode(" ", $item_2_edit['start_date']);
             list($year, $month, $day) = explode("-", $datepart);
             list($hours, $minutes, $seconds) = explode(":", $timepart);
         }
@@ -2302,8 +2311,7 @@ function show_add_form($id = '')
         // end date
         if ($item_2_edit['end_date'] != '0000-00-00 00:00:00') {
             $item_2_edit['end_date'] = api_get_local_time($item_2_edit['end_date']);
-
-            list($datepart, $timepart) = split(" ", $item_2_edit['end_date']);
+            list($datepart, $timepart) = explode(" ", $item_2_edit['end_date']);
             list($end_year, $end_month, $end_day) = explode("-", $datepart);
 
             list($end_hours, $end_minutes, $end_seconds) = explode(":", $timepart);
@@ -2316,6 +2324,7 @@ function show_add_form($id = '')
     }
     $content = stripslashes($content);
     $title = stripslashes($title);
+
     // we start a completely new item, we do not come from the resource linker
     if (isset($_GET['originalresource']) && $_GET['originalresource'] !== "no" and $_GET['action'] == "add") {
         $_SESSION["formelements"] = null;
@@ -2343,40 +2352,34 @@ function show_add_form($id = '')
 
     // the title of the agenda item
     echo '<div class="control-group">
-							<label class="control-label">
-								<span class="form_required">*</span>'.get_lang('ItemTitle').'
-							</label>
-							<div class="controls">
-								<div id="err_title" style="display:none;color:red"></div>
-								<input type="text" id="agenda_title" class="span5" name="title" value="';
+            <label class="control-label">
+                <span class="form_required">*</span>'.get_lang('ItemTitle').'
+            </label>
+            <div class="controls">
+                <div id="err_title" style="display:none;color:red"></div>
+                <input type="text" id="agenda_title" class="span5" name="title" value="';
     if (isset($title))
         echo $title;
     echo '" />
 							</div>
 						</div>';
 
-
-
     // selecting the users / groups
     $group_id = api_get_group_id();
-    if (isset($group_id) && !empty($group_id)) {
-        echo '<input type="hidden" name="selected_form[0]" value="GROUP:'.$group_id.'"/>';
-        echo '<input type="hidden" name="To" value="true"/>';
-    } else {
-        echo '<div class="control-group">
-					<label class="control-label">
-						'.Display::return_icon('group.png', get_lang('To'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).' '.get_lang('To').'</a>
-					</label>
-					<div class="controls">';
-        /* if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id'])) {
-          echo get_lang('Everybody').'&nbsp;';
-          } */
-        show_to_form($to);
-        /* if (isset($_GET['id']) && $to!='everyone') {
-          echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
-          } */
-        echo '</div>
-				</div>';
+    if (empty($id)) {
+        if (isset($group_id) && !empty($group_id)) {
+            echo '<input type="hidden" name="selected_form[0]" value="GROUP:'.$group_id.'"/>';
+            echo '<input type="hidden" name="To" value="true"/>';
+        } else {
+            echo '<div class="control-group">
+                        <label class="control-label">
+                            '.Display::return_icon('group.png', get_lang('To'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).' '.get_lang('To').'</a>
+                        </label>
+                        <div class="controls">';
+            show_to_form($to);
+            echo '</div>
+                    </div>';
+        }
     }
 
     // start date and time
@@ -2453,7 +2456,6 @@ function show_add_form($id = '')
         </select>
         <select name="fminute" onchange="javascript:document.new_calendar_item.end_fminute.value=this.value;">
             <!-- <option value="<?php echo $minutes ?>"><?php echo $minutes; ?></option> -->
-            <!-- <option value="--">--</option> -->
     <?php
     foreach (range(0, 59) as $i) {
         // values have to have double digits
@@ -2527,6 +2529,7 @@ function show_add_form($id = '')
         ?>
         </select>
         <select  id="end_fyear" name="end_fyear">
+            <option value="<?php echo ($end_year - 2) ?>"><?php echo ($end_year - 2) ?></option>
             <option value="<?php echo ($end_year - 1) ?>"><?php echo ($end_year - 1) ?></option>
             <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
             <?php
@@ -2540,7 +2543,6 @@ function show_add_form($id = '')
             <?php echo Display::span(Display::return_icon('calendar_select.gif', get_lang('Select'), array('style' => 'vertical-align: middle;')), array('id' => 'end_date_calendar_icon')); ?>
         </a>
         &nbsp;<?php echo get_lang('EndTime').": "; ?>&nbsp;
-
         <select id="end_fhour" name="end_fhour">
             <!-- <option value="--">--</option> -->
     <?php
@@ -2573,11 +2575,9 @@ function show_add_form($id = '')
             }
             ?>
         </select>
-
             <?php
             echo '	</div>
 			</div>	</span>';
-
 
             // Repeating the calendar item
             if (empty($id)) {
@@ -2617,21 +2617,21 @@ function show_add_form($id = '')
                     <td><label for="repeat_end_day"><?php echo get_lang('RepeatEnd'); ?></label></td>
                     <td>
                         <select name="repeat_end_day">
-        <?php
-        // small loop for filling all the dates
-        // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
+                        <?php
+                        // small loop for filling all the dates
+                        // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
 
-        foreach (range(1, 31) as $i) {
-            // values have to have double digits
-            $value = ($i <= 9 ? '0'.$i : $i );
-            // the current day is indicated with [] around the date
-            if ($value == $end_day) {
-                echo "<option value=\"".$value."\" selected> ".$i." </option>";
-            } else {
-                echo "<option value=\"".$value."\">".$i."</option>";
-            }
-        }
-        ?>
+                        foreach (range(1, 31) as $i) {
+                            // values have to have double digits
+                            $value = ($i <= 9 ? '0'.$i : $i );
+                            // the current day is indicated with [] around the date
+                            if ($value == $end_day) {
+                                echo "<option value=\"".$value."\" selected> ".$i." </option>";
+                            } else {
+                                echo "<option value=\"".$value."\">".$i."</option>";
+                            }
+                        }
+                        ?>
                         </select>
                         <!-- month: january -> december -->
                         <select name="repeat_end_month">
@@ -2658,17 +2658,30 @@ function show_add_form($id = '')
                             ?>
                         </select>
                         <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')">
-        <?php Display::display_icon('calendar_select.gif', get_lang('Select'), array('style' => 'vertical-align: middle;')); ?>
+                        <?php Display::display_icon('calendar_select.gif', get_lang('Select'), array('style' => 'vertical-align: middle;')); ?>
                         </a>
                     </td>
                 </tr>
             </table>
-                            <?php
-                            echo '		</div>
+                <?php
+                echo '		</div>
 				</div>';
-                        }//only show repeat fields if adding, not if editing
-                        // the main area of the agenda item: the wysiwyg editor
-                        echo '	<div class="control-group">
+                        }
+            if (isset($agendaItem['all_day'])) {
+                $checked = null;
+                if ($agendaItem['all_day']) {
+                    $checked = 'checked';
+                }
+                echo '	<div class="control-group">
+				<label class="control-label"></label>
+				<div class="controls">
+                    <input type="checkbox" '.$checked.' name="all_day"/>  '.get_lang('AllDay').'
+                </div>
+             </div>';
+            }
+                //only show repeat fields if adding, not if editing
+                // the main area of the agenda item: the wysiwyg editor
+                echo '	<div class="control-group">
 				<label class="control-label">
 					<span class="form_required">*</span>'.get_lang('Description').'
 				</label>
@@ -2688,24 +2701,6 @@ function show_add_form($id = '')
                         //echo '<textarea class="span5"  rows="4" name="content">'.$content.'</textarea>';
                         echo '</div>
 			</div>';
-
-                        // the added resources
-                        /* echo '	<div class="row">
-                          <div class="label">
-                          '.get_lang('AddedResources').'
-                          </div>
-                          <div class="controls">';
-                          if ($_SESSION['allow_individual_calendar']=='show')
-                          show_addresource_button('onclick="selectAll(this.form.elements[6],true)"');
-                          else
-                          show_addresource_button();
-                          $form_elements=$_SESSION['formelements'];
-                          echo display_resources(0);
-                          $test=$_SESSION['addedresource'];
-                          echo '		</div>
-                          </div>';
-                         */
-
                         // File attachment
                         echo '	<div class="control-group">
 				<label class="control-label">
@@ -2714,13 +2709,8 @@ function show_add_form($id = '')
                     <input type="file" name="user_upload"/>  '.get_lang('Comment').' <input name="file_comment" type="text" size="20" />
                 </div>
              </div>';
-
-
-
-
-
                         // the submit button for storing the calendar item
-                        echo '		<div class="control-group">
+                    echo '		<div class="control-group">
 					<label class="control-label">
                     </label>
 					<div class="controls">';
@@ -4159,8 +4149,8 @@ function show_add_form($id = '')
                 if ($result) {
                     $sql = 'INSERT INTO '.$agenda_table_attachment.'(c_id, filename,comment, path,agenda_id,size) '.
                         "VALUES ($course_id,  '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".intval($_FILES['user_upload']['size'])."' )";
-                    $result = Database::query($sql);
-                    $message.=' / '.get_lang('FileUploadSucces').'<br />';
+                    Database::query($sql);
+                    //$message.=' / '.get_lang('FileUploadSucces').'<br />';
 
                     $last_id_file = Database::insert_id();
                     api_item_property_update($_course, 'calendar_event_attachment', $last_id_file, 'AgendaAttachmentAdded', api_get_user_id());

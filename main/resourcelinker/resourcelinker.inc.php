@@ -246,7 +246,7 @@ function display_addedresource_link($type, $id, $style='')
 	{
 		$styling = ' class="'.$style.'"';
 	}
-    
+
     $course_id = api_get_course_int_id();
 
 	switch ($type)
@@ -1484,13 +1484,13 @@ function check_added_resources($type, $id)
 */
 function edit_added_resources($type, $id)
 {
-	global $_course;
-	$TABLERESOURCE 		= Database::get_course_table(TABLE_LINKED_RESOURCES,$_course['dbName']);
-
-	$sql="SELECT * FROM $TABLERESOURCE WHERE source_type='$type' and source_id=$id";
+	$TABLERESOURCE 		= Database::get_course_table(TABLE_LINKED_RESOURCES);
+    $course_id = api_get_course_int_id();
+    $id = intval($id);
+    $type = Database::escape_string($type);
+	$sql="SELECT * FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id=$id";
 	$result=Database::query($sql);
-	while ($row=Database::fetch_array($result))
-	{
+	while ($row=Database::fetch_array($result))	{
 		$addedresource[]=$row["resource_type"];
 		$addedresourceid[]=$row["resource_id"];
 	}
@@ -1505,10 +1505,12 @@ function edit_added_resources($type, $id)
 */
 function update_added_resources($type, $id)
 {
-	global $_course;
-	$TABLERESOURCE 		= Database::get_course_table(TABLE_LINKED_RESOURCES,$_course['dbName']);
+	$TABLERESOURCE 		= Database::get_course_table(TABLE_LINKED_RESOURCES);
+    $course_id = api_get_course_int_id();
+    $id = intval($id);
+    $type = Database::escape_string($type);
 	// delete all the added resources for this item in the database;
-	$sql="DELETE FROM $TABLERESOURCE WHERE source_type='$type' AND source_id='$id'";
+	$sql="DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' AND source_id='$id'";
 	//echo $sql;
 	Database::query($sql);
 

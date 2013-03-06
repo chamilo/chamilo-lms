@@ -300,14 +300,21 @@ $(document).ready(function() {
 									calEvent.description 	= $("#content").val();
 
 									calendar.fullCalendar('updateEvent',
-											calEvent,
-											true // make the event "stick"
+                                        calEvent,
+                                        true // make the event "stick"
 									);
-
 									$("#dialog-form").dialog("close");
 								}
 							});
 						},
+
+                        {% if type == 'course' %}
+                        '{{ "AdvancedEdit"|get_lang }}' : function() {
+                            url =  "agenda.php?action=edit&type=fromjs&id=" + calEvent.id+'&course_id='+calEvent.course_id+"";
+                            window.location.href = url;
+                            $("#dialog-form").dialog( "close" );
+                        },
+                        {% endif %}
 						'{{ "Delete"|get_lang }}': function() {
 							$.ajax({
 								url: delete_url,
@@ -422,9 +429,9 @@ $(document).ready(function() {
 
         {% if visible_to is not null %}
     	    <div id="visible_to_input" class="control-group">
-                <label class="control-label">{{"To"|get_lang}}</label>
+                <label class="control-label">{{ "To"|get_lang }}</label>
                 <div class="controls">
-                    {{visible_to}}
+                    {{ visible_to }}
                 </div>
             </div>
         {% endif %}
@@ -435,7 +442,7 @@ $(document).ready(function() {
                 </div>
          </div>
 		<div class="control-group">
-            <label class="control-label">{{"Agenda"|get_lang}}</label>
+            <label class="control-label">{{ "Agenda"|get_lang }}</label>
 			<div class="controls">
 				<div id="color_calendar"></div>
 			</div>
@@ -447,14 +454,14 @@ $(document).ready(function() {
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="title">{{"Title"|get_lang}}</label>
+			<label class="control-label" for="title">{{ "Title"|get_lang }}</label>
 			<div class="controls">
 				<input type="text" name="title" id="title" size="40" />
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label" for="content">{{"Description"|get_lang}}</label>
+			<label class="control-label" for="content">{{ "Description"|get_lang }}</label>
 			<div class="controls">
 				<textarea name="content" id="content" class="span3" rows="5"></textarea>
 			</div>

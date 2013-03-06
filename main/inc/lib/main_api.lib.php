@@ -161,7 +161,7 @@ define('LOG_CONFIGURATION_SETTINGS_CHANGE',     'settings_changed');
 define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_language_changed');
 define('LOG_SUBSCRIBE_USER_TO_COURSE',          'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE',      'user_unsubscribed');
-
+define('LOG_ATTEMPTED_FORCED_LOGIN',            'attempted_forced_login');
 
 define('LOG_HOMEPAGE_CHANGED',                  'homepage_changed');
 

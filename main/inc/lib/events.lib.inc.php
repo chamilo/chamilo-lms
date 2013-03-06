@@ -619,22 +619,12 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
 
     $user_id = intval($user_id);
 
-    $sql = "INSERT INTO $TABLETRACK_DEFAULT
-        		(default_user_id,
-        		 default_cours_code,
-                 c_id,
-        		 default_date,
-        		 default_event_type,
-        		 default_value_type,
-        		 default_value
-        		 )
-        		 VALUES('$user_id.',
-        			'$course_code',
-                    '$course_id',
-        			'$datetime',
-        			'$event_type',
-        			'$event_value_type',
-        			'$event_value')";
+    $sql = "INSERT INTO $TABLETRACK_DEFAULT ".
+      " (default_user_id, default_cours_code, c_id, ".
+      " default_date, default_event_type, default_value_type, default_value ".
+      " ) VALUES( ".
+      " '$user_id', '$course_code', '$course_id', ".
+      " '$datetime', '$event_type', '$event_value_type', '$event_value')";
     Database::query($sql);
     return true;
 }
@@ -644,6 +634,7 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
  *
  * @param int $etId
  * @return type
+ * @assert () !== false
  */
 function get_all_event_types() {
     global $event_config;

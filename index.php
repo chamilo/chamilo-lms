@@ -65,11 +65,13 @@ $_setting['display_courses_to_anonymous_users'] = 'true';
 /* LOGIN */
 
 /**
- * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled.
- * @todo Consider removing this piece of code because does nothing.
+ * Registers in the track_e_default table (view in important activities in admin
+ * interface) a possible attempted break in, sending auth data through get.
+ * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled. The real use of this code block should be seriously considered as well. This form should just use a security token and get done with it.
  */
 if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
-	// nice lie!!!
+        $i = api_get_anonymous_id();
+        event_system(LOG_ATTEMPTED_FORCED_LOGIN, 'tried_hacking_get', $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),null,$i);
 	echo 'Attempted breakin - sysadmins notified.';
 	session_destroy();
 	die();

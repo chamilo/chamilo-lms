@@ -126,6 +126,9 @@ $_api_is_translated_call = false;
 function get_lang($variable, $reserved = null, $language = null)
 {
     global $app;
+    if ($app['debug']) {
+        //return $variable;
+    }
     $translated = $app['translator']->trans($variable);
     if ($translated == $variable) {
         $translated = $app['translator']->trans("lang$variable");

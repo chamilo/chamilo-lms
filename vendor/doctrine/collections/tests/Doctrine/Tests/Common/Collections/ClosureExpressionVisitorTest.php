@@ -13,7 +13,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the LGPL. For more information, see
+ * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
@@ -34,6 +34,20 @@ class ClosureExpressionVisitorTest extends \PHPUnit_Framework_TestCase
     {
         $this->visitor = new ClosureExpressionVisitor();
         $this->builder = new ExpressionBuilder();
+    }
+
+    public function testGetObjectFieldValueIsAccessor()
+    {
+        $object = new TestObject(1, 2, true);
+
+        $this->assertTrue($this->visitor->getObjectFieldValue($object, 'baz'));
+    }
+
+    public function testGetObjectFieldValueMagicCallMethod()
+    {
+        $object = new TestObject(1, 2, true, 3);
+
+        $this->assertEquals(3, $this->visitor->getObjectFieldValue($object, 'qux'));
     }
 
     public function testWalkEqualsComparison()
@@ -106,6 +120,14 @@ class ClosureExpressionVisitorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($closure(new TestObject(4)));
     }
 
+    public function testWalkContainsComparison()
+    {
+        $closure = $this->visitor->walkComparison($this->builder->contains('foo', 'hello'));
+
+        $this->assertTrue($closure(new TestObject('hello world')));
+        $this->assertFalse($closure(new TestObject('world')));
+    }
+
     public function testWalkAndCompositeExpression()
     {
         $closure = $this->visitor->walkCompositeExpression(
@@ -172,17 +194,35 @@ class ClosureExpressionVisitorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("b", $objects[1]->getBar());
         $this->assertEquals("c", $objects[2]->getBar());
     }
+
+    public function testArrayComparison()
+    {
+        $closure = $this->visitor->walkComparison($this->builder->eq("foo", 42));
+
+        $this->assertTrue($closure(array('foo' => 42)));
+    }
 }
 
 class TestObject
 {
     private $foo;
     private $bar;
+    private $baz;
+    private $qux;
 
-    public function __construct($foo = null, $bar = null)
+    public function __construct($foo = null, $bar = null, $baz = null, $qux = null)
     {
         $this->foo = $foo;
         $this->bar = $bar;
+        $this->baz = $baz;
+        $this->qux = $qux;
+    }
+
+    public function __call($name, $arguments)
+    {
+        if ('getqux' === $name) {
+            return $this->qux;
+        }
     }
 
     public function getFoo()
@@ -193,6 +233,11 @@ class TestObject
     public function getBar()
     {
         return $this->bar;
+    }
+
+    public function isBaz()
+    {
+        return $this->baz;
     }
 }
 

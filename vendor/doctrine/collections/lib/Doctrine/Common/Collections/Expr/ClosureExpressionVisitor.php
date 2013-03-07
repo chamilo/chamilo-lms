@@ -26,27 +26,42 @@ namespace Doctrine\Common\Collections\Expr;
  * by {@ArrayCollection#select()}.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
- * @since 2.3
+ * @since  2.3
  */
 class ClosureExpressionVisitor extends ExpressionVisitor
 {
     /**
-     * Access the field of a given object. This field has to be public directly
-     * or indirectly (through an accessor get* or a magic method, __get, __call).
+     * Accesses the field of a given object. This field has to be public
+     * directly or indirectly (through an accessor get*, is*, or a magic
+     * method, __get, __call).
      *
-     * is*() is not supported.
+     * @param object $object
+     * @param string $field
      *
      * @return mixed
      */
-    static public function getObjectFieldValue($object, $field)
+    public static function getObjectFieldValue($object, $field)
     {
-        $accessor = "get" . $field;
+        $accessors = array('get', 'is');
 
-        if (method_exists($object, $accessor) || method_exists($object, '__call')) {
+        foreach ($accessors as $accessor) {
+            $accessor .= $field;
+
+            if ( ! method_exists($object, $accessor)) {
+                continue;
+            }
+
             return $object->$accessor();
         }
 
-        if ($object instanceof \ArrayAccess) {
+        // __call should be triggered for get.
+        $accessor = $accessors[0] . $field;
+
+        if (method_exists($object, '__call')) {
+            return $object->$accessor();
+        }
+
+        if ($object instanceof \ArrayAccess || is_array($object)) {
             return $object[$field];
         }
 
@@ -54,15 +69,15 @@ class ClosureExpressionVisitor extends ExpressionVisitor
     }
 
     /**
-     * Helper for sorting arrays of objects based on multiple fields +
-     * orientations.
+     * Helper for sorting arrays of objects based on multiple fields + orientations.
      *
-     * @param string $name
-     * @param int $orientation
-     * @param Closure $next
-     * @return Closure
+     * @param string   $name
+     * @param int      $orientation
+     * @param \Closure $next
+     *
+     * @return \Closure
      */
-    static public function sortByField($name, $orientation = 1, \Closure $next = null)
+    public static function sortByField($name, $orientation = 1, \Closure $next = null)
     {
         if (!$next) {
             $next = function() {
@@ -132,6 +147,11 @@ class ClosureExpressionVisitor extends ExpressionVisitor
                     return ! in_array(ClosureExpressionVisitor::getObjectFieldValue($object, $field), $value);
                 };
 
+            case Comparison::CONTAINS:
+                return function ($object) use ($field, $value) {
+                    return false !== strpos(ClosureExpressionVisitor::getObjectFieldValue($object, $field), $value);
+                };
+
             default:
                 throw new \RuntimeException("Unknown comparison operator: " . $comparison->getOperator());
         }
@@ -168,6 +188,11 @@ class ClosureExpressionVisitor extends ExpressionVisitor
         }
     }
 
+    /**
+     * @param array $expressions
+     *
+     * @return callable
+     */
     private function andExpressions($expressions)
     {
         return function ($object) use ($expressions) {
@@ -180,6 +205,11 @@ class ClosureExpressionVisitor extends ExpressionVisitor
         };
     }
 
+    /**
+     * @param array $expressions
+     *
+     * @return callable
+     */
     private function orExpressions($expressions)
     {
         return function ($object) use ($expressions) {
@@ -192,4 +222,3 @@ class ClosureExpressionVisitor extends ExpressionVisitor
         };
     }
 }
-

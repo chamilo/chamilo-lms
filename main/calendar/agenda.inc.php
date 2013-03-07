@@ -2304,7 +2304,7 @@ function show_add_form($id = '')
         $agendaItem = $agendaObj->get_event($id);
 
         $title = $agendaItem['title'];
-        $content = $agendaItem['text'];
+        $content = $agendaItem['description'];
 
         // start date
         if ($agendaItem['start_date'] != '0000-00-00 00:00:00') {

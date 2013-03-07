@@ -260,8 +260,17 @@ $(document).ready(function() {
                     $('#end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear());
                 }
 
-                $("#title").attr('value', calEvent.title);
-                $("#content").attr('value', calEvent.description);
+                /*$("#title").attr('value', calEvent.title);
+                $("#content").attr('value', calEvent.description);*/
+
+                $("#title_edit").html(calEvent.title);
+                $("#content_edit").html(calEvent.description);
+
+                $("#title_edit").show();
+                $("#content_edit").show();
+
+                $("#title").hide();
+                $("#content").hide();
 
 				allFields.removeClass( "ui-state-error" );
 
@@ -332,8 +341,17 @@ $(document).ready(function() {
 						}
 					},
 					close: function() {
-						$("#title").attr('value', '');
-						$("#content").attr('value', '');
+                        $("#title_edit").hide();
+                        $("#content_edit").hide();
+
+                        $("#title").show();
+                        $("#content").show();
+
+						$("#title_edit").html('');
+						$("#content_edit").html('');
+
+                        $("#title").attr('value', '');
+                        $("#content").attr('value', '');
 					}
 				});
 			} else {
@@ -459,6 +477,7 @@ $(document).ready(function() {
 			<label class="control-label" for="title">{{ "Title"|get_lang }}</label>
 			<div class="controls">
 				<input type="text" name="title" id="title" size="40" />
+                <span id="title_edit"></span>
 			</div>
 		</div>
 
@@ -466,6 +485,7 @@ $(document).ready(function() {
 			<label class="control-label" for="content">{{ "Description"|get_lang }}</label>
 			<div class="controls">
 				<textarea name="content" id="content" class="span3" rows="5"></textarea>
+                <span id="content_edit"></span>
 			</div>
 		</div>
 

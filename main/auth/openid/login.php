@@ -375,7 +375,7 @@ function openid_http_request($url, $headers = array(), $method = 'GET', $data = 
         // We don't add the port to prevent from breaking rewrite rules checking the
         // host that do not take into account the port number.
         'Host' => "Host: $host",
-        'User-Agent' => 'User-Agent: Dokeos (+http://dokeos.com/)',
+        'User-Agent' => 'User-Agent: Chamilo (+http://www.chamilo.org/)',
         'Content-Length' => 'Content-Length: ' . strlen($data)
     );
 

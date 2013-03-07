@@ -1680,9 +1680,14 @@ function store_edited_agenda_item($event_id, $id_attach, $file_comment)
         if (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $event_id)) {
             return false;
         }
+
+        if (!api_is_allowed_to_edit(null, true)) {
+            return false;
+        }
     }
 
     $all_day = isset($_REQUEST['all_day']) && !empty($_REQUEST['all_day']) ? 1 : 0;
+
     $agendaObj->edit_event($id, $start_date, $end_date, $all_day, null, $title, $content);
 
 
@@ -2315,14 +2320,21 @@ function show_add_form($id = '')
         }
 
         // end date
-        if ($agendaItem['end_date'] != '0000-00-00 00:00:00') {
+        if (!empty($agendaItem['end_date']) && $agendaItem['end_date'] != '0000-00-00 00:00:00') {
+
             $agendaItem['end_date'] = api_get_local_time($agendaItem['end_date']);
             list($datepart, $timepart) = explode(" ", $agendaItem['end_date']);
             list($end_year, $end_month, $end_day) = explode("-", $datepart);
-
             list($end_hours, $end_minutes, $end_seconds) = explode(":", $timepart);
-        } elseif ($agendaItem['end_date'] == '0000-00-00 00:00:00') {
-            $default_no_empty_end_date = 1;
+        } else {
+            if ($agendaItem['all_day']) {
+                $end_year = $year;
+                $end_month = $month;
+                $end_day = $day;
+                $end_hours = $hours;
+                $end_minutes = $minutes;
+                $end_seconds = $seconds;
+            }
         }
         // attachments
         //edit_added_resources("Agenda", $id);
@@ -4213,7 +4225,7 @@ function show_add_form($id = '')
                 if ($result) {
                     $sql = "UPDATE $agenda_table_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', agenda_id = '$safe_agenda_id', size ='".intval($_FILES['user_upload']['size'])."'
 						   WHERE id = '$safe_id_attach'";
-                    $result = Database::query($sql);
+                    Database::query($sql);
                     api_item_property_update($_course, 'calendar_event_attachment', $safe_id_attach, 'AgendaAttachmentUpdated', api_get_user_id());
                 }
             }

@@ -382,7 +382,7 @@ class Agenda
                     $event = Database::fetch_array($result, 'ASSOC');
                     $event['description'] = $event['text'];
                     $event['start_date'] = $event['date'];
-                    $event['end_date'] = $event['endate'];
+                    $event['end_date'] = $event['enddate'];
                 }
                 break;
             case 'course':

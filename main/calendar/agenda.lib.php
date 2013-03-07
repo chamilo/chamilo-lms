@@ -180,6 +180,10 @@ class Agenda
 
         switch ($this->type) {
             case 'personal':
+                $eventInfo = $this->get_event($id);
+                if ($eventInfo['user'] != api_get_user_id()) {
+                    break;
+                }
                 $attributes['title'] = $title;
                 $attributes['text'] = $content;
                 $attributes['date'] = $start;
@@ -361,7 +365,9 @@ class Agenda
 
     /**
      * Gets a single event
+     *
      * @param int event id
+     * @return array
      */
     function get_event($id)
     {
@@ -375,6 +381,8 @@ class Agenda
                 if (Database::num_rows($result)) {
                     $event = Database::fetch_array($result, 'ASSOC');
                     $event['description'] = $event['text'];
+                    $event['start_date'] = $event['date'];
+                    $event['end_date'] = $event['endate'];
                 }
                 break;
             case 'course':

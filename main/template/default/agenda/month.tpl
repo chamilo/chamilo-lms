@@ -284,6 +284,8 @@ $(document).ready(function() {
                             url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
                             window.location.href = url;
 						},
+
+                        {% if type == 'not_available' %}
 						'{{ "Edit"|get_lang }}' : function() {
 
 							var bValid = true;
@@ -307,14 +309,14 @@ $(document).ready(function() {
 								}
 							});
 						},
+                        {% endif %}
 
-                        {% if type == 'course' %}
-                        '{{ "AdvancedEdit"|get_lang }}' : function() {
+                        '{{ "Edit"|get_lang }}' : function() {
                             url =  "agenda.php?action=edit&type=fromjs&id=" + calEvent.id+'&course_id='+calEvent.course_id+"";
                             window.location.href = url;
                             $("#dialog-form").dialog( "close" );
                         },
-                        {% endif %}
+
 						'{{ "Delete"|get_lang }}': function() {
 							$.ajax({
 								url: delete_url,

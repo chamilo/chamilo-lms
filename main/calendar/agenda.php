@@ -17,7 +17,11 @@ $use_anonymous = true;
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_CALENDAR_EVENT;
 
-api_protect_course_script(true);
+$course_info = api_get_course_info();
+
+if (!empty($course_info)) {
+    api_protect_course_script(true);
+}
 
 //session
 if (isset($_GET['id_session'])) {
@@ -42,9 +46,23 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 if (!empty($addresources)) {
     // When the "Add Resource" button is clicked we store all the form data into a session
-    $form_elements = array('day' => Security::remove_XSS($_POST['fday']), 'month' => Security::remove_XSS($_POST['fmonth']), 'year' => Security::remove_XSS($_POST['fyear']), 'hour' => Security::remove_XSS($_POST['fhour']), 'minutes' => Security::remove_XSS($_POST['fminute']),
-        'end_day' => Security::remove_XSS($_POST['end_fday']), 'end_month' => Security::remove_XSS($_POST['end_fmonth']), 'end_year' => Security::remove_XSS($_POST['end_fyear']), 'end_hours' => Security::remove_XSS($_POST['end_fhour']), 'end_minutes' => Security::remove_XSS($_POST['end_fminute']),
-        'title' => Security::remove_XSS(stripslashes($_POST['title'])), 'content' => Security::remove_XSS(stripslashes($_POST['content'])), 'id' => Security::remove_XSS($_POST['id']), 'action' => Security::remove_XSS($_POST['action']), 'to' => Security::remove_XSS($_POST['selectedform']));
+    $form_elements = array(
+        'day' => Security::remove_XSS($_POST['fday']),
+        'month' => Security::remove_XSS($_POST['fmonth']),
+        'year' => Security::remove_XSS($_POST['fyear']),
+        'hour' => Security::remove_XSS($_POST['fhour']),
+        'minutes' => Security::remove_XSS($_POST['fminute']),
+        'end_day' => Security::remove_XSS($_POST['end_fday']),
+        'end_month' => Security::remove_XSS($_POST['end_fmonth']),
+        'end_year' => Security::remove_XSS($_POST['end_fyear']),
+        'end_hours' => Security::remove_XSS($_POST['end_fhour']),
+        'end_minutes' => Security::remove_XSS($_POST['end_fminute']),
+        'title' => Security::remove_XSS(stripslashes($_POST['title'])),
+        'content' => Security::remove_XSS(stripslashes($_POST['content'])),
+        'id' => Security::remove_XSS($_POST['id']),
+        'action' => Security::remove_XSS($_POST['action']),
+        'to' => Security::remove_XSS($_POST['selectedform'])
+    );
     $_SESSION['formelements'] = $form_elements;
     // this is to correctly handle edits
     if ($id) {
@@ -187,12 +205,16 @@ if (api_is_allowed_to_edit(false, true) OR
 
 echo '</div>';
 
-$event_id = isset($_GET['id']) ? $_GET['id'] : null;
-
+$event_id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = isset($_GET['type']) ? $_GET['type'] : null;
+
 if ($type == 'fromjs') {
     $id_list = explode('_', $event_id);
     $event_id = $id_list[1];
+}
+
+if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+    api_not_allowed();
 }
 
 $course_info = api_get_course_info();
@@ -262,14 +284,12 @@ if (api_is_allowed_to_edit(false, true) OR
             }
             break;
         case 'edit':
-            if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $event_id))) {
-                // a coach can only delete an element belonging to his session
-                if ($_POST['submit_event']) {
-                    store_edited_agenda_item($_REQUEST['id_attach'], $_REQUEST['file_comment']);
-                    $action = 'view';
-                } else {
-                    show_add_form($event_id);
-                }
+            // a coach can only delete an element belonging to his session
+            if ($_POST['submit_event']) {
+                store_edited_agenda_item($event_id, $_REQUEST['id_attach'], $_REQUEST['file_comment']);
+                $action = 'view';
+            } else {
+                show_add_form($event_id);
             }
             break;
         case "delete":

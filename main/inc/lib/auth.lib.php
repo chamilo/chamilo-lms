@@ -500,7 +500,11 @@ class Auth {
             $sql = "SELECT * FROM $tbl_course WHERE id IN($id_in)";
         } else {
             $category_code = Database::escape_string($category_code);
-            $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";
+            if (empty($category_code)) {
+                $sql = "SELECT * FROM $tbl_course WHERE 1=1 $without_special_courses ORDER BY title ";
+            } else {
+                $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";
+            }
 
             //showing only the courses of the current Chamilo access_url_id
             if ($_configuration['multiple_access_urls']) {

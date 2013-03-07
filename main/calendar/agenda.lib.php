@@ -112,13 +112,15 @@ class Agenda
                 }
                 break;
             case 'admin':
-                $attributes['title'] = $title;
-                $attributes['content'] = $content;
-                $attributes['start_date'] = $start;
-                $attributes['end_date'] = $end;
-                $attributes['all_day'] = $all_day;
-                $attributes['access_url_id'] = api_get_current_access_url_id();
-                $id = Database::insert($this->tbl_global_agenda, $attributes);
+                if (api_is_platform_admin()) {
+                    $attributes['title'] = $title;
+                    $attributes['content'] = $content;
+                    $attributes['start_date'] = $start;
+                    $attributes['end_date'] = $end;
+                    $attributes['all_day'] = $all_day;
+                    $attributes['access_url_id'] = api_get_current_access_url_id();
+                    $id = Database::insert($this->tbl_global_agenda, $attributes);
+                }
                 break;
         }
         return $id;
@@ -192,22 +194,23 @@ class Agenda
                 break;
             case 'course':
                 $course_id = api_get_course_int_id();
-                $attributes['title'] = $title;
-                $attributes['content'] = $content;
-                $attributes['start_date'] = $start;
-                $attributes['end_date'] = $end;
-                $attributes['all_day'] = $all_day;
-
-                if (!empty($course_id)) {
+                if (!empty($course_id) && api_is_allowed_to_edit(null, true)) {
+                    $attributes['title'] = $title;
+                    $attributes['content'] = $content;
+                    $attributes['start_date'] = $start;
+                    $attributes['end_date'] = $end;
+                    $attributes['all_day'] = $all_day;
                     Database::update($this->tbl_course_agenda, $attributes, array('id = ? AND c_id = ?' => array($id, $course_id)));
                 }
                 break;
             case 'admin':
-                $attributes['title'] = $title;
-                $attributes['content'] = $content;
-                $attributes['start_date'] = $start;
-                $attributes['end_date'] = $end;
-                Database::update($this->tbl_global_agenda, $attributes, array('id = ?' => $id));
+                if (api_is_platform_admin()) {
+                    $attributes['title'] = $title;
+                    $attributes['content'] = $content;
+                    $attributes['start_date'] = $start;
+                    $attributes['end_date'] = $end;
+                    Database::update($this->tbl_global_agenda, $attributes, array('id = ?' => $id));
+                }
                 break;
         }
     }
@@ -216,16 +219,21 @@ class Agenda
     {
         switch ($this->type) {
             case 'personal':
-                Database::delete($this->tbl_personal_agenda, array('id = ?' => $id));
+                $eventInfo = $this->get_event($id);
+                if ($eventInfo['user'] == api_get_user_id()) {
+                    Database::delete($this->tbl_personal_agenda, array('id = ?' => $id));
+                }
                 break;
             case 'course':
                 $course_id = api_get_course_int_id();
-                if (!empty($course_id)) {
+                if (!empty($course_id) && api_is_allowed_to_edit(null, true)) {
                     Database::delete($this->tbl_course_agenda, array('id = ? AND c_id = ?' => array($id, $course_id)));
                 }
                 break;
             case 'admin':
-                Database::delete($this->tbl_global_agenda, array('id = ?' => $id));
+                if (api_is_platform_admin()) {
+                    Database::delete($this->tbl_global_agenda, array('id = ?' => $id));
+                }
                 break;
         }
     }

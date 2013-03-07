@@ -1556,7 +1556,11 @@ function change_visibility($tool, $id, $visibility)
 function display_courseadmin_links($filter = 0)
 {
     if (!api_get_course_int_id()) {
-        return "<a href='agenda_js.php?type=personal'>".Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
+        $type = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : 'personal';
+        if ($type == 'platform') {
+            $type = 'admin';
+        }
+        return "<a href='agenda_js.php?type=$type'>".Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     }
     $form = null;
     if (!isset($_GET['action'])) {
@@ -1689,7 +1693,6 @@ function store_edited_agenda_item($event_id, $id_attach, $file_comment)
     $all_day = isset($_REQUEST['all_day']) && !empty($_REQUEST['all_day']) ? 1 : 0;
 
     $agendaObj->edit_event($id, $start_date, $end_date, $all_day, null, $title, $content);
-
 
     if (empty($id_attach)) {
         add_agenda_attachment_file($file_comment, $id);
@@ -2230,7 +2233,7 @@ function display_one_agenda_item($agenda_id)
  * @param integer id, the id of the agenda item we are editing. By default this is empty which means that we are adding an
  * 		 agenda item.
  */
-function show_add_form($id = '')
+function show_add_form($id = '', $type = null)
 {
     global $MonthsLong;
     $htmlHeadXtra[] = to_javascript();
@@ -2298,13 +2301,16 @@ function show_add_form($id = '')
     // if the id is set then we are editing an agenda item
     if (!empty($id)) {
         $course_info = api_get_course_info();
-
         $agendaObj = new Agenda();
         if (!empty($course_info)) {
             $agendaObj->set_course($course_info);
             $agendaObj->type = 'course';
         } else {
-            $agendaObj->type = 'personal';
+            if (api_is_platform_admin() && $type == 'platform') {
+                $agendaObj->type = 'admin';
+            } else {
+                $agendaObj->type = 'personal';
+            }
         }
         $agendaItem = $agendaObj->get_event($id);
 
@@ -2356,7 +2362,7 @@ function show_add_form($id = '')
 
     <!-- START OF THE FORM  -->
 
-    <form class="form-horizontal" enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$origin.'&'.$course_url."&sort=asc&toolgroup=".api_get_group_id().'&action='.Security::remove_XSS($_GET['action']); ?>" method="post" name="new_calendar_item">
+    <form class="form-horizontal" enctype="multipart/form-data"  action="<?php echo api_get_self().'?type='.Security::remove_XSS($type).'&origin='.$origin.'&'.$course_url."&sort=asc&toolgroup=".api_get_group_id().'&action='.Security::remove_XSS($_GET['action']); ?>" method="post" name="new_calendar_item">
         <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
         <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
         <input type="hidden" name="id_attach" value="<?php echo isset($_REQUEST['id_attach']) ? intval($_REQUEST['id_attach']) : null; ?>" />
@@ -2723,7 +2729,7 @@ function show_add_form($id = '')
                         echo '</div>
 			</div>';
 
-            if ($agendaObj->type != 'personal') {
+            if ($agendaObj->type == 'course') {
                         // File attachment
                         echo '	<div class="control-group">
 				<label class="control-label">

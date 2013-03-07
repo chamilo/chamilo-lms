@@ -206,14 +206,15 @@ if (api_is_allowed_to_edit(false, true) OR
 echo '</div>';
 
 $event_id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-$type = isset($_GET['type']) ? $_GET['type'] : null;
+$type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
 
 if ($type == 'fromjs') {
     $id_list = explode('_', $event_id);
     $event_id = $id_list[1];
+    $event_type = $id_list[0];
 }
 
-if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
+if (!api_is_allowed_to_edit(null, true) && $event_type == 'course') {
     api_not_allowed();
 }
 
@@ -289,7 +290,7 @@ if (api_is_allowed_to_edit(false, true) OR
                 store_edited_agenda_item($event_id, $_REQUEST['id_attach'], $_REQUEST['file_comment']);
                 $action = 'view';
             } else {
-                show_add_form($event_id);
+                show_add_form($event_id, $event_type);
             }
             break;
         case "delete":

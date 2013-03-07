@@ -492,6 +492,14 @@ class Template
      */
     private function set_header_parameters() {
         global $interbreadcrumb;
+
+        if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
+            if (empty($interbreadcrumb)) {
+                $interbreadcrumb = $this->app['breadcrumb'];
+            } else {
+                $interbreadcrumb = array_merge($interbreadcrumb, $this->app['breadcrumb']);
+            }
+        }
         $_course = api_get_course_info();
         $_configuration = $this->app['configuration'];
         $this_section = $this->app['this_section'];
@@ -1277,8 +1285,6 @@ class Template
         );
         return $return;
     }
-
-
 
     function return_breadcrumb($interbreadcrumb)
     {

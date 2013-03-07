@@ -236,6 +236,8 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
 // Classic way or Controllers ways
 $app['classic_layout'] = false;
 
+$app['breadcrumb'] = array();
+
 //Form provider
 $app->register(new Silex\Provider\FormServiceProvider());
 /*
@@ -832,8 +834,7 @@ $app->get('/userportal', 'userportal.controller:indexAction');
 $app->get('/logout', 'index.controller:logoutAction');
 
 //LP controller
-$app->get('/learnpath/subscribe_users/{id}', 'learnpath.controller:indexAction')->bind('subscribe_users');
-$app->post('/learnpath/subscribe_users/{id}', 'learnpath.controller:indexAction')->bind('subscribe_users');
+$app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')->bind('subscribe_users');
 
 //$app->mount('/', 'index.controller');
 return $app;

@@ -116,8 +116,7 @@ class learnpath
                 $this->course_info = $course_info;
                 $course_id = $course_info['real_id'];
             } else {
-                $this->error = 'Course code does not exist in database ('.$sql.')';
-
+                $this->error = 'Course code does not exist in database';
                 return false;
             }
         }
@@ -2339,20 +2338,23 @@ class learnpath
         $lp_id = (int)$lp_id;
         $course_info = api_get_course_info($course_code);
         $tbl_learnpath = Database :: get_course_table(TABLE_LP_MAIN);
+
         // Get current prerequisite
-        $sql = "SELECT id, prerequisite, publicated_on, expired_on FROM $tbl_learnpath WHERE c_id = ".$course_info['real_id']." AND id = $lp_id";
+        $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on
+                FROM $tbl_learnpath WHERE c_id = ".$course_info['real_id']." AND id = $lp_id";
         $rs = Database::query($sql);
         $now = time();
+        $session_id = api_get_session_id();
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs, 'ASSOC');
             $prerequisite = $row['prerequisite'];
+
             $is_visible = true;
             $progress = 0;
 
             //Checking LP prerequisites
             if (!empty($prerequisite)) {
-                $progress = self::get_db_progress($prerequisite, $student_id, '%', '', false, api_get_session_id());
-                $progress = intval($progress);
+                $progress = intval(self::get_db_progress($prerequisite, $student_id, '%', '', false, $session_id));
                 if ($progress < 100) {
                     $is_visible = false;
                 }
@@ -2383,6 +2385,13 @@ class learnpath
                         //api_not_allowed();
                         $is_visible = false;
                     }
+                }
+            }
+
+            if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 ) {
+                $visibility = api_get_item_visibility($course_info, 'learnpath', $row['id'], $session_id, $student_id, 'LearnpathSubscription');
+                if ($visibility == -1) {
+                    return false;
                 }
             }
 

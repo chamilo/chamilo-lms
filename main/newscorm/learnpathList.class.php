@@ -30,7 +30,7 @@ class learnpathList {
      * @param	int			Optional session id (otherwise we use api_get_session_id())
      * @return	void
      */
-    function __construct($user_id, $course_code = '', $session_id = null, $order_by = null, $check_publication_dates = false, $filter_by_category = null) {
+    function __construct($user_id, $course_code = null, $session_id = null, $order_by = null, $check_publication_dates = false, $filter_by_category = null) {
         $course_info = api_get_course_info($course_code);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -85,7 +85,7 @@ class learnpathList {
             // is done using domesticate()
             $myname = domesticate($row['name']);
             $mylink = 'newscorm/lp_controller.php?action=view&lp_id='.$row['id'].'&id_session='.$session_id;
-            $sql2="SELECT * FROM $tbl_tool WHERE c_id = $course_id AND (name='$myname' and image='scormbuilder.gif' and link LIKE '$mylink%')";
+            $sql2 = "SELECT * FROM $tbl_tool WHERE c_id = $course_id AND (name='$myname' and image='scormbuilder.gif' and link LIKE '$mylink%')";
             //error_log('New LP - learnpathList::__construct - getting visibility - '.$sql2, 0);
             $res2 = Database::query($sql2);
             if (Database::num_rows($res2) > 0) {
@@ -94,7 +94,8 @@ class learnpathList {
             } else {
                 $pub = 'i';
             }
-            // Check if visible.
+
+            // Check if visible
             $vis = api_get_item_visibility(api_get_course_info($course_code), 'learnpath', $row['id'], $session_id);
 
             if (!empty($row['created_on']) && $row['created_on'] != '0000-00-00 00:00:00') {
@@ -135,7 +136,7 @@ class learnpathList {
                 'lp_visibility'     => $vis,
                 'lp_published'	    => $pub,
                 'lp_prevent_reinit' => $row['prevent_reinit'],
-                'seriousgame_mode' => $row['seriousgame_mode'],
+                'seriousgame_mode'  => $row['seriousgame_mode'],
                 'lp_scorm_debug'    => $row['debug'],
                 'lp_display_order'  => $row['display_order'],
                 'lp_preview_image'  => stripslashes($row['preview_image']),

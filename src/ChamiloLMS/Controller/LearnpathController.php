@@ -6,19 +6,36 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LearnpathController {
 
-    function indexAction(Application $app, $id) {
+    /**
+     * Index
+     *
+     * @param \Silex\Application $app
+     * @param int $lpId
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function indexAction(Application $app, $lpId)
+    {
         $request = $app['request'];
+        $courseCode = api_get_course_id();
+        $lp = new \learnpath($courseCode, $lpId, api_get_user_id());
+
+        $breadcrumb = array(
+            array('url' => api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?action=list', 'name' => get_lang('LearningPaths')),
+            array('url' => api_get_path(WEB_CODE_PATH)."newscorm/lp_controller.php?action=build&lp_id=".$lp->get_id(), 'name' => $lp->get_name()),
+            array('url' => '#', 'name' => get_lang('SubscribeUsers'))
+        );
+
+        $app['breadcrumb'] = $breadcrumb;
 
         $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
 
-        $lpId  = $id;
-
-        if (empty($lpId)) {
-            var_dump($lpId);
-            //return $app->redirect('lp_controller.php');
+        if (empty($courseId)) {
+            $app->abort(403, 'course_not_available');
         }
 
-        $course = $app['orm.em']->getRepository('Entity\EntityCourse')->find(api_get_course_int_id());
+        $course = $app['orm.em']->getRepository('Entity\EntityCourse')->find($courseId);
 
         $subscribedUsers = $app['orm.em']->getRepository('Entity\EntityCourse')->getSubscribedStudents($course);
 
@@ -76,7 +93,7 @@ class LearnpathController {
             $data = $request->get('form');
             $destination = isset($data['destination']) ? $data['destination'] : array();
             $app['orm.em']->getRepository('Entity\EntityCItemProperty')->SubscribedUsersToItem('learnpath', $course, $sessionId, $lpId, $destination);
-            return $app->redirect($app['url_generator']->generate('subscribe_users', array('lp_id' => $lpId)));
+            return $app->redirect($app['url_generator']->generate('subscribe_users', array ('lpId' => $lpId)));
         } else {
             $app['template']->assign('form', $form->createView());
         }

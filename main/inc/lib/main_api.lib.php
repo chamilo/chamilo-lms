@@ -3158,18 +3158,29 @@ function api_get_datetime($time = null) {
  * @param int       The session ID (optional)
  * @return int      -1 on error, 0 if invisible, 1 if visible
  */
-function api_get_item_visibility($_course, $tool, $id, $session=0) {
+function api_get_item_visibility($_course, $tool, $id, $session = 0, $user_id = null, $type = null) {
     if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) { return -1; }
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
     $session = (int) $session;
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id	 = $_course['real_id'];
+    $user_condition = null;
+    if (!empty($user_id)) {
+        $user_id = intval($user_id);
+        $user_condition = " AND to_user_id = $user_id ";
+    }
+    $type_condition = null;
+    if (!empty($type)) {
+        $type = Database::escape_string($type);
+        $type_condition = " AND lastedit_type = '$type' ";
+    }
+
     $sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY
     		WHERE 	c_id = $course_id AND
     				tool = '$tool' AND
     				ref = $id AND
-    				(id_session = $session OR id_session = 0)
+    				(id_session = $session OR id_session = 0) $user_condition $type_condition
     		ORDER BY id_session DESC, lastedit_date DESC";
     $res = Database::query($sql);
     if ($res === false || Database::num_rows($res) == 0) { return -1; }
@@ -3402,9 +3413,7 @@ function api_get_item_property_id($course_code, $tool, $ref) {
 }
 
 /**
- *
  * Inserts a record in the track_e_item_property table (No update)
- *
  */
 
 function api_track_item_property_update($tool, $ref, $title, $content, $progress) {

@@ -129,6 +129,9 @@ function get_lang($variable, $reserved = null, $language = null)
     $translated = $app['translator']->trans($variable);
     if ($translated == $variable) {
         $translated = $app['translator']->trans("lang$variable");
+        if ($translated == "lang$variable") {
+            return $variable;
+        }
     }
     return $translated;
 

@@ -230,9 +230,9 @@ foreach ($categories as $item) {
                 $my_title = Display::tag('font', $name, array('style' => 'color:grey'));
             }
 
-            $dsp_line = '<tr align="center" class="'.$oddclass.'">'.
-                '<td align="left" valign="top">'.Display::return_icon('learnpath.png', get_lang('LPName'), '', ICON_SIZE_SMALL).'
-                     <a href="'.$url_start_lp.'">'.$my_title.'</a>'.$session_img.$extra."</td>";
+            $dsp_line = '<tr align="center" class="'.$oddclass.'">
+                            <td align="left" valign="top">'.Display::return_icon('learnpath.png', get_lang('LPName'), '', ICON_SIZE_SMALL).'
+                            <a href="'.$url_start_lp.'">'.$my_title.'</a>'.$session_img.$extra."</td>";
 
             $dsp_desc = '';
             $dsp_export = '';
@@ -242,6 +242,13 @@ foreach ($categories as $item) {
             $dsp_default_view = '';
             $dsp_debug = '';
             $dsp_order = '';
+            $lp_auto_lunch_icon = '';
+            $copy = null;
+            $dsp_disk = null;
+            $dsp_reinit = null;
+            $subscribe_users = null;
+            $dsp_publish = null;
+            $dsp_edit_lp = null;
 
             $progress = learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id());
 
@@ -383,11 +390,10 @@ foreach ($categories as $item) {
                 //Subscribe users
                 $subscribe_users = null;
                 if ($details['subscribe_users'] == 1) {
-                    $subscribe_users = Display::url(Display::return_icon('add.png', get_lang('AddUsers')), api_get_path(WEB_PATH)."learnpath/subscribe_users/$id");
+                    $subscribe_users = Display::url(Display::return_icon('add.png', get_lang('AddUsers')), api_get_path(WEB_PUBLIC_PATH)."learnpath/subscribe_users/$id");
                 }
 
                 /* Auto Lunch LP code */
-                $lp_auto_lunch_icon = '';
                 if (api_get_course_setting('enable_lp_auto_launch') == 1) {
                     if ($details['autolaunch'] == 1 && $autolaunch_exists == false) {
                         $autolaunch_exists = true;

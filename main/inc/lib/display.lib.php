@@ -58,24 +58,27 @@ class Display
      */
     public static function display_reduced_header()
     {
+        global $app;
         $app['classic_layout'] = true;
         global $show_learnpath, $tool_name, $app;
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
         $app['template.show_learnpath'] = $show_learnpath;
-        self::$global_template          = new Template($tool_name);
-        echo self::$global_template->show_header_template();
+        self::display_header();
+
+        //self::$global_template          = new Template($tool_name);
+        //echo self::$global_template->show_header_template();
     }
 
     public static function display_no_header()
     {
-        $app['classic_layout'] = true;
+        global $app;
         global $tool_name, $app, $show_learnpath;
         $disable_js_and_css_files       = true;
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
         $app['template.show_learnpath'] = $show_learnpath;
-        self::$global_template          = new Template($tool_name);
+        self::display_header();
     }
 
     /**

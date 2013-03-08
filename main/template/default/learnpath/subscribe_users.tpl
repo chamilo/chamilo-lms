@@ -1,5 +1,6 @@
 {% extends "default/layout/layout_1_col.tpl" %}
 {% block content %}
+    <h2>{{ 'SubscribeUsersToLp' | get_lang }}</h2>
     <script>
         $().ready(function() {
             $('#add').click(function() {

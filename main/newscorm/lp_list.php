@@ -390,7 +390,7 @@ foreach ($categories as $item) {
                 //Subscribe users
                 $subscribe_users = null;
                 if ($details['subscribe_users'] == 1) {
-                    $subscribe_users = Display::url(Display::return_icon('add.png', get_lang('AddUsers')), api_get_path(WEB_PUBLIC_PATH)."learnpath/subscribe_users/$id");
+                    $subscribe_users = Display::url(Display::return_icon('user.png', get_lang('SubscribeUsersToLp')), api_get_path(WEB_PUBLIC_PATH)."learnpath/subscribe_users/$id");
                 }
 
                 /* Auto Lunch LP code */

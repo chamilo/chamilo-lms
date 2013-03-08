@@ -76,21 +76,7 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Plataform's css.
 $my_style = $platform_theme;
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(
-    WEB_LIBRARY_PATH
-).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
-/*
- * already added in lp_controller.php
-if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
-    $htmlHeadXtra[] = '<script type="text/javascript">
-<!--
-    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
--->
-</script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
-}*/
-
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
 	$("div#log_content_cleaner").bind("click", function() {
@@ -300,6 +286,7 @@ $lp_theme_css = $_SESSION['oLP']->get_theme(
 if ($_SESSION['oLP']->mode == 'fullscreen') {
     $htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
 }
+
 
 // Not in fullscreen mode.
 Display::display_reduced_header($nameTools);

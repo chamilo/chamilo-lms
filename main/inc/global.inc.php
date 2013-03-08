@@ -602,6 +602,7 @@ if (file_exists($mail_conf)) {
 
 $mail_settings = array();
 
+// Email service provider
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
     'swiftmailer.options' => array(
         'host' => isset($platform_email['SMTP_HOST']) ? $platform_email['SMTP_HOST'] : null,

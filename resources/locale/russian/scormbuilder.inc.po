@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Строитель Плана - строитель курса в формате Scorm"
-

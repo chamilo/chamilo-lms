@@ -1,6 +1,0 @@
-msgid "langMyAgenda"
-msgstr "Моята програма"
-
-msgid "langToday"
-msgstr "Днес"
-

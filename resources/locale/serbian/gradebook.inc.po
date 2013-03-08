@@ -1,3 +1,0 @@
-msgid "ModifyEvaluation"
-msgstr "Sačuvaj ocenjivanje"
-

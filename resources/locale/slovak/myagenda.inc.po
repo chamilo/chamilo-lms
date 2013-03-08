@@ -1,6 +1,0 @@
-msgid "langMyAgenda"
-msgstr "Moja agenda"
-
-msgid "langToday"
-msgstr "Dnes"
-

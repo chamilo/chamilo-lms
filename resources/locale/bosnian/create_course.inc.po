@@ -1,3 +1,0 @@
-msgid "langProfessors"
-msgstr "Predavači"
-

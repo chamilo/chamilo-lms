@@ -1,3 +1,0 @@
-msgid "Print"
-msgstr "Imprimir"
-

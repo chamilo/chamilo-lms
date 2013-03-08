@@ -1,6 +1,0 @@
-msgid "langMyAgenda"
-msgstr "تقویم شخصی"
-
-msgid "langToday"
-msgstr "&#1575;&#1605;&#1585;&#1608;&#1586;"
-

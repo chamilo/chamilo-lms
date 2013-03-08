@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Path byggare - Scorm format kursbyggare"
-

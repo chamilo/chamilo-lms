@@ -1,6 +1,0 @@
-msgid "langMyAgenda"
-msgstr "La mio axenda"
-
-msgid "langToday"
-msgstr "Güei"
-

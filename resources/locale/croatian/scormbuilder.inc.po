@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Path builder - Program za izradu kolegija formata Scorm"
-

@@ -1,9 +1,0 @@
-msgid "AgendaAdd"
-msgstr "הוסף פריט ללוח הזמנים"
-
-msgid "ShowAllEvents"
-msgstr "הראה את כל פריטי לוח הזמנים"
-
-msgid "ShowCurrent"
-msgstr "הצג פריטי לוח זמנים של חודש זה"
-

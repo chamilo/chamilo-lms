@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Outil auteur de cours au format Scorm"
-

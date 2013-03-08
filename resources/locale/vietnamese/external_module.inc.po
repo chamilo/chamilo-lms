@@ -1,3 +1,0 @@
-msgid "langTooBig"
-msgstr "Bạn không chọn tệp nào, hoặc là kích thước tệp quá lớn"
-

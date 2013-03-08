@@ -1,6 +1,0 @@
-msgid "WCAGGoMenu"
-msgstr "Pumunta sa menu"
-
-msgid "WCAGGoContent"
-msgstr "Pumunta sa nilalaman"
-

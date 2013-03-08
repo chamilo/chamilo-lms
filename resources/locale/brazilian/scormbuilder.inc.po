@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Construtor de rotas - Construtor de cursos no formato Scorm"
-

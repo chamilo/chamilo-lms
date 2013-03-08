@@ -1,6 +1,0 @@
-msgid "Language"
-msgstr "Ede"
-
-msgid "LoginName"
-msgstr "wole"
-

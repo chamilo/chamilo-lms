@@ -1,3 +1,0 @@
-msgid "Tools"
-msgstr "Ohun elo"
-

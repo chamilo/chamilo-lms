@@ -1,3 +1,0 @@
-msgid "langTooBig"
-msgstr "Anda tidak memilih sebarang fail atau saiz fail terlalu besar"
-

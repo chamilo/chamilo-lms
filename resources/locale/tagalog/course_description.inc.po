@@ -1,6 +1,0 @@
-msgid "QuestionPlan"
-msgstr "Tulong"
-
-msgid "langNewBloc"
-msgstr "Iba pa"
-

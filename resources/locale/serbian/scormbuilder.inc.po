@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Alat za kreiranje putanje učenja u Scorm formatu"
-

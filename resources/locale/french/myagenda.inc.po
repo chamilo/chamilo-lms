@@ -1,6 +1,0 @@
-msgid "langMyAgenda"
-msgstr "Agenda perso"
-
-msgid "langToday"
-msgstr "Aujourd\'hui"
-

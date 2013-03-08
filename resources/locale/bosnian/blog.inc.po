@@ -1,3 +1,0 @@
-msgid "MyTasks"
-msgstr "Moje teme"
-

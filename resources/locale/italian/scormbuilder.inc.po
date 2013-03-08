@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Crea moduli didattici in formato Scorm"
-

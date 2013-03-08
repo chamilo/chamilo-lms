@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "建立路径 - 建立Scorm格式课程"
-

@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Plāna veidotājs - <i>Scorm</i> formāta kursa veidotājs"
-

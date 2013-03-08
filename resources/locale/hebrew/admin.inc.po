@@ -1,3 +1,0 @@
-msgid "AdminBy"
-msgstr "מנוהל על ידי"
-

@@ -1,3 +1,0 @@
-msgid "langAdded"
-msgstr "リンク纳裁"
-

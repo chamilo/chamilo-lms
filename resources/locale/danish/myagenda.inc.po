@@ -1,6 +1,0 @@
-msgid "langMyAgenda"
-msgstr "Min kalender"
-
-msgid "langToday"
-msgstr "I dag"
-

@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Редактор на SCORM-пътеки за обучение"
-

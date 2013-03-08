@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "مولد المسار - مولد دروس بتنسيق سكورم"
-

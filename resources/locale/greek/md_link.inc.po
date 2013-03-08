@@ -1,3 +1,0 @@
-msgid "langCreate"
-msgstr "Δημιουργία"
-

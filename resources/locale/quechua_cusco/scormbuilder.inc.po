@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Yachanata ruwaq - Yachachinata ruwaq kay sutiyuqpi SCORM"
-

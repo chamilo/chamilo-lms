@@ -1,3 +1,0 @@
-msgid "langScormBuilder"
-msgstr "Vytváření učební osnovy - tvorba kurzu ve formátu Scorm"
-

@@ -328,7 +328,7 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS course_rel_user;
 CREATE TABLE IF NOT EXISTS course_rel_user (
   id int unsigned AUTO_INCREMENT,
-  c_id INT NOT NULL unsigned,
+  c_id INT unsigned NOT NULL,
   course_code varchar(40) NOT NULL,
   user_id int unsigned NOT NULL default '0',
   status tinyint NOT NULL default '5',
@@ -3084,4 +3084,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21477' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21537' WHERE variable = 'chamilo_database_version';

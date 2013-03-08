@@ -3603,8 +3603,8 @@ function create_course_tables($course_db_name = null)
         to_group_id int unsigned default NULL,
         to_user_id int unsigned default NULL,
         visibility tinyint NOT NULL default '1',
-        start_visible datetime NOT NULL default '0000-00-00 00:00:00',
-        end_visible datetime NOT NULL default '0000-00-00 00:00:00',
+        start_visible datetime default NULL,
+        end_visible datetime default NULL,
         id_session INT NOT NULL DEFAULT 0,
         PRIMARY KEY (c_id, id)
         )".$charset_clause

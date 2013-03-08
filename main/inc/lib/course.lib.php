@@ -2805,14 +2805,22 @@ class CourseManager {
         }
 
         //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-        $sql = "SELECT course.id, course.title, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
-                                        course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                                        FROM    $TABLECOURS      course,
-                                                $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
-                                        WHERE   course.code = course_rel_user.course_code AND url.course_code = course.code AND
-                                                course_rel_user.user_id = '".$user_id."' AND
-                                                course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
+       $sql = "SELECT course.id,
+                        course.title,
+                        course.code,
+                        course.subscribe subscr,
+                        course.unsubscribe unsubscr,
+                        course_rel_user.status status,
+                        course_rel_user.sort sort,
+                        course_rel_user.user_course_cat user_course_cat
+                FROM    $TABLECOURS      course,
+                        $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
+                WHERE   course.code = course_rel_user.course_code AND
+                        url.course_code = course.code AND
+                        course_rel_user.user_id = '".$user_id."' AND
+                        course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
         // If multiple URL access mode is enabled, only fetch courses
+
         // corresponding to the current URL.
         if (api_get_multiple_access_url() && $current_url_id != -1) {
             $sql .= " AND url.course_code=course.code AND access_url_id='".$current_url_id."'";

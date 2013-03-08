@@ -150,4 +150,4 @@ ALTER TABLE c_item_property MODIFY COLUMN end_visible datetime default NULL;
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21537' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21538' WHERE variable = 'chamilo_database_version';

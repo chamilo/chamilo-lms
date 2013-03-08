@@ -2,9 +2,11 @@
 
 /**
  * Send a redirect to the user agent and exist
- * 
- * @license see /license.txt
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
+ * @license see /license.txt
+ *
+ * @todo use $app->redirect
  */
 class Redirect {
 
@@ -29,7 +31,7 @@ class Redirect {
     }
 
     /**
-     * Redirect to the session "request uri" if it exists. 
+     * Redirect to the session "request uri" if it exists.
      * @param bool Whether the user just logged in (in this case, use page_after_login rules)
      */
     static function session_request_uri($logging_in = false, $user_id = null) {
@@ -47,7 +49,7 @@ class Redirect {
             self::navigate($url);
         } elseif ($logging_in || (isset($_REQUEST['sso_referer']) && !empty($_REQUEST['sso_referer']))) {
             if (isset($user_id)) {
-                // Make sure we use the appropriate role redirection in case one has been defined                
+                // Make sure we use the appropriate role redirection in case one has been defined
                 $user_status = api_get_user_status($user_id);
                 switch ($user_status) {
                     case COURSEMANAGER:
@@ -96,7 +98,7 @@ class Redirect {
     }
 
     protected static function navigate($url) {
-        session_write_close(); //should not be neeeded 
+        session_write_close(); //should not be neeeded
         header("Location: $url");
         exit;
     }

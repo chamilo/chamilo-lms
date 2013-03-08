@@ -784,8 +784,8 @@ class PageController
 
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
-            //Display special courses
 
+            //Display special courses
             $special_courses = CourseManager::display_special_courses($user_id, $load_directories_preview);
 
             //Display courses

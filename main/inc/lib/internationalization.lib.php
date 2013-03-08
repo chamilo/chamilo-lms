@@ -125,8 +125,7 @@ $_api_is_translated_call = false;
  */
 function get_lang($variable, $reserved = null, $language = null)
 {
-    /*
-     *
+    /**
      *  In order to use $app['translator']
     global $app;
     if ($app['debug']) {
@@ -231,7 +230,6 @@ function get_lang($variable, $reserved = null, $language = null)
 
     // Translation mode for production servers.
     if (!$test_server_mode) {
-
         if ($read_global_variables) {
             if (isset($GLOBALS[$variable])) {
                 $langvar = $GLOBALS[$variable];

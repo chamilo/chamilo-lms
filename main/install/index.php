@@ -74,7 +74,6 @@ if ($install_language != 'english') {
     include_once api_get_path(SYS_LANG_PATH).$install_language.'/admin.inc.php';
 }
 
-
 // These global variables must be set for proper working of the function get_lang(...) during the installation.
 $language_interface = $install_language;
 
@@ -308,6 +307,7 @@ if ($encryptPassForm == '1') {
 } elseif ($encryptPassForm == '0') {
     $encryptPassForm = 'none';
 }
+
 ?>
 <!DOCTYPE html>
 <head>

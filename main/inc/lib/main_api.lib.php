@@ -544,7 +544,9 @@ function api_get_path($path_type, $path = null) {
 
         //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
         if (empty($root_web)) {
-            $pos = strpos(($requested_page_rel = api_get_self()), 'index.php');
+
+            //$pos = strpos(($requested_page_rel = api_get_self()), 'index.php');
+            $pos = strpos(($requested_page_rel = api_get_self()), 'web/index');
             $pos_install = strpos(($requested_page_rel = api_get_self()), 'main/install');
 
             if ($pos_install) {
@@ -6712,6 +6714,8 @@ function api_get_language_interface() {
     $valid_languages = api_get_languages();
     $user_language = api_get_user_language();
     $_course = api_get_course_info();
+
+    $language_interface = 'english';
 
     if (!empty($valid_languages)) {
 

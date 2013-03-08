@@ -440,7 +440,7 @@ $app->error(function (\LogicException $e, $code) {
 /*use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 ErrorHandler::register();*/
 
-if ($app['debug']) {
+if ($app['debug'] && isset($_configuration['main_database'])) {
     $logger = new Doctrine\DBAL\Logging\DebugStack();
     $app['db.config']->setSQLLogger($logger);
 
@@ -473,6 +473,7 @@ require_once $lib_path.'online.inc.php';
 /*  DATABASE CONNECTION  */
 
 global $database_connection;
+
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
     array(
@@ -618,7 +619,7 @@ $app['mailer'] = $app->share(function ($app) {
 });
 
 // Check and modify the date of user in the track.e.online table
-if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
+if ($already_installed && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
@@ -633,13 +634,17 @@ $user_language = api_get_user_language();
 $app['this_script'] = isset($this_script) ? $this_script : null;
 
 // Checking if we have a valid language. If not we set it to the platform language.
-$app['language_interface'] = $language_interface = api_get_language_interface();
+if ($already_installed) {
+    $app['language_interface'] = $language_interface = api_get_language_interface();
+} else {
+    $app['language_interface'] = $language_interface = 'english';
+}
 
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.
 // We need to save the genuine value of this variable and
 // to use it within the function get_lang(...).
-//$language_interface_initial_value = $language_interface;
+$language_interface_initial_value = $language_interface;
 
 //load_translations($app);
 
@@ -829,7 +834,10 @@ if (api_get_setting('server_type') == 'test') {
 $app->before(
     function () use ($app) {
         if (!file_exists($app['configuration_file'])) {
+
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
+
+            $app->abort(500, "Incorrect PHP version");
         }
 
         //Check the PHP version

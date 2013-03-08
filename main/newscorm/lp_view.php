@@ -289,6 +289,7 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 
 
 // Not in fullscreen mode.
+
 Display::display_reduced_header($nameTools);
 
 // Check if audio recorder needs to be in studentview.
@@ -372,6 +373,7 @@ if ($is_allowed_to_edit) {
     echo '<a class="link no-border" href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq(
     ).'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
 }
+
 echo get_lang('CourseHomepageLink').'
                         </a>
                     </td>
@@ -540,3 +542,4 @@ $_setting['show_navigation_menu'] = $save_setting;
 if ($debug) {
     error_log(' ------- end lp_view.php ------');
 }
+Display::display_footer();

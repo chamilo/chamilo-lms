@@ -60,11 +60,12 @@ class Display
     {
         global $app;
         $app['classic_layout'] = true;
-        global $show_learnpath, $tool_name, $app;
+        global $show_learnpath, $tool_name;
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
         $app['template.show_learnpath'] = $show_learnpath;
         self::display_header();
+
 
         //self::$global_template          = new Template($tool_name);
         //echo self::$global_template->show_header_template();
@@ -73,7 +74,7 @@ class Display
     public static function display_no_header()
     {
         global $app;
-        global $tool_name, $app, $show_learnpath;
+        global $tool_name, $show_learnpath;
         $disable_js_and_css_files       = true;
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
@@ -86,7 +87,7 @@ class Display
      */
     public static function set_header()
     {
-        global $tool_name, $show_learnpath, $app;
+        global $app, $tool_name, $show_learnpath;
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
         $app['template.show_learnpath'] = $show_learnpath;

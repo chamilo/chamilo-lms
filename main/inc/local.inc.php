@@ -23,7 +23,6 @@
  *    @package chamilo.include
 */
 
-//require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'; moved to autologin
 // verified if exists the username and password in session current
 
 use \ChamiloSession as Session;

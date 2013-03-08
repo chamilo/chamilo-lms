@@ -10,6 +10,14 @@ class UserPortalController
 
     function indexAction(Application $app)
     {
+        //@todo use filters like after/before to manage user access
+        api_block_anonymous_users();
+
+        //User is not allowed
+        if ($app['allowed'] == false) {
+            return $app->abort(403);
+        }
+
         // Check if a user is enrolled only in one course for going directly to the course after the login.
         if (api_get_setting('go_to_course_after_login') == 'true') {
 

@@ -204,8 +204,8 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-/*
-Implements symfony2 translator
+
+// Implements symfony2 translator
 
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'en',
@@ -213,7 +213,7 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 ));
 
 //Handling po files
-
+/*
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Dumper\PoFileDumper;
 
@@ -978,5 +978,4 @@ $app->get('/logout', 'index.controller:logoutAction');
 //LP controller
 $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')->bind('subscribe_users');
 
-//$app->mount('/', 'index.controller');
 return $app;

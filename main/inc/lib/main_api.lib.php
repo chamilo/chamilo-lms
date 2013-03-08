@@ -2958,11 +2958,12 @@ function api_not_allowed($print_headers = false, $message = null) {
 
         $app['template']->assign('content', $content);
         $app['allowed'] = false;
+
         return false;
         //$app->abort(403);
     }
 
-    if ($user_id !=0 && !api_is_anonymous()) {
+    if ($user_id != 0 && !api_is_anonymous()) {
         $app['allowed'] = false;
         return false;
     }
@@ -3053,6 +3054,7 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0, $user_id = 
 }
 
 /**
+ *
  * Updates or adds item properties to the Item_propetry table
  * Tool and lastedit_type are language independant strings (langvars->get_lang!)
  *
@@ -3069,6 +3071,7 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0, $user_id = 
  * @return boolean False if update fails.
  * @author Toon Van Hoecke <Toon.VanHoecke@UGent.be>, Ghent University
  * @version January 2005
+ *
  * @desc update the item_properties table (if entry not exists, insert) of the course
  */
 function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = 0, $start_visible = 0, $end_visible = 0, $session_id = 0) {
@@ -3080,8 +3083,10 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     $user_id        = Database::escape_string($user_id);
     $to_group_id    = Database::escape_string($to_group_id);
     $to_user_id     = Database::escape_string($to_user_id);
-    $start_visible  = $start_visible == 0 ? '0000-00-00 00:00:00' : Database::escape_string($start_visible);
-    $end_visible    = $end_visible == 0 ? '0000-00-00 00:00:00' : Database::escape_string($end_visible);
+
+    $start_visible  = $start_visible == 0 ? null : Database::escape_string($start_visible);
+    $end_visible    = $end_visible == 0 ? null : Database::escape_string($end_visible);
+
     $to_filter      = '';
     $time           = api_get_utc_datetime();
 

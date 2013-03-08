@@ -29,27 +29,31 @@ $stok = Security::get_token();
     });
 </script>
 
-<?php if (intval($_GET['hidden_links']) != 1) { ?>
-
-<div class="actions">
-    <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
-        <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-        <input type="hidden" name="search_course" value="1" />
-        <input type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
-        &nbsp;<button class="search" type="submit"><?php echo get_lang('SearchCourse'); ?></button>
-    </form>
-</div>
-<?php
-    $hidden_links = 0;
-} else {
-    $hidden_links = 1;
-}
-?>
 <div class="row">
     <div class="span3">
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
-            <?php
+                <?php if (intval($_GET['hidden_links']) != 1) { ?>
+                <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
+                    <fieldset>
+                        <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
+                        <input type="hidden" name="search_course" value="1" />
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input class="span2" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
+                                    <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                <?php
+                $hidden_links = 0;
+            } else {
+                $hidden_links = 1;
+            }
+
             if (!empty($browse_course_categories)) {
                 echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
 

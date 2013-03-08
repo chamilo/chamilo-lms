@@ -204,6 +204,9 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
+/*
+Implements symfony2 translator
+
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'en',
     'locale_fallback' => 'en'
@@ -232,7 +235,7 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
 }));
 
 //$app['translator.domains'] = array();
-
+*/
 // Classic way or Controllers ways
 $app['classic_layout'] = false;
 
@@ -619,57 +622,6 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
-error_reporting(-1);
-
-if (api_get_setting('server_type') == 'test') {
-    //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-} else {
-    /*
-    Server type is not test
-    - normal error reporting level
-    - full fake register globals block
-    */
-    error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-/*
-    // TODO: These obsolete variables $HTTP_* to be check whether they are actually used.
-    if (!isset($HTTP_GET_VARS)) {
-        $HTTP_GET_VARS = $_GET;
-    }
-    if (!isset($HTTP_POST_VARS)) {
-        $HTTP_POST_VARS = $_POST;
-    }
-    if (!isset($HTTP_POST_FILES)) {
-        $HTTP_POST_FILES = $_FILES;
-    }
-    if (!isset($HTTP_SESSION_VARS)) {
-        $HTTP_SESSION_VARS = $_SESSION;
-    }
-    if (!isset($HTTP_SERVER_VARS)) {
-        $HTTP_SERVER_VARS = $_SERVER;
-    }
-
-    // Register SESSION variables into $GLOBALS
-    if (sizeof($HTTP_SESSION_VARS)) {
-        if (!is_array($_SESSION)) {
-            $_SESSION = array();
-        }
-        foreach ($HTTP_SESSION_VARS as $key => $val) {
-            $_SESSION[$key] = $HTTP_SESSION_VARS[$key];
-            $GLOBALS[$key] = $HTTP_SESSION_VARS[$key];
-        }
-    }
-
-    // Register SERVER variables into $GLOBALS
-    if (sizeof($HTTP_SERVER_VARS)) {
-        $_SERVER = array();
-        foreach ($HTTP_SERVER_VARS as $key => $val) {
-            $_SERVER[$key] = $HTTP_SERVER_VARS[$key];
-            if (!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key != 'lang_path' && $key != 'extAuthSource' && $key != 'thisAuthSource' && $key != 'main_configuration_file_path' && $key != 'phpDigIncCn' && $key != 'drs') {
-                $GLOBALS[$key] = $HTTP_SERVER_VARS[$key];
-            }
-        }
-    }*/
-}
 
 /*	LOAD LANGUAGE FILES SECTION */
 
@@ -690,6 +642,188 @@ $app['language_interface'] = $language_interface = api_get_language_interface();
 //$language_interface_initial_value = $language_interface;
 
 //load_translations($app);
+
+$langPath = api_get_path(SYS_LANG_PATH);
+
+$this_script = $app['this_script'];
+$language_interface = $app['language_interface'];
+
+/* This will only work if we are in the page to edit a sub_language */
+if (isset($this_script) && $this_script == 'sub_language') {
+    require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
+    // getting the arrays of files i.e notification, trad4all, etc
+    $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
+        api_get_path(SYS_LANG_PATH).'english',
+        true
+    );
+    //getting parent info
+    $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
+    //getting sub language info
+    $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);
+
+    $english_language_array = $parent_language_array = $sub_language_array = array();
+
+    foreach ($language_files_to_load as $language_file_item) {
+        $lang_list_pre = array_keys($GLOBALS);
+        //loading english
+        $path = $langPath.'english/'.$language_file_item.'.inc.php';
+        if (file_exists($path)) {
+            include $path;
+        }
+
+        $lang_list_post = array_keys($GLOBALS);
+        $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
+        unset($lang_list_pre);
+
+        //  english language array
+        $english_language_array[$language_file_item] = compact($lang_list_result);
+
+        //cleaning the variables
+        foreach ($lang_list_result as $item) {
+            unset(${$item});
+        }
+        $parent_file = $langPath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+
+        if (file_exists($parent_file) && is_file($parent_file)) {
+            include_once $parent_file;
+        }
+        //  parent language array
+        $parent_language_array[$language_file_item] = compact($lang_list_result);
+
+        //cleaning the variables
+        foreach ($lang_list_result as $item) {
+            unset(${$item});
+        }
+
+        $sub_file = $langPath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+        if (file_exists($sub_file) && is_file($sub_file)) {
+            include $sub_file;
+        }
+
+        //  sub language array
+        $sub_language_array[$language_file_item] = compact($lang_list_result);
+
+        //cleaning the variables
+        foreach ($lang_list_result as $item) {
+            unset(${$item});
+        }
+    }
+}
+
+/**
+ * Include all necessary language files
+ * - trad4all
+ * - notification
+ * - custom tool language files
+ */
+
+$language_files = array();
+$language_files[] = 'trad4all';
+$language_files[] = 'notification';
+$language_files[] = 'accessibility';
+
+if (isset($language_file)) {
+    if (!is_array($language_file)) {
+        $language_files[] = $language_file;
+    } else {
+        $language_files = array_merge($language_files, $language_file);
+    }
+}
+
+if (isset($app['languages_file'])) {
+    $language_files = array_merge($language_files, $this->app['languages_file']);
+}
+
+// if a set of language files has been properly defined
+if (is_array($language_files)) {
+    // if the sub-language feature is on
+    if (api_get_setting('allow_use_sub_language') == 'true') {
+        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
+        $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
+        foreach ($language_files as $index => $language_file) {
+            // include English
+            include $langPath.'english/'.$language_file.'.inc.php';
+            // prepare string for current language and its parent
+            $lang_file = $langPath.$language_interface.'/'.$language_file.'.inc.php';
+            $parent_lang_file = $langPath.$parent_path.'/'.$language_file.'.inc.php';
+            // load the parent language file first
+            if (file_exists($parent_lang_file)) {
+                include $parent_lang_file;
+            }
+            // overwrite the parent language translations if there is a child
+            if (file_exists($lang_file)) {
+                include $lang_file;
+            }
+        }
+    } else {
+        // if the sub-languages feature is not on, then just load the
+        // set language interface
+        foreach ($language_files as $index => $language_file) {
+            // include English
+            include $langPath.'english/'.$language_file.'.inc.php';
+            // prepare string for current language
+            $langFile = $langPath.$language_interface.'/'.$language_file.'.inc.php';
+
+            if (file_exists($langFile)) {
+                include $langFile;
+            }
+        }
+    }
+}
+
+
+error_reporting(-1);
+
+if (api_get_setting('server_type') == 'test') {
+    //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+} else {
+    /*
+    Server type is not test
+    - normal error reporting level
+    - full fake register globals block
+    */
+    error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
+    /*
+        // TODO: These obsolete variables $HTTP_* to be check whether they are actually used.
+        if (!isset($HTTP_GET_VARS)) {
+            $HTTP_GET_VARS = $_GET;
+        }
+        if (!isset($HTTP_POST_VARS)) {
+            $HTTP_POST_VARS = $_POST;
+        }
+        if (!isset($HTTP_POST_FILES)) {
+            $HTTP_POST_FILES = $_FILES;
+        }
+        if (!isset($HTTP_SESSION_VARS)) {
+            $HTTP_SESSION_VARS = $_SESSION;
+        }
+        if (!isset($HTTP_SERVER_VARS)) {
+            $HTTP_SERVER_VARS = $_SERVER;
+        }
+
+        // Register SESSION variables into $GLOBALS
+        if (sizeof($HTTP_SESSION_VARS)) {
+            if (!is_array($_SESSION)) {
+                $_SESSION = array();
+            }
+            foreach ($HTTP_SESSION_VARS as $key => $val) {
+                $_SESSION[$key] = $HTTP_SESSION_VARS[$key];
+                $GLOBALS[$key] = $HTTP_SESSION_VARS[$key];
+            }
+        }
+
+        // Register SERVER variables into $GLOBALS
+        if (sizeof($HTTP_SERVER_VARS)) {
+            $_SERVER = array();
+            foreach ($HTTP_SERVER_VARS as $key => $val) {
+                $_SERVER[$key] = $HTTP_SERVER_VARS[$key];
+                if (!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key != 'lang_path' && $key != 'extAuthSource' && $key != 'thisAuthSource' && $key != 'main_configuration_file_path' && $key != 'phpDigIncCn' && $key != 'drs') {
+                    $GLOBALS[$key] = $HTTP_SERVER_VARS[$key];
+                }
+            }
+        }*/
+}
+
 
 //Filters
 $app->before(

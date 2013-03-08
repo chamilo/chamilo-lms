@@ -125,6 +125,9 @@ $_api_is_translated_call = false;
  */
 function get_lang($variable, $reserved = null, $language = null)
 {
+    /*
+     *
+     *  In order to use $app['translator']
     global $app;
     if ($app['debug']) {
         //return $variable;
@@ -136,8 +139,7 @@ function get_lang($variable, $reserved = null, $language = null)
             return $variable;
         }
     }
-    return $translated;
-
+    return $translated;*/
     $language_interface = api_get_language_interface();
     global
     // For serving some old hacks:
@@ -201,9 +203,9 @@ function get_lang($variable, $reserved = null, $language = null)
 
     // Reloading the language files when it is necessary.
 
-    /*if (!$read_global_variables) {
+    if (!$read_global_variables) {
         global $language_files;
-        var_dump($language_files);exit;
+        //var_dump($language_files);exit;
         if (isset($language_files)) {
             $parent_language = null;
             if (api_get_setting('allow_use_sub_language') == 'true') {
@@ -225,10 +227,11 @@ function get_lang($variable, $reserved = null, $language = null)
             }
         }
     }
-*/
+
 
     // Translation mode for production servers.
-    if (!$test_server_mode) { $read_global_variables = false;
+    if (!$test_server_mode) {
+
         if ($read_global_variables) {
             if (isset($GLOBALS[$variable])) {
                 $langvar = $GLOBALS[$variable];

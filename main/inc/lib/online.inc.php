@@ -198,7 +198,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
                   ORDER BY $column $direction
                   LIMIT $from, $number_of_items";
 	} else {
-		$query = "SELECT login_user_id, login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)
+		$query = "SELECT DISTINCT login_user_id, login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)
                   WHERE u.status != ".ANONYMOUS." AND login_date >= '".$current_date."'
                   ORDER BY $column $direction
                   LIMIT $from, $number_of_items";

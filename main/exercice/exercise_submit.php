@@ -55,12 +55,153 @@ if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js'); //highlight
 }
 
+$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
+
 //This library is necessary for the time control feature
 $htmlHeadXtra[]= api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
 $htmlHeadXtra[]= api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
 $htmlHeadXtra[]= api_get_js('epiclock/javascript/jquery.dateformat.min.js');
 $htmlHeadXtra[]= api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[]= api_get_js('epiclock/renderers/minute/epiclock.minute.js');
+$htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
+
+$htmlHeadXtra[]= '
+<style>
+.window, .label {
+	cursor:pointer;
+	box-shadow: 2px 2px 19px #aaa;
+   -o-box-shadow: 2px 2px 19px #aaa;
+   -webkit-box-shadow: 2px 2px 19px #aaa;
+   -moz-box-shadow: 2px 2px 19px #aaa;
+
+   min-height: 50px;
+}
+</style>
+<script>
+
+;(function() {
+    window.jsPlumbDemo = {
+	    init : function() {
+	        var countConnections = $( ".window_question" ).size();
+
+            var colorArray = $.xcolor.analogous("#da0", countConnections);
+
+	        jsPlumb.importDefaults({
+				DragOptions : { cursor: "pointer", zIndex:2000 },
+				PaintStyle : { strokeStyle:"#666" },
+				EndpointStyle : { width:20, height:16, strokeStyle:"#666" },
+				Endpoint : "Rectangle",
+				Anchors : ["TopCenter", "TopCenter"]
+			});
+
+
+			var colorDestination = "#316b31";
+
+            var exampleDropOptions = {
+                tolerance: "touch",
+                hoverClass: "dropHover",
+                activeClass: "dragActive"
+            };
+
+            var destinationEndPoint = {
+                endpoint:["Dot", { radius: 15 }],
+                paintStyle:{ fillStyle:colorDestination },
+                isSource:false,
+                connectorStyle:{ strokeStyle:colorDestination, lineWidth:8 },
+                connector: ["Bezier", { curviness: 63 } ],
+                maxConnections: countConnections,
+                isTarget:true,
+                dropOptions : exampleDropOptions,
+                beforeDrop:function(params) {
+                    var selectId = params.targetId;
+                    selectId = selectId.replace("answer", "select");
+                    value = params.sourceId.replace("window", "");
+                    jsPlumb.detachAllConnections(params.targetId);
+                    $("#" +selectId +" option").filter(function() {
+                        //may want to use $.trim in here
+                        return $(this).val() == value;
+                    }).attr("selected", true);
+                    return true;
+                }
+            };
+
+            var count = 0;
+            var sourceDestinationArray = Array;
+
+            $( ".window_question" ).each(function( index ) {
+                var windowId = $(this).attr("id");
+                var scope = windowId + "scope";
+                var destinationColor = colorArray[count].getHex();
+
+                var sourceEndPoint = {
+                    endpoint:["Dot", { radius:15 }],
+                    paintStyle:{ fillStyle:destinationColor },
+                    isSource:true,
+                    connectorStyle:{ strokeStyle:destinationColor, lineWidth:8 },
+                    connector: ["Bezier", { curviness:63 } ],
+                    maxConnections: countConnections,
+                    isTarget:false,
+                    dropOptions : exampleDropOptions,
+                    scope: scope
+                };
+                sourceDestinationArray[count+1] = sourceEndPoint;
+
+                count++;
+                jsPlumb.addEndpoint(windowId, { anchor:[0.5, 1, 0, 1] }, sourceEndPoint);
+
+                $( ".window_question" ).each(function( index ) {
+                    var windowDestinationId = $(this).attr("id");
+                    destinationEndPoint.scope = scope;
+                    jsPlumb.addEndpoint(windowDestinationId+"_answer", { anchor:[0.5, 1, 0, 1] }, destinationEndPoint);
+                });
+            });
+
+
+            var divsWithWindowClass = jsPlumb.CurrentLibrary.getSelector(".window");
+			jsPlumb.draggable(divsWithWindowClass);
+
+			jsPlumbDemo.attachBehaviour();
+        }
+    }
+})();
+
+;(function() {
+    var _initialised = false;
+
+    jsPlumbDemo.attachBehaviour = function() {
+        if (!_initialised) {
+            $(".hide").click(function() {
+                jsPlumb.toggle($(this).attr("rel"));
+            });
+
+            $(".drag").click(function() {
+                var s = jsPlumb.toggleDraggable($(this).attr("rel"));
+                $(this).html(s ? "disable dragging" : "enable dragging");
+                if (!s) $("#" + $(this).attr("rel")).addClass("drag-locked"); else $("#" + $(this).attr("rel")).removeClass("drag-locked");
+                $("#" + $(this).attr("rel")).css("cursor", s ? "pointer" : "default");
+            });
+
+            $(".detach").click(function() {
+                jsPlumb.detachAllConnections($(this).attr("rel"));
+            });
+
+            $("#clear").click(function() {
+                jsPlumb.detachEveryConnection(); jsPlumbDemo.showConnectionInfo("");
+            });
+
+            _initialised = true;
+        }
+    };
+})();
+
+jsPlumb.bind("ready", function() {
+    if ($(".drag_question").length > 0) {
+	    jsPlumbDemo.init();
+	}
+	//resetRenderMode(jsPlumb.SVG);
+});
+
+</script>';
 
 // General parameters passed via POST/GET
 

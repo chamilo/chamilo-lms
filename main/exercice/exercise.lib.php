@@ -83,7 +83,10 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         $num_suggestions = 0;
 
         if ($answerType == MATCHING) {
+
+            $s .= '<div class="drag_question">';
             $s .= '<table class="data_table">';
+
             $x = 1; //iterate through answers
             $letter = 'A'; //mark letters for each answer
             $answer_matching = $cpt1 = array();
@@ -434,16 +437,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 if ($answerCorrect != 0) {
                     // only show elements to be answered (not the contents of
                     // the select boxes, who are corrrect = 0)
-                    $s .= '<tr><td width="45%" valign="top">';
+                    $s .= '<tr><td width="45%">';
                     $parsed_answer = $answer;
                     //left part questions
                     $s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
-						 	<span style="float:left; width:92%;">'.$parsed_answer.'</span></td>';
+						 	<span style="float:left; width:92%;"><div id="window'.$lines_count.'" class="window window_question">'.$parsed_answer.' </div></span></td>';
                     //middle part (matches selects)
 
-                    $s .= '<td width="10%" valign="top" align="center">&nbsp;&nbsp;
-				            <select name="choice['.$questionId.']['.$numAnswer.']">';
+                    $s .= '<td width="10%" align="center">&nbsp;&nbsp;';
+                    $s .= '<div style="display:none">';
 
+
+                    $s .= '<select id="window'.$lines_count.'_select" name="choice['.$questionId.']['.$numAnswer.']">';
+                    $selectedValue = 0;
                     // fills the list-box
                     foreach ($select_items as $key => $val) {
                         // set $debug_mark_answer to true at function start to
@@ -452,24 +458,46 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                         if ($debug_mark_answer) {
                             if ($val['id'] == $answerCorrect) {
                                 $selected = 'selected="selected"';
+                                $selectedValue = $val['id'];
                             }
                         }
                         if (isset($user_choice[$matching_correct_answer]) && $val['id'] == $user_choice[$matching_correct_answer]['answer']) {
                             $selected = 'selected="selected"';
+                            $selectedValue = $val['id'];
                         }
-                        $s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].$help.'</option>';
+                        $s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
                     }  // end foreach()
 
-                    $s .= '</select></td>';
+                    if (!empty($answerCorrect)) {
+                        $myNumber = $answerCorrect +1;
+                        $s.= '<script>
+                            jsPlumb.bind("ready", function() {
+                                jsPlumb.connect({
+                                    source:"window'.$lines_count.'",
+                                    target:"window'.($selectedValue).'_answer",
+                                    endpoint:["Dot", { radius:15 }],
+                                    connector: ["Bezier", { curviness:63 } ],
+                                    anchor:[0.5, 1, 0, 1]
+
+                                })
+                            });
+                            </script>';
+                    }
+
+
+                    $s .= '</select></div></td>';
+
                     //print_r($select_items);
                     //right part (answers)
                     $s.='<td width="45%" valign="top" >';
+
                     if (isset($select_items[$lines_count])) {
                         $s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
-                            '<span style="float:left; width:95%;">'.$select_items[$lines_count]['answer'].'</span>';
+                            '<span style="float:left; width:95%;"><div id="window'.$lines_count.'_answer" class="window">'.$select_items[$lines_count]['answer'].'</div></span>';
                     } else {
                         $s.='&nbsp;';
                     }
+
                     $s .= '</td>';
                     $s .= '</tr>';
                     $lines_count++;
@@ -481,7 +509,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                             $s .= '<tr>
 								  <td colspan="2"></td>
 								  <td valign="top">';
-                            $s.='<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
+                            $s.='<b>'.$select_items[$lines_count]['letter'].'.</b>';
+                            $s .= $select_items[$lines_count]['answer'];
                             $s.="</td>
 							</tr>";
                             $lines_count++;
@@ -498,6 +527,10 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 $s .= '</table>';
             }
+        }
+
+        if ($answerType == MATCHING) {
+            $s .= '</div>';
         }
 
         $s .= '</div>';

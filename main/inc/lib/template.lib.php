@@ -436,6 +436,7 @@ class Template
             'jquery.min.js',
             'chosen/chosen.jquery.min.js',
             'jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.min.js',
+            'jquery-ui/jquery.ui.touch-punch.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',
         );

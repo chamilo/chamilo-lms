@@ -121,6 +121,7 @@ use Symfony\Component\HttpFoundation\Response;
 $app = new Application();
 $app['configuration_file'] = $main_configuration_file_path;
 $app['configuration'] = $_configuration;
+$app['languages_file'] = array();
 
 //require_once __DIR__.'/../../resources/config/prod.php';
 require_once __DIR__.'/../../resources/config/dev.php';
@@ -641,6 +642,8 @@ if ($already_installed) {
     $app['language_interface'] = $language_interface = 'english';
 }
 
+
+
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.
 // We need to save the genuine value of this variable and
@@ -727,6 +730,7 @@ $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
 $language_files[] = 'accessibility';
+$language_files[] = 'index';
 
 if (isset($language_file)) {
     if (!is_array($language_file)) {
@@ -737,7 +741,7 @@ if (isset($language_file)) {
 }
 
 if (isset($app['languages_file'])) {
-    $language_files = array_merge($language_files, $this->app['languages_file']);
+    $language_files = array_merge($language_files, $app['languages_file']);
 }
 
 // if a set of language files has been properly defined
@@ -836,9 +840,7 @@ if (api_get_setting('server_type') == 'test') {
 $app->before(
     function () use ($app) {
         if (!file_exists($app['configuration_file'])) {
-
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
-
             $app->abort(500, "Incorrect PHP version");
         }
 

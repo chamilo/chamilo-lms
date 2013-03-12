@@ -140,6 +140,10 @@ function get_lang($variable, $reserved = null, $language = null)
     }
     return $translated;*/
     $language_interface = api_get_language_interface();
+    /*$helo = false;
+    if ($variable == 'LostPassword') {
+        $helo = true;
+    }*/
     global
     // For serving some old hacks:
     // By manipulating this global variable the translation may be done in different languages too (not the elegant way).
@@ -167,8 +171,8 @@ function get_lang($variable, $reserved = null, $language = null)
         $encoding = api_get_system_encoding();
         $is_utf8_encoding = api_is_utf8($encoding);
         $langpath = api_get_path(SYS_LANG_PATH);
-        //$test_server_mode = api_get_setting('server_type') == 'test';
-        $test_server_mode = false;
+        $test_server_mode = api_get_setting('server_type') == 'test';
+        //$test_server_mode = false;
         $show_special_markup = api_get_setting('hide_dltt_markup') != 'true' || $test_server_mode;
         $initialized = true;
     }
@@ -177,6 +181,7 @@ function get_lang($variable, $reserved = null, $language = null)
     if (empty($language)) {
         $language = $language_interface;
     }
+
     $lang_postfix = isset($is_interface_language) && $is_interface_language ? '' : '('.$language.')';
 
     $is_interface_language = $language == $language_interface_initial_value;
@@ -193,6 +198,7 @@ function get_lang($variable, $reserved = null, $language = null)
         return $ret;
     }
 
+
     $_api_is_translated = false;
 
     // There is no cached translation, we have to retrieve it:
@@ -204,7 +210,6 @@ function get_lang($variable, $reserved = null, $language = null)
 
     if (!$read_global_variables) {
         global $language_files;
-        //var_dump($language_files);exit;
         if (isset($language_files)) {
             $parent_language = null;
             if (api_get_setting('allow_use_sub_language') == 'true') {
@@ -227,8 +232,8 @@ function get_lang($variable, $reserved = null, $language = null)
         }
     }
 
-
     // Translation mode for production servers.
+
     if (!$test_server_mode) {
         if ($read_global_variables) {
             if (isset($GLOBALS[$variable])) {
@@ -261,6 +266,7 @@ function get_lang($variable, $reserved = null, $language = null)
         return $ret;
     }
 
+
     // Translation mode for test/development servers.
     if (!is_string($variable)) {
         //return $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
@@ -268,6 +274,8 @@ function get_lang($variable, $reserved = null, $language = null)
         $used_lang_vars[$variable.$lang_postfix] = $ret;
         return $ret;
     }
+
+
     if (isset($$variable)) {
         $langvar = $$variable;
         $_api_is_translated = true;

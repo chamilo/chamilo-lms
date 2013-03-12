@@ -9,9 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  *
  */
-class IndexController
+class IndexController// extends Controller
 {
     public $section;
+    public $language_files = array('courses', 'index', 'admin');
 
     /**
      * Handles default Chamilo scripts handled by Display::display_header() and display_footer()
@@ -217,7 +218,8 @@ class IndexController
         $loginForm = null;
         if (!$userId || api_is_anonymous($userId)) {
 
-            // Only display if the user isn't logged in.
+            // Only display if the user isn't logged in
+
             $app['template']->assign('login_language_form', api_display_language_form(true));
             $app['template']->assign('login_form', self::display_login_form($app));
 

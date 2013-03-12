@@ -15,7 +15,7 @@
  * @todo display_digest, shouldn't this be removed and be made into an extension?
  */
 
-//Temporal hack
+//Temporal hack to redirect calls to the new web/index.php
 header('Location: web/userportal');
 exit;
 

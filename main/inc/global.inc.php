@@ -205,9 +205,7 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-
 // Implements symfony2 translator
-
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'en',
     'locale_fallback' => 'en'
@@ -669,12 +667,17 @@ if (isset($this_script) && $this_script == 'sub_language') {
         true
     );
     //getting parent info
-    $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
+    $languageId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+    $parent_language = SubLanguageManager::get_all_information_of_language($languageId);
+
+    $subLanguageId = isset($_REQUEST['sub_language_id']) ? $_REQUEST['sub_language_id'] : null;
+
     //getting sub language info
-    $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);
+    $sub_language = SubLanguageManager::get_all_information_of_language($subLanguageId);
 
     $english_language_array = $parent_language_array = $sub_language_array = array();
 
+    if (!empty($language_files_to_load))
     foreach ($language_files_to_load as $language_file_item) {
         $lang_list_pre = array_keys($GLOBALS);
         //loading english
@@ -706,10 +709,11 @@ if (isset($this_script) && $this_script == 'sub_language') {
         foreach ($lang_list_result as $item) {
             unset(${$item});
         }
-
-        $sub_file = $langPath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-        if (file_exists($sub_file) && is_file($sub_file)) {
-            include $sub_file;
+        if (!empty($sub_language)) {
+            $sub_file = $langPath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
+            if (file_exists($sub_file) && is_file($sub_file)) {
+                include $sub_file;
+            }
         }
 
         //  sub language array
@@ -733,7 +737,10 @@ $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
 $language_files[] = 'accessibility';
+
+//@todo Added because userportal and index are loaded by a controller should be fixed when a $app['translator'] is configured
 $language_files[] = 'index';
+$language_files[] = 'courses';
 
 if (isset($language_file)) {
     if (!is_array($language_file)) {

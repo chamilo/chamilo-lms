@@ -349,6 +349,9 @@ if (isset($_configuration['main_database'])) {
             'user' => $_configuration['db_user'],
             'password' => $_configuration['db_password'],
             'host' => $_configuration['db_host'],
+            'driverOptions' => array(
+                1002 => 'SET NAMES utf8'
+            )
         )
     ));
 

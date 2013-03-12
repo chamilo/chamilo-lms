@@ -2911,8 +2911,6 @@ function api_not_allowed($print_headers = false, $message = null) {
     $app['template.show_header'] = $show_headers;
     $app['template.show_footer'] = $show_headers;
 
-//    $tpl = new Template();
-    //$tpl->assign('content', $msg);
     $app['template']->assign('content', $msg);
     $app['allowed'] = true;
 

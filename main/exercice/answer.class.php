@@ -605,8 +605,7 @@ class Answer
                 $answer  = Database::escape_string($this->answer[$i]);
                 $correct = Database::escape_string($this->correct[$i]);
 
-                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType(
-                ) == MULTIPLE_ANSWER_TRUE_FALSE
+                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE
                 ) {
                     $correct = $fixed_list[intval($correct)];
                 }
@@ -617,12 +616,21 @@ class Answer
                 $hotspot_coordinates = Database::escape_string($this->hotspot_coordinates[$i]);
                 $hotspot_type        = Database::escape_string($this->hotspot_type[$i]);
                 $destination         = Database::escape_string($this->destination[$i]);
-                $sql .= "($c_id, '$i','$newQuestionId','$answer','$correct','$comment',".
-                    "'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
+                $sql .= "($c_id, '$i','$newQuestionId','$answer','$correct','$comment',"."'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
             }
             $sql = api_substr($sql, 0, -1);
             Database::query($sql);
         }
+    }
+
+
+    function getJs() {
+        //if ($this->questionId == 2)
+        echo '<script>jsPlumb.ready(function() {
+                if ($("#drag'.$this->questionId.'_question").length > 0) {
+                    jsPlumbDemo.init('.$this->questionId.');
+                }
+            });</script>';
     }
 
 

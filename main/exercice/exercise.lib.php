@@ -84,7 +84,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
         if ($answerType == MATCHING) {
 
-            $s .= '<div class="drag_question">';
+            $s .= '<div id="drag'.$questionId.'_question" class="drag_question">';
             $s .= '<table class="data_table">';
 
             $x = 1; //iterate through answers
@@ -433,22 +433,27 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             } elseif ($answerType == MATCHING) {
                 // matching type, showing suggestions and answers
                 // TODO: replace $answerId by $numAnswer
-
+                if ($answerId == 1) {
+                    echo $objAnswerTmp->getJs();
+                }
                 if ($answerCorrect != 0) {
                     // only show elements to be answered (not the contents of
                     // the select boxes, who are corrrect = 0)
                     $s .= '<tr><td width="45%">';
                     $parsed_answer = $answer;
+                    $windowId = $questionId.$lines_count;
                     //left part questions
                     $s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
-						 	<span style="float:left; width:92%;"><div id="window'.$lines_count.'" class="window window_question">'.$parsed_answer.' </div></span></td>';
+						 	<span style="float:left; width:92%;">
+						 	<div id="window'.$windowId.'" class="window window'.$questionId.'_question">'.$parsed_answer.' </div>
+						 	</span>
+						 	</td>';
                     //middle part (matches selects)
 
                     $s .= '<td width="10%" align="center">&nbsp;&nbsp;';
                     $s .= '<div style="display:none">';
 
-
-                    $s .= '<select id="window'.$lines_count.'_select" name="choice['.$questionId.']['.$numAnswer.']">';
+                    $s .= '<select id="window'.$windowId.'_select" name="choice['.$questionId.']['.$numAnswer.']">';
                     $selectedValue = 0;
                     // fills the list-box
                     foreach ($select_items as $key => $val) {
@@ -466,19 +471,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                             $selectedValue = $val['id'];
                         }
                         $s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
-                    }  // end foreach()
+                    }
 
-                    if (!empty($answerCorrect)) {
-                        $myNumber = $answerCorrect +1;
+                    if (!empty($answerCorrect) && !empty($selectedValue)) {
+
                         $s.= '<script>
-                            jsPlumb.bind("ready", function() {
+                            jsPlumb.ready(function() {
                                 jsPlumb.connect({
-                                    source:"window'.$lines_count.'",
-                                    target:"window'.($selectedValue).'_answer",
-                                    endpoint:["Dot", { radius:15 }],
+                                    source: "window'.$questionId.$selectedValue.'",
+                                    target: "window'.$windowId.'_answer",
+                                    endpoint:["Blank", { radius:15 }],
                                     connector: ["Bezier", { curviness:63 } ],
-                                    anchor:[0.5, 1, 0, 1]
-
+                                    anchor:[0.5, 1, 0, 1],
+                                    connectorStyle:{ lineWidth:8 }
                                 })
                             });
                             </script>';
@@ -493,7 +498,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
                     if (isset($select_items[$lines_count])) {
                         $s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
-                            '<span style="float:left; width:95%;"><div id="window'.$lines_count.'_answer" class="window">'.$select_items[$lines_count]['answer'].'</div></span>';
+                            '<span style="float:left; width:95%;"><div id="window'.$windowId.'_answer" class="window">'.$select_items[$lines_count]['answer'].'</div></span>';
                     } else {
                         $s.='&nbsp;';
                     }

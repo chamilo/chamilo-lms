@@ -73,27 +73,31 @@ $htmlHeadXtra[]= '
    -o-box-shadow: 2px 2px 19px #aaa;
    -webkit-box-shadow: 2px 2px 19px #aaa;
    -moz-box-shadow: 2px 2px 19px #aaa;
-
-   min-height: 50px;
+    min-height: 50px;
 }
 </style>
 <script>
 
 ;(function() {
     window.jsPlumbDemo = {
-	    init : function() {
-	        var countConnections = $( ".window_question" ).size();
+	    init : function(questionId) {
 
-            var colorArray = $.xcolor.analogous("#da0", countConnections);
+	        var windowQuestion = ".window"+ questionId+"_question";
+	        var countConnections = $(windowQuestion).size();
+
+            if (countConnections && countConnections > 0) {
+                var colorArray = $.xcolor.analogous("#da0", countConnections);
+            } else {
+                var colorArray = $.xcolor.analogous("#da0", 10);
+            }
 
 	        jsPlumb.importDefaults({
 				DragOptions : { cursor: "pointer", zIndex:2000 },
-				PaintStyle : { strokeStyle:"#666" },
-				EndpointStyle : { width:20, height:16, strokeStyle:"#666" },
+				PaintStyle : { strokeStyle:"#000" },
+				EndpointStyle : { strokeStyle:"#316b31" },
 				Endpoint : "Rectangle",
 				Anchors : ["TopCenter", "TopCenter"]
 			});
-
 
 			var colorDestination = "#316b31";
 
@@ -113,12 +117,13 @@ $htmlHeadXtra[]= '
                 isTarget:true,
                 dropOptions : exampleDropOptions,
                 beforeDrop:function(params) {
+                console.log(params);
                     var selectId = params.targetId;
                     selectId = selectId.replace("answer", "select");
-                    value = params.sourceId.replace("window", "");
+                    var value = params.sourceId.replace("window"+questionId, "");
                     jsPlumb.detachAllConnections(params.targetId);
+
                     $("#" +selectId +" option").filter(function() {
-                        //may want to use $.trim in here
                         return $(this).val() == value;
                     }).attr("selected", true);
                     return true;
@@ -128,9 +133,11 @@ $htmlHeadXtra[]= '
             var count = 0;
             var sourceDestinationArray = Array;
 
-            $( ".window_question" ).each(function( index ) {
+            $(windowQuestion).each(function(index) {
                 var windowId = $(this).attr("id");
+
                 var scope = windowId + "scope";
+
                 var destinationColor = colorArray[count].getHex();
 
                 var sourceEndPoint = {
@@ -149,17 +156,15 @@ $htmlHeadXtra[]= '
                 count++;
                 jsPlumb.addEndpoint(windowId, { anchor:[0.5, 1, 0, 1] }, sourceEndPoint);
 
-                $( ".window_question" ).each(function( index ) {
+                $(windowQuestion).each(function( index ) {
                     var windowDestinationId = $(this).attr("id");
                     destinationEndPoint.scope = scope;
+
                     jsPlumb.addEndpoint(windowDestinationId+"_answer", { anchor:[0.5, 1, 0, 1] }, destinationEndPoint);
                 });
             });
-
-
-            var divsWithWindowClass = jsPlumb.CurrentLibrary.getSelector(".window");
-			jsPlumb.draggable(divsWithWindowClass);
-
+            //var divsWithWindowClass = jsPlumb.CurrentLibrary.getSelector("#"+questionId+" .window");
+			//jsPlumb.draggable(divsWithWindowClass);
 			jsPlumbDemo.attachBehaviour();
         }
     }
@@ -170,7 +175,7 @@ $htmlHeadXtra[]= '
 
     jsPlumbDemo.attachBehaviour = function() {
         if (!_initialised) {
-            $(".hide").click(function() {
+            /*$(".hide").click(function() {
                 jsPlumb.toggle($(this).attr("rel"));
             });
 
@@ -187,18 +192,17 @@ $htmlHeadXtra[]= '
 
             $("#clear").click(function() {
                 jsPlumb.detachEveryConnection(); jsPlumbDemo.showConnectionInfo("");
-            });
+            });*/
 
             _initialised = true;
         }
     };
 })();
 
-jsPlumb.bind("ready", function() {
+jsPlumb.ready(function() {
     if ($(".drag_question").length > 0) {
 	    jsPlumbDemo.init();
 	}
-	//resetRenderMode(jsPlumb.SVG);
 });
 
 </script>';

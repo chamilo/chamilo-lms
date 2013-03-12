@@ -206,7 +206,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
             $attributes = array();
             // Unique answer
-            if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
+            if (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) {
                 $input_id = 'choice-'.$questionId.'-'.$answerId;
                 if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
                     $attributes = array('id' => $input_id, 'checked' => 1, 'selected' => 1);
@@ -225,10 +225,20 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
                 $s .= Display::input('hidden', 'choice2['.$questionId.']', '0');
 
-                $answer_input = '<label class="radio">';
+                $answer_input = null;
+                if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                    $attributes['style'] = 'display:none';
+                    $answer_input .= '<div id="answer'.$questionId.$numAnswer.'" style="float:left" class="highlight_image">';
+                }
+
+                $answer_input .= '<label class="radio">';
                 $answer_input .= Display::input('radio', 'choice['.$questionId.']', $numAnswer, $attributes);
                 $answer_input .= $answer;
                 $answer_input .= '</label>';
+
+                if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                    $answer_input .= "</div>";
+                }
 
                 if ($show_comment) {
                     $s .= '<tr><td>';
@@ -241,6 +251,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 } else {
                     $s .= $answer_input;
                 }
+
             } elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 $input_id = 'choice-'.$questionId.'-'.$answerId;
                 $answer = Security::remove_XSS($answer, STUDENT);
@@ -1253,7 +1264,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             }
         }
     } else {
-        //echo $hpsql; var_dump($hpsql);
+
         $hpresults = getManyResultsXCol($hpsql, 6);
 
         // Print HotPotatoes test results.
@@ -1264,7 +1275,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 if ($hp_title == '') {
                     $hp_title = basename($hpresults[$i][3]);
                 }
-                //var_dump($hpresults[$i]);
 
                 $hp_date = api_get_local_time($hpresults[$i][6], null, date_default_timezone_get());
                 $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2).'% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
@@ -1531,7 +1541,7 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
         }
         //}
         $return_value = array('position' => $position, 'count' => count($my_ranking));
-        //var_dump($my_score, $my_ranking);
+
         if ($return_string) {
             if (!empty($position) && !empty($my_ranking)) {
                 $return_value = $position.'/'.count($my_ranking);
@@ -2176,9 +2186,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             // creates a temporary Question object
             $objQuestionTmp = Question :: read($questionId);
 
-            //this variable commes from exercise_submit_modal.php
-
             ob_start();
+            $hotspot_delineation_result = null;
 
             // We're inside *one* question. Go through each possible answer for this question
             $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null, 'exercise_result', array(), $save_user_result, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
@@ -2218,6 +2227,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
             //No category for this question!
             if ($category_was_added_for_this_test == false) {
+                $category_list['none'] = array();
                 $category_list['none']['score'] += $my_total_score;
                 $category_list['none']['total'] += $my_total_weight;
             }

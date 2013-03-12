@@ -22,9 +22,8 @@ require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
 
 if (empty($origin)) {
-    $origin = $_REQUEST['origin'];
+    $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
 }
-
 $id 	       = isset($_REQUEST['id']) 	  ? intval($_GET['id']) : null; //exe id
 $show_headers  = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
 
@@ -76,6 +75,4 @@ if ($show_headers) {
 
 display_question_list_by_attempt($objExercise, $id, false);
 
-if ($show_headers) {
-	Display::display_footer();
-}
+Display::display_footer();

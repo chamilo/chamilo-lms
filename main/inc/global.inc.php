@@ -778,7 +778,8 @@ if (is_array($language_files)) {
 }
 
 
-error_reporting(-1);
+//error_reporting(-1);
+error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
 if (api_get_setting('server_type') == 'test') {
     //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
@@ -788,7 +789,7 @@ if (api_get_setting('server_type') == 'test') {
     - normal error reporting level
     - full fake register globals block
     */
-    error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
+    //error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
     /*
         // TODO: These obsolete variables $HTTP_* to be check whether they are actually used.
         if (!isset($HTTP_GET_VARS)) {

@@ -229,7 +229,7 @@ echo Display::div($table, array('class'=>'span10'));
 $exercise_actions = Display::url(get_lang('EndTest'), 'javascript://', array('onclick'=>'final_submit();', 'class'=>'btn btn-warning'));
 $exercise_actions .=  '&nbsp;'.Display::url(get_lang('ReviewQuestions'), 'javascript://', array('onclick'=>'review_questions();','class'=>'btn btn-success'));
 
-echo Display::div('', array('class'=>'clear'));
+echo Display::div(' ', array('class'=>'clear'));
 echo Display::div($exercise_actions, array('class'=>'form-actions'));
 
 if ($origin != 'learnpath') {

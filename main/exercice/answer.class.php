@@ -74,11 +74,17 @@ class Answer
 
         // fills arrays
         $objExercise = new Exercise($this->course_id);
-        $objExercise->read($_REQUEST['exerciseId']);
-        if ($objExercise->random_answers == '1') {
-            $this->readOrderedBy('rand()', ''); // randomize answers
+        $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
+
+        if ($exerciseId) {
+            $objExercise->read($exerciseId);
+            if ($objExercise->random_answers == '1') {
+                $this->readOrderedBy('rand()', ''); // randomize answers
+            } else {
+                $this->read(); // natural order
+            }
         } else {
-            $this->read(); // natural order
+            $this->read();
         }
     }
 

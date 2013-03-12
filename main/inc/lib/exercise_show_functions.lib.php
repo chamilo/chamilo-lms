@@ -56,20 +56,20 @@ class ExerciseShowFunctions {
 	 * @return void
 	 */
 	static function display_free_answer($answer, $exe_id, $questionId, $questionScore = null) {
-        global $feedback_type;        
-        
+        global $feedback_type;
+
         $comments = get_comments($exe_id, $questionId);
-        
+
         if (!empty($answer)) {
             echo '<tr><td>';
             echo nl2br(Security::remove_XSS($answer, COURSEMANAGERLOWSECURITY));
             echo '</td></tr>';
         }
-        
-        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {            
-            if ($questionScore > 0 || !empty($comments)) {                
+
+        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($questionScore > 0 || !empty($comments)) {
             } else {
-                echo '<tr>';                
+                echo '<tr>';
                 echo Display::tag('td', Display::return_message(get_lang('notCorrectedYet')), array());
                 echo '</tr>';
             }
@@ -122,19 +122,19 @@ class ExerciseShowFunctions {
 	static function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment) {
 		global $feedback_type;
 		$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
-	            						"#4271B5",
-										"#FE8E16",
-										"#45C7F0",
-										"#BCD631",
-										"#D63173",
-										"#D7D7D7",
-										"#90AFDD",
-										"#AF8640",
-										"#4F9242",
-										"#F4EB24",
-										"#ED2024",
-										"#3B3B3B",
-										"#F7BDE2");
+            "#4271B5",
+            "#FE8E16",
+            "#45C7F0",
+            "#BCD631",
+            "#D63173",
+            "#D7D7D7",
+            "#90AFDD",
+            "#AF8640",
+            "#4F9242",
+            "#F4EB24",
+            "#ED2024",
+            "#3B3B3B",
+            "#F7BDE2");
 		?>
 		<table class="data_table">
 		<tr>
@@ -187,14 +187,15 @@ class ExerciseShowFunctions {
 	 */
 	static function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
 		global $feedback_type;
+
 		?>
 		<tr>
 		<td width="5%">
-			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
+			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER,UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
 			border="0" alt="" />
 		</td>
 		<td width="5%">
-			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
+			<img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
 			border="0" alt=" " />
 		</td>
 		<td width="40%">
@@ -236,6 +237,58 @@ class ExerciseShowFunctions {
 		</tr>
 		<?php
 	}
+
+    static function display_unique_image_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
+        global $feedback_type;
+        ?>
+    <tr>
+        <td width="5%">
+            <img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
+                 border="0" alt="" />
+        </td>
+        <td width="5%">
+            <img src="../img/<?php echo (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION))) ? 'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
+                 border="0" alt=" " />
+        </td>
+        <td width="40%">
+            <?php
+            echo $answer;
+            ?>
+        </td>
+
+        <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+        <td width="20%">
+            <?php
+            if ($studentChoice) {
+                if ($answerCorrect) {
+                    $color = 'green';
+                    //echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                } else {
+                    $color = 'black';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                }
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
+
+            } else {
+                if ($answerCorrect) {
+                    //echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                } else {
+                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                }
+            }
+            ?>
+        </td>
+        <?php
+        if ($ans==1) {
+            $comm = get_comments($id,$questionId);
+        }
+        ?>
+        <?php } else { ?>
+        <td>&nbsp;</td>
+        <?php } ?>
+    </tr>
+        <?php
+    }
 
     /**
      * Display the answers to a multiple choice question
@@ -285,7 +338,7 @@ class ExerciseShowFunctions {
 
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%">
-            <?php            
+            <?php
             $color = "black";
             if (isset($new_options[$studentChoice])) {
                 if ($studentChoice == $answerCorrect) {

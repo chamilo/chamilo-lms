@@ -199,10 +199,11 @@ class Exercise
     }
 
     /**
-     * returns the exercise ID
+     * Returns the exercise ID
      *
      * @author - Olivier Brouckaert
-     * @return - integer - exercise ID
+     *
+     * @return int - exercise ID
      */
     function selectId()
     {
@@ -213,7 +214,8 @@ class Exercise
      * returns the exercise title
      *
      * @author - Olivier Brouckaert
-     * @return - string - exercise title
+     *
+     * @return string - exercise title
      */
     function selectTitle()
     {
@@ -223,7 +225,7 @@ class Exercise
     /**
      * returns the number of attempts setted
      *
-     * @return - numeric - exercise attempts
+     * @return numeric - exercise attempts
      */
     function selectAttempts()
     {
@@ -232,7 +234,8 @@ class Exercise
 
     /** returns the number of FeedbackType  *
      *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback
-     * @return - numeric - exercise attempts
+     *
+     * @return int exercise attempts
      */
     function selectFeedbackType()
     {
@@ -251,6 +254,7 @@ class Exercise
      * returns the exercise description
      *
      * @author - Olivier Brouckaert
+     *
      * @return - string - exercise description
      */
     function selectDescription()
@@ -262,6 +266,7 @@ class Exercise
      * returns the exercise sound file
      *
      * @author - Olivier Brouckaert
+     *
      * @return - string - exercise description
      */
     function selectSound()
@@ -2522,6 +2527,7 @@ class Exercise
             switch ($answerType) {
                 // for unique answer
                 case UNIQUE_ANSWER :
+                case UNIQUE_ANSWER_IMAGE :
                 case UNIQUE_ANSWER_NO_OPTION :
                     if ($from_database) {
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' and question_id= '".$questionId."'";
@@ -2956,7 +2962,9 @@ class Exercise
                                 $totalScore += $answerWeighting;
                                 $user_answer = '<span>'.$answer_matching[$choice[$numAnswer]].'</span>';
                             } else {
-                                $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';
+                                if ($choice[$numAnswer]) {
+                                    $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';
+                                }
                             }
                             $matching[$numAnswer] = $choice[$numAnswer];
                         }
@@ -3050,12 +3058,14 @@ class Exercise
                     if ($debug) {
                         error_log('Showing questions $from '.$from);
                     }
+
                     //display answers (if not matching type, or if the answer is correct)
                     if ($answerType != MATCHING || $answerCorrect) {
                         if (in_array(
                             $answerType,
                             array(
                                 UNIQUE_ANSWER,
+                                UNIQUE_ANSWER_IMAGE,
                                 UNIQUE_ANSWER_NO_OPTION,
                                 MULTIPLE_ANSWER,
                                 MULTIPLE_ANSWER_COMBINATION,
@@ -3309,6 +3319,7 @@ class Exercise
 
                     switch ($answerType) {
                         case UNIQUE_ANSWER :
+                        case UNIQUE_ANSWER_IMAGE :
                         case UNIQUE_ANSWER_NO_OPTION:
                         case MULTIPLE_ANSWER :
                         case GLOBAL_MULTIPLE_ANSWER :
@@ -3901,7 +3912,7 @@ class Exercise
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
-            } elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
+            } elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_IMAGE || $answerType == UNIQUE_ANSWER_NO_OPTION) {
                 $answer = $choice;
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {

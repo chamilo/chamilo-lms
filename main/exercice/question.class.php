@@ -28,6 +28,7 @@ define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE', 12);
 define('ORAL_EXPRESSION', 13);
 define('GLOBAL_MULTIPLE_ANSWER', 14);
 define('MEDIA_QUESTION', 15);
+define('UNIQUE_ANSWER_IMAGE', 16);
 
 //Some alias used in the QTI exports
 define('MCUA', 1);
@@ -80,7 +81,8 @@ abstract class Question
             'MultipleAnswerCombinationTrueFalse'
         ),
         GLOBAL_MULTIPLE_ANSWER => array('global_multiple_answer.class.php', 'GlobalMultipleAnswer'),
-        MEDIA_QUESTION => array('media_question.class.php', 'MediaQuestion')
+        MEDIA_QUESTION => array('media_question.class.php', 'MediaQuestion'),
+        UNIQUE_ANSWER_IMAGE => array('unique_answer_image.class.php', 'UniqueAnswerImage')
     );
 
     /**
@@ -1627,6 +1629,8 @@ abstract class Question
      * @param type $feedback_type
      * @param type $counter
      * @param type $score
+     *
+     * @return string
      */
     function return_header($feedback_type = null, $counter = null, $score = null)
     {
@@ -1655,6 +1659,7 @@ abstract class Question
         // display question category, if any
         //$header = Testcategory::returnCategoryAndTitle($this->id);
         $show_media = null;
+        $header = null;
         if ($show_media) {
             $header .= $this->show_media_content();
         }

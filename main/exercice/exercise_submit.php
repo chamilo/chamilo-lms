@@ -41,6 +41,8 @@ require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
 require_once 'exercise.lib.php';
 
+$nameTools = get_lang('Quiz');
+
 $this_section = SECTION_COURSES;
 
 if ($debug) { error_log('--- Enter to the exercise_submit.php ---- '); error_log('0. POST variables : '.print_r($_POST,1)); }
@@ -203,6 +205,23 @@ jsPlumb.ready(function() {
     if ($(".drag_question").length > 0) {
 	    jsPlumbDemo.init();
 	}
+});
+
+$(function(){
+    $(".highlight_image").on("click", function() {
+        $(this).parent().find(".highlight_image").each(function(index){
+            $(this).find("img").css({
+                "border" :"none"
+            });
+            $(this).find("label").find("input").attr("checked", false);
+        });
+
+        $(this).find("label").find("img").css({
+            "border": "5px solid #f00"
+        });
+        $(this).find("label").find("input").attr("checked", "checked");
+
+    });
 });
 
 </script>';
@@ -1145,7 +1164,7 @@ function render_question_list($objExercise, $questionList, $current_question, $e
         }
 
         //Medias question render
-        if (isset($media_questions) && !empty($media_questions)) {
+        if (isset($media_questions) && !empty($media_questions) && isset($media_questions[$questionId])) {
             $media_question_list = $media_questions[$questionId];
             $objQuestionTmp = Question::read($questionId);
 
@@ -1252,7 +1271,7 @@ function render_question($objExercise, $questionId, $attempt_list, $remind_list,
             $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
             $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
         }
-
+        echo Display::div(' ', array('class'=>'clear'));
         echo Display::div($exercise_actions, array('class'=>'form-actions'));
     echo '</div>';
 }

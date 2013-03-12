@@ -8,14 +8,14 @@
  **/
 
 // Copy little progress bar in <tr></tr>
-function toogle_minipanel() {   
-    
+function toogle_minipanel() {
+
     // Construct mini panel
     var panel = $('#lp_navigation_elem div:first').clone();
 
     $(panel).attr('id', 'control');
     $('#learning_path_main').append(panel);
-                
+
     $('#learning_path_main #control tr').after('<tr></tr>');
 	$('#learning_path_main #control tr:eq(1)').append($('#progress_bar').html());
 	$('#learning_path_main #control tr:eq(1) #progress_img_limit_left').attr('height','5');
@@ -25,7 +25,7 @@ function toogle_minipanel() {
 	$('#learning_path_main #control tr:eq(1) #progress_bar_img_limit_right').attr('height','5');
 	$('#learning_path_main #control tr:eq(1) #progress_text').remove();
 	$('#learning_path_main #control tr:eq(1) div').css('width','');
-    
+
     $('#learning_path_main #control .buttons').attr('text-align','center');
     $('#content_id').css({ height: $('#content_id').height() - ($('#control').height() + 10) });
 
@@ -34,28 +34,28 @@ function toogle_minipanel() {
         toogle_minipanel();
     });
     // Hiding navigation left zone
-    $('#learning_path_left_zone').hide(50);                
+    $('#learning_path_left_zone').hide(50);
     $('#learning_path_right_zone').css('margin-left','10px');
     $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
-                
+
 }
 
 var left_width = 292;
-  
+
 $(document).ready(function() {
 
    //Adding div to hide panel
-    $('#learning_path_right_zone').before('<div id="hide_bar" style="float: left; width: 10px; height: 100%;">' +
+    $('#learning_path_right_zone').before('<div id="hide_bar" style="float: left; width: 10px; height: 1000px;">' +
         '<table style="border: 0 none; width: 100%; height: 100%; cursor: pointer; background-color: #EEEEEE">' +
         '<tr><td></td></tr></table></div>');
     $('#hide_bar table').css({backgroundImage: "url(../img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
 
     //Adding effects to hide bar
-    $('#hide_bar table').hover(function () {        
+    $('#hide_bar table').hover(function () {
     	if ($('#hide_bar').position().left == 292)
     		$(this).css('backgroundImage','url(../img/hide1.png)').css('backgroundColor','#888888');
     	else if($('#hide_bar').position().left == 0)
-    		$(this).css('backgroundImage','url(../img/hide3.png)').css('backgroundColor','#888888');    	
+    		$(this).css('backgroundImage','url(../img/hide3.png)').css('backgroundColor','#888888');
         },function (){
             if($('#hide_bar').position().left == left_width)
               $(this).css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
@@ -63,14 +63,14 @@ $(document).ready(function() {
               $(this).css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
         }
     );
-        
+
     var original = $('#content_id').height();
 
     // Adding funcionality
-    $( "#hide_bar" ).click(function() {                
+    $( "#hide_bar" ).click(function() {
         $('#hide_bar table').toggle(function() {
             if ($('#hide_bar').position().left == left_width) {
-                toogle_minipanel();             
+                toogle_minipanel();
             }
         },
         function(){

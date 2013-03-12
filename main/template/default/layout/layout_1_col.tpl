@@ -10,7 +10,10 @@
         </div>
     {% endif %}
 
-    <div class="span12">
+    {% if show_header == true %}
+        <div class="span12">
+    {% endif %}
+
         {% include "default/layout/page_body.tpl" %}
 
         {% block content %}
@@ -20,8 +23,12 @@
                 </section>
             {% endif %}
         {% endblock %}
+
+    {% if show_header == true %}
         &nbsp;
     </div>
+    {% endif %}
+
 
     {#  Plugin bottom  #}
     {% if plugin_content_bottom %}

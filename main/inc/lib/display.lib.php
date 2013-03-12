@@ -66,7 +66,6 @@ class Display
         $app['template.show_learnpath'] = $show_learnpath;
         self::display_header();
 
-
         //self::$global_template          = new Template($tool_name);
         //echo self::$global_template->show_header_template();
     }

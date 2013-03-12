@@ -7,7 +7,7 @@
 {% include "default/layout/head.tpl" %}
 </head>
 <body dir="{{text_direction}}" class="{{section_name}}">
-{% block name%}
+{% block name %}
 {% endblock %}
 {% block body %}
     {{ content }}

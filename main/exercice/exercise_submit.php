@@ -54,7 +54,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = api_get_js('glossary.js'); //Glossary
-    $htmlHeadXtra[] = api_get_js('jquery.highlight.js'); //highlight
+    $htmlHeadXtra[] = api_get_js('jquery.   highlight.js'); //highlight
 }
 
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
@@ -68,17 +68,12 @@ $htmlHeadXtra[]= api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
 $htmlHeadXtra[]= '
-<style>
-.window, .label {
-	cursor:pointer;
-	box-shadow: 2px 2px 19px #aaa;
-   -o-box-shadow: 2px 2px 19px #aaa;
-   -webkit-box-shadow: 2px 2px 19px #aaa;
-   -moz-box-shadow: 2px 2px 19px #aaa;
-    min-height: 50px;
-}
-</style>
 <script>
+
+var colorDestination = "#316b31";
+var curvinessValue = 0;
+var connectorType = "Straight";
+
 
 ;(function() {
     window.jsPlumbDemo = {
@@ -89,8 +84,10 @@ $htmlHeadXtra[]= '
 
             if (countConnections && countConnections > 0) {
                 var colorArray = $.xcolor.analogous("#da0", countConnections);
+                var colorArrayDestination = $.xcolor.analogous("#51a351", countConnections);
             } else {
                 var colorArray = $.xcolor.analogous("#da0", 10);
+                var colorArrayDestination = $.xcolor.analogous("#51a351", 10);
             }
 
 	        jsPlumb.importDefaults({
@@ -100,8 +97,6 @@ $htmlHeadXtra[]= '
 				Endpoint : "Rectangle",
 				Anchors : ["TopCenter", "TopCenter"]
 			});
-
-			var colorDestination = "#316b31";
 
             var exampleDropOptions = {
                 tolerance: "touch",
@@ -114,16 +109,22 @@ $htmlHeadXtra[]= '
                 paintStyle:{ fillStyle:colorDestination },
                 isSource:false,
                 connectorStyle:{ strokeStyle:colorDestination, lineWidth:8 },
-                connector: ["Bezier", { curviness: 63 } ],
-                maxConnections: countConnections,
+                connector: [connectorType, { curviness: curvinessValue } ],
+                maxConnections: 1000,
                 isTarget:true,
                 dropOptions : exampleDropOptions,
                 beforeDrop:function(params) {
-                console.log(params);
-                    var selectId = params.targetId;
-                    selectId = selectId.replace("answer", "select");
-                    var value = params.sourceId.replace("window"+questionId, "");
-                    jsPlumb.detachAllConnections(params.targetId);
+
+                    var connections = jsPlumb.getConnections({source: params.sourceId});
+
+                    jsPlumb.select({source:params.sourceId}).each(function(connection) {
+                        console.log(connection.sourceId);
+
+                        jsPlumb.detach(connection);
+                    });
+                    console.log(params);
+                    var selectId = params.sourceId + "_select";
+                    var value = params.targetId.split("_")[2];
 
                     $("#" +selectId +" option").filter(function() {
                         return $(this).val() == value;
@@ -137,18 +138,16 @@ $htmlHeadXtra[]= '
 
             $(windowQuestion).each(function(index) {
                 var windowId = $(this).attr("id");
-
                 var scope = windowId + "scope";
-
                 var destinationColor = colorArray[count].getHex();
 
                 var sourceEndPoint = {
                     endpoint:["Dot", { radius:15 }],
-                    paintStyle:{ fillStyle:destinationColor },
+                    paintStyle:{ fillStyle: destinationColor },
                     isSource:true,
-                    connectorStyle:{ strokeStyle:destinationColor, lineWidth:8 },
-                    connector: ["Bezier", { curviness:63 } ],
-                    maxConnections: countConnections,
+                    connectorStyle:{ strokeStyle:"#8a8888" , lineWidth:8 },
+                    connector: [connectorType, { curviness: curvinessValue } ],
+                    maxConnections: 1,
                     isTarget:false,
                     dropOptions : exampleDropOptions,
                     scope: scope
@@ -156,15 +155,18 @@ $htmlHeadXtra[]= '
                 sourceDestinationArray[count+1] = sourceEndPoint;
 
                 count++;
-                jsPlumb.addEndpoint(windowId, { anchor:[0.5, 1, 0, 1] }, sourceEndPoint);
-
+                jsPlumb.addEndpoint(windowId, { anchor:[ "RightMiddle","RightMiddle","RightMiddle","RightMiddle" ] }, sourceEndPoint);
+                var destinationCount = 0;
                 $(windowQuestion).each(function( index ) {
                     var windowDestinationId = $(this).attr("id");
                     destinationEndPoint.scope = scope;
-
-                    jsPlumb.addEndpoint(windowDestinationId+"_answer", { anchor:[0.5, 1, 0, 1] }, destinationEndPoint);
+                    destinationEndPoint.paintStyle.fillStyle = colorArrayDestination[destinationCount].getHex();
+                    destinationCount++;
+                    jsPlumb.addEndpoint(windowDestinationId+"_answer", { anchor:[ "LeftMiddle","LeftMiddle","LeftMiddle","LeftMiddle" ]  }, destinationEndPoint);
                 });
             });
+
+
             //var divsWithWindowClass = jsPlumb.CurrentLibrary.getSelector("#"+questionId+" .window");
 			//jsPlumb.draggable(divsWithWindowClass);
 			jsPlumbDemo.attachBehaviour();
@@ -204,8 +206,18 @@ $htmlHeadXtra[]= '
 jsPlumb.ready(function() {
     if ($(".drag_question").length > 0) {
 	    jsPlumbDemo.init();
+
+	     $(document).scroll(function() {
+            jsPlumb.repaintEverything();
+        });
+
+        $(window).resize(function() {
+            jsPlumb.repaintEverything();
+        });
+
 	}
 });
+
 
 $(function(){
     $(".highlight_image").on("click", function() {

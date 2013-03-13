@@ -5145,3 +5145,23 @@ i.size-32.icon-new-work {
 .highlight_image_default img {
     border: 5px solid transparent;
 }
+
+.window_right_question {
+    padding: 10px 10px 10px 25px;
+}
+
+.window_left_question {
+    text-align: right;
+    padding: 10px 25px 10px 10px;
+}
+
+
+.drag_question .window, .drag_question .label {
+    cursor:pointer;
+    box-shadow: 2px 2px 19px #aaa;
+    -o-box-shadow: 2px 2px 19px #aaa;
+    -webkit-box-shadow: 2px 2px 19px #aaa;
+    -moz-box-shadow: 2px 2px 19px #aaa;
+    min-height: 50px;
+    padding-top: 25px;
+}

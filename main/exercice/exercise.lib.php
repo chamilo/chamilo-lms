@@ -452,19 +452,18 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     // the select boxes, who are corrrect = 0)
                     $s .= '<tr><td width="45%">';
                     $parsed_answer = $answer;
-                    $windowId = $questionId.$lines_count;
+                    $windowId = $questionId.'_'.$lines_count;
                     //left part questions
-                    $s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
-						 	<span style="float:left; width:92%;">
-						 	<div id="window'.$windowId.'" class="window window'.$questionId.'_question">'.$parsed_answer.' </div>
-						 	</span>
-						 	</td>';
+                    $s .= ' <div id="window_'.$windowId.'" class="window window_left_question window'.$questionId.'_question">
+                                <b>'.$lines_count.'</b>.&nbsp'.$parsed_answer.'
+                            </div>
+                            </td>';
                     //middle part (matches selects)
 
                     $s .= '<td width="10%" align="center">&nbsp;&nbsp;';
                     $s .= '<div style="display:none">';
 
-                    $s .= '<select id="window'.$windowId.'_select" name="choice['.$questionId.']['.$numAnswer.']">';
+                    $s .= '<select id="window_'.$windowId.'_select" name="choice['.$questionId.']['.$numAnswer.']">';
                     $selectedValue = 0;
                     // fills the list-box
                     foreach ($select_items as $key => $val) {
@@ -485,16 +484,15 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     }
 
                     if (!empty($answerCorrect) && !empty($selectedValue)) {
-
                         $s.= '<script>
                             jsPlumb.ready(function() {
                                 jsPlumb.connect({
-                                    source: "window'.$questionId.$selectedValue.'",
-                                    target: "window'.$windowId.'_answer",
+                                    source: "window_'.$windowId.'",
+                                    target: "window_'.$questionId.'_'.$selectedValue.'_answer",
                                     endpoint:["Blank", { radius:15 }],
-                                    connector: ["Bezier", { curviness:63 } ],
-                                    anchor:[0.5, 1, 0, 1],
-                                    connectorStyle:{ lineWidth:8 }
+                                    anchor:["RightMiddle","LeftMiddle"],
+                                    paintStyle:{ strokeStyle:"#8a8888" , lineWidth:8 },
+                                    connector: [connectorType, { curviness: curvinessValue } ],
                                 })
                             });
                             </script>';
@@ -508,8 +506,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $s.='<td width="45%" valign="top" >';
 
                     if (isset($select_items[$lines_count])) {
-                        $s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
-                            '<span style="float:left; width:95%;"><div id="window'.$windowId.'_answer" class="window">'.$select_items[$lines_count]['answer'].'</div></span>';
+                        $s.= '<div id="window_'.$windowId.'_answer" class="window window_right_question">
+                                <b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'].'
+                              </div>';
                     } else {
                         $s.='&nbsp;';
                     }

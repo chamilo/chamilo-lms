@@ -645,7 +645,6 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         $tabs = $this->_getTabs();
         $tab = $this->_getTab();
 
-
         $selectId = $this->getName();
         $selectName = $this->getName().'[]';
         $selectNameFrom = $this->getName().'-f[]';
@@ -794,6 +793,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
             // prepare option tables to be displayed as in POST order
             $append = count($this->_values);
+
             if ($append > 0) {
                 $arrHtmlSelected = array_fill(0, $append, ' ');
             } else {
@@ -806,6 +806,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 $arrHtmlHidden = array_fill(0, $options, ' ');
 
                 foreach ($this->_options as $option) {
+
                     if (is_array($this->_values)
                         && in_array(
                             (string)$option['attr']['value'],
@@ -875,8 +876,10 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                     = array_merge($this->_attributes, $this->_attributesSelected);
                 $attrSelected = $this->_getAttrString($this->_attributesSelected);
             }
+
             $strHtmlSelected = "<select$attrSelected>".PHP_EOL;
             if ($selected_count > 0) {
+
                 foreach ($arrHtmlSelected as $data) {
                     $strHtmlSelected
                         .= $tabs.$tab

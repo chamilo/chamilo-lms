@@ -158,7 +158,6 @@ $selected_tutors = array();
 foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];
 }
-
 $group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users);
 $group_tutors_element->setButtonAttributes('add');
 $group_tutors_element->setButtonAttributes('remove');

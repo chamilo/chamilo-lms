@@ -6,7 +6,7 @@
  */
 
 //Temporal hack to redirect calls to the new web/index.php
-header('Location: web/index');
+header('Location: web/index.php');
 exit;
 
 define('CHAMILO_HOMEPAGE', true);

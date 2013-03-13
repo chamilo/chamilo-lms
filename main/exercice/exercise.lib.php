@@ -228,7 +228,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 $answer_input = null;
                 if ($answerType == UNIQUE_ANSWER_IMAGE) {
                     $attributes['style'] = 'display:none';
-                    $answer_input .= '<div id="answer'.$questionId.$numAnswer.'" style="float:left" class="highlight_image">';
+                    $answer_input .= '<div id="answer'.$questionId.$numAnswer.'" style="float:left" class="highlight_image_default highlight_image">';
                 }
 
                 $answer_input .= '<label class="radio">';

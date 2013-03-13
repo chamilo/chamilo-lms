@@ -5137,3 +5137,11 @@ i.size-32.icon-new-work {
 #learning_path_left_zone .no-border {
     border: 0px;
 }
+
+.highlight_image_selected img {
+    border: 5px solid #0088cc;
+}
+
+.highlight_image_default img {
+    border: 5px solid transparent;
+}

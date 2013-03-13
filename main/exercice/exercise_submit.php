@@ -210,15 +210,12 @@ jsPlumb.ready(function() {
 $(function(){
     $(".highlight_image").on("click", function() {
         $(this).parent().find(".highlight_image").each(function(index){
-            $(this).find("img").css({
-                "border" :"none"
-            });
+            $(this).removeClass("highlight_image_selected");
+            $(this).addClass("highlight_image_default");
             $(this).find("label").find("input").attr("checked", false);
         });
-
-        $(this).find("label").find("img").css({
-            "border": "5px solid #f00"
-        });
+        $(this).removeClass("highlight_image_default");
+        $(this).addClass("highlight_image_selected");
         $(this).find("label").find("input").attr("checked", "checked");
 
     });

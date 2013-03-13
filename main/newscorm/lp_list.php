@@ -129,22 +129,25 @@ foreach ($categories as $item) {
 
     $edit_link = null;
     $delete_link = null;
-    if ($item->getId() > 0) {
+    $moveUpLink = null;
+    $moveDownLink = null;
+
+    if ($item->getId() > 0 && api_is_allowed_to_edit()) {
         $url = 'lp_controller.php?'.api_get_cidreq().'&action=add_lp_category&id='.$item->getId();
+
         $edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit')), $url);
         $delete_url = 'lp_controller.php?'.api_get_cidreq().'&action=delete_lp_category&id='.$item->getId();
-
-
         $moveUpUrl = 'lp_controller.php?'.api_get_cidreq().'&action=move_up_category&id='.$item->getId();
         $moveDownUrl = 'lp_controller.php?'.api_get_cidreq().'&action=move_down_category&id='.$item->getId();
 
         if ($counter == 1) {
-            $moveUpLink = Display::return_icon('up_na.png', get_lang('Move'));
+            $moveUpLink = Display::url(Display::return_icon('up_na.png', get_lang('Move')), '#');
         } else {
             $moveUpLink = Display::url(Display::return_icon('up.png', get_lang('Move')), $moveUpUrl);
         }
+
         if (($total -1) == $counter) {
-            $moveDownLink = Display::return_icon('down_na.png', get_lang('Move'));
+            $moveDownLink = Display::url(Display::return_icon('down_na.png', get_lang('Move')), '#');
         } else {
             $moveDownLink = Display::url(Display::return_icon('down.png', get_lang('Move')), $moveDownUrl);
         }

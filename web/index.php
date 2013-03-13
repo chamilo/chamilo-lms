@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-//Classic global.inc.php file now returns a Application object
+// Classic global.inc.php file now returns a Application object
 $app = require_once '../main/inc/global.inc.php';
 
 /*
     In order to execute Chamilo, $app->run() is needed.
     $app->run(); shows a page depending of the URL for example when entering in "/web/index"
-    Chamilo will render the Controller IndexController->indexAction() this is because a router was assign at the end of
+    Chamilo will render the controller IndexController->indexAction() this is because a router was assign at the end of
     global.inc.php:
 
         $app->get('/index', 'index.controller:indexAction')->bind('index');

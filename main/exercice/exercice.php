@@ -690,24 +690,52 @@ if (!empty($exercise_list)) {
                     //Hide the results
                     $my_result_disabled = $row['results_disabled'];
 
-                    //Show results
-                    if ($my_result_disabled == 0 || $my_result_disabled == 2) {
-                        if ($num > 0) {
-                            $row_track = Database :: fetch_array($qryres);
-                            $attempt_text = get_lang('LatestAttempt').' : ';
-                            $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                    //Time limits are on
+                    if ($time_limits) {
+                        // Examn is ready to be taken
+                        if ($is_actived_time) {
+                            //Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
+                            if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                                //More than one attempt
+                                if ($num > 0) {
+                                    $row_track = Database :: fetch_array($qryres);
+                                    $attempt_text = get_lang('LatestAttempt').' : ';
+                                    $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                                } else {
+                                    //No attempts
+                                    $attempt_text = get_lang('NotAttempted');
+                                }
+                            } else {
+                                $attempt_text = get_lang('CantShowResults');
+                            }
                         } else {
-                            $attempt_text = get_lang('NotAttempted');
+                            //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
+                            //@todo use the is_visible function
+                            if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                                $attempt_text = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                            } else {
+                                //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
+                                if ($row['start_time'] != '0000-00-00 00:00:00') {
+                                    $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
+                                }
+                                if ($row['end_time'] != '0000-00-00 00:00:00') {
+                                    $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));
+                                }
+                            }
                         }
                     } else {
-                        // if we don't show the score
-                        if ($num > 0) {
-                            // if the exercice has been attempted
+                        //Normal behaviour
+                        //Show results
+                        if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                            if ($num > 0) {
+                                $row_track = Database :: fetch_array($qryres);
+                                $attempt_text = get_lang('LatestAttempt').' : ';
+                                $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                            } else {
+                                $attempt_text = get_lang('NotAttempted');
+                            }
+                        } else {
                             $attempt_text = get_lang('CantShowResults');
-                        }
-                        else {
-                            // if the exercice hasn't been attempted
-                            $attempt_text = get_lang('NotAttempted');
                         }
                     }
 

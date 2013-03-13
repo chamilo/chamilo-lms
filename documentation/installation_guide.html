@@ -110,7 +110,19 @@ single-database mode.</span><br />
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
-
+<h3>Configuring your web server to allow rewrites</h3>
+If you are using Apache, and due to new friendly URL features added in 1.10, you will be required to <b>AllowOverride All</b> (and possibly install the ModRewrite extension for Apache). This means that, inside your Apache configuration (or your VirtualHost configuration), you will need to have a block similar to this (the directory given is the same as in the <i>DocumentRoot</i> directive):
+<pre>
+  &lt;Directory /var/www/chamilo&gt;
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+  &lt;/Directory&gt;
+</pre>
+In particular, the "AllowOverride All" clause is the one that matters. This will allow PHP to send the user from one page to another freely, thus allowing for a more user-friendly experience.<br />
+Once you've made sure "AllowOverride" says "All", you can safely save the file, get out of it and reload the web server (<i>sudo service apache2 reload</i> under Debian/Ubuntu, or click right on the WAMP/XAMP/EasyPHP icon and "reload web server" under Windows).
+<h3>Downloading and installing Chamilo</h3>
 <ol>
   <li><a href="http://www.chamilo.org/download">Download Chamilo LMS</a></li>
   <li>Unzip it</li>

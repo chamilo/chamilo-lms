@@ -105,9 +105,11 @@ if ($is_allowed_to_edit) {
 
 $categories_temp = learnpath::get_categories(api_get_course_int_id());
 
-$category_test = new Entity\EntityCLpCategory;
+$category_test = new Entity\EntityCLpCategory();
 $category_test->setId(0);
 $category_test->setName(get_lang('NoCategory'));
+$category_test->setPosition(0);
+
 $categories = array(
     $category_test
 );
@@ -119,7 +121,8 @@ if (!empty($categories_temp)) {
 $test_mode = api_get_setting('server_type');
 
 $lp_showed = false;
-
+$total = count($categories);
+$counter = 1;
 foreach ($categories as $item) {
     $list = new LearnpathList(api_get_user_id(), null, null, null, false, $item->getId());
     $flat_list = $list->get_flat_list();
@@ -130,9 +133,26 @@ foreach ($categories as $item) {
         $url = 'lp_controller.php?'.api_get_cidreq().'&action=add_lp_category&id='.$item->getId();
         $edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit')), $url);
         $delete_url = 'lp_controller.php?'.api_get_cidreq().'&action=delete_lp_category&id='.$item->getId();
+
+
+        $moveUpUrl = 'lp_controller.php?'.api_get_cidreq().'&action=move_up_category&id='.$item->getId();
+        $moveDownUrl = 'lp_controller.php?'.api_get_cidreq().'&action=move_down_category&id='.$item->getId();
+
+        if ($counter == 1) {
+            $moveUpLink = Display::return_icon('up_na.png', get_lang('Move'));
+        } else {
+            $moveUpLink = Display::url(Display::return_icon('up.png', get_lang('Move')), $moveUpUrl);
+        }
+        if (($total -1) == $counter) {
+            $moveDownLink = Display::return_icon('down_na.png', get_lang('Move'));
+        } else {
+            $moveDownLink = Display::url(Display::return_icon('down.png', get_lang('Move')), $moveDownUrl);
+        }
+
+        $counter++;
         $delete_link = Display::url(Display::return_icon('delete.png', get_lang('Delete')), $delete_url);
     }
-    echo Display::page_subheader2($item->getName().$edit_link.$delete_link);
+    echo Display::page_subheader2($item->getName().$edit_link.$moveUpLink.$moveDownLink.$delete_link);
 
     if (!empty($flat_list)) {
         echo '<table class="data_table">';

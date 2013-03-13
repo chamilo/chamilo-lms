@@ -10559,14 +10559,57 @@ EOD;
         }
     }
 
+    static function move_up_category($id) {
+        global $app;
+        $em = $app['orm.em'];
+        $item = $em->find('Entity\EntityCLpCategory', $id);
+        if ($item) {
+            $position = $item->getPosition() - 1;
+            $item->setPosition($position);
+            $em->persist($item);
+            $em->flush();
+        }
+    }
+
+    static function move_down_category($id) {
+        global $app;
+        $em = $app['orm.em'];
+        $item = $em->find('Entity\EntityCLpCategory', $id);
+        if ($item) {
+            $position = $item->getPosition() + 1;
+            $item->setPosition($position);
+            $em->persist($item);
+            $em->flush();
+        }
+    }
+    static function get_count_categories($course_id)
+    {
+        global $app;
+        if (empty($course_id)) {
+            return 0;
+        }
+        $em = $app['orm.em'];
+        $query = $em->createQuery('SELECT COUNT(u.id) FROM Entity\EntityCLpCategory u WHERE u.cId = :id');
+        $query->setParameter('id', $course_id);
+        return $query->getSingleScalarResult();
+    }
+
+
     static function get_categories($course_id)
     {
         global $app;
         $em = $app['orm.em'];
-        $items = $em->getRepository('Entity\EntityCLpCategory')->findBy(
+
+        //Default behaviour
+        /*$items = $em->getRepository('Entity\EntityCLpCategory')->findBy(
             array('cId' => $course_id),
             array('name' => 'ASC')
-        );
+        );*/
+
+        //Using doctrine extensions
+        $items = $em->getRepository('Entity\EntityCLpCategory')->getBySortableGroupsQuery(
+            array('cId' => $course_id)
+        )->getResult();
 
         return $items;
     }

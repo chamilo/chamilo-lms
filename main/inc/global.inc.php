@@ -29,7 +29,7 @@ $starttime = $mtime;
 define('START', $starttime);
 
 // Showing/hiding error codes in global error messages.
-define('SHOW_ERROR_CODES', false);
+//define('SHOW_ERROR_CODES', false);
 
 // Determine the directory path where this current file lies.
 // This path will be useful to include the other intialisation files.
@@ -404,12 +404,12 @@ $app->register(new ChamiloServiceProvider(), array());
 //Manage error messages
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+
 $app->error(
     function (\Exception $e, $code) use ($app) {
         if ($app['debug']) {
             //return;
         }
-
         if (isset($code)) {
             switch ($code) {
                 case 404:
@@ -792,8 +792,8 @@ if (is_array($language_files)) {
 }
 
 
-//error_reporting(-1);
-error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
+
+//error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
 if (api_get_setting('server_type') == 'test') {
     //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
@@ -845,7 +845,7 @@ if (api_get_setting('server_type') == 'test') {
         }*/
 }
 
-
+error_reporting(-1);
 //Filters
 $app->before(
     function () use ($app) {

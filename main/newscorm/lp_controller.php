@@ -318,6 +318,24 @@ switch ($action) {
         }
         require 'lp_add_category.php';
         break;
+    case 'move_up_category':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if (isset($_REQUEST['id'])) {
+            learnpath::move_up_category($_REQUEST['id']);
+        }
+        require 'lp_list.php';
+        break;
+    case 'move_down_category':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if (isset($_REQUEST['id'])) {
+            learnpath::move_down_category($_REQUEST['id']);
+        }
+        require 'lp_list.php';
+        break;
     case 'delete_lp_category':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

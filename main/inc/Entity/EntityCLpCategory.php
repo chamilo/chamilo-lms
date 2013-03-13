@@ -2,6 +2,8 @@
 
 namespace Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Column;
@@ -12,13 +14,13 @@ use Doctrine\ORM\Mapping\GeneratedValue;
  * EntityCBlog
  *
  * @Table(name="c_lp_category")
- * @Entity
+ * @Entity(repositoryClass="\Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
 class EntityCLpCategory
 {
     /**
      * @var integer
-     *
+     * @Gedmo\SortableGroup
      * @Column(name="c_id", type="integer")
      */
     private $cId;
@@ -38,6 +40,12 @@ class EntityCLpCategory
      * @Column(name="name")
      */
     private $name;
+
+    /**
+     * @Gedmo\SortablePosition
+     * @Column(name="position", type="integer")
+     */
+    private $position;
 
     /**
      * Set cId
@@ -85,7 +93,7 @@ class EntityCLpCategory
     }
 
     /**
-     * Set blogName
+     * Set category name
      *
      * @param string $blogName
      * @return EntityCBlog
@@ -98,12 +106,22 @@ class EntityCLpCategory
     }
 
     /**
-     * Get blogName
+     * Get category name
      *
      * @return string
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    public function getPosition()
+    {
+        return $this->position;
     }
 }

@@ -3751,6 +3751,7 @@ function create_course_tables($course_db_name = null)
         id int unsigned NOT NULL auto_increment,
         $add_to_all_tables
         name VARCHAR(255),
+        position INT,
         PRIMARY KEY (id)
         )".$charset_clause;
     Database::query($sql);

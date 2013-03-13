@@ -5165,3 +5165,12 @@ i.size-32.icon-new-work {
     min-height: 50px;
     padding-top: 25px;
 }
+
+.select_class_filter {
+    margin: 0px 0px 50px 10px;
+}
+
+
+.advmultiselect .span1 {
+    padding-top: 50px;
+}

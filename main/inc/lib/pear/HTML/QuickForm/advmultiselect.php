@@ -305,7 +305,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             //$this->updateAttributes(array('style' => 'min-width:100px;'));
         }
         $this->_tableAttributes = $this->getAttribute('class');
-
+        $attr = null;
         if (is_null($this->_tableAttributes)) {
             $this->updateAttributes(array('class' => 'span4'));
         } else {
@@ -850,6 +850,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                     = array_merge($this->_attributes, $this->_attributesUnselected);
                 $attrUnselected = $this->_getAttrString($this->_attributesUnselected);
             }
+
             $strHtmlUnselected = "<select$attrUnselected>".PHP_EOL;
             if ($unselected_count > 0) {
                 foreach ($arrHtmlUnselected as $data) {
@@ -862,6 +863,8 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 $strHtmlUnselected .= '<option value="">&nbsp;</option>';
             }
             $strHtmlUnselected .= '</select>';
+
+            $strHtmlUnselected = '<input placeholder="'.get_lang('Search').'" id="f-'.$selectId.'-filter" type="text" class="search-query select_class_filter"><br /><br />'.$strHtmlUnselected;
 
             // The 'selected' multi-select which appears on the right
             $selected_count = count($arrHtmlSelected);
@@ -884,6 +887,8 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 $strHtmlSelected .= '<option value="">&nbsp;</option>';
             }
             $strHtmlSelected .= '</select>';
+
+            $strHtmlSelected = '<input placeholder="'.get_lang('Search').'" id="t-'.$selectId.'-filter" type="text" class="search-query"><br /><br />'.$strHtmlSelected;
 
             // The 'hidden' multi-select
             $strHtmlHidden = "<select$attrHidden>".PHP_EOL;

@@ -30,14 +30,14 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $tool_name = get_lang("SubscribeUserToCourse");
-if ($_REQUEST['type']=='teacher') {
+if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 	$tool_name = get_lang("SubscribeUserToCourseAsTeacher");
 }
 
 
 //extra entries in breadcrumb
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
-if ($_GET['keyword']) {
+if (isset($_GET['keyword']) && $_GET['keyword']) {
 	$interbreadcrumb[] = array ("url" => "subscribe_user.php?type=".Security::remove_XSS($_GET['type']), "name" => $tool_name);
 	$tool_name = get_lang('SearchResults');
 }
@@ -348,14 +348,14 @@ function get_number_of_users() {
 			$users_of_course[] = $course_user['user_id'];
 	    }
 	}
-    $sql .=" AND u.status <> ".ANONYMOUS." "; 
+    $sql .=" AND u.status <> ".ANONYMOUS." ";
 	$res = Database::query($sql);
     $count_user = 0;
-    
-    if ($res) {	
+
+    if ($res) {
 	   $row = Database::fetch_row($res);
-	   $count_user = $row[0];	   
-	}   
+	   $count_user = $row[0];
+	}
 	return $count_user;
 }
 /**
@@ -363,7 +363,7 @@ function get_number_of_users() {
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
 	global $_course, $_configuration;
-    
+
     $url_access_id = api_get_current_access_url_id();
     $course_code = api_get_course_id();
     $session_id = api_get_session_id();
@@ -373,14 +373,14 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	$course_user_table             = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_session_rel_course_user   = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$table_user_field_values 	   = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-    
+
     $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    
+
     // adding teachers
 	$is_western_name_order = api_is_western_name_order();
-    
+
     if (api_get_setting('show_email_addresses') == 'true') {
-        
+
         $select_fields = "u.user_id              AS col0,
                 u.official_code        AS col1,
                 ".($is_western_name_order
@@ -398,18 +398,18 @@ function get_user_data($from, $number_of_items, $column, $direction) {
                 ? "u.firstname         AS col2,
                 u.lastname             AS col3,"
                 : "u.lastname          AS col2,
-                u.firstname            AS col3,")."                
+                u.firstname            AS col3,")."
                 u.active               AS col4,
                 u.user_id              AS col5";
     }
 
-	
+
 	if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'teacher') {
 		// adding a teacher through a session
 		if (!empty($session_id)) {
-			$sql = "SELECT $select_fields			
+			$sql = "SELECT $select_fields
 					FROM $user_table u
-					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user AND course_code='".$course_code."' AND id_session ='".$session_id."' 
+					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user AND course_code='".$course_code."' AND id_session ='".$session_id."'
                     INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
 
 			// applying the filter of the additional user profile fields
@@ -424,9 +424,9 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			} else {
 				$sql .=	"WHERE cu.id_user IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 			}
-            
+
             $sql .=	" AND access_url_id= $url_access_id";
-            
+
 		} else {
 		     // adding a teacher NOT through a session
 			$sql = "SELECT $select_fields
@@ -447,8 +447,8 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				}
 
 				// adding a teacher NOT trough a session on a portal with multiple URLs
-				if ($_configuration['multiple_access_urls']) {				
-					if ($url_access_id !=-1) {						
+				if ($_configuration['multiple_access_urls']) {
+					if ($url_access_id !=-1) {
 						$sql = "SELECT $select_fields
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$course_code."'
@@ -475,11 +475,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			$sql = "SELECT $select_fields
                     FROM $user_table u
                     LEFT JOIN $tbl_session_rel_course_user cu ON u.user_id = cu.id_user AND course_code='".$course_code."' AND id_session ='".$session_id."' ";
-            
+
             if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
-                $sql .= " INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";                
+                $sql .= " INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
             }
-            
+
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
                 $field_identification = explode('*',$_GET['subscribe_user_filter_value']);
@@ -492,11 +492,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
             } else	{
                 $sql .=	"WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
-            
+
             if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
                 $sql .=  "AND access_url_id = $url_access_id";
-            }            
-            
+            }
+
 		} else {
             $sql = "SELECT $select_fields
                     FROM $user_table u
@@ -514,11 +514,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			} else	{
 				$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 			}
-            
+
 			//showing only the courses of the current Chamilo access_url_id
-			
+
 			if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
-			
+
 				if ($url_access_id !=-1) {
 
 					$sql = "SELECT $select_fields
@@ -540,7 +540,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					} else	{
 						$sql .=	"WHERE  cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
 					}
-				}              
+				}
 			}
 		}
 	}
@@ -565,8 +565,8 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			$users_of_course[] = $course_user['user_id'];
 		}
 	}
-	
-	$sql .=" AND u.status != ".ANONYMOUS." "; 
+
+	$sql .=" AND u.status != ".ANONYMOUS." ";
 
 	// Sorting and pagination (used by the sortable table)
 	$sql .= " ORDER BY col$column $direction ";
@@ -574,7 +574,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 	$res = Database::query($sql);
 	$users = array ();
-	while ($user = Database::fetch_row($res)) {        
+	while ($user = Database::fetch_row($res)) {
 		$users[] = $user;
 		$_SESSION['session_user_id'][] = $user[0];
 		if ($is_western_name_order) {

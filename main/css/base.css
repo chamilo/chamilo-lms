@@ -2165,7 +2165,7 @@ div.system_announcement {
     margin-left: auto;
     margin-right: auto;
     text-align: right;
-    width: 98%;
+    width: 40px;
 }
 
 div.admin_section {
@@ -2376,6 +2376,7 @@ div.admin_section h4 {
 #question_list .header_operations {
     height:40px;
     margin-bottom:5px;
+    clear: both;
 }
 .question-list-description-block {
     margin-bottom:10px !important;

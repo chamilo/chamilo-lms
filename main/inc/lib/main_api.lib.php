@@ -6714,7 +6714,13 @@ function api_get_user_language() {
 }
 
 function api_get_language_interface() {
-    $valid_languages = api_get_languages();
+    global $app;
+
+    $valid_languages = array();
+    if ($app['installed']) {
+        $valid_languages = api_get_languages();
+    }
+
     $user_language = api_get_user_language();
     $_course = api_get_course_info();
 

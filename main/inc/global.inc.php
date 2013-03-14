@@ -2,22 +2,22 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * It is recommended that ALL Chamilo scripts include this important file.
- * This script manages
- * - http get, post, post_files, session, server-vars extraction into global namespace;
- *   (which doesn't occur anymore when servertype config setting is set to test,
- *    and which will disappear completely in Dokeos 1.6.1)
- * - include of /conf/configuration.php;
- * - selecting the main database;
- * - include of language files.
+ * This is a bootstrap file that loads all Chamilo dependencies including:
  *
- * @package chamilo.include
+ * - Loading Chamilo settings in main/inc/configuration.php
+ * - Loading mysql database (Using Doctrine ORM or the Classic way: Database;;query())
+ * - Twig templates
+ * - Loading language files
+ * - Loading mail settings (smtp/sendmail/mail)
+ * - Debug (Using Monolog)
+ * - Redirecting to the main/install folder if the configuration.php file does not exists. *
+ *
+ *  It's recommended that ALL Chamilo scripts include this file.
+ * This script returns a $app Application instance so you have access to all the services.
+ *
+ *  @package chamilo.include
  * @todo isn't configuration.php renamed to configuration.inc.php yet?
  * @todo use the $_configuration array for all the needed variables
- * @todo remove the code that displays the button that links to the install page
- *         but use a redirect immediately. By doing so the $already_installed variable can be removed.
- * @todo make it possible to enable / disable the tracking through the Chamilo config page.
- *
  *
  */
 
@@ -77,7 +77,6 @@ $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_confi
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
-
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
@@ -114,14 +113,16 @@ require_once __DIR__.'../../../vendor/autoload.php';
 
 //Start Silex
 use Silex\Application;
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 $app = new Application();
+
 $app['configuration_file'] = $main_configuration_file_path;
 $app['configuration'] = $_configuration;
 $app['languages_file'] = array();
+$app['installed'] = $already_installed;
 
 //require_once __DIR__.'/../../resources/config/prod.php';
 require_once __DIR__.'/../../resources/config/dev.php';
@@ -203,6 +204,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 //URL generator provider
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
+//Validator provider
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // Implements symfony2 translator
@@ -235,7 +237,8 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
 
 //$app['translator.domains'] = array();
 */
-// Classic way or Controllers ways
+
+// Classic way of render pages or the Controller approach
 $app['classic_layout'] = false;
 
 $app['breadcrumb'] = array();
@@ -277,7 +280,13 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
     return $extensions;
 }));*/
 
-//Monolog
+/*
+Adding Monolog service provider
+Monolog  use examples
+    $app['monolog']->addDebug('Testing the Monolog logging.');
+    $app['monolog']->addInfo('Testing the Monolog logging.');
+    $app['monolog']->addError('Testing the Monolog logging.');
+*/
 if (is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
     $app->register(
         new Silex\Provider\MonologServiceProvider(),
@@ -288,14 +297,7 @@ if (is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
     );
 }
 
-/*
-//Monolog examples
-$app['monolog']->addDebug('Testing the Monolog logging.');
-$app['monolog']->addInfo('Testing the Monolog logging.');
-$app['monolog']->addError('Testing the Monolog logging.');
-*/
-
-//The script is allowed?
+//The script is allowed? This setting is modified when calling api_is_not_allowed()
 $app['allowed'] = true;
 
 //Setting the Twig service provider
@@ -380,7 +382,7 @@ if (isset($_configuration['main_database'])) {
     $app['db.event_manager']->addEventSubscriber($sortableListener);
 }
 
-//Creating Chamilo service provider
+//Creating a Chamilo service provider
 use Silex\ServiceProviderInterface;
 
 class ChamiloServiceProvider implements ServiceProviderInterface
@@ -398,13 +400,11 @@ class ChamiloServiceProvider implements ServiceProviderInterface
     {
     }
 }
+
 //Registering Chamilo service provider
 $app->register(new ChamiloServiceProvider(), array());
 
 //Manage error messages
-use Symfony\Component\HttpKernel\Exception\HttpException;
-
-
 $app->error(
     function (\Exception $e, $code) use ($app) {
         if ($app['debug']) {
@@ -431,17 +431,8 @@ $app->error(
         return new Response($response);
     }
 );
-/*
-$app->error(function (\LogicException $e, $code) {
-    var_dump($code);
-    // this handler will only \LogicException exceptions
-    // and exceptions that extends \LogicException
-});*/
 
-
-/*use Symfony\Component\HttpKernel\Debug\ErrorHandler;
-ErrorHandler::register();*/
-
+//Prompts Doctrine SQL queries using monolog
 if ($app['debug'] && isset($_configuration['main_database'])) {
     $logger = new Doctrine\DBAL\Logging\DebugStack();
     $app['db.config']->setSQLLogger($logger);
@@ -454,6 +445,7 @@ if ($app['debug'] && isset($_configuration['main_database'])) {
     });
 }
 
+//Default template settings loaded in template.inc.php
 $app['template.show_header'] = true;
 $app['template.show_footer'] = true;
 $app['template.show_learnpath'] = true;
@@ -472,8 +464,7 @@ require_once $lib_path.'array.lib.php';
 require_once $lib_path.'events.lib.inc.php';
 require_once $lib_path.'online.inc.php';
 
-/*  DATABASE CONNECTION  */
-
+/*  Database connection (for backward compatibility) */
 global $database_connection;
 
 // Connect to the server database and select the main chamilo database.
@@ -560,7 +551,7 @@ if (api_is_utf8($charset)) {
 Database::query("SET NAMES 'utf8';");
 
 // Start session after the internationalization library has been initialized
-//@todo user silex session provider instead of a custom class
+//@todo use silex session provider instead of a custom class
 Chamilo::session()->start($already_installed);
 
 if ($already_installed) {
@@ -579,6 +570,7 @@ if ($already_installed) {
             $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
         }
     }
+
 }
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
@@ -597,12 +589,12 @@ $administrator['email'] = isset($administrator['email']) ? $administrator['email
 $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
 //Including mail settings
-$mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
-if (file_exists($mail_conf)) {
-    require_once $mail_conf;
+if ($already_installed) {
+    $mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
+    if (file_exists($mail_conf)) {
+        require_once $mail_conf;
+    }
 }
-
-$mail_settings = array();
 
 // Email service provider
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
@@ -626,8 +618,7 @@ if ($already_installed && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php'))
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
-
-/*	LOAD LANGUAGE FILES SECTION */
+/*	Loading languages */
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
@@ -642,8 +633,6 @@ if ($already_installed) {
 } else {
     $app['language_interface'] = $language_interface = 'english';
 }
-
-
 
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.
@@ -791,7 +780,7 @@ if (is_array($language_files)) {
     }
 }
 
-
+/* End loading languages */
 
 //error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
@@ -846,7 +835,9 @@ if (api_get_setting('server_type') == 'test') {
 }
 
 error_reporting(-1);
-//Filters
+
+//Silex filters: before|after|finish
+
 $app->before(
     function () use ($app) {
         if (!file_exists($app['configuration_file'])) {
@@ -937,9 +928,11 @@ $default_quota = api_get_setting('default_document_quotum');
 if (empty($default_quota)) {
     $default_quota = 100000000;
 }
+
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
-//Controllers as services
+//Setting controllers as services
+
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app['pages.controller'] = $app->share(function () use ($app) {
@@ -977,7 +970,7 @@ $app['posts.controller'] = $app->share(function() use ($app) {
 });
 $app->mount('/', "posts.controller");*/
 
-//All old stuff
+//All calls made in Chamilo are manage in the src/ChamiloLMS/Controller/IndexController.php file function classicAction
 $app->get('/', 'index.controller:classicAction');
 $app->post('/', 'index.controller:classicAction');
 
@@ -986,6 +979,7 @@ $app->get('/index', 'index.controller:indexAction')->bind('index');
 
 //user_portal.php
 $app->get('/userportal', 'userportal.controller:indexAction');
+
 //Logout
 $app->get('/logout', 'index.controller:logoutAction');
 

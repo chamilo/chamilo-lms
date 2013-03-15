@@ -82,7 +82,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         // on the right side are called answers
         $num_suggestions = 0;
 
-        if ($answerType == MATCHING) {
+        if ($answerType == MATCHING || $answerType == DRAGGABLE) {
 
             $s .= '<div id="drag'.$questionId.'_question" class="drag_question">';
             $s .= '<table class="data_table">';
@@ -441,7 +441,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
                 }
                 $s .= $answer;
-            } elseif ($answerType == MATCHING) {
+            } elseif ($answerType == MATCHING || $answerType ==  DRAGGABLE) {
                 // matching type, showing suggestions and answers
                 // TODO: replace $answerId by $numAnswer
                 if ($answerId == 1) {
@@ -538,13 +538,13 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         if ($show_comment) {
             $s .= '</table>';
         } else {
-            if ($answerType == MATCHING || $answerType == UNIQUE_ANSWER_NO_OPTION || $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
+            if ($answerType == DRAGGABLE ||  $answerType == MATCHING || $answerType == UNIQUE_ANSWER_NO_OPTION || $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
                 $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 $s .= '</table>';
             }
         }
 
-        if ($answerType == MATCHING) {
+        if ($answerType == MATCHING || $answerType == DRAGGABLE) {
             $s .= '</div>';
         }
 

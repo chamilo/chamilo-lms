@@ -29,6 +29,7 @@ define('ORAL_EXPRESSION', 13);
 define('GLOBAL_MULTIPLE_ANSWER', 14);
 define('MEDIA_QUESTION', 15);
 define('UNIQUE_ANSWER_IMAGE', 16);
+define('DRAGGABLE', 17);
 
 //Some alias used in the QTI exports
 define('MCUA', 1);
@@ -82,7 +83,8 @@ abstract class Question
         ),
         GLOBAL_MULTIPLE_ANSWER => array('global_multiple_answer.class.php', 'GlobalMultipleAnswer'),
         MEDIA_QUESTION => array('media_question.class.php', 'MediaQuestion'),
-        UNIQUE_ANSWER_IMAGE => array('unique_answer_image.class.php', 'UniqueAnswerImage')
+        UNIQUE_ANSWER_IMAGE => array('unique_answer_image.class.php', 'UniqueAnswerImage'),
+        DRAGGABLE => array('draggable.class.php', 'Draggable')
     );
 
     /**

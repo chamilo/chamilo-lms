@@ -1,8 +1,19 @@
 <?php
 
-
+namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * EntitySession
@@ -126,11 +137,24 @@ class EntitySession
      */
     private $coachAccessEndDate;
 
+    /**
+     * @OneToMany(targetEntity="EntityCItemProperty", mappedBy="session")
+     **/
+    private $items;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -153,7 +177,7 @@ class EntitySession
     /**
      * Get idCoach
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdCoach()
     {
@@ -176,7 +200,7 @@ class EntitySession
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -199,7 +223,7 @@ class EntitySession
     /**
      * Get nbrCourses
      *
-     * @return integer 
+     * @return integer
      */
     public function getNbrCourses()
     {
@@ -222,7 +246,7 @@ class EntitySession
     /**
      * Get nbrUsers
      *
-     * @return integer 
+     * @return integer
      */
     public function getNbrUsers()
     {
@@ -245,7 +269,7 @@ class EntitySession
     /**
      * Get nbrClasses
      *
-     * @return integer 
+     * @return integer
      */
     public function getNbrClasses()
     {
@@ -268,7 +292,7 @@ class EntitySession
     /**
      * Get sessionAdminId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionAdminId()
     {
@@ -291,7 +315,7 @@ class EntitySession
     /**
      * Get visibility
      *
-     * @return integer 
+     * @return integer
      */
     public function getVisibility()
     {
@@ -314,7 +338,7 @@ class EntitySession
     /**
      * Get sessionCategoryId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionCategoryId()
     {
@@ -337,7 +361,7 @@ class EntitySession
     /**
      * Get promotionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPromotionId()
     {
@@ -360,7 +384,7 @@ class EntitySession
     /**
      * Get displayStartDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDisplayStartDate()
     {
@@ -383,7 +407,7 @@ class EntitySession
     /**
      * Get displayEndDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDisplayEndDate()
     {
@@ -406,7 +430,7 @@ class EntitySession
     /**
      * Get accessStartDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getAccessStartDate()
     {
@@ -429,7 +453,7 @@ class EntitySession
     /**
      * Get accessEndDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getAccessEndDate()
     {
@@ -452,7 +476,7 @@ class EntitySession
     /**
      * Get coachAccessStartDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCoachAccessStartDate()
     {
@@ -475,7 +499,7 @@ class EntitySession
     /**
      * Get coachAccessEndDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCoachAccessEndDate()
     {

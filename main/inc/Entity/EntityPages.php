@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
-use APY\DataGridBundle\Grid\Mapping as GRID;
+//use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * EntityPages

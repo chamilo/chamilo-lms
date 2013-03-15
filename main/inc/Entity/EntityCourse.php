@@ -217,16 +217,19 @@ class EntityCourse
      **/
     private $items;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->users = new ArrayCollection();
         $this->items = new ArrayCollection();
     }
 
-    public function getItems() {
+    public function getItems()
+    {
         return $this->items;
     }
 
-    public function getUsers() {
+    public function getUsers()
+    {
         return $this->users;
     }
 

@@ -145,10 +145,17 @@ ALTER TABLE c_item_property DROP PRIMARY KEY;
 ALTER TABLE c_item_property DROP COLUMN id;
 ALTER TABLE c_item_property ADD COLUMN id bigint unsigned NOT NULL auto_increment, ADD PRIMARY KEY (id);
 
+ALTER TABLE c_item_property MODIFY id_session INT default NULL;
 ALTER TABLE c_item_property MODIFY COLUMN start_visible datetime default NULL;
 ALTER TABLE c_item_property MODIFY COLUMN end_visible datetime default NULL;
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1);
 
+ALTER TABLE c_group_info MODIFY id INT NOT NULL;
+ALTER TABLE c_group_info MODIFY c_id INT NOT NULL;
+ALTER TABLE c_group_info MODIFY session_id INT NOT NULL;
+ALTER TABLE c_group_info DROP PRIMARY KEY;
+ALTER TABLE c_group_info ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21566' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21577' WHERE variable = 'chamilo_database_version';

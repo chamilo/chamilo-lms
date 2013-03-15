@@ -879,7 +879,6 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
             $strHtmlSelected = "<select$attrSelected>".PHP_EOL;
             if ($selected_count > 0) {
-
                 foreach ($arrHtmlSelected as $data) {
                     $strHtmlSelected
                         .= $tabs.$tab

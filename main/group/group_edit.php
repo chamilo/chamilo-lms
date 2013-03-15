@@ -145,10 +145,7 @@ $complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
 usort($complete_user_list, 'sort_users');
 $possible_users = array();
 foreach ($complete_user_list as $index => $user) {
-    $possible_users[$user['user_id']] = api_get_person_name(
-        $user['firstname'],
-        $user['lastname']
-    ).' ('.$user['username'].')';
+    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'],$user['lastname']).' ('.$user['username'].')';
 }
 
 // Group tutors

@@ -4,6 +4,10 @@ namespace ChamiloLMS\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class LearnpathController
+ * @package ChamiloLMS\Controller
+ */
 class LearnpathController {
 
     /**
@@ -12,7 +16,9 @@ class LearnpathController {
      * @param \Silex\Application $app
      * @param int $lpId
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @todo move calls in repositories
+     *
+     * @return Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Application $app, $lpId)
     {
@@ -31,6 +37,11 @@ class LearnpathController {
         $app['breadcrumb'] = $breadcrumb;
 
         $sessionId = api_get_session_id();
+
+        $session = null;
+        if (!empty($sessionId)) {
+            $session = $app['orm.em']->getRepository('Entity\EntitySession')->find($sessionId);
+        }
         $courseId = api_get_course_int_id();
 
         if (empty($courseId)) {
@@ -44,30 +55,46 @@ class LearnpathController {
         $subscribedUsers = $subscribedUsers->getQuery();
         $subscribedUsers =  $subscribedUsers->execute();
 
+        //All choices
         $choices = array();
         foreach ($subscribedUsers as $user) {
-            $choices[$user->getUserId()] = $user->getCompleteName();
+            $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
         }
 
-        $subscribedUsersInLp = $app['orm.em']->getRepository('Entity\EntityCItemProperty')->getUsersSubscribedToItem('learnpath', $lpId, $course);
+        $subscribedUsersInLp = $app['orm.em']->getRepository('Entity\EntityCItemProperty')->getUsersSubscribedToItem('learnpath', $lpId, $course, $session);
 
+        //Selected choices
         $selectedChoices = array();
         foreach ($subscribedUsersInLp as $itemProperty) {
-            $userId = $itemProperty->getToUserId();
-            $user = $app['orm.em']->getRepository('Entity\EntityUser')->find($userId);
-            //$selectedChoices[$user->getUserId()] = $user->getCompleteName();
-            $selectedChoices[] = $user->getUserId();
-            if (isset($choices[$user->getUserId()])) {
-                //unset($choices[$user->getUserId()]);
-            }
+            $selectedChoices[] = $itemProperty->getToUserId();
         }
 
         $form = new \FormValidator('lp_edit', 'post', $url);
         $form->addElement('header', get_lang('SubscribeUsersToLp'));
-        $group_tutors_element = $form->addElement('advmultiselect', 'users', get_lang('Users'), $choices);
 
-        $group_tutors_element->setButtonAttributes('add');
-        $group_tutors_element->setButtonAttributes('remove');
+        $userMultiSelect = $form->addElement('advmultiselect', 'users', get_lang('Users'), $choices);
+        $userMultiSelect->setButtonAttributes('add');
+        $userMultiSelect->setButtonAttributes('remove');
+
+        $groupList = \CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id(), 1);
+
+        $groupChoices = array();
+        if (!empty($groupList)) {
+            foreach ($groupList as $group) {
+                $groupChoices[$group['id']] = $group['name'];
+            }
+        }
+
+        $subscribedGroupsInLp = $app['orm.em']->getRepository('Entity\EntityCItemProperty')->getGroupsSubscribedToItem('learnpath', $lpId, $course, $session);
+
+        $selectedGroupChoices = array();
+        foreach ($subscribedGroupsInLp as $itemProperty) {
+            $selectedGroupChoices[] = $itemProperty->getToGroupId();
+        }
+
+        $groupMultiSelect = $form->addElement('advmultiselect', 'groups', get_lang('Groups'), $groupChoices);
+        $groupMultiSelect->setButtonAttributes('add');
+        $groupMultiSelect->setButtonAttributes('remove');
 
         // submit button
         $form->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');
@@ -100,11 +127,16 @@ class LearnpathController {
             ))
             ->getForm();
         */
+        $defaults = array();
 
         if (!empty($selectedChoices)) {
             $defaults['users'] = $selectedChoices;
-            $form->setDefaults($defaults);
         }
+        if (!empty($selectedGroupChoices)) {
+            $defaults['groups'] = $selectedGroupChoices;
+        }
+
+        $form->setDefaults($defaults);
 
         if ($request->getMethod() == 'POST') {
             //$form->bind($request);
@@ -112,13 +144,18 @@ class LearnpathController {
             //var_dump($request->request);exit;
             $users = $request->get('users');
             //$destination = isset($data['destination']) ? $data['destination'] : array();
-            $app['orm.em']->getRepository('Entity\EntityCItemProperty')->SubscribedUsersToItem('learnpath', $course, $sessionId, $lpId, $users);
+            $app['orm.em']->getRepository('Entity\EntityCItemProperty')->SubscribedUsersToItem('learnpath', $course, $session, $lpId, $users);
+
+            $groups = $request->get('groups');
+            $app['orm.em']->getRepository('Entity\EntityCItemProperty')->SubscribedGroupsToItem('learnpath', $course, $session, $lpId, $groups);
+
             return $app->redirect($url);
         } else {
             $app['template']->assign('form', $form->toHtml());
         }
 
         $response = $app['template']->render_template('learnpath/subscribe_users.tpl');
+
         return new Response($response, 200, array());
     }
 }

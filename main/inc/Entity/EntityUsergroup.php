@@ -1,8 +1,18 @@
 <?php
 
-
+namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * EntityUsergroup
@@ -35,11 +45,32 @@ class EntityUsergroup
      */
     private $description;
 
+    /**
+     * @OneToMany(targetEntity="EntityUsergroupRelUser", mappedBy="class")
+     **/
+    private $users;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
+
+    /**
+     * Get users
+     * @return ArrayCollection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,7 +93,7 @@ class EntityUsergroup
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -85,7 +116,7 @@ class EntityUsergroup
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {

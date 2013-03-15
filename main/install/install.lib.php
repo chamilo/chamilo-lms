@@ -16,7 +16,6 @@ define('SYSTEM_MAIN_DATABASE_FILE', 'db_main.sql');
 define('COUNTRY_DATA_FILENAME', 'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
-require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 
 /*      COMMON PURPOSE FUNCTIONS    */
 
@@ -3523,7 +3522,8 @@ function create_course_tables($course_db_name = null)
     Database::query(
         "CREATE TABLE IF NOT EXISTS `".$TABLEGROUPS."` (
     	$add_to_all_tables
-        id int unsigned NOT NULL auto_increment,
+        id int unsigned NOT NULL ,
+        iid int unsigned NOT NULL auto_increment,
         name varchar(100) default NULL,
         category_id int unsigned NOT NULL default 0,
         description text,
@@ -3539,7 +3539,7 @@ function create_course_tables($course_db_name = null)
         self_registration_allowed tinyint unsigned NOT NULL default '0',
         self_unregistration_allowed tinyint unsigned NOT NULL default '0',
         session_id int unsigned NOT NULL default 0,
-        PRIMARY KEY (c_id, id)
+        PRIMARY KEY (iid)
         )".$charset_clause
     );
 
@@ -3605,7 +3605,7 @@ function create_course_tables($course_db_name = null)
         visibility tinyint NOT NULL default '1',
         start_visible datetime default NULL,
         end_visible datetime default NULL,
-        id_session INT NOT NULL DEFAULT 0,
+        id_session INT DEFAULT NULL,
         PRIMARY KEY (c_id, id)
         )".$charset_clause
     );

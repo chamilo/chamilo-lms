@@ -22,6 +22,9 @@ class CourseRepository extends EntityRepository
 
         //Selecting courses for users
         $qb->innerJoin('u.courses', 'c');
+
+        //@todo check app settings
+        $qb->add('orderBy', 'u.lastname ASC');
 /*
         $wherePart = $qb->expr()->andx();
         //Get only users subscribed to this course

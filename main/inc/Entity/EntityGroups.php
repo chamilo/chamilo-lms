@@ -1,8 +1,13 @@
 <?php
 
-
+namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * EntityGroups
@@ -74,7 +79,7 @@ class EntityGroups
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -97,7 +102,7 @@ class EntityGroups
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -120,7 +125,7 @@ class EntityGroups
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -143,7 +148,7 @@ class EntityGroups
     /**
      * Get pictureUri
      *
-     * @return string 
+     * @return string
      */
     public function getPictureUri()
     {
@@ -166,7 +171,7 @@ class EntityGroups
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -189,7 +194,7 @@ class EntityGroups
     /**
      * Get visibility
      *
-     * @return integer 
+     * @return integer
      */
     public function getVisibility()
     {
@@ -212,7 +217,7 @@ class EntityGroups
     /**
      * Get updatedOn
      *
-     * @return string 
+     * @return string
      */
     public function getUpdatedOn()
     {
@@ -235,7 +240,7 @@ class EntityGroups
     /**
      * Get createdOn
      *
-     * @return string 
+     * @return string
      */
     public function getCreatedOn()
     {

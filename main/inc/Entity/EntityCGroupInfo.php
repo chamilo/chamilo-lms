@@ -1,8 +1,14 @@
 <?php
 
-
+namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * EntityCGroupInfo
@@ -16,17 +22,22 @@ class EntityCGroupInfo
      * @var integer
      *
      * @Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @Id
-     * @GeneratedValue(strategy="NONE")
      */
     private $cId;
 
     /**
      * @var integer
      *
-     * @Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @Id
-     * @GeneratedValue(strategy="NONE")
+     * @GeneratedValue(strategy="IDENTITY")
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $id;
 
@@ -137,9 +148,32 @@ class EntityCGroupInfo
 
 
     /**
+     * @OneToMany(targetEntity="EntityCItemProperty", mappedBy="group")
+     **/
+    private $items;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
      * Set cId
      *
      * @param integer $cId
+     *
      * @return EntityCGroupInfo
      */
     public function setCId($cId)
@@ -152,11 +186,34 @@ class EntityCGroupInfo
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Set iid
+     *
+     * @param integer $id
+     * @return EntityCGroupInfo
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getIid()
+    {
+        return $this->iid;
     }
 
     /**
@@ -175,7 +232,7 @@ class EntityCGroupInfo
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -198,7 +255,7 @@ class EntityCGroupInfo
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -221,7 +278,7 @@ class EntityCGroupInfo
     /**
      * Get categoryId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCategoryId()
     {
@@ -244,7 +301,7 @@ class EntityCGroupInfo
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -267,7 +324,7 @@ class EntityCGroupInfo
     /**
      * Get maxStudent
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaxStudent()
     {
@@ -290,7 +347,7 @@ class EntityCGroupInfo
     /**
      * Get docState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDocState()
     {
@@ -313,7 +370,7 @@ class EntityCGroupInfo
     /**
      * Get calendarState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getCalendarState()
     {
@@ -336,7 +393,7 @@ class EntityCGroupInfo
     /**
      * Get workState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getWorkState()
     {
@@ -359,7 +416,7 @@ class EntityCGroupInfo
     /**
      * Get announcementsState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAnnouncementsState()
     {
@@ -382,7 +439,7 @@ class EntityCGroupInfo
     /**
      * Get forumState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getForumState()
     {
@@ -405,7 +462,7 @@ class EntityCGroupInfo
     /**
      * Get wikiState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getWikiState()
     {
@@ -428,7 +485,7 @@ class EntityCGroupInfo
     /**
      * Get chatState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getChatState()
     {
@@ -451,7 +508,7 @@ class EntityCGroupInfo
     /**
      * Get secretDirectory
      *
-     * @return string 
+     * @return string
      */
     public function getSecretDirectory()
     {
@@ -474,7 +531,7 @@ class EntityCGroupInfo
     /**
      * Get selfRegistrationAllowed
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSelfRegistrationAllowed()
     {
@@ -497,7 +554,7 @@ class EntityCGroupInfo
     /**
      * Get selfUnregistrationAllowed
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSelfUnregistrationAllowed()
     {
@@ -520,7 +577,7 @@ class EntityCGroupInfo
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

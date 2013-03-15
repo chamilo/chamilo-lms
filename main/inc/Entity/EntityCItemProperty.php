@@ -126,6 +126,8 @@ class EntityCItemProperty
      */
     private $idSession;
 
+    /* Adding many to many relationships */
+
     /**
      *
      * @ManyToOne(targetEntity="EntityUser")
@@ -133,20 +135,32 @@ class EntityCItemProperty
      **/
     private $user;
 
-
     /**
      * @ManyToOne(targetEntity="EntityCourse")
      * @JoinColumn(name="c_id", referencedColumnName="id")
      */
     private $course;
 
-    public function __construct(EntityUser $user, EntityCourse $course)
+    /**
+     * @ManyToOne(targetEntity="EntityCGroupInfo")
+     * @JoinColumn(name="to_group_id", referencedColumnName="iid")
+     */
+    private $group;
+
+    /**
+     * @ManyToOne(targetEntity="EntitySession")
+     * @JoinColumn(name="id_session", referencedColumnName="id", nullable=true)
+     */
+    private $session;
+
+    /**
+     * @param EntityCourse $course
+     */
+    public function __construct(EntityCourse $course)
     {
-        $this->user = $user;
+        //Mandatory
         $this->course = $course;
 
-        $this->setCId($course->getId());
-        $this->setToUserId($user->getUserId());
         $this->setInsertUserId(api_get_user_id());
         $this->setLasteditUserId(api_get_user_id());
         $this->setInsertDate(new \DateTime());
@@ -154,9 +168,43 @@ class EntityCItemProperty
     }
 
     /**
+     * @param EntityUser $user
+     */
+    public function setUser(EntityUser $user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @param EntityCourse $course
+     */
+    public function setCourse(EntityCourse $course)
+    {
+        $this->course = $course;
+    }
+
+    /**
+     * @param EntityCGroupInfo $group
+     */
+    public function setGroup(EntityCGroupInfo $group)
+    {
+        $this->group = $group;
+    }
+
+    /**
+     * @param EntitySession $session
+     */
+    public function setSession(EntitySession $session)
+    {
+        $this->session = $session;
+    }
+
+
+    /**
      * Set cId
      *
      * @param integer $cId
+     *
      * @return EntityCItemProperty
      */
     public function setCId($cId)
@@ -180,6 +228,7 @@ class EntityCItemProperty
      * Set id
      *
      * @param integer $id
+     *
      * @return EntityCItemProperty
      */
     public function setId($id)
@@ -203,6 +252,7 @@ class EntityCItemProperty
      * Set tool
      *
      * @param string $tool
+     *
      * @return EntityCItemProperty
      */
     public function setTool($tool)
@@ -226,6 +276,7 @@ class EntityCItemProperty
      * Set insertUserId
      *
      * @param integer $insertUserId
+     *
      * @return EntityCItemProperty
      */
     public function setInsertUserId($insertUserId)
@@ -249,6 +300,7 @@ class EntityCItemProperty
      * Set insertDate
      *
      * @param \DateTime $insertDate
+     *
      * @return EntityCItemProperty
      */
     public function setInsertDate($insertDate)
@@ -272,6 +324,7 @@ class EntityCItemProperty
      * Set lasteditDate
      *
      * @param \DateTime $lasteditDate
+     *
      * @return EntityCItemProperty
      */
     public function setLasteditDate($lasteditDate)
@@ -295,6 +348,7 @@ class EntityCItemProperty
      * Set ref
      *
      * @param integer $ref
+     *
      * @return EntityCItemProperty
      */
     public function setRef($ref)
@@ -318,6 +372,7 @@ class EntityCItemProperty
      * Set lasteditType
      *
      * @param string $lasteditType
+     *
      * @return EntityCItemProperty
      */
     public function setLasteditType($lasteditType)
@@ -341,6 +396,7 @@ class EntityCItemProperty
      * Set lasteditUserId
      *
      * @param integer $lasteditUserId
+     *
      * @return EntityCItemProperty
      */
     public function setLasteditUserId($lasteditUserId)
@@ -364,6 +420,7 @@ class EntityCItemProperty
      * Set toGroupId
      *
      * @param integer $toGroupId
+     *
      * @return EntityCItemProperty
      */
     public function setToGroupId($toGroupId)
@@ -387,6 +444,7 @@ class EntityCItemProperty
      * Set toUserId
      *
      * @param integer $toUserId
+     *
      * @return EntityCItemProperty
      */
     public function setToUserId($toUserId)
@@ -410,6 +468,7 @@ class EntityCItemProperty
      * Set visibility
      *
      * @param boolean $visibility
+     *
      * @return EntityCItemProperty
      */
     public function setVisibility($visibility)
@@ -433,6 +492,7 @@ class EntityCItemProperty
      * Set startVisible
      *
      * @param \DateTime $startVisible
+     *
      * @return EntityCItemProperty
      */
     public function setStartVisible($startVisible)
@@ -456,6 +516,7 @@ class EntityCItemProperty
      * Set endVisible
      *
      * @param \DateTime $endVisible
+     *
      * @return EntityCItemProperty
      */
     public function setEndVisible($endVisible)
@@ -479,6 +540,7 @@ class EntityCItemProperty
      * Set idSession
      *
      * @param integer $idSession
+     *
      * @return EntityCItemProperty
      */
     public function setIdSession($idSession)

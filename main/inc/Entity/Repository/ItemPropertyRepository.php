@@ -22,14 +22,18 @@ class ItemPropertyRepository extends EntityRepository
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getUsersSubscribedToItem($tool, $itemId, \Entity\EntityCourse $course, $sessionId = 0, $groupId = 0)
+    public function getUsersSubscribedToItem($tool, $itemId, \Entity\EntityCourse $course, \Entity\EntitySession $session = null, \Entity\EntityGroup $group = null)
     {
-        /*$items = $this->findBy(array(
-                'course' => $course,
-                'idSession' => $sessionId,
-                'toGroupId' => $groupId
-        ));
-        return $items;*/
+        $criteria = array(
+            'tool' => $tool,
+            'lasteditType' => 'LearnpathSubscription',
+            'ref' => $itemId,
+            'course' => $course,
+            'session' => $session,
+            'group' => $group
+        );
+        return $this->findBy($criteria);
+
 
         $qb = $this->createQueryBuilder('i')
             ->select('i');
@@ -48,17 +52,77 @@ class ItemPropertyRepository extends EntityRepository
 
         $qb->where($wherePart);
         $q = $qb->getQuery();
+        //var_dump($q->getSQL());
         return $q->execute();
     }
 
-    public function SubscribedUsersToItem($tool, \Entity\EntityCourse $course, $sessionId, $lpId, $newUserList = array()) {
+    public function getGroupsSubscribedToItem($tool, $itemId, \Entity\EntityCourse $course, \Entity\EntitySession $session = null)
+    {
+        $criteria = array(
+            'tool' => $tool,
+            'lasteditType' => 'LearnpathSubscription',
+            'ref' => $itemId,
+            'course' => $course,
+            'session' => $session,
+            'toUserId' => null,
+        );
+        return $this->findBy($criteria);
+    }
+
+    public function SubscribedGroupsToItem($tool, \Entity\EntityCourse $course, \Entity\EntitySession $session = null, $itemId, $newList = array())
+    {
         $em = $this->getEntityManager();
+        $groupsSubscribedToItem = $this->getGroupsSubscribedToItem($tool, $itemId, $course, $session);
 
+        $alreadyAdded = array();
+        if ($groupsSubscribedToItem) {
+            foreach ($groupsSubscribedToItem as $itemProperty) {
+                $alreadyAdded[] = $itemProperty->getToGroupId();
+            }
+        }
+
+        $toDelete = $alreadyAdded;
+
+        if (!empty($newList)) {
+            $toDelete = array_diff($alreadyAdded, $newList);
+        }
+
+        if ($toDelete) {
+            foreach ($toDelete as $itemToDelete) {
+                $item = $this->findOneBy(array(
+                    'tool' => $tool,
+                    'session' => $session,
+                    'ref' => $itemId,
+                    'toGroupId' => $itemToDelete
+                ));
+                if ($item) {
+                    $em->remove($item);
+                }
+            }
+        }
+
+        foreach ($newList as $groupId) {
+            $groupObj = $em->find('Entity\EntityCGroupInfo', $groupId);
+            if (!in_array($groupId, $alreadyAdded)) {
+                $item = new \Entity\EntityCItemProperty($course);
+                $item->setGroup($groupObj);
+                $item->setTool($tool);
+                $item->setRef($itemId);
+                $item->setIdSession($sessionId);
+                $item->setLasteditType('LearnpathSubscription');
+                $item->setVisibility('1');
+                $em->persist($item); //$em is an instance of EntityManager
+            }
+        }
+        $em->flush();
+    }
+
+    public function SubscribedUsersToItem($tool, \Entity\EntityCourse $course, \Entity\EntitySession $session = null, $itemId, $newUserList = array())
+    {
+        $em = $this->getEntityManager();
         $user = $em->getRepository('Entity\EntityUser');
-        $courseRepo = $em->getRepository('Entity\EntityCourse');
 
-        $usersSubscribedToItem = $this->getUsersSubscribedToItem($tool, $lpId, $course, $sessionId);
-        $users = $courseRepo->getSubscribedStudents($course);
+        $usersSubscribedToItem = $this->getUsersSubscribedToItem($tool, $itemId, $course, $session);
 
         $alreadyAddedUsers = array();
         if ($usersSubscribedToItem) {
@@ -76,10 +140,10 @@ class ItemPropertyRepository extends EntityRepository
         if ($usersToDelete) {
             foreach ($usersToDelete as $userToDelete) {
                 $item = $this->findOneBy(array(
-                        'tool' => $tool,
-                        'idSession' => $sessionId,
-                        'ref' => $lpId,
-                        'toUserId' => $userToDelete
+                    'tool' => $tool,
+                    'session' => $session,
+                    'ref' => $itemId,
+                    'toUserId' => $userToDelete
                 ));
                 if ($item) {
                     $em->remove($item);
@@ -88,13 +152,16 @@ class ItemPropertyRepository extends EntityRepository
         }
 
         foreach ($newUserList as $userId) {
-            $userObj = $user->find($userId);
             if (!in_array($userId, $alreadyAddedUsers)) {
-                $item = new \Entity\EntityCItemProperty($userObj, $course);
+                $userObj = $user->find($userId);
+
+                $item = new \Entity\EntityCItemProperty($course);
+                $item->setUser($userObj);
                 $item->setTool($tool);
-                $item->setRef($lpId);
-                $item->setIdSession($sessionId);
-                $item->setToGroupId(0);
+                $item->setRef($itemId);
+                if (!empty($session)) {
+                    $item->setSession($session);
+                }
                 $item->setLasteditType('LearnpathSubscription');
                 $item->setVisibility('1');
                 $em->persist($item); //$em is an instance of EntityManager

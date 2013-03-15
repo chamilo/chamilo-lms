@@ -1,8 +1,15 @@
 <?php
 
-
+namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * EntityUsergroupRelUser
@@ -35,11 +42,40 @@ class EntityUsergroupRelUser
      */
     private $userId;
 
+    /**
+     *
+     * @ManyToOne(targetEntity="EntityUser")
+     * @JoinColumn(name="user_id", referencedColumnName="user_id")
+     **/
+    private $user;
+
+    /**
+     *
+     * @ManyToOne(targetEntity="EntityUsergroup")
+     * @JoinColumn(name="usergroup_id", referencedColumnName="id")
+     **/
+    private $class;
+
+    /**
+     * Gets the class obj
+    */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * Gets an user obj
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -50,6 +86,7 @@ class EntityUsergroupRelUser
      * Set usergroupId
      *
      * @param integer $usergroupId
+     *
      * @return EntityUsergroupRelUser
      */
     public function setUsergroupId($usergroupId)
@@ -62,7 +99,7 @@ class EntityUsergroupRelUser
     /**
      * Get usergroupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUsergroupId()
     {
@@ -85,7 +122,7 @@ class EntityUsergroupRelUser
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {

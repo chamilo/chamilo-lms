@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\Common\Collections\Criteria;
-
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -224,6 +223,12 @@ class EntityUser
      **/
     private $items;
 
+
+    /**
+     * @OneToMany(targetEntity="EntityUsergroupRelUser", mappedBy="user")
+     **/
+    private $classes;
+
     /**
      *
      */
@@ -231,6 +236,15 @@ class EntityUser
     {
         $this->courses = new ArrayCollection();
         $this->items = new ArrayCollection();
+        $this->classes = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getClasses()
+    {
+        return $this->classes;
     }
 
     /**
@@ -257,7 +271,25 @@ class EntityUser
      */
     public function getCompleteName()
     {
-        return $this->lastname .', '. $this->firstname .' ('. $this->email .')';
+        //return $this->lastname .', '. $this->firstname .' ('. $this->email .')';
+        return $this->lastname .', '. $this->firstname;
+    }
+
+    /**
+     * Returns the list of classes for the user
+     * @return string
+     */
+    public function getCompleteNameWithClasses()
+    {
+        $classSubscription = $this->getClasses();
+        $classList = array();
+        foreach ($classSubscription as $subscription) {
+            $class = $subscription->getClass();
+            $classList[] = $class->getName();
+        }
+        $classString = !empty($classList) ? ' ['.implode(', ', $classList).']' : null;
+
+        return $this->getCompleteName().$classString;
     }
 
     /**

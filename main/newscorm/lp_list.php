@@ -122,7 +122,8 @@ $test_mode = api_get_setting('server_type');
 
 $lp_showed = false;
 $total = count($categories);
-$counter = 1;
+$counterCategories = 1;
+
 foreach ($categories as $item) {
     $list = new LearnpathList(api_get_user_id(), null, null, null, false, $item->getId());
     $flat_list = $list->get_flat_list();
@@ -140,21 +141,21 @@ foreach ($categories as $item) {
         $moveUpUrl = 'lp_controller.php?'.api_get_cidreq().'&action=move_up_category&id='.$item->getId();
         $moveDownUrl = 'lp_controller.php?'.api_get_cidreq().'&action=move_down_category&id='.$item->getId();
 
-        if ($counter == 1) {
+        if ($counterCategories == 1) {
             $moveUpLink = Display::url(Display::return_icon('up_na.png', get_lang('Move')), '#');
         } else {
             $moveUpLink = Display::url(Display::return_icon('up.png', get_lang('Move')), $moveUpUrl);
         }
 
-        if (($total -1) == $counter) {
+        if (($total -1) == $counterCategories) {
             $moveDownLink = Display::url(Display::return_icon('down_na.png', get_lang('Move')), '#');
         } else {
             $moveDownLink = Display::url(Display::return_icon('down.png', get_lang('Move')), $moveDownUrl);
         }
-
-        $counter++;
         $delete_link = Display::url(Display::return_icon('delete.png', get_lang('Delete')), $delete_url);
+        $counterCategories++;
     }
+
     echo Display::page_subheader2($item->getName().$edit_link.$moveUpLink.$moveDownLink.$delete_link);
 
     if (!empty($flat_list)) {

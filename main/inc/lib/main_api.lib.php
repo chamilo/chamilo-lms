@@ -3404,6 +3404,7 @@ function api_display_language_form($hide_if_no_choice = false) {
 
     // Retrieve a complete list of all the languages.
     $language_list = api_get_languages();
+
     if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
         return; //don't show any form
     }
@@ -4489,7 +4490,7 @@ function api_add_access_url($u, $d = '', $a = 1) {
  * @param int       Access URL's ID. Optional. Uses 1 by default, which is the unique URL
  * @return array    Array of database results for the current settings of the current access URL
  */
-function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0) {
+function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0) {
     $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
     $where_condition = '';
@@ -6388,7 +6389,6 @@ function api_get_js_simple($file) {
 
 function api_set_settings_and_plugins() {
     global $_configuration;
-    //error_log('Loading settings from DB');
     $_setting = array();
     $_plugins = array();
 
@@ -6731,6 +6731,7 @@ function api_get_language_interface() {
         if (!in_array($user_language, $valid_languages['folder'])) {
             $user_language = api_get_setting('platformLanguage');
         }
+
         $language_priority1 = api_get_setting('languagePriority1');
         $language_priority2 = api_get_setting('languagePriority2');
         $language_priority3 = api_get_setting('languagePriority3');

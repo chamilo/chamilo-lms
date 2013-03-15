@@ -891,7 +891,7 @@ class Template
         if (!empty($this->menu_navigation)) {
             $content = '<ul class="nav nav-list">';
             foreach ($this->menu_navigation as $section => $navigation_info) {
-                $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
+                $current = isset($GLOBALS['this_section']) && $section == $GLOBALS['this_section'] ? ' id="current"' : '';
                 $content .= '<li'.$current.'>';
                 $content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
                 $content .= '</li>';

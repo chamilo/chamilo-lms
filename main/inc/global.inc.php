@@ -507,12 +507,9 @@ if (!empty($_configuration['multiple_access_urls'])) {
 // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
 Database::query("set session sql_mode='';");
 
-if (isset($_configuration['main_database']) && !Database::select_db(
-    $_configuration['main_database'],
-    $database_connection
-)
-) {
-    //$app->abort(500, "Database is unavailable"); //error 3
+$checkConnection = false;
+if (isset($_configuration['main_database'])) {
+    $checkConnection = Database::select_db($_configuration['main_database'], $database_connection);
 }
 
 /*   Initialization of the default encodings */
@@ -839,7 +836,7 @@ error_reporting(-1);
 //Silex filters: before|after|finish
 
 $app->before(
-    function () use ($app) {
+    function () use ($app, $checkConnection) {
         if (!file_exists($app['configuration_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
             $app->abort(500, "Incorrect PHP version");
@@ -849,6 +846,11 @@ $app->before(
         if (api_check_php_version() == false) {
             $app->abort(500, "Incorrect PHP version");
         }
+
+        if ($checkConnection == false) {
+            $app->abort(500, "Database not available");
+        }
+
         if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
             $app->abort(500, "archive folder must be writeable");
         }

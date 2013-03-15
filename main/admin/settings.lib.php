@@ -206,7 +206,7 @@ function handle_stylesheets() {
     $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'), array('size' => '40', 'maxlength' => '40'));
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
-    $allowed_file_types = array('css', 'zip', 'jpeg', 'jpg', 'png', 'gif', 'ico');
+    $allowed_file_types = array('css', 'zip', 'jpeg', 'jpg', 'png', 'gif', 'ico','psd');
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
@@ -375,7 +375,7 @@ function upload_stylesheet($values, $picture) {
                 $file = $zip->statIndex($i);
                 if (substr($file['name'], -1) != '/') {
                     $path_parts = pathinfo($file['name']);
-                    if (!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css', 'ico'))) {
+                    if (!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css', 'ico','psd'))) {
                         $valid = false;
                         $invalid_files[] = $file['name'];
                     }

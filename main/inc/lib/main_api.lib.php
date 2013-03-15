@@ -3021,7 +3021,7 @@ function api_get_datetime($time = null) {
  * @param int       The session ID (optional)
  * @return int      -1 on error, 0 if invisible, 1 if visible
  */
-function api_get_item_visibility($_course, $tool, $id, $session = 0, $user_id = null, $type = null) {
+function api_get_item_visibility($_course, $tool, $id, $session = 0, $user_id = null, $type = null, $group_id = null) {
     if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) { return -1; }
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
@@ -3034,18 +3034,26 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0, $user_id = 
         $user_condition = " AND to_user_id = $user_id ";
     }
     $type_condition = null;
+
     if (!empty($type)) {
         $type = Database::escape_string($type);
         $type_condition = " AND lastedit_type = '$type' ";
+    }
+
+    $group_condition = null;
+    if (!empty($group_id)) {
+        $group_id = intval($group_id);
+        $group_condition = " AND to_group_id = '$group_id' ";
     }
 
     $sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY
     		WHERE 	c_id = $course_id AND
     				tool = '$tool' AND
     				ref = $id AND
-    				(id_session = $session OR id_session = 0) $user_condition $type_condition
+    				(id_session = $session OR id_session = 0 OR id_session IS NULL) $user_condition $type_condition $group_condition
     		ORDER BY id_session DESC, lastedit_date DESC";
     $res = Database::query($sql);
+
     if ($res === false || Database::num_rows($res) == 0) { return -1; }
     $row = Database::fetch_array($res);
     return $row['visibility'];

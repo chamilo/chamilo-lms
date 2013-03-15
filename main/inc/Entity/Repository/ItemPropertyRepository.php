@@ -102,13 +102,16 @@ class ItemPropertyRepository extends EntityRepository
         }
 
         foreach ($newList as $groupId) {
-            $groupObj = $em->find('Entity\EntityCGroupInfo', $groupId);
             if (!in_array($groupId, $alreadyAdded)) {
                 $item = new \Entity\EntityCItemProperty($course);
+                $groupObj = $em->find('Entity\EntityCGroupInfo', $groupId);
                 $item->setGroup($groupObj);
                 $item->setTool($tool);
                 $item->setRef($itemId);
-                $item->setIdSession($sessionId);
+
+                if (!empty($session)) {
+                    $item->setSession($session);
+                }
                 $item->setLasteditType('LearnpathSubscription');
                 $item->setVisibility('1');
                 $em->persist($item); //$em is an instance of EntityManager
@@ -117,6 +120,13 @@ class ItemPropertyRepository extends EntityRepository
         $em->flush();
     }
 
+    /**
+     * @param $tool
+     * @param \Entity\EntityCourse $course
+     * @param \Entity\EntitySession $session
+     * @param $itemId
+     * @param array $newUserList
+     */
     public function SubscribedUsersToItem($tool, \Entity\EntityCourse $course, \Entity\EntitySession $session = null, $itemId, $newUserList = array())
     {
         $em = $this->getEntityManager();

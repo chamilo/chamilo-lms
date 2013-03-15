@@ -878,16 +878,21 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             }
 
             $strHtmlSelected = "<select$attrSelected>".PHP_EOL;
+
             if ($selected_count > 0) {
                 foreach ($arrHtmlSelected as $data) {
+                    if (!empty($data) && isset($data['attr'])) {
+
                     $strHtmlSelected
                         .= $tabs.$tab
                         .'<option'.$this->_getAttrString($data['attr']).'>'
                         .$data['text'].'</option>'.PHP_EOL;
+                    }
                 }
             } else {
                 $strHtmlSelected .= '<option value="">&nbsp;</option>';
             }
+
             $strHtmlSelected .= '</select>';
 
             $strHtmlSelected = '<input placeholder="'.get_lang('Search').'" id="t-'.$selectId.'-filter" type="text" class="search-query"><br /><br />'.$strHtmlSelected;
@@ -896,10 +901,11 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $strHtmlHidden = "<select$attrHidden>".PHP_EOL;
             if (count($arrHtmlHidden) > 0) {
                 foreach ($arrHtmlHidden as $data) {
+                    if (!empty($data) && isset($data['attr'])) {
                     $strHtmlHidden
                         .= $tabs.$tab
-                        .'<option'.$this->_getAttrString($data['attr']).'>'
-                        .$data['text'].'</option>'.PHP_EOL;
+                        .'<option'.$this->_getAttrString($data['attr']).'>'.$data['text'].'</option>'.PHP_EOL;
+                    }
                 }
             }
             $strHtmlHidden .= '</select>';

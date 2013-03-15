@@ -2389,9 +2389,25 @@ class learnpath
             }
 
             if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 ) {
-                $visibility = api_get_item_visibility($course_info, 'learnpath', $row['id'], $session_id, $student_id, 'LearnpathSubscription');
-                if ($visibility == -1) {
-                    return false;
+                $userVisibility = api_get_item_visibility($course_info, 'learnpath', $row['id'], $session_id, $student_id, 'LearnpathSubscription');
+
+                if ($userVisibility == 1) {
+                    $is_visible = true;
+                } else {
+                    $is_visible = false;
+                }
+
+                $groupList = GroupManager::get_group_ids($course_info['real_id'], $student_id);
+
+                if (!empty($groupList)) {
+                    foreach($groupList as $groupId) {
+                        $groupVisibility = api_get_item_visibility($course_info, 'learnpath', $row['id'], $session_id, 0, 'LearnpathSubscription', $groupId);
+
+                        if ($groupVisibility == 1) {
+                            $is_visible = true;
+                            break;
+                        }
+                    }
                 }
             }
 

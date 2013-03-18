@@ -90,31 +90,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // get vars from GET
 if (empty($exerciseId)) {
-    $exerciseId = intval($_GET['exerciseId']);
+    $exerciseId = isset($_GET['exerciseId'])?intval($_GET['exerciseId']):'0';
 }
 if (empty($newQuestion)) {
-    $newQuestion = $_GET['newQuestion'];
+    $newQuestion = isset($_GET['newQuestion'])?$_GET['newQuestion']:0;
 }
 if (empty($modifyAnswers)) {
-    $modifyAnswers = $_GET['modifyAnswers'];
+    $modifyAnswers = isset($_GET['modifyAnswers'])?$_GET['modifyAnswers']:0;
 }
 if (empty($editQuestion)) {
-    $editQuestion = $_GET['editQuestion'];
+    $editQuestion = isset($_GET['editQuestion'])?$_GET['editQuestion']:0;
 }
 if (empty($modifyQuestion)) {
-    $modifyQuestion = $_GET['modifyQuestion'];
+    $modifyQuestion = isset($_GET['modifyQuestion'])?$_GET['modifyQuestion']:0;
 }
 if (empty($deleteQuestion)) {
-    $deleteQuestion = $_GET['deleteQuestion'];
+    $deleteQuestion = isset($_GET['deleteQuestion'])?$_GET['deleteQuestion']:0;
 }
 if (empty($clone_question)) {
-    $clone_question = $_GET['clone_question'];
+    $clone_question = isset($_GET['clone_question'])?$_GET['clone_question']:0;
 }
 if (empty($questionId)) {
-    $questionId = $_SESSION['questionId'];
+    $questionId = isset($_SESSION['questionId'])?$_SESSION['questionId']:0;
 }
 if (empty($modifyExercise)) {
-    $modifyExercise = $_GET['modifyExercise'];
+    $modifyExercise = isset($_GET['modifyExercise'])?$_GET['modifyExercise']:0;
 }
 
 //Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
@@ -122,9 +122,9 @@ if (empty($modifyExercise)) {
 delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
 
 // get from session
-$objExercise = $_SESSION['objExercise'];
-$objQuestion = $_SESSION['objQuestion'];
-$objAnswer = $_SESSION['objAnswer'];
+$objExercise = isset($_SESSION['objExercise'])?$_SESSION['objExercise']:0;
+$objQuestion = isset($_SESSION['objQuestion'])?$_SESSION['objQuestion']:0;
+$objAnswer = isset($_SESSION['objAnswer'])?$_SESSION['objAnswer']:0;
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -146,7 +146,7 @@ $aType = array(
 
 // tables used in the exercise tool
 
-if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
+if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';
     $export = export_question($_GET['questionId'], true);
     $qid = (int)$_GET['questionId'];
@@ -185,7 +185,7 @@ if (!is_object($objExercise)) {
 }
 
 // doesn't select the exercise ID if we come from the question pool
-if (!$fromExercise) {
+if (!isset($fromExercise) or !$fromExercise) {
     // gets the right exercise ID, and if 0 creates a new exercise
     if (!$exerciseId = $objExercise->selectId()) {
         $modifyExercise = 'yes';
@@ -217,7 +217,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 }
 
 // if cancelling an exercise
-if ($cancelExercise) {
+if (!empty($cancelExercise)) {
     // existing exercise
     if ($exerciseId) {
         unset($modifyExercise);
@@ -230,7 +230,7 @@ if ($cancelExercise) {
 }
 
 // if cancelling question creation/modification
-if ($cancelQuestion) {
+if (!empty($cancelQuestion)) {
     // if we are creating a new question from the question pool
     if (!$exerciseId && !$questionId) {
         // goes back to the question pool
@@ -243,7 +243,7 @@ if ($cancelQuestion) {
     }
 }
 
-if (isset($clone_question) && !empty($objExercise->id)) {
+if (!empty($clone_question) && !empty($objExercise->id)) {
     $old_question_obj = Question::read($clone_question);
     $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
@@ -264,11 +264,13 @@ if (isset($clone_question) && !empty($objExercise->id)) {
 }
 
 // if cancelling answer creation/modification
-if ($cancelAnswers) {
+if (!empty($cancelAnswers)) {
     // goes back to the question viewing
     $editQuestion = $modifyAnswers;
     unset($modifyAnswers);
 }
+
+$nameTools = get_lang('ExerciseManagement');
 
 // modifies the query string that is used in the link of tool name
 if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
@@ -302,7 +304,7 @@ if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
 }
 
 // if the question is duplicated, disable the link of tool name
-if ($modifyIn == 'thisExercise') {
+if (!empty($modifyIn) && $modifyIn == 'thisExercise') {
     if ($buttonBack) {
         $modifyIn = 'allExercises';
     } else {

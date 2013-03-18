@@ -2520,7 +2520,7 @@ class Exercise
                 error_log("answer correct: $answerCorrect ");
             }
 
-            //delineation
+            //Delineation
             $delineation_cord = $objAnswerTmp->selectHotspotCoordinates(1);
             $answer_delineation_destination = $objAnswerTmp->selectDestination(1);
 
@@ -2905,6 +2905,7 @@ class Exercise
                     }
                     break;
                 // for matching
+                case DRAGGABLE:
                 case MATCHING :
                     if ($from_database) {
                         $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id="'.$questionId.'" AND correct=0';
@@ -2937,19 +2938,38 @@ class Exercise
                                 $s_user_answer = 0;
                             }
                             $i_answerWeighting = $objAnswerTmp->selectWeighting($i_answer_id);
+
                             $user_answer = '';
                             if (!empty($s_user_answer)) {
                                 if ($s_user_answer == $i_answer_correct_answer) {
                                     $questionScore += $i_answerWeighting;
                                     $totalScore += $i_answerWeighting;
-                                    $user_answer = '<span>'.$real_list[$i_answer_correct_answer].'</span>';
+                                    if ($answerType == DRAGGABLE) {
+                                        $user_answer = Display::label(get_lang('Correct'), 'success');
+                                    } else {
+                                        $user_answer = '<span>'.$real_list[$i_answer_correct_answer].'</span>';
+                                    }
                                 } else {
-                                    $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
+                                    if ($answerType == DRAGGABLE) {
+                                        $user_answer = Display::label(get_lang('NotCorrect'), 'important');
+                                    } else {
+                                        $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
+                                    }
+                                }
+                            } else {
+                                if ($answerType == DRAGGABLE) {
+                                    $user_answer = Display::label(get_lang('Incorrect'), 'important');
                                 }
                             }
+
                             if ($show_result) {
                                 echo '<tr>';
-                                echo '<td>'.$s_answer_label.'</td><td>'.$user_answer.' <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b></td>';
+                                echo '<td>'.$s_answer_label.'</td>';
+                                echo '<td>'.$user_answer.'';
+                                if ($answerType == MATCHING) {
+                                    echo '<b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b>';
+                                }
+                                echo '</td>';
                                 echo '</tr>';
                             }
                         }
@@ -3060,7 +3080,7 @@ class Exercise
                     }
 
                     //display answers (if not matching type, or if the answer is correct)
-                    if ($answerType != MATCHING || $answerCorrect) {
+                    if (!in_array($answerType, array(DRAGGABLE, MATCHING))|| $answerCorrect) {
                         if (in_array(
                             $answerType,
                             array(
@@ -3582,14 +3602,11 @@ class Exercise
                                 $answerComment
                             );
                             break;
+                        case DRAGGABLE:
                         case MATCHING:
                             if ($origin != 'learnpath') {
                                 echo '<tr>';
-                                echo '<td>'.text_filter($answer_matching[$answerId]).'</td><td>'.text_filter(
-                                    $user_answer
-                                ).' / <b><span style="color: #008000;">'.text_filter(
-                                    $answer_matching[$answerCorrect]
-                                ).'</span></b></td>';
+                                echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$answer_matching[$answerCorrect].'</span></b></td>';
                                 echo '</tr>';
                             }
                             break;
@@ -3900,7 +3917,7 @@ class Exercise
                 } else {
                     exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
-            } elseif ($answerType == MATCHING) {
+            } elseif ($answerType == MATCHING || $answerType == DRAGGABLE) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
                         exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
@@ -3954,8 +3971,6 @@ class Exercise
 
         return $return_array;
     }
-
-//End function
 
     /**
      * Sends a notification when a user ends an examn

@@ -83,9 +83,12 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         $num_suggestions = 0;
 
         if ($answerType == MATCHING || $answerType == DRAGGABLE) {
-
-            $s .= '<div id="drag'.$questionId.'_question" class="drag_question">';
-            $s .= '<table class="data_table">';
+            if ($answerType == DRAGGABLE) {
+                $s .= '<ul class="drag_question">';
+            } else {
+                $s .= '<div id="drag'.$questionId.'_question" class="drag_question">';
+                $s .= '<table class="data_table">';
+            }
 
             $x = 1; //iterate through answers
             $letter = 'A'; //mark letters for each answer
@@ -441,7 +444,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
                 }
                 $s .= $answer;
-            } elseif ($answerType == MATCHING || $answerType ==  DRAGGABLE) {
+            } elseif ($answerType == MATCHING) {
                 // matching type, showing suggestions and answers
                 // TODO: replace $answerId by $numAnswer
                 if ($answerId == 1) {
@@ -449,7 +452,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 }
                 if ($answerCorrect != 0) {
                     // only show elements to be answered (not the contents of
-                    // the select boxes, who are corrrect = 0)
+                    // the select boxes, who are correct = 0)
                     $s .= '<tr><td width="45%">';
                     $parsed_answer = $answer;
                     $windowId = $questionId.'_'.$lines_count;
@@ -497,12 +500,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                             });
                             </script>';
                     }
-
-
                     $s .= '</select></div></td>';
 
-                    //print_r($select_items);
-                    //right part (answers)
                     $s.='<td width="45%" valign="top" >';
 
                     if (isset($select_items[$lines_count])) {
@@ -533,18 +532,107 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     }  // end if()
                     $matching_correct_answer++;
                 }
+            } elseif ($answerType ==  DRAGGABLE) {
+                // matching type, showing suggestions and answers
+                // TODO: replace $answerId by $numAnswer
+                if ($answerId == 1) {
+                    //echo $objAnswerTmp->getJs();
+                    //$s .= '<tr>';
+                }
+                if ($answerCorrect != 0) {
+                    // only show elements to be answered (not the contents of
+                    // the select boxes, who are correct = 0)
+                    $s .= '<td>';
+                    $parsed_answer = $answer;
+                    $windowId = $questionId.'_'.$lines_count;
+                    //left part questions
+                    $s .= '<li class="ui-state-default" id="'.$windowId.'"><span class="ui-icon ui-icon-arrow-2-e-w"></span>';
+                    $s .= ' <div id="window_'.$windowId.'" class="window'.$questionId.'_question_draggable">
+                                <b>'.$lines_count.'</b>.&nbsp'.$parsed_answer.'
+                            </div>';
+
+                    $s .= '<div style="display:none">';
+
+                    $s .= '<select id="window_'.$windowId.'_select" name="choice['.$questionId.']['.$numAnswer.']" class="select_option">';
+                    $selectedValue = 0;
+                    // fills the list-box
+                    foreach ($select_items as $key => $val) {
+                        // set $debug_mark_answer to true at function start to
+                        // show the correct answer with a suffix '-x'
+                        $selected = '';
+                        if ($debug_mark_answer) {
+                            if ($val['id'] == $answerCorrect) {
+                                $selected = 'selected="selected"';
+                                $selectedValue = $val['id'];
+                            }
+                        }
+                        if (isset($user_choice[$matching_correct_answer]) && $val['id'] == $user_choice[$matching_correct_answer]['answer']) {
+                            $selected = 'selected="selected"';
+                            $selectedValue = $val['id'];
+                        }
+                        $s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
+                    }
+
+                    /*if (!empty($answerCorrect) && !empty($selectedValue)) {
+                        $s.= '<script>
+                            jsPlumb.ready(function() {
+                                jsPlumb.connect({
+                                    source: "window_'.$windowId.'",
+                                    target: "window_'.$questionId.'_'.$selectedValue.'_answer",
+                                    endpoint:["Blank", { radius:15 }],
+                                    anchor:["RightMiddle","LeftMiddle"],
+                                    paintStyle:{ strokeStyle:"#8a8888" , lineWidth:8 },
+                                    connector: [connectorType, { curviness: curvinessValue } ],
+                                })
+                            });
+                            </script>';
+                    }*/
+                    $s .= '</select>';
+
+                    if (isset($select_items[$lines_count])) {
+                        $s.= '<div id="window_'.$windowId.'_answer" class="">
+                                <b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'].'
+                              </div>';
+                    } else {
+                        $s.='&nbsp;';
+                    }
+                    //$s .= '</td>';
+
+                    $lines_count++;
+                    //if the left side of the "matching" has been completely
+                    // shown but the right side still has values to show...
+
+                    if (($lines_count - 1) == $num_suggestions) {
+                        // if it remains answers to shown at the right side
+                        while (isset($select_items[$lines_count])) {
+                            $s.='<b>'.$select_items[$lines_count]['letter'].'.</b>';
+                            $s .= $select_items[$lines_count]['answer'];
+                            $lines_count++;
+                        }
+                    }
+                    $s .= '</div>';
+                    $matching_correct_answer++;
+                    $s .= '</li>';
+                }
             }
+            //$s.="</tr>";
+
         } // end for()
+
         if ($show_comment) {
             $s .= '</table>';
         } else {
-            if ($answerType == DRAGGABLE ||  $answerType == MATCHING || $answerType == UNIQUE_ANSWER_NO_OPTION || $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
+            if (  $answerType == MATCHING || $answerType == UNIQUE_ANSWER_NO_OPTION || $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
                 $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 $s .= '</table>';
             }
         }
 
-        if ($answerType == MATCHING || $answerType == DRAGGABLE) {
+        if ($answerType == DRAGGABLE) {
+            $s .= '</ul>';
+        }
+
+        if ($answerType == MATCHING) {
             $s .= '</div>';
         }
 

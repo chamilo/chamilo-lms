@@ -780,7 +780,7 @@ if (is_array($language_files)) {
 /* End loading languages */
 
 //error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-
+error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 if (api_get_setting('server_type') == 'test') {
     //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 } else {
@@ -831,7 +831,7 @@ if (api_get_setting('server_type') == 'test') {
         }*/
 }
 
-error_reporting(-1);
+//error_reporting(-1);
 
 //Silex filters: before|after|finish
 

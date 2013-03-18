@@ -263,12 +263,13 @@ class Matching extends Question
     function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
     {
         $header = parent::return_header($feedback_type, $counter, $score, $show_media);
-        $header .= '<table class="'.$this->question_table_class.'">';
-        $header .= '<tr>
-                <th>'.get_lang('ElementList').'</th>
-                <th>'.get_lang('CorrespondsTo').'</th>
-              </tr>';
+        if ($this->type == MATCHING) {
+            $header .= '<table class="'.$this->question_table_class.'">';
+            $header .= '<tr>
+                    <th>'.get_lang('ElementList').'</th>
+                    <th>'.get_lang('CorrespondsTo').'</th>
+                  </tr>';
+        }
         return $header;
     }
-
 }

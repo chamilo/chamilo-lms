@@ -638,6 +638,4 @@ class Answer
                 }
             });</script>';
     }
-
-
 }

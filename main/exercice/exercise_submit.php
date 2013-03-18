@@ -70,10 +70,62 @@ $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 $htmlHeadXtra[]= '
 <script>
 
+// Draggable js script in order to use jsplumb
+var oldPositionArray;
+
+$(function() {
+    $( ".drag_question" ).sortable({
+        revert: true,
+        start: function(e, ui) {
+            // Getting old positions into array before sorting
+            oldPositionArray = $(this).sortable("toArray");
+            ui.item.startPos = ui.item.index();
+        },
+        stop: function( event, ui ) {
+            $(this).data("new_position", $(this).sortable("toArray"))
+            var newPositionArray = $(this).sortable("toArray");
+
+            var oldPosition = ui.item.startPos;
+            var newPosition = ui.item.index();
+
+            /*console.log(oldPositionArray);
+            console.log(newPositionArray);
+            console.log(oldPosition);
+            console.log(newPosition);
+            */
+            var oldId = "window_"+newPositionArray[oldPosition]+"_select";
+            var newId = "window_"+newPositionArray[newPosition]+"_select";
+
+            var counter = 0;
+            $.each(newPositionArray, function(index, value){
+                console.log(index);
+                newIdValue = "window_"+value+"_select";
+                $("#"+newIdValue +" option").filter(function() {
+                    return $(this).val() == counter+1;
+                }).attr("selected", true);
+                counter++;
+            });
+
+            /*console.log(oldId);
+            console.log(newId);
+
+            $("#"+newId +" option").filter(function() {
+                selectedValue = $(this).val() == newPosition + 1;
+                return selectedValue;
+            }).attr("selected", true);
+
+            $("#"+oldId +" option").filter(function() {
+                selectedValue = $(this).val() == oldPosition + 1;
+                return selectedValue;
+            }).attr("selected", true);*/
+        }
+    });
+});
+
+// Matching js script in order to use jsplumb
 var colorDestination = "#316b31";
 var curvinessValue = 0;
 var connectorType = "Straight";
-
 
 ;(function() {
     window.jsPlumbDemo = {
@@ -114,15 +166,10 @@ var connectorType = "Straight";
                 isTarget:true,
                 dropOptions : exampleDropOptions,
                 beforeDrop:function(params) {
-
                     var connections = jsPlumb.getConnections({source: params.sourceId});
-
                     jsPlumb.select({source:params.sourceId}).each(function(connection) {
-                        console.log(connection.sourceId);
-
                         jsPlumb.detach(connection);
                     });
-                    console.log(params);
                     var selectId = params.sourceId + "_select";
                     var value = params.targetId.split("_")[2];
 
@@ -214,7 +261,6 @@ jsPlumb.ready(function() {
         $(window).resize(function() {
             jsPlumb.repaintEverything();
         });
-
 	}
 });
 
@@ -229,7 +275,6 @@ $(function(){
         $(this).removeClass("highlight_image_default");
         $(this).addClass("highlight_image_selected");
         $(this).find("label").find("input").attr("checked", "checked");
-
     });
 });
 
@@ -1243,10 +1288,11 @@ function render_question($objExercise, $questionId, $attempt_list, $remind_list,
 
     echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
-        //Shows the question + possible answers
+        //Shows the question and possible answers
+
         showQuestion($questionId, false, $origin, $i, true, false, $user_choice, false);
 
-        //BUtton save and continue
+        //Button save and continue
         switch ($objExercise->type) {
             case ONE_PER_PAGE:
                 $exercise_actions .= $objExercise->show_button($questionId, $current_question);

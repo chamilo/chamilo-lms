@@ -45,6 +45,7 @@ class Draggable extends Matching
         if ($form->isSubmitted()) {
             $nb_matches = $form->getSubmitValue('nb_matches');
             $nb_options = $form->getSubmitValue('nb_options');
+
             if (isset($_POST['lessMatches'])) {
                 $nb_matches--;
             }
@@ -70,7 +71,7 @@ class Draggable extends Matching
                             $nb_matches++;
                             $defaults['answer['.$nb_matches.']']    = $answer->selectAnswer($i);
                             $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
-                            $defaults['matches['.$nb_matches.']']   = $nb_matches;
+                            $defaults['matches['.$nb_matches.']']   = $answer->correct[$i];//$nb_matches;
                         } else {
                             $nb_options++;
                             $defaults['option['.$nb_options.']'] = $nb_options;
@@ -90,7 +91,7 @@ class Draggable extends Matching
 
         $a_matches = array();
         for ($i = 1; $i <= $nb_matches; ++$i) {
-            $a_matches[$i] = chr(64 + $i); // fill the array with A, B, C.....
+            $a_matches[$i] = $i; // fill the array with A, B, C.....
         }
 
         $form->addElement('hidden', 'nb_matches', $nb_matches);
@@ -123,9 +124,9 @@ class Draggable extends Matching
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $form->addElement('html', '<tr><td>');
             $group = array();
-            $puce  = $form->createElement('text', null, null, 'value="'.$i.'"');
+            /*$puce  = $form->createElement('text', null, null, 'value="'.$i.'"');
             $puce->freeze();
-            $group[] = $puce;
+            $group[] = $puce;*/
 
             $group[] = $form->createElement('text', 'answer['.$i.']', null, ' size="60" style="margin-left: 0em;"');
             $group[] = $form->createElement('select', 'matches['.$i.']', null, $a_matches);
@@ -139,7 +140,7 @@ class Draggable extends Matching
             $form->addElement('html', '</td></tr>');
 
             $defaults['option['.$i.']'] = $i;
-            $defaults['matches['.$i.']']   = $i;
+            //$defaults['matches['.$i.']']   = $i;
         }
 
         $form->addElement('html', '</table></div></div>');
@@ -160,9 +161,15 @@ class Draggable extends Matching
         );
 
 
+        global $text, $class;
+
+        $group[] = $form->createElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
+
+
         $form->addGroup($group);
 
         // DISPLAY OPTIONS
+        /*
         $html = '<table class="data_table">
 					<tr style="text-align: center;">
 						<th width="10px">
@@ -190,15 +197,10 @@ class Draggable extends Matching
             $group[] = $form->createElement('text', 'option['.$i.']', null, array('class' => 'span6'));
             $form->addGroup($group, null, null, '</td><td>');
             $form->addElement('html', '</td></tr>');
-        }
+        }*/
 
         $form->addElement('html', '</table></div></div>');
 
-        global $text, $class;
-
-        $group = array();
-        $group[] = $form->createElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
-        $form->addGroup($group);
 
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
@@ -217,19 +219,17 @@ class Draggable extends Matching
      */
     public function processAnswersCreation($form)
     {
-
         $nb_matches      = $form->getSubmitValue('nb_matches');
-        $nb_options      = $form->getSubmitValue('nb_options');
         $this->weighting = 0;
         $objAnswer       = new Answer($this->id);
 
         $position = 0;
 
         // insert the options
-        for ($i = 1; $i <= $nb_options; ++$i) {
+        for ($i = 1; $i <= $nb_matches; ++$i) {
             $position++;
-            $option = $form->getSubmitValue('option['.$i.']');
-            $objAnswer->createAnswer($option, 0, '', 0, $position);
+            //$option = $form->getSubmitValue('option['.$i.']');
+            $objAnswer->createAnswer($position, 0, '', 0, $position);
         }
 
         // insert the answers
@@ -239,6 +239,7 @@ class Draggable extends Matching
             $matches   = $form->getSubmitValue('matches['.$i.']');
             $weighting = $form->getSubmitValue('weighting['.$i.']');
             $this->weighting += $weighting;
+            var_dump($answer, $matches);
             $objAnswer->createAnswer($answer, $matches, '', $weighting, $position);
         }
         $objAnswer->save();
@@ -258,9 +259,8 @@ class Draggable extends Matching
         $header .= '<table class="'.$this->question_table_class.'">';
         $header .= '<tr>
                 <th>'.get_lang('ElementList').'</th>
-                <th>'.get_lang('CorrespondsTo').'</th>
+                <th>'.get_lang('Status').'</th>
               </tr>';
         return $header;
     }
-
 }

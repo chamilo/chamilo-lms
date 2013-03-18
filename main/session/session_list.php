@@ -13,11 +13,13 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script(true);
+//api_protect_admin_script(true);
+//@todo use filters
+//$app['controllers_factory']->before($app['index.controller']->security());
+SessionManager::protect_session_edit();
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
-
 $htmlHeadXtra[] = api_get_js('json-js/json2.js');
 $htmlHeadXtra[] = api_get_js('date/date.js');
 
@@ -29,15 +31,15 @@ $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
 
 if ($action == 'delete') {
 	SessionManager::delete_session($idChecked);
-	header('Location: session_list.php');
+	header('Location: '.api_get_path(WEB_CODE_PATH).'session/session_list.php');
 	exit();
 } elseif ($action == 'copy') {
 	SessionManager::copy_session($idChecked, true, false);
-    header('Location: session_list.php');
+    header('Location: '.api_get_path(WEB_CODE_PATH).'session/session_list.php');
     exit();
 }
 
-$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('Sessions'));
 
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
@@ -71,26 +73,27 @@ $columns = $result['columns'];
 $column_model = $result['column_model'];
 
 $extra_params['postData'] =array (
-                    'filters' => array(
-                                        "groupOp" => "AND",
-                                        "rules" => $result['rules'],
-                                        /*array(
-                                            array( "field" => "display_start_date", "op" => "gt", "data" => ""),
-                                            array( "field" => "display_end_date", "op" => "gt", "data" => "")
-                                        ),*/
-                                        //'groups' => $groups
-                                )
+    'filters' => array(
+        "groupOp" => "AND",
+        "rules" => $result['rules'],
+        /*array(
+            array( "field" => "display_start_date", "op" => "gt", "data" => ""),
+            array( "field" => "display_end_date", "op" => "gt", "data" => "")
+        ),*/
+        //'groups' => $groups
+    )
 );
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
-$action_links = 'function action_formatter(cellvalue, options, rowObject) {
-                         return \'<a href="session_add.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-                         '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png',get_lang('SubscribeUsersToSession'),'',ICON_SIZE_SMALL).'</a>'.
-                         '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png',get_lang('SubscribeCoursesToSession'),'',ICON_SIZE_SMALL).'</a>'.
-                         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
-                         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
-                         '\';
-                 }';
+$action_links = '
+function action_formatter(cellvalue, options, rowObject) {
+    return \'<a href="session_add.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png',get_lang('SubscribeUsersToSession'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png',get_lang('SubscribeCoursesToSession'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+    '\';
+}';
 $url_select = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 ?>
 <script>
@@ -134,7 +137,6 @@ function show_cols(grid, added_cols) {
 var second_filters = [];
 
 $(function() {
-
 
     date_pick_today = function(elem) {
         $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
@@ -264,13 +266,11 @@ $(function() {
             $(this).find('option:first').attr('selected', 'selected');
         });
     });*/
-
-
 });
 </script>
 <?php
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
 if ($list_type == 'complete') {

@@ -381,7 +381,7 @@ if (isset($_configuration['main_database'])) {
     $sortableListener = new \Gedmo\Sortable\SortableListener();
     $app['db.event_manager']->addEventSubscriber($sortableListener);
 }
-
+$app['is_admin'] = false;
 //Creating a Chamilo service provider
 use Silex\ServiceProviderInterface;
 
@@ -389,6 +389,8 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
+
+
         //Template
         $app['template'] = $app->share(function () use ($app) {
             $template = new Template(null, $app);

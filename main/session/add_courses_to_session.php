@@ -19,14 +19,13 @@ $id_session = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 SessionManager::protect_session_edit($id_session);
 
 $xajax = new xajax();
-//$xajax->debugOn();
 $xajax -> registerFunction (array('search_courses', 'AddCourseToSession', 'search_courses'));
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Sessions'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 
@@ -50,10 +49,8 @@ $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 $xajax -> processRequests();
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_course_to_session (code, content) {
-
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses_single").innerHTML = "";
 
@@ -112,7 +109,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$result     = Database::query($sql);
 	$UserList   = Database::store_result($result);
 
-
 	foreach($CourseList as $enreg_course) {
 		$enreg_course = Database::escape_string($enreg_course);
 		$exists = false;
@@ -156,11 +152,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$nbr_courses=count($CourseList);
 	Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'");
 
-	if(isset($_GET['add']))
+	if (isset($_GET['add'])) {
 		header('Location: add_users_to_session.php?id_session='.$id_session.'&add=true');
-	else
+        exit;
+    } else {
 		header('Location: resume_session.php?id_session='.$id_session);
-		//header('Location: '.$_GET['page'].'?id_session='.$id_session);
+        exit;
+    }
 }
 
 // display the dokeos header
@@ -261,8 +259,7 @@ unset($Courses);
 <input type="hidden" name="formSent" value="1" />
 
 <?php
-if(!empty($errorMsg))
-{
+if(!empty($errorMsg)) {
 	Display::display_normal_message($errorMsg); //main API
 }
 ?>
@@ -358,8 +355,7 @@ unset($sessionCourses);
 </table>
 
 </form>
-<script type="text/javascript">
-<!--
+<script>
 function moveItem(origin , destination){
 
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -371,8 +367,6 @@ function moveItem(origin , destination){
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-
-
 }
 
 function sortOptions(options) {
@@ -409,10 +403,7 @@ function valide(){
 
 	document.forms.formulaire.submit();
 }
--->
-
 </script>
 <?php
 /*		FOOTER 	*/
 Display::display_footer();
-?>

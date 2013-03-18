@@ -20,7 +20,7 @@ $id_session = intval($_GET['id_session']);
 SessionManager::protect_session_edit($id_session);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Sessions'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => 'resume_session.php?id_session='.Security::remove_XSS($_GET['id_session']),'name' => get_lang('SessionOverview'));
 
@@ -38,14 +38,7 @@ $id_user = intval($_GET['id_user']);
 
 if (empty($id_user) || empty($id_session)) {
 	header('Location: resume_session.php?id_session='.$id_session);
-}
-
-if (!api_is_platform_admin()) {
-	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql);
-	if (Database::result($rs,0,0)!=$_user['user_id']) {
-		api_not_allowed(true);
-	}
+    exit;
 }
 
 $formSent=0;
@@ -93,7 +86,7 @@ if ($_POST['formSent']) {
 			}
 		}
 	}
-    
+
 	foreach ($existingCourses as $existingCourse) {
 		//$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')";
 		if(!in_array($existingCourse['code'], $CourseList)){

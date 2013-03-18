@@ -27,7 +27,7 @@ $tbl_session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE
 
 $tool_name = get_lang('ImportSessionListXMLCSV');
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Sessions'));
 
 set_time_limit(0);
 
@@ -36,7 +36,7 @@ $purification_option_for_usernames = false;
 
 $inserted_in_course = array();
 
-global $_configuration;                            
+global $_configuration;
 
 if ($_POST['formSent']) {
     if (isset($_FILES['import_file']['tmp_name']) && !empty($_FILES['import_file']['tmp_name'])) {
@@ -68,27 +68,27 @@ if ($_POST['formSent']) {
                 if (count($root->Users->User) > 0) {
 
                     // Creating/updating users from <Sessions> <Users> base node.
-                    foreach ($root->Users->User as $node_user) {       
+                    foreach ($root->Users->User as $node_user) {
                         $username = $username_old = trim(api_utf8_decode($node_user->Username));
-                        if (UserManager::is_username_available($username)) {                            
+                        if (UserManager::is_username_available($username)) {
                             $password = api_utf8_decode($node_user->Password);
                             if (empty($password)) {
                                 $password = api_generate_password();
                             }
                             switch ($node_user->Status) {
-                                case 'student' : 
-                                    $status = 5; 
+                                case 'student' :
+                                    $status = 5;
                                     break;
-                                case 'teacher' : 
-                                    $status = 1; 
+                                case 'teacher' :
+                                    $status = 1;
                                     break;
-                                default : 
-                                    $status = 5; 
+                                default :
+                                    $status = 5;
                                     $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
                             }
-                                                        
+
                             $result = UserManager::create_user(
-                                    api_utf8_decode($node_user->Firstname), 
+                                    api_utf8_decode($node_user->Firstname),
                                     api_utf8_decode($node_user->Lastname),
                                     $status,
                                     api_utf8_decode($node_user->Email),
@@ -105,7 +105,7 @@ if ($_POST['formSent']) {
                                     null,
                                     null,
                                     $send_mail
-                                    );                            
+                                    );
                         } else {
                             $lastname = trim(api_utf8_decode($node_user->Lastname));
                             $firstname = trim(api_utf8_decode($node_user->Firstname));
@@ -136,28 +136,28 @@ if ($_POST['formSent']) {
                 }
 
                 // Creating  courses from <Sessions> <Courses> base node.
-                
+
                 if (count($root->Courses->Course) > 0) {
                     foreach ($root->Courses->Course as $courseNode) {
-                        
+
                         $params = array();
                         if (empty($courseNode->CourseTitle)) {
                             $params['title']            = api_utf8_decode($courseNode->CourseCode);
                         } else {
                             $params['title']            = api_utf8_decode($courseNode->CourseTitle);
                         }
-                        $params['wanted_code']      = api_utf8_decode($courseNode->CourseCode);         
+                        $params['wanted_code']      = api_utf8_decode($courseNode->CourseCode);
                         $params['tutor_name']       = null;
-                        $params['course_category']  = null;                    
+                        $params['course_category']  = null;
                         $params['course_language']  = api_get_valid_language(api_utf8_decode($courseNode->CourseLanguage));
                         $params['user_id']          = api_get_user_id();
-                        
+
                         // Looking up for the teacher.
                         $username = trim(api_utf8_decode($courseNode->CourseTeacher));
                         $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
                         $rs = Database::query($sql);
                         list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
-                                               
+
                         $params['teachers']  = $user_id;
                         CourseManager::create_course($params);
                     }
@@ -185,7 +185,7 @@ if ($_POST['formSent']) {
                         }
 
                         $date_start = trim(api_utf8_decode($node_session->DateStart)); // Just in case - encoding conversion.
-                        $date_end = trim(api_utf8_decode($node_session->DateEnd));                                                
+                        $date_end = trim(api_utf8_decode($node_session->DateEnd));
 
                         $visibility = trim(api_utf8_decode($node_session->Visibility));
                         $session_category_id = trim(api_utf8_decode($node_session->SessionCategory));
@@ -208,7 +208,7 @@ if ($_POST['formSent']) {
                                     $session_name .= $suffix;
                                 }
                             }
-                            
+
                             $params = array (
                                 'id_coach' => $coach_id,
                                 'visibility' => $visibility,
@@ -218,13 +218,13 @@ if ($_POST['formSent']) {
                                 'session_category_id' => $session_category_id,
                                 'session_admin_id' => api_get_user_id(),
                             );
-                            $session_id = SessionManager::add($params);                            
+                            $session_id = SessionManager::add($params);
                             $session_counter++;
 
                         } else {
                             // Update the session if it is needed.
                             $my_session_result = SessionManager::get_session_by_name($session_name);
-                            
+
                             if ($my_session_result === false) {
                                 $params = array (
                                     'id_coach' => $coach_id,
@@ -235,10 +235,10 @@ if ($_POST['formSent']) {
                                     'session_category_id' => $session_category_id,
                                     'session_admin_id' => api_get_user_id(),
                                 );
-                                $session_id = SessionManager::add($params);                                      
+                                $session_id = SessionManager::add($params);
                                 $session_counter++;
                             } else {
-                                
+
                                 $params = array (
                                     'id' => $my_session_result['id'],
                                     'id_coach' => $coach_id,
@@ -249,7 +249,7 @@ if ($_POST['formSent']) {
                                     'session_category_id' => $session_category_id,
                                     'session_admin_id' => api_get_user_id(),
                                 );
-                                SessionManager::update($params);                                
+                                SessionManager::update($params);
                                 $session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
                                 list($session_id) = Database::fetch_array($session_id);
                                 Database::query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'");
@@ -259,8 +259,8 @@ if ($_POST['formSent']) {
                         }
 
                         // Associate the session with access_url.
-                        global $_configuration;                        
-                        if ($_configuration['multiple_access_urls']) {                            
+                        global $_configuration;
+                        if ($_configuration['multiple_access_urls']) {
                             $access_url_id = api_get_current_access_url_id();
                             UrlManager::add_session_to_url($session_id, $access_url_id);
                         } else {
@@ -493,7 +493,7 @@ if ($_POST['formSent']) {
                                 $session_name .= $suffix;
                             }
                         }
-                        
+
                         $params = array (
                             'id_coach' => $coach_id,
                             'visibility' => $visibility,
@@ -503,7 +503,7 @@ if ($_POST['formSent']) {
                             'session_category_id' => $session_category_id,
                             'session_admin_id' => api_get_user_id(),
                         );
-                        $session_id = SessionManager::add($params); 
+                        $session_id = SessionManager::add($params);
                         $session_counter++;
                     } else {
                         $my_session_result = SessionManager::get_session_by_name($session_name);
@@ -517,7 +517,7 @@ if ($_POST['formSent']) {
                                 'session_category_id' => $session_category_id,
                                 'session_admin_id' => api_get_user_id(),
                             );
-                            $session_id = SessionManager::add($params); 
+                            $session_id = SessionManager::add($params);
                         } else {
                             $session_id = $my_session_result['id'];
                             $params = array (
@@ -582,18 +582,18 @@ if ($_POST['formSent']) {
                                     id_session='$session_id'";
                             $rs_course = Database::query($sql_course);
                             $course_counter++;
-                            
+
                             $course_split = array();
                             $pattern = "/\[(.*?)\]/";
                             preg_match_all($pattern, $course, $matches);
                             if (isset($matches[1])) {
-                                $course_coaches = $matches[1][0]; 
+                                $course_coaches = $matches[1][0];
                                 $course_users   = $matches[1][1];
                             }
-                            
+
                             $course_users   = explode(',', $course_users);
                             $course_coaches = explode(',', $course_coaches);
-                                                        
+
                             // Adding coaches to session course user
                             if (!empty($course_coaches)) {
                                 foreach ($course_coaches as $course_coach) {
@@ -612,7 +612,7 @@ if ($_POST['formSent']) {
                             }
 
                             $users_in_course_counter = 0;
-                            
+
                             // Adding the relationship "Session - Course - User".
                             foreach ($course_users as $user) {
                                 $user_id = UserManager::get_user_id_from_username($user);

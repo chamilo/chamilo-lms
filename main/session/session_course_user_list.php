@@ -52,7 +52,7 @@ if (!isset($courses[$course_info['real_id']])) {
 
 switch ($action) {
     case 'delete':
-        SessionManager::unsubscribe_user_from_course_session($id_session, $idChecked, $course_code);        
+        SessionManager::unsubscribe_user_from_course_session($id_session, $idChecked, $course_code);
         header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
         exit;
         break;
@@ -69,13 +69,13 @@ $from   = $page * $limit;
 $is_western_name_order = api_is_western_name_order();
 
 $Users = SessionManager::get_users_in_course_session($course_code, $id_session, $sort, $direction, $from, $limit);
-        
+
 /*
 
 $sql = "SELECT DISTINCT u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.id_user as is_subscribed
-             FROM $tbl_session_rel_user s INNER JOIN $tbl_user u ON (u.user_id=s.id_user) 
+             FROM $tbl_session_rel_user s INNER JOIN $tbl_user u ON (u.user_id=s.id_user)
                     LEFT JOIN $tbl_session_rel_course_rel_user scru ON (u.user_id=scru.id_user AND  scru.course_code = '".$course_code."' )
-             WHERE s.id_session='$id_session' 
+             WHERE s.id_session='$id_session'
              ORDER BY $sort $direction LIMIT $from,".($limit+1);
 */
 if ($direction == 'desc') {
@@ -88,7 +88,7 @@ $nbr_results = sizeof($Users);
 
 $tool_name = get_lang('Session').': '.$session_info['name'].' - '.get_lang('Course').': '.$course_info['title'];
 
-$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => "index.php","name" => get_lang('Sessions'));
 $interbreadcrumb[] = array("url" => "session_list.php","name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 

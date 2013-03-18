@@ -44,6 +44,13 @@ class IndexController// extends Controller
         return $app->redirect($app['url_generator']->generator('index'));
     }
 
+    function security() {
+        return false;
+        if (api_is_allowed_to_edit()) {
+            return true;
+        }
+    }
+
     /**
      * @param \Silex\Application $app
      *

@@ -180,20 +180,20 @@ if (api_is_platform_admin()) {
 $blocks['sessions']['icon']  = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL, false);
 $blocks['sessions']['label'] = api_ucfirst(get_lang('Sessions'));
 
-$search_form = ' <form method="GET" class="form-search" action="session_list.php">
+$search_form = ' <form method="GET" class="form-search" action="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">
                     <input class="span3" type="text" name="keyword" value="">
                     <button class="btn" type="submit">'.get_lang('Search').'</button>
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;
 $items = array();
-$items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'));
-$items[] = array('url'=>'session_add.php', 	'label' => get_lang('AddSession'));
-$items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
-$items[] = array('url'=>'session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
+$items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_list.php', 'label' => get_lang('ListSession'));
+$items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_add.php', 	'label' => get_lang('AddSession'));
+$items[] = array('url'=> 'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
+$items[] = array('url'=> api_get_path(WEB_CODE_PATH).'session/session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
 if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
     $items[] = array('url'=>'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
 }
-$items[] = array('url'=>'session_export.php', 	'label' => get_lang('ExportSessionListXMLCSV'));
+$items[] = array('url'=>api_get_path(WEB_CODE_PATH).'session/session_export.php', 	'label' => get_lang('ExportSessionListXMLCSV'));
 $items[] = array('url'=>'../coursecopy/copy_course_session.php', 	'label' => get_lang('CopyFromCourseInSessionToAnotherSession'));
 
 if (api_is_platform_admin()) {

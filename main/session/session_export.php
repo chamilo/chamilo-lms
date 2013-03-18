@@ -33,7 +33,7 @@ $tool_name = get_lang('ExportSessionListXMLCSV');
 
 global $_configuration;
 
-$interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('Sessions'));
 
 set_time_limit(0);
 
@@ -42,14 +42,14 @@ if ($_POST['formSent']) {
     $file_type = ($_POST['file_type'] == 'csv') ? 'csv' : 'xml';
     $session_id = $_POST['session_id'];
     if (empty($session_id)) {
-        $sql = "SELECT id,name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id 
+        $sql = "SELECT id,name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id
                 FROM $tbl_session INNER JOIN $tbl_user
 				ON $tbl_user.user_id = $tbl_session.id_coach ORDER BY id";
         if ($_configuration['multiple_access_urls']) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql = "SELECT id, name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id 
+                $sql = "SELECT id, name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id
                 FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url
 				ON (s.id= session_rel_url.session_id) INNER JOIN $tbl_user u ON (u.user_id = s.id_coach)
 				WHERE access_url_id = $access_url_id

@@ -24,7 +24,7 @@ $id_session = intval($_GET['id_session']);
 SessionManager::protect_session_edit($id_session);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Sessions'));
 $interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
 $interbreadcrumb[] = array(
     'url'  => "resume_session.php?id_session=".$id_session,

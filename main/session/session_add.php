@@ -17,9 +17,9 @@ require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script(true);
+SessionManager::protect_session_edit();
 
-$interbreadcrumb[] = array('url' => 'index.php',       'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php',       'name' => get_lang('Sessions'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
@@ -83,7 +83,6 @@ function check() {
 }
 
 $(function() {
-
     $("#coach_id").fcbkcomplete({
         json_url: "'.$url.'&a=find_coaches",
         maxitems: 1,
@@ -208,8 +207,13 @@ if (empty($id)) {
 }
 //Coaches
 //$coaches = SessionManager::get_user_list();
-$form->addElement('select', 'id_coach', get_lang('CoachName'), array(),array('id' => 'coach_id'));
-$form->addRule('id_coach', get_lang('ThisFieldIsRequired'), 'required');
+
+if (api_is_platform_admin()) {
+    $form->addElement('select', 'id_coach', get_lang('CoachName'), array(), array('id' => 'coach_id'));
+    $form->addRule('id_coach', get_lang('ThisFieldIsRequired'), 'required');
+} else {
+    $form->addElement('hidden', 'id_coach', api_get_user_id());
+}
 
 $form->addElement('advanced_settings','<a class="btn btn-show" id="advanced_parameters" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
 $form->addElement('html','<div id="options" style="display:none">');
@@ -276,6 +280,7 @@ if (!empty($session_info)) {
 
 if ($form->validate()) {
     $params = $form->getSubmitValues();
+
     if (isset($params['id'])) {
         SessionManager::update($params);
         header('Location: resume_session.php?id_session='.$params['id']);

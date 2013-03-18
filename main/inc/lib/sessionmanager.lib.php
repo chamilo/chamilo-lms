@@ -187,8 +187,13 @@ class SessionManager {
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
+
         if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
             $where .=" AND s.session_admin_id = $user_id ";
+        }
+
+        if (!api_is_platform_admin() && api_is_teacher() && api_get_setting('allow_teachers_to_create_sessions') == 'true') {
+            $where .=" AND s.id_coach = $user_id ";
         }
 
         $inject_extra_fields = null;
@@ -237,7 +242,6 @@ class SessionManager {
                 }
             }
         }
-
 
         $options_by_double = array();
         foreach ($double_fields as $double) {
@@ -840,7 +844,7 @@ class SessionManager {
      * @return    void    Nothing, or false on error
      * The parameters is a array to delete sessions
      **/
-    public static function delete_session ($id_checked,$from_ws = false) {
+    public static function delete_session ($id_checked, $from_ws = false) {
         $tbl_session=                        Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_rel_course=            Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_rel_course_rel_user=    Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2248,14 +2252,26 @@ class SessionManager {
         return $row[0];
     }
 
-    static function protect_session_edit($id) {
-        api_protect_admin_script(true);
-        $session_info = self::fetch($id);
-        if (empty($session_info)) {
+    static function protect_session_edit($id = null) {
+        $blockTeachers = !api_is_platform_admin() && (!api_is_teacher() || (api_is_teacher() && api_get_setting('allow_teachers_to_create_sessions') == 'false'));
+        if ($blockTeachers) {
             api_not_allowed(true);
         }
-        if (!api_is_platform_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {
-            if ($session_info['session_admin_id'] != api_get_user_id()) {
+
+        if (!empty($id)) {
+            $session_info = self::fetch($id);
+
+            if (empty($session_info)) {
+                api_not_allowed(true);
+            }
+
+            if ($blockTeachers && !api_is_platform_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') != 'true') {
+                if ($session_info['session_admin_id'] != api_get_user_id()) {
+                    api_not_allowed(true);
+                }
+            }
+            //Blocking teachers that want to edit another session
+            if ($blockTeachers == false && $session_info['id_coach'] != api_get_user_id()) {
                 api_not_allowed(true);
             }
         }

@@ -282,7 +282,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
     $form->addElement('html', '<div id="div_api_key">');
     $form->addElement('text', 'api_key_generate', get_lang('MyApiKey'), array('size' => 40, 'id' => 'id_api_key_generate'));
     $form->addElement('html', '</div>');
-    $form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'), array('id' => 'id_generate_api_key', 'onclick' => 'generate_open_id_form()')); //generate_open_id_form()
+    $form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'), array('id' => 'id_generate_api_key', 'onclick' => 'generate_open_id_form(); return false;')); //generate_open_id_form()
 }
 //    SUBMIT
 if (is_profile_editable()) {

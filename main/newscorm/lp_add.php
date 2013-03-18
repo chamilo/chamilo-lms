@@ -76,7 +76,7 @@ $learnpath_id   = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
-     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
@@ -132,6 +132,9 @@ $form -> addElement('advanced_settings',$advanced);
 $form -> addElement('html','<div id="options" style="display:none">');
 
 $items = learnpath::get_category_from_course_into_select(api_get_course_int_id());
+if (!empty($items)) {
+    $items = array_merge(array(get_lang('SelectACategory')), $items);
+}
 $form->addElement('select', 'category_id', get_lang('Category'), $items);
 
 //Start date

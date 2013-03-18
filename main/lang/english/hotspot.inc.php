@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$select = "Validate";
+$select = "Select";
 $square = "Square";
 $circle = "Elipse";
 $poly = "Polygon";

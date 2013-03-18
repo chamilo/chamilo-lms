@@ -100,9 +100,7 @@ class Draggable extends Matching
         // DISPLAY MATCHES
         $html = '<table class="data_table">
 					<tr>
-						<th width="10px">
-							'.get_lang('Number').'
-						</th>
+
 						<th width="40%">
 							'.get_lang('Answer').'
 						</th>

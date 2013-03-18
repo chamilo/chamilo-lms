@@ -912,6 +912,7 @@ VALUES
 ('session_page_enabled', NULL, 'radio', 'Session', 'true', 'SessionPageEnabledTitle', 'SessionPageEnabledComment', NULL, NULL, 1),
 ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
 ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1),
+('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
 ('chamilo_database_version', NULL, 'textfield', NULL, 'xxx','DatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
@@ -1261,7 +1262,9 @@ VALUES
 ('gradebook_show_percentage_in_reports', 'true', 'Yes'),
 ('gradebook_show_percentage_in_reports', 'false', 'No'),
 ('session_page_enabled', 'true', 'Yes'),
-('session_page_enabled', 'false', 'No');
+('session_page_enabled', 'false', 'No'),
+('allow_teachers_to_create_sessions', 'true', 'Yes'),
+('allow_teachers_to_create_sessions', 'false', 'No');
 
 
 UNLOCK TABLES;
@@ -3084,4 +3087,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21577' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21593' WHERE variable = 'chamilo_database_version';

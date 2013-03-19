@@ -11,11 +11,16 @@ use Doctrine\Common\Collections\Criteria;
  */
 class CourseRepository extends EntityRepository
 {
+    /**
+     * @param \Entity\EntityCourse $course
+     * @return \Doctrine\ORM\QueryBuilder
+     */
     public function getSubscribedStudents(\Entity\EntityCourse $course)
     {
         $qb = $this->createQueryBuilder('a');
+
         //Selecting user info
-        $qb->select('u');
+        $qb->select('DISTINCT u');
 
         //Loading EntityUser
         $qb->from('Entity\EntityUser', 'u');
@@ -25,13 +30,13 @@ class CourseRepository extends EntityRepository
 
         //@todo check app settings
         $qb->add('orderBy', 'u.lastname ASC');
-/*
-        $wherePart = $qb->expr()->andx();
-        //Get only users subscribed to this course
-        $wherePart->add($qb->expr()->eq('c.id', $course->getId()));
-        //$wherePart->add($qb->expr()->eq('r.status', 2));
-        $qb->where($wherePart);*/
 
+        $wherePart = $qb->expr()->andx();
+
+        //Get only users subscribed to this course
+        $wherePart->add($qb->expr()->eq('c.cId', $course->getId()));
+        $wherePart->add($qb->expr()->eq('c.status', STUDENT));
+        $qb->where($wherePart);
         //$q = $qb->getQuery();
         //return $q->execute();
         return $qb;

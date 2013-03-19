@@ -386,7 +386,6 @@ class CourseManager {
             $user_list[] = $user_id;
         }
 
-
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
@@ -408,7 +407,6 @@ class CourseManager {
         $sql = "DELETE FROM $table_course_user_publication WHERE c_id = $course_id AND author = '".Database::escape_string($publication_name)."'";
         Database::query($sql);
 
-
         // Unsubscribe user from all blogs in the course.
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER)." WHERE c_id = $course_id AND  user_id IN (".$user_ids.")");
         Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER)."WHERE c_id = $course_id AND  user_id IN (".$user_ids.")");
@@ -420,6 +418,10 @@ class CourseManager {
         $sql_delete_mail_queue = "DELETE FROM ".Database::get_course_table(TABLE_FORUM_MAIL_QUEUE)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
         Database::query($sql_delete_mail_queue);
 
+
+        $item_property_lp_subscription = "DELETE FROM  ".Database::get_course_table(TABLE_ITEM_PROPERTY)."
+                                          WHERE lastedit_type = 'LearnpathSubscription' AND tool = 'learnpath' AND c_id = $course_id AND to_user_id IN (".$user_ids.")";
+        Database::query($item_property_lp_subscription);
 
         // Unsubscribe user from the course.
         if (!empty($session_id)) {

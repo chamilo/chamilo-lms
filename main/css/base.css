@@ -5177,10 +5177,19 @@ i.size-32.icon-new-work {
 
 
 .drag_question {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+    float: left;
+    width: 65%;
+    min-height: 12em;
 }
+
+.droppable {
+    float:left;
+    width:100px;
+    min-height: 100px;
+    padding : 10px;
+    text-align: center;
+}
+
 
 .drag_question li {
     margin: 3px 3px 3px 0;
@@ -5190,3 +5199,9 @@ i.size-32.icon-new-work {
     height: 90px;
     text-align: center;
 }
+
+
+.item_added {
+    float:left;
+}
+

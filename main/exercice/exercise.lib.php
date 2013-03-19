@@ -84,7 +84,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
         if ($answerType == MATCHING || $answerType == DRAGGABLE) {
             if ($answerType == DRAGGABLE) {
-                $s .= '<ul class="drag_question">';
+                $s .= '<div class="ui-widget ui-helper-clearfix">
+                        <ul class="drag_question ui-helper-reset ui-helper-clearfix">';
             } else {
                 $s .= '<div id="drag'.$questionId.'_question" class="drag_question">';
                 $s .= '<table class="data_table">';
@@ -461,6 +462,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                                 <b>'.$lines_count.'</b>.&nbsp'.$parsed_answer.'
                             </div>
                             </td>';
+
                     //middle part (matches selects)
 
                     $s .= '<td width="10%" align="center">&nbsp;&nbsp;';
@@ -539,6 +541,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     //echo $objAnswerTmp->getJs();
                     //$s .= '<tr>';
                 }
+
                 if ($answerCorrect != 0) {
                     // only show elements to be answered (not the contents of
                     // the select boxes, who are correct = 0)
@@ -546,9 +549,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $parsed_answer = $answer;
                     $windowId = $questionId.'_'.$lines_count;
                     //left part questions
-                    $s .= '<li class="ui-state-default" id="'.$windowId.'"><span class="ui-icon ui-icon-arrow-2-e-w"></span>';
-                    $s .= ' <div id="window_'.$windowId.'" class="window'.$questionId.'_question_draggable">
-                                <b>'.$lines_count.'</b>.&nbsp'.$parsed_answer.'
+                    $s .= '<li class="ui-state-default" id="'.$windowId.'">';
+                    $s .= ' <div id="window_'.$windowId.'" class="window'.$questionId.'_question_draggable question_draggable">
+                               '.$parsed_answer.'
                             </div>';
 
                     $s .= '<div style="display:none">';
@@ -573,20 +576,13 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                         $s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
                     }
 
-                    /*if (!empty($answerCorrect) && !empty($selectedValue)) {
+                    if (!empty($answerCorrect) && !empty($selectedValue)) {
                         $s.= '<script>
-                            jsPlumb.ready(function() {
-                                jsPlumb.connect({
-                                    source: "window_'.$windowId.'",
-                                    target: "window_'.$questionId.'_'.$selectedValue.'_answer",
-                                    endpoint:["Blank", { radius:15 }],
-                                    anchor:["RightMiddle","LeftMiddle"],
-                                    paintStyle:{ strokeStyle:"#8a8888" , lineWidth:8 },
-                                    connector: [connectorType, { curviness: curvinessValue } ],
-                                })
+                            $(function() {
+                                deleteItem($("#'.$questionId.'_'.$selectedValue.'"), $("#drop_'.$windowId.'"));
                             });
                             </script>';
-                    }*/
+                    }
                     $s .= '</select>';
 
                     if (isset($select_items[$lines_count])) {
@@ -629,7 +625,20 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         }
 
         if ($answerType == DRAGGABLE) {
-            $s .= '</ul>';
+            $s .= '</ul><div class="clear"></div>';
+
+            $counterAnswer = 1;
+            for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+                $windowId = $questionId.'_'.$counterAnswer;
+                if ($answerCorrect) {
+                    $s .= '<div id="drop_'.$windowId.'" class="droppable ui-state-default">'.$counterAnswer.'</div>';
+                    //$s .= '<li id="drop_'.$windowId.'" class="droppable ui-state-default">'.$counterAnswer.'</li>';
+                    $counterAnswer++;
+                }
+            }
+            //$s .= '<ul>';
+            //$s .= '</div>';
         }
 
         if ($answerType == MATCHING) {

@@ -70,56 +70,160 @@ $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 $htmlHeadXtra[]= '
 <script>
 
+var recycle_icon = "<a href=\'#\' class=\'ui-icon ui-icon-refresh\'>Recycle image</a>";
+var trash_icon = "<a href=\'#\' class=\'ui-icon ui-icon-trash\'>Delete image</a>";
+
+function deleteItem($item, $insertHere) {
+
+        if ($insertHere.find(".question_draggable").length > 0) {
+            return false;
+        }
+
+        $item.fadeOut(function() {
+            /*var $list = $( "ul", $trash ).length ?
+              $( "ul", $trash ) :
+              $( "<ul class=\'gallery ui-helper-reset\'/>" ).appendTo( $trash );*/
+
+            $list =  $( "<div class=\'gallery ui-helper-reset\'/>" ).appendTo($insertHere);
+            $item.find( "a.ui-icon-trash" ).remove();
+
+             var droppedId = $item.attr("id");
+             var dropedOnId = $insertHere.attr("id");
+
+             var originSelectId = "window_"+droppedId+"_select";
+
+             value = dropedOnId.split("_")[2];
+
+             //console.log(originSelectId);             console.log(value);
+
+             $("#"+originSelectId +" option").filter(function() {
+                    return $(this).val() == value;
+            }).attr("selected", true);
+
+            console.log(droppedId);
+            console.log(dropedOnId);
+
+            $item.append( recycle_icon ).appendTo( $list  ).fadeIn(function() {
+            //$item.animate({ width: "48px" }).find( "img" ).animate({ height: "36px" });
+            });
+
+      });
+    }
+
 // Draggable js script in order to use jsplumb
 var oldPositionArray;
 
 $(function() {
-    $( ".drag_question" ).sortable({
-        revert: true,
+
+    var $gallery = $( ".drag_question" );
+    var $trash = $( ".droppable" );
+
+    // let the questions items be draggable
+    $("li", $gallery).draggable({
+        cancel: "a.ui-icon", // clicking an icon wont initiate dragging
+        revert: "invalid", // when not dropped, the item will revert back to its initial position
+        containment: "document",
+        helper: "clone",
+        cursor: "move"
+    });
+
+    // let the "droppable" be droppable, accepting the questions items
+    $trash.droppable({
+        accept: ".drag_question > li",
+        hoverClass: "ui-state-active",
+        //activeClass: "ui-state-highlight",
+        drop: function(event, ui) {
+                /*
+            var dropped = ui.draggable;
+            var droppedId = dropped.attr("id");
+
+            var droppedOn = $(this);
+            var droppedOnId = droppedOn.attr("id");
+
+            $(this).html(dropped.html());
+            $( this ).addClass("ui-state-highlight");
+            */
+            deleteItem(ui.draggable,  $(this));
+        }
+    });
+
+    // let the question handler be droppable as well, accepting items from the trash
+
+    $gallery.droppable({
+       // accept: ".droppable",
+       // activeClass: "custom-state-active",
+        hoverClass: "ui-state-active",
+        drop: function( event, ui ) {
+            recycleItem( ui.draggable, $(this));
+        }
+    });
+
+
+
+    function recycleItem( $item, droppedOn) {
+        //console.log("recycleItem");
+        $item.fadeOut(function() {
+        $item
+          .find( "a.ui-icon-refresh" )
+            .remove()
+          .end()
+          .css( "width", "96px")
+          //.append( trash_icon )
+          .find( "img" )
+            .css( "height", "72px" )
+          .end()
+          .appendTo( $gallery )
+          .fadeIn();
+        });
+        var droppedId = $item.attr("id");
+        var originSelectId = "window_"+droppedId+"_select";
+        console.log(originSelectId);
+        $("#"+originSelectId+" option:first").attr("selected","selected");
+    }
+
+
+
+    $( "ul.drag_question > li" ).click(function( event ) {
+        var $item = $( this ),
+            $target = $( event.target );
+
+        if ( $target.is( "a.ui-icon-trash" ) ) {
+            deleteItem( $item );
+        } else if ( $target.is( "a.ui-icon-zoomin" ) ) {
+        } else if ( $target.is( "a.ui-icon-refresh" ) ) {
+            recycleItem( $item );
+        }
+
+        return false;
+    });
+
+    /*$( ".drag_question" ).sortable({
+
         start: function(e, ui) {
             // Getting old positions into array before sorting
             oldPositionArray = $(this).sortable("toArray");
             ui.item.startPos = ui.item.index();
         },
         stop: function( event, ui ) {
-            $(this).data("new_position", $(this).sortable("toArray"))
+            $(this).data("new_position", $(this).sortable("toArray"));
             var newPositionArray = $(this).sortable("toArray");
 
             var oldPosition = ui.item.startPos;
             var newPosition = ui.item.index();
 
-            /*console.log(oldPositionArray);
-            console.log(newPositionArray);
-            console.log(oldPosition);
-            console.log(newPosition);
-            */
             var oldId = "window_"+newPositionArray[oldPosition]+"_select";
             var newId = "window_"+newPositionArray[newPosition]+"_select";
 
             var counter = 0;
             $.each(newPositionArray, function(index, value){
-                console.log(index);
                 newIdValue = "window_"+value+"_select";
                 $("#"+newIdValue +" option").filter(function() {
                     return $(this).val() == counter+1;
                 }).attr("selected", true);
                 counter++;
             });
-
-            /*console.log(oldId);
-            console.log(newId);
-
-            $("#"+newId +" option").filter(function() {
-                selectedValue = $(this).val() == newPosition + 1;
-                return selectedValue;
-            }).attr("selected", true);
-
-            $("#"+oldId +" option").filter(function() {
-                selectedValue = $(this).val() == oldPosition + 1;
-                return selectedValue;
-            }).attr("selected", true);*/
         }
-    });
+    });*/
 });
 
 // Matching js script in order to use jsplumb

@@ -28,7 +28,7 @@
         "twig/twig": ">=1.8,<2.0-dev",
         "symfony/twig-bridge": "2.2.*@dev",
         "symfony/doctrine-bridge": "2.3.*@dev",
-        "symfony/security": "2.1.*",
+        "symfony/security": "dev-master",
         "monolog/monolog"       : ">=1.0.0",
         "symfony/form": "2.3.*@dev",
         "symfony/property-access": "dev-master",
@@ -42,7 +42,8 @@
         "pagerfanta/pagerfanta": "dev-master",
         "knplabs/knp-menu": "2.0.*@dev",
         "gedmo/doctrine-extensions": "2.3.*@dev",
-        "emanueleminotto/faker-service-provider": "master"
+        "emanueleminotto/faker-service-provider": "master",
+        "silex/web-profiler": "~1.0"
     },
     "minimum-stability": "dev"
 }

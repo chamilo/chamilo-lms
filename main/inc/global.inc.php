@@ -280,23 +280,6 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
     return $extensions;
 }));*/
 
-/*
-Adding Monolog service provider
-Monolog  use examples
-    $app['monolog']->addDebug('Testing the Monolog logging.');
-    $app['monolog']->addInfo('Testing the Monolog logging.');
-    $app['monolog']->addError('Testing the Monolog logging.');
-*/
-if (is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-    $app->register(
-        new Silex\Provider\MonologServiceProvider(),
-        array(
-            'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
-            'monolog.name' => 'chamilo',
-        )
-    );
-}
-
 //The script is allowed? This setting is modified when calling api_is_not_allowed()
 $app['allowed'] = true;
 
@@ -339,6 +322,36 @@ $app['twig'] = $app->share(
         return $twig;
     })
 );
+
+/*
+Adding Monolog service provider
+Monolog  use examples
+    $app['monolog']->addDebug('Testing the Monolog logging.');
+    $app['monolog']->addInfo('Testing the Monolog logging.');
+    $app['monolog']->addError('Testing the Monolog logging.');
+*/
+
+//Setting controllers as services
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+
+if (is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+    $app->register(
+        new Silex\Provider\MonologServiceProvider(),
+        array(
+            'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
+            'monolog.name' => 'chamilo',
+        )
+    );
+
+    if ($app['debug']) {
+        $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
+                //'profiler.cache_dir' => api_get_path(SYS_ARCHIVE_PATH).'cache/profiler',
+                'profiler.cache_dir' => api_get_path(SYS_ARCHIVE_PATH),
+            ));
+        $app->mount('/_profiler', $p);
+    }
+}
+
 
 //Setting Doctrine service provider (DBAL)
 if (isset($_configuration['main_database'])) {
@@ -937,9 +950,7 @@ if (empty($default_quota)) {
 
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
-//Setting controllers as services
 
-$app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app['pages.controller'] = $app->share(function () use ($app) {
     return new PagesController($app['pages.repository']);

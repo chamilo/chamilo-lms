@@ -26,20 +26,10 @@ Getting Started
 ---------------
 
 * **Tutorial**:
-  :doc:`Code First <tutorials/getting-started>` |
-  :doc:`Model First <tutorials/getting-started-models>` |
-  :doc:`Database First <tutorials/getting-started-database>`
-
-* **Introduction**:
-  :doc:`In 10 quick steps <tutorials/in-ten-quick-steps>` |
-  :doc:`Architecture <reference/architecture>`
+  :doc:`Getting Started with Doctrine <tutorials/getting-started>`
 
 * **Setup**:
-  :doc:`Installation <reference/installation>` |
-  :doc:`Configuration <reference/configuration>` |
-  :doc:`Tools <reference/tools>`
-
-* :doc:`Limitations and knowns issues <reference/limitations-and-known-issues>`
+  :doc:`Installation & Configuration <reference/configuration>`
 
 Mapping Objects onto a Database
 -------------------------------
@@ -75,6 +65,10 @@ Working with Objects
 Advanced Topics
 ---------------
 
+  * :doc:`Architecture <reference/architecture>`
+  * :doc:`Advanced Configuration <reference/advanced-configuration>`
+  * :doc:`Limitations and knowns issues <reference/limitations-and-known-issues>`
+  * :doc:`Commandline Tools <reference/tools>`
   * :doc:`Transactions and Concurrency <reference/transactions-and-concurrency>`
   * :doc:`Filters <reference/filters>`
   * :doc:`NamingStrategy <reference/namingstrategy>`

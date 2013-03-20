@@ -618,7 +618,7 @@ class EntityRepositoryTest extends \Doctrine\Tests\OrmFunctionalTestCase
      * @expectedException Doctrine\ORM\ORMException
      * @expectedExceptionMessage You cannot search for the association field 'Doctrine\Tests\Models\CMS\CmsUser#address', because it is the inverse side of an association.
      */
-    public function testInvalidOrderByAsssociation()
+    public function testInvalidOrderByAssociation()
     {
         $this->_em->getRepository('Doctrine\Tests\Models\CMS\CmsUser')
             ->findBy(array('status' => 'test'), array('address' => 'ASC'));
@@ -638,7 +638,7 @@ class EntityRepositoryTest extends \Doctrine\Tests\OrmFunctionalTestCase
     /**
      * @group DDC-1713
      */
-    public function testFindByAssocationArray()
+    public function testFindByAssociationArray()
     {
         $repo = $this->_em->getRepository('Doctrine\Tests\Models\CMS\CmsArticle');
         $data = $repo->findBy(array('user' => array(1, 2, 3)));
@@ -779,6 +779,22 @@ class EntityRepositoryTest extends \Doctrine\Tests\OrmFunctionalTestCase
         ));
 
         $this->assertEquals(4, count($users));
+    }
+
+    public function testMatchingCriteriaContainsComparison()
+    {
+        $this->loadFixture();
+
+        $repository = $this->_em->getRepository('Doctrine\Tests\Models\CMS\CmsUser');
+
+        $users = $repository->matching(new Criteria(Criteria::expr()->contains('name', 'Foobar')));
+        $this->assertEquals(0, count($users));
+
+        $users = $repository->matching(new Criteria(Criteria::expr()->contains('name', 'Rom')));
+        $this->assertEquals(1, count($users));
+
+        $users = $repository->matching(new Criteria(Criteria::expr()->contains('status', 'dev')));
+        $this->assertEquals(2, count($users));
     }
 
     /**

@@ -197,7 +197,7 @@ class SelectSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
     }
 
     /* NOT (YET?) SUPPORTED.
-       Can be supported if SimpleSelectExpresion supports SingleValuedPathExpression instead of StateFieldPathExpression.
+       Can be supported if SimpleSelectExpression supports SingleValuedPathExpression instead of StateFieldPathExpression.
 
     public function testSingleAssociationPathExpressionInSubselect()
     {
@@ -1886,6 +1886,49 @@ class SelectSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
             'SELECT CASE WHEN LENGTH(u.name) > :value THEN SUBSTRING(u.name, 0, :value) ELSE TRIM(u.name) END AS name  FROM Doctrine\Tests\Models\CMS\CmsUser u',
             'SELECT CASE WHEN LENGTH(c0_.name) > ? THEN SUBSTRING(c0_.name FROM 0 FOR ?) ELSE TRIM(c0_.name) END AS sclr0 FROM cms_users c0_'
         );
+    }
+    
+    /**
+     * @group DDC-2268
+     */
+    
+    public function testSupportsMoreThanTwoParametersInConcatFunction()
+    {
+    	$connMock = $this->_em->getConnection();
+    	$orgPlatform = $connMock->getDatabasePlatform();
+    
+    	$connMock->setDatabasePlatform(new \Doctrine\DBAL\Platforms\MySqlPlatform);
+    	$this->assertSqlGeneration(
+    			"SELECT u.id FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE CONCAT(u.name, u.status, 's') = ?1",
+    			"SELECT c0_.id AS id0 FROM cms_users c0_ WHERE CONCAT(c0_.name, c0_.status, 's') = ?"
+    	);
+    	$this->assertSqlGeneration(
+    			"SELECT CONCAT(u.id, u.name, u.status) FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE u.id = ?1",
+    			"SELECT CONCAT(c0_.id, c0_.name, c0_.status) AS sclr0 FROM cms_users c0_ WHERE c0_.id = ?"
+    	);
+    
+    	$connMock->setDatabasePlatform(new \Doctrine\DBAL\Platforms\PostgreSqlPlatform);
+    	$this->assertSqlGeneration(
+    			"SELECT u.id FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE CONCAT(u.name, u.status, 's') = ?1",
+    			"SELECT c0_.id AS id0 FROM cms_users c0_ WHERE c0_.name || c0_.status || 's' = ?"
+    	);
+    	$this->assertSqlGeneration(
+    			"SELECT CONCAT(u.id, u.name, u.status) FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE u.id = ?1",
+    			"SELECT c0_.id || c0_.name || c0_.status AS sclr0 FROM cms_users c0_ WHERE c0_.id = ?"
+    	);
+    	
+    	
+    	$connMock->setDatabasePlatform(new \Doctrine\DBAL\Platforms\SQLServerPlatform());
+    	$this->assertSqlGeneration(
+    			"SELECT u.id FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE CONCAT(u.name, u.status, 's') = ?1",
+    			"SELECT c0_.id AS id0 FROM cms_users c0_ WITH (NOLOCK) WHERE (c0_.name + c0_.status + 's') = ?"
+    	);
+    	$this->assertSqlGeneration(
+    			"SELECT CONCAT(u.id, u.name, u.status) FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE u.id = ?1",
+    			"SELECT (c0_.id + c0_.name + c0_.status) AS sclr0 FROM cms_users c0_ WITH (NOLOCK) WHERE c0_.id = ?"
+    	);
+    
+    	$connMock->setDatabasePlatform($orgPlatform);
     }
 }
 

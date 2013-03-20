@@ -65,6 +65,13 @@ class BinaryFileResponse extends Response
      * Sets the file to stream.
      *
      * @param SplFileInfo|string $file The file to stream
+     * @param string             $contentDisposition
+     * @param Boolean            $autoEtag
+     * @param Boolean            $autoLastModified
+     *
+     * @return BinaryFileResponse
+     *
+     * @throws FileException
      */
     public function setFile($file, $contentDisposition = null, $autoEtag = false, $autoLastModified = true)
     {
@@ -127,6 +134,8 @@ class BinaryFileResponse extends Response
      * @param string $disposition      ResponseHeaderBag::DISPOSITION_INLINE or ResponseHeaderBag::DISPOSITION_ATTACHMENT
      * @param string $filename         Optionally use this filename instead of the real name of the file
      * @param string $filenameFallback A fallback filename, containing only ASCII characters. Defaults to an automatically encoded filename
+     *
+     * @return BinaryFileResponse
      */
     public function setContentDisposition($disposition, $filename = '', $filenameFallback = '')
     {
@@ -186,21 +195,31 @@ class BinaryFileResponse extends Response
             // Process the range headers.
             if (!$request->headers->has('If-Range') || $this->getEtag() == $request->headers->get('If-Range')) {
                 $range = $request->headers->get('Range');
+                $fileSize = $this->file->getSize();
 
-                list($start, $end) = array_map('intval', explode('-', substr($range, 6), 2)) + array(0);
+                list($start, $end) = explode('-', substr($range, 6), 2) + array(0);
 
-                if ('' !== $end) {
-                    $this->maxlen = $end - $start;
+                $end = ('' === $end) ? $fileSize - 1 : (int) $end;
+
+                if ('' === $start) {
+                    $start = $fileSize - $end;
+                    $end = $fileSize - 1;
                 } else {
-                    $end = $this->file->getSize() - 1;
+                    $start = (int) $start;
                 }
 
+                $start = max($start, 0);
+                $end = min($end, $fileSize - 1);
+
+                $this->maxlen = $end < $fileSize ? $end - $start + 1 : -1;
                 $this->offset = $start;
 
                 $this->setStatusCode(206);
-                $this->headers->set('Content-Range', sprintf('bytes %s-%s/%s', $start, $end, $this->file->getSize()));
+                $this->headers->set('Content-Range', sprintf('bytes %s-%s/%s', $start, $end, $fileSize));
             }
         }
+
+        return $this;
     }
 
     /**

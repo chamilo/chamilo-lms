@@ -35,7 +35,7 @@ class HttpUtils
      * Constructor.
      *
      * @param UrlGeneratorInterface                       $urlGenerator A UrlGeneratorInterface instance
-     * @param UrlMatcherInterface|RequestMatcherInterface $matcher      The Url or Request matcher
+     * @param UrlMatcherInterface|RequestMatcherInterface $urlMatcher   The Url or Request matcher
      */
     public function __construct(UrlGeneratorInterface $urlGenerator = null, $urlMatcher = null)
     {
@@ -70,9 +70,9 @@ class HttpUtils
      */
     public function createRequest(Request $request, $path)
     {
-        $newRequest = Request::create($this->generateUri($request, $path), 'get', array(), $request->cookies->all(), array(), $request->server->all());
-        if ($session = $request->getSession()) {
-            $newRequest->setSession($session);
+        $newRequest = $request::create($this->generateUri($request, $path), 'get', array(), $request->cookies->all(), array(), $request->server->all());
+        if ($request->hasSession()) {
+            $newRequest->setSession($request->getSession());
         }
 
         if ($request->attributes->has(SecurityContextInterface::AUTHENTICATION_ERROR)) {
@@ -136,15 +136,20 @@ class HttpUtils
             return $request->getUriForPath($path);
         }
 
-        return $this->generateUrl($path, true);
-    }
-
-    private function generateUrl($route, $absolute = false)
-    {
         if (null === $this->urlGenerator) {
             throw new \LogicException('You must provide a UrlGeneratorInterface instance to be able to use routes.');
         }
 
-        return $this->urlGenerator->generate($route, array(), $absolute);
+        $url = $this->urlGenerator->generate($path, $request->attributes->all(), UrlGeneratorInterface::ABSOLUTE_URL);
+
+        // unnecessary query string parameters must be removed from url
+        // (ie. query parameters that are presents in $attributes)
+        // fortunately, they all are, so we have to remove entire query string
+        $position = strpos($url, '?');
+        if (false !== $position) {
+            $url = substr($url, 0, $position);
+        }
+
+        return $url;
     }
 }

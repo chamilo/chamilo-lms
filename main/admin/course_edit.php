@@ -200,7 +200,8 @@ $form->setDefaults($course);
 if ($form->validate()) {
 	$course = $form->getSubmitValues();
     $visual_code = CourseManager::generate_course_code($course['visual_code']);
-    
+    // make sure to rebase the disk quota (shown in MB but stored in bytes)
+    $course['disk_quota'] = $course['disk_quota']*1024*1024;
     CourseManager::update($course);
 
     // Check if the visual code is already used by *another* course

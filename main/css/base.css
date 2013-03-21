@@ -5179,25 +5179,28 @@ i.size-32.icon-new-work {
 .drag_question {
     float: left;
     width: 65%;
-    min-height: 12em;
+    min-height: 4em;
 }
 
 .droppable {
     float:left;
     width:100px;
-    min-height: 100px;
-    padding : 10px;
+    min-height: 25px;
+    padding : 1px;
     text-align: center;
+    border: 1px dashed #555;
+    margin: 3px 3px 3px 0;
 }
 
 
-.drag_question li {
+.drag_question li, .droppable  li{
     margin: 3px 3px 3px 0;
     padding: 1px;
     float: left;
     width: 100px;
-    height: 90px;
+    min-height: 25px;
     text-align: center;
+    color: #000;
 }
 
 

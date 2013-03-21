@@ -7,6 +7,7 @@ require __DIR__ . '/cli-config.php';
 
 $cli = new \Symfony\Component\Console\Application('Doctrine Command Line Interface', Doctrine\Common\Version::VERSION);
 $cli->setCatchExceptions(true);
+
 $helperSet = $cli->getHelperSet();
 foreach ($helpers as $name => $helper) {
     $helperSet->set($helper, $name);
@@ -38,7 +39,9 @@ $cli->addCommands(array(
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
-    new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand()
+    new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
+    new ChamiloLMS\Command\Database\MigrationCommand()
+
 
 ));
 $cli->run();

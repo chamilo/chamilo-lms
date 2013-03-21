@@ -8,11 +8,20 @@ $app['jquery_ui_theme'] = 'smoothness';
 // Cache
 $app['cache.path'] = api_get_path(SYS_ARCHIVE_PATH);
 
+//Twig cache
+$app['twig.cache.path'] = $app['cache.path'].'twig';
+
 // Http cache
 $app['http_cache.cache_dir'] = $app['cache.path'].'http';
 
 // Doctrine ORM
 $app['db.orm.proxies_dir'] = $app['cache.path'].'proxies_dir';
+
+//Profiler
+$app['profiler.cache_dir'] = $app['cache.path'].'profiler';
+
+//Monolog log file
+$app['chamilo.log'] = $app['cache.path'].'chamilo.log';
 
 // Assetic
 /*
@@ -73,6 +82,10 @@ if (!is_dir($app['db.orm.proxies_dir'])) {
     @mkdir($app['db.orm.proxies_dir'], api_get_permissions_for_new_directories());
 }
 
-if (!is_dir($app['cache.path'].'twig')) {
-    @mkdir($app['cache.path'].'twig', api_get_permissions_for_new_directories());
+if (!is_dir($app['twig.cache.path'])) {
+    @mkdir($app['twig.cache.path'], api_get_permissions_for_new_directories());
+}
+
+if (!is_dir($app['profiler.cache_dir'])) {
+    @mkdir($app['profiler.cache_dir'], api_get_permissions_for_new_directories());
 }

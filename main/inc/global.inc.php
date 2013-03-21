@@ -12,10 +12,10 @@
  * - Debug (Using Monolog)
  * - Redirecting to the main/install folder if the configuration.php file does not exists. *
  *
- *  It's recommended that ALL Chamilo scripts include this file.
+ * It's recommended that ALL Chamilo scripts include this file.
  * This script returns a $app Application instance so you have access to all the services.
  *
- *  @package chamilo.include
+ * @package chamilo.include
  * @todo isn't configuration.php renamed to configuration.inc.php yet?
  * @todo use the $_configuration array for all the needed variables
  *
@@ -394,6 +394,7 @@ if (isset($_configuration['main_database'])) {
     $sortableListener = new \Gedmo\Sortable\SortableListener();
     $app['db.event_manager']->addEventSubscriber($sortableListener);
 }
+
 $app['is_admin'] = false;
 //Creating a Chamilo service provider
 use Silex\ServiceProviderInterface;

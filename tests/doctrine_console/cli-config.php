@@ -1,5 +1,6 @@
 <?php
 require_once dirname(__FILE__).'/../../main/inc/global.inc.php';
+
 error_reporting(-1);
 
 $config = new \Doctrine\ORM\Configuration();
@@ -12,11 +13,28 @@ AnnotationRegistry::registerFile(api_get_path(SYS_PATH)."vendor/doctrine/orm/lib
 $reader = new AnnotationReader();
 
 $driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array(api_get_path(SYS_PATH)."tests/doctrine_console/mapping"));
+
 $config->setMetadataDriverImpl($driverImpl);
 $config->setProxyDir(__DIR__ . '/Proxies');
 $config->setProxyNamespace('Proxies');
 
-$connectionOptions = array(
+$courseList = CourseManager::get_real_course_list();
+
+$connectionOptions = array();
+
+if (!empty($courseList)) {
+    foreach ($courseList as $course) {
+        $connectionOptions['_chamilo_course_.'.$course['db_name']] = array(
+            'driver'    => 'pdo_mysql',
+            'dbname'    => $course['db_name'],
+            'user'      => $_configuration['db_user'],
+            'password'  => $_configuration['db_password'],
+            'host'      => $_configuration['db_host'],
+        );
+    }
+}
+
+$connectionOptions['main_database'] = array(
     'driver'    => 'pdo_mysql',
     'dbname'    => $_configuration['main_database'],
     'user'      => $_configuration['db_user'],
@@ -24,7 +42,41 @@ $connectionOptions = array(
     'host'      => $_configuration['db_host'],
 );
 
-$em = \Doctrine\ORM\EntityManager::create($connectionOptions, $config);
+$connectionOptions['statistics_database'] = array(
+    'driver'    => 'pdo_mysql',
+    'dbname'    => $_configuration['statistics_database'],
+    'user'      => $_configuration['db_user'],
+    'password'  => $_configuration['db_password'],
+    'host'      => $_configuration['db_host'],
+);
+
+/*
+$connectionOptions['scorm_database'] = array(
+    'driver'    => 'pdo_mysql',
+    'dbname'    => $_configuration['scorm_database'],
+    'user'      => $_configuration['db_user'],
+    'password'  => $_configuration['db_password'],
+    'host'      => $_configuration['db_host'],
+);*/
+
+$connectionOptions['user_personal_database'] = array(
+    'driver'    => 'pdo_mysql',
+    'dbname'    => $_configuration['user_personal_database'],
+    'user'      => $_configuration['db_user'],
+    'password'  => $_configuration['db_password'],
+    'host'      => $_configuration['db_host'],
+);
+
+
+$defaultConnection = array(
+    'driver'    => 'pdo_mysql',
+    'dbname'    => $_configuration['main_database'],
+    'user'      => $_configuration['db_user'],
+    'password'  => $_configuration['db_password'],
+    'host'      => $_configuration['db_host'],
+);
+
+$em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
 
 //Fixes some errors
 $platform = $em->getConnection()->getDatabasePlatform();
@@ -33,8 +85,16 @@ $platform->registerDoctrineTypeMapping('set', 'string');
 
 $helpers = array(
     'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
-    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)
+    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
 );
+
+use Doctrine\DBAL\DriverManager;
+$multipleEM = array();
+foreach ($connectionOptions as $name => $connection) {
+    $em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
+    //$helpers[$name] = new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em);
+    $helpers[$name] = new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection());
+}
 
 /*
 To generate doctrine2 entities you must:

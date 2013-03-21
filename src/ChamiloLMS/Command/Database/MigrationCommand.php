@@ -7,12 +7,13 @@ use Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console;
 use Symfony\Component\Console\Input\ArrayInput;
+use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
 
 
 /**
  * Class MigrationCommand
  */
-class MigrationCommand extends Console\Command\Command
+class MigrationCommand extends AbstractCommand
 {
     protected function configure()
     {
@@ -20,7 +21,8 @@ class MigrationCommand extends Console\Command\Command
             ->setName('migrations:migrate_chamilo')
             ->setDescription('Execute a chamilo migration to a specified version or the latest available version.')
             ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null)
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute the migration as a dry run.');
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute the migration as a dry run.')
+            ->addOption('configuration', null, InputOption::VALUE_OPTIONAL, 'The path to a migrations configuration file.');
     }
 
     public function getMinVersionSupportedByInstall()
@@ -78,7 +80,6 @@ class MigrationCommand extends Console\Command\Command
                 return $versionInfo;
             }
         }
-
         return false;
     }
 
@@ -88,6 +89,14 @@ class MigrationCommand extends Console\Command\Command
         $dryRun = $input->getOption('dry-run');
         $minVersion = $this->getMinVersionSupportedByInstall();
         $versionList = $this->availableVersions();
+
+        $input->setOption('configuration', $this->getMigrationConfigurationFile());
+
+        $configuration = $this->getMigrationConfiguration($input, $output);
+
+        $doctrineVersion = $configuration->getCurrentVersion();
+
+        //$migration = new Migration($configuration);
 
         $versionNameList = $this->getVersionNumberList();
 
@@ -118,6 +127,18 @@ class MigrationCommand extends Console\Command\Command
             exit;
         }
 
+        $versionInfo = $this->getAvailableVersionInfo($version);
+
+
+        if (isset($versionInfo['hook_to_version']) && isset($doctrineVersion)) {
+            if ($doctrineVersion == $versionInfo['hook_to_version']) {
+                $output->writeln("<comment>Nothing to update!</comment>");
+                exit;
+            }
+        }
+
+
+
         //Too much questions?
 
         $dialog = $this->getHelperSet()->get('dialog');
@@ -142,7 +163,6 @@ class MigrationCommand extends Console\Command\Command
 
         $output->writeln('<comment>Migrating from Chamilo version: </comment><info>'.$_configuration['system_version'].'</info> <comment>to version <info>'.$version);
 
-
         //Starting
         $output->writeln('<comment>Starting migration for Chamilo portal located here: </comment><info>'.$_configuration['root_sys'].'</info>');
 
@@ -158,6 +178,15 @@ class MigrationCommand extends Console\Command\Command
                 }
             }
         }
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getMigrationConfigurationFile()
+    {
+        return api_get_path(SYS_PATH).'src/ChamiloLMS/Migrations/migrations.yml';
     }
 
     /**
@@ -183,7 +212,7 @@ class MigrationCommand extends Console\Command\Command
                     $arguments = array(
                         'command' => 'migrations:migrate',
                         'version' => $versionInfo['hook_to_version'],
-                        '--configuration' => api_get_path(SYS_PATH).'src/ChamiloLMS/Migrations/migrations.yml'
+                        '--configuration' => $this->getMigrationConfigurationFile()
                     );
                     $input     = new ArrayInput($arguments);
                     $command->run($input, $output);
@@ -193,6 +222,15 @@ class MigrationCommand extends Console\Command\Command
         }
     }
 
+    /**
+     *
+     * @param $sqlFilePath
+     * @param $dryRun
+     * @param $output
+     *
+     * @return bool
+     * @throws \Exception
+     */
     private function processSQL($sqlFilePath, $dryRun, $output)
     {
         try {
@@ -230,7 +268,7 @@ class MigrationCommand extends Console\Command\Command
     }
 
     /**
-     *
+     * Function originally wrote in install.lib.php
      * @param $file
      * @param $section
      * @param bool $printErrors

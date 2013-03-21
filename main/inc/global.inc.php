@@ -297,7 +297,7 @@ $app->register(
             'charset' => 'utf-8',
             'strict_variables' => false,
             'autoescape' => false,
-            'cache' => $app['debug'] ? false : $app['cache.path'].'twig',
+            'cache' => $app['debug'] ? false : $app['twig.cache.path'],
             'optimizations' => -1, // turn on optimizations with -1
         )
     )
@@ -334,19 +334,19 @@ Monolog  use examples
 //Setting controllers as services
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-if (is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+//Monolog and web profiler only available here
+if (is_writable($app['cache.path'])) {
     $app->register(
         new Silex\Provider\MonologServiceProvider(),
         array(
-            'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
+            'monolog.logfile' => $app['chamilo.log'],
             'monolog.name' => 'chamilo',
         )
     );
 
     if ($app['debug']) {
         $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
-                //'profiler.cache_dir' => api_get_path(SYS_ARCHIVE_PATH).'cache/profiler',
-                'profiler.cache_dir' => api_get_path(SYS_ARCHIVE_PATH),
+                'profiler.cache_dir' => $app['profiler.cache_dir'],
             ));
         $app->mount('/_profiler', $p);
     }

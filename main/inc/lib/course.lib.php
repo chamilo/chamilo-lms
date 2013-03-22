@@ -1680,9 +1680,6 @@ class CourseManager {
     public static function create_database_dump($course_code) {
         global $_configuration;
 
-        if ($_configuration['single_database']) {
-            return;
-        }
         $sql_dump = '';
         $course_code    = Database::escape_string($course_code);
         $table_course   = Database::get_main_table(TABLE_MAIN_COURSE);

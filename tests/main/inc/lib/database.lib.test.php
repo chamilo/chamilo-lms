@@ -152,7 +152,7 @@ class TestDatabase extends UnitTestCase {
 		$res=$this->dbase->get_course_table($short_table_name,$database_name);
 		$this->assertTrue(is_string($res));
 	}
-    
+
 	function testGetCourseTablePrefix() {
 		global $_configuration;
 		$res=$this->dbase->get_course_table_prefix($_configuration);
@@ -219,13 +219,6 @@ class TestDatabase extends UnitTestCase {
         	// should be returning array with empty values if user doesn't exist
 	        $res=$this->dbase->get_user_info_from_id(5000000);
         	$this->assertTrue(is_array($res));
-	}
-
-	function testGetUserPersonalDatabase() {
-		global $_configuration;
-		$res=$this->dbase->get_user_personal_database($_configuration);
-		$this->assertTrue(is_string($res));
-		$this->assertTrue($res);
 	}
 
 	function testGetUserPersonalTable(){

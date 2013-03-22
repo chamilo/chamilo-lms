@@ -51,18 +51,7 @@ class Database
         return isset($_configuration['main_database']) ? $_configuration['main_database'] : null;
     }
 
-    /**
-     *    Returns the name of the database where all the personal stuff of the user is stored
-     * @todo use main_database
-     */
-    public static function get_user_personal_database()
-    {
-        global $_configuration;
-
-        return $_configuration['main_database'];
-    }
-
-    /**
+     /**
      *    Returns the name of the current course database.
      * @return    mixed   Glued database name of false if undefined
      */
@@ -199,7 +188,7 @@ class Database
      */
     public static function get_statistic_table($short_table_name)
     {
-        return self::format_table_name(self::get_statistic_database(), $short_table_name);
+        return self::get_main_table($short_table_name);
     }
 
     /**
@@ -212,7 +201,7 @@ class Database
      */
     public static function get_user_personal_table($short_table_name)
     {
-        return self::format_table_name(self::get_user_personal_database(), $short_table_name);
+        return self::get_main_table($short_table_name);
     }
 
     public static function get_course_chat_connected_table($database_name = '')
@@ -1123,12 +1112,7 @@ class Database
     {
         global $_configuration;
         $glue = isset($_configuration['db_glue']) ? $_configuration['db_glue'] : null;
-        /*if ($_configuration['single_database']) {
-            $table_name =  '`'.$database.'`.`'.$table.'`';
-        } else {*/
         $table_name = '`'.$database.$glue.$table.'`';
-
-        //}
         return $table_name;
     }
 

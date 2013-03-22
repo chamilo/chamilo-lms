@@ -25,7 +25,7 @@ require_once 'database.constants.inc.php';
  *	@package chamilo.library
  */
 class Database {
-    
+
     /* Variable use only in the installation process to log errors. See the Database::query function */
     static $log_queries = false;
 
@@ -49,23 +49,6 @@ class Database {
     public static function get_statistic_database() {
         global $_configuration;
         return $_configuration['statistics_database'];
-    }
-
-    /**
-     *	Returns the name of the SCORM database.
-     *	@deprecated
-     */
-    public static function get_scorm_database() {
-        global $_configuration;
-        return $_configuration['scorm_database'];
-    }
-
-    /**
-     *	Returns the name of the database where all the personal stuff of the user is stored
-     */
-    public static function get_user_personal_database() {
-        global $_configuration;
-        return $_configuration['user_personal_database'];
     }
 
     /**
@@ -180,7 +163,7 @@ class Database {
      * @param string $short_table_name, the name of the table
      */
     public static function get_statistic_table($short_table_name) {
-        return self::format_table_name(self::get_statistic_database(), $short_table_name);
+        return self::get_main_table($short_table_name);
     }
 
     /**
@@ -192,7 +175,7 @@ class Database {
      * @param string $short_table_name, the name of the table
      */
     public static function get_user_personal_table($short_table_name) {
-        return self::format_table_name(self::get_user_personal_database(), $short_table_name);
+        return self::get_main_table($short_table_name);
     }
 
     public static function get_course_chat_connected_table($database_name = '') {
@@ -663,7 +646,7 @@ class Database {
      */
     public static function query($query, $connection = null, $file = null, $line = null) {
         global $database_connection;
-        
+
         $result = @$database_connection->query($query);
         if ($database_connection->errno) {
             $backtrace = debug_backtrace(); // Retrieving information about the caller statement.
@@ -710,19 +693,19 @@ class Database {
                 $info .= '</pre>';
                 echo $info;
             }
-            
+
             if (isset(self::$log_queries) && self::$log_queries) {
                 error_log("----------------  SQL error ---------------- ");
                 error_log($query);
-                
+
                 error_log('error #'.self::errno($connection));
                 error_log('error: '.self::error($connection));
-                
+
                 $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);
                 error_log($info);
                 $info = 'LINE: '.(empty($line) ? ' unknown ' : $line);
                 error_log($info);
-                
+
                 if (empty($type)) {
                     if (!empty($function)) {
                         $info = 'FUNCTION: ' . $function;
@@ -738,7 +721,7 @@ class Database {
                 }
                 error_log("---------------- end ----------------");
             }
-            
+
         }
         return $result;
     }
@@ -1139,20 +1122,20 @@ class Database {
                             $value_array = Database::escape_string($value_array);
                             $clean_values = $value_array;
                         }
-                        if (!empty($condition) && $clean_values != '') {                                                                                      
+                        if (!empty($condition) && $clean_values != '') {
                             $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
                             $condition = str_replace("'?'","%s", $condition);
                             $condition = str_replace("?","%s", $condition);
-                            
+
                             $condition = str_replace("@%s@","@-@", $condition);
                             $condition = str_replace("%s","'%s'", $condition);
                             $condition = str_replace("@-@","@%s@", $condition);
-                            
-                            //Treat conditons as string                            
-                            $condition = vsprintf($condition, $clean_values);                                                        
-                            $condition = str_replace('@percentage@','%', $condition); //replace "%"                            
+
+                            //Treat conditons as string
+                            $condition = vsprintf($condition, $clean_values);
+                            $condition = str_replace('@percentage@','%', $condition); //replace "%"
                             $where_return .= $condition;
-                        }                 
+                        }
                     }
                     if (!empty($where_return)) {
                         $return_value = " WHERE $where_return" ;
@@ -1160,11 +1143,11 @@ class Database {
                     break;
                 case 'order':
                     $order_array = $condition_data;
-                    
+
                     if (!empty($order_array)) {
                         // 'order' => 'id desc, name desc'
                         $order_array = self::escape_string($order_array);
-                        $new_order_array = explode(',', $order_array);                            
+                        $new_order_array = explode(',', $order_array);
                         $temp_value = array();
 
                         foreach($new_order_array as $element) {
@@ -1177,19 +1160,19 @@ class Database {
                                 $order = 'DESC';
                                 if (in_array($element[1], array('desc', 'asc'))) {
                                     $order = $element[1];
-                                }                            
-                                $temp_value[]= $element[0].' '.$order.' ';                                       
+                                }
+                                $temp_value[]= $element[0].' '.$order.' ';
                             } else {
                                 //by default DESC
-                                $temp_value[]= $element[0].' DESC ';                                       
+                                $temp_value[]= $element[0].' DESC ';
                             }
                         }
                         if (!empty($temp_value)) {
-                            $return_value .= ' ORDER BY '.implode(', ', $temp_value);                                
+                            $return_value .= ' ORDER BY '.implode(', ', $temp_value);
                         } else {
                             //$return_value .= '';
-                        }                        
-                    }                                        
+                        }
+                    }
                     break;
 
                 case 'limit':
@@ -1219,7 +1202,7 @@ class Database {
     public static function delete($table_name, $where_conditions) {
         $result = false;
         $where_return = self::parse_where_conditions($where_conditions);
-        $sql    = "DELETE FROM $table_name $where_return ";        
+        $sql    = "DELETE FROM $table_name $where_return ";
         $result = self::query($sql);
         $affected_rows = self::affected_rows();
         //@todo should return affected_rows for

@@ -31,7 +31,7 @@ class InstallCommand extends AbstractCommand
      *
      * @return string
      */
-    public function getConfigurationFile()
+    public function getConfigurationPath()
     {
         return api_get_path(SYS_PATH).'main/inc/conf/';
     }
@@ -48,6 +48,13 @@ class InstallCommand extends AbstractCommand
         return api_get_path(SYS_PATH).'main/install/'.$version.'/';
     }
 
+    public function getAvailableVersions() {
+        return array(
+            '1.8.8.4',
+            '1.9.0',
+            '1.10'
+        );
+    }
 
     /**
      * Executes a command via CLI
@@ -59,18 +66,19 @@ class InstallCommand extends AbstractCommand
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $configurationPath = $this->getConfigurationFile();
+        $configurationPath = $this->getConfigurationPath();
 
         $dialog = $this->getHelperSet()->get('dialog');
 
         $version = $input->getArgument('version');
+
         $defaultVersion = $this->getLatestVersion();
 
         if (empty($version)) {
             $version = $defaultVersion;
         }
 
-        $output->writeln("<comment>Welcome to the Chamilo installation process!</comment>");
+        $output->writeln("<comment>Welcome to the Chamilo installation process.</comment>");
 
         if (!is_writable($configurationPath)) {
             $output->writeln("<comment>Folder ".$configurationPath." must be writable</comment>");
@@ -79,31 +87,32 @@ class InstallCommand extends AbstractCommand
         $sqlFolder = $this->getInstallationPath($version);
 
         if (!is_dir($sqlFolder)) {
-            $output->writeln("<comment>Sorry you can't install Chamilo :( Installation files for version $version does not exists: </comment><info>".$sqlFolder);
+            $output->writeln("<comment>Sorry you can't install that version of Chamilo :( Supported versions:</comment> <info>".implode(', ', $this->getAvailableVersions()));
 
             return false;
         }
 
-        /*if (!$dialog->askConfirmation(
-            $output,
-            '<comment>You are about to install Chamilo </comment><info>$version</info> <comment>here:</comment>'.$configurationPath.'</info> <question>Are you sure?</question>(y/N)',
-            false
-        )
-        ) {
-            return;
-        }*/
 
-        /*
-        if (file_exists($configurationPath.'configuration.php') || file_exists($configurationPath.'configuration.yml')) {
-            if (!$dialog->askConfirmation(
-                $output,
-                '<question>There is a Chamilo installation located here:</question> '.$configurationPath.' <question>Are you sure you want to continue?</question>(y/N)',
-                false
-            )
-            ) {
-                return;
-            }
-        }*/
+       if (file_exists($configurationPath.'configuration.php') || file_exists($configurationPath.'configuration.yml')) {
+           if (!$dialog->askConfirmation(
+               $output,
+               '<question>There is a Chamilo installation located here:</question> '.$configurationPath.' <question>Are you sure you want to continue?</question>(y/N)',
+               false
+           )
+           ) {
+               return;
+           }
+
+           if (!$dialog->askConfirmation(
+               $output,
+               '<comment>This will be a fresh installation. Old databases and config files will be deleted. </comment></info> <question>Are you sure?</question>(y/N)',
+               false
+           )
+           ) {
+               return;
+           }
+           $this->cleanInstallation($output);
+       }
 
         //Getting default configuration parameters
         require_once api_get_path(SYS_PATH).'main/install/configuration.dist.yml.php';
@@ -142,14 +151,35 @@ class InstallCommand extends AbstractCommand
             }
         }
 
-        //Installing database
-        $result = $this->install($version, $newConfigurationArray, $output);
+        $configurationWasSaved = $this->writeConfiguration($newConfigurationArray, $version);
 
-        if ($result) {
-            $this->createAdminUser($newConfigurationArray, $output);
-            $this->writeConfiguration($newConfigurationArray, $version);
-            $output->writeln("<comment>Database installation finished!</comment>");
+        if ($configurationWasSaved) {
+
+            //Installing database
+            $result = $this->install($version, $newConfigurationArray, $output);
+
+            if ($result) {
+                $this->createAdminUser($newConfigurationArray, $output);
+
+                $output->writeln("<comment>Chamilo was successfully installed. Go to your browser and enter:</comment> <info>".$newConfigurationArray['root_web']);
+            }
         }
+    }
+
+    /**
+     * Deletes configuration files
+     */
+    function cleanInstallation($output)
+    {
+        $confPath = $this->getConfigurationPath();
+        if (file_exists($confPath.'configuration.yml')) {
+            unlink($confPath.'configuration.yml');
+        }
+
+        if (file_exists($confPath.'configuration.php')) {
+            unlink($confPath.'configuration.php');
+        }
+        $output->writeln("<comment>Config files were deleted.</comment>");
     }
 
     /**
@@ -163,8 +193,6 @@ class InstallCommand extends AbstractCommand
         $dialog = $this->getHelperSet()->get('dialog');
 
         //Creating admin user
-        $output->writeln("<comment>Chamilo was successfully installed visit: </comment> <info>".$newConfigurationArray['root_web']);
-
         $adminUser = array(
             'lastname' => 'Julio',
             'firstname' => 'M',
@@ -172,7 +200,6 @@ class InstallCommand extends AbstractCommand
             'password' => 'admin',
             'email' => 'admin@example.org'
         );
-
         $output->writeln("<comment>Creating an admin User</comment>");
         $userInfo = array();
         foreach ($adminUser as $key => $value) {
@@ -183,9 +210,13 @@ class InstallCommand extends AbstractCommand
             );
             $userInfo[$key] = $data;
         }
-        $userInfo = \UserManager::add($userInfo);
-        if ($userInfo && isset($userInfo['user_id'])) {
-            $userId = $userInfo['user_id'];
+        //By default admin is = 1 so we update it
+        $userId = $userInfo['user_id'] = 1;
+        $userInfo['auth_source'] = 'platform';
+        $userInfo['password'] = api_get_encrypted_password($userInfo['password']);
+
+        $result = \UserManager::update($userInfo);
+        if ($result) {
             \UserManager::add_user_as_admin($userInfo['user_id']);
             $output->writeln("<comment>User admin created with id: $userId</comment>");
 
@@ -210,13 +241,55 @@ class InstallCommand extends AbstractCommand
      */
     public function writeConfiguration($newConfigurationArray, $version)
     {
-        $configurationPath = $this->getConfigurationFile();
+        $configurationPath = $this->getConfigurationPath();
 
         $newConfigurationArray['system_version'] = $version;
         $dumper = new Dumper();
         $yaml = $dumper->dump($newConfigurationArray, 2); //inline
         $newConfigurationFile = $configurationPath.'configuration.yml';
         file_put_contents($newConfigurationFile, $yaml);
+        return file_exists($newConfigurationFile);
+    }
+
+    private function setDatabaseSettings($_configuration)
+    {
+        global $config;
+
+        $defaultConnection = array(
+            'driver'    => 'pdo_mysql',
+            'dbname'    => $_configuration['main_database'],
+            'user'      => $_configuration['db_user'],
+            'password'  => $_configuration['db_password'],
+            'host'      => $_configuration['db_host'],
+        );
+
+        $em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
+
+        //Fixes some errors
+        $platform = $em->getConnection()->getDatabasePlatform();
+        $platform->registerDoctrineTypeMapping('enum', 'string');
+        $platform->registerDoctrineTypeMapping('set', 'string');
+
+        $helpers = array(
+            'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
+            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
+        );
+
+        foreach ($helpers as $name => $helper) {
+            $this->getApplication()->getHelperSet()->set($helper, $name);
+        }
+
+        $conn_return = @\Database::connect(
+        array(
+            'server' => $_configuration['db_host'],
+            'username' => $_configuration['db_user'],
+            'password' => $_configuration['db_password'],
+           // 'persistent' => $_configuration['db_persistent_connection']
+            // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
+        ));
+
+        global $database_connection;
+        $checkConnection = @\Database::select_db($_configuration['main_database'], $database_connection);
     }
 
     /**
@@ -230,9 +303,23 @@ class InstallCommand extends AbstractCommand
     public function install($version, $_configuration, $output)
     {
         $sqlFolder = $this->getInstallationPath($version);
+
+        $this->setDatabaseSettings($_configuration);
+
         $output->writeln("<comment>Creating database ... </comment>");
 
-        $result = $this->createDatabase($_configuration);
+        $testConnection = $this->testDatabaseConnection($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']);
+
+        if ($testConnection == 1) {
+            $output->writeln("<comment>Connection stablished with the DB</comment>");
+        } else {
+            $output->writeln("<error>No access to the database for user:</error><info>".$_configuration['db_user']."</info>");
+            exit;
+        }
+
+        $result = $this->dropAndCreateDatabase($_configuration);
+
+
 
         //Importing files
         if ($result) {
@@ -250,12 +337,21 @@ class InstallCommand extends AbstractCommand
             $input = new ArrayInput($arguments);
             $command->run($input, $output);
 
+            api_set_setting('Institution', 'Portal');
+            api_set_setting('InstitutionUrl', 'Portal');
+            api_set_setting('siteName', 'Campus');
+            api_set_setting('emailAdministrator', 'admin@example.org');
+            api_set_setting('administratorSurname', 'M');
+            api_set_setting('administratorName', 'Julio');
+            api_set_setting('platformLanguage', 'english');
+            api_set_setting('allow_registration', '1');
+            api_set_setting('allow_registration_as_teacher', '1');
+
             //Getting extra information about the installation
-            $result = \Database::query("SELECT selected_value FROM ".\Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT)." WHERE variable = 'chamilo_database_version'");
-            $result = \Database::fetch_array($result);
-
-            $output->writeln("<comment>Showing chamilo_database_version value:</comment> ".$result['selected_value']);
-
+            //$value = api_get_setting('chamilo_database_version');
+            //$output->writeln("<comment>Showing chamilo_database_version value:</comment> ".$value);
+            $output->writeln("<comment>Check your installation status with chamilo:status</comment>");
+            $output->writeln("<comment>Database process ended!</comment>");
             return true;
         }
     }
@@ -266,7 +362,7 @@ class InstallCommand extends AbstractCommand
      *
      * @return resource
      */
-    public function createDatabase($_configuration)
+    public function dropAndCreateDatabase($_configuration)
     {
         /*
         $command = $this->getApplication()->find('orm:schema-tool:create');
@@ -277,6 +373,31 @@ class InstallCommand extends AbstractCommand
         $command->run($input, $output);
         exit;
         */
+        \Database::query("DROP DATABASE ".mysql_real_escape_string($_configuration['main_database'])."");
         return  \Database::query("CREATE DATABASE IF NOT EXISTS ".mysql_real_escape_string($_configuration['main_database'])." DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
+    }
+
+    /**
+     * In step 3. Tests establishing connection to the database server.
+     * If it's a single database environment the function checks if the database exist.
+     * If the database doesn't exist we check the creation permissions.
+     *
+     * @return int      1 when there is no problem;
+     *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
+     *                 -1 when there is no connection established.
+     */
+    public function testDatabaseConnection($dbHostForm, $dbUsernameForm, $dbPassForm)
+    {
+        $dbConnect = -1;
+        //Checking user credentials
+        if (@\Database::connect(
+            array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)
+        ) !== false
+        ) {
+            $dbConnect = 1;
+        } else {
+            $dbConnect = -1;
+        }
+        return $dbConnect; //return 1, if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
     }
 }

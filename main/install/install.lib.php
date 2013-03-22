@@ -35,7 +35,8 @@ function is_already_installed_system()
     }
 
     $current_config_file = api_get_path(CONFIGURATION_PATH).'configuration.php';
-    if (!file_exists($current_config_file)) {
+
+    if (!file_exists($current_config_file) && !file_exists(api_get_path(CONFIGURATION_PATH).'configuration.yml')) {
         return false; // Configuration file does not exist, install the system.
     }
     require $current_config_file;

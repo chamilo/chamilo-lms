@@ -227,13 +227,19 @@ class UpgradeCommand extends AbstractCommand
         $oldVersion = $currentVersion;
         foreach ($versionList as $versionItem => $versionInfo) {
             if (version_compare($versionItem, $currentVersion, '>') && version_compare($versionItem, $version, '<=')) {
+                $output->writeln("----------------------------------------------------------------");
+                $output->writeln("<comment>Starting migration from version: </comment><info>$oldVersion</info><comment> to </comment><info>$versionItem ");
+                $output->writeln("");
+
                 if (isset($versionInfo['require_update']) && $versionInfo['require_update'] == true) {
                     //Greater than my current version
                     $this->startMigration($oldVersion, $versionItem, $dryRun, $output);
                     $oldVersion = $versionItem;
+                    $output->writeln("----------------------------------------------------------------");
                 } else {
                     $output->writeln("<comment>Version <info>'$versionItem'</info> does not need a DB migration</comment>");
                 }
+
             }
         }
         $output->writeln("<comment>wow! You just finish to migrate. Too check the current status of your platform. Execute:</comment><info>chamilo:status</info>");
@@ -261,7 +267,6 @@ class UpgradeCommand extends AbstractCommand
      */
     public function startMigration($fromVersion, $toVersion, $dryRun, $output)
     {
-        $output->writeln("<comment>Starting migration from version: </comment><info>$fromVersion</info><comment> to </comment><info>$toVersion ");
         $installPath = api_get_path(SYS_CODE_PATH).'install/';
 
         $versionInfo = $this->getAvailableVersionInfo($toVersion);
@@ -273,6 +278,7 @@ class UpgradeCommand extends AbstractCommand
                 $result = true;
                 $output->writeln("");
                 $output->writeln("<comment>Executing file: <info>'$sqlToInstall'</info>");
+                $output->writeln('');
                 $output->writeln("<comment>You have to select yes for the 'Chamilo Migrations'<comment>");
 
                 if ($result) {
@@ -282,7 +288,11 @@ class UpgradeCommand extends AbstractCommand
                         'version' => $versionInfo['hook_to_version'],
                         '--configuration' => $this->getMigrationConfigurationFile()
                     );
+
+                    $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
+
                     $input     = new ArrayInput($arguments);
+
                     $command->run($input, $output);
                     $output->writeln("<comment>Migration ended succesfully</comment>");
                 }

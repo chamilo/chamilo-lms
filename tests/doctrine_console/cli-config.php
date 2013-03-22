@@ -44,13 +44,15 @@ if (!empty($courseList)) {
     }
 }
 
-$connectionOptions['main_database'] = array(
-    'driver'    => 'pdo_mysql',
-    'dbname'    => $_configuration['main_database'],
-    'user'      => $_configuration['db_user'],
-    'password'  => $_configuration['db_password'],
-    'host'      => $_configuration['db_host'],
-);
+if (isset($connectionOptions['main_database'])) {
+    $connectionOptions['main_database'] = array(
+        'driver'    => 'pdo_mysql',
+        'dbname'    => $_configuration['main_database'],
+        'user'      => $_configuration['db_user'],
+        'password'  => $_configuration['db_password'],
+        'host'      => $_configuration['db_host'],
+    );
+}
 
 if (isset($_configuration['statistics_database'])) {
     $connectionOptions['statistics_database'] = array(
@@ -73,12 +75,19 @@ if (isset($_configuration['user_personal_database'])) {
 }
 
 $defaultConnection = array(
-    'driver'    => 'pdo_mysql',
-    'dbname'    => $_configuration['main_database'],
-    'user'      => $_configuration['db_user'],
-    'password'  => $_configuration['db_password'],
-    'host'      => $_configuration['db_host'],
+    'driver' => 'pdo_mysql',
 );
+
+if (isset($_configuration['main_database'])) {
+
+    $defaultConnection = array(
+        'driver'    => 'pdo_mysql',
+        'dbname'    => $_configuration['main_database'],
+        'user'      => $_configuration['db_user'],
+        'password'  => $_configuration['db_password'],
+        'host'      => $_configuration['db_host'],
+    );
+}
 
 $em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
 

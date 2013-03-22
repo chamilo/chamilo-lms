@@ -16,7 +16,6 @@
  * This script returns a $app Application instance so you have access to all the services.
  *
  * @package chamilo.include
- * @todo isn't configuration.php renamed to configuration.inc.php yet?
  * @todo use the $_configuration array for all the needed variables
  *
  */
@@ -38,6 +37,7 @@ $includePath = dirname(__FILE__);
 // @todo Isn't this file renamed to configuration.inc.php yet?
 // Include the main Chamilo platform configuration file.
 $main_configuration_file_path = $includePath.'/conf/configuration.php';
+$configurationYML = $includePath.'/conf/configuration.yml';
 
 $already_installed = false;
 if (file_exists($main_configuration_file_path)) {
@@ -45,6 +45,10 @@ if (file_exists($main_configuration_file_path)) {
     $already_installed = true;
 } else {
     $_configuration = array();
+}
+
+if (file_exists($configurationYML)) {
+    $already_installed = true;
 }
 
 //Redirects to the main/install/ page
@@ -56,23 +60,6 @@ if (!$already_installed) {
     die();
 }*/
 
-// Ensure that _configuration is in the global scope before loading
-// main_api.lib.php. This is particularly helpful for unit tests
-if (!isset($GLOBALS['_configuration'])) {
-    $GLOBALS['_configuration'] = $_configuration;
-}
-
-// Code for trnasitional purposes, it can be removed right before the 1.8.7 release.
-if (empty($_configuration['system_version'])) {
-    $_configuration['system_version'] = (!empty($_configuration['dokeos_version']) ? $_configuration['dokeos_version'] : '');
-    $_configuration['system_stable'] = (!empty($_configuration['dokeos_stable']) ? $_configuration['dokeos_stable'] : '');
-    $_configuration['software_url'] = 'http://www.chamilo.org/';
-}
-
-// For backward compatibility.
-$_configuration['dokeos_version'] = $_configuration['system_version'];
-$_configuration['dokeos_stable'] = $_configuration['system_stable'];
-$userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
@@ -121,15 +108,31 @@ use Symfony\Component\Yaml\Parser;
 $app = new Application();
 
 //Overwriting $_configuration
-
-$configurationYML = $includePath.'/conf/configuration.yml';
-
 if (file_exists($configurationYML)) {
     $yaml = new Parser();
     $_configuration = $yaml->parse(file_get_contents($configurationYML));
 }
 
+// Ensure that _configuration is in the global scope before loading
+// main_api.lib.php. This is particularly helpful for unit tests
+if (!isset($GLOBALS['_configuration'])) {
+    $GLOBALS['_configuration'] = $_configuration;
+}
+
+// Code for trnasitional purposes, it can be removed right before the 1.8.7 release.
+if (empty($_configuration['system_version'])) {
+    $_configuration['system_version'] = (!empty($_configuration['dokeos_version']) ? $_configuration['dokeos_version'] : '');
+    $_configuration['system_stable'] = (!empty($_configuration['dokeos_stable']) ? $_configuration['dokeos_stable'] : '');
+    $_configuration['software_url'] = 'http://www.chamilo.org/';
+}
+
+// For backward compatibility.
+$_configuration['dokeos_version'] = $_configuration['system_version'];
+$_configuration['dokeos_stable'] = $_configuration['system_stable'];
+$userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
+
 $app['configuration_file'] = $main_configuration_file_path;
+$app['configuration_yml_file'] = $configurationYML;
 $app['configuration'] = $_configuration;
 $app['languages_file'] = array();
 $app['installed'] = $already_installed;
@@ -416,8 +419,6 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
-
-
         //Template
         $app['template'] = $app->share(function () use ($app) {
             $template = new Template(null, $app);
@@ -534,7 +535,6 @@ if (!empty($_configuration['multiple_access_urls'])) {
 }
 
 $charset = 'UTF-8';
-
 $checkConnection = false;
 
 if (isset($_configuration['main_database'])) {
@@ -870,7 +870,7 @@ if (api_get_setting('server_type') == 'test') {
 
 $app->before(
     function () use ($app, $checkConnection) {
-        if (!file_exists($app['configuration_file'])) {
+        if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
             $app->abort(500, "Incorrect PHP version");
         }
@@ -967,8 +967,6 @@ if (empty($default_quota)) {
 }
 
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
-
-
 
 $app['pages.controller'] = $app->share(function () use ($app) {
     return new PagesController($app['pages.repository']);

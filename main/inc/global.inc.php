@@ -116,8 +116,18 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Yaml\Parser;
 
 $app = new Application();
+
+//Overwriting $_configuration
+
+$configurationYML = $includePath.'/conf/configuration.yml';
+
+if (file_exists($configurationYML)) {
+    $yaml = new Parser();
+    $_configuration = $yaml->parse(file_get_contents($configurationYML));
+}
 
 $app['configuration_file'] = $main_configuration_file_path;
 $app['configuration'] = $_configuration;
@@ -323,19 +333,20 @@ $app['twig'] = $app->share(
     })
 );
 
-/*
-Adding Monolog service provider
-Monolog  use examples
-    $app['monolog']->addDebug('Testing the Monolog logging.');
-    $app['monolog']->addInfo('Testing the Monolog logging.');
-    $app['monolog']->addError('Testing the Monolog logging.');
-*/
-
 //Setting controllers as services
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-//Monolog and web profiler only available here
+//Monolog and web profiler only available if cache is writable
 if (is_writable($app['cache.path'])) {
+
+    /*
+    Adding Monolog service provider
+    Monolog  use examples
+        $app['monolog']->addDebug('Testing the Monolog logging.');
+        $app['monolog']->addInfo('Testing the Monolog logging.');
+        $app['monolog']->addError('Testing the Monolog logging.');
+    */
+
     $app->register(
         new Silex\Provider\MonologServiceProvider(),
         array(
@@ -343,13 +354,15 @@ if (is_writable($app['cache.path'])) {
             'monolog.name' => 'chamilo',
         )
     );
-    /*
+
+    //Adding web profiler
+
     if ($app['debug']) {
         $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
                 'profiler.cache_dir' => $app['profiler.cache_dir'],
             ));
         $app->mount('/_profiler', $p);
-    }*/
+    }
 }
 
 

@@ -343,13 +343,13 @@ if (is_writable($app['cache.path'])) {
             'monolog.name' => 'chamilo',
         )
     );
-
+    /*
     if ($app['debug']) {
         $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
                 'profiler.cache_dir' => $app['profiler.cache_dir'],
             ));
         $app->mount('/_profiler', $p);
-    }
+    }*/
 }
 
 

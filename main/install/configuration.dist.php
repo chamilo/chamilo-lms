@@ -6,7 +6,7 @@
  *		Virtual campus configuration
  *
  * This file contains a list of variables that can be modified by the campus
- * site's server administrator. Pay attention when changing these variables, 
+ * site's server administrator. Pay attention when changing these variables,
  * some changes may cause Chamilo to stop working.
  * If you changed some settings and want to restore them, please have a look at
  * configuration.dist.php. That file is an exact copy of the config file at
@@ -15,13 +15,13 @@
 
 /**
  * $_configuration define only the bare essential variables
- * for configuring the platform (paths, database connections, ...). 
+ * for configuring the platform (paths, database connections, ...).
  * Changing a $_configuration variable CAN generally break the installation.
- * Besides the $_configuration, a $_settings array also exists, that 
+ * Besides the $_configuration, a $_settings array also exists, that
  * contains variables that can be changed and will not break the platform.
- * These optional settings are defined in the database, now 
+ * These optional settings are defined in the database, now
  * (table settings_current).
- * example: $_configuration['tracking_enabled'] (assuming that the install 
+ * example: $_configuration['tracking_enabled'] (assuming that the install
  * script creates the necessary tables anyway).
  */
 
@@ -38,10 +38,6 @@ $_configuration['db_password'] = '{DATABASE_PASSWORD}';
 /**
  * Database settings
  */
-// Is tracking enabled?
-$_configuration['tracking_enabled']      = TRACKING_ENABLED;
-// Is single database enabled (DO NOT MODIFY THIS)
-$_configuration['single_database']       = SINGLE_DATABASE;
 // Prefix for course tables (IF NOT EMPTY, can be replaced by another prefix, else leave empty)
 $_configuration['table_prefix']          = '{COURSE_TABLE_PREFIX}';
 // Separator between database and table name (DO NOT MODIFY THIS)
@@ -50,11 +46,6 @@ $_configuration['db_glue']               = '{DATABASE_GLUE}';
 $_configuration['db_prefix']             = '{DATABASE_PREFIX}';
 // main Chamilo database
 $_configuration['main_database']         = '{DATABASE_MAIN}';
-// stats Chamilo database
-$_configuration['statistics_database']   ='{DATABASE_STATS}';
-// User Personal Database (where all the personal stuff of the user is stored
-// (personal agenda items, course sorting)
-$_configuration['user_personal_database']='{DATABASE_PERSONAL}';
 
 /**
  * Directory settings
@@ -79,7 +70,7 @@ $_configuration['course_folder']  = "courses/";
 $_configuration['db_admin_path']  = '';
 
 /**
- * 
+ *
  * Login modules settings
  */
 // CAS IMPLEMENTATION
@@ -103,7 +94,7 @@ $extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['
 // $extAuthSource["external_login"]["updateUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/updateUser.php";
 
 /**
- * 
+ *
  * Hosting settings - Allows you to set limits to the Chamilo portal when
  * hosting it for a third party. These settings can be overwritten by an
  * optionally-loaded extension file with only the settings (no comments).
@@ -124,7 +115,7 @@ $_configuration[1]['hosting_limit_sessions'] = 0;
 $_configuration[1]['hosting_limit_disk_space'] = 0;
 
 /**
- * Content Delivery Network (CDN) settings. Only use if you need a separate 
+ * Content Delivery Network (CDN) settings. Only use if you need a separate
  * server to serve your static data. If you don't know what a CDN is, you
  * don't need it. These settings are for simple Origin Pull CDNs and are
  * experimental. Enable only if you really know what you're doing.

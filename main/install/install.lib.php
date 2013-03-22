@@ -2674,16 +2674,7 @@ function create_course_tables($course_db_name = null)
 {
     global $_configuration;
     $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
-    $use_one_db = true;
-
-    if ($use_one_db) {
-        $course_db_name = DB_COURSE_PREFIX;
-    } else {
-        if (!$_configuration['single_database']) {
-            Database::query("CREATE DATABASE IF NOT EXISTS ".$course_db_name."".$charset_clause);
-        }
-        $course_db_name = $_configuration['table_prefix'].$course_db_name.$_configuration['db_glue'];
-    }
+    $course_db_name = DB_COURSE_PREFIX;
 
     //@todo define the backticks inside those table names directly (instead of adding them afterwards)
     $tbl_course_homepage = $course_db_name.'tool';

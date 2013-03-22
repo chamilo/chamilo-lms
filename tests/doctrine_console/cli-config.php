@@ -8,6 +8,7 @@ $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Component\Yaml\Parser;
 
 AnnotationRegistry::registerFile(api_get_path(SYS_PATH)."vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
 $reader = new AnnotationReader();
@@ -18,7 +19,16 @@ $config->setMetadataDriverImpl($driverImpl);
 $config->setProxyDir(__DIR__ . '/Proxies');
 $config->setProxyNamespace('Proxies');
 
-$courseList = CourseManager::get_real_course_list();
+//$courseList = CourseManager::get_real_course_list();
+$courseList = array();
+
+$configurationPath = api_get_path(SYS_PATH).'main/inc/conf/';
+$newConfigurationFile = $configurationPath.'configuration.yml';
+
+if (is_file($newConfigurationFile) && file_exists($newConfigurationFile)) {
+    $yaml = new Parser();
+    $_configuration = $yaml->parse(file_get_contents($newConfigurationFile));
+}
 
 $connectionOptions = array();
 
@@ -42,31 +52,25 @@ $connectionOptions['main_database'] = array(
     'host'      => $_configuration['db_host'],
 );
 
-$connectionOptions['statistics_database'] = array(
-    'driver'    => 'pdo_mysql',
-    'dbname'    => $_configuration['statistics_database'],
-    'user'      => $_configuration['db_user'],
-    'password'  => $_configuration['db_password'],
-    'host'      => $_configuration['db_host'],
-);
+if (isset($_configuration['statistics_database'])) {
+    $connectionOptions['statistics_database'] = array(
+        'driver'    => 'pdo_mysql',
+        'dbname'    => $_configuration['statistics_database'],
+        'user'      => $_configuration['db_user'],
+        'password'  => $_configuration['db_password'],
+        'host'      => $_configuration['db_host'],
+    );
+}
 
-/*
-$connectionOptions['scorm_database'] = array(
-    'driver'    => 'pdo_mysql',
-    'dbname'    => $_configuration['scorm_database'],
-    'user'      => $_configuration['db_user'],
-    'password'  => $_configuration['db_password'],
-    'host'      => $_configuration['db_host'],
-);*/
-
-$connectionOptions['user_personal_database'] = array(
-    'driver'    => 'pdo_mysql',
-    'dbname'    => $_configuration['user_personal_database'],
-    'user'      => $_configuration['db_user'],
-    'password'  => $_configuration['db_password'],
-    'host'      => $_configuration['db_host'],
-);
-
+if (isset($_configuration['user_personal_database'])) {
+    $connectionOptions['user_personal_database'] = array(
+        'driver'    => 'pdo_mysql',
+        'dbname'    => $_configuration['user_personal_database'],
+        'user'      => $_configuration['db_user'],
+        'password'  => $_configuration['db_password'],
+        'host'      => $_configuration['db_host'],
+    );
+}
 
 $defaultConnection = array(
     'driver'    => 'pdo_mysql',

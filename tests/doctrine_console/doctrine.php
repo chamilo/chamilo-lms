@@ -12,6 +12,7 @@ $helperSet = $cli->getHelperSet();
 foreach ($helpers as $name => $helper) {
     $helperSet->set($helper, $name);
 }
+
 $cli->addCommands(array(
     // DBAL Commands
     new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand(),
@@ -40,8 +41,8 @@ $cli->addCommands(array(
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
-    new ChamiloLMS\Command\Database\MigrationCommand()
-
-
+    new ChamiloLMS\Command\Database\UpgradeCommand(),
+    new ChamiloLMS\Command\Database\InstallCommand(),
+    new ChamiloLMS\Command\Database\StatusCommand(),
 ));
 $cli->run();

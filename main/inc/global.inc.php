@@ -533,28 +533,44 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
 }
 
-// The system has not been designed to use special SQL modes that were introduced since MySQL 5.
-Database::query("set session sql_mode='';");
+$charset = 'UTF-8';
 
 $checkConnection = false;
+
 if (isset($_configuration['main_database'])) {
-    $checkConnection = Database::select_db($_configuration['main_database'], $database_connection);
+    // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
+    Database::query("set session sql_mode='';");
+
+    $checkConnection = @Database::select_db($_configuration['main_database'], $database_connection);
+    if ($checkConnection) {
+
+        // Initialization of the database encoding to be used.
+        Database::query("SET SESSION character_set_server='utf8';");
+        Database::query("SET SESSION collation_server='utf8_general_ci';");
+
+        /*   Initialization of the default encodings */
+
+        // The platform's character set must be retrieved at this early moment.
+        /*$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
+
+        $result = Database::query($sql);
+        while ($row = @Database::fetch_array($result)) {
+            $charset = $row[0];
+        }
+        if (empty($charset)) {
+            $charset = 'UTF-8';
+        }*/
+        //Charset is UTF-8
+
+        if (api_is_utf8($charset)) {
+            // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
+            Database::query("SET NAMES 'utf8';");
+        } else {
+            Database::query("SET CHARACTER SET '".Database::to_db_encoding($charset)."';");
+        }
+        Database::query("SET NAMES 'utf8';");
+    }
 }
-
-/*   Initialization of the default encodings */
-
-// The platform's character set must be retrieved at this early moment.
-/*$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
-
-$result = Database::query($sql);
-while ($row = @Database::fetch_array($result)) {
-    $charset = $row[0];
-}
-if (empty($charset)) {
-    $charset = 'UTF-8';
-}*/
-//Charset is UTF-8
-$charset = 'UTF-8';
 
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
@@ -564,24 +580,12 @@ api_initialize_internationalization();
 // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
 api_set_internationalization_default_encoding($charset);
 
-// Initialization of the database encoding to be used.
-Database::query("SET SESSION character_set_server='utf8';");
-Database::query("SET SESSION collation_server='utf8_general_ci';");
-
-if (api_is_utf8($charset)) {
-    // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
-    Database::query("SET NAMES 'utf8';");
-} else {
-    Database::query("SET CHARACTER SET '".Database::to_db_encoding($charset)."';");
-}
-Database::query("SET NAMES 'utf8';");
-
 // Start session after the internationalization library has been initialized
 //@todo use silex session provider instead of a custom class
 Chamilo::session()->start($already_installed);
 
 //@todo move this inside the before filter
-if ($already_installed) {
+if ($already_installed && $checkConnection) {
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
 
     $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;

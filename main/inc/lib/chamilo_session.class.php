@@ -60,12 +60,12 @@ class ChamiloSession extends System\Session
      * @author Olivier Brouckaert
      * @param  string variable - the variable name to save into the session
      */
-    static function start($already_installed = true)
+    static function start($alreadyInstalled = true)
     {
         global $_configuration;
 
         /* Causes too many problems and is not configurable dynamically.
-          if ($already_installed) {
+          if ($alreadyInstalled) {
           $session_lifetime = 360000;
           if (isset($_configuration['session_lifetime'])) {
           $session_lifetime = $_configuration['session_lifetime'];
@@ -113,7 +113,7 @@ class ChamiloSession extends System\Session
 
         $session = self::instance();
 
-        if ($already_installed) {
+        /*if ($alreadyInstalled) {
             if (!isset($session['checkChamiloURL'])) {
                 $session['checkChamiloURL'] = api_get_path(WEB_PATH);
             } else {
@@ -121,7 +121,7 @@ class ChamiloSession extends System\Session
                     self::clear();
                 }
             }
-        }
+        }*/
 
         if (!$session->has('starttime') || $session->is_valid()) {
             $session->write('starttime', time());

@@ -20,13 +20,6 @@
  *
  */
 
-//@todo will be removed before a stable release
-$mtime = microtime();
-$mtime = explode(" ", $mtime);
-$mtime = $mtime[1] + $mtime[0];
-$starttime = $mtime;
-define('START', $starttime);
-
 // Showing/hiding error codes in global error messages.
 //define('SHOW_ERROR_CODES', false);
 
@@ -34,56 +27,37 @@ define('START', $starttime);
 // This path will be useful to include the other intialisation files.
 $includePath = dirname(__FILE__);
 
-// @todo Isn't this file renamed to configuration.inc.php yet?
 // Include the main Chamilo platform configuration file.
-$main_configuration_file_path = $includePath.'/conf/configuration.php';
+$configurationFilePath = $includePath.'/conf/configuration.php';
 $configurationYML = $includePath.'/conf/configuration.yml';
 
-$already_installed = false;
-if (file_exists($main_configuration_file_path)) {
-    require_once $main_configuration_file_path;
-    $already_installed = true;
+$alreadyInstalled = false;
+if (file_exists($configurationFilePath) || file_exists($configurationYML)) {
+    if (file_exists($configurationFilePath)) {
+        require_once $configurationFilePath;
+    }
+    $alreadyInstalled = true;
 } else {
     $_configuration = array();
 }
 
-if (file_exists($configurationYML)) {
-    $already_installed = true;
-}
-
 //Redirects to the main/install/ page
 /*
-if (!$already_installed) {
+if (!$alreadyInstalled) {
     $global_error_code = 2;
     // The system has not been installed yet.
     require $includePath.'/global_error_message.inc.php';
     die();
 }*/
 
-
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
-// Specification for usernames:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-
-$default_username_length = 40;
-if (api_get_setting('login_is_email') == 'true') {
-    $default_username_length = 100;
-}
-
-define('USERNAME_MAX_LENGTH', $default_username_length);
-
 // Do not over-use this variable. It is only for this script's local use.
-$lib_path = api_get_path(LIBRARY_PATH);
+$lib_path = $includePath.'/lib/';
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
-
-// Add the path to the pear packages to the include path
-ini_set('include_path', api_create_include_path_setting());
 
 // This is for compatibility with MAC computers.
 ini_set('auto_detect_line_endings', '1');
@@ -92,8 +66,10 @@ ini_set('auto_detect_line_endings', '1');
 define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library');
 
 //mpdf constants
-define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH));
-define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
+//define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH));
+// Forcing PclZip library to use a custom temporary folder.
+
+define('_MPDF_PATH', $lib_path.'mpdf/');
 
 //Composer autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
@@ -119,6 +95,9 @@ if (!isset($GLOBALS['_configuration'])) {
     $GLOBALS['_configuration'] = $_configuration;
 }
 
+// Add the path to the pear packages to the include path
+ini_set('include_path', api_create_include_path_setting());
+
 // Code for trnasitional purposes, it can be removed right before the 1.8.7 release.
 if (empty($_configuration['system_version'])) {
     $_configuration['system_version'] = (!empty($_configuration['dokeos_version']) ? $_configuration['dokeos_version'] : '');
@@ -131,11 +110,11 @@ $_configuration['dokeos_version'] = $_configuration['system_version'];
 $_configuration['dokeos_stable'] = $_configuration['system_stable'];
 $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 
-$app['configuration_file'] = $main_configuration_file_path;
+$app['configuration_file'] = $configurationFilePath;
 $app['configuration_yml_file'] = $configurationYML;
 $app['configuration'] = $_configuration;
 $app['languages_file'] = array();
-$app['installed'] = $already_installed;
+$app['installed'] = $alreadyInstalled;
 
 //require_once __DIR__.'/../../resources/config/prod.php';
 require_once __DIR__.'/../../resources/config/dev.php';
@@ -146,6 +125,7 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
+//Session provider
 //$app->register(new Silex\Provider\SessionServiceProvider());
 
 /*
@@ -214,8 +194,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));*/
 
-//URL generator provider
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+//Setting controllers as services
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 //Validator provider
 $app->register(new Silex\Provider\ValidatorServiceProvider());
@@ -336,8 +316,10 @@ $app['twig'] = $app->share(
     })
 );
 
-//Setting controllers as services
-$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+//URL generator provider
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
+
 
 //Monolog and web profiler only available if cache is writable
 if (is_writable($app['cache.path'])) {
@@ -358,15 +340,19 @@ if (is_writable($app['cache.path'])) {
         )
     );
 
-    //Adding web profiler
-    /*
-    if ($app['debug']) {
-        $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
-                'profiler.cache_dir' => $app['profiler.cache_dir'],
-            ));
-        $app->mount('/_profiler', $p);
+
+//Adding web profiler
+    if (is_writable($app['cache.path'])) {
+        if ($app['debug']) {
+            //if (api_get_setting('allow_web_profiler') == 'true') {
+                $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
+                        'profiler.cache_dir' => $app['profiler.cache_dir'],
+                    ));
+                $app->mount('/_profiler', $p);
+            //}
+        }
     }
-    */
+
 }
 
 
@@ -582,17 +568,19 @@ api_initialize_internationalization();
 api_set_internationalization_default_encoding($charset);
 
 // Start session after the internationalization library has been initialized
+
 //@todo use silex session provider instead of a custom class
-Chamilo::session()->start($already_installed);
+Chamilo::session()->start($alreadyInstalled);
 
 //@todo move this inside the before filter
-if ($already_installed && $checkConnection) {
+if ($alreadyInstalled && $checkConnection) {
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
 
     $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
     $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
     $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
+
     if (empty($_setting)) {
         api_set_settings_and_plugins();
     } else {
@@ -602,7 +590,11 @@ if ($already_installed && $checkConnection) {
             $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
         }
     }
+    api_set_settings_and_plugins();
 }
+
+
+
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
@@ -620,7 +612,7 @@ $administrator['email'] = isset($administrator['email']) ? $administrator['email
 $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
 //Including mail settings
-if ($already_installed) {
+if ($alreadyInstalled) {
     $mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
     if (file_exists($mail_conf)) {
         require_once $mail_conf;
@@ -645,7 +637,7 @@ $app['mailer'] = $app->share(function ($app) {
 });
 
 // Check and modify the date of user in the track.e.online table
-if ($already_installed && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
+if ($alreadyInstalled && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
@@ -659,7 +651,7 @@ $user_language = api_get_user_language();
 $app['this_script'] = isset($this_script) ? $this_script : null;
 
 // Checking if we have a valid language. If not we set it to the platform language.
-if ($already_installed) {
+if ($alreadyInstalled) {
     $app['language_interface'] = $language_interface = api_get_language_interface();
 } else {
     $app['language_interface'] = $language_interface = 'english';
@@ -814,9 +806,9 @@ if (is_array($language_files)) {
 /* End loading languages */
 
 //error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
+error_reporting(-1);
 if (api_get_setting('server_type') == 'test') {
-    //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+    error_reporting(-1);
 } else {
     /*
     Server type is not test
@@ -871,6 +863,19 @@ if (api_get_setting('server_type') == 'test') {
 
 $app->before(
     function () use ($app, $checkConnection) {
+
+        // Specification for usernames:
+        // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+        // 2. Empty username is formally valid, but it is reserved for the anonymous user.
+        // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+        $default_username_length = 40;
+        if (api_get_setting('login_is_email') == 'true') {
+            $default_username_length = 100;
+        }
+
+        define('USERNAME_MAX_LENGTH', $default_username_length);
+
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
             $app->abort(500, "Incorrect PHP version");
@@ -896,17 +901,6 @@ $app->before(
 
 $app->finish(
     function () use ($app) {
-        //@todo will be removed before a stable release
-        $mtime = microtime();
-        $mtime = explode(" ", $mtime);
-        $mtime = $mtime[1] + $mtime[0];
-
-        $message = "Page loaded in:".($mtime - START);
-        $app['monolog']->addInfo($message);
-        $message = "memory_get_usage: ".format_file_size(memory_get_usage(true));
-        $app['monolog']->addInfo($message);
-        $message = "memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true));
-        $app['monolog']->addInfo($message);
     }
 );
 
@@ -976,6 +970,9 @@ $app['pages.controller'] = $app->share(function () use ($app) {
 $app['index.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\IndexController();
 });
+$app['legacy.controller'] = $app->share(function () use ($app) {
+    return new ChamiloLMS\Controller\LegacyController();
+});
 
 $app['userportal.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\UserPortalController();
@@ -1004,9 +1001,9 @@ $app['posts.controller'] = $app->share(function() use ($app) {
 });
 $app->mount('/', "posts.controller");*/
 
-//All calls made in Chamilo are manage in the src/ChamiloLMS/Controller/IndexController.php file function classicAction
-$app->get('/', 'index.controller:classicAction');
-$app->post('/', 'index.controller:classicAction');
+//All calls made in Chamilo are manage in the src/ChamiloLMS/Controller/LegacyController.php file function classicAction
+$app->get('/', 'legacy.controller:classicAction');
+$app->post('/', 'legacy.controller:classicAction');
 
 //index.php
 $app->get('/index', 'index.controller:indexAction')->bind('index');

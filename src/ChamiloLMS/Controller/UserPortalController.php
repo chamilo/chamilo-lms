@@ -116,7 +116,7 @@ class UserPortalController
         \PageController::return_user_image_block();
         \PageController::return_course_block();
 
-        $app['template']->assign('navigation_course_links', $app['template']->return_navigation_links());
+        $app['template']->assign('navigation_course_links', $app['template']->returnNavigationLinks());
         \PageController::return_reservation_block();
         $app['template']->assign('search_block', \PageController::return_search_block());
         $app['template']->assign('classes_block', \PageController::return_classes_block());

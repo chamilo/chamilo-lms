@@ -15,40 +15,23 @@ class IndexController// extends Controller
     public $language_files = array('courses', 'index', 'admin');
 
     /**
-     * Handles default Chamilo scripts handled by Display::display_header() and display_footer()
      *
-     * @param \Silex\Application $app
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response|void
+     * @return bool
      */
-    public function classicAction(Application $app)
+    public function security()
     {
-        //User is not allowed
-        if ($app['allowed'] == false) {
-            return $app->abort(403);
-        }
-        //Rendering page
-        $response = $app['twig']->render($app['default_layout']);
-
-        //Classic style
-        if ($app['classic_layout'] == true) {
-            //assign('content', already done in display::display_header() and display_footer()
-
-        } else {
-           return $app->redirect('index');
-        }
-        return new Response($response, 200, array());
-    }
-
-    function logoutAction(Application $app) {
-        $this->logout();
-        return $app->redirect($app['url_generator']->generator('index'));
-    }
-
-    function security() {
         return false;
         if (api_is_allowed_to_edit()) {
+
             return true;
         }
+    }
+
+    function logoutAction(Application $app)
+    {
+        $this->logout();
+
+        return $app->redirect($app['url_generator']->generator('index'));
     }
 
     /**
@@ -159,7 +142,7 @@ class IndexController// extends Controller
         $app['template']->assign('home_page_block', \PageController::return_home_page());
 
         //Navigation links
-        $navLinks = $app['template']->return_navigation_links();
+        $navLinks = $app['template']->returnNavigationLinks();
 
         $app['template']->assign('navigation_course_links', $navLinks);
         $app['template']->assign('main_navigation_block', $navLinks);
@@ -245,9 +228,9 @@ class IndexController// extends Controller
     }
 
     /**
-     *
+     * Logout action
      */
-    function logout()
+    public function logout()
     {
         $userId = api_get_user_id();
         online_logout($userId, true);
@@ -258,7 +241,7 @@ class IndexController// extends Controller
      *
      * @return string
      */
-    function display_login_form(Application $app)
+    public function display_login_form(Application $app)
     {
         /* {{ form_widget(form) }}
           $form = $app['form.factory']->createBuilder('form')
@@ -286,6 +269,7 @@ class IndexController// extends Controller
             include_once 'main/auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
         }
+
         return $html;
     }
 }

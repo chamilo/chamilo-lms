@@ -40,6 +40,7 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
     event_login();
 }
 
+
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : null;
@@ -482,10 +483,7 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
     $gidReset = true;    // As groups depend from courses, group id is reset
 }
 
-
-
 /* USER INIT */
-
 if (isset($uidReset) && $uidReset) {    // session data refresh requested
     unset($_SESSION['_user']['uidReset']);
     $is_platformAdmin = false;
@@ -521,6 +519,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
             Session::write('_user', $_user);
             UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
+
             Session::write('is_platformAdmin',$is_platformAdmin);
             Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
 
@@ -539,6 +538,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
     $is_platformAdmin         = isset($_SESSION['is_platformAdmin']) ? $_SESSION['is_platformAdmin'] : false;
     $is_allowedCreateCourse   = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
+
 
 /*  COURSE INIT */
 

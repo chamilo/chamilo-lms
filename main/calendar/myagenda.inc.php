@@ -968,7 +968,7 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT " .
-							" agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
+							"DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
                             " FROM ".$t_a." agenda, ".
 			                $t_ip." ip ".
                             " WHERE agenda.id = ip.ref ".
@@ -980,7 +980,7 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 							" ORDER BY start_date ";
 			} else {
 				$sqlquery = "SELECT ".
-							" agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
+							"DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
 							" FROM ".$t_a." agenda, ".
 							$t_ip." ip ".
 							" WHERE agenda.id = ip.ref ".

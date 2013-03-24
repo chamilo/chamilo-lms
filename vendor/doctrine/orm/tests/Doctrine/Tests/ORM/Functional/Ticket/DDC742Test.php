@@ -15,7 +15,7 @@ class DDC742Test extends \Doctrine\Tests\OrmFunctionalTestCase
     {
         parent::setUp();
 
-        if (\extension_loaded('memcache') && @fsockopen('localhost', 11211)) {
+        if (\extension_loaded('memcache')) {
             $memcache = new \Memcache();
             $memcache->addServer('localhost');
             $memcache->flush();
@@ -26,8 +26,6 @@ class DDC742Test extends \Doctrine\Tests\OrmFunctionalTestCase
             $this->_em->getMetadataFactory()->setCacheDriver($cacheDriver);
         } else if (\extension_loaded('apc')) {
             $this->_em->getMetadataFactory()->setCacheDriver(new \Doctrine\Common\Cache\ApcCache());
-        } else {
-            $this->markTestSkipped('Test only works with a cache enabled.');
         }
 
         try {

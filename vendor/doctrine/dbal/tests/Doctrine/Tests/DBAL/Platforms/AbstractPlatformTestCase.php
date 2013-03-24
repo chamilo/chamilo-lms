@@ -10,7 +10,7 @@ use Doctrine\DBAL\Schema\TableDiff;
 abstract class AbstractPlatformTestCase extends \Doctrine\Tests\DbalTestCase
 {
     /**
-     * @var \Doctrine\DBAL\Platforms\AbstractPlatform
+     * @var Doctrine\DBAL\Platforms\AbstractPlatform
      */
     protected $_platform;
 
@@ -156,21 +156,6 @@ abstract class AbstractPlatformTestCase extends \Doctrine\Tests\DbalTestCase
         $this->assertEquals($this->getGenerateConstraintForeignKeySql(), $sql);
     }
 
-    public function testGeneratesForeignKeySqlOnlyWhenSupportingForeignKeys()
-    {
-        $fk = new \Doctrine\DBAL\Schema\ForeignKeyConstraint(array('fk_name'), 'foreign', array('id'), 'constraint_fk');
-
-        if ($this->_platform->supportsForeignKeyConstraints()) {
-            $this->assertInternalType(
-                'string',
-                $this->_platform->getCreateForeignKeySQL($fk, 'test')
-            );
-        } else {
-            $this->setExpectedException('Doctrine\DBAL\DBALException');
-            $this->_platform->getCreateForeignKeySQL($fk, 'test');
-        }
-    }
-
     protected function getBitAndComparisonExpressionSql($value1, $value2)
     {
         return '(' . $value1 . ' & ' . $value2 . ')';
@@ -220,15 +205,7 @@ abstract class AbstractPlatformTestCase extends \Doctrine\Tests\DbalTestCase
     {
         $expectedSql = $this->getGenerateAlterTableSql();
 
-        $table = new Table('mytable');
-        $table->addColumn('id', 'integer', array('autoincrement' => true));
-        $table->addColumn('foo', 'integer');
-        $table->addColumn('bar', 'string');
-        $table->addColumn('bloo', 'boolean');
-        $table->setPrimaryKey(array('id'));
-
         $tableDiff = new TableDiff('mytable');
-        $tableDiff->fromTable = $table;
         $tableDiff->newName = 'userlist';
         $tableDiff->addedColumns['quota'] = new \Doctrine\DBAL\Schema\Column('quota', \Doctrine\DBAL\Types\Type::getType('integer'), array('notnull' => false));
         $tableDiff->removedColumns['foo'] = new \Doctrine\DBAL\Schema\Column('foo', \Doctrine\DBAL\Types\Type::getType('integer'));
@@ -332,13 +309,7 @@ abstract class AbstractPlatformTestCase extends \Doctrine\Tests\DbalTestCase
 
         $this->_platform->setEventManager($eventManager);
 
-        $table = new Table('mytable');
-        $table->addColumn('removed', 'integer');
-        $table->addColumn('changed', 'integer');
-        $table->addColumn('renamed', 'integer');
-
         $tableDiff = new TableDiff('mytable');
-        $tableDiff->fromTable = $table;
         $tableDiff->addedColumns['added'] = new \Doctrine\DBAL\Schema\Column('added', \Doctrine\DBAL\Types\Type::getType('integer'), array());
         $tableDiff->removedColumns['removed'] = new \Doctrine\DBAL\Schema\Column('removed', \Doctrine\DBAL\Types\Type::getType('integer'), array());
         $tableDiff->changedColumns['changed'] = new \Doctrine\DBAL\Schema\ColumnDiff(

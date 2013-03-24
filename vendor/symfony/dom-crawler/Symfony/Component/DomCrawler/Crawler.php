@@ -25,7 +25,7 @@ class Crawler extends \SplObjectStorage
     /**
      * @var string The current URI or the base href value
      */
-    protected $uri;
+    private $uri;
 
     /**
      * Constructor.
@@ -704,7 +704,7 @@ class Crawler extends \SplObjectStorage
         return sprintf("concat(%s)", implode($parts, ', '));
     }
 
-    protected function getNode($position)
+    private function getNode($position)
     {
         foreach ($this as $i => $node) {
             if ($i == $position) {
@@ -717,7 +717,7 @@ class Crawler extends \SplObjectStorage
         // @codeCoverageIgnoreEnd
     }
 
-    protected function sibling($node, $siblingDir = 'nextSibling')
+    private function sibling($node, $siblingDir = 'nextSibling')
     {
         $nodes = array();
 

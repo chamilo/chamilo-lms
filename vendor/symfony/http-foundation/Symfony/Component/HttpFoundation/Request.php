@@ -1379,11 +1379,6 @@ class Request
                     for ($i = 0, $max = count($codes); $i < $max; $i++) {
                         if ($i == 0) {
                             $lang = strtolower($codes[0]);
-                            // First segment of compound language codes
-                            // is added to supported languages list
-                            if (!in_array($lang, $this->languages)) {
-                                $this->languages[] = $lang;
-                            }
                         } else {
                             $lang .= '_'.strtoupper($codes[$i]);
                         }
@@ -1391,9 +1386,7 @@ class Request
                 }
             }
 
-            if (!in_array($lang, $this->languages)) {
-                $this->languages[] = $lang;
-            }
+            $this->languages[] = $lang;
         }
 
         return $this->languages;

@@ -104,10 +104,6 @@ final class Debug
                         $return->__PROXY_INITIALIZED__ = $var->__isInitialized();
                     }
 
-                    if ($var instanceof \ArrayObject || $var instanceof \ArrayIterator) {
-                        $return->__STORAGE__ = self::export($var->getArrayCopy(), $maxDepth - 1);
-                    }
-
                     foreach ($reflClass->getProperties() as $reflProperty) {
                         $name  = $reflProperty->getName();
 
@@ -134,6 +130,6 @@ final class Debug
      */
     public static function toString($obj)
     {
-        return method_exists($obj, '__toString') ? (string) $obj : get_class($obj) . '@' . spl_object_hash($obj);
+        return method_exists('__toString', $obj) ? (string) $obj : get_class($obj) . '@' . spl_object_hash($obj);
     }
 }

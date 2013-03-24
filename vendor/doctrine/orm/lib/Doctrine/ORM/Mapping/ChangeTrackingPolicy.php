@@ -25,12 +25,6 @@ namespace Doctrine\ORM\Mapping;
  */
 final class ChangeTrackingPolicy implements Annotation
 {
-    /**
-     * The change tracking policy.
-     *
-     * @var string
-     *
-     * @Enum({"DEFERRED_IMPLICIT", "DEFERRED_EXPLICIT", "NOTIFY"})
-     */
+    /** @var string */
     public $value;
 }

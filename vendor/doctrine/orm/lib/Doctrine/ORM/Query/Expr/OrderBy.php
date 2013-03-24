@@ -20,8 +20,9 @@
 namespace Doctrine\ORM\Query\Expr;
 
 /**
- * Expression class for building DQL Order By parts.
+ * Expression class for building DQL Order By parts
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -56,8 +57,8 @@ class OrderBy
     protected $parts = array();
 
     /**
-     * @param string|null $sort
-     * @param string|null $order
+     * @param string $sort
+     * @param string $order
      */
     public function __construct($sort = null, $order = null)
     {
@@ -67,10 +68,8 @@ class OrderBy
     }
 
     /**
-     * @param string      $sort
-     * @param string|null $order
-     *
-     * @return void
+     * @param string $sort
+     * @param string $order
      */
     public function add($sort, $order = null)
     {

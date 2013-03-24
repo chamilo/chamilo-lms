@@ -58,7 +58,6 @@ class Comparator
     public function compare(Schema $fromSchema, Schema $toSchema)
     {
         $diff = new SchemaDiff();
-        $diff->fromSchema = $fromSchema;
 
         $foreignKeysToTable = array();
 
@@ -180,7 +179,6 @@ class Comparator
     {
         $changes = 0;
         $tableDifferences = new TableDiff($table1->getName());
-        $tableDifferences->fromTable = $table1;
 
         $table1Columns = $table1->getColumns();
         $table2Columns = $table2->getColumns();
@@ -205,7 +203,6 @@ class Comparator
                 $changedProperties = $this->diffColumn( $column, $table2->getColumn($columnName) );
                 if (count($changedProperties) ) {
                     $columnDiff = new ColumnDiff($column->getName(), $table2->getColumn($columnName), $changedProperties);
-                    $columnDiff->fromColumn = $column;
                     $tableDifferences->changedColumns[$column->getName()] = $columnDiff;
                     $changes++;
                 }

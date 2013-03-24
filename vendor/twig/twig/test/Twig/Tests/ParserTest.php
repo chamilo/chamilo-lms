@@ -23,7 +23,7 @@ class Twig_Tests_ParserTest extends PHPUnit_Framework_TestCase
      * @expectedException        Twig_Error_Syntax
      * @expectedExceptionMessage Unknown tag name "foo". Did you mean "for" at line 1
      */
-    public function testUnknownTag()
+    public function testUnkownTag()
     {
         $stream = new Twig_TokenStream(array(
             new Twig_Token(Twig_Token::BLOCK_START_TYPE, '', 1),

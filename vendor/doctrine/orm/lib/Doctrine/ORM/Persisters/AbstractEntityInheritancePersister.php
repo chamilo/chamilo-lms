@@ -19,8 +19,8 @@
 
 namespace Doctrine\ORM\Persisters;
 
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Mapping\ClassMetadata,
+    Doctrine\DBAL\Types\Type;
 
 /**
  * Base class for entity persisters that implement a certain inheritance mapping strategy.
@@ -36,14 +36,14 @@ abstract class AbstractEntityInheritancePersister extends BasicEntityPersister
     /**
      * {@inheritdoc}
      */
-    protected function prepareInsertData($entity)
+    protected function _prepareInsertData($entity)
     {
-        $data = parent::prepareInsertData($entity);
+        $data = parent::_prepareInsertData($entity);
 
         // Populate the discriminator column
-        $discColumn = $this->class->discriminatorColumn;
-        $this->columnTypes[$discColumn['name']] = $discColumn['type'];
-        $data[$this->getDiscriminatorColumnTableName()][$discColumn['name']] = $this->class->discriminatorValue;
+        $discColumn = $this->_class->discriminatorColumn;
+        $this->_columnTypes[$discColumn['name']] = $discColumn['type'];
+        $data[$this->_getDiscriminatorColumnTableName()][$discColumn['name']] = $this->_class->discriminatorValue;
 
         return $data;
     }
@@ -53,40 +53,30 @@ abstract class AbstractEntityInheritancePersister extends BasicEntityPersister
      *
      * @return string The table name.
      */
-    abstract protected function getDiscriminatorColumnTableName();
+    abstract protected function _getDiscriminatorColumnTableName();
 
     /**
      * {@inheritdoc}
      */
-    protected function getSelectColumnSQL($field, ClassMetadata $class, $alias = 'r')
+    protected function _getSelectColumnSQL($field, ClassMetadata $class, $alias = 'r')
     {
-        $tableAlias  = $alias == 'r' ? '' : $alias;
-        $columnName  = $class->columnNames[$field];
+        $columnName = $class->columnNames[$field];
+        $sql = $this->_getSQLTableAlias($class->name, $alias == 'r' ? '' : $alias) . '.' . $this->quoteStrategy->getColumnName($field, $class, $this->_platform);
         $columnAlias = $this->getSQLColumnAlias($columnName);
-        $sql         = $this->getSQLTableAlias($class->name, $tableAlias) . '.'
-                            . $this->quoteStrategy->getColumnName($field, $class, $this->platform);
-
-        $this->rsm->addFieldResult($alias, $columnAlias, $field, $class->name);
+        $this->_rsm->addFieldResult($alias, $columnAlias, $field, $class->name);
 
         if (isset($class->fieldMappings[$field]['requireSQLConversion'])) {
-            $type   = Type::getType($class->getTypeOfField($field));
-            $sql    = $type->convertToPHPValueSQL($sql, $this->platform);
+            $type = Type::getType($class->getTypeOfField($field));
+            $sql = $type->convertToPHPValueSQL($sql, $this->_platform);
         }
 
         return $sql . ' AS ' . $columnAlias;
     }
 
-    /**
-     * @param string $tableAlias
-     * @param string $joinColumnName
-     * @param string $className
-     *
-     * @return string
-     */
     protected function getSelectJoinColumnSQL($tableAlias, $joinColumnName, $className)
     {
         $columnAlias = $this->getSQLColumnAlias($joinColumnName);
-        $this->rsm->addMetaResult('r', $columnAlias, $joinColumnName);
+        $this->_rsm->addMetaResult('r', $columnAlias, $joinColumnName);
 
         return $tableAlias . '.' . $joinColumnName . ' AS ' . $columnAlias;
     }

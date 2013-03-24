@@ -24,8 +24,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 
 use Doctrine\DBAL\Schema\Synchronizer\AbstractSchemaSynchronizer;
-use Doctrine\DBAL\Schema\Synchronizer\SingleDatabaseSynchronizer;
-use Doctrine\DBAL\Schema\Synchronizer\SchemaSynchronizer;
+use Doctrine\DBAL\Sharding\SingleDatabaseSynchronizer;
 
 /**
  * SQL Azure Schema Synchronizer
@@ -33,7 +32,7 @@ use Doctrine\DBAL\Schema\Synchronizer\SchemaSynchronizer;
  * Will iterate over all shards when performing schema operations. This is done
  * by partitioning the passed schema into subschemas for the federation and the
  * global database and then applying the operations step by step using the
- * {@see \Doctrine\DBAL\Schema\Synchronizer\SingleDatabaseSynchronizer}.
+ * {@see \Doctrine\DBAL\Sharding\SingleDatabaseSynchronizer}.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
@@ -186,7 +185,7 @@ class SQLAzureFederationsSynchronizer extends AbstractSchemaSynchronizer
     }
 
     /**
-     * Drop all assets from the underlying db.
+     * Drop all assets from the underyling db.
      *
      * @return void
      */
@@ -205,15 +204,15 @@ class SQLAzureFederationsSynchronizer extends AbstractSchemaSynchronizer
 
     private function extractSchemaFederation(Schema $schema, $isFederation)
     {
-        $partitionedSchema = clone $schema;
+        $partionedSchema = clone $schema;
 
-        foreach ($partitionedSchema->getTables() as $table) {
+        foreach ($partionedSchema->getTables() as $table) {
             if ($isFederation) {
                 $table->addOption(self::FEDERATION_DISTRIBUTION_NAME, $this->shardManager->getDistributionKey());
             }
 
             if ( $table->hasOption(self::FEDERATION_TABLE_FEDERATED) !== $isFederation) {
-                $partitionedSchema->dropTable($table->getName());
+                $partionedSchema->dropTable($table->getName());
             } else {
                 foreach ($table->getForeignKeys() as $fk) {
                     $foreignTable = $schema->getTable($fk->getForeignTableName());
@@ -224,13 +223,13 @@ class SQLAzureFederationsSynchronizer extends AbstractSchemaSynchronizer
             }
         }
 
-        return $partitionedSchema;
+        return $partionedSchema;
     }
 
     /**
      * Work on the Global/Federation based on currently existing shards and
-     * perform the given operation on the underlying schema synchronizer given
-     * the different partitioned schema instances.
+     * perform the given operation on the underyling schema synchronizer given
+     * the different partioned schema instances.
      *
      * @param Schema $schema
      * @param Closure $operation

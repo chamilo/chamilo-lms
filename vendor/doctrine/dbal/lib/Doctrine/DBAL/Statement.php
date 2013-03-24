@@ -129,10 +129,6 @@ class Statement implements \IteratorAggregate, DriverStatement
      */
     public function execute($params = null)
     {
-        if (is_array($params)) {
-            $this->params = $params;
-        }
-        
         $logger = $this->conn->getConfiguration()->getSQLLogger();
         if ($logger) {
             $logger->startQuery($this->sql, $this->params, $this->types);

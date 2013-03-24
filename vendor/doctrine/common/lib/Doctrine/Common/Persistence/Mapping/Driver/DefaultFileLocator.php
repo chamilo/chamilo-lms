@@ -24,7 +24,7 @@ use Doctrine\Common\Persistence\Mapping\MappingException;
 /**
  * Locate the file that contains the metadata information for a given class name.
  *
- * This behavior is independent of the actual content of the file. It just detects
+ * This behavior is inpependent of the actual content of the file. It just detects
  * the file which is responsible for the given class name.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
@@ -109,7 +109,7 @@ class DefaultFileLocator implements FileLocator
 
         // Check whether file exists
         foreach ($this->paths as $path) {
-            if (is_file($path . DIRECTORY_SEPARATOR . $fileName)) {
+            if (file_exists($path . DIRECTORY_SEPARATOR . $fileName)) {
                 return $path . DIRECTORY_SEPARATOR . $fileName;
             }
         }
@@ -160,7 +160,7 @@ class DefaultFileLocator implements FileLocator
 
         // Check whether file exists
         foreach ((array) $this->paths as $path) {
-            if (is_file($path . DIRECTORY_SEPARATOR . $fileName)) {
+            if (file_exists($path . DIRECTORY_SEPARATOR . $fileName)) {
                 return true;
             }
         }

@@ -22,6 +22,7 @@ namespace Doctrine\ORM\Query\AST;
 /**
  * RangeVariableDeclaration ::= AbstractSchemaName ["AS"] AliasIdentificationVariable
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -30,29 +31,15 @@ namespace Doctrine\ORM\Query\AST;
  */
 class RangeVariableDeclaration extends Node
 {
-    /**
-     * @var string
-     */
     public $abstractSchemaName;
-
-    /**
-     * @var string
-     */
     public $aliasIdentificationVariable;
 
-    /**
-     * @param string $abstractSchemaName
-     * @param string $aliasIdentificationVar
-     */
     public function __construct($abstractSchemaName, $aliasIdentificationVar)
     {
         $this->abstractSchemaName = $abstractSchemaName;
         $this->aliasIdentificationVariable = $aliasIdentificationVar;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatch($walker)
     {
         return $walker->walkRangeVariableDeclaration($this);

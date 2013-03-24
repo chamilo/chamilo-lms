@@ -1274,7 +1274,7 @@ class BasicFunctionalTest extends \Doctrine\Tests\OrmFunctionalTestCase
     /**
      * @group DDC-1585
      */
-    public function testWrongAssociationInstance()
+    public function testWrongAssocationInstance()
     {
         $user = new CmsUser;
         $user->name = 'Dominik';

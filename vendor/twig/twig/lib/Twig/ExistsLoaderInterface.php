@@ -12,7 +12,8 @@
 /**
  * Adds an exists() method for loaders.
  *
- * @author Florin Patan <florinpatan@gmail.com>
+ * @package    twig
+ * @author     Florin Patan <florinpatan@gmail.com>
  * @deprecated since 1.12 (to be removed in 2.0)
  */
 interface Twig_ExistsLoaderInterface

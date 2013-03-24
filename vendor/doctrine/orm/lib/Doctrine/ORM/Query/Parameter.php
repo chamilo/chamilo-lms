@@ -20,7 +20,7 @@
 namespace Doctrine\ORM\Query;
 
 /**
- * Defines a Query Parameter.
+ * Define a Query Parameter
  *
  * @link    www.doctrine-project.org
  * @since   2.3
@@ -29,42 +29,36 @@ namespace Doctrine\ORM\Query;
 class Parameter
 {
     /**
-     * The parameter name.
-     *
-     * @var string
+     * @var string Parameter name
      */
     private $name;
 
     /**
-     * The parameter value.
-     *
-     * @var mixed
+     * @var mixed Parameter value
      */
     private $value;
 
     /**
-     * The parameter type.
-     *
-     * @var mixed
+     * @var mixed Parameter type
      */
     private $type;
 
     /**
      * Constructor.
      *
-     * @param string $name  Parameter name
-     * @param mixed  $value Parameter value
-     * @param mixed  $type  Parameter type
+     * @param string    $name   Parameter name
+     * @param mixed     $value  Parameter value
+     * @param mixed     $type   Parameter type
      */
     public function __construct($name, $value, $type = null)
     {
-        $this->name = trim($name, ':');
+        $this->name  = trim($name, ':');
 
         $this->setValue($value, $type);
     }
 
     /**
-     * Retrieves the Parameter name.
+     * Retrieve the Parameter name.
      *
      * @return string
      */
@@ -74,7 +68,7 @@ class Parameter
     }
 
     /**
-     * Retrieves the Parameter value.
+     * Retrieve the Parameter value.
      *
      * @return mixed
      */
@@ -84,7 +78,7 @@ class Parameter
     }
 
     /**
-     * Retrieves the Parameter type.
+     * Retrieve the Parameter type.
      *
      * @return mixed
      */
@@ -94,10 +88,10 @@ class Parameter
     }
 
     /**
-     * Defines the Parameter value.
+     * Define the Parameter value.
      *
-     * @param mixed $value Parameter value.
-     * @param mixed $type  Parameter type.
+     * @param mixed     $value  Parameter value
+     * @param mixed     $type   Parameter type
      */
     public function setValue($value, $type = null)
     {

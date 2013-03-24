@@ -128,7 +128,7 @@ class UpdateSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
         );
     }
 
-    public function testSupportsGreaterThanClause()
+    public function testSupportsGreatherThanClause()
     {
         $this->assertSqlGeneration(
             'UPDATE Doctrine\Tests\Models\CMS\CmsUser u SET u.status = ?1 WHERE u.id > ?2',
@@ -136,7 +136,7 @@ class UpdateSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
         );
     }
 
-    public function testSupportsGreaterThanOrEqualToClause()
+    public function testSupportsGreatherThanOrEqualToClause()
     {
         $this->assertSqlGeneration(
             'UPDATE Doctrine\Tests\Models\CMS\CmsUser u SET u.status = ?1 WHERE u.id >= ?2',
@@ -200,14 +200,6 @@ class UpdateSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
         $this->assertSqlGeneration(
             'UPDATE Doctrine\Tests\Models\CustomType\CustomTypeParent p SET p.customInteger = 1 WHERE p.id = 1',
             'UPDATE customtype_parents SET customInteger = 1 WHERE id = 1'
-        );
-    }
-
-    public function testUpdateWithSubselectAsNewValue()
-    {
-        $this->assertSqlGeneration(
-            "UPDATE Doctrine\Tests\Models\Company\CompanyFixContract fc SET fc.fixPrice = (SELECT ce2.salary FROM Doctrine\Tests\Models\Company\CompanyEmployee ce2 WHERE ce2.id = 2) WHERE fc.id = 1",
-            "UPDATE company_contracts SET fixPrice = (SELECT c0_.salary FROM company_employees c0_ INNER JOIN company_persons c1_ ON c0_.id = c1_.id LEFT JOIN company_managers c2_ ON c0_.id = c2_.id WHERE c1_.id = 2) WHERE (id = 1) AND discr IN ('fix')"
         );
     }
 }

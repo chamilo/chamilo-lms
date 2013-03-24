@@ -38,7 +38,7 @@ interface Proxy
     /**
      * Length of the proxy marker
      *
-     * @var integer
+     * @var int
      */
     const MARKER_LENGTH = 6;
 

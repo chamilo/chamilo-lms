@@ -14,7 +14,8 @@
  *
  * Use Twig_SimpleFunction instead.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  * @deprecated since 1.12 (to be removed in 2.0)
  */
 abstract class Twig_Function implements Twig_FunctionInterface, Twig_FunctionCallableInterface

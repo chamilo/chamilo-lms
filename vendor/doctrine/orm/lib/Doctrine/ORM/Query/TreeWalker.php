@@ -28,35 +28,16 @@ namespace Doctrine\ORM\Query;
 interface TreeWalker
 {
     /**
-     * Initializes TreeWalker with important information about the ASTs to be walked.
+     * Initializes TreeWalker with important information about the ASTs to be walked
      *
-     * @param \Doctrine\ORM\AbstractQuery      $query           The parsed Query.
-     * @param \Doctrine\ORM\Query\ParserResult $parserResult    The result of the parsing process.
-     * @param array                            $queryComponents The query components (symbol table).
+     * @param Query $query The parsed Query.
+     * @param ParserResult $parserResult The result of the parsing process.
+     * @param array $queryComponents Query components (symbol table)
      */
     public function __construct($query, $parserResult, array $queryComponents);
 
     /**
-     * Returns internal queryComponents array.
-     *
-     * @return array
-     */
-    public function getQueryComponents();
-
-    /**
-     * Sets or overrides a query component for a given dql alias.
-     *
-     * @param string $dqlAlias       The DQL alias.
-     * @param array  $queryComponent
-     *
-     * @return void
-     */
-    public function setQueryComponent($dqlAlias, array $queryComponent);
-
-    /**
      * Walks down a SelectStatement AST node, thereby generating the appropriate SQL.
-     *
-     * @param AST\SelectStatement $AST
      *
      * @return string The SQL.
      */
@@ -65,16 +46,12 @@ interface TreeWalker
     /**
      * Walks down a SelectClause AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\SelectClause $selectClause
-     *
      * @return string The SQL.
      */
     function walkSelectClause($selectClause);
 
     /**
      * Walks down a FromClause AST node, thereby generating the appropriate SQL.
-     *
-     * @param AST\FromClause $fromClause
      *
      * @return string The SQL.
      */
@@ -83,8 +60,6 @@ interface TreeWalker
     /**
      * Walks down a FunctionNode AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\Functions\FunctionNode $function
-     *
      * @return string The SQL.
      */
     function walkFunction($function);
@@ -92,8 +67,7 @@ interface TreeWalker
     /**
      * Walks down an OrderByClause AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\OrderByClause $orderByClause
-     *
+     * @param OrderByClause
      * @return string The SQL.
      */
     function walkOrderByClause($orderByClause);
@@ -101,8 +75,7 @@ interface TreeWalker
     /**
      * Walks down an OrderByItem AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\OrderByItem $orderByItem
-     *
+     * @param OrderByItem
      * @return string The SQL.
      */
     function walkOrderByItem($orderByItem);
@@ -110,8 +83,7 @@ interface TreeWalker
     /**
      * Walks down a HavingClause AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\HavingClause $havingClause
-     *
+     * @param HavingClause
      * @return string The SQL.
      */
     function walkHavingClause($havingClause);
@@ -119,8 +91,7 @@ interface TreeWalker
     /**
      * Walks down a Join AST node and creates the corresponding SQL.
      *
-     * @param AST\Join $join
-     *
+     * @param Join $joinVarDecl
      * @return string The SQL.
      */
     function walkJoin($join);
@@ -128,8 +99,7 @@ interface TreeWalker
     /**
      * Walks down a SelectExpression AST node and generates the corresponding SQL.
      *
-     * @param AST\SelectExpression $selectExpression
-     *
+     * @param SelectExpression $selectExpression
      * @return string The SQL.
      */
     function walkSelectExpression($selectExpression);
@@ -137,8 +107,7 @@ interface TreeWalker
     /**
      * Walks down a QuantifiedExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\QuantifiedExpression $qExpr
-     *
+     * @param QuantifiedExpression
      * @return string The SQL.
      */
     function walkQuantifiedExpression($qExpr);
@@ -146,8 +115,7 @@ interface TreeWalker
     /**
      * Walks down a Subselect AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\Subselect $subselect
-     *
+     * @param Subselect
      * @return string The SQL.
      */
     function walkSubselect($subselect);
@@ -155,8 +123,7 @@ interface TreeWalker
     /**
      * Walks down a SubselectFromClause AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\SubselectFromClause $subselectFromClause
-     *
+     * @param SubselectFromClause
      * @return string The SQL.
      */
     function walkSubselectFromClause($subselectFromClause);
@@ -164,8 +131,7 @@ interface TreeWalker
     /**
      * Walks down a SimpleSelectClause AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\SimpleSelectClause $simpleSelectClause
-     *
+     * @param SimpleSelectClause
      * @return string The SQL.
      */
     function walkSimpleSelectClause($simpleSelectClause);
@@ -173,8 +139,7 @@ interface TreeWalker
     /**
      * Walks down a SimpleSelectExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\SimpleSelectExpression $simpleSelectExpression
-     *
+     * @param SimpleSelectExpression
      * @return string The SQL.
      */
     function walkSimpleSelectExpression($simpleSelectExpression);
@@ -182,8 +147,7 @@ interface TreeWalker
     /**
      * Walks down an AggregateExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\AggregateExpression $aggExpression
-     *
+     * @param AggregateExpression
      * @return string The SQL.
      */
     function walkAggregateExpression($aggExpression);
@@ -191,8 +155,7 @@ interface TreeWalker
     /**
      * Walks down a GroupByClause AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\GroupByClause $groupByClause
-     *
+     * @param GroupByClause
      * @return string The SQL.
      */
     function walkGroupByClause($groupByClause);
@@ -200,8 +163,7 @@ interface TreeWalker
     /**
      * Walks down a GroupByItem AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\PathExpression|string $groupByItem
-     *
+     * @param GroupByItem
      * @return string The SQL.
      */
     function walkGroupByItem($groupByItem);
@@ -209,8 +171,7 @@ interface TreeWalker
     /**
      * Walks down an UpdateStatement AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\UpdateStatement $AST
-     *
+     * @param UpdateStatement
      * @return string The SQL.
      */
     function walkUpdateStatement(AST\UpdateStatement $AST);
@@ -218,8 +179,7 @@ interface TreeWalker
     /**
      * Walks down a DeleteStatement AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\DeleteStatement $AST
-     *
+     * @param DeleteStatement
      * @return string The SQL.
      */
     function walkDeleteStatement(AST\DeleteStatement $AST);
@@ -227,8 +187,7 @@ interface TreeWalker
     /**
      * Walks down a DeleteClause AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\DeleteClause $deleteClause
-     *
+     * @param DeleteClause
      * @return string The SQL.
      */
     function walkDeleteClause(AST\DeleteClause $deleteClause);
@@ -236,8 +195,7 @@ interface TreeWalker
     /**
      * Walks down an UpdateClause AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\UpdateClause $updateClause
-     *
+     * @param UpdateClause
      * @return string The SQL.
      */
     function walkUpdateClause($updateClause);
@@ -245,27 +203,23 @@ interface TreeWalker
     /**
      * Walks down an UpdateItem AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\UpdateItem $updateItem
-     *
+     * @param UpdateItem
      * @return string The SQL.
      */
     function walkUpdateItem($updateItem);
 
     /**
      * Walks down a WhereClause AST node, thereby generating the appropriate SQL.
-     * WhereClause or not, the appropriate discriminator sql is added.
      *
-     * @param AST\WhereClause $whereClause
-     *
+     * @param WhereClause
      * @return string The SQL.
      */
     function walkWhereClause($whereClause);
 
     /**
-     * Walk down a ConditionalExpression AST node, thereby generating the appropriate SQL.
+     * Walks down a ConditionalExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\ConditionalExpression $condExpr
-     *
+     * @param ConditionalExpression
      * @return string The SQL.
      */
     function walkConditionalExpression($condExpr);
@@ -273,8 +227,7 @@ interface TreeWalker
     /**
      * Walks down a ConditionalTerm AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\ConditionalTerm $condTerm
-     *
+     * @param ConditionalTerm
      * @return string The SQL.
      */
     function walkConditionalTerm($condTerm);
@@ -282,8 +235,7 @@ interface TreeWalker
     /**
      * Walks down a ConditionalFactor AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\ConditionalFactor $factor
-     *
+     * @param ConditionalFactor
      * @return string The SQL.
      */
     function walkConditionalFactor($factor);
@@ -291,8 +243,7 @@ interface TreeWalker
     /**
      * Walks down a ConditionalPrimary AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\ConditionalPrimary $primary
-     *
+     * @param ConditionalPrimary
      * @return string The SQL.
      */
     function walkConditionalPrimary($primary);
@@ -300,8 +251,7 @@ interface TreeWalker
     /**
      * Walks down an ExistsExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\ExistsExpression $existsExpr
-     *
+     * @param ExistsExpression
      * @return string The SQL.
      */
     function walkExistsExpression($existsExpr);
@@ -309,8 +259,7 @@ interface TreeWalker
     /**
      * Walks down a CollectionMemberExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\CollectionMemberExpression $collMemberExpr
-     *
+     * @param CollectionMemberExpression
      * @return string The SQL.
      */
     function walkCollectionMemberExpression($collMemberExpr);
@@ -318,8 +267,7 @@ interface TreeWalker
     /**
      * Walks down an EmptyCollectionComparisonExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\EmptyCollectionComparisonExpression $emptyCollCompExpr
-     *
+     * @param EmptyCollectionComparisonExpression
      * @return string The SQL.
      */
     function walkEmptyCollectionComparisonExpression($emptyCollCompExpr);
@@ -327,8 +275,7 @@ interface TreeWalker
     /**
      * Walks down a NullComparisonExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\NullComparisonExpression $nullCompExpr
-     *
+     * @param NullComparisonExpression
      * @return string The SQL.
      */
     function walkNullComparisonExpression($nullCompExpr);
@@ -336,8 +283,7 @@ interface TreeWalker
     /**
      * Walks down an InExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\InExpression $inExpr
-     *
+     * @param InExpression
      * @return string The SQL.
      */
     function walkInExpression($inExpr);
@@ -345,8 +291,7 @@ interface TreeWalker
     /**
      * Walks down an InstanceOfExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\InstanceOfExpression $instanceOfExpr
-     *
+     * @param InstanceOfExpression
      * @return string The SQL.
      */
     function walkInstanceOfExpression($instanceOfExpr);
@@ -354,8 +299,7 @@ interface TreeWalker
     /**
      * Walks down a literal that represents an AST node, thereby generating the appropriate SQL.
      *
-     * @param mixed $literal
-     *
+     * @param mixed
      * @return string The SQL.
      */
     function walkLiteral($literal);
@@ -363,8 +307,7 @@ interface TreeWalker
     /**
      * Walks down a BetweenExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\BetweenExpression $betweenExpr
-     *
+     * @param BetweenExpression
      * @return string The SQL.
      */
     function walkBetweenExpression($betweenExpr);
@@ -372,8 +315,7 @@ interface TreeWalker
     /**
      * Walks down a LikeExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\LikeExpression $likeExpr
-     *
+     * @param LikeExpression
      * @return string The SQL.
      */
     function walkLikeExpression($likeExpr);
@@ -381,8 +323,7 @@ interface TreeWalker
     /**
      * Walks down a StateFieldPathExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\PathExpression $stateFieldPathExpression
-     *
+     * @param StateFieldPathExpression
      * @return string The SQL.
      */
     function walkStateFieldPathExpression($stateFieldPathExpression);
@@ -390,8 +331,7 @@ interface TreeWalker
     /**
      * Walks down a ComparisonExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\ComparisonExpression $compExpr
-     *
+     * @param ComparisonExpression
      * @return string The SQL.
      */
     function walkComparisonExpression($compExpr);
@@ -399,8 +339,7 @@ interface TreeWalker
     /**
      * Walks down an InputParameter AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\InputParameter $inputParam
-     *
+     * @param InputParameter
      * @return string The SQL.
      */
     function walkInputParameter($inputParam);
@@ -408,8 +347,7 @@ interface TreeWalker
     /**
      * Walks down an ArithmeticExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\ArithmeticExpression $arithmeticExpr
-     *
+     * @param ArithmeticExpression
      * @return string The SQL.
      */
     function walkArithmeticExpression($arithmeticExpr);
@@ -417,8 +355,7 @@ interface TreeWalker
     /**
      * Walks down an ArithmeticTerm AST node, thereby generating the appropriate SQL.
      *
-     * @param mixed $term
-     *
+     * @param mixed
      * @return string The SQL.
      */
     function walkArithmeticTerm($term);
@@ -426,8 +363,7 @@ interface TreeWalker
     /**
      * Walks down a StringPrimary that represents an AST node, thereby generating the appropriate SQL.
      *
-     * @param mixed $stringPrimary
-     *
+     * @param mixed
      * @return string The SQL.
      */
     function walkStringPrimary($stringPrimary);
@@ -435,8 +371,7 @@ interface TreeWalker
     /**
      * Walks down an ArithmeticFactor that represents an AST node, thereby generating the appropriate SQL.
      *
-     * @param mixed $factor
-     *
+     * @param mixed
      * @return string The SQL.
      */
     function walkArithmeticFactor($factor);
@@ -444,26 +379,23 @@ interface TreeWalker
     /**
      * Walks down an SimpleArithmeticExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param AST\SimpleArithmeticExpression $simpleArithmeticExpr
-     *
+     * @param SimpleArithmeticExpression
      * @return string The SQL.
      */
     function walkSimpleArithmeticExpression($simpleArithmeticExpr);
 
     /**
-     * Walks down a PathExpression AST node, thereby generating the appropriate SQL.
+     * Walks down an PathExpression AST node, thereby generating the appropriate SQL.
      *
-     * @param mixed $pathExpr
-     *
+     * @param mixed
      * @return string The SQL.
      */
     function walkPathExpression($pathExpr);
 
     /**
-     * Walks down a ResultVariable that represents an AST node, thereby generating the appropriate SQL.
+     * Walks down an ResultVariable AST node, thereby generating the appropriate SQL.
      *
      * @param string $resultVariable
-     *
      * @return string The SQL.
      */
     function walkResultVariable($resultVariable);
@@ -471,9 +403,7 @@ interface TreeWalker
     /**
      * Gets an executor that can be used to execute the result of this walker.
      *
-     * @param AST\DeleteStatement|AST\UpdateStatement|AST\SelectStatement $AST
-     *
-     * @return Exec\AbstractSqlExecutor
+     * @return AbstractExecutor
      */
     function getExecutor($AST);
 }

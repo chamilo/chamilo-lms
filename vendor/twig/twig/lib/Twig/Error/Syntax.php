@@ -13,7 +13,8 @@
 /**
  * Exception thrown when a syntax error occurs during lexing or parsing of a template.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Error_Syntax extends Twig_Error
 {

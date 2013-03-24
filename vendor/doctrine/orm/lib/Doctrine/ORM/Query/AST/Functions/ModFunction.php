@@ -34,14 +34,7 @@ use Doctrine\ORM\Query\Lexer;
  */
 class ModFunction extends FunctionNode
 {
-    /**
-     * @var \Doctrine\ORM\Query\AST\SimpleArithmeticExpression
-     */
     public $firstSimpleArithmeticExpression;
-
-    /**
-     * @var \Doctrine\ORM\Query\AST\SimpleArithmeticExpression
-     */
     public $secondSimpleArithmeticExpression;
 
     /**
@@ -72,3 +65,4 @@ class ModFunction extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 }
+

@@ -12,7 +12,8 @@
 /**
  * Twig_NodeVisitorInterface is the interface the all node visitor classes must implement.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 interface Twig_NodeVisitorInterface
 {
@@ -32,7 +33,7 @@ interface Twig_NodeVisitorInterface
      * @param Twig_NodeInterface $node The node to visit
      * @param Twig_Environment   $env  The Twig environment instance
      *
-     * @return Twig_NodeInterface|false The modified node or false if the node must be removed
+     * @return Twig_NodeInterface The modified node
      */
     public function leaveNode(Twig_NodeInterface $node, Twig_Environment $env);
 

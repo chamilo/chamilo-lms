@@ -34,37 +34,17 @@ use Doctrine\ORM\Query\AST;
  */
 class MultiTableUpdateExecutor extends AbstractSqlExecutor
 {
-    /**
-     * @var string
-     */
     private $_createTempTableSql;
-
-    /**
-     * @var string
-     */
     private $_dropTempTableSql;
-
-    /**
-     * @var string
-     */
     private $_insertSql;
-
-    /**
-     * @var array
-     */
     private $_sqlParameters = array();
-
-    /**
-     * @var int
-     */
     private $_numParametersInUpdateClause = 0;
 
     /**
      * Initializes a new <tt>MultiTableUpdateExecutor</tt>.
      *
-     * @param \Doctrine\ORM\Query\AST\Node  $AST The root AST node of the DQL query.
-     * @param \Doctrine\ORM\Query\SqlWalker $sqlWalker The walker used for SQL generation from the AST.
-     *
+     * @param Node $AST The root AST node of the DQL query.
+     * @param SqlWalker $sqlWalker The walker used for SQL generation from the AST.
      * @internal Any SQL construction and preparation takes place in the constructor for
      *           best performance. With a query cache the executor will be cached.
      */
@@ -124,8 +104,19 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
 
                     $updateSql .= $sqlWalker->walkUpdateItem($updateItem);
 
+                    //FIXME: parameters can be more deeply nested. traverse the tree.
+                    //FIXME (URGENT): With query cache the parameter is out of date. Move to execute() stage.
                     if ($newValue instanceof AST\InputParameter) {
-                        $this->_sqlParameters[$i][] = $newValue->name;
+                        $parameterName = $newValue->name;
+                        $parameter     = $sqlWalker->getQuery()->getParameter($parameterName);
+
+                        $value = $sqlWalker->getQuery()->processParameterValue($parameter->getValue());
+                        $type  = ($parameter->getValue() === $value)
+                            ? $parameter->getType()
+                            : ParameterTypeInferer::inferType($value);
+
+                        $this->_sqlParameters[$i]['parameters'][] = $value;
+                        $this->_sqlParameters[$i]['types'][] = $type;
 
                         ++$this->_numParametersInUpdateClause;
                     }
@@ -177,18 +168,16 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
             );
 
             // Execute UPDATE statements
-            foreach ($this->_sqlStatements as $key => $statement) {
-                $paramValues = array();
-                $paramTypes  = array();
+            for ($i=0, $count=count($this->_sqlStatements); $i<$count; ++$i) {
+                $parameters = array();
+                $types      = array();
 
-                if (isset($this->_sqlParameters[$key])) {
-                    foreach ($this->_sqlParameters[$key] as $parameterKey => $parameterName) {
-                        $paramValues[] = $params[$parameterKey];
-                        $paramTypes[]  = isset($types[$parameterKey]) ? $types[$parameterKey] : ParameterTypeInferer::inferType($params[$parameterKey]);
-                    }
+                if (isset($this->_sqlParameters[$i])) {
+                    $parameters = isset($this->_sqlParameters[$i]['parameters']) ? $this->_sqlParameters[$i]['parameters'] : array();
+                    $types = isset($this->_sqlParameters[$i]['types']) ? $this->_sqlParameters[$i]['types'] : array();
                 }
 
-                $conn->executeUpdate($statement, $paramValues, $paramTypes);
+                $conn->executeUpdate($this->_sqlStatements[$i], $parameters, $types);
             }
         } catch (\Exception $exception) {
             // FAILURE! Drop temporary table to avoid possible collisions

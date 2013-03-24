@@ -39,9 +39,6 @@ class DateAddFunction extends FunctionNode
     public $intervalExpression = null;
     public $unit = null;
 
-    /**
-     * @override
-     */
     public function getSql(SqlWalker $sqlWalker)
     {
         switch (strtolower($this->unit->value)) {
@@ -64,9 +61,6 @@ class DateAddFunction extends FunctionNode
         }
     }
 
-    /**
-     * @override
-     */
     public function parse(Parser $parser)
     {
         $parser->match(Lexer::T_IDENTIFIER);

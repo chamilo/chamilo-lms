@@ -155,7 +155,7 @@ final class DriverManager
      */
     private static function _checkParams(array $params)
     {
-        // check existence of mandatory parameters
+        // check existance of mandatory parameters
 
         // driver
         if ( ! isset($params['driver']) && ! isset($params['driverClass'])) {

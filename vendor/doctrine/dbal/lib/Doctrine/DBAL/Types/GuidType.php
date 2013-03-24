@@ -22,7 +22,7 @@ namespace Doctrine\DBAL\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 /**
- * Represents a GUID/UUID datatype (both are actually synonyms) in the database.
+ * Represents a GUID/UUID datatype (both are actually synomys) in the database.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @since 2.3
@@ -37,11 +37,6 @@ class GuidType extends StringType
     public function getName()
     {
         return Type::GUID;
-    }
-
-    public function requiresSQLCommentHint(AbstractPlatform $platform)
-    {
-        return !$platform->hasNativeGuidType();
     }
 }
 

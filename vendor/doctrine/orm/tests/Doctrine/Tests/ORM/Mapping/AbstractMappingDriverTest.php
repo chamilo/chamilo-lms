@@ -2,13 +2,10 @@
 
 namespace Doctrine\Tests\ORM\Mapping;
 
-use Doctrine\ORM\Events;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\Tests\Models\Company\CompanyFixContract;
-use Doctrine\Tests\Models\Company\CompanyFlexContract;
-
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata,
+    Doctrine\ORM\Mapping\ClassMetadataInfo,
+    Doctrine\ORM\Mapping\Driver\XmlDriver,
+    Doctrine\ORM\Mapping\Driver\YamlDriver;
 
 require_once __DIR__ . '/../../TestInit.php';
 
@@ -159,8 +156,6 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
     {
         $this->assertTrue($class->isVersioned);
         $this->assertEquals("version", $class->versionField);
-
-        $this->assertFalse(isset($class->fieldMappings['version']['version']));
     }
 
     /**
@@ -210,7 +205,7 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
      * @depends testIdentifier
      * @param ClassMetadata $class
      */
-    public function testAssociations($class)
+    public function testAssocations($class)
     {
         $this->assertEquals(3, count($class->associationMappings));
 
@@ -218,10 +213,10 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
     }
 
     /**
-     * @depends testAssociations
+     * @depends testAssocations
      * @param ClassMetadata $class
      */
-    public function testOwningOneToOneAssociation($class)
+    public function testOwningOneToOneAssocation($class)
     {
         $this->assertTrue(isset($class->associationMappings['address']));
         $this->assertTrue($class->associationMappings['address']['isOwningSide']);
@@ -237,7 +232,7 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
     }
 
     /**
-     * @depends testOwningOneToOneAssociation
+     * @depends testOwningOneToOneAssocation
      * @param ClassMetadata $class
      */
     public function testInverseOneToManyAssociation($class)
@@ -480,22 +475,24 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
 
     /**
      * @group DDC-889
+     * @expectedException Doctrine\ORM\Mapping\MappingException
+     * @expectedExceptionMessage Class "Doctrine\Tests\Models\DDC889\DDC889Class" sub class of "Doctrine\Tests\Models\DDC889\DDC889SuperClass" is not a valid entity or mapped super class.
      */
     public function testInvalidEntityOrMappedSuperClassShouldMentionParentClasses()
     {
-        $this->setExpectedException('Doctrine\ORM\Mapping\MappingException', 'Class "Doctrine\Tests\Models\DDC889\DDC889Class" sub class of "Doctrine\Tests\Models\DDC889\DDC889SuperClass" is not a valid entity or mapped super class.');
-
         $this->createClassMetadata('Doctrine\Tests\Models\DDC889\DDC889Class');
     }
 
     /**
      * @group DDC-889
+     * @expectedException Doctrine\ORM\Mapping\MappingException
+     * @expectedExceptionMessage No identifier/primary key specified for Entity "Doctrine\Tests\Models\DDC889\DDC889Entity" sub class of "Doctrine\Tests\Models\DDC889\DDC889SuperClass". Every Entity must have an identifier/primary key.
      */
     public function testIdentifierRequiredShouldMentionParentClasses()
     {
-        $factory = $this->createClassMetadataFactory();
 
-        $this->setExpectedException('Doctrine\ORM\Mapping\MappingException', 'No identifier/primary key specified for Entity "Doctrine\Tests\Models\DDC889\DDC889Entity" sub class of "Doctrine\Tests\Models\DDC889\DDC889SuperClass". Every Entity must have an identifier/primary key.');
+        $factory = $this->createClassMetadataFactory();
+        
         $factory->getMetadataFor('Doctrine\Tests\Models\DDC889\DDC889Entity');
     }
 
@@ -512,7 +509,7 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
      */
     public function testNamedNativeQuery()
     {
-
+        
         $class = $this->createClassMetadata('Doctrine\Tests\Models\CMS\CmsAddress');
 
         //named native query
@@ -541,7 +538,7 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
         $this->assertArrayHasKey('mapping-count', $class->sqlResultSetMappings);
         $this->assertArrayHasKey('mapping-find-all', $class->sqlResultSetMappings);
         $this->assertArrayHasKey('mapping-without-fields', $class->sqlResultSetMappings);
-
+        
         $findAllMapping = $class->getSqlResultSetMapping('mapping-find-all');
         $this->assertEquals('mapping-find-all', $findAllMapping['name']);
         $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddress', $findAllMapping['entities'][0]['entityClass']);
@@ -553,7 +550,7 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
         $this->assertEquals('mapping-without-fields', $withoutFieldsMapping['name']);
         $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddress', $withoutFieldsMapping['entities'][0]['entityClass']);
         $this->assertEquals(array(), $withoutFieldsMapping['entities'][0]['fields']);
-
+        
         $countMapping = $class->getSqlResultSetMapping('mapping-count');
         $this->assertEquals('mapping-count', $countMapping['name']);
         $this->assertEquals(array('name'=>'count'), $countMapping['columns'][0]);
@@ -641,7 +638,7 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
         $adminMetadata  = $factory->getMetadataFor('Doctrine\Tests\Models\DDC964\DDC964Admin');
         $guestMetadata  = $factory->getMetadataFor('Doctrine\Tests\Models\DDC964\DDC964Guest');
 
-
+        
         // assert groups association mappings
         $this->assertArrayHasKey('groups', $guestMetadata->associationMappings);
         $this->assertArrayHasKey('groups', $adminMetadata->associationMappings);
@@ -700,7 +697,7 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
         $this->assertEquals($guestAddress['isCascadeRefresh'], $adminAddress['isCascadeRefresh']);
         $this->assertEquals($guestAddress['isCascadeMerge'], $adminAddress['isCascadeMerge']);
         $this->assertEquals($guestAddress['isCascadeDetach'], $adminAddress['isCascadeDetach']);
-
+        
         // assert override
         $this->assertEquals('address_id', $guestAddress['joinColumns'][0]['name']);
         $this->assertEquals(array('address_id'=>'id'), $guestAddress['sourceToTargetKeyColumns']);
@@ -753,126 +750,6 @@ abstract class AbstractMappingDriverTest extends \Doctrine\Tests\OrmTestCase
         $this->assertTrue($guestMetadata->fieldMappings['name']['unique']);
     }
 
-    /**
-     * @group DDC-1955
-     */
-    public function testEntityListeners()
-    {
-        $em         = $this->_getTestEntityManager();
-        $factory    = $this->createClassMetadataFactory($em);
-        $superClass = $factory->getMetadataFor('Doctrine\Tests\Models\Company\CompanyContract');
-        $flexClass  = $factory->getMetadataFor('Doctrine\Tests\Models\Company\CompanyFixContract');
-        $fixClass   = $factory->getMetadataFor('Doctrine\Tests\Models\Company\CompanyFlexContract');
-        $ultraClass = $factory->getMetadataFor('Doctrine\Tests\Models\Company\CompanyFlexUltraContract');
-
-        $this->assertArrayHasKey(Events::prePersist, $superClass->entityListeners);
-        $this->assertArrayHasKey(Events::postPersist, $superClass->entityListeners);
-
-        $this->assertCount(1, $superClass->entityListeners[Events::prePersist]);
-        $this->assertCount(1, $superClass->entityListeners[Events::postPersist]);
-
-        $postPersist = $superClass->entityListeners[Events::postPersist][0];
-        $prePersist  = $superClass->entityListeners[Events::prePersist][0];
-
-        $this->assertEquals('Doctrine\Tests\Models\Company\CompanyContractListener', $postPersist['class']);
-        $this->assertEquals('Doctrine\Tests\Models\Company\CompanyContractListener', $prePersist['class']);
-        $this->assertEquals('postPersistHandler', $postPersist['method']);
-        $this->assertEquals('prePersistHandler', $prePersist['method']);
-
-        //Inherited listeners
-        $this->assertEquals($fixClass->entityListeners, $superClass->entityListeners);
-        $this->assertEquals($flexClass->entityListeners, $superClass->entityListeners);
-    }
-
-    /**
-     * @group DDC-1955
-     */
-    public function testEntityListenersOverride()
-    {
-        $em         = $this->_getTestEntityManager();
-        $factory    = $this->createClassMetadataFactory($em);
-        $ultraClass = $factory->getMetadataFor('Doctrine\Tests\Models\Company\CompanyFlexUltraContract');
-
-        //overridden listeners
-        $this->assertArrayHasKey(Events::postPersist, $ultraClass->entityListeners);
-        $this->assertArrayHasKey(Events::prePersist, $ultraClass->entityListeners);
-
-        $this->assertCount(1, $ultraClass->entityListeners[Events::postPersist]);
-        $this->assertCount(3, $ultraClass->entityListeners[Events::prePersist]);
-
-        $postPersist = $ultraClass->entityListeners[Events::postPersist][0];
-        $prePersist  = $ultraClass->entityListeners[Events::prePersist][0];
-
-        $this->assertEquals('Doctrine\Tests\Models\Company\CompanyContractListener', $postPersist['class']);
-        $this->assertEquals('Doctrine\Tests\Models\Company\CompanyContractListener', $prePersist['class']);
-        $this->assertEquals('postPersistHandler', $postPersist['method']);
-        $this->assertEquals('prePersistHandler', $prePersist['method']);
-
-        $prePersist = $ultraClass->entityListeners[Events::prePersist][1];
-        $this->assertEquals('Doctrine\Tests\Models\Company\CompanyFlexUltraContractListener', $prePersist['class']);
-        $this->assertEquals('prePersistHandler1', $prePersist['method']);
-
-        $prePersist = $ultraClass->entityListeners[Events::prePersist][2];
-        $this->assertEquals('Doctrine\Tests\Models\Company\CompanyFlexUltraContractListener', $prePersist['class']);
-        $this->assertEquals('prePersistHandler2', $prePersist['method']);
-    }
-
-
-    /**
-     * @group DDC-1955
-     */
-    public function testEntityListenersNamingConvention()
-    {
-        $em         = $this->_getTestEntityManager();
-        $factory    = $this->createClassMetadataFactory($em);
-        $metadata   = $factory->getMetadataFor('Doctrine\Tests\Models\CMS\CmsAddress');
-
-        $this->assertArrayHasKey(Events::postPersist, $metadata->entityListeners);
-        $this->assertArrayHasKey(Events::prePersist, $metadata->entityListeners);
-        $this->assertArrayHasKey(Events::postUpdate, $metadata->entityListeners);
-        $this->assertArrayHasKey(Events::preUpdate, $metadata->entityListeners);
-        $this->assertArrayHasKey(Events::postRemove, $metadata->entityListeners);
-        $this->assertArrayHasKey(Events::preRemove, $metadata->entityListeners);
-        $this->assertArrayHasKey(Events::postLoad, $metadata->entityListeners);
-        $this->assertArrayHasKey(Events::preFlush, $metadata->entityListeners);
-
-        $this->assertCount(1, $metadata->entityListeners[Events::postPersist]);
-        $this->assertCount(1, $metadata->entityListeners[Events::prePersist]);
-        $this->assertCount(1, $metadata->entityListeners[Events::postUpdate]);
-        $this->assertCount(1, $metadata->entityListeners[Events::preUpdate]);
-        $this->assertCount(1, $metadata->entityListeners[Events::postRemove]);
-        $this->assertCount(1, $metadata->entityListeners[Events::preRemove]);
-        $this->assertCount(1, $metadata->entityListeners[Events::postLoad]);
-        $this->assertCount(1, $metadata->entityListeners[Events::preFlush]);
-
-        $postPersist = $metadata->entityListeners[Events::postPersist][0];
-        $prePersist  = $metadata->entityListeners[Events::prePersist][0];
-        $postUpdate  = $metadata->entityListeners[Events::postUpdate][0];
-        $preUpdate   = $metadata->entityListeners[Events::preUpdate][0];
-        $postRemove  = $metadata->entityListeners[Events::postRemove][0];
-        $preRemove   = $metadata->entityListeners[Events::preRemove][0];
-        $postLoad    = $metadata->entityListeners[Events::postLoad][0];
-        $preFlush    = $metadata->entityListeners[Events::preFlush][0];
-
-
-        $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddressListener', $postPersist['class']);
-        $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddressListener', $prePersist['class']);
-        $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddressListener', $postUpdate['class']);
-        $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddressListener', $preUpdate['class']);
-        $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddressListener', $postRemove['class']);
-        $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddressListener', $preRemove['class']);
-        $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddressListener', $postLoad['class']);
-        $this->assertEquals('Doctrine\Tests\Models\CMS\CmsAddressListener', $preFlush['class']);
-
-        $this->assertEquals(Events::postPersist, $postPersist['method']);
-        $this->assertEquals(Events::prePersist, $prePersist['method']);
-        $this->assertEquals(Events::postUpdate, $postUpdate['method']);
-        $this->assertEquals(Events::preUpdate, $preUpdate['method']);
-        $this->assertEquals(Events::postRemove, $postRemove['method']);
-        $this->assertEquals(Events::preRemove, $preRemove['method']);
-        $this->assertEquals(Events::postLoad, $postLoad['method']);
-        $this->assertEquals(Events::preFlush, $preFlush['method']);
-    }
 }
 
 /**
@@ -1194,7 +1071,7 @@ class DDC807Entity
      * @GeneratedValue(strategy="NONE")
      **/
    public $id;
-
+   
    public static function loadMetadata(ClassMetadataInfo $metadata)
     {
          $metadata->mapField(array(

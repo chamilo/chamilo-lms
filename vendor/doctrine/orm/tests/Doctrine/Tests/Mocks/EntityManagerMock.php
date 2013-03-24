@@ -28,18 +28,12 @@ use Doctrine\ORM\Proxy\ProxyFactory;
  */
 class EntityManagerMock extends \Doctrine\ORM\EntityManager
 {
-    /**
-     * @var \Doctrine\ORM\UnitOfWork|null
-     */
     private $_uowMock;
-
-    /**
-     * @var \Doctrine\ORM\Proxy\ProxyFactory|null
-     */
     private $_proxyFactoryMock;
+    private $_idGenerators = array();
 
     /**
-     * {@inheritdoc}
+     * @override
      */
     public function getUnitOfWork()
     {
@@ -51,28 +45,18 @@ class EntityManagerMock extends \Doctrine\ORM\EntityManager
     /**
      * Sets a (mock) UnitOfWork that will be returned when getUnitOfWork() is called.
      *
-     * @param \Doctrine\ORM\UnitOfWork $uow
-     *
-     * @return void
+     * @param <type> $uow
      */
     public function setUnitOfWork($uow)
     {
         $this->_uowMock = $uow;
     }
 
-    /**
-     * @param \Doctrine\ORM\Proxy\ProxyFactory $proxyFactory
-     *
-     * @return void
-     */
     public function setProxyFactory($proxyFactory)
     {
         $this->_proxyFactoryMock = $proxyFactory;
     }
 
-    /**
-     * @return \Doctrine\ORM\Proxy\ProxyFactory
-     */
     public function getProxyFactory()
     {
         return isset($this->_proxyFactoryMock) ? $this->_proxyFactoryMock : parent::getProxyFactory();
@@ -81,7 +65,11 @@ class EntityManagerMock extends \Doctrine\ORM\EntityManager
     /**
      * Mock factory method to create an EntityManager.
      *
-     * {@inheritdoc}
+     * @param unknown_type $conn
+     * @param unknown_type $name
+     * @param Doctrine_Configuration $config
+     * @param Doctrine_EventManager $eventManager
+     * @return Doctrine\ORM\EntityManager
      */
     public static function create($conn, \Doctrine\ORM\Configuration $config = null,
             \Doctrine\Common\EventManager $eventManager = null)
@@ -98,4 +86,21 @@ class EntityManagerMock extends \Doctrine\ORM\EntityManager
 
         return new EntityManagerMock($conn, $config, $eventManager);
     }
+/*
+    public function setIdGenerator($className, $generator)
+    {
+        $this->_idGenerators[$className] = $generator;
+    }
+*/
+    /** @override */
+/*    public function getIdGenerator($className)
+    {
+
+        if (isset($this->_idGenerators[$className])) {
+            return $this->_idGenerators[$className];
+        }
+
+        return parent::getIdGenerator($className);
+    }
+ */
 }

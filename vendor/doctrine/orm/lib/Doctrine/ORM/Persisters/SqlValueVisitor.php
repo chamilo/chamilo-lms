@@ -24,6 +24,11 @@ use Doctrine\Common\Collections\Expr\Comparison;
 use Doctrine\Common\Collections\Expr\Value;
 use Doctrine\Common\Collections\Expr\CompositeExpression;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
+
+use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Connection;
+
 /**
  * Extract the values from a criteria/expression
  *
@@ -42,7 +47,7 @@ class SqlValueVisitor extends ExpressionVisitor
     private $types  = array();
 
     /**
-     * Converts a comparison expression into the target query language output.
+     * Convert a comparison expression into the target query language output
      *
      * @param \Doctrine\Common\Collections\Expr\Comparison $comparison
      *
@@ -50,7 +55,7 @@ class SqlValueVisitor extends ExpressionVisitor
      */
     public function walkComparison(Comparison $comparison)
     {
-        $value          = $this->getValueFromComparison($comparison);
+        $value          = $comparison->getValue()->getValue();
         $field          = $comparison->getField();
         
         $this->values[] = $value;
@@ -58,7 +63,7 @@ class SqlValueVisitor extends ExpressionVisitor
     }
 
     /**
-     * Converts a composite expression into the target query language output.
+     * Convert a composite expression into the target query language output
      *
      * @param \Doctrine\Common\Collections\Expr\CompositeExpression $expr
      *
@@ -72,7 +77,7 @@ class SqlValueVisitor extends ExpressionVisitor
     }
 
     /**
-     * Converts a value expression into the target query language part.
+     * Convert a value expression into the target query language part.
      *
      * @param \Doctrine\Common\Collections\Expr\Value $value
      *
@@ -84,28 +89,12 @@ class SqlValueVisitor extends ExpressionVisitor
     }
 
     /**
-     * Returns the Parameters and Types necessary for matching the last visited expression.
+     * Return the Parameters and Types necessary for matching the last visited expression.
      *
      * @return array
      */
     public function getParamsAndTypes()
     {
         return array($this->values, $this->types);
-    }
-
-    /**
-     * Returns the value from a Comparison. In case of a CONTAINS comparison,
-     * the value is wrapped in %-signs, because it will be used in a LIKE clause.
-     *
-     * @param \Doctrine\Common\Collections\Expr\Comparison $comparison
-     * @return mixed
-     */
-    protected function getValueFromComparison(Comparison $comparison)
-    {
-        $value = $comparison->getValue()->getValue();
-
-        return $comparison->getOperator() == Comparison::CONTAINS
-            ? "%{$value}%"
-            : $value;
     }
 }

@@ -76,7 +76,7 @@ class AdvancedDqlQueryTest extends \Doctrine\Tests\OrmFunctionalTestCase
         $this->assertEquals(1, $result[3]['friends']);
     }
 
-    public function testIsNullAssociation()
+    public function testIsNullAssocation()
     {
         $dql = 'SELECT p FROM Doctrine\Tests\Models\Company\CompanyPerson p '.
                'WHERE p.spouse IS NULL';

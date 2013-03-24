@@ -136,4 +136,5 @@ class DefaultQuoteStrategy implements QuoteStrategy
 
         return $platform->getSQLResultCasing($columnName);
     }
+
 }

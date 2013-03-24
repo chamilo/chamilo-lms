@@ -9,24 +9,14 @@ use Doctrine\Common\Cache\ArrayCache;
  */
 abstract class OrmTestCase extends DoctrineTestCase
 {
-    /**
-     * The metadata cache that is shared between all ORM tests (except functional tests).
-     *
-     * @var \Doctrine\Common\Cache\Cache|null
-     */
+    /** The metadata cache that is shared between all ORM tests (except functional tests). */
     private static $_metadataCacheImpl = null;
 
-    /**
-     * The query cache that is shared between all ORM tests (except functional tests).
-     *
-     * @var \Doctrine\Common\Cache\Cache|null
-     */
+    /** The query cache that is shared between all ORM tests (except functional tests). */
     private static $_queryCacheImpl = null;
 
     /**
      * @param array $paths
-     * @param mixed $alias
-     *
      * @return \Doctrine\ORM\Mapping\Driver\AnnotationDriver
      */
     protected function createAnnotationDriver($paths = array(), $alias = null)
@@ -75,12 +65,7 @@ abstract class OrmTestCase extends DoctrineTestCase
      * be configured in the tests to simulate the DBAL behavior that is desired
      * for a particular test,
      *
-     * @param \Doctrine\DBAL\Connection|array    $conn
-     * @param mixed                              $conf
-     * @param \Doctrine\Common\EventManager|null $eventManager
-     * @param bool                               $withSharedMetadata
-     *
-     * @return \Doctrine\ORM\EntityManager
+     * @return Doctrine\ORM\EntityManager
      */
     protected function _getTestEntityManager($conn = null, $conf = null, $eventManager = null, $withSharedMetadata = true)
     {
@@ -112,9 +97,6 @@ abstract class OrmTestCase extends DoctrineTestCase
         return \Doctrine\Tests\Mocks\EntityManagerMock::create($conn, $config, $eventManager);
     }
 
-    /**
-     * @return \Doctrine\Common\Cache\Cache
-     */
     private static function getSharedMetadataCacheImpl()
     {
         if (self::$_metadataCacheImpl === null) {
@@ -124,9 +106,6 @@ abstract class OrmTestCase extends DoctrineTestCase
         return self::$_metadataCacheImpl;
     }
 
-    /**
-     * @return \Doctrine\Common\Cache\Cache
-     */
     private static function getSharedQueryCacheImpl()
     {
         if (self::$_queryCacheImpl === null) {

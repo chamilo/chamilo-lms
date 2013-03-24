@@ -12,7 +12,8 @@
 /**
  * Represents a template test.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  * @deprecated since 1.12 (to be removed in 2.0)
  */
 abstract class Twig_Test implements Twig_TestInterface, Twig_TestCallableInterface

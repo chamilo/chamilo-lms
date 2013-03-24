@@ -2,16 +2,16 @@
 
 namespace Doctrine\Tests\Mocks;
 
-/**
- * Mock class for TreeWalker.
- */
 class MockTreeWalker extends \Doctrine\ORM\Query\TreeWalkerAdapter
 {
     /**
-     * {@inheritdoc}
+     * Gets an executor that can be used to execute the result of this walker.
+     *
+     * @return AbstractExecutor
      */
     public function getExecutor($AST)
     {
         return null;
     }
 }
+

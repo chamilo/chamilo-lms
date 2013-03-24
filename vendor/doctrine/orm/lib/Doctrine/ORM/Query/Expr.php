@@ -20,8 +20,9 @@
 namespace Doctrine\ORM\Query;
 
 /**
- * This class is used to generate DQL expressions via a set of PHP static functions.
-
+ * This class is used to generate DQL expressions via a set of PHP static functions
+ *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -42,10 +43,9 @@ class Expr
      *     $expr->andX($expr->eq('u.type', ':1'), $expr->eq('u.role', ':2'));
      *
      * @param \Doctrine\ORM\Query\Expr\Comparison |
-     *        \Doctrine\ORM\Query\Expr\Func |
-     *        \Doctrine\ORM\Query\Expr\Orx
-     *        $x Optional clause. Defaults to null, but requires at least one defined when converting to string.
-     *
+     *          \Doctrine\ORM\Query\Expr\Func |
+     *          \Doctrine\ORM\Query\Expr\Orx
+    *               $x Optional clause. Defaults = null, but requires at least one defined when converting to string.
      * @return Expr\Andx
      */
     public function andX($x = null)
@@ -62,9 +62,8 @@ class Expr
      *     // (u.type = ?1) OR (u.role = ?2)
      *     $q->where($q->expr()->orX('u.type = ?1', 'u.role = ?2'));
      *
-     * @param mixed $x Optional clause. Defaults to null, but requires
+     * @param mixed $x Optional clause. Defaults = null, but requires
      *                 at least one defined when converting to string.
-     *
      * @return Expr\Orx
      */
     public function orX($x = null)
@@ -75,8 +74,7 @@ class Expr
     /**
      * Creates an ASCending order expression.
      *
-     * @param mixed $expr
-     *
+     * @param $sort
      * @return Expr\OrderBy
      */
     public function asc($expr)
@@ -87,8 +85,7 @@ class Expr
     /**
      * Creates a DESCending order expression.
      *
-     * @param mixed $expr
-     *
+     * @param $sort
      * @return Expr\OrderBy
      */
     public function desc($expr)
@@ -106,9 +103,8 @@ class Expr
      *     // u.id = ?1
      *     $expr->eq('u.id', '?1');
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Comparison
      */
     public function eq($x, $y)
@@ -125,9 +121,8 @@ class Expr
      *     // u.id <> ?1
      *     $q->where($q->expr()->neq('u.id', '?1'));
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Comparison
      */
     public function neq($x, $y)
@@ -144,9 +139,8 @@ class Expr
      *     // u.id < ?1
      *     $q->where($q->expr()->lt('u.id', '?1'));
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Comparison
      */
     public function lt($x, $y)
@@ -163,9 +157,8 @@ class Expr
      *     // u.id <= ?1
      *     $q->where($q->expr()->lte('u.id', '?1'));
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Comparison
      */
     public function lte($x, $y)
@@ -182,9 +175,8 @@ class Expr
      *     // u.id > ?1
      *     $q->where($q->expr()->gt('u.id', '?1'));
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Comparison
      */
     public function gt($x, $y)
@@ -201,9 +193,8 @@ class Expr
      *     // u.id >= ?1
      *     $q->where($q->expr()->gte('u.id', '?1'));
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Comparison
      */
     public function gte($x, $y)
@@ -215,7 +206,6 @@ class Expr
      * Creates an instance of AVG() function, with the given argument.
      *
      * @param mixed $x Argument to be used in AVG() function.
-     *
      * @return Expr\Func
      */
     public function avg($x)
@@ -227,7 +217,6 @@ class Expr
      * Creates an instance of MAX() function, with the given argument.
      *
      * @param mixed $x Argument to be used in MAX() function.
-     *
      * @return Expr\Func
      */
     public function max($x)
@@ -239,7 +228,6 @@ class Expr
      * Creates an instance of MIN() function, with the given argument.
      *
      * @param mixed $x Argument to be used in MIN() function.
-     *
      * @return Expr\Func
      */
     public function min($x)
@@ -251,7 +239,6 @@ class Expr
      * Creates an instance of COUNT() function, with the given argument.
      *
      * @param mixed $x Argument to be used in COUNT() function.
-     *
      * @return Expr\Func
      */
     public function count($x)
@@ -263,7 +250,6 @@ class Expr
      * Creates an instance of COUNT(DISTINCT) function, with the given argument.
      *
      * @param mixed $x Argument to be used in COUNT(DISTINCT) function.
-     *
      * @return string
      */
     public function countDistinct($x)
@@ -275,7 +261,6 @@ class Expr
      * Creates an instance of EXISTS() function, with the given DQL Subquery.
      *
      * @param mixed $subquery DQL Subquery to be used in EXISTS() function.
-     *
      * @return Expr\Func
      */
     public function exists($subquery)
@@ -287,7 +272,6 @@ class Expr
      * Creates an instance of ALL() function, with the given DQL Subquery.
      *
      * @param mixed $subquery DQL Subquery to be used in ALL() function.
-     *
      * @return Expr\Func
      */
     public function all($subquery)
@@ -299,7 +283,6 @@ class Expr
      * Creates a SOME() function expression with the given DQL subquery.
      *
      * @param mixed $subquery DQL Subquery to be used in SOME() function.
-     *
      * @return Expr\Func
      */
     public function some($subquery)
@@ -311,7 +294,6 @@ class Expr
      * Creates an ANY() function expression with the given DQL subquery.
      *
      * @param mixed $subquery DQL Subquery to be used in ANY() function.
-     *
      * @return Expr\Func
      */
     public function any($subquery)
@@ -323,7 +305,6 @@ class Expr
      * Creates a negation expression of the given restriction.
      *
      * @param mixed $restriction Restriction to be used in NOT() function.
-     *
      * @return Expr\Func
      */
     public function not($restriction)
@@ -335,7 +316,6 @@ class Expr
      * Creates an ABS() function expression with the given argument.
      *
      * @param mixed $x Argument to be used in ABS() function.
-     *
      * @return Expr\Func
      */
     public function abs($x)
@@ -350,12 +330,11 @@ class Expr
      * When converted to string, it will generated a <left expr> * <right expr>. Example:
      *
      *     [php]
-     *     // u.salary * u.percentAnnualSalaryIncrease
-     *     $q->expr()->prod('u.salary', 'u.percentAnnualSalaryIncrease')
+     *     // u.salary * u.percentAnualSalaryIncrease
+     *     $q->expr()->prod('u.salary', 'u.percentAnualSalaryIncrease')
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Math
      */
     public function prod($x, $y)
@@ -372,9 +351,8 @@ class Expr
      *     // u.monthlySubscriptionCount - 1
      *     $q->expr()->diff('u.monthlySubscriptionCount', '1')
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Math
      */
     public function diff($x, $y)
@@ -391,9 +369,8 @@ class Expr
      *     // u.numChildren + 1
      *     $q->expr()->diff('u.numChildren', '1')
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Math
      */
     public function sum($x, $y)
@@ -410,9 +387,8 @@ class Expr
      *     // u.total / u.period
      *     $expr->quot('u.total', 'u.period')
      *
-     * @param mixed $x Left expression.
-     * @param mixed $y Right expression.
-     *
+     * @param mixed $x Left expression
+     * @param mixed $y Right expression
      * @return Expr\Math
      */
     public function quot($x, $y)
@@ -424,7 +400,6 @@ class Expr
      * Creates a SQRT() function expression with the given argument.
      *
      * @param mixed $x Argument to be used in SQRT() function.
-     *
      * @return Expr\Func
      */
     public function sqrt($x)
@@ -435,9 +410,8 @@ class Expr
     /**
      * Creates an IN() expression with the given arguments.
      *
-     * @param string $x Field in string format to be restricted by IN() function.
-     * @param mixed  $y Argument to be used in IN() function.
-     *
+     * @param string $x Field in string format to be restricted by IN() function
+     * @param mixed $y Argument to be used in IN() function.
      * @return Expr\Func
      */
     public function in($x, $y)
@@ -455,9 +429,8 @@ class Expr
     /**
      * Creates a NOT IN() expression with the given arguments.
      *
-     * @param string $x Field in string format to be restricted by NOT IN() function.
+     * @param string $x Field in string format to be restricted by NOT IN() function
      * @param mixed $y Argument to be used in NOT IN() function.
-     *
      * @return Expr\Func
      */
     public function notIn($x, $y)
@@ -475,8 +448,7 @@ class Expr
     /**
      * Creates an IS NULL expression with the given arguments.
      *
-     * @param string $x Field in string format to be restricted by IS NULL.
-     *
+     * @param string $x Field in string format to be restricted by IS NULL
      * @return string
      */
     public function isNull($x)
@@ -487,8 +459,7 @@ class Expr
     /**
      * Creates an IS NOT NULL expression with the given arguments.
      *
-     * @param string $x Field in string format to be restricted by IS NOT NULL.
-     *
+     * @param string $x Field in string format to be restricted by IS NOT NULL
      * @return string
      */
     public function isNotNull($x)
@@ -500,8 +471,7 @@ class Expr
      * Creates a LIKE() comparison expression with the given arguments.
      *
      * @param string $x Field in string format to be inspected by LIKE() comparison.
-     * @param mixed  $y Argument to be used in LIKE() comparison.
-     *
+     * @param mixed $y Argument to be used in LIKE() comparison.
      * @return Expr\Comparison
      */
     public function like($x, $y)
@@ -510,24 +480,10 @@ class Expr
     }
 
     /**
-     * Creates a NOT LIKE() comparison expression with the given arguments.
-     *
-     * @param string $x Field in string format to be inspected by LIKE() comparison.
-     * @param mixed  $y Argument to be used in LIKE() comparison.
-     *
-     * @return Expr\Comparison
-     */
-    public function notLike($x, $y)
-    {
-        return new Expr\Comparison($x, 'NOT LIKE', $y);
-    }
-
-    /**
      * Creates a CONCAT() function expression with the given arguments.
      *
      * @param mixed $x First argument to be used in CONCAT() function.
-     * @param mixed $y Second argument to be used in CONCAT() function.
-     *
+     * @param mixed $x Second argument to be used in CONCAT() function.
      * @return Expr\Func
      */
     public function concat($x, $y)
@@ -538,10 +494,9 @@ class Expr
     /**
      * Creates a SUBSTRING() function expression with the given arguments.
      *
-     * @param mixed    $x    Argument to be used as string to be cropped by SUBSTRING() function.
-     * @param int      $from Initial offset to start cropping string. May accept negative values.
-     * @param int|null $len  Length of crop. May accept negative values.
-     *
+     * @param mixed $x Argument to be used as string to be cropped by SUBSTRING() function.
+     * @param integer $from Initial offset to start cropping string. May accept negative values.
+     * @param integer $len Length of crop. May accept negative values.
      * @return Expr\Func
      */
     public function substring($x, $from, $len = null)
@@ -557,7 +512,6 @@ class Expr
      * Creates a LOWER() function expression with the given argument.
      *
      * @param mixed $x Argument to be used in LOWER() function.
-     *
      * @return Expr\Func A LOWER function expression.
      */
     public function lower($x)
@@ -569,7 +523,6 @@ class Expr
      * Creates an UPPER() function expression with the given argument.
      *
      * @param mixed $x Argument to be used in UPPER() function.
-     *
      * @return Expr\Func An UPPER function expression.
      */
     public function upper($x)
@@ -581,7 +534,6 @@ class Expr
      * Creates a LENGTH() function expression with the given argument.
      *
      * @param mixed $x Argument to be used as argument of LENGTH() function.
-     *
      * @return Expr\Func A LENGTH function expression.
      */
     public function length($x)
@@ -593,7 +545,6 @@ class Expr
      * Creates a literal expression of the given argument.
      *
      * @param mixed $literal Argument to be converted to literal.
-     *
      * @return Expr\Literal
      */
     public function literal($literal)
@@ -605,7 +556,6 @@ class Expr
      * Quotes a literal value, if necessary, according to the DQL syntax.
      *
      * @param mixed $literal The literal value.
-     *
      * @return string
      */
     private function _quoteLiteral($literal)
@@ -622,10 +572,9 @@ class Expr
     /**
      * Creates an instance of BETWEEN() function, with the given argument.
      *
-     * @param mixed   $val Valued to be inspected by range values.
-     * @param integer $x   Starting range value to be used in BETWEEN() function.
-     * @param integer $y   End point value to be used in BETWEEN() function.
-     *
+     * @param mixed $val Valued to be inspected by range values.
+     * @param integer $x Starting range value to be used in BETWEEN() function.
+     * @param integer $y End point value to be used in BETWEEN() function.
      * @return Expr\Func A BETWEEN expression.
      */
     public function between($val, $x, $y)
@@ -637,7 +586,6 @@ class Expr
      * Creates an instance of TRIM() function, with the given argument.
      *
      * @param mixed $x Argument to be used as argument of TRIM() function.
-     *
      * @return Expr\Func a TRIM expression.
      */
     public function trim($x)

@@ -25,13 +25,8 @@ namespace Doctrine\ORM\Mapping;
  */
 final class NamedQuery implements Annotation
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     public $query;
 }

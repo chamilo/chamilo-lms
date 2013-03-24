@@ -13,7 +13,8 @@
 /**
  * Represents an if node.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_If extends Twig_Node
 {

@@ -25,18 +25,10 @@ namespace Doctrine\ORM\Mapping;
  */
 final class SequenceGenerator implements Annotation
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $sequenceName;
-
-    /**
-     * @var integer
-     */
+    /** @var integer */
     public $allocationSize = 1;
-
-    /**
-     * @var integer
-     */
+    /** @var integer */
     public $initialValue = 1;
 }

@@ -12,7 +12,8 @@
 /**
  * Interface implemented by token parsers.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package twig
+ * @author  Fabien Potencier <fabien@symfony.com>
  */
 interface Twig_TokenParserInterface
 {

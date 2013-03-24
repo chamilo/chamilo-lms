@@ -4,11 +4,7 @@ env:
   - OPCODE_CACHE=apc
 
 php:
-  - 5.3.3
   - 5.3
   - 5.4
-  - 5.5
 
-before_script:
-    - composer --prefer-source install
-    - php ./bin/travis-setup.php $OPCODE_CACHE
+before_script: php ./bin/travis-setup.php $OPCODE_CACHE

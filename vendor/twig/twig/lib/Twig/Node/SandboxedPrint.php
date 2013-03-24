@@ -17,7 +17,8 @@
  * and if the sandbox is enabled, we need to check that the __toString()
  * method is allowed if 'article' is an object.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_SandboxedPrint extends Twig_Node_Print
 {

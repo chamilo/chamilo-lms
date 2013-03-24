@@ -7,139 +7,92 @@ namespace Doctrine\Tests\Mocks;
  */
 class EntityPersisterMock extends \Doctrine\ORM\Persisters\BasicEntityPersister
 {
-    /**
-     * @var array
-     */
-    private $inserts = array();
-
-    /**
-     * @var array
-     */
-    private $updates = array();
-
-    /**
-     * @var array
-     */
-    private $deletes = array();
-
-    /**
-     * @var int
-     */
-    private $identityColumnValueCounter = 0;
-
-    /**
-     * @var int|null
-     */
-    private $mockIdGeneratorType;
-
-    /**
-     * @var array
-     */
-    private $postInsertIds = array();
-
-    /**
-     * @var bool
-     */
+    private $_inserts = array();
+    private $_updates = array();
+    private $_deletes = array();
+    private $_identityColumnValueCounter = 0;
+    private $_mockIdGeneratorType;
+    private $_postInsertIds = array();
     private $existsCalled = false;
 
     /**
-     * @param object $entity
-     *
-     * @return mixed
+     * @param <type> $entity
+     * @return <type>
+     * @override
      */
-    public function addInsert($entity)
+    public function insert($entity)
     {
-        $this->inserts[] = $entity;
-        if ( ! is_null($this->mockIdGeneratorType) && $this->mockIdGeneratorType == \Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_IDENTITY
-                || $this->class->isIdGeneratorIdentity()) {
-            $id = $this->identityColumnValueCounter++;
-            $this->postInsertIds[$id] = $entity;
+        $this->_inserts[] = $entity;
+        if ( ! is_null($this->_mockIdGeneratorType) && $this->_mockIdGeneratorType == \Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_IDENTITY
+                || $this->_class->isIdGeneratorIdentity()) {
+            $id = $this->_identityColumnValueCounter++;
+            $this->_postInsertIds[$id] = $entity;
             return $id;
         }
         return null;
     }
 
-    /**
-     * @return array
-     */
+    public function addInsert($entity)
+    {
+        $this->_inserts[] = $entity;
+        if ( ! is_null($this->_mockIdGeneratorType) && $this->_mockIdGeneratorType == \Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_IDENTITY
+                || $this->_class->isIdGeneratorIdentity()) {
+            $id = $this->_identityColumnValueCounter++;
+            $this->_postInsertIds[$id] = $entity;
+            return $id;
+        }
+        return null;
+    }
+
     public function executeInserts()
     {
-        return $this->postInsertIds;
+        return $this->_postInsertIds;
     }
 
-    /**
-     * @param int $genType
-     *
-     * @return void
-     */
     public function setMockIdGeneratorType($genType)
     {
-        $this->mockIdGeneratorType = $genType;
+        $this->_mockIdGeneratorType = $genType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update($entity)
     {
-        $this->updates[] = $entity;
+        $this->_updates[] = $entity;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function exists($entity, array $extraConditions = array())
     {
         $this->existsCalled = true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($entity)
     {
-        $this->deletes[] = $entity;
+        $this->_deletes[] = $entity;
     }
 
-    /**
-     * @return array
-     */
     public function getInserts()
     {
-        return $this->inserts;
+        return $this->_inserts;
     }
 
-    /**
-     * @return array
-     */
     public function getUpdates()
     {
-        return $this->updates;
+        return $this->_updates;
     }
 
-    /**
-     * @return array
-     */
     public function getDeletes()
     {
-        return $this->deletes;
+        return $this->_deletes;
     }
 
-    /**
-     * @return void
-     */
     public function reset()
     {
         $this->existsCalled = false;
-        $this->identityColumnValueCounter = 0;
-        $this->inserts = array();
-        $this->updates = array();
-        $this->deletes = array();
+        $this->_identityColumnValueCounter = 0;
+        $this->_inserts = array();
+        $this->_updates = array();
+        $this->_deletes = array();
     }
 
-    /**
-     * @return bool
-     */
     public function isExistsCalled()
     {
         return $this->existsCalled;

@@ -20,8 +20,9 @@
 namespace Doctrine\ORM\Query\AST;
 
 /**
- * Description of InputParameter.
+ * Description of InputParameter
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -30,20 +31,11 @@ namespace Doctrine\ORM\Query\AST;
  */
 class InputParameter extends Node
 {
-    /**
-     * @var bool
-     */
     public $isNamed;
-
-    /**
-     * @var string
-     */
     public $name;
 
     /**
      * @param string $value
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
      */
     public function __construct($value)
     {
@@ -56,9 +48,6 @@ class InputParameter extends Node
         $this->name = $param;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatch($walker)
     {
         return $walker->walkInputParameter($this);

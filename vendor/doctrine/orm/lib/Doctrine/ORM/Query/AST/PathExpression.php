@@ -39,31 +39,11 @@ class PathExpression extends Node
     const TYPE_SINGLE_VALUED_ASSOCIATION = 4;
     const TYPE_STATE_FIELD = 8;
 
-    /**
-     * @var int
-     */
     public $type;
-
-    /**
-     * @var int
-     */
     public $expectedType;
-
-    /**
-     * @var string
-     */
     public $identificationVariable;
-
-    /**
-     * @var string|null
-     */
     public $field;
 
-    /**
-     * @param int         $expectedType
-     * @param string      $identificationVariable
-     * @param string|null $field
-     */
     public function __construct($expectedType, $identificationVariable, $field = null)
     {
         $this->expectedType = $expectedType;
@@ -71,9 +51,6 @@ class PathExpression extends Node
         $this->field = $field;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatch($walker)
     {
         return $walker->walkPathExpression($this);

@@ -58,7 +58,7 @@ class DefaultValuesTest extends \Doctrine\Tests\OrmFunctionalTestCase
     /**
      * @group DDC-1386
      */
-    public function testGetPartialReferenceWithDefaultValueNotEvaluatedInFlush()
+    public function testGetPartialReferenceWithDefaultValueNotEvalutedInFlush()
     {
         $user = new DefaultValueUser;
         $user->name = 'romanb';

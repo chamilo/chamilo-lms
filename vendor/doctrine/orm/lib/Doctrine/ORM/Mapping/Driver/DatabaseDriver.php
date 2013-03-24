@@ -19,16 +19,17 @@
 
 namespace Doctrine\ORM\Mapping\Driver;
 
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\DBAL\Schema\SchemaException;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\Common\Util\Inflector;
-use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\DBAL\Schema\AbstractSchemaManager,
+    Doctrine\DBAL\Schema\SchemaException,
+    Doctrine\Common\Persistence\Mapping\Driver\MappingDriver,
+    Doctrine\Common\Persistence\Mapping\ClassMetadata,
+    Doctrine\ORM\Mapping\ClassMetadataInfo,
+    Doctrine\Common\Util\Inflector,
+    Doctrine\ORM\Mapping\MappingException;
 
 /**
  * The DatabaseDriver reverse engineers the mapping metadata from a database.
+ *
  *
  * @link    www.doctrine-project.org
  * @since   2.0
@@ -44,13 +45,10 @@ class DatabaseDriver implements MappingDriver
     private $_sm;
 
     /**
-     * @var array|null
+     * @var array
      */
     private $tables = null;
 
-    /**
-     * @var array
-     */
     private $classToTableNames = array();
 
     /**
@@ -71,11 +69,12 @@ class DatabaseDriver implements MappingDriver
     /**
      * The namespace for the generated entities.
      *
-     * @var string|null
+     * @var string
      */
     private $namespace;
 
     /**
+     *
      * @param AbstractSchemaManager $schemaManager
      */
     public function __construct(AbstractSchemaManager $schemaManager)
@@ -84,11 +83,10 @@ class DatabaseDriver implements MappingDriver
     }
 
     /**
-     * Sets tables manually instead of relying on the reverse engineering capabilities of SchemaManager.
+     * Set tables manually instead of relying on the reverse engeneering capabilities of SchemaManager.
      *
      * @param array $entityTables
      * @param array $manyToManyTables
-     *
      * @return void
      */
     public function setTables($entityTables, $manyToManyTables)
@@ -104,11 +102,6 @@ class DatabaseDriver implements MappingDriver
         }
     }
 
-    /**
-     * @return void
-     *
-     * @throws \Doctrine\ORM\Mapping\MappingException
-     */
     private function reverseEngineerMappingFromDatabase()
     {
         if ($this->tables !== null) {
@@ -252,7 +245,7 @@ class DatabaseDriver implements MappingDriver
 
                     if (!$otherFk) {
                         // the definition of this many to many table does not contain
-                        // enough foreign key information to continue reverse engineering.
+                        // enough foreign key information to continue reverse engeneering.
                         continue;
                     }
 
@@ -319,7 +312,7 @@ class DatabaseDriver implements MappingDriver
                 );
             }
 
-            //Here we need to check if $cols are the same as $primaryKeyColumns
+            //Here we need to check if $cols are the same as $primaryKeyColums
             if (!array_diff($cols,$primaryKeyColumns)) {
                 $metadata->mapOneToOne($associationMapping);
             } else {
@@ -347,11 +340,10 @@ class DatabaseDriver implements MappingDriver
     }
 
     /**
-     * Sets class name for a table.
+     * Set class name for a table.
      *
      * @param string $tableName
      * @param string $className
-     *
      * @return void
      */
     public function setClassNameForTable($tableName, $className)
@@ -360,12 +352,11 @@ class DatabaseDriver implements MappingDriver
     }
 
     /**
-     * Sets field name for a column on a specific table.
+     * Set field name for a column on a specific table.
      *
      * @param string $tableName
      * @param string $columnName
      * @param string $fieldName
-     *
      * @return void
      */
     public function setFieldNameForColumn($tableName, $columnName, $fieldName)
@@ -374,10 +365,9 @@ class DatabaseDriver implements MappingDriver
     }
 
     /**
-     * Returns the mapped class name for a table if it exists. Otherwise return "classified" version.
+     * Return the mapped class name for a table if it exists. Otherwise return "classified" version.
      *
      * @param string $tableName
-     *
      * @return string
      */
     private function getClassNameForTable($tableName)
@@ -392,10 +382,9 @@ class DatabaseDriver implements MappingDriver
     /**
      * Return the mapped field name for a column, if it exists. Otherwise return camelized version.
      *
-     * @param string  $tableName
-     * @param string  $columnName
+     * @param string $tableName
+     * @param string $columnName
      * @param boolean $fk Whether the column is a foreignkey or not.
-     *
      * @return string
      */
     private function getFieldNameForColumn($tableName, $columnName, $fk = false)
@@ -417,7 +406,6 @@ class DatabaseDriver implements MappingDriver
      * Set the namespace for the generated entities.
      *
      * @param string $namespace
-     *
      * @return void
      */
     public function setNamespace($namespace)

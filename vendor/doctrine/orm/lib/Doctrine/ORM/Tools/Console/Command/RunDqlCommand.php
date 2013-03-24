@@ -19,16 +19,14 @@
 
 namespace Doctrine\ORM\Tools\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\Common\Util\Debug;
+use Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console;
 
 /**
  * Command to execute DQL queries in a given EntityManager.
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Benjamin Eberlei <kontakt@beberlei.de>
@@ -36,10 +34,10 @@ use Doctrine\Common\Util\Debug;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class RunDqlCommand extends Command
+class RunDqlCommand extends Console\Command\Command
 {
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
     protected function configure()
     {
@@ -73,9 +71,9 @@ EOT
     }
 
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $em = $this->getHelper('em')->getEntityManager();
 
@@ -118,6 +116,6 @@ EOT
 
         $resultSet = $query->execute(array(), constant($hydrationMode));
 
-        Debug::dump($resultSet, $input->getOption('depth'));
+        \Doctrine\Common\Util\Debug::dump($resultSet, $input->getOption('depth'));
     }
 }

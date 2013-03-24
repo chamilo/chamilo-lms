@@ -10,15 +10,12 @@ namespace Doctrine\Tests\Mocks;
  */
 class HydratorMockStatement implements \IteratorAggregate, \Doctrine\DBAL\Driver\Statement
 {
-    /**
-     * @var array
-     */
     private $_resultSet;
 
     /**
      * Creates a new mock statement that will serve the provided fake result set to clients.
      *
-     * @param array $resultSet The faked SQL result set.
+     * @param array $resultSet  The faked SQL result set.
      */
     public function __construct(array $resultSet)
     {
@@ -28,10 +25,6 @@ class HydratorMockStatement implements \IteratorAggregate, \Doctrine\DBAL\Driver
     /**
      * Fetches all rows from the result set.
      *
-     * @param int|null   $fetchStyle
-     * @param int|null   $columnIndex
-     * @param array|null $ctorArgs
-     *
      * @return array
      */
     public function fetchAll($fetchStyle = null, $columnIndex = null, array $ctorArgs = null)
@@ -39,9 +32,6 @@ class HydratorMockStatement implements \IteratorAggregate, \Doctrine\DBAL\Driver
         return $this->_resultSet;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fetchColumn($columnNumber = 0)
     {
         $row = current($this->_resultSet);
@@ -51,7 +41,8 @@ class HydratorMockStatement implements \IteratorAggregate, \Doctrine\DBAL\Driver
     }
 
     /**
-     * {@inheritdoc}
+     * Fetches the next row in the result set.
+     *
      */
     public function fetch($fetchStyle = null)
     {
@@ -61,74 +52,60 @@ class HydratorMockStatement implements \IteratorAggregate, \Doctrine\DBAL\Driver
     }
 
     /**
-     * {@inheritdoc}
+     * Closes the cursor, enabling the statement to be executed again.
+     *
+     * @return boolean
      */
     public function closeCursor()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function setResultSet(array $resultSet)
+    {
+        reset($resultSet);
+        $this->_resultSet = $resultSet;
+    }
+
+    public function bindColumn($column, &$param, $type = null)
+    {
+    }
+
     public function bindValue($param, $value, $type = null)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function bindParam($column, &$variable, $type = null, $length = null)
+    public function bindParam($column, &$variable, $type = null, $length = null, $driverOptions = array())
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function columnCount()
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function errorCode()
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function errorInfo()
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute($params = array())
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rowCount()
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator()
     {
         return $this->_resultSet;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setFetchMode($fetchStyle, $arg2 = null, $arg3 = null)
     {
+
     }
 }

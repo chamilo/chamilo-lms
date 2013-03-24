@@ -2,31 +2,31 @@
 
 namespace Doctrine\Tests\Mocks;
 
-/**
- * Mock class for Driver.
- */
+
 class DriverMock implements \Doctrine\DBAL\Driver
 {
-    /**
-     * @var \Doctrine\DBAL\Platforms\AbstractPlatform|null
-     */
     private $_platformMock;
 
-    /**
-     * @var \Doctrine\DBAL\Schema\AbstractSchemaManager|null
-     */
     private $_schemaManagerMock;
 
-    /**
-     * {@inheritdoc}
-     */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
     {
         return new DriverConnectionMock();
     }
 
     /**
-     * {@inheritdoc}
+     * Constructs the Sqlite PDO DSN.
+     *
+     * @return string  The DSN.
+     * @override
+     */
+    protected function _constructPdoDsn(array $params)
+    {
+        return "";
+    }
+
+    /**
+     * @override
      */
     public function getDatabasePlatform()
     {
@@ -37,11 +37,11 @@ class DriverMock implements \Doctrine\DBAL\Driver
     }
 
     /**
-     * {@inheritdoc}
+     * @override
      */
     public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
     {
-        if ($this->_schemaManagerMock == null) {
+        if($this->_schemaManagerMock == null) {
             return new SchemaManagerMock($conn);
         } else {
             return $this->_schemaManagerMock;
@@ -50,37 +50,21 @@ class DriverMock implements \Doctrine\DBAL\Driver
 
     /* MOCK API */
 
-    /**
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
-     *
-     * @return void
-     */
     public function setDatabasePlatform(\Doctrine\DBAL\Platforms\AbstractPlatform $platform)
     {
         $this->_platformMock = $platform;
     }
 
-    /**
-     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $sm
-     *
-     * @return void
-     */
     public function setSchemaManager(\Doctrine\DBAL\Schema\AbstractSchemaManager $sm)
     {
         $this->_schemaManagerMock = $sm;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'mock';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDatabase(\Doctrine\DBAL\Connection $conn)
     {
         return;

@@ -27,16 +27,12 @@ namespace Doctrine\ORM;
  */
 final class NativeQuery extends AbstractQuery
 {
-    /**
-     * @var string
-     */
     private $_sql;
 
     /**
      * Sets the SQL of the query.
      *
      * @param string $sql
-     *
      * @return NativeQuery This query instance.
      */
     public function setSQL($sql)
@@ -50,7 +46,6 @@ final class NativeQuery extends AbstractQuery
      * Gets the SQL query.
      *
      * @return mixed The built SQL query or an array of all SQL queries.
-     *
      * @override
      */
     public function getSQL()

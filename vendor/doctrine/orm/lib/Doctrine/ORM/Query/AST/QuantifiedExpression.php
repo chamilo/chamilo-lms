@@ -21,6 +21,7 @@ namespace Doctrine\ORM\Query\AST;
 /**
  * QuantifiedExpression ::= ("ALL" | "ANY" | "SOME") "(" Subselect ")"
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -29,53 +30,35 @@ namespace Doctrine\ORM\Query\AST;
  */
 class QuantifiedExpression extends Node
 {
-    /**
-     * @var string
-     */
     public $type;
-
-    /**
-     * @var Subselect
-     */
     public $subselect;
 
-    /**
-     * @param Subselect $subselect
-     */
     public function __construct($subselect)
     {
         $this->subselect = $subselect;
     }
 
-    /**
-     * @return bool
-     */
     public function isAll()
     {
         return strtoupper($this->type) == 'ALL';
     }
 
-    /**
-     * @return bool
-     */
     public function isAny()
     {
         return strtoupper($this->type) == 'ANY';
     }
 
-    /**
-     * @return bool
-     */
     public function isSome()
     {
         return strtoupper($this->type) == 'SOME';
     }
 
     /**
-     * {@inheritdoc}
+     * @override
      */
     public function dispatch($sqlWalker)
     {
         return $sqlWalker->walkQuantifiedExpression($this);
     }
 }
+

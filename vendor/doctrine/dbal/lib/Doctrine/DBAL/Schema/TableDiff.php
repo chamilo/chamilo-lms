@@ -22,7 +22,7 @@ namespace Doctrine\DBAL\Schema;
 /**
  * Table Diff
  *
- *
+ * 
  * @link    www.doctrine-project.org
  * @copyright Copyright (C) 2005-2009 eZ Systems AS. All rights reserved.
  * @license http://ez.no/licenses/new_bsd New BSD License
@@ -112,11 +112,6 @@ class TableDiff
     public $removedForeignKeys = array();
 
     /**
-     * @var Table
-     */
-    public $fromTable;
-
-    /**
      * Constructs an TableDiff object.
      *
      * @param array(string=>Column) $addedColumns
@@ -125,11 +120,10 @@ class TableDiff
      * @param array(string=>Index)  $addedIndexes
      * @param array(string=>Index)  $changedIndexes
      * @param array(string=>bool)   $removedIndexes
-     * @param Table                 $fromTable
      */
     public function __construct($tableName, $addedColumns = array(),
         $changedColumns = array(), $removedColumns = array(), $addedIndexes = array(),
-        $changedIndexes = array(), $removedIndexes = array(), Table $fromTable = null)
+        $changedIndexes = array(), $removedIndexes = array())
     {
         $this->name = $tableName;
         $this->addedColumns = $addedColumns;
@@ -138,6 +132,5 @@ class TableDiff
         $this->addedIndexes = $addedIndexes;
         $this->changedIndexes = $changedIndexes;
         $this->removedIndexes = $removedIndexes;
-        $this->fromTable = $fromTable;
     }
 }

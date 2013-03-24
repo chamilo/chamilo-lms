@@ -32,13 +32,6 @@ use Doctrine\DBAL\Connection;
  */
 class SQLParserUtils
 {
-    const POSITIONAL_TOKEN = '\?';
-    const NAMED_TOKEN      = ':[a-zA-Z_][a-zA-Z0-9_]*';
-
-    // Quote characters within string literals can be preceded by a backslash.
-    const ESCAPED_SINGLE_QUOTED_TEXT = "'(?:[^'\\\\]|\\\\'|\\\\\\\\)*'";
-    const ESCAPED_DOUBLE_QUOTED_TEXT = '"(?:[^"\\\\]|\\\\"|\\\\\\\\)*"';
-
     /**
      * Get an array of the placeholders in an sql statements as keys and their positions in the query string.
      *
@@ -56,18 +49,27 @@ class SQLParserUtils
             return array();
         }
 
-        $token = ($isPositional) ? self::POSITIONAL_TOKEN : self::NAMED_TOKEN;
+        $count = 0;
+        $inLiteral = false; // a valid query never starts with quotes
+        $stmtLen = strlen($statement);
         $paramMap = array();
-
-        foreach (self::getUnquotedStatementFragments($statement) as $fragment) {
-            preg_match_all("/$token/", $fragment[0], $matches, PREG_OFFSET_CAPTURE);
-            foreach ($matches[0] as $placeholder) {
+        for ($i = 0; $i < $stmtLen; $i++) {
+            if ($statement[$i] == $match && !$inLiteral && ($isPositional || $statement[$i+1] != '=')) {
+                // real positional parameter detected
                 if ($isPositional) {
-                    $paramMap[] = $placeholder[1] + $fragment[1];
+                    $paramMap[$count] = $i;
                 } else {
-                    $pos = $placeholder[1] + $fragment[1];
-                    $paramMap[$pos] = substr($placeholder[0], 1, strlen($placeholder[0]));
+                    $name = "";
+                    // TODO: Something faster/better to match this than regex?
+                    for ($j = $i + 1; ($j < $stmtLen && preg_match('(([a-zA-Z0-9_]{1}))', $statement[$j])); $j++) {
+                        $name .= $statement[$j];
+                    }
+                    $paramMap[$i] = $name; // named parameters can be duplicated!
+                    $i = $j;
                 }
+                ++$count;
+            } else if ($statement[$i] == "'" || $statement[$i] == '"') {
+                $inLiteral = ! $inLiteral; // switch state!
             }
         }
 
@@ -177,24 +179,5 @@ class SQLParserUtils
         }
 
         return array($query, $paramsOrd, $typesOrd);
-    }
-
-    /**
-     * Slice the SQL statement around pairs of quotes and
-     * return string fragments of SQL outside of quoted literals.
-     * Each fragment is captured as a 2-element array:
-     *
-     * 0 => matched fragment string,
-     * 1 => offset of fragment in $statement
-     *
-     * @param string $statement
-     * @return array
-     */
-    static private function getUnquotedStatementFragments($statement)
-    {
-        $literal = self::ESCAPED_SINGLE_QUOTED_TEXT . '|' . self::ESCAPED_DOUBLE_QUOTED_TEXT;
-        preg_match_all("/([^'\"]+)(?:$literal)?/s", $statement, $fragments, PREG_OFFSET_CAPTURE);
-
-        return $fragments[1];
     }
 }

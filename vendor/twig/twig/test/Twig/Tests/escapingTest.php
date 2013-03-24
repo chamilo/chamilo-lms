@@ -29,7 +29,7 @@ class Twig_Test_EscapingTest extends PHPUnit_Framework_TestCase
         '.'     => '.',
         '-'     => '-',
         '_'     => '_',
-        /* Basic alnums excluded */
+        /* Basic alnums exluded */
         'a'     => 'a',
         'A'     => 'A',
         'z'     => 'z',
@@ -63,7 +63,7 @@ class Twig_Test_EscapingTest extends PHPUnit_Framework_TestCase
         ','     => ',',
         '.'     => '.',
         '_'     => '_',
-        /* Basic alnums excluded */
+        /* Basic alnums exluded */
         'a'     => 'a',
         'A'     => 'A',
         'z'     => 'z',
@@ -127,7 +127,7 @@ class Twig_Test_EscapingTest extends PHPUnit_Framework_TestCase
         ','     => '\\2C ',
         '.'     => '\\2E ',
         '_'     => '\\5F ',
-        /* Basic alnums excluded */
+        /* Basic alnums exluded */
         'a'     => 'a',
         'A'     => 'A',
         'z'     => 'z',

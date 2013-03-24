@@ -44,7 +44,7 @@ class DDC1885Test extends \Doctrine\Tests\OrmFunctionalTestCase
         
     }
 
-    public function testCreateRetrieveUpdateDelete()
+    public function testCreateRetreaveUpdateDelete()
     {
         $user   = $this->user;
         $g1     = $user->getGroups()->get(0);
@@ -54,7 +54,7 @@ class DDC1885Test extends \Doctrine\Tests\OrmFunctionalTestCase
         $g1Id   = $g1->id;
         $g2Id   = $g2->id;
 
-        // Retrieve
+        // Retreave
         $user = $this->_em->find('Doctrine\Tests\Models\Quote\User', $u1Id);
 
         $this->assertInstanceOf('Doctrine\Tests\Models\Quote\User', $user);

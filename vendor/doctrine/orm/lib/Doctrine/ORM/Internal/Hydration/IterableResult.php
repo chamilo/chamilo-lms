@@ -44,7 +44,7 @@ class IterableResult implements \Iterator
     private $_key = -1;
 
     /**
-     * @var object|null
+     * @var object
      */
     private $_current = null;
 
@@ -56,11 +56,6 @@ class IterableResult implements \Iterator
         $this->_hydrator = $hydrator;
     }
 
-    /**
-     * @return void
-     *
-     * @throws HydrationException
-     */
     public function rewind()
     {
         if ($this->_rewinded == true) {

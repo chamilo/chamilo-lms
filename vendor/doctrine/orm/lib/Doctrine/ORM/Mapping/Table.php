@@ -25,28 +25,14 @@ namespace Doctrine\ORM\Mapping;
  */
 final class Table implements Annotation
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     public $schema;
-
-    /**
-     * @var array<\Doctrine\ORM\Mapping\Index>
-     */
+    /** @var array<\Doctrine\ORM\Mapping\Index> */
     public $indexes;
-
-    /**
-     * @var array<\Doctrine\ORM\Mapping\UniqueConstraint>
-     */
+    /** @var array<\Doctrine\ORM\Mapping\UniqueConstraint> */
     public $uniqueConstraints;
-
-    /**
-     * @var array
-     */
+    /** @var array */
     public $options = array();
 }

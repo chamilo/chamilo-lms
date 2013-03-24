@@ -12,7 +12,8 @@
 /**
  * Marks a content as safe.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Markup implements Countable
 {

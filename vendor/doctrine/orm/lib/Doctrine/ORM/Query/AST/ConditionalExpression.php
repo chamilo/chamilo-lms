@@ -22,6 +22,7 @@ namespace Doctrine\ORM\Query\AST;
 /**
  * ConditionalExpression ::= ConditionalTerm {"OR" ConditionalTerm}*
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -30,22 +31,13 @@ namespace Doctrine\ORM\Query\AST;
  */
 class ConditionalExpression extends Node
 {
-    /**
-     * @var array
-     */
     public $conditionalTerms = array();
 
-    /**
-     * @param array $conditionalTerms
-     */
     public function __construct(array $conditionalTerms)
     {
         $this->conditionalTerms = $conditionalTerms;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatch($sqlWalker)
     {
         return $sqlWalker->walkConditionalExpression($this);

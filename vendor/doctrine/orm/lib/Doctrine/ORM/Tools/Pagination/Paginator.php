@@ -19,12 +19,14 @@
 
 namespace Doctrine\ORM\Tools\Pagination;
 
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\ResultSetMapping;
-use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\QueryBuilder,
+    Doctrine\ORM\Query,
+    Doctrine\ORM\Query\ResultSetMapping,
+    Doctrine\ORM\NoResultException;
 
 /**
+ * Paginator
+ *
  * The paginator can handle various complex scenarios with DQL.
  *
  * @author Pablo Díez <pablodip@gmail.com>
@@ -56,8 +58,8 @@ class Paginator implements \Countable, \IteratorAggregate
     /**
      * Constructor.
      *
-     * @param Query|QueryBuilder $query               A Doctrine ORM query or query builder.
-     * @param boolean            $fetchJoinCollection Whether the query joins a collection (true by default).
+     * @param Query|QueryBuilder $query A Doctrine ORM query or query builder.
+     * @param Boolean $fetchJoinCollection Whether the query joins a collection (true by default).
      */
     public function __construct($query, $fetchJoinCollection = true)
     {
@@ -70,7 +72,7 @@ class Paginator implements \Countable, \IteratorAggregate
     }
 
     /**
-     * Returns the query.
+     * Returns the query
      *
      * @return Query
      */
@@ -82,7 +84,7 @@ class Paginator implements \Countable, \IteratorAggregate
     /**
      * Returns whether the query joins a collection.
      *
-     * @return boolean Whether the query joins a collection.
+     * @return Boolean Whether the query joins a collection.
      */
     public function getFetchJoinCollection()
     {
@@ -90,7 +92,7 @@ class Paginator implements \Countable, \IteratorAggregate
     }
 
     /**
-     * Returns whether the paginator will use an output walker.
+     * Returns whether the paginator will use an output walker
      *
      * @return bool|null
      */
@@ -100,10 +102,9 @@ class Paginator implements \Countable, \IteratorAggregate
     }
 
     /**
-     * Sets whether the paginator will use an output walker.
+     * Set whether the paginator will use an output walker
      *
      * @param bool|null $useOutputWalkers
-     *
      * @return $this
      */
     public function setUseOutputWalkers($useOutputWalkers)
@@ -147,7 +148,6 @@ class Paginator implements \Countable, \IteratorAggregate
                 $this->count = 0;
             }
         }
-
         return $this->count;
     }
 
@@ -191,7 +191,6 @@ class Paginator implements \Countable, \IteratorAggregate
                 ->getResult($this->query->getHydrationMode())
             ;
         }
-
         return new \ArrayIterator($result);
     }
 
@@ -217,7 +216,7 @@ class Paginator implements \Countable, \IteratorAggregate
     }
 
     /**
-     * Determines whether to use an output walker for the query.
+     * Determine whether to use an output walker for the query
      *
      * @param Query $query The query.
      *
@@ -232,3 +231,4 @@ class Paginator implements \Countable, \IteratorAggregate
         return $this->useOutputWalkers;
     }
 }
+

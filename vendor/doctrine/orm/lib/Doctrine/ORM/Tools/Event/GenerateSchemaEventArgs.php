@@ -19,7 +19,6 @@
 
 namespace Doctrine\ORM\Tools\Event;
 
-use Doctrine\Common\EventArgs;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\EntityManager;
 
@@ -31,41 +30,33 @@ use Doctrine\ORM\EntityManager;
  * @since       1.0
  * @author      Benjamin Eberlei <kontakt@beberlei.de>
  */
-class GenerateSchemaEventArgs extends EventArgs
+class GenerateSchemaEventArgs extends \Doctrine\Common\EventArgs
 {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
+    private $_em = null;
+    private $_schema = null;
 
     /**
-     * @var \Doctrine\DBAL\Schema\Schema
-     */
-    private $schema;
-
-    /**
-     * @param EntityManager $em
-     * @param Schema        $schema
+     * @param ClassMetadata $classMetadata
+     * @param Schema $schema
+     * @param Table $classTable
      */
     public function __construct(EntityManager $em, Schema $schema)
     {
-        $this->em = $em;
-        $this->schema = $schema;
+        $this->_em = $em;
+        $this->_schema = $schema;
     }
 
     /**
      * @return EntityManager
      */
-    public function getEntityManager()
-    {
-        return $this->em;
+    public function getEntityManager() {
+        return $this->_em;
     }
 
     /**
      * @return Schema
      */
-    public function getSchema()
-    {
-        return $this->schema;
+    public function getSchema() {
+        return $this->_schema;
     }
 }

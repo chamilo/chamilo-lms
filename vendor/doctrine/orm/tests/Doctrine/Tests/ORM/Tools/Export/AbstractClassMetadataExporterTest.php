@@ -355,7 +355,7 @@ abstract class AbstractClassMetadataExporterTest extends \Doctrine\Tests\OrmTest
             $this->assertEquals('all', $value['Doctrine\Tests\ORM\Tools\Export\ExportedUser']['oneToMany']['interests']['cascade'][0]);
 
         } else {
-            $this->markTestSkipped('Test available only for '.$type.' driver');
+            $this->markTestSkipped('Test aviable only for '.$type.' dirver');
         }
     }
     public function __destruct()

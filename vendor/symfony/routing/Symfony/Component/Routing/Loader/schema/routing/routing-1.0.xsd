@@ -17,6 +17,16 @@
 
   <xsd:element name="routes" type="routes" />
 
+  <xsd:simpleType name="word">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="([a-zA-Z]){3,}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="stringlist">
+    <xsd:list itemType="word"/>
+  </xsd:simpleType>
+
   <xsd:complexType name="routes">
     <xsd:choice minOccurs="0" maxOccurs="unbounded">
       <xsd:element name="import" type="import" />
@@ -39,8 +49,8 @@
     <xsd:attribute name="path" type="xsd:string" />
     <xsd:attribute name="pattern" type="xsd:string" />
     <xsd:attribute name="host" type="xsd:string" />
-    <xsd:attribute name="schemes" type="xsd:string" />
-    <xsd:attribute name="methods" type="xsd:string" />
+    <xsd:attribute name="schemes" type="stringlist" />
+    <xsd:attribute name="methods" type="stringlist" />
   </xsd:complexType>
 
   <xsd:complexType name="import">
@@ -50,8 +60,8 @@
     <xsd:attribute name="type" type="xsd:string" />
     <xsd:attribute name="prefix" type="xsd:string" />
     <xsd:attribute name="host" type="xsd:string" />
-    <xsd:attribute name="schemes" type="xsd:string" />
-    <xsd:attribute name="methods" type="xsd:string" />
+    <xsd:attribute name="schemes" type="stringlist" />
+    <xsd:attribute name="methods" type="stringlist" />
   </xsd:complexType>
 
   <xsd:complexType name="element">

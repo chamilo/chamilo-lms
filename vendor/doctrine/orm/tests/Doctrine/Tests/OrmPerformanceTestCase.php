@@ -3,19 +3,18 @@
 namespace Doctrine\Tests;
 
 /**
- * Description of DoctrinePerformanceTestCase.
+ * Description of DoctrinePerformanceTestCase
  *
  * @author robo
  */
 class OrmPerformanceTestCase extends OrmFunctionalTestCase
 {
     /**
-     * @var integer
+     * @var    integer
      */
     protected $maxRunningTime = 0;
 
     /**
-     * @return void
      */
     protected function runTest()
     {
@@ -36,13 +35,9 @@ class OrmPerformanceTestCase extends OrmFunctionalTestCase
     }
 
     /**
-     * @param integer $maxRunningTime
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @since Method available since Release 2.3.0
+     * @param  integer $maxRunningTime
+     * @throws InvalidArgumentException
+     * @since  Method available since Release 2.3.0
      */
     public function setMaxRunningTime($maxRunningTime)
     {
@@ -55,11 +50,11 @@ class OrmPerformanceTestCase extends OrmFunctionalTestCase
 
     /**
      * @return integer
-     *
-     * @since Method available since Release 2.3.0
+     * @since  Method available since Release 2.3.0
      */
     public function getMaxRunningTime()
     {
         return $this->maxRunningTime;
     }
 }
+

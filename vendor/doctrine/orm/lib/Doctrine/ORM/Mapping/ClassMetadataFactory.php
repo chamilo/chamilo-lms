@@ -19,17 +19,16 @@
 
 namespace Doctrine\ORM\Mapping;
 
-use ReflectionException;
-use Doctrine\ORM\ORMException;
-use Doctrine\ORM\EntityManager;
-use Doctrine\DBAL\Platforms;
-use Doctrine\ORM\Events;
-use Doctrine\Common\Persistence\Mapping\ReflectionService;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata as ClassMetadataInterface;
-use Doctrine\Common\Persistence\Mapping\AbstractClassMetadataFactory;
-use Doctrine\ORM\Id\IdentityGenerator;
-use Doctrine\ORM\Id\BigIntegerIdentityGenerator;
-use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use ReflectionException,
+    Doctrine\ORM\ORMException,
+    Doctrine\ORM\EntityManager,
+    Doctrine\DBAL\Platforms,
+    Doctrine\ORM\Events,
+    Doctrine\Common\Persistence\Mapping\ReflectionService,
+    Doctrine\Common\Persistence\Mapping\ClassMetadata as ClassMetadataInterface,
+    Doctrine\Common\Persistence\Mapping\AbstractClassMetadataFactory,
+    Doctrine\ORM\Id\IdentityGenerator,
+    Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 
 /**
  * The ClassMetadataFactory is used to create ClassMetadata objects that contain all the
@@ -156,10 +155,6 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
             $this->addInheritedSqlResultSetMappings($class, $parent);
         }
 
-        if ($parent && !empty($parent->entityListeners) && empty($class->entityListeners)) {
-            $class->entityListeners = $parent->entityListeners;
-        }
-
         $class->setParentClasses($nonSuperclassParents);
 
         if ( $class->isRootEntity() && ! $class->isInheritanceTypeNone() && ! $class->discriminatorMap) {
@@ -178,11 +173,8 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
     /**
      * Validate runtime metadata is correctly defined.
      *
-     * @param ClassMetadata               $class
-     * @param ClassMetadataInterface|null $parent
-     *
-     * @return void
-     *
+     * @param ClassMetadata $class
+     * @param $parent
      * @throws MappingException
      */
     protected function validateRuntimeMetadata($class, $parent)
@@ -193,7 +185,7 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
         }
 
         $class->validateIdentifier();
-        $class->validateAssociations();
+        $class->validateAssocations();
         $class->validateLifecycleCallbacks($this->getReflectionService());
 
         // verify inheritance
@@ -234,7 +226,6 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
      * each class as key.
      *
      * @param \Doctrine\ORM\Mapping\ClassMetadata $class
-     *
      * @throws MappingException
      */
     private function addDefaultDiscriminatorMap(ClassMetadata $class)
@@ -264,10 +255,9 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
     }
 
     /**
-     * Gets the lower-case short name of a class.
+     * Get the lower-case short name of a class.
      *
      * @param string $className
-     *
      * @return string
      */
     private function getShortName($className)
@@ -285,8 +275,6 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
      *
      * @param \Doctrine\ORM\Mapping\ClassMetadata $subClass
      * @param \Doctrine\ORM\Mapping\ClassMetadata $parentClass
-     *
-     * @return void
      */
     private function addInheritedFields(ClassMetadata $subClass, ClassMetadata $parentClass)
     {
@@ -309,9 +297,6 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
      *
      * @param \Doctrine\ORM\Mapping\ClassMetadata $subClass
      * @param \Doctrine\ORM\Mapping\ClassMetadata $parentClass
-     *
-     * @return void
-     *
      * @throws MappingException
      */
     private function addInheritedRelations(ClassMetadata $subClass, ClassMetadata $parentClass)
@@ -319,7 +304,7 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
         foreach ($parentClass->associationMappings as $field => $mapping) {
             if ($parentClass->isMappedSuperclass) {
                 if ($mapping['type'] & ClassMetadata::TO_MANY && !$mapping['isOwningSide']) {
-                    throw MappingException::illegalToManyAssociationOnMappedSuperclass($parentClass->name, $field);
+                    throw MappingException::illegalToManyAssocationOnMappedSuperclass($parentClass->name, $field);
                 }
                 $mapping['sourceEntity'] = $subClass->name;
             }
@@ -339,11 +324,8 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
      * Adds inherited named queries to the subclass mapping.
      *
      * @since 2.2
-     *
      * @param \Doctrine\ORM\Mapping\ClassMetadata $subClass
      * @param \Doctrine\ORM\Mapping\ClassMetadata $parentClass
-     *
-     * @return void
      */
     private function addInheritedNamedQueries(ClassMetadata $subClass, ClassMetadata $parentClass)
     {
@@ -361,11 +343,8 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
      * Adds inherited named native queries to the subclass mapping.
      *
      * @since 2.3
-     *
      * @param \Doctrine\ORM\Mapping\ClassMetadata $subClass
      * @param \Doctrine\ORM\Mapping\ClassMetadata $parentClass
-     *
-     * @return void
      */
     private function addInheritedNamedNativeQueries(ClassMetadata $subClass, ClassMetadata $parentClass)
     {
@@ -386,11 +365,8 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
      * Adds inherited sql result set mappings to the subclass mapping.
      *
      * @since 2.3
-     *
      * @param \Doctrine\ORM\Mapping\ClassMetadata $subClass
      * @param \Doctrine\ORM\Mapping\ClassMetadata $parentClass
-     *
-     * @return void
      */
     private function addInheritedSqlResultSetMappings(ClassMetadata $subClass, ClassMetadata $parentClass)
     {
@@ -420,9 +396,6 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
      * most appropriate for the targeted database platform.
      *
      * @param ClassMetadataInfo $class
-     *
-     * @return void
-     *
      * @throws ORMException
      */
     private function completeIdGeneratorMapping(ClassMetadataInfo $class)
@@ -445,9 +418,9 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
                 // <table>_<column>_seq in PostgreSQL for SERIAL columns.
                 // Not pretty but necessary and the simplest solution that currently works.
                 $sequenceName = null;
-                $fieldName    = $class->identifier ? $class->getSingleIdentifierFieldName() : null;
 
                 if ($this->targetPlatform instanceof Platforms\PostgreSQLPlatform) {
+                    $fieldName      = $class->getSingleIdentifierFieldName();
                     $columnName     = $class->getSingleIdentifierColumnName();
                     $quoted         = isset($class->fieldMappings[$fieldName]['quoted']) || isset($class->table['quoted']);
                     $sequenceName   = $class->getTableName() . '_' . $columnName . '_seq';
@@ -462,12 +435,7 @@ class ClassMetadataFactory extends AbstractClassMetadataFactory
                     $sequenceName = $this->em->getConfiguration()->getQuoteStrategy()->getSequenceName($definition, $class, $this->targetPlatform);
                 }
 
-                $generator = ($fieldName && $class->fieldMappings[$fieldName]['type'] === 'bigint')
-                    ? new BigIntegerIdentityGenerator($sequenceName)
-                    : new IdentityGenerator($sequenceName);
-
-                $class->setIdGenerator($generator);
-
+                $class->setIdGenerator(new \Doctrine\ORM\Id\IdentityGenerator($sequenceName));
                 break;
 
             case ClassMetadata::GENERATOR_TYPE_SEQUENCE:

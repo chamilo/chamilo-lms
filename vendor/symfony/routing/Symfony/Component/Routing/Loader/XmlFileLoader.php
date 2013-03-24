@@ -126,8 +126,8 @@ class XmlFileLoader extends FileLoader
             $node->removeAttribute('pattern');
         }
 
-        $schemes = preg_split('/[\s,\|]++/', $node->getAttribute('schemes'), -1, PREG_SPLIT_NO_EMPTY);
-        $methods = preg_split('/[\s,\|]++/', $node->getAttribute('methods'), -1, PREG_SPLIT_NO_EMPTY);
+        $schemes = array_filter(explode(' ', $node->getAttribute('schemes')));
+        $methods = array_filter(explode(' ', $node->getAttribute('methods')));
 
         list($defaults, $requirements, $options) = $this->parseConfigs($node, $path);
 
@@ -154,8 +154,8 @@ class XmlFileLoader extends FileLoader
         $type = $node->getAttribute('type');
         $prefix = $node->getAttribute('prefix');
         $host = $node->hasAttribute('host') ? $node->getAttribute('host') : null;
-        $schemes = $node->hasAttribute('schemes') ? preg_split('/[\s,\|]++/', $node->getAttribute('schemes'), -1, PREG_SPLIT_NO_EMPTY) : null;
-        $methods = $node->hasAttribute('methods') ? preg_split('/[\s,\|]++/', $node->getAttribute('methods'), -1, PREG_SPLIT_NO_EMPTY) : null;
+        $schemes = $node->hasAttribute('schemes') ? array_filter(explode(' ', $node->getAttribute('schemes'))) : null;
+        $methods = $node->hasAttribute('methods') ? array_filter(explode(' ', $node->getAttribute('methods'))) : null;
 
         list($defaults, $requirements, $options) = $this->parseConfigs($node, $path);
 

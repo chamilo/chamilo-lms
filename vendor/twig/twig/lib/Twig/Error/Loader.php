@@ -20,7 +20,8 @@
  *
  * This strategy makes Twig_Environment::resolveTemplate() much faster.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Error_Loader extends Twig_Error
 {

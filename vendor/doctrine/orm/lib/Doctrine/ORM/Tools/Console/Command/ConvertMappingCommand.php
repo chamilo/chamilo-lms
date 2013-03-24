@@ -19,20 +19,18 @@
 
 namespace Doctrine\ORM\Tools\Console\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Doctrine\ORM\Tools\Console\MetadataFilter;
-use Doctrine\ORM\Tools\Export\ClassMetadataExporter;
-use Doctrine\ORM\Tools\EntityGenerator;
-use Doctrine\ORM\Tools\DisconnectedClassMetadataFactory;
-use Doctrine\ORM\Mapping\Driver\DatabaseDriver;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console,
+    Doctrine\ORM\Tools\Console\MetadataFilter,
+    Doctrine\ORM\Tools\Export\ClassMetadataExporter,
+    Doctrine\ORM\Tools\EntityGenerator,
+    Doctrine\ORM\Tools\DisconnectedClassMetadataFactory;
 
 /**
  * Command to convert your mapping information between the various formats.
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Benjamin Eberlei <kontakt@beberlei.de>
@@ -40,10 +38,10 @@ use Symfony\Component\Console\Command\Command;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class ConvertMappingCommand extends Command
+class ConvertMappingCommand extends Console\Command\Command
 {
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
     protected function configure()
     {
@@ -86,10 +84,10 @@ class ConvertMappingCommand extends Command
 Convert mapping information between supported formats.
 
 This is an execute <info>one-time</info> command. It should not be necessary for
-you to call this method multiple times, especially when using the <comment>--from-database</comment>
+you to call this method multiple times, escpecially when using the <comment>--from-database</comment>
 flag.
 
-Converting an existing database schema into mapping files only solves about 70-80%
+Converting an existing databsae schema into mapping files only solves about 70-80%
 of the necessary mapping information. Additionally the detection from an existing
 database cannot detect inverse associations, inheritance types,
 entities with foreign keys as primary keys and many of the
@@ -103,14 +101,14 @@ EOT
     }
 
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $em = $this->getHelper('em')->getEntityManager();
 
         if ($input->getOption('from-database') === true) {
-            $databaseDriver = new DatabaseDriver(
+            $databaseDriver = new \Doctrine\ORM\Mapping\Driver\DatabaseDriver(
                 $em->getConnection()->getSchemaManager()
             );
 
@@ -138,9 +136,7 @@ EOT
             throw new \InvalidArgumentException(
                 sprintf("Mapping destination directory '<info>%s</info>' does not exist.", $input->getArgument('dest-path'))
             );
-        }
-
-        if ( ! is_writable($destPath)) {
+        } else if ( ! is_writable($destPath)) {
             throw new \InvalidArgumentException(
                 sprintf("Mapping destination directory '<info>%s</info>' does not have write permissions.", $destPath)
             );
@@ -149,7 +145,7 @@ EOT
         $toType = strtolower($input->getArgument('to-type'));
 
         $exporter = $this->getExporter($toType, $destPath);
-        $exporter->setOverwriteExistingFiles($input->getOption('force'));
+        $exporter->setOverwriteExistingFiles( ($input->getOption('force') !== false) );
 
         if ($toType == 'annotation') {
             $entityGenerator = new EntityGenerator();
@@ -164,26 +160,20 @@ EOT
 
         if (count($metadata)) {
             foreach ($metadata as $class) {
-                $output->writeln(sprintf('Processing entity "<info>%s</info>"', $class->name));
+                $output->write(sprintf('Processing entity "<info>%s</info>"', $class->name) . PHP_EOL);
             }
 
             $exporter->setMetadata($metadata);
             $exporter->export();
 
-            $output->writeln(PHP_EOL . sprintf(
-                'Exporting "<info>%s</info>" mapping information to "<info>%s</info>"', $toType, $destPath
+            $output->write(PHP_EOL . sprintf(
+                'Exporting "<info>%s</info>" mapping information to "<info>%s</info>"' . PHP_EOL, $toType, $destPath
             ));
         } else {
-            $output->writeln('No Metadata Classes to process.');
+            $output->write('No Metadata Classes to process.' . PHP_EOL);
         }
     }
 
-    /**
-     * @param string $toType
-     * @param string $destPath
-     *
-     * @return \Doctrine\ORM\Tools\Export\Driver\AbstractExporter
-     */
     protected function getExporter($toType, $destPath)
     {
         $cme = new ClassMetadataExporter();

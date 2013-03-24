@@ -19,14 +19,14 @@
 
 namespace Doctrine\ORM\Tools\Console\Command\ClearCache;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\Common\Cache\ApcCache;
+use Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console,
+    Doctrine\Common\Cache;
 
 /**
  * Command to clear the query cache of the various cache drivers.
+ *
  *
  * @link    www.doctrine-project.org
  * @since   2.0
@@ -35,10 +35,10 @@ use Doctrine\Common\Cache\ApcCache;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class QueryCommand extends Command
+class QueryCommand extends Console\Command\Command
 {
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
     protected function configure()
     {
@@ -73,9 +73,9 @@ EOT
     }
 
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $em = $this->getHelper('em')->getEntityManager();
         $cacheDriver = $em->getConfiguration()->getQueryCacheImpl();
@@ -84,7 +84,7 @@ EOT
             throw new \InvalidArgumentException('No Query cache driver is configured on given EntityManager.');
         }
 
-        if ($cacheDriver instanceof ApcCache) {
+        if ($cacheDriver instanceof Cache\ApcCache) {
             throw new \LogicException("Cannot clear APC Cache from Console, its shared in the Webserver memory and not accessible from the CLI.");
         }
 

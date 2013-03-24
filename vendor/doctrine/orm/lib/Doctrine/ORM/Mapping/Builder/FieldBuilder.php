@@ -17,6 +17,7 @@
  * <http://www.doctrine-project.org>.
  */
 
+
 namespace Doctrine\ORM\Mapping\Builder;
 
 /**
@@ -33,12 +34,10 @@ class FieldBuilder
      * @var ClassMetadataBuilder
      */
     private $builder;
-
     /**
      * @var array
      */
     private $mapping;
-
     /**
      * @var bool
      */
@@ -55,8 +54,9 @@ class FieldBuilder
     private $sequenceDef;
 
     /**
+     *
      * @param ClassMetadataBuilder $builder
-     * @param array                $mapping
+     * @param array $mapping
      */
     public function __construct(ClassMetadataBuilder $builder, array $mapping)
     {
@@ -65,10 +65,9 @@ class FieldBuilder
     }
 
     /**
-     * Sets length.
+     * Set length.
      *
      * @param int $length
-     *
      * @return FieldBuilder
      */
     public function length($length)
@@ -78,10 +77,9 @@ class FieldBuilder
     }
 
     /**
-     * Sets nullable.
+     * Set nullable
      *
-     * @param bool $flag
-     *
+     * @param bool
      * @return FieldBuilder
      */
     public function nullable($flag = true)
@@ -91,10 +89,9 @@ class FieldBuilder
     }
 
     /**
-     * Sets Unique.
+     * Set Unique
      *
-     * @param bool $flag
-     *
+     * @param bool
      * @return FieldBuilder
      */
     public function unique($flag = true)
@@ -104,10 +101,9 @@ class FieldBuilder
     }
 
     /**
-     * Sets column name.
+     * Set column name
      *
      * @param string $name
-     *
      * @return FieldBuilder
      */
     public function columnName($name)
@@ -117,10 +113,9 @@ class FieldBuilder
     }
 
     /**
-     * Sets Precision.
+     * Set Precision
      *
-     * @param int $p
-     *
+     * @param  int $p
      * @return FieldBuilder
      */
     public function precision($p)
@@ -130,10 +125,9 @@ class FieldBuilder
     }
 
     /**
-     * Sets scale.
+     * Set scale.
      *
      * @param int $s
-     *
      * @return FieldBuilder
      */
     public function scale($s)
@@ -143,7 +137,7 @@ class FieldBuilder
     }
 
     /**
-     * Sets field as primary key.
+     * Set field as primary key.
      *
      * @return FieldBuilder
      */
@@ -154,8 +148,7 @@ class FieldBuilder
     }
 
     /**
-     * @param string $strategy
-     *
+     * @param  int $strategy
      * @return FieldBuilder
      */
     public function generatedValue($strategy = 'AUTO')
@@ -165,7 +158,7 @@ class FieldBuilder
     }
 
     /**
-     * Sets field versioned.
+     * Set field versioned
      *
      * @return FieldBuilder
      */
@@ -176,12 +169,11 @@ class FieldBuilder
     }
 
     /**
-     * Sets Sequence Generator.
+     * Set Sequence Generator
      *
      * @param string $sequenceName
-     * @param int    $allocationSize
-     * @param int    $initialValue
-     *
+     * @param int $allocationSize
+     * @param int $initialValue
      * @return FieldBuilder
      */
     public function setSequenceGenerator($sequenceName, $allocationSize = 1, $initialValue = 1)
@@ -195,10 +187,9 @@ class FieldBuilder
     }
 
     /**
-     * Sets column definition.
+     * Set column definition.
      *
      * @param string $def
-     *
      * @return FieldBuilder
      */
     public function columnDefinition($def)
@@ -208,7 +199,7 @@ class FieldBuilder
     }
 
     /**
-     * Finalizes this field and attach it to the ClassMetadata.
+     * Finalize this field and attach it to the ClassMetadata.
      *
      * Without this call a FieldBuilder has no effect on the ClassMetadata.
      *

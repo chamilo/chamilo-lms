@@ -36,10 +36,6 @@ class LocateFunction extends FunctionNode
 {
     public $firstStringPrimary;
     public $secondStringPrimary;
-
-    /**
-     * @var \Doctrine\ORM\Query\AST\SimpleArithmeticExpression|bool
-     */
     public $simpleArithmeticExpression = false;
 
     /**
@@ -82,3 +78,4 @@ class LocateFunction extends FunctionNode
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 }
+

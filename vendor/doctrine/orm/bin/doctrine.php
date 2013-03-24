@@ -13,47 +13,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license. For more information, see
+ * and is licensed under the LGPL. For more information, see
  * <http://www.doctrine-project.org>.
  */
 
-use Symfony\Component\Console\Helper\HelperSet;
-use Doctrine\ORM\Tools\Console\ConsoleRunner;
-
 (@include_once __DIR__ . '/../vendor/autoload.php') || @include_once __DIR__ . '/../../../autoload.php';
+$configFile = getcwd() . DIRECTORY_SEPARATOR . 'cli-config.php';
 
-$directories = array(getcwd(), getcwd() . DIRECTORY_SEPARATOR . 'config');
-
-$configFile = null;
-foreach ($directories as $directory) {
-    $configFile = $directory . DIRECTORY_SEPARATOR . 'cli-config.php';
-
-    if (file_exists($configFile)) {
-        break;
+$helperSet = null;
+if (file_exists($configFile)) {
+    if ( ! is_readable($configFile)) {
+        trigger_error(
+            'Configuration file [' . $configFile . '] does not have read permission.', E_ERROR
+        );
     }
-}
 
-if ( ! file_exists($configFile)) {
-    ConsoleRunner::printCliConfigTemplate();
-    exit(1);
-}
+    require $configFile;
 
-if ( ! is_readable($configFile)) {
-    echo 'Configuration file [' . $configFile . '] does not have read permission.' . "\n";
-    exit(1);
-}
-
-$commands = array();
-
-$helperSet = require $configFile;
-
-if ( ! ($helperSet instanceof HelperSet)) {
     foreach ($GLOBALS as $helperSetCandidate) {
-        if ($helperSetCandidate instanceof HelperSet) {
+        if ($helperSetCandidate instanceof \Symfony\Component\Console\Helper\HelperSet) {
             $helperSet = $helperSetCandidate;
             break;
         }
     }
 }
 
-\Doctrine\ORM\Tools\Console\ConsoleRunner::run($helperSet, $commands);
+$helperSet = ($helperSet) ?: new \Symfony\Component\Console\Helper\HelperSet();
+
+\Doctrine\ORM\Tools\Console\ConsoleRunner::run($helperSet);

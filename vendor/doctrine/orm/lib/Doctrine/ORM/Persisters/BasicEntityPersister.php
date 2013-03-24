@@ -19,6 +19,8 @@
 
 namespace Doctrine\ORM\Persisters;
 
+use PDO;
+
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Connection;
@@ -31,13 +33,15 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Events;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 
 /**
- * A BasicEntityPersister maps an entity to a single table in a relational database.
+ * A BasicEntityPersiter maps an entity to a single table in a relational database.
  *
  * A persister is always responsible for a single entity type.
  *
@@ -75,7 +79,6 @@ use Doctrine\Common\Collections\Expr\Comparison;
  * @author Giorgio Sironi <piccoloprincipeazzurro@gmail.com>
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @author Alexander <iam.asm89@gmail.com>
- * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  * @since 2.0
  */
 class BasicEntityPersister
@@ -84,16 +87,15 @@ class BasicEntityPersister
      * @var array
      */
     static private $comparisonMap = array(
-        Comparison::EQ       => '= %s',
-        Comparison::IS       => 'IS %s',
-        Comparison::NEQ      => '!= %s',
-        Comparison::GT       => '> %s',
-        Comparison::GTE      => '>= %s',
-        Comparison::LT       => '< %s',
-        Comparison::LTE      => '<= %s',
-        Comparison::IN       => 'IN (%s)',
-        Comparison::NIN      => 'NOT IN (%s)',
-        Comparison::CONTAINS => 'LIKE %s',
+        Comparison::EQ  => '= %s',
+        Comparison::IS  => 'IS %s',
+        Comparison::NEQ => '!= %s',
+        Comparison::GT  => '> %s',
+        Comparison::GTE => '>= %s',
+        Comparison::LT  => '< %s',
+        Comparison::LTE => '<= %s',
+        Comparison::IN  => 'IN (%s)',
+        Comparison::NIN => 'NOT IN (%s)',
     );
 
     /**
@@ -101,35 +103,35 @@ class BasicEntityPersister
      *
      * @var \Doctrine\ORM\Mapping\ClassMetadata
      */
-    protected $class;
+    protected $_class;
 
     /**
      * The underlying DBAL Connection of the used EntityManager.
      *
      * @var \Doctrine\DBAL\Connection $conn
      */
-    protected $conn;
+    protected $_conn;
 
     /**
      * The database platform.
      *
      * @var \Doctrine\DBAL\Platforms\AbstractPlatform
      */
-    protected $platform;
+    protected $_platform;
 
     /**
      * The EntityManager instance.
      *
      * @var \Doctrine\ORM\EntityManager
      */
-    protected $em;
+    protected $_em;
 
     /**
      * Queued inserts.
      *
      * @var array
      */
-    protected $queuedInserts = array();
+    protected $_queuedInserts = array();
 
     /**
      * ResultSetMapping that is used for all queries. Is generated lazily once per request.
@@ -138,26 +140,24 @@ class BasicEntityPersister
      *
      * @var Query\ResultSetMapping
      */
-    protected $rsm;
+    protected $_rsm;
 
     /**
      * The map of column names to DBAL mapping types of all prepared columns used
      * when INSERTing or UPDATEing an entity.
      *
      * @var array
-     *
-     * @see prepareInsertData($entity)
-     * @see prepareUpdateData($entity)
+     * @see _prepareInsertData($entity)
+     * @see _prepareUpdateData($entity)
      */
-    protected $columnTypes = array();
+    protected $_columnTypes = array();
 
     /**
      * The map of quoted column names.
      *
      * @var array
-     *
-     * @see prepareInsertData($entity)
-     * @see prepareUpdateData($entity)
+     * @see _prepareInsertData($entity)
+     * @see _prepareUpdateData($entity)
      */
     protected $quotedColumns = array();
 
@@ -167,7 +167,7 @@ class BasicEntityPersister
      *
      * @var string
      */
-    private $insertSql;
+    private $_insertSql;
 
     /**
      * The SELECT column list SQL fragment used for querying entities by this persister.
@@ -175,29 +175,29 @@ class BasicEntityPersister
      *
      * @var string
      */
-    protected $selectColumnListSql;
+    protected $_selectColumnListSql;
 
     /**
-     * The JOIN SQL fragment used to eagerly load all many-to-one and one-to-one
-     * associations configured as FETCH_EAGER, as well as all inverse one-to-one associations.
+     * The JOIN SQL fragement used to eagerly load all many-to-one and one-to-one
+     * associations configured as FETCH_EAGER, aswell as all inverse one-to-one associations.
      *
      * @var string
      */
-    protected $selectJoinSql;
+    protected $_selectJoinSql;
 
     /**
      * Counter for creating unique SQL table and column aliases.
      *
      * @var integer
      */
-    protected $sqlAliasCounter = 0;
+    protected $_sqlAliasCounter = 0;
 
     /**
      * Map from class names (FQCN) to the corresponding generated SQL table aliases.
      *
      * @var array
      */
-    protected $sqlTableAliases = array();
+    protected $_sqlTableAliases = array();
 
     /**
      * The quote strategy.
@@ -210,15 +210,15 @@ class BasicEntityPersister
      * Initializes a new <tt>BasicEntityPersister</tt> that uses the given EntityManager
      * and persists instances of the class described by the given ClassMetadata descriptor.
      *
-     * @param \Doctrine\ORM\EntityManager         $em
+     * @param \Doctrine\ORM\EntityManager $em
      * @param \Doctrine\ORM\Mapping\ClassMetadata $class
      */
     public function __construct(EntityManager $em, ClassMetadata $class)
     {
-        $this->em               = $em;
-        $this->class            = $class;
-        $this->conn             = $em->getConnection();
-        $this->platform         = $this->conn->getDatabasePlatform();
+        $this->_em              = $em;
+        $this->_class           = $class;
+        $this->_conn            = $em->getConnection();
+        $this->_platform        = $this->_conn->getDatabasePlatform();
         $this->quoteStrategy    = $em->getConfiguration()->getQuoteStrategy();
     }
 
@@ -227,7 +227,7 @@ class BasicEntityPersister
      */
     public function getClassMetadata()
     {
-        return $this->class;
+        return $this->_class;
     }
 
     /**
@@ -235,12 +235,10 @@ class BasicEntityPersister
      * The entity remains queued until {@link executeInserts} is invoked.
      *
      * @param object $entity The entity to queue for insertion.
-     *
-     * @return void
      */
     public function addInsert($entity)
     {
-        $this->queuedInserts[spl_object_hash($entity)] = $entity;
+        $this->_queuedInserts[spl_object_hash($entity)] = $entity;
     }
 
     /**
@@ -254,44 +252,44 @@ class BasicEntityPersister
      */
     public function executeInserts()
     {
-        if ( ! $this->queuedInserts) {
-            return array();
+        if ( ! $this->_queuedInserts) {
+            return;
         }
 
-        $postInsertIds  = array();
-        $idGenerator    = $this->class->idGenerator;
-        $isPostInsertId = $idGenerator->isPostInsertGenerator();
+        $postInsertIds = array();
+        $idGen = $this->_class->idGenerator;
+        $isPostInsertId = $idGen->isPostInsertGenerator();
 
-        $stmt       = $this->conn->prepare($this->getInsertSQL());
-        $tableName  = $this->class->getTableName();
+        $stmt = $this->_conn->prepare($this->_getInsertSQL());
+        $tableName = $this->_class->getTableName();
 
-        foreach ($this->queuedInserts as $entity) {
-            $insertData = $this->prepareInsertData($entity);
+        foreach ($this->_queuedInserts as $entity) {
+            $insertData = $this->_prepareInsertData($entity);
 
             if (isset($insertData[$tableName])) {
                 $paramIndex = 1;
 
                 foreach ($insertData[$tableName] as $column => $value) {
-                    $stmt->bindValue($paramIndex++, $value, $this->columnTypes[$column]);
+                    $stmt->bindValue($paramIndex++, $value, $this->_columnTypes[$column]);
                 }
             }
 
             $stmt->execute();
 
             if ($isPostInsertId) {
-                $id = $idGenerator->generate($this->em, $entity);
+                $id = $idGen->generate($this->_em, $entity);
                 $postInsertIds[$id] = $entity;
             } else {
-                $id = $this->class->getIdentifierValues($entity);
+                $id = $this->_class->getIdentifierValues($entity);
             }
 
-            if ($this->class->isVersioned) {
+            if ($this->_class->isVersioned) {
                 $this->assignDefaultVersionValue($entity, $id);
             }
         }
 
         $stmt->closeCursor();
-        $this->queuedInserts = array();
+        $this->_queuedInserts = array();
 
         return $postInsertIds;
     }
@@ -302,76 +300,66 @@ class BasicEntityPersister
      * entities version field.
      *
      * @param object $entity
-     * @param mixed  $id
-     *
-     * @return void
+     * @param mixed $id
      */
     protected function assignDefaultVersionValue($entity, $id)
     {
-        $value = $this->fetchVersionValue($this->class, $id);
-
-        $this->class->setFieldValue($entity, $this->class->versionField, $value);
+        $value = $this->fetchVersionValue($this->_class, $id);
+        $this->_class->setFieldValue($entity, $this->_class->versionField, $value);
     }
 
     /**
-     * Fetches the current version value of a versioned entity.
+     * Fetch the current version value of a versioned entity.
      *
      * @param \Doctrine\ORM\Mapping\ClassMetadata $versionedClass
-     * @param mixed                               $id
-     *
+     * @param mixed $id
      * @return mixed
      */
     protected function fetchVersionValue($versionedClass, $id)
     {
-        $versionField   = $versionedClass->versionField;
-        $tableName      = $this->quoteStrategy->getTableName($versionedClass, $this->platform);
-        $identifier     = $this->quoteStrategy->getIdentifierColumnNames($versionedClass, $this->platform);
-        $columnName     = $this->quoteStrategy->getColumnName($versionField, $versionedClass, $this->platform);
+        $versionField = $versionedClass->versionField;
+        $identifier   = $this->quoteStrategy->getIdentifierColumnNames($versionedClass, $this->_platform);
+
+        $versionFieldColumnName = $this->quoteStrategy->getColumnName($versionField, $versionedClass, $this->_platform);
 
         //FIXME: Order with composite keys might not be correct
-        $sql = 'SELECT ' . $columnName
-             . ' FROM '  . $tableName
+        $sql = 'SELECT ' . $versionFieldColumnName
+             . ' FROM ' . $this->quoteStrategy->getTableName($versionedClass, $this->_platform)
              . ' WHERE ' . implode(' = ? AND ', $identifier) . ' = ?';
+        $value = $this->_conn->fetchColumn($sql, array_values((array)$id));
 
-        $value = $this->conn->fetchColumn($sql, array_values((array) $id));
-
-        return Type::getType($versionedClass->fieldMappings[$versionField]['type'])->convertToPHPValue($value, $this->platform);
+        return Type::getType($versionedClass->fieldMappings[$versionField]['type'])->convertToPHPValue($value, $this->_platform);
     }
 
     /**
      * Updates a managed entity. The entity is updated according to its current changeset
      * in the running UnitOfWork. If there is no changeset, nothing is updated.
      *
-     * The data to update is retrieved through {@link prepareUpdateData}.
+     * The data to update is retrieved through {@link _prepareUpdateData}.
      * Subclasses that override this method are supposed to obtain the update data
-     * in the same way, through {@link prepareUpdateData}.
+     * in the same way, through {@link _prepareUpdateData}.
      *
      * Subclasses are also supposed to take care of versioning when overriding this method,
-     * if necessary. The {@link updateTable} method can be used to apply the data retrieved
-     * from {@prepareUpdateData} on the target tables, thereby optionally applying versioning.
+     * if necessary. The {@link _updateTable} method can be used to apply the data retrieved
+     * from {@_prepareUpdateData} on the target tables, thereby optionally applying versioning.
      *
      * @param object $entity The entity to update.
-     *
-     * @return void
      */
     public function update($entity)
     {
-        $tableName  = $this->class->getTableName();
-        $updateData = $this->prepareUpdateData($entity);
+        $updateData = $this->_prepareUpdateData($entity);
+        $tableName  = $this->_class->getTableName();
 
-        if ( ! isset($updateData[$tableName]) || ! ($data = $updateData[$tableName])) {
-            return;
-        }
+        if (isset($updateData[$tableName]) && $updateData[$tableName]) {
+            $this->_updateTable(
+                $entity, $this->quoteStrategy->getTableName($this->_class, $this->_platform),
+                $updateData[$tableName], $this->_class->isVersioned
+            );
 
-        $isVersioned     = $this->class->isVersioned;
-        $quotedTableName = $this->quoteStrategy->getTableName($this->class, $this->platform);
-
-        $this->updateTable($entity, $quotedTableName, $data, $isVersioned);
-
-        if ($isVersioned) {
-            $id = $this->em->getUnitOfWork()->getEntityIdentifier($entity);
-
-            $this->assignDefaultVersionValue($entity, $id);
+            if ($this->_class->isVersioned) {
+                $id = $this->_em->getUnitOfWork()->getEntityIdentifier($entity);
+                $this->assignDefaultVersionValue($entity, $id);
+            }
         }
     }
 
@@ -379,106 +367,84 @@ class BasicEntityPersister
      * Performs an UPDATE statement for an entity on a specific table.
      * The UPDATE can optionally be versioned, which requires the entity to have a version field.
      *
-     * @param object  $entity          The entity object being updated.
-     * @param string  $quotedTableName The quoted name of the table to apply the UPDATE on.
-     * @param array   $updateData      The map of columns to update (column => value).
-     * @param boolean $versioned       Whether the UPDATE should be versioned.
-     *
-     * @return void
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @param object $entity The entity object being updated.
+     * @param string $quotedTableName The quoted name of the table to apply the UPDATE on.
+     * @param array $updateData The map of columns to update (column => value).
+     * @param boolean $versioned Whether the UPDATE should be versioned.
      */
-    protected final function updateTable($entity, $quotedTableName, array $updateData, $versioned = false)
+    protected final function _updateTable($entity, $quotedTableName, array $updateData, $versioned = false)
     {
-        $set    = array();
-        $types  = array();
-        $params = array();
+        $set = $params = $types = array();
 
         foreach ($updateData as $columnName => $value) {
+            $column = $columnName;
             $placeholder = '?';
-            $column      = $columnName;
 
-            switch (true) {
-                case isset($this->class->fieldNames[$columnName]):
-                    $fieldName  = $this->class->fieldNames[$columnName];
-                    $column     = $this->quoteStrategy->getColumnName($fieldName, $this->class, $this->platform);
+            if (isset($this->_class->fieldNames[$columnName])) {
+                $column = $this->quoteStrategy->getColumnName($this->_class->fieldNames[$columnName], $this->_class, $this->_platform);
 
-                    if (isset($this->class->fieldMappings[$fieldName]['requireSQLConversion'])) {
-                        $type        = Type::getType($this->columnTypes[$columnName]);
-                        $placeholder = $type->convertToDatabaseValueSQL('?', $this->platform);
-                    }
-
-                    break;
-
-                case isset($this->quotedColumns[$columnName]):
-                    $column = $this->quotedColumns[$columnName];
-
-                    break;
+                if (isset($this->_class->fieldMappings[$this->_class->fieldNames[$columnName]]['requireSQLConversion'])) {
+                    $type = Type::getType($this->_columnTypes[$columnName]);
+                    $placeholder = $type->convertToDatabaseValueSQL('?', $this->_platform);
+                }
+            } else if (isset($this->quotedColumns[$columnName])) {
+                $column = $this->quotedColumns[$columnName];
             }
- 
-            $params[]   = $value;
-            $set[]      = $column . ' = ' . $placeholder;
-            $types[]    = $this->columnTypes[$columnName];
+
+            $set[] = $column . ' = ' . $placeholder;
+            $params[] = $value;
+            $types[] = $this->_columnTypes[$columnName];
         }
 
-        $where      = array();
-        $identifier = $this->em->getUnitOfWork()->getEntityIdentifier($entity);
+        $where = array();
+        $id = $this->_em->getUnitOfWork()->getEntityIdentifier($entity);
 
-        foreach ($this->class->identifier as $idField) {
-            if ( ! isset($this->class->associationMappings[$idField])) {
+        foreach ($this->_class->identifier as $idField) {
+            if (isset($this->_class->associationMappings[$idField])) {
+                $targetMapping = $this->_em->getClassMetadata($this->_class->associationMappings[$idField]['targetEntity']);
+                $where[] = $this->_class->associationMappings[$idField]['joinColumns'][0]['name'];
+                $params[] = $id[$idField];
 
-                $params[]   = $identifier[$idField];
-                $types[]    = $this->class->fieldMappings[$idField]['type'];
-                $where[]    = $this->quoteStrategy->getColumnName($idField, $this->class, $this->platform);
+                switch (true) {
+                    case (isset($targetMapping->fieldMappings[$targetMapping->identifier[0]])):
+                        $types[] = $targetMapping->fieldMappings[$targetMapping->identifier[0]]['type'];
+                        break;
 
-                continue;
+                    case (isset($targetMapping->associationMappings[$targetMapping->identifier[0]])):
+                        $types[] = $targetMapping->associationMappings[$targetMapping->identifier[0]]['type'];
+                        break;
+
+                    default:
+                        throw ORMException::unrecognizedField($targetMapping->identifier[0]);
+                }
+            } else {
+                $where[] = $this->quoteStrategy->getColumnName($idField, $this->_class, $this->_platform);
+                $params[] = $id[$idField];
+                $types[] = $this->_class->fieldMappings[$idField]['type'];
             }
-
-            $params[]       = $identifier[$idField];
-            $where[]        = $this->class->associationMappings[$idField]['joinColumns'][0]['name'];
-            $targetMapping  = $this->em->getClassMetadata($this->class->associationMappings[$idField]['targetEntity']);
-
-            switch (true) {
-                case (isset($targetMapping->fieldMappings[$targetMapping->identifier[0]])):
-                    $types[] = $targetMapping->fieldMappings[$targetMapping->identifier[0]]['type'];
-                    break;
-
-                case (isset($targetMapping->associationMappings[$targetMapping->identifier[0]])):
-                    $types[] = $targetMapping->associationMappings[$targetMapping->identifier[0]]['type'];
-                    break;
-
-                default:
-                    throw ORMException::unrecognizedField($targetMapping->identifier[0]);
-            }
-
         }
 
         if ($versioned) {
-            $versionField       = $this->class->versionField;
-            $versionFieldType   = $this->class->fieldMappings[$versionField]['type'];
-            $versionColumn      = $this->quoteStrategy->getColumnName($versionField, $this->class, $this->platform);
+            $versionField = $this->_class->versionField;
+            $versionFieldType = $this->_class->fieldMappings[$versionField]['type'];
+            $versionColumn = $this->quoteStrategy->getColumnName($versionField, $this->_class, $this->_platform);
 
-            $where[]    = $versionColumn;
-            $types[]    = $this->class->fieldMappings[$versionField]['type'];
-            $params[]   = $this->class->reflFields[$versionField]->getValue($entity);
-
-            switch ($versionFieldType) {
-                case Type::INTEGER:
-                    $set[] = $versionColumn . ' = ' . $versionColumn . ' + 1';
-                    break;
-
-                case Type::DATETIME:
-                    $set[] = $versionColumn . ' = CURRENT_TIMESTAMP';
-                    break;
+            if ($versionFieldType == Type::INTEGER) {
+                $set[] = $versionColumn . ' = ' . $versionColumn . ' + 1';
+            } else if ($versionFieldType == Type::DATETIME) {
+                $set[] = $versionColumn . ' = CURRENT_TIMESTAMP';
             }
+
+            $where[] = $versionColumn;
+            $params[] = $this->_class->reflFields[$versionField]->getValue($entity);
+            $types[] = $this->_class->fieldMappings[$versionField]['type'];
         }
 
         $sql = 'UPDATE ' . $quotedTableName
              . ' SET ' . implode(', ', $set)
              . ' WHERE ' . implode(' = ? AND ', $where) . ' = ?';
 
-        $result = $this->conn->executeUpdate($sql, $params, $types);
+        $result = $this->_conn->executeUpdate($sql, $params, $types);
 
         if ($versioned && ! $result) {
             throw OptimisticLockException::lockFailed($entity);
@@ -487,61 +453,55 @@ class BasicEntityPersister
 
     /**
      * @todo Add check for platform if it supports foreign keys/cascading.
-     *
      * @param array $identifier
-     *
      * @return void
      */
     protected function deleteJoinTableRecords($identifier)
     {
-        foreach ($this->class->associationMappings as $mapping) {
-            if ($mapping['type'] !== ClassMetadata::MANY_TO_MANY) {
-                continue;
-            }
+        foreach ($this->_class->associationMappings as $mapping) {
+            if ($mapping['type'] == ClassMetadata::MANY_TO_MANY) {
+                // @Todo this only covers scenarios with no inheritance or of the same level. Is there something
+                // like self-referential relationship between different levels of an inheritance hierachy? I hope not!
+                $selfReferential = ($mapping['targetEntity'] == $mapping['sourceEntity']);
+                $otherKeys       = array();
+                $keys            = array();
 
-            // @Todo this only covers scenarios with no inheritance or of the same level. Is there something
-            // like self-referential relationship between different levels of an inheritance hierarchy? I hope not!
-            $selfReferential = ($mapping['targetEntity'] == $mapping['sourceEntity']);
-            $class           = $this->class;
-            $association     = $mapping;
-            $otherColumns    = array();
-            $otherKeys       = array();
-            $keys            = array();
+                if ( ! $mapping['isOwningSide']) {
+                    $relatedClass   = $this->_em->getClassMetadata($mapping['targetEntity']);
+                    $mapping        = $relatedClass->associationMappings[$mapping['mappedBy']];
 
-            if ( ! $mapping['isOwningSide']) {
-                $class       = $this->em->getClassMetadata($mapping['targetEntity']);
-                $association = $class->associationMappings[$mapping['mappedBy']];
-            }
+                    foreach ($mapping['joinTable']['inverseJoinColumns'] as $joinColumn) {
+                        $keys[] = $this->quoteStrategy->getJoinColumnName($joinColumn, $relatedClass, $this->_platform);
+                    }
 
-            $joinColumns = $mapping['isOwningSide']
-                ? $association['joinTable']['joinColumns']
-                : $association['joinTable']['inverseJoinColumns'];
+                    if ($selfReferential) {
+                        foreach ($mapping['joinTable']['joinColumns'] as $joinColumn) {
+                            $otherKeys[] = $this->quoteStrategy->getJoinColumnName($joinColumn, $relatedClass, $this->_platform);
+                        }
+                    }
+                } else {
 
+                    foreach ($mapping['joinTable']['joinColumns'] as $joinColumn) {
+                        $keys[] = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->_class, $this->_platform);
+                    }
 
-            if ($selfReferential) {
-                $otherColumns = (! $mapping['isOwningSide'])
-                    ? $association['joinTable']['joinColumns']
-                    : $association['joinTable']['inverseJoinColumns'];
-            }
+                    if ($selfReferential) {
+                        foreach ($mapping['joinTable']['inverseJoinColumns'] as $joinColumn) {
+                            $otherKeys[] = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->_class, $this->_platform);
+                        }
+                    }
+                }
 
-            foreach ($joinColumns as $joinColumn) {
-                $keys[] = $this->quoteStrategy->getJoinColumnName($joinColumn, $class, $this->platform);
-            }
+                if ( ! isset($mapping['isOnDeleteCascade'])) {
 
-            foreach ($otherColumns as $joinColumn) {
-                $otherKeys[] = $this->quoteStrategy->getJoinColumnName($joinColumn, $class, $this->platform);
-            }
+                    $joinTableName = $this->quoteStrategy->getJoinTableName($mapping, $this->_class, $this->_platform);
 
-            if (isset($mapping['isOnDeleteCascade'])) {
-                continue;
-            }
+                    $this->_conn->delete($joinTableName, array_combine($keys, $identifier));
 
-            $joinTableName = $this->quoteStrategy->getJoinTableName($association, $this->class, $this->platform);
-
-            $this->conn->delete($joinTableName, array_combine($keys, $identifier));
-
-            if ($selfReferential) {
-                $this->conn->delete($joinTableName, array_combine($otherKeys, $identifier));
+                    if ($selfReferential) {
+                        $this->_conn->delete($joinTableName, array_combine($otherKeys, $identifier));
+                    }
+                }
             }
         }
     }
@@ -555,18 +515,16 @@ class BasicEntityPersister
      * Subclasses may override this method to customize the semantics of entity deletion.
      *
      * @param object $entity The entity to delete.
-     *
-     * @return void
      */
     public function delete($entity)
     {
-        $identifier = $this->em->getUnitOfWork()->getEntityIdentifier($entity);
-        $tableName  = $this->quoteStrategy->getTableName($this->class, $this->platform);
-        $idColumns  = $this->quoteStrategy->getIdentifierColumnNames($this->class, $this->platform);
-        $id         = array_combine($idColumns, $identifier);
+        $identifier = $this->_em->getUnitOfWork()->getEntityIdentifier($entity);
 
         $this->deleteJoinTableRecords($identifier);
-        $this->conn->delete($tableName, $id);
+
+        $id = array_combine($this->quoteStrategy->getIdentifierColumnNames($this->_class, $this->_platform), $identifier);
+
+        $this->_conn->delete($this->quoteStrategy->getTableName($this->_class, $this->_platform), $id);
     }
 
     /**
@@ -587,16 +545,15 @@ class BasicEntityPersister
      * </code>
      *
      * @param object $entity The entity for which to prepare the data.
-     *
      * @return array The prepared data.
      */
-    protected function prepareUpdateData($entity)
+    protected function _prepareUpdateData($entity)
     {
         $result = array();
-        $uow    = $this->em->getUnitOfWork();
+        $uow = $this->_em->getUnitOfWork();
 
-        if (($versioned = $this->class->isVersioned) != false) {
-            $versionField = $this->class->versionField;
+        if (($versioned = $this->_class->isVersioned) != false) {
+            $versionField = $this->_class->versionField;
         }
 
         foreach ($uow->getEntityChangeSet($entity) as $field => $change) {
@@ -606,65 +563,56 @@ class BasicEntityPersister
 
             $newVal = $change[1];
 
-            if ( ! isset($this->class->associationMappings[$field])) {
+            if (isset($this->_class->associationMappings[$field])) {
+                $assoc = $this->_class->associationMappings[$field];
 
-                $columnName = $this->class->columnNames[$field];
-                $this->columnTypes[$columnName] = $this->class->fieldMappings[$field]['type'];
+                // Only owning side of x-1 associations can have a FK column.
+                if ( ! $assoc['isOwningSide'] || ! ($assoc['type'] & ClassMetadata::TO_ONE)) {
+                    continue;
+                }
+
+                if ($newVal !== null) {
+                    $oid = spl_object_hash($newVal);
+
+                    if (isset($this->_queuedInserts[$oid]) || $uow->isScheduledForInsert($newVal)) {
+                        // The associated entity $newVal is not yet persisted, so we must
+                        // set $newVal = null, in order to insert a null value and schedule an
+                        // extra update on the UnitOfWork.
+                        $uow->scheduleExtraUpdate($entity, array(
+                            $field => array(null, $newVal)
+                        ));
+                        $newVal = null;
+                    }
+                }
+
+                if ($newVal !== null) {
+                    $newValId = $uow->getEntityIdentifier($newVal);
+                }
+
+                $targetClass = $this->_em->getClassMetadata($assoc['targetEntity']);
+                $owningTable = $this->getOwningTable($field);
+
+                foreach ($assoc['joinColumns'] as $joinColumn) {
+                    $sourceColumn = $joinColumn['name'];
+                    $targetColumn = $joinColumn['referencedColumnName'];
+                    $quotedColumn = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->_class, $this->_platform);
+
+                    $this->quotedColumns[$sourceColumn] = $quotedColumn;
+
+                    if ($newVal === null) {
+                        $result[$owningTable][$sourceColumn] = null;
+                    } else if ($targetClass->containsForeignIdentifier) {
+                        $result[$owningTable][$sourceColumn] = $newValId[$targetClass->getFieldForColumn($targetColumn)];
+                    } else {
+                        $result[$owningTable][$sourceColumn] = $newValId[$targetClass->fieldNames[$targetColumn]];
+                    }
+
+                    $this->_columnTypes[$sourceColumn] = $targetClass->getTypeOfColumn($targetColumn);
+                }
+            } else {
+                $columnName = $this->_class->columnNames[$field];
+                $this->_columnTypes[$columnName] = $this->_class->fieldMappings[$field]['type'];
                 $result[$this->getOwningTable($field)][$columnName] = $newVal;
-
-                continue;
-            }
-
-            $assoc = $this->class->associationMappings[$field];
-
-            // Only owning side of x-1 associations can have a FK column.
-            if ( ! $assoc['isOwningSide'] || ! ($assoc['type'] & ClassMetadata::TO_ONE)) {
-                continue;
-            }
-
-            if ($newVal !== null) {
-                $oid = spl_object_hash($newVal);
-
-                if (isset($this->queuedInserts[$oid]) || $uow->isScheduledForInsert($newVal)) {
-                    // The associated entity $newVal is not yet persisted, so we must
-                    // set $newVal = null, in order to insert a null value and schedule an
-                    // extra update on the UnitOfWork.
-                    $uow->scheduleExtraUpdate($entity, array($field => array(null, $newVal)));
-
-                    $newVal = null;
-                }
-            }
-
-            if ($newVal !== null) {
-                $newValId = $uow->getEntityIdentifier($newVal);
-            }
-
-            $targetClass = $this->em->getClassMetadata($assoc['targetEntity']);
-            $owningTable = $this->getOwningTable($field);
-
-            foreach ($assoc['joinColumns'] as $joinColumn) {
-                $sourceColumn = $joinColumn['name'];
-                $targetColumn = $joinColumn['referencedColumnName'];
-                $quotedColumn = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->class, $this->platform);
-
-                $this->quotedColumns[$sourceColumn] = $quotedColumn;
-                $this->columnTypes[$sourceColumn]   = $targetClass->getTypeOfColumn($targetColumn);
-
-                switch (true) {
-                    case $newVal === null:
-                        $value = null;
-                        break;
-
-                    case $targetClass->containsForeignIdentifier:
-                        $value = $newValId[$targetClass->getFieldForColumn($targetColumn)];
-                        break;
-
-                    default:
-                        $value = $newValId[$targetClass->fieldNames[$targetColumn]];
-                        break;
-                }
-
-                $result[$owningTable][$sourceColumn] = $value;
             }
         }
 
@@ -678,14 +626,12 @@ class BasicEntityPersister
      * The default insert data preparation is the same as for updates.
      *
      * @param object $entity The entity for which to prepare the data.
-     *
      * @return array The prepared data for the tables to update.
-     *
-     * @see prepareUpdateData
+     * @see _prepareUpdateData
      */
-    protected function prepareInsertData($entity)
+    protected function _prepareInsertData($entity)
     {
-        return $this->prepareUpdateData($entity);
+        return $this->_prepareUpdateData($entity);
     }
 
     /**
@@ -696,42 +642,40 @@ class BasicEntityPersister
      * is always persisted to a single table with a BasicEntityPersister.
      *
      * @param string $fieldName The field name.
-     *
      * @return string The table name.
      */
     public function getOwningTable($fieldName)
     {
-        return $this->class->getTableName();
+        return $this->_class->getTableName();
     }
 
     /**
      * Loads an entity by a list of field criteria.
      *
-     * @param array       $criteria The criteria by which to load the entity.
-     * @param object|null $entity   The entity to load the data into. If not specified, a new entity is created.
-     * @param array|null  $assoc    The association that connects the entity to load to another entity, if any.
-     * @param array       $hints    Hints for entity creation.
-     * @param int         $lockMode
-     * @param int|null    $limit    Limit number of results.
-     * @param array|null  $orderBy  Criteria to order by.
-     *
-     * @return object|null The loaded and managed entity instance or NULL if the entity can not be found.
-     *
+     * @param array $criteria The criteria by which to load the entity.
+     * @param object $entity The entity to load the data into. If not specified,
+     *        a new entity is created.
+     * @param $assoc The association that connects the entity to load to another entity, if any.
+     * @param array $hints Hints for entity creation.
+     * @param int $lockMode
+     * @param int $limit Limit number of results
+     * @param array $orderBy Criteria to order by 
+     * @return object The loaded and managed entity instance or NULL if the entity can not be found.
      * @todo Check identity map? loadById method? Try to guess whether $criteria is the id?
      */
     public function load(array $criteria, $entity = null, $assoc = null, array $hints = array(), $lockMode = 0, $limit = null, array $orderBy = null)
     {
-        $sql = $this->getSelectSQL($criteria, $assoc, $lockMode, $limit, null, $orderBy);
+        $sql = $this->_getSelectEntitiesSQL($criteria, $assoc, $lockMode, $limit, null, $orderBy);        
         list($params, $types) = $this->expandParameters($criteria);
-        $stmt = $this->conn->executeQuery($sql, $params, $types);
+        $stmt = $this->_conn->executeQuery($sql, $params, $types);
 
         if ($entity !== null) {
-            $hints[Query::HINT_REFRESH]         = true;
-            $hints[Query::HINT_REFRESH_ENTITY]  = $entity;
+            $hints[Query::HINT_REFRESH] = true;
+            $hints[Query::HINT_REFRESH_ENTITY] = $entity;
         }
 
-        $hydrator = $this->em->newHydrator($this->selectJoinSql ? Query::HYDRATE_OBJECT : Query::HYDRATE_SIMPLEOBJECT);
-        $entities = $hydrator->hydrateAll($stmt, $this->rsm, $hints);
+        $hydrator = $this->_em->newHydrator($this->_selectJoinSql ? Query::HYDRATE_OBJECT : Query::HYDRATE_SIMPLEOBJECT);
+        $entities = $hydrator->hydrateAll($stmt, $this->_rsm, $hints);
 
         return $entities ? $entities[0] : null;
     }
@@ -740,23 +684,20 @@ class BasicEntityPersister
      * Loads an entity of this persister's mapped class as part of a single-valued
      * association from another entity.
      *
-     * @param array  $assoc        The association to load.
+     * @param array $assoc The association to load.
      * @param object $sourceEntity The entity that owns the association (not necessarily the "owning side").
-     * @param array  $identifier   The identifier of the entity to load. Must be provided if
-     *                             the association to load represents the owning side, otherwise
-     *                             the identifier is derived from the $sourceEntity.
-     *
+     * @param array $identifier The identifier of the entity to load. Must be provided if
+     *                          the association to load represents the owning side, otherwise
+     *                          the identifier is derived from the $sourceEntity.
      * @return object The loaded and managed entity instance or NULL if the entity can not be found.
-     *
-     * @throws \Doctrine\ORM\Mapping\MappingException
      */
     public function loadOneToOneEntity(array $assoc, $sourceEntity, array $identifier = array())
     {
-        if (($foundEntity = $this->em->getUnitOfWork()->tryGetById($identifier, $assoc['targetEntity'])) != false) {
+        if (($foundEntity = $this->_em->getUnitOfWork()->tryGetById($identifier, $assoc['targetEntity'])) != false) {
             return $foundEntity;
         }
 
-        $targetClass = $this->em->getClassMetadata($assoc['targetEntity']);
+        $targetClass = $this->_em->getClassMetadata($assoc['targetEntity']);
 
         if ($assoc['isOwningSide']) {
             $isInverseSingleValued = $assoc['inversedBy'] && ! $targetClass->isCollectionValuedAssociation($assoc['inversedBy']);
@@ -770,7 +711,7 @@ class BasicEntityPersister
             }
 
             /* cascade read-only status
-            if ($this->em->getUnitOfWork()->isReadOnly($sourceEntity)) {
+            if ($this->_em->getUnitOfWork()->isReadOnly($sourceEntity)) {
                 $hints[Query::HINT_READ_ONLY] = true;
             }
             */
@@ -781,33 +722,31 @@ class BasicEntityPersister
             if ($targetEntity !== null && $isInverseSingleValued) {
                 $targetClass->reflFields[$assoc['inversedBy']]->setValue($targetEntity, $sourceEntity);
             }
+        } else {
+            $sourceClass = $this->_em->getClassMetadata($assoc['sourceEntity']);
+            $owningAssoc = $targetClass->getAssociationMapping($assoc['mappedBy']);
 
-            return $targetEntity;
-        }
+            // TRICKY: since the association is specular source and target are flipped
+            foreach ($owningAssoc['targetToSourceKeyColumns'] as $sourceKeyColumn => $targetKeyColumn) {
+                if ( ! isset($sourceClass->fieldNames[$sourceKeyColumn])) {
+                    throw MappingException::joinColumnMustPointToMappedField(
+                        $sourceClass->name, $sourceKeyColumn
+                    );
+                }
 
-        $sourceClass = $this->em->getClassMetadata($assoc['sourceEntity']);
-        $owningAssoc = $targetClass->getAssociationMapping($assoc['mappedBy']);
+                // unset the old value and set the new sql aliased value here. By definition
+                // unset($identifier[$targetKeyColumn] works here with how UnitOfWork::createEntity() calls this method.
+                $identifier[$this->_getSQLTableAlias($targetClass->name) . "." . $targetKeyColumn] =
+                    $sourceClass->reflFields[$sourceClass->fieldNames[$sourceKeyColumn]]->getValue($sourceEntity);
 
-        // TRICKY: since the association is specular source and target are flipped
-        foreach ($owningAssoc['targetToSourceKeyColumns'] as $sourceKeyColumn => $targetKeyColumn) {
-            if ( ! isset($sourceClass->fieldNames[$sourceKeyColumn])) {
-                throw MappingException::joinColumnMustPointToMappedField(
-                    $sourceClass->name, $sourceKeyColumn
-                );
+                unset($identifier[$targetKeyColumn]);
             }
 
-            // unset the old value and set the new sql aliased value here. By definition
-            // unset($identifier[$targetKeyColumn] works here with how UnitOfWork::createEntity() calls this method.
-            $identifier[$this->getSQLTableAlias($targetClass->name) . "." . $targetKeyColumn] =
-                $sourceClass->reflFields[$sourceClass->fieldNames[$sourceKeyColumn]]->getValue($sourceEntity);
+            $targetEntity = $this->load($identifier, null, $assoc);
 
-            unset($identifier[$targetKeyColumn]);
-        }
-
-        $targetEntity = $this->load($identifier, null, $assoc);
-
-        if ($targetEntity !== null) {
-            $targetClass->setFieldValue($targetEntity, $assoc['mappedBy'], $sourceEntity);
+            if ($targetEntity !== null) {
+                $targetClass->setFieldValue($targetEntity, $assoc['mappedBy'], $sourceEntity);
+            }
         }
 
         return $targetEntity;
@@ -816,25 +755,22 @@ class BasicEntityPersister
     /**
      * Refreshes a managed entity.
      *
-     * @param array  $id       The identifier of the entity as an associative array from
-     *                         column or field names to values.
-     * @param object $entity   The entity to refresh.
-     * @param int    $lockMode
-     *
-     * @return void
+     * @param array $id The identifier of the entity as an associative array from
+     *                  column or field names to values.
+     * @param object $entity The entity to refresh.
      */
     public function refresh(array $id, $entity, $lockMode = 0)
     {
-        $sql = $this->getSelectSQL($id, null, $lockMode);
+        $sql = $this->_getSelectEntitiesSQL($id, null, $lockMode);
         list($params, $types) = $this->expandParameters($id);
-        $stmt = $this->conn->executeQuery($sql, $params, $types);
- 
-        $hydrator = $this->em->newHydrator(Query::HYDRATE_OBJECT);
-        $hydrator->hydrateAll($stmt, $this->rsm, array(Query::HINT_REFRESH => true));
+        $stmt = $this->_conn->executeQuery($sql, $params, $types);
+
+        $hydrator = $this->_em->newHydrator(Query::HYDRATE_OBJECT);
+        $hydrator->hydrateAll($stmt, $this->_rsm, array(Query::HINT_REFRESH => true));
     }
 
     /**
-     * Loads Entities matching the given Criteria object.
+     * Load Entities matching the given Criteria object
      *
      * @param \Doctrine\Common\Collections\Criteria $criteria
      *
@@ -845,18 +781,20 @@ class BasicEntityPersister
         $orderBy = $criteria->getOrderings();
         $limit   = $criteria->getMaxResults();
         $offset  = $criteria->getFirstResult();
-        $query   = $this->getSelectSQL($criteria, null, 0, $limit, $offset, $orderBy);
+
+        $sql = $this->_getSelectEntitiesSQL($criteria, null, 0, $limit, $offset, $orderBy);
 
         list($params, $types) = $this->expandCriteriaParameters($criteria);
 
-        $stmt       = $this->conn->executeQuery($query, $params, $types);
-        $hydrator   = $this->em->newHydrator(($this->selectJoinSql) ? Query::HYDRATE_OBJECT : Query::HYDRATE_SIMPLEOBJECT);
+        $stmt = $this->_conn->executeQuery($sql, $params, $types);
 
-        return $hydrator->hydrateAll($stmt, $this->rsm, array('deferEagerLoads' => true));
+        $hydrator = $this->_em->newHydrator(($this->_selectJoinSql) ? Query::HYDRATE_OBJECT : Query::HYDRATE_SIMPLEOBJECT);
+
+        return $hydrator->hydrateAll($stmt, $this->_rsm, array('deferEagerLoads' => true));
     }
 
     /**
-     * Expands Criteria Parameters by walking the expressions and grabbing all
+     * Expand Criteria Parameters by walking the expressions and grabbing all
      * parameters and types from it.
      *
      * @param \Doctrine\Common\Collections\Criteria $criteria
@@ -872,7 +810,6 @@ class BasicEntityPersister
         }
 
         $valueVisitor = new SqlValueVisitor();
-
         $valueVisitor->dispatch($expression);
 
         list($values, $types) = $valueVisitor->getParamsAndTypes();
@@ -894,32 +831,30 @@ class BasicEntityPersister
     /**
      * Loads a list of entities by a list of field criteria.
      *
-     * @param array      $criteria
-     * @param array|null $orderBy
-     * @param int|null   $limit
-     * @param int|null   $offset
-     *
+     * @param array $criteria
+     * @param array $orderBy
+     * @param int $limit
+     * @param int $offset
      * @return array
      */
     public function loadAll(array $criteria = array(), array $orderBy = null, $limit = null, $offset = null)
     {
-        $sql = $this->getSelectSQL($criteria, null, 0, $limit, $offset, $orderBy);
+        $sql = $this->_getSelectEntitiesSQL($criteria, null, 0, $limit, $offset, $orderBy);
         list($params, $types) = $this->expandParameters($criteria);
-        $stmt = $this->conn->executeQuery($sql, $params, $types);
+        $stmt = $this->_conn->executeQuery($sql, $params, $types);
 
-        $hydrator = $this->em->newHydrator(($this->selectJoinSql) ? Query::HYDRATE_OBJECT : Query::HYDRATE_SIMPLEOBJECT);
+        $hydrator = $this->_em->newHydrator(($this->_selectJoinSql) ? Query::HYDRATE_OBJECT : Query::HYDRATE_SIMPLEOBJECT);
 
-        return $hydrator->hydrateAll($stmt, $this->rsm, array('deferEagerLoads' => true));
+        return $hydrator->hydrateAll($stmt, $this->_rsm, array('deferEagerLoads' => true));
     }
 
     /**
-     * Gets (sliced or full) elements of the given collection.
+     * Get (sliced or full) elements of the given collection.
      *
-     * @param array    $assoc
-     * @param object   $sourceEntity
+     * @param array $assoc
+     * @param object $sourceEntity
      * @param int|null $offset
      * @param int|null $limit
-     *
      * @return array
      */
     public function getManyToManyCollection(array $assoc, $sourceEntity, $offset = null, $limit = null)
@@ -930,58 +865,62 @@ class BasicEntityPersister
     }
 
     /**
-     * Loads an array of entities from a given DBAL statement.
+     * Load an array of entities from a given dbal statement.
      *
-     * @param array                    $assoc
+     * @param array $assoc
      * @param \Doctrine\DBAL\Statement $stmt
      *
      * @return array
      */
     private function loadArrayFromStatement($assoc, $stmt)
     {
-        $rsm    = $this->rsm;
-        $hints  = array('deferEagerLoads' => true);
+        $hints = array('deferEagerLoads' => true);
 
         if (isset($assoc['indexBy'])) {
-            $rsm = clone ($this->rsm); // this is necessary because the "default rsm" should be changed.
+            $rsm = clone ($this->_rsm); // this is necessary because the "default rsm" should be changed.
             $rsm->addIndexBy('r', $assoc['indexBy']);
+        } else {
+            $rsm = $this->_rsm;
         }
 
-        return $this->em->newHydrator(Query::HYDRATE_OBJECT)->hydrateAll($stmt, $rsm, $hints);
+        $hydrator = $this->_em->newHydrator(Query::HYDRATE_OBJECT);
+
+        return $hydrator->hydrateAll($stmt, $rsm, $hints);
     }
 
     /**
-     * Hydrates a collection from a given DBAL statement.
+     * Hydrate a collection from a given dbal statement.
      *
-     * @param array                    $assoc
+     * @param array $assoc
      * @param \Doctrine\DBAL\Statement $stmt
-     * @param PersistentCollection     $coll
+     * @param PersistentCollection $coll
      *
      * @return array
      */
     private function loadCollectionFromStatement($assoc, $stmt, $coll)
     {
-        $rsm   = $this->rsm;
-        $hints = array(
-            'deferEagerLoads'   => true,
-            'collection'        => $coll
-        );
+        $hints = array('deferEagerLoads' => true, 'collection' => $coll);
 
         if (isset($assoc['indexBy'])) {
-            $rsm = clone ($this->rsm); // this is necessary because the "default rsm" should be changed.
+            $rsm = clone ($this->_rsm); // this is necessary because the "default rsm" should be changed.
             $rsm->addIndexBy('r', $assoc['indexBy']);
+        } else {
+            $rsm = $this->_rsm;
         }
 
-        return $this->em->newHydrator(Query::HYDRATE_OBJECT)->hydrateAll($stmt, $rsm, $hints);
+        $hydrator = $this->_em->newHydrator(Query::HYDRATE_OBJECT);
+
+        return $hydrator->hydrateAll($stmt, $rsm, $hints);
     }
 
     /**
      * Loads a collection of entities of a many-to-many association.
      *
-     * @param array                $assoc        The association mapping of the association being loaded.
-     * @param object               $sourceEntity The entity that owns the collection.
-     * @param PersistentCollection $coll         The collection to fill.
-     *
+     * @param ManyToManyMapping $assoc The association mapping of the association being loaded.
+     * @param object $sourceEntity The entity that owns the collection.
+     * @param PersistentCollection $coll The collection to fill.
+     * @param int|null $offset
+     * @param int|null $limit
      * @return array
      */
     public function loadManyToManyCollection(array $assoc, $sourceEntity, PersistentCollection $coll)
@@ -991,197 +930,155 @@ class BasicEntityPersister
         return $this->loadCollectionFromStatement($assoc, $stmt, $coll);
     }
 
-    /**
-     * @param array    $assoc
-     * @param object   $sourceEntity
-     * @param int|null $offset
-     * @param int|null $limit
-     *
-     * @return \Doctrine\DBAL\Driver\Statement
-     *
-     * @throws \Doctrine\ORM\Mapping\MappingException
-     */
     private function getManyToManyStatement(array $assoc, $sourceEntity, $offset = null, $limit = null)
     {
-        $sourceClass    = $this->em->getClassMetadata($assoc['sourceEntity']);
-        $class          = $sourceClass;
-        $association    = $assoc;
-        $criteria       = array();
+        $criteria = array();
+        $sourceClass = $this->_em->getClassMetadata($assoc['sourceEntity']);
 
+        if ($assoc['isOwningSide']) {
+            $quotedJoinTable = $this->quoteStrategy->getJoinTableName($assoc, $sourceClass, $this->_platform);
 
-        if ( ! $assoc['isOwningSide']) {
-            $class       = $this->em->getClassMetadata($assoc['targetEntity']);
-            $association = $class->associationMappings[$assoc['mappedBy']];
-        }
+            foreach ($assoc['joinTable']['joinColumns'] as $joinColumn) {
+                $relationKeyColumn  = $joinColumn['name'];
+                $sourceKeyColumn    = $joinColumn['referencedColumnName'];
+                $quotedKeyColumn    = $this->quoteStrategy->getJoinColumnName($joinColumn, $sourceClass, $this->_platform);
 
-        $joinColumns = $assoc['isOwningSide']
-            ? $association['joinTable']['joinColumns']
-            : $association['joinTable']['inverseJoinColumns'];
-
-        $quotedJoinTable = $this->quoteStrategy->getJoinTableName($association, $class, $this->platform);
-
-        foreach ($joinColumns as $joinColumn) {
-
-            $sourceKeyColumn    = $joinColumn['referencedColumnName'];
-            $quotedKeyColumn    = $this->quoteStrategy->getJoinColumnName($joinColumn, $class, $this->platform);
-
-            switch (true) {
-                case $sourceClass->containsForeignIdentifier:
+                if ($sourceClass->containsForeignIdentifier) {
                     $field = $sourceClass->getFieldForColumn($sourceKeyColumn);
                     $value = $sourceClass->reflFields[$field]->getValue($sourceEntity);
 
                     if (isset($sourceClass->associationMappings[$field])) {
-                        $value = $this->em->getUnitOfWork()->getEntityIdentifier($value);
-                        $value = $value[$this->em->getClassMetadata($sourceClass->associationMappings[$field]['targetEntity'])->identifier[0]];
+                        $value = $this->_em->getUnitOfWork()->getEntityIdentifier($value);
+                        $value = $value[$this->_em->getClassMetadata($sourceClass->associationMappings[$field]['targetEntity'])->identifier[0]];
                     }
 
-                    break;
-
-                case isset($sourceClass->fieldNames[$sourceKeyColumn]):
-                    $field = $sourceClass->fieldNames[$sourceKeyColumn];
-                    $value = $sourceClass->reflFields[$field]->getValue($sourceEntity);
-
-                    break;
-
-                default:
+                    $criteria[$quotedJoinTable . "." . $quotedKeyColumn] = $value;
+                } else if (isset($sourceClass->fieldNames[$sourceKeyColumn])) {
+                    $criteria[$quotedJoinTable . "." . $quotedKeyColumn] = $sourceClass->reflFields[$sourceClass->fieldNames[$sourceKeyColumn]]->getValue($sourceEntity);
+                } else {
                     throw MappingException::joinColumnMustPointToMappedField(
                         $sourceClass->name, $sourceKeyColumn
                     );
+                }
             }
+        } else {
+            $owningAssoc = $this->_em->getClassMetadata($assoc['targetEntity'])->associationMappings[$assoc['mappedBy']];
+            $quotedJoinTable = $this->quoteStrategy->getJoinTableName($owningAssoc, $sourceClass, $this->_platform);
 
-            $criteria[$quotedJoinTable . '.' . $quotedKeyColumn] = $value;
+            // TRICKY: since the association is inverted source and target are flipped
+            foreach ($owningAssoc['joinTable']['inverseJoinColumns'] as $joinColumn) {
+                $relationKeyColumn  = $joinColumn['name'];
+                $sourceKeyColumn    = $joinColumn['referencedColumnName'];
+                $quotedKeyColumn    = $this->quoteStrategy->getJoinColumnName($joinColumn, $sourceClass, $this->_platform);
+
+                if ($sourceClass->containsForeignIdentifier) {
+                    $field = $sourceClass->getFieldForColumn($sourceKeyColumn);
+                    $value = $sourceClass->reflFields[$field]->getValue($sourceEntity);
+
+                    if (isset($sourceClass->associationMappings[$field])) {
+                        $value = $this->_em->getUnitOfWork()->getEntityIdentifier($value);
+                        $value = $value[$this->_em->getClassMetadata($sourceClass->associationMappings[$field]['targetEntity'])->identifier[0]];
+                    }
+
+                    $criteria[$quotedJoinTable . "." . $quotedKeyColumn] = $value;
+                } else if (isset($sourceClass->fieldNames[$sourceKeyColumn])) {
+                    $criteria[$quotedJoinTable . "." . $quotedKeyColumn] = $sourceClass->reflFields[$sourceClass->fieldNames[$sourceKeyColumn]]->getValue($sourceEntity);
+                } else {
+                    throw MappingException::joinColumnMustPointToMappedField(
+                        $sourceClass->name, $sourceKeyColumn
+                    );
+                }
+            }
         }
 
-        $sql = $this->getSelectSQL($criteria, $assoc, 0, $limit, $offset);
+        $sql = $this->_getSelectEntitiesSQL($criteria, $assoc, 0, $limit, $offset);
         list($params, $types) = $this->expandParameters($criteria);
 
-        return $this->conn->executeQuery($sql, $params, $types);
+        return $this->_conn->executeQuery($sql, $params, $types);
     }
 
     /**
      * Gets the SELECT SQL to select one or more entities by a set of field criteria.
      *
      * @param array|\Doctrine\Common\Collections\Criteria $criteria
-     * @param array|null                                  $assoc
-     * @param int                                         $lockMode
-     * @param int|null                                    $limit
-     * @param int|null                                    $offset
-     * @param array|null                                  $orderBy
-     *
+     * @param AssociationMapping $assoc
+     * @param string $orderBy
+     * @param int $lockMode
+     * @param int $limit
+     * @param int $offset
+     * @param array $orderBy
      * @return string
+     * @todo Refactor: _getSelectSQL(...)
      */
-    protected function getSelectSQL($criteria, $assoc = null, $lockMode = 0, $limit = null, $offset = null, array $orderBy = null)
+    protected function _getSelectEntitiesSQL($criteria, $assoc = null, $lockMode = 0, $limit = null, $offset = null, array $orderBy = null)
     {
-        $lockSql    = '';
-        $joinSql    = '';
-        $orderBySql = '';
-
-        if ($assoc != null && $assoc['type'] == ClassMetadata::MANY_TO_MANY) {
-            $joinSql = $this->getSelectManyToManyJoinSQL($assoc);
-        }
-
-        if (isset($assoc['orderBy'])) {
-            $orderBy = $assoc['orderBy'];
-        }
-
-        if ($orderBy) {
-            $orderBySql = $this->getOrderBySQL($orderBy, $this->getSQLTableAlias($this->class->name));
-        }
-
+        $joinSql      = ($assoc != null && $assoc['type'] == ClassMetadata::MANY_TO_MANY) ? $this->_getSelectManyToManyJoinSQL($assoc) : '';
         $conditionSql = ($criteria instanceof Criteria)
-            ? $this->getSelectConditionCriteriaSQL($criteria)
-            : $this->getSelectConditionSQL($criteria, $assoc);
+            ? $this->_getSelectConditionCriteriaSQL($criteria)
+            : $this->_getSelectConditionSQL($criteria, $assoc);
 
-        switch ($lockMode) {
-            case LockMode::PESSIMISTIC_READ:
-                $lockSql = ' ' . $this->platform->getReadLockSql();
-                break;
+        $orderBy    = ($assoc !== null && isset($assoc['orderBy'])) ? $assoc['orderBy'] : $orderBy;
+        $orderBySql = $orderBy ? $this->_getOrderBySQL($orderBy, $this->_getSQLTableAlias($this->_class->name)) : '';
 
-            case LockMode::PESSIMISTIC_WRITE:
-                $lockSql = ' ' . $this->platform->getWriteLockSql();
-                break;
+        $lockSql = '';
+
+        if ($lockMode == LockMode::PESSIMISTIC_READ) {
+            $lockSql = ' ' . $this->_platform->getReadLockSql();
+        } else if ($lockMode == LockMode::PESSIMISTIC_WRITE) {
+            $lockSql = ' ' . $this->_platform->getWriteLockSql();
         }
 
-        $columnList = $this->getSelectColumnsSQL();
-        $tableAlias = $this->getSQLTableAlias($this->class->name);
-        $filterSql  = $this->generateFilterConditionSQL($this->class, $tableAlias);
-        $tableName  = $this->quoteStrategy->getTableName($this->class, $this->platform);
+        $alias = $this->_getSQLTableAlias($this->_class->name);
 
-        if ('' !== $filterSql) {
-            $conditionSql = $conditionSql 
-                ? $conditionSql . ' AND ' . $filterSql
-                : $filterSql;
+        if ($filterSql = $this->generateFilterConditionSQL($this->_class, $alias)) {
+            if ($conditionSql) {
+                $conditionSql .= ' AND ';
+            }
+
+            $conditionSql .= $filterSql;
         }
 
-        $select = 'SELECT ' . $columnList;
-        $from   = ' FROM ' . $tableName . ' '. $tableAlias;
-        $join   = $this->selectJoinSql . $joinSql;
-        $where  = ($conditionSql ? ' WHERE ' . $conditionSql : '');
-        $lock   = $this->platform->appendLockHint($from, $lockMode);
-        $query  = $select
-            . $lock
-            . $join
-            . $where
-            . $orderBySql;
-
-        return $this->platform->modifyLimitQuery($query, $limit, $offset) . $lockSql;
+        return $this->_platform->modifyLimitQuery('SELECT ' . $this->_getSelectColumnListSQL()
+             . $this->_platform->appendLockHint(' FROM ' . $this->quoteStrategy->getTableName($this->_class, $this->_platform) . ' '
+             . $alias, $lockMode)
+             . $this->_selectJoinSql . $joinSql
+             . ($conditionSql ? ' WHERE ' . $conditionSql : '')
+             . $orderBySql, $limit, $offset)
+             . $lockSql;
     }
 
     /**
      * Gets the ORDER BY SQL snippet for ordered collections.
      *
-     * @param array  $orderBy
+     * @param array $orderBy
      * @param string $baseTableAlias
-     *
      * @return string
-     *
-     * @throws \Doctrine\ORM\ORMException
      */
-    protected final function getOrderBySQL(array $orderBy, $baseTableAlias)
+    protected final function _getOrderBySQL(array $orderBy, $baseTableAlias)
     {
-        $orderByList = array();
+        $orderBySql = '';
 
         foreach ($orderBy as $fieldName => $orientation) {
+            if ( ! isset($this->_class->fieldMappings[$fieldName])) {
+                throw ORMException::unrecognizedField($fieldName);
+            }
 
             $orientation = strtoupper(trim($orientation));
-
             if ($orientation != 'ASC' && $orientation != 'DESC') {
-                throw ORMException::invalidOrientation($this->class->name, $fieldName);
+                throw ORMException::invalidOrientation($this->_class->name, $fieldName);
             }
 
-            if (isset($this->class->fieldMappings[$fieldName])) {
-                $tableAlias = isset($this->class->fieldMappings[$fieldName]['inherited'])
-                    ? $this->getSQLTableAlias($this->class->fieldMappings[$fieldName]['inherited'])
+            $tableAlias = isset($this->_class->fieldMappings[$fieldName]['inherited']) ?
+                    $this->_getSQLTableAlias($this->_class->fieldMappings[$fieldName]['inherited'])
                     : $baseTableAlias;
 
-                $columnName    = $this->quoteStrategy->getColumnName($fieldName, $this->class, $this->platform);
-                $orderByList[] = $tableAlias . '.' . $columnName . ' ' . $orientation;
+            $columnName = $this->quoteStrategy->getColumnName($fieldName, $this->_class, $this->_platform);
 
-                continue;
-            }
-
-            if (isset($this->class->associationMappings[$fieldName])) {
-
-                if ( ! $this->class->associationMappings[$fieldName]['isOwningSide']) {
-                    throw ORMException::invalidFindByInverseAssociation($this->class->name, $fieldName);
-                }
-
-                $tableAlias = isset($this->class->associationMappings[$fieldName]['inherited'])
-                    ? $this->getSQLTableAlias($this->class->associationMappings[$fieldName]['inherited'])
-                    : $baseTableAlias;
-
-                foreach ($this->class->associationMappings[$fieldName]['joinColumns'] as $joinColumn) {
-                    $columnName    = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->class, $this->platform);
-                    $orderByList[] = $tableAlias . '.' . $columnName . ' ' . $orientation;
-                }
-
-                continue;
-            }
-
-            throw ORMException::unrecognizedField($fieldName);
+            $orderBySql .= $orderBySql ? ', ' : ' ORDER BY ';
+            $orderBySql .= $tableAlias . '.' . $columnName . ' ' . $orientation;
         }
 
-        return ' ORDER BY ' . implode(', ', $orderByList);
+        return $orderBySql;
     }
 
     /**
@@ -1190,138 +1087,139 @@ class BasicEntityPersister
      *
      * Subclasses should override this method to alter or change the select column
      * list SQL fragment. Note that in the implementation of BasicEntityPersister
-     * the resulting SQL fragment is generated only once and cached in {@link selectColumnListSql}.
+     * the resulting SQL fragment is generated only once and cached in {@link _selectColumnListSql}.
      * Subclasses may or may not do the same.
      *
      * @return string The SQL fragment.
+     * @todo Rename: _getSelectColumnsSQL()
      */
-    protected function getSelectColumnsSQL()
+    protected function _getSelectColumnListSQL()
     {
-        if ($this->selectColumnListSql !== null) {
-            return $this->selectColumnListSql;
+        if ($this->_selectColumnListSql !== null) {
+            return $this->_selectColumnListSql;
         }
 
-        $columnList = array();
-        $this->rsm  = new Query\ResultSetMapping();
-        $this->rsm->addEntityResult($this->class->name, 'r'); // r for root
+        $columnList = '';
+        $this->_rsm = new Query\ResultSetMapping();
+        $this->_rsm->addEntityResult($this->_class->name, 'r'); // r for root
 
         // Add regular columns to select list
-        foreach ($this->class->fieldNames as $field) {
-            $columnList[] = $this->getSelectColumnSQL($field, $this->class);
+        foreach ($this->_class->fieldNames as $field) {
+            if ($columnList) $columnList .= ', ';
+
+            $columnList .= $this->_getSelectColumnSQL($field, $this->_class);
         }
 
-        $this->selectJoinSql    = '';
-        $eagerAliasCounter      = 0;
+        $this->_selectJoinSql = '';
+        $eagerAliasCounter = 0;
 
-        foreach ($this->class->associationMappings as $assocField => $assoc) {
-            $assocColumnSQL = $this->getSelectColumnAssociationSQL($assocField, $assoc, $this->class);
+        foreach ($this->_class->associationMappings as $assocField => $assoc) {
+            $assocColumnSQL = $this->_getSelectColumnAssociationSQL($assocField, $assoc, $this->_class);
 
             if ($assocColumnSQL) {
-                $columnList[] = $assocColumnSQL;
+                if ($columnList) $columnList .= ', ';
+
+                $columnList .= $assocColumnSQL;
             }
 
-            if ( ! (($assoc['type'] & ClassMetadata::TO_ONE) && ($assoc['fetch'] == ClassMetadata::FETCH_EAGER || !$assoc['isOwningSide']))) {
-                continue;
-            }
+            if ($assoc['type'] & ClassMetadata::TO_ONE && ($assoc['fetch'] == ClassMetadata::FETCH_EAGER || !$assoc['isOwningSide'])) {
+                $eagerEntity = $this->_em->getClassMetadata($assoc['targetEntity']);
 
-            $eagerEntity = $this->em->getClassMetadata($assoc['targetEntity']);
-
-            if ($eagerEntity->inheritanceType != ClassMetadata::INHERITANCE_TYPE_NONE) {
-                continue; // now this is why you shouldn't use inheritance
-            }
-
-            $assocAlias = 'e' . ($eagerAliasCounter++);
-            $this->rsm->addJoinedEntityResult($assoc['targetEntity'], $assocAlias, 'r', $assocField);
-
-            foreach ($eagerEntity->fieldNames as $field) {
-                $columnList[] = $this->getSelectColumnSQL($field, $eagerEntity, $assocAlias);
-            }
-
-            foreach ($eagerEntity->associationMappings as $eagerAssocField => $eagerAssoc) {
-                $eagerAssocColumnSQL = $this->getSelectColumnAssociationSQL(
-                    $eagerAssocField, $eagerAssoc, $eagerEntity, $assocAlias
-                );
-
-                if ($eagerAssocColumnSQL) {
-                    $columnList[] = $eagerAssocColumnSQL;
-                }
-            }
-
-            $association    = $assoc;
-            $joinCondition  = array();
-
-            if ( ! $assoc['isOwningSide']) {
-                $eagerEntity = $this->em->getClassMetadata($assoc['targetEntity']);
-                $association = $eagerEntity->getAssociationMapping($assoc['mappedBy']);
-            }
-
-            $joinTableAlias = $this->getSQLTableAlias($eagerEntity->name, $assocAlias);
-            $joinTableName  = $this->quoteStrategy->getTableName($eagerEntity, $this->platform);
-
-            if ($assoc['isOwningSide']) {
-                $tableAlias           = $this->getSQLTableAlias($association['targetEntity'], $assocAlias);
-                $this->selectJoinSql .= ' ' . $this->getJoinSQLForJoinColumns($association['joinColumns']);
-                
-                foreach ($association['joinColumns'] as $joinColumn) {
-                    $sourceCol       = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->class, $this->platform);
-                    $targetCol       = $this->quoteStrategy->getReferencedJoinColumnName($joinColumn, $this->class, $this->platform);
-                    $joinCondition[] = $this->getSQLTableAlias($association['sourceEntity'])
-                                        . '.' . $sourceCol . ' = ' . $tableAlias . '.' . $targetCol;
+                if ($eagerEntity->inheritanceType != ClassMetadata::INHERITANCE_TYPE_NONE) {
+                    continue; // now this is why you shouldn't use inheritance
                 }
 
-                // Add filter SQL
-                if ($filterSql = $this->generateFilterConditionSQL($eagerEntity, $tableAlias)) {
-                    $joinCondition[] = $filterSql;
+                $assocAlias = 'e' . ($eagerAliasCounter++);
+                $this->_rsm->addJoinedEntityResult($assoc['targetEntity'], $assocAlias, 'r', $assocField);
+
+                foreach ($eagerEntity->fieldNames as $field) {
+                    if ($columnList) $columnList .= ', ';
+
+                    $columnList .= $this->_getSelectColumnSQL($field, $eagerEntity, $assocAlias);
                 }
 
-            } else {
+                foreach ($eagerEntity->associationMappings as $assoc2Field => $assoc2) {
+                    $assoc2ColumnSQL = $this->_getSelectColumnAssociationSQL($assoc2Field, $assoc2, $eagerEntity, $assocAlias);
 
-                $this->selectJoinSql .= ' LEFT JOIN';
+                    if ($assoc2ColumnSQL) {
+                        if ($columnList) $columnList .= ', ';
+                        $columnList .= $assoc2ColumnSQL;
+                    }
+                }
+                $first = true;
 
-                foreach ($association['joinColumns'] as $joinColumn) {
-                    $sourceCol       = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->class, $this->platform);
-                    $targetCol       = $this->quoteStrategy->getReferencedJoinColumnName($joinColumn, $this->class, $this->platform);
+                if ($assoc['isOwningSide']) {
+                    $this->_selectJoinSql .= ' ' . $this->getJoinSQLForJoinColumns($assoc['joinColumns']);
+                    $this->_selectJoinSql .= ' ' . $this->quoteStrategy->getTableName($eagerEntity, $this->_platform) . ' ' . $this->_getSQLTableAlias($eagerEntity->name, $assocAlias) .' ON ';
 
-                    $joinCondition[] = $this->getSQLTableAlias($association['sourceEntity'], $assocAlias) . '.' . $sourceCol . ' = '
-                        . $this->getSQLTableAlias($association['targetEntity']) . '.' . $targetCol;
+                    $tableAlias = $this->_getSQLTableAlias($assoc['targetEntity'], $assocAlias);
+                    foreach ($assoc['joinColumns'] as $joinColumn) {
+                        $sourceCol = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->_class, $this->_platform);
+                        $targetCol = $this->quoteStrategy->getReferencedJoinColumnName($joinColumn, $this->_class, $this->_platform);
+
+                        if ( ! $first) {
+                            $this->_selectJoinSql .= ' AND ';
+                        }
+                        $this->_selectJoinSql .= $this->_getSQLTableAlias($assoc['sourceEntity']) . '.' . $sourceCol . ' = '
+                                               . $tableAlias . '.' . $targetCol;
+                        $first = false;
+                    }
+
+                    // Add filter SQL
+                    if ($filterSql = $this->generateFilterConditionSQL($eagerEntity, $tableAlias)) {
+                        $this->_selectJoinSql .= ' AND ' . $filterSql;
+                    }
+                } else {
+                    $eagerEntity = $this->_em->getClassMetadata($assoc['targetEntity']);
+                    $owningAssoc = $eagerEntity->getAssociationMapping($assoc['mappedBy']);
+
+                    $this->_selectJoinSql .= ' LEFT JOIN';
+                    $this->_selectJoinSql .= ' ' . $this->quoteStrategy->getTableName($eagerEntity, $this->_platform) . ' '
+                                           . $this->_getSQLTableAlias($eagerEntity->name, $assocAlias) . ' ON ';
+
+                    foreach ($owningAssoc['sourceToTargetKeyColumns'] as $sourceCol => $targetCol) {
+                        if ( ! $first) {
+                            $this->_selectJoinSql .= ' AND ';
+                        }
+
+                        $this->_selectJoinSql .= $this->_getSQLTableAlias($owningAssoc['sourceEntity'], $assocAlias) . '.' . $sourceCol . ' = '
+                                               . $this->_getSQLTableAlias($owningAssoc['targetEntity']) . '.' . $targetCol;
+                        $first = false;
+                    }
                 }
             }
-
-            $this->selectJoinSql .= ' ' . $joinTableName . ' ' . $joinTableAlias . ' ON ';
-            $this->selectJoinSql .= implode(' AND ', $joinCondition);
         }
 
-        $this->selectColumnListSql = implode(', ', $columnList);
+        $this->_selectColumnListSql = $columnList;
 
-        return $this->selectColumnListSql;
+        return $this->_selectColumnListSql;
     }
 
     /**
      * Gets the SQL join fragment used when selecting entities from an association.
      *
-     * @param string        $field
-     * @param array         $assoc
+     * @param string $field
+     * @param array $assoc
      * @param ClassMetadata $class
-     * @param string        $alias
+     * @param string $alias
      *
      * @return string
      */
-    protected function getSelectColumnAssociationSQL($field, $assoc, ClassMetadata $class, $alias = 'r')
+    protected function _getSelectColumnAssociationSQL($field, $assoc, ClassMetadata $class, $alias = 'r')
     {
-        if ( ! ($assoc['isOwningSide'] && $assoc['type'] & ClassMetadata::TO_ONE) ) {
-            return '';
-        }
-
         $columnList = array();
 
-        foreach ($assoc['joinColumns'] as $joinColumn) {
+        if ($assoc['isOwningSide'] && $assoc['type'] & ClassMetadata::TO_ONE) {
 
-            $quotedColumn     = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->class, $this->platform);
-            $resultColumnName = $this->getSQLColumnAlias($joinColumn['name']);
-            $columnList[]     = $this->getSQLTableAlias($class->name, ($alias == 'r' ? '' : $alias) )
-                                . '.' . $quotedColumn . ' AS ' . $resultColumnName;
+            foreach ($assoc['joinColumns'] as $joinColumn) {
 
-            $this->rsm->addMetaResult($alias, $resultColumnName, $quotedColumn, isset($assoc['id']) && $assoc['id'] === true);
+                $quotedColumn     = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->_class, $this->_platform);
+                $resultColumnName = $this->getSQLColumnAlias($joinColumn['name']);
+                $columnList[]     = $this->_getSQLTableAlias($class->name, ($alias == 'r' ? '' : $alias) )
+                                    . '.' . $quotedColumn . ' AS ' . $resultColumnName;
+
+                $this->_rsm->addMetaResult($alias, $resultColumnName, $quotedColumn, isset($assoc['id']) && $assoc['id'] === true);
+            }
         }
 
         return implode(', ', $columnList);
@@ -1331,29 +1229,28 @@ class BasicEntityPersister
      * Gets the SQL join fragment used when selecting entities from a
      * many-to-many association.
      *
-     * @param array $manyToMany
-     *
+     * @param ManyToManyMapping $manyToMany
      * @return string
      */
-    protected function getSelectManyToManyJoinSQL(array $manyToMany)
+    protected function _getSelectManyToManyJoinSQL(array $manyToMany)
     {
         $conditions         = array();
         $association        = $manyToMany;
-        $sourceTableAlias   = $this->getSQLTableAlias($this->class->name);
+        $sourceTableAlias   = $this->_getSQLTableAlias($this->_class->name);
 
         if ( ! $manyToMany['isOwningSide']) {
-            $targetEntity   = $this->em->getClassMetadata($manyToMany['targetEntity']);
+            $targetEntity   = $this->_em->getClassMetadata($manyToMany['targetEntity']);
             $association    = $targetEntity->associationMappings[$manyToMany['mappedBy']];
         }
 
-        $joinTableName  = $this->quoteStrategy->getJoinTableName($association, $this->class, $this->platform);
+        $joinTableName  = $this->quoteStrategy->getJoinTableName($association, $this->_class, $this->_platform);
         $joinColumns    = ($manyToMany['isOwningSide'])
             ? $association['joinTable']['inverseJoinColumns']
             : $association['joinTable']['joinColumns'];
 
         foreach ($joinColumns as $joinColumn) {
-            $quotedSourceColumn = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->class, $this->platform);
-            $quotedTargetColumn = $this->quoteStrategy->getReferencedJoinColumnName($joinColumn, $this->class, $this->platform);
+            $quotedSourceColumn = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->_class, $this->_platform);
+            $quotedTargetColumn = $this->quoteStrategy->getReferencedJoinColumnName($joinColumn, $this->_class, $this->_platform);
             $conditions[]       = $sourceTableAlias . '.' . $quotedTargetColumn . ' = ' . $joinTableName . '.' . $quotedSourceColumn;
         }
 
@@ -1365,45 +1262,42 @@ class BasicEntityPersister
      *
      * @return string
      */
-    protected function getInsertSQL()
+    protected function _getInsertSQL()
     {
-        if ($this->insertSql !== null) {
-            return $this->insertSql;
-        }
+        if ($this->_insertSql === null) {
+            $insertSql = '';
+            $columns = $this->_getInsertColumnList();
 
-        $columns   = $this->getInsertColumnList();
-        $tableName = $this->quoteStrategy->getTableName($this->class, $this->platform);
+            if (empty($columns)) {
+                $insertSql = $this->_platform->getEmptyIdentityInsertSQL(
+                    $this->quoteStrategy->getTableName($this->_class, $this->_platform),
+                    $this->quoteStrategy->getColumnName($this->_class->identifier[0], $this->_class, $this->_platform)
+                );
+            } else {
+                $columns = array_unique($columns);
 
-        if (empty($columns)) {
-            $identityColumn  = $this->quoteStrategy->getColumnName($this->class->identifier[0], $this->class, $this->platform);
-            $this->insertSql = $this->platform->getEmptyIdentityInsertSQL($tableName, $identityColumn);
+                $values = array();
+                foreach ($columns as $column) {
+                    $placeholder = '?';
 
-            return $this->insertSql;
-        }
+                    if (isset($this->_class->fieldNames[$column]) &&
+                        isset($this->_columnTypes[$this->_class->fieldNames[$column]]) &&
+                        isset($this->_class->fieldMappings[$this->_class->fieldNames[$column]]['requireSQLConversion'])) {
+                        $type = Type::getType($this->_columnTypes[$this->_class->fieldNames[$column]]);
+                        $placeholder = $type->convertToDatabaseValueSQL('?', $this->_platform);
+                    }
 
-        $values  = array();
-        $columns = array_unique($columns);
+                    $values[] = $placeholder;
+                }
 
-        foreach ($columns as $column) {
-            $placeholder = '?';
-
-            if (isset($this->class->fieldNames[$column]) 
-                && isset($this->columnTypes[$this->class->fieldNames[$column]])
-                && isset($this->class->fieldMappings[$this->class->fieldNames[$column]]['requireSQLConversion'])) {
-
-                $type        = Type::getType($this->columnTypes[$this->class->fieldNames[$column]]);
-                $placeholder = $type->convertToDatabaseValueSQL('?', $this->platform);
+                $insertSql = 'INSERT INTO ' . $this->quoteStrategy->getTableName($this->_class, $this->_platform)
+                        . ' (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $values) . ')';
             }
 
-            $values[] = $placeholder;
+            $this->_insertSql = $insertSql;
         }
 
-        $columns = implode(', ', $columns);
-        $values  = implode(', ', $values);
-
-        $this->insertSql = sprintf('INSERT INTO %s (%s) VALUES (%s)', $tableName, $columns, $values);
-
-        return $this->insertSql;
+        return $this->_insertSql;
     }
 
     /**
@@ -1414,29 +1308,25 @@ class BasicEntityPersister
      *
      * @return array The list of columns.
      */
-    protected function getInsertColumnList()
+    protected function _getInsertColumnList()
     {
         $columns = array();
 
-        foreach ($this->class->reflFields as $name => $field) {
-            if ($this->class->isVersioned && $this->class->versionField == $name) {
+        foreach ($this->_class->reflFields as $name => $field) {
+            if ($this->_class->isVersioned && $this->_class->versionField == $name) {
                 continue;
             }
 
-            if (isset($this->class->associationMappings[$name])) {
-                $assoc = $this->class->associationMappings[$name];
+            if (isset($this->_class->associationMappings[$name])) {
+                $assoc = $this->_class->associationMappings[$name];
                 if ($assoc['isOwningSide'] && $assoc['type'] & ClassMetadata::TO_ONE) {
                     foreach ($assoc['joinColumns'] as $joinColumn) {
-                        $columns[] = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->class, $this->platform);
+                        $columns[] = $this->quoteStrategy->getJoinColumnName($joinColumn, $this->_class, $this->_platform);
                     }
                 }
-
-                continue;
-            }
-
-            if ($this->class->generatorType != ClassMetadata::GENERATOR_TYPE_IDENTITY || $this->class->identifier[0] != $name) {
-                $columns[] = $this->quoteStrategy->getColumnName($name, $this->class, $this->platform);
-                $this->columnTypes[$name] = $this->class->fieldMappings[$name]['type'];
+            } else if ($this->_class->generatorType != ClassMetadata::GENERATOR_TYPE_IDENTITY || $this->_class->identifier[0] != $name) {
+                $columns[] = $this->quoteStrategy->getColumnName($name, $this->_class, $this->_platform);
+                $this->_columnTypes[$name] = $this->_class->fieldMappings[$name]['type'];
             }
         }
 
@@ -1446,26 +1336,22 @@ class BasicEntityPersister
     /**
      * Gets the SQL snippet of a qualified column name for the given field name.
      *
-     * @param string        $field The field name.
+     * @param string $field The field name.
      * @param ClassMetadata $class The class that declares this field. The table this class is
      *                             mapped to must own the column for the given field.
-     * @param string        $alias
-     *
-     * @return string
+     * @param string $alias
      */
-    protected function getSelectColumnSQL($field, ClassMetadata $class, $alias = 'r')
+    protected function _getSelectColumnSQL($field, ClassMetadata $class, $alias = 'r')
     {
-        $root           = $alias == 'r' ? '' : $alias ;
-        $tableAlias     = $this->getSQLTableAlias($class->name, $root);
-        $columnName     = $this->quoteStrategy->getColumnName($field, $class, $this->platform);
-        $sql            = $tableAlias . '.' . $columnName;
-        $columnAlias    = $this->getSQLColumnAlias($class->columnNames[$field]);
-        
-        $this->rsm->addFieldResult($alias, $columnAlias, $field);
+        $sql = $this->_getSQLTableAlias($class->name, $alias == 'r' ? '' : $alias)
+             . '.' . $this->quoteStrategy->getColumnName($field, $class, $this->_platform);
+        $columnAlias = $this->getSQLColumnAlias($class->columnNames[$field]);
+
+        $this->_rsm->addFieldResult($alias, $columnAlias, $field);
 
         if (isset($class->fieldMappings[$field]['requireSQLConversion'])) {
-            $type   = Type::getType($class->getTypeOfField($field));
-            $sql    = $type->convertToPHPValueSQL($sql, $this->platform);
+            $type = Type::getType($class->getTypeOfField($field));
+            $sql = $type->convertToPHPValueSQL($sql, $this->_platform);
         }
 
         return $sql . ' AS ' . $columnAlias;
@@ -1475,85 +1361,70 @@ class BasicEntityPersister
      * Gets the SQL table alias for the given class name.
      *
      * @param string $className
-     * @param string $assocName
-     *
      * @return string The SQL table alias.
-     *
      * @todo Reconsider. Binding table aliases to class names is not such a good idea.
      */
-    protected function getSQLTableAlias($className, $assocName = '')
+    protected function _getSQLTableAlias($className, $assocName = '')
     {
         if ($assocName) {
             $className .= '#' . $assocName;
         }
 
-        if (isset($this->sqlTableAliases[$className])) {
-            return $this->sqlTableAliases[$className];
+        if (isset($this->_sqlTableAliases[$className])) {
+            return $this->_sqlTableAliases[$className];
         }
 
-        $tableAlias = 't' . $this->sqlAliasCounter++;
+        $tableAlias = 't' . $this->_sqlAliasCounter++;
 
-        $this->sqlTableAliases[$className] = $tableAlias;
+        $this->_sqlTableAliases[$className] = $tableAlias;
 
         return $tableAlias;
     }
 
     /**
-     * Locks all rows of this entity matching the given criteria with the specified pessimistic lock mode.
+     * Lock all rows of this entity matching the given criteria with the specified pessimistic lock mode
      *
      * @param array $criteria
-     * @param int   $lockMode
-     *
+     * @param int $lockMode
      * @return void
      */
     public function lock(array $criteria, $lockMode)
     {
-        $lockSql      = '';
-        $conditionSql = $this->getSelectConditionSQL($criteria);
+        $conditionSql = $this->_getSelectConditionSQL($criteria);
 
-        switch ($lockMode) {
-            case LockMode::PESSIMISTIC_READ:
-                $lockSql = $this->platform->getReadLockSql();
-
-                break;
-            case LockMode::PESSIMISTIC_WRITE:
-
-                $lockSql = $this->platform->getWriteLockSql();
-                break;
+        if ($lockMode == LockMode::PESSIMISTIC_READ) {
+            $lockSql = $this->_platform->getReadLockSql();
+        } else if ($lockMode == LockMode::PESSIMISTIC_WRITE) {
+            $lockSql = $this->_platform->getWriteLockSql();
         }
 
-        $lock  = $this->platform->appendLockHint($this->getLockTablesSql(), $lockMode);
-        $where = ($conditionSql ? ' WHERE ' . $conditionSql : '') . ' ';
         $sql = 'SELECT 1 '
-             . $lock
-             . $where
-             . $lockSql;
+             . $this->_platform->appendLockHint($this->getLockTablesSql(), $lockMode)
+             . ($conditionSql ? ' WHERE ' . $conditionSql : '') . ' ' . $lockSql;
 
         list($params, $types) = $this->expandParameters($criteria);
 
-        $this->conn->executeQuery($sql, $params, $types);
+        $this->_conn->executeQuery($sql, $params, $types);
     }
 
     /**
-     * Gets the FROM and optionally JOIN conditions to lock the entity managed by this persister.
+     * Get the FROM and optionally JOIN conditions to lock the entity managed by this persister.
      *
      * @return string
      */
     protected function getLockTablesSql()
     {
-        return 'FROM '
-             . $this->quoteStrategy->getTableName($this->class, $this->platform) . ' '
-             . $this->getSQLTableAlias($this->class->name);
+        return 'FROM ' . $this->quoteStrategy->getTableName($this->_class, $this->_platform) . ' '
+             . $this->_getSQLTableAlias($this->_class->name);
     }
 
     /**
-     * Gets the Select Where Condition from a Criteria object.
+     * Get the Select Where Condition from a Criteria object.
      *
      * @param \Doctrine\Common\Collections\Criteria $criteria
-     *
      * @return string
      */
-    protected function getSelectConditionCriteriaSQL(Criteria $criteria)
+    protected function _getSelectConditionCriteriaSQL(Criteria $criteria)
     {
         $expression = $criteria->getWhereExpression();
 
@@ -1567,79 +1438,68 @@ class BasicEntityPersister
     }
 
     /**
-     * Gets the SQL WHERE condition for matching a field with a given value.
+     * Get the SQL WHERE condition for matching a field with a given value.
      *
-     * @param string      $field
-     * @param mixed       $value
-     * @param array|null  $assoc
-     * @param string|null $comparison
+     * @param string $field
+     * @param mixed $value
+     * @param array|null $assoc
+     * @param string $comparison
      *
      * @return string
      */
     public function getSelectConditionStatementSQL($field, $value, $assoc = null, $comparison = null)
     {
+        $conditionSql = $this->getSelectConditionStatementColumnSQL($field, $assoc);
         $placeholder  = '?';
-        $condition    = $this->getSelectConditionStatementColumnSQL($field, $assoc);
 
-        if (isset($this->class->fieldMappings[$field]['requireSQLConversion'])) {
-            $placeholder = Type::getType($this->class->getTypeOfField($field))->convertToDatabaseValueSQL($placeholder, $this->platform);
+        if (isset($this->_class->fieldMappings[$field]['requireSQLConversion'])) {
+            $type = Type::getType($this->_class->getTypeOfField($field));
+            $placeholder = $type->convertToDatabaseValueSQL($placeholder, $this->_platform);
         }
 
-        if ($comparison !== null) {
-            return $condition . ' ' . sprintf(self::$comparisonMap[$comparison], $placeholder);
-        }
+        $conditionSql .= ($comparison === null)
+            ? ((is_array($value)) ? ' IN (?)' : (($value === null) ? ' IS NULL' : ' = ' . $placeholder))
+            : ' ' . sprintf(self::$comparisonMap[$comparison], $placeholder);
 
-        if (is_array($value)) {
-            return sprintf('%s IN (%s)' , $condition, $placeholder);
-        }
 
-        if ($value === null) {
-            return sprintf('%s IS NULL' , $condition);
-        }
-
-        return sprintf('%s = %s' , $condition, $placeholder);
+        return $conditionSql;
     }
 
     /**
-     * Builds the left-hand-side of a where condition statement.
+     * Build the left-hand-side of a where condition statement.
      *
-     * @param string     $field
-     * @param array|null $assoc
+     * @param string $field
+     * @param array $assoc
      *
      * @return string
-     *
-     * @throws \Doctrine\ORM\ORMException
      */
     protected function getSelectConditionStatementColumnSQL($field, $assoc = null)
     {
-        if (isset($this->class->columnNames[$field])) {
-            $className = (isset($this->class->fieldMappings[$field]['inherited']))
-                ? $this->class->fieldMappings[$field]['inherited']
-                : $this->class->name;
+        switch (true) {
+            case (isset($this->_class->columnNames[$field])):
+                $className = (isset($this->_class->fieldMappings[$field]['inherited']))
+                    ? $this->_class->fieldMappings[$field]['inherited']
+                    : $this->_class->name;
 
-            return $this->getSQLTableAlias($className) . '.' . $this->quoteStrategy->getColumnName($field, $this->class, $this->platform);
-        }
+                return $this->_getSQLTableAlias($className) . '.' . $this->quoteStrategy->getColumnName($field, $this->_class, $this->_platform);
 
-        if (isset($this->class->associationMappings[$field])) {
+            case (isset($this->_class->associationMappings[$field])):
+                if ( ! $this->_class->associationMappings[$field]['isOwningSide']) {
+                    throw ORMException::invalidFindByInverseAssociation($this->_class->name, $field);
+                }
 
-            if ( ! $this->class->associationMappings[$field]['isOwningSide']) {
-                throw ORMException::invalidFindByInverseAssociation($this->class->name, $field);
-            }
+                $className = (isset($this->_class->associationMappings[$field]['inherited']))
+                    ? $this->_class->associationMappings[$field]['inherited']
+                    : $this->_class->name;
 
-            $joinColumn = $this->class->associationMappings[$field]['joinColumns'][0];
-            $className  = (isset($this->class->associationMappings[$field]['inherited']))
-                ? $this->class->associationMappings[$field]['inherited']
-                : $this->class->name;
+                return $this->_getSQLTableAlias($className) . '.' . $this->_class->associationMappings[$field]['joinColumns'][0]['name'];
 
-            return $this->getSQLTableAlias($className) . '.' . $this->quoteStrategy->getJoinColumnName($joinColumn, $this->class, $this->platform);
-        }
+            case ($assoc !== null && strpos($field, " ") === false && strpos($field, "(") === false):
+                // very careless developers could potentially open up this normally hidden api for userland attacks,
+                // therefore checking for spaces and function calls which are not allowed.
 
-        if ($assoc !== null && strpos($field, " ") === false && strpos($field, "(") === false) {
-            // very careless developers could potentially open up this normally hidden api for userland attacks,
-            // therefore checking for spaces and function calls which are not allowed.
-
-            // found a join column condition, not really a "field"
-            return $field;
+                // found a join column condition, not really a "field"
+                return $field;
         }
 
         throw ORMException::unrecognizedField($field);
@@ -1652,30 +1512,29 @@ class BasicEntityPersister
      * Subclasses are supposed to override this method if they intend to change
      * or alter the criteria by which entities are selected.
      *
-     * @param array      $criteria
-     * @param array|null $assoc
-     *
+     * @param array $criteria
+     * @param AssociationMapping $assoc
      * @return string
      */
-    protected function getSelectConditionSQL(array $criteria, $assoc = null)
+    protected function _getSelectConditionSQL(array $criteria, $assoc = null)
     {
-        $conditions = array();
+        $conditionSql = '';
 
         foreach ($criteria as $field => $value) {
-            $conditions[] = $this->getSelectConditionStatementSQL($field, $value, $assoc);
+            $conditionSql .= $conditionSql ? ' AND ' : '';
+            $conditionSql .= $this->getSelectConditionStatementSQL($field, $value, $assoc);
         }
 
-        return implode(' AND ', $conditions);
+        return $conditionSql;
     }
 
     /**
-     * Returns an array with (sliced or full list) of elements in the specified collection.
+     * Return an array with (sliced or full list) of elements in the specified collection.
      *
-     * @param array    $assoc
-     * @param object   $sourceEntity
-     * @param int|null $offset
-     * @param int|null $limit
-     *
+     * @param array $assoc
+     * @param object $sourceEntity
+     * @param int $offset
+     * @param int $limit
      * @return array
      */
     public function getOneToManyCollection(array $assoc, $sourceEntity, $offset = null, $limit = null)
@@ -1688,11 +1547,11 @@ class BasicEntityPersister
     /**
      * Loads a collection of entities in a one-to-many association.
      *
-     * @param array                $assoc
-     * @param object               $sourceEntity
-     * @param PersistentCollection $coll         The collection to load/fill.
-     *
-     * @return array
+     * @param array $assoc
+     * @param object $sourceEntity
+     * @param PersistentCollection $coll The collection to load/fill.
+     * @param int|null $offset
+     * @param int|null $limit
      */
     public function loadOneToManyCollection(array $assoc, $sourceEntity, PersistentCollection $coll)
     {
@@ -1702,22 +1561,21 @@ class BasicEntityPersister
     }
 
     /**
-     * Builds criteria and execute SQL statement to fetch the one to many entities from.
+     * Build criteria and execute SQL statement to fetch the one to many entities from.
      *
-     * @param array    $assoc
-     * @param object   $sourceEntity
+     * @param array $assoc
+     * @param object $sourceEntity
      * @param int|null $offset
      * @param int|null $limit
-     *
      * @return \Doctrine\DBAL\Statement
      */
     private function getOneToManyStatement(array $assoc, $sourceEntity, $offset = null, $limit = null)
     {
         $criteria = array();
-        $owningAssoc = $this->class->associationMappings[$assoc['mappedBy']];
-        $sourceClass = $this->em->getClassMetadata($assoc['sourceEntity']);
+        $owningAssoc = $this->_class->associationMappings[$assoc['mappedBy']];
+        $sourceClass = $this->_em->getClassMetadata($assoc['sourceEntity']);
 
-        $tableAlias = $this->getSQLTableAlias(isset($owningAssoc['inherited']) ? $owningAssoc['inherited'] : $this->class->name);
+        $tableAlias = $this->_getSQLTableAlias(isset($owningAssoc['inherited']) ? $owningAssoc['inherited'] : $this->_class->name);
 
         foreach ($owningAssoc['targetToSourceKeyColumns'] as $sourceKeyColumn => $targetKeyColumn) {
             if ($sourceClass->containsForeignIdentifier) {
@@ -1725,35 +1583,31 @@ class BasicEntityPersister
                 $value = $sourceClass->reflFields[$field]->getValue($sourceEntity);
 
                 if (isset($sourceClass->associationMappings[$field])) {
-                    $value = $this->em->getUnitOfWork()->getEntityIdentifier($value);
-                    $value = $value[$this->em->getClassMetadata($sourceClass->associationMappings[$field]['targetEntity'])->identifier[0]];
+                    $value = $this->_em->getUnitOfWork()->getEntityIdentifier($value);
+                    $value = $value[$this->_em->getClassMetadata($sourceClass->associationMappings[$field]['targetEntity'])->identifier[0]];
                 }
 
                 $criteria[$tableAlias . "." . $targetKeyColumn] = $value;
-
-                continue;
+            } else {
+                $criteria[$tableAlias . "." . $targetKeyColumn] = $sourceClass->reflFields[$sourceClass->fieldNames[$sourceKeyColumn]]->getValue($sourceEntity);
             }
-
-            $criteria[$tableAlias . "." . $targetKeyColumn] = $sourceClass->reflFields[$sourceClass->fieldNames[$sourceKeyColumn]]->getValue($sourceEntity);
         }
 
-        $sql = $this->getSelectSQL($criteria, $assoc, 0, $limit, $offset);
+        $sql = $this->_getSelectEntitiesSQL($criteria, $assoc, 0, $limit, $offset);
         list($params, $types) = $this->expandParameters($criteria);
 
-        return $this->conn->executeQuery($sql, $params, $types);
+        return $this->_conn->executeQuery($sql, $params, $types);
     }
 
     /**
-     * Expands the parameters from the given criteria and use the correct binding types if found.
+     * Expand the parameters from the given criteria and use the correct binding types if found.
      *
-     * @param array $criteria
-     *
+     * @param  array $criteria
      * @return array
      */
     private function expandParameters($criteria)
     {
-        $params = array();
-        $types  = array();
+        $params = $types = array();
 
         foreach ($criteria as $field => $value) {
             if ($value === null) {
@@ -1768,30 +1622,27 @@ class BasicEntityPersister
     }
 
     /**
-     * Infers field type to be used by parameter type casting.
+     * Infer field type to be used by parameter type casting.
      *
      * @param string $field
-     * @param mixed  $value
-     *
+     * @param mixed $value
      * @return integer
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
      */
     private function getType($field, $value)
     {
         switch (true) {
-            case (isset($this->class->fieldMappings[$field])):
-                $type = $this->class->fieldMappings[$field]['type'];
+            case (isset($this->_class->fieldMappings[$field])):
+                $type = $this->_class->fieldMappings[$field]['type'];
                 break;
 
-            case (isset($this->class->associationMappings[$field])):
-                $assoc = $this->class->associationMappings[$field];
+            case (isset($this->_class->associationMappings[$field])):
+                $assoc = $this->_class->associationMappings[$field];
 
                 if (count($assoc['sourceToTargetKeyColumns']) > 1) {
                     throw Query\QueryException::associationPathCompositeKeyNotSupported();
                 }
 
-                $targetClass  = $this->em->getClassMetadata($assoc['targetEntity']);
+                $targetClass  = $this->_em->getClassMetadata($assoc['targetEntity']);
                 $targetColumn = $assoc['joinColumns'][0]['referencedColumnName'];
                 $type         = null;
 
@@ -1804,9 +1655,8 @@ class BasicEntityPersister
             default:
                 $type = null;
         }
-
         if (is_array($value)) {
-            $type = Type::getType($type)->getBindingType();
+            $type = Type::getType( $type )->getBindingType();
             $type += Connection::ARRAY_PARAM_OFFSET;
         }
 
@@ -1814,63 +1664,61 @@ class BasicEntityPersister
     }
 
     /**
-     * Retrieves parameter value.
+     * Retrieve parameter value
      *
      * @param mixed $value
-     *
      * @return mixed
      */
     private function getValue($value)
     {
-        if ( ! is_array($value)) {
-            return $this->getIndividualValue($value);
+        if (is_array($value)) {
+            $newValue = array();
+
+            foreach ($value as $itemValue) {
+                $newValue[] = $this->getIndividualValue($itemValue);
+            }
+
+            return $newValue;
         }
 
-        $newValue = array();
-
-        foreach ($value as $itemValue) {
-            $newValue[] = $this->getIndividualValue($itemValue);
-        }
-
-        return $newValue;
+        return $this->getIndividualValue($value);
     }
 
     /**
-     * Retrieves an individual parameter value.
+     * Retrieve an invidiual parameter value
      *
      * @param mixed $value
-     *
      * @return mixed
      */
     private function getIndividualValue($value)
     {
-        if ( ! is_object($value) || ! $this->em->getMetadataFactory()->hasMetadataFor(ClassUtils::getClass($value))) {
-            return $value;
+        if (is_object($value) && $this->_em->getMetadataFactory()->hasMetadataFor(ClassUtils::getClass($value))) {
+            if ($this->_em->getUnitOfWork()->getEntityState($value) === UnitOfWork::STATE_MANAGED) {
+                $idValues = $this->_em->getUnitOfWork()->getEntityIdentifier($value);
+            } else {
+                $class = $this->_em->getClassMetadata(get_class($value));
+                $idValues = $class->getIdentifierValues($value);
+            }
+
+            $key = key($idValues);
+
+            if (null !== $key){
+                $value = $idValues[$key];
+           } 
         }
 
-        if ($this->em->getUnitOfWork()->getEntityState($value) === UnitOfWork::STATE_MANAGED) {
-            $idValues = $this->em->getUnitOfWork()->getEntityIdentifier($value);
-
-            return reset($idValues);
-        }
-
-        $class      = $this->em->getClassMetadata(get_class($value));
-        $idValues   = $class->getIdentifierValues($value);
-
-        return reset($idValues);
+        return $value;
     }
 
     /**
      * Checks whether the given managed entity exists in the database.
      *
      * @param object $entity
-     * @param array  $extraConditions
-     *
      * @return boolean TRUE if the entity exists in the database, FALSE otherwise.
      */
     public function exists($entity, array $extraConditions = array())
     {
-        $criteria = $this->class->getIdentifierValues($entity);
+        $criteria = $this->_class->getIdentifierValues($entity);
 
         if ( ! $criteria) {
             return false;
@@ -1880,26 +1728,25 @@ class BasicEntityPersister
             $criteria = array_merge($criteria, $extraConditions);
         }
 
-        $alias = $this->getSQLTableAlias($this->class->name);
+        $alias = $this->_getSQLTableAlias($this->_class->name);
 
         $sql = 'SELECT 1 '
              . $this->getLockTablesSql()
-             . ' WHERE ' . $this->getSelectConditionSQL($criteria);
+             . ' WHERE ' . $this->_getSelectConditionSQL($criteria);
 
-        if ($filterSql = $this->generateFilterConditionSQL($this->class, $alias)) {
+        if ($filterSql = $this->generateFilterConditionSQL($this->_class, $alias)) {
             $sql .= ' AND ' . $filterSql;
         }
 
         list($params) = $this->expandParameters($criteria);
 
-        return (bool) $this->conn->fetchColumn($sql, $params);
+        return (bool) $this->_conn->fetchColumn($sql, $params);
     }
 
     /**
      * Generates the appropriate join SQL for the given join column.
      *
      * @param array $joinColumns The join columns definition of an association.
-     *
      * @return string LEFT JOIN if one of the columns is nullable, INNER JOIN otherwise.
      */
     protected function getJoinSQLForJoinColumns($joinColumns)
@@ -1918,19 +1765,18 @@ class BasicEntityPersister
      * Gets an SQL column alias for a column name.
      *
      * @param string $columnName
-     *
      * @return string
      */
     public function getSQLColumnAlias($columnName)
     {
-        return $this->quoteStrategy->getColumnAlias($columnName, $this->sqlAliasCounter++, $this->platform);
+        return $this->quoteStrategy->getColumnAlias($columnName, $this->_sqlAliasCounter++, $this->_platform);
     }
 
     /**
      * Generates the filter SQL for a given entity and table alias.
      *
-     * @param ClassMetadata $targetEntity     Metadata of the target entity.
-     * @param string        $targetTableAlias The table alias of the joined/selected table.
+     * @param ClassMetadata $targetEntity Metadata of the target entity.
+     * @param string $targetTableAlias The table alias of the joined/selected table.
      *
      * @return string The SQL query part to add to a query.
      */
@@ -1938,7 +1784,7 @@ class BasicEntityPersister
     {
         $filterClauses = array();
 
-        foreach ($this->em->getFilters()->getEnabledFilters() as $filter) {
+        foreach ($this->_em->getFilters()->getEnabledFilters() as $filter) {
             if ('' !== $filterExpr = $filter->addFilterConstraint($targetEntity, $targetTableAlias)) {
                 $filterClauses[] = '(' . $filterExpr . ')';
             }

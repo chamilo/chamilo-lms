@@ -42,7 +42,7 @@ class PhpFileCache extends FileCache
     {
         $filename = $this->getFilename($id);
 
-        if ( ! is_file($filename)) {
+        if ( ! file_exists($filename)) {
             return false;
         }
 
@@ -62,7 +62,7 @@ class PhpFileCache extends FileCache
     {
         $filename = $this->getFilename($id);
 
-        if ( ! is_file($filename)) {
+        if ( ! file_exists($filename)) {
             return false;
         }
 

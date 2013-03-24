@@ -22,9 +22,11 @@ namespace Doctrine\DBAL\Schema\Visitor;
 use Doctrine\DBAL\Platforms\AbstractPlatform,
     Doctrine\DBAL\Schema\Table,
     Doctrine\DBAL\Schema\Schema,
+    Doctrine\DBAL\Schema\Column,
     Doctrine\DBAL\Schema\ForeignKeyConstraint,
     Doctrine\DBAL\Schema\Constraint,
-    Doctrine\DBAL\Schema\Sequence;
+    Doctrine\DBAL\Schema\Sequence,
+    Doctrine\DBAL\Schema\Index;
 
 /**
  * Remove assets from a schema that are not in the default namespace.
@@ -40,7 +42,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform,
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  * @since 2.2
  */
-class RemoveNamespacedAssets extends AbstractVisitor
+class RemoveNamespacedAssets implements Visitor
 {
     /**
      * @var Schema
@@ -75,6 +77,13 @@ class RemoveNamespacedAssets extends AbstractVisitor
     }
 
     /**
+     * @param Column $column
+     */
+    public function acceptColumn(Table $table, Column $column)
+    {
+    }
+
+    /**
      * @param Table $localTable
      * @param ForeignKeyConstraint $fkConstraint
      */
@@ -92,5 +101,13 @@ class RemoveNamespacedAssets extends AbstractVisitor
         if ( ! $foreignTable->isInDefaultNamespace($this->schema->getName()) ) {
             $localTable->removeForeignKey($fkConstraint->getName());
         }
+    }
+
+    /**
+     * @param Table $table
+     * @param Index $index
+     */
+    public function acceptIndex(Table $table, Index $index)
+    {
     }
 }

@@ -26,8 +26,6 @@ namespace Doctrine\ORM\Mapping;
  */
 final class ElementCollection implements Annotation
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $tableName;
 }

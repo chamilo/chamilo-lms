@@ -85,7 +85,7 @@ class DDC117Test extends \Doctrine\Tests\OrmFunctionalTestCase
     /**
      * @group DDC-117
      */
-    public function testUpdateAssociationEntity()
+    public function testUpdateAssocationEntity()
     {
         $idCriteria = array('source' => $this->article1->id(), 'target' => $this->article2->id());
 
@@ -211,7 +211,7 @@ class DDC117Test extends \Doctrine\Tests\OrmFunctionalTestCase
 
         $exceptionThrown = false;
         try {
-            // exception depending on the underlying Database Driver
+            // exception depending on the underyling Database Driver
             $this->_em->flush();
         } catch(\Exception $e) {
             $exceptionThrown = true;
@@ -460,23 +460,5 @@ class DDC117Test extends \Doctrine\Tests\OrmFunctionalTestCase
         $data = $this->_em->createQuery($dql)->getArrayResult();
 
         $this->assertEquals($before + 3, count($data));
-    }
-
-    /**
-     * @group DDC-2246
-     */
-    public function testGetEntityState()
-    {
-        $this->article1 = $this->_em->find("Doctrine\Tests\Models\DDC117\DDC117Article", $this->article1->id());
-        $this->article2 = $this->_em->find("Doctrine\Tests\Models\DDC117\DDC117Article", $this->article2->id());
-
-        $this->reference = new DDC117Reference($this->article2, $this->article1, "Test-Description");
-
-        $this->assertEquals(\Doctrine\ORM\UnitOfWork::STATE_NEW, $this->_em->getUnitOfWork()->getEntityState($this->reference));
-
-        $idCriteria = array('source' => $this->article1->id(), 'target' => $this->article2->id());
-        $reference = $this->_em->find("Doctrine\Tests\Models\DDC117\DDC117Reference", $idCriteria);
-
-        $this->assertEquals(\Doctrine\ORM\UnitOfWork::STATE_MANAGED, $this->_em->getUnitOfWork()->getEntityState($reference));
     }
 }

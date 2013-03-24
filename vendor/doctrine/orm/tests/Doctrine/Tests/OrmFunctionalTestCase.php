@@ -9,25 +9,12 @@ namespace Doctrine\Tests;
  */
 abstract class OrmFunctionalTestCase extends OrmTestCase
 {
-    /**
-     * The metadata cache shared between all functional tests.
-     *
-     * @var \Doctrine\Common\Cache\Cache|null
-     */
+    /* The metadata cache shared between all functional tests. */
     private static $_metadataCacheImpl = null;
-
-    /**
-     * The query cache shared between all functional tests.
-     *
-     * @var \Doctrine\Common\Cache\Cache|null
-     */
+    /* The query cache shared between all functional tests. */
     private static $_queryCacheImpl = null;
 
-    /**
-     * Shared connection when a TestCase is run alone (outside of its functional suite).
-     *
-     * @var \Doctrine\DBAL\Connection|null
-     */
+    /* Shared connection when a TestCase is run alone (outside of it's functional suite) */
     protected static $_sharedConn;
 
     /**
@@ -45,32 +32,19 @@ abstract class OrmFunctionalTestCase extends OrmTestCase
      */
     protected $_sqlLoggerStack;
 
-    /**
-     * The names of the model sets used in this testcase.
-     *
-     * @var array
-     */
+    /** The names of the model sets used in this testcase. */
     protected $_usedModelSets = array();
 
-    /**
-     * Whether the database schema has already been created.
-     *
-     * @var array
-     */
+    /** Whether the database schema has already been created. */
     protected static $_tablesCreated = array();
 
     /**
      * Array of entity class name to their tables that were created.
-     *
      * @var array
      */
     protected static $_entityTablesCreated = array();
 
-    /**
-     * List of model sets and their classes.
-     *
-     * @var array
-     */
+    /** List of model sets and their classes. */
     protected static $_modelSets = array(
         'cms' => array(
             'Doctrine\Tests\Models\CMS\CmsUser',
@@ -152,11 +126,6 @@ abstract class OrmFunctionalTestCase extends OrmTestCase
         ),
     );
 
-    /**
-     * @param string $setName
-     *
-     * @return void
-     */
     protected function useModelSet($setName)
     {
         $this->_usedModelSets[$setName] = true;
@@ -164,8 +133,6 @@ abstract class OrmFunctionalTestCase extends OrmTestCase
 
     /**
      * Sweeps the database tables and clears the EntityManager.
-     *
-     * @return void
      */
     protected function tearDown()
     {
@@ -237,7 +204,7 @@ abstract class OrmFunctionalTestCase extends OrmTestCase
         }
         if (isset($this->_usedModelSets['directorytree'])) {
             $conn->executeUpdate('DELETE FROM ' . $this->_em->getConnection()->getDatabasePlatform()->quoteIdentifier("file"));
-            // MySQL doesn't know deferred deletions therefore only executing the second query gives errors.
+            // MySQL doesnt know deferred deletions therefore only executing the second query gives errors.
             $conn->executeUpdate('DELETE FROM Directory WHERE parentDirectory_id IS NOT NULL');
             $conn->executeUpdate('DELETE FROM Directory');
         }
@@ -275,13 +242,6 @@ abstract class OrmFunctionalTestCase extends OrmTestCase
         $this->_em->clear();
     }
 
-    /**
-     * @param array $classNames
-     *
-     * @return void
-     *
-     * @throws \RuntimeException
-     */
     protected function setUpEntitySchema(array $classNames)
     {
         if ($this->_em === null) {
@@ -304,8 +264,6 @@ abstract class OrmFunctionalTestCase extends OrmTestCase
     /**
      * Creates a connection to the test database, if there is none yet, and
      * creates the necessary tables.
-     *
-     * @return void
      */
     protected function setUp()
     {
@@ -354,10 +312,9 @@ abstract class OrmFunctionalTestCase extends OrmTestCase
     /**
      * Gets an EntityManager for testing purposes.
      *
-     * @param \Doctrine\ORM\Configuration   $config       The Configuration to pass to the EntityManager.
-     * @param \Doctrine\Common\EventManager $eventManager The EventManager to pass to the EntityManager.
-     *
-     * @return \Doctrine\ORM\EntityManager
+     * @param Configuration $config The Configuration to pass to the EntityManager.
+     * @param EventManager $eventManager The EventManager to pass to the EntityManager.
+     * @return EntityManager
      */
     protected function _getEntityManager($config = null, $eventManager = null) {
         // NOTE: Functional tests use their own shared metadata cache, because
@@ -413,13 +370,6 @@ abstract class OrmFunctionalTestCase extends OrmTestCase
         return \Doctrine\ORM\EntityManager::create($conn, $config);
     }
 
-    /**
-     * @param \Exception $e
-     *
-     * @return void
-     *
-     * @throws \Exception
-     */
     protected function onNotSuccessfulTest(\Exception $e)
     {
         if ($e instanceof \PHPUnit_Framework_AssertionFailedError) {

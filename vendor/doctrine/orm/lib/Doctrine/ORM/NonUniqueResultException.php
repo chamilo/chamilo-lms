@@ -27,4 +27,5 @@ namespace Doctrine\ORM;
  */
 class NonUniqueResultException extends UnexpectedResultException
 {
+
 }

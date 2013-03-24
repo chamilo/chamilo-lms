@@ -19,35 +19,23 @@
 
 namespace Doctrine\ORM\Tools\Console\Command\SchemaTool;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Command\Command;
-use Doctrine\ORM\Tools\SchemaTool;
+use Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Command\Command,
+    Doctrine\ORM\Tools\SchemaTool;
 
-/**
- * Base class for CreateCommand, DropCommand and UpdateCommand.
- *
- * @link    www.doctrine-project.org
- * @since   2.0
- * @author  Benjamin Eberlei <kontakt@beberlei.de>
- * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author  Jonathan Wage <jonwage@gmail.com>
- * @author  Roman Borschel <roman@code-factory.org>
- */
 abstract class AbstractCommand extends Command
 {
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
-     * @param SchemaTool      $schemaTool
-     * @param array           $metadatas
-     *
-     * @return null|int Null or 0 if everything went fine, or an error code.
+     * @param SchemaTool $schemaTool
+     * @param array $metadatas
      */
     abstract protected function executeSchemaCommand(InputInterface $input, OutputInterface $output, SchemaTool $schemaTool, array $metadatas);
 
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -60,12 +48,11 @@ abstract class AbstractCommand extends Command
 
         if ( ! empty($metadatas)) {
             // Create SchemaTool
-            $tool = new SchemaTool($em);
+            $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
 
-            return $this->executeSchemaCommand($input, $output, $tool, $metadatas);
+            $this->executeSchemaCommand($input, $output, $tool, $metadatas);
         } else {
-            $output->writeln('No Metadata Classes to process.');
-            return 0;
+            $output->write('No Metadata Classes to process.' . PHP_EOL);
         }
     }
 }

@@ -12,7 +12,8 @@
 /**
  * Checks if a variable is the same as another one (=== in PHP).
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package twig
+ * @author  Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_Expression_Test_Sameas extends Twig_Node_Expression_Test
 {

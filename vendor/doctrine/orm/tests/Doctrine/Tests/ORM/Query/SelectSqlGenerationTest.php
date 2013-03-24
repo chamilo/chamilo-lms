@@ -119,14 +119,6 @@ class SelectSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
         );
     }
 
-    public function testNotExistsExpression()
-    {
-        $this->assertSqlGeneration(
-            'SELECT u FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE NOT EXISTS (SELECT p.phonenumber FROM Doctrine\Tests\Models\CMS\CmsPhonenumber p WHERE p.phonenumber = 1234)',
-            'SELECT c0_.id AS id0, c0_.status AS status1, c0_.username AS username2, c0_.name AS name3 FROM cms_users c0_ WHERE NOT EXISTS (SELECT c1_.phonenumber FROM cms_phonenumbers c1_ WHERE c1_.phonenumber = 1234)'
-        );
-    }
-
     public function testSupportsSelectForMultipleColumnsOfASingleComponent()
     {
         $this->assertSqlGeneration(
@@ -197,7 +189,7 @@ class SelectSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
     }
 
     /* NOT (YET?) SUPPORTED.
-       Can be supported if SimpleSelectExpression supports SingleValuedPathExpression instead of StateFieldPathExpression.
+       Can be supported if SimpleSelectExpresion supports SingleValuedPathExpression instead of StateFieldPathExpression.
 
     public function testSingleAssociationPathExpressionInSubselect()
     {
@@ -1239,60 +1231,6 @@ class SelectSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
     }
 
     /**
-     * @group DDC-2205
-     */
-    public function testCaseNegativeValuesInThenExpression()
-    {
-        $this->assertSqlGeneration(
-            "SELECT CASE g.name WHEN 'admin' THEN - 1 ELSE - 2 END FROM Doctrine\Tests\Models\CMS\CmsGroup g",
-            "SELECT CASE c0_.name WHEN 'admin' THEN -1 ELSE -2 END AS sclr0 FROM cms_groups c0_"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT CASE g.name WHEN 'admin' THEN  - 2 WHEN 'guest' THEN - 1 ELSE 0 END FROM Doctrine\Tests\Models\CMS\CmsGroup g",
-            "SELECT CASE c0_.name WHEN 'admin' THEN -2 WHEN 'guest' THEN -1 ELSE 0 END AS sclr0 FROM cms_groups c0_"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT CASE g.name WHEN 'admin' THEN (- 1) ELSE (- 2) END FROM Doctrine\Tests\Models\CMS\CmsGroup g",
-            "SELECT CASE c0_.name WHEN 'admin' THEN -1 ELSE -2 END AS sclr0 FROM cms_groups c0_"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT CASE g.name WHEN 'admin' THEN ( - :value) ELSE ( + :value) END FROM Doctrine\Tests\Models\CMS\CmsGroup g",
-            "SELECT CASE c0_.name WHEN 'admin' THEN -? ELSE +? END AS sclr0 FROM cms_groups c0_"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT CASE g.name WHEN 'admin' THEN ( - g.id) ELSE ( + g.id) END FROM Doctrine\Tests\Models\CMS\CmsGroup g",
-            "SELECT CASE c0_.name WHEN 'admin' THEN -c0_.id ELSE +c0_.id END AS sclr0 FROM cms_groups c0_"
-        );
-    }
-
-    public function testIdentityFunctionWithCompositePrimaryKey()
-    {
-        $this->assertSqlGeneration(
-            "SELECT IDENTITY(p.poi, 'long') AS long FROM Doctrine\Tests\Models\Navigation\NavPhotos p",
-            "SELECT n0_.poi_long AS sclr0 FROM navigation_photos n0_"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT IDENTITY(p.poi, 'lat') AS lat FROM Doctrine\Tests\Models\Navigation\NavPhotos p",
-            "SELECT n0_.poi_lat AS sclr0 FROM navigation_photos n0_"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT IDENTITY(p.poi, 'long') AS long, IDENTITY(p.poi, 'lat') AS lat FROM Doctrine\Tests\Models\Navigation\NavPhotos p",
-            "SELECT n0_.poi_long AS sclr0, n0_.poi_lat AS sclr1 FROM navigation_photos n0_"
-        );
-
-        $this->assertInvalidSqlGeneration(
-            "SELECT IDENTITY(p.poi, 'invalid') AS invalid FROM Doctrine\Tests\Models\Navigation\NavPhotos p",
-            "Doctrine\ORM\Query\QueryException"
-        );
-    }
-
-    /**
      * @group DDC-1339
      */
     public function testIdentityFunctionInSelectClause()
@@ -1630,79 +1568,6 @@ class SelectSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
         );
     }
 
-    /**
-     * @group DDC-1574
-     */
-    public function testSupportsNewOperator()
-    {
-        $this->assertSqlGeneration(
-            "SELECT new Doctrine\Tests\Models\CMS\CmsUserDTO(u.name, e.email, a.city) FROM Doctrine\Tests\Models\CMS\CmsUser u JOIN u.email e JOIN u.address a",
-            "SELECT c0_.name AS sclr0, c1_.email AS sclr1, c2_.city AS sclr2 FROM cms_users c0_ INNER JOIN cms_emails c1_ ON c0_.email_id = c1_.id INNER JOIN cms_addresses c2_ ON c0_.id = c2_.user_id"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT new Doctrine\Tests\Models\CMS\CmsUserDTO(u.name, e.email, a.id + u.id) FROM Doctrine\Tests\Models\CMS\CmsUser u JOIN u.email e JOIN u.address a",
-            "SELECT c0_.name AS sclr0, c1_.email AS sclr1, c2_.id + c0_.id AS sclr2 FROM cms_users c0_ INNER JOIN cms_emails c1_ ON c0_.email_id = c1_.id INNER JOIN cms_addresses c2_ ON c0_.id = c2_.user_id"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT new Doctrine\Tests\Models\CMS\CmsUserDTO(u.name, e.email, a.city, COUNT(p)) FROM Doctrine\Tests\Models\CMS\CmsUser u JOIN u.email e JOIN u.address a JOIN u.phonenumbers p",
-            "SELECT c0_.name AS sclr0, c1_.email AS sclr1, c2_.city AS sclr2, COUNT(c3_.phonenumber) AS sclr3 FROM cms_users c0_ INNER JOIN cms_emails c1_ ON c0_.email_id = c1_.id INNER JOIN cms_addresses c2_ ON c0_.id = c2_.user_id INNER JOIN cms_phonenumbers c3_ ON c0_.id = c3_.user_id"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT new Doctrine\Tests\Models\CMS\CmsUserDTO(u.name, e.email, a.city, COUNT(p) + u.id) FROM Doctrine\Tests\Models\CMS\CmsUser u JOIN u.email e JOIN u.address a JOIN u.phonenumbers p",
-            "SELECT c0_.name AS sclr0, c1_.email AS sclr1, c2_.city AS sclr2, COUNT(c3_.phonenumber) + c0_.id AS sclr3 FROM cms_users c0_ INNER JOIN cms_emails c1_ ON c0_.email_id = c1_.id INNER JOIN cms_addresses c2_ ON c0_.id = c2_.user_id INNER JOIN cms_phonenumbers c3_ ON c0_.id = c3_.user_id"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT new Doctrine\Tests\Models\CMS\CmsUserDTO(a.id, a.country, a.city), new Doctrine\Tests\Models\CMS\CmsAddressDTO(u.name, e.email) FROM Doctrine\Tests\Models\CMS\CmsUser u JOIN u.email e JOIN u.address a ORDER BY u.name",
-            "SELECT c0_.id AS sclr0, c0_.country AS sclr1, c0_.city AS sclr2, c1_.name AS sclr3, c2_.email AS sclr4 FROM cms_users c1_ INNER JOIN cms_emails c2_ ON c1_.email_id = c2_.id INNER JOIN cms_addresses c0_ ON c1_.id = c0_.user_id ORDER BY c1_.name ASC"
-        );
-
-    }
-
-    /**
-     * @group DDC-2234
-     */
-    public function testWhereFunctionIsNullComparisonExpression()
-    {
-        $this->assertSqlGeneration(
-            "SELECT u FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE IDENTITY(u.email) IS NULL",
-            "SELECT c0_.id AS id0, c0_.status AS status1, c0_.username AS username2, c0_.name AS name3 FROM cms_users c0_ WHERE c0_.email_id IS NULL"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT u FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE NULLIF(u.name, 'FabioBatSilva') IS NULL AND IDENTITY(u.email) IS NOT NULL",
-            "SELECT c0_.id AS id0, c0_.status AS status1, c0_.username AS username2, c0_.name AS name3 FROM cms_users c0_ WHERE NULLIF(c0_.name, 'FabioBatSilva') IS NULL AND c0_.email_id IS NOT NULL"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT u FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE IDENTITY(u.email) IS NOT NULL",
-            "SELECT c0_.id AS id0, c0_.status AS status1, c0_.username AS username2, c0_.name AS name3 FROM cms_users c0_ WHERE c0_.email_id IS NOT NULL"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT u FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE NULLIF(u.name, 'FabioBatSilva') IS NOT NULL",
-            "SELECT c0_.id AS id0, c0_.status AS status1, c0_.username AS username2, c0_.name AS name3 FROM cms_users c0_ WHERE NULLIF(c0_.name, 'FabioBatSilva') IS NOT NULL"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT u FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE COALESCE(u.name, u.id) IS NOT NULL",
-            "SELECT c0_.id AS id0, c0_.status AS status1, c0_.username AS username2, c0_.name AS name3 FROM cms_users c0_ WHERE COALESCE(c0_.name, c0_.id) IS NOT NULL"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT u FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE COALESCE(u.id, IDENTITY(u.email)) IS NOT NULL",
-            "SELECT c0_.id AS id0, c0_.status AS status1, c0_.username AS username2, c0_.name AS name3 FROM cms_users c0_ WHERE COALESCE(c0_.id, c0_.email_id) IS NOT NULL"
-        );
-
-        $this->assertSqlGeneration(
-            "SELECT u FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE COALESCE(IDENTITY(u.email), NULLIF(u.name, 'FabioBatSilva')) IS NOT NULL",
-            "SELECT c0_.id AS id0, c0_.status AS status1, c0_.username AS username2, c0_.name AS name3 FROM cms_users c0_ WHERE COALESCE(c0_.email_id, NULLIF(c0_.name, 'FabioBatSilva')) IS NOT NULL"
-        );
-    }
-
     public function testCustomTypeValueSql()
     {
         if (DBALType::hasType('negative_to_positive')) {
@@ -1844,91 +1709,6 @@ class SelectSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
             'SELECT g, p FROM Doctrine\Tests\Models\Quote\Group g JOIN g.parent p',
             'SELECT q0_."group-id" AS groupid0, q0_."group-name" AS groupname1, q1_."group-id" AS groupid2, q1_."group-name" AS groupname3 FROM "quote-group" q0_ INNER JOIN "quote-group" q1_ ON q0_."parent-id" = q1_."group-id"'
         );
-    }
-
-   /**
-    * @group DDC-2208
-    */
-    public function testCaseThenParameterArithmeticExpression()
-    {
-        $this->assertSqlGeneration(
-            'SELECT SUM(CASE WHEN e.salary <= :value THEN e.salary - :value WHEN e.salary >= :value THEN :value - e.salary ELSE 0 END) FROM Doctrine\Tests\Models\Company\CompanyEmployee e',
-            'SELECT SUM(CASE WHEN c0_.salary <= ? THEN c0_.salary - ? WHEN c0_.salary >= ? THEN ? - c0_.salary ELSE 0 END) AS sclr0 FROM company_employees c0_ INNER JOIN company_persons c1_ ON c0_.id = c1_.id'
-        );
-
-        $this->assertSqlGeneration(
-            'SELECT SUM(CASE WHEN e.salary <= :value THEN e.salary - :value WHEN e.salary >= :value THEN :value - e.salary ELSE e.salary + 0 END) FROM Doctrine\Tests\Models\Company\CompanyEmployee e',
-            'SELECT SUM(CASE WHEN c0_.salary <= ? THEN c0_.salary - ? WHEN c0_.salary >= ? THEN ? - c0_.salary ELSE c0_.salary + 0 END) AS sclr0 FROM company_employees c0_ INNER JOIN company_persons c1_ ON c0_.id = c1_.id'
-        );
-
-        $this->assertSqlGeneration(
-            'SELECT SUM(CASE WHEN e.salary <= :value THEN (e.salary - :value) WHEN e.salary >= :value THEN (:value - e.salary) ELSE (e.salary + :value) END) FROM Doctrine\Tests\Models\Company\CompanyEmployee e',
-            'SELECT SUM(CASE WHEN c0_.salary <= ? THEN c0_.salary - ? WHEN c0_.salary >= ? THEN ? - c0_.salary ELSE c0_.salary + ? END) AS sclr0 FROM company_employees c0_ INNER JOIN company_persons c1_ ON c0_.id = c1_.id'
-        );
-    }
-
-    /**
-    * @group DDC-2268
-    */
-    public function testCaseThenFunction()
-    {
-        $this->assertSqlGeneration(
-            'SELECT CASE WHEN LENGTH(u.name) <> 0 THEN CONCAT(u.id, u.name) ELSE u.id END AS name  FROM Doctrine\Tests\Models\CMS\CmsUser u',
-            'SELECT CASE WHEN LENGTH(c0_.name) <> 0 THEN c0_.id || c0_.name ELSE c0_.id END AS sclr0 FROM cms_users c0_'
-        );
-
-        $this->assertSqlGeneration(
-            'SELECT CASE WHEN LENGTH(u.name) <> LENGTH(TRIM(u.name)) THEN TRIM(u.name) ELSE u.name END AS name  FROM Doctrine\Tests\Models\CMS\CmsUser u',
-            'SELECT CASE WHEN LENGTH(c0_.name) <> LENGTH(TRIM(c0_.name)) THEN TRIM(c0_.name) ELSE c0_.name END AS sclr0 FROM cms_users c0_'
-        );
-
-        $this->assertSqlGeneration(
-            'SELECT CASE WHEN LENGTH(u.name) > :value THEN SUBSTRING(u.name, 0, :value) ELSE TRIM(u.name) END AS name  FROM Doctrine\Tests\Models\CMS\CmsUser u',
-            'SELECT CASE WHEN LENGTH(c0_.name) > ? THEN SUBSTRING(c0_.name FROM 0 FOR ?) ELSE TRIM(c0_.name) END AS sclr0 FROM cms_users c0_'
-        );
-    }
-    
-    /**
-     * @group DDC-2268
-     */
-    
-    public function testSupportsMoreThanTwoParametersInConcatFunction()
-    {
-    	$connMock = $this->_em->getConnection();
-    	$orgPlatform = $connMock->getDatabasePlatform();
-    
-    	$connMock->setDatabasePlatform(new \Doctrine\DBAL\Platforms\MySqlPlatform);
-    	$this->assertSqlGeneration(
-    			"SELECT u.id FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE CONCAT(u.name, u.status, 's') = ?1",
-    			"SELECT c0_.id AS id0 FROM cms_users c0_ WHERE CONCAT(c0_.name, c0_.status, 's') = ?"
-    	);
-    	$this->assertSqlGeneration(
-    			"SELECT CONCAT(u.id, u.name, u.status) FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE u.id = ?1",
-    			"SELECT CONCAT(c0_.id, c0_.name, c0_.status) AS sclr0 FROM cms_users c0_ WHERE c0_.id = ?"
-    	);
-    
-    	$connMock->setDatabasePlatform(new \Doctrine\DBAL\Platforms\PostgreSqlPlatform);
-    	$this->assertSqlGeneration(
-    			"SELECT u.id FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE CONCAT(u.name, u.status, 's') = ?1",
-    			"SELECT c0_.id AS id0 FROM cms_users c0_ WHERE c0_.name || c0_.status || 's' = ?"
-    	);
-    	$this->assertSqlGeneration(
-    			"SELECT CONCAT(u.id, u.name, u.status) FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE u.id = ?1",
-    			"SELECT c0_.id || c0_.name || c0_.status AS sclr0 FROM cms_users c0_ WHERE c0_.id = ?"
-    	);
-    	
-    	
-    	$connMock->setDatabasePlatform(new \Doctrine\DBAL\Platforms\SQLServerPlatform());
-    	$this->assertSqlGeneration(
-    			"SELECT u.id FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE CONCAT(u.name, u.status, 's') = ?1",
-    			"SELECT c0_.id AS id0 FROM cms_users c0_ WITH (NOLOCK) WHERE (c0_.name + c0_.status + 's') = ?"
-    	);
-    	$this->assertSqlGeneration(
-    			"SELECT CONCAT(u.id, u.name, u.status) FROM Doctrine\Tests\Models\CMS\CmsUser u WHERE u.id = ?1",
-    			"SELECT (c0_.id + c0_.name + c0_.status) AS sclr0 FROM cms_users c0_ WITH (NOLOCK) WHERE c0_.id = ?"
-    	);
-    
-    	$connMock->setDatabasePlatform($orgPlatform);
     }
 }
 

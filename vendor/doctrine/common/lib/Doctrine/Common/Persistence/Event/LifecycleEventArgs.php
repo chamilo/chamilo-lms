@@ -41,39 +41,28 @@ class LifecycleEventArgs extends EventArgs
     /**
      * @var object
      */
-    private $object;
+    private $entity;
 
     /**
      * Constructor
      *
-     * @param object $object
+     * @param object $entity
      * @param ObjectManager $objectManager
      */
-    public function __construct($object, ObjectManager $objectManager)
+    public function __construct($entity, ObjectManager $objectManager)
     {
-        $this->object = $object;
+        $this->entity = $entity;
         $this->objectManager = $objectManager;
     }
 
     /**
-     * Retrieve associated entity.
-     * @deprecated
+     * Retrieve associated Entity.
      *
      * @return object
      */
     public function getEntity()
     {
-        return $this->object;
-    }
-
-    /**
-     * Retrieve associated object.
-     *
-     * @return object
-     */
-    public function getObject()
-    {
-        return $this->object;
+        return $this->entity;
     }
 
     /**

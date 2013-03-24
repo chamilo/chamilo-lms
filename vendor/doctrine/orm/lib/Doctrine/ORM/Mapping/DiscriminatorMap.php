@@ -25,8 +25,6 @@ namespace Doctrine\ORM\Mapping;
  */
 final class DiscriminatorMap implements Annotation
 {
-    /**
-     * @var array<string>
-     */
+    /** @var array<string> */
     public $value;
 }

@@ -87,7 +87,7 @@ interface SchemaSynchronizer
     function dropSchema(Schema $dropSchema);
 
     /**
-     * Drop all assets from the underlying db.
+     * Drop all assets from the underyling db.
      *
      * @return void
      */

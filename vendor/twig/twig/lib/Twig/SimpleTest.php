@@ -12,7 +12,8 @@
 /**
  * Represents a template test.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_SimpleTest
 {

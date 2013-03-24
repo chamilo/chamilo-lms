@@ -13,7 +13,8 @@
 /**
  * Represents a module node.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_SandboxedModule extends Twig_Node_Module
 {

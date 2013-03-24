@@ -16,7 +16,8 @@
  *  {{ var is odd }}
  * </pre>
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package twig
+ * @author  Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node_Expression_Test_Odd extends Twig_Node_Expression_Test
 {

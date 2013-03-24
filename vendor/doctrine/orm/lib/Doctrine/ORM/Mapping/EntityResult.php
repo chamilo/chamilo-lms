@@ -33,8 +33,9 @@ namespace Doctrine\ORM\Mapping;
  */
 final class EntityResult implements Annotation
 {
+
     /**
-     * The class of the result.
+     * The class of the result
      *
      * @var string
      */
@@ -53,4 +54,5 @@ final class EntityResult implements Annotation
      * @var string
      */
     public $discriminatorColumn;
+
 }

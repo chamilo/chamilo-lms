@@ -20,12 +20,9 @@
 namespace Doctrine\ORM\Query\AST\Functions;
 
 use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\Parser;
-use Doctrine\ORM\Query\SqlWalker;
-use Doctrine\ORM\Query\QueryException;
 
 /**
- * "IDENTITY" "(" SingleValuedAssociationPathExpression {"," string} ")"
+ * "IDENTITY" "(" SingleValuedAssociationPathExpression ")"
  *
  * 
  * @link    www.doctrine-project.org
@@ -35,76 +32,36 @@ use Doctrine\ORM\Query\QueryException;
  */
 class IdentityFunction extends FunctionNode
 {
-    /**
-     * @var \Doctrine\ORM\Query\AST\PathExpression
-     */
     public $pathExpression;
 
     /**
-     * @var string
+     * @override
      */
-    public $fieldMapping;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSql(SqlWalker $sqlWalker)
+    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        $platform       = $sqlWalker->getEntityManager()->getConnection()->getDatabasePlatform();
-        $quoteStrategy  = $sqlWalker->getEntityManager()->getConfiguration()->getQuoteStrategy();
-        $dqlAlias       = $this->pathExpression->identificationVariable;
-        $assocField     = $this->pathExpression->field;
-        $qComp          = $sqlWalker->getQueryComponent($dqlAlias);
-        $class          = $qComp['metadata'];
-        $assoc          = $class->associationMappings[$assocField];
-        $targetEntity   = $sqlWalker->getEntityManager()->getClassMetadata($assoc['targetEntity']);
-        $joinColumn     = reset($assoc['joinColumns']);
+        $dqlAlias   = $this->pathExpression->identificationVariable;
+        $assocField = $this->pathExpression->field;
 
-        if ($this->fieldMapping !== null) {
-            if ( ! isset($targetEntity->fieldMappings[$this->fieldMapping])) {
-                throw new QueryException(sprintf('Undefined reference field mapping "%s"', $this->fieldMapping));
-            }
-
-            $field      = $targetEntity->fieldMappings[$this->fieldMapping];
-            $joinColumn = null;
-
-            foreach ($assoc['joinColumns'] as $mapping) {
-
-                if($mapping['referencedColumnName'] === $field['columnName']) {
-                    $joinColumn = $mapping;
-
-                    break;
-                }
-            }
-
-            if ($joinColumn === null) {
-                throw new QueryException(sprintf('Unable to resolve the reference field mapping "%s"', $this->fieldMapping));
-            }
-        }
+        $qComp = $sqlWalker->getQueryComponent($dqlAlias);
+        $class = $qComp['metadata'];
+        $assoc = $class->associationMappings[$assocField];
 
         $tableAlias = $sqlWalker->getSQLTableAlias($class->getTableName(), $dqlAlias);
-        $columName  = $quoteStrategy->getJoinColumnName($joinColumn, $targetEntity, $platform);
 
-        return $tableAlias . '.' . $columName;
+        return $tableAlias . '.' . reset($assoc['targetToSourceKeyColumns']);;
     }
 
     /**
-     * {@inheritdoc}
+     * @override
      */
-    public function parse(Parser $parser)
+    public function parse(\Doctrine\ORM\Query\Parser $parser)
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
 
         $this->pathExpression = $parser->SingleValuedAssociationPathExpression();
 
-        if ($parser->getLexer()->isNextToken(Lexer::T_COMMA)) {
-            $parser->match(Lexer::T_COMMA);
-            $parser->match(Lexer::T_STRING);
-
-            $this->fieldMapping = $parser->getLexer()->token['value'];
-        }
-
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 }
+

@@ -12,7 +12,8 @@
 /**
  * Twig_NodeVisitor_Escaper implements output escaping.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_NodeVisitor_Escaper implements Twig_NodeVisitorInterface
 {

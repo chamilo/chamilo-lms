@@ -26,12 +26,7 @@ use Doctrine\Common\Persistence\Mapping\RuntimeReflectionService;
  */
 class RuntimeReflectionServiceTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var RuntimeReflectionService
-     */
     private $reflectionService;
-
-    public $unusedPublicProperty;
 
     public function setUp()
     {
@@ -70,9 +65,6 @@ class RuntimeReflectionServiceTest extends \PHPUnit_Framework_TestCase
     {
         $reflProp = $this->reflectionService->getAccessibleProperty(__CLASS__, "reflectionService");
         $this->assertInstanceOf("ReflectionProperty", $reflProp);
-
-        $reflProp = $this->reflectionService->getAccessibleProperty(__CLASS__, "unusedPublicProperty");
-        $this->assertInstanceOf("Doctrine\Common\Reflection\RuntimePublicReflectionProperty", $reflProp);
     }
 }
 

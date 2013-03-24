@@ -2,23 +2,13 @@
 
 namespace Doctrine\Tests\Mocks;
 
-/**
- * Mock class for UnitOfWork.
- */
 class UnitOfWorkMock extends \Doctrine\ORM\UnitOfWork
 {
-    /**
-     * @var array
-     */
     private $_mockDataChangeSets = array();
-
-    /**
-     * @var array|null
-     */
     private $_persisterMock;
 
     /**
-     * {@inheritdoc}
+     * @override
      */
     public function getEntityPersister($entityName)
     {
@@ -27,7 +17,8 @@ class UnitOfWorkMock extends \Doctrine\ORM\UnitOfWork
     }
 
     /**
-     * {@inheritdoc}
+     * @param <type> $entity
+     * @override
      */
     public function getEntityChangeSet($entity)
     {
@@ -42,19 +33,24 @@ class UnitOfWorkMock extends \Doctrine\ORM\UnitOfWork
      * Sets a (mock) persister for an entity class that will be returned when
      * getEntityPersister() is invoked for that class.
      *
-     * @param string                                        $entityName
-     * @param \Doctrine\ORM\Persisters\BasicEntityPersister $persister
-     *
-     * @return void
+     * @param <type> $entityName
+     * @param <type> $persister
      */
     public function setEntityPersister($entityName, $persister)
     {
         $this->_persisterMock[$entityName] = $persister;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function setDataChangeSet($entity, array $mockChangeSet)
+    {
+        $this->_mockDataChangeSets[spl_object_hash($entity)] = $mockChangeSet;
+    }
+
+    public function setEntityState($entity, $state)
+    {
+        $this->_entityStates[spl_object_hash($entity)] = $state;
+    }
+
     public function setOriginalEntityData($entity, array $originalData)
     {
         $this->_originalEntityData[spl_object_hash($entity)] = $originalData;

@@ -36,13 +36,8 @@ class AssignedGenerator extends AbstractIdGenerator
     /**
      * Returns the identifier assigned to the given entity.
      *
-     * @param EntityManager $em
-     * @param object        $entity
-     *
+     * @param object $entity
      * @return mixed
-     *
-     * @throws \Doctrine\ORM\ORMException
-     *
      * @override
      */
     public function generate(EntityManager $em, $entity)
@@ -52,7 +47,7 @@ class AssignedGenerator extends AbstractIdGenerator
         $identifier = array();
 
         foreach ($idFields as $idField) {
-            $value = $class->getFieldValue($entity, $idField);
+            $value = $class->reflFields[$idField]->getValue($entity);
 
             if ( ! isset($value)) {
                 throw ORMException::entityMissingAssignedIdForField($entity, $idField);

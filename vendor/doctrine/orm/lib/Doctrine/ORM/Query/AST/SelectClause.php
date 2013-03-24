@@ -22,6 +22,7 @@ namespace Doctrine\ORM\Query\AST;
 /**
  * SelectClause = "SELECT" ["DISTINCT"] SelectExpression {"," SelectExpression}
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -30,29 +31,15 @@ namespace Doctrine\ORM\Query\AST;
  */
 class SelectClause extends Node
 {
-    /**
-     * @var bool
-     */
     public $isDistinct;
-
-    /**
-     * @var array
-     */
     public $selectExpressions = array();
 
-    /**
-     * @param array $selectExpressions
-     * @param bool  $isDistinct
-     */
     public function __construct(array $selectExpressions, $isDistinct)
     {
         $this->isDistinct = $isDistinct;
         $this->selectExpressions = $selectExpressions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatch($sqlWalker)
     {
         return $sqlWalker->walkSelectClause($this);

@@ -19,14 +19,13 @@
 
 namespace Doctrine\ORM;
 
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
-
 use Doctrine\DBAL\LockMode;
 use Doctrine\Common\Persistence\ObjectRepository;
 
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ExpressionBuilder;
 
 /**
  * An EntityRepository serves as a repository for entities with generic as well as
@@ -61,8 +60,8 @@ class EntityRepository implements ObjectRepository, Selectable
     /**
      * Initializes a new <tt>EntityRepository</tt>.
      *
-     * @param EntityManager         $em    The EntityManager to use.
-     * @param Mapping\ClassMetadata $class The class descriptor.
+     * @param EntityManager $em The EntityManager to use.
+     * @param ClassMetadata $classMetadata The class descriptor.
      */
     public function __construct($em, Mapping\ClassMetadata $class)
     {
@@ -72,11 +71,10 @@ class EntityRepository implements ObjectRepository, Selectable
     }
 
     /**
-     * Creates a new QueryBuilder instance that is prepopulated for this entity name.
+     * Create a new QueryBuilder instance that is prepopulated for this entity name
      *
      * @param string $alias
-     *
-     * @return QueryBuilder
+     * @return QueryBuilder $qb
      */
     public function createQueryBuilder($alias)
     {
@@ -86,27 +84,9 @@ class EntityRepository implements ObjectRepository, Selectable
     }
 
     /**
-     * Creates a new result set mapping builder for this entity.
-     *
-     * The column naming strategy is "INCREMENT".
-     *
-     * @param string $alias
-     *
-     * @return ResultSetMappingBuilder
-     */
-    public function createResultSetMappingBuilder($alias)
-    {
-        $rsm = new ResultSetMappingBuilder($this->_em, ResultSetMappingBuilder::COLUMN_RENAMING_INCREMENT);
-        $rsm->addRootEntityFromClassMetadata($this->_entityName, $alias);
-
-        return $rsm;
-    }
-
-    /**
-     * Creates a new Query instance based on a predefined metadata named query.
+     * Create a new Query instance based on a predefined metadata named query.
      *
      * @param string $queryName
-     *
      * @return Query
      */
     public function createNamedQuery($queryName)
@@ -118,7 +98,6 @@ class EntityRepository implements ObjectRepository, Selectable
      * Creates a native SQL query.
      *
      * @param string $queryName
-     *
      * @return NativeQuery
      */
     public function createNativeNamedQuery($queryName)
@@ -132,8 +111,6 @@ class EntityRepository implements ObjectRepository, Selectable
 
     /**
      * Clears the repository, causing all managed entities to become detached.
-     *
-     * @return void
      */
     public function clear()
     {
@@ -143,11 +120,11 @@ class EntityRepository implements ObjectRepository, Selectable
     /**
      * Finds an entity by its primary key / identifier.
      *
-     * @param mixed    $id          The identifier.
-     * @param int      $lockMode    The lock mode.
-     * @param int|null $lockVersion The lock version.
+     * @param mixed $id The identifier.
+     * @param integer $lockMode
+     * @param integer $lockVersion
      *
-     * @return object|null The entity instance or NULL if the entity can not be found.
+     * @return object The entity.
      */
     public function find($id, $lockMode = LockMode::NONE, $lockVersion = null)
     {
@@ -167,11 +144,10 @@ class EntityRepository implements ObjectRepository, Selectable
     /**
      * Finds entities by a set of criteria.
      *
-     * @param array      $criteria
+     * @param array $criteria
      * @param array|null $orderBy
-     * @param int|null   $limit
-     * @param int|null   $offset
-     *
+     * @param int|null $limit
+     * @param int|null $offset
      * @return array The objects.
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
@@ -186,8 +162,7 @@ class EntityRepository implements ObjectRepository, Selectable
      *
      * @param array $criteria
      * @param array|null $orderBy
-     *
-     * @return object|null The entity instance or NULL if the entity can not be found.
+     * @return object
      */
     public function findOneBy(array $criteria, array $orderBy = null)
     {
@@ -199,13 +174,8 @@ class EntityRepository implements ObjectRepository, Selectable
     /**
      * Adds support for magic finders.
      *
-     * @param string $method
-     * @param array  $arguments
-     *
      * @return array|object The found entity/entities.
-     *
-     * @throws ORMException
-     * @throws \BadMethodCallException If the method called is an invalid find* method
+     * @throws BadMethodCallException  If the method called is an invalid find* method
      *                                 or no find* method at all and therefore an invalid
      *                                 method call.
      */
@@ -304,3 +274,4 @@ class EntityRepository implements ObjectRepository, Selectable
         return new ArrayCollection($persister->loadCriteria($criteria));
     }
 }
+

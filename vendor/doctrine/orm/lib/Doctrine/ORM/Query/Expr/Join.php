@@ -20,8 +20,9 @@
 namespace Doctrine\ORM\Query\Expr;
 
 /**
- * Expression class for DQL join.
+ * Expression class for DQL from
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -67,12 +68,12 @@ class Join
     protected $indexBy;
 
     /**
-     * @param string      $joinType      The condition type constant. Either INNER_JOIN or LEFT_JOIN.
-     * @param string      $join          The relationship to join.
-     * @param string|null $alias         The alias of the join.
-     * @param string|null $conditionType The condition type constant. Either ON or WITH.
-     * @param string|null $condition     The condition for the join.
-     * @param string|null $indexBy       The index for the join.
+     * @param string $joinType      The condition type constant. Either INNER_JOIN or LEFT_JOIN.
+     * @param string $join          The relationship to join
+     * @param string $alias         The alias of the join
+     * @param string $conditionType The condition type constant. Either ON or WITH.
+     * @param string $condition     The condition for the join
+     * @param string $indexBy       The index for the join
      */
     public function __construct($joinType, $join, $alias = null, $conditionType = null, $condition = null, $indexBy = null)
     {
@@ -131,6 +132,7 @@ class Join
     {
         return $this->indexBy;
     }
+
 
     /**
      * @return string

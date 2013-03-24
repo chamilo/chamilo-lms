@@ -19,7 +19,6 @@
 
 namespace Doctrine\ORM\Event;
 
-use Doctrine\Common\EventArgs;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -31,12 +30,15 @@ use Doctrine\ORM\EntityManager;
  * @author      Roman Borschel <roman@code-factory.de>
  * @author      Benjamin Eberlei <kontakt@beberlei.de>
  */
-class OnFlushEventArgs extends EventArgs
+class OnFlushEventArgs extends \Doctrine\Common\EventArgs
 {
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var Doctirne\ORM\EntityManager
      */
     private $em;
+
+    //private $entitiesToPersist = array();
+    //private $entitiesToRemove = array();
 
     /**
      * Constructor.
@@ -58,4 +60,25 @@ class OnFlushEventArgs extends EventArgs
         return $this->em;
     }
 
+    /*
+    public function addEntityToPersist($entity)
+    {
+
+    }
+
+    public function addEntityToRemove($entity)
+    {
+
+    }
+
+    public function addEntityToUpdate($entity)
+    {
+
+    }
+
+    public function getEntitiesToPersist()
+    {
+        return $this->_entitiesToPersist;
+    }
+    */
 }

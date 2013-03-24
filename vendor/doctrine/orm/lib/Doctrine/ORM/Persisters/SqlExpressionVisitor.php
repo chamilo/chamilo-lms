@@ -46,7 +46,7 @@ class SqlExpressionVisitor extends ExpressionVisitor
     }
 
     /**
-     * Converts a comparison expression into the target query language output.
+     * Convert a comparison expression into the target query language output
      *
      * @param \Doctrine\Common\Collections\Expr\Comparison $comparison
      *
@@ -61,13 +61,11 @@ class SqlExpressionVisitor extends ExpressionVisitor
     }
 
     /**
-     * Converts a composite expression into the target query language output.
+     * Convert a composite expression into the target query language output
      *
      * @param \Doctrine\Common\Collections\Expr\CompositeExpression $expr
      *
      * @return mixed
-     *
-     * @throws \RuntimeException
      */
     public function walkCompositeExpression(CompositeExpression $expr)
     {
@@ -90,7 +88,7 @@ class SqlExpressionVisitor extends ExpressionVisitor
     }
 
     /**
-     * Converts a value expression into the target query language part.
+     * Convert a value expression into the target query language part.
      *
      * @param \Doctrine\Common\Collections\Expr\Value $value
      *

@@ -20,45 +20,27 @@
 namespace Doctrine\ORM\Proxy;
 
 /**
- * ORM Proxy Exception.
+ * ORM Proxy Exception
  *
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.com
  * @since       1.0
  * @author      Benjamin Eberlei <kontakt@beberlei.de>
  */
-class ProxyException extends \Doctrine\ORM\ORMException
-{
-    /**
-     * @return ProxyException
-     */
-    public static function proxyDirectoryRequired()
-    {
+class ProxyException extends \Doctrine\ORM\ORMException {
+
+    public static function proxyDirectoryRequired() {
         return new self("You must configure a proxy directory. See docs for details");
     }
 
-    /**
-     * @return ProxyException
-     */
-    public static function proxyDirectoryNotWritable()
-    {
+    public static function proxyDirectoryNotWritable() {
         return new self("Your proxy directory must be writable.");
     }
 
-    /**
-     * @return ProxyException
-     */
-    public static function proxyNamespaceRequired()
-    {
+    public static function proxyNamespaceRequired() {
         return new self("You must configure a proxy namespace. See docs for details");
     }
 
-    /**
-     * @param $className
-     * @param $proxyNamespace
-     *
-     * @return ProxyException
-     */
     public static function notProxyClass($className, $proxyNamespace)
     {
         return new self(sprintf(
@@ -66,4 +48,5 @@ class ProxyException extends \Doctrine\ORM\ORMException
             $className, $proxyNamespace
         ));
     }
+
 }

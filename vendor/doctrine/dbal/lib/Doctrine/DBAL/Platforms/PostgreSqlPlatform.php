@@ -34,24 +34,6 @@ use Doctrine\DBAL\Schema\TableDiff,
 class PostgreSqlPlatform extends AbstractPlatform
 {
     /**
-     * @var bool
-     */
-    private $useBooleanTrueFalseStrings = true;
-
-    /**
-     * PostgreSQL has different behavior with some drivers
-     * with regard to how booleans have to be handled.
-     *
-     * Enables use of 'true'/'false' or otherwise 1 and 0 instead.
-     *
-     * @param bool $flag
-     */
-    public function setUseBooleanTrueFalseStrings($flag)
-    {
-        $this->useBooleanTrueFalseStrings = (bool)$flag;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getSubstringExpression($value, $from, $length = null)
@@ -169,14 +151,6 @@ class PostgreSqlPlatform extends AbstractPlatform
      * {@inheritDoc}
      */
     public function prefersSequences()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function hasNativeGuidType()
     {
         return true;
     }
@@ -348,9 +322,7 @@ class PostgreSqlPlatform extends AbstractPlatform
             $query .= ' NOT DEFERRABLE';
         }
 
-        if (($foreignKey->hasOption('feferred') && $foreignKey->getOption('feferred') !== false)
-            || ($foreignKey->hasOption('deferred') && $foreignKey->getOption('deferred') !== false)
-        ) {
+        if ($foreignKey->hasOption('feferred') && $foreignKey->getOption('feferred') !== false) {
             $query .= ' INITIALLY DEFERRED';
         } else {
             $query .= ' INITIALLY IMMEDIATE';
@@ -540,10 +512,6 @@ class PostgreSqlPlatform extends AbstractPlatform
      */
     public function convertBooleans($item)
     {
-        if ( ! $this->useBooleanTrueFalseStrings) {
-            return parent::convertBooleans($item);
-        }
-
         if (is_array($item)) {
             foreach ($item as $key => $value) {
                 if (is_bool($value) || is_numeric($item)) {
@@ -752,7 +720,6 @@ class PostgreSqlPlatform extends AbstractPlatform
             '_varchar'      => 'string',
             'char'          => 'string',
             'bpchar'        => 'string',
-            'inet'          => 'string',
             'date'          => 'date',
             'datetime'      => 'datetime',
             'timestamp'     => 'datetime',

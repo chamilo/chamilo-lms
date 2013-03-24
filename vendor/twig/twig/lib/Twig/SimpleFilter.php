@@ -12,7 +12,8 @@
 /**
  * Represents a template filter.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_SimpleFilter
 {

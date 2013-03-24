@@ -13,7 +13,8 @@
 /**
  * Compiles a node to PHP code.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Compiler implements Twig_CompilerInterface
 {

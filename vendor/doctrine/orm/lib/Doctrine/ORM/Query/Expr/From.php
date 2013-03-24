@@ -20,8 +20,9 @@
 namespace Doctrine\ORM\Query\Expr;
 
 /**
- * Expression class for DQL from.
+ * Expression class for DQL from
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -46,9 +47,9 @@ class From
     protected $indexBy;
 
     /**
-     * @param string $from    The class name.
-     * @param string $alias   The alias of the class.
-     * @param string $indexBy The index for the from.
+     * @param string $from      The class name.
+     * @param string $alias     The alias of the class.
+     * @param string $indexBy   The index for the from.
      */
     public function __construct($from, $alias, $indexBy = null)
     {

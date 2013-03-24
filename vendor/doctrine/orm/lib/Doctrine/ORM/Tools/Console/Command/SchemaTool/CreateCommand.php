@@ -19,15 +19,16 @@
 
 namespace Doctrine\ORM\Tools\Console\Command\SchemaTool;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\ORM\Tools\SchemaTool;
+use Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * Command to create the database schema for a set of classes based on their mappings.
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Benjamin Eberlei <kontakt@beberlei.de>
@@ -38,7 +39,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 class CreateCommand extends AbstractCommand
 {
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
     protected function configure()
     {
@@ -59,22 +60,17 @@ EOT
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function executeSchemaCommand(InputInterface $input, OutputInterface $output, SchemaTool $schemaTool, array $metadatas)
     {
-        if ($input->getOption('dump-sql')) {
+        if ($input->getOption('dump-sql') === true) {
             $sqls = $schemaTool->getCreateSchemaSql($metadatas);
-            $output->writeln(implode(';' . PHP_EOL, $sqls) . ';');
+            $output->write(implode(';' . PHP_EOL, $sqls) . ';' . PHP_EOL);
         } else {
-            $output->writeln('ATTENTION: This operation should not be executed in a production environment.' . PHP_EOL);
+            $output->write('ATTENTION: This operation should not be executed in a production environment.' . PHP_EOL . PHP_EOL);
 
-            $output->writeln('Creating database schema...');
+            $output->write('Creating database schema...' . PHP_EOL);
             $schemaTool->createSchema($metadatas);
-            $output->writeln('Database schema created successfully!');
+            $output->write('Database schema created successfully!' . PHP_EOL);
         }
-
-        return 0;
     }
 }

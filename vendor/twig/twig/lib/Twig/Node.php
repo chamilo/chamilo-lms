@@ -13,7 +13,8 @@
 /**
  * Represents a node in the AST.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package    twig
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Node implements Twig_NodeInterface
 {

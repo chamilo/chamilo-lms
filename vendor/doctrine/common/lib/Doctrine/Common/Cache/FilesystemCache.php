@@ -44,7 +44,7 @@ class FilesystemCache extends FileCache
         $lifetime = -1;
         $filename = $this->getFilename($id);
 
-        if ( ! is_file($filename)) {
+        if ( ! file_exists($filename)) {
             return false;
         }
 
@@ -77,7 +77,7 @@ class FilesystemCache extends FileCache
         $lifetime = -1;
         $filename = $this->getFilename($id);
 
-        if ( ! is_file($filename)) {
+        if ( ! file_exists($filename)) {
             return false;
         }
 

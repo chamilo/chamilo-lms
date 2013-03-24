@@ -33,9 +33,6 @@ use Doctrine\ORM\Query\QueryException;
  */
 class DateSubFunction extends DateAddFunction
 {
-    /**
-     * @override
-     */
     public function getSql(SqlWalker $sqlWalker)
     {
         switch (strtolower($this->unit->value)) {

@@ -22,6 +22,7 @@ namespace Doctrine\ORM\Query\AST;
 /**
  * ArithmeticTerm ::= ArithmeticFactor {("*" | "/") ArithmeticFactor}*
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -30,22 +31,13 @@ namespace Doctrine\ORM\Query\AST;
  */
 class ArithmeticTerm extends Node
 {
-    /**
-     * @var array
-     */
     public $arithmeticFactors;
 
-    /**
-     * @param array $arithmeticFactors
-     */
     public function __construct(array $arithmeticFactors)
     {
         $this->arithmeticFactors = $arithmeticFactors;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatch($sqlWalker)
     {
         return $sqlWalker->walkArithmeticTerm($this);

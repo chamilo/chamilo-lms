@@ -12,11 +12,12 @@
 /**
  * Stores the Twig configuration.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @package twig
+ * @author  Fabien Potencier <fabien@symfony.com>
  */
 class Twig_Environment
 {
-    const VERSION = '1.12.3-DEV';
+    const VERSION = '1.12.2';
 
     protected $charset;
     protected $loader;

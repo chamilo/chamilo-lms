@@ -19,14 +19,14 @@
 
 namespace Doctrine\ORM\Tools\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console;
 
 /**
  * Command to ensure that Doctrine is properly configured for a production environment.
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @version $Revision$
@@ -35,10 +35,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class EnsureProductionSettingsCommand extends Command
+class EnsureProductionSettingsCommand extends Console\Command\Command
 {
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
     protected function configure()
     {
@@ -48,7 +48,7 @@ class EnsureProductionSettingsCommand extends Command
         ->setDefinition(array(
             new InputOption(
                 'complete', null, InputOption::VALUE_NONE,
-                'Flag to also inspect database connection existence.'
+                'Flag to also inspect database connection existance.'
             )
         ))
         ->setHelp(<<<EOT
@@ -58,12 +58,13 @@ EOT
     }
 
     /**
-     * {@inheritdoc}
+     * @see Console\Command\Command
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $em = $this->getHelper('em')->getEntityManager();
 
+        $error = false;
         try {
             $em->getConfiguration()->ensureProductionSettings();
 
@@ -71,11 +72,12 @@ EOT
                 $em->getConnection()->connect();
             }
         } catch (\Exception $e) {
+            $error = true;
             $output->writeln('<error>' . $e->getMessage() . '</error>');
-
-            return 1;
         }
 
-        $output->writeln('<info>Environment is correctly configured for production.</info>');
+        if ($error === false) {
+            $output->write('<info>Environment is correctly configured for production.</info>' . PHP_EOL);
+        }
     }
 }

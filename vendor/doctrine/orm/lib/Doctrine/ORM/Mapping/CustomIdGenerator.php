@@ -25,8 +25,6 @@ namespace Doctrine\ORM\Mapping;
  */
 final class CustomIdGenerator implements Annotation
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $class;
 }

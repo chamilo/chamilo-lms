@@ -120,7 +120,7 @@ class ArrayCollection implements Collection, Selectable
      */
     public function remove($key)
     {
-        if (isset($this->_elements[$key]) || array_key_exists($key, $this->_elements)) {
+        if (isset($this->_elements[$key])) {
             $removed = $this->_elements[$key];
             unset($this->_elements[$key]);
 
@@ -214,7 +214,7 @@ class ArrayCollection implements Collection, Selectable
      */
     public function containsKey($key)
     {
-        return isset($this->_elements[$key]) || array_key_exists($key, $this->_elements);
+        return isset($this->_elements[$key]);
     }
 
     /**
@@ -229,7 +229,13 @@ class ArrayCollection implements Collection, Selectable
      */
     public function contains($element)
     {
-        return in_array($element, $this->_elements, true);
+        foreach ($this->_elements as $collectionElement) {
+            if ($element === $collectionElement) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

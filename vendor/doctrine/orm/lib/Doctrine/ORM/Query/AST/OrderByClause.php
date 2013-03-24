@@ -22,6 +22,7 @@ namespace Doctrine\ORM\Query\AST;
 /**
  * OrderByClause ::= "ORDER" "BY" OrderByItem {"," OrderByItem}*
  *
+ * 
  * @link    www.doctrine-project.org
  * @since   2.0
  * @author  Guilherme Blanco <guilhermeblanco@hotmail.com>
@@ -30,22 +31,13 @@ namespace Doctrine\ORM\Query\AST;
  */
 class OrderByClause extends Node
 {
-    /**
-     * @var array
-     */
     public $orderByItems = array();
 
-    /**
-     * @param array $orderByItems
-     */
     public function __construct(array $orderByItems)
     {
         $this->orderByItems = $orderByItems;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function dispatch($sqlWalker)
     {
         return $sqlWalker->walkOrderByClause($this);

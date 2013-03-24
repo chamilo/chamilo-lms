@@ -21,7 +21,7 @@
     },
     "require": {
         "php": ">=5.3.2",
-        "silex/silex"           : "dev-master",
+        "silex/silex"           : "~1.0@dev",
         "symfony/config"        : "dev-master",
         "symfony/yaml"          : "2.1.*",
         "symfony/console"  : "dev-master",
@@ -42,8 +42,8 @@
         "pagerfanta/pagerfanta": "dev-master",
         "knplabs/knp-menu": "2.0.*@dev",
         "gedmo/doctrine-extensions": "2.3.*@dev",
-        "emanueleminotto/faker-service-provider": "master",
+        "symfony/web-profiler-bundle": "~2.2",
         "silex/web-profiler": "~1.0"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }

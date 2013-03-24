@@ -93,7 +93,7 @@ function WSCourseList($username, $signature, $visibilities = 'public') {
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; // The secret key is incorrect.
     }
-
+        //public-registered = open
 	$vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
 
 	$courses_list = array();

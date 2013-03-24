@@ -198,8 +198,11 @@ class InstallCommand extends AbstractCommand
             'firstname' => 'M',
             'username' => 'admin',
             'password' => 'admin',
-            'email' => 'admin@example.org'
+            'email' => 'admin@example.org',
+            'language' => 'english',
+            'phone' => '6666666'
         );
+
         $output->writeln("<comment>Creating an admin User</comment>");
         $userInfo = array();
         foreach ($adminUser as $key => $value) {

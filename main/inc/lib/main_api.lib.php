@@ -261,9 +261,6 @@ define('SCRIPT_SWFOBJECT', '{SCRIPT_SWFOBJECT}');
 define('SCRIPT_ASCIIMATHML', '{SCRIPT_ASCIIMATHML}');
 define('DRAWING_ASCIISVG', '{DRAWING_ASCIISVG}');
 
-// Forcing PclZip library to use a custom temporary folder.
-define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
-
 // Relations type with Human resources manager
 define('COURSE_RELATION_TYPE_RRHH', 1);
 define('SESSION_RELATION_TYPE_RRHH', 1);
@@ -514,6 +511,7 @@ function api_get_path($path_type, $path = null) {
 
     // Always load root_web modifications for multiple url features
     global $_configuration;
+
     //default $_configuration['root_web'] configuration
     $root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : null;
 
@@ -530,8 +528,8 @@ function api_get_path($path_type, $path = null) {
             $load_new_config = true;
         }
     }
+
     if (!$is_this_function_initialized) {
-        global $_configuration;
 
         $root_rel       = isset($_configuration['url_append']) ? $_configuration['url_append'] : null;
         //$code_folder    = $_configuration['code_append'];
@@ -627,6 +625,7 @@ function api_get_path($path_type, $path = null) {
         $paths[CONFIGURATION_PATH]      = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
 
         $is_this_function_initialized = true;
+
     } else {
         if ($load_new_config) {
             //  Redefining variables to work well with the "multiple url" feature

@@ -57,7 +57,6 @@ define ('LANGUAGE_DETECT_MAX_LENGTH', 2000);
 // $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
 define ('LANGUAGE_DETECT_MAX_DELTA', 140000);
 
-
 /**
  * Initialization
  */

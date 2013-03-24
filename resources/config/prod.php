@@ -23,6 +23,9 @@ $app['profiler.cache_dir'] = $app['cache.path'].'profiler';
 //Monolog log file
 $app['chamilo.log'] = $app['cache.path'].'chamilo.log';
 
+//PCLZIP temp dir
+define('PCLZIP_TEMPORARY_DIR', $app['cache.path']);
+
 // Assetic
 /*
 $app['assetic.path_to_cache']   = $app['cache.path'] . DIRECTORY_SEPARATOR . 'assetic' ;

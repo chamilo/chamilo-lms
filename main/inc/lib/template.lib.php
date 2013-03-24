@@ -41,7 +41,7 @@ class Template
 
         $this->app['classic_layout'] = true;
 
-        $this->navigation_array = $this->return_navigation_array();
+        $this->navigation_array = $this->returnNavigationArray();
 
 //      $this->app['template_style'] = 'default';
 //        $this->app['default_layout'] = $this->app['template_style'].'/layout/layout_1_col.tpl';
@@ -99,7 +99,6 @@ class Template
                 }
             }
         }
-
     }
 
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
@@ -336,6 +335,7 @@ class Template
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
         );
+
         $this->assign('_p', $_p);
 
         //Here we can add system parameters that can be use in any template
@@ -877,7 +877,7 @@ class Template
         return $menu;
     }
 
-    function return_navigation_links()
+    function returnNavigationLinks()
     {
         $html = '';
 
@@ -1164,7 +1164,7 @@ class Template
         return $html;
     }
 
-    function return_navigation_array()
+    public function returnNavigationArray()
     {
         $navigation = array();
         $menu_navigation = array();

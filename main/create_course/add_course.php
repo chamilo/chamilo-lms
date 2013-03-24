@@ -36,7 +36,7 @@ if ($course_validation_feature) {
     require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
     function setFocus(){
         $("#title").focus();
     }

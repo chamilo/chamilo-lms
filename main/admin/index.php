@@ -27,7 +27,6 @@ $nameTools = get_lang('PlatformAdmin');
 // Displaying the header
 $message = '';
 
-
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
         $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'),'warning');
@@ -299,9 +298,10 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['items'] = null;
 }
 
-$tpl = new Template();
-$tpl->assign('blocks', $blocks);
-$tpl->display('default/admin/settings_index.tpl');
+$app['template']->assign('blocks', $blocks);
+//$app['template']->display('default/admin/settings_index.tpl');
+//$app['default_layout'] = $app['template_style'].'/admin/settings_index.tpl';
+$app['template']->display('default/admin/settings_index.tpl');
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date

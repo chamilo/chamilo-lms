@@ -339,22 +339,7 @@ if (is_writable($app['cache.path'])) {
             'monolog.name' => 'chamilo',
         )
     );
-
-
-//Adding web profiler
-    if (is_writable($app['cache.path'])) {
-        if ($app['debug']) {
-            //if (api_get_setting('allow_web_profiler') == 'true') {
-                $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
-                        'profiler.cache_dir' => $app['profiler.cache_dir'],
-                    ));
-                $app->mount('/_profiler', $p);
-            //}
-        }
-    }
-
 }
-
 
 //Setting Doctrine service provider (DBAL)
 if (isset($_configuration['main_database'])) {
@@ -590,11 +575,7 @@ if ($alreadyInstalled && $checkConnection) {
             $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
         }
     }
-    api_set_settings_and_plugins();
 }
-
-
-
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
@@ -617,6 +598,18 @@ if ($alreadyInstalled) {
     if (file_exists($mail_conf)) {
         require_once $mail_conf;
     }
+}
+
+//Adding web profiler
+if (is_writable($app['cache.path'])) {
+    //if ($app['debug']) {
+    if (api_get_setting('allow_web_profiler') == 'true') {
+        $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
+                'profiler.cache_dir' => $app['profiler.cache_dir'],
+            ));
+        $app->mount('/_profiler', $p);
+    }
+    //}
 }
 
 // Email service provider

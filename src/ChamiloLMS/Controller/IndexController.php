@@ -85,6 +85,7 @@ class IndexController// extends Controller
         // Defines wether or not anonymous visitors can see a list of the courses on the Chamilo homepage that are open to the world.
         //$_setting['display_courses_to_anonymous_users'] = 'true';
         // Delete session neccesary for legal terms
+
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
         }
@@ -110,7 +111,7 @@ class IndexController// extends Controller
             facebook_connect();
         }
 
-        $this->set_login_form($app);
+        $this->setLoginForm($app);
 
         if (!api_is_anonymous()) {
             \PageController::return_profile_block();
@@ -153,6 +154,7 @@ class IndexController// extends Controller
         if (api_is_platform_admin() || api_is_drh()) {
             \PageController::return_skills_links();
         }
+
         $response = $app['template']->render_layout('layout_2_col.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
@@ -202,7 +204,7 @@ class IndexController// extends Controller
     /**
      * @param \Silex\Application $app
      */
-    function set_login_form(Application $app)
+    function setLoginForm(Application $app)
     {
         $userId    = api_get_user_id();
         $loginForm = null;

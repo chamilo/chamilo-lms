@@ -64,7 +64,7 @@ $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'n
 // Displaying the header.
 $tool_name = $course_validation_feature ? get_lang('CreateCourseRequest') : get_lang('CreateSite');
 
-$tpl = new Template($tool_name);
+$tpl = $app['template'];
 
 if (api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) {
     api_not_allowed(true);
@@ -109,7 +109,6 @@ $categories_select = $form->addElement(
 $form->applyFilter('category_code', 'html_filter');
 $categories_select->addOption('-', '');
 CourseManager::select_and_sort_categories($categories_select);
-
 
 // Course code
 $form->add_textfield(

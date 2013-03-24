@@ -29,6 +29,10 @@ class Template
     public $app;
     public $navigation_array;
 
+    /**
+     * @param null $title
+     * @param null $app
+     */
     function __construct($title = null, $app = null)
     {
         if (empty($app)) {
@@ -64,18 +68,18 @@ class Template
         //Setting system variables
         $this->set_system_parameters();
 
-        //Setting user variables
-        $this->set_user_parameters();
+       //Setting user variables
+       $this->setUserParameters();
 
         //Setting course variables
-        $this->set_course_parameters();
+        $this->setCourseParameters();
 
         //header and footer are showed by default
-        $this->set_footer($show_footer);
-        $this->set_header($show_header);
+        $this->setFooter($show_footer);
+        $this->setHeader($show_header);
 
-        $this->set_header_parameters();
-        $this->set_footer_parameters();
+        $this->setHeaderParameters();
+        $this->setFooterParameters();
 
         $this->assign('style', $this->style);
 
@@ -218,7 +222,7 @@ class Template
      * Sets the footer visibility
      * @param bool true if we show the footer
      */
-    function set_footer($status)
+    function setFooter($status)
     {
         $this->show_footer = $status;
         $this->assign('show_footer', $status);
@@ -228,7 +232,7 @@ class Template
      * Sets the header visibility
      * @param bool true if we show the header
      */
-    function set_header($status)
+    function setHeader($status)
     {
         $this->show_header = $status;
         $this->assign('show_header', $status);
@@ -280,15 +284,14 @@ class Template
     }
 
     /** Set course parameters */
-    private function set_course_parameters()
+    private function setCourseParameters()
     {
         //Setting course id
-        $course_id = api_get_course_int_id();
-        $this->course_id = $course_id;
+        $this->course_id = api_get_course_int_id();
     }
 
     /** Set user parameters */
-    private function set_user_parameters()
+    private function setUserParameters()
     {
         $user_info = array();
         $user_info['logged'] = 0;
@@ -491,7 +494,7 @@ class Template
     /**
      * Set header parameters
      */
-    private function set_header_parameters() {
+    private function setHeaderParameters() {
         global $interbreadcrumb;
 
         if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
@@ -504,7 +507,6 @@ class Template
         $_course = api_get_course_info();
         $_configuration = $this->app['configuration'];
         $this_section = $this->app['this_section'];
-
 
         $nameTools = $this->title;
         $navigation = $this->navigation_array;
@@ -648,7 +650,7 @@ class Template
     /**
      * Set footer parameteres
      */
-    private function set_footer_parameters()
+    private function setFooterParameters()
     {
         global $_configuration;
 
@@ -977,18 +979,6 @@ class Template
         // Social
         if (api_get_setting('allow_social_tool') == 'true') {
             $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
-            /*
-            // get count unread message and total invitations
-            $count_unread_message = MessageManager::get_number_of_messages(true);
-
-            $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-            $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
-            if (!empty($group_pending_invitations )) {
-                $group_pending_invitations = count($group_pending_invitations);
-            }
-            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
-            $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) :'');*/
-
             $navigation['social']['title'] = get_lang('SocialNetwork');
         }
 

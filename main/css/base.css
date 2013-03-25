@@ -397,7 +397,20 @@ footer .container .row {
     padding: 2px 2px 2px 14px;
     vertical-align:middle;
 }
-
+.actions .actions-pagination {
+  float:right; 
+  margin-top:2px;
+}
+.actions .actions-pagination * {
+  display:inline-block;
+  float:none;
+  margin:0;
+  padding:0;
+}
+.actions .actions-pagination img {
+  margin:6px;
+  padding:0;
+}
 .actions form {
     margin-bottom: 0px;
 }

@@ -79,18 +79,15 @@ if ($slide_id != 'all') {
 	$image = $sys_course_path.$_course['path'].'/document'.$folder.$image_files_only[$slide];
 	if (file_exists($image)) {
 
-		echo '<div style="float: right; vertical-align: middle; padding-top: 3px; padding-bottom: 3px;"><nobr>';
-
-		$a_style = 'margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px;';
-		$img_style = 'margin-left: 5px; margin-right: 5px; padding-left: 0px; padding-right: 0px;';
+		echo '<div class="actions-pagination">';
 
 		// Back forward buttons
 		if ($slide == 0) {
 			$imgp = 'action_prev_na.png';
-			$first = '<img src="'.api_get_path(WEB_IMG_PATH).'action_first_na.png" style="'.$img_style.'">';
+			$first = '<img src="'.api_get_path(WEB_IMG_PATH).'action_first_na.png">';
 		} else {
 			$imgp = 'action_prev.png';
-			$first = '<a href="slideshow.php?slide_id=0&curdirpath='.$pathurl.'" style="'.$a_style.'"><img src="'.api_get_path(WEB_IMG_PATH).'action_first.png"  style="'.$img_style.'" title="'.get_lang('FirstSlide').'" alt="'.get_lang('FirstSlide').'"></a>';
+			$first = '<a href="slideshow.php?slide_id=0&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'action_first.png" title="'.get_lang('FirstSlide').'" alt="'.get_lang('FirstSlide').'"></a>';
 		}
 
 		// First slide
@@ -98,9 +95,9 @@ if ($slide_id != 'all') {
 
 		// Previous slide
 		if ($slide > 0) {
-			echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'" style="'.$a_style.'">';
+			echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
 		}
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).$imgp.'" style="'.$img_style.'" title="'.get_lang('Previous').'" alt="'.get_lang('Previous').'">';
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).$imgp.'" title="'.get_lang('Previous').'" alt="'.get_lang('Previous').'">';
 		if ($slide > 0) {
 			echo '</a>';
 		}
@@ -110,16 +107,16 @@ if ($slide_id != 'all') {
 
 		// Next slide
 		if ($slide < $total_slides - 1) {
-			echo '<a href="slideshow.php?slide_id='.$next_slide.'&curdirpath='.$pathurl.'" style="'.$a_style.'">';
+			echo '<a href="slideshow.php?slide_id='.$next_slide.'&curdirpath='.$pathurl.'">';
 		}
 		if ($slide == $total_slides - 1) {
 			$imgn = 'action_next_na.png';
-			$last = '<img src="'.api_get_path(WEB_IMG_PATH).'action_last_na.png" style="'.$img_style.'" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'">';
+			$last = '<img src="'.api_get_path(WEB_IMG_PATH).'action_last_na.png" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'">';
 		} else {
 			$imgn = 'action_next.png';
-			$last = '<a href="slideshow.php?slide_id='.($total_slides-1).'&curdirpath='.$pathurl.'" style="'.$a_style.'"><img src="'.api_get_path(WEB_IMG_PATH).'action_last.png" style="'.$img_style.'" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'"></a>';
+			$last = '<a href="slideshow.php?slide_id='.($total_slides-1).'&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'action_last.png" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'"></a>';
 		}
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).$imgn.'" style="'.$img_style.'" title="'.get_lang('Next').'" alt="'.get_lang('Next').'">';
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).$imgn.'" title="'.get_lang('Next').'" alt="'.get_lang('Next').'">';
 		if ($slide > 0) {
 			echo '</a>';
 		}
@@ -127,7 +124,7 @@ if ($slide_id != 'all') {
 		// Last slide
 		echo $last;
 
-		echo '</nobr></div>';
+		echo '</div>';
 	}
 }
 

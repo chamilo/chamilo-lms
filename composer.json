@@ -43,7 +43,8 @@
         "knplabs/knp-menu": "2.0.*@dev",
         "gedmo/doctrine-extensions": "2.3.*@dev",
         "symfony/web-profiler-bundle": "~2.2",
-        "silex/web-profiler": "~1.0"
+        "silex/web-profiler": "~1.0",
+        "chamilo/chash": "dev-master"
     },
     "minimum-stability": "stable"
 }

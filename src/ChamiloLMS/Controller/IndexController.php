@@ -42,6 +42,7 @@ class IndexController// extends Controller
     public function indexAction(Application $app)
     {
         $extraJS = array();
+        //@todo improve js includes
         $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
         $extraJS[] = '<script>
             $(document).ready(function(){

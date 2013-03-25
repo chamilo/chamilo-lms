@@ -41,8 +41,24 @@ $cli->addCommands(array(
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\MigrateCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand(),
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand(),
+
+    //Chamilo commands
     new ChamiloLMS\Command\Database\UpgradeCommand(),
     new ChamiloLMS\Command\Database\InstallCommand(),
     new ChamiloLMS\Command\Database\StatusCommand(),
+    new ChamiloLMS\Command\Database\SetupCommand(),
+
+    //Chash commands
+    new Chash\Command\Database\RunSQLCommand(),
+    new Chash\Command\Database\DumpCommand(),
+    new Chash\Command\Database\RestoreCommand(),
+    new Chash\Command\Database\SQLCountCommand(),
+    new Chash\Command\Database\FullBackupCommand(),
+    new Chash\Command\Database\DropDatabaseCommand(),
+    new Chash\Command\Files\CleanTempFolderCommand(),
+    new Chash\Command\Files\CleanConfigFiles(),
+    new Chash\Command\Translation\ExportLanguageCommand(),
+    new Chash\Command\Translation\ImportLanguageCommand()
+
 ));
 $cli->run();

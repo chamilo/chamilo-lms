@@ -44,7 +44,7 @@ if (!empty($courseList)) {
     }
 }
 
-if (isset($connectionOptions['main_database'])) {
+if (isset($_configuration['main_database'])) {
     $connectionOptions['main_database'] = array(
         'driver'    => 'pdo_mysql',
         'dbname'    => $_configuration['main_database'],
@@ -99,6 +99,7 @@ $platform->registerDoctrineTypeMapping('set', 'string');
 $helpers = array(
     'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
     'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
+    'configuration' => new \Chash\Helpers\ConfigurationHelper()
 );
 
 use Doctrine\DBAL\DriverManager;

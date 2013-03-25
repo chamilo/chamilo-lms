@@ -2,16 +2,15 @@
 
 namespace ChamiloLMS\Command\Database;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console;
-use Symfony\Component\Console\Input\ArrayInput;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
-
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console;
+use Symfony\Component\Yaml\Dumper;
 
 /**
- * Class MigrationCommand
+ * Class UpgradeCommand
  */
 class UpgradeCommand extends AbstractCommand
 {
@@ -22,7 +21,8 @@ class UpgradeCommand extends AbstractCommand
             ->setDescription('Execute a chamilo migration to a specified version or the latest available version.')
             ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null)
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute the migration as a dry run.')
-            ->addOption('configuration', null, InputOption::VALUE_OPTIONAL, 'The path to a migrations configuration file.');
+            ->addOption('configuration', null, InputOption::VALUE_OPTIONAL, 'The path to a migrations configuration file.')
+            ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the chamilo folder');
     }
 
     /**
@@ -57,11 +57,12 @@ class UpgradeCommand extends AbstractCommand
     public function availableVersions()
     {
         $versionList = array(
+            '1.8.7' => false,
             '1.8.8' => array(
                 'require_update' => true,
                 'pre' => 'migrate-db-1.8.7-1.8.8-pre.sql',
                 'post' => 'null',
-                'hook_to_version' => '8' //see ChamiloLMS\Migrations\Version8.php file
+                'hook_to_doctrine_version' => '8' //see ChamiloLMS\Migrations\Version8.php file
             ),
             '1.8.8.2' => false,
             '1.8.8.4' => false,
@@ -70,16 +71,17 @@ class UpgradeCommand extends AbstractCommand
                 'require_update' => true,
                 'pre' => 'migrate-db-1.8.8-1.9.0-pre.sql',
                 'post' => 'null',
-                'hook_to_version' => '9'
+                'hook_to_doctrine_version' => '9'
             ),
             '1.9.2' => false,
             '1.9.4' => false,
             '1.9.6' => false,
+            '1.9.8' => false,
             '1.10'  => array(
                 'require_update' => true,
                 'pre' => 'migrate-db-1.9.0-1.10.0-pre.sql',
                 'post' => 'migrate-db-1.9.0-1.10.0-post.sql',
-                'hook_to_version' => '10'
+                'hook_to_doctrine_version' => '10'
             )
         );
 
@@ -87,7 +89,6 @@ class UpgradeCommand extends AbstractCommand
     }
 
     /**
-     *
      * Gets the content of a version from the available versions
      *
      * @param $version
@@ -110,32 +111,29 @@ class UpgradeCommand extends AbstractCommand
      *
      * @param Console\Input\InputInterface $input
      * @param Console\Output\OutputInterface $output
+     *
      * @return int|null|void
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        global $_configuration;
+        $path = $input->getOption('path');
+        $version = $input->getArgument('version');
+        $dryRun = $input->getOption('dry-run');
+
+        $_configuration = $this->getHelper('configuration')->getConfiguration();
 
         if (!isset($_configuration['root_sys'])) {
             $output->writeln("<comment>Chamilo is not installed here!</comment>");
             exit;
         }
 
-        $configurationPath = api_get_path(SYS_PATH).'main/inc/conf/';
+        $configurationPath = $this->getHelper('configuration')->getConfigurationPath($path);
 
         //Checking configuration file
         if (!is_writable($configurationPath)) {
             $output->writeln("<comment>Folder ".$configurationPath." must have writable permissions</comment>");
         }
 
-        //Getting chamilo_database_version
-        /*$conn = $this->getHelper('main_database')->getConnection();
-        $data = $conn->executeQuery("SELECT selected_value FROM settings_current WHERE variable = 'chamilo_database_version'");
-        $data = $data->fetch();
-        $versionFromDB = $data['selected_value'];*/
-
-        $version = $input->getArgument('version');
-        $dryRun = $input->getOption('dry-run');
         $minVersion = $this->getMinVersionSupportedByInstall();
         $versionList = $this->availableVersions();
 
@@ -156,8 +154,6 @@ class UpgradeCommand extends AbstractCommand
             exit;
         }
 
-        global $_configuration;
-
         $currentVersion = null;
 
         //Checking root_sys and correct Chamilo version to install
@@ -174,7 +170,7 @@ class UpgradeCommand extends AbstractCommand
         }
 
         if (version_compare($_configuration['system_version'], $minVersion, '<')) {
-            $output->writeln("<comment>Your Chamilo version is not supported! The minimun version is: </comment> <info>$minVersion</info> <comment>You want to update from <info>".$_configuration['system_version']."</info> <comment>to</comment> <info>$minVersion</info>");
+            $output->writeln("<comment>Your Chamilo version is not supported! The minimun version is: </comment><info>$minVersion</info> <comment>You want to update from <info>".$_configuration['system_version']."</info> <comment>to</comment> <info>$minVersion</info>");
             exit;
         }
 
@@ -188,14 +184,14 @@ class UpgradeCommand extends AbstractCommand
 
         $versionInfo = $this->getAvailableVersionInfo($version);
 
-        if (isset($versionInfo['hook_to_version']) && isset($doctrineVersion)) {
-            if ($doctrineVersion == $versionInfo['hook_to_version']) {
+        if (isset($versionInfo['hook_to_doctrine_version']) && isset($doctrineVersion)) {
+            if ($doctrineVersion == $versionInfo['hook_to_doctrine_version']) {
                 $output->writeln("<comment>You already have the latest version. Nothing to update!</comment>");
                 exit;
             }
         }
 
-        $output->writeln("<comment>Welcome to the Chamilo upgrade CLI!</comment>");
+        $output->writeln("<comment>Welcome to the Chamilo upgrade!</comment>");
 
         //Too much questions?
 
@@ -239,11 +235,33 @@ class UpgradeCommand extends AbstractCommand
                 } else {
                     $output->writeln("<comment>Version <info>'$versionItem'</info> does not need a DB migration</comment>");
                 }
-
             }
         }
-        $output->writeln("<comment>wow! You just finish to migrate. Too check the current status of your platform. Execute:</comment><info>chamilo:status</info>");
 
+        $this->updateConfiguration($version);
+
+        $output->writeln("<comment>wow! You just finish to migrate. Too check the current status of your platform. Run </comment><info>chamilo:status</info>");
+    }
+
+    /**
+     * Updates the configuration.yml file
+     * @param $version
+     * @return bool
+     */
+    public function updateConfiguration($version)
+    {
+        $_configuration = $this->getHelper('configuration')->getConfiguration();
+
+        $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
+
+        $dumper = new Dumper();
+        $_configuration['system_version'] = $version;
+
+        $yaml = $dumper->dump($_configuration, 2); //inline
+        $newConfigurationFile = $configurationPath.'configuration.yml';
+        file_put_contents($newConfigurationFile, $yaml);
+
+        return file_exists($newConfigurationFile);
     }
 
     /**
@@ -274,7 +292,7 @@ class UpgradeCommand extends AbstractCommand
         if (isset($versionInfo['pre']) && !empty($versionInfo['pre'])) {
             $sqlToInstall = $installPath.$versionInfo['pre'];
             if (file_exists($sqlToInstall)) {
-                //$result = $this->processSQL($sqlToInstall, $dryRun, $output);
+                $result = $this->processSQL($sqlToInstall, $dryRun, $output);
                 $result = true;
                 $output->writeln("");
                 $output->writeln("<comment>Executing file: <info>'$sqlToInstall'</info>");
@@ -285,11 +303,11 @@ class UpgradeCommand extends AbstractCommand
                     $command = $this->getApplication()->find('migrations:migrate');
                     $arguments = array(
                         'command' => 'migrations:migrate',
-                        'version' => $versionInfo['hook_to_version'],
+                        'version' => $versionInfo['hook_to_doctrine_version'],
                         '--configuration' => $this->getMigrationConfigurationFile()
                     );
 
-                    $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
+                    $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_doctrine_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
 
                     $input     = new ArrayInput($arguments);
 
@@ -327,7 +345,7 @@ class UpgradeCommand extends AbstractCommand
                 if ($dryRun) {
                     $output->writeln($query);
                 } else {
-                    //$output->writeln('     <comment>-></comment> ' . $query);
+                    $output->writeln('     <comment>-></comment> ' . $query);
                     $conn->executeQuery($query);
                 }
                 $lines++;

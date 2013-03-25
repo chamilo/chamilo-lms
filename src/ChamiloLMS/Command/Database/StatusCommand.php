@@ -2,15 +2,13 @@
 
 namespace ChamiloLMS\Command\Database;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console;
-use Symfony\Component\Console\Input\ArrayInput;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console;
 
 /**
- * Class MigrationCommand
+ * Class StatusCommand
  */
 class StatusCommand extends AbstractCommand
 {
@@ -28,6 +26,7 @@ class StatusCommand extends AbstractCommand
      *
      * @param Console\Input\InputInterface $input
      * @param Console\Output\OutputInterface $output
+     *
      * @return int|null|void
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)

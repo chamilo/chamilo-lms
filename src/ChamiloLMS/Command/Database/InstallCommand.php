@@ -2,18 +2,17 @@
 
 namespace ChamiloLMS\Command\Database;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console;
-use Symfony\Component\Console\Input\ArrayInput;
-use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console;
 use Symfony\Component\Yaml\Dumper;
 
 /**
- * Class MigrationCommand
+ * Class InstallCommand
  */
 class InstallCommand extends AbstractCommand
 {
@@ -22,18 +21,8 @@ class InstallCommand extends AbstractCommand
         $this
             ->setName('chamilo:install')
             ->setDescription('Execute a Chamilo installation to a specified version')
-            ->addArgument('version', InputArgument::OPTIONAL, 'The version to migrate to.', null)
+            ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null)
             ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the chamilo folder');
-    }
-
-    /**
-     * Gets the configuration folder
-     *
-     * @return string
-     */
-    public function getConfigurationPath()
-    {
-        return api_get_path(SYS_PATH).'main/inc/conf/';
     }
 
     /**
@@ -48,12 +37,23 @@ class InstallCommand extends AbstractCommand
         return api_get_path(SYS_PATH).'main/install/'.$version.'/';
     }
 
-    public function getAvailableVersions() {
-        return array(
-            '1.8.8.4',
-            '1.9.0',
-            '1.10'
-        );
+    /**
+     * Gets the version name folders located in main/install
+     *
+     * @return array
+     */
+    public function getAvailableVersions()
+    {
+        $installPath = api_get_path(SYS_PATH).'main/install';
+        $dir = new \DirectoryIterator($installPath);
+        $dirList = array();
+        foreach ($dir as $fileInfo) {
+            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
+                $dirList[] = $fileInfo->getFilename();
+            }
+        }
+
+        return $dirList;
     }
 
     /**
@@ -66,7 +66,8 @@ class InstallCommand extends AbstractCommand
      */
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $configurationPath = $this->getConfigurationPath();
+        $path = $input->getOption('path');
+        $configurationPath = $this->getHelper('configuration')->getConfigurationPath($path);
 
         $dialog = $this->getHelperSet()->get('dialog');
 
@@ -78,7 +79,7 @@ class InstallCommand extends AbstractCommand
             $version = $defaultVersion;
         }
 
-        $output->writeln("<comment>Welcome to the Chamilo installation process.</comment>");
+        $output->writeln("<comment>Welcome to the Chamilo $version installation process.</comment>");
 
         if (!is_writable($configurationPath)) {
             $output->writeln("<comment>Folder ".$configurationPath." must be writable</comment>");
@@ -92,27 +93,29 @@ class InstallCommand extends AbstractCommand
             return false;
         }
 
+        if (file_exists($configurationPath.'configuration.php') || file_exists($configurationPath.'configuration.yml')) {
+            $output->writeln("<comment>There's a Chamilo portal here ".$configurationPath." you must run</comment> <info>chamilo:setup </info><comment>if you want a fresh install.</comment>");
+            exit;
+            /*
+            if (!$dialog->askConfirmation(
+                $output,
+                '<question>There is a Chamilo installation located here:</question> '.$configurationPath.' <question>Are you sure you want to continue?</question>(y/N)',
+                false
+            )
+            ) {
+                return;
+            }
 
-       if (file_exists($configurationPath.'configuration.php') || file_exists($configurationPath.'configuration.yml')) {
-           if (!$dialog->askConfirmation(
-               $output,
-               '<question>There is a Chamilo installation located here:</question> '.$configurationPath.' <question>Are you sure you want to continue?</question>(y/N)',
-               false
-           )
-           ) {
-               return;
-           }
-
-           if (!$dialog->askConfirmation(
-               $output,
-               '<comment>This will be a fresh installation. Old databases and config files will be deleted. </comment></info> <question>Are you sure?</question>(y/N)',
-               false
-           )
-           ) {
-               return;
-           }
-           $this->cleanInstallation($output);
-       }
+            if (!$dialog->askConfirmation(
+                $output,
+                '<comment>This will be a fresh installation. Old databases and config files will be deleted. </comment></info> <question>Are you sure?</question>(y/N)',
+                false
+            )
+            ) {
+                return;
+            }
+            $this->cleanInstallation($output);*/
+        }
 
         //Getting default configuration parameters
         require_once api_get_path(SYS_PATH).'main/install/configuration.dist.yml.php';
@@ -167,25 +170,10 @@ class InstallCommand extends AbstractCommand
     }
 
     /**
-     * Deletes configuration files
-     */
-    function cleanInstallation($output)
-    {
-        $confPath = $this->getConfigurationPath();
-        if (file_exists($confPath.'configuration.yml')) {
-            unlink($confPath.'configuration.yml');
-        }
-
-        if (file_exists($confPath.'configuration.php')) {
-            unlink($confPath.'configuration.php');
-        }
-        $output->writeln("<comment>Config files were deleted.</comment>");
-    }
-
-    /**
      *
      * @param $newConfigurationArray
      * @param $output
+     *
      * @return bool
      */
     public function createAdminUser($newConfigurationArray, $output)
@@ -244,13 +232,14 @@ class InstallCommand extends AbstractCommand
      */
     public function writeConfiguration($newConfigurationArray, $version)
     {
-        $configurationPath = $this->getConfigurationPath();
+        $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
 
         $newConfigurationArray['system_version'] = $version;
         $dumper = new Dumper();
         $yaml = $dumper->dump($newConfigurationArray, 2); //inline
         $newConfigurationFile = $configurationPath.'configuration.yml';
         file_put_contents($newConfigurationFile, $yaml);
+
         return file_exists($newConfigurationFile);
     }
 
@@ -309,8 +298,6 @@ class InstallCommand extends AbstractCommand
 
         $this->setDatabaseSettings($_configuration);
 
-        $output->writeln("<comment>Creating database ... </comment>");
-
         $testConnection = $this->testDatabaseConnection($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']);
 
         if ($testConnection == 1) {
@@ -320,14 +307,14 @@ class InstallCommand extends AbstractCommand
             exit;
         }
 
+        $output->writeln("<comment>Creating database ... </comment>");
         $result = $this->dropAndCreateDatabase($_configuration);
-
-
 
         //Importing files
         if ($result) {
             $command = $this->getApplication()->find('dbal:import');
 
+            //Importing sql files
             $arguments = array(
                 'command' => 'dbal:import',
                 'file' => array(
@@ -353,8 +340,9 @@ class InstallCommand extends AbstractCommand
             //Getting extra information about the installation
             //$value = api_get_setting('chamilo_database_version');
             //$output->writeln("<comment>Showing chamilo_database_version value:</comment> ".$value);
-            $output->writeln("<comment>Check your installation status with chamilo:status</comment>");
+            $output->writeln("<comment>Check your installation status with </comment><info>chamilo:status</info>");
             $output->writeln("<comment>Database process ended!</comment>");
+
             return true;
         }
     }
@@ -376,8 +364,21 @@ class InstallCommand extends AbstractCommand
         $command->run($input, $output);
         exit;
         */
+
+        $this->dropDatabase($_configuration);
+        $result = \Database::query("CREATE DATABASE IF NOT EXISTS ".mysql_real_escape_string($_configuration['main_database'])." DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
+
+        if ($result) {
+
+            return \Database::select_db($_configuration['main_database']);
+        }
+
+        return false;
+    }
+
+    public function dropDatabase($_configuration)
+    {
         \Database::query("DROP DATABASE ".mysql_real_escape_string($_configuration['main_database'])."");
-        return  \Database::query("CREATE DATABASE IF NOT EXISTS ".mysql_real_escape_string($_configuration['main_database'])." DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
     }
 
     /**
@@ -401,6 +402,7 @@ class InstallCommand extends AbstractCommand
         } else {
             $dbConnect = -1;
         }
+
         return $dbConnect; //return 1, if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
     }
 }

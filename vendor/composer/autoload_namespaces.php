@@ -44,5 +44,6 @@ return array(
     'Dflydev\\Silex\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
     'Dflydev\\Pimple\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
     'Dflydev\\Cilex\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
+    'Chash' => $vendorDir . '/chamilo/chash/src/',
     'ChamiloLMS' => $baseDir . '/src/',
 );

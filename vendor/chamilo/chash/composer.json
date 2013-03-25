@@ -1,0 +1,14 @@
+{
+    "name": "chamilo/chash",
+    "autoload": {
+        "psr-0": {
+            "Chash": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/console": "2.3.*@dev",
+        "symfony/yaml"          : "2.1.*"
+    },
+    "minimum-stability": "dev"
+}

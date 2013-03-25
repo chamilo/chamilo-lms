@@ -1998,24 +1998,24 @@
     },
     {
         "name": "doctrine/dbal",
-        "version": "2.3.2",
-        "version_normalized": "2.3.2.0",
+        "version": "2.3.3",
+        "version_normalized": "2.3.3.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/doctrine/dbal",
-            "reference": "2.3.2"
+            "url": "https://github.com/doctrine/dbal.git",
+            "reference": "2.3.3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/doctrine/dbal/archive/2.3.2.zip",
-            "reference": "2.3.2",
+            "url": "https://api.github.com/repos/doctrine/dbal/zipball/2.3.3",
+            "reference": "2.3.3",
             "shasum": ""
         },
         "require": {
-            "doctrine/common": "2.3.*",
+            "doctrine/common": ">=2.3.0,<2.5-dev",
             "php": ">=5.3.2"
         },
-        "time": "2013-01-07 20:03:43",
+        "time": "2013-03-24 19:16:29",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2034,7 +2034,7 @@
         ],
         "authors": [
             {
-                "name": "Jonathan H. Wage",
+                "name": "Jonathan Wage",
                 "email": "jonwage@gmail.com",
                 "homepage": "http://www.jwage.com/"
             },
@@ -2063,17 +2063,17 @@
     },
     {
         "name": "doctrine/orm",
-        "version": "2.3.2",
-        "version_normalized": "2.3.2.0",
+        "version": "2.3.3",
+        "version_normalized": "2.3.3.0",
         "source": {
             "type": "git",
-            "url": "git://github.com/doctrine/doctrine2.git",
-            "reference": "2.3.2"
+            "url": "https://github.com/doctrine/doctrine2.git",
+            "reference": "2.3.3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/doctrine/doctrine2/archive/2.3.2.zip",
-            "reference": "2.3.2",
+            "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2.3.3",
+            "reference": "2.3.3",
             "shasum": ""
         },
         "require": {
@@ -2085,7 +2085,7 @@
         "suggest": {
             "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
         },
-        "time": "2013-01-07 20:05:04",
+        "time": "2013-03-24 20:43:58",
         "bin": [
             "bin/doctrine",
             "bin/doctrine.php"
@@ -2132,5 +2132,35 @@
             "database",
             "orm"
         ]
+    },
+    {
+        "name": "chamilo/chash",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/chamilo/chash.git",
+            "reference": "87def53dfe80a1e15ed9bceb76f7a8f01b31990e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/chamilo/chash/zipball/87def53dfe80a1e15ed9bceb76f7a8f01b31990e",
+            "reference": "87def53dfe80a1e15ed9bceb76f7a8f01b31990e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "symfony/console": "2.3.*@dev",
+            "symfony/yaml": "2.1.*"
+        },
+        "time": "2013-03-25 18:35:52",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Chash": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/"
     }
 ]

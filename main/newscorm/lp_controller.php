@@ -664,9 +664,12 @@ switch ($action) {
             }
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
 
-            if (isset($_REQUEST['hide_toc_frame'])) {
-                $_SESSION['oLP']->set_hide_toc_frame($_REQUEST['hide_toc_frame']);
+            if (isset($_REQUEST['hide_toc_frame']) && $_REQUEST['hide_toc_frame'] == 1) {
+                $hide_toc_frame = $_REQUEST['hide_toc_frame'];
+            } else {
+                $hide_toc_frame = null;
             }
+            $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
 
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);

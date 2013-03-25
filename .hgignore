@@ -103,9 +103,10 @@ main/upload/users/*
 #!plugin/search
 
 #PHP Storm settings directory
-.idea/*
-.idea/cssxfire.xml
 .idea
+.idea/*
+.idea/dictionaries/*
+.idea/cssxfire.xml
 
 # Xapian indexes directory
 searchdb/*

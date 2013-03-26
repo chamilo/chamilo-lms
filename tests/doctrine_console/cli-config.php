@@ -19,8 +19,8 @@ $config->setMetadataDriverImpl($driverImpl);
 $config->setProxyDir(__DIR__ . '/Proxies');
 $config->setProxyNamespace('Proxies');
 
-//$courseList = CourseManager::get_real_course_list();
-$courseList = array();
+$courseList = CourseManager::get_real_course_list();
+//$courseList = array();
 
 $configurationPath = api_get_path(SYS_PATH).'main/inc/conf/';
 $newConfigurationFile = $configurationPath.'configuration.yml';
@@ -62,6 +62,10 @@ if (isset($_configuration['statistics_database'])) {
         'password'  => $_configuration['db_password'],
         'host'      => $_configuration['db_host'],
     );
+} else {
+    if (isset($_configuration['main_database'])) {
+        $connectionOptions['statistics_database'] = $_configuration['main_database'];
+    }
 }
 
 if (isset($_configuration['user_personal_database'])) {
@@ -72,14 +76,17 @@ if (isset($_configuration['user_personal_database'])) {
         'password'  => $_configuration['db_password'],
         'host'      => $_configuration['db_host'],
     );
+} else {
+    if (isset($_configuration['main_database'])) {
+        $connectionOptions['user_personal_database'] = $_configuration['main_database'];
+    }
 }
 
 $defaultConnection = array(
-    'driver' => 'pdo_mysql',
+    'driver' => 'pdo_mysql'
 );
 
 if (isset($_configuration['main_database'])) {
-
     $defaultConnection = array(
         'driver'    => 'pdo_mysql',
         'dbname'    => $_configuration['main_database'],

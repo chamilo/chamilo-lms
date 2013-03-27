@@ -558,9 +558,6 @@ class IndexManager {
 	                if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
 						$course_details[] = $course['course_language'];
 	                }
-                    if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
-	                    $course_details[] = $course['course_language'];
-	                }
 
                     $courses_list_string .= implode(' - ', $course_details);
 					// We display a subscription link if:
@@ -851,6 +848,7 @@ class IndexManager {
 
 	/**
 	 * The most important function here, prints the session and course list (user_portal.php)
+error_log(__LINE__);
 	 *
 	 * */
 	function return_courses_and_sessions($user_id) {

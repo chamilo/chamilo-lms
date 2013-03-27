@@ -234,18 +234,43 @@ class EntityCLp
      */
     private $expiredOn;
 
-    public function __construct() {
+    /**
+     * @var integer
+     *
+     * @Column(name="category_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $categoryId;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
 
     }
 
-    public function getLps() {
-        /*$query = $this->em->createQuery('SELECT u FROM Entity\Entry e WHERE :region_id MEMBER OF e.regions');
-        $query->setParameter('region_id',  1);
-        return $query->getResult();*/
+    /**
+     * Set categoryId
+     *
+     * @param integer $id
+     * @return EntityCLp
+     */
+    public function setCategoryId($id)
+    {
+        $this->categoryId = $id;
+
+        return $this;
     }
 
-
-
+    /**
+     * Get categoryId
+     *
+     * @return integer
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
 
     /**
      * Set cId

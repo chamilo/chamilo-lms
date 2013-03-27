@@ -10,7 +10,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class LpRepository extends EntityRepository
 {
-    public function getSubscribedStudentsInLP($course_id, $lp_id)
-    {
-    }
+
 }

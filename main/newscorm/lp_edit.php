@@ -72,13 +72,9 @@ $form->addElement('hidden', 'lp_encoding');
 $referer = isset($_REQUEST['referer']) ? Security::remove_XSS($_REQUEST['referer']) : null;
 $form->addElement('hidden', 'referer', $referer);
 
-$items = learnpath::get_category_from_course_into_select(api_get_course_int_id());
+$items = learnpath::get_category_from_course_into_select(api_get_course_int_id(), true);
 
-if (!empty($items)) {
-    $items = array_merge(array(get_lang('SelectACategory')), $items);
-}
 $form->addElement('select', 'category_id', get_lang('Category'), $items);
-
 
 //Hide toc frame
 $hide_toc_frame = $form->addElement('checkbox', 'hide_toc_frame', null, get_lang('HideTocFrame'),array('onclick' => '$("#lp_layout_column").toggle()' ));

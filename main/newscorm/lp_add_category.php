@@ -93,14 +93,12 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook=='view') {
     $interbreadcrumb[]= array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-
-
 
 $form = new FormValidator('lp_add_category', 'post', 'lp_controller.php');
 

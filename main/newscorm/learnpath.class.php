@@ -9289,6 +9289,7 @@ class learnpath
         global $_course;
 
         $course_id = api_get_course_int_id();
+        $links_to_create = null;
 
         // Remove memory and time limits as much as possible as this might be a long process...
         if (function_exists('ini_set')) {
@@ -10308,7 +10309,7 @@ EOD;
      */
     public function create_path($path)
     {
-        $path_bits = split('/', dirname($path));
+        $path_bits = explode('/', dirname($path));
 
         // IS_WINDOWS_OS has been defined in main_api.lib.php
         $path_built = IS_WINDOWS_OS ? '' : '/';
@@ -10574,7 +10575,8 @@ EOD;
         }
     }
 
-    static function move_up_category($id) {
+    static function move_up_category($id)
+    {
         global $app;
         $em = $app['orm.em'];
         $item = $em->find('Entity\EntityCLpCategory', $id);
@@ -10586,7 +10588,8 @@ EOD;
         }
     }
 
-    static function move_down_category($id) {
+    static function move_down_category($id)
+    {
         global $app;
         $em = $app['orm.em'];
         $item = $em->find('Entity\EntityCLpCategory', $id);
@@ -10597,6 +10600,7 @@ EOD;
             $em->flush();
         }
     }
+
     static function get_count_categories($course_id)
     {
         global $app;
@@ -10652,21 +10656,40 @@ EOD;
         $em = $app['orm.em'];
         $item = $em->find('Entity\EntityCLpCategory', $id);
         if ($item) {
+
+            $courseId = $item->getCId();
+            $query = $em->createQuery('SELECT u FROM Entity\EntityCLp u WHERE u.cId = :id AND u.categoryId = :catId');
+            $query->setParameter('id', $courseId);
+            $query->setParameter('catId', $item->getId());
+            $lps = $query->getResult();
+
+            //Setting category = 0
+            if ($lps) {
+                foreach ($lps as $lpItem) {
+                    $lpItem->setCategoryId(0);
+                }
+            }
+
+            //Removing category
             $em->remove($item);
+
             $em->flush();
         }
     }
 
-    static function get_category_from_course_into_select($course_id)
+    static function get_category_from_course_into_select($course_id, $addSelectOption = false)
     {
         $items = self::get_category_by_course($course_id);
         $cats = array();
+        if ($addSelectOption) {
+            $cats = array(get_lang('SelectACategory'));
+        }
+
         if (!empty($items)) {
             foreach ($items as $cat) {
                 $cats[$cat->getId()] = $cat->getName();
             }
         }
-
         return $cats;
     }
 }

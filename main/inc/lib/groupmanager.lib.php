@@ -1804,7 +1804,7 @@ class GroupManager
         global $_course;
         $category = self :: get_category_from_group($group_ids[0]);
         $groups_per_user = $category['groups_per_user'];
-        $course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+
         $group_table = Database :: get_course_table(TABLE_GROUP);
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $session_id = api_get_session_id();
@@ -1845,7 +1845,7 @@ class GroupManager
         //first sort by user_id to filter out duplicates
         $complete_user_list = TableSort :: sort_table($complete_user_list, 'user_id');
         $complete_user_list = self :: filter_duplicates($complete_user_list, 'user_id');
-        //$complete_user_list = self :: filter_only_students($complete_user_list);
+
         //now sort by # of group left
         $complete_user_list = TableSort :: sort_table($complete_user_list, 'number_groups_left', SORT_DESC);
 

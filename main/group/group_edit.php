@@ -140,6 +140,29 @@ $form->add_textfield('name', get_lang('GroupName'));
 // Description
 $form->addElement('textarea', 'description', get_lang('Description'), array('class' => 'span6', 'rows' => 6));
 
+//Getting course info
+$course = $app['orm.em']->getRepository('Entity\EntityCourse')->find(api_get_course_int_id());
+
+//Getting subscribed students
+$subscribedUsers = $app['orm.em']->getRepository('Entity\EntityCourse')->getSubscribedStudents($course);
+$subscribedUsers = $subscribedUsers->getQuery();
+$subscribedUsers = $subscribedUsers->execute();
+
+
+
+
+
+//Getting all users
+$complete_user_list = array();
+foreach ($subscribedUsers as $user) {
+    $complete_user_list[$user->getUserId()] = $user->getCompleteNameWithClasses();
+}
+
+$possible_users = array();
+foreach ($complete_user_list as $userId => $user) {
+    $possible_users[$userId] = $user;
+}
+/*
 $complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
 
 usort($complete_user_list, 'sort_users');
@@ -148,6 +171,7 @@ foreach ($complete_user_list as $index => $user) {
     $possible_users[$user['user_id']] = api_get_person_name($user['firstname'],$user['lastname']).' ('.$user['username'].')';
 }
 
+*/
 // Group tutors
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array();
@@ -162,14 +186,24 @@ $group_tutors_element->setButtonAttributes('remove');
 // Group members
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
 
+
 $selected_users = array();
-foreach ($group_member_list as $index => $user) {
-    $selected_users[] = $user['user_id'];
+foreach ($group_member_list as $userId => $userName) {
+    $selected_users[] = $userId;
 }
+
 
 // possible : number_groups_left > 0 and is group member
 $possible_users = array();
 
+foreach ($complete_user_list as $userId => $userName) {
+    //if ($user['number_groups_left'] > 0 || in_array($userId, $selected_users)) {
+    //if (in_array($userId, $selected_users)) {
+        $possible_users[$userId] = $userName;
+    //}
+}
+
+/*
 foreach ($complete_user_list as $index => $user) {
     if ($user['number_groups_left'] > 0 || in_array($user['user_id'], $selected_users)) {
         $possible_users[$user['user_id']] = api_get_person_name(
@@ -177,7 +211,7 @@ foreach ($complete_user_list as $index => $user) {
             $user['lastname']
         ).' ('.$user['username'].')';
     }
-}
+}*/
 
 $group_members_element = $form->addElement(
     'advmultiselect',

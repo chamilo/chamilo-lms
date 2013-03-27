@@ -52,8 +52,9 @@ class LearnpathController
         }
         $courseId = api_get_course_int_id();
 
+        //@todo use the before filter do not put all aborts in controllers
         if (empty($courseId)) {
-            $app->abort(403, 'course_not_available');
+            $app->abort(403, 'Course not availablel');
         }
 
         $course = $app['orm.em']->getRepository('Entity\EntityCourse')->find($courseId);

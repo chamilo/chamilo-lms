@@ -88,7 +88,7 @@ function xhprof_generate_mime_header($type, $length) {
  * @param dot_script, string, the script for DOT to generate the image.
  * @param type, one of the supported image types, see
  * $xhprof_legal_image_types.
- * @returns, binary content of the generated image on success. empty string on
+ * @return binary content of the generated image on success. empty string on
  *           failure.
  *
  * @author cjiang
@@ -150,7 +150,7 @@ function xhprof_get_children_table($raw_data) {
  * @param func, string, the focus function.
  * @param critical_path, bool, whether or not to display critical path with
  *                             bold lines.
- * @returns, string, the DOT script to generate image.
+ * @return string, the DOT script to generate image.
  *
  * @author cjiang
  */
@@ -418,7 +418,7 @@ function  xhprof_render_diff_image($xhprof_runs_impl, $run1, $run2,
  *                   threshold will be filtered out and won't apprear in the
  *                   generated image.
  * @param func, string, the focus function.
- * @returns, string, the DOT script to generate image.
+ * @return string, the DOT script to generate image.
  *
  * @author cjiang
  */

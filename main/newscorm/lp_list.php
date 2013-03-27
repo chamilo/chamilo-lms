@@ -101,6 +101,7 @@ if ($is_allowed_to_edit) {
     echo '</div>';
 }
 
+$token = Security::get_token();
 /* DISPLAY SCORM LIST */
 
 $categories_temp = learnpath::get_categories(api_get_course_int_id());
@@ -175,10 +176,11 @@ foreach ($categories as $item) {
         }
         echo '</tr>';
 
+    $test_mode      = api_get_setting('server_type');
         $max = count($flat_list);
         $counter = 0;
         $current = 0;
-        $autolaunch_exists = false;
+    $autolunch_exists = false;
         foreach ($flat_list as $id => $details) {
 
             // Validation when belongs to a session
@@ -260,7 +262,9 @@ foreach ($categories as $item) {
 
             $dsp_desc = '';
             $dsp_export = '';
+        $dsp_edit = '';
             $dsp_build = '';
+        $dsp_edit_close = '';
             $dsp_delete = '';
             $dsp_visible = '';
             $dsp_default_view = '';
@@ -285,6 +289,7 @@ foreach ($categories as $item) {
             $dsp_edit = '<td class="td_actions">';
             $dsp_edit_close = '</td>';
 
+        $token_parameter = "&sec_token=$token";
             if ($is_allowed_to_edit) {
                 // EDIT LP
                 if ($current_session == $details['lp_session']) {
@@ -418,17 +423,17 @@ foreach ($categories as $item) {
                 }
 
                 /* Auto Lunch LP code */
+                $lp_auto_lunch_icon = '';
                 if (api_get_course_setting('enable_lp_auto_launch') == 1) {
-                    if ($details['autolaunch'] == 1 && $autolaunch_exists == false) {
-                        $autolaunch_exists = true;
+                    if ($details['autolaunch'] == 1 && $autolunch_exists == false) {
+                        $autolunch_exists = true;
                         $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=0&lp_id='.$id.'">
-                        <img src="../img/launch.png" border="0" title="'.get_lang('DisableLPAutoLaunch').'" /></a>';
+                            <img src="../img/launch.png" border="0" title="'.get_lang('DisableLPAutoLaunch').'" /></a>';
                     } else {
                         $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=1&lp_id='.$id.'">
-                        <img src="../img/launch_na.png" border="0" title="'.get_lang('EnableLPAutoLaunch').'" /></a>';
+                            <img src="../img/launch_na.png" border="0" title="'.get_lang('EnableLPAutoLaunch').'" /></a>';
                     }
                 }
-
                 //if (api_get_setting('pdf_export_watermark_enable') == 'true') {
                 $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">
 				  '.Display::return_icon('pdf.png', get_lang('ExportToPDFOnlyHTMLAndImages'), '', ICON_SIZE_SMALL).'</a>';

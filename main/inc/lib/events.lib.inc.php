@@ -589,19 +589,23 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 }
 
 /**
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
- * @desc Record information for common (or admin) events (in the track_e_default table)
+ * Records information for common (or admin) events (in the track_e_default table)
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @param	string	Type of event
  * @param	string	Type of value
  * @param	string	Value
  * @param	string	Timestamp (defaults to null)
  * @param	integer	User ID (defaults to null)
  * @param	string	Course code (defaults to null)
+ * @assert ('','','') === false
  */
 function event_system($event_type, $event_value_type, $event_value, $datetime = null, $user_id = null, $course_code = null)
 {
     global $TABLETRACK_DEFAULT;
 
+    if (empty($event_type)) {
+        return false;
+    }
     $event_type = Database::escape_string($event_type);
     $event_value_type = Database::escape_string($event_value_type);
 
@@ -672,6 +676,7 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
  *
  * @param int $etId
  * @return type
+ * @assert () !== false
  */
 function get_all_event_types()
 {

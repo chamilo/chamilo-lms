@@ -66,16 +66,13 @@ class Security
                 }
             }
             // Code specific to courses directory stored on other disk.
-            $checker_path = str_replace(
-                api_get_path(SYS_COURSE_PATH),
-                $_configuration['symbolic_course_folder_abs'],
-                $checker_path
-            );
+            /*
+            $checker_path = str_replace(api_get_path(SYS_COURSE_PATH), $_configuration['symbolic_course_folder_abs'], $checker_path);
             $found = strpos($true_path.'/', $checker_path);
             if ($found === 0) {
                 return true;
+            }*/
             }
-        }
 
         return false;
     }
@@ -111,9 +108,8 @@ class Security
      * Filters dangerous filenames (*.php[.]?* and .htaccess) and returns it in
      * a non-executable form (for PHP and htaccess, this is still vulnerable to
      * other languages' files extensions)
-     * @param string $filename Unfiltered filename
-     *
-     * @return string
+     * @param   string  Unfiltered filename
+     * @param   string  Filtered filename
      */
     public static function filter_filename($filename)
     {

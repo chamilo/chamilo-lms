@@ -5,13 +5,16 @@
  * @package chamilo.gradebook
  */
 /**
+ * Init
+ */
+require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
+require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
+require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
+/**
  * Class
  * @package chamilo.gradebook
  */
 
-require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
-require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
-require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 
 class Category implements GradebookItem
 {
@@ -325,6 +328,10 @@ class Category implements GradebookItem
             if (isset($this->grade_model_id)) {
                 $sql .= ', grade_model_id ';
             }
+            if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
+                $sql .= ', certif_min_score ';
+            }
+
 
             /*
             $setting = api_get_setting('tool_visible_by_default_at_creation');
@@ -355,6 +362,9 @@ class Category implements GradebookItem
             }
             if (isset($this->grade_model_id)) {
                 $sql .= ', '.intval($this->get_grade_model_id());
+            }
+            if (isset($this->certificate_min_score) && !empty($this->certificate_min_score)) {
+                $sql .= ', '.Database::escape_string($this->get_certificate_min_score());
             }
 			$sql .= ')';
 			Database::query($sql);

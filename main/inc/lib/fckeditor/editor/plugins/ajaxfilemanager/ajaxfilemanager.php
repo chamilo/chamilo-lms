@@ -435,7 +435,7 @@ if(!empty($_GET['view'])) {
 	          	<td>
 	          		<!-- comment these lines while integrating into Chamilo -->
 	          		<b><?php //echo LBL_SEARCH_NAME; ?></b> <br />
-	            	<input type="text" class="input inputSearch" name="search_name" id="search_name" />
+	            	<input type="text" class="input inputSearch" name="search_name" id="search_name" size="18"/>
 	          	</td>
 
 	         </tr>

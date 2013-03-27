@@ -3058,25 +3058,29 @@ function store_edit_post($values)
 
     // First we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant).
     //if (array_key_exists('is_first_post_of_thread',$values)  AND $values['is_first_post_of_thread']=='1') {
+    $posts = get_posts($values['thread_id']);
+    $first_post = null;
+    if (!empty($posts)) {
+        $first_post = $posts[0];
+    }
+
+    if (!empty($first_post) && $first_post['post_id'] == $values['post_id']) {
     $sql = "UPDATE $table_threads SET
                 thread_title            ='".Database::escape_string($values['post_title'])."',
-                thread_sticky           ='".Database::escape_string(
-        isset($values['thread_sticky']) ? $values['thread_sticky'] : null
-    )."',".
+                thread_sticky           ='".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."'," .
         "thread_title_qualify   ='".Database::escape_string($values['calification_notebook_title'])."',".
         "thread_qualify_max     ='".Database::escape_string($values['numeric_calification'])."',".
         "thread_weight          ='".Database::escape_string($values['weight_calification'])."'".
         " WHERE c_id = $course_id AND thread_id='".intval($values['thread_id'])."'";
 
     Database::query($sql);
+    }
     //}
     // Update the post_title and the post_text.
     $sql = "UPDATE $table_posts SET
                 post_title          ='".Database::escape_string($values['post_title'])."',
                 post_text           ='".Database::escape_string($values['post_text'])."',
-                post_notification   ='".Database::escape_string(
-        isset($values['post_notification']) ? $values['post_notification'] : null
-    )."'
+                post_notification   ='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
                 WHERE c_id = $course_id AND post_id='".intval($values['post_id'])."'";
 
     Database::query($sql);

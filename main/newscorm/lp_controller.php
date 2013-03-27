@@ -199,10 +199,6 @@ if ($debug > 0) error_log('New LP - Passed oLP creation check', 0);
 
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
-
-/**
- * Actions switching
- */
 if (isset($_SESSION['oLP'])) {
     $_SESSION['oLP']->update_queue = array(); // Reinitialises array used by javascript to update items in the TOC.
     $_SESSION['oLP']->message = ''; // Should use ->clear_message() method but doesn't work.
@@ -221,6 +217,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
         if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !isset($_REQUEST['exeId'])) {
             $_REQUEST['action'] = 'build';
         }
+        $_SESSION['studentview'] = null;
     }
 }
 
@@ -699,9 +696,12 @@ switch ($action) {
             }
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
 
-            if (isset($_REQUEST['hide_toc_frame'])) {
-                $_SESSION['oLP']->set_hide_toc_frame($_REQUEST['hide_toc_frame']);
+            if (isset($_REQUEST['hide_toc_frame']) && $_REQUEST['hide_toc_frame'] == 1) {
+                $hide_toc_frame = $_REQUEST['hide_toc_frame'];
+            } else {
+                $hide_toc_frame = null;
             }
+            $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
 
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
@@ -929,11 +929,12 @@ switch ($action) {
     case 'switch_view_mode':
         if ($debug > 0) error_log('New LP - switch_view_mode action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for switch', 0); require 'lp_list.php'; }
-        $_SESSION['refresh'] = 1;
-        $_SESSION['oLP']->update_default_view_mode();
+        if (Security::check_token('get')) {
+            $_SESSION['refresh'] = 1;
+            $_SESSION['oLP']->update_default_view_mode();
+        }
         require 'lp_list.php';
         break;
-
     case 'switch_force_commit':
         if ($debug > 0) error_log('New LP - switch_force_commit action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for switch', 0); require 'lp_list.php'; }

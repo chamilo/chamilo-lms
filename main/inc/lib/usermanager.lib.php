@@ -410,10 +410,13 @@ class UserManager {
      * @assert (null) === false
      * @assert ('abc') === false
      */
-    public static function delete_user($user_id) {
+    public static function delete_user($user_id)
+    {
 
-        if ($user_id != strval(intval($user_id))) return false;
-        if ($user_id === false) return false;
+        if ($user_id != strval(intval($user_id)))
+            return false;
+        if ($user_id === false)
+            return false;
 
         if (!self::can_delete_user($user_id)) {
             return false;
@@ -465,6 +468,7 @@ class UserManager {
         // Delete user picture
         // TODO: Logic about api_get_setting('split_users_upload_directory') === 'true' , a user has 4 differnt sized photos to be deleted.
 
+        $user_info = api_get_user_info($user_id);
         if (strlen($user_info['picture_uri']) > 0) {
             $img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
             if (file_exists($img_path))
@@ -493,10 +497,9 @@ class UserManager {
         $sql = 'DELETE FROM '.$gradebook_results_table.' WHERE user_id = '.$user_id;
         Database::query($sql);
 
-        $user = Database::fetch_array($res);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         $sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
-        $resv = Database::query($sqlv);
+        Database::query($sqlv);
 
         require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
         if (api_get_multiple_access_url()) {
@@ -521,9 +524,10 @@ class UserManager {
             //Delete user from friend lists
             SocialManager::remove_user_rel_user($user_id, true);
         }
+        survey_manager::delete_all_survey_invitations_by_user($user_id);
         // Delete students works
         $sqlw = "DELETE FROM $table_work WHERE user_id = $user_id";
-        $resw = Database::query($sqlw);
+        Database::query($sqlw);
         unset($sqlw);
         // Add event to system log
         $user_id_manager = api_get_user_id();
@@ -1335,11 +1339,10 @@ class UserManager {
 
         $big    = new Image($source_file); // This is the original picture.
 
-        $ok = false;
-        $ok = $small->send_image($path.'small_'.$filename) &&
-              $medium->send_image($path.'medium_'.$filename) &&
-              $normal->send_image($path.$filename) &&
-              $big->send_image( $path.'big_'.$filename);
+        $ok = $small && $small->send_image($path.'small_'.$filename) &&
+            $medium && $medium->send_image($path.'medium_'.$filename) &&
+            $normal && $normal->send_image($path.$filename) &&
+            $big && $big->send_image($path.'big_'.$filename);
         return $ok ? $filename : false;
     }
 
@@ -1349,7 +1352,8 @@ class UserManager {
      * @param int $user_id            The user internal identitfication number.
      * @return string/bool            Returns empty string on success, FALSE on error.
      */
-    public static function delete_user_picture($user_id) {
+    public static function delete_user_picture($user_id)
+    {
         return self::update_user_picture($user_id);
     }
 
@@ -2651,6 +2655,21 @@ class UserManager {
                     }
                 }
             }
+        } else {
+            //check if user is general coach for this session
+            $s = api_get_session_info($session_id);
+            if ($s['id_coach'] == $user_id) {
+                if (count($course_list)==0) {
+                    $course_list = SessionManager::get_course_list_by_session_id($session_id);
+                    if (!empty($course_list)) {
+                        foreach ($course_list as $course) {
+                            if (!in_array($course['code'],$courses)) {
+                                $personal_course_list[] = $course;
+                            }
+                        }
+                    }
+                }
+            }
         }
         return $personal_course_list;
     }
@@ -2668,8 +2687,12 @@ class UserManager {
         $t_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT user_id FROM $t_user WHERE username = '$username'";
         $res = Database::query($sql);
-        if ($res === false) { return false; }
-        if (Database::num_rows($res) !== 1) { return false; }
+        if ($res === false) {
+            return false;
+        }
+        if (Database::num_rows($res) !== 1) {
+            return false;
+        }
         $row = Database::fetch_array($res);
         return $row['user_id'];
     }

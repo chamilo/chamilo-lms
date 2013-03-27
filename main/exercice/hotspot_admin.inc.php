@@ -6,7 +6,9 @@
  * @package chamilo.exercise
  * @author Toon Keppens
  */
-
+/**
+ * Init
+ */
 use \ChamiloSession as Session;
 
 $modifyAnswers = intval($_GET['hotspotadmin']);

@@ -94,13 +94,13 @@ $(document).ready(function() {
 		header: {
 			left: 'today prev,next',
 			center: 'title',
-			right: 'month,agendaWeek,agendaDay',
+			right: 'month,agendaWeek,agendaDay'
 		},
         {% if use_google_calendar == 1 %}
             eventSources: [
                 '{{ google_calendar_url }}',  //if you want to add more just add URL in this array
                 {
-                    className: 'gcal-event',           // an option!
+                    className: 'gcal-event'           // an option!
                 }
             ],
         {% endif %}
@@ -186,7 +186,7 @@ $(document).ready(function() {
 									$("#dialog-form").dialog("close");
 								}
 							});
-						},
+						}
 					},
 					close: function() {
 						$("#title").attr('value', '');
@@ -219,7 +219,7 @@ $(document).ready(function() {
                         delay: 2000
                     },
 		            content: event.description,
-		            position: { at:'top left' , my:'bottom left'},
+		            position: { at:'top left' , my:'bottom left'}
 		        });
 			}
 
@@ -265,6 +265,14 @@ $(document).ready(function() {
                     $('#end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear());
                 }
 
+                /*$("#title").attr('value', calEvent.title);
+                $("#content").attr('value', calEvent.description);*/
+
+                $("#title_edit").html(calEvent.title);
+                $("#content_edit").html(calEvent.description);
+
+                $("#title_edit").show();
+                $("#content_edit").show();
                 $("#title").attr('value', calEvent.title);
                 $("#content").attr('value', calEvent.description);
 
@@ -289,6 +297,7 @@ $(document).ready(function() {
                             url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";
                             window.location.href = url;
 						},
+                        {% if type == 'not_available' %}
 						'{{ "Edit"|get_lang }}' : function() {
 
 							var bValid = true;
@@ -313,6 +322,13 @@ $(document).ready(function() {
 								}
 							});
 						},
+                        {% endif %}
+
+                        '{{ "Edit"|get_lang }}' : function() {
+                            url =  "agenda.php?action=edit&type=fromjs&id=" + calEvent.id+'&course_id='+calEvent.course_id+"";
+                            window.location.href = url;
+                            $("#dialog-form").dialog( "close" );
+                        },
 						'{{ "Delete"|get_lang }}': function() {
 							$.ajax({
 								url: delete_url,
@@ -330,6 +346,14 @@ $(document).ready(function() {
 					close: function() {
 						$("#title").attr('value', '');
 						$("#content").attr('value', '');
+                        $("#title").show();
+                        $("#content").show();
+
+						$("#title_edit").html('');
+						$("#content_edit").html('');
+
+                        $("#title").attr('value', '');
+                        $("#content").attr('value', '');
 					}
 				});
 			} else { //simple form
@@ -426,41 +450,43 @@ $(document).ready(function() {
 
         {% if visible_to is not null %}
     	    <div id="visible_to_input" class="control-group">
-                <label class="control-label" for="date">{{"To"|get_lang}}</label>
+                <label class="control-label">{{ "To"|get_lang }}</label>
                 <div class="controls">
                     {{visible_to}}
                 </div>
             </div>
         {% endif %}
          <div id="visible_to_read_only" class="control-group" style="display:none">
-                <label class="control-label" for="date">{{"To"|get_lang}}</label>
+                <label class="control-label">{{ "To"|get_lang }}</label>
                 <div class="controls">
                     <div id="visible_to_read_only_users"></div>
                 </div>
          </div>
 		<div class="control-group">
-            <label class="control-label" for="date">{{"Agenda"|get_lang}}</label>
+            <label class="control-label">{{ "Agenda"|get_lang }}</label>
 			<div class="controls">
 				<div id="color_calendar"></div>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="date">{{"Date"|get_lang}}</label>
+			<label class="control-label" for="end_date">{{"Date"|get_lang}}</label>
 			<div class="controls">
 				<span id="start_date"></span><span id="end_date"></span>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="name">{{"Title"|get_lang}}</label>
+			<label class="control-label" for="title">{{ "Title"|get_lang }}</label>
 			<div class="controls">
 				<input type="text" name="title" id="title" size="40" />
+                <span id="title_edit"></span>
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label" for="name">{{"Description"|get_lang}}</label>
+			<label class="control-label" for="content">{{ "Description"|get_lang }}</label>
 			<div class="controls">
 				<textarea name="content" id="content" class="span3" rows="5"></textarea>
+                <span id="content_edit"></span>
 			</div>
 		</div>
 

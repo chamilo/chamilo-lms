@@ -17,7 +17,7 @@ $server = new soap_server();
 // Initialize WSDL support
 $server->configureWSDL('WSUserInfo', 'urn:WSUserInfo');
 
-/* Register DokeosWSCourseList function */
+/* Register WSCourseList function */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -50,12 +50,12 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWSCourseListOfUser',   // method name
+$server->register('WSCourseListOfUser',   // method name
     array('username' => 'xsd:string',
           'signature' => 'xsd:string'),         // input parameters
     array('return' => 'xsd:Array'),             // output parameters
     'urn:WSUserInfo',                           // namespace
-    'urn:WSUserInfo#DokeosWSUserInfo',          // soapaction
+    'urn:WSUserInfo#WSUserInfo',          // soapaction
     'rpc',                                      // style
     'encoded',                                  // use
     'This service returns a list of courses'    // documentation
@@ -65,11 +65,11 @@ $server->register('DokeosWSCourseListOfUser',   // method name
  * Get a list of courses (code, url, title, teacher, language) for a specific
  * user and return to caller
  * Function registered as service. Returns strings in UTF-8.
- * @param string User name in Dokeos
+ * @param string User name in Chamilo 
  * @param string Signature (composed of the sha1(username+apikey)
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
-function DokeosWSCourseListOfUser($username, $signature) {
+function WSCourseListOfUser($username, $signature) {
     if (empty($username) or empty($signature)) { return -1; }
     global $_configuration;
 
@@ -96,7 +96,7 @@ function DokeosWSCourseListOfUser($username, $signature) {
     return $courses_list;
 }
 
-/* Register DokeosWSEventsList function */
+/* Register WSEventsList function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
     'eventDetails',
@@ -128,14 +128,14 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('DokeosWSEventsList',       // method name
+$server->register('WSEventsList',       // method name
     array('username' => 'xsd:string',
           'signature' => 'xsd:string',
           'datestart' => 'xsd:int',
           'dateend'   => 'xsd:int'),          // input parameters
     array('return' => 'xsd:Array'),           // output parameters
     'urn:WSUserInfo',                         // namespace
-    'urn:WSUserInfo#DokeosWSEventsList',      // soapaction
+    'urn:WSUserInfo#WSEventsList',      // soapaction
     'rpc',                                    // style
     'encoded',                                // use
     'This service returns a list of events of the courses the given user is subscribed to'      // documentation
@@ -150,7 +150,7 @@ $server->register('DokeosWSEventsList',       // method name
  * @param int    End date, in YYYYMMDD format
  * @return array Events list
  */
-function DokeosWSEventsList($username, $signature, $datestart = 0, $dateend = 0) {
+function WSEventsList($username, $signature, $datestart = 0, $dateend = 0) {
 
     if (empty($username) or empty($signature)) { return -1; }
     global $_configuration;

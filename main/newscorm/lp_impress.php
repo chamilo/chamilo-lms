@@ -40,7 +40,7 @@ if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0) {
 }
 
 if (empty($_SESSION['oLP'])) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $debug = 0;
@@ -56,6 +56,16 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/impress
 
 $list = $_SESSION['oLP']->get_toc();
 
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
+if ($is_allowed_to_edit) {
+    echo '<div style="position: fixed; top: 0px; left: 0px; pointer-events: auto;width:100%">';
+    global $interbreadcrumb;
+    $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
+    $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
+    echo return_breadcrumb($interbreadcrumb, null, null);
+    echo '</div>';
+}
 $html = '';
 $step = 1;
 foreach ($list as $toc) {
@@ -68,13 +78,13 @@ foreach ($list as $toc) {
     $src = $_SESSION['oLP']->get_link('http', $toc['id']);
     //just showing the src in a iframe ...
     $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="'.$src.'"></iframe>';
-    $html .= "</div>\n";
+    $html .= "</div>";
     $step++;
 }
 
 //Setting the template
-$tpl = new Template($tool_name);
+$tpl = new Template($tool_name, false, false, true);
 $tpl->assign('html', $html);
 $content = $tpl->fetch('default/learnpath/impress.tpl');
 $tpl->assign('content', $content);
-$tpl->display_no_layout_template();
+$tpl->display_one_col_template();

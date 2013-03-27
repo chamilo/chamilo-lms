@@ -231,17 +231,9 @@ function handle_stylesheets()
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $is_style_changeable = true;
-            /*echo '<div class="actions" id="stylesheetuploadlink">';
-            	Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'',ICON_SIZE_MEDIUM);
-            	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
-            echo '</div>';*/
         }
     } else {
         $is_style_changeable = true;
-        /*echo '<div class="actions" id="stylesheetuploadlink">';
-			Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'',ICON_SIZE_MEDIUM);
-        	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
-        echo '</div>';*/
     }
 
     $form = new FormValidator('stylesheet_upload', 'post', 'settings.php?category=Stylesheets#tabs-2');
@@ -254,7 +246,7 @@ function handle_stylesheets()
     );
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
-    $allowed_file_types = array('css', 'zip', 'jpeg', 'jpg', 'png', 'gif', 'ico');
+    $allowed_file_types = array('css', 'zip', 'jpeg', 'jpg', 'png', 'gif', 'ico','psd');
 
     $form->addRule(
         'new_stylesheet',
@@ -272,11 +264,9 @@ function handle_stylesheets()
     } else {
         // Uploading a new stylesheet.
         if ($_configuration['access_url'] == 1) {
-            //$form->display();
             $show_upload_form = true;
         } else {
             if ($is_style_changeable) {
-                //$form->display();
                 $show_upload_form = true;
             }
         }
@@ -449,7 +439,7 @@ function upload_stylesheet($values, $picture)
                 $file = $zip->statIndex($i);
                 if (substr($file['name'], -1) != '/') {
                     $path_parts = pathinfo($file['name']);
-                    if (!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css', 'ico'))) {
+                    if (!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css', 'ico','psd'))) {
                         $valid = false;
                         $invalid_files[] = $file['name'];
                     }
@@ -593,13 +583,11 @@ function store_plugins()
  */
 function store_stylesheets()
 {
-    global $_configuration;
-
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);
 
     if (is_style($style)) {
-        api_set_setting('stylesheets', $style, null, 'stylesheets', $_configuration['access_url']);
+        api_set_setting('stylesheets', $style, null, 'stylesheets', api_get_current_access_url_id());
         api_set_setting_last_update();
     }
 
@@ -638,10 +626,6 @@ function handle_search()
 
     $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');
 
-    //$renderer = & $form->defaultRenderer();
-    //$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
-    //$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
-    //$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
 
     $values = api_get_settings_options('search_enabled');
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));
@@ -1220,7 +1204,7 @@ function delete_template($id)
 
     // Now we remove it from the database.
     $sql = "DELETE FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
-    $result = Database::query($sql);
+    Database::query($sql);
 
     // Display a feedback message.
     Display::display_confirmation_message(get_lang('TemplateDeleted'));

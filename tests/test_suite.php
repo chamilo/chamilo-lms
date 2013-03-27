@@ -9,9 +9,8 @@
 *	- files with functions tests
 *
 *	@todo rewrite code to separate display, logic, database code
-*	@package chamilo.main
+*	@package chamilo.tests
 */
-
 /**
  * @todo shouldn't these settings be moved to the test_suite.php.
  * 		 if these are really configuration then we can make require_once in each tests.
@@ -64,10 +63,11 @@ require_once 'simpletest/autorun.php';
 require_once 'simpletest/reporter.php';
 require_once 'simpletest/xml.php';
 
-/*  TEST SUITE
+/**
+ *  TEST SUITE
  * Start to load the tests files
-*/
-
+ * @package chamilo.tests
+ */
 class TestsSuite extends TestSuite {
 
     function TestsSuite() {

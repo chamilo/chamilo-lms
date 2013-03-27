@@ -9,52 +9,45 @@
  * Code
  */
 
-//@todo put constants in an array
-
-//default values
-//mail_notify_message ("At once", "Daily", "No")
-define('NOTIFY_MESSAGE_AT_ONCE',        '1');
-define('NOTIFY_MESSAGE_DAILY',          '8');
-define('NOTIFY_MESSAGE_WEEKLY',         '12');
-define('NOTIFY_MESSAGE_NO',             '0');
-
-//mail_notify_invitation ("At once", "Daily", "No")
-
-define('NOTIFY_INVITATION_AT_ONCE',     '1');
-define('NOTIFY_INVITATION_DAILY',       '8');
-define('NOTIFY_INVITATION_WEEKLY',      '12');
-define('NOTIFY_INVITATION_NO',          '0');
-
-// mail_notify_group_message ("At once", "Daily", "No")
-define('NOTIFY_GROUP_AT_ONCE',          '1');
-define('NOTIFY_GROUP_DAILY',            '8');
-define('NOTIFY_GROUP_WEEKLY',           '12');
-define('NOTIFY_GROUP_NO',               '0');
-
-define('NOTIFICATION_TYPE_MESSAGE',       1);
-define('NOTIFICATION_TYPE_INVITATION',    2);
-define('NOTIFICATION_TYPE_GROUP',         3);
 /**
  * Notification class
  * @package chamilo.library
  */
-class Notification extends Model {
+class Notification extends Model
+{
+    public $table;
+    public $columns = array('id', 'dest_user_id', 'dest_mail', 'title', 'content', 'send_freq', 'created_at', 'sent_at');
+    public $max_content_length = 254; //Max lenght of the notification.content field
+    public $debug = false;
+//@todo put constants in an array
 
-    var $table;
-    var $columns             = array('id', 'dest_user_id', 'sender_id', 'dest_mail', 'title', 'content', 'send_freq', 'created_at', 'sent_at');
-    var $max_content_length  = 254; //Max lenght of the notification.content field
-    var $debug               = false;
+    public $type;
+    public $admin_name;
+    public $admin_email;
+//default values
+    const NOTIFY_MESSAGE_AT_ONCE = 1;
+    const NOTIFY_MESSAGE_DAILY = 8;
+    const NOTIFY_MESSAGE_WEEKLY = 12;
+    const NOTIFY_MESSAGE_NO = 0;
+//mail_notify_message ("At once", "Daily", "No")
 
-    /* message, invitation, group messages */
-    var $type;
-    var $sender_name;
-    var $sender_email;
+    const NOTIFY_INVITATION_AT_ONCE = 1;
+    const NOTIFY_INVITATION_DAILY = 8;
+    const NOTIFY_INVITATION_WEEKLY = 12;
+    const NOTIFY_INVITATION_NO = 0;
+//mail_notify_invitation ("At once", "Daily", "No")
 
-    var $extra_headers = array();
+    const NOTIFY_GROUP_AT_ONCE = 1;
+    const NOTIFY_GROUP_DAILY = 8;
+    const NOTIFY_GROUP_WEEKLY = 12;
+    const NOTIFY_GROUP_NO = 0;
+    const NOTIFICATION_TYPE_MESSAGE = 1;
+    const NOTIFICATION_TYPE_INVITATION = 2;
+    const NOTIFICATION_TYPE_GROUP = 3;
 
-    var $send_email_as_user = false; //False, chamilo will sent an email as the user (not recommended)
-
-	public function __construct() {
+// mail_notify_group_message ("At once", "Daily", "No")
+    public function __construct()
+    {
         $this->table       = Database::get_main_table(TABLE_NOTIFICATION);
 
         $this->sender_email  = api_get_setting('noreply_email_address');
@@ -135,17 +128,17 @@ class Notification extends Model {
         $avoid_my_self  = false;
 
         switch ($this->type) {
-            case NOTIFICATION_TYPE_MESSAGE;
+            case self::NOTIFICATION_TYPE_MESSAGE;
                 $setting_to_check = 'mail_notify_message';
-                $default_status = NOTIFY_MESSAGE_AT_ONCE;
+                $default_status = self::NOTIFY_MESSAGE_AT_ONCE;
                 break;
-            case NOTIFICATION_TYPE_INVITATION;
+            case self::NOTIFICATION_TYPE_INVITATION;
                 $setting_to_check = 'mail_notify_invitation';
-                $default_status = NOTIFY_INVITATION_AT_ONCE;
+                $default_status = self::NOTIFY_INVITATION_AT_ONCE;
                 break;
-            case NOTIFICATION_TYPE_GROUP;
+            case self::NOTIFICATION_TYPE_GROUP;
                 $setting_to_check = 'mail_notify_group_message';
-                $default_status = NOTIFY_GROUP_AT_ONCE;
+                $default_status = self::NOTIFY_GROUP_AT_ONCE;
                 $avoid_my_self  = true;
                 break;
         }
@@ -172,17 +165,24 @@ class Notification extends Model {
 
                 switch ($user_setting) {
                     //No notifications
-                    case NOTIFY_MESSAGE_NO:
-                    case NOTIFY_INVITATION_NO:
-                    case NOTIFY_GROUP_NO:
+                    case self::NOTIFY_MESSAGE_NO:
+                    case self::NOTIFY_INVITATION_NO:
+                    case self::NOTIFY_GROUP_NO:
                         break;
                     //Send notification right now!
-                    case NOTIFY_MESSAGE_AT_ONCE:
-                    case NOTIFY_INVITATION_AT_ONCE:
-                    case NOTIFY_GROUP_AT_ONCE:
+                    case self::NOTIFY_MESSAGE_AT_ONCE:
+                    case self::NOTIFY_INVITATION_AT_ONCE:
+                    case self::NOTIFY_GROUP_AT_ONCE:
                         if (!empty($user_info['mail'])) {
                             $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
-                            api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $this->sender_name, $this->sender_email, $this->extra_headers);
+                            if (!empty($sender_info['complete_name']) && !empty($sender_info['email'])) {
+                                $extra_headers = array();
+                                $extra_headers['reply_to']['mail'] = $sender_info['email'];
+                                $extra_headers['reply_to']['name'] = $sender_info['complete_name'];
+                                api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $sender_info['complete_name'], $sender_info['email'], $extra_headers);
+                            } else {
+                                api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $sender_info['complete_name'], $sender_info['email']);
+                            }
                         }
                         $params['sent_at']       = api_get_utc_datetime();
                     //Saving the notification to be sent some day
@@ -209,14 +209,14 @@ class Notification extends Model {
         $new_message_text = $link_to_new_message = '';
 
         switch ($this->type) {
-            case NOTIFICATION_TYPE_MESSAGE:
+            case self::NOTIFICATION_TYPE_MESSAGE:
                 if (!empty($sender_info)) {
                     $sender_name = api_get_person_name($sender_info['firstname'], $sender_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
                     $new_message_text = sprintf(get_lang('YouHaveANewMessageFromX'), $sender_name);
                 }
                 $link_to_new_message = Display::url(get_lang('SeeMessage'), api_get_path(WEB_CODE_PATH).'messages/inbox.php');
                 break;
-            case NOTIFICATION_TYPE_INVITATION:
+            case self::NOTIFICATION_TYPE_INVITATION:
                 if (!empty($sender_info)) {
                     $sender_name = api_get_person_name($sender_info['firstname'], $sender_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
                     //$sender_mail = $sender_info['email'] ;
@@ -224,7 +224,7 @@ class Notification extends Model {
                 }
                 $link_to_new_message = Display::url(get_lang('SeeInvitation'), api_get_path(WEB_CODE_PATH).'social/invitations.php');
                 break;
-            case NOTIFICATION_TYPE_GROUP:
+            case self::NOTIFICATION_TYPE_GROUP:
             	$topic_page = intval($_REQUEST['topics_page_nr']);
                 if (!empty($sender_info)) {
                     $sender_name = $sender_info['group_info']['name'];

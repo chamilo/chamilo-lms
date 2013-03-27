@@ -1,10 +1,26 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Definition of the AddManySessionToCategoryFunctions class
+ * @package chamilo.library
+ */
+/**
+ * Init
+ */
 require_once (api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
-
+/**
+ * AddManySessionToCategoryFunctions class
+ */
 class AddManySessionToCategoryFunctions {
-
-	function search_courses($needle,$type) {
+    /**
+     * Search for a session based on a given search string
+     * @param string A search string
+     * @param string A search box type (single or anything else)
+     * @return string XajaxResponse
+     * @assert () !== ''
+     * @assert ('abc','single') !== ''
+     */
+    function search_courses($needle,$type) {
 
 		global $tbl_course, $tbl_session, $id_session;
 		$xajax_response = new XajaxResponse();
@@ -32,5 +48,3 @@ class AddManySessionToCategoryFunctions {
 		return $xajax_response;
 	}
 }
-
-?>

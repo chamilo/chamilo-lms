@@ -1,11 +1,13 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 /**
  * A simple set of tests for the main API.
  * @author Ivan Tcholakov, 2009.
- * For licensing terms, see /dokeos_license.txt
+ * @package chamilo.tests
  */
-
+/**
+ * Init
+ */
 $_current_dir = dirname(__FILE__).'/';
 
 $_sys_code_path = $_current_dir.'../main/';

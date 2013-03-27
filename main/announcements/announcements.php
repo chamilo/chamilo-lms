@@ -101,6 +101,7 @@ if (!empty($_POST['To']) and ($select_groupusers_status == "show")) {
     $_SESSION['select_groupusers'] = "hide";
 }
 
+$origin = empty($_GET['origin']) ? '' : Security::remove_XSS($_GET['origin']);
 /* 	Action handling */
 
 // display the form
@@ -559,7 +560,7 @@ if (AnnouncementManager::user_can_edit_announcement()) {
     echo '<div class="actions">';
     if (isset($_GET['action']) && in_array($_GET['action'], array('add', 'modify', 'view'))) {
         echo "<a href='".api_get_self()."?".api_get_cidreq(
-        )."&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon(
+        )."&origin=".$origin."'>".Display::return_icon(
             'back.png',
             get_lang('Back'),
             '',
@@ -567,7 +568,7 @@ if (AnnouncementManager::user_can_edit_announcement()) {
         )."</a>";
     } else {
         echo "<a href='".api_get_self()."?".api_get_cidreq(
-        )."&action=add&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon(
+        )."&action=add&origin=".$origin."'>".Display::return_icon(
             'new_announce.png',
             get_lang('AddAnnouncement'),
             '',
@@ -579,7 +580,7 @@ if (AnnouncementManager::user_can_edit_announcement()) {
     if (isset($_GET['action']) && in_array($_GET['action'], array('view'))) {
         echo '<div class="actions">';
         echo "<a href='".api_get_self()."?".api_get_cidreq(
-        )."&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon(
+        )."&origin=".$origin."'>".Display::return_icon(
             'back.png',
             get_lang('Back'),
             '',
@@ -1032,7 +1033,7 @@ if ($display_announcement_list) {
                 echo Display::url(
                     get_lang('AddAnnouncement'),
                     api_get_self()."?".api_get_cidreq(
-                    )."&action=add&origin=".(empty($_GET['origin']) ? '' : $_GET['origin']),
+                    )."&action=add&origin=".$origin,
                     array('class' => 'btn')
                 );
                 echo '</div>';
@@ -1136,9 +1137,7 @@ if ($display_announcement_list) {
                             $alt_visibility = get_lang('Visible');
                         }
                         $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq(
-                        )."&origin=".(!empty($_GET['origin']) ? Security::remove_XSS(
-                            $_GET['origin']
-                        ) : '')."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
+                        )."&origin=".$origin."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
                             Display::return_icon(
                                 $image_visibility.'.png',
                                 $alt_visibility,

@@ -16,6 +16,14 @@ require_once ('xajax/xajax.inc.php');
 
 class Accessurleditcoursestourl
 {
+    /**
+     * Search for a list of available courses by title or code, based on
+     * a given string
+     * @param string String to search for
+     * @param int Deprecated param
+     * @return string A formatted, xajax answer block
+     * @assert () === false
+     */
 
     function search_courses($needle, $id)
     {
@@ -29,22 +37,18 @@ class Accessurleditcoursestourl
             $needle = api_convert_encoding($needle, $charset, 'utf-8');
             $needle = Database::escape_string($needle);
             // search courses where username or firstname or lastname begins likes $needle
-            $sql = 'SELECT code, title FROM '.$tbl_course.' u
-					WHERE (title LIKE "'.$needle.'%"
-					OR code LIKE "'.$needle.'%"
-					)
-					ORDER BY title, code
-					LIMIT 11';
+            $sql = 'SELECT code, title FROM '.$tbl_course.' u '.
+                   ' WHERE (title LIKE "'.$needle.'%" '.
+                   ' OR code LIKE "'.$needle.'%" '.
+                   ' ) '.
+                   ' ORDER BY title, code '.
+                   ' LIMIT 11';
             $rs = Database::query($sql);
             $i = 0;
             while ($course = Database :: fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
-                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes(
-                        $course['code']
-                    ).'\',\''.addslashes($course['title']).' ('.addslashes(
-                        $course['code']
-                    ).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
+				     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($course['code']).'\',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
                 } else {
                     $return .= '...<br />';
                 }

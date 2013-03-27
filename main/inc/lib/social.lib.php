@@ -197,7 +197,7 @@ class SocialManager extends UserManager {
             
             $sender_info = api_get_user_info($user_id);
             $notification = new Notification(); 
-            $notification->save_notification(NOTIFICATION_TYPE_INVITATION, array($friend_id), $message_title, $message_content, $sender_info);            
+            $notification->save_notification(Notification::NOTIFICATION_TYPE_INVITATION, array($friend_id), $message_title, $message_content, $sender_info);
                 
             return true;
         } else {
@@ -349,16 +349,25 @@ class SocialManager extends UserManager {
      * @author  Yannick Warnier
      * @since   Dokeos 1.8.6.1
      */
-    public static function get_user_feeds($user, $limit=5) {
-        if (!function_exists('fetch_rss')) { return '';}
+    public static function get_user_feeds($user, $limit = 5)
+    {
+        if (!function_exists('fetch_rss')) {
+            return '';
+        }
         $feeds = array();
         $feed = UserManager::get_extra_user_data_by_field($user,'rssfeeds');
-        if(empty($feed)) { return ''; }
+        if (empty($feed)) {
+            return '';
+        }
         $feeds = explode(';',$feed['rssfeeds']);
-        if (count($feeds)==0) { return ''; }
+        if (count($feeds) == 0) {
+            return '';
+        }
         $res = '';
         foreach ($feeds as $url) {
-            if (empty($url)) { continue; }
+            if (empty($url)) {
+                continue;
+            }
             $rss = @fetch_rss($url);
             $i = 1;
             if (!empty($rss->items)) {
@@ -369,7 +378,9 @@ class SocialManager extends UserManager {
                 $res .= '<h2>'.$rss->channel['title'].''.$icon_rss.'</h2>';
                 $res .= '<div class="social-rss-channel-items">';
                 foreach ($rss->items as $item) {
-                    if ($limit>=0 and $i>$limit) {break;}
+                    if ($limit >= 0 and $i > $limit) {
+                        break;
+                    }
                     $res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
                     $res .= '<div class="social-rss-item-date">'.api_get_datetime($item['date_timestamp']).'</div>';
                     $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
@@ -569,17 +580,28 @@ class SocialManager extends UserManager {
             }
 
             //@todo check if user is online and if it's a friend to show the chat link
-            if (api_is_global_chat_enabled() && $user_friend_relation == USER_RELATION_TYPE_FRIEND) {
+            if (api_is_global_chat_enabled()) {
+                $user_name = $user_info['complete_name'];
+
+                if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
                 if ($user_id != api_get_user_id()) {
                     //Only show chat if I'm available to talk
                     if ($current_user_info['user_is_online_in_chat'] == 1) {
-                        $user_name  = $user_info['complete_name'];
 
                         $options = array('onclick' => "javascript:chatWith('".$user_id."', '".Security::remove_XSS($user_name)."', '".$user_info['user_is_online_in_chat']."')");
                         $chat_icon = $user_info['user_is_online_in_chat'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
                         $html .=   Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'),  'javascript:void(0);', $options));
+                        }
+                    }
                     } else {
                        // Do something? 
+                    if ($user_id != api_get_user_id()) {
+                        if ($current_user_info['user_is_online_in_chat'] == 1) {
+                            $message = Security::remove_XSS(sprintf(get_lang("YouHaveToAddXAsAFriendFirst", $user_name)));
+                            $options = array('onclick' => "javascript:chatNotYetWith('".$message."')");
+                            $chat_icon = $user_info['user_is_online_in_chat'] ? Display::return_icon('online.png', get_lang('Online')) : Display::return_icon('offline.png', get_lang('Offline'));
+                            $html .= Display::tag('li', Display::url($chat_icon.'&nbsp;&nbsp;'.get_lang('Chat'), 'javascript:void(0);', $options));
+                        }
                     }
                 }
             }

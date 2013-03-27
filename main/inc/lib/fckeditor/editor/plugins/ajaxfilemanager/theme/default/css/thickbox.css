@@ -119,7 +119,7 @@ margin-top: expression(0 - parseInt(this.offsetHeight / 2) + (TBWindowMargin = d
 }
 
 #TB_ajaxContent.TB_modal{
-	padding:15px;
+	padding:15px 15px 15px 0px;
 }
 
 #TB_ajaxContent p{

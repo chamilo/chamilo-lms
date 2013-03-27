@@ -2133,7 +2133,7 @@ class SessionManager {
      * @param $copy_users
      * @param $create_new_courses
      * @param $set_exercises_lp_invisible
-     * @return unknown_type
+     * @return int
      */
     public function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false) {
         $id = intval($id);
@@ -2162,7 +2162,7 @@ class SessionManager {
                 if ($create_new_courses) {
                     //Just in case
                     if (function_exists('ini_set')) {
-                        ini_set('memory_limit','256M');
+                    	api_set_memory_limit('256M');
                         ini_set('max_execution_time',0);
                     }
                     $params = array();

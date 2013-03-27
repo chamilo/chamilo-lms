@@ -121,7 +121,7 @@ function save_data($users) {
 		foreach ($users as $index => $user)	{
 			$user = complete_missing_data($user);
 			$user['Status'] = api_status_key($user['Status']);
-			$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
+            $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], $user['language'], $user['PhoneNumber'], '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
 			if (!is_array($user['Courses']) && !empty($user['Courses'])) {
 				$user['Courses'] = array($user['Courses']);
 			}

@@ -221,3 +221,102 @@ function extldap_get_user_search_string($username) {
 
     return $filter;
 }
+/**
+ * Imports all LDAP users into Chamilo
+ * @return bool false on error, true otherwise
+ */
+function extldap_import_all_users() {
+    global $extldap_config;
+    //echo "Connecting...\n";
+    $ds = extldap_connect();
+    if (!$ds) {
+        return false;
+    }
+    //echo "Binding...\n";
+    $ldapbind = false;
+    //Connection as admin to search dn of user
+    $ldapbind = @ldap_bind($ds, $extldap_config['admin_dn'], $extldap_config['admin_password']);
+    if ($ldapbind === false) {
+        error_log('EXTLDAP ERROR : cannot connect with admin login/password');
+        return false;
+    }
+    //browse ASCII values from a to z to avoid 1000 results limit of LDAP
+    $count = 0;
+    $alphanum = array('0','1','2','3','4','5','6','7','8','9');
+    for ($a=97;$a<=122;$a++) {
+        $alphanum[] = chr($a);
+    }
+    foreach ($alphanum as $char1) {
+        foreach ($alphanum as $char2) {
+            //$user_search = "uid=*";
+            $user_search = "sAMAccountName=$char1$char2*";
+            //Search distinguish name of user
+            $sr = ldap_search($ds, $extldap_config['base_dn'], $user_search);
+            if (!$sr) {
+                error_log('EXTLDAP ERROR : ldap_search(' . $ds . ', ' . $extldap_config['base_dn'] . ", $user_search) failed");
+                return false;
+            }
+            //echo "Getting entries\n";
+            $users = ldap_get_entries($ds, $sr);
+            //echo "Entries: ".$users['count']."\n";
+            for ($key = 0; $key < $users['count']; $key ++) {
+                $user_id = extldap_add_user_by_array($users[$key], true);
+                $count ++;
+                if ($user_id) {
+                    // echo "User #$user_id created or updated\n";
+                } else {
+                    // echo "User was not created\n";
+                }
+            }
+        }
+    }
+    //echo "Found $count users in total\n";
+    @ldap_close($ds);
+}
+/**
+ * Insert users from an array of user fields
+ */
+function extldap_add_user_by_array($data, $update_if_exists = true) {
+    $lastname = api_convert_encoding($data['sn'][0], api_get_system_encoding(), 'UTF-8');
+    $firstname = api_convert_encoding($data['cn'][0], api_get_system_encoding(), 'UTF-8');
+    $email = $data['mail'][0];
+    // Get uid from dn
+    $dn_array=ldap_explode_dn($data['dn'],1);
+    $username = $dn_array[0]; // uid is first key
+    $outab[] = $data['edupersonprimaryaffiliation'][0]; // Here, "student"
+    //$val = ldap_get_values_len($ds, $entry, "userPassword");
+    //$val = ldap_get_values_len($ds, $data, "userPassword");
+    //$password = $val[0];
+    // TODO the password, if encrypted at the source, will be encrypted twice, which makes it useless. Try to fix that.
+    $password = $data['userPassword'][0];
+    $structure=$data['edupersonprimaryorgunitdn'][0];
+    $array_structure=explode(",", $structure);
+    $array_val=explode("=", $array_structure[0]);
+    $etape=$array_val[1];
+    $array_val=explode("=", $array_structure[1]);
+    $annee=$array_val[1];
+    // To ease management, we add the step-year (etape-annee) code
+    $official_code=$etape."-".$annee;
+    $auth_source='ldap';
+    // No expiration date for students (recover from LDAP's shadow expiry)
+    $expiration_date='0000-00-00 00:00:00';
+    $active=1;
+    if(empty($status)){$status = 5;}
+    if(empty($phone)){$phone = '';}
+    if(empty($picture_uri)){$picture_uri = '';}
+    // Adding user
+    $user_id = 0;
+    if (UserManager::is_username_available($username)) {
+        //echo "$username\n";
+        $user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
+    } else {
+        if ($update_if_exists) {
+            $user = UserManager::get_user_info($username);
+            $user_id=$user['user_id'];
+            //echo "$username\n";
+            UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
+        }
+    }
+    return $user_id;
+}
+

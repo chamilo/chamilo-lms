@@ -776,7 +776,7 @@ switch ($action) {
                 )." : ".$_course['name']."  ";
 
                 foreach ($user_list as $user_data) {
-                    $user_id = $user_data;
+                    $user_id = $user_data['user_id'];
                     $emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
                     //$emailbody .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n";
                     $emailbody .= get_lang('UserName')." : ".api_get_person_name(

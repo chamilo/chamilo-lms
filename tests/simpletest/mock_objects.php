@@ -463,7 +463,7 @@ class SimpleCallSchedule {
      *    @param array $args        The parameters making up the
      *                              rest of the call.
      *    @return mixed             The result of the action.
-     *    @access public.
+     *    @access public
      */
     function &respond($step, $method, $args) {
         $method = strtolower($method);

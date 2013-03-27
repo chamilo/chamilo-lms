@@ -17,7 +17,11 @@ $use_anonymous = true;
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_CALENDAR_EVENT;
 
-api_protect_course_script(true);
+$course_info = api_get_course_info();
+
+if (!empty($course_info)) {
+    api_protect_course_script(true);
+}
 
 //session
 if (isset($_GET['id_session'])) {
@@ -214,10 +218,21 @@ if (api_is_allowed_to_edit(false, true) OR
     echo display_courseadmin_links();
 }
 
-//display_student_links();
 echo '</div>';
 
-$event_id = isset($_GET['id']) ? $_GET['id'] : null;
+$event_id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+$type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
+
+if ($type == 'fromjs') {
+    $id_list = explode('_', $event_id);
+    $event_id = $id_list[1];
+    $event_type = $id_list[0];
+}
+
+if (!api_is_allowed_to_edit(null, true) && $event_type == 'course') {
+    api_not_allowed();
+}
+
 $course_info = api_get_course_info();
 
 if (api_is_allowed_to_edit(false, true) OR
@@ -315,14 +330,12 @@ if (api_is_allowed_to_edit(false, true) OR
             }
             break;
         case 'edit':
-            if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
-                // a coach can only delete an element belonging to his session
-                if ($_POST['submit_event']) {
-                    store_edited_agenda_item($_REQUEST['id_attach'], $_REQUEST['file_comment']);
-                    $action = 'view';
-                } else {
-                    show_add_form($event_id);
-                }
+            // a coach can only delete an element belonging to his session
+            if ($_POST['submit_event']) {
+                store_edited_agenda_item($event_id, $_REQUEST['id_attach'], $_REQUEST['file_comment']);
+                $action = 'view';
+            } else {
+                show_add_form($event_id, $event_type);
             }
             break;
         case "delete":

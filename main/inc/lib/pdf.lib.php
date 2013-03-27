@@ -211,10 +211,12 @@ if($complete_style === false) { error_log(__FUNCTION__.' with no style'); }
                             
                             if (strpos($old_src, 'http') === false) {
                                 if (strpos($old_src, '/main/default_course_document') === false) {   
+                                    $old_src_fixed = '';
                                     if (api_get_path(REL_PATH) != '/') {
-                                        $old_src = str_replace(api_get_path(REL_PATH), '', $old_src);    
+                                        $old_src_fixed = str_replace(api_get_path(REL_PATH).'courses/'.$course_data['path'].'/document/', '', $old_src);
+                                    } else {
+                                        $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
                                     }
-                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
                                     $new_path = $document_path.$old_src_fixed;                                    
                                     $document_html= str_replace($old_src, $new_path, $document_html);                            
                                 }                                                       	

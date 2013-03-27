@@ -5,11 +5,11 @@
    depends="prepare,phpunit,pdepend,phpdoc"/>
 
  <target name="clean" description="Cleanup build artifacts">
-  <!--delete dir="${basedir}/../tests/api"/>
+  <delete dir="${basedir}/../tests/api"/>
   <delete dir="${basedir}/../tests/code-browser"/>
   <delete dir="${basedir}/../tests/coverage"/>
   <delete dir="${basedir}/../tests/logs"/>
-  <delete dir="${basedir}/../tests/pdepend"/-->
+  <delete dir="${basedir}/../tests/pdepend"/>
  </target>
 
  <target name="prepare" depends="clean" description="Prepare for build">
@@ -99,7 +99,7 @@
 
  <target name="phpdoc" description="Generate API documentation">
    <exec executable="phpdoc">
-     <arg line="-d ${basedir}/../ -t ${basedir}/api -i ${basedir}/,${basedir}/../main/inc/entity,${basedir}/../main/inc/lib/symfony,${basedir}/../main/inc/lib/phpdocx,${basedir}/../main/inc/lib/phpqrcode,${basedir}/../main/inc/lib/mpdf,${basedir}/../main/inc/lib/internationalization_database/transliteration,${basedir}/../main/inc/lib/phpmailer,${basedir}/../main/inc/lib/htmlpurifier,${basedir}/../main/inc/lib/fckeditor,${basedir}/../main/inc/lib/formvalidator,${basedir}/../main/upload/users,${basedir}/../main/lang,${basedir}/../courses,${basedir}/../archive,.htaccess" />
+     <arg line="-d ${basedir}/../ -t ${basedir}/logs/docs -ti ChamiloLMS -i archive/,home/,entity/,symfony/,phpdocx/,phpqrcode/,mpdf/,transliteration/*,phpmailer/*,htmlpurifier/,fckeditor/*,formvalidator/*,upload/users/,lang/,courses/,.htaccess -ct covers,assert" />
    </exec>
  </target>
  <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">

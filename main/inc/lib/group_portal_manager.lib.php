@@ -792,10 +792,10 @@ class GroupPortalManager
 		$normal = self::resize_picture($source_file, 200);
 
 		$big = new Image($source_file); // This is the original picture.
-		$ok = $small->send_image($path.'small_'.$filename)
-				&& $medium->send_image($path.'medium_'.$filename)
-				&& $normal->send_image($path.'big_'.$filename)
-				&& $big->send_image($path.$filename);
+        $ok = $small && $small->send_image($path.'small_'.$filename)
+            && $medium && $medium->send_image($path.'medium_'.$filename)
+            && $normal && $normal->send_image($path.'big_'.$filename)
+            && $big && $big->send_image($path.$filename);
 		return $ok ? $filename : false;
 	}
 

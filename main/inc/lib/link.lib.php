@@ -635,11 +635,11 @@ function showlinksofcategory($catid) {
     			echo '<a href="link_goto.php?'.api_get_cidreq().'&amp;link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url']).'" target="_blank">
     			         <img src="../../main/img/link.gif" border="0" alt="'.get_lang('Link').'"/></a></td>
     			         <td width="80%" valign="top"><a href="link_goto.php?'.api_get_cidreq().'&amp;link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url']).'" target="'.$myrow['target'].'">';
-    			echo Security :: remove_XSS($myrow['url']);
+    			echo Security :: remove_XSS($myrow['title']);
     			echo '</a>';
     			echo $link_validator;
     			echo $session_img;
-    			echo '<br />'.$myrow['title'];
+    			echo '<br />'.$myrow['description'];
     		} else {
     			if (api_is_allowed_to_edit(null, true)) {
     				echo '<tr class="'.$css_class.'">';

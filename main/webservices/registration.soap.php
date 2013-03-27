@@ -1432,6 +1432,14 @@ function WSEditUsers($params)
         if (!is_null($auth_source)) {
             $sql .= " auth_source='".Database::escape_string($auth_source)."',";
         }
+        $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+        $resadmin = Database::query($sqladmin);
+        $is_admin = Database::num_rows($resadmin);
+        if (empty($status) && $is_admin) {
+            $status = 1;
+        } else {
+            $status = 5;
+        }
         $sql .= "
                 email='".Database::escape_string($email)."',
                 status='".Database::escape_string($status)."',
@@ -1580,6 +1588,14 @@ function WSEditUser($params)
     }
     if (!is_null($auth_source)) {
         $sql .= " auth_source='".Database::escape_string($auth_source)."',";
+    }
+    $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+    $resadmin = Database::query($sqladmin);
+    $is_admin = Database::num_rows($resadmin);
+    if (empty($status) && $is_admin) {
+        $status = 1;
+    } else {
+        $status = 5;
     }
     $sql .= "
             email='".Database::escape_string($email)."',
@@ -1803,6 +1819,14 @@ function WSEditUsersPasswordCrypted($params)
         if (!is_null($auth_source)) {
             $sql .= " auth_source='".Database::escape_string($auth_source)."',";
         }
+        $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+        $resadmin = Database::query($sqladmin);
+        $is_admin = Database::num_rows($resadmin);
+        if (empty($status) && $is_admin) {
+            $status = 1;
+        } else {
+            $status = 5;
+        }
         $sql .= "
                 email='".Database::escape_string($email)."',
                 status='".Database::escape_string($status)."',
@@ -1976,6 +2000,14 @@ function WSEditUserPasswordCrypted($params)
     }
     if (!is_null($auth_source)) {
         $sql .= " auth_source='".Database::escape_string($auth_source)."',";
+    }
+    $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+    $resadmin = Database::query($sqladmin);
+    $is_admin = Database::num_rows($resadmin);
+    if (empty($status) && $is_admin) {
+        $status = 1;
+    } else {
+        $status = 5;
     }
     $sql .= "
                 email='".Database::escape_string($email)."',
@@ -4101,8 +4133,7 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register(
-    'WSGetUser', // method name
+$server->register('WSGetUser',                   // method name
     array('GetUser' => 'tns:GetUserArg'), // input parameters
     array('return' => 'tns:User'), // output parameters
     'urn:WSRegistration', // namespace
@@ -4113,8 +4144,7 @@ $server->register(
 );
 
 // define the method WSSubscribeUserToCourse
-function WSGetUser($params)
-{
+function WSGetUser($params) {
     global $debug;
     if ($debug) {
         error_log('WSGetUser');
@@ -4146,7 +4176,56 @@ function WSGetUser($params)
         $result['firstname'] = $user_data['firstname'];
         $result['lastname'] = $user_data['lastname'];
     }
+    return $result;
+}
 
+$server->wsdl->addComplexType(
+    'GetUserArgUsername',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'username'      => array('name' => 'username', 'type' => 'xsd:string'),
+        'secret_key'    => array('name' => 'secret_key','type' => 'xsd:string')
+    )
+);
+// Register the method to expose
+$server->register('WSGetUserFromUsername',                   // method name
+    array('GetUserFromUsername' => 'tns:GetUserArgUsername'),// input params
+    array('return' => 'tns:User'),   // output parameters
+    'urn:WSRegistration',                        // namespace
+    'urn:WSRegistration#WSGetUserFromUsername',  // soapaction
+    'rpc',                                       // style
+    'encoded',                                   // use
+    'This service get user information by username' // documentation
+);
+
+// define the method WSSubscribeUserToCourse
+function WSGetUserFromUsername($params) {
+    global $debug;
+    if ($debug) error_log('WSGetUserFromUsername');
+    if ($debug) error_log('$params: '.print_r($params, 1));
+
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $result = array();
+
+    // Get user id
+    $user_data   = UserManager::get_user_info($params['username']);
+
+    if (empty($user_data)) {
+        // If user was not found, there was a problem
+        $result['user_id']    = '';
+        $result['firstname']  = '';
+        $result['lastname']   = '';
+    } else {
+        $result['user_id']    = $user_data['user_id'];
+        $result['firstname']  = $user_data['firstname'];
+        $result['lastname']   = $user_data['lastname'];
+    }
     return $result;
 }
 

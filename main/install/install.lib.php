@@ -1363,18 +1363,24 @@ function display_requirements(
     }
 
     $fil_perm_verified = 0666;
+    $file_course_test_was_created = false;
 
     if (is_dir($course_dir)) {
         foreach ($perms_fil as $perm) {
-            $r = @touch($course_dir.'/test.txt', $perm);
+            if ($file_course_test_was_created == true) {
+                break;
+            }
+            $r = @touch($course_dir.'/test.php',$perm);
             if ($r === true) {
                 $fil_perm_verified = $perm;
-                break;
+                if (check_course_script_interpretation($course_dir, $course_attempt_name, 'test.php')) {
+                    $file_course_test_was_created = true;
+                }
             }
         }
     }
 
-    @unlink($course_dir.'/test.txt');
+    @unlink($course_dir.'/test.php');
     @rmdir($course_dir);
 
     $_SESSION['permissions_for_new_directories'] = $_setting['permissions_for_new_directories'] = $dir_perm_verified;
@@ -1383,10 +1389,7 @@ function display_requirements(
     $dir_perm = Display::label('0'.decoct($dir_perm_verified), 'info');
     $file_perm = Display::label('0'.decoct($fil_perm_verified), 'info');
 
-    $course_test_was_created = $course_test_was_created == true ? Display::label(
-        get_lang('Yes'),
-        'success'
-    ) : Display::label(get_lang('No'), 'warning');
+    $course_test_was_created  = ($course_test_was_created == true && $file_course_test_was_created == true) ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'), 'warning');
 
     echo '<table class="table">
             <tr>
@@ -1526,7 +1529,7 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        if ($course_test_was_created == false) {
+        if ($course_test_was_created == false || $file_course_test_was_created == false) {
             $error = true;
         }
 
@@ -2655,6 +2658,71 @@ function compare_setting_values($current_value, $wanted_value)
     } else {
         return Display::label($current_value_string, 'important');
     }
+}
+
+
+function check_course_script_interpretation($course_dir, $course_attempt_name, $file = 'test.php'){
+    $output = false;
+    //Write in file
+    $file_name = $course_dir.'/'.$file;
+    $content = '<?php echo "123"; exit;';
+
+    if (is_writable($file_name)) {
+        if ($handler = @fopen($file_name, "w")) {
+            //write content
+            if (fwrite($handler , $content)) {
+                $sock_errno = ''; $sock_errmsg = '';
+                $url = api_get_path(WEB_COURSE_PATH).'/'.$course_attempt_name.'/'.$file;
+
+                $parsed_url = parse_url($url);
+                //$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] : ''; //http
+                $host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+                $path = isset($parsed_url['path']) ? $parsed_url['path'] : '/';
+                $port = isset($parsed_url['port']) ? $parsed_url['port'] : '80';
+
+                //Check fsockopen
+                if ($fp = @fsockopen(str_replace('http://', '', $url), -1, $sock_errno, $sock_errmsg, 60)) {
+                    $out  = "GET $path HTTP/1.1\r\n";
+                    $out .= "Host: $host\r\n";
+                    $out .= "Connection: Close\r\n\r\n";
+
+                    fwrite($fp, $out);
+                    while (!feof($fp)) {
+                        $result = str_replace("\r\n", '',fgets($fp, 128));
+                        if (!empty($result) && $result == '123') {
+                            $output = true;
+                        }
+                    }
+                    fclose($fp);
+                    //Check allow_url_fopen
+                } elseif (ini_get('allow_url_fopen')) {
+                    if ($fp = @fopen($url, 'r')) {
+                        while ($result = fgets($fp, 1024)) {
+                            if (!empty($result) && $result == '123') {
+                                $output = true;
+                            }
+                        }
+                        fclose($fp);
+                    }
+                    // Check if has support for cURL
+                } elseif (function_exists('curl_init')) {
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_HEADER, 0);
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    //curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $result = curl_exec ($ch);
+                    if (!empty($result) && $result == '123') {
+                        $output = true;
+                    }
+                    curl_close($ch);
+                }
+            }
+            @fclose($handler);
+        }
+    }
+
+    return $output;
 }
 
 

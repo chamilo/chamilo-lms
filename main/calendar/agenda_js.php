@@ -111,10 +111,12 @@ $tpl->assign('month_names', 		json_encode($months));
 $tpl->assign('month_names_short', 	json_encode($months_short));
 $tpl->assign('day_names', 			json_encode($days));
 $tpl->assign('day_names_short', 	json_encode($day_short));
-$tpl->assign('button_text', 		json_encode(array(	'today'	=> get_lang('Today'),
-														'month'	=> get_lang('Month'),
-														'week'	=> get_lang('Week'),
-														'day'	=> get_lang('Day'))));
+$tpl->assign('button_text', json_encode(array(
+    'today' => get_lang('Today'),
+	'month'	=> get_lang('Month'),
+	'week'	=> get_lang('Week'),
+    'day' => get_lang('Day')
+)));
 
 //see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
 
@@ -191,7 +193,7 @@ if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $ty
 
     $agenda = new Agenda();
     //This will fill the select called #users_to_send_id
-    $select = $agenda->construct_not_selected_select_form($group_list, $user_list);
+    $select = $agenda->construct_not_selected_select_form($group_list, $user_list, array());
     $tpl->assign('visible_to', $select);
 }
 $tpl->display('default/agenda/month.tpl');

@@ -50,8 +50,16 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		$cb = new CourseBuilder();
 		$course = $cb->build();
 	}    
-	$cr = new CourseRecycler($course);    
-	$cr->recycle($_POST['recycle_option']);
+	$recycle_type = "";
+	if (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'full_backup') {
+	    $recycle_type = 'full_backup';
+	}
+	else if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+	    $recycle_type = 'select_items';
+	}
+	$cr = new CourseRecycler($course);
+	$cr->recycle($recycle_type);
+	
 	Display::display_confirmation_message(get_lang('RecycleFinished'));
 } elseif (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'select_items') {
 	$cb = new CourseBuilder();

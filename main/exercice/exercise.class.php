@@ -3093,7 +3093,7 @@ class Exercise
                             )
                         )
                         ) {
-                            if ($origin != 'learnpath') {
+
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
                                     $answerType,
                                     $studentChoice,
@@ -3104,9 +3104,9 @@ class Exercise
                                     0,
                                     0
                                 );
-                            }
+
                         } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
-                            if ($origin != 'learnpath') {
+
                                 ExerciseShowFunctions::display_multiple_answer_true_false(
                                     $answerType,
                                     $studentChoice,
@@ -3117,9 +3117,9 @@ class Exercise
                                     $questionId,
                                     0
                                 );
-                            }
+                            
                         } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
-                            if ($origin != 'learnpath') {
+
                                 ExerciseShowFunctions::display_multiple_answer_combination_true_false(
                                     $answerType,
                                     $studentChoice,
@@ -3130,43 +3130,43 @@ class Exercise
                                     0,
                                     0
                                 );
-                            }
+
                         } elseif ($answerType == FILL_IN_BLANKS) {
-                            if ($origin != 'learnpath') {
+
                                 ExerciseShowFunctions::display_fill_in_blanks_answer($answer, 0, 0);
-                            }
+
                         } elseif ($answerType == FREE_ANSWER) {
-                            if ($origin != 'learnpath') {
+
                                 ExerciseShowFunctions::display_free_answer(
                                     $choice,
                                     $exeId,
                                     $questionId,
                                     $questionScore
                                 );
-                            }
+
                         } elseif ($answerType == ORAL_EXPRESSION) {
                             // to store the details of open questions in an array to be used in mail
-                            if ($origin != 'learnpath') {
+
                                 ExerciseShowFunctions::display_oral_expression_answer($choice, 0, 0, $nano);
-                            }
+
                         } elseif ($answerType == HOT_SPOT) {
-                            if ($origin != 'learnpath') {
+//                            if ($origin != 'learnpath') {
                                 ExerciseShowFunctions::display_hotspot_answer(
                                     $answerId,
                                     $answer,
                                     $studentChoice,
                                     $answerComment
                                 );
-                            }
+//                            }
                         } elseif ($answerType == HOT_SPOT_ORDER) {
-                            if ($origin != 'learnpath') {
+//                            if ($origin != 'learnpath') {
                                 ExerciseShowFunctions::display_hotspot_order_answer(
                                     $answerId,
                                     $answer,
                                     $studentChoice,
                                     $answerComment
                                 );
-                            }
+//                            }
                         } elseif ($answerType == HOT_SPOT_DELINEATION) {
                             $user_answer = $_SESSION['exerciseResultCoordinates'][$questionId];
 
@@ -3323,13 +3323,13 @@ class Exercise
                                 }
                             }
                         } elseif ($answerType == MATCHING) {
-                            if ($origin != 'learnpath') {
+                            //if ($origin != 'learnpath') {
                                 echo '<tr>';
                                 echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.text_filter(
                                     $answer_matching[$answerCorrect]
                                 ).'</span></b></td>';
                                 echo '</tr>';
-                            }
+                            //}
                         }
                     }
                 } else {
@@ -3604,11 +3604,11 @@ class Exercise
                             break;
                         case DRAGGABLE:
                         case MATCHING:
-                            if ($origin != 'learnpath') {
+                            //if ($origin != 'learnpath') {
                                 echo '<tr>';
                                 echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$answer_matching[$answerCorrect].'</span></b></td>';
                                 echo '</tr>';
-                            }
+                            //}
                             break;
                     }
                 }
@@ -3837,7 +3837,7 @@ class Exercise
                 // We made an extra table for the answers
 
                 if ($show_result) {
-                    if ($origin != 'learnpath') {
+                    //if ($origin != 'learnpath') {
                         echo '</table></td></tr>';
                         echo '<tr>
                             <td colspan="2">';
@@ -3854,7 +3854,7 @@ class Exercise
 							</object>';
                         echo '</td>
                         </tr>';
-                    }
+                    //}
                 }
             }
 

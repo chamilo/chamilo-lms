@@ -2397,7 +2397,7 @@ class Tracking
         if (!empty($course_in_session)) {
             $main_session_graph = '';
 
-            if (!isset($_GET['session_id']) && !isset($_GET['course'])) {
+            //if (!isset($_GET['session_id']) && !isset($_GET['course'])) {
 
                 //Load graphics only when calling to an specific session
                 $session_graph = array();
@@ -2481,7 +2481,7 @@ class Tracking
                     //var_dump($final_all_exercise_graph_name_list, $final_all_user_results, $final_all_exercise_graph_list);
                     $main_session_graph = self::generate_session_exercise_graph($final_all_exercise_graph_name_list, $my_results_final, $final_all_exercise_graph_list);
                 }
-            }
+            //}
 
 
             $html .= Display::page_subheader(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL).' '.get_lang('Sessions'));

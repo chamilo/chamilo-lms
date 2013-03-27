@@ -32,8 +32,13 @@ $course_code    = api_get_course_id();
 $course_id      = api_get_course_int_id();
 $session_id     = api_get_session_id();
 $group_id       = api_get_group_id();
+$user_id        = api_get_user_id();
+$user_info      = api_get_user_info($user_id);
 
 $session = array();
+$user_name = $user_info['complete_name'];
+
+$course_list =  SessionManager::get_course_list_by_session_id ($session_id);
 $session_list = SessionManager::get_session_by_course($course_code);
 
 $total_quota_bytes = DocumentManager::get_course_quota();
@@ -75,6 +80,34 @@ if (!empty($group_list)) {
         }
         $used_quota_bytes += $quota_bytes;
         $session[] = array(addslashes(get_lang('Group').': '.$group_data['name']).' ('.format_file_size($quota_bytes).')', $quota_percentage);
+    }
+}
+//Showing weight of documents uploaded by user
+$document_list = DocumentManager::get_all_document_data($_course);
+if (is_array($document_list)) {
+    foreach ($document_list as $document_data) {
+        if ($document_data['insert_user_id'] == api_get_user_id() && $document_data['filetype'] == 'file') {
+            $quota_bytes += $document_data['size'];
+        }
+    }
+    if ($quota_bytes != 0) {
+       $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
+    }
+
+    $session[] = array(addslashes(get_lang('Teacher').': '.$user_name).' ('.format_file_size($quota_bytes).')', $quota_percentage);
+    //if a sesson is active
+    if ($session_id != 0) {
+        if (!empty($course_list)) {
+            $total_courses_quota = 0;
+            $total_quota_bytes = 0;
+            foreach ($course_list as $course_data) {
+                $total_quota_bytes += DocumentManager::get_course_quota($course_data['id']);
+            }
+            if ($quota_bytes != 0) {
+                $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
+            }
+        }
+        $session[] = array(addslashes(get_lang('Teacherinsession').': '.$user_name), $quota_percentage);
     }
 }
 $quota_percentage = round(($total_quota_bytes - $used_quota_bytes)/$total_quota_bytes, 2)*100;

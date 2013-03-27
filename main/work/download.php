@@ -44,8 +44,39 @@ if (!empty($course_info['real_id'])) {
         $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id']);           
         if (empty($item_info)) {
             exit;
-        }          	    
-	    if ($course_info['show_score'] == 0 || $item_info['visibility'] == 1 && $row['accepted'] == 1 && ($row['user_id'] == api_get_user_id() || api_is_allowed_to_edit())) {
+        }
+        
+        /*
+        field show_score in table course :  0 => 	New documents are visible for all users
+                                            1 =>    New documents are only visible for the teacher(s) 
+        field visibility in table item_property :   0 => eye closed, invisible for all students
+                                                    1 => eye open
+        field accepted in table c_student_publication : 0 => eye closed, invisible for all students
+                                                        1 => eye open
+        (we should have visibility == accepted , otherwise there is an inconsistency in the Database)
+        field value in table c_course_setting :     0 => Allow learners to delete their own publications = NO
+                                                    1 => Allow learners to delete their own publications = YES
+                                                    
+        +------------------+------------------------------+----------------------------+
+        |Can download work?|      doc visible for all = 0 |     doc visible for all = 1|
+        +------------------+------------------------------+----------------------------+
+        |  visibility = 0  | editor only                  | editor only                |
+        |                  |                              |                            |
+        +------------------+------------------------------+----------------------------+                  
+        |  visibility = 1  | editor                       | editor                     |
+        |                  | + owner of the work          | + any student              |
+        +------------------+------------------------------+----------------------------+                  
+        (editor = teacher + admin + anybody with right api_is_allowed_to_edit)
+        */
+        
+        $work_is_visible = ($item_info['visibility'] == 1 && $row['accepted'] == 1);
+        $doc_visible_for_all = ($course_info['show_score'] == 1);
+        $is_editor = api_is_allowed_to_edit(true,true,true);
+        $student_is_owner_of_work = ($row['user_id'] == api_get_user_id());
+        
+	    if ($is_editor
+	        || (!$doc_visible_for_all && $work_is_visible && $student_is_owner_of_work)
+	        || ($doc_visible_for_all && $work_is_visible)) {
 		    $title = str_replace(' ', '_', $row['title']);
             event_download($title);
 		    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')) {

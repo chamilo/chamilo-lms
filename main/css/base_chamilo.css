@@ -235,7 +235,9 @@ footer a:link, footer a:visited {
     float: left;
     width: 25px;
     height: 25px;
-    margin: 0 4px 0 0;    
+    margin: 0 4px 0 0;
+    *margin: 0 2px 0 0; /* IE7 and below */
+    margin: 0 2px 0 0\0/IE8+9; /* IE8 + 9 + IE10pp4  */
 }
 /* Hide from IE5-mac. Only IE-win sees this. \*/
 * html #toolnav {

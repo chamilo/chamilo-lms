@@ -175,6 +175,10 @@ header {
     margin-bottom: 0px;
 }
 
+.breadcrumb a, .breadcrumb li {
+    text-shadow:none;
+    font-size: 13px;
+}
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
     font-size: inherit;
@@ -394,6 +398,20 @@ footer .container .row {
     vertical-align: middle;
 }
 
+.actions .actions-pagination {
+  float:right; 
+  margin-top:2px;
+}
+.actions .actions-pagination * {
+  display:inline-block;
+  float:none;
+  margin:0;
+  padding:0;
+}
+.actions .actions-pagination img {
+  margin:6px;
+  padding:0;
+}
 .actions form {
     margin-bottom: 0px;
 }

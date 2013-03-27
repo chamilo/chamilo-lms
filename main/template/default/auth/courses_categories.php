@@ -29,14 +29,26 @@ $stok = Security::get_token();
     });
 </script>
 
-<?php if (!isset($_GET['hidden_links']) || ($_GET['hidden_links']) != 1) { ?>
+<div class="row">
+    <div class="span3">
+        <div id="course_category_well" class="well">
+            <ul class="nav nav-list">
+<?php if (intval($_GET['hidden_links']) != 1) { ?>
 
 <div class="actions">
     <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
+                    <fieldset>
         <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
         <input type="hidden" name="search_course" value="1" />
-        <input type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
-        &nbsp;<button class="search" type="submit"><?php echo get_lang('SearchCourse'); ?></button>
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input class="span2" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
+                                    <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
     </form>
 </div>
 <?php
@@ -97,7 +109,7 @@ $stok = Security::get_token();
                                 if ($code == $subcategory2_code) {
                                     $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
                                 } else {
-                                    $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.' ('.$count_courses_lv3.') </a>';
+                                    $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
                                 }
                                 echo '<li style="margin-left:40px;">'.$subcategory2_link.'</li>';
 
@@ -119,6 +131,7 @@ $stok = Security::get_token();
                         }
                     }
                 }
+            }
             }
             ?>
         </div>

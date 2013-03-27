@@ -30,7 +30,7 @@ require_once '../coursecopy/classes/CourseRestorer.class.php';
 require_once '../coursecopy/classes/CourseSelectForm.class.php';
 
 if (function_exists('ini_set')) {
-	ini_set('memory_limit','256M');
+	api_set_memory_limit('256M');
 	ini_set('max_execution_time',0);
 }
 

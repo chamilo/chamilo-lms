@@ -205,7 +205,7 @@ switch ($action) {
         ) {
             $document_info = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
             $parent_id = $document_info['parent_id'];
-            $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');
+            $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', true);
             $user_folder = $my_path['dir'].'my_files/';
             $my_path = null;
 
@@ -1103,7 +1103,7 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
     );
 }
 if (api_get_group_id() != 0) {
-    if (GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(
+    if (api_is_allowed_to_edit() || GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(
         api_get_user_id(),
         api_get_group_id()
     ) || UserManager::is_admin(api_get_user_id())
@@ -1266,7 +1266,7 @@ $table_footer = '';
 $total_size = 0;
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
-    if (api_get_group_id() == 0 || (GroupManager::is_subscribed(
+    if (api_get_group_id() == 0 || (api_is_allowed_to_edit() || GroupManager::is_subscribed(
         api_get_user_id(),
         api_get_group_id()
     ) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()) || UserManager::is_admin(

@@ -26,7 +26,7 @@ if (!api_is_allowed_to_edit()) {
 
 // Remove memory and time limits as much as possible as this might be a long process...
 if (function_exists('ini_set')) {
-    ini_set('memory_limit', '256M');
+	api_set_memory_limit('256M');
     ini_set('max_execution_time', 1800);
 }
 

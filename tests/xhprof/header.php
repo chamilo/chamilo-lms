@@ -1,4 +1,10 @@
 <?php
+/**
+ * @package chamilo.profiling
+ */
+/**
+ * Init
+ */
 if (extension_loaded('xhprof')) {
     include_once dirname(__FILE__).'/xhprof_lib/utils/xhprof_lib.php';
     include_once dirname(__FILE__).'/xhprof_lib/utils/xhprof_runs.php';

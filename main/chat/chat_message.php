@@ -21,13 +21,13 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $course = api_get_course_id();
-$session_id = intval($_SESSION['id_session']);
-$group_id = intval($_SESSION['_gid']);
+$session_id = api_get_session_id();
+$group_id 	= api_get_group_id();
 
 // Juan Carlos Raña inserted smileys and self-closing window.
 
 ?>
-<script type="text/javascript">
+<script >
     function insert_smile(text) {
         if (text.createTextRange) {
             text.smile = document.selection.createRange().duplicate();

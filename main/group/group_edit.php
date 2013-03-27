@@ -411,7 +411,7 @@ $form->addGroup(
 );
 
 // submit button
-$form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'class="save"');
+$form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
 
 if ($form->validate()) {
     $values = $form->exportValues();

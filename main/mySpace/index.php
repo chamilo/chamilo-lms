@@ -31,6 +31,7 @@ $csv_content = array();
 $nameTools   		= get_lang('MySpace');
 
 $user_id 	 		= api_get_user_id();
+$is_coach 			= api_is_coach($_GET['session_id']); // This is used?
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 /**
+ * Survey manager class
+ *
  * @package chamilo.survey
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
@@ -65,7 +67,7 @@ class survey_manager
      */
 
     /**
-     * This function retrieves all the survey information
+     * Retrieves all the survey information
      *
      * @param integer $survey_id the id of the survey
      * @param boolean $shared this parameter determines if we have to get the information of a survey from the central (shared) database or from the
@@ -74,7 +76,8 @@ class survey_manager
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
-     * @assert('0') === false
+     * @assert ('') === false
+	 *
      * @todo this is the same function as in create_new_survey.php
      */
     static function get_survey($survey_id, $shared = 0, $course_code = '', $simple_return = false)
@@ -1832,27 +1835,13 @@ class ch_yesno extends survey_question
         $this->html .= '	<tr>';
         $this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';
 
-        $this->html .= '		<td width="550">'.api_return_html_area(
-            'answers[0]',
-            stripslashes($form_content['answers'][0]),
-            '',
-            '',
-            null,
-            array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')
-        ).'</td>';
+		$this->html .= '		<td width="550">'.api_return_html_area('answers[0]', stripslashes($form_content['answers'][0]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
         $this->html .= '		<td><input style="width:22px" src="../img/icons/22/down.png"  type="image" class="down" value="move_down[0]" name="move_down[0]"/></td>';
         $this->html .= '	</tr>';
         $this->html .= '	<tr>';
         $this->html .= '		<td align="right"><label for="answers[1]">2</label></td>';
         //$this->html .= '		<td><input type="text" name="answers[1]" id="answers[1]" value="'.$form_content['answers'][1].'" /></td>';
-        $this->html .= '		<td width="550">'.api_return_html_area(
-            'answers[1]',
-            stripslashes($form_content['answers'][1]),
-            '',
-            '',
-            null,
-            array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')
-        ).'</td>';
+		$this->html .= '		<td width="550">'.api_return_html_area('answers[1]', stripslashes($form_content['answers'][1]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
         $this->html .= '		<td><input style="width:22px" type="image" src="../img/icons/22/up.png" value="move_up[1]" name="move_up[1]" /></td>';
         $this->html .= '	</tr>';
         $this->html .= '			</table>';
@@ -1873,7 +1862,11 @@ class ch_yesno extends survey_question
 
         if (is_array($form_content['options'])) { // Check if data is correct
             foreach ($form_content['options'] as $key => & $value) {
+                if ($form_content['display'] == 'vertical') {
                 $this->html .= '<label class="radio">';
+                } else {
+                    $this->html .= '<label class="radio inline">';
+                }
                 $value_to_show = $value;
 
                 if (substr_count($value, '<p>') == 1) {

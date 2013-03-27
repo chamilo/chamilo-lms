@@ -229,7 +229,7 @@ $(function() {
         active: false, // all items closed by default
         collapsible: true,
         header: ".accordion-heading"
-    })
+    });
 
     //Global popup
     $('.ajax').on('click', function() {

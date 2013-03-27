@@ -1,4 +1,10 @@
 <?php
+/**
+ * @package chamilo.profiling
+ */
+/**
+ * Init
+ */
 if (extension_loaded('xhprof')) {
     $profiler_namespace = 'chamilolms';  // namespace for your application
     $xhprof_data = xhprof_disable();

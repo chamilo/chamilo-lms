@@ -5,11 +5,13 @@
  *  @author: Julio Montoya <gugli100@gmail.com> Implementing a real agenda lib
  */
 
-class Agenda {
+class Agenda
+{
 	var $events = array();
 	var $type   = 'personal'; // personal, admin or course
 
-	function __construct() {
+    function __construct()
+    {
 		//Table definitions
 		$this->tbl_global_agenda 	= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 		$this->tbl_personal_agenda 	= Database::get_user_personal_table(TABLE_PERSONAL_AGENDA);
@@ -32,7 +34,8 @@ class Agenda {
 		$this->event_personal_color = 'steel blue'; //steel blue
 	}
 
-    function set_course($course_info) {
+    function set_course($course_info)
+    {
         $this->course = $course_info;
     }
 
@@ -109,6 +112,7 @@ class Agenda {
                 }
 				break;
 			case 'admin':
+                if (api_is_platform_admin()) {
 				$attributes['title'] 		= $title;
 				$attributes['content'] 		= $content;
 				$attributes['start_date'] 	= $start;
@@ -116,6 +120,7 @@ class Agenda {
 				$attributes['all_day'] 		= $all_day;
 				$attributes['access_url_id']= api_get_current_access_url_id();
 				$id = Database::insert($this->tbl_global_agenda, $attributes);
+                }
 				break;
 		}
 		return $id;
@@ -176,6 +181,10 @@ class Agenda {
 
 		switch($this->type) {
 			case 'personal':
+                $eventInfo = $this->get_event($id);
+                if ($eventInfo['user'] != api_get_user_id()) {
+                    break;
+                }
 				$attributes['title'] 	= $title;
 				$attributes['text'] 	= $content;
 				$attributes['date'] 	= $start;
@@ -184,38 +193,46 @@ class Agenda {
 				break;
 			case 'course':
                 $course_id = api_get_course_int_id();
+                if (!empty($course_id) && api_is_allowed_to_edit(null, true)) {
 				$attributes['title'] 		= $title;
 				$attributes['content'] 		= $content;
 				$attributes['start_date'] 	= $start;
 				$attributes['end_date'] 	= $end;
-                if (!empty($course_id)) {
+                    $attributes['all_day'] = $all_day;
                     Database::update($this->tbl_course_agenda, $attributes, array('id = ? AND c_id = ?' => array($id, $course_id)));
                 }
 				break;
 			case 'admin':
+                if (api_is_platform_admin()) {
 				$attributes['title'] 		= $title;
 				$attributes['content'] 		= $content;
 				$attributes['start_date'] 	= $start;
 				$attributes['end_date'] 	= $end;
 				Database::update($this->tbl_global_agenda, $attributes, array('id = ?' => $id));
-				break;
+                }
 				break;
 		}
 	}
 
-	function delete_event($id) {
+    function delete_event($id)
+    {
 		switch($this->type) {
 			case 'personal':
+                $eventInfo = $this->get_event($id);
+                if ($eventInfo['user'] == api_get_user_id()) {
 				Database::delete($this->tbl_personal_agenda, array('id = ?' => $id));
+                }
 				break;
 			case 'course':
                 $course_id = api_get_course_int_id();
-                if (!empty($course_id)) {
+                if (!empty($course_id) && api_is_allowed_to_edit(null, true)) {
                     Database::delete($this->tbl_course_agenda, array('id = ? AND c_id = ?' => array($id, $course_id)));
                 }
 				break;
 			case 'admin':
+                if (api_is_platform_admin()) {
 				Database::delete($this->tbl_global_agenda, array('id = ?' => $id));
+                }
 				break;
 		}
 	}
@@ -318,7 +335,8 @@ class Agenda {
 
     }
 
-	function move_event($id, $day_delta, $minute_delta) {
+    function move_event($id, $day_delta, $minute_delta)
+    {
 		// we convert the hour delta into minutes and add the minute delta
 		$delta = ($day_delta * 60 * 24) + $minute_delta;
 		$delta = intval($delta);
@@ -354,9 +372,12 @@ class Agenda {
 
 	/**
 	 * Gets a single event
+     *
 	 * @param int event id
+     * @return array
 	 */
-	function get_event($id) {
+    function get_event($id)
+    {
 		// make sure events of the personal agenda can only be seen by the user himself
 		$id = intval($id);
 		$event = null;
@@ -367,6 +388,8 @@ class Agenda {
 				if (Database::num_rows($result)) {
 					$event = Database::fetch_array($result, 'ASSOC');
                     $event['description'] = $event['text'];
+                    $event['start_date'] = $event['date'];
+                    $event['end_date'] = $event['enddate'];
 				}
 				break;
 			case 'course':
@@ -701,7 +724,8 @@ class Agenda {
      * Format needed for the Fullcalendar js lib
      *  @param string UTC time
      */
-	function format_event_date($utc_time) {
+    function format_event_date($utc_time)
+    {
         return date('c', api_strtotime(api_get_local_time($utc_time)));
 	}
 
@@ -710,10 +734,15 @@ class Agenda {
     * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
     * @return html code
     */
-    static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array()) {
+    static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array())
+    {
         $html = '<select id="users_to_send_id" data-placeholder="'.get_lang('Select').'" name="users_to_send[]" multiple="multiple" style="width:250px" class="chzn-select">';
 
+        if ($to_already_selected == 'everyone') {
+            $html .= '<option value="everyone" checked="checked">'.get_lang('Everyone').'</option>';
+        } else {
         $html .=  '<option value="everyone">'.get_lang('Everyone').'</option>';
+        }
 
         if (is_array($group_list)) {
             $html .= '<optgroup label="'.get_lang('Groups').'">';
@@ -724,7 +753,6 @@ class Agenda {
                     $count_users = " &ndash; $count_users ".get_lang('Users');
 
                     $html .= '<option value="GROUP:'.$this_group['id'].'"> '.$this_group['name'].$count_users.'</option>';
-                    //$html .= "<option value=\"GROUP:".$this_group['id']."\"> ".$this_group['name']." ".get_lang('Users')."</option>";
                 }
             }
             $html .= '</optgroup>';
@@ -739,7 +767,6 @@ class Agenda {
             if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) {
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
                 // @todo : add title attribute $username in the jqdialog window. wait for a chosen version to inherit title attribute
-                // from <option> to <li>
                 $html .= '<option title="'.$username.'" value="USER:'.$this_user['user_id'].'">'.api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].') </option>';
             }
         }
@@ -750,7 +777,8 @@ class Agenda {
         return $html;
     }
 
-    static function construct_not_selected_select_form_validator($form, $group_list = null, $user_list = null, $to_already_selected = array()) {
+    static function construct_not_selected_select_form_validator($form, $group_list = null, $user_list = null, $to_already_selected = array())
+    {
 
         $params = array(
             'id' => 'users_to_send_id',

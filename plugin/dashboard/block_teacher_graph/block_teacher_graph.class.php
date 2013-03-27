@@ -91,8 +91,9 @@ class BlockTeacherGraph extends Block {
  	 * @return string  content html
  	 */
     public function get_teachers_information_graph() {
+	 	$teachers = $this->teachers;
 		$graph = '';
- 		$user_ids = array_keys($this->teachers);
+ 		$user_ids = array_keys($teachers); 		
  		$a_last_week = get_last_week();
 
 		if (is_array($user_ids) && count($user_ids) > 0) {
@@ -102,9 +103,8 @@ class BlockTeacherGraph extends Block {
 				$username = $teacher_info['username'];
 				$time_by_days = array();
 				foreach ($a_last_week as $day) {
-                    $date = new DateTime(api_get_utc_datetime($day));
-                    $start_date = $date->format('Y-m-d').' 00:00:00';
-                    $end_date   = $date->format('Y-m-d').' 23:59:59';
+					$start_date = api_get_utc_datetime($day);
+					$end_date = api_get_utc_datetime($day+(3600*24-1));
 					$time_on_platform_by_day = Tracking::get_time_spent_on_the_platform($user_id, 'custom', $start_date, $end_date);
 					$hours = floor($time_on_platform_by_day / 3600);
 					$min = floor(($time_on_platform_by_day - ($hours * 3600)) / 60);

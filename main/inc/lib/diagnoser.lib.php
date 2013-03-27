@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * 
+ *
  * * Class that is responsible for generating diagnostic information about the system
- * 
+ *
  *
  * @package chamilo.diagnoser
  * @author Ivan Tcholakov, 2008, initiall proposal and sample code.
  * @author spou595, 2009, implementation for Chamilo 2.x
  * @author Julio Montoya <gugli100@gmail.com>, 2010, port to chamilo 1.8.7, Some fixes
- * 
+ *
  */
 /**
  * Diagnoser class
@@ -41,14 +41,14 @@ class Diagnoser
         $html = '<div class="tabbable"><ul class="nav nav-tabs">';
 
         foreach ($sections as $section) {
-            
-            if ($current_section == $section) {                
+
+            if ($current_section == $section) {
                 $html .= '<li class="active">';
             } else {
                 $html .= '<li>';
             }
             $params['section'] = $section;
-            $html .='<a href="system_status.php?section='.$section.'">'.get_lang($section).'</a></li>';            
+            $html .='<a href="system_status.php?section='.$section.'">'.get_lang($section).'</a></li>';
         }
 
         $html .= '</ul><div class="tab-pane">';
@@ -75,15 +75,18 @@ class Diagnoser
     function get_chamilo_data() {
         $array = array();
         $writable_folders = array('archive', 'courses', 'home', 'main/upload/users/', 'main/default_course_document/images/');
-        foreach ($writable_folders as $index => $folder) {            
+        foreach ($writable_folders as $index => $folder) {
             $writable = is_writable(api_get_path(SYS_PATH) . $folder);
             $status = $writable ? self :: STATUS_OK : self :: STATUS_ERROR;
             $array[] = $this->build_setting($status, '[FILES]', get_lang('IsWritable') . ': ' . $folder, 'http://be2.php.net/manual/en/function.is-writable.php', $writable, 1, 'yes_no', get_lang('DirectoryMustBeWritable'));
         }
-        
-        $exists = file_exists(api_get_path(SYS_CODE_PATH).'install');        
-        $status = $exists ? self :: STATUS_WARNING : self :: STATUS_OK;         
+
+        $exists = file_exists(api_get_path(SYS_CODE_PATH).'install');
+        $status = $exists ? self :: STATUS_WARNING : self :: STATUS_OK;
         $array[] = $this->build_setting($status, '[FILES]', get_lang('DirectoryExists') . ': /install', 'http://be2.php.net/file_exists', $exists, 0, 'yes_no', get_lang('DirectoryShouldBeRemoved'));
+
+        $app_version = api_get_setting('chamilo_database_version');
+        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[DB]', 'chamilo_database_version', '#', $app_version, 0, null,  'Chamilo DB version');
 
         return $array;
     }
@@ -159,19 +162,19 @@ class Diagnoser
         $array[] = $this->build_setting($status, '[INI]', 'max_input_time', 'http://www.php.net/manual/en/ini.core.php#ini.max-input-time', $setting, $req_setting, null, get_lang('MaxInputTimeInfo'));
 
         $setting = ini_get('memory_limit');
-        $req_setting = '>= '.REQUIRED_MIN_MEMORY_LIMIT.'M';        
-        $status = self :: STATUS_ERROR;    
+        $req_setting = '>= '.REQUIRED_MIN_MEMORY_LIMIT.'M';
+        $status = self :: STATUS_ERROR;
         if ((float)$setting >= REQUIRED_MIN_MEMORY_LIMIT)
             $status = self :: STATUS_OK;
         $array[] = $this->build_setting($status, '[INI]', 'memory_limit', 'http://www.php.net/manual/en/ini.core.php#ini.memory-limit', $setting, $req_setting, null, get_lang('MemoryLimitInfo'));
 
         $setting = ini_get('post_max_size');
-        $req_setting = '>= '.REQUIRED_MIN_POST_MAX_SIZE.'M';        
+        $req_setting = '>= '.REQUIRED_MIN_POST_MAX_SIZE.'M';
         $status = self :: STATUS_ERROR;
         if ((float)$setting >= REQUIRED_MIN_POST_MAX_SIZE)
             $status = self :: STATUS_OK;
         $array[] = $this->build_setting($status, '[INI]', 'post_max_size', 'http://www.php.net/manual/en/ini.core.php#ini.post-max-size', $setting, $req_setting, null, get_lang('PostMaxSizeInfo'));
-        
+
         $setting = ini_get('upload_max_filesize');
         $req_setting = '>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M';
         $status = self :: STATUS_ERROR;
@@ -195,7 +198,7 @@ class Diagnoser
         $array[] = $this->build_setting($status, '[INI]', 'browscap', 'http://www.php.net/manual/en/misc.configuration.php#ini.browscap', $setting, $req_setting, 'on_off', get_lang('BrowscapInfo'));
 
         //Extensions
-        $extensions = array('gd' 		=> array('link'=>'http://www.php.net/gd', 		'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')), 
+        $extensions = array('gd' 		=> array('link'=>'http://www.php.net/gd', 		'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
         					'mysql' 	=> array('link'=>'http://www.php.net/mysql', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
         					'pcre' 		=> array('link'=>'http://www.php.net/pcre', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
         					'session' 	=> array('link'=>'http://www.php.net/session', 	'expected' => 1, 'comment' => get_lang('ExtensionMustBeLoaded')),
@@ -209,7 +212,7 @@ class Diagnoser
         	$url  	  		= $data['link'];
         	$expected_value = $data['expected'];
         	$comment 		= $data['comment'];
-        	
+
             $loaded = extension_loaded($extension);
             $status = $loaded ? self :: STATUS_OK : self :: STATUS_ERROR;
             $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('LoadedExtension') . ': ' . $extension, $url, $loaded, $expected_value, 'yes_no_optional', $comment);
@@ -330,12 +333,12 @@ class Diagnoser
      			break;
 			case 2:
 				$return = get_lang('Optional');
-				break;     			
+				break;
     	}
     	return $return;
-    	
+
     }
-    
+
     function format_yes_no($value) {
         return $value ? get_lang('Yes') : get_lang('No');
     }

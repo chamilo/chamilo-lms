@@ -996,7 +996,7 @@ class Display
         } else {
             $obj->datatype = 'local';
         }
-
+        $column_names = array_map("utf8_encode", $column_names);
         $obj->colNames = $column_names;
         $obj->colModel = $column_model;
         $obj->pager    = '#'.$div_id.'_pager';
@@ -1054,8 +1054,6 @@ class Display
         if (!empty($data)) {
             $data_var = $div_id.'_data';
             $json .= ' var '.$data_var.' = '.json_encode($data).';';
-            /*  $json.='for(var i=0;i<='.$data_var.'.length;i++)
-                      jQuery("#'.$div_id.'").jqGrid(\'addRowData\',i+1,'.$data_var.'[i]);';*/
             $obj->data     = $data_var;
             $obj->datatype = 'local';
             $json .= "\n";

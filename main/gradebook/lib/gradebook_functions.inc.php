@@ -643,6 +643,7 @@ function create_default_course_gradebook($course_code = null, $gradebook_model_i
             $default_weight = isset($default_weight_setting) && !empty($default_weight_setting) ? $default_weight_setting : 100;
             $cat->set_weight($default_weight);
             $cat->set_grade_model_id($gradebook_model_id);
+            $cat->set_certificate_min_score(75);
             $cat->set_visible(0);
             $cat->add();
             $category_id = $cat->get_id();

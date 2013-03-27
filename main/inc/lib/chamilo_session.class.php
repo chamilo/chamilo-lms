@@ -19,13 +19,16 @@
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 
+/**
+ * ChamiloSession class definition
+ */
 class ChamiloSession extends System\Session
 {
 
     const NAME = 'ch_sid';
 
     /**
-     *
+     * Generate new session instance
      * @return ChamiloSession
      */
     static function instance()
@@ -38,6 +41,10 @@ class ChamiloSession extends System\Session
         return $result;
     }
 
+    /**
+     * Returns the session lifetime
+     * @return int The session lifetime as defined in the config file, in seconds
+     */
     static function session_lifetime()
     {
         global $_configuration;
@@ -45,6 +52,11 @@ class ChamiloSession extends System\Session
         return isset($_configuration['session_lifetime']) ? $_configuration['session_lifetime'] : 3600;
     }
 
+    /**
+     * Returns whether the sessions are stored in the database (or not)
+     * @return bool True if session data are stored in the database, false if they're stored on disk
+     * @assert (null) === false
+     */
     static function session_stored_in_db()
     {
         return self::read('session_stored_in_db', false);
@@ -60,6 +72,7 @@ class ChamiloSession extends System\Session
      *
      * @author Olivier Brouckaert
      * @param  string variable - the variable name to save into the session
+     * @return void
      */
     static function start($alreadyInstalled = true)
     {
@@ -130,8 +143,7 @@ class ChamiloSession extends System\Session
     }
 
     /**
-     * Session start time: that is the last time the user accesseed the application.
-     *
+     * Session start time: that is the last time the user loaded a page (before this time)
      * @return int timestamp
      */
     function start_time()
@@ -140,9 +152,9 @@ class ChamiloSession extends System\Session
     }
 
     /**
-     * Session end time: when the session expires.
-     *
-     * @return int timestamp
+     * Session end time: when the session expires. This is made of the last page
+     * load time + a number of seconds
+     * @return int UNIX timestamp (server's timezone)
      */
     function end_time()
     {
@@ -155,8 +167,7 @@ class ChamiloSession extends System\Session
     /**
      * Returns true if the session is stalled. I.e. if session end time is
      * greater than now. Returns false otherwise.
-     *
-     * @return bool
+     * @return bool True if the session is expired. False otherwise
      */
     function is_stalled()
     {
@@ -164,8 +175,8 @@ class ChamiloSession extends System\Session
     }
 
     /**
-     * Returns true if the session is valid - if it is not stalled - false otherwise.
-     * @return bool
+     * Returns whether the session is not stalled
+     * @return bool True if the session is still valid, false otherwise
      */
     public function is_valid()
     {
@@ -174,8 +185,7 @@ class ChamiloSession extends System\Session
 
     /**
      * The current (logged in) user.
-     *
-     * @return CurrentUser
+     * @return CurrentUser The current user instance
      */
     public function user()
     {
@@ -188,8 +198,8 @@ class ChamiloSession extends System\Session
     }
 
     /**
-     *
-     * @return CurrentCourse
+     * Returns the current (active) course
+     * @return CurrentCourse The current course instance
      */
     public function course()
     {
@@ -204,8 +214,7 @@ class ChamiloSession extends System\Session
 
     /**
      * The current group for the current (logged in) user.
-     *
-     * @return int
+     * @return int the current group id
      */
     public function group_id()
     {

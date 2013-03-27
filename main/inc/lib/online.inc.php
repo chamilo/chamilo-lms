@@ -237,15 +237,17 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 
 	$result = Database::query($query);
 	if ($result) {
-        $valid_date_time = new DateTime();
+        /*$valid_date_time = new DateTime();
         $diff = "PT".$time_limit.'M';
-        $valid_date_time->sub(new DateInterval($diff));
+        $valid_date_time->sub(new DateInterval($diff));*/
 		$users_online = array();
 		while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
-            $user_login_date = new DateTime($login_date);
-			if ($user_login_date->format('Y-m-d H:i:s') > $valid_date_time->format('Y-m-d H:i:s')) {
 				$users_online[] = $login_user_id;
-			}
+            /*$user_login_date = new DateTime($login_date);
+            var_dump($user_login_date->format('Y-m-d H:i:s'), $valid_date_time->format('Y-m-d H:i:s'));
+			if ($user_login_date->format('Y-m-d H:i:s') > $valid_date_time->format('Y-m-d H:i:s')) {
+
+			}*/
 		}
 		return $users_online;
 	} else {
@@ -261,11 +263,9 @@ function who_is_online_count($time_limit = null, $friends = false) {
     }
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+    $table_user			= Database::get_main_table(TABLE_MAIN_USER);
 	$query = '';
 
-   /*$current_date = api_get_utc_datetime();
-   $current_date = api_strtotime($current_date, 'UTC');
-   $current_date = date('Y-m-d H:i:s', $current_date);*/
 
     $online_time 		= time() - $time_limit*60;
 	$current_date		= api_get_utc_datetime($online_time);
@@ -277,8 +277,9 @@ function who_is_online_count($time_limit = null, $friends = false) {
 				  WHERE login_date >= '$current_date' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
 	} else {
 		// All users online
-		$query = "SELECT count(login_id) as count  FROM $track_online_table
-                  WHERE login_user_id <> 2 AND login_date >= '$current_date'  ";
+		$query = "SELECT count(login_id) as count
+                  FROM $track_online_table track INNER JOIN $table_user u ON (u.user_id=track.login_user_id)
+                  WHERE u.status != ".ANONYMOUS." AND login_date >= '$current_date'  ";
 	}
 
 	if (api_get_multiple_access_url()) {
@@ -293,7 +294,8 @@ function who_is_online_count($time_limit = null, $friends = false) {
 			} else {
 				// all users online
 				$query = "SELECT count(login_id) as count FROM $track_online_table track
-						  WHERE login_user_id <> 2 AND track.access_url_id = $access_url_id AND login_date >= '$current_date' ";
+                          INNER JOIN $table_user u ON (u.user_id=track.login_user_id)
+						  WHERE u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND login_date >= '$current_date' ";
 			}
 		}
 	}
@@ -343,17 +345,16 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 
 	$result = Database::query($query);
 	if ($result) {
-        $valid_date_time = new DateTime();
+        /*$valid_date_time = new DateTime();
         $diff = "PT".$time_limit.'M';
-        $valid_date_time->sub(new DateInterval($diff));
+        $valid_date_time->sub(new DateInterval($diff));*/
 		$users_online = array();
 
 		while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
-            $user_login_date = new DateTime($login_date);
-			if ($user_login_date > $valid_date_time->format('Y-m-d H:i:s')) {
+            /*$user_login_date = new DateTime($login_date);
+			if ($user_login_date > $valid_date_time->format('Y-m-d H:i:s')) {*/
 				$users_online[] = $login_user_id;
 			}
-		}
 		return $users_online;
 	} else {
 		return false;

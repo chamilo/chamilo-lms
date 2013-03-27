@@ -1,6 +1,12 @@
 #!/usr/bin/env php
 <?php
+/* For licensing terms, see /license.txt */
+
 set_time_limit(0);
+
+if (PHP_SAPI != 'cli') {
+    die("Cannot be called by any other method than the command line.");
+}
 
 require_once dirname(__FILE__).'/../main/inc/global.inc.php';
 
@@ -8,7 +14,7 @@ require_once dirname(__FILE__).'/../main/inc/global.inc.php';
 require __DIR__ . '/config/console-config.php';
 
 //$cli = new \Symfony\Component\Console\Application('Doctrine Command Line Interface', Doctrine\Common\Version::VERSION);
-$cli = new \Symfony\Component\Console\Application('Chamilo Command Line Interface');
+$cli = new \Symfony\Component\Console\Application('Chamilo CLI');
 $cli->setCatchExceptions(true);
 
 $helperSet = $cli->getHelperSet();
@@ -62,6 +68,5 @@ $cli->addCommands(array(
         new Chash\Command\Files\CleanConfigFiles(),
         new Chash\Command\Translation\ExportLanguageCommand(),
         new Chash\Command\Translation\ImportLanguageCommand()
-
     ));
 $cli->run();

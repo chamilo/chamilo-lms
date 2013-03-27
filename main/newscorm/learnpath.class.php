@@ -6061,8 +6061,7 @@ class learnpath
             ICON_SIZE_MEDIUM
         ).'</a>';*/
 
-        $return .= '<a href="lp_controller.php?'.api_get_cidreq(
-        ).'&amp;action=edit&amp;lp_id='.$_SESSION['oLP']->lp_id.'">'.Display :: return_icon(
+        $return .= '<a href="lp_controller.php?referer=add_item&'.api_get_cidreq().'&amp;action=edit&amp;lp_id='.$_SESSION['oLP']->lp_id.'">'.Display :: return_icon(
             'settings.png',
             get_lang('CourseSettings'),
             '',

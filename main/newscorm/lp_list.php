@@ -288,7 +288,7 @@ foreach ($categories as $item) {
             if ($is_allowed_to_edit) {
                 // EDIT LP
                 if ($current_session == $details['lp_session']) {
-                    $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL).'</a>';
+                    $dsp_edit_lp = '<a href="lp_controller.php?referer=lplist&'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL).'</a>';
                 } else {
                     $dsp_edit_lp = Display::return_icon('settings_na.png', get_lang('CourseSettings'), '', ICON_SIZE_SMALL);
                 }

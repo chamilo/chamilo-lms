@@ -455,7 +455,6 @@ switch ($action) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
                 $is_success = true;
-
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
                 header('Location: '.$url);
                 exit;
@@ -752,7 +751,18 @@ switch ($action) {
                     }
                 }
             }
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+
+
+            $referer = isset($_REQUEST['referer']) ? $_REQUEST['referer'] : 'add_item';
+            switch ($referer) {
+                case 'lplist':
+                    $url = api_get_self().'?action=list&'.api_get_cidreq();
+                    break;
+                default:
+                case 'add_item':
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+                    break;
+            }
             header('Location: '.$url);
             exit;
         }

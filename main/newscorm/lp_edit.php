@@ -69,6 +69,9 @@ $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 
 $form->addElement('hidden', 'lp_encoding');
 
+$referer = isset($_REQUEST['referer']) ? Security::remove_XSS($_REQUEST['referer']) : null;
+$form->addElement('hidden', 'referer', $referer);
+
 $items = learnpath::get_category_from_course_into_select(api_get_course_int_id());
 
 if (!empty($items)) {

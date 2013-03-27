@@ -219,8 +219,12 @@ class GroupManager
 				self_registration_allowed = '".$category['self_reg_allowed']."',
 				self_unregistration_allowed = '".$category['self_unreg_allowed']."',
 				session_id='".Database::escape_string($session_id)."'";
+
         Database::query($sql);
         $lastId = Database::insert_id();
+
+        //Fixing Id
+        Database::update($table_group, array('id' => $lastId), array('iid = ? ' => $lastId));
 
         if ($lastId) {
             $desired_dir_name = '/'.replace_dangerous_char($name, 'strict').'_groupdocs';

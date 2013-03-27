@@ -169,6 +169,7 @@ foreach ($group_member_list as $index => $user) {
 
 // possible : number_groups_left > 0 and is group member
 $possible_users = array();
+
 foreach ($complete_user_list as $index => $user) {
     if ($user['number_groups_left'] > 0 || in_array($user['user_id'], $selected_users)) {
         $possible_users[$user['user_id']] = api_get_person_name(

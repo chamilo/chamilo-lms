@@ -673,7 +673,7 @@ function store_forum($values)
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
             $sql_image = "'".$new_file_name."', ";
         }
-        $b = $values['forum_comment'];
+        $b = isset($values['forum_comment']) ? $values['forum_comment'] : null;
 
         $sql = "INSERT INTO ".$table_forums." (c_id, forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
             VALUES (

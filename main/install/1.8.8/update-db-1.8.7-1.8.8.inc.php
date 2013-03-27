@@ -14,8 +14,8 @@ if (defined('SYSTEM_INSTALLATION')) {
     $dbNameForm = $_configuration['main_database'];
 
     if ($singleDbForm) {
-        $dbStatsForm = $_configuration['main_database'];
-        $dbUserForm = $_configuration['main_database'];
+        $dbStatsForm = isset($_configuration['statistics_database']) ? $_configuration['statistics_database'] : $_configuration['main_database'];
+        $dbUserForm  = isset($_configuration['user_personal_database']) ? $_configuration['user_personal_database'] : $_configuration['main_database'];
     }
 
     $prefix = '';
@@ -29,6 +29,7 @@ if (defined('SYSTEM_INSTALLATION')) {
          $output->writeln('Database '.$dbNameForm.' was not found, skipping');
     } else {
         iDatabase::select_db($dbNameForm);
+        $output->writeln('Getting the course list: ');
         $res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
         if ($res === false) { die('Error while querying the courses list in update_db-1.8.7.1-1.8.8.inc.php'); }
@@ -41,7 +42,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                 $i++;
             }
             foreach ($list as $row_course) {
-                // Now use the $c_q_list
                 /**
                  * We connect to the right DB first to make sure we can use the queries
                  * without a database name
@@ -49,25 +49,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 if (!$singleDbForm) { // otherwise just use the main one
                     iDatabase::select_db($row_course['db_name']);
                 }
-                $output->writeln('Course db ' . $row_course['db_name']);
-
-                foreach ($c_q_list as $query) {
-                    if ($singleDbForm) {
-                        $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
-                    }
-
-                    if ($only_test) {
-                         $output->writeln("iDatabase::query(".$row_course['db_name'].",$query)");
-                    } else {
-                        $res = iDatabase::query($query);
-                        if ($log) {
-                             $output->writeln("In ".$row_course['db_name'].", executed: $query");
-                        }
-                        if ($res === false) {
-                             $output->writeln('Error in '.$query.': '.iDatabase::error());
-                        }
-                    }
-                }
+                $output->writeln('Updating course db: ' . $row_course['db_name']);
 
                 $table_lp_item_view = $row_course['db_name'].".lp_item_view";
                 $table_lp_view = $row_course['db_name'].".lp_view";

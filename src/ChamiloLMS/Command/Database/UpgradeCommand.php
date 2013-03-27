@@ -2,7 +2,6 @@
 
 namespace ChamiloLMS\Command\Database;
 
-use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,7 +15,7 @@ define('SYSTEM_INSTALLATION', 1);
 /**
  * Class UpgradeCommand
  */
-class UpgradeCommand extends AbstractCommand
+class UpgradeCommand extends CommonCommand
 {
     public $queryList;
     public $databaseList;
@@ -33,7 +32,7 @@ class UpgradeCommand extends AbstractCommand
     }
 
     /**
-     * Gets the min version available to migrate
+     * Gets the min version available to migrate with this command
      * @return mixed
      */
     public function getMinVersionSupportedByInstall()
@@ -42,7 +41,7 @@ class UpgradeCommand extends AbstractCommand
     }
 
     /**
-     * Gets an array with the supported Chamilo versions to migrate
+     * Gets an array with the supported versions to migrate
      * @return array
      */
     public function getVersionNumberList()
@@ -70,9 +69,9 @@ class UpgradeCommand extends AbstractCommand
             '1.8.8' => array(
                 'require_update' => true,
                 'pre' => 'migrate-db-1.8.7-1.8.8-pre.sql',
-                'post' => 'null',
+                'post' => null,
                 'update_db' => 'update-db-1.8.7-1.8.8.inc.php',
-                'update_files' => 'update-files-1.8.7-1.8.8.inc.php',
+                //'update_files' => 'update-files-1.8.7-1.8.8.inc.php',
                 'hook_to_doctrine_version' => '8' //see ChamiloLMS\Migrations\Version8.php file
             ),
             '1.8.8.2' => array(
@@ -90,7 +89,7 @@ class UpgradeCommand extends AbstractCommand
             '1.9.0' => array(
                 'require_update' => true,
                 'pre' => 'migrate-db-1.8.8-1.9.0-pre.sql',
-                'post' => 'null',
+                'post' => null,
                 'update_db' => 'update-db-1.8.8-1.9.0.inc.php',
                 'update_files' => 'update-files-1.8.8-1.9.0.inc.php',
                 'hook_to_doctrine_version' => '9'
@@ -116,7 +115,7 @@ class UpgradeCommand extends AbstractCommand
                 'pre' => 'migrate-db-1.9.0-1.10.0-pre.sql',
                 'post' => 'migrate-db-1.9.0-1.10.0-post.sql',
                 'update_db' => 'update-db-1.9.0-1.10.0.inc.php',
-                //'update_files' => '',
+                'update_files' => null,
                 'hook_to_doctrine_version' => '10'
             )
         );
@@ -146,8 +145,8 @@ class UpgradeCommand extends AbstractCommand
     /**
      * Executes a command via CLI
      *
-     * @param Console\Input\InputInterface $input
-     * @param Console\Output\OutputInterface $output
+     * @param   Console\Input\InputInterface $input
+     * @param   Console\Output\OutputInterface $output
      *
      * @return int|null|void
      */
@@ -169,19 +168,21 @@ class UpgradeCommand extends AbstractCommand
         //Checking configuration file
         if (!is_writable($configurationPath)) {
             $output->writeln("<comment>Folder ".$configurationPath." must have writable permissions</comment>");
+            exit;
         }
 
-        $minVersion = $this->getMinVersionSupportedByInstall();
-        $versionList = $this->availableVersions();
-
+        //Setting configuration variable in order to get the doctrine version:
         $input->setOption('configuration', $this->getMigrationConfigurationFile());
-
         $configuration = $this->getMigrationConfiguration($input, $output);
 
         //Doctrine migrations version
         $doctrineVersion = $configuration->getCurrentVersion();
 
+        //Getting supported version number list
         $versionNameList = $this->getVersionNumberList();
+
+        $minVersion = $this->getMinVersionSupportedByInstall();
+        $versionList = $this->availableVersions();
 
         //Checking version
         if (!in_array($version, $versionNameList)) {
@@ -195,6 +196,7 @@ class UpgradeCommand extends AbstractCommand
         //Checking root_sys and correct Chamilo version to install
         if (!isset($_configuration['root_sys'])) {
             $output->writeln("<comment>Can't migrate Chamilo. This is not a Chamilo folder installation.</comment>");
+            exit;
         }
 
         //Checking system_version
@@ -236,7 +238,7 @@ class UpgradeCommand extends AbstractCommand
 
         $output->writeln("<comment>Welcome to the Chamilo upgrade!</comment>");
 
-        //Too much questions?
+        //@todo Too much questions?
 
         $dialog = $this->getHelperSet()->get('dialog');
         if (!$dialog->askConfirmation(
@@ -258,7 +260,7 @@ class UpgradeCommand extends AbstractCommand
             return;
         }
 
-        $output->writeln('<comment>Migrating from Chamilo version: </comment><info>'.$_configuration['system_version'].'</info> <comment>to version <info>'.$version);
+        $output->writeln('<comment>Migrating from Chamilo version: </comment><info>'.$_configuration['system_version'].'</info><comment> to version <info>'.$version);
 
         //Starting
         $output->writeln('<comment>Starting upgrade for Chamilo with configuration file: </comment><info>'.$configurationPath.'configuration.php</info>');
@@ -275,6 +277,9 @@ class UpgradeCommand extends AbstractCommand
                     $this->startMigration($oldVersion, $versionItem, $dryRun, $output);
                     $oldVersion = $versionItem;
                     $output->writeln("----------------------------------------------------------------");
+
+                    //Cleaning query list
+                    $this->queryList = array();
                 } else {
                     $output->writeln("<comment>Version <info>'$versionItem'</info> does not need a DB migration</comment>");
                 }
@@ -283,7 +288,7 @@ class UpgradeCommand extends AbstractCommand
 
         $this->updateConfiguration($version);
 
-        $output->writeln("<comment>wow! You just finish to migrate. Too check the current status of your platform. Run </comment><info>chamilo:status</info>");
+        $output->writeln("<comment>Wow! You just finish to migrate. Too check the current status of your platform. Run </comment><info>chamilo:status</info>");
     }
 
     /**
@@ -298,6 +303,7 @@ class UpgradeCommand extends AbstractCommand
      */
     public function startMigration($fromVersion, $toVersion, $dryRun, $output)
     {
+        global $app;
         //Needed when using require file
         $_configuration = $this->getHelper('configuration')->getConfiguration();
 
@@ -316,14 +322,13 @@ class UpgradeCommand extends AbstractCommand
             $this->processSQLFile($sqlToInstall, $output);
         }
 
-        $result = $this->processQueryList($output, $toVersion);
-        exit;
+        $result = $this->processQueryList($output, $toVersion, $dryRun);
 
         //Processing "db" changes
         if (isset($versionInfo['update_db']) && !empty($versionInfo['update_db'])) {
             $sqlToInstall = $installPath.$versionInfo['update_db'];
             if (is_file($sqlToInstall) && file_exists($sqlToInstall)) {
-                $output->writeln("<comment>Executing update db file: <info>'$sqlToInstall'</info>");
+                $output->writeln("<comment>Executing update db: <info>'$sqlToInstall'</info>");
                 $dblist = \Database::get_databases();
                 require $sqlToInstall;
             }
@@ -333,18 +338,15 @@ class UpgradeCommand extends AbstractCommand
         if (isset($versionInfo['update_files']) && !empty($versionInfo['update_files'])) {
             $sqlToInstall = $installPath.$versionInfo['update_files'];
             if (is_file($sqlToInstall) && file_exists($sqlToInstall)) {
-                $output->writeln("<comment>Executing update files file: <info>'$sqlToInstall'</info>");
+                $output->writeln("<comment>Executing update files: <info>'$sqlToInstall'</info>");
                 $dblist = \Database::get_databases();
                 require $sqlToInstall;
             }
         }
 
-
-
         //$result = $this->processSQL($sqlToInstall, $dryRun, $output);
         //$result = true;
-        $output->writeln('');
-        $output->writeln("<comment>Executing pre file: <info>'$sqlToInstall'</info>");
+
         $output->writeln('');
         $output->writeln("<comment>You have to select yes for the 'Chamilo Migrations'<comment>");
 
@@ -371,54 +373,62 @@ class UpgradeCommand extends AbstractCommand
     /**
      *
      */
-    public function processQueryList($output, $version)
+    public function processQueryList($output, $version, $dryRun)
     {
-        $dryRun = true;
         $databases = $this->getDatabaseList($version);
 
-        foreach ($databases as $section => &$dbInfo) {
+        foreach ($databases as $section => &$dbList) {
 
-            if (isset($this->queryList[$section]) && !empty($this->queryList[$section])) {
-                $queryList = $this->queryList[$section];
-                try {
-                    $lines = 0;
-                    //$conn = $this->getHelper('main_database')->getConnection();
-                    $conn = $this->getHelper($dbInfo['database'])->getConnection();
-                    $conn->beginTransaction();
+            foreach ($dbList as &$dbInfo) {
 
-                    foreach ($queryList as $query) {
-                        if ($dryRun) {
-                            //$output->writeln($query);
-                            $output->writeln('     <comment>-></comment> ' . $query);
-                        } else {
-                            $output->writeln('     <comment>-></comment> ' . $query);
-                            $conn->executeQuery($query);
-                        }
-                        $lines++;
-                    }
+                $output->writeln("");
+                $output->writeln("<comment>Loading section:</comment><info> $section</info> <comment>with database </comment><info>".$dbInfo['database']."</info>");
+                $output->writeln("--------------------------");
 
-                    $conn->commit();
-
-                    $database['status'] = 'complete';
-
-                    //$this->saveDatabaseList($databases, $version);
-
-                    if (!$dryRun) {
-                       $output->writeln(sprintf('%d statements executed!', $lines) . PHP_EOL);
-
-                       return true;
-                    }
-                } catch (\Exception $e) {
-                    $conn->rollback();
-                    $output->write(sprintf('<error>Migration failed. Error %s</error>', $e->getMessage()));
-                    throw $e;
+                if ($dbInfo['status'] == 'complete') {
+                    $output->writeln("<comment>Database already updated</comment>");
+                    continue;
                 }
-            } else {
-                $output->writeln(sprintf("Nothing to execute for section $section!"));
-                return false;
+
+                if (isset($this->queryList[$section]) && !empty($this->queryList[$section])) {
+
+                    $queryList = $this->queryList[$section];
+                    try {
+                        $lines = 0;
+                        $conn = $this->getHelper($dbInfo['database'])->getConnection();
+
+                        $conn->beginTransaction();
+
+
+                        foreach ($queryList as $query) {
+                            if ($dryRun) {
+                                $output->writeln($query);
+                            } else {
+                                $output->writeln('     <comment>-></comment> ' . $query);
+                                $conn->executeQuery($query);
+                            }
+                            $lines++;
+                        }
+
+                        $conn->commit();
+
+                        if (!$dryRun) {
+                            $output->writeln(sprintf('%d statements executed!', $lines) . PHP_EOL);
+                            $dbInfo['status'] = 'complete';
+                            $this->saveDatabaseList($databases, $version);
+                        }
+                    } catch (\Exception $e) {
+                        $conn->rollback();
+                        $output->write(sprintf('<error>Migration failed. Error %s</error>', $e->getMessage()));
+                        throw $e;
+                    }
+                } else {
+                    $output->writeln(sprintf("Nothing to execute for section $section!"));
+                    return false;
+                }
             }
-            return true;
         }
+        return true;
     }
 
     /**
@@ -500,6 +510,11 @@ class UpgradeCommand extends AbstractCommand
         );
     }
 
+    /**
+     * Generates database array info
+     *
+     * @return mixed
+     */
     public function generateDatabaseList()
     {
         $courseList = \CourseManager::get_real_course_list();
@@ -508,28 +523,39 @@ class UpgradeCommand extends AbstractCommand
         foreach ($courseList as $course) {
             if (!empty($course['db_name'])) {
                 $courseDbList[] = array(
-                    'database' => '_chamilo_course_.'.$course['db_name'],
+                    'database' => '_chamilo_course_'.$course['db_name'],
                     'status' => 'waiting'
                 );
             }
         }
 
         if (empty($courseDbList)) {
-            $courseDbList = array('main_database');
+            $courseDbList = array(
+                array(
+                    'database'=> 'main_database',
+                    'status' => 'waiting'
+                )
+            );
         }
 
         $databaseSection = array(
             'main'  => array(
-                'database' => 'main_database',
-                'status' => 'waiting'
+                array(
+                    'database' => 'main_database',
+                    'status' => 'waiting'
+                )
             ),
             'user'  => array(
-                'database' => 'user_personal_database',
-                'status' => 'waiting'
+                array(
+                    'database' => 'user_personal_database',
+                    'status' => 'waiting'
+                )
             ),
             'stats' => array(
-                'database' => 'statistics_database',
-                'status' => 'waiting'
+                array(
+                    'database' => 'statistics_database',
+                    'status' => 'waiting'
+                )
             ),
             //  'scorm' => array('main_database'),
             'course'=> $courseDbList
@@ -554,9 +580,9 @@ class UpgradeCommand extends AbstractCommand
     {
         $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
         $newConfigurationFile = $configurationPath.'db_migration_status_'.$version.'.yml';
+
         if (file_exists($newConfigurationFile)) {
             $yaml = new Parser();
-
             return $yaml->parse(file_get_contents($newConfigurationFile));
         } else {
 
@@ -596,50 +622,6 @@ class UpgradeCommand extends AbstractCommand
     }
 
     /**
-     *
-     * Converts a SQL file into a array of SQL queries in order to be executed by the Doctrine connection obj
-     *
-     * @param string $sqlFilePath
-     * @param bool $dryRun
-     * @param $output
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    private function processSQL($sqlFilePath, $dryRun, $output)
-    {
-        try {
-            $lines = 0;
-            $conn = $this->getHelper('main_database')->getConnection();
-
-            $conn->beginTransaction();
-
-            foreach ($sqlList as $query) {
-                if ($dryRun) {
-                    $output->writeln($query);
-                } else {
-                    $output->writeln('     <comment>-></comment> ' . $query);
-                    $conn->executeQuery($query);
-                }
-                $lines++;
-            }
-            $conn->commit();
-
-            if (!$dryRun) {
-                $output->writeln(sprintf('%d statements executed!', $lines) . PHP_EOL);
-
-                return true;
-            }
-        } catch (\Exception $e) {
-            $conn->rollback();
-            $output->write(sprintf('<error>Migration failed. Error %s</error>', $e->getMessage()));
-            throw $e;
-        }
-
-        return false;
-    }
-
-    /**
      * Function originally wrote in install.lib.php
      *
      * @param string $file
@@ -656,6 +638,7 @@ class UpgradeCommand extends AbstractCommand
             if ($printErrors) {
                 echo $error;
             }
+
             return false;
         }
         if (!in_array($section, array('main', 'user', 'stats', 'scorm', 'course'))) {
@@ -717,6 +700,31 @@ class UpgradeCommand extends AbstractCommand
 
         //now we have our section's SQL statements group ready, return
         return $section_contents;
+    }
+
+
+    /* Executed only before create_course_tables() */
+    public function dropCourseTables()
+    {
+        $list = \CourseManager::get_course_tables();
+        foreach ($list as $table) {
+            $sql = "DROP TABLE IF EXISTS ".DB_COURSE_PREFIX.$table;
+            \Database::query($sql);
+        }
+    }
+
+    public function createCourseTables($output)
+    {
+        $command = $this->getApplication()->find('dbal:import');
+        $sqlFolder = $this->getInstallationPath('1.9.0');
+
+        //Importing sql files
+        $arguments = array(
+            'command' => 'dbal:import',
+            'file' =>  $sqlFolder.'db_course.sql'
+        );
+        $input = new ArrayInput($arguments);
+        $command->run($input, $output);
     }
 }
 

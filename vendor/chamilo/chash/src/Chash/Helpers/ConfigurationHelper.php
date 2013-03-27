@@ -14,6 +14,24 @@ class ConfigurationHelper extends Helper
 
     }
 
+    public function chamiloVersions()
+    {
+        $versionList = array(
+            '1.8.7',
+            '1.8.8',
+            '1.8.8.2',
+            '1.8.8.4',
+            '1.8.8.6',
+            '1.9.0',
+            '1.9.2',
+            '1.9.4',
+            '1.9.6',
+            '1.10'
+        );
+        return $versionList;
+    }
+
+
     public function getConfigurationPath($path = null)
     {
         if (empty($path)) {
@@ -88,6 +106,13 @@ class ConfigurationHelper extends Helper
             $configFiles[] = $sysPath.'main/inc/conf/configuration.yml';
         }
 
+        $versions = $this->chamiloVersions();
+        foreach ($versions as $version) {
+            $migrationFile = $sysPath."main/inc/conf/db_migration_status_$version.yml";
+            if (file_exists($migrationFile)) {
+                $configFiles[] = $migrationFile;
+            }
+        }
         return $configFiles;
     }
 

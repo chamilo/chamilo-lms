@@ -33,10 +33,12 @@ if (is_file($newConfigurationFile) && file_exists($newConfigurationFile)) {
 $connectionOptions = array();
 
 if (!empty($courseList)) {
+
+    $dbPrefix = isset($_configuration['db_prefix']) && !empty($_configuration['db_prefix']) ? $_configuration['db_prefix'].$_configuration['db_glue'] : null;
     foreach ($courseList as $course) {
-        $connectionOptions['_chamilo_course_.'.$course['db_name']] = array(
+        $connectionOptions['_chamilo_course_'.$course['db_name']] = array(
             'driver'    => 'pdo_mysql',
-            'dbname'    => $course['db_name'],
+            'dbname'    => $dbPrefix.$course['db_name'],
             'user'      => $_configuration['db_user'],
             'password'  => $_configuration['db_password'],
             'host'      => $_configuration['db_host'],
@@ -64,7 +66,7 @@ if (isset($_configuration['statistics_database'])) {
     );
 } else {
     if (isset($_configuration['main_database'])) {
-        $connectionOptions['statistics_database'] = $_configuration['main_database'];
+        $connectionOptions['statistics_database'] = $connectionOptions['main_database'];
     }
 }
 
@@ -78,7 +80,7 @@ if (isset($_configuration['user_personal_database'])) {
     );
 } else {
     if (isset($_configuration['main_database'])) {
-        $connectionOptions['user_personal_database'] = $_configuration['main_database'];
+        $connectionOptions['user_personal_database'] = $connectionOptions['main_database'];
     }
 }
 
@@ -112,7 +114,7 @@ $helpers = array(
 use Doctrine\DBAL\DriverManager;
 $multipleEM = array();
 foreach ($connectionOptions as $name => $connection) {
-    $em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
+    $em = \Doctrine\ORM\EntityManager::create($connection, $config);
     //$helpers[$name] = new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em);
     $helpers[$name] = new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection());
 }

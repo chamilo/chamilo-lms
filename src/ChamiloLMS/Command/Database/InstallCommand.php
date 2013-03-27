@@ -14,7 +14,7 @@ use Symfony\Component\Yaml\Dumper;
 /**
  * Class InstallCommand
  */
-class InstallCommand extends AbstractCommand
+class InstallCommand extends CommonCommand
 {
     protected function configure()
     {
@@ -25,17 +25,86 @@ class InstallCommand extends AbstractCommand
             ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the chamilo folder');
     }
 
-    /**
-    * Gets the installation version path
-    *
-    * @param string $version
-    *
-    * @return string
-    */
-    public function getInstallationPath($version)
+    public function getDatabaseMap()
     {
-        return api_get_path(SYS_PATH).'main/install/'.$version.'/';
+        $defaultCourseData = array(
+            array(
+                'name' => 'course1',
+                'sql' => array(
+                    'db_course1.sql',
+                ),
+            ),
+            array(
+                'name' => 'course2',
+                'sql' => array(
+                    'db_course2.sql'
+                )
+            ),
+        );
+
+        return array(
+            '1.8.7' => array(
+                'section' => array(
+                    'main' => array(
+                        array(
+                            'name' => 'chamilo',
+                            'sql' => array(
+                                'db_main.sql',
+                                'db_stats.sql',
+                                'db_user.sql'
+                            ),
+                        ),
+                    ),
+                    'course' => $defaultCourseData
+                ),
+            ),
+            '1.8.8' => array(
+                'section' => array(
+                    'main' => array(
+                        array(
+                            'name' => 'chamilo',
+                            'sql' => array(
+                                'db_main.sql',
+                                'db_stats.sql',
+                                'db_user.sql'
+                            ),
+                        ),
+                    ),
+                    'course' => $defaultCourseData
+                ),
+            ),
+            '1.9.0' => array(
+                'section' => array(
+                    'main' => array(
+                        array(
+                            'name' => 'chamilo',
+                            'sql' => array(
+                                'db_main.sql',
+                                'db_stats.sql',
+                                'db_user.sql'
+                            ),
+                        ),
+                    ),
+                )
+            ),
+            '1.10.0' => array(
+                'section' => array(
+                    'main' => array(
+                        array(
+                            'name' => 'chamilo',
+                            'sql' => array(
+                                'db_main.sql',
+                                'db_stats.sql',
+                                'db_user.sql'
+                            ),
+                        ),
+                    ),
+                )
+            )
+        );
     }
+
+
 
     /**
      * Gets the version name folders located in main/install
@@ -83,14 +152,14 @@ class InstallCommand extends AbstractCommand
 
         if (!is_writable($configurationPath)) {
             $output->writeln("<comment>Folder ".$configurationPath." must be writable</comment>");
+            exit;
         }
 
         $sqlFolder = $this->getInstallationPath($version);
 
         if (!is_dir($sqlFolder)) {
             $output->writeln("<comment>Sorry you can't install that version of Chamilo :( Supported versions:</comment> <info>".implode(', ', $this->getAvailableVersions()));
-
-            return false;
+            exit;
         }
 
         if (file_exists($configurationPath.'configuration.php') || file_exists($configurationPath.'configuration.yml')) {
@@ -121,6 +190,7 @@ class InstallCommand extends AbstractCommand
         require_once api_get_path(SYS_PATH).'main/install/configuration.dist.yml.php';
 
         $avoidVariables = array(
+            'main_database', //default is chamilo
             'db_glue',
             'code_append',
             'course_folder',
@@ -243,13 +313,13 @@ class InstallCommand extends AbstractCommand
         return file_exists($newConfigurationFile);
     }
 
-    private function setDatabaseSettings($_configuration)
+    private function setDatabaseSettings($_configuration, $databaseName)
     {
         global $config;
 
         $defaultConnection = array(
             'driver'    => 'pdo_mysql',
-            'dbname'    => $_configuration['main_database'],
+            'dbname'    => $databaseName,
             'user'      => $_configuration['db_user'],
             'password'  => $_configuration['db_password'],
             'host'      => $_configuration['db_host'],
@@ -271,17 +341,14 @@ class InstallCommand extends AbstractCommand
             $this->getApplication()->getHelperSet()->set($helper, $name);
         }
 
-        $conn_return = @\Database::connect(
-        array(
+        $conn_return = @\Database::connect(array(
             'server' => $_configuration['db_host'],
             'username' => $_configuration['db_user'],
-            'password' => $_configuration['db_password'],
-           // 'persistent' => $_configuration['db_persistent_connection']
-            // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
+            'password' => $_configuration['db_password']
         ));
 
         global $database_connection;
-        $checkConnection = @\Database::select_db($_configuration['main_database'], $database_connection);
+        $checkConnection = @\Database::select_db($databaseName, $database_connection);
     }
 
     /**
@@ -296,55 +363,101 @@ class InstallCommand extends AbstractCommand
     {
         $sqlFolder = $this->getInstallationPath($version);
 
-        $this->setDatabaseSettings($_configuration);
-
         $testConnection = $this->testDatabaseConnection($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']);
 
         if ($testConnection == 1) {
-            $output->writeln("<comment>Connection stablished with the DB</comment>");
+            $output->writeln("<comment>Connection enabled for user: </comment><info>".$_configuration['db_user']);
         } else {
             $output->writeln("<error>No access to the database for user:</error><info>".$_configuration['db_user']."</info>");
             exit;
         }
 
-        $output->writeln("<comment>Creating database ... </comment>");
-        $result = $this->dropAndCreateDatabase($_configuration);
+        $databaseMap = $this->getDatabaseMap();
 
-        //Importing files
-        if ($result) {
-            $command = $this->getApplication()->find('dbal:import');
+        if (isset($databaseMap[$version])) {
+            $dbInfo = $databaseMap[$version];
+            $sections = $dbInfo['section'];
 
-            //Importing sql files
-            $arguments = array(
-                'command' => 'dbal:import',
-                'file' => array(
-                    $sqlFolder.'db_main.sql',
-                    $sqlFolder.'db_stats.sql',
-                    $sqlFolder.'db_user.sql',
-                    $sqlFolder.'db_course.sql',
-                )
-            );
-            $input = new ArrayInput($arguments);
-            $command->run($input, $output);
+            foreach ($sections as $section => $sectionData) {
+                foreach ($sectionData as $dbInfo) {
+                    $databaseName = $dbInfo['name'];
+                    $dbList = $dbInfo['sql'];
 
-            api_set_setting('Institution', 'Portal');
-            api_set_setting('InstitutionUrl', 'Portal');
-            api_set_setting('siteName', 'Campus');
-            api_set_setting('emailAdministrator', 'admin@example.org');
-            api_set_setting('administratorSurname', 'M');
-            api_set_setting('administratorName', 'Julio');
-            api_set_setting('platformLanguage', 'english');
-            api_set_setting('allow_registration', '1');
-            api_set_setting('allow_registration_as_teacher', '1');
+                    $output->writeln("<comment>Creating database</comment> <info>$databaseName ... </info>");
 
-            //Getting extra information about the installation
-            //$value = api_get_setting('chamilo_database_version');
-            //$output->writeln("<comment>Showing chamilo_database_version value:</comment> ".$value);
+                    $result = $this->dropAndCreateDatabase($databaseName);
+
+                    $this->setDatabaseSettings($_configuration, $databaseName);
+
+                    //Fixing db list
+                    foreach ($dbList as &$db) {
+                        $db = $sqlFolder.$db;
+                    }
+
+                    //Importing files
+                    if ($result) {
+
+                        $command = $this->getApplication()->find('dbal:import');
+
+                        //Importing sql files
+                        $arguments = array(
+                            'command' => 'dbal:import',
+                            'file' =>  $dbList
+                        );
+                        $input = new ArrayInput($arguments);
+                        $command->run($input, $output);
+
+                        if ($databaseName == 'chamilo') {
+                            api_set_setting('Institution', 'Portal');
+                            api_set_setting('InstitutionUrl', 'Portal');
+                            api_set_setting('siteName', 'Campus');
+                            api_set_setting('emailAdministrator', 'admin@example.org');
+                            api_set_setting('administratorSurname', 'M');
+                            api_set_setting('administratorName', 'Julio');
+                            api_set_setting('platformLanguage', 'english');
+                            api_set_setting('allow_registration', '1');
+                            api_set_setting('allow_registration_as_teacher', '1');
+                        }
+
+                        //Getting extra information about the installation
+                        //$value = api_get_setting('chamilo_database_version');
+                        //$output->writeln("<comment>Showing chamilo_database_version value:</comment> ".$value);
+                        $output->writeln("<comment>Database </comment><info>$databaseName </info><comment>process ended!</comment>");
+                    }
+                }
+            }
+
+            if (isset($sections) && isset($sections['course'])) {
+                //@todo fix this
+                $this->setDatabaseSettings($_configuration, $sections['main'][0]['name']);
+                foreach ($sections['course'] as $courseInfo) {
+                    $databaseName = $courseInfo['name'];
+                    $output->writeln("Inserting course database in chamilo: <info>$databaseName</info>");
+                    $this->createCourse($databaseName);
+                }
+            }
             $output->writeln("<comment>Check your installation status with </comment><info>chamilo:status</info>");
-            $output->writeln("<comment>Database process ended!</comment>");
 
             return true;
         }
+        return false;
+    }
+
+
+    /**
+     * Creates a course (only an insert in the DB)
+     * @param $databaseName
+     */
+    function createCourse($databaseName)
+    {
+        $params = array(
+            'code' => $databaseName,
+            'db_name' => $databaseName,
+            'course_language' => 'english',
+            'title' => $databaseName,
+            'visual_code' => $databaseName
+        );
+        @\Database::insert(TABLE_MAIN_COURSE, $params);
     }
 
     /**
@@ -353,7 +466,7 @@ class InstallCommand extends AbstractCommand
      *
      * @return resource
      */
-    public function dropAndCreateDatabase($_configuration)
+    public function dropAndCreateDatabase($databaseName)
     {
         /*
         $command = $this->getApplication()->find('orm:schema-tool:create');
@@ -365,20 +478,19 @@ class InstallCommand extends AbstractCommand
         exit;
         */
 
-        $this->dropDatabase($_configuration);
-        $result = \Database::query("CREATE DATABASE IF NOT EXISTS ".mysql_real_escape_string($_configuration['main_database'])." DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
+        $this->dropDatabase($databaseName);
+        $result = \Database::query("CREATE DATABASE IF NOT EXISTS ".mysql_real_escape_string($databaseName)." DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
 
         if ($result) {
 
-            return \Database::select_db($_configuration['main_database']);
+            return \Database::select_db($databaseName);
         }
-
         return false;
     }
 
-    public function dropDatabase($_configuration)
+    public function dropDatabase($name)
     {
-        \Database::query("DROP DATABASE ".mysql_real_escape_string($_configuration['main_database'])."");
+        \Database::query("DROP DATABASE ".mysql_real_escape_string($name)."");
     }
 
     /**

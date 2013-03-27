@@ -8,6 +8,7 @@
  */
 /**
  * Initialization
+ * @todo replace this folder with a controller
  */
 $language_file = 'admin';
 $cidReset = true;

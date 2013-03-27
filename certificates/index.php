@@ -7,7 +7,7 @@
 
 /**
  * Initialization
- * @todo replace me with a controller
+ * @todo replace me with a controller!
  */
 
 $language_file= array('admin', 'gradebook', 'document');

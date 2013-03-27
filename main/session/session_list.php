@@ -199,7 +199,7 @@ $(function() {
                 added_cols = [];
                 //console.log(postdata);
                 $.each(filters, function(key, value){
-                    console.log('key: ' + key );
+                    //console.log('key: ' + key );
 
                     if (key == 'rules') {
                         $.each(value, function(subkey, subvalue) {

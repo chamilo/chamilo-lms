@@ -98,7 +98,6 @@ $(document).ready( function() {
 
         inputId = inputId.replace('f-', '');
         inputId = inputId.replace('-filter', '');
-        console.log(inputId);
 
         $("#"+ inputId+"-f").filterByText($("#f-"+inputId+"-filter"));
         $("#"+ inputId+"-t").filterByText($("#t-"+inputId+"-filter"));

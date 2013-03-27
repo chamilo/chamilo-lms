@@ -100,8 +100,8 @@ function deleteItem($item, $insertHere) {
                     return $(this).val() == value;
             }).attr("selected", true);
 
-            console.log(droppedId);
-            console.log(dropedOnId);
+            //console.log(droppedId);
+            //console.log(dropedOnId);
 
             $item.append( recycle_icon ).appendTo( $list  ).fadeIn(function() {
             //$item.animate({ width: "48px" }).find( "img" ).animate({ height: "36px" });
@@ -177,7 +177,6 @@ $(function() {
         });
         var droppedId = $item.attr("id");
         var originSelectId = "window_"+droppedId+"_select";
-        console.log(originSelectId);
         $("#"+originSelectId+" option:first").attr("selected","selected");
     }
 

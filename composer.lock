@@ -7,12 +7,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chamilo/chash.git",
-                "reference": "87def53dfe80a1e15ed9bceb76f7a8f01b31990e"
+                "reference": "b9f4f3b3ff7f04ce87df7bb9896f2b3aee710feb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chamilo/chash/zipball/87def53dfe80a1e15ed9bceb76f7a8f01b31990e",
-                "reference": "87def53dfe80a1e15ed9bceb76f7a8f01b31990e",
+                "url": "https://api.github.com/repos/chamilo/chash/zipball/b9f4f3b3ff7f04ce87df7bb9896f2b3aee710feb",
+                "reference": "b9f4f3b3ff7f04ce87df7bb9896f2b3aee710feb",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-03-25 18:35:52"
+            "time": "2013-03-27 13:08:43"
         },
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -128,7 +128,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan H. Wage",
+                    "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/"
                 },
@@ -356,12 +356,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "2a59134c7d6ac3f04e34b527a7de37ef0d593bbd"
+                "reference": "03799ebed1067cff5bb7fa60b711ce34f3bb689f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/2a59134c7d6ac3f04e34b527a7de37ef0d593bbd",
-                "reference": "2a59134c7d6ac3f04e34b527a7de37ef0d593bbd",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/03799ebed1067cff5bb7fa60b711ce34f3bb689f",
+                "reference": "03799ebed1067cff5bb7fa60b711ce34f3bb689f",
                 "shasum": ""
             },
             "require": {
@@ -427,7 +427,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-03-24 06:26:57"
+            "time": "2013-03-26 20:33:31"
         },
         {
             "name": "knplabs/knp-menu",
@@ -705,12 +705,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Silex.git",
-                "reference": "59e7dbd338b5caba9879ae11524da4a5905f80c1"
+                "reference": "a5cb55ced63ece76550de1599ddcc60719373594"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Silex/zipball/59e7dbd338b5caba9879ae11524da4a5905f80c1",
-                "reference": "59e7dbd338b5caba9879ae11524da4a5905f80c1",
+                "url": "https://api.github.com/repos/fabpot/Silex/zipball/a5cb55ced63ece76550de1599ddcc60719373594",
+                "reference": "a5cb55ced63ece76550de1599ddcc60719373594",
                 "shasum": ""
             },
             "require": {
@@ -778,7 +778,7 @@
             "keywords": [
                 "microframework"
             ],
-            "time": "2013-03-08 16:56:52"
+            "time": "2013-03-27 09:31:32"
         },
         {
             "name": "silex/web-profiler",
@@ -983,16 +983,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "ce8d34ee8b1abc7c0f3d0923fdb32a85e7decb98"
+                "reference": "adbc260c08000aaa75c5f0db8347a29c21d16692"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/ce8d34ee8b1abc7c0f3d0923fdb32a85e7decb98",
-                "reference": "ce8d34ee8b1abc7c0f3d0923fdb32a85e7decb98",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/adbc260c08000aaa75c5f0db8347a29c21d16692",
+                "reference": "adbc260c08000aaa75c5f0db8347a29c21d16692",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/event-dispatcher": ">=2.1,<3.0"
             },
             "type": "library",
             "extra": {
@@ -1021,7 +1024,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 07:15:46"
+            "time": "2013-03-25 20:03:44"
         },
         {
             "name": "symfony/dependency-injection",
@@ -1258,12 +1261,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "7f8553288d876fab5517ed04da7497e355d5781c"
+                "reference": "1ec4311b512a051c18300e9e1ebc1442f62da5ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/7f8553288d876fab5517ed04da7497e355d5781c",
-                "reference": "7f8553288d876fab5517ed04da7497e355d5781c",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/1ec4311b512a051c18300e9e1ebc1442f62da5ac",
+                "reference": "1ec4311b512a051c18300e9e1ebc1442f62da5ac",
                 "shasum": ""
             },
             "require": {
@@ -1308,7 +1311,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 08:06:49"
+            "time": "2013-03-26 13:01:49"
         },
         {
             "name": "symfony/http-foundation",
@@ -2002,17 +2005,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.1.8",
+            "version": "v2.1.9",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "v2.1.8"
+                "reference": "v2.1.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.1.8",
-                "reference": "v2.1.8",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.1.9",
+                "reference": "v2.1.9",
                 "shasum": ""
             },
             "require": {
@@ -2040,7 +2043,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-01-27 16:12:43"
+            "time": "2013-03-23 01:54:33"
         },
         {
             "name": "twig/twig",

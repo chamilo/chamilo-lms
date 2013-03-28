@@ -3411,10 +3411,10 @@ function api_get_languages_combo($name = 'language', $chozen=true) {
  */
 function api_display_language_form($hide_if_no_choice = false) {
 
-    // Retrieve a complete list of all the languages.
+    // Retrieve a complete list of all the languages
     $language_list = api_get_languages();
 
-    if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
+    if (!empty($language_list) && count($language_list['name']) <= 1 && $hide_if_no_choice) {
         return; //don't show any form
     }
 
@@ -3430,12 +3430,10 @@ function api_display_language_form($hide_if_no_choice = false) {
     $folder = $language_list['folder']; // This line is probably no longer needed.
 	$html = '
     <script>
-    <!--
     function jumpMenu(targ,selObj,restore){ // v3.0
         eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
         if (restore) selObj.selectedIndex=0;
     }
-    //-->
     </script>';
 
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';

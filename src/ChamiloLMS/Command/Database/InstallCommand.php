@@ -192,6 +192,7 @@ class InstallCommand extends CommonCommand
         $avoidVariables = array(
             'main_database', //default is chamilo
             'db_glue',
+            'table_prefix',
             'code_append',
             'course_folder',
             'db_admin_path',
@@ -305,6 +306,9 @@ class InstallCommand extends CommonCommand
         $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
 
         $newConfigurationArray['system_version'] = $version;
+        $newConfigurationArray['db_glue'] = '`.`';
+        $newConfigurationArray['db_prefix'] = '';
+
         $dumper = new Dumper();
         $yaml = $dumper->dump($newConfigurationArray, 2); //inline
         $newConfigurationFile = $configurationPath.'configuration.yml';

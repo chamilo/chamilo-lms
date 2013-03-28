@@ -5,6 +5,11 @@ namespace ChamiloLMS\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration,
     Doctrine\DBAL\Schema\Schema;
 
+
+/**
+ * Manages the migration to version 1.8.0
+ * @package ChamiloLMS\Controller\Migrations
+ */
 class Version8 extends AbstractMigration
 {
     public function up(Schema $schema)

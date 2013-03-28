@@ -1,5 +1,7 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
 $config = new \Doctrine\ORM\Configuration();
 $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
 
@@ -7,25 +9,44 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\Yaml\Parser;
 
-AnnotationRegistry::registerFile(api_get_path(SYS_PATH)."vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
+$sysPath = __DIR__."/../../";
+
+AnnotationRegistry::registerFile($sysPath."vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
 $reader = new AnnotationReader();
 
-$driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array(api_get_path(SYS_PATH)."tests/doctrine_console/mapping"));
+$driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array($sysPath."tests/doctrine_console/mapping"));
 
 $config->setMetadataDriverImpl($driverImpl);
 $config->setProxyDir(__DIR__ . '/Proxies');
 $config->setProxyNamespace('Proxies');
 
 $courseList = CourseManager::get_real_course_list();
-//$courseList = array();
 
-$configurationPath = api_get_path(SYS_PATH).'main/inc/conf/';
+$configurationPath = $sysPath.'main/inc/conf/';
 $newConfigurationFile = $configurationPath.'configuration.yml';
 
+//Including configuration.php
+$configurationFile = $configurationPath.'configuration.php';
+
+if (is_file($configurationFile) && file_exists($configurationFile)) {
+    require $configurationFile;
+}
+
+//Merge with the configuration.yml file, if exits
 if (is_file($newConfigurationFile) && file_exists($newConfigurationFile)) {
     $yaml = new Parser();
-    $_configuration = $yaml->parse(file_get_contents($newConfigurationFile));
+    $_configurationYML = $yaml->parse(file_get_contents($newConfigurationFile));
+
+    if (isset($_configuration)) {
+        $_configuration = array_merge($_configuration, $_configurationYML);
+    } else {
+        $_configuration = $_configurationYML;
+    }
 }
+
+$app['chamilo.log'] = $app['cache.path'].'chamilo-cli.log';
+
+// Loading db connections
 
 $connectionOptions = array();
 

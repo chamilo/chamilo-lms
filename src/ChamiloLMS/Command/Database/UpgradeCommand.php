@@ -202,7 +202,7 @@ class UpgradeCommand extends CommonCommand
         //Checking system_version
 
         if (!isset($_configuration['system_version']) || empty($_configuration['system_version'])) {
-            $output->writeln("<comment>You have something wrong in your Chamilo installation check it with chamilo:status.</comment>");
+            $output->writeln("<comment>You have something wrong in your Chamilo conf file. Check it with chamilo:status.</comment>");
             exit;
         }
 
@@ -303,25 +303,28 @@ class UpgradeCommand extends CommonCommand
      */
     public function startMigration($fromVersion, $toVersion, $dryRun, $output)
     {
+        //used by monolog
         global $app;
+
         //Needed when using require file
         $_configuration = $this->getHelper('configuration')->getConfiguration();
 
         $installPath = api_get_path(SYS_CODE_PATH).'install/'.$toVersion.'/';
         $versionInfo = $this->getAvailableVersionInfo($toVersion);
 
-        //Filling sqlList with "pre" db changes
+        //Filling sqlList array with "pre" db changes
         if (isset($versionInfo['pre']) && !empty($versionInfo['pre'])) {
             $sqlToInstall = $installPath.$versionInfo['pre'];
-            $this->processSQLFile($sqlToInstall, $output);
+            $this->fillQueryList($sqlToInstall, $output);
         }
 
-        //Filling sqlList with "post" db changes
+        //Filling sqlList array with "post" db changes
         if (isset($versionInfo['post']) && !empty($versionInfo['post'])) {
             $sqlToInstall = $installPath.$versionInfo['post'];
-            $this->processSQLFile($sqlToInstall, $output);
+            $this->fillQueryList($sqlToInstall, $output);
         }
 
+        //Processing sql query list depending of the section
         $result = $this->processQueryList($output, $toVersion, $dryRun);
 
         //Processing "db" changes
@@ -329,7 +332,6 @@ class UpgradeCommand extends CommonCommand
             $sqlToInstall = $installPath.$versionInfo['update_db'];
             if (is_file($sqlToInstall) && file_exists($sqlToInstall)) {
                 $output->writeln("<comment>Executing update db: <info>'$sqlToInstall'</info>");
-                $dblist = \Database::get_databases();
                 require $sqlToInstall;
             }
         }
@@ -339,7 +341,6 @@ class UpgradeCommand extends CommonCommand
             $sqlToInstall = $installPath.$versionInfo['update_files'];
             if (is_file($sqlToInstall) && file_exists($sqlToInstall)) {
                 $output->writeln("<comment>Executing update files: <info>'$sqlToInstall'</info>");
-                $dblist = \Database::get_databases();
                 require $sqlToInstall;
             }
         }
@@ -372,6 +373,13 @@ class UpgradeCommand extends CommonCommand
 
     /**
      *
+     * Process the queryList array and executes queries to the correct section (main, user, course, etc)
+     *
+     * @param $output
+     * @param $version
+     * @param $dryRun
+     * @return bool
+     * @throws \Exception
      */
     public function processQueryList($output, $version, $dryRun)
     {
@@ -399,7 +407,6 @@ class UpgradeCommand extends CommonCommand
 
                         $conn->beginTransaction();
 
-
                         foreach ($queryList as $query) {
                             if ($dryRun) {
                                 $output->writeln($query);
@@ -424,10 +431,12 @@ class UpgradeCommand extends CommonCommand
                     }
                 } else {
                     $output->writeln(sprintf("Nothing to execute for section $section!"));
+
                     return false;
                 }
             }
         }
+
         return true;
     }
 
@@ -435,7 +444,7 @@ class UpgradeCommand extends CommonCommand
      * @param string $sqlFilePath
      * @param $output
      */
-    public function processSQLFile($sqlFilePath, $output)
+    public function fillQueryList($sqlFilePath, $output)
     {
         if (is_file($sqlFilePath) && file_exists($sqlFilePath)) {
             $output->writeln(sprintf("Processing file '<info>%s</info>'... ", $sqlFilePath));
@@ -583,6 +592,7 @@ class UpgradeCommand extends CommonCommand
 
         if (file_exists($newConfigurationFile)) {
             $yaml = new Parser();
+
             return $yaml->parse(file_get_contents($newConfigurationFile));
         } else {
 
@@ -703,7 +713,9 @@ class UpgradeCommand extends CommonCommand
     }
 
 
-    /* Executed only before create_course_tables() */
+    /**
+     * Executed only before createCourseTables()
+     */
     public function dropCourseTables()
     {
         $list = \CourseManager::get_course_tables();
@@ -713,6 +725,10 @@ class UpgradeCommand extends CommonCommand
         }
     }
 
+    /**
+     * Creates the course tables with the prefix c_
+     * @param $output
+     */
     public function createCourseTables($output)
     {
         $command = $this->getApplication()->find('dbal:import');

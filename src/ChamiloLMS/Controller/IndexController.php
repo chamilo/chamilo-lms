@@ -112,6 +112,8 @@ class IndexController// extends Controller
             facebook_connect();
         }
 
+        //$app['url_generator']->generator('index');
+
         $this->setLoginForm($app);
 
         if (!api_is_anonymous()) {

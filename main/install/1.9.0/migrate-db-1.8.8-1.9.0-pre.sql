@@ -324,21 +324,3 @@ CREATE TABLE track_e_attempt_coeff ( id int unsigned not null auto_increment pri
 
 -- xxUSERxx
 ALTER TABLE personal_agenda ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;
-
--- xxCOURSExx
-CREATE TABLE IF NOT EXISTS metadata (c_id INT NOT NULL, eid VARCHAR(250) NOT NULL, mdxmltext TEXT default '', md5 CHAR(32) default '', htmlcache1 TEXT default '', htmlcache2 TEXT default '', indexabletext TEXT default '', PRIMARY KEY (c_id, eid))
-
-ALTER TABLE lp ADD COLUMN hide_toc_frame INT NOT NULL DEFAULT 0;
-ALTER TABLE lp ADD COLUMN seriousgame_mode INT NOT NULL DEFAULT 0;
-ALTER TABLE lp_item_view modify column suspend_data longtext;
-ALTER TABLE quiz ADD COLUMN review_answers INT NOT NULL DEFAULT 0;
-ALTER TABLE student_publication ADD COLUMN contains_file INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE student_publication ADD COLUMN allow_text_assignment INTEGER NOT NULL DEFAULT 0;
-ALTER TABLE quiz ADD COLUMN random_by_category INT NOT NULL DEFAULT 0;
-ALTER TABLE quiz ADD COLUMN text_when_finished TEXT DEFAULT NULL;
-ALTER TABLE quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
-ALTER TABLE quiz ADD COLUMN pass_percentage INT DEFAULT NULL;
-INSERT INTO course_setting(variable,value,category) VALUES ('allow_public_certificates', 0, 'certificates');
-
-ALTER TABLE quiz_answer ADD COLUMN answer_code char(10) default '';
-ALTER TABLE quiz_question ADD COLUMN question_code char(10) default '';

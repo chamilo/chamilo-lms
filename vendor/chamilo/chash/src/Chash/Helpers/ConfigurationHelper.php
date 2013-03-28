@@ -14,6 +14,10 @@ class ConfigurationHelper extends Helper
 
     }
 
+    /**
+     * Get chamilo versions
+     * @return array
+     */
     public function chamiloVersions()
     {
         $versionList = array(
@@ -26,12 +30,17 @@ class ConfigurationHelper extends Helper
             '1.9.2',
             '1.9.4',
             '1.9.6',
-            '1.10'
+            '1.9.8',
+            '1.10.0'
         );
         return $versionList;
     }
 
-
+    /**
+     * Get configuration file
+     * @param string $path
+     * @return bool|string
+     */
     public function getConfigurationPath($path = null)
     {
         if (empty($path)) {
@@ -85,6 +94,10 @@ class ConfigurationHelper extends Helper
         return false;
     }
 
+    /**
+     * Set configuration var
+     * @param $configuration
+     */
     public function setConfiguration($configuration)
     {
         $this->configuration = $configuration;
@@ -108,7 +121,11 @@ class ConfigurationHelper extends Helper
 
         $versions = $this->chamiloVersions();
         foreach ($versions as $version) {
-            $migrationFile = $sysPath."main/inc/conf/db_migration_status_$version.yml";
+            $migrationFile = $sysPath."main/inc/conf/db_migration_status_".$version."_pre.yml";
+            if (file_exists($migrationFile)) {
+                $configFiles[] = $migrationFile;
+            }
+            $migrationFile = $sysPath."main/inc/conf/db_migration_status_".$version."_post.yml";
             if (file_exists($migrationFile)) {
                 $configFiles[] = $migrationFile;
             }

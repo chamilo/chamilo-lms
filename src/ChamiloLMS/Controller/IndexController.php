@@ -31,7 +31,7 @@ class IndexController// extends Controller
     {
         $this->logout();
 
-        return $app->redirect($app['url_generator']->generator('index'));
+        return $app->redirect($app['url_generator']->generate('index'));
     }
 
     /**
@@ -111,8 +111,6 @@ class IndexController// extends Controller
         if (api_is_facebook_auth_activated() && !api_get_user_id()) {
             facebook_connect();
         }
-
-        //$app['url_generator']->generator('index');
 
         $this->setLoginForm($app);
 
@@ -207,7 +205,7 @@ class IndexController// extends Controller
     /**
      * @param \Silex\Application $app
      */
-    function setLoginForm(Application $app)
+    public function setLoginForm(Application $app)
     {
         $userId    = api_get_user_id();
         $loginForm = null;
@@ -260,7 +258,7 @@ class IndexController// extends Controller
           return $app['template']->assign('form', $form->createView());
          */
 
-        $form = new \FormValidator('formLogin', 'POST', null, null, array('class' => 'form-vertical'));
+        $form = new \FormValidator('formLogin', 'POST', $app['url_generator']->generate('index'), null, array('class' => 'form-vertical'));
         $form->addElement(
             'text',
             'login',

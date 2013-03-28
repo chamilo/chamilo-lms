@@ -7,12 +7,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chamilo/chash.git",
-                "reference": "b9f4f3b3ff7f04ce87df7bb9896f2b3aee710feb"
+                "reference": "0db81e2ad152355baca3d968f0af04cce147d510"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chamilo/chash/zipball/b9f4f3b3ff7f04ce87df7bb9896f2b3aee710feb",
-                "reference": "b9f4f3b3ff7f04ce87df7bb9896f2b3aee710feb",
+                "url": "https://api.github.com/repos/chamilo/chash/zipball/0db81e2ad152355baca3d968f0af04cce147d510",
+                "reference": "0db81e2ad152355baca3d968f0af04cce147d510",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-03-27 13:08:43"
+            "time": "2013-03-28 10:43:52"
         },
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -356,12 +356,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "03799ebed1067cff5bb7fa60b711ce34f3bb689f"
+                "reference": "e96e48a988f7fffbe3cca4763df84f77ba79ddde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/03799ebed1067cff5bb7fa60b711ce34f3bb689f",
-                "reference": "03799ebed1067cff5bb7fa60b711ce34f3bb689f",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/e96e48a988f7fffbe3cca4763df84f77ba79ddde",
+                "reference": "e96e48a988f7fffbe3cca4763df84f77ba79ddde",
                 "shasum": ""
             },
             "require": {
@@ -427,7 +427,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-03-26 20:33:31"
+            "time": "2013-03-27 16:49:35"
         },
         {
             "name": "knplabs/knp-menu",

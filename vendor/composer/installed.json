@@ -1514,66 +1514,6 @@
         "homepage": "http://symfony.com"
     },
     {
-        "name": "symfony/routing",
-        "version": "v2.2.0",
-        "version_normalized": "2.2.0.0",
-        "target-dir": "Symfony/Component/Routing",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Routing.git",
-            "reference": "v2.2.0-RC3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.0-RC3",
-            "reference": "v2.2.0-RC3",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "doctrine/common": ">=2.2,<3.0",
-            "psr/log": ">=1.0,<2.0",
-            "symfony/config": ">=2.2,<2.3-dev",
-            "symfony/yaml": ">=2.0,<3.0"
-        },
-        "suggest": {
-            "doctrine/common": "~2.2",
-            "symfony/config": "2.2.*",
-            "symfony/yaml": "2.2.*"
-        },
-        "time": "2013-02-11 11:24:47",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Routing\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Routing Component",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "symfony/web-profiler-bundle",
         "version": "v2.2.0",
         "version_normalized": "2.2.0.0",
@@ -1853,6 +1793,36 @@
         "homepage": "http://symfony.com"
     },
     {
+        "name": "chamilo/chash",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/chamilo/chash.git",
+            "reference": "0db81e2ad152355baca3d968f0af04cce147d510"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/chamilo/chash/zipball/0db81e2ad152355baca3d968f0af04cce147d510",
+            "reference": "0db81e2ad152355baca3d968f0af04cce147d510",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "symfony/console": "2.3.*@dev",
+            "symfony/yaml": "2.1.*"
+        },
+        "time": "2013-03-28 10:43:52",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Chash": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/"
+    },
+    {
         "name": "monolog/monolog",
         "version": "1.4.0",
         "version_normalized": "1.4.0.0",
@@ -2062,12 +2032,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-            "reference": "03799ebed1067cff5bb7fa60b711ce34f3bb689f"
+            "reference": "e96e48a988f7fffbe3cca4763df84f77ba79ddde"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/03799ebed1067cff5bb7fa60b711ce34f3bb689f",
-            "reference": "03799ebed1067cff5bb7fa60b711ce34f3bb689f",
+            "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/e96e48a988f7fffbe3cca4763df84f77ba79ddde",
+            "reference": "e96e48a988f7fffbe3cca4763df84f77ba79ddde",
             "shasum": ""
         },
         "require": {
@@ -2087,7 +2057,7 @@
             "doctrine/mongodb-odm": ">=1.0.0-BETA7",
             "doctrine/orm": ">=2.3.2"
         },
-        "time": "2013-03-26 20:33:31",
+        "time": "2013-03-27 16:49:35",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2137,33 +2107,63 @@
         ]
     },
     {
-        "name": "chamilo/chash",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "name": "symfony/routing",
+        "version": "v2.2.0",
+        "version_normalized": "2.2.0.0",
+        "target-dir": "Symfony/Component/Routing",
         "source": {
             "type": "git",
-            "url": "https://github.com/chamilo/chash.git",
-            "reference": "b9f4f3b3ff7f04ce87df7bb9896f2b3aee710feb"
+            "url": "https://github.com/symfony/Routing.git",
+            "reference": "v2.2.0-RC3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/chamilo/chash/zipball/b9f4f3b3ff7f04ce87df7bb9896f2b3aee710feb",
-            "reference": "b9f4f3b3ff7f04ce87df7bb9896f2b3aee710feb",
+            "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.0-RC3",
+            "reference": "v2.2.0-RC3",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.2",
-            "symfony/console": "2.3.*@dev",
-            "symfony/yaml": "2.1.*"
+            "php": ">=5.3.3"
         },
-        "time": "2013-03-27 13:08:43",
+        "require-dev": {
+            "doctrine/common": ">=2.2,<3.0",
+            "psr/log": ">=1.0,<2.0",
+            "symfony/config": ">=2.2,<2.3-dev",
+            "symfony/yaml": ">=2.0,<3.0"
+        },
+        "suggest": {
+            "doctrine/common": "~2.2",
+            "symfony/config": "2.2.*",
+            "symfony/yaml": "2.2.*"
+        },
+        "time": "2013-02-11 11:24:47",
         "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
         "installation-source": "source",
         "autoload": {
             "psr-0": {
-                "Chash": "src/"
+                "Symfony\\Component\\Routing\\": ""
             }
         },
-        "notification-url": "https://packagist.org/downloads/"
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Routing Component",
+        "homepage": "http://symfony.com"
     }
 ]

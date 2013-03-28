@@ -242,6 +242,10 @@ $app['breadcrumb'] = array();
 
 //Form provider
 $app->register(new Silex\Provider\FormServiceProvider());
+
+//URL generator provider
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
 /*
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 
@@ -320,8 +324,7 @@ $app['twig'] = $app->share(
     })
 );
 
-//URL generator provider
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
 
 //Monolog and web profiler only available if cache is writable
 if (is_writable($app['cache.path'])) {

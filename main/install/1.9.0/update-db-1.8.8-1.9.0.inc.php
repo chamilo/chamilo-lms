@@ -7,18 +7,12 @@
  * @package chamilo.install
  */
 
-$old_file_version = '1.8.8';
-$new_file_version = '1.9.0';
-
-if (defined('SYSTEM_INSTALLATION')) {
-
-    $mainConnection = $this->getHelper('main_database')->getConnection();
+$update = function($_configuration, $mainConnection, $dryRun, $output) {
 
     $mainConnection->beginTransaction();
 
     $singleDbForm = $_configuration['single_database'];
     $dbNameForm = $_configuration['main_database'];
-
     $dbStatsForm = isset($_configuration['statistics_database']) ? $_configuration['statistics_database'] : $_configuration['main_database'];
     $dbUserForm  = isset($_configuration['user_personal_database']) ? $_configuration['user_personal_database'] : $_configuration['main_database'];
 
@@ -480,9 +474,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
         /*  End of work fix  */
     }
-} else {
-    echo 'You are not allowed here !' . __FILE__;
-}
+};
 
 function check_work($folder_id, $work_url, $work_table, $base_work_dir, $courseId) {
     $uniq_id = uniqid();

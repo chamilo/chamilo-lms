@@ -110,7 +110,7 @@ class UpgradeCommand extends CommonCommand
                 'require_update' => false,
                 'parent' => '1.9.0'
             ),
-            '1.10'  => array(
+            '1.10.0'  => array(
                 'require_update' => true,
                 'pre' => 'migrate-db-1.9.0-1.10.0-pre.sql',
                 'post' => 'migrate-db-1.9.0-1.10.0-post.sql',
@@ -312,6 +312,8 @@ class UpgradeCommand extends CommonCommand
         $installPath = api_get_path(SYS_CODE_PATH).'install/'.$toVersion.'/';
         $versionInfo = $this->getAvailableVersionInfo($toVersion);
 
+        $mainConnection = $this->getHelper('main_database')->getConnection();
+
         //Filling sqlList array with "pre" db changes
         if (isset($versionInfo['pre']) && !empty($versionInfo['pre'])) {
             $sqlToInstall = $installPath.$versionInfo['pre'];
@@ -333,6 +335,7 @@ class UpgradeCommand extends CommonCommand
             if (is_file($sqlToInstall) && file_exists($sqlToInstall)) {
                 $output->writeln("<comment>Executing update db: <info>'$sqlToInstall'</info>");
                 require $sqlToInstall;
+                $update($_configuration, $mainConnection, $dryRun, $output);
             }
         }
 

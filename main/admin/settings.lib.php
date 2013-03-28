@@ -314,7 +314,8 @@ function handle_stylesheets() {
                 // Remove path prefix except the style name and put file on disk
                 $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($safe_style_dir)));
             }
-            $str = '<a class="btn btn-primary btn-large" href="'.str_replace(api_get_path(SYS_ARCHIVE_PATH),api_get_path(WEB_ARCHIVE_PATH),$arch).'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+            //@TODO: use more generic script to download.
+            $str = '<a class="btn btn-primary btn-large" href="' . api_get_path(WEB_CODE_PATH) . 'course_info/download.php?archive=' . str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch) . '">'.get_lang('ClickHereToDownloadTheFile').'</a>';
             Display::display_normal_message($str,false);
         }
     }

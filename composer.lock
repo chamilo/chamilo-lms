@@ -7,12 +7,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chamilo/chash.git",
-                "reference": "0db81e2ad152355baca3d968f0af04cce147d510"
+                "reference": "9f95bd09119a7e696da383611693285aed1ef65a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chamilo/chash/zipball/0db81e2ad152355baca3d968f0af04cce147d510",
-                "reference": "0db81e2ad152355baca3d968f0af04cce147d510",
+                "url": "https://api.github.com/repos/chamilo/chash/zipball/9f95bd09119a7e696da383611693285aed1ef65a",
+                "reference": "9f95bd09119a7e696da383611693285aed1ef65a",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-03-28 10:43:52"
+            "time": "2013-03-28 15:28:21"
         },
         {
             "name": "dflydev/doctrine-orm-service-provider",

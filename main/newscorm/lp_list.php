@@ -10,11 +10,11 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 use \ChamiloSession as Session;
-
 $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
     header('location: lp_controller.php?action=list');
+    exit;
 }
 
 require_once '../inc/global.inc.php';
@@ -29,8 +29,7 @@ require_once 'learnpathItem.class.php';
  * Display initialisation and security checks
  */
 // Extra javascript functions for in html head:
-$htmlHeadXtra[] =
-    "<script>
+$htmlHeadXtra[] = "<script>
 function confirmation(name) {
     if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." \"+name+\"?\"))
         {return true;}
@@ -39,6 +38,7 @@ function confirmation(name) {
 }
 </script>";
 $nameTools = get_lang('LearningPaths');
+
 event_access_tool(TOOL_LEARNPATH);
 
 api_protect_course_script();
@@ -51,7 +51,9 @@ if (api_get_setting('search_enabled') == 'true') {
     require api_get_path(LIBRARY_PATH).'search/search_widget.php';
     search_widget_prepare($htmlHeadXtra);
 }
+
 Display::display_header($nameTools, 'Path');
+
 $current_session = api_get_session_id();
 
 /* Introduction section (editable by course admins) */
@@ -60,8 +62,7 @@ Display::display_introduction_section(TOOL_LEARNPATH, array(
     'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
     'CreateDocumentDir' => '../../courses/'.api_get_course_path().'/document/',
     'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
-    )
-);
+));
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -102,6 +103,7 @@ if ($is_allowed_to_edit) {
 }
 
 $token = Security::get_token();
+
 /* DISPLAY SCORM LIST */
 
 $categories_temp = learnpath::get_categories(api_get_course_int_id());

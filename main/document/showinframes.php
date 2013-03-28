@@ -30,17 +30,19 @@ require_once '../inc/global.inc.php';
 api_protect_course_script();
 
 $noPHP_SELF = true;
-$header_file = Security::remove_XSS($_GET['file']);
+$header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
 
 $course_info = api_get_course_info();
-$course_code = api_get_course_id(); 
+$course_code = api_get_course_id();
 
 if (empty($course_info)) {
     api_not_allowed(true);
 }
 
-//Generate path 
+$show_web_odf = false;
+
+//Generate path
 if (!$document_id) {
     $document_id = DocumentManager::get_document_id($course_info, $header_file);
 }
@@ -98,6 +100,7 @@ if (in_array(strtolower($pathinfo['extension']), $jplayer_supported_files)) {
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
 $current_group_name=$current_group['name'];
+$req_gid = null;
 
 if (isset($group_id) && $group_id != '') {
     $req_gid = '&amp;gidReq='.$group_id;
@@ -167,7 +170,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                       { load: [
                                                 {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
                                                 {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-                                                {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},                                                    
+                                                {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
                                                 {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                                                 {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
                                            ]
@@ -178,61 +181,60 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
-    $show_web_odf  = true;    
+    $show_web_odf  = true;
     $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
     $htmlHeadXtra[] = '
-    <script charset="utf-8">        
+    <script charset="utf-8">
         function init() {
                 var odfelement = document.getElementById("odf"),
                 odfcanvas = new odf.OdfCanvas(odfelement);
                 odfcanvas.load("'.$file_url_web.'");
         }
-        $(document).ready(function() {        
+        $(document).ready(function() {
             window.setTimeout(init, 0);
-        });        
+        });
   </script>';
 }
 
 $execute_iframe = true;
 
 if ($jplayer_supported) {
-    
+
     $extension = api_strtolower($pathinfo['extension']);
-    
+
     $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
     $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/blue/jplayer.blue.monday.css" type="text/css">';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
 
-    $jquery = ' $("#jquery_jplayer_1").jPlayer({                                
-                    ready: function() {                    
-                        $(this).jPlayer("setMedia", {                                        
-                            '.$extension.' : "'.$document_data['direct_url'].'"                                                                                  
+    $jquery = ' $("#jquery_jplayer_1").jPlayer({
+                    ready: function() {
+                        $(this).jPlayer("setMedia", {
+                            '.$extension.' : "'.$document_data['direct_url'].'"
                         });
-                    },                    
+                    },
                     errorAlerts: false,
                     warningAlerts: false,
                     //swfPath: "../inc/lib/javascript/jquery-jplayer",
                      swfPath: "'.$js_path.'jquery-jplayer",
                     //supplied: "m4a, oga, mp3, ogg, wav",
-                    supplied: "'.$extension.'",                        
+                    supplied: "'.$extension.'",
                     //wmode: "window",
-                    solution: "flash, html",  // Do not change this setting 
-                    cssSelectorAncestor: "#jp_container_1", 
+                    solution: "flash, html",  // Do not change this setting
+                    cssSelectorAncestor: "#jp_container_1",
                 });';
-    
+
     $htmlHeadXtra[] = '<script>
-        $(document).ready( function() {            
-            //Experimental changes to preview mp3, ogg files        
-            '.$jquery.'            
+        $(document).ready( function() {
+            //Experimental changes to preview mp3, ogg files
+            '.$jquery.'
         });
     </script>';
     $execute_iframe = false;
 }
-if ($show_web_odf) {      
+if ($show_web_odf) {
     $execute_iframe = false;
 }
-
 
 $is_freemind_available = $pathinfo['extension']=='mm' && api_get_setting('enable_freemind') == 'true';
 if ($is_freemind_available){
@@ -245,7 +247,7 @@ if ($is_nanogong_available){
 }
 
 if (!$jplayer_supported && $execute_iframe) {
-    
+
     $htmlHeadXtra[] = '<script type="text/javascript">
     <!--
         var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
@@ -254,7 +256,7 @@ if (!$jplayer_supported && $execute_iframe) {
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
     $htmlHeadXtra[] = '<script>
     <!--
-        var updateContentHeight = function() {            
+        var updateContentHeight = function() {
             my_iframe = document.getElementById("mainFrame");
             //this doesnt seem to work in IE 7,8,9
             new_height = my_iframe.contentWindow.document.body.scrollHeight;
@@ -278,28 +280,28 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$head
 
 if (!$is_nanogong_available) {
     if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
-        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';    
-    } else {    
-        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';     
+        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';
+    } else {
+        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
     }
 }
 
-if ($show_web_odf) {        
+if ($show_web_odf) {
     //echo Display::url(get_lang('Show'), api_get_path(WEB_CODE_PATH).'document/edit_odf.php?id='.$document_data['id'], array('class' => 'btn'));
-    echo '<div id="odf"></div>';    
+    echo '<div id="odf"></div>';
 }
 
 echo '</div>';
-    
-if ($jplayer_supported) { 
+
+if ($jplayer_supported) {
     echo '<br /><div class="span12" style="margin:0 auto; width:100%; text-align:center;">';
     echo DocumentManager::generate_video_preview($document_data);
-    echo '</div>';     
+    echo '</div>';
 }
 
 
 if ($is_freemind_available) {
-	?>	
+	?>
 	<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>swfobject/swfobject.js"></script>
 	<style type="text/css">
 		#flashcontent {
@@ -310,12 +312,12 @@ if ($is_freemind_available) {
 	<div id="flashcontent" onmouseover="giveFocus();">
 		 Flash plugin or Javascript are turned off.
 		 Activate both  and reload to view the mindmap
-	</div>		
-	<script>        
-        function giveFocus() { 
-		  document.visorFreeMind.focus();  
+	</div>
+	<script>
+        function giveFocus() {
+		  document.visorFreeMind.focus();
 		}
-        
+
 		document.onload=giveFocus;
 		// <![CDATA[
 		// for allowing using http://.....?mindmap.mm mode
@@ -347,7 +349,7 @@ if ($is_freemind_available) {
 		//
 		//extra
 		//fo.addVariable("CSSFile","<?php // echo api_get_path(WEB_LIBRARY_PATH); ?>freeMindFlashBrowser/flashfreemind.css");//
-		//fo.addVariable("baseImagePath","<?php // echo api_get_path(WEB_LIBRARY_PATH); ?>freeMindFlashBrowser/");//		
+		//fo.addVariable("baseImagePath","<?php // echo api_get_path(WEB_LIBRARY_PATH); ?>freeMindFlashBrowser/");//
 		//fo.addVariable("justMap","false");//Hides all the upper control options. Default value "false"
 		//fo.addVariable("noElipseMode","anyvalue");//for changing to old elipseNode edges. Default = not set
 		//fo.addVariable("ShotsWidth","200");//The width of snapshots, in pixels.
@@ -356,10 +358,10 @@ if ($is_freemind_available) {
 		//fo.addVariable("toolTipsBgColor","0xaaeeaa");: bgcolor for tooltips ej;"0xaaeeaa"
 		//fo.addVariable("defaultWordWrap","300"); //default 600
 		//
-		
+
 		fo.write("flashcontent");
 		// ]]>
-	</script>	
+	</script>
 	<?php
 }
 
@@ -383,37 +385,37 @@ if ($is_nanogong_available) {
 		}
 
 		//encript temp name file
-		$name_crip = sha1(uniqid());//encript 
+		$name_crip = sha1(uniqid());//encript
 		$findext= explode(".", $file);
 		$extension= $findext[count($findext)-1];
 		$file_crip=$name_crip.'.'.$extension;
-		
+
 		//copy file to temp/audio directory
 		$from_sys=$file_url_sys;
 		$to_sys=api_get_path(SYS_ARCHIVE_PATH).'temp/audio/'.$file_crip;
-        
+
         if (file_exists($from_sys)) {
             copy($from_sys, $to_sys);
         }
 
 		//get file from tmp directory
 		$to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
-        
+
         echo '<div align="center">';
         echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
         echo '<br/>';
         echo '<br/>';
-        
+
 		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
             echo '<param name="SoundFileURL" value="'.$to_url.'" />';
             echo '<param name="ShowSaveButton" value="false" />';
             echo '<param name="ShowTime" value="true" />';
             echo '<param name="ShowRecordButton" value="false" />';
         echo '</applet>';
-		
+
 		//erase temp file in tmp directory when return to documents
-		$_SESSION['temp_audio_nanogong']=$to_sys;      
-    echo '</div>';    
+		$_SESSION['temp_audio_nanogong']=$to_sys;
+    echo '</div>';
 }
 if ($execute_iframe) {
     echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';

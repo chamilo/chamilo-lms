@@ -414,7 +414,13 @@ $app->register(new ChamiloServiceProvider(), array());
 
 //Manage error messages
 $app->error(
+    //PDOException
+
     function (\Exception $e, $code) use ($app) {
+
+        if ( $e instanceof PDOException) {
+
+        }
         if ($app['debug']) {
             //return;
         }

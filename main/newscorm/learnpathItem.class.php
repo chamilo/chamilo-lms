@@ -677,9 +677,9 @@ class learnpathItem
             error_log('learnpathItem::get_max()', 0);
         }
         if ($this->type == 'sco') {
-            if (!empty($this->view_max_score) && $this->view_max_score > 0) {
+            if (isset($this->view_max_score) && !empty($this->view_max_score) && $this->view_max_score > 0) {
                 return $this->view_max_score;
-            } elseif ($this->view_max_score === '') {
+            } elseif (isset($this->view_max_score) && $this->view_max_score === '') {
                 return $this->view_max_score;
             } else {
                 if (!empty($this->max_score)) {

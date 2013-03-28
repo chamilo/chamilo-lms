@@ -20,6 +20,7 @@ if (isset($_GET['action'])) {
         $language_file[] = 'hotspot';
     }
 }
+
 $language_file[] = 'course_home';
 $language_file[] = 'scormdocument';
 $language_file[] = 'document';

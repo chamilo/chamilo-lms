@@ -36,15 +36,6 @@ class Display
         global $app;
         $app['classic_layout'] = true;
 
-        /*
-        self::$global_template = new Template($tool_name);
-        self::$global_template->set_help($help);
-        if (!empty(self::$preview_style)) {
-            self::$global_template->preview_theme = self::$preview_style;
-            self::$global_template->set_css_files();
-            self::$global_template->set_js_files();
-        }*/
-
         if ($app['allowed'] == true) {
             ob_start(array($app['template'], 'manage_display'));
         } else {
@@ -65,9 +56,6 @@ class Display
         $app['template.show_footer']    = false;
         $app['template.show_learnpath'] = $show_learnpath;
         self::display_header();
-
-        //self::$global_template          = new Template($tool_name);
-        //echo self::$global_template->show_header_template();
     }
 
     public static function display_no_header()
@@ -103,7 +91,6 @@ class Display
         ob_end_clean();
         $app['template']->assign('content', $out);
         $app->run();
-        //echo self::$global_template->show_footer_template();
     }
 
     public static function page()

@@ -267,6 +267,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                 ICON_SIZE_SMALL
             ).'</a>';
         }
+        $send_to = null;
 
         //Copy files to users myfiles
         if (api_get_setting('allow_social_tool') == 'true' && api_get_setting(
@@ -284,7 +285,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                     ICON_SIZE_SMALL
                 ).'&nbsp;&nbsp;</a>';
             }
-            $send_to = '';
+
             if ($filetype == 'file') {
                 $send_to = Portfolio::share('document', $document_data['id'], array('style' => 'float:right;'));
             }

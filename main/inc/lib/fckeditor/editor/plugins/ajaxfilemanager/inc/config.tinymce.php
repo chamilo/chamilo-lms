@@ -7,12 +7,6 @@
 	 *
 	 */
 
-
-error_reporting(E_ALL);
-//error_reporting(E_ALL ^ E_NOTICE);
-
-
-
 	//Access Control Setting
 	/**
 	 * turn off => false

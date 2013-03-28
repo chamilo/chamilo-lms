@@ -5291,6 +5291,18 @@ function api_get_tools_lists($my_tool = null) {
     return in_array($my_tool, $tools_list) ? $my_tool : '';
 }
 
+function api_get_tool_urls() {
+    return array(
+        TOOL_DOCUMENT => api_get_path(WEB_CODE_PATH).'document/document.php',
+        TOOL_QUIZ => api_get_path(WEB_CODE_PATH).'exercice/exercice.php',
+        TOOL_ANNOUNCEMENT => api_get_path(WEB_CODE_PATH).'announcements/announcements.php',
+        TOOL_CALENDAR_EVENT => api_get_path(WEB_CODE_PATH).'calendar/agenda.php',
+        TOOL_STUDENTPUBLICATION => api_get_path(WEB_CODE_PATH).'work/work.php',
+        TOOL_LEARNPATH => api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php'
+
+    );
+}
+
 /**
  * Checks whether we already approved the last version term and condition
  * @param int user id

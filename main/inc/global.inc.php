@@ -389,6 +389,7 @@ if (isset($_configuration['main_database'])) {
 }
 
 $app['is_admin'] = false;
+
 //Creating a Chamilo service provider
 use Silex\ServiceProviderInterface;
 
@@ -461,6 +462,7 @@ $app['template.load_plugins'] = true;
 
 //Default template style
 $app['template_style'] = 'default';
+
 //Default layout
 $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
@@ -803,58 +805,6 @@ if (is_array($language_files)) {
 
 /* End loading languages */
 
-//error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-error_reporting(-1);
-if (api_get_setting('server_type') == 'test') {
-    error_reporting(-1);
-} else {
-    /*
-    Server type is not test
-    - normal error reporting level
-    - full fake register globals block
-    */
-    //error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-    /*
-        // TODO: These obsolete variables $HTTP_* to be check whether they are actually used.
-        if (!isset($HTTP_GET_VARS)) {
-            $HTTP_GET_VARS = $_GET;
-        }
-        if (!isset($HTTP_POST_VARS)) {
-            $HTTP_POST_VARS = $_POST;
-        }
-        if (!isset($HTTP_POST_FILES)) {
-            $HTTP_POST_FILES = $_FILES;
-        }
-        if (!isset($HTTP_SESSION_VARS)) {
-            $HTTP_SESSION_VARS = $_SESSION;
-        }
-        if (!isset($HTTP_SERVER_VARS)) {
-            $HTTP_SERVER_VARS = $_SERVER;
-        }
-
-        // Register SESSION variables into $GLOBALS
-        if (sizeof($HTTP_SESSION_VARS)) {
-            if (!is_array($_SESSION)) {
-                $_SESSION = array();
-            }
-            foreach ($HTTP_SESSION_VARS as $key => $val) {
-                $_SESSION[$key] = $HTTP_SESSION_VARS[$key];
-                $GLOBALS[$key] = $HTTP_SESSION_VARS[$key];
-            }
-        }
-
-        // Register SERVER variables into $GLOBALS
-        if (sizeof($HTTP_SERVER_VARS)) {
-            $_SERVER = array();
-            foreach ($HTTP_SERVER_VARS as $key => $val) {
-                $_SERVER[$key] = $HTTP_SERVER_VARS[$key];
-                if (!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key != 'lang_path' && $key != 'extAuthSource' && $key != 'thisAuthSource' && $key != 'main_configuration_file_path' && $key != 'phpDigIncCn' && $key != 'drs') {
-                    $GLOBALS[$key] = $HTTP_SERVER_VARS[$key];
-                }
-            }
-        }*/
-}
-
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
@@ -980,6 +930,10 @@ $app['learnpath.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\LearnpathController();
 });
 
+$app['course_home.controller'] = $app->share(function () use ($app) {
+    return new ChamiloLMS\Controller\CourseHomeController();
+});
+
 /*
 class PostController
 {
@@ -1011,6 +965,10 @@ $app->get('/userportal', 'userportal.controller:indexAction');
 
 //Logout page
 $app->get('/logout', 'index.controller:logoutAction');
+
+
+$app->match('/courses/{courseCode}/index.php', 'course_home.controller:indexAction', 'GET|POST');
+$app->match('/courses/{courseCode}', 'course_home.controller:indexAction', 'GET|POST');
 
 //LP controller
 $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')->bind('subscribe_users');

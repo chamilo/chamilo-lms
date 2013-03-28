@@ -1,8 +1,6 @@
 <?php
 require_once dirname(__FILE__).'/../../main/inc/global.inc.php';
 
-error_reporting(-1);
-
 $config = new \Doctrine\ORM\Configuration();
 $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
 

@@ -114,8 +114,6 @@ function CreateServerFolder($folderPath, $lastFolder = null)
     }
 
     if (!file_exists($folderPath)) {
-        // Turn off all error reporting.
-        error_reporting(0);
 
         $php_errormsg = '';
         // Enable error tracking to catch the error.
@@ -167,7 +165,6 @@ function CreateServerFolder($folderPath, $lastFolder = null)
 
         // Restore the configurations.
         ini_restore('track_errors');
-        ini_restore('error_reporting');
 
         return $sErrorMsg;
     } else {

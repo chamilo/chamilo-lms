@@ -1261,7 +1261,9 @@ class Template
             // Custom tabs
             for ($i = 1; $i <= 3; $i++) {
                 if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true') {
-                    $navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+                    if (isset($possible_tabs['custom_tab_'.$i])) {
+                        $navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+                    }
                 } else {
                     if (isset($possible_tabs['custom_tab_'.$i])) {
                         $menu_navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];

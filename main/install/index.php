@@ -90,9 +90,6 @@ api_set_internationalization_default_encoding($charset);
 // Page encoding initialization.
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 
-// Setting the error reporting levels.
-error_reporting(E_ALL);
-
 // Overriding the timelimit (for large campusses that have to be migrated).
 @set_time_limit(0);
 

@@ -11,9 +11,6 @@
  * @since 31/December/2008
  */
 
-//error_reporting(E_ALL);
-//error_reporting(E_ALL ^ E_NOTICE);
-
 //Access Control Setting
 /**
 * turn off => false
@@ -45,7 +42,7 @@ if(empty($_course['path']) || Security::remove_XSS($_GET['editor'])=="stand_alon
 	define('CONFIG_OPTIONS_UPLOAD', true);
 	define('CONFIG_OPTIONS_EDITABLE', false); //disable image editor and text editor
 } else {
-	
+
 	if(api_is_allowed_to_edit()) {
 		//api_is_allowed_to_edit() from Chamilo
 		define('CONFIG_OPTIONS_DELETE', true);
@@ -141,12 +138,12 @@ define('CONFIG_EDITABLE_VALID_EXTS', 'txt,htm,html'); //make you include all the
 
 define('CONFIG_OVERWRITTEN', false); //overwirte when processing paste
 define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,jpeg,png,bmp,tif,psd,zip,sit,rar,gz,tar,htm,html,mov,mpg,avi,asf,mpeg,wmv,ogg,ogx,ogv,oga, aif,aiff,wav,mp3,swf,flv, mp4, aac, ppt,rtf,doc, pdf,xls,txt,flv,odt,ods,odp,odg,odc,odf,odb,odi,pps,docx,pptx,xlsx,accdb,xml,mid, midi, svg, svgz, mm');//Updated for Chamilo
-	
+
 //define viewable valid exts
 $viewable='gif,bmp,txt,jpg,jpeg,png,tif,html,htm,mp3,wav,wmv,wma,rm,rmvb,mov,swf,flv,mp4,aac,avi,mpg,mpeg,asf,mid,midi';//updated by Chamilo
 $viewable_array = explode(" ",$viewable);
 
-if (api_browser_support('svg')){				
+if (api_browser_support('svg')){
 	$viewable_array[]=',svg';
 }
 if (api_browser_support('ogg')){

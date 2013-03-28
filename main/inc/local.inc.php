@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  *
- *                             SCRIPT PURPOSE
+ *  SCRIPT PURPOSE
  *
  * This script initializes and manages Chamilo session information. It
  * keeps available session information up to date.
@@ -39,7 +39,6 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
     $uidReset=true;
     event_login();
 }
-
 
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
@@ -132,6 +131,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         require_once api_get_path(SYS_PATH).'main/auth/cas/authcas.php';
         $cas_login = cas_is_authenticated();
     }
+
     if ((isset($_POST['login']) AND isset($_POST['password']) ) OR ($cas_login))  {
 
         // $login && $password are given to log in
@@ -146,6 +146,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status FROM $user_table
                 WHERE username = '".Database::escape_string($login)."'";
+
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {

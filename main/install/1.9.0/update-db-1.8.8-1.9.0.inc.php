@@ -7,7 +7,7 @@
  * @package chamilo.install
  */
 
-$update = function($_configuration, $mainConnection, $dryRun, $output) {
+$update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     $mainConnection->beginTransaction();
 
@@ -36,16 +36,19 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
         $mapping_classes = array();
 
         if (Database::num_rows($result)) {
+            $output->writeln('Moving classes to usergroups ');
             while($row = iDatabase::fetch_array($result, 'ASSOC')) {
                 $old_id = $row['id'];
                 unset($row['id']);
                 unset($row['code']);
                 $new_user_group_id = Database::insert($new_table, $row);
-                $mapping_classes[$old_id] = $new_user_group_id;
-                if (is_numeric($id)) {
+
+                if (is_numeric($new_user_group_id)) {
+                    $mapping_classes[$old_id] = $new_user_group_id;
                     $classes_added ++;
                 }
             }
+            $output->writeln("Classes added: $classes_added");
         }
 
         $sql = "SELECT * FROM $dbNameForm.class_user";
@@ -53,12 +56,14 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
         $new_table = "$dbNameForm.usergroup_rel_user";
 
         if (Database::num_rows($result)) {
+            $output->writeln('Moving users from class_user to usergroup_rel_user ');
             while ($row = iDatabase::fetch_array($result, 'ASSOC')) {
                 $values = array(
                     'usergroup_id' => $mapping_classes[$row['class_id']],
                     'user_id' => $row['user_id']
                 );
-                iDatabase::insert($new_table, $values);
+                Database::insert($new_table, $values);
+                $output->writeln("Saving : ".implode(', ', $values));
             }
         }
 
@@ -68,6 +73,8 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
         $new_table = "$dbNameForm.usergroup_rel_course";
 
         if (Database::num_rows($result)) {
+            $output->writeln("Moving  course_rel_class to usergroup_rel_course");
+
             while ($row = iDatabase::fetch_array($result, 'ASSOC')) {
                 $course_code = $row['course_code'];
                 $course_code = addslashes($course_code);
@@ -79,10 +86,10 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
                     'usergroup_id' => $mapping_classes[$row['class_id']],
                     'course_id' => $course_id
                 );
-                iDatabase::insert($new_table, $values);
+                Database::insert($new_table, $values);
+                $output->writeln("Saving : ".implode(', ', $values));
             }
         }
-        $app['monolog']->addInfo("#classes added $classes_added");
     }
 
     //Moving Stats DB to the main DB
@@ -117,7 +124,8 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
         iDatabase::select_db($dbStatsForm);
         foreach ($stats_table as $stat_table) {
             $sql = "ALTER TABLE $dbStatsForm.$stat_table RENAME $dbNameForm.$stat_table";
-            iDatabase::query($sql);
+            Database::query($sql);
+            $output->writeln($sql);
         }
         iDatabase::select_db($dbNameForm);
     }
@@ -135,6 +143,7 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
         foreach ($users_tables as $table) {
             $sql = "ALTER TABLE $dbUserForm.$table RENAME $dbNameForm.$table";
             iDatabase::query($sql);
+            $output->writeln($sql);
         }
         iDatabase::select_db($dbNameForm);
     }
@@ -151,10 +160,12 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
     if ($has_user_id && !$has_entry) {
         $sql = "INSERT INTO access_url_rel_user VALUES(1, 1)";
         iDatabase::query($sql);
+        $output->writeln($sql);
     }
-
+    $output->writeln("Dropping c_* tables ...");
     $this->dropCourseTables();
 
+    $output->writeln("Creating c_* tables ...");
     $this->createCourseTables($output);
 
     $prefix = '';
@@ -179,13 +190,13 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
             $i++;
         }
 
+        $output->writeln("Moving old tables into the new structure");
+
         foreach ($list as $row_course) {
             if (!$singleDbForm) {
                 // otherwise just use the main one
                 iDatabase::select_db($row_course['db_name']);
             }
-            $app['monolog']->addInfo('Course db ' . $row_course['db_name']);
-
 
             if (!$singleDbForm) {
                 // otherwise just use the main one
@@ -285,9 +296,9 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
                 'wiki_mailcue'
             );
 
-            $app['monolog']->addInfo('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
+            $output->writeln('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
 
-            $count = $old_count = 0;
+            $old_count = 0;
             foreach ($table_list as $table) {
                 $just_table_name = $table;
                 $old_table = $row_course['db_name'].".".$table;
@@ -296,6 +307,8 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
                     $old_table = "$prefix{$row_course['db_name']}_".$table;
                     $just_table_name = "$prefix{$row_course['db_name']}_".$table;
                 }
+
+                //$output->writeln('Loading table '.$old_table);
 
                 $course_id = $row_course['id'];
                 $new_table = DB_COURSE_PREFIX.$table;
@@ -323,10 +336,10 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
                         $row = iDatabase::fetch_row($result);
                         $old_count = $row[0];
                     } else {
-                        $app['monolog']->addError("Count(*) in table $old_table failed");
+                        $output->writeln("Count(*) in table $old_table failed");
                     }
 
-                    $app['monolog']->addInfo("# rows in $old_table: $old_count");
+                    //$output->writeln("$old_count rows found in $old_table ");
 
                     $sql = "SELECT * FROM $old_table";
                     $result = iDatabase::query($sql);
@@ -346,23 +359,26 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
                         }
                     }
 
-                    $app['monolog']->addInfo("#rows inserted in $new_table: $count");
+                    $output->writeln("$count/$old_count rows inserted in $new_table");
 
                     if ($old_count != $count) {
-                        $app['monolog']->addError("ERROR count of new and old table doesn't match: $old_count - $new_table");
-                        $app['monolog']->addError("Check the results: ");
-                        $app['monolog']->addError(print_r($errors, 1));
-                        error_log(print_r($errors, 1));
+                        $output->writeln("ERROR count of new and old table doesn't match: $old_count - $new_table");
+                        $output->writeln("Check the results: ");
+                        $output->writeln(print_r($errors, 1));
                     }
                 } else {
-                    $app['monolog']->addError("Seems that the table $old_table doesn't exists ");
+                    $output->writeln("Seems that the table $old_table doesn't exists ");
                 }
             }
-            $app['monolog']->addInfo('<<<------- end  -------->>');
+            $output->writeln('<<<------- end  -------->>');
         }
+
+        $output->writeln("End course migration");
 
 
         /* Start work fix */
+
+        $output->writeln("Starting work fix");
 
         /* Fixes the work subfolder and work with no parent issues */
 
@@ -377,7 +393,7 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
         $user_id = 1;
 
         foreach ($courseList as $course) {
-            $courseId = $course['real_id'];
+            $courseId = $course['id']; //int id
 
             //1. Searching for works with no parents
             $sql 	= "SELECT * FROM $work_table WHERE parent_id = 0 AND filetype ='file' AND c_id = $courseId ";
@@ -472,7 +488,14 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
                 }
             }
         }
-        /*  End of work fix  */
+
+        $output->writeln("End work fix");
+
+        //Remove dn_name
+        /*$query = "UPDATE course SET db_name = ''";
+        $mainConnection->executeQuery($query);*/
+
+        $mainConnection->commit();
     }
 };
 

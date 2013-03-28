@@ -116,7 +116,7 @@ $_configuration['dokeos_stable'] = $_configuration['system_stable'];
 $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 
 $app['configuration_file'] = $configurationFilePath;
-$app['configuration_yml_file'] = $configurationYML;
+$app['configuration_yml_file'] = $configurationYMLFile;
 $app['configuration'] = $_configuration;
 $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;

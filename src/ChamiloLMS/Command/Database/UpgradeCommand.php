@@ -28,7 +28,8 @@ class UpgradeCommand extends CommonCommand
             ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null)
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute the migration as a dry run.')
             ->addOption('configuration', null, InputOption::VALUE_OPTIONAL, 'The path to a migrations configuration file.')
-            ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the chamilo folder');
+            ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the chamilo folder')
+            ->addOption('force', null, InputOption::VALUE_NONE, 'Force the update. Only for tests');
     }
 
     /**
@@ -155,6 +156,7 @@ class UpgradeCommand extends CommonCommand
         $path = $input->getOption('path');
         $version = $input->getArgument('version');
         $dryRun = $input->getOption('dry-run');
+        $force = $input->getOption('force');
 
         $_configuration = $this->getHelper('configuration')->getConfiguration();
 
@@ -277,9 +279,6 @@ class UpgradeCommand extends CommonCommand
                     $this->startMigration($oldVersion, $versionItem, $dryRun, $output);
                     $oldVersion = $versionItem;
                     $output->writeln("----------------------------------------------------------------");
-
-                    //Cleaning query list
-                    $this->queryList = array();
                 } else {
                     $output->writeln("<comment>Version <info>'$versionItem'</info> does not need a DB migration</comment>");
                 }
@@ -314,20 +313,25 @@ class UpgradeCommand extends CommonCommand
 
         $mainConnection = $this->getHelper('main_database')->getConnection();
 
+        //Cleaning query list
+        $this->queryList = array();
+
         //Filling sqlList array with "pre" db changes
         if (isset($versionInfo['pre']) && !empty($versionInfo['pre'])) {
             $sqlToInstall = $installPath.$versionInfo['pre'];
-            $this->fillQueryList($sqlToInstall, $output);
+            $this->fillQueryList($sqlToInstall, $output, 'pre');
+
+            //Processing sql query list depending of the section
+            $result = $this->processQueryList($output, $toVersion, $dryRun, 'pre');
         }
 
         //Filling sqlList array with "post" db changes
         if (isset($versionInfo['post']) && !empty($versionInfo['post'])) {
             $sqlToInstall = $installPath.$versionInfo['post'];
-            $this->fillQueryList($sqlToInstall, $output);
+            $this->fillQueryList($sqlToInstall, $output, 'post');
+            //Processing sql query list depending of the section
+            $result = $this->processQueryList($output, $toVersion, $dryRun, 'post');
         }
-
-        //Processing sql query list depending of the section
-        $result = $this->processQueryList($output, $toVersion, $dryRun);
 
         //Processing "db" changes
         if (isset($versionInfo['update_db']) && !empty($versionInfo['update_db'])) {
@@ -335,7 +339,7 @@ class UpgradeCommand extends CommonCommand
             if (is_file($sqlToInstall) && file_exists($sqlToInstall)) {
                 $output->writeln("<comment>Executing update db: <info>'$sqlToInstall'</info>");
                 require $sqlToInstall;
-                $update($_configuration, $mainConnection, $dryRun, $output);
+                $update($_configuration, $mainConnection, $dryRun, $output, $app);
             }
         }
 
@@ -347,9 +351,6 @@ class UpgradeCommand extends CommonCommand
                 require $sqlToInstall;
             }
         }
-
-        //$result = $this->processSQL($sqlToInstall, $dryRun, $output);
-        //$result = true;
 
         $output->writeln('');
         $output->writeln("<comment>You have to select yes for the 'Chamilo Migrations'<comment>");
@@ -374,6 +375,13 @@ class UpgradeCommand extends CommonCommand
         return false;
     }
 
+    public function getMigrationTypes() {
+        return array(
+            'pre',
+            'post'
+        );
+    }
+
     /**
      *
      * Process the queryList array and executes queries to the correct section (main, user, course, etc)
@@ -384,14 +392,12 @@ class UpgradeCommand extends CommonCommand
      * @return bool
      * @throws \Exception
      */
-    public function processQueryList($output, $version, $dryRun)
+    public function processQueryList($output, $version, $dryRun, $type)
     {
-        $databases = $this->getDatabaseList($version);
+        $databases = $this->getDatabaseList($version, $type);
 
         foreach ($databases as $section => &$dbList) {
-
             foreach ($dbList as &$dbInfo) {
-
                 $output->writeln("");
                 $output->writeln("<comment>Loading section:</comment><info> $section</info> <comment>with database </comment><info>".$dbInfo['database']."</info>");
                 $output->writeln("--------------------------");
@@ -401,9 +407,9 @@ class UpgradeCommand extends CommonCommand
                     continue;
                 }
 
-                if (isset($this->queryList[$section]) && !empty($this->queryList[$section])) {
+                if (isset($this->queryList[$type]) && isset($this->queryList[$type][$section]) && !empty($this->queryList[$type][$section])) {
+                    $queryList = $this->queryList[$type][$section];
 
-                    $queryList = $this->queryList[$section];
                     try {
                         $lines = 0;
                         $conn = $this->getHelper($dbInfo['database'])->getConnection();
@@ -420,12 +426,11 @@ class UpgradeCommand extends CommonCommand
                             $lines++;
                         }
 
-                        $conn->commit();
-
                         if (!$dryRun) {
+                            $conn->commit();
                             $output->writeln(sprintf('%d statements executed!', $lines) . PHP_EOL);
                             $dbInfo['status'] = 'complete';
-                            $this->saveDatabaseList($databases, $version);
+                            $this->saveDatabaseList($databases, $version, $type);
                         }
                     } catch (\Exception $e) {
                         $conn->rollback();
@@ -438,7 +443,9 @@ class UpgradeCommand extends CommonCommand
                     return false;
                 }
             }
+
         }
+        $this->queryList = array();
 
         return true;
     }
@@ -446,16 +453,17 @@ class UpgradeCommand extends CommonCommand
     /**
      * @param string $sqlFilePath
      * @param $output
+     * @param string type
      */
-    public function fillQueryList($sqlFilePath, $output)
+    public function fillQueryList($sqlFilePath, $output, $type)
     {
         if (is_file($sqlFilePath) && file_exists($sqlFilePath)) {
-            $output->writeln(sprintf("Processing file '<info>%s</info>'... ", $sqlFilePath));
+            $output->writeln(sprintf("Processing file type:$type '<info>%s</info>'... ", $sqlFilePath));
             $sections = $this->getSections();
 
             foreach ($sections as $section) {
                 $sqlList = $this->getSQLContents($sqlFilePath, $section);
-                $this->setQueryList($sqlList, $section);
+                $this->setQueryList($sqlList, $section, $type);
             }
         } else {
             $output->writeln(sprintf("File does not exists: '<info>%s</info>'... ", $sqlFilePath));
@@ -498,12 +506,12 @@ class UpgradeCommand extends CommonCommand
      * @param $queryList
      * @param $section
      */
-    public function setQueryList($queryList, $section)
+    public function setQueryList($queryList, $section, $type)
     {
-        if (!isset($this->queryList[$section])) {
-            $this->queryList[$section] = $queryList;
+        if (!isset($this->queryList[$type][$section])) {
+            $this->queryList[$type][$section] = $queryList;
         } else {
-            $this->queryList[$section] = array_merge($this->queryList[$section], $queryList);
+            $this->queryList[$type][$section] = array_merge($this->queryList[$type][$section], $queryList);
         }
     }
 
@@ -588,10 +596,10 @@ class UpgradeCommand extends CommonCommand
      *
      * @return mixed|void
      */
-    public function getDatabaseList($version)
+    public function getDatabaseList($version, $type)
     {
         $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
-        $newConfigurationFile = $configurationPath.'db_migration_status_'.$version.'.yml';
+        $newConfigurationFile = $configurationPath.'db_migration_status_'.$version.'_'.$type.'.yml';
 
         if (file_exists($newConfigurationFile)) {
             $yaml = new Parser();
@@ -609,12 +617,12 @@ class UpgradeCommand extends CommonCommand
      *
      * @return bool
      */
-    public function saveDatabaseList($databaseSection, $version)
+    public function saveDatabaseList($databaseSection, $version, $type)
     {
         $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
         $dumper = new Dumper();
         $yaml = $dumper->dump($databaseSection, 2); //inline
-        $newConfigurationFile = $configurationPath.'db_migration_status_'.$version.'.yml';
+        $newConfigurationFile = $configurationPath.'db_migration_status_'.$version.'_'.$type.'.yml';
         file_put_contents($newConfigurationFile, $yaml);
 
         return file_exists($newConfigurationFile);
@@ -626,9 +634,9 @@ class UpgradeCommand extends CommonCommand
      *
      * @return mixed
      */
-    public function getDatabasesPerSection($section, $version)
+    public function getDatabasesPerSection($section, $version, $type)
     {
-        $databases = $this->getDatabaseList($version);
+        $databases = $this->getDatabaseList($version, $type);
         if (isset($databases[$section])) {
             return $databases[$section];
         }

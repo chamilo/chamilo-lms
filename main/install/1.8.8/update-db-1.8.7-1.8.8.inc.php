@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$update = function($_configuration, $mainConnection, $dryRun, $output) {
+$update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     $mainConnection->beginTransaction();
     $singleDbForm = false;

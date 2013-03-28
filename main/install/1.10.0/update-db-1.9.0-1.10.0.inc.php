@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$update = function($_configuration, $mainConnection, $dryRun, $output) {
+$update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     $mainConnection->beginTransaction();
 
@@ -93,5 +93,11 @@ $update = function($_configuration, $mainConnection, $dryRun, $output) {
         $mainConnection->executeQuery($ins);
         $order++;
     }
-    $mainConnection->commit();
+
+
+
+
+    if (!$dryRun) {
+        $mainConnection->commit();
+    }
 };

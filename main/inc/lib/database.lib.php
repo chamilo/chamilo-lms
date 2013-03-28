@@ -1110,8 +1110,10 @@ class Database
      */
     private static function format_table_name($database, $table)
     {
-        global $_configuration;
-        $glue = isset($_configuration['db_glue']) ? $_configuration['db_glue'] : null;
+        //global $_configuration;
+        //$glue = isset($_configuration['db_glue']) ? $_configuration['db_glue'] : null;
+        //$_configuration['db_glue'] should not be an option
+        $glue = '`.`';
         $table_name = '`'.$database.$glue.$table.'`';
         return $table_name;
     }

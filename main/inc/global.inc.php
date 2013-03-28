@@ -29,10 +29,10 @@ $includePath = dirname(__FILE__);
 
 // Include the main Chamilo platform configuration file.
 $configurationFilePath = $includePath.'/conf/configuration.php';
-$configurationYML = $includePath.'/conf/configuration.yml';
+$configurationYMLFile = $includePath.'/conf/configuration.yml';
 
 $alreadyInstalled = false;
-if (file_exists($configurationFilePath) || file_exists($configurationYML)) {
+if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)) {
     if (file_exists($configurationFilePath)) {
         require_once $configurationFilePath;
     }
@@ -84,9 +84,14 @@ use Symfony\Component\Yaml\Parser;
 $app = new Application();
 
 //Overwriting $_configuration
-if (file_exists($configurationYML)) {
+if (file_exists($configurationYMLFile)) {
     $yaml = new Parser();
-    $_configuration = $yaml->parse(file_get_contents($configurationYML));
+    $configurationYML = $yaml->parse(file_get_contents($configurationYMLFile));
+    if (isset($_configuration)) {
+        $_configuration = array_merge($_configuration, $configurationYML);
+    } else {
+        $_configuration = $configurationYML;
+    }
 }
 
 // Ensure that _configuration is in the global scope before loading
@@ -233,7 +238,6 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
 
 // Classic way of render pages or the Controller approach
 $app['classic_layout'] = false;
-
 $app['breadcrumb'] = array();
 
 //Form provider
@@ -318,8 +322,6 @@ $app['twig'] = $app->share(
 
 //URL generator provider
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-
-
 
 //Monolog and web profiler only available if cache is writable
 if (is_writable($app['cache.path'])) {
@@ -557,7 +559,7 @@ api_set_internationalization_default_encoding($charset);
 //@todo use silex session provider instead of a custom class
 Chamilo::session()->start($alreadyInstalled);
 
-//@todo move this inside the before filter
+//Loading chamilo settings
 if ($alreadyInstalled && $checkConnection) {
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
 
@@ -634,7 +636,7 @@ if ($alreadyInstalled && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) 
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
-/*	Loading languages */
+/*	Loading languages and sublanguages */
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
@@ -850,24 +852,22 @@ if (api_get_setting('server_type') == 'test') {
         }*/
 }
 
-//error_reporting(-1);
+// Specification for usernames:
+// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+// 2. Empty username is formally valid, but it is reserved for the anonymous user.
+// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+$default_username_length = 40;
+if (api_get_setting('login_is_email') == 'true') {
+    $default_username_length = 100;
+}
+
+define('USERNAME_MAX_LENGTH', $default_username_length);
 
 //Silex filters: before|after|finish
 
 $app->before(
     function () use ($app, $checkConnection) {
-
-        // Specification for usernames:
-        // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-        // 2. Empty username is formally valid, but it is reserved for the anonymous user.
-        // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-
-        $default_username_length = 40;
-        if (api_get_setting('login_is_email') == 'true') {
-            $default_username_length = 100;
-        }
-
-        define('USERNAME_MAX_LENGTH', $default_username_length);
 
         if (!file_exists($app['configuration_file']) && !file_exists($app['configuration_yml_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
@@ -956,6 +956,8 @@ if (empty($default_quota)) {
 
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
+//Controller as services definitions
+
 $app['pages.controller'] = $app->share(function () use ($app) {
     return new PagesController($app['pages.repository']);
 });
@@ -1004,7 +1006,7 @@ $app->get('/index', 'index.controller:indexAction')->bind('index');
 //user_portal.php
 $app->get('/userportal', 'userportal.controller:indexAction');
 
-//Logout
+//Logout page
 $app->get('/logout', 'index.controller:logoutAction');
 
 //LP controller

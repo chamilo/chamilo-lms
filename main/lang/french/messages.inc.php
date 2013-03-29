@@ -36,5 +36,7 @@ $WriteAMessage = "Écrire un message";
 $AlreadyReadMessage = "Message déjà lu";
 $UnReadMessage = "Message non lu";
 $MessageSent = "Message envoyé";
+$MailMarkSelectedAsUnread = "Marquer comme non lu";
+$MailMarkSelectedAsRead = "Marquer comme lu";
 $YouShouldWriteAMessage = "Vous devriez écrire un message";
 ?>

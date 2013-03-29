@@ -166,4 +166,5 @@ $YourScore = "Twój wynik";
 $Results = "Wyniki";
 $AttemptVCCLong = "Twoj test %s zostal sprawdzony/skomentowany/poprawiony przez nauczyciela. Kliknij ponizszy link aby dostac sie na swoj profil i zobaczyc test egzaminacyjny.";
 $ValidateAnswer = "Sprawdź odpowiedzi";
+$EndTest = "Test końcowy";
 ?>

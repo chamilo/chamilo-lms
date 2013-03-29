@@ -36,4 +36,5 @@ $WriteAMessage = "Escrever uma mensagem";
 $AlreadyReadMessage = "Mensagem já lida";
 $UnReadMessage = "Mensagem por ler";
 $MessageSent = "Mensagem enviada";
+$YouShouldWriteAMessage = "Deve escrever uma mensagem";
 ?>

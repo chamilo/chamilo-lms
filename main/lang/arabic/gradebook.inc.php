@@ -2,10 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ModifyEvaluation = "حفظ الاختبار";
+$CreateLink = "أضف نشاط التعلم هذا الى الاختبار";
 $FlatView = "عرض مسطح";
 $ScoreEdit = "نشرة قواعد الدرجات";
 $ScoreColor = "لون الدرجات";
-$ScoringSystem = "نظام التسجيل";
+$ScoringSystem = "وضع المهارات في مراتب";
 $EnableScoreColor = "تمكين تلوين الدرجات";
 $Below = "أدناه";
 $WillColorRed = "سوف تظهر باللون الأحمر";
@@ -48,4 +50,5 @@ $FilterCategory = "ترشيح فئة";
 $DeleteAll = "حذف الكل";
 $ScoringUpdated = "تم تعديل التسجيل";
 $CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s تشهد بأن\n\n %s \nأنهى بنجاح المقرر \n\n '%s' \n\nبدرجة  of\n\n '%s'";
+$FileType = "نوع الملف";
 ?>

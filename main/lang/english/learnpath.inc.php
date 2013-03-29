@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ViewModeImpress = "Current view mode: Impress";
 $NewForumCreated = "A new forum has now been created";
 $NewThreadCreated = "A new forum thread has now been created";
 $AddHotpotatoes = "Add hotpotatoes";
@@ -46,7 +47,7 @@ $langLearnpathVersion = "version";
 $langLearnpathRestarted = "No learning object is completed.";
 $langLearnpathNoNext = "This is the last learning object.";
 $langLearnpathNoPrev = "This is the first learning object.";
-$LearnpathAddLearnpath = "Create new course (Chamilo AUTHOR)";
+$LearnpathAddLearnpath = "Create new learning path";
 $lang_learnpath_added = "The course was created. Add sections and learning objects to build the course.";
 $LearnpathEditLearnpath = "Edit learnpath";
 $LearnpathDeleteLearnpath = "Delete course";

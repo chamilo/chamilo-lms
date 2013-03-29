@@ -86,5 +86,9 @@ Sempre podreu trobar més informació en quant aquest programari al nostre lloc 
 
 Divertiu-vos, no dubteu en unir-vos a la comunitat i doneu-vos la vostra opinió a través del nostre <a href=\"http://www.chamilo.org/forum\">fòrum</a>.";
 $Username = "Nom d'usuari";
+$GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Endavant, aneu al catàleg de cursos %s per inscriure's a un curs que li interessi. Un cop inscrit/a, el curs apareixerà %s, en lloc d'aquest missatge.";
+$HelloXAsYouCanSeeYourCourseListIsEmpty = "Hola %s, li donem la benvinguda,
+Com pot veure, la seva llista de cursos encara està buida. Això és perquè encara no esteu inscrits a cap curs!";
+$PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Doni'ns una mica de temps per subscriure's a un dels nostres cursos. Si considera que l'oblidem, posi's en contacte amb els administradors del portal. Pot trobar les seves dades de contacte al peu de pàgina.";
 $Profile = "Perfil";
 ?>

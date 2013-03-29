@@ -105,4 +105,13 @@ $CreateCourse = "Criar um curso";
 $Create = "Criar";
 $MessageOfNewCourseToAdmin = "Esta mensagem é para informar que foi criado um novo curso na plataforma";
 $NewCourseCreatedIn = "Ñovo curso criado em";
+$ExplicationTrainers = "Por enquanto, você é o professor. Pode modificar esta opção através das opções de configuração do curso";
+$Objectives = "Objetivos";
+$TargetAudience = "Público alvo";
+$YouHaveToAcceptTermsAndConditions = "Tem que aceitar os nossos Termos e Condições para requerer um nova formação.";
+$CourseRequestCreated = "O seu pedido para um novo curso foi enviado com sucesso. Pode receber uma resposta brevemente, dentro de um  ou dois dias.";
+$CreateThisCourseRequest = "Criar este pedido de curso";
+$CourseRequestDate = "Pedir data";
+$AcceptThisCourseRequest = "Aceitar este curso";
+$ANewCourseWillBeCreated = "Um novo curso %s irá ser criado. Podemos continuar ?";
 ?>

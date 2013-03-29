@@ -10,4 +10,5 @@ $langCouldNotSendPage = "Ten plik nie jest plikiem formatu HTML i nie mo&#380;e 
 $langSendPage = "Strona do wysłania";
 $langPageTitleModified = "Tytuł strony został zmodyfikowany";
 $langPageAdded = "Strona dodana";
+$Choose = "Wybierz";
 ?>

@@ -177,6 +177,7 @@ $EnterEmailUserAndWellSendYouPassword = "Introdueixi l'usuari i l'adreça de cor
 $NoUserAccountWithThisEmailAddress = "No existeix un compte amb aquest usuari i/o adreça de correu electrònic";
 $CouldNotResetPassword = "No podeu restablir la contrasenya";
 $WithTheFollowingSettings = "amb els paràmetres següents:";
+$UnsubscribeUsersAlreadyAddedInCourse = "Dóna de baixa els usuaris ja inscrits";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "El seu compte a %s ha estat aprovat per un dels nostres administradors.";
 $HaveFun = "Divertiu-vos,";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ara podeu autenticar-se a % utilitzant el nom d'usuari i contrasenya que li han estat facilitats";

@@ -47,9 +47,6 @@ class Template
 
         $this->navigation_array = $this->returnNavigationArray();
 
-//      $this->app['template_style'] = 'default';
-//        $this->app['default_layout'] = $this->app['template_style'].'/layout/layout_1_col.tpl';
-
         $show_header = $app['template.show_header'];
         $show_footer = $app['template.show_footer'];
         $show_learnpath = $app['template.show_learnpath'];
@@ -76,6 +73,7 @@ class Template
 
         //header and footer are showed by default
         $this->setFooter($show_footer);
+
         $this->setHeader($show_header);
 
         $this->setHeaderParameters();
@@ -116,32 +114,6 @@ class Template
     }
 
     /**
-     * Return the item's url key:
-     *
-     *      c_id=xx&id=xx
-     *
-     * @param object $item
-     * @return string
-     */
-    public static function key($item)
-    {
-        $id = isset($item->id) ? $item->id : null;
-        $c_id = isset($item->c_id) ? $item->c_id : null;
-        $result = '';
-        if ($c_id) {
-            $result = "c_id=$c_id";
-        }
-        if ($id) {
-            if ($result) {
-                $result .= "&amp;id=$id";
-            } else {
-                $result .= "&amp;id=$id";
-            }
-        }
-        return $result;
-    }
-
-    /**
      * @param string $help_input
      */
     public function set_help($help_input = null)
@@ -151,20 +123,7 @@ class Template
         } else {
             $help = $this->help;
         }
-
-        $help_content = '';
-        if (api_get_setting('enable_help_link') == 'true') {
-            if (!empty($help)) {
-                $help = Security::remove_XSS($help);
-                $help_content = '<li class="help">';
-                $help_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600" class="ajax" title="'.get_lang('Help').'">';
-                $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang(
-                    'Help'
-                ).'" title="'.get_lang('Help').'" />';
-                $help_content .= '</a></li>';
-            }
-        }
-        $this->assign('help_content', $help_content);
+        $this->assign('help_content', $help);
     }
 
     /*
@@ -305,6 +264,7 @@ class Template
             if (api_is_platform_admin()) {
                 $user_info['is_admin'] = 1;
             }
+
             $new_messages = MessageManager::get_new_messages();
             $user_info['messages_count'] = $new_messages != 0 ? Display::label($new_messages, 'warning') : null;
             $messages_invitations_count = GroupPortalManager::get_groups_by_user_count(
@@ -364,24 +324,26 @@ class Template
             $this->theme = $this->preview_theme;
         }
 
+        $cssPath = api_get_path(WEB_CSS_PATH);
+
         //Base CSS
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
+        $css[] = api_get_cdn_path($cssPath.'base.css');
         //Compressed version of default + all CSS files
         //$css[] = api_get_cdn_path(api_get_path(WEB_PATH).'web/css/'.$this->theme.'/style.css');
 
         //Default theme CSS
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'font_awesome/font-awesome.css');
+        $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
+        $css[] = api_get_cdn_path($cssPath.'bootstrap-responsive.css');
+        $css[] = api_get_cdn_path($cssPath.'responsive.css');
+        $css[] = api_get_cdn_path($cssPath.'font_awesome/font-awesome.css');
 
         //Extra CSS files
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
         if ($this->show_learnpath) {
-            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
-            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/scorm.css';
+            $css[] = $cssPath.$this->theme.'/learnpath.css';
+            $css[] = $cssPath.$this->theme.'/scorm.css';
         }
 
         if (api_is_global_chat_enabled()) {
@@ -421,7 +383,7 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('css_file_to_string', $css_file_to_string);
 
-            $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'), 'print');
+            $style_print = api_get_css(api_get_cdn_path($cssPath.$this->theme.'/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
 
@@ -589,18 +551,6 @@ class Template
         $this->assign('favico', $favico);
 
         $this->set_help();
-
-        //@todo move this in the template
-        $bug_notification_link = '';
-        if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
-            $bug_notification_link = '<li class="report">
-		        						<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
-		        						<img src="'.api_get_path(WEB_IMG_PATH).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang(
-                'ReportABug'
-            ).'"/></a>
-		    						  </li>';
-        }
-        $this->assign('bug_notification_link', $bug_notification_link);
 
         $notification = $this->return_notification_menu();
         $this->assign('notification_menu', $notification);
@@ -794,8 +744,7 @@ class Template
 
         // Displaying the tabs
 
-        $lang = ''; //el for "Edit Language"
-        //$user_language_choice = Session::get('user_language_choice');
+        $lang = null; //el for "Edit Language"
         $user_language_choice = isset($_SESSION['user_language_choice']) ? $_SESSION['user_language_choice'] : null;
         $user_info = api_get_user_id() ? api_get_user_info() : null;
 
@@ -1287,7 +1236,6 @@ class Template
         $user_id = api_get_user_id();
         $course_id = api_get_course_id();
 
-
         /*  Plugins for banner section */
         $web_course_path = api_get_path(WEB_COURSE_PATH);
 
@@ -1426,8 +1374,6 @@ class Template
         if (!empty($final_navigation)) {
             $lis = '';
             $i = 0;
-            //$home_link = Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home'));
-            //$lis.= Display::tag('li', Display::url(get_lang('Homepage').'<span class="divider">/</span>', api_get_path(WEB_PATH)));
             $final_navigation_count = count($final_navigation);
 
             if (!empty($final_navigation)) {

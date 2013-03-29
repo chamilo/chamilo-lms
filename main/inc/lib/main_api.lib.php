@@ -3461,8 +3461,15 @@ function api_display_language_form($hide_if_no_choice = false) {
  *  array['folder'] = An array with the corresponding names of the language-folders in the filesystem
  */
 function api_get_languages() {
+    global $app;
+
+    if (isset($app['api_get_languages'])) {
+        return $app['api_get_languages'];
+    }
+
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
+
     $result = Database::query($sql);
     $language_list = array();
     while ($row = Database::fetch_array($result)) {

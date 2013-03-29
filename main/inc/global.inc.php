@@ -635,11 +635,12 @@ if ($alreadyInstalled && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) 
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
+$app['api_get_languages'] = api_get_languages();
+
 /*	Loading languages and sublanguages */
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
-$user_language = api_get_user_language();
 
 // Include all files (first english and then current interface language)
 $app['this_script'] = isset($this_script) ? $this_script : null;

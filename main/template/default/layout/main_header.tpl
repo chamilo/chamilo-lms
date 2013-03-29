@@ -17,10 +17,26 @@
         </ul>
     </div>
     <div id="wrapper">
+
         {# Bug and help notifications #}
+
         <ul id="navigation" class="notification-panel">
-            {{ help_content }}
-            {{ bug_notification_link }}
+
+            {% if ("enable_help_link" | get_setting) == 'true' %}
+                <li class="help">
+                    <a href="{{ _p.web_img }}help/help.php?open={{ help_content }}&height=400&width=600" class="ajax" title="{{ "help"|get_lang }}">
+                        <img src="{{ _p.web_img }}help.large.png" alt="{{ "help"|get_lang }}" title="{{ "help"|get_lang }}" />
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if ("show_link_bug_notification" | get_setting) == 'true' and _u.logged != 0 %}
+            <li class="report">
+                <a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
+                    <img src="{{ _p.web_img }}bug.large.png" style="vertical-align: middle;" alt="{{ "ReportABug"|get_lang }}" title="{{ "ReportABug"|get_lang }}"/>
+                </a>
+            </li>
+            {% endif %}
         </ul>
 
         {# topbar #}

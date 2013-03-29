@@ -1907,6 +1907,7 @@ class CourseManager {
                 ON tcfv.field_id =  tcf.id $join_access_url
                 WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1  $where_access_url";
         $special_course_result = Database::query($sql);
+
         $special_course_list = array();
 
         if (Database::num_rows($special_course_result)>0) {
@@ -1933,7 +1934,8 @@ class CourseManager {
         $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_user_course_category   = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
-        $special_course_list         = self::get_special_course_list();
+        $special_course_list = self::get_special_course_list();
+
 
         $with_special_courses = $without_special_courses = '';
         if (!empty($special_course_list)) {

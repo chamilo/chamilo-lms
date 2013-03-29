@@ -53,6 +53,7 @@ $cli->addCommands(array(
     //Chamilo commands
     new ChamiloLMS\Command\Database\UpgradeCommand(),
     new ChamiloLMS\Command\Database\InstallCommand(),
+    new ChamiloLMS\Command\Database\InstallExtendCommand(),
     new ChamiloLMS\Command\Database\StatusCommand(),
     new ChamiloLMS\Command\Database\SetupCommand(),
 

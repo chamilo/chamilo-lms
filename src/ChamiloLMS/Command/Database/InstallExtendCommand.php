@@ -14,116 +14,14 @@ use Symfony\Component\Yaml\Dumper;
 /**
  * Class InstallCommand
  */
-class InstallCommand extends CommonCommand
+class InstallExtendCommand extends InstallCommand
 {
     protected function configure()
     {
         $this
-            ->setName('chamilo:install')
+            ->setName('chamilo:install_extend')
             ->setDescription('Execute a Chamilo installation to a specified version')
-            ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null)
-            ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the chamilo folder');
-    }
-
-    public function getDatabaseMap()
-    {
-
-        $defaultCourseData = array(
-            array(
-                'name' => 'course1',
-                'sql' => array(
-                    'db_course1.sql',
-                ),
-            ),
-            array(
-                'name' => 'course2',
-                'sql' => array(
-                    'db_course2.sql'
-                )
-            ),
-        );
-
-        return array(
-            '1.8.7' => array(
-                'section' => array(
-                    'main' => array(
-                        array(
-                            'name' => 'chamilo',
-                            'sql' => array(
-                                'db_main.sql',
-                                'db_stats.sql',
-                                'db_user.sql'
-                            ),
-                        ),
-                    ),
-                    'course' => $defaultCourseData
-                ),
-            ),
-            '1.8.8' => array(
-                'section' => array(
-                    'main' => array(
-                        array(
-                            'name' => 'chamilo',
-                            'sql' => array(
-                                'db_main.sql',
-                                'db_stats.sql',
-                                'db_user.sql'
-                            ),
-                        ),
-                    ),
-                    'course' => $defaultCourseData
-                ),
-            ),
-            '1.9.0' => array(
-                'section' => array(
-                    'main' => array(
-                        array(
-                            'name' => 'chamilo',
-                            'sql' => array(
-                                'db_main.sql',
-                                'db_stats.sql',
-                                'db_user.sql'
-                            ),
-                        ),
-                    ),
-                )
-            ),
-            '1.10.0' => array(
-                'section' => array(
-                    'main' => array(
-                        array(
-                            'name' => 'chamilo',
-                            'sql' => array(
-                                'db_main.sql',
-                                'db_stats.sql',
-                                'db_user.sql'
-                            ),
-                        ),
-                    ),
-                )
-            )
-        );
-    }
-
-
-
-    /**
-     * Gets the version name folders located in main/install
-     *
-     * @return array
-     */
-    public function getAvailableVersions()
-    {
-        $installPath = api_get_path(SYS_PATH).'main/install';
-        $dir = new \DirectoryIterator($installPath);
-        $dirList = array();
-        foreach ($dir as $fileInfo) {
-            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
-                $dirList[] = $fileInfo->getFilename();
-            }
-        }
-
-        return $dirList;
+            ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null);
     }
 
     /**
@@ -287,14 +185,6 @@ class InstallCommand extends CommonCommand
         }
 
         return false;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLatestVersion()
-    {
-        return '1.10';
     }
 
     /**

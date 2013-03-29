@@ -604,12 +604,12 @@ if ($alreadyInstalled) {
 //Adding web profiler
 if (is_writable($app['cache.path'])) {
     //if ($app['debug']) {
-    if (api_get_setting('allow_web_profiler') == 'true') {
+    //if (api_get_setting('allow_web_profiler') == 'true') {
         $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
                 'profiler.cache_dir' => $app['profiler.cache_dir'],
             ));
         $app->mount('/_profiler', $p);
-    }
+    //}
     //}
 }
 

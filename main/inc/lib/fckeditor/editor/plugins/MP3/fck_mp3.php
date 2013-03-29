@@ -46,8 +46,8 @@ include('../../../../../../inc/global.inc.php');
 		      <tr>
 		        <td>
 		  <?php
-		  $sType = "MP3";
-            include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
+		    $sType = "MP3";
+            include api_get_path(LIBRARY_PATH).'fck_course_document.inc.php';
 
 		  ?>
 		        </td>

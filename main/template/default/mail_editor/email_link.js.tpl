@@ -32,7 +32,7 @@ function addEvent(elm, evType, fn, useCapture) {
  * Adds the event listener
  */
 function addListeners(e) {
-	var my_links = $('.clickable_email_link');    
+	var my_links = $('.clickable_email_link');
 	for(var i=0;i < my_links.length;i++) {
 		addEvent(my_links[i],'click',loadEmailEditor,false);
 	}
@@ -54,7 +54,7 @@ function loadEmailEditor(e) {
 	}
 	//el is now my link object, so I can get el.href here to load the new window
 	var link = el.href.replace('mailto:','');
-	document.location = "{{ _p.web_main }}inc/email_editor.php?dest=" + link;
+	document.location = "{{ _p.web_main }}inc/lib/email_editor.php?dest=" + link;
 	//cancel default link action
 	if (window.event && window.event.returnValue){
 		window.event.returnValue = false;

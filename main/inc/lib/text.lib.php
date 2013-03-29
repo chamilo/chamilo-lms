@@ -493,7 +493,7 @@ function latex_gif_renderer($latex_code) {
         //echo 'volgende shell commando werd uitgevoerd:<br /><pre>'.$mimetex_command.'</pre><hr>';
     }
 
-    $return = "<a href=\"\" onclick=\"javascript: newWindow=window.open('" . api_get_path(WEB_CODE_PATH) . "inc/latex.php?code=" . urlencode($latex_code) . "&amp;filename=$latex_filename','latexCode','toolbar=no,location=no,scrollbars=yes,resizable=yes,status=yes,width=375,height=250,left=200,top=100');\">";
+    $return = "<a href=\"\" onclick=\"javascript: newWindow=window.open('" . api_get_path(WEB_CODE_PATH) . "inc/lib/latex.inc.php?code=" . urlencode($latex_code) . "&amp;filename=$latex_filename','latexCode','toolbar=no,location=no,scrollbars=yes,resizable=yes,status=yes,width=375,height=250,left=200,top=100');\">";
     $return .= '<img src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/temp/' . $latex_filename . '" alt="' . $latex_code . '" border="0" /></a>';
     return $return;
 }

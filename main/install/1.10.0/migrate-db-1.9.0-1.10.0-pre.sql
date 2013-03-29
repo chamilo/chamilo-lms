@@ -162,5 +162,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teachers_to_create_sessions', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teachers_to_create_sessions', 'false', 'No');
 
+ALTER TABLE track_e_course_access ADD COLUMN c_id INT NOT NULL DEFAULT 0;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21593' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21694' WHERE variable = 'chamilo_database_version';

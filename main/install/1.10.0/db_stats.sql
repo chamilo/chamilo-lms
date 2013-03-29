@@ -246,6 +246,7 @@ CREATE TABLE track_e_course_access (
   logout_course_date datetime default NULL,
   counter int NOT NULL,
   session_id int NOT NULL default 0,
+  c_id int NOT NULL default 0,
   PRIMARY KEY  (course_access_id)
 );
 

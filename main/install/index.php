@@ -29,6 +29,8 @@ require_once '../inc/global.inc.php';
 
 require_once __DIR__.'../../../vendor/autoload.php';
 
+require_once __DIR__.'/version.php';// A protection measure for already installed systems.
+
 require_once 'install.lib.php';
 require_once 'i_database.class.php';
 
@@ -95,6 +97,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 
 // Upgrading from any subversion of 1.6 is just like upgrading from 1.6.5
 $update_from_version_6 = array('1.6', '1.6.1', '1.6.2', '1.6.3', '1.6.4', '1.6.5');
+
 // Upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
 $update_from_version_8 = array(
     '1.8',
@@ -129,9 +132,6 @@ if (!empty($_POST['old_version'])) {
     $my_old_version = $dokeos_version;
 }
 
-require_once __DIR__.'/version.php';
-
-// A protection measure for already installed systems.
 
 if (is_already_installed_system()) {
     // The system has already been installed, so block re-installation.

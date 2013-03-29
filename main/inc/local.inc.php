@@ -692,6 +692,8 @@ if (isset($cidReset) && $cidReset) {
                 $session_lifetime    = 3600; // 1 hour
 
                 $course_code = $_course['sysCode'];
+                $courseId = $_course['id'];
+
                 $time = api_get_datetime();
 
                 if (isset($_user['user_id']) && !empty($_user['user_id'])) {

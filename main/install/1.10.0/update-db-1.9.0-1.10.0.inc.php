@@ -94,9 +94,6 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
         $order++;
     }
 
-
-
-
     if (!$dryRun) {
         $mainConnection->commit();
     }

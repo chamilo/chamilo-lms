@@ -72,7 +72,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
 
         // Get the main queries list (m_q_list)
-        $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'main');
+        $m_q_list = get_sql_file_contents($new_file_version.'/migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'main');
 
         if (count($m_q_list) > 0) {
             // Now use the $m_q_list

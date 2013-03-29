@@ -48,9 +48,6 @@ $libPath = $includePath.'/lib/';
 // This is for compatibility with MAC computers.
 ini_set('auto_detect_line_endings', '1');
 
-//Fixes Htmlpurifier autoloader issue with composer
-define('HTMLPURIFIER_PREFIX', $libPath.'htmlpurifier/library');
-
 //Composer autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
 
@@ -317,7 +314,7 @@ $app['twig'] = $app->share(
 
 
 
-//Monolog and web profiler only available if cache is writable
+//Monolog only available if cache is writable
 if (is_writable($app['cache.path'])) {
 
     /*
@@ -607,12 +604,12 @@ if ($alreadyInstalled) {
 //Adding web profiler
 if (is_writable($app['cache.path'])) {
     //if ($app['debug']) {
-    if (api_get_setting('allow_web_profiler') == 'true') {
+    //if (api_get_setting('allow_web_profiler') == 'true') {
         $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
                 'profiler.cache_dir' => $app['profiler.cache_dir'],
             ));
         $app->mount('/_profiler', $p);
-    }
+    //}
     //}
 }
 

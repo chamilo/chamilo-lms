@@ -14,23 +14,10 @@ class IndexController// extends Controller
     public $section;
     public $language_files = array('courses', 'index', 'admin');
 
-    /**
-     *
-     * @return bool
-     */
-    public function security()
-    {
-        return false;
-        if (api_is_allowed_to_edit()) {
-
-            return true;
-        }
-    }
-
     function logoutAction(Application $app)
     {
-        $this->logout();
-
+        $userId = api_get_user_id();
+        online_logout($userId, false);
         return $app->redirect($app['url_generator']->generate('index'));
     }
 
@@ -228,15 +215,6 @@ class IndexController// extends Controller
             }
             $app['template']->assign('login_options', $loginForm);
         }
-    }
-
-    /**
-     * Logout action
-     */
-    public function logout()
-    {
-        $userId = api_get_user_id();
-        online_logout($userId, true);
     }
 
     /**

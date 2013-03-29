@@ -46,8 +46,8 @@
         "silex/web-profiler": "~1.0",
         "chamilo/chash": "dev-master",
         "igorw/config-service-provider": "1.0.*@dev",
-        "mpdf/mpdf": "dev-master"
-
+        "mpdf/mpdf": "dev-master",
+        "ezyang/htmlpurifier": "dev-master"
     },
     "minimum-stability": "stable"
 }

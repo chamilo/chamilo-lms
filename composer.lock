@@ -1,5 +1,5 @@
 {
-    "hash": "30986d7996f2fbec69104a2c373ca2e7",
+    "hash": "90b06c3aeebeccfbb0c2d8921a00c638",
     "packages": [
         {
             "name": "chamilo/chash",
@@ -349,6 +349,50 @@
                 "orm"
             ],
             "time": "2013-03-24 20:43:58"
+        },
+        {
+            "name": "ezyang/htmlpurifier",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "v4.5.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/v4.5.0",
+                "reference": "v4.5.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "time": "2013-02-18 00:04:08"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -2219,7 +2263,8 @@
         "gedmo/doctrine-extensions": 20,
         "chamilo/chash": 20,
         "igorw/config-service-provider": 20,
-        "mpdf/mpdf": 20
+        "mpdf/mpdf": 20,
+        "ezyang/htmlpurifier": 20
     },
     "platform": {
         "php": ">=5.3.2"

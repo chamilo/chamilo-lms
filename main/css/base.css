@@ -261,6 +261,9 @@ form .formw input {
 #top_main_content .span3 {
   float: left;
 }
+#top_main_content .control-group .span3 {
+  float: none;
+}
 #top_main_content .span9 {
   float: left;
 }

@@ -522,6 +522,16 @@ class MessageManager
         $query = "UPDATE $table_message SET msg_status = '0' WHERE msg_status<>4 AND user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
         $result = Database::query($query);
     }
+    
+    public static function update_message_status($user_id, $message_id)
+    {
+        if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) {
+            return false;
+        }
+        $table_message = Database::get_main_table(TABLE_MESSAGE);
+        $query = "UPDATE $table_message SET msg_status = 1 WHERE user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
+        $result = Database::query($query);
+    }
 
     /**
      * get messages by user id and message id
@@ -1287,6 +1297,15 @@ class MessageManager
 
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
+                 case 'mark_as_selected' :
+                    $number_of_selected_messages = count($_POST['id']);
+                    if (is_array($_POST['id'])) {
+                        foreach ($_POST['id'] as $index => $message_id) {
+                            MessageManager::update_message_status(api_get_user_id(), $message_id);
+                        }
+                    }
+                    $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
+                    break;
                 case 'delete' :
                     $number_of_selected_messages = count($_POST['id']);
                     foreach ($_POST['id'] as $index => $message_id) {
@@ -1312,7 +1331,7 @@ class MessageManager
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
         }
-        $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages')));
+        $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages'),'mark_as_selected' => get_lang('MailMarkSelectedAsRead')));
         $html .= $table->return_table();
         return $html;
     }

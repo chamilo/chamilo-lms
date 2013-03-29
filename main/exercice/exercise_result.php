@@ -56,7 +56,7 @@ if (empty($objExercise)) {
     $objExercise = $_SESSION['objExercise'];
 }
 if (empty($remind_list)) {
-    $remind_list = $_REQUEST['remind_list'];
+    $remind_list = isset($_REQUEST['remind_list']) ? $_REQUEST['remind_list'] : null;
 }
 
 $exe_id = isset($_REQUEST['exe_id']) ? intval($_REQUEST['exe_id']) : 0;

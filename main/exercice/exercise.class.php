@@ -2592,14 +2592,14 @@ class Exercise
                             $choice[$ind] = 1;
                         }
 
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                         }
                     } else {
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if (isset($studentChoice)) {
@@ -3117,7 +3117,7 @@ class Exercise
                                     $questionId,
                                     0
                                 );
-                            
+
                         } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
 
                                 ExerciseShowFunctions::display_multiple_answer_combination_true_false(

@@ -532,16 +532,19 @@ function api_get_path($path_type, $path = null) {
 
     if (!$is_this_function_initialized) {
 
-        $root_rel       = isset($_configuration['url_append']) ? $_configuration['url_append'] : null;
-        //$code_folder    = $_configuration['code_append'];
+        //$root_rel       = isset($_configuration['url_append']) ? $_configuration['url_append'] : null;
+        $root_rel       = "/".basename($root_sys);
+
         $code_folder    = 'main/';
-        $course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;
+        //$course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;
+        $course_folder  = "courses/";
 
         // Support for the installation process.
         // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
         // configuration has not been created yet. This is why this function should be upgraded to return correct results in this case.
 
         //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
+
         if (empty($root_web)) {
 
             //$pos = strpos(($requested_page_rel = api_get_self()), 'index.php');
@@ -576,9 +579,7 @@ function api_get_path($path_type, $path = null) {
 
         // Dealing with trailing slashes.
         $root_web       = api_add_trailing_slash($root_web);
-
         $root_sys       = api_add_trailing_slash($root_sys);
-
         $root_rel       = api_add_trailing_slash($root_rel);
         $code_folder    = api_add_trailing_slash($code_folder);
 

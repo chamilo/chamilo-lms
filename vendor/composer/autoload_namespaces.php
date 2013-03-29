@@ -36,6 +36,7 @@ return array(
     'Monolog' => $vendorDir . '/monolog/monolog/src/',
     'Knp\\Menu\\' => $vendorDir . '/knplabs/knp-menu/src/',
     'Igorw\\Silex' => $vendorDir . '/igorw/config-service-provider/src',
+    'HTMLPurifier' => $vendorDir . '/ezyang/htmlpurifier/library/',
     'Gedmo' => array($baseDir . '/vendor/gedmo/doctrine-extensions/lib', $vendorDir . '/gedmo/doctrine-extensions/lib/'),
     'Entity' => $baseDir . '/main/inc/',
     'Doctrine\\ORM' => $vendorDir . '/doctrine/orm/lib/',

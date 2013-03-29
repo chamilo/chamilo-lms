@@ -9,7 +9,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\Yaml\Parser;
 
-$sysPath = __DIR__."/../../";
+$sysPath = __DIR__."../../";
 
 AnnotationRegistry::registerFile($sysPath."vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
 $reader = new AnnotationReader();
@@ -36,11 +36,12 @@ if (is_file($configurationFile) && file_exists($configurationFile)) {
 if (is_file($newConfigurationFile) && file_exists($newConfigurationFile)) {
     $yaml = new Parser();
     $_configurationYML = $yaml->parse(file_get_contents($newConfigurationFile));
-
-    if (isset($_configuration)) {
-        $_configuration = array_merge($_configuration, $_configurationYML);
-    } else {
-        $_configuration = $_configurationYML;
+    if (!empty($_configurationYML)) {
+        if (isset($_configuration)) {
+            $_configuration = array_merge($_configuration, $_configurationYML);
+        } else {
+            $_configuration = $_configurationYML;
+        }
     }
 }
 

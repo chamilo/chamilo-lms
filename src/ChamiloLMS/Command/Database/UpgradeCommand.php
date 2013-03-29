@@ -479,12 +479,23 @@ class UpgradeCommand extends CommonCommand
      */
     public function updateConfiguration($version)
     {
+        global $userPasswordCrypted, $storeSessionInDb;
+
         $_configuration = $this->getHelper('configuration')->getConfiguration();
 
         $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
 
         $dumper = new Dumper();
+
         $_configuration['system_version'] = $version;
+
+        if (!isset($_configuration['password_encryption'])) {
+            $_configuration['password_encryption']      = $userPasswordCrypted;
+        }
+
+        if (!isset($_configuration['session_stored_in_db'])) {
+            $_configuration['session_stored_in_db']     = $storeSessionInDb;
+        }
 
         $yaml = $dumper->dump($_configuration, 2); //inline
         $newConfigurationFile = $configurationPath.'configuration.yml';

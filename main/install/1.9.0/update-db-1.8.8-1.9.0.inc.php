@@ -11,6 +11,8 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     $mainConnection->beginTransaction();
 
+
+
     $singleDbForm = $_configuration['single_database'];
     $dbNameForm = $_configuration['main_database'];
     $dbStatsForm = isset($_configuration['statistics_database']) ? $_configuration['statistics_database'] : $_configuration['main_database'];
@@ -190,7 +192,10 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
             $i++;
         }
 
-        $output->writeln("Moving old tables into the new structure");
+        $output->writeln("Moving old course tables to the new structure 1 single database");
+
+        $progress = $this->getHelperSet()->get('progress');
+        $progress->start($output, count($list));
 
         foreach ($list as $row_course) {
             if (!$singleDbForm) {
@@ -296,7 +301,8 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
                 'wiki_mailcue'
             );
 
-            $output->writeln('<<<------- Loading DB course '.$row_course['db_name'].' -------->>');
+            $output->writeln('');
+            $output->writeln('Course DB'.$row_course['db_name']);
 
             $old_count = 0;
             foreach ($table_list as $table) {
@@ -307,8 +313,6 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
                     $old_table = "$prefix{$row_course['db_name']}_".$table;
                     $just_table_name = "$prefix{$row_course['db_name']}_".$table;
                 }
-
-                //$output->writeln('Loading table '.$old_table);
 
                 $course_id = $row_course['id'];
                 $new_table = DB_COURSE_PREFIX.$table;
@@ -339,8 +343,6 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
                         $output->writeln("Count(*) in table $old_table failed");
                     }
 
-                    //$output->writeln("$old_count rows found in $old_table ");
-
                     $sql = "SELECT * FROM $old_table";
                     $result = iDatabase::query($sql);
 
@@ -359,7 +361,7 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
                         }
                     }
 
-                    $output->writeln("$count/$old_count rows inserted in $new_table");
+                    //$output->writeln("$count/$old_count rows inserted in $new_table");
 
                     if ($old_count != $count) {
                         $output->writeln("ERROR count of new and old table doesn't match: $old_count - $new_table");
@@ -367,11 +369,14 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
                         $output->writeln(print_r($errors, 1));
                     }
                 } else {
+                    $output->writeln('');
                     $output->writeln("Seems that the table $old_table doesn't exists ");
                 }
             }
-            $output->writeln('<<<------- end  -------->>');
+            $progress->advance();
         }
+
+        $progress->finish();
 
         $output->writeln("End course migration");
 

@@ -2137,18 +2137,75 @@
         "homepage": "http://symfony.com"
     },
     {
+        "name": "igorw/config-service-provider",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/igorw/ConfigServiceProvider.git",
+            "reference": "v1.1.5"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/igorw/ConfigServiceProvider/zipball/v1.1.5",
+            "reference": "v1.1.5",
+            "shasum": ""
+        },
+        "require": {
+            "silex/silex": "1.0.*@dev"
+        },
+        "require-dev": {
+            "symfony/yaml": ">=2.1,<3.0"
+        },
+        "suggest": {
+            "symfony/yaml": "~2.1"
+        },
+        "time": "2013-03-09 15:35:23",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Igorw\\Silex": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Igor Wiedler",
+                "email": "igor@wiedler.ch",
+                "homepage": "http://wiedler.ch/igor/"
+            },
+            {
+                "name": "Contributors",
+                "homepage": "https://github.com/igorw/ConfigServiceProvider/contributors"
+            }
+        ],
+        "description": "A config ServiceProvider for Silex with support for php, json and yaml.",
+        "keywords": [
+            "silex"
+        ]
+    },
+    {
         "name": "chamilo/chash",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/chamilo/chash.git",
-            "reference": "9f95bd09119a7e696da383611693285aed1ef65a"
+            "reference": "3d31e9577df292fb2ee010b6182ca7dd543b2c67"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/chamilo/chash/zipball/9f95bd09119a7e696da383611693285aed1ef65a",
-            "reference": "9f95bd09119a7e696da383611693285aed1ef65a",
+            "url": "https://api.github.com/repos/chamilo/chash/zipball/3d31e9577df292fb2ee010b6182ca7dd543b2c67",
+            "reference": "3d31e9577df292fb2ee010b6182ca7dd543b2c67",
             "shasum": ""
         },
         "require": {
@@ -2156,7 +2213,7 @@
             "symfony/console": "2.3.*@dev",
             "symfony/yaml": "2.1.*"
         },
-        "time": "2013-03-28 15:28:21",
+        "time": "2013-03-29 10:44:52",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -2165,5 +2222,49 @@
             }
         },
         "notification-url": "https://packagist.org/downloads/"
+    },
+    {
+        "name": "mpdf/mpdf",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/finwe/mpdf.git",
+            "reference": "v5.6.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/finwe/mpdf/zipball/v5.6.1",
+            "reference": "v5.6.1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=4.3.10"
+        },
+        "time": "2013-01-26 08:22:27",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "mpdf.php",
+                "classes"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-1.0+"
+        ],
+        "authors": [
+            {
+                "name": "Ian Back"
+            }
+        ],
+        "description": "A PHP class to generate PDF files from HTML with Unicode/UTF-8 and CJK support",
+        "homepage": "http://www.mpdf1.com/mpdf/index.php",
+        "keywords": [
+            "pdf",
+            "php",
+            "utf-8"
+        ]
     }
 ]

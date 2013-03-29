@@ -81,10 +81,12 @@ class ConfigurationHelper extends Helper
             if (file_exists($confYML)) {
                 $yaml = new Parser();
                 $_configurationYML = $yaml->parse(file_get_contents($confYML));
-                if (isset($_configuration) && !empty($_configuration) && isset($_configurationYML) && !empty($_configurationYML)) {
-                    $_configuration = array_merge($_configuration, $_configurationYML);
-                } else {
-                    $_configuration = $_configurationYML;
+                if (isset($_configurationYML) && !empty($_configurationYML)) {
+                    if (isset($_configuration) && !empty($_configuration) ) {
+                        $_configuration = array_merge($_configuration, $_configurationYML);
+                    } else {
+                        $_configuration = $_configurationYML;
+                    }
                 }
             }
 

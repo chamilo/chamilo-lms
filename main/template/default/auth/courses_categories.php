@@ -54,6 +54,10 @@ $stok = Security::get_token();
                 $hidden_links = 1;
             }
 
+            /* Categories will only show down to 4 levels, if you want more,
+             * you will have to patch the following code. We don't recommend
+             * it, as this can considerably slow down your system
+             */
             if (!empty($browse_course_categories)) {
                 echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
 

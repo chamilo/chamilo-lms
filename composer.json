@@ -44,7 +44,10 @@
         "gedmo/doctrine-extensions": "2.3.*@dev",
         "symfony/web-profiler-bundle": "~2.2",
         "silex/web-profiler": "~1.0",
-        "chamilo/chash": "dev-master"
+        "chamilo/chash": "dev-master",
+        "igorw/config-service-provider": "1.0.*@dev",
+        "mpdf/mpdf": "dev-master"
+
     },
     "minimum-stability": "stable"
 }

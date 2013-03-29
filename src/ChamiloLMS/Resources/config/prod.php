@@ -26,6 +26,12 @@ $app['chamilo.log'] = $app['cache.path'].'chamilo.log';
 //PCLZIP temp dir
 define('PCLZIP_TEMPORARY_DIR', $app['cache.path']);
 
+//mpdf libs
+
+define("_MPDF_TEMP_PATH", $app['cache.path']);
+define("_JPGRAPH_PATH", $app['cache.path']);
+define("_MPDF_TTFONTDATAPATH", $app['cache.path']);
+
 // Assetic
 /*
 $app['assetic.path_to_cache']   = $app['cache.path'] . DIRECTORY_SEPARATOR . 'assetic' ;

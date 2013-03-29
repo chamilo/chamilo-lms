@@ -4,27 +4,21 @@
 /**
  * This is a bootstrap file that loads all Chamilo dependencies including:
  *
- * - Loading Chamilo settings in main/inc/configuration.php
- * - Loading mysql database (Using Doctrine ORM or the Classic way: Database;;query())
- * - Twig templates
- * - Loading language files
- * - Loading mail settings (smtp/sendmail/mail)
+ * - Chamilo settings in main/inc/configuration.php or main/inc/configuration.yml
+ * - mysql database (Using Doctrine DBAL/ORM or the Classic way: Database::query())
+ * - Templates (Using Twig)
+ * - Loading language files (No Symfony component)
+ * - Loading mail settings (SwiftMailer smtp/sendmail/mail)
  * - Debug (Using Monolog)
- * - Redirecting to the main/install folder if the configuration.php file does not exists. *
  *
- * It's recommended that ALL Chamilo scripts include this file.
+ * ALL Chamilo scripts must include this file in order to have the $app container
  * This script returns a $app Application instance so you have access to all the services.
  *
  * @package chamilo.include
- * @todo use the $_configuration array for all the needed variables
  *
  */
 
-// Showing/hiding error codes in global error messages.
-//define('SHOW_ERROR_CODES', false);
-
-// Determine the directory path where this current file lies.
-// This path will be useful to include the other intialisation files.
+// Determine the directory path for this file.
 $includePath = dirname(__FILE__);
 
 // Include the main Chamilo platform configuration file.
@@ -41,35 +35,21 @@ if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)) {
     $_configuration = array();
 }
 
-//Redirects to the main/install/ page
-/*
-if (!$alreadyInstalled) {
-    $global_error_code = 2;
-    // The system has not been installed yet.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}*/
-
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
 // Do not over-use this variable. It is only for this script's local use.
-$lib_path = $includePath.'/lib/';
+$libPath = $includePath.'/lib/';
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
-api_request_uri();
+//@todo not sure if this is needed any more
+//api_request_uri();
 
 // This is for compatibility with MAC computers.
 ini_set('auto_detect_line_endings', '1');
 
 //Fixes Htmlpurifier autoloader issue with composer
-define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library');
-
-//mpdf constants
-//define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH));
-// Forcing PclZip library to use a custom temporary folder.
-
-define('_MPDF_PATH', $lib_path.'mpdf/');
+define('HTMLPURIFIER_PREFIX', $libPath.'htmlpurifier/library');
 
 //Composer autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
@@ -83,16 +63,27 @@ use Symfony\Component\Yaml\Parser;
 
 $app = new Application();
 
+//@todo add a helper to read the configuration file once!
+
 //Overwriting $_configuration
 if (file_exists($configurationYMLFile)) {
     $yaml = new Parser();
     $configurationYML = $yaml->parse(file_get_contents($configurationYMLFile));
-    if (isset($_configuration)) {
-        $_configuration = array_merge($_configuration, $configurationYML);
-    } else {
-        $_configuration = $configurationYML;
+    if (is_array($configurationYML) && !empty($configurationYML)) {
+        if (isset($_configuration)) {
+            $_configuration = array_merge($_configuration, $configurationYML);
+        } else {
+            $_configuration = $configurationYML;
+        }
     }
 }
+
+/*
+$settingsFile = __DIR__."/../../app/config/settings.yml";
+$app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile, array(
+        'database' => __DIR__.'/data',
+)));
+*/
 
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
@@ -473,11 +464,11 @@ $app['template_style'] = 'default';
 $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
 //Database constants
-require_once $lib_path.'database.constants.inc.php';
-require_once $lib_path.'text.lib.php';
-require_once $lib_path.'array.lib.php';
-require_once $lib_path.'events.lib.inc.php';
-require_once $lib_path.'online.inc.php';
+require_once $libPath.'database.constants.inc.php';
+require_once $libPath.'text.lib.php';
+require_once $libPath.'array.lib.php';
+require_once $libPath.'events.lib.inc.php';
+require_once $libPath.'online.inc.php';
 
 /*  Database connection (for backward compatibility) */
 global $database_connection;
@@ -591,7 +582,7 @@ if ($alreadyInstalled && $checkConnection) {
 }
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
-require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
+require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
 
 // which will then be usable from the banner and header scripts
 $app['this_section'] = SECTION_GLOBAL;

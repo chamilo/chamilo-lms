@@ -1,0 +1,56 @@
+syntax: glob
+main/inc/conf
+#main/inc/conf/*
+#!main/inc/conf/index.html
+#!main/inc/conf/*.dist.*
+
+#temp directories
+archive/*
+!archive/.htaccess
+courses/*
+!courses/index.html
+main/garbage/*
+!main/garbage/index.html
+!main/garbage/Serializer
+#Home
+home/*
+#!home/default_platform_document
+#!home/faq.html
+#!home/home_menu.html
+#!home/home_news.html
+#!home/home_notice.html
+#!home/home_top.html
+#!home/index.html
+#!home/large_dokeos_logo.gif
+
+#garbage directory
+
+#Avatar images
+main/upload/users/*
+!main/upload/users/index.html
+
+#plugins
+#plugin/*
+#!plugin/date
+#!plugin/index.html
+#!plugin/search
+
+#PHP Storm settings directory
+.idea
+.idea/*
+.idea/dictionaries/*
+.idea/cssxfire.xml
+
+# Xapian indexes directory
+searchdb/*
+!searchdb/index.html
+
+*.orig
+main/auth/shibboleth/config.php
+syntax: regexp
+^main/upload/users$
+
+syntax: regexp
+^\.settings$
+
+nbproject/*

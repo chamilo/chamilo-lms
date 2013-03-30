@@ -1,0 +1,35 @@
+# Chamilo configuration
+main/inc/conf
+
+# Temp directories
+archive/*
+!archive/.htaccess
+
+# Courses
+
+courses/*
+!courses/index.html
+
+# Home
+home/*
+
+# User images
+main/upload/users/*
+!main/upload/users/index.html
+
+# Logs and databases #
+*.log
+
+# Xapian indexes directory
+searchdb/*
+!searchdb/index.html
+
+# IDE settings
+
+.idea
+.idea/*
+.idea/dictionaries/*
+.idea/cssxfire.xml
+
+*.orig
+nbproject/*

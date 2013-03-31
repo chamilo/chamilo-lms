@@ -302,7 +302,7 @@ class ScoreDisplay
      * @param int     $what one of the following constants: SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH) (only taken into account if custom score display is enabled and for course/platform admin)
      */
     public function display_score($score, $type = SCORE_DIV_PERCENT, $what = SCORE_BOTH, $no_color = false) {      
-    $my_score = $score == 0 ? 1 : $score;    
+        $my_score = $score == 0 ? 1 : $score;    
         
         if ($type == SCORE_BAR) {
             $percentage = $my_score[0]/$my_score[1]*100;            

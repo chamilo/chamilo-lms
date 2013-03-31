@@ -358,13 +358,13 @@ class GradebookTable extends SortableTable {
                 //"Warning row"
                 if (!empty($data_array)) {
                     if (api_is_allowed_to_edit()) {
-                        $main_weight = intval($main_cat[0]->get_weight());                
-                        if (intval($total_weight) == $main_weight) { 
+                        // Compare the category weight to the sum of all weights inside the category
+                        if (intval($total_weight) == $category_weight) { 
                             $label = null;
-                            $total = score_badges(array($total_weight.' / '.$main_weight, '100'));
+                            $total = score_badges(array($total_weight.' / '.$category_weight, '100'));
                         } else {                                                       
-                            $label = Display::return_icon('warning.png', sprintf(get_lang('TotalWeightMustBeX'), $main_weight) );    
-                            $total = Display::badge($total_weight.' / '.$main_weight, 'warning');                  
+                            $label = Display::return_icon('warning.png', sprintf(get_lang('TotalWeightMustBeX'), $category_weight) );    
+                            $total = Display::badge($total_weight.' / '.$category_weight, 'warning');                  
                         }
                         $row = array(null, null, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5>".get_lang('SubTotal').'</h5>',null, $total.' '.$label, 'child_of' =>$parent_id);
                         $sortable_data[] = $row;

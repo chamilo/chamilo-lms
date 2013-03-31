@@ -1605,7 +1605,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
                 </h1>
             </td>
             <td style="width: 50%;">
-                <img style="width: 100px; height: 100px;" alt="dokeos logo" src="{COURSE_DIR}images/logo_dokeos.png"></td>
+                <img style="width: 100px; height: 100px;" alt="Chamilo logo" src="{COURSE_DIR}images/logo_chamilo.png"></td>
             </tr>
             </tbody>
             </table>

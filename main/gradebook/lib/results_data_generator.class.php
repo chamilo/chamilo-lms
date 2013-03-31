@@ -115,7 +115,14 @@ class ResultsDataGenerator
 
     }
 
-    private function get_score_display ($score, $realscore, $ignore_score_color) {
+    /**
+     * Re-formats the score to show percentage ("2/4 (50 %)") or letters ("A")
+     * @param float Current absolute score (max score is taken from $this->evaluation->get_max()
+     * @param bool  Whether we want the real score (2/4 (50 %)) or the transformation (A, B, C, etc)
+     * @param bool  Whether we want to ignore the score color
+     * @result string The score as we want to show it
+     */
+    private function get_score_display ($score, $realscore, $ignore_score_color = false) {
         if ($score != null) {
             $scoredisplay = ScoreDisplay :: instance();
             $type = SCORE_CUSTOM;

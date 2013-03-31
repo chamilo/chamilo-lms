@@ -483,6 +483,7 @@ if ($file_type == null) { //show the result header
     	}
     	DisplayGradebook :: display_header_result($eval[0], $currentcat[0]->get_id(), 1);
     }
+    // Letter-based scores are built from lib/results_data_generator.class.php::get_score_display()
     $resulttable->display();
     Display :: display_footer();
 }

@@ -111,9 +111,8 @@ class ScoreDisplay
         $value = $value['my_display_custom'];   
         $this->custom_enabled  = $value == 'true' ? true : false;
         
-        if ($this->custom_enabled) {             
-            
-            $params = array('category = ? AND subkey = ?' =>  array('Gradebook', 'ranking'));
+        if ($this->custom_enabled) {
+            $params = array('category = ?' =>  array('Gradebook'));
             $displays = api_get_settings_params($params);
             $portal_displays = array();
             if (!empty($displays)) {
@@ -122,9 +121,8 @@ class ScoreDisplay
                     $portal_displays[$data[0]] = array('score' => $data[0], 'display' =>$data[1]);
                 }
                 sort($portal_displays);
-            }            
+            }
             $this->custom_display = $portal_displays;
-            
             if (count($this->custom_display)>0) {
                 $value = api_get_setting('gradebook_score_display_upperlimit');
                 $value = $value['my_display_upperlimit'];        
@@ -419,8 +417,7 @@ class ScoreDisplay
     }
     
     /**
-     * 
-     * Depends in the user selections [0 50] Bad  [50:100] Good 
+     * Depends on the teacher's configuration of thresholds. i.e. [0 50] "Bad", [50:100] "Good"
      * @param array $score
      */    
     private function display_custom ($score) {

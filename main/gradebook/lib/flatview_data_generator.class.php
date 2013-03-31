@@ -387,7 +387,7 @@ class FlatViewDataGenerator
                         $temp_score = $scoredisplay->display_score(array($item_value, null), SCORE_DIV_SIMPLE_WITH_CUSTOM);                        
                         $temp_score = Display::tip($real_score, $temp_score);
                     } else { 
-                        $temp_score     = $scoredisplay->display_score(array($item_value, null), SCORE_DIV_SIMPLE_WITH_CUSTOM);                    
+                        $temp_score     = $scoredisplay->display_score($real_score, SCORE_DIV_PERCENT_WITH_CUSTOM);
                         $temp_score = Display::tip($temp_score, $complete_score);
                     }
                     

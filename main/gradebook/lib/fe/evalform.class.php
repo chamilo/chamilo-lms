@@ -468,17 +468,17 @@ class EvalForm extends FormValidator
             }
         }
         
-		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$all_categories[0]->get_weight().'] '), true, array (
-			'size' => '4',
-			'maxlength' => '5',
+        $this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$all_categories[0]->get_weight().'] '), true, array (
+            'size' => '4',
+            'maxlength' => '5',
             'class' => 'span1'
-		));
+        ));
         
         /*$this->add_textfield('weight', array(null, null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
-            	'size' => '4',
-			'maxlength' => '5',
+            'size' => '4',
+            'maxlength' => '5',
             'class' => 'span1'
-		));*/
+        ));*/
         
         
 		if ($edit) {

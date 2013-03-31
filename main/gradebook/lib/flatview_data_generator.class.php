@@ -240,7 +240,7 @@ class FlatViewDataGenerator
         
         $parent_id = $this->category->get_parent_id();
         
-        if ($parent_id == 0) {
+        if ($parent_id == 0 or $this->params['only_subcat'] == $this->category->get_id()) {
             $main_weight  = $this->category->get_weight();
             $grade_model_id = $this->category->get_grade_model_id();
         } else {
@@ -411,7 +411,8 @@ class FlatViewDataGenerator
                 }
                 $item_total = $main_weight;
             }            
-            $total_score = array($item_value_total, $item_total);            
+            $total_score = array($item_value_total, $item_total);
+error_log(print_r($total_score,1));
             
             if (!$show_all) {
                 if ($export_to_pdf) {

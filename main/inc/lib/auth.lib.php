@@ -59,6 +59,7 @@ class Auth {
                                 AND   course_rel_user.user_id = '" . $user_id . "' $without_special_courses
                                 ORDER BY course_rel_user.sort ASC";
         $result = Database::query($sql_select_courses);
+        $courses = array();
         while ($row = Database::fetch_array($result)) {
             //we only need the database name of the course
             $courses[] = array('db' => $row['db'], 'code' => $row['k'], 'visual_code' => $row['vc'], 'title' => $row['i'], 'directory' => $row['dir'], 'status' => $row['status'], 'tutor' => $row['t'], 'subscribe' => $row['subscr'], 'unsubscribe' => $row['unsubscr'], 'sort' => $row['sort'], 'user_course_category' => $row['user_course_cat']);

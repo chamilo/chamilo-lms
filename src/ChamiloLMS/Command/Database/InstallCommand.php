@@ -224,9 +224,21 @@ class InstallCommand extends CommonCommand
             }
         }
 
+        $testConnection = $this->testDatabaseConnection($newConfigurationArray['db_host'], $newConfigurationArray['db_user'], $newConfigurationArray['db_password']);
+
+        if ($testConnection == 1) {
+            $output->writeln("<comment>Connection enabled for user: </comment><info>".$newConfigurationArray['db_user']);
+        } else {
+            $output->writeln("<error>No access to the database for user:</error><info>".$newConfigurationArray['db_user']."</info>");
+            exit;
+        }
+
         $configurationWasSaved = $this->writeConfiguration($newConfigurationArray, $version);
 
         if ($configurationWasSaved) {
+            global $app;
+
+            $app['chamilo.log'] = $app['cache.path'].'chamilo_install.log';
 
             //Installing database
             $result = $this->install($version, $newConfigurationArray, $output);
@@ -393,14 +405,6 @@ class InstallCommand extends CommonCommand
     {
         $sqlFolder = $this->getInstallationPath($version);
 
-        $testConnection = $this->testDatabaseConnection($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']);
-
-        if ($testConnection == 1) {
-            $output->writeln("<comment>Connection enabled for user: </comment><info>".$_configuration['db_user']);
-        } else {
-            $output->writeln("<error>No access to the database for user:</error><info>".$_configuration['db_user']."</info>");
-            exit;
-        }
 
         $databaseMap = $this->getDatabaseMap();
 

@@ -11,9 +11,7 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
 
     $mainConnection->beginTransaction();
 
-
-
-    $singleDbForm = $_configuration['single_database'];
+    $singleDbForm = isset($_configuration['single_database']) ? $_configuration['single_database'] : false;
     $dbNameForm = $_configuration['main_database'];
     $dbStatsForm = isset($_configuration['statistics_database']) ? $_configuration['statistics_database'] : $_configuration['main_database'];
     $dbUserForm  = isset($_configuration['user_personal_database']) ? $_configuration['user_personal_database'] : $_configuration['main_database'];

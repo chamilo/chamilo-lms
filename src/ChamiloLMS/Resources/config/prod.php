@@ -98,3 +98,7 @@ if (!is_dir($app['twig.cache.path'])) {
 if (!is_dir($app['profiler.cache_dir'])) {
     @mkdir($app['profiler.cache_dir'], api_get_permissions_for_new_directories());
 }
+
+if (is_file($app['chamilo.log']) && !is_writable($app['chamilo.log'])) {
+    unlink($app['chamilo.log']);
+}

@@ -2527,48 +2527,6 @@
         ]
     },
     {
-        "name": "kairos/phpqrcode",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/kairosagency/phpqrcode.git",
-            "reference": "6770ecbe0e8c7d806c5779ad38b20c9acf5427d9"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/kairosagency/phpqrcode/zipball/6770ecbe0e8c7d806c5779ad38b20c9acf5427d9",
-            "reference": "6770ecbe0e8c7d806c5779ad38b20c9acf5427d9",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=4.3.10"
-        },
-        "time": "2013-03-20 17:48:23",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "files": [
-                "qrlib.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL"
-        ],
-        "authors": [
-            {
-                "name": "Kairos Agency"
-            }
-        ],
-        "description": "A PHP class to generate QR Code",
-        "homepage": "http://github.com/kairosagency/phpqrcode",
-        "keywords": [
-            "php",
-            "qrcode"
-        ]
-    },
-    {
         "name": "pagerfanta/pagerfanta",
         "version": "dev-master",
         "version_normalized": "9999999-dev",

@@ -11,21 +11,30 @@ use Pagerfanta\Adapter\PropelAdapter;
  */
 class PropelAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    protected $query;
-    protected $adapter;
+    private $query;
+    private $adapter;
 
     protected function setUp()
     {
-        if (!class_exists('ModelCriteria')) {
+        if ($this->isPropelNotAvaiable()) {
             $this->markTestSkipped('Propel is not available');
         }
 
-        $this->query = $this
-            ->getMockBuilder('\ModelCriteria')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $this->query = $this->createQueryMock();
         $this->adapter = new PropelAdapter($this->query);
+    }
+
+    private function isPropelNotAvaiable()
+    {
+        return !class_exists('ModelCriteria');
+    }
+
+    private function createQueryMock()
+    {
+        return $this
+            ->getMockBuilder('ModelCriteria')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testGetQuery()
@@ -38,56 +47,39 @@ class PropelAdapterTest extends \PHPUnit_Framework_TestCase
         $this->query
             ->expects($this->once())
             ->method('limit')
-            ->with(0)
-            ->will($this->returnValue($this->query))
-        ;
+            ->with(0);
         $this->query
             ->expects($this->once())
             ->method('offset')
-            ->with(0)
-            ->will($this->returnValue($this->query))
-        ;
+            ->with(0);
         $this->query
             ->expects($this->once())
             ->method('count')
-            ->will($this->returnValue(100))
-        ;
+            ->will($this->returnValue(100));
 
         $this->assertSame(100, $this->adapter->getNbResults());
     }
 
-    /**
-     * @dataProvider getResultsProvider
-     */
-    public function testGetResults($offset, $length)
+    public function testGetSlice()
     {
+        $offset = 14;
+        $length = 20;
+        $slice = new \ArrayObject();
+
         $this->query
             ->expects($this->once())
             ->method('limit')
-            ->with($length)
-            ->will($this->returnValue($this->query))
-        ;
+            ->with($length);
         $this->query
             ->expects($this->once())
             ->method('offset')
-            ->with($offset)
-            ->will($this->returnValue($this->query))
-        ;
+            ->with($offset);
         $this->query
             ->expects($this->once())
             ->method('find')
-            ->will($this->returnValue($all = array(new \DateTime(), new \DateTime())))
-        ;
+            ->will($this->returnValue($slice));
 
-        $this->assertSame($all, $this->adapter->getSlice($offset, $length));
-    }
-
-    public function getResultsProvider()
-    {
-        return array(
-            array(2, 10),
-            array(3, 2),
-        );
+        $this->assertSame($slice, $this->adapter->getSlice($offset, $length));
     }
 }
 

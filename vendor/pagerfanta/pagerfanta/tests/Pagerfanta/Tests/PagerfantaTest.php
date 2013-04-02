@@ -21,8 +21,8 @@ class IteratorAggregate implements \IteratorAggregate
 
 class PagerfantaTest extends \PHPUnit_Framework_TestCase
 {
-    protected $adapter;
-    protected $pagerfanta;
+    private $adapter;
+    private $pagerfanta;
 
     protected function setUp()
     {
@@ -30,67 +30,171 @@ class PagerfantaTest extends \PHPUnit_Framework_TestCase
         $this->pagerfanta = new Pagerfanta($this->adapter);
     }
 
-    public function testGetAdapter()
+    private function setAdapterNbResultsAny($nbResults)
+    {
+        $this->setAdapterNbResults($this->any(), $nbResults);
+    }
+
+    private function setAdapterNbResultsOnce($nbResults)
+    {
+        $this->setAdapterNbResults($this->once(), $nbResults);
+    }
+
+    private function setAdapterNbResults($expects, $nbResults)
+    {
+        $this->adapter
+            ->expects($expects)
+            ->method('getNbResults')
+            ->will($this->returnValue($nbResults));
+    }
+
+    public function testGetAdapterShouldReturnTheAdapter()
     {
         $this->assertSame($this->adapter, $this->pagerfanta->getAdapter());
     }
 
-    public function testFluentInterface()
+    public function testAllowOutOfRangePagesShouldBeFalseByDefault()
     {
-        $this->assertInstanceOf('Pagerfanta\Pagerfanta', $this->pagerfanta->setCurrentPage(1, true));
-        $this->assertInstanceOf('Pagerfanta\Pagerfanta', $this->pagerfanta->setMaxPerPage(20));
+        $this->assertFalse($this->pagerfanta->allowOutOfRangePages());
+    }
+
+    public function testSetAllowOutOfRangePagesShouldSetTrue()
+    {
+        $this->pagerfanta->setAllowOutOfRangePages(true);
+        $this->assertTrue($this->pagerfanta->allowOutOfRangePages());
+    }
+
+    public function testSetAllowOutOfRangePagesShouldSetFalse()
+    {
+        $this->pagerfanta->setAllowOutOfRangePages(false);
+        $this->assertFalse($this->pagerfanta->allowOutOfRangePages());
+    }
+
+    public function testSetAllowOutOfRangePagesShouldReturnThePagerfanta()
+    {
+        $this->assertSame($this->pagerfanta, $this->pagerfanta->setAllowOutOfRangePages(true));
     }
 
     /**
-     * @dataProvider providerSetGetMaxPerPage
+     * @expectedException Pagerfanta\Exception\NotBooleanException
+     * @dataProvider notBooleanProvider
      */
-    public function testSetGetMaxPerPage($maxPerPage, $expectedMaxPerPage)
+    public function testSetAllowOutOfRangePagesShouldThrowNotBooleanExceptionWhenNotBoolean($value)
     {
-        $this->pagerfanta->setMaxPerPage($maxPerPage);
-        $this->assertSame($expectedMaxPerPage, $this->pagerfanta->getMaxPerPage());
+        $this->pagerfanta->setAllowOutOfRangePages($value);
     }
 
-    public function providerSetGetMaxPerPage()
+    public function testNormalizeOutOfRangePagesShouldBeFalseByDefault()
+    {
+        $this->assertFalse($this->pagerfanta->normalizeOutOfRangePages());
+    }
+
+    public function testSetNormalizeOutOfRangePagesShouldSetTrue()
+    {
+        $this->pagerfanta->setNormalizeOutOfRangePages(true);
+        $this->assertTrue($this->pagerfanta->normalizeOutOfRangePages());
+    }
+
+    public function testSetNormalizeOutOfRangePagesShouldSetFalse()
+    {
+        $this->pagerfanta->setNormalizeOutOfRangePages(false);
+        $this->assertFalse($this->pagerfanta->normalizeOutOfRangePages());
+    }
+
+    public function testSetNormalizeOutOfRangePagesShouldReturnThePagerfanta()
+    {
+        $this->assertSame($this->pagerfanta, $this->pagerfanta->setNormalizeOutOfRangePages(true));
+    }
+
+    /**
+     * @expectedException Pagerfanta\Exception\NotBooleanException
+     * @dataProvider notBooleanProvider
+     */
+    public function testSetNormalizeOutOfRangePagesShouldThrowNotBooleanExceptionWhenNotBoolean($value)
+    {
+        $this->pagerfanta->setNormalizeOutOfRangePages($value);
+    }
+
+    public function notBooleanProvider()
     {
         return array(
-            // normal, integer
-            array(1, 1),
-            array(10, 10),
-            array(25, 25),
-            // to normalize
-            array('1', 1),
-            array('10', 10),
-            array('25', 25),
+            array(1),
+            array('1'),
+            array(1.1),
         );
     }
 
     /**
-     * @expectedException Pagerfanta\Exception\NotIntegerMaxPerPageException
-     * @dataProvider      providerSetMaxPerPageNotInteger
+     * @dataProvider setMaxPerPageShouldSetAnIntegerProvider
      */
-    public function testSetMaxPerPageNotInteger($maxPerPage)
+    public function testSetMaxPerPageShouldSetAnInteger($maxPerPage)
+    {
+        $this->pagerfanta->setMaxPerPage($maxPerPage);
+
+        $this->assertSame($maxPerPage, $this->pagerfanta->getMaxPerPage());
+    }
+
+    public function setMaxPerPageShouldSetAnIntegerProvider()
+    {
+        return array(
+            array(1),
+            array(10),
+            array(25),
+        );
+    }
+
+    /**
+     * @dataProvider setMaxPerPageShouldConvertStringsToIntegersProvider
+     */
+    public function testSetMaxPerPageShouldConvertStringsToIntegers($maxPerPage)
+    {
+        $this->pagerfanta->setMaxPerPage($maxPerPage);
+        $this->assertSame((int) $maxPerPage, $this->pagerfanta->getMaxPerPage());
+    }
+
+    public function setMaxPerPageShouldConvertStringsToIntegersProvider()
+    {
+        return array(
+            array('1'),
+            array('10'),
+            array('25'),
+        );
+    }
+
+    public function testSetMaxPerPageShouldReturnThePagerfanta()
+    {
+        $this->assertSame($this->pagerfanta, $this->pagerfanta->setMaxPerPage(10));
+    }
+
+    /**
+     * @expectedException Pagerfanta\Exception\NotIntegerMaxPerPageException
+     * @dataProvider      setMaxPerPageShouldThrowExceptionWhenInvalidProvider
+     */
+    public function testSetMaxPerPageShouldThrowExceptionWhenInvalid($maxPerPage)
     {
         $this->pagerfanta->setMaxPerPage($maxPerPage);
     }
 
-    public function providerSetMaxPerPageNotInteger()
+    public function setMaxPerPageShouldThrowExceptionWhenInvalidProvider()
     {
         return array(
+            array(1.1),
             array('1.1'),
             array(true),
+            array(array(1)),
         );
     }
 
     /**
      * @expectedException Pagerfanta\Exception\LessThan1MaxPerPageException
-     * @dataProvider      providerSetMaxPerPageLessThan1
+     * @dataProvider      setMaxPerPageShouldThrowExceptionWhenLessThan1Provider
      */
-    public function testSetMaxPerPageLessThan1($maxPerPage)
+    public function testSetMaxPerPageShouldThrowExceptionWhenLessThan1($maxPerPage)
     {
         $this->pagerfanta->setMaxPerPage($maxPerPage);
     }
 
-    public function providerSetMaxPerPageLessThan1()
+    public function setMaxPerPageShouldThrowExceptionWhenLessThan1Provider()
     {
         return array(
             array(0),
@@ -98,248 +202,449 @@ class PagerfantaTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider providerSetGetCurrentPage
-     */
-    public function testSetCurrentPage($currentPage, $expectedCurrentPage)
+    public function testSetMaxPerPageShouldResetCurrentPageResults()
     {
-        $this->pagerfanta->setCurrentPage($currentPage, true);
-        $this->assertSame($expectedCurrentPage, $this->pagerfanta->getCurrentPage());
+        $pagerfanta = $this->pagerfanta;
+
+        $this->assertResetCurrentPageResults(function () use ($pagerfanta) {
+            $pagerfanta->setMaxPerPage(10);
+        });
     }
 
-    public function providerSetGetCurrentPage()
+    public function testSetMaxPerPageShouldResetNbResults()
+    {
+        $this->prepareForResetNbResults();
+
+        $this->assertSame(100, $this->pagerfanta->getNbResults());
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->assertSame(50, $this->pagerfanta->getNbResults());
+    }
+
+    public function testSetMaxPerPageShouldResetNbPages()
+    {
+        $this->prepareForResetNbResults();
+
+        $this->assertSame(10, $this->pagerfanta->getNbPages());
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->assertSame(5, $this->pagerfanta->getNbPages());
+    }
+
+    private function prepareForResetNbResults()
+    {
+        $this->pagerfanta->setMaxPerPage(10);
+
+        $this->adapter
+            ->expects($this->at(0))
+            ->method('getNbResults')
+            ->will($this->returnValue(100));
+        $this->adapter
+            ->expects($this->at(1))
+            ->method('getNbResults')
+            ->will($this->returnValue(50));
+    }
+
+    public function testGetNbPagesShouldReturnTheNbResultsFromTheAdapter()
+    {
+        $this->setAdapterNbResultsAny(20);
+
+        $this->assertSame(20, $this->pagerfanta->getNbResults());
+    }
+
+    public function testGetNbResultsShouldCacheTheNbResultsFromTheAdapter()
+    {
+        $this->setAdapterNbResultsOnce(20);
+
+        $this->pagerfanta->getNbResults();
+        $this->pagerfanta->getNbResults();
+    }
+
+    public function testGetNbPagesShouldCalculateTheNumberOfPages()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(20);
+
+        $this->assertSame(5, $this->pagerfanta->getNbPages());
+    }
+
+    public function testGetNbPagesShouldRoundToUp()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(15);
+
+        $this->assertSame(7, $this->pagerfanta->getNbPages());
+    }
+
+    /**
+     * @dataProvider setCurrentPageShouldSetAnIntegerProvider
+     */
+    public function testSetCurrentPageShouldSetAnInteger($currentPage)
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(2);
+        $this->pagerfanta->setCurrentPage($currentPage);
+
+        $this->assertSame($currentPage, $this->pagerfanta->getCurrentPage());
+    }
+
+    public function setCurrentPageShouldSetAnIntegerProvider()
     {
         return array(
-            // normal
-            array(1, 1),
-            array(3, 3),
-            // to normalize
-            array('1', 1),
-            array('5', 5),
+            array(1),
+            array(10),
+            array(25),
+        );
+    }
+
+    /**
+     * @dataProvider setCurrentPageShouldConvertStringsToIntegersProvider
+     */
+    public function testSetCurrentPageShouldConvertStringsToIntegers($currentPage)
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(2);
+        $this->pagerfanta->setCurrentPage($currentPage);
+
+        $this->assertSame((int) $currentPage, $this->pagerfanta->getCurrentPage());
+    }
+
+    public function setCurrentPageShouldConvertStringsToIntegersProvider()
+    {
+        return array(
+            array('1'),
+            array('10'),
+            array('25'),
         );
     }
 
     /**
      * @expectedException Pagerfanta\Exception\NotIntegerCurrentPageException
-     * @dataProvider      providerSetCurrentPageNotInteger
+     * @dataProvider      setCurrentPageShouldThrowExceptionWhenInvalidProvider
      */
-    public function testSetCurrentPageNotInteger($currentPage)
+    public function testSetCurrentPageShouldThrowExceptionWhenInvalid($currentPage)
     {
         $this->pagerfanta->setCurrentPage($currentPage);
     }
 
-    public function providerSetCurrentPageNotInteger()
+    public function setCurrentPageShouldThrowExceptionWhenInvalidProvider()
     {
         return array(
             array(1.1),
             array('1.1'),
             array(true),
+            array(array(1)),
+        );
+    }
+
+    /**
+     * @expectedException Pagerfanta\Exception\LessThan1CurrentPageException
+     * @dataProvider      setCurrentPageShouldThrowExceptionWhenLessThan1Provider
+     */
+    public function testCurrentPagePageShouldThrowExceptionWhenLessThan1($currentPage)
+    {
+        $this->pagerfanta->setCurrentPage($currentPage);
+    }
+
+    public function setCurrentPageShouldThrowExceptionWhenLessThan1Provider()
+    {
+        return array(
+            array(0),
+            array(-1),
         );
     }
 
     /**
      * @expectedException Pagerfanta\Exception\OutOfRangeCurrentPageException
      */
-    public function testSetCurrentPageOutOfRange()
+    public function testSetCurrentPageShouldThrowExceptionWhenThePageIsOutOfRange()
     {
-        $this->adapter
-            ->expects($this->any())
-            ->method('getNbResults')
-            ->will($this->returnValue(10))
-        ;
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(11);
+    }
 
-        $this->pagerfanta->setMaxPerPage(5);
-        $this->pagerfanta->setCurrentPage(3);
+    public function testSetCurrentPageShouldNotThrowExceptionWhenIndicatingAllowOurOfRangePages()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setAllowOutOfRangePages(true);
+        $this->pagerfanta->setCurrentPage(11);
+
+        $this->assertSame(11, $this->pagerfanta->getCurrentPage());
+    }
+
+    public function testSetCurrentPageShouldNotThrowExceptionWhenIndicatingAllowOurOfRangePagesWithOldBooleanArguments()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(11, true);
+
+        $this->assertSame(11, $this->pagerfanta->getCurrentPage());
+    }
+
+    public function testSetCurrentPageShouldReturnThePagerfanta()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+
+        $this->assertSame($this->pagerfanta, $this->pagerfanta->setCurrentPage(1));
+    }
+
+    public function testSetCurrentPageShouldNormalizePageWhenOutOfRangePageAndIndicatingNormalizeOutOfRangePages()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setAllowOutOfRangePages(false);
+        $this->pagerfanta->setNormalizeOutOfRangePages(true);
+        $this->pagerfanta->setCurrentPage(11);
+
+        $this->assertSame(10, $this->pagerfanta->getCurrentPage());
+    }
+
+    public function testSetCurrentPageShouldNormalizePageWhenOutOfRangePageAndIndicatingNormalizeOutOfRangePagesWithDeprecatedBooleansArguments()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(11, false, true);
+
+        $this->assertSame(10, $this->pagerfanta->getCurrentPage());
+    }
+
+    public function testSetCurrentPageShouldResetCurrentPageResults()
+    {
+        $pagerfanta = $this->pagerfanta;
+
+        $this->assertResetCurrentPageResults(function () use ($pagerfanta) {
+            $pagerfanta->setCurrentPage(1);
+        });
     }
 
     /**
-     * @dataProvider providerSetCurrentPageNormalizeOutOfRangePages
+     * @dataProvider testGetCurrentPageResultsShouldReturnASliceFromTheAdapterDependingOnTheCurrentPageAndMaxPerPageProvider
      */
-    public function testSetCurrentPageNormalizeOutOfRangePages($page)
+    public function testGetCurrentPageResultsShouldReturnASliceFromTheAdapterDependingOnTheCurrentPageAndMaxPerPage($maxPerPage, $currentPage, $offset)
     {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage($maxPerPage);
+        $this->pagerfanta->setCurrentPage($currentPage);
+
+        $currentPageResults = new \ArrayObject();
+
         $this->adapter
             ->expects($this->any())
-            ->method('getNbResults')
-            ->will($this->returnValue(0))
-        ;
+            ->method('getSlice')
+            ->with($this->equalTo($offset), $this->equalTo($maxPerPage))
+            ->will($this->returnValue($currentPageResults));
 
-        $this->pagerfanta->setCurrentPage($page, false, true);
-        $this->assertSame(1, $this->pagerfanta->getCurrentPage());
+        $this->assertSame($currentPageResults, $this->pagerfanta->getCurrentPageResults());
     }
 
-    public function providerSetCurrentPageNormalizeOutOfRangePages()
+    public function testGetCurrentPageResultsShouldReturnASliceFromTheAdapterDependingOnTheCurrentPageAndMaxPerPageProvider()
     {
+        // max per page, current page, offset
         return array(
-            array(-1),
-            array(0),
-            array(1),
-            array(2),
-            array(100),
+            array(10, 1, 0),
+            array(10, 2, 10),
+            array(20, 3, 40),
         );
     }
 
-    public function testGetCurrentPageResults()
+    public function testGetCurrentPageResultsShouldCacheTheResults()
     {
-        $returnValues = array(
-            array('foo' => 'bar', 'bar' => 'foo'),
-            array('paga', 'fanta', 'foo', 'bar'),
-        );
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(1);
+
+        $currentPageResults = new \ArrayObject();
 
         $this->adapter
             ->expects($this->once())
             ->method('getSlice')
-            ->with($this->equalTo(20), $this->equalTo(10))
-            ->will($this->returnValue($returnValues[0]))
-        ;
+            ->will($this->returnValue($currentPageResults));
 
-        $this->pagerfanta->setMaxPerPage(10);
-        $this->pagerfanta->setCurrentPage(3, true);
-        $this->assertSame($returnValues[0], $this->pagerfanta->getCurrentPageResults());
-
-        // cached
-        $this->assertSame($returnValues[0], $this->pagerfanta->getCurrentPageResults());
+        $this->pagerfanta->getCurrentPageResults();
+        $this->assertSame($currentPageResults, $this->pagerfanta->getCurrentPageResults());
     }
 
-    public function testGetNbResults()
+    public function testHaveToPaginateReturnsTrueWhenTheNumberOfResultsIsGreaterThanTheMaxPerPage()
     {
-        $this->adapter
-            ->expects($this->any())
-            ->method('getNbResults')
-            ->will($this->returnValue(100))
-        ;
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(99);
 
-        $this->assertSame(100, $this->pagerfanta->getNbResults());
-    }
-
-    public function testGetNbPages()
-    {
-        $this->adapter
-            ->expects($this->any())
-            ->method('getNbResults')
-            ->will($this->returnValue(100))
-        ;
-
-        $this->pagerfanta->setMaxPerPage(10);
-        $this->assertSame(10, $this->pagerfanta->getNbPages());
-
-        // max per page reset the nb results
-        $this->pagerfanta->setMaxPerPage(6);
-        $this->assertSame(17, $this->pagerfanta->getNbPages());
-    }
-
-    public function testHaveToPaginate()
-    {
-        $this->adapter
-            ->expects($this->any())
-            ->method('getNbResults')
-            ->will($this->returnValue(10))
-        ;
-
-        $this->pagerfanta->setMaxPerPage(11);
-        $this->assertFalse($this->pagerfanta->haveToPaginate());
-        $this->pagerfanta->setMaxPerPage(10);
-        $this->assertFalse($this->pagerfanta->haveToPaginate());
-        $this->pagerfanta->setMaxPerPage(9);
         $this->assertTrue($this->pagerfanta->haveToPaginate());
     }
-    
-    public function testSetNbResults()
+
+    public function testHaveToPaginateReturnsFalseWhenTheNumberOfResultsIsEqualToMaxPerPage()
     {
-        $this->adapter
-            ->expects($this->never())
-            ->method('getNbResults')
-        ;
-        
-        $this->pagerfanta->setNbResults(2);
-        $this->assertEquals(2, $this->pagerfanta->getNbResults());
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(100);
+
+        $this->assertFalse($this->pagerfanta->haveToPaginate());
     }
 
-    public function testHasGetPreviousNextPage()
+    public function testHaveToPaginateReturnsFalseWhenTheNumberOfResultsIsLessThanMaxPerPage()
     {
-        $this->adapter
-            ->expects($this->any())
-            ->method('getNbResults')
-            ->will($this->returnValue(100))
-        ;
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(101);
 
+        $this->assertFalse($this->pagerfanta->haveToPaginate());
+    }
+
+    public function testHasPreviousPageShouldReturnTrueWhenTheCurrentPageIsGreaterThan1()
+    {
+        $this->setAdapterNbResultsAny(100);
+
+        foreach (array(2, 3) as $page) {
+            $this->pagerfanta->setCurrentPage($page);
+            $this->assertTrue($this->pagerfanta->hasPreviousPage());
+        }
+    }
+
+    public function testHasPreviousPageShouldReturnFalseWhenTheCurrentPageIs1()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setCurrentPage(1);
+
+        $this->assertFalse($this->pagerfanta->hasPreviousPage());
+    }
+
+    public function testGetPreviousPageShouldReturnThePreviousPage()
+    {
+        $this->setAdapterNbResultsAny(100);
         $this->pagerfanta->setMaxPerPage(10);
 
-        $this->pagerfanta->setCurrentPage(1);
-        $this->assertFalse($this->pagerfanta->hasPreviousPage());
-        try {
-            $this->pagerfanta->getPreviousPage();
-            $this->fail();
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('Pagerfanta\Exception\LogicException', $e);
+        foreach (array(2 => 1, 3 => 2) as $currentPage => $previousPage) {
+            $this->pagerfanta->setCurrentPage($currentPage);
+            $this->assertSame($previousPage, $this->pagerfanta->getPreviousPage());
         }
-        $this->assertTrue($this->pagerfanta->hasNextPage());
-        $this->assertSame(2, $this->pagerfanta->getNextPage());
 
-        $this->pagerfanta->setCurrentPage(5);
-        $this->assertTrue($this->pagerfanta->hasPreviousPage());
-        $this->assertSame(4, $this->pagerfanta->getPreviousPage());
-        $this->assertTrue($this->pagerfanta->hasNextPage());
-        $this->assertSame(6, $this->pagerfanta->getNextPage());
+    }
 
-        $this->pagerfanta->setCurrentPage(10);
-        $this->assertTrue($this->pagerfanta->hasPreviousPage());
-        $this->assertSame(9, $this->pagerfanta->getPreviousPage());
-        $this->assertFalse($this->pagerfanta->hasNextPage());
-        try {
-            $this->pagerfanta->getNextPage();
-            $this->fail();
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('Pagerfanta\Exception\LogicException', $e);
+    /**
+     * @expectedException Pagerfanta\Exception\LogicException
+     */
+    public function testGetPreviousPageShouldThrowALogicExceptionIfThereIsNoPreviousPage()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(1);
+
+        $this->pagerfanta->getPreviousPage();
+    }
+
+    public function testHasNextPageShouldReturnTrueIfTheCurrentPageIsNotTheLast()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+
+        foreach (array(1, 2) as $page) {
+            $this->pagerfanta->setCurrentPage($page);
+            $this->assertTrue($this->pagerfanta->hasNextPage());
         }
     }
 
-    public function testCountableInterface()
+    public function testHasNextPageShouldReturnFalseIfTheCurrentPageIsTheLast()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(10);
+
+        $this->assertFalse($this->pagerfanta->hasNextPage());
+    }
+
+    public function testGetNextPageShouldReturnTheNextPage()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+
+        foreach (array(2 => 3, 3 => 4) as $currentPage => $nextPage) {
+            $this->pagerfanta->setCurrentPage($currentPage);
+            $this->assertSame($nextPage, $this->pagerfanta->getNextPage());
+        }
+    }
+
+    /**
+     * @expectedException Pagerfanta\Exception\LogicException
+     */
+    public function testGetNextPageShouldThrowALogicExceptionIfTheCurrentPageIsTheLast()
+    {
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+        $this->pagerfanta->setCurrentPage(10);
+
+        $this->pagerfanta->getNextPage();
+    }
+
+    public function testCountShouldReturnNbResults()
+    {
+        $this->setAdapterNbResultsAny(30);
+
+        $this->assertSame(30, $this->pagerfanta->count());
+    }
+
+    public function testPagerfantaShouldImplementCountableInterface()
+    {
+        $this->assertInstanceOf('Countable', $this->pagerfanta);
+    }
+
+    public function testGetIteratorShouldReturnCurrentPageResultsIfItIsAnIterator()
+    {
+        $currentPageResults = new \ArrayIterator(array('foo'));
+        $this->setAdapterGetSlice($currentPageResults);
+
+        $expected = $currentPageResults;
+        $this->assertSame($expected, $this->pagerfanta->getIterator());
+    }
+
+    public function testGetIteratorShouldReturnTheIteratorOfCurrentPageResultsIfItIsAnIteratorAggregate()
+    {
+        $currentPageResults = new IteratorAggregate();
+        $this->setAdapterGetSlice($currentPageResults);
+
+        $expected = $currentPageResults->getIterator();
+        $this->assertSame($expected, $this->pagerfanta->getIterator());
+    }
+
+    public function testGetIteratorShouldReturnAnArrayIteratorIfCurrentPageResultsIsAnArray()
+    {
+        $currentPageResults = array('foo', 'bar');
+        $this->setAdapterGetSlice($currentPageResults);
+
+        $expected = new \ArrayIterator($currentPageResults);
+        $this->assertEquals($expected, $this->pagerfanta->getIterator());
+    }
+
+    private function setAdapterGetSlice($currentPageResults)
     {
         $this->adapter
             ->expects($this->any())
-            ->method('getNbResults')
-            ->will($this->returnValue(100))
-        ;
-
-        $this->assertSame(100, count($this->pagerfanta));
+            ->method('getSlice')
+            ->will($this->returnValue($currentPageResults));
     }
 
-    public function testGetIteratorArray()
+    public function testPagerfantaShouldImplementIteratorAggregateInterface()
     {
-        $array = array('foo', 'bar');
-
-        $this->adapter
-            ->expects($this->once())
-            ->method('getSlice')
-            ->will($this->returnValue($array))
-        ;
-
-        $this->assertEquals(new \ArrayIterator($array), $this->pagerfanta->getIterator());
+        $this->assertInstanceOf('IteratorAggregate', $this->pagerfanta);
     }
 
-    public function testGetIteratorIterator()
+    private function assertResetCurrentPageResults($callback)
     {
-        $iterator = new \ArrayIterator(array('foobar'));
+        $this->setAdapterNbResultsAny(100);
+        $this->pagerfanta->setMaxPerPage(10);
+
+        $currentPageResults0 = new \ArrayObject();
+        $currentPageResults1 = new \ArrayObject();
 
         $this->adapter
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('getSlice')
-            ->will($this->returnValue($iterator))
-        ;
-
-        $this->assertSame($iterator, $this->pagerfanta->getIterator());
-    }
-
-    public function testGetIteratorIteratorAggregate()
-    {
-        $iteratorAggregate = new IteratorAggregate();
-
+            ->will($this->returnValue($currentPageResults0));
         $this->adapter
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('getSlice')
-            ->will($this->returnValue($iteratorAggregate))
-        ;
+            ->will($this->returnValue($currentPageResults1));
 
-        $this->assertSame($iteratorAggregate->getIterator(), $this->pagerfanta->getIterator());
+        $this->assertSame($currentPageResults0, $this->pagerfanta->getCurrentPageResults());
+        $callback();
+        $this->assertSame($currentPageResults1, $this->pagerfanta->getCurrentPageResults());
     }
 }

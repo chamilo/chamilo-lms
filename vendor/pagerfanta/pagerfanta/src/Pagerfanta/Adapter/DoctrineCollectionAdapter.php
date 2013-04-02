@@ -17,8 +17,6 @@ use Doctrine\Common\Collections\Collection;
  * DoctrineCollectionAdapter.
  *
  * @author Pablo Díez <pablodip@gmail.com>
- *
- * @api
  */
 class DoctrineCollectionAdapter implements AdapterInterface
 {
@@ -28,8 +26,6 @@ class DoctrineCollectionAdapter implements AdapterInterface
      * Constructor.
      *
      * @param Collection $collection A Doctrine collection.
-     *
-     * @api
      */
     public function __construct(Collection $collection)
     {
@@ -40,8 +36,6 @@ class DoctrineCollectionAdapter implements AdapterInterface
      * Returns the collection.
      *
      * @return Collection The collection.
-     *
-     * @api
      */
     public function getCollection()
     {

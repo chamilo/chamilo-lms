@@ -60,6 +60,10 @@ The `->setCurrentPage()` method throws an exception if the page is not valid:
 
 All of them extends from `Pagerfanta\Exception\NotValidCurrentPageException`.
 
+`->setCurrentPage()` throws an out ot range exception depending on the
+max per page, so if you are going to modify the max per page, you should do it
+before setting the current page.
+
 ## Adapters
 
 The adapter's concept is very simple. An adapter just returns the number of results and an slice for a offset and length. This way you can adapt a pagerfanta to paginate any kind results simply creating an adapter.
@@ -199,6 +203,22 @@ $query = $solarium->createSelect();
 $query->setQuery('search term');
 
 $adapter = new SolariumAdapter($solarium, $query);
+```
+
+### FixedAdapter
+
+Best used when you need to do a custom paging solution and don't want to implement a full adapter for a one-off use case.
+It returns always the same data no matter what page you query:
+
+```php
+<?php
+
+use Pagerfanta\Adapter\FixedAdapter;
+
+$nbResults = 5;
+$results = array(/* ... */);
+
+$adapter = new FixedAdapter($nbResults, $results);
 ```
 
 ## Views

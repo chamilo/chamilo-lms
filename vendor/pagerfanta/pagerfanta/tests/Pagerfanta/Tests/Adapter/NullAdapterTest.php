@@ -6,28 +6,38 @@ use Pagerfanta\Adapter\NullAdapter;
 
 class NullAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    protected $nbResults;
-    protected $adapter;
-
-    protected function setUp()
-    {
-        $this->nbResults = 33;
-        $this->adapter = new NullAdapter($this->nbResults);
-    }
-
     public function testGetNbResults()
     {
-        $this->assertSame(33, $this->adapter->getNbResults());
+        $adapter = new NullAdapter(33);
+        $this->assertSame(33, $adapter->getNbResults());
     }
 
-    public function testGetResults()
+    public function testGetSliceShouldReturnAnEmptyArrayIfTheOffsetIsEqualThanTheNbResults()
     {
-        $this->assertSame(array_fill(0, 10, null), $this->adapter->getSlice(20, 10));
+        $adapter = new NullAdapter(10);
+        $this->assertSame(array(), $adapter->getSlice(10, 5));
     }
 
-    public function testGetResultsWithRemainCountLessThanLength()
+    public function testGetSliceShouldReturnAnEmptyArrayIfTheOffsetIsGreaterThanTheNbResults()
     {
-        $this->assertSame(array_fill(0, 3, null), $this->adapter->getSlice(30, 10));
+        $adapter = new NullAdapter(10);
+        $this->assertSame(array(), $adapter->getSlice(11, 5));
     }
 
+    public function testGetSliceShouldReturnANullArrayWithTheLengthPassed()
+    {
+        $adapter = new NullAdapter(100);
+        $this->assertSame($this->createNullArray(10), $adapter->getSlice(20, 10));
+    }
+
+    public function testGetSliceShouldReturnANullArrayWithTheRemainCountWhenLengthIsGreaterThanTheRemain()
+    {
+        $adapter = new NullAdapter(33);
+        $this->assertSame($this->createNullArray(3), $adapter->getSlice(30, 10));
+    }
+
+    private function createNullArray($length)
+    {
+        return array_fill(0, $length, null);
+    }
 }

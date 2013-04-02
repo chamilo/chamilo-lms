@@ -19,8 +19,6 @@ use Pagerfanta\PagerfantaInterface;
  * This view renders another view with a default options to reuse them in a project.
  *
  * @author Pablo Díez <pablodip@gmail.com>
- *
- * @api
  */
 class OptionableView implements ViewInterface
 {
@@ -31,11 +29,9 @@ class OptionableView implements ViewInterface
      * Constructor.
      *
      * @param ViewInterface $view    A view.
-     * @param array         $options An array of default options (optional).
-     *
-     * @api
+     * @param array         $options An array of default options.
      */
-    public function __construct(ViewInterface $view, array $defaultOptions = array())
+    public function __construct(ViewInterface $view, array $defaultOptions)
     {
         $this->view = $view;
         $this->defaultOptions = $defaultOptions;

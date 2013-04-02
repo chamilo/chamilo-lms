@@ -23,8 +23,6 @@ use Doctrine\ORM\NoResultException;
  *
  * @author Pablo Díez <pablodip@gmail.com>
  * @author Benjamin Eberlei <kontakt@beberlei.de>
- *
- * @api
  */
 class Paginator implements \Countable, \IteratorAggregate
 {
@@ -40,8 +38,6 @@ class Paginator implements \Countable, \IteratorAggregate
      *
      * @param Query|QueryBuilder $query               A Doctrine ORM query or query builder.
      * @param Boolean            $fetchJoinCollection Whether the query joins a collection (true by default).
-     *
-     * @api
      */
     public function __construct($query, $fetchJoinCollection = true)
     {
@@ -57,8 +53,6 @@ class Paginator implements \Countable, \IteratorAggregate
      * Returns the query
      *
      * @return Query
-     *
-     * @api
      */
     public function getQuery()
     {

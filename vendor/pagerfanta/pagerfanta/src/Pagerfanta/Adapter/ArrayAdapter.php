@@ -15,8 +15,6 @@ namespace Pagerfanta\Adapter;
  * ArrayAdapter.
  *
  * @author Pablo Díez <pablodip@gmail.com>
- *
- * @api
  */
 class ArrayAdapter implements AdapterInterface
 {
@@ -26,8 +24,6 @@ class ArrayAdapter implements AdapterInterface
      * Constructor.
      *
      * @param array $array The array.
-     *
-     * @api
      */
     public function __construct(array $array)
     {
@@ -38,8 +34,6 @@ class ArrayAdapter implements AdapterInterface
      * Returns the array.
      *
      * @return array The array.
-     *
-     * @api
      */
     public function getArray()
     {

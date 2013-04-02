@@ -805,12 +805,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/Form.git",
-            "reference": "1ec4311b512a051c18300e9e1ebc1442f62da5ac"
+            "reference": "8659a898edadadf170dc3697c70c1030f65e8d67"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Form/zipball/1ec4311b512a051c18300e9e1ebc1442f62da5ac",
-            "reference": "1ec4311b512a051c18300e9e1ebc1442f62da5ac",
+            "url": "https://api.github.com/repos/symfony/Form/zipball/8659a898edadadf170dc3697c70c1030f65e8d67",
+            "reference": "8659a898edadadf170dc3697c70c1030f65e8d67",
             "shasum": ""
         },
         "require": {
@@ -828,7 +828,7 @@
             "symfony/http-foundation": "2.2.*",
             "symfony/validator": "2.2.*"
         },
-        "time": "2013-03-26 13:01:49",
+        "time": "2013-03-27 09:08:41",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1036,118 +1036,6 @@
         "homepage": "http://symfony.com"
     },
     {
-        "name": "symfony/dom-crawler",
-        "version": "v2.2.0",
-        "version_normalized": "2.2.0.0",
-        "target-dir": "Symfony/Component/DomCrawler",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/DomCrawler.git",
-            "reference": "v2.2.0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/v2.2.0",
-            "reference": "v2.2.0",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "symfony/css-selector": ">=2.0,<3.0"
-        },
-        "suggest": {
-            "symfony/css-selector": "2.2.*"
-        },
-        "time": "2013-03-01 06:43:14",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\DomCrawler\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony DomCrawler Component",
-        "homepage": "http://symfony.com"
-    },
-    {
-        "name": "symfony/browser-kit",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "target-dir": "Symfony/Component/BrowserKit",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/BrowserKit.git",
-            "reference": "b0aa5249d957930f93c0c2a3f1f10db0721cb6e9"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/BrowserKit/zipball/b0aa5249d957930f93c0c2a3f1f10db0721cb6e9",
-            "reference": "b0aa5249d957930f93c0c2a3f1f10db0721cb6e9",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "symfony/dom-crawler": ">=2.0,<3.0"
-        },
-        "require-dev": {
-            "symfony/css-selector": ">=2.0,<3.0",
-            "symfony/process": ">=2.0,<3.0"
-        },
-        "suggest": {
-            "symfony/process": "2.2.*"
-        },
-        "time": "2013-03-20 14:03:03",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.3-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\BrowserKit\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony BrowserKit Component",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "doctrine/dbal",
         "version": "2.3.3",
         "version_normalized": "2.3.3.0",
@@ -1275,12 +1163,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/whiteoctober/Pagerfanta.git",
-            "reference": "ae0ff215b3be2c3bd0b131a8b8daa9b15568c6db"
+            "reference": "43feb3d11af5ea16e5f1ef61fbe05df8337b6c46"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/ae0ff215b3be2c3bd0b131a8b8daa9b15568c6db",
-            "reference": "ae0ff215b3be2c3bd0b131a8b8daa9b15568c6db",
+            "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/43feb3d11af5ea16e5f1ef61fbe05df8337b6c46",
+            "reference": "43feb3d11af5ea16e5f1ef61fbe05df8337b6c46",
             "shasum": ""
         },
         "require": {
@@ -1291,7 +1179,7 @@
             "doctrine/orm": "2.*",
             "mandango/mandango": "*",
             "propel/propel1": ">=1.6,<2.0",
-            "solarium/solarium": "3.*"
+            "solarium/solarium": "dev-develop"
         },
         "suggest": {
             "doctrine/mongodb-odm": "To use the DoctrineODMMongoDBAdapter.",
@@ -1300,7 +1188,7 @@
             "propel/propel1": "To use the PropelAdapter",
             "solarium/solarium": "To use the SolariumAdapter."
         },
-        "time": "2013-03-12 22:52:44",
+        "time": "2013-04-02 00:47:33",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1395,6 +1283,557 @@
             "menu",
             "tree"
         ]
+    },
+    {
+        "name": "symfony/yaml",
+        "version": "v2.1.9",
+        "version_normalized": "2.1.9.0",
+        "target-dir": "Symfony/Component/Yaml",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Yaml.git",
+            "reference": "v2.1.9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.1.9",
+            "reference": "v2.1.9",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-03-23 01:54:33",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Yaml": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Yaml Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "chamilo/chash",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/chamilo/chash.git",
+            "reference": "3d31e9577df292fb2ee010b6182ca7dd543b2c67"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/chamilo/chash/zipball/3d31e9577df292fb2ee010b6182ca7dd543b2c67",
+            "reference": "3d31e9577df292fb2ee010b6182ca7dd543b2c67",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "symfony/console": "2.3.*@dev",
+            "symfony/yaml": "2.1.*"
+        },
+        "time": "2013-03-29 10:44:52",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Chash": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/"
+    },
+    {
+        "name": "mpdf/mpdf",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/finwe/mpdf.git",
+            "reference": "v5.6.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/finwe/mpdf/zipball/v5.6.1",
+            "reference": "v5.6.1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=4.3.10"
+        },
+        "time": "2013-01-26 08:22:27",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "mpdf.php",
+                "classes"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-1.0+"
+        ],
+        "authors": [
+            {
+                "name": "Ian Back"
+            }
+        ],
+        "description": "A PHP class to generate PDF files from HTML with Unicode/UTF-8 and CJK support",
+        "homepage": "http://www.mpdf1.com/mpdf/index.php",
+        "keywords": [
+            "pdf",
+            "php",
+            "utf-8"
+        ]
+    },
+    {
+        "name": "ezyang/htmlpurifier",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ezyang/htmlpurifier.git",
+            "reference": "v4.5.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/v4.5.0",
+            "reference": "v4.5.0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2"
+        },
+        "time": "2013-02-18 00:04:08",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "HTMLPurifier": "library/"
+            },
+            "files": [
+                "library/HTMLPurifier.composer.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Edward Z. Yang",
+                "email": "admin@htmlpurifier.org",
+                "homepage": "http://ezyang.com"
+            }
+        ],
+        "description": "Standards compliant HTML filter written in PHP",
+        "homepage": "http://htmlpurifier.org/",
+        "keywords": [
+            "html"
+        ]
+    },
+    {
+        "name": "symfony/finder",
+        "version": "v2.2.0",
+        "version_normalized": "2.2.0.0",
+        "target-dir": "Symfony/Component/Finder",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Finder.git",
+            "reference": "v2.2.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Finder/zipball/v2.2.0",
+            "reference": "v2.2.0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-02-28 14:06:36",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Finder\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Finder Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "kriswallsmith/assetic",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "http://github.com/kriswallsmith/assetic.git",
+            "reference": "v1.0.4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/kriswallsmith/assetic/zipball/v1.0.4",
+            "reference": "v1.0.4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.1"
+        },
+        "time": "2012-08-28 05:18:28",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Assetic": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Kris Wallsmith",
+                "email": "kris.wallsmith@gmail.com",
+                "homepage": "http://kriswallsmith.net/"
+            }
+        ],
+        "description": "Asset Management for PHP",
+        "homepage": "https://github.com/kriswallsmith/assetic",
+        "keywords": [
+            "assets",
+            "compression",
+            "minification"
+        ]
+    },
+    {
+        "name": "mheap/silex-assetic",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mheap/Silex-Assetic.git",
+            "reference": "00cd1e43e7c778f8816d20893202addd13a40cc8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/00cd1e43e7c778f8816d20893202addd13a40cc8",
+            "reference": "00cd1e43e7c778f8816d20893202addd13a40cc8",
+            "shasum": ""
+        },
+        "require": {
+            "kriswallsmith/assetic": ">=1.0",
+            "php": ">=5.3.0",
+            "symfony/finder": ">=2.1,<2.3"
+        },
+        "require-dev": {
+            "silex/silex": "*",
+            "twig/twig": ">=1.2.0"
+        },
+        "suggest": {
+            "twig/twig": ">=1.2.0"
+        },
+        "time": "2013-03-25 09:35:46",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "SilexAssetic": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Sven Eisenschmidt",
+                "email": "sven.eisenschmidt@gmail.com",
+                "homepage": "http://unsicherheitsagent.de/"
+            },
+            {
+                "name": "Michael Heap",
+                "email": "m@michaelheap.com",
+                "homepage": "http://michaelheap.com/"
+            }
+        ],
+        "description": "Assetic extension for Silex",
+        "homepage": "https://github.com/mheap/Silex-Assetic",
+        "keywords": [
+            "assetic",
+            "silex"
+        ]
+    },
+    {
+        "name": "leafo/lessphp",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/leafo/lessphp.git",
+            "reference": "54bb80519c9a73eff250fa1671707b492a402280"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/leafo/lessphp/zipball/54bb80519c9a73eff250fa1671707b492a402280",
+            "reference": "54bb80519c9a73eff250fa1671707b492a402280",
+            "shasum": ""
+        },
+        "time": "2013-03-08 21:29:33",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.3-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "lessc.inc.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT",
+            "GPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "Leaf Corcoran",
+                "email": "leafot@gmail.com",
+                "homepage": "http://leafo.net"
+            }
+        ],
+        "description": "lessphp is a compiler for LESS written in PHP.",
+        "homepage": "http://leafo.net/lessphp/"
+    },
+    {
+        "name": "natxet/CssMin",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/natxet/CssMin.git",
+            "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/natxet/CssMin/zipball/9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
+            "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0"
+        },
+        "time": "2013-03-15 18:47:32",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "CssMin": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Joe Scylla",
+                "email": "joe.scylla@gmail.com",
+                "homepage": "https://profiles.google.com/joe.scylla"
+            }
+        ],
+        "description": "Minifying CSS",
+        "homepage": "http://code.google.com/p/cssmin/",
+        "keywords": [
+            "css",
+            "minify"
+        ]
+    },
+    {
+        "name": "realityking/pchart",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/realityking/pChart.git",
+            "reference": "46fd01cad5a4d761b599df1ab09361fad55c83b6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/realityking/pChart/zipball/46fd01cad5a4d761b599df1ab09361fad55c83b6",
+            "reference": "46fd01cad5a4d761b599df1ab09361fad55c83b6",
+            "shasum": ""
+        },
+        "time": "2013-03-18 08:23:38",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-1.0+"
+        ],
+        "authors": [
+            {
+                "name": "Rouven Weßling",
+                "email": "me@rouvenwessling.de",
+                "homepage": "http://www.rouvenwessling.de"
+            }
+        ],
+        "description": "A fork of the popular pChart library."
+    },
+    {
+        "name": "symfony/dom-crawler",
+        "version": "v2.2.0",
+        "version_normalized": "2.2.0.0",
+        "target-dir": "Symfony/Component/DomCrawler",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/DomCrawler.git",
+            "reference": "v2.2.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/DomCrawler/zipball/v2.2.0",
+            "reference": "v2.2.0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "symfony/css-selector": ">=2.0,<3.0"
+        },
+        "suggest": {
+            "symfony/css-selector": "2.2.*"
+        },
+        "time": "2013-03-01 06:43:14",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\DomCrawler\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony DomCrawler Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/browser-kit",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/BrowserKit",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/BrowserKit.git",
+            "reference": "b0aa5249d957930f93c0c2a3f1f10db0721cb6e9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/BrowserKit/zipball/b0aa5249d957930f93c0c2a3f1f10db0721cb6e9",
+            "reference": "b0aa5249d957930f93c0c2a3f1f10db0721cb6e9",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "symfony/dom-crawler": ">=2.0,<3.0"
+        },
+        "require-dev": {
+            "symfony/css-selector": ">=2.0,<3.0",
+            "symfony/process": ">=2.0,<3.0"
+        },
+        "suggest": {
+            "symfony/process": "2.2.*"
+        },
+        "time": "2013-03-20 14:03:03",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\BrowserKit\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony BrowserKit Component",
+        "homepage": "http://symfony.com"
     },
     {
         "name": "symfony/stopwatch",
@@ -1514,6 +1953,66 @@
         "homepage": "http://symfony.com"
     },
     {
+        "name": "symfony/routing",
+        "version": "v2.2.0",
+        "version_normalized": "2.2.0.0",
+        "target-dir": "Symfony/Component/Routing",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Routing.git",
+            "reference": "v2.2.0-RC3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.0-RC3",
+            "reference": "v2.2.0-RC3",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "doctrine/common": ">=2.2,<3.0",
+            "psr/log": ">=1.0,<2.0",
+            "symfony/config": ">=2.2,<2.3-dev",
+            "symfony/yaml": ">=2.0,<3.0"
+        },
+        "suggest": {
+            "doctrine/common": "~2.2",
+            "symfony/config": "2.2.*",
+            "symfony/yaml": "2.2.*"
+        },
+        "time": "2013-02-11 11:24:47",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Routing\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Routing Component",
+        "homepage": "http://symfony.com"
+    },
+    {
         "name": "symfony/web-profiler-bundle",
         "version": "v2.2.0",
         "version_normalized": "2.2.0.0",
@@ -1625,12 +2124,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/fabpot/Silex.git",
-            "reference": "a5cb55ced63ece76550de1599ddcc60719373594"
+            "reference": "803f809cdaa409e5769b24db952655d7e9187677"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/fabpot/Silex/zipball/a5cb55ced63ece76550de1599ddcc60719373594",
-            "reference": "a5cb55ced63ece76550de1599ddcc60719373594",
+            "url": "https://api.github.com/repos/fabpot/Silex/zipball/803f809cdaa409e5769b24db952655d7e9187677",
+            "reference": "803f809cdaa409e5769b24db952655d7e9187677",
             "shasum": ""
         },
         "require": {
@@ -1667,7 +2166,7 @@
             "symfony/dom-crawler": ">=2.1,<2.3-dev",
             "symfony/form": "To make use of the FormServiceProvider, >= 2.1.4 is required"
         },
-        "time": "2013-03-27 09:31:32",
+        "time": "2013-04-01 08:47:32",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1749,62 +2248,18 @@
         "homepage": "http://silex.sensiolabs.org/"
     },
     {
-        "name": "symfony/yaml",
-        "version": "v2.1.9",
-        "version_normalized": "2.1.9.0",
-        "target-dir": "Symfony/Component/Yaml",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Yaml.git",
-            "reference": "v2.1.9"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.1.9",
-            "reference": "v2.1.9",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2013-03-23 01:54:33",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Yaml": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Yaml Component",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "monolog/monolog",
-        "version": "1.4.0",
-        "version_normalized": "1.4.0.0",
+        "version": "1.4.1",
+        "version_normalized": "1.4.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/Seldaek/monolog",
-            "reference": "1.4.0"
+            "url": "https://github.com/Seldaek/monolog.git",
+            "reference": "1.4.1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1.4.0",
-            "reference": "1.4.0",
+            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1.4.1",
+            "reference": "1.4.1",
             "shasum": ""
         },
         "require": {
@@ -1823,7 +2278,7 @@
             "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
             "raven/raven": "Allow sending log messages to a Sentry server"
         },
-        "time": "2013-02-13 18:06:51",
+        "time": "2013-04-01 10:04:58",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2077,66 +2532,6 @@
         ]
     },
     {
-        "name": "symfony/routing",
-        "version": "v2.2.0",
-        "version_normalized": "2.2.0.0",
-        "target-dir": "Symfony/Component/Routing",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Routing.git",
-            "reference": "v2.2.0-RC3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.0-RC3",
-            "reference": "v2.2.0-RC3",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "doctrine/common": ">=2.2,<3.0",
-            "psr/log": ">=1.0,<2.0",
-            "symfony/config": ">=2.2,<2.3-dev",
-            "symfony/yaml": ">=2.0,<3.0"
-        },
-        "suggest": {
-            "doctrine/common": "~2.2",
-            "symfony/config": "2.2.*",
-            "symfony/yaml": "2.2.*"
-        },
-        "time": "2013-02-11 11:24:47",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.2-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Routing\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Routing Component",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "igorw/config-service-provider",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -2191,126 +2586,6 @@
         "description": "A config ServiceProvider for Silex with support for php, json and yaml.",
         "keywords": [
             "silex"
-        ]
-    },
-    {
-        "name": "chamilo/chash",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/chamilo/chash.git",
-            "reference": "3d31e9577df292fb2ee010b6182ca7dd543b2c67"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/chamilo/chash/zipball/3d31e9577df292fb2ee010b6182ca7dd543b2c67",
-            "reference": "3d31e9577df292fb2ee010b6182ca7dd543b2c67",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.2",
-            "symfony/console": "2.3.*@dev",
-            "symfony/yaml": "2.1.*"
-        },
-        "time": "2013-03-29 10:44:52",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Chash": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/"
-    },
-    {
-        "name": "mpdf/mpdf",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/finwe/mpdf.git",
-            "reference": "v5.6.1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/finwe/mpdf/zipball/v5.6.1",
-            "reference": "v5.6.1",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=4.3.10"
-        },
-        "time": "2013-01-26 08:22:27",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "classmap": [
-                "mpdf.php",
-                "classes"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-1.0+"
-        ],
-        "authors": [
-            {
-                "name": "Ian Back"
-            }
-        ],
-        "description": "A PHP class to generate PDF files from HTML with Unicode/UTF-8 and CJK support",
-        "homepage": "http://www.mpdf1.com/mpdf/index.php",
-        "keywords": [
-            "pdf",
-            "php",
-            "utf-8"
-        ]
-    },
-    {
-        "name": "ezyang/htmlpurifier",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/ezyang/htmlpurifier.git",
-            "reference": "v4.5.0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/v4.5.0",
-            "reference": "v4.5.0",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2"
-        },
-        "time": "2013-02-18 00:04:08",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "HTMLPurifier": "library/"
-            },
-            "files": [
-                "library/HTMLPurifier.composer.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL"
-        ],
-        "authors": [
-            {
-                "name": "Edward Z. Yang",
-                "email": "admin@htmlpurifier.org",
-                "homepage": "http://ezyang.com"
-            }
-        ],
-        "description": "Standards compliant HTML filter written in PHP",
-        "homepage": "http://htmlpurifier.org/",
-        "keywords": [
-            "html"
         ]
     }
 ]

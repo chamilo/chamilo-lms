@@ -6,21 +6,30 @@ use Pagerfanta\Adapter\MandangoAdapter;
 
 class MandangoAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    protected $query;
-    protected $adapter;
+    private $query;
+    private $adapter;
 
     protected function setUp()
     {
-        if (!class_exists('Mandango\Query')) {
+        if ($this->isMandangoNotAvailable()) {
             $this->markTestSkipped('Mandango is not available');
         }
 
-        $this->query = $this
+        $this->query = $this->createQueryMock();
+        $this->adapter = new MandangoAdapter($this->query);
+    }
+
+    private function isMandangoNotAvailable()
+    {
+        return !class_exists('Mandango\Query');
+    }
+
+    private function createQueryMock()
+    {
+        return $this
             ->getMockBuilder('Mandango\Query')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
-        $this->adapter = new MandangoAdapter($this->query);
+            ->getMock();
     }
 
     public function testGetQuery()
@@ -39,37 +48,42 @@ class MandangoAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(100, $this->adapter->getNbResults());
     }
 
-    /**
-     * @dataProvider getResultsProvider
-     */
-    public function testGetResults($offset, $length)
+    public function testGetResults()
+    {
+        $offset = 14;
+        $length = 30;
+        $slice = new \ArrayObject();
+
+        $this->prepareQuerySkip($offset);
+        $this->prepareQueryLimit($length);
+        $this->prepareQueryAll($slice);
+
+        $this->assertSame($slice, $this->adapter->getSlice($offset, $length));
+    }
+
+    private function prepareQueryLimit($limit)
     {
         $this->query
             ->expects($this->once())
             ->method('limit')
-            ->with($length)
-            ->will($this->returnValue($this->query))
-        ;
+            ->with($limit)
+            ->will($this->returnValue($this->query));
+    }
+
+    private function prepareQuerySkip($skip)
+    {
         $this->query
             ->expects($this->once())
             ->method('skip')
-            ->with($offset)
-            ->will($this->returnValue($this->query))
-        ;
+            ->with($skip)
+            ->will($this->returnValue($this->query));
+    }
+
+    private function prepareQueryAll($all)
+    {
         $this->query
             ->expects($this->once())
             ->method('all')
-            ->will($this->returnValue($all = array(new \DateTime(), new \DateTime())))
-        ;
-
-        $this->assertSame($all, $this->adapter->getSlice($offset, $length));
-    }
-
-    public function getResultsProvider()
-    {
-        return array(
-            array(2, 10),
-            array(3, 2),
-        );
+            ->will($this->returnValue($all));
     }
 }

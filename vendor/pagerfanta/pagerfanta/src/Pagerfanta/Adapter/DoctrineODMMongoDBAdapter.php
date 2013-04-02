@@ -17,8 +17,6 @@ use Doctrine\ODM\MongoDB\Query\Builder;
  * DoctrineODMMongoDBAdapter.
  *
  * @author Pablo Díez <pablodip@gmail.com>
- *
- * @api
  */
 class DoctrineODMMongoDBAdapter implements AdapterInterface
 {
@@ -28,8 +26,6 @@ class DoctrineODMMongoDBAdapter implements AdapterInterface
      * Constructor.
      *
      * @param Builder $queryBuilder A DoctrineMongo query builder.
-     *
-     * @api
      */
     public function __construct(Builder $queryBuilder)
     {
@@ -40,8 +36,6 @@ class DoctrineODMMongoDBAdapter implements AdapterInterface
      * Returns the query builder.
      *
      * @return Builder The query builder.
-     *
-     * @api
      */
     public function getQueryBuilder()
     {
@@ -61,6 +55,10 @@ class DoctrineODMMongoDBAdapter implements AdapterInterface
      */
     public function getSlice($offset, $length)
     {
-        return iterator_to_array($this->queryBuilder->limit($length)->skip($offset)->getQuery()->execute());
+        return $this->queryBuilder
+            ->limit($length)
+            ->skip($offset)
+            ->getQuery()
+            ->execute();
     }
 }

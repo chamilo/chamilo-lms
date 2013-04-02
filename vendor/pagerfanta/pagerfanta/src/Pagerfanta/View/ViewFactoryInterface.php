@@ -17,8 +17,6 @@ use Pagerfanta\PagerfantaInterface;
  * ViewFactoryInterface.
  *
  * @author Pablo Díez <pablodip@gmail.com>
- *
- * @api
  */
 interface ViewFactoryInterface
 {
@@ -36,8 +34,6 @@ interface ViewFactoryInterface
      * @param string $name The name.
      *
      * @return Boolean Whether a view exists or not.
-     *
-     * @api
      */
     function has($name);
 
@@ -45,8 +41,6 @@ interface ViewFactoryInterface
      * Adds views.
      *
      * @param array $views An array of views.
-     *
-     * @api
      */
     function add(array $views);
 
@@ -58,8 +52,6 @@ interface ViewFactoryInterface
      * @return ViewInterface The view.
      *
      * @throws \InvalidArgumentException If the view does not exist.
-     *
-     * @api
      */
     function get($name);
 
@@ -76,15 +68,11 @@ interface ViewFactoryInterface
      * @param string $name The name.
      *
      * @throws \InvalidArgumentException If the view does not exist.
-     *
-     * @api
      */
     function remove($name);
 
     /**
      * Clears the views.
-     *
-     * @api
      */
     function clear();
 }

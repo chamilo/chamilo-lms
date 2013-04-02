@@ -15,8 +15,6 @@ namespace Pagerfanta\Adapter;
  * MongoAdapter.
  *
  * @author Sergey Ponomaryov <serg.ponomaryov@gmail.com>
- *
- * @api
  */
 class MongoAdapter implements AdapterInterface
 {
@@ -26,8 +24,6 @@ class MongoAdapter implements AdapterInterface
      * Constructor.
      *
      * @param \MongoCursor $cursor The cursor.
-     *
-     * @api
      */
     public function __construct(\MongoCursor $cursor)
     {
@@ -38,8 +34,6 @@ class MongoAdapter implements AdapterInterface
      * Returns the cursor.
      *
      * @return \MongoCursor The cursor.
-     *
-     * @api
      */
     public function getCursor()
     {
@@ -59,6 +53,9 @@ class MongoAdapter implements AdapterInterface
      */
     public function getSlice($offset, $length)
     {
-        return $this->cursor->limit($length)->skip($offset);
+        $this->cursor->limit($length);
+        $this->cursor->skip($offset);
+
+        return $this->cursor;
     }
 }

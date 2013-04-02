@@ -24,8 +24,6 @@ class NullAdapter implements AdapterInterface
      * Constructor.
      *
      * @param integer $nbResults Total item count.
-     *
-     * @api
      */
     public function __construct($nbResults = 0)
     {
@@ -47,17 +45,35 @@ class NullAdapter implements AdapterInterface
      * Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
      *
      * {@inheritdoc}
-     *
      */
     public function getSlice($offset, $length)
     {
-        if ($offset >= $this->getNbResults()) {
+        if ($offset >= $this->nbResults) {
             return array();
         }
 
-        $remainItemCount  = $this->getNbResults() - $offset;
-        $currentItemCount = $remainItemCount > $length ? $length : $remainItemCount;
+        $nullArrayLength = $this->calculateNullArrayLength($offset, $length);
 
-        return array_fill(0, $currentItemCount, null);
+        return $this->createNullArray($nullArrayLength);
+    }
+
+    private function calculateNullArrayLength($offset, $length)
+    {
+        $remainCount = $this->remainCount($offset);
+        if ($length > $remainCount) {
+            return $remainCount;
+        }
+
+        return $length;
+    }
+
+    private function remainCount($offset)
+    {
+        return $this->nbResults - $offset;
+    }
+
+    private function createNullArray($length)
+    {
+        return array_fill(0, $length, null);
     }
 }

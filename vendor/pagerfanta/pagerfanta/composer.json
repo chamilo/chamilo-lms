@@ -18,7 +18,7 @@
         "mandango/mandango": "*",
         "doctrine/mongodb-odm": "*",
         "propel/propel1": "~1.6",
-        "solarium/solarium": "3.*"
+        "solarium/solarium": "dev-develop"
     },
     "minimum-stability": "dev",
     "suggest": {

@@ -11,16 +11,25 @@ class MongoAdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (!extension_loaded('mongo')) {
-            $this->markTestSkipped('Mongo extension is not loaded');
+        if ($this->isMongoNotAvailable()) {
+            $this->markTestSkipped('Mongo is not available.');
         }
 
-        $this->cursor = $this
+        $this->cursor = $this->createCursorMock();
+        $this->adapter = new MongoAdapter($this->cursor);
+    }
+
+    private function isMongoNotAvailable()
+    {
+        return !extension_loaded('mongo');
+    }
+
+    private function createCursorMock()
+    {
+        return $this
             ->getMockBuilder('\MongoCursor')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
-        $this->adapter = new MongoAdapter($this->cursor);
+            ->getMock();
     }
 
     public function testGetCursor()
@@ -28,43 +37,42 @@ class MongoAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->cursor, $this->adapter->getCursor());
     }
 
-    public function testGetNbResults()
+    public function testGetNbResultsShouldReturnTheCursorCount()
     {
         $this->cursor
             ->expects($this->once())
             ->method('count')
-            ->will($this->returnValue(100))
-        ;
+            ->will($this->returnValue(100));
 
         $this->assertSame(100, $this->adapter->getNbResults());
     }
 
-    /**
-     * @dataProvider getResultsProvider
-     */
-    public function testGetResults($offset, $length)
+    public function testGetSliceShouldPassTheOffsetAndLengthToTheCursor()
     {
+        $offset = 12;
+        $length = 16;
+
         $this->cursor
             ->expects($this->once())
             ->method('limit')
-            ->with($length)
-            ->will($this->returnValue($this->cursor))
-        ;
+            ->with($length);
         $this->cursor
             ->expects($this->once())
             ->method('skip')
-            ->with($offset)
-            ->will($this->returnValue($this->cursor))
-        ;
+            ->with($offset);
 
-        $this->assertSame($this->cursor, $this->adapter->getSlice($offset, $length));
+        $this->adapter->getSlice($offset, $length);
     }
 
-    public function getResultsProvider()
+    public function testGetSliceShouldReturnTheCursor()
     {
-        return array(
-            array(2, 10),
-            array(3, 2),
-        );
+        $this->cursor
+            ->expects($this->any())
+            ->method('limit');
+        $this->cursor
+            ->expects($this->any())
+            ->method('skip');
+
+        $this->assertSame($this->cursor, $this->adapter->getSlice(1, 1));
     }
 }

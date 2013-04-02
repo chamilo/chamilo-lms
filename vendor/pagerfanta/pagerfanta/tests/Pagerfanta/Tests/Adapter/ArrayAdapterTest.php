@@ -6,15 +6,12 @@ use Pagerfanta\Adapter\ArrayAdapter;
 
 class ArrayAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    protected $array;
-    protected $adapter;
+    private $array;
+    private $adapter;
 
     protected function setUp()
     {
-        $this->array = array();
-        for ($i = 0; $i < 10; $i++) {
-            $this->array[] = mt_rand(11111, 99999);
-        }
+        $this->array = range(1, 100);
         $this->adapter = new ArrayAdapter($this->array);
     }
 
@@ -25,7 +22,7 @@ class ArrayAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNbResults()
     {
-        $this->assertSame(count($this->array), $this->adapter->getNbResults());
+        $this->assertSame(100, $this->adapter->getNbResults());
     }
 
     /**
@@ -33,7 +30,9 @@ class ArrayAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetResults($offset, $length)
     {
-        $this->assertSame(array_slice($this->array, $offset, $length), $this->adapter->getSlice($offset, $length));
+        $expected = array_slice($this->array, $offset, $length);
+
+        $this->assertSame($expected, $this->adapter->getSlice($offset, $length));
     }
 
     public function getResultsProvider()

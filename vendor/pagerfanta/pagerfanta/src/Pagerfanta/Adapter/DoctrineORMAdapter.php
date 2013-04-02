@@ -18,8 +18,6 @@ use Pagerfanta\Adapter\DoctrineORM\Paginator as LegacyPaginator;
  * DoctrineORMAdapter.
  *
  * @author Christophe Coevoet <stof@notk.org>
- *
- * @api
  */
 class DoctrineORMAdapter implements AdapterInterface
 {
@@ -31,10 +29,8 @@ class DoctrineORMAdapter implements AdapterInterface
     /**
      * Constructor.
      *
-     * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query               A Doctrine ORM query or query builder.
-     * @param Boolean            $fetchJoinCollection Whether the query joins a collection (true by default).
-     *
-     * @api
+     * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query A Doctrine ORM query or query builder.
+     * @param Boolean $fetchJoinCollection Whether the query joins a collection (true by default).
      */
     public function __construct($query, $fetchJoinCollection = true)
     {
@@ -49,8 +45,6 @@ class DoctrineORMAdapter implements AdapterInterface
      * Returns the query
      *
      * @return Query
-     *
-     * @api
      */
     public function getQuery()
     {
@@ -80,7 +74,8 @@ class DoctrineORMAdapter implements AdapterInterface
      */
     public function getSlice($offset, $length)
     {
-        $this->paginator->getQuery()
+        $this->paginator
+            ->getQuery()
             ->setFirstResult($offset)
             ->setMaxResults($length);
 

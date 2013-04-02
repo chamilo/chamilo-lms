@@ -17,8 +17,6 @@ use Mandango\Query;
  * MandangoAdapter.
  *
  * @author Pablo Díez <pablodip@gmail.com>
- *
- * @api
  */
 class MandangoAdapter implements AdapterInterface
 {
@@ -28,8 +26,6 @@ class MandangoAdapter implements AdapterInterface
      * Constructor.
      *
      * @param Query $query The query.
-     *
-     * @api
      */
     public function __construct(Query $query)
     {
@@ -40,8 +36,6 @@ class MandangoAdapter implements AdapterInterface
      * Returns the query.
      *
      * @return Query The query.
-     *
-     * @api
      */
     public function getQuery()
     {

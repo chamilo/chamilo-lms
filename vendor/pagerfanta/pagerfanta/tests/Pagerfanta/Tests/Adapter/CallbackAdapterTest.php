@@ -6,31 +6,63 @@ use Pagerfanta\Adapter\CallbackAdapter;
 
 class CallbackAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetNbResult()
+    /**
+     * @expectedException Pagerfanta\Exception\InvalidArgumentException
+     * @dataProvider notCallbackProvider
+     */
+    public function testConstructorShouldThrowAnInvalidArgumentExceptionIfTheGetNbResultsCallbackIsNotACallback($value)
     {
-        $returnValue = 42;
-        $nbResults = function () use ($returnValue) {
-            return $returnValue;
-        };
-        $adapter = new CallbackAdapter($nbResults, function () {});
-
-        $this->assertEquals($returnValue, $adapter->getNbResults());
+        new CallbackAdapter($value, function () {});
     }
 
-    public function testGetSlice()
+    /**
+     * @expectedException Pagerfanta\Exception\InvalidArgumentException
+     * @dataProvider notCallbackProvider
+     */
+    public function testConstructorShouldThrowAnInvalidArgumentExceptionIfTheGetSliceCallbackIsNotACallback($value)
     {
-        $offset = 42;
-        $length = 42 * 2;
-        $returnValue = array('foo');
-        $self = $this;
-        $slice = function ($offset, $length) use ($self, $returnValue, $offset, $length) {
-            $self->assertEquals($offset, $offset);
-            $self->assertEquals($length, $length);
+        new CallbackAdapter(function () {}, $value);
+    }
 
-            return $returnValue;
+    public function notCallbackProvider()
+    {
+        return array(
+            array('foo'),
+            array(1),
+        );
+    }
+
+    public function testGetNbResultShouldReturnTheGetNbResultsCallbackReturnValue()
+    {
+        $getNbResultsCallback = function () {
+            return 42;
         };
-        $adapter = new CallbackAdapter(function () {}, $slice);
+        $adapter = new CallbackAdapter($getNbResultsCallback, function () {});
 
-        $this->assertEquals($returnValue, $adapter->getSlice($offset, $length));
+        $this->assertEquals(42, $adapter->getNbResults());
+    }
+
+    public function testGetSliceShouldReturnTheGetSliceCallbackReturnValue()
+    {
+        $results = new \ArrayObject();
+        $getSliceCallback = function () use ($results) {
+            return $results;
+        };
+
+        $adapter = new CallbackAdapter(function () {}, $getSliceCallback);
+
+        $this->assertSame($results, $adapter->getSlice(1, 1));
+    }
+
+    public function testGetSliceShouldPassTheOffsetAndLengthToTheGetSliceCallback()
+    {
+        $testCase = $this;
+        $getSliceCallback = function ($offset, $length) use ($testCase) {
+            $testCase->assertSame(10, $offset);
+            $testCase->assertSame(18, $length);
+        };
+
+        $adapter = new CallbackAdapter(function () {}, $getSliceCallback);
+        $adapter->getSlice(10, 18);
     }
 }

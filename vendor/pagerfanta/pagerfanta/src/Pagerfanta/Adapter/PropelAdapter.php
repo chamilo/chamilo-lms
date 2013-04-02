@@ -43,7 +43,10 @@ class PropelAdapter implements AdapterInterface
     {
         $q = clone $this->getQuery();
 
-        return $q->limit(0)->offset(0)->count();
+        $q->limit(0);
+        $q->offset(0);
+
+        return $q->count();
     }
 
     /**
@@ -53,6 +56,9 @@ class PropelAdapter implements AdapterInterface
     {
         $q = clone $this->getQuery();
 
-        return $q->limit($length)->offset($offset)->find();
+        $q->limit($length);
+        $q->offset($offset);
+
+        return $q->find();
     }
 }

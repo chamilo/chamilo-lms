@@ -15,8 +15,6 @@ namespace Pagerfanta\Adapter;
  * AdapterInterface.
  *
  * @author Pablo Díez <pablodip@gmail.com>
- *
- * @api
  */
 interface AdapterInterface
 {
@@ -24,8 +22,6 @@ interface AdapterInterface
      * Returns the number of results.
      *
      * @return integer The number of results.
-     *
-     * @api
      */
     function getNbResults();
 
@@ -36,8 +32,6 @@ interface AdapterInterface
      * @param integer $length The length.
      *
      * @return array|\Traversable The slice.
-     *
-     * @api
      */
     function getSlice($offset, $length);
 }

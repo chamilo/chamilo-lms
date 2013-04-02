@@ -21,33 +21,66 @@ use Solarium_Client;
  * SolariumAdapter.
  *
  * @author Igor Wiedler <igor@wiedler.ch>
- *
- * @api
  */
 class SolariumAdapter implements AdapterInterface
 {
     private $client;
     private $query;
-    private $cachedResultSet;
+    private $resultSet;
 
     /**
      * Constructor.
      *
      * @param Solarium_Client|Client       $client A Solarium client.
      * @param Solarium_Query_Select|Query  $query  A Solarium select query.
-     *
-     * @api
      */
     public function __construct($client, $query)
     {
-        if ((!$query instanceof Query) && (!$query instanceof Solarium_Query_Select)) {
-            throw new InvalidArgumentException('The query object should be a Solarium_Query_Select or Solarium\QueryType\Select\Query\Query instance, '.get_class($query).' given');
-        }
-        if ((!$client instanceof Client) && (!$client instanceof Solarium_Client)) {
-            throw new InvalidArgumentException('The client object should be a Solarium_Client or Solarium\Core\Client\Client instance, '.get_class($client).' given');
-        }
+        $this->checkClient($client);
+        $this->checkQuery($query);
+
         $this->client = $client;
         $this->query = $query;
+    }
+
+    private function checkClient($client)
+    {
+        if ($this->isClientInvalid($client)) {
+            throw new InvalidArgumentException($this->getClientInvalidMessage($client));
+        }
+    }
+
+    private function isClientInvalid($client)
+    {
+        return !($client instanceof Client) &&
+               !($client instanceof Solarium_Client);
+    }
+
+    private function getClientInvalidMessage($client)
+    {
+        return sprintf('The client object should be a Solarium_Client or Solarium\Core\Client\Client instance, %s given',
+            get_class($client)
+        );
+    }
+
+    private function checkQuery($query)
+    {
+        if ($this->isQueryInvalid($query)) {
+            throw new InvalidArgumentException($this->getQueryInvalidMessage($query));
+        }
+    }
+
+    private function isQueryInvalid($query)
+    {
+        return !($query instanceof Query) &&
+               !($query instanceof Solarium_Query_Select);
+    }
+
+    private function getQueryInvalidMessage($query)
+    {
+        return sprintf('The query object should be a Solarium_Query_Select or Solarium\QueryType\Select\Query\Query instance, %s given',
+            get_class($query)
+        );
     }
 
     /**
@@ -55,7 +88,7 @@ class SolariumAdapter implements AdapterInterface
      */
     public function getNbResults()
     {
-        return $this->getCachedResultSet()->getNumFound();
+        return $this->getResultSet()->getNumFound();
     }
 
     /**
@@ -67,18 +100,32 @@ class SolariumAdapter implements AdapterInterface
             ->setStart($offset)
             ->setRows($length);
 
-        $this->cachedResultSet = $this->getResultSet();
+        $this->clearResultSet();
 
-        return $this->cachedResultSet;
+        return $this->getResultSet();
     }
 
     private function getResultSet()
     {
+        if ($this->isResultSetNotCached()) {
+            $this->resultSet = $this->createResultSet();
+        }
+
+        return $this->resultSet;
+    }
+
+    private function isResultSetNotCached()
+    {
+        return $this->resultSet === null;
+    }
+
+    private function createResultSet()
+    {
         return $this->client->select($this->query);
     }
 
-    private function getCachedResultSet()
+    private function clearResultSet()
     {
-        return $this->cachedResultSet ?: $this->getResultSet();
+        $this->resultSet = null;
     }
 }

@@ -12,103 +12,210 @@
 namespace Pagerfanta\View;
 
 use Pagerfanta\PagerfantaInterface;
+use Pagerfanta\View\Template\DefaultTemplate;
 
 /**
- * DefaultInterface.
- *
  * @author Pablo Díez <pablodip@gmail.com>
- *
- * @api
  */
 class DefaultView implements ViewInterface
 {
+    private $pagerfanta;
+    private $template;
+
+    private $proximity;
+
+    private $currentPage;
+    private $nbPages;
+
+    private $startPage;
+    private $endPage;
+
     /**
      * {@inheritdoc}
      */
     public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = array())
     {
-        $options = array_merge(array(
-            'proximity'          => 2,
-            'previous_message'   => 'Previous',
-            'next_message'       => 'Next',
-            'css_disabled_class' => 'disabled',
-            'css_dots_class'     => 'dots',
-            'css_current_class'  => 'current',
-        ), $options);
+        $this->initializePagerfanta($pagerfanta);
+        $this->initializeOptions($options);
 
-        $currentPage = $pagerfanta->getCurrentPage();
+        $this->template = $this->createTemplate($routeGenerator, $options);
 
-        $startPage = $currentPage - $options['proximity'];
-        $endPage = $currentPage + $options['proximity'];
+        return $this->generate();
+    }
 
-        if ($startPage < 1) {
-            $endPage = min($endPage + (1 - $startPage), $pagerfanta->getNbPages());
+    private function initializePagerfanta($pagerfanta)
+    {
+        $this->pagerfanta = $pagerfanta;
+
+        $this->currentPage = $pagerfanta->getCurrentPage();
+        $this->nbPages = $pagerfanta->getNbPages();
+    }
+
+    private function initializeOptions($options)
+    {
+        $this->proximity = isset($options['proximity']) ?
+                           $options['proximity'] :
+                           $this->defaultProximity();
+    }
+
+    protected function defaultProximity()
+    {
+        return 2;
+    }
+
+    protected function createTemplate($routeGenerator, $options)
+    {
+        return new DefaultTemplate($routeGenerator, $options);
+    }
+
+    private function generate()
+    {
+        $pages = $this->generatePages();
+
+        return $this->generateContainer($pages);
+    }
+
+    private function generateContainer($pages)
+    {
+        return str_replace('%pages%', $pages, $this->template->container());
+    }
+
+    private function generatePages()
+    {
+        $this->calculateStartAndEndPage();
+
+        return $this->previous().
+               $this->first().
+               $this->secondIfStartIs3().
+               $this->dotsIfStartIsOver3().
+               $this->pages().
+               $this->dotsIfEndIsUnder3ToLast().
+               $this->secondToLastIfEndIs3ToLast().
+               $this->last().
+               $this->next();
+    }
+
+    private function calculateStartAndEndPage()
+    {
+        $startPage = $this->currentPage - $this->proximity;
+        $endPage = $this->currentPage + $this->proximity;
+
+        if ($this->startPageUnderflow($startPage)) {
+            $endPage = $this->calculateEndPageForStartPageUnderflow($startPage, $endPage);
             $startPage = 1;
         }
-        if ($endPage > $pagerfanta->getNbPages()) {
-            $startPage = max($startPage - ($endPage - $pagerfanta->getNbPages()), 1);
-            $endPage = $pagerfanta->getNbPages();
+        if ($this->endPageOverflow($endPage)) {
+            $startPage = $this->calculateStartPageForEndPageOverflow($startPage, $endPage);
+            $endPage = $this->nbPages;
         }
 
-        $pages = array();
+        $this->startPage = $startPage;
+        $this->endPage = $endPage;
+    }
 
-        // previous
-        if ($pagerfanta->hasPreviousPage()) {
-            $pages[] = array($pagerfanta->getPreviousPage(), $options['previous_message']);
-        } else {
-            $pages[] = sprintf('<span class="%s">%s</span>', $options['css_disabled_class'], $options['previous_message']);
+    private function startPageUnderflow($startPage)
+    {
+        return $startPage < 1;
+    }
+
+    private function endPageOverflow($endPage)
+    {
+        return $endPage > $this->nbPages;
+    }
+
+    private function calculateEndPageForStartPageUnderflow($startPage, $endPage)
+    {
+        return min($endPage + (1 - $startPage), $this->nbPages);
+    }
+
+    private function calculateStartPageForEndPageOverflow($startPage, $endPage)
+    {
+        return max($startPage - ($endPage - $this->nbPages), 1);
+    }
+
+    private function previous()
+    {
+        if ($this->pagerfanta->hasPreviousPage()) {
+            return $this->template->previousEnabled($this->pagerfanta->getPreviousPage());
         }
 
-        // first
-        if ($startPage > 1) {
-            $pages[] = array(1, 1);
-            if (3 == $startPage) {
-                $pages[] = array(2, 2);
-            } elseif (2 != $startPage) {
-                $pages[] = sprintf('<span class="%s">...</span>', $options['css_dots_class']);
-            }
+        return $this->template->previousDisabled();
+    }
+
+    private function first()
+    {
+        if ($this->startPage > 1) {
+            return $this->template->first();
+        }
+    }
+
+    private function secondIfStartIs3()
+    {
+        if ($this->startPage == 3) {
+            return $this->template->page(2);
+        }
+    }
+
+    private function dotsIfStartIsOver3()
+    {
+        if ($this->startPage > 3) {
+            return $this->template->separator();
+        }
+    }
+
+    private function pages()
+    {
+        $pages = '';
+
+        foreach (range($this->startPage, $this->endPage) as $page) {
+            $pages .= $this->page($page);
         }
 
-        // pages
-        for ($page = $startPage; $page <= $endPage; $page++) {
-            if ($page == $currentPage) {
-                $pages[] = sprintf('<span class="%s">%s</span>', $options['css_current_class'], $page);
-            } else {
-                $pages[] = array($page, $page);
-            }
+        return $pages;
+    }
+
+    private function page($page)
+    {
+        if ($page == $this->currentPage) {
+            return $this->template->current($page);
         }
 
-        // last
-        if ($pagerfanta->getNbPages() > $endPage) {
-            if ($pagerfanta->getNbPages() > ($endPage + 1)) {
-                if ($pagerfanta->getNbPages() > ($endPage + 2)) {
-                    $pages[] = sprintf('<span class="%s">...</span>', $options['css_dots_class']);
-                } else {
-                    $pages[] = array($endPage + 1, $endPage + 1);
-                }
-            }
+        return $this->template->page($page);
+    }
 
-            $pages[] = array($pagerfanta->getNbPages(), $pagerfanta->getNbPages());
+    private function dotsIfEndIsUnder3ToLast()
+    {
+        if ($this->endPage < $this->toLast(3)) {
+            return $this->template->separator();
+        }
+    }
+
+    private function secondToLastIfEndIs3ToLast()
+    {
+        if ($this->endPage == $this->toLast(3)) {
+            return $this->template->page($this->toLast(2));
+        }
+    }
+
+    private function toLast($n)
+    {
+        return $this->pagerfanta->getNbPages() - ($n - 1);
+    }
+
+    private function last()
+    {
+        if ($this->pagerfanta->getNbPages() > $this->endPage) {
+            return $this->template->page($this->pagerfanta->getNbPages());
+        }
+    }
+
+    private function next()
+    {
+        if ($this->pagerfanta->hasNextPage()) {
+            return $this->template->nextEnabled($this->pagerfanta->getNextPage());
         }
 
-        // next
-        if ($pagerfanta->hasNextPage()) {
-            $pages[] = array($pagerfanta->getNextPage(), $options['next_message']);
-        } else {
-            $pages[] = sprintf('<span class="%s">%s</span>', $options['css_disabled_class'], $options['next_message']);
-        }
-
-        // process
-        $pagesHtml = '';
-        foreach ($pages as $page) {
-            if (is_string($page)) {
-                $pagesHtml .= $page;
-            } else {
-                $pagesHtml .= '<a href="'.$routeGenerator($page[0]).'">'.$page[1].'</a>';
-            }
-        }
-
-        return '<nav>'.$pagesHtml.'</nav>';
+        return $this->template->nextDisabled();
     }
 
     /**

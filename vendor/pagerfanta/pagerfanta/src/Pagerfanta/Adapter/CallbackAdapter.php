@@ -18,24 +18,24 @@ use Pagerfanta\Exception\InvalidArgumentException;
  */
 class CallbackAdapter implements AdapterInterface
 {
-    private $nbResultsCallback;
-    private $sliceCallback;
+    private $getNbResultsCallback;
+    private $getSliceCallback;
 
     /**
-     * @param callable $nbResultsCallback
-     * @param callable $sliceCallback
+     * @param callable $getNbResultsCallback
+     * @param callable $getSliceCallback
      */
-    public function __construct($nbResultsCallback, $sliceCallback)
+    public function __construct($getNbResultsCallback, $getSliceCallback)
     {
-        if (!is_callable($nbResultsCallback)) {
-            throw new InvalidArgumentException('$nbResultsCallback should be a callable');
+        if (!is_callable($getNbResultsCallback)) {
+            throw new InvalidArgumentException('$getNbResultsCallback should be a callable');
         }
-        if (!is_callable($sliceCallback)) {
-            throw new InvalidArgumentException('$sliceCallback should be a callable');
+        if (!is_callable($getSliceCallback)) {
+            throw new InvalidArgumentException('$getSliceCallback should be a callable');
         }
 
-        $this->nbResultsCallback = $nbResultsCallback;
-        $this->sliceCallback = $sliceCallback;
+        $this->getNbResultsCallback = $getNbResultsCallback;
+        $this->getSliceCallback = $getSliceCallback;
     }
 
     /**
@@ -43,7 +43,7 @@ class CallbackAdapter implements AdapterInterface
      */
     public function getNbResults()
     {
-        return call_user_func($this->nbResultsCallback);
+        return call_user_func($this->getNbResultsCallback);
     }
 
     /**
@@ -51,6 +51,6 @@ class CallbackAdapter implements AdapterInterface
      */
     public function getSlice($offset, $length)
     {
-        return call_user_func_array($this->sliceCallback, array($offset, $length));
+        return call_user_func($this->getSliceCallback, $offset, $length);
     }
 }

@@ -4,92 +4,83 @@ namespace Pagerfanta\Tests\Adapter;
 
 use Pagerfanta\Adapter\SolariumAdapter;
 
-class SolariumAdapterTest extends \PHPUnit_Framework_TestCase
+abstract class SolariumAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    static private $clientClasses = array(
-        'Solarium_Client',
-        'Solarium\Client'
-    );
+    abstract protected function getSolariumName();
 
-    static private $queryClasses = array(
-        'Solarium_Query_Select',
-        'Solarium\QueryType\Select\Query\Query'
-    );
-
-    static private $resultClasses = array(
-        'Solarium_Result_Select',
-        'Solarium\QueryType\Select\Result\Result'
-    );
-
-    static private $clientClass;
-    static private $queryClass;
-    static private $resultClass;
+    abstract protected function getClientClass();
+    abstract protected function getQueryClass();
+    abstract protected function getResultClass();
 
     public function setUp()
     {
-        if ($this->classesNotInitialized()) {
-            $this->initializeClasses();
-        }
-
-        if (!$this->isSolariumAvailable()) {
-            $this->markTestSkipped('Solarium is not available.');
+        if ($this->isSolariumNotAvailable()) {
+            $this->markTestSkipped($this->getSolariumName().' is not available.');
         }
     }
 
-    private function classesNotInitialized()
+    private function isSolariumNotAvailable()
     {
-        return static::$clientClass === null;
+        return !class_exists($this->getClientClass());
     }
 
-    private function initializeClasses()
+    /**
+     * @expectedException Pagerfanta\Exception\InvalidArgumentException
+     */
+    public function testConstructorShouldThrowAnInvalidArgumentExceptionWhenInvalidClient()
     {
-        foreach (array(
-            'client' => static::$clientClasses,
-            'query'  => static::$queryClasses,
-            'result' => static::$resultClasses
-        ) as $name => $classes) {
-            $this->initializeClass($name, $classes);
-        }
+        new SolariumAdapter(new \ArrayObject(), $this->createQueryMock());
     }
 
-    private function initializeClass($name, $classes)
+    /**
+     * @expectedException Pagerfanta\Exception\InvalidArgumentException
+     */
+    public function testConstructorShouldThrowAnInvalidArgumentExceptionWhenInvalidQuery()
     {
-        static::${$name.'Class'} = $this->find('class_exists', $classes);
-    }
-
-    private function find($callback, $collection)
-    {
-        foreach ($collection as $value) {
-            if (call_user_func($callback, $value)) {
-                return $value;
-            }
-        }
-    }
-
-    private function isSolariumAvailable()
-    {
-        return (Boolean) static::$clientClass;
+        new SolariumAdapter($this->createClientMock(), new \ArrayObject());
     }
 
     public function testGetNbResults()
     {
-        $query = $this->getQueryMock();
+        $query = $this->createQueryMock();
 
-        $client = $this->getClientMock();
+        $result = $this->createResultMock();
+        $result
+            ->expects($this->once())
+            ->method('getNumFound')
+            ->will($this->returnValue(100));
+
+        $client = $this->createClientMock();
         $client
             ->expects($this->once())
             ->method('select')
             ->with($query)
-            ->will($this->returnValue($this->getResultMock()));
+            ->will($this->returnValue($result));
 
         $adapter = new SolariumAdapter($client, $query);
 
+        $this->assertSame(100, $adapter->getNbResults());
+    }
+
+    public function testGetNbResultsCanUseACachedTheResultSet()
+    {
+        $query = $this->createQueryStub();
+
+        $client = $this->createClientMock();
+        $client
+            ->expects($this->once())
+            ->method('select')
+            ->will($this->returnValue($this->createResultMock()));
+
+        $adapter = new SolariumAdapter($client, $query);
+
+        $adapter->getSlice(1, 1);
         $adapter->getNbResults();
     }
 
     public function testGetSlice()
     {
-        $query = $this->getQueryMock();
+        $query = $this->createQueryMock();
         $query
             ->expects($this->any())
             ->method('setStart')
@@ -101,43 +92,29 @@ class SolariumAdapterTest extends \PHPUnit_Framework_TestCase
             ->with(200)
             ->will($this->returnValue($query));
 
-        $client = $this->getClientMock();
+        $result = $this->createResultMock();
+
+        $client = $this->createClientMock();
         $client
             ->expects($this->once())
             ->method('select')
             ->with($query)
-            ->will($this->returnValue($this->getResultMock()));
+            ->will($this->returnValue($result));
 
         $adapter = new SolariumAdapter($client, $query);
 
-        $adapter->getSlice(1, 200);
+        $this->assertSame($result, $adapter->getSlice(1, 200));
     }
 
-    public function testGetSliceShouldCacheResult()
+    public function testGetSliceCannotUseACachedResultSet()
     {
-        $query = $this->getQueryStub();
+        $query = $this->createQueryStub();
 
-        $client = $this->getClientMock();
-        $client
-            ->expects($this->once())
-            ->method('select')
-            ->will($this->returnValue($this->getResultMock()));
-
-        $adapter = new SolariumAdapter($client, $query);
-
-        $adapter->getSlice(1, 200);
-        $adapter->getNbResults();
-    }
-
-    public function testGetNbResultsShouldNotCacheResult()
-    {
-        $query = $this->getQueryStub();
-
-        $client = $this->getClientMock();
+        $client = $this->createClientMock();
         $client
             ->expects($this->exactly(2))
             ->method('select')
-            ->will($this->returnValue($this->getResultMock()));
+            ->will($this->returnValue($this->createResultMock()));
 
         $adapter = new SolariumAdapter($client, $query);
 
@@ -145,21 +122,21 @@ class SolariumAdapterTest extends \PHPUnit_Framework_TestCase
         $adapter->getSlice(1, 200);
     }
 
-    private function getClientMock()
+    private function createClientMock()
     {
-        return $this->getMockBuilder(static::$clientClass)
+        return $this->getMockBuilder($this->getClientClass())
             ->disableOriginalConstructor()
             ->getMock();
     }
 
-    private function getQueryMock()
+    private function createQueryMock()
     {
-        return $this->getMock(static::$queryClass);
+        return $this->getMock($this->getQueryClass());
     }
 
-    private function getQueryStub()
+    private function createQueryStub()
     {
-        $query = $this->getQueryMock();
+        $query = $this->createQueryMock();
         $query
             ->expects($this->any())
             ->method('setStart')
@@ -172,9 +149,9 @@ class SolariumAdapterTest extends \PHPUnit_Framework_TestCase
         return $query;
     }
 
-    private function getResultMock()
+    private function createResultMock()
     {
-        return $this->getMockBuilder(static::$resultClass)
+        return $this->getMockBuilder($this->getResultClass())
             ->disableOriginalConstructor()
             ->getMock();
     }

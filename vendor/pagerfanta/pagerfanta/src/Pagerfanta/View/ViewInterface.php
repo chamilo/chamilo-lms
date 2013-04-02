@@ -17,22 +17,19 @@ use Pagerfanta\PagerfantaInterface;
  * ViewInterface.
  *
  * @author Pablo Díez <pablodip@gmail.com>
- *
- * @api
  */
 interface ViewInterface
 {
     /**
      * Renders a pagerfanta.
      *
-     * The route generator is any callable to generate the routes receiving the page number
-     * as first and unique argument.
+     * The route generator can be any callable to generate
+     * the routes receiving the page number as first and
+     * unique argument.
      *
      * @param PagerfantaInterface $pagerfanta     A pagerfanta.
      * @param mixed               $routeGenerator A callable to generate the routes.
      * @param array               $options        An array of options (optional).
-     *
-     * @api
      */
     function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = array());
 
@@ -40,8 +37,6 @@ interface ViewInterface
      * Returns the canonical name.
      *
      * @return string The canonical name.
-     *
-     * @api
      */
     function getName();
 

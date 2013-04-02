@@ -6,27 +6,41 @@ use Pagerfanta\Adapter\DoctrineODMMongoDBAdapter;
 
 class DoctrineODMMongoDBAdapterTest extends \PHPUnit_Framework_TestCase
 {
-    protected $queryBuilder;
-    protected $query;
-    protected $adapter;
+    private $queryBuilder;
+    private $query;
+    private $adapter;
 
     protected function setUp()
     {
-        if (!class_exists('Doctrine\ODM\MongoDB\Query\Builder')) {
+        if ($this->isDoctrineMongoNotAvailable()) {
             $this->markTestSkipped('Doctrine MongoDB is not available');
         }
 
-        $this->queryBuilder = $this
+        $this->queryBuilder = $this->createQueryBuilderMock();
+        $this->query = $this->createQueryMock();
+
+        $this->adapter = new DoctrineODMMongoDBAdapter($this->queryBuilder);
+    }
+
+    private function isDoctrineMongoNotAvailable()
+    {
+        return !class_exists('Doctrine\ODM\MongoDB\Query\Builder');
+    }
+
+    private function createQueryBuilderMock()
+    {
+        return $this
             ->getMockBuilder('Doctrine\ODM\MongoDB\Query\Builder')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
-        $this->query = $this
+            ->getMock();
+    }
+
+    private function createQueryMock()
+    {
+        return $this
             ->getMockBuilder('Doctrine\ODM\MongoDB\Query\Query')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
-        $this->adapter = new DoctrineODMMongoDBAdapter($this->queryBuilder);
+            ->getMock();
     }
 
     public function testGetQueryBuilder()
@@ -34,27 +48,26 @@ class DoctrineODMMongoDBAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->queryBuilder, $this->adapter->getQueryBuilder());
     }
 
-    public function testGetNbResults()
+    public function testGetNbResultsShouldCreateTheQueryAndCount()
     {
         $this->queryBuilder
             ->expects($this->once())
             ->method('getQuery')
-            ->will($this->returnValue($this->query))
-        ;
+            ->will($this->returnValue($this->query));
         $this->query
             ->expects($this->once())
             ->method('count')
-            ->will($this->returnValue(110))
-        ;
+            ->will($this->returnValue(110));
 
         $this->assertSame(110, $this->adapter->getNbResults());
     }
 
-    /**
-     * @dataProvider getResultsProvider
-     */
-    public function testGetResults($offset, $length)
+    public function testGetSlice()
     {
+        $offset = 10;
+        $length = 15;
+        $slice = new \ArrayIterator();
+
         $this->queryBuilder
             ->expects($this->once())
             ->method('limit')
@@ -75,17 +88,9 @@ class DoctrineODMMongoDBAdapterTest extends \PHPUnit_Framework_TestCase
         $this->query
             ->expects($this->once())
             ->method('execute')
-            ->will($this->returnValue(new \ArrayIterator($all = array(new \DateTime(), new \DateTime()))))
+            ->will($this->returnValue($slice))
         ;
 
-        $this->assertSame($all, $this->adapter->getSlice($offset, $length));
-    }
-
-    public function getResultsProvider()
-    {
-        return array(
-            array(2, 10),
-            array(3, 2),
-        );
+        $this->assertSame($slice, $this->adapter->getSlice($offset, $length));
     }
 }

@@ -3,7 +3,8 @@ main/inc/conf
 
 # Temp directories
 archive/*
-!archive/.htaccess
+archive/.htaccess
+archive/index.html
 
 # Courses
 

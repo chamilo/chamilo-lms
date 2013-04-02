@@ -1,4 +1,5 @@
 {
+    "name"        : "chamilo/chamilo-lms",
     "autoload": {
         "psr-0": {
             "Entity" : "main/inc/",
@@ -25,29 +26,39 @@
         "symfony/config"        : "dev-master",
         "symfony/yaml"          : "2.1.*",
         "symfony/console"  : "dev-master",
-        "twig/twig": ">=1.8,<2.0-dev",
         "symfony/twig-bridge": "2.2.*@dev",
         "symfony/doctrine-bridge": "2.3.*@dev",
         "symfony/security": "dev-master",
-        "monolog/monolog"       : ">=1.0.0",
         "symfony/form": "2.3.*@dev",
         "symfony/property-access": "dev-master",
         "symfony/validator": "dev-master",
         "symfony/translation": "dev-master",
         "symfony/dependency-injection": "dev-master",
-        "symfony/browser-kit": "2.3.*@dev",
+        "monolog/monolog"       : ">=1.0.0",
+        "twig/twig": ">=1.8,<2.0-dev",
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "dev-master",
         "knplabs/knp-menu": "2.0.*@dev",
         "gedmo/doctrine-extensions": "2.3.*@dev",
-        "symfony/web-profiler-bundle": "~2.2",
-        "silex/web-profiler": "~1.0",
         "chamilo/chash": "dev-master",
         "igorw/config-service-provider": "1.0.*@dev",
         "mpdf/mpdf": "dev-master",
-        "ezyang/htmlpurifier": "dev-master"
+        "ezyang/htmlpurifier": "dev-master",
+        "mheap/silex-assetic": "dev-master",
+        "leafo/lessphp"         : "dev-master",
+        "natxet/CssMin": "dev-master",
+        "realityking/pchart": "dev-master"
+    },
+    "require-dev": {
+        "symfony/browser-kit": "2.3.*@dev",
+        "symfony/web-profiler-bundle": "~2.2",
+        "silex/web-profiler": "~1.0"
+    },
+    "scripts": {
+        "post-install-cmd": "ChamiloLMS\\Composer\\Script::install",
+        "post-update-cmd": "ChamiloLMS\\Composer\\Script::install"
     },
     "minimum-stability": "stable"
 }

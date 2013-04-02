@@ -2895,11 +2895,8 @@ class Tracking
      */
     static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
-        $cache = new pCache();
+        $cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
 
         // Dataset definition
         $data_set = new pData();
@@ -2979,13 +2976,10 @@ class Tracking
      */
     static function generate_exercise_result_thumbnail_graph($attempts)
     {
-        require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
-
         $exercise_title = $attempts['title'];
         $attempts = $attempts['data'];
         $my_exercise_result_array = $exercise_result = array();
+
         if (empty($attempts)) {
             return null;
         }
@@ -3054,10 +3048,8 @@ class Tracking
                 $final_array[$i] = 0;
             }
         }
-        //var_dump($my_final_array, $final_array); echo '<br />';
-        //echo '<pre>'; var_dump($my_exercise_result, $exercise_result,$x_axis);
 
-        $cache = new pCache();
+        $cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
 
         // Dataset definition
         $data_set = new pData();
@@ -3109,10 +3101,6 @@ class Tracking
      */
     static function generate_exercise_result_graph($attempts)
     {
-
-        require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-        require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
         $exercise_title = strip_tags($attempts['title']);
         $attempts = $attempts['data'];
@@ -3184,10 +3172,8 @@ class Tracking
                 $final_array[$i] = 0;
             }
         }
-        //var_dump($my_final_array, $final_array); echo '<br />';
-        //echo '<pre>'; var_dump($my_exercise_result, $exercise_result,$x_axis);
 
-        $cache = new pCache();
+        $cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
 
         // Dataset definition
         $data_set = new pData();

@@ -241,6 +241,22 @@ function check_writable($folder, $suggestion = false)
 }
 
 /**
+ * This function checks if the given folder is writable
+ */
+function check_writable_root_path($folder, $suggestion = false)
+{
+    if (is_writable(api_get_path(SYS_PATH).$folder)) {
+        return Display::label(get_lang('Writable'), 'success');
+    } else {
+        if ($suggestion) {
+            return Display::label(get_lang('NotWritable'), 'info');
+        } else {
+            return Display::label(get_lang('NotWritable'), 'important');
+        }
+    }
+}
+
+/**
  * This function is similar to the core file() function, except that it
  * works with line endings in Windows (which is not the case of file())
  * @param   string  File path
@@ -1393,25 +1409,27 @@ function display_requirements(
 
     echo '<table class="table">
             <tr>
-                <td class="requirements-item">chamilo/main/inc/conf/</td>
-                <td class="requirements-value">'.check_writable('inc/conf/').'</td>
+                <td class="requirements-item">chamilo/app/config</td>
+                <td class="requirements-value">'.check_writable_root_path('app/config/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/main/upload/users/</td>
-                <td class="requirements-value">'.check_writable('upload/users/').'</td>
+                <td class="requirements-item">chamilo/app/data</td>
+                <td class="requirements-value">'.check_writable_root_path('app/data').'</td>
             </tr>
+            <tr>
+                <td class="requirements-item">chamilo/app/logs</td>
+                <td class="requirements-value">'.check_writable_root_path('app/logs').'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">chamilo/app/cache</td>
+                <td class="requirements-value">'.check_writable_root_path('app/cache').'</td>
+            </tr>
+
             <tr>
                 <td class="requirements-item">chamilo/main/default_course_document/images/</td>
                 <td class="requirements-value">'.check_writable('default_course_document/images/').'</td>
             </tr>
-            <tr>
-                <td class="requirements-item">chamilo/archive/</td>
-                <td class="requirements-value">'.check_writable('../archive/').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">chamilo/courses/</td>
-                <td class="requirements-value">'.check_writable('../courses/').' </td>
-            </tr>
+
             <tr>
                 <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
                 <td class="requirements-value">'.$course_test_was_created.' </td>
@@ -1425,10 +1443,6 @@ function display_requirements(
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/home/</td>
-                <td class="requirements-value">'.check_writable('../home/').'</td>
-            </tr>
-            <tr>
                 <td class="requirements-item">chamilo/main/css/</td>
                 <td class="requirements-value">'.check_writable('css/', true).' ('.get_lang(
         'SuggestionOnlyToEnableCSSUploadFeature'
@@ -1439,18 +1453,8 @@ function display_requirements(
                 <td class="requirements-value">'.check_writable('lang/', true).' ('.get_lang(
         'SuggestionOnlyToEnableSubLanguageFeature'
     ).')</td>
-            </tr>'.
-        //'<tr>
-        //    <td class="requirements-item">chamilo/searchdb/</td>
-        //    <td class="requirements-value">'.check_writable('../searchdb/').'</td>
-        //</tr>'.
-        //'<tr>
-        //    <td class="requirements-item">'.session_save_path().'</td>
-        //    <td class="requirements-value">'.(is_writable(session_save_path())
-        //      ? '<strong><font color="green">'.get_lang('Writable').'</font></strong>'
-        //      : '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>').'</td>
-        //</tr>'.
-        '';
+            </tr>';
+
     echo '    </table>';
     echo '  </div>';
     echo '</div>';

@@ -223,6 +223,7 @@ define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path
 define('WEB_PATH', 'WEB_PATH');
 define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
 define('SYS_PATH', 'SYS_PATH');
+define('SYS_PATH_APP', 'SYS_PATH_APP');
 define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
@@ -466,6 +467,7 @@ function api_get_path($path_type, $path = null) {
     static $paths = array(
         WEB_PATH                => '',
         SYS_PATH                => '',
+        SYS_PATH_APP            => 'app/',
         REL_PATH                => '',
         WEB_SERVER_ROOT_PATH    => '',
         SYS_SERVER_ROOT_PATH    => '',
@@ -481,8 +483,8 @@ function api_get_path($path_type, $path = null) {
         WEB_CSS_PATH            => 'css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
-        SYS_ARCHIVE_PATH        => 'archive/',
-        WEB_ARCHIVE_PATH        => 'archive/',
+        SYS_ARCHIVE_PATH        => 'app/cache/',
+        WEB_ARCHIVE_PATH        => 'app/cache/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
         CONFIGURATION_PATH      => 'inc/conf/',
@@ -6804,6 +6806,17 @@ function api_get_language_interface() {
         }
     }
     return $language_interface;
+}
+
+
+function api_get_default_course_document()
+{
+    return api_get_path(SYS_PATH).'app/data/default_course_document/';
+}
+
+function api_get_web_default_course_document()
+{
+    return api_get_path(WEB_PATH).'app/data/default_course_document/';
 }
 
 function load_translations($app) {

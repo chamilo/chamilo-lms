@@ -8,6 +8,8 @@ $app['jquery_ui_theme'] = 'smoothness';
 // Cache
 $app['cache.path'] = api_get_path(SYS_ARCHIVE_PATH);
 
+$app['log.path'] = api_get_path(SYS_PATH_APP).'logs/';
+
 //Twig cache
 $app['twig.cache.path'] = $app['cache.path'].'twig';
 

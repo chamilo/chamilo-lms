@@ -80,9 +80,8 @@ class InstallCommand extends CommonCommand
                         array(
                             'name' => 'chamilo',
                             'sql' => array(
-                                'db_main.sql',
-                                'db_stats.sql',
-                                'db_user.sql'
+                                'db_course.sql',
+                                'db_main.sql'
                             ),
                         ),
                     ),
@@ -94,9 +93,8 @@ class InstallCommand extends CommonCommand
                         array(
                             'name' => 'chamilo',
                             'sql' => array(
-                                'db_main.sql',
-                                'db_stats.sql',
-                                'db_user.sql'
+                                'db_course.sql',
+                                'db_main.sql'
                             ),
                         ),
                     ),
@@ -234,11 +232,48 @@ class InstallCommand extends CommonCommand
             $result = $this->install($version, $newConfigurationArray, $output);
 
             if ($result) {
+                $this->setDatabaseSettings($newConfigurationArray, $newConfigurationArray['main_database']);
+
+                global $_configuration;
+                $_configuration = $newConfigurationArray;
+
                 $this->createAdminUser($newConfigurationArray, $output);
+
+                //@todo ask this during installation
+
+                $adminInfo = $this->getDefaultAdminUser();
+
+                api_set_setting('Institution', 'Portal');
+                api_set_setting('InstitutionUrl', 'Portal');
+                api_set_setting('siteName', 'Campus');
+                api_set_setting('emailAdministrator', $adminInfo['email']);
+                api_set_setting('administratorSurname', $adminInfo['lastname']);
+                api_set_setting('administratorName', $adminInfo['firstname']);
+                api_set_setting('platformLanguage', $adminInfo['language']);
+                api_set_setting('allow_registration', '1');
+                api_set_setting('allow_registration_as_teacher', '1');
 
                 $output->writeln("<comment>Chamilo was successfully installed. Go to your browser and enter:</comment> <info>".$newConfigurationArray['root_web']);
             }
         }
+    }
+
+    /**
+     * Default admin info
+     * @return array
+     */
+    public function getDefaultAdminUser()
+    {
+        $adminUser = array(
+            'lastname' => 'Julio',
+            'firstname' => 'M',
+            'username' => 'admin',
+            'password' => 'admin',
+            'email' => 'admin@example.org',
+            'language' => 'english',
+            'phone' => '6666666'
+        );
+        return $adminUser;
     }
 
     /**
@@ -253,15 +288,7 @@ class InstallCommand extends CommonCommand
         $dialog = $this->getHelperSet()->get('dialog');
 
         //Creating admin user
-        $adminUser = array(
-            'lastname' => 'Julio',
-            'firstname' => 'M',
-            'username' => 'admin',
-            'password' => 'admin',
-            'email' => 'admin@example.org',
-            'language' => 'english',
-            'phone' => '6666666'
-        );
+        $adminUser = $this->getDefaultAdminUser();
 
         $output->writeln("<comment>Creating an admin User</comment>");
         $userInfo = array();
@@ -273,6 +300,7 @@ class InstallCommand extends CommonCommand
             );
             $userInfo[$key] = $data;
         }
+
         //By default admin is = 1 so we update it
         $userId = $userInfo['user_id'] = 1;
         $userInfo['auth_source'] = 'platform';
@@ -318,16 +346,15 @@ class InstallCommand extends CommonCommand
         return file_exists($newConfigurationFile);
     }
 
-    private function setDatabaseSettings($_configuration, $databaseName)
+    private function setDatabaseSettings($configuration, $databaseName)
     {
         global $config;
-
         $defaultConnection = array(
             'driver'    => 'pdo_mysql',
             'dbname'    => $databaseName,
-            'user'      => $_configuration['db_user'],
-            'password'  => $_configuration['db_password'],
-            'host'      => $_configuration['db_host'],
+            'user'      => $configuration['db_user'],
+            'password'  => $configuration['db_password'],
+            'host'      => $configuration['db_host'],
         );
 
         $em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
@@ -346,14 +373,12 @@ class InstallCommand extends CommonCommand
             $this->getApplication()->getHelperSet()->set($helper, $name);
         }
 
-        $conn_return = @\Database::connect(array(
-            'server' => $_configuration['db_host'],
-            'username' => $_configuration['db_user'],
-            'password' => $_configuration['db_password']
+        $conn_return = \Database::connect(array(
+            'server' => $configuration['db_host'],
+            'username' => $configuration['db_user'],
+            'password' => $configuration['db_password']
         ));
-
-        global $database_connection;
-        $checkConnection = @\Database::select_db($databaseName, $database_connection);
+        $checkConnection = \Database::select_db($databaseName, $conn_return);
     }
 
     /**
@@ -412,18 +437,6 @@ class InstallCommand extends CommonCommand
                         $input = new ArrayInput($arguments);
                         $command->run($input, $output);
 
-                        if ($databaseName == 'chamilo') {
-                            api_set_setting('Institution', 'Portal');
-                            api_set_setting('InstitutionUrl', 'Portal');
-                            api_set_setting('siteName', 'Campus');
-                            api_set_setting('emailAdministrator', 'admin@example.org');
-                            api_set_setting('administratorSurname', 'M');
-                            api_set_setting('administratorName', 'Julio');
-                            api_set_setting('platformLanguage', 'english');
-                            api_set_setting('allow_registration', '1');
-                            api_set_setting('allow_registration_as_teacher', '1');
-                        }
-
                         //Getting extra information about the installation
                         //$value = api_get_setting('chamilo_database_version');
                         //$output->writeln("<comment>Showing chamilo_database_version value:</comment> ".$value);
@@ -441,6 +454,7 @@ class InstallCommand extends CommonCommand
                     $this->createCourse($databaseName);
                 }
             }
+
             $output->writeln("<comment>Check your installation status with </comment><info>chamilo:status</info>");
 
             return true;

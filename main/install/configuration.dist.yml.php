@@ -33,7 +33,7 @@ $_configuration['db_host']     = 'localhost';
 // Your MySQL username
 $_configuration['db_user']     = 'root';
 // Your MySQL password
-$_configuration['db_password'] = 'dokeosla';
+$_configuration['db_password'] = 'root';
 
 /**
  * Database settings

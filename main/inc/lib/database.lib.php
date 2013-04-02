@@ -36,7 +36,6 @@ class Database
     public static function get_main_database()
     {
         global $_configuration;
-
         return isset($_configuration['main_database']) ? $_configuration['main_database'] : null;
     }
 

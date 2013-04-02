@@ -129,9 +129,8 @@ class TestDatabase extends UnitTestCase {
 	}
 
 	function testGetCourseChatConnectedTable() {
-		$database_name='dokeosla';
-		$res=$this->dbase->get_course_chat_connected_table($database_name);
-		$this->assertTrue(is_string($res));
+		//$res=$this->dbase->get_course_chat_connected_table($database_name);
+		//$this->assertTrue(is_string($res));
 	}
 
 	function testGetCourseInfo() {

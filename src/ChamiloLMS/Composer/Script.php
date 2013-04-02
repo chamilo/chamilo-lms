@@ -4,7 +4,7 @@ namespace ChamiloLMS\Composer;
 
 class Script
 {
-    public static function install()
+    public static function postInstall()
     {
         /*chmod('resources/cache', 0777);
         chmod('resources/log', 0777);
@@ -12,5 +12,10 @@ class Script
         chmod('console', 0500);
         exec('php console assetic:dump');*/
         //echo 'Execting ChamiloLMS\Composer\Script::install';
+    }
+
+    public static function postUpdate()
+    {
+
     }
 }

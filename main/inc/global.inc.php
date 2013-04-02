@@ -336,6 +336,7 @@ if (is_writable($app['cache.path'])) {
 
 //Setting Doctrine service provider (DBAL)
 if (isset($_configuration['main_database'])) {
+
     $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
         'db.options' => array(
             'driver' => 'pdo_mysql',
@@ -467,9 +468,6 @@ require_once $libPath.'array.lib.php';
 require_once $libPath.'events.lib.inc.php';
 require_once $libPath.'online.inc.php';
 
-/*  Database connection (for backward compatibility) */
-global $database_connection;
-
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
     array(
@@ -514,7 +512,8 @@ if (isset($_configuration['main_database'])) {
     // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
     Database::query("set session sql_mode='';");
 
-    $checkConnection = @Database::select_db($_configuration['main_database'], $database_connection);
+    $checkConnection = @Database::select_db($_configuration['main_database'], $conn_return);
+
     if ($checkConnection) {
 
         // Initialization of the database encoding to be used.
@@ -604,12 +603,12 @@ if ($alreadyInstalled) {
 //Adding web profiler
 if (is_writable($app['cache.path'])) {
     //if ($app['debug']) {
-    //if (api_get_setting('allow_web_profiler') == 'true') {
+    if (api_get_setting('allow_web_profiler') == 'true') {
         $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
                 'profiler.cache_dir' => $app['profiler.cache_dir'],
             ));
         $app->mount('/_profiler', $p);
-    //}
+    }
     //}
 }
 

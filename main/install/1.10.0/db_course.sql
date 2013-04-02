@@ -847,7 +847,7 @@ CREATE TABLE c_group_info (
   iid int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (iid),
   KEY session_id (session_id)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -909,7 +909,7 @@ CREATE TABLE c_item_property (
   id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (id),
   KEY idx_item_property_toolref (tool,ref)
-) ENGINE=MyISAM AUTO_INCREMENT=582 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1012,7 +1012,7 @@ CREATE TABLE c_lp_category (
   name varchar(255) DEFAULT NULL,
   position int(11) DEFAULT NULL,
   PRIMARY KEY (id)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1348,7 +1348,7 @@ CREATE TABLE c_quiz_order (
   exercise_id int(11) NOT NULL,
   exercise_order int(11) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

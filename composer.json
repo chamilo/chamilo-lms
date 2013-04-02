@@ -57,8 +57,8 @@
         "silex/web-profiler": "~1.0"
     },
     "scripts": {
-        "post-install-cmd": "ChamiloLMS\\Composer\\Script::install",
-        "post-update-cmd": "ChamiloLMS\\Composer\\Script::install"
+        "post-install-cmd": "ChamiloLMS\\Composer\\Script::postInstall",
+        "post-update-cmd": "ChamiloLMS\\Composer\\Script::postUpdate"
     },
     "minimum-stability": "stable"
 }

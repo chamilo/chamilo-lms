@@ -72,7 +72,7 @@ abstract class XapianIndexer
         }
 
         if ($path == null) {
-            $path = api_get_path(SYS_PATH).'searchdb/';
+            $path = api_get_path(SYS_PATH_APP).'data/searchdb/';
         }
 
         try {

@@ -57,6 +57,8 @@ $cli->addCommands(array(
     new ChamiloLMS\Command\Database\StatusCommand(),
     new ChamiloLMS\Command\Database\SetupCommand(),
 
+    //new ChamiloLMS\Command\Template\AsseticDumpCommand(),
+
     //Chash commands
     new Chash\Command\Database\RunSQLCommand(),
     new Chash\Command\Database\DumpCommand(),

@@ -49,9 +49,14 @@
         "mheap/silex-assetic": "dev-master",
         "leafo/lessphp"         : "dev-master",
         "natxet/CssMin": "dev-master",
-        "realityking/pchart": "dev-master",
-        "kairos/phpqrcode": "dev-master"
+        "realityking/pchart": "dev-master"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/jmontoyaa/phpqrcode"
+        }
+    ],
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",
         "symfony/web-profiler-bundle": "~2.2",

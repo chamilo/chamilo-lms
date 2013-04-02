@@ -1,5 +1,5 @@
 {
-    "hash": "6e06fc526f27904f3367174dc22e24a9",
+    "hash": "d24e217e657ea1d3d2e486fb8871d0d7",
     "packages": [
         {
             "name": "chamilo/chash",
@@ -529,6 +529,46 @@
             "time": "2013-03-09 15:35:23"
         },
         {
+            "name": "kairos/phpqrcode",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kairosagency/phpqrcode.git",
+                "reference": "6770ecbe0e8c7d806c5779ad38b20c9acf5427d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kairosagency/phpqrcode/zipball/6770ecbe0e8c7d806c5779ad38b20c9acf5427d9",
+                "reference": "6770ecbe0e8c7d806c5779ad38b20c9acf5427d9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=4.3.10"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "qrlib.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Kairos Agency"
+                }
+            ],
+            "description": "A PHP class to generate QR Code",
+            "homepage": "http://github.com/kairosagency/phpqrcode",
+            "keywords": [
+                "php",
+                "qrcode"
+            ],
+            "time": "2013-03-20 17:48:23"
+        },
+        {
             "name": "knplabs/knp-menu",
             "version": "dev-master",
             "source": {
@@ -884,12 +924,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/whiteoctober/Pagerfanta.git",
-                "reference": "43feb3d11af5ea16e5f1ef61fbe05df8337b6c46"
+                "reference": "92921b9bb155cecc68695fb273729a08586ceaf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/43feb3d11af5ea16e5f1ef61fbe05df8337b6c46",
-                "reference": "43feb3d11af5ea16e5f1ef61fbe05df8337b6c46",
+                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/92921b9bb155cecc68695fb273729a08586ceaf4",
+                "reference": "92921b9bb155cecc68695fb273729a08586ceaf4",
                 "shasum": ""
             },
             "require": {
@@ -936,7 +976,7 @@
                 "page",
                 "paging"
             ],
-            "time": "2013-04-02 00:47:33"
+            "time": "2013-04-02 11:00:09"
         },
         {
             "name": "pimple/pimple",
@@ -2530,6 +2570,7 @@
         "leafo/lessphp": 20,
         "natxet/cssmin": 20,
         "realityking/pchart": 20,
+        "kairos/phpqrcode": 20,
         "symfony/browser-kit": 20
     },
     "platform": {

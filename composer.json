@@ -1,5 +1,5 @@
 {
-    "name"        : "chamilo/chamilo-lms",
+    "name" : "chamilo/chamilo-lms",
     "autoload": {
         "psr-0": {
             "Entity" : "main/inc/",
@@ -49,7 +49,8 @@
         "mheap/silex-assetic": "dev-master",
         "leafo/lessphp"         : "dev-master",
         "natxet/CssMin": "dev-master",
-        "realityking/pchart": "dev-master"
+        "realityking/pchart": "dev-master",
+        "kairos/phpqrcode": "dev-master"
     },
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",

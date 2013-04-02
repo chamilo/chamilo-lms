@@ -32,6 +32,11 @@ define("_MPDF_TEMP_PATH", $app['cache.path']);
 define("_JPGRAPH_PATH", $app['cache.path']);
 define("_MPDF_TTFONTDATAPATH", $app['cache.path']);
 
+//QR code
+
+define('QR_CACHE_DIR', $app['cache.path']);
+define('QR_LOG_DIR', $app['cache.path']);
+
 // Assetic
 /*
 $app['assetic.path_to_cache']   = $app['cache.path'] . DIRECTORY_SEPARATOR . 'assetic' ;

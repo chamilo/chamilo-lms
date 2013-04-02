@@ -103,8 +103,6 @@ class InstallCommand extends CommonCommand
         );
     }
 
-
-
     /**
      * Gets the version name folders located in main/install
      *
@@ -265,9 +263,27 @@ class InstallCommand extends CommonCommand
                 api_set_setting('allow_registration', '1');
                 api_set_setting('allow_registration_as_teacher', '1');
 
+                $versionInfo = $this->getAvailableVersionInfo($version);
+
+                $command = $this->getApplication()->find('migrations:migrate');
+                $arguments = array(
+                    'command' => 'migrations:migrate',
+                    'version' => $versionInfo['hook_to_doctrine_version'],
+                    '--configuration' => $this->getMigrationConfigurationFile()
+                );
+
+                $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_doctrine_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
+
+                $input = new ArrayInput($arguments);
+
+                $command->run($input, $output);
+                //$output->writeln("<comment>Migration ended succesfully</comment>");
+
                 $output->writeln("<comment>Chamilo was successfully installed. Go to your browser and enter:</comment> <info>".$newConfigurationArray['root_web']);
             }
         }
+
+
     }
 
     /**
@@ -405,7 +421,6 @@ class InstallCommand extends CommonCommand
     {
         $sqlFolder = $this->getInstallationPath($version);
 
-
         $databaseMap = $this->getDatabaseMap();
 
         if (isset($databaseMap[$version])) {
@@ -442,8 +457,6 @@ class InstallCommand extends CommonCommand
                         $command->run($input, $output);
 
                         //Getting extra information about the installation
-                        //$value = api_get_setting('chamilo_database_version');
-                        //$output->writeln("<comment>Showing chamilo_database_version value:</comment> ".$value);
                         $output->writeln("<comment>Database </comment><info>$databaseName </info><comment>process ended!</comment>");
                     }
                 }

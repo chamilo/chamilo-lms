@@ -18,6 +18,6 @@ class Version9 extends AbstractMigration
 
     public function down(Schema $schema)
     {
-        $this->addSql('UPDATE settings_current SET selected_value = "1.8.8.4" WHERE variable = "chamilo_database_version"');
+        $this->addSql('UPDATE settings_current SET selected_value = "1.8.8.14911.doc" WHERE variable = "chamilo_database_version"');
     }
 }

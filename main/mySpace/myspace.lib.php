@@ -1947,9 +1947,6 @@ function convert_to_string($sql_result){
  * @return string
  */
 function grapher($sql_result, $start_date, $end_date, $type = "") {
-    require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-    require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-    require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
     if (empty($start_date)) { $start_date =""; }
     if (empty($end_date)) { $end_date =""; }
@@ -2008,7 +2005,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
         $graph_id = api_get_user_id().'AccessDetails'.api_get_course_id().$start_date.$end_date.$type;
         $data_set->AddAllSeries();
 
-        $cache = new pCache();
+        $cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
         // the graph id
         $data = $data_set->GetData();
 

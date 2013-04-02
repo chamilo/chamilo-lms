@@ -9,9 +9,6 @@
 /**
  * required files for getting data
  */
-require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
 /**
  * This class is used like controller for teacher graph block plugin,
@@ -93,7 +90,7 @@ class BlockTeacherGraph extends Block {
     public function get_teachers_information_graph() {
 	 	$teachers = $this->teachers;
 		$graph = '';
- 		$user_ids = array_keys($teachers); 		
+ 		$user_ids = array_keys($teachers);
  		$a_last_week = get_last_week();
 
 		if (is_array($user_ids) && count($user_ids) > 0) {
@@ -127,7 +124,7 @@ class BlockTeacherGraph extends Block {
 			$data_set->SetAbsciseLabelSerie("Days");
 			$graph_id = $this->user_id.'TeacherConnectionsGraph';
 
-			$cache = new pCache();
+			$cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
 			// the graph id
 			$data = $data_set->GetData();
 

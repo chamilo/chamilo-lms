@@ -10,7 +10,7 @@
 * @param string $course_code the course code
 * @author Julio Montoya <gugli100@gmail.com>
 * @author Jorge Frisancho Jibaja - select between dates
-* 
+*
 */
 /**
  * Code
@@ -21,10 +21,6 @@ $language_file = array ('registration', 'index', 'tracking');
 require_once '../inc/global.inc.php';
 
 // including additional libraries
-require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
-
 require_once 'myspace.lib.php';
 
 // the section (for the tabs)
@@ -57,7 +53,7 @@ $(function() {
                     $.datepicker._defaults.dateFormat,
                     selectedDate, instance.settings );
             dates.not( this ).datepicker( "option", option, date );
-            
+
             if (foo){
                 var start_date  = document.getElementById("date_from").value;
                 var end_date    = document.getElementById("date_to").value;
@@ -90,22 +86,22 @@ $(function() {
                     }
                     var foo_height = sliderGetHeight("#messages");
                     sliderSetHeight(".slider",foo_height);
-                    controlSliderMenu(foo_height);                    
+                    controlSliderMenu(foo_height);
                     // Hide confirmation message and enable stars for "Rate this" control, after 2 sec...
                     /*setTimeout(function(){
                             $("#messages").fadeOut(1000, function(){ui.enable()})
                     }, 2000);*/
                 }, "json");
-                
+
                 $( "#cev_slider" ).empty();
                 // Create element to use for confirmation messages
                 $('.$quote_simple .'<div id="messages"/>'.$quote_simple .').appendTo("#cev_slider");
-                
+
             }
         }
      });
     if (areBothFilled()){
-        runEffect();        
+        runEffect();
     }
 });
 
@@ -184,10 +180,10 @@ $form->display();
     <div id="cev_cont_stats">
         <?php
         if ($result_to_print != "")  {
-            $rst                = get_stats($user_id, $course_code);            
+            $rst                = get_stats($user_id, $course_code);
             $foo_stats           = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
             $foo_stats          .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
-            $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';            
+            $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
             echo $foo_stats;
         } else {
             echo Display::display_warning_message(get_lang('NoDataAvailable'));
@@ -199,7 +195,7 @@ $form->display();
 <div id="container-9">
     <ul>
         <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=day&course='.$course_code.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('Day')); ?></span></a></li>
-        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=month&course='.$course_code.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('MinMonth')); ?></span></a></li>        
+        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=month&course='.$course_code.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('MinMonth')); ?></span></a></li>
     </ul>
 </div>
 
@@ -212,7 +208,7 @@ $form->display();
             echo $result_to_print;
         } else {
             Display::display_warning_message(get_lang('NoDataAvailable'));
-        }        
+        }
         ?>
     </div>
     <?php

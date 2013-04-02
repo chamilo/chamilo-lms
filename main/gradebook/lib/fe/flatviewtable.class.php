@@ -31,14 +31,14 @@ class FlatViewTable extends SortableTable
 	function FlatViewTable ($selectcat, $users= array (), $evals= array (), $links= array (), $limit_enabled = false, $offset = 0, $addparams = null) {
 		parent :: __construct ('flatviewlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 1 : 0);
 		$this->datagen = new FlatViewDataGenerator($users, $evals, $links);
-        		
+
 		$this->selectcat = $selectcat;
 		$this->limit_enabled = $limit_enabled;
 		$this->offset = $offset;
 		if (isset ($addparams)) {
 			$this->set_additional_parameters($addparams);
 		}
-		
+
 		// step 2: generate rows: students
 		$this->datagen->category = $this->selectcat;
 	}
@@ -47,26 +47,23 @@ class FlatViewTable extends SortableTable
 	 * Display the graph of the total results of all students
 	 * */
 	function display_graph() {
-		include_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-		include_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-		include_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
 		$header_name = $this->datagen->get_header_names();
 		$total_users = $this->datagen->get_total_users_count();
-		
+
 		$img_file = '';
-		
+
 		if ($this->datagen->get_total_items_count()>0 && $total_users > 0 ) {
 		    //Removing user names and total
 			array_shift($header_name);
 			array_shift($header_name);
 			array_pop($header_name);
-			
+
 			$user_results = $this->datagen->get_data_to_graph();
-						
+
 			$pre_result = $new_result = array();
 			$DataSet = new pData();
-			
+
 			//$pre_result total score of students
 			//filling the Dataset
 			foreach($user_results as $result) {
@@ -76,15 +73,15 @@ class FlatViewTable extends SortableTable
 			}
 			$i = 1;
 			$show_draw = false;
-			if ($total_users >0 ) {			    
+			if ($total_users >0 ) {
 				foreach($pre_result as $res) {
-					$total =  $res / ($total_users);										
+					$total =  $res / ($total_users);
 					if ($total != 0) {
 						$show_draw  = true;
 					}
 					$DataSet->AddPoint($total, "Serie".$i);
 					$DataSet->SetSerieName(strip_tags($header_name[$i-1]),"Serie".$i);
-					
+
 					// Dataset definition
 					$DataSet->AddAllSeries();
 					$DataSet->SetAbsciseLabelSerie();
@@ -93,12 +90,12 @@ class FlatViewTable extends SortableTable
 			}
 
 			// Cache definition
-			$Cache = new pCache();
+			$Cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
 			// the graph id
 			$gradebook_id = intval($_GET['selectcat']);
 			$graph_id = api_get_user_id().'AverageResultsVsResource'.$gradebook_id.api_get_course_id();
 			$data = $DataSet->GetData();
-			
+
 			if ($show_draw) {
 				if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
 				//if (0) {
@@ -130,7 +127,7 @@ class FlatViewTable extends SortableTable
 					//background color area & stripe or not
 					$Test->drawGraphArea(255,255,255,TRUE);
 					$Test->drawScale($DataSet->GetData(), $DataSet->GetDataDescription(), SCALE_START0 ,150,150,150,TRUE,0,1, FALSE);
-					
+
 					//background grid
 					$Test->drawGrid(4,TRUE,230,230,230,50);
 
@@ -163,9 +160,6 @@ class FlatViewTable extends SortableTable
 	}
 
 	function display_graph_by_resource() {
-		require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
-		require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
-		require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
 		$header_name = $this->datagen->get_header_names();
 		$total_users = $this->datagen->get_total_users_count();
@@ -176,13 +170,13 @@ class FlatViewTable extends SortableTable
 			array_shift($header_name);
 			//Removing last name
 			array_shift($header_name);
-            
+
 			$displayscore = ScoreDisplay :: instance();
-			$customdisplays = $displayscore->get_custom_score_display_settings();		
-			
+			$customdisplays = $displayscore->get_custom_score_display_settings();
+
 			if (is_array($customdisplays) && count(($customdisplays))) {
-			    
-				$user_results = $this->datagen->get_data_to_graph2();				
+
+				$user_results = $this->datagen->get_data_to_graph2();
 				$pre_result = $new_result = array();
 				$DataSet = new pData();
 				//filling the Dataset
@@ -192,7 +186,7 @@ class FlatViewTable extends SortableTable
 						$pre_result[$i+3][]= $result[$i+1];
 					}
 				}
-	
+
 				$i=0;
 				$show_draw = false;
 				$resource_list = array();
@@ -202,11 +196,11 @@ class FlatViewTable extends SortableTable
 					rsort($res_array);
 					$pre_result2[] = $res_array;
 				}
-				
+
 				//@todo when a display custom does not exist the order of the color does not match
 				//filling all the answer that are not responded with 0
 				rsort($customdisplays);
-				
+
 				if ($total_users > 0) {
 					foreach($pre_result2 as $key=>$res_array) {
 						$key_list = array();
@@ -214,22 +208,22 @@ class FlatViewTable extends SortableTable
 							$resource_list[$key][$user_result[1]] += 1;
 							$key_list[] = $user_result[1];
 						}
-				
+
 						foreach ($customdisplays as $display) {
 							if (!in_array($display['display'], $key_list))
 								$resource_list[$key][$display['display']] = 0;
 						}
 						$i++;
 					}
-				}				
-				
-				//fixing $resource_list		
-				$max = 0;		
+				}
+
+				//fixing $resource_list
+				$max = 0;
 				$new_list = array();
 				foreach($resource_list as $key=>$value) {
 				    $new_value = array();
-				    
-				    foreach($customdisplays as $item) {				        
+
+				    foreach($customdisplays as $item) {
 				        if ($value[$item['display']] > $max) {
 				            $max = $value[$item['display']];
 				        }
@@ -237,8 +231,8 @@ class FlatViewTable extends SortableTable
 				    }
 				    $new_list[] = $new_value;
 				}
-				$resource_list = $new_list;				
-				
+				$resource_list = $new_list;
+
 				$i = 1;
 				$j = 0;
 
@@ -258,7 +252,7 @@ class FlatViewTable extends SortableTable
 					$DataSet->SetYAxisName(get_lang('Students'));
 					$show_draw = true;
 					// Cache definition
-					$Cache = new pCache();
+					$Cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
 					// the graph id
 					$gradebook_id = intval($_GET['selectcat']);
 					$graph_id = api_get_user_id().'ByResource'.$gradebook_id.api_get_course_id().api_get_session_id();
@@ -290,12 +284,12 @@ class FlatViewTable extends SortableTable
 
 							//background color area & stripe or not
 							$Test->drawGraphArea(255,255,255,TRUE);
-							
+
 							//Setting max height by default see #3296
 						    if (!empty($max)) {
-                                $Test->setFixedScale(0, $max);    
+                                $Test->setFixedScale(0, $max);
 						    }
-							
+
 							$Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(), SCALE_ADDALLSTART0, 150,150,150, TRUE, 0, 0, FALSE);
 
 							//background grid
@@ -433,7 +427,7 @@ class FlatViewTable extends SortableTable
 	      							.'?selectcat='.Security::remove_XSS($_GET['selectcat'])
 	      							.'&offset='.(($this->offset)-LIMIT)
 									.(isset($_GET['search'])?'&search='.Security::remove_XSS($_GET['search']):'').'">'
-	      					.Display::return_icon('action_prev.png', get_lang('PreviousPage'), array(), 32)	      					
+	      					.Display::return_icon('action_prev.png', get_lang('PreviousPage'), array(), 32)
 	      					.'</a>';
 	      	} else {
 	      		$header .= Display::return_icon('action_prev_na.png', get_lang('PreviousPage'), array(), 32);
@@ -442,7 +436,7 @@ class FlatViewTable extends SortableTable
 			// next X
 	      	$calcnext = (($this->offset+(2*LIMIT)) > $totalitems) ?
 	      					($totalitems-(LIMIT+$this->offset)) : LIMIT;
-      		
+
       		if ($calcnext > 0) {
 	      		$header .= '<a href="'.api_get_self()
 	      							.'?selectcat='.Security::remove_XSS($_GET['selectcat'])
@@ -474,14 +468,14 @@ class FlatViewTable extends SortableTable
 		$header_names = $this->datagen->get_header_names($this->offset, $selectlimit);
 
 		$column = 0;
-        
+
 		if ($is_western_name_order) {
 			$this->set_header($column++, $header_names[1]);
 			$this->set_header($column++, $header_names[0]);
 		} else {
 			$this->set_header($column++, $header_names[0]);
 			$this->set_header($column++, $header_names[1]);
-		}        
+		}
 
 		while ($column < count($header_names)) {
 			$this->set_header($column, $header_names[$column], false);

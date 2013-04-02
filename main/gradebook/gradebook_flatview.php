@@ -14,7 +14,7 @@ $current_course_tool  = TOOL_GRADEBOOK;
 
 api_protect_course_script();
 
-require_once 'lib/be.inc.php';      
+require_once 'lib/be.inc.php';
 require_once 'lib/fe/dataform.class.php';
 require_once 'lib/fe/userform.class.php';
 require_once 'lib/flatview_data_generator.class.php';
@@ -84,10 +84,10 @@ if ($simple_search_form->validate() && (empty($keyword))) {
 
 if (!empty($keyword)) {
 	$users = find_students($keyword);
-    
+
 } else {
 	if (isset($alleval) && isset($alllinks)) {
-		$users = get_all_users($alleval, $alllinks);        
+		$users = get_all_users($alleval, $alllinks);
 	} else {
 		$users = null;
 	}
@@ -95,38 +95,39 @@ if (!empty($keyword)) {
 
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
-$flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
+//$flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
+$flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset);
 
 $parameters=array('selectcat'=>intval($_GET['selectcat']));
 $flatviewtable->set_additional_parameters($parameters);
 
-if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {  
+if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     $params = array();
     $params['only_total_category'] = true;
     $params['join_firstname_lastname'] = true;
     $params['show_official_code'] = true;
-    $params['export_pdf'] = true;       
+    $params['export_pdf'] = true;
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
         Display :: set_header(null, false, false);
         export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
     }
 }
-    
+
 if (isset($_GET['exportpdf']))	{
 	$interbreadcrumb[] = array (
 		'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 		'name' => get_lang('FlatView')
 	);
-    
+
     $export_pdf_form = new DataForm(DataForm::TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.intval($_GET['offset']).'&selectcat='.intval($_GET['selectcat']), '_blank', '');
 
-	if ($export_pdf_form->validate()) {        
+	if ($export_pdf_form->validate()) {
         $params = array();
         $params = $export_pdf_form->exportValues();
         Display :: set_header(null, false, false);
-        $params['join_firstname_lastname'] = true;        
+        $params['join_firstname_lastname'] = true;
         $params['show_official_code'] = true;
-        $params['export_pdf'] = true;        
+        $params['export_pdf'] = true;
         $params['only_total_category'] = false;
 		export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
 	} else {
@@ -138,9 +139,9 @@ if (isset ($_GET['print']))	{
 	$printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks);
 	echo print_table($printable_data[1],$printable_data[0], get_lang('FlatView'), $cat[0]->get_name());
 	exit;
-}       
-        
-if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report') {    
+}
+
+if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report') {
 	if (api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) {
 		$user_id = null;
 
@@ -153,7 +154,7 @@ if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report')
 
 		require_once 'gradebook_result.class.php';
 		$printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks);
-        
+
 		switch($_GET['export_format']) {
 			case 'xls':
 				$export = new GradeBookResult();
@@ -184,8 +185,8 @@ if (isset($_GET['search'])) {
 
 $this_section = SECTION_COURSES;
 
-if (isset($_GET['exportpdf'])) {	
-	$export_pdf_form->display();	
+if (isset($_GET['exportpdf'])) {
+	$export_pdf_form->display();
 } else {
 	Display :: display_header(get_lang('FlatView'));
 }
@@ -195,16 +196,16 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
 	$flatviewtable->display();
 } elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
 	DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
-	
+
 	// main graph
-	$flatviewtable->display();	
+	$flatviewtable->display();
 	// @todo this needs a fix
 	//$image_file = $flatviewtable->display_graph();
 	//@todo load images with jquery
-    echo '<div id="contentArea" style="text-align: center;" >';        		
+    echo '<div id="contentArea" style="text-align: center;" >';
 	if (!empty($image_file)) {
 		echo '<img src="'.$image_file.'">';
-	}        
+	}
 	$flatviewtable->display_graph_by_resource();
 	echo '</div>';
 }

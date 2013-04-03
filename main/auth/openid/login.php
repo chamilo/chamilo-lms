@@ -13,8 +13,6 @@
 /**
  * Initialisation
  */
-require_once api_get_path(CONFIGURATION_PATH) . 'auth.conf.php';
-
 require_once 'openid.lib.php';
 require_once 'xrds.lib.php';
 
@@ -28,7 +26,7 @@ function openid_form() {
       return '<label for="openid_url">'.get_lang('OpenIDURL').' <a href="main/auth/openid/whatis.php" title="'.get_lang('OpenIDWhatIs').'">'.Display::return_icon('info3.gif',get_lang('Info')).'</a></label>
       <input type="text" id="openid_url" name="openid_url" style="background: url(main/img/openid_small_logo.png) no-repeat; background-color: #fff; background-position: 0 50%; padding-left:18px;" value="http://"></input>
      * <input type="submit" name="openid_login" value="'.get_lang('Enter').'" /><br /><br /></form></div>';
-     * 
+     *
      */
 }
 
@@ -45,7 +43,7 @@ function openid_form() {
 function openid_begin($claimed_id, $return_to = '', $form_values = array()) {
 
     $claimed_id = _openid_normalize($claimed_id);
-    $services = openid_discovery($claimed_id);    
+    $services = openid_discovery($claimed_id);
     if (count($services) == 0) {
         echo 'Sorry, that is not a valid OpenID. Please ensure you have spelled your ID correctly.';
         return;
@@ -63,14 +61,14 @@ function openid_begin($claimed_id, $return_to = '', $form_values = array()) {
     $assoc_handle = '';
     if (function_exists('bcadd')) {
         $assoc_handle = openid_association($op_endpoint);
-    }    
+    }
     // Now that there is an association created, move on
     // to request authentication from the IdP
     $identity = (!empty($services[0]['delegate'])) ? $services[0]['delegate'] : $claimed_id;
     if (isset($services[0]['types']) && is_array($services[0]['types']) && in_array(OPENID_NS_2_0 . '/server', $services[0]['types'])) {
         $identity = 'http://openid.net/identifier_select/2.0';
     }
-    $authn_request = openid_authentication_request($claimed_id, $identity, $return_to, $assoc_handle, $services[0]['version']);    
+    $authn_request = openid_authentication_request($claimed_id, $identity, $return_to, $assoc_handle, $services[0]['version']);
     if ($services[0]['version'] == 2) {
         echo openid_redirect($op_endpoint, $authn_request);
     } else {
@@ -185,7 +183,7 @@ function openid_discovery($claimed_id) {
  * @return $assoc_handle The association handle.
  */
 function openid_association($op_endpoint) {
-    //@todo Remove Old Associations:  
+    //@todo Remove Old Associations:
     $openid_association = Database::get_main_table(TABLE_MAIN_OPENID_ASSOCIATION);
     $sql = "DELETE FROM $openid_association WHERE created + expires_in < '" . api_get_utc_datetime() . "'";
     Database::query($sql);

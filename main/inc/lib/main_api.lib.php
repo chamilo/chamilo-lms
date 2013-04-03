@@ -595,6 +595,7 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_PATH]                = $root_web;
         $paths[WEB_PUBLIC_PATH]         = $root_web."web/";
         $paths[SYS_PATH]                = $root_sys;
+        $paths[SYS_PATH_APP]            = $root_sys.'app/';
         $paths[REL_PATH]                = $root_rel;
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
@@ -1487,7 +1488,7 @@ function api_format_course_array($course_data) {
     //@todo should be deprecated
     $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
     $_course['db_name'      ]         = $course_data['db_name'         ];
-    $_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
+    //$_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
 
     $_course['titular'      ]         = $course_data['tutor_name'     ];
     $_course['language'     ]         = $course_data['course_language'];
@@ -6808,6 +6809,10 @@ function api_get_language_interface() {
     return $language_interface;
 }
 
+function getConfigurationArray($confPath) {
+
+
+}
 
 function api_get_default_course_document()
 {

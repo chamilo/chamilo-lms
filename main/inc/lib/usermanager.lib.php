@@ -1251,7 +1251,7 @@ class UserManager {
 
     /**
      * Creates new user pfotos in various sizes of a user, or deletes user pfotos.
-     * Note: This method relies on configuration setting from dokeos/main/inc/conf/profile.conf.php
+     * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
      * @param     int $user_id        The user internal identitfication number.
      * @param     string $file        The common file name for the newly created pfotos.
      *                                 It will be checked and modified for compatibility with the file system.
@@ -1270,9 +1270,6 @@ class UserManager {
         if (empty($source_file)) {
             $source_file = $file;
         }
-
-        // Configuration options about user photos.
-        require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
         // User-reserved directory where photos have to be placed.
         $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
@@ -1348,7 +1345,7 @@ class UserManager {
 
     /**
      * Deletes user pfotos.
-     * Note: This method relies on configuration setting from dokeos/main/inc/conf/profile.conf.php
+     * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
      * @param int $user_id            The user internal identitfication number.
      * @return string/bool            Returns empty string on success, FALSE on error.
      */

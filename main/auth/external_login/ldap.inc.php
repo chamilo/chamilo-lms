@@ -1,19 +1,18 @@
 <?php
 
-// External login module : LDAP 
+// External login module : LDAP
 /**
  * This files is included by newUser.ldap.php and login.ldap.php
  * It implements the functions nedded by both files
  * */
 //Includes the configuration file
 require_once dirname(__FILE__) . '/../../inc/global.inc.php';
-require_once dirname(__FILE__) . '/../../inc/conf/auth.conf.php';
 
 /**
  * Returns a transcoded and trimmed string
  *
- * @param string 
- * @return string 
+ * @param string
+ * @return string
  * @author ndiechburg <noel@cblue.be>
  * */
 function extldap_purify_string($string) {
@@ -76,9 +75,9 @@ function extldap_connect() {
  *
  * @return mixed false if user cannot authenticate on ldap, user ldap entry if tha succeeds
  * @author ndiechburg <noel@cblue.be>
- * Modified by hubert.borderiou@grenet.fr 
+ * Modified by hubert.borderiou@grenet.fr
  * Add possibility to get user info from LDAP without check password (if CAS auth and LDAP profil update)
- * 
+ *
  * */
 function extldap_authenticate($username, $password, $in_auth_with_no_password = false) {
     global $extldap_config;
@@ -182,7 +181,7 @@ function extldap_get_chamilo_user($ldap_user, $cor = null) {
 
 /**
  * Please declare here all the function you use in extldap_user_correspondance
- * All these functions must have an $ldap_user parameter. This parameter is the 
+ * All these functions must have an $ldap_user parameter. This parameter is the
  * array returned by the ldap for the user
  * */
 

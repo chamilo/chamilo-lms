@@ -81,7 +81,9 @@ class InstallCommand extends CommonCommand
                             'name' => 'chamilo',
                             'sql' => array(
                                 'db_course.sql',
-                                'db_main.sql'
+                                'db_main.sql',
+                                'db_stats.sql',
+                                'db_user.sql'
                             ),
                         ),
                     ),
@@ -353,26 +355,7 @@ class InstallCommand extends CommonCommand
         return '1.10';
     }
 
-    /**
-     * Writes the configuration file a yml file
-     * @param $newConfigurationArray
-     * @param $version
-     */
-    public function writeConfiguration($newConfigurationArray, $version)
-    {
-        $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
 
-        $newConfigurationArray['system_version'] = $version;
-        $newConfigurationArray['db_glue'] = '`.`';
-        $newConfigurationArray['db_prefix'] = '';
-
-        $dumper = new Dumper();
-        $yaml = $dumper->dump($newConfigurationArray, 2); //inline
-        $newConfigurationFile = $configurationPath.'configuration.yml';
-        file_put_contents($newConfigurationFile, $yaml);
-
-        return file_exists($newConfigurationFile);
-    }
 
     private function setDatabaseSettings($configuration, $databaseName)
     {

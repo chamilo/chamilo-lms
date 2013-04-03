@@ -1,6 +1,8 @@
 <?php
 
 namespace ChamiloLMS\Command\Database;
+use Symfony\Component\Yaml\Dumper;
+use Symfony\Component\Yaml\Parser;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
 
 class CommonCommand extends AbstractCommand
@@ -126,6 +128,72 @@ class CommonCommand extends AbstractCommand
         );
 
         return $versionList;
+    }
+
+
+    /**
+     * Gets the Doctrine configuration file path
+     * @return string
+     */
+    public function getMigrationConfigurationFile()
+    {
+        return api_get_path(SYS_PATH).'src/ChamiloLMS/Migrations/migrations.yml';
+    }
+
+
+    /**
+     * Writes the configuration file a yml file
+     * @param $newConfigurationArray
+     * @param $version
+     */
+    public function writeConfiguration($newConfigurationArray, $version)
+    {
+        $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
+
+        $newConfigurationArray['system_version'] = $version;
+        $newConfigurationArray['db_glue'] = '`.`';
+        $newConfigurationArray['db_prefix'] = '';
+
+        $dumper = new Dumper();
+        $yaml = $dumper->dump($newConfigurationArray, 2); //inline
+        $newConfigurationFile = $configurationPath.'../../../app/config/configuration.yml';
+        file_put_contents($newConfigurationFile, $yaml);
+
+        return file_exists($newConfigurationFile);
+    }
+
+
+    /**
+     * Updates the configuration.yml file
+     * @param string $version
+     *
+     * @return bool
+     */
+    public function updateConfiguration($version)
+    {
+        global $userPasswordCrypted, $storeSessionInDb;
+
+        $_configuration = $this->getHelper('configuration')->getConfiguration();
+
+        $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
+
+        $dumper = new Dumper();
+
+        $_configuration['system_version'] = $version;
+
+        if (!isset($_configuration['password_encryption'])) {
+            $_configuration['password_encryption']      = $userPasswordCrypted;
+        }
+
+        if (!isset($_configuration['session_stored_in_db'])) {
+            $_configuration['session_stored_in_db']     = $storeSessionInDb;
+        }
+
+        $yaml = $dumper->dump($_configuration, 2); //inline
+        $newConfigurationFile = $configurationPath.'../../../app/config/configuration.yml';
+        file_put_contents($newConfigurationFile, $yaml);
+
+        return file_exists($newConfigurationFile);
     }
 
 }

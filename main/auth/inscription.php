@@ -14,7 +14,6 @@ if (!empty($_POST['language'])) { //quick hack to adapt the registration form re
     $_GET['language'] = $_POST['language'];
 }
 require_once '../inc/global.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
 if (api_get_setting('allow_registration') === 'false') {
     api_not_allowed(true);

@@ -23,8 +23,8 @@ $new_file_version = '1.10.0';
 if (defined('SYSTEM_INSTALLATION')) {
 
     // Check if the current Chamilo install is eligible for update
-    if (!file_exists('../inc/conf/configuration.php')) {
-        echo '<strong>'.get_lang('Error').' !</strong> Chamilo '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
+    if (empty($_configuration)) {
+        echo '<strong>'.get_lang('Error').' !</strong> Chamilo '.get_lang('HasNotBeenFound').'.<br /><br />
                                 '.get_lang('PleasGoBackToStep1').'.
                                 <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
                                 </td></tr></table></form></body></html>';
@@ -188,7 +188,4 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
     }
-} else {
-    echo 'You are not allowed here !'.__FILE__;
 }
-

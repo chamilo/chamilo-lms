@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 /*
  * This file contains several classes related to portfolios management to avoid
- * having too much files under the lib/. 
- * 
+ * having too much files under the lib/.
+ *
  * Once external libraries are moved to their own directory it would be worth
  * moving them to their own files under a common portfolio directory.
  * @package chamilo.portfolio
@@ -16,19 +16,19 @@ use Model\Course;
 
 /**
  * A portfolio is used to present content to other people. In most cases it is
- * an external application. 
- * 
+ * an external application.
+ *
  * From the application point of view it is an end point to which the user can send
  * content.
- * 
+ *
  * Available portfolios are configured in /main/inc/config/portfolio.conf.php
- * 
+ *
  * The Portfolio class serves as an entry point to other portfolio components:
- * 
+ *
  *      - portfolio controller
  *      - portfolio share button
  *      - portfolio action
- * 
+ *
  * Note:
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
@@ -38,12 +38,12 @@ class Portfolio
 
     /**
      * Returns all portfolios available
-     * 
+     *
      * @return array
      */
     public static function all()
     {
-        $conf = Chamilo::path('/main/inc/conf/portfolio.conf.php');
+        $conf = Chamilo::path('/app/config/portfolio.conf.php');
         if (!is_readable($conf)) {
             return array();
         }
@@ -53,7 +53,7 @@ class Portfolio
 
     /**
      * Returns a portfolio from its name.
-     * 
+     *
      * @param string $name
      * @return Portfolio\Portfolio
      */
@@ -70,8 +70,8 @@ class Portfolio
 
     /**
      * True if portfolios are enabled. False otherwise.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     public static function is_enabled()
     {
@@ -91,8 +91,8 @@ class Portfolio
 
     /**
      * The controller for portfolio.
-     * 
-     * @return \PortfolioController 
+     *
+     * @return \PortfolioController
      */
     public static function controller()
     {
@@ -101,11 +101,11 @@ class Portfolio
 
     /**
      * Returns a share component/button.
-     * 
+     *
      * @param string $tool
      * @param int $id
      * @param array $attributes
-     * @return \PortfolioShare 
+     * @return \PortfolioShare
      */
     public static function share($tool, $id, $attributes = array())
     {
@@ -114,8 +114,8 @@ class Portfolio
 
     /**
      * Returns the list of actions.
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function actions()
     {
@@ -124,9 +124,9 @@ class Portfolio
 
     /**
      * Returns a temporary url to download files and/or folders.
-     * 
+     *
      * @param string|array $ids
-     * @return string 
+     * @return string
      */
     public static function download_url($ids, $tool)
     {
@@ -143,14 +143,14 @@ class Portfolio
 
 /**
  * The portfolio controller. Responsible to dispatch/process portfolio actions.
- * 
+ *
  * Usage:
- * 
+ *
  *      if(Porfolio::contoller()->accept()){
  *          Portfolio::controller()->run();
  *      }
- * 
- * 
+ *
+ *
  */
 class PortfolioController
 {
@@ -166,7 +166,7 @@ class PortfolioController
 
     /**
      *
-     * @return \PortfolioController 
+     * @return \PortfolioController
      */
     static function instance()
     {
@@ -181,7 +181,7 @@ class PortfolioController
 
     protected function __construct()
     {
-        
+
     }
 
     public static function portfolios()
@@ -190,9 +190,9 @@ class PortfolioController
     }
 
     /**
-     * List of actions for the SortableTable. 
-     * 
-     * @return array 
+     * List of actions for the SortableTable.
+     *
+     * @return array
      */
     public static function actions()
     {
@@ -216,10 +216,10 @@ class PortfolioController
     }
 
     /**
-     * Returns true if the controller accept to process the current request. 
+     * Returns true if the controller accept to process the current request.
      * Returns false otherwise.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     function accept()
     {
@@ -249,8 +249,8 @@ class PortfolioController
 
     /**
      * Returns the value of the current controller request parameters. That is
-     * the name of the controller which shall handle the current request. 
-     * 
+     * the name of the controller which shall handle the current request.
+     *
      * @return string
      */
     function get_controller()
@@ -261,8 +261,8 @@ class PortfolioController
     /**
      * Returns the value of the action parameter. That is which action shall be
      * performed. That is share to send an object to a portfolio.
-     * 
-     * @return string 
+     *
+     * @return string
      */
     function get_action()
     {
@@ -272,7 +272,7 @@ class PortfolioController
 
     /**
      * Returns the value of the id parameter: id of object to send.
-     * 
+     *
      * @return int
      */
     function get_id()
@@ -282,7 +282,7 @@ class PortfolioController
 
     /**
      * The course code (id) to which the object belongs.
-     * 
+     *
      * @return string
      */
     function course_code()
@@ -292,8 +292,8 @@ class PortfolioController
 
     /**
      * The name of the porfolio where to send.
-     * 
-     * @return type 
+     *
+     * @return type
      */
     function get_portfolio()
     {
@@ -302,9 +302,9 @@ class PortfolioController
 
     /**
      * Name of the tool: document, work, etc. Defaults to current_course_tool.
-     * 
+     *
      * @global string $current_course_tool
-     * @return string 
+     * @return string
      */
     function get_tool()
     {
@@ -322,12 +322,12 @@ class PortfolioController
     }
 
     /**
-     * Execute the controller action as required. If a registered action accept 
+     * Execute the controller action as required. If a registered action accept
      * the current request the controller calls it.
-     * 
+     *
      * If not action is accept the current request and current action is "share"
      * the controller execute the "send to portfolio" action
-     * 
+     *
      * @return PortfolioController
      */
     function run()
@@ -373,28 +373,28 @@ class PortfolioController
 
 /**
  * This component is used to display a "send to portfolio" button for a specific
- * object. 
- * 
- * Note that the component implement the __toString() magic method and can be 
+ * object.
+ *
+ * Note that the component implement the __toString() magic method and can be
  * therefore used in situation where a string is expected: for ex echo $button.
- * 
+ *
  * Usage
- * 
+ *
  *      $button = Portfolio::share(...);
  *      echo $button;
- * 
+ *
  */
 class PortfolioShare
 {
 
     /**
      * Create a "send to portfolio" button
-     * 
+     *
      * @param string $tool          The name of the tool: document, work.
      * @param int $c_id             The id of the course
-     * @param int $id               The id of the object 
+     * @param int $id               The id of the object
      * @param array $attributes     Html attributes
-     * @return \PortfolioShare  
+     * @return \PortfolioShare
      */
     static function factory($tool, $id, $attributes = array())
     {
@@ -404,8 +404,8 @@ class PortfolioShare
 
     /**
      * Returns the current secuirty token. Used to avoid see surfing attacks.
-     * 
-     * @return type 
+     *
+     * @return type
      */
     static function security_token()
     {
@@ -446,8 +446,8 @@ class PortfolioShare
     }
 
     /**
-     * Html attributes. 
-     * 
+     * Html attributes.
+     *
      * @return array
      */
     function get_attributes()
@@ -457,7 +457,7 @@ class PortfolioShare
 
     /**
      * Name of the tool. I.e. the type of the id parameter. Can be document, work.
-     * 
+     *
      * @return string
      */
     function get_tool()
@@ -467,8 +467,8 @@ class PortfolioShare
 
     /**
      * Display the component.
-     * 
-     * @return string 
+     *
+     * @return string
      */
     function display()
     {
@@ -522,15 +522,15 @@ class PortfolioShare
 }
 
 /**
- * A "send to this portfolio" action. Actions are used by the SortableTable to 
+ * A "send to this portfolio" action. Actions are used by the SortableTable to
  * perform actions on a set of objects. An action is composed of
- * 
+ *
  *      - a name
  *      - a title (displayed to the user)
  *      - code to execute
- * 
+ *
  * Usage:
- * 
+ *
  *       $form_actions = array();
  *       $form_action['...'] = get_lang('...');
  *       $portfolio_actions = Portfolio::actions();
@@ -538,7 +538,7 @@ class PortfolioShare
  *           $form_action[$action->get_name()] = $action->get_title();
  *       }
  *       $table->set_form_actions($form_action, 'path');
- * 
+ *
  * @see SortableTable
  */
 class PortfolioBulkAction
@@ -560,7 +560,7 @@ class PortfolioBulkAction
 
     /**
      *
-     * @param \Portfolio\Portfolio $portfolio 
+     * @param \Portfolio\Portfolio $portfolio
      */
     public function __construct($portfolio)
     {

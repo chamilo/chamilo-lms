@@ -359,49 +359,6 @@ class UpgradeCommand extends CommonCommand
         }
     }
 
-
-    /**
-     * Updates the configuration.yml file
-     * @param string $version
-     *
-     * @return bool
-     */
-    public function updateConfiguration($version)
-    {
-        global $userPasswordCrypted, $storeSessionInDb;
-
-        $_configuration = $this->getHelper('configuration')->getConfiguration();
-
-        $configurationPath = $this->getHelper('configuration')->getConfigurationPath();
-
-        $dumper = new Dumper();
-
-        $_configuration['system_version'] = $version;
-
-        if (!isset($_configuration['password_encryption'])) {
-            $_configuration['password_encryption']      = $userPasswordCrypted;
-        }
-
-        if (!isset($_configuration['session_stored_in_db'])) {
-            $_configuration['session_stored_in_db']     = $storeSessionInDb;
-        }
-
-        $yaml = $dumper->dump($_configuration, 2); //inline
-        $newConfigurationFile = $configurationPath.'configuration.yml';
-        file_put_contents($newConfigurationFile, $yaml);
-
-        return file_exists($newConfigurationFile);
-    }
-
-    /**
-     * Gets the Doctrine configuration file path
-     * @return string
-     */
-    public function getMigrationConfigurationFile()
-    {
-        return api_get_path(SYS_PATH).'src/ChamiloLMS/Migrations/migrations.yml';
-    }
-
     /**
      * @param $queryList
      * @param $section

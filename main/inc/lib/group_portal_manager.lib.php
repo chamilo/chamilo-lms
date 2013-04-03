@@ -705,7 +705,7 @@ class GroupPortalManager
 
 	/**
 	 * Creates new group pictures in various sizes of a user, or deletes user pfotos.
-	 * Note: This method relies on configuration setting from dokeos/main/inc/conf/profile.conf.php
+	 * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
 	 * @param	int	The group id
 	 * @param	string $file			The common file name for the newly created pfotos. It will be checked and modified for compatibility with the file system.
 	 * If full name is provided, path component is ignored.
@@ -724,9 +724,6 @@ class GroupPortalManager
 		if (empty($source_file)) {
 			$source_file = $file;
 		}
-
-		// Configuration options about user photos.
-		require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
 		// User-reserved directory where photos have to be placed.
 		$path_info = self::get_group_picture_path_by_id($group_id, 'system', true);

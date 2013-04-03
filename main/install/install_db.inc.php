@@ -115,7 +115,6 @@ $installation_settings['{PLATFORM_AUTH_SOURCE}']            = PLATFORM_AUTH_SOUR
 $installation_settings['{ADMINLANGUAGE}']                   = $languageForm;
 $installation_settings['{HASHFUNCTIONMODE}']                = $encryptPassForm;
 
-
 load_main_database($installation_settings);
 
 $app['monolog']->addInfo("drop_course_tables");
@@ -124,15 +123,10 @@ drop_course_tables();
 $app['monolog']->addInfo("create_course_tables");
 load_database_script($new_version.'/db_course.sql');
 
-$app['monolog']->addInfo("loading db_stats.sql");
-load_database_script($new_version.'/db_stats.sql');
-
 $track_countries_table = "track_c_countries";
 
 $app['monolog']->addInfo("fill_track_countries_table");
 fill_track_countries_table($track_countries_table);
-
-load_database_script($new_version.'/db_user.sql');
 
 $app['monolog']->addInfo("locking_settings");
 locking_settings();

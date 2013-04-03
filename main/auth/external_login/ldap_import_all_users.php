@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * This script executes the importation of all users in the LDAP repository
- * into Chamilo 
+ * into Chamilo
  * @package chamilo.auth.ldap
  */
 /**
@@ -15,7 +15,7 @@ use \ChamiloSession as Session;
 
 require dirname(__FILE__) . '/../../inc/global.inc.php';
 require dirname(__FILE__) . '/ldap.inc.php';
-require dirname(__FILE__) . '/../../inc/conf/auth.conf.php';
+
 /**
  * Code execution
  */

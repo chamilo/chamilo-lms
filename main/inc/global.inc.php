@@ -18,35 +18,12 @@
  *
  */
 
-// Determine the directory path for this file.
-$includePath = dirname(__FILE__);
-
-// Include the main Chamilo platform configuration file.
-$configurationFilePath = $includePath.'/conf/configuration.php';
-$configurationYMLFile = $includePath.'/conf/configuration.yml';
-
-$alreadyInstalled = false;
-if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)) {
-    if (file_exists($configurationFilePath)) {
-        require_once $configurationFilePath;
-    }
-    $alreadyInstalled = true;
-} else {
-    $_configuration = array();
-}
-
-// Include the main Chamilo platform library file.
-require_once $includePath.'/lib/main_api.lib.php';
-
-// Do not over-use this variable. It is only for this script's local use.
-$libPath = $includePath.'/lib/';
-
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 //@todo not sure if this is needed any more
 //api_request_uri();
 
 // This is for compatibility with MAC computers.
-ini_set('auto_detect_line_endings', '1');
+//ini_set('auto_detect_line_endings', '1');
 
 //Composer autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
@@ -55,12 +32,35 @@ require_once __DIR__.'../../../vendor/autoload.php';
 use Silex\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Yaml\Parser;
 
 $app = new Application();
 
 //@todo add a helper to read the configuration file once!
+// Reading configuration file from main/inc/conf or app/config
+
+// Determine the directory path for this file.
+$includePath = dirname(__FILE__);
+
+// Include the main Chamilo platform configuration file.
+$configurationFilePath = $includePath.'/conf/configuration.php';
+$configurationYMLFile = $includePath.'/../../app/config/configuration.yml';
+$configurationFileAppPath = $includePath.'/../../app/config/configuration.php';
+
+$alreadyInstalled = false;
+if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  || file_exists($configurationFileAppPath)) {
+    if (file_exists($configurationFilePath)) {
+        require_once $configurationFilePath;
+    }
+
+    if (file_exists($configurationFileAppPath)) {
+        $configurationFilePath = $configurationFileAppPath;
+        require_once $configurationFileAppPath;
+    }
+    $alreadyInstalled = true;
+} else {
+    $_configuration = array();
+}
 
 //Overwriting $_configuration
 if (file_exists($configurationYMLFile)) {
@@ -75,6 +75,40 @@ if (file_exists($configurationYMLFile)) {
     }
 }
 
+// End reading configuration file
+
+// Loading config files
+
+if ($alreadyInstalled) {
+    $configPath = $includePath.'../../app/config/';
+
+    $confFiles = array(
+        'auth.conf.php',
+        'events.conf.php',
+        'mail.conf.php',
+        'portfolio.conf.php',
+        'profile.conf.php'
+    );
+
+    foreach ($confFiles as $confFile) {
+        if (file_exists($configPath.$confFile)) {
+            require $configPath.$confFile;
+        }
+    }
+
+    //Fixes bug in Chamilo 1.8.7.1 array was not set
+    $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
+    $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
+
+}
+
+// Include the main Chamilo platform library file.
+require_once $includePath.'/lib/main_api.lib.php';
+
+// Do not over-use this variable. It is only for this script's local use.
+$libPath = $includePath.'/lib/';
+
+
 /*
 $settingsFile = __DIR__."/../../app/config/settings.yml";
 $app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile, array(
@@ -84,14 +118,14 @@ $app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile, array(
 
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
-if (!isset($GLOBALS['_configuration'])) {
+/*if (!isset($GLOBALS['_configuration'])) {
     $GLOBALS['_configuration'] = $_configuration;
-}
+}*/
 
 // Add the path to the pear packages to the include path
 ini_set('include_path', api_create_include_path_setting());
 
-// Code for trnasitional purposes, it can be removed right before the 1.8.7 release.
+// Code for transitional purposes, it can be removed right before the 1.8.7 release.
 if (empty($_configuration['system_version'])) {
     $_configuration['system_version'] = (!empty($_configuration['dokeos_version']) ? $_configuration['dokeos_version'] : '');
     $_configuration['system_stable'] = (!empty($_configuration['dokeos_stable']) ? $_configuration['dokeos_stable'] : '');
@@ -585,20 +619,6 @@ $app['this_section'] = SECTION_GLOBAL;
 
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
-
-//Include Chamilo Mail conf this is added here because the api_get_setting works
-
-//Fixes bug in Chamilo 1.8.7.1 array was not set
-$administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
-$administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
-
-//Including mail settings
-if ($alreadyInstalled) {
-    $mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
-    if (file_exists($mail_conf)) {
-        require_once $mail_conf;
-    }
-}
 
 //Adding web profiler
 if (is_writable($app['cache.path'])) {

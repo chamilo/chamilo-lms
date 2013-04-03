@@ -34,14 +34,12 @@ function is_already_installed_system()
         return true; // Must be initialized.
     }
 
-    $current_config_file = api_get_path(CONFIGURATION_PATH).'configuration.php';
-
-    if (!file_exists($current_config_file) && !file_exists(api_get_path(CONFIGURATION_PATH).'configuration.yml')) {
-        return false; // Configuration file does not exist, install the system.
+    if (empty($_configuration)) {
+        return false;
     }
-    require $current_config_file;
 
     $current_version = null;
+
     if (isset($_configuration['dokeos_version'])) {
         $current_version = trim($_configuration['dokeos_version']);
     }
@@ -364,19 +362,21 @@ function write_system_config_file($path)
     $fp = @ fopen($path, 'w');
 
     if (!$fp) {
-        echo '<strong><font color="red">Your script doesn\'t have write access to the config directory</font></strong><br />
-                        <em>('.str_replace('\\', '/', realpath($path)).')</em><br /><br />
-                        You probably do not have write access on Chamilo root directory,
-                        i.e. you should <em>CHMOD 777</em> or <em>755</em> or <em>775</em>.<br /><br />
-                        Your problems can be related on two possible causes:<br />
-                        <ul>
-                          <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
-                          <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. If possible, try to switch it off.</li>
-                        </ul>
-                        <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
-                        Please go back to step 5.
-                        <p><input type="submit" name="step5" value="&lt; Back" /></p>
-                        </td></tr></table></form></body></html>';
+        echo '<strong>
+        <font color="red">Your script doesn\'t have write access to the config directory</font></strong>
+        <br />
+        <em>('.str_replace('\\', '/', realpath($path)).')</em><br /><br />
+        You probably do not have write access on Chamilo root directory,
+        i.e. you should <em>CHMOD 777</em> or <em>755</em> or <em>775</em>.<br /><br />
+        Your problems can be related on two possible causes:<br />
+        <ul>
+          <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
+          <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. If possible, try to switch it off.</li>
+        </ul>
+        <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
+        Please go back to step 5.
+        <p><input type="submit" name="step5" value="&lt; Back" /></p>
+        </td></tr></table></form></body></html>';
         exit;
     }
 
@@ -448,154 +448,12 @@ function my_directory_to_array($directory)
  */
 function get_config_param($param, $updatePath = '')
 {
-    global $configFile, $updateFromConfigFile;
+    global $configFile, $updateFromConfigFile, $_configuration;
 
-    // Look if we already have the queried parameter.
-    if (is_array($configFile) && isset($configFile[$param])) {
-        return $configFile[$param];
-    }
-    if (empty($updatePath) && !empty($_POST['updatePath'])) {
-        $updatePath = $_POST['updatePath'];
-    }
-    if (empty($updatePath)) {
-        $updatePath = api_get_path(SYS_PATH);
-    }
-    $updatePath = api_add_trailing_slash(str_replace('\\', '/', realpath($updatePath)));
-    $updateFromInstalledVersionFile = '';
-
-    if (empty($updateFromConfigFile)) {
-        // If update from previous install was requested,
-        // try to recover old config file from dokeos 1.8.x.
-        if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
-            $updateFromConfigFile = 'main/inc/conf/configuration.php';
-        } elseif (file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php')) {
-            $updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
-        } else {
-            // Give up recovering.
-            //error_log('Chamilo Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);
-            return null;
-        }
-    }
-
-    if (file_exists($updatePath.$updateFromConfigFile) && !is_dir($updatePath.$updateFromConfigFile)) {
-
-        // The parameter was not found among the global variables, so look into the old configuration file.
-
-        // Make sure the installedVersion file is read first so it is overwritten
-        // by the config file if the config file contains the version (from 1.8.4).
-        $config_data_2 = array();
-        if (file_exists($updatePath.$updateFromInstalledVersionFile)) {
-            $config_data_2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
-        }
-        $configFile = array();
-        $config_data = file_to_array($updatePath.$updateFromConfigFile);
-        $config_data = array_merge($config_data, $config_data_2);
-        $val = '';
-
-        // Parse the configuration file, statement by statement (line by line, actually).
-        foreach ($config_data as $php_statement) {
-
-            if (strpos($php_statement, '=') !== false) {
-                // Variable assignment statement have been detected (probably).
-                // It is expected to be as follows:
-                // $variable = 'some_value'; // A comment that is not mandatory.
-
-                // Split the statement into its left and right sides.
-                $php_statement = explode('=', $php_statement);
-                $variable = trim($php_statement[0]);
-                $value = $php_statement[1];
-
-                if (substr($variable, 0, 1) == '$') {
-                    // We have for sure a php variable assignment detected.
-
-                    // On the left side: Retrieve the pure variable's name
-                    $variable = trim(str_replace('$', '', $variable));
-
-                    // On the right side: Remove the comment, if it exists.
-                    list($value) = explode(' //', $value);
-                    // Remove extra whitespace, if any. Remove the trailing semicolon (;).
-                    $value = substr(trim($value), 0, -1);
-                    // Remove surroundig quotes, restore escaped quotes.
-                    $value = str_replace('\"', '"', preg_replace('/^"|"$/', '', $value));
-                    $value = str_replace('\'', '"', preg_replace('/^\'|\'$/', '', $value));
-
-                    if (strtolower($value) == 'true') {
-
-                        // A boolean true value have been recognized.
-                        $value = 1;
-
-                    } elseif (strtolower($value) == 'false') {
-
-                        // A boolean false value have been recognized.
-                        $value = 0;
-
-                    } else {
-
-                        // Probably we have a string value, but also we have to check
-                        // possible string concatenations that may include string values
-                        // and other configuration variables. I this case we have to
-                        // get the calculated result of the concatenation.
-                        $implode_string = ' ';
-                        if (!strstr($value, '." ".') && strstr($value, '.$')) {
-                            // Yes, there is concatenation, insert a special separator string.
-                            $value = str_replace('.$', '." ".$', $value);
-                            $implode_string = '';
-                        }
-
-                        // Split the concatenated values, if they are more than one.
-                        $sub_strings = explode('." ".', $value);
-
-                        // Seek for variables and retrieve their values.
-                        foreach ($sub_strings as $key => & $sub_string) {
-                            if (preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $sub_string)) {
-                                // A variable has been detected, read it by recursive call.
-                                $sub_string = get_config_param(str_replace('$', '', $sub_string));
-                            }
-                        }
-
-                        // Concatenate everything into the final, the calculated string value.
-                        $value = implode($implode_string, $sub_strings);
-                    }
-
-                    // Cache the result value.
-                    $configFile[$variable] = $value;
-
-                    $a = explode("'", $variable);
-                    $key_tmp = isset($a[1]) ? $a[1] : null;
-                    if ($key_tmp == $param) {
-                        $val = $value;
-                    }
-                }
-            }
-        }
-    }
-
-    if ($param == 'dbGlu' && empty($val)) {
-        return '`.`';
-    }
-    //Special treatment for dokeos_version parameter due to Dokeos 1.8.3 have the dokeos_version in the main/inc/installedVersion.inc.php file
-    if ($param == 'dokeos_version') {
-        //dokeos_version from configuration.php if empty
-        $dokeos_version = $val;
-
-        if (empty($dokeos_version)) {
-            //checking the dokeos_version value exists in main/inc/installedVersion.inc.php
-            if (file_exists($updatePath.'main/inc/installedVersion.inc.php')) {
-                $updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
-                require ($updateFromInstalledVersionFile); //there are only 2 variables here: $stable & $dokeos_version
-                $stable = false;
-            }
-        }
-
-        return $dokeos_version;
+    if (isset($_configuration[$param])) {
+        return $_configuration[$param];
     } else {
-        if (file_exists($updatePath.$updateFromConfigFile)) {
-            return $val;
-        } else {
-            error_log('Config array could not be found in get_config_param()', 0);
-
-            return null;
-        }
+        return null;
     }
 }
 
@@ -732,6 +590,7 @@ function fill_track_countries_table($track_countries_table)
  */
 function load_main_database($installation_settings, $db_script = '')
 {
+    $sql_text = null;
     if (!empty($db_script)) {
         if (file_exists($db_script)) {
             $sql_text = file_get_contents($db_script);
@@ -1424,10 +1283,14 @@ function display_requirements(
                 <td class="requirements-item">chamilo/app/cache</td>
                 <td class="requirements-value">'.check_writable_root_path('app/cache').'</td>
             </tr>
-
             <tr>
                 <td class="requirements-item">chamilo/main/default_course_document/images/</td>
                 <td class="requirements-value">'.check_writable('default_course_document/images/').'</td>
+            </tr>
+
+            <tr>
+                <td class="requirements-item">chamilo/courses/</td>
+                <td class="requirements-value">'.check_writable('../courses/').' </td>
             </tr>
 
             <tr>
@@ -1902,12 +1765,12 @@ function display_database_settings_form(
             $dbUsernameForm = $_configuration['db_user'];
             $dbPassForm = $_configuration['db_password'];
             $dbPrefixForm = $_configuration['db_prefix'];
-            $enableTrackingForm = $_configuration['tracking_enabled'];
-            $singleDbForm = $_configuration['single_database'];
+            $enableTrackingForm = isset($_configuration['tracking_enabled']) ? $_configuration['tracking_enabled'] : null;
+            $singleDbForm = isset($_configuration['single_database']) ? $_configuration['single_database'] : null;
             $dbNameForm = $_configuration['main_database'];
-            $dbStatsForm = $_configuration['statistics_database'];
-            $dbScormForm = $_configuration['scorm_database'];
-            $dbUserForm = $_configuration['user_personal_database'];
+            $dbStatsForm = isset($_configuration['statistics_database']) ? $_configuration['statistics_database'] : null;
+            $dbScormForm = isset($_configuration['scorm_database']) ? $_configuration['scorm_database'] : null;
+            $dbUserForm = isset($_configuration['user_personal_database']) ? $_configuration['user_personal_database'] : null;
             $dbScormExists = true;
         }
 
@@ -2006,7 +1869,7 @@ function display_database_settings_form(
 
             //Only for updates we show this options
             if ($installType == INSTALL_TYPE_UPDATE) {
-                display_database_parameter(
+                /*display_database_parameter(
                     $installType,
                     get_lang('StatDB'),
                     'dbStatsForm',
@@ -2034,7 +1897,7 @@ function display_database_settings_form(
                     '&nbsp;',
                     null,
                     'id="optional_param4" '.$style
-                );
+                );*/
             }
             ?>
         <tr>
@@ -2737,6 +2600,22 @@ function drop_course_tables()
     foreach ($list as $table) {
         $sql = "DROP TABLE IF EXISTS ".DB_COURSE_PREFIX.$table;
         Database::query($sql);
+    }
+}
+
+function movingFilesInAppFolder()
+{
+    $sysPath = api_get_path(SYS_PATH);
+    $moveDirs = array(
+        $sysPath.'searchdb' => api_get_path(SYS_PATH_APP).'data/searchdb/',
+        $sysPath.'home' => api_get_path(SYS_PATH_APP).'data/home/',
+    );
+
+    foreach ($moveDirs as $from => $to) {
+        if (is_dir($from)) {
+            $copy = "cp -r $from/* $to";
+            system($copy);
+        }
     }
 }
 

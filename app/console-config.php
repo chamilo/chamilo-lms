@@ -7,7 +7,6 @@ $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Symfony\Component\Yaml\Parser;
 
 $sysPath = __DIR__."../../";
 
@@ -21,29 +20,6 @@ $config->setProxyDir(__DIR__ . '/Proxies');
 $config->setProxyNamespace('Proxies');
 
 $courseList = CourseManager::get_real_course_list();
-
-$configurationPath = $sysPath.'main/inc/conf/';
-$newConfigurationFile = $configurationPath.'configuration.yml';
-
-//Including configuration.php
-$configurationFile = $configurationPath.'configuration.php';
-
-if (is_file($configurationFile) && file_exists($configurationFile)) {
-    require $configurationFile;
-}
-
-//Merge with the configuration.yml file, if exits
-if (is_file($newConfigurationFile) && file_exists($newConfigurationFile)) {
-    $yaml = new Parser();
-    $_configurationYML = $yaml->parse(file_get_contents($newConfigurationFile));
-    if (!empty($_configurationYML)) {
-        if (isset($_configuration)) {
-            $_configuration = array_merge($_configuration, $_configurationYML);
-        } else {
-            $_configuration = $_configurationYML;
-        }
-    }
-}
 
 $app['chamilo.log'] = $app['cache.path'].'chamilo-cli.log';
 

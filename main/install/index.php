@@ -27,8 +27,6 @@ define('MAX_FORM_FIELD_LENGTH', 80);
 
 require_once '../inc/global.inc.php';
 
-require_once __DIR__.'../../../vendor/autoload.php';
-
 require_once __DIR__.'/version.php';// A protection measure for already installed systems.
 
 require_once 'install.lib.php';
@@ -131,13 +129,12 @@ if (!empty($_POST['old_version'])) {
 } elseif (!empty($dokeos_version)) { //variable coming from installedVersion, normally
     $my_old_version = $dokeos_version;
 }
-
-
+/*
 if (is_already_installed_system()) {
     // The system has already been installed, so block re-installation.
     header("Location: ".api_get_path(WEB_PATH));
     exit;
-}
+}*/
 
 /*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 
@@ -211,7 +208,7 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
 
 if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {
     // This is the main configuration file of the system before the upgrade.
-    include api_get_path(CONFIGURATION_PATH).'configuration.php'; // Don't change to include_once
+    //include api_get_path(CONFIGURATION_PATH).'configuration.php'; // Don't change to include_once
 }
 
 if (!isset($_GET['running'])) {
@@ -773,27 +770,7 @@ if (@$_POST['step2']) {
         <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong>
 
     <?php
-    if (!$singleDbForm) {
-        //Showing this data only in case a user migrates from a 3 main databases (main, user, tracking)
-        //@todo should be removed
-        if ($installType == 'update') {
-            echo '<br />';
-            echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
-            if ($installType == 'new') {
-                echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
-            }
-            echo '<br />';
-            echo get_lang('UserDB').' : <strong>'.$dbUserForm.'</strong>';
-            if ($installType == 'new') {
-                echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
-            }
-            echo '<br />';
-        }
-    }
-
-    //echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>
-    <?php //echo get_lang('SingleDb').' : '.($singleDbForm ? get_lang('One') : get_lang('Several')); ?><br/><br/>
-    <?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br/>
+    echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br/>
     <?php echo get_lang('EncryptMethodUserPass').' : ';
     echo $encryptPassForm;
     ?>
@@ -968,6 +945,7 @@ if (@$_POST['step2']) {
             default:
                 break;
         }
+        movingFilesInAppFolder();
     } else {
         set_file_folder_permissions();
         database_server_connect();

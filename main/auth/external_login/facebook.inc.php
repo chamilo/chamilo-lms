@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Licence: GPL 
+ * Licence: GPL
  * Please contact CBlue regarding any licences issues.
  * Author: noel@cblue.be
  *  Copyright: CBlue SPRL, 20XX

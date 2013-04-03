@@ -8,68 +8,64 @@
  * Only updates the  main/inc/conf/configuration.php  file with the new version use only from 1.8.8.1 to 1.8.8.2 (with no DB changes)
  * @package chamilo.install
  */
+
+use Symfony\Component\Yaml\Dumper;
+
 if (defined('SYSTEM_INSTALLATION')) {
 
     $app['monolog']->addInfo("Starting " . basename(__FILE__));
 
-    // Edit the configuration file
-    $file   = file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
-    $fh     = fopen(api_get_path(CONFIGURATION_PATH) . 'configuration.php', 'w');
+    //Creating app/config/configuration.yml
+    global $_configuration;
 
-    $found_version_old      = false;
-    $found_stable_old       = false;
-    $found_version          = false;
-    $found_stable           = false;
-    $found_software_name    = false;
-    $found_software_url     = false;
+    $_configuration['system_version'] = $new_version;
+    $_configuration['system_stable'] = $new_version_stable ? 'true' : 'false';
+    $_configuration['software_name'] = isset($software_name) ? $software_name : 'chamilo';
+    $_configuration['software_url'] = isset($software_url) ? $software_url : 'chamilo';
+    $_configuration['password_encryption'] = isset($userPasswordCrypted) ? $userPasswordCrypted : $_configuration['password_encryption'];
 
-    foreach ($file as $line) {
-        $ignore = false;
-        if (stripos($line, '$_configuration[\'dokeos_version\']') !== false) {
-            $found_version_old = true;
-            $line = '$_configuration[\'dokeos_version\'] = \'' . $new_version . '\';' . "\r\n";
-            $ignore = true;
-        } elseif (stripos($line, '$_configuration[\'system_version\']') !== false) {
-            $found_version = true;
-            $line = '$_configuration[\'system_version\'] = \'' . $new_version . '\';' . "\r\n";
-        } elseif (stripos($line, '$_configuration[\'dokeos_stable\']') !== false) {
-            $found_stable_old = true;
-            $line = '$_configuration[\'dokeos_stable\'] = ' . ($new_version_stable ? 'true' : 'false') . ';' . "\r\n";
-            $ignore = true;
-        } elseif (stripos($line, '$_configuration[\'system_stable\']') !== false) {
-            $found_stable = true;
-            $line = '$_configuration[\'system_stable\'] = ' . ($new_version_stable ? 'true' : 'false') . ';' . "\r\n";
-        } elseif (stripos($line, '$_configuration[\'software_name\']') !== false) {
-            $found_software_name = true;
-            $line = '$_configuration[\'software_name\'] = \'' . $software_name . '\';' . "\r\n";
-        } elseif (stripos($line, '$_configuration[\'software_url\']') !== false) {
-            $found_software_url = true;
-            $line = '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n";
-        } elseif (stripos($line, '$userPasswordCrypted') !== false) {
-            //$line = '$userPasswordCrypted = \'' . ($userPasswordCrypted) . '\';' . "\r\n";
-            $line = '$_configuration[\'password_encryption\'] = \'' .$userPasswordCrypted.'\';' . "\r\n";
-        } elseif (stripos($line, '?>') !== false) {
-            $ignore = true;
-        }
-        if (!$ignore) {
-            fwrite($fh, $line);
-        }
+    $dumper = new Dumper();
+
+    //removing useless indexes before saving in the configuration file
+
+    unset($_configuration['dokeos_version']);
+    unset($_configuration['dokeos_stable']);
+    unset($_configuration['code_append']);
+    unset($_configuration['course_folder']);
+
+    $yaml = $dumper->dump($_configuration, 2); //inline
+    $newConfigurationFile = api_get_path(SYS_PATH_APP).'config/configuration.yml';
+    file_put_contents($newConfigurationFile, $yaml);
+
+    //Moving files in app/config
+
+    if (file_exists(api_get_path(CONFIGURATION_PATH).'mail.conf.php')) {
+        copy(api_get_path(CONFIGURATION_PATH).'mail.conf.php', api_get_path(SYS_PATH_APP).'config/mail.conf.php');
+        unlink(api_get_path(CONFIGURATION_PATH).'mail.conf.php');
     }
 
-    if (!$found_version) {
-        fwrite($fh, '$_configuration[\'system_version\'] = \'' . $new_version . '\';' . "\r\n");
+    if (file_exists(api_get_path(CONFIGURATION_PATH).'auth.conf.php')) {
+        copy(api_get_path(CONFIGURATION_PATH).'auth.conf.php', api_get_path(SYS_PATH_APP).'config/auth.conf.php');
+        unlink(api_get_path(CONFIGURATION_PATH).'auth.conf.php');
     }
-    if (!$found_stable) {
-        fwrite($fh, '$_configuration[\'system_stable\'] = ' . ($new_version_stable ? 'true' : 'false') . ';' . "\r\n");
+
+    if (file_exists(api_get_path(CONFIGURATION_PATH).'events.conf.php')) {
+        copy(api_get_path(CONFIGURATION_PATH).'events.conf.php', api_get_path(SYS_PATH_APP).'config/events.conf.php');
+        unlink(api_get_path(CONFIGURATION_PATH).'events.conf.php');
     }
-    if (!$found_software_name) {
-        fwrite($fh, '$_configuration[\'software_name\'] = \'' . $software_name . '\';' . "\r\n");
+
+    if (file_exists(api_get_path(CONFIGURATION_PATH).'mail.conf.php')) {
+        copy(api_get_path(CONFIGURATION_PATH).'mail.conf.php', api_get_path(SYS_PATH_APP).'config/mail.conf.php');
+        unlink(api_get_path(CONFIGURATION_PATH).'mail.conf.php');
     }
-    if (!$found_software_url) {
-        fwrite($fh, '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n");
+
+    if (file_exists(api_get_path(CONFIGURATION_PATH).'portfolio.conf.php')) {
+        copy(api_get_path(CONFIGURATION_PATH).'portfolio.conf.php', api_get_path(SYS_PATH_APP).'config/portfolio.conf.php');
+        unlink(api_get_path(CONFIGURATION_PATH).'portfolio.conf.php');
     }
-    fwrite($fh, '?>');
-    fclose($fh);
-} else {
-    echo 'You are not allowed here !'. __FILE__;
+
+    if (file_exists(api_get_path(CONFIGURATION_PATH).'profile.conf.php')) {
+        copy(api_get_path(CONFIGURATION_PATH).'profile.conf.php', api_get_path(SYS_PATH_APP).'config/profile.conf.php');
+        unlink(api_get_path(CONFIGURATION_PATH).'profile.conf.php');
+    }
 }

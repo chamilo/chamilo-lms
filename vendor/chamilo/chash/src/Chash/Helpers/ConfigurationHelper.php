@@ -77,7 +77,7 @@ class ConfigurationHelper extends Helper
                 require $confFile;
             }
 
-            $confYML = $confPath.'configuration.yml';
+            $confYML = $confPath.'../../../app/config/configuration.yml';
             if (file_exists($confYML)) {
                 $yaml = new Parser();
                 $_configurationYML = $yaml->parse(file_get_contents($confYML));

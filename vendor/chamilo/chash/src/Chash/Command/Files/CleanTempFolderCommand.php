@@ -51,15 +51,17 @@ class CleanTempFolderCommand extends CommonChamiloDatabaseCommand
 
         $dir   = $_configuration['root_sys'].'archive';
         $files = scandir($dir);
-        foreach ($files as $file) {
-            if (substr($file, 0, 1) == '.') {
-                //ignore
-            } elseif ($file == 'twig') {
-                $err = @system('rm -rf '.$dir.'/twig/*');
-            } elseif ($file == 'Serializer') {
-                $err = @system('rm -rf '.$dir.'/Serializer/*');
-            } else {
-                $err = @system('rm -rf '.$dir.'/'.$file);
+        if (!empty($files)) {
+            foreach ($files as $file) {
+                if (substr($file, 0, 1) == '.') {
+                    //ignore
+                } elseif ($file == 'twig') {
+                    $err = @system('rm -rf '.$dir.'/twig/*');
+                } elseif ($file == 'Serializer') {
+                    $err = @system('rm -rf '.$dir.'/Serializer/*');
+                } else {
+                    $err = @system('rm -rf '.$dir.'/'.$file);
+                }
             }
         }
         $output->writeln('<info>Files were cleaned</info>');

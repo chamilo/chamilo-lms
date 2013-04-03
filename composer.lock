@@ -7,12 +7,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chamilo/chash.git",
-                "reference": "3d31e9577df292fb2ee010b6182ca7dd543b2c67"
+                "reference": "38a4ea2c1d448699c780c81f72a434da79547a8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chamilo/chash/zipball/3d31e9577df292fb2ee010b6182ca7dd543b2c67",
-                "reference": "3d31e9577df292fb2ee010b6182ca7dd543b2c67",
+                "url": "https://api.github.com/repos/chamilo/chash/zipball/38a4ea2c1d448699c780c81f72a434da79547a8f",
+                "reference": "38a4ea2c1d448699c780c81f72a434da79547a8f",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-03-29 10:44:52"
+            "time": "2013-04-03 12:15:26"
         },
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -400,12 +400,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "e96e48a988f7fffbe3cca4763df84f77ba79ddde"
+                "reference": "c893252900762f0c7a6e2e72994e983015e33ebe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/e96e48a988f7fffbe3cca4763df84f77ba79ddde",
-                "reference": "e96e48a988f7fffbe3cca4763df84f77ba79ddde",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/c893252900762f0c7a6e2e72994e983015e33ebe",
+                "reference": "c893252900762f0c7a6e2e72994e983015e33ebe",
                 "shasum": ""
             },
             "require": {
@@ -471,7 +471,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-03-27 16:49:35"
+            "time": "2013-04-03 03:54:53"
         },
         {
             "name": "igorw/config-service-provider",
@@ -641,12 +641,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/lessphp.git",
-                "reference": "54bb80519c9a73eff250fa1671707b492a402280"
+                "reference": "a2feb59a0f5cd144aa70759ce0333f36d12e2582"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/lessphp/zipball/54bb80519c9a73eff250fa1671707b492a402280",
-                "reference": "54bb80519c9a73eff250fa1671707b492a402280",
+                "url": "https://api.github.com/repos/leafo/lessphp/zipball/a2feb59a0f5cd144aa70759ce0333f36d12e2582",
+                "reference": "a2feb59a0f5cd144aa70759ce0333f36d12e2582",
                 "shasum": ""
             },
             "type": "library",
@@ -674,7 +674,7 @@
             ],
             "description": "lessphp is a compiler for LESS written in PHP.",
             "homepage": "http://leafo.net/lessphp/",
-            "time": "2013-03-08 21:29:33"
+            "time": "2013-04-02 18:20:23"
         },
         {
             "name": "mheap/silex-assetic",
@@ -682,12 +682,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mheap/Silex-Assetic.git",
-                "reference": "00cd1e43e7c778f8816d20893202addd13a40cc8"
+                "reference": "00787801c12279717542a1b38e88a9fc21d43d17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/00cd1e43e7c778f8816d20893202addd13a40cc8",
-                "reference": "00cd1e43e7c778f8816d20893202addd13a40cc8",
+                "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/00787801c12279717542a1b38e88a9fc21d43d17",
+                "reference": "00787801c12279717542a1b38e88a9fc21d43d17",
                 "shasum": ""
             },
             "require": {
@@ -730,7 +730,7 @@
                 "assetic",
                 "silex"
             ],
-            "time": "2013-03-25 09:35:46"
+            "time": "2013-04-02 15:57:01"
         },
         {
             "name": "monolog/monolog",
@@ -1290,12 +1290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DependencyInjection.git",
-                "reference": "bb10145fde285f82049c390681e3e94eb5169947"
+                "reference": "bdbd94e1fbca934ed4c6d912e57c99a17bbe753b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/bb10145fde285f82049c390681e3e94eb5169947",
-                "reference": "bb10145fde285f82049c390681e3e94eb5169947",
+                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/bdbd94e1fbca934ed4c6d912e57c99a17bbe753b",
+                "reference": "bdbd94e1fbca934ed4c6d912e57c99a17bbe753b",
                 "shasum": ""
             },
             "require": {
@@ -1336,7 +1336,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 08:06:49"
+            "time": "2013-03-23 13:07:03"
         },
         {
             "name": "symfony/doctrine-bridge",
@@ -1345,12 +1345,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DoctrineBridge.git",
-                "reference": "f4de22fd6b94a793a89e0e0e2baf04bffdcbf4c5"
+                "reference": "cdc203642da7f3db2afafa6cfea827c234ac611f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DoctrineBridge/zipball/f4de22fd6b94a793a89e0e0e2baf04bffdcbf4c5",
-                "reference": "f4de22fd6b94a793a89e0e0e2baf04bffdcbf4c5",
+                "url": "https://api.github.com/repos/symfony/DoctrineBridge/zipball/cdc203642da7f3db2afafa6cfea827c234ac611f",
+                "reference": "cdc203642da7f3db2afafa6cfea827c234ac611f",
                 "shasum": ""
             },
             "require": {
@@ -1402,7 +1402,7 @@
             ],
             "description": "Symfony Doctrine Bridge",
             "homepage": "http://symfony.com",
-            "time": "2013-03-22 15:41:38"
+            "time": "2013-04-01 08:07:30"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1512,12 +1512,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "8659a898edadadf170dc3697c70c1030f65e8d67"
+                "reference": "094c9264480dceff17bba9c9c92b520cde55a15b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/8659a898edadadf170dc3697c70c1030f65e8d67",
-                "reference": "8659a898edadadf170dc3697c70c1030f65e8d67",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/094c9264480dceff17bba9c9c92b520cde55a15b",
+                "reference": "094c9264480dceff17bba9c9c92b520cde55a15b",
                 "shasum": ""
             },
             "require": {
@@ -1562,7 +1562,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-27 09:08:41"
+            "time": "2013-04-01 08:07:53"
         },
         {
             "name": "symfony/http-foundation",
@@ -1795,12 +1795,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/PropertyAccess.git",
-                "reference": "b9c95171503d7ab8254dd8071f7f00856681a478"
+                "reference": "072ae5c084eedf7092182f2aff3ab713c63a4672"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/b9c95171503d7ab8254dd8071f7f00856681a478",
-                "reference": "b9c95171503d7ab8254dd8071f7f00856681a478",
+                "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/072ae5c084eedf7092182f2aff3ab713c63a4672",
+                "reference": "072ae5c084eedf7092182f2aff3ab713c63a4672",
                 "shasum": ""
             },
             "require": {
@@ -1844,7 +1844,7 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2013-03-20 14:03:03"
+            "time": "2013-04-01 08:07:30"
         },
         {
             "name": "symfony/routing",
@@ -1911,12 +1911,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Security.git",
-                "reference": "ab9e18a00d9da04e7ff5f204ed88bc8307e2bec9"
+                "reference": "708f7aa9f69b2ae48832a875c252f4e14f2d76e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Security/zipball/ab9e18a00d9da04e7ff5f204ed88bc8307e2bec9",
-                "reference": "ab9e18a00d9da04e7ff5f204ed88bc8307e2bec9",
+                "url": "https://api.github.com/repos/symfony/Security/zipball/708f7aa9f69b2ae48832a875c252f4e14f2d76e8",
+                "reference": "708f7aa9f69b2ae48832a875c252f4e14f2d76e8",
                 "shasum": ""
             },
             "require": {
@@ -1968,7 +1968,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-20 14:03:03"
+            "time": "2013-04-01 08:07:53"
         },
         {
             "name": "symfony/translation",
@@ -1977,12 +1977,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Translation.git",
-                "reference": "584d0b8186e4877dd26550cddb58ae678a67d776"
+                "reference": "cb8553294d259431f11b19d731d81a483309320a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Translation/zipball/584d0b8186e4877dd26550cddb58ae678a67d776",
-                "reference": "584d0b8186e4877dd26550cddb58ae678a67d776",
+                "url": "https://api.github.com/repos/symfony/Translation/zipball/cb8553294d259431f11b19d731d81a483309320a",
+                "reference": "cb8553294d259431f11b19d731d81a483309320a",
                 "shasum": ""
             },
             "require": {
@@ -2023,7 +2023,7 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 07:35:36"
+            "time": "2013-04-01 08:07:53"
         },
         {
             "name": "symfony/twig-bridge",
@@ -2098,12 +2098,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "7b3b1ed1008b6f951d2906b3ee071ae75e0b507b"
+                "reference": "b9e2fa05cf314a8c64db801adbfce611028e63b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/7b3b1ed1008b6f951d2906b3ee071ae75e0b507b",
-                "reference": "7b3b1ed1008b6f951d2906b3ee071ae75e0b507b",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/b9e2fa05cf314a8c64db801adbfce611028e63b9",
+                "reference": "b9e2fa05cf314a8c64db801adbfce611028e63b9",
                 "shasum": ""
             },
             "require": {
@@ -2150,7 +2150,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 12:50:05"
+            "time": "2013-04-01 08:07:53"
         },
         {
             "name": "symfony/yaml",

@@ -4032,9 +4032,3 @@ function setting_gettext()
     bind_textdomain_codeset($domain, 'UTF-8');
     textdomain($domain);
 }
-
-/**
- * Functions for internal use behind this API
- */
-
-require_once dirname(__FILE__).'/internationalization_internal.lib.php';

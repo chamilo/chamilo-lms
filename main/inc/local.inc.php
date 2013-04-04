@@ -144,7 +144,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
         //Lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status FROM $user_table
+        $sql = "SELECT * FROM $user_table
                 WHERE username = '".Database::escape_string($login)."'";
 
         $result = Database::query($sql);
@@ -157,12 +157,15 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $password = api_get_encrypted_password(trim(stripslashes($password)));
 
                 // Check the user's password
-                if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
+                if (($password == $uData['password'] OR $cas_login) AND (trim($login) == $uData['username'])) {
                     $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
                     $update_type= $update_type['update_type'];
+
                     if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
                         include_once $extAuthSource[$update_type]['updateUser'];
                     }
+
+                    unset($uData['password']);
 
                     // Check if the account is active (not locked)
                     if ($uData['active'] == '1') {
@@ -184,14 +187,11 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                                 if ($my_user_is_admin === false) {
 
-                                    if (is_array($my_url_list) && count($my_url_list)>0 ) {
+                                    if (is_array($my_url_list) && count($my_url_list) > 0 ) {
                                         // the user have the permissions to enter at this site
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             ConditionalLogin::check_conditions($uData);
-
-                                            $_user['user_id'] = $uData['user_id'];
-                                            $_user['status']  = $uData['status'];
-                                            Session::write('_user',$_user);
+                                            Session::write('_user', $uData);
                                             event_login();
                                             $logging_in = true;
                                         } else {
@@ -209,16 +209,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
                                     if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
                                         ConditionalLogin::check_conditions($uData);
-                                        $_user['user_id'] = $uData['user_id'];
-                                        $_user['status']  = $uData['status'];
-                                        Session::write('_user',$_user);
+                                        Session::write('_user', $uData);
                                         event_login();
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
-                                            $_user['user_id'] = $uData['user_id'];
-                                            $_user['status']  = $uData['status'];
-                                            Session::write('_user',$_user);
+                                            Session::write('_user', $uData);
                                             event_login();
                                         } else {
                                             $loginFailed = true;
@@ -229,12 +225,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     }
                                 }
                             } else {
-                                //error_log('Loggedin');
                                 ConditionalLogin::check_conditions($uData);
-                                $_user['user_id'] = $uData['user_id'];
-                                $_user['status']  = $uData['status'];
-
-                                Session::write('_user',$_user);
+                                Session::write('_user', $uData);
                                 event_login();
                                 $logging_in = true;
                             }
@@ -450,15 +442,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             $use_anonymous = false;
         }
     }
-
-    //    else {} => continue as anonymous user
     $uidReset = true;
-
-    //    $cidReset = true;
-    //    $gidReset = true;
-} // end else
-
-
+} // end
 
 //Now check for anonymous user mode
 if (isset($use_anonymous) && $use_anonymous) {
@@ -483,6 +468,11 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
     $cidReset = true;
     $gidReset = true;    // As groups depend from courses, group id is reset
 }
+
+//Setting app user variable
+$_user = Session::read('_user');
+
+$app['current_user'] = $_user;
 
 /* USER INIT */
 if (isset($uidReset) && $uidReset) {    // session data refresh requested
@@ -511,7 +501,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             // Extracting the user data
 
             $uData = Database::fetch_array($result);
-            $_user =  _api_format_user($uData, false);
+            $_user = _api_format_user($uData, false);
             $_user['lastLogin']        = api_strtotime($uData['login_date'], 'UTC');
 
             $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
@@ -521,25 +511,24 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             Session::write('_user', $_user);
             UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
 
-            Session::write('is_platformAdmin',$is_platformAdmin);
-            Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
+            Session::write('is_platformAdmin', $is_platformAdmin);
+            Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
         } else {
             header('location:'.api_get_path(WEB_PATH));
-            //exit("WARNING UNDEFINED UID !! ");
+            exit;
         }
     } else { // no uid => logout or Anonymous
         Session::erase('_user');
         Session::erase('_uid');
     }
-    Session::write('is_platformAdmin',$is_platformAdmin);
-    Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
+    Session::write('is_platformAdmin', $is_platformAdmin);
+    Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 } else { // continue with the previous values
     $_user                    = $_SESSION['_user'];
     $is_platformAdmin         = isset($_SESSION['is_platformAdmin']) ? $_SESSION['is_platformAdmin'] : false;
     $is_allowedCreateCourse   = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
-
 
 /*  COURSE INIT */
 

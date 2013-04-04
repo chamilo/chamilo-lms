@@ -257,7 +257,7 @@ class Template
         $this->user_is_logged_in = false;
 
         if (api_user_is_login()) {
-            $user_info = api_get_user_info(api_get_user_id());
+            $user_info = $this->app['current_user'];
             $user_info['logged'] = 1;
 
             $user_info['is_admin'] = 0;
@@ -746,7 +746,8 @@ class Template
 
         $lang = null; //el for "Edit Language"
         $user_language_choice = isset($_SESSION['user_language_choice']) ? $_SESSION['user_language_choice'] : null;
-        $user_info = api_get_user_id() ? api_get_user_info() : null;
+
+        $user_info = $this->app['current_user'];
 
         if (!empty($user_language_choice)) {
             $lang = $user_language_choice;

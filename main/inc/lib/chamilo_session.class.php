@@ -76,8 +76,6 @@ class ChamiloSession extends System\Session
      */
     static function start($alreadyInstalled = true)
     {
-        global $_configuration;
-
         /* Causes too many problems and is not configurable dynamically.
           if ($alreadyInstalled) {
           $session_lifetime = 360000;

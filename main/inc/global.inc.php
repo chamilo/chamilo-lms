@@ -105,9 +105,18 @@ if ($alreadyInstalled) {
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
+
+/** Inclusion of internationalization libraries */
+require_once $includePath.'/lib/internationalization.lib.php';
+
+/**
+ * Functions for internal use behind this API
+ */
+require_once $includePath.'/lib/internationalization_internal.lib.php';
+
+
 // Do not over-use this variable. It is only for this script's local use.
 $libPath = $includePath.'/lib/';
-
 
 /*
 $settingsFile = __DIR__."/../../app/config/settings.yml";
@@ -143,8 +152,8 @@ $app['configuration'] = $_configuration;
 $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 
-//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
-require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
+require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
+//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
 /*
@@ -623,6 +632,7 @@ require $includePath.'/local.inc.php';
 //Adding web profiler
 if (is_writable($app['cache.path'])) {
     //if ($app['debug']) {
+
     if (api_get_setting('allow_web_profiler') == 'true') {
         $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
                 'profiler.cache_dir' => $app['profiler.cache_dir'],
@@ -676,8 +686,6 @@ if ($alreadyInstalled) {
 // We need to save the genuine value of this variable and
 // to use it within the function get_lang(...).
 $language_interface_initial_value = $language_interface;
-
-//load_translations($app);
 
 $langPath = api_get_path(SYS_LANG_PATH);
 
@@ -978,7 +986,7 @@ $app->get('/index', 'index.controller:indexAction')->bind('index');
 $app->get('/userportal', 'userportal.controller:indexAction');
 
 //Logout page
-$app->get('/logout', 'index.controller:logoutAction');
+$app->get('/logout', 'index.controller:logoutAction')->bind('logout');
 
 
 $app->match('/courses/{courseCode}/index.php', 'course_home.controller:indexAction', 'GET|POST');

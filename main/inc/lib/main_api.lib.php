@@ -368,14 +368,6 @@ define('TEACHER_HTML', 3);
 define('STUDENT_HTML_FULLPAGE', 4);
 define('TEACHER_HTML_FULLPAGE', 5);
 
-
-/**
- * Inclusion of internationalization libraries
- */
-
-require_once dirname(__FILE__).'/internationalization.lib.php';
-
-
 /* PATHS & FILES - ROUTINES */
 
 /**

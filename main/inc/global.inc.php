@@ -32,6 +32,7 @@ require_once __DIR__.'../../../vendor/autoload.php';
 use Silex\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Parser;
 
 $app = new Application();
@@ -868,7 +869,9 @@ $app->before(
 );
 
 $app->finish(
-    function () use ($app) {
+    function (Request $request) use ($app) {
+        /*if ($request->get('_route') == 'logout') {
+        }*/
     }
 );
 

@@ -5,6 +5,8 @@ namespace ChamiloLMS\Controller;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  *
@@ -17,8 +19,9 @@ class IndexController// extends Controller
     function logoutAction(Application $app)
     {
         $userId = api_get_user_id();
-        online_logout($userId, false);
-        return $app->redirect($app['url_generator']->generate('index'));
+        online_logout($userId, true);
+        exit;
+        //return $app->redirect($app['url_generator']->generate('index'));
     }
 
     /**
@@ -88,7 +91,6 @@ class IndexController// extends Controller
             }
         }
 
-        //$this->check_last_login();
 
         if (api_get_setting('display_categories_on_homepage') == 'true') {
             $app['template']->assign('course_category_block', \PageController::return_courses_in_categories());

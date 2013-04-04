@@ -1,5 +1,9 @@
 # Chamilo configuration
 main/inc/conf
+app/cache/*
+app/config/*
+app/data/*
+app/logs/*
 
 # Temp directories
 archive/*

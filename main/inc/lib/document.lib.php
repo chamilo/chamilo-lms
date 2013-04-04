@@ -469,14 +469,16 @@ class DocumentManager
         $_course,
         $path = '/',
         $to_group_id = 0,
-        $to_user_id = null,
+        $to_user_id = 0,
         $can_see_invisible = false,
         $search = false
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
-        if (!is_null($to_user_id)) {
+        $to_user_id = Database::escape_string($to_user_id);
+
+        if (!empty($to_user_id)) {
             $to_field = 'last.to_user_id';
             $to_value = $to_user_id;
         } else {
@@ -486,7 +488,7 @@ class DocumentManager
 
         //escape underscores in the path so they don't act as a wildcard
         $path = Database::escape_string(str_replace('_', '\_', $path));
-        $to_user_id = Database::escape_string($to_user_id);
+
         $to_value = Database::escape_string($to_value);
 
         $visibility_bit = ' <> 2';
@@ -497,8 +499,7 @@ class DocumentManager
 
         //condition for the session
         $current_session_id = api_get_session_id();
-        $condition_session = " AND (id_session = '$current_session_id' OR id_session = '0')";
-
+        $condition_session = " AND (id_session = '$current_session_id' OR id_session = '0' OR id_session IS NULL)";
 
         //condition for search (get ALL folders and documents)
         $sql = "SELECT  docs.id,
@@ -513,14 +514,13 @@ class DocumentManager
                         last.lastedit_date,
                         last.visibility,
                         last.insert_user_id
-                    FROM  ".$TABLE_ITEMPROPERTY."  AS last INNER JOIN ".$TABLE_DOCUMENT."  AS docs
-                        ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
-                    WHERE
-                        docs.path LIKE '".$path.$added_slash."%' AND
-                        docs.path NOT LIKE '".$path.$added_slash."%/%' AND
-                        ".$to_field." = ".$to_value." AND
-                        last.visibility".$visibility_bit.$condition_session;
-
+                FROM  ".$TABLE_ITEMPROPERTY."  AS last INNER JOIN ".$TABLE_DOCUMENT."  AS docs
+                    ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
+                WHERE
+                    docs.path LIKE '".$path.$added_slash."%' AND
+                    docs.path NOT LIKE '".$path.$added_slash."%/%' AND
+                    ".$to_field." = ".$to_value." AND
+                    last.visibility".$visibility_bit.$condition_session;
         $result = Database::query($sql);
 
         $doc_list = array();

@@ -3902,7 +3902,7 @@ class CourseManager {
     static function sort_pictures($files, $type) {
         $pictures = array();
         foreach ($files as $key => $value){
-            if ($value[$type] != '') {
+            if (isset($value[$type]) && !empty($value[$type])) {
                 $pictures[][$type] = $value[$type];
             }
         }
@@ -3933,7 +3933,7 @@ class CourseManager {
             $audio_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/audio/';
             $flash_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
             $video_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
-            $cert_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
+            $cert_code_path  = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
 
             $course_documents_folder_images = $sys_course_path.$course_repository.'/document/images/gallery/';
             $course_documents_folder_audio = $sys_course_path.$course_repository.'/document/audio/';
@@ -3942,7 +3942,7 @@ class CourseManager {
             $course_documents_folder_cert = $sys_course_path.$course_repository.'/document/certificates/';
 
             /* Images */
-            $files = self::browse_folders($img_code_path, $files, 'images');
+            $files = self::browse_folders($img_code_path, array(), 'images');
 
             $pictures_array = self::sort_pictures($files, 'dir');
             $pictures_array = array_merge($pictures_array, self::sort_pictures($files, 'file'));
@@ -4271,13 +4271,11 @@ class CourseManager {
             $default_document_array = array();
             foreach ($folders_to_copy_from_default_course as $folder) {
                 $default_course_folder_path = $default_course_path.$folder.'/';
-                $files = browse_folders($default_course_folder_path, array(), $folder);
-                $sorted_array = sort_pictures($files, 'dir');
-                $sorted_array = array_merge($sorted_array, sort_pictures($files, 'file'));
+                $files = self::browse_folders($default_course_folder_path, array(), $folder);
+                $sorted_array = self::sort_pictures($files, 'dir');
+                $sorted_array = array_merge($sorted_array, self::sort_pictures($files, 'file'));
                 $default_document_array[$folder] = $sorted_array;
             }
-
-            //echo '<pre>'; print_r($default_document_array);exit;
 
             //Light protection (adding index.html in every document folder)
             $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n <head>\n <meta charset=\"utf-8\">\n <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";

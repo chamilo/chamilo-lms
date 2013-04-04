@@ -77,7 +77,11 @@ if (is_object($objQuestion)) {
 	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'"</script>';
 	    }
 	} else {
-		echo '<h3>'.$questionName.'</h3>';
+
+        if (isset($questionName)) {
+		    echo '<h3>'.$questionName.'</h3>';
+        }
+
 		if(!empty($pictureName)){
 			echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';
 		}

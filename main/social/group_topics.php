@@ -46,7 +46,8 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
 }
 
 // save message group
-if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
+$currentToken = Security::getCurrentToken();
+if (isset($_POST['token']) && $_POST['token'] === $currentToken) {
 
 	if (isset($_POST['action'])) {
 		$title        = isset($_POST['title']) ? $_POST['title'] : null;

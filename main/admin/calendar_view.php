@@ -1,4 +1,4 @@
-<?php // $id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
@@ -11,7 +11,7 @@ $language_file = 'agenda';
 require_once '../inc/global.inc.php';
 
 //session
-if(isset($_GET['id_session'])) {
+if (isset($_GET['id_session'])) {
 	$_SESSION['id_session'] = intval($_GET['id_session']);
 }
 

@@ -207,14 +207,14 @@ function order_filter($field_order, $url_params, $row) {
     $return = '';
     // the up icon only has to appear when the row can be moved up (all but the first row)
     if ($row[5] <> 1) {
-        $return .= '<a href="' . api_get_self() . '?action=moveup&field_id=' . $row[0] . '&sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('up.gif', get_lang('Up')) . '</a>';
+        $return .= '<a href="' . api_get_self() . '?action=moveup&field_id=' . $row[0] . '&sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('up.gif', get_lang('Up')) . '</a>';
     } else {
         $return .= Display::return_icon('blank.gif', '', array('width' => '21px'));
     }
 
     // the down icon only has to appear when the row can be moved down (all but the last row)
     if ($row[5] <> $number_of_extra_fields) {
-        $return .= '<a href="' . api_get_self() . '?action=movedown&field_id=' . $row[0] . '&sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('down.gif', get_lang('Down')) . '</a>';
+        $return .= '<a href="' . api_get_self() . '?action=movedown&field_id=' . $row[0] . '&sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('down.gif', get_lang('Down')) . '</a>';
     }
     return $return;
 }
@@ -227,7 +227,7 @@ function order_filter($field_order, $url_params, $row) {
  * @return	string	The link
  */
 function modify_visibility($visibility, $url_params, $row) {
-    return ($visibility ? '<a href="' . api_get_self() . '?action=hide_field&field_id=' . $row[0] . '&sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('visible.gif', get_lang('Hide')) . '</a>' : '<a href="' . api_get_self() . '?action=show_field&field_id=' . $row[0] . '&sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('invisible.gif', get_lang('Show')) . '</a>');
+    return ($visibility ? '<a href="' . api_get_self() . '?action=hide_field&field_id=' . $row[0] . '&sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('visible.gif', get_lang('Hide')) . '</a>' : '<a href="' . api_get_self() . '?action=show_field&field_id=' . $row[0] . '&sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('invisible.gif', get_lang('Show')) . '</a>');
 }
 
 /**
@@ -238,18 +238,18 @@ function modify_visibility($visibility, $url_params, $row) {
  * @return	string	The link
  */
 function modify_changeability($changeability, $url_params, $row) {
-    return ($changeability ? '<a href="' . api_get_self() . '?action=freeze_field&field_id=' . $row[0] . '&sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('right.gif', get_lang('MakeUnchangeable')) . '</a>' : '<a href="' . api_get_self() . '?action=thaw_field&field_id=' . $row[0] . '&sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('wrong.gif', get_lang('MakeChangeable')) . '</a>');
+    return ($changeability ? '<a href="' . api_get_self() . '?action=freeze_field&field_id=' . $row[0] . '&sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('right.gif', get_lang('MakeUnchangeable')) . '</a>' : '<a href="' . api_get_self() . '?action=thaw_field&field_id=' . $row[0] . '&sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('wrong.gif', get_lang('MakeChangeable')) . '</a>');
 }
 
 function modify_field_filter($changeability, $url_params, $row) {
-    return ($changeability ? '<a href="' . api_get_self() . '?action=filter_off&field_id=' . $row[0] . '&sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('right.gif', get_lang('FilterOff')) . '</a>' : '' .
-                    '<a href="' . api_get_self() . '?action=filter_on&field_id=' . $row[0] . '&sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('wrong.gif', get_lang('FilterOn')) . '</a>');
+    return ($changeability ? '<a href="' . api_get_self() . '?action=filter_off&field_id=' . $row[0] . '&sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('right.gif', get_lang('FilterOff')) . '</a>' : '' .
+                    '<a href="' . api_get_self() . '?action=filter_on&field_id=' . $row[0] . '&sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('wrong.gif', get_lang('FilterOn')) . '</a>');
 }
 
 function edit_filter($id, $url_params, $row) {
     global $charset;
-    $return = '<a href="user_fields_add.php?action=edit&field_id=' . $row[0] . '&field_type=' . $row[2] . '&sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('edit.png', get_lang('Edit')) . '</a>';
-    $return .= ' <a href="' . api_get_self() . '?action=delete&field_id=' . $row[0] . '&sec_token=' . $_SESSION['sec_token'] . '" onclick="javascript:if(!confirm(' . "'" . addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)) . "'" . ')) return false;">' .
+    $return = '<a href="user_fields_add.php?action=edit&field_id=' . $row[0] . '&field_type=' . $row[2] . '&sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('edit.png', get_lang('Edit')) . '</a>';
+    $return .= ' <a href="' . api_get_self() . '?action=delete&field_id=' . $row[0] . '&sec_token=' . Security::getCurrentToken() . '" onclick="javascript:if(!confirm(' . "'" . addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)) . "'" . ')) return false;">' .
             Display::return_icon('delete.png', get_lang('Delete')) . '</a>';
     return $return;
 }

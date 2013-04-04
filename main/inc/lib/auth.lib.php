@@ -642,9 +642,9 @@ class Auth {
             $message = get_lang('CourseRequiresPassword') . '<br />';
             $message .= $all_course_information['title'].' ('.$all_course_information['visual_code'].') ';
 
-            $action  = api_get_path(WEB_CODE_PATH) . "auth/courses.php?action=subscribe_user_with_password&sec_token=" . $_SESSION['sec_token'];
+            $action  = api_get_path(WEB_CODE_PATH) . "auth/courses.php?action=subscribe_user_with_password&sec_token=" . Security::getCurrentToken();
             $form = new FormValidator('subscribe_user_with_password', 'post', $action);
-            $form->addElement('hidden', 'sec_token', $_SESSION['sec_token']);
+            $form->addElement('hidden', 'sec_token', Security::getCurrentToken());
             $form->addElement('hidden', 'subscribe_user_with_password', $all_course_information['code']);
             $form->addElement('text', 'course_registration_code');
             $form->addElement('button', 'submit', get_lang('SubmitRegistrationCode'));

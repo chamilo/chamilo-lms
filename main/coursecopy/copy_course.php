@@ -11,13 +11,14 @@ $language_file = array('exercice', 'coursebackup', 'admin');
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
-$current_course_tool = TOOL_COURSE_MAINTENANCE;
-api_protect_course_script(true);
 
 // Including additional libraries
 require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseRestorer.class.php';
 require_once 'classes/CourseSelectForm.class.php';
+
+$current_course_tool = TOOL_COURSE_MAINTENANCE;
+api_protect_course_script(true);
 
 // Notice for unauthorized people.
 if (!api_is_allowed_to_edit()) {
@@ -78,6 +79,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         $sql .= ' AND cu.status=1 ';
     }
     $sql .= ' AND target_course_code IS NULL AND cu.user_id = '.$user_info['user_id'].' AND c.code != '."'".$course_info['sysCode']."'".' ORDER BY title ASC';
+
     $res = Database::query($sql);
     if (Database::num_rows($res) == 0) {
         Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));

@@ -619,7 +619,7 @@ function modify_filter($user_id) {
     //if platform admin, show the login_as icon (this drastically shortens
     // time taken by support to test things out)
     if (api_is_platform_admin()) {
-        $result .= ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+        $result .= ' <a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.Security::getCurrentToken().'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
     }
 
 	if (api_is_allowed_to_edit(null, true)) {

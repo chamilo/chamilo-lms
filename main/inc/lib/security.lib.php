@@ -126,27 +126,29 @@ class Security
      */
     public static function check_token($request_type = 'post')
     {
+        $currentSessionToken = Security::getCurrentToken();
+
         switch ($request_type) {
             case 'request':
-                if (isset($_SESSION['sec_token']) && isset($_REQUEST['sec_token']) && $_SESSION['sec_token'] === $_REQUEST['sec_token']) {
+                if (isset($currentSessionToken) && isset($_REQUEST['sec_token']) && $currentSessionToken === $_REQUEST['sec_token']) {
                     return true;
                 }
 
                 return false;
             case 'get':
-                if (isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token']) {
+                if (isset($currentSessionToken) && isset($_GET['sec_token']) && $currentSessionToken === $_GET['sec_token']) {
                     return true;
                 }
 
                 return false;
             case 'post':
-                if (isset($_SESSION['sec_token']) && isset($_POST['sec_token']) && $_SESSION['sec_token'] === $_POST['sec_token']) {
+                if (isset($currentSessionToken) && isset($_POST['sec_token']) && $currentSessionToken === $_POST['sec_token']) {
                     return true;
                 }
 
                 return false;
             default:
-                if (isset($_SESSION['sec_token']) && isset($request_type) && $_SESSION['sec_token'] === $request_type) {
+                if (isset($currentSessionToken) && isset($request_type) && $currentSessionToken === $request_type) {
                     return true;
                 }
 
@@ -212,6 +214,10 @@ class Security
         $_SESSION['sec_token'] = $token;
 
         return $token;
+    }
+
+    public function getCurrentToken() {
+        return isset($_SESSION['sec_token']) ? $_SESSION['sec_token'] : null;
     }
 
     /**

@@ -267,6 +267,7 @@ class Template
 
             $new_messages = MessageManager::get_new_messages();
             $user_info['messages_count'] = $new_messages != 0 ? Display::label($new_messages, 'warning') : null;
+
             $messages_invitations_count = GroupPortalManager::get_groups_by_user_count(
                 $user_info['user_id'],
                 GROUP_USER_PERMISSION_PENDING_INVITATION,

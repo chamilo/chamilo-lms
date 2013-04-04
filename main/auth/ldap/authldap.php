@@ -465,7 +465,7 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction) {
 function modify_filter($user_id,$url_params, $row) {
     $url_params_id="id[]=".$row[0];
     //$url_params_id="id=".$row[0];
-    $result .= '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;'.$url_params_id.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
+    $result .= '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;'.$url_params_id.'&amp;sec_token='.Security::getCurrentToken().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
     return $result;
 }
 

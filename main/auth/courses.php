@@ -114,7 +114,7 @@ if (empty($nameTools)) {
 // course description controller object
 $courses_controller = new CoursesController();
 
-$ctok = isset($_SESSION['sec_token']) ? $_SESSION['sec_token'] : null;
+$ctok = Security::getCurrentToken();
 
 // We are moving a course or category of the user up/down the list (=Sort My Courses).
 if (isset($_GET['move'])) {

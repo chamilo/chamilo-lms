@@ -129,7 +129,7 @@ if (!empty($group_id)) {
 
 /* 	Sessions */
 
-$ctok = $_SESSION['sec_token'];
+$ctok = Security::getCurrentToken();
 $stok = Security::get_token();
 $to = null;
 $email_ann = null;

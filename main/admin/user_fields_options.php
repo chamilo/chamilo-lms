@@ -22,7 +22,7 @@ api_protect_admin_script();
 // breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'user_fields.php', 'name' => get_lang('UserFields'));
-$interbreadcrumb[] = array('url' => 'user_fields_add.php?action=edit&field_id=' . Security::remove_XSS($_GET['field_id']) . '&amp;sec_token=' . $_SESSION['sec_token'], 'name' => get_lang('EditUserFields'));
+$interbreadcrumb[] = array('url' => 'user_fields_add.php?action=edit&field_id=' . Security::remove_XSS($_GET['field_id']) . '&amp;sec_token=' . Security::getCurrentToken(), 'name' => get_lang('EditUserFields'));
 
 // name of the tools
 $tool_name = get_lang('UserFieldsSortOptions');
@@ -111,14 +111,14 @@ function actions_filter($option_id, $url_params, $row) {
     global $number_of_options;
 
     if ($row[0] <> 1) {
-        $return .= '<a href="' . api_get_self() . '?action=moveup&amp;option_id=' . $option_id . '&amp;field_id=' . Security::remove_XSS($_GET['field_id']) . '&amp;sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('up.gif', get_lang('Up')) . '</a>';
+        $return .= '<a href="' . api_get_self() . '?action=moveup&amp;option_id=' . $option_id . '&amp;field_id=' . Security::remove_XSS($_GET['field_id']) . '&amp;sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('up.gif', get_lang('Up')) . '</a>';
     } else {
         $return .= Display::return_icon('blank.gif', '', array('width' => '21px'));
     }
 
     // the down icon only has to appear when the row can be moved down (all but the last row)
     if ($row[0] <> $number_of_options) {
-        $return .= '<a href="' . api_get_self() . '?action=movedown&amp;option_id=' . $option_id . '&amp;field_id=' . Security::remove_XSS($_GET['field_id']) . '&amp;sec_token=' . $_SESSION['sec_token'] . '">' . Display::return_icon('down.gif', get_lang('Down')) . '</a>';
+        $return .= '<a href="' . api_get_self() . '?action=movedown&amp;option_id=' . $option_id . '&amp;field_id=' . Security::remove_XSS($_GET['field_id']) . '&amp;sec_token=' . Security::getCurrentToken() . '">' . Display::return_icon('down.gif', get_lang('Down')) . '</a>';
     }
     return $return;
 }

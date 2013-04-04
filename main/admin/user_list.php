@@ -481,11 +481,11 @@ function modify_filter($user_id, $url_params, $row) {
     if (api_is_platform_admin() || (api_is_session_admin() && $current_user_status_label == $statusname[STUDENT])) {
     	if (!$user_is_anonymous) {
             if (api_global_admin_can_edit_admin($user_id)) {
-                $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+                $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.Security::getCurrentToken().'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
             } else {
                 $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
             }
-            //$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
+            //$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.Security::getCurrentToken().'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
     	} else {
     		$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
     	}
@@ -536,7 +536,7 @@ function modify_filter($user_id, $url_params, $row) {
         if ($delete_user_available) {
             if ($user_id != api_get_user_id() && !$user_is_anonymous && api_global_admin_can_edit_admin($user_id)) {
                 // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-                $result .= ' <a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                $result .= ' <a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.Security::getCurrentToken().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
             } else {
                 $result .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
             }
@@ -870,7 +870,7 @@ if ($table->get_total_number_of_items() == 0) {
                     $row_table = array();
                     $row_table[] =  api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
                     $row_table[] =  $access_info_to_string;
-                    $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['user_id'].'&sec_token='.$_SESSION['sec_token'];
+                    $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['user_id'].'&sec_token='.Security::getCurrentToken();
                     $row_table[] =  Display::url(get_lang('AddUserToMyURL'), $url, array('class' => 'btn'));
 
                     foreach ($row_table as $cell) {

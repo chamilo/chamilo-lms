@@ -112,10 +112,10 @@ echo '</div>';
 //$table = new SortableTable('urls', 'url_count_mask', 'get_url_data_mask',2);
 $sortable_data = UrlManager::get_url_data();
 $urls = array();
-$types = array(1=>'AccessURL',2=>'SincroServer',3=>'SincroClient'); 
+$types = array(1=>'AccessURL',2=>'SincroServer',3=>'SincroClient');
 foreach($sortable_data as $row)  {
     //title
-    $url = Display::url($row['url'], $row['url'], array('target'=>'_blank'));    
+    $url = Display::url($row['url'], $row['url'], array('target'=>'_blank'));
     $name = $row['description'];
     if (!empty($row['branch_name'])) {
         $name = $row['branch_name'];
@@ -147,14 +147,14 @@ foreach($sortable_data as $row)  {
     if ($row['id']=='1') {
         $status = Display::return_icon($image.'.gif', get_lang(ucfirst($action)));
     } else {
-        $status = '<a href="access_urls.php?action='.$action.'&amp;url_id='.$row['id'].'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
-    }    
+        $status = '<a href="access_urls.php?action='.$action.'&amp;url_id='.$row['id'].'&amp;sec_token='.Security::getCurrentToken().'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
+    }
     //Actions
     $url_id = $row['id'];
     $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "access_url_edit.php?url_id=$url_id");
     if ($url_id != '1') {
-        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
-    }    
+        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'&amp;sec_token='.Security::getCurrentToken().'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+    }
     $urls[] = array($url, $name, $type, $tech, $contact, $status, $actions);
 }
 

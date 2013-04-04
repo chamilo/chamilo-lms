@@ -3932,8 +3932,6 @@ class UserManager {
                      // if ($currentTimestamp - $timestamp > 184590 )
                         if ($currentTimestamp - $timestamp > $inactive_time && UserManager::delete_user($student_id )) {
                             Display :: display_normal_message(get_lang('UserDeleted'));
-                                //avec validation:
-                                //  $result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$student_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
                             echo '<p>','id',$student_id ,':',$last_login_date,'</p>';
                         }
                     }

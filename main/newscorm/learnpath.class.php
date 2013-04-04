@@ -4135,7 +4135,6 @@ class learnpath
      */
     public static function toggle_publish($lp_id, $set_visibility = 'v')
     {
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::toggle_publish()', 0); }
         $course_id = api_get_course_int_id();
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = Database::escape_string($lp_id);
@@ -4163,25 +4162,32 @@ class learnpath
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
         $link = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
+        $linkNoSessionId = 'newscorm/lp_controller.php?action=view&lp_id='.$lp_id;
         $sql = "SELECT * FROM $tbl_tool WHERE c_id = ".$course_id." AND link='$link' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
         $result = Database::query($sql);
         $num = Database :: num_rows($result);
 
         if (($set_visibility == 'i') && ($num > 0)) {
             $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
+            Database::query($sql);
+
+            $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (link='$linkNoSessionId' and image='scormbuilder.gif' $session_condition)";
+            Database::query($sql);
         } elseif (($set_visibility == 'v') && ($num == 0)) {
             $sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
             	    ($course_id, '$name','$link','scormbuilder.gif','$v','0','pastillegris.gif',0, $session_id)";
+            Database::query($sql);
         } elseif (($set_visibility == 'v') && ($num > 0)) {
             $sql = "UPDATE $tbl_tool SET c_id = $course_id, name = '$name', link = '$link', image = 'scormbuilder.gif', visibility = '$v', admin = '0', address = 'pastillegris.gif', added_tool = 0, session_id = $session_id
             	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
+            Database::query($sql);
         } else {
             // Parameter and database incompatible, do nothing, exit.
             return false;
         }
-        $result = Database::query($sql);
-        //if ($this->debug > 2) { error_log('New LP - Leaving learnpath::toggle_visibility: '.$sql, 0); }
+
     }
+
 
     /**
      * Restart the whole learnpath. Return the URL of the first element.

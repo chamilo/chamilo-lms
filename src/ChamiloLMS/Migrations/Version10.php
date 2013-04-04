@@ -21,7 +21,7 @@ class Version10 extends AbstractMigration
 
         //@todo change this into a function
         //Web profiler
-        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_web_profiler', NULL,'radio','Portal','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0)");
+        $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_web_profiler', NULL,'radio','Portal','false','AllowWebProfilerTitle','AllowWebProfilerComment', NULL, NULL, 0)");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_web_profiler', 'true', 'Yes')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_web_profiler', 'false', 'No')");
 

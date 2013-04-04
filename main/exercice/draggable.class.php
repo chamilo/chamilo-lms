@@ -237,7 +237,6 @@ class Draggable extends Matching
             $matches   = $form->getSubmitValue('matches['.$i.']');
             $weighting = $form->getSubmitValue('weighting['.$i.']');
             $this->weighting += $weighting;
-            var_dump($answer, $matches);
             $objAnswer->createAnswer($answer, $matches, '', $weighting, $position);
         }
         $objAnswer->save();

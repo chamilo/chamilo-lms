@@ -1491,89 +1491,6 @@
         ]
     },
     {
-        "name": "silex/silex",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/fabpot/Silex.git",
-            "reference": "803f809cdaa409e5769b24db952655d7e9187677"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/fabpot/Silex/zipball/803f809cdaa409e5769b24db952655d7e9187677",
-            "reference": "803f809cdaa409e5769b24db952655d7e9187677",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "pimple/pimple": "1.*",
-            "symfony/event-dispatcher": ">=2.1,<2.3-dev",
-            "symfony/http-foundation": ">=2.1,<2.3-dev",
-            "symfony/http-kernel": ">=2.1,<2.3-dev",
-            "symfony/routing": ">=2.1,<2.3-dev"
-        },
-        "require-dev": {
-            "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
-            "swiftmailer/swiftmailer": "4.2.*",
-            "symfony/browser-kit": ">=2.1,<2.3-dev",
-            "symfony/config": ">=2.1,<2.3-dev",
-            "symfony/css-selector": ">=2.1,<2.3-dev",
-            "symfony/dom-crawler": ">=2.1,<2.3-dev",
-            "symfony/finder": ">=2.1,<2.3-dev",
-            "symfony/form": ">=2.1.4,<2.3-dev",
-            "symfony/locale": ">=2.1,<2.3-dev",
-            "symfony/monolog-bridge": ">=2.1,<2.3-dev",
-            "symfony/options-resolver": ">=2.1,<2.3-dev",
-            "symfony/process": ">=2.1,<2.3-dev",
-            "symfony/security": ">=2.1,<2.3-dev",
-            "symfony/serializer": ">=2.1,<2.3-dev",
-            "symfony/translation": ">=2.1,<2.3-dev",
-            "symfony/twig-bridge": ">=2.1,<2.3-dev",
-            "symfony/validator": ">=2.1,<2.3-dev",
-            "twig/twig": ">=1.8.0,<2.0-dev"
-        },
-        "suggest": {
-            "symfony/browser-kit": ">=2.1,<2.3-dev",
-            "symfony/css-selector": ">=2.1,<2.3-dev",
-            "symfony/dom-crawler": ">=2.1,<2.3-dev",
-            "symfony/form": "To make use of the FormServiceProvider, >= 2.1.4 is required"
-        },
-        "time": "2013-04-01 08:47:32",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Silex": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Igor Wiedler",
-                "email": "igor@wiedler.ch",
-                "homepage": "http://wiedler.ch/igor/"
-            }
-        ],
-        "description": "The PHP micro-framework based on the Symfony2 Components",
-        "homepage": "http://silex.sensiolabs.org",
-        "keywords": [
-            "microframework"
-        ]
-    },
-    {
         "name": "silex/web-profiler",
         "version": "v1.0.0",
         "version_normalized": "1.0.0.0",
@@ -2377,64 +2294,6 @@
         "homepage": "http://symfony.com"
     },
     {
-        "name": "mheap/silex-assetic",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/mheap/Silex-Assetic.git",
-            "reference": "00787801c12279717542a1b38e88a9fc21d43d17"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/00787801c12279717542a1b38e88a9fc21d43d17",
-            "reference": "00787801c12279717542a1b38e88a9fc21d43d17",
-            "shasum": ""
-        },
-        "require": {
-            "kriswallsmith/assetic": ">=1.0",
-            "php": ">=5.3.0",
-            "symfony/finder": ">=2.1,<2.3"
-        },
-        "require-dev": {
-            "silex/silex": "*",
-            "twig/twig": ">=1.2.0"
-        },
-        "suggest": {
-            "twig/twig": ">=1.2.0"
-        },
-        "time": "2013-04-02 15:57:01",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "SilexAssetic": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Sven Eisenschmidt",
-                "email": "sven.eisenschmidt@gmail.com",
-                "homepage": "http://unsicherheitsagent.de/"
-            },
-            {
-                "name": "Michael Heap",
-                "email": "m@michaelheap.com",
-                "homepage": "http://michaelheap.com/"
-            }
-        ],
-        "description": "Assetic extension for Silex",
-        "homepage": "https://github.com/mheap/Silex-Assetic",
-        "keywords": [
-            "assetic",
-            "silex"
-        ]
-    },
-    {
         "name": "leafo/lessphp",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -2587,5 +2446,146 @@
             }
         },
         "notification-url": "https://packagist.org/downloads/"
+    },
+    {
+        "name": "silex/silex",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fabpot/Silex.git",
+            "reference": "31139babedb2a4f504737d1d8c5255fca102dae2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fabpot/Silex/zipball/31139babedb2a4f504737d1d8c5255fca102dae2",
+            "reference": "31139babedb2a4f504737d1d8c5255fca102dae2",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "pimple/pimple": "1.*",
+            "symfony/event-dispatcher": ">=2.1,<2.3-dev",
+            "symfony/http-foundation": ">=2.1,<2.3-dev",
+            "symfony/http-kernel": ">=2.1,<2.3-dev",
+            "symfony/routing": ">=2.1,<2.3-dev"
+        },
+        "require-dev": {
+            "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
+            "swiftmailer/swiftmailer": "4.2.*",
+            "symfony/browser-kit": ">=2.1,<2.3-dev",
+            "symfony/config": ">=2.1,<2.3-dev",
+            "symfony/css-selector": ">=2.1,<2.3-dev",
+            "symfony/dom-crawler": ">=2.1,<2.3-dev",
+            "symfony/finder": ">=2.1,<2.3-dev",
+            "symfony/form": ">=2.1.4,<2.3-dev",
+            "symfony/locale": ">=2.1,<2.3-dev",
+            "symfony/monolog-bridge": ">=2.1,<2.3-dev",
+            "symfony/options-resolver": ">=2.1,<2.3-dev",
+            "symfony/process": ">=2.1,<2.3-dev",
+            "symfony/security": ">=2.1,<2.3-dev",
+            "symfony/serializer": ">=2.1,<2.3-dev",
+            "symfony/translation": ">=2.1,<2.3-dev",
+            "symfony/twig-bridge": ">=2.1,<2.3-dev",
+            "symfony/validator": ">=2.1,<2.3-dev",
+            "twig/twig": ">=1.8.0,<2.0-dev"
+        },
+        "suggest": {
+            "symfony/browser-kit": ">=2.1,<2.3-dev",
+            "symfony/css-selector": ">=2.1,<2.3-dev",
+            "symfony/dom-crawler": ">=2.1,<2.3-dev",
+            "symfony/form": "To make use of the FormServiceProvider, >= 2.1.4 is required"
+        },
+        "time": "2013-04-03 19:59:11",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Silex": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Igor Wiedler",
+                "email": "igor@wiedler.ch",
+                "homepage": "http://wiedler.ch/igor/"
+            }
+        ],
+        "description": "The PHP micro-framework based on the Symfony2 Components",
+        "homepage": "http://silex.sensiolabs.org",
+        "keywords": [
+            "microframework"
+        ]
+    },
+    {
+        "name": "mheap/silex-assetic",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mheap/Silex-Assetic.git",
+            "reference": "869aa9edba10d86c16a59384f523de96343f9944"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/869aa9edba10d86c16a59384f523de96343f9944",
+            "reference": "869aa9edba10d86c16a59384f523de96343f9944",
+            "shasum": ""
+        },
+        "require": {
+            "kriswallsmith/assetic": ">=1.0",
+            "php": ">=5.3.0",
+            "symfony/finder": ">=2.1,<2.3"
+        },
+        "require-dev": {
+            "silex/silex": "*",
+            "twig/twig": ">=1.2.0"
+        },
+        "suggest": {
+            "twig/twig": ">=1.2.0"
+        },
+        "time": "2013-04-04 10:20:51",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "SilexAssetic": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Sven Eisenschmidt",
+                "email": "sven.eisenschmidt@gmail.com",
+                "homepage": "http://unsicherheitsagent.de/"
+            },
+            {
+                "name": "Michael Heap",
+                "email": "m@michaelheap.com",
+                "homepage": "http://michaelheap.com/"
+            }
+        ],
+        "description": "Assetic extension for Silex",
+        "homepage": "https://github.com/mheap/Silex-Assetic",
+        "keywords": [
+            "assetic",
+            "silex"
+        ]
     }
 ]

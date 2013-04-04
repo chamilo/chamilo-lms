@@ -1106,11 +1106,12 @@ function api_get_user_courses($userid, $fetch_session = true) {
  * Formats user information into a standard array
  * This function should be only used inside api_get_user_info()
  *
- * @param array Non-standard user array
+ * @param array user array
  * @return array Standard user array
  */
 function _api_format_user($user, $add_password = false) {
     $result = array();
+
     if (api_is_anonymous()) {
         return $user;
     }
@@ -1225,8 +1226,9 @@ function _api_format_user($user, $add_password = false) {
  * @version 21 September 2004
  */
 function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false, $add_extra_values = false) {
-    if ($user_id == '') {
-        return _api_format_user(api_get_user_id());
+    if (empty($user_id)) {
+        global $_user;
+        return _api_format_user($_user);
     }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
     $result = Database::query($sql);

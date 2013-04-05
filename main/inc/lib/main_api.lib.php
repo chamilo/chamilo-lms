@@ -1471,7 +1471,6 @@ function api_get_course_info_by_id($id = null, $add_extra_values = false) {
         $_course = array();
         if (Database::num_rows($result) > 0) {
             $course_data = Database::fetch_array($result);
-            var_dump($course_data);
             if ($add_extra_values) {
                 $extra_field_values = new ExtraField('course');
                 $course_data['extra_fields'] = $extra_field_values->get_handler_extra_data($course_data['code']);

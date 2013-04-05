@@ -23,15 +23,15 @@ $this_section = "session_my_space";
 
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
-if(!$is_allowedToTrack) {	
-	api_not_allowed(true);	
+if(!$is_allowedToTrack) {
+	api_not_allowed(true);
 }
 
 $export_to_xls = false;
 if (isset($_GET['export'])) {
 	$export_to_xls = true;
 }
-if (api_is_platform_admin() ) {	
+if (api_is_platform_admin() ) {
 	$global = true;
 } else {
 	$global = false;
@@ -69,15 +69,15 @@ $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 if (!$export_to_xls) {
 	Display :: display_header(get_lang("MySpace"));
-	echo '<div class="actions" style ="font-size:10pt;" >';	
-    
-	if ($global) {	
-		
+	echo '<div class="actions" style ="font-size:10pt;" >';
+
+	if ($global) {
+
 		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher');
 		$menu_items[] = Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), 32);
 		$menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
-		
+
 		$nb_menu_items = count($menu_items);
 		if($nb_menu_items>1) {
 			foreach($menu_items as $key=> $item) {
@@ -86,37 +86,37 @@ if (!$export_to_xls) {
 			echo '<br />';
 		}
 	} else {
-        
+
 		echo '<div style="float:left; clear:left">
-				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|			
-				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;';		
-		echo '</div>';	
+				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|
+				<a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;';
+		echo '</div>';
 	}
 	echo '</div>';
-	
+
 	if (api_is_platform_admin()) {
 		echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
-		echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';		
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
 		echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
-		echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin&amp;display=courseoverview">'.get_lang('DisplayCourseOverview').'</a>';	
+		echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin&amp;display=courseoverview">'.get_lang('DisplayCourseOverview').'</a>';
 		echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin">'.get_lang('LPQuestionListResults').'</a>';
-			
-		echo ' | '.get_lang('LPExerciseResultsBySession').'';	
-			
-				
-	}	
-	
+
+		echo ' | '.get_lang('LPExerciseResultsBySession').'';
+
+
+	}
+
 	echo '<h2>'.get_lang('LPExerciseResultsBySession').'</h2>';
 	$form->display();
 	Display::display_normal_message(get_lang('StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts'));
-	
-		
+
+
 	//echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
-	
+
 //	echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a><br /><br />';
 }
 
-	
+
 $users = SessionManager::get_users_by_session($session_id);
 $course_average = $course_average_counter = array();
 
@@ -125,42 +125,41 @@ $main_result = array();
 //Getting course list
 foreach ($course_list  as $current_course ) {
 	$course_info = api_get_course_info($current_course['code']);
-	$_course = $course_info; 
+	$_course = $course_info;
 	$attempt_result = array();
-	
+
 	//Getting LP list
 	$list = new learnpathList('', $current_course['code'], $session_id);
 	$lp_list = $list->get_flat_list();
-		
+
 	// Looping LPs
-	foreach ($lp_list as $lp_id =>$lp) {		
-		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['real_id']);		
+	foreach ($lp_list as $lp_id =>$lp) {
+		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['real_id']);
 		//Looping Chamilo Exercises in LP
 		foreach ($exercise_list as $exercise) {
 			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'], $course_info['id'], $session_id);
 			//Looping Exercise Attempts
 			foreach($exercise_stats as $stats) {
-				$attempt_result[$stats['exe_user_id']]['result'] += $stats['exe_result'] / $stats['exe_weighting'];		
-				$attempt_result[$stats['exe_user_id']]['attempts']++;								
-			}			
-		}		
+				$attempt_result[$stats['exe_user_id']]['result'] += $stats['exe_result'] / $stats['exe_weighting'];
+				$attempt_result[$stats['exe_user_id']]['attempts']++;
+			}
+		}
 	}
 	$main_result[$current_course['code']] = $attempt_result;
 }
 
-//var_dump($main_result);
 $total_average_score = 0;
 $total_average_score_count = 0;
 if (!empty($users) && is_array($users)) {
-	
+
 	$html_result .= '<table  class="data_table">';
 	$html_result .= '<tr><th>'.get_lang('User').'</th>';
-	foreach($course_list as $item ) {		
-		$html_result .= '<th>'.$item['title'].'<br /> '.get_lang('AverageScore').' %</th>';	
+	foreach($course_list as $item ) {
+		$html_result .= '<th>'.$item['title'].'<br /> '.get_lang('AverageScore').' %</th>';
 	}
 	$html_result .= '<th>'.get_lang('AverageScore').' %</th>';
-	$html_result .= '<th>'.get_lang('LastConnexionDate').'</th></tr>';	
-	
+	$html_result .= '<th>'.get_lang('LastConnexionDate').'</th></tr>';
+
 	foreach ($users  as $user) {
 		$total_student = 0;
 		$counter ++;
@@ -171,22 +170,22 @@ if (!empty($users) && is_array($users)) {
 		$html_result .= "<tr class='$s_css_class'>
 							<td >";
 		$html_result .= $user['firstname'].' '.$user['lastname'];
-		$html_result .= "</td>";	
-		
+		$html_result .= "</td>";
+
 		//Getting course list
-		
+
 		$counter = 0;
 		$total_result_by_user = 0;
 		foreach($course_list  as $current_course ) {
-			$total_course = 0;			
+			$total_course = 0;
 			$user_info_stat = $main_result[$current_course['code']][$user['user_id']];
 			$html_result .= "<td>";
 			if (!empty($user_info_stat['result']) && !empty($user_info_stat['attempts'])) {
 				$result =round($user_info_stat['result']/$user_info_stat['attempts'] * 100, 2);
 				$total_course +=$result;
-				$total_result_by_user +=$result;		
+				$total_result_by_user +=$result;
 				$course_average[$current_course['code']] += $total_course;
-				$course_average_counter[$current_course['code']]++;				
+				$course_average_counter[$current_course['code']]++;
 				$result = $result .' ('.$user_info_stat['attempts'].' '.get_lang('Attempts').')';
 				$counter++;
 			} else {
@@ -194,18 +193,18 @@ if (!empty($users) && is_array($users)) {
 			}
 			$html_result .= $result;
 			$html_result .= "</td>";
-		}		
+		}
 		if (empty($counter)) {
 			$total_student = '-';
-		} else {			
+		} else {
 			$total_student = $total_result_by_user/$counter;
 			$total_average_score+=$total_student;
 			$total_average_score_count++;
-		}		
+		}
 		$string_date=Tracking :: get_last_connection_date($user['user_id'],true);
-		$html_result .="<td>$total_student</td><td>$string_date</td></tr>";		
+		$html_result .="<td>$total_student</td><td>$string_date</td></tr>";
 	}
-	
+
 	$html_result .="<tr><th>".get_lang('AverageScore')."</th>";
 	$total_average = 0;
 	$counter = 0;
@@ -216,28 +215,28 @@ if (!empty($users) && is_array($users)) {
 			$average_per_course = '-';
 		}
 		if (!empty($average_per_course)) {
-			$counter++;		
+			$counter++;
 		}
 		$total_average = $total_average + $average_per_course;
 		$html_result .="<td>$average_per_course</td>";
-	}	
+	}
 	if (!empty($total_average_score_count)) {
 		$total_average = round($total_average_score/($total_average_score_count*100)*100,2);
 	} else {
 		$total_average = '-';
 	}
-			
+
 	$html_result .='<td>'.$total_average.'</td>';
 	$html_result .="<td>-</td>";
 	$html_result .="</tr>";
 	$html_result .= '</table>';
-} else {	
+} else {
 	Display::display_warning_message(get_lang('NoResults'));
 }
 
 
 if (!$export_to_xls) {
-	echo $html_result;	
+	echo $html_result;
 }
 
 $filename = 'exam-reporting-'.date('Y-m-d-h:i:s').'.xls';
@@ -256,7 +255,7 @@ function sort_user($a, $b) {
 		}
 		return 0;
 	}
-	return 1;	
+	return 1;
 }
 
 function export_complete_report_xls($filename, $array) {

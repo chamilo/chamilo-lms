@@ -983,8 +983,7 @@ class Tracking
                 }
 
                 $lp_with_quiz = 0;
-                if ($debug)
-                    var_dump($lp_list);
+
                 foreach ($lp_list as $lp_id) {
                     //Check if LP have a score we asume that all SCO have an score
                     $sql = "SELECT count(id) as count FROM $lp_item_table

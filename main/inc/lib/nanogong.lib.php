@@ -209,7 +209,6 @@ class Nanogong
                 $items[5] = $exe_id;
                 $filename = $filename = implode('-', $items);
                 $new_name = $this->store_path.$filename.'.'.$extension;
-                //var_dump($old_name, $new_name);
                 rename($old_name, $new_name);
                 break;
             }

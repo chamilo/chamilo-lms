@@ -238,7 +238,6 @@ class ExtraField extends Model {
      */
     static function extra_field_double_select_convert_array_to_string($options) {
         $string = null;
-        //var_dump($options);
         $options_parsed = self::extra_field_double_select_convert_array_to_ordered_array($options);
 
         if (!empty($options_parsed)) {

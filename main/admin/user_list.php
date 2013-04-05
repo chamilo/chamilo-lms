@@ -763,7 +763,6 @@ $form->addElement('html', '</td><td>');
 /*
  * @todo fix this code
 $extra_data = UserManager::get_extra_fields( 0,10,5, 'ASC', true, 1);
-var_dump($extra_data);
 $extra_options = array();
 if (!empty($extra_data)) {
     $extra_options[0] = get_lang('All');

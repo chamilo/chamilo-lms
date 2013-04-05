@@ -233,7 +233,6 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         //$r = api_set_settings_category($my_category, 'false', $_configuration['access_url'], array('checkbox', 'radio'));
 
         //This is a more accurate way of updating to false the checkboxes and radios the settings
-        //var_dump($settings);exit;
 
         /*
         foreach ($values as $key => $value) {

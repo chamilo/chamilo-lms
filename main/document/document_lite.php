@@ -1126,6 +1126,3 @@ if (!is_null($docs_and_folders)) {
 $content .= Display::div($link, array('class' => 'right'));
 $controller->tpl->assign('content', $content);
 $controller->tpl->display($tpl);
-
-//var_dump($sortable_data);
-

@@ -653,12 +653,6 @@ class Category implements GradebookItem
 		$rescount     = 0;
 		$ressum       = 0;
 		$weightsum    = 0;
-        /*$debug = false;
-
-        if ($stud_id == 11) {
-            $debug = true;
-        }
-        if ($debug) var_dump($links);*/
 
 		if (!empty($cats)) {
 			foreach ($cats as $cat) {
@@ -691,7 +685,6 @@ class Category implements GradebookItem
 		if (!empty($links)) {
 			foreach ($links as $link) {
 				$linkres = $link->calc_score($stud_id);
-                //if ($debug) var_dump($linkres);
 
 				if (isset($linkres) && $link->get_weight() != 0) {
 					$linkweight     = $link->get_weight();

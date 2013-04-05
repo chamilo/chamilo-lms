@@ -167,7 +167,6 @@ class Database
     {
         //forces fatal errors so we can debug more easily
         if (!empty($extra)) {
-            var_dump($extra);
             //@todo remove this
             echo "<h3>Dev Message: get_course_table() doesn't have a 2nd parameter</h3>";
             //exit;

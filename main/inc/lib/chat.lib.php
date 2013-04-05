@@ -136,14 +136,6 @@ class Chat extends Model
         }
 
         //print_r($_SESSION['chatHistory']);
-
-        /*
-          var_dump($_SESSION['openChatBoxes']);
-          var_dump($_SESSION['tsChatBoxes']);
-          var_dump($_SESSION['chatHistory']);
-          var_dump($items);
-         */
-        //print_r($_SESSION['chatHistory']);
         $sql = "UPDATE ".$this->table." SET recd = 1 WHERE to_user = '".$to_user_id."' AND recd = 0";
         Database::query($sql);
 

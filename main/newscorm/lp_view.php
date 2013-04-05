@@ -353,7 +353,7 @@ if ($is_allowed_to_edit) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
     //$interbreadcrumb[] = array('type' => 'right', 'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => get_lang('Edit'), 'class' => 'btn btn-mini btn-warning');
 
-    echo $app['template']->return_breadcrumb($interbreadcrumb, null, null);
+    echo $app['template']->returnBreadcrumb($interbreadcrumb, null, null);
     echo '</div>';
 }
 echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';

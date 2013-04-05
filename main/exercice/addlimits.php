@@ -17,7 +17,6 @@ require_once '../inc/global.inc.php';
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 // name of the language file that needs to be included
 $language_file='exercice';
@@ -29,8 +28,7 @@ api_protect_course_script();
 
 $dsp_percent = false;
 $debug=0;
-if($debug>0)
-{
+if($debug>0) {
 	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";exervar_dump($_POST);
 }
 // general parameters passed via POST/GET

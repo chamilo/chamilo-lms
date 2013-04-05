@@ -364,7 +364,7 @@ class SessionManager {
                 }
 
                 //Cleaning double selects
-                //var_dump($session);
+
                 foreach ($session as $key => &$value) {
                     if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
                         $options = explode('::', $value);
@@ -520,7 +520,6 @@ class SessionManager {
             $options_by_double['extra_'.$double['field_variable']] = $my_options;
         }
 
-        //var_dump($options_by_double);
         //sc.name as category_name,
         $select = "
                 SELECT * FROM (
@@ -627,7 +626,6 @@ class SessionManager {
                 }
 
                 //Cleaning double selects
-                //var_dump($session);
                 foreach ($session as $key => &$value) {
                     if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
                         $options = explode('::', $value);

@@ -1,6 +1,6 @@
 <?php
 /**
- * This script initiates a videoconference session, calling the BigBlueButton 
+ * This script initiates a videoconference session, calling the BigBlueButton
  * API
  * @package chamilo.plugin.bigbluebutton
  */
@@ -145,7 +145,7 @@ class bbb {
         }
     }
     /**
-     * Tells whether the given meeting exists and is running 
+     * Tells whether the given meeting exists and is running
      * (using course code as name)
      * @param string Meeting name (usually the course code)
      * @return bool True if meeting exists, false otherwise
@@ -307,7 +307,6 @@ class bbb {
                         }
                     }
                 }
-                //var_dump($record_array);
                 $item['show_links']  = implode('<br />', $record_array);
             }
 
@@ -412,8 +411,8 @@ class bbb {
         if (empty($ids) or (is_array($ids) && count($ids)==0)) { return false; }
         $recordingParams = array(
            /*
-            * NOTE: Set the recordId below to a valid id after you have 
-            * created a recorded meeting, and received a real recordID 
+            * NOTE: Set the recordId below to a valid id after you have
+            * created a recorded meeting, and received a real recordID
             * back from your BBB server using the
             * getRecordingsWithXmlResponseArray method.
             */

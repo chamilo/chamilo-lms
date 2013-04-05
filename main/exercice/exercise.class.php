@@ -3647,9 +3647,9 @@ class Exercise
 
         //Fixes multiple answer question in order to be exact
         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
-            //var_dump($answer_correct_array, $real_answers);
+
             $diff = @array_diff($answer_correct_array, $real_answers);
-            //var_dump($diff);
+
             /*
              * All good answers or nothing works like exact
               $counter = 1;
@@ -4481,10 +4481,9 @@ class Exercise
                     }
                     $questions_in_category = $one_question_per_category;
                 }
-                //var_dump($questions_in_category);
+
                 while (list($category_id, $question_id) = each($questions_in_category)) {
                     $elements = Testcategory::getNElementsFromArray($question_id, $number_of_random_question);
-                    //var_dump($elements);
                     $temp_question_list = array_merge($temp_question_list, $elements);
                 }
 

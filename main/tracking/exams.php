@@ -248,33 +248,9 @@ if(!empty($course_list) && is_array($course_list)) {
                         }
                         $i++;
 
-                        /*echo "    <td align='right'>
-                              ";
-                        echo         $current_student_id.' ';
-                        echo "    </td>";
-                        */
-
-                        //var_dump($pourcentageScore);
-                /*        echo "    <td align='right'>
-                              ";
-                        echo         $pourcentageScore.' %';
-                        echo "    </td>";
-
-                        echo "<td align='right'>
-                             ";
-                             /*
-                        echo         $a_essais['essais'];
-                        echo "    </td>
-                                <td align='center'>
-                             ";*/
-
                         if ($a_essais['essais'] > 0 ) {
                             $taken++;
                         }
-
-                        /*if ($pourcentageScore >= $parameter_porcentage) {
-                            $total_with_parameter_porcentage++;
-                        }*/
 
                         if ($pourcentageScore >= $filter_score) {
                             $total_with_parameter_score++;

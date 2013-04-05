@@ -2,10 +2,10 @@
 /*
  * Copyright © 2003-2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -35,7 +35,7 @@
 
 /**
  * @class PGTStorageDB
- * The PGTStorageDB class is a class for PGT database storage. An instance of 
+ * The PGTStorageDB class is a class for PGT database storage. An instance of
  * this class is returned by CASClient::SetPGTStorageDB().
  *
  * @author Pascal Aubry <pascal.aubry at univ-rennes1.fr>
@@ -45,9 +45,9 @@
 
 class PGTStorageDB extends PGTStorage
 {
-  /** 
+  /**
    * @addtogroup internalPGTStorageDB
-   * @{ 
+   * @{
    */
 
   /**
@@ -81,7 +81,7 @@ class PGTStorageDB extends PGTStorage
   var $_link = null;
 
   /**
-   * This method returns the handle of the connection to the database where PGT's are 
+   * This method returns the handle of the connection to the database where PGT's are
    * stored.
    *
    * @return a handle of connection.
@@ -94,7 +94,7 @@ class PGTStorageDB extends PGTStorage
     }
 
   /**
-   * The name of the table where PGT's are stored. Written by 
+   * The name of the table where PGT's are stored. Written by
    * PGTStorageDB::PGTStorageDB(), read by getTable().
    *
    * @hideinitializer
@@ -117,7 +117,7 @@ class PGTStorageDB extends PGTStorage
   // ########################################################################
   //  DEBUGGING
   // ########################################################################
-  
+
   /**
    * This method returns an informational string giving the type of storage
    * used by the object (used for debugging purposes).
@@ -144,7 +144,7 @@ class PGTStorageDB extends PGTStorage
   // ########################################################################
   //  CONSTRUCTOR
   // ########################################################################
-  
+
   /**
    * The class constructor, called by CASClient::SetPGTStorageDB().
    *
@@ -178,11 +178,11 @@ class PGTStorageDB extends PGTStorage
       // XXX should use setURL and setTable
       phpCAS::traceEnd();
     }
-  
+
   // ########################################################################
   //  INITIALIZATION
   // ########################################################################
-  
+
   /**
    * This method is used to initialize the storage. Halts on error.
    *
@@ -196,8 +196,8 @@ class PGTStorageDB extends PGTStorage
 		return;
       // call the ancestor's method (mark as initialized)
       parent::init();
-      
-	  //include phpDB library (the test was introduced in release 0.4.8 for 
+
+	  //include phpDB library (the test was introduced in release 0.4.8 for
 	  //the integration into Tikiwiki).
 	  if (!class_exists('DB')) {
 		include_once('DB.php');
@@ -206,13 +206,9 @@ class PGTStorageDB extends PGTStorage
       // try to connect to the database
       $this->_link = DB::connect($this->getURL());
       if ( DB::isError($this->_link) ) {
-	phpCAS::error('could not connect to database ('.DB::errorMessage($this->_link).')');
+	    phpCAS::error('could not connect to database ('.DB::errorMessage($this->_link).')');
       }
-      var_dump($this->_link);
+
       phpCAS::traceBEnd();
     }
-
-  /** @} */
 }
-
-?>

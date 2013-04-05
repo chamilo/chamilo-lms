@@ -559,9 +559,6 @@ class Thematic
             $session_star = '';
             $return = '<div id="thematic_plan_'.$thematic_id.'">';
 
-            //var_dump($thematic_simple_list);
-            //var_dump($new_thematic_plan_data);
-
 			if (!empty($thematic_plan_data)) {
 				foreach ($thematic_plan_data as $plan_data) {
 

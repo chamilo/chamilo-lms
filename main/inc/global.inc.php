@@ -255,7 +255,6 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
     foreach ($filter as $entry) {
         //$domain = $entry->getBasename('.inc.po');
         $locale = api_get_language_isocode($language); //'es_ES';
-        //var_dump($locale);exit;
         //$translator->addResource('pofile', $entry->getPathname(), $locale, $domain);
         $translator->addResource('pofile', $entry->getPathname(), $locale, 'messages');
     }
@@ -857,7 +856,6 @@ $app->before(
             $app->abort(500, "archive folder must be writeable");
         }
 
-        //var_dump($_setting);
         //$app['request']->getSession()->start();
     }
 );

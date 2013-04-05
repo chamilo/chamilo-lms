@@ -168,7 +168,7 @@ foreach ($attempt_list as $question_id => $options) {
 				$item['answer'] = $objExercise->fill_in_blank_answer_to_string($item['answer']);
 				break;
 			case HOT_SPOT:
-				//var_dump($item['answer']);
+
 				break;
 		}
 

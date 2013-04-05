@@ -93,7 +93,6 @@ if ($_REQUEST['_search'] == 'true') {
         $where_condition .= ' AND '.$where_condition_in_form;
     }
     $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
-    //var_dump($filters);
 
     //for now
     $extra_field = new ExtraField('session');
@@ -132,7 +131,6 @@ if ($_REQUEST['_search'] == 'true') {
 
                         if (isset($double_select[$rule->field])) {
                             $data = explode('#', $rule->data);
-                            //var_dump($data);
                             $rule->data = $data[1].'::'.$double_select[$rule->field];
                         } else {
                             // only was sent 1 select
@@ -160,7 +158,6 @@ if ($_REQUEST['_search'] == 'true') {
 
         if (!empty($condition_array)) {
             $where_condition .= ' AND ( ';
-            //var_dump($condition_array);
             $where_condition .= implode($filters->groupOp, $condition_array);
 
             $where_condition .= ' ) ';

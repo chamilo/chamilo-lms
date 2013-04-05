@@ -764,7 +764,6 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
 
     if ($has_data) {
         $counter = 1;
-        //var_dump($printable_data);exit;
         foreach ($printable_data[1] as &$printable_data_row) {
             $column = 0;
             $table->setCellContents($row, $column, $counter);
@@ -783,7 +782,6 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
                 if ($key === 'total') {
                     $attributes['style'] = 'font-weight:bold';
                 }
-                //var_dump($key, $printable_data_cell, $attributes);
                 $table->setCellContents($row, $column, $printable_data_cell);
                 $table->updateCellAttributes($row, $column, $attributes);
                 $column++;

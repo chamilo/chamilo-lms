@@ -63,7 +63,7 @@ if ($is_allowed_to_edit) {
     $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
     $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
-    echo return_breadcrumb($interbreadcrumb, null, null);
+    echo $app['template']->returnBreadcrumb($interbreadcrumb, null, null);
     echo '</div>';
 }
 $html = '';
@@ -83,8 +83,8 @@ foreach ($list as $toc) {
 }
 
 //Setting the template
-$tpl = new Template($tool_name, false, false, true);
-$tpl->assign('html', $html);
-$content = $tpl->fetch('default/learnpath/impress.tpl');
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+//$tpl = new Template($tool_name, false, false, true);
+$app['template']->assign('html', $html);
+$content = $app['template']->fetch('default/learnpath/impress.tpl');
+$app['template']->assign('content', $content);
+$app['template']->display_one_col_template();

@@ -248,12 +248,7 @@ class Online {
             $valid_date_time->sub(new DateInterval($diff));*/
             $users_online = array();
             while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
-                    $users_online[] = $login_user_id;
-                /*$user_login_date = new DateTime($login_date);
-                var_dump($user_login_date->format('Y-m-d H:i:s'), $valid_date_time->format('Y-m-d H:i:s'));
-                if ($user_login_date->format('Y-m-d H:i:s') > $valid_date_time->format('Y-m-d H:i:s')) {
-
-                }*/
+                $users_online[] = $login_user_id;
             }
             return $users_online;
         } else {

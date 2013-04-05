@@ -3672,7 +3672,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
         // $sqlquery = "SELECT * FROM $agendadb WHERE (DAYOFMONTH(day)>='$start_day' AND DAYOFMONTH(day)<='$end_day')
         //				AND (MONTH(day)>='$start_month' AND MONTH(day)<='$end_month')
         //				AND (YEAR(day)>='$start_year' AND YEAR(day)<='$end_year')";
-        //var_dump($sqlquery);
+
         $result = Database::query($sqlquery);
         while ($item = Database::fetch_array($result)) {
             $agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
@@ -5030,7 +5030,7 @@ function agenda_import_ical($course_info, $file)
       $attendee 	 = $ve->getProperty('attendee');
       $course_name = $ve->getProperty('location');
       //insert the event in our database
-      //var_dump($title,$desc,$start_date,$end_date);
+
       $id = agenda_add_item($course_info,$title,$desc,$start_date_string,$end_date_string,$_POST['selectedform']);
 
 
@@ -5139,7 +5139,6 @@ function agenda_import_ical($course_info, $file)
             $all_day = 'true';
         }
 
-        //var_dump($start_date_string, $end_date_string, $all_day);
         $id = $agenda_obj->add_event(
             $start_date_string,
             $end_date_string,

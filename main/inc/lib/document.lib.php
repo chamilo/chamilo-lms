@@ -1389,7 +1389,6 @@ class DocumentManager
                 }
 
                 if (isset($item_info_in_session['visibility'])) {
-                    //if ($doc_id == 85) { var_dump($item_info_in_session);}
                     if ($item_info_in_session['visibility'] == 1) {
                         return true;
                     }
@@ -2364,18 +2363,11 @@ class DocumentManager
         $content_html = file_get_contents($destiny_path.'/'.$file_name);
         $destination_file = $destiny_path.'/'.$file_name;
 
-
         $pre_original = strstr($original_path, 'document');
         $pre_destin = strstr($destiny_path, 'document');
 
-        //var_dump ("pre_original $pre_original");
-        //var_dump ("pre_destin $pre_destin");
-
         $pre_original = substr($pre_original, 8, strlen($pre_original));
         $pre_destin = substr($pre_destin, 8, strlen($pre_destin));
-
-        //var_dump ("pre_original $pre_original");
-        //var_dump ("pre_destin $pre_destin");
 
         $levels = count(explode('/', $pre_destin)) - 1;
         $link_to_add = '';
@@ -2399,10 +2391,7 @@ class DocumentManager
             $pre_destin = '..'.$pre_destin.'/';
         }
 
-        //var_dump($pre_original);
-
         $levels = explode('/', $pre_original);
-        //var_dump($levels);
 
         $count_pre_destination_levels = 0;
         foreach ($levels as $item) {

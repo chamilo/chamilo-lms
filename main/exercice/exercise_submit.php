@@ -536,7 +536,6 @@ if ($objExercise->selectAttempts() > 0) {
 if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 
 //5. Getting user exercise info (if the user took the exam before) - generating exe_id
-//var_dump($learnpath_id.' - '.$learnpath_item_id.' - '.$learnpath_item_view_id);
 
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
@@ -1041,7 +1040,6 @@ if ($reminder == 2)  {
 	    	exit;
     	}
     }
-    //var_dump($remind_question_id, $my_remind_list, $data_tracking, $current_question);
 }
 
 if ($objExercise->review_answers) {
@@ -1330,7 +1328,7 @@ function render_question_list($objExercise, $questionList, $current_question, $e
                 echo $objQuestionTmp->show_media_content();
 
                 $count_of_questions_inside_media = count($media_question_list);
-                //var_dump($media_question_list);
+
                 //Show questions that belongs to a media
                 if (!empty($media_question_list)) {
                     foreach ($media_question_list as $my_question_id) {

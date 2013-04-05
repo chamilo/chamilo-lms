@@ -4142,7 +4142,7 @@ class learnpath
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database :: fetch_array($result);
-            $name = domesticate($row['name']);
+            $name = Text::domesticate($row['name']);
             if ($set_visibility == 'i') {
                 $s = $name." ".get_lang('LearnpathNotPublished');
                 $dialogBox = $s;
@@ -5766,7 +5766,7 @@ class learnpath
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
 
-            $title_cut = cut($arrLP[$i]['title'], 25);
+            $title_cut = Text::cut($arrLP[$i]['title'], 25);
 
             //Link for the documents
             if ($arrLP[$i]['item_type'] == 'document') {
@@ -6412,7 +6412,6 @@ class learnpath
             $file = $filepath.$row['path'];
 
             if ($fp = @ fopen($file, 'w')) {
-                $content = text_filter($content);
                 $content = str_replace(
                     api_get_path(WEB_COURSE_PATH),
                     $_configuration['url_append'].'/courses/',
@@ -9112,7 +9111,7 @@ class learnpath
             $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
             $return .= '<a href="'.api_get_self().'?'.api_get_cidreq(
             ).'&amp;action=add_item&amp;type='.TOOL_QUIZ.'&amp;file='.$row_quiz['id'].'&amp;lp_id='.$this->lp_id.'">'.
-                Security :: remove_XSS(cut($row_quiz['title'], 80)).
+                Security :: remove_XSS(Text::cut($row_quiz['title'], 80)).
                 '</a>';
             $return .= '</li>';
         }
@@ -10234,7 +10233,7 @@ EOD;
         // Finalize the imsmanifest structure, add to the zip, then return the zip.
 
         $manifest = @$xmldoc->saveXML();
-        $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
+        $manifest = Text::api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
         file_put_contents($archive_path.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
         $zip_folder->add(
             $archive_path.'/'.$temp_dir_short,

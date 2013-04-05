@@ -156,7 +156,7 @@ if (isset ($_GET['import'])) {
                     );
                     exit;
                 }
-                $userinfo = get_user_info_from_id($importedresult['user_id']);
+                $userinfo = api_get_user_info($importedresult['user_id']);
                 if ($userinfo['lastname'] != $importedresult['lastname'] || $userinfo['firstname'] != $importedresult['firstname'] || $userinfo['official_code'] != $importedresult['official_code']) {
                     if (!isset ($values['ignoreerrors'])) {
                         header(
@@ -346,7 +346,7 @@ if (isset($_GET['export'])) {
 
         // export results to xml or csv file
         foreach ($results as $result) {
-            $userinfo = get_user_info_from_id($result->get_user_id());
+            $userinfo = api_get_user_info($result->get_user_id());
             $data['username'] = $userinfo['username']; //$result->get_user_id();
             $data['official_code'] = $userinfo['official_code'];
             $data['lastname'] = $userinfo['lastname'];
@@ -514,18 +514,18 @@ if (isset ($_GET['importoverwritescore'])) {
     Display :: display_confirmation_message(get_lang('ImportOverWriteScore').' '.$_GET['importoverwritescore']);
 }
 if (isset ($_GET['import_user_error'])) {
-    $userinfo = get_user_info_from_id($_GET['import_user_error']);
+    $userinfo = api_get_user_info($_GET['import_user_error']);
     Display :: display_warning_message(
-        get_lang('UserInfoDoesNotMatch').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname'])
+        get_lang('UserInfoDoesNotMatch').' '.$userinfo['complete_name']
     );
 }
 if (isset ($_GET['allresdeleted'])) {
     Display :: display_confirmation_message(get_lang('AllResultDeleted'));
 }
 if (isset ($_GET['import_score_error'])) {
-    $userinfo = get_user_info_from_id($_GET['import_score_error']);
+    $userinfo = api_get_user_info($_GET['import_score_error']);
     Display :: display_warning_message(
-        get_lang('ScoreDoesNotMatch').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname'])
+        get_lang('ScoreDoesNotMatch').' '.$userinfo['complete_name']
     );
 }
 if ($file_type == null) { //show the result header

@@ -211,25 +211,6 @@ class Database {
     }
 
     /**
-     *	@param $user_id (integer): the id of the user
-     *	@return $user_info (array): user_id, lastname, firstname, username, email, ...
-     *	@author Patrick Cool <patrick.cool@UGent.be>, expanded to get info for any user
-     *	@author Roan Embrechts, first version + converted to Database API
-     *	@version 30 September 2004
-     *	@desc find all the information about a specified user. Without parameter this is the current user.
-     * 	@todo shouldn't this be in the user.lib.php script?
-     */
-    public static function get_user_info_from_id($user_id = '') {
-        if (empty($user_id)) {
-            return $GLOBALS['_user'];
-        }
-        $table = self::get_main_table(TABLE_MAIN_USER);
-        $user_id = self::escape_string($user_id);
-        return self::generate_abstract_user_field_names(
-            self::fetch_array(self::query("SELECT * FROM $table WHERE user_id = '$user_id'")));
-    }
-
-    /**
      * Returns course code from a given gradebook category's id
      * @param int  Category ID
      * @return string  Course code

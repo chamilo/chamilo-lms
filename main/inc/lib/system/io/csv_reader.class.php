@@ -1,21 +1,21 @@
 <?php
 
 /**
- * Read cvs data from a stream - string/FileReader. 
- * 
+ * Read cvs data from a stream - string/FileReader.
+ *
  * Returns data as associative arrays (headers are the keys of the array).
  * Skip blank lines ?? is it such a good idea?
- * 
+ *
  * Usage:
- * 
+ *
  *      $reader = CsvReader::create('path');
  *      foreach($reader as $items){
  *          foreach($items as $key=>$value){
  *              echo "$key : $value";
  *          }
  *      }
- * 
- * 
+ *
+ *
  *
  * @copyright (c) 2012 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
@@ -29,7 +29,7 @@ class CsvReader implements Iterator
      * @param string|FileReader $stream
      * @param string $delimiter
      * @param string $enclosure
-     * @return CsvReader 
+     * @return CsvReader
      */
     static function create($stream, $delimiter = ';', $enclosure = '"')
     {
@@ -81,7 +81,7 @@ class CsvReader implements Iterator
         if (empty($line)) {
             return array();
         }
-        $data = api_str_getcsv($line, $this->get_delimiter(), $this->get_enclosure());
+        $data = Text::api_str_getcsv($line, $this->get_delimiter(), $this->get_enclosure());
         if ($this->headers) {
             $result = array();
             foreach ($data as $index => $value) {
@@ -100,7 +100,7 @@ class CsvReader implements Iterator
 
     /**
      * Returns the next non empty line
-     * 
+     *
      * @return boolean|string
      */
     protected function next_line()

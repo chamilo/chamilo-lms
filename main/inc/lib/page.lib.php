@@ -432,7 +432,7 @@ class PageController
                 }
             }
             if (!empty($exercise_list)) {
-                $exercise_list = msort($exercise_list, 'tms');
+                $exercise_list = ArrayClass::msort($exercise_list, 'tms');
                 $my_exercise = $exercise_list[0];
                 $url = Display::url($my_exercise['title'], api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']);
                 $tpl->assign('exercise_url', $url);
@@ -976,9 +976,9 @@ class PageController
 
         $message = "22---Page loaded in:".($mtime-START);
         $app['monolog']->addInfo($message);
-        $message = "memory_get_usage: ".format_file_size(memory_get_usage(true));
+        $message = "memory_get_usage: ".Text::format_file_size(memory_get_usage(true));
         $app['monolog']->addInfo($message);
-        $message = "memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true));
+        $message = "memory_get_peak_usage: ".Text::format_file_size(memory_get_peak_usage(true));
         $app['monolog']->addInfo($message);
     }
 }

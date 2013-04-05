@@ -379,7 +379,7 @@ if ($form->validate()) {
         $hr_dept_id = intval($user['hr_dept_id']);
         $language = $user['language'];
         if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
-            $expiration_date = return_datetime_from_array($user['expiration_date']);
+            $expiration_date = Text::return_datetime_from_array($user['expiration_date']);
         } else {
             $expiration_date = '0000-00-00 00:00:00';
         }

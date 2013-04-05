@@ -1685,11 +1685,8 @@ function check_emailcue($id_or_ref, $type, $lastime = '', $lastuser = '')
 
         //first, current author and time
         //Who is the author?
-        $userinfo = Database::get_user_info_from_id($lastuser);
-        $email_user_author = get_lang('EditedBy').': '.api_get_person_name(
-            $userinfo['firstname'],
-            $userinfo['lastname']
-        );
+        $userinfo = api_get_user_info($lastuser);
+        $email_user_author = get_lang('EditedBy').': '.$userinfo['complete_name'];
 
         //When ?
         $year = substr($lastime, 0, 4);
@@ -1724,11 +1721,8 @@ function check_emailcue($id_or_ref, $type, $lastime = '', $lastuser = '')
 
         //first, current author and time
         //Who is the author of last message?
-        $userinfo = Database::get_user_info_from_id($lastuser);
-        $email_user_author = get_lang('AddedBy').': '.api_get_person_name(
-            $userinfo['firstname'],
-            $userinfo['lastname']
-        );
+        $userinfo = api_get_user_info($lastuser);
+        $email_user_author = get_lang('AddedBy').': '.$userinfo['complete_name'];
 
         //When ?
         $year = substr($lastime, 0, 4);
@@ -1771,11 +1765,8 @@ function check_emailcue($id_or_ref, $type, $lastime = '', $lastuser = '')
         $email_page_name = $row['title'];
 
         //Who is the author?
-        $userinfo = Database::get_user_info_from_id($row['user_id']);
-        $email_user_author = get_lang('AddedBy').': '.api_get_person_name(
-            $userinfo['firstname'],
-            $userinfo['lastname']
-        );
+        $userinfo = api_get_person_name($row['user_id']);
+        $email_user_author = get_lang('AddedBy').': '.$userinfo['complete_name'];
 
         //When ?
         $year = substr($row['dtime'], 0, 4);
@@ -1808,12 +1799,8 @@ function check_emailcue($id_or_ref, $type, $lastime = '', $lastuser = '')
         $allow_send_mail = true;
 
         //Who is the author?
-        $userinfo = Database::get_user_info_from_id(api_get_user_id()); //current user
-        $email_user_author = get_lang('DeletedBy').': '.api_get_person_name(
-            $userinfo['firstname'],
-            $userinfo['lastname']
-        );
-
+        $userinfo = api_get_user_info(api_get_user_id()); //current user
+        $email_user_author = get_lang('DeletedBy').': '.$userinfo['complete_name'];
 
         //When ?
         $today = date('r'); //current time
@@ -1830,9 +1817,8 @@ function check_emailcue($id_or_ref, $type, $lastime = '', $lastuser = '')
 
     if ($allow_send_mail) {
         while ($row = Database::fetch_array($result)) {
-            $userinfo = Database::get_user_info_from_id(
-                $row['user_id']
-            ); //$row['user_id'] obtained from tbl_wiki_mailcue
+            $userinfo = api_get_user_info($row['user_id']);
+            //$row['user_id'] obtained from tbl_wiki_mailcue
             $name_to = api_get_person_name(
                 $userinfo['firstname'],
                 $userinfo['lastname'],
@@ -1917,7 +1903,7 @@ function export2doc($doc_id)
     $css = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css);
     $css = str_replace('../../img/', $root_rel.'main/img/', $css);
 
-    $asciimathmal_script = (api_contains_asciimathml($wikiContents) || api_contains_asciisvg($wikiContents))
+    $asciimathmal_script = (Text::api_contains_asciimathml($wikiContents) || Text::api_contains_asciisvg($wikiContents))
         ? '<script src="'.api_get_path(TO_REL, SCRIPT_ASCIIMATHML).'" type="text/javascript"></script>'."\n" : '';
 
     $template = str_replace(
@@ -2094,9 +2080,8 @@ function auto_add_page_users($assignment_type)
     $all_students_pages = array();
 
     //data about teacher
-    $userinfo = Database::get_user_info_from_id(api_get_user_id());
-    $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username'], ENT_QUOTES));
-    $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname'])." . ".$username;
+    $userinfo = api_get_user_info(api_get_user_id());
+    $name = $userinfo['complete_name_login_as'];
     if (api_get_user_id() <> 0) {
         $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', false, true);
         $image_repository = $image_path['dir'];
@@ -2118,11 +2103,7 @@ function auto_add_page_users($assignment_type)
     // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'<br />('.get_lang('Teacher').')</div><br/><div>';
     $content_orig_A = '<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang(
         'AssignmentDesc'
-    ).'</td></tr><tr><td>'.$photo.'<br />'.Display::tag(
-        'span',
-        api_get_person_name($userinfo['firstname'], $userinfo['lastname']),
-        array('title' => $username)
-    ).'</td></tr></table></div>';
+    ).'</td></tr><tr><td>'.$photo.'<br />'.Display::tag('span', $name).'</td></tr></table></div>';
 
     $content_orig_B = '<br/><div align="center" style="font-size:24px">'.get_lang(
         'AssignmentDescription'
@@ -2304,7 +2285,7 @@ function display_wiki_search_results($search_term, $search_content = 0, $all_ver
         $row = array();
         while ($obj = Database::fetch_object($result)) {
             //get author
-            $userinfo = Database::get_user_info_from_id($obj->user_id);
+            $userinfo = api_get_user_info($obj->user_id);
 
             //get time
             $year = substr($obj->dtime, 0, 4);
@@ -2351,9 +2332,7 @@ function display_wiki_search_results($search_term, $search_content = 0, $all_ver
                 ).'">'.$obj->title.'</a>';
             }
 
-            $row[] = $obj->user_id <> 0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(
-                api_get_person_name($userinfo['firstname'], $userinfo['lastname'])
-            ).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+            $row[] = $obj->user_id <> 0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities($userinfo['complete_name']).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
             $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 
             if ($all_vers == '1') {

@@ -61,7 +61,7 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
             foreach ($folders as $folder_id => & $folder) {
                 $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
                 $path_parts = explode('/', $folder);
-                $folder_titles[$folder] = cut($folder_titles[$folder], 80);
+                $folder_titles[$folder] = Text::cut($folder_titles[$folder], 80);
                 $counter = count($path_parts) - 2;
                 if ($counter > 0) {
                     $label = str_repeat('&nbsp;&nbsp;&nbsp;', $counter).' &mdash; '.$folder_titles[$folder];
@@ -83,7 +83,7 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
                     $label = get_lang('Documents');
                 } else {
                     $path_parts = explode('/', str_replace($group_dir, '', $folder));
-                    $label = cut($label, 80);
+                    $label = Text::cut($label, 80);
                     $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
                 }
                 $parent_select->addOption($label, $folder_id);
@@ -190,20 +190,14 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
 
     $tooltip_title = $title;
 
-    //Cut long titles
-    //$title = cut($title, 120);
-
     $tooltip_title_alt = $tooltip_title;
     if ($path == '/shared_folder') {
         $tooltip_title_alt = get_lang('UserFolders');
     } elseif (strstr($path, 'shared_folder_session_')) {
         $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name(api_get_session_id()).')';
     } elseif (strstr($tooltip_title, 'sf_user_')) {
-        $userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
-        $tooltip_title_alt = get_lang('UserFolder').' '.api_get_person_name(
-            $userinfo['firstname'],
-            $userinfo['lastname']
-        );
+        $userinfo = api_get_user_info(substr($tooltip_title, 8));
+        $tooltip_title_alt = get_lang('UserFolder').' '.$userinfo['complete_name'];
     } elseif ($path == '/chat_files') {
         $tooltip_title_alt = get_lang('ChatFiles');
     } elseif ($path == '/learning_path') {
@@ -487,7 +481,7 @@ function build_document_icon_tag($type, $path)
                 $basename = get_lang('UserFolders');
             }
         } elseif (strstr($basename, 'sf_user_')) {
-            $userinfo = Database::get_user_info_from_id(substr($basename, 8));
+            $userinfo = api_get_user_info(substr($basename, 8));
             $image_path = UserManager::get_user_picture_path_by_id(substr($basename, 8), 'web', false, true);
 
             if ($image_path['file'] == 'unknown.jpg') {
@@ -496,7 +490,7 @@ function build_document_icon_tag($type, $path)
                 $icon = '../upload/users/'.substr($basename, 8).'/'.$image_path['file'];
             }
 
-            $basename = get_lang('UserFolder').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+            $basename = get_lang('UserFolder').' '.$userinfo['complete_name'];
         } elseif (strstr($path, 'shared_folder_session_')) {
             if ($is_allowed_to_edit) {
                 $basename = '***('.api_get_session_name($current_session_id).')*** '.get_lang('HelpUsersFolder');

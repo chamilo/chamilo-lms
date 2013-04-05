@@ -885,7 +885,7 @@ function display_agenda_items()
      			display: the content
          --------------------------------------------------*/
         $content = $myrow['content'];
-        $content = make_clickable($content);
+        $content = Text::make_clickable($content);
         echo "<tr class='row_even'>";
         echo "<td colspan='3'>";
 
@@ -1084,7 +1084,7 @@ function display_one_agenda_item($agenda_id)
     $export_icon_high = '../img/export_high_fade.png';
 
     $content = $myrow['content'];
-    $content = make_clickable($content);
+    $content = Text::make_clickable($content);
     //echo "<tr><td class=\"".$text_style."\" colspan='2'>";
     //echo $content;
     //echo "</td></tr>";

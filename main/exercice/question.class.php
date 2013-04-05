@@ -215,7 +215,7 @@ abstract class Question
      */
     function selectDescription()
     {
-        $this->description = text_filter($this->description);
+        $this->description = $this->description;
 
         return $this->description;
     }

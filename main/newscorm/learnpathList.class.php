@@ -83,7 +83,7 @@ class learnpathList {
             // Use domesticate here instead of Database::escape_string because
             // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
             // is done using domesticate()
-            $myname = domesticate($row['name']);
+            $myname = Text::domesticate($row['name']);
             $mylink = 'newscorm/lp_controller.php?action=view&lp_id='.$row['id'].'&id_session='.$session_id;
             $sql2 = "SELECT * FROM $tbl_tool WHERE c_id = $course_id AND (name='$myname' and image='scormbuilder.gif' and link LIKE '$mylink%')";
             //error_log('New LP - learnpathList::__construct - getting visibility - '.$sql2, 0);

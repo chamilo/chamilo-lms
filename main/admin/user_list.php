@@ -212,7 +212,7 @@ function login_user($user_id) {
 
             //Delog the current user
 
-			LoginDelete($_SESSION["_user"]["user_id"]);
+            Online::loginDelete($_SESSION["_user"]["user_id"]);
 
 			// Cleaning session variables
 			unset($_SESSION['_user']);

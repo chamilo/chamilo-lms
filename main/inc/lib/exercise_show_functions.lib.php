@@ -157,9 +157,9 @@ class ExerciseShowFunctions {
 			<td valign="top" align="left" >
 				<?php
                 if ($studentChoice) {
-                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    echo '<span style="font-weight: bold; color: #008000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
                 } else {
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
                 }
 
 				?>
@@ -210,18 +210,18 @@ class ExerciseShowFunctions {
             if ($studentChoice) {
 				if ($answerCorrect) {
                     $color = 'green';
-					//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+					//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
 				} else {
                     $color = 'black';
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
 				}
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(Text::make_clickable($answerComment)).'</span>';
 
 			} else {
 				if ($answerCorrect) {
-					//echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+					//echo '<span style="font-weight: bold; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
 				} else {
-                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
 				}
 			}
 			?>
@@ -262,18 +262,18 @@ class ExerciseShowFunctions {
             if ($studentChoice) {
                 if ($answerCorrect) {
                     $color = 'green';
-                    //echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #008000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
                 } else {
                     $color = 'black';
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(Text::make_clickable($answerComment)).'</span>';
 
             } else {
                 if ($answerCorrect) {
-                    //echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
                 } else {
-                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: normal; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
                 }
             }
             ?>
@@ -344,7 +344,7 @@ class ExerciseShowFunctions {
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(Text::make_clickable($answerComment)).'</span>';
             }
             ?>
         </td>
@@ -414,15 +414,15 @@ class ExerciseShowFunctions {
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
-                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(make_clickable($answerComment)).'</span>';
+                echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br(Text::make_clickable($answerComment)).'</span>';
             }
             if ($studentChoice == 2 || $studentChoice == '') {
-            	//echo '<span style="font-weight: bold; color: #000;">'.nl2br(make_clickable($answerComment)).'</span>';
+            	//echo '<span style="font-weight: bold; color: #000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
             } else {
 				if ($studentChoice == $answerCorrect) {
-	            	//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
+	            	//echo '<span style="font-weight: bold; color: #008000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
 				} else {
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
+                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(Text::make_clickable($answerComment)).'</span>';
 				}
             }
             ?>

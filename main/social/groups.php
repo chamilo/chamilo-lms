@@ -294,7 +294,7 @@ if ($group_id != 0 ) {
 						$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'], 60, USER_IMAGE_SIZE_MEDIUM);
 
 						$member_content .= '<div class="">';
-						$member_name = Display::url(api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon, 'profile.php?u='.$member['user_id']);
+						$member_name = Display::url(api_get_person_name(Text::cut($member['firstname'],15),Text::cut($member['lastname'],15)).'&nbsp;'.$icon, 'profile.php?u='.$member['user_id']);
 						$member_content .= Display::div('<img height="44" border="2" align="middle" vspace="10" class="social-groups-image" src="'.$picture['file'].'"/>&nbsp'.$member_name);
 						$member_content .= '</div>';
 
@@ -334,7 +334,7 @@ if ($group_id != 0 ) {
 				$url_open  = '<a href="groups.php?id='.$id.'">';
 				$url_close = '</a>';
 
-				$name = cut($result['name'], GROUP_TITLE_LENGTH, true);
+				$name = Text::cut($result['name'], GROUP_TITLE_LENGTH, true);
 				if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
 					$name .= ' '.Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle'));
 				} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
@@ -356,7 +356,7 @@ if ($group_id != 0 ) {
 				$item_2 = '';
 				$item_3 = '';
 				if ($result['description'] != '') {
-					$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';
+					$item_3 = '<div class="box_description_group_content" >'.Text::cut($result['description'],100,true).'</div>';
 				} else {
 					$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
 					$item_3 = '<div class="box_description_group_content" ></div>';
@@ -382,7 +382,7 @@ if ($group_id != 0 ) {
 				$count_users_group = $count_users_group.' '.get_lang('Members');
 			}
 
-			$name = cut($result['name'],GROUP_TITLE_LENGTH,true);
+			$name = Text::cut($result['name'],GROUP_TITLE_LENGTH,true);
 			$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 			$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 
@@ -392,7 +392,7 @@ if ($group_id != 0 ) {
 
 
 			if ($result['description'] != '') {
-				$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';
+				$item_3 = '<div class="box_description_group_content" >'.Text::cut($result['description'],100,true).'</div>';
 			} else {
 				$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
 				$item_3 = '<div class="box_description_group_content" ></div>';
@@ -428,7 +428,7 @@ if ($group_id != 0 ) {
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}
 
-				$name = cut($result['name'],GROUP_TITLE_LENGTH,true);
+				$name = Text::cut($result['name'],GROUP_TITLE_LENGTH,true);
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 
@@ -437,7 +437,7 @@ if ($group_id != 0 ) {
 			    $item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 
 				if ($result['description'] != '') {
-					$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';
+					$item_3 = '<div class="box_description_group_content" >'.Text::cut($result['description'],100,true).'</div>';
 				} else {
 					$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
 					$item_3 = '<div class="box_description_group_content" ></div>';

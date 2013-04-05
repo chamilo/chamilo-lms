@@ -127,7 +127,7 @@ $dir_acum = '';
 for ($i = 0; $i < $array_len; $i++) {
     $url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
     //Max char 80
-    $url_to_who = cut($dir_array[$i], 80);
+    $url_to_who = Text::cut($dir_array[$i], 80);
     if ($is_certificate_mode) {
         $interbreadcrumb[] = array(
             'url' => $url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']),
@@ -313,16 +313,14 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
     ?>
 
 <!-- javascript form name form2 update voices -->
-<script type="text/javascript">
+<script>
     var langslist = document.form2.lang
     var voiceslist = document.form2.voices
-    var voices = new Array()
+    var voices = new Array();
 
-            < !--Default
-    message-- >
             voices[0] = ["<?php echo get_lang('FirstSelectALanguage'); ?>"]
 
-            < !--German-- >
+            // German
             voices[1] = ["<?php echo get_lang('Female').' (de1)'; ?>|de1", "<?php echo get_lang(
         'Male'
     ).' (de2)'; ?>|de2", "<?php echo get_lang('Female').' (de3)'; ?>|de3", "<?php echo get_lang(
@@ -333,7 +331,7 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
         'Female'
     ).' (de8 HQ)'; ?>|de8"]
 
-            < !--English-- >
+            // English
             voices[2] = ["<?php echo get_lang('Male').' (en1)'; ?>|en1", "<?php echo get_lang(
         'Male'
     ).' (en2 HQ)'; ?>|en2", "<?php echo get_lang('Female').' (us1)'; ?>| us1", "<?php echo get_lang(
@@ -342,10 +340,10 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
         'Female'
     ).'(us4 HQ)'; ?>|us4"]
 
-            < !--Spanish-- >
+            //Spanish
             voices[3] = ["<?php echo get_lang('Male').' (es5 HQ)'; ?>|es5"]
 
-            < !--French-- >
+            //French
             voices[4] = ["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
 
 
@@ -355,8 +353,6 @@ if (Security::remove_XSS($_GET['dt2a']) == 'pediaphon') {
             voiceslist.options[voiceslist.options.length] = new Option(voices[selectedvoicegroup][i].split("|")[0], voices[selectedvoicegroup][i].split("|")[1])
     }
 </script>
-
-
 <?php
 }
 //end pediaphon

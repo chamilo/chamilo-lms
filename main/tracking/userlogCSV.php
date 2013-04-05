@@ -105,11 +105,11 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse))
 
         if( $is_allowedToTrackEverybodyInCourse )
         {
-            // if user can track everybody : list user of course            
+            // if user can track everybody : list user of course
             $sql = "SELECT count(user_id)
                         FROM $TABLECOURSUSER
                         WHERE course_code = '$_cid' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
-            
+
         }
         else
         {
@@ -185,7 +185,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse))
         {
             // check if user is in this course
             $tracking_is_accepted = $is_course_member;
-            $tracked_user_info = Database::get_user_info_from_id($uInfo);
+            $tracked_user_info = api_get_user_info($uInfo);
             $title[0]=$tracked_user_info[1].'_'.$tracked_user_info[2];
         }
         else

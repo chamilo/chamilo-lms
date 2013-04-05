@@ -311,9 +311,9 @@ function insert_item(
     if ($type === 'chapter') {
         $sql = "INSERT INTO $tbl_learnpath_chapter (c_id, lp_id, chapter_name, chapter_description, display_order)
 				VALUES ( $course_id,
-						'".domesticate($learnpath_id)."',
-                        '".domesticate(htmlspecialchars($name))."',
-                        '".domesticate(htmlspecialchars($chapter_description))."',
+						'".Text::domesticate($learnpath_id)."',
+                        '".Text::domesticate(htmlspecialchars($name))."',
+                        '".Text::domesticate(htmlspecialchars($chapter_description))."',
                         $new_order )";
         $result = Database::query($sql);
         if ($result === false) {
@@ -322,7 +322,7 @@ function insert_item(
         $id = Database :: insert_id();
     } elseif ($type === 'item') {
         $sql = "INSERT INTO $tbl_learnpath_item (c_id, parent_item_id, item_type, display_order) VALUES
-        		($course_id, '".domesticate($parent_id)."','".domesticate(htmlspecialchars($type))."', $new_order )";
+        		($course_id, '".Text::domesticate($parent_id)."','".Text::domesticate(htmlspecialchars($type))."', $new_order )";
         $result = Database::query($sql);
         if ($result === false) {
             return false;
@@ -1346,8 +1346,6 @@ function export_exercise($item_id)
         }
     }
 
-    $exerciseTitle = text_filter($exerciseTitle);
-
     $test .= "<h3>".$exerciseTitle."</h3>";
 
     if (!empty ($exerciseSound)) {
@@ -1355,8 +1353,6 @@ function export_exercise($item_id)
             "Sound"
         )."\" /></a>";
     }
-
-    $exerciseDescription = text_filter($exerciseDescription);
 
     // Writing the .js file with to check the correct answers begin.
     $scriptfilename = "Exercice".$item_id.".js";
@@ -1584,8 +1580,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                 // 3.2.6 Prepare the content of the agenda item.
                 $content = $myrow['content'];
                 // 3.2.7 Make clickable???
-                $content = make_clickable($content);
-                $content = text_filter($content);
+                $content = Text::make_clickable($content);
                 // 3.2.8 Write the prepared content to the export string.
                 $expcontent .= "<tr><td class=\"text\" colspan='2'>";
                 $expcontent .= $content;
@@ -1622,8 +1617,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                 $content = $myrow[1];
                 //$content = nl2br($content);
                 // 3.2 Prepare the data for export.
-                $content = make_clickable($content);
-                $content = text_filter($content);
+                $content = Text::make_clickable($content);
 
                 // 3.3 Get a UNIX(?<-mktime) Timestamp of the end_date for this announcement.
                 $last_post_datetime = $myrow['end_date']; // post time format  datetime of database layer (MySQL is assumed)
@@ -1670,8 +1664,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                     // 2.a.1.1 Write title to export string.
                     $expcontent .= "<h4>".$row['title']."</h4>";
                     // 2.a.1.2 Prepare content.
-                    $content = make_clickable(nl2br($row['content']));
-                    $content = text_filter($content);
+                    $content = Text::make_clickable(nl2br($row['content']));
                     // 2.a.1.3 Write content to the export string.
                     $expcontent .= $content;
                 }

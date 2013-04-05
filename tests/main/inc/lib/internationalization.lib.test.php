@@ -932,9 +932,9 @@ class TestInternationalization extends UnitTestCase {
 		$html1 = $body1; // A html-snippet, see for example some log-files created by the "Chat" tool.
 		$html2 = '<html>'."\n".$head1.$body2."\n".'</html>'; // A full html-document, no encoding has been declared.
 		$html3 = '<html>'."\n".$head2.$body2."\n".'</html>'; // A full html-document, encoding has been declared.
-		$res1 = api_detect_encoding_html($html1);
-		$res2 = api_detect_encoding_html($html2);
-		$res3 = api_detect_encoding_html($html3);
+		$res1 = Text::api_detect_encoding_html($html1);
+		$res2 = Text::api_detect_encoding_html($html2);
+		$res3 = Text::api_detect_encoding_html($html3);
 		$this->assertTrue(
 			$res1 === 'UTF-8'
 			&& $res2 === 'UTF-8'

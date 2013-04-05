@@ -19,23 +19,25 @@ class Notification extends Model
     public $columns = array('id', 'dest_user_id', 'dest_mail', 'title', 'content', 'send_freq', 'created_at', 'sent_at');
     public $max_content_length = 254; //Max lenght of the notification.content field
     public $debug = false;
-//@todo put constants in an array
-
     public $type;
     public $admin_name;
     public $admin_email;
-//default values
+
+    public $send_email_as_user;
+
+    //default values
     const NOTIFY_MESSAGE_AT_ONCE = 1;
     const NOTIFY_MESSAGE_DAILY = 8;
     const NOTIFY_MESSAGE_WEEKLY = 12;
     const NOTIFY_MESSAGE_NO = 0;
-//mail_notify_message ("At once", "Daily", "No")
+    //mail_notify_message ("At once", "Daily", "No")
 
     const NOTIFY_INVITATION_AT_ONCE = 1;
     const NOTIFY_INVITATION_DAILY = 8;
     const NOTIFY_INVITATION_WEEKLY = 12;
     const NOTIFY_INVITATION_NO = 0;
-//mail_notify_invitation ("At once", "Daily", "No")
+
+    //mail_notify_invitation ("At once", "Daily", "No")
 
     const NOTIFY_GROUP_AT_ONCE = 1;
     const NOTIFY_GROUP_DAILY = 8;
@@ -45,10 +47,14 @@ class Notification extends Model
     const NOTIFICATION_TYPE_INVITATION = 2;
     const NOTIFICATION_TYPE_GROUP = 3;
 
-// mail_notify_group_message ("At once", "Daily", "No")
+    // mail_notify_group_message ("At once", "Daily", "No")
+
+    /**
+     *
+    */
     public function __construct()
     {
-        $this->table       = Database::get_main_table(TABLE_NOTIFICATION);
+        $this->table = Database::get_main_table(TABLE_NOTIFICATION);
 
         $this->sender_email  = api_get_setting('noreply_email_address');
         $this->sender_name   = api_get_setting('siteName');
@@ -190,7 +196,7 @@ class Notification extends Model
                 	    $params['dest_user_id']  = $user_id;
                 	    $params['dest_mail']     = $user_info['mail'];
                 	    $params['title']         = $title;
-                	    $params['content']       = cut($content, $this->max_content_length);
+                	    $params['content']       = Text::cut($content, $this->max_content_length);
                 	    $params['send_freq']     = $user_setting;
                         $params['sender_id']     = $sender_id;
                 	    $this->save($params);

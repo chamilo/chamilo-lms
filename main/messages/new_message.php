@@ -142,7 +142,8 @@ function show_compose_reply_to_message($message_id, $receiver_id) {
 				<label class="control-label">'.get_lang('SendMessageTo').': </label>
 				<div class="controls">';
 	$post = '</div></div>';
-    $sent_to = $pre_html.'<strong>'.GetFullUserName($row['user_sender_id']).'</strong>'.$post;
+    $userInfo = api_get_user_info($row['user_sender_id']);
+    $sent_to = $pre_html.'<strong>'.$userInfo['complete_name'].'</strong>'.$post;
 	$default['users'] = array($row['user_sender_id']);
 	$html .= manage_form($default, null, $sent_to);
     return $html;
@@ -150,7 +151,8 @@ function show_compose_reply_to_message($message_id, $receiver_id) {
 
 function show_compose_to_user ($receiver_id) {
 	global $charset;
-	$html = get_lang('To').':&nbsp;<strong>'.GetFullUserName($receiver_id).'</strong>';
+    $userInfo = api_get_user_info($receiver_id);
+	$html = get_lang('To').':&nbsp;<strong>'.$userInfo['complete_name'].'</strong>';
 	$default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
 	$default['users'] = array($receiver_id);
 	$html .= manage_form($default);
@@ -209,7 +211,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
                         '.get_lang('Description').'&nbsp;&nbsp;<input type="text" name="legend[]" /><br /><br />
                     </div>
                 </span>');
-		$form->addElement('advanced_settings','<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
+		$form->addElement('advanced_settings','<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),Text::format_file_size(api_get_setting('message_max_upload_filesize'))).')');
 	}
 
 	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');

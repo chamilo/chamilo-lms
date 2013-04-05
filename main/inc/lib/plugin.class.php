@@ -3,7 +3,7 @@
 
 /**
  * Base class for plugins
- * 
+ *
  * This class has to be extended by every plugin. It defines basic methods
  * to install/uninstall and get information about a plugin
  *
@@ -25,7 +25,7 @@ class Plugin {
     public  $is_course_plugin = false;
 
     /**
-     * When creating a new course, these settings are added to the course, in 
+     * When creating a new course, these settings are added to the course, in
      * the course_info/infocours.php
      * To show the plugin course icons you need to add these icons:
      * main/img/icons/22/plugin_name.png
@@ -72,7 +72,7 @@ class Plugin {
         $result['version']          = $this->get_version();
         $result['author']           = $this->get_author();
         $result['plugin_class']     = get_class($this);
-        $result['is_course_plugin'] = $this->is_course_plugin;        
+        $result['is_course_plugin'] = $this->is_course_plugin;
 
         if ($form = $this->get_settings_form()) {
             $result['settings_form'] = $form;
@@ -249,7 +249,7 @@ class Plugin {
                         $this->strings[$key] = $string;
                     }
                 }
-            } 
+            }
         }
 
         if (isset($this->strings[$name])) {
@@ -321,7 +321,7 @@ class Plugin {
         $result = Database::query($sql);
         if (!Database::num_rows($result)) {
             $tool_link = "$plugin_name/start.php";
-            $visibility = string2binary(api_get_setting('course_create_active_tools', $plugin_name));
+            $visibility = Text::string2binary(api_get_setting('course_create_active_tools', $plugin_name));
             $sql_course = "INSERT INTO $t_tool VALUES ($course_id, NULL, '$plugin_name', '$tool_link', '$plugin_name.png',' ".$visibility."','0', 'squaregrey.gif','NO','_self','plugin','0')";
             $r = Database::query($sql_course);
         }

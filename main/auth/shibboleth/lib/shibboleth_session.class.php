@@ -43,7 +43,7 @@ class ShibbolethSession
     function logout()
     {
         $_SESSION['_user'] = array();
-        online_logout(null, false);
+        Online::logout(null, false);
     }
 
     /**
@@ -87,7 +87,7 @@ class ShibbolethSession
         $uidReset = true;
 
         $gidReset = true;
-        $cidReset = false; //FALSE !!      
+        $cidReset = false; //FALSE !!
 
         $mainDbName = Database :: get_main_database();
         $includePath = api_get_path(INCLUDE_PATH);

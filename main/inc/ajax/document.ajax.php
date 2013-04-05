@@ -24,13 +24,13 @@ switch($action) {
 		    exit;
 		}
 
-		if (!empty($_FILES)) {		    
+		if (!empty($_FILES)) {
 		    $file = $_FILES['file'];
 		    $result = DocumentManager::upload_document($_FILES, $_POST['curdirpath'], $file['name'], null, 0, 'overwrite', false, false);
 		    $json = array();
 		    $json['name'] = Display::url(api_htmlentities($file['name']), api_htmlentities($result['url']), array('target'=>'_blank'));
 		    $json['type'] = api_htmlentities($file['type']);
-		    $json['size'] = format_file_size($file['size']);
+		    $json['size'] = Text::format_file_size($file['size']);
 		    if (!empty($result) && is_array($result)) {
 		        $json['result'] = Display::return_icon('accept.png', get_lang('Uploaded'));
 		    } else {

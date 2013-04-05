@@ -527,7 +527,7 @@ function display_monthcalendar($month, $year, $agenda_items)
 
                 if (key_exists($curday, $agenda_items)) {
                     $dayheader = Display::div($curday, array('class' => 'agenda_day'));
-                    $events_in_day = msort($agenda_items[$curday], 'start_date_tms');
+                    $events_in_day = ArrayClass::msort($agenda_items[$curday], 'start_date_tms');
                     foreach ($events_in_day as $value) {
 
                         $some_content = false;
@@ -588,7 +588,7 @@ function display_monthcalendar($month, $year, $agenda_items)
 
                             //Link to bubble
                             $url = Display::url(
-                                cut($value['title'], 40),
+                                Text::cut($value['title'], 40),
                                 '#',
                                 array('id' => $value['calendar_type'].'_'.$value['id'], 'class' => 'opener')
                             );
@@ -2041,7 +2041,7 @@ function display_agenda_items($agenda_items, $day = false)
         $col = 'start';
     }
 
-    $agenda_items = msort($agenda_items, $sort_item, $sort);
+    $agenda_items = ArrayClass::msort($agenda_items, $sort_item, $sort);
 
     //DISPLAY: NO ITEMS
     if (empty($agenda_items)) {
@@ -2412,7 +2412,7 @@ function display_one_agenda_item($agenda_id)
 
     // Content
     $content = $myrow['content'];
-    $content = make_clickable($content);
+    $content = Text::make_clickable($content);
 
     echo '<tr class="row_even">';
     echo '<td '.(api_is_allowed_to_edit() ? 'colspan="3"' : 'colspan="2"').'>';
@@ -3565,7 +3565,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 
             if ($setting_agenda_link == 'coursecode') {
                 $title = $array_course_info['title'];
-                $agenda_link = cut($title, 14, true);
+                $agenda_link = Text::cut($title, 14, true);
             } else {
                 $agenda_link = Display::return_icon('course_home.png', '&nbsp;', '', ICON_SIZE_SMALL);
             }
@@ -3682,7 +3682,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 
             if ($setting_agenda_link == 'coursecode') {
                 $title = $array_course_info['title'];
-                $agenda_link = cut($title, 14, true);
+                $agenda_link = Text::cut($title, 14, true);
             } else {
                 $agenda_link = Display::return_icon('course_home.png', '&nbsp;', '', ICON_SIZE_SMALL);
             }

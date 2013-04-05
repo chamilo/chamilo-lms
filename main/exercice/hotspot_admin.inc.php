@@ -595,7 +595,7 @@ if ($modifyAnswers) {
                                 foreach ($question_list as $key => $questionid) {
                                     $selected = '';
                                     $question = Question::read($questionid);
-                                    $val = 'Q' . $key . ' :' . substrwords($question->selectTitle(), ICON_SIZE_SMALL);
+                                    $val = 'Q' . $key . ' :' . Text::substrwords($question->selectTitle(), ICON_SIZE_SMALL);
                                     $select_lp_id[$id] = $details['lp_name'];
                                     if ($questionid == $select_question[$i]) {
                                         $selected = 'selected="selected"';
@@ -896,7 +896,7 @@ if ($modifyAnswers) {
                         foreach ($question_list as $key => $questionid) {
                             $selected = '';
                             $question = Question::read($questionid);
-                            $val = 'Q' . $key . ' :' . substrwords($question->selectTitle(), ICON_SIZE_SMALL);
+                            $val = 'Q' . $key . ' :' . Text::substrwords($question->selectTitle(), ICON_SIZE_SMALL);
                             $select_lp_id[$id] = $details['lp_name'];
                             if ($questionid == $select_question_noerror) {
                                 $selected = 'selected="selected"';

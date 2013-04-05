@@ -18,13 +18,13 @@ class MessageManager
 {
     public static function get_online_user_list($current_user_id)
     {
-        global $_configuration;
         //@todo this is a bad idea to parse all users online
-        $count = who_is_online_count();
-        $userlist = who_is_online(0, $count, null, null, 30, true);
+        $count = Online::who_is_online_count();
+        $userlist = Online::who_is_online(0, $count, null, null, 30, true);
         $online_user_list = array();
         foreach ($userlist as $user_id) {
-            $online_user_list[$user_id] = GetFullUserName($user_id).($current_user_id == $user_id ? ("&nbsp;(".get_lang(
+            $userInfo = api_get_user_info($user_id);
+            $online_user_list[$user_id] = $userInfo['complete_name'].($current_user_id == $user_id ? ("&nbsp;(".get_lang(
                 'Myself'
             ).")") : (""));
         }
@@ -57,8 +57,8 @@ class MessageManager
      */
     public static function users_connected_by_id()
     {
-        $count = who_is_online_count();
-        $user_connect = who_is_online(0, $count, null, null, 30, true);
+        $count = Online::who_is_online_count();
+        $user_connect = Online::who_is_online(0, $count, null, null, 30, true);
         $user_id_list = array();
         for ($i = 0; $i < count($user_connect); $i++) {
             $user_id_list[$i] = $user_connect[$i][0];
@@ -124,7 +124,7 @@ class MessageManager
         while ($result = Database::fetch_row($sql_result)) {
             $message[0] = $result[0];
             $result[2] = Security::remove_XSS($result[2], STUDENT, true);
-            $result[2] = cut($result[2], 80, true);
+            $result[2] = Text::cut($result[2], 80, true);
 
             if ($result[4] == 1) {
                 $class = 'class = "unread"';
@@ -135,9 +135,9 @@ class MessageManager
             if (isset($_GET['f']) && $_GET['f'] == 'social') {
                 $link = '&f=social';
             }
-            $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a><br />'.GetFullUserName(
-                ($result[1])
-            );
+            $userInfo = api_get_user_info($result[1]);
+
+            $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a><br />'.$userInfo['complete_name'];
             $message[3] = '<a href="new_message.php?re_id='.$result[0].$link.'">'.Display::return_icon(
                 'message_reply.png',
                 get_lang('ReplyToMessage')
@@ -215,7 +215,7 @@ class MessageManager
             if ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
                 return sprintf(
                     get_lang("FilesSizeExceedsX"),
-                    format_file_size(api_get_setting('message_max_upload_filesize'))
+                    Text::format_file_size(api_get_setting('message_max_upload_filesize'))
                 );
             }
         }
@@ -289,14 +289,14 @@ class MessageManager
 
             //Load user settings
             $notification = new Notification();
+            $sender_info = array();
 
             if (empty($group_id)) {
-                $sender_info = array();
                 if (!empty($user_sender_id)) {
                     $sender_info = api_get_user_info($user_sender_id);
                 }
                 $notification->save_notification(
-                    NOTIFICATION_TYPE_MESSAGE,
+                    Notification::NOTIFICATION_TYPE_MESSAGE,
                     array($receiver_user_id),
                     $subject,
                     $content,
@@ -743,18 +743,17 @@ class MessageManager
             }
             $class = 'class = "read"';
             $result[2] = Security::remove_XSS($result[2]);
+            $userInfo = api_get_user_info($result[4]);
 
             if ($request === true) {
-                $message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.GetFullUserName(
-                    $result[4]
-                ).'</a>';
+
+                $message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.$userInfo['complete_name'].'</a>';
                 $message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace(
                     "\\",
                     "",
                     $result[2]
                 ).'</a>';
                 $message[3] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-
                 $message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon(
                     'delete.png',
                     get_lang('DeleteMessage')
@@ -764,10 +763,7 @@ class MessageManager
                 if ($_GET['f'] == 'social') {
                     $link = '&f=social';
                 }
-                $message[1] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a><br />'.GetFullUserName(
-                    $result[4]
-                );
-                //$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a>';
+                $message[1] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a><br />'.$userInfo['complete_name'];
                 $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
                 $message[3] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS(
                     $_GET['f']
@@ -863,12 +859,13 @@ class MessageManager
         }
 
         if (api_get_setting('allow_social_tool') == 'true') {
+            $userInfo = api_get_user_info($row[2]);
             if ($source == 'outbox') {
                 $message_content .= get_lang('From').': <a href="'.api_get_path(
                     WEB_PATH
                 ).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(
                     get_lang('To')
-                ).'&nbsp;<b>'.GetFullUserName($row[2]).'</b>';
+                ).'&nbsp;<b>'.$userInfo['complete_name'].'</b>';
             } else {
                 $message_content .= get_lang('From').' <a href="'.api_get_path(
                     WEB_PATH
@@ -877,10 +874,11 @@ class MessageManager
                 ).'&nbsp;<b>'.get_lang('Me').'</b>';
             }
         } else {
+            $userInfo = api_get_user_info($row['user_receiver_id']);
             if ($source == 'outbox') {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(
                     get_lang('To')
-                ).' <b>'.GetFullUserName($row['user_receiver_id']).'</b>';
+                ).' <b>'.$userInfo['complete_name'].'</b>';
             } else {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(
                     get_lang('To')
@@ -931,86 +929,6 @@ class MessageManager
         return $message_content;
     }
 
-
-    /**
-     * display message box sent showing it into outbox
-     * @return void
-     */
-    public static function show_message_box_sent()
-    {
-        global $charset;
-
-        $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-
-        $message_id = '';
-        if (is_numeric($_GET['id_send'])) {
-            $query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".intval(
-                Database::escape_string($_GET['id_send'])
-            )." AND msg_status=4;";
-            $result = Database::query($query);
-            $message_id = intval($_GET['id_send']);
-        }
-        $path = 'outbox.php';
-
-        // get file attachments by message id
-        $files_attachments = self::get_links_message_attachment_files($message_id, 'outbox');
-
-        $row = Database::fetch_array($result);
-        $user_con = self::users_connected_by_id();
-        $band = 0;
-        $reply = '';
-        for ($i = 0; $i < count($user_con); $i++) {
-            if ($row[1] == $user_con[$i]) {
-                $band = 1;
-            }
-        }
-        echo '<div class=actions>';
-        echo '<a onclick="close_and_open_outbox()" href="javascript:void(0)">'.Display::return_icon(
-            'folder_up.gif',
-            api_xml_http_response_encode(get_lang('BackToOutbox'))
-        ).api_xml_http_response_encode(get_lang('BackToOutbox')).'</a>';
-        echo '<a onclick="delete_one_message_outbox('.$row[0].')" href="javascript:void(0)"  >'.Display::return_icon(
-            'delete.png',
-            api_xml_http_response_encode(get_lang('DeleteMessage'))
-        ).api_xml_http_response_encode(get_lang('DeleteMessage')).'</a>';
-        echo '</div><br />';
-        echo '
-		<table class="message_view_table" >
-		    <TR>
-		      <TD width=10>&nbsp; </TD>
-		      <TD vAlign=top width="100%">
-		      	<TABLE>
-		            <TR>
-		              <TD width="100%">
-		                    <TR> <h1>'.str_replace("\\", "", api_xml_http_response_encode($row[5])).'</h1></TR>
-		              </TD>
-		              <TR>
-		              	<TD>'.api_xml_http_response_encode(
-            get_lang('From').'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.api_strtolower(
-                get_lang('To')
-            ).'&nbsp;  <b>'.GetFullUserName($row[2])
-        ).'</b> </TD>
-		              </TR>
-		              <TR>
-		              <TD >'.api_xml_http_response_encode(get_lang('Date').'&nbsp; '.$row[4]).'</TD>
-		              </TR>
-		            </TR>
-		        </TABLE>
-		        <br />
-		        <TABLE height="209px" width="100%" bgColor=#ffffff>
-		          <TBODY>
-		            <TR>
-		              <TD vAlign=top>'.str_replace("\\", "", api_xml_http_response_encode($row[6])).'</TD>
-		            </TR>
-		          </TBODY>
-		        </TABLE>
-		        <div id="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>
-		        <DIV class=HT style="PADDING-BOTTOM: 5px"> </DIV></TD>
-		      <TD width=10>&nbsp;</TD>
-		    </TR>
-		</TABLE>';
-    }
 
     /**
      * get user id by user email
@@ -1144,10 +1062,6 @@ class MessageManager
                 $html .= '<div class="span2">';
                 $html .= $user_info;
                 $html .= '</div>';
-                //group_topics.php?action=delete&id=3&topic_id=6
-                //$date.
-
-                //$html .= Display::div($title.Security::remove_XSS(cut($topic['content'], 150), STUDENT, true).$user_info, array('class'=>'group_discussions_info')).' </tr> '.$actions.'</table>';
 
                 $html .= '</div>'; //rounded_div
 
@@ -1457,7 +1371,7 @@ class MessageManager
                 while ($row_file = Database::fetch_array($rs_file)) {
                     $archiveFile = $row_file['path'];
                     $filename = $row_file['filename'];
-                    $filesize = format_file_size($row_file['size']);
+                    $filesize = Text::format_file_size($row_file['size']);
                     $filecomment = $row_file['comment'];
                     $links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
                 }
@@ -1582,6 +1496,8 @@ class MessageManager
         $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang(
             'BackToOutbox'
         ).'</a>';
+
+        $html = null;
 
         if (isset ($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {

@@ -115,16 +115,16 @@ function addlinkcategory($type) {
 			$catlinkstatus = get_lang('LinkAdded');
 			Database :: query($sql);
 			$link_id = Database :: insert_id();
-            
+
             if ($link_id) {
-                api_set_default_visibility($link_id, TOOL_LINK);           
+                api_set_default_visibility($link_id, TOOL_LINK);
             }
 
 			if ((api_get_setting('search_enabled') == 'true') && $link_id && extension_loaded('xapian')) {
 				require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
 				require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
 				require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
-                
+
                 $course_int_id = api_get_course_int_id();
 
 				$courseid = api_get_course_id();
@@ -440,9 +440,9 @@ function editlinkcategory($type) {
 			// Update search enchine and its values table if enabled.
 			if (api_get_setting('search_enabled') == 'true') {
 				$link_id = intval($_POST['id']);
-                
+
                 $course_int_id = api_get_course_int_id();
-                
+
 				$course_id = api_get_course_id();
 				$link_url = Database :: escape_string($_POST['urllink']);
 				$link_title = Database :: escape_string($_POST['title']);
@@ -549,7 +549,7 @@ function editlinkcategory($type) {
 
 		// This is used to put the modified info of the category-form into the database.
 		if ($submit_category) {
-			$sql = "UPDATE " . $tbl_categories . " 
+			$sql = "UPDATE " . $tbl_categories . "
                     SET category_title='" . Database :: escape_string($_POST['category_title']) . "', description='" . Database :: escape_string($_POST['description']) . "'
 			        WHERE c_id = $course_id AND id='" . Database :: escape_string($_POST['id']) . "'";
 			Database :: query($sql);
@@ -943,7 +943,7 @@ function import_csvfile() {
 
 				// Modified by Ivan Tcholakov, 01-FEB-2010.
 				//while (($data = fgetcsv($myFile, 32768, $listsep))) {
-				while (($data = api_fgetcsv($myFile, null, $listsep))) {
+				while (($data = Text::api_fgetcsv($myFile, null, $listsep))) {
 					//
 					foreach ($data as $i => & $text) {
 						$linkdata[$columns[$i]] = $text;

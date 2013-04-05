@@ -112,7 +112,7 @@ class UniqueAnswerImage extends UniqueAnswer
                 $question = Question::read($questionid);
 
                 if ($question) {
-                    $select_question[$questionid] = 'Q'.$key.' :'.cut($question->selectTitle(), 20);
+                    $select_question[$questionid] = 'Q'.$key.' :'.Text::cut($question->selectTitle(), 20);
                 }
             }
         }
@@ -124,7 +124,7 @@ class UniqueAnswerImage extends UniqueAnswer
         $select_lp_id[0] = get_lang('SelectTargetLP');
 
         foreach ($flat_list as $id => $details) {
-            $select_lp_id[$id] = cut($details['lp_name'], 20);
+            $select_lp_id[$id] = Text::cut($details['lp_name'], 20);
         }
 
         $temp_scenario = array();
@@ -142,7 +142,7 @@ class UniqueAnswerImage extends UniqueAnswer
                 }
                 $defaults['answer['.$i.']']    = $answer->answer[$i];
                 $defaults['comment['.$i.']']   = $answer->comment[$i];
-                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
+                $defaults['weighting['.$i.']'] = Text::float_format($answer->weighting[$i], 1);
 
                 $item_list = explode('@@', $answer->destination[$i]);
 

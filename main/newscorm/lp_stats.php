@@ -376,10 +376,10 @@ if (is_array($list) && count($list) > 0) {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $temp[] = '/';
                             } else {
-                                $temp[] = ($score == 0 ? '0/' . $maxscore : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
+                                $temp[] = ($score == 0 ? '0/' . $maxscore : ($maxscore == 0 ? $score : $score . '/' . Text::float_format($maxscore, 1)));
                             }
                         } else {
-                            $temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
+                            $temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . Text::float_format($maxscore, 1)));
                         }
                         $temp[] = $time;
                         $csv_content[] = $temp;
@@ -701,10 +701,10 @@ if (is_array($list) && count($list) > 0) {
                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                             $temp[] = '/';
                         } else {
-                            $temp[] = ($score == 0 ? '0/' . $maxscore : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
+                            $temp[] = ($score == 0 ? '0/' . $maxscore : ($maxscore == 0 ? $score : $score . '/' . Text::float_format($maxscore, 1)));
                         }
                     } else {
-                        $temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
+                        $temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . Text::float_format($maxscore, 1)));
                     }
                     $temp[] = $time;
                     $csv_content[] = $temp;

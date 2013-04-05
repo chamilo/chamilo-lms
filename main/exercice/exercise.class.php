@@ -195,7 +195,7 @@ class Exercise
 
     function getCutTitle()
     {
-        return cut($this->exercise, EXERCISE_MAX_NAME_SIZE);
+        return Text::cut($this->exercise, EXERCISE_MAX_NAME_SIZE);
     }
 
     /**
@@ -2750,7 +2750,6 @@ class Exercise
                             $answer = $temp;
                             /* // Deprecated code
                               // TeX parsing - replacement of texcode tags
-                              $texstring = api_parse_tex($texstring);
                               $answer = str_replace("{texcode}", $texstring, $answer);
                              */
                             $real_text[] = $answer;
@@ -3325,9 +3324,9 @@ class Exercise
                         } elseif ($answerType == MATCHING) {
                             //if ($origin != 'learnpath') {
                                 echo '<tr>';
-                                echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.text_filter(
+                                echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.
                                     $answer_matching[$answerCorrect]
-                                ).'</span></b></td>';
+                                .'</span></b></td>';
                                 echo '</tr>';
                             //}
                         }
@@ -4544,7 +4543,7 @@ class Exercise
                             $question_id = $media_questions[$question_id];
                         }
                     }
-                    $new_question_list = array_flatten($new_question_list);
+                    $new_question_list = ArrayClass::array_flatten($new_question_list);
                 }
             } else {
                 $new_question_list = $question_list;

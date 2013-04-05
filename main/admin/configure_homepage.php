@@ -185,7 +185,7 @@ if (!empty($action)) {
                 event_system(
                     LOG_HOMEPAGE_CHANGED,
                     'edit_top',
-                    cut(strip_tags($home_top), 254),
+                    Text::cut(strip_tags($home_top), 254),
                     api_get_utc_datetime(),
                     api_get_user_id()
                 );
@@ -225,7 +225,7 @@ if (!empty($action)) {
                 event_system(
                     LOG_HOMEPAGE_CHANGED,
                     'edit_notice',
-                    cut(strip_tags($notice_title), 254),
+                    Text::cut(strip_tags($notice_title), 254),
                     api_get_utc_datetime(),
                     api_get_user_id()
                 );
@@ -278,7 +278,7 @@ if (!empty($action)) {
                 event_system(
                     LOG_HOMEPAGE_CHANGED,
                     'edit_news',
-                    strip_tags(cut($home_news, 254)),
+                    strip_tags(Text::cut($home_news, 254)),
                     api_get_utc_datetime(),
                     api_get_user_id()
                 );
@@ -426,7 +426,7 @@ if (!empty($action)) {
                 event_system(
                     LOG_HOMEPAGE_CHANGED,
                     $action,
-                    cut($link_name.':'.$link_url, 254),
+                    Text::cut($link_name.':'.$link_url, 254),
                     api_get_utc_datetime(),
                     api_get_user_id()
                 );

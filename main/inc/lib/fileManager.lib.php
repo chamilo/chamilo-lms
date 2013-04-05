@@ -782,7 +782,7 @@ class FileManager
                 // Not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
                 $max_file_size = intval($_POST['MAX_FILE_SIZE']);
                 if ($show_output) {
-                    Display::display_error_message(get_lang('UplExceedMaxPostSize').format_file_size($max_file_size));
+                    Display::display_error_message(get_lang('UplExceedMaxPostSize').Text::format_file_size($max_file_size));
                 }
 
                 return false;

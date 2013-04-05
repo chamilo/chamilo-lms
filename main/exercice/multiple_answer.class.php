@@ -91,7 +91,7 @@ class MultipleAnswer extends Question {
 			if(is_object($answer)) {
 				$defaults['answer['.$i.']'] = $answer -> answer[$i];
 				$defaults['comment['.$i.']'] = $answer -> comment[$i];
-				$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
+				$defaults['weighting['.$i.']'] = Text::float_format($answer -> weighting[$i], 1);
 				$defaults['correct['.$i.']'] = $answer -> correct[$i];
 			} else {
 				$defaults['answer[1]']  = get_lang('DefaultMultipleAnswer2');
@@ -105,12 +105,12 @@ class MultipleAnswer extends Question {
 				$defaults['weighting[2]'] = -5;
 			}
 			$renderer = & $form->defaultRenderer();
-			            
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');        
+
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');
 
 			$answer_number=$form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
 			$answer_number->freeze();
@@ -142,13 +142,13 @@ class MultipleAnswer extends Question {
 			//ie6 fix
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');				
+                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
                 $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
 			} else {
-                // setting the save button here and not in the question class.php                
+                // setting the save button here and not in the question class.php
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
-                $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');				
+                $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 			}
 		}
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
@@ -205,17 +205,17 @@ class MultipleAnswer extends Question {
         $this->updateWeighting($questionWeighting);
         $this->save();
 	}
-	
+
 	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
 	    $header = parent::return_header($feedback_type, $counter, $score, $show_media);
-	    $header .= '<table class="'.$this->question_table_class .'">			
+	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>
 				<th>'.get_lang("Choice").'</th>
 				<th>'. get_lang("ExpectedChoice").'</th>
 				<th>'. get_lang("Answer").'</th>';
-				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
+				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
     				$header .= '<th>'.get_lang("Comment").'</th>';
-				} else { 
+				} else {
 					$header .= '<th>&nbsp;</th>';
 				}
         $header .= '</tr>';

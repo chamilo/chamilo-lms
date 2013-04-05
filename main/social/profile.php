@@ -285,7 +285,7 @@ if (is_array($personal_course_list)) {
         $i++;
     }
     //to avoid repeted courses
-    $course_list_code = array_unique_dimensional($course_list_code);
+    $course_list_code = ArrayClass::array_unique_dimensional($course_list_code);
 }
 
 $social_left_content = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
@@ -480,7 +480,7 @@ if ($show_full_profile) {
             $url_open  = '<a href="groups.php?id='.$id.'">';
             $url_close = '</a>';
             $icon = '';
-            $name = cut($result['name'],CUT_GROUP_NAME,true);
+            $name = Text::cut($result['name'],CUT_GROUP_NAME,true);
             if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
                 $icon = Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
             } elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
@@ -603,7 +603,7 @@ if ($show_full_profile) {
                             $user_invitation_info = api_get_user_info($user_invitation_id);
                             $invitations .=  '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_invitation_id.'">'.api_get_person_name($user_invitation_info['firstname'], $user_invitation_info['lastname']).'</a>';
                             $invitations .=  '<br />';
-                            $invitations .=  Security::remove_XSS(cut($pending_invitations[$i]['content'], 50), STUDENT, true);
+                            $invitations .=  Security::remove_XSS(Text::cut($pending_invitations[$i]['content'], 50), STUDENT, true);
                             $invitations .=  '<br />';
                             $invitations .=  '<a id="btn_accepted_'.$user_invitation_id.'" class="btn" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
                             $invitations .=  '<div id="id_response"></div>';

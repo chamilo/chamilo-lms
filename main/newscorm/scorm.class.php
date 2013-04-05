@@ -98,12 +98,11 @@ class scorm extends learnpath
                 error_log('In scorm::parse_manifest() - Parsing using PHP5 method', 0);
             }
 
-            //$this->manifest_encoding = api_detect_encoding_xml($xml); // This is the usual way for reading the encoding.
             $this->manifest_encoding = self::detect_manifest_encoding(
                 $xml
             ); // This method reads the encoding, it tries to be correct even in cases of wrong or missing encoding declarations.
 
-            $xml = api_utf8_encode_xml(
+            $xml = Text::api_utf8_encode_xml(
                 $xml,
                 $this->manifest_encoding
             ); // UTF-8 is supported by DOMDocument class, this is for sure.

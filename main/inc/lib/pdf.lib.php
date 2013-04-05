@@ -233,8 +233,8 @@ class PDF {
                     }
                 }
 
-                api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
-                $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
+                Text::api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
+                $title = Text::api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
                                                                                 // $_GET[] too, as it is done with file name.
                                                                               // At the moment the title is retrieved from the html document itself.
                 //echo $document_html;exit;
@@ -337,13 +337,7 @@ class PDF {
         //$document_html= str_replace('src="',$src_http_www, $document_html);
         //$document_html= str_replace('temp_template_path', 'src="/main/default_course_document/', $document_html);// restore src templates
 
-        api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
-        $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
-                                                                        // $_GET[] too, as it is done with file name.
-                                                                        // At the moment the title is retrieved from the html document itself.
-       /* if (empty($title)) {
-            $title = $filename; // Here file name is expected to contain ASCII symbols only.
-        }*/
+        Text::api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
 
         if (!empty($css)) {
             $this->pdf->WriteHTML($css, 1);

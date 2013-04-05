@@ -178,8 +178,8 @@ class Course
 							break;
 					}
 
-					$title = api_html_to_text($title);
-					$description = api_html_to_text($description);
+					$title = Text::api_html_to_text($title);
+					$description = Text::api_html_to_text($description);
 
 					if (!empty($title)) {
 						$sample_text .= $title."\n";

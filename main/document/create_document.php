@@ -463,7 +463,7 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 
                 $selected = (substr($dir, 0, -1) == $folder) ? ' selected="selected"' : '';
                 $path_parts = explode('/', $folder);
-                $folder_titles[$folder] = cut($folder_titles[$folder], 80);
+                $folder_titles[$folder] = Text::cut($folder_titles[$folder], 80);
                 $space_counter = count($path_parts) - 2;
                 if ($space_counter > 0) {
                     $label = str_repeat('&nbsp;&nbsp;&nbsp;', $space_counter).' &mdash; '.$folder_titles[$folder];
@@ -484,7 +484,7 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
                 $label = '/ ('.get_lang('HomeDirectory').')';
             } else {
                 $path_parts = explode('/', str_replace($group_dir, '', $folder));
-                $label = cut($label, 80);
+                $label = Text::cut($label, 80);
                 $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
             }
             $parent_select->addOption($label, $folder);

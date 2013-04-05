@@ -892,7 +892,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
             $document_data['path'],
             $is_allowed_to_edit
         ) : $document_data['size'];
-        $row['size'] = format_file_size($size);
+        $row['size'] = Text::format_file_size($size);
 
         // Get the title or the basename depending on what we're using
         if ($document_data['title'] != '') {
@@ -982,7 +982,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         ).'</i>'.$invisibility_span_close.$user_link;
 
         // Comments => display comment under the document name
-        $display_size = format_file_size($size);
+        $display_size = Text::format_file_size($size);
         $row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
 
         // Last edit date

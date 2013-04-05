@@ -181,10 +181,10 @@ if (count($pending_invitations) > 0) {
         $img = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 
         $invitation['picture_uri'] = '<a href="groups.php?id='.$invitation['id'].'">'.$img.'</a>';
-        $invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.cut($invitation['name'],120,true).'</a>';
+        $invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.Text::cut($invitation['name'],120,true).'</a>';
         $invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.Display::return_icon('accept_invitation.png', get_lang('AcceptInvitation')).'&nbsp;&nbsp;'.get_lang('AcceptInvitation').'</a>';
         $invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.Display::return_icon('denied_invitation.png', get_lang('DenyInvitation')).'&nbsp;&nbsp;'.get_lang('DenyInvitation').'</a>';
-        $invitation['description'] = cut($invitation['description'],220,true);
+        $invitation['description'] = Text::cut($invitation['description'],220,true);
         $new_invitation[]=$invitation;
     }
     $social_right_content .= Display::return_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));

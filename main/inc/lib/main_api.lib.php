@@ -368,6 +368,18 @@ define('TEACHER_HTML', 3);
 define('STUDENT_HTML_FULLPAGE', 4);
 define('TEACHER_HTML_FULLPAGE', 5);
 
+
+define('EXERCISE_NUMBER_OF_DECIMALS', 2);
+
+
+/* XML processing functions */
+
+// A regular expression for accessing declared encoding within xml-formatted text.
+// Published by Steve Minutillo,
+// http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
+define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
+
+
 /* PATHS & FILES - ROUTINES */
 
 /**
@@ -927,6 +939,14 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     global $is_allowed_in_course;
     $is_visible = false;
 
+    $course_info = api_get_course_info();
+
+    //If course is not set then is not allowed to enter in a course page
+
+    if (empty($course_info)) {
+        api_not_allowed($print_headers);
+    }
+
     if (api_is_drh()) {
         return true;
     }
@@ -934,8 +954,6 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (api_is_platform_admin($allow_session_admins)) {
     	return true;
     }
-
-    $course_info = api_get_course_info();
 
     if (isset($course_info) && isset($course_info['visibility'])) {
     	switch ($course_info['visibility']) {
@@ -1133,6 +1151,13 @@ function _api_format_user($user, $add_password = false) {
     if (!empty($user['username'])) {
         $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';
     }
+
+    $result['complete_name_login_as']= $result['complete_name'];
+
+    if (!empty($user['username'])) {
+        $result['complete_name_login_as'] = $result['complete_name'].' ('.sprintf(get_lang('LoginX'), $user['username']).')';
+    }
+
     $result['firstname'] 		= $firstname;
     $result['lastname'] 		= $lastname;
 
@@ -1235,7 +1260,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
 		if ($check_if_user_is_online) {
-            $use_status_in_platform = user_is_online($user_id);
+            $use_status_in_platform = Online::user_is_online($user_id);
 
 			$result_array['user_is_online'] = $use_status_in_platform;
             $user_online_in_chat = 0;
@@ -1410,6 +1435,7 @@ function api_get_course_info($course_code = null, $add_extra_values = false) {
         $_course = array();
         if (Database::num_rows($result) > 0) {
             $course_data = Database::fetch_array($result);
+
             if ($add_extra_values) {
                 $extra_field_values = new ExtraField('course');
                 $course_data['extra_fields'] = $extra_field_values->get_handler_extra_data($course_code);
@@ -1419,7 +1445,9 @@ function api_get_course_info($course_code = null, $add_extra_values = false) {
         return $_course;
     }
     global $_course;
-    if ($_course == '-1') $_course = array();
+    if ($_course == '-1') {
+        $_course = array();
+    }
     return $_course;
 }
 
@@ -1443,9 +1471,10 @@ function api_get_course_info_by_id($id = null, $add_extra_values = false) {
         $_course = array();
         if (Database::num_rows($result) > 0) {
             $course_data = Database::fetch_array($result);
+            var_dump($course_data);
             if ($add_extra_values) {
                 $extra_field_values = new ExtraField('course');
-                $course_data['extra_fields'] = $extra_field_values->get_handler_extra_data($course_code);
+                $course_data['extra_fields'] = $extra_field_values->get_handler_extra_data($course_data['code']);
             }
             $_course = api_format_course_array($course_data);
         }
@@ -1466,8 +1495,8 @@ function api_format_course_array($course_data) {
 
     $_course = array();
 
-    $_course['id'           ]         = $course_data['code'           ];
-    $_course['real_id'      ]         = $course_data['id'              ];
+    $_course['id'           ]         = $course_data['code'];
+    $_course['real_id'      ]         = $course_data['id'];
 
     // Added
     $_course['code'         ]         = $course_data['code'           ];
@@ -5372,51 +5401,12 @@ function api_get_tool_information_by_name($name) {
 /* DEPRECATED FUNCTIONS */
 
 /**
- * Deprecated, use api_trunc_str() instead.
- */
-function shorten($input, $length = 15, $encoding = null) {
-    $length = intval($length);
-    if (!$length) {
-        $length = 15;
-    }
-    return api_trunc_str($input, $length, '...', false, $encoding);
-}
-
-/**
- * DEPRECATED, use api_get_setting instead
- */
-function get_setting($variable, $key = NULL) {
-    global $_setting;
-    return api_get_setting($variable, $key);
-}
-
-/**
  * deprecated: use api_is_allowed_to_edit() instead
  */
 function is_allowed_to_edit() {
     return api_is_allowed_to_edit();
 }
 
-/**
- * deprecated: 19-SEP-2009: Use api_get_path(TO_SYS, $url) instead.
- */
-function api_url_to_local_path($url) {
-    return api_get_path(TO_SYS, $url);
-}
-
-/**
- * @deprecated 27-SEP-2009: Use Database::store_result($result) instead.
- */
-function api_store_result($result) {
-    return Database::store_result($result);
-}
-
-/**
- * @deprecated 28-SEP-2009: Use Database::query($query, $file, $line) instead.
- */
-function api_sql_query($query, $file = '', $line = 0) {
-    return Database::query($query, $file, $line);
-}
 
 /**
  *
@@ -5520,9 +5510,6 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
     $mail->ClearAddresses();
     return 1;
 }
-
-/* END OF DEPRECATED FUNCTIONS SECTION */
-
 
 /**
  * Function used to protect a "global" admin script.

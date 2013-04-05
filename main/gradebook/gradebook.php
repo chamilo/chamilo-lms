@@ -15,10 +15,10 @@ $_in_course = false;
 //make sure the destination for scripts is index.php instead of gradebook.php
 require_once '../inc/global.inc.php';
 if (!empty($_GET['course'])) {
-	$_SESSION['gradebook_dest'] = 'index.php';	
+	$_SESSION['gradebook_dest'] = 'index.php';
 	$this_section = SECTION_COURSES;
 } else {
-	$_SESSION['gradebook_dest'] = 'gradebook.php';	
+	$_SESSION['gradebook_dest'] = 'gradebook.php';
 	$this_section = SECTION_MYGRADEBOOK;
 	unset($_GET['course']);
 }
@@ -252,7 +252,7 @@ if (isset ($_GET['visiblelink'])) {
 if (isset ($_GET['deletelink'])) {
 	block_students();
 	//fixing #5229
-	if (!empty($_GET['deletelink'])) {	
+	if (!empty($_GET['deletelink'])) {
 		$link= LinkFactory :: load($_GET['deletelink']);
 		if ($link[0] != null) {
 			$link[0]->delete();
@@ -394,25 +394,25 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 			'name' => get_lang('ToolGradebook')
 		);
 		Display :: display_header(get_lang('FlatView'));
-	} elseif (isset ($_GET['search'])) {		
+	} elseif (isset ($_GET['search'])) {
 		if ($_SESSION['gradebook_dest'] == 'index.php') {
-			$gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?cidReq='.Security::remove_XSS($_GET['course']).'&amp;';	
+			$gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?cidReq='.Security::remove_XSS($_GET['course']).'&amp;';
 		} else {
 			$gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']);
-		}	
-		
+		}
+
 		$interbreadcrumb[]= array ('url' => $gradebook_dest,'name' => get_lang('Gradebook'));
 
-		if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {			
+		if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {
 			if (!empty($_GET['course'])) {
-				$interbreadcrumb[]= array ('url' => $gradebook_dest.'selectcat='.Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Details'));	
+				$interbreadcrumb[]= array ('url' => $gradebook_dest.'selectcat='.Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Details'));
 			} else {
 				$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=0','name' => get_lang('Details'));
-			}	
-		}		
+			}
+		}
 	 	Display :: display_header('');
-	} else { 
-		Display :: display_header(''); 
+	} else {
+		Display :: display_header('');
 	}
 }
 
@@ -479,7 +479,7 @@ if ($simple_search_form->validate() && (empty($keyword))) {
 	$keyword = $values['keyword'];
 }
 if (!empty($keyword)) {
-    
+
 	$cats= Category :: load($category);
 	$allcat= array ();
 	if ((isset($_GET['selectcat']) && $_GET['selectcat']==0) && isset($_GET['search'])) {
@@ -493,7 +493,7 @@ if (!empty($keyword)) {
 	}
 
 } elseif (isset ($_GET['studentoverview'])) {
-    //@todo this code seems to be deprecated because the gradebook tab is off 
+    //@todo this code seems to be deprecated because the gradebook tab is off
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_edit() ? null : api_get_user_id());
 	$allcat= array ();
@@ -507,7 +507,7 @@ if (!empty($keyword)) {
 		foreach ($data_array as $data) {
 			$newarray[] = array_slice($data, 1);
 		}
-		$pdf= new Cezpdf(); 
+		$pdf= new Cezpdf();
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 30);
 		$pdf->ezSetY(810);
@@ -527,7 +527,7 @@ if (!empty($keyword)) {
 	}
 	$category = Category :: load ($_GET['cat_id']);
 	if ($category[0]->is_certificate_available($user_id)) {
-		$user= get_user_info_from_id($user_id);
+		$user= api_get_user_info($user_id);
 		$scoredisplay = ScoreDisplay :: instance();
 		$scorecourse = $category[0]->calc_score($user_id);
 		$scorecourse_display = (isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable'));
@@ -552,8 +552,7 @@ if (!empty($keyword)) {
 		$pdf->line(50,50,790,50);
 		$pdf->line(50,550,790,550);
 		$pdf->ezSetY(450);
-        //@todo replace image
-		//$pdf->ezImage(api_get_path(SYS_CODE_PATH).'img/dokeos_logo_certif.png',1,400,'','center','');
+
 		$pdf->ezSetY(480);
 		$pdf->ezText($certif_text,28,array('justification'=>'center'));
 		//$pdf->ezSetY(750);

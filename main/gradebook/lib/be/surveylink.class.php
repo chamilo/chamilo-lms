@@ -64,7 +64,7 @@ class SurveyLink extends AbstractLink
     	$sql = 'SELECT survey_id, title, code FROM '.$tbl_survey.' WHERE c_id = '.$course_id.' AND session_id = '.intval($session_id).'';
 		$result = Database::query($sql);
 		while ($data = Database::fetch_array($result)) {
-			$links[] = array($data['survey_id'], api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80));
+			$links[] = array($data['survey_id'], Text::api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80));
 		};
 		return isset($links) ? $links : null;
     }
@@ -89,7 +89,7 @@ class SurveyLink extends AbstractLink
 
 		$links = array();
 		while ($data = Database::fetch_array($result)) {
-			$links[] = array($data['survey_id'], api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80));
+			$links[] = array($data['survey_id'], Text::api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80));
 		}
 		return $links;
     }
@@ -105,14 +105,14 @@ class SurveyLink extends AbstractLink
 		$get_individual_score = !is_null($stud_id);
 		$sql = "SELECT COUNT(i.answered) FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i ON s.code = i.survey_code
 				WHERE 	s.c_id = {$this->course_id} AND
-						i.c_id = {$this->course_id} AND 
-						s.survey_id = $ref_id AND 
+						i.c_id = {$this->course_id} AND
+						s.survey_id = $ref_id AND
 						i.session_id = $session_id";
 
 		$sql_result = Database::query($sql);
 		$data = Database::fetch_array($sql_result);
 		return ($data[0] != 0);
-	
+
     }
 
     public function calc_score($stud_id = null) {
@@ -120,7 +120,7 @@ class SurveyLink extends AbstractLink
     	// Note: Max score is assumed to be always 1 for surveys,
     	// only student's participation is to be taken into account.
     	$max_score = 1;
-    	
+
     	$ref_id = intval($this->get_ref_id());
 		$session_id = api_get_session_id();
 		$tbl_survey = Database::get_course_table(TABLE_SURVEY, $database_name);
@@ -131,7 +131,7 @@ class SurveyLink extends AbstractLink
 		$sql = "SELECT i.answered FROM $tbl_survey AS s JOIN $tbl_survey_invitation AS i
 				ON s.code = i.survey_code
 				WHERE 	s.c_id = {$this->course_id} AND
-						i.c_id = {$this->course_id} AND 
+						i.c_id = {$this->course_id} AND
 						s.survey_id = $ref_id AND i.session_id = $session_id";
 
 		if ($get_individual_score) {
@@ -160,7 +160,7 @@ class SurveyLink extends AbstractLink
 				return null;
 			}
 			return array($sum, $rescount);
-		}		
+		}
     }
 
     /**
@@ -168,7 +168,7 @@ class SurveyLink extends AbstractLink
      */
     private function get_survey_table() {
     	$this->survey_table = Database :: get_course_table(TABLE_SURVEY);
-   		return $this->survey_table;		
+   		return $this->survey_table;
     }
 
     /**

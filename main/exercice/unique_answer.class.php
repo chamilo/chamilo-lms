@@ -64,7 +64,7 @@ class UniqueAnswer extends Question {
 		$comment_title='';
 
 		if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
-			$comment_title = '<th>'.get_lang('Comment').'</th>';            
+			$comment_title = '<th>'.get_lang('Comment').'</th>';
 		} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             //Scenario
 			$editor_config['Width'] = '250';
@@ -88,11 +88,11 @@ class UniqueAnswer extends Question {
                         '.$feedback_title.'
                     <th width="50px">
                         '.get_lang('Weighting').'
-                    </th>        
+                    </th>
                 </tr>';
 
         $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
-		
+
 		$defaults = array();
 		$correct = 0;
 		if(!empty($this -> id)) {
@@ -109,7 +109,7 @@ class UniqueAnswer extends Question {
 		$select_question=array();
 		$select_question[0] = get_lang('SelectTargetQuestion');
 
-		require_once '../newscorm/learnpathList.class.php';        
+		require_once '../newscorm/learnpathList.class.php';
 		if (is_array($question_list)) {
 			foreach ($question_list as $key=>$questionid) {
 				//To avoid warning messages
@@ -117,9 +117,9 @@ class UniqueAnswer extends Question {
 					continue;
 				}
 				$question = Question::read($questionid);
-                
+
                 if($question) {
-                    $select_question[$questionid]='Q'.$key.' :'.cut($question->selectTitle(),20);
+                    $select_question[$questionid]='Q'.$key.' :'.Text::cut($question->selectTitle(),20);
                 }
 			}
 		}
@@ -131,25 +131,25 @@ class UniqueAnswer extends Question {
 		$select_lp_id[0]=get_lang('SelectTargetLP');
 
 		foreach ($flat_list as $id => $details) {
-			$select_lp_id[$id] = cut($details['lp_name'],20);
+			$select_lp_id[$id] = Text::cut($details['lp_name'],20);
 		}
 
 		$temp_scenario = array();
-        
+
         if ($nb_answers < 1) {
             $nb_answers = 1;
             Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
-        }                        
+        }
 
         for ($i = 1 ; $i <= $nb_answers ; ++$i) {
-            $form -> addElement ('html', '<tr>');                
+            $form -> addElement ('html', '<tr>');
             if (isset($answer) && is_object($answer)) {
                 if ($answer -> correct[$i]) {
                     $correct = $i;
                 }
                 $defaults['answer['.$i.']']    = $answer->answer[$i];
                 $defaults['comment['.$i.']']   = $answer->comment[$i];
-                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
+                $defaults['weighting['.$i.']'] = Text::float_format($answer->weighting[$i], 1);
 
                 $item_list=explode('@@',$answer -> destination[$i]);
 
@@ -185,67 +185,67 @@ class UniqueAnswer extends Question {
             $defaults['scenario'] = $temp_scenario;
 
             $renderer = $form->defaultRenderer();
-            
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
+
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');        
-            
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');
+
             $answer_number = $form->addElement('text', 'counter['.$i.']',null,' value = "'.$i.'"');
             $answer_number->freeze();
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
             $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-            
+
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
                 // feedback
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-            } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                
+            } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
                 // Direct feedback
-          
+
                 //Adding extra feedback fields
                 $group = array();
                 $group['try'.$i] = $form->createElement('checkbox', 'try'.$i, null , get_lang('TryAgain'));
                 $group['lp'.$i]  = $form->createElement('select', 'lp'.$i, get_lang('SeeTheory').': ', $select_lp_id);
                 $group['destination'.$i]= $form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' , $select_question);
                 $group['url'.$i] = $form->createElement('text', 'url'.$i, get_lang('Other').': ', array('class'=>'span2', 'placeholder' => get_lang('Other')));
-                $form->addGroup($group, 'scenario');                
-                
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'scenario');            
-                
+                $form->addGroup($group, 'scenario');
+
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'scenario');
+
             }
-            $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));                    
-            $form->addElement ('html', '</tr>');                
+            $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));
+            $form->addElement ('html', '</tr>');
         }
 
 		$form -> addElement ('html', '</table>');
-		$form -> addElement ('html', '<br />');        
-        
+		$form -> addElement ('html', '<br />');
+
 		$navigator_info = api_get_navigator();
 
 		global $text, $class;
-        
+
 		//ie6 fix
 		if ($obj_ex->edit_exercise_in_lp == true) {
-			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {                
+			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"'); 
+                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
                 $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
 			} else {
-                //setting the save button here and not in the question class.php                
+                //setting the save button here and not in the question class.php
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');                
-                $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');				
+                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
+                $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');
 			}
 		}
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','moreAnswers');
-        
+
         $form->addElement('html', '</div></div>');
 
 		//We check the first radio button to be sure a radio button will be check
@@ -283,11 +283,11 @@ class UniqueAnswer extends Question {
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
 
             $scenario = $form -> getSubmitValue('scenario');
-            
+
            	//$list_destination = $form -> getSubmitValue('destination'.$i);
            	//$destination_str = $form -> getSubmitValue('destination'.$i);
 
- 		    $try = $scenario['try'.$i];            
+ 		    $try = $scenario['try'.$i];
             $lp = $scenario['lp'.$i];
  			$destination = $scenario['destination'.$i];
  			$url = trim($scenario['url'.$i]);
@@ -304,7 +304,7 @@ class UniqueAnswer extends Question {
 			lp_id = id of a learning path (0 if dont select)
 			selected_questions= ids of questions
 			url= an url
-	
+
  			$destination_str='';
  			foreach ($list_destination as $destination_id)
  			{
@@ -332,16 +332,16 @@ class UniqueAnswer extends Question {
  			if (empty($destination)) {
  				$destination=0;
  			}
-            
+
  			if ($url=='') {
  				$url=0;
  			}
 
  			//1@@1;2;@@2;4;4;@@http://www.chamilo.org
-			$dest = $try.'@@'.$lp.'@@'.$destination.'@@'.$url;            
+			$dest = $try.'@@'.$lp.'@@'.$destination.'@@'.$url;
         	$objAnswer->createAnswer($answer, $goodAnswer, $comment, $weighting, $i, null, null, $dest);
         }
-        
+
     	// saves the answers into the data base
         $objAnswer->save();
 
@@ -349,21 +349,21 @@ class UniqueAnswer extends Question {
         $this->updateWeighting($questionWeighting);
         $this->save();
 	}
-	
+
 	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
 	    $header = parent::return_header($feedback_type, $counter, $score, $show_media);
-	    $header .= '<table class="'.$this->question_table_class .'">			
+	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>
 				<th>'.get_lang("Choice").'</th>
 				<th>'. get_lang("ExpectedChoice").'</th>
-				<th>'. get_lang("Answer").'</th>';        
-				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
+				<th>'. get_lang("Answer").'</th>';
+				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
     				$header .= '<th>'.get_lang("Comment").'</th>';
-				} else { 
+				} else {
 					$header .= '<th>&nbsp;</th>';
 				}
         $header .= '</tr>';
-        return $header;	
+        return $header;
     }
   /**
    * Create database record for the given answer
@@ -377,7 +377,7 @@ class UniqueAnswer extends Question {
    * @return void
    * @assert (1,null,'a','',1,1,null) === false
    * @assert (1,1,'','',1,1,null) === false
-   */  
+   */
   function create_answer($id=1, $question_id, $answer_title, $comment = '', $score = 0, $correct = 0, $course_id = null) {
     if (empty($question_id) or empty($answer_title)) { return false; }
     $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);

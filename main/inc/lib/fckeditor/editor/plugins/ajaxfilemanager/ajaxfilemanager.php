@@ -99,9 +99,6 @@ if(!empty($_GET['view'])) {
 	?>
 	<!--var shared_folder_session = '<?php //echo get_lang('UserFolders').' ('.api_get_session_name($course_session).')';?>'; --><!--// problem does not refresh, does not synchronize with javascript -->
 	var shared_folder_session = '<?php echo get_lang('UserFolders').'*';?>';
-	<?php
-
-	//$userinfo=Database::get_user_info_from_id(substr(basename($folderInfo['path']), 8));	// problem with $folderInfo['path'] does not refresh, sincronisation with javascript?>
 	<!--var shared_user_folder = '<?php //echo api_get_person_name($userinfo['firstname'], $userinfo['lastname']);?>'; --><!--// problem does not refresh, does not synchronize with javascript -->
 	var shared_user_folder = '<?php echo get_lang('User');?>';
 

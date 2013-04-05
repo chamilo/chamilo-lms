@@ -68,7 +68,7 @@ class TestAddCourse extends UnitTestCase {
         $res = define_course_keys(generate_course_code($wantedCode), null, null, null,null, null);
         $this->assertTrue($res);
     }
-    
+
     function TestBrowseFolders(){
         $browse = array('path'=>'','file'=>'','media'=>'');
         $res = browse_folders($browse['path'], $browse['files'],$browse['media']);
@@ -90,11 +90,6 @@ class TestAddCourse extends UnitTestCase {
         $this->assertTrue($res);
     }
 */
-    function TestLang2db(){
-        $string = 'test';
-        $res = lang2db($string);
-        $this->assertTrue($res);
-    }
 
     function TestFillDbCourse(){
         global $_configuration, $_user;

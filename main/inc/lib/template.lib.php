@@ -587,7 +587,7 @@ class Template
         $this->assign('menu', $menu);
 
         //Breadcrumb
-        $breadcrumb = $this->return_breadcrumb($interbreadcrumb, $nameTools);
+        $breadcrumb = $this->returnBreadcrumb($interbreadcrumb, $nameTools);
         $this->assign('breadcrumb', $breadcrumb);
 
         //Extra content
@@ -640,10 +640,10 @@ class Template
                     }
                     if (count($coachs_email) > 1) {
                         $tutor_data .= get_lang('Coachs').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
+                        $tutor_data .= ArrayClass::array_to_string($email_link, CourseManager::USER_SEPARATOR);
                     } elseif (count($coachs_email) == 1) {
                         $tutor_data .= get_lang('Coach').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
+                        $tutor_data .= ArrayClass::array_to_string($email_link, CourseManager::USER_SEPARATOR);
                     } elseif (count($coachs_email) == 0) {
                         $tutor_data .= '';
                     }
@@ -669,7 +669,7 @@ class Template
                     if (count($mail) > 1) {
                         $label = get_lang('Teachers');
                     }
-                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
+                    $teacher_data .= $label.' : '.ArrayClass::array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
                 }
                 $this->assign('teachers', $teacher_data);
             }
@@ -734,8 +734,8 @@ class Template
         $mtime = $mtime[1] + $mtime[0];
         error_log('--------------------------------------------------------');
         error_log("Page loaded in:".($mtime - START));
-        error_log("memory_get_usage: ".format_file_size(memory_get_usage(true)));
-        error_log("memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true)));
+        error_log("memory_get_usage: ".Text::format_file_size(memory_get_usage(true)));
+        error_log("memory_get_peak_usage: ".Text::format_file_size(memory_get_peak_usage(true)));
     }
 
     function return_menu()
@@ -1028,11 +1028,11 @@ class Template
             'users'
         ) == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)
         ) {
-            $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+            $number = Online::who_is_online_count(api_get_setting('time_limit_whosonline'));
 
             $number_online_in_course = 0;
             if (!empty($_course['id'])) {
-                $number_online_in_course = who_is_online_in_this_course_count(
+                $number_online_in_course = Online::who_is_online_in_this_course_count(
                     $user_id,
                     api_get_setting('time_limit_whosonline'),
                     $_course['id']
@@ -1230,7 +1230,7 @@ class Template
         return $return;
     }
 
-    function return_breadcrumb($interbreadcrumb)
+    function returnBreadcrumb($interbreadcrumb)
     {
         $session_id = api_get_session_id();
         $session_name = api_get_session_name($session_id);
@@ -1246,13 +1246,13 @@ class Template
 
         // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
         // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
-        $session_name = cut($session_name, MAX_LENGTH_BREADCRUMB);
+        $session_name = Text::cut($session_name, MAX_LENGTH_BREADCRUMB);
         $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
 
         if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
 
             $navigation_item['url'] = $web_course_path.$_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
-            $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
+            $course_title = Text::cut($_course['name'], MAX_LENGTH_BREADCRUMB);
 
             switch (api_get_setting('breadcrumbs_course_homepage')) {
                 case 'get_lang':
@@ -1287,16 +1287,11 @@ class Template
                     }
                     break;
             }
-            /**
-             * @todo could be useful adding the My courses in the breadcrumb
-            $navigation_item_my_courses['title'] = get_lang('MyCourses');
-            $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';
-            $navigation[] = $navigation_item_my_courses;
-             */
             $navigation[] = $navigation_item;
         }
 
-        // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
+        // part 2: Interbreadcrumbs.
+        //If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
         if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
             foreach ($interbreadcrumb as $breadcrumb_step) {
                 if ($breadcrumb_step['url'] != '#') {
@@ -1312,8 +1307,8 @@ class Template
                 } elseif (strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
                     $navigation_item['title'] = get_lang('UserFolders');
                 } elseif (strstr($breadcrumb_step['name'], 'sf_user_')) {
-                    $userinfo = Database::get_user_info_from_id(substr($breadcrumb_step['name'], 8));
-                    $navigation_item['title'] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+                    $userinfo = api_get_user_info(substr($breadcrumb_step['name'], 8));
+                    $navigation_item['title'] = $userinfo['complete_name'];
                 } elseif ($breadcrumb_step['name'] == 'chat_files') {
                     $navigation_item['title'] = get_lang('ChatFiles');
                 } elseif ($breadcrumb_step['name'] == 'images') {
@@ -1329,7 +1324,7 @@ class Template
                 }
                 //Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
 
-                $navigation_item['title'] = cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);
+                $navigation_item['title'] = Text::cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);
                 $navigation_item['title'] = Security::remove_XSS($navigation_item['title']);
                 $navigation[] = $navigation_item;
             }
@@ -1338,12 +1333,6 @@ class Template
 
         // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
         // is the same as the first part of the breadcrumbs (see part 1)
-        /*
-        if (isset($nameTools) && $language_file != 'course_home') { // TODO: This condition $language_file != 'course_home' might bring surprises.
-            $navigation_item['url'] = '#';
-            $navigation_item['title'] = $nameTools;
-            $navigation[] = $navigation_item;
-        }*/
 
         $final_navigation = array();
         $counter = 0;

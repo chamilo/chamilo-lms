@@ -188,7 +188,7 @@ class MySpace {
 		while ($row = Database::fetch_row($result)) {
 			$return .= '<tr>';
 			// course code
-			$return .= '	<td width="157px" >'.cut($row[0], 20, true).'</td>';
+			$return .= '	<td width="157px" >'.Text::cut($row[0], 20, true).'</td>';
 			// time spent in the course
 			$return .= '	<td><div>'.api_time_to_hms(Tracking :: get_time_spent_on_the_course($user_id, $row[0])).'</div></td>';
 			// student progress in course
@@ -237,15 +237,15 @@ class MySpace {
 		//$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
 		$t_head .=		'<tr>';
 		$t_head .= '		<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
 		//$t_head .= '		<th><div style="width:40px">'.get_lang('AvgExercisesScore').'</div></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
 		$t_head .= '		<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
 		//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePossible').'</div></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
 		//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePercentage').'</div></th>';
 		//$t_head .= '		<th><div style="width:60px">'.get_lang('FirstLogin').'</div></th>';
 		$t_head .= '		<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
@@ -363,15 +363,15 @@ class MySpace {
 		$t_head .= '	<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
 		//$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
 		$t_head .=		'<tr>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
 		//$t_head .= '		<th><div style="width:40px">'.get_lang('AvgExercisesScore').'</div></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
 		$t_head .= '		<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
 		//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePossible').'</div></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
 		//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePercentage').'</div></th>';
 		//$t_head .= '		<th><div style="width:60px">'.get_lang('FirstLogin').'</div></th>';
 		$t_head .= '		<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
@@ -684,15 +684,15 @@ class MySpace {
 		//$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
 		$t_head .=		'<tr>';
 		$t_head .= '		<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
 		//$t_head .= '		<th><div style="width:40px">'.get_lang('AvgExercisesScore').'</div></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
 		$t_head .= '		<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
 		//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePossible').'</div></th>';
-		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
+		$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.Text::cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
 		//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePercentage').'</div></th>';
 		//$t_head .= '		<th><div style="width:60px">'.get_lang('FirstLogin').'</div></th>';
 		$t_head .= '		<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
@@ -1807,7 +1807,7 @@ class MySpace {
 		xml_set_element_handler($parser, array('MySpace','element_start'), array('MySpace','element_end'));
 		xml_set_character_data_handler($parser, "character_data");
 		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-		xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
+		xml_parse($parser, Text::api_utf8_encode_xml(file_get_contents($file)));
 		xml_parser_free($parser);
 		return $users;
 	}
@@ -1966,8 +1966,8 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
     if (is_array($sql_result) && count($sql_result) > 0) {
         foreach ($sql_result as $key => $data) {
             //creating the main array
-            $main_month_year[date('m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
-            $main_day[date('d-m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
+            $main_month_year[date('m-Y', $data['login'])] += Text::float_format(($data['logout'] - $data['login']) / 60, 0);
+            $main_day[date('d-m-Y', $data['login'])] += Text::float_format(($data['logout'] - $data['login']) / 60, 0);
             if ($i > 500) {
                     break;
             }

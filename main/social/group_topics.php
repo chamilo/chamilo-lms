@@ -56,7 +56,7 @@ if (isset($_POST['token']) && $_POST['token'] === $currentToken) {
 		$parent_id    = intval($_POST['parent_id']);
 
 		if ($_POST['action'] == 'reply_message_group') {
-			$title = cut($content, 50);
+			$title = Text::cut($content, 50);
 		}
 		if ($_POST['action'] == 'edit_message_group') {
 			$edit_message_id =  intval($_POST['message_id']);

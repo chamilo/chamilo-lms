@@ -107,14 +107,11 @@ if ($alreadyInstalled) {
 require_once $includePath.'/lib/main_api.lib.php';
 
 
-/** Inclusion of internationalization libraries */
+// Inclusion of internationalization libraries
 require_once $includePath.'/lib/internationalization.lib.php';
 
-/**
- * Functions for internal use behind this API
- */
+// Functions for internal use behind this API
 require_once $includePath.'/lib/internationalization_internal.lib.php';
-
 
 // Do not over-use this variable. It is only for this script's local use.
 $libPath = $includePath.'/lib/';
@@ -507,10 +504,7 @@ $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
 //Database constants
 require_once $libPath.'database.constants.inc.php';
-require_once $libPath.'text.lib.php';
-require_once $libPath.'array.lib.php';
 require_once $libPath.'events.lib.inc.php';
-require_once $libPath.'online.inc.php';
 
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
@@ -662,7 +656,7 @@ $app['mailer'] = $app->share(function ($app) {
 
 // Check and modify the date of user in the track.e.online table
 if ($alreadyInstalled && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
-    LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
+    Online::LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
 $app['api_get_languages'] = api_get_languages();

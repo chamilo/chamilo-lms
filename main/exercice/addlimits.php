@@ -31,7 +31,7 @@ $dsp_percent = false;
 $debug=0;
 if($debug>0)
 {
-	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);
+	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";exervar_dump($_POST);
 }
 // general parameters passed via POST/GET
 if ( empty ( $origin ) )
@@ -185,7 +185,7 @@ if (isset($_POST['ok'])) {
 		Database::query($query);
 	} else {
 		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = 0 WHERE id= $exercise_id";
-		Database::query($query); 
+		Database::query($query);
 	}
 }
 ?>

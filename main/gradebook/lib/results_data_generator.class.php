@@ -73,7 +73,7 @@ class ResultsDataGenerator
 		$table = array();
 		foreach($this->results as $result) {
 			$user = array();
-			$info = get_user_info_from_id($result->get_user_id());
+			$info = api_get_user_info($result->get_user_id());
 			$user['id'] = $result->get_user_id();
 			if ($pdf){
 				$user['username'] = $info['username'];
@@ -87,12 +87,12 @@ class ResultsDataGenerator
 				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);
 			}
             $user['percentage_score'] = intval($scoredisplay->display_score(array($result->get_score(), $this->evaluation->get_max()), SCORE_PERCENT, SCORE_BOTH, true));
-			if ($pdf && $number_decimals == null){				
+			if ($pdf && $number_decimals == null){
 				$user['scoreletter'] = $result->get_score();
-			}			
-			if ($scoredisplay->is_custom()) {				
-				$user['display'] = $this->get_score_display($result->get_score(), false, $ignore_score_color);				
-			}			
+			}
+			if ($scoredisplay->is_custom()) {
+				$user['display'] = $this->get_score_display($result->get_score(), false, $ignore_score_color);
+			}
 			$table[] = $user;
 		}
 
@@ -102,7 +102,7 @@ class ResultsDataGenerator
 			usort($table, array('ResultsDataGenerator', 'sort_by_last_name'));
 		} elseif ($sorting & self :: RDG_SORT_FIRSTNAME) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));
-		} elseif ($sorting & self :: RDG_SORT_SCORE) {            
+		} elseif ($sorting & self :: RDG_SORT_SCORE) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_score'));
 		} elseif ($sorting & self :: RDG_SORT_MASK) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_mask'));
@@ -110,7 +110,7 @@ class ResultsDataGenerator
 		if ($sorting & self :: RDG_SORT_DESC) {
 			$table = array_reverse($table);
 		}
-		$return = array_slice($table, $start, $count);		
+		$return = array_slice($table, $start, $count);
 		return $return;
 
 	}
@@ -120,11 +120,11 @@ class ResultsDataGenerator
 			$scoredisplay = ScoreDisplay :: instance();
 			$type = SCORE_CUSTOM;
 			if ($realscore === true) {
-			    $type = SCORE_DIV_PERCENT ; 
-			}			
+			    $type = SCORE_DIV_PERCENT ;
+			}
 			return $scoredisplay->display_score(array($score, $this->evaluation->get_max()), $type, SCORE_BOTH, $ignore_score_color);
         }
-        return '';		
+        return '';
 	}
 
 	// Sort functions - used internally

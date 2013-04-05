@@ -245,7 +245,7 @@ function parse_xml_data($file) {
 	xml_set_element_handler($parser, 'element_start', 'element_end');
 	xml_set_character_data_handler($parser, 'character_data');
 	xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-	xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
+	xml_parse($parser, Text::api_utf8_encode_xml(file_get_contents($file)));
 	xml_parser_free($parser);
 	return $users;
 }

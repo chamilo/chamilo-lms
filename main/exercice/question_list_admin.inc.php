@@ -165,9 +165,9 @@ if (!$inATest) {
         $styleCat = "width:22%; float:left; padding-top:8px; text-align:center;";
         $styleLevel = "width:6%; float:left; padding-top:8px; text-align:center;";
         $styleScore = "width:4%; float:left; padding-top:8px; text-align:center;";
-        
+
         $category_list = Testcategory::getCategoryListName();
-        
+
         if (is_array($questionList)) {
 			foreach ($questionList as $id) {
 				//To avoid warning messages
@@ -191,17 +191,17 @@ if (!$inATest) {
                 $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
 
                 // Question name
-				$questionName = Display::tag('div', '<a href="#" title = "'.$title.'">'.$move.' '.cut($title, 42).'</a>', array('style'=>$styleQuestion));
+				$questionName = Display::tag('div', '<a href="#" title = "'.$title.'">'.$move.' '.Text::cut($title, 42).'</a>', array('style'=>$styleQuestion));
 
 				// Question type
 				list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
-                
+
                 $question_media = null;
                 if (!empty($objQuestionTmp->parent_id)) {
                     $objQuestionMedia = Question::read($objQuestionTmp->parent_id);
                     $question_media  = Display::label($objQuestionMedia->question, 'info');
                 }
-                
+
 				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media, array('style' => $styleType));
 
 				// Question category
@@ -226,7 +226,7 @@ if (!$inATest) {
                     echo '<div class="header_operations">';
                         echo $questionName;
                         echo $questionType;
-                        
+
                         echo $questionCategory;
                         echo $questionLevel;
                         echo $questionScore;
@@ -247,7 +247,7 @@ if (!$inATest) {
 			}
 		}
 	}
-    
+
 	if (!$nbrQuestions) {
 	  	echo Display::display_warning_message(get_lang('NoQuestion'));
 	}

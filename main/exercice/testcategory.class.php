@@ -494,7 +494,7 @@ class Testcategory {
             if (!isset($all_categories[$category_id])) {
                 $category_name = get_lang('Untitled');
             } else {
-                $category_name = cut($all_categories[$category_id], 15);
+                $category_name = Text::cut($all_categories[$category_id], 15);
             }
             $category_list_to_render[] = $category_name;
         }

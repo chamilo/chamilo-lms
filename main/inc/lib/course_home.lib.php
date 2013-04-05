@@ -901,7 +901,7 @@ class CourseHome {
                 $tool_name = get_lang($variable);
             }
             */
-            $tool_name = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
+            $tool_name = get_lang('Tool'.Text::api_underscore_to_camel_case($tool['name']));
         }
 
         return $tool_name;

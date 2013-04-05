@@ -54,9 +54,9 @@ class MultipleAnswerCombination extends Question {
 						</th>
 						<th width="50%">
 							'.get_lang('Answer').'
-						</th>';				
-						// show column comment when feedback is enable						
-						if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {	
+						</th>';
+						// show column comment when feedback is enable
+						if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {
 							$html .='<th>'.get_lang('Comment').'</th>';
 						}
 						$html .= '</tr>';
@@ -74,17 +74,17 @@ class MultipleAnswerCombination extends Question {
 
 		$form -> addElement('hidden', 'nb_answers');
 		$boxes_names = array();
-		
+
 		if ($nb_answers < 1) {
 			$nb_answers = 1;
 			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
-		}		
+		}
 
 		for($i = 1 ; $i <= $nb_answers ; ++$i) {
 			if(is_object($answer)) {
 				$defaults['answer['.$i.']'] = $answer -> answer[$i];
 				$defaults['comment['.$i.']'] = $answer -> comment[$i];
-				$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
+				$defaults['weighting['.$i.']'] = Text::float_format($answer -> weighting[$i], 1);
 				$defaults['correct['.$i.']'] = $answer -> correct[$i];
 			} else {
 				$defaults['answer[1]']  = get_lang('DefaultMultipleAnswer2');
@@ -94,15 +94,15 @@ class MultipleAnswerCombination extends Question {
 
 				$defaults['answer[2]']  = get_lang('DefaultMultipleAnswer1');
 				$defaults['comment[2]'] = get_lang('DefaultMultipleComment1');
-				$defaults['correct[2]'] = false;				
+				$defaults['correct[2]'] = false;
 			}
 			$renderer = & $form->defaultRenderer();
-			
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
-                    
+
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
+
 
 			$answer_number=$form->addElement('text', 'counter['.$i.']', null,'value="'.$i.'"');
 			$answer_number->freeze();
@@ -112,40 +112,40 @@ class MultipleAnswerCombination extends Question {
 
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-			
+
 			if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
 				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			}
-			//only 1 answer the all deal ...			
+			//only 1 answer the all deal ...
 			//$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
-				
+
 			$form -> addElement ('html', '</tr>');
 		}
 		$form -> addElement ('html', '</table>');
 		$form -> addElement ('html', '<br />');
 
-		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');		
-						
+		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
+
 		//only 1 answer the all deal ...
 		$form->addElement('text', 'weighting[1]', get_lang('Score'), array('class' => "span1", 'value' => '10'));
-				
+
 		$navigator_info = api_get_navigator();
 		global $text, $class;
 		//ie6 fix
 		if ($obj_ex->edit_exercise_in_lp == true) {
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-                
+
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
-                $form->addElement('submit', 'submitQuestion', $text, 'class="'.$class.'"');				
+                $form->addElement('submit', 'submitQuestion', $text, 'class="'.$class.'"');
 			} else {
-                
+
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
                 $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');
-				
+
 				// setting the save button here and not in the question class.php
-				
+
 			}
 		}
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
@@ -176,7 +176,7 @@ class MultipleAnswerCombination extends Question {
 		$objAnswer = new Answer($this->id);
 
 		$nb_answers = $form -> getSubmitValue('nb_answers');
-		
+
 		for($i=1 ; $i <= $nb_answers ; $i++)
         {
         	$answer = trim($form -> getSubmitValue('answer['.$i.']'));
@@ -208,20 +208,20 @@ class MultipleAnswerCombination extends Question {
         $this -> updateWeighting($questionWeighting);
         $this -> save();
 	}
-	
+
 	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
 	    $header = parent::return_header($feedback_type, $counter, $score, $show_media);
-	    $header .= '<table class="'.$this->question_table_class .'">			
+	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>
 				<th>'.get_lang("Choice").'</th>
 				<th>'. get_lang("ExpectedChoice").'</th>
 				<th>'. get_lang("Answer").'</i></th>';
-				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
+				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
     				$header .= '<th>'.get_lang("Comment").'</th>';
-				} else { 
+				} else {
 					$header .= '<th>&nbsp;</th>';
 				}
         $header .= '</tr>';
-        return $header;	  
+        return $header;
 	}
 }

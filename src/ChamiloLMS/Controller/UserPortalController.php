@@ -201,14 +201,6 @@ class UserPortalController
     }
 
     /**
-     * Alias for the online_logout() function
-     */
-    function logout()
-    {
-        online_logout($this->user_id, true);
-    }
-
-    /**
      * This function checks if there are courses that are open to the world in the platform course categories (=faculties)
      *
      * @param string $category

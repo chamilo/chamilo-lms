@@ -175,7 +175,7 @@ $group = array();
 $group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
 $form->addGroup($group, '', array(get_lang("Stylesheets")), '');
 
-$form->addElement('label', get_lang('DocumentQuota'),  format_file_size(DocumentManager::get_course_quota()));
+$form->addElement('label', get_lang('DocumentQuota'), Text::format_file_size(DocumentManager::get_course_quota()));
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');

@@ -39,7 +39,7 @@ class OralExpression extends Question {
 		// setting the save button here and not in the question class.php
 		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 		if (!empty($this->id)) {
-			$form -> setDefaults(array('weighting' => float_format($this->weighting, 1)));
+			$form -> setDefaults(array('weighting' => Text::float_format($this->weighting, 1)));
 		} else {
 			if ($this -> isContent == 1) {
 				$form -> setDefaults(array('weighting' => '10'));
@@ -55,7 +55,7 @@ class OralExpression extends Question {
 		$this->weighting = $form -> getSubmitValue('weighting');
 		$this->save();
 	}
-	
+
 	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
 	    $header = parent::return_header($feedback_type, $counter, $score, $show_media);
 	    $header .= '<table class="'.$this->question_table_class.'">
@@ -67,8 +67,8 @@ class OralExpression extends Question {
 			</tr>
 			<tr>
                 <th>&nbsp;</th>
-			</tr>';				
-        return $header;	  
-	}	
+			</tr>';
+        return $header;
+	}
 }
 endif;

@@ -58,7 +58,7 @@ if (api_is_in_course()) {
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
     $base_work_dir = $sys_course_path.$course_dir;
     $current_session_id = api_get_session_id();
-    $userinfo = Database::get_user_info_from_id(api_get_user_id());
+    $userinfo = api_get_user_info(api_get_user_id());
 
     if ($current_session_id == 0) {
         //Create shared folder. Necessary for courses recycled. Allways session_id should be zero. Allway should be created from a base course, never from a session.

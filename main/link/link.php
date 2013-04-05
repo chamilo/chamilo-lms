@@ -221,7 +221,7 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 		} else {
             $target_link = "_blank";
         }
-        
+
 		echo '	<div class="control-group url">
 					<label class="control-label">
 						<span class="form_required">*</span> URL
@@ -469,7 +469,7 @@ if (empty($_GET['action']) || ($_GET['action'] != 'editlink' && $_GET['action'] 
 		}
 		// If the $urlview has a 1 for this categorie, this means it is expanded and should be desplayed as a
 		// - instead of a +, the category is no longer clickable and all the links of this category are displayed
-		$myrow['description'] = text_filter($myrow['description']);
+		$myrow['description'] = $myrow['description'];
 
 		if (isset($urlview[$i]) && $urlview[$i] == '1') {
 			$newurlview = $urlview;

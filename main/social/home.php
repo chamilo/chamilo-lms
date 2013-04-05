@@ -122,11 +122,11 @@ $social_right_content .= '
                             $result['count'] = $result['count'].' '.get_lang('Members');
                         }
         				$group_url = "groups.php?id=$id";
-        				$result['name'] = Display::url(api_ucwords(cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
+        				$result['name'] = Display::url(api_ucwords(Text::cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
         				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
         				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
         				$group_actions = '<div class="box_description_group_actions"><a href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
-        				$groups_newest[]= array(Display::url($result['picture_uri'], $group_url), $result['name'], cut($result['description'],120,true).$group_actions);
+        				$groups_newest[]= array(Display::url($result['picture_uri'], $group_url), $result['name'], Text::cut($result['description'],120,true).$group_actions);
         			}
     			}
 
@@ -144,11 +144,11 @@ $social_right_content .= '
     				} else {
     					$result['count'] = $result['count'].' '.get_lang('Members');
     				}
-    				$result['name'] = Display::url(api_ucwords(cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
+    				$result['name'] = Display::url(api_ucwords(Text::cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
     				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
     				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
     				$group_actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
-    				$groups_pop[]= array(Display::url($result['picture_uri'], $group_url) , $result['name'], cut($result['description'],120,true).$group_actions);
+    				$groups_pop[]= array(Display::url($result['picture_uri'], $group_url) , $result['name'], Text::cut($result['description'],120,true).$group_actions);
     			}
 
     			if (count($groups_newest) > 0) {

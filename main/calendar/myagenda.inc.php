@@ -184,7 +184,7 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
 
 				if (!empty($agendaitems[$curday])) {
 				   $items =  $agendaitems[$curday];
-				   $items =  msort($items, 'start_date_tms');
+				   $items =  ArrayClass::msort($items, 'start_date_tms');
 
 				   foreach($items  as $value) {
 				        $value['title'] = Security::remove_XSS($value['title']);
@@ -232,7 +232,7 @@ function display_mymonthcalendar($user_id, $agendaitems, $month, $year, $weekday
                             $link = $value['calendar_type'].'_'.$value['id'].'_'.$value['course_id'].'_'.$value['session_id'];
 
                             //Link to bubble
-                            $url = Display::url(cut($value['title'], 40), '#', array('id'=>$link, 'class'=>'opener'));
+                            $url = Display::url(Text::cut($value['title'], 40), '#', array('id'=>$link, 'class'=>'opener'));
                             $result .= $time.' '.$icon.' '.Display::div($url);
 
                             //Hidden content
@@ -874,20 +874,10 @@ function show_simple_personal_agenda($user_id) {
 			$content.= date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
 			$content.= strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"]));
 
-			/*--------------------------------------------------
-			 			display: the title
-			  --------------------------------------------------*/
 			$content.= '<br />';
 			$content.= $myrow['title'];
 			$content.= '<br />';
 
-			/*--------------------------------------------------
-			 			display: the content
-			  --------------------------------------------------*/
-			  /*
-			$content = $myrow['title'];
-			$content = make_clickable($content);
-			*/
 			return $content;
 		}
 	} else {

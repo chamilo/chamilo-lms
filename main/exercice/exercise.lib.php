@@ -1389,7 +1389,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 }
 
 /**
- * Converts the score with the exercise_max_note and exercise_min_score the platform settings + formats the results using the float_format function
+ * Converts the score with the exercise_max_note and exercise_min_score the platform settings + formats the results using the Text::float_format function
  *
  * @param   float   score
  * @param   float   weight
@@ -1419,9 +1419,9 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
     $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
 
     //Formats values
-    $percentage = float_format($percentage, 1);
-    $score = float_format($score, 1);
-    $weight = float_format($weight, 1);
+    $percentage = Text::float_format($percentage, 1);
+    $score = Text::float_format($score, 1);
+    $weight = Text::float_format($weight, 1);
 
     $html = null;
     if ($show_percentage) {
@@ -1439,7 +1439,7 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
 
 function is_success_exercise_result($score, $weight, $pass_percentage)
 {
-    $percentage = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
+    $percentage = Text::float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
     if (isset($pass_percentage) && !empty($pass_percentage)) {
         if ($percentage >= $pass_percentage) {
             return true;
@@ -1492,7 +1492,7 @@ function convert_to_percentage($value)
 {
     $return = '-';
     if ($value != '') {
-        $return = float_format($value * 100, 1).' %';
+        $return = Text::float_format($value * 100, 1).' %';
     }
     return $return;
 }
@@ -1517,7 +1517,7 @@ function convert_score($score, $weight)
             }
         }
     }
-    $score_rounded = float_format($score, 1);
+    $score_rounded = Text::float_format($score, 1);
     return $score_rounded;
 }
 
@@ -1772,7 +1772,7 @@ function get_average_score($exercise_id, $course_code, $session_id)
                 $avg_score +=$score;
             }
         }
-        $avg_score = float_format($avg_score / count($user_results), 1);
+        $avg_score = Text::float_format($avg_score / count($user_results), 1);
     }
     return $avg_score;
 }
@@ -1845,7 +1845,7 @@ function get_best_average_score_by_exercise($exercise_id, $course_code, $session
         //$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
         //$avg_score = ($avg_score / count($user_results));
         if (!empty($user_count)) {
-            $avg_score = float_format($avg_score / $user_count, 1) * 100;
+            $avg_score = Text::float_format($avg_score / $user_count, 1) * 100;
         } else {
             $avg_score = 0;
         }
@@ -2059,7 +2059,6 @@ function check_fill_in_blanks($answer, $user_answer)
             $answer = $temp;
             /* // Deprecated code
               // TeX parsing - replacement of texcode tags
-              $texstring = api_parse_tex($texstring);
               $answer = str_replace("{texcode}", $texstring, $answer);
              */
             $real_text[] = $answer;

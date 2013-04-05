@@ -347,13 +347,13 @@ class DocumentManager
             //header('Pragma: no-cache');
             switch ($content_type) {
                 case 'text/html':
-                    $encoding = @api_detect_encoding_html(file_get_contents($full_file_name));
+                    $encoding = Text::api_detect_encoding_html(file_get_contents($full_file_name));
                     if (!empty($encoding)) {
                         $content_type .= '; charset='.$encoding;
                     }
                     break;
                 case 'text/plain':
-                    $encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
+                    $encoding = Text::api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
                     if (!empty($encoding)) {
                         $content_type .= '; charset='.$encoding;
                     }

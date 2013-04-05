@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  *	@author jmontoya
- *  
+ *
  *	@package chamilo.document
  */
 /**
@@ -21,13 +21,13 @@ $header_file = Security::remove_XSS($_GET['file']);
 $document_id = intval($_GET['id']);
 
 $course_info = api_get_course_info();
-$course_code = api_get_course_id(); 
+$course_code = api_get_course_id();
 
 if (empty($course_info)) {
     api_not_allowed(true);
 }
 
-//Generate path 
+//Generate path
 if (!$document_id) {
     $document_id = DocumentManager::get_document_id($course_info, $header_file);
 }
@@ -38,7 +38,7 @@ if (empty($document_data)) {
 }
 
 $header_file  = $document_data['path'];
-$name_to_show = cut($header_file, 80);
+$name_to_show = Text::cut($header_file, 80);
 
 $path_array = explode('/', str_replace('\\', '/', $header_file));
 $path_array = array_map('urldecode', $path_array);

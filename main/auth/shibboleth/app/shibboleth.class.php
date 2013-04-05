@@ -98,7 +98,7 @@ class Shibboleth
             /*
              * Tests if the user tried to login directly in a protected course before to come here
              * (this variable could be set in the modified code of /chamilo/inc/lib/main_api.lib.php)
-             * 
+             *
              * Note:
              *       this part was added to give the possibility to access Chamilo directly on a course URL from a link diplayed in a portal.
              *       This is not a direct Shibboleth related functionnality, but this could be used in a shibbolethized
@@ -109,7 +109,7 @@ class Shibboleth
              */
         }
         if ($url) {
-            //needed to log the user in his courses. Normally it is done by visiting /chamilo/index.php    
+            //needed to log the user in his courses. Normally it is done by visiting /chamilo/index.php
 //            $include_path = api_get_path(INCLUDE_PATH);
 //            require("$include_path/local.inc.php");
 //
@@ -160,7 +160,7 @@ class Shibboleth
     /**
      * Infer the rights/status the user can have in Chamilo based on his affiliation attribute
      *
-     * @param  ShibbolethUser $user      
+     * @param  ShibbolethUser $user
      * @return The Chamilo user status, one of TEACHER, STUDENT or UNKNOWN
      */
     public static function infer_user_status($user)
@@ -200,9 +200,9 @@ class Shibboleth
     /**
      * Return true if the user can ask for a greater status than student.
      * This happens for staff members.
-     * 
+     *
      * @param ShibbolethUser $user
-     * @return boolean 
+     * @return boolean
      */
     public static function infer_status_request($user)
     {
@@ -242,9 +242,9 @@ class Shibboleth
 
         $signagure = <<<EOT
 
-_________________________ 
-$firstname $lastname 
-$email 
+_________________________
+$firstname $lastname
+$email
 $status
 EOT;
 
@@ -257,7 +257,7 @@ EOT;
             $header .= "Cc: $shibb_admin_email";
         }
 
-        $administrator_email = get_setting('emailAdministrator');
+        $administrator_email = api_get_setting('emailAdministrator');
         $result = mail($administrator_email, $subject, $message);
         return (bool) $result;
     }

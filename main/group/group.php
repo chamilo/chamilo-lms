@@ -44,8 +44,8 @@ if (api_get_setting('allow_group_categories') == 'false') {
 	$res = Database::query($sql);
 	$num = Database::num_rows($res);
 	if ($num == 0) {
-		$sql = "INSERT INTO ".$cat_table." ( c_id, id , title , description , forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order) 
-		VALUES ($course_id, '2', '".lang2db(get_lang('DefaultGroupCategory'))."', '', '1', '1', '8', '0', '0', '0', '0');";
+		$sql = "INSERT INTO ".$cat_table." ( c_id, id , title , description , forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order)
+		VALUES ($course_id, '2', '".Database::escape_string(get_lang('DefaultGroupCategory'))."', '', '1', '1', '8', '0', '0', '0', '0');";
 		Database::query ($sql);
 	}
 }
@@ -123,7 +123,7 @@ if (api_is_allowed_to_edit(false, true)) {
 				}
 				break;
 			case 'fill_selected' :
-				if (is_array($_POST['group'])) {                    
+				if (is_array($_POST['group'])) {
                     GroupManager :: fill_groups($my_group);
                     Display :: display_confirmation_message(get_lang('SelectedGroupsFilled'));
 				}
@@ -146,7 +146,7 @@ if (api_is_allowed_to_edit(false, true)) {
 				GroupManager :: unsubscribe_all_users($my_get_id);
 				Display :: display_confirmation_message(get_lang('GroupEmptied'));
 				break;
-			case 'fill_one':                
+			case 'fill_one':
 				GroupManager :: fill_groups($my_get_id);
 				Display :: display_confirmation_message(get_lang('GroupFilledGroups'));
 				break;
@@ -161,21 +161,21 @@ if (api_is_allowed_to_edit(false, true)) {
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false, true)) {
 	echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('new_group.png', get_lang('NewGroupCreate'),'',ICON_SIZE_MEDIUM).'</a>';
-	if (CourseManager::count_rows_course_table(Database::get_course_table(TABLE_GROUP),api_get_session_id(), api_get_course_int_id()) > 0) {		
+	if (CourseManager::count_rows_course_table(Database::get_course_table(TABLE_GROUP),api_get_session_id(), api_get_course_int_id()) > 0) {
 		echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_summary.png', get_lang('GroupOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
 	if (api_get_setting('allow_group_categories') == 'true') {
 		echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.Display::return_icon('new_folder.png', get_lang('AddCategory'),'',ICON_SIZE_MEDIUM).'</a>';
 	} else {
         echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('settings.png', get_lang('PropModify'),'',ICON_SIZE_MEDIUM).'</a>';
-	}	
-	echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';	
-	echo '<a href="../user/user.php?'.api_get_cidreq().'">'.Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'),'',ICON_SIZE_MEDIUM).'</a>';	
+	}
+	echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';
+	echo '<a href="../user/user.php?'.api_get_cidreq().'">'.Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 $group_cats = GroupManager :: get_categories(api_get_course_id());
 
-if (api_get_setting('allow_group_categories') == 'true' && count($group_cats) > 1) {	
+if (api_get_setting('allow_group_categories') == 'true' && count($group_cats) > 1) {
 	echo ' <a href="?'.api_get_cidreq().'&show_all=1">'.Display::return_icon('group.png',get_lang('ShowAll'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 echo '</div>';
@@ -188,15 +188,15 @@ if (api_get_setting('allow_group_categories') == 'true') {
     foreach ($group_cats as $index => $category) {
         if (isset ($_GET['show_all']) || (isset ($_GET['category']) && $_GET['category'] == $category['id'])) {
             //echo '<img src="../img/folder_group_category.gif" alt=""/>';
-            //echo '<a href="group.php?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'">'.$category['title'].'</a>';            
+            //echo '<a href="group.php?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'">'.$category['title'].'</a>';
         } else {
             //echo '<img src="../img/folder_document.gif" alt=""/>';
             //echo '<a href="group.php?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'&amp;category='.$category['id'].'">'.$category['title'].'</a>';
-            //echo Display::page_header($category['title']);            
+            //echo Display::page_header($category['title']);
         }
         $group_list = GroupManager :: get_group_list($category['id']);
         $label = Display::label(count($group_list).' '.get_lang('ExistingGroups'), 'info');
-        
+
         $actions = null;
         if (api_is_allowed_to_edit(false, true)) {
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$category['id'].'"  title="'.get_lang('Edit').'">'.Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
@@ -208,15 +208,15 @@ if (api_get_setting('allow_group_categories') == 'true') {
                 $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index +1]['id'].'">'.Display::return_icon('down.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
             }
         }
-        
+
         echo Display::page_header($category['title'].' '. $label.' '.$actions);
-        
+
         echo '<p style="margin: 0px;margin-left: 50px;">'.$category['description'].'</p><p/>';
-        
-        GroupManager ::process_groups($group_list, $category['id']);        
+
+        GroupManager ::process_groups($group_list, $category['id']);
     }
 } else {
-    $group_list = GroupManager :: get_group_list();            
+    $group_list = GroupManager :: get_group_list();
     GroupManager ::process_groups($group_list);
 }
 

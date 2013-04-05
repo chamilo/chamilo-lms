@@ -24,7 +24,7 @@ if (!empty($_SESSION['user_language_choice'])) {
 } elseif (!empty($_SESSION['_user']['language'])) {
     $user_selected_language = $_SESSION['_user']['language'];
 } else {
-    $user_selected_language = get_setting('platformLanguage');
+    $user_selected_language = api_get_setting('platformLanguage');
 }
 
 $form = new FormValidator('registration');

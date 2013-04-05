@@ -121,7 +121,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 ) {
 
     if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-        $user_list = who_is_online_in_this_course(
+        $user_list = Online::who_is_online_in_this_course(
             0,
             9,
             api_get_user_id(),
@@ -129,7 +129,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
             $_GET['cidReq']
         );
     } else {
-        $user_list = who_is_online(0, 9);
+        $user_list = Online::who_is_online(0, 9);
     }
 
     if (!isset($_GET['id'])) {

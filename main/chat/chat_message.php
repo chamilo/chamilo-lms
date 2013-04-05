@@ -257,7 +257,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 
         if (!api_is_anonymous()) {
             if (!empty($message)) {
-                $message = make_clickable($message);
+                $message = Text::make_clickable($message);
 
                 if (!file_exists($chat_path.$basename_chat.'.log.html')) {
                     $doc_id = FileManager::add_document(

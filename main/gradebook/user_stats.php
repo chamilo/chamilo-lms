@@ -48,15 +48,15 @@ $user_table= new UserTable($my_user_id, $allevals, $alllinks, $addparams);
 
 if (isset ($_GET['exportpdf'])) {
 	$datagen       = new UserDataGenerator($my_user_id, $allevals, $alllinks);
-	$data_array    = $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);    
+	$data_array    = $datagen->get_data(UserDataGenerator :: UDG_SORT_NAME, 0, null, true);
 	$newarray      = array ();
-	$displayscore  = Scoredisplay :: instance();	
-	foreach ($data_array as $data) {        
+	$displayscore  = Scoredisplay :: instance();
+	foreach ($data_array as $data) {
         $newarray[] = array_slice($data, 1);
 	}
-	$userinfo = get_user_info_from_id($my_user_id);    
-	$html .= get_lang('Results').' : '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')';
-	
+	$userinfo = api_get_user_info($my_user_id);
+	$html .= get_lang('Results').' : '.$userinfo['complete_name'].' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')';
+
 	if ($displayscore->is_custom()) {
 		$header_names= array (
             get_lang('Evaluation'), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'),get_lang('Display'));
@@ -64,7 +64,7 @@ if (isset ($_GET['exportpdf'])) {
 		$header_names= array (
 			get_lang('Evaluation'), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'));
 	}
-    
+
     $table = new HTML_Table(array('class' => 'data_table'));
     $row = 0;
     $column = 0;
@@ -81,9 +81,9 @@ if (isset ($_GET['exportpdf'])) {
             $column++;
             $row++;
         }
-    }    
+    }
     $html .= $table->toHtml();
-    
+
     require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
     $pdf = new PDF();
     $pdf->content_to_pdf($html);

@@ -41,7 +41,7 @@ if (!class_exists('FreeAnswer')):
             // setting the save button here and not in the question class.php
             $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
             if (!empty($this->id)) {
-                $form->setDefaults(array('weighting' => float_format($this->weighting, 1)));
+                $form->setDefaults(array('weighting' => Text::float_format($this->weighting, 1)));
             } else {
                 if ($this->isContent == 1) {
                     $form->setDefaults(array('weighting' => '10'));
@@ -58,18 +58,18 @@ if (!class_exists('FreeAnswer')):
             $this->save();
         }
 
-        function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {            
+        function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
             if (!empty($score['comments']) || $score['score'] > 0) {
                 $score['revised'] = true;
             } else {
                 $score['revised'] = false;
             }
             $header = parent::return_header($feedback_type, $counter, $score, $show_media);
-            $header .= '<table class="' . $this->question_table_class . '" >	
-	        <tr>		
+            $header .= '<table class="' . $this->question_table_class . '" >
+	        <tr>
 			<th>' . get_lang("Answer") . '</th>
 			</tr>';
             return $header;
         }
-    }    
+    }
 endif;

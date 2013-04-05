@@ -91,7 +91,7 @@ class BlockTeacherGraph extends Block {
 	 	$teachers = $this->teachers;
 		$graph = '';
  		$user_ids = array_keys($teachers);
- 		$a_last_week = get_last_week();
+ 		$a_last_week = Text::get_last_week();
 
 		if (is_array($user_ids) && count($user_ids) > 0) {
 			$data_set = new pData;

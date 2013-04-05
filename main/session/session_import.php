@@ -56,11 +56,11 @@ if ($_POST['formSent']) {
             // Instead of:
             // $root = @simplexml_load_file($_FILES['import_file']['tmp_name']);
             // we may use the following construct:
-            // $root = @simplexml_load_string(api_utf8_encode_xml(file_get_contents($_FILES['import_file']['tmp_name'])));
+
             // To ease debugging let us use:
             $content = file_get_contents($_FILES['import_file']['tmp_name']);
 
-            $content = api_utf8_encode_xml($content);
+            $content = Text::api_utf8_encode_xml($content);
             $root = @simplexml_load_string($content);
             unset($content);
 

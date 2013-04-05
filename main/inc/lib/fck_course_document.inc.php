@@ -200,7 +200,7 @@ if ($docs_and_folders) {
 		$row[] = '<a href="#" onclick="javascript: OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.$id['title'].'</a>';
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
-		$display_size = format_file_size($size);
+		$display_size = Text::format_file_size($size);
 		$row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
 		//last edit date
 		$display_date = date('d.m.Y', (strtotime($id['lastedit_date'])));

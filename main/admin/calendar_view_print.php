@@ -51,7 +51,7 @@ $result			= Database::query($sql);
 while($row=Database::fetch_array($result))
 {
 	$row['content'] = $row['content'];
-	$row['content'] = make_clickable($row['content']);
+	$row['content'] = Text::make_clickable($row['content']);
 	$row['content'] = str_replace('<a ','<a target="_blank" ',$row['content']);
 
 	if(!empty($row['title']))

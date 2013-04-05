@@ -812,7 +812,7 @@ class Blog
 
                 // Prepare data
                 $blog_post_id = $blog_post['post_id'];
-                $blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
+                $blog_post_text = Text::make_clickable(stripslashes($blog_post['full_text']));
                 $blog_post_date = api_convert_and_format_date(
                     $blog_post['date_creation'],
                     null,
@@ -823,7 +823,7 @@ class Blog
 
                 $introduction_text = "";
                 $words = 0;
-                $blog_post_text_cut = cut($blog_post_text, $limit);
+                $blog_post_text_cut = Text::cut($blog_post_text, $limit);
                 $words = strlen($blog_post_text);
 
                 if ($words >= $limit) {
@@ -958,7 +958,7 @@ class Blog
         $blog_post_comments = Database::fetch_array($result);
 
         // Prepare data
-        $blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
+        $blog_post_text = Text::make_clickable(stripslashes($blog_post['full_text']));
         $blog_post_date = api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get());
         $blog_post_actions = "";
 
@@ -1200,7 +1200,7 @@ class Blog
             $border_color = '';
 
             // Prepare data
-            $comment_text = make_clickable(stripslashes($comment['comment']));
+            $comment_text = Text::make_clickable(stripslashes($comment['comment']));
             $blog_comment_date = api_convert_and_format_date(
                 $comment['date_creation'],
                 null,

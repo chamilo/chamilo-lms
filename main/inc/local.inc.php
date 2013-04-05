@@ -322,7 +322,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         if (isset($_SESSION['_user']['user_id'])) {
             if ($logout) {
                 // Make custom redirect after logout
-                online_logout($_SESSION['_user']['user_id'], false);
+                Online::logout($_SESSION['_user']['user_id'], false);
                 $osso->logout(); //redirects and exits
             }
         } elseif(!$logout) {

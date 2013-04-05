@@ -625,7 +625,7 @@ class Attendance
 	}
 
     /**
-     * Unstable version! Needs review! Use only for speed boosts! 
+     * Unstable version! Needs review! Use only for speed boosts!
      * Add attendaces sheet inside table, by group to reduce db stress
      * @param       array  Array of calendar_id, user_id, status, attendance_id, course_id, date, all assumed pre-filtered
      * @param       bool   Whether to save absent users
@@ -1401,7 +1401,7 @@ class Attendance
 	 * @return	string	date and time e.g: '2010-02-10 12:30:00'
 	 */
 	public function build_datetime_from_array($array) {
-        return return_datetime_from_array($array);
+        return Text::return_datetime_from_array($array);
 	}
 
 	/** Setters for fields of attendances tables **/

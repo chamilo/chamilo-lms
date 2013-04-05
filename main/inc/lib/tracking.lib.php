@@ -2316,7 +2316,7 @@ class Tracking
             foreach ($course_list as $course_data) {
                 $my_course_data[$course_data['id']] = $course_data['title'];
             }
-            $my_course_data = utf8_sort($my_course_data);
+            $my_course_data = ArrayClass::utf8_sort($my_course_data);
             $final_course_data = array();
 
             foreach ($my_course_data as $course_id => $value) {
@@ -2445,12 +2445,12 @@ class Tracking
                                 $all_exercise_start_time[] = $time;
                                 $my_results[] = $score;
                                 if (count($exercise_list) <= 10) {
-                                    $title = cut($course_data['title'], 30)." \n ".cut($exercise_data['title'], 30);
+                                    $title = Text::cut($course_data['title'], 30)." \n ".cut($exercise_data['title'], 30);
                                     $exercise_graph_name_list[] = $title;
                                     $all_exercise_graph_name_list[] = $title;
                                 } else {
                                     // if there are more than 10 results, space becomes difficult to find, so only show the title of the exercise, not the tool
-                                    $title = cut($exercise_data['title'], 30);
+                                    $title = Text::cut($exercise_data['title'], 30);
                                     $exercise_graph_name_list[] = $title;
                                     $all_exercise_graph_name_list[] = $title;
                                 }

@@ -69,47 +69,6 @@ if ($query !='') {
         $social_right_content .=  $results;
     }
 
-    //Get users from tags this loop does not make sense for now ...
-    /*
-    if (is_array($results) && count($results) > 0) {
-        foreach ($results as $result) {
-
-            $id = $result['id'];
-            $url_open  = '<a href="groups.php?id='.$id.'">';
-            $url_close = '</a>';
-
-            $name = api_strtoupper(cut($result['name'],25,true));
-            if (isset($result['relation_type']) && $result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
-                $name .= Display::return_icon('social_group_admin.png', get_lang('Admin'), array('style'=>'vertical-align:middle'));
-            } elseif (isset($result['relation_type'])  && $result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
-                $name .= Display::return_icon('social_group_moderator.png', get_lang('Moderator'), array('style'=>'vertical-align:middle'));
-            }
-            $count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
-            if ($count_users_group == 1 ) {
-                $count_users_group = $count_users_group.' '.get_lang('Member');
-            } else {
-                $count_users_group = $count_users_group.' '.get_lang('Members');
-            }
-
-            $picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
-
-            $result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
-            $grid_item_1 = Display::return_icon('boxmygroups.jpg');
-            $item_1 = '<div>'.$url_open.$result['picture_uri'].'<strong>'.$name.'<br />('.$count_users_group.')</strong>'.$url_close.'</div>';
-
-            if ($result['description'] != '') {
-                $item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('Description').'</span></div>';
-                $item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';
-            } else {
-                $item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
-                $item_3 = '<div class="box_description_group_content" ></div>';
-            }
-            $item_4 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';
-            $grid_item_2 = $item_1.$item_2.$item_3.$item_4;
-            $grid_my_groups[]= array($grid_item_1,$grid_item_2);
-        }
-    }*/
-
     $grid_groups = array();
     if (is_array($groups) && count($groups)>0) {
         $social_right_content .= '<div class="span9">';
@@ -120,7 +79,7 @@ if ($query !='') {
             $id = $group['id'];
             $url_open  = '<a href="groups.php?id='.$id.'" >';
             $url_close = '</a>';
-            $name = cut($group['name'],25,true);
+            $name = Text::cut($group['name'],25,true);
             $count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
             if ($count_users_group == 1 ) {
                 $count_users_group = $count_users_group.' '.get_lang('Member');
@@ -139,7 +98,7 @@ if ($query !='') {
             $item_2 = '';
             $item_3 = '';
             if ($group['description'] != '') {
-                $item_3 = '<div class="box_description_group_content" >'.cut($group['description'],100,true).'</div>';
+                $item_3 = '<div class="box_description_group_content" >'.Text::cut($group['description'],100,true).'</div>';
             } else {
                 $item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
                 $item_3 = '<div class="box_description_group_content" ></div>';

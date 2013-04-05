@@ -277,12 +277,11 @@ if ($_GET['view']) {
                         $max_edit_time=1200; // 20 minutes
                         $rest_time=$max_edit_time-$time_editing;
 
-                        $userinfo=Database::get_user_info_from_id($last_row['is_editing']);
-                        $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
+                        $userinfo = api_get_user_info($last_row['is_editing']);
 
                         $is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.
                             $userinfo['user_id'].'>'.
-                            Display::tag('span', api_get_person_name($userinfo['firstname'], $userinfo['lastname'], array('title'=>$username))).
+                            Display::tag('span', $userinfo['complete_name_login_as']).
                             get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
                         Display::display_normal_message($is_being_edited, false);
 
@@ -1004,13 +1003,12 @@ if ($_GET['action']=='mactiveusers') {
     if (Database::num_rows($allpages) > 0) {
         $row = array ();
         while ($obj = Database::fetch_object($allpages)) {
-            $userinfo=Database::get_user_info_from_id($obj->user_id);
-            $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
+            $userinfo = api_get_user_info($obj->user_id);
             $row = array ();
 
             if ($obj->user_id <> 0) {
                 $row[] = '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                    Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+                    Display::tag('span', api_htmlentities($userinfo['complete_name_login_as'])).
                     '</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($row['user_id']).
                     '&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a>';
             }
@@ -1032,11 +1030,11 @@ if ($_GET['action']=='mactiveusers') {
 // User contributions Juan Carlos Raña Trabado
 
 if ($_GET['action']=='usercontrib') {
-    $userinfo=Database::get_user_info_from_id($_GET['user_id']);
+    $userinfo = api_get_user_info($_GET['user_id']);
     $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
     echo '<div class="actions">'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-            Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+            Display::tag('span', api_htmlentities($userinfo['complete_name'])).
             '</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($row['user_id']).
             '&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a></div>';
 
@@ -1053,7 +1051,7 @@ if ($_GET['action']=='usercontrib') {
         $row = array ();
         while ($obj = Database::fetch_object($allpages)) {
             //get author
-            $userinfo=Database::get_user_info_from_id($obj->user_id);
+            //$userinfo=api_get_user_info($obj->user_id);
 
             //get time
             $year 	 = substr($obj->dtime, 0, 4);
@@ -1079,13 +1077,8 @@ if ($_GET['action']=='usercontrib') {
             $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&view='.$obj->id.'&session_id='.api_htmlentities(urlencode($_GET['$session_id'])).'&group_id='.api_htmlentities(urlencode($_GET['group_id'])).'">'.api_htmlentities($obj->title).'</a>';
             $row[] =Security::remove_XSS($obj->version);
             $row[] =Security::remove_XSS($obj->comment);
-            //$row[] = api_strlen($obj->comment)>30 ? Security::remove_XSS(api_substr($obj->comment,0,30)).'...' : Security::remove_XSS($obj->comment);
             $row[] =Security::remove_XSS($obj->progress).' %';
             $row[] =Security::remove_XSS($obj->score);
-            //if(api_is_allowed_to_edit() || api_is_platform_admin())
-            //{
-                //$row[] =Security::remove_XSS($obj->user_ip);
-            //}
             $rows[] = $row;
 
         }
@@ -1547,7 +1540,7 @@ if ($_GET['action']=='links') {
             $row = array ();
             while ($obj = Database::fetch_object($allpages)) {
                 //get author
-                $userinfo=Database::get_user_info_from_id($obj->user_id);
+                $userinfo = api_get_user_info($obj->user_id);
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
                 //get time
@@ -1572,7 +1565,7 @@ if ($_GET['action']=='links') {
                 $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
                 if ($obj->user_id <>0) {
                     $row[] = '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                    Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).'</a>';
+                    Display::tag('span', api_htmlentities($userinfo['complete_name_login_as'])).'</a>';
                 }
                 else {
                     $row[] = get_lang('Anonymous').' ('.$obj->user_ip.')';
@@ -1826,7 +1819,7 @@ if ($_GET['action']=='edit') {
                     $max_edit_time=1200; // 20 minutes
                     $rest_time=$max_edit_time-$time_editing;
 
-                    $userinfo=Database::get_user_info_from_id($row['is_editing']);
+                    $userinfo = api_get_user_info($row['is_editing']);
                     $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
                     $is_being_edited= get_lang('ThisPageisBeginEditedBy').
@@ -2082,7 +2075,7 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences']) {
             $total_versions=Database::num_rows($result);
 
             while ($row=Database::fetch_array($result)) {
-                $userinfo=Database::get_user_info_from_id($row['user_id']);
+                $userinfo = api_get_user_info($row['user_id']);
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
                 echo '<li style="margin-bottom: 5px;">';
@@ -2101,7 +2094,7 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences']) {
                 echo ' '.get_lang('By').' ';
                 if ($row['user_id']<>0) {
                     echo '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                    Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+                    Display::tag('span', api_htmlentities($userinfo['complete_name_login_as'])).
                     '</a>';
                 } else {
                     echo get_lang('Anonymous').' ('.api_htmlentities($row[user_ip]).')';
@@ -2237,7 +2230,7 @@ if ($_GET['action']=='recentchanges') {
         $row = array ();
         while ($obj = Database::fetch_object($allpages)) {
             //get author
-            $userinfo=Database::get_user_info_from_id($obj->user_id);
+            $userinfo = api_get_user_info($obj->user_id);
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
             //get type assignment icon
@@ -2264,7 +2257,7 @@ if ($_GET['action']=='recentchanges') {
             $row[] = $obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');
             if ($obj->user_id <> 0 ) {
                 $row[] = '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+                Display::tag('span', api_htmlentities($userinfo['complete_name_login_as'])).
                 '</a>';
             }
             else {
@@ -2313,8 +2306,7 @@ if ($_GET['action']=='allpages') {
         $row = array ();
         while ($obj = Database::fetch_object($allpages)) {
             //get author
-            $userinfo=Database::get_user_info_from_id($obj->user_id);
-            $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
+            $userinfo = api_get_user_info($obj->user_id);
 
             //get type assignment icon
             if ($obj->assignment==1) {
@@ -2337,7 +2329,7 @@ if ($_GET['action']=='allpages') {
             $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
             if ($obj->user_id <>0) {
                 $row[] =  '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+                Display::tag('span', api_htmlentities($userinfo['complete_name_login_as'])).
                 '</a>';
             }
             else {
@@ -2384,8 +2376,7 @@ if ($_GET['action']=='discuss') {
     $result=Database::query($sql);
     $row=Database::fetch_array($result);
     $lastversiondate=api_get_local_time($row['dtime'], null, date_default_timezone_get());
-    $lastuserinfo=Database::get_user_info_from_id($row['user_id']);
-    $username = api_htmlentities(sprintf(get_lang('LoginX'), $lastuserinfo['username']), ENT_QUOTES);
+    $lastuserinfo = api_get_user_info($row['user_id']);
 
     //select page to discuss
     $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
@@ -2475,7 +2466,7 @@ if ($_GET['action']=='discuss') {
             echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.api_htmlentities($row['title']);
 
             echo ' ('.get_lang('MostRecentVersionBy').' <a href="../user/userInfo.php?uInfo='.$lastuserinfo['user_id'].'">'.
-                Display::tag('span', api_htmlentities(api_get_person_name($lastuserinfo['firstname'], $lastuserinfo['lastname'])), array('title'=>$username)).
+                Display::tag('span', api_htmlentities($lastuserinfo['complete_name_login_as'])).
                 '</a> '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
 
             echo '</div>';
@@ -2570,11 +2561,9 @@ if ($_GET['action']=='discuss') {
             Database::query($sql);
 
             echo '<hr noshade size="1">';
-            //echo '<div style="overflow:auto; height:170px;">';
 
-            while ($row=Database::fetch_array($result)) {
-                $userinfo=Database::get_user_info_from_id($row['userc_id']);
-                $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
+            while ($row = Database::fetch_array($result)) {
+                $userinfo = api_get_user_info($row['userc_id']);
 
                 if (($userinfo['status'])=="5") {
                     $author_status=get_lang('Student');
@@ -2583,7 +2572,7 @@ if ($_GET['action']=='discuss') {
                 }
 
                 $user_id=$row['userc_id'];
-                $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+                $name = $userinfo['complete_name'];
                 $attrb=array();
                 if ($user_id<>0) {
                     $image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);

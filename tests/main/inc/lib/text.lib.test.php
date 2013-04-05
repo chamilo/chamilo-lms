@@ -78,19 +78,6 @@ class TestText extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function test_text_parse_texexplorer() {
-		$textext='';
-		$res=_text_parse_texexplorer($textext);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	function test_text_parse_tool() {
-		$input='';
-		$res=_text_parse_tool($input);
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
 
 	function testcut() {
 		$text='';
@@ -116,35 +103,10 @@ class TestText extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testlatex_gif_renderer() {
-		ob_start();
-		$latex_code="";
-		global $_course;
-		$res=latex_gif_renderer($latex_code);
-		ob_end_clean();
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
 	function testmake_clickable() {
 		$string='';
 		$res=make_clickable($string);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-
-	function testtext_filter() {
-		$input='';
-		$res=text_filter($input, $filter=true);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	function testApiParseTex(){
-		$textext = 'abc';
-		$res = api_parse_tex($textext); //this function is practically deprecated now, it doesn't do anything
-		$this->assertEqual($textext,$res);
-	}
-
- }
-?>
+}

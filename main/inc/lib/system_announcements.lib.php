@@ -627,7 +627,7 @@ class SystemAnnouncementManager {
                 $url = api_get_path(WEB_PATH).'news_list.php?id='.$announcement->id;
                 if (empty($id)) {
                     if (api_strlen(strip_tags($content)) > $cut_size) {
-                        $content = cut($announcement->content, $cut_size).' '.Display::url(get_lang('More'), $url);
+                        $content = Text::cut($announcement->content, $cut_size).' '.Display::url(get_lang('More'), $url);
                     }
                 }
                 $html .=  '<li><h2>'.$announcement->title.'</h2>'.$content.'</li>';

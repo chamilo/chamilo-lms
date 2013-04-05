@@ -22,7 +22,7 @@ class UserPortalController
         if (api_get_setting('go_to_course_after_login') == 'true') {
 
             // Get the courses list
-            $personal_course_list = UserManager::get_personal_session_course_list(api_get_user_id());
+            $personal_course_list = \UserManager::get_personal_session_course_list(api_get_user_id());
 
             $my_session_list = array();
             $count_of_courses_no_sessions = 0;
@@ -170,62 +170,6 @@ class UserPortalController
         }
     }
 
-    function set_login_form()
-    {
-        global $loginFailed;
-
-        $login_form = '';
-
-        if (!($this->user_id) || api_is_anonymous($this->user_id)) {
-
-            // Only display if the user isn't logged in.
-            $this->page->assign('login_language_form', api_display_language_form(true));
-            $this->page->assign('login_form', self::display_login_form());
-
-            if ($loginFailed) {
-                $this->page->assign('login_failed', self::handle_login_failed());
-            }
-
-            if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-                $login_form .= '<ul class="nav nav-list">';
-                if (api_get_setting('allow_registration') != 'false') {
-                    $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
-                }
-                if (api_get_setting('allow_lostpassword') == 'true') {
-                    $login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
-                }
-                $login_form .= '</ul>';
-            }
-            $this->page->assign('login_options', $login_form);
-        }
-    }
-
-    /**
-     * This function checks if there are courses that are open to the world in the platform course categories (=faculties)
-     *
-     * @param string $category
-     * @return boolean
-     */
-    function category_has_open_courses($category)
-    {
-        $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
-        $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $category = Database::escape_string($category);
-        $sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
-        $sql_result = Database::query($sql_query);
-        while ($course = Database::fetch_array($sql_result)) {
-            if (!$setting_show_also_closed_courses) {
-                if ((api_get_user_id() > 0 && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
-                    return true; //at least one open course
-                }
-            } else {
-                if (isset($course['visibility'])) {
-                    return true; // At least one course (it does not matter weither it's open or not because $setting_show_also_closed_courses = true).
-                }
-            }
-        }
-        return false;
-    }
 
     /**
      * Reacts on a failed login:

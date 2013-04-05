@@ -19,7 +19,7 @@ class IndexController// extends Controller
     function logoutAction(Application $app)
     {
         $userId = api_get_user_id();
-        Online::logout($userId, true);
+        \Online::logout($userId, true);
         //return $app->redirect($app['url_generator']->generate('index'));
     }
 

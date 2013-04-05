@@ -15,11 +15,7 @@ abstract class IteratorTestCase extends \PHPUnit_Framework_TestCase
 {
     protected function assertIterator($expected, \Traversable $iterator)
     {
-        // set iterator_to_array $use_key to false to avoid values merge
-        // this made FinderTest::testAppendWithAnArray() failed with GnuFinderAdapter
-        $values = array_map(function (\SplFileInfo $fileinfo) { return str_replace('/', DIRECTORY_SEPARATOR, $fileinfo->getPathname()); }, iterator_to_array($iterator, false));
-
-        $expected = array_map(function ($path) { return str_replace('/', DIRECTORY_SEPARATOR, $path); }, $expected);
+        $values = array_map(function (\SplFileInfo $fileinfo) { return $fileinfo->getPathname(); }, iterator_to_array($iterator));
 
         sort($values);
         sort($expected);

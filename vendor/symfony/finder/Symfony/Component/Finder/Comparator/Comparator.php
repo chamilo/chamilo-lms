@@ -55,8 +55,6 @@ class Comparator
      * Sets the comparison operator.
      *
      * @param string $operator A valid operator
-     *
-     * @throws \InvalidArgumentException
      */
     public function setOperator($operator)
     {
@@ -75,8 +73,6 @@ class Comparator
      * Tests against the target.
      *
      * @param mixed $test A test value
-     *
-     * @return Boolean
      */
     public function test($test)
     {

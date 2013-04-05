@@ -11,21 +11,21 @@
 
 namespace Symfony\Component\Finder\Tests;
 
-use Symfony\Component\Finder\Expression\Expression;
+use Symfony\Component\Finder\Glob;
 
 class GlobTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getToRegexData
      */
-    public function testGlobToRegex($glob, $match, $noMatch)
+    public function testToRegex($glob, $match, $noMatch)
     {
         foreach ($match as $m) {
-            $this->assertRegExp(Expression::create($glob)->getRegex()->render(), $m, '::toRegex() converts a glob to a regexp');
+            $this->assertRegExp(Glob::toRegex($glob), $m, '::toRegex() converts a glob to a regexp');
         }
 
         foreach ($noMatch as $m) {
-            $this->assertNotRegExp(Expression::create($glob)->getRegex()->render(), $m, '::toRegex() converts a glob to a regexp');
+            $this->assertNotRegExp(Glob::toRegex($glob), $m, '::toRegex() converts a glob to a regexp');
         }
     }
 

@@ -24,13 +24,33 @@ class DepthRangeFilterIterator extends FilterIterator
      * Constructor.
      *
      * @param \RecursiveIteratorIterator $iterator    The Iterator to filter
-     * @param int                        $minDepth    The min depth
-     * @param int                        $maxDepth    The max depth
+     * @param array                      $comparators An array of \NumberComparator instances
      */
-    public function __construct(\RecursiveIteratorIterator $iterator, $minDepth = 0, $maxDepth = INF)
+    public function __construct(\RecursiveIteratorIterator $iterator, array $comparators)
     {
+        $minDepth = 0;
+        $maxDepth = PHP_INT_MAX;
+        foreach ($comparators as $comparator) {
+            switch ($comparator->getOperator()) {
+                case '>':
+                    $minDepth = $comparator->getTarget() + 1;
+                    break;
+                case '>=':
+                    $minDepth = $comparator->getTarget();
+                    break;
+                case '<':
+                    $maxDepth = $comparator->getTarget() - 1;
+                    break;
+                case '<=':
+                    $maxDepth = $comparator->getTarget();
+                    break;
+                default:
+                    $minDepth = $maxDepth = $comparator->getTarget();
+            }
+        }
+
         $this->minDepth = $minDepth;
-        $iterator->setMaxDepth(INF === $maxDepth ? -1 : $maxDepth);
+        $iterator->setMaxDepth(PHP_INT_MAX === $maxDepth ? -1 : $maxDepth);
 
         parent::__construct($iterator);
     }

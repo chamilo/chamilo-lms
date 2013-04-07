@@ -43,15 +43,6 @@
 /**
  * Code
  */
-require_once 'HTML/QuickForm/select.php';
-
-/**
- * Basic error codes
- *
- * @var        integer
- * @since      1.5.0
- */
-define('HTML_QUICKFORM_ADVMULTISELECT_ERROR_INVALID_INPUT', 1);
 
 /**
  * Element for HTML_QuickForm that emulate a multi-select.

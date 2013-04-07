@@ -66,7 +66,7 @@ $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] =
             'advanced_settings' =>array('HTML/QuickForm/advanced_settings.php','HTML_QuickForm_advanced_settings'),
             'label'             =>array('HTML/QuickForm/label.php','HTML_QuickForm_label'),
             'email'             =>array('HTML/QuickForm/email.php','HTML_QuickForm_email'),
-            
+
         );
 
 /**
@@ -119,6 +119,14 @@ define('QUICKFORM_INVALID_DATASOURCE',     -9);
 /**#@-*/
 
 // }}}
+
+/**
+ * Basic error codes
+ *
+ * @var        integer
+ * @since      1.5.0
+ */
+define('HTML_QUICKFORM_ADVMULTISELECT_ERROR_INVALID_INPUT', 1);
 
 /**
  * Create, validate and process HTML forms
@@ -327,7 +335,7 @@ class HTML_QuickForm extends HTML_Common
             unset($this->_submitValues['_qf__' . $formName]);
             $this->addElement('hidden', '_qf__' . $formName, null);
         }
-        
+
         if (preg_match('/^([0-9]+)([a-zA-Z]*)$/', ini_get('upload_max_filesize'), $matches)) {
             // see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
             switch (strtoupper($matches['2'])) {
@@ -344,10 +352,10 @@ class HTML_QuickForm extends HTML_Common
                     $this->_maxFileSize = $matches['1'];
             }
         }
-        
+
         $course_id = api_get_course_int_id();
         //If I'm in a course replace the default max filesize with the course limits
-        if (!empty($course_id)) {            
+        if (!empty($course_id)) {
             $free_course_quota = DocumentManager::get_course_quota() - DocumentManager::documents_total_space();
             if (empty($this->_maxFileSize) || $free_course_quota <= $this->_maxFileSize) {
                 $this->_maxFileSize = intval($free_course_quota);
@@ -622,7 +630,7 @@ class HTML_QuickForm extends HTML_Common
         // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$elementObject =& new $className();
         $elementObject = new $className();
-        
+
         for ($i = 0; $i < 5; $i++) {
             if (!isset($args[$i])) {
                 $args[$i] = null;
@@ -1733,7 +1741,7 @@ class HTML_QuickForm extends HTML_Common
             // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$GLOBALS['_HTML_QuickForm_default_renderer'] =& new HTML_QuickForm_Renderer_Default();
             $GLOBALS['_HTML_QuickForm_default_renderer'] = new HTML_QuickForm_Renderer_Default();
-        }        
+        }
         return $GLOBALS['_HTML_QuickForm_default_renderer'];
     } // end func defaultRenderer
 
@@ -1750,11 +1758,11 @@ class HTML_QuickForm extends HTML_Common
      * @since     1.0
      * @access   public
      */
-    function toHtml ($in_data = null) {         
+    function toHtml ($in_data = null) {
         if (!is_null($in_data)) {
             $this->addElement('html', $in_data);
         }
-        $renderer =& $this->defaultRenderer();             
+        $renderer =& $this->defaultRenderer();
         $this->accept($renderer);
         return $renderer->toHtml();
     } // end func toHtml

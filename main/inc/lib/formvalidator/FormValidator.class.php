@@ -2,9 +2,6 @@
 
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH) . 'pear/HTML/QuickForm.php';
-require_once api_get_path(LIBRARY_PATH) . 'pear/HTML/QuickForm/advmultiselect.php';
-
 /**
  * Objects of this class can be used to create/manipulate/validate user input.
  */

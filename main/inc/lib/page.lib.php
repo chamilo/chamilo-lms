@@ -967,18 +967,4 @@ class PageController
         $tpl->assign('count_courses', $count_courses);
         $tpl->assign('welcome_to_course_block', 1);
     }
-
-    static function return_debug() {
-        global $app;
-        $mtime = microtime();
-        $mtime = explode(" ",$mtime);
-        $mtime = $mtime[1] + $mtime[0];
-
-        $message = "22---Page loaded in:".($mtime-START);
-        $app['monolog']->addInfo($message);
-        $message = "memory_get_usage: ".Text::format_file_size(memory_get_usage(true));
-        $app['monolog']->addInfo($message);
-        $message = "memory_get_peak_usage: ".Text::format_file_size(memory_get_peak_usage(true));
-        $app['monolog']->addInfo($message);
-    }
 }

@@ -19,7 +19,7 @@ return array(
     'Symfony\\Component\\HttpKernel\\' => $vendorDir . '/symfony/http-kernel/',
     'Symfony\\Component\\HttpFoundation\\' => $vendorDir . '/symfony/http-foundation/',
     'Symfony\\Component\\Form\\' => $vendorDir . '/symfony/form/',
-    'Symfony\\Component\\Finder' => $vendorDir . '/symfony/finder/',
+    'Symfony\\Component\\Finder\\' => $vendorDir . '/symfony/finder/',
     'Symfony\\Component\\EventDispatcher\\' => $vendorDir . '/symfony/event-dispatcher/',
     'Symfony\\Component\\DomCrawler\\' => $vendorDir . '/symfony/dom-crawler/',
     'Symfony\\Component\\DependencyInjection\\' => $vendorDir . '/symfony/dependency-injection/',

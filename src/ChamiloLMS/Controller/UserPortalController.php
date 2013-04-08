@@ -7,7 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserPortalController
 {
-
+    /**
+     * @param Application $app
+     * @param string $filter for the userportal courses page. Only works when setting 'history'
+     * @return Response|void
+     */
     function indexAction(Application $app, $filter = null)
     {
         //@todo Use filters like "after/before|finish" to manage user access
@@ -20,97 +24,18 @@ class UserPortalController
 
         // Check if a user is enrolled only in one course for going directly to the course after the login.
         if (api_get_setting('go_to_course_after_login') == 'true') {
-
-            // Get the courses list
-            $personal_course_list = \UserManager::get_personal_session_course_list(api_get_user_id());
-
-            $my_session_list = array();
-            $count_of_courses_no_sessions = 0;
-            $count_of_courses_with_sessions = 0;
-
-            foreach ($personal_course_list as $course) {
-                if (!empty($course['id_session'])) {
-                    $my_session_list[$course['id_session']] = true;
-                    $count_of_courses_with_sessions++;
-                } else {
-                    $count_of_courses_no_sessions++;
-                }
-            }
-            $count_of_sessions = count($my_session_list);
-
-            if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
-
-                $key = array_keys($personal_course_list);
-                $course_info = $personal_course_list[$key[0]];
-                $course_directory = $course_info['course_info']['path'];
-                $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
-
-                $url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$id_session;
-
-                header('location:'.$url);
-                exit;
-            }
-
-            if (!isset($_SESSION['coursesAlreadyVisited']) && $count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
-                $key = array_keys($personal_course_list);
-                $course_info = $personal_course_list[$key[0]];
-                $course_directory = $course_info['course_info']['path'];
-                $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
-
-                $url = api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$id_session;
-                header('location:'.$url);
-                exit;
-            }
+            $this->redirectAfterLogin();
         }
 
-        /* Sniffing system */
-        /*
-          //store posts to sessions
-          if ($_SESSION['sniff_navigator']!="checked") {
-          $_SESSION['sniff_navigator']=Security::remove_XSS($_POST['sniff_navigator']);
-          $_SESSION['sniff_screen_size_w']=Security::remove_XSS($_POST['sniff_navigator_screen_size_w']);
-          $_SESSION['sniff__screen_size_h']=Security::remove_XSS($_POST['sniff_navigator_screen_size_h']);
-          $_SESSION['sniff_type_mimetypes']=Security::remove_XSS($_POST['sniff_navigator_type_mimetypes']);
-          $_SESSION['sniff_suffixes_mimetypes']=Security::remove_XSS($_POST['sniff_navigator_suffixes_mimetypes']);
-          $_SESSION['sniff_list_plugins']=Security::remove_XSS($_POST['sniff_navigator_list_plugins']);
-          $_SESSION['sniff_check_some_activex']=Security::remove_XSS($_POST['sniff_navigator_check_some_activex']);
-          $_SESSION['sniff_check_some_plugins']=Security::remove_XSS($_POST['sniff_navigator_check_some_plugins']);
-          $_SESSION['sniff_java']=Security::remove_XSS($_POST['sniff_navigator_java']);
-          $_SESSION['sniff_java_sun_ver']=Security::remove_XSS($_POST['sniff_navigator_java_sun_ver']);
-          } */
-
         // Main courses and session list
-        $courses_and_sessions = \PageController::return_courses_and_sessions(api_get_user_id(), $filter);
+        $coursesAndSessions = \PageController::return_courses_and_sessions(api_get_user_id(), $filter);
 
         //Show the chamilo mascot
-        if (empty($courses_and_sessions) && empty($filter)) {
+        if (empty($coursesAndSessions) && empty($filter)) {
             \PageController::return_welcome_to_course_block($app['template']);
         }
 
-        $app['template']->assign('content', $courses_and_sessions);
-
-        /*
-          if (api_get_setting('allow_browser_sniffer') == 'true') {
-          if ($_SESSION['sniff_navigator']!="checked") {
-          $app['template']->assign('show_sniff', 	1);
-          } else {
-          $app['template']->assign('show_sniff', 	0);
-          }
-          }
-
-          //check for flash and message
-
-          $sniff_notification = '';
-          $some_activex=$_SESSION['sniff_check_some_activex'];
-          $some_plugins=$_SESSION['sniff_check_some_plugins'];
-
-          if(!empty($some_activex) || !empty($some_plugins)){
-          if (! preg_match("/flash_yes/", $some_activex) && ! preg_match("/flash_yes/", $some_plugins)) {
-          $sniff_notification = Display::return_message(get_lang('NoFlash'), 'warning', true);
-          //js verification - To annoying of redirecting every time the page
-          $app['template']->assign('sniff_notification',  $sniff_notification);
-          }
-          } */
+        $app['template']->assign('content', $coursesAndSessions);
 
         \PageController::return_profile_block();
         \PageController::return_user_image_block();
@@ -129,6 +54,48 @@ class UserPortalController
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, private'));
         return new Response($response, 200, array());
+    }
+
+    function redirectAfterLogin()
+    {
+        // Get the courses list
+        $personal_course_list = \UserManager::get_personal_session_course_list(api_get_user_id());
+
+        $my_session_list = array();
+        $count_of_courses_no_sessions = 0;
+        $count_of_courses_with_sessions = 0;
+
+        foreach ($personal_course_list as $course) {
+            if (!empty($course['id_session'])) {
+                $my_session_list[$course['id_session']] = true;
+                $count_of_courses_with_sessions++;
+            } else {
+                $count_of_courses_no_sessions++;
+            }
+        }
+        $count_of_sessions = count($my_session_list);
+
+        if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
+
+            $key = array_keys($personal_course_list);
+            $course_info = $personal_course_list[$key[0]];
+            $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
+
+            $url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$id_session;
+            header('location:'.$url);
+            exit;
+        }
+
+        if (!isset($_SESSION['coursesAlreadyVisited']) && $count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
+            $key = array_keys($personal_course_list);
+            $course_info = $personal_course_list[$key[0]];
+            $course_directory = $course_info['course_info']['path'];
+            $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
+
+            $url = api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$id_session;
+            header('location:'.$url);
+            exit;
+        }
     }
 
     function check_last_login()

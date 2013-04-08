@@ -197,7 +197,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	$form->add_html_editor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 
 	if (isset($_GET['re_id'])) {
-		$message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
+	    $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
+        $default['title'] = get_lang('MailSubjectReplyShort')." ".$message_reply_info['title'];
 		$form->addElement('hidden','re_id', intval($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
 
@@ -218,9 +219,10 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 
 	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');
 	$form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
+    
 	if (!empty($group_id) && !empty($message_id)) {
 		$message_info = MessageManager::get_message_by_id($message_id);
-		$default['title'] = get_lang('Re:').$message_info['title'];
+		$default['title'] = get_lang('MailSubjectReplyShort')." ".$message_info['title'];
 	}
 	$form->setDefaults($default);
     $html = '';

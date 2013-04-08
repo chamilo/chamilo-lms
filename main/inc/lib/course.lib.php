@@ -2669,14 +2669,20 @@ class CourseManager {
             $with_special_courses = ' course.code IN ("'.implode('","',$special_course_list).'")';
         }
 
-        //$course_items = array();
-
         if (!empty($with_special_courses)) {
-            $sql = "SELECT course.id, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
-                           course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id
+            $sql = "SELECT  course.id,
+                            course.code,
+                            course.subscribe subscr,
+                            course.unsubscribe unsubscr,
+                            course_rel_user.status status,
+                            course_rel_user.sort sort,
+                            course_rel_user.user_course_cat user_course_cat,
+                            course_rel_user.user_id
                     FROM $tbl_course course
-                    LEFT JOIN $tbl_course_user course_rel_user ON course.code = course_rel_user.course_code AND course_rel_user.user_id = '$user_id'
-                    WHERE $with_special_courses group by course.code";
+                    LEFT JOIN $tbl_course_user course_rel_user
+                      ON course.code = course_rel_user.course_code AND course_rel_user.user_id = '$user_id'
+                    WHERE $with_special_courses
+                    GROUP BY course.code";
 
             $rs_special_course = Database::query($sql);
             $number_of_courses = Database::num_rows($rs_special_course);
@@ -2686,9 +2692,6 @@ class CourseManager {
                 while ($course = Database::fetch_array($rs_special_course)) {
                     $course_info = api_get_course_info($course['code']);
                     $params = array();
-                    // Get notifications.
-                    //$course['id_session']   = null;
-                    //$course['status']       = $course['status'];
 
                     $course_info['id_session']  = null;
                     $course_info['status']      = $course['status'];
@@ -2701,6 +2704,7 @@ class CourseManager {
                     $params['icon'] = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
 
                     $params['right_actions'] = '';
+
                     if (api_is_platform_admin()) {
                         if ($load_dirs) {
                             $params['right_actions'] .= '<a id="document_preview_'.$course['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
@@ -2742,9 +2746,7 @@ class CourseManager {
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                         $params['notifications'] = $show_notification;
                     }
-
                     $html .= self::course_item_html($params, false);
-                    //$course_items[] = $params;
                     $key++;
                 }
             }
@@ -2973,7 +2975,7 @@ class CourseManager {
      * @param   integer     Session ID
      * @param   string      CSS class to apply to course entry
      * @param   boolean     Whether the session is supposedly accessible now (not in the case it has passed and is in invisible/unaccessible mode)
-     * @param bool      Whether to show the document quick-loader or not
+     * @param   bool      Whether to show the document quick-loader or not
      * @return  string      The HTML to be printed for the course entry
      *
      * @version 1.0.3
@@ -2989,24 +2991,18 @@ class CourseManager {
         // Display course entry.
         // Show a link to the course, unless the course is closed and user is not course admin.
         $session_url = '';
-        $session_title = $course_info['name'];
 
         if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course_info['user_status_in_course'] == COURSEMANAGER) {
-            //if ($course_info['user_status_in_course'] == COURSEMANAGER) {
-                $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
-                $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
-            //}
+            $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
+            $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
         } else {
             $session_title = $course_info['name'].' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
         }
-
 
         $params = array();
         $params['icon'] = Display::return_icon('blackboard_blue.png', $course_info['name'], array(), ICON_SIZE_LARGE);
         $params['link'] = $session_url;
         $params['title'] = $session_title;
-
-
         $params['right_actions'] = '';
 
         if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {

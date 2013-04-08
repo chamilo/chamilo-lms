@@ -28,17 +28,18 @@
 //Composer autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
 
-//Start Silex
 use Silex\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Parser;
 
+// Start Silex
 $app = new Application();
 
-//@todo add a helper to read the configuration file once!
-// Reading configuration file from main/inc/conf or app/config
+// @todo add a helper to read the configuration file once!
+
+// Reading configuration file from main/inc/conf/configuration.php or app/config/configuration.yml
 
 // Determine the directory path for this file.
 $includePath = dirname(__FILE__);
@@ -97,15 +98,29 @@ if ($alreadyInstalled) {
         }
     }
 
+    // Fixing $_configuration array
+
     //Fixes bug in Chamilo 1.8.7.1 array was not set
     $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
     $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
+    // Code for transitional purposes, it can be removed right before the 1.8.7 release.
+    if (empty($_configuration['system_version'])) {
+        $_configuration['system_version'] = (!empty($_configuration['dokeos_version']) ? $_configuration['dokeos_version'] : '');
+        $_configuration['system_stable'] = (!empty($_configuration['dokeos_stable']) ? $_configuration['dokeos_stable'] : '');
+        $_configuration['software_url'] = 'http://www.chamilo.org/';
+    }
+
+    // For backward compatibility.
+    $_configuration['dokeos_version'] = $_configuration['system_version'];
+    $_configuration['dokeos_stable'] = $_configuration['system_stable'];
+    $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
+
+//Including main and internationalization libs
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
-
 
 // Inclusion of internationalization libraries
 require_once $includePath.'/lib/internationalization.lib.php';
@@ -132,24 +147,13 @@ $app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile, array(
 // Add the path to the pear packages to the include path
 ini_set('include_path', api_create_include_path_setting());
 
-// Code for transitional purposes, it can be removed right before the 1.8.7 release.
-if (empty($_configuration['system_version'])) {
-    $_configuration['system_version'] = (!empty($_configuration['dokeos_version']) ? $_configuration['dokeos_version'] : '');
-    $_configuration['system_stable'] = (!empty($_configuration['dokeos_stable']) ? $_configuration['dokeos_stable'] : '');
-    $_configuration['software_url'] = 'http://www.chamilo.org/';
-}
-
-// For backward compatibility.
-$_configuration['dokeos_version'] = $_configuration['system_version'];
-$_configuration['dokeos_stable'] = $_configuration['system_stable'];
-$userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
-
 $app['configuration_file'] = $configurationFilePath;
 $app['configuration_yml_file'] = $configurationYMLFile;
 $app['configuration'] = $_configuration;
 $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 
+//Loading $app settings
 require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
 //require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
@@ -159,7 +163,7 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
-//Session provider
+// Session provider
 //$app->register(new Silex\Provider\SessionServiceProvider());
 
 /*
@@ -228,10 +232,10 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));*/
 
-//Setting controllers as services
+// Setting controllers as services
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-//Validator provider
+// Validator provider
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // Implements symfony2 translator
@@ -240,7 +244,8 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale_fallback' => 'en'
 ));
 
-//Handling po files
+// Handling po files
+
 /*
 use Symfony\Component\Translation\Loader\PoFileLoader;
 use Symfony\Component\Translation\Dumper\PoFileDumper;
@@ -352,8 +357,6 @@ $app['twig'] = $app->share(
     })
 );
 
-
-
 //Monolog only available if cache is writable
 if (is_writable($app['cache.path'])) {
 
@@ -443,8 +446,6 @@ $app->register(new ChamiloServiceProvider(), array());
 
 //Manage error messages
 $app->error(
-    //PDOException
-
     function (\Exception $e, $code) use ($app) {
 
         if ( $e instanceof PDOException) {
@@ -482,7 +483,7 @@ if ($app['debug'] && isset($_configuration['main_database'])) {
 
     $app->after(function() use ($app, $logger) {
         // Log all queries as DEBUG.
-        foreach ( $logger->queries as $query ) {
+        foreach ($logger->queries as $query) {
             $app['monolog']->debug($query['sql'], array('params' =>$query['params'], 'types' => $query['types']));
         }
     });

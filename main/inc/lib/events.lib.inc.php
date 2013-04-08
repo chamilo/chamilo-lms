@@ -1568,9 +1568,3 @@ function portal_homepage_edited_event_send_mail_filter_func(&$values)
     // proper logic for this filter
     return $res;
 }
-/**
- *
- */
-
-/*  End of filters   */
-

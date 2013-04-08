@@ -29,7 +29,7 @@ $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' O
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1".$order_clause;
 // Filtering teachers when creating a course.
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
     $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
             INNER JOIN $access_url_rel_user_table url_rel_user
@@ -65,7 +65,7 @@ $form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_C
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" ');
 $form->applyFilter('course_teachers', 'html_filter');
 
-$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories, array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
+$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), array(), array('style' => 'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
 $categories_select->addOption('-','');
 $form->applyFilter('category_code', 'html_filter');
 //This function fills the category_code select ...
@@ -121,7 +121,7 @@ $default_course_visibility = api_get_setting('courses_default_creation_visibilit
 if (isset($default_course_visibility)) {
     $values['visibility']       = api_get_setting('courses_default_creation_visibility');
 } else {
-    $values['visibility']       = COURSE_VISIBILITY_OPEN_PLATFORM;    
+    $values['visibility']       = COURSE_VISIBILITY_OPEN_PLATFORM;
 }
 $values['subscribe']        = 1;
 $values['unsubscribe']      = 0;
@@ -132,21 +132,21 @@ $form->setDefaults($values);
 
 // Validate the form
 if ($form->validate()) {
-    $course          = $form->exportValues();    
+    $course          = $form->exportValues();
     //$tutor_name      = $teachers[$course['tutor_id']];
     $teacher_id      = $course['tutor_id'];
-    $course_teachers = $course['course_teachers'];    
-    
+    $course_teachers = $course['course_teachers'];
+
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
-    
+
     $course['exemplary_content']    = empty($course['exemplary_content']) ? false : true;
     $course['teachers']             = $course_teachers;
     //$course['tutor_name']           = $tutor_name;
-    $course['user_id']              = $teacher_id;  
+    $course['user_id']              = $teacher_id;
     $course['wanted_code']          = $course['visual_code'];
-    
-    $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;            
-    
+
+    $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
+
     $course_info = CourseManager::create_course($course);
 
     header('Location: course_list.php'.($course_info===false?'?action=show_msg&warn='.api_get_last_failure():''));
@@ -157,7 +157,5 @@ if ($form->validate()) {
 $content = $form->return_form();
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

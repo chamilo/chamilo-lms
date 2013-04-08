@@ -37,6 +37,9 @@ define('ANONYMOUS', 6);
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
 
+define('TEACHER', 1);
+
+
 //Soft user status
 define('PLATFORM_ADMIN', 11);
 define('SESSION_COURSE_COACH', 12);

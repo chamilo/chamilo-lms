@@ -59,7 +59,7 @@ $height += 30;
 $width += 30;
 $window_name = 'window'.uniqid('');
 $onclick = $window_name."=window.open('".$fullurl."','".$window_name."','alwaysRaised=yes, alwaysLowered=no,alwaysOnTop=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=".$width.",height=".$height.",left=200,top=20'); return false;";
-echo '<a href="javascript: void(0);" onclick="'.$onclick.'" ><img src="'.$fullurl.'" '.$resizing.' alt="'.$alt.'"/></a><br />';
+echo '<a href="javascript: void(0);" onclick="'.$onclick.'" ><img src="'.$fullurl.'" '.$resizing.' /></a><br />';
 echo '<p>'. ($user['status'] == 1 ? get_lang('Teacher') : get_lang('Student')).'</p>';
 echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>';
 
@@ -94,7 +94,7 @@ if (count($sessions) > 0) {
 
         foreach ($session_item['courses'] as $my_course) {
             $course_info = api_get_course_info($my_course['code']);
-            $row = array ();
+            $row = array();
             $row[] = $my_course['code'];
             $row[] = $course_info['title'];
             //$row[] = $my_course['status'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
@@ -106,9 +106,9 @@ if (count($sessions) > 0) {
             $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                     '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
-            if ($my_course['status'] == STUDENT) {
+            /*if (isset($my_course['status']) && $my_course['status'] == STUDENT) {
                 $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course_info['code'].'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
-            }
+            }*/
             $row[] = $tools;
             $data[] = $row;
         }
@@ -189,8 +189,7 @@ if (Database::num_rows($res) > 0) {
 /**
  * Show the URL in which this user is subscribed
  */
-global $_configuration;
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
     $url_list= UrlManager::get_access_url_from_user($user['user_id']);
     if (count($url_list) > 0) {
         $header = array();

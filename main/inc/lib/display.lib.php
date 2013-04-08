@@ -174,7 +174,6 @@ class Display
         $form_actions = array(),
         $style = 'table'
     ) {
-        global $origin;
         $column                 = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
 
@@ -186,7 +185,11 @@ class Display
         if ($style == 'table') {
             if (is_array($header) && count($header) > 0) {
                 foreach ($header as $index => $header_item) {
-                    $table->set_header($index, $header_item[0], $header_item[1], $header_item[2], $header_item[3]);
+                    $label = $header_item[0];
+                    $sortable = isset($header_item[1]) ? $header_item[1] : false;
+                    $th_attributes = isset($header_item[2]) ? $header_item[2] : false;
+                    $td_attributes = isset($header_item[3]) ? $header_item[3] : false;
+                    $table->set_header($index, $label, $sortable, $th_attributes, $td_attributes);
                 }
             }
             $table->set_form_actions($form_actions);

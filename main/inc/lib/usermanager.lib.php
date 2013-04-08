@@ -2435,11 +2435,11 @@ class UserManager {
     public static function get_personal_session_course_list($user_id) {
         // Database Table Definitions
         $tbl_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $tbl_user                     = Database :: get_main_table(TABLE_MAIN_USER);
-        $tbl_session                 = Database :: get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_user            = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_course_user             = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_session_course_user     = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
+        $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_user           = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_course_user            = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         if ($user_id != strval(intval($user_id))) return array();
 
@@ -2656,13 +2656,11 @@ class UserManager {
             //check if user is general coach for this session
             $s = api_get_session_info($session_id);
             if ($s['id_coach'] == $user_id) {
-                if (count($course_list)==0) {
-                    $course_list = SessionManager::get_course_list_by_session_id($session_id);
-                    if (!empty($course_list)) {
-                        foreach ($course_list as $course) {
-                            if (!in_array($course['code'],$courses)) {
-                                $personal_course_list[] = $course;
-                            }
+                $course_list = SessionManager::get_course_list_by_session_id($session_id);
+                if (!empty($course_list)) {
+                    foreach ($course_list as $course) {
+                        if (!in_array($course['code'],$courses)) {
+                            $personal_course_list[] = $course;
                         }
                     }
                 }

@@ -66,7 +66,10 @@ switch ($action) {
         $return = array();
 		if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result,'ASSOC')) {
-				$return[] = array('key'=>$row['id'], 'value' => $row['name']);
+				$return[] = array(
+                    'key' => $row['id'],
+                    'value' => $row['name']
+                );
 			}
 		}
 		echo json_encode($return);

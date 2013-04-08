@@ -940,7 +940,7 @@ $app['legacy.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\LegacyController();
 });
 
-$app['userportal.controller'] = $app->share(function () use ($app) {
+$app['userPortal.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\UserPortalController();
 });
 
@@ -979,7 +979,8 @@ $app->post('/', 'legacy.controller:classicAction');
 $app->get('/index', 'index.controller:indexAction')->bind('index');
 
 //user_portal.php
-$app->get('/userportal', 'userportal.controller:indexAction');
+$app->get('/userportal', 'userPortal.controller:indexAction');
+$app->get('/userportal/{filter}', 'userPortal.controller:indexAction');
 
 //Logout page
 $app->get('/logout', 'index.controller:logoutAction')->bind('logout');

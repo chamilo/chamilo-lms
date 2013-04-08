@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 class UserPortalController
 {
 
-    function indexAction(Application $app)
+    function indexAction(Application $app, $filter = null)
     {
-        //@todo use filters like after/before to manage user access
+        //@todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
 
-        //User is not allowed
+        //Abort request because the user is not allowed here - @todo use filters
         if ($app['allowed'] == false) {
             return $app->abort(403);
         }
@@ -80,10 +80,10 @@ class UserPortalController
           } */
 
         // Main courses and session list
-        $courses_and_sessions = \PageController::return_courses_and_sessions(api_get_user_id());
+        $courses_and_sessions = \PageController::return_courses_and_sessions(api_get_user_id(), $filter);
 
         //Show the chamilo mascot
-        if (empty($courses_and_sessions) && !isset($_GET['history'])) {
+        if (empty($courses_and_sessions) && empty($filter)) {
             \PageController::return_welcome_to_course_block($app['template']);
         }
 
@@ -114,7 +114,7 @@ class UserPortalController
 
         \PageController::return_profile_block();
         \PageController::return_user_image_block();
-        \PageController::return_course_block();
+        \PageController::return_course_block($filter);
 
         $app['template']->assign('navigation_course_links', $app['template']->returnNavigationLinks());
         \PageController::return_reservation_block();

@@ -53,7 +53,7 @@ class PageController
      * @return string HTML <div> with links
      * @assert () != ''
      */
-    static function return_course_block() {
+    static function return_course_block($filter = null) {
         $show_create_link = false;
         $show_course_link = false;
 
@@ -97,14 +97,14 @@ class PageController
             if (!api_is_drh()) {
                 $my_account_content[] = array('href' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'title' => get_lang('CourseCatalog'));
 
-                if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-                    $my_account_content [] = array(
-                        'href' => 'user_portal.php',
+                if (isset($filter) && $filter == 'history') {
+                    $my_account_content[] = array(
+                        'href' => api_get_path(WEB_PUBLIC_PATH).'userportal',
                         'title' => get_lang('DisplayTrainingList')
                     );
                 } else {
-                    $my_account_content [] = array(
-                        'href' => 'user_portal.php?history=1',
+                    $my_account_content[] = array(
+                        'href' => api_get_path(WEB_PUBLIC_PATH).'userportal/history',
                         'title' => get_lang('HistoryTrainingSessions')
                     );
                 }
@@ -752,13 +752,13 @@ class PageController
      * @return string HTML list of sessions and courses
      * @assert () === false
      */
-    static function return_courses_and_sessions($user_id) {
+    static function return_courses_and_sessions($user_id, $filter = null) {
         if (empty($user_id)) {
             return false;
         }
 
         $session_categories = array();
-        $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
+        $load_history = (isset($filter) && $filter == 'history') ? true : false;
 
         if ($load_history) {
             //Load sessions in category in *history*
@@ -768,7 +768,7 @@ class PageController
             $session_categories = UserManager::get_sessions_by_category($user_id, false);
         }
 
-        $html = '';
+        $html = null;
         //Showing history title
         if ($load_history) {
             $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
@@ -783,7 +783,7 @@ class PageController
         $load_directories_preview = api_get_setting('show_documents_preview') == 'true' ? true : false;
 
         // If we're not in the history view...
-        if (!isset($_GET['history'])) {
+        if ($load_history == false) {
 
             //Display special courses
             $special_courses = CourseManager::display_special_courses($user_id, $load_directories_preview);
@@ -792,7 +792,7 @@ class PageController
             $courses_html .= CourseManager::display_courses($user_id, $load_directories_preview);
         }
 
-        $sessions_with_category = '';
+        $sessions_with_category = $html;
         $sessions_with_no_category = '';
 
         if (is_array($session_categories)) {

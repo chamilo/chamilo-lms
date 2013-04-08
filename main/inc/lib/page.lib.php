@@ -746,18 +746,19 @@ class PageController
     }
 
     /**
-     * The most important function here, prints the session and course
-     * list (user_portal.php)
+     * The most important function here, prints the session and course list (user_portal.php)
+     *
      * @param int User ID
+     * @param string filter
      * @return string HTML list of sessions and courses
      * @assert () === false
+     *
      */
     static function return_courses_and_sessions($user_id, $filter = null) {
         if (empty($user_id)) {
             return false;
         }
 
-        $session_categories = array();
         $load_history = (isset($filter) && $filter == 'history') ? true : false;
 
         if ($load_history) {
@@ -798,7 +799,8 @@ class PageController
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
-                // Sessions and courses that are not in a session category
+
+                // Sessions does not belong to a session category
                 if ($session_category_id == 0) {
 
                     // Independent sessions
@@ -816,9 +818,9 @@ class PageController
                             $count_courses_session = 0;
 
                             foreach ($session['courses'] as $course) {
-                                //read only and accesible
+                                //Read only and accessible
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                    $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id, $load_directories_preview);
+                                    $html_courses_session .= CourseManager::get_logged_user_course_html($course, $session_id, $load_directories_preview);
                                 }
                                 $count_courses_session++;
                             }
@@ -864,6 +866,7 @@ class PageController
                     $html_sessions = '';
                     foreach ($session_category['sessions'] as $session) {
                         $session_id = $session['session_id'];
+
                         // Don't show empty sessions.
                         if (count($session['courses']) < 1) {
                             continue;
@@ -873,7 +876,7 @@ class PageController
                         $count = 0;
                         foreach ($session['courses'] as $course) {
                             if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id);
+                                $html_courses_session .= CourseManager::get_logged_user_course_html($course, $session_id);
                             }
                             $count_courses_session++;
                             $count++;

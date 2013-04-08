@@ -2230,7 +2230,7 @@ class UserManager {
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
-    public static function get_sessions_by_category($user_id, $is_time_over = false, $get_count = false, $reverse_order = false) {
+    public static function get_sessions_by_category($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0 , $limit = null) {
         // Database Table Definitions
         $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2261,12 +2261,12 @@ class UserManager {
         } else {
             if (api_is_allowed_to_create_course()) {
                 //Teachers can access the session depending in the access_coach date
-                $condition_date_start1 = " AND (session.coach_access_start_date <= '$now' OR session.coach_access_start_date = '0000-00-00 00:00:00') ";
-                $condition_date_start2 = " AND (session.coach_access_start_date <= '$now' OR session.coach_access_start_date = '0000-00-00 00:00:00') ";
+                //$condition_date_start1 = " AND (session.coach_access_start_date <= '$now' OR session.coach_access_start_date = '0000-00-00 00:00:00') ";
+                //$condition_date_start2 = " AND (session.coach_access_start_date <= '$now' OR session.coach_access_start_date = '0000-00-00 00:00:00') ";
             } else {
                 //Student can't access before the start date or after the end date
-                $condition_date_start1 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
-                $condition_date_start2 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
+                //$condition_date_start1 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
+                //$condition_date_start2 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
                 $condition_date_end1 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
                 $condition_date_end2 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
             }
@@ -2275,7 +2275,6 @@ class UserManager {
         $select = "SELECT DISTINCT ".
                    " session.id, ".
                    " session.name, ".
-                   //" SUBSTR(session.name,LOCATE('-',session.name)+2) as short_name, ".
                    " access_start_date, ".
                    " access_end_date, ".
                    " coach_access_start_date, ".
@@ -2297,30 +2296,42 @@ class UserManager {
         if ($get_count) {
             $select = "SELECT count(session.id) as total_rows ";
         }
-        // select specific to course coaches
-        $select1 = " $select ".($get_count?'':$select_1)." FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ";
-        $sql1 = $select1 . " INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id and scu.id_user = $user_id) LEFT JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user WHERE scu.id_user = $user_id $condition_date_end1 $order";
+
+        $select1 = " $select ".($get_count ? '' : $select_1)."
+                    FROM $tbl_session as session
+                    LEFT JOIN $tbl_session_category session_category
+                    ON (session_category_id = session_category.id) ";
+
+        $sql1 = $select1 . " INNER JOIN $tbl_session_course_user as scu
+                ON (scu.id_session = session.id and scu.id_user = $user_id)
+                LEFT JOIN $tbl_session_user su
+                ON su.id_session = session.id AND su.id_user = scu.id_user
+                WHERE scu.id_user = $user_id $condition_date_end1 $order";
 
         // select specific to session coaches
         $select2 = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ";
         $sql2 = $select2 . "  WHERE session.id_coach = $user_id $condition_date_end2 $order";
 
+        /*$sql1 . = "LIMIT "
+        $sql2*/
+
         $result1 = Database::query($sql1);
         $result2 = Database::query($sql2);
+
         $join = array();
         $ordered_join = array();
         $ids = array();
+
         if (Database::num_rows($result2) > 0) {
-            // First take $row2, as it contains less data and this data
-            //  is enough
+            // First take $row2, as it contains less data and this data is enough
             while ($row2 = Database::fetch_array($result2)) {
                 $join[] = $row2;
                 $ids[] = $row2['id'];
             }
         }
         if (Database::num_rows($result1) > 0) {
-            // Now add the diff with $row1, ordering elements as planned by
-            //   query
+            // Now add the diff with $row1, ordering elements as planned by query
+
             $i = 0;
             while ($row1 = Database::fetch_array($result1)) {
                 if (!in_array($row1['id'],$ids)) {
@@ -2344,7 +2355,6 @@ class UserManager {
                     $ordered_join[] = $row1;
                     $join[] = $row1;
                 }
-                //$i++;
             }
         }
         if (count($ordered_join)==0) {
@@ -2433,6 +2443,7 @@ class UserManager {
      * @return array  list of statuses (session_id-course_code => status)
      */
     public static function get_personal_session_course_list($user_id) {
+
         // Database Table Definitions
         $tbl_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
@@ -2450,12 +2461,12 @@ class UserManager {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= course.code";
+                $join_access_url = "INNER JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code = course.code";
                 $where_access_url = " AND access_url_id = $access_url_id ";
             }
         }
 
-        //Courses in which we are suscribed out of any session
+        //Courses in which we are subscribed out of any session
         $tbl_user_course_category = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
         $personal_course_list_sql = "SELECT course.code,
@@ -2463,10 +2474,10 @@ class UserManager {
                                             course_rel_user.sort sort,
                                             course_rel_user.user_course_cat user_course_cat
                                      FROM $tbl_course_user course_rel_user
-                                            LEFT JOIN $tbl_course course
-                                            ON course.code = course_rel_user.course_code
-                                            LEFT JOIN $tbl_user_course_category user_course_category
-                                            ON course_rel_user.user_course_cat = user_course_category.id
+                                        INNER JOIN $tbl_course course
+                                        ON course.code = course_rel_user.course_code
+                                        INNER JOIN $tbl_user_course_category user_course_category
+                                        ON course_rel_user.user_course_cat = user_course_category.id
                                      $join_access_url
                                      WHERE  course_rel_user.user_id = '".$user_id."' AND
                                             course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."  $where_access_url
@@ -2484,98 +2495,49 @@ class UserManager {
         }
 
         // Get the list of sessions where the user is subscribed as student, course coach or session admin
-        $sessions_sql = "SELECT DISTINCT s.id, s.name
-                        FROM $tbl_session_user su , $tbl_session s, $tbl_session_course_user scu
-                        WHERE  (su.id_session = s.id AND scu.id_session = s.id) AND
-                                (
-                                    (su.id_user = $user_id AND
-                                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH.")
-                                    OR (id_coach = $user_id)
-                                    OR (scu.id_user = $user_id)
-                                )
-                        ORDER BY s.name ";
+        $sessions_sql = "(
+                            SELECT DISTINCT s.id, s.name
+                            FROM $tbl_session_user su INNER JOIN $tbl_session s
+                            ON (su.id_session = s.id)
+                            WHERE  su.id_user = $user_id AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                        )
+                        UNION (
+                            SELECT DISTINCT s.id, s.name
+                            FROM $tbl_session s
+                            WHERE id_coach = $user_id
+                        )
+                        UNION (
+                            SELECT DISTINCT s.id, s.name
+                            FROM $tbl_session_user su INNER JOIN $tbl_session s
+                            ON (su.id_session = s.id)
+                            INNER JOIN $tbl_session_course_user scu
+                            ON (scu.id_session = s.id)
+                            WHERE (scu.id_user = $user_id)
+                        )
+                        ORDER BY name ";
+        //AND scu.status = 2
 
         $result     = Database::query($sessions_sql);
         $sessions   = Database::store_result($result, 'ASSOC');
 
-        if (api_is_allowed_to_create_course()) {
-
+        if (!empty($sessions)) {
             foreach ($sessions as $enreg) {
                 $session_id = $enreg['id'];
-                $session_visibility = api_get_session_visibility($session_id);
 
-                if ($session_visibility == SESSION_INVISIBLE) {
-                    continue;
-                }
+                $courseList = SessionManager::get_course_list_by_session_id($session_id);
+                foreach ($courseList as $course) {
+                    $sessionVisibility = api_get_session_visibility($session_id, $course['code']);
 
-                $id_session = $enreg['id'];
-                $personal_course_list_sql = "SELECT DISTINCT course.code code, course.title i,
-                                            ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t,
-                                                email, course.course_language l,
-                                                category_code user_course_cat,
-                                                session.id as id_session,
-                                                session.name as session_name
-                    FROM $tbl_session_course_user as session_course_user
-                        INNER JOIN $tbl_course AS course
-                            ON course.code = session_course_user.course_code
-                        INNER JOIN $tbl_session as session
-                            ON session.id = session_course_user.id_session
-                        LEFT JOIN $tbl_user as user
-                            ON (user.user_id = session_course_user.id_user) OR (session.id_coach = user.user_id)
-                    WHERE   session_course_user.id_session = $id_session AND
-                            (
-                                (session_course_user.id_user = $user_id AND session_course_user.status = 2) OR
-                                session.id_coach = $user_id
-                            )
-                    ORDER BY i";
-
-                $course_list_sql_result = Database::query($personal_course_list_sql);
-
-                while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
-                    $result_row['course_info'] = api_get_course_info($result_row['code']);
-                    $key = $result_row['id_session'].' - '.$result_row['code'];
-                    $personal_course_list[$key] = $result_row;
+                    if ($sessionVisibility == SESSION_INVISIBLE) {
+                        continue;
+                    }
+                    $course['course_info'] = $course;
+                    $key = $session_id.' - '.$course['code'];
+                    $personal_course_list[$key] = $course;
                 }
             }
         }
 
-        foreach ($sessions as $enreg) {
-            $session_id = $enreg['id'];
-            $session_visibility = api_get_session_visibility($session_id);
-            if ($session_visibility == SESSION_INVISIBLE) {
-                continue;
-            }
-
-            // this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
-            $personal_course_list_sql = "SELECT DISTINCT
-                                            course.code code,
-                                            course.title i,
-                                            CONCAT(user.lastname,' ',user.firstname) t,
-                                            email,
-                                            course.course_language l,
-                                            1 sort,
-                                            category_code user_course_cat,
-                                            session.id as id_session,
-                                            session.name as session_name,
-                                            IF ((session_course_user.id_user = 3 AND session_course_user.status=2),'2', '5')
-                                        FROM $tbl_session_course_user as session_course_user
-                                            INNER JOIN $tbl_course AS course
-                                            ON course.code = session_course_user.course_code AND session_course_user.id_session = $session_id
-                                            INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id
-                                            LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.id_user
-                                        WHERE session_course_user.id_user = $user_id
-                                        ORDER BY i";
-
-            $course_list_sql_result = Database::query($personal_course_list_sql);
-
-            while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
-                $result_row['course_info'] = api_get_course_info($result_row['code']);
-                $key = $result_row['id_session'].' - '.$result_row['code'];
-                if (!isset($personal_course_list[$key])) {
-                    $personal_course_list[$key] = $result_row;
-                }
-            }
-        }
         return $personal_course_list;
     }
 

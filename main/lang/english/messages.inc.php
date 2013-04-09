@@ -39,4 +39,6 @@ $MessageSent = "Message Sent";
 $MailMarkSelectedAsUnread = "Mark as unread";
 $MailMarkSelectedAsRead = "Mark as read";
 $YouShouldWriteAMessage = "You should write a message";
+$SelectedMessagesUnRead = "Selected messages have been marked as unread";
+$SelectedMessagesRead = "Selected messages have been marked as read";
 ?>

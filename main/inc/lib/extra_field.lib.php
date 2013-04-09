@@ -1,6 +1,8 @@
 <?php
+/* For licensing terms, see /license.txt */
 
-class ExtraField extends Model {
+class ExtraField extends Model
+{
     public $columns = array('id', 'field_type', 'field_variable', 'field_display_text', 'field_default_value', 'field_order', 'field_visible', 'field_changeable', 'field_filter', 'tms');
 
     CONST FIELD_TYPE_TEXT =                    1;
@@ -15,11 +17,13 @@ class ExtraField extends Model {
     CONST FIELD_TYPE_TAG =                     10;
     CONST FIELD_TYPE_TIMEZONE =                11;
     CONST FIELD_TYPE_SOCIAL_PROFILE =          12;
+    CONST FIELD_TYPE_CHECKBOX =                13;
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
 
-    function __construct($type) {
+    function __construct($type)
+    {
         $this->type = $type;
         switch ($this->type) {
             case 'course':
@@ -53,7 +57,6 @@ class ExtraField extends Model {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
         return $row['count'];
     }
-
 
     public function get_all($where_conditions = array(), $order_field_options_by = null) {
         $options = Database::select('*', $this->table, array('where'=>$where_conditions, 'order' =>'field_order ASC'));
@@ -233,7 +236,6 @@ class ExtraField extends Model {
     }
 
     /**
-
      * @param array options the result of the get_field_options_by_field() array
      */
     static function extra_field_double_select_convert_array_to_string($options) {
@@ -341,7 +343,6 @@ class ExtraField extends Model {
                     break;
                 case ExtraField::FIELD_TYPE_TEXTAREA:
                     $form->add_html_editor('extra_'.$field_details['field_variable'], $field_details['field_display_text'], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-                    //$form->addElement('textarea', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], array('size' => 80));
                     $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
                     if (!$admin_permissions) {
@@ -350,9 +351,20 @@ class ExtraField extends Model {
                     break;
                 case ExtraField::FIELD_TYPE_RADIO:
                     $group = array();
-                    foreach ($field_details['options'] as $option_id => $option_details) {
+                    foreach ($field_details['options'] as $option_details) {
                         $options[$option_details['option_value']] = $option_details['option_display_text'];
                         $group[] = $form->createElement('radio', 'extra_'.$field_details['field_variable'], $option_details['option_value'],$option_details['option_display_text'].'<br />',$option_details['option_value']);
+                    }
+                    $form->addGroup($group, 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], '');
+                    if (!$admin_permissions) {
+                        if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_CHECKBOX:
+                    $group = array();
+                    foreach ($field_details['options'] as $option_details) {
+                        $options[$option_details['option_value']] = $option_details['option_display_text'];
+                        $group[] = $form->createElement('checkbox', 'extra_'.$field_details['field_variable'], $option_details['option_value'],$option_details['option_display_text'].'<br />',$option_details['option_value']);
                     }
                     $form->addGroup($group, 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], '');
                     if (!$admin_permissions) {
@@ -367,7 +379,6 @@ class ExtraField extends Model {
                     $options = array();
 
                     foreach ($field_details['options'] as $option_id => $option_details) {
-                        //$options[$option_details['option_value']] = $option_details['option_display_text'];
                         if ($get_lang_variables) {
                             $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
                         } else {

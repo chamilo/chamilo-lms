@@ -10,6 +10,10 @@
 /**
  * Page controller
  */
+use Pagerfanta\Adapter\FixedAdapter;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\View\TwitterBootstrapView;
+
 class PageController
 {
 
@@ -50,6 +54,7 @@ class PageController
     /**
      * Return a block with course-related links. The resulting HTML block's
      * contents are only based on the user defined by the active session.
+     *
      * @return string HTML <div> with links
      * @assert () != ''
      */
@@ -134,6 +139,27 @@ class PageController
                 self::show_right_block(get_lang('Profile'), array(), 'profile_block');
             }
         }
+    }
+
+    static function getSectionCourseBlock() {
+        //@todo use this class as a service
+        global $app;
+
+        $courseURL = $app['url_generator']->generate('userportal', array('type' => 'courses'));
+        $sessionURL = $app['url_generator']->generate('userportal', array('type' => 'sessions'));
+        $myCourseCategoriesURL = $app['url_generator']->generate('userportal', array('type' => 'mycoursecategories'));
+        $specialCoursesURL = $app['url_generator']->generate('userportal', array('type' => 'specialcourses'));
+        $sessionCategoriesURL = $app['url_generator']->generate('userportal', array('type' => 'sessioncategories'));
+
+        $params = array(
+            array('href' => $courseURL, 'title' => get_lang('Courses')),
+            array('href' => $specialCoursesURL, 'title' => get_lang('SpecialCourses')),
+            array('href' => $myCourseCategoriesURL, 'title' => get_lang('MyCourseCategories')),
+            array('href' => $sessionURL, 'title' => get_lang('Sessions')),
+            array('href' => $sessionCategoriesURL, 'title' => get_lang('SessionsCategories')),
+
+        );
+        self::show_right_block(get_lang('CourseSessionBlock'), $params, 'course_session_block');
     }
 
     /**
@@ -385,7 +411,6 @@ class PageController
     static function return_classes_block() {
         $html = '';
         if (api_get_setting('show_groups_to_users') == 'true') {
-            require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
             $usergroup = new Usergroup();
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
             $classes = '';
@@ -448,7 +473,6 @@ class PageController
      * @assert () == ''
      */
     static function return_teacher_link() {
-        $html = '';
         $user_id = api_get_user_id();
 
         if (!empty($user_id)) {
@@ -479,8 +503,9 @@ class PageController
         $elements = array();
         if ($show_menu) {
             if ($show_create_link) {
-                $elements[] = array('href' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
-                                    'title' => (api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')));
+                $elements[] = array(
+                    'href' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
+                    'title' => (api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')));
             }
 
             if ($show_course_link) {
@@ -745,28 +770,148 @@ class PageController
         return $result;
     }
 
+    static function returnMyCourseCategories($user_id, $filter, $page) {
+        if (empty($user_id)) {
+            return false;
+        }
+        $loadDirs = api_get_setting('show_documents_preview') == 'true' ? true : false;
+        $maxPerPage = 2;
+        $start = ($page -1) * $maxPerPage;
+
+        $nbResults = (int) CourseManager::displayPersonalCourseCategories($user_id, $filter, $loadDirs, true);
+
+        $html = CourseManager::displayPersonalCourseCategories($user_id, $filter, $loadDirs, false, $start, $maxPerPage);
+
+        $adapter = new FixedAdapter($nbResults, array());
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($maxPerPage); // 10 by default
+        $pagerfanta->setCurrentPage($page); // 1 by default
+
+        $view = new TwitterBootstrapView();
+        global $app;
+        //{type}/{category}/{filter}/{page}
+        $routeGenerator = function($page) use ($app, $filter) {
+            return $app['url_generator']->generate('userportal', array(
+                    'filter' => $filter,
+                    'type' => 'courses',
+                    'page' => $page)
+            );
+        };
+
+        $pagination = $view->render($pagerfanta, $routeGenerator, array(
+            'proximity' => 3,
+        ));
+
+        return $html.$pagination;
+
+    }
+
+    function returnSpecialCourses($user_id, $filter, $page)
+    {
+        global $app;
+
+        if (empty($user_id)) {
+            return false;
+        }
+
+        $loadDirs = api_get_setting('show_documents_preview') == 'true' ? true : false;
+        $maxPerPage = 2;
+        $start = ($page -1) * $maxPerPage;
+
+        $nbResults = CourseManager::displaySpecialCourses($user_id, $filter, $loadDirs, true);
+
+        $html = CourseManager::displaySpecialCourses($user_id, $filter, $loadDirs, false, $start, $maxPerPage);
+
+        $adapter = new FixedAdapter($nbResults, array());
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($maxPerPage); // 10 by default
+        $pagerfanta->setCurrentPage($page); // 1 by default
+
+        $view = new TwitterBootstrapView();
+
+        $routeGenerator = function($page) use ($app, $filter) {
+            return $app['url_generator']->generate('userportal', array(
+                    'filter' => $filter,
+                    'type' => 'courses',
+                    'page' => $page)
+            );
+        };
+
+        $pagination = $view->render($pagerfanta, $routeGenerator, array(
+                'proximity' => 3,
+            ));
+
+        return $html.$pagination;
+    }
+
     /**
      * The most important function here, prints the session and course list (user_portal.php)
      *
      * @param int User ID
      * @param string filter
+     * @param int page
      * @return string HTML list of sessions and courses
      * @assert () === false
      *
      */
-    static function return_courses_and_sessions($user_id, $filter = null) {
+
+    static function returnCourses($user_id, $filter, $page)
+    {
+        global $app;
+
+        if (empty($user_id)) {
+            return false;
+        }
+
+        $loadDirs = api_get_setting('show_documents_preview') == 'true' ? true : false;
+        $maxPerPage = 2;
+        $start = ($page -1) * $maxPerPage;
+
+        $nbResults = CourseManager::displayCourses($user_id, $filter, $loadDirs, true);
+
+        $html = CourseManager::displayCourses($user_id, $filter, $loadDirs, false, $start, $maxPerPage);
+
+        $adapter = new FixedAdapter($nbResults, array());
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage($maxPerPage); // 10 by default
+        $pagerfanta->setCurrentPage($page); // 1 by default
+
+        $view = new TwitterBootstrapView();
+
+        $routeGenerator = function($page) use ($app, $filter) {
+            return $app['url_generator']->generate('userportal', array(
+                    'filter' => $filter,
+                    'type' => 'courses',
+                    'page' => $page)
+            );
+        };
+
+        $pagination = $view->render($pagerfanta, $routeGenerator, array(
+            'proximity' => 3,
+        ));
+
+        return $html.$pagination;
+    }
+
+    static function returnSessions($user_id, $filter, $page) {
         if (empty($user_id)) {
             return false;
         }
 
         $load_history = (isset($filter) && $filter == 'history') ? true : false;
 
+        $maxPerPage = 10;
+
+        $start = ($page -1) * $maxPerPage;
+
         if ($load_history) {
             //Load sessions in category in *history*
-            $session_categories = UserManager::get_sessions_by_category($user_id, true, false, true);
+            $nbResults = (int) UserManager::get_sessions_by_category($user_id, true, true, true);
+            $session_categories = UserManager::get_sessions_by_category($user_id, true, false, true, $start, $maxPerPage);
         } else {
             //Load sessions in category
-            $session_categories = UserManager::get_sessions_by_category($user_id, false);
+            $nbResults = (int) UserManager::get_sessions_by_category($user_id, false, true, false);
+            $session_categories = UserManager::get_sessions_by_category($user_id, false, false, false, $start, $maxPerPage);
         }
 
         $html = null;
@@ -778,20 +923,7 @@ class PageController
             }
         }
 
-        $courses_html = '';
-        $special_courses = '';
-
         $load_directories_preview = api_get_setting('show_documents_preview') == 'true' ? true : false;
-
-        // If we're not in the history view...
-        if ($load_history == false) {
-
-            //Display special courses
-            $special_courses = CourseManager::display_special_courses($user_id, $load_directories_preview);
-
-            //Display courses
-            $courses_html .= CourseManager::display_courses($user_id, $load_directories_preview);
-        }
 
         $sessions_with_category = $html;
         $sessions_with_no_category = '';
@@ -944,7 +1076,29 @@ class PageController
                 }
             }
         }
-        return $sessions_with_category.$sessions_with_no_category.$courses_html.$special_courses;
+
+        $adapter = new FixedAdapter($nbResults, array());
+
+        $pagerfanta = new Pagerfanta($adapter);
+
+        $pagerfanta->setMaxPerPage($maxPerPage); // 10 by default
+        $pagerfanta->setCurrentPage($page); // 1 by default
+
+        $view = new TwitterBootstrapView();
+        global $app;
+
+        $routeGenerator = function($page) use ($app, $filter) {
+            return $app['url_generator']->generate('userportal', array(
+                'filter' => $filter,
+                'type' => 'sessions',
+                'page' => $page)
+            );
+        };
+
+        $pagination = $view->render($pagerfanta, $routeGenerator, array(
+            'proximity' => 3,
+        ));
+        return $sessions_with_category.$sessions_with_no_category.$pagination;
     }
 
     /**

@@ -16,6 +16,9 @@
 			{% include "default/layout/login_form.tpl" %}
 		{% endif %}
 
+        {#  course_session_block #}
+        {% include "default/index/course_session_block.tpl" %}
+
 		{#  User picture  #}
         {% include "default/index/user_image_block.tpl" %}
 

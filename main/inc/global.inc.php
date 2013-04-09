@@ -980,7 +980,12 @@ $app->get('/index', 'index.controller:indexAction')->bind('index');
 
 //user_portal.php
 $app->get('/userportal', 'userPortal.controller:indexAction');
-$app->get('/userportal/{filter}', 'userPortal.controller:indexAction');
+$app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
+    ->value('type', 'courses')
+    ->value('filter', 'current')
+    ->value('page', '1')
+    ->bind('userportal');
+    //->assert('type', '.+'); //allowing slash "/"
 
 //Logout page
 $app->get('/logout', 'index.controller:logoutAction')->bind('logout');

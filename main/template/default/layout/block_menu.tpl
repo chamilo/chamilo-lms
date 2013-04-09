@@ -6,6 +6,7 @@
         {% endif %}
 
         {% if block_menu.elements is not empty %}
+
         <ul class="nav nav-list">
             {% for item in block_menu.elements %}
                 <li><a href="{{ item.href }}"> {{ item.title }}</a></li>

@@ -9,10 +9,11 @@ class UserPortalController
 {
     /**
      * @param Application $app
+     * @param string $type courses|sessions|mycoursecategories
      * @param string $filter for the userportal courses page. Only works when setting 'history'
      * @return Response|void
      */
-    function indexAction(Application $app, $filter = null)
+    function indexAction(Application $app, $type = 'courses', $filter = 'current', $page = 1)
     {
         //@todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
@@ -28,14 +29,35 @@ class UserPortalController
         }
 
         // Main courses and session list
-        $coursesAndSessions = \PageController::return_courses_and_sessions(api_get_user_id(), $filter);
+        $items = null;
+        $type = str_replace('/', '', $type);
+
+        switch ($type) {
+            case 'sessions':
+                $items = \PageController::returnSessions(api_get_user_id(), $filter, $page);
+                break;
+            case 'sessioncategories':
+                $items = \PageController::returnSessionsCategories(api_get_user_id(), $filter, $page);
+                break;
+            case 'courses':
+                $items = \PageController::returnCourses(api_get_user_id(), $filter, $page);
+                break;
+            case 'mycoursecategories':
+                $items = \PageController::returnMyCourseCategories(api_get_user_id(), $filter, $page);
+                break;
+            case 'specialcourses':
+                $items = \PageController::returnSpecialCourses(api_get_user_id(), $filter, $page);
+                break;
+        }
 
         //Show the chamilo mascot
-        if (empty($coursesAndSessions) && empty($filter)) {
+        if (empty($items) && empty($filter)) {
             \PageController::return_welcome_to_course_block($app['template']);
         }
 
-        $app['template']->assign('content', $coursesAndSessions);
+        $app['template']->assign('content', $items);
+
+        \PageController::getSectionCourseBlock();
 
         \PageController::return_profile_block();
         \PageController::return_user_image_block();

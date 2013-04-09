@@ -2230,7 +2230,7 @@ class UserManager {
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
-    public static function get_sessions_by_category($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0 , $limit = null) {
+    public static function get_sessions_by_category($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0, $maxPerPage = null) {
         // Database Table Definitions
         $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2248,6 +2248,7 @@ class UserManager {
         $condition_date_start2 = null;
         $condition_date_end1 = null;
         $condition_date_end2 = null;
+
         // uncomment commented query lines to alter the query sorting
         //$order = ' ORDER BY session_category_name, short_name ';
         $order = ' ORDER BY session_category_name, name ';
@@ -2306,21 +2307,43 @@ class UserManager {
                 ON (scu.id_session = session.id and scu.id_user = $user_id)
                 LEFT JOIN $tbl_session_user su
                 ON su.id_session = session.id AND su.id_user = scu.id_user
-                WHERE scu.id_user = $user_id $condition_date_end1 $order";
+                WHERE scu.id_user = $user_id $condition_date_end1";
 
         // select specific to session coaches
         $select2 = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ";
-        $sql2 = $select2 . "  WHERE session.id_coach = $user_id $condition_date_end2 $order";
+        $sql2 = $select2 . " WHERE session.id_coach = $user_id $condition_date_end2 ";
 
-        /*$sql1 . = "LIMIT "
-        $sql2*/
+        $sql3 = null;
+        if ($get_count) {
+            $sql3 = $sql1;
+        } else {
+            $sql1 .= $order;
+            $sql2 .= $order;
+        }
 
-        $result1 = Database::query($sql1);
-        $result2 = Database::query($sql2);
+        $sql3 = $select2 . " WHERE session.id_coach = $user_id $condition_date_end2 ";
+
+        if (isset($start) && isset($maxPerPage)) {
+            $start = intval($start);
+            $maxPerPage = intval($maxPerPage);
+            $limitCondition = " LIMIT $start, $maxPerPage";
+
+            $sql1 .= $limitCondition;
+            $sql2 .= $limitCondition;
+        }
 
         $join = array();
         $ordered_join = array();
         $ids = array();
+
+        if ($get_count) {
+            $result3 = Database::query($sql3);
+            $row = Database::fetch_array($result3);
+            return $row['total_rows'];
+        } else {
+            $result1 = Database::query($sql1);
+            $result2 = Database::query($sql2);
+        }
 
         if (Database::num_rows($result2) > 0) {
             // First take $row2, as it contains less data and this data is enough
@@ -2329,6 +2352,7 @@ class UserManager {
                 $ids[] = $row2['id'];
             }
         }
+
         if (Database::num_rows($result1) > 0) {
             // Now add the diff with $row1, ordering elements as planned by query
 
@@ -2357,10 +2381,12 @@ class UserManager {
                 }
             }
         }
-        if (count($ordered_join)==0) {
+
+        if (count($ordered_join) == 0) {
             $ordered_join = $join;
         }
-        if (count($ordered_join)>0) {
+
+        if (count($ordered_join) > 0) {
             //while ($row = Database::fetch_array($result1)) {
             foreach ($ordered_join as $row) {
                 if ($get_count) {

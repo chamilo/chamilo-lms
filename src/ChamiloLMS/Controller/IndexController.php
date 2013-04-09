@@ -92,7 +92,7 @@ class IndexController// extends Controller
 
 
         if (api_get_setting('display_categories_on_homepage') == 'true') {
-            $app['template']->assign('course_category_block', \PageController::return_courses_in_categories());
+            $app['template']->assign('course_category_block', $app['page_controller']->return_courses_in_categories());
         }
 
         // Facebook connexion, if activated
@@ -103,13 +103,13 @@ class IndexController// extends Controller
         $this->setLoginForm($app);
 
         if (!api_is_anonymous()) {
-            \PageController::return_profile_block();
-            \PageController::return_user_image_block();
+            $app['page_controller']->return_profile_block();
+            $app['page_controller']->return_user_image_block();
 
             if (api_is_platform_admin()) {
-                \PageController::return_course_block();
+                $app['page_controller']->return_course_block();
             } else {
-                \PageController::return_teacher_link();
+                $app['page_controller']->return_teacher_link();
             }
         }
 
@@ -120,16 +120,16 @@ class IndexController// extends Controller
         // When loading a chamilo page do not include the hot courses and news
         if (!isset($_REQUEST['include'])) {
             if (api_get_setting('show_hot_courses') == 'true') {
-                $hotCourses = \PageController::return_hot_courses();
+                $hotCourses = $app['page_controller']->return_hot_courses();
             }
-            $announcementsBlock = \PageController::return_announcements();
+            $announcementsBlock = $app['page_controller']->return_announcements();
         }
 
         $app['template']->assign('hot_courses', $hotCourses);
         $app['template']->assign('announcements_block', $announcementsBlock);
 
         //Homepage
-        $app['template']->assign('home_page_block', \PageController::return_home_page());
+        $app['template']->assign('home_page_block', $app['page_controller']->return_home_page());
 
         //Navigation links
         $navLinks = $app['template']->returnNavigationLinks();
@@ -137,11 +137,11 @@ class IndexController// extends Controller
         $app['template']->assign('navigation_course_links', $navLinks);
         $app['template']->assign('main_navigation_block', $navLinks);
 
-        \PageController::return_notice();
-        \PageController::return_help();
+        $app['page_controller']->return_notice();
+        $app['page_controller']->return_help();
 
         if (api_is_platform_admin() || api_is_drh()) {
-            \PageController::return_skills_links();
+            $app['page_controller']->return_skills_links();
         }
 
         $response = $app['template']->render_layout('layout_2_col.tpl');

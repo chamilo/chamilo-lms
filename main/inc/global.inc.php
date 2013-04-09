@@ -434,6 +434,11 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             $template = new Template(null, $app);
             return $template;
         });
+
+        $app['page_controller'] = $app->share(function () use ($app) {
+            $pageController = new PageController($app);
+            return $pageController;
+        });
     }
 
     public function boot(Application $app)

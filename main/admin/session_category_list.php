@@ -18,17 +18,17 @@ api_protect_admin_script(true);
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 $htmlHeadXtra[] = '<script>
-				function selectAll(idCheck,numRows,action) {
-					for(i=0;i<numRows;i++) {
-						idcheck = document.getElementById(idCheck+"_"+i);
-						if (action == "true"){
-							idcheck.checked = true;
-						} else {
-							idcheck.checked = false;
-						}
-					}
-				}
-				</script>';
+function selectAll(idCheck,numRows,action) {
+    for(i=0;i<numRows;i++) {
+        idcheck = document.getElementById(idCheck+"_"+i);
+        if (action == "true"){
+            idcheck.checked = true;
+        } else {
+            idcheck.checked = false;
+        }
+    }
+}
+</script>';
 
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -98,7 +98,6 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $nbr_results = sizeof($Sessions);
     $tool_name = get_lang('ListSessionCategory');
     Display::display_header($tool_name);
-    //api_display_tool_title($tool_name);
 
     if (!empty($_GET['warn'])) {
         Display::display_warning_message(urldecode($_GET['warn']), false);
@@ -114,7 +113,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
         <?php
         echo '<div style="float:right;">
 			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_add.php">'.Display::return_icon('new_folder.png', get_lang('AddSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>
-			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_list.php">'.Display::return_icon('session.png', get_lang('ListSession'), '', ICON_SIZE_MEDIUM).'</a>
+			<a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">'.Display::return_icon('session.png', get_lang('ListSession'), '', ICON_SIZE_MEDIUM).'</a>
 	 	  </div>';
         ?>
         <form method="POST" action="session_category_list.php">
@@ -176,7 +175,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 <tr class="<?php echo $i ? 'row_odd' : 'row_even'; ?>">
                     <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
                     <td><?php echo api_htmlentities($enreg['name'], ENT_QUOTES, $charset); ?></td>
-                    <td><?php echo "<a href=\"session_list.php?id_category=".$enreg['id']."\">".$nb_courses." Sesion(es) </a>"; ?></td>
+                    <td><?php echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php?id_category='.$enreg['id'].'">'.$nb_courses.' '.get_lang('Sessions').'</a>'; ?></td>
                     <td><?php echo api_htmlentities($enreg['date_start'], ENT_QUOTES, $charset); ?></td>
                     <td><?php echo api_htmlentities($enreg['date_end'], ENT_QUOTES, $charset); ?></td>
                     <td>
@@ -203,9 +202,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             if ($num > $limit) {
                 if ($page) {
                     ?>
-
                     <a href="<?php echo api_get_self(); ?>?page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($_REQUEST['order']); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
-
                 <?php
             } else {
                 echo get_lang('Previous');
@@ -238,4 +235,5 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     <?php } ?>
     </table>
 
-<?php } Display::display_footer(); ?>
+<?php }
+Display::display_footer();

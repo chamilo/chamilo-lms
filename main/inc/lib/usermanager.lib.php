@@ -2221,6 +2221,74 @@ class UserManager {
         return $data;
     }
 
+    static function getCategories($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0, $maxPerPage = null, $categoryFilter = null) {
+        $tableSessionCategory = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $tableSession = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $tableSessionUser = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
+        $tableSessionCourseUser    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $select = " DISTINCT sc.id, sc.name  ";
+        if ($get_count) {
+            $select = " COUNT(DISTINCT(sc.id)) as total";
+        }
+
+        $sql = "SELECT $select
+                FROM $tableSessionCategory sc
+                INNER JOIN $tableSession s ON (sc.id = s.session_category_id)
+                INNER JOIN (
+                    (
+                        SELECT DISTINCT id_session as sessionID FROM $tableSessionUser
+                        WHERE id_user = $user_id AND relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                    )
+                    UNION
+                    (
+                        SELECT DISTINCT s.id
+                        FROM $tableSession s
+                        WHERE (id_coach = $user_id)
+                    )
+                    UNION
+                    (
+                        SELECT DISTINCT s.id
+                        FROM $tableSessionUser su INNER JOIN $tableSession s
+                        ON (su.id_session = s.id)
+                        INNER JOIN $tableSessionCourseUser scu
+                        ON (scu.id_session = s.id)
+                        WHERE (scu.id_user = $user_id)
+                    )
+                ) as t ON (t.sessionId = sc.id)
+        ";
+
+        if ($get_count) {
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            return $row['total'];
+        }
+
+        $order = ' ORDER BY sc.name';
+        if ($reverse_order) {
+            $order = ' ORDER BY sc.name DESC ';
+        }
+
+        $sql .= $order;
+
+        if (isset($start) && isset($maxPerPage)) {
+            $start = intval($start);
+            $maxPerPage = intval($maxPerPage);
+            $limitCondition = " LIMIT $start, $maxPerPage";
+            $sql .= $limitCondition;
+        }
+
+        $result = Database::query($sql);
+        $sessionsCategories = array();
+        if (Database::num_rows($result)) {
+            while ($sessionCategory = Database::fetch_array($result, 'ASSOC')) {
+                $sessions = self::get_sessions_by_category($user_id, $is_time_over, false, $reverse_order, null, null, $sessionCategory['id']);
+                $sessionsCategories[$sessionCategory['id']] = $sessions[$sessionCategory['id']];
+            }
+        }
+        return $sessionsCategories;
+    }
+
     /**
      * Gives a list of [session_category][session_id] for the current user.
      * @param integer $user_id
@@ -2230,7 +2298,7 @@ class UserManager {
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
-    public static function get_sessions_by_category($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0, $maxPerPage = null) {
+    public static function get_sessions_by_category($user_id, $is_time_over = false, $get_count = false, $reverse_order = false, $start = 0, $maxPerPage = null, $categoryFilter = null) {
         // Database Table Definitions
         $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2249,13 +2317,12 @@ class UserManager {
         $condition_date_end1 = null;
         $condition_date_end2 = null;
 
-        // uncomment commented query lines to alter the query sorting
-        //$order = ' ORDER BY session_category_name, short_name ';
-        $order = ' ORDER BY session_category_name, name ';
+        $order = ' ORDER BY name ';
         if ($reverse_order) {
-            //$order = ' ORDER BY session_category_name DESC, short_name DESC ';
-            $order = ' ORDER BY session_category_name DESC, name DESC ';
+            $order = ' ORDER BY name DESC ';
         }
+
+
         if ($is_time_over) {
             $condition_date_end1 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
             $condition_date_end2 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00')) ";
@@ -2309,19 +2376,41 @@ class UserManager {
                 ON su.id_session = session.id AND su.id_user = scu.id_user
                 WHERE scu.id_user = $user_id $condition_date_end1";
 
+
         // select specific to session coaches
         $select2 = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ";
         $sql2 = $select2 . " WHERE session.id_coach = $user_id $condition_date_end2 ";
 
+        if (isset($categoryFilter) && $categoryFilter != '') {
+            switch ($categoryFilter) {
+                case 'no_category':
+                    $sql1 .= "AND session_category_id = 0";
+                    $sql2 .= "AND session_category_id = 0";
+                    break;
+                case 'with_category':
+                    $sql1 .= "AND session_category_id <> 0";
+                    $sql2 .= "AND session_category_id <> 0";
+                    break;
+                default:
+                    if (!empty($categoryFilter) && is_numeric($categoryFilter)) {
+                        $categoryFilter = intval($categoryFilter);
+                        $sql1 .= "AND session_category_id = $categoryFilter";
+                        $sql2 .= "AND session_category_id = $categoryFilter";
+                    }
+                    break;
+            }
+        }
+
         $sql3 = null;
+
         if ($get_count) {
-            $sql3 = $sql1;
+            $sql3 = $sql2;
         } else {
             $sql1 .= $order;
             $sql2 .= $order;
         }
 
-        $sql3 = $select2 . " WHERE session.id_coach = $user_id $condition_date_end2 ";
+        //$sql3 = $sql2 . " AND session.id_coach = $user_id $condition_date_end2 ";
 
         if (isset($start) && isset($maxPerPage)) {
             $start = intval($start);
@@ -2341,6 +2430,7 @@ class UserManager {
             $row = Database::fetch_array($result3);
             return $row['total_rows'];
         } else {
+
             $result1 = Database::query($sql1);
             $result2 = Database::query($sql2);
         }

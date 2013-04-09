@@ -850,7 +850,7 @@ class Template
                 $content .= '</li>';
             }
             $content .= '</ul>';
-            $html = PageController::show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
+            $html = $this->app['page_controller']->show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
         }
         return $html;
     }

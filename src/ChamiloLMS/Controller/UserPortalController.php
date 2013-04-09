@@ -34,40 +34,39 @@ class UserPortalController
 
         switch ($type) {
             case 'sessions':
-                $items = \PageController::returnSessions(api_get_user_id(), $filter, $page);
+                $items = $app['page_controller']->returnSessions(api_get_user_id(), $filter, $page);
                 break;
             case 'sessioncategories':
-                $items = \PageController::returnSessionsCategories(api_get_user_id(), $filter, $page);
+                $items = $app['page_controller']->returnSessionsCategories(api_get_user_id(), $filter, $page);
                 break;
             case 'courses':
-                $items = \PageController::returnCourses(api_get_user_id(), $filter, $page);
+                $items = $app['page_controller']->returnCourses(api_get_user_id(), $filter, $page);
                 break;
             case 'mycoursecategories':
-                $items = \PageController::returnMyCourseCategories(api_get_user_id(), $filter, $page);
+                $items = $app['page_controller']->returnMyCourseCategories(api_get_user_id(), $filter, $page);
                 break;
             case 'specialcourses':
-                $items = \PageController::returnSpecialCourses(api_get_user_id(), $filter, $page);
+                $items = $app['page_controller']->returnSpecialCourses(api_get_user_id(), $filter, $page);
                 break;
         }
 
         //Show the chamilo mascot
         if (empty($items) && empty($filter)) {
-            \PageController::return_welcome_to_course_block($app['template']);
+            $app['page_controller']->return_welcome_to_course_block($app['template']);
         }
 
         $app['template']->assign('content', $items);
 
-        \PageController::getSectionCourseBlock();
-
-        \PageController::return_profile_block();
-        \PageController::return_user_image_block();
-        \PageController::return_course_block($filter);
+        $app['page_controller']->getSectionCourseBlock();
+        $app['page_controller']->return_profile_block();
+        $app['page_controller']->return_user_image_block();
+        $app['page_controller']->return_course_block($filter);
 
         $app['template']->assign('navigation_course_links', $app['template']->returnNavigationLinks());
-        \PageController::return_reservation_block();
-        $app['template']->assign('search_block', \PageController::return_search_block());
-        $app['template']->assign('classes_block', \PageController::return_classes_block());
-        \PageController::return_skills_links();
+        $app['page_controller']->return_reservation_block();
+        $app['template']->assign('search_block', $app['page_controller']->return_search_block());
+        $app['template']->assign('classes_block', $app['page_controller']->return_classes_block());
+        $app['page_controller']->return_skills_links();
 
         // Deleting the session_id.
         Session::erase('session_id');

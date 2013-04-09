@@ -174,7 +174,7 @@ class SessionManager {
         return $result['count'] > 0;
     }
     /**
-     * Gets the admin session list callback of the admin/session_list.php page
+     * Gets the admin session list callback of the session/session_list.php page
      * @param array order and limit keys
      * @param boolean Whether to get all the results or only the count
      * @return mixed Integer for number of rows, or array of results
@@ -452,7 +452,7 @@ class SessionManager {
         return $num;
     }
     /**
-     * Gets the admin session list callback of the admin/session_list.php
+     * Gets the admin session list callback of the session/session_list.php
      * page with all user/details in the right fomat
      * @param array order and limit keys
      * @result array Array of rows results
@@ -2794,5 +2794,14 @@ class SessionManager {
             'simple_column_name' => $simple_column_name
         );
         return $return_array;
+    }
+
+    static function getSessionsByCategory($categoryId) {
+        $categoryId = intval($categoryId);
+        $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sql = "select * FROM $tableSession WHERE session_category_id = $categoryId";
+        $result = Database::query($sql);
+        return Database::store_result($result);
+
     }
 }

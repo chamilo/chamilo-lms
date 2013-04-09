@@ -38,3 +38,5 @@ searchdb/*
 
 *.orig
 nbproject/*
+
+vendor/.git

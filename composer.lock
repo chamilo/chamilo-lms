@@ -1,5 +1,5 @@
 {
-    "hash": "b75d7ddfba8e0198ad8e714f107936ca",
+    "hash": "7cb7caff324a28f86650f70fc4f6fb1c",
     "packages": [
         {
             "name": "chamilo/chash",
@@ -400,12 +400,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "db0585625f6944a755534688e971b86d1d33ec45"
+                "reference": "af197d8d65de90827778379a18dd44d82c61d3fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/db0585625f6944a755534688e971b86d1d33ec45",
-                "reference": "db0585625f6944a755534688e971b86d1d33ec45",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/af197d8d65de90827778379a18dd44d82c61d3fc",
+                "reference": "af197d8d65de90827778379a18dd44d82c61d3fc",
                 "shasum": ""
             },
             "require": {
@@ -471,7 +471,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-04-07 10:44:07"
+            "time": "2013-04-08 16:55:03"
         },
         {
             "name": "igorw/config-service-provider",
@@ -479,12 +479,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/igorw/ConfigServiceProvider.git",
-                "reference": "v1.1.5"
+                "reference": "1b834386a3e535a95928445129390242fb5a7b05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/igorw/ConfigServiceProvider/zipball/v1.1.5",
-                "reference": "v1.1.5",
+                "url": "https://api.github.com/repos/igorw/ConfigServiceProvider/zipball/1b834386a3e535a95928445129390242fb5a7b05",
+                "reference": "1b834386a3e535a95928445129390242fb5a7b05",
                 "shasum": ""
             },
             "require": {
@@ -526,7 +526,7 @@
             "keywords": [
                 "silex"
             ],
-            "time": "2013-03-09 15:35:23"
+            "time": "2013-04-08 13:55:50"
         },
         {
             "name": "knplabs/knp-menu",
@@ -641,12 +641,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/lessphp.git",
-                "reference": "280b8bcce2256b0793feaed8a74568edcbab42ae"
+                "reference": "51aad6ef903bdcb18280ae81fb85016a078232a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/lessphp/zipball/280b8bcce2256b0793feaed8a74568edcbab42ae",
-                "reference": "280b8bcce2256b0793feaed8a74568edcbab42ae",
+                "url": "https://api.github.com/repos/leafo/lessphp/zipball/51aad6ef903bdcb18280ae81fb85016a078232a0",
+                "reference": "51aad6ef903bdcb18280ae81fb85016a078232a0",
                 "shasum": ""
             },
             "type": "library",
@@ -674,7 +674,7 @@
             ],
             "description": "lessphp is a compiler for LESS written in PHP.",
             "homepage": "http://leafo.net/lessphp/",
-            "time": "2013-04-07 17:30:42"
+            "time": "2013-04-09 01:25:49"
         },
         {
             "name": "mheap/silex-assetic",
@@ -682,12 +682,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mheap/Silex-Assetic.git",
-                "reference": "2836391e9aadf60478a6ceff8d8d7f919946d0a9"
+                "reference": "a3a2747ca48897ebd1e1def300c58117969ad6aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/2836391e9aadf60478a6ceff8d8d7f919946d0a9",
-                "reference": "2836391e9aadf60478a6ceff8d8d7f919946d0a9",
+                "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/a3a2747ca48897ebd1e1def300c58117969ad6aa",
+                "reference": "a3a2747ca48897ebd1e1def300c58117969ad6aa",
                 "shasum": ""
             },
             "require": {
@@ -736,7 +736,7 @@
                 "assetic",
                 "silex"
             ],
-            "time": "2013-04-06 13:09:31"
+            "time": "2013-04-09 10:37:15"
         },
         {
             "name": "monolog/monolog",
@@ -1068,12 +1068,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Silex.git",
-                "reference": "31139babedb2a4f504737d1d8c5255fca102dae2"
+                "reference": "80f0abd669b2c615b73065b76c63ff27c7d3c38d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Silex/zipball/31139babedb2a4f504737d1d8c5255fca102dae2",
-                "reference": "31139babedb2a4f504737d1d8c5255fca102dae2",
+                "url": "https://api.github.com/repos/fabpot/Silex/zipball/80f0abd669b2c615b73065b76c63ff27c7d3c38d",
+                "reference": "80f0abd669b2c615b73065b76c63ff27c7d3c38d",
                 "shasum": ""
             },
             "require": {
@@ -1086,6 +1086,7 @@
             },
             "require-dev": {
                 "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
+                "monolog/monolog": ">=1.4,<2.0,>=1.4.1",
                 "swiftmailer/swiftmailer": "4.2.*",
                 "symfony/browser-kit": ">=2.1,<2.3-dev",
                 "symfony/config": ">=2.1,<2.3-dev",
@@ -1141,7 +1142,7 @@
             "keywords": [
                 "microframework"
             ],
-            "time": "2013-04-03 19:59:11"
+            "time": "2013-04-08 20:37:52"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1246,12 +1247,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "2d4f1e5bb1144f66edb34becf3b4b29193c628f7"
+                "reference": "d789216529d541b55cf39141724ca71733265f60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/2d4f1e5bb1144f66edb34becf3b4b29193c628f7",
-                "reference": "2d4f1e5bb1144f66edb34becf3b4b29193c628f7",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/d789216529d541b55cf39141724ca71733265f60",
+                "reference": "d789216529d541b55cf39141724ca71733265f60",
                 "shasum": ""
             },
             "require": {
@@ -1287,7 +1288,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-07 14:24:42"
+            "time": "2013-04-07 20:25:23"
         },
         {
             "name": "symfony/dependency-injection",
@@ -1917,12 +1918,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Security.git",
-                "reference": "cfa23578e55c43c20a8d823bf9a01ed08bcde1d5"
+                "reference": "d62296fc75038d884314ed78bbf4fa2e95654017"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Security/zipball/cfa23578e55c43c20a8d823bf9a01ed08bcde1d5",
-                "reference": "cfa23578e55c43c20a8d823bf9a01ed08bcde1d5",
+                "url": "https://api.github.com/repos/symfony/Security/zipball/d62296fc75038d884314ed78bbf4fa2e95654017",
+                "reference": "d62296fc75038d884314ed78bbf4fa2e95654017",
                 "shasum": ""
             },
             "require": {
@@ -1974,7 +1975,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-02 09:39:57"
+            "time": "2013-04-07 20:25:23"
         },
         {
             "name": "symfony/translation",
@@ -2202,16 +2203,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.12.2",
+            "version": "v1.12.3",
             "source": {
                 "type": "git",
-                "url": "git://github.com/fabpot/Twig.git",
-                "reference": "v1.12.2"
+                "url": "https://github.com/fabpot/Twig.git",
+                "reference": "v1.12.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/v1.12.2",
-                "reference": "v1.12.2",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/v1.12.3",
+                "reference": "v1.12.3",
                 "shasum": ""
             },
             "require": {
@@ -2247,7 +2248,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-02-09 18:21:53"
+            "time": "2013-04-08 12:40:11"
         }
     ],
     "packages-dev": [

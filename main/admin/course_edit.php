@@ -13,27 +13,22 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
-
-
 $course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
+
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyCourseInfo');
 $interbreadcrumb[] = array ("url" => 'index.php',       "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => "course_list.php", "name" => get_lang('CourseList'));
 
-/* Libraries */
-/* MAIN CODE */
 // Get all course categories
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 //Get the course infos
-$sql = "SELECT * FROM $course_table WHERE code='".Database::escape_string($course_code)."'";
-$result = Database::query($sql);
-if (Database::num_rows($result) != 1) {
+$course = api_get_course_info($course_code);
+if (empty($course)) {
 	header('Location: course_list.php');
-	exit ();
+	exit;
 }
-$course = Database::fetch_array($result,'ASSOC');
 
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -46,28 +41,26 @@ while ($obj = Database::fetch_object($res)) {
 }
 
 // Get all possible teachers without the course teachers
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
 	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
 			INNER JOIN $access_url_rel_user_table url_rel_user
 			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 } else {
-	
 	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
 }
 
 $res = Database::query($sql);
 $teachers = array();
 
-
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
-    
+
 	if (!array_key_exists($obj->user_id,$course_teachers)) {
 		$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 	}
 
-	if ($course['tutor_name']==$course_teachers[$obj->user_id]) {
+	if (isset($course['tutor_name']) && isset($course_teachers[$obj->user_id]) && $course['tutor_name']== $course_teachers[$obj->user_id]) {
 		$course['tutor_name']=$obj->user_id;
 	}
 	//We add in the array platform teachers
@@ -134,7 +127,7 @@ $form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80"
 		'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
 
 
-$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories , array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
+$categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), array() , array('style'=>'width:350px','id'=>'category_code_id', 'class'=>'chzn-select'));
 $categories_select->addOption('-','');
 CourseManager::select_and_sort_categories($categories_select);
 
@@ -178,7 +171,6 @@ $extra = $extra_field->add_elements($form, $course_code);
 
 $htmlHeadXtra[] ='
 <script>
-
 $(function() {
     '.$extra['jquery_ready_content'].'
 });
@@ -217,14 +209,16 @@ if ($form->validate()) {
             }
         }
         $warn = substr($warn,0,-1);
-    }    
+    }
 	if ($visual_code_is_used) {
 	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));
+        exit;
 	} else {
         header('Location: course_list.php');
+        exit;
 	}
-	
 }
+
 Display::display_header($tool_name);
 
 echo "<script>

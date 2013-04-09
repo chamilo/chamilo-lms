@@ -74,7 +74,8 @@ If reading the config file on every request becomes a performance problem in
 production, you can use a plain PHP file instead, and it will get cached by
 APC.
 
-Just make sure it ends with `.php`:
+You'll have to rewrite your config to be a PHP file that returns the array of
+config data, and also make sure it ends with `.php`:
 
     $app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/prod.php"));
 

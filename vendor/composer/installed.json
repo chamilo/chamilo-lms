@@ -111,57 +111,6 @@
         ]
     },
     {
-        "name": "twig/twig",
-        "version": "v1.12.2",
-        "version_normalized": "1.12.2.0",
-        "source": {
-            "type": "git",
-            "url": "git://github.com/fabpot/Twig.git",
-            "reference": "v1.12.2"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/fabpot/Twig/zipball/v1.12.2",
-            "reference": "v1.12.2",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2.4"
-        },
-        "time": "2013-02-09 18:21:53",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.12-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Twig_": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Armin Ronacher",
-                "email": "armin.ronacher@active-4.com"
-            }
-        ],
-        "description": "Twig, the flexible, fast, and secure template language for PHP",
-        "homepage": "http://twig.sensiolabs.org",
-        "keywords": [
-            "templating"
-        ]
-    },
-    {
         "name": "swiftmailer/swiftmailer",
         "version": "v4.1.8",
         "version_normalized": "4.1.8.0",
@@ -1014,63 +963,6 @@
         ]
     },
     {
-        "name": "igorw/config-service-provider",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/igorw/ConfigServiceProvider.git",
-            "reference": "v1.1.5"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/igorw/ConfigServiceProvider/zipball/v1.1.5",
-            "reference": "v1.1.5",
-            "shasum": ""
-        },
-        "require": {
-            "silex/silex": "1.0.*@dev"
-        },
-        "require-dev": {
-            "symfony/yaml": ">=2.1,<3.0"
-        },
-        "suggest": {
-            "symfony/yaml": "~2.1"
-        },
-        "time": "2013-03-09 15:35:23",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Igorw\\Silex": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Igor Wiedler",
-                "email": "igor@wiedler.ch",
-                "homepage": "http://wiedler.ch/igor/"
-            },
-            {
-                "name": "Contributors",
-                "homepage": "https://github.com/igorw/ConfigServiceProvider/contributors"
-            }
-        ],
-        "description": "A config ServiceProvider for Silex with support for php, json and yaml.",
-        "keywords": [
-            "silex"
-        ]
-    },
-    {
         "name": "symfony/property-access",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -1342,89 +1234,6 @@
         "notification-url": "https://packagist.org/downloads/"
     },
     {
-        "name": "silex/silex",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/fabpot/Silex.git",
-            "reference": "31139babedb2a4f504737d1d8c5255fca102dae2"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/fabpot/Silex/zipball/31139babedb2a4f504737d1d8c5255fca102dae2",
-            "reference": "31139babedb2a4f504737d1d8c5255fca102dae2",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "pimple/pimple": "1.*",
-            "symfony/event-dispatcher": ">=2.1,<2.3-dev",
-            "symfony/http-foundation": ">=2.1,<2.3-dev",
-            "symfony/http-kernel": ">=2.1,<2.3-dev",
-            "symfony/routing": ">=2.1,<2.3-dev"
-        },
-        "require-dev": {
-            "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
-            "swiftmailer/swiftmailer": "4.2.*",
-            "symfony/browser-kit": ">=2.1,<2.3-dev",
-            "symfony/config": ">=2.1,<2.3-dev",
-            "symfony/css-selector": ">=2.1,<2.3-dev",
-            "symfony/dom-crawler": ">=2.1,<2.3-dev",
-            "symfony/finder": ">=2.1,<2.3-dev",
-            "symfony/form": ">=2.1.4,<2.3-dev",
-            "symfony/locale": ">=2.1,<2.3-dev",
-            "symfony/monolog-bridge": ">=2.1,<2.3-dev",
-            "symfony/options-resolver": ">=2.1,<2.3-dev",
-            "symfony/process": ">=2.1,<2.3-dev",
-            "symfony/security": ">=2.1,<2.3-dev",
-            "symfony/serializer": ">=2.1,<2.3-dev",
-            "symfony/translation": ">=2.1,<2.3-dev",
-            "symfony/twig-bridge": ">=2.1,<2.3-dev",
-            "symfony/validator": ">=2.1,<2.3-dev",
-            "twig/twig": ">=1.8.0,<2.0-dev"
-        },
-        "suggest": {
-            "symfony/browser-kit": ">=2.1,<2.3-dev",
-            "symfony/css-selector": ">=2.1,<2.3-dev",
-            "symfony/dom-crawler": ">=2.1,<2.3-dev",
-            "symfony/form": "To make use of the FormServiceProvider, >= 2.1.4 is required"
-        },
-        "time": "2013-04-03 19:59:11",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Silex": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Igor Wiedler",
-                "email": "igor@wiedler.ch",
-                "homepage": "http://wiedler.ch/igor/"
-            }
-        ],
-        "description": "The PHP micro-framework based on the Symfony2 Components",
-        "homepage": "http://silex.sensiolabs.org",
-        "keywords": [
-            "microframework"
-        ]
-    },
-    {
         "name": "symfony/config",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -1601,74 +1410,6 @@
             }
         ],
         "description": "Symfony Doctrine Bridge",
-        "homepage": "http://symfony.com"
-    },
-    {
-        "name": "symfony/security",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "target-dir": "Symfony/Component/Security",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Security.git",
-            "reference": "cfa23578e55c43c20a8d823bf9a01ed08bcde1d5"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Security/zipball/cfa23578e55c43c20a8d823bf9a01ed08bcde1d5",
-            "reference": "cfa23578e55c43c20a8d823bf9a01ed08bcde1d5",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "symfony/event-dispatcher": ">=2.1,<3.0",
-            "symfony/http-foundation": ">=2.1,<2.4-dev",
-            "symfony/http-kernel": ">=2.1,<=2.3-dev"
-        },
-        "require-dev": {
-            "doctrine/common": ">=2.2,<3.0",
-            "doctrine/dbal": ">=2.2,<3.0",
-            "psr/log": ">=1.0,<2.0",
-            "symfony/form": ">=2.0,<3.0",
-            "symfony/routing": ">=2.2,<2.4-dev",
-            "symfony/validator": ">=2.2,<2.4-dev"
-        },
-        "suggest": {
-            "doctrine/dbal": "to use the built-in ACL implementation",
-            "symfony/class-loader": "2.2.*",
-            "symfony/finder": "2.2.*",
-            "symfony/form": "2.2.*",
-            "symfony/routing": "2.2.*",
-            "symfony/validator": "2.2.*"
-        },
-        "time": "2013-04-02 09:39:57",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.3-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Security\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Security Component",
         "homepage": "http://symfony.com"
     },
     {
@@ -2287,58 +2028,6 @@
         "homepage": "http://symfony.com"
     },
     {
-        "name": "symfony/console",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "target-dir": "Symfony/Component/Console",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Console.git",
-            "reference": "2d4f1e5bb1144f66edb34becf3b4b29193c628f7"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Console/zipball/2d4f1e5bb1144f66edb34becf3b4b29193c628f7",
-            "reference": "2d4f1e5bb1144f66edb34becf3b4b29193c628f7",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "symfony/event-dispatcher": ">=2.1,<3.0"
-        },
-        "time": "2013-04-07 14:24:42",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.3-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Console\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Console Component",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "symfony/twig-bridge",
         "version": "2.2.x-dev",
         "version_normalized": "2.2.9999999.9999999-dev",
@@ -2407,21 +2096,333 @@
         "homepage": "http://symfony.com"
     },
     {
+        "name": "twig/twig",
+        "version": "v1.12.3",
+        "version_normalized": "1.12.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fabpot/Twig.git",
+            "reference": "v1.12.3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fabpot/Twig/zipball/v1.12.3",
+            "reference": "v1.12.3",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "time": "2013-04-08 12:40:11",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.12-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Twig_": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Armin Ronacher",
+                "email": "armin.ronacher@active-4.com"
+            }
+        ],
+        "description": "Twig, the flexible, fast, and secure template language for PHP",
+        "homepage": "http://twig.sensiolabs.org",
+        "keywords": [
+            "templating"
+        ]
+    },
+    {
+        "name": "igorw/config-service-provider",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/igorw/ConfigServiceProvider.git",
+            "reference": "1b834386a3e535a95928445129390242fb5a7b05"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/igorw/ConfigServiceProvider/zipball/1b834386a3e535a95928445129390242fb5a7b05",
+            "reference": "1b834386a3e535a95928445129390242fb5a7b05",
+            "shasum": ""
+        },
+        "require": {
+            "silex/silex": "1.0.*@dev"
+        },
+        "require-dev": {
+            "symfony/yaml": ">=2.1,<3.0"
+        },
+        "suggest": {
+            "symfony/yaml": "~2.1"
+        },
+        "time": "2013-04-08 13:55:50",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Igorw\\Silex": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Igor Wiedler",
+                "email": "igor@wiedler.ch",
+                "homepage": "http://wiedler.ch/igor/"
+            },
+            {
+                "name": "Contributors",
+                "homepage": "https://github.com/igorw/ConfigServiceProvider/contributors"
+            }
+        ],
+        "description": "A config ServiceProvider for Silex with support for php, json and yaml.",
+        "keywords": [
+            "silex"
+        ]
+    },
+    {
+        "name": "symfony/security",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/Security",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Security.git",
+            "reference": "d62296fc75038d884314ed78bbf4fa2e95654017"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Security/zipball/d62296fc75038d884314ed78bbf4fa2e95654017",
+            "reference": "d62296fc75038d884314ed78bbf4fa2e95654017",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "symfony/event-dispatcher": ">=2.1,<3.0",
+            "symfony/http-foundation": ">=2.1,<2.4-dev",
+            "symfony/http-kernel": ">=2.1,<=2.3-dev"
+        },
+        "require-dev": {
+            "doctrine/common": ">=2.2,<3.0",
+            "doctrine/dbal": ">=2.2,<3.0",
+            "psr/log": ">=1.0,<2.0",
+            "symfony/form": ">=2.0,<3.0",
+            "symfony/routing": ">=2.2,<2.4-dev",
+            "symfony/validator": ">=2.2,<2.4-dev"
+        },
+        "suggest": {
+            "doctrine/dbal": "to use the built-in ACL implementation",
+            "symfony/class-loader": "2.2.*",
+            "symfony/finder": "2.2.*",
+            "symfony/form": "2.2.*",
+            "symfony/routing": "2.2.*",
+            "symfony/validator": "2.2.*"
+        },
+        "time": "2013-04-07 20:25:23",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Security\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Security Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/console",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/Console",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Console.git",
+            "reference": "d789216529d541b55cf39141724ca71733265f60"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Console/zipball/d789216529d541b55cf39141724ca71733265f60",
+            "reference": "d789216529d541b55cf39141724ca71733265f60",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "symfony/event-dispatcher": ">=2.1,<3.0"
+        },
+        "time": "2013-04-07 20:25:23",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Console\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Console Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "silex/silex",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fabpot/Silex.git",
+            "reference": "80f0abd669b2c615b73065b76c63ff27c7d3c38d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fabpot/Silex/zipball/80f0abd669b2c615b73065b76c63ff27c7d3c38d",
+            "reference": "80f0abd669b2c615b73065b76c63ff27c7d3c38d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "pimple/pimple": "1.*",
+            "symfony/event-dispatcher": ">=2.1,<2.3-dev",
+            "symfony/http-foundation": ">=2.1,<2.3-dev",
+            "symfony/http-kernel": ">=2.1,<2.3-dev",
+            "symfony/routing": ">=2.1,<2.3-dev"
+        },
+        "require-dev": {
+            "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
+            "monolog/monolog": ">=1.4,<2.0,>=1.4.1",
+            "swiftmailer/swiftmailer": "4.2.*",
+            "symfony/browser-kit": ">=2.1,<2.3-dev",
+            "symfony/config": ">=2.1,<2.3-dev",
+            "symfony/css-selector": ">=2.1,<2.3-dev",
+            "symfony/dom-crawler": ">=2.1,<2.3-dev",
+            "symfony/finder": ">=2.1,<2.3-dev",
+            "symfony/form": ">=2.1.4,<2.3-dev",
+            "symfony/locale": ">=2.1,<2.3-dev",
+            "symfony/monolog-bridge": ">=2.1,<2.3-dev",
+            "symfony/options-resolver": ">=2.1,<2.3-dev",
+            "symfony/process": ">=2.1,<2.3-dev",
+            "symfony/security": ">=2.1,<2.3-dev",
+            "symfony/serializer": ">=2.1,<2.3-dev",
+            "symfony/translation": ">=2.1,<2.3-dev",
+            "symfony/twig-bridge": ">=2.1,<2.3-dev",
+            "symfony/validator": ">=2.1,<2.3-dev",
+            "twig/twig": ">=1.8.0,<2.0-dev"
+        },
+        "suggest": {
+            "symfony/browser-kit": ">=2.1,<2.3-dev",
+            "symfony/css-selector": ">=2.1,<2.3-dev",
+            "symfony/dom-crawler": ">=2.1,<2.3-dev",
+            "symfony/form": "To make use of the FormServiceProvider, >= 2.1.4 is required"
+        },
+        "time": "2013-04-08 20:37:52",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Silex": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Igor Wiedler",
+                "email": "igor@wiedler.ch",
+                "homepage": "http://wiedler.ch/igor/"
+            }
+        ],
+        "description": "The PHP micro-framework based on the Symfony2 Components",
+        "homepage": "http://silex.sensiolabs.org",
+        "keywords": [
+            "microframework"
+        ]
+    },
+    {
         "name": "leafo/lessphp",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/leafo/lessphp.git",
-            "reference": "280b8bcce2256b0793feaed8a74568edcbab42ae"
+            "reference": "51aad6ef903bdcb18280ae81fb85016a078232a0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/leafo/lessphp/zipball/280b8bcce2256b0793feaed8a74568edcbab42ae",
-            "reference": "280b8bcce2256b0793feaed8a74568edcbab42ae",
+            "url": "https://api.github.com/repos/leafo/lessphp/zipball/51aad6ef903bdcb18280ae81fb85016a078232a0",
+            "reference": "51aad6ef903bdcb18280ae81fb85016a078232a0",
             "shasum": ""
         },
-        "time": "2013-04-07 17:30:42",
+        "time": "2013-04-09 01:25:49",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2456,12 +2457,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-            "reference": "db0585625f6944a755534688e971b86d1d33ec45"
+            "reference": "af197d8d65de90827778379a18dd44d82c61d3fc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/db0585625f6944a755534688e971b86d1d33ec45",
-            "reference": "db0585625f6944a755534688e971b86d1d33ec45",
+            "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/af197d8d65de90827778379a18dd44d82c61d3fc",
+            "reference": "af197d8d65de90827778379a18dd44d82c61d3fc",
             "shasum": ""
         },
         "require": {
@@ -2481,7 +2482,7 @@
             "doctrine/mongodb-odm": ">=1.0.0-BETA7",
             "doctrine/orm": ">=2.3.2"
         },
-        "time": "2013-04-07 10:44:07",
+        "time": "2013-04-08 16:55:03",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2537,12 +2538,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/mheap/Silex-Assetic.git",
-            "reference": "2836391e9aadf60478a6ceff8d8d7f919946d0a9"
+            "reference": "a3a2747ca48897ebd1e1def300c58117969ad6aa"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/2836391e9aadf60478a6ceff8d8d7f919946d0a9",
-            "reference": "2836391e9aadf60478a6ceff8d8d7f919946d0a9",
+            "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/a3a2747ca48897ebd1e1def300c58117969ad6aa",
+            "reference": "a3a2747ca48897ebd1e1def300c58117969ad6aa",
             "shasum": ""
         },
         "require": {
@@ -2558,7 +2559,7 @@
         "suggest": {
             "twig/twig": "~1.2"
         },
-        "time": "2013-04-06 13:09:31",
+        "time": "2013-04-09 10:37:15",
         "type": "library",
         "extra": {
             "branch-alias": {

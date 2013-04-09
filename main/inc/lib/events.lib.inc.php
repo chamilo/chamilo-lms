@@ -315,10 +315,10 @@ function event_link($link_id)
 /**
  * Update the TRACK_E_EXERCICES exercises
  *
- * @param   int     exeid id of the attempt
- * @param   int     exo_id 	exercise id
- * @param   mixed   result 	score
- * @param   int     weighting ( higher score )
+ * @param   int     id of the attempt
+ * @param   int     exercise id
+ * @param   mixed   score obtained
+ * @param   int     highest score for this exercise (and combination of questions)
  * @param   int     duration ( duration of the attempt in seconds )
  * @param   int     session_id
  * @param   int     learnpath_id (id of the learnpath)
@@ -328,7 +328,7 @@ function event_link($link_id)
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done
  */
-function update_event_exercise($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array(), $end_date = null)
+function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array(), $end_date = null)
 {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
@@ -366,7 +366,7 @@ function update_event_exercise($exeid, $exo_id, $score, $weighting, $session_id,
         $sql = "UPDATE $TABLETRACK_EXERCICES SET
         		   exe_exo_id 			= '".Database::escape_string($exo_id)."',
         		   exe_result			= '".Database::escape_string($score)."',
-        		   exe_weighting 		= '".Database::escape_string($weighting)."',
+        		   exe_weighting 		= '".Database::escape_string($weight)."',
         		   session_id			= '".Database::escape_string($session_id)."',
         		   orig_lp_id 			= '".Database::escape_string($learnpath_id)."',
         		   orig_lp_item_id 		= '".Database::escape_string($learnpath_item_id)."',

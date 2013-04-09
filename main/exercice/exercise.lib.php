@@ -2406,7 +2406,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
         if (api_is_allowed_to_session_edit()) {
-            update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration']);
+            update_event_exercise($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration']);
         }
 
         // Send notification ..

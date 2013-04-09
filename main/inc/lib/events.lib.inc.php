@@ -328,12 +328,12 @@ function event_link($link_id)
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done
  */
-function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array(), $end_date = null)
+function update_event_exercise($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array(), $end_date = null)
 {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
     if ($debug) {
-        error_log('Called to update_event_exercice');
+        error_log('Called to update_event_exercise');
         error_log('duration:'.$duration);
     }
 
@@ -379,7 +379,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
         $res = Database::query($sql);
 
         if ($debug)
-            error_log('update_event_exercice called');
+            error_log('update_event_exercise called');
         if ($debug)
             error_log("$sql");
 
@@ -393,7 +393,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
 
 /**
  * This function creates an empty Exercise in STATISTIC_TRACK_E_EXERCICES table.
- * After that in exercise_result.php we call the update_event_exercice() to update the exercise
+ * After that in exercise_result.php we call the update_event_exercise() to update the exercise
  * @return $id the last id registered, or false on error
  * @author Julio Montoya <gugli100@gmail.com>
  * @desc Record result of user when an exercice was done
@@ -520,7 +520,7 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
         if (Database::num_rows($result)) {
             if ($debug)
                 error_log("Attempt already exist: exe_id: $exe_id - user_id:$user_id - question_id:$question_id");
-            //The attempt already exist do not update use  update_event_exercice() instead
+            //The attempt already exist do not update use  update_event_exercise() instead
             return false;
         }
 

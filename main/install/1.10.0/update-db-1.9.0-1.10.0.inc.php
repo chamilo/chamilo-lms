@@ -87,7 +87,6 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
             $temp_session_id = $row['session_id'];
             $order = 1;
         }
-        //echo $row['c_id'].'-'.$row['session_id'].'-'.$row['id']."\n";
         $ins = "INSERT INTO $to (c_id, session_id, exercise_id, exercise_order)".
                " VALUES ($cid, $temp_session_id, {$row['id']}, $order)";
         $mainConnection->executeQuery($ins);

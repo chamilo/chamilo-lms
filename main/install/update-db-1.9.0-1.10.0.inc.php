@@ -179,13 +179,26 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $temp_session_id = $row['session_id'];
                     $order = 1;
                 }
-                //echo $row['c_id'].'-'.$row['session_id'].'-'.$row['id']."\n";
                 $ins = "INSERT INTO $to (c_id, session_id, exercise_id, exercise_order)".
                        " VALUES ($cid, $temp_session_id, {$row['id']}, $order)";
                 $rins = iDatabase::query($ins);
-                //echo $ins."\n";
+
                 $order++;
             }
+
+            $sql = "SELECT id FROM $dbNameForm.course_field WHERE field_variable = 'special_course'";
+            $result = Database::query($sql);
+            $fieldData = Database::fetch_array($result, 'ASSOC');
+            $id = $fieldData['id'];
+
+            $sql = "INSERT INTO $dbNameForm.course_field_options (field_id, option_value, option_display_text, option_order)
+                    VALUES ('$id', '1', '".get_lang('Yes')."', '1')";
+            $result = Database::query($sql);
+
+            $sql = "INSERT INTO $dbNameForm.course_field_options (field_id, option_value, option_display_text, option_order)
+                    VALUES ('$id', '0', '".get_lang('No')."', '2')";
+            Database::query($sql);
+
         }
     }
 }

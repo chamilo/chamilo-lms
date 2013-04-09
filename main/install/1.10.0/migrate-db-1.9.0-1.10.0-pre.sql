@@ -164,5 +164,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teac
 
 ALTER TABLE track_e_course_access ADD COLUMN c_id INT NOT NULL DEFAULT 0;
 
+UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21694' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.030b27b' WHERE variable = 'chamilo_database_version';

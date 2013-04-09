@@ -2715,9 +2715,9 @@ CREATE TABLE IF NOT EXISTS message_attachment (
     PRIMARY KEY  (id)
 );
 
-
-
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', 'Yes', 1 , 1);
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (3, 'special_course','Special course', 'Yes', 1 , 1);
+INSERT INTO course_field_options (field_id, option_value, option_display_text, option_order) VALUES  ('1', '1', 'Yes', '1');
+INSERT INTO course_field_options (field_id, option_value, option_display_text, option_order) VALUES  ('1', '0', 'No', '2');
 
 --
 -- Table structure for table block
@@ -3087,4 +3087,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21593' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.030b27b' WHERE variable = 'chamilo_database_version';

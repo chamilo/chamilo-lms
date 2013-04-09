@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $TermAddNew = "Προσθήκη νεόυ όρου στο γλωσσάρι";
 $TermName = "Όρος";
-$TermDefinition = "Ορισμός του όρου";
+$TermDefinition = "Επεξήγηση του όρου";
 $TermDeleted = "Ο όρος έχει διαγραφεί";
 $TermUpdated = "Ο όρος ενημερώθηκε";
 $TermConfirmDelete = "Θέλετε πραγματικά να διαγράψετε αυτό τον όρο;";
@@ -27,10 +27,10 @@ $ShowGlossaryInExtraToolsTitle = "Εμφάνιση των όρων του γλω
 $ShowGlossaryInExtraToolsComment = "Από εδώ μπορείτε να ρυθμίσετε πως να προσθέτετε όρους στο γλωσσάρι μέσα στα πρόσθετα εργαλεία, σαν εκπαιδευτική διαδρομή και εργαλείο ασκήσεων.";
 $ImportGlossary = "Εισαγωγή γλωσσαρίου";
 $ReplaceGlossary = "Αντικατάσταση γλωσσαρίου";
-$CannotDeleteGlossary = "Αδύνατη η διαγραφή γλωσσαρίου";
+$CannotDeleteGlossary = "Δεν είναι δύνατη η διαγραφή γλωσσαρίου";
 $TermsImported = "Οι όροι έχουν εισαχθεί";
 $TermsNotImported = "Οι όροι δεν έχουν εισαχθεί";
-$ExportGlossaryAsCSV = "Εξαγωγή γλωσσαρίου υπό μορφή αρχείου CVS";
+$ExportGlossaryAsCSV = "Εξαγωγή γλωσσαρίου σε μορφή αρχείου CVS";
 $List = "Κατάλογος";
 $GlossaryTermUpdated = "Ο όρος ενημερώθηκε";
 $DeleteAllGlossaryTerms = "Διαγραφή όλων των όρων";

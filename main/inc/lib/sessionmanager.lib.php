@@ -1944,6 +1944,7 @@ class SessionManager {
 
         $sql .= $order_clause;
 
+        $return_array = array();
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result,'ASSOC')) {
             $return_array[] = $row;

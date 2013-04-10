@@ -1,5 +1,5 @@
 {
-    "hash": "7cb7caff324a28f86650f70fc4f6fb1c",
+    "hash": "c69ef99b3d8c589438b68f78e031e191",
     "packages": [
         {
             "name": "chamilo/chash",
@@ -1247,12 +1247,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "d789216529d541b55cf39141724ca71733265f60"
+                "reference": "5c9fb1169f3940ffb869c4a36c3794f66790600a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/d789216529d541b55cf39141724ca71733265f60",
-                "reference": "d789216529d541b55cf39141724ca71733265f60",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/5c9fb1169f3940ffb869c4a36c3794f66790600a",
+                "reference": "5c9fb1169f3940ffb869c4a36c3794f66790600a",
                 "shasum": ""
             },
             "require": {
@@ -1288,7 +1288,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-07 20:25:23"
+            "time": "2013-04-09 15:42:31"
         },
         {
             "name": "symfony/dependency-injection",
@@ -1297,12 +1297,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DependencyInjection.git",
-                "reference": "bdbd94e1fbca934ed4c6d912e57c99a17bbe753b"
+                "reference": "6e9c3a29432d7274a297d945e937e46b7c48b3fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/bdbd94e1fbca934ed4c6d912e57c99a17bbe753b",
-                "reference": "bdbd94e1fbca934ed4c6d912e57c99a17bbe753b",
+                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/6e9c3a29432d7274a297d945e937e46b7c48b3fa",
+                "reference": "6e9c3a29432d7274a297d945e937e46b7c48b3fa",
                 "shasum": ""
             },
             "require": {
@@ -1343,7 +1343,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 13:07:03"
+            "time": "2013-04-08 01:18:40"
         },
         {
             "name": "symfony/doctrine-bridge",
@@ -1918,12 +1918,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Security.git",
-                "reference": "d62296fc75038d884314ed78bbf4fa2e95654017"
+                "reference": "29d6516841ca9961398dee9479bc576d9b09d6dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Security/zipball/d62296fc75038d884314ed78bbf4fa2e95654017",
-                "reference": "d62296fc75038d884314ed78bbf4fa2e95654017",
+                "url": "https://api.github.com/repos/symfony/Security/zipball/29d6516841ca9961398dee9479bc576d9b09d6dd",
+                "reference": "29d6516841ca9961398dee9479bc576d9b09d6dd",
                 "shasum": ""
             },
             "require": {
@@ -1975,7 +1975,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-07 20:25:23"
+            "time": "2013-04-09 14:18:38"
         },
         {
             "name": "symfony/translation",

@@ -23,9 +23,9 @@
     "require": {
         "php": ">=5.3.2",
         "silex/silex"           : "~1.0@dev",
-        "symfony/config"        : "dev-master",
+        "symfony/config": "2.3.*@dev",
         "symfony/yaml"          : "2.1.*",
-        "symfony/console"  : "dev-master",
+        "symfony/console"  : "2.3.*@dev",
         "symfony/twig-bridge": "2.2.*@dev",
         "symfony/doctrine-bridge": "2.3.*@dev",
         "symfony/security": "dev-master",

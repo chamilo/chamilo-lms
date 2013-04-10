@@ -11,7 +11,6 @@ $language_file = array('glossary', 'admin');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $current_course_tool  = TOOL_GLOSSARY;
 

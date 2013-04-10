@@ -20,7 +20,9 @@ $use_anonymous = true;
 // Name of the language file that needs to be included.
 $language_file[] = 'learnpath';
 
-require_once 'back_compat.inc.php';
+// Including the global initialization file.
+require_once '../inc/global.inc.php';
+
 require_once 'learnpath.class.php';
 require_once 'scorm.class.php';
 require_once 'aicc.class.php';
@@ -84,7 +86,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
     $prereq_check = $mylp->prerequisites_match($item_id);
     $check_attempts = $mylp->check_item_attempts($item_id);
-    
+
     if (!$check_attempts) {
         return false;
     }

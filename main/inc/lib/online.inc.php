@@ -130,7 +130,7 @@ class Online {
         return true;
     }
 
-    function user_is_online($user_id) {
+    static function user_is_online($user_id) {
         $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         $table_user			= Database::get_main_table(TABLE_MAIN_USER);
 

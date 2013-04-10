@@ -12,18 +12,13 @@
  */
 
 /**
- * INIT SECTION 
+ * INIT SECTION
 */
 
 $_SESSION['whereami'] = 'lp/build';
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
-
-/* Libraries */
-
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
 
 include 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
@@ -128,8 +123,8 @@ echo $_SESSION['oLP']->build_action_menu();
 echo '<div class="row-fluid">';
 echo '<div class="span4">';
 // Build the tree with the menu items in it.
-echo $_SESSION['oLP']->return_new_tree();    
-echo '</div>';        
+echo $_SESSION['oLP']->return_new_tree();
+echo '</div>';
 echo '<div class="span8">';
 
 if (isset($is_success) && $is_success === true) {
@@ -142,18 +137,18 @@ if (isset($is_success) && $is_success === true) {
     $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
 
     echo Display::page_subheader(get_lang('LearnPathAddedTitle'));
-    
+
     echo '<ul id="lp_overview" class="thumbnails">';
-    
+
     echo show_block('lp_controller.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id, get_lang("NewStep"), get_lang('NewStepComment'), 'tools.png');
-    
+
 //    echo show_block('lp_controller.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;updateaudio=true&amp;lp_id=' . $_SESSION['oLP']->lp_id, get_lang("BasicOverview"), get_lang('BasicOverviewComment'), 'audio.png');
-    
+
     echo show_block('lp_controller.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=view&amp;lp_id=' . $_SESSION['oLP']->lp_id, get_lang("Display"), get_lang('DisplayComment'), 'view.png');
-    
+
     //echo show_block('lp_controller.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id, get_lang("Settings"), null, 'reference.png');
-    
-    echo '</ul>';    
+
+    echo '</ul>';
 }
 echo '</div>';
 echo '</div>';

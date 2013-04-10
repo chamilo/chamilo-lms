@@ -12,7 +12,6 @@
  * Code
  */
 require_once 'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
 /**
  *
@@ -24,7 +23,7 @@ class Export {
 	}
 
 	/**
-     * 
+     *
      * @deprecated use export_table_csv_utf8 instead
 	 */
 	public static function export_table_csv ($data, $filename = 'export') {
@@ -46,7 +45,7 @@ class Export {
 		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');
 		return false;
 	}
-    
+
 	/**
 	 * Export tabular data to CSV-file
 	 * @param array $data
@@ -167,33 +166,33 @@ class Export {
         }
         return $string;
     }
-    
-    /** 
-     * 
-     * @param array table in array format to be read with the HTML_table class 
+
+    /**
+     *
+     * @param array table in array format to be read with the HTML_table class
      */
-    public static function export_table_pdf($data, $params = array()) {        
-        $table_html = self::convert_array_to_html($data, $params);          
+    public static function export_table_pdf($data, $params = array()) {
+        $table_html = self::convert_array_to_html($data, $params);
         $params['format'] = isset($params['format']) ? $params['format'] : 'A4';
         $params['orientation'] = isset($params['orientation']) ? $params['orientation'] : 'P';
-        
-        $pdf = new PDF($params['format'], $params['orientation'], $params); 
+
+        $pdf = new PDF($params['format'], $params['orientation'], $params);
         $pdf->html_to_pdf_with_template($table_html);
     }
-    
-    public static function export_html_to_pdf($html, $params = array()) {        
+
+    public static function export_html_to_pdf($html, $params = array()) {
         $params['format'] = isset($params['format']) ? $params['format'] : 'A4';
         $params['orientation'] = isset($params['orientation']) ? $params['orientation'] : 'P';
-        
-        $pdf = new PDF($params['format'], $params['orientation'], $params); 
-        $pdf->html_to_pdf_with_template($html);        
+
+        $pdf = new PDF($params['format'], $params['orientation'], $params);
+        $pdf->html_to_pdf_with_template($html);
     }
-    
-    public static function convert_array_to_html($data, $params = array()) {        
+
+    public static function convert_array_to_html($data, $params = array()) {
         $headers = $data[0];
-        unset($data[0]); 
-       
-        $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : array();                
+        unset($data[0]);
+
+        $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : array();
         $table = new HTML_Table(array('class' => 'data_table', 'repeat_header' => '1'));
         $row = 0;
         $column = 0;
@@ -201,14 +200,14 @@ class Export {
             $table->setHeaderContents($row, $column, $header);
             $attributes = array();
             if (isset($header_attributes) && isset($header_attributes[$column])) {
-                $attributes = $header_attributes[$column];            
+                $attributes = $header_attributes[$column];
             }
             if (!empty($attributes)) {
                 $table->updateCellAttributes($row, $column, $attributes);
             }
             $column++;
         }
-        $row++; 
+        $row++;
         foreach ($data as &$printable_data_row) {
             $column = 0;
             foreach ($printable_data_row as &$printable_data_cell) {

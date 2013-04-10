@@ -27,7 +27,6 @@ if (!isset($_GET['cidReq'])) {
 require_once '../inc/global.inc.php';
 
 // Including additional libraries
-//require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
 require_once 'survey.lib.php';
 
 // Breadcrumbs

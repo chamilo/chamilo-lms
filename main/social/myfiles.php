@@ -17,8 +17,6 @@ if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
 $this_section = SECTION_SOCIAL;
 $_SESSION['this_section']=$this_section;
 

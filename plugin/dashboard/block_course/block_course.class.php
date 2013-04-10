@@ -9,7 +9,6 @@
 /**
  * required files for getting data
  */
-require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 /**
  * This class is used like controller for this course block plugin,

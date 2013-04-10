@@ -21,7 +21,6 @@ if (!function_exists('api_get_path')) {
     header('location: upload.php');
     die;
 }
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once '../document/document.inc.php';
 
 $courseDir = $_course['path']."/document";

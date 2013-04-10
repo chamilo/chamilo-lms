@@ -9,7 +9,6 @@
 /**
  * required files for getting data
  */
-require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
 
 /**
  * This class is used like controller for this session block plugin,
@@ -33,7 +32,7 @@ class BlockSession extends Block {
     		/*if (api_is_platform_admin()) {
 	    		$this->sessions = SessionManager::get_sessions_list();
 	    	} else {*/
-	    		$this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);	
+	    		$this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
 	    	//}
     	}
     }
@@ -42,15 +41,15 @@ class BlockSession extends Block {
 	 * This method check if a user is allowed to see the block inside dashboard interface
 	 * @param	int		User id
 	 * @return	bool	Is block visible for user
-	 */    
-    public function is_block_visible_for_user($user_id) {	
+	 */
+    public function is_block_visible_for_user($user_id) {
     	$user_info = api_get_user_info($user_id);
 		$user_status = $user_info['status'];
 		$is_block_visible_for_user = false;
     	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
     		$is_block_visible_for_user = true;
-    	}    	
-    	return $is_block_visible_for_user;    	
+    	}
+    	return $is_block_visible_for_user;
     }
 
     /**
@@ -96,13 +95,13 @@ class BlockSession extends Block {
 
 		$content = '<div style="margin:10px;">';
 		$content .= '<h3><font color="#000">'.get_lang('YourSessionsList').'</font></h3>';
-		
-		if (count($sessions) > 0) {			
+
+		if (count($sessions) > 0) {
 			$sessions_table = '<table class="data_table" width:"95%">';
- 			$sessions_table .= '<tr>								
+ 			$sessions_table .= '<tr>
 									<th >'.get_lang('Title').'</th>
 									<th >'.get_lang('Date').'</th>
-									<th width="100px">'.get_lang('NbCoursesPerSession').'</th>							
+									<th width="100px">'.get_lang('NbCoursesPerSession').'</th>
 								</tr>';
 			$i = 1;
 			foreach ($sessions as $session) {
@@ -110,21 +109,21 @@ class BlockSession extends Block {
 				$session_id = intval($session['id']);
 				$title = $session['name'];
                 $date_string = SessionManager::parse_session_dates($session);
-	 			
+
 	 			$count_courses_in_session = count(Tracking::get_courses_list_from_session($session_id));
-	 			
+
 				if ($i%2 == 0) $class_tr = 'row_odd';
 	    		else $class_tr = 'row_even';
 
 				$sessions_table .= '<tr class="'.$class_tr.'">
 										<td>'.$title.'</td>
 										<td align="center">'.$date_string.'</td>
-										<td align="center">'.$count_courses_in_session.'</td>										
+										<td align="center">'.$count_courses_in_session.'</td>
 								   </tr>';
 				$i++;
 			}
 			$sessions_table .= '</table>';
-			$content .= $sessions_table; 
+			$content .= $sessions_table;
 		} else {
 			$content .= get_lang('ThereIsNoInformationAboutYourSessions');
 		}

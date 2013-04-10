@@ -11,7 +11,6 @@
 $language_file = array('registration','admin','userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 api_block_anonymous_users();
 

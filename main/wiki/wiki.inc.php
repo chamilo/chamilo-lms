@@ -1980,12 +1980,6 @@ function export2doc($doc_id)
 function export_to_pdf($id, $course_code)
 {
     $data = get_wiki_data($id);
-
-    require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
-
-    $data = get_wiki_data($id);
-
-
     $content_pdf = api_html_entity_decode($data['content'], ENT_QUOTES, api_get_system_encoding());
 
     //clean wiki links
@@ -2018,7 +2012,6 @@ function export_to_pdf($id, $course_code)
     } else {
         $css = '';
     }
-    require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
     $pdf = new PDF();
     $pdf->content_to_pdf($html, $css, $title_pdf, $course_code);
     exit;

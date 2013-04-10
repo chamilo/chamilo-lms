@@ -790,7 +790,6 @@ class aicc extends learnpath
         // Zip everything that is in the corresponding scorm dir.
         // Write the zip file somewhere (might be too big to return).
 
-        require_once api_get_path(LIBRARY_PATH).'document.lib.php';
         require_once 'learnpath_functions.inc.php';
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);

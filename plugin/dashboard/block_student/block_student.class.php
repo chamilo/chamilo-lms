@@ -9,7 +9,6 @@
 /**
  * required files for getting data
  */
-require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';

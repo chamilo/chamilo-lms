@@ -12,9 +12,7 @@ $language_file = array('admin');
 require_once '../inc/global.inc.php';
 $this_section =  SECTION_COURSES;
 
-if (extension_loaded('xapian')) {	
-	require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';	
+if (extension_loaded('xapian')) {
 	//api_block_anonymous_users(); // only users who are logged in can proceed
 	require '../newscorm/lp_list_search.php';
 } else {

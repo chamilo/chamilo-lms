@@ -32,9 +32,6 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-/*		Libraries	*/
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-
 global $_configuration;
 
 if (!api_is_platform_admin(true)) {

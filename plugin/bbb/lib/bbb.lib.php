@@ -435,11 +435,10 @@ class bbb {
         if (empty($id) or empty($record_id)) {
             return false;
         }
-        require_once api_get_path(LIBRARY_PATH).'link.lib.php';
         $records =  BigBlueButtonBN::getRecordingsArray($id, $this->url, $this->salt);
         if (!empty($records)) {
             foreach ($records as $record) {
-error_log($record['recordID']);
+                //error_log($record['recordID']);
                 if ($record['recordID'] == $record_id) {
                     if (is_array($record) && isset($record['recordID']) && isset($record['playbacks'])) {
                         foreach ($record['playbacks'] as $item) {

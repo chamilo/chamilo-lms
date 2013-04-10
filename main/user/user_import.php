@@ -4,7 +4,6 @@
 $language_file = array('registration', 'admin', 'userInfo');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 $this_section = SECTION_COURSES;
 
@@ -45,31 +44,31 @@ $type = '';
 
 if ($form->validate()) {
     if (isset($_FILES['import_file']['size']) && $_FILES['import_file']['size'] !== 0) {
-        
+
         $unsubscribe_users = isset($_POST['unsubscribe_users']) ? true : false;
-                
+
         $users  = Import::csv_to_array($_FILES['import_file']['tmp_name']);
-        
+
         $invalid_users  = array();
         $clean_users    = array();
-                
-        if (!empty($users)) { 
-            
+
+        if (!empty($users)) {
+
             foreach ($users as $user_data) {
                 $username = $user_data['username'];
-                $user_id = UserManager::get_user_id_from_username($username);                
+                $user_id = UserManager::get_user_id_from_username($username);
                 $user_info = api_get_user_info($user_id);
                 if ($user_id && !empty($user_info)) {
-                    $clean_users[$user_id] = $user_info;                    
+                    $clean_users[$user_id] = $user_info;
                 } else {
                     $invalid_users[] = $user_id;
                 }
             }
-            
+
             if (empty($invalid_users)) {
                 $type = 'confirmation';
                 $message = get_lang('ListOfUsersSubscribedToCourse');
-                
+
                 if ($unsubscribe_users) {
                     $current_user_list = CourseManager::get_user_list_from_course_code($course_code, $session_id);
                     if (!empty($current_user_list)) {
@@ -78,9 +77,9 @@ if ($form->validate()) {
                             $user_ids[]= $user['user_id'];
                         }
                         CourseManager::unsubscribe_user($user_ids, $course_code, $session_id);
-                    }                    
-                }                
-                foreach ($clean_users as $user_info) {      
+                    }
+                }
+                foreach ($clean_users as $user_info) {
                     $user_id = $user_info['user_id'];
                     CourseManager :: subscribe_user($user_id, $course_code, STUDENT, $session_id);
                     if (empty($session_id)) {
@@ -94,14 +93,14 @@ if ($form->validate()) {
                             $user_to_show[]= $user_info['complete_name'];
                         }
                     }
-                }   
+                }
             } else {
                 $message = get_lang('CheckUsersWithId');
-                $type = 'warning';                
-                foreach ($invalid_users as $invalid_user) {                    
+                $type = 'warning';
+                foreach ($invalid_users as $invalid_user) {
                     $user_to_show[]= $invalid_user;
-                }        
-            }            
+                }
+            }
         }
     }
 }
@@ -119,7 +118,7 @@ if (!empty($message)) {
         Display::display_error_message(get_lang('ErrorsWhenImportingFile'));
     }
 }
-    
+
 $form->display();
 
 echo get_lang('CSVMustLookLike');
@@ -127,7 +126,7 @@ echo '<blockquote><pre>
     username;
     jdoe;
     jmontoya;
-</pre>  
+</pre>
 </blockquote>';
 
 Display::display_footer();

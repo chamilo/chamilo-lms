@@ -12,8 +12,6 @@ $language_file = array('userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
-
 api_block_anonymous_users();
 
 $this_section = SECTION_COURSES;
@@ -24,7 +22,7 @@ if (isset($_GET['id'])) {
 }
 
 if (api_get_setting('show_groups_to_users') == 'false') {
-    
+
 }
 
 

@@ -32,7 +32,6 @@ function import_users_from_file($filepath, $security_key)
     }
 
     // Libraries
-    require_once api_get_path(LIBRARY_PATH).'import.lib.php';
     require_once 'import.lib.php';
 
     // Check is users file exists.

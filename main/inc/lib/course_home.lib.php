@@ -578,7 +578,6 @@ class CourseHome {
      * @return void
      */
     public static function show_tools_category($all_tools_list, $rows = false) {
-        global $_user;
         $theme = api_get_setting('homepage_view');
         if ($theme == 'vertical_activity') {
             //ordering by get_lang name
@@ -742,9 +741,11 @@ class CourseHome {
                 }
 
                 $icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']), ICON_SIZE_BIG, false);
+                $userInfo = api_get_user_info();
+                $userStatus = isset($userInfo['status']) ? $userInfo['status'] : null;
 
                 // Validation when belongs to a session
-                $session_img = api_get_session_image($tool['session_id'], $_user['status']);
+                $session_img = api_get_session_image($tool['session_id'], $userStatus);
                 $item['url_params'] = $tool_link_params;
                 $item['icon']       = Display::url($icon, $tool_link_params['href'], $tool_link_params);
                 $item['tool']       = $tool;

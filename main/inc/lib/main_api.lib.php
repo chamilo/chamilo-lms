@@ -23,14 +23,14 @@ define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
 use \ChamiloSession as Session;
 
 // USER STATUS CONSTANTS
-/** global status of a user: student */
-define('STUDENT', 5);
 /** global status of a user: course manager */
 define('COURSEMANAGER', 1);
 /** global status of a user: session admin */
 define('SESSIONADMIN', 3);
 /** global status of a user: human ressource manager */
 define('DRH', 4);
+/** global status of a user: student */
+define('STUDENT', 5);
 /** global status of a user: human ressource manager */
 define('ANONYMOUS', 6);
 /** global status of a user: low security, necessary for inserting data from
@@ -2017,7 +2017,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
 function api_get_session_image($session_id, $status_id) {
     $session_id = (int)$session_id;
     $session_img = '';
-    if ((int)$status_id != 5) { //check whether is not a student
+    if ((int)$status_id != STUDENT) { //check whether is not a student
         if ($session_id > 0) {
             $session_img = "&nbsp;&nbsp;".Display::return_icon('star.png', get_lang('SessionSpecificResource'), array('align' => 'absmiddle'), ICON_SIZE_SMALL);
         }

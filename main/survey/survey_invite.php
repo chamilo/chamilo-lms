@@ -17,7 +17,7 @@
 $language_file = 'survey';
 
 // Including the global initialization file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // Including additional libraries
 require_once 'survey.lib.php';
@@ -169,7 +169,8 @@ $form->addElement('label', null, "<pre>$auto_survey_link</pre>");
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    if ($values['send_mail'] == 1) {
+
+    if (isset($values['send_mail']) && $values['send_mail'] == 1) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
             Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete'));
             // Getting the invited users
@@ -185,7 +186,6 @@ if ($form->validate()) {
             $defaults['send_mail'] = 1;
             $form->setDefaults($defaults);
             $form->display();
-            return;
         }
     }
 

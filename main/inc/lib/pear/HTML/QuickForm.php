@@ -38,36 +38,35 @@ require_once 'HTML/Common.php';
  *      HTML_QuickForm::isTypeRegistered()
  * @global array $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES']
  */
-$GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] =
-        array(
-            'group'             =>array('HTML/QuickForm/group.php','HTML_QuickForm_group'),
-            'hidden'            =>array('HTML/QuickForm/hidden.php','HTML_QuickForm_hidden'),
-            'reset'             =>array('HTML/QuickForm/reset.php','HTML_QuickForm_reset'),
-            'checkbox'          =>array('HTML/QuickForm/checkbox.php','HTML_QuickForm_checkbox'),
-            'file'              =>array('HTML/QuickForm/file.php','HTML_QuickForm_file'),
-            'image'             =>array('HTML/QuickForm/image.php','HTML_QuickForm_image'),
-            'password'          =>array('HTML/QuickForm/password.php','HTML_QuickForm_password'),
-            'radio'             =>array('HTML/QuickForm/radio.php','HTML_QuickForm_radio'),
-            'button'            =>array('HTML/QuickForm/button.php','HTML_QuickForm_button'),
-            'submit'            =>array('HTML/QuickForm/submit.php','HTML_QuickForm_submit'),
-            'select'            =>array('HTML/QuickForm/select.php','HTML_QuickForm_select'),
-            'hiddenselect'      =>array('HTML/QuickForm/hiddenselect.php','HTML_QuickForm_hiddenselect'),
-            'text'              =>array('HTML/QuickForm/text.php','HTML_QuickForm_text'),
-            'textarea'          =>array('HTML/QuickForm/textarea.php','HTML_QuickForm_textarea'),
-            'link'              =>array('HTML/QuickForm/link.php','HTML_QuickForm_link'),
-            'advcheckbox'       =>array('HTML/QuickForm/advcheckbox.php','HTML_QuickForm_advcheckbox'),
-            'date'              =>array('HTML/QuickForm/date.php','HTML_QuickForm_date'),
-            'static'            =>array('HTML/QuickForm/static.php','HTML_QuickForm_static'),
-            'header'            =>array('HTML/QuickForm/header.php', 'HTML_QuickForm_header'),
-            'html'              =>array('HTML/QuickForm/html.php', 'HTML_QuickForm_html'),
-            'hierselect'        =>array('HTML/QuickForm/hierselect.php', 'HTML_QuickForm_hierselect'),
-            'autocomplete'      =>array('HTML/QuickForm/autocomplete.php', 'HTML_QuickForm_autocomplete'),
-            'xbutton'           =>array('HTML/QuickForm/xbutton.php','HTML_QuickForm_xbutton'),
-            'advanced_settings' =>array('HTML/QuickForm/advanced_settings.php','HTML_QuickForm_advanced_settings'),
-            'label'             =>array('HTML/QuickForm/label.php','HTML_QuickForm_label'),
-            'email'             =>array('HTML/QuickForm/email.php','HTML_QuickForm_email'),
-
-        );
+$GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] =array(
+    'group'             => array('HTML/QuickForm/group.php','HTML_QuickForm_group'),
+    'hidden'            => array('HTML/QuickForm/hidden.php','HTML_QuickForm_hidden'),
+    'reset'             => array('HTML/QuickForm/reset.php','HTML_QuickForm_reset'),
+    'checkbox'          => array('HTML/QuickForm/checkbox.php','HTML_QuickForm_checkbox'),
+    'file'              => array('HTML/QuickForm/file.php','HTML_QuickForm_file'),
+    'image'             => array('HTML/QuickForm/image.php','HTML_QuickForm_image'),
+    'password'          => array('HTML/QuickForm/password.php','HTML_QuickForm_password'),
+    'radio'             => array('HTML/QuickForm/radio.php','HTML_QuickForm_radio'),
+    'button'            => array('HTML/QuickForm/button.php','HTML_QuickForm_button'),
+    'submit'            => array('HTML/QuickForm/submit.php','HTML_QuickForm_submit'),
+    'select'            => array('HTML/QuickForm/select.php','HTML_QuickForm_select'),
+    'hiddenselect'      => array('HTML/QuickForm/hiddenselect.php','HTML_QuickForm_hiddenselect'),
+    'text'              => array('HTML/QuickForm/text.php','HTML_QuickForm_text'),
+    'textarea'          => array('HTML/QuickForm/textarea.php','HTML_QuickForm_textarea'),
+    'link'              => array('HTML/QuickForm/link.php','HTML_QuickForm_link'),
+    'advcheckbox'       => array('HTML/QuickForm/advcheckbox.php','HTML_QuickForm_advcheckbox'),
+    'date'              => array('HTML/QuickForm/date.php','HTML_QuickForm_date'),
+    'static'            => array('HTML/QuickForm/static.php','HTML_QuickForm_static'),
+    'header'            => array('HTML/QuickForm/header.php', 'HTML_QuickForm_header'),
+    'html'              => array('HTML/QuickForm/html.php', 'HTML_QuickForm_html'),
+    'hierselect'        => array('HTML/QuickForm/hierselect.php', 'HTML_QuickForm_hierselect'),
+    'autocomplete'      => array('HTML/QuickForm/autocomplete.php', 'HTML_QuickForm_autocomplete'),
+    'xbutton'           => array('HTML/QuickForm/xbutton.php','HTML_QuickForm_xbutton'),
+    'advanced_settings' => array('HTML/QuickForm/advanced_settings.php','HTML_QuickForm_advanced_settings'),
+    'label'             => array('HTML/QuickForm/label.php','HTML_QuickForm_label'),
+    'email'             => array('HTML/QuickForm/email.php','HTML_QuickForm_email'),
+    'advmultiselect'    => array('HTML/QuickForm/advmultiselect.php','HTML_QuickForm_advmultiselect')
+);
 
 /**
  * Validation rules known to HTML_QuickForm
@@ -624,11 +623,14 @@ class HTML_QuickForm extends HTML_Common
             $error = PEAR::raiseError(null, QUICKFORM_UNREGISTERED_ELEMENT, null, E_USER_WARNING, "Element '$type' does not exist in HTML_QuickForm::_loadElement()", 'HTML_QuickForm_Error', true);
             return $error;
         }
+
         $className = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][1];
         $includeFile = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][0];
-        include_once($includeFile);
+
+        include_once $includeFile;
         // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$elementObject =& new $className();
+
         $elementObject = new $className();
 
         for ($i = 0; $i < 5; $i++) {

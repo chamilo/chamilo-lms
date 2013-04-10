@@ -33,7 +33,7 @@ if (!isset($GLOBALS['XHPROF_LIB_ROOT'])) {
   $GLOBALS['XHPROF_LIB_ROOT'] = realpath(dirname(__FILE__) . '/..');
 }
 
-include_once $GLOBALS['XHPROF_LIB_ROOT'].'/utils/xhprof_lib.php';
+require_once $GLOBALS['XHPROF_LIB_ROOT'].'/utils/xhprof_lib.php';
 include_once $GLOBALS['XHPROF_LIB_ROOT'].'/utils/callgraph_utils.php';
 include_once $GLOBALS['XHPROF_LIB_ROOT'].'/utils/xhprof_runs.php';
 

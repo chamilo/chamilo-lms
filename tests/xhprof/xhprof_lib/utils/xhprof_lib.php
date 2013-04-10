@@ -18,7 +18,6 @@
 // This file contains various XHProf library (utility) functions.
 // Do not add any display specific code here.
 //
-
 function xhprof_error($message) {
   error_log($message);
 }

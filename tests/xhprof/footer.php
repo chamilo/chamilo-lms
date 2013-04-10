@@ -12,7 +12,9 @@ if (extension_loaded('xhprof')) {
     $run_id = $xhprof_runs->save_run($xhprof_data, $profiler_namespace);
 
     // url to the XHProf UI libraries (change the host name and path)
-    $profiler_url = sprintf('http://my.chamilo.net/tests/xhprof/xhprof_html/index.php?run=%s&source=%s', $run_id, $profiler_namespace);
-    $xhprof =  '<a href="'. $profiler_url .'" target="_blank">Profiler output</a>';
+    $url = api_get_path(WEB_PATH);
+    $profiler_url = sprintf($url.'tests/xhprof/xhprof_html/index.php?run=%s&source=%s', $run_id, $profiler_namespace);
+    $xhprof =  '<br /><a class="btn btn-primary" href="'. $profiler_url .'" target="_blank">xhprof profiler output</a><br /><br />';
+    echo $xhprof;
     error_log($run_id);
 }

@@ -2927,9 +2927,7 @@ class CourseManager {
         return $html;
     }
 
-
-
-    function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null) {
+    static function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null) {
 
         // Table definitions
         $TABLECOURS                     = Database :: get_main_table(TABLE_MAIN_COURSE);

@@ -248,7 +248,7 @@ class PageController
      * @param array Array of attributes to add to the HTML block
      * @return string HTML <div> block
      * @assert ('a','') != ''
-     * @todo use the template system
+     * @todo use the menu builder
      */
     public function show_right_block($title, $content, $id, $params = null) {
         $app = $this->app;
@@ -817,28 +817,30 @@ class PageController
         $nbResults = CourseManager::displaySpecialCourses($user_id, $filter, $loadDirs, true);
 
         $html = CourseManager::displaySpecialCourses($user_id, $filter, $loadDirs, false, $start, $this->maxPerPage);
+        if (!empty($html)) {
 
-        $adapter = new FixedAdapter($nbResults, array());
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
-        $pagerfanta->setCurrentPage($page); // 1 by default
+            $adapter = new FixedAdapter($nbResults, array());
+            $pagerfanta = new Pagerfanta($adapter);
+            $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
+            $pagerfanta->setCurrentPage($page); // 1 by default
 
-        $view = new TwitterBootstrapView();
+            $view = new TwitterBootstrapView();
 
-        $app = $this->app;
-        $routeGenerator = function($page) use ($app, $filter) {
-            return $app['url_generator']->generate('userportal', array(
-                    'filter' => $filter,
-                    'type' => 'courses',
-                    'page' => $page)
-            );
-        };
+            $app = $this->app;
+            $routeGenerator = function($page) use ($app, $filter) {
+                return $app['url_generator']->generate('userportal', array(
+                        'filter' => $filter,
+                        'type' => 'courses',
+                        'page' => $page)
+                );
+            };
 
-        $pagination = $view->render($pagerfanta, $routeGenerator, array(
-            'proximity' => 3,
-        ));
-
-        return $html.$pagination;
+            $pagination = $view->render($pagerfanta, $routeGenerator, array(
+                'proximity' => 3,
+            ));
+            $html .= $pagination;
+        }
+        return $html;
     }
 
     /**
@@ -864,29 +866,31 @@ class PageController
         $nbResults = CourseManager::displayCourses($user_id, $filter, $loadDirs, true);
 
         $html = CourseManager::displayCourses($user_id, $filter, $loadDirs, false, $start, $this->maxPerPage);
+        if (!empty($html)) {
 
-        $adapter = new FixedAdapter($nbResults, array());
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
-        $pagerfanta->setCurrentPage($page); // 1 by default
+            $adapter = new FixedAdapter($nbResults, array());
+            $pagerfanta = new Pagerfanta($adapter);
+            $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
+            $pagerfanta->setCurrentPage($page); // 1 by default
 
-        $view = new TwitterBootstrapView();
+            $view = new TwitterBootstrapView();
 
-        $app = $this->app;
+            $app = $this->app;
 
-        $routeGenerator = function($page) use ($app, $filter) {
-            return $app['url_generator']->generate('userportal', array(
-                    'filter' => $filter,
-                    'type' => 'courses',
-                    'page' => $page)
-            );
-        };
+            $routeGenerator = function($page) use ($app, $filter) {
+                return $app['url_generator']->generate('userportal', array(
+                        'filter' => $filter,
+                        'type' => 'courses',
+                        'page' => $page)
+                );
+            };
 
-        $pagination = $view->render($pagerfanta, $routeGenerator, array(
-            'proximity' => 3,
-        ));
-
-        return $html.$pagination;
+            $pagination = $view->render($pagerfanta, $routeGenerator, array(
+                'proximity' => 3,
+            ));
+            $html .= $pagination;
+        }
+        return $html;
     }
 
     public function returnSessionsCategories($user_id, $filter, $page)
@@ -912,10 +916,9 @@ class PageController
         }
 
         $load_directories_preview = api_get_setting('show_documents_preview') == 'true' ? true : false;
-
         $sessions_with_category = $html;
 
-        if (is_array($session_categories)) {
+        if (isset($session_categories) && !empty($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
 
@@ -999,42 +1002,82 @@ class PageController
                     $sessions_with_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_sessions);
                 }
             }
+
+            $adapter = new FixedAdapter($nbResults, array());
+
+            $pagerfanta = new Pagerfanta($adapter);
+
+            $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
+            $pagerfanta->setCurrentPage($page); // 1 by default
+
+            $view = new TwitterBootstrapView();
+
+            $app = $this->app;
+            $routeGenerator = function($page) use ($app, $filter) {
+                return $app['url_generator']->generate('userportal', array(
+                        'filter' => $filter,
+                        'type' => 'sessioncategories',
+                        'page' => $page
+                    ));
+            };
+
+            $pagination = $view->render($pagerfanta, $routeGenerator, array(
+                'proximity' => 3,
+            ));
+            $sessions_with_category .= $pagination;
         }
-
-        $adapter = new FixedAdapter($nbResults, array());
-
-        $pagerfanta = new Pagerfanta($adapter);
-
-        $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
-        $pagerfanta->setCurrentPage($page); // 1 by default
-
-        $view = new TwitterBootstrapView();
-
-        $app = $this->app;
-        $routeGenerator = function($page) use ($app, $filter) {
-            return $app['url_generator']->generate('userportal', array(
-                    'filter' => $filter,
-                    'type' => 'sessioncategories',
-                    'page' => $page)
-            );
-        };
-
-        $pagination = $view->render($pagerfanta, $routeGenerator, array(
-            'proximity' => 3,
-        ));
-        return $sessions_with_category.$pagination;
+        return $sessions_with_category;
     }
 
     public function returnSessions($user_id, $filter, $page) {
         if (empty($user_id)) {
             return false;
         }
+        $app = $this->app;
 
-        $load_history = (isset($filter) && $filter == 'history') ? true : false;
+        $loadHistory = (isset($filter) && $filter == 'history') ? true : false;
+
+        $app['session_menu'] = function($app) use ($loadHistory) {
+            $menu = $app['knp_menu.factory']->createItem('root');
+
+            $menu->setUri($app['request']->getRequestUri());
+
+            $menu->setChildrenAttributes(array(
+                'class' =>  'nav nav-tabs',
+                'currentClass' => 'active'
+            ));
+
+            $current = $menu->addChild(get_lang('Current'), array(
+                    'route' => 'userportal',
+                    'routeParameters' => array(
+                        'filter' => 'current',
+                        'type' => 'sessions'
+                    )
+                )
+            );
+            $history = $menu->addChild(get_lang('HistoryTrainingSession'), array(
+                    'route' => 'userportal',
+                    'routeParameters' => array(
+                        'filter' => 'history',
+                        'type' => 'sessions'
+                    )
+                )
+            );
+            //@todo use URIVoter
+            if ($loadHistory) {
+                $history->setCurrent(true);
+            } else {
+                $current->setCurrent(true);
+            }
+            return $menu;
+        };
+
+        //@todo move this in template
+        $app['knp_menu.menus'] = array('actions_menu' => 'session_menu');
 
         $start = ($page -1) * $this->maxPerPage;
 
-        if ($load_history) {
+        if ($loadHistory) {
             //Load sessions in category in *history*
             $nbResults = (int) UserManager::get_sessions_by_category($user_id, true, true, true, null, null, 'no_category');
             $session_categories = UserManager::get_sessions_by_category($user_id, true, false, true, $start, $this->maxPerPage, 'no_category');
@@ -1046,8 +1089,9 @@ class PageController
 
         $html = null;
         //Showing history title
-        if ($load_history) {
-            $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
+
+        if ($loadHistory) {
+           // $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
             if (empty($session_categories)) {
                 $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
             }
@@ -1057,7 +1101,8 @@ class PageController
 
         $sessions_with_no_category = $html;
 
-        if (is_array($session_categories)) {
+        if (isset($session_categories) && !empty($session_categories)) {
+
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
 
@@ -1123,27 +1168,28 @@ class PageController
                     }
                 }
             }
+
+            $adapter = new FixedAdapter($nbResults, array());
+            $pagerfanta = new Pagerfanta($adapter);
+            $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
+            $pagerfanta->setCurrentPage($page); // 1 by default
+
+            $view = new TwitterBootstrapView();
+            $app = $this->app;
+            $routeGenerator = function($page) use ($app, $filter) {
+                return $app['url_generator']->generate('userportal', array(
+                        'filter' => $filter,
+                        'type' => 'sessions',
+                        'page' => $page)
+                );
+            };
+
+            $pagination = $view->render($pagerfanta, $routeGenerator, array(
+                'proximity' => 3,
+            ));
+            $sessions_with_no_category .= $pagination;
         }
-
-        $adapter = new FixedAdapter($nbResults, array());
-        $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
-        $pagerfanta->setCurrentPage($page); // 1 by default
-
-        $view = new TwitterBootstrapView();
-        $app = $this->app;
-        $routeGenerator = function($page) use ($app, $filter) {
-            return $app['url_generator']->generate('userportal', array(
-                'filter' => $filter,
-                'type' => 'sessions',
-                'page' => $page)
-            );
-        };
-
-        $pagination = $view->render($pagerfanta, $routeGenerator, array(
-            'proximity' => 3,
-        ));
-        return $sessions_with_no_category.$pagination;
+        return $sessions_with_no_category;
     }
 
     /**

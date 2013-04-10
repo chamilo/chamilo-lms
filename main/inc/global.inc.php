@@ -154,8 +154,8 @@ $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 
 //Loading $app settings
-require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
-//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
+//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
+require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
 /*
@@ -339,7 +339,7 @@ $app->register(
 
 //Setting Twig options
 $app['twig'] = $app->share(
-    $app->extend('twig', function ($twig, $app) {
+    $app->extend('twig', function ($twig) {
         $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
         $twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
         $twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
@@ -356,6 +356,9 @@ $app['twig'] = $app->share(
         return $twig;
     })
 );
+
+// Registering Menu extension
+$app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
 
 //Monolog only available if cache is writable
 if (is_writable($app['cache.path'])) {

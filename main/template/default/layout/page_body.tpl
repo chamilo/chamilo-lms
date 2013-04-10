@@ -5,15 +5,19 @@
     </div>
 {% endif %}
 
+{% if actions_menu != '' %}
+    {{ knp_menu_render('actions_menu', { 'currentClass': 'active'}) }}
+{% endif %}
+
 {#  Page header #}
-{% if header != '' %}    
+{% if header != '' %}
     <div class="page-header">
         <h1>{{ header }}</h1>
     </div>
 {% endif %}
 
 {#  Show messages #}
-{% if message != '' %}    
+{% if message != '' %}
     <section id="messages">
         {{ message}}
     </section>

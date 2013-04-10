@@ -55,6 +55,15 @@ class UserPortalController
             $app['page_controller']->return_welcome_to_course_block($app['template']);
         }
 
+        /*
+        $app['my_main_menu'] = function($app) {
+            $menu = $app['knp_menu.factory']->createItem('root');
+            $menu->addChild('Home', array('route' => api_get_path(WEB_CODE_PATH)));
+            return $menu;
+        };
+        $app['knp_menu.menus'] = array('main' => 'my_main_menu');*/
+
+
         $app['template']->assign('content', $items);
 
         $app['page_controller']->getSectionCourseBlock();

@@ -100,7 +100,7 @@ class Resource {
      * Checks if this resource links to a given resource
      */
     function links_to(& $resource) {
-        if (is_array($this->linked_resources[$resource->get_type()])) {
+        if (isset($this->linked_resources[$resource->get_type()]) && is_array($this->linked_resources[$resource->get_type()])) {
             return in_array($resource->get_id(), $this->linked_resources[$resource->get_type()]);
         }
         return false;

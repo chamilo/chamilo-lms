@@ -945,19 +945,21 @@ class SessionManager {
       **/
     public static function suscribe_users_to_session($id_session, $user_list, $session_visibility = SESSION_VISIBLE_READ_ONLY, $empty_users = true, $send_email = false) {
 
-          if ($id_session!= strval(intval($id_session))) return false;
-           foreach ($user_list as $intUser){
-               if ($intUser!= strval(intval($intUser))) return false;
-           }
-           $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-           $tbl_session_rel_user                 = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-           $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
+        if ($id_session!= strval(intval($id_session))) return false;
 
-        $session_info         = api_get_session_info($id_session);
+        foreach ($user_list as $intUser){
+            if ($intUser!= strval(intval($intUser))) return false;
+        }
+
+        $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_rel_user                 = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        $session_info = api_get_session_info($id_session);
 
         if ($session_info) {
-            $session_name         = $session_info['name'];
+            $session_name = $session_info['name'];
         } else {
             return false;
         }
@@ -1073,7 +1075,7 @@ class SessionManager {
         }
     }
 
-    function subscribe_users_to_session_course($user_list, $session_id, $course_code, $session_visibility = SESSION_VISIBLE_READ_ONLY ) {
+    static function subscribe_users_to_session_course($user_list, $session_id, $course_code, $session_visibility = SESSION_VISIBLE_READ_ONLY ) {
         $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -1089,7 +1091,7 @@ class SessionManager {
         foreach ($user_list as $enreg_user) {
             //if (!in_array($enreg_user, $existingUsers)) {
                 $enreg_user = intval($enreg_user);
-                $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user,visibility)
+                $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session, course_code, id_user, visibility)
                                VALUES ('$session_id','$course_code','$enreg_user','$session_visibility')";
                 Database::query($insert_sql);
                 if (Database::affected_rows()) {
@@ -1098,11 +1100,11 @@ class SessionManager {
             //}
         }
         // count users in this session-course relation
-        $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND status<>2";
+        $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$session_id' AND course_code='$course_code' AND status<>2";
         $rs = Database::query($sql);
         list($nbr_users) = Database::fetch_array($rs);
         // update the session-course relation to add the users total
-        $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users = $nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+        $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users = $nbr_users WHERE id_session='$session_id' AND course_code='$course_code'";
         Database::query($update_sql);
     }
 
@@ -1219,7 +1221,6 @@ class SessionManager {
                 if (!in_array($existingCourse['course_code'], $course_list)){
                     Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
                     Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
-
                 }
             }
             $nbr_courses=0;
@@ -1236,8 +1237,11 @@ class SessionManager {
                 }
             }
             if (!$exists) {
+                $courseInfo = api_get_course_info($enreg_course);
+                $courseId = $courseInfo['real_id'];
+
                 //if the course isn't subscribed yet
-                $sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code) VALUES ('$id_session','$enreg_course')";
+                $sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session, course_code, course_id) VALUES ('$id_session','$enreg_course', $courseId)";
                 Database::query($sql_insert_rel_course);
                 //We add the current course in the existing courses array, to avoid adding another time the current course
                 $existingCourses[]=array('course_code'=>$enreg_course);

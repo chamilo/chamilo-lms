@@ -21,7 +21,7 @@ use \ChamiloSession as Session;
 
 class Online {
 
-    function LoginCheck($uid) {
+    static function LoginCheck($uid) {
         global $_course;
         $uid = (int) $uid;
         $online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
@@ -53,7 +53,7 @@ class Online {
      * @return void  Directly redirects the user or leaves him where he is, but doesn't return anything
      * @author Fernando P. García <fernando@develcuy.com>
      */
-    function logout($user_id = null, $logout_redirect = false) {
+    static function logout($user_id = null, $logout_redirect = false) {
         global $extAuthSource;
 
         // Database table definition
@@ -119,7 +119,7 @@ class Online {
      * @param int User ID
      * @return bool
      */
-    function loginDelete($user_id) {
+    static function loginDelete($user_id) {
         $online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         $user_id = intval($user_id);
         if (empty($user_id)) {
@@ -159,7 +159,7 @@ class Online {
      * Gives a list of people online now (and in the last $valid minutes)
      * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
      */
-    function who_is_online($from, $number_of_items, $column = null, $direction = null, $time_limit = null, $friends = false) {
+    static function who_is_online($from, $number_of_items, $column = null, $direction = null, $time_limit = null, $friends = false) {
 
         // Time limit in seconds?
         if (empty($time_limit)) {
@@ -256,7 +256,7 @@ class Online {
         }
     }
 
-    function who_is_online_count($time_limit = null, $friends = false) {
+    static function who_is_online_count($time_limit = null, $friends = false) {
         if (empty($time_limit)) {
             $time_limit = api_get_setting('time_limit_whosonline');
         } else {
@@ -323,7 +323,7 @@ class Online {
     * @param    string  Course code (could be empty, but then the function returns false)
     * @return   array   Each line gives a user id and a login time
     */
-    function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit, $course_code) {
+    static function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit, $course_code) {
         if (empty($course_code)) return false;
 
         if (empty($time_limit)) {
@@ -362,7 +362,7 @@ class Online {
         }
     }
 
-    function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null) {
+    static function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null) {
         if(empty($coursecode)) return false;
         $track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         $coursecode = Database::escape_string($coursecode);

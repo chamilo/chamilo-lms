@@ -17,7 +17,7 @@ class Text {
      * @param  string $string    The input string with html-tags to be converted to plain text.
      * @return string            The returned plain text as a result.
      */
-    function api_html_to_text($string) {
+    static function api_html_to_text($string) {
         // These purifications have been found experimentally, for nice looking output.
         $string = preg_replace('/<br[^>]*>/i', "\n", $string);
         $string = preg_replace('/<\/?(div|p|h[1-6]|table|ol|ul|blockquote)[^>]*>/i', "\n", $string);
@@ -39,7 +39,7 @@ class Text {
      * @param  string $string                The input html-formatted text.
      * @return string                        Returns the detected encoding.
      */
-    function api_detect_encoding_html($string) {
+    static function api_detect_encoding_html($string) {
         if (@preg_match('/<head.*(<meta[^>]*content=[^>]*>).*<\/head>/si', $string, $matches)) {
             if (@preg_match('/<meta[^>]*charset=(.*)["\';][^>]*>/si', $matches[1], $matches)) {
                 return api_refine_encoding_id(trim($matches[1]));
@@ -53,7 +53,7 @@ class Text {
      * @param string $string                The input full-html document.
      * @param string                        The new encoding value to be set.
      */
-    function api_set_encoding_html(&$string, $encoding) {
+    static function api_set_encoding_html(&$string, $encoding) {
         $old_encoding = self::api_detect_encoding_html($string);
         if (@preg_match('/(.*<head.*)(<meta[^>]*content=[^>]*>)(.*<\/head>.*)/si', $string, $matches)) {
             $meta = $matches[2];
@@ -77,7 +77,7 @@ class Text {
      * @param string $$output_encoding      The encoding of the retrieved title. If the value is not set, the system encoding is assumend.
      * @return string                       The retrieved title, html-entities and extra-whitespace between the words are cleaned.
      */
-    function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null)
+    static function api_get_title_html(&$string, $output_encoding = null, $input_encoding = null)
     {
         if (@preg_match('/<head.+<title[^>]*>(.*)<\/title>/msi', $string, $matches)) {
             if (empty($output_encoding)) {
@@ -98,7 +98,7 @@ class Text {
      * @return string                       Returns the detected encoding.
      * @todo The second parameter is to be eliminated. See api_detect_encoding_html().
      */
-    function api_detect_encoding_xml($string, $default_encoding = null) {
+    static function api_detect_encoding_xml($string, $default_encoding = null) {
         if (preg_match(_PCRE_XML_ENCODING, $string, $matches)) {
             return api_refine_encoding_id($matches[1]);
         }
@@ -118,7 +118,7 @@ class Text {
      * @param string $from_encoding (optional)  The encoding that text is being converted from. If it is omited, it is tried to be detected then.
      * @return string                           Returns the converted xml-text.
      */
-    function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) {
+    static function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) {
         return self::_api_convert_encoding_xml($string, $to_encoding, $from_encoding);
     }
 
@@ -128,7 +128,7 @@ class Text {
      * @param string $from_encoding (optional)  The encoding that text is being converted from. If it is omited, it is tried to be detected then.
      * @return string                           Returns the converted xml-text.
      */
-    function api_utf8_encode_xml($string, $from_encoding = null) {
+    static function api_utf8_encode_xml($string, $from_encoding = null) {
         return self::_api_convert_encoding_xml($string, 'UTF-8', $from_encoding);
     }
 
@@ -138,7 +138,7 @@ class Text {
      * @param string $to_encoding (optional)    The encoding that text is being converted to. If it is omited, the platform character set is assumed.
      * @return string                           Returns the converted xml-text.
      */
-    function api_utf8_decode_xml($string, $to_encoding = null) {
+    static function api_utf8_decode_xml($string, $to_encoding = null) {
         if (empty($to_encoding)) {
             $to_encoding = _api_mb_internal_encoding();
         }
@@ -152,7 +152,7 @@ class Text {
      * @param string $from_encoding (optional)  The encoding that text is being converted from. If the value is empty, it is tried to be detected then.
      * @return string                           Returns the converted xml-text.
      */
-    function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
+    static function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
         if (empty($from_encoding)) {
             $from_encoding = self::api_detect_encoding_xml($string);
         }
@@ -179,7 +179,7 @@ class Text {
      * @param array $matches    Input array of matches corresponding to the xml-declaration.
      * @return string           Returns the xml-declaration with modified encoding.
      */
-    function _api_convert_encoding_xml_callback($matches) {
+    static function _api_convert_encoding_xml_callback($matches) {
         global $_api_encoding;
         return str_replace($matches[1], $_api_encoding, $matches[0]);
     }
@@ -197,7 +197,7 @@ class Text {
      * should be kept. These parameters should be single ASCII characters only. Thus the implementation of this function is faster.
      * @link http://php.net/manual/en/function.str-getcsv.php   (exists as of PHP 5 >= 5.3.0)
      */
-    function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+    static function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape = '\\') {
         $delimiter = (string) $delimiter;
         if (api_byte_count($delimiter) > 1) {
             $delimiter = $delimiter[1];
@@ -268,7 +268,7 @@ class Text {
      * should be kept. These parameters should be single ASCII characters only.
      * @link http://php.net/manual/en/function.fgetcsv.php
      */
-    function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+    static function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"', $escape = '\\') {
         if (($line = is_null($length) ? fgets($handle) : fgets($handle, $length)) !== false) {
             $line = rtrim($line, "\r\n");
             return self::api_str_getcsv($line, $delimiter, $enclosure, $escape);
@@ -283,7 +283,7 @@ class Text {
      * @param string $html      The input html text.
      * @return bool             Returns TRUE when there is a formula found or FALSE otherwise.
      */
-    function api_contains_asciimathml($html) {
+    static function api_contains_asciimathml($html) {
         if (!preg_match_all('/<span[^>]*class\s*=\s*[\'"](.*?)[\'"][^>]*>/mi', $html, $matches)) {
             return false;
         }
@@ -301,7 +301,7 @@ class Text {
      * @param string $html      The input html text.
      * @return bool             Returns TRUE when there is a graph found or FALSE otherwise.
      */
-    function api_contains_asciisvg($html) {
+    static function api_contains_asciisvg($html) {
         if (!preg_match_all('/<embed([^>]*?)>/mi', $html, $matches)) {
             return false;
         }
@@ -322,7 +322,7 @@ class Text {
      * @param string $string                            The input string (ASCII)
      * @return string                                   The converted result string
      */
-    function api_camel_case_to_underscore($string) {
+    static function api_camel_case_to_underscore($string) {
         return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
     }
 
@@ -333,7 +333,7 @@ class Text {
      * @param bool $capitalise_first_char (optional)    If true (default), the function capitalises the first char in the result string.
      * @return string                                   The converted result string
      */
-    function api_underscore_to_camel_case($string, $capitalise_first_char = true) {
+    static function api_underscore_to_camel_case($string, $capitalise_first_char = true) {
         if ($capitalise_first_char) {
             $string = ucfirst($string);
         }
@@ -341,7 +341,7 @@ class Text {
     }
 
     // A function for internal use, only for this library.
-    function _api_camelize($match) {
+    static function _api_camelize($match) {
         return strtoupper($match[1]);
     }
 
@@ -356,7 +356,7 @@ class Text {
      * @param  boolean $middle               If this parameter is true, truncation is done in the middle of the string.
      * @return string                        Truncated string, decorated with the given suffix (replacement).
      */
-    function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null) {
+    static function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null) {
         if (empty($encoding)) {
             $encoding = api_get_system_encoding();
         }
@@ -376,7 +376,7 @@ class Text {
      * @author Denes Nagy
      * @param  string variable - the variable to be revised
      */
-    function domesticate($input) {
+    static function domesticate($input) {
         $input = stripslashes($input);
         $input = str_replace("'", "''", $input);
         $input = str_replace('"', "''", $input);
@@ -402,7 +402,7 @@ class Text {
      * - Only matches these 2 patterns either after a space, or at the beginning of a line
      *
      */
-    function make_clickable($text) {
+    static function make_clickable($text) {
         $regex = '/(\S+@\S+\.\S+)/i';
         $replace = "<a href='mailto:$1'>$1</a>";
         $result = preg_replace($regex, $replace, $text);
@@ -417,7 +417,7 @@ class Text {
      * @param bool      Whether to embed in a <span title="...">...</span>
      * @return string
      * */
-    function cut($text, $maxchar, $embed = false) {
+    static function cut($text, $maxchar, $embed = false) {
         if (api_strlen($text) > $maxchar) {
             if ($embed) {
                 return '<span title="' . $text . '">' . api_substr($text, 0, $maxchar) . '...</span>';
@@ -434,7 +434,7 @@ class Text {
      * @param int       Decimal points 0=never, 1=if needed, 2=always
      * @return mixed    An integer or a float depends on the parameter
      */
-    function float_format($number, $flag = 1) {
+    static function float_format($number, $flag = 1) {
         if (is_numeric($number)) {
             if (!$number) {
                 $result = ($flag == 2 ? '0.' . str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
@@ -455,7 +455,7 @@ class Text {
      * Function to obtain last week timestamps
      * @return array    Times for every day inside week
      */
-    function get_last_week() {
+    static function get_last_week() {
         $week = date('W');
         $year = date('Y');
 
@@ -478,7 +478,7 @@ class Text {
      * @param   string   Date in UTC (2010-01-01 12:12:12)
      * @return  int      Returns an integer with the week number of the year
      */
-    function get_week_from_day($date) {
+    static function get_week_from_day($date) {
         if (!empty($date)) {
             $time = api_strtotime($date, 'UTC');
             return date('W', $time);
@@ -496,7 +496,7 @@ class Text {
      * @param string how the string will be end
      * @return a reduce string
      */
-    function substrwords($text, $maxchar, $end = '...') {
+    static function substrwords($text, $maxchar, $end = '...') {
         if (strlen($text) > $maxchar) {
             $words = explode(" ", $text);
             $output = '';
@@ -517,7 +517,7 @@ class Text {
         return $output . $end;
     }
 
-    function implode_with_key($glue, $array) {
+    static function implode_with_key($glue, $array) {
         if (!empty($array)) {
             $string = '';
             foreach ($array as $key => $value) {
@@ -539,7 +539,7 @@ class Text {
      * @param string    $variable
      * @author Patrick Cool, patrick.cool@ugent.be
      */
-    function string2binary($variable) {
+    static function string2binary($variable) {
         if ($variable == 'true') {
             return true;
         }
@@ -554,7 +554,7 @@ class Text {
      * @param  int      Size of the file in bytes
      * @return string A human readable representation of the file size
      */
-    function format_file_size($file_size) {
+    static function format_file_size($file_size) {
         $file_size = intval($file_size);
         if($file_size >= 1073741824) {
             $file_size = round($file_size / 1073741824 * 100) / 100 . 'G';
@@ -568,8 +568,7 @@ class Text {
         return $file_size;
     }
 
-
-    function return_datetime_from_array($array) {
+    static function return_datetime_from_array($array) {
         $year	 = '0000';
         $month = $day = $hours = $minutes = $seconds = '00';
         if (isset($array['Y']) && (isset($array['F']) || isset($array['M']))  && isset($array['d']) && isset($array['H']) && isset($array['i'])) {

@@ -17,7 +17,7 @@ class ArrayClass {
      * @return array an array with unique values
      *
      */
-    function array_unique_dimensional($array) {
+    static function array_unique_dimensional($array) {
         if(!is_array($array))
             return $array;
 
@@ -42,7 +42,7 @@ class ArrayClass {
      * @return 	array	result array
      * @author	found in http://php.net/manual/en/function.sort.php
      */
-    function msort($array, $id='id', $order = 'desc') {
+    static function msort($array, $id='id', $order = 'desc') {
         if (empty($array)) {
             return $array;
         }
@@ -68,7 +68,7 @@ class ArrayClass {
         return $temp_array;
     }
 
-    function utf8_sort($array) {
+    static function utf8_sort($array) {
         $old_locale = setlocale(LC_ALL, null);
         $code = api_get_language_isocode();
         $locale_list = array($code.'.utf8', 'en.utf8','en_US.utf8','en_GB.utf8');
@@ -89,14 +89,14 @@ class ArrayClass {
         return $array;
     }
 
-    function array_to_string($array, $separator = ',') {
+    static function array_to_string($array, $separator = ',') {
         if (empty($array)) {
             return '';
         }
         return implode($separator.' ', $array);
     }
 
-    function array_flatten(array $array) {
+    static function array_flatten(array $array) {
         $flatten = array();
         array_walk_recursive($array, function($value) use(&$flatten) {
             $flatten[] = $value;

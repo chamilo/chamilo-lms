@@ -30,7 +30,6 @@ $nameTools = get_lang('GroupOverview');
 
 /*	Libraries */
 
-include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 if (isset($_GET['action'])) {
@@ -101,7 +100,7 @@ foreach ($categories as $index => $category) {
 	}
 	$groups = GroupManager::get_group_list($category['id']);
     echo '<ul>';
-	if (!empty($groups)) {    	
+	if (!empty($groups)) {
     	foreach ($groups as $index => $group) {
     		echo '<li>';
         		echo Display::tag('h3', Security::remove_XSS($group['name']));
@@ -112,16 +111,16 @@ foreach ($categories as $index => $category) {
             			$user_info = api_get_user_info($user);
             			$username = api_htmlentities(sprintf(get_lang('LoginX'), $user_info['username']), ENT_QUOTES);
             			echo '<li title="'.$username.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</li>';
-            		}            	
+            		}
                 } else {
-                    //echo Display::tag('li', get_lang('NoStudents'));            
+                    //echo Display::tag('li', get_lang('NoStudents'));
                 }
                 echo '</ul>';
     		echo '</li>';
-    	}    	
-    } else {        
-        //echo Display::tag('li', get_lang('NoData'));   
-    }    
+    	}
+    } else {
+        //echo Display::tag('li', get_lang('NoData'));
+    }
     echo '</ul>';
 }
 

@@ -10,7 +10,6 @@
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
 
 /**
  * Extends formvalidator with import and export forms
@@ -43,7 +42,7 @@ class DataForm extends FormValidator {
 				$this->build_export_form_option(false);
 			} else {
 				$this->build_export_form();
-			}			
+			}
 		}
 		elseif ($this->form_type == self :: TYPE_EXPORT_PDF) {
 			$this->build_pdf_export_form();
@@ -80,7 +79,7 @@ class DataForm extends FormValidator {
 		$this->addElement('header', get_lang('ChooseFormat'));
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
-		$this->addElement('radio', 'file_type', Display::return_icon('info3.gif',get_lang('ToExportMustLockEvaluation')), 'PDF (Portable Document Format)', 'pdf', array('disabled'));			
+		$this->addElement('radio', 'file_type', Display::return_icon('info3.gif',get_lang('ToExportMustLockEvaluation')), 'PDF (Portable Document Format)', 'pdf', array('disabled'));
 		$this->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="upload"');
 		$this->setDefaults(array (
 			'file_type' => 'csv'

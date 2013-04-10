@@ -41,7 +41,6 @@ $language_file = array('document','gradebook');
 require_once '../inc/global.inc.php';
 
 // Including additional libraries
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 require_once 'document.inc.php';
 
@@ -122,8 +121,7 @@ $group_properties = array();
 // This needs cleaning!
 if (api_get_group_id()) {
     // If the group id is set, check if the user has the right to be here
-	// Needed for group related stuff
-	require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+
 	// Get group info
 	$group_properties = GroupManager::get_group_properties(api_get_group_id());
 

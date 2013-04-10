@@ -32,7 +32,6 @@ $(function() {
 });
 </script>';
 
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 /**
  * Retrieves all the agenda items from the table

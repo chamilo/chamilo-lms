@@ -23,8 +23,6 @@ $permissions_for_new_directories = api_get_permissions_for_new_directories();
 $permissions_for_new_files = api_get_permissions_for_new_files();
 
 if (!empty($_course['path'])) {
-    require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
     // Get the Chamilo session properties. Before ajaximagemanager!!!
     $to_group_id = !empty($_SESSION['_gid']) ? $_SESSION['_gid'] : 0;

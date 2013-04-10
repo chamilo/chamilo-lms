@@ -12,7 +12,6 @@ if ($mainUserInfo['status']==1)
 }
 include_once('permissions_functions.inc.php');
 include_once('all_permissions.inc.php');
-include_once (api_get_library_path()."/groupmanager.lib.php");
 include_once (api_get_library_path()."/blog.lib.php");
 // ---------------------------------------------------
 // 			ACTIONS

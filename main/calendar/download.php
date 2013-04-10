@@ -17,7 +17,6 @@ session_cache_limiter('public');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once 'agenda.inc.php';
 
 // IMPORTANT to avoid caching of documents
@@ -40,7 +39,7 @@ if (empty($course_id) || empty($doc_url)) {
 
 $is_user_is_subscribed = CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'], true, $session_id);
 
-if (!api_is_allowed_to_edit() && !$is_user_is_subscribed) {    
+if (!api_is_allowed_to_edit() && !$is_user_is_subscribed) {
     api_not_allowed();
 }
 
@@ -75,7 +74,7 @@ $sql='SELECT filename FROM '.$tbl_agenda_attachment.'
 
 $result = Database::query($sql);
 if (Database::num_rows($result)) {
-    $row    = Database::fetch_array($result);    
+    $row    = Database::fetch_array($result);
     $title = str_replace(' ','_', $row['filename']);
     if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).$course_info['path'].'/upload/calendar/')) {
         DocumentManager::file_send_for_download($full_file_name,TRUE, $title);

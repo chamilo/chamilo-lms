@@ -16,7 +16,6 @@
 session_cache_limiter('nocache');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
@@ -52,7 +51,7 @@ if (is_dir($full_file_name)) {
 	//create the path
 	$document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
 	//redirect
-	header('Location: '.$document_explorer); 
+	header('Location: '.$document_explorer);
 }
 
 $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
@@ -71,7 +70,7 @@ $result= Database::query($sql);
 if (Database::num_rows($result) > 0) {
     $row= Database::fetch_array($result);
     $title = str_replace(' ','_', $row['filename']);
-    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/announcements/')) {  
+    if (Security::check_abs_path($full_file_name, api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/announcements/')) {
         DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
     }
 }

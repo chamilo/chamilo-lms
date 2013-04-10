@@ -134,9 +134,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         } elseif ($answerType == ORAL_EXPRESSION) {
             //Add nanog
             if (api_get_setting('enable_nanogong') == 'true') {
-
-                require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
-
                 //@todo pass this as a parameter
                 global $exercise_stat_info, $exerciseId, $exe_id;
 

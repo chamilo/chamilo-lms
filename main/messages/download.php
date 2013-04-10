@@ -15,8 +15,6 @@
 session_cache_limiter('public');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');

@@ -11,7 +11,6 @@
 if ( count( get_included_files() ) == 1 ) die( '---' );
 
 if (!function_exists('mime_content_type')) {
-	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 	function mime_content_type($filename) {
 		return DocumentManager::file_get_mime_type((string)$filename);
 	}
@@ -97,8 +96,8 @@ class ImsAnswerMultipleChoice extends Answer
         $out .= '      <prompt> ' . $questionStatment . ' </prompt>'. "\n";
 		if (is_array($this->answerList)) {
 	        foreach ($this->answerList as $current_answer) {
-	        	
-	        	
+
+
 	            $out .= '      <simpleChoice identifier="answer_' . $current_answer['id'] . '" fixed="false">' . $current_answer['answer'];
 	            if (isset($current_answer['comment']) && $current_answer['comment'] != '')
 	            {
@@ -247,7 +246,7 @@ class ImsAnswerFillInBlanks extends Answer
         $out = '';
 		if (is_array($this->answerList)) {
 	        foreach ($this->answerList as $answerKey=>$answer) {
-	        	
+
 	        	$answerKey = $answer['id'];
 	        	$answer = $answer['answer'];
 	            $out .= '  <responseDeclaration identifier="fill_' . $answerKey . '" cardinality="single" baseType="identifier">' . "\n";

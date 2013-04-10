@@ -25,8 +25,6 @@ require_once 'Glossary.class.php';
 require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
 
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
 define('FILE_SKIP', 1);
 define('FILE_RENAME', 2);
 define('FILE_OVERWRITE', 3);

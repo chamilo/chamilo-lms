@@ -22,7 +22,6 @@ $language_file = 'exercice';
 include("../inc/global.inc.php");
 $this_section = SECTION_COURSES;
 
-include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 $nameTools = get_lang('ExerciseManagement');
 
 if (isset($_SESSION['gradebook'])) {

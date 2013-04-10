@@ -7,7 +7,6 @@
 /**
  * Code
  */
-require_once 'document.lib.php';
 
 /**
  * This library contains some functions for group-management.

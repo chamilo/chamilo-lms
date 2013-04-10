@@ -10,7 +10,6 @@
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
 
 /**
  * Forms related to links
@@ -75,20 +74,20 @@ class LinkForm extends FormValidator
 		$select = $this->addElement('select', 'select_link', get_lang('ChooseLink'), null, array('onchange' => 'document.create_link.submit()'));
 
 		$linktypes = LinkFactory :: get_all_types();
-		
+
 		$select->addoption('['.get_lang('ChooseLink').']', 0);
 
 		$cc = $this->category_object->get_course_code();
-                
+
 		foreach ($linktypes as $linktype) {
-			$link = LinkFactory :: create ($linktype);            
+			$link = LinkFactory :: create ($linktype);
 			if (!empty($cc)) {
 				$link->set_course_code($cc);
 			} elseif(!empty($_GET['course_code'])) {
 				$link->set_course_code(Database::escape_string($_GET['course_code']));
-			}			
+			}
 			// disable this element if the link works with a dropdownlist
-			// and if there are no links left            
+			// and if there are no links left
 			if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0') {
 				$select->addoption($link->get_type_name(), $linktype, 'disabled');
 			} else {

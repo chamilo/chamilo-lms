@@ -35,7 +35,6 @@ if ($mainUserInfo['status']==1)
 }
 
 include_once('permissions_functions.inc.php');
-include_once(api_get_path(LIBRARY_PATH) . "/groupmanager.lib.php");
 // 			ACTIONS
 if (isset($_GET['do']))
 {

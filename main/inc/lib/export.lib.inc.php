@@ -11,8 +11,6 @@
 /**
  * Code
  */
-require_once 'document.lib.php';
-
 /**
  *
  * @package chamilo.library

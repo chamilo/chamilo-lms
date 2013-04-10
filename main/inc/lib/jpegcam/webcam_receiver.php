@@ -4,11 +4,10 @@
 /* Receives JPEG webcam submission and saves to local file. */
 /* Make sure your directory has permission to write files as your web server user! */
 require_once '../../../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-////Add security from Chamilo
+//Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
-///
+
 # Save the audio to a URL-accessible directory for playback.
 parse_str($_SERVER['QUERY_STRING'], $params);
 

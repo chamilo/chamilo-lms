@@ -18,7 +18,6 @@ define('FRAME', 'message');
 $language_file = array('chat');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $course = api_get_course_id();
 $session_id = api_get_session_id();
@@ -63,7 +62,6 @@ if (empty($_user['user_id'])) {
 
 // if we have the session set up
 if (!empty($course) && !empty($_user['user_id'])) {
-    require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
     /*	Constants and variables */
 

@@ -54,8 +54,6 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-
 /*
 	Variables
 	- some need defining before inclusion of libraries

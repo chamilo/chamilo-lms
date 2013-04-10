@@ -124,7 +124,6 @@ if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
     require_once 'export/qti2/qti2_export.php';
     $export = export_exercise($exerciseId, true);
 
-    require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $temp_dir_short = api_get_unique_id();
     $temp_zip_dir = $archive_path."/".$temp_dir_short;

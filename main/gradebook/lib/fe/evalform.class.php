@@ -10,7 +10,6 @@
 require_once dirname(__FILE__).'/../../../inc/global.inc.php';
 require_once dirname(__FILE__).'/../be.inc.php';
 require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
 
 /**
  * Extends formvalidator with add&edit forms for evaluations

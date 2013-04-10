@@ -15,7 +15,6 @@ define('FRAME', 'chat');
 
 $language_file = array('chat');
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 $course = $_GET['cidReq'];
 $session_id = intval($_SESSION['id_session']);

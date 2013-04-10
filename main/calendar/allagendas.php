@@ -18,8 +18,6 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
 require_once 'agenda.inc.php';
 require_once 'myagenda.inc.php';
 

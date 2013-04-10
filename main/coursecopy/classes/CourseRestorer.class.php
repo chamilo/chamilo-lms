@@ -1445,7 +1445,7 @@ class CourseRestorer
                     }
                 }
                 if ($id != -1) {
-                    // check resources inside html from fckeditor tool and copy correct urls into recipient course
+                        // check resources inside html from fckeditor tool and copy correct urls into recipient course
                     $quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                         $quiz->description,
                         $this->course->code,
@@ -1502,13 +1502,15 @@ class CourseRestorer
                 }
 
                 if ($new_id) {
-                    // updates the question position
+                    // Updates the question position
                     $exercise = new Exercise($this->destination_course_id);
                     $exercise->read($new_id);
-                    $exercise->add_exercise_to_order_table();
+
+                    if ($new_id != -1) {
+                        $exercise->add_exercise_to_order_table();
+                    }
 
                     $this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
-
                     $order = 0;
                     if (!empty($quiz->question_ids)) {
                         foreach ($quiz->question_ids as $index => $question_id) {
@@ -1516,6 +1518,7 @@ class CourseRestorer
                             $question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;
                             $sql = "INSERT IGNORE INTO ".$table_rel." SET c_id = ".$this->destination_course_id.", question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
                             Database::query($sql);
+
                         }
                     }
                 }

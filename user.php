@@ -4,9 +4,9 @@
  *  Clean URls for the Social Network
  *
  *  The idea is to access to the user info more easily:
- *  http://campus.chamilo.org/admin instead of 
+ *  http://campus.chamilo.org/admin instead of
  *  http://campus.chamilo.org/main/social/profile.php?1
- *  To use this you should rename the htaccess to .htaccess and check your 
+ *  To use this you should rename the htaccess to .htaccess and check your
  *  virtualhost configuration
  *
  *  More improvements will come in next versions of Chamilo maybe in the 1.8.8
@@ -14,6 +14,8 @@
  */
 /**
  * Variables definitions and inclusions
+ *
+ * @todo move this inside web/user
  */
 // name of the language file that needs to be included
 $language_file = array('index','registration','messages','userInfo');

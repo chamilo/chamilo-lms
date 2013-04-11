@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+//@todo move this inside web/news
+
 // name of the language file that needs to be included
 $language_file = array ('admin','courses', 'index', 'announcements', 'group');
 

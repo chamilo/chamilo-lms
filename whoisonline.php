@@ -3,6 +3,7 @@
 
 /**
  * Who is online list
+ * @todo move this inside web/online
  */
 
 // language files that should be included

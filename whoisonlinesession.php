@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Shows who is online in a specific session
+ * @todo move this inside web/onlineincourses
  * @package chamilo.main
  */
 /**

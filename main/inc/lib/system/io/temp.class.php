@@ -3,16 +3,16 @@
 /**
  * Temporary file/folder. The file/folder is automatically deleted at
  * the end of the script/during garbage collection.
- * 
+ *
  * The object implements __toString so it can be used as string variable.
- * 
+ *
  * Usage
- * 
+ *
  *      $path = Temp::file();
  *      file_puts_content($path, $content);
- * 
+ *
  * or
- * 
+ *
  *      $path = Temp::dir();
  *      ...
  *
@@ -22,15 +22,15 @@
  */
 class Temp
 {
-    
+
     protected static $files = array();
-    
+
     /**
      * Returns the list of temporary files opened by the script.
      * This is mostly due to pin temporary files and prevent garbage collection.
-     * This ensure files are not unlinked while still using it to send data in 
+     * This ensure files are not unlinked while still using it to send data in
      * an upload.
-     * 
+     *
      * @return array
      */
     public static function files()
@@ -40,9 +40,9 @@ class Temp
 
     /**
      * Recursively delete files and/or folders.
-     * 
+     *
      * @param string $path
-     * @return boolean 
+     * @return boolean
      */
     public static function delete($path)
     {
@@ -70,8 +70,8 @@ class Temp
     /**
      * Set the temp root directory. Temporary files are by default created in this directory.
      * Defaults to sys_get_temp_dir().
-     * 
-     * @param string $value 
+     *
+     * @param string $value
      */
     public static function set_temp_root($value)
     {
@@ -89,8 +89,8 @@ class Temp
 
     /**
      * Returns a path to a non-existing temporary file located under temp_dir.
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public static function get_temporary_name()
     {
@@ -104,7 +104,7 @@ class Temp
     /**
      *
      * @param string $path
-     * @return Temp 
+     * @return Temp
      */
     public static function file($path = '')
     {
@@ -115,7 +115,7 @@ class Temp
     /**
      *
      * @param string $path
-     * @return Temp 
+     * @return Temp
      */
     public static function dir($path = '')
     {
@@ -129,7 +129,7 @@ class Temp
     /**
      *
      * @param string $path
-     * @return Temp 
+     * @return Temp
      */
     public static function create($path = '')
     {

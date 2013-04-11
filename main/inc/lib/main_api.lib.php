@@ -430,7 +430,7 @@ define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
  * api_get_path(REL_CODE_PATH)                  /chamilo/main/
  * api_get_path(SYS_SERVER_ROOT_PATH)           /var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
  * api_get_path(SYS_PATH)                       /var/www/chamilo/
- * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/archive/
+ * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/app/cache/
  * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/courses/
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
  * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css

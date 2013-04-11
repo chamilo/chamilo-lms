@@ -8,36 +8,44 @@ $app['jquery_ui_theme'] = 'smoothness';
 // Cache
 $app['cache.path'] = api_get_path(SYS_ARCHIVE_PATH);
 
-$app['log.path'] = api_get_path(SYS_PATH_APP).'logs/';
+$app['cache.paths'] = new stdClass();
+
+//Monolog
+$app['cache.paths']->folders[] = $app['log.path'] = $app['cache.path'].'logs';
 
 //Twig cache
-$app['twig.cache.path'] = $app['cache.path'].'twig';
+$app['cache.paths']->folders[] = $app['twig.cache.path'] = $app['cache.path'].'twig';
 
 // Http cache
-$app['http_cache.cache_dir'] = $app['cache.path'].'http';
+$app['cache.paths']->folders[] = $app['http_cache.cache_dir'] = $app['cache.path'].'http';
 
 // Doctrine ORM
-$app['db.orm.proxies_dir'] = $app['cache.path'].'proxies_dir';
+$app['cache.paths']->folders[] = $app['db.orm.proxies_dir'] = $app['cache.path'].'proxies_dir';
 
 //Profiler
-$app['profiler.cache_dir'] = $app['cache.path'].'profiler';
+$app['cache.paths']->folders[] = $app['profiler.cache_dir'] = $app['cache.path'].'profiler';
 
-//Monolog log file
-$app['chamilo.log'] = $app['cache.path'].'chamilo.log';
+//HTMLPurifier
+$app['cache.paths']->folders[] = $app['htmlpurifier.serializer'] = $app['cache.path'].'serializer';
 
 //PCLZIP temp dir
-define('PCLZIP_TEMPORARY_DIR', $app['cache.path']);
+define('PCLZIP_TEMPORARY_DIR', $app['cache.path'].'pclzip');
+$app['cache.paths']->folders[] = PCLZIP_TEMPORARY_DIR;
 
-//mpdf libs
+//MPDF libs
+define("_MPDF_TEMP_PATH", $app['cache.path'].'/mpdf');
+define("_JPGRAPH_PATH", $app['cache.path'].'/mpdf');
+define("_MPDF_TTFONTDATAPATH", $app['cache.path'].'/mpdf');
 
-define("_MPDF_TEMP_PATH", $app['cache.path']);
-define("_JPGRAPH_PATH", $app['cache.path']);
-define("_MPDF_TTFONTDATAPATH", $app['cache.path']);
+$app['cache.paths']->folders[] = _MPDF_TEMP_PATH;
 
 //QR code
+define('QR_CACHE_DIR', $app['cache.path'].'qr');
+define('QR_LOG_DIR', $app['cache.path'].'qr');
+$app['cache.paths']->folders[] = QR_CACHE_DIR;
 
-define('QR_CACHE_DIR', $app['cache.path']);
-define('QR_LOG_DIR', $app['cache.path']);
+//Chamilo temp class
+$app['cache.paths']->folders[] = $app['cache.path'].'temp';
 
 // Assetic
 /*
@@ -94,17 +102,15 @@ if (!is_dir($app['assetic.path_to_web'].'/js')) {
 }
  *
  */
-if (!is_dir($app['db.orm.proxies_dir'])) {
-    @mkdir($app['db.orm.proxies_dir'], api_get_permissions_for_new_directories());
+
+foreach($app['cache.paths']->folders as $folder) {
+    if (!is_dir($folder)) {
+        @mkdir($folder, api_get_permissions_for_new_directories());
+    }
 }
 
-if (!is_dir($app['twig.cache.path'])) {
-    @mkdir($app['twig.cache.path'], api_get_permissions_for_new_directories());
-}
-
-if (!is_dir($app['profiler.cache_dir'])) {
-    @mkdir($app['profiler.cache_dir'], api_get_permissions_for_new_directories());
-}
+//Monolog log file
+$app['chamilo.log'] = $app['cache.path'].'chamilo.log';
 
 if (is_file($app['chamilo.log']) && !is_writable($app['chamilo.log'])) {
     unlink($app['chamilo.log']);

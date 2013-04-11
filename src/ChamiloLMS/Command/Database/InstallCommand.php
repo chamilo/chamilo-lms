@@ -238,7 +238,7 @@ class InstallCommand extends CommonCommand
         if ($configurationWasSaved) {
             global $app;
 
-            $app['chamilo.log'] = $app['cache.path'].'chamilo_install.log';
+            $app['chamilo.log'] = $app['log.path'].'/chamilo_install.log';
 
             //Installing database
             $result = $this->install($version, $newConfigurationArray, $output);

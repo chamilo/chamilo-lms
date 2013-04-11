@@ -265,10 +265,8 @@ class Security
         }
         static $purifier = array();
         if (!isset($purifier[$user_status])) {
-            $cache_dir = api_get_path(SYS_ARCHIVE_PATH).'Serializer';
-            if (!file_exists($cache_dir)) {
-                mkdir($cache_dir, 0777);
-            }
+            global $app;
+            $cache_dir = $app['htmlpurifier.serializer'];
             $config = HTMLPurifier_Config::createDefault();
             //$config->set('Cache.DefinitionImpl', null); // Enable this line for testing purposes, for turning off caching. Don't forget to disable this line later!
             $config->set('Cache.SerializerPath', $cache_dir);

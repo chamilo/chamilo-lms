@@ -4,10 +4,6 @@
 *	This script displays a list of the users of the current course.
 *	Course admins can change user perimssions, subscribe and unsubscribe users...
 *
-*	EXPERIMENTAL: support for virtual courses
-*	- show users registered in virtual and real courses;
-*	- only show the users of a virtual course if the current user;
-*	is registered in that virtual course.
 *
 *	Exceptions: platform admin and the course admin will see all virtual courses.
 *	This is a new feature, there may be bugs.
@@ -31,8 +27,6 @@ $this_section = SECTION_COURSES;
 
 // notice for unauthorized people.
 api_protect_course_script(true);
-
-global $_configuration;
 
 if (!api_is_platform_admin(true)) {
 	if (!api_is_course_admin() && !api_is_coach()) {
@@ -87,7 +81,7 @@ if (api_is_allowed_to_edit(null, true)) {
 				$data = array();
 				$a_users = array();
 
-				if ($_configuration['multiple_access_urls']) {
+				if (api_is_multiple_url_enabled()) {
 					$current_access_url_id = api_get_current_access_url_id();
 				}
 
@@ -134,7 +128,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     $table_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
                     $sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").",  user.username, $select_email_condition phone, user.official_code, active $legal
                                   FROM $table_session_course_user as session_course_user, $table_users as user,  $table_session_user as su";
-                    if ($_configuration['multiple_access_urls']) {
+                    if (api_is_multiple_url_enabled()) {
                         $sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
                     $sql_query .=" WHERE course_code = '$course_code' AND
@@ -143,7 +137,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                         su.moved_to = 0 AND su.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION."  AND
                                         session_course_user.id_session = $session_id";
 
-                    if ($_configuration['multiple_access_urls']) {
+                    if (api_is_multiple_url_enabled()) {
                         $sql_query .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
                     }
 
@@ -192,12 +186,12 @@ if (api_is_allowed_to_edit(null, true)) {
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.username, $select_email_condition phone, user.official_code, active $legal
 								  FROM $table_course_user as course_user, $table_users as user ";
-					if ($_configuration['multiple_access_urls']) {
+					if (api_is_multiple_url_enabled()) {
 						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
 					}
 					$sql_query .= " WHERE course_code = '$course_code' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ";
 
-					if ($_configuration['multiple_access_urls']) {
+					if (api_is_multiple_url_enabled()) {
 						$sql_query .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
 					}
 
@@ -243,7 +237,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 				switch ($_GET['type']) {
 					case 'csv' :
-						Export::export_table_csv($a_users);
+						Export::export_table_csv_utf8($a_users);
 						exit;
 					case 'xls' :
 						Export::export_table_xls($a_users);

@@ -44,5 +44,6 @@
         {{ form_rest(form) }}
     </form>
     #}
-    {{ form }}
+    {{ formUsers }}
+    {{ formGroups }}
 {% endblock %}

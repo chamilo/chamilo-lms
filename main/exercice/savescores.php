@@ -25,19 +25,19 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'learnpath') {
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
+$_cid = api_get_course_id();
+$test = $_REQUEST['test'];
+$score = $_REQUEST['score'];
+$origin = $_REQUEST['origin'];
+
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $full_file_path = $documentPath.$test;
 
 FileManager::my_delete($full_file_path.$_user['user_id'].".t.html");
 
 $TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
 $TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-$_cid = api_get_course_id();
-$test = $_REQUEST['test'];
-$score = $_REQUEST['score'];
-$origin = $_REQUEST['origin'];
 $jscript2run = '';
 
 /**
@@ -51,9 +51,7 @@ $jscript2run = '';
  */
 function save_scores($file, $score)
 {
-    global $origin, $_user, $_cid,
-           $TABLETRACK_HOTPOTATOES;
-    // if tracking is disabled record nothing
+    global $origin, $_user, $TABLETRACK_HOTPOTATOES;
     $weighting = 100; // 100%
     $date = api_get_utc_datetime();
 
@@ -67,7 +65,7 @@ function save_scores($file, $score)
 			'".Database::escape_string($file)."',
 			'".Database::escape_string($user_id)."',
 			'".Database::escape_string($date)."',
-			'".Database::escape_string($_cid)."',
+			'".Database::escape_string(api_get_course_id())."',
 			'".Database::escape_string($score)."',
 			'".Database::escape_string($weighting)."')";
 

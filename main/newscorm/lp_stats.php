@@ -943,3 +943,5 @@ if ($origin != 'tracking') {
 if (empty($export_csv)) {
     echo $output;
 }
+
+Display::display_footer();

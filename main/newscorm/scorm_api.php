@@ -45,9 +45,8 @@ if (!is_object($oItem)) {
 $autocomplete_when_80pct = 0;
 $user = api_get_user_info();
 header('Content-type: text/javascript');
-
-?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
-var lms_logs=0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
+?>var scorm_logs = <?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
 // API Object initialization (eases access later on)
 function APIobject() {
@@ -203,7 +202,7 @@ $(document).ready(function() {
     olms.info_lms_item[1] = '<?php echo $oItem->get_id();?>';
 
     $("#content_id").load(function() {
-        logit_lms('#content_id on load executing: ');
+        logit_lms('#content_id on load executed');
         olms.info_lms_item[0] = olms.info_lms_item[1];
 
         if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
@@ -1041,6 +1040,7 @@ function addListeners(){
  * leaving it
  */
 function lms_save_asset() {
+    logit_lms('lms_save_asset called');
     // only for Chamilo lps
     if (olms.execute_stats) {
         olms.execute_stats = false;
@@ -1058,7 +1058,6 @@ function lms_save_asset() {
     }
 
     if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
-        logit_lms('lms_save_asset');
         logit_lms('execute_stats :'+ olms.execute_stats);
         xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location, olms.interactions, olms.lms_item_core_exit);
         if (olms.item_objectives.length>0) {

@@ -1242,8 +1242,7 @@ class learnpathItem
             }
             if (!empty($this->db_item_view_id)) {
                 $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                $sql = "SELECT status FROM $table WHERE c_id = $course_id AND id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id(
-                )."'";
+                $sql = "SELECT status FROM $table WHERE c_id = $course_id AND id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
                 if (self::debug > 2) {
                     error_log('learnpathItem::get_status() - Checking DB: '.$sql, 0);
                 }
@@ -1303,14 +1302,12 @@ class learnpathItem
      */
     public function get_scorm_time($origin = 'php', $given_time = null, $query_db = false)
     {
+        $time = 0;
         $h = get_lang('h');
         $course_id = api_get_course_int_id();
         if (!isset($given_time)) {
             if (self::debug > 2) {
-                error_log(
-                    'learnpathItem::get_scorm_time(): given time empty, current_start_time = '.$this->current_start_time,
-                    0
-                );
+                error_log('learnpathItem::get_scorm_time(): given time empty, current_start_time = '.$this->current_start_time, 0);
             }
             if (is_object($this)) {
                 if ($query_db === true) {
@@ -1395,21 +1392,24 @@ class learnpathItem
      */
     public function get_total_time()
     {
-        if (self::debug > 0) {
+        $debug = self::debug;
+        if ($debug > 0) {
             error_log(
                 'learnpathItem::get_total_time() for item '.$this->db_id.' - Initially, current_start_time = '.$this->current_start_time.' and current_stop_time = '.$this->current_stop_time,
                 0
             );
         }
-        if ($this->current_start_time == 0) { // Shouldn't be necessary thanks to the open() method.
-            if (self::debug > 2) {
+
+        // Shouldn't be necessary thanks to the open() method
+        if ($this->current_start_time == 0) {
+            if ($debug > 2) {
                 error_log('learnpathItem::get_total_time() - Current start time was empty', 0);
             }
             $this->current_start_time = time();
         }
-        //$this->current_stop_time=time();
+
         if (time() < $this->current_stop_time or $this->current_stop_time == 0) {
-            if (self::debug > 2) {
+            if ($debug > 2) {
                 error_log(
                     'learnpathItem::get_total_time() - Current stop time was greater than the current time or was empty',
                     0
@@ -1421,19 +1421,18 @@ class learnpathItem
         }
         $time = $this->current_stop_time - $this->current_start_time;
         if ($time < 0) {
-            if (self::debug > 2) {
+            if ($debug > 2) {
                 error_log('learnpathItem::get_total_time() - Time smaller than 0. Returning 0', 0);
             }
 
             return 0;
         } else {
-            if (self::debug > 2) {
+            if ($debug > 2) {
                 error_log(
                     'learnpathItem::get_total_time() - Current start time = '.$this->current_start_time.', current stop time = '.$this->current_stop_time.' Returning '.$time."-----------\n",
                     0
                 );
             }
-
             return $time;
         }
     }

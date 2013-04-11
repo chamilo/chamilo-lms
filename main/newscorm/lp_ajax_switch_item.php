@@ -19,6 +19,13 @@ $language_file[] = 'learnpath';
 
 require_once '../inc/global.inc.php';
 
+require_once 'learnpath.class.php';
+require_once 'scorm.class.php';
+require_once 'aicc.class.php';
+require_once 'learnpathItem.class.php';
+require_once 'scormItem.class.php';
+require_once 'aiccItem.class.php';
+
 /**
  * Get one item's details
  * @param   integer LP ID
@@ -42,12 +49,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      * -'last'
      * - a real item ID
      */
-    require_once 'learnpath.class.php';
-    require_once 'scorm.class.php';
-    require_once 'aicc.class.php';
-    require_once 'learnpathItem.class.php';
-    require_once 'scormItem.class.php';
-    require_once 'aiccItem.class.php';
+
     $mylp = '';
     if (isset($_SESSION['lpobject'])) {
         if ($debug > 1) {
@@ -69,6 +71,10 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
                 error_log('Reusing session lp', 0);
             }
             $mylp = $oLP;
+        }
+    } else {
+        if ($debug > 1) {
+            error_log('$_SESSION[lpobject] is NOT set', 0);
         }
     }
 
@@ -132,6 +138,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         $mylpi = new learnpathItem($new_item_id, $user_id);
         $mylpi->set_lp_view($view_id);
     }
+
     /*
      * now get what's needed by the SCORM API:
      * -score
@@ -155,7 +162,6 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mylaunch_data = $mylpi->get_launch_data();
     $mysession_time = $mylpi->get_total_time();
     $mysuspend_data = $mylpi->get_suspend_data();
-    $mylesson_location = $mylpi->get_lesson_location();
     $myic = $mylpi->get_interactions_count();
     $myistring = '';
     for ($i = 0; $i < $myic; $i++) {
@@ -247,6 +253,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
     if ($debug > 1) {
         error_log('Prereq_match() returned '.htmlentities($mylp->error), 0);
+        error_log($return);
     }
     $_SESSION['scorm_item_id'] = $new_item_id; // Save the new item ID for the exercise tool to use.
     $_SESSION['lpobject'] = serialize($mylp);

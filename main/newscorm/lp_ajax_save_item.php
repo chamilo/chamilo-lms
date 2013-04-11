@@ -171,11 +171,13 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             }
             //if ($debug > 1) { error_log('Done calling set_time - now '.$mylpi->get_total_time(), 0); }
         } else {
+            //Fixes time when loading hotpotatoes see #3343
             $time = $mylpi->get_total_time();
+            $mylpi->set_time($time, 'int');
         }
 
         if (isset($suspend) && $suspend != '' && $suspend != 'undefined') {
-            $mylpi->current_data = $suspend; //escapetxt($suspend);
+            $mylpi->current_data = $suspend;
         }
 
         if (isset($location) && $location != '' && $location!='undefined') {

@@ -2388,7 +2388,9 @@ class learnpath
                 }
             }
 
+            //Check if the subscription users/group to a LP is ON
             if (isset($row['subscribe_users']) && $row['subscribe_users'] == 1 ) {
+                //Checking only the user visibility
                 $userVisibility = api_get_item_visibility($course_info, 'learnpath', $row['id'], $session_id, $student_id, 'LearnpathSubscription');
 
                 if ($userVisibility == 1) {
@@ -2396,8 +2398,8 @@ class learnpath
                 } else {
                     $is_visible = false;
                 }
-
-                $groupList = GroupManager::get_group_ids($course_info['real_id'], $student_id);
+                //the group visibility is not going to be checked because the user *must* be related to the LP
+                /*$groupList = GroupManager::get_group_ids($course_info['real_id'], $student_id);
 
                 if (!empty($groupList)) {
                     foreach($groupList as $groupId) {
@@ -2408,7 +2410,7 @@ class learnpath
                             break;
                         }
                     }
-                }
+                }*/
             }
 
             return $is_visible;
@@ -6962,7 +6964,6 @@ class learnpath
     public function display_hotpotatoes_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        global $charset;
         $uploadPath = DIR_HOTPOTATOES; //defined in main_api
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
@@ -7160,7 +7161,6 @@ class learnpath
     public function display_forum_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        global $charset;
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_forum = Database :: get_course_table(TABLE_FORUM);
 
@@ -7827,7 +7827,6 @@ class learnpath
     public function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
     {
         $course_id = api_get_course_int_id();
-        global $charset;
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
 
@@ -8199,7 +8198,6 @@ class learnpath
     public function display_link_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        global $charset;
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_link = Database :: get_course_table(TABLE_LINK);
 
@@ -8410,8 +8408,6 @@ class learnpath
     public function display_student_publication_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        global $charset;
-
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -8630,7 +8626,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         $course_code = api_get_course_id();
 
-        global $charset, $_course;
+        global $_course;
         $return = '<div class="actions">';
 
         switch ($item_type) {
@@ -8750,7 +8746,6 @@ class learnpath
                     ORDER BY display_order ASC";
         $res_zero = Database::query($sql_zero);
 
-        global $charset;
         $i = 0;
 
         while ($row_zero = Database :: fetch_array($res_zero)) {
@@ -8790,9 +8785,6 @@ class learnpath
     public function display_move_item($item_id)
     {
         $course_id = api_get_course_int_id();
-
-        global $_course; //will disappear
-        global $charset;
         $return = '';
 
         if (is_numeric($item_id)) {

@@ -154,8 +154,8 @@ $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 
 //Loading $app settings
-//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
-require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
+require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
+//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
 /*

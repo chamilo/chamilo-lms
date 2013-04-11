@@ -7,7 +7,6 @@
 /**
  * Init
  */
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 /**
  * MySpace class definition
  */

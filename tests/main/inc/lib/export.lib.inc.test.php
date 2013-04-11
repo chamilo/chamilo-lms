@@ -1,6 +1,4 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
 /** Test about export csv using class document manager
  * @author Arthur portugal

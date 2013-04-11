@@ -20,10 +20,8 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 } else {
 	$this_section = SECTION_COURSES;
 }
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $session_id  = isset($_REQUEST['id_session']) && !empty($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : api_get_session_id();
 
@@ -41,12 +39,12 @@ if (isset($_GET['course'])) {
 $user_infos = UserManager :: get_user_info_by_id($user_id);
 $name = api_get_person_name($user_infos['firstname'], $user_infos['lastname']);
 
-if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher(api_get_user_id(), $cidReq) && !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {	
-	api_not_allowed();	
+if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher(api_get_user_id(), $cidReq) && !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {
+	api_not_allowed();
 }
 $course_exits = CourseManager::course_exists($cidReq);
 
-if (!empty($course_exits)) {	
+if (!empty($course_exits)) {
 	$course_info = api_get_course_info($cidReq);
 } else {
 	api_not_allowed();
@@ -89,7 +87,7 @@ $table_title = ($session_name? Display::return_icon('session.png', get_lang('Ses
                 Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).' '.$name;
 echo Display::page_header($table_title);
 echo Display::page_subheader('<h3>'.Display::return_icon('learnpath.png', get_lang('ToolLearnpath'), array(), ICON_SIZE_SMALL).' '.$lp_title.'</h3>');
- 
+
 //Needed in newscorm/lp_stats.php
 $list = learnpath :: get_flat_ordered_items_list($lp_id, 0, $course_info['real_id']);
 
@@ -101,8 +99,8 @@ if ($export_csv) {
 	ob_start();
 	require_once  api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
 	$tracking_content = ob_get_contents();
-	ob_end_clean();    
+	ob_end_clean();
 	echo api_utf8_decode($tracking_content, $charset);
-    
+
 }
 Display :: display_footer();

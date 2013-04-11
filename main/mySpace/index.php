@@ -16,7 +16,6 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 // including additional libraries
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once 'myspace.lib.php';
 
 // the section (for the tabs)

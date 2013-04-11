@@ -129,8 +129,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
-require_once api_get_path(LIBRARY_PATH) . 'import.lib.php';
-
 $tool_name = get_lang('AddUsersToAClass') . ' CSV';
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));

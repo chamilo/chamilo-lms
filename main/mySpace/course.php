@@ -14,8 +14,6 @@ $language_file = array ('admin', 'registration', 'index', 'tracking');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 $this_section = SECTION_TRACKING;
 $id_session = intval($_GET['id_session']);
@@ -83,7 +81,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
 	$a_courses = array_keys($courses);
 
-	if (!api_is_session_admin()) {		
+	if (!api_is_session_admin()) {
 		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
 		$menu_items[] = Display::url(Display::return_icon('user.png', get_lang('Students'), array(), 32), "index.php?view=drh_students&amp;display=yourstudents");
 		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), 32), 'teachers.php');
@@ -95,7 +93,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 	$nb_menu_items = count($menu_items);
 	if ($nb_menu_items > 1) {
 		foreach ($menu_items as $key => $item) {
-			echo $item;		
+			echo $item;
 		}
 	}
 	if (count($a_courses) > 0) {
@@ -186,7 +184,7 @@ if (is_array($a_courses)) {
 
 			$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
 			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
-			
+
 			if (is_numeric($avg_score_in_course)) {
 				$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2).'%';
 			}
@@ -201,7 +199,7 @@ if (is_array($a_courses)) {
 
 		$tematic_advance_progress = 0;
 		$thematic = new Thematic();
-		$tematic_advance = $thematic->get_total_average_of_thematic_advances($course_code, $id_session);		
+		$tematic_advance = $thematic->get_total_average_of_thematic_advances($course_code, $id_session);
 
 		if (!empty($tematic_advance)) {
 			$tematic_advance_csv = $tematic_advance_progress.'%';

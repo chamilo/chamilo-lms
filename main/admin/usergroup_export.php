@@ -15,7 +15,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $tool_name = get_lang('Export');
 
@@ -31,9 +30,9 @@ $form->addElement('style_submit_button', 'submit',get_lang('Export'),'class="sav
 if ($form->validate()) {
     $user_group = new UserGroup;
     $header = array(array('name', 'description'));
-	$data = $user_group->get_all_for_export();    
-    $data = array_merge($header, $data);    
-    $filename = 'export_classes_'.api_get_local_time();    
+	$data = $user_group->get_all_for_export();
+    $data = array_merge($header, $data);
+    $filename = 'export_classes_'.api_get_local_time();
     Export::export_table_csv($data,$filename);
     exit;
 }

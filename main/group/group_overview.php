@@ -28,10 +28,6 @@ api_protect_course_script(true);
 
 $nameTools = get_lang('GroupOverview');
 
-/*	Libraries */
-
-include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
 		case 'export':

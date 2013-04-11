@@ -11,7 +11,6 @@ $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin'
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 api_block_anonymous_users();
 
@@ -63,13 +62,13 @@ if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
 }
 
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
-    
-    $a_sessions = SessionManager :: get_sessions_coached_by_user(api_get_user_id());    
-	$a_sessions_drh = SessionManager::get_sessions_followed_by_drh(api_get_user_id()); 
-    
+
+    $a_sessions = SessionManager :: get_sessions_coached_by_user(api_get_user_id());
+	$a_sessions_drh = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
+
     if (!empty($a_sessions_drh)) {
         $a_sessions = array_merge($a_sessions, $a_sessions_drh);
-    }    
+    }
 
 	if (!api_is_session_admin()) {
 		$menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
@@ -83,15 +82,15 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 	$nb_menu_items = count($menu_items);
 	if ($nb_menu_items > 1) {
 		foreach ($menu_items as $key => $item) {
-			echo $item;			
+			echo $item;
 		}
 	}
-    
+
 	if (count($a_sessions) > 0) {
 		echo '<span style="float:right">';
 		echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), 32), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
 		echo Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32), api_get_self().'?export=csv');
-		echo '</span>';		
+		echo '</span>';
 	}
 	echo '</div>';
 	echo Display::page_header(get_lang('YourSessionsList'));
@@ -111,7 +110,7 @@ if ($export_csv) {
 }
 
 if ($nb_sessions > 0) {
-	
+
 	$table = new SortableTable('tracking', 'count_sessions_coached');
 	$table->set_header(0, get_lang('Title'));
 	$table->set_header(1, get_lang('Date'));
@@ -119,10 +118,10 @@ if ($nb_sessions > 0) {
 	$table->set_header(3, get_lang('Details'), false);
 
 	$all_data = array();
-	foreach ($a_sessions as $session) {        
+	foreach ($a_sessions as $session) {
 		$row = array();
 		$row[] = $session['name'];
-		$row[] = SessionManager::parse_session_dates($session);        
+		$row[] = SessionManager::parse_session_dates($session);
 		$row[] = count(Tracking::get_courses_list_from_session($session['id']));
 
 		if ($export_csv) {

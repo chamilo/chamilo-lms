@@ -12,7 +12,6 @@ $language_file = array ('registration', 'index', 'tracking', 'admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 api_block_anonymous_users();
 
@@ -76,7 +75,7 @@ function rsort_users($a, $b) {
 /* MAIN CODE	 */
 
 //if ($isCoach || api_is_platform_admin() || api_is_drh()) {
-if (api_is_allowed_to_create_course() || api_is_drh()) {		
+if (api_is_allowed_to_create_course() || api_is_drh()) {
 	if ($export_csv) {
 		$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
 	} else {
@@ -91,29 +90,29 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 		$menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), array(), 32), 'teachers.php');
 		$menu_items[] = Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), 32), 'course.php');
 		$menu_items[] = Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), 32), 'session.php');
-		
+
 		echo '<div class="actions">';
 		$nb_menu_items = count($menu_items);
 		if ($nb_menu_items > 1) {
 			foreach ($menu_items as $key => $item) {
-				echo $item;			
+				echo $item;
 			}
 		}
-        
+
 		//if (count($students) > 0) {		//
 			echo '<span style="float:right">';
 			echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), 32), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
 			echo Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32), api_get_self().'?export=csv');
-			echo '</span>';	
+			echo '</span>';
 		//}
-		echo '</div>';		
-	} else {		
+		echo '</div>';
+	} else {
 		echo '<div class="actions"><div style="float:right;">
 				<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
 				<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-			  </div></div>';        
+			  </div></div>';
 	}
-    
+
     echo Display::page_subheader($page_title);
 
 	if (isset($_GET['id_coach'])) {
@@ -124,7 +123,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 	if (api_is_drh()) {
 		$page_title = get_lang('YourStudents');
 		if (!isset($_GET['id_session'])) {
-		
+
 			if (isset($_GET['user_id'])) {
 				$user_id = intval($_GET['user_id']);
 				$user_info = api_get_user_info($user_id);
@@ -147,22 +146,22 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			} else {
 				$students = array_keys(UserManager::get_users_followed_by_drh(api_get_user_id() , STUDENT));
 			}
-		
+
 			$courses_of_the_platform = CourseManager :: get_real_course_list();
 			foreach ($courses_of_the_platform as $course) {
 				$courses[$course['code']] = $course['code'];
 			}
 		}
 	} else {
-		if (!isset($_GET['id_session'])) {	
+		if (!isset($_GET['id_session'])) {
 			//Getting courses
 			$courses  = CourseManager::get_course_list_as_coach($coach_id, false);
 			if (isset($courses[0])) {
 				$courses = $courses[0];
-			}			
-			//Getting students			
+			}
+			//Getting students
 			$students = CourseManager::get_user_list_from_courses_as_coach($coach_id);
-					
+
 		} else {
 			$students = Tracking :: get_student_followed_by_coach_in_a_session($_GET['id_session'], $coach_id);
 		}
@@ -170,7 +169,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 
 	$tracking_column 	= isset($_GET['tracking_column']) ? $_GET['tracking_column'] : ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : DESC;
-	
+
 	if (count($students) > 0) {
 		$table = new SortableTable('tracking_student', 'count_student_coached', null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
 		if ($is_western_name_order) {
@@ -217,19 +216,19 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			}
 		}
 
-	    $all_datas = array();	  
-	      
+	    $all_datas = array();
+
 		foreach ($students as $student_id) {
 			$student_data = UserManager :: get_user_info_by_id($student_id);
 			if (isset($_GET['id_session'])) {
-				$courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);				
-			}			
+				$courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
+			}
 
 			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
 			$nb_courses_student = 0;
 			foreach ($courses as $course_code) {
 				if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-					$avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $course_code, $_GET['id_session']);					
+					$avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $course_code, $_GET['id_session']);
 					$my_average 		 = Tracking :: get_avg_student_score($student_id, $course_code);
 					if (is_numeric($my_average)) {
 						$avg_student_score += $my_average;
@@ -259,7 +258,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 				$row[] = $student_data['lastname'];
 				$row[] = $student_data['firstname'];
 			}
-			
+
 			/*
 			$row[] = api_time_to_hms($avg_time_spent);
 			$row[] = is_null($avg_student_progress) ? null : round($avg_student_progress, 2).'%';
@@ -273,7 +272,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			$row[] = $first_date;
 			$row[] = $string_date;
 
-			if ($export_csv) {			    
+			if ($export_csv) {
 			    $row[count($row) - 1] = strip_tags($row[count($row) - 1]);
                 $row[count($row) - 2] = strip_tags($row[count($row) - 2]);
 				$csv_content[] = $row;

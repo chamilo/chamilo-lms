@@ -1,6 +1,4 @@
 <?php
-//include_once(api_get_path(LIBRARY_PATH)."/pclzip/pclzip.lib.php");
-require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 class TestDropboxFunctions extends UnitTestCase {
 
 	/**

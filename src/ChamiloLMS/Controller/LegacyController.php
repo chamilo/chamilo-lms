@@ -7,7 +7,10 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * Class LegacyController
  * Manages the chamilo pages starting with Display::display_header and $tpl = new Template();
+ * @package ChamiloLMS\Controller
+ * @author Julio Montoya <gugli100@gmail.com>
  */
 class LegacyController// extends Controller
 {

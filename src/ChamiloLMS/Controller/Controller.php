@@ -1,6 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Controller;
 
+/**
+ * @package ChamiloLMS.Controller
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
 class Controller {
     public $language_files = array();
 

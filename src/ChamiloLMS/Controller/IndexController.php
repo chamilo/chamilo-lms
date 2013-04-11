@@ -9,7 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
- *
+ * @package ChamiloLMS.Controller
+ * @author Julio Montoya <gugli100@gmail.com>
  */
 class IndexController// extends Controller
 {
@@ -31,7 +32,7 @@ class IndexController// extends Controller
     public function indexAction(Application $app)
     {
         $extraJS = array();
-        //@todo improve js includes
+        //@todo improve this JS includes should be added using twig
         $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
         $extraJS[] = '<script>
             $(document).ready(function(){
@@ -51,8 +52,10 @@ class IndexController// extends Controller
         $app['languages_file'] = array('courses', 'index', 'admin');
         $app['cidReset'] = true;
 
+        // Testing translation using translator
         //echo $app['translator']->trans('Wiki Search Results');
         //echo $app['translator']->trans('Profile');
+
 
         //$token = $app['security']->getToken();
 
@@ -251,7 +254,6 @@ class IndexController// extends Controller
             include_once 'main/auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
         }
-
         return $html;
     }
 }

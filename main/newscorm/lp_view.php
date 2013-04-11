@@ -73,7 +73,7 @@ $lp_type = $_SESSION['oLP']->get_type();
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
-$platform_theme = api_get_setting('stylesheets'); // Plataform's css.
+$platform_theme = api_get_setting('stylesheets');
 $my_style = $platform_theme;
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';

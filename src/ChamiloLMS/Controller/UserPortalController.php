@@ -1,10 +1,17 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 namespace ChamiloLMS\Controller;
 
 use Silex\Application;
 use \ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class UserPortalController
+ * @package ChamiloLMS\Controller
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
 class UserPortalController
 {
     /**

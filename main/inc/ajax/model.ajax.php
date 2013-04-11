@@ -649,7 +649,6 @@ if (in_array($action, $allowed_actions)) {
 
     if ($operation && $operation == 'excel') {
         $j = 1;
-        require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
         $array = array();
         if (empty($column_names)) {

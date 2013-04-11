@@ -680,8 +680,12 @@ class DocumentManager
                     }
                     $document_folders[$row['id']] = $row['path'];
                 }
+
                 //sort($document_folders);
-                natsort($document_folders);
+
+                if (!empty($document_folders)) {
+                    natsort($document_folders);
+                }
 
                 //return results
                 return $document_folders;

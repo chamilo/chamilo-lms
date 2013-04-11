@@ -42,6 +42,8 @@ $lib_path = api_get_path(LIBRARY_PATH);
 
 api_protect_course_script(true);
 
+$to_user_id = api_get_user_id();
+
 //erase temp nanogons' audio, image edit
 if (isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nanogong'])) {
     unlink($_SESSION['temp_audio_nanogong']);

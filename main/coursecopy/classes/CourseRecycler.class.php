@@ -348,28 +348,27 @@ class CourseRecycler
                 */
 
                 $sql = " (
-                    SELECT q.id FROM $table_qui_que q INNER JOIN $table_rel r
+                    SELECT q.id FROM $table_qui_que q
+                    INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.id = r.question_id)
                     INNER JOIN $table_qui ex
-                    ON (ex.id = r.exercice_id AND ex.c_id =r.c_id )
-                    WHERE ex.c_id = '.$this->course_id.' AND (ex.active = '-1' OR ex.exercice_id = '-1')
+                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id )
+                    WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
                 )
                 UNION
                 (
-                    SELECT q.id FROM $table_qui_que q left
-                    OUTER JOIN $table_rel r
+                    SELECT q.id FROM $table_qui_que q
+                    LEFT OUTER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.id = r.question_id)
-                    WHERE q.c_id = '.$this->course_id.' AND r.question_id is null
+                    WHERE q.c_id = ".$this->course_id." AND r.question_id is null
                 )
                 UNION
                 (
-                SELECT q.id FROM $table_qui_que q
-                INNER JOIN $table_rel r
-                ON (q.c_id = r.c_id AND q.id = r.question_id)
-                WHERE r.c_id = '.$this->course_id.' AND r.exercice_id = '-1' OR r.exercice_id = '0'
-                )
-
-                ";
+                    SELECT q.id FROM $table_qui_que q
+                    INNER JOIN $table_rel r
+                    ON (q.c_id = r.c_id AND q.id = r.question_id)
+                    WHERE r.c_id = ".$this->course_id." AND r.exercice_id = '-1' OR r.exercice_id = '0'
+                )";
 
                 $db_result = Database::query($sql);
                 if (Database::num_rows($db_result) > 0) {

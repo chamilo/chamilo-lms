@@ -31,9 +31,8 @@ if (isset($_REQUEST['user_friend'])) {
  	$info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id,'web',false,true);
 }
 
-$group_id = intval($_GET['group_id']);
-
-$message_id = intval($_GET['message_id']);
+$group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
+$message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
 $actions = array('add_message_group', 'edit_message_group', 'reply_message_group');
 
 $allowed_action = (isset($_GET['action']) && in_array($_GET['action'],$actions))?Security::remove_XSS($_GET['action']):'';
@@ -41,9 +40,10 @@ $allowed_action = (isset($_GET['action']) && in_array($_GET['action'],$actions))
 $to_group = '';
 $subject = '';
 $message = '';
+$usergroup = new UserGroup();
 if (!empty($group_id) && $allowed_action) {
-	$group_info = GroupPortalManager::get_group_data($group_id);
-	$is_member = GroupPortalManager::is_group_member($group_id);
+	$group_info = $usergroup->get($group_id);
+	$is_member = $usergroup->is_group_member($group_id);
 
     if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member) {
         api_not_allowed(true);
@@ -62,13 +62,17 @@ if (!empty($group_id) && $allowed_action) {
 	}
 }
 
-$page_item = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1;
-$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id'])?('&items_'.intval($_GET['topic_id']).'_page_nr='.(!empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1)):'';
-$param_item_page .= '&topic_id='.intval($_GET['topic_id']);
-$page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1;
+$page_item = !empty($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']):1;
+$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id']) ? ('&items_'.intval($_GET['topic_id']).'_page_nr='.(!empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1)):'';
+if (isset($_GET['topic_id'])) {
+    $param_item_page .= '&topic_id='.intval($_GET['topic_id']);
+}
+$page_topic  = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']):1;
+
+$anchor_topic  = isset($_GET['anchor_topic']) ? Security::remove_XSS($_GET['anchor_topic']): null;
 ?>
 
-<form name="form" action="group_topics.php?id=<?php echo $group_id ?>&anchor_topic=<?php echo Security::remove_XSS($_GET['anchor_topic']) ?>&topics_page_nr=<?php echo $page_topic.$param_item_page ?>" method="POST" enctype="multipart/form-data">
+<form name="form" action="group_topics.php?id=<?php echo $group_id ?>&anchor_topic=<?php echo $anchor_topic ?>&topics_page_nr=<?php echo $page_topic.$param_item_page ?>" method="POST" enctype="multipart/form-data">
 <input type="hidden" name="action" value="<?php echo $allowed_action ?>" />
 <input type="hidden" name="group_id" value="<?php echo $group_id ?>" />
 <input type="hidden" name="parent_id" value="<?php echo $message_id ?>" />

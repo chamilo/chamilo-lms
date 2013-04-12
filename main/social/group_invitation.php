@@ -45,17 +45,18 @@ $add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
+$usergroup = new UserGroup();
 
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
 	api_not_allowed();
 } else {
-	$group_info = GroupPortalManager::get_group_data($group_id);
+	$group_info = $usergroup->get($group_id);
 	if (empty($group_info)) {
 		api_not_allowed();
 	}
 	//only admin or moderator can do that
-	if (!GroupPortalManager::is_group_member($group_id)) {
+	if (!$usergroup->is_group_member($group_id)) {
 		api_not_allowed();
 	}
 }
@@ -199,19 +200,19 @@ $users=$sessions=array();
 
 //Display :: display_header($tool_name, 'Groups');
 
-if ($_POST['form_sent']) {
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 	$form_sent			= $_POST['form_sent'];
 	$firstLetterUser	= $_POST['firstLetterUser'];
 	$firstLetterSession	= $_POST['firstLetterSession'];
 	$user_list			= $_POST['sessionUsersList'];
 	$group_id			= intval($_POST['id']);
 
-	if(!is_array($user_list)) {
+	if (!is_array($user_list)) {
 		$user_list=array();
 	}
 	if ($form_sent == 1) {
 		//invite this users
-		$result 	= GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
+		$result 	= $usergroup->add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
 		$title 		= get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
 		$content  	= get_lang('YouAreInvitedToGroupContent').' '.$group_info['name'].' <br />';
 		$content   .= get_lang('ToSubscribeClickInTheLinkBelow').' <br />';
@@ -260,14 +261,13 @@ if ($ajax_search) {
 	}
 } else {
 		$friends = SocialManager::get_friends(api_get_user_id());
-
 		$suggest_friends = false;
-
+        $Users = array();
 		if (!$friends) {
 			$suggest_friends = true;
 		} else {
 			foreach($friends as $friend) {
-				$group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id'], 0);
+				$group_friend_list = $usergroup->get_groups_by_user($friend['friend_user_id'], 0);
 				//var_dump($group_friend_list);
 				$friend_group_id = '';
 				if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
@@ -433,7 +433,7 @@ $form .= '</select></td>
 $social_right_content .= $form;
 
 //current group members
-$members = GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
+$members = $usergroup->get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
 if (is_array($members) && count($members)>0) {
 	foreach ($members as &$member) {
 		$image_path = UserManager::get_user_picture_path_by_id($member['user_id'], 'web', false, true);
@@ -444,9 +444,7 @@ if (is_array($members) && count($members)>0) {
 	$social_right_content .= Display::return_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
 }
 
-$htmlHeadXtra[] = '
-<script type="text/javascript">
-<!--
+$htmlHeadXtra[] = '<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -525,7 +523,6 @@ function makepost(select) {
 		ret = ret + options[i].value +\'::\'+options[i].text+";;";
 	return ret;
 }
--->
 </script>';
 
 $social_right_content = Display::div($social_right_content, array('class' => 'span9'));
@@ -533,11 +530,8 @@ $social_right_content = Display::div($social_right_content, array('class' => 'sp
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
 
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

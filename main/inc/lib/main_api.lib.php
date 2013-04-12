@@ -331,7 +331,7 @@ define('GROUP_PERMISSION_OPEN'	, '1');
 define('GROUP_PERMISSION_CLOSED', '2');
 
 // Group user permissions
-define('GROUP_USER_PERMISSION_ADMIN'	,                               '1'); // the admin of a group
+define('GROUP_USER_PERMISSION_ADMIN'	,                           '1'); // the admin of a group
 define('GROUP_USER_PERMISSION_READER',                              '2'); // a normal user
 define('GROUP_USER_PERMISSION_PENDING_INVITATION',                  '3'); // When an admin/moderator invites a user
 define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER',     '4'); // an user joins a group
@@ -371,9 +371,8 @@ define('TEACHER_HTML', 3);
 define('STUDENT_HTML_FULLPAGE', 4);
 define('TEACHER_HTML_FULLPAGE', 5);
 
-
+//Exercise
 define('EXERCISE_NUMBER_OF_DECIMALS', 2);
-
 
 /* XML processing functions */
 
@@ -381,6 +380,13 @@ define('EXERCISE_NUMBER_OF_DECIMALS', 2);
 // Published by Steve Minutillo,
 // http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
 define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
+
+
+//Social PLUGIN PLACES
+define('SOCIAL_LEFT_PLUGIN',        1);
+define('SOCIAL_CENTER_PLUGIN',      2);
+define('SOCIAL_RIGHT_PLUGIN',       3);
+define('CUT_GROUP_NAME', 50);
 
 
 /* PATHS & FILES - ROUTINES */
@@ -1133,9 +1139,9 @@ function api_get_user_courses($userid, $fetch_session = true) {
 function _api_format_user($user, $add_password = false) {
     $result = array();
 
-    if (api_is_anonymous()) {
+    /*if (api_is_anonymous()) {
         return $user;
-    }
+    }*/
 
     $firstname = $lastname = null;
 
@@ -1276,7 +1282,8 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
             }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
-        $user =  _api_format_user($result_array, $show_password);
+        $user = _api_format_user($result_array, $show_password);
+
 
         if ($add_extra_values) {
             $extra_field_values = new ExtraField('user');

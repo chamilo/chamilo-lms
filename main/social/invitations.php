@@ -16,7 +16,7 @@ api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
-
+$usergroup = new UserGroup();
 $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
@@ -73,9 +73,9 @@ if (is_array($_GET) && count($_GET)>0) {
 	foreach ($_GET as $key => $value) {
 		switch ($key) {
 			case 'accept':
-				$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);
+				$user_role = $usergroup->get_user_group_role(api_get_user_id(), $value);
 				if (in_array($user_role , array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,GROUP_USER_PERMISSION_PENDING_INVITATION))) {
-					GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
+					$usergroup->update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
 					$show_message = Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'success');
 				} elseif (in_array($user_role , array(GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
 					$show_message = Display::return_message(get_lang('UserIsAlreadySubscribedToThisGroup'), 'warning');
@@ -85,7 +85,7 @@ if (is_array($_GET) && count($_GET)>0) {
                 break 2;
 			case 'deny':
 				// delete invitation
-				GroupPortalManager::delete_user_rel_group(api_get_user_id(), $value);
+				$usergroup->delete_user_rel_group(api_get_user_id(), $value);
 				$show_message = Display::return_message(get_lang('GroupInvitationWasDeny'));
 			break 2;
 		}
@@ -97,7 +97,7 @@ $social_right_content =  '<div id="id_response" align="center"></div>';
 $user_id = api_get_user_id();
 $list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
 $list_get_invitation_sent	= SocialManager::get_list_invitation_sent_by_user_id($user_id);
-$pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION);
+$pending_invitations 		= $usergroup->get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION);
 $number_loop                = count($list_get_invitation);
 
 $total_invitations = $number_loop + count($list_get_invitation_sent) + count($pending_invitations);
@@ -177,10 +177,10 @@ if (count($pending_invitations) > 0) {
     $social_right_content .= Display::page_subheader(get_lang('GroupsWaitingApproval'));
     $new_invitation = array();
     foreach ($pending_invitations as $invitation) {
-        $picture = GroupPortalManager::get_picture_group($invitation['id'], $invitation['picture_uri'],80);
+        $picture = $usergroup->get_picture_group($invitation['id'], $invitation['picture'],80);
         $img = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 
-        $invitation['picture_uri'] = '<a href="groups.php?id='.$invitation['id'].'">'.$img.'</a>';
+        $invitation['picture'] = '<a href="groups.php?id='.$invitation['id'].'">'.$img.'</a>';
         $invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.Text::cut($invitation['name'],120,true).'</a>';
         $invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.Display::return_icon('accept_invitation.png', get_lang('AcceptInvitation')).'&nbsp;&nbsp;'.get_lang('AcceptInvitation').'</a>';
         $invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.Display::return_icon('denied_invitation.png', get_lang('DenyInvitation')).'&nbsp;&nbsp;'.get_lang('DenyInvitation').'</a>';

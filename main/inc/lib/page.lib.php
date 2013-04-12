@@ -1038,14 +1038,18 @@ class PageController
         $loadHistory = (isset($filter) && $filter == 'history') ? true : false;
 
         $app['session_menu'] = function($app) use ($loadHistory) {
-            $menu = $app['knp_menu.factory']->createItem('root');
-
-            $menu->setUri($app['request']->getRequestUri());
-
-            $menu->setChildrenAttributes(array(
-                'class' =>  'nav nav-tabs',
-                'currentClass' => 'active'
+            $menu = $app['knp_menu.factory']->createItem('root', array(
+                'childrenAttributes' => array(
+                    'class' => 'nav nav-tabs',
+                    'currentClass' => 'active'
+                )
             ));
+
+            //$menu->setUri($app['request']->getRequestUri());
+            /*
+            $menu->setChildrenAttributes(array(
+                'currentClass' => 'active'
+            ));*/
 
             $current = $menu->addChild(get_lang('Current'), array(
                     'route' => 'userportal',

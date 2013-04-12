@@ -267,8 +267,8 @@ class Template
 
             $new_messages = MessageManager::get_new_messages();
             $user_info['messages_count'] = $new_messages != 0 ? Display::label($new_messages, 'warning') : null;
-
-            $messages_invitations_count = GroupPortalManager::get_groups_by_user_count(
+            $usergroup = new UserGroup();
+            $messages_invitations_count = $usergroup->get_groups_by_user_count(
                 $user_info['user_id'],
                 GROUP_USER_PERMISSION_PENDING_INVITATION,
                 false
@@ -410,8 +410,9 @@ class Template
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
-                $js_files[] = 'chat/js/chat.js';
+                //$js_files[] = 'chat/js/chat.js';
             }
+            $js_files[] = 'chat/js/chat.js';
         }
 
         if (api_get_setting('accessibility_font_resize') == 'true') {

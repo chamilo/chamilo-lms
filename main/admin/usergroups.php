@@ -16,9 +16,10 @@ api_protect_admin_script(true);
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
+
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$action = $_GET['action'];
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 if ($action == 'add') {
     $interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
@@ -30,7 +31,7 @@ if ($action == 'add') {
 }
 
 // The header.
-Display::display_header($tool_name);
+Display::display_header();
 
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
@@ -51,13 +52,13 @@ $columns        = array(get_lang('Name'), get_lang('Users'), get_lang('Courses')
 
 //Column config
 $column_model   = array(
-						array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
-                        //array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
-                        array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
-                        array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
-                        array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
-                        array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false','formatter'=>'action_formatter'),
-                       );
+    array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
+    //array('name'=>'description',    'index'=>'description', 'width'=>'500',  'align'=>'left'),
+    array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
+    array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
+    array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
+    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false','formatter'=>'action_formatter'),
+);
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -65,13 +66,13 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
-                    return \''
-                    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
-                    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/course_to_class.png" title="'.get_lang('SubscribeClassToCourses').'"></a>'
-                    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/sessions_to_class.png" title="'.get_lang('SubscribeClassToSessions').'"></a>'
-                    .' <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'
-                    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
-                 }';
+return \''
+.' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
+.' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/course_to_class.png" title="'.get_lang('SubscribeClassToCourses').'"></a>'
+.' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'"><img src="../img/icons/22/sessions_to_class.png" title="'.get_lang('SubscribeClassToSessions').'"></a>'
+.' <a href="?action=edit&id=\'+options.rowId+\'"><img width="20px" src="../img/edit.png" title="'.get_lang('Edit').'" ></a>'
+.' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
+}';
 ?>
 <script>
 $(function() {
@@ -93,8 +94,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         api_not_allowed();
     }
 
-    $_SESSION['notebook_view'] = 'creation_date';
-    //@todo move this in the career.lib.php
+    //@todo move this in the .lib.php
 
     // Initiate the object
     $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
@@ -103,6 +103,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form->addElement('text', 'name', get_lang('name'), array('size' => '70', 'id' => 'name'));
     //$form->applyFilter('note_title', 'html_filter');
     $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
+
+    //$form->addElement('text', 'url', 'URL');
+
+    $form->addElement('checkbox', 'group_type', null, get_lang('SocialGroup'));
+
     $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
 
     // Setting the rules
@@ -129,7 +134,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $form->setConstants(array('sec_token' => $token));
         $form->display();
     }
-}// Action handling: Editing a note
+}// Action handling: Edition
 elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
     // Initialize the object
     $form = new FormValidator('career', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
@@ -138,6 +143,8 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET[
     $form->addElement('hidden', 'id',intval($_GET['id']));
     $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
     $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
+    $form->addElement('checkbox', 'group_type', null, get_lang('SocialGroup'));
+
     $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
 
     // Setting the defaults
@@ -179,5 +186,4 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'delete' && is_numeric($_GE
 } else {
     $usergroup->display();
 }
-
 Display :: display_footer();

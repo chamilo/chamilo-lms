@@ -315,6 +315,7 @@ define('TABLE_USERGROUP',               'usergroup');
 define('TABLE_USERGROUP_REL_USER',      'usergroup_rel_user');
 define('TABLE_USERGROUP_REL_COURSE',    'usergroup_rel_course');
 define('TABLE_USERGROUP_REL_SESSION',   'usergroup_rel_session');
+define('TABLE_USERGROUP_REL_TAG',      'usergroup_rel_tag');
 
 // Mail notifications
 define('TABLE_NOTIFICATION',               'notification');

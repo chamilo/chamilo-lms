@@ -118,7 +118,7 @@ class Notification extends Model
      * @param	array	recipients: user list of ids
      * @param	string	title
      * @param	string	content of the message
-     * @param	array	result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param	array	result of api_get_user_info() or UserGroup->get()
      */
     public function save_notification($type, $user_list, $title, $content, $sender_info = array()) {
         $this->type = intval($type);
@@ -132,6 +132,8 @@ class Notification extends Model
 
         $setting_to_check = '';
         $avoid_my_self  = false;
+
+        $default_status = self::NOTIFY_MESSAGE_AT_ONCE;
 
         switch ($this->type) {
             case self::NOTIFICATION_TYPE_MESSAGE;
@@ -209,7 +211,7 @@ class Notification extends Model
     /**
      * Formats the content in order to add the welcome message, the notification preference, etc
      * @param	string 	the content
-     * @param	array	result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param	array	result of api_get_user_info() or UserGroup->get()
      * */
     public function format_content($content, $sender_info) {
         $new_message_text = $link_to_new_message = '';
@@ -235,10 +237,11 @@ class Notification extends Model
                 if (!empty($sender_info)) {
                     $sender_name = $sender_info['group_info']['name'];
                     $new_message_text  = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $sender_name);
-                    $sender_name = api_get_person_name($sender_info['user_info']['firstname'], $sender_info['user_info']['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-                    $sender_name = Display::url($sender_name , api_get_path(WEB_CODE_PATH).'social/profile.php?'.$sender_info['user_info']['user_id']);
-                    $new_message_text  .= '<br />'.get_lang('User').': '.$sender_name;
-
+                    if (isset($sender_info['user_info']) && !empty($sender_info['user_info'])) {
+                        $sender_name = api_get_person_name($sender_info['user_info']['firstname'], $sender_info['user_info']['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+                        $sender_name = Display::url($sender_name , api_get_path(WEB_CODE_PATH).'social/profile.php?'.$sender_info['user_info']['user_id']);
+                        $new_message_text  .= '<br />'.get_lang('User').': '.$sender_name;
+                    }
                 }
                 $group_url = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$sender_info['group_info']['id'].'&topic_id='.$sender_info['group_info']['topic_id'].'&msg_id='.$sender_info['group_info']['msg_id'].'&topics_page_nr='.$topic_page;
                 $link_to_new_message = Display::url(get_lang('SeeMessage'), $group_url);

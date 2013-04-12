@@ -7,6 +7,7 @@
 
 $language_file = array('userInfo', 'forum');
 $cidReset = true;
+
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -15,33 +16,37 @@ if (api_get_setting('allow_social_tool') !='true') {
 }
 
 $group_id	= intval($_GET['id']);
-$topic_id   = intval($_GET['topic_id']);
-$message_id = intval($_GET['msg_id']);
+$topic_id   = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
+$message_id = isset($_GET['msg_id']) ? intval($_GET['msg_id']) : null;
+
+$usergroup = new UserGroup();
 
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
 	api_not_allowed(true);
 
 } else {
-	$group_info = GroupPortalManager::get_group_data($group_id);
+	$group_info = $usergroup->get($group_id);
 
 	if (empty($group_info)) {
 		api_not_allowed(true);
 	}
-	$is_member = GroupPortalManager::is_group_member($group_id);
+	$is_member = $usergroup->is_group_member($group_id);
 	if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member ) {
 		api_not_allowed(true);
 	}
 }
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
-    $group_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);
+    $group_role = $usergroup->get_user_group_role(api_get_user_id(), $group_id);
 
     if (api_is_platform_admin() || in_array($group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
-        GroupPortalManager::delete_topic($group_id, $topic_id);
+        $usergroup->delete_topic($group_id, $topic_id);
         header("Location: groups.php?id=$group_id&action=show_message&msg=topic_deleted");
+        exit;
     }
 }
+$content = null;
 
 // save message group
 $currentToken = Security::getCurrentToken();
@@ -70,7 +75,7 @@ if (isset($_POST['token']) && $_POST['token'] === $currentToken) {
 		if (!$res) {
 			$social_right_content .= Display::return_message(get_lang('Error'),'error');
 		}
-		$topic_id = intval($_GET['topic_id']);
+		$topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
 		if ($_POST['action'] == 'add_message_group') {
 			$topic_id = $res;
 		}
@@ -78,7 +83,7 @@ if (isset($_POST['token']) && $_POST['token'] === $currentToken) {
 	}
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 
 var counter_image = 1;
 function remove_image_form(id_elem1) {
@@ -179,22 +184,18 @@ $social_right_content = '<div class="breadcrumb">
                            <span class="divider">/</span>
                            <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a>
                          </div> ';
-$social_left_content .= SocialManager::show_social_menu('member_list', $group_id);
-
+$social_left_content = SocialManager::show_social_menu('member_list', $group_id);
+$show_message = null;
 if (!empty($show_message)) {
     $social_right_content .= Display::return_message($show_message, 'confirmation');
 }
 $social_right_content .= MessageManager::display_message_for_group($group_id, $topic_id, $is_member, $message_id);
-
-
 $social_right_content = '<div class="span9">'.$social_right_content.'</div>';
 
-$tpl = new Template($tool_name);
+$tpl = new Template(get_lang('Social'));
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
-$tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');

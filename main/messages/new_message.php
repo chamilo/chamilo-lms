@@ -183,7 +183,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 			}
 		}
 	} else {
-		$group_info = GroupPortalManager::get_group_data($group_id);
+        $usergroup = new UserGroup();
+		$group_info = $usergroup->get($group_id);
 
 		$form->addElement('label', get_lang('ToGroup'), api_xml_http_response_encode($group_info['name']));
 		$form->addElement('hidden','group_id',$group_id);

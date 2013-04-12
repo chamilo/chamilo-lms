@@ -160,7 +160,6 @@ class MessageManager
         return $message_list;
     }
 
-
     /**
      * Sends a message to a user/group
      *
@@ -236,12 +235,12 @@ class MessageManager
             //@todo it's possible to edit a message? yes, only for groups
             if ($edit_message_id) {
                 $query = " UPDATE $table_message SET update_date = '".$now."', content = '$clean_content' WHERE id = '$edit_message_id' ";
-                $result = Database::query($query);
+                Database::query($query);
                 $inbox_last_id = $edit_message_id;
             } else {
                 $query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
                     "VALUES ('$user_sender_id', '$receiver_user_id', '1', '".$now."','$clean_subject','$clean_content','$group_id','$parent_id', '".$now."')";
-                $result = Database::query($query);
+                Database::query($query);
                 $inbox_last_id = Database::insert_id();
             }
 
@@ -250,9 +249,10 @@ class MessageManager
                 $i = 0;
                 foreach ($file_attachments as $file_attach) {
                     if ($file_attach['error'] == 0) {
+                        $comments = isset($file_comments[$i]) ? $file_comments[$i] : null;
                         self::save_message_attachment_file(
                             $file_attach,
-                            $file_comments[$i],
+                            $comments,
                             $inbox_last_id,
                             null,
                             $receiver_user_id,
@@ -303,11 +303,12 @@ class MessageManager
                     $sender_info
                 );
             } else {
-                $group_info = GroupPortalManager::get_group_data($group_id);
+                $usergroup = new UserGroup();
+                $group_info = $usergroup->get($group_id);
                 $group_info['topic_id'] = $topic_id;
                 $group_info['msg_id'] = $inbox_last_id;
 
-                $user_list = GroupPortalManager::get_users_by_group($group_id, false, array(), 0, 1000);
+                $user_list = $usergroup->get_users_by_group($group_id, false, array(), 0, 1000);
 
                 //Adding more sens to the message group
                 $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
@@ -319,7 +320,7 @@ class MessageManager
                 $group_info = array('group_info' => $group_info, 'user_info' => $sender_info);
 
                 $notification->save_notification(
-                    NOTIFICATION_TYPE_GROUP,
+                    Notification::NOTIFICATION_TYPE_GROUP,
                     $new_user_list,
                     $subject,
                     $content,
@@ -474,7 +475,7 @@ class MessageManager
             Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
         } else {
             $new_file_name = uniqid('');
-
+            $usergroup = new UserGroup();
             $message_user_id = '';
             if (!empty($receiver_user_id)) {
                 $message_user_id = $receiver_user_id;
@@ -485,7 +486,7 @@ class MessageManager
             // User-reserved directory where photos have to be placed.
 
             if (!empty($group_id)) {
-                $path_user_info = GroupPortalManager::get_group_picture_path_by_id($group_id, 'system', true);
+                $path_user_info = $usergroup->get_group_picture_path_by_id($group_id, 'system', true);
             } else {
                 $path_user_info = UserManager::get_user_picture_path_by_id($message_user_id, 'system', true);
             }
@@ -527,13 +528,14 @@ class MessageManager
         $sql = "SELECT * FROM $table_message_attach WHERE message_id = '$message_id'";
         $rs = Database::query($sql);
         $new_paths = array();
+        $usergroup = new UserGroup();
         while ($row = Database::fetch_array($rs)) {
             $path = $row['path'];
             $attach_id = $row['id'];
             $new_path = $path.'_DELETED_'.$attach_id;
 
             if (!empty($group_id)) {
-                $path_user_info = GroupPortalManager::get_group_picture_path_by_id($group_id, 'system', true);
+                $path_user_info = $usergroup->get_group_picture_path_by_id($group_id, 'system', true);
             } else {
                 $path_user_info = UserManager::get_user_picture_path_by_id($message_uid, 'system', true);
             }
@@ -837,12 +839,6 @@ class MessageManager
         $files_attachments = self::get_links_message_attachment_files($message_id, $source);
 
         $user_con = self::users_connected_by_id();
-        $band = 0;
-        for ($i = 0; $i < count($user_con); $i++) {
-            if ($user_sender_id == $user_con[$i]) {
-                $band = 1;
-            }
-        }
 
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
@@ -859,7 +855,7 @@ class MessageManager
         }
 
         if (api_get_setting('allow_social_tool') == 'true') {
-            $userInfo = api_get_user_info($row[2]);
+            $userInfo = api_get_user_info($row['user_sender_id']);
             if ($source == 'outbox') {
                 $message_content .= get_lang('From').': <a href="'.api_get_path(
                     WEB_PATH
@@ -1023,7 +1019,7 @@ class MessageManager
                         'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']
                     )
                 );
-
+                $actions = null;
                 if ($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) {
                     $actions = '<br />'.Display::url(
                         get_lang('Delete'),
@@ -1129,20 +1125,20 @@ class MessageManager
         $topic_page_nr = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : null;
         $links .= '<div id="message-reply-link">';
         if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $main_message['user_sender_id'] == $current_user_id) {
-            $links .= '<a href="'.api_get_path(
+            $links .= '<a class="ajax btn" href="'.api_get_path(
                 WEB_CODE_PATH
             ).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=edit_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$main_message['id'].'" class="group_message_popup" title="'.get_lang(
                 'Edit'
             ).'">';
-            $links .= Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+            $links .= get_lang('Edit').'</a>';
         }
-        $links .= '&nbsp;&nbsp;<a href="'.api_get_path(
+        $links .= '&nbsp;&nbsp;<a class="ajax btn btn-primary" href="'.api_get_path(
             WEB_CODE_PATH
         ).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id(
         ).'&group_id='.$group_id.'&message_id='.$main_message['id'].'&action=reply_message_group&anchor_topic=topic_'.$main_message['id'].'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$main_message['id'].'" class="group_message_popup" title="'.get_lang(
             'Reply'
         ).'">';
-        $links .= Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
+        $links .= get_lang('Reply').'</a>';
         $links .= '</div>';
 
         $image_path = UserManager::get_user_picture_path_by_id($main_message['user_sender_id'], 'web', false, true);
@@ -1205,19 +1201,19 @@ class MessageManager
 
                 $links .= '<div id="message-reply-link">';
                 if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
-                    $links .= '<a href="'.api_get_path(
+                    $links .= '<a class="btn ajax" href="'.api_get_path(
                         WEB_CODE_PATH
                     ).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="group_message_popup" title="'.get_lang(
                         'Edit'
-                    ).'">'.Display :: return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+                    ).'">'.get_lang('Edit').'</a>';
                 }
-                $links .= '&nbsp;&nbsp;<a href="'.api_get_path(
+                $links .= '&nbsp;&nbsp;<a class="btn btn-primary ajax" href="'.api_get_path(
                     WEB_CODE_PATH
                 ).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id(
                 ).'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic_id.'&topics_page_nr='.$topic_page_nr.'&items_page_nr='.$items_page_nr.'&topic_id='.$topic_id.'" class="group_message_popup" title="'.get_lang(
                     'Reply'
                 ).'">';
-                $links .= Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
+                $links .= get_lang('Reply').'</a>';
                 $links .= '</div>';
 
                 $image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);

@@ -10,15 +10,6 @@
 /**
  * Code
  */
-//PLUGIN PLACES
-define('SOCIAL_LEFT_PLUGIN',        1);
-define('SOCIAL_CENTER_PLUGIN',      2);
-define('SOCIAL_RIGHT_PLUGIN',       3);
-
-define('CUT_GROUP_NAME', 50);
-
-//This require is necessary because we use constants that need to be loaded before the SocialManager class
-require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 /**
  *
@@ -401,7 +392,7 @@ class SocialManager extends UserManager {
 
         $course_code   = $my_course['code'];
         $course_title  = $my_course['course_info']['title'];
-        $course_id     = $my_course['id'];
+        $course_id     = $my_course['course_info']['real_id'];
 
         $course_access_settings = CourseManager :: get_access_settings($course_code);
 
@@ -442,6 +433,7 @@ class SocialManager extends UserManager {
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
+        $usergroup = new UserGroup();
         $user_info = api_get_user_info($user_id, true);
 
         $current_user_id = api_get_user_id();
@@ -454,14 +446,13 @@ class SocialManager extends UserManager {
         }
 
         $show_groups      = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list', 'browse_groups');
-        //$show_messages    = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
 
         // get count unread message and total invitations
         $count_unread_message = MessageManager::get_number_of_messages(true);
         $count_unread_message = (!empty($count_unread_message)? Display::badge($count_unread_message) :'');
 
         $number_of_new_messages_of_friend    = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-        $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
+        $group_pending_invitations = $usergroup->get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
         $group_pending_invitations = count($group_pending_invitations);
         $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) :'');
@@ -469,13 +460,13 @@ class SocialManager extends UserManager {
         $html = '<div class="social-menu">';
           if (in_array($show, $show_groups) && !empty($group_id)) {
             //--- Group image
-            $group_info = GroupPortalManager::get_group_data($group_id);
-            $big        = GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,GROUP_IMAGE_SIZE_BIG);
+            $group_info = $usergroup->get($group_id);
+            $big        = $usergroup->get_picture_group($group_id, $group_info['picture'],160,GROUP_IMAGE_SIZE_BIG);
 
             $html .= '<div class="social-content-image">';
                 $html .= '<div class="well social-background-content">';
                 $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id);
-                if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
+                if ($usergroup->is_group_admin($group_id, api_get_user_id())) {
                     $html .= '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a></div>';
                 }
                 $html .= '</div>';
@@ -534,7 +525,7 @@ class SocialManager extends UserManager {
         }
 
         if (in_array($show, $show_groups) && !empty($group_id)) {
-            $html .= GroupPortalManager::show_group_column_information($group_id, api_get_user_id(), $show);
+            $html .= $usergroup->show_group_column_information($group_id, api_get_user_id(), $show);
         }
 
         if ($show == 'shared_profile') {
@@ -665,7 +656,9 @@ class SocialManager extends UserManager {
      * @param array $user_list
      */
     public static function display_user_list($user_list) {
-        if ($_GET['id'] == '') {
+        if (!isset($_GET['id'])) {
+
+            $html = null;
 
             $column_size = '9';
             $add_row = false;
@@ -676,7 +669,8 @@ class SocialManager extends UserManager {
 
             $extra_params = array();
             $course_url = '';
-            if (strlen($_GET['cidReq']) > 0) {
+
+            if (isset($_GET['cidReq']) && !empty($_GET['cidReq'])) {
                 $extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
                 $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
             }

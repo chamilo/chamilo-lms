@@ -55,11 +55,12 @@ if (in_array($_GET['type'],$message_type)) {
 		$message_uid = $row_users['user_sender_id'];
 	}
 }
+$usergroup = new UserGroup();
 
 // allow to the correct user for download this file
 $not_allowed_to_edit = false;
 if (!empty($row_users['group_id'])) {
-	$users_group = GroupPortalManager::get_all_users_by_group($row_users['group_id']);
+	$users_group = $usergroup->get_all_users_by_group($row_users['group_id']);
 	if (!in_array($current_uid,array_keys($users_group))) {
 		$not_allowed_to_edit = true;
 	}
@@ -76,7 +77,7 @@ if ($not_allowed_to_edit) {
 
 // set the path directory file
 if (!empty($row_users['group_id'])) {
-	$path_user_info = GroupPortalManager::get_group_picture_path_by_id($row_users['group_id'], 'system', true);
+	$path_user_info = $usergroup->get_group_picture_path_by_id($row_users['group_id'], 'system', true);
 } else {
 	$path_user_info = UserManager::get_user_picture_path_by_id($message_uid, 'system', true);
 }

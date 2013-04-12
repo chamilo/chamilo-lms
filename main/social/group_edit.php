@@ -38,21 +38,18 @@ $tool_name = get_lang('GroupEdit');
 $interbreadcrumb[] = array('url' => 'home.php', 'name' => get_lang('Social'));
 $interbreadcrumb[] = array('url' => 'groups.php', 'name' => get_lang('Groups'));
 
-$table_group = Database::get_main_table(TABLE_MAIN_GROUP);
+$usergroup = new UserGroup();
 
-$sql = "SELECT * FROM $table_group WHERE id = '".$group_id."'";
-$res = Database::query($sql);
-if (Database::num_rows($res) != 1) {
+$group_data = $usergroup->get($group_id);
+if (empty($group_data)) {
     header('Location: groups.php?id='.$group_id);
     exit;
 }
 
 //only group admins can edit the group
-if (!GroupPortalManager::is_group_admin($group_id)) {
+if (!$usergroup->is_group_admin($group_id)) {
     api_not_allowed();
 }
-
-$group_data = Database::fetch_array($res, 'ASSOC');
 
 // Create the form
 $form = new FormValidator('group_edit', 'post', '', '');
@@ -89,15 +86,12 @@ $form->addRule(
     'filetype',
     $allowed_picture_types
 );
-if (strlen($group_data['picture_uri']) > 0) {
+if (strlen($group_data['picture']) > 0) {
     $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
 
-// Status
-$status = array();
-$status[GROUP_PERMISSION_OPEN] = get_lang('Open');
-$status[GROUP_PERMISSION_CLOSED] = get_lang('Closed');
-$form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
+//Status
+$form->addElement('select', 'visibility', get_lang('GroupPermissions'), $usergroup->getGroupStatusList(), array());
 
 
 // Submit button
@@ -111,24 +105,19 @@ if ($form->validate()) {
     $group = $form->exportValues();
     $picture_element = $form->getElement('picture');
     $picture = $picture_element->getValue();
-    $picture_uri = $group_data['picture_uri'];
+    $picture_uri = $group_data['picture'];
 
     if ($group['delete_picture']) {
-        $picture_uri = GroupPortalManager::delete_group_picture($group_id);
+        $picture_uri = $usergroup->delete_group_picture($group_id);
     } elseif (!empty($picture['name'])) {
-        $picture_uri = GroupPortalManager::update_group_picture(
+        $picture_uri = $usergroup->update_group_picture(
             $group_id,
             $_FILES['picture']['name'],
             $_FILES['picture']['tmp_name']
         );
     }
-
-    $name = $group['name'];
-    $description = $group['description'];
-    $url = $group['url'];
-    $status = intval($group['visibility']);
-
-    GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
+    $group['id'] = $group_id;
+    $usergroup->update($group);
     $tok = Security::get_token();
     header(
         'Location: groups.php?id='.$group_id.'&action=show_message&message='.urlencode(
@@ -139,7 +128,7 @@ if ($form->validate()) {
 }
 
 // Group picture
-$image_path = GroupPortalManager::get_group_picture_path_by_id($group_id, 'web');
+$image_path = $usergroup->get_group_picture_path_by_id($group_id, 'web');
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
 $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown_group.jpg');

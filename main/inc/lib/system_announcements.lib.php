@@ -28,15 +28,16 @@ class SystemAnnouncementManager {
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
         $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-        $temp_user_groups = GroupPortalManager::get_groups_by_user(api_get_user_id(),0);
+        $usergroup = new UserGroup();
+        $temp_user_groups = $usergroup->get_groups_by_user(api_get_user_id(),0);
         $groups =array();
         foreach ($temp_user_groups as $user_group) {
             $groups = array_merge($groups, array($user_group['id']));
-            $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
+            $groups = array_merge($groups, $usergroup->get_parent_groups($user_group['id']));
         }
         //checks if tables exists to not break platform not updated
         $ann_group_db_ok =false;
-        if( Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
+        if (Database::num_rows(Database::query("SHOW TABLES LIKE 'announcement_rel_group'")) > 0)
         $ann_group_db_ok =true;
 
         $groups_string = '('.implode($groups,',').')';
@@ -110,13 +111,13 @@ class SystemAnnouncementManager {
 	public static function display_all_announcements($visible, $id = -1, $start = 0,$user_id='') {
 		$user_selected_language = api_get_interface_language();
 		$start	= intval($start);
-
+        $usergroup = new UserGroup();
 	    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-	    $temp_user_groups = GroupPortalManager::get_groups_by_user(api_get_user_id(),0);
+	    $temp_user_groups = $usergroup->get_groups_by_user(api_get_user_id(),0);
 	    $groups =array();
 	    foreach ($temp_user_groups as $user_group) {
 	      $groups = array_merge($groups, array($user_group['id']));
-	      $groups = array_merge($groups, GroupPortalManager::get_parent_groups($user_group['id']));
+	      $groups = array_merge($groups, $usergroup->get_parent_groups($user_group['id']));
 	    }
 	    //checks if tables exists to not break platform not updated
 	    $ann_group_db_ok =false;

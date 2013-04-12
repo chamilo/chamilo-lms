@@ -29,11 +29,12 @@ $social_left_content = SocialManager::show_social_menu('search');
 
 $social_right_content = '<div class="span9">'.UserManager::get_search_form($query).'</div>';
 
+$usergroup = new UserGroup();
 //I'm searching something
 if ($query !='') {
     //get users from tags
     $users  = UserManager::get_all_user_tags($_GET['q'], 0, 0, 5);
-    $groups = GroupPortalManager::get_all_group_tags($_GET['q']);
+    $groups = $usergroup->get_all_group_tags($_GET['q']);
 
     if (empty($users) && empty($groups)) {
         $social_right_content .= get_lang('SorryNoResults');
@@ -44,7 +45,7 @@ if ($query !='') {
     if (is_array($users) && count($users)> 0) {
         $results .=  Display::page_subheader(get_lang('Users'));
         $results .= '<ul class="thumbnails">';
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $user_info = api_get_user_info($user['user_id'], true);
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
 
@@ -79,18 +80,17 @@ if ($query !='') {
             $url_open  = '<a href="groups.php?id='.$id.'" >';
             $url_close = '</a>';
             $name = Text::cut($group['name'],25,true);
-            $count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
+            $count_users_group = count($usergroup->get_all_users_by_group($id));
             if ($count_users_group == 1 ) {
                 $count_users_group = $count_users_group.' '.get_lang('Member');
             } else {
                 $count_users_group = $count_users_group.' '.get_lang('Members');
             }
-            $picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'],80);
-            $tags = GroupPortalManager::get_group_tags($group['id']);
-            $group['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
+            $picture = $usergroup->get_picture_group($group['id'], $group['picture'],80);
+            $tags = $usergroup->get_group_tags($group['id']);
+            $group['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 
-
-            $item_0 = Display::div($group['picture_uri'], array('class'=>'box_description_group_image'));
+            $item_0 = Display::div($group['picture'], array('class'=>'box_description_group_image'));
             $members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
             $item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 

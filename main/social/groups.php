@@ -10,6 +10,7 @@ $language_file = array('userInfo');
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
+
 if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
@@ -90,21 +91,21 @@ jQuery(document).ready(function() {
     var valor = "'.$anchor.'";
 
     $(".head").click(function() {
-				$(this).next().next().slideToggle("fast");
-				image_clicked = $("#" + this.id + " img").attr("src");
-				image_clicked_info = image_clicked.split("/");
-				image_real_clicked = image_clicked_info[image_clicked_info.length-1];
-				image_path = image_clicked.split("img");
-				current_path = image_path[0]+"img/";
-				if (image_real_clicked == "div_show.gif") {
-					current_path = current_path+"div_hide.gif";
-					$("#" + this.id + " img").attr("src", current_path);
-				} else {
-					current_path = current_path+"div_show.gif";
-					$("#" + this.id + " img").attr("src", current_path)
-				}
-				return false;
-		 	}).next().next().hide();
+        $(this).next().next().slideToggle("fast");
+        image_clicked = $("#" + this.id + " img").attr("src");
+        image_clicked_info = image_clicked.split("/");
+        image_real_clicked = image_clicked_info[image_clicked_info.length-1];
+        image_path = image_clicked.split("img");
+        current_path = image_path[0]+"img/";
+        if (image_real_clicked == "div_show.gif") {
+            current_path = current_path+"div_hide.gif";
+            $("#" + this.id + " img").attr("src", current_path);
+        } else {
+            current_path = current_path+"div_show.gif";
+            $("#" + this.id + " img").attr("src", current_path)
+        }
+        return false;
+    }).next().next().hide();
 
    // anchor for current topic
    if (valor) {
@@ -146,17 +147,19 @@ $group_id	= isset($_GET['id']) ? intval($_GET['id']) : null;
 $relation_group_title = '';
 $my_group_role = 0;
 
+$usergroup = new UserGroup();
+
 if ($group_id != 0 ) {
 	$user_leave_message = false;
 	$user_added_group_message = false;
 	$user_invitation_sent = false;
-	$group_info = GroupPortalManager::get_group_data($group_id);
+	$group_info = $usergroup->get($group_id);
 
 	if (isset($_GET['action']) && $_GET['action']=='leave') {
 		$user_leaved = intval($_GET['u']);
 		//I can "leave me myself"
 		if (api_get_user_id() == $user_leaved) {
-			GroupPortalManager::delete_user_rel_group($user_leaved, $group_id);
+            $usergroup->delete_user_rel_group($user_leaved, $group_id);
 			$user_leave_message = true;
 		}
 	}
@@ -166,10 +169,10 @@ if ($group_id != 0 ) {
 		$user_join = intval($_GET['u']);
 		if (api_get_user_id() == $user_join && !empty($group_id)) {
 			if ($group_info['visibility'] == GROUP_PERMISSION_OPEN) {
-				GroupPortalManager::add_user_to_group($user_join, $group_id);
+                $usergroup->add_user_to_group($user_join, $group_id);
 				$user_added_group_message = true;
 			} else {
-				GroupPortalManager::add_user_to_group($user_join, $group_id, GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER);
+                $usergroup->add_user_to_group($user_join, $group_id, GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER);
 				$user_invitation_sent = true;
 			}
 		}
@@ -191,7 +194,7 @@ $social_right_content = null;
 
 if ($group_id != 0 ) {
 
-	$group_info = GroupPortalManager::get_group_data($group_id);
+	$group_info = $usergroup->get($group_id);
 
 	//Loading group information
 	if (isset($_GET['status']) && $_GET['status']=='sent') {
@@ -210,13 +213,13 @@ if ($group_id != 0 ) {
         $social_right_content .= Display::return_message(get_lang('InvitationSent'), 'confirmation', false);
     }
 
-    $is_group_member = GroupPortalManager::is_group_member($group_id);
+    $is_group_member = $usergroup->is_group_member($group_id);
 
 	// details about the current group
 	$social_right_content = '<div class="span9">';
 	$social_right_content .=  '<div id="social-group-details">';
             //Group's title
-            $social_right_content .=  Display::tag('h2', Security::remove_XSS($group_info['name'], STUDENT, true));
+            $social_right_content .=  Display::tag('h3', Security::remove_XSS($group_info['name'], STUDENT, true));
 
             //Privacy
             if (!$is_group_member) {
@@ -231,7 +234,7 @@ if ($group_id != 0 ) {
             }
 
             if (!$is_group_member && $group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
-                $role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);
+                $role = $usergroup->get_user_group_role(api_get_user_id(), $group_id);
                 if ($role == GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER) {
                     $social_right_content .=  Display::return_message(get_lang('YouAlreadySentAnInvitation'));
                 }
@@ -244,10 +247,12 @@ if ($group_id != 0 ) {
                 echo $relation_group_title;
                 echo '</div>';*/
             }
+
             //Group's tags
+            /*
             if (!empty($tags)) {
                 $social_right_content .=  '<div id="social-group-details-info"><span>'.get_lang('Tags').' : </span>'.$tags.'</div>';
-            }
+            }*/
 		$social_right_content .=  '</div>';
 	$social_right_content .=  '</div>';
 
@@ -271,7 +276,7 @@ if ($group_id != 0 ) {
     			    $create_thread_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax btn" title="'.get_lang('ComposeMessage').'">'.get_lang('NewTopic').'</a>';
     			}
 			}
-			$members = GroupPortalManager::get_users_by_group($group_id);
+			$members = $usergroup->get_users_by_group($group_id);
             $member_content = '';
 
     		//Members
@@ -304,10 +309,6 @@ if ($group_id != 0 ) {
     		if (!empty($create_thread_link)) {
     			$create_thread_link =  Display::div($create_thread_link, array('style'=>'padding-top:2px;height:40px'));
     		}
-
-    		//api_get_item_property_by_tool('group', $course_info, $group_id);
-    		//$updates =
-    		//get_lang('Updates'),
     		$headers = array(get_lang('Discussions'), get_lang('Members'));
 			$social_right_content .= Display::tabs($headers, array($create_thread_link.$content, $member_content),'tabs');
 		} else {
@@ -322,7 +323,7 @@ if ($group_id != 0 ) {
 
 } else {
 		// My groups -----
-		$results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0);
+		$results = $usergroup->get_groups_by_user(api_get_user_id(), 0);
 		$grid_my_groups = array();
 		$my_group_list = array();
 		if (is_array($results) && count($results) > 0) {
@@ -340,16 +341,16 @@ if ($group_id != 0 ) {
 				} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
 					$name .= ' '.Display::return_icon('social_group_moderator.png', get_lang('Moderator'), array('style'=>'vertical-align:middle'));
 				}
-				$count_users_group = count(GroupPortalManager::get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
+				$count_users_group = count($usergroup->get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
 				if ($count_users_group == 1 ) {
 					$count_users_group = $count_users_group.' '.get_lang('Member');
 				} else {
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}
 
-				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
-				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
-				$item_0  = Display::div($result['picture_uri'], array('class'=>'box_description_group_image'));
+				$picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
+				$result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
+				$item_0  = Display::div($result['picture'], array('class'=>'box_description_group_image'));
 				$members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
 				$item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 
@@ -367,7 +368,7 @@ if ($group_id != 0 ) {
 		}
 
 		// Newest groups
-		$results = GroupPortalManager::get_groups_by_age(4,false);
+		$results = $usergroup->get_groups_by_age(4,false);
 		$grid_newest_groups = array();
 		foreach ($results as $result) {
 			$result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
@@ -375,7 +376,7 @@ if ($group_id != 0 ) {
 			$id = $result['id'];
 			$url_open  = '<a href="groups.php?id='.$id.'">';
 			$url_close = '</a>';
-			$count_users_group = count(GroupPortalManager::get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
+			$count_users_group = count($usergroup->get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
 			if ($count_users_group == 1 ) {
 					$count_users_group = $count_users_group.' '.get_lang('Member');
 			} else {
@@ -383,10 +384,10 @@ if ($group_id != 0 ) {
 			}
 
 			$name = Text::cut($result['name'],GROUP_TITLE_LENGTH,true);
-			$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
-			$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
+			$picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
+			$result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 
-			$item_0 = Display::div($result['picture_uri'], array('class'=>'box_description_group_image'));
+			$item_0 = Display::div($result['picture'], array('class'=>'box_description_group_image'));
 			$members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
 			$item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 
@@ -410,7 +411,7 @@ if ($group_id != 0 ) {
 		}
 
 		// Pop groups
-		$results = GroupPortalManager::get_groups_by_popularity(4,false);
+		$results = $usergroup->get_groups_by_popularity(4,false);
 		$grid_pop_groups = array();
 
 		if (is_array($results) && count($results) > 0) {
@@ -421,7 +422,7 @@ if ($group_id != 0 ) {
 				$url_open  = '<a href="groups.php?id='.$id.'">';
 				$url_close = '</a>';
 
-				$count_users_group = count(GroupPortalManager::get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
+				$count_users_group = count($usergroup->get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000));
 				if ($count_users_group == 1 ) {
 						$count_users_group = $count_users_group.' '.get_lang('Member');
 				} else {
@@ -429,10 +430,10 @@ if ($group_id != 0 ) {
 				}
 
 				$name = Text::cut($result['name'],GROUP_TITLE_LENGTH,true);
-				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
-				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
+				$picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
+				$result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 
-	            $item_0 = Display::div($result['picture_uri'], array('class'=>'box_description_group_image'));
+	            $item_0 = Display::div($result['picture'], array('class'=>'box_description_group_image'));
 			    $members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
 			    $item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 
@@ -526,7 +527,7 @@ if ($group_id != 0 ) {
     }
 
 $show_message = null;
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && $_REQUEST['msg'] == 'topic_deleted') {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && isset($_REQUEST['msg']) && $_REQUEST['msg'] == 'topic_deleted') {
     $show_message = Display::return_message(get_lang('Deleted'), 'success');
 }
 

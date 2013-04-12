@@ -102,7 +102,7 @@ $usergroup = new UserGroup();
 $id = intval($_GET['id']);
 $first_letter_user = '';
 
-if ($_POST['form_sent']) {
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent              = $_POST['form_sent'];
     $elements_posted        = $_POST['elements_in_name'];
     $first_letter_user      = $_POST['firstLetterUser'];
@@ -210,11 +210,11 @@ if (!empty($user_list)) {
 $add_type == 'unique' ? true : false;
 Display::display_header($tool_name);
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+    $link_add_type_unique = '<a href="'.api_get_self().'?add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 echo '<div class="actions">';
@@ -254,6 +254,7 @@ if ($add_type=='multiple') {
         }
     }
 }
+
 echo Display::input('hidden','id',$id);
 echo Display::input('hidden','form_sent','1');
 echo Display::input('hidden','add_type',null);

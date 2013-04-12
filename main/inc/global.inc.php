@@ -430,6 +430,13 @@ if (isset($_configuration['main_database'])) {
     $app['db.event_manager']->addEventSubscriber($sortableListener);
 }
 
+define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
+
+$app->register(new Grom\Silex\ImagineServiceProvider(), array(
+    'imagine.factory' => 'Gd',
+    'imagine.base_path' => __DIR__.'/vendor/imagine',
+));
+
 $app['is_admin'] = false;
 
 //Creating a Chamilo service provider

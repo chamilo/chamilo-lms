@@ -501,7 +501,6 @@ class UserManager {
         $sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
         Database::query($sqlv);
 
-        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
         if (api_get_multiple_access_url()) {
             $url_id = api_get_current_access_url_id();
             UrlManager::delete_url_rel_user($user_id, $url_id);
@@ -511,13 +510,12 @@ class UserManager {
         }
 
         if (api_get_setting('allow_social_tool')=='true' ) {
-
-            require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+            $usergroup = new UserGroup();
             //Delete user from portal groups
-            $group_list = GroupPortalManager::get_groups_by_user($user_id);
+            $group_list = $usergroup->get_groups_by_user($user_id);
             if (!empty($group_list)) {
                 foreach($group_list as $group_id => $data) {
-                    GroupPortalManager::delete_user_rel_group($user_id, $group_id);
+                    $usergroup->delete_user_rel_group($user_id, $group_id);
                 }
             }
 
@@ -2562,7 +2560,6 @@ class UserManager {
 
         // Database Table Definitions
         $tbl_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
         $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_user           = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_course_user            = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2639,7 +2636,6 @@ class UserManager {
         if (!empty($sessions)) {
             foreach ($sessions as $enreg) {
                 $session_id = $enreg['id'];
-
                 $courseList = SessionManager::get_course_list_by_session_id($session_id);
                 foreach ($courseList as $course) {
                     $sessionVisibility = api_get_session_visibility($session_id, $course['code']);

@@ -4,6 +4,7 @@
 *	This library provides functions for the group management.
 *	Include/require it in your code to use its functionality.
 *	@author Julio Montoya <gugli100@gmail.com>
+ *  @deprecated use usergroup.lib.php
 *	@package chamilo.library
 */
 /**

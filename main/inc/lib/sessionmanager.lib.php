@@ -1870,7 +1870,8 @@ class SessionManager {
         $num_rows     = Database::num_rows($result);
         $courses = array();
         if ($num_rows > 0) {
-            while ($row = Database::fetch_array($result,'ASSOC'))    {
+            while ($row = Database::fetch_array($result,'ASSOC')) {
+                $row['real_id'] = $row['id'];
                 $courses[$row['id']] = $row;
             }
         }

@@ -59,9 +59,10 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 			echo $friend_html;
 		echo '</div>';
 	} else {
+        $usergroup = new UserGroup();
 		// show all groups by user_id
 		// MY GROUPS
-	    $results = GroupPortalManager::get_groups_by_user($user_id, 0);
+	    $results = $usergroup->get_groups_by_user($user_id, 0);
 		$grid_my_groups = array();
 		if (is_array($results) && count($results) > 0) {
 			$i = 1;
@@ -76,13 +77,13 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 				} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
 					$icon = Display::return_icon('social_group_moderator.png', get_lang('Moderator'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
 				}
-				$count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
+				$count_users_group = count($usergroup->get_all_users_by_group($id));
 				if ($count_users_group == 1 ) {
 					$count_users_group = $count_users_group.' '.get_lang('Member');
 				} else {
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}
-				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
+				$picture = $usergroup->get_picture_group($result['id'], $result['picture'],80);
 				$item_name = '<div class="box_shared_profile_group_title">'.$url_open.api_xml_http_response_encode($name). $icon.$url_close.'</div>';
 				$item_description = '';
 				if (!empty($result['description'])) {

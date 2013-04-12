@@ -67,15 +67,16 @@ function register_friend(element_input) {
 </script>';
 
 $show_message = null;
+$usergroup = new UserGroup();
 
 // easy links
 if (is_array($_GET) && count($_GET)>0) {
 	foreach($_GET as $key => $value) {
 		switch ($key) {
 			case 'accept':
-				$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);
+				$user_role = $usergroup->get_user_group_role(api_get_user_id(), $value);
 				if (in_array($user_role , array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,GROUP_USER_PERMISSION_PENDING_INVITATION))) {
-					GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
+					$usergroup->update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
 					$show_message = get_lang('UserIsSubscribedToThisGroup');
 				} elseif (in_array($user_role , array(GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
 					$show_message = get_lang('UserIsAlreadySubscribedToThisGroup');
@@ -85,7 +86,7 @@ if (is_array($_GET) && count($_GET)>0) {
 			break 2;
 			case 'deny':
 				// delete invitation
-				GroupPortalManager::delete_user_rel_group(api_get_user_id(), $value);
+				$usergroup->delete_user_rel_group(api_get_user_id(), $value);
 				$show_message = get_lang('GroupInvitationWasDeny');
 			break 2;
 		}

@@ -64,9 +64,12 @@ $social_right_content .= '<div class="well_border">';
 $social_right_content .= '<h3>'.get_lang('ContactInformation').'</h3>';
 
 $list = array(
-                array('title' => get_lang('Name'), 'content' => api_get_person_name($user_info['firstname'], $user_info['lastname'])),
-                array('title' => get_lang('Email'), 'content' => $user_info['email']),
-        );
+    array('title' => get_lang('Name'), 'content' => api_get_person_name($user_info['firstname'], $user_info['lastname'])),
+    array('title' => get_lang('Email'), 'content' => $user_info['email']),
+);
+
+$usergroup = new UserGroup();
+
 // information current user
 $social_right_content .= '<div>'.Display::description($list).'</div>';
 $social_right_content .= '
@@ -107,7 +110,7 @@ $social_right_content .= '
     			$social_right_content .= '<br />';
 
     			//Group box by age
-    			$results = GroupPortalManager::get_groups_by_age(1,false);
+    			$results = $usergroup->get_groups_by_age(1,false);
 
     			$groups_newest = array();
     			if (!empty($results)) {
@@ -122,14 +125,14 @@ $social_right_content .= '
                         }
         				$group_url = "groups.php?id=$id";
         				$result['name'] = Display::url(api_ucwords(Text::cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
-        				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
+        				$picture = $usergroup->get_picture_group($id, $result['picture'],80);
         				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
         				$group_actions = '<div class="box_description_group_actions"><a href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
         				$groups_newest[]= array(Display::url($result['picture_uri'], $group_url), $result['name'], Text::cut($result['description'],120,true).$group_actions);
         			}
     			}
 
-    			$results = GroupPortalManager::get_groups_by_popularity(1,false);
+    			$results = $usergroup->get_groups_by_popularity(1,false);
 
     			$groups_pop = array();
     			foreach ($results as $result) {
@@ -144,7 +147,7 @@ $social_right_content .= '
     					$result['count'] = $result['count'].' '.get_lang('Members');
     				}
     				$result['name'] = Display::url(api_ucwords(Text::cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
-    				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
+    				$picture = $usergroup->get_picture_group($id, $result['picture'],80);
     				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
     				$group_actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
     				$groups_pop[]= array(Display::url($result['picture_uri'], $group_url) , $result['name'], Text::cut($result['description'],120,true).$group_actions);

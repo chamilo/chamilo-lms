@@ -24,15 +24,15 @@
         "php": ">=5.3.2",
         "silex/silex"           : "~1.0@dev",
         "symfony/config": "2.3.*@dev",
-        "symfony/yaml"          : "2.1.*",
+        "symfony/yaml": "2.1.*@dev",
         "symfony/console"  : "2.3.*@dev",
         "symfony/twig-bridge": "2.2.*@dev",
         "symfony/doctrine-bridge": "2.3.*@dev",
-        "symfony/security": "dev-master",
+        "symfony/security": "2.3.*@dev",
         "symfony/form": "2.3.*@dev",
-        "symfony/property-access": "dev-master",
-        "symfony/validator": "dev-master",
-        "symfony/translation": "dev-master",
+        "symfony/property-access": "2.3.*@dev",
+        "symfony/validator": "2.3.*@dev",
+        "symfony/translation": "2.3.*@dev",
         "symfony/dependency-injection": "dev-master",
         "monolog/monolog"       : ">=1.0.0",
         "twig/twig": ">=1.8,<2.0-dev",
@@ -46,8 +46,6 @@
         "igorw/config-service-provider": "1.0.*@dev",
         "mpdf/mpdf": "dev-master",
         "ezyang/htmlpurifier": "dev-master",
-        "mheap/silex-assetic": "dev-master",
-        "leafo/lessphp"         : "dev-master",
         "natxet/CssMin": "dev-master",
         "realityking/pchart": "dev-master"
     },
@@ -60,7 +58,10 @@
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",
         "symfony/web-profiler-bundle": "~2.2",
-        "silex/web-profiler": "~1.0"
+        "silex/web-profiler": "~1.0",
+        "natxet/CssMin": "dev-master",
+        "leafo/lessphp": "dev-master",
+        "mheap/silex-assetic": "dev-master"
     },
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",

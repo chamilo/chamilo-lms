@@ -166,5 +166,21 @@ ALTER TABLE track_e_course_access ADD COLUMN c_id INT NOT NULL DEFAULT 0;
 
 UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
 
+ALTER TABLE usergroup ADD COLUMN group_type INT unsigned NOT NULL default 0;
+
+ALTER TABLE usergroup ADD COLUMN picture varchar(255) NOT NULL;
+ALTER TABLE usergroup ADD COLUMN url varchar(255) NOT NULL;
+ALTER TABLE usergroup ADD COLUMN visibility varchar(255) NOT NULL;
+ALTER TABLE usergroup ADD COLUMN updated_on varchar(255) NOT NULL;
+ALTER TABLE usergroup ADD COLUMN created_on varchar(255) NOT NULL;
+
+CREATE TABLE IF NOT EXISTS usergroup_rel_tag( id int NOT NULL AUTO_INCREMENT, tag_id int NOT NULL, usergroup_id int NOT NULL, PRIMARY KEY (id));
+ALTER TABLE usergroup_rel_tag ADD INDEX ( usergroup_id );
+ALTER TABLE usergroup_rel_tag ADD INDEX ( tag_id );
+
+ALTER TABLE usergroup_rel_user ADD INDEX ( usergroup_id );
+ALTER TABLE usergroup_rel_user ADD INDEX ( user_id );
+ALTER TABLE usergroup_rel_user ADD INDEX ( relation_type );
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.030b27b' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.f39d0d9' WHERE variable = 'chamilo_database_version';

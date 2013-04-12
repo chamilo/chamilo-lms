@@ -415,23 +415,9 @@ if (isset($_configuration['main_database'])) {
         ),
     ));
 
-    /*
-    $app['orm.ems.config'] = $app->share($app->extend('orm.ems.config', function ($config, $app) {
-        $mapping = $app['orm.generate_psr0_mapping'](array(
-                'Foo\Resources\mappings' => 'Foo\Entities',
-                'Bar\Resources\mappings' => 'Bar\Entities',
-            ));
-
-        $chain = $app['orm.mapping_driver_chain.locator']();
-
-        foreach ($mapping as $directory => $namespace) {
-            $driver = new XmlDriver($directory);
-            $chain->addDriver($driver, $namespace);
-        }
-
-        return $config;
-    }));
-*/
+    //Temporal fix to load gedmo libs
+    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
+    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
 
     //Setting Doctrine2 extensions
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
@@ -442,10 +428,6 @@ if (isset($_configuration['main_database'])) {
 
     $sortableListener = new Gedmo\Sortable\SortableListener();
     $app['db.event_manager']->addEventSubscriber($sortableListener);
-
-    //Temporal fix to load gedmo libs
-    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
-    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
 }
 
 $app['is_admin'] = false;

@@ -38,16 +38,19 @@
         "twig/twig": ">=1.8,<2.0-dev",
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
+        "gedmo/doctrine-extensions": "2.3.*@dev",
+        "chamilo/chash": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "1.0.*@dev",
         "knplabs/knp-menu": "2.0.*@dev",
-        "gedmo/doctrine-extensions": "2.3.*@dev",
-        "chamilo/chash": "dev-master",
         "igorw/config-service-provider": "1.0.*@dev",
         "mpdf/mpdf": "dev-master",
         "ezyang/htmlpurifier": "dev-master",
         "natxet/CssMin": "dev-master",
-        "realityking/pchart": "dev-master"
+        "realityking/pchart": "dev-master",
+        "imagine/imagine": "dev-develop",
+        "grom/silex-service-provider": "dev-master",
+        "knplabs/knp-snappy": "dev-master"
     },
     "repositories": [
         {

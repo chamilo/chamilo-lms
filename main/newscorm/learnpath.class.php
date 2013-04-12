@@ -10544,7 +10544,7 @@ EOD;
     {
         global $app;
         $em = $app['orm.em'];
-        $item = new Entity\EntityCLpCategory();
+        $item = new Entity\CLpCategory();
         $item->setName($params['name']);
         $item->setCId($params['c_id']);
         $em->persist($item);
@@ -10555,7 +10555,7 @@ EOD;
     {
         global $app;
         $em = $app['orm.em'];
-        $item = $em->find('Entity\EntityCLpCategory', $params['id']);
+        $item = $em->find('Entity\CLpCategory', $params['id']);
         if ($item) {
             $item->setName($params['name']);
             $item->setCId($params['c_id']);
@@ -10568,7 +10568,7 @@ EOD;
     {
         global $app;
         $em = $app['orm.em'];
-        $item = $em->find('Entity\EntityCLpCategory', $id);
+        $item = $em->find('Entity\CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() - 1;
             $item->setPosition($position);
@@ -10581,7 +10581,7 @@ EOD;
     {
         global $app;
         $em = $app['orm.em'];
-        $item = $em->find('Entity\EntityCLpCategory', $id);
+        $item = $em->find('Entity\CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() + 1;
             $item->setPosition($position);
@@ -10597,7 +10597,7 @@ EOD;
             return 0;
         }
         $em = $app['orm.em'];
-        $query = $em->createQuery('SELECT COUNT(u.id) FROM Entity\EntityCLpCategory u WHERE u.cId = :id');
+        $query = $em->createQuery('SELECT COUNT(u.id) FROM Entity\CLpCategory u WHERE u.cId = :id');
         $query->setParameter('id', $course_id);
         return $query->getSingleScalarResult();
     }
@@ -10607,15 +10607,14 @@ EOD;
     {
         global $app;
         $em = $app['orm.em'];
-
         //Default behaviour
-        /*$items = $em->getRepository('Entity\EntityCLpCategory')->findBy(
+        /*$items = $em->getRepository('Entity\CLpCategory')->findBy(
             array('cId' => $course_id),
             array('name' => 'ASC')
         );*/
 
         //Using doctrine extensions
-        $items = $em->getRepository('Entity\EntityCLpCategory')->getBySortableGroupsQuery(
+        $items = $em->getRepository('Entity\CLpCategory')->getBySortableGroupsQuery(
             array('cId' => $course_id)
         )->getResult();
 
@@ -10626,7 +10625,7 @@ EOD;
     {
         global $app;
         $em = $app['orm.em'];
-        $item = $em->find('Entity\EntityCLpCategory', $id);
+        $item = $em->find('Entity\CLpCategory', $id);
 
         return $item;
     }
@@ -10634,7 +10633,7 @@ EOD;
     static function get_category_by_course($course_id)
     {
         global $app;
-        $items = $app['orm.em']->getRepository('Entity\EntityCLpCategory')->findBy(array('cId' => $course_id));
+        $items = $app['orm.em']->getRepository('Entity\CLpCategory')->findBy(array('cId' => $course_id));
 
         return $items;
     }
@@ -10643,11 +10642,11 @@ EOD;
     {
         global $app;
         $em = $app['orm.em'];
-        $item = $em->find('Entity\EntityCLpCategory', $id);
+        $item = $em->find('Entity\CLpCategory', $id);
         if ($item) {
 
             $courseId = $item->getCId();
-            $query = $em->createQuery('SELECT u FROM Entity\EntityCLp u WHERE u.cId = :id AND u.categoryId = :catId');
+            $query = $em->createQuery('SELECT u FROM Entity\CLp u WHERE u.cId = :id AND u.categoryId = :catId');
             $query->setParameter('id', $courseId);
             $query->setParameter('catId', $item->getId());
             $lps = $query->getResult();

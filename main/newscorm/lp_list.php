@@ -108,7 +108,7 @@ $token = Security::get_token();
 
 $categories_temp = learnpath::get_categories(api_get_course_int_id());
 
-$category_test = new Entity\EntityCLpCategory();
+$category_test = new Entity\CLpCategory();
 $category_test->setId(0);
 $category_test->setName(get_lang('NoCategory'));
 $category_test->setPosition(0);

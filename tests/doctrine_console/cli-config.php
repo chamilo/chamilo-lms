@@ -182,5 +182,7 @@ php5 doctrine.php  migrations:migrate 0
 
 http://docs.doctrine-project.org/projects/doctrine-migrations/en/latest/reference/managing_migrations.html
 
+sudo php5 doctrine.php orm:generate-proxies
+
 */
 

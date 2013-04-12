@@ -58,14 +58,14 @@ class LearnpathController
         $sessionId = api_get_session_id();
         $session = null;
         if (!empty($sessionId)) {
-            $session = $app['orm.em']->getRepository('Entity\EntitySession')->find($sessionId);
+            $session = $app['orm.em']->getRepository('Entity\Session')->find($sessionId);
         }
 
         //Find course
-        $course = $app['orm.em']->getRepository('Entity\EntityCourse')->find($courseId);
+        $course = $app['orm.em']->getRepository('Entity\Course')->find($courseId);
 
         //Getting subscribe users to the course
-        $subscribedUsers = $app['orm.em']->getRepository('Entity\EntityCourse')->getSubscribedStudents($course);
+        $subscribedUsers = $app['orm.em']->getRepository('Entity\Course')->getSubscribedStudents($course);
         $subscribedUsers = $subscribedUsers->getQuery();
         $subscribedUsers = $subscribedUsers->execute();
 
@@ -76,7 +76,7 @@ class LearnpathController
         }
 
         //Getting subscribed users to a LP
-        $subscribedUsersInLp = $app['orm.em']->getRepository('Entity\EntityCItemProperty')->getUsersSubscribedToItem(
+        $subscribedUsersInLp = $app['orm.em']->getRepository('Entity\CItemProperty')->getUsersSubscribedToItem(
             'learnpath',
             $lpId,
             $course,
@@ -122,7 +122,7 @@ class LearnpathController
         }
 
         //Subscribed groups to a LP
-        $subscribedGroupsInLp = $app['orm.em']->getRepository('Entity\EntityCItemProperty')->getGroupsSubscribedToItem(
+        $subscribedGroupsInLp = $app['orm.em']->getRepository('Entity\CItemProperty')->getGroupsSubscribedToItem(
             'learnpath',
             $lpId,
             $course,
@@ -147,7 +147,7 @@ class LearnpathController
                 'multiple' => true,
                 'required' => false,
                 'expanded' => false,
-                //'class' => 'Entity\EntityCourse',
+                //'class' => 'Entity\Course',
                 //'property' => 'complete_name',
                 //'query_builder' => function(\Entity\Repository\CourseRepository $repo) use ($course) {
                     $repo =  $repo->getSubscribedStudents($course);
@@ -160,7 +160,7 @@ class LearnpathController
                 'multiple' => true,
                 'expanded' => false,
                 'required' => false,
-                //'class' => 'Entity\EntityCourse',
+                //'class' => 'Entity\Course',
                 //'property' => 'complete_name',
                 //'query_builder' => function(\Entity\Repository\CourseRepository $repo) use ($course) {
                   //  return $repo->getSubscribedStudents($course);
@@ -181,7 +181,7 @@ class LearnpathController
             $users = $request->get('users');
             $userForm = $request->get('user_form');
             if (!empty($userForm)) {
-                $app['orm.em']->getRepository('Entity\EntityCItemProperty')->subscribeUsersToItem(
+                $app['orm.em']->getRepository('Entity\CItemProperty')->subscribeUsersToItem(
                     'learnpath',
                     $course,
                     $session,
@@ -195,7 +195,7 @@ class LearnpathController
             $groupForm = $request->get('group_form');
 
             if (!empty($groupForm)) {
-                $app['orm.em']->getRepository('Entity\EntityCItemProperty')->subscribeGroupsToItem(
+                $app['orm.em']->getRepository('Entity\CItemProperty')->subscribeGroupsToItem(
                     'learnpath',
                     $course,
                     $session,

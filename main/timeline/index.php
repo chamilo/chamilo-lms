@@ -4,14 +4,14 @@ require_once '../inc/global.inc.php';
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
-use Entity\EntityCTimeline;
+use Entity\CTimeline;
 
 class TimeLineController {
 
     function indexAction(Application $app) {
-        $timeline_query = $app['orm.em']->getRepository('Entity\EntityCTimeline')->findAll();
-        
-        $timeline_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCTimeline a');
+        $timeline_query = $app['orm.em']->getRepository('Entity\CTimeline')->findAll();
+
+        $timeline_query = $app['orm.em']->createQuery('SELECT a FROM Entity\CTimeline a');
 
 
         $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($timeline_query, $fetchJoinCollection = true);
@@ -35,7 +35,7 @@ class TimeLineController {
             $values['type']     = 0;
             $values['status']   = 0;
 
-            $my_timeline = new EntityCTimeline();
+            $my_timeline = new CTimeline();
             $my_timeline->setCId(api_get_course_int_id());
             $my_timeline->setHeadline($values['headline']);
             $my_timeline->setType($values['type']);
@@ -66,14 +66,14 @@ class TimeLineController {
     }
 
     function viewAction(Application $app, $id) {
-        $timeline = $app['db.orm.em']->find('EntityCTimeline', $id);
+        $timeline = $app['db.orm.em']->find('CTimeline', $id);
         $app['template']->assign('timeline', $timeline);
         $response = $app['template']->render_template('timeline/view.tpl');
         return new Response($response, 200, array());
     }
 
     function editAction(Application $app, $id) {
-        $timeline = $app['db.orm.em']->find('EntityCTimeline', $id);
+        $timeline = $app['db.orm.em']->find('CTimeline', $id);
         $app['template']->assign('timeline', $timeline);
         $content = $app['template']->fetch('default/timeline/edit.tpl');
         $app['template']->assign('content', $content);

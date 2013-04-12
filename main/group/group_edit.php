@@ -141,16 +141,12 @@ $form->add_textfield('name', get_lang('GroupName'));
 $form->addElement('textarea', 'description', get_lang('Description'), array('class' => 'span6', 'rows' => 6));
 
 //Getting course info
-$course = $app['orm.em']->getRepository('Entity\EntityCourse')->find(api_get_course_int_id());
+$course = $app['orm.em']->getRepository('Entity\Course')->find(api_get_course_int_id());
 
 //Getting subscribed students
-$subscribedUsers = $app['orm.em']->getRepository('Entity\EntityCourse')->getSubscribedStudents($course);
+$subscribedUsers = $app['orm.em']->getRepository('Entity\Course')->getSubscribedStudents($course);
 $subscribedUsers = $subscribedUsers->getQuery();
 $subscribedUsers = $subscribedUsers->execute();
-
-
-
-
 
 //Getting all users
 $complete_user_list = array();

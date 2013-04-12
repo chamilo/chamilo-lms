@@ -244,6 +244,7 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale_fallback' => 'en'
 ));
 
+
 // Handling po files
 
 /*
@@ -404,6 +405,8 @@ if (isset($_configuration['main_database'])) {
         "orm.em.options" => array(
             "mappings" => array(
                 array(
+                    //If true, only simple notations like @Entity will work. If false, more advanced notations and aliasing via use will work. (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)
+                    'use_simple_annotation_reader' => false,
                     "type" => "annotation",
                     "namespace" => "Entity",
                     "path" => api_get_path(INCLUDE_PATH).'Entity',
@@ -412,6 +415,24 @@ if (isset($_configuration['main_database'])) {
         ),
     ));
 
+    /*
+    $app['orm.ems.config'] = $app->share($app->extend('orm.ems.config', function ($config, $app) {
+        $mapping = $app['orm.generate_psr0_mapping'](array(
+                'Foo\Resources\mappings' => 'Foo\Entities',
+                'Bar\Resources\mappings' => 'Bar\Entities',
+            ));
+
+        $chain = $app['orm.mapping_driver_chain.locator']();
+
+        foreach ($mapping as $directory => $namespace) {
+            $driver = new XmlDriver($directory);
+            $chain->addDriver($driver, $namespace);
+        }
+
+        return $config;
+    }));
+*/
+
     //Setting Doctrine2 extensions
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
     $app['db.event_manager']->addEventSubscriber($timestampableListener);
@@ -419,8 +440,12 @@ if (isset($_configuration['main_database'])) {
     $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
     $app['db.event_manager']->addEventSubscriber($sluggableListener);
 
-    $sortableListener = new \Gedmo\Sortable\SortableListener();
+    $sortableListener = new Gedmo\Sortable\SortableListener();
     $app['db.event_manager']->addEventSubscriber($sortableListener);
+
+    //Temporal fix to load gedmo libs
+    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
+    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
 }
 
 $app['is_admin'] = false;

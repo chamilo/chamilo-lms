@@ -11,7 +11,7 @@ $app['cache.path'] = api_get_path(SYS_ARCHIVE_PATH);
 $app['cache.paths'] = new stdClass();
 
 //Monolog
-$app['cache.paths']->folders[] = $app['log.path'] = $app['cache.path'].'logs';
+$app['cache.paths']->folders[] = $app['log.path'] = api_get_path(SYS_PATH_APP).'logs';
 
 //Twig cache
 $app['cache.paths']->folders[] = $app['twig.cache.path'] = $app['cache.path'].'twig';
@@ -110,7 +110,7 @@ foreach($app['cache.paths']->folders as $folder) {
 }
 
 //Monolog log file
-$app['chamilo.log'] = $app['cache.path'].'chamilo.log';
+$app['chamilo.log'] = $app['log.path'].'/chamilo.log';
 
 if (is_file($app['chamilo.log']) && !is_writable($app['chamilo.log'])) {
     unlink($app['chamilo.log']);

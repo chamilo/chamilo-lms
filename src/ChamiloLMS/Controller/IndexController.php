@@ -59,12 +59,12 @@ class IndexController// extends Controller
 
         //$token = $app['security']->getToken();
 
-        //$article = $app['orm.em']->getRepository('Entity\EntityCourse');
-        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
-        //$a = new EntityCourse();
-        //$article = $app['orm.em']->getRepository('EntityCourse');
+        //$article = $app['orm.em']->getRepository('Entity\Course');
+        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\Course a');
+        //$a = new Course();
+        //$article = $app['orm.em']->getRepository('Course');
         //var_dump($article);
-        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
+        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\Course a');
         /*
           $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($courses_query, $fetchJoinCollection = true);
           $c = count($paginator);
@@ -73,7 +73,7 @@ class IndexController// extends Controller
           }
           exit; */
 
-        //$app['orm.em']->find('EntityCourse', 1);
+        //$app['orm.em']->find('Course', 1);
         //var_dump($app['orm.ems']['mysql']);
         // Defines wether or not anonymous visitors can see a list of the courses on the Chamilo homepage that are open to the world.
         //$_setting['display_courses_to_anonymous_users'] = 'true';

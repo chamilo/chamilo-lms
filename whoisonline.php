@@ -93,7 +93,7 @@ $(document).ready(function() {
 </script>';
 
 
-if ($_GET['chatid'] != '') {
+if (isset($_GET['chatid']) && !empty($_GET['chatid'])) {
     //send out call request
     $time = time();
     $time = date("Y-m-d H:i:s", $time);
@@ -113,6 +113,8 @@ if ($_GET['chatid'] != '') {
         exit;
     }
 }
+
+$social_right_content = null;
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting(

@@ -15,7 +15,7 @@
 /**
  * Variables definitions and inclusions
  *
- * @todo move this inside web/user
+ * @todo move this inside web/users
  */
 // name of the language file that needs to be included
 $language_file = array('index','registration','messages','userInfo');

@@ -53,21 +53,21 @@ class PagerfantaTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->adapter, $this->pagerfanta->getAdapter());
     }
 
-    public function testAllowOutOfRangePagesShouldBeFalseByDefault()
+    public function testGetAllowOutOfRangePagesShouldBeFalseByDefault()
     {
-        $this->assertFalse($this->pagerfanta->allowOutOfRangePages());
+        $this->assertFalse($this->pagerfanta->getAllowOutOfRangePages());
     }
 
     public function testSetAllowOutOfRangePagesShouldSetTrue()
     {
         $this->pagerfanta->setAllowOutOfRangePages(true);
-        $this->assertTrue($this->pagerfanta->allowOutOfRangePages());
+        $this->assertTrue($this->pagerfanta->getAllowOutOfRangePages());
     }
 
     public function testSetAllowOutOfRangePagesShouldSetFalse()
     {
         $this->pagerfanta->setAllowOutOfRangePages(false);
-        $this->assertFalse($this->pagerfanta->allowOutOfRangePages());
+        $this->assertFalse($this->pagerfanta->getAllowOutOfRangePages());
     }
 
     public function testSetAllowOutOfRangePagesShouldReturnThePagerfanta()
@@ -84,21 +84,21 @@ class PagerfantaTest extends \PHPUnit_Framework_TestCase
         $this->pagerfanta->setAllowOutOfRangePages($value);
     }
 
-    public function testNormalizeOutOfRangePagesShouldBeFalseByDefault()
+    public function testGetNormalizeOutOfRangePagesShouldBeFalseByDefault()
     {
-        $this->assertFalse($this->pagerfanta->normalizeOutOfRangePages());
+        $this->assertFalse($this->pagerfanta->getNormalizeOutOfRangePages());
     }
 
     public function testSetNormalizeOutOfRangePagesShouldSetTrue()
     {
         $this->pagerfanta->setNormalizeOutOfRangePages(true);
-        $this->assertTrue($this->pagerfanta->normalizeOutOfRangePages());
+        $this->assertTrue($this->pagerfanta->getNormalizeOutOfRangePages());
     }
 
     public function testSetNormalizeOutOfRangePagesShouldSetFalse()
     {
         $this->pagerfanta->setNormalizeOutOfRangePages(false);
-        $this->assertFalse($this->pagerfanta->normalizeOutOfRangePages());
+        $this->assertFalse($this->pagerfanta->getNormalizeOutOfRangePages());
     }
 
     public function testSetNormalizeOutOfRangePagesShouldReturnThePagerfanta()

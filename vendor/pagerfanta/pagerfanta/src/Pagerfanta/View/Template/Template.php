@@ -21,15 +21,38 @@ abstract class Template implements TemplateInterface
     private $routeGenerator;
     private $options;
 
-    public function __construct($routeGenerator, array $options = array())
+    public function __construct()
+    {
+        $this->initializeOptions();
+    }
+
+    public function setRouteGenerator($routeGenerator)
     {
         $this->routeGenerator = $routeGenerator;
-        $this->options = array_merge(static::$defaultOptions, $options);
+    }
+
+    public function setOptions(array $options)
+    {
+        $this->options = array_merge($this->options, $options);
+    }
+
+    private function initializeOptions()
+    {
+        $this->options = static::$defaultOptions;
     }
 
     protected function generateRoute($page)
     {
-        return call_user_func($this->routeGenerator, $page);
+        return call_user_func($this->getRouteGenerator(), $page);
+    }
+
+    private function getRouteGenerator()
+    {
+        if (!$this->routeGenerator) {
+            throw new \RuntimeException('There is no route generator.');
+        }
+
+        return $this->routeGenerator;
     }
 
     protected function option($name)

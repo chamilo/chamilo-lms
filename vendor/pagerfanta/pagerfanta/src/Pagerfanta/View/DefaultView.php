@@ -19,9 +19,9 @@ use Pagerfanta\View\Template\DefaultTemplate;
  */
 class DefaultView implements ViewInterface
 {
-    private $pagerfanta;
     private $template;
 
+    private $pagerfanta;
     private $proximity;
 
     private $currentPage;
@@ -29,6 +29,16 @@ class DefaultView implements ViewInterface
 
     private $startPage;
     private $endPage;
+
+    public function __construct(TemplateInterface $template = null)
+    {
+        $this->template = $template ?: $this->createDefaultTemplate();
+    }
+
+    protected function createDefaultTemplate()
+    {
+        return new DefaultTemplate();
+    }
 
     /**
      * {@inheritdoc}
@@ -38,7 +48,7 @@ class DefaultView implements ViewInterface
         $this->initializePagerfanta($pagerfanta);
         $this->initializeOptions($options);
 
-        $this->template = $this->createTemplate($routeGenerator, $options);
+        $this->configureTemplate($routeGenerator, $options);
 
         return $this->generate();
     }
@@ -54,18 +64,19 @@ class DefaultView implements ViewInterface
     private function initializeOptions($options)
     {
         $this->proximity = isset($options['proximity']) ?
-                           $options['proximity'] :
-                           $this->defaultProximity();
+                           (int) $options['proximity'] :
+                           $this->getDefaultProximity();
     }
 
-    protected function defaultProximity()
+    protected function getDefaultProximity()
     {
         return 2;
     }
 
-    protected function createTemplate($routeGenerator, $options)
+    private function configureTemplate($routeGenerator, $options)
     {
-        return new DefaultTemplate($routeGenerator, $options);
+        $this->template->setRouteGenerator($routeGenerator);
+        $this->template->setOptions($options);
     }
 
     private function generate()

@@ -38,7 +38,7 @@ class ConfigServiceProviderTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->register(new ConfigServiceProvider(__DIR__."/Fixtures/config.json", array(
+        $app->register(new ConfigServiceProvider($filename, array(
             'data' => 'test-replacement'
         )));
 

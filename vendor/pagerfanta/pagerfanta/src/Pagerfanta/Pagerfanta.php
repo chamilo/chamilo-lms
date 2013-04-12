@@ -74,7 +74,7 @@ class Pagerfanta implements \Countable, \IteratorAggregate, PagerfantaInterface
      *
      * @return Boolean
      */
-    public function allowOutOfRangePages()
+    public function getAllowOutOfRangePages()
     {
         return $this->allowOutOfRangePages;
     }
@@ -96,7 +96,7 @@ class Pagerfanta implements \Countable, \IteratorAggregate, PagerfantaInterface
      *
      * @return Boolean
      */
-    public function normalizeOutOfRangePages()
+    public function getNormalizeOutOfRangePages()
     {
         return $this->normalizeOutOfRangePages;
     }
@@ -244,7 +244,7 @@ class Pagerfanta implements \Countable, \IteratorAggregate, PagerfantaInterface
 
     private function notAllowedCurrentPageOutOfRange($currentPage)
     {
-        return !$this->allowOutOfRangePages() &&
+        return !$this->getAllowOutOfRangePages() &&
                $this->currentPageOutOfRange($currentPage);
     }
 
@@ -255,7 +255,7 @@ class Pagerfanta implements \Countable, \IteratorAggregate, PagerfantaInterface
 
     private function normalizeOutOfRangeCurrentPage($currentPage)
     {
-        if ($this->normalizeOutOfRangePages()) {
+        if ($this->getNormalizeOutOfRangePages()) {
             return $this->getNbPages();
         }
 

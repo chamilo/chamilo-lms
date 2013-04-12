@@ -26,12 +26,12 @@ use Pagerfanta\View\Template\TwitterBootstrapTemplate;
  */
 class TwitterBootstrapView extends DefaultView
 {
-    protected function createTemplate($routeGenerator, $options)
+    protected function createDefaultTemplate()
     {
-        return new TwitterBootstrapTemplate($routeGenerator, $options);
+        return new TwitterBootstrapTemplate();
     }
 
-    protected function defaultProximity()
+    protected function getDefaultProximity()
     {
         return 3;
     }

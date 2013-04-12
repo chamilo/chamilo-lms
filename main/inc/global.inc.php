@@ -434,7 +434,7 @@ define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
 
 $app->register(new Grom\Silex\ImagineServiceProvider(), array(
     'imagine.factory' => 'Gd',
-    'imagine.base_path' => __DIR__.'/vendor/imagine',
+    //'imagine.base_path' => __DIR__.'/vendor/imagine',
 ));
 
 $app['is_admin'] = false;

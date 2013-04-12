@@ -2136,26 +2136,27 @@ class CourseRestorer
                         $path = self::DBUTF8escapestring($item['path']);
                         $path = $this->get_new_id($item['item_type'], $path);
                     }
+                    $item['launch_dataprereq_type'] = isset($item['launch_dataprereq_type']) ? $item['launch_dataprereq_type'] : null;
 
                     $sql = "INSERT INTO ".$table_item." SET
 							c_id = ".$this->destination_course_id." ,
 							lp_id = '".self::DBUTF8escapestring($new_lp_id)."', ".
-                        "item_type='".self::DBUTF8escapestring($item['item_type'])."', ".
-                        "ref = '".self::DBUTF8escapestring($ref)."', ".
-                        "title = '".self::DBUTF8escapestring($item['title'])."', ".
-                        "description ='".self::DBUTF8escapestring($item['description'])."', ".
-                        "path = '".self::DBUTF8escapestring($path)."', ".
-                        "min_score = '".self::DBUTF8escapestring($item['min_score'])."', ".
-                        "max_score = '".self::DBUTF8escapestring($item['max_score'])."', ".
-                        "mastery_score = '".self::DBUTF8escapestring($item['mastery_score'])."', ".
-                        "parent_item_id = '".self::DBUTF8escapestring($item['parent_item_id'])."', ".
-                        "previous_item_id = '".self::DBUTF8escapestring($item['previous_item_id'])."', ".
-                        "next_item_id = '".self::DBUTF8escapestring($item['next_item_id'])."', ".
-                        "display_order = '".self::DBUTF8escapestring($item['display_order'])."', ".
-                        "prerequisite = '".self::DBUTF8escapestring($item['prerequisite'])."', ".
-                        "parameters='".self::DBUTF8escapestring($item['parameters'])."', ".
-                        "audio='".self::DBUTF8escapestring($item['audio'])."', ".
-                        "launch_data = '".self::DBUTF8escapestring($item['launch_dataprereq_type'])."'";
+                            "item_type='".self::DBUTF8escapestring($item['item_type'])."', ".
+                            "ref = '".self::DBUTF8escapestring($ref)."', ".
+                            "title = '".self::DBUTF8escapestring($item['title'])."', ".
+                            "description ='".self::DBUTF8escapestring($item['description'])."', ".
+                            "path = '".self::DBUTF8escapestring($path)."', ".
+                            "min_score = '".self::DBUTF8escapestring($item['min_score'])."', ".
+                            "max_score = '".self::DBUTF8escapestring($item['max_score'])."', ".
+                            "mastery_score = '".self::DBUTF8escapestring($item['mastery_score'])."', ".
+                            "parent_item_id = '".self::DBUTF8escapestring($item['parent_item_id'])."', ".
+                            "previous_item_id = '".self::DBUTF8escapestring($item['previous_item_id'])."', ".
+                            "next_item_id = '".self::DBUTF8escapestring($item['next_item_id'])."', ".
+                            "display_order = '".self::DBUTF8escapestring($item['display_order'])."', ".
+                            "prerequisite = '".self::DBUTF8escapestring($item['prerequisite'])."', ".
+                            "parameters='".self::DBUTF8escapestring($item['parameters'])."', ".
+                            "audio='".self::DBUTF8escapestring($item['audio'])."', ".
+                            "launch_data = '".self::DBUTF8escapestring($item['launch_dataprereq_type'])."'";
 
                     Database::query($sql);
 

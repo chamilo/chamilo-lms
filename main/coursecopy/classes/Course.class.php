@@ -67,8 +67,8 @@ class Course
 	 * type.
 	 */
 	function has_resources($resource_type = null) {
-		if( $resource_type != null) {
-			return is_array($this->resources[$resource_type]) && ( count($this->resources[$resource_type]) > 0 );
+		if ($resource_type != null) {
+			return isset($this->resources[$resource_type]) && is_array($this->resources[$resource_type]) && ( count($this->resources[$resource_type]) > 0 );
 		}
 		return (count($this->resources) > 0);
 	}

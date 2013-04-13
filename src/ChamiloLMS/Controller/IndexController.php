@@ -83,7 +83,7 @@ class IndexController// extends Controller
             unset($_SESSION['term_and_condition']);
         }
 
-        //If we are not logged in and customapages activated
+        // If we are not logged in and customapages activated
         if (!api_get_user_id() && \CustomPages::enabled()) {
             $loggedOut = $request->get('loggedout');
             if ($loggedOut) {
@@ -98,7 +98,7 @@ class IndexController// extends Controller
             $app['template']->assign('course_category_block', $app['page_controller']->return_courses_in_categories());
         }
 
-        // Facebook connexion, if activated
+        // Facebook connection, if activated
         if (api_is_facebook_auth_activated() && !api_get_user_id()) {
             facebook_connect();
         }
@@ -116,7 +116,7 @@ class IndexController// extends Controller
             }
         }
 
-        //Hot courses & announcements
+        // Hot courses & announcements
         $hotCourses         = null;
         $announcementsBlock = null;
 
@@ -131,10 +131,10 @@ class IndexController// extends Controller
         $app['template']->assign('hot_courses', $hotCourses);
         $app['template']->assign('announcements_block', $announcementsBlock);
 
-        //Homepage
+        // Homepage
         $app['template']->assign('home_page_block', $app['page_controller']->return_home_page());
 
-        //Navigation links
+        // Navigation links
         $navLinks = $app['template']->returnNavigationLinks();
 
         $app['template']->assign('navigation_course_links', $navLinks);
@@ -166,8 +166,8 @@ class IndexController// extends Controller
         if (!empty($_POST['submitAuth'])) {
             // The user has been already authenticated, we are now to find the last login of the user.
             if (!empty($this->user_id)) {
-                $track_login_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-                $sql_last_login    = "SELECT login_date
+                $track_login_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $sql_last_login = "SELECT login_date
                                     FROM $track_login_table
                                     WHERE login_user_id = '".$this->user_id."'
                                     ORDER BY login_date DESC LIMIT 1";
@@ -182,7 +182,7 @@ class IndexController// extends Controller
                 Database::free_result($result_last_login);
 
                 if (api_is_platform_admin()) {
-                    // decode all open event informations and fill the track_c_* tables
+                    // Decode all open event informations and fill the track_c_* tables
                     include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
                     decodeOpenInfos();
                 }

@@ -2804,12 +2804,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/jmontoyaa/silex-pagerfanta-provider.git",
-            "reference": "dcafa4f9788dddfb1d5c5783b9bb8439313c0d54"
+            "reference": "417acc6e761929ccf608c3d34c4d4abeb72f05f0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/jmontoyaa/silex-pagerfanta-provider/zipball/dcafa4f9788dddfb1d5c5783b9bb8439313c0d54",
-            "reference": "dcafa4f9788dddfb1d5c5783b9bb8439313c0d54",
+            "url": "https://api.github.com/repos/jmontoyaa/silex-pagerfanta-provider/zipball/417acc6e761929ccf608c3d34c4d4abeb72f05f0",
+            "reference": "417acc6e761929ccf608c3d34c4d4abeb72f05f0",
             "shasum": ""
         },
         "require": {
@@ -2817,7 +2817,7 @@
             "silex/silex": "1.0.*@dev",
             "symfony/property-access": ">=2.2,<2.4-dev"
         },
-        "time": "2013-04-15 10:12:47",
+        "time": "2013-04-15 11:29:52",
         "type": "library",
         "extra": {
             "branch-alias": {

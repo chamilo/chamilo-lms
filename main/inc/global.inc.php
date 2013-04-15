@@ -79,10 +79,23 @@ if (file_exists($configurationYMLFile)) {
 
 // End reading configuration file
 
-// Loading config files
+//Including main and internationalization libs
 
+// Include the main Chamilo platform library file.
+require_once $includePath.'/lib/main_api.lib.php';
+
+// Inclusion of internationalization libraries
+require_once $includePath.'/lib/internationalization.lib.php';
+
+// Functions for internal use behind this API
+require_once $includePath.'/lib/internationalization_internal.lib.php';
+
+// Do not over-use this variable. It is only for this script's local use.
+$libPath = $includePath.'/lib/';
+
+// Loading config files
 if ($alreadyInstalled) {
-    $configPath = $includePath.'../../app/config/';
+    $configPath = $includePath.'/../../app/config/';
 
     $confFiles = array(
         'auth.conf.php',
@@ -94,7 +107,7 @@ if ($alreadyInstalled) {
 
     foreach ($confFiles as $confFile) {
         if (file_exists($configPath.$confFile)) {
-            require $configPath.$confFile;
+            require_once $configPath.$confFile;
         }
     }
 
@@ -117,19 +130,7 @@ if ($alreadyInstalled) {
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
 
-//Including main and internationalization libs
 
-// Include the main Chamilo platform library file.
-require_once $includePath.'/lib/main_api.lib.php';
-
-// Inclusion of internationalization libraries
-require_once $includePath.'/lib/internationalization.lib.php';
-
-// Functions for internal use behind this API
-require_once $includePath.'/lib/internationalization_internal.lib.php';
-
-// Do not over-use this variable. It is only for this script's local use.
-$libPath = $includePath.'/lib/';
 
 /*
 $settingsFile = __DIR__."/../../app/config/settings.yml";

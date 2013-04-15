@@ -42,10 +42,15 @@ $application->addCommands(array(
     new Chash\Command\Database\SQLCountCommand(),
     new Chash\Command\Database\FullBackupCommand(),
     new Chash\Command\Database\DropDatabaseCommand(),
+    new Chash\Command\Database\ShowConnInfoCommand(),
     new Chash\Command\Files\CleanTempFolderCommand(),
     new Chash\Command\Files\CleanConfigFiles(),
+    new Chash\Command\Files\MailConfCommand(),
     new Chash\Command\Translation\ExportLanguageCommand(),
-    new Chash\Command\Translation\ImportLanguageCommand()
+    new Chash\Command\Translation\ImportLanguageCommand(),
+    new Chash\Command\User\DisableAdminsCommand(),
+    new Chash\Command\User\MakeAdminCommand(),
+    new Chash\Command\User\ResetLoginCommand(),
 ));
 
 $application->run();

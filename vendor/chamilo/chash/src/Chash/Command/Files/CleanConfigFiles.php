@@ -21,7 +21,7 @@ class CleanConfigFiles extends CommonChamiloDatabaseCommand
         parent::configure();
         $this
             ->setName('files:clean_config_files')
-            ->setDescription('Cleans the archives directory');
+            ->setDescription('Cleans the config files to help you re-install');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

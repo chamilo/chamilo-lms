@@ -22,12 +22,15 @@ class DefaultTemplate extends Template
         'css_disabled_class' => 'disabled',
         'css_dots_class'     => 'dots',
         'css_current_class'  => 'current',
-        'dots_text'          => '...'
+        'dots_text'          => '...',
+        'container_template' => '<nav>%pages%</nav>',
+        'page_template'      => '<a href="%href%">%text%</a>',
+        'span_template'      => '<span class="%class%">%text%</span>'
     );
 
     public function container()
     {
-        return '<nav>%pages%</nav>';
+        return $this->option('container_template');
     }
 
     public function page($page)
@@ -39,7 +42,12 @@ class DefaultTemplate extends Template
 
     public function pageWithText($page, $text)
     {
-        return sprintf('<a href="%s">%s</a>', $this->generateRoute($page), $text);
+        $search = array('%href%', '%text%');
+
+        $href = $this->generateRoute($page);
+        $replace = array($href, $text);
+
+        return str_replace($search, $replace, $this->option('page_template'));
     }
 
     public function previousDisabled()
@@ -84,6 +92,9 @@ class DefaultTemplate extends Template
 
     private function generateSpan($class, $page)
     {
-        return sprintf('<span class="%s">%s</span>', $class, $page);
+        $search = array('%class%', '%text%');
+        $replace = array($class, $page);
+
+        return str_replace($search, $replace, $this->option('span_template'));
     }
 }

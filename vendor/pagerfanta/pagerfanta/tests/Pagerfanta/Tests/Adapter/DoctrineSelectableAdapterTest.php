@@ -6,7 +6,7 @@ use Pagerfanta\Adapter\DoctrineSelectableAdapter;
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Version;
+use Doctrine\Common\Version;
 
 class DoctrineSelectableAdapterTest extends \PHPUnit_Framework_TestCase
 {

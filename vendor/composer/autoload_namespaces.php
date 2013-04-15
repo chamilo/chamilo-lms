@@ -43,6 +43,7 @@ return array(
     'HTMLPurifier' => $vendorDir . '/ezyang/htmlpurifier/library',
     'Grom\\Silex' => $vendorDir . '/grom/silex-service-provider/src',
     'Gedmo' => array($vendorDir . '/gedmo/doctrine-extensions/lib', $vendorDir . '/gedmo/doctrine-extensions/lib'),
+    'FranMoreno' => $vendorDir . '/franmomu/silex-pagerfanta-provider/src',
     'Entity' => $baseDir . '/main/inc',
     'Doctrine\\ORM' => $vendorDir . '/doctrine/orm/lib',
     'Doctrine\\DBAL\\Migrations' => $vendorDir . '/doctrine/migrations/lib',

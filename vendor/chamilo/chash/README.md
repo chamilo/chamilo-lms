@@ -9,7 +9,7 @@ To get the most out of Chash, you should move the chash.phar file to your
 you put chash.phar and doing:
 
     chmod +x chash.phar
-    mv chash.phar /usr/local/bin/chash
+    sudo ln -s /path/to/chash.phar /usr/local/bin/chash
 
 Then you can launch chash by moving into any Chamilo installation directory and
 typing
@@ -37,7 +37,7 @@ Remember to add execution permissions to the phar file.
     cd chash
     php -d phar.readonly=0 createPhar.php
     chmod +x chash.phar
-    sudo mv chash.phar /usr/local/bin/chash
+    sudo ln -s /path/to/chash.phar /usr/local/bin/chash
     Then you can call the chash.phar file in your Chamilo installation
 
     cd /var/www/chamilo
@@ -51,11 +51,13 @@ Available commands:
         db:dump                 Outputs a dump of the database
         db:full_backup          Generates a .tgz from the Chamilo files and database
         db:restore              Allows you to restore an SQL dump right into the active database of a given Chamilo installation (which will also erase all previous data in that database)
+        db:show_conn_info       Shows database connection credentials for the current Chamilo install
         db:sql_cli              Enters to the SQL command line
         db:sql_count            Count the number of rows in a specific table
 
     files
         files:clean_archives          Cleans the archives directory
+        files:clean_config_files      Cleans the config files to help you re-install
 
     translation
         translation:export_language   Exports a Chamilo language package

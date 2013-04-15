@@ -1,49 +1,5 @@
 [
     {
-        "name": "jmontoyaa/phpqrcode",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jmontoyaa/phpqrcode.git",
-            "reference": "c50e0fbb2f69ad961a0f7b56b082a6772b36585b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jmontoyaa/phpqrcode/zipball/c50e0fbb2f69ad961a0f7b56b082a6772b36585b",
-            "reference": "c50e0fbb2f69ad961a0f7b56b082a6772b36585b",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=4.3.10"
-        },
-        "time": "2013-04-02 13:13:44",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "files": [
-                "qrlib.php"
-            ]
-        },
-        "license": [
-            "LGPL"
-        ],
-        "authors": [
-            {
-                "name": "Julio Montoya"
-            }
-        ],
-        "description": "A PHP class to generate QR Code",
-        "homepage": "http://github.com/jmontoyaa/phpqrcode/",
-        "keywords": [
-            "php",
-            "qrcode"
-        ],
-        "support": {
-            "source": "https://github.com/jmontoyaa/phpqrcode/tree/master"
-        }
-    },
-    {
         "name": "symfony/dom-crawler",
         "version": "v2.2.1",
         "version_normalized": "2.2.1.0",
@@ -97,150 +53,6 @@
         ],
         "description": "Symfony DomCrawler Component",
         "homepage": "http://symfony.com"
-    },
-    {
-        "name": "symfony/browser-kit",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "target-dir": "Symfony/Component/BrowserKit",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/BrowserKit.git",
-            "reference": "08f303dc3591d10ca450b85c22e9268523747ab3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/BrowserKit/zipball/08f303dc3591d10ca450b85c22e9268523747ab3",
-            "reference": "08f303dc3591d10ca450b85c22e9268523747ab3",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "symfony/dom-crawler": ">=2.0,<3.0"
-        },
-        "require-dev": {
-            "symfony/css-selector": ">=2.0,<3.0",
-            "symfony/process": ">=2.0,<3.0"
-        },
-        "suggest": {
-            "symfony/process": "2.2.*"
-        },
-        "time": "2013-04-11 06:50:46",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.3-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\BrowserKit\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony BrowserKit Component",
-        "homepage": "http://symfony.com"
-    },
-    {
-        "name": "natxet/CssMin",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/natxet/CssMin.git",
-            "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/natxet/CssMin/zipball/9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
-            "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.0"
-        },
-        "time": "2013-03-15 18:47:32",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "CssMin": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Joe Scylla",
-                "email": "joe.scylla@gmail.com",
-                "homepage": "https://profiles.google.com/joe.scylla"
-            }
-        ],
-        "description": "Minifying CSS",
-        "homepage": "http://code.google.com/p/cssmin/",
-        "keywords": [
-            "css",
-            "minify"
-        ]
-    },
-    {
-        "name": "leafo/lessphp",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/leafo/lessphp.git",
-            "reference": "51aad6ef903bdcb18280ae81fb85016a078232a0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/leafo/lessphp/zipball/51aad6ef903bdcb18280ae81fb85016a078232a0",
-            "reference": "51aad6ef903bdcb18280ae81fb85016a078232a0",
-            "shasum": ""
-        },
-        "time": "2013-04-09 01:25:49",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.3-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "classmap": [
-                "lessc.inc.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT",
-            "GPL-3.0"
-        ],
-        "authors": [
-            {
-                "name": "Leaf Corcoran",
-                "email": "leafot@gmail.com",
-                "homepage": "http://leafo.net"
-            }
-        ],
-        "description": "lessphp is a compiler for LESS written in PHP.",
-        "homepage": "http://leafo.net/lessphp/"
     },
     {
         "name": "symfony/finder",
@@ -334,70 +146,6 @@
             "assets",
             "compression",
             "minification"
-        ]
-    },
-    {
-        "name": "mheap/silex-assetic",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/mheap/Silex-Assetic.git",
-            "reference": "3294311b34848d1395ab38809756fa03be54fb61"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/3294311b34848d1395ab38809756fa03be54fb61",
-            "reference": "3294311b34848d1395ab38809756fa03be54fb61",
-            "shasum": ""
-        },
-        "require": {
-            "kriswallsmith/assetic": ">=1.0,<2.0",
-            "php": ">=5.3.0",
-            "symfony/finder": ">=2.1,<2.3-dev"
-        },
-        "require-dev": {
-            "phpunit/phpunit": ">=3.7.10.0,<3.8",
-            "silex/silex": ">=1.0,<2.0",
-            "twig/twig": ">=1.2,<2.0"
-        },
-        "suggest": {
-            "twig/twig": "~1.2"
-        },
-        "time": "2013-04-13 08:32:44",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "SilexAssetic": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Sven Eisenschmidt",
-                "email": "sven.eisenschmidt@gmail.com",
-                "homepage": "http://unsicherheitsagent.de/"
-            },
-            {
-                "name": "Michael Heap",
-                "email": "m@michaelheap.com",
-                "homepage": "http://michaelheap.com/"
-            }
-        ],
-        "description": "Assetic extension for Silex",
-        "homepage": "https://github.com/mheap/Silex-Assetic",
-        "keywords": [
-            "assetic",
-            "silex"
         ]
     },
     {
@@ -1850,152 +1598,6 @@
         ]
     },
     {
-        "name": "realityking/pchart",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/realityking/pChart.git",
-            "reference": "46fd01cad5a4d761b599df1ab09361fad55c83b6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/realityking/pChart/zipball/46fd01cad5a4d761b599df1ab09361fad55c83b6",
-            "reference": "46fd01cad5a4d761b599df1ab09361fad55c83b6",
-            "shasum": ""
-        },
-        "time": "2013-03-18 08:23:38",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "classmap": [
-                "src/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-1.0+"
-        ],
-        "authors": [
-            {
-                "name": "Rouven Weßling",
-                "email": "me@rouvenwessling.de",
-                "homepage": "http://www.rouvenwessling.de"
-            }
-        ],
-        "description": "A fork of the popular pChart library."
-    },
-    {
-        "name": "imagine/imagine",
-        "version": "dev-develop",
-        "version_normalized": "dev-develop",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/avalanche123/Imagine.git",
-            "reference": "38c704dfac479c01bcb61341e477fe167bcb7958"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/38c704dfac479c01bcb61341e477fe167bcb7958",
-            "reference": "38c704dfac479c01bcb61341e477fe167bcb7958",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.2"
-        },
-        "require-dev": {
-            "sami/sami": "dev-master"
-        },
-        "suggest": {
-            "ext-gd": "to use the GD implementation",
-            "ext-gmagick": "to use the Gmagick implementation",
-            "ext-imagick": "to use the Imagick implementation"
-        },
-        "time": "2013-04-11 19:58:00",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Imagine": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Bulat Shakirzyanov",
-                "email": "mallluhuct@gmail.com",
-                "homepage": "http://avalanche123.com"
-            }
-        ],
-        "description": "Image processing for PHP 5.3",
-        "homepage": "http://imagine.readthedocs.org/",
-        "keywords": [
-            "drawing",
-            "graphics",
-            "image manipulation",
-            "image processing"
-        ]
-    },
-    {
-        "name": "knplabs/knp-snappy",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/KnpLabs/snappy.git",
-            "reference": "524bbd3b1883204ea3a7f11f31fc38b81f6426fe"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/KnpLabs/snappy/zipball/524bbd3b1883204ea3a7f11f31fc38b81f6426fe",
-            "reference": "524bbd3b1883204ea3a7f11f31fc38b81f6426fe",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "suggest": {
-            "google/wkhtmltopdf-amd64": "Provide wkhtmltopdf-amd64 binary, use version `0.11.0-RC1` as dependency",
-            "google/wkhtmltopdf-i386": "Provide wkhtmltopdf-i386 binary, use version `0.11.0-RC1` as dependency",
-            "symfony/process": "Process Component of Symfony2."
-        },
-        "time": "2013-04-10 07:21:56",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Knp\\Snappy": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "KnpLabs Team",
-                "homepage": "http://knplabs.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://github.com/KnpLabs/snappy/contributors"
-            }
-        ],
-        "description": "PHP5 library allowing thumbnail, snapshot or PDF generation from a url or a html page. Wrapper for wkhtmltopdf/wkhtmltoimage.",
-        "homepage": "http://github.com/KnpLabs/snappy",
-        "keywords": [
-            "knp",
-            "knplabs",
-            "pdf",
-            "snapshot",
-            "thumbnail",
-            "wkhtmltopdf"
-        ]
-    },
-    {
         "name": "symfony/routing",
         "version": "v2.2.1",
         "version_normalized": "2.2.1.0",
@@ -2185,54 +1787,6 @@
         "homepage": "http://silex.sensiolabs.org",
         "keywords": [
             "microframework"
-        ]
-    },
-    {
-        "name": "grom/silex-service-provider",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/GromNaN/SilexServiceProvider.git",
-            "reference": "v1.0.0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/GromNaN/SilexServiceProvider/zipball/v1.0.0",
-            "reference": "v1.0.0",
-            "shasum": ""
-        },
-        "require": {
-            "imagine/imagine": "*",
-            "knplabs/knp-snappy": "dev-master",
-            "silex/silex": ">=1.0.0-dev"
-        },
-        "time": "2012-06-03 01:27:23",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Grom\\Silex": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jérôme Tamarelle",
-                "email": "jerome@tamarelle.net"
-            }
-        ],
-        "description": "Imagine & KnpSnappy integration for Silex.",
-        "homepage": "http://github.com/GromNaN/SilexServiceProvider",
-        "keywords": [
-            "image",
-            "imagine",
-            "pdf",
-            "silex",
-            "snappy"
         ]
     },
     {
@@ -2798,6 +2352,54 @@
         ]
     },
     {
+        "name": "grom/silex-service-provider",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/GromNaN/SilexServiceProvider.git",
+            "reference": "v1.0.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/GromNaN/SilexServiceProvider/zipball/v1.0.0",
+            "reference": "v1.0.0",
+            "shasum": ""
+        },
+        "require": {
+            "imagine/imagine": "*",
+            "knplabs/knp-snappy": "dev-master",
+            "silex/silex": ">=1.0.0-dev"
+        },
+        "time": "2012-06-03 01:27:23",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Grom\\Silex": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jérôme Tamarelle",
+                "email": "jerome@tamarelle.net"
+            }
+        ],
+        "description": "Imagine & KnpSnappy integration for Silex.",
+        "homepage": "http://github.com/GromNaN/SilexServiceProvider",
+        "keywords": [
+            "image",
+            "imagine",
+            "pdf",
+            "silex",
+            "snappy"
+        ]
+    },
+    {
         "name": "franmomu/silex-pagerfanta-provider",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -2850,5 +2452,403 @@
         "support": {
             "source": "https://github.com/jmontoyaa/silex-pagerfanta-provider/tree/master"
         }
+    },
+    {
+        "name": "realityking/pchart",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/realityking/pChart.git",
+            "reference": "46fd01cad5a4d761b599df1ab09361fad55c83b6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/realityking/pChart/zipball/46fd01cad5a4d761b599df1ab09361fad55c83b6",
+            "reference": "46fd01cad5a4d761b599df1ab09361fad55c83b6",
+            "shasum": ""
+        },
+        "time": "2013-03-18 08:23:38",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-1.0+"
+        ],
+        "authors": [
+            {
+                "name": "Rouven Weßling",
+                "email": "me@rouvenwessling.de",
+                "homepage": "http://www.rouvenwessling.de"
+            }
+        ],
+        "description": "A fork of the popular pChart library."
+    },
+    {
+        "name": "imagine/imagine",
+        "version": "dev-develop",
+        "version_normalized": "dev-develop",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/avalanche123/Imagine.git",
+            "reference": "38c704dfac479c01bcb61341e477fe167bcb7958"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/38c704dfac479c01bcb61341e477fe167bcb7958",
+            "reference": "38c704dfac479c01bcb61341e477fe167bcb7958",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "sami/sami": "dev-master"
+        },
+        "suggest": {
+            "ext-gd": "to use the GD implementation",
+            "ext-gmagick": "to use the Gmagick implementation",
+            "ext-imagick": "to use the Imagick implementation"
+        },
+        "time": "2013-04-11 19:58:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Imagine": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Bulat Shakirzyanov",
+                "email": "mallluhuct@gmail.com",
+                "homepage": "http://avalanche123.com"
+            }
+        ],
+        "description": "Image processing for PHP 5.3",
+        "homepage": "http://imagine.readthedocs.org/",
+        "keywords": [
+            "drawing",
+            "graphics",
+            "image manipulation",
+            "image processing"
+        ]
+    },
+    {
+        "name": "knplabs/knp-snappy",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/KnpLabs/snappy.git",
+            "reference": "524bbd3b1883204ea3a7f11f31fc38b81f6426fe"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/KnpLabs/snappy/zipball/524bbd3b1883204ea3a7f11f31fc38b81f6426fe",
+            "reference": "524bbd3b1883204ea3a7f11f31fc38b81f6426fe",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "suggest": {
+            "google/wkhtmltopdf-amd64": "Provide wkhtmltopdf-amd64 binary, use version `0.11.0-RC1` as dependency",
+            "google/wkhtmltopdf-i386": "Provide wkhtmltopdf-i386 binary, use version `0.11.0-RC1` as dependency",
+            "symfony/process": "Process Component of Symfony2."
+        },
+        "time": "2013-04-10 07:21:56",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Knp\\Snappy": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "KnpLabs Team",
+                "homepage": "http://knplabs.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://github.com/KnpLabs/snappy/contributors"
+            }
+        ],
+        "description": "PHP5 library allowing thumbnail, snapshot or PDF generation from a url or a html page. Wrapper for wkhtmltopdf/wkhtmltoimage.",
+        "homepage": "http://github.com/KnpLabs/snappy",
+        "keywords": [
+            "knp",
+            "knplabs",
+            "pdf",
+            "snapshot",
+            "thumbnail",
+            "wkhtmltopdf"
+        ]
+    },
+    {
+        "name": "jmontoyaa/phpqrcode",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/jmontoyaa/phpqrcode.git",
+            "reference": "c50e0fbb2f69ad961a0f7b56b082a6772b36585b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/jmontoyaa/phpqrcode/zipball/c50e0fbb2f69ad961a0f7b56b082a6772b36585b",
+            "reference": "c50e0fbb2f69ad961a0f7b56b082a6772b36585b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=4.3.10"
+        },
+        "time": "2013-04-02 13:13:44",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "files": [
+                "qrlib.php"
+            ]
+        },
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Julio Montoya"
+            }
+        ],
+        "description": "A PHP class to generate QR Code",
+        "homepage": "http://github.com/jmontoyaa/phpqrcode/",
+        "keywords": [
+            "php",
+            "qrcode"
+        ],
+        "support": {
+            "source": "https://github.com/jmontoyaa/phpqrcode/tree/master"
+        }
+    },
+    {
+        "name": "symfony/browser-kit",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/BrowserKit",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/BrowserKit.git",
+            "reference": "08f303dc3591d10ca450b85c22e9268523747ab3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/BrowserKit/zipball/08f303dc3591d10ca450b85c22e9268523747ab3",
+            "reference": "08f303dc3591d10ca450b85c22e9268523747ab3",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "symfony/dom-crawler": ">=2.0,<3.0"
+        },
+        "require-dev": {
+            "symfony/css-selector": ">=2.0,<3.0",
+            "symfony/process": ">=2.0,<3.0"
+        },
+        "suggest": {
+            "symfony/process": "2.2.*"
+        },
+        "time": "2013-04-11 06:50:46",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\BrowserKit\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony BrowserKit Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "natxet/CssMin",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/natxet/CssMin.git",
+            "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/natxet/CssMin/zipball/9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
+            "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0"
+        },
+        "time": "2013-03-15 18:47:32",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "CssMin": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Joe Scylla",
+                "email": "joe.scylla@gmail.com",
+                "homepage": "https://profiles.google.com/joe.scylla"
+            }
+        ],
+        "description": "Minifying CSS",
+        "homepage": "http://code.google.com/p/cssmin/",
+        "keywords": [
+            "css",
+            "minify"
+        ]
+    },
+    {
+        "name": "leafo/lessphp",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/leafo/lessphp.git",
+            "reference": "51aad6ef903bdcb18280ae81fb85016a078232a0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/leafo/lessphp/zipball/51aad6ef903bdcb18280ae81fb85016a078232a0",
+            "reference": "51aad6ef903bdcb18280ae81fb85016a078232a0",
+            "shasum": ""
+        },
+        "time": "2013-04-09 01:25:49",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.3-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "lessc.inc.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT",
+            "GPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "Leaf Corcoran",
+                "email": "leafot@gmail.com",
+                "homepage": "http://leafo.net"
+            }
+        ],
+        "description": "lessphp is a compiler for LESS written in PHP.",
+        "homepage": "http://leafo.net/lessphp/"
+    },
+    {
+        "name": "mheap/silex-assetic",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mheap/Silex-Assetic.git",
+            "reference": "3294311b34848d1395ab38809756fa03be54fb61"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/3294311b34848d1395ab38809756fa03be54fb61",
+            "reference": "3294311b34848d1395ab38809756fa03be54fb61",
+            "shasum": ""
+        },
+        "require": {
+            "kriswallsmith/assetic": ">=1.0,<2.0",
+            "php": ">=5.3.0",
+            "symfony/finder": ">=2.1,<2.3-dev"
+        },
+        "require-dev": {
+            "phpunit/phpunit": ">=3.7.10.0,<3.8",
+            "silex/silex": ">=1.0,<2.0",
+            "twig/twig": ">=1.2,<2.0"
+        },
+        "suggest": {
+            "twig/twig": "~1.2"
+        },
+        "time": "2013-04-13 08:32:44",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "SilexAssetic": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Sven Eisenschmidt",
+                "email": "sven.eisenschmidt@gmail.com",
+                "homepage": "http://unsicherheitsagent.de/"
+            },
+            {
+                "name": "Michael Heap",
+                "email": "m@michaelheap.com",
+                "homepage": "http://michaelheap.com/"
+            }
+        ],
+        "description": "Assetic extension for Silex",
+        "homepage": "https://github.com/mheap/Silex-Assetic",
+        "keywords": [
+            "assetic",
+            "silex"
+        ]
     }
 ]

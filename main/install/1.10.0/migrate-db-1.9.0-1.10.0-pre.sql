@@ -183,4 +183,4 @@ ALTER TABLE usergroup_rel_user ADD INDEX ( user_id );
 ALTER TABLE usergroup_rel_user ADD INDEX ( relation_type );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.f39d0d9' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.f31bfcd' WHERE variable = 'chamilo_database_version';

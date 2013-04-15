@@ -2767,10 +2767,11 @@ CREATE TABLE IF NOT EXISTS usergroup (
 
 DROP TABLE IF EXISTS usergroup_rel_user;
 CREATE TABLE IF NOT EXISTS usergroup_rel_user    (
-    id 			INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     usergroup_id INT NOT NULL,
-    user_id 	INT NOT NULL
-    relation_type INT DEFAULT 0
+    user_id 	INT NOT NULL,
+    relation_type INT DEFAULT 0,
+    PRIMARY KEY (id)
 );
 
 ALTER TABLE usergroup_rel_user ADD INDEX ( usergroup_id );
@@ -3446,4 +3447,4 @@ ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_i
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.f39d0d9' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.f31bfcd' WHERE variable = 'chamilo_database_version';

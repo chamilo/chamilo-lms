@@ -25,8 +25,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
+$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
 
 // Database Table Definitions
 
@@ -39,8 +39,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 }
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script>
+$htmlHeadXtra[] = '<script>
 function add_user_to_session (code, content) {
 
     document.getElementById("user_to_add").value = "";
@@ -80,16 +79,16 @@ $errorMsg   = '';
 $sessions=array();
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
-if($_POST['form_sent']) {
-    $form_sent              = $_POST['form_sent'];    
-    $elements_posted        = $_POST['elements_in_name'];     
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+    $form_sent              = $_POST['form_sent'];
+    $elements_posted        = $_POST['elements_in_name'];
     if (!is_array($elements_posted)) {
         $elements_posted=array();
     }
     if ($form_sent == 1) {
         $usergroup->subscribe_courses_to_usergroup($id, $elements_posted);
         header('Location: usergroups.php');
-        exit;        
+        exit;
     }
 }
 $data               = $usergroup->get($id);
@@ -100,8 +99,8 @@ $course_list        = CourseManager::get_courses_list(0,0,'title');
 $elements_not_in = $elements_in= array();
 
 if (!empty($course_list)) {
-    foreach($course_list as $item) {        
-        if (in_array($item['id'], $course_list_in)) {            
+    foreach($course_list as $item) {
+        if (in_array($item['id'], $course_list_in)) {
             $elements_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
         } else {
             $elements_not_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
@@ -133,8 +132,8 @@ function search($needle,$type) {
                 ' LIMIT 11';*/
         } else {
             $list = CourseManager::get_courses_list(0, 0, 2, 'ASC', -1, $needle);
-        }     
-        $i=0;        
+        }
+        $i=0;
         if ($type=='single') {
             /*
             while ($user = Database :: fetch_array($rs)) {
@@ -149,9 +148,9 @@ function search($needle,$type) {
             $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));*/
         } else {
             $return .= '<select id="elements_not_in" name="elements_not_in_name[]" multiple="multiple" size="15" style="width:360px;">';
-            
-            foreach ($list as $row ) {         
-                if (!in_array($row['id'], array_keys($elements_in))) {       
+
+            foreach ($list as $row ) {
+                if (!in_array($row['id'], array_keys($elements_in))) {
                     $return .= '<option value="'.$row['id'].'">'.$row['title'].' ('.$row['visual_code'].')</option>';
                 }
             }
@@ -166,22 +165,22 @@ $xajax -> processRequests();
 Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';       
+echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
-<?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>'; 
-
+<?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
+/*
 if ($add_type=='multiple') {
     if (is_array($extra_field_list)) {
         if (is_array($new_field_list) && count($new_field_list)>0 ) {
@@ -207,7 +206,7 @@ if ($add_type=='multiple') {
             echo '<br /><br />';
         }
     }
-}
+}*/
 echo Display::input('hidden','id',$id);
 echo Display::input('hidden','form_sent','1');
 echo Display::input('hidden','add_type',null);
@@ -241,16 +240,16 @@ if(!empty($errorMsg)) {
 <tr>
   <td align="center">
   <div id="content_source">
-      <?php           
-      if (!($add_type=='multiple')) {        
+      <?php
+      if (!($add_type=='multiple')) {
         ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
         <?php
-      } else {               
+      } else {
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name',$elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?> 
+        <?php echo Display::select('elements_not_in_name',$elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
       </div>
     <?php
       }
@@ -291,45 +290,7 @@ if(!empty($errorMsg)) {
 </table>
 </form>
 
-<script type="text/javascript">
-<!--
-function moveItem(origin , destination){
-
-    for(var i = 0 ; i<origin.options.length ; i++) {
-        if(origin.options[i].selected) {
-            destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-            origin.options[i]=null;
-            i = i-1;
-        }
-    }
-    destination.selectedIndex = -1;
-    sortOptions(destination.options);
-
-}
-
-function sortOptions(options) {
-
-    newOptions = new Array();
-    for (i = 0 ; i<options.length ; i++)
-        newOptions[i] = options[i];
-
-    newOptions = newOptions.sort(mysort);
-    options.length = 0;
-    for(i = 0 ; i < newOptions.length ; i++)
-        options[i] = newOptions[i];
-
-}
-
-function mysort(a, b){
-    if(a.text.toLowerCase() > b.text.toLowerCase()){
-        return 1;
-    }
-    if(a.text.toLowerCase() < b.text.toLowerCase()){
-        return -1;
-    }
-    return 0;
-}
-
+<script>
 function valide(){
     var options = document.getElementById('elements_in').options;
     for (i = 0 ; i<options.length ; i++)
@@ -347,9 +308,8 @@ function loadUsersInSelect(select){
     else if(window.ActiveXObject) // Internet Explorer
         xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
     else  // XMLHttpRequest non supporté par le navigateur
-    alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
+        alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
-    //xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
     xhr_object.open("POST", "loadUsersInSelect.ajax.php");
 
     xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -377,7 +337,6 @@ function makepost(select){
 
     return ret;
 }
--->
 </script>
 <?php
 Display::display_footer();

@@ -41,7 +41,7 @@ if (!$usergroup->is_group_admin($group_id)) {
 // Create the form
 $form = new FormValidator('group_edit', 'post', '', '');
 $form->addElement('hidden', 'id', $group_id);
-
+$usergroup->setGroupType($usergroup::SOCIAL_CLASS);
 $usergroup->setForm($form, 'edit', $group_data);
 
 // Set default values
@@ -51,6 +51,7 @@ $form->setDefaults($group_data);
 if ($form->validate()) {
     $group = $form->exportValues();
     $group['id'] = $group_id;
+    $group['type'] = $usergroup::SOCIAL_CLASS;
     $usergroup->update($group);
     $tok = Security::get_token();
     header(
@@ -60,20 +61,6 @@ if ($form->validate()) {
     );
     exit();
 }
-
-// Group picture
-$image_path = $usergroup->get_group_picture_path_by_id($group_id, 'web');
-$image_dir = $image_path['dir'];
-$image = $image_path['file'];
-$image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown_group.jpg');
-$image_size = api_getimagesize($image_file);
-
-// get the path,width and height from original picture
-$big_image = $image_dir.'big_'.$image;
-$big_image_size = api_getimagesize($big_image);
-$big_image_width = $big_image_size['width'];
-$big_image_height = $big_image_size['height'];
-$url_big_image = $big_image.'?rnd='.time();
 
 $social_left_content = SocialManager::show_social_menu('group_edit', $group_id);
 $social_right_content = '<div class="span9">';
@@ -87,4 +74,3 @@ $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);
-

@@ -23,12 +23,11 @@ if (api_get_setting('allow_students_to_create_groups_in_social') == 'false' && !
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 $usergroup = new UserGroup();
 $form = new FormValidator('add_group');
-
-$usergroup->setForm($form, 'add');
+$usergroup->setGroupType($usergroup::SOCIAL_CLASS);
+$usergroup->setForm($form, 'add', array());
 
 if ($form->validate()) {
 	$values = $form->exportValues();
-    $values['type'] = $usergroup::SOCIAL_CLASS;
     $groupId = $usergroup->save($values);
 	header('Location: groups.php?id='.$groupId.'&action=show_message&message='.urlencode(get_lang('GroupAdded')));
 	exit();

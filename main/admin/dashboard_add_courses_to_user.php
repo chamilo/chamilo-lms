@@ -116,17 +116,7 @@ function moveItem(origin , destination) {
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
 }
-function sortOptions(options) {
-	var newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++) {
-		newOptions[i] = options[i];
-	}
-	newOptions = newOptions.sort(mysort);
-	options.length = 0;
-	for(i = 0 ; i < newOptions.length ; i++){
-		options[i] = newOptions[i];
-	}
-}
+
 function mysort(a, b) {
 	if (a.text.toLowerCase() > b.text.toLowerCase()) {
 		return 1;
@@ -204,7 +194,7 @@ if ($_configuration['multiple_access_urls']) {
 
 } else {
 	$sql 	= " SELECT c.code, c.title FROM $tbl_course c
-                WHERE  c.code LIKE '$needle' $without_assigned_courses 
+                WHERE  c.code LIKE '$needle' $without_assigned_courses
                 ORDER BY c.title";
 }
 

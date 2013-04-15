@@ -128,7 +128,7 @@ Display::display_header($tool_name);
 $where ='';
 $rows_category_session = array();
 if((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category']) ) {
-	
+
 	$where = 'WHERE session_category_id !='.$Categoryid;
 	$sql = 'SELECT id, name  FROM '.$tbl_session .' WHERE session_category_id ='.$Categoryid.' ORDER BY name';
 	$result=Database::query($sql);
@@ -158,10 +158,10 @@ if(!empty($OkMsg)) {
 	Display::display_confirmation_message($OkMsg); //main API
 }
 
-/* 
- * 
- * The a/b/c Filter is not a priority 
- *  
+/*
+ *
+ * The a/b/c Filter is not a priority
+ *
  * <td width="45%" align="center">
  <?php echo get_lang('FirstLetterCourse'); ?> :
      <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
@@ -179,7 +179,7 @@ if(!empty($OkMsg)) {
 <tr>
 	<td align="left"></td>
 	<td align="left"></td>
-	<td  align="center"> 
+	<td  align="center">
 	<b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
 	<select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
 		<option value="0" ></option>
@@ -248,54 +248,13 @@ if(!empty($OkMsg)) {
 </table>
 
 </form>
-<script type="text/javascript">
-<!--
-function moveItem(origin , destination) {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
-}
-
-function sortOptions(options) {
-	newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++) {
-		newOptions[i] = options[i];
-	}
-
-	newOptions = newOptions.sort(mysort);
-	options.length = 0;
-
-	for(i = 0 ; i < newOptions.length ; i++){
-		options[i] = newOptions[i];
-	}
-}
-
-function mysort(a, b){
-	if(a.text.toLowerCase() > b.text.toLowerCase()){
-		return 1;
-	}
-	if(a.text.toLowerCase() < b.text.toLowerCase()){
-		return -1;
-	}
-	return 0;
-}
-
+<script>
 function valide(){
 	var options = document.getElementById('destination').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;
-
 	document.forms.formulaire.submit();
 }
--->
-
 </script>
 <?php
-/*		FOOTER	*/
 Display::display_footer();

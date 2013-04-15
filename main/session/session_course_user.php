@@ -202,49 +202,9 @@ unset($sessionCourses);
 </table>
 
 </form>
-<script type="text/javascript">
-<!--
-function moveItem(origin , destination){
-
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
+<script>
 
 
-}
-
-function sortOptions(options) {
-
-	newOptions = new Array();
-
-	for (i = 0 ; i<options.length ; i++) {
-		newOptions[i] = options[i];
-	}
-
-	newOptions = newOptions.sort(mysort);
-	options.length = 0;
-
-	for(i = 0 ; i < newOptions.length ; i++){
-		options[i] = newOptions[i];
-	}
-
-}
-
-function mysort(a, b){
-	if(a.text.toLowerCase() > b.text.toLowerCase()){
-		return 1;
-	}
-	if(a.text.toLowerCase() < b.text.toLowerCase()){
-		return -1;
-	}
-	return 0;
-}
 
 function valide(){
 	var options = document.getElementById('destination').options;
@@ -253,8 +213,6 @@ function valide(){
 
 	document.forms.formulaire.submit();
 }
--->
-
 </script>
 <?php
 Display::display_footer();

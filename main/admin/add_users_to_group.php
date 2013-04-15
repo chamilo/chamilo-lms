@@ -42,7 +42,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 //checking for extra field with filter on
 $xajax = new xajax();
 $xajax->registerFunction('search_users');
-function search_users($needle,$type,$relation_type) {    
+function search_users($needle,$type,$relation_type) {
 	global $tbl_user,$tbl_user_rel_access_url, $tbl_group_rel_user,$group_id,$_configuration;
 	$xajax_response = new XajaxResponse();
 	$return = $return_origin = $return_destination = '';
@@ -87,7 +87,7 @@ function search_users($needle,$type,$relation_type) {
 		} else {
 			$return_destination .= '<select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;"></select>';
 		}
-		
+
 		$xajax_response -> addAssign('ajax_destination_list','innerHTML',api_utf8_encode($return_destination));
 
 	} else {
@@ -110,7 +110,7 @@ function search_users($needle,$type,$relation_type) {
 		$needle = Database::escape_string($needle);
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$user_anonymous=api_get_anonymous_id();
-		
+
 
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 		if ($type == 'single') {
@@ -148,7 +148,7 @@ function search_users($needle,$type,$relation_type) {
 		} else {
 			// multiple
 			if (!empty($group_id) && !empty($relation_type)) {
-				$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user 
+				$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 				        WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id $order_clause ";
 				if ($_configuration['multiple_access_urls']) {
 					$access_url_id = api_get_current_access_url_id();
@@ -160,7 +160,7 @@ function search_users($needle,$type,$relation_type) {
 								AND user.user_id<>'$user_anonymous' $without_user_id $order_clause ";
 					}
 				}
-				
+
 				$rs_multiple = Database::query($sql);
 				$return_origin .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
 				while ($user = Database :: fetch_array($rs_multiple)) {
@@ -307,7 +307,7 @@ if ($ajax_search) {
 	if (Database::num_rows($rs_count)) {
 	   $row_count = Database::fetch_row($rs_count);
 	   $row_count = $row_count[0];
-	}	
+	}
 	if ($row_count > 2) $many_users = true;
 
 	// data for origin list
@@ -386,7 +386,7 @@ if ($add_type == 'multiple') {
 </div>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
-<?php echo '<legend>'.$tool_name.' ('.$group_info['name'].')</legend>'; ?>    
+<?php echo '<legend>'.$tool_name.' ('.$group_info['name'].')</legend>'; ?>
 <?php if ($add_type=='multiple') { ?>
 <select name="relation" id="relation" onchange="xajax_search_users(document.getElementById('firstLetterUser').value,'multiple',this.value)">
 <?php } else { ?>
@@ -537,44 +537,6 @@ if(!empty($errorMsg)) {
 </form>
 
 <script>
-<!--
-function moveItem(origin , destination){
-
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
-
-}
-
-function sortOptions(options) {
-
-	newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++)
-		newOptions[i] = options[i];
-
-	newOptions = newOptions.sort(mysort);
-	options.length = 0;
-	for(i = 0 ; i < newOptions.length ; i++)
-		options[i] = newOptions[i];
-
-}
-
-function mysort(a, b){
-	if(a.text.toLowerCase() > b.text.toLowerCase()){
-		return 1;
-	}
-	if(a.text.toLowerCase() < b.text.toLowerCase()){
-		return -1;
-	}
-	return 0;
-}
-
 function valide() {
 
 	var relation_select = document.getElementById('relation');
@@ -631,9 +593,6 @@ function makepost(select){
 	return ret;
 
 }
--->
-
 </script>
 <?php
-/*  FOOTER */
 Display::display_footer();

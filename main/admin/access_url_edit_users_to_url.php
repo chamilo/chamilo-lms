@@ -95,7 +95,7 @@ $message = '';
 if ($_POST['form_sent']) {
 	$form_sent  = $_POST['form_sent'];
 	$UserList   = $_POST['sessionUsersList'];
-    
+
 	if (!is_array($UserList)) {
 		$UserList=array();
 	}
@@ -104,11 +104,11 @@ if ($_POST['form_sent']) {
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
 		} elseif (is_array($UserList)) {
 			$result     = UrlManager::update_urls_rel_user($UserList, $access_url_id);
-            $url_info   = UrlManager::get_url_data_from_id($access_url_id);            
+            $url_info   = UrlManager::get_url_data_from_id($access_url_id);
             if (!empty($result)) {
                 $message .= 'URL: '.$url_info['url'].'<br />';
             }
-                        
+
             if (!empty($result['users_added'])) {
                 $message .=  '<h4>'.get_lang('UsersAdded').':</h4>';
                 $i = 1;
@@ -122,9 +122,9 @@ if ($_POST['form_sent']) {
                 }
                 if (!empty($user_added_list)) {
                     $message .= implode(', ', $user_added_list);
-                }                
+                }
             }
-            
+
             if (!empty($result['users_deleted'])) {
                 $message .= '<br /><h4>'.get_lang('UsersDeleted').': </h4>';
                 $user_deleted_list = array();
@@ -240,8 +240,8 @@ if(!empty($errorMsg)) {
 <tr>
     <td>
     <h3>
-    <?php 
-            $total_users = count($nosessionUsersList) +  count($sessionUsersList); 
+    <?php
+            $total_users = count($nosessionUsersList) +  count($sessionUsersList);
             echo get_lang('TotalAvailableUsers').' '.$total_users;
     ?>
     </h3>
@@ -324,48 +324,9 @@ unset($sessionUsersList);
 		?>
 	</td>
 </tr>
-
-
-
-
 </table>
-
 </form>
-<script type="text/javascript">
-<!--
-function moveItem(origin , destination) {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
-			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;
-			i = i-1;
-		}
-	}
-	destination.selectedIndex = -1;
-	sortOptions(destination.options);
-}
-
-function sortOptions(options) {
-	newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++)
-		newOptions[i] = options[i];
-	newOptions = newOptions.sort(mysort);
-	options.length = 0;
-	for(i = 0 ; i < newOptions.length ; i++)
-		options[i] = newOptions[i];
-
-}
-
-function mysort(a, b) {
-	if(a.text.toLowerCase() > b.text.toLowerCase()){
-		return 1;
-	}
-	if(a.text.toLowerCase() < b.text.toLowerCase()){
-		return -1;
-	}
-	return 0;
-}
-
+<script>
 function valide(){
 	var options = document.getElementById('destination_users').options;
 	for (i = 0 ; i<options.length ; i++)
@@ -419,8 +380,6 @@ function makepost(select){
 	return ret;
 
 }
--->
-
 </script>
 <?php
 Display::display_footer();

@@ -39,8 +39,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 }
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_user_to_session (code, content) {
 
     document.getElementById("user_to_add").value = "";
@@ -81,16 +80,16 @@ $users      =$sessions=array();
 $promotion = new Promotion();
 $id = intval($_GET['id']);
 if($_POST['form_sent']) {
-    $form_sent          = $_POST['form_sent'];    
-    $session_in_promotion_posted       = $_POST['session_in_promotion_name'];     
+    $form_sent          = $_POST['form_sent'];
+    $session_in_promotion_posted       = $_POST['session_in_promotion_name'];
     if (!is_array($session_in_promotion_posted)) {
         $session_in_promotion_posted=array();
     }
     if ($form_sent == 1) {
-        //added a parameter to send emails when registering a user        
+        //added a parameter to send emails when registering a user
         SessionManager::suscribe_sessions_to_promotion($id, $session_in_promotion_posted);
         header('Location: promotions.php');
-        exit;        
+        exit;
     }
 }
 
@@ -102,13 +101,13 @@ $session_not_in_promotion = $session_in_promotion= array();
 
 if (!empty($session_list)) {
     foreach($session_list as $session) {
-        $promotion_id = $session['promotion_id'];    
+        $promotion_id = $session['promotion_id'];
         if (isset($promotion_id) && !empty($promotion_id)) {
-            if ($promotion_id == $id) {                
+            if ($promotion_id == $id) {
                 $session_in_promotion[$session['id']] = $session['name'];
             } else {
                 $session_not_in_promotion[$session['id']] = $session['name'];
-            } 
+            }
         } else {
             $session_not_in_promotion[$session['id']] = $session['name'];
         }
@@ -139,8 +138,8 @@ function search_sessions($needle,$type) {
                 ' LIMIT 11';*/
         } else {
             $session_list = SessionManager::get_sessions_list(array('s.name LIKE' => "$needle%"));
-        }     
-        $i=0;        
+        }
+        $i=0;
         if ($type=='single') {
             /*
             while ($user = Database :: fetch_array($rs)) {
@@ -154,9 +153,9 @@ function search_sessions($needle,$type) {
             }
             $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));*/
         } else {
-            $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';            
-            foreach ($session_list as $row ) {         
-                if (!in_array($row['id'], array_keys($session_in_promotion))) {       
+            $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';
+            foreach ($session_list as $row ) {
+                if (!in_array($row['id'], array_keys($session_in_promotion))) {
                     $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
                 }
             }
@@ -179,7 +178,7 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="promotions.php">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';       
+echo '<a href="promotions.php">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 ?>
 
@@ -245,16 +244,16 @@ if(!empty($errorMsg)) {
 <tr>
   <td align="center">
   <div id="content_source">
-      <?php           
-      if (!($add_type=='multiple')) {        
+      <?php
+      if (!($add_type=='multiple')) {
         ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
         <?php
-      } else {               
+      } else {
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('session_not_in_promotion_name',$session_not_in_promotion, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'session_not_in_promotion','size'=>'15px'),false); ?> 
+        <?php echo Display::select('session_not_in_promotion_name',$session_not_in_promotion, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'session_not_in_promotion','size'=>'15px'),false); ?>
       </div>
     <?php
       }
@@ -295,45 +294,7 @@ if(!empty($errorMsg)) {
 </table>
 </form>
 
-<script type="text/javascript">
-<!--
-function moveItem(origin , destination){
-
-    for(var i = 0 ; i<origin.options.length ; i++) {
-        if(origin.options[i].selected) {
-            destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-            origin.options[i]=null;
-            i = i-1;
-        }
-    }
-    destination.selectedIndex = -1;
-    sortOptions(destination.options);
-
-}
-
-function sortOptions(options) {
-
-    newOptions = new Array();
-    for (i = 0 ; i<options.length ; i++)
-        newOptions[i] = options[i];
-
-    newOptions = newOptions.sort(mysort);
-    options.length = 0;
-    for(i = 0 ; i < newOptions.length ; i++)
-        options[i] = newOptions[i];
-
-}
-
-function mysort(a, b){
-    if(a.text.toLowerCase() > b.text.toLowerCase()){
-        return 1;
-    }
-    if(a.text.toLowerCase() < b.text.toLowerCase()){
-        return -1;
-    }
-    return 0;
-}
-
+<script>
 function valide(){
     var options = document.getElementById('session_in_promotion').options;
     for (i = 0 ; i<options.length ; i++)
@@ -383,7 +344,6 @@ function makepost(select){
     return ret;
 
 }
--->
 </script>
 <?php
 Display::display_footer();

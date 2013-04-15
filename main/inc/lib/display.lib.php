@@ -37,7 +37,7 @@ class Display
         $app['classic_layout'] = true;
 
         if ($app['allowed'] == true) {
-            ob_start(array($app['template'], 'manage_display'));
+           ob_start(array($app['template'], 'manage_display'));
         } else {
             $app->run();
             exit;

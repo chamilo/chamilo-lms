@@ -87,6 +87,18 @@ jQuery.fn.filterByText = function(textbox) {
     });
 };
 
+var textarea = "";
+var max_char = 255;
+
+function maxCharForTextarea(obj) {
+    num_characters = obj.value.length;
+    if (num_characters > max_char){
+        obj.value = textarea;
+    } else {
+        textarea = obj.value;
+    }
+}
+
 /* Makes row highlighting possible */
 $(document).ready( function() {
     //Chosen select
@@ -126,7 +138,6 @@ $(document).ready( function() {
         placement : 'right'
     }
     $('.boot-tooltip').tooltip(tip_options);
-
 });
 </script>
 {% endraw %}

@@ -32,19 +32,20 @@ if (!in_array($sord, array('asc','desc'))) {
 }
 
 if (!in_array($action, array(
-        'get_exercise_results',
-        'get_hotpotatoes_exercise_results',
-        'get_work_user_list',
-        'get_timelines',
-        'get_user_skill_ranking',
-        'get_usergroups_teacher'))
+    'get_exercise_results',
+    'get_hotpotatoes_exercise_results',
+    'get_work_user_list',
+    'get_timelines',
+    'get_user_skill_ranking',
+    'get_usergroups_teacher'
+))
     ) {
 	api_protect_admin_script(true);
 }
 
 //Search features
 
-$ops = array (
+$ops = array(
     'eq' => '=',        //equal
     'ne' => '<>',       //not equal
     'lt' => '<',        //less than
@@ -523,7 +524,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_usergroups':
-        $columns = array('name', 'users', 'courses', 'sessions', 'actions');
+        $columns = array('name', 'users', 'courses', 'sessions', 'group_type', 'actions');
         $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         if (!empty($result)) {
@@ -531,11 +532,19 @@ switch ($action) {
                 $group['sessions']   = count($obj->get_sessions_by_usergroup($group['id']));
                 $group['courses']    = count($obj->get_courses_by_usergroup($group['id']));
                 $group['users']      = count($obj->get_users_by_usergroup($group['id']));
-                $new_result[]        = $group;
+                switch($group['group_type']) {
+                    case '0':
+                        $group['group_type'] = Display::label(get_lang('Class'), 'info');
+                        break;
+                    case '1' :
+                        $group['group_type'] = Display::label(get_lang('Social'), 'success');
+                        break;
+                }
+                $new_result[] = $group;
             }
             $result = $new_result;
         }
-        $columns = array('name', 'users', 'courses','sessions');
+        $columns = array('name', 'users', 'courses','sessions', 'group_type');
         if(!in_array($sidx, $columns)) {
             $sidx = 'name';
         }

@@ -19,19 +19,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
 
 $this_section = SECTION_SOCIAL;
 
-$htmlHeadXtra[] = '<script>
-var textarea = "";
-var num_characters_permited = 255;
-function textarea_maxlength(){
-   num_characters = document.forms[0].description.value.length;
-  if (num_characters > num_characters_permited){
-      document.forms[0].description.value = textarea;
-   }else{
-      textarea = document.forms[0].description.value;
-   }
-}
-</script>';
-
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
 $tool_name = get_lang('GroupEdit');
 
@@ -55,47 +42,7 @@ if (!$usergroup->is_group_admin($group_id)) {
 $form = new FormValidator('group_edit', 'post', '', '');
 $form->addElement('hidden', 'id', $group_id);
 
-// name
-$form->addElement('text', 'name', get_lang('Name'), array('class' => 'span5', 'maxlength' => 120));
-$form->applyFilter('name', 'html_filter');
-$form->applyFilter('name', 'trim');
-$form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
-
-// Description
-$form->addElement(
-    'textarea',
-    'description',
-    get_lang('Description'),
-    array('class' => 'span5', 'cols' => 58, 'onKeyDown' => "textarea_maxlength()", 'onKeyUp' => "textarea_maxlength()")
-);
-$form->applyFilter('description', 'html_filter');
-$form->applyFilter('description', 'trim');
-$form->addRule('name', '', 'maxlength', 255);
-
-// url
-$form->addElement('text', 'url', get_lang('URL'), array('class' => 'span5'));
-$form->applyFilter('url', 'html_filter');
-$form->applyFilter('url', 'trim');
-
-// Picture
-$form->addElement('file', 'picture', get_lang('AddPicture'));
-$allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
-$form->addRule(
-    'picture',
-    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
-    'filetype',
-    $allowed_picture_types
-);
-if (strlen($group_data['picture']) > 0) {
-    $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
-}
-
-//Status
-$form->addElement('select', 'visibility', get_lang('GroupPermissions'), $usergroup->getGroupStatusList(), array());
-
-
-// Submit button
-$form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');
+$usergroup->setForm($form, 'edit', $group_data);
 
 // Set default values
 $form->setDefaults($group_data);
@@ -103,19 +50,6 @@ $form->setDefaults($group_data);
 // Validate form
 if ($form->validate()) {
     $group = $form->exportValues();
-    $picture_element = $form->getElement('picture');
-    $picture = $picture_element->getValue();
-    $picture_uri = $group_data['picture'];
-
-    if ($group['delete_picture']) {
-        $picture_uri = $usergroup->delete_group_picture($group_id);
-    } elseif (!empty($picture['name'])) {
-        $picture_uri = $usergroup->update_group_picture(
-            $group_id,
-            $_FILES['picture']['name'],
-            $_FILES['picture']['tmp_name']
-        );
-    }
     $group['id'] = $group_id;
     $usergroup->update($group);
     $tok = Security::get_token();

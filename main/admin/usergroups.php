@@ -45,10 +45,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'editnote') {
 
 //jqgrid will use this URL to do the selects
 
-$url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('Name'), get_lang('Users'), get_lang('Courses'), get_lang('Sessions'), get_lang('Actions'));
+$columns = array(get_lang('Name'), get_lang('Users'), get_lang('Courses'), get_lang('Sessions'), get_lang('Type'), get_lang('Actions'));
 
 //Column config
 $column_model   = array(
@@ -57,6 +57,7 @@ $column_model   = array(
     array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
     array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
     array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
+    array('name'=>'group_type',    	'index'=>'group_type', 	    'width'=>'15',  'align'=>'left'),
     array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false','formatter'=>'action_formatter'),
 );
 //Autowidth
@@ -98,20 +99,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
 
     // Initiate the object
     $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
-    // Settting the form elements
-    $form->addElement('header', get_lang('Add'));
-    $form->addElement('text', 'name', get_lang('name'), array('size' => '70', 'id' => 'name'));
-    //$form->applyFilter('note_title', 'html_filter');
-    $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
-
-    //$form->addElement('text', 'url', 'URL');
-
-    $form->addElement('checkbox', 'group_type', null, get_lang('SocialGroup'));
-
-    $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
-
-    // Setting the rules
-    $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+    $usergroup->setForm($form, 'add');
 
     // The validation or display
     if ($form->validate()) {
@@ -137,22 +125,16 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
 }// Action handling: Edition
 elseif (isset($_GET['action']) && $_GET['action'] == 'edit' && is_numeric($_GET['id'])) {
     // Initialize the object
-    $form = new FormValidator('career', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
-    // Settting the form elements
-    $form->addElement('header', '', get_lang('Modify'));
-    $form->addElement('hidden', 'id',intval($_GET['id']));
-    $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
-    $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
-    $form->addElement('checkbox', 'group_type', null, get_lang('SocialGroup'));
+    $form = new FormValidator('usergroup', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
+    $defaults = $usergroup->get($_GET['id']);
 
-    $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+    $usergroup->setForm($form, 'edit', $defaults);
+
+    // Setting the form elements
+    $form->addElement('hidden', 'id', intval($_GET['id']));
 
     // Setting the defaults
-    $defaults = $usergroup->get($_GET['id']);
     $form->setDefaults($defaults);
-
-    // Setting the rules
-    $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
     // The validation or display
     if ($form->validate()) {

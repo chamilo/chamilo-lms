@@ -251,7 +251,7 @@ class UserGroup extends Model
             }
         }
 
-        //Addding new relationships
+        //Adding new relationships
         if (!empty($new_items)) {
             foreach ($new_items as $session_id) {
                 $params = array('session_id' => $session_id, 'usergroup_id' => $usergroup_id);
@@ -409,15 +409,48 @@ class UserGroup extends Model
 
     function save($values) {
         $values['updated_on'] = $values['created_on'] = api_get_utc_datetime();
-
         $values['group_type'] = isset($values['group_type']) ? intval($values['group_type']) : self::NORMAL_CLASS;
-        return parent::save($values);
+
+        $groupId = parent::save($values);
+
+        if ($groupId) {
+            $this->add_user_to_group(api_get_user_id(), $groupId, $values['visibility']);
+            $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
+            $this->manageFileUpload($groupId, $picture);
+        }
+        return $groupId;
+    }
+
+    function manageFileUpload($groupId, $picture) {
+        if (!empty($picture['name'])) {
+            return $this->update_group_picture($groupId, $picture['name'], $picture['tmp_name']);
+        }
+        return false;
     }
 
     function update($values) {
         $values['updated_on'] = api_get_utc_datetime();
         $values['group_type'] = isset($values['group_type']) ? intval($values['group_type']) : self::NORMAL_CLASS;
+
+        if (isset($values['id'])) {
+            $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
+            if (!empty($picture)) {
+                $picture = $this->manageFileUpload($values['id'], $picture);
+                if ($picture) {
+                    $values['picture'] = $picture;
+                }
+            }
+
+            if (isset($values['delete_picture'])) {
+                $values['picture'] = null;
+            }
+        }
+
         parent::update($values);
+
+        if (isset($values['delete_picture'])) {
+            $this->delete_group_picture($values['id']);
+        }
     }
 
     /**
@@ -429,9 +462,9 @@ class UserGroup extends Model
      * If an empty name is provided, then old user photos are deleted only, @see UserManager::delete_user_picture() as the prefered way for deletion.
      * @param	string		$source_file	The full system name of the image from which user photos will be created.
      * @return	string/bool	Returns the resulting common file name of created images which usually should be stored in database.
-     * When deletion is recuested returns empty string. In case of internal error or negative validation returns FALSE.
+     * When an image is removed the function returns an empty string. In case of internal error or negative validation it returns FALSE.
      */
-    public  function update_group_picture($group_id, $file = null, $source_file = null) {
+    public function update_group_picture($group_id, $file = null, $source_file = null) {
 
         // Validation 1.
         if (empty($group_id)) {
@@ -446,7 +479,6 @@ class UserGroup extends Model
         $path_info = self::get_group_picture_path_by_id($group_id, 'system', true);
 
         $path = $path_info['dir'];
-        var_dump($path);
 
         // If this directory does not exist - we create it.
         if (!file_exists($path)) {
@@ -511,6 +543,8 @@ class UserGroup extends Model
             $image->getSize()->widen( 700 )
         );*/
 
+        //Usign the Imagine service
+
         $image = $app['imagine']->open($source_file);
         $image->resize(new Imagine\Image\Box(200, 200))->save($path.'big_'.$filename);
 
@@ -547,7 +581,7 @@ class UserGroup extends Model
      * @param	bool	If we want that the function returns the /main/img/unknown.jpg image set it at true
      * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
      */
-    public  function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false) {
+    public function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false) {
 
         switch ($type) {
             case 'system': // Base: absolute system path.
@@ -1153,11 +1187,9 @@ class UserGroup extends Model
         return $return;
     }
 
-
     public function delete_group_picture($group_id) {
         return self::update_group_picture($group_id);
     }
-
 
     public function is_group_admin($group_id, $user_id = 0) {
         if (empty($user_id)) {
@@ -1374,9 +1406,57 @@ class UserGroup extends Model
         return $status;
     }
 
-    public function setForm($form) {
+    public function setForm($form, $type = 'add', $data = array()) {
+        switch ($type) {
+            case 'add':
+                $header = get_lang('Add');
+                break;
+            case 'edit':
+                $header = get_lang('Edit');
+                break;
+        }
 
+        $form->addElement('header', $header);
 
+        //Name
+        $form->addElement('text', 'name', get_lang('name'), array('class'=>'span5', 'maxlength'=>120));
+        $form->applyFilter('name', 'html_filter');
+        $form->applyFilter('name', 'trim');
+
+        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', '', 'maxlength', 255);
+
+        // Description
+        $form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, 'onKeyDown' => "maxCharForTextarea(this);", 'onKeyUp' => "maxCharForTextarea(this);"));
+        $form->applyFilter('description', 'html_filter');
+        $form->applyFilter('description', 'trim');
+
+        $form->addElement('checkbox', 'group_type', null, get_lang('SocialGroup'));
+
+        // url
+        $form->addElement('text', 'url', get_lang('URL'), array('class'=>'span5'));
+        $form->applyFilter('url', 'html_filter');
+        $form->applyFilter('url', 'trim');
+
+        // Picture
+        $allowed_picture_types = $this->getAllowedPictureExtensions();
+        $form->addElement('file', 'picture', get_lang('AddPicture'));
+        $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+        if (isset($data['picture']) && strlen($data['picture']) > 0) {
+            $picture = $this->get_picture_group($data['id'], $data['picture'], 80);
+            $img = '<img src="'.$picture['file'].'" />';
+            $form->addElement('label', null, $img);
+            $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
+
+        }
+        $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $this->getGroupStatusList());
+
+        $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
+
+        $form->addElement('style_submit_button', 'submit', $header, 'class="add"');
     }
 
+    public function getAllowedPictureExtensions() {
+        return $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+    }
 }

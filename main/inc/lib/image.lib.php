@@ -5,6 +5,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  * @package chamilo.include.image
  * @todo move in a DB configuration setting
+ * @deprecated Use the $app['imagine'] service provider
  */
 /**
  * Code

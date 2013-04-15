@@ -86,8 +86,6 @@ $social_left_content = SocialManager::show_social_menu('member_list',$group_id);
 
 $social_right_content = '<h2>'.$group_info['name'].'</h2>';
 
-$social_right_content .= '<div style="width:90%">';
-
 foreach($users as $user) {
     switch ($user['relation_type']) {
         case  GROUP_USER_PERMISSION_ADMIN:
@@ -120,8 +118,8 @@ foreach($users as $user) {
 if (count($new_member_list) > 0) {
     $social_right_content .= Display::return_sortable_grid('list_members', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), null, false, array(true, false, true,true,false,true,true));
 }
-$social_right_content .= '</div>';
 
+$social_right_content = '<div class="span9">'.$social_right_content.'</div>';
 $tpl = new Template(get_lang('Social'));
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);

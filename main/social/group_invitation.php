@@ -20,7 +20,6 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 api_block_anonymous_users();
 
 $xajax = new xajax();
-//$xajax->debugOn();
 $xajax -> registerFunction ('search_users');
 
 // setting the section (for the tabs)
@@ -33,9 +32,8 @@ $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
 
 // Database Table Definitions
-$tbl_group			= Database::get_main_table(TABLE_MAIN_GROUP);
 $tbl_user			= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
+$tbl_group_rel_user	= Database::get_main_table(TABLE_USERGROUP_REL_USER);
 
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToGroup');
@@ -79,7 +77,7 @@ function search_users($needle,$type) {
 		if (!empty($id_session)) {
 		$group_id = Database::escape_string($group_id);
 			// check id_user from session_rel_user table
-			$sql = 'SELECT id_user FROM '.$tbl_group_rel_user.' WHERE group_id ="'.(int)$group_id.'"';
+			$sql = 'SELECT id_user FROM '.$tbl_group_rel_user.' WHERE usergroup_id ="'.(int)$group_id.'"';
 			$res = Database::query($sql);
 			$user_ids = array();
 			if (Database::num_rows($res) > 0) {
@@ -95,38 +93,42 @@ function search_users($needle,$type) {
 		if ($type == 'single') {
 			// search users where username or firstname or lastname begins likes $needle
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					WHERE (username LIKE "'.$needle.'%"
-					OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"'.
-				$order_clause.
+					WHERE ( username LIKE "'.$needle.'%" OR
+					        firstname LIKE "'.$needle.'%" OR
+					        lastname LIKE "'.$needle.'%"
+                          ) AND
+					      user_id<>"'.$user_anonymous.'"'.
+                 $order_clause.
 				' LIMIT 11';
 		} else {
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
 					$order_clause;
 		}
-
-		global $_configuration;
-		if ($_configuration['multiple_access_urls']) {
+		if (api_is_multiple_url_enabled()) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
 				if ($type == 'single') {
-					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+					$sql = 'SELECT user.user_id, username, lastname, firstname
+					FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-					WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
-					OR firstname LIKE "'.$needle.'%"
-					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"'.
+					WHERE access_url_id = '.$access_url_id.'  AND (
+					    username LIKE "'.$needle.'%" OR
+					    firstname LIKE "'.$needle.'%" OR
+					    lastname LIKE "'.$needle.'%")
+					    AND user.user_id <> "'.$user_anonymous.'"'.
 					$order_clause.
 					' LIMIT 11';
 				} else {
-					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+					$sql = 'SELECT user.user_id, username, lastname, firstname
+					FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-					WHERE access_url_id = '.$access_url_id.'
-					AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+					WHERE access_url_id = '.$access_url_id.' AND
+					       '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND
+					       user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
 					$order_clause;
 				}
-
 			}
 		}
 
@@ -161,8 +163,7 @@ function search_users($needle,$type) {
 $xajax -> processRequests();
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_user (code, content) {
 	// document.getElementById("user_to_add").value = "";
 	//document.getElementById("ajax_list_users_single").innerHTML = "";
@@ -199,6 +200,7 @@ $UserList=$SessionList=array();
 $users=$sessions=array();
 
 //Display :: display_header($tool_name, 'Groups');
+$content = null;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 	$form_sent			= $_POST['form_sent'];
@@ -230,7 +232,6 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
 $nosessionUsersList = $sessionUsersList = array();
 $ajax_search = $add_type == 'unique' ? true : false;
-global $_configuration;
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
 if ($ajax_search) {
@@ -240,7 +241,7 @@ if ($ajax_search) {
 				ON (gu.user_id = u.user_id) WHERE gu.group_id = $group_id ".
 			$order_clause;
 
-	if ($_configuration['multiple_access_urls']) {
+	if (api_is_multiple_url_enabled()) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
@@ -254,8 +255,8 @@ if ($ajax_search) {
 				$order_clause";
 		}
 	}
-	$result=Database::query($sql);
-	$Users=Database::store_result($result);
+	$result = Database::query($sql);
+	$Users = Database::store_result($result);
 	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}
@@ -295,34 +296,37 @@ if ($ajax_search) {
 		}
 }
 if ($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_unique = '<a href="'.api_get_self().'?id='.$group_id.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
 	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+	$link_add_type_multiple = '<a href="'.api_get_self().'?id='.$group_id.'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 $social_left_content = SocialManager::show_social_menu('invite_friends',$group_id);
-$social_right_content .=  '<h2>'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h2>';
+$social_right_content =  '<h2>'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h2>';
 
 if (count($nosessionUsersList) == 0) {
-        $friends = SocialManager::get_friends(api_get_user_id());
-        if ($friends == 0) {
-            $social_right_content .=  get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
-        } else {
-            $social_right_content .=   get_lang('YouAlreadyInviteAllYourContacts');
-        }
-        $social_right_content .=   '<div>';
-        $social_right_content .=   '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
-        $social_right_content .=   '</div>';
+    $friends = SocialManager::get_friends(api_get_user_id());
+    if ($friends == 0) {
+        $social_right_content .=  get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
+    } else {
+        $social_right_content .=   get_lang('YouAlreadyInviteAllYourContacts');
+    }
+    $social_right_content .=   '<div>';
+    $social_right_content .=   '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
+    $social_right_content .=   '</div>';
 }
 
+$add_true = null;
+$ajax = null;
 if (!empty($_GET['add'])) $add_true = '&add=true';
 if ($ajax_search) $ajax = 'onsubmit="valide();"';
 
 $form = '<form name="formulaire" method="post" action="'.api_get_self().'?id='.$group_id.$add_true.'" style="margin:0px;" '.$ajax.'>';
 
 if ($add_type=='multiple') {
+    /*
 	if (is_array($extra_field_list)) {
 		if (is_array($new_field_list) && count($new_field_list)>0 ) {
 			$form .= '<h3>'.get_lang('FilterUsers').'</h3>';
@@ -346,7 +350,7 @@ if ($add_type=='multiple') {
 			$form .= '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
 			$form .= '<br /><br />';
 		}
-	}
+	}*/
 }
 
 $form .=  '<input type="hidden" name="form_sent" value="1" />';
@@ -452,11 +456,8 @@ function valide(){
 	document.forms.formulaire.submit();
 }
 
-
 function loadUsersInSelect(select){
-
 	var xhr_object = null;
-
 	if(window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
 	else if(window.ActiveXObject) // Internet Explorer

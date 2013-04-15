@@ -768,10 +768,12 @@ class UserGroup extends Model
      */
     public  function get_group_tags($group_id, $show_tag_links = true) {
         $tag					= Database :: get_main_table(TABLE_MAIN_TAG);
-        $table_group_rel_tag	= Database :: get_main_table(TABLE_MAIN_GROUP_REL_TAG);
+        $table_group_rel_tag	= Database :: get_main_table(TABLE_USERGROUP_REL_TAG);
         $group_id 				= intval($group_id);
 
-        $sql = "SELECT tag FROM $tag t INNER JOIN $table_group_rel_tag gt ON (gt.tag_id= t.id) WHERE gt.group_id = $group_id ";
+        $sql = "SELECT tag
+                FROM $tag t INNER JOIN $table_group_rel_tag gt ON (gt.tag_id= t.id)
+                WHERE gt.usergroup_id = $group_id ";
         $res = Database::query($sql);
         $tags = array();
         if (Database::num_rows($res)>0) {
@@ -799,6 +801,7 @@ class UserGroup extends Model
      * Gets the inner join from users and group table
      *
      * @return array   Database::store_result of the result
+     *
      * @author Julio Montoya
      * */
     public  function get_groups_by_user($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false) {
@@ -992,11 +995,11 @@ class UserGroup extends Model
         if (empty($group_id)){
             return array();
         }
-        $sql="SELECT u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
-			  INNER JOIN $table_group_rel_user gu
-			  ON (gu.user_id = u.user_id)
-			  WHERE g.group_type = ".self::SOCIAL_CLASS." AND gu.usergroup_id= $group_id
-			  ORDER BY relation_type, firstname";
+        $sql="SELECT u.user_id, u.firstname, u.lastname, relation_type
+                FROM $tbl_user u
+			    INNER JOIN $table_group_rel_user gu ON (gu.user_id = u.user_id)
+			    WHERE gu.usergroup_id= $group_id
+			    ORDER BY relation_type, firstname";
 
         $result=Database::query($sql);
         $array = array();

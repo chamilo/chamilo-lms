@@ -131,9 +131,9 @@ if ($number_loop != 0) {
                     '.get_lang('DateSend').' : '.$date.'
                     </div>
                     <div class="buttons">
-                        <button class="save" name="btn_accepted" type="submit" id="btn_accepted_'.$sender_user_id.'" value="'.get_lang('Accept').' "onclick="javascript:register_friend(this)">
+                        <button class="btn btn-primary" name="btn_accepted" type="submit" id="btn_accepted_'.$sender_user_id.'" value="'.get_lang('Accept').' "onclick="javascript:register_friend(this)">
                         '.get_lang('Accept').'</button>
-                        <button class="cancel" name="btn_denied" type="submit" id="btn_deniedst_'.$sender_user_id.' " value="'.get_lang('Deny').' " onclick="javascript:denied_friend(this)" >
+                        <button class="btn btn-danger" name="btn_denied" type="submit" id="btn_deniedst_'.$sender_user_id.' " value="'.get_lang('Deny').' " onclick="javascript:denied_friend(this)" >
                         '.get_lang('Deny').'</button>
                     </div>
                 </div>
@@ -156,19 +156,15 @@ if (count($list_get_invitation_sent) > 0 ) {
         $content	= Security::remove_XSS($invitation['content'], STUDENT, true);
         $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
         $social_right_content .= '
-                        <div class="span2">
-                            <a class="thumbnail" href="profile.php?u='.$sender_user_id.'">
-                                <img src="'.$friends_profile['file'].'"  /></a>
-                            </div>
-                        <div class="span3">
-                            <a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>
-                            <div>
-                            '. $title.' : '.$content.'
-                            </div>
-                            <div>
-                            '. get_lang('DateSend').' : '.$date.'
-                            </div>
-                    </div>
+        <div class="span2">
+            <a class="thumbnail" href="profile.php?u='.$sender_user_id.'">
+            <img src="'.$friends_profile['file'].'"  /></a>
+        </div>
+        <div class="span3">
+            <a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.$user_info['complete_name'].'</a>
+            <div>'. $title.' : '.$content.'</div>
+            <div>'. get_lang('DateSend').' : '.$date.'</div>
+            </div>
         </div>';
     }
 }
@@ -182,13 +178,15 @@ if (count($pending_invitations) > 0) {
 
         $invitation['picture'] = '<a href="groups.php?id='.$invitation['id'].'">'.$img.'</a>';
         $invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.Text::cut($invitation['name'],120,true).'</a>';
-        $invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.Display::return_icon('accept_invitation.png', get_lang('AcceptInvitation')).'&nbsp;&nbsp;'.get_lang('AcceptInvitation').'</a>';
-        $invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.Display::return_icon('denied_invitation.png', get_lang('DenyInvitation')).'&nbsp;&nbsp;'.get_lang('DenyInvitation').'</a>';
+        $invitation['join'] = '<a class="btn btn-primary" href="invitations.php?accept='.$invitation['id'].'">'.get_lang('AcceptInvitation').'</a>';
+        $invitation['deny'] = '<a class="btn btn-danger" href="invitations.php?deny='.$invitation['id'].'">'.get_lang('DenyInvitation').'</a>';
         $invitation['description'] = Text::cut($invitation['description'],220,true);
-        $new_invitation[]=$invitation;
+        $new_invitation[] = $invitation;
     }
-    $social_right_content .= Display::return_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
+    $social_right_content .= Display::return_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,false,false,true,true,true,true));
 }
+
+$social_right_content = Display::div($social_right_content, array('class' => 'span9'));
 
 $tpl = new Template(null);
 $tpl->assign('social_left_content', $social_left_content);

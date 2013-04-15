@@ -160,11 +160,11 @@ $(document).ready(function() {
 	    	url,
 	        {},
 	        	function(responseText, textStatus, XMLHttpRequest) {
-	                        dialog.dialog({
-	                            modal	: true,
-	            				width	: 520,
-	            				height	: 400,
-	                        });
+                    dialog.dialog({
+                        modal	: true,
+                        width	: 520,
+                        height	: 400,
+                    });
 				});
 	            //prevent the browser to follow the link
 	            return false;

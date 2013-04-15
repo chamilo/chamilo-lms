@@ -816,7 +816,12 @@ class UserGroup extends Model
             $where_relation_condition = "AND gu.relation_type = $relation_type ";
         }
 
-        $sql = "SELECT g.picture, g.name, g.description, g.id , gu.relation_type
+        $sql = "SELECT
+                    g.picture,
+                    g.name,
+                    g.description,
+                    g.id ,
+                    gu.relation_type
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
 				ON gu.usergroup_id = g.id
@@ -824,7 +829,7 @@ class UserGroup extends Model
 				      gu.user_id = $user_id $where_relation_condition
                 ORDER BY created_on desc ";
 
-        $result=Database::query($sql);
+        $result = Database::query($sql);
         $array = array();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {

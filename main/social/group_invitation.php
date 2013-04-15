@@ -262,34 +262,53 @@ if ($ajax_search) {
 	}
 } else {
 		$friends = SocialManager::get_friends(api_get_user_id());
+
 		$suggest_friends = false;
         $Users = array();
 		if (!$friends) {
 			$suggest_friends = true;
 		} else {
-			foreach($friends as $friend) {
+			foreach ($friends as $friend) {
 				$group_friend_list = $usergroup->get_groups_by_user($friend['friend_user_id'], 0);
-				//var_dump($group_friend_list);
-				$friend_group_id = '';
-				if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
-					$friend_group_id = $group_id;
-				}
-				//var_dump ($group_friend_list[$group_id]['relation_type']);
-				if ($group_friend_list[$group_id]['relation_type'] == '' ) {
-					$Users[$friend['friend_user_id']]=array('user_id' => $friend['friend_user_id'],  'firstname' =>$friend['firstName'], 'lastname' => $friend['lastName'], 'username' =>$friend['username'],'group_id'=>$friend_group_id );
-				}
+                if (!empty($group_friend_list)) {
+                    $friend_group_id = '';
+                    if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
+                        $friend_group_id = $group_id;
+                    }
+                    //var_dump ($group_friend_list[$group_id]['relation_type']);
+                    if ($group_friend_list[$group_id]['relation_type'] == '' ) {
+                        $Users[$friend['friend_user_id']]= array(
+                            'user_id' => $friend['friend_user_id'],
+                            'firstname' => $friend['firstName'],
+                            'lastname' => $friend['lastName'],
+                            'username' => $friend['username'],
+                            'group_id' => $friend_group_id
+                        );
+                    }
+                } else {
+
+                    $Users[$friend['friend_user_id']]= array(
+                        'user_id' => $friend['friend_user_id'],
+                        'firstname' =>$friend['firstName'],
+                        'lastname' => $friend['lastName'],
+                        'username' =>$friend['username'],
+                        'group_id' => null
+                    );
+                }
 			}
 		}
+
 		if (is_array($Users) && count($Users) > 0 ) {
 			foreach ($Users as $user) {
-				if($user['group_id'] != $group_id)
+				if ($user['group_id'] != $group_id) {
 					$nosessionUsersList[$user['user_id']] = $user ;
+                }
 			}
 		}
 
 		//deleting anonymous users
 		$user_anonymous = api_get_anonymous_id();
-		foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
+		foreach ($nosessionUsersList as $key_user_list =>$value_user_list) {
 			if ($nosessionUsersList[$key_user_list]['user_id']==$user_anonymous) {
 				unset($nosessionUsersList[$key_user_list]);
 			}
@@ -311,7 +330,7 @@ if (count($nosessionUsersList) == 0) {
     if ($friends == 0) {
         $social_right_content .=  get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
     } else {
-        $social_right_content .=   get_lang('YouAlreadyInviteAllYourContacts');
+        $social_right_content .=  get_lang('YouAlreadyInviteAllYourContacts');
     }
     $social_right_content .=   '<div>';
     $social_right_content .=   '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
@@ -445,7 +464,7 @@ if (is_array($members) && count($members)>0) {
 		$member['image'] = '<img src="'.$picture['file'].'"  width="50px" height="50px"  />';
 	}
 	$social_right_content .= '<h3>'.get_lang('UsersAlreadyInvited').'</h3>';
-	$social_right_content .= Display::return_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
+	$social_right_content .= Display::return_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, false, true,true));
 }
 
 $htmlHeadXtra[] = '<script>

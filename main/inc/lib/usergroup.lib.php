@@ -29,6 +29,7 @@ class UserGroup extends Model
 
     const SOCIAL_CLASS = '1';
     const NORMAL_CLASS = '0';
+    public $groupType = 0;
 
     public function __construct()
     {
@@ -409,15 +410,23 @@ class UserGroup extends Model
 
     function save($values) {
         $values['updated_on'] = $values['created_on'] = api_get_utc_datetime();
-        $values['group_type'] = isset($values['group_type']) ? intval($values['group_type']) : self::NORMAL_CLASS;
+        $values['group_type'] = isset($values['group_type']) ? intval($values['group_type']) : $this->getGroupType();
 
         $groupId = parent::save($values);
 
         if ($groupId) {
             $this->add_user_to_group(api_get_user_id(), $groupId, $values['visibility']);
             $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
-            $this->manageFileUpload($groupId, $picture);
+            $picture = $this->manageFileUpload($groupId, $picture);
+            if ($picture) {
+                $params = array(
+                    'id' => $groupId,
+                    'picture' => $picture
+                );
+                $this->update($params);
+            }
         }
+
         return $groupId;
     }
 
@@ -430,7 +439,7 @@ class UserGroup extends Model
 
     function update($values) {
         $values['updated_on'] = api_get_utc_datetime();
-        $values['group_type'] = isset($values['group_type']) ? intval($values['group_type']) : self::NORMAL_CLASS;
+        $values['group_type'] = isset($values['group_type']) ? intval($values['group_type']) : $this->getGroupType();
 
         if (isset($values['id'])) {
             $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
@@ -546,13 +555,20 @@ class UserGroup extends Model
         //Usign the Imagine service
 
         $image = $app['imagine']->open($source_file);
-        $image->resize(new Imagine\Image\Box(200, 200))->save($path.'big_'.$filename);
+
+        $options = array(
+            'quality' => 90,
+        );
+
+        //$image->resize(new Imagine\Image\Box(200, 200))->save($path.'big_'.$filename);
+        $image->resize($image->getSize()->widen(200))->save($path.'big_'.$filename, $options);
+
+        $image = $app['imagine']->open($source_file);
+        $image->resize(new Imagine\Image\Box(85, 85))->save($path.'medium_'.$filename, $options);
 
         $image = $app['imagine']->open($source_file);
         $image->resize(new Imagine\Image\Box(22, 22))->save($path.'small_'.$filename);
 
-        $image = $app['imagine']->open($source_file);
-        $image->resize(new Imagine\Image\Box(85, 85))->save($path.'medium_'.$filename);
 
         /*
         $small  = self::resize_picture($source_file, 22);
@@ -652,9 +668,10 @@ class UserGroup extends Model
      * Get the parent group
      * @param group_id
      * @param relation_type
+     *
      * @return int parent_group_id or false
      **/
-    public  function get_parent_group($group_id, $relation_type=1) {
+    public function get_parent_group($group_id, $relation_type=1) {
         $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
         $group_id=intval($group_id);
         //$parent_group_id=intval($parent_group_id);
@@ -668,7 +685,7 @@ class UserGroup extends Model
         }
     }
 
-    public  function get_subgroups($root, $level) {
+    public function get_subgroups($root, $level) {
         $t_group = Database::get_main_table(TABLE_MAIN_GROUP);
         $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
         $select_part = "SELECT ";
@@ -710,7 +727,7 @@ class UserGroup extends Model
         return $toreturn;
     }
 
-    public  function get_parent_groups($group_id) {
+    public function get_parent_groups($group_id) {
         $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
         $max_level = 10;
         $select_part = "SELECT ";
@@ -778,7 +795,9 @@ class UserGroup extends Model
         return $tags;
     }
 
-    /** Gets the inner join from users and group table
+    /**
+     * Gets the inner join from users and group table
+     *
      * @return array   Database::store_result of the result
      * @author Julio Montoya
      * */
@@ -797,7 +816,10 @@ class UserGroup extends Model
         $sql = "SELECT g.picture, g.name, g.description, g.id , gu.relation_type
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
-				ON gu.usergroup_id = g.id WHERE gu.user_id = $user_id $where_relation_condition ORDER BY created_on desc ";
+				ON gu.usergroup_id = g.id
+				WHERE g.group_type = ".self::SOCIAL_CLASS." AND
+				      gu.user_id = $user_id $where_relation_condition
+                ORDER BY created_on desc ";
 
         $result=Database::query($sql);
         $array = array();
@@ -820,7 +842,7 @@ class UserGroup extends Model
      * @return array  with group content
      * @author Julio Montoya
      * */
-    public  function get_groups_by_popularity($num = 6, $with_image = true) {
+    public function get_groups_by_popularity($num = 6, $with_image = true) {
         $table_group_rel_user	= $this->usergroup_rel_user_table;
         $tbl_group				= $this->table;
         if (empty($num)) {
@@ -829,7 +851,8 @@ class UserGroup extends Model
             $num = intval($num);
         }
         // only show admins and readers
-        $where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
+        $where_relation_condition = " WHERE g.group_type = ".self::SOCIAL_CLASS." AND
+                                      gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
         $sql = "SELECT DISTINCT count(user_id) as count, g.picture, g.name, g.description, g.id
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
@@ -869,7 +892,8 @@ class UserGroup extends Model
         } else {
             $num = intval($num);
         }
-        $where_relation_condition = " WHERE gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
+        $where_relation_condition = " WHERE g.group_type = ".self::SOCIAL_CLASS." AND
+                                      gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
         $sql = "SELECT DISTINCT
                   count(user_id) as count,
                   g.picture,
@@ -907,7 +931,7 @@ class UserGroup extends Model
      * @param array image configuration, i.e array('height'=>'20px', 'size'=> '20px')
      * @return array list of users in a group
      */
-    public  function get_users_by_group($group_id, $with_image = false, $relation_type = array(), $from = null, $limit = null, $image_conf = array('size'=>USER_IMAGE_SIZE_MEDIUM,'height'=>80)) {
+    public function get_users_by_group($group_id, $with_image = false, $relation_type = array(), $from = null, $limit = null, $image_conf = array('size'=>USER_IMAGE_SIZE_MEDIUM,'height'=>80)) {
         $table_group_rel_user	= $this->usergroup_rel_user_table;
         $tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
         $group_id 				= intval($group_id);
@@ -960,7 +984,7 @@ class UserGroup extends Model
      * @param int group id
      * @return array
      */
-    public  function get_all_users_by_group($group_id) {
+    public function get_all_users_by_group($group_id) {
         $table_group_rel_user	= $this->usergroup_rel_user_table;
         $tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
         $group_id 				= intval($group_id);
@@ -969,8 +993,10 @@ class UserGroup extends Model
             return array();
         }
         $sql="SELECT u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
-			INNER JOIN $table_group_rel_user gu
-			ON (gu.user_id = u.user_id) WHERE gu.usergroup_id= $group_id ORDER BY relation_type, firstname";
+			  INNER JOIN $table_group_rel_user gu
+			  ON (gu.user_id = u.user_id)
+			  WHERE g.group_type = ".self::SOCIAL_CLASS." AND gu.usergroup_id= $group_id
+			  ORDER BY relation_type, firstname";
 
         $result=Database::query($sql);
         $array = array();
@@ -1024,7 +1050,7 @@ class UserGroup extends Model
      * @param int group_id
      * @return int 0 if there are not relationship otherwise returns the user group
      * */
-    public  function get_user_group_role($user_id, $group_id) {
+    public function get_user_group_role($user_id, $group_id) {
         $table_group_rel_user= $this->usergroup_rel_user_table;
         $return_value = 0;
         if (!empty($user_id) && !empty($group_id)) {
@@ -1406,6 +1432,14 @@ class UserGroup extends Model
         return $status;
     }
 
+    public function setGroupType($type) {
+        $this->groupType = (int)$type;
+    }
+
+    public function getGroupType() {
+        return $this->groupType;
+    }
+
     public function setForm($form, $type = 'add', $data = array()) {
         switch ($type) {
             case 'add':
@@ -1419,7 +1453,7 @@ class UserGroup extends Model
         $form->addElement('header', $header);
 
         //Name
-        $form->addElement('text', 'name', get_lang('name'), array('class'=>'span5', 'maxlength'=>120));
+        $form->addElement('text', 'name', get_lang('Name'), array('class'=>'span5', 'maxlength'=>255));
         $form->applyFilter('name', 'html_filter');
         $form->applyFilter('name', 'trim');
 
@@ -1431,7 +1465,18 @@ class UserGroup extends Model
         $form->applyFilter('description', 'html_filter');
         $form->applyFilter('description', 'trim');
 
-        $form->addElement('checkbox', 'group_type', null, get_lang('SocialGroup'));
+        if ($this->getGroupType() == self::NORMAL_CLASS) {
+            $form->addElement('checkbox', 'group_type', null, get_lang('SocialGroup'), array('id' => "advanced_parameters"));
+
+        }
+        $display = "none";
+        if ($type == 'edit' && $data['group_type'] == self::SOCIAL_CLASS) {
+            $display = "block";
+        }
+
+
+        $form->addElement('html','<div id="options" style="display:'.$display.'">');
+
 
         // url
         $form->addElement('text', 'url', get_lang('URL'), array('class'=>'span5'));
@@ -1450,6 +1495,8 @@ class UserGroup extends Model
 
         }
         $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $this->getGroupStatusList());
+        $form->addElement('html','</div>');
+
 
         $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
 

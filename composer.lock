@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f296851f48c43d6a56c46c0a9e9f0e85",
+    "hash": "70053a4d6a22184cee89f227ae452e41",
     "packages": [
         {
             "name": "chamilo/chash",
@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chamilo/chash.git",
-                "reference": "38a4ea2c1d448699c780c81f72a434da79547a8f"
+                "reference": "f4c4747cd6c9d016dc9da0c67df92817b054de14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chamilo/chash/zipball/38a4ea2c1d448699c780c81f72a434da79547a8f",
-                "reference": "38a4ea2c1d448699c780c81f72a434da79547a8f",
+                "url": "https://api.github.com/repos/chamilo/chash/zipball/f4c4747cd6c9d016dc9da0c67df92817b054de14",
+                "reference": "f4c4747cd6c9d016dc9da0c67df92817b054de14",
                 "shasum": ""
             },
             "require": {
@@ -31,7 +31,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-04-03 12:15:26"
+            "time": "2013-04-15 07:10:00"
         },
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -150,9 +150,9 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -399,6 +399,58 @@
             "time": "2013-02-18 00:04:08"
         },
         {
+            "name": "franmomu/silex-pagerfanta-provider",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jmontoyaa/silex-pagerfanta-provider.git",
+                "reference": "dcafa4f9788dddfb1d5c5783b9bb8439313c0d54"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jmontoyaa/silex-pagerfanta-provider/zipball/dcafa4f9788dddfb1d5c5783b9bb8439313c0d54",
+                "reference": "dcafa4f9788dddfb1d5c5783b9bb8439313c0d54",
+                "shasum": ""
+            },
+            "require": {
+                "pagerfanta/pagerfanta": "dev-master",
+                "silex/silex": "1.0.*@dev",
+                "symfony/property-access": ">=2.2,<2.4-dev"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "FranMoreno": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fran Moreno",
+                    "email": "franmomu@gmail.com",
+                    "homepage": "http://showmethecode.es"
+                }
+            ],
+            "description": "Silex ServiceProvider for Pagerfanta Library",
+            "homepage": "https://github.com/franmomu/silex-pagerfanta-provider",
+            "keywords": [
+                "pagerfanta",
+                "service provider",
+                "silex"
+            ],
+            "support": {
+                "source": "https://github.com/jmontoyaa/silex-pagerfanta-provider/tree/master"
+            },
+            "time": "2013-04-15 10:12:47"
+        },
+        {
             "name": "gedmo/doctrine-extensions",
             "version": "dev-master",
             "source": {
@@ -631,6 +683,48 @@
             "time": "2013-04-11 19:58:00"
         },
         {
+            "name": "jmontoyaa/phpqrcode",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jmontoyaa/phpqrcode.git",
+                "reference": "c50e0fbb2f69ad961a0f7b56b082a6772b36585b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jmontoyaa/phpqrcode/zipball/c50e0fbb2f69ad961a0f7b56b082a6772b36585b",
+                "reference": "c50e0fbb2f69ad961a0f7b56b082a6772b36585b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=4.3.10"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "qrlib.php"
+                ]
+            },
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Julio Montoya"
+                }
+            ],
+            "description": "A PHP class to generate QR Code",
+            "homepage": "http://github.com/jmontoyaa/phpqrcode/",
+            "keywords": [
+                "php",
+                "qrcode"
+            ],
+            "support": {
+                "source": "https://github.com/jmontoyaa/phpqrcode/tree/master"
+            },
+            "time": "2013-04-02 13:13:44"
+        },
+        {
             "name": "knplabs/knp-menu",
             "version": "dev-master",
             "source": {
@@ -678,7 +772,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "Knplabs",
+                    "name": "KnpLabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -853,59 +947,17 @@
             "time": "2013-01-26 08:22:27"
         },
         {
-            "name": "natxet/CssMin",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/natxet/CssMin.git",
-                "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/natxet/CssMin/zipball/9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
-                "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "CssMin": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Joe Scylla",
-                    "email": "joe.scylla@gmail.com",
-                    "homepage": "https://profiles.google.com/joe.scylla"
-                }
-            ],
-            "description": "Minifying CSS",
-            "homepage": "http://code.google.com/p/cssmin/",
-            "keywords": [
-                "css",
-                "minify"
-            ],
-            "time": "2013-03-15 18:47:32"
-        },
-        {
             "name": "pagerfanta/pagerfanta",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/whiteoctober/Pagerfanta.git",
-                "reference": "797944b0f70f71a24a273752dbf063cba5b11513"
+                "reference": "6d37d04645ab875042e08b54ddacc5c0bd294c44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/797944b0f70f71a24a273752dbf063cba5b11513",
-                "reference": "797944b0f70f71a24a273752dbf063cba5b11513",
+                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/6d37d04645ab875042e08b54ddacc5c0bd294c44",
+                "reference": "6d37d04645ab875042e08b54ddacc5c0bd294c44",
                 "shasum": ""
             },
             "require": {
@@ -952,7 +1004,7 @@
                 "page",
                 "paging"
             ],
-            "time": "2013-04-10 12:34:33"
+            "time": "2013-04-14 14:47:11"
         },
         {
             "name": "pimple/pimple",
@@ -1257,12 +1309,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "04f0be7b0d08fb45591f35b011eb5d3ec507a059"
+                "reference": "74049e36e2e73ca2ec069c9be86d01ba422d44ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/04f0be7b0d08fb45591f35b011eb5d3ec507a059",
-                "reference": "04f0be7b0d08fb45591f35b011eb5d3ec507a059",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/74049e36e2e73ca2ec069c9be86d01ba422d44ea",
+                "reference": "74049e36e2e73ca2ec069c9be86d01ba422d44ea",
                 "shasum": ""
             },
             "require": {
@@ -1298,7 +1350,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-12 15:23:00"
+            "time": "2013-04-13 14:06:01"
         },
         {
             "name": "symfony/dependency-injection",
@@ -2305,12 +2357,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mheap/Silex-Assetic.git",
-                "reference": "a3a2747ca48897ebd1e1def300c58117969ad6aa"
+                "reference": "3294311b34848d1395ab38809756fa03be54fb61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/a3a2747ca48897ebd1e1def300c58117969ad6aa",
-                "reference": "a3a2747ca48897ebd1e1def300c58117969ad6aa",
+                "url": "https://api.github.com/repos/mheap/Silex-Assetic/zipball/3294311b34848d1395ab38809756fa03be54fb61",
+                "reference": "3294311b34848d1395ab38809756fa03be54fb61",
                 "shasum": ""
             },
             "require": {
@@ -2359,11 +2411,53 @@
                 "assetic",
                 "silex"
             ],
-            "time": "2013-04-09 10:37:15"
+            "time": "2013-04-13 08:32:44"
+        },
+        {
+            "name": "natxet/CssMin",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/natxet/CssMin.git",
+                "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/natxet/CssMin/zipball/9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
+                "reference": "9801e2a0de7ae252ca4f2b85542d75a82047a8b4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "CssMin": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joe Scylla",
+                    "email": "joe.scylla@gmail.com",
+                    "homepage": "https://profiles.google.com/joe.scylla"
+                }
+            ],
+            "description": "Minifying CSS",
+            "homepage": "http://code.google.com/p/cssmin/",
+            "keywords": [
+                "css",
+                "minify"
+            ],
+            "time": "2013-03-15 18:47:32"
         },
         {
             "name": "silex/web-profiler",
-            "version": "v1.0.0",
+            "version": "dev-master",
             "target-dir": "Silex/Provider",
             "source": {
                 "type": "git",
@@ -2686,16 +2780,19 @@
         "gedmo/doctrine-extensions": 20,
         "chamilo/chash": 20,
         "pagerfanta/pagerfanta": 20,
+        "franmomu/silex-pagerfanta-provider": 20,
         "knplabs/knp-menu": 20,
         "igorw/config-service-provider": 20,
         "mpdf/mpdf": 20,
         "ezyang/htmlpurifier": 20,
-        "natxet/cssmin": 20,
         "realityking/pchart": 20,
         "imagine/imagine": 20,
         "grom/silex-service-provider": 20,
         "knplabs/knp-snappy": 20,
+        "jmontoyaa/phpqrcode": 20,
         "symfony/browser-kit": 20,
+        "silex/web-profiler": 20,
+        "natxet/cssmin": 20,
         "leafo/lessphp": 20,
         "mheap/silex-assetic": 20
     },

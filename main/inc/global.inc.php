@@ -238,12 +238,11 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 // Validator provider
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-// Implements symfony2 translator
+// Implements Symfony2 translator
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'en',
     'locale_fallback' => 'en'
 ));
-
 
 // Handling po files
 
@@ -361,6 +360,23 @@ $app['twig'] = $app->share(
 // Registering Menu extension
 $app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
 
+//Pagerfanta settings
+use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
+$app->register(new PagerfantaServiceProvider());
+
+$app['pagerfanta.view.options'] = array(
+    'routeName'     => null,
+    'routeParams'   => array(),
+    'pageParameter' => '[page]',
+    'proximity'     => 3,
+    'next_message'  => '&raquo;',
+    'prev_message'  => '&laquo;',
+    'default_view'  => 'twitter_bootstrap'
+);
+
+//$app['pagerfanta.view.router.name']
+//$app['pagerfanta.view.router.params']
+
 //Monolog only available if cache is writable
 if (is_writable($app['cache.path'])) {
 
@@ -431,11 +447,11 @@ if (isset($_configuration['main_database'])) {
 }
 
 define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
-/*
+
 $app->register(new Grom\Silex\ImagineServiceProvider(), array(
     'imagine.factory' => 'Gd',
     //'imagine.base_path' => __DIR__.'/vendor/imagine',
-));*/
+));
 
 $app['is_admin'] = false;
 

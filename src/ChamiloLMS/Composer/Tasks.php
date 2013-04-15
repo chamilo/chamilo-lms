@@ -12,6 +12,9 @@ class Tasks
         chmod('../../app/logs', 0777);*/
         //chmod('console', 0500);
         //exec('php console assetic:dump');
+
+        //Removing .git folder in vendors
+        //system('find ./vendor -name ".git" -exec rm -rf {} \;');
     }
 
     public static function postUpdate()

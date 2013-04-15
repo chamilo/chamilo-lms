@@ -20,9 +20,19 @@
             "main/survey"
         ]
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/jmontoyaa/phpqrcode"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/jmontoyaa/silex-pagerfanta-provider"
+        }
+    ],
     "require": {
         "php": ">=5.3.2",
-        "silex/silex"           : "~1.0@dev",
+        "silex/silex": "1.0.*@dev",
         "symfony/config": "2.3.*@dev",
         "symfony/yaml": "2.1.*@dev",
         "symfony/console"  : "2.3.*@dev",
@@ -33,35 +43,30 @@
         "symfony/property-access": "2.3.*@dev",
         "symfony/validator": "2.3.*@dev",
         "symfony/translation": "2.3.*@dev",
-        "symfony/dependency-injection": "dev-master",
-        "monolog/monolog"       : ">=1.0.0",
+        "symfony/dependency-injection": "2.3.*@dev",
+        "monolog/monolog" : ">=1.0.0",
         "twig/twig": ">=1.8,<2.0-dev",
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
         "gedmo/doctrine-extensions": "2.3.*@dev",
         "chamilo/chash": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
-        "pagerfanta/pagerfanta": "1.0.*@dev",
+        "pagerfanta/pagerfanta": "dev-master",
+        "franmomu/silex-pagerfanta-provider": "dev-master",
         "knplabs/knp-menu": "2.0.*@dev",
         "igorw/config-service-provider": "1.0.*@dev",
         "mpdf/mpdf": "dev-master",
         "ezyang/htmlpurifier": "dev-master",
-        "natxet/CssMin": "dev-master",
         "realityking/pchart": "dev-master",
         "imagine/imagine": "dev-develop",
         "grom/silex-service-provider": "dev-master",
-        "knplabs/knp-snappy": "dev-master"
+        "knplabs/knp-snappy": "dev-master",
+        "jmontoyaa/phpqrcode": "dev-master"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/jmontoyaa/phpqrcode"
-        }
-    ],
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",
         "symfony/web-profiler-bundle": "~2.2",
-        "silex/web-profiler": "~1.0",
+        "silex/web-profiler": "1.0.x-dev",
         "natxet/CssMin": "dev-master",
         "leafo/lessphp": "dev-master",
         "mheap/silex-assetic": "dev-master"

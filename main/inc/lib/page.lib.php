@@ -17,10 +17,11 @@ use Pagerfanta\View\TwitterBootstrapView;
 
 class PageController
 {
-    public $app;
     public $maxPerPage = 2;
+    private $app;
 
-    function __construct(Application $app) {
+    public function __construct(Application $app)
+    {
         $this->app = $app;
     }
 
@@ -159,7 +160,6 @@ class PageController
             array('href' => $myCourseCategoriesURL, 'title' => get_lang('MyCourseCategories')),
             array('href' => $sessionURL, 'title' => get_lang('Sessions')),
             array('href' => $sessionCategoriesURL, 'title' => get_lang('SessionsCategories')),
-
         );
         $this->show_right_block(get_lang('CourseSessionBlock'), $params, 'course_session_block');
     }
@@ -786,22 +786,22 @@ class PageController
         $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
         $pagerfanta->setCurrentPage($page); // 1 by default
 
-        $view = new TwitterBootstrapView();
-        $app = $this->app;
         //{type}/{category}/{filter}/{page}
-        $routeGenerator = function($page) use ($app, $filter) {
+        /*$routeGenerator = function($page) use ($app, $filter) {
             return $app['url_generator']->generate('userportal', array(
                     'filter' => $filter,
                     'type' => 'courses',
                     'page' => $page)
             );
-        };
-
-        $pagination = $view->render($pagerfanta, $routeGenerator, array(
-            'proximity' => 3,
-        ));
-
-        return $html.$pagination;
+        };*/
+        $this->app['pagerfanta.view.router.name'] = 'userportal';
+        $this->app['pagerfanta.view.router.params'] = array(
+            'filter' => $filter,
+            'type' => 'courses',
+            'page' => $page
+        );
+        $this->app['template']->assign('pagination', $pagerfanta);
+        return $html;
 
     }
 
@@ -823,22 +823,13 @@ class PageController
             $pagerfanta = new Pagerfanta($adapter);
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
-
-            $view = new TwitterBootstrapView();
-
-            $app = $this->app;
-            $routeGenerator = function($page) use ($app, $filter) {
-                return $app['url_generator']->generate('userportal', array(
-                        'filter' => $filter,
-                        'type' => 'courses',
-                        'page' => $page)
-                );
-            };
-
-            $pagination = $view->render($pagerfanta, $routeGenerator, array(
-                'proximity' => 3,
-            ));
-            $html .= $pagination;
+            $this->app['pagerfanta.view.router.name'] = 'userportal';
+            $this->app['pagerfanta.view.router.params'] = array(
+                'filter' => $filter,
+                'type' => 'courses',
+                'page' => $page
+            );
+            $this->app['template']->assign('pagination', $pagerfanta);
         }
         return $html;
     }
@@ -873,22 +864,27 @@ class PageController
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
 
+            /*
+            Original pagination construction
             $view = new TwitterBootstrapView();
-
-            $app = $this->app;
-
             $routeGenerator = function($page) use ($app, $filter) {
                 return $app['url_generator']->generate('userportal', array(
-                        'filter' => $filter,
-                        'type' => 'courses',
-                        'page' => $page)
+                    'filter' => $filter,
+                    'type' => 'courses',
+                    'page' => $page)
                 );
             };
-
             $pagination = $view->render($pagerfanta, $routeGenerator, array(
                 'proximity' => 3,
             ));
-            $html .= $pagination;
+            */
+            $this->app['pagerfanta.view.router.name'] = 'userportal';
+            $this->app['pagerfanta.view.router.params'] = array(
+                'filter' => $filter,
+                'type' => 'courses',
+                'page' => $page
+            );
+            $this->app['template']->assign('pagination', $pagerfanta);
         }
         return $html;
     }
@@ -1010,21 +1006,13 @@ class PageController
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
 
-            $view = new TwitterBootstrapView();
-
-            $app = $this->app;
-            $routeGenerator = function($page) use ($app, $filter) {
-                return $app['url_generator']->generate('userportal', array(
-                        'filter' => $filter,
-                        'type' => 'sessioncategories',
-                        'page' => $page
-                    ));
-            };
-
-            $pagination = $view->render($pagerfanta, $routeGenerator, array(
-                'proximity' => 3,
-            ));
-            $sessions_with_category .= $pagination;
+            $this->app['pagerfanta.view.router.name'] = 'userportal';
+            $this->app['pagerfanta.view.router.params'] = array(
+                'filter' => $filter,
+                'type' => 'sessioncategories',
+                'page' => $page
+            );
+            $this->app['template']->assign('pagination', $pagerfanta);
         }
         return $sessions_with_category;
     }
@@ -1178,20 +1166,13 @@ class PageController
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
 
-            $view = new TwitterBootstrapView();
-            $app = $this->app;
-            $routeGenerator = function($page) use ($app, $filter) {
-                return $app['url_generator']->generate('userportal', array(
-                        'filter' => $filter,
-                        'type' => 'sessions',
-                        'page' => $page)
-                );
-            };
-
-            $pagination = $view->render($pagerfanta, $routeGenerator, array(
-                'proximity' => 3,
-            ));
-            $sessions_with_no_category .= $pagination;
+            $this->app['pagerfanta.view.router.name'] = 'userportal';
+            $this->app['pagerfanta.view.router.params'] = array(
+                'filter' => $filter,
+                'type' => 'sessions',
+                'page' => $page
+            );
+            $this->app['template']->assign('pagination', $pagerfanta);
         }
         return $sessions_with_no_category;
     }

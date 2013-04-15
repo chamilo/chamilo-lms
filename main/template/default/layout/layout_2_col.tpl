@@ -88,18 +88,13 @@
 
         {% include "default/layout/page_body.tpl" %}
 
-        {#  Welcome to course block  #}
-        {% if welcome_to_course_block %}
-            <section id="welcome_to_course">
-            {% include "default/layout/welcome_to_course.tpl" %}
-            </section>
-        {% endif %}
-
         {% if content is not null %}
             <section id="main_content">
                 {{ content }}
             </section>
         {% endif %}
+
+        {% include "default/layout/page_post_body.tpl" %}
 
 		{#  Announcements  #}
         {% if announcements_block %}

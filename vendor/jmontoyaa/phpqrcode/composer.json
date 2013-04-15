@@ -1,0 +1,19 @@
+{
+  "name": "jmontoyaa/phpqrcode",
+  "type": "library",
+  "description": "A PHP class to generate QR Code",
+  "keywords": ["php", "qrcode"],
+  "homepage": "http://github.com/jmontoyaa/phpqrcode/",
+  "license": ["LGPL"],
+  "authors": [
+  	{
+  		"name": "Julio Montoya"
+  	}
+  ],
+  "require": {
+  	"php": ">=4.3.10"
+  },
+  "autoload": {
+  	"files": ["qrlib.php"]
+  }
+}

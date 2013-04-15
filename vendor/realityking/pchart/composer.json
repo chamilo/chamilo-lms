@@ -1,0 +1,15 @@
+{
+    "name": "realityking/pchart",
+    "description": "A fork of the popular pChart library.",
+    "license": "GPL-1.0+",
+    "authors": [
+        {
+            "name": "Rouven Weßling",
+            "email": "me@rouvenwessling.de",
+            "homepage": "http://www.rouvenwessling.de"
+        }
+    ],
+    "autoload": {
+    	"classmap": ["src/"]
+    }
+}

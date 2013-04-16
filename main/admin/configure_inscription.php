@@ -13,7 +13,7 @@ require_once '../inc/global.inc.php';
 api_protect_admin_script();
 
 // Load terms & conditions from the current lang
-if (get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') == 'true') {
     $get = array_keys($_GET);
     if (isset($get)) {
         if ($get[0] == 'legal') {
@@ -111,7 +111,7 @@ if (!empty($homep_new)) {
 }
 
 if (!empty($action)) {
-    if ($_POST['formSent']) {
+    if (isset($_POST['formSent']) && $_POST['formSent']) {
         switch ($action) {
             case 'edit_top':
                 // Filter
@@ -167,12 +167,12 @@ echo Display::page_header($tool_name);
 
 // The following security condition has been removed, because it makes no sense here. See Bug #1846.
 //// Forbidden to self-register
-//if (get_setting('allow_registration') == 'false') {
+//if (api_get_setting('allow_registration') == 'false') {
 //    api_not_allowed();
 //}
 
 //api_display_tool_title($tool_name);
-if (get_setting('allow_registration') == 'approval') {
+if (api_get_setting('allow_registration') == 'approval') {
     Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
 }
 //if openid was not found
@@ -181,7 +181,7 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 }
 
 $form = new FormValidator('registration');
-if (get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') == 'true') {
     $display_all_form = !isset($_SESSION['update_term_and_condition']['user_id']);
 } else {
     $display_all_form = true;
@@ -237,12 +237,12 @@ if ($display_all_form) {
     }
 
     //	LANGUAGE
-    if (get_setting('registration', 'language') == 'true') {
+    if (api_get_setting('registration', 'language') == 'true') {
         $form->addElement('select_language', 'language', get_lang('Language'), '', array('disabled' => 'disabled'));
     }
 
     //	STUDENT/TEACHER
-    if (get_setting('allow_registration_as_teacher') != 'false') {
+    if (api_get_setting('allow_registration_as_teacher') != 'false') {
         $form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT, array('disabled' => 'disabled'));
         $form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER, array('disabled' => 'disabled'));
     }
@@ -279,7 +279,7 @@ if ($display_all_form) {
 }
 
 // Terms and conditions
-if (get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') == 'true') {
     $language = api_get_interface_language();
     $language = api_get_language_id($language);
     $term_preview = LegalManager::get_last_condition($language);

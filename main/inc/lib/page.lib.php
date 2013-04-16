@@ -351,20 +351,15 @@ class PageController
     public function return_home_page() {
         // Including the page for the news
         $html = null;
-        $home = api_get_home_path();
+        $home = api_get_path(SYS_PATH).api_get_home_path();
         $home_top_temp = null;
 
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
             $open = @(string) file_get_contents(api_get_path(SYS_PATH).$home.$_GET['include']);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
-            if (!empty($_SESSION['user_language_choice'])) {
-                $user_selected_language = $_SESSION['user_language_choice'];
-            } elseif (!empty($_SESSION['_user']['language'])) {
-                $user_selected_language = $_SESSION['_user']['language'];
-            } else {
-                $user_selected_language = api_get_setting('platformLanguage');
-            }
+            $user_selected_language = api_get_user_language();
+
             if (!file_exists($home.'home_news_'.$user_selected_language.'.html')) {
                 if (file_exists($home.'home_top.html')) {
                     $home_top_temp = file($home.'home_top.html');
@@ -381,7 +376,7 @@ class PageController
                     $home_top_temp = file_get_contents($home.'home_top.html');
                 }
             }
-            //trim($home_top_temp) == ''
+
             if (empty($home_top_temp) && api_is_platform_admin()) {
                 $home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
             }

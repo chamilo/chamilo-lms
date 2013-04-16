@@ -6780,6 +6780,14 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
 function api_get_user_language() {
     $user_language = null;
 
+    if (!empty($_SESSION['user_language_choice'])) {
+        $user_language = $_SESSION['user_language_choice'];
+    } elseif (!empty($_SESSION['_user']['language'])) {
+        $user_language = $_SESSION['_user']['language'];
+    } else {
+        $user_language = api_get_setting('platformLanguage');
+    }
+
     if (!empty($_GET['language'])) {
         $user_language = $_GET['language'];
     }

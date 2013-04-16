@@ -13,7 +13,7 @@
 
 -- xxMAINxx
 
-ALTER TABLE session_rel_course DROP COLUMN course_code;
-ALTER TABLE session_rel_course_rel_user DROP COLUMN course_code;
+-- ALTER TABLE session_rel_course DROP COLUMN course_code;
+-- ALTER TABLE session_rel_course_rel_user DROP COLUMN course_code;
 ALTER TABLE session DROP COLUMN date_start;
 ALTER TABLE session DROP COLUMN date_end;

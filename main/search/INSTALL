@@ -36,4 +36,31 @@ Chamilo 1.8.8 + XAPIAN in Ubuntu 10.10
 8. Restart Apache
 9. Create a course and 2 *new* Learning paths for testing
 10.Edit the LPs created and add/edit the specific fields (i.e. Author, Body part, Technology, Topic)
-11.Go to the 
+11.Go to the
+
+On Ubuntu 12.04
+
+Chamilo 1.9.4 + Xapian in Ubuntu 12.04
+Since php5-xapian bindings are not available due to license inconsistencies, you have to build the php5-xapian package yourself.
+you can follow the instrucions on the xapian.org wiki: http://trac.xapian.org/wiki/FAQ/PHP%20Bindings%20Package
+build packages:
+	sudo apt-get build-dep xapian-bindings
+	sudo apt-get install php5-dev php5-cli devscripts
+	apt-get source xapian-bindings
+	cd xapian-bindings-1.2.*
+	rm -f debian/control debian/*-stamp
+	env PHP_VERSIONS=5 debian/rules maint
+	sed -i 's!include_path=php5$!include_path=$(srcdir)/php5!' php/Makefile.in
+	echo auto-commit >> debian/source/options
+	debuild -e PHP_VERSIONS=5 -us -uc 
+	cd ..
+
+ If you're using PHP 5.4, then subclassing Xapian classes in PHP doesn't currently work properly and the testsuite will fail with
+ a segmentation fault. The wrappers work otherwise, so if that's all you need, you can build the package without running the testsuite
+ by changing the penultimate command above to:
+
+env DEB_BUILD_OPTIONS=nocheck debuild -e PHP_VERSIONS=5 -us -uc 
+
+Then you can install the built package:
+
+sudo dpkg -i php5-xapian_*.deb

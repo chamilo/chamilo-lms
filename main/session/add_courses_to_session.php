@@ -39,13 +39,12 @@ $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 $tool_name= get_lang('SubscribeCoursesToSession');
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
+if (isset($_GET['add_type']) && $_GET['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
-
-$xajax -> processRequests();
+$xajax->processRequests();
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
@@ -66,8 +65,7 @@ function add_course_to_session (code, content) {
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
 }
-function remove_item(origin)
-{
+function remove_item(origin) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			origin.options[i]=null;
@@ -78,11 +76,11 @@ function remove_item(origin)
 </script>';
 
 
-$formSent=0;
-$errorMsg=$firstLetterCourse=$firstLetterSession='';
-$CourseList=$SessionList=array();
-$courses=$sessions=array();
-$noPHP_SELF=true;
+$formSent = 0;
+$errorMsg = $firstLetterCourse=$firstLetterSession='';
+$CourseList = $SessionList=array();
+$courses = $sessions=array();
+$noPHP_SELF = true;
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
 
@@ -138,10 +136,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             CourseManager::remove_course_ranking($course_info['real_id'], $id_session);
 			Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
-
 		}
 	}
-	$nbr_courses=count($CourseList);
+	$nbr_courses = count($CourseList);
 	Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'");
 
 	if (isset($_GET['add'])) {
@@ -156,10 +153,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 // display the dokeos header
 Display::display_header($tool_name);
 
-// display the tool title
-// api_display_tool_title($tool_name);
-
-if($add_type == 'multiple') {
+if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').' ';
 } else {
@@ -201,12 +195,11 @@ if ($ajax_search) {
 				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.course_code=course.code)
 				WHERE access_url_id = $access_url_id
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
-
 		}
 	}
 
-	$result=Database::query($sql);
-	$Courses=Database::store_result($result);
+	$result = Database::query($sql);
+	$Courses = Database::store_result($result);
 
 	foreach($Courses as $course) {
 		$sessionCourses[$course['code']] = $course ;
@@ -233,9 +226,8 @@ if ($ajax_search) {
 				ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 		}
 	}
-
-	$result=Database::query($sql);
-	$Courses=Database::store_result($result);
+	$result = Database::query($sql);
+	$Courses = Database::store_result($result);
 	foreach($Courses as $course) {
 		if ($course['id_session'] == $id_session) {
 			$sessionCourses[$course['code']] = $course ;
@@ -259,7 +251,6 @@ if(!empty($errorMsg)) {
 <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('CourseListInPlatform') ?> :</b></td>
-
   <td width="10%">&nbsp;</td>
   <td align="center" width="45%"><b><?php echo get_lang('CourseListInSession') ?> :</b></td>
 </tr>
@@ -277,29 +268,23 @@ if(!empty($errorMsg)) {
 </td>
 <td>&nbsp;</td></tr>
 <?php } ?>
-
 <tr>
   <td width="45%" align="center">
-
 <?php
 if(!($add_type == 'multiple')){
 	?>
 	<input type="text" id="course_to_add" onkeyup="xajax_search_courses(this.value,'single')" />
 	<div id="ajax_list_courses_single"></div>
 	<?php
-}
-else
-{
+} else {
 	?>
 	<div id="ajax_list_courses_multiple">
 	<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:360px;"> <?php
-	foreach($nosessionCourses as $enreg)
-	{
+	foreach($nosessionCourses as $enreg) {
 		?>
 		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
-		<?php
-	}
-	?></select>
+    <?php } ?>
+    </select>
 	</div>
 	<?php
 }
@@ -322,33 +307,26 @@ unset($nosessionCourses);
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
-	if(isset($_GET['add'])) {
-		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
+	if (isset($_GET['add'])) {
+	    echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
 	} else {
 		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
 	}
 	?>
   </td>
-  <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:360px;">
-
-<?php
-foreach($sessionCourses as $enreg)
-{
-?>
+  <td width="45%" align="center">
+      <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:360px;">
+<?php foreach($sessionCourses as $enreg) { ?>
 	<option value="<?php echo $enreg['code']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
-
-<?php
-}
+<?php }
 unset($sessionCourses);
 ?>
-
-  </select></td>
+  </select>
+  </td>
 </tr>
 </table>
-
 </form>
 <script>
-
 function valide(){
 	var options = document.getElementById('destination').options;
 	for (i = 0 ; i<options.length ; i++)
@@ -358,5 +336,4 @@ function valide(){
 }
 </script>
 <?php
-/*		FOOTER 	*/
 Display::display_footer();

@@ -1,21 +1,9 @@
 # Chamilo configuration
 main/inc/conf
-<<<<<<< HEAD
 app/cache/*
 app/config/*
 app/data/*
 app/logs/*
-
-# Temp directories
-archive/*
-archive/.htaccess
-archive/index.html
-=======
-
-# Temp directories
-archive/*
-!archive/.htaccess
->>>>>>> julio19x
 
 # Courses
 
@@ -44,10 +32,5 @@ searchdb/*
 .idea/cssxfire.xml
 
 *.orig
-<<<<<<< HEAD
 nbproject/*
-
 vendor/.git
-=======
-nbproject/*
->>>>>>> julio19x

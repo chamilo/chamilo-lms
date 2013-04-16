@@ -2,22 +2,22 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram = "Περιγραφή μαθήματος";
-$langThisCourseDescriptionIsEmpty = "Το μάθημα, προς το παρόν, δεν διαθέτει περιγραφή";
-$langEditCourseProgram = "Δημιουργία ή Επεξεργασία της περιγραφής του μαθήματος";
-$QuestionPlan = "Ερώτηση στον επικεφαλή";
-$langInfo2Say = "Πληροφορία προς τους χρήστες";
+$langCourseProgram = "Περιγραφή";
+$langThisCourseDescriptionIsEmpty = "Δεν υπάρχει περιγραφή προς το παρόν";
+$langEditCourseProgram = "Δημιουργία ή επεξεργασία περιγραφής";
+$QuestionPlan = "Βοήθεια";
+$langInfo2Say = "Πληροφορίες προς τους χρήστες";
 $langOuAutreTitre = "Τίτλος";
 $langNewBloc = "Άλλο";
-$langAddCat = "Προσθήκη μιας κατηγορίας";
+$langAddCat = "Προσθήκη κατηγορίας";
 $langAdd = "Προσθήκη";
-$langValid = "Επικύρωση";
-$langBackAndForget = "Επιστροφή και ακύρωση";
-$CourseDescriptionUpdated = "Αυτή η περιγραφή ενημερώθηκε";
-$CourseDescriptionDeleted = "Η περιγραφή έχει διαγραφεί";
-$CourseDescriptionIntro = "Κάντε κλικ στο Ok για να συνεχίσετε.";
-$langSaveDescription = "Αποθήκευση περιγραφής";
+$langValid = "Οκ";
+$langBackAndForget = "Άκυρο";
+$CourseDescriptionUpdated = "Η περιγραφή ανανεώθηκε";
+$CourseDescriptionDeleted = "Η περιγραφή διαγράφηκε";
+$CourseDescriptionIntro = "Για την δημιουργία περιγραφή κάντε κλικ στην κεφαλίδα και συμπληρώστε το πεδίο.<br><br> Πατήστε OK για να συνεχίσετε.";
+$langSaveDescription = "Αποθήκευση Περιγραφής";
 $AddCourseDescription = "Προσθήκη περιγραφής μαθήματος";
-$DescriptionUpdated = "Η περιγραφή ενημερώθηκε";
-$CourseDescriptions = "Περιγραφές μαθημάτων";
+$DescriptionUpdated = "Η περιγραφή ανανεώθηκε";
+$CourseDescriptions = "Περιγραφή μαθήματος";
 ?>

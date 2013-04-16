@@ -4485,7 +4485,7 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
 
 /**
  * Gets the access url info in an array
- * @param id of the access url
+ * @param int id of the access url
  * @return array Array with all the info (url, description, active, created_by, tms) from the access_url table
  * @author Julio Montoya Armas
  */

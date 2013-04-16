@@ -399,7 +399,7 @@ footer .container .row {
 }
 
 .actions .actions-pagination {
-  float:right; 
+  float:right;
   margin-top:2px;
 }
 .actions .actions-pagination * {
@@ -1014,7 +1014,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 
 .message-group-content {
     float: right;
-    width: 90%;
+    width: 93%;
     line-height: 100%;
 }
 
@@ -1412,7 +1412,7 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
 }
 
 .message-group-content {
-    margin: 5px 0px 8px 0px;
+    margin: 0px 0px 8px 0px;
 }
 
 .message-group-date {

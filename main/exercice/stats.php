@@ -240,7 +240,7 @@ $tpl = new Template(get_lang('ReportByQuestion'));
 
 //$actions = array();
 //$actions[]= array(get_lang('Back'), Display::return_icon('back.png', get_lang('Back'), 'exercise_report.php?'.$exercise_id));
-//$tpl->set_actions($actions);
+//$tpl->setActions($actions);
 
 $actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 $actions = Display::div($actions, array('class'=> 'actions'));

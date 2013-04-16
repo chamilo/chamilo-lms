@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chamilo/chash.git",
-                "reference": "f4c4747cd6c9d016dc9da0c67df92817b054de14"
+                "reference": "4d3ad62b395fe7f5ed39fc2eeb0980fb40cbccb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chamilo/chash/zipball/f4c4747cd6c9d016dc9da0c67df92817b054de14",
-                "reference": "f4c4747cd6c9d016dc9da0c67df92817b054de14",
+                "url": "https://api.github.com/repos/chamilo/chash/zipball/4d3ad62b395fe7f5ed39fc2eeb0980fb40cbccb7",
+                "reference": "4d3ad62b395fe7f5ed39fc2eeb0980fb40cbccb7",
                 "shasum": ""
             },
             "require": {
@@ -31,7 +31,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-04-15 07:10:00"
+            "time": "2013-04-16 09:34:42"
         },
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -636,12 +636,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "38c704dfac479c01bcb61341e477fe167bcb7958"
+                "reference": "29325ba55cdd1a20bc8143bc5b5570e2c5c6c441"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/38c704dfac479c01bcb61341e477fe167bcb7958",
-                "reference": "38c704dfac479c01bcb61341e477fe167bcb7958",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/29325ba55cdd1a20bc8143bc5b5570e2c5c6c441",
+                "reference": "29325ba55cdd1a20bc8143bc5b5570e2c5c6c441",
                 "shasum": ""
             },
             "require": {
@@ -680,7 +680,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2013-04-11 19:58:00"
+            "time": "2013-04-15 22:34:20"
         },
         {
             "name": "jmontoyaa/phpqrcode",
@@ -730,12 +730,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenu.git",
-                "reference": "730bc37232f5f813822acf80edfbd89381ea5971"
+                "reference": "5cf5ab4948d8c573f260e2b612bfc9721da1c892"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/730bc37232f5f813822acf80edfbd89381ea5971",
-                "reference": "730bc37232f5f813822acf80edfbd89381ea5971",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/5cf5ab4948d8c573f260e2b612bfc9721da1c892",
+                "reference": "5cf5ab4948d8c573f260e2b612bfc9721da1c892",
                 "shasum": ""
             },
             "require": {
@@ -786,7 +786,7 @@
                 "menu",
                 "tree"
             ],
-            "time": "2012-12-27 13:04:16"
+            "time": "2013-04-15 14:10:52"
         },
         {
             "name": "knplabs/knp-snappy",
@@ -1534,12 +1534,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "4ec63437dda78313f60d05c9ba6441290dfa3de1"
+                "reference": "f9d814a79ac38de448eb27512d78c87b147c68a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/4ec63437dda78313f60d05c9ba6441290dfa3de1",
-                "reference": "4ec63437dda78313f60d05c9ba6441290dfa3de1",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/f9d814a79ac38de448eb27512d78c87b147c68a7",
+                "reference": "f9d814a79ac38de448eb27512d78c87b147c68a7",
                 "shasum": ""
             },
             "require": {
@@ -1584,7 +1584,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-11 06:50:46"
+            "time": "2013-04-15 11:52:45"
         },
         {
             "name": "symfony/http-foundation",

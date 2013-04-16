@@ -10,6 +10,8 @@ use \ChamiloSession as Session;
 
 class Template
 {
+    private $app;
+
     public $style = 'default'; //see the template folder
     public $preview_theme = null;
     public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
@@ -26,14 +28,13 @@ class Template
     public $jquery_ui_theme;
     public $load_plugins = false; /* Loads chamilo plugins */
     public $force_plugin_load = true;
-    public $app;
     public $navigation_array;
 
     /**
-     * @param null $title
-     * @param null $app
+     * @param string $title
+     * @param Application $app
      */
-    function __construct($title = null, $app = null)
+    public function __construct($title = null, $app = null)
     {
         if (empty($app)) {
             global $app;
@@ -50,13 +51,11 @@ class Template
         $show_header = $app['template.show_header'];
         $show_footer = $app['template.show_footer'];
         $show_learnpath = $app['template.show_learnpath'];
-        $hide_global_chat = $app['template.hide_global_chat'];
         $load_plugins = $app['template.load_plugins'];
 
         //Page title
         $this->title = $title;
         $this->show_learnpath = $show_learnpath;
-        $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins = $load_plugins;
 
         // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
@@ -103,11 +102,23 @@ class Template
         }
     }
 
+    /**
+     * Get icon path
+     * @param string $image
+     * @param int $size
+     * @return string
+     */
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
     {
         return Display:: return_icon($image, '', array(), $size, false, true);
     }
 
+    /**
+     * Format date
+     * @param string $timestamp
+     * @param string $format
+     * @return string
+     */
     public static function format_date($timestamp, $format = null)
     {
         return api_format_date($timestamp, $format);
@@ -126,11 +137,13 @@ class Template
         $this->assign('help_content', $help);
     }
 
-    /*
+    /**
      * Use template system to parse the actions menu
      * @todo finish it!
-     * */
-    function set_actions($actions)
+     * @param array $actions
+     *
+     **/
+    public function setActions($actions)
     {
         $action_string = '';
         if (!empty($actions)) {
@@ -144,7 +157,7 @@ class Template
     /**
      * Shortcut to display a 1 col layout (index.php)
      * */
-    function display_one_col_template()
+    public function display_one_col_template()
     {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
@@ -153,7 +166,7 @@ class Template
     /**
      * Shortcut to display a 2 col layout (userportal.php)
      * */
-    function display_two_col_template()
+    public function display_two_col_template()
     {
         $tpl = $this->get_template('layout/layout_2_col.tpl');
         $this->display($tpl);
@@ -162,7 +175,7 @@ class Template
     /**
      * Displays an empty template
      */
-    function display_blank_template()
+    public function display_blank_template()
     {
         $tpl = $this->get_template('layout/blank.tpl');
         $this->display($tpl);
@@ -171,7 +184,7 @@ class Template
     /**
      * Displays an empty template
      */
-    function display_no_layout_template()
+    public function display_no_layout_template()
     {
         $tpl = $this->get_template('layout/no_layout.tpl');
         $this->display($tpl);
@@ -181,7 +194,7 @@ class Template
      * Sets the footer visibility
      * @param bool true if we show the footer
      */
-    function setFooter($status)
+    public function setFooter($status)
     {
         $this->show_footer = $status;
         $this->assign('show_footer', $status);
@@ -191,7 +204,7 @@ class Template
      * Sets the header visibility
      * @param bool true if we show the header
      */
-    function setHeader($status)
+    public function setHeader($status)
     {
         $this->show_header = $status;
         $this->assign('show_header', $status);
@@ -237,7 +250,7 @@ class Template
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 
-    function get_template($name)
+    public function get_template($name)
     {
         return $this->app['template_style'].'/'.$name;
     }
@@ -314,7 +327,7 @@ class Template
 
     /**
      * Set theme, include CSS files  */
-    function set_css_files()
+    private function set_css_files()
     {
         global $disable_js_and_css_files;
         $css = array();
@@ -393,7 +406,7 @@ class Template
         $this->assign('logo', $logo);
     }
 
-    function set_js_files()
+    private function set_js_files()
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
         //JS files
@@ -409,10 +422,9 @@ class Template
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
-            if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
-                //$js_files[] = 'chat/js/chat.js';
+            if ($this->show_learnpath == false && $this->show_footer == true && $this->app['template.hide_global_chat'] == false) {
+                $js_files[] = 'chat/js/chat.js';
             }
-            $js_files[] = 'chat/js/chat.js';
         }
 
         if (api_get_setting('accessibility_font_resize') == 'true') {
@@ -600,12 +612,10 @@ class Template
     }
 
     /**
-     * Set footer parameteres
+     * Set footer parameters
      */
     private function setFooterParameters()
     {
-        global $_configuration;
-
         //Show admin data
         //$this->assign('show_administrator_data', api_get_setting('show_administrator_data'));
 
@@ -683,19 +693,19 @@ class Template
         $this->display($tpl);
     }
 
-    function show_footer_template()
+    public function show_footer_template()
     {
         $tpl = $this->get_template('layout/show_footer.tpl');
         $this->display($tpl);
     }
 
-    function manage_display($content)
+    public function manage_display($content)
     {
         //$this->assign('content', $content);
     }
 
     /* Sets the plugin content in a template variable */
-    function set_plugin_region($plugin_region)
+   private function set_plugin_region($plugin_region)
     {
         if (!empty($plugin_region)) {
             $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);
@@ -1231,7 +1241,12 @@ class Template
         return $return;
     }
 
-    function returnBreadcrumb($interbreadcrumb)
+    /**
+     * Return breadcrumb
+     * @param array $interbreadcrumb
+     * @return string
+     */
+    public function returnBreadcrumb($interbreadcrumb)
     {
         $session_id = api_get_session_id();
         $session_name = api_get_session_name($session_id);

@@ -528,19 +528,6 @@ if ($app['debug'] && isset($_configuration['main_database'])) {
     });
 }
 
-//Default template settings loaded in template.inc.php
-$app['template.show_header'] = true;
-$app['template.show_footer'] = true;
-$app['template.show_learnpath'] = true;
-$app['template.hide_global_chat'] = true;
-$app['template.load_plugins'] = true;
-
-//Default template style
-$app['template_style'] = 'default';
-
-//Default layout
-$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
 //Database constants
 require_once $libPath.'database.constants.inc.php';
 require_once $libPath.'events.lib.inc.php';
@@ -965,6 +952,21 @@ if (empty($default_quota)) {
 }
 
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+
+
+
+//Default template settings loaded in template.inc.php
+$app['template.show_header'] = true;
+$app['template.show_footer'] = true;
+$app['template.show_learnpath'] = false;
+$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+$app['template.load_plugins'] = true;
+
+//Default template style
+$app['template_style'] = 'default';
+
+//Default layout
+$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
 //Controller as services definitions
 

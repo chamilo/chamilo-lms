@@ -5,6 +5,8 @@ for more information: see languages.txt in the lang folder.
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Cet élément est invisible pour les étudiants mais vous avez un accès enseignant.";
 $DeleteAllAttendances = "Supprimer toutes les présences créées";
 $Unsubscribe = "Désinscription";
+$SelectACategory = "Sélectionnez une catégorie";
+$AdvancedEdit = "Édition avancée";
 $SearchXapianModuleNotInstalled = "Le module de recherche Xapian n'est pas installé";
 $Title = "Titre";
 $By = "Par";
@@ -839,6 +841,7 @@ $AssignUsers = "Assigner des utilisateurs";
 $AssignCourses = "Assigner des cours";
 $AssignSessions = "Assigner des sessions";
 $Timezone = "Zones horaires";
+$YouHaveToAddXAsAFriendFirst = "%s doit d'abord être votre ami(e)";
 $Company = "Entreprise";
 $GradebookExcellent = "Excellent";
 $GradebookOutstanding = "Très bon";

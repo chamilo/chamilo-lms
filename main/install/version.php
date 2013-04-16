@@ -5,7 +5,8 @@
  * system to know in which version is the current Chamilo install. This 
  * script should be overwritten with each upgrade of Chamilo. It is not
  * required from any other process of Chamilo than the installation or upgrade.
- * It also helps for automatic packaging of unstable versions
+ * It also helps for automatic packaging of unstable versions.
+ * 
  * @package chamilo.install
  */
 /**

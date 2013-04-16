@@ -54,4 +54,11 @@ $MyTextHere = " هنا نصي";
 $CopiedAsAnnouncement = "إعلان تم نسخه";
 $NewAnnouncement = "إعلان جديد";
 $AddAnnouncement = "أضف كإعلان";
+$UpcomingEvent = "الأحداث المقبلة";
+$RepeatedEvent = "حدث مكرر";
+$RepeatType = "كرر النوع";
+$RepeatDaily = "يوميا";
+$RepeatWeekly = "أسبوعيا";
+$RepeatMonthlyByDate = "شهريا، حسب التاريخ";
+$AllUsersOfThePlatform = "جميع مستخدمي البرنامج";
 ?>

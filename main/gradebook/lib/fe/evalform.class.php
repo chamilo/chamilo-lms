@@ -466,6 +466,7 @@ class EvalForm extends FormValidator
                 }
             }
         }
+<<<<<<< HEAD
 
 		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$all_categories[0]->get_weight().'] '), true, array (
 			'size' => '4',
@@ -473,13 +474,28 @@ class EvalForm extends FormValidator
             'class' => 'span1'
 		));
 
-        /*$this->add_textfield('weight', array(null, null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
-            	'size' => '4',
-			'maxlength' => '5',
+=======
+        
+        $this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$all_categories[0]->get_weight().'] '), true, array (
+            'size' => '4',
+            'maxlength' => '5',
             'class' => 'span1'
+        ));
+        
+>>>>>>> julio19x
+        /*$this->add_textfield('weight', array(null, null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
+            'size' => '4',
+            'maxlength' => '5',
+            'class' => 'span1'
+<<<<<<< HEAD
 		));*/
 
 
+=======
+        ));*/
+        
+        
+>>>>>>> julio19x
 		if ($edit) {
 			if (!$this->evaluation_object->has_results()) {
 				$this->add_textfield('max', get_lang('QualificationNumeric'), true, array (

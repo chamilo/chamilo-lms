@@ -84,5 +84,6 @@ $Collapse = "Contreure";
 $CourseDetails = "Detalls del curs";
 $GroupPendingInvitations = "Invitacions pendents de grup";
 $Compose = "Redacta";
+$EnrollToCourseXSuccessful = "La seva inscripció al curs %s s'ha completat";
 $ThereAreNoCoursesInThisCategory = "No existeixen cursos en la categoria actual";
 ?>

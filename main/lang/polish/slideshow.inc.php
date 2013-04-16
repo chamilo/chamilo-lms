@@ -2,18 +2,22 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$Height = "Height";
-$ResizingComment = "resize the image to the following dimensions (in pixels)";
-$Width = "Width";
-$Resizing = "RESIZE";
-$NoResizingComment = "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size.";
-$ShowThumbnails = "Show Thumbnails";
-$SetSlideshowOptions = "Set Slideshow Options";
-$SlideshowOptions = "Slideshow Options";
-$NoResizing = "NO RESIZING (default)";
-$ExitSlideshow = "Exit Slideshow";
-$SlideShow = "Slideshow";
-$PreviousSlide = "Previous Slide";
-$NextSlide = "Next Slide";
-$ViewSlideshow = "View Slideshow";
+$Height = "Wysokość";
+$ResizingComment = "Zmień rozmiar obrazu do następujących wymiarów (w pikselach)";
+$Width = "Szerokość";
+$Resizing = "Zmień rozmiar";
+$NoResizingComment = "Pokaż wszystkie zdjęcia w oryginalnym rozmiarze. Nie zmieniano rozmiaru. Pasek przewijania pojawi się automatycznie, jeśli obraz jest większy niż rozmiar monitora.";
+$ShowThumbnails = "Pokaż miniaturki";
+$SetSlideshowOptions = "Ustawienia galerii";
+$SlideshowOptions = "Opcje pokazu slajdów";
+$NoResizing = "Bez zmiany rozmiaru";
+$ExitSlideshow = "Wyjdź z pokazu slajdów";
+$SlideShow = "Pokaz slajdów";
+$PreviousSlide = "Poprzedni slajd";
+$NextSlide = "Następny slajd";
+$ViewSlideshow = "Widok pokazu slajdów";
+$FirstSlide = "Pierwszy slajd";
+$LastSlide = "Ostatni slajd";
+$ResizingAuto = "Automatyczna zmiana rozmiaru (domyślne)";
+$ResizingAutoComment = "Pokaz slajdów automatycznie zmieni rozmiar dostosowany do wielkości ekranu. Opcja domyślna.";
 ?>

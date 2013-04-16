@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$MessageEmptyMessageOrSubject = "Podaj temat lub wiadomość";
 $Inbox = "Skrzynka odbiorcza";
 $Messages = "Wiadomości";
 $SendMessage = "Wyślij wiadomość";
@@ -20,12 +21,20 @@ $To = "Do";
 $Date = "Data";
 $InvalidMessageId = "Numer identyfikacyjny wiadomości na którą chcesz odpowiedzieć jest niepoprawny.";
 $ErrorSendingMessage = "Błąd podczas próby wysłania wiadomości.";
-$SureYouWantToDeleteSelectedMessages = "Czy na pewno chcesz skasować zaznaczone wiadomości?";
-$SelectedMessagesDeleted = "Zaznaczone wiadomości zostały skasowane";
+$SureYouWantToDeleteSelectedMessages = "Czy na pewno chcesz usunąć zaznaczone wiadomości?";
+$SelectedMessagesDeleted = "Zaznaczone wiadomości zostały usunięte";
 $EnterTitle = "Wpisz tytuł";
 $TypeYourMessage = "Wpisz tutaj wiadomość";
-$MessageDeleted = "Wiadomość została skasowana";
-$ConfirmDeleteMessage = "Jesteś pewny, że chcesz skasować zaznaczone wiadomości ?";
-$DeleteMessage = "Skasuj wiadomość";
+$MessageDeleted = "Wiadomość została usunięta";
+$ConfirmDeleteMessage = "Czy na pewno chcesz usunąć zaznaczoną wiadomość?";
+$DeleteMessage = "Usuń wiadomość";
 $ReadMessage = "Czytaj wiadomość";
+$SendInviteMessage = "Wyślij wiadomość powitalną";
+$SendMessageInvitation = "Jesteś pewien, że chcesz wysłać te zaproszenia?";
+$MessageTool = "Narzędzia wiadomości";
+$WriteAMessage = "Napisz wiadomość";
+$AlreadyReadMessage = "Wiadomość przeczytana";
+$UnReadMessage = "Wiadomość nieprzeczytana";
+$MessageSent = "Wiadomość wysłana";
+$YouShouldWriteAMessage = "Napisz wiadomość";
 ?>

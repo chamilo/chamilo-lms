@@ -201,7 +201,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 						</h1>
 					</td>
 					<td style="width: 50%;">
-						<img alt="Chamilo logo" src="{COURSE_DIR}images/logo_dokeos.png"></td>
+						<img alt="Chamilo logo" src="{COURSE_DIR}images/logo_chamilo.png"></td>
 					</tr>
 					</tbody>
 					</table>

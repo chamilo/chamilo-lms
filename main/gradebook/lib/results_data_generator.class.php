@@ -73,7 +73,7 @@ class ResultsDataGenerator
 		$table = array();
 		foreach($this->results as $result) {
 			$user = array();
-			$info = api_get_user_info($result->get_user_id());
+			$info = get_user_info_from_id($result->get_user_id());
 			$user['id'] = $result->get_user_id();
 			if ($pdf){
 				$user['username'] = $info['username'];
@@ -87,12 +87,12 @@ class ResultsDataGenerator
 				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);
 			}
             $user['percentage_score'] = intval($scoredisplay->display_score(array($result->get_score(), $this->evaluation->get_max()), SCORE_PERCENT, SCORE_BOTH, true));
-			if ($pdf && $number_decimals == null){
+			if ($pdf && $number_decimals == null){				
 				$user['scoreletter'] = $result->get_score();
-			}
-			if ($scoredisplay->is_custom()) {
-				$user['display'] = $this->get_score_display($result->get_score(), false, $ignore_score_color);
-			}
+			}			
+			if ($scoredisplay->is_custom()) {				
+				$user['display'] = $this->get_score_display($result->get_score(), false, $ignore_score_color);				
+			}			
 			$table[] = $user;
 		}
 
@@ -102,7 +102,7 @@ class ResultsDataGenerator
 			usort($table, array('ResultsDataGenerator', 'sort_by_last_name'));
 		} elseif ($sorting & self :: RDG_SORT_FIRSTNAME) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));
-		} elseif ($sorting & self :: RDG_SORT_SCORE) {
+		} elseif ($sorting & self :: RDG_SORT_SCORE) {            
 			usort($table, array('ResultsDataGenerator', 'sort_by_score'));
 		} elseif ($sorting & self :: RDG_SORT_MASK) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_mask'));
@@ -110,21 +110,28 @@ class ResultsDataGenerator
 		if ($sorting & self :: RDG_SORT_DESC) {
 			$table = array_reverse($table);
 		}
-		$return = array_slice($table, $start, $count);
+		$return = array_slice($table, $start, $count);		
 		return $return;
 
 	}
 
-	private function get_score_display ($score, $realscore, $ignore_score_color) {
+    /**
+     * Re-formats the score to show percentage ("2/4 (50 %)") or letters ("A")
+     * @param float Current absolute score (max score is taken from $this->evaluation->get_max()
+     * @param bool  Whether we want the real score (2/4 (50 %)) or the transformation (A, B, C, etc)
+     * @param bool  Whether we want to ignore the score color
+     * @result string The score as we want to show it
+     */
+    private function get_score_display ($score, $realscore, $ignore_score_color = false) {
 		if ($score != null) {
 			$scoredisplay = ScoreDisplay :: instance();
 			$type = SCORE_CUSTOM;
 			if ($realscore === true) {
-			    $type = SCORE_DIV_PERCENT ;
-			}
+			    $type = SCORE_DIV_PERCENT ; 
+			}			
 			return $scoredisplay->display_score(array($score, $this->evaluation->get_max()), $type, SCORE_BOTH, $ignore_score_color);
         }
-        return '';
+        return '';		
 	}
 
 	// Sort functions - used internally

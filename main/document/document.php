@@ -1268,6 +1268,7 @@ $table_footer = '';
 $total_size = 0;
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
+<<<<<<< HEAD
     if (api_get_group_id() == 0 || (api_is_allowed_to_edit() || GroupManager::is_subscribed(
         api_get_user_id(),
         api_get_group_id()
@@ -1275,6 +1276,9 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         api_get_user_id()
     ))
     ) {
+=======
+    if (api_get_group_id() == 0 || ( api_is_allowed_to_edit() || GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()))) {
+>>>>>>> julio19x
         // Create a sortable table with our data
         $sortable_data = array();
 

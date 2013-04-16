@@ -117,6 +117,12 @@ $AllowUserViewUserList = "Permet a l'usuari veure la llista de cursos";
 $AllowUserViewUserListActivate = "Activeu per permetre a l'usuari veure la llista d'usuaris";
 $AllowUserViewUserListDeactivate = "Desactiva permetre a l'usuari veure la llista d'usuaris";
 $DoNotDisplayAnyAdvance = "No mostris cap avenç";
+$RedirectToTheExerciseList = "Redirigeix a la llista d'exercicis";
+$RedirectToExercise = "Redirigeix a un exercici seleccionat";
+$ConfigExercise = "Configura l'eina Exercicis";
+$CourseSettingsRegisterDirectLink = "Si el seu curs és públic o obert, podeu usar l'enllaç directe de sota per convidar nous usuaris, de manera que estiguin enviats directament en aquest curs en finalitzar el formulari de registre al portal. Si voleu, podeu afegir el paràmetre e=1 a aquest enllaç, reemplaçant \"1\" per l'ID de l'exercici, per enviar els usuaris directament a un exercici o examen. L'identificador de l'exercici es pot obtenir a la URL de l'exercici quan li doni clic per entrar-hi.
+% s";
+$DirectLink = "Enllaç directe";
 $NewHomeworkEmailAlert = "Avisa als estudiants amb un correu electrònic quan s'hagi creat una tasca nova";
 $NewHomeworkEmailAlertEnable = "Activa l'avís de la creació d'una tasca nova";
 $NewHomeworkEmailAlertDisable = "Desactiva l'avís de la creació d'una tasca nova";

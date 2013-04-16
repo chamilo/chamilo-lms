@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$UsersRegisteredInAnyGroup = "المستخدمين المسجلين في أي مجموعة";
+$ShowHotCoursesComment = "الدروس المهمة ـ الساخنة - ستوضع في الصفحة الرئيسية";
+$ShowHotCoursesTitle = "اعرض الدروس المهمة ـ الساخنة ـ";
+$MailTemplateRegistrationTitle = "مستخدم جديد على
+((اسم الموقع))";
 $AdminBy = " ادارة من قبل";
 $AdministrationTools = " ادارة";
 $State = " حالة النظام";
@@ -708,6 +713,41 @@ $FieldTypeSelect = "تحديد المنسدلة";
 $FieldTypeSelectMultiple = "متعددة اختيار المنسدلة";
 $FieldAdded = "أضيف الحقل بنجاح";
 $GradebookScoreDisplayColoring = "عتبات التلوين";
+$TabsGradebookEnableColoring = "مكِّن الحد الأدنى للعلامات";
+$GradebookScoreDisplayCustom = "الإشارة الى مستويات الكفاءة";
+$TabsGradebookEnableCustom = "مكَّن الإشارة إلى مستوى الكفاءة";
+$GradebookScoreDisplayColorSplit = "الحد الأدنى";
+$GradebookScoreDisplayColorSplitComment = "الحد الأدنى للعلامة ـ من مائة ـ والذى أدناه تصبح العلامة باللون الأحمر";
+$GradebookScoreDisplayUpperLimit = "اعرض الحد الأعلى للعلامة";
+$TabsGradebookEnableUpperLimit = "مكَّن عرض الحد الأعلى للعلامة";
+$AddUserFields = "أضف حقل صفحةبروفايل";
+$FieldPossibleValues = "القيم المحتملة";
+$FieldPossibleValuesComment = "القيم المحتملة";
+$FieldTypeDate = "التاريخ";
 $FieldTypeDatetime = "التاريخ و الوقت";
+$AllowCourseThemeTitle = "اسمح لموضوعات الدروس";
+$DisplayMiniMonthCalendarTitle = "اعرض الرزنامة الشهرية الصغيرة في أداة جدول الأعمال ـ الأجندة ـ";
+$DisplayMiniMonthCalendarComment = "هذا الإعداد يمكَّن أو يعطَّل الرزنامة الشهرية الصغيرة التي تظهر في العمود الأيسر في أداة جدول الأعمال/ الأجندة";
+$DisplayUpcomingEventsTitle = "اعرض الأحداث المقبلة في أداة جدول الأعمال/ الأجندة";
+$DisplayUpcomingEventsComment = "هذا الإعداد يمكِّن أو يعطل الأحداث المقبلة والتي تظهر في العمود الأيسر في أداة جدول الأعمال/ الأجندة الخاصة بالدرس";
+$NumberOfUpcomingEventsTitle = "عددالأحداث المقبلة والتي يجب أن تُعرَض";
+$NumberOfUpcomingEventsComment = "عدد الأحداث المقبلة والتي يجب أن تعرض في جدول الأعمال/ الأجندة. هذا يتطلب أن يفعَّل الحدث المقبل ـ أنظر الإعداد أعلاه ـ";
+$ShowClosedCoursesTitle = "إعرض الدروس المغلقة في صفحة تسجيل الدخول و صفحة بوابة البدء";
+$LDAPSearchTermTitle = "ابحث عن المصطلح";
+$NoUserAdded = "لم يضاف أي مستخدم";
+$SelectCourseToImportUsersTo = "اختر الدرس الذي ترغب في تسجيل المستخدمين فيه والذين ستختارهم لاحقا";
+$LDAPFilledTutorFieldValueTitle = "قيمة تعريف المدرس أو المدرب";
+$IsNotWritable = "غير قابل للتحرير";
+$FieldMovedDown = "تم تحريك الحقل إلى الأسفل بنجاح";
+$CannotMoveField = "يصعب تحريك الحقل";
+$FieldMovedUp = "تم تحريك الحقل إلى الأعلى بنجاح";
+$FieldShown = "الحقل مرئي للمستخدم الآن";
+$CannotShowField = "غير قادر على جعل الحقل مرئيا";
+$FieldHidden = "الحقل مرئي للمستخدم الآن";
+$CannotHideField = "غير قادر على إخفاء الحقل";
+$FieldMadeChangeable = "الحقل قابل للتغيير من قبل المستخدم: المستخدم قادر على الإضافة إلى أو تعديل الحقل الآن";
+$CannotMakeFieldChangeable = "لايمكن جعل الحقل قابلا للتغيير";
+$CannotMakeFieldUnchangeable = "لايمكن جعل الحقل قابلا للتغيير";
+$FieldDeleted = "تم حذف الحقل";
 $CannotDeleteField = "لا يستطيع حذف الحقل";
 ?>

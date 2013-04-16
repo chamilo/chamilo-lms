@@ -15,7 +15,7 @@ $langEvents = "Wydarzenia";
 $langAnnouncements = "Ogłoszenia";
 $langDocuments = "Dokumenty";
 $langTests = "Testy";
-$langLearnpaths = "Learning-paths (ścieżki szkoleniowe)";
+$langLearnpaths = "Ścieżki szkoleniowe (Kursy)";
 $langCopyCourse = "Kopiuj kurs";
 $langSelectItemsToCopy = "Wybierz elementy do skopiowania";
 $langCopyFinished = "Kopiowanie zakończone";
@@ -48,4 +48,6 @@ $DocumentsWillBeAddedToo = "Dokumenty zostaną dodane";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Jeśli chcesz wyeksportować ścieżki nauczania zawierające test, upewnij się, że odpowiednie testy zostały włączone do eksportu. Należy je wybrać z listy testów.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Archiwa katalogu wykorzystywane przez to narzędzie, nie posiadają prawa zapisu. Skontaktuj się z administratorem platformy.";
 $DestinationCourse = "Kurs docelowy";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Jeśli ścieżki kształcenia mają mieć włączone pliki audio, należy je wybrać z dokumentów";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Nie zapomnij, wybrać plików multimedialnych, jeśli będą potrzebne";
 ?>

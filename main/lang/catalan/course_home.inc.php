@@ -29,6 +29,7 @@ $SessionIdentifier = "Identificador de la sesión";
 $SessionName = "Nom de la sessió";
 $SessionCategory = "Categoria de la sessió";
 $SessionData = "Dades de la sessió";
+$TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise = "La configuració per el desplegament automàtic d'Exercicis està activada. Els estudiants seran redirigits a l'exercici seleccionat per que tal que es mostri automàticament.";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "La configuració per al desplegament automàtic de lliçons està activada. Quan els estudiants entrin al curs, seran redirigits a la lliçó seleccionada perquè es desplegui automàticament.";
 $ToolSearch = "Cerca";
 ?>

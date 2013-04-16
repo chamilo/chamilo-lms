@@ -41,6 +41,8 @@ function hide_icon_edit(element_html)  {
 
 </script>';
 
+$show_message = null;
+$actions = null;
 /*
   MAIN CODE
  */
@@ -154,7 +156,7 @@ if (!isset($_GET['del_msg'])) {
     $num_msg = intval($_POST['total']);
     for ($i = 0; $i < $num_msg; $i++) {
         if ($_POST[$i]) {
-            //the user_id was necesarry to delete a message??
+            //the user_id was necessary to delete a message??
             $show_message .= MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
         }
     }

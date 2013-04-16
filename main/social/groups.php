@@ -220,7 +220,7 @@ if ($group_id != 0 ) {
 	$social_right_content .=  '<div id="social-group-details">';
 
     //Group's title
-    $social_right_content .=  Display::tag('h3', Security::remove_XSS($group_info['name'], STUDENT, true));
+    $social_right_content .=  Display::tag('h4', Security::remove_XSS($group_info['name'], STUDENT, true));
 
     //Privacy
     if (!$is_group_member) {
@@ -353,7 +353,7 @@ if ($group_id != 0 ) {
 				$result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 				$item_0  = Display::div($result['picture'], array('class'=>'box_description_group_image'));
 				$members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
-				$item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
+				$item_1  = Display::div(Display::tag('h4', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 
 				$item_2 = '';
 				$item_3 = '';
@@ -391,7 +391,7 @@ if ($group_id != 0 ) {
 
 			$item_0 = Display::div($result['picture'], array('class'=>'box_description_group_image'));
 			$members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
-			$item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
+			$item_1  = Display::div(Display::tag('h4', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 
 
 			if ($result['description'] != '') {
@@ -437,7 +437,7 @@ if ($group_id != 0 ) {
 
 	            $item_0 = Display::div($result['picture'], array('class'=>'box_description_group_image'));
 			    $members = Display::span($count_users_group, array('class'=>'box_description_group_member'));
-			    $item_1  = Display::div(Display::tag('h3', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
+			    $item_1  = Display::div(Display::tag('h4', $url_open.$name.$url_close).$members, array('class'=>'box_description_group_title'));
 
 				if ($result['description'] != '') {
 					$item_3 = '<div class="box_description_group_content" >'.Text::cut($result['description'],100,true).'</div>';

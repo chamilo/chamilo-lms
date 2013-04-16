@@ -146,7 +146,11 @@ class PageController
         }
     }
 
-    function getSectionCourseBlock() {
+    /**
+     * Get the section course section
+     */
+    public function getSectionCourseBlock()
+    {
         $app = $this->app;
         $courseURL = $app['url_generator']->generate('userportal', array('type' => 'courses'));
         $sessionURL = $app['url_generator']->generate('userportal', array('type' => 'sessions'));
@@ -171,7 +175,8 @@ class PageController
      * @return string HTML <div> with the most popular courses
      * @assert () != ''
      */
-    public function return_hot_courses() {
+    public function return_hot_courses()
+    {
         return CourseManager::return_hot_courses();
     }
 
@@ -181,7 +186,8 @@ class PageController
      * @return string HTML block
      * @assert () != ''
      */
-    public function return_help() {
+    public function return_help()
+    {
         $home = api_get_home_path();
         $user_selected_language = api_get_interface_language();
         $sys_path = api_get_path(SYS_PATH);
@@ -786,14 +792,6 @@ class PageController
         $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
         $pagerfanta->setCurrentPage($page); // 1 by default
 
-        //{type}/{category}/{filter}/{page}
-        /*$routeGenerator = function($page) use ($app, $filter) {
-            return $app['url_generator']->generate('userportal', array(
-                    'filter' => $filter,
-                    'type' => 'courses',
-                    'page' => $page)
-            );
-        };*/
         $this->app['pagerfanta.view.router.name'] = 'userportal';
         $this->app['pagerfanta.view.router.params'] = array(
             'filter' => $filter,
@@ -878,6 +876,7 @@ class PageController
                 'proximity' => 3,
             ));
             */
+            //Pagination using the pagerfanta silex service provider
             $this->app['pagerfanta.view.router.name'] = 'userportal';
             $this->app['pagerfanta.view.router.params'] = array(
                 'filter' => $filter,
@@ -999,10 +998,9 @@ class PageController
                 }
             }
 
+            //Pagination
             $adapter = new FixedAdapter($nbResults, array());
-
             $pagerfanta = new Pagerfanta($adapter);
-
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
 

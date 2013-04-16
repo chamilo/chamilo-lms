@@ -199,6 +199,105 @@ if (defined('SYSTEM_INSTALLATION')) {
                     VALUES ('$id', '0', '".get_lang('No')."', '2')";
             Database::query($sql);
 
+
+            //Moving social group to class
+            $output->writeln('Fixing social groups');
+
+            $sql = "SELECT * FROM $dbNameForm.groups";
+            $result = Database::query($sql);
+            $oldGroups = array();
+            if (Database::num_rows($result)) {
+                while ($group = Database::fetch_array($result, 'ASSOC')) {
+
+                    $group['name'] = Database::escape_string($group['name']);
+                    $group['description'] = Database::escape_string($group['description']);
+                    $group['picture'] = Database::escape_string($group['picture_uri']);
+                    $group['url'] = Database::escape_string($group['url']);
+                    $group['visibility'] = Database::escape_string($group['visibility']);
+                    $group['updated_on'] = Database::escape_string($group['updated_on']);
+                    $group['created_on'] = Database::escape_string($group['created_on']);
+
+                    $sql = "INSERT INTO $dbNameForm.usergroup (name, group_type, description, picture, url, visibility, updated_on, created_on)
+                    VALUES ('{$group['name']}', '1', '{$group['description']}', '{$group['picture_uri']}', '{$group['url']}', '{$group['visibility']}', '{$group['updated_on']}', '{$group['created_on']}')";
+                    Database::query($sql);
+                    $id = Database::get_last_insert_id();
+                    $oldGroups[$group['id']] = $id;
+                }
+            }
+
+            if (!empty($oldGroups)) {
+                $output->writeln('Moving group files');
+                foreach ($oldGroups as $oldId => $newId) {
+                    $path = GroupPortalManager::get_group_picture_path_by_id($oldId, 'system');
+                    if (!empty($path)) {
+                        var_dump($path['dir']);
+                        $newPath = str_replace("groups/$oldId/", "groups/$newId/", $path['dir']);
+                        $command = "mv {$path['dir']} $newPath ";
+                        system($command);
+                        $output->writeln("Moving files: $command");
+                    }
+                }
+                $sql = "SELECT * FROM $dbNameForm.group_rel_user";
+                $result = Database::query($sql);
+
+                if (Database::num_rows($result)) {
+                    while ($data = Database::fetch_array($result, 'ASSOC')) {
+                        if (isset($oldGroups[$data['group_id']])) {
+                            $data['group_id'] = $oldGroups[$data['group_id']];
+                            $sql = "INSERT INTO $dbNameForm.usergroup_rel_user (usergroup_id, user_id, relation_type)
+                            VALUES ('{$data['group_id']}', '{$data['user_id']}', '{$data['relation_type']}')";
+                            Database::query($sql);
+                        }
+                    }
+                }
+
+                $sql = "SELECT * FROM $dbNameForm.group_rel_group";
+                $result = Database::query($sql);
+
+                if (Database::num_rows($result)) {
+                    while ($data = Database::fetch_array($result, 'ASSOC')) {
+                        if (isset($oldGroups[$data['group_id']]) && isset($oldGroups[$data['subgroup_id']])) {
+                            $data['group_id'] = $oldGroups[$data['group_id']];
+                            $data['subgroup_id'] = $oldGroups[$data['subgroup_id']];
+                            $sql = "INSERT INTO $dbNameForm.usergroup_rel_usergroup (group_id, subgroup_id, relation_type)
+                            VALUES ('{$data['group_id']}', '{$data['subgroup_id']}', '{$data['relation_type']}')";
+                            Database::query($sql);
+                        }
+                    }
+                }
+
+                $sql = "SELECT * FROM $dbNameForm.announcement_rel_group";
+                $result = Database::query($sql);
+
+                if (Database::num_rows($result)) {
+                    while ($data = Database::fetch_array($result, 'ASSOC')) {
+                        if (isset($oldGroups[$data['group_id']])) {
+                            //Deleting relation
+                            $sql = "DELETE FROM announcement_rel_group WHERE id = {$data['id']}";
+                            Database::query($sql);
+
+                            //Add new relation
+                            $data['group_id'] = $oldGroups[$data['group_id']];
+                            $sql = "INSERT INTO $dbNameForm.announcement_rel_group(group_id, announcement_id)
+                            VALUES ('{$data['group_id']}', '{$data['announcement_id']}')";
+                            Database::query($sql);
+                        }
+                    }
+                }
+
+                $sql = "SELECT * FROM $dbNameForm.group_rel_tag";
+                $result = Database::query($sql);
+                if (Database::num_rows($result)) {
+                    while ($data = Database::fetch_array($result, 'ASSOC')) {
+                        if (isset($oldGroups[$data['group_id']])) {
+                            $data['group_id'] = $oldGroups[$data['group_id']];
+                            $sql = "INSERT INTO $dbNameForm.usergroup_rel_tag (tag_id, usergroup_id)
+                            VALUES ('{$data['tag_id']}', '{$data['group_id']}')";
+                            Database::query($sql);
+                        }
+                    }
+                }
+            }
         }
     }
 }

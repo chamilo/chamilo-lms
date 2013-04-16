@@ -106,7 +106,7 @@ class UpgradeCommand extends CommonCommand
             $currentVersion = $_configuration['system_version'];
         } else {
             $output->writeln("<comment>Please provide a version greater than </comment><info>".$_configuration['system_version']."</info> <comment>your selected version: </comment><info>$version</info>");
-            $output->writeln("<comment>You can also check your installation health's with </comment><info>chamilo:status");
+            $output->writeln("<comment>You can also check your installation health with </comment><info>chamilo:status");
             exit;
         }
 

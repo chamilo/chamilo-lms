@@ -301,8 +301,9 @@ define('TABLE_THEMATIC_PLAN', 'thematic_plan');
 define('TABLE_THEMATIC_ADVANCE','thematic_advance');
 
 //User groups
-/*
+//Needed for migration
 define('TABLE_MAIN_GROUP',              'groups');
+/*
 define('TABLE_MAIN_USER_REL_GROUP',     'group_rel_user');
 define('TABLE_MAIN_GROUP_REL_TAG',      'group_rel_tag');
 define('TABLE_MAIN_GROUP_REL_GROUP',    'group_rel_group');

@@ -647,7 +647,7 @@ class UserGroup extends Model
      * @return true or false
      **/
     public  function set_parent_group($group_id, $parent_group_id, $relation_type = 1){
-        $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+        $table = Database :: get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $group_id = intval($group_id);
         $parent_group_id = intval($parent_group_id);
         if ($parent_group_id == 0) {
@@ -656,9 +656,9 @@ class UserGroup extends Model
             $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
             $res = Database::query($sql);
             if (Database::num_rows($res)==0) {
-                $sql = "INSERT INTO $table  SET group_id = $parent_group_id, subgroup_id = $group_id, relation_type = $relation_type";
+                $sql = "INSERT INTO $table SET group_id = $parent_group_id, subgroup_id = $group_id, relation_type = $relation_type";
             } else {
-                $sql = "UPDATE $table SET group_id = $parent_group_id, relation_type = $relation_type  WHERE subgroup_id = $group_id";
+                $sql = "UPDATE $table SET group_id = $parent_group_id, relation_type = $relation_type WHERE subgroup_id = $group_id";
             }
         }
         $res = Database::query($sql);
@@ -671,10 +671,10 @@ class UserGroup extends Model
      *
      * @return int parent_group_id or false
      **/
-    public function get_parent_group($group_id, $relation_type=1) {
-        $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
-        $group_id=intval($group_id);
-        //$parent_group_id=intval($parent_group_id);
+    public function get_parent_group($group_id, $relation_type = 1) {
+        $table = Database :: get_main_table(TABLE_USERGROUP_REL_USERGROUP);
+        $group_id = intval($group_id);
+
         $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
         $res = Database::query($sql);
         if (Database::num_rows($res)==0) {
@@ -686,8 +686,8 @@ class UserGroup extends Model
     }
 
     public function get_subgroups($root, $level) {
-        $t_group = Database::get_main_table(TABLE_MAIN_GROUP);
-        $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+        $t_group = Database::get_main_table(TABLE_USERGROUP);
+        $t_rel_group = Database :: get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $select_part = "SELECT ";
         $cond_part='';
         for ($i=1; $i <= $level; $i++) {
@@ -699,7 +699,7 @@ class UserGroup extends Model
                 $select_part .="g$i.id as id_$i, g$i.name name_$i, ";
             }
             if ($i == 1) {
-                $cond_part .= "FROM $t_group g1 JOIN $t_rel_group rg0 on g1.id = rg0.subgroup_id and rg0.group_id = $root ";
+                $cond_part .= "FROM $t_group g1 JOIN $t_rel_group rg0 on g1.id = rg0.subgroup_id and rg0.usergroup_id = $root ";
             } else {
                 $cond_part .= "LEFT JOIN $t_rel_group rg$rg_number on g$rg_number.id = rg$rg_number.group_id ";
                 $cond_part .= "LEFT JOIN $t_group g$g_number on rg$rg_number.subgroup_id = g$g_number.id ";
@@ -728,7 +728,7 @@ class UserGroup extends Model
     }
 
     public function get_parent_groups($group_id) {
-        $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+        $t_rel_group = Database :: get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $max_level = 10;
         $select_part = "SELECT ";
         $cond_part='';

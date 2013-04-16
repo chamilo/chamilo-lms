@@ -178,9 +178,20 @@ CREATE TABLE IF NOT EXISTS usergroup_rel_tag( id int NOT NULL AUTO_INCREMENT, ta
 ALTER TABLE usergroup_rel_tag ADD INDEX ( usergroup_id );
 ALTER TABLE usergroup_rel_tag ADD INDEX ( tag_id );
 
+ALTER TABLE usergroup_rel_user ADD relation_type int NOT NULL default 0;
+
 ALTER TABLE usergroup_rel_user ADD INDEX ( usergroup_id );
 ALTER TABLE usergroup_rel_user ADD INDEX ( user_id );
 ALTER TABLE usergroup_rel_user ADD INDEX ( relation_type );
 
+CREATE TABLE IF NOT EXISTS usergroup_rel_usergroup (id int NOT NULL AUTO_INCREMENT, group_id int NOT NULL, subgroup_id int NOT NULL, relation_type int NOT NULL, PRIMARY KEY (id));
+
+ALTER TABLE usergroup_rel_usergroup ADD INDEX ( group_id );
+ALTER TABLE usergroup_rel_usergroup ADD INDEX ( subgroup_id );
+ALTER TABLE usergroup_rel_usergroup ADD INDEX ( relation_type );
+
+ALTER TABLE announcement_rel_group DROP PRIMARY KEY;
+ALTER TABLE announcement_rel_group ADD COLUMN id INT unsigned NOT NULL auto_increment PRIMARY KEY;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.f31bfcd' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.862202a' WHERE variable = 'chamilo_database_version';

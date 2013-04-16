@@ -2687,15 +2687,16 @@ CREATE TABLE IF NOT EXISTS group_rel_group (
 	relation_type int NOT NULL,
 	PRIMARY KEY (id)
 );
+
 ALTER TABLE group_rel_group ADD INDEX ( group_id );
 ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
 ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
 DROP TABLE IF EXISTS announcement_rel_group;
 CREATE TABLE IF NOT EXISTS announcement_rel_group (
-	group_id int NOT NULL,
-	announcement_id int NOT NULL,
-	PRIMARY KEY (group_id, announcement_id)
+  group_id int NOT NULL,
+  announcement_id int NOT NULL,
+  PRIMARY KEY (group_id, announcement_id)
 );
 --
 -- Table structure for table message attachment
@@ -3006,9 +3007,9 @@ ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
 DROP TABLE IF EXISTS course_type;
 CREATE TABLE course_type (
     id int unsigned not null auto_increment primary key,
-    name varchar(50) not null, 
-    translation_var char(40) default 'UndefinedCourseTypeLabel', 
-    description TEXT default '', 
+    name varchar(50) not null,
+    translation_var char(40) default 'UndefinedCourseTypeLabel',
+    description TEXT default '',
     props text default ''
 );
 

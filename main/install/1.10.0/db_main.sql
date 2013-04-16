@@ -2658,9 +2658,10 @@ CREATE TABLE IF NOT EXISTS user_rel_tag (
 
 DROP TABLE IF EXISTS announcement_rel_group;
 CREATE TABLE IF NOT EXISTS announcement_rel_group (
+  id INT unsigned NOT NULL auto_increment,
 	group_id int NOT NULL,
 	announcement_id int NOT NULL,
-	PRIMARY KEY (group_id, announcement_id)
+	PRIMARY KEY (id)
 );
 --
 -- Table structure for table message attachment
@@ -2766,7 +2767,7 @@ CREATE TABLE IF NOT EXISTS usergroup (
 );
 
 DROP TABLE IF EXISTS usergroup_rel_user;
-CREATE TABLE IF NOT EXISTS usergroup_rel_user    (
+CREATE TABLE IF NOT EXISTS usergroup_rel_user(
     id INT NOT NULL AUTO_INCREMENT,
     usergroup_id INT NOT NULL,
     user_id 	INT NOT NULL,
@@ -2777,7 +2778,6 @@ CREATE TABLE IF NOT EXISTS usergroup_rel_user    (
 ALTER TABLE usergroup_rel_user ADD INDEX ( usergroup_id );
 ALTER TABLE usergroup_rel_user ADD INDEX ( user_id );
 ALTER TABLE usergroup_rel_user ADD INDEX ( relation_type );
-
 
 DROP TABLE IF EXISTS usergroup_rel_course;
 CREATE TABLE IF NOT EXISTS usergroup_rel_course  (
@@ -2803,6 +2803,19 @@ CREATE TABLE IF NOT EXISTS usergroup_rel_tag(
 
 ALTER TABLE usergroup_rel_tag ADD INDEX ( usergroup_id );
 ALTER TABLE usergroup_rel_tag ADD INDEX ( tag_id );
+
+DROP TABLE IF EXISTS usergroup_rel_usergroup;
+CREATE TABLE IF NOT EXISTS usergroup_rel_usergroup (
+	id int NOT NULL AUTO_INCREMENT,
+	group_id int NOT NULL,
+	subgroup_id int NOT NULL,
+	relation_type int NOT NULL,
+	PRIMARY KEY (id)
+);
+
+ALTER TABLE usergroup_rel_usergroup ADD INDEX ( group_id );
+ALTER TABLE usergroup_rel_usergroup ADD INDEX ( subgroup_id );
+ALTER TABLE usergroup_rel_usergroup ADD INDEX ( relation_type );
 
 --
 -- Structure for Mail notifications
@@ -3447,4 +3460,4 @@ ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_i
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.f31bfcd' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.862202a' WHERE variable = 'chamilo_database_version';

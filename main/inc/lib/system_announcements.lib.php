@@ -144,8 +144,10 @@ class SystemAnnouncementManager {
 		}
 
 	    if (count($groups) > 0 and $ann_group_db_ok ) {
-            $sql .= " OR id IN (SELECT announcement_id FROM $tbl_announcement_group
-                              WHERE group_id in $groups_string) ";
+            $sql .= " OR id IN (
+                        SELECT announcement_id FROM $tbl_announcement_group
+                        WHERE group_id in $groups_string
+                      ) ";
 	    }
 
 		if (api_is_multiple_url_enabled()) {
@@ -367,7 +369,7 @@ class SystemAnnouncementManager {
     public static function announcement_for_groups($announcement_id, $group_array){
         $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         //first delete all group associations for this announcement
-        $res = Database::query("DELETE FROM $tbl_announcement_group where announcement_id=".intval($announcement_id));
+        $res = Database::query("DELETE FROM $tbl_announcement_group WHERE announcement_id = ".intval($announcement_id));
         if ($res === false) {
           Debug::log_s(mysql_error());
           return false;
@@ -375,7 +377,7 @@ class SystemAnnouncementManager {
 
         foreach ($group_array as $group_id) {
           if (intval($group_id) != 0 ) {
-            $res = Database::query("INSERT into $tbl_announcement_group set announcement_id=".intval($announcement_id)
+            $res = Database::query("INSERT INTO $tbl_announcement_group SET announcement_id=".intval($announcement_id)
               .", group_id=".intval($group_id));
             if ($res === false) {
               Debug::log_s(mysql_error());
@@ -391,15 +393,15 @@ class SystemAnnouncementManager {
    * @return array array of group id
    **/
   public static function get_announcement_groups($announcement_id){
-        $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
-        $tbl_group = Database :: get_main_table(TABLE_MAIN_GROUP);
-        //first delete all group associations for this announcement
+    $tbl_announcement_group = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
+    $tbl_group = Database :: get_main_table(TABLE_USERGROUP);
+    //first delete all group associations for this announcement
 
-        $res = Database::query("SELECT g.id as group_id , g.name as group_name  FROM $tbl_group g , $tbl_announcement_group ag"
-                                ." WHERE announcement_id=".intval($announcement_id)
-                                ." AND ag.group_id = g.id");
-        $groups = Database::fetch_array($res);
-        return $groups;
+    $res = Database::query("SELECT g.id as group_id, g.name as group_name
+                            FROM $tbl_group g , $tbl_announcement_group ag
+                            WHERE announcement_id = ".intval($announcement_id)." AND ag.group_id = g.id");
+    $groups = Database::fetch_array($res);
+    return $groups;
   }
 
 	/**

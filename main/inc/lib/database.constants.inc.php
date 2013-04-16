@@ -58,8 +58,6 @@ define('TABLE_MAIN_GRADEBOOK_LINK',         'gradebook_link');
 define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
 define('TABLE_MAIN_GRADEBOOK_CERTIFICATE',  'gradebook_certificate');
 
-
-
 //Profiling
 define('TABLE_MAIN_USER_FIELD',         'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS', 'user_field_options');
@@ -69,13 +67,6 @@ define('TABLE_MAIN_USER_FIELD_VALUES',  'user_field_values');
 define('TABLE_MAIN_TAG',                'tag');
 define('TABLE_MAIN_USER_REL_TAG',       'user_rel_tag');
 
-//User groups
-/*
-define('TABLE_MAIN_GROUP',              'groups');
-define('TABLE_MAIN_USER_REL_GROUP',     'group_rel_user');
-define('TABLE_MAIN_GROUP_REL_TAG',      'group_rel_tag');
-define('TABLE_MAIN_GROUP_REL_GROUP',    'group_rel_group');
-*/
 
 // Search engine
 define('TABLE_MAIN_SPECIFIC_FIELD',         'specific_field');
@@ -309,6 +300,15 @@ define('TABLE_THEMATIC','thematic');
 define('TABLE_THEMATIC_PLAN', 'thematic_plan');
 define('TABLE_THEMATIC_ADVANCE','thematic_advance');
 
+//User groups
+/*
+define('TABLE_MAIN_GROUP',              'groups');
+define('TABLE_MAIN_USER_REL_GROUP',     'group_rel_user');
+define('TABLE_MAIN_GROUP_REL_TAG',      'group_rel_tag');
+define('TABLE_MAIN_GROUP_REL_GROUP',    'group_rel_group');
+*/
+
+
 // Careers, promotions, Usergroups
 define('TABLE_CAREER',      'career');
 define('TABLE_PROMOTION',   'promotion');
@@ -317,7 +317,8 @@ define('TABLE_USERGROUP',               'usergroup');
 define('TABLE_USERGROUP_REL_USER',      'usergroup_rel_user');
 define('TABLE_USERGROUP_REL_COURSE',    'usergroup_rel_course');
 define('TABLE_USERGROUP_REL_SESSION',   'usergroup_rel_session');
-define('TABLE_USERGROUP_REL_TAG',      'usergroup_rel_tag');
+define('TABLE_USERGROUP_REL_TAG',       'usergroup_rel_tag');
+define('TABLE_USERGROUP_REL_USERGROUP', 'usergroup_rel_usergroup');
 
 // Mail notifications
 define('TABLE_NOTIFICATION',               'notification');

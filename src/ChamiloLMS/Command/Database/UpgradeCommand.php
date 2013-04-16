@@ -175,7 +175,6 @@ class UpgradeCommand extends CommonCommand
         }
 
         $this->updateConfiguration($version);
-
         $output->writeln("<comment>Wow! You just finish to migrate. Too check the current status of your platform. Run </comment><info>chamilo:status</info>");
     }
 

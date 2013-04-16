@@ -25,6 +25,10 @@ class InstallCommand extends CommonCommand
             ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the chamilo folder');
     }
 
+    /**
+     * Gets the SQL files relation with versions
+     * @return array
+     */
     public function getDatabaseMap()
     {
 
@@ -284,8 +288,6 @@ class InstallCommand extends CommonCommand
                 $output->writeln("<comment>Chamilo was successfully installed. Go to your browser and enter:</comment> <info>".$newConfigurationArray['root_web']);
             }
         }
-
-
     }
 
     /**
@@ -296,17 +298,19 @@ class InstallCommand extends CommonCommand
     {
         $adminUser = array(
             'lastname' => 'Julio',
-            'firstname' => 'M',
+            'firstname' => 'Montoya',
             'username' => 'admin',
             'password' => 'admin',
             'email' => 'admin@example.org',
             'language' => 'english',
             'phone' => '6666666'
         );
+
         return $adminUser;
     }
 
     /**
+     * Creates an admin user
      *
      * @param $newConfigurationArray
      * @param $output
@@ -354,8 +358,6 @@ class InstallCommand extends CommonCommand
     {
         return '1.10';
     }
-
-
 
     private function setDatabaseSettings($configuration, $databaseName)
     {
@@ -459,15 +461,15 @@ class InstallCommand extends CommonCommand
 
             return true;
         }
+
         return false;
     }
 
-
     /**
      * Creates a course (only an insert in the DB)
-     * @param $databaseName
+     * @param string $databaseName
      */
-    function createCourse($databaseName)
+    public function createCourse($databaseName)
     {
         $params = array(
             'code' => $databaseName,
@@ -501,18 +503,23 @@ class InstallCommand extends CommonCommand
         $result = \Database::query("CREATE DATABASE IF NOT EXISTS ".mysql_real_escape_string($databaseName)." DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
 
         if ($result) {
-
             return \Database::select_db($databaseName);
         }
+
         return false;
     }
 
+    /**
+     * Drops a database
+     * @param string $name
+     */
     public function dropDatabase($name)
     {
         \Database::query("DROP DATABASE ".mysql_real_escape_string($name)."");
     }
 
     /**
+     *
      * In step 3. Tests establishing connection to the database server.
      * If it's a single database environment the function checks if the database exist.
      * If the database doesn't exist we check the creation permissions.

@@ -49,9 +49,49 @@ class survey_manager
         return $code.$num;
     }
 
+    /**
+     * Deletes all survey invitations of a user
+     * @param int $user_id
+     * @return boolean
+     * @assert ('') === false
+     */
+    public static function delete_all_survey_invitations_by_user($user_id) {
+        $user_id = intval($user_id);
+       
+        if (empty($user_id)) {
+            return false;
+        }
+        $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+        $table_survey = Database :: get_course_table(TABLE_SURVEY);
+        
+        $sql = "SELECT survey_invitation_id, survey_code FROM $table_survey_invitation WHERE user = '$user_id' AND c_id <> 0 ";
+        $result = Database::query($sql);
+        $deleted = array();
+       	while ($row = Database::fetch_array($result ,'ASSOC')){
+            $survey_invitation_id = $row['survey_invitation_id'];
+            $survey_code = $row['survey_code'];
+            $sql2 = "DELETE FROM $table_survey_invitation WHERE survey_invitation_id = '$survey_invitation_id' AND c_id <> 0";
+            if (Database::query($sql2)) {
+                $sql3 = "UPDATE $table_survey SET invited = invited-1 ".
+                       " WHERE c_id  <> 0 AND code ='$survey_code'";
+                Database::query($sql3);
+            }
+        }
+    }
+
+     /**
+     *
+     * @param type $course_code
+     * @param type $session_id
+     * @return type
+     * @assert ('') === false
+     */
     public static function get_surveys($course_code, $session_id = 0)
     {
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
+        if (empty($course_code)) {
+            return false;
+        }
         $course_info = api_get_course_info($course_code);
         $session_condition = api_get_session_condition($session_id, true, true);
 
@@ -1725,6 +1765,7 @@ class survey_question
                             $_GET['action']
                         ).'&type='.Security::remove_XSS($_GET['type']).''
                     );
+                    exit;
                 }
             }
         }
@@ -4602,6 +4643,7 @@ class SurveyUtil
         $sender_email = $_user['mail'];
         $sender_user_id = api_get_user_id();
 
+		$replyto = array();
         if (api_get_setting('survey_email_sender_noreply') == 'noreply') {
             $noReply = api_get_setting('noreply_email_address');
             if (!empty($noReply)) {

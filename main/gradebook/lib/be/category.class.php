@@ -1427,7 +1427,7 @@ class Category implements GradebookItem
             if (!empty($my_certificate)) {
                 $certificate_obj = new Certificate($my_certificate['id']);
 
-                $url  = api_get_path(WEB_PATH) .'certificates/index.php?id='.$my_certificate['id'];
+                $url  = Certificate::getCertificatePublicURL($my_certificate['id']);
                 $certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 32), $url, array('target'=>'_blank'));
                 $html = '<div class="actions" align="right">';
                 $html .= Display::url($url, $url, array('target'=>'_blank'));

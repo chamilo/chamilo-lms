@@ -1545,7 +1545,7 @@ class DocumentManager
             $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         }
 
-        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
+        $url = Certificate::getCertificatePublicURL($info_grade_certificate['id']);
         //replace content
         $info_to_replace_in_content_html = array(
             $first_name,

@@ -13,11 +13,15 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CertificateController
 {
-    public function indexAction()
+    /**
+     *
+     * @return string
+     */
+    public function indexAction($id)
     {
-        /*$certificate = new Certificate($_GET['id']);
+        $certificate = new \Certificate($id);
 
         //Show certificate HTML
-        $certificate->show();*/
+        return $certificate->show(true);
     }
 }

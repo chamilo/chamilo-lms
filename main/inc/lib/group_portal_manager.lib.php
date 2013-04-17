@@ -126,7 +126,7 @@ class GroupPortalManager
         while ($item = Database::fetch_assoc($res)) {
             $list[$item['id']] = $item['name'];
 	}
-	return $list;
+	    return $list;
     }
 
 	/**

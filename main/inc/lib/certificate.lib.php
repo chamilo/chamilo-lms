@@ -5,7 +5,8 @@
  * gradebook tool.
  * @package chamilo.library.certificates
  */
-class Certificate extends Model {
+class Certificate extends Model
+{
     var $table;
     var $columns = array('id','cat_id','score_certificate','created_at','path_certificate');
     /**
@@ -313,7 +314,7 @@ class Certificate extends Model {
     * course* can be printed (for anonymous users). Connected users can always
     * print them.
     */
-    public function show() {
+    public function show($returnContent = false) {
         // Special rules for anonymous users
         $failed = false;
         if (api_is_anonymous()) {
@@ -349,14 +350,25 @@ class Certificate extends Model {
         //Read file or preview file
         if (!empty($this->certificate_data['path_certificate'])) {
             $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
+
             if (file_exists($user_certificate)) {
+                if ($returnContent) {
+                    return file_get_contents($user_certificate);
+                }
                 header('Content-Type: text/html; charset='. api_get_system_encoding());
                 echo @file_get_contents($user_certificate);
             }
         } else {
+            if ($returnContent) {
+                return Display :: return_message(get_lang('NoCertificateAvailable'), 'warning');
+            }
             Display :: display_reduced_header();
             Display :: display_warning_message(get_lang('NoCertificateAvailable'));
         }
         exit;
+    }
+
+    static function getCertificatePublicURL($id) {
+        return api_get_path(WEB_PUBLIC_PATH).'certificates/'.$id;
     }
 }

@@ -8,7 +8,7 @@ $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
-$sysPath = __DIR__."../../";
+$sysPath = __DIR__."/";
 
 AnnotationRegistry::registerFile($sysPath."vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
 $reader = new AnnotationReader();

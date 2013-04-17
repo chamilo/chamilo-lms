@@ -8,7 +8,7 @@ if (PHP_SAPI != 'cli') {
     die("Cannot be called by any other method than the command line.");
 }
 
-require_once dirname(__FILE__).'/../main/inc/global.inc.php';
+require_once dirname(__FILE__).'/main/inc/global.inc.php';
 
 // Variable $helperSet is defined inside cli-config.php
 require __DIR__.'/console-config.php';

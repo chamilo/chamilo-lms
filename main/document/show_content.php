@@ -17,7 +17,7 @@ require_once '../inc/global.inc.php';
 api_protect_course_script();
 
 $noPHP_SELF = true;
-$header_file = Security::remove_XSS($_GET['file']);
+$header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
 
 $course_info = api_get_course_info();

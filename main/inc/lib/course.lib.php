@@ -4487,10 +4487,9 @@ class CourseManager {
             Database::query("INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL, '" . TOOL_SEARCH. "','search/','info.gif','".Text::string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring','0')");
         }
 
-        // Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
+        // Blogs (Kevin Van Den Haute :: kevin@develop-it.be)
         $sql = "INSERT INTO $tbl_course_homepage VALUES ($course_id, NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . Text::string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin','0')";
         Database::query($sql);
-        // end of Smartblogs
 
         /*  Course homepage tools for course admin only    */
 
@@ -4516,7 +4515,7 @@ class CourseManager {
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_lp_auto_launch',0,'learning_path')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'pdf_export_watermark_text','','learning_path')");
         Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_public_certificates','','certificates')");
-
+        Database::query(" INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_fast_exercise_edition', 0 ,'exercise')");
 
         /* Course homepage tools for platform admin only */
 

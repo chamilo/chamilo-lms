@@ -604,8 +604,7 @@ function handle_search() {
     echo '</div>';
 
     if ($search_enabled == 'true') {
-        require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
-        $xapian_path = api_get_path(SYS_PATH).'searchdb';
+        $xapian_path = api_get_path(SYS_DATA_PATH).'searchdb';
 
         /*
         @todo Test the Xapian connection

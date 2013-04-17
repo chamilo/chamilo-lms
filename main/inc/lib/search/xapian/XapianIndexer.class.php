@@ -72,7 +72,7 @@ abstract class XapianIndexer
         }
 
         if ($path == null) {
-            $path = api_get_path(SYS_PATH_DATA).'searchdb/';
+            $path = api_get_path(SYS_DATA_PATH).'searchdb/';
         }
         try {
             $this->db = new XapianWritableDatabase($path, $dbMode);

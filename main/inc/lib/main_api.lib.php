@@ -392,6 +392,11 @@ define('SOCIAL_CENTER_PLUGIN',      2);
 define('SOCIAL_RIGHT_PLUGIN',       3);
 define('CUT_GROUP_NAME', 50);
 
+//Skills
+define ('SKILL_TYPE_REQUIREMENT',   'required');
+define ('SKILL_TYPE_ACQUIRED',      'acquired');
+define ('SKILL_TYPE_BOTH',          'both');
+
 
 /* PATHS & FILES - ROUTINES */
 

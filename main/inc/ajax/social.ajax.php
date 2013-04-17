@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Responses to AJAX calls
  */
@@ -123,7 +123,6 @@ switch ($action) {
 			echo '';
 			break;
 		}
-		require_once api_get_path(LIBRARY_PATH).'blog.lib.php';
 		require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
 		$user_id = intval($_SESSION['social_user_id']);

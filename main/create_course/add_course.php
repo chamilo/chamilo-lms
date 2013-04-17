@@ -32,10 +32,6 @@ $this_section = SECTION_COURSES;
 // false - the new course is created immedialely, after filling this form.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
-if ($course_validation_feature) {
-    require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-}
-
 $htmlHeadXtra[] = '<script>
     function setFocus(){
         $("#title").focus();

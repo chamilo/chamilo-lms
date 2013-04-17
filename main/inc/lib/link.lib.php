@@ -20,7 +20,8 @@
 
 /* FUNCTIONS */
 
-class Link extends Model {
+class Link extends Model
+{
     var $table;
     var $is_course_model = true;
     var $columns = array('id', 'c_id','url','title','description','category_id', 'display_order', 'on_homepage', 'target', 'session_id');

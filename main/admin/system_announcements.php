@@ -33,7 +33,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $tool_name = null;
 
 if (empty($_GET['lang'])) {
-    $_GET['lang'] = $_SESSION['user_language_choice'];
+    $_GET['lang'] = api_get_user_language();
 }
 
 $usergroup = new UserGroup();

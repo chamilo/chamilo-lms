@@ -1514,4 +1514,25 @@ class UserGroup extends Model
     public function getAllowedPictureExtensions() {
         return $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
     }
+
+    /**
+     * Gets a list of all group
+     * @param id of a group not to include (i.e. to exclude)
+     * @return array : id => name
+     **/
+    public static function get_groups_list($without_this_one = NULL ) {
+        $where='';
+        if ( isset($without_this_one) && (intval($without_this_one) == $without_this_one) ) {
+            $where = "WHERE id <> $without_this_one";
+        }
+        $table	= Database :: get_main_table(TABLE_USERGROUP);
+        $sql = "SELECT id, name FROM $table $where order by name";
+        $res = Database::query($sql);
+        $list = array ();
+        while ($item = Database::fetch_assoc($res)) {
+            $list[$item['id']] = $item['name'];
+        }
+        return $list;
+    }
+
 }

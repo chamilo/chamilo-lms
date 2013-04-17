@@ -7,6 +7,7 @@
  */
 class FormValidator extends HTML_QuickForm
 {
+
     /**
      * Create a form validator based on an array of form data:
      *
@@ -132,7 +133,6 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');
         $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');
         $this->registerRule('compare_datetime_text', null, 'HTML_QuickForm_Rule_CompareDateTimeText', $dir . 'Rule/CompareDateTimeText.php');
-
 
         // Modify the default templates
         $renderer = & $this->defaultRenderer();
@@ -528,6 +528,7 @@ EOT;
         }
         return $return_value;
     }
+
 
 }
 

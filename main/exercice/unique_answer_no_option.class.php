@@ -90,7 +90,7 @@ class UniqueAnswerNoOption extends Question {
 							'.get_lang('Weighting').'
 						</th>
 					</tr>';
-        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
 		$defaults = array();
 		$correct = 0;
@@ -189,12 +189,11 @@ class UniqueAnswerNoOption extends Question {
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');
 
 
-			$answer_number=$form->addElement('text', 'counter['.$i.']', null,'value="'.$i.'"');
+			$answer_number = $form->addElement('text', 'counter['.$i.']', null,'value="'.$i.'"');
 			$answer_number->freeze();
 
-
 			$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-			$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+            $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 
 			if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
 				// feedback

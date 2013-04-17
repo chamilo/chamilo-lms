@@ -23,17 +23,17 @@ if (isset($_GET['editQuestion'])) {
 }
 
 if (is_object($objQuestion)) {
-	//FORM CREATION
+	//Form creation
 	$form = new FormValidator('question_admin_form','post', $action);
 
-	if(isset($_GET['editQuestion'])) {
+	if (isset($_GET['editQuestion'])) {
 		$class="btn save";
 		$text=get_lang('ModifyQuestion');
-		$type = Security::remove_XSS($_GET['type']);
+		//$type = Security::remove_XSS($_GET['type']); already loaded in admin.php
 	} else {
 		$class="btn add";
 		$text=get_lang('AddQuestionToExercise');
-		$type = $_REQUEST['answerType'];
+		//$type = $_REQUEST['answerType']; //already loaded in admin.php
 	}
 
 	$types_information = Question::get_question_type_list();
@@ -42,8 +42,14 @@ if (is_object($objQuestion)) {
 	// form title
 	$form->addElement('header', $text.': '.$form_title_extra);
 
+    if ($fastEdition) {
+        $form->setAllowRichEditorInForm(false);
+        $form->setAllowedRichEditorList(array('questionDescription'));
+    }
+
 	// question form elements
 	$objQuestion->createForm($form);
+
 
 	// answer form elements
 	$objQuestion->createAnswersForm($form);

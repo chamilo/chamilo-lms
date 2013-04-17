@@ -37,7 +37,8 @@ if (!in_array($action, array(
     'get_work_user_list',
     'get_timelines',
     'get_user_skill_ranking',
-    'get_usergroups_teacher'
+    'get_usergroups_teacher',
+    'get_question_list'
 ))
     ) {
 	api_protect_admin_script(true);
@@ -66,19 +67,26 @@ $ops = array(
 
 function get_where_clause($col, $oper, $val) {
     global $ops;
-    if (empty($col)){
+    if (empty($col)) {
         return '';
     }
-    if($oper == 'bw' || $oper == 'bn') $val .= '%';
-    if($oper == 'ew' || $oper == 'en' ) $val = '%'.$val;
-    if($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') $val = '%'.$val.'%';
+    if ($oper == 'bw' || $oper == 'bn') {
+        $val .= '%';
+    }
+    if ($oper == 'ew' || $oper == 'en' ) {
+        $val = '%'.$val;
+    }
+    if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
+        $val = '%'.$val.'%';
+    }
     $val = Database::escape_string($val);
+
     return " $col {$ops[$oper]} '$val' ";
 }
 
 $where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
-$operation    = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
-$export_format    = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
+$operation = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
+$export_format = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
 
 $search_field    = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
 $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
@@ -173,6 +181,13 @@ if (!$sidx) $sidx = 1;
 //@todo rework this
 
 switch ($action) {
+    case 'get_question_list':
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
+        $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
+        $exercise = new Exercise(api_get_course_int_id());
+        $exercise->read($exerciseId);
+        $count = $exercise->selectNbrQuestions();
+        break;
     case 'get_group_reporting':
         $course_id = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;
         $group_id = isset($_REQUEST['gidReq']) ? $_REQUEST['gidReq'] : null;
@@ -305,6 +320,12 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(
 $columns = array();
 
 switch ($action) {
+    case 'get_question_list':
+        if (isset($exercise) && !empty($exercise)) {
+            $columns = array('question', 'type', 'category', 'level', 'score', 'actions');
+            $result = $exercise->getQuestionList($start, $limit, $sidx, $sord, $where_condition);
+        }
+        break;
     case 'get_group_reporting':
         $columns = array('name', 'time', 'progress', 'score', 'works', 'messages', 'actions');
         $result = Tracking::get_group_reporting($course_id, $group_id, 'all', $start, $limit, $sidx, $sord, $where_condition);
@@ -646,7 +667,8 @@ $allowed_actions = array(
     'get_course_exercise_medias',
     'get_user_course_report',
     'get_user_course_report_resumed',
-    'get_group_reporting'
+    'get_group_reporting',
+    'get_question_list'
 );
 
 //5. Creating an obj to return a json
@@ -690,7 +712,7 @@ if (in_array($action, $allowed_actions)) {
         foreach ($result as $row) {
             //print_r($row);
             // if results tab give not id, set id to $i otherwise id="null" for all <tr> of the jqgrid - ref #4235
-            if ($row['id'] == "") {
+            if (!isset($row['id']) || isset($row['id']) && $row['id'] == "") {
                 $response->rows[$i]['id']=$i;
             } else {
                 $response->rows[$i]['id']=$row['id'];

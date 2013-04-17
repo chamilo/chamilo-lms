@@ -38,7 +38,7 @@ define('MCMA', 2);
 define('FIB', 3);
 
 /**
-QUESTION CLASS
+ *    QUESTION CLASS
  *
  *    This class allows to instantiate an object of type Question
  *
@@ -64,6 +64,8 @@ abstract class Question
     static $typePicture = 'new_question.png';
     static $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
+
+    public $editionMode = 'normal';
 
     static $questionTypes = array(
         UNIQUE_ANSWER => array('unique_answer.class.php', 'UniqueAnswer'),
@@ -106,6 +108,7 @@ abstract class Question
         $this->course = api_get_course_info();
         $this->category_list = array();
         $this->parent_id = 0;
+        $this->editionMode = 'normal';
     }
 
     public function getIsContent()
@@ -183,6 +186,16 @@ abstract class Question
 
         // question not found
         return false;
+    }
+
+    public function setEditionMode($mode)
+    {
+        $this->editionMode = $mode;
+    }
+
+    public function getEditionMode()
+    {
+        return $this->editionMode;
     }
 
     /**
@@ -1358,8 +1371,8 @@ abstract class Question
         $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
 
         // Question type
-        $answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : null;
-        $form->addElement('hidden', 'answerType', $_REQUEST['answerType']);
+        $answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : $this->selectType();
+        $form->addElement('hidden', 'answerType', $answerType);
 
         // html editor
         $editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
@@ -1373,8 +1386,7 @@ abstract class Question
 
         $form->addElement(
             'advanced_settings',
-            '
-			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang(
+            '<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang(
                 'EnrichQuestion'
             ).'</span></a>
 		'

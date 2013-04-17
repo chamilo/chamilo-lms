@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  *     Exercise administration
@@ -141,6 +140,13 @@ $aType = array(
     get_lang('Matching'),
     get_lang('FreeAnswer')
 );
+
+$fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
+//$fastEdition = false;
+
+if ($fastEdition) {
+    $htmlHeadXtra[] = api_get_jqgrid_js();
+}
 
 // tables used in the exercise tool
 
@@ -545,7 +551,12 @@ if (isset($_GET['message'])) {
 
 if ($newQuestion || $editQuestion) {
     // statement management
-    $type = Security::remove_XSS($_REQUEST['answerType']);
+
+    if ($editQuestion) {
+        $type = $objQuestion->selectType();
+    } else {
+        $type = Security::remove_XSS($_REQUEST['answerType']);
+    }
     echo '<input type="hidden" name="Type" value="'.$type.'" />';
     require 'question_admin.inc.php';
 }
@@ -562,7 +573,11 @@ if (isset($_GET['hotspotadmin'])) {
 
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
     // question list management
-    require 'question_list_admin.inc.php';
+    if ($fastEdition) {
+        require 'question_list_pagination_admin.inc.php';
+    } else {
+        require 'question_list_admin.inc.php';
+    }
 }
 
 Session::write('objExercise', $objExercise);

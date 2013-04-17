@@ -227,6 +227,10 @@ define('WEB_PATH', 'WEB_PATH');
 define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('SYS_PATH_APP', 'SYS_PATH_APP');
+define('SYS_DATA_PATH', 'SYS_DATA_PATH');
+define('SYS_LOG_PATH', 'SYS_LOG_PATH');
+
+define('SYS_CONFIG_PATH', 'SYS_CONFIG_PATH');
 define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
@@ -436,7 +440,12 @@ define('CUT_GROUP_NAME', 50);
  * api_get_path(REL_CODE_PATH)                  /chamilo/main/
  * api_get_path(SYS_SERVER_ROOT_PATH)           /var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
  * api_get_path(SYS_PATH)                       /var/www/chamilo/
- * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/app/cache/
+ *
+ * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/temp/
+ * api_get_path(SYS_LOG_PATH)                   /var/www/chamilo/logs/
+ * api_get_path(SYS_DATA_PATH)                  /var/www/chamilo/data/
+ * api_get_path(SYS_CONFIG_PATH)                /var/www/chamilo/config/
+
  * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/courses/
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
  * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css
@@ -481,6 +490,9 @@ function api_get_path($path_type, $path = null) {
         WEB_PATH                => '',
         SYS_PATH                => '',
         SYS_PATH_APP            => 'app/',
+        SYS_DATA_PATH           => 'data/',
+        SYS_CONFIG_PATH         => 'config/',
+        SYS_LOG_PATH            => 'logs/',
         REL_PATH                => '',
         WEB_SERVER_ROOT_PATH    => '',
         SYS_SERVER_ROOT_PATH    => '',
@@ -496,8 +508,8 @@ function api_get_path($path_type, $path = null) {
         WEB_CSS_PATH            => 'css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
-        SYS_ARCHIVE_PATH        => 'app/cache/',
-        WEB_ARCHIVE_PATH        => 'app/cache/',
+        SYS_ARCHIVE_PATH        => 'temp/',
+        WEB_ARCHIVE_PATH        => 'temp/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
         CONFIGURATION_PATH      => 'inc/conf/',
@@ -609,6 +621,10 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_PUBLIC_PATH]         = $root_web."web/";
         $paths[SYS_PATH]                = $root_sys;
         $paths[SYS_PATH_APP]            = $root_sys.'app/';
+        $paths[SYS_DATA_PATH]           = $root_sys.'data/';
+        $paths[SYS_LOG_PATH]            = $root_sys.'logs/';
+        $paths[SYS_CONFIG_PATH]         = $root_sys.'config/';
+
         $paths[REL_PATH]                = $root_rel;
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';

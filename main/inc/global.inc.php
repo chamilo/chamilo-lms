@@ -25,7 +25,7 @@
 // This is for compatibility with MAC computers.
 //ini_set('auto_detect_line_endings', '1');
 
-//Composer autoloader
+//Autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
 
 use Silex\Application;
@@ -46,8 +46,8 @@ $includePath = dirname(__FILE__);
 
 // Include the main Chamilo platform configuration file.
 $configurationFilePath = $includePath.'/conf/configuration.php';
-$configurationYMLFile = $includePath.'/../../app/config/configuration.yml';
-$configurationFileAppPath = $includePath.'/../../app/config/configuration.php';
+$configurationYMLFile = $includePath.'/../../config/configuration.yml';
+$configurationFileAppPath = $includePath.'/../../config/configuration.php';
 
 $alreadyInstalled = false;
 if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  || file_exists($configurationFileAppPath)) {
@@ -78,8 +78,6 @@ if (file_exists($configurationYMLFile)) {
 }
 
 // End reading configuration file
-
-//Including main and internationalization libs
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
@@ -358,6 +356,7 @@ $app['twig'] = $app->share(
     })
 );
 
+
 // Registering Menu extension
 $app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
 
@@ -379,7 +378,7 @@ $app['pagerfanta.view.options'] = array(
 //$app['pagerfanta.view.router.params']
 
 //Monolog only available if cache is writable
-if (is_writable($app['cache.path'])) {
+if (is_writable($app['temp.path'])) {
 
     /*
     Adding Monolog service provider
@@ -651,7 +650,7 @@ $app['this_section'] = SECTION_GLOBAL;
 require $includePath.'/local.inc.php';
 
 //Adding web profiler
-if (is_writable($app['cache.path'])) {
+if (is_writable($app['temp.path'])) {
     //if ($app['debug']) {
 
     if (api_get_setting('allow_web_profiler') == 'true') {
@@ -977,6 +976,7 @@ $app['pages.controller'] = $app->share(function () use ($app) {
 $app['index.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\IndexController();
 });
+
 $app['legacy.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\LegacyController();
 });
@@ -991,6 +991,18 @@ $app['learnpath.controller'] = $app->share(function () use ($app) {
 
 $app['course_home.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\CourseHomeController();
+});
+
+$app['certificate.controller'] = $app->share(function () use ($app) {
+    return new ChamiloLMS\Controller\CertificateController();
+});
+
+$app['user.controller'] = $app->share(function () use ($app) {
+    return new ChamiloLMS\Controller\UserController();
+});
+
+$app['news.controller'] = $app->share(function () use ($app) {
+    return new ChamiloLMS\Controller\NewsController();
 });
 
 /*
@@ -1034,6 +1046,12 @@ $app->get('/logout', 'index.controller:logoutAction')->bind('logout');
 
 $app->match('/courses/{courseCode}/index.php', 'course_home.controller:indexAction', 'GET|POST');
 $app->match('/courses/{courseCode}', 'course_home.controller:indexAction', 'GET|POST');
+
+$app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
+
+$app->match('/user/{username}', 'user.controller:indexAction', 'GET');
+
+$app->match('/news/{id}', 'news.controller:indexAction', 'GET');
 
 //LP controller
 $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')->bind('subscribe_users');

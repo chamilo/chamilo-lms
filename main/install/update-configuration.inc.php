@@ -34,38 +34,38 @@ if (defined('SYSTEM_INSTALLATION')) {
     unset($_configuration['course_folder']);
 
     $yaml = $dumper->dump($_configuration, 2); //inline
-    $newConfigurationFile = api_get_path(SYS_PATH_APP).'config/configuration.yml';
+    $newConfigurationFile = api_get_path(SYS_CONFIG_PATH).'configuration.yml';
     file_put_contents($newConfigurationFile, $yaml);
 
     //Moving files in app/config
 
     if (file_exists(api_get_path(CONFIGURATION_PATH).'mail.conf.php')) {
-        copy(api_get_path(CONFIGURATION_PATH).'mail.conf.php', api_get_path(SYS_PATH_APP).'config/mail.conf.php');
+        copy(api_get_path(CONFIGURATION_PATH).'mail.conf.php', api_get_path(SYS_CONFIG_PATH).'mail.conf.php');
         unlink(api_get_path(CONFIGURATION_PATH).'mail.conf.php');
     }
 
     if (file_exists(api_get_path(CONFIGURATION_PATH).'auth.conf.php')) {
-        copy(api_get_path(CONFIGURATION_PATH).'auth.conf.php', api_get_path(SYS_PATH_APP).'config/auth.conf.php');
+        copy(api_get_path(CONFIGURATION_PATH).'auth.conf.php', api_get_path(SYS_CONFIG_PATH).'auth.conf.php');
         unlink(api_get_path(CONFIGURATION_PATH).'auth.conf.php');
     }
 
     if (file_exists(api_get_path(CONFIGURATION_PATH).'events.conf.php')) {
-        copy(api_get_path(CONFIGURATION_PATH).'events.conf.php', api_get_path(SYS_PATH_APP).'config/events.conf.php');
+        copy(api_get_path(CONFIGURATION_PATH).'events.conf.php', api_get_path(SYS_CONFIG_PATH).'events.conf.php');
         unlink(api_get_path(CONFIGURATION_PATH).'events.conf.php');
     }
 
     if (file_exists(api_get_path(CONFIGURATION_PATH).'mail.conf.php')) {
-        copy(api_get_path(CONFIGURATION_PATH).'mail.conf.php', api_get_path(SYS_PATH_APP).'config/mail.conf.php');
+        copy(api_get_path(CONFIGURATION_PATH).'mail.conf.php', api_get_path(SYS_CONFIG_PATH).'mail.conf.php');
         unlink(api_get_path(CONFIGURATION_PATH).'mail.conf.php');
     }
 
     if (file_exists(api_get_path(CONFIGURATION_PATH).'portfolio.conf.php')) {
-        copy(api_get_path(CONFIGURATION_PATH).'portfolio.conf.php', api_get_path(SYS_PATH_APP).'config/portfolio.conf.php');
+        copy(api_get_path(CONFIGURATION_PATH).'portfolio.conf.php', api_get_path(SYS_CONFIG_PATH).'portfolio.conf.php');
         unlink(api_get_path(CONFIGURATION_PATH).'portfolio.conf.php');
     }
 
     if (file_exists(api_get_path(CONFIGURATION_PATH).'profile.conf.php')) {
-        copy(api_get_path(CONFIGURATION_PATH).'profile.conf.php', api_get_path(SYS_PATH_APP).'config/profile.conf.php');
+        copy(api_get_path(CONFIGURATION_PATH).'profile.conf.php', api_get_path(SYS_CONFIG_PATH).'profile.conf.php');
         unlink(api_get_path(CONFIGURATION_PATH).'profile.conf.php');
     }
 }

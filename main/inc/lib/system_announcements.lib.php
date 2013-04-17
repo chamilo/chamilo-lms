@@ -71,6 +71,8 @@ class SystemAnnouncementManager {
 		$sql .= " AND access_url_id = '$current_access_url_id' ";
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
 
+        $newsPath = api_get_path(WEB_PUBLIC_PATH).'news';
+
 		$announcements = Database::query($sql);
 		if (Database::num_rows($announcements) > 0) {
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
@@ -80,14 +82,14 @@ class SystemAnnouncementManager {
 
 			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
 
-			echo '<div style="margin:10px;text-align:right;"><a href="news_list.php">'.get_lang('More').'</a></div>';
+			echo '<div style="margin:10px;text-align:right;"><a href="'.$newsPath.'">'.get_lang('More').'</a></div>';
 
 			while ($announcement = Database::fetch_object($announcements)) {
 				if ($id != $announcement->id) {
 					if (strlen($query_string) > 0) {
-						$show_url = 'news_list.php#'.$announcement->id;
+						$show_url = $newsPath.'#'.$announcement->id;
 					} else {
-						$show_url = 'news_list.php#'.$announcement->id;
+						$show_url = $newsPath.'#'.$announcement->id;
 					}
 			        $display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG);
 					echo '<a name="'.$announcement->id.'"></a>
@@ -209,14 +211,15 @@ class SystemAnnouncementManager {
 		$next = ((int)$_GET['start']+19);
 		$prev = ((int)$_GET['start']-19);
 		$content = '';
+        $newsPath = api_get_path(WEB_PUBLIC_PATH).'news';
 		if(!isset($_GET['start']) || $_GET['start'] == 0) {
 			if($nb_announcement > 20) {
-				$content .= '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+				$content .= '<a href="'.$newsPath.'?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 		} else {
-			echo '<a href="news_list.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
+			echo '<a href="'.$newsPath.'?start='.$prev.'"> << '.get_lang('Prev').'</a>';
 			if ($nb_announcement > 20) {
-				$content .= '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+				$content .= '<a href="'.$newsPath.'?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 		}
 		return $content;
@@ -627,7 +630,7 @@ class SystemAnnouncementManager {
 			$html .=  '<div id="container-slider" class="span6"><ul id="slider">';
 			while ($announcement = Database::fetch_object($announcements)) {
                 $content = $announcement->content;
-                $url = api_get_path(WEB_PATH).'news_list.php?id='.$announcement->id;
+                $url = api_get_path(WEB_PUBLIC_PATH).'news/'.$announcement->id;
                 if (empty($id)) {
                     if (api_strlen(strip_tags($content)) > $cut_size) {
                         $content = Text::cut($announcement->content, $cut_size).' '.Display::url(get_lang('More'), $url);

@@ -72,9 +72,8 @@ abstract class XapianIndexer
         }
 
         if ($path == null) {
-            $path = api_get_path(SYS_PATH_APP).'data/searchdb/';
+            $path = api_get_path(SYS_PATH_DATA).'searchdb/';
         }
-
         try {
             $this->db = new XapianWritableDatabase($path, $dbMode);
             $this->indexer = new XapianTermGenerator();
@@ -297,7 +296,7 @@ abstract class XapianIndexer
             $this->connectDb();
         }
         try {
-            $this->getDb()->replace_document((int)$did, $doc);
+            $this->getDb()->replace_document((int) $did, $doc);
             $this->getDb()->flush();
         } catch (Exception $e) {
             Display::display_error_message($e->getMessage());
@@ -309,7 +308,7 @@ abstract class XapianIndexer
     /**
      * Class contructor
      */
-    function __construct()
+    public function __construct()
     {
         $this->db = null;
         $this->stemmer = null;
@@ -318,7 +317,7 @@ abstract class XapianIndexer
     /**
      * Class destructor
      */
-    function __destruct()
+    public function __destruct()
     {
         unset($this->db);
         unset($this->stemmer);

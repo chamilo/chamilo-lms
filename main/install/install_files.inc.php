@@ -19,20 +19,18 @@ if (defined('SYSTEM_INSTALLATION')) {
 	// Write the system config file
 	//write_system_config_file(api_get_path(CONFIGURATION_PATH).'configuration.php');
 
-    write_system_config_file(api_get_path(SYS_PATH_APP).'config/configuration.php');
+    write_system_config_file(api_get_path(SYS_CONFIG_PATH).'configuration.php');
 
 	// Write a distribution file with the config as a backup for the admin
 	//write_system_config_file(api_get_path(CONFIGURATION_PATH).'configuration.dist.php');
-
-    //write_system_config_file(api_get_path(SYS_PATH_APP).'config/configuration.dist.php');
 
 	// Write a .htaccess file in the course repository
 	write_courses_htaccess_file($urlAppendPath);
 
 	// Copy distribution files with renaming for being the actual system configuration files.
-	copy(api_get_path(CONFIGURATION_PATH).'mail.conf.dist.php', api_get_path(SYS_PATH_APP).'config/mail.conf.php');
-	copy(api_get_path(CONFIGURATION_PATH).'profile.conf.dist.php', api_get_path(SYS_PATH_APP).'config/profile.conf.php');
-    copy(api_get_path(CONFIGURATION_PATH).'events.conf.dist.php', api_get_path(SYS_PATH_APP).'config/events.conf.php');
-    copy(api_get_path(CONFIGURATION_PATH).'auth.conf.dist.php', api_get_path(SYS_PATH_APP).'config/auth.conf.php');
-	copy(api_get_path(CONFIGURATION_PATH).'portfolio.conf.dist.php', api_get_path(SYS_PATH_APP).'config/portfolio.conf.php');
+	copy(api_get_path(CONFIGURATION_PATH).'mail.conf.dist.php', api_get_path(SYS_CONFIG_PATH).'mail.conf.php');
+	copy(api_get_path(CONFIGURATION_PATH).'profile.conf.dist.php', api_get_path(SYS_CONFIG_PATH).'profile.conf.php');
+    copy(api_get_path(CONFIGURATION_PATH).'events.conf.dist.php', api_get_path(SYS_CONFIG_PATH).'events.conf.php');
+    copy(api_get_path(CONFIGURATION_PATH).'auth.conf.dist.php', api_get_path(SYS_CONFIG_PATH).'auth.conf.php');
+	copy(api_get_path(CONFIGURATION_PATH).'portfolio.conf.dist.php', api_get_path(SYS_CONFIG_PATH).'portfolio.conf.php');
 }

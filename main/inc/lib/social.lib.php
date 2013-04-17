@@ -728,26 +728,31 @@ class SocialManager extends UserManager {
      * Displays the information of an individual user
      * @param int $user_id
      */
-    public static function display_individual_user($user_id) {
+    public static function display_individual_user($user_id, $returnContent = false) {
         global $interbreadcrumb;
         $safe_user_id = intval($user_id);
+        $curretUserId = api_get_user_id();
 
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT * FROM $user_table WHERE user_id = ".$safe_user_id;
         $result = Database::query($sql);
 
         $userInfo = api_get_user_info($user_id);
+        $content = null;
 
         if (Database::num_rows($result) == 1) {
             $user_object = Database::fetch_object($result);
-            $alt  = $userInfo['complete_name'].($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
+            $alt  = $userInfo['complete_name'].($curretUserId == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
 
             $status = get_status_from_code($user_object->status);
 
             $interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
-            Display::display_header($alt, null, $alt);
 
-            echo '<div class ="thumbnail">';
+            if ($returnContent == false) {
+                Display::display_header($alt, null, $alt);
+            }
+
+            $content = '<div class ="thumbnail">';
             if (strlen(trim($user_object->picture_uri)) > 0) {
                 $sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
                 $sysdir = $sysdir_array['dir'];
@@ -765,51 +770,62 @@ class SocialManager extends UserManager {
                 $big_image_height = $big_image_size['height'];
                 $url_big_image = $big_image.'?rnd='.time();
                 //echo '<a href="javascript:void()" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');" >';
-                echo '<img src="'.$fullurl.'" alt="'.$alt.'" />';
+                $content .= '<img src="'.$fullurl.'" alt="'.$alt.'" />';
             } else {
-                echo Display::return_icon('unknown.jpg', get_lang('Unknown'));
+                $content .= Display::return_icon('unknown.jpg', get_lang('Unknown'));
             }
-            if (!empty($status)) {
-                echo '<div class="caption">'.$status.'</div>';
-            }
-            echo '</div>';
 
+            if (!empty($status)) {
+                $content .= '<div class="caption">'.$status.'</div>';
+            }
+            $content .= '</div>';
 
             if (api_get_setting('show_email_addresses') == 'true') {
-                echo Display::encrypted_mailto_link($user_object->email,$user_object->email).'<br />';
+                $content .= Display::encrypted_mailto_link($user_object->email,$user_object->email).'<br />';
             }
 
             if ($user_object->competences) {
-                echo Display::page_subheader(get_lang('MyCompetences'));
-                echo '<p>'.$user_object->competences.'</p>';
+                $content .= Display::page_subheader(get_lang('MyCompetences'));
+                $content .= '<p>'.$user_object->competences.'</p>';
             }
             if ($user_object->diplomas) {
-                echo Display::page_subheader(get_lang('MyDiplomas'));
-                echo '<p>'.$user_object->diplomas.'</p>';
+                $content .= Display::page_subheader(get_lang('MyDiplomas'));
+                $content .= '<p>'.$user_object->diplomas.'</p>';
             }
             if ($user_object->teach) {
-                echo Display::page_subheader(get_lang('MyTeach'));
-                echo '<p>'.$user_object->teach.'</p>';
+                $content .= Display::page_subheader(get_lang('MyTeach'));
+                $content .= '<p>'.$user_object->teach.'</p>';
             }
-            SocialManager::display_productions($user_object->user_id);
+
+            $content .= SocialManager::display_productions($user_object->user_id);
+
             if ($user_object->openarea) {
-                echo Display::page_subheader(get_lang('MyPersonalOpenArea'));
-                echo '<p>'.$user_object->openarea.'</p>';
+                $content .= Display::page_subheader(get_lang('MyPersonalOpenArea'));
+                $content .= '<p>'.$user_object->openarea.'</p>';
             }
 
         } else    {
-            Display::display_header(get_lang('UsersOnLineList'));
-            echo '<div class="actions-title">';
-            echo get_lang('UsersOnLineList');
-            echo '</div>';
+            if ($returnContent == false) {
+                Display::display_header(get_lang('UsersOnLineList'));
+            }
+            $content .= '<div class="actions-title">';
+            $content .= get_lang('UsersOnLineList');
+            $content .= '</div>';
         }
+
+        if ($returnContent) {
+            return $content;
+        } else {
+            echo $content;
+        }
+
     }
 
     /**
      * Display productions in whoisonline
      * @param int $user_id User id
      */
-    public static function display_productions($user_id) {
+    public static function display_productions($user_id, $returnContent = false) {
         $sysdir_array = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
         $sysdir = $sysdir_array['dir'].$user_id.'/';
         $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true);
@@ -831,27 +847,33 @@ class SocialManager extends UserManager {
             $productions[] = $file;
         }
         */
+        $content = null;
         $productions = UserManager::get_user_productions($user_id);
 
         if (count($productions) > 0) {
-            echo '<dt><strong>'.get_lang('Productions').'</strong></dt>';
-            echo '<dd><ul>';
+            $content .= '<dt><strong>'.get_lang('Productions').'</strong></dt>';
+            $content .='<dd><ul>';
             foreach ($productions as $file) {
                 // Only display direct file links to avoid browsing an empty directory
                 if (is_file($sysdir.$file) && $file != $webdir_array['file']) {
-                    echo '<li><a href="'.$webdir.urlencode($file).'" target=_blank>'.$file.'</a></li>';
+                    $content .= '<li><a href="'.$webdir.urlencode($file).'" target=_blank>'.$file.'</a></li>';
                 }
                 // Real productions are under a subdirectory by the User's id
                 if (is_dir($sysdir.$file)) {
                     $subs = scandir($sysdir.$file);
                     foreach ($subs as $my => $sub) {
                         if (substr($sub, 0, 1) != '.' && is_file($sysdir.$file.'/'.$sub)) {
-                            echo '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';
+                            $content .= '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';
                         }
                     }
                 }
             }
-            echo '</ul></dd>';
+            $content .= '</ul></dd>';
+        }
+        if ($returnContent) {
+            return $content;
+        } else {
+            echo $content;
         }
     }
 

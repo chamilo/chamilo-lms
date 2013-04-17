@@ -1268,31 +1268,25 @@ function display_requirements(
 
     echo '<table class="table">
             <tr>
-                <td class="requirements-item">chamilo/app/config</td>
-                <td class="requirements-value">'.check_writable_root_path('app/config/').'</td>
+                <td class="requirements-item">chamilo/config</td>
+                <td class="requirements-value">'.check_writable_root_path('config/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/app/data</td>
-                <td class="requirements-value">'.check_writable_root_path('app/data').'</td>
+                <td class="requirements-item">chamilo/data</td>
+                <td class="requirements-value">'.check_writable_root_path('data').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/app/logs</td>
-                <td class="requirements-value">'.check_writable_root_path('app/logs').'</td>
+                <td class="requirements-item">chamilo/logs</td>
+                <td class="requirements-value">'.check_writable_root_path('logs').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/app/cache</td>
-                <td class="requirements-value">'.check_writable_root_path('app/cache').'</td>
+                <td class="requirements-item">chamilo/temp</td>
+                <td class="requirements-value">'.check_writable_root_path('temp').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">chamilo/main/default_course_document/images/</td>
                 <td class="requirements-value">'.check_writable('default_course_document/images/').'</td>
             </tr>
-
-            <tr>
-                <td class="requirements-item">chamilo/courses/</td>
-                <td class="requirements-value">'.check_writable('../courses/').' </td>
-            </tr>
-
             <tr>
                 <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
                 <td class="requirements-value">'.$course_test_was_created.' </td>
@@ -1304,8 +1298,9 @@ function display_requirements(
             <tr>
                 <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
-            </tr>
-            <tr>
+            </tr>';
+
+    /*  <tr>
                 <td class="requirements-item">chamilo/main/css/</td>
                 <td class="requirements-value">'.check_writable('css/', true).' ('.get_lang(
         'SuggestionOnlyToEnableCSSUploadFeature'
@@ -1316,7 +1311,7 @@ function display_requirements(
                 <td class="requirements-value">'.check_writable('lang/', true).' ('.get_lang(
         'SuggestionOnlyToEnableSubLanguageFeature'
     ).')</td>
-            </tr>';
+            </tr>*/
 
     echo '    </table>';
     echo '  </div>';
@@ -2607,8 +2602,8 @@ function movingFilesInAppFolder()
 {
     $sysPath = api_get_path(SYS_PATH);
     $moveDirs = array(
-        $sysPath.'searchdb' => api_get_path(SYS_PATH_APP).'data/searchdb/',
-        $sysPath.'home' => api_get_path(SYS_PATH_APP).'data/home/',
+        $sysPath.'searchdb' => api_get_path(SYS_DATA_PATH).'searchdb',
+        $sysPath.'home' => api_get_path(SYS_DATA_PATH).'home',
     );
 
     foreach ($moveDirs as $from => $to) {

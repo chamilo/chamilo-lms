@@ -5,51 +5,51 @@ $app['debug'] = false;
 $app['app.title'] = '';
 $app['jquery_ui_theme'] = 'smoothness';
 
-// Cache
-$app['cache.path'] = api_get_path(SYS_ARCHIVE_PATH);
+// Temp folder
+$app['temp.path'] = api_get_path(SYS_ARCHIVE_PATH);
 
-$app['cache.paths'] = new stdClass();
+$app['temp.paths'] = new stdClass();
 
 //Monolog
-$app['cache.paths']->folders[] = $app['log.path'] = api_get_path(SYS_PATH_APP).'logs';
+$app['temp.paths']->folders[] = $app['log.path'] = api_get_path(SYS_LOG_PATH);
 
 //Twig cache
-$app['cache.paths']->folders[] = $app['twig.cache.path'] = $app['cache.path'].'twig';
+$app['temp.paths']->folders[] = $app['twig.cache.path'] = $app['temp.path'].'twig';
 
 // Http cache
-$app['cache.paths']->folders[] = $app['http_cache.cache_dir'] = $app['cache.path'].'http';
+$app['temp.paths']->folders[] = $app['http_cache.cache_dir'] = $app['temp.path'].'http';
 
 // Doctrine ORM
-$app['cache.paths']->folders[] = $app['db.orm.proxies_dir'] = $app['cache.path'].'proxies_dir';
+$app['temp.paths']->folders[] = $app['db.orm.proxies_dir'] = $app['temp.path'].'proxies_dir';
 
 //Profiler
-$app['cache.paths']->folders[] = $app['profiler.cache_dir'] = $app['cache.path'].'profiler';
+$app['temp.paths']->folders[] = $app['profiler.cache_dir'] = $app['temp.path'].'profiler';
 
 //HTMLPurifier
-$app['cache.paths']->folders[] = $app['htmlpurifier.serializer'] = $app['cache.path'].'serializer';
+$app['temp.paths']->folders[] = $app['htmlpurifier.serializer'] = $app['temp.path'].'serializer';
 
 //PCLZIP temp dir
-define('PCLZIP_TEMPORARY_DIR', $app['cache.path'].'pclzip');
-$app['cache.paths']->folders[] = PCLZIP_TEMPORARY_DIR;
+define('PCLZIP_TEMPORARY_DIR', $app['temp.path'].'pclzip');
+$app['temp.paths']->folders[] = PCLZIP_TEMPORARY_DIR;
 
 //MPDF libs
-define("_MPDF_TEMP_PATH", $app['cache.path'].'/mpdf');
-define("_JPGRAPH_PATH", $app['cache.path'].'/mpdf');
-define("_MPDF_TTFONTDATAPATH", $app['cache.path'].'/mpdf');
+define("_MPDF_TEMP_PATH", $app['temp.path'].'/mpdf');
+define("_JPGRAPH_PATH", $app['temp.path'].'/mpdf');
+define("_MPDF_TTFONTDATAPATH", $app['temp.path'].'/mpdf');
 
-$app['cache.paths']->folders[] = _MPDF_TEMP_PATH;
+$app['temp.paths']->folders[] = _MPDF_TEMP_PATH;
 
 //QR code
-define('QR_CACHE_DIR', $app['cache.path'].'qr');
-define('QR_LOG_DIR', $app['cache.path'].'qr');
-$app['cache.paths']->folders[] = QR_CACHE_DIR;
+define('QR_CACHE_DIR', $app['temp.path'].'qr');
+define('QR_LOG_DIR', $app['temp.path'].'qr');
+$app['temp.paths']->folders[] = QR_CACHE_DIR;
 
-//Chamilo temp class
-$app['cache.paths']->folders[] = $app['cache.path'].'temp';
+//Chamilo Temp class
+$app['temp.paths']->folders[] = $app['temp.path'].'temp';
 
 // Assetic
 /*
-$app['assetic.path_to_cache']   = $app['cache.path'] . DIRECTORY_SEPARATOR . 'assetic' ;
+$app['assetic.path_to_cache']   = $app['temp.path'] . DIRECTORY_SEPARATOR . 'assetic' ;
 $app['assetic.path_to_web']     = api_get_path(SYS_PATH) . 'web'; //Location where to dump all generated files
 $app['assetic.input.path_to_assets'] = $app['assetic.path_to_web'].$app['app.theme'];
 
@@ -103,7 +103,7 @@ if (!is_dir($app['assetic.path_to_web'].'/js')) {
  *
  */
 
-foreach($app['cache.paths']->folders as $folder) {
+foreach ($app['temp.paths']->folders as $folder) {
     if (!is_dir($folder)) {
         @mkdir($folder, api_get_permissions_for_new_directories());
     }

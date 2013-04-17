@@ -20,7 +20,7 @@
  * The course id is stored in $_cid session variable.
  * The group  id is stored in $_gid session variable.
  *
- *    @package chamilo.include
+ * @package chamilo.include
 */
 
 // verified if exists the username and password in session current

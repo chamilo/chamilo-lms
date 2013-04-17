@@ -25,7 +25,6 @@ if ($_GET['origin']=='learnpath') {
 	require_once '../newscorm/aicc.class.php';
 	require_once '../newscorm/aiccItem.class.php';
 }
-require_once api_get_path(LIBRARY_PATH).'exercise_show_functions.lib.php';
 
 $this_section = SECTION_COURSES;
 

@@ -408,11 +408,11 @@ class UserGroup extends Model
         return Database::num_rows($res) != 0;
     }
 
-    function save($values) {
+    function save($values, $show_query = false) {
         $values['updated_on'] = $values['created_on'] = api_get_utc_datetime();
         $values['group_type'] = isset($values['group_type']) ? intval($values['group_type']) : $this->getGroupType();
 
-        $groupId = parent::save($values);
+        $groupId = parent::save($values, $show_query);
 
         if ($groupId) {
             $this->add_user_to_group(api_get_user_id(), $groupId, $values['visibility']);

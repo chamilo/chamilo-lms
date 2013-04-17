@@ -60,7 +60,6 @@
 
 {% raw %}
 <script>
-
 jQuery.fn.filterByText = function(textbox) {
     return this.each(function() {
         var select = this;
@@ -86,6 +85,8 @@ jQuery.fn.filterByText = function(textbox) {
         });
     });
 };
+
+//Functions used in main/admin
 
 var textarea = "";
 var max_char = 255;
@@ -132,7 +133,6 @@ function mysort(a, b){
     return 0;
 }
 
-
 var value = 1;
 $("#advanced_parameters").on("click", function() {
     $("#options").toggle(function() {
@@ -146,8 +146,7 @@ $("#advanced_parameters").on("click", function() {
     });
 });
 
-
-/* Makes row highlighting possible */
+/** Makes row highlighting possible */
 $(document).ready( function() {
     //Chosen select
     $(".chzn-select").chosen();

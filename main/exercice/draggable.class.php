@@ -38,7 +38,7 @@ class Draggable extends Matching
      */
     public function createAnswersForm($form)
     {
-        $defaults       = array();
+        $defaults = array();
         $navigator_info = api_get_navigator();
 
         $nb_matches = $nb_options = 2;

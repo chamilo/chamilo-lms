@@ -24,9 +24,8 @@ define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final 
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
-$debug = false; //All exercise scripts should depend in this debug variable
-
-require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
+//All exercise scripts should depend in this debug variable
+$debug = false;
 
 class Exercise
 {
@@ -66,7 +65,7 @@ class Exercise
      *
      * @author - Olivier Brouckaert
      */
-    function Exercise($course_id = null)
+    public function Exercise($course_id = null)
     {
         $this->id = 0;
         $this->exercise = '';
@@ -105,7 +104,7 @@ class Exercise
      * @param - integer $id - exercise ID
      * @return - boolean - true if exercise exists, otherwise false
      */
-    function read($id)
+    public function read($id)
     {
         global $_configuration;
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -178,13 +177,13 @@ class Exercise
             //load questions only for exercises of type 'one question per page'
             //this is needed only is there is no questions
             /*
-              // @todo not sure were in the code this is used somebody mess with the exercise tool
-              // @todo don't know who add that config and why $_configuration['live_exercise_tracking']
-              global $_configuration, $questionList;
-              if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED') &&
-              isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {
-              $this->questionList = $questionList;
-              } */
+            // @todo not sure were in the code this is used somebody mess with the exercise tool
+            // @todo don't know who add that config and why $_configuration['live_exercise_tracking']
+            global $_configuration, $questionList;
+            if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED') &&
+            isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {
+            $this->questionList = $questionList;
+            } */
 
             return true;
         }
@@ -193,7 +192,7 @@ class Exercise
         return false;
     }
 
-    function getCutTitle()
+    public function getCutTitle()
     {
         return Text::cut($this->exercise, EXERCISE_MAX_NAME_SIZE);
     }
@@ -205,7 +204,7 @@ class Exercise
      *
      * @return int - exercise ID
      */
-    function selectId()
+    public function selectId()
     {
         return $this->id;
     }
@@ -255,7 +254,7 @@ class Exercise
      *
      * @author - Olivier Brouckaert
      *
-     * @return - string - exercise description
+     * @return string - exercise description
      */
     function selectDescription()
     {
@@ -342,6 +341,7 @@ class Exercise
      * return 1 if random by cat, categories shuffled
      * return 2 if random by cat, categories sorted by alphabetic order
      * @author - hubert borderiou
+     *
      * @return - integer - quiz random by category
      */
     function isRandomByCat()
@@ -380,7 +380,8 @@ class Exercise
      * tells if questions are selected randomly, and if so returns the draws
      *
      * @author - Carlos Vargas
-     * @return - integer - results disabled exercise
+     *
+     * @return int results disabled exercise
      */
     function selectResultsDisabled()
     {
@@ -391,7 +392,8 @@ class Exercise
      * tells if questions are selected randomly, and if so returns the draws
      *
      * @author - Olivier Brouckaert
-     * @return - integer - 0 if not random, otherwise the draws
+     *
+     * @return bool - 0 if not random, otherwise the draws
      */
     function isRandom()
     {
@@ -430,6 +432,76 @@ class Exercise
     {
         return $this->active;
     }
+
+    /**
+     *
+     * @param $start
+     * @param $limit
+     * @param $sidx
+     * @param $sord
+     * @param array $where_condition
+     */
+    public function getQuestionList($start, $limit, $sidx, $sord, $where_condition = array())
+    {
+        if (!empty($this->id)) {
+
+            $category_list = Testcategory::getCategoryListName();
+
+            $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+            $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
+            $sql = "SELECT q.id
+                    FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
+                        ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
+					ORDER BY question_order";
+
+            $limitCondition = null;
+            if (!empty($start) && !empty($limit)) {
+                $limitCondition = " LIMIT $start, $limit";
+            }
+            $sql .= $limitCondition;
+
+            $columns = array('question', 'type', 'category', 'level', 'score', 'actions');
+
+            $result = Database::query($sql);
+            $questions = array();
+            if (Database::num_rows($result)) {
+                while ($question = Database::fetch_array($result, 'ASSOC')) {
+                    $objQuestionTmp = Question::read($question['id']);
+                    $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
+
+                    if (empty($category_labels)) {
+                        $category_labels = "-";
+                    }
+
+                    // Question type
+                    list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
+
+                    $question_media = null;
+                    if (!empty($objQuestionTmp->parent_id)) {
+                        $objQuestionMedia = Question::read($objQuestionTmp->parent_id);
+                        $question_media  = Display::label($objQuestionMedia->question, 'info');
+                    }
+
+                    $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media);
+
+                    $question = array(
+                        'id' => $question['id'],
+                        'question' => $objQuestionTmp->selectTitle(),
+                        'type' => $questionType,
+                        'category' => Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.'</a>'),
+                        'score' => $objQuestionTmp->selectWeighting(),
+                        'level' => $objQuestionTmp->level
+                    );
+                    $questions[] = $question;
+                }
+            }
+            return $questions;
+        }
+    }
+
+
 
     /**
      * returns the array with the question ID list

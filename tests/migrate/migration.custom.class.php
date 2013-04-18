@@ -996,26 +996,16 @@ class MigrationCustom {
                 $before1 = SessionManager::get_user_status_in_session($session_id, $user_id);
                 $before2 = SessionManager::get_user_status_in_session($destination_session_id, $user_id);
 
-                /*SessionManager::unsubscribe_user_from_session($session_id, $user_id);
-                SessionManager::suscribe_users_to_session($destination_session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);*/
-
-                //Not sure what reason use
                 /*
-                $extra_field_value = new ExtraFieldValue('session');
+                  These constants are defined in sessionmanager but are not
+                  usable directly from here
+                  SESSION_CHANGE_USER_REASON_SCHEDULE = 1;
+                  SESSION_CHANGE_USER_REASON_CLASSROOM = 2;
+                  SESSION_CHANGE_USER_REASON_LOCATION = 3;
+                  SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION = 4;
+                */
 
-                SESSION_CHANGE_USER_REASON_SCHEDULE = 1;
-                SESSION_CHANGE_USER_REASON_CLASSROOM = 2;
-                SESSION_CHANGE_USER_REASON_LOCATION = 3;
-                SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION = 4;
-
-                $extra_field_value->compare_item_values($session_id, $destination_session_id, 'aula');
-
-                SessionManager::compare_extra_field($session_id, $session_id, 'aula');
-                SessionManager::detect_reason_by_extra_field($session_id, 'sede');
-                SessionManager::detect_reason_by_extra_field($session_id, 'horario');
-                SessionManager::detect_reason_by_extra_field($session_id, 'aula');*/
-
-                $reason_id = SESSION_CHANGE_USER_REASON_SCHEDULE;
+                $reason_id = 1;
                 SessionManager::change_user_session($user_id, $session_id, $destination_session_id, $reason_id);
 
                 $befores = array($before1, $before2);

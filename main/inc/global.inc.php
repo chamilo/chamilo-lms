@@ -93,7 +93,7 @@ $libPath = $includePath.'/lib/';
 
 // Loading config files
 if ($alreadyInstalled) {
-    $configPath = $includePath.'/../../app/config/';
+    $configPath = $includePath.'/../../config/';
 
     $confFiles = array(
         'auth.conf.php',
@@ -527,6 +527,7 @@ if ($app['debug'] && isset($_configuration['main_database'])) {
 
 //Database constants
 require_once $libPath.'database.constants.inc.php';
+//@todo tranform the events.lib.inc.php in a class
 require_once $libPath.'events.lib.inc.php';
 
 // Connect to the server database and select the main chamilo database.
@@ -549,7 +550,7 @@ if (!$_configuration['db_host']) {
 }*/
 
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
-if (!empty($_configuration['multiple_access_urls'])) {
+if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
     $access_urls = api_get_access_urls();
 
@@ -772,6 +773,9 @@ if (isset($this_script) && $this_script == 'sub_language') {
         }
     }
 }
+
+
+
 
 /**
  * Include all necessary language files

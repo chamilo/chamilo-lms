@@ -15,7 +15,7 @@ class UserController
 {
     /**
      *
-     * @return string
+     * @return Response
      */
     public function indexAction(Application $app, $username)
     {
@@ -26,4 +26,39 @@ class UserController
 
         return new Response($response, 200, array());
     }
+
+    /**
+     * @param Application $app
+     *
+     * @return Response
+     */
+    public function onlineAction(Application $app)
+    {
+
+        $response = $app['template']->render_layout('layout_1_col.tpl');
+
+        return new Response($response, 200, array());
+    }
+
+    /**
+     * @param Application $app
+     *
+     * @return Response
+     */
+    public function onlineInCourseAction(Application $app)
+    {
+
+    }
+
+    /**
+     * @param Application $app
+     * @return Response
+     */
+    public function onlineInSessionAction(Application $app)
+    {
+
+    }
+
+
+
 }

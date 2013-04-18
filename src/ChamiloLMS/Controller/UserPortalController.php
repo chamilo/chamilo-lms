@@ -12,16 +12,20 @@ use Symfony\Component\HttpFoundation\Response;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class UserPortalController
+class UserPortalController extends CommonController
 {
     /**
      * @param Application $app
      * @param string $type courses|sessions|mycoursecategories
      * @param string $filter for the userportal courses page. Only works when setting 'history'
+     * @param int $page
+     *
      * @return Response|void
      */
     function indexAction(Application $app, $type = 'courses', $filter = 'current', $page = 1)
     {
+        $this->cidReset();
+
         //@todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
 
@@ -93,6 +97,9 @@ class UserPortalController
         return new Response($response, 200, array());
     }
 
+    /**
+     * Redirects after login
+     */
     function redirectAfterLogin()
     {
         // Get the courses list

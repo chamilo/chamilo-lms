@@ -12,12 +12,16 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class IndexController// extends Controller
+class IndexController extends CommonController
 {
     public $section;
-    public $language_files = array('courses', 'index', 'admin');
+    public $languageFiles = array('courses', 'index', 'admin');
 
-    function logoutAction(Application $app)
+    /**
+     * Logouts a user
+     * @param Application $app
+     */
+    public function logoutAction(Application $app)
     {
         $userId = api_get_user_id();
         \Online::logout($userId, true);
@@ -31,6 +35,8 @@ class IndexController// extends Controller
      */
     public function indexAction(Application $app)
     {
+        $this->cidReset();
+
         $extraJS = array();
         //@todo improve this JS includes should be added using twig
         $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
@@ -50,7 +56,6 @@ class IndexController// extends Controller
         $app['extraJS'] = $extraJS;
         $request = $app['request'];
         $app['languages_file'] = array('courses', 'index', 'admin');
-        $app['cidReset'] = true;
 
         // Testing translation using translator
         //echo $app['translator']->trans('Wiki Search Results');

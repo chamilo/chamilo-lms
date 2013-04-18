@@ -737,7 +737,9 @@ class Template
 
     public function assign($key, $value = null)
     {
-        $this->app['twig']->addGlobal($key, $value);
+        if ($this->app['allowed'] == true) {
+            $this->app['twig']->addGlobal($key, $value);
+        }
     }
 
     public function display($template = null)

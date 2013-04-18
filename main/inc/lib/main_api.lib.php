@@ -1166,7 +1166,6 @@ function _api_format_user($user, $add_password = false) {
     if (isset($user['is_anonymous']) && $user['is_anonymous']) {
         return $user;
     }
-
     $firstname = $lastname = null;
 
     if (isset($user['firstname']) && isset($user['lastname'])) {
@@ -2979,7 +2978,6 @@ function api_not_allowed($print_headers = false, $message = null) {
         // but the cidReq is not found, assume we are missing course data and send the user
         // to the user_portal
         //$tpl->display_one_col_template();
-        //$app->abort('403');
         $app['allowed'] = false;
         return false;
     }

@@ -45,6 +45,11 @@ $app = new Application();
 $includePath = dirname(__FILE__);
 
 // Include the main Chamilo platform configuration file.
+//@todo use a service provider like:
+/*
+    $app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile));
+*/
+
 $configurationFilePath = $includePath.'/conf/configuration.php';
 $configurationYMLFile = $includePath.'/../../config/configuration.yml';
 $configurationFileAppPath = $includePath.'/../../config/configuration.php';
@@ -128,12 +133,25 @@ if ($alreadyInstalled) {
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
 
-/*
-$settingsFile = __DIR__."/../../app/config/settings.yml";
-$app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile, array(
-        'database' => __DIR__.'/data',
-)));
-*/
+/* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
+if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
+    $_configuration['access_url'] = 1;
+    $access_urls = api_get_access_urls();
+
+    $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+    $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
+    $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+
+    foreach ($access_urls as & $details) {
+        if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
+            $_configuration['access_url'] = $details['id'];
+        }
+    }
+} else {
+    $_configuration['access_url'] = 1;
+}
+
+$app['configuration'] = $_configuration;
 
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
@@ -146,7 +164,6 @@ ini_set('include_path', api_create_include_path_setting());
 
 $app['configuration_file'] = $configurationFilePath;
 $app['configuration_yml_file'] = $configurationYMLFile;
-$app['configuration'] = $_configuration;
 $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 
@@ -164,6 +181,8 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 //$app->register(new Silex\Provider\SessionServiceProvider());
 
 /*
+ Implements a UserProvider to login users
+
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\User;
@@ -278,7 +297,6 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 /*
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
-
 class ManagerRegistry extends AbstractManagerRegistry
 {
     protected $container;
@@ -354,11 +372,10 @@ $app['twig'] = $app->share(
     })
 );
 
-
 // Registering Menu extension
 $app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
 
-//Pagerfanta settings
+//Pagerfanta settings (Pagination)
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 $app->register(new PagerfantaServiceProvider());
 
@@ -396,15 +413,15 @@ if (is_writable($app['temp.path'])) {
 }
 
 //Setting Doctrine service provider (DBAL)
-if (isset($_configuration['main_database'])) {
+if (isset($app['configuration']['main_database'])) {
 
     $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
         'db.options' => array(
             'driver' => 'pdo_mysql',
-            'dbname' => $_configuration['main_database'],
-            'user' => $_configuration['db_user'],
-            'password' => $_configuration['db_password'],
-            'host' => $_configuration['db_host'],
+            'dbname' => $app['configuration']['main_database'],
+            'user' => $app['configuration']['db_user'],
+            'password' => $app['configuration']['db_password'],
+            'host' => $app['configuration']['db_host'],
             'driverOptions' => array(
                 1002 => 'SET NAMES utf8'
             )
@@ -504,16 +521,17 @@ $app->error(
             $message = null;
         }
         //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
-        $app['template']->assign('error_code', $code);
-        $app['template']->assign('error_message', $message);
+        $app['twig']->addGlobal('error_code', $code);
+        $app['twig']->addGlobal('error_message', $message);
 
         $response = $app['template']->render_layout('error.tpl');
+
         return new Response($response);
     }
 );
 
 //Prompts Doctrine SQL queries using monolog
-if ($app['debug'] && isset($_configuration['main_database'])) {
+if ($app['debug'] && isset($app['configuration']['main_database'])) {
     $logger = new Doctrine\DBAL\Logging\DebugStack();
     $app['db.config']->setSQLLogger($logger);
 
@@ -533,11 +551,11 @@ require_once $libPath.'events.lib.inc.php';
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
     array(
-        'server' => $_configuration['db_host'],
-        'username' => $_configuration['db_user'],
-        'password' => $_configuration['db_password'],
-        'persistent' => $_configuration['db_persistent_connection']
-        // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
+        'server' => $app['configuration']['db_host'],
+        'username' => $app['configuration']['db_user'],
+        'password' => $app['configuration']['db_password'],
+        'persistent' => $app['configuration']['db_persistent_connection']
+        // When $app['configuration']['db_persistent_connection'] is set, it is expected to be a boolean type.
     )
 ))
 ) {
@@ -545,36 +563,18 @@ if (!($conn_return = @Database::connect(
 }
 
 /*
-if (!$_configuration['db_host']) {
+if (!$app['configuration']['db_host']) {
     //$app->abort(500, "Database is unavailable"); //error 3
 }*/
-
-/* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
-if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
-    $_configuration['access_url'] = 1;
-    $access_urls = api_get_access_urls();
-
-    $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-    $request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-    $request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
-
-    foreach ($access_urls as & $details) {
-        if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
-            $_configuration['access_url'] = $details['id'];
-        }
-    }
-} else {
-    $_configuration['access_url'] = 1;
-}
 
 $charset = 'UTF-8';
 $checkConnection = false;
 
-if (isset($_configuration['main_database'])) {
+if (isset($app['configuration']['main_database'])) {
     // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
     Database::query("set session sql_mode='';");
 
-    $checkConnection = @Database::select_db($_configuration['main_database'], $conn_return);
+    $checkConnection = @Database::select_db($app['configuration']['main_database'], $conn_return);
 
     if ($checkConnection) {
 
@@ -776,7 +776,6 @@ if (isset($this_script) && $this_script == 'sub_language') {
 
 
 
-
 /**
  * Include all necessary language files
  * - trad4all
@@ -933,7 +932,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         $q_logout_date = Database::query($sql_logout_date);
         $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
 
-        if ($res_logout_date < time() - $_configuration['session_lifetime']) {
+        if ($res_logout_date < time() - $app['configuration']['session_lifetime']) {
             // it isn't, we should create a fresh entry
             event_login();
             // now that it's created, we can get its ID and carry on
@@ -952,7 +951,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 // The langstat object will then be used in the get_lang() function.
 // This block can be removed to speed things up a bit as it should only ever
 // be used in development versions.
-if (isset($_configuration['language_measure_frequency']) && $_configuration['language_measure_frequency'] == 1) {
+if (isset($app['configuration']['language_measure_frequency']) && $app['configuration']['language_measure_frequency'] == 1) {
     require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
     $langstats = new langstats();
 }

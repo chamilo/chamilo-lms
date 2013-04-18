@@ -6633,7 +6633,8 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
             ->setFrom(array($sender_email => $sender_name))
             ->setTo(array($recipient_email => $recipient_name))
             ->setReplyTo(array($reply_to_mail => $reply_to_name))
-            ->setBody($body);
+            ->setBody($body)
+            ->setEncoder(Swift_Encoding::get8BitEncoding());
         if (!empty($data_file)) {
             // Attach it to the message
             $message->attach(Swift_Attachment::fromPath($data_file['path']))->setFilename($data_file['filename']);

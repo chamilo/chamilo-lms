@@ -16,7 +16,6 @@
 User-Agent: *
 
 # Directories
-Disallow: /archive/
 Disallow: /courses/
 Disallow: /documentation/
 Disallow: /home/
@@ -25,8 +24,12 @@ Disallow: /plugin/
 Disallow: /searchdb/
 Disallow: /tests/
 
+Disallow: /config/
+Disallow: /data/
+Disallow: /temp/
+Disallow: /logs/
+Disallow: /vendor/
+
 # Files
 Disallow: /license.txt
 Disallow: /README.txt
-Disallow: /whoisonline.php
-Disallow: /whoisonlinesession.php

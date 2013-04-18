@@ -50,6 +50,7 @@ return array(
     'AttendanceLink' => $baseDir . '/main/gradebook/lib/be/attendancelink.class.php',
     'Attribute_Translator' => $baseDir . '/main/inc/lib/phpdocx/pdf/include/attribute_translator.cls.php',
     'Auth' => $baseDir . '/main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/inc/class.auth.php',
+    'AuthLib' => $baseDir . '/main/inc/lib/auth.lib.php',
     'AutoLoader' => $baseDir . '/main/inc/lib/phpdocx/classes/AutoLoader.inc',
     'BaseFacebook' => $baseDir . '/main/auth/external_login/facebook-php-sdk/src/base_facebook.php',
     'Block_Frame_Decorator' => $baseDir . '/main/inc/lib/phpdocx/pdf/include/block_frame_decorator.cls.php',

@@ -9,8 +9,8 @@
  * Code
  * @package chamilo.auth
  */
-class CoursesController { // extends Controller {
-
+class CoursesController
+{
     private $toolname;
     private $view;
     private $model;
@@ -22,7 +22,7 @@ class CoursesController { // extends Controller {
         $this->toolname = 'auth';
         $actived_theme_path = api_get_template();
         $this->view = new View($this->toolname, $actived_theme_path);
-        $this->model = new Auth();
+        $this->model = new AuthLib();
     }
 
     /**

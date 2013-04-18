@@ -12,7 +12,7 @@
  * Auth can be used to instanciate objects or as a library to manage courses
  * @package chamilo.auth
  */
-class Auth {
+class AuthLib {
 
     /**
      * Constructor
@@ -441,7 +441,9 @@ class Auth {
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         // Get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id
+        $sql = "SELECT course_code
+                FROM $TABLE_COURSE_FIELD_VALUE tcfv
+                INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id
                 WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 
         $special_course_result = Database::query($sql);
@@ -578,8 +580,8 @@ class Auth {
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sql_find = "SELECT * FROM $TABLECOURS as course INNER JOIN $tbl_url_rel_course as url_rel_course
-                                        ON (url_rel_course.course_code=course.code)
-                                        WHERE access_url_id = $url_access_id AND  (code LIKE '%" . $search_term_safe . "%' OR title LIKE '%" . $search_term_safe . "%' OR tutor_name LIKE '%" . $search_term_safe . "%' ) $without_special_courses ORDER BY title, visual_code ASC ";
+                            ON (url_rel_course.course_code=course.code)
+                            WHERE access_url_id = $url_access_id AND  (code LIKE '%" . $search_term_safe . "%' OR title LIKE '%" . $search_term_safe . "%' OR tutor_name LIKE '%" . $search_term_safe . "%' ) $without_special_courses ORDER BY title, visual_code ASC ";
             }
         }
         $result_find = Database::query($sql_find);
@@ -588,8 +590,10 @@ class Auth {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
             $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+
             $courses[] = array(
                 'code' => $row['code'],
+                'real_id' => $row['id'],
                 'directory' => $row['directory'],
                 'db' => $row['db_name'],
                 'visual_code' => $row['visual_code'],

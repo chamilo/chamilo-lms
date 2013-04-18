@@ -147,7 +147,7 @@ if ($is_speacialcourse) {
 if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
-        $auth = new Auth();
+        $auth = new AuthLib();
         $msg = $auth->subscribe_user($course_code);
         if (!empty($msg)) {
             $show_message .= Display::return_message(get_lang($msg));

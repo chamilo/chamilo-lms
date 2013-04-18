@@ -16,8 +16,6 @@ $cidReset = true; // Flag forcing the 'current course' reset
 
 // including files
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'auth.lib.php';
-require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'courses_controller.php';
 
 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {

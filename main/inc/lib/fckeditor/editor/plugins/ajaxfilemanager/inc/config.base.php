@@ -1,6 +1,6 @@
 <?php
 /**
- * sysem base config setting
+ * system base config setting
  * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
  * @link www.phpletter.com
  * @since 1/August/2007
@@ -33,7 +33,7 @@ define('CONFIG_SYS_THUMBNAIL_VIEW_ENABLE', true);//REMOVE THE thumbnail view if 
 
 //User Permissions
 //Hack by Juan Carlos Raña Trabado
-if(empty($_course['path']) || Security::remove_XSS($_GET['editor'])=="stand_alone") {
+if(empty($_course['path']) || isset($_GET['editor']) && $_GET['editor'] == "stand_alone") {
 	define('CONFIG_OPTIONS_DELETE', true);
 	define('CONFIG_OPTIONS_CUT', true);
 	define('CONFIG_OPTIONS_COPY', true);
@@ -75,7 +75,7 @@ these two paths accept relative path only, don't use absolute path
 
 // Integration for Chamilo
 
-if(!empty($_course['path']) && Security::remove_XSS($_GET['editor'])!="stand_alone") {
+if(!empty($_course['path']) && !isset($_GET['editor']) && isset($_GET['editor']) && $_GET['editor'] != 'stand_alone') {
 	if(!empty($group_properties['directory'])) {
 		$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document'.$group_properties['directory'].'/';
 	} else {
@@ -91,7 +91,7 @@ if(!empty($_course['path']) && Security::remove_XSS($_GET['editor'])!="stand_alo
 		}
 	}
 } else {
-	if (api_is_platform_admin() && $_SESSION['this_section']=='platform_admin') {
+	if (api_is_platform_admin() && isset($_SESSION['this_section']) && $_SESSION['this_section']=='platform_admin') {
 		//home page portal
 		$PathChamiloAjaxFileManager='../../../../../../../home/default_platform_document/';
 	} else {

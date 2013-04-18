@@ -175,7 +175,7 @@
                         echo '&nbsp;';
                 }
 
-                if ($_GET['editor'] != 'stand_alone') {
+                if (!isset($_GET['editor']) && isset($_GET['editor']) && $_GET['editor'] != 'stand_alone') {
                     $path_chamilo_file = '../'.$file['path']; // fix for makes a good show when pressed next on window preview, don't only one image
                 } else {
                     $path_chamilo_file = $file['path'];

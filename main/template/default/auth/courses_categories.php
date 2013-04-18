@@ -33,7 +33,7 @@ $stok = Security::get_token();
     <div class="span3">
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
-                <?php if (intval($_GET['hidden_links']) != 1) { ?>
+                <?php if (!isset($_GET['hidden_links']) || isset($_GET['hidden_links']) && intval($_GET['hidden_links']) != 1) { ?>
                 <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
                     <fieldset>
                         <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
@@ -66,10 +66,10 @@ $stok = Security::get_token();
                 // level 1
                 foreach ($browse_course_categories[0] as $category) {
                     $category_name = $category['name'];
-                    $category_code = $category['code'];
+                    $category_code = isset($category['code']) ? $category['code'] : null;
                     $count_courses_lv1 = $category['count_courses'];
 
-                    if ($code == $category_code) {
+                    if (isset($code) && $code == $category_code) {
                         $category_link = '<strong>'.$category_name.' ('.$count_courses_lv1.')</strong>';
                     } else {
                         if (!empty($count_courses_lv1)) {
@@ -151,7 +151,7 @@ $stok = Security::get_token();
                     continue;
                 }
                 // course isn't closed
-                $title      = cut($course['title'], 70);
+                $title      = Text::cut($course['title'], 70);
                 $tutor_name = $course['tutor'];
 
                 $creation_date = substr($course['creation_date'],0,10);
@@ -165,13 +165,15 @@ $stok = Security::get_token();
                     $course_medium_image = api_get_path(WEB_IMG_PATH).'without_picture.png'; // without picture
                 }
 
-                $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);
+                $pointInfo = isset($course['point_info']) ? $course['point_info'] : null;
+
+                $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $pointInfo);
 
                 echo '<div class="well_border"><div class="row">';
                     echo '<div class="span2">';
                         echo '<div class="thumbnail">';
                         if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                            echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';
+                            echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" rel="gb_page_center[778]">';
                             echo '<img src="'.$course_medium_image.'" alt="" />';
                             echo '</a>';
                         } else {
@@ -183,14 +185,14 @@ $stok = Security::get_token();
                     echo '<div class="span4">';
                     $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
                     $teachers = '<h5>'.$teachers.'</h5>';
-                    echo '<div class="categories-course-description"><h3>'.cut($title, 60).'</h3>'.$teachers.$rating.'</div>';
+                    echo '<div class="categories-course-description"><h3>'.Text::cut($title, 60).'</h3>'.$teachers.$rating.'</div>';
 
                     echo '<p>';
                     // we display the icon to subscribe or the text already subscribed
                     echo '<div class="btn-toolbar">';
 
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                        echo '<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a>';
+                        echo '<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" class="thickbox">'.get_lang('Description').'</a>';
                     }
 
                     // Get access type for course button ("enter" or/and "register")

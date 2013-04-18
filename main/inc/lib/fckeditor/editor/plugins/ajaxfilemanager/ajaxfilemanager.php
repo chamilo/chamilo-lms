@@ -71,7 +71,7 @@ if(!empty($_GET['view'])) {
 <script type="text/javascript" src="jscripts/ajaxfilemanager.js"></script>
 <script type="text/javascript">
 
-	var mode_editor = '<?php echo Security::remove_XSS($_GET['editor']);?>';<!-- Chamilo hack for general my files users  -->
+	var mode_editor = '<?php echo isset($_GET['editor']) ? Security::remove_XSS($_GET['editor']) : '' ;?>';<!-- Chamilo hack for general my files users  -->
 	if (!mode_editor){
 		// Added by Ivan Tcholakov, 22-JUL-2009.
 		// For integration with the editor's dialig system.

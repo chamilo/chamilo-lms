@@ -1,5 +1,5 @@
 <?php
-//Temporal hack to redirect calls to the new web/index.php
+//Redirects calls to user.php?admin to web/user/admin
 require_once 'main/inc/global.inc.php';
 $path = api_get_path(WEB_PUBLIC_PATH);
 $array_keys = isset($_GET) ? array_keys($_GET) : null;

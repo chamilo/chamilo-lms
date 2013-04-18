@@ -61,6 +61,7 @@ if ($user_already_registered_show_terms == false) {
 
     //	EMAIL
     $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
+
     if (api_get_setting('registration', 'email') == 'true') {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
     }
@@ -80,11 +81,12 @@ if ($user_already_registered_show_terms == false) {
     }
     // Enabled by Ivan Tcholakov, 06-APR-2009. CONFVAL_ASK_FOR_OFFICIAL_CODE = false by default.
     //	OFFICIAL CODE
-    if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
+    //if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
         $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
-        if (api_get_setting('registration', 'officialcode') == 'true')
+        if (api_get_setting('registration', 'officialcode') == 'true') {
             $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
-    }
+        }
+    //}
 
     //	USERNAME
     if (api_get_setting('login_is_email') != 'true') {
@@ -97,19 +99,22 @@ if ($user_already_registered_show_terms == false) {
     }
 
     //	PASSWORD
-    $form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 20, 'autocomplete' => 'off'));
+    $form->addElement('password', 'pass1', get_lang('Password'), array('size' => 20, 'autocomplete' => 'off'));
     $form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 20, 'autocomplete' => 'off'));
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
 
-    if (CHECK_PASS_EASY_TO_FIND)
-        $form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+    //if (CHECK_PASS_EASY_TO_FIND) {
+        $form->addRule('pass1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+    //}
 
     //	PHONE
     $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
-    if (api_get_setting('registration', 'phone') == 'true')
+
+    if (api_get_setting('registration', 'phone') == 'true') {
         $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
+    }
 
     // PICTURE
     /*if (api_get_setting('profile', 'picture') == 'true') {

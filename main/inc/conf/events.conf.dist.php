@@ -11,7 +11,7 @@
  * 4. that switch will see if the function actually exists (if not, we get dont do anything)
  * 5. then it will see if a filter for that function exists (if it does, the filter is executed)
  * 6. if the filter says it's ok, the function linked to the event is executed
- * 7. and that function will actually call the truly interesting function with the good require_once 
+ * 7. and that function will actually call the truly interesting function with the good require_once
  */
 global $event_config;
 
@@ -21,8 +21,8 @@ $event_config = array(
             'event_send_mail' // don't forget to actually write this function in the events.lib.php file
         ),
         'self_sent' => false, // this key states that we can't add user to this event through the admin panel
-        'name_lang_var' => get_lang('PortalHomepageEdited'),
-        'desc_lang_var' => get_lang('PortalHomepageEdited'),
+        'name_lang_var' => 'PortalHomepageEdited',
+        'desc_lang_var' => 'PortalHomepageEdited',
         'available_keyvars' => array (// keys used for the mail template
             'url'           => 'portal',
             'sitename'      => 'sitename',
@@ -43,8 +43,8 @@ $event_config = array(
             'event_send_mail' // don't forget to actually write this function in the events.lib.php file
         ),
         'self_sent' => true, // this key states that we can't add user to this event through the admin panel
-        'name_lang_var' => get_lang('UserRegistrationTitle'),
-        'desc_lang_var' => get_lang('UserRegistrationComment'),
+        'name_lang_var' => 'UserRegistrationTitle',
+        'desc_lang_var' => 'UserRegistrationComment',
         'available_keyvars' => array (// keys used for the mail template
             'url'           => 'portal',
             'sitename'      => 'sitename',

@@ -5453,6 +5453,7 @@ function is_allowed_to_edit() {
  * @param string $additional_headers
  * @param string $additional_parameters
  * @author Ivan Tcholakov, 04-OCT-2009, a reworked version of this function.
+ * @deprecated use api_mail_html
  * @link http://www.dokeos.com/forum/viewtopic.php?t=15557
  */
 function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null) {

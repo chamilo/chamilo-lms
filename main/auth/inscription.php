@@ -106,7 +106,7 @@ if ($user_already_registered_show_terms == false) {
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
 
     //if (CHECK_PASS_EASY_TO_FIND) {
-        $form->addRule('pass1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+        //$form->addRule('pass1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
     //}
 
     //	PHONE

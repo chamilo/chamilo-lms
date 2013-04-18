@@ -6627,13 +6627,21 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
         $reply_to_mail = $extra_headers['reply_to']['mail'];
         $reply_to_name = $extra_headers['reply_to']['name'];
     }
+
+    //$mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
+
+    //Forcing the conversion
+    $htmlBody = str_replace(array("\n\r", "\n", "\r"), '<br />', $body);
+    $htmlBody = '<html><head></head><body>'.$htmlBody.'</body></html>';
+
     try {
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
             ->setFrom(array($sender_email => $sender_name))
             ->setTo(array($recipient_email => $recipient_name))
             ->setReplyTo(array($reply_to_mail => $reply_to_name))
-            ->setBody($body)
+            ->setBody($htmlBody, 'text/html')
+            ->addPart($body, 'text/plain')
             ->setEncoder(Swift_Encoding::get8BitEncoding());
         if (!empty($data_file)) {
             // Attach it to the message
@@ -6646,13 +6654,15 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
 
         $app['monolog']->addDebug($message);
         $result = $app['mailer']->send($message);
+
         return $result;
     } catch (Exception $e) {
         $app['monolog']->addDebug('Email address not valid:' . $e->getMessage());
     }
+
     return false;
 
-
+    /*
     $mail = new PHPMailer();
     $mail->Mailer  = $platform_email['SMTP_MAILER'];
     $mail->Host    = $platform_email['SMTP_HOST'];
@@ -6801,6 +6811,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
     $mail->ClearAddresses();
 
     return 1;
+    */
 }
 
 function api_get_user_language() {

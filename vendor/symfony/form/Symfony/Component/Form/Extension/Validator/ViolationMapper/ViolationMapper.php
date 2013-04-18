@@ -13,9 +13,9 @@ namespace Symfony\Component\Form\Extension\Validator\ViolationMapper;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Util\VirtualFormAwareIterator;
-use Symfony\Component\PropertyAccess\PropertyPathIterator;
-use Symfony\Component\PropertyAccess\PropertyPathBuilder;
-use Symfony\Component\PropertyAccess\PropertyPathIteratorInterface;
+use Symfony\Component\Form\Util\PropertyPathIterator;
+use Symfony\Component\Form\Util\PropertyPathBuilder;
+use Symfony\Component\Form\Util\PropertyPathIteratorInterface;
 use Symfony\Component\Form\Extension\Validator\ViolationMapper\ViolationPathIterator;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -123,7 +123,6 @@ class ViolationMapper implements ViolationMapperInterface
         // Only add the error if the form is synchronized
         if ($this->acceptsErrors($scope)) {
             $scope->addError(new FormError(
-                $violation->getMessage(),
                 $violation->getMessageTemplate(),
                 $violation->getMessageParameters(),
                 $violation->getMessagePluralization()
@@ -174,9 +173,9 @@ class ViolationMapper implements ViolationMapperInterface
             }
 
             if ($it->isIndex()) {
-                $chunk .= '['.$it->current().']';
+                $chunk .= '[' . $it->current() . ']';
             } else {
-                $chunk .= ('' === $chunk ? '' : '.').$it->current();
+                $chunk .= ('' === $chunk ? '' : '.') . $it->current();
             }
 
             // Test mapping rules as long as we have any
@@ -265,7 +264,7 @@ class ViolationMapper implements ViolationMapperInterface
                 $propertyPathBuilder->remove(0, $i + 1);
                 $i = 0;
             } else {
-                /* @var \Symfony\Component\PropertyAccess\PropertyPathInterface $propertyPath */
+                /* @var \Symfony\Component\Form\Util\PropertyPathInterface $propertyPath */
                 $propertyPath = $scope->getPropertyPath();
 
                 if (null === $propertyPath) {

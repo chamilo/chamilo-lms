@@ -32,7 +32,7 @@ class NumberToLocalizedStringTransformerTest extends LocalizedTestCase
         $this->assertEquals('12345,912', $transformer->transform(12345.9123));
     }
 
-    public function testTransformEmpty()
+    public function testTransform_empty()
     {
         $transformer = new NumberToLocalizedStringTransformer();
 
@@ -75,7 +75,7 @@ class NumberToLocalizedStringTransformerTest extends LocalizedTestCase
         $this->assertEquals(12345.912, $transformer->reverseTransform('12345,912'));
     }
 
-    public function testReverseTransformEmpty()
+    public function testReverseTransform_empty()
     {
         $transformer = new NumberToLocalizedStringTransformer();
 
@@ -129,7 +129,7 @@ class NumberToLocalizedStringTransformerTest extends LocalizedTestCase
     /**
      * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
-    public function testDecimalSeparatorMayNotBeDotIfGroupingSeparatorIsDotWithNoGroupSep()
+    public function testDecimalSeparatorMayNotBeDotIfGroupingSeparatorIsDot_noGroupSep()
     {
         if ($this->isLowerThanIcuVersion('4.7')) {
             $this->markTestSkipped('Please upgrade ICU version to 4.7+');
@@ -185,7 +185,7 @@ class NumberToLocalizedStringTransformerTest extends LocalizedTestCase
     /**
      * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
-    public function testDecimalSeparatorMayNotBeCommaIfGroupingSeparatorIsCommaWithNoGroupSep()
+    public function testDecimalSeparatorMayNotBeCommaIfGroupingSeparatorIsComma_noGroupSep()
     {
         if ($this->isLowerThanIcuVersion('4.7')) {
             $this->markTestSkipped('Please upgrade ICU version to 4.7+');

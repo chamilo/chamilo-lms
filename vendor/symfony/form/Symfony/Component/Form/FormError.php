@@ -19,11 +19,6 @@ namespace Symfony\Component\Form;
 class FormError
 {
     /**
-     * @var string
-     */
-    private $message;
-
-    /**
      * The template for the error message
      * @var string
      */
@@ -46,19 +41,16 @@ class FormError
      *
      * Any array key in $messageParameters will be used as a placeholder in
      * $messageTemplate.
+     * @see \Symfony\Component\Translation\Translator
      *
-     * @param string       $message              The translated error message
-     * @param string|null  $messageTemplate      The template for the error message
+     * @param string       $messageTemplate      The template for the error message
      * @param array        $messageParameters    The parameters that should be
      *                                           substituted in the message template.
      * @param integer|null $messagePluralization The value for error message pluralization
-     *
-     * @see \Symfony\Component\Translation\Translator
      */
-    public function __construct($message, $messageTemplate = null, array $messageParameters = array(), $messagePluralization = null)
+    public function __construct($messageTemplate, array $messageParameters = array(), $messagePluralization = null)
     {
-        $this->message = $message;
-        $this->messageTemplate = $messageTemplate ?: $message;
+        $this->messageTemplate = $messageTemplate;
         $this->messageParameters = $messageParameters;
         $this->messagePluralization = $messagePluralization;
     }
@@ -70,7 +62,7 @@ class FormError
      */
     public function getMessage()
     {
-        return $this->message;
+        return strtr($this->messageTemplate, $this->messageParameters);
     }
 
     /**

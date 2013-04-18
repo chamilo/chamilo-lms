@@ -22,8 +22,7 @@ class DefaultCsrfProviderTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        ini_set('session.save_handler', 'files');
-        ini_set('session.save_path', sys_get_temp_dir());
+        @session_start();
     }
 
     protected function setUp()
@@ -38,33 +37,13 @@ class DefaultCsrfProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateCsrfToken()
     {
-        session_start();
-
         $token = $this->provider->generateCsrfToken('foo');
 
         $this->assertEquals(sha1('SECRET'.'foo'.session_id()), $token);
-    }
-
-    public function testGenerateCsrfTokenOnUnstartedSession()
-    {
-        session_id('touti');
-
-        if (!version_compare(PHP_VERSION, '5.4', '>=')) {
-            $this->markTestSkipped('This test requires PHP >= 5.4');
-        }
-
-        $this->assertSame(PHP_SESSION_NONE, session_status());
-
-        $token = $this->provider->generateCsrfToken('foo');
-
-        $this->assertEquals(sha1('SECRET'.'foo'.session_id()), $token);
-        $this->assertSame(PHP_SESSION_ACTIVE, session_status());
     }
 
     public function testIsCsrfTokenValidSucceeds()
     {
-        session_start();
-
         $token = sha1('SECRET'.'foo'.session_id());
 
         $this->assertTrue($this->provider->isCsrfTokenValid('foo', $token));
@@ -72,8 +51,6 @@ class DefaultCsrfProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testIsCsrfTokenValidFails()
     {
-        session_start();
-
         $token = sha1('SECRET'.'bar'.session_id());
 
         $this->assertFalse($this->provider->isCsrfTokenValid('foo', $token));

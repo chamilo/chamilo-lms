@@ -42,6 +42,12 @@ Remember to add execution permissions to the phar file.
 
     cd /var/www/chamilo
     chash
+    
+If you're using php 5.3 with suhosin the phar will not be executed you can try this:
+
+    php -d suhosin.executor.include.whitelist="phar" chash.phar 
+
+or you can change this setting in your /etc/php5/cli/conf.d/suhosin.ini file (look for "executor"), although this might increase the vulnerability of your system.
 
 Available commands:
 ====================
@@ -58,10 +64,19 @@ Available commands:
     files
         files:clean_archives          Cleans the archives directory
         files:clean_config_files      Cleans the config files to help you re-install
+        files:show_mail_conf          Returns the current mail config
 
     translation
         translation:export_language   Exports a Chamilo language package
         translation:import_language   Import a Chamilo language package
+        translation:platform_language Gets or sets the platform language
+
+    user
+        user:change_pass              Updates the user password to the one given
+        user:disable_admins           Makes the given user admin on the main portal
+        user:make_admin               Makes the given user admin on the main portal
+        user:reset_login              Outputs login link for given username
+        user:set_language             Sets the users language to the one given
 
 Usage
 ====================

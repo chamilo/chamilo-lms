@@ -79,14 +79,14 @@ class DateTimeToStringTransformerTest extends DateTimeTestCase
         $this->assertEquals($output, $transformer->transform($input));
     }
 
-    public function testTransformEmpty()
+    public function testTransform_empty()
     {
         $transformer = new DateTimeToStringTransformer();
 
         $this->assertSame('', $transformer->transform(null));
     }
 
-    public function testTransformWithDifferentTimezones()
+    public function testTransform_differentTimezones()
     {
         $transformer = new DateTimeToStringTransformer('Asia/Hong_Kong', 'America/New_York', 'Y-m-d H:i:s');
 
@@ -134,14 +134,14 @@ class DateTimeToStringTransformerTest extends DateTimeTestCase
         $this->assertDateTimeEquals($output, $reverseTransformer->reverseTransform($input));
     }
 
-    public function testReverseTransformEmpty()
+    public function testReverseTransform_empty()
     {
         $reverseTransformer = new DateTimeToStringTransformer();
 
         $this->assertNull($reverseTransformer->reverseTransform(''));
     }
 
-    public function testReverseTransformWithDifferentTimezones()
+    public function testReverseTransform_differentTimezones()
     {
         $reverseTransformer = new DateTimeToStringTransformer('America/New_York', 'Asia/Hong_Kong', 'Y-m-d H:i:s');
 

@@ -29,14 +29,18 @@ class ServerParams
             return null;
         }
 
-        if (preg_match('#^\+?(0X?)?(.*?)([KMG]?)$#', $iniMax, $match)) {
-            $shifts = array('' => 0, 'K' => 10, 'M' => 20, 'G' => 30);
-            $bases = array('' => 10, '0' => 8, '0X' => 16);
+        $max = (int) $iniMax;
 
-            return intval($match[2], $bases[$match[1]]) << $shifts[$match[3]];
+        switch (substr($iniMax, -1)) {
+            case 'G':
+                $max *= 1024;
+            case 'M':
+                $max *= 1024;
+            case 'K':
+                $max *= 1024;
         }
 
-        return 0;
+        return $max;
     }
 
     /**

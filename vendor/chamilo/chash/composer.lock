@@ -1,4 +1,8 @@
 {
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
     "hash": "1bea5cc52d392819dc48a5b9caa6a96b",
     "packages": [
         {
@@ -8,16 +12,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "ce8d34ee8b1abc7c0f3d0923fdb32a85e7decb98"
+                "reference": "74049e36e2e73ca2ec069c9be86d01ba422d44ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/ce8d34ee8b1abc7c0f3d0923fdb32a85e7decb98",
-                "reference": "ce8d34ee8b1abc7c0f3d0923fdb32a85e7decb98",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/74049e36e2e73ca2ec069c9be86d01ba422d44ea",
+                "reference": "74049e36e2e73ca2ec069c9be86d01ba422d44ea",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/event-dispatcher": ">=2.1,<3.0"
             },
             "type": "library",
             "extra": {
@@ -46,7 +53,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 07:15:46"
+            "time": "2013-04-13 14:06:01"
         },
         {
             "name": "symfony/yaml",
@@ -55,12 +62,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "1238ede850fb8c6946a6c44963d38bbf9cad6dd1"
+                "reference": "4ef80f5c5081ad9a7e08184fc9f25c62d87e408c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/1238ede850fb8c6946a6c44963d38bbf9cad6dd1",
-                "reference": "1238ede850fb8c6946a6c44963d38bbf9cad6dd1",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/4ef80f5c5081ad9a7e08184fc9f25c62d87e408c",
+                "reference": "4ef80f5c5081ad9a7e08184fc9f25c62d87e408c",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +95,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 01:54:33"
+            "time": "2013-04-12 10:27:36"
         }
     ],
     "packages-dev": [

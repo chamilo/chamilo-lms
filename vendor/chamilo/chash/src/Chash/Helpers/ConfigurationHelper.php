@@ -49,12 +49,12 @@ class ConfigurationHelper extends Helper
             $chamiloPath = $path;
         }
 
-        $dir = $chamiloPath.'/main/inc/conf/';
-
-        if (is_dir($dir)) {
-            return $dir;
+        while (!is_dir($chamiloPath.'/main/inc/conf/') && $chamiloPath != '/') {
+            $chamiloPath = realpath($chamiloPath.'/..');
         }
-
+        if (is_dir($chamiloPath.'/main/inc/conf/')) {
+            return $dir = realpath($chamiloPath.'/main/inc/conf/').'/';
+        }
         return false;
     }
 

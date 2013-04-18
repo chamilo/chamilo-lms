@@ -38,7 +38,7 @@ class ValueToDuplicatesTransformerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($output, $this->transformer->transform('Foo'));
     }
 
-    public function testTransformEmpty()
+    public function testTransform_empty()
     {
         $output = array(
             'a' => null,
@@ -60,7 +60,7 @@ class ValueToDuplicatesTransformerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Foo', $this->transformer->reverseTransform($input));
     }
 
-    public function testReverseTransformCompletelyEmpty()
+    public function testReverseTransform_completelyEmpty()
     {
         $input = array(
             'a' => '',
@@ -71,7 +71,7 @@ class ValueToDuplicatesTransformerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->transformer->reverseTransform($input));
     }
 
-    public function testReverseTransformCompletelyNull()
+    public function testReverseTransform_completelyNull()
     {
         $input = array(
             'a' => null,
@@ -85,7 +85,7 @@ class ValueToDuplicatesTransformerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
-    public function testReverseTransformPartiallyNull()
+    public function testReverseTransform_partiallyNull()
     {
         $input = array(
             'a' => 'Foo',
@@ -99,7 +99,7 @@ class ValueToDuplicatesTransformerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
-    public function testReverseTransformDifferences()
+    public function testReverseTransform_differences()
     {
         $input = array(
             'a' => 'Foo',

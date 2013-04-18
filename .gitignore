@@ -1,9 +1,10 @@
-# Chamilo configuration
+# Chamilo
+
 main/inc/conf
-app/cache/*
-app/config/*
-app/data/*
-app/logs/*
+config/*
+temp/*
+data/*
+logs/*
 
 # Courses
 
@@ -20,10 +21,6 @@ main/upload/users/*
 # Logs and databases #
 *.log
 
-# Xapian indexes directory
-searchdb/*
-!searchdb/index.html
-
 # IDE settings
 
 .idea
@@ -34,3 +31,9 @@ searchdb/*
 *.orig
 nbproject/*
 vendor/.git
+
+#Doctrine entities generation tests
+
+tests/doctrine_console/generated
+tests/doctrine_console/mapping
+tests/doctrine_console/Proxies

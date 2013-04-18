@@ -128,8 +128,6 @@ if ($alreadyInstalled) {
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
 
-
-
 /*
 $settingsFile = __DIR__."/../../app/config/settings.yml";
 $app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile, array(
@@ -153,8 +151,8 @@ $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 
 //Loading $app settings
-require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
-//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
+//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
+require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
 /*
@@ -679,11 +677,6 @@ $app['mailer'] = $app->share(function ($app) {
     return new \Swift_Mailer($app['swiftmailer.transport']);
 });
 
-// Check and modify the date of user in the track.e.online table
-if ($alreadyInstalled && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
-    Online::LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
-}
-
 $app['api_get_languages'] = api_get_languages();
 
 /*	Loading languages and sublanguages */
@@ -859,7 +852,7 @@ if (api_get_setting('login_is_email') == 'true') {
 
 define('USERNAME_MAX_LENGTH', $default_username_length);
 
-//Silex filters: before|after|finish
+/** Silex Middlewares: A before application middleware allows you to tweak the Request before the controller is executed */
 
 $app->before(
     function () use ($app, $checkConnection) {
@@ -879,19 +872,36 @@ $app->before(
         }
 
         if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-            $app->abort(500, "archive folder must be writeable");
+            $app->abort(500, "temp folder must be writeable");
         }
 
+        // Check and modify the date of user in the track.e.online table
+
+        //if ($checkConnection && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
+
+        Online::loginCheck(api_get_user_id());
+        //}
+
         //$app['request']->getSession()->start();
+        //var_dump($app['cidReset']);
     }
 );
 
-$app->finish(
-    function (Request $request) use ($app) {
-        /*if ($request->get('_route') == 'logout') {
-        }*/
+/** Silex Middlewares: An after application middleware allows you to tweak the Response before it is sent to the client */
+$app->after(
+    function (Request $request, Response $response) {
+
     }
 );
+
+/** Silex Middlewares: A finish application middleware allows you to execute tasks after the Response has been sent to
+ * the client (like sending emails or logging) */
+$app->finish(
+    function (Request $request) use ($app) {
+
+    }
+);
+
 
 
 // The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
@@ -951,8 +961,6 @@ if (empty($default_quota)) {
 }
 
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
-
-
 
 //Default template settings loaded in template.inc.php
 $app['template.show_header'] = true;
@@ -1043,14 +1051,21 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
 //Logout page
 $app->get('/logout', 'index.controller:logoutAction')->bind('logout');
 
-
+//Courses
 $app->match('/courses/{courseCode}/index.php', 'course_home.controller:indexAction', 'GET|POST');
 $app->match('/courses/{courseCode}', 'course_home.controller:indexAction', 'GET|POST');
 
+//Certificates
 $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
 
+//Username
 $app->match('/user/{username}', 'user.controller:indexAction', 'GET');
 
+/*$app->match('/users/online', 'user.controller:onlineAction', 'GET');
+$app->match('/users/online-in-course', 'user.controller:onlineInCourseAction', 'GET');
+$app->match('/users/online-in-session', 'user.controller:onlineInSessionAction', 'GET');*/
+
+//Portal news
 $app->match('/news/{id}', 'news.controller:indexAction', 'GET');
 
 //LP controller

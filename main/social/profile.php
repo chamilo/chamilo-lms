@@ -12,7 +12,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 if (api_get_setting('allow_social_tool') !='true') {
-    $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
+    $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.intval($_GET['u']);
     header('Location: '.$url);
     exit;
 }
@@ -390,7 +390,7 @@ if ($show_full_profile) {
         $friend_html .= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';
         $friend_html.= '<div id="friend-container" class="social-friend-container">';
         $friend_html.= '<div id="friend-header">';
-        $friend_html.= '<div>'.get_lang('NoFriendsInYourContactList').'<br /><a class="btn" href="'.api_get_path(WEB_PATH).'whoisonline.php">'.get_lang('TryAndFindSomeFriends').'</a></div>';
+        $friend_html.= '<div>'.get_lang('NoFriendsInYourContactList').'<br /><a class="btn" href="'.api_get_path(WEB_PUBLIC_PATH).'users/online">'.get_lang('TryAndFindSomeFriends').'</a></div>';
         $friend_html.= '</div>'; // close div friend-header
     }
     $friend_html.= '</div>';
@@ -546,7 +546,7 @@ if ($show_full_profile) {
 
     // COURSES LIST
     $my_courses = null;
-    if ( is_array($list) ) {
+    if (isset($list) && !empty($list)) {
         $my_courses .=  '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
         $my_courses .=  '<div class="social-content-training">';
 

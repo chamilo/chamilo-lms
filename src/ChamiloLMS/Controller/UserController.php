@@ -29,6 +29,7 @@ class UserController
 
     /**
      * @param Application $app
+     * @todo remove whoisonline.php script and use this
      *
      * @return Response
      */
@@ -36,7 +37,6 @@ class UserController
     {
 
         $response = $app['template']->render_layout('layout_1_col.tpl');
-
         return new Response($response, 200, array());
     }
 
@@ -52,13 +52,11 @@ class UserController
 
     /**
      * @param Application $app
+     *
      * @return Response
      */
     public function onlineInSessionAction(Application $app)
     {
 
     }
-
-
-
 }

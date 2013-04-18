@@ -746,7 +746,7 @@ class SocialManager extends UserManager {
 
             $status = get_status_from_code($user_object->status);
 
-            $interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
+            $interbreadcrumb[] = array('url' => SocialManager::getUserOnlineLink(), 'name' => get_lang('UsersOnLineList'));
 
             if ($returnContent == false) {
                 Display::display_header($alt, null, $alt);
@@ -912,5 +912,29 @@ class SocialManager extends UserManager {
             break;
         }
         return $content;
+    }
+
+    /**
+     *
+     * @param $courseCode
+     * @param null $sessionId
+     * @return string
+     */
+    static function getUserOnlineLink($courseCode = null, $sessionId = null)
+    {
+        if (empty($courseCode) && empty($sessionId)) {
+            return api_get_path(WEB_PATH).'whoisonline.php';
+            //return api_get_path(WEB_PUBLIC_PATH).'users/online';
+        }
+
+        if (!empty($courseCode)) {
+            //return api_get_path(WEB_PUBLIC_PATH).'users/online-in-course/'.$courseCode;
+            return api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseCode;
+        }
+
+        if (!empty($sessionId)) {
+            //return api_get_path(WEB_PUBLIC_PATH).'users/online-in-session/'.$courseCode;
+            return api_get_path(WEB_PATH).'whoisonlinesession.php?session_id='.$sessionId;
+        }
     }
 }

@@ -21,7 +21,12 @@ use \ChamiloSession as Session;
 
 class Online {
 
-    static function LoginCheck($uid) {
+    /**
+     * Checking user in DB
+     * @param int $uid
+     */
+    static function loginCheck($uid)
+    {
         global $_course;
         $uid = (int) $uid;
         $online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);

@@ -1,5 +1,11 @@
 {
     "name" : "chamilo/chamilo-lms",
+    "homepage" : "www.chamilo.org",
+    "license" : "GPL-3.0",
+    "support": {
+        "forum": "http://www.chamilo.org/forum",
+        "irc": "irc://irc.freenode.org/chamilo"
+    },
     "autoload": {
         "psr-0": {
             "Entity" : "main/inc/",
@@ -39,7 +45,7 @@
         "symfony/twig-bridge": "2.2.*@dev",
         "symfony/doctrine-bridge": "2.3.*@dev",
         "symfony/security": "2.3.*@dev",
-        "symfony/form": "2.3.*@dev",
+        "symfony/form": "2.2.*@dev",
         "symfony/property-access": "2.3.*@dev",
         "symfony/validator": "2.3.*@dev",
         "symfony/translation": "2.3.*@dev",

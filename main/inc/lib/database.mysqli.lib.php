@@ -24,7 +24,7 @@ require_once 'database.constants.inc.php';
  *      The class and its methods
  *	@package chamilo.library
  */
-class Database {
+class DatabaseSQLI {
 
     /* Variable use only in the installation process to log errors. See the Database::query function */
     static $log_queries = false;

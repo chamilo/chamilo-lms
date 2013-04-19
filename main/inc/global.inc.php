@@ -29,6 +29,7 @@
 require_once __DIR__.'../../../vendor/autoload.php';
 
 use Silex\Application;
+use \ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -554,7 +555,7 @@ if (!($conn_return = @Database::connect(
         'server' => $app['configuration']['db_host'],
         'username' => $app['configuration']['db_user'],
         'password' => $app['configuration']['db_password'],
-        'persistent' => $app['configuration']['db_persistent_connection']
+        'persistent' => isset($app['configuration']['db_persistent_connection']) ? $app['configuration']['db_persistent_connection'] : null
         // When $app['configuration']['db_persistent_connection'] is set, it is expected to be a boolean type.
     )
 ))
@@ -569,6 +570,7 @@ if (!$app['configuration']['db_host']) {
 
 $charset = 'UTF-8';
 $checkConnection = false;
+
 
 if (isset($app['configuration']['main_database'])) {
     // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
@@ -672,7 +674,6 @@ $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
         'auth_mode' => null
     )
 ));
-
 //if (isset($platform_email['SMTP_MAILER']) && $platform_email['SMTP_MAILER'] == 'smtp') {
 $app['mailer'] = $app->share(function ($app) {
     return new \Swift_Mailer($app['swiftmailer.transport']);
@@ -875,7 +876,7 @@ $app->before(
         }
 
         if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-            $app->abort(500, "temp folder must be writeable");
+            $app->abort(500, "temp folder must be writable");
         }
 
         // Check and modify the date of user in the track.e.online table
@@ -904,8 +905,6 @@ $app->finish(
 
     }
 );
-
-
 
 // The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
 // So, we have to reassign this variable again in order to keep its value right.
@@ -1016,6 +1015,7 @@ $app['news.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\NewsController();
 });
 
+
 /*
 class PostController
 {
@@ -1035,12 +1035,59 @@ $app['posts.controller'] = $app->share(function() use ($app) {
 });
 $app->mount('/', "posts.controller");*/
 
+
+
+//@todo move this in a permission class
+$checkCourse = function (Request $request) use ($app) {
+    $courseCode = $request->get('courseCode');
+    $sessionId = $request->get('sessionId');
+
+    $_course = api_get_course_info($courseCode);
+
+    if (!empty($_course)) {
+        //@TODO real_cid should be cid, for working with numeric course id
+        $_real_cid                      = $_course['real_id'];
+        $_cid                           = $_course['code'];
+
+        Session::write('_real_cid', $_real_cid);
+        Session::write('_cid',      $_cid);
+        Session::write('_course',   $_course);
+    }
+
+    $sessionId = intval($sessionId);
+    if (!empty($sessionId)) {
+        $sessionInfo = api_get_session_info($sessionId);
+        if (empty($sessionInfo)) {
+            $app->abort(404, 'Session not available');
+        }
+        Session::write('id_session', $sessionId);
+    } else {
+        Session::write('id_session', 0);
+    }
+};
+
+$courseAccessConditions = function (Request $request) use ($app) {
+    $courseCode = $request->get('cidReq');
+};
+
+$userAccessPermissions = function (Request $request) use ($app) {
+    $courseCode = $request->get('cidReq');
+};
+
+//End legacy befores
+
 //All calls made in Chamilo are manage in the src/ChamiloLMS/Controller/LegacyController.php file function classicAction
-$app->get('/', 'legacy.controller:classicAction');
-$app->post('/', 'legacy.controller:classicAction');
+$app->get('/', 'legacy.controller:classicAction')
+    ->before($courseAccessConditions)
+    ->before($userAccessPermissions);
+
+$app->post('/', 'legacy.controller:classicAction')
+    ->before($courseAccessConditions)
+    ->before($userAccessPermissions);
 
 //index.php
-$app->get('/index', 'index.controller:indexAction')->bind('index');
+$app->get('/index', 'index.controller:indexAction')
+    ->bind('index');
 
 //user_portal.php
 $app->get('/userportal', 'userPortal.controller:indexAction');
@@ -1049,14 +1096,23 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
     ->value('filter', 'current')
     ->value('page', '1')
     ->bind('userportal');
-    //->assert('type', '.+'); //allowing slash "/"
+//->assert('type', '.+'); //allowing slash "/"
 
 //Logout page
-$app->get('/logout', 'index.controller:logoutAction')->bind('logout');
+$app->get('/logout', 'index.controller:logoutAction')
+    ->bind('logout');
 
-//Courses
-$app->match('/courses/{courseCode}/index.php', 'course_home.controller:indexAction', 'GET|POST');
-$app->match('/courses/{courseCode}', 'course_home.controller:indexAction', 'GET|POST');
+
+//Course home
+$app->match('/courses/{courseCode}/{sessionId}/', 'course_home.controller:indexAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($checkCourse);
+
+$app->match('/courses/{courseCode}/', 'course_home.controller:indexAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($checkCourse); //allowing slash "/"
+
+//$app->match('/courses/{courseCode}/document/{fileName}', 'course_home.controller:getFileAction', 'GET|POST');
 
 //Certificates
 $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
@@ -1072,6 +1128,7 @@ $app->match('/users/online-in-session', 'user.controller:onlineInSessionAction',
 $app->match('/news/{id}', 'news.controller:indexAction', 'GET');
 
 //LP controller
-$app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')->bind('subscribe_users');
+$app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')
+    ->bind('subscribe_users');
 
 return $app;

@@ -945,7 +945,7 @@ if (@$_POST['step2']) {
             default:
                 break;
         }
-        movingFilesInAppFolder();
+        movingFilesInDataFolder();
     } else {
         set_file_folder_permissions();
         database_server_connect();

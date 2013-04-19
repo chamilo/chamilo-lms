@@ -30,7 +30,6 @@ if (api_is_allowed_to_edit(null, true)) {
 		// REACTIVATE
 		$sql = "UPDATE $tool_table SET visibility=1 WHERE c_id = $course_id AND id=".$id;
 		Database::query($sql);
-		//$show_message = Display::return_message(get_lang('ToolIsNowVisible'),'confirmation');
 	}
 }
 

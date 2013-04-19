@@ -2739,7 +2739,7 @@ class CourseManager {
                 }
 
                 if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                    $course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0&amp;autoreg=1">'.$course_info['title'].'</a>';
+                    $course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0&amp;autoreg=1">'.$course_info['title'].'</a>';
                 } else {
                     $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
                 }
@@ -2754,7 +2754,7 @@ class CourseManager {
                 $course_title .= Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
 
                 $params['title'] = $course_title;
-                $params['link'] = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0&amp;autoreg=1';
+                $params['link'] = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0&amp;autoreg=1';
 
                 if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                     $params['notifications'] = $show_notification;
@@ -2891,7 +2891,7 @@ class CourseManager {
 
                     $course_title_url = '';
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                        $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0';
+                        $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
                         $course_title = Display::url($course_info['title'], $course_title_url);
                     } else {
                         $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
@@ -3048,7 +3048,7 @@ class CourseManager {
 
             $course_title_url = '';
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0';
+                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
                 $course_title = Display::url($course_info['title'], $course_title_url);
             } else {
                 $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
@@ -3221,7 +3221,7 @@ class CourseManager {
 
             $course_title_url = '';
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0';
+                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
                 $course_title = Display::url($course_info['title'], $course_title_url);
             } else {
                 $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
@@ -3321,8 +3321,8 @@ class CourseManager {
         $session_url = '';
 
         if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course_info['user_status_in_course'] == COURSEMANAGER) {
-            $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
-            $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
+            $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session='.$course_info['id_session'];
+            $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
         } else {
             $session_title = $course_info['name'].' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
         }

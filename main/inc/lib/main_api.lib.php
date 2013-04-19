@@ -235,6 +235,8 @@ define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
+define('WEB_DATA_COURSE_PATH', 'WEB_DATA_COURSE_PATH');
+
 define('SYS_COURSE_PATH', 'SYS_COURSE_PATH');
 define('REL_COURSE_PATH', 'REL_COURSE_PATH');
 define('REL_CODE_PATH', 'REL_CODE_PATH');
@@ -451,7 +453,7 @@ define ('SKILL_TYPE_BOTH',          'both');
  * api_get_path(SYS_DATA_PATH)                  /var/www/chamilo/data/
  * api_get_path(SYS_CONFIG_PATH)                /var/www/chamilo/config/
 
- * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/courses/
+ * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/data/courses/
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
  * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
@@ -502,7 +504,8 @@ function api_get_path($path_type, $path = null) {
         WEB_SERVER_ROOT_PATH    => '',
         SYS_SERVER_ROOT_PATH    => '',
         WEB_COURSE_PATH         => '',
-        SYS_COURSE_PATH         => '',
+        WEB_DATA_COURSE_PATH    => 'data/',
+        SYS_COURSE_PATH         => 'data/',
         REL_COURSE_PATH         => '',
         REL_CODE_PATH           => '',
         WEB_CODE_PATH           => '',
@@ -604,7 +607,6 @@ function api_get_path($path_type, $path = null) {
                 $root_web = $server_protocol.'://'.$server_name.$root_rel;
                 $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../../')).'/';
                 $code_folder = 'main/';
-                $course_folder = 'courses/';
             //}
             // Here we give up, so we don't touch anything.
         }
@@ -634,7 +636,9 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
         $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
-        $paths[SYS_COURSE_PATH]         = $root_sys.$course_folder;
+        $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_PUBLIC_PATH].$course_folder;
+
+        $paths[SYS_COURSE_PATH]         = $paths[SYS_DATA_PATH].$course_folder;
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
@@ -966,7 +970,7 @@ function api_valid_email($address) {
  * @author Roan Embrechts
  */
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false) {
-    global $is_allowed_in_course;
+    $is_allowed_in_course = Session::read('is_allowed_in_course');
     $is_visible = false;
 
     $course_info = api_get_course_info();
@@ -1339,7 +1343,7 @@ function api_get_user_info_from_username($username = '') {
  * Returns the current course code (string)
  */
 function api_get_course_id() {
-    return isset($GLOBALS['_cid']) ? $GLOBALS['_cid'] : null;
+    return isset($_SESSION['_cid']) ? $_SESSION['_cid'] : null;
 }
 
 /**
@@ -1414,24 +1418,25 @@ function api_get_anonymous_id() {
 
 /**
  * Returns the cidreq parameter name + current course id taken from
- * $GLOBALS['_cid'] and returns a string like 'cidReq=ABC&id_session=123
+ * api_get_course_id() and returns a string like 'cidReq=ABC&id_session=123
  * @return  string  Course & session references to add to a URL
  *
  * @see Uri.course_params
  */
 function api_get_cidreq($add_session_id = true, $add_group_id = true) {
-     $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
-     if ($add_session_id) {
-         if (!empty($url)) {
+    $courseCode = api_get_course_id();
+    $url = empty($courseCode) || $courseCode == -1 ? '' : 'cidReq='.htmlspecialchars($courseCode);
+    if ($add_session_id) {
+        if (!empty($url)) {
             $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
         }
-     }
-     if ($add_group_id) {
+    }
+    if ($add_group_id) {
         if (!empty($url)) {
             $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
-         }
-     }
-     return $url;
+        }
+    }
+    return $url;
 }
 /**
  * Returns the current course info array.
@@ -1477,7 +1482,7 @@ function api_get_course_info($course_code = null, $add_extra_values = false) {
         }
         return $_course;
     }
-    global $_course;
+    $_course = Session::read('_course');
     if ($_course == '-1') {
         $_course = array();
     }
@@ -1519,7 +1524,6 @@ function api_get_course_info_by_id($id = null, $add_extra_values = false) {
 }
 
 function api_format_course_array($course_data) {
-    global $_configuration;
 
     if (empty($course_data)) {
         return array();
@@ -5965,9 +5969,9 @@ function api_get_course_url($course_code = null, $session_id = null) {
         $course_info = api_get_course_info($course_code);
     }
     if (empty($session_id)) {
-        $session_url = '?id_session='.api_get_session_id();
+        $session_url = 'index.php?id_session='.api_get_session_id();
     } else {
-        $session_url = '?id_session='.intval($session_id);
+        $session_url = 'index.php?id_session='.intval($session_id);
     }
     /*
     if (empty($group_id)) {

@@ -623,10 +623,11 @@ if (isset($cidReset) && $cidReset) {
     }
 
     if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
-        $_cid         = -1;        //set default values that will be caracteristic of being unset
+        //set default values that will be caracteristic of being unset
+        $_cid         = -1;
         $_course      = -1;
     } else {
-        $_cid      = $_SESSION['_cid'   ];
+        $_cid      = $_SESSION['_cid'];
         $_course   = $_SESSION['_course'];
 
            // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
@@ -943,6 +944,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     Session::write('is_courseCoach', $is_courseCoach);
     Session::write('is_allowed_in_course', $is_allowed_in_course);
     Session::write('is_sessionAdmin', $is_sessionAdmin);
+
 } else { // continue with the previous values
 
     if (isset($_SESSION['_courseUser'])) {
@@ -954,7 +956,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     $is_courseCoach       = isset($_SESSION ['is_courseCoach']) ? $_SESSION ['is_courseCoach'] : false;
     $is_courseMember      = isset($_SESSION ['is_courseMember']) ? $_SESSION ['is_courseMember'] : false;
     $is_allowed_in_course = isset($_SESSION ['is_allowed_in_course']) ? $_SESSION ['is_allowed_in_course'] : false;
-
 }
 
 //set variable according to student_view_enabled choices

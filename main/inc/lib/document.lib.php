@@ -290,7 +290,7 @@ class DocumentManager
             //$doc_url = addslashes($doc_url);
             $query = "SELECT 1 FROM $tbl_document AS docs,$tbl_item_property AS props
                       WHERE props.tool = 'document' AND docs.id=props.ref AND props.visibility <> '1' AND docs.path = '$doc_url'";
-            //echo $query;
+
             $result = Database::query($query);
 
             return (Database::num_rows($result) == 0);
@@ -1106,6 +1106,7 @@ class DocumentManager
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
         $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id = $id ";
+
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -2348,7 +2349,7 @@ class DocumentManager
         } else {
             $destination = $destiny_path.'/'.$file_name;
         }
-        //var_dump("From $original ", "to $destination");
+
         $original_count = count(explode('/', $original));
         $destination_count = count(explode('/', $destination));
         if ($original_count == $destination_count) {
@@ -2362,7 +2363,7 @@ class DocumentManager
         } else {
             $mode = 'inside';
         }
-        //echo $original_count.' '.$destination_count; var_dump($mode);
+
         //We do not select the $original_path becayse the file was already moved
         $content_html = file_get_contents($destiny_path.'/'.$file_name);
         $destination_file = $destiny_path.'/'.$file_name;
@@ -2408,7 +2409,7 @@ class DocumentManager
         if ($count_pre_destination_levels == 0) {
             $count_pre_destination_levels = 1;
         }
-        //echo '$count_pre_destination_levels '. $count_pre_destination_levels;
+
         $pre_remove = '';
         for ($i = 1; $i <= $count_pre_destination_levels; $i++) {
             $pre_remove .= '..\/';
@@ -2446,7 +2447,7 @@ class DocumentManager
                     $document_file = strstr($real_orig_path, 'document');
 
                     if (strpos($real_orig_path, $document_file) !== false) {
-                        echo 'continue1';
+                        //echo 'continue1';
                         continue;
                     } else {
                         $real_orig_url_temp = '';
@@ -2465,7 +2466,7 @@ class DocumentManager
                         $content_html = str_replace($real_orig_url, $destination_url, $content_html);
                     }
                 } else {
-                    echo 'continue3';
+                    //echo 'continue3';
                     continue;
                 }
             }
@@ -3180,7 +3181,6 @@ class DocumentManager
                 if (empty($title)) {
                     $title = $key;
                 }
-                //echo '<pre>'; print_r($resource);
                 if (isset($resource['id']) && is_int($resource['id'])) {
                     // It's a folder.
                     //hide some folders
@@ -3393,7 +3393,7 @@ class DocumentManager
             //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
             // now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while
             $doc_mime = mime_content_type($doc_path);
-            //echo $doc_mime;
+
             $allowed_mime_types = self::file_get_mime_type(true);
 
             // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used for the moment

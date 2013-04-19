@@ -27,6 +27,7 @@ $nameTools = get_lang('CreateAudio');
 
 api_protect_course_script();
 api_block_anonymous_users();
+
 if (api_get_setting('enabled_text2audio') == 'false') {
     api_not_allowed(true);
 }
@@ -91,11 +92,6 @@ $interbreadcrumb[] = array(
     "url" => "./document.php?curdirpath=".urlencode($dir).$req_gid,
     "name" => get_lang('Documents')
 );
-
-if (!$is_allowed_in_course) {
-    api_not_allowed(true);
-}
-
 
 if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(
     api_get_user_id(),

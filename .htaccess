@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+    Options -MultiViews
+    Options +FollowSymLinks
+
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteCond %{QUERY_STRING} ^id_session=0
+    RewriteRule ^courses/(.*)/(.*)$ web/courses/$1? [R,L]
+
+    RewriteCond %{QUERY_STRING} ^id_session=([0-9]*)
+    RewriteRule ^courses/(.*)/(.*)$ web/courses/$1/%1/? [R,L]
+
+    RewriteRule ^courses/(.*)/index.php$ web/courses/$1? [R,L]
+
+    RewriteRule ^courses/(.*)/$ web/courses/$1? [R,L]
+
+    RewriteRule ^certificates/(.*)/$ web/courses/$1? [R,L]
+
+
+</IfModule>

@@ -5,6 +5,7 @@
     RewriteEngine On
     RewriteBase /
 
+    # Courses home
     RewriteCond %{QUERY_STRING} ^id_session=0
     RewriteRule ^courses/(.*)/(.*)$ web/courses/$1? [R,L]
 
@@ -15,7 +16,19 @@
 
     RewriteRule ^courses/(.*)/$ web/courses/$1? [R,L]
 
-    RewriteRule ^certificates/(.*)/$ web/courses/$1? [R,L]
+    # Certificates
+    # certificates/index.php?id=1 => web/certificates/1
+    RewriteCond %{QUERY_STRING} ^id=([0-9]*)
+    RewriteRule ^certificates/(.*)$ web/certificates/%1? [R,L]
+
+    # User profile
+    # user.php?admin => web/user/admin
+    RewriteCond %{QUERY_STRING} ^([a-z0-9A-z]*)
+    RewriteRule ^user.php?$ web/user/%1? [R,L]
+
+    # News
+    RewriteCond %{QUERY_STRING} ^id=([0-9]*)
+    RewriteRule ^news_list.php?$ web/news/%1? [R,L]
 
 
 </IfModule>

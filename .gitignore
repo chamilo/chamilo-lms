@@ -4,19 +4,10 @@ main/inc/conf
 config/*
 temp/*
 data/*
+!data/upload/users
 logs/*
 
-# Courses
-
-courses/*
-!courses/index.html
-
-# Home
-home/*
-
-# User images
-main/upload/users/*
-!main/upload/users/index.html
+!data/courses/index.html
 
 # Logs and databases #
 *.log

@@ -37,6 +37,8 @@ class IndexController extends CommonController
     {
         $this->cidReset();
 
+        $loginError = $app['request']->get('error');
+
         $extraJS = array();
         //@todo improve this JS includes should be added using twig
         $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
@@ -98,7 +100,6 @@ class IndexController extends CommonController
             }
         }
 
-
         if (api_get_setting('display_categories_on_homepage') == 'true') {
             $app['template']->assign('course_category_block', $app['page_controller']->return_courses_in_categories());
         }
@@ -150,6 +151,11 @@ class IndexController extends CommonController
 
         if (api_is_platform_admin() || api_is_drh()) {
             $app['page_controller']->return_skills_links();
+        }
+
+        if (isset($loginError)) {
+            $message = $this->handle_login_failed($loginError);
+            $app['template']->assign('login_failed', $message);
         }
 
         $response = $app['template']->render_layout('layout_2_col.tpl');
@@ -260,5 +266,46 @@ class IndexController extends CommonController
             $html .= '<div>'.openid_form().'</div>';
         }
         return $html;
+    }
+
+    /**
+     * Reacts on a failed login:
+     * Displays an explanation with a link to the registration form.
+     *
+     * @todo use twig template to prompt errors
+     */
+    function handle_login_failed($error)
+    {
+        $message = get_lang('InvalidId');
+
+        if (!isset($error)) {
+            if (api_is_self_registration_allowed()) {
+                $message = get_lang('InvalidForSelfRegistration');
+            }
+        } else {
+            switch ($error) {
+                case '':
+                    if (api_is_self_registration_allowed()) {
+                        $message = get_lang('InvalidForSelfRegistration');
+                    }
+                    break;
+                case 'account_expired':
+                    $message = get_lang('AccountExpired');
+                    break;
+                case 'account_inactive':
+                    $message = get_lang('AccountInactive');
+                    break;
+                case 'user_password_incorrect':
+                    $message = get_lang('InvalidId');
+                    break;
+                case 'access_url_inactive':
+                    $message = get_lang('AccountURLInactive');
+                    break;
+                case 'unrecognize_sso_origin':
+                    //$message = get_lang('SSOError');
+                    break;
+            }
+        }
+        return \Display::return_message($message, 'error');
     }
 }

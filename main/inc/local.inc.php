@@ -68,6 +68,9 @@ $logging_in = false;
 
 /*  MAIN CODE  */
 
+$errorMessage = null;
+$loginFailed = true;
+
 if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
@@ -149,6 +152,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
         $result = Database::query($sql);
 
+        // @todo use a UserProvider
+
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result);
 
@@ -197,14 +202,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
-                                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                            exit;
+                                            $errorMessage = 'access_url_inactive';
                                         }
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');
-                                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                        exit;
+                                        $errorMessage = 'access_url_inactive';
                                     }
                                 } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
                                     if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
@@ -219,8 +222,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
-                                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                            exit;
+                                            $errorMessage = 'access_url_inactive';
                                         }
                                     }
                                 }
@@ -233,24 +235,21 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         } else {
                             $loginFailed = true;
                             Session::erase('_uid');
-                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
-                            exit;
+                            $errorMessage = 'account_expired';
                         }
                     } else {
                         $loginFailed = true;
                         Session::erase('_uid');
-                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
-                        exit;
+                        $errorMessage = 'account_inactive';
                     }
                 } else {
                     // login failed: username or password incorrect
                     $loginFailed = true;
                     Session::erase('_uid');
-                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
-                    exit;
+                    $errorMessage = 'user_password_incorrect';
                 }
 
-                if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
+                if (isset($uData['creator_id']) && isset($_user) && $_user['user_id'] != $uData['creator_id']) {
                     //first login for a not self registred
                     //e.g. registered by a teacher
                     //do nothing (code may be added later)
@@ -303,7 +302,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
             } //end if is_array($extAuthSource)
             if ($loginFailed) { //If we are here username given is wrong
-                header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
+                //header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
+                $errorMessage = 'user_password_incorrect';
             }
         } //end else login failed
     } elseif (api_get_setting('sso_authentication') === 'true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
@@ -363,8 +363,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     //Request comes from unknown source
                     $loginFailed = true;
                     Session::erase('_uid');
-                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=unrecognize_sso_origin');
-                    exit;
+                    $errorMessage = 'unrecognize_sso_origin';
                 }
             }
         }//end logout ... else ... login
@@ -409,14 +408,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 } else {
                                     $loginFailed = true;
                                     Session::erase('_uid');
-                                    header('Location: index.php?loginFailed=1&error=account_expired');
-                                    exit;
+                                    $errorMessage = 'account_expired';
                                 }
                             } else {
                                 $loginFailed = true;
                                 Session::erase('_uid');
-                                header('Location: index.php?loginFailed=1&error=account_inactive');
-                                exit;
+                                $errorMessage = 'account_inactive';
                             }
                             if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
                                 //first login for a not self registred
@@ -438,12 +435,18 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         }
     } elseif (KeyAuth::is_enabled()) {
         $success = KeyAuth::instance()->login();
-        if($success) {
+        if ($success) {
             $use_anonymous = false;
         }
     }
     $uidReset = true;
 } // end
+
+
+if ($loginFailed == true && !empty($errorMessage)) {
+    header('Location: '.api_get_path(WEB_PUBLIC_PATH).'index?error='.$errorMessage);
+    exit;
+}
 
 //Now check for anonymous user mode
 if (isset($use_anonymous) && $use_anonymous) {

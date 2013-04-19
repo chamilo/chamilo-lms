@@ -571,7 +571,6 @@ if (!$app['configuration']['db_host']) {
 $charset = 'UTF-8';
 $checkConnection = false;
 
-
 if (isset($app['configuration']['main_database'])) {
     // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
     Database::query("set session sql_mode='';");
@@ -660,6 +659,7 @@ if (is_writable($app['temp.path'])) {
             ));
         $app->mount('/_profiler', $p);
     }
+    //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
     //}
 }
 
@@ -1086,7 +1086,7 @@ $app->post('/', 'legacy.controller:classicAction')
     ->before($userAccessPermissions);
 
 //index.php
-$app->get('/index', 'index.controller:indexAction')
+$app->match('/index', 'index.controller:indexAction', 'GET|POST')
     ->bind('index');
 
 //user_portal.php
@@ -1125,7 +1125,8 @@ $app->match('/users/online-in-course', 'user.controller:onlineInCourseAction', '
 $app->match('/users/online-in-session', 'user.controller:onlineInSessionAction', 'GET');*/
 
 //Portal news
-$app->match('/news/{id}', 'news.controller:indexAction', 'GET');
+$app->match('/news/{id}', 'news.controller:indexAction', 'GET')
+    ->bind('portal_news');
 
 //LP controller
 $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')

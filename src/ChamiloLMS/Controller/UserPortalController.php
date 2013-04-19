@@ -181,45 +181,4 @@ class UserPortalController extends CommonController
         }
     }
 
-
-    /**
-     * Reacts on a failed login:
-     * Displays an explanation with a link to the registration form.
-     *
-     * @deprecated use twig template to prompt errors
-     */
-    function handle_login_failed()
-    {
-        $message = get_lang('InvalidId');
-
-        if (!isset($_GET['error'])) {
-            if (api_is_self_registration_allowed()) {
-                $message = get_lang('InvalidForSelfRegistration');
-            }
-        } else {
-            switch ($_GET['error']) {
-                case '':
-                    if (api_is_self_registration_allowed()) {
-                        $message = get_lang('InvalidForSelfRegistration');
-                    }
-                    break;
-                case 'account_expired':
-                    $message = get_lang('AccountExpired');
-                    break;
-                case 'account_inactive':
-                    $message = get_lang('AccountInactive');
-                    break;
-                case 'user_password_incorrect':
-                    $message = get_lang('InvalidId');
-                    break;
-                case 'access_url_inactive':
-                    $message = get_lang('AccountURLInactive');
-                    break;
-                case 'unrecognize_sso_origin':
-                    //$message = get_lang('SSOError');
-                    break;
-            }
-        }
-        return Display::return_message($message, 'error');
-    }
 }

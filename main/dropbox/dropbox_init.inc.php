@@ -51,7 +51,6 @@ require_once 'dropbox_functions.inc.php';
 // protecting the script
 api_protect_course_script();
 
-
 /*	Libraries */
 
 // including the library for the dropbox
@@ -223,7 +222,7 @@ if (($_POST['action'] == 'download_received' || $_POST['action'] == 'download_se
  * Prevents access of all users that are not course members
  */
 
-if ((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(null, true)) {
+if ((!$is_course_member) && !api_is_allowed_to_edit(null, true)) {
 	if ($origin != 'learnpath') {
 		api_not_allowed(true);//print headers/footers
 	} else {

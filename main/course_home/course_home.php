@@ -36,8 +36,8 @@ use \ChamiloSession as Session;
 $language_file = array('course_home','courses');
 $use_anonymous = true;
 
-// Inlcuding the global initialization file.
-require dirname(__FILE__).'/../inc/global.inc.php';
+// Including the global initialization file.
+require_once dirname(__FILE__).'/../inc/global.inc.php';
 
 // Delete LP sessions - commented out after seeing that normal
 // users in their first learnpath step (1st SCO of a SCORM)
@@ -72,7 +72,7 @@ $(document).ready(function() {
 			success: function(data) {
 				eval("var info=" + data);
 				new_current_tool_image = info.image;
-				new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
+				new_current_view = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
 				//eyes
 				$("#" + tool_id).attr("src", new_current_view);
 				//tool
@@ -129,7 +129,7 @@ define('TOOL_STUDENT_VIEW',              'toolstudentview');
 define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
 
 $user_id 		= api_get_user_id();
-$course_code 	= api_get_course_id();
+//$course_code 	= api_get_course_id();
 $show_message = '';
 
 //Deleting group session
@@ -254,9 +254,10 @@ if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_
 	require 'vertical_activity.php';
 }
 $content = '<div id="course_tools">'.$content.'</div>';
-$tpl = new Template(null);
-
-$tpl->assign('message', $show_message);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+//$tpl = new Template(null);
+//$tpl->assign('message', $show_message);
+//$tpl->assign('content', $content);
+//$tpl->display_one_col_template();
 Session::erase('_gid');
+
+return array('content' => $content, 'message' => $show_message);

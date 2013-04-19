@@ -192,6 +192,4 @@ function &create_xhtml($xhtml) {
 	$xhtml .= WCAG_Rendering::editor_footer();;
 	return $xhtml;
 }
-
 } // end class WAI_Rendering
-?>

@@ -1184,7 +1184,7 @@ button.next.disabled {
     border-radius: 10px;
     border-width: 1px;
     border-style: solid;
-    padding: 6px;
+    padding: 6px 12px;
 }
 
 .confirmation-message img, .error-message img, .normal-message img, .warning-message img {

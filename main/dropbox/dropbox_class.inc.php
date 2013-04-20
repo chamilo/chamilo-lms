@@ -252,7 +252,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * @param unknown_type $recipient_ids
 	 */
 	function _createNewSentWork($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids) {
-		global $dropbox_cnf;
+			global $dropbox_cnf;
 		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($uploader_id, $title, $description, $author, $filename, $filesize);
 		
@@ -284,6 +284,7 @@ class Dropbox_SentWork extends Dropbox_Work
         $table_person = $dropbox_cnf['tbl_person'];
         $session_id = api_get_session_id();
         $uploader_id = $this->uploader_id;
+        $user  = api_get_user_id();
 		// Insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec) {
             $file_id = (int)$this->id;
@@ -296,7 +297,7 @@ class Dropbox_SentWork extends Dropbox_Work
             /**
              * Poster is already added when work is created - not so good to split logic 
              */
-            //if ($user_id != $user_id) {
+            if ($user_id != $user) {
                 // Insert entries into person table
                 $sql = "INSERT INTO $table_person (c_id, file_id, user_id)
                         VALUES ($course_id, $file_id, $user_id)";
@@ -305,7 +306,7 @@ class Dropbox_SentWork extends Dropbox_Work
                 if (!$justSubmit) {
                     $result = Database::query($sql);	// If work already exists no error is generated
                 }
-            //}
+            }
 
 			// Update item_property table for each recipient
 			global $_course, $dropbox_cnf;

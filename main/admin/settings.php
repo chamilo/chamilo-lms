@@ -156,7 +156,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         $mark_all = false;
         $un_mark_all = false;
 
-        if ($_configuration['multiple_access_urls']) {
+        if (!empty($_configuration['multiple_access_urls'])) {
             if (isset($values['buttons_in_action_right']) && isset($values['buttons_in_action_right']['mark_all'])) {
                 $mark_all = true;
             }
@@ -219,7 +219,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
             }
         }
 
-        if ($values['allow_social_tool'] == 'true') {
+        if (isset($values['allow_social_tool']) && $values['allow_social_tool'] == 'true') {
             $values['allow_message_tool'] = 'true';
         }
 

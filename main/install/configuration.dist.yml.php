@@ -137,9 +137,7 @@ $_configuration['cdn'] = array(
 /**
  * Misc. settings
  */
-// Verbose backup
-$_configuration['verbose_backup']    = false;
-// security word for password recovery
+// Security word for password recovery
 $_configuration['security_key']      = md5(uniqid(rand().time()));
 // Hash function method
 $_configuration['password_encryption']      = 'sha1';

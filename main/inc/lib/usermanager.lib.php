@@ -397,8 +397,10 @@ class UserManager
     {
         $result = false;
         $ids = is_array($ids) ? $ids : func_get_args();
+        if (!is_array($ids) or count($ids) == 0) { return false; }
         $ids = array_map('intval', $ids);
         foreach ($ids as $id) {
+            if (empty($id) or $id < 1) { continue; }
             $deleted = self::delete_user($id);
             $result = $deleted || $result;
         }
@@ -495,13 +497,14 @@ class UserManager
      * @param int The department of HR in which the user is registered (optional, defaults to 0)
      * @param    array    A series of additional fields to add to this user as extra fields (optional, defaults to null)
      * @return boolean true if the user information was updated
-     * @assert (false) === false
+     * @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false
      */
     public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '', $send_email = false, $reset_password = 0)
     {
         global $_configuration;
         $original_password = $password;
 
+        if (empty($user_id)) { return false; }
         $user_info = api_get_user_info($user_id, false, true);
 
         if ($reset_password == 0) {

@@ -567,8 +567,8 @@ function api_get_path($path_type, $path = null) {
 
     if (!$is_this_function_initialized) {
 
-        //$root_rel       = isset($_configuration['url_append']) ? $_configuration['url_append'] : null;
-        $root_rel       = "/".basename($root_sys);
+        $root_rel       = isset($_configuration['url_append']) ? $_configuration['url_append'] : null;
+        //$root_rel       = "/".basename($root_sys);
 
         $code_folder    = 'main/';
         //$course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;

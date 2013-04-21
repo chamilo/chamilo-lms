@@ -130,6 +130,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
 
 $user_id 		= api_get_user_id();
 //$course_code 	= api_get_course_id();
+$course_code = $cidReq;
 $show_message = '';
 
 //Deleting group session
@@ -254,10 +255,10 @@ if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_
 	require 'vertical_activity.php';
 }
 $content = '<div id="course_tools">'.$content.'</div>';
-//$tpl = new Template(null);
-//$tpl->assign('message', $show_message);
-//$tpl->assign('content', $content);
-//$tpl->display_one_col_template();
+$tpl = new Template(null);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();
 Session::erase('_gid');
 
 return array('content' => $content, 'message' => $show_message);

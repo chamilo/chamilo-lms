@@ -237,6 +237,7 @@ define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
 define('WEB_DATA_PATH', 'WEB_DATA_PATH');
 define('WEB_DATA_COURSE_PATH', 'WEB_DATA_COURSE_PATH');
+define('REL_DATA_PATH', 'REL_DATA_PATH');
 
 define('SYS_COURSE_PATH', 'SYS_COURSE_PATH');
 define('REL_COURSE_PATH', 'REL_COURSE_PATH');
@@ -509,6 +510,7 @@ function api_get_path($path_type, $path = null) {
         SYS_COURSE_PATH         => 'data/',
         REL_COURSE_PATH         => '',
         REL_CODE_PATH           => '',
+        REL_DATA_PATH           => '',
         WEB_CODE_PATH           => '',
         SYS_CODE_PATH           => '',
         SYS_CSS_PATH            => 'css/',
@@ -630,6 +632,7 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_PUBLIC_PATH]         = $root_web.'web/';
         $paths[SYS_PATH]                = $root_sys;
         $paths[SYS_PATH_APP]            = $root_sys.'app/';
+        //update data path to get it from config file if defined
         $paths[SYS_DATA_PATH]           = $root_sys.'data/';
         $paths[SYS_LOG_PATH]            = $root_sys.'logs/';
         $paths[SYS_CONFIG_PATH]         = $root_sys.'config/';
@@ -637,6 +640,7 @@ function api_get_path($path_type, $path = null) {
         $paths[REL_PATH]                = $root_rel;
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
+        //web data path always points to root_web.data/, even is sys_data_path is defined
         $paths[WEB_DATA_PATH]           = $root_web.'data/';
         $paths[WEB_COURSE_PATH]         = $paths[WEB_DATA_PATH].$course_folder;
         $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_PUBLIC_PATH].$course_folder;
@@ -645,6 +649,7 @@ function api_get_path($path_type, $path = null) {
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
+        $paths[REL_DATA_PATH]           = $root_rel.'data/';
 
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
 

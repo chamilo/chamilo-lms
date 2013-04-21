@@ -235,6 +235,7 @@ define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
+define('WEB_DATA_PATH', 'WEB_DATA_PATH');
 define('WEB_DATA_COURSE_PATH', 'WEB_DATA_COURSE_PATH');
 
 define('SYS_COURSE_PATH', 'SYS_COURSE_PATH');
@@ -525,7 +526,8 @@ function api_get_path($path_type, $path = null) {
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
-        SYS_TEMPLATE_PATH       => 'template/'
+        SYS_TEMPLATE_PATH       => 'template/',
+        WEB_DATA_PATH           => 'data/',
     );
 
     static $resource_paths = array(
@@ -625,7 +627,7 @@ function api_get_path($path_type, $path = null) {
 
         // Initialization of a table taht contains common-purpose paths.
         $paths[WEB_PATH]                = $root_web;
-        $paths[WEB_PUBLIC_PATH]         = $root_web."web/";
+        $paths[WEB_PUBLIC_PATH]         = $root_web.'web/';
         $paths[SYS_PATH]                = $root_sys;
         $paths[SYS_PATH_APP]            = $root_sys.'app/';
         $paths[SYS_DATA_PATH]           = $root_sys.'data/';
@@ -635,7 +637,8 @@ function api_get_path($path_type, $path = null) {
         $paths[REL_PATH]                = $root_rel;
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
-        $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
+        $paths[WEB_DATA_PATH]           = $root_web.'data/';
+        $paths[WEB_COURSE_PATH]         = $paths[WEB_DATA_PATH].$course_folder;
         $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_PUBLIC_PATH].$course_folder;
 
         $paths[SYS_COURSE_PATH]         = $paths[SYS_DATA_PATH].$course_folder;

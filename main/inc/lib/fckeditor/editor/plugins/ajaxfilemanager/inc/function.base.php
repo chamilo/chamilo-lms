@@ -274,8 +274,8 @@ function getParentPath($value) {
  * @return  boolean
  */
 function isUnderRoot($value) {
-    $roorPath = strtolower(addTrailingSlash(backslashToSlash(getRealPath(CONFIG_SYS_ROOT_PATH))));
-    if (file_exists($value) && @strpos(strtolower(addTrailingSlash(backslashToSlash(getRealPath($value)))), $roorPath) === 0) {
+    $rootPath = strtolower(addTrailingSlash(backslashToSlash(getRealPath(CONFIG_SYS_ROOT_PATH))));
+    if (file_exists($value) && @strpos(strtolower(addTrailingSlash(backslashToSlash(getRealPath($value)))), $rootPath) === 0) {
         return true;
     }
     return false;
@@ -422,21 +422,21 @@ function getFileUrl($value) {
 
     $urlprefix = "";
     $urlsuffix = "";
-
     $value = backslashToSlash(getRealPath($value));
-
-
     $pos = stripos($value, $wwwroot);
     if ($pos !== false && $pos == 0) {
         $output = $urlprefix.substr($value, strlen($wwwroot)).$urlsuffix;
     } else {
         $output = $value;
     }
-
     $protocol = "http://";
     if (isset($_SERVER['HTTPS'])) {
         $protocol = "https://";
     }
+
+    //Removing /data folder in order to work like usual
+    $output = str_replace('/data/courses', '/courses', $output);
+    //$output = str_replace('/data/default_platform_document', '/default_platform_document', $output);
     return $protocol.addTrailingSlash(backslashToSlash($_SERVER['HTTP_HOST'])).removeBeginingSlash(backslashToSlash($output));
 }
 

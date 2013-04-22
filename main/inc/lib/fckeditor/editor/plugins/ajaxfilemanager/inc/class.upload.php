@@ -48,7 +48,6 @@ class Upload
 
     function isFileUploaded($indexInPost = "file")
     {
-
         $this->errCode = isset($_FILES[$indexInPost]['error']) ? $_FILES[$indexInPost]['error'] : 999;
         if ((isset($_FILES[$indexInPost]['error']) && $_FILES[$indexInPost] == 0) ||
             (!empty($_FILES[$indexInPost]['tmp_name']) && $_FILES[$indexInPost]['tmp_name'] != 'none')
@@ -210,14 +209,11 @@ class Upload
                 $fileName = $this->fileBaseName.'_'.$counter.$this->fileExtension;
             }
             $this->fileBaseName .= "_".$counter;
-
         }
-
         if (@move_uploaded_file($this->_value['tmp_name'], $dest.$fileName)) {
             @chmod($dest.$fileName, $this->uploadFileMode);
             $this->fileName = $fileName;
             $this->filePath = $dest.$fileName;
-
             return true;
         } else {
             return false;

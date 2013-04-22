@@ -275,7 +275,12 @@ class IndexController extends CommonController
         return $html;
     }
 
-    public function dumpDataAction(Application $app)
+    /**
+     *
+     * @param Application $app
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getDocumentTemplateAction(Application $app)
     {
         try {
             $file = $app['request']->get('file');
@@ -286,10 +291,22 @@ class IndexController extends CommonController
         }
     }
 
-    public function getDocumentAction(Application $app, $courseCode) {
+    public function getDocumentAction(Application $app, $courseCode)
+    {
         try {
             $filePath = $app['request']->get('file');
             $file = $app['chamilo.filesystem']->getCourseDocument($courseCode, $filePath);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'No file found');
+        }
+    }
+
+    public function getDefaultPlatformDocumentAction(Application $app)
+    {
+        try {
+            $file = $app['request']->get('file');
+            $file = $app['chamilo.filesystem']->get('default_platform_document/'.$file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
             return $app->abort(404, 'No file found');

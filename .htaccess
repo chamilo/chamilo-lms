@@ -19,6 +19,9 @@
     # courses/MATHS/document/folder1/picture.jpg --> courses/MATHS/document/?file=folder1/picture.jpg
     RewriteRule ^courses/(.*)/document/(.*)$ web/courses/$1/document/?file=$2 [R,L]
 
+    # Portal default_platform_document files
+    RewriteRule ^data/default_platform_document/(.*)$ web/data/default_platform_document/?file=$1 [R,L]
+
     # Certificates
     # certificates/index.php?id=123 --> web/certificates/123
     RewriteCond %{QUERY_STRING} ^id=([0-9]*)

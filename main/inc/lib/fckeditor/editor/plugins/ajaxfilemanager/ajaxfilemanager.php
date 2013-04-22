@@ -10,12 +10,14 @@
 * @since 31/December/2008
 */
 
-include '../../../../../../inc/global.inc.php'; // Integrating with Chamilo
+// Integrating with Chamilo
+require_once '../../../../../../inc/global.inc.php';
+
 api_block_anonymous_users();// from Chamilo
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php";
-
 require_once CLASS_SESSION_ACTION;
+
 $sessionAction = new SessionAction();
 
 if (CONFIG_LOAD_DOC_LATTER) {
@@ -29,7 +31,7 @@ if (CONFIG_LOAD_DOC_LATTER) {
 	$folderInfo = $manager->getFolderInfo();
 }
 
-if(CONFIG_SYS_THUMBNAIL_VIEW_ENABLE) {
+if (CONFIG_SYS_THUMBNAIL_VIEW_ENABLE) {
 	$views = array(
 		'detail'=>LBL_BTN_VIEW_DETAILS,
 		'thumbnail'=>LBL_BTN_VIEW_THUMBNAIL,
@@ -40,7 +42,7 @@ if(CONFIG_SYS_THUMBNAIL_VIEW_ENABLE) {
 	);
 }
 
-if(!empty($_GET['view'])) {
+if (!empty($_GET['view'])) {
 	switch($_GET['view']) {
 		case 'detail':
 		case 'thumbnail':

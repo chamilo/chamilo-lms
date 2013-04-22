@@ -1099,7 +1099,7 @@ $userAccessPermissions = function (Request $request) use ($app) {
  * src/ChamiloLMS/Controller/LegacyController.php
  */
 
-// @todo put routes somewhere else yml file.
+// @todo put routes somewhere else, in a yml/php file .
 
 $app->get('/', 'legacy.controller:classicAction')
     ->before($courseAccessConditions)
@@ -1125,8 +1125,6 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
 // Logout
 $app->get('/logout', 'index.controller:logoutAction')
     ->bind('logout');
-
-
 
 // Course home instead of courses/MATHS the new URL is web/courses/MATHS
 $app->match('/courses/{courseCode}/{sessionId}/', 'course_home.controller:indexAction', 'GET|POST')
@@ -1165,8 +1163,9 @@ $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexActi
     ->bind('subscribe_users');
 
 // Data document_templates
-$app->get('/data/document_templates/{file}', 'index.controller:dumpDataAction')
+$app->get('/data/document_templates/{file}', 'index.controller:getDocumentTemplateAction')
     ->bind('data');
-//var_dump($app['url_generator']->generate('index'));
 
+$app->get('/data/default_platform_document/', 'index.controller:getDefaultPlatformDocumentAction')
+    ->assert('type', '.+');
 return $app;

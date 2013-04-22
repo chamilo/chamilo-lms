@@ -39,7 +39,7 @@
     "require": {
         "php": ">=5.3.2",
         "silex/silex": "1.0.*@dev",
-        "symfony/config": "2.3.*@dev",
+        "symfony/config": "2.2.*@dev",
         "symfony/yaml": "2.1.*@dev",
         "symfony/console"  : "2.3.*@dev",
         "symfony/twig-bridge": "2.2.*@dev",
@@ -58,7 +58,7 @@
         "chamilo/chash": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "dev-master",
-        "franmomu/silex-pagerfanta-provider": "dev-master",
+        "franmomu/silex-pagerfanta-provider": "2.3.*@dev",
         "knplabs/knp-menu": "2.0.*@dev",
         "igorw/config-service-provider": "1.0.*@dev",
         "mpdf/mpdf": "dev-master",
@@ -67,7 +67,10 @@
         "imagine/imagine": "dev-develop",
         "grom/silex-service-provider": "dev-master",
         "knplabs/knp-snappy": "dev-master",
-        "jmontoyaa/phpqrcode": "dev-master"
+        "jmontoyaa/phpqrcode": "dev-master",
+        "knplabs/gaufrette": "0.2.*@dev",
+        "bt51/gaufrette-serviceprovider": "dev-master",
+        "neutron/silex-filesystem-provider": "dev-master"
     },
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",

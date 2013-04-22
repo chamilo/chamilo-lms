@@ -3484,10 +3484,10 @@ function api_display_language_form($hide_if_no_choice = false) {
     $language_list = api_get_languages();
 
     if (!empty($language_list) && count($language_list['name']) <= 1 && $hide_if_no_choice) {
-        return; //don't show any form
+        return; // Don't show any form
     }
 
-    // The the current language of the user so that his/her language occurs as selected in the dropdown menu.
+    // The current language of the user so that his/her language occurs as selected in the dropdown menu.
     if (isset($_SESSION['user_language_choice'])) {
         $user_selected_language = $_SESSION['user_language_choice'];
     }

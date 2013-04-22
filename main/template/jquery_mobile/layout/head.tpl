@@ -9,11 +9,14 @@
 <meta name="Generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" />
 {#  Use the latest engine in ie8/ie9 or use google chrome engine if available  #}
 {#  Improve usability in portal devices #}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ title_string }}</title>
 {{ css_file_to_string }}
 {{ css_style_print }}
 {{ js_file_to_string }}
 {{ extra_headers }}
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
 <script>
 //<![CDATA[
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.

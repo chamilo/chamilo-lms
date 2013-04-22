@@ -7,7 +7,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-
+use Symfony\Component\Finder\Finder;
 /**
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
@@ -36,7 +36,11 @@ class IndexController extends CommonController
     public function indexAction(Application $app)
     {
         $this->cidReset();
-
+        /*
+        var_dump($app['request']->getBaseUrl());
+        var_dump($app['request']->getHttpHost());
+        var_dump($app['request']->getRequestUri());
+        */
         $loginError = $app['request']->get('error');
 
         $extraJS = array();
@@ -59,12 +63,13 @@ class IndexController extends CommonController
         $request = $app['request'];
         $app['languages_file'] = array('courses', 'index', 'admin');
 
-        // Testing translation using translator
+        // Testing translation using translator component
         //echo $app['translator']->trans('Wiki Search Results');
         //echo $app['translator']->trans('Profile');
 
-
         //$token = $app['security']->getToken();
+
+        //Testing Doctrine ORM + pagination using pagerfanta
 
         //$article = $app['orm.em']->getRepository('Entity\Course');
         //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\Course a');
@@ -239,7 +244,9 @@ class IndexController extends CommonController
      */
     public function display_login_form(Application $app)
     {
-        /* {{ form_widget(form) }}
+        /*
+          symfony2 form way
+          {{ form_widget(form) }}
           $form = $app['form.factory']->createBuilder('form')
           ->add('name')
           ->add('email')
@@ -268,11 +275,32 @@ class IndexController extends CommonController
         return $html;
     }
 
+    public function dumpDataAction(Application $app)
+    {
+        try {
+            $file = $app['request']->get('file');
+            $file = $app['chamilo.filesystem']->get('document_templates/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'No file found');
+        }
+    }
+
+    public function getDocumentAction(Application $app, $courseCode) {
+        try {
+            $filePath = $app['request']->get('file');
+            $file = $app['chamilo.filesystem']->getCourseDocument($courseCode, $filePath);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'No file found');
+        }
+    }
+
     /**
      * Reacts on a failed login:
      * Displays an explanation with a link to the registration form.
      *
-     * @todo use twig template to prompt errors
+     * @todo use twig template to prompt errors + move this into a helper
      */
     function handle_login_failed($error)
     {

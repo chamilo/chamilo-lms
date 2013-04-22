@@ -1014,9 +1014,8 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         $user_id = api_get_user_id();
 
         // Create the template_thumbnails folder in the upload folder (if needed)
-        if (!is_dir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/')) {
-            @mkdir(
-                api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/',
+        if (!is_dir(api_get_path(SYS_DATA_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/')) {
+            @mkdir(api_get_path(SYS_DATA_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/',
                 api_get_permissions_for_new_directories()
             );
         }
@@ -1032,7 +1031,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                 );
 
                 // Upload dir
-                $upload_dir = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/';
+                $upload_dir = api_get_path(SYS_DATA_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/';
 
                 // Resize image to max default and end upload
                 $temp = new Image($_FILES['template_image']['tmp_name']);

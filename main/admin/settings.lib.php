@@ -822,9 +822,9 @@ function actions_filter($id) {
  */
 function image_filter($image) {
     if (!empty($image)) {
-        return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_DATA_PATH).'document_templates/'.$image.'" alt="'.get_lang('TemplatePreview').'"/>';
     } else {
-        return '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
+        return '<img src="'.api_get_path(WEB_DATA_PATH).'document_templates/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>';
     }
 }
 
@@ -845,7 +845,7 @@ function add_edit_template() {
     } else {
         $title = get_lang('EditTemplate');
     }
-    $form->addElement('header', '', $title);
+    $form->addElement('header', $title);
 
     // Settting the form elements: the title of the template.
     $form->add_textfield('title', get_lang('Title'), false);
@@ -877,9 +877,9 @@ function add_edit_template() {
 
         // Adding an extra field: a preview of the image that is currently used.
         if (!empty($row['image'])) {
-            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
+            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_DATA_PATH).'document_templates/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
         } else {
-            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
+            $form->addElement('static', 'template_image_preview', '', '<img src="'.api_get_path(WEB_DATA_PATH).'document_templates/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
         }
 
         // Setting the information of the template that we are editing.
@@ -901,20 +901,14 @@ function add_edit_template() {
             $values = $form->exportValues();
             // Upload the file.
             if (!empty($_FILES['template_image']['name'])) {
-                require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-                $upload_ok = process_uploaded_file($_FILES['template_image']);
+                $upload_ok = FileManager::process_uploaded_file($_FILES['template_image']);
 
                 if ($upload_ok) {
                     // Try to add an extension to the file if it hasn't one.
-                    $new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
+                    $new_file_name = FileManager::add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
 
                     // The upload directory.
-                    $upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
-
-                    // Create the directory if it does not exist.
-                    if (!is_dir($upload_dir)) {
-                        mkdir($upload_dir, api_get_permissions_for_new_directories());
-                    }
+                    $upload_dir = api_get_path(SYS_DATA_PATH).'document_templates/';
 
                     // Resize the preview image to max default and upload.
                     $temp = new Image($_FILES['template_image']['tmp_name']);
@@ -987,7 +981,7 @@ function delete_template($id) {
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if (!empty($row['image'])) {
-        @unlink(api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
+        @unlink(api_get_path(SYS_DATA_PATH).'document_templates/'.$row['image']);
     }
 
     // Now we remove it from the database.

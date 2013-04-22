@@ -35,14 +35,28 @@ class Display
     {
         global $app;
         $app['classic_layout'] = true;
+        $app['title'] = $tool_name;
 
         if ($app['allowed'] == true) {
-           ob_start(array($app['template'], 'manage_display'));
+            ob_start(array($app['template'], 'manage_display'));
         } else {
             $app->run();
             exit;
         }
     }
+
+    /**
+     * Display the page footer
+     */
+    public static function display_footer()
+    {
+        global $app;
+        $out = ob_get_contents();
+        ob_end_clean();
+        $app['template']->assign('content', $out);
+        $app->run();
+    }
+
 
     /**
      * Displays the reduced page header (without banner)
@@ -78,24 +92,8 @@ class Display
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
         $app['template.show_learnpath'] = $show_learnpath;
-        self::$global_template          = new Template($tool_name);
-    }
-
-    /**
-     * Display the page footer
-     */
-    public static function display_footer()
-    {
-        global $app;
-        $out = ob_get_contents();
-        ob_end_clean();
-        $app['template']->assign('content', $out);
-        $app->run();
-    }
-
-    public static function page()
-    {
-        return new Page();
+        $app['title'] = $tool_name;
+        self::$global_template = $app['template'];
     }
 
     /**

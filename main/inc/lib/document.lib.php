@@ -1220,7 +1220,6 @@ class DocumentManager
      */
     public static function unset_document_as_template($document_id, $course_code, $user_id)
     {
-
         $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
         $course_code = Database::escape_string($course_code);
         $user_id = Database::escape_string($user_id);

@@ -470,7 +470,7 @@ class UserManager {
 
         $user_info = api_get_user_info($user_id);
         if (strlen($user_info['picture_uri']) > 0) {
-            $img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
+            $img_path = api_get_path(SYS_DATA_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
             if (file_exists($img_path))
                 unlink($img_path);
         }
@@ -1201,13 +1201,16 @@ class UserManager {
 
         switch ($type) {
             case 'system': // Base: absolute system path.
-                $base = api_get_path(SYS_CODE_PATH);
+                $base = api_get_path(SYS_DATA_PATH);
+                $base_unknown = api_get_path(SYS_CODE_PATH);
                 break;
             case 'rel': // Base: semi-absolute web path (no server base).
-                $base = api_get_path(REL_CODE_PATH);
+                $base = api_get_path(REL_DATA_PATH);
+                $base_unknown = api_get_path(REL_CODE_PATH);
                 break;
             case 'web': // Base: absolute web path.
-                $base = api_get_path(WEB_CODE_PATH);
+                $base = api_get_path(WEB_DATA_PATH);
+                $base_unknown = api_get_path(WEB_CODE_PATH);
                 break;
             case 'none':
             default: // Base: empty, the result path below will be relative.
@@ -1225,7 +1228,7 @@ class UserManager {
         $res = Database::query($sql);
 
         if (!Database::num_rows($res)) {
-            return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
+            return $anonymous ? array('dir' => $base_unknown.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
         }
 
         $user = Database::fetch_array($res);
@@ -1233,15 +1236,15 @@ class UserManager {
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
             if (!empty($picture_filename) or $preview) {
-                $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
+                $dir = $base.'data/upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
             } else {
-                $dir = $base.'upload/users/'.$user_id.'/';
+                $dir = $base.'data/upload/users/'.$user_id.'/';
             }
         } else {
-            $dir = $base.'upload/users/'.$user_id.'/';
+            $dir = $base.'data/upload/users/'.$user_id.'/';
         }
         if (empty($picture_filename) && $anonymous) {
-            return array('dir' => $base.'img/', 'file' => 'unknown.jpg');
+            return array('dir' => $base_unknown.'img/', 'file' => 'unknown.jpg');
         }
         return array('dir' => $dir, 'file' => $picture_filename);
     }

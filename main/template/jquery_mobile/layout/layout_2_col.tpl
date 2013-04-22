@@ -114,8 +114,7 @@
             </section>
         {% endif %}
 
-		{#  Hot courses template  #}
-		{% include "jquery_mobile/layout/hot_courses.tpl" %}
+		{#  Hot courses template is disabled in mobile template #}
 
         {#  Content bottom  #}
         {% if plugin_content_bottom %}

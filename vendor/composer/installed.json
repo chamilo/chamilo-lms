@@ -1,54 +1,5 @@
 [
     {
-        "name": "symfony/config",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "target-dir": "Symfony/Component/Config",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Config.git",
-            "reference": "d55f6cc63f0c2487fd89fc0d779a9e9f191c9ecf"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Config/zipball/d55f6cc63f0c2487fd89fc0d779a9e9f191c9ecf",
-            "reference": "d55f6cc63f0c2487fd89fc0d779a9e9f191c9ecf",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2013-04-13 14:46:29",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.3-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Config\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Config Component",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "doctrine/common",
         "version": "2.3.0",
         "version_normalized": "2.3.0.0",
@@ -103,7 +54,7 @@
                 "email": "kontakt@beberlei.de"
             },
             {
-                "name": "Johannes Schmitt",
+                "name": "Johannes M. Schmitt",
                 "email": "schmittjoh@gmail.com",
                 "homepage": "https://github.com/schmittjoh",
                 "role": "Developer of wrapped JMSSerializerBundle"
@@ -127,12 +78,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/DoctrineBridge.git",
-            "reference": "aaf831d16ec3eef5ea42048d36bc5e7f56044112"
+            "reference": "d44f22f1a996383699dff42b2d41b7d7d3b9099c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/DoctrineBridge/zipball/aaf831d16ec3eef5ea42048d36bc5e7f56044112",
-            "reference": "aaf831d16ec3eef5ea42048d36bc5e7f56044112",
+            "url": "https://api.github.com/repos/symfony/DoctrineBridge/zipball/d44f22f1a996383699dff42b2d41b7d7d3b9099c",
+            "reference": "d44f22f1a996383699dff42b2d41b7d7d3b9099c",
             "shasum": ""
         },
         "require": {
@@ -157,7 +108,7 @@
             "symfony/form": "2.2.*",
             "symfony/validator": "2.2.*"
         },
-        "time": "2013-04-18 05:16:59",
+        "time": "2013-04-21 16:59:26",
         "type": "symfony-bridge",
         "extra": {
             "branch-alias": {
@@ -465,12 +416,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/Security.git",
-            "reference": "29d6516841ca9961398dee9479bc576d9b09d6dd"
+            "reference": "d156097a1b4653108637dedaaf2c64b876eb2f35"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Security/zipball/29d6516841ca9961398dee9479bc576d9b09d6dd",
-            "reference": "29d6516841ca9961398dee9479bc576d9b09d6dd",
+            "url": "https://api.github.com/repos/symfony/Security/zipball/d156097a1b4653108637dedaaf2c64b876eb2f35",
+            "reference": "d156097a1b4653108637dedaaf2c64b876eb2f35",
             "shasum": ""
         },
         "require": {
@@ -495,7 +446,7 @@
             "symfony/routing": "2.2.*",
             "symfony/validator": "2.2.*"
         },
-        "time": "2013-04-09 14:18:38",
+        "time": "2013-04-21 16:59:26",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -533,12 +484,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/Translation.git",
-            "reference": "6ed1f8208520b7f97154883b1d49f5b7e07d179c"
+            "reference": "6bc4b753c1ae5640c0eacdbe27c04a69cde3d10d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Translation/zipball/6ed1f8208520b7f97154883b1d49f5b7e07d179c",
-            "reference": "6ed1f8208520b7f97154883b1d49f5b7e07d179c",
+            "url": "https://api.github.com/repos/symfony/Translation/zipball/6bc4b753c1ae5640c0eacdbe27c04a69cde3d10d",
+            "reference": "6bc4b753c1ae5640c0eacdbe27c04a69cde3d10d",
             "shasum": ""
         },
         "require": {
@@ -552,7 +503,7 @@
             "symfony/config": "2.2.*",
             "symfony/yaml": "2.2.*"
         },
-        "time": "2013-04-13 14:46:29",
+        "time": "2013-04-21 13:23:54",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -641,12 +592,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/Validator.git",
-            "reference": "69a3458a7978d7aa275ecb7e066333e07aea5c6e"
+            "reference": "078e031b43564b7f6c048f4e20e5404512fe20a7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Validator/zipball/69a3458a7978d7aa275ecb7e066333e07aea5c6e",
-            "reference": "69a3458a7978d7aa275ecb7e066333e07aea5c6e",
+            "url": "https://api.github.com/repos/symfony/Validator/zipball/078e031b43564b7f6c048f4e20e5404512fe20a7",
+            "reference": "078e031b43564b7f6c048f4e20e5404512fe20a7",
             "shasum": ""
         },
         "require": {
@@ -666,7 +617,7 @@
             "symfony/intl": "2.3.*",
             "symfony/yaml": "2.2.*"
         },
-        "time": "2013-04-18 07:30:57",
+        "time": "2013-04-22 10:52:51",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -704,12 +655,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/DependencyInjection.git",
-            "reference": "e5abb770d75de0efca263b6acae36fd89c707ead"
+            "reference": "e886a2fe3e9161c573d45caba9e5d98ad450ac3f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/e5abb770d75de0efca263b6acae36fd89c707ead",
-            "reference": "e5abb770d75de0efca263b6acae36fd89c707ead",
+            "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/e886a2fe3e9161c573d45caba9e5d98ad450ac3f",
+            "reference": "e886a2fe3e9161c573d45caba9e5d98ad450ac3f",
             "shasum": ""
         },
         "require": {
@@ -723,7 +674,7 @@
             "symfony/config": "2.2.*",
             "symfony/yaml": "2.2.*"
         },
-        "time": "2013-04-17 12:16:20",
+        "time": "2013-04-21 12:26:17",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -926,12 +877,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/Console.git",
-            "reference": "d12b9f735acc4c335d040ff042530c2ef82150f3"
+            "reference": "0022ee8cb49fcac14442abd49038da24f9b953d4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Console/zipball/d12b9f735acc4c335d040ff042530c2ef82150f3",
-            "reference": "d12b9f735acc4c335d040ff042530c2ef82150f3",
+            "url": "https://api.github.com/repos/symfony/Console/zipball/0022ee8cb49fcac14442abd49038da24f9b953d4",
+            "reference": "0022ee8cb49fcac14442abd49038da24f9b953d4",
             "shasum": ""
         },
         "require": {
@@ -940,7 +891,7 @@
         "require-dev": {
             "symfony/event-dispatcher": ">=2.1,<3.0"
         },
-        "time": "2013-04-17 05:37:48",
+        "time": "2013-04-21 10:38:46",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1001,6 +952,376 @@
         "notification-url": "https://packagist.org/downloads/"
     },
     {
+        "name": "symfony/property-access",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/PropertyAccess",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/PropertyAccess.git",
+            "reference": "df67239b02a9cef12cf84579f6cf569680298238"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/df67239b02a9cef12cf84579f6cf569680298238",
+            "reference": "df67239b02a9cef12cf84579f6cf569680298238",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-04-18 14:39:54",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\PropertyAccess\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony PropertyAccess Component",
+        "homepage": "http://symfony.com",
+        "keywords": [
+            "access",
+            "array",
+            "extraction",
+            "index",
+            "injection",
+            "object",
+            "property",
+            "property path",
+            "reflection"
+        ]
+    },
+    {
+        "name": "pagerfanta/pagerfanta",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/whiteoctober/Pagerfanta.git",
+            "reference": "48ed04c9797e96c70cfc514d0dc0ded8546f2b55"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/48ed04c9797e96c70cfc514d0dc0ded8546f2b55",
+            "reference": "48ed04c9797e96c70cfc514d0dc0ded8546f2b55",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "doctrine/mongodb-odm": "*",
+            "doctrine/orm": "2.*",
+            "mandango/mandango": "*",
+            "propel/propel1": ">=1.6,<2.0",
+            "solarium/solarium": "dev-develop"
+        },
+        "suggest": {
+            "doctrine/mongodb-odm": "To use the DoctrineODMMongoDBAdapter.",
+            "doctrine/orm": "To use the DoctrineORMAdapter.",
+            "mandango/mandango": "To use the MandangoAdapter.",
+            "propel/propel1": "To use the PropelAdapter",
+            "solarium/solarium": "To use the SolariumAdapter."
+        },
+        "time": "2013-04-16 21:43:21",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Pagerfanta\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Pablo Díez",
+                "email": "pablodip@gmail.com",
+                "homepage": "http://github.com/pablodip"
+            }
+        ],
+        "description": "Pagination for PHP 5.3",
+        "keywords": [
+            "page",
+            "pagination",
+            "paginator",
+            "paging"
+        ]
+    },
+    {
+        "name": "symfony/routing",
+        "version": "v2.2.1",
+        "version_normalized": "2.2.1.0",
+        "target-dir": "Symfony/Component/Routing",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Routing.git",
+            "reference": "v2.2.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.1",
+            "reference": "v2.2.1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "doctrine/common": ">=2.2,<3.0",
+            "psr/log": ">=1.0,<2.0",
+            "symfony/config": ">=2.2,<2.3-dev",
+            "symfony/yaml": ">=2.0,<3.0"
+        },
+        "suggest": {
+            "doctrine/common": "~2.2",
+            "symfony/config": "2.2.*",
+            "symfony/yaml": "2.2.*"
+        },
+        "time": "2013-03-23 12:03:22",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Routing\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Routing Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "pimple/pimple",
+        "version": "v1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fabpot/Pimple.git",
+            "reference": "v1.0.2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fabpot/Pimple/zipball/v1.0.2",
+            "reference": "v1.0.2",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2013-03-08 08:21:40",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Pimple": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            }
+        ],
+        "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
+        "homepage": "http://pimple.sensiolabs.org",
+        "keywords": [
+            "container",
+            "dependency injection"
+        ]
+    },
+    {
+        "name": "silex/silex",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fabpot/Silex.git",
+            "reference": "1cd7f3f050b78dae4458d93892355720f56659f9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fabpot/Silex/zipball/1cd7f3f050b78dae4458d93892355720f56659f9",
+            "reference": "1cd7f3f050b78dae4458d93892355720f56659f9",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "pimple/pimple": "1.*",
+            "symfony/event-dispatcher": ">=2.1,<2.3-dev",
+            "symfony/http-foundation": ">=2.1,<2.3-dev",
+            "symfony/http-kernel": ">=2.1,<2.3-dev",
+            "symfony/routing": ">=2.1,<2.3-dev"
+        },
+        "require-dev": {
+            "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
+            "monolog/monolog": ">=1.4,<2.0,>=1.4.1",
+            "swiftmailer/swiftmailer": "4.2.*",
+            "symfony/browser-kit": ">=2.1,<2.3-dev",
+            "symfony/config": ">=2.1,<2.3-dev",
+            "symfony/css-selector": ">=2.1,<2.3-dev",
+            "symfony/dom-crawler": ">=2.1,<2.3-dev",
+            "symfony/finder": ">=2.1,<2.3-dev",
+            "symfony/form": ">=2.1.4,<2.3-dev",
+            "symfony/locale": ">=2.1,<2.3-dev",
+            "symfony/monolog-bridge": ">=2.1,<2.3-dev",
+            "symfony/options-resolver": ">=2.1,<2.3-dev",
+            "symfony/process": ">=2.1,<2.3-dev",
+            "symfony/security": ">=2.1,<2.3-dev",
+            "symfony/serializer": ">=2.1,<2.3-dev",
+            "symfony/translation": ">=2.1,<2.3-dev",
+            "symfony/twig-bridge": ">=2.1,<2.3-dev",
+            "symfony/validator": ">=2.1,<2.3-dev",
+            "twig/twig": ">=1.8.0,<2.0-dev"
+        },
+        "suggest": {
+            "symfony/browser-kit": ">=2.1,<2.3-dev",
+            "symfony/css-selector": ">=2.1,<2.3-dev",
+            "symfony/dom-crawler": ">=2.1,<2.3-dev",
+            "symfony/form": "To make use of the FormServiceProvider, >= 2.1.4 is required"
+        },
+        "time": "2013-04-11 12:23:56",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Silex": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Igor Wiedler",
+                "email": "igor@wiedler.ch",
+                "homepage": "http://wiedler.ch/igor/"
+            }
+        ],
+        "description": "The PHP micro-framework based on the Symfony2 Components",
+        "homepage": "http://silex.sensiolabs.org",
+        "keywords": [
+            "microframework"
+        ]
+    },
+    {
+        "name": "franmomu/silex-pagerfanta-provider",
+        "version": "2.3.x-dev",
+        "version_normalized": "2.3.9999999.9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/jmontoyaa/silex-pagerfanta-provider.git",
+            "reference": "9e88fe51bb42cd5dec754bba9e8a5186f905778b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/jmontoyaa/silex-pagerfanta-provider/zipball/9e88fe51bb42cd5dec754bba9e8a5186f905778b",
+            "reference": "9e88fe51bb42cd5dec754bba9e8a5186f905778b",
+            "shasum": ""
+        },
+        "require": {
+            "pagerfanta/pagerfanta": "dev-master",
+            "silex/silex": "1.0.*@dev",
+            "symfony/property-access": "2.3.*@dev"
+        },
+        "time": "2013-04-22 11:39:08",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "FranMoreno": "src/"
+            }
+        },
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fran Moreno",
+                "email": "franmomu@gmail.com",
+                "homepage": "http://showmethecode.es"
+            }
+        ],
+        "description": "Silex ServiceProvider for Pagerfanta Library",
+        "homepage": "https://github.com/franmomu/silex-pagerfanta-provider",
+        "keywords": [
+            "pagerfanta",
+            "service provider",
+            "silex"
+        ],
+        "support": {
+            "source": "https://github.com/jmontoyaa/silex-pagerfanta-provider/tree/2.3"
+        }
+    },
+    {
         "name": "knplabs/knp-menu",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -1051,7 +1372,7 @@
                 "email": "stof@notk.org"
             },
             {
-                "name": "KnpLabs",
+                "name": "Knplabs",
                 "homepage": "http://knplabs.com"
             },
             {
@@ -1303,198 +1624,6 @@
         ]
     },
     {
-        "name": "symfony/routing",
-        "version": "v2.2.1",
-        "version_normalized": "2.2.1.0",
-        "target-dir": "Symfony/Component/Routing",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Routing.git",
-            "reference": "v2.2.1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.1",
-            "reference": "v2.2.1",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "doctrine/common": ">=2.2,<3.0",
-            "psr/log": ">=1.0,<2.0",
-            "symfony/config": ">=2.2,<2.3-dev",
-            "symfony/yaml": ">=2.0,<3.0"
-        },
-        "suggest": {
-            "doctrine/common": "~2.2",
-            "symfony/config": "2.2.*",
-            "symfony/yaml": "2.2.*"
-        },
-        "time": "2013-03-23 12:03:22",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Routing\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Routing Component",
-        "homepage": "http://symfony.com"
-    },
-    {
-        "name": "pimple/pimple",
-        "version": "v1.0.2",
-        "version_normalized": "1.0.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/fabpot/Pimple.git",
-            "reference": "v1.0.2"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/fabpot/Pimple/zipball/v1.0.2",
-            "reference": "v1.0.2",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2013-03-08 08:21:40",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Pimple": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            }
-        ],
-        "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
-        "homepage": "http://pimple.sensiolabs.org",
-        "keywords": [
-            "container",
-            "dependency injection"
-        ]
-    },
-    {
-        "name": "silex/silex",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/fabpot/Silex.git",
-            "reference": "1cd7f3f050b78dae4458d93892355720f56659f9"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/fabpot/Silex/zipball/1cd7f3f050b78dae4458d93892355720f56659f9",
-            "reference": "1cd7f3f050b78dae4458d93892355720f56659f9",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "pimple/pimple": "1.*",
-            "symfony/event-dispatcher": ">=2.1,<2.3-dev",
-            "symfony/http-foundation": ">=2.1,<2.3-dev",
-            "symfony/http-kernel": ">=2.1,<2.3-dev",
-            "symfony/routing": ">=2.1,<2.3-dev"
-        },
-        "require-dev": {
-            "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
-            "monolog/monolog": ">=1.4,<2.0,>=1.4.1",
-            "swiftmailer/swiftmailer": "4.2.*",
-            "symfony/browser-kit": ">=2.1,<2.3-dev",
-            "symfony/config": ">=2.1,<2.3-dev",
-            "symfony/css-selector": ">=2.1,<2.3-dev",
-            "symfony/dom-crawler": ">=2.1,<2.3-dev",
-            "symfony/finder": ">=2.1,<2.3-dev",
-            "symfony/form": ">=2.1.4,<2.3-dev",
-            "symfony/locale": ">=2.1,<2.3-dev",
-            "symfony/monolog-bridge": ">=2.1,<2.3-dev",
-            "symfony/options-resolver": ">=2.1,<2.3-dev",
-            "symfony/process": ">=2.1,<2.3-dev",
-            "symfony/security": ">=2.1,<2.3-dev",
-            "symfony/serializer": ">=2.1,<2.3-dev",
-            "symfony/translation": ">=2.1,<2.3-dev",
-            "symfony/twig-bridge": ">=2.1,<2.3-dev",
-            "symfony/validator": ">=2.1,<2.3-dev",
-            "twig/twig": ">=1.8.0,<2.0-dev"
-        },
-        "suggest": {
-            "symfony/browser-kit": ">=2.1,<2.3-dev",
-            "symfony/css-selector": ">=2.1,<2.3-dev",
-            "symfony/dom-crawler": ">=2.1,<2.3-dev",
-            "symfony/form": "To make use of the FormServiceProvider, >= 2.1.4 is required"
-        },
-        "time": "2013-04-11 12:23:56",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Silex": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Igor Wiedler",
-                "email": "igor@wiedler.ch",
-                "homepage": "http://wiedler.ch/igor/"
-            }
-        ],
-        "description": "The PHP micro-framework based on the Symfony2 Components",
-        "homepage": "http://silex.sensiolabs.org",
-        "keywords": [
-            "microframework"
-        ]
-    },
-    {
         "name": "grom/silex-service-provider",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -1585,6 +1714,227 @@
         "support": {
             "source": "https://github.com/jmontoyaa/phpqrcode/tree/master"
         }
+    },
+    {
+        "name": "knplabs/gaufrette",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/KnpLabs/Gaufrette.git",
+            "reference": "1540391e4115ac7c01255e07e02ea3250ca31c51"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/1540391e4115ac7c01255e07e02ea3250ca31c51",
+            "reference": "1540391e4115ac7c01255e07e02ea3250ca31c51",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "amazonwebservices/aws-sdk-for-php": "1.5.*",
+            "doctrine/dbal": ">=2.3",
+            "dropbox-php/dropbox-php": "*",
+            "herzult/php-ssh": "*",
+            "phpspec/phpspec2": "dev-master",
+            "phpunit/phpunit": "3.7.*",
+            "rackspace/php-cloudfiles": "*",
+            "rackspace/php-opencloud": "dev-master"
+        },
+        "suggest": {
+            "amazonwebservices/aws-sdk-for-php": "to use the Amazon S3 adapter",
+            "doctrine/dbal": "to use the Doctrine DBAL adapter",
+            "dropbox-php/dropbox-php": "to use the Dropbox adapter",
+            "ext-apc": "to use the APC adapter",
+            "ext-curl": "*",
+            "ext-fileinfo": "*",
+            "ext-mbstring": "*",
+            "ext-mongo": "*",
+            "ext-zip": "to use the Zip adapter",
+            "knplabs/knp-gaufrette-bundle": "*",
+            "rackspace/php-opencloud": "to use Opencloud adapter"
+        },
+        "time": "2013-04-20 08:12:21",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.2.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Gaufrette": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "The contributors",
+                "homepage": "http://github.com/knplabs/Gaufrette/contributors"
+            },
+            {
+                "name": "KnpLabs Team",
+                "homepage": "http://knplabs.com"
+            }
+        ],
+        "description": "PHP5 library that provides a filesystem abstraction layer",
+        "homepage": "http://knplabs.com",
+        "keywords": [
+            "abstraction",
+            "file",
+            "filesystem",
+            "media"
+        ]
+    },
+    {
+        "name": "bt51/gaufrette-serviceprovider",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bt51/GaufretteServiceProvider.git",
+            "reference": "6bba885170beb6719e7256e407b172f90af3159a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bt51/GaufretteServiceProvider/zipball/6bba885170beb6719e7256e407b172f90af3159a",
+            "reference": "6bba885170beb6719e7256e407b172f90af3159a",
+            "shasum": ""
+        },
+        "require": {
+            "knplabs/gaufrette": "dev-master@dev",
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "silex/silex": "1.0.x-dev"
+        },
+        "time": "2012-12-07 00:50:44",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Bt51\\Silex\\Provider\\GaufretteServiceProvider": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Ben Tollakson",
+                "email": "ben.tollakson@gmail.com"
+            }
+        ],
+        "description": "Gaufrette service provider for silex",
+        "homepage": "https://github.com/bt51/GaufretteServiceProvider",
+        "keywords": [
+            "extension",
+            "gaufrette",
+            "silex",
+            "silex-extension"
+        ]
+    },
+    {
+        "name": "symfony/filesystem",
+        "version": "v2.2.1",
+        "version_normalized": "2.2.1.0",
+        "target-dir": "Symfony/Component/Filesystem",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Filesystem.git",
+            "reference": "v2.2.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Filesystem/zipball/v2.2.1",
+            "reference": "v2.2.1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-01-17 15:25:59",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Filesystem\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Filesystem Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "neutron/silex-filesystem-provider",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/romainneutron/Silex-Filesystem-Service-Provider.git",
+            "reference": "98771524bba1ffa58373c4c06d438f5fb5442ff4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/romainneutron/Silex-Filesystem-Service-Provider/zipball/98771524bba1ffa58373c4c06d438f5fb5442ff4",
+            "reference": "98771524bba1ffa58373c4c06d438f5fb5442ff4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "silex/silex": ">=1.0",
+            "symfony/filesystem": ">=2.0"
+        },
+        "time": "2012-11-08 21:07:08",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Neutron": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Romain Neutron",
+                "email": "imprec@gmail.com",
+                "homepage": "http://www.lickmychip.com/"
+            }
+        ],
+        "description": "A Silex Provider for Symfony Filesystem component",
+        "keywords": [
+            "filesystem",
+            "silex",
+            "temporary-filesystem"
+        ]
     },
     {
         "name": "symfony/dom-crawler",
@@ -2165,184 +2515,6 @@
         ]
     },
     {
-        "name": "symfony/property-access",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "target-dir": "Symfony/Component/PropertyAccess",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/PropertyAccess.git",
-            "reference": "10dafc69dc50e07d6c0e45a179fa7e86209250d7"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/10dafc69dc50e07d6c0e45a179fa7e86209250d7",
-            "reference": "10dafc69dc50e07d6c0e45a179fa7e86209250d7",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2013-04-11 06:50:46",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.3-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\PropertyAccess\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony PropertyAccess Component",
-        "homepage": "http://symfony.com",
-        "keywords": [
-            "access",
-            "array",
-            "extraction",
-            "index",
-            "injection",
-            "object",
-            "property",
-            "property path",
-            "reflection"
-        ]
-    },
-    {
-        "name": "pagerfanta/pagerfanta",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/whiteoctober/Pagerfanta.git",
-            "reference": "48ed04c9797e96c70cfc514d0dc0ded8546f2b55"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/48ed04c9797e96c70cfc514d0dc0ded8546f2b55",
-            "reference": "48ed04c9797e96c70cfc514d0dc0ded8546f2b55",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "doctrine/mongodb-odm": "*",
-            "doctrine/orm": "2.*",
-            "mandango/mandango": "*",
-            "propel/propel1": ">=1.6,<2.0",
-            "solarium/solarium": "dev-develop"
-        },
-        "suggest": {
-            "doctrine/mongodb-odm": "To use the DoctrineODMMongoDBAdapter.",
-            "doctrine/orm": "To use the DoctrineORMAdapter.",
-            "mandango/mandango": "To use the MandangoAdapter.",
-            "propel/propel1": "To use the PropelAdapter",
-            "solarium/solarium": "To use the SolariumAdapter."
-        },
-        "time": "2013-04-16 21:43:21",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Pagerfanta\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Pablo Díez",
-                "email": "pablodip@gmail.com",
-                "homepage": "http://github.com/pablodip"
-            }
-        ],
-        "description": "Pagination for PHP 5.3",
-        "keywords": [
-            "page",
-            "pagination",
-            "paginator",
-            "paging"
-        ]
-    },
-    {
-        "name": "franmomu/silex-pagerfanta-provider",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/jmontoyaa/silex-pagerfanta-provider.git",
-            "reference": "417acc6e761929ccf608c3d34c4d4abeb72f05f0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/jmontoyaa/silex-pagerfanta-provider/zipball/417acc6e761929ccf608c3d34c4d4abeb72f05f0",
-            "reference": "417acc6e761929ccf608c3d34c4d4abeb72f05f0",
-            "shasum": ""
-        },
-        "require": {
-            "pagerfanta/pagerfanta": "dev-master",
-            "silex/silex": "1.0.*@dev",
-            "symfony/property-access": ">=2.2,<2.4-dev"
-        },
-        "time": "2013-04-15 11:29:52",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "FranMoreno": "src/"
-            }
-        },
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fran Moreno",
-                "email": "franmomu@gmail.com",
-                "homepage": "http://showmethecode.es"
-            }
-        ],
-        "description": "Silex ServiceProvider for Pagerfanta Library",
-        "homepage": "https://github.com/franmomu/silex-pagerfanta-provider",
-        "keywords": [
-            "pagerfanta",
-            "service provider",
-            "silex"
-        ],
-        "support": {
-            "source": "https://github.com/jmontoyaa/silex-pagerfanta-provider/tree/master"
-        }
-    },
-    {
         "name": "symfony/options-resolver",
         "version": "v2.2.1",
         "version_normalized": "2.2.1.0",
@@ -2721,12 +2893,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-            "reference": "673a8dfb05875e8512e3aab2cf10476f537db4cd"
+            "reference": "cfabd4076c52ae0e86646dd22cc786c86783308c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/673a8dfb05875e8512e3aab2cf10476f537db4cd",
-            "reference": "673a8dfb05875e8512e3aab2cf10476f537db4cd",
+            "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/cfabd4076c52ae0e86646dd22cc786c86783308c",
+            "reference": "cfabd4076c52ae0e86646dd22cc786c86783308c",
             "shasum": ""
         },
         "require": {
@@ -2746,7 +2918,7 @@
             "doctrine/mongodb-odm": ">=1.0.0-BETA7",
             "doctrine/orm": ">=2.3.2"
         },
-        "time": "2013-04-17 16:42:34",
+        "time": "2013-04-21 18:56:48",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2851,5 +3023,54 @@
         "keywords": [
             "silex"
         ]
+    },
+    {
+        "name": "symfony/config",
+        "version": "2.2.x-dev",
+        "version_normalized": "2.2.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/Config",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Config.git",
+            "reference": "dd19d55c3493d1afa0600bb8cd7c83945c2f0cdb"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Config/zipball/dd19d55c3493d1afa0600bb8cd7c83945c2f0cdb",
+            "reference": "dd19d55c3493d1afa0600bb8cd7c83945c2f0cdb",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-04-20 18:42:10",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Config\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Config Component",
+        "homepage": "http://symfony.com"
     }
 ]

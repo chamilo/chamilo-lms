@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\PropertyAccess\Exception;
+namespace Symfony\Component\Validator\Constraints;
 
 /**
- * Thrown when a property cannot be accessed because it is not public.
+ * @Annotation
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class PropertyAccessDeniedException extends RuntimeException
+class Optional extends Existence
 {
 }

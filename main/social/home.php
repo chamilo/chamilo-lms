@@ -70,7 +70,6 @@ $list = array(
 $usergroup = new UserGroup();
 
 // Current user information
->>>>>>> Minor - code style
 $social_right_content .= '<div>'.Display::description($list).'</div>';
 $social_right_content .= '
     <div class="form-actions">

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Report
  * @package chamilo.tracking
@@ -100,7 +101,7 @@ if (!empty($course_info)) {
 			$my_exercise->read($exercise['path']);
 			$question_list = $my_exercise->selectQuestionList();
 
-			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'],$course_info['id'], $session_id);
+			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'],$course_info['real_id'], $session_id);
 
 			foreach ($question_list  as $question_id) {
 				$question_data = Question::read($question_id);

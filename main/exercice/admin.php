@@ -116,7 +116,7 @@ if (empty($modifyExercise)) {
 
 //Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
 
-delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
+delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_int_id(), api_get_session_id());
 
 // get from session
 $objExercise = isset($_SESSION['objExercise'])?$_SESSION['objExercise']:0;

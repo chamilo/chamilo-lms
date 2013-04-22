@@ -876,8 +876,8 @@ function get_exercise_track_exercise_info($exe_id)
 	                    INNER JOIN $TBL_TRACK_EXERCICES as tee
 	                    ON q.id=tee.exe_exo_id
 	                    INNER JOIN $TBL_COURSE c
-	                    ON c.code = tee.exe_cours_id
-	                    WHERE tee.exe_id=$exe_id
+	                    ON c.id = tee.c_id
+	                    WHERE tee.exe_id = $exe_id
 	                    AND q.c_id=c.id";
 
         $res_fb_type = Database::query($sql_fb_type);
@@ -969,7 +969,8 @@ function get_count_exam_hotpotatoes_results($in_hotpot_path)
 function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null)
 {
     $tab_res = array();
-    $course_code = api_get_course_id();
+    $courseId = api_get_course_int_id();
+
     // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
     if ($in_column == 1) {
         $in_column = 'firstname';
@@ -980,7 +981,10 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
     $TBL_GROUP = Database :: get_course_table(TABLE_GROUP);
     $TBL_USER = Database :: get_main_table(TABLE_MAIN_USER);
 
-    $sql .= "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
+    $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp
+            JOIN $TBL_USER u ON thp.exe_user_id = u.user_id
+            WHERE thp.c_id = '$courseId' AND
+                  exe_name LIKE '$in_hotpot_path%'";
 
     // just count how many answers
     if ($in_get_count) {
@@ -1050,13 +1054,13 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 
     // sql for chamilo-type tests for teacher / tutor view
     $sql_inner_join_tbl_track_exercices = " (
-                                            SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
-                                            FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
-                                            ON (ttte.exe_id = tr.exe_id)
-                                            WHERE exe_cours_id = '$course_code' AND
-                                                  exe_exo_id = $exercise_id AND
-                                                  ttte.session_id = ".api_get_session_id()."
-                                            )";
+        SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
+        FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
+        ON (ttte.exe_id = tr.exe_id)
+        WHERE ttte.c_id = '$course_id' AND
+              exe_exo_id = $exercise_id AND
+              ttte.session_id = ".api_get_session_id()."
+    )";
     if ($is_allowedToEdit) {
         //Teacher view
         if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -1153,9 +1157,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 INNER JOIN $sql_inner_join_tbl_user  AS user ON (user.user_id = exe_user_id)
                 WHERE $extra_where_conditions AND
                     te.status != 'incomplete'
-                    AND te.exe_cours_id='".api_get_course_id()."' $session_id_and
+                    AND te.c_id='".$course_id."' $session_id_and
                     AND ce.active <>-1
-                    AND ce.c_id=".api_get_course_int_id()."
+                    AND ce.c_id=".$course_id."
                     $exercise_where ";
 
         // sql for hotpotatoes tests for teacher / tutor view
@@ -1171,7 +1175,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     tth.exe_weighting,
                     tth.exe_date";
         }
-
+        //	AND $where_condition seems not to be used
         $hpsql = " $hpsql_select
                 FROM
                     $TBL_TRACK_HOTPOTATOES tth,
@@ -1179,12 +1183,12 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     $sqlFromOption
                 WHERE
                     user.user_id=tth.exe_user_id
-                    AND tth.exe_cours_id = '".api_get_course_id()."'
+                    AND tth.c_id = '".$course_id."'
                     $hotpotatoe_where
                     $sqlWhereOption
-					AND $where_condition
+
                 ORDER BY
-                    tth.exe_cours_id ASC,
+                    tth.c_id ASC,
                     tth.exe_date DESC";
     }
 
@@ -1234,7 +1238,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         if (is_array($results)) {
 
             $users_array_id = array();
-            if ($_GET['gradebook'] == 'view') {
+            if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
                 $from_gradebook = true;
             }
             $sizeof = count($results);
@@ -1247,7 +1251,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             for ($i = 0; $i < $sizeof; $i++) {
                 $revised = $results[$i]['revised'];
 
-                if ($from_gradebook && ($is_allowedToEdit)) {
+                if (isset($from_gradebook) && $from_gradebook && $is_allowedToEdit) {
                     if (in_array($results[$i]['username'].$results[$i]['firstname'].$results[$i]['lastname'], $users_array_id)) {
                         continue;
                     }
@@ -1588,7 +1592,7 @@ function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $
  * @param   int     session id
  * @return  int     the position of the user between his friends in a course (or course within a session)
  */
-function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $user_list = array(), $return_string = true)
+function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $course_id, $session_id = 0, $user_list = array(), $return_string = true)
 {
     //No score given we return
     if (is_null($my_score)) {
@@ -1601,7 +1605,7 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
     $best_attempts = array();
     foreach ($user_list as $user_data) {
         $user_id = $user_data['user_id'];
-        $best_attempts[$user_id] = get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session_id);
+        $best_attempts[$user_id] = get_best_attempt_by_user($user_id, $exercise_id, $course_id, $session_id);
     }
 
     if (empty($best_attempts)) {
@@ -1653,11 +1657,11 @@ function get_exercise_result_ranking($my_score, $my_exe_id, $exercise_id, $cours
  * @param   float   user score to be compared attention => score/weight
  * @param   int     exe id of the exercise (this is necesary because if 2 students have the same score the one with the minor exe_id will have a best position, just to be fair and FIFO)
  * @param   int     exercise id
- * @param   string  course code
+ * @param   int     course id
  * @param   int     session id
  * @return  int     the position of the user between his friends in a course (or course within a session)
  */
-function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise_id, $course_code, $session_id = 0, $return_string = true)
+function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise_id, $courseId, $session_id = 0, $return_string = true)
 {
     if (empty($session_id)) {
         $session_id = 0;
@@ -1665,7 +1669,7 @@ function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise
     if (is_null($my_score)) {
         return '-';
     }
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id, false);
+    $user_results = get_all_exercise_results($exercise_id, $courseId, $session_id, false);
     $position_data = array();
     if (empty($user_results)) {
         return 1;
@@ -1709,9 +1713,9 @@ function get_exercise_result_ranking_by_attempt($my_score, $my_exe_id, $exercise
  *  Get the best attempt in a exercise (NO Exercises in LPs )
  */
 
-function get_best_attempt_in_course($exercise_id, $course_code, $session_id)
+function get_best_attempt_in_course($exercise_id, $courseId, $session_id)
 {
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id, false);
+    $user_results = get_all_exercise_results($exercise_id, $courseId, $session_id, false);
     $best_score_data = array();
     $best_score = 0;
     if (!empty($user_results)) {
@@ -1727,13 +1731,18 @@ function get_best_attempt_in_course($exercise_id, $course_code, $session_id)
     }
     return $best_score_data;
 }
-/*
- *  Get the best score in a exercise (NO Exercises in LPs )
- */
 
-function get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session_id)
+/**
+ * Get the best score in a exercise (NO Exercises in LPs )
+ * @param $user_id
+ * @param $exercise_id
+ * @param $courseId
+ * @param $session_id
+ * @return array
+ */
+function get_best_attempt_by_user($user_id, $exercise_id, $courseId, $session_id)
 {
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id, false, $user_id);
+    $user_results = get_all_exercise_results($exercise_id, $courseId, $session_id, false, $user_id);
     $best_score_data = array();
     $best_score = 0;
     if (!empty($user_results)) {
@@ -1753,13 +1762,13 @@ function get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session
 /**
  * Get average score (NO Exercises in LPs )
  * @param 	int	exercise id
- * @param 	string	course code
+ * @param 	int	course id
  * @param 	int	session id
  * @return 	float	Average score
  */
-function get_average_score($exercise_id, $course_code, $session_id)
+function get_average_score($exercise_id, $courseId, $session_id)
 {
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
+    $user_results = get_all_exercise_results($exercise_id, $courseId, $session_id);
     $avg_score = 0;
     if (!empty($user_results)) {
         foreach ($user_results as $result) {
@@ -1776,14 +1785,13 @@ function get_average_score($exercise_id, $course_code, $session_id)
 /**
  * Get average score by score (NO Exercises in LPs )
  * @param 	int	exercise id
- * @param 	string	course code
+ * @param 	int	course id
  * @param 	int	session id
  * @return 	float	Average score
  */
-function get_average_score_by_course($course_code, $session_id)
+function get_average_score_by_course($courseId, $session_id)
 {
-    $user_results = get_all_exercise_results_by_course($course_code, $session_id, false);
-    //echo $course_code.' - '.$session_id.'<br />';
+    $user_results = get_all_exercise_results_by_course($courseId, $session_id, false);
     $avg_score = 0;
     if (!empty($user_results)) {
         foreach ($user_results as $result) {
@@ -1799,9 +1807,17 @@ function get_average_score_by_course($course_code, $session_id)
     return $avg_score;
 }
 
-function get_average_score_by_course_by_user($user_id, $course_code, $session_id)
+/**
+ *
+ * @param $user_id
+ * @param $courseId
+ * @param $session_id
+ *
+ * @return float|int
+ */
+function get_average_score_by_course_by_user($user_id, $courseId, $session_id)
 {
-    $user_results = get_all_exercise_results_by_user($user_id, $course_code, $session_id);
+    $user_results = get_all_exercise_results_by_user($user_id, $courseId, $session_id);
     $avg_score = 0;
     if (!empty($user_results)) {
         foreach ($user_results as $result) {
@@ -1820,8 +1836,9 @@ function get_average_score_by_course_by_user($user_id, $course_code, $session_id
 /**
  * Get average score by score (NO Exercises in LPs )
  * @param 	int		exercise id
- * @param 	string	course code
+ * @param 	int course id
  * @param 	int		session id
+ *
  * @return	float	Best average score
  */
 function get_best_average_score_by_exercise($exercise_id, $course_code, $session_id, $user_count)
@@ -1847,6 +1864,11 @@ function get_best_average_score_by_exercise($exercise_id, $course_code, $session
     return $avg_score;
 }
 
+/**
+ * @param $course_code
+ * @param $session_id
+ * @return array
+ */
 function get_exercises_to_be_taken($course_code, $session_id)
 {
     $course_info = api_get_course_info($course_code);
@@ -1863,26 +1885,28 @@ function get_exercises_to_be_taken($course_code, $session_id)
 
 /**
  * Get student results (only in completed exercises) stats by question
+ *
  * @param 	int		question id
  * @param 	int		exercise id
- * @param 	string	course code
+ * @param 	int 	course id
  * @param 	int		session id
  *
  * */
-function get_student_stats_by_question($question_id, $exercise_id, $course_code, $session_id)
+function get_student_stats_by_question($question_id, $exercise_id, $courseId, $session_id)
 {
     $track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
     $question_id = intval($question_id);
     $exercise_id = intval($exercise_id);
-    $course_code = Database::escape_string($course_code);
+    $courseId = intval($courseId);
     $session_id = intval($session_id);
 
     $sql = "SELECT MAX(marks) as max , MIN(marks) as min, AVG(marks) as average
 			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
 			WHERE 	exe_exo_id 		= $exercise_id AND
-					course_code 	= '$course_code' AND
+					e.c_id 	= $courseId AND
+					a.c_id = $courseId
 					e.session_id 	= $session_id AND
 					question_id 	= $question_id AND status = '' LIMIT 1";
     $result = Database::query($sql);
@@ -1893,7 +1917,14 @@ function get_student_stats_by_question($question_id, $exercise_id, $course_code,
     return $return;
 }
 
-function get_number_students_question_with_answer_count($question_id, $exercise_id, $course_code, $session_id)
+/**
+ * @param int $question_id
+ * @param int $exercise_id
+ * @param int $courseId
+ * @param int $session_id
+ * @return int
+ */
+function get_number_students_question_with_answer_count($question_id, $exercise_id, $courseId, $session_id)
 {
     $track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1901,15 +1932,15 @@ function get_number_students_question_with_answer_count($question_id, $exercise_
 
     $question_id = intval($question_id);
     $exercise_id = intval($exercise_id);
-    $course_code = Database::escape_string($course_code);
+    $courseId = intval($courseId);
     $session_id = intval($session_id);
 
 
     $sql = "SELECT DISTINCT exe_user_id
 			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
-                ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id
+                ON cu.c_id = a.c_id AND cu.user_id  = exe_user_id
 			WHERE 	exe_exo_id 		= $exercise_id AND
-					a.course_code 	= '$course_code' AND
+					a.c_id 	        = $courseId AND
 					e.session_id 	= $session_id AND
 					question_id 	= $question_id AND
                     answer          <> '0' AND
@@ -1957,7 +1988,19 @@ function get_number_students_answer_hotspot_count($answer_id, $question_id, $exe
     return $return;
 }
 
-function get_number_students_answer_count($answer_id, $question_id, $exercise_id, $course_code, $session_id, $question_type = null, $correct_answer = null, $current_answer = null)
+/**
+ *
+ * @param int $answer_id
+ * @param int $question_id
+ * @param int $exercise_id
+ * @param int $courseId
+ * @param int $session_id
+ * @param string $question_type
+ * @param null $correct_answer
+ * @param null $current_answer
+ * @return int
+ */
+function get_number_students_answer_count($answer_id, $question_id, $exercise_id, $courseId, $session_id, $question_type = null, $correct_answer = null, $current_answer = null)
 {
     $track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1966,7 +2009,7 @@ function get_number_students_answer_count($answer_id, $question_id, $exercise_id
     $question_id = intval($question_id);
     $answer_id = intval($answer_id);
     $exercise_id = intval($exercise_id);
-    $course_code = Database::escape_string($course_code);
+    $courseId = intval($courseId);
     $session_id = intval($session_id);
 
     switch ($question_type) {
@@ -1982,9 +2025,9 @@ function get_number_students_answer_count($answer_id, $question_id, $exercise_id
 
     $sql = "SELECT $select_condition
 			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
-                ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id
+                ON cu.c_id = a.c_id AND cu.user_id  = exe_user_id
 			WHERE 	exe_exo_id 		= $exercise_id AND
-					a.course_code 	= '$course_code' AND
+					a.c_id 	= $courseId AND
 					e.session_id 	= $session_id AND
                     $answer_condition
 					question_id 	= $question_id AND
@@ -2127,19 +2170,28 @@ function check_fill_in_blanks($answer, $user_answer)
     return $good_answer;
 }
 
-function get_number_students_finish_exercise($exercise_id, $course_code, $session_id)
+/**
+ *
+ * @param int $exercise_id
+ * @param int $courseId
+ * @param int $session_id
+ * @depracted seems not to be used
+ * @return int
+ */
+function get_number_students_finish_exercise($exercise_id, $courseId, $session_id)
 {
     $track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
     $exercise_id = intval($exercise_id);
-    $course_code = Database::escape_string($course_code);
+    $courseId = intval($courseId);
     $session_id = intval($session_id);
 
     $sql = "SELECT DISTINCT exe_user_id
 			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
 			WHERE 	exe_exo_id 		= $exercise_id AND
-					course_code 	= '$course_code' AND
+					a.c_id = $courseId AND
+					e.c_id = $courseId AND
 					e.session_id 	= $session_id AND
 					status = ''";
     $result = Database::query($sql);

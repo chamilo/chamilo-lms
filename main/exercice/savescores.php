@@ -61,11 +61,11 @@ function save_scores($file, $score)
         // anonymous
         $user_id = "NULL";
     }
-    $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, exe_cours_id, exe_result, exe_weighting) VALUES (
+    $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, c_id, exe_result, exe_weighting) VALUES (
 			'".Database::escape_string($file)."',
 			'".Database::escape_string($user_id)."',
 			'".Database::escape_string($date)."',
-			'".Database::escape_string(api_get_course_id())."',
+			'".api_get_course_int_id()."',
 			'".Database::escape_string($score)."',
 			'".Database::escape_string($weighting)."')";
 

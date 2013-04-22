@@ -35,7 +35,7 @@ $tbl_track_exercice = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EX
 /*
  	MAIN CODE
 */
-$sql_course = "SELECT title,code FROM $tbl_course as course ORDER BY title ASC";
+$sql_course = "SELECT title, code, id FROM $tbl_course as course ORDER BY title ASC";
 $result_course = Database::query($sql_course);
 
 if (Database::num_rows($result_course) > 0) {
@@ -49,7 +49,7 @@ if (Database::num_rows($result_course) > 0) {
 		// TODO: This query is to be checked, there are no HotPotatoes tests results.
 		$sql_moy_test = "SELECT exe_result,exe_weighting
 			FROM $tbl_track_exercice
-			WHERE exe_cours_id = '".$a_course['code']."'";
+			WHERE c_id = '".$a_course['id']."'";
 		$result_moy_test = Database::query($sql_moy_test);
 		$result = 0;
 		$weighting = 0;

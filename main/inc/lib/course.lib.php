@@ -1567,6 +1567,8 @@ class CourseManager {
         $table_stats_links          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
         $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
 
+        $courseInfo = api_get_course_info($code);
+
         $code = Database::escape_string($code);
 
         // Unsubscribe all classes from the course
@@ -1595,11 +1597,11 @@ class CourseManager {
 
         // Delete the course from the stats tables
 
-        $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$code."'";
+        $sql = "DELETE FROM $table_stats_hotpots WHERE c_id = '".$courseInfo['real_id']."'";
         Database::query($sql);
-        $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$code."'";
+        $sql = "DELETE FROM $table_stats_attempt WHERE c_id = '".$courseInfo['real_id']."'";
         Database::query($sql);
-        $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$code."'";
+        $sql = "DELETE FROM $table_stats_exercises WHERE c_id = '".$courseInfo['real_id']."'";
         Database::query($sql);
         $sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$code."'";
         Database::query($sql);

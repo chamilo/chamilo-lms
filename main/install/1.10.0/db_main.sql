@@ -3188,13 +3188,11 @@ CREATE TABLE track_e_exercices (
   exe_id int NOT NULL auto_increment,
   exe_user_id int unsigned default NULL,
   exe_date datetime NOT NULL default '0000-00-00 00:00:00',
-  exe_cours_id varchar(40) NOT NULL default '',
   exe_exo_id int unsigned NOT NULL default 0,
   exe_result float(6,2) NOT NULL default 0,
   exe_weighting float(6,2) NOT NULL default 0,
-  PRIMARY KEY  (exe_id),
-  KEY exe_user_id (exe_user_id),
-  KEY exe_cours_id (exe_cours_id)
+  c_id INT unsigned NOT NULL default 0,
+  PRIMARY KEY  (exe_id)
 );
 
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
@@ -3219,12 +3217,13 @@ CREATE TABLE track_e_attempt (
     answer text NOT NULL,
     teacher_comment text NOT NULL,
     marks float(6,2) NOT NULL default 0,
-    course_code varchar(40) NOT NULL default '',
     position int default 0,
     tms datetime NOT NULL default '0000-00-00 00:00:00',
     session_id INT NOT NULL DEFAULT 0,
+    c_id INT unsigned NOT NULL default 0,
     filename VARCHAR(255) DEFAULT NULL
 );
+
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt ADD INDEX (user_id);
 ALTER TABLE track_e_attempt ADD INDEX (question_id);
@@ -3251,11 +3250,9 @@ CREATE TABLE track_e_hotpotatoes (
     exe_name VARCHAR( 255 ) NOT NULL ,
     exe_user_id int unsigned DEFAULT NULL ,
     exe_date DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL ,
-    exe_cours_id varchar(40) NOT NULL ,
+    c_id INT unsigned NOT NULL default 0,
     exe_result smallint default 0 NOT NULL ,
-    exe_weighting smallint default 0 NOT NULL,
-    KEY exe_user_id (exe_user_id),
-    KEY exe_cours_id (exe_cours_id)
+    exe_weighting smallint default 0 NOT NULL
 );
 
 DROP TABLE IF EXISTS track_e_links;

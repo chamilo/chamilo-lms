@@ -188,7 +188,7 @@ class Tracking
 
         $sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
                 FROM $tbl_track_course
-                WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND course_code='$course_code' AND session_id = '$session_id' $condition_user";
+                WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND course_code = '$course_code' AND session_id = '$session_id' $condition_user";
 
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
@@ -477,11 +477,11 @@ class Tracking
                 $sql = "SELECT SUM(exe_result/exe_weighting*100) as avg_score, COUNT(*) as num_attempts
                         FROM $tbl_stats_exercise
                         WHERE exe_exo_id IN ('".$exercise_id."')
-				        $condition_user AND
-                        orig_lp_id = 0 AND
-                        status = '' AND
-                        exe_cours_id = '$course_code' AND
-                        orig_lp_item_id = 0 $condition_session
+                            $condition_user AND
+                            orig_lp_id = 0 AND
+                            status = '' AND
+                            c_id = '{$course_info['real_id']}' AND
+                            orig_lp_item_id = 0 $condition_session
                         ORDER BY exe_date DESC";
 
                 $res = Database::query($sql);
@@ -507,15 +507,15 @@ class Tracking
     /**
      * Get count student's exercise COMPLETED attempts
      * @param    int     Student id
-     * @param    string    Course code
+     * @param    int    course id
      * @param    int        Exercise id
      * @param    int        Learning path id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
      * @param    int        Learning path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
      * @return  int     count of attempts
      */
-    public static function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0)
+    public static function count_student_exercise_attempts($student_id, $courseId, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0)
     {
-        $course_code = Database::escape_string($course_code);
+        $courseId = intval($courseId);
         $student_id = intval($student_id);
         $exercise_id = intval($exercise_id);
         $session_id = intval($session_id);
@@ -526,17 +526,16 @@ class Tracking
         if (!empty($lp_item_id))
             $lp_id = intval($lp_item_id);
 
-
         $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
         $sql = "SELECT COUNT(ex.exe_id) as essais FROM $tbl_stats_exercices AS ex
-                WHERE  ex.exe_cours_id = '$course_code'
-                AND ex.exe_exo_id = $exercise_id
-                AND status = ''
-                AND orig_lp_id = $lp_id
-                AND orig_lp_item_id = $lp_item_id
-                AND exe_user_id= $student_id
-                AND session_id = $session_id ";
+                WHERE  ex.c_id = '$courseId' AND
+                      ex.exe_exo_id = $exercise_id AND
+                      status = '' AND
+                      orig_lp_id = $lp_id AND
+                      orig_lp_item_id = $lp_item_id AND
+                      exe_user_id= $student_id AND
+                      session_id = $session_id ";
 
         $rs = Database::query($sql);
         $row = Database::fetch_row($rs);
@@ -547,13 +546,14 @@ class Tracking
 
     /**
      * Get count student's exercise progress
+     *
      * @param    int       user id
-     * @param    string    course code
+     * @param    int       course id
      * @param    int       session id
      */
-    static function get_exercise_student_progress($exercise_list, $user_id, $course_code, $session_id)
+    static function get_exercise_student_progress($exercise_list, $user_id, $courseId, $session_id)
     {
-        $course_code = Database::escape_string($course_code);
+        $courseId = intval($courseId);
         $user_id = intval($user_id);
         $session_id = intval($session_id);
 
@@ -567,9 +567,10 @@ class Tracking
         $exercise_list_imploded = implode("' ,'", $exercise_list);
 
         $sql = "SELECT COUNT(DISTINCT ex.exe_exo_id) FROM $tbl_stats_exercices AS ex
-                WHERE ex.exe_cours_id = '$course_code' AND
+                WHERE ex.c_id = '$courseId' AND
                       ex.session_id  = $session_id AND
-                      ex.exe_user_id = $user_id AND ex.exe_exo_id IN ('$exercise_list_imploded') ";
+                      ex.exe_user_id = $user_id AND
+                      ex.exe_exo_id IN ('$exercise_list_imploded') ";
 
         $rs = Database::query($sql);
         $count = 0;
@@ -581,13 +582,21 @@ class Tracking
         return $count;
     }
 
-    static function get_exercise_student_average_best_attempt($exercise_list, $user_id, $course_code, $session_id)
+    /**
+     *
+     * @param $exercise_list
+     * @param $user_id
+     * @param $courseId
+     * @param $session_id
+     * @return string
+     */
+    static function get_exercise_student_average_best_attempt($exercise_list, $user_id, $courseId, $session_id)
     {
         $result = 0;
         if (!empty($exercise_list)) {
             foreach ($exercise_list as $exercise_data) {
                 $exercise_id = $exercise_data['id'];
-                $best_attempt = get_best_attempt_exercise_results_per_user($user_id, $exercise_id, $course_code, $session_id);
+                $best_attempt = get_best_attempt_exercise_results_per_user($user_id, $exercise_id, $courseId, $session_id);
 
                 if (!empty($best_attempt)) {
                     $result += $best_attempt['exe_result'] / $best_attempt['exe_weighting'];
@@ -912,7 +921,7 @@ class Tracking
                                             exe_user_id          = $user_id AND
                                             orig_lp_item_id      = $item_id AND
                                             orig_lp_item_view_id = $lp_item_view_id AND
-                                            exe_cours_id         = '$course_code'  AND
+                                            c_id         = '$course_id'  AND
                                             session_id           = $session_id
                                             ORDER BY exe_date DESC LIMIT 1";
                                 if ($debug)
@@ -2434,7 +2443,7 @@ class Tracking
                                 $exercise_graph_list[] = $best_average;
                                 $all_exercise_graph_list[] = $best_average;
 
-                                $user_result_data = get_best_attempt_by_user(api_get_user_id(), $exercise_data['id'], $course_data['code'], $my_session_id);
+                                $user_result_data = get_best_attempt_by_user(api_get_user_id(), $exercise_data['id'], $course_data['real_id'], $my_session_id);
                                 $score = 0;
                                 if (!empty($user_result_data['exe_weighting']) && intval($user_result_data['exe_weighting']) != 0) {
                                     $score = intval($user_result_data['exe_result'] / $user_result_data['exe_weighting'] * 100);
@@ -2519,14 +2528,16 @@ class Tracking
                         $count_exercises = count($exercises);
                     }
 
+                    $courseId = $course_data['real_id'];
+
                     //Count of user results
-                    //$done_exercises     = get_count_exercises_attempted_by_course($course_data['code'], $my_session_id);
+                    //$done_exercises     = get_count_exercises_attempted_by_course($course_data['real_id'], $my_session_id);
                     $done_exercises = null;
 
                     $answered_exercises = 0;
                     if (!empty($exercises)) {
                         foreach ($exercises as $exercise_item) {
-                            $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $course_data['code'], $my_session_id);
+                            $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $courseId, $my_session_id);
                             if ($attempts > 1) {
                                 $answered_exercises++;
                             }
@@ -2534,7 +2545,7 @@ class Tracking
                     }
 
                     //Average
-                    $average = get_average_score_by_course($course_data['code'], $my_session_id);
+                    $average = get_average_score_by_course($course_data['real_id'], $my_session_id);
 
                     $all_exercises += $count_exercises;
 
@@ -2599,6 +2610,7 @@ class Tracking
 
                 foreach ($course_list as $course_data) {
                     $course_code = $course_data['code'];
+                    $courseId = $course_data['real_id'];
                     $course_title = $course_data['title'];
 
                     //All exercises in the course @todo change for a real count
@@ -2610,10 +2622,10 @@ class Tracking
                     //Count of user results
                     //$done_exercises     = get_best_exercise_results_by_course($course_code, $session_id_from_get);
                     //From course exercises NOT from LP exercises!!!
-                    //$done_exercises     = get_count_exercises_attempted_by_course($course_code, $session_id_from_get);
+                    //$done_exercises     = get_count_exercises_attempted_by_course($courseId, $session_id_from_get);
                     $answered_exercises = 0;
                     foreach ($exercises as $exercise_item) {
-                        $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $course_code, $session_id_from_get);
+                        $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercise_item['id'], $courseId, $session_id_from_get);
                         if ($attempts > 1) {
                             $answered_exercises++;
                         }
@@ -2622,14 +2634,16 @@ class Tracking
                     $unanswered_exercises = $count_exercises - $answered_exercises;
 
                     //Average
-                    $average = get_average_score_by_course($course_code, $session_id_from_get);
-                    $my_average = get_average_score_by_course_by_user(api_get_user_id(), $course_code, $session_id_from_get);
+                    $average = get_average_score_by_course($courseId, $session_id_from_get);
+                    $my_average = get_average_score_by_course_by_user(api_get_user_id(), $courseId, $session_id_from_get);
 
-                    $stats_array[$course_code] = array('exercises' => $count_exercises,
+                    $stats_array[$course_code] = array(
+                        'exercises' => $count_exercises,
                         'unanswered_exercises_by_user' => $unanswered_exercises,
                         'done_exercises' => $done_exercises,
                         'average' => $average,
-                        'my_average' => $my_average);
+                        'my_average' => $my_average
+                    );
 
                     $weighting = 0;
                     $last_connection = Tracking :: get_last_connection_date_on_the_course($user_id, $course_code, $session_id_from_get);
@@ -2751,7 +2765,7 @@ class Tracking
                     $score = $weighting = $attempts = 0;
 
                     //Getting count of attempts by user
-                    $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercices['id'], $course_info['code'], $session_id);
+                    $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercices['id'], $course_info['real_id'], $session_id);
 
                     $html .= '<tr class="row_even">';
                     $url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
@@ -2765,7 +2779,7 @@ class Tracking
                     //Exercise configuration show results or show only score
                     if ($exercices['results_disabled'] == 0 || $exercices['results_disabled'] == 2) {
                         //For graphics
-                        $best_exercise_stats = get_best_exercise_results_by_user($exercices['id'], $course_info['code'], $session_id);
+                        $best_exercise_stats = get_best_exercise_results_by_user($exercices['id'], $course_info['real_id'], $session_id);
                         $to_graph_exercise_result[$exercices['id']] = array('title' => $exercices['title'], 'data' => $best_exercise_stats);
 
                         $latest_attempt_url = '';
@@ -2773,11 +2787,11 @@ class Tracking
                         $graph = $normal_graph = null;
 
                         //Getting best results
-                        $best_score_data = get_best_attempt_in_course($exercices['id'], $course_info['code'], $session_id);
+                        $best_score_data = get_best_attempt_in_course($exercices['id'], $course_info['real_id'], $session_id);
                         $best_score = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
 
                         if ($attempts > 0) {
-                            $exercise_stat = get_best_attempt_by_user(api_get_user_id(), $exercices['id'], $course_info['code'], $session_id);
+                            $exercise_stat = get_best_attempt_by_user(api_get_user_id(), $exercices['id'], $course_info['real_id'], $session_id);
                             if (!empty($exercise_stat)) {
 
                                 //Always getting the BEST attempt
@@ -2792,7 +2806,7 @@ class Tracking
                                     $my_score = $score / $weighting;
                                 }
                                 //@todo this function slows the page
-                                $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
+                                $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['real_id'], $session_id, $user_list);
 
                                 $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
                                 $normal_graph = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
@@ -2927,15 +2941,15 @@ class Tracking
 
         $graph->drawFilledRoundedRectangle(7, 7, $main_width - 7, $main_height - 7, 5, 240, 240, 240);
         $graph->drawRoundedRectangle(5, 5, $main_width - 5, $main_height - 5, 5, 230, 230, 230);
-        $graph->drawGraphArea(255, 255, 255, TRUE);
+        $graph->drawGraphArea(255, 255, 255, true);
 
         //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0, SCALE_ADDALL
-        $graph->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_NORMAL, 150, 150, 150, TRUE, $y_label_angle, 1, TRUE);
-        $graph->drawGrid(4, TRUE, 230, 230, 230, 70);
+        $graph->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_NORMAL, 150, 150, 150, true, $y_label_angle, 1, true);
+        $graph->drawGrid(4, true, 230, 230, 230, 70);
 
         // Draw the 0 line
         $graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 6);
-        $graph->drawTreshold(0, 143, 55, 72, TRUE, TRUE);
+        $graph->drawTreshold(0, 143, 55, 72, true, true);
 
         // Draw the cubic curve graph
         $graph->drawLineGraph($data_set->GetData(), $data_set->GetDataDescription());
@@ -3071,7 +3085,7 @@ class Tracking
         $thumbnail_graph->drawGraphArea(255, 255, 255);
 
         //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0
-        $thumbnail_graph->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_ADDALLSTART0, 150, 150, 150, FALSE, 0, 1, TRUE);
+        $thumbnail_graph->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_ADDALLSTART0, 150, 150, 150, false, 0, 1, true);
 
         $thumbnail_graph->drawOverlayBarGraph($data_set->GetData(), $data_set->GetDataDescription(), 100);
 
@@ -3199,12 +3213,12 @@ class Tracking
         $main_graph->drawFilledRoundedRectangle(10, 10, $main_width - 10, $main_height - 10, 5, 240, 240, 240);
         $main_graph->drawRoundedRectangle(7, 7, $main_width - 7, $main_height - 7, 5, 230, 230, 230);
 
-        $main_graph->drawGraphArea(255, 255, 255, TRUE);
+        $main_graph->drawGraphArea(255, 255, 255, true);
 
         //SCALE_NORMAL, SCALE_START0, SCALE_ADDALLSTART0
-        $main_graph->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_ADDALLSTART0, 150, 150, 150, TRUE, 0, 1, TRUE);
+        $main_graph->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_ADDALLSTART0, 150, 150, 150, true, 0, 1, true);
 
-        $main_graph->drawGrid(4, TRUE, 230, 230, 230, 50);
+        $main_graph->drawGrid(4, true, 230, 230, 230, 50);
 
         // Draw the 0 line
         $main_graph->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 6);
@@ -3792,10 +3806,10 @@ class TrackingCourseLog
             }
             $user['average_progress'] = $avg_student_progress.'%';
 
-            $total_user_exercise = Tracking::get_exercise_student_progress($total_exercises, $user['user_id'], $course_code, $session_id);
+            $total_user_exercise = Tracking::get_exercise_student_progress($total_exercises, $user['user_id'], $course_info['real_id'], $session_id);
             $user['exercise_progress'] = $total_user_exercise;
 
-            $total_user_exercise = Tracking::get_exercise_student_average_best_attempt($total_exercises, $user['user_id'], $course_code, $session_id);
+            $total_user_exercise = Tracking::get_exercise_student_average_best_attempt($total_exercises, $user['user_id'], $course_info['real_id'], $session_id);
             $user['exercise_average_best_attempt'] = $total_user_exercise;
 
 
@@ -3971,11 +3985,16 @@ class TrackingUserLog
 
     /**
      * Displays the exercise results for a specific user in a specific course.
-     * @todo remove globals
+     * @param $view
+     * @param $user_id
+     * @param $course_id
      */
     function display_exercise_tracking_info($view, $user_id, $course_id)
     {
-        global $TABLECOURSE_EXERCICES, $TABLETRACK_EXERCICES, $dateTimeFormatLong;
+        $TABLECOURSE_EXERCICES = Database::get_main_table(TABLE_QUIZ_TEST);
+        $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+
         if (substr($view, 1, 1) == '1') {
             $new_view = substr_replace($view, '0', 1, 1);
             echo "<tr>
@@ -3987,15 +4006,15 @@ class TrackingUserLog
 
             $sql = "SELECT ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
                 FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
-                WHERE te.exe_cours_id = '".Database::escape_string($course_id)."'
+                WHERE te.c_id = '".Database::escape_string($course_id)."'
                     AND te.exe_user_id = '".Database::escape_string($user_id)."'
                     AND te.exe_exo_id = ce.id
                 ORDER BY ce.title ASC, te.exe_date ASC";
 
             $hpsql = "SELECT te.exe_name, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
                 FROM $TBL_TRACK_HOTPOTATOES AS te
-                WHERE te.exe_user_id = '".Database::escape_string($user_id)."' AND te.exe_cours_id = '".Database::escape_string($course_id)."'
-                ORDER BY te.exe_cours_id ASC, te.exe_date ASC";
+                WHERE te.exe_user_id = '".Database::escape_string($user_id)."' AND te.c_id = '".Database::escape_string($course_id)."'
+                ORDER BY te.c_id ASC, te.exe_date ASC";
 
             $hpresults = getManyResultsXCol($hpsql, 4);
 
@@ -4347,11 +4366,18 @@ class TrackingUserLogCSV
 
     /**
      * Displays the exercise results for a specific user in a specific course.
-     * @todo remove globals
+     * @param $view
+     * @param $user_id
+     * @param $course_id
+     * @return array
      */
     function display_exercise_tracking_info($view, $user_id, $course_id)
     {
-        global $TABLECOURSE_EXERCICES, $TABLETRACK_EXERCICES, $TABLETRACK_HOTPOTATOES, $dateTimeFormatLong;
+        $TABLECOURSE_EXERCICES = Database::get_main_table(TABLE_QUIZ_TEST);
+        $TABLETRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+
+
         if (substr($view, 1, 1) == '1') {
             $new_view = substr_replace($view, '0', 1, 1);
 
@@ -4360,15 +4386,15 @@ class TrackingUserLogCSV
 
             $sql = "SELECT ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
                 FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
-                WHERE te.exe_cours_id = '$course_id'
+                WHERE te.c_id = '$course_id'
                     AND te.exe_user_id = '$user_id'
                     AND te.exe_exo_id = ce.id
                 ORDER BY ce.title ASC, te.exe_date ASC";
 
             $hpsql = "SELECT te.exe_name, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
                 FROM $TABLETRACK_HOTPOTATOES AS te
-                WHERE te.exe_user_id = '$user_id' AND te.exe_cours_id = '$course_id'
-                ORDER BY te.exe_cours_id ASC, te.exe_date ASC";
+                WHERE te.exe_user_id = '$user_id' AND te.c_id = '$course_id'
+                ORDER BY te.c_id ASC, te.exe_date ASC";
 
             $hpresults = getManyResultsXCol($hpsql, 4);
 

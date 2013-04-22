@@ -76,7 +76,7 @@ if (!empty($new_session_list)) {
                 $course['name'] = $course_info['name'];
                 $course['id']   = $course_info['real_id'];
                 if (!empty($exercise_list)) {
-                    foreach($exercise_list as $exercise_item) {
+                    foreach ($exercise_list as $exercise_item) {
                         //Loading the exercise
                         $exercise = new Exercise($course_info['real_id']);
                         $exercise->read($exercise_item['id']);
@@ -84,7 +84,7 @@ if (!empty($new_session_list)) {
                         if ($visible_return['value'] != false) {
                             //$exercise_course_list[$exercise_item['id']] = $exercise;
                             //Reading all Exercise results by user, exercise_id, code, and session
-                            $user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['code'], $my_session_id);
+                            $user_results = get_exercise_results_by_user(api_get_user_id(), $exercise_item['id'], $my_course['real_id'], $my_session_id);
                             $course['exercises'][$exercise_item['id']]['data']['exercise_data'] =  $exercise;
                             $course['exercises'][$exercise_item['id']]['data']['results']       =  $user_results;
                         }
@@ -195,7 +195,7 @@ $now = time();
 foreach($final_array as $session_data) {
     $my_course_list = isset($session_data['data']) ? $session_data['data']: array();
     if (!empty($my_course_list))
-    foreach ($my_course_list as $my_course_code=>$course_data) {
+    foreach ($my_course_list as $my_course_code => $course_data) {
         if (isset($course_id) && !empty($course_id)) {
             if ($course_id != $course_data['id']) {
                 continue;
@@ -205,7 +205,7 @@ foreach($final_array as $session_data) {
         if (!empty($course_data['exercises'])) {
             //Exercises
             foreach ($course_data['exercises'] as $my_exercise_id => $exercise_data) {
-                $best_score_data = get_best_attempt_in_course($my_exercise_id, $my_course_code, $session_id);
+                $best_score_data = get_best_attempt_in_course($my_exercise_id, $course_data['id'], $session_id);
 
                 $best_score = '';
                 if (!empty($best_score_data)) {
@@ -229,20 +229,21 @@ foreach($final_array as $session_data) {
                             if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {
                                 $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
                             }
-                            $position       = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id, $my_course_code, $session_id, $user_list);
+                            $position = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id, $course_data['id'], $session_id, $user_list);
                             //$exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercice.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id&show=result", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
                             $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
 
-                            $my_real_array[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']),
-                            							'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'', ICON_SIZE_SMALL),
-                            							'date'        => $start_date,
-                            							'course'      => $course_data['name'],
-                            						    'exercise'    => $exercise_info->exercise,
-                            						    'attempt'     => $counter,
-                            						    'result'      => $platform_score,
-                            						    'best_result' => $best_score,
-                            						    'position'    => $position
-                                                );
+                            $my_real_array[]= array(
+                                //'date'        => api_get_local_time($exercise_result['exe_date']),
+                                'status'      => Display::return_icon('quiz.gif', get_lang('Attempted'),'', ICON_SIZE_SMALL),
+                                'date'        => $start_date,
+                                'course'      => $course_data['name'],
+                                'exercise'    => $exercise_info->exercise,
+                                'attempt'     => $counter,
+                                'result'      => $platform_score,
+                                'best_result' => $best_score,
+                                'position'    => $position
+                            );
                             $counter++;
                         }
                     } else {
@@ -254,16 +255,17 @@ foreach($final_array as $session_data) {
                             }
                         }
                         $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id", array('target'=>SESSION_LINK_TARGET));
-                        $new_exercises[]= array(	//'date'        => api_get_local_time($exercise_result['exe_date']),
-                       							'status'      => Display::return_icon('star.png', get_lang('New'), array('width'=>ICON_SIZE_SMALL)),
-                    							'date'        => $start_date,
-                    							'course'      => $course_data['name'],
-                    						    'exercise'    => $exercise_info->exercise,
-                    						    'attempt'     => '-',
-                    						    'result'      => '-',
-                    						    'best_result' => '-',
-                    						    'position'    => '-'
-                                        );
+                        $new_exercises[]= array(
+                            //'date'        => api_get_local_time($exercise_result['exe_date']),
+                            'status'      => Display::return_icon('star.png', get_lang('New'), array('width'=>ICON_SIZE_SMALL)),
+                            'date'        => $start_date,
+                            'course'      => $course_data['name'],
+                            'exercise'    => $exercise_info->exercise,
+                            'attempt'     => '-',
+                            'result'      => '-',
+                            'best_result' => '-',
+                            'position'    => '-'
+                        );
                     }
                 }
             }

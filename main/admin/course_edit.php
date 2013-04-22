@@ -33,7 +33,8 @@ if (empty($course)) {
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='".$course_code."'".$order_clause;
+$sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user
+WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='".$course_code."'".$order_clause;
 $res = Database::query($sql);
 $course_teachers = array();
 while ($obj = Database::fetch_object($res)) {

@@ -30,6 +30,7 @@ $this_section = "session_my_space";
 // variables
 $user_id = api_get_user_id();
 $course_id = api_get_course_id();
+$courseId = api_get_course_int_id();
 
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
@@ -76,7 +77,6 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($
 // Database Table Definitions
 $TABLECOURSUSER	        	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEUSER	        		= Database::get_main_table(TABLE_MAIN_USER);
-
 $TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
 
 $tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
@@ -251,7 +251,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
             TrackingUserLog::display_login_tracking_info($view, $uInfo, $_cid);
 
             //Exercise results
-            TrackingUserLog::display_exercise_tracking_info($view, $uInfo, $_cid);
+            TrackingUserLog::display_exercise_tracking_info($view, $uInfo, $courseId);
 
             //Student publications uploaded
             TrackingUserLog::display_student_publications_tracking_info($view, $uInfo, $_cid);

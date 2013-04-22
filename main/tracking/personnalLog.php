@@ -216,7 +216,7 @@ api_display_tool_title($nameTools);
                     FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
                     WHERE te.exe_user_id = '".$_user['user_id']."'
                         AND te.exe_exo_id = ce.id
-                    ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+                    ORDER BY te.c_id ASC, ce.title ASC, te.exe_date ASC";
 
         echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
         $results = getManyResultsXCol($sql,4);

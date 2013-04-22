@@ -154,7 +154,7 @@ if (isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
                                     exe_user_id="' . api_get_user_id() . '" AND
                                     orig_lp_id = "' . (int) $clean_lp_id . '" AND
                                     orig_lp_item_id = "' . (int) $clean_lp_item_id . '" AND
-                                    exe_cours_id="' . $clean_course_code . '"  AND
+                                    c_id="' . $course_id . '"  AND
                                     session_id = ' . $session_id . '
                              ORDER BY exe_date';
         } else {
@@ -164,7 +164,7 @@ if (isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
                                     exe_user_id="' . $student_id . '" AND
                                     orig_lp_id = "' . (int) $clean_lp_id . '" AND
                                     orig_lp_item_id = "' . (int) $clean_lp_item_id . '" AND
-                                    exe_cours_id="' . $clean_course_code . '"  AND
+                                    c_id = "' . $course_id . '"  AND
                                     session_id = ' . $session_id . '
                              ORDER BY exe_date';
         }
@@ -516,7 +516,7 @@ if (is_array($list) && count($list) > 0) {
                                             exe_user_id="' . api_get_user_id() . '" AND
                                             orig_lp_id = "' . $lp_id . '" AND
                                             orig_lp_item_id = "' . $row['myid'] . '" AND
-                                            exe_cours_id="' . $course_code . '" AND
+                                            c_id ="' . $course_id . '" AND
                                             status <> "incomplete" AND
                                             session_id = ' . $session_id . '
                                      ORDER BY exe_date DESC limit 1';
@@ -526,7 +526,7 @@ if (is_array($list) && count($list) > 0) {
                                             exe_user_id="' . $student_id . '" AND
                                             orig_lp_id = "' . $lp_id . '" AND
                                             orig_lp_item_id = "' . $row['myid'] . '" AND
-                                            exe_cours_id="' . $course_code . '" AND
+                                            c_id ="' . $course_id . '" AND
                                             status <> "incomplete" AND
                                             session_id = ' . $session_id . '
                                      ORDER BY exe_date DESC limit 1';
@@ -613,18 +613,20 @@ if (is_array($list) && count($list) > 0) {
                                                     exe_user_id="' . api_get_user_id() . '" AND
                                                     orig_lp_id = "' . $lp_id . '" AND
                                                     orig_lp_item_id = "' . $row['myid'] . '" AND
-                                                    exe_cours_id="' . $course_code . '" AND
+                                                    c_id = "' . $course_id . '" AND
                                                     status <> "incomplete" AND
                                                     session_id = ' . $session_id . '
                                             ORDER BY exe_date DESC ';
                     } else {
+                        $courseInfo = api_get_course_info($_GET['course']);
+
                         $my_url_suffix = '&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($row['mylpid']) . '&origin=' . Security::remove_XSS($_GET['origin'] . $from_link);
                         $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . '
                                              WHERE   exe_exo_id="' . $row['path'] . '" AND
                                                     exe_user_id="' . $student_id . '" AND
                                                     orig_lp_id = "' . $lp_id . '" AND
                                                     orig_lp_item_id = "' . $row['myid'] . '" AND
-                                                    exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND
+                                                    c_id = "' . $courseInfo['real_id'] . '" AND
                                                     status <> "incomplete" AND
                                                     session_id = ' . $session_id . '
                                              ORDER BY exe_date DESC ';

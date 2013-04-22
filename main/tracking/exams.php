@@ -207,9 +207,9 @@ if(!empty($course_list) && is_array($course_list)) {
 
                     foreach ($a_students as $student ) {
                         $current_student_id = $student['user_id'];
-                        $sqlEssais = "    SELECT COUNT(ex.exe_id) as essais
+                        $sqlEssais = "  SELECT COUNT(ex.exe_id) as essais
                                         FROM $tbl_stats_exercices AS ex
-                                        WHERE  ex.exe_cours_id = '".$current_course['code']."'
+                                        WHERE  ex.c_id = '".$course_id."'
                                         AND ex.exe_exo_id = ".$a_exercices['id']."
                                         AND exe_user_id='".$current_student_id."'";
 
@@ -217,10 +217,10 @@ if(!empty($course_list) && is_array($course_list)) {
                         $resultEssais = Database::query($sqlEssais);
                         $a_essais = Database::fetch_array($resultEssais);
 
-                        $sqlScore = "SELECT exe_id, exe_result,exe_weighting
+                        $sqlScore = "SELECT exe_id, exe_result, exe_weighting
                                  FROM $tbl_stats_exercices
                                  WHERE exe_user_id = ".$current_student_id."
-                                 AND exe_cours_id = '".$current_course['code']."'
+                                 AND c_id = '".$course_id."'
                                  AND exe_exo_id = ".$a_exercices['id']."
                                  ORDER BY exe_result DESC LIMIT 1"; // we take the higher value
                                  //ORDER BY exe_date DESC LIMIT 1";

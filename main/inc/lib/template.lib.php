@@ -32,10 +32,9 @@ class Template
     public $navigation_array;
 
     /**
-     * @param string $title
      * @param Application $app
      */
-    public function __construct($title = null, Application $app = null)
+    public function __construct(Application $app = null)
     {
         if (empty($app)) {
             global $app;
@@ -46,11 +45,13 @@ class Template
         }
 
         $this->app['classic_layout'] = true;
-
         $this->navigation_array = $this->returnNavigationArray();
 
+        //just in case
+        global $tool_name;
+
         //Page title
-        $this->title = $title;
+        $this->title = isset($app['title']) ? $app['title'] : $tool_name;
         $this->show_learnpath = $app['template.show_learnpath'];
         $this->load_plugins = $app['template.load_plugins'];
 
@@ -80,7 +81,6 @@ class Template
         if (!empty($interbreadcrumb)) {
             $this->app['breadcrumb'] = $interbreadcrumb;
         }
-
 
         //header and footer are showed by default
         $this->setFooter($app['template.show_footer']);
@@ -1258,6 +1258,7 @@ class Template
     public function returnBreadcrumb()
     {
         $interbreadcrumb = $this->app['breadcrumb'];
+
         $session_id = api_get_session_id();
         $session_name = api_get_session_name($session_id);
         $_course = api_get_course_info();

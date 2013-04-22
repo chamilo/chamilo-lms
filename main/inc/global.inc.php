@@ -19,13 +19,13 @@
  */
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
-//@todo not sure if this is needed any more
+//@todo not sure if we need this
 //api_request_uri();
 
 // This is for compatibility with MAC computers.
 //ini_set('auto_detect_line_endings', '1');
 
-//Autoloader
+// Composer autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
 
 use Silex\Application;
@@ -46,11 +46,12 @@ $app = new Application();
 $includePath = dirname(__FILE__);
 
 // Include the main Chamilo platform configuration file.
-//@todo use a service provider like:
+// @todo use a service provider to load configuration files:
 /*
     $app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile));
 */
 
+/** Loading configuration files */
 $configurationFilePath = $includePath.'/conf/configuration.php';
 $configurationYMLFile = $includePath.'/../../config/configuration.yml';
 $configurationFileAppPath = $includePath.'/../../config/configuration.php';
@@ -85,6 +86,8 @@ if (file_exists($configurationYMLFile)) {
 
 // End reading configuration file
 
+/** Loading legacy libs */
+
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
@@ -97,7 +100,7 @@ require_once $includePath.'/lib/internationalization_internal.lib.php';
 // Do not over-use this variable. It is only for this script's local use.
 $libPath = $includePath.'/lib/';
 
-// Loading config files
+/** Loading config files */
 if ($alreadyInstalled) {
     $configPath = $includePath.'/../../config/';
 
@@ -168,7 +171,7 @@ $app['configuration_yml_file'] = $configurationYMLFile;
 $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 
-//Loading $app settings
+// Loading $app settings
 //require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
 require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
@@ -249,13 +252,13 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));*/
 
-// Setting controllers as services
+// Setting Controllers as services provider
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 // Validator provider
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-// Implements Symfony2 translator
+// Implements Symfony2 translator (needed when using forms in Twig)
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'locale' => 'en',
     'locale_fallback' => 'en'
@@ -290,10 +293,10 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
 $app['classic_layout'] = false;
 $app['breadcrumb'] = array();
 
-//Form provider
+// Form provider
 $app->register(new Silex\Provider\FormServiceProvider());
 
-//URL generator provider
+// URL generator provider
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 /*
@@ -330,7 +333,7 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
     return $extensions;
 }));*/
 
-//The script is allowed? This setting is modified when calling api_is_not_allowed()
+// The script is allowed? This setting is modified when calling api_is_not_allowed()
 $app['allowed'] = true;
 
 // Template settings loaded in template.lib.php
@@ -340,13 +343,13 @@ $app['template.show_learnpath'] = false;
 $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
 $app['template.load_plugins'] = true;
 
-//Default template style
+// Default template style
 $app['template_style'] = 'default';
 
-//Default layout
+// Default layout
 $app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
-//Setting the Twig service provider
+// Setting Twig as a service provider
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
@@ -367,7 +370,7 @@ $app->register(
     )
 );
 
-//Setting Twig options
+// Setting Twig options
 $app['twig'] = $app->share(
     $app->extend('twig', function ($twig) {
         $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
@@ -387,10 +390,10 @@ $app['twig'] = $app->share(
     })
 );
 
-// Registering Menu extension
+// Registering Menu service provider (too gently creating menus with the URLgenerator provider)
 $app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
 
-//Pagerfanta settings (Pagination)
+// Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 $app->register(new PagerfantaServiceProvider());
 
@@ -401,13 +404,13 @@ $app['pagerfanta.view.options'] = array(
     'proximity'     => 3,
     'next_message'  => '&raquo;',
     'prev_message'  => '&laquo;',
-    'default_view'  => 'twitter_bootstrap'
+    'default_view'  => 'twitter_bootstrap' // the pagination style
 );
-
+// Custom route params see https://github.com/franmomu/silex-pagerfanta-provider/pull/2
 //$app['pagerfanta.view.router.name']
 //$app['pagerfanta.view.router.params']
 
-//Monolog only available if cache is writable
+// Monolog only available if the log dir is writable
 if (is_writable($app['temp.path'])) {
 
     /*
@@ -427,7 +430,7 @@ if (is_writable($app['temp.path'])) {
     );
 }
 
-//Setting Doctrine service provider (DBAL)
+// Setting Doctrine service provider (DBAL)
 if (isset($app['configuration']['main_database'])) {
 
     $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
@@ -443,7 +446,7 @@ if (isset($app['configuration']['main_database'])) {
         )
     ));
 
-    //Setting Doctrine ORM
+    // Setting Doctrine ORM
     $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
         'orm.auto_generate_proxies' => true,
         "orm.proxies_dir" => $app['db.orm.proxies_dir'],
@@ -461,11 +464,11 @@ if (isset($app['configuration']['main_database'])) {
         ),
     ));
 
-    //Temporal fix to load gedmo libs
+    // Temporal fix to load gedmo libs
     $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
     $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
 
-    //Setting Doctrine2 extensions
+    // Setting Doctrine2 extensions
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
     $app['db.event_manager']->addEventSubscriber($timestampableListener);
 
@@ -478,24 +481,23 @@ if (isset($app['configuration']['main_database'])) {
 
 define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
 
+// Setting the Imagine service provider to deal with image transformations used in social group.
 $app->register(new Grom\Silex\ImagineServiceProvider(), array(
     'imagine.factory' => 'Gd',
     //'imagine.base_path' => __DIR__.'/vendor/imagine',
 ));
 
-
-
-
-//Manage error messages
+// Manage Chamilo error messages
 $app->error(
     function (\Exception $e, $code) use ($app) {
 
         if ( $e instanceof PDOException) {
-
         }
+
         if ($app['debug']) {
             //return;
         }
+
         if (isset($code)) {
             switch ($code) {
                 case 404:
@@ -519,7 +521,7 @@ $app->error(
     }
 );
 
-//Prompts Doctrine SQL queries using monolog
+// Prompts Doctrine SQL queries using monolog
 if ($app['debug'] && isset($app['configuration']['main_database'])) {
     $logger = new Doctrine\DBAL\Logging\DebugStack();
     $app['db.config']->setSQLLogger($logger);
@@ -532,9 +534,9 @@ if ($app['debug'] && isset($app['configuration']['main_database'])) {
     });
 }
 
-//Database constants
+// Database constants
 require_once $libPath.'database.constants.inc.php';
-//@todo tranform the events.lib.inc.php in a class
+// @todo Rewrite the events.lib.inc.php in a class
 require_once $libPath.'events.lib.inc.php';
 
 // Connect to the server database and select the main chamilo database.
@@ -605,10 +607,10 @@ api_set_internationalization_default_encoding($charset);
 
 // Start session after the internationalization library has been initialized
 
-//@todo use silex session provider instead of a custom class
+// @todo use silex session provider instead of a custom class
 Chamilo::session()->start($alreadyInstalled);
 
-//Loading chamilo settings
+// Loading chamilo settings
 if ($alreadyInstalled && $checkConnection) {
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
 
@@ -631,13 +633,13 @@ if ($alreadyInstalled && $checkConnection) {
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
 
-// which will then be usable from the banner and header scripts
+// Section (tabs in the main chamilo menu)
 $app['this_section'] = SECTION_GLOBAL;
 
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
 
-//Adding web profiler
+// Adding symfony2 web profiler (memory, time, logs, etc)
 if (is_writable($app['temp.path'])) {
     //if ($app['debug']) {
 
@@ -647,6 +649,7 @@ if (is_writable($app['temp.path'])) {
             ));
         $app->mount('/_profiler', $p);
     }
+
     //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
     //}
 }
@@ -667,19 +670,24 @@ $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
 $app['mailer'] = $app->share(function ($app) {
     return new \Swift_Mailer($app['swiftmailer.transport']);
 });
-use Bt51\Silex\Provider\GaufretteServiceProvider\GaufretteServiceProvider;
 
+// Gaufrette service provider (to manage files/dirs) (not used yet)
+/*
+use Bt51\Silex\Provider\GaufretteServiceProvider\GaufretteServiceProvider;
 $app->register(new GaufretteServiceProvider(), array(
     'gaufrette.adapter.class' => 'Local',
     'gaufrette.options' => array(api_get_path(SYS_DATA_PATH))
 ));
+*/
 
+// Use symfony2 filesystem instead of custom scripts
 use Neutron\Silex\Provider\FilesystemServiceProvider;
 $app->register(new FilesystemServiceProvider());
 
+// Setting languages
 $app['api_get_languages'] = api_get_languages();
 
-/*	Loading languages and sublanguages */
+/**	Loading languages and sublanguages **/
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
@@ -773,8 +781,6 @@ if (isset($this_script) && $this_script == 'sub_language') {
     }
 }
 
-
-
 /**
  * Include all necessary language files
  * - trad4all
@@ -787,7 +793,7 @@ $language_files[] = 'trad4all';
 $language_files[] = 'notification';
 $language_files[] = 'accessibility';
 
-//@todo Added because userportal and index are loaded by a controller should be fixed when a $app['translator'] is configured
+// @todo Added because userportal and index are loaded by a controller should be fixed when a $app['translator'] is configured
 $language_files[] = 'index';
 $language_files[] = 'courses';
 
@@ -839,13 +845,13 @@ if (is_array($language_files)) {
         }
     }
 }
-
-/* End loading languages */
+// End loading languages
 
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+// @todo this should be configured somewhere else usermanager.class.php? a users.yml setting?
 
 $default_username_length = 40;
 if (api_get_setting('login_is_email') == 'true') {
@@ -854,7 +860,9 @@ if (api_get_setting('login_is_email') == 'true') {
 
 define('USERNAME_MAX_LENGTH', $default_username_length);
 
-/** Silex Middlewares: A before application middleware allows you to tweak the Request before the controller is executed */
+/** Silex Middlewares: */
+
+/** A "before" middleware allows you to tweak the Request before the controller is executed */
 
 $app->before(
     function () use ($app, $checkConnection) {
@@ -890,20 +898,21 @@ $app->before(
     }
 );
 
-/** Silex Middlewares: An after application middleware allows you to tweak the Response before it is sent to the client */
+/** An after application middleware allows you to tweak the Response before it is sent to the client */
 $app->after(
     function (Request $request, Response $response) {
 
     }
 );
 
-/** Silex Middlewares: A finish application middleware allows you to execute tasks after the Response has been sent to
+/** A "finish" application middleware allows you to execute tasks after the Response has been sent to
  * the client (like sending emails or logging) */
 $app->finish(
     function (Request $request) use ($app) {
 
     }
 );
+// End Silex Middlewares
 
 // The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
 // So, we have to reassign this variable again in order to keep its value right.
@@ -913,8 +922,9 @@ $charset = $charset_initial_value;
 // For determing text direction correspondent to the current language we use now information from the internationalization library.
 $text_dir = api_get_text_direction();
 
-//Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
+// Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
+/** "Login as user" custom script */
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
@@ -949,23 +959,29 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 // The langstat object will then be used in the get_lang() function.
 // This block can be removed to speed things up a bit as it should only ever
 // be used in development versions.
+// @todo create a service provider to load this
 if (isset($app['configuration']['language_measure_frequency']) && $app['configuration']['language_measure_frequency'] == 1) {
     require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
     $langstats = new langstats();
 }
 
-//Default quota for the course documents folder
+/** Setting the course quota */
+// @todo move this somewhere else
+
+// Default quota for the course documents folder
 $default_quota = api_get_setting('default_document_quotum');
-//Just in case the setting is not correctly set
+// Just in case the setting is not correctly set
 if (empty($default_quota)) {
     $default_quota = 100000000;
 }
-
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+
+/** Setting the is_admin key */
 
 $app['is_admin'] = false;
 
-// Creating a Chamilo service provider
+/** Chamilo service provider */
+
 use Silex\ServiceProviderInterface;
 
 class ChamiloServiceProvider implements ServiceProviderInterface
@@ -974,21 +990,21 @@ class ChamiloServiceProvider implements ServiceProviderInterface
     {
         // Template class
         $app['template'] = $app->share(function () use ($app) {
-                $template = new Template($app);
-                return $template;
-            });
+            $template = new Template($app);
+            return $template;
+        });
 
         // Chamilo data filesystem
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
-                $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['data.path']);
-                return $filesystem;
-            });
+            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['data.path']);
+            return $filesystem;
+        });
 
         // Page controller class
         $app['page_controller'] = $app->share(function () use ($app) {
-                $pageController = new PageController($app);
-                return $pageController;
-            });
+            $pageController = new PageController($app);
+            return $pageController;
+        });
     }
 
     public function boot(Application $app)
@@ -996,10 +1012,11 @@ class ChamiloServiceProvider implements ServiceProviderInterface
     }
 }
 
-//Registering Chamilo service provider
+// Registering Chamilo service provider
 $app->register(new ChamiloServiceProvider(), array());
 
-//Controller as services definitions
+// Controller as services definitions
+// @todo move definitions in another file
 
 $app['pages.controller'] = $app->share(function () use ($app) {
     return new PagesController($app['pages.repository']);
@@ -1058,8 +1075,8 @@ $app['posts.controller'] = $app->share(function() use ($app) {
 $app->mount('/', "posts.controller");*/
 
 /**
- * Nice middlewares that will fix the permission problems in Chamilo
- * @todo move this in a permission class
+ * Custom chamilo middlewares that will fix the permission problems in Chamilo
+ * @todo move this
  **/
 $checkCourse = function (Request $request) use ($app) {
     $courseCode = $request->get('courseCode');
@@ -1096,7 +1113,7 @@ $userAccessPermissions = function (Request $request) use ($app) {
     $courseCode = $request->get('cidReq');
 };
 
-// End middlewares
+// End custom middlewares
 
 // @todo put routes somewhere else, in a yml/php file .
 
@@ -1104,6 +1121,7 @@ $userAccessPermissions = function (Request $request) use ($app) {
  * All calls made in Chamilo (olds ones) are manage in the LegacyController::classicAction function located here:
  * src/ChamiloLMS/Controller/LegacyController.php
  */
+
 $app->get('/', 'legacy.controller:classicAction')
     ->before($courseAccessConditions)
     ->before($userAccessPermissions);
@@ -1116,7 +1134,7 @@ $app->post('/', 'legacy.controller:classicAction')
 $app->match('/index', 'index.controller:indexAction', 'GET|POST')
     ->bind('index');
 
-// web/userportal
+// Userportal
 $app->get('/userportal', 'userPortal.controller:indexAction');
 $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
     ->value('type', 'courses') //default values
@@ -1170,4 +1188,5 @@ $app->get('/data/document_templates/{file}', 'index.controller:getDocumentTempla
 // Data default_platform_document files
 $app->get('/data/default_platform_document/', 'index.controller:getDefaultPlatformDocumentAction')
     ->assert('type', '.+');
+
 return $app;

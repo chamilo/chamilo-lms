@@ -62,14 +62,14 @@ class IndexController extends CommonController
         $app['extraJS'] = $extraJS;
         $request = $app['request'];
         $app['languages_file'] = array('courses', 'index', 'admin');
+        $app['cidReset'] = true;
 
-        // Testing translation using translator component
+        // Testing translation using translator
         //echo $app['translator']->trans('Wiki Search Results');
         //echo $app['translator']->trans('Profile');
 
-        //$token = $app['security']->getToken();
 
-        //Testing Doctrine ORM + pagination using pagerfanta
+        //$token = $app['security']->getToken();
 
         //$article = $app['orm.em']->getRepository('Entity\Course');
         //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\Course a');

@@ -224,18 +224,11 @@ define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path
 
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 define('WEB_PATH', 'WEB_PATH');
-define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
-define('SYS_PATH', 'SYS_PATH');
-define('SYS_PATH_APP', 'SYS_PATH_APP');
-define('SYS_DATA_PATH', 'SYS_DATA_PATH');
-define('SYS_LOG_PATH', 'SYS_LOG_PATH');
-
 define('SYS_CONFIG_PATH', 'SYS_CONFIG_PATH');
 define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
-define('WEB_DATA_COURSE_PATH', 'WEB_DATA_COURSE_PATH');
 
 define('SYS_COURSE_PATH', 'SYS_COURSE_PATH');
 define('REL_COURSE_PATH', 'REL_COURSE_PATH');
@@ -259,6 +252,14 @@ define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('SYS_TEST_PATH', 'SYS_TEST_PATH');
 define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
+
+// 1.10 new paths
+define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
+define('SYS_PATH', 'SYS_PATH');
+define('SYS_DATA_PATH', 'SYS_DATA_PATH');
+define('SYS_LOG_PATH', 'SYS_LOG_PATH');
+define('WEB_DATA_COURSE_PATH', 'WEB_DATA_COURSE_PATH');
+define('WEB_DATA_PATH', 'WEB_DATA_PATH');
 
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
@@ -466,6 +467,9 @@ define ('SKILL_TYPE_BOTH',          'both');
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
+ * api_get_path(WEB_PUBLIC_PATH)                http://www.mychamilo.org/chamilo/web/
+ * api_get_path(WEB_DATA_PATH)                  http://www.mychamilo.org/chamilo/web/data/
+ * api_get_path(WEB_DATA_COURSE_PATH)           http://www.mychamilo.org/chamilo/web/data/courses/
  * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/courses/
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
@@ -496,7 +500,6 @@ function api_get_path($path_type, $path = null) {
     static $paths = array(
         WEB_PATH                => '',
         SYS_PATH                => '',
-        SYS_PATH_APP            => 'app/',
         SYS_DATA_PATH           => 'data/',
         SYS_CONFIG_PATH         => 'config/',
         SYS_LOG_PATH            => 'logs/',
@@ -504,7 +507,8 @@ function api_get_path($path_type, $path = null) {
         WEB_SERVER_ROOT_PATH    => '',
         SYS_SERVER_ROOT_PATH    => '',
         WEB_COURSE_PATH         => '',
-        WEB_DATA_COURSE_PATH    => 'data/',
+        WEB_DATA_COURSE_PATH    => 'courses/',
+        WEB_DATA_PATH           => '/',
         SYS_COURSE_PATH         => 'data/',
         REL_COURSE_PATH         => '',
         REL_CODE_PATH           => '',
@@ -627,7 +631,6 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_PATH]                = $root_web;
         $paths[WEB_PUBLIC_PATH]         = $root_web."web/";
         $paths[SYS_PATH]                = $root_sys;
-        $paths[SYS_PATH_APP]            = $root_sys.'app/';
         $paths[SYS_DATA_PATH]           = $root_sys.'data/';
         $paths[SYS_LOG_PATH]            = $root_sys.'logs/';
         $paths[SYS_CONFIG_PATH]         = $root_sys.'config/';
@@ -636,7 +639,9 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
         $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
-        $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_PUBLIC_PATH].$course_folder;
+
+        $paths[WEB_DATA_PATH]           = $paths[WEB_PUBLIC_PATH].'data/';
+        $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_DATA_PATH].$course_folder;
 
         $paths[SYS_COURSE_PATH]         = $paths[SYS_DATA_PATH].$course_folder;
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
@@ -2913,7 +2918,7 @@ function api_not_found($print_headers = false) {
     $app['template.show_header'] = $show_headers;
     $app['template.show_footer'] = $show_headers;
 
-    $tpl = new Template(null);
+    $tpl = $app['template'];
     $msg = get_lang('NotFound');
     $tpl->assign('content', $msg);
     $tpl->display_one_col_template();
@@ -6919,4 +6924,8 @@ function api_get_web_default_course_document()
 
 function load_translations($app) {
 
+}
+
+function api_get_path_chamilo_extension() {
+    return api_get_path(WEB_PUBLIC_PATH).'extensions/chamilo/';
 }

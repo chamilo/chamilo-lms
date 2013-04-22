@@ -136,9 +136,9 @@ $show_message = '';
 Session::erase('toolgroup');
 Session::erase('_gid');
 
-$is_speacialcourse = CourseManager::is_special_course($course_code);
+$is_specialcourse = CourseManager::is_special_course($course_code);
 
-if ($is_speacialcourse) {
+if ($is_specialcourse) {
     $autoreg = isset($_GET['autoreg']) ? Security::remove_XSS($_GET['autoreg']) : null;
     if ($autoreg == 1) {
         CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT);

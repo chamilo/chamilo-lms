@@ -16,6 +16,7 @@ class AddCourseToSessionTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         require_once dirname(__FILE__).'/../../../main/inc/global.inc.php';
+        require_once dirname(__FILE__).'/../../../main/inc/lib/database.lib.php';
         $this->object = new AddCourseToSession;
     }
 

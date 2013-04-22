@@ -137,7 +137,7 @@ abstract class XapianIndexer
                         }
                     }
                     $doc->set_data($chunk->xapian_data, 1);
-                    $did = $this->db->FileManager::add_document($doc);
+//                    $did = $this->db->FileManager::add_document($doc);
 
                     //write to disk
                     $this->db->flush();

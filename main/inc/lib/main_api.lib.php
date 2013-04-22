@@ -224,6 +224,7 @@ define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path
 
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 define('WEB_PATH', 'WEB_PATH');
+
 define('SYS_CONFIG_PATH', 'SYS_CONFIG_PATH');
 define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
@@ -260,6 +261,7 @@ define('SYS_DATA_PATH', 'SYS_DATA_PATH');
 define('SYS_LOG_PATH', 'SYS_LOG_PATH');
 define('WEB_DATA_COURSE_PATH', 'WEB_DATA_COURSE_PATH');
 define('WEB_DATA_PATH', 'WEB_DATA_PATH');
+define('REL_DATA_PATH', 'REL_DATA_PATH');
 
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
@@ -467,9 +469,6 @@ define ('SKILL_TYPE_BOTH',          'both');
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
- * api_get_path(WEB_PUBLIC_PATH)                http://www.mychamilo.org/chamilo/web/
- * api_get_path(WEB_DATA_PATH)                  http://www.mychamilo.org/chamilo/web/data/
- * api_get_path(WEB_DATA_COURSE_PATH)           http://www.mychamilo.org/chamilo/web/data/courses/
  * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/courses/
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
@@ -512,6 +511,7 @@ function api_get_path($path_type, $path = null) {
         SYS_COURSE_PATH         => 'data/',
         REL_COURSE_PATH         => '',
         REL_CODE_PATH           => '',
+        REL_DATA_PATH           => '',
         WEB_CODE_PATH           => '',
         SYS_CODE_PATH           => '',
         SYS_CSS_PATH            => 'css/',
@@ -629,8 +629,10 @@ function api_get_path($path_type, $path = null) {
 
         // Initialization of a table taht contains common-purpose paths.
         $paths[WEB_PATH]                = $root_web;
-        $paths[WEB_PUBLIC_PATH]         = $root_web."web/";
+        $paths[WEB_PUBLIC_PATH]         = $root_web.'web/';
         $paths[SYS_PATH]                = $root_sys;
+
+        //update data path to get it from config file if defined
         $paths[SYS_DATA_PATH]           = $root_sys.'data/';
         $paths[SYS_LOG_PATH]            = $root_sys.'logs/';
         $paths[SYS_CONFIG_PATH]         = $root_sys.'config/';
@@ -638,15 +640,16 @@ function api_get_path($path_type, $path = null) {
         $paths[REL_PATH]                = $root_rel;
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
-        $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
 
         $paths[WEB_DATA_PATH]           = $paths[WEB_PUBLIC_PATH].'data/';
+        $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
         $paths[WEB_DATA_COURSE_PATH]    = $paths[WEB_DATA_PATH].$course_folder;
 
         $paths[SYS_COURSE_PATH]         = $paths[SYS_DATA_PATH].$course_folder;
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
+        $paths[REL_DATA_PATH]           = $root_rel.'data/';
 
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
 
@@ -6924,8 +6927,4 @@ function api_get_web_default_course_document()
 
 function load_translations($app) {
 
-}
-
-function api_get_path_chamilo_extension() {
-    return api_get_path(WEB_PUBLIC_PATH).'extensions/chamilo/';
 }

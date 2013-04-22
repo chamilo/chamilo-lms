@@ -226,7 +226,8 @@ function load_personal_templates($user_id = 0) {
             $image = api_get_path(WEB_DATA_PATH).'document_templates/noimage.gif';
         }
 
-        echo '<Template title="'.s2($row['title']).'" image="'.$image.'">
+        echo '
+                <Template title="'.s2($row['title']).'" image="'.$image.'">
                     <Description>'.s2($row['Description']).'</Description>
                     <Html>
                         <![CDATA[

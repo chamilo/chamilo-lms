@@ -2,7 +2,7 @@
 <phpunit bootstrap="autoload.php"
          backupGlobals="false"
          backupStaticAttributes="false"
-         colors="true"
+         colors="false"
          strict="true"
          verbose="true"
          convertErrorsToExceptions="true"

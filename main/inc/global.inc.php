@@ -341,6 +341,7 @@ $app->register(
             api_get_path(SYS_CODE_PATH).'template', //template folder
             api_get_path(SYS_PLUGIN_PATH) //plugin folder
         ),
+        // twitter bootstrap form twig templates
         'twig.form.templates' => array('form_div_layout.html.twig', 'default/form/form_custom_template.tpl'),
         'twig.options' => array(
             'debug' => $app['debug'],
@@ -480,8 +481,14 @@ class ChamiloServiceProvider implements ServiceProviderInterface
     {
         //Template
         $app['template'] = $app->share(function () use ($app) {
-            $template = new Template(null, $app);
+            $template = new Template($app);
             return $template;
+        });
+
+        //Template
+        $app['chamilo.filesystem'] = $app->share(function () use ($app) {
+            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['data.path']);
+            return $filesystem;
         });
 
         $app['page_controller'] = $app->share(function () use ($app) {
@@ -674,10 +681,20 @@ $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
         'auth_mode' => null
     )
 ));
+
 //if (isset($platform_email['SMTP_MAILER']) && $platform_email['SMTP_MAILER'] == 'smtp') {
 $app['mailer'] = $app->share(function ($app) {
     return new \Swift_Mailer($app['swiftmailer.transport']);
 });
+use Bt51\Silex\Provider\GaufretteServiceProvider\GaufretteServiceProvider;
+
+$app->register(new GaufretteServiceProvider(), array(
+    'gaufrette.adapter.class' => 'Local',
+    'gaufrette.options' => array(api_get_path(SYS_DATA_PATH))
+));
+
+use Neutron\Silex\Provider\FilesystemServiceProvider;
+$app->register(new FilesystemServiceProvider());
 
 $app['api_get_languages'] = api_get_languages();
 
@@ -888,6 +905,7 @@ $app->before(
 
         //$app['request']->getSession()->start();
         //var_dump($app['cidReset']);
+
     }
 );
 
@@ -1076,7 +1094,13 @@ $userAccessPermissions = function (Request $request) use ($app) {
 
 //End legacy befores
 
-//All calls made in Chamilo are manage in the src/ChamiloLMS/Controller/LegacyController.php file function classicAction
+/**
+ * All calls made in Chamilo (olds ones) are manage in the LegacyController::classicAction function located here:
+ * src/ChamiloLMS/Controller/LegacyController.php
+ */
+
+// @todo put routes somewhere else yml file.
+
 $app->get('/', 'legacy.controller:classicAction')
     ->before($courseAccessConditions)
     ->before($userAccessPermissions);
@@ -1085,26 +1109,28 @@ $app->post('/', 'legacy.controller:classicAction')
     ->before($courseAccessConditions)
     ->before($userAccessPermissions);
 
-//index.php
+// web/index
 $app->match('/index', 'index.controller:indexAction', 'GET|POST')
     ->bind('index');
 
-//user_portal.php
+// web/userportal
 $app->get('/userportal', 'userPortal.controller:indexAction');
 $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
-    ->value('type', 'courses')
+    ->value('type', 'courses') //default values
     ->value('filter', 'current')
     ->value('page', '1')
     ->bind('userportal');
 //->assert('type', '.+'); //allowing slash "/"
 
-//Logout page
+// Logout
 $app->get('/logout', 'index.controller:logoutAction')
     ->bind('logout');
 
 
-//Course home
+
+// Course home instead of courses/MATHS the new URL is web/courses/MATHS
 $app->match('/courses/{courseCode}/{sessionId}/', 'course_home.controller:indexAction', 'GET|POST')
+    ->assert('sessionId', '\d+')
     ->assert('type', '.+')
     ->before($checkCourse);
 
@@ -1112,24 +1138,35 @@ $app->match('/courses/{courseCode}/', 'course_home.controller:indexAction', 'GET
     ->assert('type', '.+')
     ->before($checkCourse); //allowing slash "/"
 
+// Course documents
+$app->get('/courses/{courseCode}/document/', 'index.controller:getDocumentAction')
+    ->assert('type', '.+');
+
+
 //$app->match('/courses/{courseCode}/document/{fileName}', 'course_home.controller:getFileAction', 'GET|POST');
 
-//Certificates
+// Certificates
 $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
 
-//Username
+// Username
 $app->match('/user/{username}', 'user.controller:indexAction', 'GET');
 
+// Who is online
 /*$app->match('/users/online', 'user.controller:onlineAction', 'GET');
 $app->match('/users/online-in-course', 'user.controller:onlineInCourseAction', 'GET');
 $app->match('/users/online-in-session', 'user.controller:onlineInSessionAction', 'GET');*/
 
-//Portal news
+// Portal news
 $app->match('/news/{id}', 'news.controller:indexAction', 'GET')
     ->bind('portal_news');
 
-//LP controller
+// LP controller (subscribe users to a LP)
 $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')
     ->bind('subscribe_users');
+
+// Data document_templates
+$app->get('/data/document_templates/{file}', 'index.controller:dumpDataAction')
+    ->bind('data');
+//var_dump($app['url_generator']->generate('index'));
 
 return $app;

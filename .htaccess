@@ -13,22 +13,24 @@
     RewriteRule ^courses/(.*)/(.*)$ web/courses/$1/%1/? [R,L]
 
     RewriteRule ^courses/(.*)/index.php$ web/courses/$1? [R,L]
-
     RewriteRule ^courses/(.*)/$ web/courses/$1? [R,L]
 
+    # Courses documents
+    # courses/MATHS/document/folder1/picture.jpg --> courses/MATHS/document/?file=folder1/picture.jpg
+    RewriteRule ^courses/(.*)/document/(.*)$ web/courses/$1/document/?file=$2 [R,L]
+
     # Certificates
-    # certificates/index.php?id=1 => web/certificates/1
+    # certificates/index.php?id=123 --> web/certificates/123
     RewriteCond %{QUERY_STRING} ^id=([0-9]*)
     RewriteRule ^certificates/(.*)$ web/certificates/%1? [R,L]
 
     # User profile
-    # user.php?admin => web/user/admin
+    # user.php?jmontoya --> web/user/jmontoya
     RewriteCond %{QUERY_STRING} ^([a-z0-9A-z]*)
     RewriteRule ^user.php?$ web/user/%1? [R,L]
 
-    # News
+    # Portal news
+    # news_list.php?id=5 --> web/news/5
     RewriteCond %{QUERY_STRING} ^id=([0-9]*)
     RewriteRule ^news_list.php?$ web/news/%1? [R,L]
-
-
 </IfModule>

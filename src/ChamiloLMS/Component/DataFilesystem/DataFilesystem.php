@@ -6,6 +6,11 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * @todo use Gaufrette to manage course files (some day)
+ * Class DataFilesystem
+ * @package ChamiloLMS\Component\DataFilesystem
+ */
 class DataFilesystem
 {
     private $path;
@@ -49,5 +54,4 @@ class DataFilesystem
         $file = 'courses/'.$courseCode.'/document/'.$file;
         return $this->get($file);
     }
-
 }

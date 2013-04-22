@@ -472,25 +472,26 @@ $app->register(new Grom\Silex\ImagineServiceProvider(), array(
 
 $app['is_admin'] = false;
 
-//Creating a Chamilo service provider
+// Creating a Chamilo service provider
 use Silex\ServiceProviderInterface;
 
 class ChamiloServiceProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
     {
-        //Template
+        // Template class
         $app['template'] = $app->share(function () use ($app) {
             $template = new Template($app);
             return $template;
         });
 
-        //Template
+        // Chamilo data filesystem
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
             $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['data.path']);
             return $filesystem;
         });
 
+        // Page controller class
         $app['page_controller'] = $app->share(function () use ($app) {
             $pageController = new PageController($app);
             return $pageController;
@@ -1053,9 +1054,10 @@ $app['posts.controller'] = $app->share(function() use ($app) {
 });
 $app->mount('/', "posts.controller");*/
 
-
-
-//@todo move this in a permission class
+/**
+ * Nice middlewares that will fix the permission problems in Chamilo
+ * @todo move this in a permission class
+ **/
 $checkCourse = function (Request $request) use ($app) {
     $courseCode = $request->get('courseCode');
     $sessionId = $request->get('sessionId');
@@ -1083,7 +1085,6 @@ $checkCourse = function (Request $request) use ($app) {
         Session::write('id_session', 0);
     }
 };
-
 $courseAccessConditions = function (Request $request) use ($app) {
     $courseCode = $request->get('cidReq');
 };
@@ -1092,15 +1093,14 @@ $userAccessPermissions = function (Request $request) use ($app) {
     $courseCode = $request->get('cidReq');
 };
 
-//End legacy befores
+// End middlewares
+
+// @todo put routes somewhere else, in a yml/php file .
 
 /**
  * All calls made in Chamilo (olds ones) are manage in the LegacyController::classicAction function located here:
  * src/ChamiloLMS/Controller/LegacyController.php
  */
-
-// @todo put routes somewhere else, in a yml/php file .
-
 $app->get('/', 'legacy.controller:classicAction')
     ->before($courseAccessConditions)
     ->before($userAccessPermissions);
@@ -1140,9 +1140,6 @@ $app->match('/courses/{courseCode}/', 'course_home.controller:indexAction', 'GET
 $app->get('/courses/{courseCode}/document/', 'index.controller:getDocumentAction')
     ->assert('type', '.+');
 
-
-//$app->match('/courses/{courseCode}/document/{fileName}', 'course_home.controller:getFileAction', 'GET|POST');
-
 // Certificates
 $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
 
@@ -1150,6 +1147,7 @@ $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
 $app->match('/user/{username}', 'user.controller:indexAction', 'GET');
 
 // Who is online
+
 /*$app->match('/users/online', 'user.controller:onlineAction', 'GET');
 $app->match('/users/online-in-course', 'user.controller:onlineInCourseAction', 'GET');
 $app->match('/users/online-in-session', 'user.controller:onlineInSessionAction', 'GET');*/
@@ -1162,10 +1160,11 @@ $app->match('/news/{id}', 'news.controller:indexAction', 'GET')
 $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')
     ->bind('subscribe_users');
 
-// Data document_templates
+// Data document_templates files
 $app->get('/data/document_templates/{file}', 'index.controller:getDocumentTemplateAction')
     ->bind('data');
 
+// Data default_platform_document files
 $app->get('/data/default_platform_document/', 'index.controller:getDefaultPlatformDocumentAction')
     ->assert('type', '.+');
 return $app;

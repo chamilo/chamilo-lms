@@ -276,7 +276,7 @@ class IndexController extends CommonController
     }
 
     /**
-     *
+     * @todo move all this getDocument* Actions into another controller
      * @param Application $app
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
@@ -287,10 +287,17 @@ class IndexController extends CommonController
             $file = $app['chamilo.filesystem']->get('document_templates/'.$file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
-            return $app->abort(404, 'No file found');
+            return $app->abort(404, 'File not found');
         }
     }
 
+    /**
+     * Gets a document from the data/courses/MATHS/document/file.jpg to the user
+     * @todo check permissions
+     * @param Application $app
+     * @param $courseCode
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
     public function getDocumentAction(Application $app, $courseCode)
     {
         try {
@@ -298,10 +305,15 @@ class IndexController extends CommonController
             $file = $app['chamilo.filesystem']->getCourseDocument($courseCode, $filePath);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
-            return $app->abort(404, 'No file found');
+            return $app->abort(404, 'File not found');
         }
     }
 
+    /**
+     * Gets a document from the data/default_platform_document/* folder
+     * @param Application $app
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
     public function getDefaultPlatformDocumentAction(Application $app)
     {
         try {
@@ -309,12 +321,12 @@ class IndexController extends CommonController
             $file = $app['chamilo.filesystem']->get('default_platform_document/'.$file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
-            return $app->abort(404, 'No file found');
+            return $app->abort(404, 'File not found');
         }
     }
 
     /**
-     * Reacts on a failed login:
+     * Reacts on a failed login.
      * Displays an explanation with a link to the registration form.
      *
      * @todo use twig template to prompt errors + move this into a helper

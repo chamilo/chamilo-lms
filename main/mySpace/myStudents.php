@@ -39,7 +39,7 @@ function show_image(image,width,height) {
 }
 </script>';
 
-$export_csv = isset ($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 
 if ($export_csv) {
 	ob_start();
@@ -74,9 +74,6 @@ if (isset($_GET['details'])) {
 	} else
 		if (!empty ($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
 			$course_info = CourseManager :: get_course_information($get_course_code);
-			if (empty ($cidReq)) {
-				//$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['title']);
-			}
 			$interbreadcrumb[] = array (
 				"url" => "../tracking/courseLog.php?cidReq=".$get_course_code.'&id_session=' . (empty ($_SESSION['id_session']) ? '' : $_SESSION['id_session']),
 				"name" => get_lang("Tracking")
@@ -554,7 +551,6 @@ if (!empty($info_course['title'])) {
 	$table_title .= ($info_course ? Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$info_course['title'].'  ':'');
 }
 
-
 echo Display::page_subheader($table_title);
 
 if (empty($_GET['details'])) {
@@ -854,7 +850,7 @@ if (empty($_GET['details'])) {
 						  WHERE quiz.c_id =  ".$info_course['real_id']." AND
 						  		active='1' AND
 								(quiz.session_id = $session_id OR quiz.session_id = 0)
-							ORDER BY quiz.title ASC ";
+                          ORDER BY quiz.title ASC ";
 
 		$result_exercices = Database::query($sql_exercices);
 		$i = 0;
@@ -862,7 +858,7 @@ if (empty($_GET['details'])) {
 			while ($exercices = Database :: fetch_array($result_exercices)) {
 				$exercise_id = intval($exercices['id']);
 
-				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id);
+				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $info_course['real_id'], $exercise_id, 0, 0, $session_id);
 				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id);
 
 				$csv_content[] = array (
@@ -877,7 +873,6 @@ if (empty($_GET['details'])) {
                     $css_class = 'row_even';
 
 				echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
-
 				echo '<td>';
 
 				if ($count_attempts > 0) {
@@ -894,7 +889,7 @@ if (empty($_GET['details'])) {
 				$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . '
 				                     WHERE  exe_exo_id      ="'.$exercise_id.'" AND
 				                            exe_user_id     ="'.$student_id.'" AND
-				                            exe_cours_id    ="'.$course_code.'" AND
+				                            c_id    ="'.$info_course['real_id'].'" AND
                                             session_id      ="'.$session_id.'" AND
 				                            status          = "" AND
 				                            orig_lp_id      = 0 AND
@@ -908,7 +903,6 @@ if (empty($_GET['details'])) {
                             echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$session_id.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
                         } else {
                             echo Display::return_icon('quiz_na.png', get_lang('Exercise'));
-                            //echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$session_id.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
                         }
                     }
 				}
@@ -1051,5 +1045,4 @@ if ($export_csv) {
 	Export :: export_table_csv($csv_content, 'reporting_student');
 	exit;
 }
-/*		FOOTER  */
 Display :: display_footer();

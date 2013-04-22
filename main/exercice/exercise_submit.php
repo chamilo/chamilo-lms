@@ -487,7 +487,7 @@ if ($objExercise->selectAttempts() > 0) {
 			if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
 
 				//Showing latest attempt according with task BT#1628
-				$exercise_stat_info = get_exercise_results_by_user($user_id, $exerciseId, api_get_course_id(), api_get_session_id());
+				$exercise_stat_info = get_exercise_results_by_user($user_id, $exerciseId, api_get_course_int_id(), api_get_session_id());
 
 				if (!empty($exercise_stat_info)) {
 					$max_exe_id = max(array_keys($exercise_stat_info));
@@ -634,7 +634,8 @@ if ($time_control) {
 
 			// First we update the attempt to today
 			// How the expired time is changed into "track_e_exercices" table,then the last attempt for this student should be changed too,so
-	        $sql_track_e_exe = "UPDATE $exercice_attemp_table SET tms = '".api_get_utc_datetime()."' WHERE exe_id = '".$exercise_stat_info['exe_id']."' AND tms = '".$last_attempt_date."' ";
+	        $sql_track_e_exe = "UPDATE $exercice_attemp_table SET tms = '".api_get_utc_datetime()."'
+	                            WHERE exe_id = '".$exercise_stat_info['exe_id']."' AND tms = '".$last_attempt_date."' ";
 	        if ($debug) {error_log('7.10. $sql_track_e_exe2: '.$sql_track_e_exe); }
 	        Database::query($sql_track_e_exe);
 

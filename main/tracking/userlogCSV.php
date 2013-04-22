@@ -23,6 +23,7 @@ require_once '../inc/global.inc.php';
 // Roles and rights system
 $user_id = api_get_user_id();
 $course_id = api_get_course_id();
+$courseId = api_get_course_int_id();
 
 /*
 $role_id = RolesRights::get_local_user_role_id($user_id, $course_id);
@@ -215,7 +216,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse))
             list($title_line1, $line1) = TrackingUserLogCSV::display_login_tracking_info($view, $uInfo, $_cid);
 
             //Exercise results
-            list($title_line2, $line2) = TrackingUserLogCSV::display_exercise_tracking_info($view, $uInfo, $_cid);
+            list($title_line2, $line2) = TrackingUserLogCSV::display_exercise_tracking_info($view, $uInfo, $courseId);
 
             //Student publications uploaded
             list($title_line3, $line3) = TrackingUserLogCSV::display_student_publications_tracking_info($view, $uInfo, $_cid);

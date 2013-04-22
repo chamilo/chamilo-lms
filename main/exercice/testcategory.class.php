@@ -445,8 +445,9 @@ class Testcategory {
         $in_exe_id = intval($in_exe_id);
         $in_user_id = intval($in_user_id);
 
-		$query = "SELECT DISTINCT marks, exe_id, user_id, ta.question_id, category_id FROM $tbl_track_attempt ta , $tbl_question_rel_category qrc
-                  WHERE ta.question_id=qrc.question_id AND qrc.category_id=$in_cat_id AND exe_id=$in_exe_id AND user_id=$in_user_id";
+		$query = "SELECT DISTINCT marks, exe_id, user_id, ta.question_id, category_id
+                  FROM $tbl_track_attempt ta , $tbl_question_rel_category qrc
+                  WHERE ta.question_id = qrc.question_id AND qrc.category_id=$in_cat_id AND exe_id = $in_exe_id AND user_id = $in_user_id";
 		$res = Database::query($query);
 		$totalcatscore = "";
 		while ($data = Database::fetch_array($res)) {

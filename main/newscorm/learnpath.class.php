@@ -3236,10 +3236,10 @@ class learnpath
             $user_id = api_get_user_id();
 
             $sql = "SELECT path  FROM $tbl_track_e_exercises, $tbl_lp_item
-                    WHERE   c_id = $course_id AND
+                    WHERE   c_id = $courseId AND
                             path =   '" . $item['path'] . "' AND
                             exe_user_id =  '$user_id' AND
-                            exe_cours_id = '$course_code' AND
+                            c_id = '$course_code' AND
                             path = exe_exo_id AND
                             status <> 'incomplete'";
             $result = Database::query($sql);

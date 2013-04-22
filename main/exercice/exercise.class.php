@@ -1849,7 +1849,7 @@ class Exercise
         $table_track_e_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql_select = "SELECT exe_id FROM $table_track_e_exercises
-					   WHERE 	exe_cours_id = '".api_get_course_id()."' AND
+					   WHERE 	c_id = '".api_get_course_int_id()."' AND
 								exe_exo_id = ".$this->id." AND
 								orig_lp_id = 0 AND
 								orig_lp_item_id = 0 AND
@@ -1870,9 +1870,11 @@ class Exercise
 
         //delete TRACK_E_EXERCICES table
         $sql = "DELETE FROM $table_track_e_exercises
-				WHERE exe_cours_id = '".api_get_course_id(
-        )."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id(
-        )."";
+				WHERE c_id = '".api_get_course_int_id()."' AND
+				        exe_exo_id = ".$this->id." AND
+				        orig_lp_id = 0  AND
+				        orig_lp_item_id = 0 AND
+				        session_id = ".api_get_session_id();
         Database::query($sql);
 
         return $i;
@@ -2074,7 +2076,7 @@ class Exercise
         }
         $condition = ' WHERE exe_exo_id 	= '."'".$this->id."'".' AND
 					   exe_user_id 			= '."'".api_get_user_id()."'".' AND
-					   exe_cours_id 		= '."'".api_get_course_id()."'".' AND
+					   c_id 		        = '."'".api_get_course_int_id()."'".' AND
 					   status 				= '."'".Database::escape_string($status)."'".' AND
 					   orig_lp_id 			= '."'".$lp_id."'".' AND
 					   orig_lp_item_id 		= '."'".$lp_item_id."'".' AND
@@ -2132,9 +2134,8 @@ class Exercise
         }
         $questionList = array_map('intval', $questionList);
         $weight = Database::escape_string($weight);
-        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status, session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting)
-                VALUES($sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_id(
-        )."', 'incomplete','".api_get_session_id()."','".implode(',', $questionList)."', '".api_get_utc_datetime(
+        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, c_id, status, session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting)
+                VALUES($sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_int_id()."', 'incomplete','".api_get_session_id()."','".implode(',', $questionList)."', '".api_get_utc_datetime(
         )."', '$safe_lp_id', '$safe_lp_item_id', '$weight')";
 
         Database::query($sql);
@@ -2601,7 +2602,7 @@ class Exercise
                 case UNIQUE_ANSWER_IMAGE :
                 case UNIQUE_ANSWER_NO_OPTION :
                     if ($from_database) {
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' and question_id= '".$questionId."'";
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
                         $choice = Database::result($resultans, 0, "answer");
 
@@ -2622,7 +2623,7 @@ class Exercise
                 case MULTIPLE_ANSWER_TRUE_FALSE :
                     if ($from_database) {
                         $choice = array();
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = ".$exeId." and question_id = ".$questionId;
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = ".$exeId." AND question_id = ".$questionId;
                         $resultans = Database::query($queryans);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];

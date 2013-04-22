@@ -343,6 +343,7 @@ HotPotGCt($documentPath, 1, api_get_user_id());
 
 //condition for the session
 $course_code = api_get_course_id();
+$courseId = api_get_course_int_id();
 $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id, true, true);
 
@@ -599,7 +600,6 @@ if (!empty($exercise_list)) {
                         );
                     }
 
-
                     $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
 
                     if ($row['active'] == 0 || $visibility == 0) {
@@ -609,7 +609,7 @@ if (!empty($exercise_list)) {
                     }
 
                     $count_exercise_not_validated = intval(
-                        count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id)
+                        count_exercise_result_not_validated($my_exercise_id, $courseId, $session_id)
                     );
 
                     $move = Display::return_icon(
@@ -857,7 +857,7 @@ if (!empty($exercise_list)) {
                     $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
                         WHERE   exe_exo_id      = ".$row['id']." AND
                                 exe_user_id     = ".api_get_user_id()." AND
-                                exe_cours_id    = '".api_get_course_id()."' AND
+                                c_id    = '".api_get_course_int_id()."' AND
                                 status          <> 'incomplete' AND
                                 orig_lp_id      = 0 AND
                                 orig_lp_item_id = 0 AND

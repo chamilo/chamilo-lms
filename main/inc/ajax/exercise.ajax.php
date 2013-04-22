@@ -337,9 +337,9 @@ switch ($action) {
                 // Deleting old attempt
                 if (isset($attempt_list) && !empty($attempt_list[$my_question_id])) {
                     if ($debug) error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
-                    delete_attempt($exe_id, api_get_user_id() , $course_code, $session_id, $my_question_id);
+                    delete_attempt($exe_id, api_get_user_id(), $course_id, $session_id, $my_question_id);
                     if ($objQuestionTmp->type  == HOT_SPOT) {
-            	        delete_attempt_hotspot($exe_id, api_get_user_id() , $course_code, $my_question_id);
+            	        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_id, $my_question_id);
                     }
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
             	    $total_score  -= $attempt_list[$my_question_id]['marks'];

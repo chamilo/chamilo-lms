@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Report
  * @package chamilo.tracking
@@ -137,7 +138,7 @@ foreach ($course_list  as $current_course ) {
 		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['real_id']);
 		//Looping Chamilo Exercises in LP
 		foreach ($exercise_list as $exercise) {
-			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'], $course_info['id'], $session_id);
+			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'], $course_info['real_id'], $session_id);
 			//Looping Exercise Attempts
 			foreach($exercise_stats as $stats) {
 				$attempt_result[$stats['exe_user_id']]['result'] += $stats['exe_result'] / $stats['exe_weighting'];

@@ -15,15 +15,14 @@
  */
 class Nanogong
 {
-
-    var $filename;
-    var $store_filename;
-    var $store_path;
-    var $params;
-    var $can_edit = false;
+    public $filename;
+    public $store_filename;
+    public $store_path;
+    public $params;
+    public $can_edit = false;
 
     /* Files allowed to upload */
-    var $available_extensions = array('mp3', 'wav', 'ogg');
+    public $available_extensions = array('mp3', 'wav', 'ogg');
 
     public function __construct($params = array())
     {
@@ -169,7 +168,7 @@ class Nanogong
 
     /**
      * Delete audio file
-     * @return number
+     * @return int
      */
     function delete_files()
     {
@@ -193,7 +192,7 @@ class Nanogong
     /**
      *
      * Tricky stuff to deal with the feedback = 0 in exercises (all question per page)
-     * @param unknown_type $exe_id
+     * @param int $exe_id
      */
     function replace_with_real_exe($exe_id)
     {
@@ -215,6 +214,10 @@ class Nanogong
         }
     }
 
+    /**
+     * @param bool $load_from_database
+     * @return null|string
+     */
     function load_filename_if_exists($load_from_database = false)
     {
         $filename = null;
@@ -233,11 +236,11 @@ class Nanogong
             if (isset($this->params['exe_id']) && isset($this->params['user_id']) && isset($this->params['question_id']) && isset($this->params['session_id']) && isset($this->params['course_id'])) {
                 $attempt_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
                 $sql = "SELECT filename FROM $attempt_table
-								WHERE 	exe_id 		= ".$this->params['exe_id']." AND
-										user_id 	= ".$this->params['user_id']." AND
-										question_id = ".$this->params['question_id']." AND
-										session_id 	= ".$this->params['session_id']." AND
-										course_code = '".$this->course_info['code']."' LIMIT 1";
+                        WHERE 	exe_id 		= ".$this->params['exe_id']." AND
+                                user_id 	= ".$this->params['user_id']." AND
+                                question_id = ".$this->params['question_id']." AND
+                                session_id 	= ".$this->params['session_id']." AND
+                                c_id = '".$this->course_info['real_id']."' LIMIT 1";
                 $result = Database::query($sql);
                 $result = Database::fetch_row($result, 'ASSOC');
 
@@ -258,6 +261,7 @@ class Nanogong
      *
      * Get the URL of the file
      * path courses/XXX/exercises/(session_id)/(exercise_id)/(question_id)/(user_id)/
+     * @param int $force_download
      *
      * @return string
      */
@@ -267,14 +271,13 @@ class Nanogong
         $url = api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=get_file&download='.$force_download.'&'.$params;
         $params = $this->get_params();
         $filename = basename($this->load_filename_if_exists());
-        $url = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/exercises/'.
-            $params['session_id'].'/'.$params['exercise_id'].'/'.$params['question_id'].'/'.$params['user_id'].'/'.$filename;
-
+        $url = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/exercises/'.$params['session_id'].'/'.$params['exercise_id'].'/'.$params['question_id'].'/'.$params['user_id'].'/'.$filename;
         return $url;
     }
 
     /**
      * Uploads the nanogong wav file
+     * @param bool
      */
     public function upload_file($is_nano = false)
     {
@@ -321,7 +324,7 @@ class Nanogong
 
     /**
      * Show the audio file + a button to download
-     *
+     * @param bool
      */
     public function show_audio_file($show_delete_button = false)
     {
@@ -571,6 +574,7 @@ class Nanogong
 
     /**
      * Returns the HTML form to upload a nano file or upload a file
+     * @param string
      */
     function return_form($message = null)
     {
@@ -588,8 +592,7 @@ class Nanogong
             array('id' => 'preview', 'style' => 'text-align:center; padding-left: 25px;')
         );
 
-        $html .= '<center>';
-
+        $html = '<center>';
         //Use normal upload file
         $html .= Display::return_icon('microphone.png', get_lang('PressRecordButton'), '', ICON_SIZE_BIG);
         $html .= '<br />';
@@ -636,21 +639,18 @@ class Nanogong
         $html .= '<a href="#" class="btn"  onclick="upload_file()" />'.get_lang('UploadFile').'</a>';
         $html .= '</form>';
         $html .= '</div>';
-
-
         $html .= '</center>';
-
-
         $html .= '<div style="display:none" id="status_ok" class="confirmation-message"></div><div style="display:none" id="status_warning" class="warning-message"></div>';
-
         $html .= '<div id="messages">'.$message.'</div>';
-
         $html .= $preview_file;
-
 
         return $html;
     }
 
+    /**
+     * @param bool $return_as_query
+     * @return bool|string
+     */
     function get_params($return_as_query = false)
     {
         if (empty($this->params)) {
@@ -663,6 +663,10 @@ class Nanogong
         return $this->params;
     }
 
+    /**
+     * @param $attribute
+     * @return mixed
+     */
     function get_param_value($attribute)
     {
         if (isset($this->params[$attribute])) {
@@ -677,7 +681,7 @@ class Nanogong
     function show_button()
     {
         $params_string = $this->get_params(true);
-        $html .= '<br />'.Display::url(
+        $html = '<br />'.Display::url(
             get_lang('RecordAnswer'),
             api_get_path(
                 WEB_AJAX_PATH

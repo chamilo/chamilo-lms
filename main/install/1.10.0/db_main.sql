@@ -3457,4 +3457,4 @@ ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_i
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.862202a' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.c9a93d7' WHERE variable = 'chamilo_database_version';

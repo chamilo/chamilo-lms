@@ -15,5 +15,9 @@
 
 -- ALTER TABLE session_rel_course DROP COLUMN course_code;
 -- ALTER TABLE session_rel_course_rel_user DROP COLUMN course_code;
+-- ALTER TABLE track_e_hotpotatoes DROP COLUMN course_code;
+-- ALTER TABLE track_e_exercices DROP COLUMN course_code;
+-- ALTER TABLE track_e_attempt DROP COLUMN course_code;
 ALTER TABLE session DROP COLUMN date_start;
 ALTER TABLE session DROP COLUMN date_end;
+

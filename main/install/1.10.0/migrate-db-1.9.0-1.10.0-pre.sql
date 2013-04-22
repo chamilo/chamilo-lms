@@ -196,4 +196,4 @@ ALTER TABLE track_e_exercices ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_attempt ADD COLUMN c_id int unsigned NOT NULL default 0;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.862202a' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.c9a93d7' WHERE variable = 'chamilo_database_version';

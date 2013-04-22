@@ -10,7 +10,9 @@
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once dirname(__FILE__).'/config.php';
 $tool_name = get_lang('Videoconference');
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
+
 $bbb = new bbb();
 
 if ($bbb->plugin_enabled) {

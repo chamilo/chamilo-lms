@@ -254,10 +254,6 @@ if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_
 	require 'vertical_activity.php';
 }
 $content = '<div id="course_tools">'.$content.'</div>';
-//$tpl = new Template(null);
-//$tpl->assign('message', $show_message);
-//$tpl->assign('content', $content);
-//$tpl->display_one_col_template();
 Session::erase('_gid');
 
 return array('content' => $content, 'message' => $show_message);

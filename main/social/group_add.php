@@ -46,7 +46,7 @@ $social_right_content = '<div class="span9">';
 $social_right_content .= $form->return_form();
 $social_right_content .= '</div>';
 
-$tpl = new Template();
+$tpl = $app['template'];
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);

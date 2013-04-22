@@ -670,8 +670,9 @@ if ($show_full_profile) {
 $social_right_content .= MessageManager::generate_message_form('send_message');
 $social_right_content .= MessageManager::generate_invitation_form('send_invitation');
 
+$app['title'] = get_lang('Social');
+$tpl = $app['template'];
 
-$tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');

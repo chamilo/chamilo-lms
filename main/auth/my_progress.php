@@ -108,7 +108,8 @@ if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
 }
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

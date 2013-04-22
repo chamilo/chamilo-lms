@@ -136,7 +136,8 @@ $(document).ready(function(){
 });
 </script>";
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 $content = Display::page_subheader(get_lang('ShowCourseQuotaUse')).'<div id="chart1"></div>';
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -533,7 +533,8 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && isset
     $show_message = Display::return_message(get_lang('Deleted'), 'success');
 }
 
-$tpl = new Template();
+$tpl = $app['template'];
+
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);

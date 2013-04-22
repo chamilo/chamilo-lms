@@ -887,7 +887,8 @@ if ($table->get_total_number_of_items() == 0) {
     }
 }
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

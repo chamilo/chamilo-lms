@@ -156,6 +156,7 @@ if ($form->validate()) {
 // Display the form.
 $content = $form->return_form();
 
-$tpl = new Template($tool_name);
+$tpl = $app['template'];
+$app['title'] = $tool_name;
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

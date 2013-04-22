@@ -112,8 +112,9 @@ if ($query !='') {
     $social_right_content .= Display::return_sortable_grid('mygroups', array(), $grid_groups, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false, $visibility);
 }
 
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 
-$tpl = new Template($tool_name);
 $tpl->assign('social_left_content', $social_left_content);
 
 $tpl->assign('social_right_content', $social_right_content);

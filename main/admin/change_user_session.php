@@ -81,8 +81,7 @@ $(document).ready(function() {
 
 </script>';
 
-$tpl = new Template();
-
+$tpl = $app['template'];
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

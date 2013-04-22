@@ -236,7 +236,8 @@ $content .= $table->toHtml();
 $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 
-$tpl = new Template(get_lang('ReportByQuestion'));
+$app['title'] = get_lang('ReportByQuestion');
+$tpl = $app['template'];
 
 //$actions = array();
 //$actions[]= array(get_lang('Back'), Display::return_icon('back.png', get_lang('Back'), 'exercise_report.php?'.$exercise_id));

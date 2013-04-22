@@ -33,8 +33,7 @@ $skill_visualizer = new SkillVisualizer($tree, $type);
 $html = $skill_visualizer->return_html();
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 
-//$tpl = new Template(null, false, false);
-$tpl = new Template(null);
+$tpl = $app['template'];
 
 $tpl->assign('url', $url);
 $tpl->assign('html', $html);

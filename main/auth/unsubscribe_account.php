@@ -25,7 +25,8 @@ if ($form->validate()) {
     }
 }
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

@@ -57,7 +57,8 @@ if (!empty($group_id)) {
     $interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$group_id, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
-$tpl = new Template(get_lang('Agenda'));
+$app['title'] = get_lang('Agenda');
+$tpl = $app['template'];
 
 $tpl->assign('use_google_calendar', 0);
 

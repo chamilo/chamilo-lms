@@ -12,8 +12,6 @@ use Silex\Application;
 class Template
 {
     private $app;
-
-    public $style = 'jqm'; //see the template folder
     public $preview_theme = null;
     public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
     public $title = null;
@@ -90,7 +88,7 @@ class Template
         $this->setHeaderParameters();
         $this->setFooterParameters();
 
-        $this->assign('style', $this->style);
+        $this->assign('style', $app['template_style']);
 
         //Chamilo plugins
         if ($this->show_header) {
@@ -462,7 +460,7 @@ class Template
 
         //Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
-            $js_file_to_string .= $this->fetch($this->style.'/mail_editor/email_link.js.tpl');
+            $js_file_to_string .= $this->fetch($this->app['template_style'].'/mail_editor/email_link.js.tpl');
         }
 
         //$js_file_to_string = api_get_js_simple(api_get_path(WEB_PATH).'web/js/script.js').$js_file_to_string;

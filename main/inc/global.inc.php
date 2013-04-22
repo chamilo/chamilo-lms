@@ -333,6 +333,19 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
 //The script is allowed? This setting is modified when calling api_is_not_allowed()
 $app['allowed'] = true;
 
+// Template settings loaded in template.lib.php
+$app['template.show_header'] = true;
+$app['template.show_footer'] = true;
+$app['template.show_learnpath'] = false;
+$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+$app['template.load_plugins'] = true;
+
+//Default template style
+$app['template_style'] = 'default';
+
+//Default layout
+$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+
 //Setting the Twig service provider
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
@@ -470,41 +483,8 @@ $app->register(new Grom\Silex\ImagineServiceProvider(), array(
     //'imagine.base_path' => __DIR__.'/vendor/imagine',
 ));
 
-$app['is_admin'] = false;
 
-// Creating a Chamilo service provider
-use Silex\ServiceProviderInterface;
 
-class ChamiloServiceProvider implements ServiceProviderInterface
-{
-    public function register(Application $app)
-    {
-        // Template class
-        $app['template'] = $app->share(function () use ($app) {
-            $template = new Template($app);
-            return $template;
-        });
-
-        // Chamilo data filesystem
-        $app['chamilo.filesystem'] = $app->share(function () use ($app) {
-            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['data.path']);
-            return $filesystem;
-        });
-
-        // Page controller class
-        $app['page_controller'] = $app->share(function () use ($app) {
-            $pageController = new PageController($app);
-            return $pageController;
-        });
-    }
-
-    public function boot(Application $app)
-    {
-    }
-}
-
-//Registering Chamilo service provider
-$app->register(new ChamiloServiceProvider(), array());
 
 //Manage error messages
 $app->error(
@@ -983,18 +963,41 @@ if (empty($default_quota)) {
 
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
-//Default template settings loaded in template.inc.php
-$app['template.show_header'] = true;
-$app['template.show_footer'] = true;
-$app['template.show_learnpath'] = false;
-$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
-$app['template.load_plugins'] = true;
+$app['is_admin'] = false;
 
-//Default template style
-$app['template_style'] = 'default';
+// Creating a Chamilo service provider
+use Silex\ServiceProviderInterface;
 
-//Default layout
-$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
+class ChamiloServiceProvider implements ServiceProviderInterface
+{
+    public function register(Application $app)
+    {
+        // Template class
+        $app['template'] = $app->share(function () use ($app) {
+                $template = new Template($app);
+                return $template;
+            });
+
+        // Chamilo data filesystem
+        $app['chamilo.filesystem'] = $app->share(function () use ($app) {
+                $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['data.path']);
+                return $filesystem;
+            });
+
+        // Page controller class
+        $app['page_controller'] = $app->share(function () use ($app) {
+                $pageController = new PageController($app);
+                return $pageController;
+            });
+    }
+
+    public function boot(Application $app)
+    {
+    }
+}
+
+//Registering Chamilo service provider
+$app->register(new ChamiloServiceProvider(), array());
 
 //Controller as services definitions
 

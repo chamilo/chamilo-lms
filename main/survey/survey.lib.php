@@ -1647,7 +1647,11 @@ class ch_yesno extends survey_question {
 
 		if (is_array($form_content['options'])) { // Check if data is correct
 			foreach ($form_content['options'] as $key => & $value) {
-                $this->html .= '<label class="radio">';
+                if ($form_content['display'] == 'vertical') {
+                    $this->html .= '<label class="radio">';
+                } else {
+                    $this->html .= '<label class="radio inline">';
+                }
                 $value_to_show = $value;
 
                 if (substr_count($value, '<p>') == 1) {
@@ -1927,7 +1931,11 @@ class ch_multipleresponse extends survey_question {
 	 */
 	function render_question($form_content, $answers = array()) {
 		foreach ($form_content['options'] as $key => & $value) {
-			$this->html .= '<label class="checkbox"><input name="question'.$form_content['question_id'].'[]" type="checkbox" value="'.$key.'"';
+			if ($form_content['display'] == 'vertical') {
+			    $this->html .= '<label class="checkbox"><input name="question'.$form_content['question_id'].'[]" type="checkbox" value="'.$key.'"';
+            } else {
+                $this->html .= '<label class="checkbox inline"><input name="question'.$form_content['question_id'].'[]" type="checkbox" value="'.$key.'"';
+            }
 			if (is_array($answers)) {
 				if (in_array($key, $answers)) {
 					$this->html .= 'checked="checked"';

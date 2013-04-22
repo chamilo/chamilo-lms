@@ -43,6 +43,10 @@ class UserPortalController extends CommonController
         $items = null;
         $type = str_replace('/', '', $type);
 
+        /** var $pageController \PageController */
+        $pageController = $app['page_controller'];
+
+
         switch ($type) {
             case 'sessions':
                 $items = $app['page_controller']->returnSessions(api_get_user_id(), $filter, $page);

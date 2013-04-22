@@ -10,6 +10,8 @@ $app['temp.path'] = api_get_path(SYS_ARCHIVE_PATH);
 
 $app['temp.paths'] = new stdClass();
 
+$app['temp.paths']->folders[] = $app['data.path'] = api_get_path(SYS_DATA_PATH);
+
 //Monolog
 $app['temp.paths']->folders[] = $app['log.path'] = api_get_path(SYS_LOG_PATH);
 

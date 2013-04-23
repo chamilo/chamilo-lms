@@ -3450,7 +3450,20 @@ a:active{
     display: inline-block;
     margin-right: 4px;
 }
-
+.send_msg_in_text {
+    background: url("send_msg.png") no-repeat scroll right center transparent;
+    height: 16px;
+    width: 17px;
+    display: inline-block;
+    margin-right: 4px;
+}
+.send_inv_in_text {
+    background: url("send_inv.png") no-repeat scroll right center transparent;
+    height: 16px;
+    width: 17px;
+    display: inline-block;
+    margin-right: 4px;
+}
 .teacher_online {
     background: url("teacher.png") no-repeat scroll right center transparent;
     height: 16px;

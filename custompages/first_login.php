@@ -16,8 +16,8 @@ require_once dirname(__FILE__).'/../main/inc/global.inc.php';
 if (! isset($_SESSION['conditional_login']['uid']))
   die("Not Authorised");
 
-if (isset($_POST['password'])){
-  $u = UserManager::get_user_info_by_id($_SESdiagnoser.lib.phpSION['conditional_login']['uid']);
+if (isset($_POST['password'])) {
+  $u = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
   if ($_POST['password'] != $_POST['password2']) {
     header('Location: '. api_get_self().'?invalid=2');
     exit();

@@ -325,6 +325,15 @@ $group[]=$form->createElement('radio', 'allow_fast_exercise_edition', get_lang('
 
 $form->addGroup($group, '', array(get_lang("AllowFastExerciseEdition")), '');
 
+//Auto-launch Exercise LP
+$form->addElement('html', '<div><h3>'.Display::return_icon('quiz.png', get_lang('ConfigExercise'),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('ConfigExercise')).'</h3><div>');
+$group = array();
+$group[]=$form->createElement('radio', 'enable_exercise_auto_launch', get_lang('ExerciseAutoLaunch'), get_lang('RedirectToExercise'), 1);
+$group[]=$form->createElement('radio', 'enable_exercise_auto_launch', get_lang('ExerciseAutoLaunch'), get_lang('RedirectToTheExerciseList'), 2);
+$group[]=$form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Deactivate'), 0);
+$form->addGroup($group, '', array(get_lang("ExerciseAutoLaunch")), '');
+
+
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
 
@@ -408,6 +417,7 @@ $values['display_info_advance_inside_homecourse']   = api_get_course_setting('di
 $values['email_alert_students_on_new_homework']     = api_get_course_setting('email_alert_students_on_new_homework');
 
 $values['enable_lp_auto_launch']                    = api_get_course_setting('enable_lp_auto_launch');
+$values['enable_exercise_auto_launch']              = api_get_course_setting('enable_exercise_auto_launch');
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
 $values['allow_public_certificates']                = api_get_course_setting('allow_public_certificates');
 $values['allow_fast_exercise_edition']              = api_get_course_setting('allow_fast_exercise_edition') == 1 ? 1 : 0;

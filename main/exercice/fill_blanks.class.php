@@ -45,7 +45,7 @@ class FillBlanks extends Question
 		$defaults = array();
 
 		if (!empty($this->id)) {
-			$objAnswer = new answer($this->id);
+			$objAnswer = new Answer($this->id);
 
 			// the question is encoded like this
 		    // [A] B [C] D [E] F::10,10,10@1
@@ -53,7 +53,8 @@ class FillBlanks extends Question
 		    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
 		    // means that is a normal fill blank question
 
-			$pre_array = explode('::', $objAnswer->selectAnswer(1));
+            $answer_id = $objAnswer->getRealAnswerIdFromList(1);
+			$pre_array = explode('::', $objAnswer->selectAnswer($answer_id));
 
 			//make sure we only take the last bit to find special marks
 			$sz = count($pre_array);

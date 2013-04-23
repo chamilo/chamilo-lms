@@ -32,14 +32,8 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-// setting the tabs
+// Setting the tabs
 $this_section = SECTION_COURSES;
-$htmlHeadXtra[] = "<script type='text/javascript'>
-  $(document).ready( function(){
-  $(\"div.formw\").attr(\"style\",\"width: 73%;\");
-  $(\"#img_plus_and_minus\").hide();
-});
-</script>";
 
 // Action handling
 lp_upload_quiz_action_handling();
@@ -55,50 +49,32 @@ if ($origin != 'learnpath') {
             Display :: display_confirmation_message(get_lang($_GET['message']));
         }
     }
-} else {
-    echo '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/default.css"/>';
 }
 // display the actions
 echo '<div class="actions">';
 echo lp_upload_quiz_actions();
 echo '</div>';
 
-// start the content div
-echo '<div id="content_with_secondary_actions" class="gradient">';
 // the main content
 lp_upload_quiz_main();
 
-// close the content div
-echo '</div>';
-
-function lp_upload_quiz_actions()
-{
+function lp_upload_quiz_actions() {
     $lp_id = Security::remove_XSS($_GET['lp_id']);
     $return = "";
-    $return .= '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon(
-        'back.png',
-        get_lang('BackToExercisesList'),
-        '',
-        ICON_SIZE_MEDIUM
-    ).'</a>';
+    $return .= '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
 
     return $return;
 }
 
-function lp_upload_quiz_secondary_actions()
-{
+function lp_upload_quiz_secondary_actions() {
     $lp_id = Security::remove_XSS($_GET['lp_id']);
     $return .= '';
-    $return .= '<a href="exercise_report.php?'.api_get_cidreq().'">'.Display :: return_icon(
-        'reporting32.png',
-        get_lang('Tracking')
-    ).get_lang('Tracking').'</a>';
+    $return.='<a href="exercise_report.php?'.api_get_cidreq().'">'.Display :: return_icon('reporting32.png', get_lang('Tracking')).get_lang('Tracking').'</a>';
 
     return $return;
 }
 
-function lp_upload_quiz_main()
-{
+function lp_upload_quiz_main() {
 
     // variable initialisation
     $lp_id = Security::remove_XSS($_GET['lp_id']);
@@ -286,13 +262,6 @@ function lp_upload_quiz_action_handling()
                         } else {
                             $comment = $feedback_false_list[$i][2];
                         }
-                        /*
-                                            if ($id == 1) {
-                                                $comment = $feedback_true_list[$i][2];
-                                            } elseif ($id == 2) {
-                                                $comment = $feedback_false_list[$i][2];
-                                            }
-                        */
                         // Create answer
                         $unique_answer->create_answer($id, $question_id, $answer, $comment, $score, $correct);
                         $id++;

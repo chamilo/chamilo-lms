@@ -166,14 +166,73 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
     Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
 }
 
+$show_autolaunch_exercise_warning = false;
+
+//Exercise autolaunch
+$auto_launch = api_get_course_setting('enable_exercise_auto_launch');
+if (!empty($auto_launch)) {
+    $session_id = api_get_session_id();
+     //Exercise list
+    if ($auto_launch == 2) {
+        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+            $show_autolaunch_exercise_warning = true;
+        } else {
+            $session_key = 'exercise_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
+            if (!isset($_SESSION[$session_key])) {
+                //redirecting to the Exercise
+                $url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&id_session='.$session_id;
+                $_SESSION[$session_key] = true;
+                header("Location: $url");
+                exit;
+            }
+        }
+    } else {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $course_id = api_get_course_int_id();
+        $condition = '';
+        if (!empty($session_id)) {
+            $condition =  api_get_session_condition($session_id);
+            $sql = "SELECT iid FROM $table WHERE c_id = $course_id AND autolaunch = 1 $condition LIMIT 1";
+            $result = Database::query($sql);
+            //If we found nothing in the session we just called the session_id =  0 autolaunch
+            if (Database::num_rows($result) ==  0) {
+                $condition = '';
+            } else {
+            	//great, there is an specific auto lunch for this session we leave the $condition
+            }
+        }
+
+        $sql = "SELECT iid FROM $table WHERE c_id = $course_id AND autolaunch = 1 $condition LIMIT 1";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) >  0) {
+            $data = Database::fetch_array($result,'ASSOC');
+            if (!empty($data['iid'])) {
+                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+                	$show_autolaunch_exercise_warning = true;
+                } else {
+                    $session_key = 'exercise_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
+                    if (!isset($_SESSION[$session_key])) {
+                        //redirecting to the LP
+                        $url = api_get_path(WEB_CODE_PATH).'exercice/overview.php?'.api_get_cidreq().'&exerciseId='.$data['iid'];
+
+                        $_SESSION[$session_key] = true;
+                        header("Location: $url");
+                        exit;
+                    }
+                }
+            }
+        }
+    }
+}
 /*Auto launch code */
-$show_autolunch_lp_warning = false;
+$show_autolaunch_lp_warning = false;
 $auto_launch = api_get_course_setting('enable_lp_auto_launch');
 if (!empty($auto_launch)) {
     $session_id = api_get_session_id();
-    if ($auto_launch == 2) { //LP list
+     //LP list
+    if ($auto_launch == 2) {
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-            $show_autolunch_lp_warning = true;
+            $show_autolaunch_lp_warning = true;
         } else {
             $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
             if (!isset($_SESSION[$session_key])) {
@@ -206,7 +265,7 @@ if (!empty($auto_launch)) {
             $lp_data = Database::fetch_array($result,'ASSOC');
             if (!empty($lp_data['id'])) {
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                	$show_autolunch_lp_warning = true;
+                	$show_autolaunch_lp_warning = true;
                 } else {
                     $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
@@ -241,8 +300,11 @@ $content = Display::return_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 	the setting homepage_view is adjustable through
 	the platform administration section */
 
-if ($show_autolunch_lp_warning) {
+if ($show_autolaunch_lp_warning) {
     $show_message .= Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),'warning');
+}
+if ($show_autolaunch_exercise_warning) {
+    $show_message .= Display::return_message(get_lang('TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'),'warning');
 }
 if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_view') == 'activity_big') {
 	require 'activity.php';

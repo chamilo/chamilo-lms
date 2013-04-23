@@ -9,8 +9,6 @@
 /**
  * Code
  */
-if(class_exists('MultipleAnswerCombinationTrueFalse')) { return true; }
-require_once 'multiple_answer_combination.class.php';
 /**
 	CLASS MultipleAnswer
  *
@@ -20,7 +18,8 @@ require_once 'multiple_answer_combination.class.php';
  *	@author Eric Marguin
  *	@package chamilo.exercise
  **/
-class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination {
+class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
+{
 
 	static $typePicture = 'mcmaco.gif';
 	static $explanationLangVar = 'MultipleAnswerCombinationTrueFalse';

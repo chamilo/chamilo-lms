@@ -1718,4 +1718,62 @@ class Display
             </div> </div>';
         return $html;
     }
-} //end class Display
+
+    static function progress_pagination_bar($list, $current, $conditions = array(), $link = null) {
+        $counter = 1;
+        $pagination_size = '';
+        $total = count($list);
+        if ($total > 25) {
+            $pagination_size = 'pagination-small';
+        }
+        if ($total > 50) {
+            $pagination_size = 'pagination-mini';
+        }
+        $html = '<div class="pagination '.$pagination_size.' pagination-centered"><ul>';
+
+        foreach ($list as $item_id) {
+            $class = "active";
+
+            if ($counter < $current) {
+                $class = "before";
+            }
+
+            foreach ($conditions as $condition) {
+                $array = $condition['items'];
+                $class_to_applied = $condition['class'];
+                $type = isset($condition['type']) ? $condition['type'] : 'positive';
+                switch ($type) {
+                    case 'positive':
+                        if (in_array($item_id, $array)) {
+                            $class .= " $class_to_applied";
+                        }
+                        break;
+                    case 'negative':
+                        if (!in_array($item_id, $array)) {
+                            $class .= " $class_to_applied";
+                        }
+                        break;
+                }
+            }
+
+            if ($current == $counter) {
+                $class = "before current";
+            }
+
+            if ($counter > $current) {
+                $class = "after";
+            }
+
+            if (empty($link)) {
+                $link_to_show = "#";
+            } else {
+                $link_counter = $counter -1;
+                $link_to_show = $link.$link_counter;
+            }
+            $html .= '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$counter.'</a></li>';
+            $counter++;
+        }
+        $html .= '</ul></div>';
+        return $html;
+    }
+}

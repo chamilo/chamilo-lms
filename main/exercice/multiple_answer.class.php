@@ -8,8 +8,6 @@
 /**
  * Code
  */
-if(!class_exists('MultipleAnswer')):
-
 /**
 	CLASS MultipleAnswer
  *
@@ -58,7 +56,7 @@ class MultipleAnswer extends Question {
 							'.get_lang('Answer').'
 						</th>';
 				// show column comment when feedback is enable
-				if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {
+                if (!empty($obj_ex) && $obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
                     $html .='<th>
                                 '.get_lang('Comment').'
                             </th>';
@@ -89,10 +87,11 @@ class MultipleAnswer extends Question {
 
 		for ($i = 1 ; $i <= $nb_answers ; ++$i) {
 			if(is_object($answer)) {
-				$defaults['answer['.$i.']'] = $answer -> answer[$i];
-				$defaults['comment['.$i.']'] = $answer -> comment[$i];
-				$defaults['weighting['.$i.']'] = Text::float_format($answer -> weighting[$i], 1);
-				$defaults['correct['.$i.']'] = $answer -> correct[$i];
+                $answer_id = $answer->getRealAnswerIdFromList($i);
+                $defaults['answer['.$i.']'] = $answer->answer[$answer_id];
+                $defaults['comment['.$i.']'] = $answer->comment[$answer_id];
+                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$answer_id], 1);
+                $defaults['correct['.$i.']'] = $answer->correct[$answer_id];
 			} else {
 				$defaults['answer[1]']  = get_lang('DefaultMultipleAnswer2');
 				$defaults['comment[1]'] = get_lang('DefaultMultipleComment2');
@@ -122,7 +121,7 @@ class MultipleAnswer extends Question {
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
 			// show comment when feedback is enable
-			if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if (!empty($obj_ex) && $obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
 				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			}
 
@@ -222,4 +221,3 @@ class MultipleAnswer extends Question {
         return $header;
 	}
 }
-endif;

@@ -186,4 +186,3 @@ if (isset($_POST['ok'])) {
 		Database::query($query);
 	}
 }
-?>

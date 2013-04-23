@@ -497,17 +497,16 @@ $extra_params['height'] = 'auto';
 <script>
 
     function setSearchSelect(columnName) {
-        $("#results").jqGrid('setColProp', columnName,
-                {
-                    searchoptions:{
-                        dataInit:function (el) {
-                            $("option[value='1']", el).attr("selected", "selected");
-                            setTimeout(function () {
-                                $(el).trigger('change');
-                            }, 1000);
-                        }
-                    }
-                });
+        $("#results").jqGrid('setColProp', columnName, {
+            searchoptions:{
+                dataInit:function (el) {
+                    $("option[value='1']", el).attr("selected", "selected");
+                    setTimeout(function () {
+                        $(el).trigger('change');
+                    }, 1000);
+                }
+            }
+        });
     }
 
     function exportExcel() {
@@ -575,8 +574,8 @@ jQuery("#results").jqGrid('navButtonAdd','#results_pager',{
 
         //Adding search options
         var options = {
-            'stringResult':true,
-            'autosearch':true,
+            'stringResult': true,
+            'autosearch' : true,
             'searchOnEnter':false
         }
         jQuery("#results").jqGrid('filterToolbar', options);

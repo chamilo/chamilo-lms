@@ -1,28 +1,23 @@
 <?php
 /* See license terms in /license.txt */
 
-class AppPlugin {
-    var $plugin_regions = array (
- //           'loginpage_main',
-            'login_top',
-            'login_bottom',
-            'menu_top',
-            'menu_bottom',
-/*            'campushomepage_main',
-            'campushomepage_menu',
-            'mycourses_main',
-            'mycourses_menu',*/
-            'content_top',
-            'content_bottom',
-            'header_main',
-            'header_center',
-            'header_left',
-            'header_right',
-            //'footer',
-            'footer_left',
-            'footer_center',
-            'footer_right',
-            'course_tool_plugin'
+class AppPlugin
+{
+    public $plugin_regions = array(
+        'login_top',
+        'login_bottom',
+        'menu_top',
+        'menu_bottom',
+        'content_top',
+        'content_bottom',
+        'header_main',
+        'header_center',
+        'header_left',
+        'header_right',
+        'footer_left',
+        'footer_center',
+        'footer_right',
+        'course_tool_plugin'
     );
 
     function __construct() {
@@ -79,7 +74,7 @@ class AppPlugin {
         $pluginpath = api_get_path(SYS_PLUGIN_PATH).$plugin_name.'/install.php';
 
         if (is_file($pluginpath) && is_readable($pluginpath)) {
-            //execute the install procedure
+            // Executes the install procedure
             require $pluginpath;
         }
     }
@@ -412,7 +407,9 @@ class AppPlugin {
      */ 
     public function get_plugin_course_settings($plugin_name) {
         $settings = array();
-        if (empty($plugin_name)) { return $settings; }
+        if (empty($plugin_name)) {
+            return $settings;
+        }
         $plugin_info = $this->get_plugin_info($plugin_name);
         
         if (isset($plugin_info['plugin_class'])) {
@@ -428,7 +425,8 @@ class AppPlugin {
                     }
                 }
             }
-            unset($obj); unset($plugin_info);
+            unset($obj);
+            unset($plugin_info);
         }
         return $settings;
     }

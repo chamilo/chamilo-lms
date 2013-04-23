@@ -6,6 +6,27 @@
   hubert.borderiou
   Manage tests category page
  */
+// name of the language file that needs to be included
+$language_file = 'exercice';
+$nameTools = "";
+
+require_once '../inc/global.inc.php';
+require_once 'exercise.lib.php';
+require_once 'question.class.php';
+
+$this_section = SECTION_COURSES;
+
+if (!api_is_allowed_to_edit()) {
+    api_not_allowed(true);
+}
+
+$type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'simple';
+
+if ($type == 'global' && !api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
+$url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?type='.$type;
 $htmlHeadXtra[] = '
 <script>
 	function confirmDelete(in_txt, in_id) {
@@ -19,71 +40,112 @@ $htmlHeadXtra[] = '
 			return false;
 		}
 	}
-</script>
-';
 
-// name of the language file that needs to be included
-$language_file = 'exercice';
-$nameTools = "";
+    function check() {
+        $("#parent_id option:selected").each(function() {
+            var id = $(this).val();
+            var name = $(this).text();
+            if (id != "" ) {
+                $.ajax({
+                    async: false,
+                    url: "'.$url.'&a=exercise_category_exists",
+                    data: "id="+id,
+                    success: function(return_value) {
+                        if (return_value == 0 ) {
+                            alert("'.get_lang('CategoryDoesNotExists').'");
+                            //Deleting select option tag
+                            $("#parent_id").find("option").remove();
 
-require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
-require_once 'question.class.php';
-require_once 'testcategory.class.php';
+                            $(".holder li").each(function () {
+                                if ($(this).attr("rel") == id) {
+                                    $(this).remove();
+                                }
+                            });
+                        }
+                    },
+                });
+            }
+        });
+    }
 
-$this_section = SECTION_COURSES;
+    $(function() {
+        $("#parent_id").fcbkcomplete({
+            json_url: "'.$url.'&a=search_category_parent",
+            maxitems: 1,
+            addontab: false,
+            input_min_size: 1,
+            cache: false,
+            complete_text:"'.get_lang('StartToType').'",
+            firstselected: false,
+            onselect: check,
+            filter_selected: true,
+            newel: true
+        });
+    });
+</script>';
 
-if (!api_is_allowed_to_edit()) {
-    api_not_allowed(true);
-}
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
-// breadcrumbs
+// Breadcrumbs
 $interbreadcrumb[] = array("url" => "exercice.php", "name" => get_lang('Exercices'));
 Display::display_header(get_lang('Category'));
 
 // Action handling: add, edit and remove
 if (isset($_GET['action']) && $_GET['action'] == 'addcategory') {
-    add_category_form($_GET['action']);
+    add_category_form($_GET['action'], $type);
+} else if (isset($_GET['action']) && $_GET['action'] == 'addcategoryglobal') {
+    add_category_form($_GET['action'], $type);
 } else if (isset($_GET['action']) && $_GET['action'] == 'editcategory') {
-    edit_category_form($_GET['action']);
+    edit_category_form($_GET['action'], $type);
 } else if (isset($_GET['action']) && $_GET['action'] == 'deletecategory') {
-    delete_category_form($_GET['action']);
+    delete_category_form($_GET['action'], $type);
 } else {
-    display_add_category();
-    display_categories();
+    display_add_category($type);
+    display_categories($type);
 }
 
 Display::display_footer();
 
 // FUNCTIONS
 // form to edit a category
-function edit_category_form($in_action) {
+function edit_category_form($in_action, $type = 'simple') {
     $in_action = Security::remove_XSS($in_action);
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = Security::remove_XSS($_GET['category_id']);
         $objcat = new Testcategory($category_id);
 
-        // initiate the object		
-        $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $in_action . '&category_id=' . $category_id);
+        // initiate the object
+        $form = new FormValidator('note', 'post', api_get_self().'?action='.$in_action.'&category_id='.$category_id."&type=".$type);
 
-        // settting the form elements			
+        // settting the form elements
         $form->addElement('header', get_lang('EditCategory'));
         $form->addElement('hidden', 'category_id');
-        $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
+        $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
         $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+        $category_parent_list = array();
+
+        if (!empty($objcat->parent_id)) {
+            $parent_cat = new Testcategory($objcat->parent_id);
+            $category_parent_list = array($parent_cat->id => $parent_cat->name);
+            echo '<script>$(function() { $("#parent_id").trigger("addItem",[{"title": "'.$parent_cat->name.'", "value": "'.$parent_cat->id.'"}]); });</script>';
+        }
+
+        $form->addElement('select', 'parent_id', get_lang('Parent'), $category_parent_list, array('id' => 'parent_id'));
         $form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyCategory'), 'class="add"');
 
-        // setting the defaults		
+        // setting the defaults
         $defaults = array();
         $defaults["category_id"] = $objcat->id;
         $defaults["category_name"] = $objcat->name;
         $defaults["category_description"] = $objcat->description;
+        $defaults["parent_id"] = $objcat->parent_id;
         $form->setDefaults($defaults);
 
-        // setting the rules		
+        // setting the rules
         $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
 
-        // The validation or display		
+        // The validation or display
         if ($form->validate()) {
             $check = Security::check_token('post');
             if ($check) {
@@ -91,7 +153,8 @@ function edit_category_form($in_action) {
                 $v_id = Security::remove_XSS($values['category_id']);
                 $v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
                 $v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
-                $objcat = new Testcategory($v_id, $v_name, $v_description);
+                $parent_id = isset($values['parent_id']) ? $values['parent_id'] : null;
+                $objcat = new Testcategory($v_id, $v_name, $v_description, $parent_id, $type);
                 if ($objcat->modifyCategory()) {
                     Display::display_confirmation_message(get_lang('MofidfyCategoryDone'));
                 } else {
@@ -99,15 +162,15 @@ function edit_category_form($in_action) {
                 }
             }
             Security::clear_token();
-            display_add_category();
-            display_categories();
+            display_add_category($type);
+            display_categories($type);
         } else {
-            display_goback();
+            display_goback($type);
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $form->display();
-            display_categories();
+            display_categories($type);
         }
     } else {
         Display::display_error_message(get_lang('CannotEditCategory'));
@@ -115,7 +178,7 @@ function edit_category_form($in_action) {
 }
 
 // process to delete a category
-function delete_category_form($in_action) {
+function delete_category_form($in_action, $type = 'simple') {
     $in_action = Security::remove_XSS($in_action);
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = Security::remove_XSS($_GET['category_id']);
@@ -132,30 +195,33 @@ function delete_category_form($in_action) {
     } else {
         Display::display_error_message(get_lang('CannotDeleteCategoryError'));
     }
-    display_add_category();
-    display_categories();
+    display_add_category($type);
+    display_categories($type);
 }
 
-// form to add a category
-function add_category_form($in_action) {
+// Form to add a category
+function add_category_form($in_action, $type = 'simple') {
     $in_action = Security::remove_XSS($in_action);
-    // initiate the object
-    $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $in_action);
-    // settting the form elements	
+    // Initiate the object
+    $form = new FormValidator('note', 'post', api_get_self().'?action='.$in_action."&type=".$type);
+    // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
-    $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
+    $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
     $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+    $form->addElement('select', 'parent_id', get_lang('Parent'), array(), array('id' => 'parent_id'));
     $form->addElement('style_submit_button', 'SubmitNote', get_lang('AddTestCategory'), 'class="add"');
-    // setting the rules
+
+    // Setting the rules
     $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
     // The validation or display
     if ($form->validate()) {
         $check = Security::check_token('post');
         if ($check) {
-            $values = $form->exportValues();
+            $values = $form->getSubmitValues();
             $v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
             $v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
-            $objcat = new Testcategory(0, $v_name, $v_description);
+            $parent_id = isset($values['parent_id']) && isset($values['parent_id'][0]) ? $values['parent_id'][0] : null;
+            $objcat = new Testcategory(0, $v_name, $v_description, $parent_id, $type, api_get_course_int_id());
             if ($objcat->addCategoryInBDD()) {
                 Display::display_confirmation_message(get_lang('AddCategoryDone'));
             } else {
@@ -163,59 +229,75 @@ function add_category_form($in_action) {
             }
         }
         Security::clear_token();
-        display_add_category();
-        display_categories();
+        display_add_category($type);
+        display_categories($type);
     } else {
-        display_goback();
+        display_goback($type);
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(array('sec_token' => $token));
         $form->display();
-        display_categories();
     }
 }
 
 // Display add category button
 
-function display_add_category() {
+function display_add_category($type) {
     echo '<div class="actions">';
     echo '<a href="exercice.php?' . api_get_cidreq() . '">' . Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM) . '</a>';
-    echo '<a href="' . api_get_self() . '?action=addcategory">' . Display::return_icon('question_category.gif', get_lang('AddACategory')) . '</a>';
+    $icon = "question_category.gif";
+    if ($type == 'global') {
+        $icon = "folder_global_category_new.png";
+    }
+    echo '<a href="'.api_get_self().'?action=addcategory&type='.$type.'">'.Display::return_icon($icon, get_lang('AddACategory'), array(), ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
     echo "<br/>";
+    if ($type == 'simple') {
     echo "<fieldset><legend>" . get_lang('QuestionCategory') . "</legend></fieldset>";
+    } else {
+        echo "<fieldset><legend>".get_lang('QuestionGlobalCategory')."</legend></fieldset>";
+    }
 }
 
 // Display category list
 
-function display_categories() {
-    $course_id = api_get_course_int_id();
-    $t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-    $sql = "SELECT * FROM $t_cattable WHERE c_id = $course_id ORDER BY title";
-    $res = Database::query($sql);
+function display_categories($type = 'simple') {
+    $cat = new Testcategory();
+    $categories = $cat->get_category_tree_by_type($type);
 
-    while ($row = Database::fetch_array($res)) {
-        // le titre avec le nombre de questions qui sont dans cette cat�gorie
-        $tmpobj = new Testcategory($row['id']);
+    foreach ($categories as $row) {
+        // Title with number of questions in the category
+        $category_id = $row['id'];
+        $tmpobj = new Testcategory($category_id);
         $nb_question = $tmpobj->getCategoryQuestionsNumber();
-        echo '<div class="sectiontitle" id="id_cat' . $row['id'] . '">';
+        echo '<div class="sectiontitle" id="id_cat'.$category_id.'">';
         $nb_question_label = $nb_question == 1 ? $nb_question . ' ' . get_lang('Question') : $nb_question . ' ' . get_lang('Questions');
+        $global_label = null;
+        if ($row['c_id'] == 0) {
+            $global_label = ' '.Display::label(get_lang('Global'), 'info');
+        }
         echo "<span style='float:right'>" . $nb_question_label . "</span>";
-        echo $row['title'];
+        $style = 'margin-left:' . $row['depth'] * 20 . 'px; margin-right:10px;';
+        echo $title = Display::div($row['title'].$global_label, array('style' => $style));
         echo '</div>';
         echo '<div class="sectioncomment">';
         echo $row['description'];
         echo '</div>';
         echo '<div>';
-        echo '<a href="' . api_get_self() . '?action=editcategory&amp;category_id=' . $row['id'] . '">' . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
-        if ($nb_question > 0) {
+        if ($row['c_id'] == 0 && $type == 'simple') {
+            echo Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
+        } else {
+            echo '<a href="'.api_get_self().'?action=editcategory&category_id='.$category_id.'&type='.$type.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+        }
+
+        if ($nb_question > 0 || ($row['c_id'] == 0 && $type == 'simple')){
             echo '<a href="javascript:void(0)" onclick="alert(\'' . protectJSDialogQuote(get_lang('CannotDeleteCategory')) . '\')">';
             echo Display::return_icon('delete_na.png', get_lang('CannotDeleteCategory'), array(), ICON_SIZE_SMALL);
             echo '</a>';
         } else {
             $rowname = protectJSDialogQuote($row['title']);
-            echo ' <a href="' . api_get_self() . '?action=deletecategory&amp;category_id=' . $row['id'] . '" ';
-            echo 'onclick="return confirmDelete(\'' . protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure') . '[' . $rowname) . '] ?\', \'id_cat' . $row['id'] . '\');">';
+            echo ' <a href="'.api_get_self().'?action=deletecategory&amp;category_id='.$category_id.'&type='.$type.'"';
+            echo 'onclick="return confirmDelete(\''.protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category_id.'\');">';
             echo Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
         }
         echo '</div>';
@@ -223,9 +305,10 @@ function display_categories() {
 }
 
 // display goback to category list page link
-function display_goback() {
+function display_goback($type) {
+    $type = Security::remove_XSS($type);
     echo '<div class="actions">';
-    echo '<a href="' . api_get_self() . '">' . Display::return_icon('back.png', get_lang('BackToCategoryList'), array(), 32) . '</a>';
+    echo '<a href="'.api_get_self().'?type='.$type.'">'.Display::return_icon('back.png', get_lang('BackToCategoryList'), array(), 32).'</a>';
     echo '</div>';
 }
 

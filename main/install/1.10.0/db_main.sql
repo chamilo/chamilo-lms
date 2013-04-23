@@ -2643,18 +2643,18 @@ CREATE TABLE IF NOT EXISTS user_rel_tag (
 );
 
 
---DROP TABLE IF EXISTS group_rel_group;
---CREATE TABLE IF NOT EXISTS group_rel_group (
+-- DROP TABLE IF EXISTS group_rel_group;
+-- CREATE TABLE IF NOT EXISTS group_rel_group (
 --	id int NOT NULL AUTO_INCREMENT,
 --	group_id int NOT NULL,
 --	subgroup_id int NOT NULL,
 --	relation_type int NOT NULL,
 --	PRIMARY KEY (id)
---);
+-- );
 
---ALTER TABLE group_rel_group ADD INDEX ( group_id );
---ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
---ALTER TABLE group_rel_group ADD INDEX ( relation_type );
+-- ALTER TABLE group_rel_group ADD INDEX ( group_id );
+-- ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
+-- ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
 DROP TABLE IF EXISTS announcement_rel_group;
 CREATE TABLE IF NOT EXISTS announcement_rel_group (
@@ -2663,6 +2663,7 @@ CREATE TABLE IF NOT EXISTS announcement_rel_group (
 	announcement_id int NOT NULL,
 	PRIMARY KEY (id)
 );
+
 --
 -- Table structure for table message attachment
 --
@@ -3263,7 +3264,7 @@ CREATE TABLE track_e_links (
   links_cours_id varchar(40) NOT NULL default '' ,
   links_link_id int NOT NULL default 0,
   links_session_id INT NOT NULL DEFAULT 0,
-  PRIMARY KEY  (links_id),
+  PRIMARY KEY (links_id),
   KEY links_cours_id (links_cours_id),
   KEY links_user_id (links_user_id)
 );
@@ -3275,7 +3276,7 @@ CREATE TABLE track_e_login (
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
   login_ip varchar(39) NOT NULL default '',
   logout_date datetime NULL default NULL,
-  PRIMARY KEY  (login_id),
+  PRIMARY KEY (login_id),
   KEY login_user_id (login_user_id)
 );
 

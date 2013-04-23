@@ -9,9 +9,6 @@
 /**
  * Code
  */
-
-if(!class_exists('UniqueAnswer')):
-
 /**
 	CLASS UNIQUE_ANSWER
  *
@@ -23,7 +20,8 @@ if(!class_exists('UniqueAnswer')):
  *	@package chamilo.exercise
  **/
 
-class UniqueAnswer extends Question {
+class UniqueAnswer extends Question
+{
 
 	static $typePicture = 'mcua.gif';
 	static $explanationLangVar = 'UniqueSelect';
@@ -119,7 +117,7 @@ class UniqueAnswer extends Question {
 				$question = Question::read($questionid);
 
                 if($question) {
-                    $select_question[$questionid]='Q'.$key.' :'.Text::cut($question->selectTitle(),20);
+                    $select_question[$questionid] = 'Q'.$key.' :'.Text::cut($question->selectTitle(),20);
                 }
 			}
 		}
@@ -131,7 +129,7 @@ class UniqueAnswer extends Question {
 		$select_lp_id[0]=get_lang('SelectTargetLP');
 
 		foreach ($flat_list as $id => $details) {
-			$select_lp_id[$id] = Text::cut($details['lp_name'],20);
+			$select_lp_id[$id] = Text::cut($details['lp_name'], 20);
 		}
 
 		$temp_scenario = array();
@@ -144,14 +142,16 @@ class UniqueAnswer extends Question {
         for ($i = 1 ; $i <= $nb_answers ; ++$i) {
             $form -> addElement ('html', '<tr>');
             if (isset($answer) && is_object($answer)) {
-                if ($answer -> correct[$i]) {
+                $answer_id = $answer->getRealAnswerIdFromList($i);
+
+                if ($answer->correct[$answer_id]) {
                     $correct = $i;
                 }
-                $defaults['answer['.$i.']']    = $answer->answer[$i];
-                $defaults['comment['.$i.']']   = $answer->comment[$i];
-                $defaults['weighting['.$i.']'] = Text::float_format($answer->weighting[$i], 1);
+                $defaults['answer['.$i.']'] = $answer->answer[$answer_id];
+                $defaults['comment['.$i.']'] = $answer->comment[$answer_id];
+                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$answer_id], 1);
 
-                $item_list=explode('@@',$answer -> destination[$i]);
+                $item_list = explode('@@', $answer->destination[$answer_id]);
 
                 $try       = $item_list[0];
                 $lp        = $item_list[1];
@@ -306,8 +306,7 @@ class UniqueAnswer extends Question {
 			url= an url
 
  			$destination_str='';
- 			foreach ($list_destination as $destination_id)
- 			{
+              foreach ($list_destination as $destination_id) {
  				$destination_str.=$destination_id.';';
  			}*/
 
@@ -379,13 +378,14 @@ class UniqueAnswer extends Question {
    * @assert (1,1,'','',1,1,null) === false
    */
   function create_answer($id=1, $question_id, $answer_title, $comment = '', $score = 0, $correct = 0, $course_id = null) {
-    if (empty($question_id) or empty($answer_title)) { return false; }
+        if (empty($question_id) or empty($answer_title)) {
+            return false;
+        }
     $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
     if (empty($course_id)) {
         $course_id = api_get_course_int_id();
     }
-    $position = 1;
     $question_id = filter_var($question_id,FILTER_SANITIZE_NUMBER_INT);
     $score = filter_var($score,FILTER_SANITIZE_NUMBER_FLOAT);
     $correct = filter_var($correct,FILTER_SANITIZE_NUMBER_INT);
@@ -396,18 +396,15 @@ class UniqueAnswer extends Question {
     $row_max = Database::fetch_object($rs_max);
     $position = $row_max->max_position + 1;
     // Insert a new answer
-    $sql = "INSERT INTO $tbl_quiz_answer "
-    ."(c_id, id, question_id,answer,correct,comment,ponderation,position,destination)"
-    ."VALUES ($course_id, $id,$question_id,'".Database::escape_string($answer_title)."',"
+        $sql = "INSERT INTO $tbl_quiz_answer (c_id, question_id,answer,correct,comment,ponderation,position,destination)"
+            ."VALUES ($course_id, $question_id,'".Database::escape_string($answer_title)."',"
     ."$correct,'".Database::escape_string($comment)."',$score,$position, "
     ." '0@@0@@0@@0')";
     $rs = Database::query($sql);
     if ($correct) {
-        $sql = "UPDATE $tbl_quiz_question "
-        ." SET ponderation = (ponderation + $score) WHERE c_id = $course_id AND id = ".$question_id;
+            $sql = "UPDATE $tbl_quiz_question SET ponderation = (ponderation + $score) WHERE c_id = $course_id AND iid = ".$question_id;
         $rs = Database::query($sql);
         return $rs;
     }
   }
 }
-endif;

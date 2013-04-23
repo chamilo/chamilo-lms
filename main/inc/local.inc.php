@@ -478,6 +478,7 @@ $_user = Session::read('_user');
 $app['current_user'] = $_user;
 
 /* USER INIT */
+
 if (isset($uidReset) && $uidReset) {    // session data refresh requested
     unset($_SESSION['_user']['uidReset']);
     $is_platformAdmin = false;
@@ -506,7 +507,6 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             $uData = Database::fetch_array($result);
             $_user = _api_format_user($uData, false);
             $_user['lastLogin']        = api_strtotime($uData['login_date'], 'UTC');
-
             $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse     = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
             ConditionalLogin::check_conditions($uData);

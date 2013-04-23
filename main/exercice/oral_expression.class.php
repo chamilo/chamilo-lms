@@ -11,11 +11,11 @@
 /**
  * Code
  */
-if(!class_exists('OralExpression')):
 /**
  * @package chamilo.exercise
  */
-class OralExpression extends Question {
+class OralExpression extends Question
+{
 
 	static $typePicture = 'audio_question.png';
 	static $explanationLangVar = 'OralExpression';
@@ -71,4 +71,3 @@ class OralExpression extends Question {
         return $header;
 	}
 }
-endif;

@@ -38,43 +38,46 @@ $course_id     = api_get_course_int_id();
 
 if ($answer_type == HOT_SPOT_DELINEATION) {
 	// Query db for answers
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS 
-	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' AND hotspot_type <> 'noerror' ORDER BY id";
+	$sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS
+	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' AND hotspot_type <> 'noerror'
+            ORDER BY iid";
 } else {
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS 
-	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' ORDER BY id";
+	$sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS
+	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' ORDER BY iid";
 }
 $result = Database::query($sql);
 // Init
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
-$i = 0;
+$i = 1;
 
 while ($hotspot = Database::fetch_array($result)) {
-	$output .= "&hotspot_".$hotspot['id']."=true";
+    $hotspot_id = $i;
+    //$hotspot_id = $hotspot['iid'];
+	$output .= "&hotspot_".$hotspot_id."=true";
 	// Square or rectancle
 	if ($hotspot['hotspot_type'] == 'square' ) {
-		$output .= "&hotspot_".$hotspot['id']."_type=square";
+		$output .= "&hotspot_".$hotspot_id."_type=square";
 	}
 
 	// Circle or ovale
 	if ($hotspot['hotspot_type'] == 'circle') {
-		$output .= "&hotspot_".$hotspot['id']."_type=circle";
+		$output .= "&hotspot_".$hotspot_id."_type=circle";
 	}
 
 	// Polygon
 	if ($hotspot['hotspot_type'] == 'poly') {
-		$output .= "&hotspot_".$hotspot['id']."_type=poly";
+		$output .= "&hotspot_".$hotspot_id."_type=poly";
 	}
 
 	// Delineation
 	if ($hotspot['hotspot_type'] == 'delineation') {
-		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
+		$output .= "&hotspot_".$hotspot_id."_type=delineation";
 	}	
 	// oar
 	if ($hotspot['hotspot_type'] == 'oar') {
-		$output .= "&hotspot_".$hotspot['id']."_type=delineation";	 
+		$output .= "&hotspot_".$hotspot_id."_type=delineation";
 	}	
-	$output .= "&hotspot_".$hotspot['id']."_coord=".$hotspot['hotspot_coordinates']."";
+	$output .= "&hotspot_".$hotspot_id."_coord=".$hotspot['hotspot_coordinates']."";
 	$i++;
 }
 

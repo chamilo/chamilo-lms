@@ -38,10 +38,18 @@ if (!in_array($action, array(
     'get_timelines',
     'get_user_skill_ranking',
     'get_usergroups_teacher',
-    'get_question_list'
+    'get_question_list',
+    'get_user_list_plugin_widescale'
 ))
     ) {
 	api_protect_admin_script(true);
+}
+
+if ($action == 'get_user_list_plugin_widescale') {
+    $allowed = api_is_drh() || api_is_platform_admin();
+    if (!$allowed) {
+        api_not_allowed();
+    }
 }
 
 //Search features
@@ -181,6 +189,9 @@ if (!$sidx) $sidx = 1;
 //@todo rework this
 
 switch ($action) {
+    case 'get_user_list_plugin_widescale':
+        $count = UserManager::get_user_data(null, null, null, null, true);
+        break;
     case 'get_question_list':
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
         $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
@@ -320,6 +331,11 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(
 $columns = array();
 
 switch ($action) {
+    case 'get_user_list_plugin_widescale':
+        $columns = array('username', 'firstname', 'lastname', 'exam_password');
+        $column_names = array(get_lang('Username'), get_lang('Firstname'), get_lang('Lastname'), get_lang('Password'));
+        $result = UserManager::get_user_data($start, $limit, $sidx, $sord);
+        break;
     case 'get_question_list':
         if (isset($exercise) && !empty($exercise)) {
             $columns = array('question', 'type', 'category', 'level', 'score', 'actions');
@@ -333,6 +349,11 @@ switch ($action) {
     case 'get_course_exercise_medias':
         $columns = array('question');
         $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);
+        if (!empty($result)) {
+            foreach ($result as &$media) {
+                $media['id'] = $media['iid'];
+            }
+        }
         break;
     case 'get_user_course_report_resumed':
         $columns = array('extra_ruc', 'training_hours', 'count_users', 'count_users_registered', 'average_hours_per_user', 'count_certificates');
@@ -553,7 +574,7 @@ switch ($action) {
                 $group['sessions']   = count($obj->get_sessions_by_usergroup($group['id']));
                 $group['courses']    = count($obj->get_courses_by_usergroup($group['id']));
                 $group['users']      = count($obj->get_users_by_usergroup($group['id']));
-                switch($group['group_type']) {
+                switch ($group['group_type']) {
                     case '0':
                         $group['group_type'] = Display::label(get_lang('Class'), 'info');
                         break;
@@ -668,7 +689,8 @@ $allowed_actions = array(
     'get_user_course_report',
     'get_user_course_report_resumed',
     'get_group_reporting',
-    'get_question_list'
+    'get_question_list',
+    'get_user_list_plugin_widescale'
 );
 
 //5. Creating an obj to return a json

@@ -11,7 +11,6 @@
 /**
  * Code
  */
-if(!class_exists('ExerciseResult')):
 /**
  * Exercise results class
  * @package chamilo.exercise
@@ -439,7 +438,8 @@ class ExerciseResult
 		foreach ($this->results as $row) {
 			$column = 0;
 
-            if ($with_column_user) {
+            if ($with_column_user) {               
+
                 if (api_is_western_name_order()) {
                     $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
                     $column++;
@@ -487,4 +487,3 @@ class ExerciseResult
 		return true;
 	}
 }
-endif;

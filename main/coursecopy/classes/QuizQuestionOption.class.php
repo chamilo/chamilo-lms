@@ -28,7 +28,7 @@ class QuizQuestionOption extends Resource
      * @param int $position
      */
     function QuizQuestionOption($obj) {
-        parent::Resource($obj->id, RESOURCE_QUIZQUESTION);
+        parent::Resource($obj->iid, RESOURCE_QUIZQUESTION);
         $this->obj = $obj;
     }
 }

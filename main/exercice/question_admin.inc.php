@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 /**
 *	This script allows to manage the statements of questions.
-* 	It is included from the script admin.php
-*	@package chamilo.exercise
-* 	@author Olivier Brouckaert
-*  @author Julio Montoya
+*   It is included from the script admin.php
+*   @package chamilo.exercise
+*   @author Olivier Brouckaert
+*   @author Julio Montoya
 */
 /**
  * Code
@@ -16,10 +16,10 @@ $course_id = api_get_course_int_id();
 // INIT QUESTION
 if (isset($_GET['editQuestion'])) {
 	$objQuestion = Question::read ($_GET['editQuestion']);
-	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
+	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id."&exerciseId=$exerciseId";
 } else {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
-	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
+	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion."&exerciseId=$exerciseId";
 }
 
 if (is_object($objQuestion)) {

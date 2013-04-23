@@ -12,7 +12,8 @@ require_once 'Course.class.php';
  *
  * @todo Use archive-folder of Chamilo?
  */
-class CourseArchiver {
+class CourseArchiver 
+{
 
     /**
      * Delete old temp-dirs

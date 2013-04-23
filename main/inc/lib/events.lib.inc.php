@@ -328,8 +328,7 @@ function event_link($link_id)
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done
  */
-function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array(), $end_date = null)
-{
+function update_event_exercise($exeid, $exo_id, $score, $weigh, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
     if ($debug) {
@@ -1571,6 +1570,32 @@ function delete_attempt_hotspot($exe_id, $user_id, $courseId, $question_id)
     Database::query($sql);
 }
 
+function get_answered_questions_from_attempt($exe_id, $objExercise) {
+    $attempt_list = get_all_exercise_event_by_exe_id($exe_id);
+    $exercise_result = array();
+    if (!empty($attempt_list)) {
+        foreach ($attempt_list as $question_id => $options) {
+            foreach ($options as $item) {
+                $question_obj = Question::read($item['question_id']);
+                switch ($question_obj->type) {
+                    case FILL_IN_BLANKS:
+                        $item['answer'] = $objExercise->fill_in_blank_answer_to_string($item['answer']);
+                        break;
+                    case HOT_SPOT:
+                        //var_dump($item['answer']);
+                        break;
+                }
+
+                if ($item['answer'] != '0' && !empty($item['answer'])) {
+                    $exercise_result[] = $question_id;
+                    break;
+                }
+            }
+        }
+    }
+    return $exercise_result;
+}
+
 /**
  * User logs in for the first time to a course
  * @param $course_code
@@ -1626,7 +1651,8 @@ function check_if_mail_already_sent($event_name, $user_from, $user_to = null)
     $result = Database::store_result(Database::query($sql), 'ASSOC');
     return $result[0]["total"];
 }
-/*
+
+/**
  *
  * Filter EventEmailTemplate Filters see the main/inc/conf/events.conf.dist.php
  *

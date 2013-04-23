@@ -74,7 +74,7 @@ ALTER TABLE c_item_property ADD INDEX idx_itemprop_id_tool (c_id, tool(8));
 ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 
 ALTER TABLE c_quiz_answer ADD INDEX idx_quiz_answer_c_q (c_id, question_id);
-CREATE TABLE c_quiz_order( id int unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (id));
+CREATE TABLE c_quiz_order( iid bigint unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (iid));
 
 ALTER TABLE c_quiz_question_rel_category ADD COLUMN id int unsigned NOT NULL;
 ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY;
@@ -194,6 +194,13 @@ ALTER TABLE announcement_rel_group ADD COLUMN id INT unsigned NOT NULL auto_incr
 ALTER TABLE track_e_hotpotatoes ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_attempt ADD COLUMN c_id int unsigned NOT NULL default 0;
+
+ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
+RENAME TABLE c_quiz_question_category TO c_quiz_category;
+ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned NOT NULL default 0;
+
+CREATE TABLE c_quiz_rel_category (iid bigint unsigned NOT NULL auto_increment, c_id INT unsigned default 0, category_id int unsigned NOT NULL, exercise_id int unsigned NOT NULL, count_questions int NOT NULL default 0, PRIMARY KEY(iid));
+
 
 -- Do not move this
 UPDATE settings_current SET selected_value = '1.10.0.c9a93d7' WHERE variable = 'chamilo_database_version';

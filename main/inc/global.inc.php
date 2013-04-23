@@ -100,6 +100,12 @@ require_once $includePath.'/lib/internationalization_internal.lib.php';
 // Do not over-use this variable. It is only for this script's local use.
 $libPath = $includePath.'/lib/';
 
+// Database constants
+require_once $libPath.'database.constants.inc.php';
+
+// @todo Rewrite the events.lib.inc.php in a class
+require_once $libPath.'events.lib.inc.php';
+
 /** Loading config files */
 if ($alreadyInstalled) {
     $configPath = $includePath.'/../../config/';
@@ -333,6 +339,115 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
     return $extensions;
 }));*/
 
+
+// Setting Doctrine service provider (DBAL)
+if (isset($app['configuration']['main_database'])) {
+
+    $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+            'db.options' => array(
+                'driver' => 'pdo_mysql',
+                'dbname' => $app['configuration']['main_database'],
+                'user' => $app['configuration']['db_user'],
+                'password' => $app['configuration']['db_password'],
+                'host' => $app['configuration']['db_host'],
+                'charset'   => 'utf8',
+                /*'driverOptions' => array(
+                    1002 => 'SET NAMES utf8'
+                )*/
+            )
+        ));
+
+    // Setting Doctrine ORM
+    $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
+            'orm.auto_generate_proxies' => true,
+            "orm.proxies_dir" => $app['db.orm.proxies_dir'],
+            //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
+            "orm.em.options" => array(
+                "mappings" => array(
+                    array(
+                        //If true, only simple notations like @Entity will work. If false, more advanced notations and aliasing via use will work. (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)
+                        'use_simple_annotation_reader' => false,
+                        "type" => "annotation",
+                        "namespace" => "Entity",
+                        "path" => api_get_path(INCLUDE_PATH).'Entity',
+                    )
+                ),
+            ),
+        ));
+
+    // Temporal fix to load gedmo libs
+    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
+    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
+
+    // Setting Doctrine2 extensions
+    $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
+    $app['db.event_manager']->addEventSubscriber($timestampableListener);
+
+    $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
+    $app['db.event_manager']->addEventSubscriber($sluggableListener);
+
+    $sortableListener = new Gedmo\Sortable\SortableListener();
+    $app['db.event_manager']->addEventSubscriber($sortableListener);
+}
+
+// Connect to the server database and select the main chamilo database.
+if (!($conn_return = @Database::connect(
+    array(
+        'server' => $app['configuration']['db_host'],
+        'username' => $app['configuration']['db_user'],
+        'password' => $app['configuration']['db_password'],
+        'persistent' => isset($app['configuration']['db_persistent_connection']) ? $app['configuration']['db_persistent_connection'] : null
+        // When $app['configuration']['db_persistent_connection'] is set, it is expected to be a boolean type.
+    )
+))
+) {
+    //$app->abort(500, "Database is unavailable"); //error 3
+}
+
+/*
+if (!$app['configuration']['db_host']) {
+    //$app->abort(500, "Database is unavailable"); //error 3
+}*/
+
+$charset = 'UTF-8';
+$checkConnection = false;
+
+if (isset($app['configuration']['main_database'])) {
+    // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
+    Database::query("set session sql_mode='';");
+
+    $checkConnection = @Database::select_db($app['configuration']['main_database'], $conn_return);
+
+    if ($checkConnection) {
+
+        // Initialization of the database encoding to be used.
+        Database::query("SET SESSION character_set_server='utf8';");
+        Database::query("SET SESSION collation_server='utf8_general_ci';");
+
+        /*   Initialization of the default encodings */
+
+        // The platform's character set must be retrieved at this early moment.
+        /*$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
+
+        $result = Database::query($sql);
+        while ($row = @Database::fetch_array($result)) {
+            $charset = $row[0];
+        }
+        if (empty($charset)) {
+            $charset = 'UTF-8';
+        }*/
+        //Charset is UTF-8
+
+        if (api_is_utf8($charset)) {
+            // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
+            Database::query("SET NAMES 'utf8';");
+        } else {
+            Database::query("SET CHARACTER SET '".Database::to_db_encoding($charset)."';");
+        }
+        Database::query("SET NAMES 'utf8';");
+    }
+}
+
 // The script is allowed? This setting is modified when calling api_is_not_allowed()
 $app['allowed'] = true;
 
@@ -430,54 +545,6 @@ if (is_writable($app['temp.path'])) {
     );
 }
 
-// Setting Doctrine service provider (DBAL)
-if (isset($app['configuration']['main_database'])) {
-
-    $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
-        'db.options' => array(
-            'driver' => 'pdo_mysql',
-            'dbname' => $app['configuration']['main_database'],
-            'user' => $app['configuration']['db_user'],
-            'password' => $app['configuration']['db_password'],
-            'host' => $app['configuration']['db_host'],
-            'driverOptions' => array(
-                1002 => 'SET NAMES utf8'
-            )
-        )
-    ));
-
-    // Setting Doctrine ORM
-    $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
-        'orm.auto_generate_proxies' => true,
-        "orm.proxies_dir" => $app['db.orm.proxies_dir'],
-        //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
-        "orm.em.options" => array(
-            "mappings" => array(
-                array(
-                    //If true, only simple notations like @Entity will work. If false, more advanced notations and aliasing via use will work. (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)
-                    'use_simple_annotation_reader' => false,
-                    "type" => "annotation",
-                    "namespace" => "Entity",
-                    "path" => api_get_path(INCLUDE_PATH).'Entity',
-                )
-            ),
-        ),
-    ));
-
-    // Temporal fix to load gedmo libs
-    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
-    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
-
-    // Setting Doctrine2 extensions
-    $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
-    $app['db.event_manager']->addEventSubscriber($timestampableListener);
-
-    $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
-    $app['db.event_manager']->addEventSubscriber($sluggableListener);
-
-    $sortableListener = new Gedmo\Sortable\SortableListener();
-    $app['db.event_manager']->addEventSubscriber($sortableListener);
-}
 
 define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
 
@@ -534,68 +601,6 @@ if ($app['debug'] && isset($app['configuration']['main_database'])) {
     });
 }
 
-// Database constants
-require_once $libPath.'database.constants.inc.php';
-// @todo Rewrite the events.lib.inc.php in a class
-require_once $libPath.'events.lib.inc.php';
-
-// Connect to the server database and select the main chamilo database.
-if (!($conn_return = @Database::connect(
-    array(
-        'server' => $app['configuration']['db_host'],
-        'username' => $app['configuration']['db_user'],
-        'password' => $app['configuration']['db_password'],
-        'persistent' => isset($app['configuration']['db_persistent_connection']) ? $app['configuration']['db_persistent_connection'] : null
-        // When $app['configuration']['db_persistent_connection'] is set, it is expected to be a boolean type.
-    )
-))
-) {
-    //$app->abort(500, "Database is unavailable"); //error 3
-}
-
-/*
-if (!$app['configuration']['db_host']) {
-    //$app->abort(500, "Database is unavailable"); //error 3
-}*/
-
-$charset = 'UTF-8';
-$checkConnection = false;
-
-if (isset($app['configuration']['main_database'])) {
-    // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
-    Database::query("set session sql_mode='';");
-
-    $checkConnection = @Database::select_db($app['configuration']['main_database'], $conn_return);
-
-    if ($checkConnection) {
-
-        // Initialization of the database encoding to be used.
-        Database::query("SET SESSION character_set_server='utf8';");
-        Database::query("SET SESSION collation_server='utf8_general_ci';");
-
-        /*   Initialization of the default encodings */
-
-        // The platform's character set must be retrieved at this early moment.
-        /*$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
-
-        $result = Database::query($sql);
-        while ($row = @Database::fetch_array($result)) {
-            $charset = $row[0];
-        }
-        if (empty($charset)) {
-            $charset = 'UTF-8';
-        }*/
-        //Charset is UTF-8
-
-        if (api_is_utf8($charset)) {
-            // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
-            Database::query("SET NAMES 'utf8';");
-        } else {
-            Database::query("SET CHARACTER SET '".Database::to_db_encoding($charset)."';");
-        }
-        Database::query("SET NAMES 'utf8';");
-    }
-}
 
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;

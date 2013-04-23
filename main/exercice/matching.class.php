@@ -33,7 +33,7 @@ class Matching extends Question
     }
 
     /**
-     * function which redifines Question::createAnswersForm
+     * Redefines Question::createAnswersForm
      * @param the formvalidator instance
      */
     function createAnswersForm($form)
@@ -65,12 +65,13 @@ class Matching extends Question
                 if (count($answer->nbrAnswers) > 0) {
                     $a_matches  = $a_options = array();
                     $nb_matches = $nb_options = 0;
-                    for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
+                    foreach ($answer->answer as $i => $answer_item) {
                         if ($answer->isCorrect($i)) {
                             $nb_matches++;
                             $defaults['answer['.$nb_matches.']']    = $answer->selectAnswer($i);
-                            $defaults['weighting['.$nb_matches.']'] = Text::float_format($answer->selectWeighting($i), 1);
-                            $defaults['matches['.$nb_matches.']']   = $answer->correct[$i];
+                            $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
+                            $correct_answer_id = $answer->correct[$i];
+                            $defaults['matches['.$nb_matches.']'] = $answer->getCorrectAnswerPosition($correct_answer_id);
                         } else {
                             $nb_options++;
                             $defaults['option['.$nb_options.']'] = $answer->selectAnswer($i);
@@ -88,7 +89,8 @@ class Matching extends Question
         }
         $a_matches = array();
         for ($i = 1; $i <= $nb_options; ++$i) {
-            $a_matches[$i] = chr(64 + $i); // fill the array with A, B, C.....
+            // fill the array with A, B, C.....
+            $a_matches[$i] = chr(64 + $i);
         }
 
         $form->addElement('hidden', 'nb_matches', $nb_matches);

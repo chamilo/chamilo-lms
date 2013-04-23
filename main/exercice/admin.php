@@ -248,11 +248,11 @@ if (!empty($cancelQuestion)) {
 }
 
 if (!empty($clone_question) && !empty($objExercise->id)) {
-    $old_question_obj = Question::read($clone_question);
+    $old_question_obj = Question::read($clone_question, api_get_course_int_id());
     $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
     $new_id = $old_question_obj->duplicate();
-    $new_question_obj = Question::read($new_id);
+    $new_question_obj = Question::read($new_id, api_get_course_int_id());
     $new_question_obj->addToList($exerciseId);
 
     // This should be moved to the duplicate function
@@ -329,10 +329,10 @@ function multiple_answer_true_false_onchange(variable) {
     }
     document.getElementById(weight_id).value = array_result[result];
 }
-
-
 </script>';
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
 <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
 <script language=\"JavaScript\" type=\"text/javascript\">
@@ -558,6 +558,7 @@ if ($newQuestion || $editQuestion) {
         $type = Security::remove_XSS($_REQUEST['answerType']);
     }
     echo '<input type="hidden" name="Type" value="'.$type.'" />';
+    //Create/Edit question
     require 'question_admin.inc.php';
 }
 
@@ -572,7 +573,7 @@ if (isset($_GET['hotspotadmin'])) {
 }
 
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
-    // question list management
+    // Question list (drag n drop view)
     if ($fastEdition) {
         require 'question_list_pagination_admin.inc.php';
     } else {

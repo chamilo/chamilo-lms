@@ -27,16 +27,67 @@ if (!api_is_allowed_to_edit(null,true)) {
 	api_not_allowed(true);
 }
 
+$url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+
 $htmlHeadXtra[] = '<script>
-		function advanced_parameters() {
-			if(document.getElementById(\'options\').style.display == \'none\') {
-				document.getElementById(\'options\').style.display = \'block\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
-			} else {
-				document.getElementById(\'options\').style.display = \'none\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
-			}
+    function check() {
+        $("#category_id option:selected").each(function() {
+            var id = $(this).val();
+            var name = $(this).text();
+            if (id != "" ) {
+                $.ajax({
+                    async: false,
+                    url: "'.$url.'&a=exercise_category_exists",
+                    data: "id="+id,
+                    success: function(return_value) {
+                        if (return_value == 0 ) {
+                            alert("'.get_lang('CategoryDoesNotExists').'");
+                            //Deleting select option tag
+                            $("#category_id").find("option").remove();
+
+                            $(".holder li").each(function () {
+                                if ($(this).attr("rel") == id) {
+                                    $(this).remove();
+                                }
+                            });
+                        } else {
+                            option_text = $("#category_id").find("option").text();
+                            $("#category_inputs").append( option_text + "<input type=text>");
+                        }
+                    },
+                });
+            }
+        });
+    }
+
+    $(function() {
+        $("#category_id").fcbkcomplete({
+            json_url: "'.$url.'&a=search_category_parent",
+            maxitems: 20,
+            addontab: false,
+            input_min_size: 1,
+            cache: false,
+            complete_text:"'.get_lang('StartToType').'",
+            firstselected: false,
+            onselect: check,
+            oncreate: add_item,
+            filter_selected: true,
+            newel: true
+        });
+    });
+
+	function advanced_parameters() {
+		if(document.getElementById(\'options\').style.display == \'none\') {
+			document.getElementById(\'options\').style.display = \'block\';
+			document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
+		} else {
+			document.getElementById(\'options\').style.display = \'none\';
+			document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
 		}
+	}
 
 		function FCKeditor_OnComplete( editorInstance ) {
 			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
@@ -147,6 +198,8 @@ window.onload=advanced_parameters;
 // INIT EXERCISE
 
 $objExercise = new Exercise();
+$objExercise->setCategoriesGrouping(false);
+
 $course_id = api_get_course_int_id();
 
 //INIT FORM

@@ -1280,8 +1280,8 @@ DROP TABLE IF EXISTS c_quiz;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz (
-  c_id int(11) NOT NULL,
-  id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  iid int unsigned NOT NULL auto_increment,
+  c_id int(11) NOT NULL,  
   title varchar(255) NOT NULL,
   description text,
   sound varchar(255) DEFAULT NULL,
@@ -1303,8 +1303,8 @@ CREATE TABLE c_quiz (
   text_when_finished text,
   display_category_name int(11) NOT NULL DEFAULT '1',
   pass_percentage int(11) DEFAULT NULL,
-  PRIMARY KEY (c_id,id),
-  KEY session_id (session_id)
+  autolaunch INT DEFAULT 0,
+  PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1316,9 +1316,8 @@ DROP TABLE IF EXISTS c_quiz_answer;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_answer (
-  c_id int(11) NOT NULL,
-  id int(10) unsigned NOT NULL,
-  id_auto int(11) NOT NULL AUTO_INCREMENT,
+  iid bigint unsigned NOT NULL AUTO_INCREMENT,
+  c_id int(11) NOT NULL, 
   question_id int(10) unsigned NOT NULL,
   answer text NOT NULL,
   correct mediumint(8) unsigned DEFAULT NULL,
@@ -1329,8 +1328,7 @@ CREATE TABLE c_quiz_answer (
   hotspot_type enum('square','circle','poly','delineation','oar') DEFAULT NULL,
   destination text NOT NULL,
   answer_code char(10) DEFAULT '',
-  PRIMARY KEY (c_id,id_auto),
-  KEY idx_quiz_answer_c_q (c_id,question_id)
+  PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1342,12 +1340,12 @@ DROP TABLE IF EXISTS c_quiz_order;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_order (
-  id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  iid bigint unsigned NOT NULL auto_increment,  
   c_id int(10) unsigned NOT NULL,
   session_id int(10) unsigned NOT NULL,
   exercise_id int(11) NOT NULL,
   exercise_order int(11) NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1359,8 +1357,8 @@ DROP TABLE IF EXISTS c_quiz_question;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_question (
-  c_id int(11) NOT NULL,
-  id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  iid bigint unsigned NOT NULL auto_increment,
+  c_id int(11) NOT NULL,  
   question text NOT NULL,
   description text,
   ponderation float(6,2) NOT NULL DEFAULT '0.00',
@@ -1371,24 +1369,24 @@ CREATE TABLE c_quiz_question (
   extra varchar(255) DEFAULT NULL,
   question_code char(10) DEFAULT '',
   parent_id int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (c_id,id),
-  KEY position (position)
+  PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table c_quiz_question_category
+-- Table structure for table c_quiz_category
 --
 
-DROP TABLE IF EXISTS c_quiz_question_category;
+DROP TABLE IF EXISTS c_quiz_category;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE c_quiz_question_category (
-  c_id int(11) NOT NULL,
-  id int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE c_quiz_category (
+  iid bigint unsigned NOT NULL AUTO_INCREMENT,
+  parent_id int unsigned NOT NULL default 0,
+  c_id int(11) NOT NULL,  
   title varchar(255) NOT NULL,
   description text NOT NULL,
-  PRIMARY KEY (c_id,id)
+  PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1400,12 +1398,12 @@ DROP TABLE IF EXISTS c_quiz_question_option;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_question_option (
+  iid bigint unsigned NOT NULL auto_increment,
   c_id int(11) NOT NULL,
-  id int(11) NOT NULL AUTO_INCREMENT,
   question_id int(11) NOT NULL,
   name varchar(255) DEFAULT NULL,
   position int(10) unsigned NOT NULL,
-  PRIMARY KEY (c_id,id)
+  PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1417,10 +1415,11 @@ DROP TABLE IF EXISTS c_quiz_question_rel_category;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_question_rel_category (
+  iid bigint unsigned NOT NULL AUTO_INCREMENT,
   c_id int(11) NOT NULL,
   question_id int(11) NOT NULL,
   category_id int(11) NOT NULL,
-  PRIMARY KEY (c_id,question_id)
+  PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1432,11 +1431,12 @@ DROP TABLE IF EXISTS c_quiz_rel_question;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_rel_question (
+  iid bigint unsigned NOT NULL AUTO_INCREMENT,
   c_id int(11) NOT NULL,
   question_id int(10) unsigned NOT NULL,
   exercice_id int(10) unsigned NOT NULL,
   question_order int(10) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (c_id,question_id,exercice_id)
+  PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

@@ -21,43 +21,44 @@ class QuizQuestion extends Resource
     /**
      * The question
      */
-    var $question;
+    public $question;
 
     /**
      * The description
      */
-    var $description;
+    public $description;
 
     /**
      * Ponderation
      */
-    var $ponderation;
+    public $ponderation;
 
     /**
      * Type
      */
-    var $quiz_type;
+    public $quiz_type;
 
     /**
      * Position
      */
-    var $position;
+    public $position;
 
     /**
      * Level
      */
-    var $level;
+    public $level;
 
     /**
      * Answers
      */
-    var $answers;
+    public $answers;
 
     /**
      * Picture
      */
-    var $picture;
-    var $extra;
+    public $picture;
+    public $extra;
+    public $categories;
 
     /**
      * Create a new QuizQuestion
@@ -67,7 +68,7 @@ class QuizQuestion extends Resource
      * @param int $type
      * @param int $position
      */
-    function QuizQuestion($id, $question, $description, $ponderation, $type, $position, $picture, $level, $extra) {
+    function QuizQuestion($id, $question, $description, $ponderation, $type, $position, $picture, $level, $extra, $parent_info, $categories) {
         parent::Resource($id, RESOURCE_QUIZQUESTION);
         $this->question = $question;
         $this->description = $description;
@@ -78,6 +79,8 @@ class QuizQuestion extends Resource
         $this->level = $level;
         $this->answers = array();
         $this->extra = $extra;
+        $this->parent_info = $parent_info;
+        $this->categories = $categories;
     }
 
     /**
@@ -85,7 +88,7 @@ class QuizQuestion extends Resource
      */
     function add_answer($answer_id, $answer_text, $correct, $comment, $ponderation, $position, $hotspot_coordinates, $hotspot_type) {
         $answer = array();
-        $answer['id'] = $answer_id;
+        $answer['iid'] = $answer_id;
         $answer['answer'] = $answer_text;
         $answer['correct'] = $correct;
         $answer['comment'] = $comment;

@@ -11,7 +11,6 @@
 /**
  * Code
  */
-if(!class_exists('HotpotatoesExerciseResult')):
 /**
  * Exercise results class
  * @package chamilo.exercise
@@ -378,4 +377,3 @@ class HotpotatoesExerciseResult
 		return true;
 	}
 }
-endif;

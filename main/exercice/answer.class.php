@@ -116,15 +116,21 @@ class Answer
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
 
-        $sql = "SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
+        /*$sql = "SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
 		      $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
+        */
+        $sql = "SELECT iid, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination
+                FROM $TBL_ANSWER
+                WHERE question_id ='".$questionId."' ORDER BY position";
 
         $result = Database::query($sql);
-        $i      = 1;
+        $counter = 1;
 
         // while a record is found
         while ($object = Database::fetch_object($result)) {
-            $this->id[$i]                  = $object->id;
+            $i = $object->iid;
+
+            $this->id[$i]                  = $object->iid;
             $this->answer[$i]              = $object->answer;
             $this->correct[$i]             = $object->correct;
             $this->comment[$i]             = $object->comment;
@@ -133,10 +139,10 @@ class Answer
             $this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
             $this->hotspot_type[$i]        = $object->hotspot_type;
             $this->destination[$i]         = $object->destination;
-            $this->autoId[$i]              = $object->id_auto;
-            $i++;
+                //$this->autoId[$i]            = $object->id_auto;
+            $counter++;
         }
-        $this->nbrAnswers = $i - 1;
+        $this->nbrAnswers = $counter - 1;
     }
 
     /**
@@ -161,16 +167,20 @@ class Answer
         $TBL_QUIZ   = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $questionId = intval($this->questionId);
 
-        $sql             = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND id = $questionId";
+        //$sql             = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND id = $questionId";
+        $sql = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND iid = $questionId";
         $result_question = Database::query($sql);
         $question_type   = Database::fetch_array($result_question);
 
-        $sql    = "SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto ".
+        /*$sql    = "SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto ".
             "FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'   ".
             "ORDER BY $field $order";
+        */
+        $sql = "SELECT * FROM $TBL_ANSWER
+                WHERE c_id = {$this->course_id} AND question_id = '".$questionId."'
+				ORDER BY $field $order";
         $result = Database::query($sql);
 
-        $i = 1;
         // while a record is found
         $doubt_data = null;
         while ($object = Database::fetch_object($result)) {
@@ -178,33 +188,37 @@ class Answer
                 $doubt_data = $object;
                 continue;
             }
+            $i = $object->iid;
+            $this->id[$i] = $object->iid;
+
             $this->answer[$i]      = $object->answer;
             $this->correct[$i]     = $object->correct;
             $this->comment[$i]     = $object->comment;
             $this->weighting[$i]   = $object->ponderation;
             $this->position[$i]    = $object->position;
             $this->destination[$i] = $object->destination;
-            $this->autoId[$i]      = $object->id_auto;
-            $i++;
+            //$this->autoId[$i]      = $object->id_auto;
         }
 
         if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
+            $i = $doubt_data->iid;
+            $this->id[$i] = $doubt_data->iid;
+
             $this->answer[$i]      = $doubt_data->answer;
             $this->correct[$i]     = $doubt_data->correct;
             $this->comment[$i]     = $doubt_data->comment;
             $this->weighting[$i]   = $doubt_data->ponderation;
             $this->position[$i]    = $doubt_data->position;
             $this->destination[$i] = $doubt_data->destination;
-            $this->autoId[$i]      = $doubt_data->id_auto;
-            $i++;
+            //$this->autoId[$i]      = $doubt_data->id_auto;            
         }
-        $this->nbrAnswers = $i - 1;
+        $this->nbrAnswers = count($this->answer);
     }
 
 
     /**
      * returns the autoincrement id identificator
-     *
+     * @deprecated Should not be used anymore
      * @author - Juan Carlos Ra�a
      * @return - integer - answer num
      */
@@ -320,7 +334,7 @@ class Answer
                 }
 
                 $list[] = array(
-                    'id'            => $i,
+                    'iid'            => $i,
                     'answer'        => $this->answer[$i],
                     'comment'       => $this->comment[$i],
                     'grade'         => $this->weighting[$i],
@@ -358,15 +372,14 @@ class Answer
     function getQuestionType()
     {
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql           = "SELECT type FROM $TBL_QUESTIONS WHERE c_id = {$this->course_id} AND id = '".$this->questionId."'";
-        $res           = Database::query($sql);
+        $sql = "SELECT type FROM $TBL_QUESTIONS WHERE c_id = {$this->course_id} AND iid = '".$this->questionId."'";
+        $res = Database::query($sql);
         if (Database::num_rows($res) <= 0) {
             return null;
         }
         $row = Database::fetch_array($res);
         return $row['type'];
     }
-
 
     /**
      * tells if answer is correct or not
@@ -378,6 +391,36 @@ class Answer
     function isCorrect($id)
     {
         return $this->correct[$id];
+    }
+
+    function getAnswerIdFromList($answer_id) {
+        $counter = 1;
+        foreach ($this->answer as $my_answer_id => $item) {
+            if ($answer_id == $my_answer_id) {
+                return $counter;
+            }
+            $counter++;
+        }
+    }
+
+    function getRealAnswerIdFromList($answer_id) {
+        $counter = 1;
+        foreach ($this->answer as $my_answer_id => $item) {
+            if ($answer_id == $counter) {
+                return $my_answer_id;
+            }
+            $counter++;
+        }
+    }
+
+    function getCorrectAnswerPosition($correct_id) {
+        $counter = 1;
+        foreach ($this->correct as $my_correct_id => $item) {
+            if ($correct_id == $my_correct_id) {
+                return $counter;
+            }
+            $counter++;
+        }
     }
 
     /**
@@ -488,13 +531,13 @@ class Answer
         $TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
         $questionId = $this->questionId;
-        $sql        = "UPDATE $TBL_REPONSES SET
+        $sql = "UPDATE $TBL_REPONSES SET
                 answer = '".Database::escape_string($answer)."',
 				comment = '".Database::escape_string($comment)."',
 				ponderation = '".Database::escape_string($weighting)."',
 				position = '".Database::escape_string($position)."',
 				destination = '".Database::escape_string($destination)."'
-				WHERE c_id = {$this->course_id} AND id = '".Database::escape_string($position)."'
+				WHERE c_id = {$this->course_id} AND iid = '".Database::escape_string($position)."'
 				AND question_id = '".Database::escape_string($questionId)."'";
         Database::query($sql);
     }
@@ -506,30 +549,52 @@ class Answer
      */
     function save()
     {
-        $TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-        $questionId   = intval($this->questionId);
+        $table_quiz_answer = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+        $questionId = intval($this->questionId);
 
-        // removes old answers before inserting of new ones
-        $sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."'";
+        // Removes old answers before inserting of new ones
+        /*$sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."'";
+        Database::query($sql);*/
+
+        // @todo don't do this!
+        $sql = "DELETE FROM $table_quiz_answer WHERE question_id = '".($questionId)."'";
         Database::query($sql);
 
         $c_id = $this->course['real_id'];
-        // inserts new answers into data base
-        $sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";
-        for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
-            $answer              = Database::escape_string($this->new_answer[$i]);
-            $correct             = Database::escape_string($this->new_correct[$i]);
-            $comment             = Database::escape_string($this->new_comment[$i]);
-            $weighting           = Database::escape_string($this->new_weighting[$i]);
-            $position            = Database::escape_string($this->new_position[$i]);
-            $hotspot_coordinates = Database::escape_string($this->new_hotspot_coordinates[$i]);
-            $hotspot_type        = Database::escape_string($this->new_hotspot_type[$i]);
-            $destination         = Database::escape_string($this->new_destination[$i]);
 
-            $sql .= "($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
+        // Inserts new answers into database
+        $real_correct_ids = array();
+        for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
+
+            $answer = Database::escape_string($this->new_answer[$i]);
+            $correct = Database::escape_string($this->new_correct[$i]);
+            $comment = Database::escape_string($this->new_comment[$i]);
+            $weighting = Database::escape_string($this->new_weighting[$i]);
+            $position = Database::escape_string($this->new_position[$i]);
+            $hotspot_coordinates = Database::escape_string($this->new_hotspot_coordinates[$i]);
+            $hotspot_type = Database::escape_string($this->new_hotspot_type[$i]);
+            $destination = Database::escape_string($this->new_destination[$i]);
+
+            $sql = "INSERT INTO $table_quiz_answer (c_id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";
+            $sql.= "($c_id, '$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
+            Database::query($sql);
+            $latest_insert_id = Database::insert_id();
+            $real_correct_ids[$i] = $latest_insert_id;
         }
-        $sql = api_substr($sql, 0, -1);
-        Database::query($sql);
+
+        $question_info = Question::read($questionId);
+        if ($question_info->type == MATCHING) {
+
+            //Fixing real answer id
+            for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
+                if (isset($this->new_correct[$i]) && !empty($this->new_correct[$i])) {
+                    $real_correct_id = $real_correct_ids[$this->new_correct[$i]];
+                    $current_answer_id = $real_correct_ids[$i];
+                    $sql = "UPDATE $table_quiz_answer SET correct = '$real_correct_id' WHERE iid = $current_answer_id";
+                    Database::query($sql);
+                }
+            }
+        }
 
         // moves $new_* arrays
         $this->answer              = $this->new_answer;
@@ -570,7 +635,6 @@ class Answer
             //Selecting origin options
             $origin_options = Question::readQuestionOption($this->selectQuestionId(), $this->course['real_id']);
 
-
             if (!empty($origin_options)) {
                 foreach ($origin_options as $item) {
                     $new_option_list[] = $item['id'];
@@ -591,41 +655,51 @@ class Answer
         // if at least one answer
         if ($this->nbrAnswers) {
             // inserts new answers into data base
-            $sql  = "INSERT INTO $TBL_REPONSES (c_id, id,question_id,answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
-            $c_id = $course_info['real_id'];
 
-            for ($i = 1; $i <= $this->nbrAnswers; $i++) {
+            $c_id = $course_info['real_id'];
+            $correct_answers = array();
+            $new_ids = array();
+
+            foreach ($this->answer as $answer_id => $answer_item) {
+                $i = $answer_id;
                 if ($this->course['id'] != $course_info['id']) {
-                    $this->answer[$i]  = DocumentManager::replace_urls_inside_content_html_from_copy_course(
-                        $this->answer[$i],
-                        $this->course['id'],
-                        $course_info['id']
-                    );
-                    $this->comment[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
-                        $this->comment[$i],
-                        $this->course['id'],
-                        $course_info['id']
-                    );
+                    $this->answer[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course($this->answer[$i], $this->course['id'], $course_info['id']);
+                    $this->comment[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course($this->comment[$i], $this->course['id'], $course_info['id']);
                 }
 
-                $answer  = Database::escape_string($this->answer[$i]);
+                $answer = Database::escape_string($this->answer[$i]);
                 $correct = Database::escape_string($this->correct[$i]);
 
-                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE
-                ) {
+
+
+                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {
                     $correct = $fixed_list[intval($correct)];
                 }
 
-                $comment             = Database::escape_string($this->comment[$i]);
-                $weighting           = Database::escape_string($this->weighting[$i]);
-                $position            = Database::escape_string($this->position[$i]);
+                $comment = Database::escape_string($this->comment[$i]);
+                $weighting = Database::escape_string($this->weighting[$i]);
+                $position = Database::escape_string($this->position[$i]);
                 $hotspot_coordinates = Database::escape_string($this->hotspot_coordinates[$i]);
-                $hotspot_type        = Database::escape_string($this->hotspot_type[$i]);
-                $destination         = Database::escape_string($this->destination[$i]);
-                $sql .= "($c_id, '$i','$newQuestionId','$answer','$correct','$comment',"."'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
+                $hotspot_type = Database::escape_string($this->hotspot_type[$i]);
+                $destination = Database::escape_string($this->destination[$i]);
+                $sql = "INSERT INTO $TBL_REPONSES (c_id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type ,destination) VALUES";
+                $sql.= "($c_id, '$newQuestionId','$answer','$correct','$comment', '$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
+                Database::query($sql);
+                $new_id = Database::insert_id();
+                $new_ids[$answer_id] = $new_id;
+                if ($correct) {
+                    $correct_answers[$new_id] = $correct;
+                }
             }
-            $sql = api_substr($sql, 0, -1);
-            Database::query($sql);
+            if (self::getQuestionType() == MATCHING) {
+                if (!empty($correct_answers)) {
+                    foreach($correct_answers as $new_id => $correct_id) {
+                        $correct = $new_ids[$correct_id];
+                        $sql = "UPDATE $TBL_REPONSES SET correct = $correct WHERE iid = $new_id";
+                        Database::query($sql);
+                    }
+                }
+            }
         }
     }
 

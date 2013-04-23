@@ -9,8 +9,6 @@
 /**
  * Code
  */
-if(class_exists('MultipleAnswerCombination')) { return true; }
-
 /**
 	CLASS MultipleAnswer
  *
@@ -21,7 +19,8 @@ if(class_exists('MultipleAnswerCombination')) { return true; }
  *	@package chamilo.exercise
  **/
 
-class MultipleAnswerCombination extends Question {
+class MultipleAnswerCombination extends Question
+{
 
 	static $typePicture = 'mcmac.gif';
 	static $explanationLangVar = 'MultipleSelectCombination';
@@ -82,10 +81,11 @@ class MultipleAnswerCombination extends Question {
 
 		for($i = 1 ; $i <= $nb_answers ; ++$i) {
 			if(is_object($answer)) {
-				$defaults['answer['.$i.']'] = $answer -> answer[$i];
-				$defaults['comment['.$i.']'] = $answer -> comment[$i];
-				$defaults['weighting['.$i.']'] = Text::float_format($answer -> weighting[$i], 1);
-				$defaults['correct['.$i.']'] = $answer -> correct[$i];
+                $answer_id = $answer->getRealAnswerIdFromList($i);
+                $defaults['answer['.$i.']'] = $answer->answer[$answer_id];
+                $defaults['comment['.$i.']'] = $answer->comment[$answer_id];
+                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$answer_id], 1);
+                $defaults['correct['.$i.']'] = $answer->correct[$answer_id];
 			} else {
 				$defaults['answer[1]']  = get_lang('DefaultMultipleAnswer2');
 				$defaults['comment[1]'] = get_lang('DefaultMultipleComment2');
@@ -177,8 +177,7 @@ class MultipleAnswerCombination extends Question {
 
 		$nb_answers = $form -> getSubmitValue('nb_answers');
 
-		for($i=1 ; $i <= $nb_answers ; $i++)
-        {
+        for ($i = 1; $i <= $nb_answers; $i++) {
         	$answer = trim($form -> getSubmitValue('answer['.$i.']'));
             $comment = trim($form -> getSubmitValue('comment['.$i.']'));
             if ($i == 1)
@@ -194,8 +193,7 @@ class MultipleAnswerCombination extends Question {
 				$weighting = abs($weighting);
 			//	$weighting = -$weighting;
 			}
-    		if($weighting > 0)
-            {
+            if ($weighting > 0) {
                 $questionWeighting += $weighting;
             }
         	$objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i);

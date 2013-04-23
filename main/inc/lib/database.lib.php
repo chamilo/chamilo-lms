@@ -723,6 +723,8 @@ class Database
      */
     public static function query($query, $connection = null, $file = null, $line = null)
     {
+        //bad idea ...
+        //global $app;return $app['db']->executeQuery($query);
         $use_default_connection = self::use_default_connection($connection);
         if ($use_default_connection) {
             // Let us do parameter shifting, thus the method would be similar
@@ -771,6 +773,9 @@ class Database
                 strpos($query, 'ALTER') === false &&
                 strpos($query, 'alter') === false &&
                 strpos($query, 'c_id') === false &&
+                strpos($query, 'c_quiz_question_rel_category') === false &&
+                strpos($query, 'c_quiz_category') === false &&
+
                 strpos($query, 'create table') === false &&
                 strpos($query, 'CREATE TABLE') === false &&
                 strpos($query, 'AUTO_INCREMENT') === false

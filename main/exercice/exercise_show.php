@@ -333,6 +333,7 @@ foreach ($questionList as $questionId) {
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];
 	} elseif ($answerType == HOT_SPOT) {
+        //@todo remove this HTML and move in the function
 	    if ($show_results) {
 		    echo '<table width="500" border="0"><tr>
                     <td valign="top" align="center" style="padding-left:0px;" >

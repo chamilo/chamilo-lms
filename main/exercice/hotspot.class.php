@@ -9,8 +9,6 @@
 /**
  * Code
  */
-if(!class_exists('HotSpot')):
-
 /**
 	CLASS HotSpot
  *
@@ -115,4 +113,3 @@ class HotSpotDelineation extends HotSpot {
 		parent::processAnswersCreation ($form);
 	}
 }
-endif;

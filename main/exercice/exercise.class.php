@@ -24,8 +24,11 @@ define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final 
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
-//All exercise scripts should depend in this debug variable
-$debug = false;
+define('EXERCISE_CATEGORY_RANDOM_SHUFFLED', 1);
+define('EXERCISE_CATEGORY_RANDOM_ORDERED', 2);
+define('EXERCISE_CATEGORY_RANDOM_DISABLED', 0);
+
+$debug = false; //All exercise scripts should depend in this debug variable
 
 class Exercise
 {
@@ -59,6 +62,8 @@ class Exercise
     public $is_gradebook_locked = false;
     public $exercise_was_added_in_lp = false;
     public $force_edit_exercise_in_lp = false;
+    public $categories;
+    public $categories_grouping = true;
 
     /**
      * Constructor of the class
@@ -106,15 +111,15 @@ class Exercise
      */
     public function read($id)
     {
+        if (empty($this->course_id)) {
+            return false;
+        }
         global $_configuration;
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $id = intval($id);
-        if (empty($this->course_id)) {
-            return false;
-        }
-        $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = ".$this->course_id." AND id = ".$id;
+        $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = ".$this->course_id." AND iid = ".$id;
         $result = Database::query($sql);
 
         // if the exercise has been found
@@ -170,6 +175,7 @@ class Exercise
 
             //control time
             $this->expired_time = $object->expired_time;
+
             //Checking if question_order is correctly set
             $this->questionList = $this->selectQuestionList(true);
 
@@ -303,9 +309,9 @@ class Exercise
      * @return - : modify object to update the switch display_category_name
      * $in_txt is an integer 0 or 1
      */
-    function updateDisplayCategoryName($in_txt)
+    function updateDisplayCategoryName($text)
     {
-        $this->display_category_name = $in_txt;
+        $this->display_category_name = $text;
     }
 
     /**
@@ -321,9 +327,9 @@ class Exercise
      * @author - hubert borderiou 28-11-11
      * @return - html text : update the text to display ay the end of the test.
      */
-    function updateTextWhenFinished($in_txt)
+    function updateTextWhenFinished($text)
     {
-        $this->text_when_finished = $in_txt;
+        $this->text_when_finished = $text;
     }
 
     /**
@@ -344,40 +350,33 @@ class Exercise
      *
      * @return - integer - quiz random by category
      */
-    function isRandomByCat()
-    {
-        $res = 0;
-        if ($this->randomByCat == 1) {
-            $res = 1;
-        } else {
-            if ($this->randomByCat == 2) {
-                $res = 2;
-            }
+    function isRandomByCat() {
+        $res = EXERCISE_CATEGORY_RANDOM_DISABLED;
+        if ($this->randomByCat == EXERCISE_CATEGORY_RANDOM_SHUFFLED) {
+            $res = EXERCISE_CATEGORY_RANDOM_SHUFFLED;
+        } else if ($this->randomByCat == EXERCISE_CATEGORY_RANDOM_ORDERED) {
+            $res = EXERCISE_CATEGORY_RANDOM_ORDERED;
         }
 
         return $res;
     }
 
     /**
-     * return nothing
-     * update randomByCat value for object
-     * @author - hubert borderiou
+     * Sets the random by category value
+     * @author - Julio Montoya
+     * @param int random by category
      */
-    function updateRandomByCat($in_randombycat)
+    function updateRandomByCat($random)
     {
-        if ($in_randombycat == 1) {
-            $this->randomByCat = 1;
+        if (in_array($random, array(EXERCISE_CATEGORY_RANDOM_SHUFFLED, EXERCISE_CATEGORY_RANDOM_ORDERED, EXERCISE_CATEGORY_RANDOM_DISABLED))) {
+            $this->randomByCat = $random;
         } else {
-            if ($in_randombycat == 2) {
-                $this->randomByCat = 2;
-            } else {
-                $this->randomByCat = 0;
-            }
+            $this->randomByCat = EXERCISE_CATEGORY_RANDOM_DISABLED;
         }
     }
 
     /**
-     * tells if questions are selected randomly, and if so returns the draws
+     * Tells if questions are selected randomly, and if so returns the draws
      *
      * @author - Carlos Vargas
      *
@@ -431,6 +430,14 @@ class Exercise
     function selectStatus()
     {
         return $this->active;
+    }
+
+    /**
+     * If false the question list will be managed as always if true the question will be filtered depending of the exercise settings (table c_quiz_rel_category)
+     * @param bool active or inactive grouping
+     **/
+    function setCategoriesGrouping($status) {
+        $this->categories_grouping = (bool) $status;
     }
 
     /**
@@ -501,8 +508,6 @@ class Exercise
         }
     }
 
-
-
     /**
      * returns the array with the question ID list
      *
@@ -515,39 +520,98 @@ class Exercise
             $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
+            //Getting question_order count (to verify that the question list is correct and all question_order's were set)
             $sql = "SELECT DISTINCT e.question_order
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id = q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+                        ON (e.question_id = q.iid)
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'";
             $result = Database::query($sql);
 
             $count_question_orders = Database::num_rows($result);
 
+            //Getting question list from the order (question list interface drag n drop)
             $sql = "SELECT e.question_id, e.question_order
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+                        ON (e.question_id= q.iid)
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					ORDER BY question_order";
             $result = Database::query($sql);
 
-            // fills the array with the question ID for this exercise
+            // Fills the array with the question ID for this exercise
             // the key of the array is the question position
             $temp_question_list = array();
-            $counter = 1;
             $question_list = array();
 
+            $counter = 1;
             while ($new_object = Database::fetch_object($result)) {
+                //Correct order
                 $question_list[$new_object->question_order] = $new_object->question_id;
+                //Just in case we save the order in other array
                 $temp_question_list[$counter] = $new_object->question_id;
                 $counter++;
             }
 
             if (!empty($temp_question_list)) {
+                //If both array don't match it means that question_order was not correctly set for all questions using the default mysql order
                 if (count($temp_question_list) != $count_question_orders) {
                     $question_list = $temp_question_list;
                 }
             }
 
+            if ($this->categories_grouping) {
+                //Selecting question list depending in categories
+
+                $random_by_category = $this->isRandomByCat();
+
+                $categories_added_in_exercise = array();
+
+                switch ($random_by_category) {
+                    case EXERCISE_CATEGORY_RANDOM_SHUFFLED:
+                    case EXERCISE_CATEGORY_RANDOM_DISABLED:
+                        $cat = new Testcategory();
+                        //$categories_added_in_exercise = $this->get_categories_with_name_in_exercise();
+                        $categories_added_in_exercise = $cat->get_category_exercise_tree($this->id, $this->course['real_id']);
+                        shuffle($categories_added_in_exercise);
+                        break;
+                    case EXERCISE_CATEGORY_RANDOM_ORDERED:
+                        $cat = new Testcategory();
+                        $categories_added_in_exercise = $cat->get_category_exercise_tree($this->id, $this->course['real_id'], 'title DESC');
+                        break;
+                }
+
+                if (!empty($categories_added_in_exercise)) {
+                    $question_list_based_in_categories = array();
+                    $categories_in_questions = Testcategory::getQuestionsByCat($this->id);
+                    $question_id_added_already = array();
+
+                    foreach ($categories_added_in_exercise as $category_info) {
+                        $category_id = $category_info['category_id'];
+                        if (isset($categories_in_questions[$category_id])) {
+                            //How many question will be picked from this category
+                            $count = $category_info['count_questions'];
+
+                            if (!empty($count)) {
+                                //Question list for this category
+                                $questions_for_this_category = $categories_in_questions[$category_id];
+
+                                //Removing questions already added $questions_for_this_category (due multiple categories by question)
+                                $questions_for_this_category = array_diff($questions_for_this_category, $question_id_added_already);
+
+                                if (!empty($questions_for_this_category)) {
+                                    //Getting X number of questions for this category
+                                    $question_list_for_category = array_slice($questions_for_this_category, 0, $count);
+                                    $question_list_based_in_categories[$category_id] = $question_list_for_category;
+                                    $question_id_added_already = array_merge($question_id_added_already, $question_list_for_category);
+                                }
+                            }
+                        }
+                    }
+
+                    if (!empty($question_list_based_in_categories)) {
+                        $question_list = array_flatten($question_list_based_in_categories);
+                    }
+                }
+            }
             return $question_list;
         }
 
@@ -575,21 +639,20 @@ class Exercise
      *
      * @author - Olivier Brouckaert
      * @return - array - if the exercise is not set to take questions randomly, returns the question list
-     *                      without randomizing, otherwise, returns the list with questions selected randomly
+     *                   without randomizing, otherwise, returns the list with questions selected randomly
      * Modified by Hubert Borderiou 15 nov 2011
      */
-    function selectRandomList()
+    function selectRandomList($question_list)
     {
         $nbQuestions = $this->selectNbrQuestions();
-        $temp_list = $this->questionList;
 
         //Not a random exercise, or if there are not at least 2 questions
         if ($this->random == 0 || $nbQuestions < 2) {
-            return $this->questionList;
+            return $question_list;
         }
         if ($nbQuestions != 0) {
-            shuffle($temp_list);
-            $my_random_list = array_combine(range(1, $nbQuestions), $temp_list);
+            shuffle($question_list);
+            $my_random_list = array_combine(range(1, $nbQuestions), $question_list);
             $my_question_list = array();
             // $this->random == -1 if random with all questions
             if ($this->random > 0) {
@@ -647,6 +710,10 @@ class Exercise
         $this->attempts = $attempts;
     }
 
+    function updateActive($active) {
+        $this->active = $active;
+    }
+
     /**
      * changes the exercise feedback type
      *
@@ -694,6 +761,11 @@ class Exercise
         $this->pass_percentage = $value;
     }
 
+    function updateCategories($categories) {
+        $categories = array_map('intval', $categories);
+        $this->categories = $categories;
+    }
+
     /**
      * changes the exercise sound file
      *
@@ -718,9 +790,6 @@ class Exercise
                 $result = Database::query($query);
 
                 if (!Database::num_rows($result)) {
-                    /* $query="INSERT INTO $TBL_DOCUMENT(path,filetype) VALUES "
-                      ." ('".str_replace($documentPath,'',$audioPath).'/'.$this->sound."','file')";
-                      Database::query($query); */
                     $id = FileManager::add_document(
                         $this->course,
                         str_replace($documentPath, '', $audioPath).'/'.$this->sound,
@@ -761,9 +830,6 @@ class Exercise
      */
     function setRandom($random)
     {
-        /* if ($random == 'all') {
-          $random = $this->selectNbrQuestions();
-          } */
         $this->random = $random;
     }
 
@@ -887,7 +953,7 @@ class Exercise
                     pass_percentage = '".Database::escape_string($pass_percentage)."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
             }
-            $sql .= " WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($id)."'";
+            $sql .= " WHERE iid = '".Database::escape_string($id)."'";
             Database::query($sql);
 
             // update into the item_property table
@@ -897,7 +963,7 @@ class Exercise
                 $this->search_engine_edit();
             }
         } else {
-            // creates a new exercise
+            // Creates a new exercise
             $sql = "INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
                                                 results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
                                                 text_when_finished, display_category_name, pass_percentage)
@@ -936,6 +1002,8 @@ class Exercise
             }
         }
 
+        $this->save_categories_in_exercise($this->categories);
+
         // updates the question position
         $this->update_question_positions();
     }
@@ -950,9 +1018,7 @@ class Exercise
         if (!empty($question_list)) {
             foreach ($question_list as $position => $questionId) {
                 $sql = "UPDATE $quiz_question_table SET question_order ='".intval($position)."'".
-                    "WHERE c_id = ".$this->course_id." AND question_id = ".intval(
-                    $questionId
-                )." AND exercice_id=".intval($this->id);
+                    "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id = ".intval($this->id);
                 Database::query($sql);
             }
         }
@@ -1003,7 +1069,7 @@ class Exercise
         } else {
             // dont reduce the number of random question if we use random by category option, or if
             // random all questions
-            if ($this->isRandom() && $this->isRandomByCat() == 0) {
+            if ($this->isRandom() && $this->isRandomByCat() == EXERCISE_RANDOM_DISABLED) {
                 if (count($this->questionList) >= $this->random && $this->random > 0) {
                     $this->random -= 1;
                     $this->save();
@@ -1025,9 +1091,8 @@ class Exercise
     function delete()
     {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $TBL_EXERCICES SET active='-1' WHERE c_id = ".$this->course_id." AND id='".Database::escape_string(
-            $this->id
-        )."'";
+        $sql = "UPDATE $TBL_EXERCICES
+                SET active='-1' WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($this->id)."'";
         Database::query($sql);
         api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizDeleted', api_get_user_id());
         $this->delete_exercise_order();
@@ -1102,11 +1167,6 @@ class Exercise
         $form->addElement('html', '<div id="options" style="">');
 
         if ($type == 'full') {
-
-            /* $feedback_option[0]=get_lang('ExerciseAtTheEndOfTheTest');
-              $feedback_option[1]=get_lang('DirectFeedback');
-              $feedback_option[2]=get_lang('NoFeedback');
-             */
             //Can't modify a DirectFeedback question
             if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                 // feedback type
@@ -1507,12 +1567,17 @@ class Exercise
                         $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
                     }
                 }
-                //$form->addElement ('html','</div>');
             }
 
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
         }
+
+        //Category selection
+        $cat = new Testcategory();
+
+        $cat_form = $cat->return_category_form($this);
+        $form->addElement('html', $cat_form);
 
         // submit
         $text = isset($_GET['exerciseId']) ? get_lang('ModifyExercise') : get_lang('ProcedToQuestions');
@@ -1619,6 +1684,7 @@ class Exercise
         $this->updateDisplayCategoryName($form->getSubmitValue('display_category_name'));
         $this->updateReviewAnswers($form->getSubmitValue('review_answers'));
         $this->updatePassPercentage($form->getSubmitValue('pass_percentage'));
+        $this->updateCategories($form->getSubmitValue('category'));
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
@@ -2002,8 +2068,11 @@ class Exercise
      */
     public function copy_exercise()
     {
+        $original_exercise = $this;
+
         $exercise_obj = new Exercise();
-        $exercise_obj = $this;
+        $exercise_obj->setCategoriesGrouping(false);
+        $exercise_obj->read($this->id);
 
         // force the creation of a new exercise
         $exercise_obj->updateTitle($exercise_obj->selectTitle().' - '.get_lang('Copy'));
@@ -2015,26 +2084,58 @@ class Exercise
         $exercise_obj->save_exercise_list_order($this->course['real_id'], api_get_session_id());
 
         $new_exercise_id = $exercise_obj->selectId();
-        $question_list = $exercise_obj->selectQuestionList();
+        if ($new_exercise_id) {
 
-        if (!empty($question_list)) {
-            //Question creation
+            $original_exercise->copy_exercise_categories($exercise_obj);
 
-            foreach ($question_list as $old_question_id) {
-                $old_question_obj = Question::read($old_question_id);
-                $new_id = $old_question_obj->duplicate();
-                if ($new_id) {
-                    $new_question_obj = Question::read($new_id);
+            $question_list = $exercise_obj->selectQuestionList();
 
-                    if (isset($new_question_obj) && $new_question_obj) {
-                        $new_question_obj->addToList($new_exercise_id);
-                        // This should be moved to the duplicate function
-                        $new_answer_obj = new Answer($old_question_id);
-                        $new_answer_obj->read();
-                        $new_answer_obj->duplicate($new_id);
+            if (!empty($question_list)) {
+                //Question creation
+                foreach ($question_list as $old_question_id) {
+                    $old_question_obj = Question::read($old_question_id);
+                    $new_id = $old_question_obj->duplicate();
+
+                    if ($new_id) {
+                        $new_question_obj = Question::read($new_id);
+
+                        if (isset($new_question_obj) && $new_question_obj) {
+                            $new_question_obj->addToList($new_exercise_id);
+                            // This should be moved to the duplicate function
+                            $new_answer_obj = new Answer($old_question_id);
+                            //$new_answer_obj->read();
+                            $new_answer_obj->duplicate($new_id);
+                        }
                     }
                 }
             }
+        }
+    }
+
+    public function set_autolaunch() {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $session_id = api_get_session_id();
+
+        $course_id = $this->course_id;
+        $sql = "UPDATE $table SET autolaunch = 0 WHERE c_id = $course_id AND session_id = $session_id ";
+        Database::query($sql);
+
+        $sql = "UPDATE $table SET autolaunch = 1 WHERE iid = {$this->id} ";
+        Database::query($sql);
+    }
+
+    /**
+     * Copy exercise categories to a new exercise
+     * @params obj exercise object
+     */
+    function copy_exercise_categories($new_exercise_obj) {
+        $categories = $this->get_categories_in_exercise();
+        if ($categories) {
+            $cat_list = array();
+            foreach($categories as $cat) {
+                $cat_list[$cat['category_id']] = $cat['count_questions'];
+            }
+            $new_exercise_obj->save_categories_in_exercise($cat_list);
         }
     }
 
@@ -2455,16 +2556,17 @@ class Exercise
 
         if ($debug) {
             error_log("<------ manage_answer ------> ");
-            error_log('called exe_id: '.$exeId);
+            error_log('exe_id: '.$exeId);
             error_log('$from:  '.$from);
-            error_log('$saved_results: '.$saved_results);
-            error_log('$from_database: '.$from_database);
+            error_log('$saved_results: '.intval($saved_results));
+            error_log('$from_database: '.intval($from_database));
             error_log('$show_result: '.$show_result);
             error_log('$propagate_neg: '.$propagate_neg);
             error_log('$exerciseResultCoordinates: '.print_r($exerciseResultCoordinates, 1));
             error_log('$hotspot_delineation_result: '.print_r($hotspot_delineation_result, 1));
             error_log('$learnpath_id: '.$learnpath_id);
             error_log('$learnpath_item_id: '.$learnpath_item_id);
+            error_log('$choice: '.print_r($choice, 1));
         }
 
         $extra_data = array();
@@ -2556,19 +2658,25 @@ class Exercise
         $user_answer = '';
 
         // Get answer list for matching
-        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = "'.$questionId.'" ';
+        $sql_answer = 'SELECT iid, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = "'.$questionId.'" ';
         $res_answer = Database::query($sql_answer);
 
         $answer_matching = array();
+        $answer_list = array();
         while ($real_answer = Database::fetch_array($res_answer)) {
-            $answer_matching[$real_answer['id']] = $real_answer['answer'];
+            $answer_matching[$real_answer['iid']] = $real_answer['answer'];
+            $answer_list[] = $real_answer['iid'];
+        }
+
+        if ($answerType == FREE_ANSWER || $answerType == ORAL_EXPRESSION) {
+            $nbrAnswers = 1;
+            $answer_list[] = 1;
         }
 
         $real_answers = array();
         $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
 
         $organs_at_risk_hit = 0;
-
         $questionScore = 0;
 
         if ($debug) {
@@ -2577,13 +2685,18 @@ class Exercise
 
         $answer_correct_array = array();
 
-        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+        //for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+        $counter = 1;
+
+        foreach ($answer_list as $answerId) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
+            //error_log(print_r($objAnswerTmp->correct,1));
             $answerComment = $objAnswerTmp->selectComment($answerId);
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
             $answerWeighting = (float)$objAnswerTmp->selectWeighting($answerId);
 
-            $numAnswer = $objAnswerTmp->selectAutoId($answerId);
+            //$numAnswer = $objAnswerTmp->selectAutoId($answerId);
+            $numAnswer = $answerId;
 
             $answer_correct_array[$answerId] = (bool)$answerCorrect;
 
@@ -2721,7 +2834,8 @@ class Exercise
                             $option = $result[1];
                             $choice[$my_answer_id] = $option;
                         }
-                        $numAnswer = $objAnswerTmp->selectAutoId($answerId);
+                        //$numAnswer = $objAnswerTmp->selectAutoId($answerId);
+                        $numAnswer = $answerId;
                         $studentChoice = $choice[$numAnswer];
 
                         if ($answerCorrect == $studentChoice) {
@@ -2747,12 +2861,9 @@ class Exercise
                         $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = '".$exeId."' and question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
                         while ($row = Database::fetch_array($resultans)) {
-                            $ind = $row['answer'];
-                            $choice[$ind] = 1;
+                            $choice[$row['answer']] = 1;
                         }
-                        $numAnswer = $objAnswerTmp->selectAutoId($answerId);
-                        $studentChoice = $choice[$numAnswer];
-
+                        $studentChoice = $choice[$answerId];
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -2979,37 +3090,38 @@ class Exercise
                 case DRAGGABLE:
                 case MATCHING :
                     if ($from_database) {
-                        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id="'.$questionId.'" AND correct=0';
+                        $sql_answer = 'SELECT iid, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id="'.$questionId.'" AND correct=0';
                         $res_answer = Database::query($sql_answer);
                         // getting the real answer
                         $real_list = array();
                         while ($real_answer = Database::fetch_array($res_answer)) {
-                            $real_list[$real_answer['id']] = $real_answer['answer'];
+                            $real_list[$real_answer['iid']] = $real_answer['answer'];
                         }
-                        $sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.'
-                                              WHERE c_id = '.$course_id.' AND question_id="'.$questionId.'" AND correct <> 0 ORDER BY id_auto';
+                        $sql_select_answer = "SELECT iid, answer, correct FROM $table_ans
+                                              WHERE c_id = $course_id AND question_id = '$questionId' AND correct <> 0
+                                              ORDER BY iid";
                         $res_answers = Database::query($sql_select_answer);
 
                         $questionScore = 0;
 
                         while ($a_answers = Database::fetch_array($res_answers)) {
-                            $i_answer_id = $a_answers['id']; //3
-                            $s_answer_label = $a_answers['answer']; // your daddy - your mother
+                            $i_answer_id = $a_answers['iid']; //3
+                            $s_answer_label = $a_answers['answer'];  // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
-                            $i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
+                            //$i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
 
                             $sql_user_answer = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                                WHERE exe_id = '$exeId' AND question_id = '$questionId' AND position='$i_answer_id_auto'";
+                                                WHERE exe_id = '$exeId' AND question_id = '$questionId' AND position = '$i_answer_id'";
 
                             $res_user_answer = Database::query($sql_user_answer);
 
                             if (Database::num_rows($res_user_answer) > 0) {
-                                $s_user_answer = Database::result($res_user_answer, 0, 0); //  rich - good looking
+                                //  Rich - good looking
+                                $s_user_answer = Database::result($res_user_answer, 0, 0);
                             } else {
                                 $s_user_answer = 0;
                             }
                             $i_answerWeighting = $objAnswerTmp->selectWeighting($i_answer_id);
-
                             $user_answer = '';
                             if (!empty($s_user_answer)) {
                                 if ($s_user_answer == $i_answer_correct_answer) {
@@ -3046,7 +3158,9 @@ class Exercise
                         }
                         break(2); //break the switch and the "for" condition
                     } else {
-                        $numAnswer = $objAnswerTmp->selectAutoId($answerId);
+                        //$numAnswer = $objAnswerTmp->selectAutoId($answerId);
+                        $numAnswer = $answerId;
+
                         if ($answerCorrect) {
                             if ($answerCorrect == $choice[$numAnswer]) {
                                 $questionScore += $answerWeighting;
@@ -3072,7 +3186,7 @@ class Exercise
                             $resq = Database::query($query);
                             $studentChoice = Database::result($resq, 0, "hotspot_correct");
 
-                            if ($studentChoice) {
+                            if ($studentChoice == 1) {
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
                             }
@@ -3221,14 +3335,7 @@ class Exercise
                                 ExerciseShowFunctions::display_oral_expression_answer($choice, 0, 0, $nano);
 
                         } elseif ($answerType == HOT_SPOT) {
-//                            if ($origin != 'learnpath') {
-                                ExerciseShowFunctions::display_hotspot_answer(
-                                    $answerId,
-                                    $answer,
-                                    $studentChoice,
-                                    $answerComment
-                                );
-//                            }
+                            ExerciseShowFunctions::display_hotspot_answer($counter, $answer, $studentChoice, $answerComment);
                         } elseif ($answerType == HOT_SPOT_ORDER) {
 //                            if ($origin != 'learnpath') {
                                 ExerciseShowFunctions::display_hotspot_order_answer(
@@ -3251,11 +3358,6 @@ class Exercise
                             $user_array = substr($user_array, 0, -1);
 
                             if ($next) {
-                                //$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                                // Save into db
-                                /* 	$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate )
-                                  VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($user_array)."')";
-                                  $result = api_sql_query($sql,__FILE__,__LINE__); */
                                 $user_answer = $user_array;
 
                                 // we compare only the delineation not the other points
@@ -3512,21 +3614,11 @@ class Exercise
 		                            </table>';
                             break;
                         case HOT_SPOT:
-                            ExerciseShowFunctions::display_hotspot_answer(
-                                $answerId,
-                                $answer,
-                                $studentChoice,
-                                $answerComment
-                            );
+                            ExerciseShowFunctions::display_hotspot_answer($counter, $answer, $studentChoice, $answerComment);
                             break;
                         case HOT_SPOT_DELINEATION:
                             $user_answer = $user_array;
                             if ($next) {
-                                //$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                                // Save into db
-                                /* 	$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate )
-                                  VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($user_array)."')";
-                                  $result = api_sql_query($sql,__FILE__,__LINE__); */
                                 $user_answer = $user_array;
 
                                 // we compare only the delineation not the other points
@@ -3684,15 +3776,14 @@ class Exercise
                     }
                 }
             }
-            if ($debug) {
-                error_log(' ------ ');
-            }
+            $counter++;
         } // end for that loops over all answers of the current question
 
         if ($debug) {
             error_log('<-- end answer loop -->');
         }
 
+        // destruction of Answer
         /*
           if (!$saved_results && $answerType == HOT_SPOT) {
           $queryfree      = "SELECT marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($exeId)."' and question_id= '".Database::escape_string($questionId)."'";
@@ -3711,7 +3802,7 @@ class Exercise
         if ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
             if ($final_answer) {
                 //getting only the first score where we save the weight of all the question
-                $answerWeighting = $objAnswerTmp->selectWeighting(1);
+                $answerWeighting = $objAnswerTmp->selectWeighting($objAnswerTmp->getRealAnswerIdFromList(1));
                 $questionScore += $answerWeighting;
                 $totalScore += $answerWeighting;
             }
@@ -3719,9 +3810,9 @@ class Exercise
 
         //Fixes multiple answer question in order to be exact
         if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
-
+            //var_dump($answer_correct_array, $real_answers);
             $diff = @array_diff($answer_correct_array, $real_answers);
-
+            //var_dump($diff);
             /*
              * All good answers or nothing works like exact
               $counter = 1;
@@ -3866,21 +3957,9 @@ class Exercise
                         if ($final_answer == 0) {
                             $questionScore = 0;
                         }
-                        exercise_attempt(
-                            $questionScore,
-                            1,
-                            $quesId,
-                            $exeId,
-                            0
-                        ); // we always insert the answer_id 1 = delineation
+                        exercise_attempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
-                        exercise_attempt_hotspot(
-                            $exeId,
-                            $quesId,
-                            1,
-                            $hotspot_delineation_result[1],
-                            $exerciseResultCoordinates[$quesId]
-                        );
+                        exercise_attempt_hotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList(1), $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
                     } else {
                         if ($final_answer == 0) {
                             $questionScore = 0;
@@ -3888,14 +3967,14 @@ class Exercise
                             exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    exercise_attempt_hotspot($exeId, $quesId, $idx, 0, $val);
+                                    exercise_attempt_hotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), 0, $val);
                                 }
                             }
                         } else {
                             exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach ($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    exercise_attempt_hotspot($exeId, $quesId, $idx, $choice[$idx], $val);
+                                    exercise_attempt_hotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val);
                                 }
                             }
                         }
@@ -3935,7 +4014,6 @@ class Exercise
                 }
             }
         }
-        unset($objAnswerTmp);
 
         $totalWeighting += $questionWeighting;
         // Store results directly in the database
@@ -4008,7 +4086,7 @@ class Exercise
                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
-                        exercise_attempt_hotspot($exeId, $quesId, $idx, $choice[$idx], $val, $this->id);
+                        exercise_attempt_hotspot($exeId, $quesId, $objAnswerTmp->getRealAnswerIdFromList($idx), $choice[$idx], $val, $this->id);
                     }
                 }
             } else {
@@ -4258,34 +4336,25 @@ class Exercise
      * @todo this was function was added due the import exercise via CSV
      * @return    int New exercise ID
      */
-    function create_quiz(
-        $title,
-        $expired_time = 0,
-        $type = 2,
-        $random = 0,
-        $active = 1,
-        $results_disabled = 0,
-        $max_attempt = 0,
-        $feedback = 3
-    ) {
-        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $expired_time = filter_var($expired_time, FILTER_SANITIZE_NUMBER_INT);
-        $type = filter_var($type, FILTER_SANITIZE_NUMBER_INT);
-        $random = filter_var($random, FILTER_SANITIZE_NUMBER_INT);
-        $active = filter_var($active, FILTER_SANITIZE_NUMBER_INT);
-        $results_disabled = filter_var($results_disabled, FILTER_SANITIZE_NUMBER_INT);
-        $max_attempt = filter_var($max_attempt, FILTER_SANITIZE_NUMBER_INT);
-        $feedback = filter_var($feedback, FILTER_SANITIZE_NUMBER_INT);
-        $sid = api_get_session_id();
-        $course_id = api_get_course_int_id();
-        // Save a new quiz
-        $sql = "INSERT INTO $tbl_quiz (c_id, title,type,random,active,results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time, session_id) ".
-            " VALUES('$course_id', '".Database::escape_string(
-            $title
-        )."',$type,$random,$active, $results_disabled,$max_attempt,'','',$feedback,$expired_time,$sid)";
-        $rs = Database::query($sql);
-        $quiz_id = Database::get_last_insert_id();
-
+    function create_quiz($title, $expired_time = 0, $type = 2, $random = 0, $active = 1, $results_disabled = 0, $max_attempt = 0, $feedback = 3) {
+        $this->updateTitle($title);
+        $this->updateActive($active);
+        $this->updateAttempts($max_attempt);
+        $this->updateFeedbackType($feedback);
+        $this->updateType($type);
+        $this->setRandom($random);
+        //$this->updateRandomAnswers($form->getSubmitValue('randomAnswers'));
+        $this->updateResultsDisabled($results_disabled);
+        $this->updateExpiredTime($expired_time);
+        /*$this->updatePropagateNegative($form->getSubmitValue('propagate_neg'));
+        $this->updateRandomByCat($form->getSubmitValue('randomByCat'));
+        $this->updateTextWhenFinished($form->getSubmitValue('text_when_finished'));
+        $this->updateDisplayCategoryName($form->getSubmitValue('display_category_name'));
+        $this->updateReviewAnswers($form->getSubmitValue('review_answers'));
+        $this->updatePassPercentage($form->getSubmitValue('pass_percentage'));
+        $this->updateCategories($form->getSubmitValue('category'));*/
+        $this->save();
+        $quiz_id = $this->selectId();
         return $quiz_id;
     }
 
@@ -4488,7 +4557,7 @@ class Exercise
         return $active;
     }
 
-    function get_validated_question_list()
+    function get_validated_question_list_2()
     {
         $question_list = array();
         $is_random_by_category = $this->isRandomByCat();
@@ -4573,6 +4642,103 @@ class Exercise
         return $question_list;
     }
 
+/**
+     * Get list of questions depending of the category random settings, exercise random settings, exercise categories settings
+     */
+    function get_validated_question_list() {
+        //Getting current question list
+        $question_list = $this->selectQuestionList();
+
+        //Getting random by category setting
+        $random_by_category = $this->isRandomByCat();
+
+        switch ($random_by_category) {
+            case EXERCISE_CATEGORY_RANDOM_SHUFFLED:
+                //Randomized array
+                if ($this->isRandom()) {
+                    $question_list = $this->selectRandomList($question_list);
+                }
+                break;
+            case EXERCISE_CATEGORY_RANDOM_DISABLED:
+                //Randomized array
+                if ($this->isRandom()) {
+                    $question_list = $this->selectRandomList($question_list);
+                }
+                break;
+            case EXERCISE_CATEGORY_RANDOM_ORDERED:
+                if (!$this->isRandom()) {
+                    //break;
+                }
+
+                /**
+                 *  Get questions by category for this exercice
+                 *  we have to choice $objExercise->random question in each array values of $questions_by_category
+                 *  key of $tabCategoryQuestions are the categopy id (0 for not in a category)
+                 *  value is the array of question id of this category
+                 */
+
+                //Getting questions by category
+                //$questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list);
+
+
+                /**
+                 * The order is based in the category in this case [biology] is first that [maths]
+
+                 * Example:
+                 * [biology] Question 1
+                 * [biology] Question 2
+                 * [biology] Question 3
+                 * [maths] Question 1
+                 * [maths] Question 2
+                 */
+
+                // If test option is Grouped By Categories
+                //if ($random_by_category == EXERCISE_CATEGORY_RANDOM_ORDERED) {
+                    //$questions_by_category = Testcategory::sortCategoriesQuestionByName($questions_by_category);
+                //}
+
+/*
+                $number_of_random_question = $this->random;
+                if ($this->random == -1) {
+                    $number_of_random_question = count($question_list);
+                }
+
+                //Only 1 question per category
+                if (!empty($questions_by_category)) {
+                    $one_question_per_category = array();
+                    $questions_added = array();
+                    foreach ($questions_by_category as $category_id => $question_list) {
+                        foreach ($question_list as $question_id) {
+                            if (!in_array($question_id, $questions_added)) {
+                                $one_question_per_category[$category_id][] = $question_id;
+                                $questions_added[] = $question_id;
+                            }
+                        }
+                    }
+                    $questions_by_category = $one_question_per_category;
+                }
+
+                $temp_question_list = array();
+                while (list($category_id, $question_list) = each($questions_by_category)) {
+                    $elements = Testcategory::getNElementsFromArray($question_list, $number_of_random_question);
+                    $temp_question_list = array_merge($temp_question_list, $elements);
+                }
+
+                // shuffle the question list if test is not grouped by categories
+                //if ($random_by_category == EXERCISE_CATEGORY_RANDOM_SHUFFLED) {
+                    shuffle($temp_question_list);
+                //}
+                $question_list = $temp_question_list;*/
+                break;
+        }
+        return $question_list;
+    }
+
+
+    /**
+     * Gets question list from the exercise
+     * @params bool expand or not question list (true show all questions, false show media question id instead of the question ids)
+     */
     function get_question_list($expand_media_questions = false)
     {
         $question_list = $this->get_validated_question_list();
@@ -4581,6 +4747,12 @@ class Exercise
         return $question_list;
     }
 
+    /**
+     *
+     * @params array question list
+     * @params bool expand or not question list (true show all questions, false show media question id instead of the question ids)
+     *
+     **/
     function transform_question_list_with_medias($question_list, $expand_media_questions = false)
     {
         $new_question_list = array();
@@ -4776,5 +4948,76 @@ class Exercise
         }
 
         return $list;
+    }
+
+    /**
+     * @return bool
+     */
+    function get_categories_in_exercise() {
+        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
+        if (!empty($this->id)) {
+            $sql = "SELECT * FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id} ";
+            $result = Database::query($sql);
+            $list = array();
+            if (Database::num_rows($result)) {
+                 while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    $list[$row['category_id']] = $row;
+                }
+                return $list;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param null $order
+     * @return bool
+     */
+    function get_categories_with_name_in_exercise($order = null) {
+        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
+        $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE exercise_id = {$this->id} AND qc.c_id = {$this->course_id} ";
+        if (!empty($order)) {
+            $sql .= "ORDER BY $order ";
+        }
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+             while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $list[$row['category_id']] = $row;
+            }
+            return $list;
+        }
+        return false;
+    }
+
+    /**
+     * Get total number of question that will be parsed when using the category/exercise
+     */
+    function getNumberQuestionExerciseCategory() {
+        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
+        $sql = "SELECT SUM(count_questions) count_questions FROM $table WHERE exercise_id = {$this->id}";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result);
+            return $row['count_questions'];
+        }
+        return 0;
+    }
+
+    function save_categories_in_exercise($categories) {
+        if (!empty($categories)) {
+            $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
+            $sql = "DELETE FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
+            Database::query($sql);
+            foreach ($categories as $category_id => $count_questions) {
+                $params = array(
+                    'c_id' => $this->course_id,
+                    'exercise_id' => $this->id,
+                    'category_id' => $category_id,
+                    'count_questions' => $count_questions
+                );
+                Database::insert($table, $params);
+            }
+        }
     }
 }

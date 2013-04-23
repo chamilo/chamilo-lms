@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-class GlobalMultipleAnswer extends Question {
+class GlobalMultipleAnswer extends Question
+{
 
     static $typePicture = 'mcmagl.gif';
     static $explanationLangVar = 'GlobalMultipleAnswer';
@@ -81,12 +82,14 @@ class GlobalMultipleAnswer extends Question {
         for ($i = 1; $i <= $nb_answers; ++$i) {
             /* si la reponse est de type objet */
             if (is_object($answer)) {
-                $defaults['answer[' . $i . ']'] = $answer->answer[$i];
-                $defaults['comment[' . $i . ']'] = $answer->comment[$i];
-                $defaults['correct[' . $i . ']'] = $answer->correct[$i];
+                $answer_id = $answer->getRealAnswerIdFromList($i);
+
+                $defaults['answer['.$i.']'] = $answer->answer[$answer_id];
+                $defaults['comment['.$i.']'] = $answer->comment[$answer_id];
+                $defaults['correct['.$i.']'] = $answer->correct[$answer_id];
 
                 //------------- D�but
-                $scoreA = $answer->weighting[$i];
+                $scoreA = $answer->weighting[$answer_id];
             }
             if ($scoreA > 0) {
                 $scoreG = $scoreG + $scoreA;
@@ -207,7 +210,6 @@ class GlobalMultipleAnswer extends Question {
 
         //$answer_score �quivaut � la valeur d'une bonne r�ponse
         // cr�ation variable pour r�cuperer la valeur de la coche pour la prise en compte des n�gatifs
-        $test = "";
         $test = $form->getSubmitValue('pts');
 
         for ($i = 1; $i <= $nb_answers; $i++) {

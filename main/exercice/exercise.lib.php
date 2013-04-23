@@ -23,19 +23,18 @@
  * @param int   current item from the list of questions
  * @param int   number of total questions
  * */
-function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null, $show_answers = false)
-{
-
+function showQuestion($objQuestionTmp, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null, $show_answers = false) {
     // Text direction for the current language
-    $is_ltr_text_direction = api_get_text_direction() != 'rtl';
-
+    //$is_ltr_text_direction = api_get_text_direction() != 'rtl';
     // Change false to true in the following line to enable answer hinting
     $debug_mark_answer = $show_answers; //api_is_allowed_to_edit() && false;
     // Reads question information
-    if (!$objQuestionTmp = Question::read($questionId)) {
+    if (!$objQuestionTmp) {
         // Question not found
         return false;
     }
+
+    $questionId = $objQuestionTmp->id;
 
     if ($exercise_feedback != EXERCISE_FEEDBACK_TYPE_END) {
         $show_comment = false;
@@ -91,23 +90,25 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 $s .= '<table class="data_table">';
             }
 
-            $x = 1; //iterate through answers
+            $j = 1; //iterate through answers
             $letter = 'A'; //mark letters for each answer
-            $answer_matching = $cpt1 = array();
-
-            for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+            $answer_matching = array();
+            $capital_letter = array();
+            //for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
+            foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-                $numAnswer = $objAnswerTmp->selectAutoId($answerId);
                 $answer = $objAnswerTmp->selectAnswer($answerId);
                 if ($answerCorrect == 0) {
                     // options (A, B, C, ...) that will be put into the list-box
                     // have the "correct" field set to 0 because they are answer
-                    $cpt1[$x] = $letter;
-                    $answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId($numAnswer);
-                    $x++;
+                    $capital_letter[$j] = $letter;
+                    //$answer_matching[$j]=$objAnswerTmp->selectAnswerByAutoId($numAnswer);
+                    $answer_matching[$j] = array('id' => $answerId, 'answer' => $answer);
+                    $j++;
                     $letter++;
                 }
             }
+
             $i = 1;
 
             $select_items[0]['id'] = 0;
@@ -116,11 +117,11 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
             foreach ($answer_matching as $id => $value) {
                 $select_items[$i]['id'] = $value['id'];
-                $select_items[$i]['letter'] = $cpt1[$id];
+                $select_items[$i]['letter'] = $capital_letter[$id];
                 $select_items[$i]['answer'] = $value['answer'];
                 $i++;
             }
-            $num_suggestions = ($nbrAnswers - $x) + 1;
+            $num_suggestions = ($nbrAnswers - $j) + 1;
         } elseif ($answerType == FREE_ANSWER) {
             $fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
 
@@ -134,8 +135,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         } elseif ($answerType == ORAL_EXPRESSION) {
             //Add nanog
             if (api_get_setting('enable_nanogong') == 'true') {
+
                 //@todo pass this as a parameter
-                global $exercise_stat_info, $exerciseId, $exe_id;
+                global $exercise_stat_info, $exerciseId;
 
                 if (!empty($exercise_stat_info)) {
                     $params = array(
@@ -199,11 +201,15 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             }
         }
 
-        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+        //for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
+
+        foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-            $numAnswer = $objAnswerTmp->selectAutoId($answerId);
             $comment = $objAnswerTmp->selectComment($answerId);
+
+            //$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
+            $numAnswer = $answerId;
 
             $attributes = array();
             // Unique answer
@@ -252,8 +258,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 } else {
                     $s .= $answer_input;
                 }
-
-            } elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == GLOBAL_MULTIPLE_ANSWER) {
+            } elseif (in_array($answerType, array(MULTIPLE_ANSWER, MULTIPLE_ANSWER_TRUE_FALSE, GLOBAL_MULTIPLE_ANSWER))) {
                 $input_id = 'choice-'.$questionId.'-'.$answerId;
                 $answer = Security::remove_XSS($answer, STUDENT);
 
@@ -304,7 +309,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
                     if (!empty($quiz_question_options)) {
                         foreach ($quiz_question_options as $id => $item) {
-
+                            $id = $item['iid'];
                             if (isset($my_choice[$numAnswer]) && $id == $my_choice[$numAnswer]) {
                                 $attributes = array('checked' => 1, 'selected' => 1);
                             } else {
@@ -329,6 +334,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $s.='</tr>';
                 }
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+
                 // multiple answers
                 $input_id = 'choice-'.$questionId.'-'.$answerId;
 
@@ -871,7 +877,7 @@ function get_exercise_track_exercise_info($exe_id)
     $exe_id = intval($exe_id);
     $result = array();
     if (!empty($exe_id)) {
-        $sql_fb_type = "SELECT q.*, tee.*
+        $sql = "SELECT q.*, tee.*
 	                    FROM $TBL_EXERCICES as q
 	                    INNER JOIN $TBL_TRACK_EXERCICES as tee
 	                    ON q.id=tee.exe_exo_id
@@ -880,10 +886,10 @@ function get_exercise_track_exercise_info($exe_id)
 	                    WHERE tee.exe_id = $exe_id
 	                    AND q.c_id=c.id";
 
-        $res_fb_type = Database::query($sql_fb_type);
-        $result = Database::fetch_array($res_fb_type, 'ASSOC');
+        $result = Database::query($sql);
+        $result_array = Database::fetch_array($result, 'ASSOC');
     }
-    return $result;
+    return $result_array;
 }
 
 /**
@@ -2323,11 +2329,18 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         if ($debug) {
             error_log('Looping question_list '.print_r($question_list, 1));
         }
+
+        $media_questions = $objExercise->get_media_list();
+        $media_is_activated = $objExercise->media_is_activated($media_questions);
+
+        $medias_showed = array();
+
         foreach ($question_list as $questionId) {
 
             // creates a temporary Question object
-            $objQuestionTmp = Question :: read($questionId);
+            $objQuestionTmp = Question::read($questionId);
 
+            //this variable commes from exercise_submit_modal.php
             ob_start();
             $hotspot_delineation_result = null;
 
@@ -2454,7 +2467,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
         if (api_is_allowed_to_session_edit()) {
-            update_event_exercise($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration']);
+            update_event_exercise($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array(), $end_date);
         }
 
         // Send notification ..

@@ -11,12 +11,12 @@
 /**
  * Code
  */
-if(!class_exists('MultipleAnswerTrueFalse')):
 /**
  * Class
  * @package chamilo.exercise
  */
-class MultipleAnswerTrueFalse extends Question {
+class MultipleAnswerTrueFalse extends Question
+{
 
 	static $typePicture = 'mcmao.gif';
 	static $explanationLangVar = 'MultipleAnswerTrueFalse';
@@ -101,11 +101,12 @@ class MultipleAnswerTrueFalse extends Question {
             $answer_number->freeze();
 
 			if (is_object($answer)) {
-				$defaults['answer['.$i.']']     = $answer -> answer[$i];
-				$defaults['comment['.$i.']']    = $answer -> comment[$i];
 				      
-                $correct = $answer->correct[$i];
+                $answer_id = $answer->getRealAnswerIdFromList($i);
 
+                $defaults['answer['.$i.']'] = $answer->answer[$answer_id];
+                $defaults['comment['.$i.']'] = $answer->comment[$answer_id];
+                $correct = $answer->correct[$answer_id];
                 $defaults['correct['.$i.']']    = $correct;
 
                 $j = 1;
@@ -128,7 +129,6 @@ class MultipleAnswerTrueFalse extends Question {
                 $defaults['correct['.$i.']']    = '';
 			}
 
-            //$form->addElement('select', 'correct['.$i.']',null, $this->options, array('id'=>$i,'onchange'=>'multiple_answer_true_false_onchange(this)'));
 
 			$boxes_names[] = 'correct['.$i.']';
 
@@ -229,8 +229,8 @@ class MultipleAnswerTrueFalse extends Question {
 
         if (!empty($options)) {
             foreach ($options as $option_data) {
-                $id = $option_data['id'];
-                unset($option_data['id']);
+                $id = $option_data['iid'];
+                unset($option_data['iid']);
                 Question::updateQuestionOption($id, $option_data, $course_id);
             }
         } else {
@@ -262,7 +262,7 @@ class MultipleAnswerTrueFalse extends Question {
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
             if (empty($options)) {
                 //If this is the first time that the question is created when change the default values from the form 1 and 2 by the correct "option id" registered
-                $goodAnswer = $sorted_by_position[$goodAnswer]['id'];
+                $goodAnswer = $sorted_by_position[$goodAnswer]['iid'];
             }
     	    $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
         	$objAnswer->createAnswer($answer, $goodAnswer, $comment,'',$i);
@@ -293,4 +293,3 @@ class MultipleAnswerTrueFalse extends Question {
         return $header;
 	}
 }
-endif;

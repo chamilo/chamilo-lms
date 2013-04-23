@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * @author hubert.borderiou
+ * @author hubert.borderiou & jmontoya
  */
 class Testcategory
 {
@@ -18,10 +18,17 @@ class Testcategory
 	/**
 	 * Constructor of the class Category
 	 * @author - Hubert Borderiou
-	 If you give an in_id and no in_name, you get info concerning the category of id=in_id
-	 otherwise, you've got an category objet avec your in_id, in_name, in_descr
+	 * If you give an in_id and no in_name, you get info concerning the category of id=in_id
+	 * otherwise, you've got an category objet avec your in_id, in_name, in_descr
      * @todo fix this function
-	 */
+     *
+     * @param int $in_id
+     * @param string $in_name
+     * @param string $in_description
+     * @param int $parent_id
+     * @param string $type
+     * @param null $course_id
+     */
     public function Testcategory($in_id = 0, $in_name = '', $in_description = "", $parent_id = 0, $type = 'simple', $course_id = null)
     {
 		if ($in_id != 0 && $in_name == "") {
@@ -55,10 +62,12 @@ class Testcategory
 
     /**
      * Return the Testcategory object with id=in_id
-     *
+     * @param $in_id
+     * @return bool
      * @assert () === false
 	 */
-	function getCategory($in_id) {
+
+    function getCategory($in_id) {
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$in_id = Database::escape_string($in_id);
         $sql = "SELECT * FROM $t_cattable WHERE iid = $in_id ";
@@ -105,6 +114,11 @@ class Testcategory
 		}
     }
 
+    /**
+     * @param string $title
+     * @param int $course_id
+     * @return bool
+     */
     function get_category_by_title($title , $course_id = 0) {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $course_id = intval($course_id);
@@ -117,10 +131,12 @@ class Testcategory
         }
 		return false;
 	}
+
     /**
      *
      * Get categories by title for json calls
-     *
+     * @param string $tag
+     * @return array
      * @assert() === false
      */
     function get_categories_by_keyword($tag) {
@@ -168,7 +184,8 @@ class Testcategory
      * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
      * jmontoya
 	 */
-    function removeCategory() {
+    function removeCategory()
+    {
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$v_id = Database::escape_string($this->id);
         $sql = "DELETE FROM $t_cattable WHERE iid = $v_id";
@@ -636,7 +653,8 @@ class Testcategory
      * count the number of questions in all categories, and return the max
      * @author - hubert borderiou
     */
-    public static function getNumberMaxQuestionByCat($in_testid) {
+    public static function getNumberMaxQuestionByCat($in_testid)
+    {
         $res_num_max = 0;
         // foreach question
 		$tabcatid = Testcategory::getListOfCategoriesIDForTest($in_testid);
@@ -651,7 +669,12 @@ class Testcategory
         return $res_num_max;
     }
 
-    public static function getCategoryListName($course_id = null) {
+    /**
+     * @param int $course_id
+     * @return array
+     */
+    public static function getCategoryListName($course_id = null)
+    {
         $category_list = self::getCategoryListInfo(null, $course_id);
         $category_name_list = array();
         if (!empty($category_list)) {
@@ -662,6 +685,11 @@ class Testcategory
         return $category_name_list;
     }
 
+    /**
+     * @param array $category_list
+     * @param array $all_categories
+     * @return null|string
+     */
     public static function return_category_labels($category_list, $all_categories) {
         $category_list_to_render = array();
         foreach ($category_list as $category_id) {
@@ -677,6 +705,11 @@ class Testcategory
         return $html;
     }
 
+    /**
+     * @param array $category_list
+     * @param string $type
+     * @return null|string
+     */
     static function draw_category_label($category_list, $type = 'label') {
         $new_category_list = array();
         foreach ($category_list as $category_name) {
@@ -755,6 +788,9 @@ class Testcategory
         return null;
     }
 
+    /**
+     * @return array
+     */
     function get_all_categories() {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT * FROM $table ORDER BY title ASC";
@@ -765,7 +801,14 @@ class Testcategory
         return $array;
     }
 
-    function get_category_exercise_tree($exercise_id, $course_id, $order = null) {
+    /**
+     * @param $exercise_id
+     * @param $course_id
+     * @param null $order
+     * @return bool
+     */
+    function get_category_exercise_tree($exercise_id, $course_id, $order = null)
+    {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE exercise_id = {$exercise_id} AND qc.c_id = {$course_id} ";
@@ -788,8 +831,10 @@ class Testcategory
         return false;
     }
 
-
-
+    /**
+     * @param $type
+     * @return mixed
+     */
     function get_category_tree_by_type($type) {
         $course_id = api_get_course_int_id();
         if ($type == 'global') {
@@ -813,7 +858,10 @@ class Testcategory
         return $this->category_array_tree;
     }
 
-
+    /**
+     * @param $exercise_obj
+     * @return string
+     */
     function return_category_form($exercise_obj) {
 
         $categories = $this->getListOfCategoriesForTest($exercise_obj);
@@ -824,7 +872,7 @@ class Testcategory
         }
 
         $saved_categories = $exercise_obj->get_categories_in_exercise();
-
+        $return = null;
         if (!empty($this->category_array_tree)) {
             $nbQuestionsTotal = $exercise_obj->getNumberQuestionExerciseCategory();
             $original_grouping = $exercise_obj->categories_grouping;
@@ -860,6 +908,10 @@ class Testcategory
         }
     }
 
+    /**
+     * @param $array
+     * @return mixed
+     */
     public function sort_tree_array($array) {
       foreach ($array as $key => $row) {
             $parent[$key] = $row['parent_id'];
@@ -870,6 +922,12 @@ class Testcategory
         return $array;
     }
 
+    /**
+     * @param $array
+     * @param int $parent
+     * @param $depth
+     * @param array $tmp
+     */
     public function create_tree_array($array, $parent = 0, $depth = -1, $tmp = array()) {
         if (is_array($array)) {
             for ($i = 0; $i < count($array); $i++) {

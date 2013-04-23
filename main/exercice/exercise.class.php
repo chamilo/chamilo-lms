@@ -69,6 +69,7 @@ class Exercise
      * Constructor of the class
      *
      * @author - Olivier Brouckaert
+     * @param int $course_id
      */
     public function Exercise($course_id = null)
     {
@@ -103,10 +104,10 @@ class Exercise
     }
 
     /**
-     * reads exercise informations from the data base
+     * Reads exercise informations from the data base
      *
      * @author - Olivier Brouckaert
-     * @param - integer $id - exercise ID
+     * @param - int $id - exercise ID
      * @return - boolean - true if exercise exists, otherwise false
      */
     public function read($id)
@@ -198,6 +199,9 @@ class Exercise
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function getCutTitle()
     {
         return Text::cut($this->exercise, EXERCISE_MAX_NAME_SIZE);
@@ -268,10 +272,9 @@ class Exercise
     }
 
     /**
-     * returns the exercise sound file
+     * Returns the exercise sound file
      *
      * @author - Olivier Brouckaert
-     *
      * @return - string - exercise description
      */
     function selectSound()
@@ -280,7 +283,7 @@ class Exercise
     }
 
     /**
-     * returns the exercise type
+     * Returns the exercise type
      *
      * @author - Olivier Brouckaert
      * @return - integer - exercise type
@@ -299,6 +302,9 @@ class Exercise
         return $this->display_category_name;
     }
 
+    /**
+     * @return null
+     */
     function selectPassPercentage()
     {
         return $this->pass_percentage;
@@ -422,7 +428,7 @@ class Exercise
     }
 
     /**
-     * returns the exercise status (1 = enabled ; 0 = disabled)
+     * Returns the exercise status (1 = enabled ; 0 = disabled)
      *
      * @author - Olivier Brouckaert
      * @return - boolean - true if enabled, otherwise false
@@ -4123,7 +4129,10 @@ class Exercise
 
     /**
      * Sends a notification when a user ends an examn
-     *
+     * @param array $question_list_answers
+     * @param string $origin
+     * @param int $exe_id
+     * @return null
      */
     function send_notification_for_open_questions($question_list_answers, $origin, $exe_id)
     {
@@ -4295,6 +4304,12 @@ class Exercise
         }
     }
 
+    /**
+     * @param array $user_data
+     * @param string $start_date
+     * @param int $duration
+     * @return string
+     */
     function show_exercise_result_header($user_data, $start_date = null, $duration = null)
     {
         $array = array();
@@ -4407,7 +4422,7 @@ class Exercise
     }
 
     /**
-     *  Checks if the exercise is visible due a lot of conditions - visibility, time limits, student attempts
+     * Checks if the exercise is visible due a lot of conditions - visibility, time limits, student attempts
      * @return bool true if is active
      */
     public function is_visible($lp_id = 0, $lp_item_id = 0, $lp_item_view_id = 0, $filter_by_admin = true)
@@ -4507,6 +4522,9 @@ class Exercise
         return array('value' => $is_visible, 'message' => $message);
     }
 
+    /**
+     * @return bool
+     */
     function added_in_lp()
     {
         $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
@@ -4519,6 +4537,9 @@ class Exercise
         return false;
     }
 
+    /**
+     * @return array
+     */
     function get_media_list()
     {
         $media_questions = array();
@@ -4538,6 +4559,10 @@ class Exercise
         return $media_questions;
     }
 
+    /**
+     * @param array $media_list
+     * @return bool
+     */
     function media_is_activated($media_list)
     {
         $active = false;
@@ -4557,6 +4582,10 @@ class Exercise
         return $active;
     }
 
+    /**
+     * @deprecated
+     * @return array
+     */
     function get_validated_question_list_2()
     {
         $question_list = array();
@@ -4642,10 +4671,11 @@ class Exercise
         return $question_list;
     }
 
-/**
+    /**
      * Get list of questions depending of the category random settings, exercise random settings, exercise categories settings
      */
-    function get_validated_question_list() {
+    function get_validated_question_list()
+    {
         //Getting current question list
         $question_list = $this->selectQuestionList();
 
@@ -4796,6 +4826,10 @@ class Exercise
         return $new_question_list;
     }
 
+    /**
+     * @param int $exe_id
+     * @return array
+     */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
         $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
@@ -4828,6 +4862,11 @@ class Exercise
         return $new_array;
     }
 
+    /**
+     * @param int $exe_id
+     * @param int $question_id
+     * @param string $action
+     */
     public function edit_question_to_remind($exe_id, $question_id, $action = 'add')
     {
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
@@ -4871,11 +4910,15 @@ class Exercise
                 }
                 $remind_list_string = Database::escape_string($remind_list_string);
                 $sql = "UPDATE $track_exercises SET questions_to_check = '$remind_list_string' WHERE exe_id = $exe_id ";
-                $result = Database::query($sql);
+                Database::query($sql);
             }
         }
     }
 
+    /**
+     * @param string $answer
+     * @return mixed
+     */
     public function fill_in_blank_answer_to_array($answer)
     {
         api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
@@ -4884,6 +4927,10 @@ class Exercise
         return $teacher_answer_list;
     }
 
+    /**
+     * @param $answer
+     * @return string
+     */
     public function fill_in_blank_answer_to_string($answer)
     {
         $teacher_answer_list = $this->fill_in_blank_answer_to_array($answer);
@@ -4907,6 +4954,9 @@ class Exercise
         return $result;
     }
 
+    /**
+     * @return string
+     */
     function return_time_left_div()
     {
         $html = '<div id="clock_warning" style="display:none">'.Display::return_message(
@@ -4921,6 +4971,9 @@ class Exercise
         return $html;
     }
 
+    /**
+     * @return int
+     */
     function get_count_question_list()
     {
         //Real question count
@@ -4933,6 +4986,9 @@ class Exercise
         return $question_count;
     }
 
+    /**
+     * @return array
+     */
     function get_exercise_list_ordered()
     {
         $table_exercise_order = Database::get_course_table(TABLE_QUIZ_ORDER);
@@ -4993,30 +5049,38 @@ class Exercise
     /**
      * Get total number of question that will be parsed when using the category/exercise
      */
-    function getNumberQuestionExerciseCategory() {
+    function getNumberQuestionExerciseCategory()
+    {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
-        $sql = "SELECT SUM(count_questions) count_questions FROM $table WHERE exercise_id = {$this->id}";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-            return $row['count_questions'];
+        if (!empty($this->id)) {
+            $sql = "SELECT SUM(count_questions) count_questions FROM $table WHERE exercise_id = {$this->id}";
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                $row = Database::fetch_array($result);
+                return $row['count_questions'];
+            }
         }
         return 0;
     }
 
+    /**
+     * @param array $categories
+     */
     function save_categories_in_exercise($categories) {
-        if (!empty($categories)) {
+        if (!empty($categories) && !empty($this->id)) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
             Database::query($sql);
-            foreach ($categories as $category_id => $count_questions) {
-                $params = array(
-                    'c_id' => $this->course_id,
-                    'exercise_id' => $this->id,
-                    'category_id' => $category_id,
-                    'count_questions' => $count_questions
-                );
-                Database::insert($table, $params);
+            if (!empty($categories)) {
+                foreach ($categories as $category_id => $count_questions) {
+                    $params = array(
+                        'c_id' => $this->course_id,
+                        'exercise_id' => $this->id,
+                        'category_id' => $category_id,
+                        'count_questions' => $count_questions
+                    );
+                    Database::insert($table, $params);
+                }
             }
         }
     }

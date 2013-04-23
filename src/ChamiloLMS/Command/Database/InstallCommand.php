@@ -189,11 +189,8 @@ class InstallCommand extends CommonCommand
             $this->cleanInstallation($output);*/
         }
 
-        //Getting default configuration parameters
-        require_once api_get_path(SYS_PATH).'main/install/configuration.dist.yml.php';
-
         $avoidVariables = array(
-            'main_database', //default is chamilo
+            //'main_database', //default is chamilo
             'db_glue',
             'table_prefix',
             'code_append',
@@ -209,8 +206,11 @@ class InstallCommand extends CommonCommand
             'system_version',
             'system_stable'
         );
+        // Getting default configuration parameters in the $_configuration array
+        require_once api_get_path(SYS_PATH).'main/install/configuration.dist.yml.php';
 
         $newConfigurationArray = array();
+
         foreach ($_configuration as $key => $value) {
             if (in_array($key, $avoidVariables)) {
                 $newConfigurationArray[$key] = $value;
@@ -361,6 +361,7 @@ class InstallCommand extends CommonCommand
 
     private function setDatabaseSettings($configuration, $databaseName)
     {
+        // @todo remove this config global. loaded in config-console.php
         global $config;
         $defaultConnection = array(
             'driver'    => 'pdo_mysql',
@@ -412,7 +413,7 @@ class InstallCommand extends CommonCommand
             $dbInfo = $databaseMap[$version];
             $sections = $dbInfo['section'];
 
-            foreach ($sections as $section => $sectionData) {
+            foreach ($sections as $sectionData) {
                 foreach ($sectionData as $dbInfo) {
                     $databaseName = $dbInfo['name'];
                     $dbList = $dbInfo['sql'];
@@ -423,7 +424,7 @@ class InstallCommand extends CommonCommand
 
                     $this->setDatabaseSettings($_configuration, $databaseName);
 
-                    //Fixing db list
+                    // Fixing db list
                     foreach ($dbList as &$db) {
                         $db = $sqlFolder.$db;
                     }

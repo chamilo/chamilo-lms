@@ -7,8 +7,6 @@
 * 	@author Yannick Warnier
 */
 
-
-if(!class_exists('GradeBookResult')):
 /**
  * Gradebook results class
  * @package chamilo.gradebook
@@ -331,4 +329,3 @@ class GradeBookResult
         return true;
     }
 }
-endif;

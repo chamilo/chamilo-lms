@@ -113,7 +113,7 @@ elseif ($restore) { // visibility 0,2 -> 1
 elseif (isset($update) && $update) {
 	$result 	= Database::query("SELECT * FROM $TBL_ACCUEIL WHERE c_id = $course_id AND id=$id");
 	$tool		= Database::fetch_array($result);
-	$racine		= $_configuration['root_sys'].'/'.$currentCourseID.'/images/';
+	$racine		= api_get_path(SYS_PATH).'/'.$currentCourseID.'/images/';
 	$chemin		= $racine;
 	$name		= $tool[1];
 	$image		= $tool[3];

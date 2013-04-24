@@ -91,7 +91,7 @@ if ($content_type == 'text/html') {
     $directory_name = dirname($full_file_name);
 
     $dir = str_replace(
-        array('\\', $_configuration['root_sys']."courses/".$_course['path'].'/document'),
+        array('\\', api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'),
         array('/', ''),
         $directory_name
     );

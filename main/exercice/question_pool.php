@@ -443,23 +443,23 @@ if ($exerciseId > 0) {
 
     $sql = " (
                 SELECT q.* FROM $TBL_QUESTIONS q INNER JOIN $TBL_EXERCICE_QUESTION r
-                ON (q.c_id = r.c_id AND q.id = r.question_id)
+                ON (q.c_id = r.c_id AND q.iid = r.question_id)
                 INNER JOIN $TBL_EXERCICES ex
-                ON (ex.id = r.exercice_id AND ex.c_id =r.c_id ) $from
+                ON (ex.id = r.exercice_id AND ex.c_id = r.c_id ) $from
                 WHERE ex.c_id = '$selected_course' AND ex.active = '-1'   $level_where $answer_where
              )
              UNION
              (
                 SELECT q.* FROM $TBL_QUESTIONS q
                 LEFT OUTER JOIN $TBL_EXERCICE_QUESTION r
-                ON (q.c_id = r.c_id AND q.id = r.question_id)
+                ON (q.c_id = r.c_id AND q.iid = r.question_id)
                 WHERE q.c_id = '$selected_course' AND r.question_id is null $level_where $answer_where
              )
              UNION
              (
                 SELECT q.* FROM $TBL_QUESTIONS q
                 INNER JOIN $TBL_EXERCICE_QUESTION r
-                ON (q.c_id = r.c_id AND q.id = r.question_id)
+                ON (q.c_id = r.c_id AND q.iid = r.question_id)
                 WHERE r.c_id = '$selected_course' AND r.exercice_id = '-1' OR r.exercice_id = '0' $level_where $answer_where
              )";
 

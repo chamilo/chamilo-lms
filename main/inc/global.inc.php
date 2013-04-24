@@ -35,23 +35,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Parser;
 
+// Determine the directory path for this file
+$includePath = dirname(__FILE__);
+
 // Start Silex
 $app = new Application();
-
-// Setting paths
-$app['root_sys'] = dirname(dirname(__DIR__)).'/';
-
-$app['sys_data_path'] = $app['root_sys'].'data/';
-$app['sys_config_path'] = $app['root_sys'].'config/';
-$app['sys_temp_path'] = $app['root_sys'].'temp/';
-$app['sys_log_path'] = $app['root_sys'].'logs/';
-
 // @todo add a helper to read the configuration file once!
 
-// Reading configuration file from main/inc/conf/configuration.php or app/config/configuration.yml
-
-// Determine the directory path for this file.
-$includePath = dirname(__FILE__);
 
 // Include the main Chamilo platform configuration file.
 // @todo use a service provider to load configuration files:
@@ -59,7 +49,8 @@ $includePath = dirname(__FILE__);
     $app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile));
 */
 
-/** Loading configuration files */
+/** Loading configuration file */
+// Reading configuration file from main/inc/conf/configuration.php or app/config/configuration.yml
 $configurationFilePath = $includePath.'/conf/configuration.php';
 $configurationYMLFile = $includePath.'/../../config/configuration.yml';
 $configurationFileAppPath = $includePath.'/../../config/configuration.php';
@@ -91,15 +82,22 @@ if (file_exists($configurationYMLFile)) {
         }
     }
 }
-
 // End reading configuration file
+
+/**  Setting paths */
+$app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : dirname(dirname(__DIR__)).'/';
+$app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
+$app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
+$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['root_sys'].'temp/';
+$app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
 
 /** Loading legacy libs */
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
-// Setting url_append
-$_configuration['url_append'] = '/'.basename(str_replace(api_get_path(WEB_SERVER_ROOT_PATH), '', api_get_path(WEB_PATH)));
+
+// Setting url_append @ŧodo improve this replace
+$_configuration['url_append'] = '/'.basename(str_replace($_SERVER['HTTP_HOST'], '', $_configuration['root_web']));
 
 // Inclusion of internationalization libraries
 require_once $includePath.'/lib/internationalization.lib.php';
@@ -107,7 +105,7 @@ require_once $includePath.'/lib/internationalization.lib.php';
 // Functions for internal use behind this API
 require_once $includePath.'/lib/internationalization_internal.lib.php';
 
-// Do not over-use this variable. It is only for this script's local use.
+// Do not over-use this variable. It is only for this scripts local use.
 $libPath = $includePath.'/lib/';
 
 // Database constants
@@ -116,9 +114,12 @@ require_once $libPath.'database.constants.inc.php';
 // @todo Rewrite the events.lib.inc.php in a class
 require_once $libPath.'events.lib.inc.php';
 
+// Load allowed tag definitions for kses and/or HTMLPurifier.
+require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
+
 /** Loading config files */
 if ($alreadyInstalled) {
-    $configPath = $includePath.'/../../config/';
+    $configPath = $app['sys_config_path'];
 
     $confFiles = array(
         'auth.conf.php',
@@ -141,19 +142,19 @@ if ($alreadyInstalled) {
     $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
     // Code for transitional purposes, it can be removed right before the 1.8.7 release.
-    if (empty($_configuration['system_version'])) {
+    /*if (empty($_configuration['system_version'])) {
         $_configuration['system_version'] = (!empty($_configuration['dokeos_version']) ? $_configuration['dokeos_version'] : '');
         $_configuration['system_stable'] = (!empty($_configuration['dokeos_stable']) ? $_configuration['dokeos_stable'] : '');
         $_configuration['software_url'] = 'http://www.chamilo.org/';
-    }
+    }*/
 
     // For backward compatibility.
     $_configuration['dokeos_version'] = $_configuration['system_version'];
-    $_configuration['dokeos_stable'] = $_configuration['system_stable'];
+    //$_configuration['dokeos_stable'] = $_configuration['system_stable'];
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
 
-/* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
+/* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE */
 if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
     $access_urls = api_get_access_urls();
@@ -645,8 +646,7 @@ if ($alreadyInstalled && $checkConnection) {
     }
 }
 
-// Load allowed tag definitions for kses and/or HTMLPurifier.
-require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
+
 
 // Section (tabs in the main chamilo menu)
 $app['this_section'] = SECTION_GLOBAL;

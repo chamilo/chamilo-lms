@@ -363,7 +363,7 @@ class Login
                     $_course['path'] = $course_data['directory']; // use as key in path
                     $_course['dbName'] = $course_data['db_name']; // use as key in db list
                     $_course['db_name'] = $course_data['db_name']; // not needed in Chamilo 1.9
-                    $_course['dbNameGlu'] = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries //not needed in Chamilo 1.9
+                    //$_course['dbNameGlu'] = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // use in all queries //not needed in Chamilo 1.9
                     $_course['titular'] = $course_data['tutor_name']; // this should be deprecated and use the table course_rel_user
                     $_course['language'] = $course_data['course_language'];
                     $_course['extLink']['url'] = $course_data['department_url'];

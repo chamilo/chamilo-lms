@@ -29,7 +29,7 @@ $connectionOptions = array();
 
 if (!empty($courseList)) {
 
-    $dbPrefix = isset($_configuration['db_prefix']) && !empty($_configuration['db_prefix']) ? $_configuration['db_prefix'].$_configuration['db_glue'] : null;
+    $dbPrefix = isset($_configuration['db_prefix']) && !empty($_configuration['db_prefix']) ? $_configuration['db_prefix'].Database::get_database_glue() : null;
     foreach ($courseList as $course) {
         $connectionOptions['_chamilo_course_'.$course['db_name']] = array(
             'driver'    => 'pdo_mysql',

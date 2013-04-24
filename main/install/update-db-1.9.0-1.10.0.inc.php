@@ -220,7 +220,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $sql = "INSERT INTO $dbNameForm.usergroup (name, group_type, description, picture, url, visibility, updated_on, created_on)
                     VALUES ('{$group['name']}', '1', '{$group['description']}', '{$group['picture_uri']}', '{$group['url']}', '{$group['visibility']}', '{$group['updated_on']}', '{$group['created_on']}')";
                     Database::query($sql);
-                    $id = Database::get_last_insert_id();
+                    $id = Database::insert_id();
                     $oldGroups[$group['id']] = $id;
                 }
             }
@@ -260,7 +260,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $data['group_id'] = $oldGroups[$data['group_id']];
                             $data['subgroup_id'] = $oldGroups[$data['subgroup_id']];
                             $sql = "INSERT INTO $dbNameForm.usergroup_rel_usergroup (group_id, subgroup_id, relation_type)
-                            VALUES ('{$data['group_id']}', '{$data['subgroup_id']}', '{$data['relation_type']}')";
+                                    VALUES ('{$data['group_id']}', '{$data['subgroup_id']}', '{$data['relation_type']}')";
                             Database::query($sql);
                         }
                     }

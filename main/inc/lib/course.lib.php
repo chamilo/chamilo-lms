@@ -1017,9 +1017,9 @@ class CourseManager
             $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND
-                        course_rel_user.relation_type <> '.COURSE_RELATION_TYPE_RRHH.'  ';
+                        course_rel_user.relation_type <> '.COURSE_RELATION_TYPE_RRHH;
             if (!empty($course_code)) {
-                $sql .= ' AND course_rel_user.c_id = "'.$courseInfo['real_id'].'"';
+                $sql .= " AND course_rel_user.c_id = ".$courseInfo['real_id'];
             } else {
                 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql .= " INNER JOIN  $course_table course ON course_rel_user.c_id = course.id";

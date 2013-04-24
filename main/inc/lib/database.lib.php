@@ -87,9 +87,9 @@ class Database
      */
     public static function get_database_glue()
     {
-        global $_configuration;
-
-        return $_configuration['db_glue'];
+        /*global $_configuration;
+        return $_configuration['db_glue'];*/
+        return `.`;
     }
 
     /**

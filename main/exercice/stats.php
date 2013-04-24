@@ -182,7 +182,7 @@ if (!empty($question_list)) {
                     $data[$id]['answer'] 	= $answer_info;
                     $data[$id]['correct'] 	= '-';
 
-                    $count = get_number_students_answer_hotspot_count($answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+                    $count = get_number_students_answer_hotspot_count($answer_id, $question_id, $exercise_id, api_get_course_int_id(), api_get_session_id());
                     $percentange = 0;
                     if (!empty($count_students)) {
                         $percentange = $count/$count_students*100;

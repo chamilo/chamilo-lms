@@ -1965,7 +1965,15 @@ function get_number_students_question_with_answer_count($question_id, $exercise_
     return $return;
 }
 
-function get_number_students_answer_hotspot_count($answer_id, $question_id, $exercise_id, $course_code, $session_id)
+/**
+ * @param int $answer_id
+ * @param int $question_id
+ * @param int $exercise_id
+ * @param int $courseId
+ * @param int $session_id
+ * @return int
+ */
+function get_number_students_answer_hotspot_count($answer_id, $question_id, $exercise_id, $courseId, $session_id)
 {
     $track_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $track_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
@@ -1974,14 +1982,16 @@ function get_number_students_answer_hotspot_count($answer_id, $question_id, $exe
     $question_id = intval($question_id);
     $answer_id = intval($answer_id);
     $exercise_id = intval($exercise_id);
-    $course_code = Database::escape_string($course_code);
+    $courseId = intval($courseId);
     $session_id = intval($session_id);
 
     $sql = "SELECT DISTINCT exe_user_id
-			FROM $track_exercises e INNER JOIN $track_hotspot a ON (a.hotspot_exe_id = e.exe_id) INNER JOIN $course_user cu
-                ON cu.course_code = a.hotspot_course_code AND cu.user_id  = exe_user_id
+			FROM $track_exercises e
+			INNER JOIN $track_hotspot a ON (a.hotspot_exe_id = e.exe_id)
+			INNER JOIN $course_user cu
+                ON cu.c_id = a.c_id AND cu.user_id  = exe_user_id
 			WHERE 	exe_exo_id              = $exercise_id AND
-					a.hotspot_course_code 	= '$course_code' AND
+					a.c_id               	= $courseId AND
 					e.session_id            = $session_id AND
                     hotspot_answer_id       = $answer_id AND
 					hotspot_question_id     = $question_id AND

@@ -165,7 +165,6 @@ ALTER TABLE track_e_course_access ADD COLUMN c_id INT NOT NULL DEFAULT 0;
 UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
 
 ALTER TABLE usergroup ADD COLUMN group_type INT unsigned NOT NULL default 0;
-
 ALTER TABLE usergroup ADD COLUMN picture varchar(255) NOT NULL;
 ALTER TABLE usergroup ADD COLUMN url varchar(255) NOT NULL;
 ALTER TABLE usergroup ADD COLUMN visibility varchar(255) NOT NULL;
@@ -194,6 +193,7 @@ ALTER TABLE announcement_rel_group ADD COLUMN id INT unsigned NOT NULL auto_incr
 ALTER TABLE track_e_hotpotatoes ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_attempt ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_hotspot ADD COLUMN c_id int unsigned NOT NULL default 0;
 
 ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
 RENAME TABLE c_quiz_question_category TO c_quiz_category;
@@ -202,4 +202,4 @@ ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned NOT NULL default 0
 CREATE TABLE c_quiz_rel_category (iid bigint unsigned NOT NULL auto_increment, c_id INT unsigned default 0, category_id int unsigned NOT NULL, exercise_id int unsigned NOT NULL, count_questions int NOT NULL default 0, PRIMARY KEY(iid));
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.0d46406' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.6a12538' WHERE variable = 'chamilo_database_version';

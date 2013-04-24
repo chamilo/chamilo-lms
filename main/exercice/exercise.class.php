@@ -630,7 +630,7 @@ class Exercise
      * returns the number of questions in this exercise
      *
      * @author - Olivier Brouckaert
-     * @return - integer - number of questions
+     * @return integer - number of questions
      */
     function selectNbrQuestions()
     {
@@ -646,7 +646,7 @@ class Exercise
      * Selects questions randomly in the question list
      *
      * @author - Olivier Brouckaert
-     * @return - array - if the exercise is not set to take questions randomly, returns the question list
+     * @return array - if the exercise is not set to take questions randomly, returns the question list
      *                   without randomizing, otherwise, returns the list with questions selected randomly
      * Modified by Hubert Borderiou 15 nov 2011
      */
@@ -686,7 +686,8 @@ class Exercise
      *
      * @author - Olivier Brouckaert
      * @param - integer $questionId - question ID
-     * @return - boolean - true if in the list, otherwise false
+     *
+     * @return boolean - true if in the list, otherwise false
      */
     function isInList($questionId)
     {
@@ -718,7 +719,8 @@ class Exercise
         $this->attempts = $attempts;
     }
 
-    function updateActive($active) {
+    function updateActive($active)
+    {
         $this->active = $active;
     }
 
@@ -759,19 +761,31 @@ class Exercise
         $this->propagate_neg = $value;
     }
 
+    /**
+     * @param $value
+     */
     function updateReviewAnswers($value)
     {
         $this->review_answers = (isset($value) && $value) ? true : false;
     }
 
+    /**
+     * @param $value
+     */
     function updatePassPercentage($value)
     {
         $this->pass_percentage = $value;
     }
 
-    function updateCategories($categories) {
-        $categories = array_map('intval', $categories);
-        $this->categories = $categories;
+    /**
+     * @param array $categories
+     */
+    function updateCategories($categories)
+    {
+        if (!empty($categories)) {
+            $categories = array_map('intval', $categories);
+            $this->categories = $categories;
+        }
     }
 
     /**
@@ -3190,9 +3204,11 @@ class Exercise
                     if ($from_database) {
                         if ($show_result) {
                             $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                            $query = "SELECT hotspot_correct FROM ".$TBL_TRACK_HOTSPOT." WHERE hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='".Database::escape_string(
-                                $answerId
-                            )."'";
+                            $query = "SELECT hotspot_correct
+                                     FROM ".$TBL_TRACK_HOTSPOT."
+                                     WHERE  hotspot_exe_id = '".$exeId."' and
+                                            hotspot_question_id= '".$questionId."' AND
+                                            hotspot_answer_id='".Database::escape_string($answerId)."'";
                             $resq = Database::query($query);
                             $studentChoice = Database::result($resq, 0, "hotspot_correct");
 
@@ -3226,7 +3242,11 @@ class Exercise
                     if ($from_database) {
                         // getting the user answer
                         $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                        $query = "SELECT hotspot_correct, hotspot_coordinate from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='1'"; //by default we take 1 because it's a delineation
+                        $query = "SELECT hotspot_correct, hotspot_coordinate
+                                  FROM ".$TBL_TRACK_HOTSPOT."
+                                  WHERE hotspot_exe_id = '".$exeId."' AND
+                                        hotspot_question_id= '".$questionId."' AND
+                                        hotspot_answer_id='1'"; //by default we take 1 because it's a delineation
                         $resq = Database::query($query);
                         $row = Database::fetch_array($resq, 'ASSOC');
 

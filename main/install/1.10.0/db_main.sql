@@ -3338,6 +3338,7 @@ CREATE TABLE track_e_hotspot (
   hotspot_answer_id int NOT NULL,
   hotspot_correct tinyint(3) unsigned NOT NULL,
   hotspot_coordinate text NOT NULL,
+  c_id int NOT NULL default 0,
   PRIMARY KEY  (hotspot_id),
   KEY hotspot_course_code (hotspot_course_code),
   KEY hotspot_user_id (hotspot_user_id),
@@ -3458,4 +3459,4 @@ ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_i
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.0d46406' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.6a12538' WHERE variable = 'chamilo_database_version';

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This file generates the ActionScript variables code used by the 
+ * This file generates the ActionScript variables code used by the
  * HotSpot .swf
  * @package chamilo.exercise
  * @author Toon Keppens, Julio Montoya adding hotspot "medical" support
@@ -72,11 +72,11 @@ while ($hotspot = Database::fetch_array($result)) {
 	// Delineation
 	if ($hotspot['hotspot_type'] == 'delineation') {
 		$output .= "&hotspot_".$hotspot_id."_type=delineation";
-	}	
+	}
 	// oar
 	if ($hotspot['hotspot_type'] == 'oar') {
 		$output .= "&hotspot_".$hotspot_id."_type=delineation";
-	}	
+	}
 	$output .= "&hotspot_".$hotspot_id."_coord=".$hotspot['hotspot_coordinates']."";
 	$i++;
 }
@@ -89,18 +89,18 @@ for ($i; $i <= 12; $i++) {
 
 
 // Get clicks
-if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {    
+if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
 	foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate) {
 		$output2 .= $coordinate."|";
 	}
-} else {    
+} else {
 	// get it from db
 	$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = "SELECT hotspot_coordinate
             FROM $tbl_track_e_hotspot
-            WHERE   hotspot_question_id = $questionId AND 
-                    hotspot_course_code = '$course_code' AND 
-                    hotspot_exe_id = $exe_id 
+            WHERE   hotspot_question_id = $questionId AND
+                    c_id = $course_id AND
+                    hotspot_exe_id = $exe_id
             ORDER by hotspot_id";
 	$rs = @Database::query($sql); // don't output error because we are in Flash execution.
 	while($row = Database :: fetch_array($rs)) {

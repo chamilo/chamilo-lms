@@ -582,9 +582,9 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
     }
 
     $tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-    $sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
+    $sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, c_id, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".
         " VALUES ('".api_get_user_id()."',".
-        " '".api_get_course_id()."', ".
+        " '".api_get_course_int_id()."', ".
         " '".Database :: escape_string($exe_id)."', ".
         " '".Database :: escape_string($question_id)."',".
         " '".Database :: escape_string($answer_id)."',".
@@ -1565,7 +1565,7 @@ function delete_attempt_hotspot($exe_id, $user_id, $courseId, $question_id)
     $sql = "DELETE FROM $table_track_attempt
             WHERE   hotspot_exe_id = $exe_id AND
                     hotspot_user_id = $user_id AND
-                    hotspot_course_code = $courseId AND
+                    c_id = $courseId AND
                     hotspot_question_id = $question_id ";
     Database::query($sql);
 }

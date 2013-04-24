@@ -201,6 +201,5 @@ ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned NOT NULL default 0
 
 CREATE TABLE c_quiz_rel_category (iid bigint unsigned NOT NULL auto_increment, c_id INT unsigned default 0, category_id int unsigned NOT NULL, exercise_id int unsigned NOT NULL, count_questions int NOT NULL default 0, PRIMARY KEY(iid));
 
-
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.c9a93d7' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.0d46406' WHERE variable = 'chamilo_database_version';

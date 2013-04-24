@@ -1281,7 +1281,7 @@ DROP TABLE IF EXISTS c_quiz;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz (
   iid int unsigned NOT NULL auto_increment,
-  c_id int(11) NOT NULL,  
+  c_id int(11) NOT NULL,
   title varchar(255) NOT NULL,
   description text,
   sound varchar(255) DEFAULT NULL,
@@ -1317,7 +1317,7 @@ DROP TABLE IF EXISTS c_quiz_answer;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_answer (
   iid bigint unsigned NOT NULL AUTO_INCREMENT,
-  c_id int(11) NOT NULL, 
+  c_id int(11) NOT NULL,
   question_id int(10) unsigned NOT NULL,
   answer text NOT NULL,
   correct mediumint(8) unsigned DEFAULT NULL,
@@ -1340,7 +1340,7 @@ DROP TABLE IF EXISTS c_quiz_order;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_order (
-  iid bigint unsigned NOT NULL auto_increment,  
+  iid bigint unsigned NOT NULL auto_increment,
   c_id int(10) unsigned NOT NULL,
   session_id int(10) unsigned NOT NULL,
   exercise_id int(11) NOT NULL,
@@ -1358,7 +1358,7 @@ DROP TABLE IF EXISTS c_quiz_question;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_question (
   iid bigint unsigned NOT NULL auto_increment,
-  c_id int(11) NOT NULL,  
+  c_id int(11) NOT NULL,
   question text NOT NULL,
   description text,
   ponderation float(6,2) NOT NULL DEFAULT '0.00',
@@ -1383,7 +1383,7 @@ DROP TABLE IF EXISTS c_quiz_category;
 CREATE TABLE c_quiz_category (
   iid bigint unsigned NOT NULL AUTO_INCREMENT,
   parent_id int unsigned NOT NULL default 0,
-  c_id int(11) NOT NULL,  
+  c_id int(11) NOT NULL,
   title varchar(255) NOT NULL,
   description text NOT NULL,
   PRIMARY KEY (iid)
@@ -1411,14 +1411,16 @@ CREATE TABLE c_quiz_question_option (
 -- Table structure for table c_quiz_question_rel_category
 --
 
-DROP TABLE IF EXISTS c_quiz_question_rel_category;
+DROP TABLE IF EXISTS c_quiz_rel_category;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE c_quiz_question_rel_category (
+CREATE TABLE c_quiz_rel_category (
   iid bigint unsigned NOT NULL AUTO_INCREMENT,
   c_id int(11) NOT NULL,
   question_id int(11) NOT NULL,
   category_id int(11) NOT NULL,
+  exercise_id int unsigned NOT NULL,
+  count_questions int NOT NULL default 0,
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

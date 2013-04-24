@@ -10,7 +10,7 @@
  *   of older versions before upgrading.
  */
 
-/*      CONSTANTS */
+/* CONSTANTS */
 
 define('SYSTEM_MAIN_DATABASE_FILE', $new_version.'/db_main.sql');
 define('COUNTRY_DATA_FILENAME', 'country_data.csv');
@@ -306,7 +306,6 @@ function write_courses_htaccess_file($url_append)
  */
 function write_system_config_file($path)
 {
-
     global $dbHostForm;
     global $dbUsernameForm;
     global $dbPassForm;

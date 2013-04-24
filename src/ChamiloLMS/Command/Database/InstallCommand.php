@@ -193,7 +193,6 @@ class InstallCommand extends CommonCommand
             //'main_database', //default is chamilo
             'db_glue',
             'table_prefix',
-            'code_append',
             'course_folder',
             'db_admin_path',
             'cdn_enable',

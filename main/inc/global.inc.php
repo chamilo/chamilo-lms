@@ -38,6 +38,14 @@ use Symfony\Component\Yaml\Parser;
 // Start Silex
 $app = new Application();
 
+// Setting paths
+$app['root_sys'] = dirname(dirname(__DIR__)).'/';
+
+$app['sys_data_path'] = $app['root_sys'].'data/';
+$app['sys_config_path'] = $app['root_sys'].'config/';
+$app['sys_temp_path'] = $app['root_sys'].'temp/';
+$app['sys_log_path'] = $app['root_sys'].'logs/';
+
 // @todo add a helper to read the configuration file once!
 
 // Reading configuration file from main/inc/conf/configuration.php or app/config/configuration.yml
@@ -90,6 +98,8 @@ if (file_exists($configurationYMLFile)) {
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
+// Setting url_append
+$_configuration['url_append'] = '/'.basename(str_replace(api_get_path(WEB_SERVER_ROOT_PATH), '', api_get_path(WEB_PATH)));
 
 // Inclusion of internationalization libraries
 require_once $includePath.'/lib/internationalization.lib.php';

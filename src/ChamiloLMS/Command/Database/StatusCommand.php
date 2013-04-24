@@ -33,7 +33,7 @@ class StatusCommand extends AbstractCommand
     {
         global $_configuration;
 
-        if (!isset($_configuration['root_sys'])) {
+        if (empty($_configuration)) {
             $output->writeln("<comment>Chamilo is not installed here!</comment>");
             exit;
         }

@@ -775,7 +775,7 @@ if ($content == 'Document' || (empty($content) && (api_is_allowed_to_edit() || i
 ))) && !$_GET['showresources']
 ) {
     // setting variables for file locations
-    $baseServDir = $_configuration['root_sys'];
+    $baseServDir = api_get_path(SYS_PATH);
     $courseDir = $_course['path'].'/document';
     $baseWorkDir = $baseServDir.$courseDir;
     // showing the link to move one folder up (when not in the root folder)

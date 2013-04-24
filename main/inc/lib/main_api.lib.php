@@ -495,6 +495,7 @@ define ('SKILL_TYPE_BOTH',          'both');
  * ...
  */
 function api_get_path($path_type, $path = null) {
+    global $app;
 
     static $paths = array(
         WEB_PATH                => '',
@@ -556,7 +557,8 @@ function api_get_path($path_type, $path = null) {
     $root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : null;
 
     // Configuration data for already installed system.
-    $root_sys = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : realpath(dirname(__FILE__).'/../../../');
+    $root_sys = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : $app['root_sys'];
+
     $load_new_config = false;
 
     // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
@@ -570,8 +572,6 @@ function api_get_path($path_type, $path = null) {
     }
 
     if (!$is_this_function_initialized) {
-
-        //$root_rel       = isset($_configuration['url_append']) ? $_configuration['url_append'] : null;
         $root_rel       = "/".basename($root_sys);
 
         $code_folder    = 'main/';

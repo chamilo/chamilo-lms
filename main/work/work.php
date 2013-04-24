@@ -440,9 +440,9 @@ switch ($action) {
         $show_progress_bar = false;
 
         if ($submitGroupWorkUrl) {
-            // For user comming from group space to publish his work
+            // For user coming from group space to publish his work
             $realUrl = str_replace(
-                $_configuration['root_sys'],
+                api_get_path(SYS_PATH),
                 api_get_path(WEB_PATH),
                 str_replace("\\", '/', realpath($submitGroupWorkUrl))
             );

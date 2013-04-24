@@ -1273,12 +1273,9 @@ function exporttofile($filename, $LPname, $LPid, $content)
  */
 function export_exercise($item_id)
 {
-
     global $expdir, $_course, $_configuration, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk, $origin, $questionNum;
 
     $exerciseId = $item_id;
-
-    require_once '../exercice/testcategory.class.php';
     require_once '../exercice/exercise.class.php';
     require_once '../exercice/question.class.php';
     require_once '../exercice/answer.class.php';
@@ -1401,7 +1398,7 @@ function export_exercise($item_id)
                 continue;
             } else {
                 // if the user has already answered this question:
-                if (isset ($exerciseResult[$questionId])) {
+                if (isset($exerciseResult[$questionId])) {
                     // Construction of the Question object.
                     $objQuestionTmp = new Question();
 

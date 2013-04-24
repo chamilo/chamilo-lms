@@ -43,6 +43,7 @@ class FillBlanks extends Question
 	 */
 	function createAnswersForm ($form) {
 		$defaults = array();
+        $a_weightings = null;
 
 		if (!empty($this->id)) {
 			$objAnswer = new Answer($this->id);

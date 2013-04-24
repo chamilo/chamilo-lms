@@ -328,7 +328,7 @@ function event_link($link_id)
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done
  */
-function update_event_exercise($exeid, $exo_id, $score, $weigh, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {
+function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
     if ($debug) {
@@ -336,7 +336,7 @@ function update_event_exercise($exeid, $exo_id, $score, $weigh, $session_id, $le
         error_log('duration:'.$duration);
     }
 
-    if ($exeid != '') {
+    if (!empty($exeid)) {
         // Validation in case of fraud with actived control time
         if (!exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {
             $score = 0;

@@ -869,22 +869,26 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
     return $nbrAnswers;
 }
 
+/**
+ * @param int $exe_id
+ * @return array
+ */
 function get_exercise_track_exercise_info($exe_id)
 {
     $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
     $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
     $exe_id = intval($exe_id);
-    $result = array();
+    $result_array = array();
     if (!empty($exe_id)) {
         $sql = "SELECT q.*, tee.*
-	                    FROM $TBL_EXERCICES as q
-	                    INNER JOIN $TBL_TRACK_EXERCICES as tee
-	                    ON q.id=tee.exe_exo_id
-	                    INNER JOIN $TBL_COURSE c
-	                    ON c.id = tee.c_id
-	                    WHERE tee.exe_id = $exe_id
-	                    AND q.c_id=c.id";
+                FROM $TBL_EXERCICES as q
+                INNER JOIN $TBL_TRACK_EXERCICES as tee
+                  ON q.iid = tee.exe_exo_id
+                INNER JOIN $TBL_COURSE c
+                  ON c.id = tee.c_id
+                WHERE tee.exe_id = $exe_id
+                AND q.c_id = c.id";
 
         $result = Database::query($sql);
         $result_array = Database::fetch_array($result, 'ASSOC');
@@ -900,7 +904,7 @@ function exercise_time_control_is_valid($exercise_id, $lp_id = 0, $lp_item_id = 
     $course_id = api_get_course_int_id();
     $exercise_id = intval($exercise_id);
     $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-    $sql = "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $exercise_id";
+    $sql = "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $exercise_id";
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');
     if (!empty($row['expired_time'])) {
@@ -2337,10 +2341,10 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
         foreach ($question_list as $questionId) {
 
-            // creates a temporary Question object
+            // Creates a temporary Question object
             $objQuestionTmp = Question::read($questionId);
 
-            //this variable commes from exercise_submit_modal.php
+            // This variable commes from exercise_submit_modal.php
             ob_start();
             $hotspot_delineation_result = null;
 
@@ -2363,24 +2367,23 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $my_total_score = $result['score'];
             $my_total_weight = $result['weight'];
 
-            //Category report
+            // Category report
             $category_was_added_for_this_test = false;
-
-            if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
-                $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
-                $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
-                $category_was_added_for_this_test = true;
-            }
 
             if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
                 foreach ($objQuestionTmp->category_list as $category_id) {
+                    if (!isset($category_list[$category_id])) {
+                        $category_list[$category_id] = array();
+                        $category_list[$category_id]['score'] = 0;
+                        $category_list[$category_id]['total'] = 0;
+                    }
                     $category_list[$category_id]['score'] += $my_total_score;
                     $category_list[$category_id]['total'] += $my_total_weight;
                     $category_was_added_for_this_test = true;
                 }
             }
 
-            //No category for this question!
+            // No category for this question!
             if ($category_was_added_for_this_test == false) {
                 $category_list['none'] = array();
                 $category_list['none']['score'] += $my_total_score;
@@ -2467,7 +2470,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
         if (api_is_allowed_to_session_edit()) {
-            update_event_exercise($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array(), $end_date);
+            update_event_exercise($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array());
         }
 
         // Send notification ..
@@ -2478,6 +2481,13 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     }
 }
 
+/**
+ * @param $objExercise
+ * @param $score
+ * @param $weight
+ * @param bool $check_pass_percentage
+ * @return string
+ */
 function get_question_ribbon($objExercise, $score, $weight, $check_pass_percentage = false)
 {
     $ribbon = '<div class="ribbon">';
@@ -2503,8 +2513,6 @@ function get_question_ribbon($objExercise, $score, $weight, $check_pass_percenta
     if ($check_pass_percentage) {
         $ribbon .= show_success_message($score, $weight, $objExercise->selectPassPercentage());
     }
-
-
     $ribbon .= '</div>';
     return $ribbon;
 }

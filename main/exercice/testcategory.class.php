@@ -62,15 +62,15 @@ class Testcategory
 
     /**
      * Return the Testcategory object with id=in_id
-     * @param $in_id
+     * @param int $id
      * @return bool
      * @assert () === false
 	 */
 
-    function getCategory($in_id) {
+    function getCategory($id) {
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-		$in_id = Database::escape_string($in_id);
-        $sql = "SELECT * FROM $t_cattable WHERE iid = $in_id ";
+		$in_id = Database::escape_string($id);
+        $sql = "SELECT * FROM $t_cattable WHERE iid = $id ";
 		$res = Database::query($sql);
 		$numrows = Database::num_rows($res);
 		if ($numrows > 0) {
@@ -88,7 +88,8 @@ class Testcategory
      * Add Testcategory in the database if name doesn't already exists
      *
 	 */
-	function addCategoryInBDD() {
+	function addCategoryInBDD()
+    {
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $v_name = Database::escape_string($this->name);
         $v_description = Database::escape_string($this->description);
@@ -549,18 +550,20 @@ class Testcategory
      * $categories[1][30] = 10, array with category id = 1 and question_id = 10
      * A question has "n" categories
 	 */
-    static function getQuestionsByCat($exerciceId, $check_in_question_list = array()) {
+    static function getQuestionsByCat($exerciseId, $check_in_question_list = array()) {
         $categories = array();
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $exerciceId = intval($exerciceId);
+        $exerciseId = intval($exerciseId);
+
         $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
                 FROM $TBL_QUESTION_REL_CATEGORY qrc, $TBL_EXERCICE_QUESTION eq
-                WHERE   exercice_id = $exerciceId AND
+                WHERE   exercice_id = $exerciseId AND
                         eq.question_id = qrc.question_id AND
                         eq.c_id =".api_get_course_int_id()." AND
                         eq.c_id = qrc.c_id
                 ORDER BY category_id, question_id";
+
 		$res = Database::query($sql);
 		while ($data = Database::fetch_array($res)) {
             if (!empty($check_in_question_list)) {
@@ -569,7 +572,7 @@ class Testcategory
 			    }
 		    }
 
-            if (!is_array($categories[$data['category_id']])) {
+            if (!isset($categories[$data['category_id']]) OR !is_array($categories[$data['category_id']])) {
                 $categories[$data['category_id']] = array();
             }
 
@@ -802,16 +805,17 @@ class Testcategory
     }
 
     /**
-     * @param $exercise_id
-     * @param $course_id
-     * @param null $order
+     * @param int $exercise_id
+     * @param int $course_id
+     * @param string $order
      * @return bool
      */
     function get_category_exercise_tree($exercise_id, $course_id, $order = null)
     {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE exercise_id = {$exercise_id} AND qc.c_id = {$course_id} ";
+        $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid)
+                WHERE exercise_id = {$exercise_id} AND qc.c_id = {$course_id} ";
 
         if (!empty($order)) {
             $sql .= "ORDER BY $order";

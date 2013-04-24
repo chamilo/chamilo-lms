@@ -577,7 +577,9 @@ class Exercise
                         $cat = new Testcategory();
                         //$categories_added_in_exercise = $this->get_categories_with_name_in_exercise();
                         $categories_added_in_exercise = $cat->get_category_exercise_tree($this->id, $this->course['real_id']);
-                        shuffle($categories_added_in_exercise);
+                        if (!empty($categories_added_in_exercise)) {
+                            shuffle($categories_added_in_exercise);
+                        }
                         break;
                     case EXERCISE_CATEGORY_RANDOM_ORDERED:
                         $cat = new Testcategory();
@@ -614,7 +616,7 @@ class Exercise
                     }
 
                     if (!empty($question_list_based_in_categories)) {
-                        $question_list = array_flatten($question_list_based_in_categories);
+                        $question_list = ArrayClass::array_flatten($question_list_based_in_categories);
                     }
                 }
             }
@@ -911,7 +913,6 @@ class Exercise
         $text_when_finished = $this->text_when_finished;
         $display_category_name = intval($this->display_category_name);
         $pass_percentage = intval($this->pass_percentage);
-
         $session_id = api_get_session_id();
 
         //If direct we do not show results
@@ -959,7 +960,7 @@ class Exercise
                     pass_percentage = '".Database::escape_string($pass_percentage)."',
 					results_disabled='".Database::escape_string($results_disabled)."'";
             }
-            $sql .= " WHERE iid = '".Database::escape_string($id)."'";
+            $sql .= " WHERE iid = ".Database::escape_string($id)." AND c_id = {$this->course_id}";
             Database::query($sql);
 
             // update into the item_property table
@@ -2118,7 +2119,11 @@ class Exercise
         }
     }
 
-    public function set_autolaunch() {
+    /**
+     *
+     */
+    public function set_autolaunch()
+    {
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $session_id = api_get_session_id();
 
@@ -2956,23 +2961,22 @@ class Exercise
                             $answer .= $temp;
                             break;
                         }
+
                         if ($from_database) {
-                            $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".Database::escape_string(
-                                $questionId
-                            )."'";
+                            $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = ".$exeId." AND question_id= ".Database::escape_string($questionId);
                             $resfill = Database::query($queryfill);
-                            $str = Database::result($resfill, 0, 'answer');
+                            if (Database::num_rows($resfill)) {
+                                $str = Database::result($resfill, 0, 'answer');
+                                api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
+                                $str = str_replace('\r\n', '', $str);
+                                $choice = $arr[1];
+                                $tmp = api_strrpos($choice[$j], ' / ');
+                                $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                $choice[$j] = trim($choice[$j]);
 
-                            api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
-                            $str = str_replace('\r\n', '', $str);
-                            $choice = $arr[1];
-
-                            $tmp = api_strrpos($choice[$j], ' / ');
-                            $choice[$j] = api_substr($choice[$j], 0, $tmp);
-                            $choice[$j] = trim($choice[$j]);
-
-                            //Needed to let characters ' and " to work as part of an answer
-                            $choice[$j] = stripslashes($choice[$j]);
+                                //Needed to let characters ' and " to work as part of an answer
+                                $choice[$j] = stripslashes($choice[$j]);
+                            }
                         } else {
                             $choice[$j] = trim($choice[$j]);
                         }
@@ -5053,7 +5057,7 @@ class Exercise
     {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->id)) {
-            $sql = "SELECT SUM(count_questions) count_questions FROM $table WHERE exercise_id = {$this->id}";
+            $sql = "SELECT SUM(count_questions) count_questions FROM $table WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);

@@ -11,7 +11,6 @@
  * Code
  */
 
-
 // Question types
 define('UNIQUE_ANSWER', 1);
 define('MULTIPLE_ANSWER', 2);
@@ -59,7 +58,7 @@ abstract class Question
     public $exerciseList; // array with the list of exercises which this question is in
     public $category_list;
     public $parent_id;
-    private $isContent;
+    public $isContent;
     public $course;
     static $typePicture = 'new_question.png';
     static $explanationLangVar = '';
@@ -121,6 +120,11 @@ abstract class Question
         return $this->isContent = $isContent;
     }
 
+    /**
+     * @param string $title
+     * @param int  $course_id
+     * @return mixed|bool
+     */
     public function readByTitle($title, $course_id = null) {
         if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
@@ -139,6 +143,7 @@ abstract class Question
         }
         return false;
     }
+
     /**
      * Reads question informations from the data base
      *
@@ -165,7 +170,7 @@ abstract class Question
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-        $sql = "SELECT * FROM $TBL_QUESTIONS WHERE iid = $id ";
+        $sql = "SELECT * FROM $TBL_QUESTIONS WHERE iid = $id AND c_id = $course_id";
 
         $result = Database::query($sql);
 
@@ -217,10 +222,10 @@ abstract class Question
     }
 
     /**
-     * returns the question ID
+     * Returns the question ID
      *
      * @author - Olivier Brouckaert
-     * @return - integer - question ID
+     * @return int - question ID
      */
     function selectId()
     {
@@ -228,10 +233,10 @@ abstract class Question
     }
 
     /**
-     * returns the question title
+     * Returns the question title
      *
      * @author - Olivier Brouckaert
-     * @return - string - question title
+     * @return string - question title
      */
     function selectTitle()
     {
@@ -242,7 +247,7 @@ abstract class Question
      * returns the question description
      *
      * @author - Olivier Brouckaert
-     * @return - string - question description
+     * @return string - question description
      */
     function selectDescription()
     {
@@ -255,7 +260,7 @@ abstract class Question
      * returns the question weighting
      *
      * @author - Olivier Brouckaert
-     * @return - integer - question weighting
+     * @return int - question weighting
      */
     function selectWeighting()
     {
@@ -266,7 +271,7 @@ abstract class Question
      * returns the question position
      *
      * @author - Olivier Brouckaert
-     * @return - integer - question position
+     * @return int - question position
      */
     function selectPosition()
     {
@@ -277,7 +282,7 @@ abstract class Question
      * returns the answer type
      *
      * @author - Olivier Brouckaert
-     * @return - integer - answer type
+     * @return int - answer type
      */
     function selectType()
     {
@@ -288,7 +293,7 @@ abstract class Question
      * returns the level of the question
      *
      * @author - Nicolas Raynaud
-     * @return - integer - level of the question, 0 by default.
+     * @return int - level of the question, 0 by default.
      */
     function selectLevel()
     {
@@ -299,7 +304,7 @@ abstract class Question
      * returns the picture name
      *
      * @author - Olivier Brouckaert
-     * @return - string - picture name
+     * @return string - picture name
      */
     function selectPicture()
     {
@@ -319,7 +324,7 @@ abstract class Question
      * returns the array with the exercise ID list
      *
      * @author - Olivier Brouckaert
-     * @return - array - list of exercise ID which the question is in
+     * @return array - list of exercise ID which the question is in
      */
     function selectExerciseList()
     {
@@ -330,14 +335,18 @@ abstract class Question
      * returns the number of exercises which this question is in
      *
      * @author - Olivier Brouckaert
-     * @return - integer - number of exercises
+     * @return integer - number of exercises
      */
     function selectNbrExercises()
     {
         return sizeof($this->exerciseList);
     }
 
-    function updateCourse($course_id) {
+    /**
+     * @param $course_id
+     */
+    function updateCourse($course_id)
+    {
         $this->course = api_get_course_info_by_id($course_id);
     }
     /**
@@ -833,7 +842,7 @@ abstract class Question
                     extra       ='".Database::escape_string($extra)."',
 					level		='".Database::escape_string($level)."',
                     parent_id   =  ".$this->parent_id."
-				WHERE iid = '".Database::escape_string($id)."'";
+				WHERE c_id = $c_id AND iid = '".Database::escape_string($id)."'";
 
             Database::query($sql);
             $this->saveCategories($category_list);
@@ -1731,6 +1740,7 @@ abstract class Question
         }
         $question_title = $this->question;
 
+        $header = null;
         // Display question category, if any
         if ($show_media) {
             $header .= $this->show_media_content();

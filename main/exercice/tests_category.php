@@ -264,43 +264,44 @@ function display_add_category($type) {
 function display_categories($type = 'simple') {
     $cat = new Testcategory();
     $categories = $cat->get_category_tree_by_type($type);
+    if (!empty($categories)) {
+        foreach ($categories as $row) {
+            // Title with number of questions in the category
+            $category_id = $row['id'];
+            $tmpobj = new Testcategory($category_id);
+            $nb_question = $tmpobj->getCategoryQuestionsNumber();
+            echo '<div class="sectiontitle" id="id_cat'.$category_id.'">';
+            $nb_question_label = $nb_question == 1 ? $nb_question . ' ' . get_lang('Question') : $nb_question . ' ' . get_lang('Questions');
+            $global_label = null;
+            if ($row['c_id'] == 0) {
+                $global_label = ' '.Display::label(get_lang('Global'), 'info');
+            }
+            echo "<span style='float:right'>" . $nb_question_label . "</span>";
+            $style = 'margin-left:' . $row['depth'] * 20 . 'px; margin-right:10px;';
+            echo $title = Display::div($row['title'].$global_label, array('style' => $style));
+            echo '</div>';
+            echo '<div class="sectioncomment">';
+            echo $row['description'];
+            echo '</div>';
+            echo '<div>';
+            if ($row['c_id'] == 0 && $type == 'simple') {
+                echo Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
+            } else {
+                echo '<a href="'.api_get_self().'?action=editcategory&category_id='.$category_id.'&type='.$type.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+            }
 
-    foreach ($categories as $row) {
-        // Title with number of questions in the category
-        $category_id = $row['id'];
-        $tmpobj = new Testcategory($category_id);
-        $nb_question = $tmpobj->getCategoryQuestionsNumber();
-        echo '<div class="sectiontitle" id="id_cat'.$category_id.'">';
-        $nb_question_label = $nb_question == 1 ? $nb_question . ' ' . get_lang('Question') : $nb_question . ' ' . get_lang('Questions');
-        $global_label = null;
-        if ($row['c_id'] == 0) {
-            $global_label = ' '.Display::label(get_lang('Global'), 'info');
+            if ($nb_question > 0 || ($row['c_id'] == 0 && $type == 'simple')){
+                echo '<a href="javascript:void(0)" onclick="alert(\'' . protectJSDialogQuote(get_lang('CannotDeleteCategory')) . '\')">';
+                echo Display::return_icon('delete_na.png', get_lang('CannotDeleteCategory'), array(), ICON_SIZE_SMALL);
+                echo '</a>';
+            } else {
+                $rowname = protectJSDialogQuote($row['title']);
+                echo ' <a href="'.api_get_self().'?action=deletecategory&amp;category_id='.$category_id.'&type='.$type.'"';
+                echo 'onclick="return confirmDelete(\''.protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category_id.'\');">';
+                echo Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+            }
+            echo '</div>';
         }
-        echo "<span style='float:right'>" . $nb_question_label . "</span>";
-        $style = 'margin-left:' . $row['depth'] * 20 . 'px; margin-right:10px;';
-        echo $title = Display::div($row['title'].$global_label, array('style' => $style));
-        echo '</div>';
-        echo '<div class="sectioncomment">';
-        echo $row['description'];
-        echo '</div>';
-        echo '<div>';
-        if ($row['c_id'] == 0 && $type == 'simple') {
-            echo Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
-        } else {
-            echo '<a href="'.api_get_self().'?action=editcategory&category_id='.$category_id.'&type='.$type.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
-        }
-
-        if ($nb_question > 0 || ($row['c_id'] == 0 && $type == 'simple')){
-            echo '<a href="javascript:void(0)" onclick="alert(\'' . protectJSDialogQuote(get_lang('CannotDeleteCategory')) . '\')">';
-            echo Display::return_icon('delete_na.png', get_lang('CannotDeleteCategory'), array(), ICON_SIZE_SMALL);
-            echo '</a>';
-        } else {
-            $rowname = protectJSDialogQuote($row['title']);
-            echo ' <a href="'.api_get_self().'?action=deletecategory&amp;category_id='.$category_id.'&type='.$type.'"';
-            echo 'onclick="return confirmDelete(\''.protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category_id.'\');">';
-            echo Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
-        }
-        echo '</div>';
     }
 }
 

@@ -69,7 +69,7 @@ class Matching extends Question
                         if ($answer->isCorrect($i)) {
                             $nb_matches++;
                             $defaults['answer['.$nb_matches.']']    = $answer->selectAnswer($i);
-                            $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
+                            $defaults['weighting['.$nb_matches.']'] = Text::float_format($answer->selectWeighting($i), 1);
                             $correct_answer_id = $answer->correct[$i];
                             $defaults['matches['.$nb_matches.']'] = $answer->getCorrectAnswerPosition($correct_answer_id);
                         } else {

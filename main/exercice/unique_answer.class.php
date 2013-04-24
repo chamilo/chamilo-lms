@@ -149,7 +149,7 @@ class UniqueAnswer extends Question
                 }
                 $defaults['answer['.$i.']'] = $answer->answer[$answer_id];
                 $defaults['comment['.$i.']'] = $answer->comment[$answer_id];
-                $defaults['weighting['.$i.']'] = float_format($answer->weighting[$answer_id], 1);
+                $defaults['weighting['.$i.']'] = Text::float_format($answer->weighting[$answer_id], 1);
 
                 $item_list = explode('@@', $answer->destination[$answer_id]);
 

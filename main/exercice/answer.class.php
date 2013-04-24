@@ -119,9 +119,9 @@ class Answer
         /*$sql = "SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
 		      $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
         */
-        $sql = "SELECT iid, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination
+        $sql = "SELECT iid, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination
                 FROM $TBL_ANSWER
-                WHERE question_id ='".$questionId."' ORDER BY position";
+                WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
 
         $result = Database::query($sql);
         $counter = 1;
@@ -210,7 +210,7 @@ class Answer
             $this->weighting[$i]   = $doubt_data->ponderation;
             $this->position[$i]    = $doubt_data->position;
             $this->destination[$i] = $doubt_data->destination;
-            //$this->autoId[$i]      = $doubt_data->id_auto;            
+            //$this->autoId[$i]      = $doubt_data->id_auto;
         }
         $this->nbrAnswers = count($this->answer);
     }
@@ -255,9 +255,9 @@ class Answer
      * @author - Julio Montoya
      * @return - integer - the question ID
      */
-    function selectDestination($id)
+    public function selectDestination($id)
     {
-        return $this->destination[$id];
+        return isset($this->destination[$id]) ? $this->destination[$id] : null;
     }
 
     /**
@@ -267,9 +267,9 @@ class Answer
      * @param - integer $id - answer ID
      * @return - string - answer title
      */
-    function selectAnswer($id)
+    public function selectAnswer($id)
     {
-        return $this->answer[$id];
+        return isset($this->answer[$id]) ? $this->answer[$id] : null;
     }
 
     /**
@@ -297,7 +297,7 @@ class Answer
      * @param - integer $id - answer ID
      * @return - bool - answer title
      */
-    function selectAnswerIdByPosition($pos)
+    public function selectAnswerIdByPosition($pos)
     {
         foreach ($this->position as $k => $v) {
             if ($v != $pos) {
@@ -460,7 +460,7 @@ class Answer
     }
 
     /**
-     * returns answer hotspot coordinates
+     * Returns answer hotspot coordinates
      *
      * @author    Olivier Brouckaert
      * @param    integer    Answer ID
@@ -468,11 +468,11 @@ class Answer
      */
     function selectHotspotCoordinates($id)
     {
-        return $this->hotspot_coordinates[$id];
+        return isset($this->hotspot_coordinates[$id]) ? $this->hotspot_coordinates[$id] : null;
     }
 
     /**
-     * returns answer hotspot type
+     * Returns answer hotspot type
      *
      * @author    Toon Keppens
      * @param    integer        Answer ID
@@ -480,11 +480,11 @@ class Answer
      */
     function selectHotspotType($id)
     {
-        return $this->hotspot_type[$id];
+        return isset($this->hotspot_type[$id]) ? $this->hotspot_type[$id] : null;
     }
 
     /**
-     * creates a new answer
+     * Creates a new answer
      *
      * @author Olivier Brouckaert
      * @param string     answer title
@@ -495,7 +495,7 @@ class Answer
      * @param coordinates     Coordinates for hotspot exercises (optional)
      * @param integer        Type for hotspot exercises (optional)
      */
-    function createAnswer(
+    public function createAnswer(
         $answer,
         $correct,
         $comment,
@@ -693,7 +693,7 @@ class Answer
             }
             if (self::getQuestionType() == MATCHING) {
                 if (!empty($correct_answers)) {
-                    foreach($correct_answers as $new_id => $correct_id) {
+                    foreach ($correct_answers as $new_id => $correct_id) {
                         $correct = $new_ids[$correct_id];
                         $sql = "UPDATE $TBL_REPONSES SET correct = $correct WHERE iid = $new_id";
                         Database::query($sql);

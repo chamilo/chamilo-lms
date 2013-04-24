@@ -146,7 +146,7 @@ class UniqueAnswerNoOption extends Question
     					$correct = $i;
     				}
                     $answer_result = $answer->answer[$answer_id];
-                    $weight_result = float_format($answer->weighting[$answer_id], 1);
+                    $weight_result = Text::float_format($answer->weighting[$answer_id], 1);
                     if ($nb_answers == $i) {
                         $weight_result = '0';
                     }

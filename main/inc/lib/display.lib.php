@@ -57,7 +57,6 @@ class Display
         $app->run();
     }
 
-
     /**
      * Displays the reduced page header (without banner)
      */

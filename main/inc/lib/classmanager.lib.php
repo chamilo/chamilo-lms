@@ -15,7 +15,7 @@ class ClassManager
 	 * php-function.
 	 */
 	function get_class_info($class_id) {
-        $class_id = intval($class_id);        
+        $class_id = intval($class_id);
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE id='".$class_id."'";
 		$res = Database::query($sql);
@@ -27,7 +27,7 @@ class ClassManager
 	 * @param int $class_id The class id
 	 */
 	function set_name($name, $class_id) {
-        $class_id = intval($class_id);        
+        $class_id = intval($class_id);
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "UPDATE $table_class SET name='".Database::escape_string($name)."' WHERE id='".$class_id."'";
 		$res = Database::query($sql);
@@ -59,7 +59,7 @@ class ClassManager
 	 * class was subscibed to
 	 */
 	function delete_class($class_id) {
-        $class_id = intval($class_id);        
+        $class_id = intval($class_id);
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
@@ -75,8 +75,8 @@ class ClassManager
 	 * @param int $class_id
 	 * @return array
 	 */
-	function get_users($class_id) {        
-        $class_id = intval($class_id);        
+	function get_users($class_id) {
+        $class_id = intval($class_id);
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $table_class_user cu, $table_user u WHERE cu.class_id = '".$class_id."' AND cu.user_id = u.user_id";
@@ -111,9 +111,9 @@ class ClassManager
 	 * @param int $class_id The class id
 	 */
 	function unsubscribe_user($user_id, $class_id) {
-        $class_id = intval($class_id);        
+        $class_id = intval($class_id);
         $user_id  = intval($user_id);
-        
+
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$courses = ClassManager :: get_courses($class_id);
@@ -138,7 +138,7 @@ class ClassManager
 	 * @return array
 	 */
 	function get_courses($class_id) {
-        $class_id = intval($class_id);       
+        $class_id = intval($class_id);
 		$table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT * FROM $table_class_course cc, $table_course c WHERE cc.class_id = '".$class_id."' AND cc.course_code = c.code";
@@ -153,11 +153,11 @@ class ClassManager
 	 * Subscribe all members of a class to a course
 	 * @param  int $class_id The class id
 	 * @param string $course_code The course code
+     * @deprecated
 	 */
 	function subscribe_to_course($class_id, $course_code) {
 		$tbl_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
-		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql = "INSERT IGNORE INTO $tbl_course_class SET course_code = '".Database::escape_string($course_code)."', class_id = '".Database::escape_string($class_id)."'";
 		Database::query($sql);
 		$sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".Database::escape_string($class_id)."'";

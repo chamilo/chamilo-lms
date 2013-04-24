@@ -199,11 +199,8 @@ class InstallCommand extends CommonCommand
             'verbose_backup',
             'session_stored_in_db',
             'session_lifetime',
-            'software_name',
-            'software_url',
             'deny_delete_users',
             'system_version',
-            'system_stable'
         );
         // Getting default configuration parameters in the $_configuration array
         require_once api_get_path(SYS_PATH).'main/install/configuration.dist.yml.php';

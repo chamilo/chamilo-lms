@@ -180,15 +180,16 @@ unset($result);
 
 $sql = "SELECT code,visual_code,title FROM $tbl_course WHERE visual_code LIKE '".$first_letter_course."%' ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 
-if ($_configuration['multiple_access_urls']) {
-    $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+if (api_is_multiple_url_enabled()) {
+    $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1){
         $sql = "SELECT code, visual_code, title
                 FROM $tbl_course as course
                   INNER JOIN $tbl_course_rel_access_url course_rel_url
-                ON (course_rel_url.course_code= course.code)
-                  WHERE access_url_id =  $access_url_id  AND (visual_code LIKE '".$first_letter_course."%' ) ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+                ON (course_rel_url.c_id = course.id)
+                  WHERE access_url_id =  $access_url_id  AND (visual_code LIKE '".$first_letter_course."%' )
+              ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
     }
 }
 
@@ -196,7 +197,7 @@ $result = Database::query($sql);
 $db_courses = Database::store_result($result);
 unset($result);
 
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1){
@@ -205,9 +206,11 @@ if ($_configuration['multiple_access_urls']) {
             INNER JOIN $tbl_course as course
             ON course.code = course_rel_user.course_code
               INNER JOIN $tbl_course_rel_access_url course_rel_url
-            ON (course_rel_url.course_code= course.code)
-              WHERE access_url_id =  $access_url_id  AND course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-              ORDER BY course.title";
+            ON (course_rel_url.c_id = course.id)
+            WHERE access_url_id =  $access_url_id  AND
+                course_rel_user.user_id='".$_user['user_id']."' AND
+                course_rel_user.status='1'
+            ORDER BY course.title";
     }
 }
 ?>

@@ -1208,7 +1208,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         return $rowx[0];
     }
 
-    $teacher_list = CourseManager::get_teacher_list_from_course_code(api_get_course_id());
+    $teacher_list = CourseManager::get_teacher_list_from_course_code(api_get_course_int_id());
     $teacher_id_list = array();
     foreach ($teacher_list as $teacher) {
         $teacher_id_list[] = $teacher['user_id'];
@@ -2044,7 +2044,9 @@ function get_number_students_answer_count($answer_id, $question_id, $exercise_id
     }
 
     $sql = "SELECT $select_condition
-			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
+			FROM $track_exercises e
+			    INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+			    INNER JOIN $course_user cu
                 ON cu.c_id = a.c_id AND cu.user_id  = exe_user_id
 			WHERE 	exe_exo_id 		= $exercise_id AND
 					a.c_id 	= $courseId AND

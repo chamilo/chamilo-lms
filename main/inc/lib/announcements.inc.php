@@ -27,7 +27,7 @@ class AnnouncementManager
     {
         $reader_info = api_get_user_info(api_get_user_id());
         $course_info = api_get_course_info($course_code);
-        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
 
         $teacher_name = '';
         if (!empty($teacher_list)) {

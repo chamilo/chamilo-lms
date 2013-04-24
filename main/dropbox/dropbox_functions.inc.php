@@ -572,10 +572,7 @@ function display_add_form()
                 api_get_session_id()
             );
         } else {
-            $complete_user_list_for_dropbox = CourseManager :: get_teacher_list_from_course_code(
-                $course_info['code'],
-                false
-            );
+            $complete_user_list_for_dropbox = CourseManager :: get_teacher_list_from_course_code($course_info['real_id'], false);
         }
     }
 

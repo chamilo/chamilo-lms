@@ -964,8 +964,6 @@ the first name, the last name, the user id
  */
 function get_course_users()
 {
-    global $_cid;
-
     $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
     $tbl_courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -979,7 +977,7 @@ function get_course_users()
     ) ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
     $sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName, u.username
 			FROM $tbl_user as u, $tbl_courseUser as cu
-			WHERE cu.course_code = '".api_get_course_id()."'
+			WHERE cu.c_id = '".api_get_course_int_id()."'
 			AND cu.user_id = u.user_id $courseadmin_filter".$order_clause;
     $result = Database::query($sql);
     while ($user = Database::fetch_array($result)) {

@@ -397,15 +397,15 @@ class Tracking
         $tbl_session_course_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $sql = 'SELECT DISTINCT course_code
-                        FROM '.$tbl_course_rel_user.'
-                        WHERE user_id = '.$user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH;
+                FROM '.$tbl_course_rel_user.'
+                WHERE user_id = '.$user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH;
         $rs = Database::query($sql);
         $nb_courses = Database::num_rows($rs);
 
         if ($include_sessions) {
             $sql = 'SELECT DISTINCT course_code
-                            FROM '.$tbl_session_course_rel_user.'
-                            WHERE id_user = '.$user_id;
+                    FROM '.$tbl_session_course_rel_user.'
+                    WHERE id_user = '.$user_id;
             $rs = Database::query($sql);
             $nb_courses += Database::num_rows($rs);
         }
@@ -1360,15 +1360,23 @@ class Tracking
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql = 'SELECT DISTINCT scu.course_code FROM '.$tbl_session_course_user.' scu INNER JOIN '.$tbl_course_rel_access_url.' cru
-                        ON (scu.course_code = cru.course_code)
-                        WHERE scu.id_user='.$coach_id.' AND scu.status=2 AND cru.access_url_id = '.$access_url_id;
+                $sql = 'SELECT DISTINCT scu.course_code
+                        FROM '.$tbl_session_course_user.' scu
+                        INNER JOIN '.$tbl_course.' c
+                        ON (scu.course_code = c.code)
+                        INNER JOIN '.$tbl_course_rel_access_url.' cru
+                        ON (cru.c_id = c.id)
+                        WHERE scu.id_user='.$coach_id.' AND
+                            scu.status=2 AND
+                            cru.access_url_id = '.$access_url_id;
             }
         }
 
         if (!empty($id_session))
             $sql .= ' AND id_session='.$id_session;
+
         $result = Database::query($sql);
+
         while ($row = Database::fetch_array($result)) {
             $a_courses[$row['course_code']] = $row['course_code'];
         }
@@ -1376,12 +1384,12 @@ class Tracking
         // Then, courses where $coach_id is coach of the session
 
         $sql = 'SELECT DISTINCT session_course.course_code
-                        FROM '.$tbl_session_course.' as session_course
-                        INNER JOIN '.$tbl_session.' as session
-                            ON session.id = session_course.id_session
-                            AND session.id_coach = '.$coach_id.'
-                        INNER JOIN '.$tbl_course.' as course
-                            ON course.code = session_course.course_code';
+                FROM '.$tbl_session_course.' as session_course
+                INNER JOIN '.$tbl_session.' as session
+                    ON session.id = session_course.id_session
+                    AND session.id_coach = '.$coach_id.'
+                INNER JOIN '.$tbl_course.' as course
+                    ON course.code = session_course.course_code';
 
         if (api_is_multiple_url_enabled()) {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -1395,7 +1403,7 @@ class Tracking
                         INNER JOIN '.$tbl_course.' as course
                             ON course.code = session_course.course_code
                          INNER JOIN '.$tbl_course_rel_access_url.' course_rel_url
-                        ON (session_course.course_code = course_rel_url.course_code)';
+                        ON (course.id = course_rel_url.c_id)';
             }
         }
 
@@ -1947,7 +1955,7 @@ class Tracking
      * @param    int        Session id    (optional)
      * @return    array    Inactives users
      */
-    public static function get_inactives_students_in_course($course_code, $since = 'never', $session_id = 0)
+    public static function get_inactives_students_in_course($courseId, $since = 'never', $session_id = 0)
     {
         $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1969,7 +1977,7 @@ class Tracking
                         LEFT JOIN '.$tbl_track_login.' stats_login
                         ON course_user.user_id = stats_login.user_id AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' '.
                 $inner.'
-                    WHERE course_user.course_code = \''.Database::escape_string($course_code).'\'
+                    WHERE course_user.c_id = \''.Database::escape_string($courseId).'\'
                     AND stats_login.login_course_date IS NULL
                     GROUP BY course_user.user_id';
         }
@@ -2275,7 +2283,6 @@ class Tracking
      */
     static function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true)
     {
-        global $_configuration;
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2288,11 +2295,15 @@ class Tracking
         // get course list
         if (api_is_multiple_url_enabled()) {
             $sql = 'SELECT cu.course_code as code, title
-                		FROM '.$tbl_course_user.' cu INNER JOIN '.$tbl_access_rel_course.' a  ON(a.course_code = cu.course_code) INNER JOIN '.$tbl_course.' c ON( cu.course_code = c.code)
-                		WHERE user_id='.$user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND access_url_id = '.api_get_current_access_url_id().' ORDER BY title ';
+                    FROM '.$tbl_course_user.' cu INNER JOIN '.$tbl_access_rel_course.' a
+                        ON(a.c_id = cu.c_id) INNER JOIN '.$tbl_course.' c ON( cu.c_id = c.id)
+                    WHERE user_id='.$user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND access_url_id = '.api_get_current_access_url_id().'
+                    ORDER BY title ';
         } else {
-            $sql = 'SELECT course_code as code, title FROM '.$tbl_course_user.' u INNER JOIN '.$tbl_course.' c ON(course_code = c.code)
-						WHERE u.user_id='.$user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ORDER BY title ';
+            $sql = 'SELECT course_code as code, title
+                    FROM '.$tbl_course_user.' u INNER JOIN '.$tbl_course.' c ON(u.c_id = c.id)
+                    WHERE u.user_id='.$user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
+                    ORDER BY title ';
         }
 
         $rs = Database::query($sql);
@@ -2303,11 +2314,17 @@ class Tracking
 
         // Get the list of sessions where the user is subscribed as student
         if (api_is_multiple_url_enabled()) {
-            $sql = 'SELECT DISTINCT cu.course_code, id_session as session_id, name FROM '.$tbl_session_course_user.' cu INNER JOIN '.$tbl_access_rel_session.' a  ON(a.session_id = cu.id_session) INNER JOIN '.$tbl_session.' s  ON(s.id = a.session_id)
-                		WHERE id_user='.$user_id.' AND access_url_id = '.api_get_current_access_url_id().' ORDER BY name ';
+            $sql = 'SELECT DISTINCT cu.course_code, id_session as session_id, name
+                    FROM '.$tbl_session_course_user.' cu INNER JOIN '.$tbl_access_rel_session.' a
+                    ON(a.session_id = cu.id_session)
+                    INNER JOIN '.$tbl_session.' s  ON(s.id = a.session_id)
+                    WHERE id_user='.$user_id.' AND access_url_id = '.api_get_current_access_url_id().'
+                    ORDER BY name ';
         } else {
-            $sql = 'SELECT DISTINCT course_code, id_session as session_id, name FROM '.$tbl_session_course_user.' u INNER JOIN '.$tbl_session.' s ON(s.id = u.id_session)
-                		WHERE id_user='.$user_id.' ORDER BY name ';
+            $sql = 'SELECT DISTINCT course_code, id_session as session_id, name
+                    FROM '.$tbl_session_course_user.' u INNER JOIN '.$tbl_session.' s ON(s.id = u.id_session)
+                    WHERE id_user='.$user_id.'
+                    ORDER BY name ';
         }
 
         $rs = Database::query($sql);
@@ -4548,5 +4565,4 @@ class TrackingUserLogCSV
         }
         return array($title_line, $line);
     }
-
 }

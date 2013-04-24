@@ -4230,11 +4230,10 @@ class Exercise
             $mail_content = $msg1;
             $subject = get_lang('OpenQuestionsAttempted');
 
-            $teachers = array();
             if (api_get_session_id()) {
                 $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
             } else {
-                $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+                $teachers = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
             }
 
             if (!empty($teachers)) {
@@ -4313,11 +4312,10 @@ class Exercise
             $mail_content = $msg1;
             $subject = get_lang('OralQuestionsAttempted');
 
-            $teachers = array();
             if (api_get_session_id()) {
                 $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
             } else {
-                $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+                $teachers = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
             }
 
             if (!empty($teachers)) {

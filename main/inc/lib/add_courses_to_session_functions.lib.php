@@ -64,9 +64,8 @@ class AddCourseToSession {
 					WHERE course.visual_code LIKE "'.$needle.'%" '.$cond_course_code.' ORDER BY course.code ';
 			}
 
-			global $_configuration;
-			if ($_configuration['multiple_access_urls']) {
-				$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+			if (api_is_multiple_url_enabled()) {
+				$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1){
 
@@ -76,13 +75,13 @@ class AddCourseToSession {
 								LEFT JOIN '.$tbl_session_rel_course.' session_rel_course
 									ON course.code = session_rel_course.course_code
 									AND session_rel_course.id_session = '.intval($id_session).'
-								INNER JOIN '.$tbl_course_rel_access_url.' url_course ON (url_course.course_code=course.code)
+								INNER JOIN '.$tbl_course_rel_access_url.' url_course ON (url_course.c_id = course.id)
 								WHERE access_url_id = '.$access_url_id.' AND (course.visual_code LIKE "'.$needle.'%"
 								OR course.title LIKE "'.$needle.'%" )';
 					} else {
 						$sql = 'SELECT course.code, course.visual_code, course.title
 								FROM '.$tbl_course.' course, '.$tbl_course_rel_access_url.' url_course
-								WHERE url_course.course_code=course.code AND access_url_id = '.$access_url_id.'
+								WHERE url_course.c_id = course.od AND access_url_id = '.$access_url_id.'
 								AND course.visual_code LIKE "'.$needle.'%" '.$cond_course_code.' ORDER BY course.code ';
 					}
 				}

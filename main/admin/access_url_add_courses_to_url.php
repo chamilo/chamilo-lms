@@ -46,7 +46,7 @@ $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('Mult
 Display :: display_header($tool_name);
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('edit.gif',get_lang('EditCoursesToURL'),''), api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php"'); 
+echo Display::url(Display::return_icon('edit.gif',get_lang('EditCoursesToURL'),''), api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php"');
 echo '</div>';
 
 api_display_tool_title($tool_name);
@@ -65,7 +65,7 @@ if ($_POST['form_sent']) {
 		if ( count($courses) == 0 || count($url_list) == 0) {
 			Display :: display_error_message(get_lang('AtLeastOneCourseAndOneURL'));
 		} else {
-			UrlManager::add_courses_to_urls($courses,$url_list);
+			UrlManager::add_courses_to_urls($courses, $url_list);
 			Display :: display_confirmation_message(get_lang('CourseBelongURL'));
 		}
 	}
@@ -88,7 +88,7 @@ if(empty($first_letter_user)) {
 }
 
 $first_letter_course = Database::escape_string($first_letter_course);
-$sql = "SELECT code, title FROM $tbl_course
+$sql = "SELECT code, title, id FROM $tbl_course
 		WHERE title LIKE '".$first_letter_course."%' OR title LIKE '".api_strtolower($first_letter_course)."%'
 		ORDER BY title, code DESC ";
 
@@ -129,13 +129,13 @@ unset($result);
 		<?php
 		foreach ($db_courses as $course) {
 			?>
-			<option value="<?php echo $course['code']; ?>" <?php if(in_array($course['code'],$courses)) echo 'selected="selected"'; ?>><?php echo $course['title'].' ('.$course['code'].')'; ?></option>
+			<option value="<?php echo $course['id']; ?>" <?php if(in_array($course['code'],$courses)) echo 'selected="selected"'; ?>><?php echo $course['title'].' ('.$course['code'].')'; ?></option>
 			<?php
 		}
 		?>
     </select>
    </td>
-   <td width="20%" valign="middle" align="center">    
+   <td width="20%" valign="middle" align="center">
     <button type="submit" class="add"> <?php echo get_lang('AddCoursesToThatURL'); ?> </button>
    </td>
    <td width="40%" align="center">

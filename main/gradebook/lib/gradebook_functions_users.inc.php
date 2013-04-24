@@ -18,19 +18,21 @@ function get_users_in_course($course_id) {
 
 	$current_session = api_get_session_id();
 	$course_id = Database::escape_string($course_id);
+    $courseInfo = api_get_course_info($course_id);
 
 	if (!empty($current_session)) {
 		$sql = "SELECT user.user_id, user.username, lastname, firstname, official_code
 			 	FROM $tbl_session_course_user as scru, $tbl_user as user
 			 	WHERE scru.id_user=user.user_id
 			 	AND scru.status=0
-			 	AND scru.course_code='$course_id' AND id_session ='$current_session' $order_clause ";
+			 	AND scru.course_code='$course_id' AND id_session = '$current_session' $order_clause ";
 	} else {
 		$sql = 'SELECT user.user_id, user.username, lastname, firstname, official_code
                 FROM '.$tbl_course_user.' as course_rel_user, '.$tbl_user.' as user
                 WHERE   course_rel_user.user_id=user.user_id AND
                         course_rel_user.status='.STUDENT.' AND
-                        course_rel_user.course_code = "'.$course_id.'" '.$order_clause;
+                        course_rel_user.c_id = '.$courseInfo['real_id'].'
+                '.$order_clause;
 	}
 	$result = Database::query($sql);
 	return get_user_array_from_sql_result($result);
@@ -96,13 +98,13 @@ function get_all_users ($evals = array(), $links = array()) {
  */
 function find_students($mask= '') {
 	// students shouldn't be here // don't search if mask empty
-	if (!api_is_allowed_to_edit() || empty ($mask)) {
+	if (!api_is_allowed_to_edit() || empty($mask)) {
 		return null;
 	}
 	$mask = Database::escape_string($mask);
 
-	$tbl_user= Database :: get_main_table(TABLE_MAIN_USER);
-	$tbl_cru= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$tbl_cru = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql= 'SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email, user.official_code ' . ' FROM ' . $tbl_user . ' user';
 	if (!api_is_platform_admin()) {
 		$sql .= ', ' . $tbl_cru . ' cru';
@@ -113,7 +115,11 @@ function find_students($mask= '') {
 	$sql .= ' OR user.firstname LIKE '."'%" . $mask . "%')";
 
 	if (!api_is_platform_admin()) {
-		$sql .= ' AND user.user_id = cru.user_id AND cru.relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ' . ' AND cru.course_code in' . ' (SELECT course_code' . ' FROM ' . $tbl_cru . ' WHERE user_id = ' . api_get_user_id() . ' AND status = ' . COURSEMANAGER . ')';
+		$sql .= ' AND user.user_id = cru.user_id AND
+		            cru.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ' . ' AND
+		            cru.c_id in' . ' (
+		                SELECT c_id FROM '.$tbl_cru.' WHERE user_id = ' . api_get_user_id() . ' AND status = ' . COURSEMANAGER . '
+                    )';
 	}
 	$sql .= ' ORDER BY lastname';
 	$result= Database::query($sql);

@@ -431,18 +431,6 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers UserManager::get_teacher_list
-     * @todo   Implement testGet_teacher_list().
-     */
-    public function testGet_teacher_list()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers UserManager::get_user_picture_path_by_id
      * @todo   Implement testGet_user_picture_path_by_id().
      */

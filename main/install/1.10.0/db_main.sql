@@ -1568,11 +1568,11 @@ INSERT INTO access_url_rel_user VALUES(1, 1);
 
 DROP TABLE IF EXISTS access_url_rel_course;
 CREATE TABLE IF NOT EXISTS access_url_rel_course (
+  id int unsigned NOT NULL auto_increment,
   access_url_id int unsigned NOT NULL,
-  course_code char(40) NOT NULL,
-  PRIMARY KEY (access_url_id, course_code)
+  c_id int unsigned NOT NULL default 0,
+  PRIMARY KEY (id)
 );
-
 
 DROP TABLE IF EXISTS access_url_rel_session;
 CREATE TABLE IF NOT EXISTS access_url_rel_session (
@@ -3332,15 +3332,13 @@ DROP TABLE IF EXISTS track_e_hotspot;
 CREATE TABLE track_e_hotspot (
   hotspot_id int NOT NULL auto_increment,
   hotspot_user_id int NOT NULL,
-  hotspot_course_code varchar(50) NOT NULL,
   hotspot_exe_id int NOT NULL,
   hotspot_question_id int NOT NULL,
   hotspot_answer_id int NOT NULL,
   hotspot_correct tinyint(3) unsigned NOT NULL,
   hotspot_coordinate text NOT NULL,
   c_id int NOT NULL default 0,
-  PRIMARY KEY  (hotspot_id),
-  KEY hotspot_course_code (hotspot_course_code),
+  PRIMARY KEY (hotspot_id),
   KEY hotspot_user_id (hotspot_user_id),
   KEY hotspot_exe_id (hotspot_exe_id),
   KEY hotspot_question_id (hotspot_question_id)

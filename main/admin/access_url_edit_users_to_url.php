@@ -52,10 +52,8 @@ if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
 
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_user_to_url(code, content) {
-
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users").innerHTML = "";
 
@@ -92,7 +90,7 @@ $UserList=array();
 
 $message = '';
 
-if ($_POST['form_sent']) {
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 	$form_sent  = $_POST['form_sent'];
 	$UserList   = $_POST['sessionUsersList'];
 
@@ -156,8 +154,9 @@ echo '</div>';
 
 api_display_tool_title($tool_name);
 
-if ($_GET['action'] == 'show_message')
+if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
 	Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
+}
 
 $nosessionUsersList = $sessionUsersList = array();
 $ajax_search = $add_type == 'unique' ? true : false;
@@ -211,16 +210,17 @@ $url_list = UrlManager::get_url_data();
 	<?php
 	$url_selected='';
 	foreach ($url_list as $url_obj) {
+
 		$checked = '';
 		if (!empty($access_url_id)) {
-			if ($url_obj['id']==$access_url_id) {
-			$checked = 'selected=true';
-			$url_selected=	$url_obj[1];
+			if ($url_obj['id'] == $access_url_id) {
+			    $checked = 'selected=true';
+			    $url_selected =	$url_obj['id'];
 			}
 		}
 		if ($url_obj['active']==1) {
 	?>
-		<option <?php echo $checked;?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
+		<option <?php echo $checked;?> value="<?php echo $url_obj['id']; ?>"> <?php echo $url_obj['url']; ?></option>
 	<?php
 		}
 	}
@@ -351,7 +351,6 @@ function loadUsersInSelect(select){
 	else  // XMLHttpRequest non supporté par le navigateur
 	alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
-	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
 
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

@@ -206,11 +206,11 @@ class CoursesController
     /**
      * Change course category
      * render to listing view
-     * @param string    Course code
+     * @param int Course id
      * @param int    Category id
      */
-    public function change_course_category($course_code, $category_id) {
-        $result = $this->model->store_changecoursecategory($course_code, $category_id);
+    public function change_course_category($courseId, $category_id) {
+        $result = $this->model->store_changecoursecategory($courseId, $category_id);
         $message = '';
         if ($result) { $message = get_lang('EditCourseCategorySucces'); }
         $action = 'sortmycourses';

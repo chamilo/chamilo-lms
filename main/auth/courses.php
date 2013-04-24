@@ -131,7 +131,9 @@ if (isset($_GET['move'])) {
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
 if (isset($_POST['submit_change_course_category'])) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->change_course_category($_POST['course_2_edit_category'], $_POST['course_categories']);
+        $courseCode = $_POST['course_2_edit_category'];
+        $courseInfo = api_get_course_info($courseCode);
+        $courses_controller->change_course_category($courseInfo['real_id'], $_POST['course_categories']);
     }
 }
 

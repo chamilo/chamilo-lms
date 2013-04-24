@@ -32,6 +32,7 @@ $currentCourseRepository    = $_course['path'];
 $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
 
 $course_code 				= api_get_course_id();
+$courseId = api_get_course_int_id();
 $course_access_settings 	= CourseManager :: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
@@ -68,7 +69,11 @@ $q_tutor = Database::query($s_select_course_tutor_name);
 $s_tutor = Database::result($q_tutor, 0, 'tutor_name');
 
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
-$s_sql_course_titular = "SELECT DISTINCT username, lastname, firstname FROM $tbl_user as user, $tbl_course_user as course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."' ORDER BY ".$target_name." ASC";
+$s_sql_course_titular = "
+    SELECT DISTINCT username, lastname, firstname
+    FROM $tbl_user as user, $tbl_course_user as course_rel_user
+    WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND c_id ='".$courseId."'
+    ORDER BY ".$target_name." ASC";
 $q_result_titulars = Database::query($s_sql_course_titular);
 
 if (Database::num_rows($q_result_titulars) == 0) {

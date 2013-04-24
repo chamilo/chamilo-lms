@@ -1843,14 +1843,15 @@ function get_thread_users_details($thread_id)
 
     } else {
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, thread_id
-                  FROM $t_posts , $t_users user, $t_course_user course_user
-                  WHERE poster_id = user.user_id
-                  AND user.user_id = course_user.user_id
-                  AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                  AND thread_id = '".Database::escape_string($thread_id)."'
-                  AND course_user.status NOT IN('1') AND
-                  c_id = $course_id AND
-                  course_code = '".$course_code."' $orderby";
+                FROM $t_posts, $t_users user, $t_course_user course_user
+                WHERE   poster_id = user.user_id AND
+                        course_user.c_id = $t_posts.c_id
+                        user.user_id = course_user.user_id AND
+                        course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                        thread_id = '".Database::escape_string($thread_id)."' AND
+                        course_user.status NOT IN('1') AND
+                        course_user.c_id = $course_id
+                $orderby";
     }
     $result = Database::query($sql);
 
@@ -1905,22 +1906,22 @@ function get_thread_users_qualify($thread_id)
                   $orderby ";
     } else {
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.user_id,qualify.qualify
-                                FROM $t_posts post,
-                                     $t_qualify qualify,
-                                     $t_users user,
-                                     $t_course_user course_user
-                                WHERE
-                                     post.poster_id = user.user_id
-                                     AND post.poster_id = qualify.user_id
-                                     AND user.user_id = course_user.user_id
-                                     AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                                     AND qualify.thread_id = '".Database::escape_string($thread_id)."'
-                                     AND post.thread_id = '".Database::escape_string($thread_id)."'
-                                     AND course_user.status not in('1')
-                                     AND course_code = '".$course_code."' AND
-                                     qualify.c_id = $course_id AND
-                                     post.c_id = $course_id
-                                     $orderby ";
+            FROM $t_posts post,
+                 $t_qualify qualify,
+                 $t_users user,
+                 $t_course_user course_user
+            WHERE
+                 post.poster_id = user.user_id
+                 AND post.poster_id = qualify.user_id
+                 AND user.user_id = course_user.user_id
+                 AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                 AND qualify.thread_id = '".Database::escape_string($thread_id)."'
+                 AND post.thread_id = '".Database::escape_string($thread_id)."'
+                 AND course_user.status not in('1')
+                 AND course_user.c_id = $course_id AND
+                 qualify.c_id = $course_id AND
+                 post.c_id = $course_id
+                 $orderby ";
     }
     $result = Database::query($sql);
 
@@ -1973,23 +1974,23 @@ function get_thread_users_not_qualify($thread_id)
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
                   FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course
                   WHERE poster_id = user.user_id
-                  AND user.user_id NOT IN (".$cad.")
-                  AND user.user_id = session_rel_user_rel_course.id_user
-                  AND session_rel_user_rel_course.status<>'2'
-                  AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
-                  AND post.thread_id = '".Database::escape_string($thread_id)."'
-                  AND id_session = '".api_get_session_id()."'
-                  AND course_code = '".$course_code."' AND post.c_id = $course_id $orderby ";
+                      AND user.user_id NOT IN (".$cad.")
+                      AND user.user_id = session_rel_user_rel_course.id_user
+                      AND session_rel_user_rel_course.status<>'2'
+                      AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
+                      AND post.thread_id = '".Database::escape_string($thread_id)."'
+                      AND id_session = '".api_get_session_id()."'
+                      AND course_code = '".$course_code."' AND post.c_id = $course_id $orderby ";
     } else {
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
-                  FROM $t_posts post, $t_users user,$t_course_user course_user
-                  WHERE post.poster_id = user.user_id
+                FROM $t_posts post, $t_users user,$t_course_user course_user
+                WHERE post.poster_id = user.user_id
                   AND user.user_id NOT IN (".$cad.")
                   AND user.user_id = course_user.user_id
                   AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                   AND post.thread_id = '".Database::escape_string($thread_id)."'
                   AND course_user.status not in('1')
-                  AND course_code = '".$course_code."' AND post.c_id = $course_id  $orderby";
+                  AND course_user.c_id = $course_id AND post.c_id = $course_id  $orderby";
     }
     $result = Database::query($sql);
 

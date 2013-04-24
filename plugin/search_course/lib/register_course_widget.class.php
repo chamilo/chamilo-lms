@@ -108,7 +108,7 @@ class RegisterCourseWidget
             $user_id = $_user['user_id'];
         }
 
-        return (bool)CourseManager::add_user_to_course($user_id, $course_code);
+        return (bool)CourseManager::add_user_to_course($user_id, $course['real_id']);
     }
 
     /**

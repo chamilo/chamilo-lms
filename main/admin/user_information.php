@@ -27,8 +27,8 @@ $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 if ( isset($_GET['action']) ) {
     switch($_GET['action']) {
         case 'unsubscribe':
-            if ( CourseManager::get_user_in_course_status($_GET['user_id'],$_GET['course_code']) == STUDENT) {
-                CourseManager::unsubscribe_user($_GET['user_id'],$_GET['course_code']);
+            if ( CourseManager::get_user_in_course_status($_GET['user_id'],$_GET['courseId']) == STUDENT) {
+                CourseManager::unsubscribe_user($_GET['user_id'], $_GET['courseId']);
                 Display::display_normal_message(get_lang('UserUnsubscribed'));
             } else {
                 Display::display_error_message(get_lang('CannotUnsubscribeUserFromCourse'));
@@ -106,9 +106,6 @@ if (count($sessions) > 0) {
             $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                     '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
-            /*if (isset($my_course['status']) && $my_course['status'] == STUDENT) {
-                $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course_info['code'].'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
-            }*/
             $row[] = $tools;
             $data[] = $row;
         }
@@ -124,7 +121,7 @@ if (count($sessions) > 0) {
  * Show the courses in which this user is subscribed
  */
 $sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c'.
-    ' WHERE cu.user_id = '.$user['user_id'].' AND cu.course_code = c.code '.
+    ' WHERE cu.user_id = '.$user['user_id'].' AND cu.c_id = c.id '.
     ' AND cu.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
 $res = Database::query($sql);
 if (Database::num_rows($res) > 0) {
@@ -144,9 +141,9 @@ if (Database::num_rows($res) > 0) {
         $row[] = api_get_roles_to_string($roles);
         $tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                 '<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
-                '<a href="course_edit.php?course_code='.$course->code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+                '<a href="course_edit.php?courseId='.$course->c_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
         if ( $course->status == STUDENT ) {
-            $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course->code.'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+            $tools .= '<a href="user_information.php?action=unsubscribe&courseId='.$course->c_id.'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
 
         }
         $row[] = $tools;

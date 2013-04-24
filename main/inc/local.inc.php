@@ -747,7 +747,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
         //Checking if the user filled the course legal agreement
         if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {
-            $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id) || $user_pass_open_course;
+            $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course, $session_id) || $user_pass_open_course;
             if (!$user_is_subscribed) {
                 $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
                 header('Location: '.$url);
@@ -756,13 +756,13 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         }
     }
 
-    if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
+    if (isset($user_id) && $user_id && isset($_cid) && !empty($_cid) && $_cid != -1) {
 
         //Check if user is subscribed in a course
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "SELECT * FROM $course_user_table
                    WHERE user_id  = '".$user_id."' AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                   AND course_code = '$cidReq'";
+                   AND c_id = ".$_course['real_id'];
         $result = Database::query($sql);
 
         $cuData = null;

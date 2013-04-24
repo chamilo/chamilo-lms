@@ -192,7 +192,7 @@ if ($ajax_search) {
 			INNER JOIN $tbl_session_rel_course session_rel_course
 				ON course.code = session_rel_course.course_code
 				AND session_rel_course.id_session = ".intval($id_session)."
-				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.course_code=course.code)
+				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.c_id = course.id)
 				WHERE access_url_id = $access_url_id
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 		}
@@ -221,7 +221,7 @@ if ($ajax_search) {
 				LEFT JOIN $tbl_session_rel_course session_rel_course
 					ON course.code = session_rel_course.course_code
 					AND session_rel_course.id_session = ".intval($id_session)."
-				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.course_code=course.code)
+				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.c_id = course.id)
 				WHERE access_url_id = $access_url_id
 				ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 		}

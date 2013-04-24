@@ -183,7 +183,7 @@ $stok = Security::get_token();
                     echo '</div>';
 
                     echo '<div class="span4">';
-                    $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
+                    $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course['real_id']);
                     $teachers = '<h5>'.$teachers.'</h5>';
                     echo '<div class="categories-course-description"><h3>'.Text::cut($title, 60).'</h3>'.$teachers.$rating.'</div>';
 

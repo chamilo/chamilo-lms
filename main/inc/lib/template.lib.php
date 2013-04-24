@@ -331,7 +331,7 @@ class Template
 
         //Here we can add system parameters that can be use in any template
         $_s = array(
-            'software_name' => $_configuration['software_name'],
+            'software_name' => api_get_software_name(),
             'system_version' => $_configuration['system_version'],
             'site_name' => api_get_setting('siteName'),
             'institution' => api_get_setting('Institution')
@@ -674,7 +674,7 @@ class Template
 
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
-            $id_course = api_get_course_id();
+            $id_course = api_get_course_int_id();
             if (isset($id_course) && $id_course != -1) {
                 $teacher_data = '';
                 $mail = CourseManager::get_emails_of_tutors_to_course($id_course);
@@ -790,7 +790,7 @@ class Template
                 $clean_url = replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path
+                $homep = api_get_path(SYS_DATA_PATH).'home/'.$clean_url; //homep for Home Path
                 //we create the new dir for the new sites
                 if (!is_dir($homep)) {
                     mkdir($homep, api_get_permissions_for_new_directories());

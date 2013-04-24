@@ -50,35 +50,36 @@ if (!empty($course)) {
 
 	$users = array();
 	$course_id = api_get_course_int_id();
-	
+
 	if (empty($session_id)) {
-		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status 
-				  FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_course_user t3 
+		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status
+				  FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_course_user t3
 				  WHERE t2.c_id = $course_id AND
-				  		t1.user_id=t2.user_id AND 
-				  		t3.user_id=t2.user_id AND 
-						t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND 
-						t3.course_code = '".$_course['sysCode']."' AND 
-						t2.last_connection>'".$date_inter."' $extra_condition 
-						ORDER BY username";                        
+				  		t1.user_id=t2.user_id AND
+				  		t3.user_id=t2.user_id AND
+						t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+						t3.c_id = '".$course_id."' AND
+						t2.last_connection>'".$date_inter."' $extra_condition
+						ORDER BY username";
 		$result = Database::query($query);
 		$users = Database::store_result($result);
 	} else {
 		// select learners
-		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_session_course_user t3 
+		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_session_course_user t3
 		          WHERE
-		          t2.c_id = $course_id AND 
-		          t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND 
-		          t3.id_session = '".$session_id."' AND 
-		          t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
+		          t2.c_id = $course_id AND
+		          t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND
+		          t3.id_session = '".$session_id."' AND
+		          t3.c_id = '".$course_id."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
 		$result = Database::query($query);
 		while ($learner = Database::fetch_array($result)) {
 			$users[$learner['user_id']] = $learner;
 		}
 
 		// select session coach
-		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session t3 
-		          WHERE t2.c_id = $course_id AND 
+		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri
+                  FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session t3
+		          WHERE t2.c_id = $course_id AND
 		             t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id = '".$session_id."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
 		$result = Database::query($query);
 		if ($coach = Database::fetch_array($result)) {
@@ -89,7 +90,7 @@ if (!empty($course)) {
 		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri
 				FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3
 				WHERE
-				t2.c_id = $course_id AND  
+				t2.c_id = $course_id AND
 				t1.user_id=t2.user_id
 				AND t3.id_user=t2.user_id AND t3.status=2
 				AND t3.id_session = '".$session_id."'
@@ -109,7 +110,7 @@ if (!empty($course)) {
 
 	$user_id = $enreg['user_id'];
 	require 'header_frame.inc.php';
-	
+
 	?>
 	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="data_table">
 	<tr><th colspan="2"><?php echo get_lang('Connected'); ?></th></tr>
@@ -118,7 +119,7 @@ if (!empty($course)) {
 		if (empty($session_id)) {
 			$status = $user['status'];
 		} else {
-			$status = CourseManager::is_course_teacher($user['user_id'], $_SESSION['_course']['id']) ? 1 : 5;
+			$status = CourseManager::is_course_teacher($user['user_id'], api_get_course_int_id()) ? 1 : 5;
 		}
 		$user_image = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
 		$file_url = $user_image['dir'].$user_image['file'];

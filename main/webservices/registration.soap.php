@@ -3975,16 +3975,12 @@ function WSSubscribeUserToCourse($params)
             $result['result'] = 0;
         } else {
             // User was found
-            $course_id = CourseManager::get_course_id_from_original_id(
-                $original_course_id['original_course_id_value'],
-                $original_course_id['original_course_id_name']
-            );
+            $course_id = CourseManager::get_course_id_from_original_id($original_course_id['original_course_id_value'], $original_course_id['original_course_id_name']);
             if ($course_id == 0) {
                 // Course was not found
                 $result['result'] = 0;
             } else {
-                $course_code = CourseManager::get_course_code_from_course_id($course_id);
-                if (!CourseManager::add_user_to_course($user_id, $course_code, $status)) {
+                if (!CourseManager::add_user_to_course($user_id, $course_id, $status)) {
                     $result['result'] = 0;
                 }
             }
@@ -4070,7 +4066,7 @@ function WSSubscribeUserToCourseSimple($params)
         return $result;
     }
     if (!empty($course_code)) {
-        $course_data = CourseManager::get_course_information($course_code);
+        $course_data = api_get_course_info($course_code);
         if (empty($course_data)) {
             // Course was not found
             $result = "Course $course_code does not exist in the platform ";
@@ -4081,7 +4077,7 @@ function WSSubscribeUserToCourseSimple($params)
             if ($debug) {
                 error_log('Try to register: user_id= '.$user_id.' to course: '.$course_data['code']);
             }
-            if (!CourseManager::add_user_to_course($user_id, $course_data['code'], $status)) {
+            if (!CourseManager::add_user_to_course($user_id, $course_data['real_id'], $status)) {
                 $result = 'User was not registered possible reasons: User already registered to the course, Course visibility doesnt allow user subscriptions ';
                 if ($debug) {
                     error_log($result);

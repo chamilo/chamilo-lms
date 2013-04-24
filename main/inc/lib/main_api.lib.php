@@ -610,7 +610,6 @@ function api_get_path($path_type, $path = null) {
                 }
                 $root_web = $server_protocol.'://'.$server_name.$root_rel;
                 $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../../')).'/';
-                $code_folder = 'main/';
             //}
             // Here we give up, so we don't touch anything.
         }
@@ -1144,15 +1143,11 @@ function api_get_user_courses($userid, $fetch_session = true) {
     if ($userid != strval(intval($userid))) { return array(); } //get out if not integer
     $t_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $t_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $t_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $sql_select_courses = "SELECT cc.code code, cc.db_name db, cc.directory dir, cu.status status
-                                    FROM    $t_course       cc,
-                                            $t_course_user   cu
-                                    WHERE cc.code = cu.course_code
-                                    AND   cu.user_id = '".$userid."' AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+                            FROM    $t_course       cc, $t_course_user   cu
+                            WHERE cc.id = cu.c_id
+                            AND   cu.user_id = '".$userid."' AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
     $result = Database::query($sql_select_courses);
     if ($result === false) { return array(); }
     while ($row = Database::fetch_array($result)) {
@@ -2370,7 +2365,7 @@ function api_get_user_platform_status($user_id = false) {
                     case STUDENT;
                         $course_status['status'] = 'student';
                         //check if tutor
-                        $tutor_course_status = CourseManager::get_tutor_in_course_status($user_id, $course_code);
+                        $tutor_course_status = CourseManager::get_tutor_in_course_status($user_id, $course_id);
                         if ($tutor_course_status) {
                             $course_status['status'] = 'tutor';
                         }
@@ -3770,7 +3765,8 @@ function api_return_html_area($name, $content = '', $height = '', $width = '100%
 function api_max_sort_value($user_course_category, $user_id) {
     $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-    $sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".intval($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND user_course_cat='".Database::escape_string($user_course_category)."'";
+    $sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user
+                WHERE user_id='".intval($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND user_course_cat='".Database::escape_string($user_course_category)."'";
     $result_max = Database::query($sql_max);
     if (Database::num_rows($result_max) == 1) {
         $row_max = Database::fetch_array($result_max);
@@ -4257,12 +4253,13 @@ function api_get_version() {
  * @return string
  */
 function api_get_software_name() {
-    global $_configuration;
+    return 'Chamilo';
+    /*global $_configuration;
     if (isset($_configuration['software_name']) && !empty($_configuration['software_name'])) {
         return $_configuration['software_name'];
     } else {
         return 'Chamilo';
-    }
+    }*/
 }
 
 /**
@@ -4769,6 +4766,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         }
     }
     $cid = Database::escape_string($cid);
+    $courseInfo = api_get_course_info($cid);
     global $is_platformAdmin;
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -4809,7 +4807,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
             AND
                 relation_type <> '".COURSE_RELATION_TYPE_RRHH."'
             AND
-                course_code = '$cid'
+                course_code = ".$courseInfo['real_id']."
             LIMIT 1";
 
     $result = Database::query($sql);
@@ -5101,16 +5099,16 @@ function api_get_access_url_from_user($user_id) {
 /**
  * Gets the status of a user in a course
  * @param int       user_id
- * @param string    course_code
+ * @param int    course id
  * @return int      user status
  */
-function api_get_status_of_user_in_course ($user_id, $course_code) {
-    $tbl_rel_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    if (!empty($user_id) && !empty($course_code)) {
-        $user_id        = Database::escape_string(intval($user_id));
-        $course_code    = Database::escape_string($course_code);
-        $sql = 'SELECT status FROM '.$tbl_rel_course_user.'
-            WHERE user_id='.$user_id.' AND course_code="'.$course_code.'";';
+function api_get_status_of_user_in_course ($user_id, $courseId)
+{
+    if (!empty($user_id) && !empty($courseId)) {
+        $tbl_rel_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        $user_id     = intval($user_id);
+        $courseId    = Database::escape_string($courseId);
+        $sql = 'SELECT status FROM '.$tbl_rel_course_user.' WHERE user_id='.$user_id.' AND c_id="'.$courseId.'"';
         $result = Database::query($sql);
         $row_status = Database::fetch_array($result, 'ASSOC');
         return $row_status['status'];
@@ -5201,7 +5199,10 @@ function api_is_valid_secret_key($original_key_secret, $security_key) {
  */
 function api_is_user_of_course($course_id, $user_id) {
     $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = 'SELECT user_id FROM '.$tbl_course_rel_user.' WHERE course_code="'.Database::escape_string($course_id).'" AND user_id="'.Database::escape_string($user_id).'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ';
+    $sql = 'SELECT user_id FROM '.$tbl_course_rel_user.'
+            WHERE   c_id ="'.Database::escape_string($course_id).'" AND
+                    user_id="'.Database::escape_string($user_id).'" AND
+                    relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ';
     $result = Database::query($sql);
     return Database::num_rows($result) == 1;
 }
@@ -6332,6 +6333,8 @@ function api_detect_user_roles($user_id, $course_code, $session_id = 0) {
     /*$user_info = api_get_user_info($user_id);
     $user_roles[] = $user_info['status'];*/
 
+    $courseInfo = api_get_course_info($course_code);
+
     $url_id = api_get_current_access_url_id();
     if (api_is_platform_admin_by_id($user_id, $url_id)) {
         $user_roles[] = PLATFORM_ADMIN;
@@ -6349,10 +6352,10 @@ function api_detect_user_roles($user_id, $course_code, $session_id = 0) {
 
     if (!empty($course_code)) {
         if (empty($session_id)) {
-            if (CourseManager::is_course_teacher($user_id, $course_code)) {
+            if (CourseManager::is_course_teacher($user_id, $courseInfo['real_id'])) {
                 $user_roles[] = COURSEMANAGER;
             }
-            if (CourseManager::get_tutor_in_course_status($user_id, $course_code)) {
+            if (CourseManager::get_tutor_in_course_status($user_id, $courseInfo['real_id'])) {
                 $user_roles[] = COURSE_TUTOR;
             }
 

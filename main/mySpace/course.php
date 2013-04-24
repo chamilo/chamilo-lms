@@ -164,9 +164,11 @@ if (is_array($a_courses)) {
 
 		// students directly subscribed to the course
 		if (empty($id_session)) {
-			$sql = "SELECT user_id FROM $tbl_user_course as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+			$sql = "SELECT user_id FROM $tbl_user_course as course_rel_user
+			        WHERE course_rel_user.status='5' AND course_rel_user.c_id =".$course['real_id'];
 		} else {
-			$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code' AND id_session = '$id_session' AND srcu.status<>2";
+			$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu
+			        WHERE  srcu. course_code='$course_code' AND id_session = '$id_session' AND srcu.status<>2";
 		}
 
 		$rs = Database::query($sql);

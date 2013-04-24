@@ -419,7 +419,7 @@ class MySpace {
         $from = intval($from);
         $number_of_items = intval($number_of_items);
 
-		$sql = "SELECT code AS col0, title AS col1 FROM $main_course_table";
+		$sql = "SELECT code AS col0, title AS col1, id FROM $main_course_table";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
 		$result = Database::query($sql);
@@ -444,6 +444,8 @@ class MySpace {
 		// the table header
 		$return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
 
+        $courseInfo = api_get_course_info($course_code);
+
 		// database table definition
 		$tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -451,7 +453,7 @@ class MySpace {
 		// getting all the courses of the user
 		$sql = "SELECT * FROM $tbl_user AS u
 		        INNER JOIN $tbl_course_rel_user AS cu ON cu.user_id = u.user_id
-		        WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
+		        WHERE cu.c_id = '".$courseInfo['real_id']."' AND ISNULL(cu.role);";
 		$result = Database::query($sql);
 		$time_spent = 0;
 		$progress = 0;
@@ -543,7 +545,8 @@ class MySpace {
 	 * This function exports the table that we see in display_tracking_course_overview()
 	 *
 	 */
-	function export_tracking_course_overview() {
+	function export_tracking_course_overview()
+    {
 		// database table definition
 		$tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -590,13 +593,14 @@ class MySpace {
 		foreach ($course_data as $key => $course) {
 			$course_code = $course[0];
 			$course_title = $course[1];
+            $courseId = $course[2];
 
 			$csv_row = array();
 			$csv_row[] = $course_title;
 
 			// getting all the courses of the session
 			$sql = "SELECT * FROM $tbl_user AS u INNER JOIN $tbl_course_rel_user AS cu ON cu.user_id = u.user_id
-			        WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
+			        WHERE cu.c_id = '".$courseId."' AND ISNULL(cu.role);";
 			$result = Database::query($sql);
 			$time_spent = 0;
 			$progress = 0;
@@ -1119,9 +1123,8 @@ class MySpace {
 	 * @version Dokeos 1.8.6
 	 * @since October 2008
 	 */
-	function export_tracking_user_overview() {
-
-
+	function export_tracking_user_overview()
+    {
 		// database table definitions
 		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -1190,7 +1193,8 @@ class MySpace {
 		// the other lines (the data)
 		foreach ($user_data as $key => $user) {
 			// getting all the courses of the user
-			$sql = "SELECT code, id FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user[4])."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+			$sql = "SELECT code, id FROM $tbl_course_user
+			        WHERE user_id = '".Database::escape_string($user[4])."' AND relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
 			$result = Database::query($sql);
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
 				$csv_row = array();
@@ -1262,7 +1266,7 @@ class MySpace {
 		}
 
 		// get all courses with limit
-		$sql = "SELECT course.code as col1, course.title as col2
+		$sql = "SELECT course.code as col1, course.title as col2, id
 				FROM $tbl_course course
 				WHERE course.code IN (".implode(',',$courses_code).")";
 
@@ -1276,16 +1280,16 @@ class MySpace {
 
 		$res = Database::query($sql);
 		while ($row_course = Database::fetch_row($res)) {
-
 			$course_code = $row_course[0];
-			$course_info = api_get_course_info($course_code);
+            $courseId = $row_course[2];
+
 			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
 			// students directly subscribed to the course
 			if (empty($session_id)) {
-				$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+				$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$courseId'";
 			} else {
-				$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code' AND id_session = '$session_id' AND srcu.status<>2";
+				$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu.course_code='$course_code' AND id_session = '$session_id' AND srcu.status<>2";
 			}
 			$rs = Database::query($sql);
 			$users = array();

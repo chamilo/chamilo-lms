@@ -249,7 +249,7 @@ if (api_is_allowed_to_edit(null, true)) {
                         }
                         $description .= '<tr><td>'.get_lang('Course').': </td><td class="highlight">'.$course_info['name'].'</td>';
 
-                        $teachers = CourseManager::get_teacher_list_from_course_code($course_info['code']);
+                        $teachers = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
 
                         //If I'm a teacher in this course show just my name
                         if (isset($teachers[$user_id])) {
@@ -259,7 +259,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             }
                         } else {
                             //If not show all teachers
-                            $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
+                            $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course_info['real_id']);
                             if (!empty($teachers)) {
                                 $description .= '<tr><td>'.get_lang('Teachers').': </td><td class="highlight">'.$teachers.'</td>';
                             }

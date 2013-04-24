@@ -194,6 +194,7 @@ ALTER TABLE track_e_hotpotatoes ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_attempt ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_hotspot ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE access_url_rel_course ADD COLUMN c_id int unsigned NOT NULL default 0;
 
 ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
 RENAME TABLE c_quiz_question_category TO c_quiz_category;

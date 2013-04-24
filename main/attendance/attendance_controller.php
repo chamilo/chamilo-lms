@@ -446,12 +446,12 @@
         //Set headers pdf
 
         $courseCategory = CourseManager::get_course_category($courseInfo['category_code']);
-        $teacherInfo    = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
+        $teacherInfo    = CourseManager::get_teacher_list_from_course_code($courseInfo['real_id']);
         $teacherName = null;
         foreach ($teacherInfo as $dados) {
             if ($teacherName != null)
                 $teacherName = $teacherName . " / ";
-                $teacherName.= $dados['firstname']." ".$dados['lastname'];
+            $teacherName.= $dados['firstname']." ".$dados['lastname'];
         }
 
         // Get data table - Marco - ordenacao fixa - just fullname

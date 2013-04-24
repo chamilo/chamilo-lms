@@ -1525,7 +1525,7 @@ class DocumentManager
         $official_code = $user_info['official_code'];
 
         //Teacher information
-        $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_id);
+        $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_info);
         $teacher_info = api_get_user_info($info_teacher_id);
         $teacher_first_name = $teacher_info['firstname'];
         $teacher_last_name = $teacher_info['lastname'];
@@ -2956,7 +2956,7 @@ class DocumentManager
         }
 
         if (!$user_in_course) {
-            if (CourseManager::is_course_teacher($user_id, $course_info['code'])) {
+            if (CourseManager::is_course_teacher($user_id, $course_info['real_id'])) {
                 $user_in_course = true;
             }
         }
@@ -3313,22 +3313,30 @@ class DocumentManager
         return $return;
     }
 
+    /**
+     * @param int $doc_id
+     * @param string $course_code
+     * @param int $session_id
+     * @param int $user_id
+     * @return bool
+     */
     public static function check_visibility_tree($doc_id, $course_code, $session_id, $user_id)
     {
         $document_data = self::get_document_data_by_id($doc_id, $course_code);
 
         if (!empty($document_data)) {
+            $course_info = api_get_course_info($course_code);
+
             //if admin or course teacher, allow anyway
-            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $course_code)) {
+            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $course_info['real_id'])) {
                 return true;
             }
-            $course_info = api_get_course_info($course_code);
+
             if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
 
                 return $visible;
             } else {
-                $course_info = api_get_course_info($course_code);
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
 
                 if (!$visible) {

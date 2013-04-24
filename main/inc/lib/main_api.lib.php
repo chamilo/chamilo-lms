@@ -572,7 +572,7 @@ function api_get_path($path_type, $path = null) {
     }
 
     if (!$is_this_function_initialized) {
-        $root_rel       = "/".basename($root_sys);
+        $root_rel       = $_configuration['url_append'];
 
         $code_folder    = 'main/';
         //$course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;

@@ -41,6 +41,7 @@ class IndexController extends CommonController
         var_dump($app['request']->getHttpHost());
         var_dump($app['request']->getRequestUri());
         */
+
         $loginError = $app['request']->get('error');
 
         $extraJS = array();
@@ -156,6 +157,10 @@ class IndexController extends CommonController
 
         if (api_is_platform_admin() || api_is_drh()) {
             $app['page_controller']->return_skills_links();
+        }
+
+        if (!empty($loginError)) {
+            $app['template']->assign('login_failed', $this->handle_login_failed($loginError));
         }
 
         $response = $app['template']->render_layout('layout_2_col.tpl');

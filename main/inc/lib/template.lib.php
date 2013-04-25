@@ -367,6 +367,10 @@ class Template
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
 
+        if (api_get_setting('use_virtual_keyboard') == 'true') {
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/keyboard/keyboard.css';
+        }
+
         $css_file_to_string = null;
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
@@ -433,6 +437,14 @@ class Template
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
             $js_files[] = 'asciimath/ASCIIMathML.js';
+        }
+
+        if (api_get_setting('use_virtual_keyboard') == 'true') {
+            $js_files[] = 'keyboard/jquery.keyboard.js';
+        }
+
+        if (api_get_setting('disable_copy_paste') == 'true') {
+            $js_files[] = 'jquery.nocutcopypaste.js';
         }
 
         $js_file_to_string = null;

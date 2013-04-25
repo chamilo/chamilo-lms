@@ -913,7 +913,9 @@ VALUES
 ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
 ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1),
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
-('chamilo_database_version', NULL, 'textfield', NULL, 'xxx','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield', NULL, 'xxx','DatabaseVersion','', NULL, NULL, 0),
+('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
+('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1264,7 +1266,11 @@ VALUES
 ('session_page_enabled', 'true', 'Yes'),
 ('session_page_enabled', 'false', 'No'),
 ('allow_teachers_to_create_sessions', 'true', 'Yes'),
-('allow_teachers_to_create_sessions', 'false', 'No');
+('allow_teachers_to_create_sessions', 'false', 'No'),
+('use_virtual_keyboard', 'true', 'Yes'),
+('use_virtual_keyboard', 'false', 'No'),
+('disable_copy_paste', 'true', 'Yes'),
+('disable_copy_paste', 'false', 'No');
 
 
 UNLOCK TABLES;

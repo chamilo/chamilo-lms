@@ -19,7 +19,7 @@ api_block_anonymous_users();
 block_students();
 
 $select_cat=isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
-$is_allowedToEdit = $is_courseAdmin;
+$is_allowedToEdit = api_is_course_admin();
 $evaladd = new Evaluation();
 $evaladd->set_user_id($_user['user_id']);
 if (isset ($_GET['selectcat']) && (!empty ($_GET['selectcat']))) {
@@ -38,24 +38,24 @@ if ($form->validate()) {
 	$eval->set_name($values['name']);
 	$eval->set_description($values['description']);
 	$eval->set_user_id($values['hid_user_id']);
-	
+
 	if (!empty ($values['hid_course_code'])) {
 		$eval->set_course_code($values['hid_course_code']);
 	}
-	
+
 	//Always add the gradebook to the course
-	$eval->set_course_code(api_get_course_id());	
+	$eval->set_course_code(api_get_course_id());
 	$eval->set_category_id($values['hid_category_id']);
-    
-    $parent_cat = Category :: load($values['hid_category_id']);            
+
+    $parent_cat = Category :: load($values['hid_category_id']);
     $global_weight = $cat[0]->get_weight();
-    //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();    
+    //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
     $values['weight'] = $values['weight_mask'];
-    
-    
-	$eval->set_weight($values['weight']);	
+
+
+	$eval->set_weight($values['weight']);
 	$eval->set_max($values['max']);
-    
+
 	if (empty ($values['visible'])) {
 		$visible = 0;
 	} else {
@@ -94,18 +94,18 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 
     $("#hid_category_id").change(function(){
-        
+
        $("#hid_category_id option:selected").each(function () {
            var cat_id = $(this).val();
-            $.ajax({ 
-                url: "'.api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=get_gradebook_weight", 
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=get_gradebook_weight",
                 data: "cat_id="+cat_id,
                 success: function(return_value) {
                     if (return_value != 0 ) {
-                        $("#max_weight").html(return_value);                                             
-                    }                    
-                },            
-            });    
+                        $("#max_weight").html(return_value);
+                    }
+                },
+            });
        });
     });
 });

@@ -29,11 +29,6 @@ $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session 		= Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_track_exercice = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
-/*
-===============================================================================
-	MAIN CODE
-===============================================================================
-*/
 if (!empty($_GET['session'])) {
 	$sql_session = "SELECT name,id
 		FROM $tbl_session
@@ -49,7 +44,7 @@ if (!empty($_GET['session'])) {
 			$sql_course = "SELECT title, code, course.id
 				FROM $tbl_course as course
 				INNER JOIN $tbl_session_course AS rel_course
-				ON course.code = rel_course.course_code
+				ON course.id = rel_course.c_id
 				AND rel_course.id_session = ".$session['id']."
 				ORDER BY title ASC";
 

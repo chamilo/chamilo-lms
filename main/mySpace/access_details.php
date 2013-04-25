@@ -31,14 +31,17 @@ $user_id = intval($_REQUEST['student']);
 $session_id = intval($_GET['id_session']);
 $type = Security::remove_XSS($_REQUEST['type']);
 $course_code = Security::remove_XSS($_REQUEST['course']);
-$connections = MySpace::get_connections_to_course($user_id, $course_code, $session_id);
+$courseInfo = api_get_course_info($course_code);
+$courseId = $courseInfo['real_id'];
+
+$connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);
 
 $quote_simple = "'";
 
 $htmlHeadXtra[] = '<script src="slider.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="slider.css" />';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(function() {
     var dates = $( "#date_from, #date_to" ).datepicker({
         dateFormat: '.$quote_simple.'yy-mm-dd'.$quote_simple.',
@@ -59,7 +62,7 @@ $(function() {
                 var end_date    = document.getElementById("date_to").value;
                 changeHREF(start_date,end_date);
                 var foo_student = '.$user_id.';
-                var foo_course  = "'.$course_code.'";
+                var foo_course  = "'.$courseId.'";
                 var graph_type  = "'.$type.'";
                 var foo_slider_state = getSliderState();
                 if (foo_slider_state == "open"){
@@ -108,8 +111,7 @@ $(function() {
 </script>';
 
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-
+$htmlHeadXtra[] = '<script>
 function changeHREF(sd,ed) {
     var i       = 0;
     var href    = "";
@@ -146,7 +148,7 @@ function areBothFilled() {
 }
 </script>';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(function() {
         $("#cev_button").hide();
         $("#container-9").tabs({remote: true});
@@ -160,7 +162,7 @@ Display :: display_header('');
 $main_user_info = api_get_user_info($user_id);
 $result_to_print = '';
 
-$sql_result      = MySpace::get_connections_to_course($user_id, $course_code);
+$sql_result      = MySpace::get_connections_to_course($user_id, $courseId);
 $result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
@@ -170,7 +172,7 @@ $form = new FormValidator('myform', 'post', "javascript:get(document.getElementB
 $form->addElement('text', 'from', get_lang('From'), array('id' => 'date_from'));
 $form->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to'));
 
-$form->addElement('style_submit_button', 'reset', get_lang('Reset'), array('onclick' => "javascript:window.location='access_details.php?course=".$course_code."&student=".$user_id."&cidReq=".$course_code."';"));
+$form->addElement('style_submit_button', 'reset', get_lang('Reset'), array('onclick' => "javascript:window.location='access_details.php?course=".$courseId."&student=".$user_id."&cidReq=".$course_code."';"));
 $form->display();
 ?>
 <div id="cev_results_header" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
@@ -180,7 +182,7 @@ $form->display();
     <div id="cev_cont_stats">
         <?php
         if ($result_to_print != "")  {
-            $rst                = get_stats($user_id, $course_code);
+            $rst                = get_stats($user_id, $courseId);
             $foo_stats           = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
             $foo_stats          .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
             $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
@@ -194,8 +196,8 @@ $form->display();
 
 <div id="container-9">
     <ul>
-        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=day&course='.$course_code.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('Day')); ?></span></a></li>
-        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=month&course='.$course_code.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('MinMonth')); ?></span></a></li>
+        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=day&course='.$courseId.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('Day')); ?></span></a></li>
+        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=month&course='.$courseId.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('MinMonth')); ?></span></a></li>
     </ul>
 </div>
 

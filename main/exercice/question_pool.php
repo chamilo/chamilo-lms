@@ -281,11 +281,11 @@ if (!empty($session_id) && $session_id != '-1') {
 }
 $course_select_list = array();
 foreach ($course_list as $item) {
-	$course_select_list[$item['id']] = "";
-	if ($item['id'] == api_get_course_int_id()) {
-		$course_select_list[$item['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
+	$course_select_list[$item['real_id']] = "";
+	if ($item['real_id'] == api_get_course_int_id()) {
+		$course_select_list[$item['real_id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
 	}
-	$course_select_list[$item['id']] .= $item['title'];
+	$course_select_list[$item['real_id']] .= $item['title'];
 }
 
 $select_course_html =  Display::select('selected_course', $course_select_list, $selected_course, array('class'=>'chzn-select','onchange'=>'mark_course_id_changed(); submit_form(this);'));

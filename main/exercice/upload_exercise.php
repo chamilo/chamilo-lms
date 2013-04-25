@@ -105,7 +105,9 @@ function lp_upload_quiz_main() {
  */
 function lp_upload_quiz_action_handling()
 {
-    global $_course, $debug;
+    global $debug;
+    $_course = api_get_course_info();
+
     if (!isset($_POST['submit_upload_quiz'])) {
         return;
     }

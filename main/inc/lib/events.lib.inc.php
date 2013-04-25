@@ -16,10 +16,9 @@
 $TABLETRACK_LOGIN = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 $TABLETRACK_OPEN = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_OPEN);
 $TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-$course_tracking_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-$TABLETRACK_DOWNLOADS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+
 $TABLETRACK_UPLOADS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
-$TABLETRACK_LINKS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+
 $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TABLETRACK_LASTACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS); //for "what's new" notification
 $TABLETRACK_DEFAULT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
@@ -111,7 +110,7 @@ function event_access_course()
 
     $id_session = api_get_session_id();
     $now = api_get_utc_datetime();
-    $_cid = api_get_course_id();
+    $courseId = api_get_course_int_id();
     $user_id = api_get_user_id();
 
     if ($user_id) {
@@ -119,19 +118,19 @@ function event_access_course()
     } else {
         $user_id = "0"; // no one
     }
-    $sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (access_user_id, access_cours_code, access_date, access_session_id) VALUES
-            (".$user_id.", '".$_cid."', '".$now."','".$id_session."')";
-    $res = Database::query($sql);
+    $sql = "INSERT INTO ".$TABLETRACK_ACCESS."  (access_user_id, c_id, access_date, access_session_id) VALUES
+            (".$user_id.", '".$courseId."', '".$now."','".$id_session."')";
+    Database::query($sql);
 
     // added for "what's new" notification
     $sql = "UPDATE $TABLETRACK_LASTACCESS  SET access_date = '$now'
-        	WHERE access_user_id = $user_id AND access_cours_code = '$_cid' AND access_tool IS NULL AND access_session_id=".$id_session;
-    $res = Database::query($sql);
+        	WHERE access_user_id = $user_id AND c_id = '$courseId' AND access_tool IS NULL AND access_session_id=".$id_session;
+    Database::query($sql);
 
     if (Database::affected_rows() == 0) {
-        $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, access_cours_code, access_date, access_session_id)
-        		VALUES (".$user_id.", '".$_cid."', '$now', '".$id_session."')";
-        $res = Database::query($sql);
+        $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_date, access_session_id)
+        		VALUES (".$user_id.", '".$courseId."', '$now', '".$id_session."')";
+        Database::query($sql);
     }
     // end "what's new" notification
     return 1;
@@ -155,10 +154,11 @@ function event_access_tool($tool, $id_session = 0)
 {
     global $_configuration;
     global $_user;
-    global $_cid;
     global $TABLETRACK_ACCESS;
-    global $_course;
+    $_course = api_get_course_info();
     global $TABLETRACK_LASTACCESS; //for "what's new" notification
+
+    $courseId = api_get_course_int_id();
 
     $id_session = api_get_session_id();
     $tool = Database::escape_string($tool);
@@ -176,28 +176,28 @@ function event_access_tool($tool, $id_session = 0)
     if ($pos !== false || $pos2 !== false) {
         $sql = "INSERT INTO ".$TABLETRACK_ACCESS."
         			(access_user_id,
-        			 access_cours_code,
+        			 c_id,
         			 access_tool,
         			 access_date,
         			 access_session_id
         			 )
         		VALUES
         			(".$user_id.",".// Don't add ' ' around value, it's already done.
-            "'".$_cid."' ,
+                    "'".$courseId."' ,
         			'".$tool."',
         			'".$reallyNow."',
         			'".$id_session."')";
-        $res = Database::query($sql);
+        Database::query($sql);
     }
     // "what's new" notification
     $sql = "UPDATE $TABLETRACK_LASTACCESS
         	SET access_date = '$reallyNow'
-        	WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool = '".$tool."' AND access_session_id=".$id_session;
-    $res = Database::query($sql);
+        	WHERE access_user_id = ".$user_id." AND c_id = '".$courseId."' AND access_tool = '".$tool."' AND access_session_id=".$id_session;
+    Database::query($sql);
     if (Database::affected_rows() == 0) {
-        $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id,access_cours_code,access_tool, access_date, access_session_id)
-        		VALUES (".$user_id.", '".$_cid."' , '$tool', '$reallyNow', $id_session)";
-        $res = Database::query($sql);
+        $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_tool, access_date, access_session_id)
+        		VALUES (".$user_id.", '".$courseId."' , '$tool', '$reallyNow', $id_session)";
+        Database::query($sql);
     }
     return 1;
 }
@@ -222,11 +222,11 @@ function event_download($doc_url)
 
     $reallyNow = api_get_utc_datetime();
     $user_id = "'".api_get_user_id()."'";
-    $_cid = api_get_course_id();
+    $_cid = api_get_course_int_id();
 
     $sql = "INSERT INTO $tbl_stats_downloads (
         		 down_user_id,
-        		 down_cours_id,
+        		 c_id,
         		 down_doc_path,
         		 down_date,
         		 down_session_id
@@ -287,7 +287,9 @@ function event_upload($doc_id)
  */
 function event_link($link_id)
 {
-    global $_user, $TABLETRACK_LINKS;
+    global $_user;
+    $TABLETRACK_LINKS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
+
     $reallyNow = api_get_utc_datetime();
     if (isset($_user['user_id']) && $_user['user_id'] != '') {
         $user_id = "'".Database::escape_string($_user['user_id'])."'";
@@ -297,18 +299,18 @@ function event_link($link_id)
     }
     $sql = "INSERT INTO ".$TABLETRACK_LINKS."
         		( links_user_id,
-        		 links_cours_id,
+        		 c_id,
         		 links_link_id,
         		 links_date,
         		 links_session_id
         		) VALUES (
         		 ".$user_id.",
-        		 '".api_get_course_id()."',
+        		 '".api_get_course_int_id()."',
         		 '".Database::escape_string($link_id)."',
         		 '".$reallyNow."',
         		 '".api_get_session_id()."'
         		)";
-    $res = Database::query($sql);
+    Database::query($sql);
     return 1;
 }
 
@@ -1602,17 +1604,17 @@ function get_answered_questions_from_attempt($exe_id, $objExercise) {
  * @param $user_id
  * @param $session_id
  */
-function event_course_login($course_code, $user_id, $session_id)
+function event_course_login($courseId, $user_id, $session_id)
 {
-    global $course_tracking_table;
+    $course_tracking_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
     $time = api_get_datetime();
 
-    $course_code = Database::escape_string($course_code);
+    $courseId = Database::escape_string($courseId);
     $user_id = Database::escape_string($user_id);
     $session_id = Database::escape_string($session_id);
 
-    $sql = "INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)
-        	  VALUES('".$course_code."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
+    $sql = "INSERT INTO $course_tracking_table(c_id, user_id, login_course_date, logout_course_date, counter, session_id)
+        	  VALUES('".$courseId."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
     Database::query($sql);
 
     //Course catalog stats modifications see #4191

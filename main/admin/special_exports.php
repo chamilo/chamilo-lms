@@ -242,10 +242,9 @@ function fullexportspecial(){
                                 );
             }
             //Add tem to the zip file session course
-            $code_course = $_course['code'];
             $sql_session = "SELECT id, name, course_code FROM $tbl_session_course
                 INNER JOIN  $tbl_session ON id_session = id
-                WHERE course_code = '$code_course' ";
+                WHERE c_id = '$course_id' ";
             $query_session = Database::query($sql_session);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session_id = $rows_session['id'];

@@ -556,7 +556,7 @@ function get_all_courses_of_user() {
                                   c.db_name db, c.directory dir, '5' as status
                             FROM $TABLECOURS c, $tbl_session_course_user srcu
                             WHERE srcu.id_user='".api_get_user_id()."'
-                            AND c.code=srcu.course_code
+                            AND c.id = srcu.c_id
                             UNION
                            SELECT c.code k, c.visual_code  vc, c.title i, c.tutor_name t,
                                   c.db_name db, c.directory dir, cru.status status

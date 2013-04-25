@@ -28,12 +28,14 @@ class Search
     function __construct($rootFolder)
     {
         $this->rootFolder    = $rootFolder;
+
         $this->sessionAction = new SessionAction();
         $objRootFolder       = new file($this->rootFolder);
         $tem                 = $objRootFolder->getFileInfo();
         $obj                 = new manager($this->rootFolder, false);
         $obj->setSessionAction($this->sessionAction);
         $selectedDocuments = $this->sessionAction->get();
+
         $fileType          = $obj->getFolderInfo($this->rootFolder);
 
         foreach ($fileType as $k => $v) {
@@ -108,6 +110,7 @@ class Search
         $dirHandler = @opendir($baseFolderPath);
         if ($dirHandler) {
             while (false !== ($file = readdir($dirHandler))) {
+
                 if ($file != '.' && $file != '..') {
                     $path = $baseFolderPath.$file;
                     if (is_file($path)) {

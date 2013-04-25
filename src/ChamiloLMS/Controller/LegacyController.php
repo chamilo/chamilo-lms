@@ -30,6 +30,7 @@ class LegacyController// extends Controller
         if ($app['allowed'] == false) {
             return $app->abort(403);
         }
+
         //Rendering page
         $response = $app['twig']->render($app['default_layout']);
 

@@ -550,41 +550,36 @@ function ldap_add_user_to_session($UserList, $id_session) {
 
     // Database Table Definitions
     $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_rel_class                = Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
     $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_course                            = Database::get_main_table(TABLE_MAIN_COURSE);
-    $tbl_user                            = Database::get_main_table(TABLE_MAIN_USER);
     $tbl_session_rel_user                = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $tbl_class                            = Database::get_main_table(TABLE_MAIN_CLASS);
-    $tbl_class_user                        = Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
     $id_session = (int) $id_session;
     // Once users are imported in the users base, we can assign them to the session
-    $result=Database::query("SELECT course_code FROM $tbl_session_rel_course " .
+    $result=Database::query("SELECT c_id FROM $tbl_session_rel_course " .
             "WHERE id_session='$id_session'");
     $CourseList=array();
     while ($row=Database::fetch_array($result)) {
-        $CourseList[]=$row['course_code'];
+        $CourseList[]=$row['c_id'];
     }
     foreach ($CourseList as $enreg_course) {
         foreach ($UserList as $enreg_user) {
             $enreg_user = (int) $enreg_user;
             Database::query("INSERT IGNORE ".
               " INTO $tbl_session_rel_course_rel_user ".
-              "(id_session,course_code,id_user) VALUES ".
+              "(id_session,c_id,id_user) VALUES ".
               "('$id_session','$enreg_course','$enreg_user')");
         }
         $sql = "SELECT COUNT(id_user) as nbUsers ".
                " FROM $tbl_session_rel_course_rel_user " .
                " WHERE id_session='$id_session' ".
-               " AND course_code='$enreg_course'";
+               " AND c_id='$enreg_course'";
         $rs = Database::query($sql);
         list($nbr_users) = Database::fetch_array($rs);
         Database::query("UPDATE $tbl_session_rel_course  ".
                " SET nbr_users=$nbr_users " .
                " WHERE id_session='$id_session' ".
-               " AND course_code='$enreg_course'");
+               " AND c_id='$enreg_course'");
     }
     foreach ($UserList as $enreg_user) {
         $enreg_user = (int) $enreg_user;

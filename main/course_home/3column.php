@@ -165,7 +165,7 @@ elseif (isset($update) && $update) {
 
 // Work with data post askable by admin of  course
 
-if ($is_platformAdmin && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
+if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	// Show message to confirm that a tools must be hide  from aivailable tools
 	// visibility 0,1->2
 	if ($askDelete) {
@@ -219,7 +219,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 
 /*	TOOLS FOR PLATFORM ADMIN ONLY */
 
-if ($is_platformAdmin && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
+if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	$content .=  "<tr>"."<td colspan=\"6\">".
 		"<hr noshade size=\"1\" />".
 		"</td>"."</tr>\n".

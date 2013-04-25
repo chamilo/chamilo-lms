@@ -27,7 +27,7 @@ $(document).ready(function () {
  */
 function handle_multiple_actions()
 {
-    global $_user, $is_courseAdmin, $is_courseTutor;
+    global $_user, $is_courseTutor;
 
     // STEP 1: are we performing the actions on the received or on the sent files?
     if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'download_received') {
@@ -56,7 +56,7 @@ function handle_multiple_actions()
 
     // STEP 3A: deleting
     if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'delete_sent') {
-        $dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+        $dropboxfile = new Dropbox_Person($_user['user_id'], api_is_course_admin(), $is_courseTutor);
         foreach ($checked_file_ids as $key => $value) {
             if ($_GET['view'] == 'received') {
                 $dropboxfile->deleteReceivedWork($value);
@@ -114,7 +114,7 @@ function delete_category($action, $id, $user_id = null)
     $course_id = api_get_course_int_id();
 
     global $dropbox_cnf;
-    global $is_courseAdmin, $is_courseTutor;
+    global $is_courseTutor;
 
     if (empty($user_id)) {
         $user_id = api_get_user_id();
@@ -154,7 +154,7 @@ function delete_category($action, $id, $user_id = null)
     $result = Database::query($sql);
 
     while ($row = Database::fetch_array($result)) {
-        $dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+        $dropboxfile = new Dropbox_Person($_user['user_id'], api_is_course_admin(), $is_courseTutor);
         if ($action == 'deletereceivedcategory') {
             $dropboxfile->deleteReceivedWork($row[$id_field]);
         }
@@ -492,10 +492,10 @@ function display_addcategory_form($category_name = '', $id = '', $action)
  */
 function display_add_form()
 {
-    global $_user, $is_courseAdmin, $is_courseTutor, $course_info, $origin, $dropbox_unid;
+    global $_user, $is_courseTutor, $course_info, $origin, $dropbox_unid;
 
     $token = Security::get_token();
-    $dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
+    $dropbox_person = new Dropbox_Person(api_get_user_id(), api_is_course_admin(), $is_courseTutor);
     ?>
 	<form method="post" action="index.php?view_received_category=<?php echo Security::remove_XSS(
         $_GET['view_received_category']
@@ -561,7 +561,7 @@ function display_add_form()
             );
         }
         $complete_user_list2 = CourseManager::get_coach_list_from_course_code(
-            $course_info['code'],
+            $course_info['real_id'],
             api_get_session_id()
         );
         $complete_user_list_for_dropbox = array_merge($complete_user_list_for_dropbox, $complete_user_list2);
@@ -708,10 +708,7 @@ function getLoginFromId($id)
  */
 function isCourseMember($user_id)
 {
-    global $_course;
-    $course_code = $_course['sysCode'];
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true);
-
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, api_get_course_int_id(), true);
     return $is_course_member;
 }
 
@@ -834,7 +831,7 @@ function store_add_dropbox()
 {
     global $dropbox_cnf;
     global $_user;
-    global $_course;
+    $_course = api_get_course_info();
 
     // Validating the form data
 
@@ -1174,7 +1171,7 @@ function store_feedback()
  */
 function zip_download($array)
 {
-    global $_course;
+    $_course = api_get_course_info();
     global $dropbox_cnf;
     global $files;
 
@@ -1351,14 +1348,16 @@ function check_number_feedback($key, $array)
  *
  * @todo consider moving this function to a more appropriate place.
  */
-function get_last_tool_access($tool, $course_code = '', $user_id = '')
+function get_last_tool_access($tool, $courseId = '', $user_id = '')
 {
     global $_course, $_user;
 
     // The default values of the parameters
-    if ($course_code == '') {
-        $course_code = $_course['id'];
+    if ($courseId == '') {
+        $courseId = api_get_course_int_id();
     }
+    $courseId = intval($courseId);
+
     if ($user_id == '') {
         $user_id = $_user['user_id'];
     }
@@ -1367,7 +1366,7 @@ function get_last_tool_access($tool, $course_code = '', $user_id = '')
     $table_last_access = Database::get_statistic_table('track_e_lastaccess');
 
     $sql = "SELECT access_date FROM $table_last_access WHERE access_user_id='".Database::escape_string($user_id)."'
-				AND access_cours_code='".Database::escape_string($course_code)."'
+				AND c_id ='".Database::escape_string($courseId)."'
 				AND access_tool='".Database::escape_string($tool)."'
 				ORDER BY access_date DESC
 				LIMIT 1";

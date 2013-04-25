@@ -423,7 +423,9 @@ function downloadMP3_google($filepath, $dir)
 
         return;
     }
-    global $_course, $_user;
+    global $_user;
+    $_course = api_get_course_info();
+
     $clean_title = trim($_POST['title']);
     $clean_text = trim($_POST['text']);
     if (empty($clean_title) || empty($clean_text)) {
@@ -591,7 +593,8 @@ function downloadMP3_pediaphon($filepath, $dir)
 
         return;
     }
-    global $_course, $_user;
+    global $_user;
+    $_course = api_get_course_info();
     $clean_title = trim($_POST['title']);
     $clean_title = Database::escape_string($clean_title);
     $clean_text = trim($_POST['text']);

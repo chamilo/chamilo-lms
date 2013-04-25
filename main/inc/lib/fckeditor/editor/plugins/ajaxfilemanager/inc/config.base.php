@@ -97,15 +97,18 @@ if (isset($_course['path']) && !empty($_course['path'])) {
 		$PathChamiloAjaxFileManager = '../../../../../../../data/default_platform_document/';
 	} else {
 		//my profile
-		$my_path					= UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
-                $dir = api_get_path(SYS_CODE_PATH).$my_path['dir'];
-                if (!is_dir($dir)) {
-                    mkdir($dir);
-                }
-                if (!is_dir($dir.'my_files')) {
-                    mkdir($dir.'my_files');
-                }
-		$PathChamiloAjaxFileManager	= '../../../../../../../main/'.$my_path['dir'].'my_files/';
+		$my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');
+        $my_path_none = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'none');
+
+
+        if (!is_dir($my_path['dir'])) {
+            mkdir($my_path['dir']);
+        }
+
+        if (!is_dir($my_path['dir'].'my_files')) {
+            mkdir($my_path['dir'].'my_files');
+        }
+		$PathChamiloAjaxFileManager	= '../../../../../../../data/'.$my_path_none['dir'].'my_files/';
 	}
 }
 

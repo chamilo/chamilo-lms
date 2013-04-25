@@ -1194,8 +1194,8 @@ class Display
 
         $course_info['id_session'] = intval($course_info['id_session']);
         // Get the user's last access dates to all tools of this course
-        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id)
-                                 WHERE  access_cours_code = '".$course_code."' AND
+        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (c_id, access_user_id)
+                                 WHERE  c_id = ".$course_id." AND
                                         access_user_id = '$user_id' AND
                                         access_session_id ='".$course_info['id_session']."'";
         $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);

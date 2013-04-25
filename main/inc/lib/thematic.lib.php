@@ -686,7 +686,7 @@ class Thematic
 	 * @return	int		Affected rows
 	 */
 	public function thematic_advance_destroy($thematic_advance_id) {
-		global $_course;
+        $_course = api_get_course_info();
 		$course_id = $this->get_course_int_id();
 
 		// definition database table
@@ -946,7 +946,7 @@ class Thematic
 	 * @return	int		Affected rows
 	 */
 	public function update_done_thematic_advances($thematic_advance_id) {
-		global $_course;
+        $_course = api_get_course_info();
 		$thematic_data         = $this->get_thematic_list(null, api_get_course_id());
 		$thematic_advance_data = $this->get_thematic_advance_list(null, api_get_course_id(), true);
 		$tbl_thematic_advance  = Database::get_course_table(TABLE_THEMATIC_ADVANCE);

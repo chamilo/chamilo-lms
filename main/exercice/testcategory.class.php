@@ -253,7 +253,7 @@ class Testcategory
 	If in_field=="" Return an array of all category objects in the database
 	Otherwise, return an array of all in_field value in the database (in_field = id or name or description)
 	 */
-	public static function getCategoryListInfo($in_field="", $in_courseid="") {
+	public static function getCategoryListInfo($in_field = "", $in_courseid="") {
 		if (empty($in_courseid) || $in_courseid=="") {
 			$in_courseid = api_get_course_int_id();
 		}
@@ -261,14 +261,17 @@ class Testcategory
 		$in_field = Database::escape_string($in_field);
 		$tabres = array();
 		if ($in_field=="") {
-			$sql = "SELECT * FROM $t_cattable WHERE c_id=$in_courseid ORDER BY title ASC";
+			$sql = "SELECT * FROM $t_cattable WHERE c_id = $in_courseid ORDER BY title ASC";
 			$res = Database::query($sql);
 			while ($row = Database::fetch_array($res)) {
                 $tmpcat = new Testcategory($row['iid'], $row['title'], $row['description'], $row['parent_id']);
 				$tabres[] = $tmpcat;
 			}
         } else {
-			$sql = "SELECT $in_field FROM $t_cattable WHERE c_id=$in_courseid ORDER BY $in_field ASC";
+			$sql = "SELECT $in_field
+			FROM $t_cattable WHERE c_id=$in_courseid
+			ORDER BY $in_field ASC";
+
 			$res = Database::query($sql);
 			while ($row = Database::fetch_array($res)) {
 				$tabres[] = $row[$in_field];
@@ -681,7 +684,7 @@ class Testcategory
         $category_list = self::getCategoryListInfo(null, $course_id);
         $category_name_list = array();
         if (!empty($category_list)) {
-            foreach($category_list as $category) {
+            foreach ($category_list as $category) {
                 $category_name_list[$category->id] = $category->name;
             }
         }

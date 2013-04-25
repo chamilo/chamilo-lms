@@ -27,7 +27,7 @@ class Online {
      */
     static function loginCheck($uid)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $uid = (int) $uid;
         $online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         if (!empty($uid)) {

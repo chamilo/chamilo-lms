@@ -1195,6 +1195,7 @@ class UserManager {
             case 'none':
             default: // Base: empty, the result path below will be relative.
                 $base = '';
+                break;
         }
 
         if (empty($id) || empty($type)) {
@@ -1215,13 +1216,15 @@ class UserManager {
         $picture_filename = trim($user['picture_uri']);
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
+            $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
+            /* @todo check this validation
             if (!empty($picture_filename) or $preview) {
-                $dir = $base.'data/upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
+                $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
             } else {
-                $dir = $base.'data/upload/users/'.$user_id.'/';
-            }
+                $dir = $base.'upload/users/'.$user_id.'/';
+            }*/
         } else {
-            $dir = $base.'data/upload/users/'.$user_id.'/';
+            $dir = $base.'upload/users/'.$user_id.'/';
         }
         if (empty($picture_filename) && $anonymous) {
             return array('dir' => $base_unknown.'img/', 'file' => 'unknown.jpg');
@@ -2516,13 +2519,13 @@ class UserManager {
                 foreach ($courses as $course) {
 
                     //Checking course session visibility
-                    $visibility = api_get_session_visibility($session_id, $course['code']);
+                    $visibility = api_get_session_visibility($session_id, $course['id']);
 
                     if ($visibility == SESSION_INVISIBLE) {
                         continue;
                     }
 
-                    $user_status_in_course = CourseManager::get_user_in_course_status($user_id, $course['code']);
+                    $user_status_in_course = CourseManager::get_user_in_course_status($user_id, $course['id']);
                     $course['user_status_in_course'] = $user_status_in_course;
                     $course_list[] = $course;
                 }
@@ -2622,13 +2625,13 @@ class UserManager {
                 $session_id = $enreg['id'];
                 $courseList = SessionManager::get_course_list_by_session_id($session_id);
                 foreach ($courseList as $course) {
-                    $sessionVisibility = api_get_session_visibility($session_id, $course['code']);
+                    $sessionVisibility = api_get_session_visibility($session_id, $course['id']);
 
                     if ($sessionVisibility == SESSION_INVISIBLE) {
                         continue;
                     }
                     $course['course_info'] = $course;
-                    $key = $session_id.' - '.$course['code'];
+                    $key = $session_id.' - '.$course['id'];
                     $personal_course_list[$key] = $course;
                 }
             }
@@ -2665,35 +2668,37 @@ class UserManager {
         $courses = array();
 
         // this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
-        $personal_course_list_sql = "SELECT DISTINCT scu.course_code as code FROM $tbl_session_course_user as scu $join_access_url
+        $personal_course_list_sql = "SELECT DISTINCT scu.c_id as id
+                                    FROM $tbl_session_course_user as scu $join_access_url
                                     WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
-                                    ORDER BY code";
+                                    ORDER BY c_id";
 
         $course_list_sql_result = Database::query($personal_course_list_sql);
 
         if (Database::num_rows($course_list_sql_result) > 0) {
             while ($result_row = Database::fetch_array($course_list_sql_result)) {
                 $result_row['status'] = 5;
-                if (!in_array($result_row['code'], $courses)) {
+                if (!in_array($result_row['id'], $courses)) {
                     $personal_course_list[] = $result_row;
-                    $courses[] = $result_row['code'];
+                    $courses[] = $result_row['id'];
                 }
             }
         }
 
         if (api_is_allowed_to_create_course()) {
-            $personal_course_list_sql = "SELECT DISTINCT scu.course_code as code FROM $tbl_session_course_user as scu, $tbl_session as s $join_access_url
+            $personal_course_list_sql = "SELECT DISTINCT scu.c_id as id
+                                        FROM $tbl_session_course_user as scu, $tbl_session as s $join_access_url
                                         WHERE s.id = $session_id AND scu.id_session = s.id AND ((scu.id_user=$user_id AND scu.status=2) OR s.id_coach = $user_id)
                                         $where_access_url
-                                        ORDER BY code";
+                                        ORDER BY c_id";
             $course_list_sql_result = Database::query($personal_course_list_sql);
 
             if (Database::num_rows($course_list_sql_result)>0) {
                 while ($result_row = Database::fetch_array($course_list_sql_result)) {
                     $result_row['status'] = 2;
-                    if (!in_array($result_row['code'],$courses)) {
+                    if (!in_array($result_row['id'],$courses)) {
                         $personal_course_list[] = $result_row;
-                        $courses[] = $result_row['code'];
+                        $courses[] = $result_row['id'];
                     }
                 }
             }
@@ -2717,7 +2722,7 @@ class UserManager {
                 $course_list = SessionManager::get_course_list_by_session_id($session_id);
                 if (!empty($course_list)) {
                     foreach ($course_list as $course) {
-                        if (!in_array($course['code'],$courses)) {
+                        if (!in_array($course['id'],$courses)) {
                             $personal_course_list[] = $course;
                         }
                     }
@@ -3790,7 +3795,6 @@ class UserManager {
      */
      public static function get_user_id_of_course_admin_or_session_admin($courseInfo) {
         $session = api_get_session_id();
-        $courseCode = $courseInfo['code'];
         $courseId = $courseInfo['real_id'];
 
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -3799,7 +3803,7 @@ class UserManager {
          if ($session==0 || is_null($session)) {
              $sql='SELECT u.user_id FROM '.$table_user.' u
                     INNER JOIN '.$table_course_user.' ru ON ru.user_id=u.user_id
-                    WHERE ru.status=1 AND ru.course_code="'.Database::escape_string($courseId).'" ';
+                    WHERE ru.status=1 AND ru.c_id="'.Database::escape_string($courseId).'" ';
             $rs=Database::query($sql);
             $num_rows=Database::num_rows($rs);
             if ($num_rows==1) {
@@ -3813,7 +3817,7 @@ class UserManager {
         } elseif ($session>0) {
             $sql='SELECT u.user_id FROM '.$table_user.' u
                 INNER JOIN '.$table_session_course_user.' sru
-                ON sru.id_user=u.user_id WHERE sru.course_code="'.Database::escape_string($courseCode).'" ';
+                ON sru.id_user=u.user_id WHERE sru.c_id="'.Database::escape_string($courseId).'" ';
             $rs=Database::query($sql);
             $row=Database::fetch_array($rs);
             return $row['user_id'];
@@ -3915,6 +3919,7 @@ class UserManager {
       * @param  string  Course code
       * @param  int     Session id
       * @return bool    True if the user is a coach
+      * @deprecated seems not to be used
       *
       */
     public static function is_session_course_coach($user_id, $course_code, $session_id) {

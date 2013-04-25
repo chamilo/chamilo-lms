@@ -1334,6 +1334,7 @@ function render_question_list($objExercise, $questionList, $current_question, $e
                 //Show questions that belongs to a media
                 if (!empty($media_question_list)) {
                     foreach ($media_question_list as $my_question_id) {
+                        $last_question_in_media = false;
                         if ($counter == $count_of_questions_inside_media) {
                             $last_question_in_media = true;
                         }

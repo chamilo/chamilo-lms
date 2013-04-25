@@ -119,7 +119,7 @@ if (isset($_POST['save_audio'])) {
             $lp_item_id = str_ireplace('mp3file', '', $key);
 
             // Create the audio folder if it does not exist yet.
-            global $_course;
+            $_course = api_get_course_info();
             $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
             if (!is_dir($filepath.'audio')) {
                 mkdir($filepath.'audio', api_get_permissions_for_new_directories());

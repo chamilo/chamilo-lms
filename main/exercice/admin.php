@@ -249,6 +249,7 @@ if (!empty($cancelQuestion)) {
 
 if (!empty($clone_question) && !empty($objExercise->id)) {
     $old_question_obj = Question::read($clone_question, api_get_course_int_id());
+
     $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
     $new_id = $old_question_obj->duplicate();
@@ -333,9 +334,9 @@ function multiple_answer_true_false_onchange(variable) {
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-$htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
-<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
-<script language=\"JavaScript\" type=\"text/javascript\">
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/JavaScriptFlashGateway.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot.js"></script>';
+$htmlHeadXtra[] = "<script>
 <!--
 // Globals
 // Major version of Flash required

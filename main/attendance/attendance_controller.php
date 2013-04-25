@@ -243,7 +243,7 @@
                 $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
             }
         } else {
-            if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api_get_course_id())) {
+            if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api_get_course_int_id())) {
                 $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id);
             } else {
                 $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id, $user_id);

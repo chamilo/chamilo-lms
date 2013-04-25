@@ -163,7 +163,7 @@ function login_user($user_id) {
     }
 
     //Load $_user to be sure we clean it before logging in
-	global $uidReset, $loginFailed, $_configuration, $_user;
+	global $uidReset, $loginFailed, $_user;
 
 	$main_user_table      = Database::get_main_table(TABLE_MAIN_USER);
 	$main_admin_table     = Database::get_main_table(TABLE_MAIN_ADMIN);

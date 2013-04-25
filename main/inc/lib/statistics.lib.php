@@ -437,7 +437,7 @@ class Statistics {
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT access_tool, count( access_id ) AS number_of_logins
                     FROM $table, $access_url_rel_course_table u, $tableCourse c
-                    WHERE access_tool IN ('".implode("','",$tools)."') AND c.id = u.c_id AND c.code = access_cours_code AND access_url_id='".$current_url_id."' ".
+                    WHERE access_tool IN ('".implode("','",$tools)."') AND c.id = u.c_id AND c.id = c_id AND access_url_id='".$current_url_id."' ".
                    "GROUP BY access_tool ";
         } else {
             $sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM $table ".
@@ -545,7 +545,7 @@ class Statistics {
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
-        $columns[0] = 'access_cours_code';
+        $columns[0] = 'c_id';
         $columns[1] = 'access_date';
         $sql_order[SORT_ASC] = 'ASC';
         $sql_order[SORT_DESC] = 'DESC';
@@ -575,16 +575,17 @@ class Statistics {
         $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $tableCourse  = Database::get_main_table(TABLE_MAIN_COURSE);
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT * FROM $table, $access_url_rel_course_table, $tableCourse c
-                    WHERE c.id c_id AND access_cours_code = c.code AND access_url_id='".$current_url_id."' ".
+            $sql = "SELECT access_date, c.code FROM $table s , $access_url_rel_course_table u, $tableCourse c
+                    WHERE c.id = u.c_id AND c.id = s.c_id AND access_url_id='".$current_url_id."' ".
                    "GROUP BY access_cours_code ".
-                   "HAVING access_cours_code <> '' ".
+                   "HAVING s.c_id <> '' ".
                    "AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
         } else {
-            $sql = "SELECT * FROM $table ".
-                   "GROUP BY access_cours_code ".
-                   "HAVING access_cours_code <> '' ".
-                   "AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
+            $sql = "SELECT access_date, c.code FROM $table , $tableCourse c
+                    WHERE c_id = c.id
+                    GROUP BY c_id
+                    HAVING c_id <> ''AND
+                    DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
         }
         $res = Database::query($sql);
         $number_of_courses = Database::num_rows($res);
@@ -597,7 +598,7 @@ class Statistics {
             $courses = array ();
             while ($obj = Database::fetch_object($res)) {
                 $course = array ();
-                $course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
+                $course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->code.'">'.$obj->code.' <a>';
                                 //Allow sort by date hiding the numerical date
                 $course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date);
                 $courses[] = $course;

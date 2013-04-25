@@ -119,8 +119,6 @@ $htmlHeadXtra[] .= $js;
 // Database table definitions.
 //@todo remove this calls
 $TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-$TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
-$TABLETRACK_DOWNLOADS   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 $TABLETRACK_ACCESS_2    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $TABLETRACK_EXERCISES 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -144,10 +142,10 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 if (empty($session_id)) {
 	// Registered students in a course outside session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id());
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id());
 } else {
 	// Registered students in session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id(), true, api_get_session_id());
 }
 
 $nbStudents = count($a_students);

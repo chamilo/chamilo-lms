@@ -39,7 +39,8 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777)
 
 function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
 {
-    global $_course, $_user;
+    global $_user;
+    $_course = api_get_course_info();
     //Check if the file is valid (not to big and exists)
     if (!isset ($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
         // upload failed

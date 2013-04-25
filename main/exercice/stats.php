@@ -21,9 +21,9 @@ if (!$result) {
 $session_id = api_get_session_id();
 
 if (empty($session_id)) {
-    $students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), false);
+    $students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id(), false);
 } else {
-    $students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, $session_id);
+    $students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id(), true, $session_id);
 }
 $count_students = count($students);
 

@@ -64,7 +64,7 @@ if (empty($id)) {
 }
 
 
-if (api_is_course_session_coach(api_get_user_id(), api_get_course_id(), api_get_session_id())) {
+if (api_is_course_session_coach(api_get_user_id(), api_get_course_int_id(), api_get_session_id())) {
     if (!api_coach_can_edit_view_results(api_get_course_id(), api_get_session_id())) {
         api_not_allowed(true);
     }
@@ -79,7 +79,7 @@ if (empty($track_exercise_info)) {
     api_not_allowed(true);
 }
 
-$exercise_id        = $track_exercise_info['id'];
+$exercise_id        = $track_exercise_info['iid'];
 $exercise_date      = $track_exercise_info['start_date'];
 $student_id         = $track_exercise_info['exe_user_id'];
 $learnpath_id       = $track_exercise_info['orig_lp_id'];
@@ -222,13 +222,14 @@ $arrans  = array();
 $user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($student_id)." ";
 $query = "SELECT attempts.question_id, answer
           FROM ".$TBL_TRACK_ATTEMPT." as attempts
-            INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices ON stats_exercices.exe_id=attempts.exe_id
+            INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices
+                ON stats_exercices.exe_id=attempts.exe_id
             INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions
                 ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id AND
                 quizz_rel_questions.question_id = attempts.question_id AND
                 quizz_rel_questions.c_id=".api_get_course_int_id()."
             INNER JOIN ".$TBL_QUESTIONS." AS questions
-                ON questions.id=quizz_rel_questions.question_id AND
+                ON questions.iid=quizz_rel_questions.question_id AND
                 questions.c_id = ".api_get_course_int_id()."
 		  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
@@ -588,7 +589,7 @@ foreach ($questionList as $questionId) {
     }
 
     if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
-        foreach($objQuestionTmp->category_list as $category_id) {
+        foreach ($objQuestionTmp->category_list as $category_id) {
             $category_list[$category_id]['score'] += $my_total_score;
             $category_list[$category_id]['total'] += $my_total_weight;
             $category_was_added_for_this_test = true;
@@ -597,6 +598,11 @@ foreach ($questionList as $questionId) {
 
     //No category for this question!
     if ($category_was_added_for_this_test == false) {
+        if (!isset($category_list['none'])) {
+            $category_list['none'] = array();
+            $category_list['none']['score'] = 0;
+            $category_list['none']['total'] = 0;
+        }
         $category_list['none']['score'] += $my_total_score;
         $category_list['none']['total'] += $my_total_weight;
     }

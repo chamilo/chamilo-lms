@@ -68,9 +68,6 @@ echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>'
  */
 
 echo Display::page_subheader(get_lang('SessionList'));
-
-$tbl_session_course         = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
@@ -99,10 +96,8 @@ if (count($sessions) > 0) {
             $row[] = $course_info['title'];
             //$row[] = $my_course['status'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
 
-            $roles = api_detect_user_roles($user['user_id'], $my_course['code'], $id_session);
+            $roles = api_detect_user_roles($user['user_id'], $my_course['real_id'], $id_session);
             $row[] = api_get_roles_to_string($roles);
-
-
             $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                     '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
@@ -137,7 +132,7 @@ if (Database::num_rows($res) > 0) {
         $row[] = $course->title;
 
         //$row[] = $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher');
-        $roles = api_detect_user_roles($user['user_id'], $course->code);
+        $roles = api_detect_user_roles($user['user_id'], $course->id);
         $row[] = api_get_roles_to_string($roles);
         $tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                 '<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .

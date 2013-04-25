@@ -64,11 +64,10 @@ if (!empty($new_session_list)) {
             //Get all courses by session where I'm subscribed
             $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);
 
-
             foreach ($my_course_list as $my_course) {
                 $course = array();
 
-                $course_info   = api_get_course_info($my_course['code']);
+                $course_info   = api_get_course_info_by_id($my_course['id']);
 
                 //Getting all exercises from the current course
                 $exercise_list = get_all_exercises($course_info, $my_session_id, true);
@@ -115,7 +114,7 @@ if (!empty($course_list)) {
 
         $max_mutation_date = '';
 
-        $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(), $course_data['code'], $session_id, false);
+        $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(), $course_data['id'], $session_id, false);
         $icons = '';
         foreach ($lp_list as $item) {
             if ($item['modified_on'] == '0000-00-00 00:00:00' || empty($item['modified_on'])) {

@@ -2012,7 +2012,7 @@ function deldir($dir)
  */
 function exportSCORM($scormname, $course)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     // Initialize.
     $tmpname = api_get_path(SYS_COURSE_PATH).$_course['path'].'/scorm';
@@ -2087,7 +2087,8 @@ function xmltagwrite($tagname, $which, $data, $linebreak = 'yes')
  */
 function createimsmanifest($circle1_files, $learnpath_id)
 {
-    global $_course, $LPname, $expdir, $LPnamesafe;
+    global $LPname, $expdir, $LPnamesafe;
+    $_course = api_get_course_info();
     //$tbl_learnpath_main, $tbl_learnpath_chapter, $tbl_learnpath_item,
     $tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);

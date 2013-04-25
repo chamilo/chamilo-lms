@@ -63,13 +63,14 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';  // we use
 
 $user_id = api_get_user_id();
 $course_code = api_get_course_id();
+$courseId = api_get_course_int_id();
 $course_info = Database::get_course_info($course_code);
 
 $session_id = api_get_session_id();
 if (empty($session_id)) {
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, false);
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $courseId, false);
 } else {
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true, $session_id);
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $courseId, true, $session_id);
 }
 
 /*	Object Initialisation */
@@ -79,7 +80,7 @@ if (empty($session_id)) {
 // @todo consider moving the javascripts in a function that displays the javascripts
 // only when it is needed.
 if ($_GET['action'] == 'add') {
-	$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+	$dropbox_person = new Dropbox_Person($_user['user_id'], api_is_course_admin(), $is_courseTutor);
 }
 
 /*	Create javascript and htmlHeaders */

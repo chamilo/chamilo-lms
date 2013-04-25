@@ -67,14 +67,14 @@ if (!empty($course_user_list)) {
         if ($count == $last_item) {
             $last = '<a href="#'.$login.'">'.get_lang('Last').'</a>';
         }
-        $course_info = api_get_course_info($result['course_code']);
+        $course_info = api_get_course_info_by_id($result['real_id']);
         $course_image = '<img src="'.$course_info['course_image'].'">';
         $dates .= '<li><a href="#'.$login.'">'.api_get_utc_datetime($login).'</a></li>';
         $issues .= '<li id ="'.$login.'">
                         <div class="row">
                             <div class="span2"><div class="thumbnail">'.$course_image.'</div>
                         </div>
-                        <div class="span3">'.sprintf(get_lang('YouHaveEnteredTheCourseXInY'), $result['course_code'], api_convert_and_format_date($login, DATE_FORMAT_LONG)).'</div>
+                        <div class="span3">'.sprintf(get_lang('YouHaveEnteredTheCourseXInY'), $course_info['code'], api_convert_and_format_date($login, DATE_FORMAT_LONG)).'</div>
                     </li>';
         $count++;
     }

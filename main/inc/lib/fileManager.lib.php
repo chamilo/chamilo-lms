@@ -1421,7 +1421,7 @@ class FileManager
         $output = true,
         $to_group_id = 0
     ) {
-        global $_course;
+        $_course = api_get_course_info();
         global $_user;
         global $to_user_id;
         global $to_group_id;

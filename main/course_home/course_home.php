@@ -46,70 +46,6 @@ require_once dirname(__FILE__).'/../inc/global.inc.php';
 //unset($_SESSION['oLP']);
 //unset($_SESSION['lpobject']);
 
-$htmlHeadXtra[] ='<script>
-$(document).ready(function() {
-	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
-	$(".make_visible_and_invisible > img").click(function () {
-
-		make_visible = "visible.gif";
-		make_invisible = "invisible.gif";
-		path_name = $(this).attr("src");
-		list_path_name = path_name.split("/");
-		image_link = list_path_name[list_path_name.length - 1];
-		tool_id = $(this).attr("id");
-		tool_info = tool_id.split("_");
-		my_tool_id = tool_info[1];
-
-		$.ajax({
-			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(objeto) {
-				$(".normal-message").show();
-				$("#id_confirmation_message").hide();
-			},
-			type: "GET",
-			url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?'.api_get_cidreq().'&a=set_visibility",
-			data: "id=" + my_tool_id + "&sent_http_request=1",
-			success: function(data) {
-				eval("var info=" + data);
-				new_current_tool_image = info.image;
-				new_current_view = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
-				//eyes
-				$("#" + tool_id).attr("src", new_current_view);
-				//tool
-				$("#toolimage_" + my_tool_id).attr("src", new_current_tool_image);
-				//clase
-				$("#tooldesc_" + my_tool_id).attr("class", info.tclass);
-				$("#istooldesc_" + my_tool_id).attr("class", info.tclass);
-
-				if (image_link == "visible.gif") {
-					$("#" + tool_id).attr("alt", "'.get_lang('Activate', '').'");
-					$("#" + tool_id).attr("title", "'.get_lang('Activate', '').'");
-				} else {
-					$("#" + tool_id).attr("alt", "'.get_lang('Deactivate', '').'");
-					$("#" + tool_id).attr("title", "'.get_lang('Deactivate', '').'");
-				}
-				if (info.message == "is_active") {
-					message = "'.get_lang('ToolIsNowVisible', '').'";
-				} else {
-					message = "'.get_lang('ToolIsNowHidden', '').'";
-				}
-				$(".normal-message").hide();
-				$("#id_confirmation_message").html(message);
-				$("#id_confirmation_message").show();
-			}
-		});
-	});
-});
-
-/* toogle for post-it in course home */
-$(function() {
-	$(".thematic-postit-head").click(function() {
-		$(".thematic-postit-center").slideToggle("fast");
-	});
-});
-
-</script>';
-
 // The section for the tabs
 $this_section = SECTION_COURSES;
 
@@ -129,7 +65,6 @@ define('TOOL_STUDENT_VIEW',              'toolstudentview');
 define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
 
 $user_id 		= api_get_user_id();
-//$course_code 	= api_get_course_id();
 $show_message = '';
 
 //Deleting group session
@@ -168,7 +103,7 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
 
 $show_autolaunch_exercise_warning = false;
 
-//Exercise autolaunch
+//Exercise auto-launch
 $auto_launch = api_get_course_setting('enable_exercise_auto_launch');
 if (!empty($auto_launch)) {
     $session_id = api_get_session_id();
@@ -224,7 +159,8 @@ if (!empty($auto_launch)) {
         }
     }
 }
-/*Auto launch code */
+
+/* Auto launch code */
 $show_autolaunch_lp_warning = false;
 $auto_launch = api_get_course_setting('enable_lp_auto_launch');
 if (!empty($auto_launch)) {

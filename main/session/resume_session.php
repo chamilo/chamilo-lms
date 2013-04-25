@@ -190,8 +190,8 @@ if ($session['nbr_courses'] == 0){
 } else {
     $courses = SessionManager::get_course_list_by_session_id($id_session);
 	foreach ($courses as $course) {
-        $count_users = SessionManager::get_count_users_in_course_session($course['code'], $id_session);
-        $coaches = SessionManager::get_session_course_coaches_to_string($course['code'], $id_session);
+        $count_users = SessionManager::get_count_users_in_course_session($course['id'], $id_session);
+        $coaches = SessionManager::get_session_course_coaches_to_string($course['id'], $id_session);
 
 		$orig_param = '&origin=resume_session';
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
@@ -206,7 +206,7 @@ if ($session['nbr_courses'] == 0){
                 <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course['code'].'&id_session='.$id_session.'">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
 				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
 				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
-				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&course_code_to_delete='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
+				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&course_code_to_delete='.$course['id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
 			</td>
 		</tr>';
 	}

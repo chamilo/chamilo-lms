@@ -186,7 +186,7 @@ class GroupManager
      */
     public static function create_group($name, $category_id, $tutor, $places)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $table_group = Database :: get_course_table(TABLE_GROUP);
 
         $session_id = api_get_session_id();
@@ -327,7 +327,7 @@ class GroupManager
      */
     public static function create_class_groups($category_id)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $options['where'] = array(" usergroup.course_id = ? " => api_get_real_course_id());
         $obj = new UserGroup();
         $classes = $obj->get_usergroup_in_course($options);
@@ -916,7 +916,7 @@ class GroupManager
      */
     public static function fill_groups($group_ids)
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         $group_ids = is_array($group_ids) ? $group_ids : array($group_ids);
         $group_ids = array_map('intval', $group_ids);
@@ -1162,10 +1162,7 @@ class GroupManager
      */
     public static function can_user_subscribe($user_id, $group_id)
     {
-        global $_course;
-        $course_code = $_course['sysCode'];
         $category = self :: get_category_from_group($group_id);
-        $result = CourseManager :: is_user_subscribed_in_real_or_linked_course($user_id, $course_code);
         $result = !self :: is_subscribed($user_id, $group_id);
         $result &= (self :: number_of_students($group_id) < self :: maximum_number_of_students($group_id));
         if ($category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT) {
@@ -1279,7 +1276,7 @@ class GroupManager
         $course_id = api_get_course_int_id();
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
-            foreach ($user_ids as $index => $user_id) {
+            foreach ($user_ids as $user_id) {
                 $user_id = Database::escape_string($user_id);
                 $group_id = Database::escape_string($group_id);
                 $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id) VALUES ('$course_id', '".$user_id."', '".$group_id."')";
@@ -1407,7 +1404,7 @@ class GroupManager
      */
     public static function is_tutor_of_group($user_id, $group_id)
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
         $user_id = Database::escape_string($user_id);
@@ -1722,7 +1719,7 @@ class GroupManager
             }
         }
 
-        global $_course;
+        $_course = api_get_course_info();
         $category = self :: get_category_from_group($group_ids[0]);
         $groups_per_user = $category['groups_per_user'];
 

@@ -39,7 +39,7 @@ $session = array();
 $user_name = $user_info['complete_name'];
 
 $course_list =  SessionManager::get_course_list_by_session_id ($session_id);
-$session_list = SessionManager::get_session_by_course($course_code);
+$session_list = SessionManager::get_session_by_course($course_id);
 
 $total_quota_bytes = DocumentManager::get_course_quota();
 

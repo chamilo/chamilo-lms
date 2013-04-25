@@ -49,21 +49,24 @@ ALTER TABLE session_field_values ADD INDEX idx_session_field_values_session_id(s
 ALTER TABLE session_field_values ADD INDEX idx_session_field_values_field_id(field_id);
 
 ALTER TABLE session MODIFY COLUMN name CHAR(150) NOT NULL DEFAULT '';
-ALTER TABLE session MODIFY COLUMN id MEDIUMINT unsigned NOT NULL;
+ALTER TABLE session MODIFY COLUMN id INT unsigned NOT NULL;
 
-ALTER TABLE session_rel_course MODIFY COLUMN id_session MEDIUMINT unsigned NOT NULL;
-ALTER TABLE session_rel_course ADD COLUMN course_id INT NOT NULL DEFAULT '0';
-ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (course_id);
+ALTER TABLE session_rel_course MODIFY COLUMN id_session INT unsigned NOT NULL;
+ALTER TABLE session_rel_course ADD COLUMN c_id INT NOT NULL DEFAULT '0';
+ALTER TABLE session_rel_course ADD COLUMN id INT NOT NULL;
 ALTER TABLE session_rel_course DROP PRIMARY KEY;
-ALTER TABLE session_rel_course ADD PRIMARY KEY (id_session, course_id);
+ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (c_id);
+ALTER TABLE session_rel_course ADD PRIMARY KEY (id);
 
-ALTER TABLE session_rel_course_rel_user MODIFY COLUMN id_session MEDIUMINT unsigned NOT NULL;
-ALTER TABLE session_rel_course_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT '0';
+ALTER TABLE session_rel_course_rel_user MODIFY COLUMN id_session INT unsigned NOT NULL;
+ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id INT NOT NULL DEFAULT '0';
+ALTER TABLE session_rel_course_rel_user ADD COLUMN id INT NOT NULL;
 ALTER TABLE session_rel_course_rel_user DROP PRIMARY KEY;
-ALTER TABLE session_rel_course_rel_user ADD PRIMARY KEY (id_session, course_id, id_user);
+ALTER TABLE session_rel_course_rel_user ADD PRIMARY KEY (id);
+
 
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
-ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (course_id);
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (c_id);
 
 -- Courses changes c_XXX
 
@@ -160,8 +163,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teachers_to_create_sessions', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teachers_to_create_sessions', 'false', 'No');
 
-ALTER TABLE track_e_course_access ADD COLUMN c_id INT NOT NULL DEFAULT 0;
-
 UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
 
 ALTER TABLE usergroup ADD COLUMN group_type INT unsigned NOT NULL default 0;
@@ -189,12 +190,18 @@ ALTER TABLE usergroup_rel_usergroup ADD INDEX ( relation_type );
 
 ALTER TABLE announcement_rel_group DROP PRIMARY KEY;
 ALTER TABLE announcement_rel_group ADD COLUMN id INT unsigned NOT NULL auto_increment PRIMARY KEY;
-
 ALTER TABLE track_e_hotpotatoes ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_exercices ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_attempt ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_hotspot ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_course_access ADD COLUMN c_id INT NOT NULL DEFAULT 0;
 ALTER TABLE access_url_rel_course ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_lastaccess ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_access ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_downloads ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_links ADD COLUMN c_id int unsigned NOT NULL default 0;
+
+ALTER TABLE track_e_lastaccess ADD INDEX ( c_id, access_user_id ) ;
 
 ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
 RENAME TABLE c_quiz_question_category TO c_quiz_category;

@@ -40,6 +40,7 @@ if (!api_is_platform_admin(true)) {
 	Constants and variables
 */
 $course_code            = api_get_course_id();
+$courseId = api_get_course_int_id();
 $session_id             = api_get_session_id();
 $is_western_name_order 	= api_is_western_name_order();
 $sort_by_first_name 	= api_sort_by_first_name();
@@ -60,7 +61,7 @@ if (api_is_allowed_to_edit(null, true)) {
 				if (is_array($_POST['user'])) {
 					$user_ids = array_diff($_POST['user'], array($_user['user_id']));
 					if (count($user_ids) > 0) {
-						CourseManager::unsubscribe_user($user_ids, $_SESSION['_course']['sysCode']);
+						CourseManager::unsubscribe_user($user_ids, $courseId);
 						$message = get_lang('UsersUnsubscribed');
 					}
 				}
@@ -131,7 +132,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     if (api_is_multiple_url_enabled()) {
                         $sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
-                    $sql_query .=" WHERE course_code = '$course_code' AND
+                    $sql_query .=" WHERE su.c_id = '$courseId' AND
                                         session_course_user.id_user = user.user_id AND
                                         su.id_user =  session_course_user.id_user AND session_course_user.id_session = su.id_session AND
                                         su.moved_to = 0 AND su.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION."  AND
@@ -189,7 +190,9 @@ if (api_is_allowed_to_edit(null, true)) {
 					if (api_is_multiple_url_enabled()) {
 						$sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
 					}
-					$sql_query .= " WHERE course_code = '$course_code' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ";
+					$sql_query .= " WHERE   course_user.c_id = '$courseId' AND
+					                        course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+					                        course_user.user_id = user.user_id ";
 
 					if (api_is_multiple_url_enabled()) {
 						$sql_query .= " AND user.user_id = au.user_id  AND access_url_id =  $current_access_url_id  ";
@@ -267,14 +270,14 @@ if (api_is_allowed_to_edit(null, true)) {
 
                         if (!empty($session_id)) {
                             //If I'm a coach
-                            $coaches  = CourseManager::get_coach_list_from_course_code($course_info['code'], $session_id);
+                            $coaches  = CourseManager::get_coach_list_from_course_code($course_info['real_id'], $session_id);
 
                             if (isset($coaches) && isset($coaches[$user_id])) {
                                 $user_info = api_get_user_info($user_id);
                                 $description .= '<tr><td>'.get_lang('Coach').': </td><td class="highlight">'.$user_info['complete_name'].'</td>';
                             } else {
                                //If not show everything
-                               $teachers = CourseManager::get_coach_list_from_course_code_to_string($course_info['code'], $session_id);
+                               $teachers = CourseManager::get_coach_list_from_course_code_to_string($course_info['real_id'], $session_id);
                                if (!empty($teachers)) {
                                    $description .= '<tr><td>'.get_lang('Coachs').': </td><td class="highlight">'.$coaches.'</td>';
                                }
@@ -321,7 +324,7 @@ if (api_is_allowed_to_edit(null, true)) {
 					INNER JOIN '.$tbl_session_rel_course.' rel_course
 					ON rel_course.id_session = reluser.id_session
 					WHERE user.user_id = "'.$user_id.'"
-					AND rel_course.course_code = "'.$course_code.'"';
+					AND rel_course.c_id = "'.$courseId.'"';
 
 			$result = Database::query($sql);
 			$row = Database::fetch_array($result, 'ASSOC');
@@ -338,7 +341,7 @@ if (api_is_allowed_to_edit(null, true)) {
     if (isset($_REQUEST['unregister']) && $_REQUEST['unregister'] == 'yes') {
         if ($course_info['unsubscribe'] == 1) {
             $user_id = api_get_user_id();
-            CourseManager::unsubscribe_user($user_id, $course_info['code']);
+            CourseManager::unsubscribe_user($user_id, $courseId);
             header('Location: '.api_get_path(WEB_PATH).'user_portal.php');
             exit;
         }
@@ -377,7 +380,7 @@ if (isset($origin) && $origin == 'learnpath') {
 event_access_tool(TOOL_USER);
 
 /*	Setting the permissions for this page */
-$is_allowed_to_track = ($is_courseAdmin || $is_courseTutor);
+$is_allowed_to_track = (api_is_course_admin() || $is_courseTutor);
 
 // Tool introduction
 Display::display_introduction_section(TOOL_USER, 'left');
@@ -606,7 +609,6 @@ function modify_filter($user_id) {
 		$result .= '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&amp;details=true&amp;course='.$_course['id'].'&amp;origin=user_course&amp;id_session='.api_get_session_id().'" title="'.get_lang('Tracking').'"  ><img border="0" alt="'.get_lang('Tracking').'" src="../img/icons/22/stats.png" /></a>';
 	}
 
-
     //if platform admin, show the login_as icon (this drastically shortens
     // time taken by support to test things out)
     if (api_is_platform_admin()) {
@@ -699,7 +701,7 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 	echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-if (api_get_setting('allow_user_headings') == 'true' && $is_courseAdmin && api_is_allowed_to_edit() && $origin != 'learnpath') { // only course administrators see this line
+if (api_get_setting('allow_user_headings') == 'true' && api_is_course_admin() && api_is_allowed_to_edit() && $origin != 'learnpath') { // only course administrators see this line
 	echo "<div align=\"right\">", "<form method=\"post\" action=\"userInfo.php\">", get_lang("CourseAdministratorOnly"), " : ", "<input type=\"submit\" class=\"save\" name=\"viewDefList\" value=\"".get_lang("DefineHeadings")."\" />", "</form>", "</div>\n";
 }
 if ($origin != 'learnpath') {

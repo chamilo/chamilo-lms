@@ -489,34 +489,31 @@ ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 --
 DROP TABLE IF EXISTS session_rel_course;
 CREATE TABLE IF NOT EXISTS session_rel_course (
+    id INT unsigned NOT NULL auto_increment,
     id_session INT unsigned NOT NULL default '0',
-    course_id INT NOT NULL default '0',
-    course_code char(40),
+    c_id INT NOT NULL default '0',
     nbr_users int unsigned NOT NULL default '0',
-    PRIMARY KEY  (id_session, course_id)
+    PRIMARY KEY(id)
 );
-
-ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (course_id);
-
-
+ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (c_id);
 
 --
 -- Table structure for table session_rel_course_rel_user
 --
 DROP TABLE IF EXISTS session_rel_course_rel_user;
 CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
-  id_session MEDIUMINT unsigned NOT NULL default '0',
-  course_id INT NOT NULL default '0',
-  course_code char(40),
+  id INT unsigned NOT NULL auto_increment,
+  id_session INT unsigned NOT NULL default '0',
+  c_id INT NOT NULL default '0',
   id_user int unsigned NOT NULL default '0',
   visibility int NOT NULL default 1,
   status int NOT NULL default 0,
   legal_agreement INTEGER DEFAULT 0,
-  PRIMARY KEY (id_session, course_id, id_user)
+  PRIMARY KEY (id)
 );
 
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
-ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (course_id);
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (c_id);
 
 
 
@@ -3127,7 +3124,7 @@ CREATE TABLE track_c_referers (
   id int NOT NULL auto_increment,
   referer varchar(255) NOT NULL default '',
   counter int NOT NULL default 0,
-  PRIMARY KEY  (id)
+  PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS track_e_access;
@@ -3135,12 +3132,12 @@ CREATE TABLE track_e_access (
   access_id int NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL default '',
+  c_id INT NOT NULL DEFAULT 0,
   access_tool varchar(30) default NULL,
   access_session_id int NOT NULL default 0,
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
-  KEY access_cours_code (access_cours_code)
+  KEY access_cid_user (c_id, access_user_id)
 );
 
 DROP TABLE IF EXISTS track_e_lastaccess;
@@ -3148,12 +3145,12 @@ CREATE TABLE track_e_lastaccess (
   access_id bigint NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL,
+  c_id INT NOT NULL DEFAULT 0,
   access_tool varchar(30) default NULL,
   access_session_id int unsigned default NULL,
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
-  KEY access_cours_code (access_cours_code),
+  KEY access_cours_code (c_id),
   KEY access_session_id (access_session_id)
 );
 
@@ -3168,7 +3165,7 @@ CREATE TABLE track_e_default (
   default_value text NOT NULL,
   c_id int unsigned default NULL,
   session_id int unsigned default 0,
-  PRIMARY KEY  (default_id)
+  PRIMARY KEY (default_id)
 );
 
 DROP TABLE IF EXISTS track_e_downloads;
@@ -3176,12 +3173,10 @@ CREATE TABLE track_e_downloads (
   down_id int NOT NULL auto_increment,
   down_user_id int unsigned default NULL,
   down_date datetime NOT NULL default '0000-00-00 00:00:00',
-  down_cours_id varchar(40) NOT NULL default '',
+  c_id int NOT NULL default 0,
   down_doc_path varchar(255) NOT NULL default '',
   down_session_id INT NOT NULL DEFAULT 0,
-  PRIMARY KEY  (down_id),
-  KEY down_user_id (down_user_id),
-  KEY down_cours_id (down_cours_id)
+  PRIMARY KEY  (down_id)
 );
 
 DROP TABLE IF EXISTS track_e_exercices;
@@ -3261,11 +3256,10 @@ CREATE TABLE track_e_links (
   links_id int NOT NULL auto_increment,
   links_user_id int unsigned default NULL,
   links_date datetime NOT NULL default '0000-00-00 00:00:00',
-  links_cours_id varchar(40) NOT NULL default '' ,
+  c_id INT NOT NULL DEFAULT 0,
   links_link_id int NOT NULL default 0,
   links_session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY (links_id),
-  KEY links_cours_id (links_cours_id),
   KEY links_user_id (links_user_id)
 );
 

@@ -93,53 +93,48 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	}
 	$nbr_courses=0;
 
-	$id_coach = Database::query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
+	$id_coach = Database::query("SELECT id_coach FROM $tbl_session WHERE id = $id_session");
 	$id_coach = Database::fetch_array($id_coach);
 	$id_coach = $id_coach[0];
 
-	$rs = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
+	$rs = Database::query("SELECT c_id FROM $tbl_session_rel_course WHERE id_session = $id_session");
 	$existingCourses = Database::store_result($rs);
 
-    // Updating only the RRHH users?? why?
-	//$sql="SELECT id_user FROM $tbl_session_rel_user WHERE id_session = $id_session AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
     $sql        = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session = $id_session ";
 	$result     = Database::query($sql);
 	$UserList   = Database::store_result($result);
 
-	foreach($CourseList as $enreg_course) {
-		$enreg_course = Database::escape_string($enreg_course);
+	foreach ($CourseList as $courseId) {
+        $courseId = Database::escape_string($courseId);
 		$exists = false;
 		foreach ($existingCourses as $existingCourse) {
-			if ($enreg_course == $existingCourse['course_code']) {
+			if ($enreg_course == $existingCourse['c_id']) {
 				$exists=true;
 			}
 		}
 		if (!$exists) {
-            SessionManager::add_courses_to_session($id_session, array($enreg_course));
-
-            $course_info = api_get_course_info($enreg_course);
-            CourseManager::update_course_ranking($course_info['real_id'], $id_session);
+            SessionManager::add_courses_to_session($id_session, array($courseId));
+            CourseManager::update_course_ranking($courseId, $id_session);
 
 			//We add in the existing courses table the current course, to not try to add another time the current course
-			$existingCourses[]=array('course_code'=>$enreg_course);
+			$existingCourses[]=array('c_id'=>$courseId);
             $newUserList = array();
 			foreach ($UserList as $enreg_user) {
                 $newUserList[] = $enreg_user['id_user'];
 			}
-            SessionManager::subscribe_users_to_session_course($newUserList, $id_session, $enreg_course);
+            SessionManager::subscribe_users_to_session_course($newUserList, $id_session, $courseId);
 		}
 	}
 
 	foreach ($existingCourses as $existingCourse) {
-		if(!in_array($existingCourse['course_code'], $CourseList)) {
-		    $course_info = api_get_course_info($existingCourse['course_code']);
-            CourseManager::remove_course_ranking($course_info['real_id'], $id_session);
-			Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
-			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
+		if(!in_array($existingCourse['c_id'], $CourseList)) {
+            CourseManager::remove_course_ranking($existingCourse['c_id'], $id_session);
+			Database::query("DELETE FROM $tbl_session_rel_course WHERE c_id ='".$existingCourse['c_id']."' AND id_session = $id_session");
+			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE c_id ='".$existingCourse['c_id']."' AND id_session = $id_session");
 		}
 	}
 	$nbr_courses = count($CourseList);
-	Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'");
+	Database::query("UPDATE $tbl_session SET nbr_courses = $nbr_courses WHERE id='$id_session'");
 
 	if (isset($_GET['add'])) {
 		header('Location: add_users_to_session.php?id_session='.$id_session.'&add=true');
@@ -216,7 +211,7 @@ if ($ajax_search) {
 		$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
-			$sql="SELECT code, title, visual_code, id_session
+			$sql="SELECT code, title, visual_code, id_session, course.id as real_id
 				FROM $tbl_course course
 				LEFT JOIN $tbl_session_rel_course session_rel_course
 					ON course.code = session_rel_course.course_code
@@ -230,9 +225,9 @@ if ($ajax_search) {
 	$Courses = Database::store_result($result);
 	foreach($Courses as $course) {
 		if ($course['id_session'] == $id_session) {
-			$sessionCourses[$course['code']] = $course ;
+			$sessionCourses[$course['real_id']] = $course ;
 		} else {
-			$nosessionCourses[$course['code']] = $course ;
+			$nosessionCourses[$course['real_id']] = $course ;
 		}
 	}
 }
@@ -282,7 +277,7 @@ if(!($add_type == 'multiple')){
 	<select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:360px;"> <?php
 	foreach($nosessionCourses as $enreg) {
 		?>
-		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+		<option value="<?php echo $enreg['real_id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
     <?php } ?>
     </select>
 	</div>
@@ -317,7 +312,7 @@ unset($nosessionCourses);
   <td width="45%" align="center">
       <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:360px;">
 <?php foreach($sessionCourses as $enreg) { ?>
-	<option value="<?php echo $enreg['code']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+	<option value="<?php echo $enreg['real_id']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
 <?php }
 unset($sessionCourses);
 ?>

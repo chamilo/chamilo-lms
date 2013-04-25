@@ -135,7 +135,8 @@ function CreateServerFolder($folderPath, $lastFolder = null)
 
         // While we are in a course: Registering the newly created folder in the course's database.
         if (api_is_in_course()) {
-            global $_course, $_user;
+            global $_user;
+            $_course = api_get_course_info();
             $repository_path = api_get_path(REL_COURSE_PATH).api_get_course_path().'/document/';
             $to_group_id = 0;
 

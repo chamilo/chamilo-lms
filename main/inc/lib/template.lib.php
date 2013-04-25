@@ -644,11 +644,11 @@ class Template
                 $this->assign('footer_extra_content', $extra_footer);
             }
         }
+        $id_course = api_get_course_int_id();
 
         //Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
-            $id_course = api_get_course_id();
             $id_session = api_get_session_id();
             if (isset($id_course) && $id_course != -1) {
                 $tutor_data = '';
@@ -674,7 +674,6 @@ class Template
 
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
-            $id_course = api_get_course_int_id();
             if (isset($id_course) && $id_course != -1) {
                 $teacher_data = '';
                 $mail = CourseManager::get_emails_of_tutors_to_course($id_course);
@@ -901,7 +900,7 @@ class Template
      */
     function get_tabs()
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         $navigation = array();
 

@@ -60,7 +60,7 @@ class CourseBuilder {
 	 * Create a new CourseBuilder
 	 */
 	function __construct($type='', $course = null) {
-		global $_course;
+        $_course = api_get_course_info();
 
 		if (!empty($course['official_code'])){
 			$_course = $course;
@@ -915,10 +915,11 @@ class CourseBuilder {
 			$this->course->path = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/';
 			$this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['directory'];
 			$this->course->encoding = api_get_system_encoding(); //current platform encoding
-			$code_course = $_course['code'];
-			$sql_session = "SELECT id, name, course_code  FROM $tbl_session_course
-				INNER JOIN  $tbl_session ON id_session = id
-				WHERE course_code = '$code_course' ";
+			//$code_course = $_course['code'];
+            $courseId = $_course['real_id'];
+			$sql_session = "SELECT id, name, c_id
+                FROM $tbl_session_course INNER JOIN  $tbl_session ON id_session = id
+				WHERE c_id = '$courseId' ";
 			$query_session = Database::query($sql_session);
 			while ($rows_session = Database::fetch_assoc($query_session)) {
 				$session = new CourseSession($rows_session['id'], $rows_session['name']);

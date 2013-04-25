@@ -858,34 +858,34 @@ if (!empty($a_my_id)) {
         $my_studen_id = intval(api_get_user_id());
         $my_course_id = Database::escape_string(api_get_course_id());
     }
-    //var_dump($my_studen_id, $my_course_id,$a_my_id);
+    $courseInfo = api_get_course_info($my_course_id);
+    $courseId = $courseInfo['real_id'];
     if (isset($_GET['extend_attempt'])) {
         //"Right green cross" extended
-        $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, api_get_session_id(), false, false);
+        $total_score = Tracking::get_avg_student_score($my_studen_id, $courseId, $a_my_id, api_get_session_id(), false, false);
     } else {
         //"Left green cross" extended
-        $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, api_get_session_id(), false, true);
+        $total_score = Tracking::get_avg_student_score($my_studen_id, $courseId, $a_my_id, api_get_session_id(), false, true);
     }
 } else {
     // Extend all "left green cross"
     if ($origin == 'tracking') {
         $my_course_id = Database::escape_string($_GET['course']);
-        //    var_dump($student_id, $my_course_id );
-        if (!empty($student_id) && !empty($my_course_id)) {
-            $total_score = Tracking::get_avg_student_score($student_id, $my_course_id, array(intval($_GET['lp_id'])), api_get_session_id(), false, false);
+        $courseInfo = api_get_course_info($my_course_id);
+        $courseId = $courseInfo['real_id'];
+
+        if (!empty($student_id) && !empty($courseId)) {
+            $total_score = Tracking::get_avg_student_score($student_id, $courseId, array(intval($_GET['lp_id'])), api_get_session_id(), false, false);
         } else {
             $total_score = 0;
         }
     } else {
-        $total_score = Tracking::get_avg_student_score(api_get_user_id(), api_get_course_id(), array(intval($_GET['lp_id'])), api_get_session_id(), false, false);
+        $total_score = Tracking::get_avg_student_score(api_get_user_id(), api_get_course_int_id(), array(intval($_GET['lp_id'])), api_get_session_id(), false, false);
     }
 }
 
 $total_time = learnpathItem :: get_scorm_time('js', $total_time);
-//$total_time = str_replace('NaN', '00:00:00' ,$total_time);
 $total_time = str_replace('NaN', '00' . $h . '00\'00"', $total_time);
-//$lp_type = learnpath :: get_type_static($lp_id);
-//$total_percent = 0;
 
 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
     $final_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));

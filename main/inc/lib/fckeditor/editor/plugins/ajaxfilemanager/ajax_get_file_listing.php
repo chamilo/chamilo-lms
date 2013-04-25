@@ -19,6 +19,7 @@ if (!isset($manager)) {
     //$_GET = $_POST;
     include_once dirname(__FILE__).DIRECTORY_SEPARATOR."inc".DIRECTORY_SEPARATOR."config.php";
     include_once CLASS_PAGINATION;
+
     $pagination = new pagination(false);
     $search_folder = null;
     if (isset($_GET['search_folder'])) {

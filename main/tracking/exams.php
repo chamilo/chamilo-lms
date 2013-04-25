@@ -14,7 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.ph
 
 $this_section = SECTION_TRACKING;
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
+$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin() || api_is_course_coach() || api_is_session_admin();
 
 if(!$is_allowedToTrack) {
     api_not_allowed();
@@ -147,7 +147,7 @@ if(!empty($course_list) && is_array($course_list)) {
         $global_row = $row_not_global = array();
         $course_id = $current_course['real_id'];
 
-        $a_students = CourseManager :: get_student_list_from_course_code($current_course['code'], false);
+        $a_students = CourseManager :: get_student_list_from_course_code($course_id, false);
         $total_students = count($a_students);
 
         $sqlExercices        = "SELECT count(id) as count FROM ".$t_quiz." AS quiz WHERE active='1' AND c_id = $course_id ";

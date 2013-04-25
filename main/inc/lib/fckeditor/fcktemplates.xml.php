@@ -188,7 +188,7 @@ function load_platform_templates() {
  * @since Dokeos 1.8.6 The code already existed but not in a function and a lot less performant.
  */
 function load_personal_templates($user_id = 0) {
-    global $_course;
+    $_course = api_get_course_info();
 
     // the templates that the user has defined are only available inside the course itself
     if (empty($_course)) {

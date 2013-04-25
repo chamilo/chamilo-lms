@@ -1336,7 +1336,7 @@ class DocumentManager
         //3. Checking if user exist in course/session
 
         if ($session_id == 0) {
-            if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']) || api_is_platform_admin()
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['real_id']) || api_is_platform_admin()
             ) {
                 $user_in_course = true;
             }
@@ -1347,7 +1347,7 @@ class DocumentManager
         } else {
             $user_status = SessionManager::get_user_status_in_course_session(
                 $user_id,
-                $course_info['code'],
+                $course_info['real_id'],
                 $session_id
             );
             if (in_array($user_status, array('0', '2', '6'))) {
@@ -2966,7 +2966,7 @@ class DocumentManager
 
         if (!$user_in_course) {
             if (empty($session_id)) {
-                if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
+                if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['real_id'])) {
                     $user_in_course = true;
                 }
                 //Check if course is open then we can consider that the student is regitered to the course
@@ -2976,7 +2976,7 @@ class DocumentManager
             } else {
                 $user_status = SessionManager::get_user_status_in_course_session(
                     $user_id,
-                    $course_info['code'],
+                    $course_info['real_id'],
                     $session_id
                 );
                 //is true if is an student, course session teacher or coach

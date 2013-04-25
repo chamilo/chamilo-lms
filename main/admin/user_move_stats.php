@@ -77,7 +77,7 @@ if (isset($_REQUEST['load_ajax'])) {
         } else {
             $course_info            = api_get_course_info_by_id($combination_result['c_id']);
             $origin_course_code     = $course_info['code'];
-            $course_id 					= $course_info['real_id'];
+            $course_id 				= $course_info['real_id'];
             $origin_session_id      = intval($combination_result['session_id']);
             $new_session_id         = intval($_REQUEST['session_id']);
 
@@ -93,7 +93,7 @@ if (isset($_REQUEST['load_ajax'])) {
 
             $course_founded = false;
             foreach ($new_course_list as $course_item) {
-                if ($origin_course_code == $course_item['code']) {
+                if ($course_id == $course_item['id']) {
                     $course_founded = true;
                 }
             }
@@ -196,7 +196,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 //3. track_e_course_access
 
                 $sql = "SELECT * FROM $TBL_TRACK_E_COURSE_ACCESS
-                        WHERE course_code = '$origin_course_code' AND session_id = $origin_session_id AND user_id = $user_id ";
+                        WHERE c_id = '$course_id' AND session_id = $origin_session_id AND user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = array();
                 while($row = Database::fetch_array($res,'ASSOC')) {
@@ -218,7 +218,8 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 //4. track_e_lastaccess
 
-                $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS WHERE access_cours_code = '$origin_course_code' AND access_session_id = $origin_session_id  AND access_user_id = $user_id ";
+                $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
+                        WHERE c_id = '$course_id' AND access_session_id = $origin_session_id  AND access_user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = array();
                 while($row = Database::fetch_array($res,'ASSOC')) {
@@ -264,8 +265,8 @@ if (isset($_REQUEST['load_ajax'])) {
                           $result_message[$TBL_LP_VIEW]++;
                     } else {
                           //Getting all information of that lp_item_id
-                          $score    = Tracking::get_avg_student_score($user_id, $origin_course_code, array($data['lp_id']),$origin_session_id);
-                          $progress = Tracking::get_avg_student_progress($user_id, $origin_course_code, array($data['lp_id']),$origin_session_id);
+                          $score    = Tracking::get_avg_student_score($user_id, $course_id, array($data['lp_id']),$origin_session_id);
+                          $progress = Tracking::get_avg_student_progress($user_id, $course_id, array($data['lp_id']),$origin_session_id);
                     	  $result_message['LP_VIEW'][$data['lp_id']] = array('score' => $score, 'progress' =>$progress);
                     }
                 }
@@ -273,29 +274,28 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 //CHECk DESTINY
                 if (!$update_database) {
-                        $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $new_session_id AND c_id = $course_id";
-                        $res = Database::query($sql);
+                    $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $new_session_id AND c_id = $course_id";
+                    $res = Database::query($sql);
 
-                        //Getting the list of LPs in the new session
-                        $lp_list = new LearnpathList($user_id, $origin_course_code, $new_session_id);
-                        $flat_list = $lp_list->get_flat_list();
+                    //Getting the list of LPs in the new session
+                    $lp_list = new LearnpathList($user_id, $origin_course_code, $new_session_id);
+                    $flat_list = $lp_list->get_flat_list();
 
-                        $list = array();
-                        while($row = Database::fetch_array($res,'ASSOC')) {
-                            //Checking if the LP exist in the new session
-                            if (in_array($row['lp_id'], array_keys($flat_list))) {
-                                $list[$row['id']] = $row;
-                            }
+                    $list = array();
+                    while($row = Database::fetch_array($res,'ASSOC')) {
+                        //Checking if the LP exist in the new session
+                        if (in_array($row['lp_id'], array_keys($flat_list))) {
+                            $list[$row['id']] = $row;
                         }
-                        if (!empty($list))
-                        foreach ($list as $id=>$data) {
-                              //Getting all information of that lp_item_id
-                              $score    = Tracking::get_avg_student_score($user_id, $origin_course_code,        array($data['lp_id']), $new_session_id);
-                              $progress = Tracking::get_avg_student_progress($user_id, $origin_course_code,     array($data['lp_id']), $new_session_id);
-                              $result_message_compare['LP_VIEW'][$data['lp_id']] = array('score' => $score, 'progress' =>$progress);
-                        }
+                    }
+                    if (!empty($list))
+                    foreach ($list as $id=>$data) {
+                          //Getting all information of that lp_item_id
+                          $score    = Tracking::get_avg_student_score($user_id, $course_id,        array($data['lp_id']), $new_session_id);
+                          $progress = Tracking::get_avg_student_progress($user_id, $course_id,     array($data['lp_id']), $new_session_id);
+                          $result_message_compare['LP_VIEW'][$data['lp_id']] = array('score' => $score, 'progress' =>$progress);
+                    }
                 }
-
 
                 //6. Agenda
 

@@ -123,7 +123,7 @@ if (Database::num_rows($res) > 0) {
 	echo Display::display_warning_message(get_lang('NoUsersInCourse'));
 }
 
-$session_list = SessionManager::get_session_by_course($course_info['code']);
+$session_list = SessionManager::get_session_by_course($course_info['real_id']);
 
 $url = api_get_path(WEB_CODE_PATH);
 if (!empty($session_list)) {

@@ -306,7 +306,7 @@ class Attendance
 	 * @return 	int    last id
 	 */
 	public function attendance_edit($attendance_id, $link_to_gradebook = false) {
-		global $_course;
+        $_course = api_get_course_info();
 		$tbl_attendance     = Database :: get_course_table(TABLE_ATTENDANCE);
 		$table_link         = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$session_id         = api_get_session_id();
@@ -446,6 +446,9 @@ class Attendance
 	 */
 	public function get_users_rel_course($attendance_id = 0) {
         $current_course_id  = $this->get_course_id();
+        $courseInfo = api_get_course_info($current_course_id);
+        $courseId = $courseInfo['real_id'];
+
         $current_session_id  = $this->get_session_id();
 
 		if (!empty($current_session_id)) {
@@ -465,9 +468,9 @@ class Attendance
 			$user_status_in_course  = null;
 
 			if ($current_session_id) {
-                $user_status_in_session = SessionManager::get_user_status_in_course_session($uid, $current_course_id, $current_session_id);
+                $user_status_in_session = SessionManager::get_user_status_in_course_session($uid, $courseId, $current_session_id);
 			} else {
-			    $user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);
+			    $user_status_in_course = CourseManager::get_user_in_course_status($uid, $courseId);
 			}
 
 			//Not taking into account DRH or COURSEMANAGER

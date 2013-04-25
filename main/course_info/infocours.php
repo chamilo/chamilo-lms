@@ -29,7 +29,7 @@ define('MODULE_HELP_NAME', 'Settings');
 define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
 $currentCourseRepository    = $_course['path'];
-$is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
+$is_allowedToEdit 			= api_is_course_admin() || api_is_platform_admin();
 
 $course_code 				= api_get_course_id();
 $courseId = api_get_course_int_id();
@@ -91,7 +91,7 @@ while ($a_titulars = Database::fetch_array($q_result_titulars)) {
         $s_selected_tutor = api_get_person_name($s_firstname, $s_lastname);
     }
     $s_disabled_select_titular = '';
-    if (!$is_courseAdmin) {
+    if (!api_is_course_admin()) {
         $s_disabled_select_titular = 'disabled=disabled';
     }
     $a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
@@ -331,7 +331,6 @@ $group[]=$form->createElement('radio', 'allow_fast_exercise_edition', get_lang('
 $form->addGroup($group, '', array(get_lang("AllowFastExerciseEdition")), '');
 
 //Auto-launch Exercise LP
-$form->addElement('html', '<div><h3>'.Display::return_icon('quiz.png', get_lang('ConfigExercise'),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('ConfigExercise')).'</h3><div>');
 $group = array();
 $group[]=$form->createElement('radio', 'enable_exercise_auto_launch', get_lang('ExerciseAutoLaunch'), get_lang('RedirectToExercise'), 1);
 $group[]=$form->createElement('radio', 'enable_exercise_auto_launch', get_lang('ExerciseAutoLaunch'), get_lang('RedirectToTheExerciseList'), 2);

@@ -463,9 +463,9 @@ class Exercise
             $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
-            $sql = "SELECT q.id
+            $sql = "SELECT q.iid
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+                        ON (e.question_id = q.iid AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					ORDER BY question_order";
 
@@ -475,13 +475,11 @@ class Exercise
             }
             $sql .= $limitCondition;
 
-            $columns = array('question', 'type', 'category', 'level', 'score', 'actions');
-
             $result = Database::query($sql);
             $questions = array();
             if (Database::num_rows($result)) {
                 while ($question = Database::fetch_array($result, 'ASSOC')) {
-                    $objQuestionTmp = Question::read($question['id']);
+                    $objQuestionTmp = Question::read($question['iid']);
                     $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
 
                     if (empty($category_labels)) {
@@ -500,7 +498,7 @@ class Exercise
                     $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media);
 
                     $question = array(
-                        'id' => $question['id'],
+                        'id' => $question['iid'],
                         'question' => $objQuestionTmp->selectTitle(),
                         'type' => $questionType,
                         'category' => Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.'</a>'),
@@ -908,7 +906,7 @@ class Exercise
      */
     function save($type_e = '')
     {
-        global $_course;
+        $_course = api_get_course_info();
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 
         $id = $this->id;
@@ -4231,7 +4229,7 @@ class Exercise
             $subject = get_lang('OpenQuestionsAttempted');
 
             if (api_get_session_id()) {
-                $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+                $teachers = CourseManager::get_coach_list_from_course_code($course_info['real_id'], api_get_session_id());
             } else {
                 $teachers = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
             }
@@ -4313,7 +4311,7 @@ class Exercise
             $subject = get_lang('OralQuestionsAttempted');
 
             if (api_get_session_id()) {
-                $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+                $teachers = CourseManager::get_coach_list_from_course_code($course_info['real_id'], api_get_session_id());
             } else {
                 $teachers = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
             }

@@ -1541,7 +1541,6 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
 {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
     $course_id = api_get_course_int_id();
-
     if (!empty($course_info) && !empty($course_info['real_id'])) {
         $course_id = $course_info['real_id'];
     }
@@ -1554,7 +1553,7 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
     $time_conditions = '';
 
     if ($check_publication_dates) {
-        $time_conditions = " AND ((start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now' )  OR "; //start and end are set
+        $time_conditions = " AND ((start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time <> '0000-00-00 00:00:00' AND end_time > '$now' ) OR "; //start and end are set
         $time_conditions .= " (start_time <> '0000-00-00 00:00:00' AND start_time < '$now'  AND end_time = '0000-00-00 00:00:00') OR "; // only start is set
         $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time <> '0000-00-00 00:00:00'  AND end_time > '$now') OR   "; // only end is set
         $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time =  '0000-00-00 00:00:00'))  "; // nothing is set
@@ -1566,7 +1565,8 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
         //All exercises
         $conditions = array('where' => array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? '.$time_conditions => array('1', $session_id, $course_id)), 'order' => 'title');
     }
-    return Database::select('*', $TBL_EXERCICES, $conditions);
+    $result = Database::select('*', $TBL_EXERCICES, $conditions);
+    return $result;
 }
 
 /**
@@ -2397,7 +2397,12 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
             // No category for this question!
             if ($category_was_added_for_this_test == false) {
-                $category_list['none'] = array();
+                if (!isset($category_list['none'])) {
+                    $category_list['none'] = array();
+                    $category_list['none']['score'] = 0;
+                    $category_list['none']['total'] = 0;
+                }
+
                 $category_list['none']['score'] += $my_total_score;
                 $category_list['none']['total'] += $my_total_weight;
             }

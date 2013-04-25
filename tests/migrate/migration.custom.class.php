@@ -797,7 +797,7 @@ class MigrationCustom {
                         $eval = new Evaluation();
                         $evals_found = false;
                         if (isset($data_list['course_evals'][$course_data['code']][$gradebook['id']][$title])) {
-                            $evals_found = $data_list['course_evals'][$course_data['code']][$gradebook['id']][$title]; 
+                            $evals_found = $data_list['course_evals'][$course_data['code']][$gradebook['id']][$title];
                         }
                         if (empty($evals_found)) {
                             $eval->set_name($title);
@@ -1183,16 +1183,17 @@ class MigrationCustom {
      */
     static function transaction_curso_matricula($data) {
         $course_code = self::get_real_course_code($data['item_id']);
+        $courseInfo = api_get_course_info($course_code);
         $uidIdPrograma = $data['orig_id'];
         $uidIdProgramaDestination = $data['dest_id'];
 
         global $data_list;
-        $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
+        //$session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
         $destination_session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination, $data_list);
 
         if (!empty($course_code)) {
             if (empty($uidIdPrograma) && !empty($uidIdProgramaDestination) && !empty($destination_session_id)) {
-                SessionManager::add_courses_to_session($destination_session_id, array($course_code));
+                SessionManager::add_courses_to_session($destination_session_id, array($courseInfo['real_id']));
                 return array(
                    'message' => "Session updated $uidIdPrograma",
                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
@@ -1982,7 +1983,7 @@ class MigrationCustom {
                                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                                 );
                             } else {
-                                // Gradebook result not found. Creating... 
+                                // Gradebook result not found. Creating...
                                 // @todo disable when moving to production
                                 $res->set_evaluation_id($eval_id);
                                 $res->set_user_id($user_id);
@@ -2068,7 +2069,7 @@ class MigrationCustom {
                 if (isset($course_data['code'])) {
 
                     //Check if user exist in the session
-                    $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['code'], $session_id);
+                    $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['id'], $session_id);
 
                     if ($status === false) {
                          return array(
@@ -2076,7 +2077,7 @@ class MigrationCustom {
                             'status_id' => self::TRANSACTION_STATUS_FAILED
                         );
                     }
-                    // attendance are registered with date + time, so get time 
+                    // attendance are registered with date + time, so get time
                     // from session schedule
                     $time = self::get_horario_value($session_id);
                     $attendance_date .= " $time:00";
@@ -2131,7 +2132,7 @@ class MigrationCustom {
                         */
                         //only 1 course per session
                     } else {
-                    
+
                         $attendance_data = current($attendance_list);
                         $attendance_id = $attendance_data['id'];
                         //error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id - $attendance_date");
@@ -2241,7 +2242,7 @@ error_log('Setting date '.$attendance_date);
                 if (isset($course_data['code'])) {
 
                     //Check if user exist in the session
-                    $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['code'], $session_id);
+                    $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['id'], $session_id);
 
                     if ($status === false) {
                          return array(
@@ -2363,7 +2364,7 @@ error_log('Setting date '.$attendance_date);
                 if (isset($course_data['code'])) {
 
                     //Check if user exist in the session
-                    $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['code'], $session_id);
+                    $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['id'], $session_id);
 
                     if ($status === false) {
                          return array(
@@ -3154,7 +3155,7 @@ error_log('Setting date '.$attendance_date);
         // Browse through all transactions
         foreach ($transactions as $id => $t) {
             //If the item is in the "cleanable actions" list, register it.
-            //  Otherwise, just ignore (it won't be inserted in the excluded 
+            //  Otherwise, just ignore (it won't be inserted in the excluded
             //  list)
             if (in_array($t['ida'],$cleanable_actions)) {
                 if (isset($cleanable[$t['id']][$t['ida']])) {

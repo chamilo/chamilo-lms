@@ -21,7 +21,7 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
 $this_section = "session_my_space";
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
+$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin() || api_is_course_coach() || api_is_session_admin();
 
 if(!$is_allowedToTrack) {
 	Display :: display_header(null);

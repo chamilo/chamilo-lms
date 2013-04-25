@@ -197,7 +197,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
  */
 function show_add_forum_form($inputvalues = array(), $lp_id)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     // Initialize the object.
@@ -480,7 +480,7 @@ function show_edit_forumcategory_form($inputvalues = array())
  */
 function store_forumcategory($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
     global $_user;
 
     $course_id = api_get_course_int_id();
@@ -546,7 +546,7 @@ function store_forumcategory($values)
  */
 function store_forum($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
@@ -735,7 +735,7 @@ function store_forum($values)
  */
 function delete_forum_forumcategory_thread($content, $id)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $table_forums_post = Database::get_course_table(TABLE_FORUM_POST);
@@ -1057,7 +1057,7 @@ function display_up_down_icon($content, $id, $list)
  */
 function change_visibility($content, $id, $target_visibility)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $constants = array('forumcategory' => TOOL_FORUM_CATEGORY, 'forum' => TOOL_FORUM, 'thread' => TOOL_FORUM_THREAD);
     api_item_property_update(
         $_course,
@@ -2091,7 +2091,7 @@ function count_number_of_forums_in_category($cat_id)
 function store_thread($values)
 {
     global $_user;
-    global $_course;
+    $_course = api_get_course_info();
     global $current_forum;
     global $origin;
 
@@ -2704,7 +2704,7 @@ function current_qualify_of_thread($thread_id, $session_id)
  */
 function store_reply($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
     global $current_forum;
     global $origin;
 
@@ -3272,7 +3272,7 @@ function forum_not_allowed_here()
 function get_whats_new()
 {
     global $_user;
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $tracking_last_tool_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
@@ -3288,11 +3288,7 @@ function get_whats_new()
 
     if (!$_SESSION['last_forum_access']) {
         $sql = "SELECT * FROM ".$tracking_last_tool_access."
-                WHERE access_user_id='".Database::escape_string(
-            $_user['user_id']
-        )."' AND access_cours_code='".Database::escape_string(
-            $_course['sysCode']
-        )."' AND access_tool='".Database::escape_string($tool)."'";
+                WHERE access_user_id='".Database::escape_string($_user['user_id'])."' AND c_id='".$course_id."' AND access_tool='".Database::escape_string($tool)."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $_SESSION['last_forum_access'] = $row['access_date'];
@@ -3615,7 +3611,7 @@ function handle_mail_cue($content, $id)
  */
 function send_mail($user_info = array(), $thread_information = array())
 {
-    global $_course;
+    $_course = api_get_course_info();
     $user_id = api_get_user_id();
     $subject = get_lang('NewForumPost').' - '.$_course['official_code'];
     if (isset($thread_information) && is_array($thread_information)) {
@@ -3770,7 +3766,7 @@ function move_post_form()
  */
 function store_move_post($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -3899,7 +3895,7 @@ function store_move_post($values)
  */
 function store_move_thread($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -4144,7 +4140,7 @@ function search_link()
  */
 function add_forum_attachment_file($file_comment, $last_id)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $agenda_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 
@@ -4208,7 +4204,7 @@ function add_forum_attachment_file($file_comment, $last_id)
  */
 function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
@@ -4293,7 +4289,7 @@ function get_attachment($post_id)
  */
 function delete_attachment($post_id, $id_attach = 0)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
@@ -4563,7 +4559,8 @@ function get_notifications($content, $id)
  */
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
-    global $_course, $_user;
+    global $_user;
+    $_course = api_get_course_info();
 
     // The content of the mail
     $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq(

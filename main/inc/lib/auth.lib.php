@@ -343,28 +343,26 @@ class AuthLib {
      * @param   string  Course code
      * @return  bool    True if it success
      */
-    public function remove_user_from_course($course_code)
+    public function remove_user_from_course($courseId)
     {
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
 
         // protect variables
         $current_user_id = api_get_user_id();
-        $course_code = Database::escape_string($course_code);
+        $courseId = Database::escape_string($courseId);
         $result = true;
 
         // we check (once again) if the user is not course administrator
         // because the course administrator cannot unsubscribe himself
         // (s)he can only delete the course
-        $sql_check = "SELECT * FROM $tbl_course_user WHERE user_id='" . $current_user_id . "' AND c_id ='" . $course_id . "' AND status='1' ";
+        $sql_check = "SELECT * FROM $tbl_course_user WHERE user_id='" . $current_user_id . "' AND c_id ='" . $courseId . "' AND status='1' ";
         $result_check = Database::query($sql_check);
         $number_of_rows = Database::num_rows($result_check);
         if ($number_of_rows > 0) {
             $result = false;
         }
 
-        CourseManager::unsubscribe_user($current_user_id, $course_code);
+        CourseManager::unsubscribe_user($current_user_id, $courseId);
         return $result;
     }
 
@@ -555,7 +553,7 @@ class AuthLib {
         while ($row = Database::fetch_array($result)) {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = CourseManager::get_users_count_in_course($row['code']);
-            $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+            $count_connections_last_month = Tracking::get_course_connections_count($row['id'], 0, api_get_utc_datetime(time() - (30 * 86400)));
 
             if ($row['tutor_name'] == '0') {
                 $row['tutor_name'] = get_lang('NoManager');
@@ -626,7 +624,7 @@ class AuthLib {
         while ($row = Database::fetch_array($result_find)) {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
-            $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+            $count_connections_last_month = Tracking::get_course_connections_count($row['id'], 0, api_get_utc_datetime(time() - (30 * 86400)));
 
             $courses[] = array(
                 'code' => $row['code'],
@@ -663,8 +661,7 @@ class AuthLib {
             } else {
                 $status_user_in_new_course = null;
             }
-            $courseInfo = api_get_course_info($course_code);
-            if (CourseManager::add_user_to_course($user_id, $courseInfo['real_id'], $status_user_in_new_course)) {
+            if (CourseManager::add_user_to_course($user_id, $all_course_information['real_id'], $status_user_in_new_course)) {
                 $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course_code);
                 if ($send == 1) {
                     CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = false);

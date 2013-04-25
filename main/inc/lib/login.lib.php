@@ -323,7 +323,7 @@ class Login
         global $_user;
 
         global $_cid;
-        global $_course;
+        $_course = api_get_course_info();
         global $_real_cid;
         global $_courseUser;
 
@@ -386,8 +386,6 @@ class Login
 
                     // Database Table Definitions
                     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-                    $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-                    $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
                     if (!empty($_GET['id_session'])) {
                         $_SESSION['id_session'] = intval($_GET['id_session']);
@@ -402,7 +400,7 @@ class Login
                     if (!isset($_SESSION['login_as'])) {
                         //Course login
                         if (isset($_user['user_id'])) {
-                            event_course_login($_course['sysCode'], $_user['user_id'], api_get_session_id());
+                            event_course_login($_real_cid, $_user['user_id'], api_get_session_id());
                         }
                     }
                 } else {
@@ -486,10 +484,10 @@ class Login
                             //But only if the login date is < than now + max_life_time
                             $sql = "SELECT course_access_id FROM $course_tracking_table
                             WHERE   user_id     = " . intval($_user ['user_id']) . " AND
-                                    course_code = '$course_code' AND
+                                    c_id = '$_real_cid' AND
                                     session_id  = " . api_get_session_id() . " AND
                                     login_course_date > now() - INTERVAL $session_lifetime SECOND
-                        ORDER BY login_course_date DESC LIMIT 0,1";
+                            ORDER BY login_course_date DESC LIMIT 0,1";
                             $result = Database::query($sql);
 
                             if (Database::num_rows($result) > 0) {
@@ -500,8 +498,8 @@ class Login
                                 //error_log($sql);
                                 Database::query($sql);
                             } else {
-                                $sql = "INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
-                                    "VALUES('" . $course_code . "', '" . $_user['user_id'] . "', '$time', '$time', '1','" . api_get_session_id() . "')";
+                                $sql = "INSERT INTO $course_tracking_table (c_id, user_id, login_course_date, logout_course_date, counter, session_id)" .
+                                    "VALUES('" . $_real_cid . "', '" . $_user['user_id'] . "', '$time', '$time', '1','" . api_get_session_id() . "')";
                                 //error_log($sql);
                                 Database::query($sql);
                             }
@@ -561,14 +559,13 @@ class Login
                         // The user is subscribed in a session? The user is a Session coach a Session admin ?
 
                         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-                        $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
                         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
                         //Session coach, session admin, course coach admin
                         $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
                 		FROM $tbl_session session, $tbl_session_course_user session_rcru
 					    WHERE  session_rcru.id_session  = session.id AND
-					           session_rcru.course_code = '$_cid' AND
+					           session_rcru.c_id = ".$_course['real_id']." AND
 					           session_rcru.id_user     = '$user_id' AND
                                session_rcru.id_session  = $session_id AND
 					           session_rcru.status      = 2";
@@ -734,7 +731,7 @@ class Login
     static function init_group($group_id, $reset)
     {
         global $_cid;
-        global $_course;
+        $_course = api_get_course_info();
         global $_gid;
 
         if ($reset) { // session data refresh requested

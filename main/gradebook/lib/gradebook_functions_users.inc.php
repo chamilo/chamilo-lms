@@ -9,7 +9,7 @@
  * returns users within a course given by param
  * @param $course_id
  */
-function get_users_in_course($course_id) {
+function get_users_in_course($courseId) {
 	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
@@ -17,27 +17,26 @@ function get_users_in_course($course_id) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
 
 	$current_session = api_get_session_id();
-	$course_id = Database::escape_string($course_id);
-    $courseInfo = api_get_course_info($course_id);
+    $courseId = Database::escape_string($courseId);
 
 	if (!empty($current_session)) {
 		$sql = "SELECT user.user_id, user.username, lastname, firstname, official_code
 			 	FROM $tbl_session_course_user as scru, $tbl_user as user
 			 	WHERE scru.id_user=user.user_id
-			 	AND scru.status=0
-			 	AND scru.course_code='$course_id' AND id_session = '$current_session' $order_clause ";
+                    AND scru.status=0
+                    AND scru.c_id ='$courseId' AND id_session = '$current_session'
+			 	$order_clause ";
 	} else {
 		$sql = 'SELECT user.user_id, user.username, lastname, firstname, official_code
                 FROM '.$tbl_course_user.' as course_rel_user, '.$tbl_user.' as user
                 WHERE   course_rel_user.user_id=user.user_id AND
                         course_rel_user.status='.STUDENT.' AND
-                        course_rel_user.c_id = '.$courseInfo['real_id'].'
+                        course_rel_user.c_id = '.$courseId.'
                 '.$order_clause;
 	}
 	$result = Database::query($sql);
 	return get_user_array_from_sql_result($result);
 }
-
 
 function get_user_array_from_sql_result($result) {
 	$a_students = array();
@@ -61,11 +60,12 @@ function get_all_users ($evals = array(), $links = array()) {
 
 	foreach ($evals as $eval) {
 		$coursecode = $eval->get_course_code();
+        $courseInfo = api_get_course_info($coursecode);
 		// evaluation in course
 		if (isset($coursecode) && !empty($coursecode)) {
 			if (!array_key_exists($coursecode,$coursecodes)) {
 				$coursecodes[$coursecode] = '1';
-				$users = array_merge($users, get_users_in_course($coursecode));
+				$users = array_merge($users, get_users_in_course($courseInfo['real_id']));
 			}
 		} else {// course independent evaluation
 			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -73,8 +73,7 @@ function get_all_users ($evals = array(), $links = array()) {
 
 			$sql = 'SELECT user.user_id,lastname, firstname, user.official_code
                     FROM '.$tbl_res.' as res, '.$tbl_user.' as user
-                    WHERE res.evaluation_id = '.intval($eval->get_id())
-					.' AND res.user_id = user.user_id';
+                    WHERE res.evaluation_id = '.intval($eval->get_id()).' AND res.user_id = user.user_id';
 			$result = Database::query($sql);
 			$users = array_merge($users, get_user_array_from_sql_result($result));
 		}
@@ -83,9 +82,10 @@ function get_all_users ($evals = array(), $links = array()) {
 	foreach ($links as $link) {
 		// links are always in a course
 		$coursecode = $link->get_course_code();
+        $courseInfo = api_get_course_info($coursecode);
 		if (!array_key_exists($coursecode,$coursecodes)) {
 			$coursecodes[$coursecode] = '1';
-			$users = array_merge($users, get_users_in_course($coursecode));
+			$users = array_merge($users, get_users_in_course($courseInfo['real_id']));
 		}
 	}
 	unset ($coursecodes);

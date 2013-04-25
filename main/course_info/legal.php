@@ -19,6 +19,7 @@ if (empty($course_code)) {
 }
 
 $course_info = CourseManager::get_course_information($course_code);
+$courseId = $course_info['real_id'];
 $course_legal = $course_info['legal'];
 
 // Build the form
@@ -51,7 +52,7 @@ if (api_check_user_access_to_legal($course_info['visibility']) && Session::read(
 $url = api_get_course_url($course_code, $session_id);
 
 if (empty($session_id)) {
-    if (CourseManager::is_user_subscribed_in_course($user_id, $course_code) || api_check_user_access_to_legal($course_info['visibility'])) {
+    if (CourseManager::is_user_subscribed_in_course($user_id, $courseId) || api_check_user_access_to_legal($course_info['visibility'])) {
         $user_accepted_legal = CourseManager::is_user_accepted_legal($user_id, $course_info);
         if ($user_accepted_legal || $user_pass_open_course) {
             //Redirect to course home
@@ -67,7 +68,7 @@ if (empty($session_id)) {
         header('Location: '.$url);
     }
 
-    $user_session_status = SessionManager::get_user_status_in_course_session($user_id, $course_code, $session_id);
+    $user_session_status = SessionManager::get_user_status_in_course_session($user_id, $courseId, $session_id);
 
     if (isset($user_session_status) || api_check_user_access_to_legal($course_info['visibility'])) {
         $user_accepted_legal = CourseManager::is_user_accepted_legal($user_id, $course_info, $session_id);

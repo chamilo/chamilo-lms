@@ -69,7 +69,6 @@ class IndexController extends CommonController
         //echo $app['translator']->trans('Wiki Search Results');
         //echo $app['translator']->trans('Profile');
 
-
         //$token = $app['security']->getToken();
 
         //$article = $app['orm.em']->getRepository('Entity\Course');
@@ -167,6 +166,25 @@ class IndexController extends CommonController
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
         return new Response($response, 200, array());
+    }
+
+    public function loginAction(Application $app)
+    {
+        /*$username = $app['request']->get('login');
+        $password = $app['request']->get('password');
+
+        $user_table = \Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT * FROM $user_table WHERE username = ?";
+        $userInfo = $app['db']->fetchAssoc($sql, array($username));
+
+        if ($userInfo) {
+            if ($userInfo['auth_source'] == PLATFORM_AUTH_SOURCE) {
+                if ($password == $userInfo['password'] AND trim($username) == $userInfo['username']) {
+                    unset($userInfo['password']);
+
+                }
+            }
+        }*/
     }
 
     /**

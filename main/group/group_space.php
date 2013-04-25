@@ -115,7 +115,7 @@ if (isset($_GET['action'])) {
 /* 	Main Display Area */
 
 $course_code = $_course['sysCode'];
-$is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course(api_get_user_id(), $course_code);
+$is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course(api_get_user_id(), api_get_course_int_id());
 
 /*
  * Edit the group

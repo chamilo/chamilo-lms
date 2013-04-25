@@ -991,7 +991,7 @@ function get_course_users()
 				FROM $tbl_session_course_user AS session_course_user
 				INNER JOIN $tbl_user u ON u.user_id = session_course_user.id_user
 				WHERE id_session = ".$session_id."
-				AND course_code  = '".api_get_course_id()."'";
+				AND c_id  = '".api_get_course_int_id()."'";
 
         $result = Database::query($sql);
         while ($user = Database::fetch_array($result)) {
@@ -1009,9 +1009,7 @@ function get_course_users()
  */
 function get_course_groups()
 {
-    $group_list = array();
     $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
-
     return $group_list;
 }
 
@@ -1215,7 +1213,7 @@ function construct_selected_select_form($group_list = null, $user_list = null, $
  */
 function store_new_agenda_item()
 {
-    global $_course;
+    $_course = api_get_course_info();
     $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
     $t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
 
@@ -1683,7 +1681,7 @@ function load_edit_users($tool, $id)
  */
 function change_visibility($tool, $id, $visibility)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
@@ -1931,7 +1929,7 @@ function save_edit_agenda_item($id, $title, $content, $start_date, $end_date)
  */
 function delete_agenda_item($id)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $id = Database::escape_string($id);
     if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())
     ) {
@@ -2269,7 +2267,6 @@ function display_one_agenda_item($agenda_id)
     global $TABLE_ITEM_PROPERTY;
     global $select_month, $select_year;
     global $DaysShort, $DaysLong, $MonthsLong;
-    global $is_courseAdmin;
     global $dateFormatLong, $timeNoSecFormat, $charset;
 
     // getting the name of the groups
@@ -4686,7 +4683,7 @@ function agenda_add_item(
  */
 function delete_attachment_file($id_attach)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
     $id_attach = intval($id_attach);
 
@@ -4715,7 +4712,7 @@ function delete_attachment_file($id_attach)
 function add_agenda_attachment_file($file_comment, $last_id)
 {
 
-    global $_course;
+    $_course = api_get_course_info();
     $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
     $last_id = intval($last_id);
     // Storing the attachments
@@ -4776,8 +4773,7 @@ function add_agenda_attachment_file($file_comment, $last_id)
  */
 function edit_agenda_attachment_file($file_comment, $agenda_id, $id_attach)
 {
-
-    global $_course;
+    $_course = api_get_course_info();
     $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
     // Storing the attachments
 

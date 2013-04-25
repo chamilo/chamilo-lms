@@ -791,6 +791,7 @@ $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
 $language_files[] = 'accessibility';
+$language_files[] = 'minedu';
 
 //@todo Added because userportal and index are loaded by a controller should be fixed when a $app['translator'] is configured
 $language_files[] = 'index';

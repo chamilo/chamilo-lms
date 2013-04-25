@@ -1097,7 +1097,7 @@ class SessionManager
      * @param    bool    Whether to unsubscribe existing users (true, default) or not (false)
      * @return    void    Nothing, or false on error
      **/
-     public static function add_courses_to_session ($id_session, $course_list, $empty_courses=true) {
+     public static function add_courses_to_session($id_session, $course_list, $empty_courses = true) {
          // security checks
          if ($id_session!= strval(intval($id_session))) { return false; }
 
@@ -1111,19 +1111,21 @@ class SessionManager
         $id_coach = Database::query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
         $id_coach = Database::fetch_array($id_coach);
         $id_coach = $id_coach[0];
+
         // get list of courses subscribed to this session
         $rs = Database::query("SELECT c_id FROM $tbl_session_rel_course WHERE id_session=$id_session");
-        $existingCourses = Database::store_result($rs);
+        $existingCourses = Database::store_result($rs, 'ASSOC');
         $nbr_courses=count($existingCourses);
+
         // get list of users subscribed to this session
         $sql="SELECT id_user
             FROM $tbl_session_rel_user
             WHERE id_session = $id_session AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
         $result=Database::query($sql);
-        $user_list=Database::store_result($result);
+        $user_list=Database::store_result($result, 'ASSOC');
 
         // Remove existing courses from the session
-        if ($empty_courses===true) {
+        if ($empty_courses === true) {
             foreach ($existingCourses as $existingCourse) {
                 if (!in_array($existingCourse['c_id'], $course_list)){
                     Database::query("DELETE FROM $tbl_session_rel_course WHERE c_id='".$existingCourse['c_id']."' AND id_session=$id_session");
@@ -1134,35 +1136,39 @@ class SessionManager
         }
 
         // Pass through the courses list we want to add to the session
-        foreach ($course_list as $enreg_course) {
-            $enreg_course = Database::escape_string($enreg_course);
+        foreach ($course_list as $courseId) {
+            $courseId = Database::escape_string($courseId);
             $exists = false;
             // check if the course we want to add is already subscribed
             foreach ($existingCourses as $existingCourse) {
-                if ($enreg_course == $existingCourse['c_id']) {
+                if ($courseId == $existingCourse['c_id']) {
                     $exists=true;
                 }
             }
-            if (!$exists) {
+            if ($exists == false) {
+
+                CourseManager::update_course_ranking($courseId, $id_session);
 
                 //if the course isn't subscribed yet
-                $sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session, c_id, course_id) VALUES ('$id_session','$enreg_course', $courseId)";
+                $sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session, c_id) VALUES ('$id_session','$courseId')";
+
                 Database::query($sql_insert_rel_course);
                 //We add the current course in the existing courses array, to avoid adding another time the current course
-                $existingCourses[]=array('course_code'=>$enreg_course);
+                $existingCourses[]=array('c_id' => $courseId);
                 $nbr_courses++;
 
                 // subscribe all the users from the session to this course inside the session
                 $nbr_users=0;
                 foreach ($user_list as $enreg_user) {
                     $enreg_user_id = Database::escape_string($enreg_user['id_user']);
-                    $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session, c_id, id_user) VALUES ('$id_session','$enreg_course','$enreg_user_id')";
+                    $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session, c_id, id_user) VALUES ('$id_session','$courseId','$enreg_user_id')";
                     Database::query($sql_insert);
                     if (Database::affected_rows()) {
                         $nbr_users++;
                     }
                 }
-                Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND c_id = '$enreg_course'");
+                SessionManager::subscribe_users_to_session_course($user_list, $id_session, $courseId);
+                Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND c_id = '$courseId'");
             }
         }
         Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'");
@@ -1824,7 +1830,13 @@ class SessionManager
                     WHERE 1 = 1
                     ";
         }*/
-        $sql = "SELECT u.user_id, lastname, firstname, username, moved_to, moved_status, moved_at
+        $sql = "SELECT u.user_id,
+                    lastname,
+                    firstname,
+                    username,
+                    moved_to,
+                    moved_status,
+                    moved_at
                     FROM $tbl_user u INNER JOIN $tbl_session_rel_user su
                     ON  u.user_id = su.id_user  AND
                         su.id_session = $id

@@ -50,7 +50,6 @@ class Answer
      */
     function Answer($questionId, $course_id = null)
     {
-
         $this->questionId          = intval($questionId);
         $this->answer              = array();
         $this->correct             = array();

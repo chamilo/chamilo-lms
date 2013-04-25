@@ -2042,7 +2042,7 @@ class CourseManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $coachs_emails = array();
 
-        $course_code = Database::escape_string($course_code);
+        $courseId = Database::escape_string($courseId);
         $session_id = intval($session_id);
 
         $sql = "SELECT id_user FROM $tbl_session_course_user WHERE id_session='$session_id' AND c_id ='$courseId' AND status =2";

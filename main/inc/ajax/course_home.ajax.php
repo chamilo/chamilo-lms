@@ -143,7 +143,7 @@ switch ($action) {
             $list               = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
             $flat_list          = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
-            $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
+            $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/index.php?id_session='.$session_id;
             $item['title']      = Display::url($item['title'], $course_url, array('target'=>SESSION_LINK_TARGET));
 
             foreach($flat_list as $lp_id => $lp_item) {
@@ -265,7 +265,7 @@ switch ($action) {
             $list               = new LearnpathList(api_get_user_id(),$item['code'], $session_id, 'publicated_on DESC');
             $flat_list          = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
-            $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>SESSION_LINK_TARGET));
+            $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/index.php?id_session='.$session_id,array('target'=>SESSION_LINK_TARGET));
 
             foreach($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
@@ -392,7 +392,7 @@ switch ($action) {
             $list               = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
             $flat_list          = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
-            $item['title']      = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, array('target'=>SESSION_LINK_TARGET));
+            $item['title']      = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/index.php?id_session='.$session_id, array('target'=>SESSION_LINK_TARGET));
             foreach($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';

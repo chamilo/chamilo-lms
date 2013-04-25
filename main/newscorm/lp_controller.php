@@ -993,7 +993,7 @@ switch ($action) {
         else {
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();
-            header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/?id_session='.api_get_session_id());
+            header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php?id_session='.api_get_session_id());
             exit;
         }
         break;

@@ -1034,8 +1034,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     }
 
     $course_id = api_get_course_int_id();
-    $course_code = api_get_course_id();
-
     $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh();
 
     $TBL_USER = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1163,7 +1161,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 
         $sql = " $sql_select
                 FROM $TBL_EXERCICES AS ce
-                INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.id)
+                INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $sql_inner_join_tbl_user  AS user ON (user.user_id = exe_user_id)
                 WHERE $extra_where_conditions AND
                     te.status != 'incomplete'

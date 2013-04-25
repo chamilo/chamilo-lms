@@ -232,7 +232,8 @@ class Testcategory
      * jmontoya
 	 */
 	//function getCategoryQuestionsNumber($in_id) {
-	function getCategoryQuestionsNumber() {
+	function getCategoryQuestionsNumber()
+    {
 		$t_reltable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$in_id = Database::escape_string($this->id);
         $sql = "SELECT count(*) AS nb FROM $t_reltable WHERE category_id = $in_id";
@@ -246,8 +247,6 @@ class Testcategory
 		print_r($this);
 		echo "</textarea>";
 	}
-
-
 
 	/** return an array of all Category objects in the database
 	If in_field=="" Return an array of all category objects in the database

@@ -79,8 +79,10 @@ if (empty($session_id)) {
 // off all the documents that have already been sent.
 // @todo consider moving the javascripts in a function that displays the javascripts
 // only when it is needed.
-if ($_GET['action'] == 'add') {
+if (isset($_GET['action']) && $_GET['action'] == 'add') {
 	$dropbox_person = new Dropbox_Person($_user['user_id'], api_is_course_admin(), $is_courseTutor);
+} else {
+    $dropbox_person = null;
 }
 
 /*	Create javascript and htmlHeaders */
@@ -125,13 +127,15 @@ if (dropbox_cnf('allowOverwrite')) {
 		var sentArray = new Array(";	//sentArray keeps list of all files still available in the sent files list
 										//of the user.
 										//This is used to show or hide the overwrite file-radio button of the upload form
-	for ($i = 0; $i < count($dropbox_person->sentWork); $i++) {
-		if ($i > 0) {
-		    $javascript .= ", ";
-		}
-		$javascript .= "'".$dropbox_person->sentWork[$i]->title."'";
-		//echo '***'.$dropbox_person->sentWork[$i]->title;
-	}
+    if ($dropbox_person) {
+        for ($i = 0; $i < count($dropbox_person->sentWork); $i++) {
+            if ($i > 0) {
+                $javascript .= ", ";
+            }
+            $javascript .= "'".$dropbox_person->sentWork[$i]->title."'";
+            //echo '***'.$dropbox_person->sentWork[$i]->title;
+        }
+    }
 	$javascript .= ");
 
 		function checkfile(str)

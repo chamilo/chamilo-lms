@@ -53,8 +53,9 @@ ALTER TABLE session MODIFY COLUMN id INT unsigned NOT NULL;
 
 ALTER TABLE session_rel_course MODIFY COLUMN id_session INT unsigned NOT NULL;
 ALTER TABLE session_rel_course ADD COLUMN c_id INT NOT NULL DEFAULT '0';
-ALTER TABLE session_rel_course ADD COLUMN id INT NOT NULL;
 ALTER TABLE session_rel_course DROP PRIMARY KEY;
+ALTER TABLE session_rel_course ADD COLUMN id INT NOT NULL;
+ALTER TABLE session_rel_course MODIFY COLUMN id int unsigned AUTO_INCREMENT;
 ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (c_id);
 ALTER TABLE session_rel_course ADD PRIMARY KEY (id);
 

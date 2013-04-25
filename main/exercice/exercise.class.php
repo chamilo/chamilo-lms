@@ -457,8 +457,7 @@ class Exercise
     public function getQuestionList($start, $limit, $sidx, $sord, $where_condition = array())
     {
         if (!empty($this->id)) {
-
-            $category_list = Testcategory::getCategoryListName();
+            $category_list = Testcategory::getListOfCategoriesNameForTest($this->id, false);
 
             $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);

@@ -134,7 +134,7 @@ foreach($career_array as $career_id => $data) {
                     echo '<table>';
                     foreach($course_list as $course) {
                         echo '<tr>';
-                       $url = Display::url($course['title'], api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session='.$session['data']['id']);
+                       $url = Display::url($course['title'], api_get_path(WEB_COURSE_PATH).$course['directory'].'/index.php?id_session='.$session['data']['id']);
                        echo Display::tag('td',$url);
                        echo '</tr>';
                     }

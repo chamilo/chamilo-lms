@@ -89,11 +89,7 @@ function deleteItem($item, $insertHere) {
         var droppedId = $item.attr("id");
         var dropedOnId = $insertHere.attr("id");
         var originSelectId = "window_"+droppedId+"_select";
-        console.log(originSelectId);
-        console.log(dropedOnId);
-
         value = dropedOnId.split("_")[2];
-                        console.log(value);
 
         $("#"+originSelectId +" option").filter(function() {
             return $(this).val() == value;
@@ -196,8 +192,12 @@ var connectorType = "Straight";
 ;(function() {
     window.jsPlumbDemo = {
 	    init : function(questionId) {
+	        var windowQuestion = null;
 
-	        var windowQuestion = ".window"+ questionId+"_question";
+	        if (questionId) {
+	            windowQuestion = ".window"+ questionId+"_question";
+	        }
+
 	        var countConnections = $(windowQuestion).size();
 
             if (countConnections && countConnections > 0) {
@@ -238,6 +238,8 @@ var connectorType = "Straight";
                     });
                     var selectId = params.sourceId + "_select";
                     var value = params.targetId.split("_")[2];
+                    console.log(selectId);
+                    console.log(value);
 
                     $("#" +selectId +" option").filter(function() {
                         return $(this).val() == value;

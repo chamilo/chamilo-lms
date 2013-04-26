@@ -702,8 +702,8 @@ class Answer
         }
     }
 
-
-    function getJs() {
+    function getJs()
+    {
         //if ($this->questionId == 2)
         echo '<script>jsPlumb.ready(function() {
                 if ($("#drag'.$this->questionId.'_question").length > 0) {

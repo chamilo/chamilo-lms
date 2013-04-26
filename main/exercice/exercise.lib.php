@@ -451,7 +451,8 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
             } elseif ($answerType == MATCHING) {
                 // matching type, showing suggestions and answers
                 // TODO: replace $answerId by $numAnswer
-                if ($answerId == 1) {
+
+                if ($lines_count == 1) {
                     echo $objAnswerTmp->getJs();
                 }
                 if ($answerCorrect != 0) {
@@ -466,14 +467,15 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
                             </div>
                             </td>';
 
-                    //middle part (matches selects)
+                    // middle part (matches selects)
 
                     $s .= '<td width="10%" align="center">&nbsp;&nbsp;';
-                    $s .= '<div style="display:none">';
+                    $s .= '<div style="display:block">';
 
                     $s .= '<select id="window_'.$windowId.'_select" name="choice['.$questionId.']['.$numAnswer.']">';
                     $selectedValue = 0;
                     // fills the list-box
+                    $item = 0;
                     foreach ($select_items as $val) {
                         // set $debug_mark_answer to true at function start to
                         // show the correct answer with a suffix '-x'
@@ -488,7 +490,9 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
                             $selected = 'selected="selected"';
                             $selectedValue = $val['id'];
                         }
-                        $s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
+                        //$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
+                        $s .= '<option value="'.$item.'" '.$selected.'>'.$val['letter'].'</option>';
+                        $item++;
                     }
 
                     if (!empty($answerCorrect) && !empty($selectedValue)) {

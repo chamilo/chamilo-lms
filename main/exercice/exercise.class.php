@@ -2712,9 +2712,10 @@ class Exercise
 
         foreach ($answer_list as $answerId) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
-            //error_log(print_r($objAnswerTmp->correct,1));
             $answerComment = $objAnswerTmp->selectComment($answerId);
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+
+            $answerIdFromList = $objAnswerTmp->getAnswerIdFromList($answerId);
             $answerWeighting = (float)$objAnswerTmp->selectWeighting($answerId);
 
             //$numAnswer = $objAnswerTmp->selectAutoId($answerId);
@@ -3118,6 +3119,7 @@ class Exercise
                         while ($real_answer = Database::fetch_array($res_answer)) {
                             $real_list[$real_answer['iid']] = $real_answer['answer'];
                         }
+
                         $sql_select_answer = "SELECT iid, answer, correct FROM $table_ans
                                               WHERE c_id = $course_id AND question_id = '$questionId' AND correct <> 0
                                               ORDER BY iid";
@@ -3129,6 +3131,7 @@ class Exercise
                             $i_answer_id = $a_answers['iid']; //3
                             $s_answer_label = $a_answers['answer'];  // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
+                            $answerIdCorrect = $a_answers['correct'];
 
                             $sql_user_answer = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                                 WHERE exe_id = '$exeId' AND
@@ -3146,6 +3149,11 @@ class Exercise
                             }
 
                             $i_answerWeighting = $objAnswerTmp->selectWeighting($i_answer_id);
+                            if ($answerType ==  MATCHING) {
+                                $i_answer_correct_answer = $objAnswerTmp->getAnswerIdFromList($i_answer_correct_answer);
+                            }
+
+                            //var_dump($s_user_answer, $i_answer_correct_answer);
 
                             $user_answer = '';
                             if (!empty($s_user_answer)) {
@@ -3155,7 +3163,7 @@ class Exercise
                                     if ($answerType == DRAGGABLE) {
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
                                     } else {
-                                        $user_answer = '<span>'.$real_list[$i_answer_correct_answer].'</span>';
+                                        $user_answer = '<span>'.$real_list[$answerIdCorrect].'</span>';
                                     }
                                 } else {
                                     if ($answerType == DRAGGABLE) {
@@ -3175,7 +3183,7 @@ class Exercise
                                 echo '<td>'.$s_answer_label.'</td>';
                                 echo '<td>'.$user_answer.'';
                                 if ($answerType == MATCHING) {
-                                    echo '<b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b>';
+                                    echo '<b><span style="color: #008000;"> '.$real_list[$answerIdCorrect].'</span></b>';
                                 }
                                 echo '</td>';
                                 echo '</tr>';
@@ -3186,9 +3194,17 @@ class Exercise
                         $numAnswer = $answerId;
                         if ($answerCorrect) {
                             $matchingKey = $choice[$numAnswer];
+
                             if ($answerType == DRAGGABLE) {
                                 $matchingKey = $numAnswer;
                             }
+
+                            if ($answerType == MATCHING) {
+                                $answerCorrect = $objAnswerTmp->getAnswerIdFromList($answerCorrect);
+                                $matchingKey = $numAnswer;
+                                //var_dump($answer_matching, $numAnswer);
+                            }
+
                             if ($answerCorrect == $choice[$numAnswer]) {
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;

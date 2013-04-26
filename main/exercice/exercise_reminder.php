@@ -80,6 +80,7 @@ if (!empty($exercise_stat_info['data_tracking'])) {
 if (empty($exercise_stat_info) || empty($question_list)) {
 	api_not_allowed();
 }
+$gradebook = isset($_SESSION['greadebook']) ? Security::remove_XSS($_SESSION['greadebook']) : null;
 
 $nameTools = get_lang('Exercice');
 $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
@@ -148,7 +149,7 @@ echo '<script>
 		}
 </script>';
 
-$exercise_result = get_answered_questions_from_attempt($exe_id);
+$exercise_result = get_answered_questions_from_attempt($exe_id, $objExercise);
 
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);

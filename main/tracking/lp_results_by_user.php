@@ -127,10 +127,8 @@ $user_list = array();
 foreach($course_list  as $current_course ) {
 	$course_info = api_get_course_info($current_course['code']);
 	$_course = $course_info;
-
-
 	//Getting LP list
-	$list = new learnpathList('', $current_course['code'], $session_id);
+	$list = new LearnpathList('', $current_course['code'], $session_id);
 	$lp_list = $list->get_flat_list();
 
 	// Looping LPs

@@ -2720,16 +2720,17 @@ class Tracking
                 foreach ($exercise_list as $exercices) {
 
                     $exercise_obj = new Exercise($course_info['real_id']);
-                    $exercise_obj->read($exercices['id']);
+                    $exerciseId = $exercices['iid'];
+                    $exercise_obj->read($exerciseId);
                     $visible_return = $exercise_obj->is_visible();
 
                     $score = $weighting = $attempts = 0;
 
                     //Getting count of attempts by user
-                    $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exercices['id'], $course_info['real_id'], $session_id);
+                    $attempts = count_exercise_attempts_by_user(api_get_user_id(), $exerciseId, $course_info['real_id'], $session_id);
 
                     $html .= '<tr class="row_even">';
-                    $url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exercices['id']}";
+                    $url = api_get_path(WEB_CODE_PATH)."exercice/overview.php?cidReq={$course_info['code']}&id_session=$session_id&exerciseId={$exerciseId}";
 
                     if ($visible_return['value'] == true) {
                         $exercices['title'] = Display::url($exercices['title'], $url, array('target' => SESSION_LINK_TARGET));
@@ -2740,19 +2741,22 @@ class Tracking
                     //Exercise configuration show results or show only score
                     if ($exercices['results_disabled'] == 0 || $exercices['results_disabled'] == 2) {
                         //For graphics
-                        $best_exercise_stats = get_best_exercise_results_by_user($exercices['id'], $course_info['real_id'], $session_id);
-                        $to_graph_exercise_result[$exercices['id']] = array('title' => $exercices['title'], 'data' => $best_exercise_stats);
+                        $best_exercise_stats = get_best_exercise_results_by_user($exerciseId, $course_info['real_id'], $session_id);
+                        $to_graph_exercise_result[$exerciseId] = array('title' => $exercices['title'], 'data' => $best_exercise_stats);
 
                         $latest_attempt_url = '';
                         $best_score = $position = $percentage_score_result = '-';
                         $graph = $normal_graph = null;
 
                         //Getting best results
-                        $best_score_data = get_best_attempt_in_course($exercices['id'], $course_info['real_id'], $session_id);
-                        $best_score = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
+                        $best_score_data = get_best_attempt_in_course($exerciseId, $course_info['real_id'], $session_id);
+
+                        if (!empty($best_score_data)) {
+                            $best_score = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
+                        }
 
                         if ($attempts > 0) {
-                            $exercise_stat = get_best_attempt_by_user(api_get_user_id(), $exercices['id'], $course_info['real_id'], $session_id);
+                            $exercise_stat = get_best_attempt_by_user(api_get_user_id(), $exerciseId, $course_info['real_id'], $session_id);
                             if (!empty($exercise_stat)) {
 
                                 //Always getting the BEST attempt
@@ -2767,19 +2771,19 @@ class Tracking
                                     $my_score = $score / $weighting;
                                 }
                                 //@todo this function slows the page
-                                $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['real_id'], $session_id, $user_list);
+                                $position = get_exercise_result_ranking($my_score, $exe_id, $exerciseId, $course_info['real_id'], $session_id, $user_list);
 
-                                $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);
-                                $normal_graph = self::generate_exercise_result_graph($to_graph_exercise_result[$exercices['id']]);
+                                $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exerciseId]);
+                                $normal_graph = self::generate_exercise_result_graph($to_graph_exercise_result[$exerciseId]);
                             }
                         }
 
-                        $html .= Display::div($normal_graph, array('id' => 'main_graph_'.$exercices['id'], 'class' => 'dialog', 'style' => 'display:none'));
+                        $html .= Display::div($normal_graph, array('id' => 'main_graph_'.$exerciseId, 'class' => 'dialog', 'style' => 'display:none'));
 
                         if (empty($graph)) {
                             $graph = '-';
                         } else {
-                            $graph = Display::url($graph, '#', array('id' => $exercices['id'], 'class' => 'opener'));
+                            $graph = Display::url($graph, '#', array('id' => $exerciseId, 'class' => 'opener'));
                         }
 
                         $html .= Display::tag('td', $attempts, array('align' => 'center'));

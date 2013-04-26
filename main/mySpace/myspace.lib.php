@@ -102,9 +102,9 @@ class MySpace {
         if (empty($course_list)) {
             return false;
         }
-	    $sql = 'SELECT login_course_date, logout_course_date, course_code FROM ' . $tbl_track_course . '
+	    $sql = 'SELECT login_course_date, logout_course_date, c_id FROM ' . $tbl_track_course . ',
                 WHERE   user_id = '.$user_id.' AND
-                        c_id IN ('.$course_list.') AND
+                        c_id IN ('.$course_list.')
                         session_id = '.$session_id.'
                 ORDER BY login_course_date ASC';
 	    $rs = Database::query($sql);
@@ -113,7 +113,7 @@ class MySpace {
 	    while ($row = Database::fetch_array($rs)) {
 	        $timestamp_login_date = api_strtotime($row['login_course_date'], 'UTC');
 	        $timestamp_logout_date = api_strtotime($row['logout_course_date'], 'UTC');
-	        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date,'real_id' => $row['real_id']);
+	        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date, 'c_id' => $row['c_id']);
 	    }
 	    return $connections;
 	}

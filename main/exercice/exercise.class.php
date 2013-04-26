@@ -1110,7 +1110,7 @@ class Exercise
     {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $TBL_EXERCICES
-                SET active='-1' WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($this->id)."'";
+                SET active='-1' WHERE c_id = ".$this->course_id." AND iid='".Database::escape_string($this->id)."'";
         Database::query($sql);
         api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizDeleted', api_get_user_id());
         $this->delete_exercise_order();

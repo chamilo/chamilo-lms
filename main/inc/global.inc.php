@@ -1308,12 +1308,13 @@ $coursePermissions = function (Request $request) use ($app) {
 
     } else {
         // continue with the previous values
+        /*
         $_courseUser          = Session::read('_courseUser');
         $is_courseAdmin       = Session::read('is_courseAdmin');
         $is_courseTutor       = Session::read('is_courseTutor');
         $is_courseCoach       = Session::read('is_courseCoach');
         $is_courseMember      = Session::read('is_courseMember');
-        $is_allowed_in_course = Session::read('is_allowed_in_course');
+        $is_allowed_in_course = Session::read('is_allowed_in_course');*/
     }
 };
 
@@ -1343,11 +1344,13 @@ $courseAccessConditions = function (Request $request) use ($app) {
     if ($tempSessionId != $sessionId || empty($tempSessionId)) {
         $sessionReset = true;
     }
+    /*
     $app['monolog']->addDebug('Start');
     $app['monolog']->addDebug($courseReset);
     $app['monolog']->addDebug($cidReq);
     $app['monolog']->addDebug($tempCourseId);
     $app['monolog']->addDebug('End');
+    */
 
     if ($courseReset) {
 

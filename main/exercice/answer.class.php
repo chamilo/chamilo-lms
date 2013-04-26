@@ -43,7 +43,7 @@ class Answer
     public $course; //Course information
 
     /**
-     * constructor of the class
+     * Constructor of the class
      *
      * @author     Olivier Brouckaert
      * @param     integer    Question ID that answers belong to
@@ -161,20 +161,14 @@ class Answer
             $order = 'ASC';
         }
 
-
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TBL_QUIZ   = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $questionId = intval($this->questionId);
 
-        //$sql             = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND id = $questionId";
         $sql = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND iid = $questionId";
         $result_question = Database::query($sql);
         $question_type   = Database::fetch_array($result_question);
 
-        /*$sql    = "SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto ".
-            "FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'   ".
-            "ORDER BY $field $order";
-        */
         $sql = "SELECT * FROM $TBL_ANSWER
                 WHERE c_id = {$this->course_id} AND question_id = '".$questionId."'
 				ORDER BY $field $order";
@@ -517,7 +511,7 @@ class Answer
     }
 
     /**
-     * updates an answer
+     * Updates an answer
      *
      * @author Toon Keppens
      * @param    string    Answer title
@@ -551,19 +545,24 @@ class Answer
         $table_quiz_answer = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = intval($this->questionId);
 
-        // Removes old answers before inserting of new ones
-        /*$sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."'";
-        Database::query($sql);*/
+        $c_id = $this->course['real_id'];
+
+        $answersAlreadyCreated = array_keys($this->answer);
 
         // @todo don't do this!
-        $sql = "DELETE FROM $table_quiz_answer WHERE question_id = '".($questionId)."'";
-        Database::query($sql);
-
-        $c_id = $this->course['real_id'];
+        // Removes old answers before inserting of new ones
+        //$sql = "DELETE FROM $table_quiz_answer WHERE c_id = $c_id AND question_id = ".$questionId;
+        //Database::query($sql);
 
         // Inserts new answers into database
         $real_correct_ids = array();
+
         for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
+
+            $update = false;
+            if (isset($answersAlreadyCreated[$i-1])) {
+                $update = $answersAlreadyCreated[$i-1];
+            }
 
             $answer = Database::escape_string($this->new_answer[$i]);
             $correct = Database::escape_string($this->new_correct[$i]);
@@ -574,14 +573,39 @@ class Answer
             $hotspot_type = Database::escape_string($this->new_hotspot_type[$i]);
             $destination = Database::escape_string($this->new_destination[$i]);
 
-            $sql = "INSERT INTO $table_quiz_answer (c_id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";
-            $sql.= "($c_id, '$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
-            Database::query($sql);
-            $latest_insert_id = Database::insert_id();
+            if ($update) {
+                $params = array(
+                    'answer' =>  $answer,
+                    'correct' => $correct,
+                    'comment' => $comment,
+                    'ponderation' => $weighting,
+                    'position' => $position,
+                    'hotspot_coordinates' => $hotspot_coordinates,
+                    'hotspot_type' => $hotspot_type,
+                    'destination' => $destination
+                );
+                Database::update($table_quiz_answer, $params, array('iid = ? '=> array($update)));
+                $latest_insert_id = $update;
+            } else {
+                $sql = "INSERT INTO $table_quiz_answer (c_id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";
+                $sql.= "($c_id, '$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
+                Database::query($sql);
+                $latest_insert_id = Database::insert_id();
+            }
             $real_correct_ids[$i] = $latest_insert_id;
         }
 
+        // Delete unused answers
+        if (!empty($latest_insert_id)) {
+            $idsToDelete = implode("','", $real_correct_ids);
+            if (!empty($idsToDelete) && !empty($c_id) && !empty($questionId)) {
+                $sql = "DELETE FROM $table_quiz_answer WHERE c_id = $c_id AND question_id = $questionId AND iid NOT IN ('$idsToDelete')";
+                Database::query($sql);
+            }
+        }
+
         $question_info = Question::read($questionId);
+        
         if ($question_info->type == MATCHING) {
 
             //Fixing real answer id

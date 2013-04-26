@@ -97,7 +97,8 @@ $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration[
 require_once $includePath.'/lib/main_api.lib.php';
 
 // Setting url_append @ŧodo improve this replace
-$_configuration['url_append'] = '/'.basename(str_replace($_SERVER['HTTP_HOST'], '', $_configuration['root_web']));
+$urlInfo = parse_url($_configuration['root_web']);
+$_configuration['url_append'] = '/'.basename($urlInfo['path']);
 
 // Inclusion of internationalization libraries
 require_once $includePath.'/lib/internationalization.lib.php';

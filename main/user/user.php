@@ -317,7 +317,7 @@ if (api_is_allowed_to_edit(null, true)) {
 			$tbl_session_rel_course		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 			$tbl_session_rel_user		= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-			$sql = 'SELECT '.$tbl_user.'.user_id
+			$sql = 'SELECT DISTINCT '.$tbl_user.'.user_id
 					FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_session_rel_user.' reluser
 					ON user.user_id = reluser.id_user AND reluser.relation_type<>'.SESSION_RELATION_TYPE_RRHH.'
@@ -329,7 +329,7 @@ if (api_is_allowed_to_edit(null, true)) {
 			$result = Database::query($sql);
 			$row = Database::fetch_array($result, 'ASSOC');
 			if ($row['user_id'] == $user_id || $row['user_id'] == "") {
-				CourseManager::unsubscribe_user($_GET['user_id'], $_SESSION['_course']['sysCode']);
+				CourseManager::unsubscribe_user($_GET['user_id'], $courseId);
 				$message = get_lang('UserUnsubscribed');
 			} else {
 				$message = get_lang('ThisStudentIsSubscribeThroughASession');
@@ -371,10 +371,6 @@ if (isset($origin) && $origin == 'learnpath') {
     }
     Display::display_header($tool_name, "User");
 }
-
-
-
-/*		MAIN CODE*/
 
 //statistics
 event_access_tool(TOOL_USER);

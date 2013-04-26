@@ -36,7 +36,6 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
     Session::write('_user', $_user);
     Session::erase('conditional_login');
     $uidReset=true;
-    event_login();
 }*/
 
 // parameters passed via GET
@@ -192,7 +191,6 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             ConditionalLogin::check_conditions($uData);
                                             Session::write('_user', $uData);
-                                            event_login();
                                             $logging_in = true;
                                         } else {
                                             $loginFailed = true;
@@ -208,12 +206,10 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
                                     if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
                                         ConditionalLogin::check_conditions($uData);
                                         Session::write('_user', $uData);
-                                        event_login();
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             Session::write('_user', $uData);
-                                            event_login();
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
@@ -224,7 +220,6 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
                             } else {
                                 ConditionalLogin::check_conditions($uData);
                                 Session::write('_user', $uData);
-                                event_login();
                                 $logging_in = true;
                             }
                         } else {
@@ -393,9 +388,7 @@ if (!empty($_SESSION['_user']['user_id']) && !$login) {
                                 if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
                                     $_user['user_id'] = $uData['user_id'];
                                     $_user['status']  = $uData['status'];
-
                                     Session::write('_user',$_user);
-                                    event_login();
                                 } else {
                                     $loginFailed = true;
                                     Session::erase('_uid');
@@ -459,8 +452,12 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
 
 //Setting app user variable
 $_user = Session::read('_user');
-
-$app['current_user'] = $_user;
+if ($_user) {
+    $userInfo = api_get_user_info($_user['user_id']);
+    $app['current_user'] = $userInfo;
+} else {
+    $app['current_user'] = null;
+}
 
 /* USER INIT */
 

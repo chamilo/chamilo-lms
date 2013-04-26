@@ -34,7 +34,8 @@ switch ($action) {
             break;
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
-        echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $_REQUEST['title'], $_REQUEST['content'], $_REQUEST['users_to_send'], $add_as_announcement);
+        $usersToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : null;
+        echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $_REQUEST['title'], $_REQUEST['content'], $usersToSend, $add_as_announcement);
         break;
     case 'edit_event':
         if (!api_is_allowed_to_edit(null, true) && $type == 'course') {

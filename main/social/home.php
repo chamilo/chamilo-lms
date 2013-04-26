@@ -58,6 +58,8 @@ $user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
 $social_left_content = SocialManager::show_social_menu('home');
 
+$usergroup = new UserGroup();
+
 $social_right_content = '<div class="span5">';
 $social_right_content .= '<div class="well_border">';
 $social_right_content .= '<h3>'.get_lang('ContactInformation').'</h3>';
@@ -67,16 +69,15 @@ $list = array(
     array('title' => get_lang('Email'), 'content' => $user_info['email']),
 );
 
-$usergroup = new UserGroup();
-
 // Current user information
 $social_right_content .= '<div>'.Display::description($list).'</div>';
 $social_right_content .= '
-    <div class="form-actions">
-    <a class="btn" href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
-        '.get_lang('EditProfile').'
-    </a>
-    </div></div>';
+        <div class="form-actions">
+            <a class="btn" href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
+                '.get_lang('EditProfile').'
+            </a>
+        </div>
+    </div>';
 
 if (api_get_setting('allow_skills_tool') == 'true') {
     $social_right_content .= '<div class="well_border">';
@@ -86,7 +87,6 @@ if (api_get_setting('allow_skills_tool') == 'true') {
     $ranking_url = Display::url(sprintf(get_lang('YourSkillRankingX'), $ranking), $url, array('class' => 'btn'));
 
     $skills =  $skill->get_user_skills(api_get_user_id(), true);
-
     $social_right_content .= '<h3>'.get_lang('Skills').'</h3>';
     $lis = '';
     if (!empty($skills)) {
@@ -106,10 +106,10 @@ $social_right_content .= '</div>';
 // Search box
 $social_right_content .= '<div class="span4">';
 $social_right_content .= UserManager::get_search_form('');
-$social_right_content .= '<br />';
+$social_right_content .= '</br>';
 
 // Group box by age
-$results = GroupPortalManager::get_groups_by_age(1,false);
+$results = $usergroup->get_groups_by_age(1,false);
 
 $groups_newest = array();
 if (!empty($results)) {
@@ -123,19 +123,13 @@ if (!empty($results)) {
             $result['count'] = $result['count'].' '.get_lang('Members');
         }
         $group_url = "groups.php?id=$id";
-        $result['name'] = Display::url(api_ucwords(cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
-        $picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);
-        $result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
+        $result['name'] = Display::url(api_ucwords(Text::cut($result['name'],40,true)), $group_url).Display::span('<br />'.$result['count'],array('class'=>'box_description_group_member'));
+        $picture = $usergroup->get_picture_group($id, $result['picture'],80);
+        $result['picture'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
         $group_actions = '<div class="box_description_group_actions"><a href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
-        $groups_newest[]= array(Display::url($result['picture_uri'], $group_url), $result['name'], cut($result['description'],120,true).$group_actions);
+        $groups_newest[]= array(Display::url($result['picture'], $group_url), $result['name'], Text::cut($result['description'],120,true).$group_actions);
     }
 }
-
-// Search box
-$social_right_content .= '<div class="span4">';
-$social_right_content .= UserManager::get_search_form('');
-$social_right_content .= '<br />';
-
 // Group box by age
 $results = $usergroup->get_groups_by_age(1,false);
 

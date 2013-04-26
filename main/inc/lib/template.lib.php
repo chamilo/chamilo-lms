@@ -57,7 +57,7 @@ class Template
         $this->jquery_ui_theme = 'smoothness';
 
         //Setting system variables
-        $this->set_system_parameters();
+        $this->setSystemParameters();
 
         //Setting user variables
         $this->setUserParameters();
@@ -282,7 +282,6 @@ class Template
         $user_info = array();
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
-
         if (api_user_is_login()) {
             $user_info = $this->app['current_user'];
             $user_info['logged'] = 1;
@@ -306,12 +305,13 @@ class Template
             ) : null;
             $this->user_is_logged_in = true;
         }
+
         //Setting the $_u array that could be use in any template
         $this->assign('_u', $user_info);
     }
 
     /** Set system parameters */
-    private function set_system_parameters()
+    private function setSystemParameters()
     {
         global $_configuration;
 
@@ -487,8 +487,8 @@ class Template
     /**
      * Set header parameters
      */
-    private function setHeaderParameters() {
-
+    private function setHeaderParameters()
+    {
         $_course = api_get_course_info();
         $_configuration = $this->app['configuration'];
         $this_section = $this->app['this_section'];

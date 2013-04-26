@@ -1216,7 +1216,12 @@ class UserManager {
         $picture_filename = trim($user['picture_uri']);
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
-            $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
+            if ($type == 'system') {
+                $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
+            } else {
+                $dir = $base.'upload/users/?file='.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
+            }
+
             /* @todo check this validation
             if (!empty($picture_filename) or $preview) {
                 $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
@@ -1229,7 +1234,10 @@ class UserManager {
         if (empty($picture_filename) && $anonymous) {
             return array('dir' => $base_unknown.'img/', 'file' => 'unknown.jpg');
         }
-        return array('dir' => $dir, 'file' => $picture_filename);
+        return array(
+            'dir' => $dir,
+            'file' => $picture_filename
+        );
     }
 
 
@@ -2932,9 +2940,10 @@ class UserManager {
      * @param   int     Access URL ID (optional)
      * @return    mixed    Number of users or false on error
      */
-    public static function get_number_of_users($status=0, $access_url_id=null) {
+    public static function get_number_of_users($status=0, $access_url_id=null)
+    {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
-    $t_a = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $t_a = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $sql = "SELECT count(*) FROM $t_u u";
         $sql2 = '';
         if (is_int($status) && $status>0) {
@@ -3062,7 +3071,7 @@ class UserManager {
      * @param string The message title
      * @param string The content message
      */
-         public static function send_message_in_outbox($email_administrator, $user_id, $title, $content) {
+     public static function send_message_in_outbox($email_administrator, $user_id, $title, $content) {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $title = api_utf8_decode($title);

@@ -1130,7 +1130,12 @@ function api_is_self_registration_allowed() {
  * @return integer the id of the current user, 0 if is empty
  */
 function api_get_user_id() {
-    return empty($GLOBALS['_user']['user_id']) ? 0 : intval($GLOBALS['_user']['user_id']);
+    $userInfo = Session::read('_user');
+    if ($userInfo && isset($userInfo['user_id'])) {
+        return $userInfo['user_id'];
+    }
+    return 0;
+    //return isset($GLOBALS['_user']['user_id']) ? 0 : intval($GLOBALS['_user']['user_id']);
 }
 
 /**
@@ -1291,7 +1296,7 @@ function _api_format_user($user, $add_password = false) {
  */
 function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false, $add_extra_values = false) {
     if (empty($user_id)) {
-        global $_user;
+        $_user = Session::read('_user');
         return _api_format_user($_user);
     }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
@@ -5086,9 +5091,10 @@ function api_get_status_of_user_in_course ($user_id, $courseId)
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 function api_is_in_course($course_code = null) {
-    if (isset($_SESSION['_course']['sysCode'])) {
+    $courseCodeInSession = api_get_course_id();
+    if (isset($courseCodeInSession)) {
         if (!empty($course_code)) {
-            return $course_code == $_SESSION['_course']['sysCode'];
+            return $course_code == $courseCodeInSession;
         }
         return true;
     }
@@ -5103,19 +5109,22 @@ function api_is_in_course($course_code = null) {
  * @return boolean
  * @author Ivan Tcholakov
  */
-function api_is_in_group($group_id = null, $course_code = null) {
+function api_is_in_group($group_id = null, $course_code = null)
+{
+    $courseCodeInSession = api_get_course_id();
+    $groupIdInSession = api_get_group_id();
 
     if (!empty($course_code)) {
-        if (isset($_SESSION['_course']['sysCode'])) {
-            if ($course_code != $_SESSION['_course']['sysCode']) return false;
+        if (isset($courseCodeInSession)) {
+            if ($course_code != $courseCodeInSession) return false;
         } else {
             return false;
         }
     }
 
-    if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
+    if (isset($groupIdInSession) && $groupIdInSession != '') {
         if (!empty($group_id)) {
-            return $group_id == $_SESSION['_gid'];
+            return $group_id == $groupIdInSession;
         } else {
             return true;
         }

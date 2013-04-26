@@ -241,7 +241,6 @@ function login_user($user_id) {
 			$_SESSION['login_as']               = true; // will be useful later to know if the user is actually an admin or not (example reporting)s
 
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
-			//$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";
 			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">'.$target_url.'</a>');
 			Display :: display_header(get_lang('UserList'));
 			Display :: display_normal_message($message,false);

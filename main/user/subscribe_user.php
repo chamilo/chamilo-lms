@@ -30,7 +30,8 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $tool_name = get_lang("SubscribeUserToCourse");
-if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
+$type = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : null;
+if ($type == 'teacher') {
 	$tool_name = get_lang("SubscribeUserToCourseAsTeacher");
 }
 
@@ -48,13 +49,13 @@ Display :: display_header($tool_name, "User");
 echo '<div class="actions">';
 $actions = null;
 if (isset($_GET['keyword'])) {
-    $actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
+    $actions .= '<a href="subscribe_user.php?type='.$type.'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
 }
 if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])) {
-    $actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
+    $actions .= '<a href="subscribe_user.php?type='.$type.'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
 }
 if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
-    display_extra_profile_fields_filter();
+    display_extra_profile_fields_filter($type);
 }
 
 // Build search-form
@@ -62,7 +63,7 @@ $form = new FormValidator('search_user', 'get', '', '', null, false);
 $renderer = $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->add_textfield('keyword', '', false);
-$form->addElement('hidden', 'type', Security::remove_XSS($_REQUEST['type']));
+$form->addElement('hidden', 'type', $type);
 $form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
 $form->addElement('static', 'additionalactions', null, $actions);
 $form->display();
@@ -185,7 +186,7 @@ $sort_by_first_name = api_sort_by_first_name();
 // Build table
 $table = new SortableTable('subscribe_users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
 $parameters['keyword'] = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : null;
-$parameters ['type'] = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : null;
+$parameters ['type'] = isset($_REQUEST['type']) ? $type : null;
 $table->set_additional_parameters($parameters);
 $col = 0;
 $table->set_header($col ++, '', false);
@@ -610,8 +611,8 @@ function email_filter($email) {
  * @return string Some HTML-code
  */
 function reg_filter($user_id) {
-	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') $type='teacher'; else $type='student';
-	$result = '<a class="btn btn-small btn-primary" href="'.api_get_self().'?register=yes&type='.$type.'&user_id='.$user_id.'">'.get_lang("reg").'</a>';
+	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') $type='teacher'; else $type='student';
+	$result = '<a class="btn btn-small btn-primary" href="'.api_get_self().'?register=yes&type='.$type.'&user_id='.$user_id.'&'.api_get_cidreq().'">'.get_lang("reg").'</a>';
 	return $result;
 }
 
@@ -693,7 +694,7 @@ function search_additional_profile_fields($keyword)
  * platform administration > profiling. Only the fields that have predefined fields are usefull for such a filter.
  *
  */
-function display_extra_profile_fields_filter() {
+function display_extra_profile_fields_filter($type) {
 	// getting all the additional user profile fields
 	$extra = UserManager::get_extra_fields(0,50,5,'ASC');
 
@@ -727,7 +728,7 @@ function display_extra_profile_fields_filter() {
 	}
 
 	echo '<form id="subscribe_user_filter" name="subscribe_user_filter" method="get" action="'.api_get_self().'?api_get_cidreq" style="float:left;">';
-	echo '	<input type="hidden" name="type" id="type" value="'.Security::remove_XSS($_REQUEST['type']).'" />';
+	echo '	<input type="hidden" name="type" id="type" value="'.$type.'" />';
 	echo   '<select name="subscribe_user_filter_value" id="subscribe_user_filter_value">'.$return.'</select>';
 	echo   '<button type="submit" name="submit_filter" id="submit_filter" value="" class="search">'.get_lang('Filter').'</button>';
 	echo '</form>';

@@ -29,43 +29,22 @@ $this_section = SECTION_COURSES;
 
 $is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
-if (empty($delete)) {
-    $delete = intval($_GET['delete']);
-}
-if ( empty ( $recup ) ) {
-    $recup = intval($_GET['recup']);
-}
-if ( empty ( $fromExercise ) ) {
-    $fromExercise = intval($_REQUEST['fromExercise']);
-}
-if(isset($_GET['exerciseId'])){
-	$exerciseId = intval($_GET['exerciseId']);
-}
+$delete = isset($_GET['delete']) ? intval($_GET['delete']) : null;
+$recup = isset($_GET['recup']) ? intval($_GET['recup']) : null;
+$fromExercise = isset($_REQUEST['fromExercise']) ? intval($_REQUEST['fromExercise']) : null;
+$exerciseId = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
+$courseCategoryId = isset($_REQUEST['courseCategoryId']) ? intval($_REQUEST['courseCategoryId']) : null;
+$exerciseLevel = isset($_REQUEST['exerciseLevel']) ? intval($_REQUEST['exerciseLevel']) : -1;
+$answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : -1;
+$page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 0;
+$copy_question = isset($_REQUEST['copy_question']) ? intval($_REQUEST['copy_question']) : 0;
 
-if (isset($_GET['courseCategoryId'])) {
-	$courseCategoryId = intval($_GET['courseCategoryId']);
-}
-
-$exerciseLevel = -1;
-if(isset($_REQUEST['exerciseLevel'])){
-	$exerciseLevel = intval($_REQUEST['exerciseLevel']);
-}
-if(isset($_GET['answerType'])){
-	$answerType = intval($_REQUEST['answerType']);
-}
-$page = 0;
-if(!empty($_GET['page'])){
-	$page = intval($_GET['page']);
-}
-$copy_question = 0;
-if(!empty($_GET['copy_question'])){
-	$copy_question = intval($_GET['copy_question']);
-}
-
-$session_id      		= intval($_GET['session_id']);
-$selected_course        = intval($_GET['selected_course']);
-$course_id_changed		= intval($_GET['course_id_changed']);	// save the id of the previous course selected by user to reset menu if we detect that user change course hub 13-10-2011
-$exercice_id_changed 	= intval($_GET['exercice_id_changed']); // save the id of the previous exercice selected by user to reset menu if we detect that user change course hub 13-10-2011
+$session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : 0;
+$selected_course = isset($_REQUEST['selected_course']) ? intval($_REQUEST['selected_course']) : 0;
+// save the id of the previous course selected by user to reset menu if we detect that user change course hub 13-10-2011
+$course_id_changed = isset($_REQUEST['course_id_changed']) ? intval($_REQUEST['course_id_changed']) : 0;
+// save the id of the previous exercice selected by user to reset menu if we detect that user change course hub 13-10-2011
+$exercice_id_changed = isset($_REQUEST['exercice_id_changed']) ? intval($_REQUEST['exercice_id_changed']) : 0;
 
 // by default when we go to the page for the first time, we select the current course
 if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
@@ -77,7 +56,7 @@ $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 // picture path
 $picturePath = $documentPath.'/images';
 
-if(!($objExcercise instanceOf Exercise) && !empty($fromExercise)) {
+if(!($objExercise instanceOf Exercise) && !empty($fromExercise)) {
     $objExercise = new Exercise();
     $objExercise->read($fromExercise);
 }
@@ -112,7 +91,7 @@ if ($is_allowedToEdit) {
 			// destruction of the Question object
 			unset($new_question_obj);
 			unset($old_question_obj);
-            if (!$objExcercise instanceOf Exercise) {
+            if (!$objExercise instanceOf Exercise) {
                 $objExercise = new Exercise();
                 $objExercise->read($fromExercise);
             }
@@ -142,7 +121,7 @@ if ($is_allowedToEdit) {
 		// destruction of the Question object
 		unset($objQuestionTmp);
 
-        if (!$objExcercise instanceOf Exercise) {
+        if (!$objExercise instanceOf Exercise) {
         	$objExercise = new Exercise();
             $objExercise->read($fromExercise);
         }
@@ -184,7 +163,7 @@ if ($is_allowedToEdit) {
 					unset($new_question_obj);
 					unset($old_question_obj);
 
-					if (!$objExcercise instanceOf Exercise) {
+					if (!$objExercise instanceOf Exercise) {
 						$objExercise = new Exercise();
 						$objExercise->read($fromExercise);
 					}
@@ -324,13 +303,14 @@ $exercise_list         = get_all_exercises_for_course_id($course_info, $session_
 $my_exercise_list = array();
 $my_exercise_list['0']  = get_lang('AllExercises');
 $my_exercise_list['-1'] = get_lang('OrphanQuestions');
+
 if (is_array($exercise_list)) {
   foreach($exercise_list as $row) {
-		$my_exercise_list[$row['id']] = "";
-    if ($row['id'] ==  $fromExercise && $selected_course == api_get_course_int_id()) {
-    	$my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";	// hub 13-10-2011
+		$my_exercise_list[$row['iid']] = "";
+    if ($row['iid'] ==  $fromExercise && $selected_course == api_get_course_int_id()) {
+    	$my_exercise_list[$row['iid']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";	// hub 13-10-2011
     }
-    $my_exercise_list[$row['id']] .= $row['title'];
+    $my_exercise_list[$row['iid']] .= $row['title'];
   }
 }
 

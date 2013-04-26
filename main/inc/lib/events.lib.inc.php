@@ -13,7 +13,6 @@
  */
 /* 	   INIT SECTION */
 
-$TABLETRACK_LOGIN = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 $TABLETRACK_OPEN = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_OPEN);
 $TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
@@ -72,12 +71,12 @@ function event_open()
  */
 function event_login()
 {
-    global $_user;
-    global $TABLETRACK_LOGIN;
+    $TABLETRACK_LOGIN = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $_user = api_get_user_info();
 
     $reallyNow = api_get_utc_datetime();
     $sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date) VALUES
-                ('".$_user['user_id']."',
+                ('".api_get_user_id()."',
         		'".Database::escape_string(api_get_real_ip())."',
         		'".$reallyNow."',
         		'".$reallyNow."'

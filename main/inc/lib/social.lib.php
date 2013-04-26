@@ -475,14 +475,14 @@ class SocialManager extends UserManager {
           } else {
             $img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
             $big_image = UserManager::get_picture_user($user_id, $img_array['file'],'', USER_IMAGE_SIZE_BIG);
-            $big_image = $big_image['file'].'?'.uniqid();
-            $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
+            $big_image = $big_image['file'];
+            $normal_image = $img_array['dir'].$img_array['file'];
 
               //--- User image
 
             $html .= '<div class="well social-background-content">';
                 if ($img_array['file'] != 'unknown.jpg') {
-                    $html .= '<a class="thumbnail thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
+                    $html .= '<a class="thumbnail ajax" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
                 } else {
                     $html .= '<img src='.$normal_image.' width="110px" />';
                 }

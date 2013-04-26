@@ -970,7 +970,8 @@ class CourseManager
      * @param int       if using the session_id: 0 or 2 (student, coach), if using session_id = 0 STUDENT or COURSEMANAGER
      * @return array
      */
-    public static function get_user_list_from_course_code($course_code = null, $session_id = 0, $limit = null, $order_by = null, $filter_by_status = null, $return_count = null, $add_reports = false, $resumed_report = false, $extra_field = null) {
+    public static function get_user_list_from_course_code($course_code = null, $session_id = 0, $limit = null, $order_by = null, $filter_by_status = null, $return_count = null, $add_reports = false, $resumed_report = false, $extra_field = null)
+    {
         // variable initialisation
         $session_id     = intval($session_id);
         $course_code    = Database::escape_string($course_code);
@@ -998,7 +999,7 @@ class CourseManager
                       ON user.user_id = session_course_user.id_user
                       AND session_course_user.c_id="'.$courseId.'"
                       AND session_course_user.id_session = '.$session_id;
-            $where[] = ' session_course_user.course_code IS NOT NULL ';
+            $where[] = ' session_course_user.c_id IS NOT NULL ';
 
             // 2 = coach
             // 0 = student

@@ -951,13 +951,11 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
 
         // is the latest logout_date still relevant?
-        $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id=$i_id_last_connection";
+        $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id = $i_id_last_connection";
         $q_logout_date = Database::query($sql_logout_date);
         $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
 
         if ($res_logout_date < time() - $app['configuration']['session_lifetime']) {
-            // it isn't, we should create a fresh entry
-            event_login();
             // now that it's created, we can get its ID and carry on
             $q_last_connection = Database::query($sql_last_connection);
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
@@ -965,6 +963,9 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 
         $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
         Database::query($s_sql_update_logout_date);
+    } else {
+        // it isn't, we should create a fresh entry
+        event_login();
     }
 }
 
@@ -1513,6 +1514,14 @@ $app->get('/data/document_templates/{file}', 'index.controller:getDocumentTempla
 
 // Data default_platform_document files
 $app->get('/data/default_platform_document/', 'index.controller:getDefaultPlatformDocumentAction')
+    ->assert('type', '.+');
+
+// Group files
+$app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile')
+    ->assert('type', '.+');
+
+// User files
+$app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
     ->assert('type', '.+');
 
 //Fixes uses of $_course in the scripts

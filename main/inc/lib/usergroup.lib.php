@@ -601,13 +601,13 @@ class UserGroup extends Model
 
         switch ($type) {
             case 'system': // Base: absolute system path.
-                $base = api_get_path(SYS_CODE_PATH);
+                $base = api_get_path(SYS_DATA_PATH);
                 break;
             case 'rel': // Base: semi-absolute web path (no server base).
                 $base = api_get_path(REL_CODE_PATH);
                 break;
             case 'web': // Base: absolute web path.
-                $base = api_get_path(WEB_CODE_PATH);
+                $base = api_get_path(WEB_DATA_PATH);
                 break;
             case 'none':
             default: // Base: empty, the result path below will be relative.
@@ -628,7 +628,7 @@ class UserGroup extends Model
         }
         $user = Database::fetch_array($res);
         $picture_filename = trim($user['picture']);
-        $dir = $base.'upload/users/groups/'.$id.'/';
+        $dir = $base.'upload/groups/'.$id.'/';
         if (empty($picture_filename) && $anonymous) {
             return array(
                 'dir' => $base.'img/',
@@ -1384,8 +1384,7 @@ class UserGroup extends Model
      * @param string style css
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
-    public static function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM , $style = '') {
-        $patch_profile = 'upload/users/groups/';
+    public function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM , $style = '') {
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
@@ -1410,8 +1409,8 @@ class UserGroup extends Model
                 $size_picture = 'medium_';
         }
 
-        $image_array_sys = self::get_group_picture_path_by_id($id, 'system', false, true);
-        $image_array = self::get_group_picture_path_by_id($id, 'web', false, true);
+        $image_array_sys = $this->get_group_picture_path_by_id($id, 'system', false, true);
+        $image_array = $this->get_group_picture_path_by_id($id, 'web', false, true);
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
         if (file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;

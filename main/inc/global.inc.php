@@ -1356,15 +1356,10 @@ $courseAccessConditions = function (Request $request) use ($app) {
     */
 
     if ($courseReset) {
-
         if (!empty($cidReq) && $cidReq != -1) {
-
             $courseInfo = api_get_course_info($cidReq);
 
             if (!empty($courseInfo)) {
-
-                //@TODO real_cid should be cid, for working with numeric course id
-                $_real_cid = $courseInfo['real_id'];
                 $courseCode = $courseInfo['code'];
                 $courseId = $courseInfo['real_id'];
 
@@ -1375,13 +1370,16 @@ $courseAccessConditions = function (Request $request) use ($app) {
             } else {
                 $app->abort(404, 'Course not available');
             }
+        } else {
+            Session::erase('_real_cid');
+            Session::erase('_cid');
+            Session::erase('_course');
         }
     }
 
     $courseCode = api_get_course_id();
 
     if (!empty($courseCode) && $courseCode != -1) {
-        $time = api_get_utc_datetime();
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $time = api_get_utc_datetime();
         $sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";

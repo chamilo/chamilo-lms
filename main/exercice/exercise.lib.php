@@ -1239,7 +1239,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             }
         }
 
-        $lp_list_obj = new learnpathList(api_get_user_id());
+        $lp_list_obj = new LearnpathList(api_get_user_id());
         $lp_list = $lp_list_obj->get_flat_list();
 
         if (is_array($results)) {

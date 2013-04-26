@@ -1309,13 +1309,15 @@ function get_best_exercise_results_by_user($exercise_id, $courseId, $session_id 
             $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
         }
     }
+
     //Getting the best results of every student
     $best_score_return = array();
 
     foreach ($list as $student_result) {
         $user_id = $student_result['exe_user_id'];
         $current_best_score[$user_id] = $student_result['exe_result'];
-        if ($current_best_score[$user_id] > $best_score_return[$user_id]['exe_result']) {
+
+        if (isset($current_best_score[$user_id]) && isset($best_score_return[$user_id]) && $current_best_score[$user_id] > $best_score_return[$user_id]['exe_result']) {
             $best_score_return[$user_id] = $student_result;
         }
     }

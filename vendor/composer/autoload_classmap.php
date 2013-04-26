@@ -700,7 +700,7 @@ return array(
     'langstats' => $baseDir . '/main/cron/lang/langstats.class.php',
     'learnpath' => $baseDir . '/main/newscorm/learnpath.class.php',
     'learnpathItem' => $baseDir . '/main/newscorm/learnpathItem.class.php',
-    'learnpathList' => $baseDir . '/main/newscorm/learnpathList.class.php',
+    'LearnpathList' => $baseDir . '/main/newscorm/learnpathList.class.php',
     'learnpath_processor' => $baseDir . '/main/inc/lib/search/tool_processors/learnpath_processor.class.php',
     'lessc' => $vendorDir . '/leafo/lessphp/lessc.inc.php',
     'lessc_formatter_classic' => $vendorDir . '/leafo/lessphp/lessc.inc.php',

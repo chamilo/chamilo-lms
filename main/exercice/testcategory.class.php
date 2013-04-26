@@ -877,11 +877,13 @@ class Testcategory
 
         if (!empty($categories)) {
             $array = $this->sort_tree_array($categories);
+
             $this->create_tree_array($array);
         }
 
         $saved_categories = $exercise_obj->get_categories_in_exercise();
         $return = null;
+
         if (!empty($this->category_array_tree)) {
             $nbQuestionsTotal = $exercise_obj->getNumberQuestionExerciseCategory();
             $original_grouping = $exercise_obj->categories_grouping;

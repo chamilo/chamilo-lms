@@ -1295,12 +1295,14 @@ function render_question_list($objExercise, $questionList, $current_question, $e
 
                 //Show questions that belongs to a media
                 if (!empty($media_question_list)) {
+                    $letterCounter = 97;
                     foreach ($media_question_list as $my_question_id) {
                         $last_question_in_media = false;
                         if ($counter == $count_of_questions_inside_media) {
                             $last_question_in_media = true;
                         }
-                        render_question($objExercise, $my_question_id, $attempt_list, $remind_list, $i, $current_question, $media_question_list, $last_question_in_media);
+                        render_question($objExercise, $my_question_id, $attempt_list, $remind_list, chr($letterCounter), $current_question, $media_question_list, $last_question_in_media);
+                        $letterCounter++;
                         $counter++;
                     }
                 }
@@ -1343,10 +1345,9 @@ function render_question($objExercise, $questionId, $attempt_list, $remind_list,
         }
     }
 
-    $is_remind_on = false;
-
     $attributes = array('id' =>'remind_list['.$questionId.']');
 
+    $is_remind_on = false;
     if (in_array($questionId, $remind_list)) {
         $is_remind_on = true;
         $attributes['checked'] = 1;

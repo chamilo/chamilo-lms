@@ -238,8 +238,11 @@ class Testcategory
 		$in_id = Database::escape_string($this->id);
         $sql = "SELECT count(*) AS nb FROM $t_reltable WHERE category_id = $in_id";
 		$res = Database::query($sql);
-		$row = Database::fetch_array($res);
-		return $row['nb'];
+        if (Database::num_rows($res)) {
+		    $row = Database::fetch_array($res);
+            return $row['nb'];
+        }
+		return 0;
 	}
 
 	function display($in_color="#E0EBF5") {

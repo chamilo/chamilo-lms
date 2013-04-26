@@ -54,6 +54,7 @@ ALTER TABLE session MODIFY COLUMN id INT unsigned NOT NULL;
 ALTER TABLE session_rel_course MODIFY COLUMN id_session INT unsigned NOT NULL;
 ALTER TABLE session_rel_course ADD COLUMN c_id INT NOT NULL DEFAULT '0';
 ALTER TABLE session_rel_course DROP PRIMARY KEY;
+-- remove course_code
 ALTER TABLE session_rel_course ADD COLUMN id INT NOT NULL;
 ALTER TABLE session_rel_course MODIFY COLUMN id int unsigned AUTO_INCREMENT;
 ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (c_id);
@@ -80,10 +81,7 @@ ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 ALTER TABLE c_quiz_answer ADD INDEX idx_quiz_answer_c_q (c_id, question_id);
 CREATE TABLE c_quiz_order( iid bigint unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (iid));
 
-ALTER TABLE c_quiz_question_rel_category ADD COLUMN id int unsigned NOT NULL;
-ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY;
-ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (id, c_id, question_id);
-ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN id int unsigned AUTO_INCREMENT;
+CREATE TABLE c_quiz_question_rel_category ( iid int unsigned NOT NULL AUTO_INCREMENT, c_id int NOT NULL, question_id int NOT NULL, category_id int NOT NULL,  PRIMARY KEY (iid));
 
 ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
 ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
@@ -209,6 +207,39 @@ RENAME TABLE c_quiz_question_category TO c_quiz_category;
 ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned NOT NULL default 0;
 
 CREATE TABLE c_quiz_rel_category (iid bigint unsigned NOT NULL auto_increment, c_id INT unsigned default 0, category_id int unsigned NOT NULL, exercise_id int unsigned NOT NULL, count_questions int NOT NULL default 0, PRIMARY KEY(iid));
+
+ALTER TABLE c_quiz DROP INDEX session_id;
+ALTER TABLE c_quiz MODIFY id INT NOT NULL;
+ALTER TABLE c_quiz MODIFY c_id INT NOT NULL;
+ALTER TABLE c_quiz DROP PRIMARY KEY;
+ALTER TABLE c_quiz ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
+
+ALTER TABLE c_quiz_question MODIFY id INT NOT NULL;
+ALTER TABLE c_quiz_question MODIFY c_id INT NOT NULL;
+ALTER TABLE c_quiz_question DROP PRIMARY KEY;
+ALTER TABLE c_quiz_question ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
+
+ALTER TABLE c_quiz_answer MODIFY id INT NOT NULL;
+ALTER TABLE c_quiz_answer MODIFY c_id INT NOT NULL;
+ALTER TABLE c_quiz_answer MODIFY id_auto INT NOT NULL;
+ALTER TABLE c_quiz_answer DROP PRIMARY KEY;
+ALTER TABLE c_quiz_answer ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
+
+ALTER TABLE c_quiz_question_option MODIFY id INT NOT NULL;
+ALTER TABLE c_quiz_question_option MODIFY c_id INT NOT NULL;
+ALTER TABLE c_quiz_question_option DROP PRIMARY KEY;
+ALTER TABLE c_quiz_question_option ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
+
+ALTER TABLE c_quiz_rel_question MODIFY id INT NOT NULL;
+ALTER TABLE c_quiz_rel_question MODIFY question_id INT NOT NULL;
+ALTER TABLE c_quiz_rel_question MODIFY exercice_id INT NOT NULL;
+ALTER TABLE c_quiz_rel_question DROP PRIMARY KEY;
+ALTER TABLE c_quiz_rel_question ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
+
+ALTER TABLE c_quiz_category MODIFY id INT NOT NULL;
+ALTER TABLE c_quiz_category MODIFY c_id INT NOT NULL;
+ALTER TABLE c_quiz_category DROP PRIMARY KEY;
+ALTER TABLE c_quiz_category ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
 
 -- Do not move this
 UPDATE settings_current SET selected_value = '1.10.0.6a12538' WHERE variable = 'chamilo_database_version';

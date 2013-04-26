@@ -191,7 +191,7 @@ define('TABLE_DROPBOX_POST',    'dropbox_post');
 define('TABLE_DROPBOX_FILE',    'dropbox_file');
 define('TABLE_DROPBOX_PERSON',  'dropbox_person');
 
-// Course quiz (or test, or exercice) tables
+// Course quiz (or test, or exercise) tables
 define('TABLE_QUIZ_QUESTION',               'quiz_question');
 define('TABLE_QUIZ_TEST',                   'quiz');
 define('TABLE_QUIZ_ORDER',                  'quiz_order');

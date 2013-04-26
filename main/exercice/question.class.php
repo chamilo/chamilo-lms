@@ -428,6 +428,7 @@ abstract class Question
     {
         $course_id = $this->course['real_id'];
 
+
         if (!empty($category_list)) {
             $this->deleteCategory();
             $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
@@ -440,7 +441,9 @@ abstract class Question
                 }
                 $category_id = intval($category_id);
                 $question_id = Database::escape_string($this->id);
-                $sql         = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY WHERE category_id = $category_id AND question_id = $question_id AND c_id=".$course_id;
+                $sql         = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY
+                                WHERE category_id = $category_id AND question_id = $question_id AND c_id=".$course_id;
+
                 $res         = Database::query($sql);
                 $row         = Database::fetch_array($res);
                 if ($row['nb'] > 0) {
@@ -449,7 +452,7 @@ abstract class Question
                     //$res = Database::query($sql);
                 } else {
                     $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id) VALUES (".$course_id.", $question_id, $category_id)";
-                    $res = Database::query($sql);
+                    Database::query($sql);
                 }
             }
         }

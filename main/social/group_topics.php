@@ -192,7 +192,9 @@ if (!empty($show_message)) {
 $social_right_content .= MessageManager::display_message_for_group($group_id, $topic_id, $is_member, $message_id);
 $social_right_content = '<div class="span9">'.$social_right_content.'</div>';
 
-$tpl = new Template(get_lang('Social'));
+$app['title'] = get_lang('Social');
+$tpl = $app['template'];
+
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);

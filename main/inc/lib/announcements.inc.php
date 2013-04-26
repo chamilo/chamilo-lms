@@ -27,7 +27,7 @@ class AnnouncementManager
     {
         $reader_info = api_get_user_info(api_get_user_id());
         $course_info = api_get_course_info($course_code);
-        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
 
         $teacher_name = '';
         if (!empty($teacher_list)) {
@@ -137,6 +137,7 @@ class AnnouncementManager
      */
     public static function display_announcement($announcement_id)
     {
+        global $stok;
         if ($announcement_id != strval(intval($announcement_id))) {
             return false;
         }
@@ -216,7 +217,6 @@ class AnnouncementManager
                     $image_visibility = "invisible";
                     $alt_visibility = get_lang('Visible');
                 }
-                global $stok;
 
                 $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq(
                 )."&origin=".(!empty($_GET['origin']) ? Security::remove_XSS(
@@ -313,7 +313,7 @@ class AnnouncementManager
         $file_comment = null,
         $end_date = null
     ) {
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
         // filter data
@@ -408,7 +408,7 @@ class AnnouncementManager
         $file = array(),
         $file_comment = ''
     ) {
-        global $_course;
+        $_course = api_get_course_info();
 
         // database definitions
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -497,7 +497,7 @@ class AnnouncementManager
      */
     public static function edit_announcement($id, $emailTitle, $newContent, $to, $file = array(), $file_comment = '')
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         $course_id = api_get_course_int_id();
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -1216,7 +1216,7 @@ class AnnouncementManager
      */
     public static function add_announcement_attachment_file($announcement_id, $file_comment, $file)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
         $announcement_id = intval($announcement_id);
@@ -1264,7 +1264,7 @@ class AnnouncementManager
      */
     public static function edit_announcement_attachment_file($id_attach, $file, $file_comment)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
         $course_id = api_get_course_int_id();

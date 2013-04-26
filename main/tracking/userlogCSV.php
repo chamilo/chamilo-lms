@@ -23,6 +23,7 @@ require_once '../inc/global.inc.php';
 // Roles and rights system
 $user_id = api_get_user_id();
 $course_id = api_get_course_id();
+$courseId = api_get_course_int_id();
 
 /*
 $role_id = RolesRights::get_local_user_role_id($user_id, $course_id);
@@ -57,13 +58,12 @@ $nameTools = get_lang('ToolName');
 
 /*	Constants and variables */
 
-$is_allowedToTrack = $is_courseAdmin;
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_id);
+$is_allowedToTrack = api_is_course_admin();
+$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $courseId);
 
 // Database Table Definitions
 $TABLECOURSUSER	        	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEUSER	        		= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 
 $TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
@@ -212,19 +212,19 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse))
                 $view ='0000000';
             }
             //Logins
-            list($title_line1, $line1) = TrackingUserLogCSV::display_login_tracking_info($view, $uInfo, $_cid);
+            list($title_line1, $line1) = TrackingUserLogCSV::display_login_tracking_info($view, $uInfo, $courseId);
 
             //Exercise results
-            list($title_line2, $line2) = TrackingUserLogCSV::display_exercise_tracking_info($view, $uInfo, $_cid);
+            list($title_line2, $line2) = TrackingUserLogCSV::display_exercise_tracking_info($view, $uInfo, $courseId);
 
             //Student publications uploaded
-            list($title_line3, $line3) = TrackingUserLogCSV::display_student_publications_tracking_info($view, $uInfo, $_cid);
+            list($title_line3, $line3) = TrackingUserLogCSV::display_student_publications_tracking_info($view, $uInfo, $courseId);
 
             //Links usage
-            list($title_line4, $line4) = TrackingUserLogCSV::display_links_tracking_info($view, $uInfo, $_cid);
+            list($title_line4, $line4) = TrackingUserLogCSV::display_links_tracking_info($view, $uInfo, $courseId);
 
             //Documents downloaded
-            list($title_line5, $line5) = TrackingUserLogCSV::display_document_tracking_info($view, $uInfo, $_cid);
+            list($title_line5, $line5) = TrackingUserLogCSV::display_document_tracking_info($view, $uInfo, $courseId);
 
             $title_line = $title_line1.$title_line2.$title_line3.$title_line4.$title_line5;
             $line= $line1.$line2.$line3.$line4.$line5;

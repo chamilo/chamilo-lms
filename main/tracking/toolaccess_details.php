@@ -62,31 +62,31 @@ $DaysLong = api_get_week_days_long();
 $MonthsLong = api_get_months_long();
 // Defining the months of the year to allow translation of the months
 $MonthsShort = api_get_months_short();
+$courseId = api_get_course_int_id();
 
-$tool=$_REQUEST['tool'];
-$period=$_REQUEST['period'];
-$reqdate=$_REQUEST['reqdate'];
+$tool = $_REQUEST['tool'];
+$period = $_REQUEST['period'];
+$reqdate = $_REQUEST['reqdate'];
 ?>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <?php
 
-
     $TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
-    if(isset($_cid)) //stats for the current course
+    if (isset($courseId)) //stats for the current course
     {
         // to see stats of one course user must be courseAdmin of this course
-        $is_allowedToTrack = $is_courseAdmin;
-        $courseCodeEqualcidIfNeeded = "AND access_cours_code = '$_cid'";
+        $is_allowedToTrack = api_is_course_admin();
+        $courseCodeEqualcidIfNeeded = "AND c_id = '$courseId'";
     }
     else // stats for all courses
     {
         // to see stats of all courses user must be platformAdmin
-        $is_allowedToTrack = $is_platformAdmin;
+        $is_allowedToTrack = api_is_platform_admin();
         $courseCodeEqualcidIfNeeded = "";
     }
-    if( $is_allowedToTrack)
-    {
+
+    if ( $is_allowedToTrack) {
         // list of all tools
         if (!isset($tool))
         {
@@ -115,19 +115,14 @@ $reqdate=$_REQUEST['reqdate'];
                     $langToolTitleCountColumn
                     </td>
                 </tr>";
-            if (is_array($results))
-            {
-                for($j = 0 ; $j < count($results) ; $j++)
-                {
-                        echo "<tr>";
-                        echo "<td><a href='toolaccess_details.php?tool=".urlencode($results[$j][0])."'>".get_lang($results[$j][0])."</a></td>";
-                        echo "<td align='right'>".$results[$j][1]."</td>";
-                        echo"</tr>";
-                }
-
-            }
-            else
-            {
+            if (is_array($results)) {
+                for($j = 0 ; $j < count($results) ; $j++) {
+                    echo "<tr>";
+                    echo "<td><a href='toolaccess_details.php?tool=".urlencode($results[$j][0])."'>".get_lang($results[$j][0])."</a></td>";
+                    echo "<td align='right'>".$results[$j][1]."</td>";
+                    echo"</tr>";
+               }
+            } else {
                 echo "<tr>";
                 echo "<td colspan='2'><center>".get_lang('NoResult')."</center></td>";
                 echo"</tr>";
@@ -269,5 +264,4 @@ $reqdate=$_REQUEST['reqdate'];
         echo get_lang('NotAllowed');
     }
 echo '</table>';
-// footer
 Display::display_footer();

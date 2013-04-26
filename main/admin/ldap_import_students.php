@@ -9,10 +9,10 @@
  * Code
  */
 // name of the language file that needs to be included
-$language_file[]='admin';
-$language_file[]='registration';
+$language_file[] = 'admin';
+$language_file[] = 'registration';
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 require_once('../inc/global.inc.php');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -22,11 +22,11 @@ require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 api_protect_admin_script();
 require('../auth/ldap/authldap.php');
 
-$annee_base=date('Y');
+$annee_base = date('Y');
 
 $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
@@ -52,30 +52,28 @@ function checkAll() {
 
 $annee = $_GET['annee'];
 $composante = $_GET['composante'];
-$etape =  $_GET['etape'];
+$etape = $_GET['etape'];
 $course = $_POST['course'];
 
 
 // form1 annee = 0; composante= 0 etape = 0
 //if ($annee == "" && $composante == "" && $etape == "") {
-if (empty($annee) && empty($course))
-{
-		Display::display_header($tool_name);
-		echo '<div style="align:center">';
-		Display::display_icon('group.gif', get_lang('LDAPSelectFilterOnUsersOU'));
-		echo get_lang('LDAPSelectFilterOnUsersOU');
-		//echo '<em>'.get_lang('ToDoThisYouMustEnterYearComponentAndComponentStep').'</em><br />';
-		///echo get_lang('FollowEachOfTheseStepsStepByStep').'<br />';
+if (empty($annee) && empty($course)) {
+    Display::display_header($tool_name);
+    echo '<div style="align:center">';
+    Display::display_icon('group.gif', get_lang('LDAPSelectFilterOnUsersOU'));
+    echo get_lang('LDAPSelectFilterOnUsersOU');
+    //echo '<em>'.get_lang('ToDoThisYouMustEnterYearComponentAndComponentStep').'</em><br />';
+    ///echo get_lang('FollowEachOfTheseStepsStepByStep').'<br />';
 
-		echo '<form method="get" action="'.api_get_self().'"><br />';
-		echo '<em>'.get_lang('LDAPOUAttributeFilter').' :</em> ';
-		echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"><br />';
-		echo '<input type="submit" value="'.get_lang('Submit').'">';
-		echo '</form>';
-		echo '</div>';
+    echo '<form method="get" action="'.api_get_self().'"><br />';
+    echo '<em>'.get_lang('LDAPOUAttributeFilter').' :</em> ';
+    echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"><br />';
+    echo '<input type="submit" value="'.get_lang('Submit').'">';
+    echo '</form>';
+    echo '</div>';
 
-}
-/*
+} /*
 elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0; composante= 0 etape = 0
 {
 		Display::display_header($tool_name);
@@ -202,101 +200,95 @@ elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0com
 	echo '</div>';
 }
 */
-elseif(!empty($annee) && empty($course))
-{
-	Display::display_header($tool_name);
-	echo '<div style="align:center">';
-	echo Display::return_icon('course.gif', get_lang('SelectCourseToImportUsersTo')).' '.get_lang('SelectCourseToImportUsersTo').'<br />';
-	echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
-	echo '<select name="course">';
-	$courses = CourseManager::get_courses_list();
-	foreach($courses as $row)
-	{
-		echo '<option value="'.$row['code'].'">'.api_htmlentities($row['title'], ENT_COMPAT, api_get_system_encoding()).'</option>';
-	}
-	echo '</select>';
-	echo '<input type="submit" value="'.get_lang('Submit').'">';
-	echo '</form>';
-	echo '</div>';
-}
-// form4  annee != 0; composante != 0 etape != 0
+elseif (!empty($annee) && empty($course)) {
+    Display::display_header($tool_name);
+    echo '<div style="align:center">';
+    echo Display::return_icon('course.gif', get_lang('SelectCourseToImportUsersTo')).' '.get_lang(
+        'SelectCourseToImportUsersTo'
+    ).'<br />';
+    echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
+    echo '<select name="course">';
+    $courses = CourseManager::get_courses_list();
+    foreach ($courses as $row) {
+        echo '<option value="'.$row['code'].'">'.api_htmlentities(
+            $row['title'],
+            ENT_COMPAT,
+            api_get_system_encoding()
+        ).'</option>';
+    }
+    echo '</select>';
+    echo '<input type="submit" value="'.get_lang('Submit').'">';
+    echo '</form>';
+    echo '</div>';
+} // form4  annee != 0; composante != 0 etape != 0
 //elseif ($annee <> "" && $composante <> "" && $etape <> "" && $listeok != 'yes') {
-elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
-{
-	Display::display_header($tool_name);
-	echo '<div style="align: center;">';
-	echo '<br />';
-	echo '<br />';
-	echo '<h3>'.Display::return_icon('group.gif', get_lang('SelectStudents')).' '.get_lang('SelectStudents').'</h3>';
-	//echo "Connection ...";
-	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
-	ldap_set_version($ds);
+elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed'])) {
+    Display::display_header($tool_name);
+    echo '<div style="align: center;">';
+    echo '<br />';
+    echo '<br />';
+    echo '<h3>'.Display::return_icon('group.gif', get_lang('SelectStudents')).' '.get_lang('SelectStudents').'</h3>';
+    //echo "Connection ...";
+    $ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
+    ldap_set_version($ds);
 
-	if ($ds) {
+    if ($ds) {
 
-		$r = false;
-		$res = ldap_handle_bind($ds, $r);
+        $r   = false;
+        $res = ldap_handle_bind($ds, $r);
 
-		//$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "(|(edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn)(edupersonprimaryorgunitdn=ou=02PEL,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn))");
-		//echo "(ou=*$annee,ou=$composante)";
-		$sr = @ ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
+        //$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "(|(edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn)(edupersonprimaryorgunitdn=ou=02PEL,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn))");
+        //echo "(ou=*$annee,ou=$composante)";
+        $sr = @ ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
 
-		$info = ldap_get_entries($ds, $sr);
+        $info = ldap_get_entries($ds, $sr);
 
-		for ($key = 0; $key < $info["count"]; $key ++) {
-			$nom_form[] = $info[$key]["sn"][0];//api_utf8_decode($info[$key]["sn"][0], api_get_system_encoding());
-			$prenom_form[] = $info[$key]["givenname"][0];//api_utf8_decode($info[$key]["givenname"][0], api_get_system_encoding());
-			$email_form[] = $info[$key]["mail"][0];
-			// Get uid from dn
-			//$dn_array=ldap_explode_dn($info[$key]["dn"],1);
-			//$username_form[] = $dn_array[0]; // uid is first key
-			$username_form[] = $info[$key]['uid'][0];
-			$outab[] = $info[$key]["eduPersonPrimaryAffiliation"][0]; // Ici "student"
-			//$val = ldap_get_values_len($ds, $entry, "userPassword");
-			//$password_form[] = $val[0];
-			$password_form[] = $info[$key]['userPassword'][0];
-		}
-		ldap_unbind($ds);
+        for ($key = 0; $key < $info["count"]; $key++) {
+            $nom_form[]    = $info[$key]["sn"][0]; //api_utf8_decode($info[$key]["sn"][0], api_get_system_encoding());
+            $prenom_form[] = $info[$key]["givenname"][0]; //api_utf8_decode($info[$key]["givenname"][0], api_get_system_encoding());
+            $email_form[]  = $info[$key]["mail"][0];
+            // Get uid from dn
+            //$dn_array=ldap_explode_dn($info[$key]["dn"],1);
+            //$username_form[] = $dn_array[0]; // uid is first key
+            $username_form[] = $info[$key]['uid'][0];
+            $outab[]         = $info[$key]["eduPersonPrimaryAffiliation"][0]; // Ici "student"
+            //$val = ldap_get_values_len($ds, $entry, "userPassword");
+            //$password_form[] = $val[0];
+            $password_form[] = $info[$key]['userPassword'][0];
+        }
+        ldap_unbind($ds);
+        asort($nom_form);
+        reset($nom_form);
 
-		/*-----------------------------------------------*/
-
-		asort($nom_form);
-		reset($nom_form);
-
-		$statut=5;
-		include ('ldap_form_add_users_group.php');
-	} else {
-		echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
-	}
-	echo '<br /><br />';
+        $statut = 5;
+        include('ldap_form_add_users_group.php');
+    } else {
+        echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
+    }
+    echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
     echo '<br /><br />';
     echo '</div>';
 
-}
-elseif (!empty($annee) && !empty($course) && ($_POST['confirmed']=='yes'))
-{
-	$id=$_POST['username_form'];
-	$UserList=array();
-	$userid_match_login = array();
-	foreach ($id as $form_index=>$user_id)
-	{
-		if(is_array($_POST['checkboxes']) && in_array($form_index,array_values($_POST['checkboxes'])))
-		{
-			$tmp = ldap_add_user($user_id);
-			$UserList[]= $tmp;
-			$userid_match_login[$tmp] = $user_id;
-		}
-	}
-	if (!empty($_POST['course']))
-	{
-		foreach($UserList as $user_id)
-		{
-			CourseManager::add_user_to_course($user_id,$_POST['course']);
-		}
-		header('Location: course_information.php?code='.Security::remove_XSS($_POST['course']));
-	}
-	/*
+} elseif (!empty($annee) && !empty($course) && ($_POST['confirmed'] == 'yes')) {
+    $id                 = $_POST['username_form'];
+    $UserList           = array();
+    $userid_match_login = array();
+    foreach ($id as $form_index => $user_id) {
+        if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes']))) {
+            $tmp                      = ldap_add_user($user_id);
+            $UserList[]               = $tmp;
+            $userid_match_login[$tmp] = $user_id;
+        }
+    }
+    $courseInfo = api_get_course_info($_POST['course']);
+    if (!empty($courseInfo)) {
+        foreach ($UserList as $user_id) {
+            CourseManager::add_user_to_course($user_id, $courseInfo['real_id']);
+        }
+        header('Location: course_information.php?code='.Security::remove_XSS($_POST['course']));
+        exit;
+    } /*
 	else
 	{
 		Display :: display_header($tool_name);
@@ -315,15 +307,13 @@ elseif (!empty($annee) && !empty($course) && ($_POST['confirmed']=='yes'))
 		Display :: display_normal_message($message,false);
 	}
 	*/
-	else
-	{
-		Display::display_header($tool_name);
-		$message=get_lang('NoUserAdded');
-		Display :: display_normal_message($message,false);
-	}
-	echo '<br /><br />';
+    else {
+        Display::display_header($tool_name);
+        $message = get_lang('NoUserAdded');
+        Display :: display_normal_message($message, false);
+    }
+    echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
     echo '<br /><br />';
 }
 Display::display_footer();
-?>

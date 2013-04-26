@@ -211,6 +211,7 @@ class FormBuilder extends FormConfigBuilder implements \IteratorAggregate, FormB
     {
         $config = parent::getFormConfig();
 
+        $config->factory = null;
         $config->parent = null;
         $config->children = array();
         $config->unresolvedChildren = array();
@@ -286,6 +287,34 @@ class FormBuilder extends FormConfigBuilder implements \IteratorAggregate, FormB
         }
 
         return new \ArrayIterator($this->children);
+    }
+
+    /**
+     * Returns the types used by this builder.
+     *
+     * @return FormTypeInterface[] An array of FormTypeInterface
+     *
+     * @deprecated Deprecated since version 2.1, to be removed in 2.3. Use
+     *             {@link FormConfigInterface::getType()} instead.
+     *
+     * @throws BadMethodCallException If the builder was turned into a {@link FormConfigInterface}
+     *                                via {@link getFormConfig()}.
+     */
+    public function getTypes()
+    {
+        if ($this->locked) {
+            throw new BadMethodCallException('FormBuilder methods cannot be accessed anymore once the builder is turned into a FormConfigInterface instance.');
+        }
+
+        trigger_error('getTypes() is deprecated since version 2.1 and will be removed in 2.3. Use getConfig() and FormConfigInterface::getType() instead.', E_USER_DEPRECATED);
+
+        $types = array();
+
+        for ($type = $this->getType(); null !== $type; $type = $type->getParent()) {
+            array_unshift($types, $type->getInnerType());
+        }
+
+        return $types;
     }
 
     /**

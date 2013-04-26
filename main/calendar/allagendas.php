@@ -372,9 +372,7 @@ if (isset ($_user['user_id'])) {
 				echo '<h1>'.$sessions[$session_id]['name'].'</h1>';
 			}
 			if (is_array($course_list) && count($course_list) > 0) {
-
 				$agendaitems = get_agenda_items_by_course_list($course_list, $month, $year, $session_id);
-				//$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 				display_mymonthcalendar_2($agendaitems, $month, $year, array(), $monthName, $session_id);
 			} else {
 				Display::display_warning_message(get_lang('PleaseSelectACourseOrASessionInTheLeftColumn'));

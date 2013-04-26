@@ -108,7 +108,6 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
             VALUES ('$id', '0', '".get_lang('No')."', '2')";
     Database::query($sql);
 
-
     //Moving social group to class
     $output->writeln('Fixing social groups');
 

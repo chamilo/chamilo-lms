@@ -70,7 +70,7 @@ $interbreadcrumb[] = array("url" => api_get_self() . "?view=0000000", "name" => 
 include(api_get_path(LIBRARY_PATH) . "statsUtils.lib.inc.php");
 include("../resourcelinker/resourcelinker.inc.php");
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || api_is_drh();
+$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin() || api_is_drh();
 
 /* 	MAIN CODE */
 
@@ -143,12 +143,13 @@ if ($is_allowedToTrack) {
                 // END % visited
                 // BEGIN first/last access
                 // first access
-                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2 WHERE access_user_id = '" . $results[$j][0] . "' AND access_cours_code = '" . $_course['official_code'] . "' AND access_tool = 'learnpath' AND access_session_id = '" . api_get_session_id() . "' ORDER BY access_id ASC LIMIT 1";
+                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2
+                        WHERE access_user_id = '" . $results[$j][0] . "' AND c_id = '" . $_course['id'] . "' AND access_tool = 'learnpath' AND access_session_id = '" . api_get_session_id() . "' ORDER BY access_id ASC LIMIT 1";
                 $first_access = getOneResult($sql);
                 $first_access = empty($first_access) ? "-" : date('d.m.y', strtotime($first_access));
 
                 // last access
-                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE access_user_id = '" . $results[$j][0] . "' AND access_cours_code = '" . $_course['official_code'] . "' AND access_tool = 'learnpath'";
+                $sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE access_user_id = '" . $results[$j][0] . "' AND c_id = '" . $_course['id'] . "' AND access_tool = 'learnpath'";
                 $last_access = getOneResult($sql);
                 $last_access = empty($last_access) ? "-" : date('d.m.y', strtotime($last_access));
                 // END first/last access
@@ -203,7 +204,7 @@ if ($is_allowedToTrack) {
         // last 31 days
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
-                    WHERE access_cours_code = '$_cid'
+                    WHERE c_id = '$course_id'
                         AND (access_date > DATE_ADD(CURDATE(), INTERVAL -31 DAY))
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
@@ -213,7 +214,7 @@ if ($is_allowedToTrack) {
         // last 7 days
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
-                    WHERE access_cours_code = '$_cid'
+                    WHERE c_id = '$course_id'
                         AND (access_date > DATE_ADD(CURDATE(), INTERVAL -7 DAY))
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
@@ -230,8 +231,6 @@ if ($is_allowedToTrack) {
         $line .= get_lang('Thisday') . " ; " . $count . "\n";
     }
 
-
-
     /* 	Tools */
     $tempView = $view;
     if ($view[2] == '1') {
@@ -245,8 +244,7 @@ if ($is_allowedToTrack) {
 
         $sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool )
                 FROM $TABLETRACK_ACCESS
-                WHERE access_tool IS NOT NULL
-                    AND access_cours_code = '$_cid'
+                WHERE access_tool IS NOT NULL AND c_id = '$course_id'
                 GROUP BY access_tool";
 
         $results = getManyResults3Col($sql);
@@ -273,7 +271,7 @@ if ($is_allowedToTrack) {
                     WHERE
                     	cl.c_id = $course_id AND
                     	sl.links_link_id = cl.id AND
-                    	sl.links_cours_id = '$_cid'
+                    	sl.c_id = '$course_id'
                     GROUP BY cl.title, cl.url";
 
         $results = getManyResultsXCol($sql, 4);
@@ -301,7 +299,7 @@ if ($is_allowedToTrack) {
 
         $sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path)
                     FROM $TABLETRACK_DOWNLOADS
-                    WHERE down_cours_id = '$_cid'
+                    WHERE c_id = '$course_id'
                     GROUP BY down_doc_path";
 
         $results = getManyResults3Col($sql);

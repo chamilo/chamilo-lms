@@ -273,7 +273,7 @@ class Blog
     public static function create_post($title, $full_text, $file_comment, $blog_id)
     {
         global $_user;
-        global $_course;
+        $_course = api_get_course_info();
 
         $blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
         $upload_ok = true;
@@ -413,7 +413,7 @@ class Blog
         $task_id = 'NULL'
     ) {
         global $_user;
-        global $_course;
+        $_course = api_get_course_info();
         global $blog_table_attachment;
 
         $upload_ok = true;
@@ -2375,12 +2375,11 @@ class Blog
     public static function display_form_user_subscribe($blog_id)
     {
         // Init
-        global $_course;
+        $_course = api_get_course_info();
         $is_western_name_order = api_is_western_name_order();
         $currentCourse = $_course['sysCode'];
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
-        $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         echo '<legend>'.get_lang('SubscribeMembers').'</legend>';
         $course_id = api_get_course_int_id();
@@ -2416,7 +2415,7 @@ class Blog
             $session_id = 0;
         }
 
-        $student_list = CourseManager :: get_student_list_from_course_code($currentCourse, false, $session_id);
+        $student_list = CourseManager :: get_student_list_from_course_code(api_get_course_int_id(), false, $session_id);
         $user_data = array();
 
         // Add users that are not in this blog to the list.
@@ -3054,8 +3053,7 @@ function get_blog_attachment($blog_id, $post_id = null, $comment_id = null)
 
 function delete_all_blog_attachment($blog_id, $post_id = null, $comment_id = null)
 {
-
-    global $_course;
+    $_course = api_get_course_info();
     $blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
     $blog_id = Database::escape_string($blog_id);
     $comment_id = Database::escape_string($comment_id);

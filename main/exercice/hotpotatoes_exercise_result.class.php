@@ -5,13 +5,12 @@
  * of type HotpotatoesExerciseResult
  * which allows you to export exercises results in multiple presentation forms
  * @package chamilo.exercise
- * @author 
+ * @author
  * @version $Id: $
  */
 /**
  * Code
  */
-if(!class_exists('HotpotatoesExerciseResult')):
 /**
  * Exercise results class
  * @package chamilo.exercise
@@ -69,41 +68,41 @@ class HotpotatoesExerciseResult
     $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
     $TBL_TRACK_EXERCISES    	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-    $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-    
+    $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+
     $cid             = api_get_course_id();
     $course_id       = api_get_course_int_id();
     $user_id         = intval($user_id);
     $session_id_and  = ' AND te.session_id = ' . api_get_session_id() . ' ';
     $hotpotato_name  = Database::escape_string($hotpotato_name);
-    
-    
+
+
     if (!empty($exercise_id)) {
       $session_id_and .= " AND exe_exo_id = $exercise_id ";
     }
 
-		if (empty($user_id)) {
-    $sql="SELECT firstname as userpart1, lastname as userpart2 ,
-            email,
-            tth.exe_name,
-            tth.exe_result,
-            tth.exe_weighting,
-            tth.exe_date
-            FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-            WHERE   tu.user_id=tth.exe_user_id AND
-                    tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND
-                    tth.exe_name = '$hotpotato_name'
-            ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
-		} else {
-      $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
-      // get only this user's results
-  
-      $sql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
-                      FROM $TBL_TRACK_HOTPOTATOES
-                      WHERE   exe_user_id = '" . $user_id . "' AND
-                              exe_cours_id = '" . Database :: escape_string($cid) . "' AND
-                              tth.exe_name = '$hotpotato_name'
-                      ORDER BY exe_cours_id ASC, exe_date ASC";
+    if (empty($user_id)) {
+        $sql="SELECT firstname as userpart1, lastname as userpart2 ,
+                email,
+                tth.exe_name,
+                tth.exe_result,
+                tth.exe_weighting,
+                tth.exe_date
+                FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
+                WHERE   tu.user_id=tth.exe_user_id AND
+                        tth.c_id = '" . $course_id. "' AND
+                        tth.exe_name = '$hotpotato_name'
+                ORDER BY tth.c_id ASC, tth.exe_date ASC";
+    } else {
+        $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
+        // get only this user's results
+
+        $sql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
+                  FROM $TBL_TRACK_HOTPOTATOES
+                  WHERE   exe_user_id = '" . $user_id . "' AND
+                          c_id = '" . $course_id . "' AND
+                          tth.exe_name = '$hotpotato_name'
+                  ORDER BY c_id ASC, exe_date ASC";
 		}
 
 		$results = array();
@@ -378,4 +377,3 @@ class HotpotatoesExerciseResult
 		return true;
 	}
 }
-endif;

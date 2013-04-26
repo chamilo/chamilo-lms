@@ -186,7 +186,7 @@ class GroupManager
      */
     public static function create_group($name, $category_id, $tutor, $places)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $table_group = Database :: get_course_table(TABLE_GROUP);
 
         $session_id = api_get_session_id();
@@ -327,7 +327,7 @@ class GroupManager
      */
     public static function create_class_groups($category_id)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $options['where'] = array(" usergroup.course_id = ? " => api_get_real_course_id());
         $obj = new UserGroup();
         $classes = $obj->get_usergroup_in_course($options);
@@ -916,7 +916,7 @@ class GroupManager
      */
     public static function fill_groups($group_ids)
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         $group_ids = is_array($group_ids) ? $group_ids : array($group_ids);
         $group_ids = array_map('intval', $group_ids);
@@ -1162,10 +1162,7 @@ class GroupManager
      */
     public static function can_user_subscribe($user_id, $group_id)
     {
-        global $_course;
-        $course_code = $_course['sysCode'];
         $category = self :: get_category_from_group($group_id);
-        $result = CourseManager :: is_user_subscribed_in_real_or_linked_course($user_id, $course_code);
         $result = !self :: is_subscribed($user_id, $group_id);
         $result &= (self :: number_of_students($group_id) < self :: maximum_number_of_students($group_id));
         if ($category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT) {
@@ -1279,7 +1276,7 @@ class GroupManager
         $course_id = api_get_course_int_id();
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
-            foreach ($user_ids as $index => $user_id) {
+            foreach ($user_ids as $user_id) {
                 $user_id = Database::escape_string($user_id);
                 $group_id = Database::escape_string($group_id);
                 $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id) VALUES ('$course_id', '".$user_id."', '".$group_id."')";
@@ -1407,7 +1404,7 @@ class GroupManager
      */
     public static function is_tutor_of_group($user_id, $group_id)
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         $table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
         $user_id = Database::escape_string($user_id);
@@ -1451,14 +1448,13 @@ class GroupManager
      */
     public static function get_all_tutors()
     {
-        global $_course;
         $course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT user.user_id AS user_id, user.lastname AS lastname, user.firstname AS firstname
 				FROM ".$user_table." user, ".$course_user_table." cu
 				WHERE cu.user_id=user.user_id
 				AND cu.tutor_id='1'
-				AND cu.course_code='".$_course['sysCode']."'";
+				AND cu.c_id='".api_get_course_int_id()."'";
         $resultTutor = Database::query($sql);
         $tutors = array();
         while ($tutor = Database::fetch_array($resultTutor)) {
@@ -1477,12 +1473,11 @@ class GroupManager
      */
     public static function is_tutor($user_id)
     {
-        global $_course;
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $user_id = Database::escape_string($user_id);
 
         $sql = "SELECT tutor_id FROM ".$course_user_table."
-		        WHERE user_id='".$user_id."' AND course_code='".$_course['code']."'"."AND tutor_id=1";
+		        WHERE user_id='".$user_id."' AND c_id ='".api_get_course_int_id()."'"."AND tutor_id=1";
         $db_result = Database::query($sql);
         $result = (Database::num_rows($db_result) > 0);
 
@@ -1532,82 +1527,6 @@ class GroupManager
     /*
         Group functions - these take virtual/linked courses into account when necessary
     */
-    /**
-     *    Get a combined list of all users of the real course $course_code
-     *        and all users in virtual courses linked to this course $course_code
-     *    Filter user list: remove duplicate users; plus
-     *        remove users that
-     *        - are already in the current group $group_id;
-     *        - do not have student status in these courses;
-     *        - are not appointed as tutor (group assistent) for this group;
-     *        - have already reached their maximum # of groups in this course.
-     *
-     *    Originally to get the correct list of users a big SQL statement was used,
-     *    but this has become more complicated now there is not just one real course but many virtual courses.
-     *    Still, that could have worked as well.
-     *
-     * @version 1.1.3
-     * @author Roan Embrechts
-     */
-    public static function get_complete_list_of_users_that_can_be_added_to_group($course_code, $group_id)
-    {
-        global $_course, $_user;
-        $category = self :: get_category_from_group($group_id, $course_code);
-        $number_of_groups_limit = $category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $category['groups_per_user'];
-        $real_course_code = $_course['sysCode'];
-        $real_course_info = Database :: get_course_info($real_course_code);
-        $real_course_user_list = CourseManager :: get_user_list_from_course_code($real_course_code);
-        //get list of all virtual courses
-        $user_subscribed_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course(
-            $_user['user_id'],
-            $real_course_code
-        );
-        //add real course to the list
-        $user_subscribed_course_list[] = $real_course_info;
-        if (!is_array($user_subscribed_course_list)) {
-            return;
-        }
-        //for all courses...
-        foreach ($user_subscribed_course_list as $this_course) {
-            $this_course_code = $this_course['code'];
-            $course_user_list = CourseManager :: get_user_list_from_course_code($this_course_code);
-            //for all users in the course
-            foreach ($course_user_list as $this_user) {
-                $user_id = $this_user['user_id'];
-                $loginname = $this_user['username'];
-                $lastname = $this_user['lastname'];
-                $firstname = $this_user['firstname'];
-                $status = $this_user['status'];
-                //$role =  $this_user['role'];
-                $tutor_id = $this_user['tutor_id'];
-                $full_name = api_get_person_name($firstname, $lastname);
-                if ($lastname == "" || $firstname == '') {
-                    $full_name = $loginname;
-                }
-                $complete_user['user_id'] = $user_id;
-                $complete_user['full_name'] = $full_name;
-                $complete_user['firstname'] = $firstname;
-                $complete_user['lastname'] = $lastname;
-                $complete_user['status'] = $status;
-                $complete_user['tutor_id'] = $tutor_id;
-                $student_number_of_groups = self :: user_in_number_of_groups($user_id, $category['id']);
-                //filter: only add users that have not exceeded their maximum amount of groups
-                if ($student_number_of_groups < $number_of_groups_limit) {
-                    $complete_user_list[] = $complete_user;
-                }
-            }
-        }
-        if (is_array($complete_user_list)) {
-            //sort once, on array field "full_name"
-            $complete_user_list = TableSort :: sort_table($complete_user_list, "full_name");
-            //filter out duplicates, based on field "user_id"
-            $complete_user_list = self :: filter_duplicates($complete_user_list, "user_id");
-            $complete_user_list = self :: filter_users_already_in_group($complete_user_list, $group_id);
-
-        }
-
-        return $complete_user_list;
-    }
 
     /**
      *    Filter out duplicates in a multidimensional array
@@ -1800,7 +1719,7 @@ class GroupManager
             }
         }
 
-        global $_course;
+        $_course = api_get_course_info();
         $category = self :: get_category_from_group($group_ids[0]);
         $groups_per_user = $category['groups_per_user'];
 

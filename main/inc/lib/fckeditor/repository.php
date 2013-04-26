@@ -41,15 +41,6 @@ if (!file_exists($user_folder)) {
     @mkdir($user_folder, $permissions_for_new_directories, true);
 }
 
-// Creation of repository used by paltform administrators if it does not exist.
-if (api_is_platform_admin()) {
-    $homepage_folder = api_get_path(SYS_PATH).'home/default_platform_document/';
-    if (!file_exists($homepage_folder)) {
-        @mkdir($homepage_folder, $permissions_for_new_directories);
-    }
-}
-
-
 // Create course shared folders
 if (api_is_in_course()) {
     $course_dir = $_course['path'].'/document';

@@ -186,8 +186,7 @@ function detect_irc_link($input)
  **/
 function make_wiki_link_clickable($input)
 {
-    global $_course;
-
+    $_course = api_get_course_info();
     if (isset($_SESSION['_gid'])) {
         $_clean['group_id'] = intval($_SESSION['_gid']);
     }
@@ -613,7 +612,8 @@ function save_new_wiki()
  **/
 function display_new_wiki_form()
 {
-    global $_course, $page;
+    $_course = api_get_course_info();
+    global $page;
     ?>
 <script type="text/javascript">
     function CheckSend() {
@@ -1668,7 +1668,7 @@ function check_emailcue($id_or_ref, $type, $lastime = '', $lastuser = '')
     global $tbl_wiki;
     global $groupfilter;
     global $tbl_wiki_mailcue;
-    global $_course;
+    $_course = api_get_course_info();
     global $condition_session;
 
     $_clean['group_id'] = (int)$_SESSION['_gid'];
@@ -1859,8 +1859,7 @@ function check_emailcue($id_or_ref, $type, $lastime = '', $lastuser = '')
  */
 function export2doc($doc_id)
 {
-
-    global $_course;
+    $_course = api_get_course_info();
     $groupId = api_get_group_id();
     $session_id = api_get_session_id();
     $data = get_wiki_data($doc_id);

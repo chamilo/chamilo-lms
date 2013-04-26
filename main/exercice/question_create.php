@@ -48,11 +48,13 @@ $session_id  = api_get_session_id();
 $tbl_exercices = Database :: get_course_table(TABLE_QUIZ_TEST);
 $course_id = api_get_course_int_id();
 
-$sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE c_id = $course_id AND active<>'-1' AND session_id=".$session_id." ORDER BY title ASC";
+$sql = "SELECT iid,title,type,description, results_disabled
+        FROM $tbl_exercices WHERE c_id = $course_id AND active<>'-1' AND session_id=".$session_id."
+        ORDER BY title ASC";
 $result = Database::query($sql);
 $exercises['-'] = '-'.get_lang('SelectExercice').'-';
 while ($row = Database :: fetch_array($result)) {
-	$exercises[$row['id']] = Text::cut($row['title'], EXERCISE_MAX_NAME_SIZE);
+	$exercises[$row['iid']] = Text::cut($row['title'], EXERCISE_MAX_NAME_SIZE);
 }
 $form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
 

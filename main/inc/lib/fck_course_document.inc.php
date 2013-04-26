@@ -63,8 +63,8 @@ if (api_is_in_course()) {
 } else {
 	if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
 		// 3. Platform administration activities.
-		$base_work_dir = $_configuration['root_sys'].'home/default_platform_document/';
-		$http_www = $_configuration['root_web'].'home/default_platform_document/';
+		$base_work_dir = api_get_path(SYS_DATA_PATH).'default_platform_document/';
+		$http_www = api_get_path(WEB_PUBLIC_PATH).'data/default_platform_document/';
 	} else {
 		// 4. The user is outside courses.
         $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');

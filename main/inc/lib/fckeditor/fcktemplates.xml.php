@@ -161,14 +161,12 @@ function load_platform_templates() {
 
     $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
     $replace = array($css.$js, $img_dir, api_get_path(REL_PATH), $default_course_dir);
-    $template_thumb = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/';
+    $template_thumb = api_get_path(WEB_DATA_PATH).'document_templates/';
 
     while ($row = Database::fetch_array($result)) {
         $image = empty($row['image']) ? $template_thumb.'empty.gif' : $template_thumb.$row['image'];
         $row['content'] = str_replace($search, $replace, $row['content']);
-
-        echo '
-                <Template title="'.s($row['title']).'" image="'.$image.'">
+        echo '<Template title="'.s($row['title']).'" image="'.$image.'">
                     <Description>'.s($row['comment']).'</Description>
                     <Html>
                         <![CDATA[
@@ -190,7 +188,7 @@ function load_platform_templates() {
  * @since Dokeos 1.8.6 The code already existed but not in a function and a lot less performant.
  */
 function load_personal_templates($user_id = 0) {
-    global $_course;
+    $_course = api_get_course_info();
 
     // the templates that the user has defined are only available inside the course itself
     if (empty($_course)) {
@@ -223,9 +221,9 @@ function load_personal_templates($user_id = 0) {
         $row['content'] = file_get_contents(api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path']);
 
         if (!empty($row['image'])) {
-            $image = api_get_path(WEB_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/'.$row['image'];
+            $image = api_get_path(WEB_DATA_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/'.$row['image'];
         } else {
-            $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif';
+            $image = api_get_path(WEB_DATA_PATH).'document_templates/noimage.gif';
         }
 
         echo '
@@ -245,7 +243,7 @@ function load_empty_template() {
     /* <?php echo $css; ?>
         <?php echo $js; ?> */
     ?>
-<Template title="<?php echo s2('Empty'); ?>" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif'; ?>">
+<Template title="<?php echo s2('Empty'); ?>" image="<?php echo api_get_path(WEB_DATA_PATH).'document_templates/empty.gif'; ?>">
     <Description></Description>
     <Html>
         <![CDATA[

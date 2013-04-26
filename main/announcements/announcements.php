@@ -28,6 +28,12 @@ $use_anonymous = true;
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
+
+/* 	Sessions */
+
+$ctok = Security::getCurrentToken();
+$stok = Security::get_token();
+
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
@@ -127,10 +133,8 @@ if (!empty($group_id)) {
     $_SESSION['select_groupusers'] = 'hide';
 }
 
-/* 	Sessions */
 
-$ctok = Security::getCurrentToken();
-$stok = Security::get_token();
+
 $to = null;
 $email_ann = null;
 
@@ -351,6 +355,7 @@ if (AnnouncementManager::user_can_edit_announcement()) {
         $error_message = get_lang('TitleIsRequired');
         $content_to_modify = $newContent;
     } else {
+
         if ($submitAnnouncement) {
             $selected_form = isset($_POST['selectedform']) ? $_POST['selectedform'] : null;
 
@@ -376,7 +381,7 @@ if (AnnouncementManager::user_can_edit_announcement()) {
                 }
             } else {
                 //insert mode
-                if ($ctok == $_POST['sec_token']) {
+                if ($ctok == $_REQUEST['sec_token']) {
                     $file = $_FILES['user_upload'];
                     $file_comment = $_POST['file_comment'];
 
@@ -672,7 +677,7 @@ if ($display_form) {
             // we want to remind inactive users. The $_GET['since'] parameter determines which users have to be warned (i.e the users who have been inactive for x days or more
             $since = isset($_GET['since']) ? intval($_GET['since']) : 6;
             // getting the users who have to be reminded
-            $to = Tracking :: get_inactives_students_in_course($_course['id'], $since, api_get_session_id());
+            $to = Tracking :: get_inactives_students_in_course(api_get_course_int_id(), $since, api_get_session_id());
             // setting the variables for the form elements: the users who need to receive the message
             foreach ($to as &$user) {
                 $user = 'USER:'.$user;

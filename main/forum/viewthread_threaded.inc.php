@@ -87,7 +87,7 @@ foreach ($rows as $post) {
     $count++;
 }
 
-$locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREAD);            
+$locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREAD);
 
 /* NAVIGATION CONTROLS */
 
@@ -173,7 +173,7 @@ $id_attach = !empty($attachment_list)?$attachment_list['id']:'';
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
 //if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
-if ( GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR  ($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {    
+if ( GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR  ($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
     if ($locked == false) {
         echo "<a href=\"editpost.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;origin=".$origin."&amp;post=".$rows[$display_post_id]['post_id']."&amp;id_attach=".$id_attach."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL)."</a>";
     }
@@ -203,13 +203,13 @@ if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR api_is_allo
     }
 }
 $userinf=api_get_user_info($rows[$display_post_id]['user_id']);
-$user_status=api_get_status_of_user_in_course($rows[$display_post_id]['user_id'],api_get_course_id());
+$user_status=api_get_status_of_user_in_course($rows[$display_post_id]['user_id'],api_get_course_int_id());
 if (api_is_allowed_to_edit(null,true)) {
     if ($post_id > $post_minor ) {
-        //if ($user_status!=1) {        
-            $current_qualify_thread=show_qualify('1', $rows[$display_post_id]['user_id'],$_GET['thread']);            
-            
-            if ($locked == false) { 
+        //if ($user_status!=1) {
+            $current_qualify_thread=show_qualify('1', $rows[$display_post_id]['user_id'],$_GET['thread']);
+
+            if ($locked == false) {
                 echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&amp;user_id=".$rows[$display_post_id]['user_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."\" >".Display::return_icon('new_test_small.gif',get_lang('Qualify'))."</a>";
             }
         //}

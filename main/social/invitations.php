@@ -188,7 +188,8 @@ if (count($pending_invitations) > 0) {
 
 $social_right_content = Display::div($social_right_content, array('class' => 'span9'));
 
-$tpl = new Template(null);
+$tpl = $app['template'];
+
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
 

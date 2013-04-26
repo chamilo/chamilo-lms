@@ -15,9 +15,6 @@ require_once './main/inc/global.inc.php';
 
 api_block_anonymous_users();
 
-$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
 if (isset($_REQUEST['session_id'])) {
     $session_id = intval($_REQUEST['session_id']);
 } else {
@@ -62,15 +59,18 @@ echo Display::page_header(get_lang('UserOnlineListSession'));
         foreach ($session_is_coach as $session) {
 			$sql = "SELECT 	DISTINCT last_access.access_user_id,
 							last_access.access_date,
-							last_access.access_cours_code,
+							last_access.c_id,
 							last_access.access_session_id,
+							course.code,
 							".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." as name,
 							user.email
 					FROM ".Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS)." AS last_access
 					INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." AS user
-						ON user.user_id = last_access.access_user_id
-					WHERE access_session_id='".$session['id']."'
-					AND access_date >= '$current_date' GROUP BY access_user_id";
+					    ON user.user_id = last_access.access_user_id
+					INNER JOIN ".Database::get_main_table(TABLE_MAIN_COURSE)." AS course
+					    ON course.id = last_access.c_id
+					WHERE access_session_id='".$session['id']."' AND access_date >= '$current_date'
+					GROUP BY access_user_id";
 
 			$result = Database::query($sql);
 
@@ -84,7 +84,7 @@ echo Display::page_header(get_lang('UserOnlineListSession'));
 				echo "<tr><td>";
 				echo $student_online['name'];
 				echo "</td><td align='center'>";
-				echo $student_online['access_cours_code'];
+				echo $student_online['code'];
 				echo "</td><td align='center'>";
                 if (api_get_setting('show_email_addresses') == 'true') {
                     if (!empty($student_online['email'])) {
@@ -96,7 +96,7 @@ echo Display::page_header(get_lang('UserOnlineListSession'));
 				echo "	</td>
 						<td align='center'>
 					 ";
-				echo '<a target="_blank" class="btn" href="main/chat/chat.php?cidReq='.$student_online['access_cours_code'].'&id_session='.$student_online['access_session_id'].'">
+				echo '<a target="_blank" class="btn" href="main/chat/chat.php?cidReq='.$student_online['code'].'&id_session='.$student_online['access_session_id'].'">
                     '.get_lang('Chat').'
                         </a>';
 				echo "	</td>

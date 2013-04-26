@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This file generates the ActionScript variables code used by the 
+ * This file generates the ActionScript variables code used by the
  * HotSpot .swf
  * @package chamilo.exercise
  * @author Toon Keppens, Julio Montoya adding hotspot "medical" support
@@ -38,43 +38,46 @@ $course_id     = api_get_course_int_id();
 
 if ($answer_type == HOT_SPOT_DELINEATION) {
 	// Query db for answers
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS 
-	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' AND hotspot_type <> 'noerror' ORDER BY id";
+	$sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS
+	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' AND hotspot_type <> 'noerror'
+            ORDER BY iid";
 } else {
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS 
-	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' ORDER BY id";
+	$sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS
+	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' ORDER BY iid";
 }
 $result = Database::query($sql);
 // Init
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
-$i = 0;
+$i = 1;
 
 while ($hotspot = Database::fetch_array($result)) {
-	$output .= "&hotspot_".$hotspot['id']."=true";
+    $hotspot_id = $i;
+    //$hotspot_id = $hotspot['iid'];
+	$output .= "&hotspot_".$hotspot_id."=true";
 	// Square or rectancle
 	if ($hotspot['hotspot_type'] == 'square' ) {
-		$output .= "&hotspot_".$hotspot['id']."_type=square";
+		$output .= "&hotspot_".$hotspot_id."_type=square";
 	}
 
 	// Circle or ovale
 	if ($hotspot['hotspot_type'] == 'circle') {
-		$output .= "&hotspot_".$hotspot['id']."_type=circle";
+		$output .= "&hotspot_".$hotspot_id."_type=circle";
 	}
 
 	// Polygon
 	if ($hotspot['hotspot_type'] == 'poly') {
-		$output .= "&hotspot_".$hotspot['id']."_type=poly";
+		$output .= "&hotspot_".$hotspot_id."_type=poly";
 	}
 
 	// Delineation
 	if ($hotspot['hotspot_type'] == 'delineation') {
-		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
-	}	
+		$output .= "&hotspot_".$hotspot_id."_type=delineation";
+	}
 	// oar
 	if ($hotspot['hotspot_type'] == 'oar') {
-		$output .= "&hotspot_".$hotspot['id']."_type=delineation";	 
-	}	
-	$output .= "&hotspot_".$hotspot['id']."_coord=".$hotspot['hotspot_coordinates']."";
+		$output .= "&hotspot_".$hotspot_id."_type=delineation";
+	}
+	$output .= "&hotspot_".$hotspot_id."_coord=".$hotspot['hotspot_coordinates']."";
 	$i++;
 }
 
@@ -86,18 +89,18 @@ for ($i; $i <= 12; $i++) {
 
 
 // Get clicks
-if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {    
+if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
 	foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate) {
 		$output2 .= $coordinate."|";
 	}
-} else {    
+} else {
 	// get it from db
 	$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = "SELECT hotspot_coordinate
             FROM $tbl_track_e_hotspot
-            WHERE   hotspot_question_id = $questionId AND 
-                    hotspot_course_code = '$course_code' AND 
-                    hotspot_exe_id = $exe_id 
+            WHERE   hotspot_question_id = $questionId AND
+                    c_id = $course_id AND
+                    hotspot_exe_id = $exe_id
             ORDER by hotspot_id";
 	$rs = @Database::query($sql); // don't output error because we are in Flash execution.
 	while($row = Database :: fetch_array($rs)) {

@@ -90,10 +90,7 @@ function get_number_of_requests() {
  */
 function get_request_data($from, $number_of_items, $column, $direction) {
     global $keyword;
-
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
-    $users_table = Database :: get_main_table(TABLE_MAIN_USER);
-    $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
     $sql = "SELECT id AS col0,
                    code AS col1,
@@ -102,7 +99,8 @@ function get_request_data($from, $number_of_items, $column, $direction) {
                    tutor_name AS col4,
                    request_date AS col5,
                    id  AS col6
-                   FROM $course_request_table WHERE status = ".COURSE_REQUEST_ACCEPTED;
+                   FROM $course_request_table
+           WHERE status = ".COURSE_REQUEST_ACCEPTED;
 
     if ($keyword != '') {
         $sql .= " AND (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";

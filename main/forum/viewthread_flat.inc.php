@@ -81,7 +81,7 @@ if (isset($current_thread['thread_id'])){
                 }
             }
 
-            $user_status = api_get_status_of_user_in_course($row['user_id'], api_get_course_id());
+            $user_status = api_get_status_of_user_in_course($row['user_id'], api_get_course_int_id());
             $current_qualify_thread = show_qualify('1', $row['poster_id'],$_GET['thread']);
 
             if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {

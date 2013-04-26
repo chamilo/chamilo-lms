@@ -137,7 +137,7 @@ class CourseRestorer
         $this->destination_course_id = $course_info['real_id'];
 
         //Getting first teacher (for the forums)
-        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['real_id']);
         $this->first_teacher_id = api_get_user_id();
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -1508,7 +1508,7 @@ class CourseRestorer
                         $exercise->add_exercise_to_order_table();
                     }
 
-                    $this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
+                    $this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
                     $order = 0;
                     if (!empty($quiz->question_ids)) {
                         foreach ($quiz->question_ids as $index => $question_id) {
@@ -1517,6 +1517,35 @@ class CourseRestorer
                             $sql = "INSERT IGNORE INTO ".$table_rel." SET c_id = ".$this->destination_course_id.", question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
                             Database::query($sql);
                         }
+                    }
+
+                    if ($quiz->categories) {
+                        $exercise_obj = new Exercise($this->destination_course_id);
+                        $exercise_obj->read($new_id);
+                        $cats = array();
+                        foreach ($quiz->categories as $cat) {
+                            $cat_from_db = new Testcategory($cat['category_id']);
+                            if ($cat_from_db && $cat_from_db->title == $cat['title']) {
+                                //use the same id
+                                $cats[$cat_from_db->id] = $cat['count_questions'];
+                            } else {
+                                $cat_from_db = $cat_from_db->get_category_by_title($cat['title'], $this->destination_course_id);
+                                if (empty($cat_from_db)) {
+                                    //Create a new category in this portal
+                                    if ($cat['category_id'] == 0) {
+                                        $category_c_id = 0;
+                                    } else {
+                                        $category_c_id = $this->destination_course_id;
+                                    }
+                                    $new_cat = new Testcategory(null, $cat['title'], $cat['description'], null, 'simple', $category_c_id);
+                                    $new_cat_id = $new_cat->addCategoryInBDD();
+                                    $cats[$new_cat_id] = $cat['count_questions'];
+                                } else {
+                                    $cats[$cat_from_db['iid']] = $cat['count_questions'];
+                                }
+                            }
+                        }
+                        $exercise_obj->save_categories_in_exercise($cats);
                     }
                 }
             }
@@ -1543,13 +1572,26 @@ class CourseRestorer
             $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
             // check resources inside html from fckeditor tool and copy correct urls into recipient course
-            $question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
-                $question->description,
-                $this->course->code,
-                $this->course->destination_path,
-                $this->course->backup_path,
-                $this->course->info['path']
-            );
+			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
+
+            $parent_id = 0;
+
+            if (isset($question->parent_info)) {
+                $question_obj = Question::readByTitle($question->parent_info['question'], $this->destination_course_id);
+
+                if ($question_obj) {
+                    //Reuse media
+                    $parent_id = $question_obj->selectId();
+                } else {
+                    //Create media
+                    $question_obj = new MediaQuestion();
+                    $question_obj->updateCourse($this->destination_course_id);
+                    $parent_id = $question_obj->save_media(array(
+                        'questionName'  => $question->parent_info['question'],
+                        'questionDescription' => $question->parent_info['description']
+                    ));
+                }
+            }
 
             $sql = "INSERT INTO ".$table_que." SET
                     c_id = ".$this->destination_course_id." ,
@@ -1560,6 +1602,7 @@ class CourseRestorer
                     type='".self::DBUTF8escapestring($question->quiz_type)."',
                     picture='".self::DBUTF8escapestring($question->picture)."',
                     level='".self::DBUTF8escapestring($question->level)."',
+                    parent_id ='".$parent_id."',
                     extra='".self::DBUTF8escapestring($question->extra)."'";
 
             Database::query($sql);
@@ -1573,9 +1616,7 @@ class CourseRestorer
                     // picture path
                     $picturePath = $documentPath.'/images';
 
-                    $old_picture = api_get_path(
-                        SYS_COURSE_PATH
-                    ).$this->course->info['path'].'/document/images/'.$question->picture;
+                    $old_picture = api_get_path(SYS_COURSE_PATH).$this->course->info['path'].'/document/images/'.$question->picture;
                     if (file_exists($old_picture)) {
                         $picture_name = 'quiz-'.$new_id.'.jpg';
 
@@ -1590,14 +1631,18 @@ class CourseRestorer
 
             if ($question->quiz_type == MATCHING) {
                 $temp = array();
+                $matching_list = array();
+                $matching_to_update = array();
                 foreach ($question->answers as $index => $answer) {
                     $temp[$answer['position']] = $answer;
-                }
 
+                    if (!empty($answer['correct'])) {
+                        $matching_to_update[$answer['iid']] = $answer['correct'];
+                    }
+                }
                 foreach ($temp as $index => $answer) {
                     $sql = "INSERT INTO ".$table_ans." SET
                             c_id = ".$this->destination_course_id." ,
-                            id = '".$index."',
                             question_id = '".$new_id."',
                             answer = '".self::DBUTF8escapestring($answer['answer'])."',
                             correct = '".$answer['correct']."',
@@ -1606,6 +1651,15 @@ class CourseRestorer
                             position = '".$answer['position']."',
                             hotspot_coordinates = '".$answer['hotspot_coordinates']."',
                             hotspot_type = '".$answer['hotspot_type']."'";
+					Database::query($sql);
+                    $new_answer_id = Database::insert_id();
+                    $matching_list[$answer['iid']] = $new_answer_id;
+				}
+                //var_dump($matching_list, $matching_to_update);
+                foreach ($matching_to_update as $old_answer_id => $old_correct_id) {
+                    $new_correct = $matching_list[$old_correct_id];
+                    $new_fixed_id = $matching_list[$old_answer_id];
+                    $sql = "UPDATE $table_ans SET correct = '$new_correct' WHERE iid = $new_fixed_id ";
                     Database::query($sql);
                 }
             } else {
@@ -1613,24 +1667,11 @@ class CourseRestorer
                 foreach ($question->answers as $index => $answer) {
 
                     // check resources inside html from fckeditor tool and copy correct urls into recipient course
-                    $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
-                        $answer['answer'],
-                        $this->course->code,
-                        $this->course->destination_path,
-                        $this->course->backup_path,
-                        $this->course->info['path']
-                    );
-                    $answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
-                        $answer['comment'],
-                        $this->course->code,
-                        $this->course->destination_path,
-                        $this->course->backup_path,
-                        $this->course->info['path']
-                    );
+					$answer['answer']  = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['answer'], $this->course->code, $this->course->destination_path);
+					$answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['comment'], $this->course->code, $this->course->destination_path);
 
                     $sql = "INSERT INTO ".$table_ans." SET
                                 c_id = ".$this->destination_course_id." ,
-                                id = '".($index + 1)."',
                                 question_id = '".$new_id."',
                                 answer = '".self::DBUTF8escapestring($answer['answer'])."',
                                 correct = '".$answer['correct']."',
@@ -1640,7 +1681,8 @@ class CourseRestorer
                                 hotspot_coordinates = '".$answer['hotspot_coordinates']."',
                                 hotspot_type = '".$answer['hotspot_type']."'";
                     Database::query($sql);
-                    $correct_answers[$index + 1] = $answer['correct'];
+                    $new_answer_id = Database::insert_id();
+                    $correct_answers[$new_answer_id] = $answer['correct'];
                 }
             }
 
@@ -1655,41 +1697,19 @@ class CourseRestorer
                 if ($question_option_list) {
                     $old_option_ids = array();
                     foreach ($question_option_list as $item) {
-                        $old_id = $item['id'];
-                        unset($item['id']);
+                        $old_id = $item['iid'];
+                        unset($item['iid']);
                         $item['question_id'] = $new_id;
                         $item['c_id'] = $this->destination_course_id;
                         $question_option_id = Database::insert($table_options, $item);
                         $old_option_ids[$old_id] = $question_option_id;
                     }
                     if ($old_option_ids) {
-                        $new_answers = Database::select(
-                            'id, correct',
-                            $table_ans,
-                            array(
-                                'WHERE' => array(
-                                    'question_id = ? AND c_id = ? ' => array(
-                                        $new_id,
-                                        $this->destination_course_id
-                                    )
-                                )
-                            )
-                        );
+                        $new_answers = Database::select('iid, correct', $table_ans, array('WHERE' => array('question_id = ? AND c_id = ? '=> array($new_id, $this->destination_course_id))));
                         foreach ($new_answers as $answer_item) {
                             $params = array();
                             $params['correct'] = $old_option_ids[$answer_item['correct']];
-                            $question_option_id = Database::update(
-                                $table_ans,
-                                $params,
-                                array(
-                                    'id = ? AND c_id = ? AND question_id = ? ' => array(
-                                        $answer_item['id'],
-                                        $this->destination_course_id,
-                                        $new_id
-                                    )
-                                ),
-                                false
-                            );
+                            $question_option_id = Database::update($table_ans, $params, array('iid = ? AND c_id = ? AND question_id = ? '=> array($answer_item['iid'], $this->destination_course_id, $new_id)), false);
                         }
                     }
                 } else {
@@ -1704,25 +1724,45 @@ class CourseRestorer
                             $item['position'] = $obj->obj->position;
 
                             $question_option_id = Database::insert($table_options, $item);
-                            $new_options[$obj->obj->id] = $question_option_id;
+                            $new_options[$obj->obj->iid] = $question_option_id;
                         }
+                        //var_dump($new_options, $correct_answers);
                         foreach ($correct_answers as $answer_id => $correct_answer) {
                             $params = array();
                             $params['correct'] = $new_options[$correct_answer];
-                            Database::update(
-                                $table_ans,
-                                $params,
-                                array(
-                                    'id = ? AND c_id = ? AND question_id = ? ' => array(
-                                        $answer_id,
-                                        $this->destination_course_id,
-                                        $new_id
-                                    )
-                                ),
-                                false
-                            );
+                            Database::update($table_ans, $params, array('iid = ? AND c_id = ? AND question_id = ? '=> array($answer_id, $this->destination_course_id, $new_id)), false);
                         }
                     }
+                }
+            }
+
+            if ($question->categories) {
+                $cats = array();
+                foreach ($question->categories as $cat) {
+
+                    $new_category = new Testcategory($cat['category_id']);
+                    if ($new_category && $new_category->title == $cat['title']) {
+                        $cats[] = $cat['category_id'];
+                    } else {
+                        $new_category = $new_category->get_category_by_title($cat['title'], $this->destination_course_id);
+                        if (empty($new_category)) {
+                            //Create a new category in this portal
+                            if ($cat['category_id'] == 0) {
+                                $category_c_id = 0;
+                            } else {
+                                $category_c_id = $this->destination_course_id;
+                            }
+                            $new_cat = new Testcategory(null, $cat['title'], $cat['description'], null, 'simple', $category_c_id);
+                            $new_cat_id = $new_cat->addCategoryInBDD();
+                            $cats[] = $new_cat_id;
+                        } else {
+                            $cats[] = $new_category['iid'];
+                        }
+                    }
+                }
+                $question = Question::read($new_id, $this->destination_course_id);
+                if (!empty($cats)) {
+                    $question->saveCategories($cats);
                 }
             }
             $this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;

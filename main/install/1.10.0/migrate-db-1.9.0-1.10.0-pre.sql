@@ -49,21 +49,25 @@ ALTER TABLE session_field_values ADD INDEX idx_session_field_values_session_id(s
 ALTER TABLE session_field_values ADD INDEX idx_session_field_values_field_id(field_id);
 
 ALTER TABLE session MODIFY COLUMN name CHAR(150) NOT NULL DEFAULT '';
-ALTER TABLE session MODIFY COLUMN id MEDIUMINT unsigned NOT NULL;
+ALTER TABLE session MODIFY COLUMN id INT unsigned NOT NULL;
 
-ALTER TABLE session_rel_course MODIFY COLUMN id_session MEDIUMINT unsigned NOT NULL;
-ALTER TABLE session_rel_course ADD COLUMN course_id INT NOT NULL DEFAULT '0';
-ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (course_id);
+ALTER TABLE session_rel_course MODIFY COLUMN id_session INT unsigned NOT NULL;
+ALTER TABLE session_rel_course ADD COLUMN c_id INT NOT NULL DEFAULT '0';
 ALTER TABLE session_rel_course DROP PRIMARY KEY;
-ALTER TABLE session_rel_course ADD PRIMARY KEY (id_session, course_id);
+ALTER TABLE session_rel_course ADD COLUMN id INT NOT NULL;
+ALTER TABLE session_rel_course MODIFY COLUMN id int unsigned AUTO_INCREMENT;
+ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (c_id);
+ALTER TABLE session_rel_course ADD PRIMARY KEY (id);
 
-ALTER TABLE session_rel_course_rel_user MODIFY COLUMN id_session MEDIUMINT unsigned NOT NULL;
-ALTER TABLE session_rel_course_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT '0';
+ALTER TABLE session_rel_course_rel_user MODIFY COLUMN id_session INT unsigned NOT NULL;
+ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id INT NOT NULL DEFAULT '0';
+ALTER TABLE session_rel_course_rel_user ADD COLUMN id INT NOT NULL;
 ALTER TABLE session_rel_course_rel_user DROP PRIMARY KEY;
-ALTER TABLE session_rel_course_rel_user ADD PRIMARY KEY (id_session, course_id, id_user);
+ALTER TABLE session_rel_course_rel_user ADD PRIMARY KEY (id);
+
 
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
-ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (course_id);
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (c_id);
 
 -- Courses changes c_XXX
 
@@ -74,7 +78,7 @@ ALTER TABLE c_item_property ADD INDEX idx_itemprop_id_tool (c_id, tool(8));
 ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 
 ALTER TABLE c_quiz_answer ADD INDEX idx_quiz_answer_c_q (c_id, question_id);
-CREATE TABLE c_quiz_order( id int unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (id));
+CREATE TABLE c_quiz_order( iid bigint unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (iid));
 
 ALTER TABLE c_quiz_question_rel_category ADD COLUMN id int unsigned NOT NULL;
 ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY;
@@ -104,9 +108,7 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 
 CREATE TABLE branch_transaction (id bigint unsigned not null AUTO_INCREMENT, transaction_id bigint unsigned, branch_id int unsigned not null default 0,  action char(20),  item_id char(36),  orig_id char(36),  dest_id char(36),  info char(20), status_id tinyint not null default 0,  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00', message VARCHAR(255) default '' , PRIMARY KEY (id, transaction_id, branch_id));
 
-
 ALTER TABLE settings_current ADD INDEX idx_settings_current_au_cat (access_url, category(5));
-
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('session_page_enabled', NULL, 'radio', 'Session', 'true', 'SessionPageEnabledTitle', 'SessionPageEnabledComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('session_page_enabled', 'true', 'Yes');
@@ -162,12 +164,9 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teachers_to_create_sessions', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_teachers_to_create_sessions', 'false', 'No');
 
-ALTER TABLE track_e_course_access ADD COLUMN c_id INT NOT NULL DEFAULT 0;
-
 UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
 
 ALTER TABLE usergroup ADD COLUMN group_type INT unsigned NOT NULL default 0;
-
 ALTER TABLE usergroup ADD COLUMN picture varchar(255) NOT NULL;
 ALTER TABLE usergroup ADD COLUMN url varchar(255) NOT NULL;
 ALTER TABLE usergroup ADD COLUMN visibility varchar(255) NOT NULL;
@@ -192,6 +191,24 @@ ALTER TABLE usergroup_rel_usergroup ADD INDEX ( relation_type );
 
 ALTER TABLE announcement_rel_group DROP PRIMARY KEY;
 ALTER TABLE announcement_rel_group ADD COLUMN id INT unsigned NOT NULL auto_increment PRIMARY KEY;
+ALTER TABLE track_e_hotpotatoes ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_exercices ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_attempt ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_hotspot ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_course_access ADD COLUMN c_id INT NOT NULL DEFAULT 0;
+ALTER TABLE access_url_rel_course ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_lastaccess ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_access ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_downloads ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE track_e_links ADD COLUMN c_id int unsigned NOT NULL default 0;
+
+ALTER TABLE track_e_lastaccess ADD INDEX ( c_id, access_user_id ) ;
+
+ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
+RENAME TABLE c_quiz_question_category TO c_quiz_category;
+ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned NOT NULL default 0;
+
+CREATE TABLE c_quiz_rel_category (iid bigint unsigned NOT NULL auto_increment, c_id INT unsigned default 0, category_id int unsigned NOT NULL, exercise_id int unsigned NOT NULL, count_questions int NOT NULL default 0, PRIMARY KEY(iid));
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.862202a' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.6a12538' WHERE variable = 'chamilo_database_version';

@@ -14,7 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.ph
 
 $this_section = SECTION_TRACKING;
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
+$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin() || api_is_course_coach() || api_is_session_admin();
 
 if(!$is_allowedToTrack) {
     api_not_allowed();
@@ -147,7 +147,7 @@ if(!empty($course_list) && is_array($course_list)) {
         $global_row = $row_not_global = array();
         $course_id = $current_course['real_id'];
 
-        $a_students = CourseManager :: get_student_list_from_course_code($current_course['code'], false);
+        $a_students = CourseManager :: get_student_list_from_course_code($course_id, false);
         $total_students = count($a_students);
 
         $sqlExercices        = "SELECT count(id) as count FROM ".$t_quiz." AS quiz WHERE active='1' AND c_id = $course_id ";
@@ -207,9 +207,9 @@ if(!empty($course_list) && is_array($course_list)) {
 
                     foreach ($a_students as $student ) {
                         $current_student_id = $student['user_id'];
-                        $sqlEssais = "    SELECT COUNT(ex.exe_id) as essais
+                        $sqlEssais = "  SELECT COUNT(ex.exe_id) as essais
                                         FROM $tbl_stats_exercices AS ex
-                                        WHERE  ex.exe_cours_id = '".$current_course['code']."'
+                                        WHERE  ex.c_id = '".$course_id."'
                                         AND ex.exe_exo_id = ".$a_exercices['id']."
                                         AND exe_user_id='".$current_student_id."'";
 
@@ -217,10 +217,10 @@ if(!empty($course_list) && is_array($course_list)) {
                         $resultEssais = Database::query($sqlEssais);
                         $a_essais = Database::fetch_array($resultEssais);
 
-                        $sqlScore = "SELECT exe_id, exe_result,exe_weighting
+                        $sqlScore = "SELECT exe_id, exe_result, exe_weighting
                                  FROM $tbl_stats_exercices
                                  WHERE exe_user_id = ".$current_student_id."
-                                 AND exe_cours_id = '".$current_course['code']."'
+                                 AND c_id = '".$course_id."'
                                  AND exe_exo_id = ".$a_exercices['id']."
                                  ORDER BY exe_result DESC LIMIT 1"; // we take the higher value
                                  //ORDER BY exe_date DESC LIMIT 1";

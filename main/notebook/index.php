@@ -16,8 +16,6 @@ require_once '../inc/global.inc.php';
 
 $current_course_tool  = TOOL_NOTEBOOK;
 
-require_once api_get_path(LIBRARY_PATH).'notebook.lib.php';
-
 // The section (tabs)
 $this_section = SECTION_COURSES;
 
@@ -26,7 +24,7 @@ api_protect_course_script(true);
 
 // Additional javascript
 $htmlHeadXtra[] = NotebookManager::javascript_notebook();
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function setFocus(){
 $("#note_title").focus();
 }

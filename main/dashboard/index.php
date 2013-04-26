@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action  
+* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.dashboard
 */
@@ -12,10 +12,8 @@
 $language_file = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
 $cidReset = true;
 
-// including files 
+// including files
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'dashboard.lib.php';
-require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'dashboard_controller.php';
 require_once 'block.class.php';
 
@@ -51,16 +49,16 @@ if (isset($_GET['path'])) {
 }
 
 // distpacher actions to controller
-switch ($action) {	
-	case 'listing':	
+switch ($action) {
+	case 'listing':
 		$dashboard_controller->display();
 		break;
-	case 'store_user_block':	
+	case 'store_user_block':
 		$dashboard_controller->store_user_block();
-		break;	
-	case 'disable_block':	
+		break;
+	case 'disable_block':
 		$dashboard_controller->close_user_block($path);
-		break;					
-	default :	
+		break;
+	default :
 		$dashboard_controller->display();
 }

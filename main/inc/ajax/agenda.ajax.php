@@ -16,15 +16,14 @@ require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.lib.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
-$group_id = api_get_group_id();
 
 if ($type == 'course') {
     api_protect_course_script(true);
 }
 
 $group_id = api_get_group_id();
-
-$is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
+$user_id = api_get_user_id();
+$is_group_tutor = GroupManager::is_tutor_of_group($user_id, $group_id);
 
 $agenda = new Agenda();
 $agenda->type = $type; //course,admin or personal
@@ -35,7 +34,8 @@ switch ($action) {
             break;
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
-        echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $_REQUEST['title'], $_REQUEST['content'], $_REQUEST['users_to_send'], $add_as_announcement);
+        $usersToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : null;
+        echo $agenda->add_event($_REQUEST['start'], $_REQUEST['end'], $_REQUEST['all_day'], $_REQUEST['view'], $_REQUEST['title'], $_REQUEST['content'], $usersToSend, $add_as_announcement);
         break;
     case 'edit_event':
         if (!api_is_allowed_to_edit(null, true) && $type == 'course') {
@@ -74,7 +74,14 @@ switch ($action) {
         $agenda->move_event($id, $day_delta, $minute_delta);
         break;
     case 'get_events':
-        $events = $agenda->get_events($_REQUEST['start'], $_REQUEST['end'], api_get_course_int_id(), $group_id, $_REQUEST['user_id']);
+        // The following code needs a security check for permissions
+        /*
+        $uid = $user_id;
+        if (!empty($_REQUEST['user_id'])) {
+            $uid = intval($user_id);
+        }
+        */
+        $events = $agenda->get_events($_REQUEST['start'], $_REQUEST['end'], api_get_course_int_id(), $group_id, $user_id);
         echo $events;
         break;
     case 'get_user_agenda':

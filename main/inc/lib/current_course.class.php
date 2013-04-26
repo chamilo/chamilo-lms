@@ -14,7 +14,7 @@ class CurrentCourse
 
     /**
      *
-     * @return CurrentCourse 
+     * @return CurrentCourse
      */
     public static function instance()
     {
@@ -29,7 +29,7 @@ class CurrentCourse
     {
         ;
     }
-    
+
     public function is_empty()
     {
         $id = $this->real_id();
@@ -38,7 +38,7 @@ class CurrentCourse
 
     public function data()
     {
-        global $_course;
+        $_course = api_get_course_info();
         if ($_course == '-1') {
             $_course = array();
         }
@@ -82,8 +82,8 @@ class CurrentCourse
 
     /**
      * not needed in Chamilo 1.9
-     * 
-     * @return type 
+     *
+     * @return type
      */
     public function db_name()
     {
@@ -144,11 +144,11 @@ class CurrentCourse
     {
         return $this->get('extLink');
     }
-     
+
     /**
      * Returns the current user (logged in user) relationship with the course.
      * I.e his role
-     * 
+     *
      * @return array
      */
     public function user()

@@ -165,7 +165,6 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_group = Database::get_course_table(TABLE_GROUP);
 $tbl_groupUser = Database::get_course_table(TABLE_GROUP_USER);
-$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 /*   			ACCESS RIGHTS */
 // permission stuff - also used by loading from global in agenda.inc.php

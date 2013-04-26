@@ -28,7 +28,7 @@ function get_number_of_courses() {
 
     if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
+        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (id = url_rel_course.c_id)";
     }
 
     if (isset ($_GET['keyword'])) {
@@ -76,7 +76,7 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 
     if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
+        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (id = url_rel_course.c_id)";
     }
 
     if (isset ($_GET['keyword'])) {
@@ -278,7 +278,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $content .= $table->return_table();
 }
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

@@ -30,13 +30,13 @@ class LegacyController// extends Controller
         if ($app['allowed'] == false) {
             return $app->abort(403);
         }
+
         //Rendering page
         $response = $app['twig']->render($app['default_layout']);
 
         //Classic style
         if ($app['classic_layout'] == true) {
             //assign('content', already done in display::display_header() and display_footer()
-
         } else {
            return $app->redirect('index');
         }

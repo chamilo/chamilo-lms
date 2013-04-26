@@ -129,7 +129,7 @@ class BlockStudent extends Block {
 		 			foreach ($courses_by_user as $course) {
 		 				$course_code = $course['code'];
 		 				$course_title = $course['title'];
-		 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $course_code));
+		 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $course['real_id']));
 		 				$students_table .= '<tr '.$style.'>
 											<td align="right">'.$course_title.'</td>
 											<td align="right">'.$time.'</td>
@@ -157,7 +157,8 @@ class BlockStudent extends Block {
  		return $content;
  	}
 
-  	public function get_students_content_html_for_drh() {
+  	public function get_students_content_html_for_drh()
+    {
   		$attendance = new Attendance();
   		$students = $this->students;
  		$content = '<div style="margin:5px;">';

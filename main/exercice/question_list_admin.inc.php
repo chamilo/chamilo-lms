@@ -3,17 +3,12 @@
 /**
 *	Code library for HotPotatoes integration.
 *	@package chamilo.exercise
-* 	@author
-*/
+*	@author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)
 
-/**
 *	QUESTION LIST ADMINISTRATION
 *
 *	This script allows to manage the question list
 *	It is included from the script admin.php
-*
-*	@author Olivier Brouckaert
-* Modified by Hubert Borderiou 21-10-2011 (Question by category)
 */
 
 // deletes a question from the exercise (not from the data base)
@@ -156,6 +151,7 @@ if (!$inATest) {
     echo '<div id="question_list">';
 	if ($nbrQuestions) {
         //Always getting list from DB
+        $objExercise->setCategoriesGrouping(false);
         $questionList = $objExercise->selectQuestionList(true);
 
         // Style for columns
@@ -166,7 +162,7 @@ if (!$inATest) {
         $styleLevel = "width:6%; float:left; padding-top:8px; text-align:center;";
         $styleScore = "width:4%; float:left; padding-top:8px; text-align:center;";
 
-        $category_list = Testcategory::getCategoryListName();
+        $category_list = Testcategory::getListOfCategoriesNameForTest($objExercise->id, false);
 
         if (is_array($questionList)) {
 			foreach ($questionList as $id) {
@@ -202,7 +198,7 @@ if (!$inATest) {
                     $question_media  = Display::label($objQuestionMedia->question, 'info');
                 }
 
-				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media, array('style' => $styleType));
+				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM), array('style' => $styleType));
 
 				// Question category
                 $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
@@ -210,7 +206,7 @@ if (!$inATest) {
 				if (empty($category_labels)) {
 					$category_labels = "-";
 				}
-				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.'</a>', array('style'=>$styleCat));
+				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.$question_media.'</a>', array('style'=>$styleCat));
 
 				// Question level
 				$txtQuestionLevel = $objQuestionTmp->level;
@@ -239,7 +235,7 @@ if (!$inATest) {
                         echo '<br />';
                         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
-                        showQuestion($id, false, null, null, false, true, false, true, $objExercise->feedback_type, true);
+                        showQuestion($objQuestionTmp, false, null, null, false, true, false, true, $objExercise->feedback_type, true);
                         echo '</p>';
                     echo '</div>';
                 echo '</div>';

@@ -35,13 +35,26 @@ class Display
     {
         global $app;
         $app['classic_layout'] = true;
+        $app['title'] = $tool_name;
 
         if ($app['allowed'] == true) {
-           ob_start(array($app['template'], 'manage_display'));
+            ob_start(array($app['template'], 'manage_display'));
         } else {
             $app->run();
             exit;
         }
+    }
+
+    /**
+     * Display the page footer
+     */
+    public static function display_footer()
+    {
+        global $app;
+        $out = ob_get_contents();
+        ob_end_clean();
+        $app['template']->assign('content', $out);
+        $app->run();
     }
 
     /**
@@ -78,24 +91,8 @@ class Display
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
         $app['template.show_learnpath'] = $show_learnpath;
-        self::$global_template          = new Template($tool_name);
-    }
-
-    /**
-     * Display the page footer
-     */
-    public static function display_footer()
-    {
-        global $app;
-        $out = ob_get_contents();
-        ob_end_clean();
-        $app['template']->assign('content', $out);
-        $app->run();
-    }
-
-    public static function page()
-    {
-        return new Page();
+        $app['title'] = $tool_name;
+        self::$global_template = $app['template'];
     }
 
     /**
@@ -1197,8 +1194,8 @@ class Display
 
         $course_info['id_session'] = intval($course_info['id_session']);
         // Get the user's last access dates to all tools of this course
-        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id)
-                                 WHERE  access_cours_code = '".$course_code."' AND
+        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (c_id, access_user_id)
+                                 WHERE  c_id = ".$course_id." AND
                                         access_user_id = '$user_id' AND
                                         access_session_id ='".$course_info['id_session']."'";
         $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
@@ -1720,4 +1717,62 @@ class Display
             </div> </div>';
         return $html;
     }
-} //end class Display
+
+    static function progress_pagination_bar($list, $current, $conditions = array(), $link = null) {
+        $counter = 1;
+        $pagination_size = '';
+        $total = count($list);
+        if ($total > 25) {
+            $pagination_size = 'pagination-small';
+        }
+        if ($total > 50) {
+            $pagination_size = 'pagination-mini';
+        }
+        $html = '<div class="pagination '.$pagination_size.' pagination-centered"><ul>';
+
+        foreach ($list as $item_id) {
+            $class = "active";
+
+            if ($counter < $current) {
+                $class = "before";
+            }
+
+            foreach ($conditions as $condition) {
+                $array = $condition['items'];
+                $class_to_applied = $condition['class'];
+                $type = isset($condition['type']) ? $condition['type'] : 'positive';
+                switch ($type) {
+                    case 'positive':
+                        if (in_array($item_id, $array)) {
+                            $class .= " $class_to_applied";
+                        }
+                        break;
+                    case 'negative':
+                        if (!in_array($item_id, $array)) {
+                            $class .= " $class_to_applied";
+                        }
+                        break;
+                }
+            }
+
+            if ($current == $counter) {
+                $class = "before current";
+            }
+
+            if ($counter > $current) {
+                $class = "after";
+            }
+
+            if (empty($link)) {
+                $link_to_show = "#";
+            } else {
+                $link_counter = $counter -1;
+                $link_to_show = $link.$link_counter;
+            }
+            $html .= '<li class = "'.$class.'"><a href="'.$link_to_show.'">'.$counter.'</a></li>';
+            $counter++;
+        }
+        $html .= '</ul></div>';
+        return $html;
+    }
+}

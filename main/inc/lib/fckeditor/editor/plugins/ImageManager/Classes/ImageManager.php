@@ -138,7 +138,7 @@ class ImageManager
                 ) {
                     continue;
                 }
-                global $_course;
+                $_course = api_get_course_info();
                 if (!empty($_course)) {
                     $base_dir = substr($fullpath, 0, strpos($fullpath, '/document/') + 9); //
                     $new_dir = substr($fullpath, strlen($base_dir), -1); //
@@ -251,7 +251,7 @@ class ImageManager
                 }
 
                 if ($is_dir && !$this->isThumbDir($entry)) {
-                    global $_course;
+                    $_course = api_get_course_info();
                     if (isset($_course) && !empty($_course) && isset($_course['code'])) {
                         //checking visibility
                         $base_dir = substr($dir_entry, 0, strpos($dir_entry, '/document/') + 9);
@@ -274,7 +274,7 @@ class ImageManager
                     if (is_file($fullpath.$entry) && !$this->isThumb($entry) && !$this->isTmpFile($entry)) {
                         $img = $this->getImageInfo($fullpath.$entry);
                         if (!(!is_array($img) && $this->config['validate_images'])) {
-                            global $_course;
+                            $_course = api_get_course_info();
 
                             if (!empty($_course) && isset($_course['code'])) {
                                 //checking visibility
@@ -528,7 +528,7 @@ class ImageManager
      */
     function _processFiles($relative, $file)
     {
-        global $_course;
+        $_course = api_get_course_info();
         if ($file['error'] != 0) {
             return false;
         }
@@ -788,7 +788,7 @@ class ImageManager
 
         if (Files::delFile($fullpath)) {
             //deleting from the DB
-            global $_course;
+            $_course = api_get_course_info();
             if (isset($_course) && !empty($_course) && isset($_course['code'])) {
                 $document_path = substr(
                     $fullpath,
@@ -817,7 +817,7 @@ class ImageManager
         //if($this->countFiles($fullpath) <= 0) {
         // now we use the default delete_document function
         //return Files::delFolder($fullpath,true); //delete recursively.
-        global $_course;
+        $_course = api_get_course_info();
         if (isset($_course) && !empty($_course) && isset($_course['code'])) {
             $path_dir = substr($fullpath, strpos($fullpath, '/document/') + 9, -1); //
             $base_dir = substr($fullpath, 0, strlen($fullpath) - strlen($path_dir)); //
@@ -859,8 +859,7 @@ class ImageManager
                 //adding to the DB
                 // now the FileManager::create_unexisting_directory will create the folder
                 //$result = Files::createFolder($fullpath);
-
-                global $_course;
+                $_course = api_get_course_info();
                 if (isset($_course) && !empty($_course) && isset($_course['code'])) {
                     //@todo make this str to functions
                     $base_dir = substr($path, 0, strpos($path, '/document/') + 9); //

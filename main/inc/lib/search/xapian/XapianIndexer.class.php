@@ -72,7 +72,7 @@ abstract class XapianIndexer
         }
 
         if ($path == null) {
-            $path = api_get_path(SYS_PATH_DATA).'searchdb/';
+            $path = api_get_path(SYS_DATA_PATH).'searchdb/';
         }
         try {
             $this->db = new XapianWritableDatabase($path, $dbMode);
@@ -137,7 +137,7 @@ abstract class XapianIndexer
                         }
                     }
                     $doc->set_data($chunk->xapian_data, 1);
-                    $did = $this->db->FileManager::add_document($doc);
+//                    $did = $this->db->FileManager::add_document($doc);
 
                     //write to disk
                     $this->db->flush();

@@ -4,8 +4,6 @@
  *
  *  SCRIPT PURPOSE
  *
- * This script initializes and manages Chamilo session information. It
- * keeps available session information up to date.
  *
  * You can request a course id. It will check if the course Id requested is the
  * same as the current one. If it isn't it will update session information from
@@ -27,39 +25,35 @@
 
 use \ChamiloSession as Session;
 
-//Conditional login
+// Conditional login
+/*
+ * Disabling for now
 if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true) {
     $uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
     ConditionalLogin::check_conditions($uData);
-
     $_user['user_id'] = $_SESSION['conditional_login']['uid'];
     $_user['status']  = $uData['status'];
     Session::write('_user', $_user);
     Session::erase('conditional_login');
     $uidReset=true;
-    event_login();
-}
+}*/
 
 // parameters passed via GET
-$logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : null;
 
 //this fixes some problems with generic functionalities like
 //My Agenda & What's New icons linking to courses
-// $cidReq can be set in the index.php file of a course-area
-$cidReq = isset($cidReq) ? Database::escape_string($cidReq) : '';
+// $cidReq can be set in the session
+$cidReq = isset($_SESSION['_cid']) ? Database::escape_string($_SESSION['_cid']) : null;
 // $cidReq can be set in URL-parameter
 $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $cidReq;
 $cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
 
 // $cidReset can be set in URL-parameter
-$cidReset = (isset($_GET['cidReq']) && ((isset($_SESSION['_cid']) && $_GET['cidReq']!=$_SESSION['_cid']) || (!isset($_SESSION['_cid'])))) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
+$cidReset = (isset($_GET['cidReq']) && ((isset($_SESSION['_cid']) && $_GET['cidReq'] != $_SESSION['_cid']) || (!isset($_SESSION['_cid'])))) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
 
-// $cDir is a special url param sent by courses/.htaccess
-$cDir = (!empty($_GET['cDir']) ? $_GET['cDir'] : null);
-
-$gidReset = isset($gidReset) ? $gidReset : '';
 // $gidReset can be set in URL-parameter
+$gidReset = isset($gidReset) ? $gidReset : '';
 
 // parameters passed via POST
 $login = isset($_POST["login"]) ? $_POST["login"] : '';
@@ -68,7 +62,10 @@ $logging_in = false;
 
 /*  MAIN CODE  */
 
-if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
+$errorMessage = null;
+$loginFailed = true;
+
+if (!empty($_SESSION['_user']['user_id']) && !$login) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
     //Check if we have to reset user data
@@ -127,7 +124,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     }
 
     $cas_login=false;
-    if ($cas_activated AND !isset($_user['user_id']) and !isset($_POST['login'])  && !$logout) {
+    if ($cas_activated AND !isset($_user['user_id']) and !isset($_POST['login'])) {
         require_once api_get_path(SYS_PATH).'main/auth/cas/authcas.php';
         $cas_login = cas_is_authenticated();
     }
@@ -148,6 +145,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 WHERE username = '".Database::escape_string($login)."'";
 
         $result = Database::query($sql);
+
+        // @todo use a UserProvider
 
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result);
@@ -192,65 +191,55 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             ConditionalLogin::check_conditions($uData);
                                             Session::write('_user', $uData);
-                                            event_login();
                                             $logging_in = true;
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
-                                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                            exit;
+                                            $errorMessage = 'access_url_inactive';
                                         }
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');
-                                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                        exit;
+                                        $errorMessage = 'access_url_inactive';
                                     }
                                 } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
                                     if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
                                         ConditionalLogin::check_conditions($uData);
                                         Session::write('_user', $uData);
-                                        event_login();
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             Session::write('_user', $uData);
-                                            event_login();
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
-                                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                            exit;
+                                            $errorMessage = 'access_url_inactive';
                                         }
                                     }
                                 }
                             } else {
                                 ConditionalLogin::check_conditions($uData);
                                 Session::write('_user', $uData);
-                                event_login();
                                 $logging_in = true;
                             }
                         } else {
                             $loginFailed = true;
                             Session::erase('_uid');
-                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
-                            exit;
+                            $errorMessage = 'account_expired';
                         }
                     } else {
                         $loginFailed = true;
                         Session::erase('_uid');
-                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_inactive');
-                        exit;
+                        $errorMessage = 'account_inactive';
                     }
                 } else {
                     // login failed: username or password incorrect
                     $loginFailed = true;
                     Session::erase('_uid');
-                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
-                    exit;
+                    $errorMessage = 'user_password_incorrect';
                 }
 
-                if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
+                if (isset($uData['creator_id']) && isset($_user) && $_user['user_id'] != $uData['creator_id']) {
                     //first login for a not self registred
                     //e.g. registered by a teacher
                     //do nothing (code may be added later)
@@ -303,7 +292,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
             } //end if is_array($extAuthSource)
             if ($loginFailed) { //If we are here username given is wrong
-                header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
+                //header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
+                $errorMessage = 'user_password_incorrect';
             }
         } //end else login failed
     } elseif (api_get_setting('sso_authentication') === 'true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
@@ -320,12 +310,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             $osso = new sso();
         }
         if (isset($_SESSION['_user']['user_id'])) {
-            if ($logout) {
-                // Make custom redirect after logout
-                Online::logout($_SESSION['_user']['user_id'], false);
-                $osso->logout(); //redirects and exits
-            }
-        } elseif(!$logout) {
+
+        } else {
             // Handle cookie comming from Master Server
             if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed']) && isset($_GET['sso_cookie'])) {
                 // Redirect to master server
@@ -363,8 +349,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     //Request comes from unknown source
                     $loginFailed = true;
                     Session::erase('_uid');
-                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=unrecognize_sso_origin');
-                    exit;
+                    $errorMessage = 'unrecognize_sso_origin';
                 }
             }
         }//end logout ... else ... login
@@ -403,20 +388,16 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
                                     $_user['user_id'] = $uData['user_id'];
                                     $_user['status']  = $uData['status'];
-
                                     Session::write('_user',$_user);
-                                    event_login();
                                 } else {
                                     $loginFailed = true;
                                     Session::erase('_uid');
-                                    header('Location: index.php?loginFailed=1&error=account_expired');
-                                    exit;
+                                    $errorMessage = 'account_expired';
                                 }
                             } else {
                                 $loginFailed = true;
                                 Session::erase('_uid');
-                                header('Location: index.php?loginFailed=1&error=account_inactive');
-                                exit;
+                                $errorMessage = 'account_inactive';
                             }
                             if (isset($uData['creator_id']) && $_user['user_id'] != $uData['creator_id']) {
                                 //first login for a not self registred
@@ -438,12 +419,18 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         }
     } elseif (KeyAuth::is_enabled()) {
         $success = KeyAuth::instance()->login();
-        if($success) {
+        if ($success) {
             $use_anonymous = false;
         }
     }
     $uidReset = true;
 } // end
+
+
+if ($loginFailed == true && !empty($errorMessage)) {
+    header('Location: '.api_get_path(WEB_PUBLIC_PATH).'index?error='.$errorMessage);
+    exit;
+}
 
 //Now check for anonymous user mode
 if (isset($use_anonymous) && $use_anonymous) {
@@ -456,12 +443,6 @@ if (isset($use_anonymous) && $use_anonymous) {
     api_clear_anonymous();
 }
 
-// if there is a cDir parameter in the URL (coming from courses/.htaccess redirection)
-if (!empty($cDir)) {
-    $c = CourseManager::get_course_id_from_path($cDir);
-    if ($c) { $cidReq = $c; }
-}
-
 // if the requested course is different from the course in session
 
 if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))) {
@@ -471,16 +452,21 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
 
 //Setting app user variable
 $_user = Session::read('_user');
-
-$app['current_user'] = $_user;
+if ($_user) {
+    $userInfo = api_get_user_info($_user['user_id']);
+    $app['current_user'] = $userInfo;
+} else {
+    $app['current_user'] = null;
+}
 
 /* USER INIT */
-if (isset($uidReset) && $uidReset) {    // session data refresh requested
+
+if (isset($uidReset) && $uidReset) {   // session data refresh requested
     unset($_SESSION['_user']['uidReset']);
     $is_platformAdmin = false;
     $is_allowedCreateCourse = false;
 
-    if (isset($_user['user_id']) && $_user['user_id'] && ! api_is_anonymous()) {
+    if (isset($_user['user_id']) && $_user['user_id'] && !api_is_anonymous()) {
     // a uid is given (log in succeeded)
         $user_table     = Database::get_main_table(TABLE_MAIN_USER);
         $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -503,7 +489,6 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             $uData = Database::fetch_array($result);
             $_user = _api_format_user($uData, false);
             $_user['lastLogin']        = api_strtotime($uData['login_date'], 'UTC');
-
             $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse     = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
             ConditionalLogin::check_conditions($uData);
@@ -530,195 +515,68 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
     $is_allowedCreateCourse   = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
 
-/*  COURSE INIT */
+if (!isset($_SESSION['login_as'])) {
+    $save_course_access = true;
 
-if (isset($cidReset) && $cidReset) {
-    // Course session data refresh requested or empty data
-    if ($cidReq) {
-        $_course = api_get_course_info($cidReq);
+    //The value  $_dont_save_user_course_access should be added before the call of global.inc.php see the main/inc/chat.ajax.php file
+    //Disables the updates in the TRACK_E_COURSE_ACCESS table
+    if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
+        $save_course_access = false;
+    }
 
-        if (!empty($_course)) {
+    if ($save_course_access) {
+        $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-            //@TODO real_cid should be cid, for working with numeric course id
-            $_real_cid                      = $_course['real_id'];
-            $_cid                           = $_course['code'];
-
-            Session::write('_real_cid', $_real_cid);
-            Session::write('_cid',      $_cid);
-            Session::write('_course',   $_course);
-
-            // if a session id has been given in url, we store the session
-
-            // Database Table Definitions
-            $tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);
-            $tbl_session_course          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $tbl_session_course_user     = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-            if (!empty($_GET['id_session'])) {
-                $_SESSION['id_session'] = intval($_GET['id_session']);
-                $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']) . '"';
-                $rs = Database::query($sql);
-                list($_SESSION['session_name']) = Database::fetch_array($rs);
-            } else {
-                Session::erase('session_name');
-                Session::erase('id_session');
-            }
-
-            if (isset($_REQUEST['gidReq'])) {
-                $_SESSION['_gid'] = intval($_REQUEST['gidReq']);
-            } else {
-                Session::erase('_gid');
-            }
-
-            if (!isset($_SESSION['login_as'])) {
-                //Course login
-                if (isset($_user['user_id'])) {
-                    event_course_login($_course['code'], $_user['user_id'], api_get_session_id());
-                }
-            }
+        /*
+        * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
+        * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition:
+        * login_course_date > now() - INTERVAL $session_lifetime SECOND
+        *
+        */
+        /*
+        if (isset($_configuration['session_lifetime'])) {
+            $session_lifetime    = $_configuration['session_lifetime'];
         } else {
-            //exit("WARNING UNDEFINED CID !! ");
-            header('location:'.api_get_path(WEB_PATH));
-        }
-    } else {
-        Session::erase('_cid');
-        Session::erase('_real_cid');
-        Session::erase('_course');
+            $session_lifetime    = 3600; // 1 hour
+        }*/
 
-        if (!empty($_SESSION)) {
-                foreach($_SESSION as $key => $session_item) {
-                if (strpos($key,'lp_autolunch_') === false) {
-                    continue;
-                } else {
-                    if (isset($_SESSION[$key])) {
-                        Session::erase($key);
-                    }
-                }
-            }
-        }
-        //Deleting session info
-        if (api_get_session_id()) {
-            Session::erase('id_session');
-            Session::erase('session_name');
-        }
-        if (api_get_group_id()) {
-            Session::erase('_gid');
-        }
-    }
-} else {
+        $session_lifetime    = 3600; // 1 hour
 
-    // Continue with the previous values
+        $course_code = api_get_course_id();
+        $courseId = api_get_course_int_id();
+        $time = api_get_datetime();
 
-    if (empty($_SESSION['_course']) && !empty($_SESSION['_cid'])) {
-        //Just in case $_course is empty we try to load if the c_id still exists
-        $_course = api_get_course_info($_SESSION['_cid']);
-        if (!empty($_course)) {
-            $_real_cid                      = $_course['real_id'];
-            $_cid                           = $_course['code'];
+        if (isset($_user['user_id']) && !empty($_user['user_id'])) {
 
-            Session::write('_real_cid', $_real_cid);
-            Session::write('_cid',      $_cid);
-            Session::write('_course',   $_course);
-        }
-    }
-
-    if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
-        $_cid         = -1;        //set default values that will be caracteristic of being unset
-        $_course      = -1;
-    } else {
-        $_cid      = $_SESSION['_cid'   ];
-        $_course   = $_SESSION['_course'];
-
-           // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
-           // Moreover, if we want to track a course with another session it can be usefull
-        if (!empty($_GET['id_session'])) {
-            $tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
-            $rs = Database::query($sql);
-            list($_SESSION['session_name']) = Database::fetch_array($rs);
-            $_SESSION['id_session']         = intval($_GET['id_session']);
-        }
-
-        if (isset($_REQUEST['gidReq'])) {
-            $_SESSION['_gid'] = intval($_REQUEST['gidReq']);
-
-            $group_table = Database::get_course_table(TABLE_GROUP);
-            $sql = "SELECT id FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
+            //We select the last record for the current course in the course tracking table
+            //But only if the login date is < than now + max_life_time
+            $sql = "SELECT course_access_id FROM $course_tracking_table
+                    WHERE   user_id     = ".intval($_user ['user_id'])." AND
+                            c_id = '$courseId' AND
+                            session_id  = ".api_get_session_id()." AND
+                            login_course_date > now() - INTERVAL $session_lifetime SECOND
+                    ORDER BY login_course_date DESC LIMIT 0,1";
             $result = Database::query($sql);
+
             if (Database::num_rows($result) > 0) {
-                // This group has recorded status related to this course
-                $group_info = Database::fetch_array($result);
-                $_gid = $group_info['id'];
-                Session::write('_gid', $_gid);
-            }
-        }
-
-        if (!isset($_SESSION['login_as'])) {
-            $save_course_access = true;
-
-            //The value  $_dont_save_user_course_access should be added before the call of global.inc.php see the main/inc/chat.ajax.php file
-            //Disables the updates in the TRACK_E_COURSE_ACCESS table
-            if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
-                $save_course_access = false;
-            }
-
-            if ($save_course_access) {
-                $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-
-                /*
-                * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
-                * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition:
-                * login_course_date > now() - INTERVAL $session_lifetime SECOND
-                *
-                */
-                /*
-                if (isset($_configuration['session_lifetime'])) {
-                    $session_lifetime    = $_configuration['session_lifetime'];
-                } else {
-                    $session_lifetime    = 3600; // 1 hour
-                }*/
-
-                $session_lifetime    = 3600; // 1 hour
-
-                $course_code = $_course['sysCode'];
-                $courseId = $_course['id'];
-
-                $time = api_get_datetime();
-
-                if (isset($_user['user_id']) && !empty($_user['user_id'])) {
-
-                    //We select the last record for the current course in the course tracking table
-                    //But only if the login date is < than now + max_life_time
-                    $sql = "SELECT course_access_id FROM $course_tracking_table
-                            WHERE   user_id     = ".intval($_user ['user_id'])." AND
-                                    course_code = '$course_code' AND
-                                    session_id  = ".api_get_session_id()." AND
-                                    login_course_date > now() - INTERVAL $session_lifetime SECOND
-                        ORDER BY login_course_date DESC LIMIT 0,1";
-                    $result = Database::query($sql);
-
-                    if (Database::num_rows($result) > 0) {
-                        $i_course_access_id = Database::result($result,0,0);
-                        //We update the course tracking table
-                        $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
-                                WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
-                        //error_log($sql);
-                        Database::query($sql);
-                    } else {
-                        $sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
-                            "VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
-                        //error_log($sql);
-                        Database::query($sql);
-                    }
-                }
+                $i_course_access_id = Database::result($result,0,0);
+                //We update the course tracking table
+                $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
+                        WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
+                //error_log($sql);
+                Database::query($sql);
+            } else {
+                $sql="INSERT INTO $course_tracking_table (c_id, user_id, login_course_date, logout_course_date, counter, session_id)" .
+                    "VALUES('".$courseId."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
+                Database::query($sql);
             }
         }
     }
 }
 
+
 /*  COURSE / USER REL. INIT */
 
-$session_id = api_get_session_id();
 $user_id    = isset($_user['user_id']) ? $_user['user_id'] : null;
 
 //Course permissions
@@ -729,233 +587,7 @@ $is_courseCoach     = false; //course coach
 
 //Course - User permissions
 $is_sessionAdmin    = false;
-
-if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
-
-    if (isset($_cid) && $_cid) {
-        $my_user_id = isset($user_id) ? intval($user_id) : 0;
-        $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
-
-        $user_pass_open_course = false;
-        if (api_check_user_access_to_legal($_course['visibility']) && Session::read($variable)) {
-            $user_pass_open_course = true;
-        }
-
-        //Checking if the user filled the course legal agreement
-        if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {
-            $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id) || $user_pass_open_course;
-            if (!$user_is_subscribed) {
-                $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$_course['code'].'&session_id='.$session_id;
-                header('Location: '.$url);
-                exit;
-            }
-        }
-    }
-
-    if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
-
-        //Check if user is subscribed in a course
-        $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = "SELECT * FROM $course_user_table
-                   WHERE user_id  = '".$user_id."' AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                   AND course_code = '$cidReq'";
-        $result = Database::query($sql);
-
-        $cuData = null;
-        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
-            $cuData = Database::fetch_array($result, 'ASSOC');
-            $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
-            $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
-            $is_courseMember     = true;
-
-            $_courseUser['role'] = $cuData['role'];
-            Session::write('_courseUser',$_courseUser);
-        }
-
-        //We are in a session course? Check session permissions
-        if (!empty($session_id)) {
-            //I'm not the teacher of the course
-            if ($is_courseAdmin == false) {
-                // this user has no status related to this course
-                // The user is subscribed in a session? The user is a Session coach a Session admin ?
-
-                $tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);
-                $tbl_session_course      = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-                $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-                //Session coach, session admin, course coach admin
-                $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
-                        FROM $tbl_session session, $tbl_session_course_user session_rcru
-                        WHERE  session_rcru.id_session  = session.id AND
-                               session_rcru.course_code = '$_cid' AND
-                               session_rcru.id_user     = '$user_id' AND
-                               session_rcru.id_session  = $session_id AND
-                               session_rcru.status      = 2
-                        ";
-
-                $result = Database::query($sql);
-                $row     = Database::store_result($result);
-
-                //I'm a session admin?
-                if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
-                    $_courseUser['role'] = 'Professor';
-                    $is_courseMember     = false;
-                    $is_courseTutor      = false;
-                    $is_courseAdmin      = false;
-                    $is_courseCoach      = false;
-                    $is_sessionAdmin     = true;
-                } else {
-                    //Im a coach or a student?
-                    $sql = "SELECT cu.id_user, cu.status FROM $tbl_session_course_user cu
-                            WHERE   course_code = '$_cid' AND
-                                    cu.id_user     = '".$user_id."' AND
-                                    cu.id_session  = '".$session_id."'
-                            LIMIT 1";
-                    $result = Database::query($sql);
-
-                    if (Database::num_rows($result)) {
-                        $row = Database::fetch_array($result, 'ASSOC');
-
-                        $session_course_status = $row['status'];
-
-                        switch ($session_course_status) {
-                            case '2': // coach - teacher
-                                $_courseUser['role'] = 'Professor';
-                                $is_courseMember     = true;
-                                $is_courseTutor      = true;
-                                $is_courseCoach      = true;
-                                $is_sessionAdmin     = false;
-
-                                if (api_get_setting('extend_rights_for_coach') == 'true') {
-                                    $is_courseAdmin = true;
-                                } else {
-                                    $is_courseAdmin = false;
-                                }
-                                Session::write('_courseUser', $_courseUser);
-                                break;
-                            case '0': //Student
-                                $_courseUser['role'] = '';
-                                $is_courseMember     = true;
-                                $is_courseTutor      = false;
-                                $is_courseAdmin      = false;
-                                $is_courseCoach      = false;
-                                $is_sessionAdmin     = false;
-
-                                Session::write('_courseUser', $_courseUser);
-                                break;
-                            default:
-                                //unregister user
-                                $_courseUser['role'] = '';
-                                $is_courseMember     = false;
-                                $is_courseTutor      = false;
-                                $is_courseAdmin      = false;
-                                $is_sessionAdmin     = false;
-                                $is_courseCoach      = false;
-                                Session::erase('_courseUser');
-                                break;
-                        }
-                    } else {
-                        //unregister user
-                        $is_courseMember     = false;
-                        $is_courseTutor      = false;
-                        $is_courseAdmin      = false;
-                        $is_sessionAdmin     = false;
-                        $is_courseCoach      = false;
-                        Session::erase('_courseUser');
-                    }
-                }
-            }
-
-            //If I'm the admin platform i'm a teacher of the course
-            if ($is_platformAdmin) {
-                $is_courseAdmin     = true;
-            }
-        }
-    } else { // keys missing => not anymore in the course - user relation
-        // course
-        $is_courseMember    = false;
-        $is_courseAdmin     = false;
-        $is_courseTutor     = false;
-        $is_courseCoach     = false;
-        $is_sessionAdmin    = false;
-        Session::erase('_courseUser');
-    }
-
-    //Checking the course access
-    $is_allowed_in_course = false;
-
-    if (isset($_course)) {
-        switch ($_course['visibility']) {
-            case COURSE_VISIBILITY_OPEN_WORLD: //3
-                $is_allowed_in_course = true;
-                break;
-            case COURSE_VISIBILITY_OPEN_PLATFORM : //2
-                if (isset($user_id) && !api_is_anonymous($user_id)) {
-                    $is_allowed_in_course = true;
-                }
-                break;
-            case COURSE_VISIBILITY_REGISTERED: //1
-                if ($is_platformAdmin || $is_courseMember) {
-                    $is_allowed_in_course = true;
-                }
-                break;
-            case COURSE_VISIBILITY_CLOSED: //0
-                if ($is_platformAdmin || $is_courseAdmin) {
-                    $is_allowed_in_course = true;
-                }
-                break;
-        }
-    }
-
-    if (!$is_platformAdmin) {
-        if (!$is_courseMember && isset($_course['registration_code']) && !empty($_course['registration_code'])) {
-            $is_courseMember    = false;
-            $is_courseAdmin     = false;
-            $is_courseTutor     = false;
-            $is_courseCoach     = false;
-            $is_sessionAdmin    = false;
-            $is_allowed_in_course = false;
-        }
-    }
-    // check the session visibility
-    if ($is_allowed_in_course == true) {
-
-        //if I'm in a session
-        if ($session_id != 0) {
-            if (!$is_platformAdmin) {
-                // admin is not affected to the invisible session mode
-                $session_visibility = api_get_session_visibility($session_id);
-
-                switch ($session_visibility) {
-                    case SESSION_INVISIBLE:
-                        $is_allowed_in_course = false;
-                        break;
-                }
-                //checking date
-            }
-        }
-    }
-
-    // save the states
-    Session::write('is_courseAdmin', $is_courseAdmin);
-    Session::write('is_courseMember', $is_courseMember);
-    Session::write('is_courseTutor', $is_courseTutor);
-    Session::write('is_courseCoach', $is_courseCoach);
-    Session::write('is_allowed_in_course', $is_allowed_in_course);
-    Session::write('is_sessionAdmin', $is_sessionAdmin);
-} else { // continue with the previous values
-
-    if (isset($_SESSION['_courseUser'])) {
-        $_courseUser       = $_SESSION ['_courseUser'];
-    }
-
-    $is_courseAdmin       = isset($_SESSION ['is_courseAdmin']) ? $_SESSION ['is_courseAdmin'] : false;
-    $is_courseTutor       = isset($_SESSION ['is_courseTutor']) ? $_SESSION ['is_courseTutor'] : false;
-    $is_courseCoach       = isset($_SESSION ['is_courseCoach']) ? $_SESSION ['is_courseCoach'] : false;
-    $is_courseMember      = isset($_SESSION ['is_courseMember']) ? $_SESSION ['is_courseMember'] : false;
-    $is_allowed_in_course = isset($_SESSION ['is_allowed_in_course']) ? $_SESSION ['is_allowed_in_course'] : false;
-
-}
+$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 //set variable according to student_view_enabled choices
 if (api_get_setting('student_view_enabled') == "true") {
@@ -982,11 +614,4 @@ if (api_get_setting('student_view_enabled') == "true") {
         $_SESSION['studentview'] = 'teacherview';
     }
 }
-
-if (isset($_cid)) {
-    $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-    $time = api_get_utc_datetime();
-    $sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
-    Database::query($sql);
-}
-Redirect::session_request_uri($logging_in, $user_id);
+//Redirect::session_request_uri($logging_in, $user_id);

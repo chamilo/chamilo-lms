@@ -7,8 +7,6 @@
 * 	@author Yannick Warnier
 */
 
-
-if(!class_exists('GradeBookResult')):
 /**
  * Gradebook results class
  * @package chamilo.gradebook
@@ -72,8 +70,8 @@ class GradeBookResult
 		$sql="SELECT q.id, q.question, q.ponderation, q.position, q.type, q.picture " .
 			" FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
 			" WHERE eq.c_di = $course_id AND
-					q.c_di = $course_id AND					
-					eq.question_id=q.id AND 
+					q.c_di = $course_id AND
+					eq.question_id=q.id AND
 					eq.exercice_id='$e_id' " .
 			" ORDER BY q.position";
 		$result = Database::query($sql);
@@ -93,10 +91,10 @@ class GradeBookResult
 	function _getGradeBookReporting($document_path,$user_id=null) {
 		$return = array();
     	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
-    	$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);		
+    	$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 		$TBL_TRACK_EXERCISES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-		
+
     	$cid = api_get_course_id();
     	$course_id = api_get_course_int_id();
 		if (empty($user_id)) {
@@ -106,29 +104,29 @@ class GradeBookResult
 						te.exe_weighting, te.exe_date,te.exe_id, user.email, user.user_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te, $TBL_USER user
 				  WHERE ce.c_id = $course_id AND
-				  		te.exe_exo_id = ce.id AND 
-				  		user_id=te.exe_user_id AND te.exe_cours_id='$cid'
-				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+				  		te.exe_exo_id = ce.id AND
+				  		user_id=te.exe_user_id AND te.c_id = '$course_id'
+				  ORDER BY te.c_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
 						tth.exe_result , tth.exe_weighting, tth.exe_date, tu.email, tu.user_id
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".$cid."'
-					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
+					WHERE  tu.user_id=tth.exe_user_id AND tth.c_id = '".$course_id."'
+					ORDER BY tth.c_id ASC, tth.exe_date ASC";
 
 		} else { // get only this user's results
 			  $sql = "SELECT '',ce.title, te.exe_result , te.exe_weighting, te.exe_date,te.exe_id
 						FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te
 				  		WHERE 	ce.c_id 		= $course_id AND
-				  				te.exe_exo_id 	= ce.id AND 
-				  				te.exe_user_id 	= '".$user_id."' AND 
-				  				te.exe_cours_id = '$cid'
-				  		ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+				  				te.exe_exo_id 	= ce.id AND
+				  				te.exe_user_id 	= '".$user_id."' AND
+				  				te.c_id = '$course_id'
+				  		ORDER BY te.c_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, exe_date
 					FROM $TBL_TRACK_HOTPOTATOES
-					WHERE exe_user_id = '".$user_id."' AND exe_cours_id = '".$cid."'
-					ORDER BY exe_cours_id ASC, exe_date ASC";
+					WHERE exe_user_id = '".$user_id."' AND c_id = '".$course_id."'
+					ORDER BY c_id ASC, exe_date ASC";
 		}
 
 		$results=getManyResultsXCol($sql,8);
@@ -239,29 +237,29 @@ class GradeBookResult
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportXLS($data) {	    
+	public function exportCompleteReportXLS($data) {
 	   	$filename = 'gradebook-results-'.date('Y-m-d-h:i:s').'.xls';
-		include api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';        
+		include api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 		$workbook = new Spreadsheet_Excel_Writer();
         $workbook->setVersion(8); // BIFF8
         $workbook->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
 		$workbook->send($filename);
-        
+
 		$worksheet =& $workbook->addWorksheet('Report');
         $worksheet->setInputEncoding(api_get_system_encoding());
-          
+
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
 
 		//headers
-		foreach ($data[0] as $header_col) {		    
+		foreach ($data[0] as $header_col) {
 			$worksheet->write($line, $column, $header_col);
 			$column++;
 		}
-		$line++;    
+		$line++;
 
 		$cant_students = count($data[1]);
-		
+
 		for ($i=0;$i<$cant_students;$i++) {
 			$column = 0;
 			foreach ($data[1][$i] as $col_name) {
@@ -272,14 +270,14 @@ class GradeBookResult
 		}
         $workbook->close();
         exit;
-			
+
 	}
 	/**
 	 * Exports the complete report as a DOCX file
 	 * @return	boolean		False on error
 	 */
 	public function exportCompleteReportDOC($data) {
-        global $_course;
+        $_course = api_get_course_info();
         $filename = 'gb_results_'.$_course['code'].'_'.gmdate('YmdGis');
         $filepath = api_get_path(SYS_ARCHIVE_PATH).$filename;
         //build the results
@@ -331,4 +329,3 @@ class GradeBookResult
         return true;
     }
 }
-endif;

@@ -26,7 +26,6 @@ if (isset($_REQUEST["cancel"])) {
     }
 }
 
-//$is_courseAdmin = $_SESSION['is_courseAdmin'];
 $newName = (!empty($_REQUEST['newName'])?$_REQUEST['newName']:'');
 $hotpotatoesName = (!empty($_REQUEST['hotpotatoesName'])?$_REQUEST['hotpotatoesName']:'');
 

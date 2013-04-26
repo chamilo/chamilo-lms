@@ -14,7 +14,7 @@ namespace Symfony\Component\Form\Tests;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\PropertyAccess\PropertyPath;
+use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\FormConfigBuilder;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -204,7 +204,7 @@ class SimpleFormTest extends AbstractFormTest
 
     public function testEmptyIfEmptyCountable()
     {
-        $this->form = new Form(new FormConfigBuilder('name', __NAMESPACE__.'\SimpleFormTest_Countable', $this->dispatcher));
+        $this->form = new Form(new FormConfigBuilder('name', __NAMESPACE__ . '\SimpleFormTest_Countable', $this->dispatcher));
 
         $this->form->setData(new SimpleFormTest_Countable(0));
 
@@ -213,7 +213,7 @@ class SimpleFormTest extends AbstractFormTest
 
     public function testNotEmptyIfFilledCountable()
     {
-        $this->form = new Form(new FormConfigBuilder('name', __NAMESPACE__.'\SimpleFormTest_Countable', $this->dispatcher));
+        $this->form = new Form(new FormConfigBuilder('name', __NAMESPACE__ . '\SimpleFormTest_Countable', $this->dispatcher));
 
         $this->form->setData(new SimpleFormTest_Countable(1));
 
@@ -222,7 +222,7 @@ class SimpleFormTest extends AbstractFormTest
 
     public function testEmptyIfEmptyTraversable()
     {
-        $this->form = new Form(new FormConfigBuilder('name', __NAMESPACE__.'\SimpleFormTest_Traversable', $this->dispatcher));
+        $this->form = new Form(new FormConfigBuilder('name', __NAMESPACE__ . '\SimpleFormTest_Traversable', $this->dispatcher));
 
         $this->form->setData(new SimpleFormTest_Traversable(0));
 
@@ -231,7 +231,7 @@ class SimpleFormTest extends AbstractFormTest
 
     public function testNotEmptyIfFilledTraversable()
     {
-        $this->form = new Form(new FormConfigBuilder('name', __NAMESPACE__.'\SimpleFormTest_Traversable', $this->dispatcher));
+        $this->form = new Form(new FormConfigBuilder('name', __NAMESPACE__ . '\SimpleFormTest_Traversable', $this->dispatcher));
 
         $this->form->setData(new SimpleFormTest_Traversable(1));
 
@@ -638,6 +638,26 @@ class SimpleFormTest extends AbstractFormTest
         $form->bind('');
 
         $this->assertEquals('bar', $form->getData());
+    }
+
+    public function testBindValidatesAfterTransformation()
+    {
+        $test = $this;
+        $validator = $this->getFormValidator();
+        set_error_handler(array('Symfony\Component\Form\Test\DeprecationErrorHandler', 'handle'));
+        $form = $this->getBuilder()
+            ->addValidator($validator)
+            ->getForm();
+        restore_error_handler();
+
+        $validator->expects($this->once())
+            ->method('validate')
+            ->with($form)
+            ->will($this->returnCallback(function ($form) use ($test) {
+            $test->assertEquals('foobar', $form->getData());
+        }));
+
+        $form->bind('foobar');
     }
 
     public function testBindResetsErrors()

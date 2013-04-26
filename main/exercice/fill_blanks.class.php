@@ -11,8 +11,6 @@
  * Code
  */
 
-if(!class_exists('FillBlanks')):
-
 /**
 	CLASS FillBlanks
  *
@@ -45,9 +43,10 @@ class FillBlanks extends Question
 	 */
 	function createAnswersForm ($form) {
 		$defaults = array();
-		
+        $a_weightings = null;
+
 		if (!empty($this->id)) {
-			$objAnswer = new answer($this->id);
+			$objAnswer = new Answer($this->id);
 
 			// the question is encoded like this
 		    // [A] B [C] D [E] F::10,10,10@1
@@ -55,7 +54,8 @@ class FillBlanks extends Question
 		    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
 		    // means that is a normal fill blank question
 
-			$pre_array = explode('::', $objAnswer->selectAnswer(1));
+            $answer_id = $objAnswer->getRealAnswerIdFromList(1);
+			$pre_array = explode('::', $objAnswer->selectAnswer($answer_id));
 
 			//make sure we only take the last bit to find special marks
 			$sz = count($pre_array);
@@ -77,21 +77,21 @@ class FillBlanks extends Question
 		}
 
 		// javascript
-		echo '<script type="text/javascript">            
-			function FCKeditor_OnComplete( editorInstance ) {                
-				if (window.attachEvent) {                    
+		echo '<script>
+			function FCKeditor_OnComplete( editorInstance ) {
+				if (window.attachEvent) {
 					editorInstance.EditorDocument.attachEvent("onkeyup", updateBlanks) ;
-				} else {                
+				} else {
 					editorInstance.EditorDocument.addEventListener("keyup",updateBlanks,true);
 				}
-			}            
-            
+			}
+
             var firstTime = true;
-            
-            function updateBlanks() {                
+
+            function updateBlanks() {
                 if (firstTime) {
                     field = document.getElementById("answer");
-                    var answer = field.value; 
+                    var answer = field.value;
                 } else {
                     var oEditor = FCKeditorAPI.GetInstance(\'answer\');
                     answer =  oEditor.GetXHTML( true ) ;
@@ -99,7 +99,7 @@ class FillBlanks extends Question
 
                 var blanks = answer.match(/\[[^\]]*\]/g);
                 var fields = "<div class=\"control-group\"><label class=\"control-label\">'.get_lang('Weighting').'</label><div class=\"controls\"><table>";
-                    
+
                 if (blanks!=null) {
                     for (i=0 ; i<blanks.length ; i++){
                         if (document.getElementById("weighting["+i+"]"))
@@ -139,7 +139,7 @@ class FillBlanks extends Question
 		global $text, $class;
 		// setting the save button here and not in the question class.php
 		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-		
+
 		if (!empty($this -> id)) {
 			$form -> setDefaults($defaults);
 		} else {
@@ -190,14 +190,13 @@ class FillBlanks extends Question
         $objAnswer->createAnswer($answer,0,'',0,'');
         $objAnswer->save();
 	}
-	
+
 	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
 	    $header = parent::return_header($feedback_type, $counter, $score, $show_media);
-	    $header .= '<table class="'.$this->question_table_class .'">				
+	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>
                 <th>'.get_lang("Answer").'</th>
 			</tr>';
-        return $header;	  
+        return $header;
 	}
 }
-endif;

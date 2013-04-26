@@ -31,7 +31,7 @@ $session_id = 0;
 if (!empty($my_courses)) {
 	foreach ($my_courses as $course) {
         $course_code    = $course['course_code'];
-        $course_id      = $course['real_id'];
+        $courseId      = $course['real_id'];
 		$course_info    = api_get_course_info($course_code);
 
 		//Only show open courses
@@ -39,7 +39,7 @@ if (!empty($my_courses)) {
 			continue;
 		}
 
-		$teachers = CourseManager::get_teacher_list_from_course_code($course_code);
+		$teachers = CourseManager::get_teacher_list_from_course_code($courseId);
         $teacher_list =  array();
 
 		//$teacher_list = array($course_info['titular']);
@@ -50,7 +50,7 @@ if (!empty($my_courses)) {
 			}
 		}
 
-		$tmp_students = CourseManager :: get_student_list_from_course_code($course_code, false);
+		$tmp_students = CourseManager :: get_student_list_from_course_code($courseId, false);
 
 		//Cleaning students only REAL students
 		$students = array();
@@ -63,19 +63,12 @@ if (!empty($my_courses)) {
 		}
 
 		$t_lp 	= Database :: get_course_table(TABLE_LP_MAIN);
-		$sql_lp = "SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = $course_id AND lp.session_id = 0";
+		$sql_lp = "SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = $courseId AND lp.session_id = 0";
 		$rs_lp 	= Database::query($sql_lp);
 		$t_lpi 	= Database :: get_course_table(TABLE_LP_ITEM);
 		$t_news = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 
-
-		//No needed
-		/*$nb_assignments 		= Tracking::count_student_assignments($students, $course_code, $session_id);
-		$messages 				= Tracking::count_student_messages($students, $course_code, $session_id);
-		$links 					= Tracking::count_student_visited_links($students, $course_code, $session_id);
-		$chat_last_connection 	= Tracking::chat_last_connection($students, $course_code, $session_id);
-		$documents				= Tracking::count_student_downloaded_documents($students, $course_code, $session_id);*/
-		$total_tools_list 		= Tracking::get_tools_most_used_by_course($course_code, $session_id);
+		$total_tools_list 		= Tracking::get_tools_most_used_by_course($courseId, $session_id);
 
 		$total_tools = 0;
 		foreach($total_tools_list as $tool) {
@@ -105,9 +98,9 @@ if (!empty($my_courses)) {
 
 				if (!empty($students)) {
 					foreach ($students  as $student_id) {
-						$avg_student_progress   = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
-						$myavg_temp 			= Tracking::get_avg_student_score($student_id, $course_code, array($lp_id), $session_id);
-						$avg_progress_in_course = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
+						$avg_student_progress   = Tracking::get_avg_student_progress($student_id, $courseId, array($lp_id), $session_id);
+						$myavg_temp 			= Tracking::get_avg_student_score($student_id, $courseId, array($lp_id), $session_id);
+						$avg_progress_in_course = Tracking::get_avg_student_progress($student_id, $courseId, array($lp_id), $session_id);
 
 						if (intval($avg_progress_in_course) == 100) {
 							$count_students_complete_all_activities++;
@@ -117,7 +110,7 @@ if (!empty($my_courses)) {
 						}
 						$total_average_progress +=$avg_progress_in_course;
 
-						$time_spent  = Tracking::get_time_spent_on_the_course($student_id, $course_code, $session_id);
+						$time_spent  = Tracking::get_time_spent_on_the_course($student_id, $courseId, $session_id);
 						$total_time_spent += $time_spent;
 						if (!empty($time_spent)) {
 							$count_students_accessing++;
@@ -147,7 +140,7 @@ if (!empty($my_courses)) {
 
 				//registering the number of each category of
 				//items in learning path
-				$sql_lpi = "SELECT lpi.item_type FROM $t_lpi lpi WHERE c_id = $course_id AND lpi.lp_id = $lp_id ORDER BY item_type";
+				$sql_lpi = "SELECT lpi.item_type FROM $t_lpi lpi WHERE c_id = $courseId AND lpi.lp_id = $lp_id ORDER BY item_type";
 				$res_lpi = Database::query($sql_lpi);
 				while ($row_lpi = Database::fetch_array($res_lpi)) {
 					switch($row_lpi['item_type']) {
@@ -171,7 +164,7 @@ if (!empty($my_courses)) {
 				}
 				// Count announcements
 				$array[$i]['total_announcements'] = 0;
-				$sql_news = "SELECT count(id) FROM $t_news WHERE c_id = $course_id ";
+				$sql_news = "SELECT count(id) FROM $t_news WHERE c_id = $courseId ";
 				$res_news = Database::query($sql_news);
 				while ($row_news = Database::fetch_array($res_news)) {
 					$array[$i]['total_announcements'] = $row_news[0];

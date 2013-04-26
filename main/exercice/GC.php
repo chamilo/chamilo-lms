@@ -13,7 +13,7 @@
 // working recursively, flag[0,1] print or delete the HotPotatoes temp files (.t.html)
 
 echo "Garbage Collector<BR>";
-HotPotGC($_configuration['root_sys'], 1, 1);
+HotPotGC(api_get_path(SYS_PATH), 1, 1);
 /**
  * Garbage collector caller function
  */

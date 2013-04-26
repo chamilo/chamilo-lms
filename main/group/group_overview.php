@@ -61,10 +61,6 @@ if (isset($_GET['action'])) {
 
 $interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
-	// So we are not in learnpath tool
-	if (!$is_allowed_in_course) {
-		api_not_allowed(true);
-	}
 	if (!api_is_allowed_to_edit(false, true)) {
 		api_not_allowed(true);
 	} else {

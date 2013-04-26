@@ -1273,12 +1273,9 @@ function exporttofile($filename, $LPname, $LPid, $content)
  */
 function export_exercise($item_id)
 {
-
     global $expdir, $_course, $_configuration, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk, $origin, $questionNum;
 
     $exerciseId = $item_id;
-
-    require_once '../exercice/testcategory.class.php';
     require_once '../exercice/exercise.class.php';
     require_once '../exercice/question.class.php';
     require_once '../exercice/answer.class.php';
@@ -1401,7 +1398,7 @@ function export_exercise($item_id)
                 continue;
             } else {
                 // if the user has already answered this question:
-                if (isset ($exerciseResult[$questionId])) {
+                if (isset($exerciseResult[$questionId])) {
                     // Construction of the Question object.
                     $objQuestionTmp = new Question();
 
@@ -1422,7 +1419,8 @@ function export_exercise($item_id)
 
         echo $s = "<tr bgcolor='#e6e6e6'><td valign='top' colspan='2'>".get_lang('Question')." ";
         // Call the showQuestion() function from exercise.lib.php. This basically displays the question in a table.
-        $test .= showQuestion($questionId, false, 'export', $i);
+        $question_obj = Question::read($questionId);
+        $test .= showQuestion($question_obj, false, 'export', $i);
 
     } // end foreach()
 
@@ -2014,7 +2012,7 @@ function deldir($dir)
  */
 function exportSCORM($scormname, $course)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     // Initialize.
     $tmpname = api_get_path(SYS_COURSE_PATH).$_course['path'].'/scorm';
@@ -2089,7 +2087,8 @@ function xmltagwrite($tagname, $which, $data, $linebreak = 'yes')
  */
 function createimsmanifest($circle1_files, $learnpath_id)
 {
-    global $_course, $LPname, $expdir, $LPnamesafe;
+    global $LPname, $expdir, $LPnamesafe;
+    $_course = api_get_course_info();
     //$tbl_learnpath_main, $tbl_learnpath_chapter, $tbl_learnpath_item,
     $tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);

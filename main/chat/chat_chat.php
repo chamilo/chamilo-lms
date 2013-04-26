@@ -30,7 +30,7 @@ if (!empty($course)) {
     list($pseudo_user) = Database::fetch_row($result);
 
     $isAllowed = !(empty($pseudo_user) || !$_cid);
-    $isMaster = (bool)$is_courseAdmin;
+    $isMaster = (bool)api_is_course_admin();
 
     $date_now = date('Y-m-d');
     $basepath_chat = '';
@@ -203,7 +203,7 @@ if (!empty($course)) {
 <a name="bottom" style="text-decoration:none;">&nbsp;</a>
 
 <?php
-    if ($isMaster || $is_courseCoach) {
+    if ($isMaster || api_is_course_coach()) {
         $rand = mt_rand(1, 1000);
         echo '<div style="margin-left: 5px;">';
         echo '<a href="'.api_get_self(

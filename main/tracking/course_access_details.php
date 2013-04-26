@@ -53,8 +53,8 @@ $DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
 $MonthsLong = api_get_months_long();
 
-$is_allowedToTrack = $is_courseAdmin;
-
+$is_allowedToTrack = api_is_course_admin();
+$courseId = api_get_coure_int_id();
 ?>
 <h3>
     <?php echo $nameTools ?>
@@ -147,14 +147,13 @@ $is_allowedToTrack = $is_courseAdmin;
         ";
         //**
         // display information about this period
-        switch($period)
-        {
+        switch($period) {
             // all days
             case "year" :
                 $sql = "SELECT UNIX_TIMESTAMP( access_date )
                             FROM $TABLETRACK_ACCESS
                             WHERE YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
-                            AND access_cours_code = '$_cid'
+                            AND c_id = '$courseId'
                             AND access_tool IS NULL ";
                 if($displayType == "month")
                 {
@@ -181,7 +180,7 @@ $is_allowedToTrack = $is_courseAdmin;
                             FROM $TABLETRACK_ACCESS
                             WHERE MONTH(access_date) = MONTH (FROM_UNIXTIME( '$reqdate' ) )
                             AND YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
-                            AND access_cours_code = '$_cid'
+                            AND c_id = '$courseId'
                             AND access_tool IS NULL ";
                 if($displayType == "day")
                 {
@@ -203,7 +202,7 @@ $is_allowedToTrack = $is_courseAdmin;
                             WHERE DAYOFMONTH(access_date) = DAYOFMONTH(FROM_UNIXTIME( '$reqdate' ) )
                             AND MONTH(access_date) = MONTH (FROM_UNIXTIME( '$reqdate' ) )
                             AND YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
-                            AND access_cours_code = '$_cid'
+                            AND c_id = '$courseId'
                             AND access_tool IS NULL
                             ORDER BY HOUR( access_date )";
                 $hours_array = hoursTab($sql,$reqdate);

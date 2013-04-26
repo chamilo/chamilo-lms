@@ -103,7 +103,8 @@ if (count($new_member_list) > 0) {
 }
 $social_right_content .= '</div>';
 
-$tpl = new Template();
+$tpl = $app['template'];
+
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);

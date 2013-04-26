@@ -71,15 +71,15 @@ class manager
         if (defined('CONFIG_SYS_FOLDER_SHOWN_ON_TOP')) {
             $this->forceFolderOnTop = CONFIG_SYS_FOLDER_SHOWN_ON_TOP;
         }
-
         if (!is_null($path)) {
             $this->currentFolderPath = $path;
         } elseif (isset($_GET[$this->folderPathIndex]) && file_exists(base64_decode($_GET[$this->folderPathIndex])) && !is_file(base64_decode($_GET[$this->folderPathIndex]))) {
             $this->currentFolderPath = api_htmlentities(Security::remove_XSS($_GET[$this->folderPathIndex]));
+
         } elseif (isset($_SESSION[$this->lastVisitedFolderPathIndex]) && file_exists($_SESSION[$this->lastVisitedFolderPathIndex]) && !is_file($_SESSION[$this->lastVisitedFolderPathIndex])) {
             $this->currentFolderPath = $_SESSION[$this->lastVisitedFolderPathIndex];
         } else {
-            $this->currentFolderPath = CONFIG_SYS_DEFAULT_PATH;
+            $this->currentFolderPath = base64_encode(CONFIG_SYS_DEFAULT_PATH);
         }
 
         $this->currentFolderPath = (isUnderRoot($this->getCurrentFolderPath()) ? backslashToSlash((addTrailingSlash($this->getCurrentFolderPath()))) : CONFIG_SYS_DEFAULT_PATH);

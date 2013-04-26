@@ -17,7 +17,7 @@ class Course
     /**
      *
      * @param string $where
-     * @return \ResultSet 
+     * @return \ResultSet
      */
     public static function query($where)
     {
@@ -58,12 +58,12 @@ class Course
     }
 
     /**
-     * 
+     *
      * @return \Model\Course|null
      */
     public static function current()
     {
-        global $_course;
+        $_course = api_get_course_info();
         /**
          * Note that $_course = -1 when not set.
          */

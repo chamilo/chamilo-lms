@@ -37,7 +37,7 @@ if (empty($course_id) || empty($doc_url)) {
     api_not_allowed();
 }
 
-$is_user_is_subscribed = CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'], true, $session_id);
+$is_user_is_subscribed = CourseManager::is_user_subscribed_in_course($user_id, $course_id, true, $session_id);
 
 if (!api_is_allowed_to_edit() && !$is_user_is_subscribed) {
     api_not_allowed();

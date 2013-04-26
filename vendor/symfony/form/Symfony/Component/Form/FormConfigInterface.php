@@ -35,7 +35,7 @@ interface FormConfigInterface
     /**
      * Returns the property path that the form should be mapped to.
      *
-     * @return null|\Symfony\Component\PropertyAccess\PropertyPathInterface The property path.
+     * @return null|Util\PropertyPathInterface The property path.
      */
     public function getPropertyPath();
 
@@ -103,6 +103,15 @@ interface FormConfigInterface
      * @return DataMapperInterface The data mapper.
      */
     public function getDataMapper();
+
+    /**
+     * Returns the validators of the form.
+     *
+     * @return FormValidatorInterface The form validator.
+     *
+     * @deprecated Deprecated since version 2.1, to be removed in 2.3.
+     */
+    public function getValidators();
 
     /**
      * Returns whether the form is required.

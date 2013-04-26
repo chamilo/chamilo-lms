@@ -66,7 +66,6 @@ class PDF {
         Display::$global_template->assign('organization', $organization);
 
         //Showing only the current teacher/admin instead the all teacherlist name see BT#4080
-        //$teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
 
         $user_info = api_get_user_info();
 

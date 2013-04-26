@@ -1,4 +1,4 @@
-<?php //$id:$
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	This file generates the ActionScript variables code used by the HotSpot .swf
@@ -50,20 +50,17 @@ for($i=1;$i <= $nbrAnswers;$i++) {
 			$output .= "&hotspot_".$i."_type=oar";
 	} else {
 		// Square or rectancle
-		if ($answers['hotspot_type'][$i] == 'square' )
-		{
+        if ($answers['hotspot_type'][$i] == 'square') {
 			$output .= "&hotspot_".$i."_type=square";
 		}
 
 		// Circle or ovale
-		if ($answers['hotspot_type'][$i] == 'circle')
-		{
+        if ($answers['hotspot_type'][$i] == 'circle') {
 			$output .= "&hotspot_".$i."_type=circle";
 		}
 
 		// Polygon
-		if ($answers['hotspot_type'][$i] == 'poly')
-		{
+        if ($answers['hotspot_type'][$i] == 'poly') {
 			$output .= "&hotspot_".$i."_type=poly";
 		}
 		/*// Delineation
@@ -74,8 +71,7 @@ for($i=1;$i <= $nbrAnswers;$i++) {
 	}
 
 	// This is a good answer, count + 1 for nmbr of clicks
-	if ($answers['weighting'][$i] > 0)
-	{
+    if ($answers['weighting'][$i] > 0) {
 		$nmbrTries++;
 	}
 

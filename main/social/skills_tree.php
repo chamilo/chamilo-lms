@@ -10,8 +10,6 @@ $language_file = array('admin');
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
-require_once api_get_path(LIBRARY_PATH).'skill.visualizer.lib.php';
 
 $this_section = SECTION_MYPROFILE;
 
@@ -33,8 +31,7 @@ $tree   = $skill->get_skills_tree(api_get_user_id(), null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 
-//$tpl = new Template(null, false, false);
-$tpl = new Template();
+$tpl = $app['template'];
 
 $tpl->assign('url', $url);
 $tpl->assign('skill_visualizer', $skill_visualizer);

@@ -39,7 +39,7 @@ $session = array();
 $user_name = $user_info['complete_name'];
 
 $course_list =  SessionManager::get_course_list_by_session_id ($session_id);
-$session_list = SessionManager::get_session_by_course($course_code);
+$session_list = SessionManager::get_session_by_course($course_id);
 
 $total_quota_bytes = DocumentManager::get_course_quota();
 
@@ -136,7 +136,8 @@ $(document).ready(function(){
 });
 </script>";
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 $content = Display::page_subheader(get_lang('ShowCourseQuotaUse')).'<div id="chart1"></div>';
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -23,8 +23,7 @@ $_SESSION['this_section']=$this_section;
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('MyFiles'));
 
-$htmlHeadXtra[] = '
-<script>
+$htmlHeadXtra[] = '<script>
 
 function denied_friend (element_input) {
 	name_button=$(element_input).attr("id");
@@ -83,12 +82,12 @@ if (is_array($_GET) && count($_GET)>0) {
 				} else {
 					$show_message = get_lang('UserIsNotSubscribedToThisGroup');
 				}
-			break 2;
+			    break 2;
 			case 'deny':
 				// delete invitation
 				$usergroup->delete_user_rel_group(api_get_user_id(), $value);
 				$show_message = get_lang('GroupInvitationWasDeny');
-			break 2;
+			    break 2;
 		}
 	}
 }
@@ -103,8 +102,9 @@ $social_right_content =  '<div class="span9">';
 $social_right_content .= '<iframe name="fileManager" id="fileManager" src="'.api_get_path(WEB_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/ajaxfilemanager.php?editor=stand_alone" scrolling="no" noresize="noresize" frameborder="no" style="height:480px; width:100%; float:left"></iframe>';
 $social_right_content .= '</div>';
 
+$app['title'] = get_lang('Social');
+$tpl = $app['template'];
 
-$tpl = new Template();
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
 

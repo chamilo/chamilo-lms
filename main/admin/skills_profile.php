@@ -30,7 +30,8 @@ $skill_rel_user  = new SkillRelUser();
 
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';
 
-$tpl = new Template(get_lang('Skills'));
+$tpl['title'] = get_lang('Skills');
+$tpl = $app['template'];
 
 $form = new FormValidator('profile_search');
 

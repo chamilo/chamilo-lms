@@ -250,6 +250,14 @@ class DateType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function getParent()
+    {
+        return 'field';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'date';
@@ -260,11 +268,7 @@ class DateType extends AbstractType
         $pattern = $formatter->getPattern();
         $timezone = $formatter->getTimezoneId();
 
-        if (version_compare(\PHP_VERSION, '5.5.0-dev', '>=')) {
-            $formatter->setTimeZone(\DateTimeZone::UTC);
-        } else {
-            $formatter->setTimeZoneId(\DateTimeZone::UTC);
-        }
+        $formatter->setTimezoneId(\DateTimeZone::UTC);
 
         if (preg_match($regex, $pattern, $matches)) {
             $formatter->setPattern($matches[0]);
@@ -278,11 +282,7 @@ class DateType extends AbstractType
             $formatter->setPattern($pattern);
         }
 
-        if (version_compare(\PHP_VERSION, '5.5.0-dev', '>=')) {
-            $formatter->setTimeZone($timezone);
-        } else {
-            $formatter->setTimeZoneId($timezone);
-        }
+        $formatter->setTimezoneId($timezone);
 
         return $timestamps;
     }

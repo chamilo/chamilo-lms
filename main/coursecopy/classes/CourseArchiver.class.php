@@ -12,7 +12,8 @@ require_once 'Course.class.php';
  *
  * @todo Use archive-folder of Chamilo?
  */
-class CourseArchiver {
+class CourseArchiver
+{
 
     /**
      * Delete old temp-dirs
@@ -69,10 +70,10 @@ class CourseArchiver {
         if ($res === false) {
             error_log(__FILE__ . ' line ' . __LINE__ . ': ' . (ini_get('track_errors') != false ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
         }
-        
+
         //Documents
-        
-        // Copy all documents to the temp-dir        
+
+        // Copy all documents to the temp-dir
         if (is_array($course->resources[RESOURCE_DOCUMENT])) {
             foreach ($course->resources[RESOURCE_DOCUMENT] as $id => $document) {
                 if ($document->file_type == DOCUMENT) {
@@ -104,7 +105,7 @@ class CourseArchiver {
             FileManager::copyDirTo($course->path . 'upload/calendar/', $doc_dir, false);
         }
 
-        //Copy learningpath author image		
+        //Copy learningpath author image
         if (is_array($course->resources[RESOURCE_LEARNPATH])) {
             $doc_dir = dirname($backup_dir . '/upload/learning_path/');
             @mkdir($doc_dir, $perm_dirs, true);
@@ -132,7 +133,6 @@ class CourseArchiver {
      *
      */
     static function get_available_backups($user_id = null) {
-        global $dateTimeFormatLong;
         $backup_files = array();
         $dirname = api_get_path(SYS_ARCHIVE_PATH) . '';
         if ($dir = opendir($dirname)) {

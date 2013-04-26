@@ -183,17 +183,20 @@ FCKSelection.MoveToAncestorNode = function( nodeTagName )
 	var oNode ;
 
 	var oContainer = this.GetSelectedElement() ;
-	if ( ! oContainer )
-		oContainer = this.GetSelection().getRangeAt(0).startContainer ;
+	if ( ! oContainer ) {
+        var selection = this.GetSelection();
+        if (selection.rangeCount) {
+		    oContainer = selection.getRangeAt(0).startContainer ;
+        }
+    }
 
-	while ( oContainer )
-	{
+	while ( oContainer ) {
 		if ( oContainer.nodeName.IEquals( nodeTagName ) )
 			return oContainer ;
 
 		oContainer = oContainer.parentNode ;
 	}
-	return null ;
+	return null;
 }
 
 FCKSelection.Delete = function()

@@ -59,6 +59,12 @@ class ResolvedFormType implements ResolvedFormTypeInterface
             }
         }
 
+        // BC
+        if ($innerType instanceof AbstractType) {
+            /* @var AbstractType $innerType */
+            $innerType->setExtensions($typeExtensions);
+        }
+
         $this->innerType = $innerType;
         $this->typeExtensions = $typeExtensions;
         $this->parent = $parent;

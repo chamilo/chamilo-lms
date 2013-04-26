@@ -33,56 +33,47 @@ include '../../../../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
 
 // Choosing the repository to be used.
-if (api_is_in_course())
-{
-	if (!api_is_in_group())
-	{
-		// 1. We are inside a course and not in a group.
-		if (api_is_allowed_to_edit())
-		{
-			// 1.1. Teacher
-			$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/';
-			$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
-		}
-		else
-		{
-			// 1.2. Student			
-			$current_session_id = api_get_session_id();
-			if($current_session_id==0)
-			{
-				$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
-				$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder/sf_user_'.api_get_user_id().'/';
-			}
-			else
-			{
-				$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
-				$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';	
-			}	
-		}
-	}
-	else
-	{
-		// 2. Inside a course and inside a group.
-		$IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
-		$IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/';
-	}
-}
-else
-{
-	if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin')
-	{
-		// 3. Platform administration activities.
-		$IMConfig['base_dir'] = $_configuration['root_sys'].'home/default_platform_document/';
-		$IMConfig['base_url'] = $_configuration['root_web'].'home/default_platform_document/';
-	}
-	else
-	{
-		// 4. The user is outside courses.
-        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'system');
-		$IMConfig['base_dir'] = $my_path['dir'].'my_files/';
-        $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web');
-		$IMConfig['base_url'] = $my_path['dir'].'my_files/';
-	}
+if (api_is_in_course()) {
+    if (!api_is_in_group()) {
+        // 1. We are inside a course and not in a group.
+        if (api_is_allowed_to_edit()) {
+            // 1.1. Teacher
+            $IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/';
+            $IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/';
+        } else {
+            // 1.2. Student
+            $current_session_id = api_get_session_id();
+            if ($current_session_id == 0) {
+                $IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path(
+                ).'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+                $IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path(
+                ).'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+            } else {
+                $IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path(
+                ).'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
+                $IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path(
+                ).'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
+            }
+        }
+    } else {
+        // 2. Inside a course and inside a group.
+        $IMConfig['base_dir'] = api_get_path(SYS_COURSE_PATH).api_get_course_path(
+        ).'/document'.$group_properties['directory'].'/';
+        $IMConfig['base_url'] = api_get_path(WEB_COURSE_PATH).api_get_course_path(
+        ).'/document'.$group_properties['directory'].'/';
+    }
+} else {
+    if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
+        // 3. Platform administration activities.
+        $IMConfig['base_dir'] = api_get_path(SYS_DATA).'default_platform_document/';
+        $IMConfig['base_url'] = api_get_path(WEB_PUBLIC_PATH).'data/default_platform_document/';
+    } else {
+        // 4. The user is outside courses.
+        $my_path              = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');
+        $IMConfig['base_dir'] = $my_path['dir'].'my_files/';
+        $my_path              = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web');
+        $IMConfig['base_url'] = $my_path['dir'].'my_files/';
+    }
 }
 
 $IMConfig['server_name'] = $_SERVER['SERVER_NAME'];
@@ -236,7 +227,7 @@ $IMConfig['watermarks'] = array();
 //$IMConfig['maxHeight'][0] = 333;
 //$IMConfig['maxWidth'][1] = 100;
 //$IMConfig['maxHeight'][1] = 180;
-$IMConfig['maxWidth'][0] = 0;
+$IMConfig['maxWidth'][0]  = 0;
 $IMConfig['maxHeight'][0] = 0;
 
 
@@ -267,7 +258,7 @@ $IMConfig['default_thumbnail'] = 'img/default.gif';
 /*
   Thumbnail dimensions.
 */
-$IMConfig['thumbnail_width'] = 96;
+$IMConfig['thumbnail_width']  = 96;
 $IMConfig['thumbnail_height'] = 96;
 
 /*
@@ -278,5 +269,5 @@ $IMConfig['tmp_prefix'] = '.editor_';
 /*
  Language and text direction.
  */
-$IMConfig['language'] = api_get_language_isocode();
+$IMConfig['language']       = api_get_language_isocode();
 $IMConfig['text_direction'] = api_get_text_direction($IMConfig['language']);

@@ -98,7 +98,7 @@ require_once 'dropbox_init.inc.php';
 
 // get the last time the user accessed the tool
 if ($_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] == '') {
-	$last_access = get_last_tool_access(TOOL_DROPBOX, $_course['code'], $_user['user_id']);
+	$last_access = get_last_tool_access(TOOL_DROPBOX, api_get_course_int_id(), $_user['user_id']);
 	$_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] = $last_access;
 } else {
 	$last_access = $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX];
@@ -204,7 +204,7 @@ if (($action == 'deletereceivedfile' OR $action == 'deletesentfile') AND isset($
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
-	$dropboxfile = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
+	$dropboxfile = new Dropbox_Person(api_get_user_id(), api_is_course_admin(), $is_courseTutor);
 	if ($action == 'deletereceivedfile') {
 		$dropboxfile->deleteReceivedWork($_GET['id']);
 		$message = get_lang('ReceivedFileDeleted');
@@ -374,7 +374,7 @@ if ($action != 'add') {
 		}
 
 		// Object initialisation
-		$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
+		$dropbox_person = new Dropbox_Person(api_get_user_id(), api_is_course_admin(), $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
 
 		// Constructing the array that contains the total number of feedback messages per document.
 		$number_feedback = get_total_number_feedback();
@@ -525,7 +525,7 @@ if ($action != 'add') {
 		}
 
 		// Object initialisation
-		$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
+		$dropbox_person = new Dropbox_Person(api_get_user_id(), api_is_course_admin(), $is_courseTutor);
 
 		// Constructing the array that contains the total number of feedback messages per document.
 		$number_feedback = get_total_number_feedback();

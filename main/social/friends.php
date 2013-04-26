@@ -140,7 +140,8 @@ if (count($friends) == 0) {
 $social_right_content .= '</div>';
 
 
-$tpl = new Template(get_lang('Social'));
+$app['title'] = get_lang('Social');
+$tpl = $app['template'];
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
 

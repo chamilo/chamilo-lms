@@ -512,7 +512,9 @@ function makepost(select) {
 
 $social_right_content = Display::div($social_right_content, array('class' => 'span9'));
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
+
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);

@@ -9,8 +9,8 @@
  * Code
  * @package chamilo.auth
  */
-class CoursesController { // extends Controller {
-
+class CoursesController
+{
     private $toolname;
     private $view;
     private $model;
@@ -22,7 +22,7 @@ class CoursesController { // extends Controller {
         $this->toolname = 'auth';
         $actived_theme_path = api_get_template();
         $this->view = new View($this->toolname, $actived_theme_path);
-        $this->model = new Auth();
+        $this->model = new AuthLib();
     }
 
     /**
@@ -171,7 +171,6 @@ class CoursesController { // extends Controller {
      *
      */
     public function subscribe_user($course_code, $search_term, $category_code) {
-        $data = array();
         $result = $this->model->subscribe_user($course_code);
         if (!$result) {
             $error = get_lang('CourseRegistrationCodeIncorrect');
@@ -206,11 +205,11 @@ class CoursesController { // extends Controller {
     /**
      * Change course category
      * render to listing view
-     * @param string    Course code
+     * @param int Course id
      * @param int    Category id
      */
-    public function change_course_category($course_code, $category_id) {
-        $result = $this->model->store_changecoursecategory($course_code, $category_id);
+    public function change_course_category($courseId, $category_id) {
+        $result = $this->model->store_changecoursecategory($courseId, $category_id);
         $message = '';
         if ($result) { $message = get_lang('EditCourseCategorySucces'); }
         $action = 'sortmycourses';
@@ -278,8 +277,9 @@ class CoursesController { // extends Controller {
      * render to listing view
      * @param string    Course code
      */
-    public function unsubscribe_user_from_course($course_code, $search_term = null, $category_code = null) {
-        $result = $this->model->remove_user_from_course($course_code);
+    public function unsubscribe_user_from_course($courseCode, $search_term = null, $category_code = null) {
+        $courseInfo = api_get_course_info($courseCode);
+        $result = $this->model->remove_user_from_course($courseInfo['real_id']);
         $message = '';
         if ($result) { $message = get_lang('YouAreNowUnsubscribed'); }
         $action = 'sortmycourses';

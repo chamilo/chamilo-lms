@@ -36,7 +36,9 @@ $intro_cmdUpdate = isset($_POST['intro_cmdUpdate']);
 $intro_cmdDel = empty($_GET['intro_cmdDel']) ? '' : $_GET['intro_cmdDel'];
 $intro_cmdAdd = empty($_GET['intro_cmdAdd']) ? '' : $_GET['intro_cmdAdd'];
 
-if (!empty ($GLOBALS['_cid'])) {
+$courseCode = api_get_course_id();
+
+if (!empty($courseCode)) {
 	$form = new FormValidator('introduction_text', 'post', api_get_self().'?'.api_get_cidreq());
 } else {
 	$form = new FormValidator('introduction_text');
@@ -157,6 +159,7 @@ $thematic_description_html = '';
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
 	$thematic = new Thematic();
+    $thematic->set_course_int_id(api_get_course_int_id());
 	if (api_get_course_setting('display_info_advance_inside_homecourse') == '1') {
 		$information_title = get_lang('InfoAboutLastDoneAdvance');
 		$last_done_advance =  $thematic->get_last_done_thematic_advance();
@@ -228,7 +231,7 @@ if ($intro_dispCommand) {
 	if (empty($intro_content)) {
 		// Displays "Add intro" commands
 		$introduction_section .=  '<div id="courseintro_empty">';
-		if (!empty ($GLOBALS['_cid'])) {
+		if (!empty($courseCode) && $courseCode != -1) {
 			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">";
             $introduction_section .=  Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';
 			$introduction_section .=  "</a>";
@@ -240,7 +243,7 @@ if ($intro_dispCommand) {
 	} else {
 		// Displays "edit intro && delete intro" commands
 		$introduction_section .=  '<div id="courseintro_empty">';
-		if (!empty ($GLOBALS['_cid'])) {
+		if (!empty($courseCode) && $courseCode != -1) {
 			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdEdit=1\">".Display::return_icon('edit.png',get_lang('Modify'),'',ICON_SIZE_SMALL)."</a>";
 			$introduction_section .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL)."</a>";
 		} else {

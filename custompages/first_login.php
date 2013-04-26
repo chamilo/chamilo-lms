@@ -7,18 +7,18 @@
 /**
  * Initialization
  */
-require_once('language.php');
-require_once(dirname(__FILE__).'/../main/inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once 'language.php';
+require_once dirname(__FILE__).'/../main/inc/global.inc.php';
+
 /**
  * Security checks
  */
 if (! isset($_SESSION['conditional_login']['uid']))
   die("Not Authorised");
 
-if (isset($_POST['password'])){
+if (isset($_POST['password'])) {
   $u = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
-  if ($_POST['password'] != $_POST['password2']) { 
+  if ($_POST['password'] != $_POST['password2']) {
     header('Location: '. api_get_self().'?invalid=2');
     exit();
   }
@@ -59,11 +59,11 @@ if ($_GET['invalid'] == 2) {
 	<script type="text/javascript" src="/main/inc/lib/javascript/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			if (top.location != location) 
+			if (top.location != location)
 				top.location.href = document.location.href ;
 
 			// Handler pour la touche retour
-			$('input').keyup(function(e) { 
+			$('input').keyup(function(e) {
 				if (e.keyCode == 13) {
 					$('#changepassword-form').submit();
 				}
@@ -80,12 +80,12 @@ if ($_GET['invalid'] == 2) {
 			<img src="/custompages/images/header.png" alt="Logo" />
 		</div> <!-- #header -->
     <h2> <?php echo custompages_get_lang('FirstLogin');?> </h2>
-        
+
 		<div id="changepassword-form-box" class="form-box">
       <div class="info"> <?php echo custompages_get_lang('FirstLoginChangePassword');?> </div>
 		<?php if (isset($error_message)) {
 			echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
-		}?> 
+		}?>
 			<form id="changepassword-form" class="form" method="post">
 				<div>
           <label for="password">*<?php echo custompages_get_lang('langPass');?></label>

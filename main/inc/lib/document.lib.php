@@ -290,7 +290,7 @@ class DocumentManager
             //$doc_url = addslashes($doc_url);
             $query = "SELECT 1 FROM $tbl_document AS docs,$tbl_item_property AS props
                       WHERE props.tool = 'document' AND docs.id=props.ref AND props.visibility <> '1' AND docs.path = '$doc_url'";
-            //echo $query;
+
             $result = Database::query($query);
 
             return (Database::num_rows($result) == 0);
@@ -1106,6 +1106,7 @@ class DocumentManager
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
         $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id = $id ";
+
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result, 'ASSOC');
@@ -1219,7 +1220,6 @@ class DocumentManager
      */
     public static function unset_document_as_template($document_id, $course_code, $user_id)
     {
-
         $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
         $course_code = Database::escape_string($course_code);
         $user_id = Database::escape_string($user_id);
@@ -1336,7 +1336,7 @@ class DocumentManager
         //3. Checking if user exist in course/session
 
         if ($session_id == 0) {
-            if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']) || api_is_platform_admin()
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['real_id']) || api_is_platform_admin()
             ) {
                 $user_in_course = true;
             }
@@ -1347,7 +1347,7 @@ class DocumentManager
         } else {
             $user_status = SessionManager::get_user_status_in_course_session(
                 $user_id,
-                $course_info['code'],
+                $course_info['real_id'],
                 $session_id
             );
             if (in_array($user_status, array('0', '2', '6'))) {
@@ -1525,7 +1525,7 @@ class DocumentManager
         $official_code = $user_info['official_code'];
 
         //Teacher information
-        $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_id);
+        $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_info);
         $teacher_info = api_get_user_info($info_teacher_id);
         $teacher_first_name = $teacher_info['firstname'];
         $teacher_last_name = $teacher_info['lastname'];
@@ -2348,7 +2348,7 @@ class DocumentManager
         } else {
             $destination = $destiny_path.'/'.$file_name;
         }
-        //var_dump("From $original ", "to $destination");
+
         $original_count = count(explode('/', $original));
         $destination_count = count(explode('/', $destination));
         if ($original_count == $destination_count) {
@@ -2362,7 +2362,7 @@ class DocumentManager
         } else {
             $mode = 'inside';
         }
-        //echo $original_count.' '.$destination_count; var_dump($mode);
+
         //We do not select the $original_path becayse the file was already moved
         $content_html = file_get_contents($destiny_path.'/'.$file_name);
         $destination_file = $destiny_path.'/'.$file_name;
@@ -2408,7 +2408,7 @@ class DocumentManager
         if ($count_pre_destination_levels == 0) {
             $count_pre_destination_levels = 1;
         }
-        //echo '$count_pre_destination_levels '. $count_pre_destination_levels;
+
         $pre_remove = '';
         for ($i = 1; $i <= $count_pre_destination_levels; $i++) {
             $pre_remove .= '..\/';
@@ -2446,7 +2446,7 @@ class DocumentManager
                     $document_file = strstr($real_orig_path, 'document');
 
                     if (strpos($real_orig_path, $document_file) !== false) {
-                        echo 'continue1';
+                        //echo 'continue1';
                         continue;
                     } else {
                         $real_orig_url_temp = '';
@@ -2465,7 +2465,7 @@ class DocumentManager
                         $content_html = str_replace($real_orig_url, $destination_url, $content_html);
                     }
                 } else {
-                    echo 'continue3';
+                    //echo 'continue3';
                     continue;
                 }
             }
@@ -2956,7 +2956,7 @@ class DocumentManager
         }
 
         if (!$user_in_course) {
-            if (CourseManager::is_course_teacher($user_id, $course_info['code'])) {
+            if (CourseManager::is_course_teacher($user_id, $course_info['real_id'])) {
                 $user_in_course = true;
             }
         }
@@ -2966,7 +2966,7 @@ class DocumentManager
 
         if (!$user_in_course) {
             if (empty($session_id)) {
-                if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
+                if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['real_id'])) {
                     $user_in_course = true;
                 }
                 //Check if course is open then we can consider that the student is regitered to the course
@@ -2976,7 +2976,7 @@ class DocumentManager
             } else {
                 $user_status = SessionManager::get_user_status_in_course_session(
                     $user_id,
-                    $course_info['code'],
+                    $course_info['real_id'],
                     $session_id
                 );
                 //is true if is an student, course session teacher or coach
@@ -3180,7 +3180,6 @@ class DocumentManager
                 if (empty($title)) {
                     $title = $key;
                 }
-                //echo '<pre>'; print_r($resource);
                 if (isset($resource['id']) && is_int($resource['id'])) {
                     // It's a folder.
                     //hide some folders
@@ -3314,22 +3313,30 @@ class DocumentManager
         return $return;
     }
 
+    /**
+     * @param int $doc_id
+     * @param string $course_code
+     * @param int $session_id
+     * @param int $user_id
+     * @return bool
+     */
     public static function check_visibility_tree($doc_id, $course_code, $session_id, $user_id)
     {
         $document_data = self::get_document_data_by_id($doc_id, $course_code);
 
         if (!empty($document_data)) {
+            $course_info = api_get_course_info($course_code);
+
             //if admin or course teacher, allow anyway
-            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $course_code)) {
+            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $course_info['real_id'])) {
                 return true;
             }
-            $course_info = api_get_course_info($course_code);
+
             if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
 
                 return $visible;
             } else {
-                $course_info = api_get_course_info($course_code);
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
 
                 if (!$visible) {
@@ -3393,7 +3400,7 @@ class DocumentManager
             //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
             // now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while
             $doc_mime = mime_content_type($doc_path);
-            //echo $doc_mime;
+
             $allowed_mime_types = self::file_get_mime_type(true);
 
             // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used for the moment

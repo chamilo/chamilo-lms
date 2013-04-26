@@ -33,6 +33,14 @@ class HiddenType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function getParent()
+    {
+        return 'field';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'hidden';

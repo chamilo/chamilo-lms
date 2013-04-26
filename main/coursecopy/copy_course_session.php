@@ -45,17 +45,13 @@ $nameTools = get_lang('CopyCourse');
 $interbreadcrumb[] = array('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
 
 // Database Table Definitions
-$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 /* FUNCTIONS */
 
-function make_select_session_list($name, $sessions, $attr = array())
-{
-
+function make_select_session_list($name, $sessions, $attr = array()) {
     $attrs = '';
     if (count($attr) > 0) {
         foreach ($attr as $key => $value) {
@@ -85,11 +81,9 @@ function make_select_session_list($name, $sessions, $attr = array())
     return $output;
 }
 
-function display_form()
-{
+function display_form() {
     $html = '';
     $sessions = SessionManager::get_sessions_list(null, array('name ASC'));
-
     // Actions
     $html .= '<div class="actions">';
     // Link back to the documents overview
@@ -144,8 +138,7 @@ function display_form()
     echo $html;
 }
 
-function search_courses($id_session, $type)
-{
+function search_courses($id_session, $type) {
     global $tbl_course, $tbl_session_rel_course, $course_list;
     $xajax_response = new XajaxResponse();
     $select_destination = '';
@@ -158,7 +151,7 @@ function search_courses($id_session, $type)
             $course_list = SessionManager::get_course_list_by_session_id($id_session);
 
             $temp_course_list = array();
-            $return .= '<select id="origin" name="SessionCoursesListOrigin[]" style="width:380px;" onclick="javascript: checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\');">';
+            $return = '<select id="origin" name="SessionCoursesListOrigin[]" style="width:380px;" onclick="javascript: checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\');">';
 
             foreach ($course_list as $course) {
                 $temp_course_list[] = "'{$course['code']}'";
@@ -221,65 +214,28 @@ function search_courses($id_session, $type)
         } else {
             //Left Select - Destination
 
-            $list_courses_origin = implode(',', $_SESSION['course_list']);
-            $session_origin = $_SESSION['session_origin'];
-
             // Search courses by id_session where course codes is include en courses list destination
             $sql = "SELECT c.code, c.visual_code, c.title, src.id_session
 					FROM $tbl_course c, $tbl_session_rel_course src
-					WHERE src.course_code = c.code
+					WHERE src.c_id = c.id
 					AND src.id_session = '".intval($id_session)."'";
             //AND c.code IN ($list_courses_origin)";
             $rs = Database::query($sql);
 
             $course_list_destination = array();
-            //onmouseover="javascript: this.disabled=true;" onmouseout="javascript: this.disabled=false;"
-            $return .= '<select id="destination" name="SessionCoursesListDestination[]" style="width:380px;" >';
+            $return = '<select id="destination" name="SessionCoursesListDestination[]" style="width:380px;" >';
             while ($course = Database :: fetch_array($rs)) {
-                $course_list_destination[] = $course['code'];
+                $course_list_destination[] = $course['c_id'];
                 $course_title = str_replace("'", "\'", $course_title);
-                $return .= '<option value="'.$course['code'].'" title="'.@htmlspecialchars(
-                    $course['title'].' ('.$course['visual_code'].')',
-                    ENT_QUOTES,
-                    api_get_system_encoding()
-                ).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
+                $return .= '<option value="'.$course['c_id'].'" title="'.@htmlspecialchars($course['title'].' ('.$course['visual_code'].')',ENT_QUOTES,api_get_system_encoding()).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
             }
             $return .= '</select>';
             $_SESSION['course_list_destination'] = $course_list_destination;
 
             // Send response by ajax
             $xajax_response->addAssign('ajax_list_courses_destination', 'innerHTML', api_utf8_encode($return));
-            /*
-                        // Disable option from session courses list origin where if no the same con the destination
-                        $sql = "SELECT c.code, c.visual_code, c.title, src.id_session
-                                FROM $tbl_course c, $tbl_session_rel_course src
-                                WHERE src.course_code = c.code
-                                AND src.id_session = '".intval($session_origin)."'";
-                        $result = Database::query($sql);
-
-                        $return_option_disabled = '<select id="origin" name="SessionCoursesListOrigin[]" multiple="multiple" size="20" style="width:320px;" onclick="javascript: checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\');">';
-                        while ($cours = Database :: fetch_array($result)) {
-                            $course_title=str_replace("'", "\'", $course_title);
-                            if (count($course_list_destination) > 0) {
-                                if (!in_array($cours['code'], $course_list_destination)) {
-                                    $return_option_disabled .= '<optgroup style="color:#ccc" label="'.$cours['title'].' ('.$cours['visual_code'].')" >'.$cours['title'].' ('.$cours['visual_code'].')</optgroup>';
-                                } else {
-                                    $return_option_disabled .= '<option value="'.$cours['code'].'" title="'.@htmlspecialchars($cours['title'].' ('.$cours['visual_code'].')', ENT_QUOTES, api_get_system_encoding()).'">'.$cours['title'].' ('.$cours['visual_code'].')</option>';
-                                }
-                            } else {
-                                if (empty($id_session)) {
-                                    $return_option_disabled .= '<option value="'.$cours['code'].'" title="'.@htmlspecialchars($cours['title'].' ('.$cours['visual_code'].')', ENT_QUOTES, api_get_system_encoding()).'">'.$cours['title'].' ('.$cours['visual_code'].')</option>';
-                                } else {
-                                    $return_option_disabled .= '<optgroup style="color:#ccc" label="'.$cours['title'].'('.$cours['visual_code'].')" >'.$cours['title'].' ('.$cours['visual_code'].')</optgroup>';
-                                }
-                            }
-                        }
-                        $return_option_disabled .= '</select>';*/
-            // Send response by ajax
-            //$xajax_response -> addAssign('ajax_list_courses_origin', 'innerHTML', api_utf8_encode($return_option_disabled));
         }
     }
-
     return $xajax_response;
 }
 
@@ -288,45 +244,43 @@ $xajax->processRequests();
 /* HTML head extra */
 
 $htmlHeadXtra[] = $xajax->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax/');
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 
-						function checkSelected(id_select,id_radio,id_title,id_destination) {
-						   var num=0;
-						   obj_origin = document.getElementById(id_select);
-						   obj_destination = document.getElementById(id_destination);
+function checkSelected(id_select,id_radio,id_title,id_destination) {
+    var num=0;
+    obj_origin = document.getElementById(id_select);
+    obj_destination = document.getElementById(id_destination);
 
-						   for (x=0;x<obj_origin.options.length;x++) {
-						      if (obj_origin.options[x].selected) {
-						      		if (obj_destination.options.length > 0) {
-										for (y=0;y<obj_destination.options.length;y++) {
-												if (obj_origin.options[x].value == obj_destination.options[y].value) {
-													obj_destination.options[y].selected = true;
-												}
-									   	}
-									}
-						      		num++;
-						      	} else {
-						      		if (obj_destination.options.length > 0) {
-										for (y=0;y<obj_destination.options.length;y++) {
-												if (obj_origin.options[x].value == obj_destination.options[y].value) {
-													obj_destination.options[y].selected = false;
-												}
-									   		}
-									}
-						      	}
-						   }
+    for (x=0;x<obj_origin.options.length;x++) {
+      if (obj_origin.options[x].selected) {
+            if (obj_destination.options.length > 0) {
+                for (y=0;y<obj_destination.options.length;y++) {
+                        if (obj_origin.options[x].value == obj_destination.options[y].value) {
+                            obj_destination.options[y].selected = true;
+                        }
+                }
+            }
+            num++;
+        } else {
+            if (obj_destination.options.length > 0) {
+                for (y=0;y<obj_destination.options.length;y++) {
+                        if (obj_origin.options[x].value == obj_destination.options[y].value) {
+                            obj_destination.options[y].selected = false;
+                        }
+                    }
+            }
+        }
+    }
 
-						   if (num == 1) {
-						      document.getElementById(id_radio).disabled = false;
-						      document.getElementById(id_title).style.color = \'#000\';
-						   } else {
-						   	  document.getElementById(id_radio).disabled = true;
-						      document.getElementById(id_title).style.color = \'#aaa\';
-						   }
-
-						}
+    if (num == 1) {
+      document.getElementById(id_radio).disabled = false;
+      document.getElementById(id_title).style.color = \'#000\';
+    } else {
+      document.getElementById(id_radio).disabled = true;
+      document.getElementById(id_title).style.color = \'#aaa\';
+    }
+}
 </script>';
-
 
 Display::display_header($nameTools);
 
@@ -335,13 +289,10 @@ if (isset($_POST['copy_only_session_items']) && $_POST['copy_only_session_items'
     $with_base_content = false;
 }
 
-
 /*  MAIN CODE  */
 
 if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
-
     $destination_course = $origin_course = $destination_session = $origin_session = '';
-
     if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
 
         $destination_course = $_POST['destination_course'];
@@ -352,7 +303,6 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         $course = CourseSelectForm :: get_posted_course('copy_course', $origin_session, $origin_course);
 
         $cr = new CourseRestorer($course);
-        //$cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore($destination_course, $destination_session);
         Display::display_confirmation_message(get_lang('CopyFinished'));
         display_form();
@@ -385,6 +335,8 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
                 //first element of the array
                 $course_code = $arr_course_origin[0];
                 $course_destinatination = $arr_course_destination[0];
+                $courseDestinationInfo = api_get_course_info_by_id($course_destinatination);
+                $course_destinatination = $courseDestinationInfo['code'];
 
                 $course_origin = api_get_course_info($course_code);
                 $cb = new CourseBuilder('', $course_origin);

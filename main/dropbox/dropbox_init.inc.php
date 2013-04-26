@@ -51,7 +51,6 @@ require_once 'dropbox_functions.inc.php';
 // protecting the script
 api_protect_course_script();
 
-
 /*	Libraries */
 
 // including the library for the dropbox
@@ -64,13 +63,14 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';  // we use
 
 $user_id = api_get_user_id();
 $course_code = api_get_course_id();
+$courseId = api_get_course_int_id();
 $course_info = Database::get_course_info($course_code);
 
 $session_id = api_get_session_id();
 if (empty($session_id)) {
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, false);
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $courseId, false);
 } else {
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true, $session_id);
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $courseId, true, $session_id);
 }
 
 /*	Object Initialisation */
@@ -79,8 +79,10 @@ if (empty($session_id)) {
 // off all the documents that have already been sent.
 // @todo consider moving the javascripts in a function that displays the javascripts
 // only when it is needed.
-if ($_GET['action'] == 'add') {
-	$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+if (isset($_GET['action']) && $_GET['action'] == 'add') {
+	$dropbox_person = new Dropbox_Person($_user['user_id'], api_is_course_admin(), $is_courseTutor);
+} else {
+    $dropbox_person = null;
 }
 
 /*	Create javascript and htmlHeaders */
@@ -125,13 +127,15 @@ if (dropbox_cnf('allowOverwrite')) {
 		var sentArray = new Array(";	//sentArray keeps list of all files still available in the sent files list
 										//of the user.
 										//This is used to show or hide the overwrite file-radio button of the upload form
-	for ($i = 0; $i < count($dropbox_person->sentWork); $i++) {
-		if ($i > 0) {
-		    $javascript .= ", ";
-		}
-		$javascript .= "'".$dropbox_person->sentWork[$i]->title."'";
-		//echo '***'.$dropbox_person->sentWork[$i]->title;
-	}
+    if ($dropbox_person) {
+        for ($i = 0; $i < count($dropbox_person->sentWork); $i++) {
+            if ($i > 0) {
+                $javascript .= ", ";
+            }
+            $javascript .= "'".$dropbox_person->sentWork[$i]->title."'";
+            //echo '***'.$dropbox_person->sentWork[$i]->title;
+        }
+    }
 	$javascript .= ");
 
 		function checkfile(str)
@@ -223,7 +227,7 @@ if (($_POST['action'] == 'download_received' || $_POST['action'] == 'download_se
  * Prevents access of all users that are not course members
  */
 
-if ((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(null, true)) {
+if ((!$is_course_member) && !api_is_allowed_to_edit(null, true)) {
 	if ($origin != 'learnpath') {
 		api_not_allowed(true);//print headers/footers
 	} else {

@@ -21,9 +21,6 @@ $this_section = SECTION_COURSES;
 
 $nameTools = get_lang('ModifInfo');
 
-/*	Libraries */
-require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
-
 api_protect_course_script(true);
 api_block_anonymous_users();
 
@@ -32,14 +29,17 @@ define('MODULE_HELP_NAME', 'Settings');
 define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
 $currentCourseRepository    = $_course['path'];
-$is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
+$is_allowedToEdit 			= api_is_course_admin() || api_is_platform_admin();
 
 $course_code 				= api_get_course_id();
+$courseId = api_get_course_int_id();
 $course_access_settings 	= CourseManager :: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
 function is_settings_editable() {
-	return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
+    //@todo check this setting This course_info_is_editable is defined where?
+	//return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
+    return true;
 }
 
 /* MAIN CODE */
@@ -69,7 +69,11 @@ $q_tutor = Database::query($s_select_course_tutor_name);
 $s_tutor = Database::result($q_tutor, 0, 'tutor_name');
 
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
-$s_sql_course_titular = "SELECT DISTINCT username, lastname, firstname FROM $tbl_user as user, $tbl_course_user as course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."' ORDER BY ".$target_name." ASC";
+$s_sql_course_titular = "
+    SELECT DISTINCT username, lastname, firstname
+    FROM $tbl_user as user, $tbl_course_user as course_rel_user
+    WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND c_id ='".$courseId."'
+    ORDER BY ".$target_name." ASC";
 $q_result_titulars = Database::query($s_sql_course_titular);
 
 if (Database::num_rows($q_result_titulars) == 0) {
@@ -87,7 +91,7 @@ while ($a_titulars = Database::fetch_array($q_result_titulars)) {
         $s_selected_tutor = api_get_person_name($s_firstname, $s_lastname);
     }
     $s_disabled_select_titular = '';
-    if (!$is_courseAdmin) {
+    if (!api_is_course_admin()) {
         $s_disabled_select_titular = 'disabled=disabled';
     }
     $a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
@@ -249,7 +253,7 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 $form->addElement('html', '</div></div>');
 
 // USER RIGHTS
-$form->addElement('html', '<div> <h3>'.Display::return_icon('user.png', Security::remove_XSS(get_lang('UserRights')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('UserRights')).'</h3><div>');
+$form->addElement('html', '<div><h3>'.Display::return_icon('user.png', Security::remove_XSS(get_lang('UserRights')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('UserRights')).'</h3><div>');
 
 $group = array();
 $group[]=$form->createElement('radio', 'allow_user_edit_agenda', get_lang('AllowUserEditAgenda'), get_lang('AllowUserEditAgendaActivate'), 1);
@@ -303,7 +307,6 @@ if (api_get_setting('allow_course_theme') == 'true') {
     $group[]=$form->createElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
     $group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '');
-
 }
 
 if (is_settings_editable()) {
@@ -317,6 +320,28 @@ if (is_settings_editable()) {
 }
 $form->addElement('html', '</div></div>');
 
+
+//Exercise
+$form->addElement('html', '<div><h3>'.Display::return_icon('quiz.png', Security::remove_XSS(get_lang('Exercises')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Exercises')).'</h3><div>');
+
+$group = array();
+$group[]=$form->createElement('radio', 'allow_fast_exercise_edition', get_lang('AllowFastExerciseEdition'), get_lang('Yes'), 1);
+$group[]=$form->createElement('radio', 'allow_fast_exercise_edition', get_lang('AllowFastExerciseEdition'), get_lang('No'), 0);
+
+$form->addGroup($group, '', array(get_lang("AllowFastExerciseEdition")), '');
+
+//Auto-launch Exercise LP
+$group = array();
+$group[]=$form->createElement('radio', 'enable_exercise_auto_launch', get_lang('ExerciseAutoLaunch'), get_lang('RedirectToExercise'), 1);
+$group[]=$form->createElement('radio', 'enable_exercise_auto_launch', get_lang('ExerciseAutoLaunch'), get_lang('RedirectToTheExerciseList'), 2);
+$group[]=$form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Deactivate'), 0);
+$form->addGroup($group, '', array(get_lang("ExerciseAutoLaunch")), '');
+
+
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+$form->addElement('html', '</div></div>');
+
+
 // THEMATIC ADVANCE SETTINGS
 $form->addElement('html', '<div><h3>'.Display::return_icon('course_progress.png', Security::remove_XSS(get_lang('ThematicAdvanceConfiguration')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('ThematicAdvanceConfiguration')).'</h3><div>');
 
@@ -328,12 +353,9 @@ $group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse',
 $form->addGroup($group, '', array(get_lang("InfoAboutAdvanceInsideHomeCourse")), '');
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-
 $form->addElement('html', '</div></div>');
 
-
 // Certificate settings
-
 if (api_get_setting('allow_public_certificates')=='true') {
     $form->addElement('html', '<div><h3>'.Display::return_icon('certificate.png', Security::remove_XSS(get_lang('Certificates')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Certificates')).'</h3><div>');
     $group = array();
@@ -399,8 +421,10 @@ $values['display_info_advance_inside_homecourse']   = api_get_course_setting('di
 $values['email_alert_students_on_new_homework']     = api_get_course_setting('email_alert_students_on_new_homework');
 
 $values['enable_lp_auto_launch']                    = api_get_course_setting('enable_lp_auto_launch');
+$values['enable_exercise_auto_launch']              = api_get_course_setting('enable_exercise_auto_launch');
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
 $values['allow_public_certificates']                = api_get_course_setting('allow_public_certificates');
+$values['allow_fast_exercise_edition']              = api_get_course_setting('allow_fast_exercise_edition') == 1 ? 1 : 0;
 
 $app_plugin->set_course_settings_defaults($values);
 

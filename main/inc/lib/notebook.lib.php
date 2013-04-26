@@ -10,8 +10,9 @@
  */
 class NotebookManager {
 
-    private function __construct() {
-        
+    public function __construct()
+    {
+
     }
 
     /**
@@ -165,7 +166,7 @@ class NotebookManager {
             $sort_direction = 'DESC';
             $link_sort_direction = 'ASC';
         }
-        
+
         // action links
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
@@ -223,6 +224,6 @@ class NotebookManager {
             echo '<a href="' . api_get_self() . '?action=editnote&amp;notebook_id=' . $row['notebook_id'] . '">' . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . '</a>';
             echo '<a href="' . api_get_self() . '?action=deletenote&amp;notebook_id=' . $row['notebook_id'] . '" onclick="return confirmation(\'' . $row['title'] . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL) . '</a>';
             echo '</div>';
-        }        
+        }
     }
 }

@@ -74,7 +74,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     $table_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     $user_info = api_get_user_info();
     $course_info = api_get_course_info();
-    $sql = 'SELECT * FROM '.$table_c.' c, '.$table_cu.' cu WHERE cu.course_code = c.code';
+    $sql = 'SELECT * FROM '.$table_c.' c, '.$table_cu.' cu WHERE cu.c_id = c.id';
     if (!api_is_platform_admin()) {
         $sql .= ' AND cu.status=1 ';
     }

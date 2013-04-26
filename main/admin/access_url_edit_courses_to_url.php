@@ -44,15 +44,14 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 
 }
 
-$access_url_id=1;
-if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
+$access_url_id = 1;
+if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
 	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
 }
 
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_user_to_url(code, content) {
 
 	document.getElementById("course_to_add").value = "";
@@ -67,7 +66,7 @@ function add_user_to_url(code, content) {
 
 function send() {
 
-	if (document.formulaire.access_url_id.value!=0) {
+	if (document.formulaire.access_url_id.value != 0) {
 		document.formulaire.form_sent.value=0;
 		document.formulaire.add_type.value=\''.$add_type.'\';
 		document.formulaire.submit();
@@ -90,20 +89,20 @@ $errorMsg='';
 $UserList=$SessionList=array();
 $users=$sessions=array();
 
-if($_POST['form_sent']) {
-	$form_sent=$_POST['form_sent'];
-	$course_list=$_POST['course_list'];
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+	$form_sent = $_POST['form_sent'];
+	$course_list = $_POST['course_list'];
 
-	if(!is_array($course_list)) {
+	if (!is_array($course_list)) {
 		$course_list=array();
 	}
 
-	if($form_sent == 1) {
+	if ($form_sent == 1) {
 		if ($access_url_id==0) {
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
 		}
 		elseif(is_array($course_list) ) {
-			UrlManager::update_urls_rel_course($course_list,$access_url_id);
+			UrlManager::update_urls_rel_course($course_list, $access_url_id);
 			header('Location: access_urls.php?action=show_message&message='.get_lang('CoursesWereEdited'));
 		}
 	}
@@ -117,36 +116,36 @@ echo '</div>';
 
 api_display_tool_title($tool_name);
 
-if ($_GET['action'] == 'show_message')
+if (isset($_GET['action']) && $_GET['action'] == 'show_message')
 	Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
 
 $no_course_list = $course_list = array();
 $ajax_search = $add_type == 'unique' ? true : false;
 
 if($ajax_search) {
-	$courses=UrlManager::get_url_rel_course_data($access_url_id);
-	foreach($courses as $course) {
-		$course_list[$course['course_code']] = $course ;
+	$courses = UrlManager::get_url_rel_course_data($access_url_id);
+	foreach ($courses as $course) {
+		$course_list[$course['c_id']] = $course ;
 	}
 } else {
-	$courses=UrlManager::get_url_rel_course_data();
+	$courses = UrlManager::get_url_rel_course_data();
 
-	foreach($courses as $course) {
-		if($course['access_url_id'] == $access_url_id) {
-			$course_list[$course['course_code']] = $course ;
+	foreach ($courses as $course) {
+		if ($course['access_url_id'] == $access_url_id) {
+			$course_list[$course['c_id']] = $course ;
 		}
 	}
 
 	$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$sql="SELECT code, title
+	$sql="SELECT code, title, id
 	  	  	FROM $tbl_course u
 			ORDER BY title, code";
-	$result=Database::query($sql);
-	$courses=Database::store_result($result);
+	$result = Database::query($sql);
+	$courses = Database::store_result($result);
 	$course_list_leys = array_keys($course_list);
-	foreach($courses as $course) {
-		if (!in_array($course['code'],$course_list_leys))
-			$no_course_list[$course['code']] = $course ;
+	foreach ($courses as $course) {
+		if (!in_array($course['id'], $course_list_leys))
+			$no_course_list[$course['id']] = $course ;
 	}
 }
 
@@ -176,14 +175,14 @@ $url_list = UrlManager::get_url_data();
 	foreach ($url_list as $url_obj) {
 		$checked = '';
 		if (!empty($access_url_id)) {
-			if ($url_obj[0]==$access_url_id) {
+			if ($url_obj['id']==$access_url_id) {
 			$checked = 'selected=true';
-			$url_selected=$url_obj[1];
+			$url_selected = $url_obj['id'];
 			}
 		}
 		if ($url_obj['active']==1) {
 			?>
-				<option <?php echo $checked;?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
+				<option <?php echo $checked;?> value="<?php echo $url_obj['id']; ?>"> <?php echo $url_obj['url']; ?></option>
 			<?php
 		}
 	}
@@ -197,6 +196,7 @@ $url_list = UrlManager::get_url_data();
 if(!empty($errorMsg)) {
 	Display::display_normal_message($errorMsg); //main API
 }
+
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
@@ -224,7 +224,7 @@ if(!empty($errorMsg)) {
 		<?php
 		foreach($no_course_list as $no_course) {
 		?>
-			<option value="<?php echo $no_course['code']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
+			<option value="<?php echo $no_course['id']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
 		<?php
 		}
 		unset($no_course_list);
@@ -255,9 +255,10 @@ if(!empty($errorMsg)) {
   <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
 
 <?php
-foreach($course_list as $course) {
+
+foreach ($course_list as $course) {
 ?>
-	<option value="<?php echo $course['course_code']; ?>"><?php echo $course['title'].' ('.$course['course_code'].')'; ?></option>
+	<option value="<?php echo $course['c_id']; ?>"><?php echo $course['title'].' ('.$course['code'].')'; ?></option>
 <?php
 }
 unset($course_list);
@@ -285,11 +286,6 @@ function valide(){
 	var options = document.getElementById('destination_users').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;
-	/*
-	var options = document.getElementById('destination_classes').options;
-	for (i = 0 ; i<options.length ; i++)
-		options[i].selected = true;
-		*/
 	document.forms.formulaire.submit();
 }
 
@@ -305,7 +301,6 @@ function loadUsersInSelect(select){
 	else  // XMLHttpRequest non supporté par le navigateur
 	alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
-	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
 
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

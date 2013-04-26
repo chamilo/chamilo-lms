@@ -288,12 +288,11 @@ if ($_POST['formSent']) {
                             if (CourseManager::course_exists($course_code)) {
                                 // If the course exists we continue.
                                 $course_info = CourseManager::get_course_information($course_code);
+                                $courseId = $course_info['real_id'];
 
-                                $session_course_relation = SessionManager::relation_session_course_exist($session_id, $course_code);
+                                $session_course_relation = SessionManager::relation_session_course_exist($session_id, $courseId);
                                 if (!$session_course_relation) {
-                                    $sql_course = "INSERT INTO $tbl_session_course SET
-                                            course_code = '$course_code',
-                                            id_session='$session_id'";
+                                    $sql_course = "INSERT INTO $tbl_session_course SET c_id = '$courseId', id_session='$session_id'";
                                     $rs_course = Database::query($sql_course);
                                 }
 
@@ -306,7 +305,7 @@ if ($_POST['formSent']) {
                                     if ($coach_id !== false) {
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                 id_user='$coach_id',
-                                                course_code='$course_code',
+                                                c_id ='$courseId',
                                                 id_session = '$session_id',
                                                 status = 2 ";
                                         $rs_coachs = Database::query($sql);
@@ -331,7 +330,7 @@ if ($_POST['formSent']) {
                                         // Adding to session_rel_user_rel_course table.
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                 id_user='$user_id',
-                                                course_code='$course_code',
+                                                c_id ='$courseId',
                                                 id_session = '$session_id'";
                                         $rs_users = Database::query($sql);
                                         $users_in_course_counter++;
@@ -339,12 +338,12 @@ if ($_POST['formSent']) {
                                         $error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
                                     }
                                 }
-                                $update_session_course = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
+                                $update_session_course = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE c_id ='$courseId'";
                                 Database::query($update_session_course);
                                 $inserted_in_course[$course_code] = $course_info['title'];
 
                             }
-
+                            /*
                             if (CourseManager::course_exists($course_code, true)) {
                                 // If the course exists we continue.
                                 // Also subscribe to virtual courses through check on visual code.
@@ -354,9 +353,7 @@ if ($_POST['formSent']) {
                                         // Ignore, this has already been inserted.
                                     } else {
 
-                                        $sql_course = "INSERT INTO $tbl_session_course SET
-                                                course_code = '".$vcourse['code']."',
-                                                id_session='$session_id'";
+                                        $sql_course = "INSERT INTO $tbl_session_course SET course_code = '".$vcourse['code']."', id_session='$session_id'";
                                         $rs_course = Database::query($sql_course);
 
                                         $course_coaches = explode(",",$node_course->Coach);
@@ -413,6 +410,7 @@ if ($_POST['formSent']) {
                                 // Tthe course does not exist.
                                 $error_message .= get_lang('CourseDoesNotExist').' : '.$course_code.'<br />';
                             }
+                            */
                         }
                         Database::query("UPDATE $tbl_session SET nbr_users='$user_counter', nbr_courses='$course_counter' WHERE id='$session_id'");
                     }

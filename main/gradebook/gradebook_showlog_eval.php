@@ -10,7 +10,6 @@
 $language_file = 'gradebook';
 //$cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/fe/evalform.class.php';
@@ -39,15 +38,15 @@ $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
 $visible_log=Security::remove_XSS($_GET['visiblelog']);
 
 $evaledit = Evaluation :: load($visible_log);
-$sql="SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at,us.username FROM ".$t_linkeval_log." le INNER JOIN ".$t_user." us 
+$sql="SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at,us.username FROM ".$t_linkeval_log." le INNER JOIN ".$t_user." us
       ON le.user_id_log=us.user_id where id_linkeval_log=".$evaledit[0]->get_id()." and type='evaluation';";
 $result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
-	$list_info[]=$row; 
+	$list_info[]=$row;
 }
 
-foreach($list_info as $key => $info_log) {	
+foreach($list_info as $key => $info_log) {
 	$list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
 	$list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }

@@ -27,6 +27,7 @@ $nameTools = get_lang('CreateAudio');
 
 api_protect_course_script();
 api_block_anonymous_users();
+
 if (api_get_setting('enabled_text2audio') == 'false') {
     api_not_allowed(true);
 }
@@ -91,11 +92,6 @@ $interbreadcrumb[] = array(
     "url" => "./document.php?curdirpath=".urlencode($dir).$req_gid,
     "name" => get_lang('Documents')
 );
-
-if (!$is_allowed_in_course) {
-    api_not_allowed(true);
-}
-
 
 if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(
     api_get_user_id(),
@@ -427,7 +423,9 @@ function downloadMP3_google($filepath, $dir)
 
         return;
     }
-    global $_course, $_user;
+    global $_user;
+    $_course = api_get_course_info();
+
     $clean_title = trim($_POST['title']);
     $clean_text = trim($_POST['text']);
     if (empty($clean_title) || empty($clean_text)) {
@@ -595,7 +593,8 @@ function downloadMP3_pediaphon($filepath, $dir)
 
         return;
     }
-    global $_course, $_user;
+    global $_user;
+    $_course = api_get_course_info();
     $clean_title = trim($_POST['title']);
     $clean_title = Database::escape_string($clean_title);
     $clean_text = trim($_POST['text']);

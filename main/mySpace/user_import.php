@@ -75,11 +75,11 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
             if (!empty($id_session)) {
                 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                 // Selecting all the courses from the session id requested.
-                $sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
+                $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE id_session='$id_session'";
                 $result = Database::query($sql);
                 $course_list = array();
                 while ($row = Database::fetch_array($result)) {
-                    $course_list[] = $row['course_code'];
+                    $course_list[] = $row['c_id'];
                 }
                 $errors = MySpace::get_user_creator($users, $course_list, $id_session);
                 $users = MySpace::check_all_usernames($users, $course_list, $id_session);

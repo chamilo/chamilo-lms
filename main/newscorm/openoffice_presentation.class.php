@@ -34,7 +34,7 @@ class OpenofficePresentation extends OpenofficeDocument
 
     public function make_lp($files = array())
     {
-        global $_course;
+        $_course = api_get_course_info();
         $previous = 0;
         $i = 0;
 
@@ -244,7 +244,7 @@ class OpenofficePresentation extends OpenofficeDocument
 
     function add_docs_to_visio($files = array())
     {
-        global $_course;
+        $_course = api_get_course_info();
         foreach ($files as $file) {
             list($slide_name, $file_name) = explode(
                 '||',

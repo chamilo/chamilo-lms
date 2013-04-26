@@ -613,8 +613,7 @@ function save_edit_agenda_item($id, $title, $content, $start_date, $end_date)
  */
 function delete_agenda_item($id)
 {
-    global $_course;
-
+    $_course = api_get_course_info();
     $t_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
     $id = intval($id);
     $sql = "SELECT * FROM $t_agenda WHERE id = '$id'";
@@ -661,7 +660,6 @@ function display_agenda_items()
 {
     global $select_month, $select_year;
     global $DaysShort, $DaysLong, $MonthsLong;
-    global $is_courseAdmin;
     global $dateFormatLong, $timeNoSecFormat, $charset, $_user, $_course;
 
     $TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -971,7 +969,6 @@ function display_one_agenda_item($agenda_id)
 {
     global $select_month, $select_year;
     global $DaysShort, $DaysLong, $MonthsLong;
-    global $is_courseAdmin;
     global $dateFormatLong, $timeNoSecFormat, $charset;
     global $_user;
 

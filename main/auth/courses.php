@@ -16,8 +16,6 @@ $cidReset = true; // Flag forcing the 'current course' reset
 
 // including files
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'auth.lib.php';
-require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'courses_controller.php';
 
 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
@@ -133,7 +131,9 @@ if (isset($_GET['move'])) {
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
 if (isset($_POST['submit_change_course_category'])) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->change_course_category($_POST['course_2_edit_category'], $_POST['course_categories']);
+        $courseCode = $_POST['course_2_edit_category'];
+        $courseInfo = api_get_course_info($courseCode);
+        $courses_controller->change_course_category($courseInfo['real_id'], $_POST['course_categories']);
     }
 }
 

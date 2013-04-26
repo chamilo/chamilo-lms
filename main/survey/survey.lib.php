@@ -57,13 +57,13 @@ class survey_manager
      */
     public static function delete_all_survey_invitations_by_user($user_id) {
         $user_id = intval($user_id);
-       
+
         if (empty($user_id)) {
             return false;
         }
         $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
-        
+
         $sql = "SELECT survey_invitation_id, survey_code FROM $table_survey_invitation WHERE user = '$user_id' AND c_id <> 0 ";
         $result = Database::query($sql);
         $deleted = array();
@@ -1032,7 +1032,7 @@ class survey_manager
      */
     function save_shared_question($form_content, $survey_data)
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         // Table definitions
         $tbl_survey_question = Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
@@ -5282,7 +5282,7 @@ class SurveyUtil
      */
     static function survey_list_user($user_id)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $course_id = api_get_course_int_id();
 
         // Database table definitions

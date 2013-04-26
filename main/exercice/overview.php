@@ -125,7 +125,7 @@ if ($visible_return['value'] == false) {
     }
 }
 
-$attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id, 'desc');
+$attempts = get_exercise_results_by_user(api_get_user_id(), $objExercise->id, api_get_course_int_id(), api_get_session_id(), $learnpath_id, $learnpath_item_id, 'desc');
 $counter = count($attempts);
 
 $my_attempt_array = array();
@@ -133,7 +133,6 @@ $table_content = '';
 
 /* Make a special case for IE, which doesn't seem to be able to handle the
  * results popup -> send it to the full results page */
-require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
 $browser = new Browser();
 $current_browser = $browser->getBrowser();
 $url_suffix = '';

@@ -9,7 +9,6 @@
 $language_file='admin';
 // resetting the course id
 $cidReset = true;
-
 require_once '../inc/global.inc.php';
 
 $xajax = new xajax();
@@ -26,19 +25,14 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 // Database Table Definitions
-$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
 $tool_name= get_lang('SubscribeSessionsToCategory');
 $id_session=intval($_GET['id_session']);
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
+if (isset($_GET['add_type']) && $_GET['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -52,8 +46,7 @@ if (!api_is_platform_admin() && !api_is_session_admin()) {
 
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_course_to_session (code, content) {
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses_single").innerHTML = "";
@@ -99,7 +92,6 @@ if ($_POST['formSent']) {
 		$session_id = join(',', $SessionCategoryList);
 		$sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
 		Database::query($sql);
-		//header('Location: session_list.php?id_category='.$Categoryid);
 		header('Location: add_many_session_to_category.php?id_category='.$Categoryid.'&msg=ok');
 		exit;
 	} else {
@@ -112,11 +104,11 @@ if (isset($_GET['id_category'])) {
 	$Categoryid = intval($_GET['id_category']);
 }
 
-if(isset($_GET['msg']) && $_GET['msg']=='error'){
+if (isset($_GET['msg']) && $_GET['msg']=='error'){
 	$errorMsg = get_lang('MsgErrorSessionCategory');
 }
 
-if(isset($_GET['msg']) && $_GET['msg']=='ok'){
+if (isset($_GET['msg']) && $_GET['msg']=='ok'){
 	$OkMsg = get_lang('SessionCategoryUpdate');
 }
 
@@ -127,7 +119,7 @@ Display::display_header($tool_name);
 
 $where ='';
 $rows_category_session = array();
-if((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category']) ) {
+if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category']) ) {
 
 	$where = 'WHERE session_category_id !='.$Categoryid;
 	$sql = 'SELECT id, name  FROM '.$tbl_session .' WHERE session_category_id ='.$Categoryid.' ORDER BY name';
@@ -150,11 +142,11 @@ $rows_session = Database::store_result($result);
     <?php echo '<legend>'.$tool_name.'</legend>'; ?>
 <input type="hidden" name="formSent" value="1" />
 <?php
-if(!empty($errorMsg)) {
+if (!empty($errorMsg)) {
 	Display::display_error_message($errorMsg); //main API
 }
 
-if(!empty($OkMsg)) {
+if (!empty($OkMsg)) {
 	Display::display_confirmation_message($OkMsg); //main API
 }
 
@@ -246,7 +238,6 @@ if(!empty($OkMsg)) {
   </select></td>
 </tr>
 </table>
-
 </form>
 <script>
 function valide(){

@@ -19,8 +19,6 @@ api_protect_admin_script();
 
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 
-global $_configuration;
-
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tool_name = get_lang('ConfigureHomePage');
@@ -82,6 +80,7 @@ if (!empty($_SESSION['user_language_choice'])) {
 }
 
 // Ensuring availability of main files in the corresponding language
+$homePath = api_get_path(SYS_DATA_PATH).'home/';
 
 if (api_is_multiple_url_enabled()) {
     $access_url_id = api_get_current_access_url_id();
@@ -92,9 +91,8 @@ if (api_is_multiple_url_enabled()) {
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
 
-        $homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
-        $homep_new = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path added the url
-        $new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
+        $homep_new = $homePath.$clean_url; //homep for Home Path added the url
+        $new_url_dir = $homePath.$clean_url;
         //we create the new dir for the new sites
         if (!is_dir($new_url_dir)) {
             mkdir($new_url_dir, api_get_permissions_for_new_directories());
@@ -102,7 +100,7 @@ if (api_is_multiple_url_enabled()) {
     }
 } else {
     $homep_new = '';
-    $homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
+    //$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
 }
 
 $menuf = 'home_menu'; //menuf for Menu File
@@ -118,16 +116,16 @@ $homef = array($menuf, $newsf, $topf, $noticef, $menutabs);
 foreach ($homef as $my_file) {
     if (api_is_multiple_url_enabled()) {
         if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
-            copy($homep.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
+            copy($homePath.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
         }
     } else {
-        if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
-            copy($homep.$my_file.$ext, $homep.$my_file.'_'.$lang.$ext);
+        if (!file_exists($homePath.$my_file.'_'.$lang.$ext)) {
+            copy($homePath.$my_file.$ext, $homePath.$my_file.'_'.$lang.$ext);
         }
     }
 }
 if (api_is_multiple_url_enabled()) {
-    $homep = $homep_new;
+    $homePath = $homep_new;
 }
 
 // Check WCAG settings and prepare edition using WCAG
@@ -164,9 +162,9 @@ if (!empty($action)) {
                 }
 
                 // Write
-                if (file_exists($homep.$topf.'_'.$lang.$ext)) {
-                    if (is_writable($homep.$topf.'_'.$lang.$ext)) {
-                        $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
+                if (file_exists($homePath.$topf.'_'.$lang.$ext)) {
+                    if (is_writable($homePath.$topf.'_'.$lang.$ext)) {
+                        $fp = fopen($homePath.$topf.'_'.$lang.$ext, 'w');
                         fputs($fp, $home_top);
                         fclose($fp);
                     } else {
@@ -174,7 +172,7 @@ if (!empty($action)) {
                     }
                 } else {
                     //File does not exist
-                    $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
+                    $fp = fopen($homePath.$topf.'_'.$lang.$ext, 'w');
                     fputs($fp, $home_top);
                     fclose($fp);
                 }
@@ -204,9 +202,9 @@ if (!empty($action)) {
                     $errorMsg = get_lang('NoticeWillBeNotDisplayed');
                 }
                 // Write
-                if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
-                    if (is_writable($homep.$noticef.'_'.$lang.$ext)) {
-                        $fp = fopen($homep.$noticef.'_'.$lang.$ext, 'w');
+                if (file_exists($homePath.$noticef.'_'.$lang.$ext)) {
+                    if (is_writable($homePath.$noticef.'_'.$lang.$ext)) {
+                        $fp = fopen($homePath.$noticef.'_'.$lang.$ext, 'w');
                         if ($errorMsg == '') {
                             fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
                         } else {
@@ -218,7 +216,7 @@ if (!empty($action)) {
                     }
                 } else {
                     //File does not exist
-                    $fp = fopen($homep.$noticef.'_'.$lang.$ext, 'w');
+                    $fp = fopen($homePath.$noticef.'_'.$lang.$ext, 'w');
                     fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
                     fclose($fp);
                 }
@@ -240,9 +238,9 @@ if (!empty($action)) {
                 }
                 //Write
                 if ($s_languages_news != 'all') {
-                    if (file_exists($homep.$newsf.'_'.$s_languages_news.$ext)) {
-                        if (is_writable($homep.$newsf.'_'.$s_languages_news.$ext)) {
-                            $fp = fopen($homep.$newsf.'_'.$s_languages_news.$ext, 'w');
+                    if (file_exists($homePath.$newsf.'_'.$s_languages_news.$ext)) {
+                        if (is_writable($homePath.$newsf.'_'.$s_languages_news.$ext)) {
+                            $fp = fopen($homePath.$newsf.'_'.$s_languages_news.$ext, 'w');
                             fputs($fp, $home_news);
                             fclose($fp);
                         } else {
@@ -250,7 +248,7 @@ if (!empty($action)) {
                         }
                     } else {
                         // File does not exist
-                        $fp = fopen($homep.$newsf.'_'.$s_languages_news.$ext, 'w');
+                        $fp = fopen($homePath.$newsf.'_'.$s_languages_news.$ext, 'w');
                         fputs($fp, $home_news);
                         fclose($fp);
                     }
@@ -259,9 +257,9 @@ if (!empty($action)) {
                     $_languages = api_get_languages();
                     foreach ($_languages['name'] as $key => $value) {
                         $english_name = $_languages['folder'][$key];
-                        if (file_exists($homep.$newsf.'_'.$english_name.$ext)) {
-                            if (is_writable($homep.$newsf.'_'.$english_name.$ext)) {
-                                $fp = fopen($homep.$newsf.'_'.$english_name.$ext, 'w');
+                        if (file_exists($homePath.$newsf.'_'.$english_name.$ext)) {
+                            if (is_writable($homePath.$newsf.'_'.$english_name.$ext)) {
+                                $fp = fopen($homePath.$newsf.'_'.$english_name.$ext, 'w');
                                 fputs($fp, $home_news);
                                 fclose($fp);
                             } else {
@@ -269,7 +267,7 @@ if (!empty($action)) {
                             }
                         } else {
                             // File does not exist
-                            $fp = fopen($homep.$newsf.'_'.$english_name.$ext, 'w');
+                            $fp = fopen($homePath.$newsf.'_'.$english_name.$ext, 'w');
                             fputs($fp, $home_news);
                             fclose($fp);
                         }
@@ -309,7 +307,7 @@ if (!empty($action)) {
                     $link_url = 'http://'.$link_url;
                 }
                 $menuf = ($action == 'insert_tabs' || $action == 'edit_tabs') ? $menutabs : $menuf;
-                if (!is_writable($homep.$menuf.'_'.$lang.$ext)) {
+                if (!is_writable($homePath.$menuf.'_'.$lang.$ext)) {
                     $errorMsg = get_lang('HomePageFilesNotWritable');
                 } elseif (empty($link_name)) {
                     $errorMsg = get_lang('PleaseEnterLinkName');
@@ -333,7 +331,7 @@ if (!empty($action)) {
                     }
                     // Get the contents of home_menu_en.html (or active menu language
                     // version) into $home_menu as an array of one entry per line
-                    $home_menu = file($homep.$menuf.'_'.$lang.$ext);
+                    $home_menu = file($homePath.$menuf.'_'.$lang.$ext);
                     $home_menu = implode("\n", $home_menu);
                     $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
                     $home_menu = explode("\n", $home_menu);
@@ -355,7 +353,7 @@ if (!empty($action)) {
                         // If the file doesn't exist, then create it and
                         // fill it with default text
 
-                        $fp = @fopen($homep.$filename, 'w');
+                        $fp = @fopen($homePath.$filename, 'w');
                         if ($fp) {
                             if (empty($link_html)) {
                                 fputs($fp, get_lang('MyTextHere'));
@@ -368,7 +366,7 @@ if (!empty($action)) {
                     // If the requested action is to edit a link, open the file and
                     // write to it (if the file doesn't exist, create it)
                     if (in_array($action, array('edit_link')) && !empty($link_html)) {
-                        $fp = @fopen($homep.$filename, 'w');
+                        $fp = @fopen($homePath.$filename, 'w');
                         if ($fp) {
                             fputs($fp, $link_html);
                             fclose($fp);
@@ -401,14 +399,14 @@ if (!empty($action)) {
                     // Re-build the file from the home_menu array
                     $home_menu = implode("\n", $home_menu);
                     // Write
-                    if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
-                        if (is_writable($homep.$menuf.'_'.$lang.$ext)) {
-                            $fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
+                    if (file_exists($homePath.$menuf.'_'.$lang.$ext)) {
+                        if (is_writable($homePath.$menuf.'_'.$lang.$ext)) {
+                            $fp = fopen($homePath.$menuf.'_'.$lang.$ext, 'w');
                             fputs($fp, $home_menu);
                             fclose($fp);
-                            if (file_exists($homep.$menuf.$ext)) {
-                                if (is_writable($homep.$menuf.$ext)) {
-                                    $fpo = fopen($homep.$menuf.$ext, 'w');
+                            if (file_exists($homePath.$menuf.$ext)) {
+                                if (is_writable($homePath.$menuf.$ext)) {
+                                    $fpo = fopen($homePath.$menuf.$ext, 'w');
                                     fputs($fpo, $home_menu);
                                     fclose($fpo);
                                 }
@@ -418,7 +416,7 @@ if (!empty($action)) {
                         }
                     } else {
                         //File does not exist
-                        $fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
+                        $fp = fopen($homePath.$menuf.'_'.$lang.$ext, 'w');
                         fputs($fp, $home_menu);
                         fclose($fp);
                     }
@@ -450,7 +448,7 @@ if (!empty($action)) {
                 // link and re-writing the array to the file
                 $link_index = intval($_GET['link_index']);
                 $menuf = ($action == 'delete_tabs') ? $menutabs : $menuf;
-                $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
+                $home_menu = @file($homePath.$menuf.'_'.$lang.$ext);
                 if (empty($home_menu)) {
                     $home_menu = array();
                 }
@@ -464,12 +462,12 @@ if (!empty($action)) {
                 $home_menu = implode("\n", $home_menu);
                 $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 
-                $fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
+                $fp = fopen($homePath.$menuf.'_'.$lang.$ext, 'w');
                 fputs($fp, $home_menu);
                 fclose($fp);
-                if (file_exists($homep.$menuf.$ext)) {
-                    if (is_writable($homep.$menuf.$ext)) {
-                        $fpo = fopen($homep.$menuf.$ext, 'w');
+                if (file_exists($homePath.$menuf.$ext)) {
+                    if (is_writable($homePath.$menuf.$ext)) {
+                        $fpo = fopen($homePath.$menuf.$ext, 'w');
                         fputs($fpo, $home_menu);
                         fclose($fpo);
                     }
@@ -480,10 +478,10 @@ if (!empty($action)) {
             case 'edit_top':
                 // This request is only the preparation for the update of the home_top
                 $home_top = '';
-                if (is_file($homep.$topf.'_'.$lang.$ext) && is_readable($homep.$topf.'_'.$lang.$ext)) {
-                    $home_top = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
-                } elseif (is_file($homep.$topf.$lang.$ext) && is_readable($homep.$topf.$lang.$ext)) {
-                    $home_top = @(string)file_get_contents($homep.$topf.$lang.$ext);
+                if (is_file($homePath.$topf.'_'.$lang.$ext) && is_readable($homePath.$topf.'_'.$lang.$ext)) {
+                    $home_top = @(string)file_get_contents($homePath.$topf.'_'.$lang.$ext);
+                } elseif (is_file($homePath.$topf.$lang.$ext) && is_readable($homePath.$topf.$lang.$ext)) {
+                    $home_top = @(string)file_get_contents($homePath.$topf.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -492,10 +490,10 @@ if (!empty($action)) {
             case 'edit_notice':
                 // This request is only the preparation for the update of the home_notice
                 $home_notice = '';
-                if (is_file($homep.$noticef.'_'.$lang.$ext) && is_readable($homep.$noticef.'_'.$lang.$ext)) {
-                    $home_notice = @file($homep.$noticef.'_'.$lang.$ext);
-                } elseif (is_file($homep.$noticef.$lang.$ext) && is_readable($homep.$noticef.$lang.$ext)) {
-                    $home_notice = @file($homep.$noticef.$lang.$ext);
+                if (is_file($homePath.$noticef.'_'.$lang.$ext) && is_readable($homePath.$noticef.'_'.$lang.$ext)) {
+                    $home_notice = @file($homePath.$noticef.'_'.$lang.$ext);
+                } elseif (is_file($homePath.$noticef.$lang.$ext) && is_readable($homePath.$noticef.$lang.$ext)) {
+                    $home_notice = @file($homePath.$noticef.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -510,10 +508,10 @@ if (!empty($action)) {
             case 'edit_news':
                 // This request is the preparation for the update of the home_news page
                 $home_news = '';
-                if (is_file($homep.$newsf.'_'.$lang.$ext) && is_readable($homep.$newsf.'_'.$lang.$ext)) {
-                    $home_news = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
-                } elseif (is_file($homep.$newsf.$lang.$ext) && is_readable($homep.$newsf.$lang.$ext)) {
-                    $home_news = @(string)file_get_contents($homep.$newsf.$lang.$ext);
+                if (is_file($homePath.$newsf.'_'.$lang.$ext) && is_readable($homePath.$newsf.'_'.$lang.$ext)) {
+                    $home_news = @(string)file_get_contents($homePath.$newsf.'_'.$lang.$ext);
+                } elseif (is_file($homePath.$newsf.$lang.$ext) && is_readable($homePath.$newsf.$lang.$ext)) {
+                    $home_news = @(string)file_get_contents($homePath.$newsf.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -523,10 +521,10 @@ if (!empty($action)) {
                 // This request is the preparation for the addition of an item in home_menu
                 $home_menu = '';
                 $menuf = ($action == 'edit_tabs') ? $menutabs : $menuf;
-                if (is_file($homep.$menuf.'_'.$lang.$ext) && is_readable($homep.$menuf.'_'.$lang.$ext)) {
-                    $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
-                } elseif (is_file($homep.$menuf.$lang.$ext) && is_readable($homep.$menuf.$lang.$ext)) {
-                    $home_menu = @file($homep.$menuf.$lang.$ext);
+                if (is_file($homePath.$menuf.'_'.$lang.$ext) && is_readable($homePath.$menuf.'_'.$lang.$ext)) {
+                    $home_menu = @file($homePath.$menuf.'_'.$lang.$ext);
+                } elseif (is_file($homePath.$menuf.$lang.$ext) && is_readable($homePath.$menuf.$lang.$ext)) {
+                    $home_menu = @file($homePath.$menuf.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -543,10 +541,10 @@ if (!empty($action)) {
             case 'insert_tabs':
                 // This request is the preparation for the addition of an item in home_menu
                 $home_menu = '';
-                if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
-                    $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
-                } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
-                    $home_menu = @file($homep.$menutabs.$lang.$ext);
+                if (is_file($homePath.$menutabs.'_'.$lang.$ext) && is_readable($homePath.$menutabs.'_'.$lang.$ext)) {
+                    $home_menu = @file($homePath.$menutabs.'_'.$lang.$ext);
+                } elseif (is_file($homePath.$menutabs.$lang.$ext) && is_readable($homePath.$menutabs.$lang.$ext)) {
+                    $home_menu = @file($homePath.$menutabs.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -565,10 +563,10 @@ if (!empty($action)) {
                 // This request is the preparation for the edition of the links array
                 $home_menu = '';
                 $menuf = ($action == 'edit_tabs') ? $menutabs : $menuf;
-                if (is_file($homep.$menuf.'_'.$lang.$ext) && is_readable($homep.$menuf.'_'.$lang.$ext)) {
-                    $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
-                } elseif (is_file($homep.$menuf.$lang.$ext) && is_readable($homep.$menuf.$lang.$ext)) {
-                    $home_menu = @file($homep.$menuf.$lang.$ext);
+                if (is_file($homePath.$menuf.'_'.$lang.$ext) && is_readable($homePath.$menuf.'_'.$lang.$ext)) {
+                    $home_menu = @file($homePath.$menuf.'_'.$lang.$ext);
+                } elseif (is_file($homePath.$menuf.$lang.$ext) && is_readable($homePath.$menuf.$lang.$ext)) {
+                    $home_menu = @file($homePath.$menuf.$lang.$ext);
                 } else {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
@@ -635,7 +633,7 @@ if (!empty($action)) {
 
                             if (!strstr($filename, '/') && strstr($filename, '.html')) {
                                 // Get oonly the contents of the link file
-                                $link_html = @file($homep.$filename);
+                                $link_html = @file($homePath.$filename);
                                 $link_html = implode('', $link_html);
                                 $link_url = '';
                             } else {
@@ -665,7 +663,7 @@ switch ($action) {
     case 'open_link':
         if (!empty($link)) {
             // $link is only set in case of action=open_link and is filtered
-            $open = @(string)file_get_contents($homep.$link);
+            $open = @(string)file_get_contents($homePath.$link);
             $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
             echo $open;
         }
@@ -820,7 +818,7 @@ switch ($action) {
             $open = $home_top;
         } else {
             $name = $newsf;
-            $open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
+            $open = @(string)file_get_contents($homePath.$newsf.'_'.$lang.$ext);
         }
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
@@ -898,10 +896,10 @@ switch ($action) {
                     <td colspan="2">
                         <?php
                         //print home_top contents
-                        if (file_exists($homep.$topf.'_'.$lang.$ext)) {
-                            $home_top_temp = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
+                        if (file_exists($homePath.$topf.'_'.$lang.$ext)) {
+                            $home_top_temp = @(string)file_get_contents($homePath.$topf.'_'.$lang.$ext);
                         } else {
-                            $home_top_temp = @(string)file_get_contents($homep.$topf.$ext);
+                            $home_top_temp = @(string)file_get_contents($homePath.$topf.$ext);
                         }
                         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
                         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
@@ -954,12 +952,12 @@ switch ($action) {
                     </td>
                     <!--<td width="50%" valign="top">
 				<?php
-                    if (file_exists($homep.$newsf.'_'.$lang.$ext)) {
-                        $open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
+                    if (file_exists($homePath.$newsf.'_'.$lang.$ext)) {
+                        $open = @(string)file_get_contents($homePath.$newsf.'_'.$lang.$ext);
                         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
                         echo $open;
                     } else {
-                        $open = @(string)file_get_contents($homep.$newsf.$ext);
+                        $open = @(string)file_get_contents($homePath.$newsf.$ext);
                         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
                         echo $open;
                     }
@@ -972,10 +970,10 @@ switch ($action) {
             // Add new page
 
             $home_menu = '';
-            if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
-                $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
+            if (file_exists($homePath.$menutabs.'_'.$lang.$ext)) {
+                $home_menu = @file($homePath.$menutabs.'_'.$lang.$ext);
             } else {
-                $home_menu = @file($homep.$menutabs.$ext);
+                $home_menu = @file($homePath.$menutabs.$ext);
             }
             if (empty($home_menu)) {
                 $home_menu = array();
@@ -1077,10 +1075,10 @@ switch ($action) {
                 </h4>
                 <?php
                 $home_notice = '';
-                if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
-                    $home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
+                if (file_exists($homePath.$noticef.'_'.$lang.$ext)) {
+                    $home_notice = @(string)file_get_contents($homePath.$noticef.'_'.$lang.$ext);
                 } else {
-                    $home_notice = @(string)file_get_contents($homep.$noticef.$ext);
+                    $home_notice = @(string)file_get_contents($homePath.$noticef.$ext);
                 }
                 $home_notice = api_to_system_encoding(
                     $home_notice,
@@ -1106,10 +1104,10 @@ switch ($action) {
                 <ul class="menulist">
                     <?php
                     $home_menu = '';
-                    if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
-                        $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
+                    if (file_exists($homePath.$menuf.'_'.$lang.$ext)) {
+                        $home_menu = @file($homePath.$menuf.'_'.$lang.$ext);
                     } else {
-                        $home_menu = @file($homep.$menuf.$ext);
+                        $home_menu = @file($homePath.$menuf.$ext);
                     }
                     if (empty($home_menu)) {
                         $home_menu = array();

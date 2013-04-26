@@ -32,10 +32,6 @@ $this_section = SECTION_COURSES;
 // false - the new course is created immedialely, after filling this form.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
-if ($course_validation_feature) {
-    require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-}
-
 $htmlHeadXtra[] = '<script>
     function setFocus(){
         $("#title").focus();
@@ -73,7 +69,6 @@ if (api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platf
 // Check access rights.
 if (!api_is_allowed_to_create_course()) {
     api_not_allowed(true);
-    exit;
 }
 
 // Build the form.
@@ -177,12 +172,10 @@ if ($course_validation_feature) {
         $form->addElement('checkbox', 'legal', null, get_lang('IAcceptTermsAndConditions'), 1);
         $form->addRule('legal', get_lang('YouHaveToAcceptTermsAndConditions'), 'required');
         // Link to terms and conditions.
-        $link_terms_and_conditions = '<script type="text/JavaScript">
-        <!--
+        $link_terms_and_conditions = '<script>
         function MM_openBrWindow(theURL,winName,features) { //v2.0
             window.open(theURL,winName,features);
         }
-        //-->
         </script><a href="#" onclick="javascript: MM_openBrWindow(\''.$terms_and_conditions_url.'\',\'Conditions\',\'scrollbars=yes, width=800\')">';
         $link_terms_and_conditions .= get_lang('ReadTermsAndConditions').'</a>';
         $form->addElement('label', null, $link_terms_and_conditions);
@@ -312,7 +305,6 @@ if ($form->validate()) {
         // Display the form.
         $content = $form->return_form();
     }
-
 } else {
     if (!$course_validation_feature) {
         $message = Display :: return_message(get_lang('Explanation'));

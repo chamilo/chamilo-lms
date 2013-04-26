@@ -10,7 +10,7 @@
  *   of older versions before upgrading.
  */
 
-/*      CONSTANTS */
+/* CONSTANTS */
 
 define('SYSTEM_MAIN_DATABASE_FILE', $new_version.'/db_main.sql');
 define('COUNTRY_DATA_FILENAME', 'country_data.csv');
@@ -306,7 +306,6 @@ function write_courses_htaccess_file($url_append)
  */
 function write_system_config_file($path)
 {
-
     global $dbHostForm;
     global $dbUsernameForm;
     global $dbPassForm;
@@ -1245,7 +1244,7 @@ function display_requirements(
             if ($file_course_test_was_created == true) {
                 break;
             }
-            $r = @touch($course_dir.'/test.php',$perm);
+            $r = touch($course_dir.'/test.php', $perm);
             if ($r === true) {
                 $fil_perm_verified = $perm;
                 if (check_course_script_interpretation($course_dir, $course_attempt_name, 'test.php')) {
@@ -1264,7 +1263,7 @@ function display_requirements(
     $dir_perm = Display::label('0'.decoct($dir_perm_verified), 'info');
     $file_perm = Display::label('0'.decoct($fil_perm_verified), 'info');
 
-    $course_test_was_created  = ($course_test_was_created == true && $file_course_test_was_created == true) ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'), 'warning');
+    $course_test_was_created  = ($course_test_was_created == true && $file_course_test_was_created == true) ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'), 'important');
 
     echo '<table class="table">
             <tr>
@@ -1361,13 +1360,13 @@ function display_requirements(
         $notwritable = array();
         $curdir = getcwd();
 
-        $checked_writable = api_get_path(CONFIGURATION_PATH);
+        $checked_writable = api_get_path(SYS_CONFIG_PATH);
         if (!is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_CODE_PATH).'upload/users/';
+        $checked_writable = api_get_path(SYS_DATA_PATH);
         if (!is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
@@ -1385,32 +1384,38 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_COURSE_PATH);
+        $checked_writable = api_get_path(SYS_LOG_PATH);
         if (!is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
+
+        /*$checked_writable = api_get_path(SYS_COURSE_PATH);
+        if (!is_writable($checked_writable)) {
+            $notwritable[] = $checked_writable;
+            @chmod($checked_writable, $perm);
+        }*/
 
         if ($course_test_was_created == false || $file_course_test_was_created == false) {
             $error = true;
         }
 
-
-        $checked_writable = api_get_path(SYS_PATH).'home/';
+        /*$checked_writable = api_get_path(SYS_PATH).'home/';
         if (!is_writable($checked_writable)) {
             $notwritable[] = realpath($checked_writable);
             @chmod($checked_writable, $perm);
-        }
+        }*/
 
-        $checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';
+        /*$checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';
         if (file_exists($checked_writable) && !is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm_file);
-        }
+        }*/
 
         // Second, if this fails, report an error
 
-        //--> The user would have to adjust the permissions manually
+        // The user would have to adjust the permissions manually
+
         if (count($notwritable) > 0) {
             $error = true;
             echo '<div class="error-message">';
@@ -1441,8 +1446,7 @@ function display_requirements(
         <p align="center" style="padding-top:15px">
         <button type="submit" name="step1" class="back" onclick="javascript: window.location='index.php'; return false;"
                 value="&lt; <?php echo get_lang('Previous'); ?>"><?php echo get_lang('Previous'); ?></button>
-        <button type="submit" name="step2_install" class="add"
-                value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
+        <button type="submit" name="step2_install" class="add"value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
             echo 'disabled="disabled"';
         } ?> ><?php echo get_lang('NewInstallation'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-"/>
@@ -2053,7 +2057,7 @@ function display_configuration_settings_form(
     echo "<h2>".display_step_sequence().get_lang("CfgSetting")."</h2>";
     echo '</div>';
     echo '<div class="RequirementContent">';
-    echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>main/inc/conf/configuration.php</strong></p>';
+    echo '<p>'.get_lang('ConfigSettingsInfo').' '.Display::label('config/configuration.php', 'info').'</p>';
     echo '</div>';
 
     echo '<fieldset>';
@@ -2533,8 +2537,18 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
         if ($handler = @fopen($file_name, "w")) {
             //write content
             if (fwrite($handler , $content)) {
-                $sock_errno = ''; $sock_errmsg = '';
-                $url = api_get_path(WEB_COURSE_PATH).'/'.$course_attempt_name.'/'.$file;
+
+                $file = api_get_path(SYS_COURSE_PATH).$course_attempt_name.'/'.$file;
+                if (file_exists($file)) {
+                    return true;
+                }
+
+                //You can't access to a course file like this. You will be prompted to the installation process.
+                //If you access
+                $sock_errno = '';
+                $sock_errmsg = '';
+
+                $url = api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/'.$file;
 
                 $parsed_url = parse_url($url);
                 //$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] : ''; //http
@@ -2598,19 +2612,24 @@ function drop_course_tables()
     }
 }
 
-function movingFilesInAppFolder()
+/**
+ * Copy users files in the new data directory
+ */
+function movingFilesInDataFolder()
 {
     $sysPath = api_get_path(SYS_PATH);
     $moveDirs = array(
         $sysPath.'searchdb' => api_get_path(SYS_DATA_PATH).'searchdb',
         $sysPath.'home' => api_get_path(SYS_DATA_PATH).'home',
+        $sysPath.'courses' => api_get_path(SYS_DATA_PATH).'courses',
+        $sysPath.'main/upload/users' => api_get_path(SYS_DATA_PATH).'upload/users',
     );
-
+    error_log("Copying files to the new data folder");
     foreach ($moveDirs as $from => $to) {
         if (is_dir($from)) {
             $copy = "cp -r $from/* $to";
+            error_log($copy);
             system($copy);
         }
     }
 }
-

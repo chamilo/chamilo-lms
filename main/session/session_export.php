@@ -1,8 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * 	@package chamilo.admin
  */
+
 // name of the language file that needs to be included
 $language_file = 'admin';
 
@@ -139,10 +141,10 @@ if ($_POST['formSent']) {
             $add .= $users;
 
             //courses
-            $sql = "SELECT DISTINCT $tbl_course.code
+            $sql = "SELECT DISTINCT $tbl_course.id, $tbl_course.code
 					FROM $tbl_course
 					INNER JOIN $tbl_session_course_user
-						ON $tbl_course.code = $tbl_session_course_user.course_code
+						ON $tbl_course.id = $tbl_session_course_user.c_id
 						AND $tbl_session_course_user.id_session = '" . $row['id'] . "'";
 
             $rsCourses = Database::query($sql);
@@ -150,12 +152,13 @@ if ($_POST['formSent']) {
             $courses = '';
             while ($rowCourses = Database::fetch_array($rsCourses)) {
 
-                // get coachs from a course
+                // Get coachs from a course
                 $sql = "SELECT u.username
 					FROM $tbl_session_course_user scu
 					INNER JOIN $tbl_user u ON u.user_id = scu.id_user
-					WHERE scu.course_code = '{$rowCourses['code']}'
-						AND scu.id_session = '" . $row['id'] . "' AND scu.status = 2 ";
+					WHERE scu.c_id = '{$rowCourses['id']}' AND
+						  scu.id_session = '" . $row['id'] . "' AND
+						  scu.status = 2 ";
 
                 $rs_coachs = Database::query($sql);
                 $coachs = array();
@@ -179,7 +182,7 @@ if ($_POST['formSent']) {
 						INNER JOIN $tbl_session_user su ON scu.id_user = su.id_user AND scu.id_session = su.id_session AND su.relation_type<>" . SESSION_RELATION_TYPE_RRHH . "
 						INNER JOIN $tbl_user u
 						ON scu.id_user = u.user_id
-						AND scu.course_code='" . $rowCourses['code'] . "'
+						AND scu.c_id='" . $rowCourses['id'] . "'
 						AND scu.id_session='" . $row['id'] . "'";
 
                 $rsUsersCourse = Database::query($sql);
@@ -231,7 +234,7 @@ Display::display_header($tool_name);
 //select of sessions
 $sql = "SELECT id, name FROM $tbl_session ORDER BY name";
 
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
     $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1) {
@@ -241,6 +244,7 @@ if ($_configuration['multiple_access_urls']) {
 		ORDER BY name";
     }
 }
+
 $result = Database::query($sql);
 $Sessions = Database::store_result($result);
 

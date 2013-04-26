@@ -15,7 +15,7 @@ $language_file="registration";
 require_once "../inc/global.inc.php";
 $this_section = SECTION_COURSES;
 
-if (! ($is_courseAdmin || $is_platformAdmin)) api_not_allowed(true);
+if (! (api_is_course_admin() || api_is_platform_admin())) api_not_allowed(true);
 
 $currentCourseID   = $_course['sysCode'];
 $currentCourseName = $_course['official_code'];

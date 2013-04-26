@@ -1374,8 +1374,7 @@ function create_unexisting_work_directory($base_work_dir, $desired_dir_name)
  * @return    integer    -1 on error
  */
 function del_dir($id)
-{
-    global $_course;
+{$_course = api_get_course_info();
     $id = intval($id);
     $work_data = get_work_data_by_id($id);
 
@@ -2167,7 +2166,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
  */
 function send_reminder_users_without_publication($task_data)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $sender_name = api_get_person_name(
         api_get_setting('administratorName'),
         api_get_setting('administratorSurname'),
@@ -2203,7 +2202,7 @@ function send_reminder_users_without_publication($task_data)
 /**
  * Sends an email to the students of a course when a homework is created
  *
- * @param string course_id
+ * @param int course_id
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @author Julio Montoya <gugli100@gmail.com> Adding session support - 2011
@@ -2217,6 +2216,7 @@ function send_email_on_homework_creation($course_id)
     } else {
         $students = CourseManager::get_student_list_from_course_code($course_id, true, $session_id);
     }
+    $courseInfo = api_get_course_info_by_id($course_id);
     $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('HomeworkCreated');
     $currentUser = api_get_user_info(api_get_user_id());
     if (!empty($students)) {
@@ -2230,7 +2230,7 @@ function send_email_on_homework_creation($course_id)
                     PERSON_NAME_EMAIL_ADDRESS
                 );
                 $emailbody = get_lang('Dear')." ".$name_user.",\n\n";
-                $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang(
+                $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$courseInfo['title'].". "."\n\n".get_lang(
                     'PleaseCheckHomeworkPage'
                 );
                 $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
@@ -2385,11 +2385,10 @@ function get_list_users_without_publication($task_id)
 
     if ($session_id == 0) {
         $sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u
-		              WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";
+		              WHERE u.status!=1 and cu.c_id='".api_get_course_int_id()."' AND u.user_id=cu.user_id";
     } else {
         $sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u
-		              WHERE u.status!=1 and cu.course_code='".api_get_course_id(
-        )."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
+		              WHERE u.status!=1 and cu.c_id='".api_get_course_int_id()."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
     }
 
     $group_id = api_get_group_id();

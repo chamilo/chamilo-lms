@@ -127,7 +127,8 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     }
 } else {
     $user = api_get_user_info();
-    $backups = CourseArchiver::get_available_backups($is_platformAdmin ? null : $user['user_id']);
+    $user = $is_platformAdmin ? null : $user['user_id'];
+    $backups = CourseArchiver::get_available_backups($user);
     $backups_available = count($backups) > 0;
 
     $form = new FormValidator('import_backup_form', 'post', 'import_backup.php', '', 'multipart/form-data');

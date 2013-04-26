@@ -1,18 +1,17 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  * @todo better organization of the class, methods and variables
  *
  * */
 use \ChamiloSession as Session;
+use Silex\Application;
 
 class Template
 {
     private $app;
-
-    public $style = 'default'; //see the template folder
     public $preview_theme = null;
     public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
     public $title = null;
@@ -31,10 +30,9 @@ class Template
     public $navigation_array;
 
     /**
-     * @param string $title
      * @param Application $app
      */
-    public function __construct($title = null, $app = null)
+    public function __construct(Application $app = null)
     {
         if (empty($app)) {
             global $app;
@@ -45,40 +43,52 @@ class Template
         }
 
         $this->app['classic_layout'] = true;
-
         $this->navigation_array = $this->returnNavigationArray();
 
-        $show_header = $app['template.show_header'];
-        $show_footer = $app['template.show_footer'];
-        $show_learnpath = $app['template.show_learnpath'];
-        $load_plugins = $app['template.load_plugins'];
+        //just in case
+        global $tool_name;
 
         //Page title
-        $this->title = $title;
-        $this->show_learnpath = $show_learnpath;
-        $this->load_plugins = $load_plugins;
+        $this->title = isset($app['title']) ? $app['title'] : $tool_name;
+        $this->show_learnpath = $app['template.show_learnpath'];
+        $this->load_plugins = $app['template.load_plugins'];
 
         // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
         $this->jquery_ui_theme = 'smoothness';
 
         //Setting system variables
-        $this->set_system_parameters();
+        $this->setSystemParameters();
 
-       //Setting user variables
-       $this->setUserParameters();
+        //Setting user variables
+        $this->setUserParameters();
 
         //Setting course variables
         $this->setCourseParameters();
 
-        //header and footer are showed by default
-        $this->setFooter($show_footer);
+        //Using global because all scripts have this variable
+        global $interbreadcrumb;
 
-        $this->setHeader($show_header);
+        if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
+            if (empty($interbreadcrumb)) {
+                $interbreadcrumb = $this->app['breadcrumb'];
+            } else {
+                $interbreadcrumb = array_merge($interbreadcrumb, $this->app['breadcrumb']);
+            }
+        }
+
+        if (!empty($interbreadcrumb)) {
+            $this->app['breadcrumb'] = $interbreadcrumb;
+        }
+
+        //header and footer are showed by default
+        $this->setFooter($app['template.show_footer']);
+
+        $this->setHeader($app['template.show_header']);
 
         $this->setHeaderParameters();
         $this->setFooterParameters();
 
-        $this->assign('style', $this->style);
+        $this->assign('style', $app['template_style']);
 
         //Chamilo plugins
         if ($this->show_header) {
@@ -106,6 +116,7 @@ class Template
      * Get icon path
      * @param string $image
      * @param int $size
+     *
      * @return string
      */
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
@@ -117,6 +128,7 @@ class Template
      * Format date
      * @param string $timestamp
      * @param string $format
+     *
      * @return string
      */
     public static function format_date($timestamp, $format = null)
@@ -262,13 +274,14 @@ class Template
         $this->course_id = api_get_course_int_id();
     }
 
-    /** Set user parameters */
+    /**
+     * Set user parameters
+     */
     private function setUserParameters()
     {
         $user_info = array();
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
-
         if (api_user_is_login()) {
             $user_info = $this->app['current_user'];
             $user_info['logged'] = 1;
@@ -292,12 +305,13 @@ class Template
             ) : null;
             $this->user_is_logged_in = true;
         }
+
         //Setting the $_u array that could be use in any template
         $this->assign('_u', $user_info);
     }
 
     /** Set system parameters */
-    private function set_system_parameters()
+    private function setSystemParameters()
     {
         global $_configuration;
 
@@ -317,7 +331,7 @@ class Template
 
         //Here we can add system parameters that can be use in any template
         $_s = array(
-            'software_name' => $_configuration['software_name'],
+            'software_name' => api_get_software_name(),
             'system_version' => $_configuration['system_version'],
             'site_name' => api_get_setting('siteName'),
             'institution' => api_get_setting('Institution')
@@ -410,6 +424,9 @@ class Template
         $this->assign('logo', $logo);
     }
 
+    /**
+     *
+     */
     private function set_js_files()
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
@@ -455,7 +472,7 @@ class Template
 
         //Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
-            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');
+            $js_file_to_string .= $this->fetch($this->app['template_style'].'/mail_editor/email_link.js.tpl');
         }
 
         //$js_file_to_string = api_get_js_simple(api_get_path(WEB_PATH).'web/js/script.js').$js_file_to_string;
@@ -482,16 +499,8 @@ class Template
     /**
      * Set header parameters
      */
-    private function setHeaderParameters() {
-        global $interbreadcrumb;
-
-        if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
-            if (empty($interbreadcrumb)) {
-                $interbreadcrumb = $this->app['breadcrumb'];
-            } else {
-                $interbreadcrumb = array_merge($interbreadcrumb, $this->app['breadcrumb']);
-            }
-        }
+    private function setHeaderParameters()
+    {
         $_course = api_get_course_info();
         $_configuration = $this->app['configuration'];
         $this_section = $this->app['this_section'];
@@ -502,7 +511,6 @@ class Template
         $this->menu_navigation = $navigation['menu_navigation'];
 
         $this->assign('system_charset', api_get_system_encoding());
-
         $this->assign('online_button', Display::return_icon('online.png'));
         $this->assign('offline_button', Display::return_icon('offline.png'));
 
@@ -612,7 +620,8 @@ class Template
         $this->assign('menu', $menu);
 
         //Breadcrumb
-        $breadcrumb = $this->returnBreadcrumb($interbreadcrumb, $nameTools);
+        $breadcrumb = $this->returnBreadcrumb();
+
         $this->assign('breadcrumb', $breadcrumb);
 
         //Extra content
@@ -647,11 +656,11 @@ class Template
                 $this->assign('footer_extra_content', $extra_footer);
             }
         }
+        $id_course = api_get_course_int_id();
 
         //Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
-            $id_course = api_get_course_id();
             $id_session = api_get_session_id();
             if (isset($id_course) && $id_course != -1) {
                 $tutor_data = '';
@@ -677,7 +686,6 @@ class Template
 
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
-            $id_course = api_get_course_id();
             if (isset($id_course) && $id_course != -1) {
                 $teacher_data = '';
                 $mail = CourseManager::get_emails_of_tutors_to_course($id_course);
@@ -738,7 +746,9 @@ class Template
 
     public function assign($key, $value = null)
     {
-        $this->app['twig']->addGlobal($key, $value);
+        if ($this->app['allowed'] == true) {
+            $this->app['twig']->addGlobal($key, $value);
+        }
     }
 
     public function display($template = null)
@@ -791,7 +801,7 @@ class Template
                 $clean_url = replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path
+                $homep = api_get_path(SYS_DATA_PATH).'home/'.$clean_url; //homep for Home Path
                 //we create the new dir for the new sites
                 if (!is_dir($homep)) {
                     mkdir($homep, api_get_permissions_for_new_directories());
@@ -902,7 +912,7 @@ class Template
      */
     function get_tabs()
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         $navigation = array();
 
@@ -1069,7 +1079,7 @@ class Template
                     'users'
                 ) == 'true' AND $user_id)
                 ) {
-                    $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang(
+                    $html .= '<li><a href="'.SocialManager::getUserOnlineLink().'" target="_top" title="'.get_lang(
                         'UsersOnline'
                     ).'" >'.
                         Display::return_icon(
@@ -1088,9 +1098,7 @@ class Template
                     'course'
                 ) == 'true' AND isset($_course['sysCode'])
                 ) {
-                    $html .= '<li><a href="'.api_get_path(
-                        WEB_PATH
-                    ).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.
+                    $html .= '<li><a href="'.SocialManager::getUserOnlineLink($_course['sysCode']).'" target="_top">'.
                         Display::return_icon(
                             'course.png',
                             get_lang('UsersOnline').' '.get_lang('InThisCourse'),
@@ -1103,9 +1111,7 @@ class Template
             // Display the who's online for the session
             if (isset($user_id) && api_get_session_id() != 0) {
                 if (api_is_allowed_to_edit()) {
-                    $html .= '<li><a href="'.api_get_path(
-                        WEB_PATH
-                    ).'whoisonlinesession.php?session_id='.api_get_session_id().'&id_coach='.$user_id.'" >'.
+                    $html .= '<li><a href="'.SocialManager::getUserOnlineLink(null, api_get_session_id()).'&id_coach='.$user_id.'" >'.
                         Display::return_icon(
                             'session.png',
                             get_lang('UsersConnectedToMySessions'),
@@ -1258,8 +1264,10 @@ class Template
      * @param array $interbreadcrumb
      * @return string
      */
-    public function returnBreadcrumb($interbreadcrumb)
+    public function returnBreadcrumb()
     {
+        $interbreadcrumb = $this->app['breadcrumb'];
+
         $session_id = api_get_session_id();
         $session_name = api_get_session_name($session_id);
         $_course = api_get_course_info();

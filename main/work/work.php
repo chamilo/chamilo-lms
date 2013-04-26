@@ -86,15 +86,15 @@ $TSTDPUBASG = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT)
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $table_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 /*	Constants and variables */
 
 $tool_name = get_lang('StudentPublications');
 $course_code = api_get_course_id();
+$courseId = api_get_course_int_id();
 $session_id = api_get_session_id();
 
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id);
+$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $courseId, $session_id);
 $is_course_member = $is_course_member || api_is_platform_admin();
 
 $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
@@ -440,9 +440,9 @@ switch ($action) {
         $show_progress_bar = false;
 
         if ($submitGroupWorkUrl) {
-            // For user comming from group space to publish his work
+            // For user coming from group space to publish his work
             $realUrl = str_replace(
-                $_configuration['root_sys'],
+                api_get_path(SYS_PATH),
                 api_get_path(WEB_PATH),
                 str_replace("\\", '/', realpath($submitGroupWorkUrl))
             );
@@ -1051,7 +1051,7 @@ switch ($action) {
                     }
 
                     if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
-                        send_email_on_homework_creation(api_get_course_id());
+                        send_email_on_homework_creation(api_get_course_int_id());
                     }
                 } else {
                     Display :: display_error_message(get_lang('CannotCreateDir'));

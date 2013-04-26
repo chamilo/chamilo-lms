@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\Form\Tests\Extension\Core\Type;
 
-use Symfony\Component\PropertyAccess\PropertyPath;
+use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Tests\Fixtures\Author;
@@ -598,6 +598,17 @@ class FormTypeTest extends TypeTestCase
         $this->assertTrue($form->getConfig()->getMapped());
     }
 
+    // BC
+    public function testPropertyPathFalseImpliesDefaultNotMapped()
+    {
+        $form = $this->factory->createNamed('name', 'form', null, array(
+            'property_path' => false,
+        ));
+
+        $this->assertEquals(new PropertyPath('name'), $form->getPropertyPath());
+        $this->assertFalse($form->getConfig()->getMapped());
+    }
+
     public function testNotMapped()
     {
         $form = $this->factory->create('form', null, array(
@@ -649,16 +660,5 @@ class FormTypeTest extends TypeTestCase
 
         $this->assertSame('foo', $view->vars['data']);
         $this->assertSame('bar', $view->vars['value']);
-    }
-
-    // https://github.com/symfony/symfony/issues/6862
-    public function testPassZeroLabelToView()
-    {
-        $view = $this->factory->create('form', null, array(
-                'label' => '0'
-            ))
-            ->createView();
-
-        $this->assertSame('0', $view->vars['label']);
     }
 }

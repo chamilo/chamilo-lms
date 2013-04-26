@@ -28,6 +28,12 @@ $use_anonymous = true;
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
+
+/* 	Sessions */
+
+$ctok = Security::getCurrentToken();
+$stok = Security::get_token();
+
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
@@ -127,10 +133,8 @@ if (!empty($group_id)) {
     $_SESSION['select_groupusers'] = 'hide';
 }
 
-/* 	Sessions */
 
-$ctok = Security::getCurrentToken();
-$stok = Security::get_token();
+
 $to = null;
 $email_ann = null;
 
@@ -351,6 +355,7 @@ if (AnnouncementManager::user_can_edit_announcement()) {
         $error_message = get_lang('TitleIsRequired');
         $content_to_modify = $newContent;
     } else {
+
         if ($submitAnnouncement) {
             $selected_form = isset($_POST['selectedform']) ? $_POST['selectedform'] : null;
 
@@ -376,7 +381,7 @@ if (AnnouncementManager::user_can_edit_announcement()) {
                 }
             } else {
                 //insert mode
-                if ($ctok == $_POST['sec_token']) {
+                if ($ctok == $_REQUEST['sec_token']) {
                     $file = $_FILES['user_upload'];
                     $file_comment = $_POST['file_comment'];
 

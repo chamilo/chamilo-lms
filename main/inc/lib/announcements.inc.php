@@ -137,6 +137,7 @@ class AnnouncementManager
      */
     public static function display_announcement($announcement_id)
     {
+        global $stok;
         if ($announcement_id != strval(intval($announcement_id))) {
             return false;
         }
@@ -216,7 +217,6 @@ class AnnouncementManager
                     $image_visibility = "invisible";
                     $alt_visibility = get_lang('Visible');
                 }
-                global $stok;
 
                 $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq(
                 )."&origin=".(!empty($_GET['origin']) ? Security::remove_XSS(

@@ -71,8 +71,8 @@ $_configuration['db_admin_path']  = '';
 // CAS IMPLEMENTATION
 // -> Go to your portal Chamilo > Administration > CAS to activate CAS
 // You can leave these lines uncommented even if you don't use CAS authentification
-$extAuthSource["cas"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
-$extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
+//$extAuthSource["cas"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
+//$extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
 //
 // NEW LDAP IMPLEMENTATION BASED ON external_login info
 // -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration

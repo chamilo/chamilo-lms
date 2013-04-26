@@ -1932,14 +1932,14 @@ class Exercise
         $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_track_e_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $sql_select = "SELECT exe_id FROM $table_track_e_exercises
+        $sql = "SELECT exe_id FROM $table_track_e_exercises
 					   WHERE 	c_id = '".api_get_course_int_id()."' AND
 								exe_exo_id = ".$this->id." AND
 								orig_lp_id = 0 AND
 								orig_lp_item_id = 0 AND
 								session_id = ".api_get_session_id()."";
 
-        $result = Database::query($sql_select);
+        $result = Database::query($sql);
         $exe_list = Database::store_result($result);
 
         //deleting TRACK_E_ATTEMPT table
@@ -3129,20 +3129,24 @@ class Exercise
                             $i_answer_id = $a_answers['iid']; //3
                             $s_answer_label = $a_answers['answer'];  // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
-                            //$i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
 
                             $sql_user_answer = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                                WHERE exe_id = '$exeId' AND question_id = '$questionId' AND position = '$i_answer_id'";
+                                                WHERE exe_id = '$exeId' AND
+                                                      question_id = '$questionId' AND
+                                                      position = '$i_answer_id'";
 
                             $res_user_answer = Database::query($sql_user_answer);
 
-                            if (Database::num_rows($res_user_answer) > 0) {
+                            if (Database::num_rows($res_user_answer)) {
                                 //  Rich - good looking
-                                $s_user_answer = Database::result($res_user_answer, 0, 0);
+                                $result = Database::fetch_array($res_user_answer, 'ASSOC');
+                                $s_user_answer = $result['answer'];
                             } else {
                                 $s_user_answer = 0;
                             }
+
                             $i_answerWeighting = $objAnswerTmp->selectWeighting($i_answer_id);
+
                             $user_answer = '';
                             if (!empty($s_user_answer)) {
                                 if ($s_user_answer == $i_answer_correct_answer) {
@@ -3179,17 +3183,19 @@ class Exercise
                         }
                         break(2); //break the switch and the "for" condition
                     } else {
-                        //$numAnswer = $objAnswerTmp->selectAutoId($answerId);
                         $numAnswer = $answerId;
-
                         if ($answerCorrect) {
+                            $matchingKey = $choice[$numAnswer];
+                            if ($answerType == DRAGGABLE) {
+                                $matchingKey = $numAnswer;
+                            }
                             if ($answerCorrect == $choice[$numAnswer]) {
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
-                                $user_answer = '<span>'.$answer_matching[$choice[$numAnswer]].'</span>';
+                                $user_answer = '<span>'.$answer_matching[$matchingKey].'</span>';
                             } else {
                                 if ($choice[$numAnswer]) {
-                                    $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';
+                                    $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$matchingKey].'</span>';
                                 }
                             }
                             $matching[$numAnswer] = $choice[$numAnswer];
@@ -3215,7 +3221,11 @@ class Exercise
                             }
                         }
                     } else {
-                        $studentChoice = $choice[$answerId];
+                        if (isset($choice[$answerId])) {
+                            $studentChoice = $choice[$answerId];
+                        } else {
+                            $studentChoice = false;
+                        }
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                             $totalScore += $answerWeighting;

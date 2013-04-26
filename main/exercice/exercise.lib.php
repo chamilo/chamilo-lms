@@ -43,6 +43,8 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
     $answerType = $objQuestionTmp->selectType();
     $pictureName = $objQuestionTmp->selectPicture();
 
+    $s = null;
+
     if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
         // Question is not a hotspot
 
@@ -62,8 +64,6 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
         }
 
         echo '<div class="question_options">';
-
-        $s = '';
         // construction of the Answer object (also gets all answers details)
         $objAnswerTmp = new Answer($questionId);
 
@@ -474,7 +474,7 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
                     $s .= '<select id="window_'.$windowId.'_select" name="choice['.$questionId.']['.$numAnswer.']">';
                     $selectedValue = 0;
                     // fills the list-box
-                    foreach ($select_items as $key => $val) {
+                    foreach ($select_items as $val) {
                         // set $debug_mark_answer to true at function start to
                         // show the correct answer with a suffix '-x'
                         $selected = '';
@@ -540,17 +540,14 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
             } elseif ($answerType ==  DRAGGABLE) {
                 // matching type, showing suggestions and answers
                 // TODO: replace $answerId by $numAnswer
-                if ($answerId == 1) {
-                    //echo $objAnswerTmp->getJs();
-                    //$s .= '<tr>';
-                }
 
                 if ($answerCorrect != 0) {
                     // only show elements to be answered (not the contents of
                     // the select boxes, who are correct = 0)
                     $s .= '<td>';
                     $parsed_answer = $answer;
-                    $windowId = $questionId.'_'.$lines_count;
+                    $windowId = $questionId.'_'.$numAnswer; //67_293 - 67_294
+
                     //left part questions
                     $s .= '<li class="ui-state-default" id="'.$windowId.'">';
                     $s .= ' <div id="window_'.$windowId.'" class="window'.$questionId.'_question_draggable question_draggable">
@@ -558,11 +555,11 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
                             </div>';
 
                     $s .= '<div style="display:none">';
-
                     $s .= '<select id="window_'.$windowId.'_select" name="choice['.$questionId.']['.$numAnswer.']" class="select_option">';
                     $selectedValue = 0;
                     // fills the list-box
-                    foreach ($select_items as $key => $val) {
+                    $item = 0;
+                    foreach ($select_items as $val) {
                         // set $debug_mark_answer to true at function start to
                         // show the correct answer with a suffix '-x'
                         $selected = '';
@@ -576,8 +573,11 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
                             $selected = 'selected="selected"';
                             $selectedValue = $val['id'];
                         }
-                        $s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
+                        //$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
+                        $s .= '<option value="'.$item.'" '.$selected.'>'.$val['letter'].'</option>';
+                        $item++;
                     }
+                    $s .= '</select>';
 
                     if (!empty($answerCorrect) && !empty($selectedValue)) {
                         $s.= '<script>
@@ -586,7 +586,7 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
                             });
                             </script>';
                     }
-                    $s .= '</select>';
+
 
                     if (isset($select_items[$lines_count])) {
                         $s.= '<div id="window_'.$windowId.'_answer" class="">
@@ -595,8 +595,6 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
                     } else {
                         $s.='&nbsp;';
                     }
-                    //$s .= '</td>';
-
                     $lines_count++;
                     //if the left side of the "matching" has been completely
                     // shown but the right side still has values to show...
@@ -614,14 +612,12 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
                     $s .= '</li>';
                 }
             }
-            //$s.="</tr>";
-
         } // end for()
 
         if ($show_comment) {
             $s .= '</table>';
         } else {
-            if (  $answerType == MATCHING || $answerType == UNIQUE_ANSWER_NO_OPTION || $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
+            if ($answerType == MATCHING || $answerType == UNIQUE_ANSWER_NO_OPTION || $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
                 $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 $s .= '</table>';
             }
@@ -631,17 +627,15 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
             $s .= '</ul><div class="clear"></div>';
 
             $counterAnswer = 1;
-            for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+            foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
+            //for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $windowId = $questionId.'_'.$counterAnswer;
-                if ($answerCorrect) {
+                if ($answerCorrect == 0) {
                     $s .= '<div id="drop_'.$windowId.'" class="droppable ui-state-default">'.$counterAnswer.'</div>';
-                    //$s .= '<li id="drop_'.$windowId.'" class="droppable ui-state-default">'.$counterAnswer.'</li>';
                     $counterAnswer++;
                 }
             }
-            //$s .= '<ul>';
-            //$s .= '</div>';
         }
 
         if ($answerType == MATCHING) {
@@ -689,9 +683,10 @@ function showQuestion($objQuestionTmp, $only_questions = false, $origin = false,
 
         // get answers of hotpost
         $answers_hotspot = array();
-        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-            $answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));
-            $answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer($answerId);
+        //for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+        foreach ($objAnswerTmp->answer as $answerId => $answer_item) {
+            //$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));
+            $answers_hotspot[$answerId] = $objAnswerTmp->selectAnswer($answerId);
         }
 
         // display answers of hotpost order by id

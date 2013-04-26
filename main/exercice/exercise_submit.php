@@ -67,48 +67,43 @@ $htmlHeadXtra[]= api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[]= api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
-$htmlHeadXtra[]= '
-<script>
+$htmlHeadXtra[]= '<script>
 
 var recycle_icon = "<a href=\'#\' class=\'ui-icon ui-icon-refresh\'>Recycle image</a>";
 var trash_icon = "<a href=\'#\' class=\'ui-icon ui-icon-trash\'>Delete image</a>";
 
 function deleteItem($item, $insertHere) {
 
-        if ($insertHere.find(".question_draggable").length > 0) {
-            return false;
-        }
-
-        $item.fadeOut(function() {
-            /*var $list = $( "ul", $trash ).length ?
-              $( "ul", $trash ) :
-              $( "<ul class=\'gallery ui-helper-reset\'/>" ).appendTo( $trash );*/
-
-            $list =  $( "<div class=\'gallery ui-helper-reset\'/>" ).appendTo($insertHere);
-            $item.find( "a.ui-icon-trash" ).remove();
-
-             var droppedId = $item.attr("id");
-             var dropedOnId = $insertHere.attr("id");
-
-             var originSelectId = "window_"+droppedId+"_select";
-
-             value = dropedOnId.split("_")[2];
-
-             //console.log(originSelectId);             console.log(value);
-
-             $("#"+originSelectId +" option").filter(function() {
-                    return $(this).val() == value;
-            }).attr("selected", true);
-
-            //console.log(droppedId);
-            //console.log(dropedOnId);
-
-            $item.append( recycle_icon ).appendTo( $list  ).fadeIn(function() {
-            //$item.animate({ width: "48px" }).find( "img" ).animate({ height: "36px" });
-            });
-
-      });
+    if ($insertHere.find(".question_draggable").length > 0) {
+        return false;
     }
+
+    $item.fadeOut(function() {
+        /*var $list = $( "ul", $trash ).length ?
+          $( "ul", $trash ) :
+          $( "<ul class=\'gallery ui-helper-reset\'/>" ).appendTo( $trash );*/
+
+        $list =  $( "<div class=\'gallery ui-helper-reset\'/>" ).appendTo($insertHere);
+        $item.find( "a.ui-icon-trash" ).remove();
+
+        var droppedId = $item.attr("id");
+        var dropedOnId = $insertHere.attr("id");
+        var originSelectId = "window_"+droppedId+"_select";
+        console.log(originSelectId);
+        console.log(dropedOnId);
+
+        value = dropedOnId.split("_")[2];
+                        console.log(value);
+
+        $("#"+originSelectId +" option").filter(function() {
+            return $(this).val() == value;
+        }).attr("selected", true);
+
+        $item.append( recycle_icon ).appendTo( $list  ).fadeIn(function() {
+            //$item.animate({ width: "48px" }).find( "img" ).animate({ height: "36px" });
+        });
+  });
+}
 
 // Draggable js script in order to use jsplumb
 var oldPositionArray;
@@ -158,8 +153,6 @@ $(function() {
         }
     });
 
-
-
     function recycleItem( $item, droppedOn) {
         //console.log("recycleItem");
         $item.fadeOut(function() {
@@ -180,8 +173,6 @@ $(function() {
         $("#"+originSelectId+" option:first").attr("selected","selected");
     }
 
-
-
     $( "ul.drag_question > li" ).click(function( event ) {
         var $item = $( this ),
             $target = $( event.target );
@@ -192,37 +183,9 @@ $(function() {
         } else if ( $target.is( "a.ui-icon-refresh" ) ) {
             recycleItem( $item );
         }
-
         return false;
     });
 
-    /*$( ".drag_question" ).sortable({
-
-        start: function(e, ui) {
-            // Getting old positions into array before sorting
-            oldPositionArray = $(this).sortable("toArray");
-            ui.item.startPos = ui.item.index();
-        },
-        stop: function( event, ui ) {
-            $(this).data("new_position", $(this).sortable("toArray"));
-            var newPositionArray = $(this).sortable("toArray");
-
-            var oldPosition = ui.item.startPos;
-            var newPosition = ui.item.index();
-
-            var oldId = "window_"+newPositionArray[oldPosition]+"_select";
-            var newId = "window_"+newPositionArray[newPosition]+"_select";
-
-            var counter = 0;
-            $.each(newPositionArray, function(index, value){
-                newIdValue = "window_"+value+"_select";
-                $("#"+newIdValue +" option").filter(function() {
-                    return $(this).val() == counter+1;
-                }).attr("selected", true);
-                counter++;
-            });
-        }
-    });*/
 });
 
 // Matching js script in order to use jsplumb
@@ -315,8 +278,6 @@ var connectorType = "Straight";
                     jsPlumb.addEndpoint(windowDestinationId+"_answer", { anchor:[ "LeftMiddle","LeftMiddle","LeftMiddle","LeftMiddle" ]  }, destinationEndPoint);
                 });
             });
-
-
             //var divsWithWindowClass = jsPlumb.CurrentLibrary.getSelector("#"+questionId+" .window");
 			//jsPlumb.draggable(divsWithWindowClass);
 			jsPlumbDemo.attachBehaviour();
@@ -439,7 +400,6 @@ if (!isset($objExercise) && isset($_SESSION['objExercise'])) {
 	if ($debug) { error_log('2. Loading $objExercise from session'); };
     $objExercise = $_SESSION['objExercise'];
 }
-
 
 //3. $objExercise is not set, then return to the exercise list
 if (!is_object($objExercise)) {

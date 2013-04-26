@@ -39,7 +39,6 @@ class Draggable extends Matching
     public function createAnswersForm($form)
     {
         $defaults = array();
-        $navigator_info = api_get_navigator();
 
         $nb_matches = $nb_options = 2;
         if ($form->isSubmitted()) {
@@ -64,14 +63,15 @@ class Draggable extends Matching
                 $answer = new Answer($this->id);
                 $answer->read();
                 if (count($answer->nbrAnswers) > 0) {
-                    $a_matches  = $a_options = array();
                     $nb_matches = $nb_options = 0;
-                    for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
-                        if ($answer->isCorrect($i)) {
+                    //for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
+                    foreach ($answer->answer as $answerId => $answer_item) {
+                        //$answer_id = $answer->getRealAnswerIdFromList($answerId);
+                        if ($answer->isCorrect($answerId)) {
                             $nb_matches++;
-                            $defaults['answer['.$nb_matches.']']    = $answer->selectAnswer($i);
-                            $defaults['weighting['.$nb_matches.']'] = Text::float_format($answer->selectWeighting($i), 1);
-                            $defaults['matches['.$nb_matches.']']   = $answer->correct[$i];//$nb_matches;
+                            $defaults['answer['.$nb_matches.']']    = $answer->selectAnswer($answerId);
+                            $defaults['weighting['.$nb_matches.']'] = Text::float_format($answer->selectWeighting($answerId), 1);
+                            $defaults['matches['.$nb_matches.']']   = $answer->correct[$answerId];//$nb_matches;
                         } else {
                             $nb_options++;
                             $defaults['option['.$nb_options.']'] = $nb_options;
@@ -158,12 +158,8 @@ class Draggable extends Matching
             'class="btn minus"'
         );
 
-
         global $text, $class;
-
         $group[] = $form->createElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
-
-
         $form->addGroup($group);
 
         // DISPLAY OPTIONS
@@ -198,7 +194,6 @@ class Draggable extends Matching
         }*/
 
         $form->addElement('html', '</table></div></div>');
-
 
         if (!empty($this->id)) {
             $form->setDefaults($defaults);

@@ -254,6 +254,7 @@ switch ($action) {
 
             //Question info
             $question_id             = intval($_REQUEST['question_id']);
+
             //$question_list           = $_SESSION['questionList'];
             $question_list           = $_SESSION['question_list_flatten'];
 
@@ -331,6 +332,7 @@ switch ($action) {
 
             if ($debug) error_log("Looping question list".print_r($question_list, 1));
             if ($debug) error_log("Trying to save question: $question_id ");
+
             foreach ($question_list as $my_question_id) {
 
                 if ($type == 'simple' && $question_id != $my_question_id) {
@@ -357,7 +359,7 @@ switch ($action) {
             	//this variable commes from exercise_submit_modal.php
                 $hotspot_delineation_result = null;
                 if (isset($_SESSION['hotspot_delineation_result']) && isset($_SESSION['hotspot_delineation_result'][$objExercise->selectId()])) {
-            	$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
+            	    $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
 
                 if ($type == 'simple') {
@@ -376,12 +378,12 @@ switch ($action) {
             	        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_id, $my_question_id);
                     }
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
-            	    $total_score  -= $attempt_list[$my_question_id]['marks'];
+            	        $total_score  -= $attempt_list[$my_question_id]['marks'];
+            	    }
             	}
-            	}
-
 
             	// We're inside *one* question. Go through each possible answer for this question
+
             	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice, 'exercise_result', $hot_spot_coordinates, true, false, false, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
 
                 //Adding the new score

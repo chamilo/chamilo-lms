@@ -1411,6 +1411,16 @@ CREATE TABLE c_quiz_question_option (
 -- Table structure for table c_quiz_question_rel_category
 --
 
+DROP TABLE IF EXISTS c_quiz_question_rel_category;
+CREATE TABLE c_quiz_question_rel_category (
+  iid int unsigned NOT NULL AUTO_INCREMENT,
+  c_id int NOT NULL,
+  question_id int NOT NULL,
+	category_id int NOT NULL,
+  PRIMARY KEY (iid)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 DROP TABLE IF EXISTS c_quiz_rel_category;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;

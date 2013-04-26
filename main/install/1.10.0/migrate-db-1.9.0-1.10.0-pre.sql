@@ -81,10 +81,7 @@ ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 ALTER TABLE c_quiz_answer ADD INDEX idx_quiz_answer_c_q (c_id, question_id);
 CREATE TABLE c_quiz_order( iid bigint unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (iid));
 
-ALTER TABLE c_quiz_question_rel_category ADD COLUMN id int unsigned NOT NULL;
-ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY;
-ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (id);
-ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN id int unsigned AUTO_INCREMENT;
+CREATE TABLE c_quiz_question_rel_category ( iid int unsigned NOT NULL AUTO_INCREMENT, c_id int NOT NULL, question_id int NOT NULL, category_id int NOT NULL,  PRIMARY KEY (iid));
 
 ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
 ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);

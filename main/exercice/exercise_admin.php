@@ -224,7 +224,7 @@ if ($form->validate()) {
 	}
 	$exercise_id = $objExercise->id;
 	Session::erase('objExercise');
-	header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id);
+	header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id.'&'.api_get_cidreq());
 	exit;
 } else {
     // DISPLAY FORM

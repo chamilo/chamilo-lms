@@ -25,9 +25,9 @@ $permissions_for_new_files = api_get_permissions_for_new_files();
 if (!empty($_course['path'])) {
 
     // Get the Chamilo session properties. Before ajaximagemanager!!!
-    $to_group_id = !empty($_SESSION['_gid']) ? $_SESSION['_gid'] : 0;
-    $group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
-    $is_user_in_group = GroupManager::is_user_in_group($_user['user_id'], $_SESSION['_gid']);
+    $to_group_id = api_get_group_id();
+    $group_properties = GroupManager::get_group_properties($to_group_id);
+    $is_user_in_group = GroupManager::is_user_in_group($_user['user_id'], $to_group_id);
 }
 
 $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');

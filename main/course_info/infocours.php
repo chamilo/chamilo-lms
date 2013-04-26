@@ -337,7 +337,6 @@ $group[]=$form->createElement('radio', 'enable_exercise_auto_launch', get_lang('
 $group[]=$form->createElement('radio', 'enable_exercise_auto_launch', null, get_lang('Deactivate'), 0);
 $form->addGroup($group, '', array(get_lang("ExerciseAutoLaunch")), '');
 
-
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
 
@@ -390,10 +389,8 @@ $values['visibility']                   = $_course['visibility'];
 $values['subscribe']                    = $course_access_settings['subscribe'];
 $values['unsubscribe']                  = $course_access_settings['unsubscribe'];
 $values['course_registration_password'] = $all_course_information['registration_code'];
-
 $values['legal']                        = $all_course_information['legal'];
 $values['activate_legal']               = $all_course_information['activate_legal'];
-
 // Get send_mail_setting (auth)from table
 $values['email_alert_to_teacher_on_new_user_in_course']= api_get_course_setting('email_alert_to_teacher_on_new_user_in_course');
 // Get send_mail_setting (work)from table
@@ -419,7 +416,6 @@ $values['allow_user_view_user_list']                = api_get_course_setting('al
 //Get allow show user list
 $values['display_info_advance_inside_homecourse']   = api_get_course_setting('display_info_advance_inside_homecourse');
 $values['email_alert_students_on_new_homework']     = api_get_course_setting('email_alert_students_on_new_homework');
-
 $values['enable_lp_auto_launch']                    = api_get_course_setting('enable_lp_auto_launch');
 $values['enable_exercise_auto_launch']              = api_get_course_setting('enable_exercise_auto_launch');
 $values['pdf_export_watermark_text']                = api_get_course_setting('pdf_export_watermark_text');
@@ -429,6 +425,7 @@ $values['allow_fast_exercise_edition']              = api_get_course_setting('al
 $app_plugin->set_course_settings_defaults($values);
 
 $form->setDefaults($values);
+
 
 // Validate form
 if ($form->validate() && is_settings_editable()) {
@@ -467,10 +464,25 @@ if ($form->validate() && is_settings_editable()) {
 
     // Update course_settings table - this assumes those records exist, otherwise triggers an error
     $table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
+
     foreach ($update_values as $key =>$value) {
         //We do not update variables that were already saved in the TABLE_MAIN_COURSE table
         if (!in_array($key, $update_in_course_table)) {
-            Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id())));
+            $data = api_get_course_setting($key);
+            //Setting does not exist we create one!
+            if ($data == -1 && isset($values[$key])) {
+                // @todo create a api_set_course_setting
+                //api_set_course_setting()
+                //api_set_setting($key, $update_values[$key], null, null, api_get_current_access_url_id());
+                $params = array(
+                    'c_id' => api_get_course_int_id(),
+                    'variable' => $key,
+                    'value' => $update_values[$key]
+                );
+                Database::insert($table_course_setting, $params);
+            } else {
+                Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id())));
+            }
         }
     }
     $app_plugin->save_course_settings($update_values);

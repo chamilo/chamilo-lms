@@ -428,7 +428,6 @@ abstract class Question
     {
         $course_id = $this->course['real_id'];
 
-
         if (!empty($category_list)) {
             $this->deleteCategory();
             $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);

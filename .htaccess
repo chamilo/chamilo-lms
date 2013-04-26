@@ -32,6 +32,8 @@
     RewriteCond %{QUERY_STRING} ^([a-z0-9A-z]*)
     RewriteRule ^user.php?$ web/user/%1? [R,L]
 
+    # User images
+
     # Portal news
     # news_list.php?id=5 --> web/news/5
     RewriteCond %{QUERY_STRING} ^id=([0-9]*)

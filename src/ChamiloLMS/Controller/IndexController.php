@@ -342,6 +342,39 @@ class IndexController extends CommonController
     }
 
     /**
+     * @param Application $app
+     * @param $groupId
+     * @param $file
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getGroupFile(Application $app, $groupId, $file)
+    {
+        try {
+            $file = $app['chamilo.filesystem']->get('upload/groups/'.$groupId.'/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+    /**
+     * @param Application $app
+     * @param $file
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getUserFile(Application $app)
+    {
+        try {
+            $file = $app['request']->get('file');
+            $file = $app['chamilo.filesystem']->get('upload/users/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+
+    /**
      * Reacts on a failed login.
      * Displays an explanation with a link to the registration form.
      *

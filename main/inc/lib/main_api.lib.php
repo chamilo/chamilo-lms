@@ -4345,7 +4345,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
         // Found item for this access_url.
         $row = Database::fetch_array($res);
         $update = "UPDATE $t_settings SET selected_value = '$value' WHERE id = ".$row['id'] ;
-        $res = Database::query($update);
+        Database::query($update);
     } else {
         // Item not found for this access_url, we have to check if it exist with access_url = 1
         $select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = 1 ";
@@ -4404,7 +4404,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                             "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".
                             (!empty($row['scope']) ? "'".$row['scope']."'" : "NULL")."," .
                             "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url,".$row['access_url_changeable'].")";
-                    $res = Database::query($insert);
+                    Database::query($insert);
                 }
             } else { // Such a setting does not exist.
                 error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all. The access_url is: '.$access_url.' ',0);

@@ -13,6 +13,7 @@
 require_once '../../../../../../inc/global.inc.php'; // Integrating with Chamilo
 
 if (!isset($manager)) {
+
     /**
      *  this is part of  script for processing file paste
      */
@@ -45,8 +46,8 @@ if (!isset($manager)) {
         include_once(CLASS_SESSION_ACTION);
         $sessionAction = new SessionAction();
         include_once(DIR_AJAX_INC."class.manager.php");
-
-        $manager = new manager();
+        $path = isset($_REQUEST['path']) ? base64_decode($_REQUEST['path']) : null;
+        $manager = new manager($path);
         $manager->setSessionAction($sessionAction);
 
         $fileList = $manager->getFileList();
@@ -64,6 +65,7 @@ $pagination->setPreviousText(PAGINATION_PREVIOUS);
 $pagination->setNextText(PAGINATION_NEXT);
 $pagination->setLastText(PAGINATION_LAST);
 $pagination->setLimit(!empty($_GET['limit']) ? intval($_GET['limit']) : CONFIG_DEFAULT_PAGINATION_LIMIT);
+
 echo $pagination->getPaginationHTML();
 
 // Chamilo fix for count hidden folders
@@ -77,11 +79,9 @@ $chat_files_Chamilo = 'chat_files';
 $certificates_Chamilo = 'certificates';
 
 //end previous fix for count hidden folders
-
 echo "<script>";
-
 echo "parentFolder = {path_base64:'".base64_encode(getParentFolderPath($folderInfo['path']))."', path:'".getParentFolderPath($folderInfo['path'])."'};";
-echo 'currentFolder ={';
+echo 'currentFolder = {';
 $count = 1;
 foreach ($folderInfo as $k => $v) {
     echo ($count++ == 1 ? '' : ',')."'".$k."':'".($k == 'ctime' || $k == 'mtime' ? date(DATE_TIME_FORMAT, $v) : $v)."'";
@@ -130,7 +130,6 @@ foreach ($fileList as $file) {
     echo "}\n";
 }
 $fileList = array_slice($fileList, $pagination->getPageOffset(), $pagination->getLimit()); //Chamilo fix for hidden files added +$count_hideItem
-
 echo "};</script>";
 if (!empty($_GET['view'])) {
     switch ($_GET['view']) {
@@ -145,7 +144,6 @@ if (!empty($_GET['view'])) {
 } else {
     $view = CONFIG_DEFAULT_VIEW;
 }
-
 switch ($view) {
     case 'text':
         //list file name only

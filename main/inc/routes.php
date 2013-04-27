@@ -121,8 +121,8 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     $is_platformAdmin = api_is_platform_admin();
     $courseReset      = Session::read('courseReset');
 
-    $app['monolog']->addDebug($courseReset);
-    $app['monolog']->addDebug($courseId);
+    //$app['monolog']->addDebug($courseReset);
+    //$app['monolog']->addDebug($courseId);
 
     // Course
     $is_courseMember = false;

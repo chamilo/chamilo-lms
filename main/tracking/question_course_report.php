@@ -16,7 +16,6 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
 $this_section = "session_my_space";
 

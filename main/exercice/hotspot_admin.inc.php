@@ -563,7 +563,6 @@ if ($modifyAnswers) {
 
                         </tr>
                         <?php
-                        require_once '../newscorm/learnpathList.class.php';
                         $list = new LearnpathList(api_get_user_id());
                         $flat_list = $list->get_flat_list(); //loading list of LPs
 
@@ -870,7 +869,6 @@ if ($modifyAnswers) {
                             </tr>
                             <?php
                         }
-                        require_once '../newscorm/learnpathList.class.php';
                         $list = new LearnpathList(api_get_user_id());
                         $flat_list = $list->get_flat_list();
                         $select_lp_id = array();

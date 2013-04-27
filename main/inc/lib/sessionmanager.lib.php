@@ -2080,7 +2080,6 @@ class SessionManager
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {
-                                require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
                                 $list       = new LearnpathList('', $course_info['code'], $sid);
                                 $flat_list  = $list->get_flat_list();
                                 if (!empty($flat_list)) {

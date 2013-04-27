@@ -14,10 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.ph
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
-
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
 $this_section = "session_my_space";
 $is_allowedToTrack = api_is_course_admin() || api_is_platform_admin() || api_is_course_coach() || api_is_session_admin();

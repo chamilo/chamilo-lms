@@ -119,7 +119,6 @@ if (!$export_to_csv) {
 	$form->display();
 	//echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
 }
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 $main_result = array();
 $session_id = 0;
 $user_list = array();

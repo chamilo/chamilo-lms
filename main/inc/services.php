@@ -88,8 +88,8 @@ $app->register(new Silex\Provider\ValidatorServiceProvider());
 
 // Implements Symfony2 translator (needed when using forms in Twig)
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
-'locale' => 'en',
-'locale_fallback' => 'en'
+    'locale' => 'en',
+    'locale_fallback' => 'en'
 ));
 
 // Handling po files
@@ -116,8 +116,6 @@ return $translator;
 
 //$app['translator.domains'] = array();
 */
-
-
 
 // Form provider
 $app->register(new Silex\Provider\FormServiceProvider());
@@ -184,7 +182,9 @@ if (isset($app['configuration']['main_database'])) {
             "orm.em.options" => array(
                 "mappings" => array(
                     array(
-                        //If true, only simple notations like @Entity will work. If false, more advanced notations and aliasing via use will work. (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)
+                        /* If true, only simple notations like @Entity will work.
+                        If false, more advanced notations and aliasing via use will work.
+                        (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)*/
                         'use_simple_annotation_reader' => false,
                         "type" => "annotation",
                         "namespace" => "Entity",
@@ -208,8 +208,6 @@ if (isset($app['configuration']['main_database'])) {
     $sortableListener = new Gedmo\Sortable\SortableListener();
     $app['db.event_manager']->addEventSubscriber($sortableListener);
 }
-
-
 
 
 // Setting Twig as a service provider
@@ -269,6 +267,7 @@ $app['pagerfanta.view.options'] = array(
     'prev_message'  => '&laquo;',
     'default_view'  => 'twitter_bootstrap' // the pagination style
 );
+
 // Custom route params see https://github.com/franmomu/silex-pagerfanta-provider/pull/2
 //$app['pagerfanta.view.router.name']
 //$app['pagerfanta.view.router.params']
@@ -292,7 +291,6 @@ if (is_writable($app['temp.path'])) {
     );
 }
 
-
 define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
 
 // Setting the Imagine service provider to deal with image transformations used in social group.
@@ -307,11 +305,11 @@ if ($app['debug'] && isset($app['configuration']['main_database'])) {
     $app['db.config']->setSQLLogger($logger);
 
     $app->after(function() use ($app, $logger) {
-            // Log all queries as DEBUG.
-            foreach ($logger->queries as $query) {
-                $app['monolog']->debug($query['sql'], array('params' =>$query['params'], 'types' => $query['types']));
-            }
-        });
+        // Log all queries as DEBUG.
+        foreach ($logger->queries as $query) {
+            $app['monolog']->debug($query['sql'], array('params' =>$query['params'], 'types' => $query['types']));
+        }
+    });
 }
 
 
@@ -332,20 +330,20 @@ if (is_writable($app['sys_temp_path'])) {
 
 // Email service provider
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
-        'swiftmailer.options' => array(
-            'host' => isset($platform_email['SMTP_HOST']) ? $platform_email['SMTP_HOST'] : null,
-            'port' => isset($platform_email['SMTP_PORT']) ? $platform_email['SMTP_PORT'] : null,
-            'username' => isset($platform_email['SMTP_USER']) ? $platform_email['SMTP_USER'] : null,
-            'password' => isset($platform_email['SMTP_PASS']) ? $platform_email['SMTP_PASS'] : null,
-            'encryption' => null,
-            'auth_mode' => null
-        )
-    ));
+    'swiftmailer.options' => array(
+        'host' => isset($platform_email['SMTP_HOST']) ? $platform_email['SMTP_HOST'] : null,
+        'port' => isset($platform_email['SMTP_PORT']) ? $platform_email['SMTP_PORT'] : null,
+        'username' => isset($platform_email['SMTP_USER']) ? $platform_email['SMTP_USER'] : null,
+        'password' => isset($platform_email['SMTP_PASS']) ? $platform_email['SMTP_PASS'] : null,
+        'encryption' => null,
+        'auth_mode' => null
+    )
+));
 
 //if (isset($platform_email['SMTP_MAILER']) && $platform_email['SMTP_MAILER'] == 'smtp') {
 $app['mailer'] = $app->share(function ($app) {
-        return new \Swift_Mailer($app['swiftmailer.transport']);
-    });
+    return new \Swift_Mailer($app['swiftmailer.transport']);
+});
 
 // Gaufrette service provider (to manage files/dirs) (not used yet)
 /*
@@ -360,8 +358,6 @@ $app->register(new GaufretteServiceProvider(), array(
 use Neutron\Silex\Provider\FilesystemServiceProvider;
 $app->register(new FilesystemServiceProvider());
 
-
-
 /** Chamilo service provider */
 
 use Silex\ServiceProviderInterface;
@@ -372,21 +368,21 @@ class ChamiloServiceProvider implements ServiceProviderInterface
     {
         // Template class
         $app['template'] = $app->share(function () use ($app) {
-                $template = new Template($app);
-                return $template;
-            });
+            $template = new Template($app);
+            return $template;
+        });
 
         // Chamilo data filesystem
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
-                $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['sys_data_path']);
-                return $filesystem;
-            });
+            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['sys_data_path']);
+            return $filesystem;
+        });
 
         // Page controller class
         $app['page_controller'] = $app->share(function () use ($app) {
-                $pageController = new PageController($app);
-                return $pageController;
-            });
+            $pageController = new PageController($app);
+            return $pageController;
+        });
     }
 
     public function boot(Application $app)

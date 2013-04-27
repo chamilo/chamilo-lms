@@ -170,9 +170,9 @@ if ($query !='') {
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
             //Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user['user_id'] != api_get_user_id()) {
-                $send_inv = '<a href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user['user_id'].'\');"/>'.Display::span('', array('class' => 'send_inv_in_text')).'</a>';
+                $send_inv = '<a href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user['user_id'].'\');"/>'.Display::span('', array('class' => 'send_inv_in_text', 'title' => get_lang('SendInvitation'))).'</a>';
             }
-            $send_msg = '<a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user['user_id'].'\');"/>'.Display::span('', array('class' => 'send_msg_in_text')).'</a>';
+            $send_msg = '<a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user['user_id'].'\');"/>'.Display::span('', array('class' => 'send_msg_in_text', 'title' => get_lang('SendMessage'))).'</a>';
             if (empty($user['picture_uri'])) {
                 $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
                 $img = '<img src="'.$picture['file'].'">';

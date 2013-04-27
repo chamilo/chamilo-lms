@@ -392,3 +392,58 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
 // Registering Chamilo service provider
 $app->register(new ChamiloServiceProvider(), array());
+
+// Controller as services definitions
+$app['pages.controller'] = $app->share(
+    function () use ($app) {
+        return new PagesController($app['pages.repository']);
+    }
+);
+
+$app['index.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\IndexController();
+    }
+);
+
+$app['legacy.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\LegacyController();
+    }
+);
+
+$app['userPortal.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\UserPortalController();
+    }
+);
+
+$app['learnpath.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\LearnpathController();
+    }
+);
+
+$app['course_home.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\CourseHomeController();
+    }
+);
+
+$app['certificate.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\CertificateController();
+    }
+);
+
+$app['user.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\UserController();
+    }
+);
+
+$app['news.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\NewsController();
+    }
+);

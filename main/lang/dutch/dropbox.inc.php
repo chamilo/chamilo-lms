@@ -100,4 +100,7 @@ $ErrorNoFilesInFolder = "Deze map is leeg";
 $AddComment = "Commentaar toevoegen";
 $SentCatgoryDeleted = "De categorie is verwijderd";
 $ReceivedCatgoryDeleted = "De categorie is verwijderd";
+$InvalideUserDetected = "Foutieve gebruiker gevonden";
+$InvalideGroupDetected = "Foutieve groep gevonden";
+$OverviewOfFilesInThisZip = "Overzicht van bestanden in deze Zip";
 ?>

@@ -76,7 +76,7 @@ $PortalHomepageDefaultIntroduction = "<h2>¡Enhorabuena, ha instalado satisfacto
 $Username = "Nombre de usuario";
 $GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Adelante, pulsa %s para acceder al catálogo de cursos e inscribirte en un curso que te interese. Una vez inscrito/a, el curso aparecerá en esta pantalla en lugar de este mensaje.";
 $HelloXAsYouCanSeeYourCourseListIsEmpty = "Hola %s, te damos la bienvenida,<br />
-Como puedes ver, tu lista de cursos todavía está vacía. Esto es porque todavía no estás inscrito/a en algún curso.";
+Como puedes ver, tu lista de cursos todavía está vacía. Esto es porque todavía no estás inscrito/a en ningún curso.";
 $PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Permitanos un poco de tiempo para suscribirse a uno de nuestros cursos. Si considera que nos olvidamos de Ud., póngase en contacto con los administradores del portal. Puede encontrar sus datos de contacto en el pie de página.";
 $Profile = "Perfil";
 ?>

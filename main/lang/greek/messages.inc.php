@@ -36,5 +36,9 @@ $WriteAMessage = "Δημιουργία ενός μηνύματος";
 $AlreadyReadMessage = "Το μήνυμα έχει ήδη διαβασθεί";
 $UnReadMessage = "Το μήνυμα δεν έχει διαβασθεί";
 $MessageSent = "Αυτό το μήνυμα έχει σταλεί στο";
+$MailMarkSelectedAsUnread = "Σήμανση ως Μη Αναγνωσμένο";
+$MailMarkSelectedAsRead = "Σήμανση ως αναγνωσμένο";
 $YouShouldWriteAMessage = "Πρέπει να γράψετε ένα μήνυμα";
+$SelectedMessagesUnRead = "Επιλογή μηνυμάτων που έχουν επισυμανθεί ως Μη Αναγνωσμένα";
+$SelectedMessagesRead = "Επιλογή μηνυμάτων που έχουν επισυμανθεί ως Αναγνωσμένα";
 ?>

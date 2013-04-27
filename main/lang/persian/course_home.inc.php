@@ -29,6 +29,7 @@ $SessionIdentifier = "مشخص کننده جلسه";
 $SessionName = "نام جلسه";
 $SessionCategory = "دسته بندی جلسات";
 $SessionData = "اطلاعات جلسه";
+$TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise = "قابلیت اجرای خودکار این تمرین فعال شده است. دانشجویان به صورت خودکار به تمرین منتخب هدایت خواهند شد.";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "تنظیمات راه اندازی اتوماتیک مسیر آموزشی روشن هست. وقتی دانشجویان وارد درس شوند، آنها بصورت اتوماتیک به مسیر آموزشی که بشکل راه اندازی اتوماتیک در آمده است هدایت خواهند شد.";
 $ToolSearch = "جستجو";
 ?>

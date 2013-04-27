@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ViewModeImpress = "Trenuten način pogleda: Impress";
 $NewForumCreated = "Nov forum je bil ustvarjen";
 $NewThreadCreated = "Nova nit foruma je bila ustvarjena.";
 $AddHotpotatoes = "Dodaj Hotpotatoes";

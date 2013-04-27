@@ -93,4 +93,8 @@ $GroupsFromClassesInfo = "Gebruik makend van deze optie, kan u groepen aanmaken 
 $Group = "Groep";
 $ForumOfGroup = "forum van groep:";
 $BackToGroupList = "terug naar de groepenlijst";
+$EditGroupCategory = "Bewerk groep categorie";
+$NoStudents = "Geen student";
+$NoData = "Geen data beschikbaar";
+$AllGroups = "Alle groepen";
 ?>

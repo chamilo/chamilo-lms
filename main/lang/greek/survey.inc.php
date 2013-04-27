@@ -205,6 +205,7 @@ $ReportingOverview = "Reporting overview";
 $ThereAreNotQuestionsForthisSurvey = "There are not questions for this survey";
 $GenerateSurveyAccessLinkExplanation = "= You can test this feature by clicking the link above and answering the survey.\nThis is particularly useful if you want to allow anyone on a forum to answer you survey and you don't know their e-mail addresses.";
 $GenerateSurveyAccessLink = "Generate survey access link";
+$Multipleresponse = "Πολλαπλής Απάντησης";
 $ErrorSurveyTypeUnknown = "Survey type unknown";
 $SurveyUndetermined = "Survey undefined";
 $QuestionComment = "Question comment";

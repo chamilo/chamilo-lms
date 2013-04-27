@@ -1404,7 +1404,7 @@ $HomepageViewActivityBig = "IPad-Style (Große Aktiviäten Ansicht)";
 $EnableQuizScenarioTitle = "Test: Verzweigung";
 $EnableQuizScenarioComment = "Hiermit können Sie Test erzeugen, welche zu unterschiedelichen Fragen führen, je nach dem, wie der Teilnehmer geantwortet hat.";
 $EnableNanogongTitle = "Audio-Rekorder";
-$EnableNanogongComment = "<a href='http://nanogong.ust.hk/' target='_blank'>Nanongong</a> ist ein Sprach-Rekorder und  -Player, der es Ihnen ermöglicht über eine JAVA-Applet  Ihre Stimme aufzunehmen und wiederzugegen. Die Teilnehmer benötigen lediglich eine Mikrofon und Lautsprecher, bzw. Headset und müssen den Download und die Ausführung von JAVA-Applets erlauben. Insbesondere für den Sprachunterricht ist es für die Teilnehmer wichtig, Ihre eigene Aussprache und richtige Betonung selbst zu hören, nachdem Sie die Vorgaben des Kursleiters aus einer *.wav oder *.mp3 Datei gehört haben.";
+$EnableNanogongComment = "<a href='http://nanogong.ust.hk/' target='_blank'>Nanongong</a> ist ein Sprach-Rekorder und  -Player, der es Ihnen ermöglicht über eine JAVA-Applet  Ihre Stimme aufzunehmen und wiederzugegen. Die Teilnehmer benötigen lediglich eine Mikrofon und Lautsprecher, bzw. Headset und müssen den Download und die Ausführung von JAVA-Applets erlauben. Insbesondere für den Sprachunterricht ist es für die Teilnehmer wichtig, Ihre eigene Aussprache und richtige Betonung selbst zu hören, nachdem Sie die Vorgaben des Kursleiters aus einer *.wav Datei gehört haben.";
 $ExerciseAndLPsAreInvisibleInTheNewCourse = "Tests und Lernpfade sind in dem neuen Kurs nicht mehr sichtbar.";
 $YouMustChooseARelationType = "Sie müssen eine Beziehung auswählen.";
 $SelectARelationType = "Beziehung auswählen";

@@ -269,6 +269,7 @@ $LinkInvisible = "Link invisível";
 $LinkAdded = "Link adicionado";
 $Minutes = "Minutos";
 $BackupCreated = "Backup criado";
+$NotesObtained = "Notas obtidas";
 $DisplayCourseOverview = "Descrição do curso";
 $DisplaySessionOverview = "Descrição da Sessão";
 $TotalNumberOfMessages = "Número total de mensagens";

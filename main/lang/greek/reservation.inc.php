@@ -2,24 +2,24 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$ReservationPeriodToSmall = "The reservation period is to short.";
-$BookingSystem = "Booking system";
+$ReservationPeriodToSmall = "Η περίοδος Κράτησης είναι πολύ μικρή.";
+$BookingSystem = "Σύστημα Κρατήσεων";
 $BookingPeriodList = "Booking period list";
-$BookingListView = "Booking list";
-$BookingCalendarView = "Booking calendar view";
-$BookingPeriods = "Scheduling";
-$ResourceList = "Resource list";
-$GoToCalendarView = "Calendar view";
-$GoToListView = "List view";
-$ManageResources = "Manage resources";
-$EditResource = "Edit resource";
-$BookIt = "Book a resource";
-$GoTo = "Go to";
+$BookingListView = "Λίστα Κρατήσεων";
+$BookingCalendarView = "Εμφάνιση Ημερολογίου Κρατήσεων";
+$BookingPeriods = "Προγραμματισμός";
+$ResourceList = "Λίστα πόρων";
+$GoToCalendarView = "Εμφάνιση Ημερολογίου";
+$GoToListView = "Εμφάνιση Λίστας";
+$ManageResources = "Διαχείριση Πόρων";
+$EditResource = "Επεξεργασία Πόρου";
+$BookIt = "Κράτηση Πόρου";
+$GoTo = "Μετάβαση σε";
 $NoTimePicker = "No time picker";
 $TimePicker = "Time picker";
-$ManageBookingPeriods = "Manage booking periods";
-$BookingPeriodToSmall = "The booking period is to small.";
-$BookingPeriodToBig = "The booking period is to big.";
+$ManageBookingPeriods = "Διαχείριση Περιόδων Κρατήσεων";
+$BookingPeriodToSmall = "Η περίοδος Κράτησης είναι πολύ μικρή";
+$BookingPeriodToBig = "Η περίοδος Κράτησης είναι πολύ μεγάλη.";
 $BookingPeriodTimePickerError1 = "A booking period without a timepicker can not be made if the minimum and maximum time of a chunck differs from zero.";
 $BookingPeriodTimePickerError2 = "A booking period with a timepicker can not be made if the maximum time is smaller than the minimum time of a chunck.";
 $BookingPeriodTimePickerError3 = "A booking period with a timepicker can not be made if the maximum time of a chunck doesn't fit between the start and end date.";
@@ -169,6 +169,7 @@ $ItemEdited = "Item updated.";
 $CategoryFilter = "Category filter";
 $ItemCreator = "Item creator";
 $DeleteSelectedItems = "Delete selected items";
+$BookingPeriodTimepickerLimitation = "Περιορισμός στην επιλογή περιόδου κρατήσεων";
 $Blackout = "Blackout";
 $EveryDay = "Every day";
 $EveryWeek = "Every week";

@@ -36,5 +36,9 @@ $WriteAMessage = "Idatzi mezua";
 $AlreadyReadMessage = "Mezua irakurri da";
 $UnReadMessage = "Irakurri gabeko mezua";
 $MessageSent = "Mezua bidali da";
+$MailMarkSelectedAsUnread = "Markatu irakurri gabe dagoela";
+$MailMarkSelectedAsRead = "Markatu irakurrita dagoela";
 $YouShouldWriteAMessage = "Mezua idatzi dezakezu";
+$SelectedMessagesUnRead = "Hautatutako mezuak irakurri gabe gisa markatu dira";
+$SelectedMessagesRead = "Hautatutako mezuak irakurriak izan direla markatu da";
 ?>

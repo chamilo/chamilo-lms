@@ -5,6 +5,8 @@ for more information: see languages.txt in the lang folder.
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "این بخش برای محصلین غیر فعال بوده و شما بعنوان استاد دسترسی دارید.";
 $DeleteAllAttendances = "تمامی حضورها را حذف کن";
 $Unsubscribe = "لغو عضویت";
+$SelectACategory = "انتخاب یک دسته";
+$AdvancedEdit = "ویرایش پیشرفته";
 $SearchXapianModuleNotInstalled = "ماژول جستجوی اگزاپیان نصب نیست";
 $Title = "عنوان";
 $By = "توسط";
@@ -519,7 +521,15 @@ $SessionsAdmin = "مدیر جلسات";
 $MakeChangeable = "قابل تغییر";
 $MakeUnchangeable = "غیر قابل تغییر";
 $UserFields = "خصوصیات مشخصات";
+$FieldShown = "این گزینه هم اکنون برای کاربر آشکار هست.";
+$CannotShowField = "قادر به آشکار کردن گزینه نبودیم.";
+$FieldHidden = "این گزینه هم اکنون برای کاربر پنهان هست.";
+$CannotHideField = "قادر به پنهان کردن گزینه نبودیم.";
+$CannotMakeFieldChangeable = "این گزینه قابلیت فعال کردن تغییر را ندارد.";
+$FieldMadeUnchangeable = "این گزینه هم اکنون غیر قابل تغییر هست: کاربر قادر به پر کردن و یا تغییر گزینه را ندارد.";
+$CannotMakeFieldUnchangeable = "این گزینه قابلیت غیر فعال کردن تغییر را ندارد.";
 $Folder = "پوشه";
+$FileUploadSucces = "فایل مورد نظر با موفقیت آپلود شد.";
 $Yesterday = "دیروز";
 $Submit = "ارسال";
 $Department = "بخش";
@@ -549,27 +559,44 @@ $Border = "حاشیه";
 $Height = "ارتفاع";
 $ImageManager = "مدیریت تصاویر";
 $ImageFile = "فایل تصویر";
+$ConstrainProportions = "نگهداری تناسب";
 $InsertImage = "وارد کردن تصویر";
 $AccountActive = "اکانت فعال";
 $GroupSpace = "منطقه گروه";
 $GroupWiki = "ویکی";
 $ExportToPDF = "برون بری پی دی اف";
+$CommentAdded = "دیدگاه اضافه شد";
+$BackToPreviousPage = "بازگشت به صفحه قبلی";
 $ListView = "نمایش فهرست";
 $NoOfficialCode = "بدون کد";
 $Owner = "مالک";
+$DisplayOrder = "ترتیب نمایش";
+$SearchFeatureDoIndexDocument = "متن سند ایندکس شود؟";
 $With = "عرض";
+$GeneralCoach = "مربی عمومی";
+$SaveDocument = "ذخیره سند";
+$CategoryDeleted = "دستهبندی حذف شده است.";
+$CategoryAdded = "دسته بندی اضافه شد";
 $IP = "آی پی";
+$Qualify = "فعالیت درجه";
 $Words = "کلمات";
 $GoBack = "بازگشت";
 $Details = "جزئیات";
 $EditLink = "ویرایش پیوند";
+$LinkEdited = "ارزیابی ویرایش شد";
+$ForumThreads = "موضوعات انجمن";
 $GradebookVisible = "آشکار";
 $GradebookInvisible = "پنهان";
+$Phone = "تلفن";
+$InfoMessage = "پیام اطلاعات";
+$ConfirmationMessage = "پیام تاییدیه";
 $WarningMessage = "پیام اخطار";
 $ErrorMessage = "پیام خطا";
 $Glossary = "واژه نامه";
 $Coach = "مربی";
+$Condition = "شرایط";
 $CourseSettings = "تنظیمات درس";
+$EmailNotifications = "اطلاعیه های ایمیل";
 $UserRights = "حقوق کاربر";
 $Theming = "قالب گرافیکی";
 $Qualification = "امتیاز";
@@ -577,41 +604,69 @@ $OnlyNumbers = "فقط ارقام";
 $ReorderOptions = "گزینه های مرتب سازی";
 $EditUserFields = "ویرایش گزینه های کاربر";
 $OptionText = "متن";
+$FieldTypeDoubleSelect = "انتخاب دوباره";
+$FieldTypeDivider = "تقسیم کننده ویژوال";
+$ScormUnknownPackageFormat = "فرمت ناشناخته بسته";
+$ResourceDeleted = "منابع حذف شدند";
+$AdvancedParameters = "تنظیمات پیشرفته";
 $GoTo = "برو به";
+$SessionNameAndCourseTitle = "جلسه و نام دروس";
 $CreationDate = "تاریخ ساخت";
 $LastUpdateDate = "آخرین بروز رسانی";
+$ViewHistoryChange = "مشاهده تاریخ تغییرات";
+$langNameOfLang['asturian'] = "اطریشی";
 $SearchGoToLearningPath = "رفتن به درس";
 $SearchLectureLibrary = "کتابخانه سخنرانی ها";
 $SearchImagePreview = "پیش نمایش تصویر";
+$SearchAdvancedOptions = "گزینه های پیشرفته جستجو";
 $SearchResetKeywords = "تنظیم مجدد کلمات کلیدی";
 $SearchKeywords = "کلمات کلیدی";
 $IntroductionTextDeleted = "معرفی حذف گردید";
+$SearchKeywordsHelpTitle = "راهنمای جستجو کلید واژه ها";
 $Validate = "اعتبار دهی";
+$SearchCombineSearchWith = "ترکیب کلمات کلیدی با";
 $Top = "بالا";
 $YourTextHere = "اینجا محل متن شماست";
 $OrderBy = "ترتیب توسط";
 $Notebook = "یادداشت";
 $Any = "هر";
+$SpecificSearchFields = "گزینه های خاص جستجو";
+$AddSpecificSearchField = "افزودن یک گزینه خاص جستجو";
 $SaveSettings = "ذخیره تنظیمات";
+$NoParticipation = "هیچ مشارکت کننده ای وجود ندارد";
 $Subscribers = "مشترکین";
 $Accept = "قبول کردن";
 $Reserved = "رزرو شده";
+$SharedDocumentsDirectory = "پوشه اسناد اشتراک گذاری شده";
 $Gallery = "گالری";
 $Audio = "صوت";
 $GoToQuestion = "رفتن به سوال";
 $Level = "مرحله";
 $Duration = "مدت";
+$SearchPrefilterPrefix = "گزینه های خاص برای ما قبل فیلتر";
+$MaxTimeAllowed = "حداکثر زمان (دقیقه ها)";
 $Class = "کلاس";
 $Select = "انتخاب";
 $Booking = "رزور";
 $ManageReservations = "رزوز";
 $DestinationUsers = "کاربران مقصد";
+$AttachmentFileDeleteSuccess = "فایل پیوست شده حذف شده است";
+$MaxFileSize = "حداکثر اندازه فایل";
+$Expired = "منقضی شده";
+$InvitationHasBeenSent = "دعوتنامه ارسال شد";
+$InvitationHasBeenNotSent = "دعوتنامه ارسال نشده است";
 $Outbox = "صندوق خروجی";
 $Overview = "نمایش کلی";
+$DateSend = "تاریخ ارسال شد";
 $Deny = "انکار کردن";
+$ThereIsNotQualifiedLearners = "هیچ دانشجوی واجد شرایطی وجود ندارد";
+$ThereIsNotUnqualifiedLearners = "هیچ دانشجوی فاقد صلاحیتی وجود ندارد";
 $SocialNetwork = "شبکه اجتماعی";
 $BackToOutbox = "برگشت به صندوق خروجی";
 $Invitation = "دعوتنامه";
+$SeeMoreOptions = "دیدن گزینه های بیشتر";
+$TemplatePreview = "پیش نمایش قالب";
+$NoTemplatePreview = "پیش نمایش در دسترس نیست";
 $ModifyCategory = "ویرایش دسته بندی";
 $Photo = "تصویر";
 $MoveFile = "انتقال فایل";
@@ -622,14 +677,23 @@ $MoreInformation = "اطلاعات بیشتر";
 $MakeInvisible = "پنهان کردن";
 $MakeVisible = "آشکار کردن";
 $Image = "تصویر";
+$SaveIntroText = "ذخیره متن معرفی";
 $CourseName = "نام درس";
 $SendAMessage = "ارسال یک پیام";
 $Menu = "منو";
+$BackToUserList = "بازگشت به فهرست کاربران";
+$GraphicNotAvailable = "گرفایک در دسترس نیست";
 $BackTo = "برگشت به";
 $HistoryTrainingSessions = "تاریخ جلسات دروس";
+$ConversionFailled = "تبدیل با شکست مواجه شد";
+$AlreadyExists = "از قبل وجود دارد";
+$TheNewWordHasBeenAdded = "کلمه جدید اضافه شده است";
 $DataType = "نوع اطلاعات";
 $Value = "اعتبار";
 $System = "سیستم";
+$ImportantActivities = "فعالیت های مهم";
+$SearchActivities = "جستجو برای فعالیت های خاص";
+$Parent = "والدین";
 $SurveyAdded = "بررسی اضافه شد";
 $WikiAdded = "ویکی اضافه شد";
 $ReadOnly = "فقط خواندنی";
@@ -640,6 +704,10 @@ $Until = "تا";
 $FirstPage = "اولین صفحه";
 $LastPage = "آخرین صفحه";
 $Coachs = "مربی ها";
+$ThereAreNoRegisteredDatetimeYet = "هیچ تاریخ و زمانی تا بحال ثبت نشده است";
+$CalendarList = "فهرست تقویم مشارکت کنندگان";
+$CleanCalendar = "پاک کردن تقویم تمام فهرست ها";
+$AddDateAndTime = "افزودن یک تاریخ و زمان";
 $Attendance = "شرکت";
 $GeneralDescription = "توضیحات درس";
 $GeneralDescriptionQuestions = "جایگاهاین درس در برنامهآموزشی چیست؟آیا پیش نیازهاییبرای این درسوجود دارد؟ارتباط این درسبا دروس دیگرچیست؟";
@@ -665,6 +733,7 @@ $AssessmentInformation = "نمومه سؤالات، معیارهای ارزشی�
 $langNameOfLang['bosnian'] = "بسنی";
 $langNameOfLang['czech'] = "چک";
 $langNameOfLang['dari'] = "دری";
+$langNameOfLang['english_org'] = "انگلیسی برای سازمان ها";
 $langNameOfLang['korean'] = "کره ای";
 $langNameOfLang['pashto'] = "پشتو";
 $langNameOfLang['persian'] = "فارسی";
@@ -705,6 +774,20 @@ $AssignUsers = "انتصاب کاربران";
 $AssignCourses = "انتصاب دروس";
 $AssignSessions = "انتصاب جلسات";
 $Timezone = "زمان محلی";
+$Company = "شرکت";
+$GradebookExcellent = "فوق العاده";
+$GradebookOutstanding = "برجسته";
+$GradebookGood = "خوب";
+$GradebookFair = "نسبتا خوب";
+$GradebookPoor = "ضعیف";
+$GradebookFailed = "شکست خورد";
+$UploadedDate = "تاریخ ارسال";
+$Filename = "نام فایل";
+$Recover = "بازیابی";
+$Recovered = "بازیابی شد";
+$RecoverDropboxFiles = "بازیابی فایل ها از تبادل فایل";
+$ForumCategory = "دسته بندی انجمن";
+$YouCanAccessTheExercise = "برو به آزمون";
 $LoginEnter = "ورود";
 $ToolCourseDescription = "توضیحات درس";
 $ToolDocument = "اسناد";
@@ -729,9 +812,22 @@ $ToolBlogManagement = "پروژه ها";
 $ToolTracking = "گزارش گیری";
 $ToolCourseSetting = "تنظیمات";
 $ToolCourseMaintenance = "نسخه پشتیبان";
+$AreYouSureToDeleteAllDates = "آیا مطمئن هستید قصد حذف تمامی تاریخ ها را دارید؟";
+$AddADateTime = "افزودن تاریخ و زمان";
 $Infrastructure = "ساختار";
 $DurationInHours = "مدت در ساعت";
+$YouMustSelectAtleastAStartDate = "شما باید یک تاریخ شروع انتخاب کنید";
+$AditionalNotes = "یادداشت های اضافه";
+$StartDateCustom = "تاریخ شروع سفارشی";
+$StartDateOptions = "گزینه های تاریخ شروع";
+$DisplayAboutLastDoneAdvance = "نمایش اطلاعات درباره آخرین موضوع تکمیل شده";
+$DisplayAboutNextAdvanceNotDone = "نمایش اطلاعات درباره آخرین موضوع تکمیل نشده";
 $ToolCourseProgress = "روند پیشرفت درس";
+$NotAttended = "شرکت نکرده";
+$Attended = "شرکت کرده";
+$IPAddress = "آدرس آی پی";
+$CourseAdvance = "روند درس";
+$CertificateGenerated = "مدرک ایجاد شده";
 $QualificationNumeric = "حداکثر امتیاز";
 $Literal0 = "صفر";
 $Literal1 = "یک";
@@ -763,17 +859,43 @@ $SkillsImport = "درون ریزی مهارت ها";
 $SkillsYouAcquired = "مهارت های بدست آورده";
 $SkillsSearchedFor = "مهارت های جستجو شده";
 $SkillsYouCanLearn = "مهارت هایی که قادر به آموختن هستید";
+$ClickToZoom = "برای زوم کردن کلیک کنید";
+$ManageSkills = "مدیریت مهارت ها";
+$Categories = "دسته بندی ها";
 $SkillRoot = "روت";
 $SkillInfo = "اطلاعات مهارت";
 $GetNewSkills = "بدست آوردن مهارت های جدید";
+$CompleteMatch = "مطابقت کامل";
 $Rank = "رتبه";
+$CurrentlyLearning = "در حال یادگیری";
 $SkillsAcquired = "مهارت های بدست آورده";
+$AddSkillToProfileSearch = "افزودن مهارت به مشخصه جستجو";
+$ShortCode = "کد کوتاه";
+$CreateChildSkill = "ایجاد زیر شاخه مهارت";
+$SearchProfileMatches = "جستجوی مطابقت های مشخصه";
 $ProfileSearch = "جستجوی مشخصات";
 $here = "اینجا";
 $ImportUsers = "درون ریزی کاربران";
+$NumberOfCoursesPublic = "تعداد دروس عمومی";
+$NumberOfCoursesOpen = "تعداد دروس باز";
+$NumberOfCoursesPrivate = "تعداد دروس خصوصی";
+$NumberOfCoursesClosed = "تعداد دروس بسته";
+$NumberOfCoursesTotal = "مجموع تعداد دروس";
+$NumberOfUsersActive = "تعداد کاربران فعال";
+$Approved = "تایید شد";
+$EditSettings = "ویرایش تنظیمات";
+$ThisValueCantBeChanged = "این مقدار قابل تغییر نیست.";
+$TotalAvailableUsers = "مجموع کاربران در دسترس";
 $LowerCaseUser = "کاربر";
+$ReturnToCourseList = "بازگشت به فهرست دروس";
+$CourseTutor = "استاد درس";
+$StudentInSessionCourse = "دانشجو در جلسه درس";
+$StudentInCourse = "دانشجو در درس";
+$SessionGeneralCoach = "مربی عمومی جلسه";
+$SessionCourseCoach = "مربی درس جلسه";
 $Admin = "مدیر";
 $Order = "ترتیب";
+$GlobalPlatformInformation = "پلتفرم جهانی اطلاعات";
 $ReportABug = "گزارش مشکل";
 $Letters = "نامه ها";
 $MaximumOfParticipants = "حداکثر تعداد اعضا";
@@ -793,6 +915,8 @@ $DateUnLock = "باز کردن تاریخ";
 $DateLock = "قفل کردن تاریخ";
 $RepeatDate = "تکرار تاریخ";
 $HaveFun = "موفق باشید،";
+$ClearSearchResults = "پاکسازی نتایج جستجو";
+$TestServerMode = "حالت سرور تست";
 $MemoryUsage = "استفاده از حافظه";
 $MemoryUsagePeak = "کداکثر استفاده از حافظه";
 $Seconds = "ثانیه ها";
@@ -809,12 +933,16 @@ $PassExam = "گذراندن";
 $FillWithExemplaryContent = "با محتوای آزمایشی پر شود";
 $ToolVideoconference = "ویدیو کنفرانس";
 $SelectSVGEditImage = "انتخاب یک تصویر";
+$OnlyAccessFromYourGroup = "فقط از طریق گروه شما در دسترس هست";
 $UserFolders = "پوشه های کاربران";
 $CertificatesFiles = "گواهینامه ها";
 $ChatFiles = "تاریخچه مکالمات گفتگو";
 $Flash = "فلش";
 $Video = "ویدیو";
 $Images = "تصاویر";
+$OpenInANewWindow = "باز کردن در پنجره جدید";
+$ExamNotAvailableAtThisTime = "آزمون در حال حاضر در دسترس نیست";
+$LoginOrEmailAddress = "نام کاربری یا آدرس ایمیل";
 $Activate = "فعال";
 $Deactivate = "غیر فعال";
 $Profile = "مشخصات";
@@ -852,6 +980,10 @@ $NotInstalled = "نصب نشده";
 $Settings = "تنظیمات";
 $CheckFilePermissions = "چک کردن مجوز فایل";
 $NotAvailable = "در دسترس نیست";
+$NanogongGiveTitle = "شما هیچ نامی به فایل نداده اید";
+$NanogongFailledToSubmit = "ارسال ضبط صدا با مشکل مواجه شد";
+$NanogongSubmitted = "ضبط صدا ارسال شده است";
+$RecordMyVoice = "ضبط صدای من";
 $VoiceRecord = "ضبط صدا";
 $SelectADateRange = "انتخاب یک بازه تاریخ";
 $AllDone = "همه انجام شد";
@@ -861,10 +993,14 @@ $Responsable = "مسئول";
 $Presence = "راهنمایی";
 $Blogs = "بلاگ ها";
 $Others = "دیگران";
+$BackToCourseDesriptionList = "بازگشت به توضیحات درس";
 $Postpone = "به تعویق انداختن";
 $Uploaded = "آپلود شد.";
 $Saved = "ذخیره شد.";
 $Reset = "تنظیم مجدد";
+$DecreaseFontSize = "کوچک کردن اندازه فونت";
+$ResetFontSize = "بازگردانی اندازه فونت";
+$IncreaseFontSize = "بزرگ کردن اندازه فونت";
 $AttachmentUpload = "آپلود ضمیمه";
 $CourseAutoRegister = "درس ثبت نام اتوماتیک";
 $DiskFreeSpace = "فضای خالی در دیسک";
@@ -874,16 +1010,20 @@ $NextBis = "بعدی";
 $Prev = "قبلی";
 $Configuration = "تنظیمات";
 $ToGroup = "به گروه اجتماعی";
+$BackToGroup = "بازگشت به گروه";
 $UserRoles = "نقش کاربر";
 $GroupRoles = "نقش گروه";
 $StorePermissions = "نگهداری مجوزها";
 $PendingInvitation = "دعوتنامه معلق";
+$MaximunFileSizeXMB = "حداکثر حجم فایل: %s مگابایت.";
 $MessageHasBeenSent = "پیام شما ارسال شده است.";
 $Tags = "برچسب ها";
 $ClassesUnSubscribed = "عضویت کلاس ها باطل شد.";
 $NotAddedToCourse = "به درس اضافه نشده است";
 $ClearFilterResults = "حذف نتایج فیلتر";
 $SelectFilter = "انتخاب فیلتر";
+$AddToCalendar = "افزودن به تقویم";
+$RandomPick = "انتخاب تصادفی";
 $SeeMessage = "دیدن پیام";
 $SeeInvitation = "دیدن پیام";
 $Replies = "پاسخ ها";

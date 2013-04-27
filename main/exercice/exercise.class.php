@@ -3455,11 +3455,14 @@ class Exercise {
         if (!empty($user_data)) {
             $array[] = array('title' => get_lang("User"), 'content' => $user_data);
         }
-
+        // Description can be very long and is generally meant to explain
+        //   rules *before* the exam. Leaving here to make display easier if
+        //   necessary
+        /*
         if (!empty($this->description)) {
             $array[] = array('title' => get_lang("Description"), 'content' => $this->description);
         }
-
+        */
         if (!empty($start_date)) {
             $array[] = array('title' => get_lang("StartDate"), 'content' => $start_date);
         }

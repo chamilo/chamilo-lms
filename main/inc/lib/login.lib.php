@@ -29,7 +29,6 @@ class Login
     public static function get_user_account_list($user, $reset = false, $by_username = false)
     {
         global $_configuration;
-        //$portal_url = $_configuration['root_web'];
         $portal_url = api_get_path(WEB_PATH);
 
         if ($_configuration['multiple_access_urls']) {
@@ -112,13 +111,13 @@ class Login
         if (api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
             return get_lang('your_password_has_been_reset');
         } else {
-            $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));            
-            return sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);            
+            $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
+            return sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
         }
     }
 
     /**
-     * Handle encrypted password, send an email to a user with his password 
+     * Handle encrypted password, send an email to a user with his password
      *
      * @param int	user id
      * @param bool	$by_username
@@ -126,7 +125,6 @@ class Login
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
     public static function handle_encrypted_password($user, $by_username = false) {
-        global $_configuration;
         $email_subject = "[" . api_get_setting('siteName') . "] " . get_lang('LoginRequest'); // SUBJECT
 
         if ($by_username) { // Show only for lost password
@@ -136,8 +134,6 @@ class Login
             $user_account_list = self::get_user_account_list($user, true); // BODY
             $email_to = $user[0]['email'];
         }
-
-        $secret_word = self::get_secret_word($email_to);
         $email_body = get_lang('DearUser') . " :\n" . get_lang('password_request') . "\n";
         $email_body .= $user_account_list . "\n-----------------------------------------------\n\n";
         $email_body .= get_lang('PasswordEncryptedForSecurity');
@@ -148,16 +144,15 @@ class Login
         $email_admin = api_get_setting('emailAdministrator');
 
         if (@api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
-
             if (CustomPages::enabled()) {
                 return get_lang('YourPasswordHasBeenEmailed');
             } else {
                 Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
             }
         } else {
-            $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));            
+            $admin_email = Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
             $message = sprintf(get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'), $admin_email);
-            
+
             if (CustomPages::enabled()) {
                 return $message;
             } else {
@@ -172,8 +167,7 @@ class Login
      */
     public static function get_secret_word($add)
     {
-        global $_configuration;
-        return $secret_word = md5($_configuration['security_key'] . $add);
+        return $secret_word = sha1($add);
     }
 
     /**
@@ -194,12 +188,12 @@ class Login
             return get_lang('CouldNotResetPassword');
         }
 
-        if (self::get_secret_word($user['email']) == $secret) { // OK, secret word is good. Now change password and mail it.
+        if (self::get_secret_word($user['email']) == $secret) {
+            // OK, secret word is good. Now change password and mail it.
             $user['password'] = api_generate_password();
-            $crypted = $user['password'];
-            $crypted = api_get_encrypted_password($crypted);
+            $crypted = api_get_encrypted_password($user['password']);
             $sql = "UPDATE " . $tbl_user . " SET password='$crypted' WHERE user_id = $id";
-            $result = Database::query($sql);
+            Database::query($sql);
             return self::send_password_to_user($user, $by_username);
         } else {
             return get_lang('NotAllowed');
@@ -210,7 +204,7 @@ class Login
      *
      * @global bool   $is_platformAdmin
      * @global bool   $is_allowedCreateCourse
-     * @global object $_user 
+     * @global object $_user
      */
     public static function init_user($user_id, $reset)
     {
@@ -267,8 +261,8 @@ class Login
                     Session::write('is_platformAdmin', $is_platformAdmin);
                     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
-//                  
-//                    
+//
+//
 //                    // If request_uri is setted we have to go further to have course permissions
 //                    if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
 //                        if (isset($_SESSION['noredirection'])) {
@@ -311,9 +305,9 @@ class Login
      * @global type $is_courseMember
      * @global type $is_sessionAdmin
      * @global type $is_allowed_in_course
-     * 
+     *
      * @param type $course_id
-     * @param type $reset 
+     * @param type $reset
      */
     static function init_course($course_id, $reset)
     {
@@ -335,7 +329,7 @@ class Login
         global $is_allowed_in_course;
 
         if ($reset) {
-            // Course session data refresh requested or empty data        
+            // Course session data refresh requested or empty data
             if ($course_id) {
                 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -383,7 +377,7 @@ class Login
                     Session::write('_real_cid', $_real_cid);
 
                     // if a session id has been given in url, we store the session
-                    
+
                     // Database Table Definitions
                     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
                     $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -425,14 +419,14 @@ class Login
                         }
                     }
                 }
-                //Deleting session info 
+                //Deleting session info
                 if (api_get_session_id()) {
                     Session::erase('id_session');
                     Session::erase('session_name');
                 }
             }
         } else {
-            // Continue with the previous values       
+            // Continue with the previous values
             if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
                 $_cid = -1;        //set default values that will be caracteristic of being unset
                 $_course = -1;
@@ -441,7 +435,7 @@ class Login
                 $_course = $_SESSION['_course'];
 
                 // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
-                // Moreover, if we want to track a course with another session it can be usefull        
+                // Moreover, if we want to track a course with another session it can be usefull
                 if (!empty($_GET['id_session'])) {
                     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
                     $sql = 'SELECT name FROM ' . $tbl_session . ' WHERE id="' . intval($_SESSION['id_session']) . '"';
@@ -464,9 +458,9 @@ class Login
 
                         /*
                          * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)
-                         * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition: 
+                         * the function Tracking::get_time_spent_on_the_course() returns big values (200h) due the condition:
                          * login_course_date > now() - INTERVAL $session_lifetime SECOND
-                         * 
+                         *
                          */
                         /*
                           if (isset($_configuration['session_lifetime'])) {
@@ -483,10 +477,10 @@ class Login
                         if (isset($_user['user_id']) && !empty($_user['user_id'])) {
 
                             //We select the last record for the current course in the course tracking table
-                            //But only if the login date is < than now + max_life_time            
+                            //But only if the login date is < than now + max_life_time
                             $sql = "SELECT course_access_id FROM $course_tracking_table
                             WHERE   user_id     = " . intval($_user ['user_id']) . " AND
-                                    course_code = '$course_code' AND 
+                                    course_code = '$course_code' AND
                                     session_id  = " . api_get_session_id() . " AND
                                     login_course_date > now() - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
@@ -495,7 +489,7 @@ class Login
                             if (Database::num_rows($result) > 0) {
                                 $i_course_access_id = Database::result($result, 0, 0);
                                 //We update the course tracking table
-                                $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1  
+                                $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
                                 WHERE course_access_id = " . intval($i_course_access_id) . " AND session_id = " . api_get_session_id();
                                 //error_log($sql);
                                 Database::query($sql);
@@ -526,7 +520,7 @@ class Login
 
             if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
 
-                //Check if user is subscribed in a course        
+                //Check if user is subscribed in a course
                 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql = "SELECT * FROM $course_user_table
                    WHERE user_id  = '" . $user_id . "' AND relation_type <> " . COURSE_RELATION_TYPE_RRHH . "
@@ -556,7 +550,7 @@ class Login
                 //We are in a session course? Check session permissions
                 if (!empty($session_id)) {
 
-                    //I'm not the teacher of the course 
+                    //I'm not the teacher of the course
                     if ($is_courseAdmin == false) {
                         // this user has no status related to this course
                         // The user is subscribed in a session? The user is a Session coach a Session admin ?
@@ -565,19 +559,19 @@ class Login
                         $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
                         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-                        //Session coach, session admin, course coach admin 
+                        //Session coach, session admin, course coach admin
                         $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
                 		FROM $tbl_session session, $tbl_session_course_user session_rcru
-					    WHERE  session_rcru.id_session  = session.id AND 
-					           session_rcru.course_code = '$_cid' AND 
-					           session_rcru.id_user     = '$user_id' AND 
+					    WHERE  session_rcru.id_session  = session.id AND
+					           session_rcru.course_code = '$_cid' AND
+					           session_rcru.id_user     = '$user_id' AND
                                session_rcru.id_session  = $session_id AND
 					           session_rcru.status      = 2";
 
                         $result = Database::query($sql);
                         $row = Database::store_result($result);
 
-                        //I'm a session admin?                
+                        //I'm a session admin?
                         if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
                             $_courseUser['role'] = 'Professor';
                             $is_courseMember = false;
@@ -588,9 +582,9 @@ class Login
                         } else {
                             //Im a coach or a student?
                             $sql = "SELECT id_user, status FROM " . $tbl_session_course_user . "
-                            WHERE   course_code = '$_cid' AND 
+                            WHERE   course_code = '$_cid' AND
                                     id_user     = '" . $user_id . "' AND
-                                    id_session  = '" . $session_id . "'                                    
+                                    id_session  = '" . $session_id . "'
                             LIMIT 1";
                             $result = Database::query($sql);
 
@@ -728,9 +722,9 @@ class Login
      * @global int $_cid
      * @global array $_course
      * @global int $_gid
-     * 
+     *
      * @param int $group_id
-     * @param bool $reset 
+     * @param bool $reset
      */
     static function init_group($group_id, $reset)
     {
@@ -785,14 +779,14 @@ class Login
             }
         }
     }
-    
+
     /**
      * Returns true if user exists in the platform when asking the password
-     * 
+     *
      * @param string $username (email or username)
      * @return boolean
      */
-    function get_user_accounts_by_username($username) {        
+    function get_user_accounts_by_username($username) {
         if (strpos($username,'@')){
             $username = api_strtolower($username);
             $email = true;
@@ -809,8 +803,8 @@ class Login
         }
 
 		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$query = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, username AS loginName, password, email, 
-                         status AS status, official_code, phone, picture_uri, creator_id 
+		$query = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, username AS loginName, password, email,
+                         status AS status, official_code, phone, picture_uri, creator_id
 				 FROM  $tbl_user
 				 WHERE ( $condition AND active = 1) ";
 		$result 	= Database::query($query);

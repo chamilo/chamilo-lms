@@ -523,13 +523,14 @@ class MessageManager
         $result = Database::query($query);
     }
     
-    public static function update_message_status($user_id, $message_id)
+    public static function update_message_status($user_id, $message_id,$type)
     {
+        $type = intval($type);
         if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) {
             return false;
         }
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $query = "UPDATE $table_message SET msg_status = 1 WHERE user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
+        $query = "UPDATE $table_message SET msg_status = '$type' WHERE user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
         $result = Database::query($query);
     }
 
@@ -1293,18 +1294,29 @@ class MessageManager
     static function inbox_display()
     {
         $success = get_lang('SelectedMessagesDeleted');
+        $success_read = get_lang('SelectedMessagesRead');
+        $success_unread = get_lang('SelectedMessagesUnRead');
         $html = '';
 
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
-                 case 'mark_as_selected' :
+                 case 'mark_as_unread' :
                     $number_of_selected_messages = count($_POST['id']);
                     if (is_array($_POST['id'])) {
                         foreach ($_POST['id'] as $index => $message_id) {
-                            MessageManager::update_message_status(api_get_user_id(), $message_id);
+                            MessageManager::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_UNREAD);
                         }
                     }
-                    $html .= Display::return_message(api_xml_http_response_encode($success), 'normal', false);
+                    $html .= Display::return_message(api_xml_http_response_encode($success_unread), 'normal', false);
+                    break;
+                case 'mark_as_read' :
+                    $number_of_selected_messages = count($_POST['id']);
+                    if (is_array($_POST['id'])) {
+                        foreach ($_POST['id'] as $index => $message_id) {
+                            MessageManager::update_message_status(api_get_user_id(), $message_id, MESSAGE_STATUS_NEW);
+                        }
+                    }
+                    $html .= Display::return_message(api_xml_http_response_encode($success_read), 'normal', false);
                     break;
                 case 'delete' :
                     $number_of_selected_messages = count($_POST['id']);
@@ -1331,7 +1343,7 @@ class MessageManager
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
         }
-        $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages'),'mark_as_selected' => get_lang('MailMarkSelectedAsRead')));
+        $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages'),'mark_as_unread' => get_lang('MailMarkSelectedAsUnRead'),'mark_as_read' => get_lang('MailMarkSelectedAsRead')));
         $html .= $table->return_table();
         return $html;
     }

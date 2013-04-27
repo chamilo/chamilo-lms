@@ -272,7 +272,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Generated from @assert (false) === false.
+     * Generated from @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false.
      *
      * @covers UserManager::update_user
      */
@@ -280,7 +280,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame(
           false,
-          UserManager::update_user(false)
+          UserManager::update_user(false,false,false,false,false,false,false,false,false,false,false,false,false)
         );
     }
 

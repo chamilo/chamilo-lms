@@ -36,5 +36,9 @@ $WriteAMessage = "Escrever uma mensagem";
 $AlreadyReadMessage = "Esta mensagem já foi lida";
 $UnReadMessage = "Mensagem ainda não lida";
 $MessageSent = "Mensagem enviada";
+$MailMarkSelectedAsUnread = "Marcar como não lida";
+$MailMarkSelectedAsRead = "Marcar como não lida";
 $YouShouldWriteAMessage = "Você deve escrever uma mensagem";
+$SelectedMessagesUnRead = "As mensagens selecionadas foram marcadas como não lidas";
+$SelectedMessagesRead = "As mensagens selecionadas foram marcadas como lidas";
 ?>

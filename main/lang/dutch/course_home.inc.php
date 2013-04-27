@@ -29,5 +29,7 @@ $SessionIdentifier = "Sessie herkenningsteken";
 $SessionName = "Sessienaam";
 $SessionCategory = "Sessiecategorie";
 $SessionData = "Sessiedata";
+$TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise = "De auto-start functie instelling van de oefeningen is ingeschakeld. Studenten zullen automatisch doorgezonden worden naar de geselecteerde oefening.";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "De auto-start functie van het leerpad is ingeschakeld. Wanneer studenten deze cursus openen, zullen ze automatisch doorgezonden worden naar het leerpad wat is aangeduid als auto-start.";
 $ToolSearch = "Zoeken";
 ?>

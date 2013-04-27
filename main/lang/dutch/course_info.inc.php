@@ -113,4 +113,28 @@ $NewUserEmailAlert = "Melding van nieuwe zelfinschrijvingen aan de cursusbeheerd
 $NewUserEmailAlertEnable = "Breng de cursusbeheerder op de hoogte van nieuwe zelfinschrijvingen";
 $NewUserEmailAlertToTeacharAndTutor = "Breng de cursusbeheerder en tutoren op de hoogte van nieuwe zelfinschrijvingen";
 $NewUserEmailAlertDisable = "Breng de beheerders niet op de hoogte";
+$AllowUserViewUserList = "Sta gebruiker toe de gebruikerslijst te bekijken";
+$AllowUserViewUserListActivate = "Schakel gebruikerslijst in";
+$AllowUserViewUserListDeactivate = "Schakel gebruikerslijst uit";
+$DoNotDisplayAnyAdvance = "Vooruitgang niet weergeven";
+$RedirectToTheExerciseList = "Verwijs door naar de lijst met oefeningen";
+$RedirectToExercise = "Verwijs door naar de geselecteerde oefeningen";
+$ConfigExercise = "Configureer de oefeningen tool";
+$CourseSettingsRegisterDirectLink = "Als uw cursus publiek of geopend is, kunt u gebruik maken van onderstaande directe link om een uitnodiging te verzenden naar alle nieuwe gebruikers. Dus na registratie, zullen ze direct worden doorverwezen naar de cursus. Ook kunt u de e = 1 parameter toevoegen aan de URL, vervang het cijfer \"1\" door het juiste oefening ID om ze rechtstreeks naar een specifiek examen door te verwijzen. Het oefening ID kan je vinden in de URL die je te zien krijgt wanneer je klikt op een te openen oefening.
+%s";
+$DirectLink = "Directe link";
+$NewHomeworkEmailAlert = "Stuur, bij aanmaken van een huiswerk, een e-mail naar de gebruikers";
+$NewHomeworkEmailAlertEnable = "Schakel, voor gebruikers, een e-mail herinnering in bij nieuw huiswerk";
+$NewHomeworkEmailAlertDisable = "Schakel, voor gebruikers, een e-mail herinnering bij nieuw huiswerk uit";
+$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Toon de laatst uitgevoerde stap en de volgende uit te voeren stap";
+$AddPicture = "Voeg een afbeelding toe";
+$LPAutoLaunch = "Auto-start functie van leerpad inschakelen";
+$ConfigLearnpath = "Leerpad instellingen";
+$PDFWaterMarkHeader = "Watermerk hoofding in geëxporteerde PDF's";
+$RedirectToALearningPath = "Verwijs door naar een geselecteerd leerpad";
+$RedirectToTheLearningPathList = "Verwijs door naar de lijst met leerpaden";
+$ActivateLegal = "Juridische termen inschakelen";
+$ShowALegalNoticeWhenEnteringTheCourse = "Toon een gebruiksovereenkomst bij openen van de cursus";
+$CourseLegalAgreement = "Juridische overeenkomst voor deze cursus";
+$AcceptLegal = "Accepteer de gebruiksovereenkomst";
 ?>

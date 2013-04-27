@@ -522,7 +522,7 @@ class MessageManager
         $query = "UPDATE $table_message SET msg_status = '0' WHERE msg_status<>4 AND user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
         $result = Database::query($query);
     }
-    
+
     public static function update_message_status($user_id, $message_id,$type)
     {
         $type = intval($type);
@@ -1343,7 +1343,7 @@ class MessageManager
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
         }
-        $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages'),'mark_as_unread' => get_lang('MailMarkSelectedAsUnRead'),'mark_as_read' => get_lang('MailMarkSelectedAsRead')));
+        $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages'),'mark_as_unread' => get_lang('MailMarkSelectedAsUnread'),'mark_as_read' => get_lang('MailMarkSelectedAsRead')));
         $html .= $table->return_table();
         return $html;
     }

@@ -54,4 +54,8 @@ $Attempt = "Saioa";
 $MoveTheCurrentForum = "Lekuz aldatu uneko foroa";
 $WarningWhenEditingScorm = "Abisua! Ikaskuntza objektu baten edukia editatzen duzunean, ikastaroaren txostena aldatu dezakezu edo ikaskuntza objektuari kalte egin.";
 $AdditionalProfileField = "Gehitu erabiltzailearen profil eremua";
+$ScormUnknownPackageFormat = "Zu kargatzen saiatzen ari zaren paketeak formatu ezezaguna du. Mesedez, egiaztatu euskarri onartua duen formaturen bat erabiltzen ari zarela.";
+$ScormNotEnoughSpaceInCourseToInstallPackage = "Ez dago uneko paketea deskonprimatzeko nahiko lekurik ikastaro honetan.";
+$ScormPackageFormatNotScorm = "Badirudi zu kargatzen ari zaren paketea ez dagoela SCORM formatuan. Mesedez, egiaztatu imsmanifest.xml dagoela kargatzen saiatzen ari zaren ZIP artxibategiaren barruan.";
+$HideTocFrame = "Ezkutatu eduki taularen markoa";
 ?>

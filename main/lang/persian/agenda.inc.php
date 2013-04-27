@@ -75,6 +75,7 @@ $AgendaSortChronologicallyDown = "نزولی";
 $ItemForUserSelection = "فهرست انتخاب کاربران";
 $IsNotiCalFormatFile = "این فایل در ساختار iCal نیست";
 $RepeatEvent = "تکرار رویداد";
+$AllDay = "تمام روز";
 $SessionCalendar = "تقویم جلسه";
 $RepeatDate = "تکرار تاریخ";
 $EndDateMustBeMoreThanStartDate = "تاریخ پایان باید بیشتر از تاریخ شروع باشد";

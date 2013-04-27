@@ -128,4 +128,21 @@ $DoNotDisplayAnyAdvance = "Ez erakutsi inolako aurrerapenik";
 $RedirectToTheExerciseList = "Berbideratu ariketen zerrendara";
 $RedirectToExercise = "Berbideratu aukeratutako ariketara";
 $ConfigExercise = "Ezarri Ariketak tresna";
+$CourseSettingsRegisterDirectLink = "Zure ikastaroa publikoa edo irekia bada, erabiltzaile berriak gonbidatzeko beheko lotura zuzena erabili dezakezu. Horrela, atarian erregistratzeko inprimakia bete ondoren, ikastarora zuzenean eramanak izango dira. Nahi baduzu, URL-rako e=1 parametroa gehitu dezakezu, \"1\" ordez ariketaren ID idatziz, eta erabiltzaileak zuzenean ariketa edo azterketa batera eramanak izango dira. Ariketaren ID ariketaren beraren URL-n aurkituko duzu, ariketa irekitzeko klikatzen duzunean.
+%s";
+$DirectLink = "Zuzeneko lotura";
+$NewHomeworkEmailAlert = "Abisatu ikasleei, mezu elektronikoaren bidez, beste lan baten sorreraz";
+$NewHomeworkEmailAlertEnable = "Aktibatu mezu elektronikoaren bidezko abisua zeregin berri bat sortu denean";
+$NewHomeworkEmailAlertDisable = "Deskatibatu mezu elektronikoaren bidezko abisua, lan berri bat sortu denean";
+$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Erakutsi egindako azken gaiaren eta egingo den hurrengoaren gaineko informazioa";
+$AddPicture = "Gehitu ikastaroaren irudia";
+$LPAutoLaunch = "Aktibatu ikasgaien bistaratze automatikoa";
+$ConfigLearnpath = "Ezarri ikasgaien tresna";
+$PDFWaterMarkHeader = "Ur-markaren goiburua PDF esportazioetan";
+$RedirectToALearningPath = "Berbideratu aukeratutako ibilbidera";
+$RedirectToTheLearningPathList = "Berbideratu ibilbideen zerrendara";
+$ActivateLegal = "Aktibatu lege terminoak";
+$ShowALegalNoticeWhenEnteringTheCourse = "Erakutsi lege abisua ikastaroan sartzean";
+$CourseLegalAgreement = "Ikastaro honetarako lege hitzarmena";
+$AcceptLegal = "Onartu lege terminoak";
 ?>

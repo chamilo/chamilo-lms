@@ -48,4 +48,6 @@ $DocumentsWillBeAddedToo = "Documenten worden ook toegevoegd";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Als u een leerpad dat een oefening bevat wenst te exporteren dan dient u ervoor te zorgen dat deze oefeningen ook in de export zitten. U dient deze dus te selecteren in de lijst met oefeningen";
 $ArchivesDirectoryNotWriteableContactAdmin = "De archievenfolder die door deze functionaliteit gebruikt word is niet schrijfbaar. Gelieve contact op te nemen met uw platform beheerder.";
 $DestinationCourse = "Doelcursus";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Als je leerpaden audio bestanden bevatten, dan moet je ze selecteren vanuit documenten";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Niet vergeten om je mediabestanden te selecteren als je als je bron die nodig heeft";
 ?>

@@ -819,4 +819,5 @@ $StartToType = "Tik hier en klik vervolgens op deze balk om de tag te valideren"
 $InstallChamilo = "Installeer Chamilo";
 $ChamiloURL = "Chamilo URL";
 $AddedToALP = "Toegevoegd aan leerpad";
+$UserList = "Gebruikerslijst";
 ?>

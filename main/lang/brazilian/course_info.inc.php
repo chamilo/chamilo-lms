@@ -117,6 +117,11 @@ $AllowUserViewUserList = "Permitir que os usuários possam ver a lista de usuár
 $AllowUserViewUserListActivate = "Ativar a lista de usuários";
 $AllowUserViewUserListDeactivate = "Desativar a lista de usuários";
 $DoNotDisplayAnyAdvance = "Não exibir o progresso";
+$RedirectToTheExerciseList = "Redirecionar para a lista de exercícios";
+$RedirectToExercise = "Redirecionar para o exercício selecionado";
+$ConfigExercise = "Ferramenta para configurar exercícios";
+$CourseSettingsRegisterDirectLink = "Se o curso é público ou aberto, você pode usar o link direto abaixo para enviar um convite para novos usuários, assim, após o registro, eles serão enviados diretamente para o curso. Além disso, você pode adicionar o e = 1 parâmetro para a URL, substituindo \"1\" por uma ID de exercício para enviá-los diretamente para um exame específico. O ID de exercício pode ser descoberto na URL ao clicar em um exercício para abri-lo. % s";
+$DirectLink = "Link direto";
 $NewHomeworkEmailAlert = "Enviar email aos usuários quando uma atividade for criada";
 $NewHomeworkEmailAlertEnable = "Permitir email aos usuários quando um trabalho for submetido";
 $NewHomeworkEmailAlertDisable = "Desativar email aos usuários quando um trabalho for submetido";

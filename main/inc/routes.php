@@ -4,62 +4,6 @@
 use Symfony\Component\HttpFoundation\Request;
 use \ChamiloSession as Session;
 
-// Controller as services definitions
-
-$app['pages.controller'] = $app->share(
-    function () use ($app) {
-        return new PagesController($app['pages.repository']);
-    }
-);
-
-$app['index.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\IndexController();
-    }
-);
-
-$app['legacy.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\LegacyController();
-    }
-);
-
-$app['userPortal.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\UserPortalController();
-    }
-);
-
-$app['learnpath.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\LearnpathController();
-    }
-);
-
-$app['course_home.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\CourseHomeController();
-    }
-);
-
-$app['certificate.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\CertificateController();
-    }
-);
-
-$app['user.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\UserController();
-    }
-);
-
-$app['news.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\NewsController();
-    }
-);
-
 /**
  * All calls made in Chamilo (olds ones) are manage in the LegacyController::classicAction function located here:
  * src/ChamiloLMS/Controller/LegacyController.php
@@ -69,23 +13,124 @@ $userAccessConditions = function (Request $request) use ($app) {
 
 };
 
-$coursePermissions = function (Request $request) use ($app) {
+/** Setting course session and group global values */
+$settingCourseConditions = function (Request $request) use ($app) {
+
+    $cidReq    = $request->get('cidReq');
+    $sessionId = $request->get('id_session');
+    $groupId   = $request->get('gidReq');
+
+    $tempCourseId  = api_get_course_id();
+    $tempGroupId   = api_get_group_id();
+    $tempSessionId = api_get_session_id();
+
+    $courseReset = false;
+    if ( (!empty($cidReq) && $tempCourseId != $cidReq) || empty($tempCourseId) || empty($tempCourseId) == -1) {
+        $courseReset = true;
+    }
+
+    Session::write('courseReset', $courseReset);
+
+    $groupReset = false;
+    if ($tempGroupId != $groupId || empty($tempGroupId)) {
+        $groupReset = true;
+    }
+
+    $sessionReset = false;
+    if ($tempSessionId != $sessionId || empty($tempSessionId)) {
+        $sessionReset = true;
+    }
+    /*
+    $app['monolog']->addDebug('Start');
+    $app['monolog']->addDebug($courseReset);
+    $app['monolog']->addDebug($cidReq);
+    $app['monolog']->addDebug($tempCourseId);
+    $app['monolog']->addDebug('End');
+    */
+
+    if ($courseReset) {
+        if (!empty($cidReq) && $cidReq != -1) {
+            $courseInfo = api_get_course_info($cidReq);
+
+            if (!empty($courseInfo)) {
+                $courseCode = $courseInfo['code'];
+                $courseId   = $courseInfo['real_id'];
+
+                Session::write('_real_cid', $courseId);
+                Session::write('_cid', $courseCode);
+                Session::write('_course', $courseInfo);
+
+            } else {
+                $app->abort(404, 'Course not available');
+            }
+        } else {
+            Session::erase('_real_cid');
+            Session::erase('_cid');
+            Session::erase('_course');
+        }
+    }
+
+    $courseCode = api_get_course_id();
+
+    if (!empty($courseCode) && $courseCode != -1) {
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $time       = api_get_utc_datetime();
+        $sql        = "UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";
+        Database::query($sql);
+    }
+
+    if ($sessionReset) {
+        Session::erase('session_name');
+        Session::erase('id_session');
+
+        if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+            if (empty($sessionInfo)) {
+                $app->abort(404, 'Session not available');
+            } else {
+                Session::write('id_session', $sessionId);
+            }
+        }
+    }
+
+    if ($groupReset) {
+        Session::erase('_gid');
+        if (!empty($groupId)) {
+            Session::write('_gid', $groupId);
+        }
+    }
+
+    if (!isset($_SESSION['login_as'])) {
+        $userId = api_get_user_id();
+
+        // Course login
+        if (isset($userId)) {
+            event_course_login(api_get_course_int_id(), $userId, api_get_session_id());
+        }
+    }
+};
+
+/** Checks user permissions inside a course teacher? coach? etc */
+$userPermissionsInsideACourse = function (Request $request) use ($app) {
 
     $courseId  = api_get_course_int_id();
     $userId    = api_get_user_id();
     $sessionId = api_get_session_id();
 
-//If I'm the admin platform i'm a teacher of the course
+    //If I'm the admin platform i'm a teacher of the course
     $is_platformAdmin = api_is_platform_admin();
     $courseReset      = Session::read('courseReset');
 
-// course
+    //$app['monolog']->addDebug($courseReset);
+    //$app['monolog']->addDebug($courseId);
+
+    // Course
     $is_courseMember = false;
     $is_courseAdmin  = false;
     $is_courseTutor  = false;
     $is_courseCoach  = false;
     $is_sessionAdmin = false;
-//Session::erase('_courseUser');
+    //Session::erase('_courseUser');
 
     if ($courseReset) {
 
@@ -101,7 +146,7 @@ $coursePermissions = function (Request $request) use ($app) {
                 $user_pass_open_course = true;
             }
 
-//Checking if the user filled the course legal agreement
+            //Checking if the user filled the course legal agreement
             if ($courseInfo['activate_legal'] == 1 && !api_is_platform_admin()) {
                 $user_is_subscribed = CourseManager::is_user_accepted_legal(
                     $userId,
@@ -117,7 +162,7 @@ $coursePermissions = function (Request $request) use ($app) {
                 }
             }
 
-//Check if user is subscribed in a course
+            //Check if user is subscribed in a course
             $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
             $sql               = "SELECT * FROM $course_user_table WHERE   user_id  = '".$userId."' AND
                                   relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND c_id = ".api_get_course_int_id();
@@ -135,17 +180,17 @@ $coursePermissions = function (Request $request) use ($app) {
                 Session::write('_courseUser', $_courseUser);
             }
 
-//We are in a session course? Check session permissions
+            //We are in a session course? Check session permissions
             if (!empty($session_id)) {
-//I'm not the teacher of the course
+                //I'm not the teacher of the course
                 if ($is_courseAdmin == false) {
-// this user has no status related to this course
-// The user is subscribed in a session? The user is a Session coach a Session admin ?
+                    // this user has no status related to this course
+                    // The user is subscribed in a session? The user is a Session coach a Session admin ?
 
                     $tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);
                     $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-//Session coach, session admin, course coach admin
+                    //Session coach, session admin, course coach admin
                     $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
                     FROM $tbl_session session, $tbl_session_course_user session_rcru
                     WHERE  session_rcru.id_session  = session.id AND
@@ -157,7 +202,7 @@ $coursePermissions = function (Request $request) use ($app) {
                     $result = Database::query($sql);
                     $row    = Database::store_result($result);
 
-//I'm a session admin?
+                    //I'm a session admin?
                     if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $userId) {
                         $_courseUser['role'] = 'Professor';
                         $is_courseMember     = false;
@@ -166,7 +211,7 @@ $coursePermissions = function (Request $request) use ($app) {
                         $is_courseCoach      = false;
                         $is_sessionAdmin     = true;
                     } else {
-//Im a coach or a student?
+                        //Im a coach or a student?
                         $sql    = "SELECT cu.id_user, cu.status FROM $tbl_session_course_user cu
                                    WHERE   c_id = '$courseId' AND
                                    cu.id_user     = '".$userId."' AND
@@ -308,108 +353,6 @@ $coursePermissions = function (Request $request) use ($app) {
     }
 };
 
-$courseAccessConditions = function (Request $request) use ($app) {
-
-    $cidReq    = $request->get('cidReq');
-    $sessionId = $request->get('id_session');
-    $groupId   = $request->get('gidReq');
-
-    $tempCourseId  = api_get_course_id();
-    $tempGroupId   = api_get_group_id();
-    $tempSessionId = api_get_session_id();
-
-    $courseReset = false;
-    if ($tempCourseId != $cidReq || empty($tempCourseId) || empty($tempCourseId) == -1) {
-        $courseReset = true;
-    }
-
-    Session::write('courseReset', $courseReset);
-
-    $groupReset = false;
-    if ($tempGroupId != $groupId || empty($tempGroupId)) {
-        $groupReset = true;
-    }
-
-    $sessionReset = false;
-    if ($tempSessionId != $sessionId || empty($tempSessionId)) {
-        $sessionReset = true;
-    }
-    /*
-    $app['monolog']->addDebug('Start');
-    $app['monolog']->addDebug($courseReset);
-    $app['monolog']->addDebug($cidReq);
-    $app['monolog']->addDebug($tempCourseId);
-    $app['monolog']->addDebug('End');
-    */
-
-    if ($courseReset) {
-        if (!empty($cidReq) && $cidReq != -1) {
-            $courseInfo = api_get_course_info($cidReq);
-
-            if (!empty($courseInfo)) {
-                $courseCode = $courseInfo['code'];
-                $courseId   = $courseInfo['real_id'];
-
-                Session::write('_real_cid', $courseId);
-                Session::write('_cid', $courseCode);
-                Session::write('_course', $courseInfo);
-
-            } else {
-                $app->abort(404, 'Course not available');
-            }
-        } else {
-            Session::erase('_real_cid');
-            Session::erase('_cid');
-            Session::erase('_course');
-        }
-    }
-
-    $courseCode = api_get_course_id();
-
-    if (!empty($courseCode) && $courseCode != -1) {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $time       = api_get_utc_datetime();
-        $sql        = "UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";
-        Database::query($sql);
-    }
-
-    if ($sessionReset) {
-        Session::erase('session_name');
-        Session::erase('id_session');
-
-        if (!empty($sessionId)) {
-            $sessionInfo = api_get_session_info($sessionId);
-            if (empty($sessionInfo)) {
-                $app->abort(404, 'Session not available');
-            } else {
-                Session::write('id_session', $sessionId);
-            }
-        }
-    }
-
-    if ($groupReset) {
-        Session::erase('_gid');
-        if (!empty($groupId)) {
-            Session::write('_gid', $groupId);
-        }
-    }
-
-    if (!isset($_SESSION['login_as'])) {
-        $userId = api_get_user_id();
-
-        // Course login
-        if (isset($userId)) {
-            event_course_login(api_get_course_int_id(), $userId, api_get_session_id());
-        }
-    }
-};
-
-$groupAccessConditions = function (Request $request) use ($app) {
-};
-
-$sessionAccessConditions = function (Request $request) use ($app) {
-};
-
 $cleanCourseSession = function (Request $request) use ($app) {
     Session::erase('_cid');
     Session::erase('_real_cid');
@@ -418,17 +361,13 @@ $cleanCourseSession = function (Request $request) use ($app) {
 
 $app->get('/', 'legacy.controller:classicAction')
     ->before($userAccessConditions)
-    ->before($courseAccessConditions)
-    ->before($groupAccessConditions)
-    ->before($sessionAccessConditions)
-    ->before($coursePermissions);
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse);
 
 $app->post('/', 'legacy.controller:classicAction')
     ->before($userAccessConditions)
-    ->before($courseAccessConditions)
-    ->before($groupAccessConditions)
-    ->before($sessionAccessConditions)
-    ->before($coursePermissions);
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse);
 
 // web/index
 $app->match('/index', 'index.controller:indexAction', 'GET|POST')
@@ -451,19 +390,20 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
 
 // Logout
 $app->get('/logout', 'index.controller:logoutAction')
-    ->bind('logout');
+    ->bind('logout')
+    ->after($cleanCourseSession);
 
 // Course home instead of courses/MATHS the new URL is web/courses/MATHS
 $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('id_session', '\d+')
     ->assert('type', '.+')
-    ->before($courseAccessConditions)
-    ->before($coursePermissions);
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse);
 
 $app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($courseAccessConditions)
-    ->before($coursePermissions); //allowing slash "/"
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse); //allowing slash "/"
 
 // Course documents
 $app->get('/courses/{courseCode}/document/', 'index.controller:getDocumentAction')
@@ -476,7 +416,6 @@ $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
 $app->match('/user/{username}', 'user.controller:indexAction', 'GET');
 
 // Who is online
-
 /*$app->match('/users/online', 'user.controller:onlineAction', 'GET');
 $app->match('/users/online-in-course', 'user.controller:onlineInCourseAction', 'GET');
 $app->match('/users/online-in-session', 'user.controller:onlineInSessionAction', 'GET');*/

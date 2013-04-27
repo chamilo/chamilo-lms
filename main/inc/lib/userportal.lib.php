@@ -432,8 +432,8 @@ class IndexManager {
 		$thereIsSubCat = false;
 		if (Database::num_rows($resCats) > 0) {
 		    $htmlListCat = Display::page_header(get_lang('CatList'));
-        $htmlListCat .= '<ul>';
-        $htmlTitre = '';
+            $htmlListCat .= '<ul>';
+            $htmlTitre = '';
 			  while ($catLine = Database::fetch_array($resCats)) {
 				    $category_has_open_courses = self::category_has_open_courses($catLine['code']);
 				    if ($category_has_open_courses) {
@@ -504,7 +504,7 @@ class IndexManager {
 							$course_details[] = $course['visual_code'];
 						}
 						if (api_get_setting('display_teacher_in_courselist') == 'true') {
-							$course_details[] = $course['tutor_name'];
+							$course_details[] = CourseManager::get_teacher_list_from_course_code_to_string($course['code']);
 						}
 						if (api_get_setting('show_different_course_language') == 'true' && $course['course_language'] != api_get_setting('platformLanguage')) {
 							$course_details[] = $course['course_language'];

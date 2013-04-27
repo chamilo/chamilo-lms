@@ -42,7 +42,6 @@ $includePath = dirname(__FILE__);
 $app = new Application();
 // @todo add a helper to read the configuration file once!
 
-
 // Include the main Chamilo platform configuration file.
 // @todo use a service provider to load configuration files:
 /*
@@ -82,21 +81,22 @@ if (file_exists($configurationYMLFile)) {
         }
     }
 }
-// End reading configuration file
+/**  End loading configuration file */
 
-/**  Setting paths */
+/**  Setting Chamilo paths */
+
 $app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : dirname(dirname(__DIR__)).'/';
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
 $app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
 $app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['root_sys'].'temp/';
 $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
 
-/** Loading legacy libs */
+/** Including legacy libs */
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
-// Setting url_append @ŧodo improve this replace
+// Setting url_append
 $urlInfo = parse_url($_configuration['root_web']);
 $_configuration['url_append'] = '/'.basename($urlInfo['path']);
 
@@ -156,7 +156,7 @@ if ($alreadyInstalled) {
     $userPasswordCrypted = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 }
 
-/* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE */
+/* Retrieving all the chamilo config settings for multiple URLs feature*/
 if (isset($_configuration['multiple_access_urls']) && !empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
     $access_urls = api_get_access_urls();
@@ -178,6 +178,7 @@ $app['configuration'] = $_configuration;
 
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
+// @todo do not use $GLOBALS
 /*if (!isset($GLOBALS['_configuration'])) {
     $GLOBALS['_configuration'] = $_configuration;
 }*/
@@ -194,213 +195,28 @@ $app['installed'] = $alreadyInstalled;
 //require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
 require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
-//Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
-/*
-$app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
-    'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
-));*/
-
-// Session provider
-//$app->register(new Silex\ProviderSessionServiceProvider());
-
-/*
- Implements a UserProvider to login users
-
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Doctrine\DBAL\Connection;
-
-class UserProvider implements UserProviderInterface
-{
-    private $conn;
-
-    public function __construct(Connection $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    public function loadUserByUsername($username)
-    {
-        $stmt = $this->conn->executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
-
-        if (!$user = $stmt->fetch()) {
-            throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
-        }
-        $roles = 'student';
-        echo $user['username'];exit;
-        return new User($user['username'], $user['password'], explode(',', $roles), true, true, true, true);
-    }
-
-    public function refreshUser(UserInterface $user)
-    {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
-        }
-
-        return $this->loadUserByUsername($user->getUsername());
-    }
-
-    public function supportsClass($class)
-    {
-        return $class === 'Symfony\Component\Security\Core\User\User';
-    }
-}
-
-$app->register(new Silex\Provider\SecurityServiceProvider(), array(
-    'security.firewalls' => array(
-        'secured' => array(
-            'pattern' => '^/admin/',
-            'form'    => array(
-                'login_path' => '/login',
-                'check_path' => '/admin/login_check'
-            ),
-            'logout' => array('path' => '/logout', 'target' => '/'),
-            'users' => $app->share(function() use ($app) {
-                return new UserProvider($app['db']);
-            })
-        )
-    ),
-    'security.role_hierarchy'=> array(
-        'ROLE_ADMIN' => array('ROLE_EDITOR'),
-        "ROLE_EDITOR" => array('ROLE_WRITER'),
-        "ROLE_WRITER" => array('ROLE_USER'),
-        "ROLE_USER" => array("ROLE_SUSCRIBER"),
-    )
-));*/
-
-// Setting Controllers as services provider
-$app->register(new Silex\Provider\ServiceControllerServiceProvider());
-
-// Validator provider
-$app->register(new Silex\Provider\ValidatorServiceProvider());
-
-// Implements Symfony2 translator (needed when using forms in Twig)
-$app->register(new Silex\Provider\TranslationServiceProvider(), array(
-    'locale' => 'en',
-    'locale_fallback' => 'en'
-));
-
-// Handling po files
-
-/*
-use Symfony\Component\Translation\Loader\PoFileLoader;
-use Symfony\Component\Translation\Dumper\PoFileDumper;
-
-$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
-    $translator->addLoader('pofile', new PoFileLoader());
-
-    $language = api_get_language_interface();
-    $iterator = new FilesystemIterator(api_get_path(SYS_PATH).'resources/locale/'.$language);
-    $filter = new RegexIterator($iterator, '/\.(po)$/');
-
-    foreach ($filter as $entry) {
-        //$domain = $entry->getBasename('.inc.po');
-        $locale = api_get_language_isocode($language); //'es_ES';
-        //$translator->addResource('pofile', $entry->getPathname(), $locale, $domain);
-        $translator->addResource('pofile', $entry->getPathname(), $locale, 'messages');
-    }
-    return $translator;
-}));
-
-//$app['translator.domains'] = array();
-*/
-
 // Classic way of render pages or the Controller approach
 $app['classic_layout'] = false;
 $app['breadcrumb'] = array();
 
-// Form provider
-$app->register(new Silex\Provider\FormServiceProvider());
+// The script is allowed? This setting is modified when calling api_is_not_allowed()
+$app['allowed'] = true;
 
-// URL generator provider
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+// Template settings loaded in template.lib.php
+$app['template.show_header'] = true;
+$app['template.show_footer'] = true;
+$app['template.show_learnpath'] = false;
+$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+$app['template.load_plugins'] = true;
 
-/*
-use Doctrine\Common\Persistence\AbstractManagerRegistry;
-class ManagerRegistry extends AbstractManagerRegistry
-{
-    protected $container;
+// Default template style
+$app['template_style'] = 'default';
 
-    protected function getService($name)
-    {
-        return $this->container[$name];
-    }
+// Default layout
+$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
 
-    protected function resetService($name)
-    {
-        unset($this->container[$name]);
-    }
-
-    public function getAliasNamespace($alias)
-    {
-        throw new \BadMethodCallException('Namespace aliases not supported.');
-    }
-
-    public function setContainer(Application $container)
-    {
-        $this->container = $container;
-    }
-}
-
-$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
-    $managerRegistry = new ManagerRegistry(null, array(), array('orm.em'), null, null, $app['orm.proxies_namespace']);
-    $managerRegistry->setContainer($app);
-    $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($managerRegistry);
-    return $extensions;
-}));*/
-
-// Setting Doctrine service provider (DBAL)
-if (isset($app['configuration']['main_database'])) {
-
-    $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
-            'db.options' => array(
-                'driver' => 'pdo_mysql',
-                'dbname' => $app['configuration']['main_database'],
-                'user' => $app['configuration']['db_user'],
-                'password' => $app['configuration']['db_password'],
-                'host' => $app['configuration']['db_host'],
-                'charset'   => 'utf8',
-                /*'driverOptions' => array(
-                    1002 => 'SET NAMES utf8'
-                )*/
-            )
-        ));
-
-    // Setting Doctrine ORM
-    $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
-            'orm.auto_generate_proxies' => true,
-            "orm.proxies_dir" => $app['db.orm.proxies_dir'],
-            //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
-            "orm.em.options" => array(
-                "mappings" => array(
-                    array(
-                        //If true, only simple notations like @Entity will work. If false, more advanced notations and aliasing via use will work. (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)
-                        'use_simple_annotation_reader' => false,
-                        "type" => "annotation",
-                        "namespace" => "Entity",
-                        "path" => api_get_path(INCLUDE_PATH).'Entity',
-                    )
-                ),
-            ),
-        ));
-
-    // Temporal fix to load gedmo libs
-    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
-    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
-
-    // Setting Doctrine2 extensions
-    $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
-    $app['db.event_manager']->addEventSubscriber($timestampableListener);
-
-    $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
-    $app['db.event_manager']->addEventSubscriber($sluggableListener);
-
-    $sortableListener = new Gedmo\Sortable\SortableListener();
-    $app['db.event_manager']->addEventSubscriber($sortableListener);
-}
+/** Including service providers */
+require_once 'services.php';
 
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
@@ -460,111 +276,6 @@ if (isset($app['configuration']['main_database'])) {
     }
 }
 
-// The script is allowed? This setting is modified when calling api_is_not_allowed()
-$app['allowed'] = true;
-
-// Template settings loaded in template.lib.php
-$app['template.show_header'] = true;
-$app['template.show_footer'] = true;
-$app['template.show_learnpath'] = false;
-$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
-$app['template.load_plugins'] = true;
-
-// Default template style
-$app['template_style'] = 'default';
-
-// Default layout
-$app['default_layout'] = $app['template_style'].'/layout/layout_1_col.tpl';
-
-// Setting Twig as a service provider
-$app->register(
-    new Silex\Provider\TwigServiceProvider(),
-    array(
-        'twig.path' => array(
-            api_get_path(SYS_CODE_PATH).'template', //template folder
-            api_get_path(SYS_PLUGIN_PATH) //plugin folder
-        ),
-        // twitter bootstrap form twig templates
-        'twig.form.templates' => array('form_div_layout.html.twig', 'default/form/form_custom_template.tpl'),
-        'twig.options' => array(
-            'debug' => $app['debug'],
-            'charset' => 'utf-8',
-            'strict_variables' => false,
-            'autoescape' => false,
-            'cache' => $app['debug'] ? false : $app['twig.cache.path'],
-            'optimizations' => -1, // turn on optimizations with -1
-        )
-    )
-);
-
-// Setting Twig options
-$app['twig'] = $app->share(
-    $app->extend('twig', function ($twig) {
-        $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
-        $twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
-        $twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
-        $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
-        $twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
-        $twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
-        $twig->addFilter(
-            'display_page_subheader',
-            new Twig_Filter_Function('Display::page_subheader_and_translate')
-        );
-        $twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
-        $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-
-        return $twig;
-    })
-);
-
-// Registering Menu service provider (too gently creating menus with the URLgenerator provider)
-$app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
-
-// Pagerfanta settings (Pagination using Doctrine2, arrays, etc)
-use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
-$app->register(new PagerfantaServiceProvider());
-
-$app['pagerfanta.view.options'] = array(
-    'routeName'     => null,
-    'routeParams'   => array(),
-    'pageParameter' => '[page]',
-    'proximity'     => 3,
-    'next_message'  => '&raquo;',
-    'prev_message'  => '&laquo;',
-    'default_view'  => 'twitter_bootstrap' // the pagination style
-);
-// Custom route params see https://github.com/franmomu/silex-pagerfanta-provider/pull/2
-//$app['pagerfanta.view.router.name']
-//$app['pagerfanta.view.router.params']
-
-// Monolog only available if the log dir is writable
-if (is_writable($app['temp.path'])) {
-
-    /*    Adding Monolog service provider
-    Monolog  use examples
-        $app['monolog']->addDebug('Testing the Monolog logging.');
-        $app['monolog']->addInfo('Testing the Monolog logging.');
-        $app['monolog']->addError('Testing the Monolog logging.');
-    */
-
-    $app->register(
-        new Silex\Provider\MonologServiceProvider(),
-        array(
-            'monolog.logfile' => $app['chamilo.log'],
-            'monolog.name' => 'chamilo',
-        )
-    );
-}
-
-
-define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
-
-// Setting the Imagine service provider to deal with image transformations used in social group.
-$app->register(new Grom\Silex\ImagineServiceProvider(), array(
-    'imagine.factory' => 'Gd',
-    //'imagine.base_path' => __DIR__.'/vendor/imagine',
-));
-
 // Manage Chamilo error messages
 $app->error(
     function (\Exception $e, $code) use ($app) {
@@ -598,19 +309,6 @@ $app->error(
         return new Response($response);
     }
 );
-
-// Prompts Doctrine SQL queries using monolog
-if ($app['debug'] && isset($app['configuration']['main_database'])) {
-    $logger = new Doctrine\DBAL\Logging\DebugStack();
-    $app['db.config']->setSQLLogger($logger);
-
-    $app->after(function() use ($app, $logger) {
-        // Log all queries as DEBUG.
-        foreach ($logger->queries as $query) {
-            $app['monolog']->debug($query['sql'], array('params' =>$query['params'], 'types' => $query['types']));
-        }
-    });
-}
 
 
 // Preserving the value of the global variable $charset.
@@ -646,62 +344,18 @@ if ($alreadyInstalled && $checkConnection) {
     }
 }
 
-
-
 // Section (tabs in the main chamilo menu)
 $app['this_section'] = SECTION_GLOBAL;
 
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
 
-// Adding symfony2 web profiler (memory, time, logs, etc)
-if (is_writable($app['sys_temp_path'])) {
-    //if ($app['debug']) {
-
-    if (api_get_setting('allow_web_profiler') == 'true') {
-        $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
-            'profiler.cache_dir' => $app['profiler.cache_dir'],
-        ));
-        $app->mount('/_profiler', $p);
-    }
-    //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
-    //}
-}
-
-// Email service provider
-$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
-    'swiftmailer.options' => array(
-        'host' => isset($platform_email['SMTP_HOST']) ? $platform_email['SMTP_HOST'] : null,
-        'port' => isset($platform_email['SMTP_PORT']) ? $platform_email['SMTP_PORT'] : null,
-        'username' => isset($platform_email['SMTP_USER']) ? $platform_email['SMTP_USER'] : null,
-        'password' => isset($platform_email['SMTP_PASS']) ? $platform_email['SMTP_PASS'] : null,
-        'encryption' => null,
-        'auth_mode' => null
-    )
-));
-
-//if (isset($platform_email['SMTP_MAILER']) && $platform_email['SMTP_MAILER'] == 'smtp') {
-$app['mailer'] = $app->share(function ($app) {
-    return new \Swift_Mailer($app['swiftmailer.transport']);
-});
-
-// Gaufrette service provider (to manage files/dirs) (not used yet)
-/*
-use Bt51\Silex\Provider\GaufretteServiceProvider\GaufretteServiceProvider;
-$app->register(new GaufretteServiceProvider(), array(
-    'gaufrette.adapter.class' => 'Local',
-    'gaufrette.options' => array(api_get_path(SYS_DATA_PATH))
-));
-*/
-
-// Use symfony2 filesystem instead of custom scripts
-use Neutron\Silex\Provider\FilesystemServiceProvider;
-$app->register(new FilesystemServiceProvider());
 
 // Setting languages
 $app['api_get_languages'] = api_get_languages();
 
 /**	Loading languages and sublanguages **/
+// @todo improve the language loading
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
@@ -812,7 +466,6 @@ $language_files[] = 'index';
 $language_files[] = 'courses';
 $language_files[] = 'course_home';
 
-
 if (isset($language_file)) {
     if (!is_array($language_file)) {
         $language_files[] = $language_file;
@@ -861,6 +514,7 @@ if (is_array($language_files)) {
         }
     }
 }
+
 // End loading languages
 
 // Specification for usernames:
@@ -904,7 +558,6 @@ $app->before(
         // Check and modify the date of user in the track.e.online table
 
         //if ($checkConnection && !$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
-
         Online::loginCheck(api_get_user_id());
         //}
 
@@ -991,537 +644,14 @@ $default_quota = api_get_setting('default_document_quotum');
 if (empty($default_quota)) {
     $default_quota = 100000000;
 }
+
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
 /** Setting the is_admin key */
-
 $app['is_admin'] = false;
 
-/** Chamilo service provider */
-
-use Silex\ServiceProviderInterface;
-
-class ChamiloServiceProvider implements ServiceProviderInterface
-{
-    public function register(Application $app)
-    {
-        // Template class
-        $app['template'] = $app->share(function () use ($app) {
-            $template = new Template($app);
-            return $template;
-        });
-
-        // Chamilo data filesystem
-        $app['chamilo.filesystem'] = $app->share(function () use ($app) {
-            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['sys_data_path']);
-            return $filesystem;
-        });
-
-        // Page controller class
-        $app['page_controller'] = $app->share(function () use ($app) {
-            $pageController = new PageController($app);
-            return $pageController;
-        });
-    }
-
-    public function boot(Application $app)
-    {
-    }
-}
-
-// Registering Chamilo service provider
-$app->register(new ChamiloServiceProvider(), array());
-
-// Controller as services definitions
-// @todo move definitions in another file
-
-$app['pages.controller'] = $app->share(function () use ($app) {
-    return new PagesController($app['pages.repository']);
-});
-
-$app['index.controller'] = $app->share(function () use ($app) {
-    return new ChamiloLMS\Controller\IndexController();
-});
-
-$app['legacy.controller'] = $app->share(function () use ($app) {
-    return new ChamiloLMS\Controller\LegacyController();
-});
-
-$app['userPortal.controller'] = $app->share(function () use ($app) {
-    return new ChamiloLMS\Controller\UserPortalController();
-});
-
-$app['learnpath.controller'] = $app->share(function () use ($app) {
-    return new ChamiloLMS\Controller\LearnpathController();
-});
-
-$app['course_home.controller'] = $app->share(function () use ($app) {
-    return new ChamiloLMS\Controller\CourseHomeController();
-});
-
-$app['certificate.controller'] = $app->share(function () use ($app) {
-    return new ChamiloLMS\Controller\CertificateController();
-});
-
-$app['user.controller'] = $app->share(function () use ($app) {
-    return new ChamiloLMS\Controller\UserController();
-});
-
-$app['news.controller'] = $app->share(function () use ($app) {
-    return new ChamiloLMS\Controller\NewsController();
-});
-
-// End custom middlewares
-
-// @todo put routes somewhere else, in a yml/php file .
-
-/**
- * All calls made in Chamilo (olds ones) are manage in the LegacyController::classicAction function located here:
- * src/ChamiloLMS/Controller/LegacyController.php
- */
-
-$userAccessConditions = function (Request $request) use ($app) {
-
-};
-
-$coursePermissions = function (Request $request) use ($app) {
-
-    $courseId = api_get_course_int_id();
-    $userId = api_get_user_id();
-    $sessionId = api_get_session_id();
-
-    //If I'm the admin platform i'm a teacher of the course
-    $is_platformAdmin = api_is_platform_admin();
-    $courseReset = Session::read('courseReset');
-
-    // course
-    $is_courseMember    = false;
-    $is_courseAdmin     = false;
-    $is_courseTutor     = false;
-    $is_courseCoach     = false;
-    $is_sessionAdmin    = false;
-    //Session::erase('_courseUser');
-
-    if ($courseReset) {
-
-        if (isset($courseId) && $courseId && $courseId != -1) {
-
-            $courseInfo = api_get_course_info();
-
-            $userId = isset($userId) ? intval($userId) : 0;
-            $variable = 'accept_legal_'.$userId.'_'.$courseInfo['real_id'].'_'.$sessionId;
-
-            $user_pass_open_course = false;
-            if (api_check_user_access_to_legal($courseInfo['visibility']) && Session::read($variable)) {
-                $user_pass_open_course = true;
-            }
-
-            //Checking if the user filled the course legal agreement
-            if ($courseInfo['activate_legal'] == 1 && !api_is_platform_admin()) {
-                $user_is_subscribed = CourseManager::is_user_accepted_legal($userId, $courseInfo, $sessionId) || $user_pass_open_course;
-                if (!$user_is_subscribed) {
-                    $url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$courseInfo['code'].'&session_id='.$sessionId;
-                    header('Location: '.$url);
-                    exit;
-                }
-            }
-
-            //Check if user is subscribed in a course
-            $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-            $sql = "SELECT * FROM $course_user_table
-                    WHERE   user_id  = '".$userId."' AND
-                            relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                            c_id = ".api_get_course_int_id();
-
-            $result = Database::query($sql);
-
-            $cuData = null;
-            if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
-                $cuData = Database::fetch_array($result, 'ASSOC');
-                $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
-                $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
-                $is_courseMember     = true;
-
-                $_courseUser['role'] = $cuData['role'];
-                Session::write('_courseUser', $_courseUser);
-            }
-
-            //We are in a session course? Check session permissions
-            if (!empty($session_id)) {
-                //I'm not the teacher of the course
-                if ($is_courseAdmin == false) {
-                    // this user has no status related to this course
-                    // The user is subscribed in a session? The user is a Session coach a Session admin ?
-
-                    $tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);
-                    $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-                    //Session coach, session admin, course coach admin
-                    $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
-                            FROM $tbl_session session, $tbl_session_course_user session_rcru
-                            WHERE  session_rcru.id_session  = session.id AND
-                                   session_rcru.c_id = ".$courseInfo['real_id']." AND
-                                   session_rcru.id_user     = $userId AND
-                                   session_rcru.id_session  = $sessionId AND
-                                   session_rcru.status      = 2
-                            ";
-
-                    $result = Database::query($sql);
-                    $row = Database::store_result($result);
-
-                    //I'm a session admin?
-                    if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $userId) {
-                        $_courseUser['role'] = 'Professor';
-                        $is_courseMember     = false;
-                        $is_courseTutor      = false;
-                        $is_courseAdmin      = false;
-                        $is_courseCoach      = false;
-                        $is_sessionAdmin     = true;
-                    } else {
-                        //Im a coach or a student?
-                        $sql = "SELECT cu.id_user, cu.status FROM $tbl_session_course_user cu
-                                WHERE   c_id = '$courseId' AND
-                                        cu.id_user     = '".$userId."' AND
-                                        cu.id_session  = '".$sessionId."'
-                                LIMIT 1";
-                        $result = Database::query($sql);
-
-                        if (Database::num_rows($result)) {
-                            $row = Database::fetch_array($result, 'ASSOC');
-
-                            $session_course_status = $row['status'];
-
-                            switch ($session_course_status) {
-                                case '2': // coach - teacher
-                                    $_courseUser['role'] = 'Professor';
-                                    $is_courseMember     = true;
-                                    $is_courseTutor      = true;
-                                    $is_courseCoach      = true;
-                                    $is_sessionAdmin     = false;
-
-                                    if (api_get_setting('extend_rights_for_coach') == 'true') {
-                                        $is_courseAdmin = true;
-                                    } else {
-                                        $is_courseAdmin = false;
-                                    }
-                                    Session::write('_courseUser', $_courseUser);
-                                    break;
-                                case '0': //Student
-                                    $_courseUser['role'] = '';
-                                    $is_courseMember     = true;
-                                    $is_courseTutor      = false;
-                                    $is_courseAdmin      = false;
-                                    $is_courseCoach      = false;
-                                    $is_sessionAdmin     = false;
-
-                                    Session::write('_courseUser', $_courseUser);
-                                    break;
-                                default:
-                                    //unregister user
-                                    $_courseUser['role'] = '';
-                                    $is_courseMember     = false;
-                                    $is_courseTutor      = false;
-                                    $is_courseAdmin      = false;
-                                    $is_sessionAdmin     = false;
-                                    $is_courseCoach      = false;
-                                    Session::erase('_courseUser');
-                                    break;
-                            }
-                        } else {
-                            //unregister user
-                            $is_courseMember     = false;
-                            $is_courseTutor      = false;
-                            $is_courseAdmin      = false;
-                            $is_sessionAdmin     = false;
-                            $is_courseCoach      = false;
-                            Session::erase('_courseUser');
-                        }
-                    }
-                }
-                if ($is_platformAdmin) {
-                    $is_courseAdmin     = true;
-                }
-            }
-        }
-
-        //Checking the course access
-        $is_allowed_in_course = false;
-
-        if (isset($_course)) {
-            switch ($_course['visibility']) {
-                case COURSE_VISIBILITY_OPEN_WORLD: //3
-                    $is_allowed_in_course = true;
-                    break;
-                case COURSE_VISIBILITY_OPEN_PLATFORM : //2
-                    if (isset($user_id) && !api_is_anonymous($user_id)) {
-                        $is_allowed_in_course = true;
-                    }
-                    break;
-                case COURSE_VISIBILITY_REGISTERED: //1
-                    if ($is_platformAdmin || $is_courseMember) {
-                        $is_allowed_in_course = true;
-                    }
-                    break;
-                case COURSE_VISIBILITY_CLOSED: //0
-                    if ($is_platformAdmin || $is_courseAdmin) {
-                        $is_allowed_in_course = true;
-                    }
-                    break;
-            }
-        }
-
-        if (!$is_platformAdmin) {
-            if (!$is_courseMember && isset($courseInfo['registration_code']) && !empty($courseInfo['registration_code'])) {
-                $is_courseMember    = false;
-                $is_courseAdmin     = false;
-                $is_courseTutor     = false;
-                $is_courseCoach     = false;
-                $is_sessionAdmin    = false;
-                $is_allowed_in_course = false;
-            }
-        }
-
-        // check the session visibility
-        if ($is_allowed_in_course == true) {
-
-            //if I'm in a session
-            if ($sessionId != 0) {
-                if (!$is_platformAdmin) {
-                    // admin is not affected to the invisible session mode
-                    $session_visibility = api_get_session_visibility($sessionId);
-
-                    switch ($session_visibility) {
-                        case SESSION_INVISIBLE:
-                            $is_allowed_in_course = false;
-                            break;
-                    }
-                    //checking date
-                }
-            }
-        }
-
-        // save the states
-        Session::write('is_courseAdmin', $is_courseAdmin);
-        Session::write('is_courseMember', $is_courseMember);
-        Session::write('is_courseTutor', $is_courseTutor);
-        Session::write('is_courseCoach', $is_courseCoach);
-        Session::write('is_allowed_in_course', $is_allowed_in_course);
-        Session::write('is_sessionAdmin', $is_sessionAdmin);
-
-    } else {
-        // continue with the previous values
-        /*
-        $_courseUser          = Session::read('_courseUser');
-        $is_courseAdmin       = Session::read('is_courseAdmin');
-        $is_courseTutor       = Session::read('is_courseTutor');
-        $is_courseCoach       = Session::read('is_courseCoach');
-        $is_courseMember      = Session::read('is_courseMember');
-        $is_allowed_in_course = Session::read('is_allowed_in_course');*/
-    }
-};
-
-$courseAccessConditions = function (Request $request) use ($app) {
-
-    $cidReq = $request->get('cidReq');
-    $sessionId = $request->get('id_session');
-    $groupId = $request->get('gidReq');
-
-    $tempCourseId = api_get_course_id();
-    $tempGroupId = api_get_group_id();
-    $tempSessionId = api_get_session_id();
-
-    $courseReset = false;
-    if ($tempCourseId != $cidReq || empty($tempCourseId) || empty($tempCourseId) == -1) {
-        $courseReset = true;
-    }
-
-    Session::write('courseReset', $courseReset);
-
-    $groupReset = false;
-    if ($tempGroupId != $groupId || empty($tempGroupId)) {
-        $groupReset = true;
-    }
-
-    $sessionReset = false;
-    if ($tempSessionId != $sessionId || empty($tempSessionId)) {
-        $sessionReset = true;
-    }
-    /*
-    $app['monolog']->addDebug('Start');
-    $app['monolog']->addDebug($courseReset);
-    $app['monolog']->addDebug($cidReq);
-    $app['monolog']->addDebug($tempCourseId);
-    $app['monolog']->addDebug('End');
-    */
-
-    if ($courseReset) {
-        if (!empty($cidReq) && $cidReq != -1) {
-            $courseInfo = api_get_course_info($cidReq);
-
-            if (!empty($courseInfo)) {
-                $courseCode = $courseInfo['code'];
-                $courseId = $courseInfo['real_id'];
-
-                Session::write('_real_cid', $courseId);
-                Session::write('_cid',      $courseCode);
-                Session::write('_course',   $courseInfo);
-
-            } else {
-                $app->abort(404, 'Course not available');
-            }
-        } else {
-            Session::erase('_real_cid');
-            Session::erase('_cid');
-            Session::erase('_course');
-        }
-    }
-
-    $courseCode = api_get_course_id();
-
-    if (!empty($courseCode) && $courseCode != -1) {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $time = api_get_utc_datetime();
-        $sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";
-        Database::query($sql);
-    }
-    //var_dump($sessionId);exit;
-
-    if ($sessionReset) {
-        Session::erase('session_name');
-        Session::erase('id_session');
-
-        if (!empty($sessionId)) {
-            $sessionInfo = api_get_session_info($sessionId);
-            if (empty($sessionInfo)) {
-                $app->abort(404, 'Session not available');
-            } else {
-                Session::write('id_session', $sessionId);
-            }
-        }
-    }
-
-    if ($groupReset) {
-        Session::erase('_gid');
-        if (!empty($groupId)) {
-            Session::write('_gid', $groupId);
-        }
-    }
-
-    if (!isset($_SESSION['login_as'])) {
-        $userId = api_get_user_id();
-
-        //Course login
-        if (isset($userId)) {
-            event_course_login(api_get_course_int_id(), $userId, api_get_session_id());
-        }
-    }
-};
-
-$groupAccessConditions = function (Request $request) use ($app) {
-};
-
-$sessionAccessConditions = function (Request $request) use ($app) {
-};
-
-$cleanCourseSession = function (Request $request) use ($app) {
-    Session::erase('_cid');
-    Session::erase('_real_cid');
-    Session::erase('_course');
-};
-
-$app->get('/', 'legacy.controller:classicAction')
-    ->before($userAccessConditions)
-    ->before($courseAccessConditions)
-    ->before($groupAccessConditions)
-    ->before($sessionAccessConditions)
-    ->before($coursePermissions)
-;
-
-$app->post('/', 'legacy.controller:classicAction')
-    ->before($userAccessConditions)
-    ->before($courseAccessConditions)
-    ->before($groupAccessConditions)
-    ->before($sessionAccessConditions)
-    ->before($coursePermissions)
-;
-
-// web/index
-$app->match('/index', 'index.controller:indexAction', 'GET|POST')
-    ->bind('index');
-
-// web/login
-/*$app->match('/login', 'index.controller:loginAction', 'GET|POST')
-    ->bind('login');*/
-
-
-// Userportal
-$app->get('/userportal', 'userPortal.controller:indexAction');
-$app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
-    ->value('type', 'courses') //default values
-    ->value('filter', 'current')
-    ->value('page', '1')
-    ->bind('userportal')
-    ->after($cleanCourseSession)
-;
-//->assert('type', '.+'); //allowing slash "/"
-
-// Logout
-$app->get('/logout', 'index.controller:logoutAction')
-    ->bind('logout');
-
-// Course home instead of courses/MATHS the new URL is web/courses/MATHS
-$app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
-    ->assert('id_session', '\d+')
-    ->assert('type', '.+')
-    ->before($courseAccessConditions)
-    ->before($coursePermissions)
-;
-
-$app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POST')
-    ->assert('type', '.+')
-    ->before($courseAccessConditions)
-    ->before($coursePermissions)
-; //allowing slash "/"
-
-// Course documents
-$app->get('/courses/{courseCode}/document/', 'index.controller:getDocumentAction')
-    ->assert('type', '.+');
-
-// Certificates
-$app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
-
-// Username
-$app->match('/user/{username}', 'user.controller:indexAction', 'GET');
-
-// Who is online
-
-/*$app->match('/users/online', 'user.controller:onlineAction', 'GET');
-$app->match('/users/online-in-course', 'user.controller:onlineInCourseAction', 'GET');
-$app->match('/users/online-in-session', 'user.controller:onlineInSessionAction', 'GET');*/
-
-// Portal news
-$app->match('/news/{id}', 'news.controller:indexAction', 'GET')
-    ->bind('portal_news');
-
-// LP controller (subscribe users to a LP)
-$app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')
-    ->bind('subscribe_users');
-
-// Data document_templates files
-$app->get('/data/document_templates/{file}', 'index.controller:getDocumentTemplateAction')
-    ->bind('data');
-
-// Data default_platform_document files
-$app->get('/data/default_platform_document/', 'index.controller:getDefaultPlatformDocumentAction')
-    ->assert('type', '.+');
-
-// Group files
-$app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile')
-    ->assert('type', '.+');
-
-// User files
-$app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
-    ->assert('type', '.+');
+/** Including routes */
+require_once 'routes.php';
 
 //Fixes uses of $_course in the scripts
 $_course = api_get_course_info();

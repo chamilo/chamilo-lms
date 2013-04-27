@@ -1,0 +1,496 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+use Symfony\Component\HttpFoundation\Request;
+use \ChamiloSession as Session;
+
+// Controller as services definitions
+// @todo move definitions in another file
+
+$app['pages.controller'] = $app->share(function () use ($app) {
+return new PagesController($app['pages.repository']);
+});
+
+$app['index.controller'] = $app->share(function () use ($app) {
+return new ChamiloLMS\Controller\IndexController();
+});
+
+$app['legacy.controller'] = $app->share(function () use ($app) {
+return new ChamiloLMS\Controller\LegacyController();
+});
+
+$app['userPortal.controller'] = $app->share(function () use ($app) {
+return new ChamiloLMS\Controller\UserPortalController();
+});
+
+$app['learnpath.controller'] = $app->share(function () use ($app) {
+return new ChamiloLMS\Controller\LearnpathController();
+});
+
+$app['course_home.controller'] = $app->share(function () use ($app) {
+return new ChamiloLMS\Controller\CourseHomeController();
+});
+
+$app['certificate.controller'] = $app->share(function () use ($app) {
+return new ChamiloLMS\Controller\CertificateController();
+});
+
+$app['user.controller'] = $app->share(function () use ($app) {
+return new ChamiloLMS\Controller\UserController();
+});
+
+$app['news.controller'] = $app->share(function () use ($app) {
+return new ChamiloLMS\Controller\NewsController();
+});
+
+// End custom middlewares
+
+// @todo put routes somewhere else, in a yml/php file .
+
+/**
+* All calls made in Chamilo (olds ones) are manage in the LegacyController::classicAction function located here:
+* src/ChamiloLMS/Controller/LegacyController.php
+*/
+
+$userAccessConditions = function (Request $request) use ($app) {
+
+};
+
+$coursePermissions = function (Request $request) use ($app) {
+
+$courseId = api_get_course_int_id();
+$userId = api_get_user_id();
+$sessionId = api_get_session_id();
+
+//If I'm the admin platform i'm a teacher of the course
+$is_platformAdmin = api_is_platform_admin();
+$courseReset = Session::read('courseReset');
+
+// course
+$is_courseMember    = false;
+$is_courseAdmin     = false;
+$is_courseTutor     = false;
+$is_courseCoach     = false;
+$is_sessionAdmin    = false;
+//Session::erase('_courseUser');
+
+if ($courseReset) {
+
+if (isset($courseId) && $courseId && $courseId != -1) {
+
+$courseInfo = api_get_course_info();
+
+$userId = isset($userId) ? intval($userId) : 0;
+$variable = 'accept_legal_'.$userId.'_'.$courseInfo['real_id'].'_'.$sessionId;
+
+$user_pass_open_course = false;
+if (api_check_user_access_to_legal($courseInfo['visibility']) && Session::read($variable)) {
+$user_pass_open_course = true;
+}
+
+//Checking if the user filled the course legal agreement
+if ($courseInfo['activate_legal'] == 1 && !api_is_platform_admin()) {
+$user_is_subscribed = CourseManager::is_user_accepted_legal($userId, $courseInfo, $sessionId) || $user_pass_open_course;
+if (!$user_is_subscribed) {
+$url = api_get_path(WEB_CODE_PATH).'course_info/legal.php?course_code='.$courseInfo['code'].'&session_id='.$sessionId;
+header('Location: '.$url);
+exit;
+}
+}
+
+//Check if user is subscribed in a course
+$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$sql = "SELECT * FROM $course_user_table
+WHERE   user_id  = '".$userId."' AND
+relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
+c_id = ".api_get_course_int_id();
+
+$result = Database::query($sql);
+
+$cuData = null;
+if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
+$cuData = Database::fetch_array($result, 'ASSOC');
+$is_courseAdmin      = (bool) ($cuData['status'] == 1 );
+$is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
+$is_courseMember     = true;
+
+$_courseUser['role'] = $cuData['role'];
+Session::write('_courseUser', $_courseUser);
+}
+
+//We are in a session course? Check session permissions
+if (!empty($session_id)) {
+//I'm not the teacher of the course
+if ($is_courseAdmin == false) {
+// this user has no status related to this course
+// The user is subscribed in a session? The user is a Session coach a Session admin ?
+
+$tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+//Session coach, session admin, course coach admin
+$sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
+FROM $tbl_session session, $tbl_session_course_user session_rcru
+WHERE  session_rcru.id_session  = session.id AND
+session_rcru.c_id = ".$courseInfo['real_id']." AND
+session_rcru.id_user     = $userId AND
+session_rcru.id_session  = $sessionId AND
+session_rcru.status      = 2
+";
+
+$result = Database::query($sql);
+$row = Database::store_result($result);
+
+//I'm a session admin?
+if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $userId) {
+$_courseUser['role'] = 'Professor';
+$is_courseMember     = false;
+$is_courseTutor      = false;
+$is_courseAdmin      = false;
+$is_courseCoach      = false;
+$is_sessionAdmin     = true;
+} else {
+//Im a coach or a student?
+$sql = "SELECT cu.id_user, cu.status FROM $tbl_session_course_user cu
+WHERE   c_id = '$courseId' AND
+cu.id_user     = '".$userId."' AND
+cu.id_session  = '".$sessionId."'
+LIMIT 1";
+$result = Database::query($sql);
+
+if (Database::num_rows($result)) {
+$row = Database::fetch_array($result, 'ASSOC');
+
+$session_course_status = $row['status'];
+
+switch ($session_course_status) {
+case '2': // coach - teacher
+$_courseUser['role'] = 'Professor';
+$is_courseMember     = true;
+$is_courseTutor      = true;
+$is_courseCoach      = true;
+$is_sessionAdmin     = false;
+
+if (api_get_setting('extend_rights_for_coach') == 'true') {
+$is_courseAdmin = true;
+} else {
+$is_courseAdmin = false;
+}
+Session::write('_courseUser', $_courseUser);
+break;
+case '0': //Student
+$_courseUser['role'] = '';
+$is_courseMember     = true;
+$is_courseTutor      = false;
+$is_courseAdmin      = false;
+$is_courseCoach      = false;
+$is_sessionAdmin     = false;
+
+Session::write('_courseUser', $_courseUser);
+break;
+default:
+//unregister user
+$_courseUser['role'] = '';
+$is_courseMember     = false;
+$is_courseTutor      = false;
+$is_courseAdmin      = false;
+$is_sessionAdmin     = false;
+$is_courseCoach      = false;
+Session::erase('_courseUser');
+break;
+}
+} else {
+//unregister user
+$is_courseMember     = false;
+$is_courseTutor      = false;
+$is_courseAdmin      = false;
+$is_sessionAdmin     = false;
+$is_courseCoach      = false;
+Session::erase('_courseUser');
+}
+}
+}
+if ($is_platformAdmin) {
+$is_courseAdmin     = true;
+}
+}
+}
+
+//Checking the course access
+$is_allowed_in_course = false;
+
+if (isset($_course)) {
+switch ($_course['visibility']) {
+case COURSE_VISIBILITY_OPEN_WORLD: //3
+$is_allowed_in_course = true;
+break;
+case COURSE_VISIBILITY_OPEN_PLATFORM : //2
+if (isset($user_id) && !api_is_anonymous($user_id)) {
+$is_allowed_in_course = true;
+}
+break;
+case COURSE_VISIBILITY_REGISTERED: //1
+if ($is_platformAdmin || $is_courseMember) {
+$is_allowed_in_course = true;
+}
+break;
+case COURSE_VISIBILITY_CLOSED: //0
+if ($is_platformAdmin || $is_courseAdmin) {
+$is_allowed_in_course = true;
+}
+break;
+}
+}
+
+if (!$is_platformAdmin) {
+if (!$is_courseMember && isset($courseInfo['registration_code']) && !empty($courseInfo['registration_code'])) {
+$is_courseMember    = false;
+$is_courseAdmin     = false;
+$is_courseTutor     = false;
+$is_courseCoach     = false;
+$is_sessionAdmin    = false;
+$is_allowed_in_course = false;
+}
+}
+
+// check the session visibility
+if ($is_allowed_in_course == true) {
+
+//if I'm in a session
+if ($sessionId != 0) {
+if (!$is_platformAdmin) {
+// admin is not affected to the invisible session mode
+$session_visibility = api_get_session_visibility($sessionId);
+
+switch ($session_visibility) {
+case SESSION_INVISIBLE:
+$is_allowed_in_course = false;
+break;
+}
+//checking date
+}
+}
+}
+
+// save the states
+Session::write('is_courseAdmin', $is_courseAdmin);
+Session::write('is_courseMember', $is_courseMember);
+Session::write('is_courseTutor', $is_courseTutor);
+Session::write('is_courseCoach', $is_courseCoach);
+Session::write('is_allowed_in_course', $is_allowed_in_course);
+Session::write('is_sessionAdmin', $is_sessionAdmin);
+
+} else {
+// continue with the previous values
+/*
+$_courseUser          = Session::read('_courseUser');
+$is_courseAdmin       = Session::read('is_courseAdmin');
+$is_courseTutor       = Session::read('is_courseTutor');
+$is_courseCoach       = Session::read('is_courseCoach');
+$is_courseMember      = Session::read('is_courseMember');
+$is_allowed_in_course = Session::read('is_allowed_in_course');*/
+}
+};
+
+$courseAccessConditions = function (Request $request) use ($app) {
+
+$cidReq = $request->get('cidReq');
+$sessionId = $request->get('id_session');
+$groupId = $request->get('gidReq');
+
+$tempCourseId = api_get_course_id();
+$tempGroupId = api_get_group_id();
+$tempSessionId = api_get_session_id();
+
+$courseReset = false;
+if ($tempCourseId != $cidReq || empty($tempCourseId) || empty($tempCourseId) == -1) {
+$courseReset = true;
+}
+
+Session::write('courseReset', $courseReset);
+
+$groupReset = false;
+if ($tempGroupId != $groupId || empty($tempGroupId)) {
+$groupReset = true;
+}
+
+$sessionReset = false;
+if ($tempSessionId != $sessionId || empty($tempSessionId)) {
+$sessionReset = true;
+}
+/*
+$app['monolog']->addDebug('Start');
+$app['monolog']->addDebug($courseReset);
+$app['monolog']->addDebug($cidReq);
+$app['monolog']->addDebug($tempCourseId);
+$app['monolog']->addDebug('End');
+*/
+
+if ($courseReset) {
+if (!empty($cidReq) && $cidReq != -1) {
+$courseInfo = api_get_course_info($cidReq);
+
+if (!empty($courseInfo)) {
+$courseCode = $courseInfo['code'];
+$courseId = $courseInfo['real_id'];
+
+Session::write('_real_cid', $courseId);
+Session::write('_cid',      $courseCode);
+Session::write('_course',   $courseInfo);
+
+} else {
+$app->abort(404, 'Course not available');
+}
+} else {
+Session::erase('_real_cid');
+Session::erase('_cid');
+Session::erase('_course');
+}
+}
+
+$courseCode = api_get_course_id();
+
+if (!empty($courseCode) && $courseCode != -1) {
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$time = api_get_utc_datetime();
+$sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";
+Database::query($sql);
+}
+//var_dump($sessionId);exit;
+
+if ($sessionReset) {
+Session::erase('session_name');
+Session::erase('id_session');
+
+if (!empty($sessionId)) {
+$sessionInfo = api_get_session_info($sessionId);
+if (empty($sessionInfo)) {
+$app->abort(404, 'Session not available');
+} else {
+Session::write('id_session', $sessionId);
+}
+}
+}
+
+if ($groupReset) {
+Session::erase('_gid');
+if (!empty($groupId)) {
+Session::write('_gid', $groupId);
+}
+}
+
+if (!isset($_SESSION['login_as'])) {
+$userId = api_get_user_id();
+
+//Course login
+if (isset($userId)) {
+event_course_login(api_get_course_int_id(), $userId, api_get_session_id());
+}
+}
+};
+
+$groupAccessConditions = function (Request $request) use ($app) {
+};
+
+$sessionAccessConditions = function (Request $request) use ($app) {
+};
+
+$cleanCourseSession = function (Request $request) use ($app) {
+Session::erase('_cid');
+Session::erase('_real_cid');
+Session::erase('_course');
+};
+
+$app->get('/', 'legacy.controller:classicAction')
+->before($userAccessConditions)
+->before($courseAccessConditions)
+->before($groupAccessConditions)
+->before($sessionAccessConditions)
+->before($coursePermissions)
+;
+
+$app->post('/', 'legacy.controller:classicAction')
+->before($userAccessConditions)
+->before($courseAccessConditions)
+->before($groupAccessConditions)
+->before($sessionAccessConditions)
+->before($coursePermissions)
+;
+
+// web/index
+$app->match('/index', 'index.controller:indexAction', 'GET|POST')
+->bind('index');
+
+// web/login
+/*$app->match('/login', 'index.controller:loginAction', 'GET|POST')
+->bind('login');*/
+
+
+// Userportal
+$app->get('/userportal', 'userPortal.controller:indexAction');
+$app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
+->value('type', 'courses') //default values
+->value('filter', 'current')
+->value('page', '1')
+->bind('userportal')
+->after($cleanCourseSession)
+;
+//->assert('type', '.+'); //allowing slash "/"
+
+// Logout
+$app->get('/logout', 'index.controller:logoutAction')
+->bind('logout');
+
+// Course home instead of courses/MATHS the new URL is web/courses/MATHS
+$app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
+->assert('id_session', '\d+')
+->assert('type', '.+')
+->before($courseAccessConditions)
+->before($coursePermissions)
+;
+
+$app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POST')
+->assert('type', '.+')
+->before($courseAccessConditions)
+->before($coursePermissions)
+; //allowing slash "/"
+
+// Course documents
+$app->get('/courses/{courseCode}/document/', 'index.controller:getDocumentAction')
+->assert('type', '.+');
+
+// Certificates
+$app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
+
+// Username
+$app->match('/user/{username}', 'user.controller:indexAction', 'GET');
+
+// Who is online
+
+/*$app->match('/users/online', 'user.controller:onlineAction', 'GET');
+$app->match('/users/online-in-course', 'user.controller:onlineInCourseAction', 'GET');
+$app->match('/users/online-in-session', 'user.controller:onlineInSessionAction', 'GET');*/
+
+// Portal news
+$app->match('/news/{id}', 'news.controller:indexAction', 'GET')
+->bind('portal_news');
+
+// LP controller (subscribe users to a LP)
+$app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')
+->bind('subscribe_users');
+
+// Data document_templates files
+$app->get('/data/document_templates/{file}', 'index.controller:getDocumentTemplateAction')
+->bind('data');
+
+// Data default_platform_document files
+$app->get('/data/default_platform_document/', 'index.controller:getDefaultPlatformDocumentAction')
+->assert('type', '.+');
+
+// Group files
+$app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile')
+->assert('type', '.+');
+
+// User files
+$app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
+->assert('type', '.+');

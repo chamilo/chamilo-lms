@@ -35,6 +35,8 @@ $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
 
 require_once '../inc/global.inc.php';
 
+$parent_id = null;
+
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 

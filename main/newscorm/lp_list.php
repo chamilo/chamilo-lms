@@ -21,7 +21,6 @@ require_once '../inc/global.inc.php';
 $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
 
-require_once 'learnpathList.class.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 

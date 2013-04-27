@@ -33,7 +33,7 @@ class Online {
         if (!empty($uid)) {
             $login_ip = '';
             if(!empty($_SERVER['REMOTE_ADDR'])) {
-              $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
+                $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
             }
 
             $login_date = api_get_utc_datetime();
@@ -49,7 +49,7 @@ class Online {
             } else {
                 $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '$session_id', '$access_url_id')";
             }
-            @Database::query($query);
+            Database::query($query);
         }
     }
 

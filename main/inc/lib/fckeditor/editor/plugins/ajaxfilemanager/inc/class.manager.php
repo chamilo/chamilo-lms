@@ -58,7 +58,8 @@ class manager
         array(array("ods", "ots", "sxc", "stc"), "fileODS", SEARCH_TYPE_ODS, 1),
         array(array("odg", "otg", "sxd", "std"), "fileODG", SEARCH_TYPE_ODG, 1),
         array(array("mm"), "freemind", SEARCH_TYPE_PDF, 0)
-    ); // Added mm, svg, svgz, pps, docx, pptx, xlsx, midi, ogg, ogv, oga,(odt,ods,odp,odg and extra) types to Chamilo, and change flv from flash to video
+    );
+    // Added mm, svg, svgz, pps, docx, pptx, xlsx, midi, ogg, ogv, oga,(odt,ods,odp,odg and extra) types to Chamilo, and change flv from flash to video
 
     /**
      * constructor
@@ -79,11 +80,10 @@ class manager
         } elseif (isset($_SESSION[$this->lastVisitedFolderPathIndex]) && file_exists($_SESSION[$this->lastVisitedFolderPathIndex]) && !is_file($_SESSION[$this->lastVisitedFolderPathIndex])) {
             $this->currentFolderPath = $_SESSION[$this->lastVisitedFolderPathIndex];
         } else {
-            $this->currentFolderPath = base64_encode(CONFIG_SYS_DEFAULT_PATH);
+            $this->currentFolderPath = CONFIG_SYS_DEFAULT_PATH;
         }
 
         $this->currentFolderPath = (isUnderRoot($this->getCurrentFolderPath()) ? backslashToSlash((addTrailingSlash($this->getCurrentFolderPath()))) : CONFIG_SYS_DEFAULT_PATH);
-        $this->currentFolderPath = base64_encode($this->currentFolderPath);
 
         if ($this->calculateSubdir) {
             // keep track of this folder path in session
@@ -148,23 +148,25 @@ class manager
      * @return  string
      */
     function getCurrentFolderPath() {
-        return base64_decode($this->currentFolderPath);
+        return $this->currentFolderPath;
     }
 
     /**
      * get the list of files and folders under this current fold
      * 	@return array
      */
-    function getFileList() {
+    function getFileList()
+    {
         $outputs = array();
         $files = array();
         $folders = array();
-        $tem = array();
 
         $dirHandler = @opendir($this->getCurrentFolderPath());
+
         if ($dirHandler) {
             while (false !== ($file = readdir($dirHandler))) {
                 if ($file != '.' && $file != '..') {
+
                     $flag = $this->flags['no'];
                     if ($this->sessionAction->getFolder() == $this->getCurrentFolderPath()) {
                         //check if any flag associated with this folder or file
@@ -179,9 +181,10 @@ class manager
                     }
 
                     $path = $this->getCurrentFolderPath().$file;
-
                     if (is_dir($path) && isListingDocument($path)) {
+
                         $this->currentFolderInfo['subdir']++;
+
                         //fix count left folders for Chamilo
                         $deleted_by_Chamilo_folder = '_DELETED_';
                         $css_folder_Chamilo = 'css';
@@ -190,7 +193,7 @@ class manager
                         $certificates_Chamilo = 'certificates';
 
                         //show group's directory only if I'm member. Or if I'm a teacher.
-                        //@todo: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder).
+                        //@todo: check groups not necessary because the student don't have access to main folder documents (only to document/group or document/shared_folder).
                         //Teachers can access to all groups ?
                         $group_folder = '_groupdocs';
                         $hide_doc_group = false;
@@ -207,7 +210,8 @@ class manager
                             preg_match("/$hotpotatoes_folder_Chamilo/", $path) ||
                             preg_match("/$chat_files_Chamilo/", $path) ||
                             preg_match("/$certificates_Chamilo/", $path) ||
-                            $hide_doc_group || $file[0] == '.') {
+                            $hide_doc_group || $file[0] == '.')
+                        {
                             $this->currentFolderInfo['subdir'] = $this->currentFolderInfo['subdir'] - 1;
                         }
                         //end fix for Chamilo
@@ -220,6 +224,9 @@ class manager
                             $folders[$file] = $folder;
                             $outputs[$file] = $folders[$file];
                         }
+
+
+
                     } elseif (is_file($path) && isListingDocument($path)) {
                         $obj = new file($path);
                         $tem = $obj->getFileInfo();
@@ -279,6 +286,7 @@ class manager
         } else {
             trigger_error('Unable to locate the folder '.$this->getCurrentFolderPath(), E_NOTICE);
         }
+
         return $outputs;
     }
 
@@ -292,7 +300,6 @@ class manager
         if (is_null($path)) {
             return $this->currentFolderInfo;
         } else {
-            $path = base64_encode($path);
             $obj = new manager($path, false);
             $obj->setSessionAction($this->sessionAction);
             $obj->getFileList();

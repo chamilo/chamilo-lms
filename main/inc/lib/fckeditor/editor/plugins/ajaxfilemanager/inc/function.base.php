@@ -13,7 +13,6 @@ require_once dirname(__FILE__).DIRECTORY_SEPARATOR."config.php";
  * force to ensure existence of stripos
  */
 if (!function_exists("stripos")) {
-
     function stripos($str, $needle, $offset = 0) {
         return @strpos(strtolower($str), strtolower($needle), $offset);
     }
@@ -811,7 +810,8 @@ function isListingDocument($path) {
             }
             return true;
         }
-    } else {//regular expression
+    } else {
+        //regular expression
         if (is_dir($path)) {
             if (isValidPattern(CONFIG_SYS_INC_DIR_PATTERN, $path) && !isInvalidPattern(CONFIG_SYS_EXC_DIR_PATTERN, $path)) {
                 return true;

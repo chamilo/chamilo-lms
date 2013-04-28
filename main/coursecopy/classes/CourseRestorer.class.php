@@ -1760,7 +1760,6 @@ class CourseRestorer
 	}
 	/**
 	 * restore works
-	 * @todo I fixed this crappy function jmontoya
 	 */
 	function restore_student_publication() {
 		$work_assignment_table  = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);

@@ -1,4 +1,5 @@
 <?php
+/* See license terms in /license.txt */
 
 require_once '../../main/inc/global.inc.php';
 

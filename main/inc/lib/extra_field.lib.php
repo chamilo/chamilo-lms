@@ -68,8 +68,8 @@ class ExtraField extends Model
                 $this->table_field_values   = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
 
                 //Used for the model
-                $this->table                = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
-                $this->handler_id           = 'question_id';
+                $this->table = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
+                $this->handler_id = 'question_id';
                 break;
         }
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -185,7 +185,7 @@ class ExtraField extends Model
             }
         }
         $extra_fields = self::get_all();
-        $extra        = ExtraField::set_extra_fields_in_form(
+        $extra = ExtraField::set_extra_fields_in_form(
             $form,
             $extra_data,
             $this->type.'_field',
@@ -228,9 +228,12 @@ class ExtraField extends Model
                         case ExtraField::FIELD_TYPE_RADIO:
                             $extra_data['extra_'.$field['field_variable']]['extra_'.$field['field_variable']] = $field_value;
                             break;
+                        /*case ExtraField::FIELD_TYPE_DATETIME:
+                            break;*/
                         default:
                             $extra_data['extra_'.$field['field_variable']] = $field_value;
                             break;
+
                     }
                 }
             }
@@ -521,15 +524,16 @@ class ExtraField extends Model
                         }
                         $options = array();
 
-                        foreach ($field_details['options'] as $option_id => $option_details) {
-                            if ($get_lang_variables) {
-                                $options[$option_details['option_value']] = get_lang(
-                                    $option_details['option_display_text']
-                                );
-                            } else {
-                                $options[$option_details['option_value']] = $option_details['option_display_text'];
+                        if (!empty($field_details['options'])) {
+                            foreach ($field_details['options'] as $option_id => $option_details) {
+                                if ($get_lang_variables) {
+                                    $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
+                                } else {
+                                    $options[$option_details['option_value']] = $option_details['option_display_text'];
+                                }
                             }
                         }
+
                         if ($get_lang_variables) {
                             $field_details['field_display_text'] = get_lang($field_details['field_display_text']);
                         }
@@ -577,7 +581,9 @@ class ExtraField extends Model
                             1900
                         );
                         $defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
-                        $form->setDefaults($defaults);
+                        if (!isset($form->_defaultValues['extra_'.$field_details['field_variable']])) {
+                            $form->setDefaults($defaults);
+                        }
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {
                                 $form->freeze('extra_'.$field_details['field_variable']);
@@ -597,7 +603,9 @@ class ExtraField extends Model
                             1900
                         );
                         $defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
-                        $form->setDefaults($defaults);
+                        if (!isset($form->_defaultValues['extra_'.$field_details['field_variable']])) {
+                            $form->setDefaults($defaults);
+                        }
                         if (!$admin_permissions) {
                             if ($field_details['field_visible'] == 0) {
                                 $form->freeze('extra_'.$field_details['field_variable']);

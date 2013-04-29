@@ -26,7 +26,10 @@ class ExtraFieldOption extends Model
                 break;
             case 'session':
                 $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
-            break;
+                break;
+            case 'question':
+                $this->table = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_OPTIONS);
+                break;
         }
     }
     /**
@@ -46,7 +49,8 @@ class ExtraFieldOption extends Model
      * @assert (-1) == 0
      * @assert (0) == 0
      */
-    public function get_count_by_field_id($field_id) {
+    public function get_count_by_field_id($field_id)
+    {
         if (empty($field_id)) {
             return false;
         }

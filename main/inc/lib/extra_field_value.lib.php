@@ -15,16 +15,19 @@ class ExtraFieldValue extends Model
     public $type = null;
     public $columns = array('id', 'field_id', 'field_value', 'tms');
     public $handler_id = null;//session_id, course_code, user_id
+
     /**
      * Formats the necessary elements for the given datatype
      * @param string The type of data to which this extra field applies (user, course, session, ...)
      * @return void (or false if unmanaged datatype)
      * @assert (-1) === false
      */
-    public function __construct($type) {
+    public function __construct($type)
+    {
         $this->type = $type;
         $extra_field = new ExtraField($this->type);
         $this->handler_id = $extra_field->handler_id;
+
         switch ($this->type) {
             case 'course':
                 $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -38,6 +41,10 @@ class ExtraFieldValue extends Model
                 $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
                 break;
+            case 'question':
+                $this->table = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
+                $this->table_handler_field = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
+                break;
             default:
                 //unmanaged datatype, return false to let the caller know it
                 // didn't work
@@ -45,23 +52,27 @@ class ExtraFieldValue extends Model
         }
         $this->columns[] = $this->handler_id;
     }
+
     /**
      * Gets the number of values stored in the table (all fields together)
      * for this type of resource
      * @return integer Number of rows in the table
      * @assert () !== false
      */
-    public function get_count() {
+    public function get_count()
+    {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
         return $row['count'];
     }
+
     /**
      * Saves a series of records given as parameter into the coresponding table
      * @param array  Structured parameter for the insertion into the *_field_values table
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
-    public function save_field_values($params) {
+    public function save_field_values($params)
+    {
         $extra_field = new ExtraField($this->type);
         if (empty($params[$this->handler_id])) {
             return false;
@@ -254,6 +265,7 @@ class ExtraFieldValue extends Model
             return false;
         }
     }
+
     /**
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value
@@ -280,6 +292,7 @@ class ExtraFieldValue extends Model
             return false;
         }
     }
+
     /**
      * Get all values for a specific field id
      * @param int Field ID
@@ -322,6 +335,7 @@ class ExtraFieldValue extends Model
         $sql = "DELETE FROM {$this->table} WHERE {$this->handler_id} = '$item_id' AND field_id = '".$field_id."' ";
         Database::query($sql);
     }
+
     /**
      * Not yet implemented - Compares the field values of two items
      * @param int Item 1

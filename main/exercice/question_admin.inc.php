@@ -50,7 +50,6 @@ if (is_object($objQuestion)) {
     // question form elements
     $objQuestion->createForm($form);
 
-
     // answer form elements
     $objQuestion->createAnswersForm($form);
 

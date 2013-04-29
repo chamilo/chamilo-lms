@@ -293,16 +293,13 @@ class Template
 
             $new_messages = MessageManager::get_new_messages();
             $user_info['messages_count'] = $new_messages != 0 ? Display::label($new_messages, 'warning') : null;
-            $usergroup = new UserGroup();
-            $messages_invitations_count = $usergroup->get_groups_by_user_count(
-                $user_info['user_id'],
-                GROUP_USER_PERMISSION_PENDING_INVITATION,
-                false
-            );
+
+            /*$usergroup = new UserGroup();
+            $messages_invitations_count = $usergroup->get_groups_by_user_count($user_info['user_id'], GROUP_USER_PERMISSION_PENDING_INVITATION, false);
             $user_info['messages_invitations_count'] = $messages_invitations_count != 0 ? Display::label(
                 $messages_invitations_count,
                 'warning'
-            ) : null;
+            ) : null;*/
             $this->user_is_logged_in = true;
         }
 
@@ -1390,7 +1387,7 @@ class Template
         /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
         $view_as_student_link = null;
         if ($user_id && isset($course_id)) {
-            if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting(
+            if ((api_is_course_admin() || api_is_course_coach() || api_is_platform_admin()) && api_get_setting(
                 'student_view_enabled'
             ) == 'true'
             ) {

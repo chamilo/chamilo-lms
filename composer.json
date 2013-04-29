@@ -23,7 +23,8 @@
             "main/inc/lib",
             "main/install",
             "main/inc/lib/getid3",
-            "main/survey"
+            "main/survey",
+            "vendor/jmontoyaa/phpqrcode"
         ]
     },
     "repositories": [

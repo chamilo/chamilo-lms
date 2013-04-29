@@ -44,6 +44,7 @@ $app['temp.paths']->folders[] = _MPDF_TEMP_PATH;
 //QR code
 define('QR_CACHE_DIR', $app['temp.path'].'qr');
 define('QR_LOG_DIR', $app['temp.path'].'qr');
+
 $app['temp.paths']->folders[] = QR_CACHE_DIR;
 
 //Chamilo Temp class

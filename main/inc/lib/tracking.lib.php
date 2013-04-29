@@ -2334,7 +2334,7 @@ class Tracking
                         $progress = $progress.'%';
                     }
 
-                    if ($course_code == $_GET['course'] && empty($_GET['session_id'])) {
+                    if (isset($_GET['course']) && $course_code == $_GET['course'] && empty($_GET['session_id'])) {
                         $html .= '<tr class="row_odd" style="background-color:#FBF09D">';
                     } else {
                         $html .= '<tr class="row_even">';
@@ -2355,7 +2355,7 @@ class Tracking
                     $html .= '</td>';
                     $html .= '<td align="center">'.$last_connection.'</td>';
                     $html .= '<td align="center">';
-                    if ($course_code == $_GET['course'] && empty($_GET['session_id'])) {
+                    if (isset($_GET['course'] ) && $course_code == $_GET['course'] && empty($_GET['session_id'])) {
                         $html .= '<a href="#">';
                         $html .= Display::return_icon('2rightarrow_na.gif', get_lang('Details'));
                     } else {

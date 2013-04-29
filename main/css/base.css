@@ -2054,6 +2054,10 @@ input.maininput:focus {
     margin-bottom: 20px;
 }
 
+#course_tools .content a {
+    font-size: 12px;
+}
+
 .big_icon img {
     padding:5px;
     -moz-border-radius:10px;

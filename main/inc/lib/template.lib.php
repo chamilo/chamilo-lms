@@ -25,7 +25,6 @@ class Template
     public $user_is_logged_in = false;
     public $twig = null;
     public $jquery_ui_theme;
-    public $load_plugins = false; /* Loads chamilo plugins */
     public $force_plugin_load = true;
     public $navigation_array;
 
@@ -51,7 +50,6 @@ class Template
         //Page title
         $this->title = isset($app['title']) ? $app['title'] : $tool_name;
         $this->show_learnpath = $app['template.show_learnpath'];
-        $this->load_plugins = $app['template.load_plugins'];
 
         // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
         $this->jquery_ui_theme = 'smoothness';
@@ -92,7 +90,7 @@ class Template
 
         //Chamilo plugins
         if ($this->show_header) {
-            if ($this->load_plugins) {
+            if ($app['template.load_plugins']) {
 
                 $this->plugin = new AppPlugin();
 
@@ -713,7 +711,7 @@ class Template
    private function set_plugin_region($plugin_region)
     {
         if (!empty($plugin_region)) {
-            $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);
+            $region_content = $this->plugin->load_region($this->app['plugins'], $plugin_region, $this, $this->force_plugin_load);
             if (!empty($region_content)) {
                 $this->assign('plugin_'.$plugin_region, $region_content);
             } else {

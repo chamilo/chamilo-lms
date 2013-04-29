@@ -192,8 +192,8 @@ $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 
 // Loading $app settings
-//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
-require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
+require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
+//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
 // Classic way of render pages or the Controller approach
 $app['classic_layout'] = false;
@@ -325,6 +325,8 @@ api_set_internationalization_default_encoding($charset);
 Chamilo::session()->start($alreadyInstalled);
 
 // Loading chamilo settings
+/* @todo create a service provider to load plugins.
+  Check how bolt add extensions (including twig templates, config with yml)*/
 if ($alreadyInstalled && $checkConnection) {
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
 
@@ -343,6 +345,8 @@ if ($alreadyInstalled && $checkConnection) {
         }
     }
 }
+
+$app['plugins'] = $_plugins;
 
 // Section (tabs in the main chamilo menu)
 $app['this_section'] = SECTION_GLOBAL;

@@ -6492,8 +6492,10 @@ function api_set_settings_and_plugins() {
     $_SESSION['_plugins'] = $_plugins;
 }
 
+/**
+ * Saving latest settings modification datetime
+ */
 function api_set_setting_last_update() {
-    //Saving latest refresh
     api_set_setting('settings_latest_update', api_get_utc_datetime());
 }
 

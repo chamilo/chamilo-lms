@@ -20,7 +20,8 @@ class AppPlugin
         'course_tool_plugin'
     );
 
-    function __construct() {
+    public function __construct()
+    {
     }
 
     function read_plugins_from_path() {
@@ -123,12 +124,13 @@ class AppPlugin
         return $this->plugin_regions;
     }
 
-    function load_region($region, $main_template, $forced = false) {
+    function load_region($plugins, $region, $main_template, $forced = false)
+    {
         if ($region == 'course_tool_plugin') {
             return null;
         }
         ob_start();
-        $this->get_all_plugin_contents_by_region($region, $main_template, $forced);
+        $this->get_all_plugin_contents_by_region($plugins, $region, $main_template, $forced);
         $content = ob_get_contents();
         ob_end_clean();
         return $content;
@@ -172,13 +174,12 @@ class AppPlugin
 
     /**
      *
-     *
      * @param string $block
      * @param obj   template obj
      * @todo improve this function
      */
-    function get_all_plugin_contents_by_region($region, $template, $forced = false) {
-        global $_plugins;
+    function get_all_plugin_contents_by_region($_plugins, $region, $template, $forced = false)
+    {
         if (isset($_plugins[$region]) && is_array($_plugins[$region])) {
         //if (1) {
             //Load the plugin information

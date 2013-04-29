@@ -32,6 +32,8 @@ class ExtraField extends Model
 
     public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
+    public $pageName;
+    public $pageUrl;
 
     function __construct($type)
     {
@@ -61,7 +63,26 @@ class ExtraField extends Model
                 $this->table      = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
                 $this->handler_id = 'session_id';
                 break;
+            case 'question':
+                $this->table_field_options  = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_OPTIONS);
+                $this->table_field_values   = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
+
+                //Used for the model
+                $this->table                = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
+                $this->handler_id           = 'question_id';
+                break;
         }
+        $this->pageUrl = 'extra_fields.php?type='.$this->type;
+        $this->pageName = get_lang(ucwords($this->type).'Fields'); // Example QuestionFields
+    }
+
+    static function getValidExtraFieldTypes() {
+        return array(
+            'user',
+            'course',
+            'session',
+            'question'
+        );
     }
 
     public function get_count()
@@ -759,5 +780,150 @@ EOF;
         $return['jquery_ready_content'] = $jquery_ready_content;
 
         return $return;
+    }
+
+    function setupBreadcrumb(&$breadcrumb, $action)
+    {
+        if ($action == 'add') {
+            $breadcrumb[]=array('url' => $this->pageUrl,'name' => $this->pageName);
+            $breadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+        } elseif ($action == 'edit') {
+            $breadcrumb[]=array('url' => $this->pageUrl,'name' => $this->pageName);
+            $breadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+        } else {
+            $breadcrumb[]=array('url' => '#','name' => $this->pageName);
+        }
+    }
+
+
+    /**
+     * Displays the title + grid
+     */
+    public function display()
+    {
+        // action links
+        echo '<div class="actions">';
+        echo '<a href="../admin/index.php">' . Display::return_icon('back.png', get_lang('BackTo') . ' ' . get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM) . '</a>';
+        echo '<a href="' . api_get_self() . '?action=add&type='.$this->type.'">' . Display::return_icon('add_user_fields.png', get_lang('Add'), '', ICON_SIZE_MEDIUM) . '</a>';
+        echo '</div>';
+        echo Display::grid_html($this->type.'_fields');
+    }
+
+    public function getJqgridColumnNames() {
+        return array(get_lang('Name'), get_lang('FieldLabel'),  get_lang('Type'), get_lang('FieldChangeability'), get_lang('Visibility'), get_lang('Filter'), get_lang('FieldOrder'), get_lang('Actions'));
+    }
+
+    public function getJqgridColumnModel() {
+        return array(
+            array('name'=>'field_display_text', 'index'=>'field_display_text',      'width'=>'180',   'align'=>'left'),
+            array('name'=>'field_variable',     'index'=>'field_variable',          'width'=>'',  'align'=>'left','sortable'=>'true'),
+            array('name'=>'field_type',         'index'=>'field_type',              'width'=>'',  'align'=>'left','sortable'=>'true'),
+            array('name'=>'field_changeable',   'index'=>'field_changeable',        'width'=>'50',  'align'=>'left','sortable'=>'true'),
+            array('name'=>'field_visible',      'index'=>'field_visible',           'width'=>'40',  'align'=>'left','sortable'=>'true'),
+            array('name'=>'field_filter',       'index'=>'field_filter',            'width'=>'30',  'align'=>'left','sortable'=>'true'),
+            array('name'=>'field_order',        'index'=>'field_order',             'width'=>'40',  'align'=>'left','sortable'=>'true'),
+            array('name'=>'actions',            'index'=>'actions',                 'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
+        );
+
+    }
+
+
+    public function return_form($url, $action)
+    {
+        $form = new FormValidator($this->type.'_field', 'post', $url);
+
+        $form->addElement('hidden', 'type', $this->type);
+        $id = isset($_GET['id']) ? intval($_GET['id']) : null;
+        $form->addElement('hidden', 'id', $id);
+
+        // Setting the form elements
+        $header = get_lang('Add');
+        $defaults = array();
+
+        if ($action == 'edit') {
+            $header = get_lang('Modify');
+            // Setting the defaults
+            $defaults = $this->get($id);
+        }
+
+        $form->addElement('header', $header);
+        $form->addElement('text', 'field_display_text', get_lang('Name'), array('class' => 'span5'));
+
+        // Field type
+        $types = self::get_field_types();
+
+        $form->addElement('select', 'field_type', get_lang('FieldType'), $types, array('id' => 'field_type', 'class' => 'chzn-select', 'data-placeholder' => get_lang('Select')));
+        $form->addElement('label', get_lang('Example'), '<div id="example">-</div>');
+
+        //$form->addElement('advanced_settings','<a class="btn btn-show" id="advanced_parameters" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
+        //$form->addElement('html','<div id="options" style="display:none">');
+
+        $form->addElement('text', 'field_variable', get_lang('FieldLabel'), array('class' => 'span5'));
+        $form->addElement('text', 'field_options', get_lang('FieldPossibleValues'), array('id' => 'field_options', 'class' => 'span6'));
+        if ($action == 'edit') {
+            if (in_array($defaults['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
+                $url = Display::url(get_lang('EditExtraFieldOptions'), 'extra_field_options.php?type='.$this->type.'&field_id=' . $id);
+                $form->addElement('label', null, $url);
+                $form->freeze('field_options');
+            }
+        }
+        $form->addElement('text', 'field_default_value', get_lang('FieldDefaultValue'), array('id' => 'field_default_value', 'class' => 'span5'));
+
+        $group = array();
+        $group[] = $form->createElement('radio', 'field_visible', null, get_lang('Yes'), 1);
+        $group[] = $form->createElement('radio', 'field_visible', null, get_lang('No'), 0);
+        $form->addGroup($group, '', get_lang('Visible'), '', false);
+
+        $group = array();
+        $group[] = $form->createElement('radio', 'field_changeable', null, get_lang('Yes'), 1);
+        $group[] = $form->createElement('radio', 'field_changeable', null, get_lang('No'), 0);
+        $form->addGroup($group, '', get_lang('FieldChangeability'), '', false);
+
+        $group = array();
+        $group[] = $form->createElement('radio', 'field_filter', null, get_lang('Yes'), 1);
+        $group[] = $form->createElement('radio', 'field_filter', null, get_lang('No'), 0);
+        $form->addGroup($group, '', get_lang('FieldFilter'), '', false);
+
+        $form->addElement('text', 'field_order', get_lang('FieldOrder'), array('class' => 'span1'));
+
+        if ($action == 'edit') {
+            $option = new ExtraFieldOption($this->type);
+            if ($defaults['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+                $form->freeze('field_options');
+            }
+            $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
+            $form->addElement('button', 'submit', get_lang('Modify'), 'class="save"');
+        } else {
+            $defaults['field_visible'] = 0;
+            $defaults['field_changeable'] = 0;
+            $defaults['field_filter'] = 0;
+            $form->addElement('button', 'submit', get_lang('Add'), 'class="save"');
+        }
+
+        /*if (!empty($defaults['created_at'])) {
+            $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
+        }
+        if (!empty($defaults['updated_at'])) {
+            $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
+        }*/
+        $form->setDefaults($defaults);
+
+        // Setting the rules
+        $form->addRule('field_display_text', get_lang('ThisFieldIsRequired'), 'required');
+        //$form->addRule('field_variable', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('field_type', get_lang('ThisFieldIsRequired'), 'required');
+
+        return $form;
+    }
+
+    public function getJqgridActionLinks($token)
+    {
+        //With this function we can add actions to the jgrid (edit, delete, etc)
+        return 'function action_formatter(cellvalue, options, rowObject) {
+     return \'<a href="?action=edit&type='.$this->type.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+            '\';
+        }';
+
     }
 }

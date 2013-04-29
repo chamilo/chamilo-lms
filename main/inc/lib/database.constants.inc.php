@@ -105,6 +105,11 @@ define('TABLE_MAIN_SESSION_FIELD',          'session_field');
 define('TABLE_MAIN_SESSION_FIELD_OPTIONS',  'session_field_options');
 define('TABLE_MAIN_SESSION_FIELD_VALUES',   'session_field_values');
 
+define('TABLE_MAIN_QUESTION_FIELD',          'question_field');
+define('TABLE_MAIN_QUESTION_FIELD_OPTIONS',  'question_field_options');
+define('TABLE_MAIN_QUESTION_FIELD_VALUES',   'question_field_values');
+
+
 // Message
 define('TABLE_MAIN_MESSAGE', 'message');
 

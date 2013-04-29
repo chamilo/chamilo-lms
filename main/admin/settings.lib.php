@@ -22,6 +22,7 @@ function handle_regions() {
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
+        api_set_setting_last_update();
         event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
         Display :: display_confirmation_message(get_lang('SettingsStored'));
     }
@@ -74,7 +75,7 @@ function handle_regions() {
             echo '</td><td>';
             $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);
 
-            if ($plugin_info['is_course_plugin']) {
+            if (isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin']) {
                 $region_list = array('course_tool_plugin' => 'course_tool_plugin');
             } else {
                 $region_list = $plugin_region_list;

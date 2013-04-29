@@ -470,7 +470,7 @@ class CourseSelectForm
 					case RESOURCE_DOCUMENT:
 						// Mark folders to import which are not selected by the user to import,
 						// but in which a document was selected.
-						$documents = $_POST['resource'][RESOURCE_DOCUMENT];
+						$documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
 						if (is_array($resources))
 							foreach($resources as $id => $obj) {
 								if ($obj->file_type == 'folder' && ! isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) && is_array($documents)) {

@@ -1,12 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+/**
+ * This file includes all the services that are loaded via the ServiceProviderInterface
+ *
+ * @package chamilo.services
+ */
+
 use Silex\Application;
+use Silex\ServiceProviderInterface;
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
 /*
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
-'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
+    'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
 // Session provider
@@ -24,59 +31,56 @@ use Doctrine\DBAL\Connection;
 
 class UserProvider implements UserProviderInterface
 {
-private $conn;
+    private $conn;
 
-public function __construct(Connection $conn)
-{
-$this->conn = $conn;
-}
+    public function __construct(Connection $conn)
+    {
+        $this->conn = $conn;
+    }
 
-public function loadUserByUsername($username)
-{
-$stmt = $this->conn->executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
+    public function loadUserByUsername($username)
+    {
+        $stmt = $this->conn->executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
 
-if (!$user = $stmt->fetch()) {
-throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
-}
-$roles = 'student';
-echo $user['username'];exit;
-return new User($user['username'], $user['password'], explode(',', $roles), true, true, true, true);
-}
+        if (!$user = $stmt->fetch()) {
+            throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
+        }
+        $roles = 'student';
+        echo $user['username'];exit;
+        return new User($user['username'], $user['password'], explode(',', $roles), true, true, true, true);
+    }
 
-public function refreshUser(UserInterface $user)
-{
-if (!$user instanceof User) {
-throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
-}
+    public function refreshUser(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+        throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+    }
 
-return $this->loadUserByUsername($user->getUsername());
-}
-
-public function supportsClass($class)
-{
-return $class === 'Symfony\Component\Security\Core\User\User';
-}
+    public function supportsClass($class)
+    {
+        return $class === 'Symfony\Component\Security\Core\User\User';
+    }
 }
 
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
-'security.firewalls' => array(
-'secured' => array(
-'pattern' => '^/admin/',
-'form'    => array(
-'login_path' => '/login',
-'check_path' => '/admin/login_check'
-),
-'logout' => array('path' => '/logout', 'target' => '/'),
-'users' => $app->share(function() use ($app) {
-return new UserProvider($app['db']);
-})
-)
-),
-'security.role_hierarchy'=> array(
-'ROLE_ADMIN' => array('ROLE_EDITOR'),
-"ROLE_EDITOR" => array('ROLE_WRITER'),
-"ROLE_WRITER" => array('ROLE_USER'),
-"ROLE_USER" => array("ROLE_SUSCRIBER"),
+    'security.firewalls' => array(
+        'secured' => array(
+        'pattern' => '^/admin/',
+        'form'    => array(
+        'login_path' => '/login',
+        'check_path' => '/admin/login_check'
+    ),
+    'logout' => array('path' => '/logout', 'target' => '/'),
+    'users' => $app->share(function() use ($app) {
+        return new UserProvider($app['db']);
+    })
+    )
+    ),
+    'security.role_hierarchy'=> array(
+        'ROLE_ADMIN' => array('ROLE_EDITOR'),
+        "ROLE_EDITOR" => array('ROLE_WRITER'),
+        "ROLE_WRITER" => array('ROLE_USER'),
+        "ROLE_USER" => array("ROLE_SUSCRIBER"),
 )
 ));*/
 
@@ -161,40 +165,41 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
 if (isset($app['configuration']['main_database'])) {
 
     $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
-            'db.options' => array(
-                'driver' => 'pdo_mysql',
-                'dbname' => $app['configuration']['main_database'],
-                'user' => $app['configuration']['db_user'],
-                'password' => $app['configuration']['db_password'],
-                'host' => $app['configuration']['db_host'],
-                'charset'   => 'utf8',
-                /*'driverOptions' => array(
-                    1002 => 'SET NAMES utf8'
-                )*/
-            )
-        ));
+        'db.options' => array(
+            'driver' => 'pdo_mysql',
+            'dbname' => $app['configuration']['main_database'],
+            'user' => $app['configuration']['db_user'],
+            'password' => $app['configuration']['db_password'],
+            'host' => $app['configuration']['db_host'],
+            'charset'   => 'utf8',
+            /*'driverOptions' => array(
+                1002 => 'SET NAMES utf8'
+            )*/
+        )
+    ));
 
     // Setting Doctrine ORM
     $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
-            'orm.auto_generate_proxies' => true,
-            "orm.proxies_dir" => $app['db.orm.proxies_dir'],
-            //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
-            "orm.em.options" => array(
-                "mappings" => array(
-                    array(
-                        /* If true, only simple notations like @Entity will work.
-                        If false, more advanced notations and aliasing via use will work.
-                        (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)*/
-                        'use_simple_annotation_reader' => false,
-                        "type" => "annotation",
-                        "namespace" => "Entity",
-                        "path" => api_get_path(INCLUDE_PATH).'Entity',
-                    )
-                ),
+        'orm.auto_generate_proxies' => true,
+        "orm.proxies_dir" => $app['db.orm.proxies_dir'],
+        //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
+        "orm.em.options" => array(
+            "mappings" => array(
+                array(
+                    /* If true, only simple notations like @Entity will work.
+                    If false, more advanced notations and aliasing via use will work.
+                    (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)*/
+                    'use_simple_annotation_reader' => false,
+                    "type" => "annotation",
+                    "namespace" => "Entity",
+                    "path" => api_get_path(INCLUDE_PATH).'Entity',
+                )
             ),
-        ));
+        ),
+    ));
 
     // Temporal fix to load gedmo libs
+
     $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
     $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
 
@@ -234,21 +239,21 @@ $app->register(
 // Setting Twig options
 $app['twig'] = $app->share(
     $app->extend('twig', function ($twig) {
-            $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
-            $twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
-            $twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
-            $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
-            $twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
-            $twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
-            $twig->addFilter(
-                'display_page_subheader',
-                new Twig_Filter_Function('Display::page_subheader_and_translate')
-            );
-            $twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
-            $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
+        $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
+        $twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
+        $twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
+        $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
+        $twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
+        $twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
+        $twig->addFilter(
+            'display_page_subheader',
+            new Twig_Filter_Function('Display::page_subheader_and_translate')
+        );
+        $twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
+        $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
 
-            return $twig;
-        })
+        return $twig;
+    })
 );
 
 // Registering Menu service provider (too gently creating menus with the URLgenerator provider)
@@ -291,6 +296,7 @@ if (is_writable($app['temp.path'])) {
     );
 }
 
+// @todo use a app['image_processor'] setting
 define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
 
 // Setting the Imagine service provider to deal with image transformations used in social group.
@@ -311,8 +317,6 @@ if ($app['debug'] && isset($app['configuration']['main_database'])) {
         }
     });
 }
-
-
 
 // Adding symfony2 web profiler (memory, time, logs, etc)
 if (is_writable($app['sys_temp_path'])) {
@@ -360,8 +364,6 @@ $app->register(new FilesystemServiceProvider());
 
 /** Chamilo service provider */
 
-use Silex\ServiceProviderInterface;
-
 class ChamiloServiceProvider implements ServiceProviderInterface
 {
     public function register(Application $app)
@@ -393,7 +395,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 // Registering Chamilo service provider
 $app->register(new ChamiloServiceProvider(), array());
 
-// Controller as services definitions
+// Controller as services definitions see
 $app['pages.controller'] = $app->share(
     function () use ($app) {
         return new PagesController($app['pages.repository']);

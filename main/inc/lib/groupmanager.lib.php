@@ -98,6 +98,7 @@ class GroupManager {
 
 		//COURSEMANAGER or STUDENT
 		if ($my_status_of_user_in_course == COURSEMANAGER || api_is_allowed_to_edit(null, true) || api_is_drh()) {
+            $can_see_groups = 1;
 			$sql = "SELECT g.id ,
 						g.name ,
 						g.description ,
@@ -112,7 +113,8 @@ class GroupManager {
 					LEFT JOIN $table_group_user ug
 					ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id AND g.c_id = $course_id)";
 		} elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session  ===true || $_SESSION['studentview'] == 'studentview') {
-			$sql = "SELECT g.id,
+			$can_see_groups = 1;
+            $sql = "SELECT g.id,
 						g.name,
 						g.description,
 						g.category_id,
@@ -144,10 +146,10 @@ class GroupManager {
 			$sql .= $session_condition;
 		$sql .= " GROUP BY g.id ORDER BY UPPER(g.name)";
 
-		if (!api_is_anonymous()) {
+		if ($can_see_groups == 1) {
 			$groupList = Database::query($sql);
 		} else {
-			return array();
+            return array();
 		}
 
 		$groups = array();

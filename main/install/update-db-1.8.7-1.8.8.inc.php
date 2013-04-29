@@ -291,7 +291,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $i = 0;
                             foreach($exe_list as $exe_id) {       
                                 $lp_item_view_id = $lp_item_view_id_list[$i];                         
-                                $update = "UPDATE $dbNameForm.track_e_exercices SET orig_lp_item_view_id  = '$lp_item_view_id' WHERE exe_id = $exe_id ";                                
+                                $update = "UPDATE $dbStatsForm.track_e_exercices SET orig_lp_item_view_id  = '$lp_item_view_id' WHERE exe_id = $exe_id ";                                
                                 iDatabase::query($update);                                
                                 $i++;
                             }                            

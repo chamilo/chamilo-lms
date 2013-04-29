@@ -988,11 +988,14 @@ class CourseManager
         }
 
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
+        $courseId = null;
+        if ($courseInfo) {
+            $courseId = $courseInfo['real_id'];
+        }
 
         $filter_by_status_condition = null;
 
-        if (!empty($session_id)) {
+        if (!empty($session_id) && !empty($courseId)) {
             $sql = 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
             $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user

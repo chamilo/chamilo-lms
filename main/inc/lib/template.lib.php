@@ -293,16 +293,13 @@ class Template
 
             $new_messages = MessageManager::get_new_messages();
             $user_info['messages_count'] = $new_messages != 0 ? Display::label($new_messages, 'warning') : null;
-            $usergroup = new UserGroup();
-            $messages_invitations_count = $usergroup->get_groups_by_user_count(
-                $user_info['user_id'],
-                GROUP_USER_PERMISSION_PENDING_INVITATION,
-                false
-            );
+
+            /*$usergroup = new UserGroup();
+            $messages_invitations_count = $usergroup->get_groups_by_user_count($user_info['user_id'], GROUP_USER_PERMISSION_PENDING_INVITATION, false);
             $user_info['messages_invitations_count'] = $messages_invitations_count != 0 ? Display::label(
                 $messages_invitations_count,
                 'warning'
-            ) : null;
+            ) : null;*/
             $this->user_is_logged_in = true;
         }
 

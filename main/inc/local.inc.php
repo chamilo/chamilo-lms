@@ -452,12 +452,12 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
 
 //Setting app user variable
 $_user = Session::read('_user');
-if ($_user) {
-    $userInfo = api_get_user_info($_user['user_id']);
-    $app['current_user'] = $userInfo;
-} else {
-    $app['current_user'] = null;
+if ($_user && !isset($_user['complete_name'])) {
+    $_user = api_get_user_info(api_get_user_id());
+    Session::write('_user', $_user);
 }
+
+$app['current_user'] = $_user;
 
 /* USER INIT */
 

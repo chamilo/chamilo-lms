@@ -3313,15 +3313,14 @@ CREATE TABLE track_e_uploads (
 
 DROP TABLE IF EXISTS track_e_course_access;
 CREATE TABLE track_e_course_access (
-  course_access_id int NOT NULL auto_increment,
-  course_code varchar(40) NOT NULL,
+  course_access_id bigint unsigned NOT NULL auto_increment,
   user_id int NOT NULL,
   login_course_date datetime NOT NULL default '0000-00-00 00:00:00',
   logout_course_date datetime default NULL,
   counter int NOT NULL,
   session_id int NOT NULL default 0,
   c_id int NOT NULL default 0,
-  PRIMARY KEY  (course_access_id)
+  PRIMARY KEY(course_access_id)
 );
 
 DROP TABLE IF EXISTS track_e_hotspot;

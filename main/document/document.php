@@ -241,7 +241,7 @@ switch ($action) {
                 ).'&amp;action=copytomyfiles&amp;id='.$document_info['id'].'&amp;copy=yes">'.get_lang('Yes').'</a></p>';
                 if (!isset($_GET['copy'])) {
                     $message = Display::return_message($message, 'warning', false);
-                } var_dump($file, $copyfile);exit;
+                }
                 if (Security::remove_XSS($_GET['copy']) == 'yes') {
                     if (!copy($file, $copyfile)) {
                         $message = Display::return_message(get_lang('CopyFailed'), 'error');

@@ -12,7 +12,6 @@ $language_file = array('registration', 'tracking', 'exercice', 'admin', 'learnpa
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
 $this_section = SECTION_TRACKING;
@@ -80,7 +79,7 @@ if (!empty($course_user_list)) {
     }
 }
 
-$content .= Tracking::show_user_progress(api_get_user_id());
+$content = Tracking::show_user_progress(api_get_user_id());
 $content .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
 
 if (!empty($dates)) {
@@ -103,12 +102,12 @@ if (!empty($dates)) {
     </ul>
     </div></div>';
 }
-
+$message = null;
 if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
 }
 
-$app['title'] = $tool_name;
+//$app['title'] = $tool_name;
 $tpl = $app['template'];
 
 $tpl->assign('message', $message);

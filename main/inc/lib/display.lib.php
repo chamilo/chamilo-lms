@@ -692,11 +692,13 @@ class Display
      * @param array additional attributes (for instance height, width, onclick, ...)
      * @author Julio Montoya 2010
      */
-    public static function img($image_path, $alt_text = '', $additional_attributes = array())
+    public static function img($image_path, $alt_text = '', $additional_attributes = array(), $applyFilter = true)
     {
 
         // Sanitizing the parameter $image_path
-        $image_path = Security::filter_img_path($image_path);
+        if ($applyFilter) {
+            $image_path = Security::filter_img_path($image_path);
+        }
 
         // alt text = the image name if there is none provided (for XHTML compliance)
         if ($alt_text == '') {

@@ -117,7 +117,8 @@ class CourseBuilder {
 
         foreach ($this->tools_to_build as $tool) {
             $function_build = 'build_'.$tool;
-            $this->$function_build($session_id, $course_code, $with_base_content, $this->specific_id_list[$tool]);
+            $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
+            $this->$function_build($session_id, $course_code, $with_base_content, $specificIdList);
         }
 
 		if (!empty($session_id) && !empty($course_code)) {

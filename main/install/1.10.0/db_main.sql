@@ -531,6 +531,8 @@ CREATE TABLE IF NOT EXISTS session_rel_user (
   PRIMARY KEY (id_session, id_user, relation_type)
 );
 
+ALTER TABLE session_rel_user ADD INDEX idx_session_rel_user_id_user_moved (id_user, moved_to);
+
 DROP TABLE IF EXISTS session_field;
 CREATE TABLE IF NOT EXISTS session_field (
     id  int NOT NULL auto_increment,
@@ -910,7 +912,7 @@ VALUES
 ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
 ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1),
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
-('chamilo_database_version', NULL, 'textfield', NULL, 'xxx','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;

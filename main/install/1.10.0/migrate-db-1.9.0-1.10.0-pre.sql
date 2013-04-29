@@ -70,6 +70,8 @@ ALTER TABLE session_rel_course_rel_user ADD PRIMARY KEY (id);
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (c_id);
 
+ALTER TABLE session_rel_user ADD INDEX idx_session_rel_user_id_user_moved (id_user, moved_to);
+
 -- Courses changes c_XXX
 
 -- ALTER TABLE c_lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
@@ -242,4 +244,4 @@ ALTER TABLE c_quiz_category DROP PRIMARY KEY;
 ALTER TABLE c_quiz_category ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.6a12538' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.001' WHERE variable = 'chamilo_database_version';

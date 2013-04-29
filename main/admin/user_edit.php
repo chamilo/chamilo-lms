@@ -192,7 +192,7 @@ if (api_get_setting('login_is_email') != 'true') {
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
 $nb_ext_auth_source_added = 0;
-if (count($extAuthSource) > 0) {
+if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
     $auth_sources = array();
     foreach ($extAuthSource as $key => $info) {
         // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)

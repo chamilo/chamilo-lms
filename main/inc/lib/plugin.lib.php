@@ -373,6 +373,7 @@ class AppPlugin
             }
         }
     }
+
     /**
      * When saving the plugin values in the course settings, check whether
      * a callback method should be called and send it the updated settings

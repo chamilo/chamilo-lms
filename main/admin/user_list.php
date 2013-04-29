@@ -270,7 +270,6 @@ function get_number_of_users() {
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction, $get_count = false) {
-	global $origin;
 
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);

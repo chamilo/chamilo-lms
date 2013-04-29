@@ -2047,7 +2047,7 @@ class DocumentManager
         $checked_files_list = array();
         $checked_array_list = array();
 
-        if (count($files_list) > 0) {
+        if (!empty($files_list) && count($files_list) > 0) {
             foreach ($files_list as $idx => $file) {
                 if (!empty($file[0])) {
                     if (!in_array($file[0], $checked_files_list)) {

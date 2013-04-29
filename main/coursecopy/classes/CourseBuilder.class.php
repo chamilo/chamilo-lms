@@ -480,13 +480,14 @@ class CourseBuilder {
 
 		// Building normal tests.
 		$sql = "SELECT * FROM $table_que WHERE c_id = $course_id ";
+
         $db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
             $categories = Testcategory::getCategoryForQuestionWithCategoryData($obj->iid, $course_id, true);
             $parent_info = array();
 
             if (isset($obj->parent_id) && !empty($obj->parent_id)) {
-                $parent_info = (array) Question::read($obj->parent_id, $course_id);
+                $parent_info = (array)Question::read($obj->parent_id, $course_id);
             }
 
 			$question = new QuizQuestion($obj->iid, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture, $obj->level, $obj->extra, $parent_info, $categories);

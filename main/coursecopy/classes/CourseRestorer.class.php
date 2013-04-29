@@ -41,17 +41,17 @@ class CourseRestorer
     /**
      * The course-object
      */
-    var $course;
-    var $destination_course_info;
+    public $course;
+    public $destination_course_info;
 
     /**
      * What to do with files with same name (FILE_SKIP, FILE_RENAME or
      * FILE_OVERWRITE)
      */
-    var $file_option;
-    var $set_tools_invisible_by_default;
-    var $skip_content;
-    var $tools_to_restore = array(
+    public $file_option;
+    public $set_tools_invisible_by_default;
+    public $skip_content;
+    public $tools_to_restore = array(
         'announcements',
         'attendance',
         'course_descriptions',
@@ -72,18 +72,18 @@ class CourseRestorer
     );
 
     /** Setting per tool */
-    var $tool_copy_settings = array();
+    public $tool_copy_settings = array();
 
     /**
      * If true adds the text "copy" in the title of an item (only for LPs right now)
      *
      * */
-    var $add_text_in_items = false;
+    public $add_text_in_items = false;
 
     /**
      * Create a new CourseRestorer
      */
-    function __construct($course)
+    public function __construct($course)
     {
         $this->course = $course;
         $course_info = api_get_course_info($this->course->code);
@@ -1576,7 +1576,7 @@ class CourseRestorer
 
             $parent_id = 0;
 
-            if (isset($question->parent_info)) {
+            if (isset($question->parent_info) && !empty($question->parent_info)) {
                 $question_obj = Question::readByTitle($question->parent_info['question'], $this->destination_course_id);
 
                 if ($question_obj) {

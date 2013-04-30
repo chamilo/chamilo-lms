@@ -412,7 +412,8 @@ if (!is_object($objExercise)) {
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
 	if ($remind_question_id == -1) {
-		header('Location: exercise_reminder.php?origin='.$origin.'&exerciseId='.$exerciseId);
+        $paramsReminder = "exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
+		header('Location: exercise_reminder.php?'.$paramsReminder);
 		exit;
 	}
 }
@@ -565,7 +566,6 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 	$my_remind_list = array_filter($my_remind_list);
 }
 if ($debug) { error_log("6.0 my_remind_list array: ".print_r($my_remind_list, 1)); }
-
 $params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 if ($debug) { error_log("6.1 params: $params"); };
 

@@ -101,6 +101,12 @@ class Testcategory
             $course_id = '';
             $courseCondition = null;
         }
+
+        // Only admins can add global categories
+        if ($this->type == 'global' && empty($course_id) && !api_is_platform_admin()) {
+            return false;
+        }
+
 		// Check if name already exists
         $sql = "SELECT count(*) AS nb FROM $t_cattable WHERE title = '$v_name' $courseCondition";
 		$result = Database::query($sql);
@@ -111,8 +117,8 @@ class Testcategory
             // @todo inject the app in the claas
             global $app;
             $category = new \Entity\CQuizCategory();
-            $category->setTitle($v_name);
-            $category->setDescription($v_description);
+            $category->setTitle($this->name);
+            $category->setDescription($this->description);
 
             if (!empty($parent_id)) {
                 $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parent_id);
@@ -145,7 +151,7 @@ class Testcategory
         $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $v_id = Database::escape_string($this->id);
         $v_name = Database::escape_string($this->name);
-        $v_description = Database::escape_string($this->description);
+        //$v_description = Database::escape_string($this->description);
         $parent_id = intval($this->parent_id);
 
         //Avoid recursive categories
@@ -159,9 +165,14 @@ class Testcategory
         if (!$category) {
             return false;
         }
+        $courseId = $category->getCId();
+        //Only admins can delete global categories
+        if (empty($courseId) && !api_is_platform_admin()) {
+            return false;
+        }
 
-        $category->setTitle($v_name);
-        $category->setDescription($v_description);
+        $category->setTitle($this->name);
+        $category->setDescription($this->description);
 
         if (!empty($parent_id)) {
             $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parent_id);
@@ -207,6 +218,14 @@ class Testcategory
         if (!$category) {
             return false;
         }
+
+        //Only admins can delete global categories
+        $courseId = $category->getCId();
+        //Only admins can delete global categories
+        if (empty($courseId) && !api_is_platform_admin()) {
+            return false;
+        }
+
         $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
         $repo->removeFromTree($category);
         $app['orm.em']->clear(); // clear cached nodes

@@ -238,6 +238,7 @@ CREATE TABLE IF NOT EXISTS course_field_values(
     course_code varchar(40) NOT NULL,
     field_id int NOT NULL,
     field_value text,
+    user_id INT unsigned NOT NULL default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -565,6 +566,7 @@ CREATE TABLE IF NOT EXISTS session_field_values(
     session_id int NOT NULL,
     field_id int NOT NULL,
     field_value text,
+    user_id INT unsigned NOT NULL default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -1477,12 +1479,12 @@ CREATE TABLE IF NOT EXISTS user_field_values(
     user_id	int	unsigned NOT NULL,
     field_id int NOT NULL,
     field_value	text,
+    author_id INT unsigned NOT NULL default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
 
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
-
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'legal_accept','Legal',0,0);
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'already_logged_in','Already logged in',0,0);
@@ -1508,9 +1510,6 @@ INSERT INTO user_field_options (field_id, option_value, option_display_text, opt
 INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '1', 'AtOnce',1);
 INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '8', 'Daily',2);
 INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '0', 'No',3);
-
-
-
 
 DROP TABLE IF EXISTS gradebook_result_log;
 CREATE TABLE IF NOT EXISTS gradebook_result_log (
@@ -3484,6 +3483,7 @@ CREATE TABLE IF NOT EXISTS question_field_values(
     question_id int NOT NULL,
     field_id int NOT NULL,
     field_value text,
+    user_id INT unsigned NOT NULL default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -3493,4 +3493,4 @@ ALTER TABLE question_field_values ADD INDEX idx_question_field_values_question_i
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(field_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.002' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.003' WHERE variable = 'chamilo_database_version';

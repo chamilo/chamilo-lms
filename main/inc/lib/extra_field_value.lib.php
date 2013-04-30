@@ -32,18 +32,22 @@ class ExtraFieldValue extends Model
             case 'course':
                 $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+                $this->author_id = 'user_id';
                 break;
             case 'user':
                 $this->table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+                $this->author_id = 'author_id';
                 break;
             case 'session':
                 $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+                $this->author_id = 'user_id';
                 break;
             case 'question':
                 $this->table = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
+                $this->author_id = 'question_id';
                 break;
             default:
                 //unmanaged datatype, return false to let the caller know it
@@ -51,6 +55,7 @@ class ExtraFieldValue extends Model
                 return false;
         }
         $this->columns[] = $this->handler_id;
+        $this->columns[] = $this->author_id;
     }
 
     /**
@@ -168,6 +173,8 @@ class ExtraFieldValue extends Model
             }
             $params['field_value'] = $value_to_insert;
             $params['tms'] = api_get_utc_datetime();
+            $params[$this->author_id] = api_get_user_id();
+
             return parent::save($params, $show_query);
         }
     }
@@ -309,6 +316,7 @@ class ExtraFieldValue extends Model
         }
         return false;
     }
+
     /**
      * Deletes all the values related to a specific field ID
      * @param int Field ID

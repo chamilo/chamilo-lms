@@ -13,7 +13,7 @@
  * Base transaction log class.
  */
 abstract class TransactionLog {
-  const BRANCH_LOCAL = 0;
+  const BRANCH_LOCAL = 1;
   const TRANSACTION_LOCAL = 0;
   const STATUS_LOCAL = 0;
   const STATUS_TO_BE_EXECUTED = 1;

@@ -3052,6 +3052,8 @@ CREATE TABLE branch_sync(
   last_sync_type char(20) default 'full'
 );
 
+INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
+
 DROP TABLE IF EXISTS branch_sync_log;
 CREATE TABLE branch_sync_log(
   id bigint unsigned not null AUTO_INCREMENT PRIMARY KEY,

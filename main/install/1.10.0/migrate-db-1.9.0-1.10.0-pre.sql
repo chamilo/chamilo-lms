@@ -249,5 +249,8 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 -- Modify branch_transaction PK to use a simple field.
 ALTER TABLE branch_transaction DROP PRIMARY KEY, ADD PRIMARY KEY (id);
 
+-- Insert a row to identify local chamilo branch.
+INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
+
 -- Do not move this
 UPDATE settings_current SET selected_value = '1.10.0.002' WHERE variable = 'chamilo_database_version';

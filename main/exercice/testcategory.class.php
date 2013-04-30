@@ -255,24 +255,24 @@ class Testcategory
 	If in_field=="" Return an array of all category objects in the database
 	Otherwise, return an array of all in_field value in the database (in_field = id or name or description)
 	 */
-	public static function getCategoryListInfo($in_field = "", $in_courseid="") {
-		if (empty($in_courseid) || $in_courseid=="") {
-			$in_courseid = api_get_course_int_id();
+	public static function getCategoryListInfo($in_field = "", $courseId = null) {
+		if (empty($courseId) || $courseId=="") {
+            $courseId = api_get_course_int_id();
 		}
+        $courseId = intval($courseId);
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$in_field = Database::escape_string($in_field);
 		$tabres = array();
 		if ($in_field=="") {
-			$sql = "SELECT * FROM $t_cattable WHERE c_id = $in_courseid ORDER BY title ASC";
+			$sql = "SELECT * FROM $t_cattable WHERE c_id = $courseId ORDER BY title ASC";
 			$res = Database::query($sql);
 			while ($row = Database::fetch_array($res)) {
                 $tmpcat = new Testcategory($row['iid'], $row['title'], $row['description'], $row['parent_id']);
 				$tabres[] = $tmpcat;
 			}
         } else {
-			$sql = "SELECT $in_field
-			FROM $t_cattable WHERE c_id=$in_courseid
-			ORDER BY $in_field ASC";
+			$sql = "SELECT $in_field FROM $t_cattable WHERE c_id = $courseId
+			        ORDER BY $in_field ASC";
 
 			$res = Database::query($sql);
 			while ($row = Database::fetch_array($res)) {
@@ -289,14 +289,16 @@ class Testcategory
 	 Return the testcategory id, 0 if none
      * @assert () === false
 	 */
-    public static function getCategoryForQuestion($question_id, $in_courseid = null) {
-		$result = array();	// result
-		if (empty($in_courseid) || $in_courseid=="") {
-			$in_courseid = api_get_course_int_id();
+    public static function getCategoryForQuestion($question_id, $courseId = null)
+    {
+		$result = array();
+		if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
 		}
-		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $courseId = intval($courseId);
+		$categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $question_id = Database::escape_string($question_id);
-		$sql = "SELECT category_id FROM $t_cattable WHERE question_id = '$question_id' AND c_id = $in_courseid";
+		$sql = "SELECT category_id FROM $categoryTable WHERE question_id = '$question_id' AND c_id = $courseId";
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -306,15 +308,17 @@ class Testcategory
 		return $result;
 	}
 
-    public static function getCategoryForQuestionWithCategoryData($question_id, $in_courseid = null) {
+    public static function getCategoryForQuestionWithCategoryData($question_id, $courseId = null) {
 		$result = array();	// result
-		if (empty($in_courseid) || $in_courseid=="") {
-			$in_courseid = api_get_course_int_id();
+		if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
 		}
+        $courseId = intval($courseId);
+
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $question_id = Database::escape_string($question_id);
-        $sql = "SELECT * FROM $t_cattable qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE question_id = '$question_id' AND qc.c_id = $in_courseid";
+        $sql = "SELECT * FROM $t_cattable qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE question_id = '$question_id' AND qc.c_id = $courseId";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -749,10 +753,12 @@ class Testcategory
      * @params int exercise id
      * @params array prefilled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
      */
-    public static function get_stats_table_by_attempt($exercise_id, $category_list = array()) {
+    public static function get_stats_table_by_attempt($exercise_id, $category_list = array())
+    {
         if (empty($category_list)) {
             return null;
         }
+
         $category_name_list = Testcategory::getListOfCategoriesNameForTest($exercise_id, false);
 
         $table = new HTML_Table(array('class' => 'data_table'));
@@ -772,12 +778,21 @@ class Testcategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
+
         if (count($category_list) > 1) {
+
             foreach ($category_list as $category_id => $category_item) {
                 $table->setCellContents($row, 0, $category_name_list[$category_id]);
                 $table->setCellContents($row, 1, show_score($category_item['score'], $category_item['total'], false));
                 $table->setCellContents($row, 2, show_score($category_item['score'], $category_item['total'], true, false, true));
+
+                $class = 'class="row_odd"';
+                if ($row % 2) {
+                    $class = 'class="row_even"';
+                }
+                $table->setRowAttributes($row, $class, true);
                 $row++;
+
             }
 
             if (!empty($none_category)) {
@@ -786,13 +801,17 @@ class Testcategory
                 $table->setCellContents($row, 2, show_score($none_category['score'], $none_category['total'], true, false, true));
                 $row++;
             }
+
             if (!empty($total)) {
                 $table->setCellContents($row, 0, get_lang('Total'));
                 $table->setCellContents($row, 1, show_score($total['score'], $total['total'], false));
                 $table->setCellContents($row, 2, show_score($total['score'], $total['total'], true, false, true));
+                $table->setRowAttributes($row, 'class="row_total"', true);
             }
+
             return $table->toHtml();
         }
+
         return null;
     }
 

@@ -249,8 +249,10 @@ class Testcategory
     function get_category_by_title($title , $course_id = 0) {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $course_id = intval($course_id);
-        $sql = "SELECT * FROM $table WHERE title = '$title' AND c_id IN ('0', '$course_id')LIMIT 1";
         $title = Database::escape_string($title);
+
+        $sql = "SELECT * FROM $table WHERE title = '$title' AND c_id IN ('0', '$course_id')LIMIT 1";
+
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::store_result($result, 'ASSOC');
@@ -305,9 +307,6 @@ class Testcategory
         }
         return false;
 	}
-
-
-
 
 	/**
      * Gets the number of question of category id=in_id

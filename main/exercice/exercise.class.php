@@ -4658,7 +4658,7 @@ class Exercise
                 //Getting questions by category
                 $questions_in_category = Testcategory::getQuestionsByCat($this->id);
 
-                $isRandomByCategory = $this->selectRandomByCat();
+                //$isRandomByCategory = $this->selectRandomByCat();
 
                 // on tri les catÃ©gories en fonction du terme entre [] en tÃªte de la description de la catÃ©gorie
                 /*
@@ -4674,9 +4674,9 @@ class Exercise
 
                 // If test option is Grouped By Categories
 
-                if ($isRandomByCategory == 2) {
+                /*if ($isRandomByCategory == 2) {
                     $questions_in_category = Testcategory::sortTabByBracketLabel($questions_in_category);
-                }
+                }*/
 
                 $number_of_random_question = $this->random;
                 if ($this->random == -1) {
@@ -4722,21 +4722,21 @@ class Exercise
      */
     function get_validated_question_list()
     {
-        //Getting current question list
+        // Getting current question list
         $question_list = $this->selectQuestionList();
 
-        //Getting random by category setting
+        // Getting random by category setting
         $random_by_category = $this->isRandomByCat();
 
         switch ($random_by_category) {
             case EXERCISE_CATEGORY_RANDOM_SHUFFLED:
-                //Randomized array
+                // Randomized array
                 if ($this->isRandom()) {
                     $question_list = $this->selectRandomList($question_list);
                 }
                 break;
             case EXERCISE_CATEGORY_RANDOM_DISABLED:
-                //Randomized array
+                // Randomized array
                 if ($this->isRandom()) {
                     $question_list = $this->selectRandomList($question_list);
                 }
@@ -4746,16 +4746,16 @@ class Exercise
                     //break;
                 }
 
+
                 /**
-                 *  Get questions by category for this exercice
+                 *  Get questions by category for this exercise
                  *  we have to choice $objExercise->random question in each array values of $questions_by_category
-                 *  key of $tabCategoryQuestions are the categopy id (0 for not in a category)
+                 *  key of $tabCategoryQuestions are the category id (0 for not in a category)
                  *  value is the array of question id of this category
                  */
 
                 //Getting questions by category
-                //$questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list);
-
+                $questions_by_category = Testcategory::getQuestionsByCat($this->id, $question_list);
 
                 /**
                  * The order is based in the category in this case [biology] is first that [maths]
@@ -4773,13 +4773,13 @@ class Exercise
                     //$questions_by_category = Testcategory::sortCategoriesQuestionByName($questions_by_category);
                 //}
 
-/*
                 $number_of_random_question = $this->random;
-                if ($this->random == -1) {
+                if ($this->random == -1 || empty($this->random)) {
                     $number_of_random_question = count($question_list);
                 }
 
                 //Only 1 question per category
+                /*
                 if (!empty($questions_by_category)) {
                     $one_question_per_category = array();
                     $questions_added = array();
@@ -4792,7 +4792,7 @@ class Exercise
                         }
                     }
                     $questions_by_category = $one_question_per_category;
-                }
+                }*/
 
                 $temp_question_list = array();
                 while (list($category_id, $question_list) = each($questions_by_category)) {
@@ -4802,9 +4802,9 @@ class Exercise
 
                 // shuffle the question list if test is not grouped by categories
                 //if ($random_by_category == EXERCISE_CATEGORY_RANDOM_SHUFFLED) {
-                    shuffle($temp_question_list);
+                    //shuffle($temp_question_list);
                 //}
-                $question_list = $temp_question_list;*/
+                $question_list = $temp_question_list;
                 break;
         }
         return $question_list;
@@ -4819,7 +4819,6 @@ class Exercise
     {
         $question_list = $this->get_validated_question_list();
         $question_list = $this->transform_question_list_with_medias($question_list, $expand_media_questions);
-
         return $question_list;
     }
 
@@ -4829,7 +4828,7 @@ class Exercise
      * @params bool expand or not question list (true show all questions, false show media question id instead of the question ids)
      *
      **/
-    function transform_question_list_with_medias($question_list, $expand_media_questions = false)
+    public function transform_question_list_with_medias($question_list, $expand_media_questions = false)
     {
         $new_question_list = array();
         if (!empty($question_list)) {

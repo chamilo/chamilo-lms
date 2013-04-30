@@ -430,6 +430,20 @@ switch ($action) {
                     $remind_list
                 );
 
+                $log_transactions_settings = TransactionLog::getTransactionSettings();
+                if (isset($log_transactions_settings['exercise_test'])) {
+                  $exercise_test_id = sprintf('%s:%s', $objExercise->selectId(), $exe_id);
+                  $transaction = ExerciseTestTransactionLog::load_exercise_test($objExercise->selectId(), $exe_id);
+                  if (!$transaction) {
+                    $transaction_data = array(
+                      'item_id' => $exercise_test_id,
+                    );
+                    // @todo Save question order.
+                    $transaction = new ExerciseTransactionLog($transaction_data);
+                  }
+                  $transaction->save();
+                }
+
                  // Destruction of the Question object
             	unset($objQuestionTmp);
                 if ($debug) error_log(" -- end question -- ");

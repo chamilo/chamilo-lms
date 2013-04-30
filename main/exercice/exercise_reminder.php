@@ -154,7 +154,6 @@ $exercise_result = get_answered_questions_from_attempt($exe_id, $objExercise);
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
 
-
 echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
 echo '<div class="clear"></div><br />';
 
@@ -207,7 +206,24 @@ foreach ($question_list as $questionId) {
     if (!in_array($questionId, $exercise_result)) {
         $question_title = Display::label($question_title, 'warning');
     }
-    $question_title = Display::tag('label', $checkbox.$question_title, $label_attributes);
+
+    //var_dump($objQuestionTmp->category_list);
+    $rootCategories = null;
+    global $app;
+    $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+    foreach ($objQuestionTmp->category_list as $categoryId) {
+        $cat = $repo->find($categoryId);
+        $parentCat = $repo->getPath($cat);
+        if (isset($parentCat[0])) {
+            $rootCategories .= $parentCat[0]->getTitle();
+        }
+    }
+
+    if (!empty($rootCategories)) {
+        $rootCategories = Display::label($rootCategories, 'info').' ';
+    }
+
+    $question_title = Display::tag('label', $checkbox.$rootCategories.$question_title, $label_attributes);
     $table .= Display::div($question_title, array('class' => 'exercise_reminder_item'));
 
     if (($counter % $split_by) == 0) {

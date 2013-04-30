@@ -574,6 +574,11 @@ if (isset($_GET['hotspotadmin'])) {
 }
 
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
+
+    if ($objExercise->randomByCat == EXERCISE_CATEGORY_RANDOM_SHUFFLED || EXERCISE_CATEGORY_RANDOM_ORDERED) {
+        Display::display_normal_message(get_lang('AllQuestionsMustHaveACategory'));
+    }
+
     // Question list (drag n drop view)
     if ($fastEdition) {
         require 'question_list_pagination_admin.inc.php';

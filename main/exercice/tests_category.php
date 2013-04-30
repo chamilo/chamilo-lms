@@ -304,6 +304,7 @@ function display_categories($type = 'simple') {
         //'html' => true
     );
 
+    // @todo put this in a function
     $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
 
     $query = null;

@@ -521,6 +521,7 @@ if (!isset($_SESSION['questionList'])) {
 
 //Fix in order to get the correct question list
 $question_list_flatten = $objExercise->transform_question_list_with_medias($questionList, true);
+
 Session::write('question_list_flatten', $question_list_flatten);
 
 $clock_expired_time = null;

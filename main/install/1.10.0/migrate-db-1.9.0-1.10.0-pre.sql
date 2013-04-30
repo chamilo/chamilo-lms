@@ -258,5 +258,12 @@ ALTER TABLE session_field_values ADD COLUMN user_id INT unsigned NOT NULL defaul
 ALTER TABLE course_field_values ADD COLUMN user_id INT unsigned NOT NULL default 0;
 ALTER TABLE user_field_values ADD COLUMN author_id INT unsigned NOT NULL default 0;
 
+ALTER TABLE c_quiz_category ADD COLUMN lvl int;
+ALTER TABLE c_quiz_category ADD COLUMN lft int;
+ALTER TABLE c_quiz_category ADD COLUMN rgt int;
+ALTER TABLE c_quiz_category ADD COLUMN root int;
+ALTER TABLE c_quiz_category MODIFY COLUMN parent_id int default null;
+
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.003' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.004' WHERE variable = 'chamilo_database_version';

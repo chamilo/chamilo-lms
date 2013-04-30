@@ -3876,14 +3876,16 @@ function api_get_valid_encodings()
     $result2 = array();
     $result3 = array();
     foreach ($encodings as $value) {
-        $encoding = api_refine_encoding_id(trim($value[0]));
-        if (!empty($encoding)) {
-            if (strpos($encoding, 'ISO-') === 0) {
-                $result1[] = $encoding;
-            } elseif (strpos($encoding, 'WINDOWS-') === 0) {
-                $result2[] = $encoding;
-            } else {
-                $result3[] = $encoding;
+        if (isset($value[0])) {
+            $encoding = api_refine_encoding_id(trim($value[0]));
+            if (!empty($encoding)) {
+                if (strpos($encoding, 'ISO-') === 0) {
+                    $result1[] = $encoding;
+                } elseif (strpos($encoding, 'WINDOWS-') === 0) {
+                    $result2[] = $encoding;
+                } else {
+                    $result3[] = $encoding;
+                }
             }
         }
     }

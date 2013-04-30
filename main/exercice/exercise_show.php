@@ -103,7 +103,6 @@ if (!$is_allowedToEdit) {
     }
 }
 
-
 if (isset($_SESSION['gradebook'])) {
 	$gradebook = Security::remove_XSS($_SESSION['gradebook']);
 } else {
@@ -282,8 +281,6 @@ $category_list = array();
 foreach ($questionList as $questionId) {
 
 	$choice = $exerciseResult[$questionId];
-	// destruction of the Question object
-	unset($objQuestionTmp);
 
 	// creates a temporary Question object
 	$objQuestionTmp = Question::read($questionId);
@@ -348,8 +345,8 @@ foreach ($questionList as $questionId) {
 			echo '</table></td></tr>';
 		 	echo '<tr>
 				<td colspan="2">'.
-					'<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
-						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.Security::remove_XSS($questionId).'&exe_id='.$id.'&from_db=1" />
+					'<object type="application/x-shockwave-flash" data="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" width="552" height="352">
+						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.intval($questionId).'&exe_id='.$id.'&from_db=1" />
 					</object>
 				</td>
 			</tr>
@@ -582,21 +579,29 @@ foreach ($questionList as $questionId) {
 
     $category_was_added_for_this_test = false;
 
-    if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+    // We use now category_list instead of a unique category
+    /*if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
         $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
         $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
         $category_was_added_for_this_test = true;
-    }
+    }*/
 
     if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
         foreach ($objQuestionTmp->category_list as $category_id) {
+
+            if (!isset($category_list[$category_id])) {
+                $category_list[$category_id] = array();
+                $category_list[$category_id]['score'] = 0;
+                $category_list[$category_id]['total'] = 0;
+            }
+
             $category_list[$category_id]['score'] += $my_total_score;
             $category_list[$category_id]['total'] += $my_total_weight;
             $category_was_added_for_this_test = true;
         }
     }
 
-    //No category for this question!
+    // No category for this question!
     if ($category_was_added_for_this_test == false) {
         if (!isset($category_list['none'])) {
             $category_list['none'] = array();
@@ -606,6 +611,7 @@ foreach ($questionList as $questionId) {
         $category_list['none']['score'] += $my_total_score;
         $category_list['none']['total'] += $my_total_weight;
     }
+
     if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
         $my_total_score = 0;
     }
@@ -642,6 +648,7 @@ foreach ($questionList as $questionId) {
 	}
 
 	$counter++;
+
     $question_content .= $contents;
     $question_content .= '</div>';
     $exercise_content .= $question_content;
@@ -666,10 +673,15 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 
 if (!empty($category_list) && ($show_results || $show_only_total_score)) {
     //Adding total
-    $category_list['total'] = array('score' => $my_total_score_temp, 'total' => $totalWeighting);
-
+    $category_list['total'] = array(
+        'score' => $my_total_score_temp,
+        'total' => $totalWeighting
+    );
     echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
 }
+
+
+
 echo $total_score_text;
 echo $exercise_content;
 echo $total_score_text;

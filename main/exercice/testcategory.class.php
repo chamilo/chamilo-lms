@@ -44,7 +44,7 @@ class Testcategory
             if (!empty($tmpobj->parent_id)) {
                 $category = new Testcategory($tmpobj->parent_id);
                 $this->parent_path = $category->parent_path.' > '.$this->name;
-		}
+		    }
         } else {
 			$this->id = $in_id;
 			$this->name = $in_name;
@@ -105,15 +105,122 @@ class Testcategory
         $sql = "SELECT count(*) AS nb FROM $t_cattable WHERE title = '$v_name' $courseCondition";
 		$result = Database::query($sql);
 		$data = Database::fetch_array($result);
+
         // lets add in BD if not the same name
 		if ($data['nb'] <= 0) {
-            $sql = "INSERT INTO $t_cattable (c_id, title, description, parent_id) VALUES ('$course_id', '$v_name', '$v_description', '$parent_id')";
-            Database::query($sql);
-            return Database::insert_id();
+            // @todo inject the app in the claas
+            global $app;
+            $category = new \Entity\CQuizCategory();
+            $category->setTitle($v_name);
+            $category->setDescription($v_description);
+
+            if (!empty($parent_id)) {
+                $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parent_id);
+                if ($parent) {
+                    $category->setParent($parent);
+                }
+            }
+            $category->setCId($course_id);
+            $app['orm.em']->persist($category);
+            $app['orm.em']->flush();
+
+            if ($category->getIid()) {
+                return $category->getIid();
+            } else {
+                return false;
+            }
+            /*$sql = "INSERT INTO $t_cattable (c_id, title, description, parent_id) VALUES ('$course_id', '$v_name', '$v_description', '$parent_id')";
+            Database::query($sql);*/
+            //return Database::insert_id();
         } else {
             return false;
 		}
     }
+
+    /**
+     * Modify category name or description of category with id=in_id
+     */
+    function modifyCategory()
+    {
+        $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $v_id = Database::escape_string($this->id);
+        $v_name = Database::escape_string($this->name);
+        $v_description = Database::escape_string($this->description);
+        $parent_id = intval($this->parent_id);
+
+        //Avoid recursive categories
+        if ($parent_id == $v_id) {
+            $parent_id = 0;
+        }
+
+        // @todo inject the app in the claas
+        global $app;
+        $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
+        if (!$category) {
+            return false;
+        }
+
+        $category->setTitle($v_name);
+        $category->setDescription($v_description);
+
+        if (!empty($parent_id)) {
+            $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parent_id);
+            if ($parent) {
+                $category->setParent($parent);
+            }
+        }
+
+        $app['orm.em']->persist($category);
+        $app['orm.em']->flush();
+
+        if ($category->getIid()) {
+            return $category->getIid();
+        } else {
+            return false;
+        }
+
+        /*
+        $sql = "UPDATE $t_cattable SET
+                    title = '$v_name',
+                    description = '$v_description',
+                    parent_id = '$parent_id'
+                WHERE iid = '$v_id'";
+        Database::query($sql);*/
+        /*
+		if (Database::affected_rows() <= 0) {
+			return false;
+        } else {
+			return true;
+		}*/
+    }
+
+
+    /**
+     * Removes the category with id=in_id from the database if no question use this category
+     * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
+     * jmontoya
+     */
+    function removeCategory()
+    {
+        global $app;
+        $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
+        if (!$category) {
+            return false;
+        }
+        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        $repo->removeFromTree($category);
+        $app['orm.em']->clear(); // clear cached nodes
+        return true;
+
+        /*$sql = "DELETE FROM $t_cattable WHERE iid = $v_id";
+        Database::query($sql);
+		if (Database::affected_rows() <= 0) {
+			return false;
+		} else {
+			return true;
+		}*/
+    }
+
 
     /**
      * @param string $title
@@ -180,51 +287,8 @@ class Testcategory
         return false;
 	}
 
-	/**
-     * Removes the category with id=in_id from the database if no question use this category
-     * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
-     * jmontoya
-	 */
-    function removeCategory()
-    {
-		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-		$v_id = Database::escape_string($this->id);
-        $sql = "DELETE FROM $t_cattable WHERE iid = $v_id";
-        Database::query($sql);
-		if (Database::affected_rows() <= 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
 
 
-    /**
-     * Modify category name or description of category with id=in_id
-	 */
-    function modifyCategory() {
-		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-		$v_id = Database::escape_string($this->id);
-		$v_name = Database::escape_string($this->name);
-		$v_description = Database::escape_string($this->description);
-        $parent_id = intval($this->parent_id);
-
-        //Avoid recursive categories
-        if ($parent_id == $v_id) {
-            $parent_id = 0;
-        }
-        $sql = "UPDATE $t_cattable SET
-                    title = '$v_name',
-                    description = '$v_description',
-                    parent_id = '$parent_id'
-                WHERE iid = '$v_id'";
-        Database::query($sql);
-		if (Database::affected_rows() <= 0) {
-			return false;
-        } else {
-			return true;
-		}
-	}
 
 	/**
      * Gets the number of question of category id=in_id
@@ -778,11 +842,39 @@ class Testcategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
+        global $app;
+        $em = $app['orm.em'];
+        $repo = $em->getRepository('Entity\CQuizCategory');
 
-        if (count($category_list) > 1) {
+        $redefineCategoryList = array();
+
+
+        if (!empty($category_list) && count($category_list) > 1) {
+            $globalCategoryScore = array();
 
             foreach ($category_list as $category_id => $category_item) {
-                $table->setCellContents($row, 0, $category_name_list[$category_id]);
+                $cat = $em->find('Entity\CQuizCategory', $category_id);
+                $path = $repo->getPath($cat);
+
+                $categoryName = $category_name_list[$category_id];
+
+                if (isset($path[0])) {
+                    $category_id = $path[0]->getIid();
+                    $categoryName = $path[0]->getTitle();
+                }
+                if (!isset($globalCategoryScore[$category_id])) {
+                    $globalCategoryScore[$category_id] = array();
+                    $globalCategoryScore[$category_id]['score'] = 0;
+                    $globalCategoryScore[$category_id]['total'] = 0;
+                    $globalCategoryScore[$category_id]['title'] = '';
+                }
+                $globalCategoryScore[$category_id]['score'] += $category_item['score'];
+                $globalCategoryScore[$category_id]['total'] += $category_item['total'];
+                $globalCategoryScore[$category_id]['title'] = $categoryName;
+            }
+
+            foreach ($globalCategoryScore as $category_item) {
+                $table->setCellContents($row, 0, $category_item['title']);
                 $table->setCellContents($row, 1, show_score($category_item['score'], $category_item['total'], false));
                 $table->setCellContents($row, 2, show_score($category_item['score'], $category_item['total'], true, false, true));
 

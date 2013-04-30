@@ -202,6 +202,14 @@ if (isset($app['configuration']['main_database'])) {
 
     $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
     $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
+    $tree = new Gedmo\Mapping\Annotation\Tree(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeParent(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeLeft(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeRight(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeRoot(array());
+    $tree = new Gedmo\Mapping\Annotation\TreeLevel(array());
+
+
 
     // Setting Doctrine2 extensions
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
@@ -212,8 +220,11 @@ if (isset($app['configuration']['main_database'])) {
 
     $sortableListener = new Gedmo\Sortable\SortableListener();
     $app['db.event_manager']->addEventSubscriber($sortableListener);
-}
 
+    $treeListener = new \Gedmo\Tree\TreeListener();
+    //$treeListener->setAnnotationReader($cachedAnnotationReader);
+    $app['db.event_manager']->addEventSubscriber($treeListener);
+}
 
 // Setting Twig as a service provider
 $app->register(

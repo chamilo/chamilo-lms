@@ -208,7 +208,7 @@ ALTER TABLE track_e_lastaccess ADD INDEX ( c_id, access_user_id ) ;
 
 ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
 RENAME TABLE c_quiz_question_category TO c_quiz_category;
-ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned NOT NULL default 0;
+ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned default NULL;
 
 CREATE TABLE c_quiz_rel_category (iid bigint unsigned NOT NULL auto_increment, c_id INT unsigned default 0, category_id int unsigned NOT NULL, exercise_id int unsigned NOT NULL, count_questions int NOT NULL default 0, PRIMARY KEY(iid));
 

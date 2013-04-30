@@ -194,7 +194,7 @@ abstract class Question
                 $objQuestion->parent_id     = $object->parent_id;
                 $objQuestion->category_list = Testcategory::getCategoryForQuestion($id);
 
-                $sql                  = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
+                $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
                 $result_exercise_list = Database::query($sql);
 
                 // fills the array with the exercises which this question is in

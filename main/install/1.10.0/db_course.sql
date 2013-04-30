@@ -1382,7 +1382,7 @@ DROP TABLE IF EXISTS c_quiz_category;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE c_quiz_category (
   iid bigint unsigned NOT NULL AUTO_INCREMENT,
-  parent_id int unsigned NOT NULL default 0,
+  parent_id int unsigned DEFAULT NULL,
   c_id int(11) NOT NULL,
   title varchar(255) NOT NULL,
   description text NOT NULL,

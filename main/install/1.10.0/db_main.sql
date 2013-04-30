@@ -3493,4 +3493,4 @@ ALTER TABLE question_field_values ADD INDEX idx_question_field_values_question_i
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(field_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.003' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.004' WHERE variable = 'chamilo_database_version';

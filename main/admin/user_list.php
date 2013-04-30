@@ -163,7 +163,7 @@ function login_user($user_id) {
     }
 
     //Load $_user to be sure we clean it before logging in
-	global $uidReset, $loginFailed, $_configuration, $_user;
+	global $uidReset, $loginFailed, $_user;
 
 	$main_user_table      = Database::get_main_table(TABLE_MAIN_USER);
 	$main_admin_table     = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -241,7 +241,6 @@ function login_user($user_id) {
 			$_SESSION['login_as']               = true; // will be useful later to know if the user is actually an admin or not (example reporting)s
 
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
-			//$message .= "<br/>Login successful. Go to <a href=\"$target_url\">$target_url</a>";
 			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">'.$target_url.'</a>');
 			Display :: display_header(get_lang('UserList'));
 			Display :: display_normal_message($message,false);
@@ -405,8 +404,8 @@ function get_user_data($from, $number_of_items, $column, $direction, $get_count 
 		$image_path 	= UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
 		$user_profile 	= UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 		if (!api_is_anonymous()) {
-			$photo = '<center><a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$user[0].'" title="'.get_lang('Info').'">
-                            <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'"  title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
+			$photo = '<center><a href="'.api_get_path(WEB_CODE_PATH).'?social/profile.php&u='.$user[0].'" title="'.get_lang('Info').'">
+                            <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
 		} else {
 			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
 		}
@@ -439,7 +438,7 @@ function email_filter($email) {
 * @return string HTML-code with a mailto-link
 */
 function user_filter($name, $params, $row) {
-	return '<a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$row[0].'">'.$name.'</a>';
+	return '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$row[0].'">'.$name.'</a>';
 }
 
 /**
@@ -887,7 +886,8 @@ if ($table->get_total_number_of_items() == 0) {
     }
 }
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

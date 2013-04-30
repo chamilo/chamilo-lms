@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Responses to AJAX calls
  */
@@ -123,7 +123,6 @@ switch ($action) {
 			echo '';
 			break;
 		}
-		require_once api_get_path(LIBRARY_PATH).'blog.lib.php';
 		require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
 		$user_id = intval($_SESSION['social_user_id']);
@@ -136,7 +135,7 @@ switch ($action) {
 				$course_info = api_get_course_info_by_id($course_id);
 				$course_code = $course_info['code'];
 
-				if (api_is_user_of_course($course_code, api_get_user_id())) {
+				if (api_is_user_of_course($course_info['real_id'], api_get_user_id())) {
 					//------Forum messages
 					$forum_result = get_all_post_from_user($user_id, $course_code);
 					$all_result_data = 0;

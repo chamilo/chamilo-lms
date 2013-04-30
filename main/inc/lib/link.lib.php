@@ -20,7 +20,8 @@
 
 /* FUNCTIONS */
 
-class Link extends Model {
+class Link extends Model
+{
     var $table;
     var $is_course_model = true;
     var $columns = array('id', 'c_id','url','title','description','category_id', 'display_order', 'on_homepage', 'target', 'session_id');
@@ -225,7 +226,7 @@ function addlinkcategory($type) {
 	// "WHAT'S NEW" notification : update last tool Edit.
 	if ($type == 'link') {
 		global $_user;
-		global $_course;
+        $_course = api_get_course_info();
 		global $nameTools;
 		api_item_property_update($_course, TOOL_LINK, $link_id, 'LinkAdded', $_user['user_id']);
 	}
@@ -238,7 +239,7 @@ function addlinkcategory($type) {
  */
 function deletelinkcategory($type) {
 	global $catlinkstatus;
-	global $_course;
+    $_course = api_get_course_info();
 	$tbl_link              = Database :: get_course_table(TABLE_LINK);
 	$tbl_categories        = Database :: get_course_table(TABLE_LINK_CATEGORY);
 	$TABLE_ITEM_PROPERTY   = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -341,7 +342,7 @@ function editlinkcategory($type) {
 	global $submit_link;
 	global $submit_category;
 	global $_user;
-	global $_course;
+    $_course = api_get_course_info();
 	global $nameTools;
 	global $urllink;
 	global $title;
@@ -577,7 +578,8 @@ function makedefaultviewcode($locatie) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function change_visibility($id, $scope) {
-	global $_course, $_user;
+	global $_user;
+    $_course = api_get_course_info();
 	if ($scope == 'link') {
 		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);
 		Display :: display_confirmation_message(get_lang('VisibilityChanged'));
@@ -855,7 +857,8 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden) {
 		$ipu = 'LinkAdded';
 		$rv = 2; // 2 = new
 	}
-	global $_course, $nameTools, $_user;
+	global $nameTools, $_user;
+    $_course = api_get_course_info();
 	api_item_property_update($_course, TOOL_LINK, $id, $ipu, $_user['user_id']);
 
 	if ($hidden && $ipu == 'LinkAdded') {

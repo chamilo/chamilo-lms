@@ -632,7 +632,7 @@ class learnpath
         // Upload audio.
         if (!empty ($_FILES['mp3']['name'])) {
             // Create the audio folder if it does not exist yet.
-            global $_course;
+            $_course = api_get_course_info();
             $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
             if (!is_dir($filepath.'audio')) {
                 mkdir($filepath.'audio', api_get_permissions_for_new_directories());
@@ -1224,7 +1224,7 @@ class learnpath
         $audio_update_sql = '';
         if (is_array($audio) && !empty ($audio['tmp_name']) && $audio['error'] === 0) {
             // Create the audio folder if it does not exist yet.
-            global $_course;
+            $_course = api_get_course_info();
             $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
             if (!is_dir($filepath.'audio')) {
                 mkdir($filepath.'audio', api_get_permissions_for_new_directories());
@@ -2275,7 +2275,7 @@ class learnpath
     public function get_mediaplayer($autostart = 'true')
     {
         $course_id = api_get_course_int_id();
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
@@ -3236,10 +3236,10 @@ class learnpath
             $user_id = api_get_user_id();
 
             $sql = "SELECT path  FROM $tbl_track_e_exercises, $tbl_lp_item
-                    WHERE   c_id = $course_id AND
+                    WHERE   c_id = $courseId AND
                             path =   '" . $item['path'] . "' AND
                             exe_user_id =  '$user_id' AND
-                            exe_cours_id = '$course_code' AND
+                            c_id = '$course_code' AND
                             path = exe_exo_id AND
                             status <> 'incomplete'";
             $result = Database::query($sql);
@@ -5535,7 +5535,7 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::overview()', 0);
         }
-        global $_course;
+        $_course = api_get_course_info();
         $_SESSION['gradebook'] = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         $return = '';
 
@@ -6414,11 +6414,7 @@ class learnpath
             $file = $filepath.$row['path'];
 
             if ($fp = @ fopen($file, 'w')) {
-                $content = str_replace(
-                    api_get_path(WEB_COURSE_PATH),
-                    $_configuration['url_append'].'/courses/',
-                    $content
-                );
+                $content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/',$content);
 
                 // Change the path of mp3 to absolute.
                 // The first regexp deals with ../../../ urls.
@@ -6530,7 +6526,7 @@ class learnpath
      */
     public function display_edit_item($item_id)
     {
-        global $_course; // It will disappear.
+        $_course = api_get_course_info(); // It will disappear.
         $course_id = api_get_course_int_id();
         $return = '';
         if (is_numeric($item_id)) {
@@ -6640,7 +6636,7 @@ class learnpath
      */
     public function display_resources()
     {
-        global $_course; // TODO: Don't use globals.
+        $_course = api_get_course_info(); // TODO: Don't use globals.
         $course_code = api_get_course_id();
 
         //Get all the docs
@@ -6693,7 +6689,7 @@ class learnpath
      */
     public function display_document($id, $show_title = false, $iframe = true, $edit_link = false)
     {
-        global $_course; // It is temporary.
+        $_course = api_get_course_info(); // It is temporary.
         $course_id = api_get_course_int_id();
         $return = '';
         $tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
@@ -7587,7 +7583,7 @@ class learnpath
     public function display_item_form($item_type, $title = '', $action = 'add_item', $id = 0, $extra_info = 'new')
     {
         $course_id = api_get_course_int_id();
-        global $_course;
+        $_course = api_get_course_info();
         global $charset;
 
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
@@ -8116,7 +8112,7 @@ class learnpath
                                 $relative_path = $relative_path.'/';
                             }
                         } else {
-                            global $_course;
+                            $_course = api_get_course_info();
                             $result = $this->generate_lp_folder($_course);
                             $relative_path = api_substr($result['dir'], 1, strlen($result['dir']));
                             $relative_prefix = '../../';
@@ -8626,7 +8622,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         $course_code = api_get_course_id();
 
-        global $_course;
+        $_course = api_get_course_info();
         $return = '<div class="actions">';
 
         switch ($item_type) {
@@ -9283,7 +9279,7 @@ class learnpath
      */
     public function scorm_export()
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         $course_id = api_get_course_int_id();
         $links_to_create = null;

@@ -16,6 +16,20 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea {
     var $fck_editor;
 
     /**
+     * if true it show the fckeditor as usual if false it shows a textarea
+     * @var bool
+     */
+    public $richEditorStatus = true;
+
+    public function getRichEditorStatus() {
+        return $this->richEditorStatus;
+    }
+
+    public function setRichEditorStatus($status) {
+        $this->richEditorStatus = (bool)$status;
+    }
+
+    /**
      * Class constructor
      * @param   string  HTML editor name/id
      * @param   string  HTML editor  label
@@ -75,6 +89,13 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea {
      * @return string
      */
     function toHtml() {
+        if ($this->getRichEditorStatus() == false) {
+            //Fix rows and cols
+            //$this->_attributes['rows'] = 20;
+            //$this->_attributes['class'] = 20;
+            return parent::toHtml();
+        }
+
         $value = $this->getValue();
         if ($this->fullPage) {
             if (strlen(trim($value)) == 0) {

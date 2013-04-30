@@ -53,7 +53,7 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
     $sql = "SELECT id_session, sc.course_code, c.id FROM $course_table c INNER JOIN $session_rel_course_table sc ON sc.course_code = c.code";
     $result = iDatabase::query($sql);
     while ($row = Database::fetch_array($result)) {
-        $sql = "UPDATE $session_rel_course_table SET course_id = {$row['id']}
+        $sql = "UPDATE $session_rel_course_table SET c_id = {$row['id']}
                 WHERE course_code = '{$row['course_code']}' AND id_session = {$row['id_session']} ";
         $mainConnection->executeQuery($sql);
     }
@@ -62,7 +62,7 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
     $sql = "SELECT id_session, sc.course_code, c.id FROM $course_table c INNER JOIN $session_rel_course_rel_user_table sc ON sc.course_code = c.code";
     $result = iDatabase::query($sql);
     while ($row = Database::fetch_array($result)) {
-        $sql = "UPDATE $session_rel_course_rel_user_table SET course_id = {$row['id']}
+        $sql = "UPDATE $session_rel_course_rel_user_table SET c_id = {$row['id']}
                 WHERE course_code = '{$row['course_code']}' AND id_session = {$row['id_session']} ";
         $mainConnection->executeQuery($sql);
     }
@@ -107,7 +107,6 @@ $update = function($_configuration, $mainConnection, $dryRun, $output, $app) {
     $sql = "INSERT INTO $dbNameForm.course_field_options (field_id, option_value, option_display_text, option_order)
             VALUES ('$id', '0', '".get_lang('No')."', '2')";
     Database::query($sql);
-
 
     //Moving social group to class
     $output->writeln('Fixing social groups');

@@ -5,7 +5,6 @@ namespace Gedmo\Mapping;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Annotations\Reader;
 use Gedmo\Mapping\ExtensionMetadataFactory;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -46,7 +45,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
      * ExtensionMetadataFactory used to read the extension
      * metadata through the extension drivers
      *
-     * @var Gedmo\Mapping\ExtensionMetadataFactory
+     * @var ExtensionMetadataFactory
      */
     private $extensionMetadataFactory = array();
 
@@ -146,7 +145,7 @@ abstract class MappedEventSubscriber implements EventSubscriber
      * Get extended metadata mapping reader
      *
      * @param ObjectManager $objectManager
-     * @return Gedmo\Mapping\ExtensionMetadataFactory
+     * @return ExtensionMetadataFactory
      */
     public function getExtensionMetadataFactory(ObjectManager $objectManager)
     {

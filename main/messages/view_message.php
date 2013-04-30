@@ -78,7 +78,9 @@ if (!empty($message)) {
 }
 
 
-$tpl = new Template(get_lang('View'));
+$app['title'] = get_lang('View');
+$tpl = $app['template'];
+
 if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->assign('social_left_content', $social_left_content);
     $tpl->assign('social_right_content', $social_right_content);

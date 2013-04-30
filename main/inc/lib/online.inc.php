@@ -21,14 +21,19 @@ use \ChamiloSession as Session;
 
 class Online {
 
-    static function LoginCheck($uid) {
-        global $_course;
+    /**
+     * Checking user in DB
+     * @param int $uid
+     */
+    static function loginCheck($uid)
+    {
+        $_course = api_get_course_info();
         $uid = (int) $uid;
         $online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
         if (!empty($uid)) {
             $login_ip = '';
             if(!empty($_SERVER['REMOTE_ADDR'])) {
-              $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
+                $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
             }
 
             $login_date = api_get_utc_datetime();
@@ -44,7 +49,7 @@ class Online {
             } else {
                 $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '$session_id', '$access_url_id')";
             }
-            @Database::query($query);
+            Database::query($query);
         }
     }
 

@@ -15,11 +15,12 @@ $language_file = array('document', 'gradebook');
 
 require_once '../inc/global.inc.php';
 
+api_protect_course_script();
+
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '
-<script>
+$htmlHeadXtra[] = '<script>
 
 var hide_bar = function() {
     $("#template_col").hide();
@@ -293,10 +294,6 @@ if (!$is_certificate_mode) {
 } else {
     $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
-
-if (!$is_allowed_in_course) {
-    api_not_allowed(true);
-}
 if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(
     $_user['user_id'],
     Security::remove_XSS($dir),
@@ -305,8 +302,6 @@ if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_
 ) {
     api_not_allowed(true);
 }
-
-/*	Header */
 
 event_access_tool(TOOL_DOCUMENT);
 
@@ -691,6 +686,7 @@ if ($form->validate()) {
         Display :: display_footer();
     }
 } else {
+
     // Interbreadcrumb for the current directory root path
     // Copied from document.php
     $dir_array = explode('/', $dir);
@@ -709,7 +705,7 @@ if ($form->validate()) {
     }
 
     Display :: display_header($nameTools, "Doc");
-    //api_display_tool_title($nameTools);
+
     // actions
     echo '<div class="actions">';
 

@@ -1184,7 +1184,7 @@ button.next.disabled {
     border-radius: 10px;
     border-width: 1px;
     border-style: solid;
-    padding: 6px;
+    padding: 6px 12px;
 }
 
 .confirmation-message img, .error-message img, .normal-message img, .warning-message img {
@@ -2866,6 +2866,7 @@ div.admin_section h4 {
 
 /* Fixes questions list */
 .question_options {
+    margin-top:16px;
     min-height: 150px;
 }
 
@@ -2938,6 +2939,7 @@ div.admin_section h4 {
 #question_description {
     padding-left: 5px;
     padding-top: 10px;
+    padding-bottom:10px;
 }
 
 #question_score {
@@ -5146,6 +5148,43 @@ i.size-32.icon-new-work {
     height: 35px;
     margin-bottom: 15px;
 }
+
+
+.pagination .current a {
+    font-size: 120%;
+    cursor: default;
+}
+
+.pagination .before a, .pagination .before a:hover {
+    background-color: #028DC2;
+    color:white;
+}
+
+.pagination .after a, .pagination .after a:hover {
+    background-color: #F5F5F5;
+    color:#999999;
+}
+
+.pagination .remind a {
+    text-decoration: underline;
+}
+
+.pagination .not_answered a , .pagination .not_answered a:hover {
+    background-color: #f89406;
+}
+
+.pagination .answered a , .pagination .answered a:hover {
+    background-color: green;
+}
+
+.exercise_reminder_item {
+    font-size: 80%;
+}
+
+.exercise_reminder_item .radio, .exercise_reminder_item .checkbox {
+    padding-left: 0px;
+}
+
 
 .exercise_save_mini_message {
     margin-left: 5px;

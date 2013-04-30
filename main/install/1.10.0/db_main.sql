@@ -489,34 +489,31 @@ ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 --
 DROP TABLE IF EXISTS session_rel_course;
 CREATE TABLE IF NOT EXISTS session_rel_course (
+    id INT unsigned NOT NULL auto_increment,
     id_session INT unsigned NOT NULL default '0',
-    course_id INT NOT NULL default '0',
-    course_code char(40),
+    c_id INT NOT NULL default '0',
     nbr_users int unsigned NOT NULL default '0',
-    PRIMARY KEY  (id_session, course_id)
+    PRIMARY KEY(id)
 );
-
-ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (course_id);
-
-
+ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (c_id);
 
 --
 -- Table structure for table session_rel_course_rel_user
 --
 DROP TABLE IF EXISTS session_rel_course_rel_user;
 CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
-  id_session MEDIUMINT unsigned NOT NULL default '0',
-  course_id INT NOT NULL default '0',
-  course_code char(40),
+  id INT unsigned NOT NULL auto_increment,
+  id_session INT unsigned NOT NULL default '0',
+  c_id INT NOT NULL default '0',
   id_user int unsigned NOT NULL default '0',
   visibility int NOT NULL default 1,
   status int NOT NULL default 0,
   legal_agreement INTEGER DEFAULT 0,
-  PRIMARY KEY (id_session, course_id, id_user)
+  PRIMARY KEY (id)
 );
 
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
-ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (course_id);
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (c_id);
 
 
 
@@ -534,6 +531,7 @@ CREATE TABLE IF NOT EXISTS session_rel_user (
   PRIMARY KEY (id_session, id_user, relation_type)
 );
 
+ALTER TABLE session_rel_user ADD INDEX idx_session_rel_user_id_user_moved (id_user, moved_to);
 DROP TABLE IF EXISTS session_field;
 CREATE TABLE IF NOT EXISTS session_field (
     id  int NOT NULL auto_increment,
@@ -913,7 +911,7 @@ VALUES
 ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
 ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1),
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
-('chamilo_database_version', NULL, 'textfield', NULL, 'xxx','DatabaseVersion','', NULL, NULL, 0),
+('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0),
 ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
 ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1);
 
@@ -1266,11 +1264,7 @@ VALUES
 ('session_page_enabled', 'true', 'Yes'),
 ('session_page_enabled', 'false', 'No'),
 ('allow_teachers_to_create_sessions', 'true', 'Yes'),
-('allow_teachers_to_create_sessions', 'false', 'No'),
-('use_virtual_keyboard', 'true', 'Yes'),
-('use_virtual_keyboard', 'false', 'No'),
-('disable_copy_paste', 'true', 'Yes'),
-('disable_copy_paste', 'false', 'No');
+('allow_teachers_to_create_sessions', 'false', 'No');
 
 
 UNLOCK TABLES;
@@ -1574,11 +1568,11 @@ INSERT INTO access_url_rel_user VALUES(1, 1);
 
 DROP TABLE IF EXISTS access_url_rel_course;
 CREATE TABLE IF NOT EXISTS access_url_rel_course (
+  id int unsigned NOT NULL auto_increment,
   access_url_id int unsigned NOT NULL,
-  course_code char(40) NOT NULL,
-  PRIMARY KEY (access_url_id, course_code)
+  c_id int unsigned NOT NULL default 0,
+  PRIMARY KEY (id)
 );
-
 
 DROP TABLE IF EXISTS access_url_rel_session;
 CREATE TABLE IF NOT EXISTS access_url_rel_session (
@@ -2649,18 +2643,18 @@ CREATE TABLE IF NOT EXISTS user_rel_tag (
 );
 
 
---DROP TABLE IF EXISTS group_rel_group;
---CREATE TABLE IF NOT EXISTS group_rel_group (
+-- DROP TABLE IF EXISTS group_rel_group;
+-- CREATE TABLE IF NOT EXISTS group_rel_group (
 --	id int NOT NULL AUTO_INCREMENT,
 --	group_id int NOT NULL,
 --	subgroup_id int NOT NULL,
 --	relation_type int NOT NULL,
 --	PRIMARY KEY (id)
---);
+-- );
 
---ALTER TABLE group_rel_group ADD INDEX ( group_id );
---ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
---ALTER TABLE group_rel_group ADD INDEX ( relation_type );
+-- ALTER TABLE group_rel_group ADD INDEX ( group_id );
+-- ALTER TABLE group_rel_group ADD INDEX ( subgroup_id );
+-- ALTER TABLE group_rel_group ADD INDEX ( relation_type );
 
 DROP TABLE IF EXISTS announcement_rel_group;
 CREATE TABLE IF NOT EXISTS announcement_rel_group (
@@ -2669,6 +2663,7 @@ CREATE TABLE IF NOT EXISTS announcement_rel_group (
 	announcement_id int NOT NULL,
 	PRIMARY KEY (id)
 );
+
 --
 -- Table structure for table message attachment
 --
@@ -3132,7 +3127,7 @@ CREATE TABLE track_c_referers (
   id int NOT NULL auto_increment,
   referer varchar(255) NOT NULL default '',
   counter int NOT NULL default 0,
-  PRIMARY KEY  (id)
+  PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS track_e_access;
@@ -3140,12 +3135,12 @@ CREATE TABLE track_e_access (
   access_id int NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL default '',
+  c_id INT NOT NULL DEFAULT 0,
   access_tool varchar(30) default NULL,
   access_session_id int NOT NULL default 0,
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
-  KEY access_cours_code (access_cours_code)
+  KEY access_cid_user (c_id, access_user_id)
 );
 
 DROP TABLE IF EXISTS track_e_lastaccess;
@@ -3153,12 +3148,12 @@ CREATE TABLE track_e_lastaccess (
   access_id bigint NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL,
+  c_id INT NOT NULL DEFAULT 0,
   access_tool varchar(30) default NULL,
   access_session_id int unsigned default NULL,
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
-  KEY access_cours_code (access_cours_code),
+  KEY access_cours_code (c_id),
   KEY access_session_id (access_session_id)
 );
 
@@ -3173,7 +3168,7 @@ CREATE TABLE track_e_default (
   default_value text NOT NULL,
   c_id int unsigned default NULL,
   session_id int unsigned default 0,
-  PRIMARY KEY  (default_id)
+  PRIMARY KEY (default_id)
 );
 
 DROP TABLE IF EXISTS track_e_downloads;
@@ -3181,12 +3176,10 @@ CREATE TABLE track_e_downloads (
   down_id int NOT NULL auto_increment,
   down_user_id int unsigned default NULL,
   down_date datetime NOT NULL default '0000-00-00 00:00:00',
-  down_cours_id varchar(40) NOT NULL default '',
+  c_id int NOT NULL default 0,
   down_doc_path varchar(255) NOT NULL default '',
   down_session_id INT NOT NULL DEFAULT 0,
-  PRIMARY KEY  (down_id),
-  KEY down_user_id (down_user_id),
-  KEY down_cours_id (down_cours_id)
+  PRIMARY KEY  (down_id)
 );
 
 DROP TABLE IF EXISTS track_e_exercices;
@@ -3194,13 +3187,11 @@ CREATE TABLE track_e_exercices (
   exe_id int NOT NULL auto_increment,
   exe_user_id int unsigned default NULL,
   exe_date datetime NOT NULL default '0000-00-00 00:00:00',
-  exe_cours_id varchar(40) NOT NULL default '',
   exe_exo_id int unsigned NOT NULL default 0,
   exe_result float(6,2) NOT NULL default 0,
   exe_weighting float(6,2) NOT NULL default 0,
-  PRIMARY KEY  (exe_id),
-  KEY exe_user_id (exe_user_id),
-  KEY exe_cours_id (exe_cours_id)
+  c_id INT unsigned NOT NULL default 0,
+  PRIMARY KEY  (exe_id)
 );
 
 ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
@@ -3225,12 +3216,13 @@ CREATE TABLE track_e_attempt (
     answer text NOT NULL,
     teacher_comment text NOT NULL,
     marks float(6,2) NOT NULL default 0,
-    course_code varchar(40) NOT NULL default '',
     position int default 0,
     tms datetime NOT NULL default '0000-00-00 00:00:00',
     session_id INT NOT NULL DEFAULT 0,
+    c_id INT unsigned NOT NULL default 0,
     filename VARCHAR(255) DEFAULT NULL
 );
+
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt ADD INDEX (user_id);
 ALTER TABLE track_e_attempt ADD INDEX (question_id);
@@ -3257,11 +3249,9 @@ CREATE TABLE track_e_hotpotatoes (
     exe_name VARCHAR( 255 ) NOT NULL ,
     exe_user_id int unsigned DEFAULT NULL ,
     exe_date DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL ,
-    exe_cours_id varchar(40) NOT NULL ,
+    c_id INT unsigned NOT NULL default 0,
     exe_result smallint default 0 NOT NULL ,
-    exe_weighting smallint default 0 NOT NULL,
-    KEY exe_user_id (exe_user_id),
-    KEY exe_cours_id (exe_cours_id)
+    exe_weighting smallint default 0 NOT NULL
 );
 
 DROP TABLE IF EXISTS track_e_links;
@@ -3269,11 +3259,10 @@ CREATE TABLE track_e_links (
   links_id int NOT NULL auto_increment,
   links_user_id int unsigned default NULL,
   links_date datetime NOT NULL default '0000-00-00 00:00:00',
-  links_cours_id varchar(40) NOT NULL default '' ,
+  c_id INT NOT NULL DEFAULT 0,
   links_link_id int NOT NULL default 0,
   links_session_id INT NOT NULL DEFAULT 0,
-  PRIMARY KEY  (links_id),
-  KEY links_cours_id (links_cours_id),
+  PRIMARY KEY (links_id),
   KEY links_user_id (links_user_id)
 );
 
@@ -3284,7 +3273,7 @@ CREATE TABLE track_e_login (
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
   login_ip varchar(39) NOT NULL default '',
   logout_date datetime NULL default NULL,
-  PRIMARY KEY  (login_id),
+  PRIMARY KEY (login_id),
   KEY login_user_id (login_user_id)
 );
 
@@ -3340,14 +3329,13 @@ DROP TABLE IF EXISTS track_e_hotspot;
 CREATE TABLE track_e_hotspot (
   hotspot_id int NOT NULL auto_increment,
   hotspot_user_id int NOT NULL,
-  hotspot_course_code varchar(50) NOT NULL,
   hotspot_exe_id int NOT NULL,
   hotspot_question_id int NOT NULL,
   hotspot_answer_id int NOT NULL,
   hotspot_correct tinyint(3) unsigned NOT NULL,
   hotspot_coordinate text NOT NULL,
-  PRIMARY KEY  (hotspot_id),
-  KEY hotspot_course_code (hotspot_course_code),
+  c_id int NOT NULL default 0,
+  PRIMARY KEY (hotspot_id),
   KEY hotspot_user_id (hotspot_user_id),
   KEY hotspot_exe_id (hotspot_exe_id),
   KEY hotspot_question_id (hotspot_question_id)
@@ -3466,4 +3454,4 @@ ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_i
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.862202a' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.6a12538' WHERE variable = 'chamilo_database_version';

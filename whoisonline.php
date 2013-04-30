@@ -169,7 +169,8 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
     exit;
 }
 
-$tpl = new Template(get_lang('UsersOnLineList'));
+$app['title'] = get_lang('UsersOnLineList');
+$tpl = $app['template'];
 
 if (api_get_setting('allow_social_tool') == 'true' && !api_is_anonymous()) {
     $tpl->set_help('Groups');

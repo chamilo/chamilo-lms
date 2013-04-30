@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Chamilo phpdig/search.php
  * 2006/12/14
@@ -26,8 +26,8 @@ If you modify code and redistribute, you may ADD your copyright to this notice.
 
 // name of the language file that needs to be included
 $language_file = "md_mix";
-include('../../../main/inc/global.inc.php');
-if (! $is_allowed_in_course) api_not_allowed();
+require_once '../../../main/inc/global.inc.php';
+api_protect_course_script();
 
 // start of part copied (with some changes) from standard PhpDig search.php
 $relative_script_path = '.';

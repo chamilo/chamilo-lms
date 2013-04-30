@@ -23,6 +23,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\Driver;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
+use Doctrine\ORM\Mapping\Driver\StaticPHPDriver;
 
 /**
  * Doctrine ORM Pimple Service Provider.
@@ -134,6 +135,10 @@ class DoctrineOrmServiceProvider
                             break;
                         case 'xml':
                             $driver = new XmlDriver($entity['path']);
+                            $chain->addDriver($driver, $entity['namespace']);
+                            break;
+                        case 'php':
+                            $driver = new StaticPHPDriver($entity['path']);
                             $chain->addDriver($driver, $entity['namespace']);
                             break;
                         default:

@@ -34,7 +34,7 @@ if ($path != '/') {
 	$folder = '/';
 }
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
-	
+
 // Including the functions for the slideshow
 require_once 'slideshow.inc.php';
 
@@ -151,11 +151,11 @@ echo '<br />';
 // If we come from slideshowoptions.php we sessionize (new word !!! ;-) the options
 if (isset($_POST['Submit'])) {
 	// We come from slideshowoptions.php
-	
+
 	//$_SESSION["auto_image_resizing"]=Security::remove_XSS($_POST['auto_radio_resizing']);
-	
+
 	$_SESSION["image_resizing"] = Security::remove_XSS($_POST['radio_resizing']);
-	
+
 	if ($_POST['radio_resizing'] == "resizing" && $_POST['width'] != '' && $_POST['height'] != '') {
 		//echo "resizing";
 		$_SESSION["image_resizing_width"] = Security::remove_XSS($_POST['width']);
@@ -178,34 +178,33 @@ if (isset($_SESSION["image_resizing"]) &&  $_SESSION["image_resizing"] == "resiz
 // This is for viewing all the images in the slideshow as thumbnails.
 $image_tag = array ();
 if ($slide_id == 'all') {
-	
-	// Config for make thumbnails	
+
+	// Config for make thumbnails
 	$allowed_thumbnail_types = array('jpg','jpeg','gif','png');
 	$max_thumbnail_width     = 100;
 	$max_thumbnail_height    = 100;
 	$png_compression	     = 0;//0(none)-9
 	$jpg_quality  	         = 75;//from 0 to 100 (default is 75). More quality less compression
-	
-	$directory_thumbnails=$sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
-	
+
+	$directory_thumbnails = $sys_course_path.$_course['path'].'/document'.$folder.'.thumbs/';
+
 	//Other parameters only for show tumbnails
 	$row_items 			     = 4;//only in slideshow.php
 	$number_image 			 = 7;//num icons cols to show
 	$thumbnail_width_frame=$max_thumbnail_width;//optional $max_thumbnail_width+x
 	$thumbnail_height_frame=$max_thumbnail_height;
-	
+
 	// Create the template_thumbnails folder (if no exist)
-	
-	
+
 	if (!file_exists($directory_thumbnails)) {
 		@mkdir($directory_thumbnails, api_get_permissions_for_new_directories());
     }
-	
+
 	/*
 	//
 	//disabled by now, because automatic mode is heavy for server (scandir), only manual
 	//
-	
+
 	// Delete orphaned thumbnails
 	$directory_images=$sys_course_path.$_course['path'].'/document'.$folder;
 	$all_thumbnails  = scandir($directory_thumbnails);
@@ -220,7 +219,7 @@ if ($slide_id == 'all') {
 		}
 	}
 	*/
-			  
+
 	// check files and thumbnails
 	if (is_array($image_files_only)) {
 
@@ -232,11 +231,11 @@ if ($slide_id == 'all') {
 				//check thumbnail
 				$imagetype = explode(".", $image);
 				$imagetype = strtolower($imagetype[count($imagetype)-1]);//or check $imagetype = image_type_to_extension(exif_imagetype($image), false);
-				
+
 				if(in_array($imagetype,$allowed_thumbnail_types)) {
 					if (!file_exists($image_thumbnail)){
 						$original_image_size = api_getimagesize($image);//run each once we view thumbnails is too heavy, then need move into  !file_exists($image_thumbnail, and only run when haven't the thumbnail
-						
+
 						switch($imagetype) {
 							case 'gif':
 								$source_img = imagecreatefromgif($image);
@@ -251,22 +250,22 @@ if ($slide_id == 'all') {
 								$source_img = imagecreatefrompng($image);
 								break;
 						}
-						
+
 						$new_thumbnail_size = api_calculate_image_size($original_image_size['width'], $original_image_size['height'], $max_thumbnail_width, $max_thumbnail_height);
 						if($max_thumbnail_width>$original_image_size['width'] && $max_thumbnail_height>$original_image_size['height']){
 							$new_thumbnail_size['width']=$original_image_size['width'];
 							$new_thumbnail_size['height']=$original_image_size['height'];
 						}
-						
+
 						$crop = imagecreatetruecolor($new_thumbnail_size['width'], $new_thumbnail_size['height']);
-						
+
 						// preserve transparency
 						if($imagetype == "png"){
 							imagesavealpha($crop, true);
 							$color = imagecolorallocatealpha($crop,0x00,0x00,0x00,127);
-							imagefill($crop, 0, 0, $color); 
+							imagefill($crop, 0, 0, $color);
 						}
-						
+
 						if ($imagetype == "gif") {
 							$transindex = imagecolortransparent($source_img);
                             $palletsize = imagecolorstotal($source_img);
@@ -296,20 +295,20 @@ if ($slide_id == 'all') {
 								imagepng($crop,$image_thumbnail,$png_compression);
 								break;
 						}
-		
+
 						//clean memory
-						imagedestroy($crop);					
+						imagedestroy($crop);
 					}//end !exist thumbnail
-					
+
 					//show thumbnail and link
-					
+
 					$one_image_thumbnail_file='.thumbs/.'.$one_image_file;//get path thumbnail
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_thumbnail_file : $path.$one_image_thumbnail_file;
 					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" title="'.$one_image_file.'">';
 				}
 				else{
 					//if images aren't support by gd (not gif, jpg, jpeg, png)
-					
+
 					if ($imagetype=="bmp"){
 						$original_image_size = getimagesize($image);// use getimagesize instead api_getimagesize($image); becasuse api_getimagesize doesn't support bmp files. Put here for each show, only for a few bmp files isn't heavy
 						if($max_thumbnail_width<$original_image_size[0] || $max_thumbnail_height<$original_image_size[1]){
@@ -329,13 +328,13 @@ if ($slide_id == 'all') {
 					}
 
 					$doc_url = ($path && $path !== '/') ? $path.'/'.$one_image_file : $path.$one_image_file;
-					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';	
-					
+					$image_tag[] = '<img src="download.php?doc_url='.$doc_url.'" border="0" width="'.$image_width.'" height="'.$image_height.'" title="'.$one_image_file.'">';
+
 				}//end allowed image types
 			}//end if exist file image
 		}//end foreach
 	}//end image files only
-	
+
 	// Creating the table
 	$html_table = '';
 	echo '<table align="center" width="760px" border="0" cellspacing="10">';
@@ -350,7 +349,7 @@ if ($slide_id == 'all') {
 				echo '<td>';
 				//TODO:move styles to css files and center image vertical
 				?>
-				
+
 				<style>
 				div.thumbnail:hover {
 				  border-color: #0088cc;
@@ -360,8 +359,8 @@ if ($slide_id == 'all') {
 				  box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
 				}
 				</style>
-	
-				<?php			
+
+				<?php
 				echo '<div class="thumbnail" style="text-align: center; margin:5px; padding:9px; height:'.$thumbnail_height_frame.'px; width:'.$thumbnail_width_frame.'px">';
 				echo '<a href="slideshow.php?slide_id='.$p.'&curdirpath='.$pathurl.'">'.$image_tag[$p].'</a>';
 				echo '</div>';
@@ -371,7 +370,7 @@ if ($slide_id == 'all') {
 		}
 		echo '</tr>';
 	}
-	echo '</table>';	
+	echo '</table>';
 
 }//end slide==all
 
@@ -388,7 +387,7 @@ if ($slide_id != 'all') {
 
 		$image_height = $image_height_width[0];
 		$image_width = $image_height_width[1];
-	
+
 		$height_width_tags = null;
 		if (isset($_SESSION['image_resizing']) && $_SESSION['image_resizing'] == 'resizing') {
 			$height_width_tags = 'width="'.$image_width.'" height="'.$image_height.'"';
@@ -423,17 +422,17 @@ if ($slide_id != 'all') {
         }
 
 		list($width, $height) = getimagesize($image);
-		
+
 		//auto resize
 		if($_SESSION["image_resizing"]!="noresizing" && $_SESSION["image_resizing"]!="resizing" ){
 		?>
-        
+
 		<script type="text/javascript">
 			var initial_width='<?php echo $width; ?>';
 			var initial_height='<?php echo $height; ?>';
 			var height = window.innerHeight -320;
 			var width = window.innerWidth -360;
-			
+
 			if (initial_height>height || initial_width>width) {
 				start_width=width;
 				start_height=height;
@@ -442,16 +441,16 @@ if ($slide_id != 'all') {
 				start_width=initial_width;
 				start_height=initial_height;
 			}
-			
+
 			document.write ('<img id="image"  src="<?php echo  'download.php?doc_url='.$path.'/'.$image_files_only[$slide]; ?>" width="'+start_width+'" height="'+start_height+'"  border="0"  alt="<?php echo $image_files_only[$slide] ;?>">');
 
 			function resizeImage() {
-				
+
 				var resize_factor_width = width / initial_width;
                 var resize_factor_height = height / initial_height;
                 var delta_width = width - initial_width * resize_factor_height;
     			var delta_height = height - initial_height * resize_factor_width;
-    
+
 				if (delta_width > delta_height) {
 					width = Math.ceil(initial_width * resize_factor_height);
 					height= Math.ceil(initial_height * resize_factor_height);
@@ -464,13 +463,13 @@ if ($slide_id != 'all') {
 					width = Math.ceil(width);
 					height = Math.ceil(height);
 				}
-				
+
 				document.getElementById('image').style.height = height +"px";
 				document.getElementById('image').style.width = width +"px";
 				document.getElementById('td_image').style.background='none';
 				document.getElementById('image').style.visibility='visible';
 			};
-			
+
 			 if (initial_height>height || initial_width>width) {
 				document.getElementById('image').style.visibility='hidden';
 				document.getElementById('td_image').style.background='url(../img/loadingAnimation.gif) center no-repeat';
@@ -482,10 +481,10 @@ if ($slide_id != 'all') {
     <?php
 		}
 		else{
-		
+
 			echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags.">";
 		}
-		
+
 		echo '</a>';
 		echo '</td>';
 		echo '</tr>';

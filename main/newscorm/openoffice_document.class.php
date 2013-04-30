@@ -40,7 +40,7 @@ abstract class OpenofficeDocument extends learnpath
 
     public function convert_document($file, $action_after_conversion = 'make_lp')
     {
-        global $_course, $_user, $_configuration;
+        $_course = api_get_course_info();
         $this->file_name = pathinfo($file['name'], PATHINFO_FILENAME);
         // Create the directory
         $result = $this->generate_lp_folder($_course, $this->file_name);

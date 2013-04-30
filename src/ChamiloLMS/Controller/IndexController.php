@@ -7,17 +7,21 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-
+use Symfony\Component\Finder\Finder;
 /**
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class IndexController// extends Controller
+class IndexController extends CommonController
 {
     public $section;
-    public $language_files = array('courses', 'index', 'admin');
+    public $languageFiles = array('courses', 'index', 'admin');
 
-    function logoutAction(Application $app)
+    /**
+     * Logouts a user
+     * @param Application $app
+     */
+    public function logoutAction(Application $app)
     {
         $userId = api_get_user_id();
         \Online::logout($userId, true);
@@ -31,6 +35,15 @@ class IndexController// extends Controller
      */
     public function indexAction(Application $app)
     {
+        $this->cidReset();
+        /*
+        var_dump($app['request']->getBaseUrl());
+        var_dump($app['request']->getHttpHost());
+        var_dump($app['request']->getRequestUri());
+        */
+
+        $loginError = $app['request']->get('error');
+
         $extraJS = array();
         //@todo improve this JS includes should be added using twig
         $extraJS[] = api_get_jquery_libraries_js(array('bxslider'));
@@ -55,7 +68,6 @@ class IndexController// extends Controller
         // Testing translation using translator
         //echo $app['translator']->trans('Wiki Search Results');
         //echo $app['translator']->trans('Profile');
-
 
         //$token = $app['security']->getToken();
 
@@ -83,7 +95,7 @@ class IndexController// extends Controller
             unset($_SESSION['term_and_condition']);
         }
 
-        //If we are not logged in and customapages activated
+        // If we are not logged in and customapages activated
         if (!api_get_user_id() && \CustomPages::enabled()) {
             $loggedOut = $request->get('loggedout');
             if ($loggedOut) {
@@ -93,12 +105,11 @@ class IndexController// extends Controller
             }
         }
 
-
         if (api_get_setting('display_categories_on_homepage') == 'true') {
             $app['template']->assign('course_category_block', $app['page_controller']->return_courses_in_categories());
         }
 
-        // Facebook connexion, if activated
+        // Facebook connection, if activated
         if (api_is_facebook_auth_activated() && !api_get_user_id()) {
             facebook_connect();
         }
@@ -116,7 +127,7 @@ class IndexController// extends Controller
             }
         }
 
-        //Hot courses & announcements
+        // Hot courses & announcements
         $hotCourses         = null;
         $announcementsBlock = null;
 
@@ -131,10 +142,10 @@ class IndexController// extends Controller
         $app['template']->assign('hot_courses', $hotCourses);
         $app['template']->assign('announcements_block', $announcementsBlock);
 
-        //Homepage
+        // Homepage
         $app['template']->assign('home_page_block', $app['page_controller']->return_home_page());
 
-        //Navigation links
+        // Navigation links
         $navLinks = $app['template']->returnNavigationLinks();
 
         $app['template']->assign('navigation_course_links', $navLinks);
@@ -147,10 +158,33 @@ class IndexController// extends Controller
             $app['page_controller']->return_skills_links();
         }
 
+        if (!empty($loginError)) {
+            $app['template']->assign('login_failed', $this->handle_login_failed($loginError));
+        }
+
         $response = $app['template']->render_layout('layout_2_col.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
         return new Response($response, 200, array());
+    }
+
+    public function loginAction(Application $app)
+    {
+        /*$username = $app['request']->get('login');
+        $password = $app['request']->get('password');
+
+        $user_table = \Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "SELECT * FROM $user_table WHERE username = ?";
+        $userInfo = $app['db']->fetchAssoc($sql, array($username));
+
+        if ($userInfo) {
+            if ($userInfo['auth_source'] == PLATFORM_AUTH_SOURCE) {
+                if ($password == $userInfo['password'] AND trim($username) == $userInfo['username']) {
+                    unset($userInfo['password']);
+
+                }
+            }
+        }*/
     }
 
     /**
@@ -166,8 +200,8 @@ class IndexController// extends Controller
         if (!empty($_POST['submitAuth'])) {
             // The user has been already authenticated, we are now to find the last login of the user.
             if (!empty($this->user_id)) {
-                $track_login_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-                $sql_last_login    = "SELECT login_date
+                $track_login_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $sql_last_login = "SELECT login_date
                                     FROM $track_login_table
                                     WHERE login_user_id = '".$this->user_id."'
                                     ORDER BY login_date DESC LIMIT 1";
@@ -182,7 +216,7 @@ class IndexController// extends Controller
                 Database::free_result($result_last_login);
 
                 if (api_is_platform_admin()) {
-                    // decode all open event informations and fill the track_c_* tables
+                    // Decode all open event informations and fill the track_c_* tables
                     include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
                     decodeOpenInfos();
                 }
@@ -261,5 +295,129 @@ class IndexController// extends Controller
             $html .= "<script> $(function(){ $('.virtualkey').keyboard();}); </script>";
         }
         return $html;
+    }
+
+    /**
+     * @todo move all this getDocument* Actions into another controller
+     * @param Application $app
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getDocumentTemplateAction(Application $app)
+    {
+        try {
+            $file = $app['request']->get('file');
+            $file = $app['chamilo.filesystem']->get('document_templates/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+    /**
+     * Gets a document from the data/courses/MATHS/document/file.jpg to the user
+     * @todo check permissions
+     * @param Application $app
+     * @param $courseCode
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getDocumentAction(Application $app, $courseCode)
+    {
+        try {
+            $filePath = $app['request']->get('file');
+            $file = $app['chamilo.filesystem']->getCourseDocument($courseCode, $filePath);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+    /**
+     * Gets a document from the data/default_platform_document/* folder
+     * @param Application $app
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getDefaultPlatformDocumentAction(Application $app)
+    {
+        try {
+            $file = $app['request']->get('file');
+            $file = $app['chamilo.filesystem']->get('default_platform_document/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+    /**
+     * @param Application $app
+     * @param $groupId
+     * @param $file
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getGroupFile(Application $app, $groupId, $file)
+    {
+        try {
+            $file = $app['chamilo.filesystem']->get('upload/groups/'.$groupId.'/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+    /**
+     * @param Application $app
+     * @param $file
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getUserFile(Application $app)
+    {
+        try {
+            $file = $app['request']->get('file');
+            $file = $app['chamilo.filesystem']->get('upload/users/'.$file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+
+    /**
+     * Reacts on a failed login.
+     * Displays an explanation with a link to the registration form.
+     *
+     * @todo use twig template to prompt errors + move this into a helper
+     */
+    function handle_login_failed($error)
+    {
+        $message = get_lang('InvalidId');
+
+        if (!isset($error)) {
+            if (api_is_self_registration_allowed()) {
+                $message = get_lang('InvalidForSelfRegistration');
+            }
+        } else {
+            switch ($error) {
+                case '':
+                    if (api_is_self_registration_allowed()) {
+                        $message = get_lang('InvalidForSelfRegistration');
+                    }
+                    break;
+                case 'account_expired':
+                    $message = get_lang('AccountExpired');
+                    break;
+                case 'account_inactive':
+                    $message = get_lang('AccountInactive');
+                    break;
+                case 'user_password_incorrect':
+                    $message = get_lang('InvalidId');
+                    break;
+                case 'access_url_inactive':
+                    $message = get_lang('AccountURLInactive');
+                    break;
+                case 'unrecognize_sso_origin':
+                    //$message = get_lang('SSOError');
+                    break;
+            }
+        }
+        return \Display::return_message($message, 'error');
     }
 }

@@ -280,7 +280,7 @@ class Agenda
                         $my_session_id = $session_item['session_id'];
                         if (!empty($my_courses)) {
                             foreach ($my_courses as $course_item) {
-                                $course_info = api_get_course_info($course_item['code']);
+                                $course_info = api_get_course_info_by_id($course_item['id']);
                                 $this->get_course_events($start, $end, $course_info, 0, $my_session_id);
                             }
                         }

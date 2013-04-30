@@ -17,7 +17,7 @@ require_once dirname(__FILE__).'/../gradebook_functions.inc.php';
  * @package chamilo.gradebook
  */
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#evaluation_title").focus();
 }
@@ -246,8 +246,8 @@ class EvalForm extends FormValidator
                </table>
             </form>'
         );
-
-        $tblusers = get_users_in_course($this->evaluation_object->get_course_code());
+        $courseInfo = api_get_course_info($this->evaluation_object->get_course_code());
+        $tblusers = get_users_in_course($courseInfo['real_id']);
         $nr_users = 0;
         //extra field for check on maxvalue
         $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());

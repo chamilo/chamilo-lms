@@ -197,7 +197,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
  */
 function show_add_forum_form($inputvalues = array(), $lp_id)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     // Initialize the object.
@@ -480,7 +480,7 @@ function show_edit_forumcategory_form($inputvalues = array())
  */
 function store_forumcategory($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
     global $_user;
 
     $course_id = api_get_course_int_id();
@@ -546,7 +546,7 @@ function store_forumcategory($values)
  */
 function store_forum($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
@@ -735,7 +735,7 @@ function store_forum($values)
  */
 function delete_forum_forumcategory_thread($content, $id)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_forums = Database::get_course_table(TABLE_FORUM);
     $table_forums_post = Database::get_course_table(TABLE_FORUM_POST);
@@ -1057,7 +1057,7 @@ function display_up_down_icon($content, $id, $list)
  */
 function change_visibility($content, $id, $target_visibility)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $constants = array('forumcategory' => TOOL_FORUM_CATEGORY, 'forum' => TOOL_FORUM, 'thread' => TOOL_FORUM_THREAD);
     api_item_property_update(
         $_course,
@@ -1843,14 +1843,15 @@ function get_thread_users_details($thread_id)
 
     } else {
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, thread_id
-                  FROM $t_posts , $t_users user, $t_course_user course_user
-                  WHERE poster_id = user.user_id
-                  AND user.user_id = course_user.user_id
-                  AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                  AND thread_id = '".Database::escape_string($thread_id)."'
-                  AND course_user.status NOT IN('1') AND
-                  c_id = $course_id AND
-                  course_code = '".$course_code."' $orderby";
+                FROM $t_posts, $t_users user, $t_course_user course_user
+                WHERE   poster_id = user.user_id AND
+                        course_user.c_id = $t_posts.c_id
+                        user.user_id = course_user.user_id AND
+                        course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                        thread_id = '".Database::escape_string($thread_id)."' AND
+                        course_user.status NOT IN('1') AND
+                        course_user.c_id = $course_id
+                $orderby";
     }
     $result = Database::query($sql);
 
@@ -1905,22 +1906,22 @@ function get_thread_users_qualify($thread_id)
                   $orderby ";
     } else {
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.user_id,qualify.qualify
-                                FROM $t_posts post,
-                                     $t_qualify qualify,
-                                     $t_users user,
-                                     $t_course_user course_user
-                                WHERE
-                                     post.poster_id = user.user_id
-                                     AND post.poster_id = qualify.user_id
-                                     AND user.user_id = course_user.user_id
-                                     AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                                     AND qualify.thread_id = '".Database::escape_string($thread_id)."'
-                                     AND post.thread_id = '".Database::escape_string($thread_id)."'
-                                     AND course_user.status not in('1')
-                                     AND course_code = '".$course_code."' AND
-                                     qualify.c_id = $course_id AND
-                                     post.c_id = $course_id
-                                     $orderby ";
+            FROM $t_posts post,
+                 $t_qualify qualify,
+                 $t_users user,
+                 $t_course_user course_user
+            WHERE
+                 post.poster_id = user.user_id
+                 AND post.poster_id = qualify.user_id
+                 AND user.user_id = course_user.user_id
+                 AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                 AND qualify.thread_id = '".Database::escape_string($thread_id)."'
+                 AND post.thread_id = '".Database::escape_string($thread_id)."'
+                 AND course_user.status not in('1')
+                 AND course_user.c_id = $course_id AND
+                 qualify.c_id = $course_id AND
+                 post.c_id = $course_id
+                 $orderby ";
     }
     $result = Database::query($sql);
 
@@ -1973,23 +1974,23 @@ function get_thread_users_not_qualify($thread_id)
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
                   FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course
                   WHERE poster_id = user.user_id
-                  AND user.user_id NOT IN (".$cad.")
-                  AND user.user_id = session_rel_user_rel_course.id_user
-                  AND session_rel_user_rel_course.status<>'2'
-                  AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
-                  AND post.thread_id = '".Database::escape_string($thread_id)."'
-                  AND id_session = '".api_get_session_id()."'
-                  AND course_code = '".$course_code."' AND post.c_id = $course_id $orderby ";
+                      AND user.user_id NOT IN (".$cad.")
+                      AND user.user_id = session_rel_user_rel_course.id_user
+                      AND session_rel_user_rel_course.status<>'2'
+                      AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
+                      AND post.thread_id = '".Database::escape_string($thread_id)."'
+                      AND id_session = '".api_get_session_id()."'
+                      AND course_code = '".$course_code."' AND post.c_id = $course_id $orderby ";
     } else {
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
-                  FROM $t_posts post, $t_users user,$t_course_user course_user
-                  WHERE post.poster_id = user.user_id
+                FROM $t_posts post, $t_users user,$t_course_user course_user
+                WHERE post.poster_id = user.user_id
                   AND user.user_id NOT IN (".$cad.")
                   AND user.user_id = course_user.user_id
                   AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                   AND post.thread_id = '".Database::escape_string($thread_id)."'
                   AND course_user.status not in('1')
-                  AND course_code = '".$course_code."' AND post.c_id = $course_id  $orderby";
+                  AND course_user.c_id = $course_id AND post.c_id = $course_id  $orderby";
     }
     $result = Database::query($sql);
 
@@ -2090,7 +2091,7 @@ function count_number_of_forums_in_category($cat_id)
 function store_thread($values)
 {
     global $_user;
-    global $_course;
+    $_course = api_get_course_info();
     global $current_forum;
     global $origin;
 
@@ -2703,7 +2704,7 @@ function current_qualify_of_thread($thread_id, $session_id)
  */
 function store_reply($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
     global $current_forum;
     global $origin;
 
@@ -3271,7 +3272,7 @@ function forum_not_allowed_here()
 function get_whats_new()
 {
     global $_user;
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $tracking_last_tool_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
@@ -3287,11 +3288,7 @@ function get_whats_new()
 
     if (!$_SESSION['last_forum_access']) {
         $sql = "SELECT * FROM ".$tracking_last_tool_access."
-                WHERE access_user_id='".Database::escape_string(
-            $_user['user_id']
-        )."' AND access_cours_code='".Database::escape_string(
-            $_course['sysCode']
-        )."' AND access_tool='".Database::escape_string($tool)."'";
+                WHERE access_user_id='".Database::escape_string($_user['user_id'])."' AND c_id='".$course_id."' AND access_tool='".Database::escape_string($tool)."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $_SESSION['last_forum_access'] = $row['access_date'];
@@ -3614,7 +3611,7 @@ function handle_mail_cue($content, $id)
  */
 function send_mail($user_info = array(), $thread_information = array())
 {
-    global $_course;
+    $_course = api_get_course_info();
     $user_id = api_get_user_id();
     $subject = get_lang('NewForumPost').' - '.$_course['official_code'];
     if (isset($thread_information) && is_array($thread_information)) {
@@ -3769,7 +3766,7 @@ function move_post_form()
  */
 function store_move_post($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -3898,7 +3895,7 @@ function store_move_post($values)
  */
 function store_move_thread($values)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -4143,7 +4140,7 @@ function search_link()
  */
 function add_forum_attachment_file($file_comment, $last_id)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $agenda_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 
@@ -4207,7 +4204,7 @@ function add_forum_attachment_file($file_comment, $last_id)
  */
 function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $table_forum_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
@@ -4292,7 +4289,7 @@ function get_attachment($post_id)
  */
 function delete_attachment($post_id, $id_attach = 0)
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     $forum_table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
@@ -4562,7 +4559,8 @@ function get_notifications($content, $id)
  */
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
-    global $_course, $_user;
+    global $_user;
+    $_course = api_get_course_info();
 
     // The content of the mail
     $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq(

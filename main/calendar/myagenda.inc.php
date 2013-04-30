@@ -549,28 +549,26 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
  */
 
 function get_all_courses_of_user() {
-        $TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_session_course     = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_course_user= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session                    = Database :: get_main_table(TABLE_MAIN_SESSION);
-        $sql_select_courses = "SELECT c.code k, c.visual_code  vc, c.title i, c.tutor_name t,
-                                      c.db_name db, c.directory dir, '5' as status
-                                FROM $TABLECOURS c, $tbl_session_course_user srcu
-                                WHERE srcu.id_user='".api_get_user_id()."'
-                                AND c.code=srcu.course_code
-                                UNION
-                               SELECT c.code k, c.visual_code  vc, c.title i, c.tutor_name t,
-                                      c.db_name db, c.directory dir, cru.status status
-                                FROM $TABLECOURS c, $TABLECOURSUSER cru
-                                WHERE cru.user_id='".api_get_user_id()."'
-                                AND c.code=cru.course_code";
-        $result = Database::query($sql_select_courses);
-        while ($row = Database::fetch_array($result)) {
-            // we only need the database name of the course
-            $courses[] = array ("db" => $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status']);
-        }
-        return $courses;
+    $TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+    $tbl_session_course_user= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $sql_select_courses = "SELECT c.code k, c.visual_code  vc, c.title i, c.tutor_name t,
+                                  c.db_name db, c.directory dir, '5' as status
+                            FROM $TABLECOURS c, $tbl_session_course_user srcu
+                            WHERE srcu.id_user='".api_get_user_id()."'
+                            AND c.id = srcu.c_id
+                            UNION
+                           SELECT c.code k, c.visual_code  vc, c.title i, c.tutor_name t,
+                                  c.db_name db, c.directory dir, cru.status status
+                            FROM $TABLECOURS c, $TABLECOURSUSER cru
+                            WHERE cru.user_id='".api_get_user_id()."'
+                            AND c.id = cru.c_id";
+    $result = Database::query($sql_select_courses);
+    while ($row = Database::fetch_array($result)) {
+        // we only need the database name of the course
+        $courses[] = array ("db" => $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status']);
+    }
+    return $courses;
  }
 
 
@@ -584,14 +582,13 @@ function get_courses_of_user() {
 	$TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql_select_courses = "SELECT course.code k, course.visual_code  vc,
-									course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status
-			                        FROM    $TABLECOURS       course,
-											$TABLECOURSUSER   course_rel_user
-			                        WHERE course.code = course_rel_user.course_code
-			                        AND   course_rel_user.user_id = '".api_get_user_id()."'";
+                            course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status
+                            FROM    $TABLECOURS       course,
+                                    $TABLECOURSUSER   course_rel_user
+                            WHERE course.id = course_rel_user.c_id
+                            AND   course_rel_user.user_id = '".api_get_user_id()."'";
 	$result = Database::query($sql_select_courses);
-	while ($row = Database::fetch_array($result))
-	{
+	while ($row = Database::fetch_array($result)) {
 		// we only need the database name of the course
 		$courses[] = array ("db" => $row['db'], "code" => $row['k'], "visual_code" => $row['vc'], "title" => $row['i'], "directory" => $row['dir'], "status" => $row['status']);
 	}

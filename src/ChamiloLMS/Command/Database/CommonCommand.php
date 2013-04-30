@@ -156,7 +156,7 @@ class CommonCommand extends AbstractCommand
 
         $dumper = new Dumper();
         $yaml = $dumper->dump($newConfigurationArray, 2); //inline
-        $newConfigurationFile = $configurationPath.'../../../app/config/configuration.yml';
+        $newConfigurationFile = $configurationPath.'../../../config/configuration.yml';
         file_put_contents($newConfigurationFile, $yaml);
 
         return file_exists($newConfigurationFile);

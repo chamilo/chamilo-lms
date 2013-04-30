@@ -12,7 +12,6 @@ if ( count( get_included_files() ) == 1 ) die( '---' );
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/testcategory.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/answer.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/unique_answer.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/multiple_answer.class.php';

@@ -83,7 +83,6 @@ foreach ($list as $toc) {
 }
 
 //Setting the template
-//$tpl = new Template($tool_name, false, false, true);
 $app['template']->assign('html', $html);
 $content = $app['template']->fetch('default/learnpath/impress.tpl');
 $app['template']->assign('content', $content);

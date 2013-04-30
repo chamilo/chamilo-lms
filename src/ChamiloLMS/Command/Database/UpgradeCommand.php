@@ -49,7 +49,7 @@ class UpgradeCommand extends CommonCommand
 
         $_configuration = $this->getHelper('configuration')->getConfiguration();
 
-        if (!isset($_configuration['root_sys'])) {
+        if (empty($_configuration)) {
             $output->writeln("<comment>Chamilo is not installed here!</comment>");
             exit;
         }
@@ -85,7 +85,7 @@ class UpgradeCommand extends CommonCommand
         $currentVersion = null;
 
         //Checking root_sys and correct Chamilo version to install
-        if (!isset($_configuration['root_sys'])) {
+        if (empty($_configuration)) {
             $output->writeln("<comment>Can't migrate Chamilo. This is not a Chamilo folder installation.</comment>");
             exit;
         }

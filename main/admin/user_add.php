@@ -416,8 +416,8 @@ if (!empty($message)) {
 }
 $content = $form->return_form();
 
-$tpl = new Template($tool_name);
-//$tpl->assign('actions', $actions);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

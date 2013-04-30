@@ -58,13 +58,13 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
             array(null, \IntlDateFormatter::SHORT, null, '03.02.2010 04:05', '2010-02-03 04:05:00 UTC'),
             array(null, \IntlDateFormatter::MEDIUM, null, '03.02.2010 04:05:06', '2010-02-03 04:05:06 UTC'),
             array(null, \IntlDateFormatter::LONG, null,
-                '03.02.2010 04:05:06 GMT'.($this->isLowerThanIcuVersion('4.8') ? '+00:00' : ''),
+                '03.02.2010 04:05:06 GMT' . ($this->isLowerThanIcuVersion('4.8') ? '+00:00' : ''),
                 '2010-02-03 04:05:06 UTC'),
             // see below for extra test case for time format FULL
             array(\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT, null, '04:05', '1970-01-01 04:05:00 UTC'),
             array(\IntlDateFormatter::NONE, \IntlDateFormatter::MEDIUM, null, '04:05:06', '1970-01-01 04:05:06 UTC'),
             array(\IntlDateFormatter::NONE, \IntlDateFormatter::LONG, null,
-                '04:05:06 GMT'.($this->isLowerThanIcuVersion('4.8') ? '+00:00' : ''),
+                '04:05:06 GMT' . ($this->isLowerThanIcuVersion('4.8') ? '+00:00' : ''),
                 '1970-01-01 04:05:06 UTC'),
             array(null, null, 'yyyy-MM-dd HH:mm:00', '2010-02-03 04:05:00', '2010-02-03 04:05:00 UTC'),
             array(null, null, 'yyyy-MM-dd HH:mm', '2010-02-03 04:05', '2010-02-03 04:05:00 UTC'),
@@ -121,14 +121,14 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
         $this->assertEquals('Feb 3, 2010 4:05 AM', $transformer->transform($this->dateTime));
     }
 
-    public function testTransformEmpty()
+    public function testTransform_empty()
     {
         $transformer = new DateTimeToLocalizedStringTransformer();
 
         $this->assertSame('', $transformer->transform(null));
     }
 
-    public function testTransformWithDifferentTimezones()
+    public function testTransform_differentTimezones()
     {
         $transformer = new DateTimeToLocalizedStringTransformer('America/New_York', 'Asia/Hong_Kong');
 
@@ -140,7 +140,7 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
         $this->assertEquals($dateTime->format('d.m.Y H:i'), $transformer->transform($input));
     }
 
-    public function testTransformWithDifferentPatterns()
+    public function testTransform_differentPatterns()
     {
         $transformer = new DateTimeToLocalizedStringTransformer('UTC', 'UTC', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, \IntlDateFormatter::GREGORIAN, 'MM*yyyy*dd HH|mm|ss');
 
@@ -206,7 +206,7 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
         $this->assertDateTimeEquals($this->dateTimeWithoutSeconds, $transformer->reverseTransform('Feb 3, 2010 04:05 AM'));
     }
 
-    public function testReverseTransformWithDifferentTimezones()
+    public function testReverseTransform_differentTimezones()
     {
         $transformer = new DateTimeToLocalizedStringTransformer('America/New_York', 'Asia/Hong_Kong');
 
@@ -216,14 +216,14 @@ class DateTimeToLocalizedStringTransformerTest extends DateTimeTestCase
         $this->assertDateTimeEquals($dateTime, $transformer->reverseTransform('03.02.2010 04:05'));
     }
 
-    public function testReverseTransformWithDifferentPatterns()
+    public function testReverseTransform_differentPatterns()
     {
         $transformer = new DateTimeToLocalizedStringTransformer('UTC', 'UTC', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, \IntlDateFormatter::GREGORIAN, 'MM*yyyy*dd HH|mm|ss');
 
         $this->assertDateTimeEquals($this->dateTime, $transformer->reverseTransform('02*2010*03 04|05|06'));
     }
 
-    public function testReverseTransformEmpty()
+    public function testReverseTransform_empty()
     {
         $transformer = new DateTimeToLocalizedStringTransformer();
 

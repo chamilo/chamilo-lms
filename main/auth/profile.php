@@ -368,13 +368,14 @@ function is_platform_authentication()
 }
 
 /**
- * Can a user edit his/her profile?
+ * Returns whether a user can edit his/her profile. Defaults to false if
+ * profileIsEditable is not set in $GLOBALS.
  *
  * @return    boolean    Editability of the profile
  */
 function is_profile_editable()
 {
-    return $GLOBALS['profileIsEditable'];
+    return isset($GLOBALS['profileIsEditable']) ? $GLOBALS['profileIsEditable'] : false;
 }
 
 /*

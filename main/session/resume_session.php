@@ -190,23 +190,23 @@ if ($session['nbr_courses'] == 0){
 } else {
     $courses = SessionManager::get_course_list_by_session_id($id_session);
 	foreach ($courses as $course) {
-        $count_users = SessionManager::get_count_users_in_course_session($course['code'], $id_session);
-        $coaches = SessionManager::get_session_course_coaches_to_string($course['code'], $id_session);
+        $count_users = SessionManager::get_count_users_in_course_session($course['id'], $id_session);
+        $coaches = SessionManager::get_session_course_coaches_to_string($course['id'], $id_session);
 
 		$orig_param = '&origin=resume_session';
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 		echo '
 		<tr>
-			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session),'</td>
+			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/index.php?id_session='.$id_session),'</td>
 			<td>'.$coaches.'</td>
 			<td>'.$count_users.'</td>
 			<td>
-                <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>
+                <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/index.php?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>
                 <a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$course['code'].'">'.Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
                 <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course['code'].'&id_session='.$id_session.'">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>
 				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;
 				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
-				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&course_code_to_delete='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
+				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&course_code_to_delete='.$course['id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
 			</td>
 		</tr>';
 	}
@@ -343,7 +343,7 @@ if ($session['nbr_users'] == 0) {
             $link_to_add_user_in_url = '';
 
             if ($multiple_url_is_on) {
-                if ($user['access_url_id'] != $url_id) {
+                if (isset($user['access_url_id']) && $user['access_url_id'] != $url_id) {
                     $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), ICON_SIZE_SMALL);
                     $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), ICON_SIZE_SMALL);
                     $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';

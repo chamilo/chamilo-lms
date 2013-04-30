@@ -126,7 +126,7 @@ final class ExtensionMetadataFactory
      * read the metadata required by extension
      *
      * @param object $omDriver
-     * @throws DriverException if driver was not found in extension
+     * @throws \Gedmo\Exception\RuntimeException if driver was not found in extension
      * @return \Gedmo\Mapping\Driver
      */
     private function getDriver($omDriver)
@@ -138,6 +138,9 @@ final class ExtensionMetadataFactory
             $driver = new Driver\Chain();
             foreach ($omDriver->getDrivers() as $namespace => $nestedOmDriver) {
                 $driver->addDriver($this->getDriver($nestedOmDriver), $namespace);
+            }
+            if ($omDriver->getDefaultDriver() !== null) {
+                $driver->setDefaultDriver($this->getDriver($omDriver->getDefaultDriver()));
             }
         } else {
             $driverName = substr($driverName, 0, strpos($driverName, 'Driver'));

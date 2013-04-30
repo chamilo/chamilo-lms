@@ -11,7 +11,7 @@
 // protect a course script
 api_protect_course_script(true);
 
-if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api_get_course_id())) {
+if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api_get_course_int_id())) {
 
     $param_gradebook = '';
     if (isset($_SESSION['gradebook'])) {

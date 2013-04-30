@@ -55,9 +55,9 @@ class WSSession extends WS {
             'coach_access_end_date' => $coach_access_end_date,
             'visibility' => $visibility
         );
-        
+
 		$session_id = SessionManager::add($params);
-        
+
 		if(!is_int($session_id)) {
 			return new WSError(301, 'Could not create the session');
 		} else {
@@ -326,8 +326,7 @@ class WSSession extends WS {
 				return $course_id;
 			} else {
 				if($state  == 1) {
-					$course_code = CourseManager::get_course_code_from_course_id($course_id);
-					SessionManager::add_courses_to_session($session_id, array($course_code));
+					SessionManager::add_courses_to_session($session_id, array($course_id));
 					return true;
 				} else {
 					$result = SessionManager::unsubscribe_course_from_session($session_id, $course_id);

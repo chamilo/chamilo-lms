@@ -3,20 +3,67 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "70053a4d6a22184cee89f227ae452e41",
+    "hash": "e89b212fa46e1a508924215490a3b3b8",
     "packages": [
+        {
+            "name": "bt51/gaufrette-serviceprovider",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bt51/GaufretteServiceProvider.git",
+                "reference": "6bba885170beb6719e7256e407b172f90af3159a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bt51/GaufretteServiceProvider/zipball/6bba885170beb6719e7256e407b172f90af3159a",
+                "reference": "6bba885170beb6719e7256e407b172f90af3159a",
+                "shasum": ""
+            },
+            "require": {
+                "knplabs/gaufrette": "dev-master@dev",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "silex/silex": "1.0.x-dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Bt51\\Silex\\Provider\\GaufretteServiceProvider": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Tollakson",
+                    "email": "ben.tollakson@gmail.com"
+                }
+            ],
+            "description": "Gaufrette service provider for silex",
+            "homepage": "https://github.com/bt51/GaufretteServiceProvider",
+            "keywords": [
+                "extension",
+                "gaufrette",
+                "silex",
+                "silex-extension"
+            ],
+            "time": "2012-12-07 00:50:44"
+        },
         {
             "name": "chamilo/chash",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chamilo/chash.git",
-                "reference": "4d3ad62b395fe7f5ed39fc2eeb0980fb40cbccb7"
+                "reference": "510a5ca67040899f9ea69fdf04ca2529de37cc02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chamilo/chash/zipball/4d3ad62b395fe7f5ed39fc2eeb0980fb40cbccb7",
-                "reference": "4d3ad62b395fe7f5ed39fc2eeb0980fb40cbccb7",
+                "url": "https://api.github.com/repos/chamilo/chash/zipball/510a5ca67040899f9ea69fdf04ca2529de37cc02",
+                "reference": "510a5ca67040899f9ea69fdf04ca2529de37cc02",
                 "shasum": ""
             },
             "require": {
@@ -31,7 +78,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-04-16 09:34:42"
+            "time": "2013-04-17 07:24:02"
         },
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -39,12 +86,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dflydev/dflydev-doctrine-orm-service-provider.git",
-                "reference": "v1.0.0"
+                "reference": "e453be6837cad2cd50371c08497d1e5e4b0bde9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dflydev/dflydev-doctrine-orm-service-provider/zipball/v1.0.0",
-                "reference": "v1.0.0",
+                "url": "https://api.github.com/repos/dflydev/dflydev-doctrine-orm-service-provider/zipball/e453be6837cad2cd50371c08497d1e5e4b0bde9c",
+                "reference": "e453be6837cad2cd50371c08497d1e5e4b0bde9c",
                 "shasum": ""
             },
             "require": {
@@ -96,7 +143,7 @@
                 "pimple",
                 "silex"
             ],
-            "time": "2012-12-30 23:41:22"
+            "time": "2013-04-16 17:55:14"
         },
         {
             "name": "doctrine/common",
@@ -150,9 +197,9 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -400,22 +447,22 @@
         },
         {
             "name": "franmomu/silex-pagerfanta-provider",
-            "version": "dev-master",
+            "version": "2.3.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jmontoyaa/silex-pagerfanta-provider.git",
-                "reference": "417acc6e761929ccf608c3d34c4d4abeb72f05f0"
+                "reference": "9e88fe51bb42cd5dec754bba9e8a5186f905778b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jmontoyaa/silex-pagerfanta-provider/zipball/417acc6e761929ccf608c3d34c4d4abeb72f05f0",
-                "reference": "417acc6e761929ccf608c3d34c4d4abeb72f05f0",
+                "url": "https://api.github.com/repos/jmontoyaa/silex-pagerfanta-provider/zipball/9e88fe51bb42cd5dec754bba9e8a5186f905778b",
+                "reference": "9e88fe51bb42cd5dec754bba9e8a5186f905778b",
                 "shasum": ""
             },
             "require": {
                 "pagerfanta/pagerfanta": "dev-master",
                 "silex/silex": "1.0.*@dev",
-                "symfony/property-access": ">=2.2,<2.4-dev"
+                "symfony/property-access": "2.3.*@dev"
             },
             "type": "library",
             "extra": {
@@ -446,9 +493,9 @@
                 "silex"
             ],
             "support": {
-                "source": "https://github.com/jmontoyaa/silex-pagerfanta-provider/tree/master"
+                "source": "https://github.com/jmontoyaa/silex-pagerfanta-provider/tree/2.3"
             },
-            "time": "2013-04-15 11:29:52"
+            "time": "2013-04-22 11:39:08"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -456,12 +503,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "b31e0a4664f13dbf24b0215547e42c401ca5300a"
+                "reference": "cfabd4076c52ae0e86646dd22cc786c86783308c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/b31e0a4664f13dbf24b0215547e42c401ca5300a",
-                "reference": "b31e0a4664f13dbf24b0215547e42c401ca5300a",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/cfabd4076c52ae0e86646dd22cc786c86783308c",
+                "reference": "cfabd4076c52ae0e86646dd22cc786c86783308c",
                 "shasum": ""
             },
             "require": {
@@ -527,7 +574,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-04-12 04:03:22"
+            "time": "2013-04-21 18:56:48"
         },
         {
             "name": "grom/silex-service-provider",
@@ -725,6 +772,81 @@
             "time": "2013-04-02 13:13:44"
         },
         {
+            "name": "knplabs/gaufrette",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/Gaufrette.git",
+                "reference": "1540391e4115ac7c01255e07e02ea3250ca31c51"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/1540391e4115ac7c01255e07e02ea3250ca31c51",
+                "reference": "1540391e4115ac7c01255e07e02ea3250ca31c51",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "amazonwebservices/aws-sdk-for-php": "1.5.*",
+                "doctrine/dbal": ">=2.3",
+                "dropbox-php/dropbox-php": "*",
+                "herzult/php-ssh": "*",
+                "phpspec/phpspec2": "dev-master",
+                "phpunit/phpunit": "3.7.*",
+                "rackspace/php-cloudfiles": "*",
+                "rackspace/php-opencloud": "dev-master"
+            },
+            "suggest": {
+                "amazonwebservices/aws-sdk-for-php": "to use the Amazon S3 adapter",
+                "doctrine/dbal": "to use the Doctrine DBAL adapter",
+                "dropbox-php/dropbox-php": "to use the Dropbox adapter",
+                "ext-apc": "to use the APC adapter",
+                "ext-curl": "*",
+                "ext-fileinfo": "*",
+                "ext-mbstring": "*",
+                "ext-mongo": "*",
+                "ext-zip": "to use the Zip adapter",
+                "knplabs/knp-gaufrette-bundle": "*",
+                "rackspace/php-opencloud": "to use Opencloud adapter"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Gaufrette": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "The contributors",
+                    "homepage": "http://github.com/knplabs/Gaufrette/contributors"
+                },
+                {
+                    "name": "KnpLabs Team",
+                    "homepage": "http://knplabs.com"
+                }
+            ],
+            "description": "PHP5 library that provides a filesystem abstraction layer",
+            "homepage": "http://knplabs.com",
+            "keywords": [
+                "abstraction",
+                "file",
+                "filesystem",
+                "media"
+            ],
+            "time": "2013-04-20 08:12:21"
+        },
+        {
             "name": "knplabs/knp-menu",
             "version": "dev-master",
             "source": {
@@ -772,7 +894,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -947,17 +1069,61 @@
             "time": "2013-01-26 08:22:27"
         },
         {
+            "name": "neutron/silex-filesystem-provider",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/romainneutron/Silex-Filesystem-Service-Provider.git",
+                "reference": "98771524bba1ffa58373c4c06d438f5fb5442ff4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/romainneutron/Silex-Filesystem-Service-Provider/zipball/98771524bba1ffa58373c4c06d438f5fb5442ff4",
+                "reference": "98771524bba1ffa58373c4c06d438f5fb5442ff4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "silex/silex": ">=1.0",
+                "symfony/filesystem": ">=2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Neutron": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Romain Neutron",
+                    "email": "imprec@gmail.com",
+                    "homepage": "http://www.lickmychip.com/"
+                }
+            ],
+            "description": "A Silex Provider for Symfony Filesystem component",
+            "keywords": [
+                "filesystem",
+                "silex",
+                "temporary-filesystem"
+            ],
+            "time": "2012-11-08 21:07:08"
+        },
+        {
             "name": "pagerfanta/pagerfanta",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/whiteoctober/Pagerfanta.git",
-                "reference": "6d37d04645ab875042e08b54ddacc5c0bd294c44"
+                "reference": "48ed04c9797e96c70cfc514d0dc0ded8546f2b55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/6d37d04645ab875042e08b54ddacc5c0bd294c44",
-                "reference": "6d37d04645ab875042e08b54ddacc5c0bd294c44",
+                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/48ed04c9797e96c70cfc514d0dc0ded8546f2b55",
+                "reference": "48ed04c9797e96c70cfc514d0dc0ded8546f2b55",
                 "shasum": ""
             },
             "require": {
@@ -1002,9 +1168,11 @@
             "description": "Pagination for PHP 5.3",
             "keywords": [
                 "page",
+                "pagination",
+                "paginator",
                 "paging"
             ],
-            "time": "2013-04-14 14:47:11"
+            "time": "2013-04-16 21:43:21"
         },
         {
             "name": "pimple/pimple",
@@ -1257,17 +1425,17 @@
         },
         {
             "name": "symfony/config",
-            "version": "dev-master",
+            "version": "2.2.x-dev",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "6a9046f65ed72b9ed41dc063bba1d59978114a65"
+                "reference": "dd19d55c3493d1afa0600bb8cd7c83945c2f0cdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/6a9046f65ed72b9ed41dc063bba1d59978114a65",
-                "reference": "6a9046f65ed72b9ed41dc063bba1d59978114a65",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/dd19d55c3493d1afa0600bb8cd7c83945c2f0cdb",
+                "reference": "dd19d55c3493d1afa0600bb8cd7c83945c2f0cdb",
                 "shasum": ""
             },
             "require": {
@@ -1276,7 +1444,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.2-dev"
                 }
             },
             "autoload": {
@@ -1300,7 +1468,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-02 09:39:57"
+            "time": "2013-04-20 18:42:10"
         },
         {
             "name": "symfony/console",
@@ -1309,12 +1477,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "74049e36e2e73ca2ec069c9be86d01ba422d44ea"
+                "reference": "0022ee8cb49fcac14442abd49038da24f9b953d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/74049e36e2e73ca2ec069c9be86d01ba422d44ea",
-                "reference": "74049e36e2e73ca2ec069c9be86d01ba422d44ea",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/0022ee8cb49fcac14442abd49038da24f9b953d4",
+                "reference": "0022ee8cb49fcac14442abd49038da24f9b953d4",
                 "shasum": ""
             },
             "require": {
@@ -1350,7 +1518,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-13 14:06:01"
+            "time": "2013-04-21 10:38:46"
         },
         {
             "name": "symfony/dependency-injection",
@@ -1359,12 +1527,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DependencyInjection.git",
-                "reference": "6ce2347c2b346c35bf3fffcbb89a808892e033c8"
+                "reference": "e886a2fe3e9161c573d45caba9e5d98ad450ac3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/6ce2347c2b346c35bf3fffcbb89a808892e033c8",
-                "reference": "6ce2347c2b346c35bf3fffcbb89a808892e033c8",
+                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/e886a2fe3e9161c573d45caba9e5d98ad450ac3f",
+                "reference": "e886a2fe3e9161c573d45caba9e5d98ad450ac3f",
                 "shasum": ""
             },
             "require": {
@@ -1405,7 +1573,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-11 06:50:46"
+            "time": "2013-04-21 12:26:17"
         },
         {
             "name": "symfony/doctrine-bridge",
@@ -1414,12 +1582,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DoctrineBridge.git",
-                "reference": "464e871e337962c526de95d758f91df049e5758c"
+                "reference": "d44f22f1a996383699dff42b2d41b7d7d3b9099c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DoctrineBridge/zipball/464e871e337962c526de95d758f91df049e5758c",
-                "reference": "464e871e337962c526de95d758f91df049e5758c",
+                "url": "https://api.github.com/repos/symfony/DoctrineBridge/zipball/d44f22f1a996383699dff42b2d41b7d7d3b9099c",
+                "reference": "d44f22f1a996383699dff42b2d41b7d7d3b9099c",
                 "shasum": ""
             },
             "require": {
@@ -1471,7 +1639,7 @@
             ],
             "description": "Symfony Doctrine Bridge",
             "homepage": "http://symfony.com",
-            "time": "2013-04-02 09:46:23"
+            "time": "2013-04-21 16:59:26"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1528,30 +1696,76 @@
             "time": "2013-02-11 11:26:43"
         },
         {
-            "name": "symfony/form",
-            "version": "dev-master",
-            "target-dir": "Symfony/Component/Form",
+            "name": "symfony/filesystem",
+            "version": "v2.2.1",
+            "target-dir": "Symfony/Component/Filesystem",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Form.git",
-                "reference": "f9d814a79ac38de448eb27512d78c87b147c68a7"
+                "url": "https://github.com/symfony/Filesystem.git",
+                "reference": "v2.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/f9d814a79ac38de448eb27512d78c87b147c68a7",
-                "reference": "f9d814a79ac38de448eb27512d78c87b147c68a7",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/v2.2.1",
+                "reference": "v2.2.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Filesystem\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Filesystem Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-01-17 15:25:59"
+        },
+        {
+            "name": "symfony/form",
+            "version": "v2.2.0-BETA1",
+            "target-dir": "Symfony/Component/Form",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Form",
+                "reference": "v2.2.0-BETA1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/v2.2.0-BETA1",
+                "reference": "v2.2.0-BETA1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "symfony/event-dispatcher": ">=2.1,<3.0",
-                "symfony/locale": ">=2.0,<3.0",
-                "symfony/options-resolver": ">=2.1,<2.4-dev",
-                "symfony/property-access": ">=2.2,<2.4-dev"
+                "symfony/event-dispatcher": "2.2.*",
+                "symfony/locale": "2.2.*",
+                "symfony/options-resolver": "2.2.*"
             },
             "require-dev": {
-                "symfony/http-foundation": ">=2.1,<2.4-dev",
-                "symfony/validator": ">=2.2,<2.4-dev"
+                "symfony/http-foundation": "2.2.*",
+                "symfony/validator": "2.2.*"
             },
             "suggest": {
                 "symfony/http-foundation": "2.2.*",
@@ -1560,7 +1774,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.2-dev"
                 }
             },
             "autoload": {
@@ -1584,7 +1798,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-15 11:52:45"
+            "time": "2013-01-08 18:17:41"
         },
         {
             "name": "symfony/http-foundation",
@@ -1817,12 +2031,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/PropertyAccess.git",
-                "reference": "10dafc69dc50e07d6c0e45a179fa7e86209250d7"
+                "reference": "df67239b02a9cef12cf84579f6cf569680298238"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/10dafc69dc50e07d6c0e45a179fa7e86209250d7",
-                "reference": "10dafc69dc50e07d6c0e45a179fa7e86209250d7",
+                "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/df67239b02a9cef12cf84579f6cf569680298238",
+                "reference": "df67239b02a9cef12cf84579f6cf569680298238",
                 "shasum": ""
             },
             "require": {
@@ -1866,7 +2080,7 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2013-04-11 06:50:46"
+            "time": "2013-04-18 14:39:54"
         },
         {
             "name": "symfony/routing",
@@ -1933,12 +2147,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Security.git",
-                "reference": "29d6516841ca9961398dee9479bc576d9b09d6dd"
+                "reference": "d156097a1b4653108637dedaaf2c64b876eb2f35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Security/zipball/29d6516841ca9961398dee9479bc576d9b09d6dd",
-                "reference": "29d6516841ca9961398dee9479bc576d9b09d6dd",
+                "url": "https://api.github.com/repos/symfony/Security/zipball/d156097a1b4653108637dedaaf2c64b876eb2f35",
+                "reference": "d156097a1b4653108637dedaaf2c64b876eb2f35",
                 "shasum": ""
             },
             "require": {
@@ -1990,7 +2204,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-09 14:18:38"
+            "time": "2013-04-21 16:59:26"
         },
         {
             "name": "symfony/translation",
@@ -1999,12 +2213,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Translation.git",
-                "reference": "79a63e2829ea4e8295b4d44a55b08f20f0875a11"
+                "reference": "6bc4b753c1ae5640c0eacdbe27c04a69cde3d10d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Translation/zipball/79a63e2829ea4e8295b4d44a55b08f20f0875a11",
-                "reference": "79a63e2829ea4e8295b4d44a55b08f20f0875a11",
+                "url": "https://api.github.com/repos/symfony/Translation/zipball/6bc4b753c1ae5640c0eacdbe27c04a69cde3d10d",
+                "reference": "6bc4b753c1ae5640c0eacdbe27c04a69cde3d10d",
                 "shasum": ""
             },
             "require": {
@@ -2045,7 +2259,7 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-11 06:50:46"
+            "time": "2013-04-21 13:23:54"
         },
         {
             "name": "symfony/twig-bridge",
@@ -2120,12 +2334,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "bd395fae887be437fe3fb1dd29fa88994dd23958"
+                "reference": "078e031b43564b7f6c048f4e20e5404512fe20a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/bd395fae887be437fe3fb1dd29fa88994dd23958",
-                "reference": "bd395fae887be437fe3fb1dd29fa88994dd23958",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/078e031b43564b7f6c048f4e20e5404512fe20a7",
+                "reference": "078e031b43564b7f6c048f4e20e5404512fe20a7",
                 "shasum": ""
             },
             "require": {
@@ -2135,14 +2349,14 @@
             "require-dev": {
                 "symfony/config": ">=2.2,<2.4-dev",
                 "symfony/http-foundation": ">=2.1,<3.0",
-                "symfony/locale": ">=2.0,<3.0",
+                "symfony/intl": ">=2.3,<3.0",
                 "symfony/yaml": ">=2.0,<3.0"
             },
             "suggest": {
                 "doctrine/common": "~2.2",
                 "symfony/config": "2.2.*",
                 "symfony/http-foundation": "2.2.*",
-                "symfony/locale": "2.2.*",
+                "symfony/intl": "2.3.*",
                 "symfony/yaml": "2.2.*"
             },
             "type": "library",
@@ -2172,7 +2386,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-11 06:50:46"
+            "time": "2013-04-22 10:52:51"
         },
         {
             "name": "symfony/yaml",
@@ -2790,6 +3004,9 @@
         "grom/silex-service-provider": 20,
         "knplabs/knp-snappy": 20,
         "jmontoyaa/phpqrcode": 20,
+        "knplabs/gaufrette": 20,
+        "bt51/gaufrette-serviceprovider": 20,
+        "neutron/silex-filesystem-provider": 20,
         "symfony/browser-kit": 20,
         "silex/web-profiler": 20,
         "natxet/cssmin": 20,

@@ -1283,7 +1283,8 @@ function check_and_create_resource_directory($repository_path, $resource_directo
         if (@mkdir($resource_directory_full_path, $permissions_for_new_directories)) {
             // While we are in a course: Registering the newly created folder in the course's database.
             if (api_is_in_course()) {
-                global $_course, $_user;
+                global $_user;
+                $_course = api_get_course_info();
                 global $group_properties, $to_group_id;
                 $group_directory = !empty($group_properties['directory']) ? $group_properties['directory'] : '';
 

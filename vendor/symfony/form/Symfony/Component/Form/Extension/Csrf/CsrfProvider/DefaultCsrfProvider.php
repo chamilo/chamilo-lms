@@ -65,11 +65,7 @@ class DefaultCsrfProvider implements CsrfProviderInterface
      */
     protected function getSessionId()
     {
-        if (version_compare(PHP_VERSION, '5.4', '>=')) {
-            if (PHP_SESSION_NONE === session_status()) {
-                session_start();
-            }
-        } elseif (!session_id()) {
+        if (!session_id()) {
             session_start();
         }
 

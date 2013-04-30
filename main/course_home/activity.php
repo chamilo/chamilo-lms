@@ -18,7 +18,6 @@ $course_id = api_get_course_int_id();
 $session_id = api_get_session_id();
 
 //	MAIN CODE
-
 if (api_is_allowed_to_edit(null, true)) {
 	// HIDE
 	if (!empty($_GET['hide'])) {
@@ -30,7 +29,6 @@ if (api_is_allowed_to_edit(null, true)) {
 		// REACTIVATE
 		$sql = "UPDATE $tool_table SET visibility=1 WHERE c_id = $course_id AND id=".$id;
 		Database::query($sql);
-		//$show_message = Display::return_message(get_lang('ToolIsNowVisible'),'confirmation');
 	}
 }
 
@@ -74,6 +72,7 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
         </div>';
 	}
     $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
+
 	$items = CourseHome::show_tools_category($my_list);
     $content .= return_block(get_lang('Authoring'),  $items);
 

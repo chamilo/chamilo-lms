@@ -187,9 +187,8 @@ class BlockDaily extends Block {
                     $attendances[] = get_lang("NotAvailable");
 			}
 
-             // quantidade de alunos
-
-			$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status=".STUDENT." AND course_rel_user.course_code='$course_code'";
+			$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
+			        WHERE course_rel_user.status=".STUDENT." AND course_rel_user.c_id = ".$course_info['real_id'];
 			$rs = Database::query($sql);
 			$users = array();
 			while ($row = Database::fetch_array($rs)) {

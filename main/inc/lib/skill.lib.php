@@ -8,14 +8,10 @@
 /**
  * Code
  */
-define ('SKILL_TYPE_REQUIREMENT',   'required');
-define ('SKILL_TYPE_ACQUIRED',      'acquired');
-define ('SKILL_TYPE_BOTH',          'both');
 
-require_once api_get_path(LIBRARY_PATH).'model.lib.php';
-
-class SkillProfile extends Model {
-    var $columns = array('id', 'name', 'description');
+class SkillProfile extends Model
+{
+    public $columns = array('id', 'name', 'description');
     public function __construct() {
         $this->table = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
         $this->table_rel_profile = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);

@@ -1,7 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\Composer;
 
+/**
+ * Class Tasks
+ * Executes tasks when executing composer update/install methods
+ * @package ChamiloLMS\Composer
+ */
 class Tasks
 {
     public static function postInstall()

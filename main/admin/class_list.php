@@ -123,7 +123,8 @@ $actions .= Display::url(Display::return_icon('add.png', get_lang('Add'), array(
 $actions .= Display::url(Display::return_icon('import_csv.png', get_lang('AddUsersToAClass'), array(), ICON_SIZE_MEDIUM), 'class_user_import.php');
 $actions .= Display::url(Display::return_icon('import_csv.png', get_lang('ImportClassListCSV'), array(), ICON_SIZE_MEDIUM), 'class_import.php');
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 $tpl->assign('content', $content);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

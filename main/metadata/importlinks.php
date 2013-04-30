@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * Chamilo metadata/importlinks.php
  * 2006/12/15
  * Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php
@@ -79,7 +79,8 @@ function check_andor_get($row, $get = '', $check = '', $tobe = '')
 
 function get_cat($catname)
 {
-    global $_course; $cateq = "category_title='". addslashes($catname) . "'";
+    $_course = api_get_course_info();
+    $cateq = "category_title='". addslashes($catname) . "'";
 
     $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
     $result = Database::query("SELECT id FROM $linkcat_table WHERE " . $cateq);

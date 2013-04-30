@@ -132,7 +132,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 				$students_by_course = array();
 				if (!empty($courses_by_teacher)) {
 					foreach ($courses_by_teacher as $course) {
-						$students_by_course = array_keys(CourseManager::get_student_list_from_course_code($course['course_code']));
+						$students_by_course = array_keys(CourseManager::get_student_list_from_course_code($course['real_id']));
 						if (count($students_by_course) > 0) {
 							foreach ($students_by_course as $student_by_course) {
 								$students[] = $student_by_course;
@@ -226,16 +226,16 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 
 			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
 			$nb_courses_student = 0;
-			foreach ($courses as $course_code) {
-				if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-					$avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $course_code, $_GET['id_session']);
-					$my_average 		 = Tracking :: get_avg_student_score($student_id, $course_code);
+			foreach ($courses as $courseId) {
+				if (CourseManager :: is_user_subscribed_in_course($student_id, $courseId, true)) {
+					$avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
+					$my_average 		 = Tracking :: get_avg_student_score($student_id, $courseId);
 					if (is_numeric($my_average)) {
 						$avg_student_score += $my_average;
 					}
-					$avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
-					$total_assignments += Tracking :: count_student_assignments($student_id, $course_code);
-					$total_messages += Tracking :: count_student_messages($student_id, $course_code);
+					$avg_student_progress += Tracking :: get_avg_student_progress($student_id, $courseId);
+					$total_assignments += Tracking :: count_student_assignments($student_id, $courseId);
+					$total_messages += Tracking :: count_student_messages($student_id, $courseId);
 					$nb_courses_student++;
 				}
 			}
@@ -258,14 +258,6 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 				$row[] = $student_data['lastname'];
 				$row[] = $student_data['firstname'];
 			}
-
-			/*
-			$row[] = api_time_to_hms($avg_time_spent);
-			$row[] = is_null($avg_student_progress) ? null : round($avg_student_progress, 2).'%';
-			$row[] = is_null($avg_student_score) ? null : round($avg_student_score, 2).'%';
-			$row[] = $total_assignments;
-			$row[] = $total_messages;
-			*/
 
 			$string_date = Tracking :: get_last_connection_date($student_id, true);
 			$first_date = Tracking :: get_first_connection_date($student_id);
@@ -313,6 +305,4 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 		exit;
 	}
 }
-
-/*		FOOTER	*/
 Display :: display_footer();

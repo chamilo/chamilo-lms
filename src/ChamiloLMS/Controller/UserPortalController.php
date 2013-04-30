@@ -12,16 +12,20 @@ use Symfony\Component\HttpFoundation\Response;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class UserPortalController
+class UserPortalController extends CommonController
 {
     /**
      * @param Application $app
      * @param string $type courses|sessions|mycoursecategories
      * @param string $filter for the userportal courses page. Only works when setting 'history'
+     * @param int $page
+     *
      * @return Response|void
      */
     function indexAction(Application $app, $type = 'courses', $filter = 'current', $page = 1)
     {
+        $this->cidReset();
+
         //@todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
 
@@ -38,6 +42,10 @@ class UserPortalController
         // Main courses and session list
         $items = null;
         $type = str_replace('/', '', $type);
+
+        /** var $pageController \PageController */
+        $pageController = $app['page_controller'];
+
 
         switch ($type) {
             case 'sessions':
@@ -93,6 +101,9 @@ class UserPortalController
         return new Response($response, 200, array());
     }
 
+    /**
+     * Redirects after login
+     */
     function redirectAfterLogin()
     {
         // Get the courses list
@@ -129,7 +140,7 @@ class UserPortalController
             $course_directory = $course_info['course_info']['path'];
             $id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
 
-            $url = api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$id_session;
+            $url = api_get_path(WEB_COURSE_PATH).$course_directory.'/index.php?id_session='.$id_session;
             header('location:'.$url);
             exit;
         }
@@ -174,45 +185,4 @@ class UserPortalController
         }
     }
 
-
-    /**
-     * Reacts on a failed login:
-     * Displays an explanation with a link to the registration form.
-     *
-     * @deprecated use twig template to prompt errors
-     */
-    function handle_login_failed()
-    {
-        $message = get_lang('InvalidId');
-
-        if (!isset($_GET['error'])) {
-            if (api_is_self_registration_allowed()) {
-                $message = get_lang('InvalidForSelfRegistration');
-            }
-        } else {
-            switch ($_GET['error']) {
-                case '':
-                    if (api_is_self_registration_allowed()) {
-                        $message = get_lang('InvalidForSelfRegistration');
-                    }
-                    break;
-                case 'account_expired':
-                    $message = get_lang('AccountExpired');
-                    break;
-                case 'account_inactive':
-                    $message = get_lang('AccountInactive');
-                    break;
-                case 'user_password_incorrect':
-                    $message = get_lang('InvalidId');
-                    break;
-                case 'access_url_inactive':
-                    $message = get_lang('AccountURLInactive');
-                    break;
-                case 'unrecognize_sso_origin':
-                    //$message = get_lang('SSOError');
-                    break;
-            }
-        }
-        return Display::return_message($message, 'error');
-    }
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * create a folder
  * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
@@ -10,7 +9,8 @@
  * @author Juan Carlos Ra�a
  * @since 18/January/2009
  */
-require_once(dirname(__FILE__).DIRECTORY_SEPARATOR."inc".DIRECTORY_SEPARATOR."config.php");
+require_once dirname(__FILE__).DIRECTORY_SEPARATOR."inc".DIRECTORY_SEPARATOR."config.php";
+
 //@ob_start(); //Disabled for integration with Chamilo
 //displayArray($_POST); //Disabled for integration with Chamilo
 //writeInfo(@ob_get_clean()); //Disabled for integration with Chamilo

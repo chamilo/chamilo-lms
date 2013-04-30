@@ -30,7 +30,7 @@ $csv_content = array();
 $nameTools   		= get_lang('MySpace');
 
 $user_id 	 		= api_get_user_id();
-$is_coach 			= api_is_coach($_GET['session_id']); // This is used?
+$is_coach 			= api_is_coach(isset($_GET['session_id'])?$_GET['session_id']:0); // This is used?
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 
@@ -199,7 +199,7 @@ if (empty($session_id)) {
 		$courses_of_the_platform = CourseManager :: get_courses_followed_by_drh($user_id);
 
 		foreach ($courses_of_the_platform as $course) {
-			$courses[$course['code']] = $course['code'];
+			$courses[$course['real_id']] = $course['real_id'];
 		}
         $sessions = SessionManager::get_sessions_followed_by_drh($user_id);
 	}
@@ -237,13 +237,13 @@ if (empty($session_id)) {
 		$avg_student_progress   = 0;
         $avg_student_score      = 0;
 		$nb_courses_student     = 0;
-		foreach ($courses as $course_code) {
-			if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
+		foreach ($courses as $courseId) {
+			if (CourseManager :: is_user_subscribed_in_course($student_id, $courseId, true)) {
 				$nb_courses_student++;
-				$nb_posts 			   += Tracking :: count_student_messages($student_id, $course_code);
-				$nb_assignments 	   += Tracking :: count_student_assignments($student_id, $course_code);
-				$avg_student_progress  += Tracking :: get_avg_student_progress($student_id, $course_code);
-				$myavg_temp 			= Tracking :: get_avg_student_score($student_id, $course_code);
+				$nb_posts 			   += Tracking :: count_student_messages($student_id, $courseId);
+				$nb_assignments 	   += Tracking :: count_student_assignments($student_id, $courseId);
+				$avg_student_progress  += Tracking :: get_avg_student_progress($student_id, $courseId);
+				$myavg_temp 			= Tracking :: get_avg_student_score($student_id, $courseId);
 
 				 if (is_numeric($myavg_temp))
 				 	$avg_student_score += $myavg_temp;
@@ -628,7 +628,9 @@ if ($is_platform_admin && $view == 'admin' && $display != 'yourstudents') {
 
 		$sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
 			FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login
-			WHERE scu.id_user=user_id AND scu.status=2  AND login_user_id=user_id
+			WHERE scu.id_user=user_id AND
+			      scu.status=2  AND
+			      login_user_id=user_id
 			GROUP BY user_id ";
 
 		if ($_configuration['multiple_access_urls']) {

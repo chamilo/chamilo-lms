@@ -66,7 +66,7 @@ function show_folder_up()
  */
 function show_documents($folder)
 {
-    global $_course;
+    $_course = api_get_course_info();
     global $source_id, $action, $learnpath_id, $chapter_id, $originalresource;
 
     // documents are a special case: the teacher can add an invisible document (it will be viewable by the user)
@@ -173,7 +173,7 @@ function show_documents($folder)
  */
 function file_or_folder($filefolder)
 {
-    global $_course;
+    $_course = api_get_course_info();
     global $baseServDir;
 
     $courseDir = $_course['path'].'/document';
@@ -190,7 +190,7 @@ function file_or_folder($filefolder)
  */
 function store_resources($source_type, $source_id)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $resource_table = Database::get_course_table(TABLE_LINKED_RESOURCES);
 
     $addedresource = $_SESSION['addedresource'];
@@ -220,7 +220,7 @@ function store_resources($source_type, $source_id)
  */
 function display_addedresource_link($type, $id, $style = '')
 {
-    global $_course;
+    $_course = api_get_course_info();
 
     // styling the link of the added resource
     if ($style <> '') {
@@ -326,7 +326,8 @@ function display_addedresource_link($type, $id, $style = '')
 function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_path, $builder, $icon, $level = 0)
 {
     global $learnpath_id, $tbl_learnpath_item, $items;
-    global $_course, $curDirPath, $_configuration, $enableDocumentParsing, $_user, $_cid;
+    global $curDirPath, $_configuration, $enableDocumentParsing, $_user, $_cid;
+    $_course = api_get_course_info();
 
     $hyperlink_target_parameter = ''; //or e.g. 'target="_blank"'
 
@@ -1481,8 +1482,10 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
  */
 function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 {
-    global $_course, $learnpath_id, $tbl_learnpath_item, $items;
+    global $learnpath_id, $tbl_learnpath_item, $items;
     global $curDirPath, $_configuration, $enableDocumentParsing, $_user, $_cid;
+
+    $_course = api_get_course_info();
 
     $hyperlink_target_parameter = ""; //or e.g. target='_blank'
     $builder = 'player';
@@ -1802,7 +1805,7 @@ function show_addresource_button($additionalparameters = '')
 function delete_one_added_resource($source_type, $source_id, $resource_type, $resource_id)
 {
 	//echo "delete_one_added_resource";
-	global $_course;
+	$_course = api_get_course_info();
 	$TABLERESOURCE 		= $_course['dbNameGlu']."resource";
 
 	$sql="DELETE FROM $TABLERESOURCE WHERE source_type='$source_type' and source_id='$source_id' and resource_type='$resource_type' and resource_id='$resource_id'";
@@ -1814,7 +1817,7 @@ function delete_one_added_resource($source_type, $source_id, $resource_type, $re
  */
 function delete_added_resource($type, $id)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES, $_course['dbName']);
 
     $sql = "DELETE FROM $TABLERESOURCE WHERE source_type='$type' and source_id='$id'";
@@ -1827,7 +1830,7 @@ function delete_added_resource($type, $id)
  */
 function delete_all_resources_type($type)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES, $_course['dbName']);
 
     $sql = "DELETE FROM $TABLERESOURCE WHERE source_type='$type'";
@@ -1840,7 +1843,7 @@ function delete_all_resources_type($type)
  */
 function check_added_resources($type, $id)
 {
-    global $_course, $origin;
+    $_course = api_get_course_info();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES, $_course['dbName']);
     $sql = "SELECT * FROM $TABLERESOURCE WHERE source_type='$type' and source_id='$id'";
     $result = Database::query($sql);
@@ -1859,7 +1862,7 @@ function check_added_resources($type, $id)
  */
 function edit_added_resources($type, $id)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES, $_course['dbName']);
 
     $sql = "SELECT * FROM $TABLERESOURCE WHERE source_type='$type' and source_id=$id";
@@ -1879,7 +1882,7 @@ function edit_added_resources($type, $id)
  */
 function update_added_resources($type, $id)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES, $_course['dbName']);
     // delete all the added resources for this item in the database;
     $sql = "DELETE FROM $TABLERESOURCE WHERE source_type='$type' AND source_id='$id'";
@@ -1906,7 +1909,8 @@ function display_added_resources($type, $id, $style = '')
         'Exercise' => '../img/quiz.gif'
     );
 
-    global $_course, $origin;
+    $_course = api_get_course_info();
+    global $origin;
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES, $_course['dbName']);
 
     $sql = "SELECT * FROM $TABLERESOURCE WHERE source_type='$type' and source_id='$id'";

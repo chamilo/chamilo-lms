@@ -21,9 +21,9 @@ if (!$result) {
 $session_id = api_get_session_id();
 
 if (empty($session_id)) {
-    $students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), false);
+    $students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id(), false);
 } else {
-    $students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, $session_id);
+    $students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id(), true, $session_id);
 }
 $count_students = count($students);
 
@@ -45,8 +45,8 @@ $headers = array(
 if (!empty($question_list)) {
 	foreach ($question_list as $question_id) {
 		$question_obj   = Question::read($question_id);
-		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
-        $count_users    = get_number_students_question_with_answer_count($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_int_id(), api_get_session_id());
+        $count_users    = get_number_students_question_with_answer_count($question_id, $exercise_id, api_get_course_int_id(), api_get_session_id());
 
 		$data[$question_id]['name'] 						= Text::cut($question_obj->question, 100);
         $data[$question_id]['type'] 						= $question_obj->get_question_type_name();
@@ -101,7 +101,7 @@ if (!empty($question_list)) {
     $id = 0;
 	foreach ($question_list as $question_id) {
 		$question_obj = Question::read($question_id);
-		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+		$exercise_stats = get_student_stats_by_question($question_id, $exercise_id, api_get_course_int_id(), api_get_session_id());
 
         $answer = new Answer($question_id);
 		$answer_count = $answer->selectNbrAnswers();
@@ -134,7 +134,7 @@ if (!empty($question_list)) {
 
                         $data[$id]['correct'] 	= '-';
 
-                        $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), FILL_IN_BLANKS, $answer_info_db, $answer_item);
+                        $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_int_id(), api_get_session_id(), FILL_IN_BLANKS, $answer_info_db, $answer_item);
 
                         $percentange = 0;
                         if (!empty($count_students)) {
@@ -165,7 +165,7 @@ if (!empty($question_list)) {
                         $data[$id]['answer'] 	= $correct;
                         $data[$id]['correct'] 	= $answer_info;
 
-                        $count = get_number_students_answer_count($answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), MATCHING);
+                        $count = get_number_students_answer_count($answer_id, $question_id, $exercise_id, api_get_course_int_id(), api_get_session_id(), MATCHING);
                         $percentange = 0;
                         if (!empty($count_students)) {
                             $percentange = $count/$count_students*100;
@@ -182,7 +182,7 @@ if (!empty($question_list)) {
                     $data[$id]['answer'] 	= $answer_info;
                     $data[$id]['correct'] 	= '-';
 
-                    $count = get_number_students_answer_hotspot_count($answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+                    $count = get_number_students_answer_hotspot_count($answer_id, $question_id, $exercise_id, api_get_course_int_id(), api_get_session_id());
                     $percentange = 0;
                     if (!empty($count_students)) {
                         $percentange = $count/$count_students*100;
@@ -198,7 +198,7 @@ if (!empty($question_list)) {
                     $data[$id]['answer'] 	= $answer_info;
                     $data[$id]['correct'] 	= $correct_answer;
 
-                    $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());
+                    $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_int_id(), api_get_session_id());
                     $percentange = 0;
                     if (!empty($count_students)) {
                         $percentange = $count/$count_students*100;
@@ -236,7 +236,8 @@ $content .= $table->toHtml();
 $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
 $interbreadcrumb[] = array ("url" => "admin.php?exerciseId=$exercise_id","name" => $objExercise->name);
 
-$tpl = new Template(get_lang('ReportByQuestion'));
+$app['title'] = get_lang('ReportByQuestion');
+$tpl = $app['template'];
 
 //$actions = array();
 //$actions[]= array(get_lang('Back'), Display::return_icon('back.png', get_lang('Back'), 'exercise_report.php?'.$exercise_id));

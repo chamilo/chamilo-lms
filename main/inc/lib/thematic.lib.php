@@ -686,7 +686,7 @@ class Thematic
 	 * @return	int		Affected rows
 	 */
 	public function thematic_advance_destroy($thematic_advance_id) {
-		global $_course;
+        $_course = api_get_course_info();
 		$course_id = $this->get_course_int_id();
 
 		// definition database table
@@ -946,7 +946,7 @@ class Thematic
 	 * @return	int		Affected rows
 	 */
 	public function update_done_thematic_advances($thematic_advance_id) {
-		global $_course;
+        $_course = api_get_course_info();
 		$thematic_data         = $this->get_thematic_list(null, api_get_course_id());
 		$thematic_advance_data = $this->get_thematic_advance_list(null, api_get_course_id(), true);
 		$tbl_thematic_advance  = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
@@ -1033,28 +1033,32 @@ class Thematic
 	 * @return	int		Last done thematic advance id
 	 */
 	public function get_last_done_thematic_advance() {
-		$thematic_data          = $this->get_thematic_list();
-		$thematic_advance_data  = $this->get_thematic_advance_list(null, api_get_course_id(), true);
+        $courseCode = api_get_course_id();
 
-		$a_thematic_advance_ids = array();
-		$last_done_advance_id = 0;
-		if (!empty($thematic_data)) {
-			foreach ($thematic_data as $thematic) {
-				$thematic_id = $thematic['id'];
-				if (!empty($thematic_advance_data[$thematic['id']])) {
-					foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
-						if ($thematic_advance['done_advance'] == 1) {
-							$a_thematic_advance_ids[] = $thematic_advance['id'];
-						}
-					}
-				}
-			}
-		}
-		if (!empty($a_thematic_advance_ids)) {
-			$last_done_advance_id = array_pop($a_thematic_advance_ids);
-			$last_done_advance_id = intval($last_done_advance_id);
-		}
-		return $last_done_advance_id;
+        if (!empty($courseCode)) {
+            $thematic_data          = $this->get_thematic_list();
+            $thematic_advance_data  = $this->get_thematic_advance_list(null, $courseCode, true);
+
+            $a_thematic_advance_ids = array();
+            $last_done_advance_id = 0;
+            if (!empty($thematic_data)) {
+                foreach ($thematic_data as $thematic) {
+                    $thematic_id = $thematic['id'];
+                    if (!empty($thematic_advance_data[$thematic['id']])) {
+                        foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
+                            if ($thematic_advance['done_advance'] == 1) {
+                                $a_thematic_advance_ids[] = $thematic_advance['id'];
+                            }
+                        }
+                    }
+                }
+            }
+            if (!empty($a_thematic_advance_ids)) {
+                $last_done_advance_id = array_pop($a_thematic_advance_ids);
+                $last_done_advance_id = intval($last_done_advance_id);
+            }
+            return $last_done_advance_id;
+        }
 	}
 
 	/**

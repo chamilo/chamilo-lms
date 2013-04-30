@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  *     Exercise administration
@@ -117,7 +116,7 @@ if (empty($modifyExercise)) {
 
 //Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
 
-delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
+delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_int_id(), api_get_session_id());
 
 // get from session
 $objExercise = isset($_SESSION['objExercise'])?$_SESSION['objExercise']:0;
@@ -141,6 +140,13 @@ $aType = array(
     get_lang('Matching'),
     get_lang('FreeAnswer')
 );
+
+$fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
+//$fastEdition = false;
+
+if ($fastEdition) {
+    $htmlHeadXtra[] = api_get_jqgrid_js();
+}
 
 // tables used in the exercise tool
 
@@ -242,11 +248,12 @@ if (!empty($cancelQuestion)) {
 }
 
 if (!empty($clone_question) && !empty($objExercise->id)) {
-    $old_question_obj = Question::read($clone_question);
+    $old_question_obj = Question::read($clone_question, api_get_course_int_id());
+
     $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
     $new_id = $old_question_obj->duplicate();
-    $new_question_obj = Question::read($new_id);
+    $new_question_obj = Question::read($new_id, api_get_course_int_id());
     $new_question_obj->addToList($exerciseId);
 
     // This should be moved to the duplicate function
@@ -323,13 +330,13 @@ function multiple_answer_true_false_onchange(variable) {
     }
     document.getElementById(weight_id).value = array_result[result];
 }
-
-
 </script>';
 
-$htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
-<script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
-<script language=\"JavaScript\" type=\"text/javascript\">
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/JavaScriptFlashGateway.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot.js"></script>';
+$htmlHeadXtra[] = "<script>
 <!--
 // Globals
 // Major version of Flash required
@@ -545,8 +552,14 @@ if (isset($_GET['message'])) {
 
 if ($newQuestion || $editQuestion) {
     // statement management
-    $type = Security::remove_XSS($_REQUEST['answerType']);
+
+    if ($editQuestion) {
+        $type = $objQuestion->selectType();
+    } else {
+        $type = Security::remove_XSS($_REQUEST['answerType']);
+    }
     echo '<input type="hidden" name="Type" value="'.$type.'" />';
+    //Create/Edit question
     require 'question_admin.inc.php';
 }
 
@@ -561,8 +574,12 @@ if (isset($_GET['hotspotadmin'])) {
 }
 
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
-    // question list management
-    require 'question_list_admin.inc.php';
+    // Question list (drag n drop view)
+    if ($fastEdition) {
+        require 'question_list_pagination_admin.inc.php';
+    } else {
+        require 'question_list_admin.inc.php';
+    }
 }
 
 Session::write('objExercise', $objExercise);

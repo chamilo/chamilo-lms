@@ -46,11 +46,18 @@ $application->addCommands(array(
     new Chash\Command\Files\CleanTempFolderCommand(),
     new Chash\Command\Files\CleanConfigFiles(),
     new Chash\Command\Files\MailConfCommand(),
+    new Chash\Command\Translation\AddSubLanguageCommand(),
+    new Chash\Command\Translation\DisableLanguageCommand(),
+    new Chash\Command\Translation\EnableLanguageCommand(),
     new Chash\Command\Translation\ExportLanguageCommand(),
     new Chash\Command\Translation\ImportLanguageCommand(),
+    new Chash\Command\Translation\ListLanguagesCommand(),
+    new Chash\Command\Translation\PlatformLanguageCommand(),
+    new Chash\Command\User\ChangePassCommand(),
     new Chash\Command\User\DisableAdminsCommand(),
     new Chash\Command\User\MakeAdminCommand(),
     new Chash\Command\User\ResetLoginCommand(),
+    new Chash\Command\User\SetLanguageCommand(),
 ));
 
 $application->run();

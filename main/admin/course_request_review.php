@@ -142,8 +142,6 @@ function get_request_data($from, $number_of_items, $column, $direction) {
     global $keyword;
 
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
-    $users_table = Database :: get_main_table(TABLE_MAIN_USER);
-    $course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
     if (DELETE_ACTION_ENABLED) {
         $sql = "SELECT id AS col0,
@@ -153,7 +151,8 @@ function get_request_data($from, $number_of_items, $column, $direction) {
                    tutor_name AS col4,
                    request_date AS col5,
                    id  AS col6
-                   FROM $course_request_table WHERE status = ".COURSE_REQUEST_PENDING;
+                FROM $course_request_table
+                WHERE status = ".COURSE_REQUEST_PENDING;
     } else {
         $sql = "SELECT
                    code AS col0,
@@ -162,7 +161,8 @@ function get_request_data($from, $number_of_items, $column, $direction) {
                    tutor_name AS col3,
                    request_date AS col4,
                    id  AS col5
-                   FROM $course_request_table WHERE status = ".COURSE_REQUEST_PENDING;
+               FROM $course_request_table
+               WHERE status = ".COURSE_REQUEST_PENDING;
     }
 
     if ($keyword != '') {

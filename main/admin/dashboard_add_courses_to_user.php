@@ -60,7 +60,7 @@ if (!api_is_platform_admin()) {
 }
 
 function search_courses($needle,$type) {
-	global $_configuration, $tbl_course, $tbl_course_rel_user, $tbl_course_rel_access_url,$user_id;
+	global $_configuration, $tbl_course, $tbl_course_rel_access_url,$user_id;
 
 	$xajax_response = new XajaxResponse();
 	$return = '';
@@ -80,7 +80,7 @@ function search_courses($needle,$type) {
 		}
 
 		if ($_configuration['multiple_access_urls']) {
-			$sql = "SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+			$sql = "SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.c_id  = c.id)
 				WHERE  c.code LIKE '$needle%' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";
 		} else {
 			$sql = "SELECT c.code, c.title FROM $tbl_course c
@@ -102,9 +102,7 @@ function search_courses($needle,$type) {
 
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
-<!--
+$htmlHeadXtra[] = '<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -142,23 +140,22 @@ function remove_item(origin) {
 		}
 	}
 }
--->
 </script>';
 
 $formSent=0;
 $errorMsg = $firstLetterCourse = '';
 $UserList = array();
-
 $msg = '';
+
 if (intval($_POST['formSent']) == 1) {
 	$courses_list = $_POST['CoursesList'];
-	$affected_rows = CourseManager::suscribe_courses_to_hr_manager($user_id,$courses_list);
+	$affected_rows = CourseManager::suscribe_courses_to_hr_manager($user_id, $courses_list);
 	if ($affected_rows)	{
 		$msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
 	}
 }
 
-// display header
+// Display header
 Display::display_header($tool_name);
 
 // actions
@@ -187,13 +184,12 @@ if (isset($_POST['firstLetterCourse'])) {
 	$needle = "$needle%";
 }
 
-if ($_configuration['multiple_access_urls']) {
-	$sql 	= " SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+if (api_is_multiple_url_enabled()) {
+	$sql 	= " SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.c_id = c.id)
                 WHERE  c.code LIKE '$needle' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."
                 ORDER BY c.title";
-
 } else {
-	$sql 	= " SELECT c.code, c.title FROM $tbl_course c
+	$sql 	= " SELECT c.code, c.title, id as real_id FROM $tbl_course c
                 WHERE  c.code LIKE '$needle' $without_assigned_courses
                 ORDER BY c.title";
 }
@@ -250,7 +246,7 @@ if(!empty($msg)) {
 	<?php
 	while ($enreg = Database::fetch_array($result)) {
 	?>
-		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"';?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
+		<option value="<?php echo $enreg['real_id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"';?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
 	<?php } ?>
 	</select></div>
   </td>
@@ -282,7 +278,7 @@ if(!empty($msg)) {
 	if (is_array($assigned_courses_to_hrm)) {
 		foreach($assigned_courses_to_hrm as $enreg) {
 	?>
-		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
+		<option value="<?php echo $enreg['real_id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
 	<?php }
 	}?>
   </select></td>

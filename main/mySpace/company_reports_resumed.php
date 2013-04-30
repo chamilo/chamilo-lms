@@ -58,6 +58,7 @@ $(function() {
 </script>';
 $content = Display::grid_html('user_course_report');
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -109,8 +109,8 @@ $form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('url', '', 'maxlength',254);
 
 $types = array(
-  1=>get_lang('AccessURL'), 
-  2=>get_lang('SincroServer'), 
+  1=>get_lang('AccessURL'),
+  2=>get_lang('SincroServer'),
   3=>get_lang('SincroClient'),
 );
 $form->addElement('select', 'url_type', get_lang('Type'), $types);
@@ -118,7 +118,7 @@ $form->addElement('select', 'url_type', get_lang('Type'), $types);
 $form->addElement('textarea','description',get_lang('Description'));
 
 //the first url with id = 1 will be always active
-if ($_GET['url_id'] != 1) {
+if (isset($_GET['url_id']) && $_GET['url_id'] != 1) {
     $form->addElement('checkbox','active',get_lang('Active'));
 }
 
@@ -169,3 +169,5 @@ $form->addElement('file','url_image_3','URL Image 3 (PNG)');
 // Submit button
 $form->addElement('style_submit_button', 'submit', $submit_name, 'class="add"');
 $form->display();
+
+Display::display_footer();

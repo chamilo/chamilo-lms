@@ -23,12 +23,11 @@ $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 api_protect_course_script(true);
 
 //	 ONLY USERS REGISTERED IN THE COURSE
-if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit()) {
+if((!$is_courseMember) && !api_is_allowed_to_edit()) {
 	api_not_allowed(true);//print headers/footers
 }
 
-if (api_is_allowed_to_edit()) { 
-	require_once api_get_path(LIBRARY_PATH) . "blog.lib.php";
+if (api_is_allowed_to_edit()) {
 	$nameTools = get_lang("blog_management");
 
 	// showing the header if we are not in the learning path, if we are in
@@ -49,8 +48,8 @@ if (api_is_allowed_to_edit()) {
 		'name' => $current_section
 		);
 		Display::display_header('');
-	} else {		
-	}	
+	} else {
+	}
 	echo '<div class="actions">';
 	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",Display::return_icon('new_blog.png',get_lang('AddBlog'),'',ICON_SIZE_MEDIUM)."</a>";
 	echo '</div>';
@@ -83,7 +82,7 @@ if (api_is_allowed_to_edit()) {
 		Display::display_confirmation_message(get_lang('BlogDeleted'));
 	}
 
-	/*	
+	/*
 		DISPLAY
 	*/
 	//api_display_tool_title($nameTools);

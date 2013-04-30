@@ -13,8 +13,6 @@
 //require '../inc/global.inc.php';
 
 function create_backup_is_admin($_cid) {
-
-	$this_section = SECTION_COURSES;
 	if (isset($_GET['session']) && $_GET['session']) {
 		$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 		$_cid = true;

@@ -103,7 +103,6 @@ switch ($action) {
     case 'session_courses_lp_default':
 
         require_once '../global.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
@@ -143,13 +142,13 @@ switch ($action) {
             $list               = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
             $flat_list          = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
-            $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
+            $course_url         = api_get_path(WEB_COURSE_PATH).$item['directory'].'/index.php?id_session='.$session_id;
             $item['title']      = Display::url($item['title'], $course_url, array('target'=>SESSION_LINK_TARGET));
 
             foreach($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
-                $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['code'], $session_id, false);
+                $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(), $item['id'], $session_id, false);
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
@@ -223,7 +222,6 @@ switch ($action) {
     case 'session_courses_lp_by_week':
 
         require_once '../global.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
@@ -265,13 +263,13 @@ switch ($action) {
             $list               = new LearnpathList(api_get_user_id(),$item['code'], $session_id, 'publicated_on DESC');
             $flat_list          = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
-            $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id,array('target'=>SESSION_LINK_TARGET));
+            $item['title'] = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/index.php?id_session='.$session_id,array('target'=>SESSION_LINK_TARGET));
 
             foreach($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
 
-                $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['code'], $session_id, false);
+                $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['id'], $session_id, false);
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
@@ -349,7 +347,6 @@ switch ($action) {
     case 'session_courses_lp_by_course':
 
         require_once '../global.inc.php';
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
@@ -392,11 +389,11 @@ switch ($action) {
             $list               = new LearnpathList(api_get_user_id(),$item['code'],$session_id);
             $flat_list          = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
-            $item['title']      = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id, array('target'=>SESSION_LINK_TARGET));
+            $item['title']      = Display::url($item['title'],api_get_path(WEB_COURSE_PATH).$item['directory'].'/index.php?id_session='.$session_id, array('target'=>SESSION_LINK_TARGET));
             foreach($flat_list as $lp_id => $lp_item) {
                 $temp[$count]['id']= $lp_id;
                 $lp_url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?cidReq='.$item['code'].'&id_session='.$session_id.'&lp_id='.$lp_id.'&action=view';
-                $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['code'], $session_id, false);
+                $last_date = Tracking::get_last_connection_date_on_the_course(api_get_user_id(),$item['id'], $session_id, false);
                 if ($lp_item['modified_on'] == '0000-00-00 00:00:00' || empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';

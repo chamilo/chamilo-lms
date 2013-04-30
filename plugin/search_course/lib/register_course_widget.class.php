@@ -14,7 +14,7 @@ class RegisterCourseWidget
     const ACTION_SUBSCRIBE = 'subscribe';
 
     const PARAM_SUBSCRIBE = 'subscribe';
-    const PARAM_PASSCODE = 'course_registration_code';
+    const PARAM_PASSCODE  = 'course_registration_code';
 
     /**
      * Returns $_POST data for $key is it exists or $default otherwise.
@@ -62,29 +62,27 @@ class RegisterCourseWidget
     function action_subscribe_user()
     {
         $action = self::get('action');
-        if ($action != self::ACTION_SUBSCRIBE)
-        {
+        if ($action != self::ACTION_SUBSCRIBE) {
             return false;
         }
 
         $course_code = self::post(self::PARAM_SUBSCRIBE);
-        if (empty($course_code))
-        {
+        if (empty($course_code)) {
             return false;
         }
 
         $registration_code = self::post(self::PARAM_PASSCODE);
 
-        if ($this->subscribe_user($course_code, $registration_code))
-        {
+        if ($this->subscribe_user($course_code, $registration_code)) {
             Display::display_confirmation_message(get_lang('EnrollToCourseSuccessful'));
+
             return;
         }
-        if (!empty($registration_code))
-        {
+        if (!empty($registration_code)) {
             Display::display_error_message(get_lang('CourseRegistrationCodeIncorrect'));
         }
         $this->display_form($course_code);
+
         return true;
     }
 
@@ -99,20 +97,18 @@ class RegisterCourseWidget
      */
     function subscribe_user($course_code, $registration_code = '', $user_id = null)
     {
-        $course = $this->retrieve_course($course_code);
+        $course                  = $this->retrieve_course($course_code);
         $course_regisration_code = $course['registration_code'];
-        if (!empty($course_regisration_code) && $registration_code != $course_regisration_code)
-        {
+        if (!empty($course_regisration_code) && $registration_code != $course_regisration_code) {
             return false;
         }
 
-        if (empty($user_id))
-        {
+        if (empty($user_id)) {
             global $_user;
             $user_id = $_user['user_id'];
         }
 
-        return (bool) CourseManager::add_user_to_course($user_id, $course_code);
+        return (bool)CourseManager::add_user_to_course($user_id, $course['real_id']);
     }
 
     /**
@@ -125,11 +121,11 @@ class RegisterCourseWidget
     {
         global $stok;
 
-        $course = $this->retrieve_course($course_code);
-        $self = $_SERVER['REQUEST_URI'];
-        $course_code = $course['code'];
-        $course_visual_code = $course['visual_code'];
-        $course_title = $course['title'];
+        $course                         = $this->retrieve_course($course_code);
+        $self                           = $_SERVER['REQUEST_URI'];
+        $course_code                    = $course['code'];
+        $course_visual_code             = $course['visual_code'];
+        $course_title                   = $course['title'];
         $submit_registration_code_label = get_lang("SubmitRegistrationCode");
         $course_requires_password_label = get_lang('CourseRequiresPassword');
 

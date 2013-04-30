@@ -344,14 +344,17 @@ if ($modifyAnswers) {
         $destination = array();
 
 
-        for ($i = 1; $i <= $nbrAnswers; $i++) {
-            $reponse[$i] = $objAnswer->selectAnswer($i);
+        //for ($i = 1; $i <= $nbrAnswers; $i++) {
+        $i = 1;
+        foreach ($objAnswer->answer as $answer_id =>  $answer_item) {
+            //$i = $answer_id;
+            $reponse[$i] = $objAnswer->selectAnswer($answer_id);
             if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                $comment[$i] = $objAnswer->selectComment($i);
+                $comment[$i] = $objAnswer->selectComment($answer_id);
             }
-            $weighting[$i] = $objAnswer->selectWeighting($i);
-            $hotspot_coordinates[$i] = $objAnswer->selectHotspotCoordinates($i);
-            $hotspot_type[$i] = $objAnswer->selectHotspotType($i);
+            $weighting[$i] = $objAnswer->selectWeighting($answer_id);
+            $hotspot_coordinates[$i] = $objAnswer->selectHotspotCoordinates($answer_id);
+            $hotspot_type[$i] = $objAnswer->selectHotspotType($answer_id);
 
             if ($answerType == HOT_SPOT_DELINEATION) {
                 $destination[$i] = $objAnswer->selectDestination($i);
@@ -368,6 +371,7 @@ if ($modifyAnswers) {
                 $select_question[$i] = $destination_items[3];
                 $url[$i] = $destination_items[4];
             }
+            $i++;
         }
     }
 
@@ -559,7 +563,6 @@ if ($modifyAnswers) {
 
                         </tr>
                         <?php
-                        require_once '../newscorm/learnpathList.class.php';
                         $list = new LearnpathList(api_get_user_id());
                         $flat_list = $list->get_flat_list(); //loading list of LPs
 
@@ -866,7 +869,6 @@ if ($modifyAnswers) {
                             </tr>
                             <?php
                         }
-                        require_once '../newscorm/learnpathList.class.php';
                         $list = new LearnpathList(api_get_user_id());
                         $flat_list = $list->get_flat_list();
                         $select_lp_id = array();

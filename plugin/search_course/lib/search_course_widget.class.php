@@ -393,7 +393,7 @@ EOT;
                                       course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
 				      course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
 		               FROM $course_table course, $user_course_table course_rel_user
-		               WHERE course.code = course_rel_user.course_code
+		               WHERE course.id = course_rel_user.c_id
 		                     AND course_rel_user.user_id = $user_id
 		               ORDER BY course_rel_user.sort ASC";
         $result = array();

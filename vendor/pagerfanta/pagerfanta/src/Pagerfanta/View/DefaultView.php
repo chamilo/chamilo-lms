@@ -12,6 +12,7 @@
 namespace Pagerfanta\View;
 
 use Pagerfanta\PagerfantaInterface;
+use Pagerfanta\View\Template\TemplateInterface;
 use Pagerfanta\View\Template\DefaultTemplate;
 
 /**

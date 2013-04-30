@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 $reports_modules['quiz'] = array ();
 
@@ -8,20 +8,27 @@ function reports_modules_quiz_init() {
 
 function reports_modules_quiz_init_forEachCourses($course_code, $course_id, $course_db) {
 	global $reports_modules;
-	
+
 	$reports_modules_quiz_toolid = reports_getToolId(TOOL_QUIZ);
 
-	array_push($reports_modules['quiz'], 
-	  array('keys_query' =>  
+	array_push($reports_modules['quiz'],
+	  array('keys_query' =>
 		'select '.$course_id.' as course_id, '.
 		$reports_modules_quiz_toolid.' as tool_id, '.
 		'q.id as child_id, q.title as child_name, '.
 		"'".$course_code."'".' as course_code from '.Database::get_course_table(TABLE_QUIZ_TEST).' q ',
-		'values_query_function' => 'reports_modules_quiz_quizVal'));		
+		'values_query_function' => 'reports_modules_quiz_quizVal'));
 }
 
+/**
+ * @todo fix the exe_cours_id field
+ * @param $quiz
+ * @param $key_id
+ * @return array
+ */
+
 function reports_modules_quiz_quizVal($quiz, $key_id) {
-	return array('type'=> 'sql', 'sql' => 
+	return array('type'=> 'sql', 'sql' =>
 			'select '.$key_id.', exe_user_id as uid, '.
 			'session_id, -1 as attempt, exe_result as score, '.
 			REPORTS_PROGRESS_COMPLETED.' as progress, '.

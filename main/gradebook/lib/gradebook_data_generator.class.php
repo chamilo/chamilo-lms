@@ -22,7 +22,7 @@ class GradebookDataGenerator
 
 	const GDG_SORT_ASC             = 32;
 	const GDG_SORT_DESC            = 64;
-    
+
     const GDG_SORT_ID              = 128;
 
 
@@ -34,7 +34,7 @@ class GradebookDataGenerator
 		$allevals = (isset($evals) ? $evals : array());
 		$alllinks = (isset($links) ? $links : array());
 		// merge categories, evaluations and links
-		$this->items = array_merge($allcats, $allevals, $alllinks);        
+		$this->items = array_merge($allcats, $allevals, $alllinks);
 		$this->evals_links = array_merge($allevals, $alllinks);
     }
 
@@ -44,7 +44,7 @@ class GradebookDataGenerator
 	public function get_total_items_count() {
 		return count($this->items);
 	}
-	
+
 	/**
 	 * Get actual array data
 	 * @return array 2-dimensional array - each array contains the elements:
@@ -64,7 +64,7 @@ class GradebookDataGenerator
 		if ($count < 0) {
 			$count = 0;
 		}
-        
+
 		$allitems = $this->items;
 		// sort array
 		if ($sorting & self :: GDG_SORT_TYPE) {
@@ -87,12 +87,11 @@ class GradebookDataGenerator
 		$visibleitems = array_slice($allitems, $start, $count);
 		//status de user in course
 	    $user_id      = api_get_user_id();
-		$course_code  = api_get_course_id();
-		$status_user  = api_get_status_of_user_in_course($user_id, $course_code);
-        
+		$status_user  = api_get_status_of_user_in_course($user_id, api_get_course_int_id());
+
 		// generate the data to display
 		$data = array();
-        
+
 		foreach ($visibleitems as $item) {
 			$row = array ();
 			$row[] = $item;
@@ -101,22 +100,24 @@ class GradebookDataGenerator
 			$row[] = $item->get_weight();
 			/*if (api_is_allowed_to_edit(null, true)) {
 				$row[] = $this->build_date_column($item);
-			}*/			
+			}*/
 			if (count($this->evals_links) > 0) {
-				if (!api_is_allowed_to_edit() || $status_user != 1 ) {                    
+				if (!api_is_allowed_to_edit() || $status_user != 1 ) {
 					$row[] = $this->build_result_column($item, $ignore_score_color);
                     $row[] = $item;
 				}
-			}			
+			}
 		    $data[] = $row;
         }
+
 		return $data;
 	}
 
 	/**
 	 * Returns the link to the certificate generation, if the score is enough, otherwise
 	 * returns an empty string. This only works with categories.
-	 * @param	object Item
+	 * @param object Item
+     * @return string
 	 */
 	function get_certificate_link($item) {
 		if (is_a($item, 'Category')) {
@@ -133,10 +134,10 @@ class GradebookDataGenerator
 	function sort_by_name($item1, $item2) {
 		return api_strnatcmp($item1->get_name(), $item2->get_name());
 	}
-    
+
     function sort_by_id($item1, $item2) {
         return api_strnatcmp($item1->get_id(), $item2->get_id());
-    }    
+    }
 
 	function sort_by_type($item1, $item2) {
 		if ($item1->get_item_type() == $item2->get_item_type()) {
@@ -173,13 +174,13 @@ class GradebookDataGenerator
                 $timestamp1 = null;
             }
 		}
-		
+
 		if(is_int($item2->get_date())) {
 			$timestamp2 = $item2->get_date();
 		} else {
 			$timestamp2 = api_strtotime($item2->get_date(), 'UTC');
 		}
-		
+
 		if ($timestamp1 == $timestamp2) {
 			return $this->sort_by_name($item1,$item2);
 		} else {
@@ -189,10 +190,10 @@ class GradebookDataGenerator
 
     //  Other functions
 	private function build_result_column($item, $ignore_score_color) {
-		$scoredisplay = ScoreDisplay::instance();        
+		$scoredisplay = ScoreDisplay::instance();
 		$score 	      = $item->calc_score(api_get_user_id());
-		
-        if (!empty($score)) {        	
+
+        if (!empty($score)) {
     		switch ($item->get_item_type()) {
     			// category
     			case 'C' :
@@ -209,7 +210,7 @@ class GradebookDataGenerator
     			case 'E' :
     			case 'L' :
     				$displaytype = SCORE_DIV_PERCENT;
-    				if ($ignore_score_color) {    				    
+    				if ($ignore_score_color) {
     					$displaytype |= SCORE_IGNORE_SPLIT;
     				}
     				return $scoredisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM);

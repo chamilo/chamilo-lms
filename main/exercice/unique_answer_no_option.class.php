@@ -10,9 +10,6 @@
 /**
  * Code
  */
-
-if(!class_exists('UniqueAnswerNoOption')):
-
 /**
 	CLASS UNIQUE_ANSWER
  *
@@ -24,7 +21,8 @@ if(!class_exists('UniqueAnswerNoOption')):
  *	@package chamilo.exercise
  **/
 
-class UniqueAnswerNoOption extends Question {
+class UniqueAnswerNoOption extends Question
+{
 
 	static $typePicture = 'mcuao.gif';
 	static $explanationLangVar = 'UniqueAnswerNoOption';
@@ -90,7 +88,7 @@ class UniqueAnswerNoOption extends Question {
 							'.get_lang('Weighting').'
 						</th>
 					</tr>';
-        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
 		$defaults = array();
 		$correct = 0;
@@ -121,7 +119,8 @@ class UniqueAnswerNoOption extends Question {
                 }
             }
             for ($k = 1 ; $k <= $nb_answers; ++$k) {
-                if ($answer->position[$k] != '666') {
+                $answer_id = $answer->getRealAnswerIdFromList($k);
+                if ($answer->position[$answer_id] != '666') {
                     $new_list[$count] = $count;
                     $count++;
                 }
@@ -137,25 +136,26 @@ class UniqueAnswerNoOption extends Question {
         foreach ($new_list as $key) {
             $i = $key;
 			$form -> addElement ('html', '<tr>');
+            $answer_id = $answer->getRealAnswerIdFromList($i);
 
 			if (is_object($answer)) {
-			    if($answer->position[$i] == 666) {
+                if ($answer->position[$answer_id] == 666) {
 			        //we set nothing
 			    } else {
-    				if ($answer->correct[$i]) {
+                    if ($answer->correct[$answer_id]) {
     					$correct = $i;
     				}
-                    $answer_result = $answer->answer[$i];
-                    $weight_result = Text::float_format($answer->weighting[$i], 1);
+                    $answer_result = $answer->answer[$answer_id];
+                    $weight_result = Text::float_format($answer->weighting[$answer_id], 1);
                     if ($nb_answers == $i) {
                         $weight_result = '0';
                     }
 
     				$defaults['answer['.$i.']']    = $answer_result;
-    				$defaults['comment['.$i.']']   = $answer->comment[$i];
+                    $defaults['comment['.$i.']'] = $answer->comment[$answer_id];
     				$defaults['weighting['.$i.']'] = $weight_result;
 
-    				$item_list=explode('@@',$answer -> destination[$i]);
+                    $item_list = explode('@@', $answer->destination[$answer_id]);
 
     				$try       = $item_list[0];
     				$lp        = $item_list[1];
@@ -189,12 +189,11 @@ class UniqueAnswerNoOption extends Question {
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');
 
 
-			$answer_number=$form->addElement('text', 'counter['.$i.']', null,'value="'.$i.'"');
+			$answer_number = $form->addElement('text', 'counter['.$i.']', null,'value="'.$i.'"');
 			$answer_number->freeze();
 
-
 			$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-			$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+            $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 
 			if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
 				// feedback
@@ -415,4 +414,3 @@ class UniqueAnswerNoOption extends Question {
         return $header;
 	}
 }
-endif;

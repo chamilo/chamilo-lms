@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**	
+/**
 	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
 *	@package chamilo.timeline
 */
@@ -8,8 +8,6 @@
 // name of the language file that needs to be included
 $language_file = array ('registration','admin');
 require_once '../inc/global.inc.php';
-
-require_once api_get_path(LIBRARY_PATH).'timeline.lib.php';  
 
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Timeline'));
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Listing'));
@@ -28,12 +26,14 @@ $htmlHeadXtra[] = '
 <script>
 	$(document).ready(function() {
 		var timeline = new VMM.Timeline();
-		timeline.init("'.$url.'");			
+		timeline.init("'.$url.'");
 	});
 </script>';
 $content = '<div class="timeline-example"><div id="timeline"></div></div>';
 
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
+
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

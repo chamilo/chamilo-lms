@@ -32,7 +32,10 @@
 
 // Language files that need to be included
 $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
+
 require_once '../inc/global.inc.php';
+
+$parent_id = null;
 
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
@@ -70,7 +73,7 @@ if (empty($course_info)) {
 $course_dir = $course_info['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;
-$http_www = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
+$http_www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
 
 $dbl_click_id = 0; // Used for avoiding double-click
 
@@ -201,9 +204,7 @@ switch ($action) {
         break;
     case 'copytomyfiles':
         // Copy a file to general my files user's
-        if (api_get_setting('allow_social_tool') == 'true' && api_get_setting(
-            'users_copy_files'
-        ) == 'true' && api_get_user_id() != 0 && !api_is_anonymous()
+        if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0 && !api_is_anonymous()
         ) {
             $document_info = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
             $parent_id = $document_info['parent_id'];
@@ -216,7 +217,7 @@ switch ($action) {
                 @mkdir($user_folder, $perm, true);
             }
 
-            $file = $sys_course_path.$_course['path'].'/document'.$document_info['path'];
+            $file = $sys_course_path.$course_info['path'].'/document'.$document_info['path'];
             $copyfile = $user_folder.basename($document_info['path']);
             $cidReq = Security::remove_XSS($_GET['cidReq']);
             $id_session = Security::remove_XSS($_GET['id_session']);
@@ -253,6 +254,7 @@ switch ($action) {
                     }
                 }
             } else {
+
                 if (!copy($file, $copyfile)) {
                     $message = Display::return_message(get_lang('CopyFailed'), 'error');
                 } else {
@@ -438,7 +440,7 @@ if ($to_group_id != 0 && $curdirpath == '/') {
 //if (!$is_allowed_to_edit || api_is_coach()) { before
 
 if (!$is_allowed_to_edit && api_is_coach()) {
-    if ($curdirpath != '/' && !(DocumentManager::is_visible($curdirpath, $_course, api_get_session_id(), 'folder'))) {
+    if ($curdirpath != '/' && !(DocumentManager::is_visible($curdirpath, $course_info, api_get_session_id(), 'folder'))) {
         api_not_allowed(true);
     }
 }
@@ -452,7 +454,7 @@ if ($session_id == 0) {
         $to_group_id = 0;
         $visibility = 0;
         FileManager::create_unexisting_directory(
-            $_course,
+            $course_info,
             api_get_user_id(),
             api_get_session_id(),
             $to_group_id,
@@ -470,7 +472,7 @@ if ($session_id == 0) {
         $to_group_id = 0;
         $visibility = 1;
         FileManager::create_unexisting_directory(
-            $_course,
+            $course_info,
             api_get_user_id(),
             api_get_session_id(),
             $to_group_id,
@@ -489,7 +491,7 @@ if ($session_id == 0) {
         $to_group_id = 0;
         $visibility = 0;
         FileManager::create_unexisting_directory(
-            $_course,
+            $course_info,
             api_get_user_id(),
             api_get_session_id(),
             $to_group_id,
@@ -509,7 +511,7 @@ if ($session_id == 0) {
         $to_group_id = 0;
         $visibility = 1;
         FileManager::create_unexisting_directory(
-            $_course,
+            $course_info,
             api_get_user_id(),
             api_get_session_id(),
             $to_group_id,
@@ -576,7 +578,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplaye
 
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
 $docs_and_folders = DocumentManager::get_all_document_data(
-    $_course,
+    $course_info,
     $curdirpath,
     $to_group_id,
     null,
@@ -632,13 +634,14 @@ if ($to_group_id != 0) { // Add group name after for group documents
 
 /* Introduction section (editable by course admins) */
 
-if (!empty($_SESSION['_gid'])) {
-    Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid']);
+if (!empty($to_group_id)) {
+    Display::display_introduction_section(TOOL_DOCUMENT.$to_group_id);
 } else {
     Display::display_introduction_section(TOOL_DOCUMENT);
 }
 
 // ACTION MENU
+$moveTo = isset($_POST['move_to']) ? Security::remove_XSS($_POST['move_to']) : null;
 
 /* 	MOVE FILE OR DIRECTORY */
 //Only teacher and all users into their group and each user into his/her shared folder
@@ -646,7 +649,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     api_get_user_id(),
     $curdirpath,
     $session_id
-) || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($_POST['move_to']), $session_id)
+) || is_my_shared_folder(api_get_user_id(), $moveTo, $session_id)
 ) {
 
     if (isset($_GET['move']) && $_GET['move'] != '') {
@@ -665,7 +668,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         }
 
         if (!$is_allowed_to_edit) {
-            if (DocumentManager::check_readonly($_course, api_get_user_id(), $my_get_move)) {
+            if (DocumentManager::check_readonly($course_info, api_get_user_id(), $my_get_move)) {
                 api_not_allowed();
             }
         }
@@ -673,7 +676,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         $move_path = $document_to_move['path'];
         if (!empty($document_to_move)) {
             $folders = DocumentManager::get_all_document_folders(
-                $_course,
+                $course_info,
                 $to_group_id,
                 $is_allowed_to_edit || $group_member_with_upload_rights
             );
@@ -708,7 +711,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     if (isset($_POST['move_to']) && isset($_POST['move_file'])) {
 
         if (!$is_allowed_to_edit) {
-            if (DocumentManager::check_readonly($_course, api_get_user_id(), $_POST['move_file'])) {
+            if (DocumentManager::check_readonly($course_info, api_get_user_id(), $_POST['move_file'])) {
                 api_not_allowed();
             }
         }
@@ -1013,9 +1016,8 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         $user_id = api_get_user_id();
 
         // Create the template_thumbnails folder in the upload folder (if needed)
-        if (!is_dir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/')) {
-            @mkdir(
-                api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/',
+        if (!is_dir(api_get_path(SYS_DATA_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/')) {
+            @mkdir(api_get_path(SYS_DATA_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/',
                 api_get_permissions_for_new_directories()
             );
         }
@@ -1031,7 +1033,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                 );
 
                 // Upload dir
-                $upload_dir = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/';
+                $upload_dir = api_get_path(SYS_DATA_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/';
 
                 // Resize image to max default and end upload
                 $temp = new Image($_FILES['template_image']['tmp_name']);
@@ -1501,16 +1503,18 @@ $column_show[] = 0;
 
 $column_order = array();
 
-if (count($row) == 12) {
-    //teacher
-    $column_order[2] = 8; //name
-    $column_order[3] = 7;
-    $column_order[4] = 6;
-} elseif (count($row) == 10) {
-    //student
-    $column_order[1] = 6;
-    $column_order[2] = 5;
-    $column_order[3] = 4;
+if (isset($row)) {
+    if (count($row) == 12) {
+        //teacher
+        $column_order[2] = 8; //name
+        $column_order[3] = 7;
+        $column_order[4] = 6;
+    } elseif (count($row) == 10) {
+        //student
+        $column_order[1] = 6;
+        $column_order[2] = 5;
+        $column_order[3] = 4;
+    }
 }
 
 $default_column = $is_allowed_to_edit ? 2 : 1;

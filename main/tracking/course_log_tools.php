@@ -15,6 +15,7 @@ require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
 $course_info = api_get_course_info(api_get_course_id());
+$courseId = $course_info['real_id'];
 
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
@@ -38,7 +39,6 @@ if (!$is_allowedToTrack) {
 
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/scormItem.class.php';
 require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
@@ -78,10 +78,10 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 if (empty($session_id)) {
 	// Registered students in a course outside session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), false, 0, api_get_group_id());
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id(), false, 0, api_get_group_id());
 } else {
 	// Registered students in session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id(), true, api_get_session_id());
 }
 
 $nbStudents = count($a_students);
@@ -112,6 +112,7 @@ echo '</span>';
 echo '</div>';
 
 $course_code = api_get_course_id();
+$courseId = api_get_course_int_id();
 
 $list = new LearnpathList(null, $course_code, $session_id);
 
@@ -142,7 +143,7 @@ if (count($flat_list) > 0) {
         $lp_avg_progress = 0;
         foreach ($a_students as $student_id => $student) {
             // get the progress in learning pathes
-            $lp_avg_progress += Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
+            $lp_avg_progress += Tracking::get_avg_student_progress($student_id, $courseId, array($lp_id), $session_id);
         }
         if ($nbStudents > 0) {
             $lp_avg_progress = $lp_avg_progress / $nbStudents;
@@ -196,7 +197,7 @@ if (Database::num_rows($rs) > 0) {
         $quiz_avg_score = 0;
         if ($count_students > 0) {
             foreach ($student_ids as $student_id) {
-                $avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_code, $quiz['id'], $session_id);
+                $avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_id, $quiz['id'], $session_id);
                 $quiz_avg_score += $avg_student_score;
             }
         }
@@ -259,7 +260,7 @@ echo '<div class="report_section">
         '.Display::page_subheader2(Display::return_icon('chat.gif',get_lang('Chat')).get_lang('Chat')).'
         <table class="data_table">';
 
-$chat_connections_during_last_x_days_by_course = Tracking::chat_connections_during_last_x_days_by_course($course_code, 7, $session_id, $filter_by_users);
+$chat_connections_during_last_x_days_by_course = Tracking::chat_connections_during_last_x_days_by_course($courseId, 7, $session_id, $filter_by_users);
 if ($export_csv) {
     $csv_content[] = array(get_lang('Chat', ''), '');
     $csv_content[] = array(sprintf(get_lang('ChatConnectionsDuringLastXDays', ''), '7'), $chat_connections_during_last_x_days_by_course);
@@ -274,7 +275,7 @@ echo '<div class="report_section">
             '.Display::page_subheader2(Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed')).'
         <table class="data_table">';
 
-$tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id, $filter_by_users);
+$tools_most_used = Tracking::get_tools_most_used_by_course($courseId, $session_id, $filter_by_users);
 
 if ($export_csv) {
     $temp = array(get_lang('ToolsMostUsed'), '');
@@ -311,7 +312,7 @@ if (!isset($_GET['num']) || empty($_GET['num'])) {
         <table class="data_table">';
 
 //No group id
-$documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course($course_code, $session_id, $num, $filter_by_users);
+$documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course($courseId, $session_id, $num, $filter_by_users);
 
 if ($export_csv) {
     $temp = array(get_lang('DocumentsMostDownloaded', ''), '');
@@ -346,7 +347,7 @@ echo '<div class="clear"></div>';
             '.Display::page_subheader2(Display::return_icon('link.gif',get_lang('LinksMostClicked')).'&nbsp;'.get_lang('LinksMostClicked')).'
         <table class="data_table">';
 
-$links_most_visited = Tracking::get_links_most_visited_by_course($course_code, $session_id, $filter_by_users);
+$links_most_visited = Tracking::get_links_most_visited_by_course($courseId, $session_id, $filter_by_users);
 
 if ($export_csv) {
     $temp = array(get_lang('LinksMostClicked'), '');

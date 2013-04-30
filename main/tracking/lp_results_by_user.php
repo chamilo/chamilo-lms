@@ -14,12 +14,11 @@
 $language_file = array ('registration', 'index', 'tracking', 'exercice','survey');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
 $this_section = SECTION_TRACKING;
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
+$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin() || api_is_course_coach() || api_is_session_admin();
 
 if (!$is_allowedToTrack) {
 	Display :: display_header(null);
@@ -120,7 +119,6 @@ if (!$export_to_csv) {
 	$form->display();
 	//echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
 }
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 $main_result = array();
 $session_id = 0;
 $user_list = array();
@@ -128,10 +126,8 @@ $user_list = array();
 foreach($course_list  as $current_course ) {
 	$course_info = api_get_course_info($current_course['code']);
 	$_course = $course_info;
-
-
 	//Getting LP list
-	$list = new learnpathList('', $current_course['code'], $session_id);
+	$list = new LearnpathList('', $current_course['code'], $session_id);
 	$lp_list = $list->get_flat_list();
 
 	// Looping LPs
@@ -141,7 +137,7 @@ foreach($course_list  as $current_course ) {
 		$attempt_result = array();
 		//Looping Chamilo Exercises in LP
 		foreach ($exercise_list as $exercise) {
-			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'], $course_info['id'], $session_id);
+			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'], $course_info['real_id'], $session_id);
 			//Looping Exercise Attempts
 			foreach($exercise_stats as $stats) {
 				//$attempt_result[$exercise['id']]['users'][$stats['exe_user_id']][$stats['exe_id']] = array('exe_result' =>$stats['exe_result'],'exe_weighting' =>$stats['exe_weighting']);

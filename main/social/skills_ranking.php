@@ -50,8 +50,8 @@ $jqgrid = Display::grid_js('skill_ranking', $url,$columns,$column_model,$extra_p
 
 $content = Display::grid_html('skill_ranking');
 
-
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

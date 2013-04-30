@@ -479,11 +479,9 @@ class CourseHome {
             }
         }
 
-        $i = 0;
         // Grabbing all the links that have the property on_homepage set to 1
         $course_link_table 			= Database::get_course_table(TABLE_LINK);
         $course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
 
         switch ($course_tool_category) {
             case TOOL_AUTHORING:

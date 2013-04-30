@@ -2,6 +2,9 @@
 
 namespace Symfony\Component\Form\Test;
 
+use Symfony\Component\Form\FormInterface as NonTestFormInterface;
+use Symfony\Component\Form\FormEvent;
+
 class DeprecationErrorHandler
 {
     public static function handle($errorNumber, $message, $file, $line, $context)
@@ -20,5 +23,14 @@ class DeprecationErrorHandler
         }
 
         return false;
+    }
+
+    public static function getFormEvent(NonTestFormInterface $form, $data)
+    {
+        set_error_handler(array('Symfony\Component\Form\Test\DeprecationErrorHandler', 'handle'));
+        $event = new FormEvent($form, $data);
+        restore_error_handler();
+
+        return $event;
     }
 }

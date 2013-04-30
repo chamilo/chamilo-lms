@@ -47,9 +47,9 @@ if ($action == 'delete') {
 		}
 		$idChecked = $my_temp;
 		$idChecked="'".implode("','", $idChecked)."'";
-		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
+		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND c_id IN($idChecked)");
 		$nbr_affected_rows=Database::affected_rows();
-		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
+		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND c_id IN($idChecked)");
 		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
 	}
 	header('Location: '.api_get_self().'?id_session='.$id_session.'&sort='.$sort);
@@ -59,7 +59,9 @@ if ($action == 'delete') {
 $limit  = 20;
 $from   = $page * $limit;
 
-$sql = "SELECT code, title, nbr_users FROM $tbl_session_rel_course, $tbl_course WHERE course_code=code AND id_session='$id_session' ORDER BY $sort LIMIT $from,".($limit+1);
+$sql = "SELECT c_id, title, nbr_users FROM $tbl_session_rel_course, $tbl_course  c
+        WHERE c_id = c.id AND id_session='$id_session'
+        ORDER BY $sort LIMIT $from,".($limit+1);
 $result=Database::query($sql);
 $Courses=Database::store_result($result);
 $tool_name = api_htmlentities($session_name,ENT_QUOTES,$charset).' : '.get_lang('CourseListInSession');
@@ -80,14 +82,14 @@ $tableHeader[] = array(get_lang('NbUsers'));
 $tableHeader[] = array(get_lang('Actions'));
 
 $tableCourses = array();
-foreach($Courses as $key=>$enreg) {
+foreach ($Courses as $key=>$enreg) {
 	$course = array();
-	$course[] = '<input type="checkbox" name="idChecked[]" value="'.$enreg['code'].'">';
+	$course[] = '<input type="checkbox" name="idChecked[]" value="'.$enreg['c_id'].'">';
 	$course[] = api_htmlentities($enreg['title'],ENT_QUOTES,$charset);
-	$course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['code'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
-	$course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$enreg['code'].'/?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>
-                <a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>
-				<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['code'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+	$course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['c_id'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
+	$course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$enreg['c_id'].'/index.php?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>
+                <a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['c_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>
+				<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['c_id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	$tableCourses[] = $course;
 }
 echo '<form method="post" action="'.api_get_self().'">';

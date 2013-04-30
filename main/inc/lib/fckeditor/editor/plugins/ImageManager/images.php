@@ -57,7 +57,6 @@ function drawFiles($list, &$manager) {
     $in_course = $course_id != -1 ? true : false;
 
 	foreach ($list as $entry => $file) {
-		//$chamiloPath = '/'.$_configuration['url_append'].'/courses/'.api_get_course_path().'/document'.$file['relative'];
 		?>
 		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
 		<!-- change <?php echo $file['relative'];?> with <?php echo $chamiloPath; ?>

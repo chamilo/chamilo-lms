@@ -1008,7 +1008,7 @@ class scorm extends learnpath
         if ($this->debug > 0) {
             error_log('In scorm::reimport_manifest() method', 0);
         }
-        global $_course;
+        $_course = api_get_course_info();
         // RECOVERING PATH FROM DB
         $main_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $course = Datbase::escape_string($course);

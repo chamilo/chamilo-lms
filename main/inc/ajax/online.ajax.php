@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /*
  * To change this template, choose Tools | Templates
@@ -37,3 +38,4 @@ switch($action) {
     default:
         break;
 }
+exit;

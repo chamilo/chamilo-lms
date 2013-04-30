@@ -20,21 +20,9 @@ use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
 use Symfony\Component\Form\Exception\Exception;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class FormType extends AbstractType
 {
-    /**
-     * @var PropertyAccessorInterface
-     */
-    private $propertyAccessor;
-
-    public function __construct(PropertyAccessorInterface $propertyAccessor = null)
-    {
-        $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::getPropertyAccessor();
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -45,14 +33,15 @@ class FormType extends AbstractType
             ->setDisabled($options['disabled'])
             ->setErrorBubbling($options['error_bubbling'])
             ->setEmptyData($options['empty_data'])
-            ->setPropertyPath($options['property_path'])
+            // BC compatibility, when "property_path" could be false
+            ->setPropertyPath(is_string($options['property_path']) ? $options['property_path'] : null)
             ->setMapped($options['mapped'])
             ->setByReference($options['by_reference'])
             ->setVirtual($options['virtual'])
             ->setCompound($options['compound'])
             ->setData(isset($options['data']) ? $options['data'] : null)
             ->setDataLocked(isset($options['data']))
-            ->setDataMapper($options['compound'] ? new PropertyPathMapper($this->propertyAccessor) : null)
+            ->setDataMapper($options['compound'] ? new PropertyPathMapper() : null)
         ;
 
         if ($options['trim']) {
@@ -82,7 +71,7 @@ class FormType extends AbstractType
             } else {
                 $id = $name;
                 $fullName = $name;
-                $uniqueBlockPrefix = '_'.$blockName;
+                $uniqueBlockPrefix = '_' . $blockName;
             }
 
             // Complex fields are read-only if they themselves or their parents are.
@@ -96,7 +85,7 @@ class FormType extends AbstractType
         } else {
             $id = $name;
             $fullName = $name;
-            $uniqueBlockPrefix = '_'.$blockName;
+            $uniqueBlockPrefix = '_' . $blockName;
 
             // Strip leading underscores and digits. These are allowed in
             // form names, but not in HTML4 ID attributes.
@@ -143,7 +132,7 @@ class FormType extends AbstractType
             // collection form have different types (dynamically), they should
             // be rendered differently.
             // https://github.com/symfony/symfony/issues/5038
-            'cache_key'           => $uniqueBlockPrefix.'_'.$form->getConfig()->getType()->getName(),
+            'cache_key'           => $uniqueBlockPrefix . '_' . $form->getConfig()->getType()->getName(),
         ));
     }
 
@@ -195,6 +184,11 @@ class FormType extends AbstractType
             return $options['compound'];
         };
 
+        // BC clause: former property_path=false now equals mapped=false
+        $mapped = function (Options $options) {
+            return false !== $options['property_path'];
+        };
+
         // If data is given, the form is locked to that data
         // (independent of its value)
         $resolver->setOptional(array(
@@ -212,7 +206,7 @@ class FormType extends AbstractType
             'max_length'         => null,
             'pattern'            => null,
             'property_path'      => null,
-            'mapped'             => true,
+            'mapped'             => $mapped,
             'by_reference'       => true,
             'error_bubbling'     => $errorBubbling,
             'label'              => null,

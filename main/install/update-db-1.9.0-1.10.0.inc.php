@@ -142,20 +142,20 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
             }
 
-            //Fixes new changes session_rel_course
+            // Fixes new changes session_rel_course
             $sql = "SELECT id_session, sc.course_code, c.id FROM $course_table c INNER JOIN $session_rel_course_table sc ON sc.course_code = c.code";
             $result = iDatabase::query($sql);
             while ($row = Database::fetch_array($result)) {
-                $sql = "UPDATE $session_rel_course_table SET course_id = {$row['id']}
+                $sql = "UPDATE $session_rel_course_table SET c_id = {$row['id']}
                         WHERE course_code = '{$row['course_code']}' AND id_session = {$row['id_session']} ";
                 iDatabase::query($sql);
             }
 
-            //Fixes new changes in session_rel_course_rel_user
+            // Fixes new changes in session_rel_course_rel_user
             $sql = "SELECT id_session, sc.course_code, c.id FROM $course_table c INNER JOIN $session_rel_course_rel_user_table sc ON sc.course_code = c.code";
             $result = iDatabase::query($sql);
             while ($row = Database::fetch_array($result)) {
-                $sql = "UPDATE $session_rel_course_rel_user_table SET course_id = {$row['id']}
+                $sql = "UPDATE $session_rel_course_rel_user_table SET c_id = {$row['id']}
                         WHERE course_code = '{$row['course_code']}' AND id_session = {$row['id_session']} ";
                 iDatabase::query($sql);
             }
@@ -200,7 +200,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             Database::query($sql);
 
 
-            //Moving social group to class
+            // Moving social group to class
             $output->writeln('Fixing social groups');
 
             $sql = "SELECT * FROM $dbNameForm.groups";
@@ -220,7 +220,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $sql = "INSERT INTO $dbNameForm.usergroup (name, group_type, description, picture, url, visibility, updated_on, created_on)
                     VALUES ('{$group['name']}', '1', '{$group['description']}', '{$group['picture_uri']}', '{$group['url']}', '{$group['visibility']}', '{$group['updated_on']}', '{$group['created_on']}')";
                     Database::query($sql);
-                    $id = Database::get_last_insert_id();
+                    $id = Database::insert_id();
                     $oldGroups[$group['id']] = $id;
                 }
             }
@@ -260,7 +260,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $data['group_id'] = $oldGroups[$data['group_id']];
                             $data['subgroup_id'] = $oldGroups[$data['subgroup_id']];
                             $sql = "INSERT INTO $dbNameForm.usergroup_rel_usergroup (group_id, subgroup_id, relation_type)
-                            VALUES ('{$data['group_id']}', '{$data['subgroup_id']}', '{$data['relation_type']}')";
+                                    VALUES ('{$data['group_id']}', '{$data['subgroup_id']}', '{$data['relation_type']}')";
                             Database::query($sql);
                         }
                     }
@@ -294,6 +294,86 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $sql = "INSERT INTO $dbNameForm.usergroup_rel_tag (tag_id, usergroup_id)
                             VALUES ('{$data['tag_id']}', '{$data['group_id']}')";
                             Database::query($sql);
+                        }
+                    }
+                }
+
+                $course = "$dbNameForm.course";
+                $sql = "SELECT id FROM $course";
+                $result = Database::query($sql);
+                $test = false;
+                // Getting courses
+                while ($data = Database::fetch_array($result, 'ASSOC')) {
+                    $courseId = $data['id'];
+                    $sql = "SELECT id, iid FROM $dbNameForm.c_quiz WHERE c_id = $courseId";
+                    $resultQuiz = Database::query($sql);
+                    // getting quiz
+                    while ($quiz = Database::fetch_array($resultQuiz, 'ASSOC')) {
+                        $quizId = $quiz['id'];
+                        $newQuizId = $quiz['iid'];
+
+                        //item properties
+                        $sql = "UPDATE $dbNameForm.c_item_property SET ref= $newQuizId WHERE c_id = $courseId AND ref = $quizId AND tool = 'quiz' ";
+                        if ($test) {
+                            var_dump($sql);
+                        } else {
+                            Database::query($sql);
+                        }
+
+                        //item c_lp_item
+                        $sql = "UPDATE $dbNameForm.c_lp_item SET ref= $newQuizId WHERE c_id = $courseId AND ref = $quizId AND item_type = 'quiz' ";
+                        if ($test) {
+                            var_dump($sql);
+                        } else {
+                            Database::query($sql);
+                        }
+                        // getting questions
+                        $sql = "SELECT r.question_id, q.iid FROM $dbNameForm.c_quiz_rel_question r INNER JOIN $dbNameForm.c_quiz_question q
+                                ON (r.c_id = q.c_id AND r.question_id = q.id)
+                                WHERE r.c_id = $courseId AND exercice_id = $quizId";
+                        $resultQuestion = Database::query($sql);
+                        while ($question = Database::fetch_array($resultQuestion, 'ASSOC')) {
+
+                            $oldQuestionId = $question['question_id'];
+                            $newQuestionId = $question['iid'];
+
+                            // moving answers
+                            $sql = "SELECT id, iid FROM $dbNameForm.c_quiz_answer WHERE c_id = $courseId AND question_id = $oldQuestionId";
+                            $resultAnswer = Database::query($sql);
+                            while ($answer = Database::fetch_array($resultAnswer, 'ASSOC')) {
+                                $sql = "UPDATE $dbNameForm.c_quiz_answer SET question_id = $newQuestionId
+                                        WHERE c_id = $courseId AND question_id = $oldQuestionId";
+
+                                if ($test) {
+                                    var_dump($sql);
+                                } else {
+                                    Database::query($sql);
+                                }
+                            }
+
+                            $sql = "UPDATE $dbNameForm.c_quiz_rel_question SET exercice_id = $newQuizId, question_id = $newQuestionId
+                                    WHERE c_id = $courseId AND question_id = $oldQuestionId";
+                            if ($test ) {
+                                var_dump($sql);
+                            } else {
+                                Database::query($sql);
+                            }
+                        }
+
+                        // Categories
+                        $sql = "SELECT iid, id FROM $dbNameForm.c_quiz_category WHERE c_id = $courseId";
+                        $resultCat = Database::query($sql);
+                        while ($category = Database::fetch_array($resultCat, 'ASSOC')) {
+                            $oldId = $category['id'];
+                            $newId = $category['iid'];
+
+                            $sql = "UPDATE $dbNameForm.c_quiz_rel_category SET exercice_id = $newQuizId, category_id = $newId
+                                    WHERE c_id = $courseId AND category_id = $oldId";
+                            if ($test ) {
+                                var_dump($sql);
+                            } else {
+                                Database::query($sql);
+                            }
                         }
                     }
                 }

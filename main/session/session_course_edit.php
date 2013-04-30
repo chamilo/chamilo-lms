@@ -14,6 +14,8 @@ $id_session = intval($_GET['id_session']);
 SessionManager::protect_session_edit($id_session);
 
 $course_code = Database::escape_string($_GET['course_code']);
+$courseInfo = api_get_course_info($course_code);
+$courseId = $courseInfo['real_id'];
 
 $formSent = 0;
 $errorMsg = '';
@@ -31,10 +33,13 @@ $tool_name = $course_info['name'];
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('Sessions'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
 $interbreadcrumb[]=array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
-$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>api_htmlentities($session_name,ENT_QUOTES,$charset));
+$interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" => api_htmlentities($session_name,ENT_QUOTES,$charset));
 
 $result = Database::query("SELECT s.name, c.title FROM $tbl_session_course sc,$tbl_session s,$tbl_course c
-                           WHERE sc.id_session=s.id AND sc.course_code=c.code AND sc.id_session='$id_session' AND sc.course_code='".$course_code."'");
+                           WHERE sc.id_session=s.id AND
+                                sc.c_id = c.id AND
+                                sc.id_session='$id_session' AND
+                                sc.c_id='".$courseId."'");
 
 if (!list($session_name,$course_title)=Database::fetch_row($result)) {
 	header('Location: session_course_list.php?id_session='.$id_session);
@@ -46,7 +51,7 @@ if ($_POST['formSent']) {
 	$formSent=1;
 
 	// get all tutor by course_code in the session
-	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2";
+	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND c_id = '$courseId' AND status = 2";
 	$rs_coachs = Database::query($sql);
 
 	$coachs_course_session = array();
@@ -62,14 +67,14 @@ if ($_POST['formSent']) {
 
 		foreach ($id_coachs as $id_coach) {
 			$id_coach = intval($id_coach);
-			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $course_code);
+			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $courseId);
 		}
 
 		// set status to 0 other tutors from multiple list
 		$array_intersect = array_diff($coachs_course_session,$id_coachs);
 
 		foreach ($array_intersect as $nocoach_user_id) {
-			$rs2 = SessionManager::set_coach_to_course_session($nocoach_user_id, $id_session, $course_code, true);
+			$rs2 = SessionManager::set_coach_to_course_session($nocoach_user_id, $id_session, $courseId, true);
 		}
 
 		header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
@@ -77,7 +82,7 @@ if ($_POST['formSent']) {
 
 	}
 } else {
-	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2 ";
+	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND c_id = '$courseId' AND status = 2 ";
 	$rs = Database::query($sql);
 
 	if (Database::num_rows($rs) > 0) {
@@ -92,7 +97,8 @@ global $_configuration;
 if ($_configuration['multiple_access_urls']) {
     $tbl_access_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
-    $sql="SELECT u.user_id,lastname,firstname,username FROM $tbl_user u LEFT JOIN $tbl_access_rel_user  a ON(u.user_id= a.user_id) WHERE status='1' AND access_url_id = $access_url_id ".$order_clause;
+    $sql="SELECT u.user_id,lastname,firstname,username FROM $tbl_user u LEFT JOIN $tbl_access_rel_user  a ON(u.user_id= a.user_id)
+          WHERE status='1' AND access_url_id = $access_url_id ".$order_clause;
 } else {
     $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 }

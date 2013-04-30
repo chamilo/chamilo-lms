@@ -19,7 +19,7 @@ abstract class AbstractDivLayoutTest extends AbstractLayoutTest
     public function testRow()
     {
         $form = $this->factory->createNamed('name', 'text');
-        $form->addError(new FormError('[trans]Error![/trans]'));
+        $form->addError(new FormError('Error!'));
         $view = $form->createView();
         $html = $this->renderRow($view);
 
@@ -58,7 +58,7 @@ abstract class AbstractDivLayoutTest extends AbstractLayoutTest
     public function testRepeatedRow()
     {
         $form = $this->factory->createNamed('name', 'repeated');
-        $form->addError(new FormError('[trans]Error![/trans]'));
+        $form->addError(new FormError('Error!'));
         $view = $form->createView();
         $html = $this->renderRow($view);
 
@@ -398,7 +398,7 @@ abstract class AbstractDivLayoutTest extends AbstractLayoutTest
             )
             ->getForm();
 
-        $form->get('child')->addError(new FormError('[trans]Error![/trans]'));
+        $form->get('child')->addError(new FormError('Error!'));
 
         $this->assertWidgetMatchesXpath($form->createView(), array(),
 '/div

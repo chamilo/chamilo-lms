@@ -39,9 +39,6 @@ class ObjectChoiceListTest extends \PHPUnit_Framework_TestCase
 
     private $obj4;
 
-    /**
-     * @var ObjectChoiceList
-     */
     private $list;
 
     protected function setUp()

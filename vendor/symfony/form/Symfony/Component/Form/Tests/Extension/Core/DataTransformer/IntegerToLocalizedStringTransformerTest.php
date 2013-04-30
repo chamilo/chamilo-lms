@@ -32,7 +32,7 @@ class IntegerToLocalizedStringTransformerTest extends LocalizedTestCase
         $this->assertEquals(12345, $transformer->reverseTransform('12345,912'));
     }
 
-    public function testReverseTransformEmpty()
+    public function testReverseTransform_empty()
     {
         $transformer = new IntegerToLocalizedStringTransformer();
 

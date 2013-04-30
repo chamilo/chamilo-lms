@@ -41,6 +41,17 @@ interface FormConfigBuilderInterface extends FormConfigInterface
     public function addEventSubscriber(EventSubscriberInterface $subscriber);
 
     /**
+     * Adds a validator to the form.
+     *
+     * @param FormValidatorInterface $validator The validator.
+     *
+     * @return self The configuration object.
+     *
+     * @deprecated Deprecated since version 2.1, to be removed in 2.3.
+     */
+    public function addValidator(FormValidatorInterface $validator);
+
+    /**
      * Appends / prepends a transformer to the view transformer chain.
      *
      * The transform method of the transformer is used to convert data from the
@@ -106,7 +117,7 @@ interface FormConfigBuilderInterface extends FormConfigInterface
     /**
      * Sets the data mapper used by the form.
      *
-     * @param DataMapperInterface $dataMapper
+     * @param  DataMapperInterface $dataMapper
      *
      * @return self The configuration object.
      */
@@ -115,7 +126,7 @@ interface FormConfigBuilderInterface extends FormConfigInterface
     /**
      * Set whether the form is disabled.
      *
-     * @param Boolean $disabled Whether the form is disabled
+     * @param  Boolean $disabled Whether the form is disabled
      *
      * @return self The configuration object.
      */
@@ -124,7 +135,7 @@ interface FormConfigBuilderInterface extends FormConfigInterface
     /**
      * Sets the data used for the client data when no value is bound.
      *
-     * @param mixed $emptyData The empty data.
+     * @param  mixed $emptyData The empty data.
      *
      * @return self The configuration object.
      */
@@ -133,7 +144,7 @@ interface FormConfigBuilderInterface extends FormConfigInterface
     /**
      * Sets whether errors bubble up to the parent.
      *
-     * @param Boolean $errorBubbling
+     * @param  Boolean $errorBubbling
      *
      * @return self The configuration object.
      */
@@ -151,9 +162,9 @@ interface FormConfigBuilderInterface extends FormConfigInterface
     /**
      * Sets the property path that the form should be mapped to.
      *
-     * @param null|string|\Symfony\Component\PropertyAccess\PropertyPathInterface $propertyPath
-     *             The property path or null if the path should be set
-     *             automatically based on the form's name.
+     * @param  null|string|PropertyPathInterface $propertyPath The property path or null if the path
+     *                                                         should be set automatically based on
+     *                                                         the form's name.
      *
      * @return self The configuration object.
      */
@@ -163,7 +174,7 @@ interface FormConfigBuilderInterface extends FormConfigInterface
      * Sets whether the form should be mapped to an element of its
      * parent's data.
      *
-     * @param Boolean $mapped Whether the form should be mapped.
+     * @param  Boolean $mapped Whether the form should be mapped.
      *
      * @return self The configuration object.
      */
@@ -172,7 +183,7 @@ interface FormConfigBuilderInterface extends FormConfigInterface
     /**
      * Sets whether the form's data should be modified by reference.
      *
-     * @param Boolean $byReference Whether the data should be
+     * @param  Boolean $byReference Whether the data should be
      *                              modified by reference.
      *
      * @return self The configuration object.
@@ -182,7 +193,7 @@ interface FormConfigBuilderInterface extends FormConfigInterface
     /**
      * Sets whether the form should be virtual.
      *
-     * @param Boolean $virtual Whether the form should be virtual.
+     * @param  Boolean $virtual Whether the form should be virtual.
      *
      * @return self The configuration object.
      */
@@ -191,7 +202,7 @@ interface FormConfigBuilderInterface extends FormConfigInterface
     /**
      * Sets whether the form should be compound.
      *
-     * @param Boolean $compound Whether the form should be compound.
+     * @param  Boolean $compound Whether the form should be compound.
      *
      * @return self The configuration object.
      *
@@ -224,7 +235,7 @@ interface FormConfigBuilderInterface extends FormConfigInterface
      * this configuration. The data can only be modified then by
      * binding the form.
      *
-     * @param Boolean $locked Whether to lock the default data.
+     * @param  Boolean $locked Whether to lock the default data.
      *
      * @return self The configuration object.
      */

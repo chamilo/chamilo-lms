@@ -53,6 +53,11 @@ class FormTypeValidatorExtension extends AbstractTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        // BC clause
+        $constraints = function (Options $options) {
+            return $options['validation_constraint'];
+        };
+
         // Make sure that validation groups end up as null, closure or array
         $validationGroupsNormalizer = function (Options $options, $groups) {
             if (empty($groups)) {
@@ -74,7 +79,9 @@ class FormTypeValidatorExtension extends AbstractTypeExtension
         $resolver->setDefaults(array(
             'error_mapping'              => array(),
             'validation_groups'          => null,
-            'constraints'                => null,
+            // "validation_constraint" is deprecated. Use "constraints".
+            'validation_constraint'      => null,
+            'constraints'                => $constraints,
             'cascade_validation'         => false,
             'invalid_message'            => 'This value is not valid.',
             'invalid_message_parameters' => array(),

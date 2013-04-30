@@ -62,14 +62,18 @@ echo '</div>';
 	<tr class="row_odd">
 		<th><?php echo get_lang('Question'); ?></th>
 		<th width="50px"><?php echo get_lang('Value'); ?></th>
-		<th><?php echo get_lang('Feedback'); ?></th>		  
+		<th><?php echo get_lang('Feedback'); ?></th>
 		<th><?php echo get_lang('Author'); ?></th>
 		<th width="160px"><?php echo get_lang('Date'); ?></th>
 	</tr>
 <?php
 
-$sql = "SELECT *, quiz_question.question, firstname, lastname FROM $TBL_TRACK_ATTEMPT_RECORDING t, $TBL_USER,$TBL_EXERCICES_QUESTION quiz_question
-		WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY position";
+$sql = "SELECT *, quiz_question.question, firstname, lastname
+        FROM $TBL_TRACK_ATTEMPT_RECORDING t, $TBL_USER, $TBL_EXERCICES_QUESTION quiz_question
+		WHERE   quiz_question.id = question_id AND
+                user_id = author AND
+                exe_id = '".(int)$_GET['exe_id']."'
+        ORDER BY position";
 $query = Database::query($sql);
 while($row = Database::fetch_array($query)){
 	echo '<tr';

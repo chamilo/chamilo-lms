@@ -6,12 +6,14 @@ $app['app.title'] = '';
 $app['jquery_ui_theme'] = 'smoothness';
 
 // Temp folder
-$app['temp.path'] = api_get_path(SYS_ARCHIVE_PATH);
+$app['temp.path'] = $app['sys_temp_path'];
 
 $app['temp.paths'] = new stdClass();
 
+$app['temp.paths']->folders[] = $app['sys_data_path'];
+
 //Monolog
-$app['temp.paths']->folders[] = $app['log.path'] = api_get_path(SYS_LOG_PATH);
+$app['temp.paths']->folders[] = $app['sys_log_path'];
 
 //Twig cache
 $app['temp.paths']->folders[] = $app['twig.cache.path'] = $app['temp.path'].'twig';
@@ -42,6 +44,7 @@ $app['temp.paths']->folders[] = _MPDF_TEMP_PATH;
 //QR code
 define('QR_CACHE_DIR', $app['temp.path'].'qr');
 define('QR_LOG_DIR', $app['temp.path'].'qr');
+
 $app['temp.paths']->folders[] = QR_CACHE_DIR;
 
 //Chamilo Temp class
@@ -109,8 +112,8 @@ foreach ($app['temp.paths']->folders as $folder) {
     }
 }
 
-//Monolog log file
-$app['chamilo.log'] = $app['log.path'].'/chamilo.log';
+// Monolog log file
+$app['chamilo.log'] = $app['sys_log_path'].'/chamilo.log';
 
 if (is_file($app['chamilo.log']) && !is_writable($app['chamilo.log'])) {
     unlink($app['chamilo.log']);

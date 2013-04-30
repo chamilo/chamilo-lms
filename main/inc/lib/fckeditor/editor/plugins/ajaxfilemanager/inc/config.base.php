@@ -1,6 +1,6 @@
 <?php
 /**
- * sysem base config setting
+ * system base config setting
  * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
  * @link www.phpletter.com
  * @since 1/August/2007
@@ -33,7 +33,7 @@ define('CONFIG_SYS_THUMBNAIL_VIEW_ENABLE', true);//REMOVE THE thumbnail view if 
 
 //User Permissions
 //Hack by Juan Carlos Raña Trabado
-if(empty($_course['path']) || Security::remove_XSS($_GET['editor'])=="stand_alone") {
+if(empty($_course['path']) || isset($_GET['editor']) && $_GET['editor'] == "stand_alone") {
 	define('CONFIG_OPTIONS_DELETE', true);
 	define('CONFIG_OPTIONS_CUT', true);
 	define('CONFIG_OPTIONS_COPY', true);
@@ -75,36 +75,40 @@ these two paths accept relative path only, don't use absolute path
 
 // Integration for Chamilo
 
-if(!empty($_course['path']) && Security::remove_XSS($_GET['editor'])!="stand_alone") {
-	if(!empty($group_properties['directory'])) {
-		$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document'.$group_properties['directory'].'/';
+//if(!empty($_course['path']) && isset($_GET['editor']) && $_GET['editor'] != 'stand_alone') {
+if (isset($_course['path']) && !empty($_course['path'])) {
+	if (!empty($group_properties['directory'])) {
+		$PathChamiloAjaxFileManager='../../../../../../../data/courses/'.$_course['path'].'/document'.$group_properties['directory'].'/';
 	} else {
 		if(api_is_allowed_to_edit()) {
-			$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/';
+			$PathChamiloAjaxFileManager='../../../../../../../data/courses/'.$_course['path'].'/document/';
 		} else {
 			$current_session_id = api_get_session_id();
-			if($current_session_id==0) {
-				$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';
+			if ($current_session_id==0) {
+				$PathChamiloAjaxFileManager = '../../../../../../../data/courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';
 			} else {
-				$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
+				$PathChamiloAjaxFileManager = '../../../../../../../data/courses/'.$_course['path'].'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
 			}
 		}
 	}
 } else {
-	if (api_is_platform_admin() && $_SESSION['this_section']=='platform_admin') {
+	if (api_is_platform_admin() && isset($_SESSION['this_section']) && $_SESSION['this_section']=='platform_admin') {
 		//home page portal
-		$PathChamiloAjaxFileManager='../../../../../../../home/default_platform_document/';
+		$PathChamiloAjaxFileManager = '../../../../../../../data/default_platform_document/';
 	} else {
 		//my profile
-		$my_path					= UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
-                $dir = api_get_path(SYS_CODE_PATH).$my_path['dir'];
-                if (!is_dir($dir)) {
-                    mkdir($dir);
-                }
-                if (!is_dir($dir.'my_files')) {
-                    mkdir($dir.'my_files');
-                }
-		$PathChamiloAjaxFileManager	= '../../../../../../../main/'.$my_path['dir'].'my_files/';
+		$my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');
+        $my_path_none = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'none');
+
+
+        if (!is_dir($my_path['dir'])) {
+            mkdir($my_path['dir']);
+        }
+
+        if (!is_dir($my_path['dir'].'my_files')) {
+            mkdir($my_path['dir'].'my_files');
+        }
+		$PathChamiloAjaxFileManager	= '../../../../../../../data/'.$my_path_none['dir'].'my_files/';
 	}
 }
 
@@ -112,8 +116,6 @@ define('CONFIG_SYS_DEFAULT_PATH',	$PathChamiloAjaxFileManager);
 define('CONFIG_SYS_ROOT_PATH',		$PathChamiloAjaxFileManager);
 
 // end chamilo
-
-
 
 define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name
 define("CONFIG_SYS_DIR_SESSION_PATH", session_save_path()); // Hack by Juan Carlos Raña
@@ -208,7 +210,6 @@ define('CONFIG_THEME_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['theme']
 define('CONFIG_DEFAULT_VIEW', (CONFIG_SYS_THUMBNAIL_VIEW_ENABLE?'thumbnail':'detail')); //thumbnail or detail
 define('CONFIG_DEFAULT_PAGINATION_LIMIT', 10000); //change 10 by 10000 while pagination is deactivated on Chamilo
 define('CONFIG_LOAD_DOC_LATTER', false); //all documents will be loaded up after the template has been loaded to the client
-
 
 //General Option Declarations
 

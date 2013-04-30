@@ -221,7 +221,9 @@ class BlockEvaluationGraph extends Block {
 			foreach ($session_ids as $session_id) {
 				$courses_code = array_keys(Tracking::get_courses_list_from_session($session_id));
 				$courses_graph = array();
-				foreach ($courses_code as $course_code) {
+				foreach ($courses_code as $courseId) {
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $course_code = $courseInfo['code'];
 					$cats = Category::load(null, null, $course_code, null, null, $session_id);
 					if (isset($cats) && isset($cats[0])) {
 						$alleval = $cats[0]->get_evaluations(null, true, $course_code);

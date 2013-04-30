@@ -21,6 +21,35 @@ $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) :
 $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
 switch ($action) {
+    case 'exercise_category_exists':
+        $category = new Testcategory();
+        $category->getCategory($_REQUEST['id']);
+        if (empty($category->id)) {
+            echo 0;
+        } else {
+            echo 1;
+        }
+        break;
+    case 'search_category_parent':
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'simple';
+
+        $cat = new Testcategory(null, null, null, null, $type);
+        $items = $cat->get_categories_by_keyword($_REQUEST['tag']);
+
+        $json_items = array();
+        if (!empty($items)) {
+            foreach ($items as $item) {
+                if ($item['c_id'] == 0) {
+                    $item['title'] .= " [".get_lang('Global')."]";
+                }
+                $json_items[] = array(
+                    'key' => $item['iid'],
+                    'value' => $item['title']
+                );
+            }
+        }
+        echo json_encode($json_items);
+        break;
     case 'get_live_stats':
         if (!api_is_allowed_to_edit(null, true)) {
             break;
@@ -212,18 +241,22 @@ switch ($action) {
             //Attempt id
             $exe_id = $_REQUEST['exe_id'];
 
-            if ($debug) error_log("exe_id = $exe_id ");
-            if ($debug) error_log("type = $type ");
-            if ($debug) error_log("choice = ".print_r($choice, 1)." ");
-            if ($debug) error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates,1));
-            if ($debug) error_log("remind_list = ".print_r($remind_list));
+            if ($debug) {
+                error_log("exe_id = $exe_id ");
+                error_log("type = $type ");
+                error_log("choice = ".print_r($choice, 1)." ");
+                error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates,1));
+                error_log("remind_list = ".print_r($remind_list));
+            }
 
             //Exercise information
             $objExercise             = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
 
             //Question info
             $question_id             = intval($_REQUEST['question_id']);
-            $question_list           = $_SESSION['questionList'];
+
+            //$question_list           = $_SESSION['questionList'];
+            $question_list           = $_SESSION['question_list_flatten'];
 
             //If exercise or question is not set then exit
             if (empty($question_list) || empty($objExercise)) {
@@ -297,12 +330,15 @@ switch ($action) {
 
             //Looping the question list
 
+            if ($debug) error_log("Looping question list".print_r($question_list, 1));
+            if ($debug) error_log("Trying to save question: $question_id ");
+
             foreach ($question_list as $my_question_id) {
-                if ($debug) error_log("Saving question_id = $my_question_id ");
 
                 if ($type == 'simple' && $question_id != $my_question_id) {
                     continue;
                 }
+                if ($debug) error_log("Saving question_id = $my_question_id ");
 
                 $my_choice = $choice[$my_question_id];
 
@@ -323,7 +359,7 @@ switch ($action) {
             	//this variable commes from exercise_submit_modal.php
                 $hotspot_delineation_result = null;
                 if (isset($_SESSION['hotspot_delineation_result']) && isset($_SESSION['hotspot_delineation_result'][$objExercise->selectId()])) {
-            	$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
+            	    $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
 
                 if ($type == 'simple') {
@@ -337,17 +373,17 @@ switch ($action) {
                 // Deleting old attempt
                 if (isset($attempt_list) && !empty($attempt_list[$my_question_id])) {
                     if ($debug) error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
-                    delete_attempt($exe_id, api_get_user_id() , $course_code, $session_id, $my_question_id);
+                    delete_attempt($exe_id, api_get_user_id(), $course_id, $session_id, $my_question_id);
                     if ($objQuestionTmp->type  == HOT_SPOT) {
-            	        delete_attempt_hotspot($exe_id, api_get_user_id() , $course_code, $my_question_id);
+            	        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_id, $my_question_id);
                     }
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
-            	    $total_score  -= $attempt_list[$my_question_id]['marks'];
+            	        $total_score  -= $attempt_list[$my_question_id]['marks'];
+            	    }
             	}
-            	}
-
 
             	// We're inside *one* question. Go through each possible answer for this question
+
             	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice, 'exercise_result', $hot_spot_coordinates, true, false, false, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
 
                 //Adding the new score
@@ -380,17 +416,19 @@ switch ($action) {
 
                 $_SESSION['duration_time'][$key] = time();
 
-                update_event_exercise(  $exe_id,
-                                        $objExercise->selectId(),
-                                        $total_score,
-                                        $total_weight,
-                                        $session_id,
-                                        $exercise_stat_info['orig_lp_id'],
-                                        $exercise_stat_info['orig_lp_item_id'],
-                                        $exercise_stat_info['orig_lp_item_view_id'],
-                                        $duration,
-                                        'incomplete',
-                                        $remind_list);
+                update_event_exercise(
+                    $exe_id,
+                    $objExercise->selectId(),
+                    $total_score,
+                    $total_weight,
+                    $session_id,
+                    $exercise_stat_info['orig_lp_id'],
+                    $exercise_stat_info['orig_lp_item_id'],
+                    $exercise_stat_info['orig_lp_item_view_id'],
+                    $duration,
+                    'incomplete',
+                    $remind_list
+                );
 
                  // Destruction of the Question object
             	unset($objQuestionTmp);

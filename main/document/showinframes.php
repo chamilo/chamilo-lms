@@ -73,13 +73,6 @@ if (is_dir($file_url_sys)) {
     api_not_allowed(true);
 }
 
-//fix the screen when you try to access a protected course through the url
-$is_allowed_in_course = $_SESSION ['is_allowed_in_course'];
-
-if ($is_allowed_in_course == false) {
-    api_not_allowed(true);
-}
-
 //Check user visibility
 //$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
 $is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
@@ -143,7 +136,7 @@ header('Pragma: no-cache');
 $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' - '.$file;
 // Only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
 $frameheight = 135;
-if ($is_courseAdmin) {
+if (api_is_course_admin()) {
     $frameheight = 165;
 }
 

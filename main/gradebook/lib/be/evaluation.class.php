@@ -20,10 +20,10 @@ class Evaluation implements GradebookItem
 	private $created_at;
 	private $weight;
 	private $eval_max;
-	private $visible;    
+	private $visible;
     private $evaluation_type_id;
-    
-    function __construct() {    	
+
+    function __construct() {
     }
 
     // GETTERS AND SETTERS
@@ -63,23 +63,23 @@ class Evaluation implements GradebookItem
 	public function get_max() {
 		return $this->eval_max;
 	}
-	
+
 	public function get_type() {
 		return $this->type;
-	}	
+	}
 
 	public function is_visible() {
 		return $this->visible;
 	}
-	
+
 	public function get_locked() {
 		return $this->locked;
 	}
-    
+
     public function is_locked() {
 		return isset($this->locked) && $this->locked == 1 ? true : false ;
-	}  
-    
+	}
+
 	public function set_id($id) {
 		$this->id = $id;
 	}
@@ -119,23 +119,23 @@ class Evaluation implements GradebookItem
 	public function set_visible ($visible) {
 		$this->visible = $visible;
 	}
-	
+
     public function set_type ($type) {
 		$this->type = $type;
 	}
- 
+
 	public function set_locked ($locked) {
 		$this->locked = $locked;
 	}
-    
+
     public function get_evaluation_type_id() {
         return isset($this->evaluation_type_id) ? $this->evaluation_type_id : 0;
     }
-    
+
     public function set_evaluation_type_id($id) {
         $this->evaluation_type_id = intval($id);
     }
-    
+
     // CRUD FUNCTIONS
 
 	/**
@@ -189,7 +189,7 @@ class Evaluation implements GradebookItem
 			else $sql .= ' WHERE';
 			$sql .= " name = '".Database::escape_string($name)."'";
 			$paramcount ++;
-		}        
+		}
 		$result = Database::query($sql);
 		$alleval = Evaluation::create_evaluation_objects_from_sql_result($result);
 		return $alleval;
@@ -212,7 +212,7 @@ class Evaluation implements GradebookItem
     			$eval->set_visible($data['visible']);
     			$eval->set_type($data['type']);
     			$eval->set_locked($data['locked']);
-    			
+
     			$alleval[]=$eval;
     		}
     	}
@@ -236,10 +236,10 @@ class Evaluation implements GradebookItem
 			}
 			if (isset($this->category)) {
 				$sql .= ', category_id';
-			}            
-			$sql .= ', created_at';            
+			}
+			$sql .= ', created_at';
             $sql .= ', evaluation_type_id';
-            
+
 			$sql .= ',type';
 			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
 					.','.intval($this->get_user_id())
@@ -255,15 +255,15 @@ class Evaluation implements GradebookItem
 			if (isset($this->category)) {
 				 $sql .= ','.intval($this->get_category_id());
 			}
-            
+
             $sql .= ','.intval($this->get_evaluation_type_id());
 			if (empty($this->type)) {
-				$this->type = 'evaluation';	
-			}            
-			$sql .= ", '".api_get_utc_datetime()."'";			
-			$sql .= ',\''.Database::escape_string($this->type).'\'';			
-			$sql .= ")";       
-            
+				$this->type = 'evaluation';
+			}
+			$sql .= ", '".api_get_utc_datetime()."'";
+			$sql .= ',\''.Database::escape_string($this->type).'\'';
+			$sql .= ")";
+
 			Database::query($sql);
 			$this->set_id(Database::insert_id());
 		} else {
@@ -320,7 +320,7 @@ class Evaluation implements GradebookItem
 				.', visible = '.intval($this->is_visible())
 				.' WHERE id = '.intval($this->id);
 		//recorded history
-        
+
 		$eval_log=new Evaluation();
 		$eval_log->add_evaluation_log($this->id);
 		Database::query($sql);
@@ -334,8 +334,6 @@ class Evaluation implements GradebookItem
 		$sql = 'DELETE FROM '.$tbl_grade_evaluations.' WHERE id = '.intval($this->id);
 		Database::query($sql);
 	}
-
-// OTHER FUNCTIONS
 
 	/**
 	 * Check if an evaluation name (with the same parent category) already exists
@@ -354,13 +352,12 @@ class Evaluation implements GradebookItem
 
 		if (api_is_allowed_to_edit()) {
 			$parent = Category::load($parent);
-			$code = $parent[0]->get_course_code();
-			if (isset($code) && $code != '0') {
+			$courseId = $parent[0]->get_course_id();
+			if (isset($courseId) && $courseId != '0') {
 				$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-				$sql .= ' AND user_id IN ('
-						.' SELECT user_id FROM '.$main_course_user_table
-						." WHERE course_code = '".Database::escape_string($code)."'"
-						.' AND status = '.COURSEMANAGER
+				$sql .= " AND user_id IN (
+				            SELECT user_id FROM $main_course_user_table
+				            WHERE c_id = ".Database::escape_string($courseId)." AND status = ".COURSEMANAGER
 						.')';
 			} else {
 				$sql .= ' AND user_id = '.api_get_user_id();
@@ -512,7 +509,7 @@ class Evaluation implements GradebookItem
 		}
 		$this->save();
 	}
-    
+
 	/**
 	 * Retrieve evaluations where a student has results for
 	 * and return them as an array of Evaluation objects
@@ -588,18 +585,18 @@ class Evaluation implements GradebookItem
 	public function get_icon_name() {
 		return $this->has_results() ? 'evalnotempty' : 'evalempty';
 	}
-    
+
   	/**
-  	 * Locks an evaluation, only one who can unlock it is the platform administrator.  	 
-  	 * @param int locked 1 or unlocked 0 
-  	 * 
+  	 * Locks an evaluation, only one who can unlock it is the platform administrator.
+  	 * @param int locked 1 or unlocked 0
+  	 *
   	 **/
   	function lock($locked) {
   		$table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
   		$sql = "UPDATE $table_evaluation SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
   		Database::query($sql);
   	}
-    
+
     function check_lock_permissions() {
         if (api_is_platform_admin()) {
             return true;
@@ -609,8 +606,8 @@ class Evaluation implements GradebookItem
             }
         }
     }
-    
+
     function delete_linked_data() {
-        
+
     }
 }

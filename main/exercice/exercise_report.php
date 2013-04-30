@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *    Exercise list: This script shows the list of exercises for administrators and students.
+ * Exercise list: This script shows the list of exercises for administrators and students.
  * @package chamilo.exercise
  * @author Julio Montoya <gugli100@gmail.com> jqgrid integration
  *   Modified by hubert.borderiou (question category)
@@ -113,7 +113,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 }
 
 //Send student email @todo move this code in a class, library
-if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(
+if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(
     intval($_GET['exeid'])
 )
 ) {
@@ -238,46 +238,47 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     }
 }
 
-
-if ($is_allowedToEdit && $origin != 'learnpath') {
-    // the form
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-        $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon(
-            'back.png',
-            get_lang('GoBackToQuestionList'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
-        $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon(
-            'activity_monitor.png',
-            get_lang('LiveResults'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
-        $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon(
-            'statistics.png',
-            get_lang('ReportByQuestion'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
-        $actions .= '<a id="export_opener" href="'.api_get_self(
-        ).'?export_report=1&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval(
-            $_GET['exerciseId']
-        ).'" >'.
-            Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
-    }
-} else {
+$actions = null;
+if (isset($origin) && $origin == 'learnpath') {
     $actions .= '<a href="exercice.php">'.Display :: return_icon(
         'back.png',
         get_lang('GoBackToQuestionList'),
         '',
         ICON_SIZE_MEDIUM
     ).'</a>';
+} else {
+    if ($is_allowedToEdit) {
+        // the form
+        if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
+            $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon(
+                'back.png',
+                get_lang('GoBackToQuestionList'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).'</a>';
+            $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon(
+                'activity_monitor.png',
+                get_lang('LiveResults'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).'</a>';
+            $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon(
+                'statistics.png',
+                get_lang('ReportByQuestion'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).'</a>';
+            $actions .= '<a id="export_opener" href="'.api_get_self(
+            ).'?export_report=1&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval(
+                $_GET['exerciseId']
+            ).'" >'.
+                Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
+    }
 }
 
 //Deleting an attempt
-if (($is_allowedToEdit || $is_tutor || api_is_coach(
-)) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false
 ) {
     $exe_id = intval($_GET['did']);
     if (!empty($exe_id)) {
@@ -380,9 +381,7 @@ if ($is_allowedToEdit) {
 
 echo $actions;
 
-$url = api_get_path(
-    WEB_AJAX_PATH
-).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user;
 
 $action_links = '';
 
@@ -498,17 +497,16 @@ $extra_params['height'] = 'auto';
 <script>
 
     function setSearchSelect(columnName) {
-        $("#results").jqGrid('setColProp', columnName,
-                {
-                    searchoptions:{
-                        dataInit:function (el) {
-                            $("option[value='1']", el).attr("selected", "selected");
-                            setTimeout(function () {
-                                $(el).trigger('change');
-                            }, 1000);
-                        }
-                    }
-                });
+        $("#results").jqGrid('setColProp', columnName, {
+            searchoptions:{
+                dataInit:function (el) {
+                    $("option[value='1']", el).attr("selected", "selected");
+                    setTimeout(function () {
+                        $(el).trigger('change');
+                    }, 1000);
+                }
+            }
+        });
     }
 
     function exportExcel() {
@@ -544,7 +542,6 @@ $extra_params['height'] = 'auto';
 
     if ($is_allowedToEdit || $is_tutor) {
         ?>
-
         //setSearchSelect("status");
         //
         //view:true, del:false, add:false, edit:false, excel:true}
@@ -577,8 +574,8 @@ jQuery("#results").jqGrid('navButtonAdd','#results_pager',{
 
         //Adding search options
         var options = {
-            'stringResult':true,
-            'autosearch':true,
+            'stringResult': true,
+            'autosearch' : true,
             'searchOnEnter':false
         }
         jQuery("#results").jqGrid('filterToolbar', options);

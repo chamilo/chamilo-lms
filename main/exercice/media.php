@@ -37,10 +37,9 @@ switch ($action) {
             $objQuestion->processCreation($form, null);
             // answers
             $objQuestion->processAnswersCreation($form, null);
-            header('Location: '.$page_url);
-            exit;
+        } else {
+            $form->display();
         }
-        $form->display();
         break;
     case 'edit':
         $url  = $page_url.'&action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
@@ -58,13 +57,14 @@ switch ($action) {
 		$defaults['questionCategory']       = $objQuestion->category_list;
         $defaults['parent_id']              = $objQuestion->parent_id;
         $form->setDefaults($defaults);
-        $form->display();
 
         if ($form->validate()) {
             // question
             $objQuestion->processCreation($form, null);
             // answers
             $objQuestion->processAnswersCreation($form, null);
+        } else {
+            $form->display();
         }
         break;
     case 'delete':
@@ -81,9 +81,9 @@ $columns        = array(get_lang('Name'), get_lang('Actions'));
 
 //Column config
 $column_model   = array(
-                        array('name'=>'name',           'index'=>'name',        'width'=>'80',   'align'=>'left'),
-                        array('name'=>'actions',        'index'=>'actions',     'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
-                       );
+    array('name'=>'name',    'index'=>'name',        'width'=>'200',   'align'=>'left'),
+    array('name'=>'actions', 'index'=>'actions',     'width'=>'50',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
+);
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto

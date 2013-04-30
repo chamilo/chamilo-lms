@@ -83,7 +83,8 @@ $table->display();
 echo Display::page_subheader(get_lang('Users'));
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$sql = "SELECT *, cu.status as course_status FROM $table_course_user cu, $table_user u WHERE cu.user_id = u.user_id AND cu.course_code = '".$course_info['code']."' AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
+$sql = "SELECT *, cu.status as course_status FROM $table_course_user cu, $table_user u
+        WHERE cu.user_id = u.user_id AND cu.c_id = '".$course_info['real_id']."' AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
 $res = Database::query($sql);
 $is_western_name_order = api_is_western_name_order();
 if (Database::num_rows($res) > 0) {
@@ -122,11 +123,11 @@ if (Database::num_rows($res) > 0) {
 	echo Display::display_warning_message(get_lang('NoUsersInCourse'));
 }
 
-$session_list = SessionManager::get_session_by_course($course_info['code']);
+$session_list = SessionManager::get_session_by_course($course_info['real_id']);
 
 $url = api_get_path(WEB_CODE_PATH);
 if (!empty($session_list)) {
-    foreach($session_list as &$session)  {    
+    foreach($session_list as &$session)  {
         $session[0] = Display::url($session[0], $url.'admin/resume_session.php?id_session='.$session['id'] );
         unset($session[1]);
     }
@@ -140,28 +141,28 @@ $extra_fields = $extra_field->get_all();
 
 if (!empty($extra_fields)) {
     echo Display::page_subheader(get_lang('ExtraFields'));
-    echo '<table class="data_table">';    
+    echo '<table class="data_table">';
     foreach ($extra_fields as $field) {
         if ($field['field_visible'] != '1') {
             continue;
         }
         $obj = new ExtraFieldValue($extra_field->type);
         $result = $obj->get_values_by_handler_and_field_id($course_info['code'], $field['id'], true);
-        
-        $value = null;        
+
+        $value = null;
         if ($result) {
             $value = $result['field_value'];
-            
+
             if (is_bool($value)) {
                 $value = $value ? get_lang('Yes') : get_lang('No');
-            }            
+            }
         } else {
             $value = '-';
         }
         echo "<tr>";
         echo "<td> {$field['field_display_text']} </td>";
         echo "<td> $value </td>";
-        echo "</tr>";    
+        echo "</tr>";
     }
     echo "</table>";
 }

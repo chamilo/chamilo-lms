@@ -128,7 +128,7 @@ class FCKeditor
      *
      * @var array
      */
-    public $Config ;
+    public $Config;
 
     /**
      * Main Constructor.

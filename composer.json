@@ -1,5 +1,11 @@
 {
     "name" : "chamilo/chamilo-lms",
+    "homepage" : "www.chamilo.org",
+    "license" : "GPL-3.0",
+    "support": {
+        "forum": "http://www.chamilo.org/forum",
+        "irc": "irc://irc.freenode.org/chamilo"
+    },
     "autoload": {
         "psr-0": {
             "Entity" : "main/inc/",
@@ -17,7 +23,8 @@
             "main/inc/lib",
             "main/install",
             "main/inc/lib/getid3",
-            "main/survey"
+            "main/survey",
+            "vendor/jmontoyaa/phpqrcode"
         ]
     },
     "repositories": [
@@ -33,13 +40,13 @@
     "require": {
         "php": ">=5.3.2",
         "silex/silex": "1.0.*@dev",
-        "symfony/config": "2.3.*@dev",
+        "symfony/config": "2.2.*@dev",
         "symfony/yaml": "2.1.*@dev",
         "symfony/console"  : "2.3.*@dev",
         "symfony/twig-bridge": "2.2.*@dev",
         "symfony/doctrine-bridge": "2.3.*@dev",
         "symfony/security": "2.3.*@dev",
-        "symfony/form": "2.3.*@dev",
+        "symfony/form": "2.2.*@dev",
         "symfony/property-access": "2.3.*@dev",
         "symfony/validator": "2.3.*@dev",
         "symfony/translation": "2.3.*@dev",
@@ -52,7 +59,7 @@
         "chamilo/chash": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "dev-master",
-        "franmomu/silex-pagerfanta-provider": "dev-master",
+        "franmomu/silex-pagerfanta-provider": "2.3.*@dev",
         "knplabs/knp-menu": "2.0.*@dev",
         "igorw/config-service-provider": "1.0.*@dev",
         "mpdf/mpdf": "dev-master",
@@ -61,7 +68,10 @@
         "imagine/imagine": "dev-develop",
         "grom/silex-service-provider": "dev-master",
         "knplabs/knp-snappy": "dev-master",
-        "jmontoyaa/phpqrcode": "dev-master"
+        "jmontoyaa/phpqrcode": "dev-master",
+        "knplabs/gaufrette": "0.2.*@dev",
+        "bt51/gaufrette-serviceprovider": "dev-master",
+        "neutron/silex-filesystem-provider": "dev-master"
     },
     "require-dev": {
         "symfony/browser-kit": "2.3.*@dev",

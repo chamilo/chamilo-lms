@@ -61,7 +61,8 @@ if (isset($form)) {
         $message = Display::return_message(get_lang('Updated'), 'success');
     }
 }
-$tpl = new Template($tool_name);
+$app['title'] = $tool_name;
+$tpl = $app['template'];
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

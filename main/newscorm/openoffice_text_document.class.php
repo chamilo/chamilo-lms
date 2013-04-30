@@ -44,8 +44,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument
      */
     public function make_lp($files = array())
     {
-
-        global $_course;
+        $_course = api_get_course_info();
         // We get a content where ||page_break|| indicates where the page is broken.
         if (!file_exists($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html')) {
             return false;
@@ -111,9 +110,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument
      */
     function dealPerChapter($header, $content)
     {
-
-        global $_course;
-
+        $_course = api_get_course_info();
         $content = str_replace('||page_break||', '', $content);
 
         // Get all the h1.
@@ -202,7 +199,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument
      */
     function dealPerPage($header, $body)
     {
-        global $_course;
+        $_course = api_get_course_info();
         // Split document to pages.
         $pages = explode('||page_break||', $body);
 

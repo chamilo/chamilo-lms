@@ -13,7 +13,6 @@
  * Code
  */
 // TODO: Is this file deprecated?
-
 exit;
 
 
@@ -68,7 +67,7 @@ $MonthsLong = api_get_months_long();
 $MonthsShort = api_get_months_short();
 
 $is_allowedToTrack = $is_groupTutor; // allowed to track only user of one group
-$is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all student in course
+$is_allowedToTrackEverybodyInCourse = api_is_course_admin(); // allowed to track all student in course
 ?>
 <h3>
     <?php echo $nameTools ?>
@@ -107,7 +106,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
             /*             * ***** MENU ******* */
             echo "<tr>
                 <td>
-                
+
         ";
             echo "  &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
                 [<a href='" . api_get_self() . "?uInfo=$uInfo&view=$view&period=week&reqdate=$reqdate' class='specialLink'>" . get_lang('PeriodWeek') . "</a>]
@@ -141,8 +140,6 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                 </td>
             </tr>
         ";
-            /*             * ***** END OF MENU ******* */
-
             switch ($period) {
                 case "month" :
                     $sql = "SELECT access_date

@@ -218,7 +218,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 
 	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');
 	$form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
-    
+
 	if (!empty($group_id) && !empty($message_id)) {
 		$message_info = MessageManager::get_message_by_id($message_id);
 		$default['title'] = get_lang('MailSubjectReplyShort')." ".$message_info['title'];
@@ -353,8 +353,9 @@ if (!isset($_POST['compose'])) {
 if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .=  '</div>';
 }
+$app['title'] = get_lang('ComposeMessage');
+$tpl = $app['template'];
 
-$tpl = new Template(get_lang('ComposeMessage'));
 if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->assign('social_left_content', $social_left_content);
     $tpl->assign('social_right_content', $social_right_content);

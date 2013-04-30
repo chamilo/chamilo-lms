@@ -281,7 +281,8 @@ class DisplayGradebook
 		$my_category = $catobj->shows_all_information_an_category($catobj->get_id());
 		$user_id     = api_get_user_id();
 		$course_code = $my_category['course_code'];
-		$status_user = api_get_status_of_user_in_course ($user_id,$course_code);
+        $courseInfo = api_get_course_info($course_code);
+		$status_user = api_get_status_of_user_in_course($user_id, $courseInfo['real_id']);
 
 		//$header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=0"><img src="../img/folder_new.gif" alt="' . get_lang('AddGradebook') . '" /></a></td>';
 
@@ -468,9 +469,6 @@ class DisplayGradebook
 
 		$my_category = $catobj->shows_all_information_an_category($catobj->get_id());
 		$user_id     = api_get_user_id();
-
-		//$course_code = $my_category['course_code'];
-		//$status_user = api_get_status_of_user_in_course ($user_id,$course_code);
 
 		if (api_is_allowed_to_edit(null, true)) {
 

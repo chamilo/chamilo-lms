@@ -13,7 +13,9 @@
  * @uses	Database.lib.php to use the database
  * @uses	learnpath.class.php to generate learnpath objects to get in the list
  */
-class learnpathList {
+class LearnpathList
+{
+
     public $list = array(); // Holds a flat list of learnpaths data from the database.
     public $ref_list = array(); // Holds a list of references to the learnpaths objects (only filled by get_refs()).
     public $alpha_list = array(); // Holds a flat list of learnpaths sorted by alphabetical name order.

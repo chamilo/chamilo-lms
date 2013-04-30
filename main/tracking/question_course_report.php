@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Report
  * @package chamilo.tracking
@@ -12,16 +13,13 @@ require_once '../inc/global.inc.php';
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 
 $this_section = "session_my_space";
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
+$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin() || api_is_course_coach() || api_is_session_admin();
 
 if(!$is_allowedToTrack) {
 	Display :: display_header(null);
@@ -88,7 +86,7 @@ $form->setDefaults(array('course_code'=>(string)$course_code));
 $course_info = api_get_course_info($course_code);
 
 if (!empty($course_info)) {
-	$list = new learnpathList('', $course_code);
+	$list = new LearnpathList('', $course_code);
 	$lp_list = $list->get_flat_list();
 	$_course = $course_info;
 	$main_question_list = array();
@@ -101,7 +99,7 @@ if (!empty($course_info)) {
 			$my_exercise->read($exercise['path']);
 			$question_list = $my_exercise->selectQuestionList();
 
-			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'],$course_info['id'], $session_id);
+			$exercise_stats = get_all_exercise_event_from_lp($exercise['path'],$course_info['real_id'], $session_id);
 
 			foreach ($question_list  as $question_id) {
 				$question_data = Question::read($question_id);

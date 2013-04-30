@@ -11,7 +11,6 @@
 /**
  * Code
  */
-if(!class_exists('ExerciseResult')):
 /**
  * Exercise results class
  * @package chamilo.exercise
@@ -90,7 +89,7 @@ class ExerciseResult
 		$TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 		$TBL_TRACK_EXERCISES    	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-        $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
     	$cid             = api_get_course_id();
         $course_id       = api_get_course_int_id();
@@ -104,6 +103,7 @@ class ExerciseResult
         }
 
 		if (empty($user_id)) {
+            $user_id_and = null;
 			$sql = "SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
                         ce.title as extitle,
                         te.exe_result as exresult ,
@@ -119,7 +119,7 @@ class ExerciseResult
                      $TBL_USER  AS user ON (user.user_id = exe_user_id)
                 WHERE   ce.c_id = $course_id AND
                         te.status != 'incomplete' AND
-                        te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and  $session_id_and AND
+                        te.c_id = '" . $course_id . "' $user_id_and $session_id_and AND
                         ce.active <>-1 AND
                         orig_lp_id = 0 AND
                         orig_lp_item_id = 0";
@@ -131,9 +131,9 @@ class ExerciseResult
                     tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
                     WHERE   tu.user_id=tth.exe_user_id AND
-                            tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND
+                            tth.c_id = '" . $course_id . "' AND
                             tth.exe_name = '$hotpotato_name'
-                    ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
+                    ORDER BY tth.c_id ASC, tth.exe_date DESC";
 
 		} else {
             $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
@@ -150,21 +150,22 @@ class ExerciseResult
                     exe_user_id as excruid,
                     te.exe_duration as duration,
                     ce.results_disabled as exdisabled
-                        FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id) INNER JOIN  $TBL_USER  AS user ON (user.user_id = exe_user_id)
+                        FROM $TBL_EXERCISES  AS ce INNER JOIN $TBL_TRACK_EXERCISES AS te ON (te.exe_exo_id = ce.id)
+                        INNER JOIN $TBL_USER  AS user ON (user.user_id = exe_user_id)
                         WHERE   ce.c_id = $course_id AND
                                 te.status != 'incomplete' AND
-                                te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and $session_id_and AND
+                                te.c_id ='" . $course_id . "'  $user_id_and $session_id_and AND
                                 ce.active <>-1 AND
                                 orig_lp_id = 0 AND
                                 orig_lp_item_id = 0
-                        ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
+                        ORDER BY userpart2, te.c_id ASC, ce.title ASC, te.exe_date DESC";
 
             $hpsql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
-                            FROM $TBL_TRACK_HOTPOTATOES
-                            WHERE   exe_user_id = '" . $user_id . "' AND
-                                    exe_cours_id = '" . Database :: escape_string($cid) . "' AND
-                                    tth.exe_name = '$hotpotato_name'
-                            ORDER BY exe_cours_id ASC, exe_date DESC";
+                        FROM $TBL_TRACK_HOTPOTATOES
+                        WHERE   exe_user_id = '" . $user_id . "' AND
+                                c_id = '" . $course_id . "' AND
+                                tth.exe_name = '$hotpotato_name'
+                        ORDER BY c_id ASC, exe_date DESC";
 		}
 
 		$results = array();
@@ -407,7 +408,7 @@ class ExerciseResult
 		}
 	    $worksheet->write($line,$column,get_lang('Groups'));
 	    $column++;
-        
+
 		if ($export_user_fields) {
 			//show user fields section with a big th colspan that spans over all fields
 			$extra_user_fields = UserManager::get_extra_fields(0,1000,5,'ASC',false, 1);
@@ -437,7 +438,8 @@ class ExerciseResult
 		foreach ($this->results as $row) {
 			$column = 0;
 
-            if ($with_column_user) {
+            if ($with_column_user) {               
+
                 if (api_is_western_name_order()) {
                     $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
                     $column++;
@@ -455,7 +457,7 @@ class ExerciseResult
 
             $worksheet->write($line,$column,api_html_entity_decode(strip_tags(implode(", ", GroupManager :: get_user_group_name($row['user_id']))), ENT_QUOTES, $charset));
             $column++;
-            
+
 			if ($export_user_fields) {
 				//show user fields data, if any, for this user
 				$user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);
@@ -485,4 +487,3 @@ class ExerciseResult
 		return true;
 	}
 }
-endif;

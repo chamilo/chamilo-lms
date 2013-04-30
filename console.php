@@ -59,7 +59,7 @@ $cli->addCommands(array(
 
     //new ChamiloLMS\Command\Template\AsseticDumpCommand(),
 
-    //Chash commands
+    // Chash commands
     new Chash\Command\Database\RunSQLCommand(),
     new Chash\Command\Database\DumpCommand(),
     new Chash\Command\Database\RestoreCommand(),

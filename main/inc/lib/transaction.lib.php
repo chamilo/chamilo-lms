@@ -15,21 +15,34 @@
 abstract class TransactionLog {
   const BRANCH_LOCAL = 0;
   const TRANSACTION_LOCAL = 0;
+  const STATUS_LOCAL = 0;
+  const STATUS_TO_BE_EXECUTED = 1;
+  const STATUS_SUCCESSFUL = 2;
+  const STATUS_FAILED = 4;
+  const STATUS_ABANDONNED = 5;
+
   protected static $table;
 
   public function __construct($data) {
     $this->table = Database::get_main_table(TABLE_BRANCH_TRANSACTION);
     // time_insert and time_update are handled manually.
-    $fields = array('id', 'action', 'branch_id', 'transaction_id', 'item_id', 'orig_id', 'dest_id', 'info', 'status_id');
-    foreach ($fields as $field) {
+    $fields = array(
+      'id' => FALSE,
+      'action' => FALSE,
+      'branch_id' => TransactionLog::BRANCH_LOCAL,
+      'transaction_id' => TransactionLog::TRANSACTION_LOCAL,
+      'item_id' => FALSE,
+      'orig_id' => NULL,
+      'dest_id' => NULL,
+      'info' => NULL,
+      'status_id' => TransactionLog::STATUS_LOCAL
+    );
+    foreach ($fields as $field => $default_value) {
       if (isset($data[$field])) {
         $this->$field = $data[$field];
       }
-      elseif ($field == 'branch_id') {
-        $this->branch_id = TransactionLog::BRANCH_LOCAL;
-      }
-      elseif ($field == 'transaction_id') {
-        $this->transaction_id = TransactionLog::TRANSACTION_LOCAL;
+      elseif ($default_value !== FALSE) {
+        $this->$field = $default_value;
       }
     }
   }

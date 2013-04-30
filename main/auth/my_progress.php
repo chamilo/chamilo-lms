@@ -22,8 +22,7 @@ api_block_anonymous_users();
 
 $htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.5.js');
 
-$htmlHeadXtra[] = '
-<script language="javascript">
+$htmlHeadXtra[] = '<script>
 $(function() {
     $().timelinr();
     $(".dialog").dialog("destroy");
@@ -79,8 +78,11 @@ if (!empty($course_user_list)) {
     }
 }
 
+$selectedCourse = isset($_GET['course']) ? $_GET['course'] : null;
+$selectedSession = isset($_GET['session_id']) ? $_GET['session_id'] : null;
+
 $content = Tracking::show_user_progress(api_get_user_id());
-$content .= Tracking::show_course_detail(api_get_user_id(), $_GET['course'], $_GET['session_id']);
+$content .= Tracking::show_course_detail(api_get_user_id(), $selectedCourse, $selectedSession);
 
 if (!empty($dates)) {
     if (!empty($content)) {

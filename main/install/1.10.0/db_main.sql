@@ -238,6 +238,7 @@ CREATE TABLE IF NOT EXISTS course_field_values(
     course_code varchar(40) NOT NULL,
     field_id int NOT NULL,
     field_value text,
+    user_id INT unsigned NOT NULL default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -532,6 +533,7 @@ CREATE TABLE IF NOT EXISTS session_rel_user (
 );
 
 ALTER TABLE session_rel_user ADD INDEX idx_session_rel_user_id_user_moved (id_user, moved_to);
+
 DROP TABLE IF EXISTS session_field;
 CREATE TABLE IF NOT EXISTS session_field (
     id  int NOT NULL auto_increment,
@@ -564,6 +566,7 @@ CREATE TABLE IF NOT EXISTS session_field_values(
     session_id int NOT NULL,
     field_id int NOT NULL,
     field_value text,
+    user_id INT unsigned NOT NULL default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -911,9 +914,9 @@ VALUES
 ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
 ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1),
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
-('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0),
 ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
-('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1);
+('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1),
+('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1478,6 +1481,7 @@ CREATE TABLE IF NOT EXISTS user_field_values(
     user_id	int	unsigned NOT NULL,
     field_id int NOT NULL,
     field_value	text,
+    author_id INT unsigned NOT NULL default 0,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
@@ -3314,8 +3318,7 @@ CREATE TABLE track_e_uploads (
 
 DROP TABLE IF EXISTS track_e_course_access;
 CREATE TABLE track_e_course_access (
-  course_access_id int NOT NULL auto_increment,
-  course_code varchar(40) NOT NULL,
+  course_access_id bigint unsigned NOT NULL auto_increment,
   user_id int NOT NULL,
   login_course_date datetime NOT NULL default '0000-00-00 00:00:00',
   logout_course_date datetime default NULL,
@@ -3452,6 +3455,47 @@ CREATE TABLE user_course_category (
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_id);
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
+-- Question extra fields
+DROP TABLE IF EXISTS question_field;
+CREATE TABLE IF NOT EXISTS question_field (
+    id  int NOT NULL auto_increment,
+    field_type int NOT NULL default 1,
+    field_variable  varchar(64) NOT NULL,
+    field_display_text  varchar(64),
+    field_default_value text,
+    field_order int,
+    field_visible tinyint default 0,
+    field_changeable tinyint default 0,
+    field_filter tinyint default 0,
+    tms DATETIME NOT NULL default '0000-00-00 00:00:00',
+    PRIMARY KEY(id)
+);
+
+DROP TABLE IF EXISTS question_field_options;
+CREATE TABLE IF NOT EXISTS question_field_options(
+    id int NOT NULL auto_increment,
+    field_id int NOT NULL,
+    option_value text,
+    option_display_text varchar(255),
+    option_order int,
+    tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
+    PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS question_field_values;
+CREATE TABLE IF NOT EXISTS question_field_values(
+    id  int NOT NULL auto_increment,
+    question_id int NOT NULL,
+    field_id int NOT NULL,
+    field_value text,
+    user_id INT unsigned NOT NULL default 0,
+    tms DATETIME NOT NULL default '0000-00-00 00:00:00',
+    PRIMARY KEY(id)
+);
+
+ALTER TABLE question_field_options ADD INDEX idx_question_field_options_field_id(field_id);
+ALTER TABLE question_field_values ADD INDEX idx_question_field_values_question_id(question_id);
+ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(field_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.6a12538' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.003' WHERE variable = 'chamilo_database_version';

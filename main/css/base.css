@@ -5259,8 +5259,11 @@ i.size-32.icon-new-work {
     color: #000;
 }
 
-
 .item_added {
     float:left;
 }
 
+.data_table .row_total {
+    background-color: #555;
+    color:white;
+}

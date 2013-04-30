@@ -202,11 +202,13 @@ ALTER TABLE track_e_access ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_downloads ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_links ADD COLUMN c_id int unsigned NOT NULL default 0;
 
+ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned;
+
 ALTER TABLE track_e_lastaccess ADD INDEX ( c_id, access_user_id ) ;
 
 ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
 RENAME TABLE c_quiz_question_category TO c_quiz_category;
-ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned NOT NULL default 0;
+ALTER TABLE c_quiz_category ADD COLUMN parent_id int unsigned default NULL;
 
 CREATE TABLE c_quiz_rel_category (iid bigint unsigned NOT NULL auto_increment, c_id INT unsigned default 0, category_id int unsigned NOT NULL, exercise_id int unsigned NOT NULL, count_questions int NOT NULL default 0, PRIMARY KEY(iid));
 
@@ -243,5 +245,18 @@ ALTER TABLE c_quiz_category MODIFY c_id INT NOT NULL;
 ALTER TABLE c_quiz_category DROP PRIMARY KEY;
 ALTER TABLE c_quiz_category ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
 
+CREATE TABLE IF NOT EXISTS question_field (id  int NOT NULL auto_increment, field_type int NOT NULL default 1, field_variable varchar(64) NOT NULL, field_display_text  varchar(64), field_default_value text, field_order int, field_visible tinyint default 0, field_changeable tinyint default 0, field_filter tinyint default 0, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY(id));
+CREATE TABLE IF NOT EXISTS question_field_options(id int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms	DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS question_field_values( id  int NOT NULL auto_increment, question_id int NOT NULL, field_id int NOT NULL, field_value text, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY(id));
+
+ALTER TABLE question_field_options ADD INDEX idx_question_field_options_field_id(field_id);
+ALTER TABLE question_field_values ADD INDEX idx_question_field_values_question_id(question_id);
+ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(field_id);
+
+ALTER TABLE question_field_values ADD COLUMN user_id INT unsigned NOT NULL default 0;
+ALTER TABLE session_field_values ADD COLUMN user_id INT unsigned NOT NULL default 0;
+ALTER TABLE course_field_values ADD COLUMN user_id INT unsigned NOT NULL default 0;
+ALTER TABLE user_field_values ADD COLUMN author_id INT unsigned NOT NULL default 0;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.001' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.003' WHERE variable = 'chamilo_database_version';

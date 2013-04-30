@@ -21,18 +21,11 @@ api_protect_super_admin($user_id, null, true);
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(
-    WEB_LIBRARY_PATH
-).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link  href="'.api_get_path(
-    WEB_LIBRARY_PATH
-).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-$htmlHeadXtra[] = '
-<script>
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+$htmlHeadXtra[] = '<script>
 
 var is_platform_id = "'.$is_platform_admin.'";
-
-<!--
 function enable_expiration_date() {
 	document.user_edit.radio_expiration_date[0].checked=false;
 	document.user_edit.radio_expiration_date[1].checked=true;
@@ -68,7 +61,6 @@ function show_image(image,width,height) {
 	height = parseInt(height) + 20;
 	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \' , resizable=0\');
 }
-//-->
 </script>';
 
 $noPHP_SELF = true;
@@ -192,7 +184,7 @@ if (api_get_setting('login_is_email') != 'true') {
 // Password
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
 $nb_ext_auth_source_added = 0;
-if (count($extAuthSource) > 0) {
+if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
     $auth_sources = array();
     foreach ($extAuthSource as $key => $info) {
         // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
@@ -428,10 +420,14 @@ if ($form->validate()) {
             }
         }
 
+        // Using the extrafieldvalue obj
+        $extraFieldValues = new ExtraFieldValue('user');
+        $extraFieldValues->save_field_values($user);
+
+        /*
         foreach ($user as $key => $value) {
             if (substr($key, 0, 6) == 'extra_') {
                 //an extra field
-                //@todo remove this as well as in the profile.php ad put it in a function
                 if (is_array($value) && isset($value['Y']) && isset($value['F']) && isset($value['d'])) {
                     if (isset($value['H']) && isset($value['i'])) {
                         // extra field date time
@@ -445,7 +441,8 @@ if ($form->validate()) {
                 }
                 UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
             }
-        }
+        }*/
+
         $tok = Security::get_token();
         header(
             'Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok

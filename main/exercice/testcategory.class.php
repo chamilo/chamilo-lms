@@ -44,7 +44,7 @@ class Testcategory
             if (!empty($tmpobj->parent_id)) {
                 $category = new Testcategory($tmpobj->parent_id);
                 $this->parent_path = $category->parent_path.' > '.$this->name;
-		}
+		    }
         } else {
 			$this->id = $in_id;
 			$this->name = $in_name;
@@ -101,19 +101,145 @@ class Testcategory
             $course_id = '';
             $courseCondition = null;
         }
+
+        // Only admins can add global categories
+        if ($this->type == 'global' && empty($course_id) && !api_is_platform_admin()) {
+            return false;
+        }
+
 		// Check if name already exists
         $sql = "SELECT count(*) AS nb FROM $t_cattable WHERE title = '$v_name' $courseCondition";
 		$result = Database::query($sql);
 		$data = Database::fetch_array($result);
+
         // lets add in BD if not the same name
 		if ($data['nb'] <= 0) {
-            $sql = "INSERT INTO $t_cattable (c_id, title, description, parent_id) VALUES ('$course_id', '$v_name', '$v_description', '$parent_id')";
-            Database::query($sql);
-            return Database::insert_id();
+            // @todo inject the app in the claas
+            global $app;
+            $category = new \Entity\CQuizCategory();
+            $category->setTitle($this->name);
+            $category->setDescription($this->description);
+
+            if (!empty($parent_id)) {
+                $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parent_id);
+                if ($parent) {
+                    $category->setParent($parent);
+                }
+            }
+            $category->setCId($course_id);
+            $app['orm.em']->persist($category);
+            $app['orm.em']->flush();
+
+            if ($category->getIid()) {
+                return $category->getIid();
+            } else {
+                return false;
+            }
+            /*$sql = "INSERT INTO $t_cattable (c_id, title, description, parent_id) VALUES ('$course_id', '$v_name', '$v_description', '$parent_id')";
+            Database::query($sql);*/
+            //return Database::insert_id();
         } else {
             return false;
 		}
     }
+
+    /**
+     * Modify category name or description of category with id=in_id
+     */
+    function modifyCategory()
+    {
+        $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $v_id = Database::escape_string($this->id);
+        $v_name = Database::escape_string($this->name);
+        //$v_description = Database::escape_string($this->description);
+        $parent_id = intval($this->parent_id);
+
+        //Avoid recursive categories
+        if ($parent_id == $v_id) {
+            $parent_id = 0;
+        }
+
+        // @todo inject the app in the claas
+        global $app;
+        $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
+        if (!$category) {
+            return false;
+        }
+        $courseId = $category->getCId();
+        //Only admins can delete global categories
+        if (empty($courseId) && !api_is_platform_admin()) {
+            return false;
+        }
+
+        $category->setTitle($this->name);
+        $category->setDescription($this->description);
+
+        if (!empty($parent_id)) {
+            $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parent_id);
+            if ($parent) {
+                $category->setParent($parent);
+            }
+        }
+
+        $app['orm.em']->persist($category);
+        $app['orm.em']->flush();
+
+        if ($category->getIid()) {
+            return $category->getIid();
+        } else {
+            return false;
+        }
+
+        /*
+        $sql = "UPDATE $t_cattable SET
+                    title = '$v_name',
+                    description = '$v_description',
+                    parent_id = '$parent_id'
+                WHERE iid = '$v_id'";
+        Database::query($sql);*/
+        /*
+		if (Database::affected_rows() <= 0) {
+			return false;
+        } else {
+			return true;
+		}*/
+    }
+
+
+    /**
+     * Removes the category with id=in_id from the database if no question use this category
+     * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
+     * jmontoya
+     */
+    function removeCategory()
+    {
+        global $app;
+        $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
+        if (!$category) {
+            return false;
+        }
+
+        //Only admins can delete global categories
+        $courseId = $category->getCId();
+        //Only admins can delete global categories
+        if (empty($courseId) && !api_is_platform_admin()) {
+            return false;
+        }
+
+        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        $repo->removeFromTree($category);
+        $app['orm.em']->clear(); // clear cached nodes
+        return true;
+
+        /*$sql = "DELETE FROM $t_cattable WHERE iid = $v_id";
+        Database::query($sql);
+		if (Database::affected_rows() <= 0) {
+			return false;
+		} else {
+			return true;
+		}*/
+    }
+
 
     /**
      * @param string $title
@@ -180,51 +306,8 @@ class Testcategory
         return false;
 	}
 
-	/**
-     * Removes the category with id=in_id from the database if no question use this category
-     * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
-     * jmontoya
-	 */
-    function removeCategory()
-    {
-		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-		$v_id = Database::escape_string($this->id);
-        $sql = "DELETE FROM $t_cattable WHERE iid = $v_id";
-        Database::query($sql);
-		if (Database::affected_rows() <= 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
 
 
-    /**
-     * Modify category name or description of category with id=in_id
-	 */
-    function modifyCategory() {
-		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-		$v_id = Database::escape_string($this->id);
-		$v_name = Database::escape_string($this->name);
-		$v_description = Database::escape_string($this->description);
-        $parent_id = intval($this->parent_id);
-
-        //Avoid recursive categories
-        if ($parent_id == $v_id) {
-            $parent_id = 0;
-        }
-        $sql = "UPDATE $t_cattable SET
-                    title = '$v_name',
-                    description = '$v_description',
-                    parent_id = '$parent_id'
-                WHERE iid = '$v_id'";
-        Database::query($sql);
-		if (Database::affected_rows() <= 0) {
-			return false;
-        } else {
-			return true;
-		}
-	}
 
 	/**
      * Gets the number of question of category id=in_id
@@ -255,24 +338,24 @@ class Testcategory
 	If in_field=="" Return an array of all category objects in the database
 	Otherwise, return an array of all in_field value in the database (in_field = id or name or description)
 	 */
-	public static function getCategoryListInfo($in_field = "", $in_courseid="") {
-		if (empty($in_courseid) || $in_courseid=="") {
-			$in_courseid = api_get_course_int_id();
+	public static function getCategoryListInfo($in_field = "", $courseId = null) {
+		if (empty($courseId) || $courseId=="") {
+            $courseId = api_get_course_int_id();
 		}
+        $courseId = intval($courseId);
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$in_field = Database::escape_string($in_field);
 		$tabres = array();
 		if ($in_field=="") {
-			$sql = "SELECT * FROM $t_cattable WHERE c_id = $in_courseid ORDER BY title ASC";
+			$sql = "SELECT * FROM $t_cattable WHERE c_id = $courseId ORDER BY title ASC";
 			$res = Database::query($sql);
 			while ($row = Database::fetch_array($res)) {
                 $tmpcat = new Testcategory($row['iid'], $row['title'], $row['description'], $row['parent_id']);
 				$tabres[] = $tmpcat;
 			}
         } else {
-			$sql = "SELECT $in_field
-			FROM $t_cattable WHERE c_id=$in_courseid
-			ORDER BY $in_field ASC";
+			$sql = "SELECT $in_field FROM $t_cattable WHERE c_id = $courseId
+			        ORDER BY $in_field ASC";
 
 			$res = Database::query($sql);
 			while ($row = Database::fetch_array($res)) {
@@ -289,14 +372,16 @@ class Testcategory
 	 Return the testcategory id, 0 if none
      * @assert () === false
 	 */
-    public static function getCategoryForQuestion($question_id, $in_courseid = null) {
-		$result = array();	// result
-		if (empty($in_courseid) || $in_courseid=="") {
-			$in_courseid = api_get_course_int_id();
+    public static function getCategoryForQuestion($question_id, $courseId = null)
+    {
+		$result = array();
+		if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
 		}
-		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $courseId = intval($courseId);
+		$categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $question_id = Database::escape_string($question_id);
-		$sql = "SELECT category_id FROM $t_cattable WHERE question_id = '$question_id' AND c_id = $in_courseid";
+		$sql = "SELECT category_id FROM $categoryTable WHERE question_id = '$question_id' AND c_id = $courseId";
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -306,15 +391,17 @@ class Testcategory
 		return $result;
 	}
 
-    public static function getCategoryForQuestionWithCategoryData($question_id, $in_courseid = null) {
+    public static function getCategoryForQuestionWithCategoryData($question_id, $courseId = null) {
 		$result = array();	// result
-		if (empty($in_courseid) || $in_courseid=="") {
-			$in_courseid = api_get_course_int_id();
+		if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
 		}
+        $courseId = intval($courseId);
+
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
         $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $question_id = Database::escape_string($question_id);
-        $sql = "SELECT * FROM $t_cattable qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE question_id = '$question_id' AND qc.c_id = $in_courseid";
+        $sql = "SELECT * FROM $t_cattable qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE question_id = '$question_id' AND qc.c_id = $courseId";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -749,10 +836,12 @@ class Testcategory
      * @params int exercise id
      * @params array prefilled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
      */
-    public static function get_stats_table_by_attempt($exercise_id, $category_list = array()) {
+    public static function get_stats_table_by_attempt($exercise_id, $category_list = array())
+    {
         if (empty($category_list)) {
             return null;
         }
+
         $category_name_list = Testcategory::getListOfCategoriesNameForTest($exercise_id, false);
 
         $table = new HTML_Table(array('class' => 'data_table'));
@@ -772,12 +861,49 @@ class Testcategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
-        if (count($category_list) > 1) {
+        global $app;
+        $em = $app['orm.em'];
+        $repo = $em->getRepository('Entity\CQuizCategory');
+
+        $redefineCategoryList = array();
+
+
+        if (!empty($category_list) && count($category_list) > 1) {
+            $globalCategoryScore = array();
+
             foreach ($category_list as $category_id => $category_item) {
-                $table->setCellContents($row, 0, $category_name_list[$category_id]);
+                $cat = $em->find('Entity\CQuizCategory', $category_id);
+                $path = $repo->getPath($cat);
+
+                $categoryName = $category_name_list[$category_id];
+
+                if (isset($path[0])) {
+                    $category_id = $path[0]->getIid();
+                    $categoryName = $path[0]->getTitle();
+                }
+                if (!isset($globalCategoryScore[$category_id])) {
+                    $globalCategoryScore[$category_id] = array();
+                    $globalCategoryScore[$category_id]['score'] = 0;
+                    $globalCategoryScore[$category_id]['total'] = 0;
+                    $globalCategoryScore[$category_id]['title'] = '';
+                }
+                $globalCategoryScore[$category_id]['score'] += $category_item['score'];
+                $globalCategoryScore[$category_id]['total'] += $category_item['total'];
+                $globalCategoryScore[$category_id]['title'] = $categoryName;
+            }
+
+            foreach ($globalCategoryScore as $category_item) {
+                $table->setCellContents($row, 0, $category_item['title']);
                 $table->setCellContents($row, 1, show_score($category_item['score'], $category_item['total'], false));
                 $table->setCellContents($row, 2, show_score($category_item['score'], $category_item['total'], true, false, true));
+
+                $class = 'class="row_odd"';
+                if ($row % 2) {
+                    $class = 'class="row_even"';
+                }
+                $table->setRowAttributes($row, $class, true);
                 $row++;
+
             }
 
             if (!empty($none_category)) {
@@ -786,13 +912,17 @@ class Testcategory
                 $table->setCellContents($row, 2, show_score($none_category['score'], $none_category['total'], true, false, true));
                 $row++;
             }
+
             if (!empty($total)) {
                 $table->setCellContents($row, 0, get_lang('Total'));
                 $table->setCellContents($row, 1, show_score($total['score'], $total['total'], false));
                 $table->setCellContents($row, 2, show_score($total['score'], $total['total'], true, false, true));
+                $table->setRowAttributes($row, 'class="row_total"', true);
             }
+
             return $table->toHtml();
         }
+
         return null;
     }
 

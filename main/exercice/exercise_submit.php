@@ -378,7 +378,6 @@ if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['previ
 }
 
 // 1. Loading the $objExercise variable
-
 if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
     // Construction of Exercise
     $objExercise = new Exercise();
@@ -873,7 +872,6 @@ if ($objExercise->type == ONE_PER_PAGE) {
     $exercise_result = get_answered_questions_from_attempt($exe_id, $objExercise);
     $conditions = array();
     $conditions[] = array("class" => 'remind', 'items' => $my_remind_list);
-    //$conditions[] = array("class" => 'not_answered', 'items' => $exercise_result, 'type' => 'negative');
     $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
     $link = api_get_self().'?'.$params.'&num=';
     echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
@@ -1017,8 +1015,8 @@ if ($objExercise->review_answers) {
 if (!empty($error)) {
     Display :: display_error_message($error, false);
 } else {
-    if (!empty ($exercise_sound)) {
-        echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F" . Security::remove_XSS($exercise_sound) . "\" target=\"_blank\">", "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound') . "\" /></a>";
+    if (!empty($exercise_sound)) {
+        echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F".Security::remove_XSS($exercise_sound)."\" target=\"_blank\">", "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound') . "\" /></a>";
     }
     // Get number of hotspot questions for javascript validation
     $number_of_hotspot_questions = 0;

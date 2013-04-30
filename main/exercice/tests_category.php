@@ -262,6 +262,70 @@ function display_add_category($type) {
 // Display category list
 
 function display_categories($type = 'simple') {
+    global $app;
+
+    $options = array(
+        'decorate' => true,
+        'rootOpen' => '<ul>',
+        'rootClose' => '</ul>',
+        'childOpen' => '<li>',
+        'childClose' => '</li>',
+        'nodeDecorator' => function($row) use ($type) {
+            $category_id = $row['iid'];
+            $courseId =  $row['cId'];
+
+            $tmpobj = new Testcategory($category_id);
+            $nb_question = $tmpobj->getCategoryQuestionsNumber();
+
+            $nb_question_label = $nb_question == 1 ? $nb_question . ' ' . get_lang('Question') : $nb_question . ' ' . get_lang('Questions');
+            $nb_question_label = Display::label($nb_question_label, 'info');
+
+            $actions = null;
+            if ($courseId == 0 && $type == 'simple') {
+                $actions .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL);
+            } else {
+                $actions .= '<a href="'.api_get_self().'?action=editcategory&category_id='.$category_id.'&type='.$type.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+            }
+
+            if ($nb_question > 0 && $courseId == 0 && $type == 'simple') {
+                $actions .= '<a href="javascript:void(0)" onclick="alert(\'' . protectJSDialogQuote(get_lang('CannotDeleteCategory')) . '\')">';
+                $actions .= Display::return_icon('delete_na.png', get_lang('CannotDeleteCategory'), array(), ICON_SIZE_SMALL);
+                $actions .='</a>';
+            } else {
+                $rowname = protectJSDialogQuote($row['title']);
+                $actions .= ' <a href="'.api_get_self().'?action=deletecategory&amp;category_id='.$category_id.'&type='.$type.'"';
+                $actions .= 'onclick="return confirmDelete(\''.protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category_id.'\');">';
+                $actions .= Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+            }
+
+            return $row['title'].' '.$nb_question_label.' '.$actions;
+        }
+        //'representationField' => 'slug',
+        //'html' => true
+    );
+
+    $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+
+    $query = null;
+    if ($type == 'global') {
+        $query = $app['orm.em']
+            ->createQueryBuilder()
+            ->select('node')
+            ->from('Entity\CQuizCategory', 'node')
+            ->where('node.cId = 0')
+            ->getQuery()
+        ;
+        $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
+    } else {
+        $htmlTree = $repo->childrenHierarchy(
+            null, /* starting from root nodes */
+            false, /* load all children, not only direct */
+            $options
+        );
+    }
+    echo $htmlTree;
+    return true;
+
     $cat = new Testcategory();
     $categories = $cat->get_category_tree_by_type($type);
     if (!empty($categories)) {

@@ -353,12 +353,36 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     }
 };
 
+/**
+ * Removes course-session data
+ * @param Request $request
+ */
 $cleanCourseSession = function (Request $request) use ($app) {
     Session::erase('_cid');
     Session::erase('_real_cid');
     Session::erase('_course');
 };
 
+/**
+ * Deletes the exam_password user extra field *only* to students
+ * @todo improve the login hook system
+ * @param Request $request
+ */
+$afterLogin = function (Request $request) use ($app) {
+    if (isset($app['current_user']) && isset($app['current_user']['user_id']) && $app['current_user']['status'] == STUDENT) {
+        $extraField = new ExtraField('user');
+        $extraFieldData = $extraField->get_handler_field_info_by_field_variable('exam_password');
+        if ($extraFieldData && !empty($extraFieldData)) {
+            $extraField = new ExtraFieldValue('user');
+            $extraFieldValue = $extraField->get_values_by_handler_and_field_variable($app['current_user']['user_id'], 'exam_password');
+            if (!empty($extraFieldValue)) {
+                $extraField->delete_values_by_handler_and_field_id($app['current_user']['user_id'], $extraFieldValue['id']);
+            }
+        }
+    }
+};
+
+/** Legacy controller */
 $app->get('/', 'legacy.controller:classicAction')
     ->before($userAccessConditions)
     ->before($settingCourseConditions)
@@ -369,8 +393,9 @@ $app->post('/', 'legacy.controller:classicAction')
     ->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse);
 
-// web/index
+/** web/index */
 $app->match('/index', 'index.controller:indexAction', 'GET|POST')
+    ->after($afterLogin)
     ->bind('index');
 
 // web/login
@@ -378,7 +403,7 @@ $app->match('/index', 'index.controller:indexAction', 'GET|POST')
 ->bind('login');*/
 
 
-// Userportal
+/** Userportal */
 $app->get('/userportal', 'userPortal.controller:indexAction');
 $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
     ->value('type', 'courses') //default values
@@ -386,14 +411,15 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
     ->value('page', '1')
     ->bind('userportal')
     ->after($cleanCourseSession);
+
 //->assert('type', '.+'); //allowing slash "/"
 
-// Logout
+/**  Logout */
 $app->get('/logout', 'index.controller:logoutAction')
     ->bind('logout')
     ->after($cleanCourseSession);
 
-// Course home instead of courses/MATHS the new URL is web/courses/MATHS
+/** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
 $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('id_session', '\d+')
     ->assert('type', '.+')
@@ -405,41 +431,41 @@ $app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POS
     ->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse); //allowing slash "/"
 
-// Course documents
+/**  Course documents */
 $app->get('/courses/{courseCode}/document/', 'index.controller:getDocumentAction')
     ->assert('type', '.+');
 
-// Certificates
+/** Certificates */
 $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
 
-// Username
+/**  Username */
 $app->match('/user/{username}', 'user.controller:indexAction', 'GET');
 
-// Who is online
+/** Who is online */
 /*$app->match('/users/online', 'user.controller:onlineAction', 'GET');
 $app->match('/users/online-in-course', 'user.controller:onlineInCourseAction', 'GET');
 $app->match('/users/online-in-session', 'user.controller:onlineInSessionAction', 'GET');*/
 
-// Portal news
+/** Portal news */
 $app->match('/news/{id}', 'news.controller:indexAction', 'GET')
     ->bind('portal_news');
 
-// LP controller (subscribe users to a LP)
+/** LP controller (subscribe users to a LP) */
 $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')
     ->bind('subscribe_users');
 
-// Data document_templates files
+/** Data document_templates files */
 $app->get('/data/document_templates/{file}', 'index.controller:getDocumentTemplateAction')
     ->bind('data');
 
-// Data default_platform_document files
+/** Data default_platform_document files */
 $app->get('/data/default_platform_document/', 'index.controller:getDefaultPlatformDocumentAction')
     ->assert('type', '.+');
 
-// Group files
+/** Group files */
 $app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile')
     ->assert('type', '.+');
 
-// User files
+/** User files */
 $app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
     ->assert('type', '.+');

@@ -120,6 +120,11 @@ if (api_is_platform_admin()) {
 	$items[] = array('url'=>'subscribe_user2course.php', 	'label' => get_lang('AddUsersToACourse'));
 	$items[] = array('url'=>'course_user_import.php', 		'label' => get_lang('ImportUsersToACourse'));
 
+    $items[] = array('url'=>'extra_fields.php?type=course', 	'label' => get_lang('ManageCourseFields'));
+
+    $items[] = array('url'=>'extra_fields.php?type=question', 	'label' => get_lang('ManageQuestionFields'));
+
+
     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
         $items[] = array('url'=>'grade_models.php',             'label' => get_lang('GradeModel'));
     }
@@ -203,7 +208,7 @@ if (api_is_platform_admin()) {
 }
 
 $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
-$items[] = array('url'=>'session_fields.php', 	'label' => get_lang('ManageSessionFields'));
+$items[] = array('url'=>'extra_fields.php?type=session', 	'label' => get_lang('ManageSessionFields'));
 
 $blocks['sessions']['items'] = $items;
 $blocks['sessions']['extra'] = null;

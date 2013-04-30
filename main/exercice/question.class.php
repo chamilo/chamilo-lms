@@ -147,9 +147,10 @@ abstract class Question
     /**
      * Reads question informations from the data base
      *
-     * @author - Olivier Brouckaert
-     * @param - integer $id - question ID
-     * @return - boolean - true if question exists, otherwise false
+     * @author Olivier Brouckaert
+     * @param int $id - question ID
+     *
+     * @return boolean - true if question exists, otherwise false
      */
     static function read($id, $course_id = null)
     {
@@ -193,7 +194,7 @@ abstract class Question
                 $objQuestion->parent_id     = $object->parent_id;
                 $objQuestion->category_list = Testcategory::getCategoryForQuestion($id);
 
-                $sql                  = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
+                $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
                 $result_exercise_list = Database::query($sql);
 
                 // fills the array with the exercises which this question is in
@@ -1352,7 +1353,7 @@ abstract class Question
     function createForm(&$form, $fck_config = 0)
     {
         $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
-        echo '	<style>
+        echo '<style>
 					.media { display:none;}
 				</style>';
         if ($this->type != MEDIA_QUESTION) {
@@ -1531,6 +1532,11 @@ abstract class Question
 
             $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
 
+            // Inject question extra fields!
+            //Extra fields
+            $extraFields = new ExtraField('question');
+            $extraFields->add_elements($form, $this->id);
+
             $form->addElement('html', '</div>');
         }
 
@@ -1598,6 +1604,11 @@ abstract class Question
         //Save normal question if NOT media
         if ($this->type != MEDIA_QUESTION) {
             $this->save($objExercise->id);
+
+            $field_value = new ExtraFieldValue('question');
+            $params = $form->exportValues();
+            $params['question_id'] = $this->id;
+            $field_value->save_field_values($params);
 
             // modify the exercise
             $objExercise->addToList($this->id);

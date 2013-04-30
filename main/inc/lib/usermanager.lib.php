@@ -10,7 +10,8 @@
  * Class
  * @package chamilo.include.user
  */
-class UserManager {
+class UserManager
+{
     static public $columns = array(
         'user_id',
         'lastname',
@@ -4114,4 +4115,96 @@ class UserManager {
         $send_to['users'] = array_unique($userlist);
         return $send_to;
     }
+
+    /** Used by the widescale plugin */
+    static function get_user_data($from, $number_of_items, $column, $direction, $get_count = false) {
+        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+
+        $select = "SELECT
+                     u.user_id,
+                     u.username,
+                     u.firstname,
+                     u.lastname,
+                     ufv1.field_value as exam_password
+                     ";
+        if ($get_count) {
+            $select = "SELECT count(u.user_id) as total_rows";
+        }
+
+        $sql = "$select FROM $user_table u ";
+
+        // adding the filter to see the user's only of the current access_url
+        if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
+            $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
+        }
+
+        $extra_fields = array('exam_password', 'exam_room', 'exam_schedule');
+        $counter = 1;
+        $where_condition = "";
+        $and_conditions = array();
+        foreach ($extra_fields as $keyword_extra_data) {
+            $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
+
+            $field_id = $extra_info['id'];
+            $table_alias = "ufv$counter";
+            $sql.= " INNER JOIN user_field_values $table_alias ON u.user_id = $table_alias.user_id AND $table_alias.field_id = $field_id ";
+            $counter++;
+
+            if ($keyword_extra_data == 'exam_password') {
+                continue;
+            }
+            $keyword_extra_data_text = UserManager::get_extra_user_data_by_field(api_get_user_id(), $extra_info['field_variable']);
+            $keyword_extra_data_text = $keyword_extra_data_text[$extra_info['field_variable']];
+            if (!empty($keyword_extra_data_text)) {
+                $and_conditions[] = " $table_alias.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
+            }
+
+        }
+
+        if (!empty($and_conditions)) {
+            $where_condition = implode(' AND ', $and_conditions);
+        }
+        if (!empty($where_condition)) {
+            $sql .= " WHERE  $where_condition ";
+        }
+
+        $sql .= " AND u.user_id <> ".api_get_user_id();
+
+        // adding the filter to see the user's only of the current access_url
+        if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
+            $sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+        }
+
+        if (!in_array($direction, array('ASC','DESC'))) {
+            $direction = 'ASC';
+        }
+
+        if (in_array($column, array('username', 'firstname', 'lastname'))) {
+            $column = $column;
+        }
+
+        $from 	= intval($from);
+        $number_of_items = intval($number_of_items);
+
+        //Returns counts and exits function
+        if ($get_count) {
+            $res = Database::query($sql);
+            $user = Database::fetch_array($res);
+            return $user['total_rows'];
+        }
+
+        $sql .= " ORDER BY $column $direction ";
+        $sql .= " LIMIT $from, $number_of_items";
+        $res = Database::query($sql);
+
+        $users = array();
+        while ($user = Database::fetch_array($res, 'ASSOC')) {
+            $users[] = $user;
+        }
+        return $users;
+    }
+
+
+
 }

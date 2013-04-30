@@ -117,7 +117,8 @@ class CourseBuilder {
 
         foreach ($this->tools_to_build as $tool) {
             $function_build = 'build_'.$tool;
-            $this->$function_build($session_id, $course_code, $with_base_content, $this->specific_id_list[$tool]);
+            $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
+            $this->$function_build($session_id, $course_code, $with_base_content, $specificIdList);
         }
 
 		if (!empty($session_id) && !empty($course_code)) {
@@ -479,13 +480,14 @@ class CourseBuilder {
 
 		// Building normal tests.
 		$sql = "SELECT * FROM $table_que WHERE c_id = $course_id ";
+
         $db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
             $categories = Testcategory::getCategoryForQuestionWithCategoryData($obj->iid, $course_id, true);
             $parent_info = array();
 
             if (isset($obj->parent_id) && !empty($obj->parent_id)) {
-                $parent_info = (array) Question::read($obj->parent_id, $course_id);
+                $parent_info = (array)Question::read($obj->parent_id, $course_id);
             }
 
 			$question = new QuizQuestion($obj->iid, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture, $obj->level, $obj->extra, $parent_info, $categories);

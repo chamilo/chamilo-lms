@@ -6478,7 +6478,6 @@ function api_set_settings_and_plugins() {
     }
 
     $result = api_get_settings('Plugins', 'list', $access_url_id);
-    $_plugins = array();
     foreach ($result as & $row) {
         $key = & $row['variable'];
         if (is_string($_setting[$key])) {
@@ -6487,13 +6486,14 @@ function api_set_settings_and_plugins() {
         $_setting[$key][] = $row['selected_value'];
         $_plugins[$key][] = $row['selected_value'];
     }
-    //global $app;
     $_SESSION['_setting'] = $_setting;
     $_SESSION['_plugins'] = $_plugins;
 }
 
+/**
+ * Saving latest settings modification datetime
+ */
 function api_set_setting_last_update() {
-    //Saving latest refresh
     api_set_setting('settings_latest_update', api_get_utc_datetime());
 }
 
@@ -6823,7 +6823,6 @@ function api_get_language_interface() {
 
     $user_language = api_get_user_language();
     $_course = api_get_course_info();
-
     $language_interface = 'english';
 
     if (!empty($valid_languages)) {
@@ -6831,7 +6830,7 @@ function api_get_language_interface() {
         if (!in_array($user_language, $valid_languages['folder'])) {
             $user_language = api_get_setting('platformLanguage');
         }
-
+        /* @todo fix the language priority feature */
         $language_priority1 = api_get_setting('languagePriority1');
         $language_priority2 = api_get_setting('languagePriority2');
         $language_priority3 = api_get_setting('languagePriority3');

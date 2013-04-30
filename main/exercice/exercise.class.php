@@ -4589,6 +4589,7 @@ class Exercise
     {
         $media_questions = array();
         $question_list = $this->get_validated_question_list();
+
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 $objQuestionTmp = Question::read($questionId);

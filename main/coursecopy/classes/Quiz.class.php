@@ -27,16 +27,18 @@ class Quiz extends Resource
      */
     public $obj; //question
 
-    function Quiz($obj) {
+    function Quiz($obj)
+    {
         $this->obj = $obj;
         $this->obj->quiz_type = $this->obj->type;
-        parent::Resource($obj->id, RESOURCE_QUIZ);
+        parent::Resource($obj->iid, RESOURCE_QUIZ);
     }
 
     /**
      * Add a question to this Quiz
      */
-    function add_question($id, $question_order) {
+    function add_question($id, $question_order)
+    {
         $this->obj->question_ids[] = $id;
         $this->obj->question_orders[] = $question_order;
     }
@@ -44,7 +46,8 @@ class Quiz extends Resource
     /**
      * Show this question
      */
-    function show() {
+    function show()
+    {
         parent::show();
         echo $this->obj->title;
     }

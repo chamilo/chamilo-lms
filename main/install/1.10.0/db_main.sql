@@ -3072,7 +3072,7 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 
 DROP TABLE IF EXISTS branch_transaction;
 CREATE TABLE branch_transaction (
-    id bigint unsigned not null AUTO_INCREMENT,
+    id bigint unsigned not null PRIMARY KEY AUTO_INCREMENT,
     transaction_id bigint unsigned,
     branch_id int not null default 0,
     action char(20),
@@ -3082,8 +3082,7 @@ CREATE TABLE branch_transaction (
     info char(20),
     status_id tinyint not null default 0,
     time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-    time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-    PRIMARY KEY (id, transaction_id, branch_id)
+    time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 );
 
 -- Stats database
@@ -3455,4 +3454,4 @@ ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_i
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.6a12538' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.002' WHERE variable = 'chamilo_database_version';

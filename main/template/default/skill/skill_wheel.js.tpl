@@ -1,5 +1,5 @@
 {# topbar #}
-{% include "default/layout/topbar.tpl" %}
+{% include app.template_style ~ "/layout/topbar.tpl" %}
 <script>
 
 /* Skill wheel settings */
@@ -12,8 +12,8 @@ var main_depth = 4;
 var main_parent_id = 0;
 
 // Used to split in two word or not
-var max_size_text_length = 11; 
-  
+var max_size_text_length = 11;
+
 /* ColorBrewer settings */
 var my_domain = [1,2,3,4,5,6,7,8,9];
 var col = 9;
@@ -22,16 +22,16 @@ var color_patterns = [];
 /*
 
 See colorbrewer documentation
-    
-color_patterns[1] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Blues[col]);      
+
+color_patterns[1] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Blues[col]);
 color_patterns[2] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Purples[col]);
 color_patterns[2] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Blues[6]);
-color_patterns[3] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greens[col]);    
+color_patterns[3] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Greens[col]);
 color_patterns[4] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Reds[col]);
 color_patterns[5] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.Oranges[col]);
 color_patterns[6] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlOrBr[col]);
 
-color_patterns[7] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlGn[col]);    
+color_patterns[7] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlGn[col]);
 color_patterns[8] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.YlGnBu[col]);
 color_patterns[9] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.GnBu[col]);
 color_patterns[10] = d3.scale.ordinal().domain(my_domain).range(colorbrewer.BuGn[col]);
@@ -58,7 +58,7 @@ var color_loops = 4;
 
 // Generating array of colors thanks to the "$.xcolor.analogous" function we can create a rainbow style!
 for (i= 0; i < color_loops; i++) {
-    //Getting the latest color hex of the 8 colors loaded 
+    //Getting the latest color hex of the 8 colors loaded
     last_color = colors[colors.length-1].getHex();
     //Getting the complementary
     glue_color = $.xcolor.complementary(last_color);
@@ -116,32 +116,32 @@ function isParentOf(p, c) {
         });
     }
     return false;
-}	
+}
 
 function get_color(d) {
     depth = d.depth;
-    if (d.family_id) {            
-        /*var p = color_patterns[d.family_id];            
+    if (d.family_id) {
+        /*var p = color_patterns[d.family_id];
         color = p(depth -1 + d.counter);
-        d.color = color;*/                  
-        if (depth > 1) {              
+        d.color = color;*/
+        if (depth > 1) {
             family1 = colors[d.family_id];
-            family2 = colors[d.family_id + 2];                
-            position = d.depth*d.counter;                
+            family2 = colors[d.family_id + 2];
+            position = d.depth*d.counter;
             //part_color = $.xcolor.gradientlevel(family1, family2, position, 100);
-            part_color = $.xcolor.lighten(family1, position, 15);                
+            part_color = $.xcolor.lighten(family1, position, 15);
             color = part_color.getHex();
             //console.log(d.depth + " - " + d.name + " + "+ color+ "+ " +d.counter);
         } else {
-            color = colors[d.family_id];                
-        }                  
+            color = colors[d.family_id];
+        }
         return color;
     }
-    color = '#fefefe';        
+    color = '#fefefe';
     return color; //missing colors
 }
 
-/*      
+/*
 gray tones for all skills that have no particular property ("Basic skills wheel" view)
 yellow tones for skills that are provided by courses in Chamilo ("Teachable skills" view)
 bright blue tones for personal skills already acquired by the student currently looking at the weel ("My skills" view)
@@ -152,7 +152,7 @@ bright red for missing skills, in the "Required skills" view for a student when 
 */
 
 /**
-    Manage the partition background colors    
+    Manage the partition background colors
 **/
 function set_skill_style(d, attribute, searched_skill_id) {
     //Default border color (stroke)
@@ -160,15 +160,15 @@ function set_skill_style(d, attribute, searched_skill_id) {
 
     //0. Nice rainbow colors (Comment 1.0 to see the rainbow!)
     return_fill = get_color(d);
-    
+
     //1. Grey colors using colorbrewer
     var p = color_patterns[18];
     color = p(depth -1 + d.counter);
-    return_fill = color;          
+    return_fill = color;
 
     //2. Yellow - If the skill has a gradebook attached
-    if (d.skill_has_gradebook) {      
-        return_fill = '#F89406';            
+    if (d.skill_has_gradebook) {
+        return_fill = '#F89406';
         //return_stroke = 'grey';
     }
 
@@ -178,10 +178,10 @@ function set_skill_style(d, attribute, searched_skill_id) {
             return_fill = '#B94A48';
         }
     }
-    
+
     //4. Blue - if user achieved that skill
-    if (d.achieved) {        
-        return_fill = '#3A87AD';        
+    if (d.achieved) {
+        return_fill = '#3A87AD';
         //return_stroke = '#FCD23A';
     }
 
@@ -199,7 +199,7 @@ function set_skill_style(d, attribute, searched_skill_id) {
 
 /* When you click a skill partition */
 function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
-    //console.log(d.depth); 
+    //console.log(d.depth);
     if (debug) {
         console.log('Clicking a partition skill id: '+d.id);
         console.log(d);
@@ -209,27 +209,27 @@ function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
         console.log('main_parent_id: ' + main_parent_id);
     }
 
-    if (d.depth >= main_depth) {            
+    if (d.depth >= main_depth) {
         //main_depth += main_depth;
-        if (main_parent_id) {                
-            load_nodes(main_parent_id, main_depth);      
+        if (main_parent_id) {
+            load_nodes(main_parent_id, main_depth);
         } else {
-            load_nodes(d.id, main_depth);      
+            load_nodes(d.id, main_depth);
         }
     }
 
-    if (d.id) {            
+    if (d.id) {
         console.log('Getting skill info');
-        skill_info = get_skill_info(d.parent_id);            
+        skill_info = get_skill_info(d.parent_id);
         console.log(skill_info);
-        main_parent_id  = skill_info.extra.parent_id; 
-        main_parent_id  = d.parent_id;   
+        main_parent_id  = skill_info.extra.parent_id;
+        main_parent_id  = d.parent_id;
         console.log('Setting main_parent_id: ' + main_parent_id);
     }
 
     //console.log(main_parent_id);
 
-    /* "No id" means that we reach the center of the wheel go to the root*/        
+    /* "No id" means that we reach the center of the wheel go to the root*/
     if (!d.id) {
         load_nodes(main_parent_id, main_depth);
     }
@@ -281,7 +281,7 @@ function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
             return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
         };
     })
-    .attrTween("transform", function(d) {            
+    .attrTween("transform", function(d) {
         return function() {
             var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
             rotate = angle;
@@ -296,12 +296,12 @@ function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
     });*/
 }
 
-/* 
-    Open a popup in order to modify the skill 
+/*
+    Open a popup in order to modify the skill
  */
 function open_popup(skill_id, parent_id) {
     //Cleaning selects
-    $("#gradebook_id").find('option').remove();        
+    $("#gradebook_id").find('option').remove();
     $("#parent_id").find('option').remove();
     //Cleaning lists
     $("#gradebook_holder").find('li').remove();
@@ -322,45 +322,45 @@ function open_popup(skill_id, parent_id) {
 
         $("#id").attr('value',   skill.id);
         $("#name").attr('value', skill.name);
-        $("#short_code").attr('value', skill.short_code);                        
-        $("#description").attr('value', skill.description);                
+        $("#short_code").attr('value', skill.short_code);
+        $("#description").attr('value', skill.description);
 
-        //Filling parent_id                        
-        $("#parent_id").append('<option class="selected" value="'+skill.extra.parent_id+'" selected="selected" >');            
+        //Filling parent_id
+        $("#parent_id").append('<option class="selected" value="'+skill.extra.parent_id+'" selected="selected" >');
 
         $("#skill_edit_holder").append('<li class="bit-box">'+parent_info.name+'</li>');
 
         //Filling the gradebook_id
-        jQuery.each(skill.gradebooks, function(index, data) {                    
+        jQuery.each(skill.gradebooks, function(index, data) {
             $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
-            $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
-        });            
+            $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');
+        });
 
         $("#dialog-form").dialog({
             buttons: {
                  "{{ "Edit"|get_lang }}" : function() {
                      var params = $("#add_item").find(':input').serialize();
-                     add_skill(params);                     
-                  },                                    
+                     add_skill(params);
+                  },
                   /*"{{ "Delete"|get_lang }}" : function() {
                   },*/
-                  "{{ "CreateChildSkill"|get_lang }}" : function() {                          
+                  "{{ "CreateChildSkill"|get_lang }}" : function() {
                       open_popup(0, skill.id);
                   },
-                  "{{ "AddSkillToProfileSearch"|get_lang }}" : function() {                          
+                  "{{ "AddSkillToProfileSearch"|get_lang }}" : function() {
                       add_skill_in_profile_list(skill.id, skill.name);
                   }
             },
-            close: function() {     
+            close: function() {
                 $("#name").attr('value','');
                 $("#description").attr('value', '');
                 //Redirect to the main root
                 load_nodes(0, main_depth);
 
             }
-        });            
-        $("#dialog-form").dialog("open");            
-    }  
+        });
+        $("#dialog-form").dialog("open");
+    }
 
     if (parent) {
         $("#id").attr('value','');
@@ -368,31 +368,31 @@ function open_popup(skill_id, parent_id) {
         $("#short_code").attr('value', '');
         $("#description").attr('value', '');
 
-        //Filling parent_id                        
-        $("#parent_id").append('<option class="selected" value="'+parent.id+'" selected="selected" >');            
+        //Filling parent_id
+        $("#parent_id").append('<option class="selected" value="'+parent.id+'" selected="selected" >');
 
         $("#skill_edit_holder").append('<li class="bit-box">'+parent.name+'</li>');
 
         //Filling the gradebook_id
-        jQuery.each(parent.gradebooks, function(index, data) {                    
+        jQuery.each(parent.gradebooks, function(index, data) {
             $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
-            $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');    
-        });            
+            $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');
+        });
 
         $("#dialog-form").dialog({
             buttons: {
                  "{{ "Save"|get_lang }}" : function() {
                      var params = $("#add_item").find(':input').serialize();
-                     add_skill(params);                     
+                     add_skill(params);
                   }
             },
-            close: function() {     
+            close: function() {
                 $("#name").attr('value', '');
                 $("#description").attr('value', '');
-                   load_nodes(0, main_depth);              
+                   load_nodes(0, main_depth);
             }
         });
-        $("#dialog-form").dialog("open");        
+        $("#dialog-form").dialog("open");
     }
     return false;
 }
@@ -400,24 +400,24 @@ function open_popup(skill_id, parent_id) {
 /* Handles mouse clicks */
 function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis) {
     switch (d3.event.which) {
-        case 1:                
-            //alert('Left mouse button pressed');                
+        case 1:
+            //alert('Left mouse button pressed');
             click_partition(d, path, text, icon, arc, x, y, r, padding, vis);
             break;
         case 2:
             //alert('Middle mouse button pressed');
-            break;                        
-        case 3:                 
-            open_popup(d.id);                        
+            break;
+        case 3:
+            open_popup(d.id);
             //alert('Right mouse button pressed');
             break;
         default:
             //alert('You have a strange mouse :D '); //
     }
 }
-    
 
-/* 
+
+/*
     Loads the skills partitions thanks to a json call
  */
 function load_nodes(load_skill_id, main_depth, extra_parent_id) {
@@ -427,20 +427,20 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         console.log('main_parent_id before: ' + main_parent_id);
     }
 
-    //"Root partition" on click switch 
-    if (main_parent_id && load_skill_id) {    
-        skill_info = get_skill_info(load_skill_id);    
+    //"Root partition" on click switch
+    if (main_parent_id && load_skill_id) {
+        skill_info = get_skill_info(load_skill_id);
         if (skill_info && skill_info.extra) {
             main_parent_id = skill_info.extra.parent_id;
         } else {
             main_parent_id = 0;
         }
-        console.log('main_parent_id after: ' + main_parent_id);        
+        console.log('main_parent_id after: ' + main_parent_id);
     }
 
     if (load_skill_id && load_skill_id == 1)  {
         main_parent_id = 0;
-    }    
+    }
 
 
     /** Define constants and size of the wheel */
@@ -452,7 +452,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     x = d3.scale.linear().range([0, 2 * Math.PI]),
     y = d3.scale.pow().exponent(1.1).domain([0, 1]).range([0, r]),
     /** Padding in pixels before the string starts */
-    padding = 3,    
+    padding = 3,
     /** Levels to show */
     levels_to_show = 3;
     reduce_top = 1;
@@ -517,22 +517,22 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     }
 
     //The JS load
-    if (load_skill_id != 0) { 
-        load_skill_condition = 'skill_id=' + load_skill_id;            
+    if (load_skill_id != 0) {
+        load_skill_condition = 'skill_id=' + load_skill_id;
     }
 
     d3.json("{{ wheel_url }}&main_depth="+main_depth+"&"+load_skill_condition, function(json) {
 
         /** Define the list of nodes based on the JSON */
         var nodes = partition.nodes({
-            children: json                
+            children: json
         });
 
         /* Setting all skills */
         var path = vis.selectAll("path").data(nodes);
 
         /* Setting all texts */
-        var text = vis.selectAll("text").data(nodes);    
+        var text = vis.selectAll("text").data(nodes);
 
         /* Setting icons */
         var icon = vis.selectAll("icon").data(nodes);
@@ -553,20 +553,20 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
             return set_skill_style(d, 'stroke');
         })
         .on("mouseover", function(d, i) {
-            //$("#icon-" + i).show();                         
+            //$("#icon-" + i).show();
         })
         .on("mouseout", function(d, i) {
             //$("#icon-" + i).hide();
         })
         .on("contextmenu", function(d, i) {
             //Handles mouse clicks
-            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);            
+            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);
             //Blocks "right click menu"
-            d3.event.preventDefault();       
+            d3.event.preventDefault();
             return false;
         })
-        .on("mousedown", function(d, i) {                                    
-        })        
+        .on("mousedown", function(d, i) {
+        })
         .on("click", function(d) {
             //Simple click
             handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);
@@ -580,14 +580,14 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
                click_partition(d, path, text, icon, arc, x, y, r, padding, vis);
         });*/
 
-        /* End setting skills */        
+        /* End setting skills */
 
-        /* Text settings */     
+        /* Text settings */
         var textEnter = text.enter().append("text")
         .style("fill-opacity", 1)
-        .style("fill", function(d) {            
-            return brightness(d3.rgb(d.color)) < 125 ? "#eee" : "#000";                
-        })  
+        .style("fill", function(d) {
+            return brightness(d3.rgb(d.color)) < 125 ? "#eee" : "#000";
+        })
         .attr("text-anchor", function(d) {
             return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
         })
@@ -603,47 +603,47 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
             rotate = angle + (multiline ? -.5 : 0);
             return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
         })
-        .on("mouseover", function(d, i) {                    
-            //$("#icon-" + i).show();                
+        .on("mouseover", function(d, i) {
+            //$("#icon-" + i).show();
         })
         .on("mouseout", function(d, i) {
-            //$("#icon-" + i).hide();                
+            //$("#icon-" + i).hide();
         })
-        .on("contextmenu", function(d, i) {            
-            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);  
+        .on("contextmenu", function(d, i) {
+            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);
             d3.event.preventDefault();
         })
         .on("mousedown", function(d, i) {
-        })  
+        })
         .on("click", function(d) {
-            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);              
+            handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis);
         });
 
-        /** Managing text - maximum two words */        
+        /** Managing text - maximum two words */
         var insert_two_words = false;
 
         textEnter.append("tspan")
         .attr("x", 0)
         .text(function(d) {
             if (d.depth && d.name.length > max_size_text_length) {
-                if (d.depth) {                    
+                if (d.depth) {
                     first_part = d.name.split(" ")[0];
-                    second_part = d.name.split(" ")[1];                    
+                    second_part = d.name.split(" ")[1];
                     if (first_part.length >= max_size_text_length) {
                         insert_two_words = false;
                         return first_part.substring(0, max_size_text_length -3)  + ' ... ';
                     } else {
                         return first_part;
-                    }                
+                    }
                 } else {
                     return "";
                 }
             } else {
                 insert_two_words = false;
                 return d.depth ? d.name : "";
-            }            
+            }
         });
-        
+
         if (insert_two_words) {
             textEnter.append("tspan")
             .attr("x", 0)
@@ -660,13 +660,13 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         /*
         var icon_click = icon.enter().append("text")
         .style("fill-opacity", 1)
-        .style("fill", function(d) {                
+        .style("fill", function(d) {
             //return "#000";
-        })  
+        })
         .attr("text-anchor", function(d) {
             return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
         })
-        .attr("dy", ".2em")            
+        .attr("dy", ".2em")
         .attr("transform", function(d) {
             ///Get the text details and define the rotation and general position
             angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
@@ -678,11 +678,11 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         });
 
         icon_click.append("tspan")
-        .attr("id", function(d, i) {            
+        .attr("id", function(d, i) {
             return "icon-" + i;
         })
         .attr("x", 0)
-        .attr("display", 'none')            
+        .attr("display", 'none')
         .text(function(d) {
             //return "Click";
         });*/
@@ -700,7 +700,7 @@ function get_skill_info(my_id) {
     var skill = false;
     $.ajax({
         url: url+'&a=get_skill_info&id='+my_id,
-        async: false,        
+        async: false,
         success: function(json) {
             skill = jQuery.parseJSON(json);
             return skill;
@@ -713,12 +713,12 @@ function get_gradebook_info(id) {
     var item = false;
     $.ajax({
         url: url+'&a=get_gradebook_info&id='+id,
-        async: false,        
+        async: false,
         success: function(json) {
             item = jQuery.parseJSON(json);
             return item;
         }
-    });    
+    });
     return item;
 }
 

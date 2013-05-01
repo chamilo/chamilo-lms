@@ -26,6 +26,6 @@
 {#  Welcome to course block  #}
 {% if welcome_to_course_block %}
     <section id="welcome_to_course">
-        {% include "default/layout/welcome_to_course.tpl" %}
+        {% include app.template_style ~ "/layout/welcome_to_course.tpl" %}
     </section>
 {% endif %}

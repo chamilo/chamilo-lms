@@ -4,7 +4,7 @@
 <!--[if IE 8]>    <html lang="{{ document_language }}" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--><html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
-{% include "default/layout/head.tpl" %}
+{% include app.template_style ~ "/layout/head.tpl" %}
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }}">
 <noscript>{{ "NoJavascript"|get_lang }}</noscript>
@@ -40,7 +40,7 @@
         </ul>
 
         {# topbar #}
-        {% include "default/layout/topbar.tpl" %}
+        {% include app.template_style ~ "/layout/topbar.tpl" %}
 
         <div id="main" class="container">
             <header>
@@ -91,7 +91,7 @@
                 {% endif %}
 
                 {# menu #}
-                {% include "default/layout/menu.tpl" %}
+                {% include app.template_style ~ "/layout/menu.tpl" %}
 
                 {# breadcrumb #}
                 {{ breadcrumb }}
@@ -99,5 +99,5 @@
 
             <div id="top_main_content" class="row">
             {# course navigation links/shortcuts need to be activated by the admin #}
-            {% include "default/layout/course_navigation.tpl" %}
+            {% include app.template_style ~ "/layout/course_navigation.tpl" %}
 {% endif %}

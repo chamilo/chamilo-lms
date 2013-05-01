@@ -1548,7 +1548,6 @@ class CourseRestorer
                                 }
                             //}
                         }
-                        var_dump($cats);
                         $exercise_obj->save_categories_in_exercise($cats);
                     }
                 }

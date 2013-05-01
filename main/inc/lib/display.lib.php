@@ -985,11 +985,10 @@ class Display
         } else {
             $obj->datatype = 'local';
         }
-        $column_names = array_map("utf8_encode", $column_names);
+        //$column_names = array_map("utf8_encode", $column_names);
         $obj->colNames = $column_names;
         $obj->colModel = $column_model;
         $obj->pager    = '#'.$div_id.'_pager';
-
 
         $all_value = 10000000;
 

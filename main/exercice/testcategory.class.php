@@ -139,6 +139,7 @@ class Testcategory
             Database::query($sql);*/
             //return Database::insert_id();
         } else {
+
             return false;
 		}
     }
@@ -148,17 +149,6 @@ class Testcategory
      */
     function modifyCategory()
     {
-        $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $v_id = Database::escape_string($this->id);
-        $v_name = Database::escape_string($this->name);
-        //$v_description = Database::escape_string($this->description);
-        $parent_id = intval($this->parent_id);
-
-        //Avoid recursive categories
-        if ($parent_id == $v_id) {
-            $parent_id = 0;
-        }
-
         // @todo inject the app in the claas
         global $app;
         $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
@@ -166,6 +156,7 @@ class Testcategory
             return false;
         }
         $courseId = $category->getCId();
+
         //Only admins can delete global categories
         if (empty($courseId) && !api_is_platform_admin()) {
             return false;
@@ -174,11 +165,19 @@ class Testcategory
         $category->setTitle($this->name);
         $category->setDescription($this->description);
 
-        if (!empty($parent_id)) {
-            $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parent_id);
-            if ($parent) {
-                $category->setParent($parent);
+        if (!empty($this->parent_id)) {
+            foreach ($this->parent_id as $parentId) {
+                if ($this->id == $parentId) {
+                    continue;
+                }
+                $parent = $app['orm.em']->find('\Entity\CQuizCategory', $parentId);
+                if ($parent) {
+                    $category->setParent($parent);
+                }
+                break;
             }
+        } else {
+            $category->setParent(null);
         }
 
         $app['orm.em']->persist($category);

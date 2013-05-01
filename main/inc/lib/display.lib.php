@@ -1719,24 +1719,38 @@ class Display
         return $html;
     }
 
-    static function progress_pagination_bar($list, $current, $conditions = array(), $link = null)
+    /**
+     *
+     * @param array $list
+     * @param int $current
+     * @param array $conditions
+     * @param string $link
+     * @return string
+     */
+    static function progress_pagination_bar($list, $current, $conditions = array(), $link = null, $counter = null)
     {
-        $counter = 1;
+        if (empty($counter)) {
+            $counter = 1;
+        }
+
         $pagination_size = '';
         $total = count($list);
-        if ($total > 25) {
+        /*if ($total > 25) {
             $pagination_size = 'pagination-small';
         }
         if ($total > 50) {
             $pagination_size = 'pagination-mini';
         }
-        $html = '<div class="pagination '.$pagination_size.' pagination-centered"><ul>';
+        */
+        $pagination_size = 'pagination-mini';
 
+        //$html = '<div class="exercise_pagination pagination '.$pagination_size.' pagination-centered"><ul>';
+        $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
         foreach ($list as $item_id) {
             $class = "active";
 
             if ($counter < $current) {
-            //    $class = "before";
+                //    $class = "before";
             }
             $class = "before";
 
@@ -1776,6 +1790,41 @@ class Display
             $counter++;
         }
         $html .= '</ul></div>';
+        return $html;
+    }
+
+    /**
+     * @param $categories
+     * @param $list
+     * @param $current
+     * @param array $conditions
+     * @param null $link
+     * @return null|string
+     */
+    static function progress_pagination_bar_with_categories($categories, $current, $conditions = array(), $link = null)
+    {
+        $counter = 0;
+        $totalTemp = 0;
+        $html = null;
+        foreach ($categories as $category) {
+            $list = $category['question_list'];
+
+            if ($counter > 0) {
+                $total = $totalTemp + 1;
+            } else {
+                $total = 0;
+            }
+            $html .= '<div class="row">';
+            $html .= '<div class="span2">'.$category['name'].'</div>';
+            $html .= '<div class="span10">';
+            $html .= self::progress_pagination_bar($list, $current, $conditions, $link, $total);
+            $html .= '</div>';
+            $html .= '</div>';
+
+            $totalTemp = $totalTemp + count($list);
+            $counter++;
+        }
+
         return $html;
     }
 

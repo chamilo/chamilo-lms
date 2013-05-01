@@ -526,6 +526,56 @@ class Testcategory
 		return $categories_in_exercise;
 	}
 
+
+    public static function getListOfCategoriesWithQuestionForTestObject($exercise_obj) {
+        $question_list = $exercise_obj->selectQuestionList();
+        $categoriesWithQuestion = array();
+        $parentsLoaded = array();
+        global $app;
+        $em = $app['orm.em'];
+        $repo = $em->getRepository('Entity\CQuizCategory');
+
+        // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
+        foreach ($question_list as $question_id) {
+            $category_list = Testcategory::getCategoryForQuestion($question_id);
+            foreach ($category_list as $categoryId) {
+                if (!isset($categoriesWithQuestion[$categoryId])) {
+                    $cat = new Testcategory($categoryId);
+                    $cat = (array)$cat;
+                    $cat['iid'] = $cat['id'];
+                    $cat['name'] = $cat['title'];
+                    if (!empty($cat['parent_id'])) {
+                        if (!isset($parentsLoaded[$cat['parent_id']])) {
+                            $categoryEntity = $em->find('Entity\CQuizCategory', $cat['parent_id']);
+                            $parentsLoaded[$cat['parent_id']] = $categoryEntity;
+                        } else {
+                            $categoryEntity = $parentsLoaded[$cat['parent_id']];
+                        }
+                        $path = $repo->getPath($categoryEntity);
+                        if (isset($path) && isset($path[0])) {
+                            $categoryId = $path[0]->getIid();
+                            $cat['id'] = $categoryId;
+                            $cat['iid'] = $categoryId;
+                            $cat['parent_path'] = null;
+                            $cat['title'] = $path[0]->getTitle();
+                            $cat['name'] = $path[0]->getTitle();
+                            $cat['parent_id'] = null;
+                        }
+                        $temp = isset($categoriesWithQuestion[$categoryId]) ? $categoriesWithQuestion[$categoryId]['question_list'] : array();
+                        $categoriesWithQuestion[$categoryId] = $cat;
+                        $categoriesWithQuestion[$categoryId]['question_list'] = $temp;
+                    } else {
+                        $categoriesWithQuestion[$categoryId] = $cat;
+                    }
+                }
+                $categoriesWithQuestion[$categoryId]['question_list'][] = $question_id;
+            }
+        }
+
+        return $categoriesWithQuestion;
+    }
+
+
     /**
 	 * return the list of differents categories NAME for a test
 	 * input : test_id

@@ -1,10 +1,9 @@
 {% block header %}
-{% include "default/layout/main_header.tpl" %}
+{% include app.template_style ~ "/layout/main_header.tpl" %}
 {% endblock %}
-
 {% block body %}
 	{% if show_sniff == 1 %}
-	 	{% include "default/layout/sniff.tpl" %}
+	 	{% include app.template_style ~ "/layout/sniff.tpl" %}
 	{% endif %}
 {% endblock %}
 
@@ -16,6 +15,6 @@
         <div class="push"></div>
         </div> <!-- end of #wrapper section -->
     {% endif %}
-{% include "default/layout/main_footer.tpl" %}
+{% include app.template_style ~ "/layout/main_footer.tpl" %}
 {{ xhprof }}
 {% endblock %}

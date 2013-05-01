@@ -1,4 +1,4 @@
-{% extends "default/layout/main.tpl" %}
+{% extends app.template_style ~ "/layout/main.tpl" %}
 
 {% block body %}
 	{# Main content #}
@@ -13,31 +13,31 @@
 
 	    {# if user is not login show the login form #}
 		{% if _u.logged  == 0 %}
-			{% include "default/layout/login_form.tpl" %}
+			{% include app.template_style ~ "/layout/login_form.tpl" %}
 		{% endif %}
 
         {#  course_session_block #}
-        {% include "default/index/course_session_block.tpl" %}
+        {% include app.template_style ~ "/index/course_session_block.tpl" %}
 
 		{#  User picture  #}
-        {% include "default/index/user_image_block.tpl" %}
+        {% include app.template_style ~ "/index/user_image_block.tpl" %}
 
         {#  User Profile links #}
-        {% include "default/index/profile_block.tpl" %}
+        {% include app.template_style ~ "/index/profile_block.tpl" %}
 
-        {% include "default/index/profile_social_block.tpl" %}
+        {% include app.template_style ~ "/index/profile_social_block.tpl" %}
 
         {#  Course block - admin #}
-        {% include "default/index/course_block.tpl" %}
+        {% include app.template_style ~ "/index/course_block.tpl" %}
 
         {#  Course block - teacher #}
-        {% include "default/index/teacher_block.tpl" %}
+        {% include app.template_style ~ "/index/teacher_block.tpl" %}
 
 		{#  Notice  #}
-        {% include "default/index/notice_block.tpl" %}
+        {% include app.template_style ~ "/index/notice_block.tpl" %}
 
         {#  Help #}
-		{% include "default/index/help_block.tpl" %}
+		{% include app.template_style ~ "/index/help_block.tpl" %}
 
 		{#  Links that are not added in the tabs #}
 		{{ navigation_course_links }}
@@ -52,7 +52,7 @@
 		{{ classes_block }}
 
 		{#  Skills #}
-        {% include "default/index/skills_block.tpl" %}
+        {% include app.template_style ~ "/index/skills_block.tpl" %}
 
 		{#  Plugin courses sidebar  #}
         {#  Plugins for footer section  #}
@@ -86,7 +86,7 @@
 		{#  ??  #}
 		{{ sniff_notification }}
 
-        {% include "default/layout/page_body.tpl" %}
+        {% include app.template_style ~ "/layout/page_body.tpl" %}
 
         {% if content is not null %}
             <section id="main_content">
@@ -94,7 +94,7 @@
             </section>
         {% endif %}
 
-        {% include "default/layout/page_post_body.tpl" %}
+        {% include app.template_style ~ "/layout/page_post_body.tpl" %}
 
 		{#  Announcements  #}
         {% if announcements_block %}
@@ -115,7 +115,7 @@
         {% endif %}
 
 		{#  Hot courses template  #}
-		{% include "default/layout/hot_courses.tpl" %}
+		{% include app.template_style ~ "/layout/hot_courses.tpl" %}
 
         {#  Content bottom  #}
         {% if plugin_content_bottom %}

@@ -7,7 +7,7 @@
 </div>
 {% endif %}
 
-{# Plugin bottom  #}   
+{# Plugin bottom  #}
 {% if plugin_content_bottom is not null %}
     <div id="plugin_content_bottom" class="span12">
         {{ plugin_content_bottom}}
@@ -21,4 +21,4 @@
 </div> <!-- end of #wrapper section -->
 {% endif %}
 
-{% include "default/layout/main_footer.tpl" %}
+{% include app.template_style ~ "/layout/main_footer.tpl" %}

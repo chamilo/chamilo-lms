@@ -1,5 +1,5 @@
-{% include 'default/glossary/header.tpl' %}
-{% include 'default/glossary/javascript.tpl' %}
+{% include app.template_style ~ '/glossary/header.tpl' %}
+{% include app.template_style ~ '/glossary/javascript.tpl' %}
 
 <div class="btn-toolbar actions-bar" >
     {% if is_allowed_to_edit %}
@@ -17,7 +17,7 @@
                 <i class="size-32 icon-delete-all"></i>
             </a>
         </div>
-    {% endif %}    
+    {% endif %}
     <div class="btn-group edit">
         {% if view == 'table' %}
             <a href="{{root}}&amp;view=list" class="btn" title="{{'ViewList'|get_lang}}">
@@ -29,11 +29,11 @@
             </a>
         {% endif %}
     </div>
-    
+
 </div>
 
 {% if view == 'table' %}
-    {% include 'default/glossary/table.tpl' %}
+    {% include app.template_style ~ '/glossary/table.tpl' %}
 {% else %}
-    {% include 'default/glossary/list.tpl' %}
+    {% include app.template_style ~ '/glossary/list.tpl' %}
 {% endif %}

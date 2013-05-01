@@ -1,4 +1,4 @@
-{% extends "default/layout/layout_1_col.tpl" %}
+{% extends app.template_style ~ "/layout/layout_1_col.tpl" %}
 
 {% block content %}
     {% for page in pages %}

@@ -1,4 +1,4 @@
-{% extends "default/layout/main.tpl" %}
+{% extends app.template_style ~ "/layout/main.tpl" %}
 
 {#  1 column  #}
 {% block body %}
@@ -14,7 +14,7 @@
         <div class="span12">
     {% endif %}
 
-        {% include "default/layout/page_body.tpl" %}
+        {% include app.template_style ~ "/layout/page_body.tpl" %}
 
         {% block content %}
             {% if content is not null %}

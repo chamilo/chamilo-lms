@@ -33,9 +33,9 @@ $(document).ready( function() {
                 </span>
                 {% endif %}
                 {{ "HottestCourses"|display_page_subheader }}
-            </div>            
-                
-            {% include 'default/layout/hot_course_item.tpl' %}
+            </div>
+
+            {% include app.template_style ~ '/layout/hot_course_item.tpl' %}
         </div>
     </section>
 {% endif %}

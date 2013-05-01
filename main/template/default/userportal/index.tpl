@@ -1,1 +1,1 @@
-{% extends "default/layout/layout_2_col.tpl" %}
+{% extends app.template_style ~ "/layout/layout_2_col.tpl" %}

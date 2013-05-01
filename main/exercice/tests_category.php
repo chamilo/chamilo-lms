@@ -148,7 +148,7 @@ function edit_category_form($in_action, $type = 'simple') {
         if ($form->validate()) {
             $check = Security::check_token('post');
             if ($check) {
-                $values = $form->exportValues();
+                $values = $form->getSubmitValues();
                 $v_id = Security::remove_XSS($values['category_id']);
                 $v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
                 $v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
@@ -199,7 +199,8 @@ function delete_category_form($in_action, $type = 'simple') {
 }
 
 // Form to add a category
-function add_category_form($in_action, $type = 'simple') {
+function add_category_form($in_action, $type = 'simple')
+{
     $in_action = Security::remove_XSS($in_action);
     // Initiate the object
     $form = new FormValidator('note', 'post', api_get_self().'?action='.$in_action."&type=".$type);
@@ -313,16 +314,28 @@ function display_categories($type = 'simple') {
             ->select('node')
             ->from('Entity\CQuizCategory', 'node')
             ->where('node.cId = 0')
-            ->getQuery()
-        ;
-        $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
+            ->orderBy('node.root, node.lft', 'ASC')
+            ->getQuery();
     } else {
-        $htmlTree = $repo->childrenHierarchy(
-            null, /* starting from root nodes */
-            false, /* load all children, not only direct */
-            $options
-        );
+        $query = $app['orm.em']
+            ->createQueryBuilder()
+            ->select('node')
+            ->from('Entity\CQuizCategory', 'node')
+            ->where('node.cId = :courseId')
+            //->add('orderBy', 'node.title ASC')
+            ->orderBy('node.root, node.lft', 'ASC')
+            ->setParameter('courseId', api_get_course_int_id())
+            ->getQuery();
+
     }
+    $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
+    /*
+    $htmlTree = $repo->childrenHierarchy(
+        null, //starting from root nodes
+        false, //load all children, not only direct
+        $options
+    );*/
+
     echo $htmlTree;
     return true;
 

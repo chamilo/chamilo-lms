@@ -36,4 +36,5 @@
             {{ plugin_content_bottom }}
         </div>
     {% endif %}
+
 {% endblock %}

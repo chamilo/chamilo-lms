@@ -157,7 +157,6 @@ if ($intro_dispForm) {
 $thematic_description_html = '';
 
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
-
 	$thematic = new Thematic();
     $thematic->set_course_int_id(api_get_course_int_id());
 	if (api_get_course_setting('display_info_advance_inside_homecourse') == '1') {

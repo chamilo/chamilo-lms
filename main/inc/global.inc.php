@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /license.txt */
+/** For licensing terms, see /license.txt */
 
 /**
  * This is a bootstrap file that loads all Chamilo dependencies including:
@@ -19,13 +19,12 @@
  */
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
-//@todo not sure if we need this
-//api_request_uri();
-
+// @todo not sure if we need this
+// api_request_uri();
 // This is for compatibility with MAC computers.
 //ini_set('auto_detect_line_endings', '1');
 
-// Composer autoloader
+// Composer auto loader.
 require_once __DIR__.'../../../vendor/autoload.php';
 
 use Silex\Application;
@@ -35,10 +34,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Parser;
 
-// Determine the directory path for this file
+// Determine the directory path for this file.
 $includePath = dirname(__FILE__);
 
-// Start Silex
+// Start Silex.
 $app = new Application();
 // @todo add a helper to read the configuration file once!
 
@@ -69,7 +68,7 @@ if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  |
     $_configuration = array();
 }
 
-//Overwriting $_configuration
+// Overwriting $_configuration
 if (file_exists($configurationYMLFile)) {
     $yaml = new Parser();
     $configurationYML = $yaml->parse(file_get_contents($configurationYMLFile));
@@ -81,6 +80,7 @@ if (file_exists($configurationYMLFile)) {
         }
     }
 }
+
 /**  End loading configuration file */
 
 /**  Setting Chamilo paths */
@@ -352,7 +352,6 @@ $app['this_section'] = SECTION_GLOBAL;
 
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
-
 
 // Setting languages
 $app['api_get_languages'] = api_get_languages();

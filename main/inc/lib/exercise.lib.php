@@ -2553,7 +2553,7 @@ class ExerciseLib
                             $objQuestionTmp = Question::read($questionId);
                             // destruction of the Question object
                             unset ($objQuestionTmp);
-                            Display :: display_normal_message(get_lang('AlreadyAnswered'));
+                            Display::display_normal_message(get_lang('AlreadyAnswered'));
                             $i++;
                             break;
                         }

@@ -875,7 +875,19 @@ if ($objExercise->type == ONE_PER_PAGE) {
     $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
     $link = api_get_self().'?'.$params.'&num=';
 
-    //$category_list = Testcategory::getListOfCategoriesNameForTest($objExercise->id, false);
+    $fixedRemindList = array();
+    if (!empty($my_remind_list)) {
+        foreach ($questionList as $questionId) {
+            if (in_array($questionId, $my_remind_list)) {
+                $fixedRemindList[] = $questionId;
+            }
+        }
+    }
+
+    if (isset($reminder) && $reminder == 2) {
+        $values = array_flip($questionList);
+        $current_question = isset($values[$remind_question_id]) ? $values[$remind_question_id] + 1 : $values[$fixedRemindList[0]] +1;
+    }
     echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
     //var_dump($category_list);
 }
@@ -941,7 +953,6 @@ if ($time_control) {
 	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 
-
 if (!empty($objExercise->description)) {
     echo "<script>
         $(function() {
@@ -974,7 +985,6 @@ if ($reminder == 2)  {
 
 				if (!empty($remind_question_id)) {
 					if ($remind_question_id == $my_remind_list[$j]) {
-
 			        	if ($remind_question_id == $data_tracking[$i]) {
 			        		if (isset($my_remind_list[$j+1])) {
 			        			$remind_question_id = $my_remind_list[$j+1];
@@ -1200,7 +1210,6 @@ if (!empty($error)) {
                		}
            		});
 
-           		//lok+(fgt)= data base
            		free_answers = $.param(free_answers);
 
           		$("#save_all_reponse").html("'.addslashes(Display::return_icon('loading1.gif')).'");
@@ -1247,6 +1256,7 @@ if (!empty($error)) {
     if (isset($exe_id)) {
         $attempt_list = get_all_exercise_event_by_exe_id($exe_id);
     }
+
     $remind_list  = array();
     if (isset($exercise_stat_info['questions_to_check']) && !empty($exercise_stat_info['questions_to_check'])) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);

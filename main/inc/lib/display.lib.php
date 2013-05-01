@@ -1719,7 +1719,8 @@ class Display
         return $html;
     }
 
-    static function progress_pagination_bar($list, $current, $conditions = array(), $link = null) {
+    static function progress_pagination_bar($list, $current, $conditions = array(), $link = null)
+    {
         $counter = 1;
         $pagination_size = '';
         $total = count($list);

@@ -15,7 +15,6 @@ use \ChamiloSession as Session;
 $language_file = 'exercice';
 require_once 'exercise.class.php';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 $current_course_tool  = TOOL_QUIZ;
 
 // Clear the exercise session just in case
@@ -45,7 +44,7 @@ $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook", "name"
 $interbreadcrumb[] = array ("url" => "#","name" => $objExercise->name);
 
 $time_control = false;
-$clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
 	$time_control = true;
@@ -146,7 +145,7 @@ if (!empty($attempts)) {
     $i = $counter;
 	foreach ($attempts as $attempt_result) {
 
-		$score = show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
+		$score = ExerciseLib::show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
 		$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&amp;id='.$attempt_result['exe_id'].'&amp;id_session='.api_get_session_id().'&amp;height=500&amp;width=950'.$url_suffix;
 		$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>$btn_class.'btn'));
 

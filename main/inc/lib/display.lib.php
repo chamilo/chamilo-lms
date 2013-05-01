@@ -1777,4 +1777,19 @@ class Display
         $html .= '</ul></div>';
         return $html;
     }
+
+    /**
+     * @param int $current
+     * @param int $total
+     * @return null
+     */
+    public static function paginationIndicator($current, $total)
+    {
+        $html = null;
+        if (!empty($current) && !empty($total)) {
+            $label = sprintf(get_lang('PaginationXofY'), $current, $total);
+            $html = self::url($label, '#', array('class' => 'btn disabled'));
+        }
+        return $html;
+    }
 }

@@ -29,7 +29,6 @@ api_protect_course_script(true, false, true);
 
 // including additional libraries
 require_once 'exercise.class.php';
-require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once 'hotpotatoes.lib.php';
@@ -118,7 +117,7 @@ if (isset($_REQUEST['comments']) && $_REQUEST['comments'] == 'update' && ($is_al
 )
 ) {
     $id = intval($_GET['exeid']); //filtered by post-condition
-    $track_exercise_info = get_exercise_track_exercise_info($id);
+    $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }

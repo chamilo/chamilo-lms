@@ -164,6 +164,7 @@ return array(
     'EventsDispatcher' => $baseDir . '/main/inc/lib/events_dispatcher.class.php',
     'EventsMail' => $baseDir . '/main/inc/lib/events_email.class.php',
     'Exercise' => $baseDir . '/main/exercice/exercise.class.php',
+    'ExerciseLib' => $baseDir . '/main/inc/lib/exercise.lib.php',
     'ExerciseLink' => $baseDir . '/main/gradebook/lib/be/exerciselink.class.php',
     'ExerciseResult' => $baseDir . '/main/exercice/exercise_result.class.php',
     'ExerciseShowFunctions' => $baseDir . '/main/inc/lib/exercise_show_functions.lib.php',

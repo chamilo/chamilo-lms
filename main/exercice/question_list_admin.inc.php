@@ -83,10 +83,9 @@ $(function() {
     });
 
     var icons = {
-            header: "ui-icon-circle-arrow-e",
-            headerSelected: "ui-icon-circle-arrow-s"
+        header: "ui-icon-circle-arrow-e",
+        headerSelected: "ui-icon-circle-arrow-s"
     };
-
 
     /* We can add links in the accordion header */
     $("div > div > div > .edition > div > a").click(function() {
@@ -103,7 +102,7 @@ $(function() {
         autoHeight: false,
         active: false, // all items closed by default
         collapsible: true,
-        header: ".header_operations",
+        header: ".header_operations"
     })
 
     .sortable({
@@ -189,18 +188,18 @@ if (!$inATest) {
                 // Question name
 				$questionName = Display::tag('div', '<a href="#" title = "'.$title.'">'.$move.' '.Text::cut($title, 42).'</a>', array('style'=>$styleQuestion));
 
-				// Question type
+				// Question type.
 				list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
 
                 $question_media = null;
                 if (!empty($objQuestionTmp->parent_id)) {
                     $objQuestionMedia = Question::read($objQuestionTmp->parent_id);
-                    $question_media  = Display::label($objQuestionMedia->question, 'info');
+                    $question_media  = ' '.Display::label($objQuestionMedia->question, 'success');
                 }
 
 				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM), array('style' => $styleType));
 
-				// Question category
+				// Question category.
                 $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
 
 				if (empty($category_labels)) {
@@ -208,7 +207,7 @@ if (!$inATest) {
 				}
 				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.$question_media.'</a>', array('style'=>$styleCat));
 
-				// Question level
+				// Question level.
 				$txtQuestionLevel = $objQuestionTmp->level;
                 if (empty($objQuestionTmp->level)) {
                     $txtQuestionLevel = '-';
@@ -222,7 +221,6 @@ if (!$inATest) {
                     echo '<div class="header_operations">';
                         echo $questionName;
                         echo $questionType;
-
                         echo $questionCategory;
                         echo $questionLevel;
                         echo $questionScore;
@@ -235,7 +233,7 @@ if (!$inATest) {
                         echo '<br />';
                         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
-                        showQuestion($objQuestionTmp, false, null, null, false, true, false, true, $objExercise->feedback_type, true);
+                        ExerciseLib::showQuestion($objQuestionTmp, false, null, null, false, true, false, true, $objExercise->feedback_type, true);
                         echo '</p>';
                     echo '</div>';
                 echo '</div>';

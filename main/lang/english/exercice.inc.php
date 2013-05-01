@@ -514,4 +514,5 @@ $NoNegativeScore = "No negative score";
 $GlobalMultipleAnswer = "Global multiple answer";
 $AllQuestionsShort = "All";
 $ProblemsRecordingUploadYourOwnAudioFile = "Problem recording? Upload your own audio file.";
+$AllQuestionsMustHaveACategory = "All questions must have a category";
 ?>

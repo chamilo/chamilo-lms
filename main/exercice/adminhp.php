@@ -16,7 +16,6 @@ require_once 'answer.class.php';
 $language_file='exercice';
 
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 
 $this_section=SECTION_COURSES;
 

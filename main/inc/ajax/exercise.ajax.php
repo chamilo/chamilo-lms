@@ -8,7 +8,6 @@ require_once '../../exercice/exercise.class.php';
 require_once '../../exercice/question.class.php';
 require_once '../../exercice/answer.class.php';
 require_once '../global.inc.php';
-require_once '../../exercice/exercise.lib.php';
 
 api_protect_course_script(true);
 
@@ -399,7 +398,7 @@ switch ($action) {
                     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
                 }
 
-                $key = get_time_control_key($exercise_id, $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id']);
+                $key = ExerciseLib::get_time_control_key($exercise_id, $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id']);
 
                 if (isset($_SESSION['duration_time'][$key]) && !empty($_SESSION['duration_time'][$key])) {
                     $duration = $now - $_SESSION['duration_time'][$key];

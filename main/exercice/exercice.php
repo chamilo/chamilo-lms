@@ -35,7 +35,6 @@ api_protect_course_script(true);
 
 // including additional libraries
 require_once 'exercise.class.php';
-require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once 'hotpotatoes.lib.php';
@@ -811,7 +810,7 @@ if (!empty($exercise_list)) {
                                 if ($num > 0) {
                                     $row_track = Database :: fetch_array($qryres);
                                     $attempt_text = get_lang('LatestAttempt').' : ';
-                                    $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                                    $attempt_text .= ExerciseLib::show_score($row_track['exe_result'], $row_track['exe_weighting']);
                                 } else {
                                     //No attempts
                                     $attempt_text = get_lang('NotAttempted');
@@ -852,7 +851,7 @@ if (!empty($exercise_list)) {
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
-                                $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                                $attempt_text .= ExerciseLib::show_score($row_track['exe_result'], $row_track['exe_weighting']);
                             } else {
                                 $attempt_text = get_lang('NotAttempted');
                             }

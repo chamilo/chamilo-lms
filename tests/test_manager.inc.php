@@ -85,7 +85,6 @@ require_once $libdir.'geometry.lib.php';
 ob_end_clean();
 
 /**Problem with this file to test objects*/
-//require_once $maindir.'exercice/exercise.lib.php';
 
 class TestManager
 {

@@ -39,7 +39,6 @@ $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
-require_once 'exercise.lib.php';
 
 $nameTools = get_lang('Quiz');
 
@@ -427,7 +426,7 @@ if ($objExercise->expired_time != 0) {
 }
 
 //Generating the time control key for the user
-$current_expired_time_key = get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 if ($debug)  error_log("4. current_expired_time_key: $current_expired_time_key ");
 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
@@ -469,7 +468,7 @@ if ($objExercise->selectAttempts() > 0) {
 							$attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
 						}
 					}
-					$score =  show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
+					$score =  ExerciseLib::show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
 					$attempt_html .= Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
 				} else {
 					$attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
@@ -557,7 +556,7 @@ if (empty($exercise_stat_info)) {
 }
 
 //Array to check in order to block the chat
-create_chat_exercise_session($exe_id);
+ExerciseLib::create_chat_exercise_session($exe_id);
 
 if ($debug) { error_log('6. $objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
 
@@ -741,7 +740,7 @@ if ($formSent && isset($_POST)) {
                 //Time control is only enabled for ONE PER PAGE
                 if (!empty($exe_id) && is_numeric($exe_id)) {
                     //Verify if the current test is fraudulent
-                    if (exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id)) {
+                    if (ExerciseLib::exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id)) {
                     	$sql_exe_result = "";
                         if ($debug) { error_log('exercise_time_control_is_valid is valid'); }
                     } else {
@@ -800,7 +799,7 @@ if ($question_count != 0) {
 	            //Time control is only enabled for ONE PER PAGE
 	            if (!empty($exe_id) && is_numeric($exe_id)) {
 	                //Verify if the current test is fraudulent
-	            	$check = exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id);
+	            	$check = ExerciseLib::exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id);
 
 	                if ($check) {
 	                	$sql_exe_result = "";
@@ -875,7 +874,10 @@ if ($objExercise->type == ONE_PER_PAGE) {
     $conditions[] = array("class" => 'remind', 'items' => $my_remind_list);
     $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
     $link = api_get_self().'?'.$params.'&num=';
+
+    //$category_list = Testcategory::getListOfCategoriesNameForTest($objExercise->id, false);
     echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
+    //var_dump($category_list);
 }
 
 $is_visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
@@ -1249,156 +1251,12 @@ if (!empty($error)) {
     if (isset($exercise_stat_info['questions_to_check']) && !empty($exercise_stat_info['questions_to_check'])) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
     }
-    render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions);
+
+    ExerciseLib::render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions);
+
     echo '</form>';
 }
 
-function render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions = array()) {
-    global $origin;
-
-    $i = 1;
-    //Normal question list render
-    foreach ($questionList as $questionId) {
-        // for sequential exercises
-        if ($objExercise->type == ONE_PER_PAGE) {
-            // if it is not the right question, goes to the next loop iteration
-            if ($current_question != $i) {
-                $i++;
-                continue;
-            } else {
-                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                    // if the user has already answered this question
-                    if (isset($exerciseResult[$questionId])) {
-                        // construction of the Question object
-                        $objQuestionTmp = Question::read($questionId);
-                        // destruction of the Question object
-                        unset ($objQuestionTmp);
-                        Display :: display_normal_message(get_lang('AlreadyAnswered'));
-                        $i++;
-                        break;
-                    }
-                }
-            }
-        }
-
-        //Medias question render
-        if (isset($media_questions) && !empty($media_questions) && isset($media_questions[$questionId])) {
-            $media_question_list = $media_questions[$questionId];
-            $objQuestionTmp = Question::read($questionId);
-
-            $counter = 1;
-            if ($objQuestionTmp->type == MEDIA_QUESTION) {
-                echo $objQuestionTmp->show_media_content();
-
-                $count_of_questions_inside_media = count($media_question_list);
-
-                //Show questions that belongs to a media
-                if (!empty($media_question_list)) {
-                    $letterCounter = 97;
-                    foreach ($media_question_list as $my_question_id) {
-                        $last_question_in_media = false;
-                        if ($counter == $count_of_questions_inside_media) {
-                            $last_question_in_media = true;
-                        }
-                        render_question($objExercise, $my_question_id, $attempt_list, $remind_list, chr($letterCounter), $current_question, $media_question_list, $last_question_in_media);
-                        $letterCounter++;
-                        $counter++;
-                    }
-                }
-            } else {
-                render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question);
-                $i++;
-            }
-        } else {
-            //Normal question render
-            render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question);
-            $i++;
-        }
-
-        // for sequential exercises
-        if ($objExercise->type == ONE_PER_PAGE) {
-            // quits the loop
-            break;
-        }
-    }
-
-    // end foreach()
-    if ($objExercise->type == ALL_ON_ONE_PAGE) {
-        $exercise_actions =  $objExercise->show_button($questionId, $current_question);
-        echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
-    }
-}
-
-function render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, $questions_in_media = array(), $last_question_in_media = false) {
-    global $origin;
-    $question_obj = Question::read($questionId);
-    $user_choice = isset($attempt_list[$questionId]) ? $attempt_list[$questionId] : null;
-
-    $remind_highlight = null;
-
-    //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
-    if ($objExercise->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
-        $remind_highlight = 'no_remind_highlight';
-        if (in_array($question_obj->type, Question::question_type_no_review())) {
-            return null;
-        }
-    }
-
-    $attributes = array('id' =>'remind_list['.$questionId.']');
-
-    $is_remind_on = false;
-    if (in_array($questionId, $remind_list)) {
-        $is_remind_on = true;
-        $attributes['checked'] = 1;
-        $remind_highlight = ' remind_highlight ';
-    }
-
-    //Showing the question
-
-    $exercise_actions  = null;
-
-    echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
-        // Shows the question + possible answers
-        showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
-
-        // Button save and continue
-        switch ($objExercise->type) {
-            case ONE_PER_PAGE:
-                $exercise_actions .= $objExercise->show_button($questionId, $current_question);
-                break;
-            case ALL_ON_ONE_PAGE :
-                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
-                break;
-        }
-
-        if (!empty($questions_in_media)) {
-            /*$button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
-            $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
-            $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
-            $exercise_actions .= $objExercise->show_button($questionId, $current_question);*/
-            $count_of_questions_inside_media = count($questions_in_media);
-            if ($count_of_questions_inside_media > 1) {
-                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
-                $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
-            }
-
-            if ($last_question_in_media && $objExercise->type == ONE_PER_PAGE) {
-                $exercise_actions = $objExercise->show_button($questionId, $current_question, $questions_in_media);
-            }
-        }
-
-        //Checkbox review answers
-        if ($objExercise->review_answers && !in_array($question_obj->type, Question::question_type_no_review())) {
-            $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
-            $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
-        }
-        echo Display::div(' ', array('class'=>'clear'));
-        echo Display::div($exercise_actions, array('class'=>'form-actions'));
-    echo '</div>';
-}
 
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool

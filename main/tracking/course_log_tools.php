@@ -44,7 +44,6 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/scormItem.class.php';
 require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 

@@ -25,7 +25,6 @@ function fill_exe() {
     require_once $lib.'exercice/exercise.class.php';
     require_once $lib.'exercice/question.class.php';
     require_once $lib.'exercice/answer.class.php';
-    require_once $lib.'exercice/exercise.lib.php';
     foreach ($courses as $i => $course) {
         $res = 0;
         //first check that the first item doesn't exist already
@@ -57,7 +56,7 @@ function fill_exe() {
                     while ($qi < $qc) {
                         foreach ($qst as $q) {
                             error_log('Created '.$qi.' questions');
-                            $question = Question::getInstance($q['type']); 
+                            $question = Question::getInstance($q['type']);
                             $question->id = 0;
                             $question->question = $q['title'].' '.$qi;
                             $question->description = $q['desc'];
@@ -75,7 +74,7 @@ function fill_exe() {
                             $qi++;
                         }
                     }
-                } 
+                }
             }
         }
     }

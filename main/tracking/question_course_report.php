@@ -91,7 +91,7 @@ if (!empty($course_info)) {
 	$_course = $course_info;
 	$main_question_list = array();
 	foreach ($lp_list as $lp_id =>$lp) {
-		$exercise_list = get_all_exercises_from_lp($lp_id, $course_info['real_id']);
+		$exercise_list = ExerciseLib::get_all_exercises_from_lp($lp_id, $course_info['real_id']);
 
 		foreach ($exercise_list as $exercise) {
 			$my_exercise = new Exercise();

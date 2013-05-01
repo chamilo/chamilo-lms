@@ -39,7 +39,6 @@ $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
-require_once 'exercise.lib.php';
 
 $nameTools = get_lang('Quiz');
 
@@ -427,7 +426,7 @@ if ($objExercise->expired_time != 0) {
 }
 
 //Generating the time control key for the user
-$current_expired_time_key = get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 if ($debug)  error_log("4. current_expired_time_key: $current_expired_time_key ");
 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
@@ -469,7 +468,7 @@ if ($objExercise->selectAttempts() > 0) {
 							$attempt_html .= Display::div(get_lang('Score').' '.$marks, array('id'=>'question_score'));
 						}
 					}
-					$score =  show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
+					$score =  ExerciseLib::show_score($last_attempt_info['exe_result'], $last_attempt_info['exe_weighting']);
 					$attempt_html .= Display::div(get_lang('YourTotalScore').' '.$score, array('id'=>'question_score'));
 				} else {
 					$attempt_html .= Display::return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);
@@ -557,7 +556,7 @@ if (empty($exercise_stat_info)) {
 }
 
 //Array to check in order to block the chat
-create_chat_exercise_session($exe_id);
+ExerciseLib::create_chat_exercise_session($exe_id);
 
 if ($debug) { error_log('6. $objExercise->get_stat_track_exercise_info function called::  '.print_r($exercise_stat_info, 1)); };
 
@@ -741,7 +740,7 @@ if ($formSent && isset($_POST)) {
                 //Time control is only enabled for ONE PER PAGE
                 if (!empty($exe_id) && is_numeric($exe_id)) {
                     //Verify if the current test is fraudulent
-                    if (exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id)) {
+                    if (ExerciseLib::exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id)) {
                     	$sql_exe_result = "";
                         if ($debug) { error_log('exercise_time_control_is_valid is valid'); }
                     } else {
@@ -800,7 +799,7 @@ if ($question_count != 0) {
 	            //Time control is only enabled for ONE PER PAGE
 	            if (!empty($exe_id) && is_numeric($exe_id)) {
 	                //Verify if the current test is fraudulent
-	            	$check = exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id);
+	            	$check = ExerciseLib::exercise_time_control_is_valid($exerciseId, $learnpath_id, $learnpath_item_id);
 
 	                if ($check) {
 	                	$sql_exe_result = "";
@@ -875,7 +874,10 @@ if ($objExercise->type == ONE_PER_PAGE) {
     $conditions[] = array("class" => 'remind', 'items' => $my_remind_list);
     $conditions[] = array("class" => 'answered', 'items' => $exercise_result);
     $link = api_get_self().'?'.$params.'&num=';
+
+    //$category_list = Testcategory::getListOfCategoriesNameForTest($objExercise->id, false);
     echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
+    //var_dump($category_list);
 }
 
 $is_visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
@@ -1359,7 +1361,7 @@ function render_question($objExercise, $questionId, $attempt_list, $remind_list,
 
     echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
         // Shows the question + possible answers
-        showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
+        ExerciseLib::showQuestion($question_obj, false, $origin, $i, true, false, $user_choice, false);
 
         // Button save and continue
         switch ($objExercise->type) {

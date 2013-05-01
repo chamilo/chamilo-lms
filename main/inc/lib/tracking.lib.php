@@ -11,8 +11,6 @@
  * Code
  */
 
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-
 /**
  * Class
  * @package chamilo.library
@@ -2395,7 +2393,7 @@ class Tracking
 
                     foreach ($course_list as $course_data) {
 
-                        $exercise_list = get_all_exercises($course_data, $my_session_id);
+                        $exercise_list = ExerciseLib::get_all_exercises($course_data, $my_session_id);
 
                         foreach ($exercise_list as $exercise_data) {
                             $exercise_obj = new Exercise($course_data['id']);
@@ -2405,11 +2403,11 @@ class Tracking
 
                             if ($exercise_data['results_disabled'] == 0 || $exercise_data['results_disabled'] == 2) {
                                 //if ($visible_return['value'] == true) {
-                                $best_average = intval(get_best_average_score_by_exercise($exercise_data['id'], $course_data['code'], $my_session_id, $user_count));
+                                $best_average = intval(ExerciseLib::get_best_average_score_by_exercise($exercise_data['id'], $course_data['code'], $my_session_id, $user_count));
                                 $exercise_graph_list[] = $best_average;
                                 $all_exercise_graph_list[] = $best_average;
 
-                                $user_result_data = get_best_attempt_by_user(api_get_user_id(), $exercise_data['id'], $course_data['real_id'], $my_session_id);
+                                $user_result_data = ExerciseLib::get_best_attempt_by_user(api_get_user_id(), $exercise_data['id'], $course_data['real_id'], $my_session_id);
                                 $score = 0;
                                 if (!empty($user_result_data['exe_weighting']) && intval($user_result_data['exe_weighting']) != 0) {
                                     $score = intval($user_result_data['exe_result'] / $user_result_data['exe_weighting'] * 100);
@@ -2419,7 +2417,7 @@ class Tracking
                                 $all_exercise_start_time[] = $time;
                                 $my_results[] = $score;
                                 if (count($exercise_list) <= 10) {
-                                    $title = Text::cut($course_data['title'], 30)." \n ".cut($exercise_data['title'], 30);
+                                    $title = Text::cut($course_data['title'], 30)." \n ".Text::cut($exercise_data['title'], 30);
                                     $exercise_graph_name_list[] = $title;
                                     $all_exercise_graph_name_list[] = $title;
                                 } else {
@@ -2488,7 +2486,7 @@ class Tracking
 
                 foreach ($course_list as $course_data) {
                     //All exercises in the course @todo change for a real count
-                    $exercises = get_all_exercises($course_data, $my_session_id);
+                    $exercises = ExerciseLib::get_all_exercises($course_data, $my_session_id);
                     $count_exercises = 0;
                     if (is_array($exercises) && !empty($exercises)) {
                         $count_exercises = count($exercises);
@@ -2511,7 +2509,7 @@ class Tracking
                     }
 
                     //Average
-                    $average = get_average_score_by_course($course_data['real_id'], $my_session_id);
+                    $average = ExerciseLib::get_average_score_by_course($course_data['real_id'], $my_session_id);
 
                     $all_exercises += $count_exercises;
 
@@ -2535,7 +2533,7 @@ class Tracking
                 $html .= Display::tag('td', $all_unanswered_exercises_by_user);
 
                 //$html .= Display::tag('td', $all_done_exercise);
-                $html .= Display::tag('td', convert_to_percentage($all_average));
+                $html .= Display::tag('td', ExerciseLib::convert_to_percentage($all_average));
 
                 if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
                     $icon = Display::url(Display::return_icon('2rightarrow_na.gif', get_lang('Details')), '?session_id='.$my_session_id);
@@ -2580,7 +2578,7 @@ class Tracking
                     $course_title = $course_data['title'];
 
                     //All exercises in the course @todo change for a real count
-                    $exercises = get_all_exercises($course_data, $session_id_from_get);
+                    $exercises = ExerciseLib::get_all_exercises($course_data, $session_id_from_get);
                     $count_exercises = 0;
                     if (!empty($exercises)) {
                         $count_exercises = count($exercises);
@@ -2600,8 +2598,8 @@ class Tracking
                     $unanswered_exercises = $count_exercises - $answered_exercises;
 
                     //Average
-                    $average = get_average_score_by_course($courseId, $session_id_from_get);
-                    $my_average = get_average_score_by_course_by_user(api_get_user_id(), $courseId, $session_id_from_get);
+                    $average = ExerciseLib::get_average_score_by_course($courseId, $session_id_from_get);
+                    $my_average = ExerciseLib::get_average_score_by_course_by_user(api_get_user_id(), $courseId, $session_id_from_get);
 
                     $stats_array[$course_code] = array(
                         'exercises' => $count_exercises,
@@ -2630,9 +2628,9 @@ class Tracking
                     $html .= Display::tag('td', $stats_array[$course_code]['exercises']);
                     $html .= Display::tag('td', $stats_array[$course_code]['unanswered_exercises_by_user']);
                     //$html .= Display::tag('td', $stats_array[$course_code]['done_exercises']);
-                    $html .= Display::tag('td', convert_to_percentage($stats_array[$course_code]['my_average']));
+                    $html .= Display::tag('td', ExerciseLib::convert_to_percentage($stats_array[$course_code]['my_average']));
 
-                    $html .= Display::tag('td', $stats_array[$course_code]['average'] == 0 ? '-' : '('.convert_to_percentage($stats_array[$course_code]['average']).')');
+                    $html .= Display::tag('td', $stats_array[$course_code]['average'] == 0 ? '-' : '('.ExerciseLib::convert_to_percentage($stats_array[$course_code]['average']).')');
                     $html .= Display::tag('td', $time, array('align' => 'center'));
 
                     if (is_numeric($progress)) {
@@ -2711,7 +2709,7 @@ class Tracking
             }
 
             // Show exercise results of invisible exercises? see BT#4091
-            $exercise_list = get_all_exercises($course_info, $session_id, false);
+            $exercise_list = ExerciseLib::get_all_exercises($course_info, $session_id, false);
 
             $to_graph_exercise_result = array();
 
@@ -2749,14 +2747,14 @@ class Tracking
                         $graph = $normal_graph = null;
 
                         //Getting best results
-                        $best_score_data = get_best_attempt_in_course($exerciseId, $course_info['real_id'], $session_id);
+                        $best_score_data = ExerciseLib::get_best_attempt_in_course($exerciseId, $course_info['real_id'], $session_id);
 
                         if (!empty($best_score_data)) {
-                            $best_score = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
+                            $best_score = ExerciseLib::show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
                         }
 
                         if ($attempts > 0) {
-                            $exercise_stat = get_best_attempt_by_user(api_get_user_id(), $exerciseId, $course_info['real_id'], $session_id);
+                            $exercise_stat = ExerciseLib::get_best_attempt_by_user(api_get_user_id(), $exerciseId, $course_info['real_id'], $session_id);
                             if (!empty($exercise_stat)) {
 
                                 //Always getting the BEST attempt
@@ -2765,13 +2763,13 @@ class Tracking
                                 $exe_id = $exercise_stat['exe_id'];
 
                                 $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
-                                $percentage_score_result = Display::url(show_score($score, $weighting), $latest_attempt_url);
+                                $percentage_score_result = Display::url(ExerciseLib::show_score($score, $weighting), $latest_attempt_url);
                                 $my_score = 0;
                                 if (!empty($weighting) && intval($weighting) != 0) {
                                     $my_score = $score / $weighting;
                                 }
                                 //@todo this function slows the page
-                                $position = get_exercise_result_ranking($my_score, $exe_id, $exerciseId, $course_info['real_id'], $session_id, $user_list);
+                                $position = ExerciseLib::get_exercise_result_ranking($my_score, $exe_id, $exerciseId, $course_info['real_id'], $session_id, $user_list);
 
                                 $graph = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exerciseId]);
                                 $normal_graph = self::generate_exercise_result_graph($to_graph_exercise_result[$exerciseId]);
@@ -3733,7 +3731,7 @@ class TrackingCourseLog
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
         $total_surveys = 0;
-        $total_exercises = get_all_exercises($courseInfo, $session_id);
+        $total_exercises = ExerciseLib::get_all_exercises($courseInfo, $session_id);
 
         if (empty($session_id)) {
             $survey_user_list = array();

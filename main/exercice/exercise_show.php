@@ -24,7 +24,6 @@ require_once 'exercise.class.php';
 require_once 'question.class.php'; //also defines answer type constants
 require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 
 if (empty($origin) ) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
@@ -72,7 +71,7 @@ if (api_is_course_session_coach(api_get_user_id(), api_get_course_int_id(), api_
 $is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
-$track_exercise_info = get_exercise_track_exercise_info($id);
+$track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
 
 //No track info
 if (empty($track_exercise_info)) {
@@ -618,7 +617,7 @@ foreach ($questionList as $questionId) {
 
     $score = array();
     if ($show_results) {
-		$score['result'] = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
+		$score['result'] = get_lang('Score')." : ".ExerciseLib::show_score($my_total_score, $my_total_weight, false, false);
         $score['pass']   = $my_total_score >= $my_total_weight ? true : false;
         $score['type']   = $answerType;
         $score['score']  = $my_total_score;
@@ -666,7 +665,7 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
 	    }
-        $total_score_text .= get_question_ribbon($objExercise, $my_total_score_temp, $totalWeighting, true);
+        $total_score_text .= ExerciseLib::get_question_ribbon($objExercise, $my_total_score_temp, $totalWeighting, true);
         $total_score_text .= '</div>';
 	}
 }

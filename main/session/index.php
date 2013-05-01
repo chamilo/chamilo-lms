@@ -16,7 +16,6 @@ $language_file = array('learnpath', 'courses', 'index','tracking','exercice', 'a
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
@@ -69,7 +68,7 @@ if (!empty($new_session_list)) {
                 $course_info   = api_get_course_info_by_id($my_course['id']);
 
                 //Getting all exercises from the current course
-                $exercise_list = get_all_exercises($course_info, $my_session_id, true);
+                $exercise_list = ExerciseLib::get_all_exercises($course_info, $my_session_id, true);
 
                 $course['name'] = $course_info['name'];
                 $course['id']   = $course_info['real_id'];
@@ -109,7 +108,7 @@ if (!empty($course_list)) {
         $lp_list        = $list->get_flat_list();
         $lp_count       = count($lp_list);
         $course_info    = api_get_course_info($course_data['code']);
-        $exercise_count = count(get_all_exercises($course_info, $session_id, true));
+        $exercise_count = count(ExerciseLib::get_all_exercises($course_info, $session_id, true));
 
         $max_mutation_date = '';
 
@@ -203,11 +202,11 @@ foreach($final_array as $session_data) {
         if (!empty($course_data['exercises'])) {
             //Exercises
             foreach ($course_data['exercises'] as $my_exercise_id => $exercise_data) {
-                $best_score_data = get_best_attempt_in_course($my_exercise_id, $course_data['id'], $session_id);
+                $best_score_data = ExerciseLib::get_best_attempt_in_course($my_exercise_id, $course_data['id'], $session_id);
 
                 $best_score = '';
                 if (!empty($best_score_data)) {
-                	$best_score      = show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
+                	$best_score      = ExerciseLib::show_score($best_score_data['exe_result'], $best_score_data['exe_weighting']);
                 }
                 //Exercise results
                 $counter = 1;
@@ -222,12 +221,12 @@ foreach($final_array as $session_data) {
                     }
                     if (!empty($result_list)) {
                         foreach ($result_list as $exercise_result) {
-                            $platform_score = show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
+                            $platform_score = ExerciseLib::show_score($exercise_result['exe_result'], $exercise_result['exe_weighting']);
                             $my_score = 0;
                             if(!empty($exercise_result['exe_weighting']) && intval($exercise_result['exe_weighting']) != 0) {
                                 $my_score = $exercise_result['exe_result']/$exercise_result['exe_weighting'];
                             }
-                            $position = get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id, $course_data['id'], $session_id, $user_list);
+                            $position = ExerciseLib::get_exercise_result_ranking($my_score, $exercise_result['exe_id'], $my_exercise_id, $course_data['id'], $session_id, $user_list);
                             //$exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/exercice.php?cidReq=$my_course_code&exerciseId={$exercise_info->id}&id_session=$session_id&show=result", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
                             $exercise_info->exercise = Display::url($exercise_info->exercise, api_get_path(WEB_CODE_PATH)."exercice/result.php?cidReq=$my_course_code&id={$exercise_result['exe_id']}&id_session=$session_id&show_headers=1", array('target'=>SESSION_LINK_TARGET,'class'=>'exercise-result-link'));
 

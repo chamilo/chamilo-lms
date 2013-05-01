@@ -1279,8 +1279,6 @@ function export_exercise($item_id)
     require_once '../exercice/exercise.class.php';
     require_once '../exercice/question.class.php';
     require_once '../exercice/answer.class.php';
-    require_once '../exercice/exercise.lib.php';
-
     $TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
 
     /* Clears the exercise session */
@@ -1420,7 +1418,7 @@ function export_exercise($item_id)
         echo $s = "<tr bgcolor='#e6e6e6'><td valign='top' colspan='2'>".get_lang('Question')." ";
         // Call the showQuestion() function from exercise.lib.php. This basically displays the question in a table.
         $question_obj = Question::read($questionId);
-        $test .= showQuestion($question_obj, false, 'export', $i);
+        $test .= ExerciseLib::showQuestion($question_obj, false, 'export', $i);
 
     } // end foreach()
 
@@ -1454,7 +1452,6 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
     include_once $libp.'exercice/exercise.class.php';
     include_once $libp.'question.class.php';
     include_once $libp.'answer.class.php';
-    include_once $libp.'exercise.lib.php';
 
     $langLasting = ''; //avoid code parser warning
     include_once $libp.'lang/english/announcements.inc.php'; //this line is here only for $langPubl in announcements

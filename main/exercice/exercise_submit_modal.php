@@ -23,7 +23,6 @@ $dbg_local = 0;
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-require_once 'exercise.lib.php';
 
 if (empty ($exerciseResult)) {
     $exerciseResult = $_SESSION['exerciseResult'];

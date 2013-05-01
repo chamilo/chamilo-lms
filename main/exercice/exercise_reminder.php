@@ -15,7 +15,6 @@ require_once 'answer.class.php';
 
 $language_file = 'exercice';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 
 if ($_GET['origin'] == 'learnpath') {
     require_once '../newscorm/learnpath.class.php';
@@ -52,7 +51,7 @@ if (!$objExercise) {
 }
 
 $time_control = false;
-$clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
 	$time_control = true;

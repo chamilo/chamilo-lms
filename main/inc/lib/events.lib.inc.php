@@ -316,7 +316,7 @@ function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $l
 
     if (!empty($exeid)) {
         // Validation in case of fraud with actived control time
-        if (!exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {
+        if (!ExerciseLib::exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {
             $score = 0;
         }
 
@@ -359,7 +359,7 @@ function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $l
             error_log("$sql");
 
         //Deleting control time session track
-        //exercise_time_control_delete($exo_id);
+        //ExerciseLib::exercise_time_control_delete($exo_id);
         return $res;
     } else {
         return false;
@@ -413,8 +413,7 @@ function create_event_exercice($exo_id)
 
     // No record was found, so create one
     // get expire time to insert into the tracking record
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-    $current_expired_time_key = get_time_control_key($exercise_id);
+    $current_expired_time_key = ExerciseLib::get_time_control_key($exercise_id);
     if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
         $expired_date = $_SESSION['expired_time'][$current_expired_time_key];
     } else {
@@ -422,7 +421,7 @@ function create_event_exercice($exo_id)
     }
     $sql = "INSERT INTO $tbl_track_exe (exe_user_id, c_id, expired_time_control, exe_exo_id, session_id)
         	VALUES ($uid,  '".$course_id."' ,'$expired_date','$exo_id','".api_get_session_id()."')";
-    $res = Database::query($sql);
+    Database::query($sql);
     $id = Database::insert_id();
     return $id;
 }
@@ -438,7 +437,6 @@ function create_event_exercice($exo_id)
  */
 function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $exercise_id = 0, $nano = null)
 {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug, $learnpath_id, $learnpath_item_id;
     $score = Database::escape_string($score);
     $answer = Database::escape_string($answer);
@@ -463,7 +461,7 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
         error_log("position: $position");
 
     //Validation in case of fraud with actived control time
-    if (!exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id)) {
+    if (!ExerciseLib::exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id)) {
         if ($debug)
             error_log("exercise_time_control_is_valid is false");
         $score = 0;
@@ -550,11 +548,10 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
  */
 function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords, $exerciseId = 0)
 {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $safe_lp_id, $safe_lp_item_id;
 
     //Validation in case of fraud  with actived control time
-    if (!exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
+    if (!ExerciseLib::exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
         $correct = 0;
     }
 

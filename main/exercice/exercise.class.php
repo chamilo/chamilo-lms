@@ -4431,7 +4431,7 @@ class Exercise
     public function get_exercise_result($exe_id)
     {
         $result = array();
-        $track_exercise_info = get_exercise_track_exercise_info($exe_id);
+        $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($exe_id);
         if (!empty($track_exercise_info)) {
             $objExercise = new Exercise();
             $objExercise->read($track_exercise_info['exe_exo_id']);

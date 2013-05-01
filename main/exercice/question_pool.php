@@ -23,7 +23,6 @@ require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 
 $this_section = SECTION_COURSES;
 
@@ -298,7 +297,7 @@ echo Display::form_row(get_lang("QuestionCategory"), $selectCourseCateogry);
 
 // Get exercice list for this course
 
-$exercise_list         = get_all_exercises_for_course_id($course_info, $session_id, $selected_course);
+$exercise_list         = ExerciseLib::get_all_exercises_for_course_id($course_info, $session_id, $selected_course);
 //Exercise List
 $my_exercise_list = array();
 $my_exercise_list['0']  = get_lang('AllExercises');
@@ -472,7 +471,7 @@ if ($exerciseId > 0) {
           	continue;
           }
       }
-      $exercise_list = get_all_exercises($course_item, $session_id);
+      $exercise_list = ExerciseLib::get_all_exercises($course_item, $session_id);
       if (!empty($exercise_list)) {
         foreach ($exercise_list as $exercise) {
           $my_exercise = new Exercise($course_item['id']);

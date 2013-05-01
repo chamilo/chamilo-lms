@@ -58,7 +58,6 @@ require_once 'answer.class.php';
 $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 $current_course_tool = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
 

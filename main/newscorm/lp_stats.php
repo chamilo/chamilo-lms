@@ -346,14 +346,14 @@ if (is_array($list) && count($list) > 0) {
                                 if ($maxscore == 0) {
                                     $view_score = $score;
                                 } else {
-                                    $view_score = show_score($score, $maxscore, false);
+                                    $view_score = ExerciseLib::show_score($score, $maxscore, false);
                                 }
                                 break;
                             case 'document':
-                                $view_score = ($score == 0 ? '/' : show_score($score, $maxscore, false));
+                                $view_score = ($score == 0 ? '/' : ExerciseLib::show_score($score, $maxscore, false));
                                 break;
                             default:
-                                $view_score = show_score($score, $maxscore, false);
+                                $view_score = ExerciseLib::show_score($score, $maxscore, false);
                                 break;
                         }
                     }
@@ -683,7 +683,7 @@ if (is_array($list) && count($list) > 0) {
                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                             $output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                         } else {
-                            $output .= show_score($score, $maxscore, false);
+                            $output .= ExerciseLib::show_score($score, $maxscore, false);
                         }
                     } else {
                         $output .= ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
@@ -791,12 +791,12 @@ if (is_array($list) && count($list) > 0) {
                             } else {
                                 // Show only float when need it
                                 if ($my_score == 0) {
-                                    $view_score = show_score(0, $my_maxscore, false);
+                                    $view_score = ExerciseLib::show_score(0, $my_maxscore, false);
                                 } else {
                                     if ($my_maxscore == 0) {
                                         $view_score = $my_score;
                                     } else {
-                                        $view_score = show_score($my_score, $my_maxscore, false);
+                                        $view_score = ExerciseLib::show_score($my_score, $my_maxscore, false);
                                     }
                                 }
                             }

@@ -14,8 +14,6 @@ include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 
-include('exercise.lib.php');
-
 // name of the language file that needs to be included
 $language_file = 'exercice';
 

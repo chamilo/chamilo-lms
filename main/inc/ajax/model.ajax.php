@@ -224,7 +224,6 @@ switch ($action) {
         $count = get_count_work($work_id);
         break;
 	case 'get_exercise_results':
-		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_id = $_REQUEST['exerciseId'];
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = intval($_GET['filter_by_user']);
@@ -234,12 +233,11 @@ switch ($action) {
                 $where_condition .= " AND te.exe_user_id  = '$filter_user'";
             }
         }
-		$count = get_count_exam_results($exercise_id, $where_condition);
+		$count = ExerciseLib::get_count_exam_results($exercise_id, $where_condition);
 		break;
 	case 'get_hotpotatoes_exercise_results':
-		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $hotpot_path = $_REQUEST['path'];
-		$count = get_count_exam_hotpotatoes_results($hotpot_path);
+		$count = ExerciseLib::get_count_exam_hotpotatoes_results($hotpot_path);
 		break;
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
@@ -423,14 +421,14 @@ switch ($action) {
 		} else {
 			//$columns = array('exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
 		}
-		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
+		$result = ExerciseLib::get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		break;
 	case 'get_hotpotatoes_exercise_results':
 		$course = api_get_course_info();
         //used inside get_exam_results_data()
 		$documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
 		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
-		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
+		$result = ExerciseLib::get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		break;
     case 'get_sessions':
         $session_columns = SessionManager::get_session_columns($list_type);

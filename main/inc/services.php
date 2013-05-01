@@ -209,8 +209,6 @@ if (isset($app['configuration']['main_database'])) {
     $tree = new Gedmo\Mapping\Annotation\TreeRoot(array());
     $tree = new Gedmo\Mapping\Annotation\TreeLevel(array());
 
-
-
     // Setting Doctrine2 extensions
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
     $app['db.event_manager']->addEventSubscriber($timestampableListener);
@@ -274,6 +272,10 @@ $app->register(new \Knp\Menu\Silex\KnpMenuServiceProvider());
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 $app->register(new PagerfantaServiceProvider());
 
+// Custom route params see https://github.com/franmomu/silex-pagerfanta-provider/pull/2
+//$app['pagerfanta.view.router.name']
+//$app['pagerfanta.view.router.params']
+
 $app['pagerfanta.view.options'] = array(
     'routeName'     => null,
     'routeParams'   => array(),
@@ -283,29 +285,6 @@ $app['pagerfanta.view.options'] = array(
     'prev_message'  => '&laquo;',
     'default_view'  => 'twitter_bootstrap' // the pagination style
 );
-
-// Custom route params see https://github.com/franmomu/silex-pagerfanta-provider/pull/2
-//$app['pagerfanta.view.router.name']
-//$app['pagerfanta.view.router.params']
-
-// Monolog only available if the log dir is writable
-if (is_writable($app['temp.path'])) {
-
-    /*    Adding Monolog service provider
-    Monolog  use examples
-        $app['monolog']->addDebug('Testing the Monolog logging.');
-        $app['monolog']->addInfo('Testing the Monolog logging.');
-        $app['monolog']->addError('Testing the Monolog logging.');
-    */
-
-    $app->register(
-        new Silex\Provider\MonologServiceProvider(),
-        array(
-            'monolog.logfile' => $app['chamilo.log'],
-            'monolog.name' => 'chamilo',
-        )
-    );
-}
 
 // @todo use a app['image_processor'] setting
 define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
@@ -329,18 +308,34 @@ if ($app['debug'] && isset($app['configuration']['main_database'])) {
     });
 }
 
-// Adding symfony2 web profiler (memory, time, logs, etc)
+// Developer tools
 if (is_writable($app['sys_temp_path'])) {
-    //if ($app['debug']) {
+    if ($app['debug']) {
+        // Adding symfony2 web profiler (memory, time, logs, etc)
+        if (api_get_setting('allow_web_profiler') == 'true') {
+            $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
+                    'profiler.cache_dir' => $app['profiler.cache_dir'],
+                ));
+            $app->mount('/_profiler', $p);
+        }
 
-    if (api_get_setting('allow_web_profiler') == 'true') {
-        $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
-                'profiler.cache_dir' => $app['profiler.cache_dir'],
-            ));
-        $app->mount('/_profiler', $p);
+        /** Adding Monolog service provider Monolog  use examples
+            $app['monolog']->addDebug('Testing the Monolog logging.');
+            $app['monolog']->addInfo('Testing the Monolog logging.');
+            $app['monolog']->addError('Testing the Monolog logging.');
+        */
+
+        $app->register(
+            new Silex\Provider\MonologServiceProvider(),
+            array(
+                'monolog.logfile' => $app['chamilo.log'],
+                'monolog.name' => 'chamilo',
+            )
+        );
+
+        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+        //}
     }
-    //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
-    //}
 }
 
 // Email service provider

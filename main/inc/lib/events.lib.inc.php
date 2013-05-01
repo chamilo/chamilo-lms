@@ -11,19 +11,6 @@
  *
  * @package chamilo.library
  */
-/* 	   INIT SECTION */
-
-$TABLETRACK_OPEN = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_OPEN);
-$TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-
-$TABLETRACK_UPLOADS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
-
-$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TABLETRACK_LASTACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS); //for "what's new" notification
-$TABLETRACK_DEFAULT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-
-
-/* FUNCTIONS */
 
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
@@ -32,7 +19,7 @@ $TABLETRACK_DEFAULT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFA
 function event_open()
 {
     global $_configuration;
-    global $TABLETRACK_OPEN;
+    $TABLETRACK_OPEN = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_OPEN);
 
     // @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
     // $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
@@ -105,7 +92,8 @@ function event_login()
  */
 function event_access_course()
 {
-    global $TABLETRACK_ACCESS, $TABLETRACK_LASTACCESS;
+    $TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+    $TABLETRACK_LASTACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS); //for "what's new" notification
 
     $id_session = api_get_session_id();
     $now = api_get_utc_datetime();
@@ -152,17 +140,16 @@ function event_access_course()
 function event_access_tool($tool, $id_session = 0)
 {
     global $_configuration;
-    global $_user;
-    global $TABLETRACK_ACCESS;
+    $TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+    $TABLETRACK_LASTACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS); //for "what's new" notification
+
     $_course = api_get_course_info();
-    global $TABLETRACK_LASTACCESS; //for "what's new" notification
-
     $courseId = api_get_course_int_id();
-
     $id_session = api_get_session_id();
     $tool = Database::escape_string($tool);
     $reallyNow = api_get_utc_datetime();
-    $user_id = $_user['user_id'] ? "'".$_user['user_id']."'" : "0"; // no one
+    $user_id = api_get_user_id();
+
     // record information
     // only if user comes from the course $_cid
     //if( eregi($_configuration['root_web'].$_cid,$_SERVER['HTTP_REFERER'] ) )
@@ -250,16 +237,11 @@ function event_download($doc_url)
  */
 function event_upload($doc_id)
 {
-    global $_user;
-    global $_cid;
-    global $TABLETRACK_UPLOADS;
-
+    $TABLETRACK_UPLOADS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
+    $courseCode = api_get_course_id();
     $reallyNow = api_get_utc_datetime();
-    if (isset($_user['user_id']) && $_user['user_id'] != '') {
-        $user_id = "'".$_user['user_id']."'";
-    } else {
-        $user_id = "0"; // anonymous
-    }
+    $user_id = api_get_user_id();
+
     $sql = "INSERT INTO ".$TABLETRACK_UPLOADS."
         		( upload_user_id,
         		  upload_cours_id,
@@ -269,12 +251,12 @@ function event_upload($doc_id)
         		)
         		VALUES (
         		 ".$user_id.",
-        		 '".$_cid."',
+        		 '".$courseCode."',
         		 '".$doc_id."',
         		 '".$reallyNow."',
         		 '".api_get_session_id()."'
         		)";
-    $res = Database::query($sql);
+    Database::query($sql);
     return 1;
 }
 
@@ -286,16 +268,9 @@ function event_upload($doc_id)
  */
 function event_link($link_id)
 {
-    global $_user;
     $TABLETRACK_LINKS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
-
     $reallyNow = api_get_utc_datetime();
-    if (isset($_user['user_id']) && $_user['user_id'] != '') {
-        $user_id = "'".Database::escape_string($_user['user_id'])."'";
-    } else {
-        // anonymous
-        $user_id = "0";
-    }
+    $user_id = api_get_user_id();
     $sql = "INSERT INTO ".$TABLETRACK_LINKS."
         		( links_user_id,
         		 c_id,
@@ -332,6 +307,8 @@ function event_link($link_id)
 function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
+    $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+
     if ($debug) {
         error_log('Called to update_event_exercise');
         error_log('duration:'.$duration);
@@ -348,8 +325,6 @@ function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $l
         } else {
             $status = Database::escape_string($status);
         }
-
-        $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
         if (!empty($remind_list)) {
             $remind_list = array_map('intval', $remind_list);
@@ -577,6 +552,7 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $safe_lp_id, $safe_lp_item_id;
+
     //Validation in case of fraud  with actived control time
     if (!exercise_time_control_is_valid($exerciseId, $safe_lp_id, $safe_lp_item_id)) {
         $correct = 0;
@@ -607,7 +583,7 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
  */
 function event_system($event_type, $event_value_type, $event_value, $datetime = null, $user_id = null, $course_code = null)
 {
-    global $TABLETRACK_DEFAULT;
+    $TABLETRACK_DEFAULT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 
     if (empty($event_type)) {
         return false;
@@ -743,7 +719,7 @@ function get_event_users($event_name)
 
 function get_events_by_user_and_type($user_id, $event_type)
 {
-    global $TABLETRACK_DEFAULT;
+    $TABLETRACK_DEFAULT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
     $user_id = intval($user_id);
     $event_type = Database::escape_string($event_type);
 
@@ -934,7 +910,6 @@ function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_
  */
 function delete_student_lp_events($user_id, $lp_id, $course, $session_id)
 {
-
     $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
     $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $course_id = $course['real_id'];

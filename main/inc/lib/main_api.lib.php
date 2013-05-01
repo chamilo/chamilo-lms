@@ -8,19 +8,17 @@
  * @package chamilo.library
  */
 
+use \ChamiloSession as Session;
 
 /**
  * Constants declaration
  */
-
 // PHP version requirement.
 define('REQUIRED_PHP_VERSION', '5.3');
 
 define('REQUIRED_MIN_MEMORY_LIMIT',         '32');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
 define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
-
-use \ChamiloSession as Session;
 
 // USER STATUS CONSTANTS
 /** global status of a user: course manager */
@@ -36,9 +34,7 @@ define('ANONYMOUS', 6);
 /** global status of a user: low security, necessary for inserting data from
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
-
 define('TEACHER', 1);
-
 
 //Soft user status
 define('PLATFORM_ADMIN', 11);
@@ -48,14 +44,12 @@ define('COURSE_STUDENT', 14);   //student subscribed in a course
 define('SESSION_STUDENT', 15);  //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
 
-
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
 $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
 $_status_list[DRH]              = 'drh';            // 4
 $_status_list[STUDENT]          = 'user';           // 5
 $_status_list[ANONYMOUS]        = 'anonymous';      // 6
-
 
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
@@ -67,13 +61,11 @@ define('COURSE_VISIBILITY_OPEN_PLATFORM', 2);
 /** Open for the whole world */
 define('COURSE_VISIBILITY_OPEN_WORLD', 3);
 
-
 // SESSION VISIBILITY CONSTANTS
 define('SESSION_VISIBLE_READ_ONLY', 1);
 define('SESSION_VISIBLE', 2);
 define('SESSION_INVISIBLE', 3); // not available
 define('SESSION_AVAILABLE', 4);
-
 
 define('SUBSCRIBE_ALLOWED', 1);
 define('SUBSCRIBE_NOT_ALLOWED', 0);
@@ -352,14 +344,9 @@ define('GROUP_IMAGE_SIZE_ORIGINAL',	1);
 define('GROUP_IMAGE_SIZE_BIG', 		2);
 define('GROUP_IMAGE_SIZE_MEDIUM', 	3);
 define('GROUP_IMAGE_SIZE_SMALL', 	4);
-
 define('GROUP_TITLE_LENGTH',       50);
 
-
 // Messages
-/*
- * @todo use constants!
- */
 define('MESSAGE_STATUS_NEW',                    '0');
 define('MESSAGE_STATUS_UNREAD',                 '1');
 //2 ??
@@ -380,7 +367,7 @@ define('TEACHER_HTML', 3);
 define('STUDENT_HTML_FULLPAGE', 4);
 define('TEACHER_HTML_FULLPAGE', 5);
 
-//Exercise
+// Exercise
 define('EXERCISE_NUMBER_OF_DECIMALS', 2);
 
 /* XML processing functions */
@@ -389,7 +376,6 @@ define('EXERCISE_NUMBER_OF_DECIMALS', 2);
 // Published by Steve Minutillo,
 // http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
 define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
-
 
 //Social PLUGIN PLACES
 define('SOCIAL_LEFT_PLUGIN',        1);
@@ -401,7 +387,6 @@ define('CUT_GROUP_NAME', 50);
 define ('SKILL_TYPE_REQUIREMENT',   'required');
 define ('SKILL_TYPE_ACQUIRED',      'acquired');
 define ('SKILL_TYPE_BOTH',          'both');
-
 
 /* PATHS & FILES - ROUTINES */
 
@@ -6409,7 +6394,8 @@ function api_get_js_simple($file) {
 }
 
 
-function api_set_settings_and_plugins() {
+function api_set_settings_and_plugins()
+{
     global $_configuration;
     $_setting = array();
     $_plugins = array();
@@ -6478,6 +6464,7 @@ function api_set_settings_and_plugins() {
     }
 
     $result = api_get_settings('Plugins', 'list', $access_url_id);
+
     foreach ($result as & $row) {
         $key = & $row['variable'];
         if (is_string($_setting[$key])) {
@@ -6486,8 +6473,8 @@ function api_set_settings_and_plugins() {
         $_setting[$key][] = $row['selected_value'];
         $_plugins[$key][] = $row['selected_value'];
     }
-    $_SESSION['_setting'] = $_setting;
-    $_SESSION['_plugins'] = $_plugins;
+    Session::write('_setting', $_setting);
+    Session::write('_plugins', $_plugins);
 }
 
 /**
@@ -6879,7 +6866,6 @@ function api_get_language_interface() {
 }
 
 function getConfigurationArray($confPath) {
-
 }
 
 function api_get_default_course_document()
@@ -6893,5 +6879,4 @@ function api_get_web_default_course_document()
 }
 
 function load_translations($app) {
-
 }

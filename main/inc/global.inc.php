@@ -345,7 +345,6 @@ if ($alreadyInstalled && $checkConnection) {
         }
     }
 }
-
 $app['plugins'] = $_plugins;
 
 // Section (tabs in the main chamilo menu)

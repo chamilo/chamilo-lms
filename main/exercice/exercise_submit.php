@@ -889,6 +889,7 @@ if ($objExercise->type == ONE_PER_PAGE) {
         $current_question = isset($values[$remind_question_id]) ? $values[$remind_question_id] + 1 : $values[$fixedRemindList[0]] +1;
     }
     echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
+    echo Display::label(get_lang('Answered'), 'success').' '.Display::label(get_lang('Unanswered')).' '.Display::label(get_lang('ToReview'), 'warning').' '.Display::label(get_lang('CurrentQuestion'), 'info');
     //var_dump($category_list);
 }
 

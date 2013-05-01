@@ -154,8 +154,8 @@ $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
 
 echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
-echo ' ';
-echo Display::label(get_lang('Categories'), 'info');
+//echo ' ';
+//echo Display::label(get_lang('Categories'), 'info');
 echo '<hr>';
 
 echo '<div class="clear"></div><br />';
@@ -229,8 +229,7 @@ foreach ($question_list as $questionId) {
     }
 
     if (!empty($rootCategories)) {
-        $rootCategories = Display::label($rootCategories, 'info').'';
-        $table .= '<li class="nav-header">'.$rootCategories.'</li>';
+        $table .= '<li class="nav-header"><h5>'.$rootCategories.'</h5></li>';
     }
 
     $question_title = Display::tag('label', $checkbox.$question_title, $label_attributes);

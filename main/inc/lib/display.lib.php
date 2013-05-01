@@ -1736,8 +1736,9 @@ class Display
             $class = "active";
 
             if ($counter < $current) {
-                $class = "before";
+            //    $class = "before";
             }
+            $class = "before";
 
             foreach ($conditions as $condition) {
                 $array = $condition['items'];
@@ -1762,7 +1763,7 @@ class Display
             }
 
             if ($counter > $current) {
-                $class = "after";
+                //$class = "after";
             }
 
             if (empty($link)) {

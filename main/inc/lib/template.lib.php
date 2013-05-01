@@ -90,7 +90,7 @@ class Template
 
         //Chamilo plugins
         if ($this->show_header) {
-            if ($app['template.load_plugins']) {
+            if ($app['template.load_plugins'] && !empty($app['plugins'])) {
 
                 $this->plugin = new AppPlugin();
 
@@ -639,16 +639,17 @@ class Template
                 $this->assign('footer_extra_content', $extra_footer);
             }
         }
-        $id_course = api_get_course_int_id();
+
+        $courseId = api_get_course_int_id();
 
         //Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
             $id_session = api_get_session_id();
-            if (isset($id_course) && $id_course != -1) {
+            if (isset($courseId) && $courseId != -1 && !empty($courseId)) {
                 $tutor_data = '';
                 if ($id_session != 0) {
-                    $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $id_course);
+                    $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $courseId);
                     $email_link = array();
                     foreach ($coachs_email as $coach) {
                         $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
@@ -669,9 +670,9 @@ class Template
 
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
-            if (isset($id_course) && $id_course != -1) {
+            if (isset($courseId) && $courseId != -1 && !empty($courseId)) {
                 $teacher_data = '';
-                $mail = CourseManager::get_emails_of_tutors_to_course($id_course);
+                $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
                 if (!empty($mail)) {
                     $teachers_parsed = array();
                     foreach ($mail as $value) {

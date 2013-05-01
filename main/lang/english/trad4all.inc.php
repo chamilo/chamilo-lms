@@ -1412,4 +1412,5 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
+$PaginationXofY = "%s of %s";
 ?>

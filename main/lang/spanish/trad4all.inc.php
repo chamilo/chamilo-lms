@@ -1417,4 +1417,5 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
+$PaginationXofY = "%s de %s";
 ?>

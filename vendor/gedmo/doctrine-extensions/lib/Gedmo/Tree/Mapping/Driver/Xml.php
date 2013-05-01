@@ -15,7 +15,6 @@ use Gedmo\Mapping\Driver\Xml as BaseXml,
  * @author Gustavo Falco <comfortablynumb84@gmail.com>
  * @author Gediminas Morkevicius <gediminas.morkevicius@gmail.com>
  * @author Miha Vrhovnik <miha.vrhovnik@gmail.com>
- * @link http://www.gediminasm.org
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class Xml extends BaseXml
@@ -67,7 +66,7 @@ class Xml extends BaseXml
                 throw new InvalidMappingException("Tree closure class: {$class} does not exist.");
             }
             $config['closure'] = $class;
-        }        
+        }
         if (isset($xmlDoctrine->field)) {
             foreach ($xmlDoctrine->field as $mapping) {
                 $mappingDoctrine = $mapping;
@@ -152,7 +151,7 @@ class Xml extends BaseXml
             throw new InvalidMappingException("You need to map a date field as the tree lock time field to activate locking support.");
         }
 
-        if ($xmlDoctrine->getName() == 'entity') {        
+        if ($xmlDoctrine->getName() == 'entity') {
             if (isset($xmlDoctrine->{'many-to-one'})) {
                 foreach ($xmlDoctrine->{'many-to-one'} as $manyToOneMapping)  {
                     /**
@@ -176,9 +175,9 @@ class Xml extends BaseXml
                      * @var \SimpleXMLElement $referenceOneMapping
                      */
                     $referenceOneMappingDoctrine = $referenceOneMapping;
-                    $referenceOneMapping = $referenceOneMapping->children(self::GEDMO_NAMESPACE_URI);;                    
+                    $referenceOneMapping = $referenceOneMapping->children(self::GEDMO_NAMESPACE_URI);;
                     if (isset($referenceOneMapping->{'tree-parent'})) {
-                        $field = $this->_getAttribute($referenceOneMappingDoctrine, 'field');                        
+                        $field = $this->_getAttribute($referenceOneMappingDoctrine, 'field');
                         if ($this->_getAttribute($referenceOneMappingDoctrine, 'target-document') != $meta->name) {
                             throw new InvalidMappingException("Unable to find ancestor/parent child relation through ancestor field - [{$field}] in class - {$meta->name}");
                         }
@@ -186,7 +185,7 @@ class Xml extends BaseXml
                     }
                 }
             }
-        }        
+        }
 
         if (!$meta->isMappedSuperclass && $config) {
             if (isset($config['strategy'])) {

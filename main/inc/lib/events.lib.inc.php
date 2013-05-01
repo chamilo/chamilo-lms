@@ -305,7 +305,6 @@ function event_link($link_id)
  * @desc Record result of user when an exercice was done
  */
 function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {
-    require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
     $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
@@ -353,11 +352,10 @@ function update_event_exercise($exeid, $exo_id, $score, $weight, $session_id, $l
         		 WHERE exe_id = '".Database::escape_string($exeid)."'";
         $res = Database::query($sql);
 
-        if ($debug)
+        if ($debug) {
             error_log('update_event_exercise called');
-        if ($debug)
             error_log("$sql");
-
+        }
         //Deleting control time session track
         //ExerciseLib::exercise_time_control_delete($exo_id);
         return $res;

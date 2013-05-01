@@ -13,7 +13,6 @@
  */
 require_once 'learnpath.class.php';
 require_once 'resourcelinker.inc.php';
-require_once '../exercice/exercise.lib.php';
 
 $course_code = api_get_course_id();
 

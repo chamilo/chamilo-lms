@@ -526,9 +526,13 @@ class Testcategory
 		return $categories_in_exercise;
 	}
 
-
-    public static function getListOfCategoriesWithQuestionForTestObject($exercise_obj) {
-        $question_list = $exercise_obj->selectQuestionList();
+    /**
+     * @param Exercise $exercise_obj
+     * @return array
+     */
+    public static function getListOfCategoriesWithQuestionForTestObject($exercise_obj, $question_list)
+    {
+        //$question_list = $exercise_obj->selectQuestionList();
         $categoriesWithQuestion = array();
         $parentsLoaded = array();
         global $app;
@@ -568,7 +572,7 @@ class Testcategory
                         $categoriesWithQuestion[$categoryId] = $cat;
                     }
                 }
-                $categoriesWithQuestion[$categoryId]['question_list'][] = $question_id;
+                $categoriesWithQuestion[$categoryId]['question_list'][] = (int)$question_id;
             }
         }
 
@@ -595,6 +599,10 @@ class Testcategory
         return $result;
     }
 
+    /**
+     * @param Exercise $exercise_obj
+     * @return array
+     */
     public static function getListOfCategoriesForTest($exercise_obj) {
         $result = array();
         $categories = self::getListOfCategoriesIDForTestObject($exercise_obj);
@@ -1119,7 +1127,6 @@ class Testcategory
     public function create_tree_array($array, $parent = 0, $depth = -1, $tmp = array()) {
         if (is_array($array)) {
             for ($i = 0; $i < count($array); $i++) {
-                //var_dump($array[$i], $parent, $tmp);
                 if ($array[$i]['parent_id'] == $parent) {
                     if (!in_array($array[$i]['parent_id'], $tmp)) {
                         $tmp[] = $array[$i]['parent_id'];

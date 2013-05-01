@@ -892,7 +892,7 @@ if ($objExercise->type == ONE_PER_PAGE) {
     $categoryList = Session::read('categoryList');
 
     if (empty($categoryList)) {
-        $categoryList = Testcategory::getListOfCategoriesWithQuestionForTestObject($objExercise);
+        $categoryList = Testcategory::getListOfCategoriesWithQuestionForTestObject($objExercise, $questionList);
         Session::write('categoryList', $categoryList);
     }
 
@@ -903,9 +903,8 @@ if ($objExercise->type == ONE_PER_PAGE) {
     }
 
     //echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
-
     echo Display::label(get_lang('Answered'), 'success').' '.Display::label(get_lang('Unanswered')).' '.Display::label(get_lang('ToReview'), 'warning').' '.Display::label(get_lang('CurrentQuestion'), 'info');
-    //var_dump($category_list);
+
 }
 
 $is_visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);

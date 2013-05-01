@@ -1733,8 +1733,8 @@ class Display
             $counter = 1;
         }
 
-        $pagination_size = '';
-        $total = count($list);
+        //$pagination_size = '';
+        //$total = count($list);
         /*if ($total > 25) {
             $pagination_size = 'pagination-small';
         }
@@ -1748,7 +1748,6 @@ class Display
         $html = '<div class="exercise_pagination pagination '.$pagination_size.'"><ul>';
         foreach ($list as $item_id) {
             $class = "active";
-
             if ($counter < $current) {
                 //    $class = "before";
             }
@@ -1763,6 +1762,7 @@ class Display
                         if (in_array($item_id, $array)) {
                             $class .= " $class_to_applied";
                         }
+
                         break;
                     case 'negative':
                         if (!in_array($item_id, $array)) {
@@ -1779,6 +1779,7 @@ class Display
             if ($counter > $current) {
                 //$class = "after";
             }
+
 
             if (empty($link)) {
                 $link_to_show = "#";
@@ -1817,6 +1818,7 @@ class Display
             $html .= '<div class="row">';
             $html .= '<div class="span2">'.$category['name'].'</div>';
             $html .= '<div class="span10">';
+
             $html .= self::progress_pagination_bar($list, $current, $conditions, $link, $total);
             $html .= '</div>';
             $html .= '</div>';

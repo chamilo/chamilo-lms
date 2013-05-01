@@ -455,3 +455,9 @@ $app['news.controller'] = $app->share(
         return new ChamiloLMS\Controller\NewsController();
     }
 );
+
+$app['admin.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\AdminController();
+    }
+);

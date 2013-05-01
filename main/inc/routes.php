@@ -25,7 +25,7 @@ $settingCourseConditions = function (Request $request) use ($app) {
     $tempSessionId = api_get_session_id();
 
     $courseReset = false;
-    if ( (!empty($cidReq) && $tempCourseId != $cidReq) || empty($tempCourseId) || empty($tempCourseId) == -1) {
+    if ((!empty($cidReq) && $tempCourseId != $cidReq) || empty($tempCourseId) || empty($tempCourseId) == -1) {
         $courseReset = true;
     }
 
@@ -285,7 +285,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
                 case COURSE_VISIBILITY_OPEN_WORLD: //3
                     $is_allowed_in_course = true;
                     break;
-                case COURSE_VISIBILITY_OPEN_PLATFORM : //2
+                case COURSE_VISIBILITY_OPEN_PLATFORM: //2
                     if (isset($user_id) && !api_is_anonymous($user_id)) {
                         $is_allowed_in_course = true;
                     }
@@ -328,7 +328,6 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
                             $is_allowed_in_course = false;
                             break;
                     }
-                //checking date
                 }
             }
         }
@@ -469,3 +468,8 @@ $app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile
 /** User files */
 $app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
     ->assert('type', '.+');
+
+/** Admin  */
+$app->match('/admin/questions', 'admin.controller:questionsAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->bind('admin_questions');

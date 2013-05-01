@@ -354,7 +354,7 @@ class CourseRecycler
                     INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
                     INNER JOIN $table_qui ex
-                    ON (ex.id = r.exercice_id AND ex.c_id = r.c_id )
+                    ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id )
                     WHERE ex.c_id = ".$this->course_id." AND (ex.active = '-1' OR ex.id = '-1')
                 )
                 UNION

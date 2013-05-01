@@ -5,10 +5,10 @@
  */
 class Testcategory
 {
-	public $id;
+    public $id;
     public $name; //why using name?? Use title as in the db!
     public $title;
-	public $description;
+    public $description;
     public $parent_id;
     public $parent_path;
     public $category_array_tree;
@@ -77,7 +77,7 @@ class Testcategory
 			$row = Database::fetch_array($res);
             $this->id = $row['iid'];
             $this->title = $this->name = $row['title'];
-			$this->description  = $row['description'];
+			$this->description = $row['description'];
             $this->parent_id = $row['parent_id'];
         } else {
             return false;
@@ -90,9 +90,8 @@ class Testcategory
 	 */
 	function addCategoryInBDD()
     {
-		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $v_name = Database::escape_string($this->name);
-        $v_description = Database::escape_string($this->description);
         $parent_id = intval($this->parent_id);
 
         $course_id = $this->course_id;
@@ -107,13 +106,13 @@ class Testcategory
             return false;
         }
 
-		// Check if name already exists
+		// Check if name already exists.
         $sql = "SELECT count(*) AS nb FROM $t_cattable WHERE title = '$v_name' $courseCondition";
 		$result = Database::query($sql);
 		$data = Database::fetch_array($result);
 
         // lets add in BD if not the same name
-		if ($data['nb'] <= 0) {
+        if ($data['nb'] <= 0) {
             // @todo inject the app in the claas
             global $app;
             $category = new \Entity\CQuizCategory();

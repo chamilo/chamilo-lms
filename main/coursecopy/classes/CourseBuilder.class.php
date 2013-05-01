@@ -484,8 +484,8 @@ class CourseBuilder {
         $db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
             $categories = Testcategory::getCategoryForQuestionWithCategoryData($obj->iid, $course_id, true);
-            $parent_info = array();
 
+            $parent_info = array();
             if (isset($obj->parent_id) && !empty($obj->parent_id)) {
                 $parent_info = (array)Question::read($obj->parent_id, $course_id);
             }
@@ -527,7 +527,7 @@ class CourseBuilder {
                     SELECT q.* FROM $table_que q INNER JOIN $table_rel r
                     ON (q.c_id = r.c_id AND q.iid = r.question_id)
                     INNER JOIN $table_qui ex
-                    ON (ex.id = r.exercice_id AND ex.c_id =r.c_id )
+                    ON (ex.iid = r.exercice_id AND ex.c_id = r.c_id )
                     WHERE ex.c_id = $course_id AND ex.active = '-1'
                  )
                  UNION
@@ -545,16 +545,24 @@ class CourseBuilder {
                     WHERE r.c_id = $course_id AND r.exercice_id = '-1' OR r.exercice_id = '0'
                  )
         ";
+
 		$db_result = Database::query($sql);
 
 		if (Database::num_rows($db_result) > 0) {
 			$build_orphan_questions = true;
             $orphanQuestionIds = array();
 			while ($obj = Database::fetch_object($db_result)) {
+                $categories = Testcategory::getCategoryForQuestionWithCategoryData($obj->iid, $course_id, true);
+
+                $parent_info = array();
+                if (isset($obj->parent_id) && !empty($obj->parent_id)) {
+                    $parent_info = (array)Question::read($obj->parent_id, $course_id);
+                }
+
                 //Avoid adding the same question twice
-                if (!isset($this->course->resources[$obj->id])) {
-                    $question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
-                    $sql = "SELECT * FROM $table_ans WHERE c_id = $course_id AND question_id = ".$obj->id;
+                if (!isset($this->course->resources[$obj->iid])) {
+                    $question = new QuizQuestion($obj->iid, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra, $parent_info, $categories);
+                    $sql = "SELECT * FROM $table_ans WHERE c_id = $course_id AND question_id = ".$obj->iid;
                     $db_result2 = Database::query($sql);
                     if (Database::num_rows($db_result2)) {
                         while ($obj2 = Database::fetch_object($db_result2)) {
@@ -569,8 +577,9 @@ class CourseBuilder {
 
 		if ($build_orphan_questions) {
             $obj = array(
-                'id' => -1,
-                'title' => get_lang('OrphanQuestions', '')
+                'iid' => -1,
+                'title' => get_lang('OrphanQuestions', ''),
+                'type' => 2
             );
             $newQuiz = new Quiz((object)$obj);
             if (!empty($orphanQuestionIds)) {

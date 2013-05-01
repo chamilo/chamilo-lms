@@ -141,7 +141,7 @@ $aType = array(
 );
 
 $fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
-//$fastEdition = false;
+//$fastEdition = true;
 
 if ($fastEdition) {
     $htmlHeadXtra[] = api_get_jqgrid_js();

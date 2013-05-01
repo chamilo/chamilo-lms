@@ -221,56 +221,55 @@ switch ($action) {
         //Use have permissions?
         if (api_is_allowed_to_session_edit()) {
 
-            //"all" or "simple" strings means that there's one or all questions exercise type
+            // "all" or "simple" strings means that there's one or all questions exercise type
             $type                   = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
-            //Questions choices
+            // Questions choices
             $choice                 = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 
-            //Hotspot coordinates from all questions
+            // Hotspot coordinates from all questions
             $hot_spot_coordinates   = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
 
-            //There is a reminder?
+            // There is a reminder?
             $remind_list            = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
 
-            //Needed in manage_answer
+            // Needed in manage_answer
             $learnpath_id           = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
             $learnpath_item_id      = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 
-            //Attempt id
+            // Attempt id
             $exe_id = $_REQUEST['exe_id'];
 
             if ($debug) {
                 error_log("exe_id = $exe_id ");
                 error_log("type = $type ");
                 error_log("choice = ".print_r($choice, 1)." ");
-                error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates,1));
+                error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
                 error_log("remind_list = ".print_r($remind_list));
             }
 
-            //Exercise information
+            // Exercise information.
             $objExercise             = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
 
-            //Question info
+            // Question info.
             $question_id             = intval($_REQUEST['question_id']);
 
-            //$question_list           = $_SESSION['questionList'];
             $question_list           = $_SESSION['question_list_flatten'];
 
-            //If exercise or question is not set then exit
+            // If exercise or question is not set then exit.
             if (empty($question_list) || empty($objExercise)) {
                 echo 'error';
                 exit;
             }
 
-            //Getting information of the current exercise
+            // Getting information of the current exercise.
             $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 
             $exercise_id = $exercise_stat_info['exe_exo_id'];
 
             $attempt_list = array();
 
-            //First time here we create an attempt (getting the exe_id)
+            // First time here we create an attempt (getting the exe_id).
             if (empty($exercise_stat_info)) {
             } else {
                 //We know the user we get the exe_id
@@ -281,9 +280,21 @@ switch ($action) {
                 $attempt_list  = get_all_exercise_event_by_exe_id($exe_id);
             }
 
-            //Updating Reminder algorythm
+            // Updating Reminder algorythm.
             if ($objExercise->type == ONE_PER_PAGE) {
             	$bd_reminder_list = explode(',', $exercise_stat_info['questions_to_check']);
+
+                // Fixing reminder order
+                $fixedRemindList = array();
+                if (!empty($bd_reminder_list)) {
+                    foreach($question_list as $questionId) {
+                        if (in_array($questionId, $bd_reminder_list)) {
+                            $fixedRemindList[] = $questionId;
+                        }
+                    }
+                }
+
+                $bd_reminder_list = $fixedRemindList;
 
             	if (empty($remind_list)) {
             		$remind_list = $bd_reminder_list;

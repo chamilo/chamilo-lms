@@ -5149,15 +5149,14 @@ i.size-32.icon-new-work {
     margin-bottom: 15px;
 }
 
-
 .pagination .current a {
-    font-size: 120%;
     cursor: default;
+    background-color: #3a87ad !important;
 }
 
 .pagination .before a, .pagination .before a:hover {
-    background-color: #028DC2;
-    color:white;
+    background-color: #999;
+    color: white;
 }
 
 .pagination .after a, .pagination .after a:hover {
@@ -5166,7 +5165,8 @@ i.size-32.icon-new-work {
 }
 
 .pagination .remind a {
-    text-decoration: underline;
+    /* text-decoration: underline; */
+    background-color: #f89406
 }
 
 .pagination .not_answered a , .pagination .not_answered a:hover {
@@ -5266,4 +5266,8 @@ i.size-32.icon-new-work {
 .data_table .row_total {
     background-color: #555;
     color:white;
+}
+
+.exercise_pagination {
+    margin: 0px;
 }

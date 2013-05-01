@@ -5,10 +5,10 @@
  */
 class Testcategory
 {
-	public $id;
+    public $id;
     public $name; //why using name?? Use title as in the db!
     public $title;
-	public $description;
+    public $description;
     public $parent_id;
     public $parent_path;
     public $category_array_tree;
@@ -77,7 +77,7 @@ class Testcategory
 			$row = Database::fetch_array($res);
             $this->id = $row['iid'];
             $this->title = $this->name = $row['title'];
-			$this->description  = $row['description'];
+			$this->description = $row['description'];
             $this->parent_id = $row['parent_id'];
         } else {
             return false;
@@ -90,9 +90,8 @@ class Testcategory
 	 */
 	function addCategoryInBDD()
     {
-		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
+        $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $v_name = Database::escape_string($this->name);
-        $v_description = Database::escape_string($this->description);
         $parent_id = intval($this->parent_id);
 
         $course_id = $this->course_id;
@@ -107,13 +106,13 @@ class Testcategory
             return false;
         }
 
-		// Check if name already exists
+		// Check if name already exists.
         $sql = "SELECT count(*) AS nb FROM $t_cattable WHERE title = '$v_name' $courseCondition";
 		$result = Database::query($sql);
 		$data = Database::fetch_array($result);
 
         // lets add in BD if not the same name
-		if ($data['nb'] <= 0) {
+        if ($data['nb'] <= 0) {
             // @todo inject the app in the claas
             global $app;
             $category = new \Entity\CQuizCategory();
@@ -528,6 +527,60 @@ class Testcategory
 	}
 
     /**
+     * @param Exercise $exercise_obj
+     * @return array
+     */
+    public static function getListOfCategoriesWithQuestionForTestObject($exercise_obj, $question_list)
+    {
+        //$question_list = $exercise_obj->selectQuestionList();
+        $categoriesWithQuestion = array();
+        $parentsLoaded = array();
+        global $app;
+        $em = $app['orm.em'];
+        $repo = $em->getRepository('Entity\CQuizCategory');
+
+        // the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
+        foreach ($question_list as $question_id) {
+            $category_list = Testcategory::getCategoryForQuestion($question_id);
+            foreach ($category_list as $categoryId) {
+                if (!isset($categoriesWithQuestion[$categoryId])) {
+                    $cat = new Testcategory($categoryId);
+                    $cat = (array)$cat;
+                    $cat['iid'] = $cat['id'];
+                    $cat['name'] = $cat['title'];
+                    if (!empty($cat['parent_id'])) {
+                        if (!isset($parentsLoaded[$cat['parent_id']])) {
+                            $categoryEntity = $em->find('Entity\CQuizCategory', $cat['parent_id']);
+                            $parentsLoaded[$cat['parent_id']] = $categoryEntity;
+                        } else {
+                            $categoryEntity = $parentsLoaded[$cat['parent_id']];
+                        }
+                        $path = $repo->getPath($categoryEntity);
+                        if (isset($path) && isset($path[0])) {
+                            $categoryId = $path[0]->getIid();
+                            $cat['id'] = $categoryId;
+                            $cat['iid'] = $categoryId;
+                            $cat['parent_path'] = null;
+                            $cat['title'] = $path[0]->getTitle();
+                            $cat['name'] = $path[0]->getTitle();
+                            $cat['parent_id'] = null;
+                        }
+                        $temp = isset($categoriesWithQuestion[$categoryId]) ? $categoriesWithQuestion[$categoryId]['question_list'] : array();
+                        $categoriesWithQuestion[$categoryId] = $cat;
+                        $categoriesWithQuestion[$categoryId]['question_list'] = $temp;
+                    } else {
+                        $categoriesWithQuestion[$categoryId] = $cat;
+                    }
+                }
+                $categoriesWithQuestion[$categoryId]['question_list'][] = (int)$question_id;
+            }
+        }
+
+        return $categoriesWithQuestion;
+    }
+
+
+    /**
 	 * return the list of differents categories NAME for a test
 	 * input : test_id
 	 * return : array of string
@@ -546,6 +599,10 @@ class Testcategory
         return $result;
     }
 
+    /**
+     * @param Exercise $exercise_obj
+     * @return array
+     */
     public static function getListOfCategoriesForTest($exercise_obj) {
         $result = array();
         $categories = self::getListOfCategoriesIDForTestObject($exercise_obj);
@@ -1070,7 +1127,6 @@ class Testcategory
     public function create_tree_array($array, $parent = 0, $depth = -1, $tmp = array()) {
         if (is_array($array)) {
             for ($i = 0; $i < count($array); $i++) {
-                //var_dump($array[$i], $parent, $tmp);
                 if ($array[$i]['parent_id'] == $parent) {
                     if (!in_array($array[$i]['parent_id'], $tmp)) {
                         $tmp[] = $array[$i]['parent_id'];

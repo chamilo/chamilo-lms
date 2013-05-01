@@ -62,12 +62,18 @@ class QuizQuestion extends Resource
     public $parent_info;
 
     /**
-     * Create a new QuizQuestion
-     * @param string $question
-     * @param string $description
-     * @param int $ponderation
-     * @param int $type
-     * @param int $position
+     * * Create a new QuizQuestion
+     * @param $id
+     * @param $question
+     * @param $description
+     * @param $ponderation
+     * @param $type
+     * @param $position
+     * @param $picture
+     * @param $level
+     * @param $extra
+     * @param $parent_info
+     * @param $categories
      */
     function QuizQuestion($id, $question, $description, $ponderation, $type, $position, $picture, $level, $extra, $parent_info, $categories)
     {
@@ -102,14 +108,19 @@ class QuizQuestion extends Resource
         $this->answers[] = $answer;
     }
 
-    function add_option($option_obj) {
+    /**
+     * @param $option_obj
+     */
+    function add_option($option_obj)
+    {
         $this->question_options[$option_obj->obj->id] = $option_obj;
     }
 
     /**
      * Show this question
      */
-    function show() {
+    function show()
+    {
         parent::show();
         echo $this->question;
     }

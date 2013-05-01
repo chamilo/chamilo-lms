@@ -2553,7 +2553,7 @@ class ExerciseLib
                             $objQuestionTmp = Question::read($questionId);
                             // destruction of the Question object
                             unset ($objQuestionTmp);
-                            Display :: display_normal_message(get_lang('AlreadyAnswered'));
+                            Display::display_normal_message(get_lang('AlreadyAnswered'));
                             $i++;
                             break;
                         }
@@ -2610,7 +2610,7 @@ class ExerciseLib
     }
 
     public static function render_question(
-        $objExercise,
+        Exercise $objExercise,
         $questionId,
         $attempt_list,
         $remind_list,
@@ -2656,7 +2656,7 @@ class ExerciseLib
         // Button save and continue
         switch ($objExercise->type) {
             case ONE_PER_PAGE:
-                $exercise_actions .= $objExercise->show_button($questionId, $current_question);
+                $exercise_actions .= $objExercise->show_button($questionId, $current_question, null, $remind_list);
                 break;
             case ALL_ON_ONE_PAGE :
                 $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
@@ -2678,13 +2678,13 @@ class ExerciseLib
             }
         }
 
-        //Checkbox review answers
+        // Checkbox review answers
         if ($objExercise->review_answers && !in_array($question_obj->type, Question::question_type_no_review())) {
             $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
             $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
         }
-        echo Display::div(' ', array('class'=>'clear'));
 
+        echo Display::div(' ', array('class'=>'clear'));
 
         if ($objExercise->type == ONE_PER_PAGE) {
             if (empty($questions_in_media)) {

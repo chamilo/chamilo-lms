@@ -100,7 +100,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
 	echo '</div>';
 }
-echo Display::page_header(get_lang('QuestionsToReview'));
+echo Display::page_subheader2(get_lang('QuestionsToReview'));
 
 if ($time_control) {
     echo $objExercise->return_time_left_div();
@@ -154,6 +154,10 @@ $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
 
 echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
+//echo ' ';
+//echo Display::label(get_lang('Categories'), 'info');
+echo '<hr>';
+
 echo '<div class="clear"></div><br />';
 
 $table = '<div class="row">';
@@ -165,12 +169,12 @@ $split_by = 25;
 $count_cols = 3;
 $span_size = 12/$count_cols;
 $span_class = "span$span_size";
-
 $table .= '<div class="'.$span_class.'">';
-
+$table .= '<ul class="nav nav-list">';
 $cols = 1;
 
 // Loop over all question to show results for each of them, one by one
+$currentCategory = null;
 foreach ($question_list as $questionId) {
 
     // creates a temporary Question object
@@ -218,16 +222,23 @@ foreach ($question_list as $questionId) {
         }
     }
 
-    if (!empty($rootCategories)) {
-        $rootCategories = Display::label($rootCategories, 'info').' ';
+    if ($currentCategory != $rootCategories) {
+        $currentCategory = $rootCategories;
+    } else {
+        $rootCategories = null;
     }
 
-    $question_title = Display::tag('label', $checkbox.$rootCategories.$question_title, $label_attributes);
-    $table .= Display::div($question_title, array('class' => 'exercise_reminder_item'));
+    if (!empty($rootCategories)) {
+        $table .= '<li class="nav-header"><h5>'.$rootCategories.'</h5></li>';
+    }
+
+    $question_title = Display::tag('label', $checkbox.$question_title, $label_attributes);
+
+    $table .= '<li>'.Display::div($question_title, array('class' => 'exercise_reminder_item')).'</li>';
 
     if (($counter % $split_by) == 0) {
-        if ($counter > 1 ) {
-            $table .= '</div>';
+        if ($counter > 1) {
+            $table .= '</ul></div>';
             if ($cols % $count_cols == 0) {
                 $table .= '</div>';
                 $table .= '<hr>';
@@ -236,6 +247,7 @@ foreach ($question_list as $questionId) {
             $cols++;
         }
         $table .= '<div class="'.$span_class.'">';
+        $table .= '<ul class="nav nav-list">';
     }
 }
 $table .= "</div>";

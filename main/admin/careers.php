@@ -37,7 +37,7 @@ if ($action == 'add') {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Careers'));
 }
 
-Display::display_header($tool_name);
+Display::display_header();
 
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';

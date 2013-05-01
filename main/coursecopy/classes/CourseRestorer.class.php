@@ -1436,7 +1436,7 @@ class CourseRestorer
                 $doc = '';
                 if (strlen($quiz->sound) > 0) {
                     if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
-                        echo $sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
+                        $sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
                         $doc = Database::query($sql);
                         $doc = Database::fetch_object($doc);
                         $doc = str_replace('/audio/', '', $doc->path);
@@ -1520,15 +1520,18 @@ class CourseRestorer
                     }
 
                     if ($quiz->categories) {
+
                         $exercise_obj = new Exercise($this->destination_course_id);
                         $exercise_obj->read($new_id);
                         $cats = array();
                         foreach ($quiz->categories as $cat) {
                             $cat_from_db = new Testcategory($cat['category_id']);
+                            /*$cat_from_db = new Testcategory($cat['category_id']);
                             if ($cat_from_db && $cat_from_db->title == $cat['title']) {
+                                echo '1';
                                 //use the same id
                                 $cats[$cat_from_db->id] = $cat['count_questions'];
-                            } else {
+                            } else {*/
                                 $cat_from_db = $cat_from_db->get_category_by_title($cat['title'], $this->destination_course_id);
                                 if (empty($cat_from_db)) {
                                     //Create a new category in this portal
@@ -1543,7 +1546,7 @@ class CourseRestorer
                                 } else {
                                     $cats[$cat_from_db['iid']] = $cat['count_questions'];
                                 }
-                            }
+                            //}
                         }
                         $exercise_obj->save_categories_in_exercise($cats);
                     }
@@ -1739,11 +1742,12 @@ class CourseRestorer
             if ($question->categories) {
                 $cats = array();
                 foreach ($question->categories as $cat) {
-
                     $new_category = new Testcategory($cat['category_id']);
+                   /* $new_category = new Testcategory($cat['category_id']);
+                    var_dump($new_category->title, $cat['title']);
                     if ($new_category && $new_category->title == $cat['title']) {
                         $cats[] = $cat['category_id'];
-                    } else {
+                    } else {*/
                         $new_category = $new_category->get_category_by_title($cat['title'], $this->destination_course_id);
                         if (empty($new_category)) {
                             //Create a new category in this portal
@@ -1758,8 +1762,9 @@ class CourseRestorer
                         } else {
                             $cats[] = $new_category['iid'];
                         }
-                    }
+                    //}
                 }
+
                 $question = Question::read($new_id, $this->destination_course_id);
                 if (!empty($cats)) {
                     $question->saveCategories($cats);

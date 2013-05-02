@@ -84,6 +84,37 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 )
 ));*/
 
+
+// Developer tools
+if (is_writable($app['sys_temp_path'])) {
+    if ($app['debug']) {
+        // Adding symfony2 web profiler (memory, time, logs, etc)
+        if (api_get_setting('allow_web_profiler') == 'true') {
+            $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
+                    'profiler.cache_dir' => $app['profiler.cache_dir'],
+                ));
+            $app->mount('/_profiler', $p);
+        }
+
+        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+        //}
+    }
+
+    /** Adding Monolog service provider Monolog  use examples
+    $app['monolog']->addDebug('Testing the Monolog logging.');
+    $app['monolog']->addInfo('Testing the Monolog logging.');
+    $app['monolog']->addError('Testing the Monolog logging.');
+     */
+
+    $app->register(
+        new Silex\Provider\MonologServiceProvider(),
+        array(
+            'monolog.logfile' => $app['chamilo.log'],
+            'monolog.name' => 'chamilo',
+        )
+    );
+
+}
 // Setting Controllers as services provider
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
@@ -308,35 +339,6 @@ if ($app['debug'] && isset($app['configuration']['main_database'])) {
     });
 }
 
-// Developer tools
-if (is_writable($app['sys_temp_path'])) {
-    if ($app['debug']) {
-        // Adding symfony2 web profiler (memory, time, logs, etc)
-        if (api_get_setting('allow_web_profiler') == 'true') {
-            $app->register($p = new Silex\Provider\WebProfilerServiceProvider(), array(
-                    'profiler.cache_dir' => $app['profiler.cache_dir'],
-                ));
-            $app->mount('/_profiler', $p);
-        }
-
-        /** Adding Monolog service provider Monolog  use examples
-            $app['monolog']->addDebug('Testing the Monolog logging.');
-            $app['monolog']->addInfo('Testing the Monolog logging.');
-            $app['monolog']->addError('Testing the Monolog logging.');
-        */
-
-        $app->register(
-            new Silex\Provider\MonologServiceProvider(),
-            array(
-                'monolog.logfile' => $app['chamilo.log'],
-                'monolog.name' => 'chamilo',
-            )
-        );
-
-        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
-        //}
-    }
-}
 
 // Email service provider
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(

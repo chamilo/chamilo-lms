@@ -1267,7 +1267,7 @@ VALUES
 ('session_page_enabled', 'true', 'Yes'),
 ('session_page_enabled', 'false', 'No'),
 ('allow_teachers_to_create_sessions', 'true', 'Yes'),
-('allow_teachers_to_create_sessions', 'false', 'No')
+('allow_teachers_to_create_sessions', 'false', 'No'),
 ('use_virtual_keyboard', 'true', 'Yes'),
 ('use_virtual_keyboard', 'false', 'No'),
 ('disable_copy_paste', 'true', 'Yes'),

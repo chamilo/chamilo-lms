@@ -264,6 +264,13 @@ ALTER TABLE c_quiz_category ADD COLUMN rgt int;
 ALTER TABLE c_quiz_category ADD COLUMN root int;
 ALTER TABLE c_quiz_category MODIFY COLUMN parent_id int default null;
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false', 'ShowVirtualKeyboardTitle', 'ShowVirtualKeyboardComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('use_virtual_keyboard', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('use_virtual_keyboard', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('disable_copy_paste', NULL,'radio','Platform','false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'false', 'No');
 
 -- Do not move this
 UPDATE settings_current SET selected_value = '1.10.0.004' WHERE variable = 'chamilo_database_version';

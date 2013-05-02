@@ -11,7 +11,7 @@
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-if ($_GET['session']) {
+if (isset($_GET['session'])) {
     $archive_path = api_get_path(SYS_ARCHIVE_PATH).'temp/';
     $_cid = true;
     $is_courseAdmin = true;

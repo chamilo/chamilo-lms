@@ -81,6 +81,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     }
 
     if (!$error && $course->has_resources()) {
+
         $cr = new CourseRestorer($course);
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
@@ -88,6 +89,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         echo '<a class="btn" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.get_lang(
             'CourseHomepage'
         ).'</a>';
+
     } else {
         if (!$error) {
             Display::display_warning_message(get_lang('NoResourcesInBackupFile'));
@@ -106,6 +108,9 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         }
     }
     CourseArchiver::clean_backup_dir();
+    // @todo fix fatal error due a file upload
+    header('Location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php');
+    exit;
 } elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_items') {
     if ($_POST['backup_type'] == 'server') {
         $filename = $_POST['backup_server'];

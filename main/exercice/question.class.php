@@ -1540,7 +1540,7 @@ abstract class Question
             $form->addElement('html', '</div>');
         }
 
-
+        //@todo why we need this condition??
         if (!isset($_GET['fromExercise'])) {
             switch ($answerType) {
                 case 1:
@@ -1564,9 +1564,9 @@ abstract class Question
             }
         }
 
-
         // default values
         $defaults                        = array();
+
         $defaults['questionName']        = $this->question;
         $defaults['questionDescription'] = $this->description;
         $defaults['questionLevel']       = $this->level;

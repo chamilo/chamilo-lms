@@ -11,7 +11,7 @@
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-if ($_GET['session']) {
+if (isset($_GET['session'])) {
     $archive_path = api_get_path(SYS_ARCHIVE_PATH).'temp/';
     $_cid = true;
     $is_courseAdmin = true;
@@ -22,7 +22,7 @@ if ($_GET['session']) {
 $archive_file = $_GET['archive'];
 $archive_file = str_replace(array('..', '/', '\\'), '', $archive_file);
 
-list($extension) = getextension($archive_file);
+list($extension) = FileManager::getextension($archive_file);
 
 if (empty($extension) || !file_exists($archive_path.$archive_file)) {
     exit;

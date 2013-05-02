@@ -489,15 +489,17 @@ class ExtraField extends Model
                         break;
                     case ExtraField::FIELD_TYPE_CHECKBOX:
                         $group = array();
-                        foreach ($field_details['options'] as $option_details) {
-                            $options[$option_details['option_value']] = $option_details['option_display_text'];
-                            $group[]                                  = $form->createElement(
-                                'checkbox',
-                                'extra_'.$field_details['field_variable'],
-                                $option_details['option_value'],
-                                $option_details['option_display_text'].'<br />',
-                                $option_details['option_value']
-                            );
+                        if (isset($field_details['options']) && !empty($field_details['options'])) {
+                            foreach ($field_details['options'] as $option_details) {
+                                $options[$option_details['option_value']] = $option_details['option_display_text'];
+                                $group[]                                  = $form->createElement(
+                                    'checkbox',
+                                    'extra_'.$field_details['field_variable'],
+                                    $option_details['option_value'],
+                                    $option_details['option_display_text'].'<br />',
+                                    $option_details['option_value']
+                                );
+                            }
                         }
                         $form->addGroup(
                             $group,

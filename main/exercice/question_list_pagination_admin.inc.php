@@ -91,7 +91,7 @@ if ($objExercise->edit_exercise_in_lp == true) {
 }
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="?myid=1&cidReq='.$courseCode.'&editQuestion=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+    return \'<a href="?fromExercise='.$exerciseId.'&myid=1&cidReq='.$courseCode.'&editQuestion=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="?cidReq='.$courseCode.'&sec_token='.$token.'&clone_question=\'+options.rowId+\'">'.Display::return_icon('cd.gif',get_lang('Copy'), '',ICON_SIZE_SMALL).'</a>'.
     $delete_link.'\';
 }';

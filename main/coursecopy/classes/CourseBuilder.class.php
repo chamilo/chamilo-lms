@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+// @todo autoloader?
 require_once 'Course.class.php';
 require_once 'Event.class.php';
 require_once 'Link.class.php';
@@ -29,7 +30,8 @@ require_once 'Attendance.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class CourseBuilder {
+class CourseBuilder
+{
 	/** Course */
     public $course;
 
@@ -59,7 +61,8 @@ class CourseBuilder {
 	/**
 	 * Create a new CourseBuilder
 	 */
-	function __construct($type='', $course = null) {
+	public function __construct($type='', $course = null)
+    {
         $_course = api_get_course_info();
 
 		if (!empty($course['official_code'])){
@@ -80,7 +83,8 @@ class CourseBuilder {
      *
      * @param type $array
      */
-    function set_tools_to_build($array) {
+    function set_tools_to_build($array)
+    {
         $this->tools_to_build = $array;
     }
 
@@ -88,7 +92,8 @@ class CourseBuilder {
      *
      * @param type $array
      */
-    function set_tools_specific_id_list($array) {
+    function set_tools_specific_id_list($array)
+    {
         $this->specific_id_list = $array;
     }
 
@@ -96,7 +101,8 @@ class CourseBuilder {
 	 * Get the created course
 	 * @return course The course
 	 */
-	function get_course() {
+	function get_course()
+    {
 		return $this->course;
 	}
 
@@ -108,7 +114,8 @@ class CourseBuilder {
 	 * @param bool     true if you want to get the elements that exists in the course and
 	 *                 in the session, (session_id = 0 or session_id = X)
 	 */
-	function build($session_id = 0, $course_code = '', $with_base_content = false) {
+	function build($session_id = 0, $course_code = '', $with_base_content = false)
+    {
         $table_link       = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		$table_properties = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -183,7 +190,8 @@ class CourseBuilder {
 	/**
 	 * Build the documents
 	 */
-	function build_documents($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
+	function build_documents($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
+    {
 
 		$course_info 	= api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];

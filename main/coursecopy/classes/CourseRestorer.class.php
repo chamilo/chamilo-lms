@@ -1434,8 +1434,9 @@ class CourseRestorer
                 }
 
                 $doc = '';
-                if (strlen($quiz->sound) > 0) {
-                    if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
+                if (!empty($quiz->sound)) {
+                    if (isset($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]) &&
+                        $this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
                         $sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
                         $doc = Database::query($sql);
                         $doc = Database::fetch_object($doc);
@@ -1519,7 +1520,7 @@ class CourseRestorer
                         }
                     }
 
-                    if ($quiz->categories) {
+                    if (isset($quiz->categorie) && $quiz->categories) {
 
                         $exercise_obj = new Exercise($this->destination_course_id);
                         $exercise_obj->read($new_id);
@@ -1562,7 +1563,7 @@ class CourseRestorer
     function restore_quiz_question($id)
     {
         $resources = $this->course->resources;
-        $question = $resources[RESOURCE_QUIZQUESTION][$id];
+        $question = isset($resources[RESOURCE_QUIZQUESTION][$id]) ? $resources[RESOURCE_QUIZQUESTION][$id] : null;
 
         $new_id = 0;
 

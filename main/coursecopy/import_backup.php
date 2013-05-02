@@ -15,7 +15,7 @@
 $language_file = array('exercice', 'coursebackup', 'admin');
 
 // Including the global initialization file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
@@ -38,7 +38,7 @@ $interbreadcrumb[] = array('url' => '../course_info/maintenance.php', 'name' => 
 
 // Displaying the header
 $nameTools = get_lang('ImportBackup');
-Display::display_header($nameTools);
+
 
 // Include additional libraries
 require_once 'classes/CourseBuilder.class.php';
@@ -46,6 +46,7 @@ require_once 'classes/CourseArchiver.class.php';
 require_once 'classes/CourseRestorer.class.php';
 require_once 'classes/CourseSelectForm.class.php';
 
+Display::display_header($nameTools);
 // Display the tool title
 echo Display::page_header($nameTools);
 
@@ -80,11 +81,13 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         }
     }
 
+
     if (!$error && $course->has_resources()) {
 
         $cr = new CourseRestorer($course);
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
+
         Display::display_normal_message(get_lang('ImportFinished'));
         echo '<a class="btn" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.get_lang(
             'CourseHomepage'

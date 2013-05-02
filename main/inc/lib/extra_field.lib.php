@@ -172,6 +172,11 @@ class ExtraField extends Model
         return $types;
     }
 
+    /**
+     * @param FormValidator $form
+     * @param int $item_id
+     * @return array|bool
+     */
     public function add_elements($form, $item_id = null)
     {
         if (empty($form)) {
@@ -185,6 +190,7 @@ class ExtraField extends Model
             }
         }
         $extra_fields = self::get_all();
+
         $extra = ExtraField::set_extra_fields_in_form(
             $form,
             $extra_data,
@@ -420,11 +426,13 @@ class ExtraField extends Model
 
         if (!empty($extra)) {
             foreach ($extra as $field_details) {
+
                 if (!$admin_permissions) {
                     if ($field_details['field_visible'] == 0) {
                         continue;
                     }
                 }
+
                 switch ($field_details['field_type']) {
                     case ExtraField::FIELD_TYPE_TEXT:
                         $form->addElement(
@@ -489,10 +497,11 @@ class ExtraField extends Model
                         break;
                     case ExtraField::FIELD_TYPE_CHECKBOX:
                         $group = array();
+
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['option_display_text'];
-                                $group[]                                  = $form->createElement(
+                                $group[] = $form->createElement(
                                     'checkbox',
                                     'extra_'.$field_details['field_variable'],
                                     $option_details['option_value'],
@@ -500,6 +509,16 @@ class ExtraField extends Model
                                     $option_details['option_value']
                                 );
                             }
+                        } else {
+                            // We asume that is a switch on/off with 1 and 0 as values
+                            $group[] = $form->createElement(
+                                'checkbox',
+                                'extra_'.$field_details['field_variable'],
+                                null,
+                                //$field_details['field_display_text'].'<br />',
+                                'Yes <br />',
+                                null
+                            );
                         }
                         $form->addGroup(
                             $group,

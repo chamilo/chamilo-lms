@@ -253,7 +253,7 @@ function display_add_category($type) {
     echo '</div>';
     echo "<br/>";
     if ($type == 'simple') {
-    echo "<fieldset><legend>" . get_lang('QuestionCategory') . "</legend></fieldset>";
+        echo "<fieldset><legend>" . get_lang('QuestionCategory') . "</legend></fieldset>";
     } else {
         echo "<fieldset><legend>".get_lang('QuestionGlobalCategory')."</legend></fieldset>";
     }

@@ -370,6 +370,32 @@ define('TEACHER_HTML_FULLPAGE', 5);
 // Exercise
 define('EXERCISE_NUMBER_OF_DECIMALS', 2);
 
+// @todo add this constants in the Question class
+// Question types
+define('UNIQUE_ANSWER', 1);
+define('MULTIPLE_ANSWER', 2);
+define('FILL_IN_BLANKS', 3);
+define('MATCHING', 4);
+define('FREE_ANSWER', 5);
+define('HOT_SPOT', 6);
+define('HOT_SPOT_ORDER', 7);
+define('HOT_SPOT_DELINEATION', 8);
+define('MULTIPLE_ANSWER_COMBINATION', 9);
+define('UNIQUE_ANSWER_NO_OPTION', 10);
+define('MULTIPLE_ANSWER_TRUE_FALSE', 11);
+define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE', 12);
+define('ORAL_EXPRESSION', 13);
+define('GLOBAL_MULTIPLE_ANSWER', 14);
+define('MEDIA_QUESTION', 15);
+define('UNIQUE_ANSWER_IMAGE', 16);
+define('DRAGGABLE', 17);
+
+//Some alias used in the QTI exports
+define('MCUA', 1);
+define('TF', 1);
+define('MCMA', 2);
+define('FIB', 3);
+
 /* XML processing functions */
 
 // A regular expression for accessing declared encoding within xml-formatted text.
@@ -3432,13 +3458,7 @@ function api_display_language_form($hide_if_no_choice = false) {
         return; // Don't show any form
     }
 
-    // The current language of the user so that his/her language occurs as selected in the dropdown menu.
-    if (isset($_SESSION['user_language_choice'])) {
-        $user_selected_language = $_SESSION['user_language_choice'];
-    }
-    if (empty($user_selected_language)) {
-        $user_selected_language = api_get_setting('platformLanguage');
-    }
+    $user_selected_language = api_get_user_language();
 
     $original_languages = $language_list['name'];
     $folder = $language_list['folder']; // This line is probably no longer needed.
@@ -6782,20 +6802,23 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
 function api_get_user_language() {
     $user_language = null;
 
-    if (!empty($_SESSION['user_language_choice'])) {
+    if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice'])) {
         $user_language = $_SESSION['user_language_choice'];
     } elseif (!empty($_SESSION['_user']['language'])) {
         $user_language = $_SESSION['_user']['language'];
-    } else {
-        $user_language = api_get_setting('platformLanguage');
     }
 
-    if (!empty($_GET['language'])) {
+    if (isset($_GET['language']) && !empty($_GET['language'])) {
         $user_language = $_GET['language'];
     }
 
-    if (!empty($_POST['language_list'])) {
+    if (isset($_POST['language_list']) && !empty($_POST['language_list'])) {
         $user_language = str_replace('index.php?language=', '', $_POST['language_list']);
+    }
+
+    // Last chance we get the platform language
+    if (empty($user_language)) {
+        $user_language = api_get_setting('platformLanguage');
     }
     return $user_language;
 }

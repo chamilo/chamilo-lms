@@ -3432,13 +3432,7 @@ function api_display_language_form($hide_if_no_choice = false) {
         return; // Don't show any form
     }
 
-    // The current language of the user so that his/her language occurs as selected in the dropdown menu.
-    if (isset($_SESSION['user_language_choice'])) {
-        $user_selected_language = $_SESSION['user_language_choice'];
-    }
-    if (empty($user_selected_language)) {
-        $user_selected_language = api_get_setting('platformLanguage');
-    }
+    $user_selected_language = api_get_user_language();
 
     $original_languages = $language_list['name'];
     $folder = $language_list['folder']; // This line is probably no longer needed.
@@ -6782,20 +6776,23 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
 function api_get_user_language() {
     $user_language = null;
 
-    if (!empty($_SESSION['user_language_choice'])) {
+    if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice'])) {
         $user_language = $_SESSION['user_language_choice'];
     } elseif (!empty($_SESSION['_user']['language'])) {
         $user_language = $_SESSION['_user']['language'];
-    } else {
-        $user_language = api_get_setting('platformLanguage');
     }
 
-    if (!empty($_GET['language'])) {
+    if (isset($_GET['language']) && !empty($_GET['language'])) {
         $user_language = $_GET['language'];
     }
 
-    if (!empty($_POST['language_list'])) {
+    if (isset($_POST['language_list']) && !empty($_POST['language_list'])) {
         $user_language = str_replace('index.php?language=', '', $_POST['language_list']);
+    }
+
+    // Last chance we get the platform language
+    if (empty($user_language)) {
+        $user_language = api_get_setting('platformLanguage');
     }
     return $user_language;
 }

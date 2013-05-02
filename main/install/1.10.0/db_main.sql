@@ -217,8 +217,11 @@ CREATE TABLE IF NOT EXISTS course_field (
     PRIMARY KEY(id)
 );
 
+-- Special course
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) VALUES (13, 'special_course','Special course', 'Yes', 1 , 1);
+
 --
--- Table structure for table course_field_values
+-- Table structure for table course_field_options
 --
 
 DROP TABLE IF EXISTS course_field_options;
@@ -231,6 +234,10 @@ CREATE TABLE IF NOT EXISTS course_field_options (
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
+
+--
+-- Table structure for table course_field_values
+--
 
 DROP TABLE IF EXISTS course_field_values;
 CREATE TABLE IF NOT EXISTS course_field_values(
@@ -2676,10 +2683,6 @@ CREATE TABLE IF NOT EXISTS message_attachment (
     filename varchar(255) NOT NULL,
     PRIMARY KEY  (id)
 );
-
-
-
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (13, 'special_course','Special course', 'Yes', 1 , 1);
 
 --
 -- Table structure for table block

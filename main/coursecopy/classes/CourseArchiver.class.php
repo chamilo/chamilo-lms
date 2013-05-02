@@ -162,7 +162,7 @@ class CourseArchiver
         $new_filename = uniqid('') . '.zip';
         $new_dir = api_get_path(SYS_ARCHIVE_PATH);
         if (is_dir($new_dir) && is_writable($new_dir)) {
-            move_uploaded_file($file, api_get_path(SYS_ARCHIVE_PATH) . '' . $new_filename);
+            move_uploaded_file($file, api_get_path(SYS_ARCHIVE_PATH).$new_filename);
             return $new_filename;
         }
         return false;
@@ -206,5 +206,4 @@ class CourseArchiver
         $course->backup_path = $unzip_dir;
         return $course;
     }
-
 }

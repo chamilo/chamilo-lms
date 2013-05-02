@@ -708,6 +708,7 @@ if ($_POST['formSent']) {
             }
             $warn = substr($warn, 0, -1);
         }
+
         if ($session_counter == 1) {
             header('Location: resume_session.php?id_session='.$session_id.'&warn='.urlencode($warn));
             exit;

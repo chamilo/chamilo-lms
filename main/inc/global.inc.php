@@ -283,7 +283,7 @@ if (isset($app['configuration']['main_database'])) {
 $app->error(
     function (\Exception $e, $code) use ($app) {
 
-        if ( $e instanceof PDOException) {
+        if ($e instanceof PDOException) {
         }
 
         if ($app['debug']) {

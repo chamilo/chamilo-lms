@@ -210,6 +210,7 @@ if (!$_GET['view'] OR $_GET['view'] == 'received') {
 	$part = 'sent';
 } else {
 	header ('location: index.php?view='.$_GET['view'].'&error=Error');
+    exit;
 }
 
 if (($_POST['action'] == 'download_received' || $_POST['action'] == 'download_sent') and !$_POST['store_feedback']) {

@@ -97,8 +97,11 @@ $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration[
 require_once $includePath.'/lib/main_api.lib.php';
 
 // Setting url_append
-$urlInfo = parse_url($_configuration['root_web']);
-$_configuration['url_append'] = '/'.basename($urlInfo['path']);
+$urlInfo = isset($_configuration['root_web']) ? parse_url($_configuration['root_web']) : null;
+$_configuration['url_append'] = null;
+if (isset($urlInfo['path'])) {
+    $_configuration['url_append'] = '/'.basename($urlInfo['path']);
+}
 
 // Inclusion of internationalization libraries
 require_once $includePath.'/lib/internationalization.lib.php';
@@ -192,8 +195,8 @@ $app['languages_file'] = array();
 $app['installed'] = $alreadyInstalled;
 
 // Loading $app settings
-require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
-//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
+//require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
+require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
 
 // Classic way of render pages or the Controller approach
 $app['classic_layout'] = false;
@@ -310,7 +313,6 @@ $app->error(
     }
 );
 
-
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
@@ -327,6 +329,7 @@ Chamilo::session()->start($alreadyInstalled);
 // Loading chamilo settings
 /* @todo create a service provider to load plugins.
   Check how bolt add extensions (including twig templates, config with yml)*/
+$_plugins = array();
 if ($alreadyInstalled && $checkConnection) {
     $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
 

@@ -177,7 +177,6 @@ $(function() {
 });
 </script>';
 
-
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="save"');
 
 // Set some default values

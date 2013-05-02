@@ -2200,8 +2200,9 @@ class DocumentManager
 
                 // Get path and query from origin url
                 $orig_parse_url = parse_url($real_orig_url);
-                $real_orig_path = $orig_parse_url['path'];
-                $real_orig_query = $orig_parse_url['query'];
+
+                $real_orig_path = isset($orig_parse_url['path']) ? $orig_parse_url['path'] : null;
+                $real_orig_query = isset($orig_parse_url['query']) ? $orig_parse_url['query'] : null;
 
                 // Replace origin course code by destination course code from origin url query
                 $dest_url_query = '';

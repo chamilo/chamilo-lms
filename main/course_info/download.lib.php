@@ -24,7 +24,7 @@ function create_backup_is_admin($_cid) {
 	$archive_file = $_GET['archive'];
 	$archive_file = str_replace(array('..', '/', '\\'), '', $archive_file);
 
-	list($extension) = getextension($archive_file);
+	list($extension) = FileManager::getextension($archive_file);
 
 	if (empty($extension) || !file_exists($archive_path.$archive_file)) {
 		return false;

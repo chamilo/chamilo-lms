@@ -2139,6 +2139,7 @@ class learnpath {
         return $output;
     }
 
+
     /**
      * Gets the progress bar info to display inside the progress bar. Also used by scorm_api.php
      * @param	string	Mode of display (can be '%' or 'abs').abs means we display a number of completed elements per total elements

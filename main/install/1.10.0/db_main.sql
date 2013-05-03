@@ -914,7 +914,7 @@ VALUES
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0),
 ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
 ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1),
-('log_transactions','exercise','checkbox','LogTransactions','false','LogTransactionsForExercises','LogTransactionsForExercisesComment',NULL,'LogTransactionsForExercisesText', 1);
+('log_transactions','exercise_test','checkbox','LogTransactions','false','LogTransactionsForExercises','LogTransactionsForExercisesComment',NULL,'LogTransactionsForExercisesText', 1);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;

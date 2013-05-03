@@ -1676,8 +1676,4 @@ $SpaceUsedOnSystemCannotBeMeasuredOnWindows = "The space used on disk cannot be 
 $XOldTablesDeleted = "%d old tables deleted";
 $XOldDatabasesDeleted = "%d old databases deleted";
 $ExtensionShouldBeLoaded = "This extension should be loaded.";
-$LogTransactions = "Log Transactions";
-$LogTransactionsForExercises = "Log Transactions for Exercise tool.";
-$LogTransactionsForExercisesText = "Log Exercises.";
-$LogTransactionsForExercisesComment = "When enabled, transactions will be saved. ";
 ?>

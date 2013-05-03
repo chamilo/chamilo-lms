@@ -617,7 +617,10 @@ if ($time_control) {
 
 			// First we update the attempt to today
 			// How the expired time is changed into "track_e_exercices" table,then the last attempt for this student should be changed too,so
-            update_attempt_date($exercise_stat_info['exe_id'], $last_attempt_date);
+          $sql_track_e_exe = "UPDATE $exercice_attemp_table SET tms = '".api_get_utc_datetime()."'
+                              WHERE exe_id = '".$exercise_stat_info['exe_id']."' AND tms = '".$last_attempt_date."' ";
+          Database::query($sql_track_e_exe);
+//            update_attempt_date($exercise_stat_info['exe_id'], $last_attempt_date);
 
 	        //Sessions  that contain the expired time
 	        $_SESSION['expired_time'][$current_expired_time_key] 		= $clock_expired_time;

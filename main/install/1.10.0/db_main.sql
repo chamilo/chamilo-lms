@@ -3087,6 +3087,11 @@ CREATE TABLE branch_transaction (
     time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 );
 
+CREATE TABLE IF NOT EXISTS branch_transaction_data (
+    id bigint unsigned NOT NULL PRIMARY KEY,
+    data text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+);
+
 -- Stats database
 
 

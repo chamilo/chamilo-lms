@@ -2432,6 +2432,7 @@ class UserManager
             // First take $row2, as it contains less data and this data is enough
             while ($row2 = Database::fetch_array($result2)) {
                 $join[] = $row2;
+                $ordered_join[] = $row2;
                 $ids[] = $row2['id'];
             }
         }

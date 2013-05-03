@@ -577,22 +577,19 @@ if ($form->validate()) {
             $sql = rtrim($sql, ',');
         }
     } else {
-        //normal behaviour
-        if(empty($changeemail) && isset($password)) {
-            $sql .= " email = y@u.com";
-        }
         if (isset($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."'";
-        } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {
-            $sql .= " email = '".Database::escape_string($changeemail)."',";
-            $password = api_get_encrypted_password($password);
-            $sql .= " password = '".Database::escape_string($password)."'";
-        } elseif (isset($password) && in_array('password', $available_values_to_modify)) {
-            $password = api_get_encrypted_password($password);
-            $sql .= " password = '".Database::escape_string($password)."'";
         } else {
-            // remove trailing , from the query we have so far
-            $sql = rtrim($sql, ',');
+            if (isset($password) && in_array('password', $available_values_to_modify)) {
+                if (isset($changeemail) && in_array('email', $available_values_to_modify)) {
+                    $sql .= " email = '".Database::escape_string($changeemail)."',";
+                }
+                $password = api_get_encrypted_password($password);
+                $sql .= " password = '".Database::escape_string($password)."'";
+            } else {
+                // remove trailing , from the query we have so far
+                $sql = rtrim($sql, ',');
+            }
         }
     }
     if (api_get_setting('profile', 'officialcode') == 'true' && isset($user_data['official_code'])) {

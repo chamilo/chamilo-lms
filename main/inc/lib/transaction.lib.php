@@ -24,6 +24,8 @@ abstract class TransactionLog {
   protected static $table;
   protected static $data_table;
   public $action;
+  protected $controller_class = 'TransactionLogController';
+  public $controller;
 
   public function __construct($data) {
     if (empty($this->action)) {
@@ -51,25 +53,35 @@ abstract class TransactionLog {
         $this->$field = $default_value;
       }
     }
+    $this->controller = new $this->controller_class();
   }
 
   /**
    * Adds a transaction to the database.
    */
   public function save() {
-    // data field is handled in other method.
-    $data = $this->data;
-    unset($this->data);
+    $transaction_row = array();
     if (isset($this->id)) {
       $this->time_update = api_get_utc_datetime();
-      Database::update(self::$table, $this, array('id = ?' => $this->id));
+      $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'orig_id', 'dest_id', 'info', 'status_id', 'time_update');
+      $transaction_row = array();
+      foreach ($fields as $field) {
+        if (isset($this->$field)) {
+          $transaction_row[$field] = $this->$field;
+        }
+      }
+      Database::update(self::$table, $transaction_row, array('id = ?' => $this->id));
     }
     else {
-      $this->time_update = $this->time_insert = api_get_utc_datetime();
-      $this->id = Database::insert(self::$table, $this);
-      error_log("id is $this->id");
+      $this->time_insert = $this->time_update = api_get_utc_datetime();
+      $fields = array('transaction_id', 'branch_id', 'action', 'item_id', 'orig_id', 'dest_id', 'info', 'status_id', 'time_insert', 'time_update');
+      foreach ($fields as $field) {
+        if (isset($this->$field)) {
+          $transaction_row[$field] = $this->$field;
+        }
+      }
+      $this->id = Database::insert(self::$table, $transaction_row);
     }
-    $this->data = $data;
     if (!empty($this->data)) {
       $this->saveData();
     }
@@ -93,22 +105,6 @@ abstract class TransactionLog {
   }
 
   /**
-   * General load method.
-   */
-  public static function load($db_fields) {
-    foreach ($db_fields as $db_field => $db_value) {
-      $conditions[] = "$db_field = ?";
-      $values[] = $db_value;
-    }
-    $results = Database::select('*', self::$table, array('where' => array(implode(' AND ', $conditions) => $values)));
-    $objects = array();
-    foreach ($results as $result) {
-      $objects[] = self::createInstance($transaction);
-    }
-    return $objects;
-  }
-
-  /**
    * Loading for data table.
    */
   public function loadData() {
@@ -120,28 +116,6 @@ abstract class TransactionLog {
     foreach ($results as $id => $result) {
       $results[$id]['data'] = unserialize($results[$id]['data']);
     }
-  }
-
-  /**
-   * Loads by id.
-   */
-  public static function load_by_id($id) {
-    $transactions = self::load(array('id' => $id));
-    if (empty($transactions)) {
-      return FALSE;
-    }
-    return array_shift($transactions);
-  }
-
-  /**
-   * Load by branch and transaction.
-   */
-  public static function load_by_branch_and_transaction($branch_id, $transaction_id) {
-    $transactions = self::load(array('branch_id' => $branch_id, 'transaction_id' => $transaction_id));
-    if (empty($transactions)) {
-      return FALSE;
-    }
-    return array_shift($transactions);
   }
 
   public static function getTransactionSettings($reset = FALSE) {
@@ -158,13 +132,69 @@ abstract class TransactionLog {
   }
 }
 
+/**
+ * Controller class for transactions.
+ */
+class TransactionLogController {
+  protected $table;
+  protected $data_table;
+  protected $action;
+  protected $class;
+
+  public function __construct() {
+    $this->table = Database::get_main_table(TABLE_BRANCH_TRANSACTION);
+    $this->data_table = Database::get_main_table(TABLE_BRANCH_TRANSACTION_DATA);
+  }
+
+  /**
+   * General load method.
+   */
+  public function load($db_fields) {
+    foreach ($db_fields as $db_field => $db_value) {
+      $conditions[] = "$db_field = ?";
+      $values[] = $db_value;
+    }
+    $results = Database::select('*', $this->table, array('where' => array(implode(' AND ', $conditions) => $values)));
+    $objects = array();
+    foreach ($results as $result) {
+      $objects[] = new $this->class($result);
+    }
+    return $objects;
+  }
+
+  /**
+   * Loads by id.
+   */
+  public function load_by_id($id) {
+    $transactions = $this->load(array('id' => $id));
+    if (empty($transactions)) {
+      return FALSE;
+    }
+    return array_shift($transactions);
+  }
+
+  /**
+   * Load by branch and transaction.
+   */
+  public function load_by_branch_and_transaction($branch_id, $transaction_id) {
+    $transactions = $this->load(array('branch_id' => $branch_id, 'transaction_id' => $transaction_id));
+    if (empty($transactions)) {
+      return FALSE;
+    }
+    return array_shift($transactions);
+  }
+}
+
 class ExerciseTestTransactionLog extends TransactionLog {
   public $action = 'exercise_test';
+  public $controller_class = 'ExerciseTestTransactionLogController';
+}
 
-  public static function load_exercise_test($exercise_id, $attempt_id, $branch_id = TransactionLog::BRANCH_LOCAL) {
+class ExerciseTestTransactionLogController extends TransactionLogController {
+  public $class = 'ExerciseTestTransactionLog';
+  public function load_exercise_test($exercise_id, $attempt_id, $branch_id = TransactionLog::BRANCH_LOCAL) {
     $exercise_test_id = sprintf('%s:%s', $exercise_id, $attempt_id);
-    var_dump($exercise_test_id);
-    $transactions = self::load(array('branch_id' => $branch_id, 'item_id' => $exercise_test_id));
+    $transactions = $this->load(array('branch_id' => $branch_id, 'item_id' => $exercise_test_id));
     if (empty($transactions)) {
       return FALSE;
     }

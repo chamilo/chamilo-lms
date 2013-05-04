@@ -536,7 +536,7 @@ if (api_get_setting('login_is_email') == 'true') {
     $default_username_length = 100;
 }
 
-define('USERNAME_MAX_LENGTH', $default_username_length);
+@define('USERNAME_MAX_LENGTH', $default_username_length);
 
 /** Silex Middlewares: */
 
@@ -653,7 +653,7 @@ if (empty($default_quota)) {
     $default_quota = 100000000;
 }
 
-define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+@define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
 /** Setting the is_admin key */
 $app['is_admin'] = false;

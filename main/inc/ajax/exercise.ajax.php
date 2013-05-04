@@ -9,6 +9,7 @@ require_once '../../exercice/question.class.php';
 require_once '../../exercice/answer.class.php';
 require_once '../global.inc.php';
 require_once '../../exercice/exercise.lib.php';
+require_once api_get_path(LIBRARY_PATH).'transaction.lib.php';
 
 api_protect_course_script(true);
 
@@ -437,9 +438,11 @@ switch ($action) {
                   if (!$transaction) {
                     $transaction_data = array(
                       'item_id' => $exercise_test_id,
+                      'data' => array(
+                        'question_order' => implode(',', $objExercise->selectQuestionList()),
+                      ),
                     );
-                    // @todo Save question order.
-                    $transaction = new ExerciseTransactionLog($transaction_data);
+                    $transaction = new ExerciseTestTransactionLog($transaction_data);
                   }
                   $transaction->save();
                 }

@@ -22,20 +22,26 @@ abstract class TransactionLog {
   const STATUS_ABANDONNED = 5;
 
   protected static $table;
+  protected static $data_table;
+  public $action;
 
   public function __construct($data) {
-    $this->table = Database::get_main_table(TABLE_BRANCH_TRANSACTION);
+    if (empty($this->action)) {
+      throw new Exception('No action set at the creation of the transaction class.');
+    }
+    self::$table = Database::get_main_table(TABLE_BRANCH_TRANSACTION);
+    self::$data_table = Database::get_main_table(TABLE_BRANCH_TRANSACTION_DATA);
     // time_insert and time_update are handled manually.
     $fields = array(
       'id' => FALSE,
-      'action' => FALSE,
       'branch_id' => TransactionLog::BRANCH_LOCAL,
       'transaction_id' => TransactionLog::TRANSACTION_LOCAL,
       'item_id' => FALSE,
       'orig_id' => NULL,
       'dest_id' => NULL,
       'info' => NULL,
-      'status_id' => TransactionLog::STATUS_LOCAL
+      'status_id' => TransactionLog::STATUS_LOCAL,
+      'data' => array(),
     );
     foreach ($fields as $field => $default_value) {
       if (isset($data[$field])) {
@@ -51,27 +57,39 @@ abstract class TransactionLog {
    * Adds a transaction to the database.
    */
   public function save() {
-    $string_keys = array('action', 'item_id', 'orig_id', 'dest_id', 'info');
-    foreach ($string_keys as $string) {
-      if (isset($this->$string)) {
-        $this->$string = Database::escape_string($string);
-      }
-    }
+    // data field is handled in other method.
+    $data = $this->data;
+    unset($this->data);
     if (isset($this->id)) {
       $this->time_update = api_get_utc_datetime();
-      return Database::update($this->table, $this, array('id = ?' => $this->id));
+      Database::update(self::$table, $this, array('id = ?' => $this->id));
     }
     else {
       $this->time_update = $this->time_insert = api_get_utc_datetime();
-      return Database::insert($this->table, $params);
+      $this->id = Database::insert(self::$table, $this);
+      error_log("id is $this->id");
     }
+    $this->data = $data;
+    if (!empty($this->data)) {
+      $this->saveData();
+    }
+  }
+
+  public function saveData() {
+    $data = $this->loadData();
+    if (empty($this->data)) {
+      // Nothing to save.
+      return;
+    }
+    Database::delete(self::$data_table, array('where' => array('id = ?' => $this->id)));
+    Database::insert(self::$data_table, array('id' => $this->id, 'data' => serialize($this->data)));
   }
 
   /**
    * Deletes a transaction by id.
    */
   public function delete() {
-    return Database::delete($this->table, array('where' => array('id = ?' => $this->id)));
+    return Database::delete(self::$table, array('where' => array('id = ?' => $this->id)));
   }
 
   /**
@@ -79,15 +97,29 @@ abstract class TransactionLog {
    */
   public static function load($db_fields) {
     foreach ($db_fields as $db_field => $db_value) {
-      $conditions[] = $db_field;
+      $conditions[] = "$db_field = ?";
       $values[] = $db_value;
     }
-    $results = Database::select('*', self::$table, array('where' => array(implode(' = ? AND ', $conditions) => $values)));
+    $results = Database::select('*', self::$table, array('where' => array(implode(' AND ', $conditions) => $values)));
     $objects = array();
     foreach ($results as $result) {
       $objects[] = self::createInstance($transaction);
     }
     return $objects;
+  }
+
+  /**
+   * Loading for data table.
+   */
+  public function loadData() {
+    if (empty($this->id)) {
+      // No id, no data.
+      return array();
+    }
+    $results = Database::select('id', self::$data_table, array('where' => array('id = ?' => array($this->id))));
+    foreach ($results as $id => $result) {
+      $results[$id]['data'] = unserialize($results[$id]['data']);
+    }
   }
 
   /**
@@ -105,7 +137,7 @@ abstract class TransactionLog {
    * Load by branch and transaction.
    */
   public static function load_by_branch_and_transaction($branch_id, $transaction_id) {
-    $transactions = $this->load(array('branch_id' => $branch_id, 'transaction_id' => $transaction_id));
+    $transactions = self::load(array('branch_id' => $branch_id, 'transaction_id' => $transaction_id));
     if (empty($transactions)) {
       return FALSE;
     }
@@ -120,26 +152,19 @@ abstract class TransactionLog {
     $settings = array();
     $log_transactions_settings = api_get_settings('LogTransactions');
     foreach ($log_transactions_settings as $setting) {
-      $settings[$settings['subkey']] = $setting;
+      $settings[$setting['subkey']] = $setting;
     }
     return $settings;
   }
-
-  /**
-   * Creates an object of the current class.
-   */
-  public static abstract function createInstance($transaction);
 }
 
 class ExerciseTestTransactionLog extends TransactionLog {
-  public static function createInstance($transaction) {
-    $transaction['action'] = 'exercise_test';
-    return new ExerciseTestTransactionLog($transaction);
-  }
+  public $action = 'exercise_test';
 
-  public static function load_exercise_test($exercise_id, $attempt_id, $branch_id = BRANCH_LOCAL) {
+  public static function load_exercise_test($exercise_id, $attempt_id, $branch_id = TransactionLog::BRANCH_LOCAL) {
     $exercise_test_id = sprintf('%s:%s', $exercise_id, $attempt_id);
-    $transactions = $this->load(array('branch_id' => $branch_id, 'item_id' => $exercise_test_id));
+    var_dump($exercise_test_id);
+    $transactions = self::load(array('branch_id' => $branch_id, 'item_id' => $exercise_test_id));
     if (empty($transactions)) {
       return FALSE;
     }

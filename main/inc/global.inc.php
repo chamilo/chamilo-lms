@@ -209,7 +209,7 @@ $app['allowed'] = true;
 $app['template.show_header'] = true;
 $app['template.show_footer'] = true;
 $app['template.show_learnpath'] = false;
-$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+$app['template.hide_global_chat'] = true;
 $app['template.load_plugins'] = true;
 
 // Default template style
@@ -355,6 +355,9 @@ $app['this_section'] = SECTION_GLOBAL;
 
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
+
+// reconfigure templat now we know the user
+$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
 
 // Setting languages
 $app['api_get_languages'] = api_get_languages();

@@ -124,7 +124,7 @@ $social_right_content = '<div class="span9">'.$social_right_content.'</div>';
 $app['title'] = get_lang('Social');
 $tpl = $app['template'];
 
-$tpl->set_help('Groups');
+$tpl->setHelp('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
 $tpl->assign('message', $show_message);

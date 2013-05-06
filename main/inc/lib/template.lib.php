@@ -137,7 +137,7 @@ class Template
     /**
      * @param string $help_input
      */
-    public function set_help($help_input = null)
+    public function setHelp($help_input = null)
     {
         if (!empty($help_input)) {
             $help = $help_input;
@@ -411,7 +411,7 @@ class Template
         }
 
         // Logo
-        $logo = $this->return_logo($this->theme);
+        $logo = $this->returnLogo($this->theme);
         $this->assign('logo', $logo);
     }
 
@@ -567,9 +567,9 @@ class Template
 
         $this->assign('favico', $favico);
 
-        $this->set_help();
+        $this->setHelp();
 
-        $notification = $this->return_notification_menu();
+        $notification = $this->returnNotificationMenu();
         $this->assign('notification_menu', $notification);
 
         //Preparing values for the menu
@@ -889,12 +889,12 @@ class Template
      * Determines the possible tabs (=sections) that are available.
      * This function is used when creating the tabs in the third header line and
      * all the sections that do not appear there (as determined by the
-     * platform admin on the Dokeos configuration settings page)
+     * platform admin on the Chamilo configuration settings page)
      * will appear in the right hand menu that appears on several other pages
      * @return array containing all the possible tabs
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
-    function get_tabs()
+    function getTabs()
     {
         $_course = api_get_course_info();
 
@@ -976,10 +976,16 @@ class Template
             $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
             $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
         }
+
+        if (api_is_question_manager()) {
+            $navigation['question_manager']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin/questionmanager';
+            $navigation['question_manager']['title'] = get_lang('PlatformAdmin');
+        }
+
         return $navigation;
     }
 
-    function return_logo($theme)
+    function returnLogo($theme)
     {
         $_course = api_get_course_info();
         $html = '';
@@ -1032,7 +1038,7 @@ class Template
         return $html;
     }
 
-    function return_notification_menu()
+    function returnNotificationMenu()
     {
         $_course = api_get_course_info();
         $course_id = api_get_course_id();
@@ -1122,7 +1128,7 @@ class Template
     {
         $navigation = array();
         $menu_navigation = array();
-        $possible_tabs = $this->get_tabs();
+        $possible_tabs = $this->getTabs();
 
         // Campus Homepage
         if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
@@ -1207,6 +1213,11 @@ class Template
                     $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
                 }
             }
+
+            if (api_is_question_manager()) {
+                $navigation['question_manager'] = $possible_tabs['question_manager'];
+            }
+
 
             // Reports
             if (!empty($possible_tabs['reports'])) {

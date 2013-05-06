@@ -535,7 +535,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && isset
 
 $tpl = $app['template'];
 
-$tpl->set_help('Groups');
+$tpl->setHelp('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
 

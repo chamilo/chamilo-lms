@@ -3,6 +3,7 @@
 namespace ChamiloLMS\Controller;
 
 use Silex\Application;
+use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
 use Pagerfanta\Adapter\DoctrineCollectionAdapter;
 use Pagerfanta\Pagerfanta;
@@ -22,6 +23,38 @@ class AdminController
 
     }
 
+    public function editQuestionAction(Application $app, $id)
+    {
+
+        $extraJS = array();
+        //@todo improve this JS includes should be added using twig
+        $extraJS[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+        $extraJS[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+        $app['extraJS'] = $extraJS;
+
+        $exercise = new \Exercise();
+        $question = \Question::read($id, null, $exercise);
+        $question->setDefaultValues = true;
+        $form = new \FormValidator('edit_question');
+        $question->createForm($form);
+        // answer form elements
+        $question->createAnswersForm($form);
+
+        $app['template']->assign('form', $form->toHtml());
+
+        $response = $app['template']->render_template('admin/edit_question.tpl');
+        return new Response($response, 200, array());
+
+    }
+
+    public function questionManagerIndexAction(Application $app)
+    {
+        $response = $app['template']->render_template('admin/questionmanager.tpl');
+        return new Response($response, 200, array());
+    }
+
+
+
     /**
      * @param Application $app
      * @param int $id
@@ -39,7 +72,7 @@ class AdminController
             'childOpen' => '<li>',
             'childClose' => '</li>',
             'nodeDecorator' => function ($row) use ($app) {
-                $url = $app['url_generator']->generate('admin_get_categories', array('id' => $row['iid']));
+                $url = $app['url_generator']->generate('admin_questions_get_categories', array('id' => $row['iid']));
                 return \Display::url($row['title'], $url);
             }
             //'representationField' => 'slug',
@@ -88,20 +121,20 @@ class AdminController
             array(
                 'name' => 'question',
                 'index' => 'question',
-                'width' => '150',
+                'width' => '200',
                 'align' => 'left'
             ),
             array(
                 'name'     => 'description',
                 'index'    => 'description',
-                'width'    => '150',
+                'width'    => '100',
                 'align'    => 'left',
                 'sortable' => 'false'
             ),
             array(
                 'name'      => 'actions',
                 'index'     => 'actions',
-                'width'     => '100',
+                'width'     => '30',
                 'align'     => 'left',
                 'formatter' => 'action_formatter',
                 'sortable'  => 'false'
@@ -112,15 +145,13 @@ class AdminController
         // height auto.
         $extraParams['height'] = 'auto';
         $token = null;
+        $editUrl = $app['url_generator']->generate('admin_questions');
 
+        /* '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.
+            \Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'. */
         $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
-                         return \'<a href="?action=edit&id=\'+options.rowId+\'">'.\Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.
-            \Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.
-            \Display::return_icon(          'delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.'\';
+            return \'<a href="'.$editUrl.'/edit/\'+rowObject[0]+\'">'.\Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.'\';
         }';
-
 
         $js = \Display::grid_js('questions', $url, $columns, $columnModel, $extraParams, array(), $actionLinks, true);
 
@@ -171,7 +202,7 @@ class AdminController
             'childOpen' => '<li>',
             'childClose' => '</li>',
             'nodeDecorator' => function ($row) use ($app) {
-                $url = $app['url_generator']->generate('admin_get_categories', array('id' => $row['iid']));
+                $url = $app['url_generator']->generate('admin_questions_get_categories', array('id' => $row['iid']));
                 return \Display::url($row['title'], $url);
             }
             //'representationField' => 'slug',

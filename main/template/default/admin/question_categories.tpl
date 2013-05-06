@@ -3,7 +3,7 @@
     <script>
         $(function() {
             $('.load_categories li').on('click', 'a', function() {
-                event.preventDefault();
+                //event.preventDefault();
                 var url = $(this).attr('href');
                 var id = url.replace(/[^\d\.]/g, '');
 

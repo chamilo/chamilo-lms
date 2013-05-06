@@ -11,9 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="c_quiz_category")
- * @ORM\Entity(repositoryClass="Entity\Repository\CQuizCategoryRepository")
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
-
  */
 class CQuizCategory
 {

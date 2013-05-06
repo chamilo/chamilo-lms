@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CQuizQuestionRelCategory
  *
  * @ORM\Table(name="c_quiz_question_rel_category")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Entity\Repository\CQuizQuestionRelCategoryRepository")
  */
 class CQuizQuestionRelCategory
 {
@@ -49,13 +49,13 @@ class CQuizQuestionRelCategory
     /** Relationships */
 
     /**
-     * @ORM\ManyToOne(targetEntity="CQuizCategory", fetch="EAGER" )
+     * @ORM\ManyToOne(targetEntity="CQuizCategory")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CQuizQuestion", fetch="EAGER" )
+     * @ORM\ManyToOne(targetEntity="CQuizQuestion")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      */
     private $question;

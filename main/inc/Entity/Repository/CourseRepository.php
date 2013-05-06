@@ -24,7 +24,7 @@ class CourseRepository extends EntityRepository
         //Selecting user info
         $qb->select('DISTINCT u');
 
-        //Loading EntityUser
+        // Loading EntityUser
         $qb->from('Entity\User', 'u');
 
         //Selecting courses for users

@@ -201,13 +201,10 @@ if (!$sidx) {
 switch ($action) {
     case 'get_questions':
         $categoryId = isset($_REQUEST['categoryId']) ? $_REQUEST['categoryId'] : null;
-        $repo = $app['orm.em']->getRepository('Entity\CQuizQuestionRelCategory');
-        $count = $repo->createQueryBuilder('a')
-            ->select('COUNT(a)')
-            ->where('a.categoryId = :categoryId')
-            ->setParameters(array('categoryId' => $categoryId))
-            ->getQuery()
-            ->getSingleScalarResult();
+        /** @var \Doctrine\ORM\EntityManager $em */
+        $em = $app['orm.em'];
+        $repo = $em->getRepository('Entity\CQuizQuestionRelCategory');
+        $count = $repo->getCountQuestionByCategory($categoryId);
         break;
     case 'get_user_list_plugin_widescale':
         $count = UserManager::get_user_data(null, null, null, null, true);
@@ -351,12 +348,24 @@ $columns = array();
 switch ($action) {
     case 'get_questions':
         $columns = array('iid', 'question', 'description', 'actions');
-
-        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        // @todo implement a class that manages jqgrid petitions
+        /** @var \Entity\Repository\CQuizQuestionRepository $repo */
+        $repo = $em->getRepository('Entity\CQuizQuestion');
+        $qb = $repo->getQuestionsByCategory($categoryId);
+        if (!empty($sidx) && strlen($sidx) > 1) {
+            $sidx = 'q.'.$sidx;
+            $sord = strtoupper($sord);
+            $qb->addOrderBy($sidx, $sord);
+        }
+        $qb->getFirstResult($start);
+        $qb->getMaxResults($limit);
+        $query = $qb->getQuery();
+        //echo $qb->getQuery()->getSQL();
+        $questions = $query->getResult();
 
         /** @var \Entity\CQuizCategory $category */
-        $category = $repo->find($categoryId);
-        $questions = $category->getQuestions();
+        /*$category = $repo->find($categoryId);
+        $questions = $category->getQuestions();*/
 
         $result = array();
         foreach ($questions as $question) {
@@ -368,9 +377,7 @@ switch ($action) {
             //$row['iid'] = $question->getIid();
             $result[] = $row;
         }
-
         break;
-
     case 'get_user_list_plugin_widescale':
         $columns = array('username', 'firstname', 'lastname', 'exam_password');
         $column_names = array(get_lang('Username'), get_lang('Firstname'), get_lang('Lastname'), get_lang('Password'));

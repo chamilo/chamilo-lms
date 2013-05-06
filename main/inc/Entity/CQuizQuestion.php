@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * CQuizQuestion
  *
  * @ORM\Table(name="c_quiz_question")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Entity\Repository\CQuizQuestionRepository")
  */
 class CQuizQuestion
 {
@@ -115,8 +115,6 @@ class CQuizQuestion
     {
         return $this->quizQuestionRelCategoryList;
     }
-
-
 
     /**
      * Set cId

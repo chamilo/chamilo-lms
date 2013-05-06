@@ -1,4 +1,3 @@
-
 <script>
     $(function () {
         {{ js }}

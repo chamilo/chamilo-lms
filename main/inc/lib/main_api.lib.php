@@ -2265,7 +2265,7 @@ function api_is_course_admin() {
  * @return bool     True if current user is a course coach
  */
 function api_is_course_coach() {
-    return $_SESSION['is_courseCoach'];
+    return isset($_SESSION['is_courseCoach']) ? $_SESSION['is_courseCoach'] : null;
 }
 
 /**
@@ -2273,7 +2273,7 @@ function api_is_course_coach() {
  * @return bool     True if current user is a course tutor
  */
 function api_is_course_tutor() {
-    return $_SESSION['is_courseTutor'];
+    return isset($_SESSION['is_courseTutor']) ? $_SESSION['is_courseTutor'] : null;
 }
 
 function api_get_user_platform_status($user_id = false) {

@@ -127,7 +127,7 @@ class ItemPropertyRepository extends EntityRepository
             $users = \GroupManager::get_members_and_tutors($groupId);
             $newUserList = array();
             if (!empty($users)) {
-                foreach($users as $user) {
+                foreach ($users as $user) {
                     $newUserList[] = $user['user_id'];
                 }
                 $this->subscribeUsersToItem(
@@ -255,12 +255,14 @@ class ItemPropertyRepository extends EntityRepository
 
         if (!empty($usersToDelete)) {
             foreach ($usersToDelete as $userId) {
-                $item = $this->findOneBy(array(
+                $item = $this->findOneBy(
+                    array(
                         'tool' => $tool,
                         'session' => $session,
                         'ref' => $itemId,
                         'toUserId' => $userId
-                    ));
+                    )
+                );
                 if ($item) {
                     $em->remove($item);
                 }

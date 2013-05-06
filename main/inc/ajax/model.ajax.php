@@ -31,18 +31,20 @@ if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc';
 }
 
-if (!in_array($action, array(
-    'get_exercise_results',
-    'get_hotpotatoes_exercise_results',
-    'get_work_user_list',
-    'get_timelines',
-    'get_user_skill_ranking',
-    'get_usergroups_teacher',
-    'get_question_list',
-    'get_user_list_plugin_widescale'
+if (!in_array($action,
+    array(
+        'get_exercise_results',
+        'get_hotpotatoes_exercise_results',
+        'get_work_user_list',
+        'get_timelines',
+        'get_user_skill_ranking',
+        'get_usergroups_teacher',
+        'get_question_list',
+        'get_user_list_plugin_widescale'
+    )
 ))
-    ) {
-	api_protect_admin_script(true);
+{
+    api_protect_admin_script(true);
 }
 
 if ($action == 'get_user_list_plugin_widescale') {
@@ -72,7 +74,12 @@ $ops = array(
 );
 
 //@todo move this in the display_class or somewhere else
-
+/**
+ * @param $col
+ * @param $oper
+ * @param $val
+ * @return string
+ */
 function get_where_clause($col, $oper, $val) {
     global $ops;
     if (empty($col)) {
@@ -81,7 +88,7 @@ function get_where_clause($col, $oper, $val) {
     if ($oper == 'bw' || $oper == 'bn') {
         $val .= '%';
     }
-    if ($oper == 'ew' || $oper == 'en' ) {
+    if ($oper == 'ew' || $oper == 'en') {
         $val = '%'.$val;
     }
     if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
@@ -181,9 +188,12 @@ if ($_REQUEST['_search'] == 'true') {
         }
     }
 }
+
 // get index row - i.e. user click to sort $sord = $_GET['sord'];
 // get the direction
-if (!$sidx) $sidx = 1;
+if (!$sidx) {
+    $sidx = 1;
+}
 
 //2. Selecting the count FIRST
 //@todo rework this
@@ -214,10 +224,10 @@ switch ($action) {
         $course_id = api_get_course_int_id();
         $count = Question::get_count_course_medias($course_id);
         break;
-	case 'get_user_skill_ranking':
-    	$skill = new Skill();
-	    $count = $skill->get_user_list_skill_ranking_count();
-	    break;
+    case 'get_user_skill_ranking':
+        $skill = new Skill();
+        $count = $skill->get_user_list_skill_ranking_count();
+        break;
     case 'get_work_user_list':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
@@ -233,8 +243,8 @@ switch ($action) {
                 $where_condition .= " AND te.exe_user_id  = '$filter_user'";
             }
         }
-		$count = ExerciseLib::get_count_exam_results($exercise_id, $where_condition);
-		break;
+        $count = ExerciseLib::get_count_exam_results($exercise_id, $where_condition);
+        break;
 	case 'get_hotpotatoes_exercise_results':
         $hotpot_path = $_REQUEST['path'];
 		$count = ExerciseLib::get_count_exam_hotpotatoes_results($hotpot_path);
@@ -295,7 +305,7 @@ switch ($action) {
         if ($type == 'registered') {
             $count = $obj->get_usergroup_by_course_with_data_count($course_id);
         } else {
-        $count      = $obj->get_count();
+            $count = $obj->get_count();
         }
         break;
     default:
@@ -314,8 +324,8 @@ if ($page > $total_pages) {
 }
 
 $start = $limit * $page - $limit;
-if ($start < 0 ) {
-	$start = 0;
+if ($start < 0) {
+    $start = 0;
 }
 
 //4. Deleting an element if the user wants to

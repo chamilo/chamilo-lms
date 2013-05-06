@@ -1745,10 +1745,11 @@ abstract class Question
      */
     function return_header($feedback_type = null, $counter = null, $score = null, $show_media)
     {
-        $counter_label = '';
+        $counterLabel = '';
         if (!empty($counter)) {
-            $counter_label = intval($counter);
+            $counterLabel = $counter;
         }
+
         $score_label = get_lang('Wrong');
         $class       = 'error';
         if ($score['pass'] == true) {
@@ -1765,6 +1766,7 @@ abstract class Question
                 $class       = 'error';
             }
         }
+
         $question_title = $this->question;
 
         $header = null;
@@ -1772,7 +1774,7 @@ abstract class Question
         if ($show_media) {
             $header .= $this->show_media_content();
         }
-        $header .= Display::page_subheader2($counter_label.". ".$question_title);
+        $header .= Display::page_subheader2($counterLabel.". ".$question_title);
         $header .= Display::div(
             '<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>',
             array('class' => 'ribbon')
@@ -1790,7 +1792,7 @@ abstract class Question
      * @param   int     Type of question (see constants at beginning of question.class.php)
      * @param   int     Question level/category
      */
-    function create_question($quiz_id, $question_name, $max_score = 0, $type = 1, $level = 1)
+    public function create_question($quiz_id, $question_name, $max_score = 0, $type = 1, $level = 1)
     {
         $course_id = api_get_course_int_id();
 

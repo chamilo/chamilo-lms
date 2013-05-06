@@ -100,7 +100,6 @@ class Draggable extends Matching
         // DISPLAY MATCHES
         $html = '<table class="data_table">
 					<tr>
-
 						<th width="40%">
 							'.get_lang('Answer').'
 						</th>
@@ -112,7 +111,7 @@ class Draggable extends Matching
 						</th>
 					</tr>';
 
-        $form->addElement('label', get_lang('MakeCorrespond').'<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('MakeCorrespond').'<br /> '.Display::return_icon('fill_field.png'), $html);
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
@@ -122,9 +121,6 @@ class Draggable extends Matching
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $form->addElement('html', '<tr><td>');
             $group = array();
-            /*$puce  = $form->createElement('text', null, null, 'value="'.$i.'"');
-            $puce->freeze();
-            $group[] = $puce;*/
 
             $group[] = $form->createElement('text', 'answer['.$i.']', null, ' size="60" style="margin-left: 0em;"');
             $group[] = $form->createElement('select', 'matches['.$i.']', null, $a_matches);
@@ -138,12 +134,10 @@ class Draggable extends Matching
             $form->addElement('html', '</td></tr>');
 
             $defaults['option['.$i.']'] = $i;
-            //$defaults['matches['.$i.']']   = $i;
         }
 
         $form->addElement('html', '</table></div></div>');
         $group = array();
-
 
         $group[] = $form->createElement(
             'style_submit_button',
@@ -161,37 +155,6 @@ class Draggable extends Matching
         global $text, $class;
         $group[] = $form->createElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
         $form->addGroup($group);
-
-        // DISPLAY OPTIONS
-        /*
-        $html = '<table class="data_table">
-					<tr style="text-align: center;">
-						<th width="10px">
-							'.get_lang('Number').'
-						</th>
-						<th width="90%"
-							'.get_lang('Answer').'
-						</th>
-					</tr>';
-        //$form -> addElement ('html', $html);
-        $form->addElement('label', null, $html);
-
-        if ($nb_options < 1)
-        {
-            $nb_options = 1;
-            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
-        }
-
-        for ($i = 1; $i <= $nb_matches; ++$i) {
-            $form->addElement('html', '<tr><td>');
-            $group = array();
-            $puce  = $form->createElement('text', null, null, 'value="'.chr(64 + $i).'"');
-            $puce->freeze();
-            $group[] = $puce;
-            $group[] = $form->createElement('text', 'option['.$i.']', null, array('class' => 'span6'));
-            $form->addGroup($group, null, null, '</td><td>');
-            $form->addElement('html', '</td></tr>');
-        }*/
 
         $form->addElement('html', '</table></div></div>');
 

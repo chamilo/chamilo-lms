@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *    File containing the UNIQUE_ANSWER class.
+ * File containing the UNIQUE_ANSWER class.
  * @package chamilo.exercise
  * @author Eric Marguin
  */
@@ -29,7 +29,7 @@ class UniqueAnswer extends Question
     /**
      * Constructor
      */
-    function UniqueAnswer()
+    public function UniqueAnswer()
     {
         //this is highly important
         parent::question();
@@ -42,10 +42,10 @@ class UniqueAnswer extends Question
      * @param the formvalidator instance
      * @param the answers number to display
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         // Getting the exercise list
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = $this->exercise;
 
         $editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
@@ -91,7 +91,7 @@ class UniqueAnswer extends Question
                     </th>
                 </tr>';
 
-        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
         $defaults = array();
         $correct  = 0;
@@ -316,7 +316,7 @@ class UniqueAnswer extends Question
      * @param the formvalidator instance
      * @param the answers number to display
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
 
         $questionWeighting = $nbrGoodAnswers = 0;
@@ -396,7 +396,7 @@ class UniqueAnswer extends Question
         $this->save();
     }
 
-    function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
+    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
     {
         $header = parent::return_header($feedback_type, $counter, $score, $show_media);
         $header .= '<table class="'.$this->question_table_class.'">
@@ -427,7 +427,7 @@ class UniqueAnswer extends Question
      * @assert (1,null,'a','',1,1,null) === false
      * @assert (1,1,'','',1,1,null) === false
      */
-    function create_answer(
+    public function create_answer(
         $id = 1,
         $question_id,
         $answer_title,

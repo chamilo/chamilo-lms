@@ -120,7 +120,7 @@ class Answer
         */
         $sql = "SELECT iid, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination
                 FROM $TBL_ANSWER
-                WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
+                WHERE question_id ='".$questionId."' ORDER BY position";
 
         $result = Database::query($sql);
         $counter = 1;
@@ -605,7 +605,7 @@ class Answer
         }
 
         $question_info = Question::read($questionId);
-        
+
         if ($question_info->type == MATCHING) {
 
             //Fixing real answer id

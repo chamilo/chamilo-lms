@@ -204,7 +204,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
         // reads question data
         if ($editQuestion) {
             // question not found
-            if (!$objQuestion = Question::read($editQuestion)) {
+            if (!$objQuestion = Question::read($editQuestion, null, $objExercise)) {
                 api_not_allowed();
             }
             // saves the object into the session

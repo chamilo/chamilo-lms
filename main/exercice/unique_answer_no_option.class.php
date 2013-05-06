@@ -44,7 +44,7 @@ class UniqueAnswerNoOption extends Question
 	 */
 	function createAnswersForm ($form) {
 		// getting the exercise list
-		$obj_ex = $_SESSION['objExercise'];
+		$obj_ex = $this->exercise;
 
 		$editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
@@ -88,7 +88,7 @@ class UniqueAnswerNoOption extends Question
 							'.get_lang('Weighting').'
 						</th>
 					</tr>';
-        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
 		$defaults = array();
 		$correct = 0;

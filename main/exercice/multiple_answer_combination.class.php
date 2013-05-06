@@ -42,7 +42,7 @@ class MultipleAnswerCombination extends Question
 	function createAnswersForm ($form) {
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
-		$obj_ex = $_SESSION['objExercise'];
+		$obj_ex = $this->exercise;
 		$html= '<table class="data_table">
 					<tr style="text-align: center;">
 						<th width="10px">
@@ -59,7 +59,7 @@ class MultipleAnswerCombination extends Question
 							$html .='<th>'.get_lang('Comment').'</th>';
 						}
 						$html .= '</tr>';
-        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form -> addElement ('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
 		$defaults = array();
 		$correct = 0;

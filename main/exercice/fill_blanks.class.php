@@ -126,7 +126,7 @@ class FillBlanks extends Question
 
 		// answer
 		$form -> addElement ('label', null, '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'));
-		$form -> addElement ('html_editor', 'answer', '<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
+		$form -> addElement ('html_editor', 'answer', Display::return_icon('fill_field.png'),'id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
 
 		$form -> addRule ('answer',get_lang('GiveText'),'required');
 		$form -> addRule ('answer',get_lang('DefineBlanks'),'regex','/\[.*\]/');

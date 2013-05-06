@@ -45,7 +45,7 @@ class UniqueAnswerImage extends UniqueAnswer
     function createAnswersForm($form)
     {
         // Getting the exercise list
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = $this->exercise;
 
         $editor_config = array('ToolbarSet' => 'UniqueAnswerImage', 'Width' => '100%', 'Height' => '125');
 
@@ -84,7 +84,7 @@ class UniqueAnswerImage extends UniqueAnswer
                     </th>
                 </tr>';
 
-        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
         $defaults = array();
         $correct  = 0;

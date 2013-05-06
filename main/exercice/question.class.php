@@ -35,13 +35,14 @@ abstract class Question
     public $parent_id;
     public $isContent;
     public $course;
-    static $typePicture = 'new_question.png';
-    static $explanationLangVar = '';
+    public static $typePicture = 'new_question.png';
+    public static $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
-
     public $editionMode = 'normal';
+    public $exercise; // exercise obj
+    public $setDefaultValues = false;
 
-    static $questionTypes = array(
+    public static $questionTypes = array(
         UNIQUE_ANSWER                          => array('unique_answer.class.php', 'UniqueAnswer'),
         MULTIPLE_ANSWER                        => array('multiple_answer.class.php', 'MultipleAnswer'),
         FILL_IN_BLANKS                         => array('fill_blanks.class.php', 'FillBlanks'),
@@ -129,7 +130,7 @@ abstract class Question
      *
      * @return boolean - true if question exists, otherwise false
      */
-    static function read($id, $course_id = null)
+    static function read($id, $course_id = null, Exercise $exercise = null)
     {
         $id = intval($id);
 
@@ -142,13 +143,14 @@ abstract class Question
         $course_id = $course_info['real_id'];
 
         if (empty($course_id) || $course_id == -1) {
-            return false;
+            //return false;
         }
 
         $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-        $sql = "SELECT * FROM $TBL_QUESTIONS WHERE iid = $id AND c_id = $course_id";
+        //$sql = "SELECT * FROM $TBL_QUESTIONS WHERE iid = $id AND c_id = $course_id";
+        $sql = "SELECT * FROM $TBL_QUESTIONS WHERE iid = $id";
 
         $result = Database::query($sql);
 
@@ -170,8 +172,10 @@ abstract class Question
                 $objQuestion->course        = $course_info;
                 $objQuestion->parent_id     = $object->parent_id;
                 $objQuestion->category_list = Testcategory::getCategoryForQuestion($id);
+                $objQuestion->exercise      = $exercise;
 
-                $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
+                //$sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
+                $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE question_id = $id";
                 $result_exercise_list = Database::query($sql);
 
                 // fills the array with the exercises which this question is in
@@ -1305,14 +1309,16 @@ abstract class Question
      * @param integer $type the type of the question
      * @return an instance of a Question subclass (or of Questionc class by default)
      */
-    static function getInstance($type)
+    static function getInstance($type, Exercise $exercise = null)
     {
         if (!is_null($type)) {
             list($file_name, $class_name) = self::get_question_type($type);
             if (!empty($file_name)) {
                 include_once $file_name;
                 if (class_exists($class_name)) {
-                    return new $class_name();
+                    $obj = new $class_name();
+                    $obj->exercise = $exercise;
+                    return $obj;
                 } else {
                     echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
                 }
@@ -1325,16 +1331,15 @@ abstract class Question
     /**
      * Creates the form to create / edit a question
      * A subclass can redifine this function to add fields...
+     *
      * @param FormValidator $form the formvalidator instance (by reference)
      */
-    function createForm(&$form, $fck_config = 0)
+    public function createForm(&$form, $fck_config = 0)
     {
         $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
-        echo '<style>
-					.media { display:none;}
-				</style>';
+        $js = null;
         if ($this->type != MEDIA_QUESTION) {
-            echo '<script>
+            $js = '<script>
             function check() {
                 $("#category_id option:selected").each(function() {
                     var id = $(this).val();
@@ -1378,7 +1383,8 @@ abstract class Question
             });
             </script>';
         }
-        echo '<script>
+
+        $js .= '<script>
 			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
 
 			function FCKeditor_OnComplete( editorInstance ) {
@@ -1395,38 +1401,35 @@ abstract class Question
 
 			function show_media(){
 				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
-				if(my_display== \'none\' || my_display == \'\') {
+				if (my_display== \'none\' || my_display == \'\') {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang(
-            'EnrichQuestion'
-        ).'\';
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;'.Display::return_icon('looknfeelna.png').'&nbsp;'.get_lang('EnrichQuestion').'\';
 			} else {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang(
-            'EnrichQuestion'
-        ).'\';
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;'.Display::return_icon('looknfeel.png').'&nbsp;'.get_lang('EnrichQuestion').'\';
 			}
 		}
 
 		// hub 13-12-2010
 		function visiblerDevisibler(in_id) {
 			if (document.getElementById(in_id)) {
+
 				if (document.getElementById(in_id).style.display == "none") {
 					document.getElementById(in_id).style.display = "block";
 					if (document.getElementById(in_id+"Img")) {
-						document.getElementById(in_id+"Img").src = "../img/div_hide.gif";
+						document.getElementById(in_id+"Img").html = "'.addslashes(Display::return_icon('div_hide.gif')).'";
 					}
-				}
-				else {
+				} else {
 					document.getElementById(in_id).style.display = "none";
 					if (document.getElementById(in_id+"Img")) {
-						document.getElementById(in_id+"Img").src = "../img/div_show.gif";
+						document.getElementById(in_id+"Img").html = "dsdsds'.addslashes(Display::return_icon('div_show.gif')).'";
 					}
 				}
 			}
 		}
 		</script>';
 
+        $form->addElement('html', $js);
         // question name
         $form->addElement('text', 'questionName', get_lang('Question'), array('class' => 'span6'));
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
@@ -1450,9 +1453,8 @@ abstract class Question
 
         $form->addElement(
             'advanced_settings',
-            '<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang(
-                'EnrichQuestion'
-            ).'</span></a>
+            '<a href="javascript://" onclick=" return show_media()"><span id="media_icon">
+                '.Display::return_icon('looknfeel.png').'&nbsp;'.get_lang('EnrichQuestion').'</span></a>
 		'
         );
 
@@ -1467,18 +1469,13 @@ abstract class Question
         if ($this->type != MEDIA_QUESTION) {
 
             // Advanced parameters
-            $form->addElement(
-                'advanced_settings',
-                '<a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang(
-                    "AdvancedParameters"
-                ).'</a>'
-            );
+            $form->addElement('advanced_settings', '<a class="btn btn-show advanced_parameters" id="advanced_params" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
 
-            $form->addElement('html', '<div id="id_advancedOption" style="display:none;">');
+            $form->addElement('html', '<div id="advanced_params_options" style="display:none;">');
 
             $select_level = Question::get_default_levels();
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
-
+            $categoryJS = null;
             if (!empty($this->category_list)) {
                 $trigger = '';
                 foreach ($this->category_list as $category_id) {
@@ -1489,8 +1486,9 @@ abstract class Question
                         }
                     }
                 }
-                echo '<script>$(function() { '.$trigger.'  });</script>';
+                $categoryJS .= '<script>$(function() { '.$trigger.'  });</script>';
             }
+            $form->addElement('html', $categoryJS);
 
             $form->addElement(
                 'select',
@@ -1542,8 +1540,7 @@ abstract class Question
         }
 
         // default values
-        $defaults                        = array();
-
+        $defaults = array();
         $defaults['questionName']        = $this->question;
         $defaults['questionDescription'] = $this->description;
         $defaults['questionLevel']       = $this->level;
@@ -1561,6 +1558,10 @@ abstract class Question
             if ($isContent == 1) {
                 $form->setDefaults($defaults);
             }
+        }
+
+        if ($this->setDefaultValues) {
+            $form->setDefaults($defaults);
         }
     }
 

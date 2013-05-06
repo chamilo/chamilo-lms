@@ -5271,3 +5271,8 @@ i.size-32.icon-new-work {
 .exercise_pagination {
     margin: 0px;
 }
+
+
+#question_admin_form .media {
+    display:none;
+}

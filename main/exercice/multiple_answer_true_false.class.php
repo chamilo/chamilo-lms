@@ -43,7 +43,7 @@ class MultipleAnswerTrueFalse extends Question
 
         $course_id = api_get_course_int_id();
 
-		$obj_ex = $_SESSION['objExercise'];
+		$obj_ex = $this->exercise;
 
         $renderer = & $form->defaultRenderer();
 
@@ -68,7 +68,7 @@ class MultipleAnswerTrueFalse extends Question
             $html .='<th>'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
-        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form -> addElement ('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
 		$correct = 0;
 		if (!empty($this -> id)) {
@@ -101,7 +101,7 @@ class MultipleAnswerTrueFalse extends Question
             $answer_number->freeze();
 
 			if (is_object($answer)) {
-				      
+
                 $answer_id = $answer->getRealAnswerIdFromList($i);
 
                 $defaults['answer['.$i.']'] = $answer->answer[$answer_id];

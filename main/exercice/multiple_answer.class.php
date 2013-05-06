@@ -28,8 +28,8 @@ class MultipleAnswer extends Question {
 	 */
 	function MultipleAnswer() {
 		parent::question();
-		$this -> type = MULTIPLE_ANSWER;
-		$this -> isContent = $this-> getIsContent();
+		$this ->type = MULTIPLE_ANSWER;
+		$this ->isContent = $this-> getIsContent();
 	}
 
 	/**
@@ -42,7 +42,7 @@ class MultipleAnswer extends Question {
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;  // The previous default value was 2. See task #1759.
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
-		$obj_ex = $_SESSION['objExercise'];
+		$obj_ex = $this->exercise;
 
 		$html='<table class="data_table">
 					<tr>
@@ -65,7 +65,7 @@ class MultipleAnswer extends Question {
 							'.get_lang('Weighting').'
 						</th>
 					</tr>';
-		$form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+		$form -> addElement ('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
 		$defaults = array();
 		$correct = 0;

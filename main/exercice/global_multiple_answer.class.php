@@ -25,7 +25,7 @@ class GlobalMultipleAnswer extends Question
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = $this->exercise;
 
         /* Mise en variable de Affichage "Reponses" et son icone, "N�", "Vrai", "Reponse" */
         $html = '<table class="data_table">
@@ -47,7 +47,7 @@ class GlobalMultipleAnswer extends Question
         $html .='</tr>';
 
 
-        $form->addElement('label', get_lang('Answers') . '<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers') . '<br />'.Display::return_icon('fill_field.png'), $html);
 
         /* Initialiation variable */
         $defaults = array();

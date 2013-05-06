@@ -113,7 +113,7 @@ class Matching extends Question
 						</th>
 					</tr>';
 
-        $form->addElement('label', get_lang('MakeCorrespond').'<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('MakeCorrespond').'<br /> '.Display::return_icon('fill_field.png'), $html);
 
         if ($nb_matches < 1) {
             $nb_matches = 1;

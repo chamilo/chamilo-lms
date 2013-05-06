@@ -775,7 +775,10 @@ class Database
                 strpos($query, 'c_id') === false &&
                 strpos($query, 'c_quiz_question_rel_category') === false &&
                 strpos($query, 'c_quiz_category') === false &&
-
+                strpos($query, 'c_quiz_rel_question') === false &&
+                strpos($query, 'c_quiz_answer') === false &&
+                strpos($query, 'c_quiz_question') === false &&
+                strpos($query, 'c_quiz_rel_question') === false &&
                 strpos($query, 'create table') === false &&
                 strpos($query, 'CREATE TABLE') === false &&
                 strpos($query, 'AUTO_INCREMENT') === false

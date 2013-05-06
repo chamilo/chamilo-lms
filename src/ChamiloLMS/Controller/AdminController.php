@@ -4,6 +4,8 @@ namespace ChamiloLMS\Controller;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
+use Pagerfanta\Adapter\DoctrineCollectionAdapter;
+use Pagerfanta\Pagerfanta;
 
 /**
  * Class AdminController
@@ -214,26 +216,106 @@ class AdminController
         return new Response($response, 200, array());
     }
 
-    /**
-     *
-     * @param Application $app
-     */
-    public function questionsAction(Application $app)
+    public function getCategoriesAction(Application $app, $id)
     {
+        // Getting CQuizCategory repo.
         $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+
         $options = array(
             'decorate' => true,
             'rootOpen' => '<ul class="nav nav-list">',
             'rootClose' => '</ul>',
             'childOpen' => '<li>',
             'childClose' => '</li>',
-            'nodeDecorator' => function($row) {
-              return $row['title'];
+            'nodeDecorator' => function ($row) use ($app) {
+                $url = $app['url_generator']->generate('admin_get_categories', array('id' => $row['iid']));
+                return \Display::url($row['title'], $url);
+            }
+            //'representationField' => 'slug',
+            //'html' => true
+        );
+        $cats = $repo->findOneByIid($id);
+        $htmlTree = $repo->childrenHierarchy(
+            $cats, /* starting from root nodes */
+            true, /* false: load all children, true: only direct */
+            $options
+        );
+        return $htmlTree;
+    }
+
+    /**
+     * Gets the question list per category
+     * @param Application $app
+     * @param $categoryId
+     * @return int
+     */
+    public function getQuestionsByCategoryAction(Application $app, $categoryId)
+    {
+         // Getting CQuizCategory repo.
+        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+
+        /** @var \Entity\CQuizCategory $category*/
+        $category = $repo->find($categoryId);
+        $questions = $category->getQuestions();
+
+        //$adapter = new DoctrineCollectionAdapter($questions);
+
+        //$adapter    = new FixedAdapter($nbResults, array());
+        /*$pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(10); // 10 by default
+        $pagerfanta->setCurrentPage(1); // 1 by default
+        */
+        //$this->app['pagerfanta.view.router.name']   = 'userportal';
+        /*$this->app['pagerfanta.view.router.params'] = array(
+            'filter' => $filter,
+            'type'   => 'courses',
+            'page'   => $page
+        );*/
+        //$app['template']->assign('pagination', $pagerfanta);
+
+        foreach ($questions as $question) {
+
+        }
+        $response = $app['template']->render_template('admin/questions.tpl');
+        return new Response($response, 200, array());
+    }
+
+    /**
+     *
+     * @param Application $app
+     */
+    public function questionsAction(Application $app)
+    {
+        // Getting CQuizCategory repo.
+        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+
+        $options = array(
+            'decorate' => true,
+            'rootOpen' => '<ul class="nav nav-list">',
+            'rootClose' => '</ul>',
+            'childOpen' => '<li>',
+            'childClose' => '</li>',
+            'nodeDecorator' => function ($row) use ($app) {
+                $url = $app['url_generator']->generate('admin_get_categories', array('id' => $row['iid']));
+                return \Display::url($row['title'], $url);
             }
             //'representationField' => 'slug',
             //'html' => true
         );
 
+        // Getting all categories only first level lvl=1
+        $query = $app['orm.em']
+            ->createQueryBuilder()
+            ->select('node')
+            ->from('Entity\CQuizCategory', 'node')
+            ->where('node.cId <> 0 AND node.lvl = 0')
+            ->orderBy('node.root, node.lft', 'ASC')
+            ->getQuery();
+
+        $tree = $repo->buildTree($query->getArrayResult(), $options);
+        $app['template']->assign('category_tree', $tree);
+
+        // Getting globals
         $query = $app['orm.em']
             ->createQueryBuilder()
             ->select('node')
@@ -243,9 +325,9 @@ class AdminController
             ->getQuery();
 
         $tree = $repo->buildTree($query->getArrayResult(), $options);
-        $app['template']->assign('tree', $tree);
-        $response = $app['template']->render_template('admin/questions.tpl');
+        $app['template']->assign('global_category_tree', $tree);
 
+        $response = $app['template']->render_template('admin/question_categories.tpl');
         return new Response($response, 200, array());
 
     }

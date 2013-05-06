@@ -4,6 +4,7 @@ namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * CQuizCategory
@@ -11,6 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\Tree(type="nested")
  * @ORM\Table(name="c_quiz_category")
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+ * @ORM\Entity(repositoryClass="Entity\Repository\CQuizCategoryRepository")
  */
 class CQuizCategory
 {
@@ -83,6 +85,16 @@ class CQuizCategory
      */
     private $children;
 
+    /**
+     * @ORM\OneToMany(targetEntity="CQuizQuestionRelCategory", mappedBy="category")
+     **/
+    private $quizQuestionRelCategoryList;
+
+    public function __construct()
+    {
+        $this->quizQuestionRelCategoryList = new ArrayCollection();
+    }
+
     public function setParent(CQuizCategory $parent = null)
     {
         $this->parent = $parent;
@@ -91,6 +103,15 @@ class CQuizCategory
     public function getParent()
     {
         return $this->parent;
+    }
+
+    public function getQuestions()
+    {
+        $questions = new ArrayCollection();
+        foreach ($this->quizQuestionRelCategoryList as $relQuestion) {
+            $questions[] = $relQuestion->getQuestion();
+        }
+        return $questions;
     }
 
 

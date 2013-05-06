@@ -62,7 +62,6 @@ if (empty($id)) {
 	api_not_allowed(true);
 }
 
-
 if (api_is_course_session_coach(api_get_user_id(), api_get_course_int_id(), api_get_session_id())) {
     if (!api_coach_can_edit_view_results(api_get_course_id(), api_get_session_id())) {
         api_not_allowed(true);
@@ -678,8 +677,6 @@ if (!empty($category_list) && ($show_results || $show_only_total_score)) {
     );
     echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
 }
-
-
 
 echo $total_score_text;
 echo $exercise_content;

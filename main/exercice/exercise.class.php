@@ -4373,7 +4373,7 @@ class Exercise
             $array[] = array('title' => get_lang("Duration"), 'content' => $duration);
         }
 
-        $html = Display::page_header(
+        $html = Display::page_subheader(
             Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result')
         );
         $html .= Display::description($array);
@@ -4591,6 +4591,7 @@ class Exercise
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 $objQuestionTmp = Question::read($questionId);
+
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
                 } else {

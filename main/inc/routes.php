@@ -362,6 +362,14 @@ $cleanCourseSession = function (Request $request) use ($app) {
     Session::erase('_course');
 };
 
+$adminAndQuestionManagerCondition = function (Request $request) use ($app) {
+    if (!(api_is_platform_admin() || api_is_question_manager())) {
+        $app->abort(401);
+    }
+    return null;
+};
+
+
 /**
  * Deletes the exam_password user extra field *only* to students
  * @todo improve the login hook system
@@ -472,10 +480,13 @@ $app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
 /** Admin  */
 $app->match('/admin/questions', 'admin.controller:questionsAction', 'GET|POST')
     ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions');
 
 $app->get('/admin/questions/get-categories/{id}', 'admin.controller:getCategoriesAction')
+    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_get_categories');
 
 $app->get('/admin/questions/get-questions-by-category/{categoryId}', 'admin.controller:getQuestionsByCategoryAction')
+    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_get_questions_by_category');

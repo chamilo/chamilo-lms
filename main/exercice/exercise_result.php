@@ -136,7 +136,7 @@ if ($objExercise->selectAttempts() > 0) {
     }
 }
 
-Display :: display_normal_message(get_lang('Saved').'<br />', false);
+Display::display_normal_message(get_lang('Saved').'<br />', false);
 
 // Display questions.
 ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);

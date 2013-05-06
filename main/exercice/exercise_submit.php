@@ -894,7 +894,7 @@ if ($objExercise->type == ONE_PER_PAGE) {
     }
 
     if (!empty($categoryList)) {
-        echo Display::progress_pagination_bar_with_categories($categoryList, $current_question, $conditions, $link);
+        echo Display::progress_pagination_bar_with_categories($categoryList, $media_questions, $current_question, $conditions, $link);
     } else {
         echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
     }

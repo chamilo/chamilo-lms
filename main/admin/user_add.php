@@ -152,7 +152,7 @@ if (api_get_setting('login_is_email') != 'true') {
 $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 $nb_ext_auth_source_added = 0;
-if (count($extAuthSource) > 0) {
+if (isset($extAuthSource) && count($extAuthSource) > 0) {
     $auth_sources = array();
     foreach ($extAuthSource as $key => $info) {
         // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
@@ -187,11 +187,7 @@ $group[] = $form->createElement(
 $form->addGroup($group, 'password', get_lang('Password'), '');
 
 // Status
-$status = array();
-$status[COURSEMANAGER] = get_lang('Teacher');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Drh');
-$status[SESSIONADMIN] = get_lang('SessionsAdmin');
+$status = api_get_user_roles();
 
 $form->addElement(
     'select',

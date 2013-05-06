@@ -15,7 +15,6 @@ use \ChamiloSession as Session;
  */
 // PHP version requirement.
 define('REQUIRED_PHP_VERSION', '5.3');
-
 define('REQUIRED_MIN_MEMORY_LIMIT',         '32');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
 define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
@@ -23,26 +22,35 @@ define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
 // USER STATUS CONSTANTS
 /** global status of a user: course manager */
 define('COURSEMANAGER', 1);
+define('TEACHER', 1);
+
+// status 2 ??
+
 /** global status of a user: session admin */
 define('SESSIONADMIN', 3);
+
 /** global status of a user: human ressource manager */
 define('DRH', 4);
+
 /** global status of a user: student */
 define('STUDENT', 5);
+
 /** global status of a user: human ressource manager */
 define('ANONYMOUS', 6);
+
 /** global status of a user: low security, necessary for inserting data from
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
-define('TEACHER', 1);
 
-//Soft user status
+// Soft user status
 define('PLATFORM_ADMIN', 11);
 define('SESSION_COURSE_COACH', 12);
 define('SESSION_GENERAL_COACH', 13);
 define('COURSE_STUDENT', 14);   //student subscribed in a course
 define('SESSION_STUDENT', 15);  //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
+
+define('QUESTION_MANAGER', 17);
 
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
@@ -2192,8 +2200,13 @@ function api_is_platform_admin($allow_sessions_admins = false) {
     if (isset($_SESSION['is_platformAdmin']) && $_SESSION['is_platformAdmin']) {
         return true;
     }
-    global $_user;
+    $_user = api_get_user_info();
     return $allow_sessions_admins && isset($_user['status']) && $_user['status'] == SESSIONADMIN;
+}
+
+function api_is_question_manager() {
+    $_user = api_get_user_info();
+    return isset($_user['status']) && $_user['status'] == QUESTION_MANAGER;
 }
 
 /**
@@ -6905,4 +6918,21 @@ function api_get_web_default_course_document()
 }
 
 function load_translations($app) {
+
+}
+
+
+/**
+ * Get user roles
+ * @return array
+ */
+function api_get_user_roles() {
+    // Status
+    $status = array();
+    $status[COURSEMANAGER] = get_lang('Teacher');
+    $status[STUDENT] = get_lang('Learner');
+    $status[DRH] = get_lang('Drh');
+    $status[SESSIONADMIN] = get_lang('SessionsAdmin');
+    $status[QUESTION_MANAGER] = get_lang('QuestionManager');
+    return $status;
 }

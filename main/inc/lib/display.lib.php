@@ -1802,11 +1802,13 @@ class Display
      * @param null $link
      * @return null|string
      */
-    static function progress_pagination_bar_with_categories($categories, $current, $conditions = array(), $link = null)
+    static function progress_pagination_bar_with_categories($categories, $mediaQuestions, $current, $conditions = array(), $link = null)
     {
         $counter = 0;
         $totalTemp = 0;
         $html = null;
+        //var_dump($categories);
+
         foreach ($categories as $category) {
             $list = $category['question_list'];
 

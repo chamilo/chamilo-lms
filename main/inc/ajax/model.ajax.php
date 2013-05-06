@@ -199,6 +199,16 @@ if (!$sidx) {
 //@todo rework this
 
 switch ($action) {
+    case 'get_questions':
+        $categoryId = isset($_REQUEST['categoryId']) ? $_REQUEST['categoryId'] : null;
+        $repo = $app['orm.em']->getRepository('Entity\CQuizQuestionRelCategory');
+        $count = $repo->createQueryBuilder('a')
+            ->select('COUNT(a)')
+            ->where('a.categoryId = :categoryId')
+            ->setParameters(array('categoryId' => $categoryId))
+            ->getQuery()
+            ->getSingleScalarResult();
+        break;
     case 'get_user_list_plugin_widescale':
         $count = UserManager::get_user_data(null, null, null, null, true);
         break;
@@ -233,7 +243,7 @@ switch ($action) {
         $work_id = $_REQUEST['work_id'];
         $count = get_count_work($work_id);
         break;
-	case 'get_exercise_results':
+    case 'get_exercise_results':
         $exercise_id = $_REQUEST['exerciseId'];
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = intval($_GET['filter_by_user']);
@@ -339,6 +349,28 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(
 $columns = array();
 
 switch ($action) {
+    case 'get_questions':
+        $columns = array('iid', 'question', 'description', 'actions');
+
+        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+
+        /** @var \Entity\CQuizCategory $category */
+        $category = $repo->find($categoryId);
+        $questions = $category->getQuestions();
+
+        $result = array();
+        foreach ($questions as $question) {
+            $row = array();
+            $row['iid'] = $question->getIid();
+            $row['question'] = $question->getQuestion();
+            $row['description'] = $question->getDescription();
+            //$row['iid'] = $question->getIid();
+            //$row['iid'] = $question->getIid();
+            $result[] = $row;
+        }
+
+        break;
+
     case 'get_user_list_plugin_widescale':
         $columns = array('username', 'firstname', 'lastname', 'exam_password');
         $column_names = array(get_lang('Username'), get_lang('Firstname'), get_lang('Lastname'), get_lang('Password'));
@@ -698,7 +730,8 @@ $allowed_actions = array(
     'get_user_course_report_resumed',
     'get_group_reporting',
     'get_question_list',
-    'get_user_list_plugin_widescale'
+    'get_user_list_plugin_widescale',
+    'get_questions'
 );
 
 //5. Creating an obj to return a json

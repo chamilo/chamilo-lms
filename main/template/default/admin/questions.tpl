@@ -1,4 +1,9 @@
 
+<script>
+    $(function () {
+        {{ js }}
+    });
+</script>
 <div class="questions">
-    {{ pagerfanta(pagination, 'twitter_bootstrap', { 'proximity': 3 } ) }}
+    {{ grid }}
 </div>

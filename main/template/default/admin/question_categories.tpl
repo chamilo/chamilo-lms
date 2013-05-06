@@ -32,6 +32,5 @@
 {% block right_column %}
 
     <div class="questions">
-        {{ pagerfanta(pagination, 'twitter_bootstrap', { 'proximity': 3 } ) }}
     </div>
 {% endblock %}

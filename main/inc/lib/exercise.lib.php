@@ -2699,4 +2699,19 @@ class ExerciseLib
         echo Display::div($exercise_actions, array('class'=>'form-actions'));
         echo '</div>';
     }
+
+    /**
+     * Update attempt date
+     * @param int $exeId
+     * @param Datetime $last_attempt_date
+     */
+    function update_attempt_date($exeId, $last_attempt_date) {
+        $exercice_attemp_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $exeId = intval($exeId);
+        $last_attempt_date = Database::escape_string($last_attempt_date);
+        $sql = "UPDATE $exercice_attemp_table SET tms = '".api_get_utc_datetime()."'
+                WHERE exe_id = $exeId AND tms = '".$last_attempt_date."' ";
+        Database::query($sql);
+
+    }
 }

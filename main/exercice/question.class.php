@@ -74,7 +74,9 @@ abstract class Question
         $this->position      = 1;
         $this->picture       = '';
         $this->level         = 1;
-        $this->extra         = ''; // This variable is used when loading an exercise like an scenario with an special hotspot: final_overlap, final_missing, final_excess
+        // This variable is used when loading an exercise like an scenario
+        //with an special hotspot: final_overlap, final_missing, final_excess
+        $this->extra         = '';
         $this->exerciseList  = array();
         $this->course        = api_get_course_info();
         $this->category_list = array();
@@ -203,7 +205,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @return int - question ID
      */
-    function selectId()
+    public function selectId()
     {
         return $this->id;
     }
@@ -214,7 +216,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @return string - question title
      */
-    function selectTitle()
+    public function selectTitle()
     {
         return $this->question;
     }
@@ -225,7 +227,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @return string - question description
      */
-    function selectDescription()
+    public function selectDescription()
     {
         $this->description = $this->description;
 
@@ -238,7 +240,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @return int - question weighting
      */
-    function selectWeighting()
+    public function selectWeighting()
     {
         return $this->weighting;
     }
@@ -249,7 +251,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @return int - question position
      */
-    function selectPosition()
+    public function selectPosition()
     {
         return $this->position;
     }
@@ -260,7 +262,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @return int - answer type
      */
-    function selectType()
+    public function selectType()
     {
         return $this->type;
     }
@@ -271,7 +273,7 @@ abstract class Question
      * @author - Nicolas Raynaud
      * @return int - level of the question, 0 by default.
      */
-    function selectLevel()
+    public function selectLevel()
     {
         return $this->level;
     }
@@ -282,12 +284,12 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @return string - picture name
      */
-    function selectPicture()
+    public function selectPicture()
     {
         return $this->picture;
     }
 
-    function selectPicturePath()
+    public function selectPicturePath()
     {
         if (!empty($this->picture)) {
             return api_get_path(WEB_COURSE_PATH).$this->course['path'].'/document/images/'.$this->picture;
@@ -302,7 +304,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @return array - list of exercise ID which the question is in
      */
-    function selectExerciseList()
+    public function selectExerciseList()
     {
         return $this->exerciseList;
     }
@@ -313,7 +315,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @return integer - number of exercises
      */
-    function selectNbrExercises()
+    public function selectNbrExercises()
     {
         return sizeof($this->exerciseList);
     }
@@ -321,7 +323,7 @@ abstract class Question
     /**
      * @param $course_id
      */
-    function updateCourse($course_id)
+    public function updateCourse($course_id)
     {
         $this->course = api_get_course_info_by_id($course_id);
     }
@@ -332,12 +334,12 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @param - string $title - question title
      */
-    function updateTitle($title)
+    public function updateTitle($title)
     {
         $this->question = $title;
     }
 
-    function updateParentId($id)
+    public function updateParentId($id)
     {
         $this->parent_id = intval($id);
     }
@@ -348,7 +350,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @param - string $description - question description
      */
-    function updateDescription($description)
+    public function updateDescription($description)
     {
         $this->description = $description;
     }
@@ -359,7 +361,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @param - integer $weighting - question weighting
      */
-    function updateWeighting($weighting)
+    public function updateWeighting($weighting)
     {
         $this->weighting = $weighting;
     }
@@ -368,7 +370,7 @@ abstract class Question
      * @author - Hubert Borderiou 12-10-2011
      * @param - array of category $in_category
      */
-    function updateCategory($category_list)
+    public function updateCategory($category_list)
     {
         $this->category_list = $category_list;
     }
@@ -377,7 +379,7 @@ abstract class Question
      * @author - Hubert Borderiou 12-10-2011
      * @param - interger $in_positive
      */
-    function updateScoreAlwaysPositive($in_positive)
+    public function updateScoreAlwaysPositive($in_positive)
     {
         $this->scoreAlwaysPositive = $in_positive;
     }
@@ -386,7 +388,7 @@ abstract class Question
      * @author - Hubert Borderiou 12-10-2011
      * @param - interger $in_positive
      */
-    function updateUncheckedMayScore($in_positive)
+    public function updateUncheckedMayScore($in_positive)
     {
         $this->uncheckedMayScore = $in_positive;
     }
@@ -400,7 +402,7 @@ abstract class Question
      * @param  - int $in_positive
      * @author - Julio Montoya - Adding multiple cat support
      */
-    function saveCategories($category_list)
+    public function saveCategories($category_list)
     {
         $course_id = $this->course['real_id'];
 
@@ -439,7 +441,7 @@ abstract class Question
      * in this version, a question can only have 1 category
      * if category is 0, then question has no category then delete the category entry
      */
-    function saveCategory($in_category)
+    public function saveCategory($in_category)
     {
         if ($in_category <= 0) {
             $this->deleteCategory();
@@ -471,7 +473,7 @@ abstract class Question
      * @param : none
      * delte the category for question
      */
-    function deleteCategory()
+    public function deleteCategory()
     {
         $course_id                 = $this->course['real_id'];
         $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
@@ -486,7 +488,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @param - integer $position - question position
      */
-    function updatePosition($position)
+    public function updatePosition($position)
     {
         $this->position = $position;
     }
@@ -497,7 +499,7 @@ abstract class Question
      * @author - Nicolas Raynaud
      * @param - integer $level - question level
      */
-    function updateLevel($level)
+    public function updateLevel($level)
     {
         $this->level = $level;
     }
@@ -509,7 +511,7 @@ abstract class Question
      * @author - Olivier Brouckaert
      * @param - integer $type - answer type
      */
-    function updateType($type)
+    public function updateType($type)
     {
         $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $course_id    = $this->course['real_id'];
@@ -537,14 +539,14 @@ abstract class Question
     }
 
     /**
-     * adds a picture to the question
+     * Adds a picture to the question
      *
      * @author - Olivier Brouckaert
      * @param - string $Picture - temporary path of the picture to upload
      * @param - string $PictureName - Name of the picture
      * @return - boolean - true if uploaded, otherwise false
      */
-    function uploadPicture($Picture, $PictureName, $picturePath = null)
+    public function uploadPicture($Picture, $PictureName, $picturePath = null)
     {
         if (empty($picturePath)) {
             global $picturePath;
@@ -1771,7 +1773,6 @@ abstract class Question
             $header .= $this->show_media_content();
         }
         $header .= Display::page_subheader2($counter_label.". ".$question_title);
-        //$header .=  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.($score['result']).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
         $header .= Display::div(
             '<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>',
             array('class' => 'ribbon')
@@ -1949,5 +1950,22 @@ abstract class Question
             HOT_SPOT_ORDER,
             HOT_SPOT_DELINEATION
         );
+    }
+
+    public static function getMediaLabels() {
+
+        // Shows media questions
+        $courseMedias = Question::prepare_course_media_select(api_get_course_int_id());
+        $labels = null;
+        if (!empty($courseMedias)) {
+            $labels .= get_lang('MediaQuestion').' ';
+            foreach ($courseMedias as $mediaId => $media) {
+                if (!empty($mediaId)) {
+                    $labels .= Display::label($media).' ';
+                }
+            }
+        }
+
+        return $labels;
     }
 }

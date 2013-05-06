@@ -6157,6 +6157,9 @@ function api_user_is_login($user_id = null) {
 function api_get_real_ip(){
     // Guess the IP if behind a reverse proxy
     global $debug;
+    if (PHP_SAPI === 'cli' && !isset($_SERVER['REMOTE_ADDR'])) {
+        $_SERVER['REMOTE_ADDR'] = 'localhost';
+    }
     $ip = trim($_SERVER['REMOTE_ADDR']);
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);

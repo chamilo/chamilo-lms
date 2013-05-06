@@ -173,7 +173,7 @@ $app['title'] = get_lang('UsersOnLineList');
 $tpl = $app['template'];
 
 if (api_get_setting('allow_social_tool') == 'true' && !api_is_anonymous()) {
-    $tpl->set_help('Groups');
+    $tpl->setHelp('Groups');
     $tpl->assign('social_left_content', $social_left_content);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');

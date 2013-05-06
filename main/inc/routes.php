@@ -477,16 +477,27 @@ $app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile
 $app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
     ->assert('type', '.+');
 
-/** Admin  */
+/** Question manager - admin */
 $app->match('/admin/questions', 'admin.controller:questionsAction', 'GET|POST')
     ->assert('type', '.+')
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions');
 
+$app->match('/admin/questions/edit/{id}', 'admin.controller:editQuestionAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_questions_edit');
+
 $app->get('/admin/questions/get-categories/{id}', 'admin.controller:getCategoriesAction')
     ->before($adminAndQuestionManagerCondition)
-    ->bind('admin_get_categories');
+    ->bind('admin_questions_get_categories');
 
 $app->get('/admin/questions/get-questions-by-category/{categoryId}', 'admin.controller:getQuestionsByCategoryAction')
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_get_questions_by_category');
+
+$app->get('/admin/questionmanager', 'admin.controller:questionManagerIndexAction')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_questionmanager');
+
+

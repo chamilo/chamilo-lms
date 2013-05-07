@@ -953,6 +953,94 @@ EOF;
             '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
             '\';
         }';
+    }
 
+    public function getRules(&$columns, &$column_model)
+    {
+        $fields = $this->get_all(array('field_visible = ? AND field_filter = ?' => array(1, 1)), 'option_display_text');
+        $extraFieldOption = new ExtraFieldOption($this->type);
+
+        $rules = array();
+        if (!empty($fields)) {
+            foreach ($fields as $field) {
+                $search_options = array();
+                $type = 'text';
+                if (in_array($field['field_type'], array(self::FIELD_TYPE_SELECT, self::FIELD_TYPE_DOUBLE_SELECT))) {
+                    $type = 'select';
+                    $search_options['sopt'] = array('eq', 'ne'); //equal not equal
+                } else {
+                    $search_options['sopt'] = array('cn', 'nc');//contains not contains
+                }
+
+                $search_options['searchhidden'] = 'true';
+                $search_options['defaultValue'] = isset($search_options['field_default_value']) ? $search_options['field_default_value'] : null;
+
+                if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
+                    //Add 2 selects
+                    $options = $extraFieldOption->get_field_options_by_field($field['id']);
+                    $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
+                    $first_options = array();
+
+                    if (!empty($options)) {
+                        foreach ($options as $option) {
+                            foreach ($option as $sub_option) {
+                                if ($sub_option['option_value'] == 0) {
+                                    $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'.$sub_option['option_display_text'];
+                                } else {
+                                }
+                            }
+                        }
+                    }
+
+                    $search_options['value']  = implode(';', $first_options);
+                    $search_options['dataInit'] = 'fill_second_select';
+
+                    //First
+                    $column_model[] = array(
+                        'name' => 'extra_'.$field['field_variable'],
+                        'index' => 'extra_'.$field['field_variable'],
+                        'width' => '100',
+                        'hidden' => 'true',
+                        'search' => 'true',
+                        'stype' => 'select',
+                        'searchoptions' => $search_options
+                    );
+                    $columns[] = $field['field_display_text'].' (1)';
+                    $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');
+
+                    //Second
+                    $search_options['value'] = $field['id'].':';
+                    $search_options['dataInit'] = 'register_second_select';
+
+                    $column_model[] = array(
+                        'name' => 'extra_'.$field['field_variable'].'_second',
+                        'index' => 'extra_'.$field['field_variable'].'_second',
+                        'width' => '100',
+                        'hidden' => 'true',
+                        'search' => 'true',
+                        'stype' => 'select',
+                        'searchoptions' => $search_options
+                    );
+                    $columns[] = $field['field_display_text'].' (2)';
+                    $rules[] = array('field' => 'extra_'.$field['field_variable'].'_second', 'op' => 'cn');
+                    continue;
+                } else {
+                    $search_options['value'] = $extraFieldOption->get_field_options_to_string($field['id'], false, 'option_display_text');
+                }
+
+                $column_model[] = array(
+                    'name' => 'extra_'.$field['field_variable'],
+                    'index' => 'extra_'.$field['field_variable'],
+                    'width' => '100',
+                    'hidden' => 'true',
+                    'search' => 'true',
+                    'stype' => $type,
+                    'searchoptions' => $search_options
+                );
+                $columns[] = $field['field_display_text'];
+                $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');
+            }
+        }
+        return $rules;
     }
 }

@@ -2542,8 +2542,7 @@ class SessionManager
         return $msg_date;
     }
 
-    static public function get_session_columns($list_type = 'simple') {
-        //$activeurl = '?sidx=session_active';
+    public static function get_session_columns($list_type = 'simple') {
         //Column config
         $operators = array('cn', 'nc');
         $date_operators = array('gt', 'ge', 'lt', 'le');
@@ -2617,90 +2616,7 @@ class SessionManager
 
         //Inject extra session fields
         $session_field = new SessionField();
-        $session_field_option = new SessionFieldOption();
-        $fields = $session_field->get_all(array('field_visible = ? AND field_filter = ?' => array(1, 1)), 'option_display_text');
-
-        $rules = array();
-        if (!empty($fields)) {
-            foreach ($fields as $field) {
-                $search_options = array();
-                $type = 'text';
-                if (in_array($field['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
-                    $type = 'select';
-                    $search_options['sopt'] = array('eq', 'ne'); //equal not equal
-                } else {
-                    $search_options['sopt'] = array('cn', 'nc');//contains not contains
-                }
-
-                $search_options['searchhidden'] = 'true';
-                $search_options['defaultValue'] = isset($search_options['field_default_value']) ? $search_options['field_default_value'] : null;
-
-                if ($field['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
-                    //Add 2 selects
-                    $options = $session_field_option->get_field_options_by_field($field['id']);
-                    $options = ExtraField::extra_field_double_select_convert_array_to_ordered_array($options);
-                    $first_options = array();
-
-                    if (!empty($options)) {
-                        foreach ($options as $option) {
-                            foreach ($option as $sub_option) {
-                                if ($sub_option['option_value'] == 0) {
-                                    $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'.$sub_option['option_display_text'];
-                                } else {
-                                }
-                            }
-                        }
-                    }
-
-                    $search_options['value']  = implode(';', $first_options);
-                    $search_options['dataInit'] = 'fill_second_select';
-
-                    //First
-                    $column_model[] = array(
-                        'name' => 'extra_'.$field['field_variable'],
-                        'index' => 'extra_'.$field['field_variable'],
-                        'width' => '100',
-                        'hidden' => 'true',
-                        'search' => 'true',
-                        'stype' => 'select',
-                        'searchoptions' => $search_options
-                    );
-                    $columns[] = $field['field_display_text'].' (1)';
-                    $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');
-
-                    //Second
-                    $search_options['value'] = $field['id'].':';
-                    $search_options['dataInit'] = 'register_second_select';
-
-                    $column_model[] = array(
-                        'name' => 'extra_'.$field['field_variable'].'_second',
-                        'index' => 'extra_'.$field['field_variable'].'_second',
-                        'width' => '100',
-                        'hidden' => 'true',
-                        'search' => 'true',
-                        'stype' => 'select',
-                        'searchoptions' => $search_options
-                    );
-                    $columns[] = $field['field_display_text'].' (2)';
-                    $rules[] = array('field' => 'extra_'.$field['field_variable'].'_second', 'op' => 'cn');
-                    continue;
-                } else {
-                    $search_options['value'] = $session_field_option->get_field_options_to_string($field['id'], false, 'option_display_text');
-                }
-
-                $column_model[] = array(
-                    'name' => 'extra_'.$field['field_variable'],
-                    'index' => 'extra_'.$field['field_variable'],
-                    'width' => '100',
-                    'hidden' => 'true',
-                    'search' => 'true',
-                    'stype' => $type,
-                    'searchoptions' => $search_options
-                );
-                $columns[] = $field['field_display_text'];
-                $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');
-            }
-        }
+        $rules = $session_field->getRules($columns, $column_model);
 
         $column_model[] = array('name'=>'actions', 'index'=>'actions', 'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false');
         $columns[] = get_lang('Actions');

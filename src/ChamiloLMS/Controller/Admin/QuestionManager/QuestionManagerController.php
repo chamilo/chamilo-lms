@@ -42,9 +42,6 @@ class QuestionManagerController
         $exercise = new \Exercise();
         $exercise->edit_exercise_in_lp = true;
 
-        $class = "btn save";
-        $text  = get_lang('ModifyQuestion');
-
         /** @var  \Question $question */
         $question = \Question::read($id, null, $exercise);
 

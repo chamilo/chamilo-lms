@@ -2680,7 +2680,7 @@ class Exercise
         $user_answer = '';
 
         // Get answer list for matching
-        $sql_answer = 'SELECT iid, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = "'.$questionId.'" ';
+        $sql_answer = 'SELECT iid, answer FROM '.$table_ans.' WHERE question_id = "'.$questionId.'" ';
         $res_answer = Database::query($sql_answer);
 
         $answer_matching = array();

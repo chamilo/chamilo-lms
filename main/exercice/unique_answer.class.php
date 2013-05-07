@@ -317,8 +317,8 @@ class UniqueAnswer extends Question
      */
     public function processAnswersCreation($form)
     {
-
         $questionWeighting = $nbrGoodAnswers = 0;
+
         $correct           = $form->getSubmitValue('correct');
         $objAnswer         = new Answer($this->id);
         $nb_answers        = $form->getSubmitValue('nb_answers');
@@ -447,19 +447,18 @@ class UniqueAnswer extends Question
         $score       = filter_var($score, FILTER_SANITIZE_NUMBER_FLOAT);
         $correct     = filter_var($correct, FILTER_SANITIZE_NUMBER_INT);
         // Get the max position
-        $sql      = "SELECT max(position) as max_position FROM $tbl_quiz_answer "
-            ." WHERE c_id = $course_id AND question_id = $question_id";
+        $sql      = "SELECT max(position) as max_position FROM $tbl_quiz_answer WHERE question_id = $question_id";
         $rs_max   = Database::query($sql);
         $row_max  = Database::fetch_object($rs_max);
         $position = $row_max->max_position + 1;
         // Insert a new answer
-        $sql = "INSERT INTO $tbl_quiz_answer (c_id, question_id,answer,correct,comment,ponderation,position,destination)"
-            ."VALUES ($course_id, $question_id,'".Database::escape_string($answer_title)."',"
+        $sql = "INSERT INTO $tbl_quiz_answer (question_id,answer,correct,comment,ponderation,position,destination)"
+            ."VALUES ($question_id, '".Database::escape_string($answer_title)."',"
             ."$correct,'".Database::escape_string($comment)."',$score,$position, "
             ." '0@@0@@0@@0')";
-        $rs  = Database::query($sql);
+        Database::query($sql);
         if ($correct) {
-            $sql = "UPDATE $tbl_quiz_question SET ponderation = (ponderation + $score) WHERE c_id = $course_id AND iid = ".$question_id;
+            $sql = "UPDATE $tbl_quiz_question SET ponderation = (ponderation + $score) WHERE iid = ".$question_id;
             $rs  = Database::query($sql);
 
             return $rs;

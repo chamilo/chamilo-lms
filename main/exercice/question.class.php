@@ -43,6 +43,7 @@ abstract class Question
     public $setDefaultValues = false;
     public $submitClass;
     public $submitText;
+    public $setDefaultQuestionValues = false;
 
     public static $questionTypes = array(
         UNIQUE_ANSWER                          => array('unique_answer.class.php', 'UniqueAnswer'),
@@ -129,10 +130,12 @@ abstract class Question
      *
      * @author Olivier Brouckaert
      * @param int $id - question ID
+     * @param int $course_id
+     * @param Exercise
      *
      * @return boolean - true if question exists, otherwise false
      */
-    static function read($id, $course_id = null, Exercise $exercise = null)
+    public static function read($id, $course_id = null, Exercise $exercise = null)
     {
         $id = intval($id);
 
@@ -534,9 +537,7 @@ abstract class Question
             )
             ) {
                 // removes old answers
-                $sql = "DELETE FROM $TBL_REPONSES WHERE c_id = $course_id  AND question_id='".Database::escape_string(
-                    $this->id
-                )."'";
+                $sql = "DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($this->id)."'";
                 Database::query($sql);
             }
 
@@ -833,32 +834,32 @@ abstract class Question
 					picture		='".Database::escape_string($picture)."',
                     extra       ='".Database::escape_string($extra)."',
 					level		='".Database::escape_string($level)."',
-                    parent_id   =  ".$this->parent_id."
-				WHERE c_id = $c_id AND iid = '".Database::escape_string($id)."'";
+                    parent_id   = ".$this->parent_id."
+                    WHERE iid = '".Database::escape_string($id)."'";
+            //WHERE c_id = $c_id AND iid = '".Database::escape_string($id)."'";
 
             Database::query($sql);
+
             $this->saveCategories($category_list);
 
             if (!empty($exerciseId)) {
                 api_item_property_update($this->course, TOOL_QUIZ, $id, 'QuizQuestionUpdated', api_get_user_id());
-            }
-            if (api_get_setting('search_enabled') == 'true') {
-                if ($exerciseId != 0) {
+                if (api_get_setting('search_enabled') == 'true') {
                     $this->search_engine_edit($exerciseId);
                 }
             }
         } else {
             // Creates a new question
-            $sql              = "SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question
-					   WHERE 	question.id					= test_question.question_id AND
-								test_question.exercice_id	= '".Database::escape_string($exerciseId)."' AND
-								question.c_id 				= $c_id AND
-								test_question.c_id 			= $c_id ";
-            $result           = Database::query($sql);
+            $sql = "SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question
+				    WHERE 	question.id					= test_question.question_id AND
+					        test_question.exercice_id	= '".Database::escape_string($exerciseId)."' AND
+							question.c_id 				= $c_id AND
+							test_question.c_id 			= $c_id ";
+            $result = Database::query($sql);
             $current_position = Database::result($result, 0, 0);
             $this->updatePosition($current_position + 1);
             $position = $this->position;
-            $sql      = "INSERT INTO $TBL_QUESTIONS (c_id, question, description, ponderation, position, type, picture, extra, level, parent_id) VALUES ( ".
+            $sql = "INSERT INTO $TBL_QUESTIONS (c_id, question, description, ponderation, position, type, picture, extra, level, parent_id) VALUES ( ".
                 " $c_id, ".
                 " '".Database::escape_string($question)."', ".
                 " '".Database::escape_string($description)."', ".
@@ -879,30 +880,21 @@ abstract class Question
             // If hotspot, create first answer
             if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
                 $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-                $sql         = "INSERT INTO $TBL_ANSWERS (c_id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
-					    VALUES (".$c_id.", '".Database::escape_string(
-                    $this->id
-                )."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
+                $sql = "INSERT INTO $TBL_ANSWERS (question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
+					    VALUES ('".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
                 Database::query($sql);
             }
 
             if ($type == HOT_SPOT_DELINEATION) {
                 $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-                $sql         = "INSERT INTO $TBL_ANSWERS (c_id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
-					  VALUES (".$c_id.", '".Database::escape_string(
-                    $this->id
-                )."', '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
+                $sql = "INSERT INTO $TBL_ANSWERS (question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
+					    VALUES ('".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
                 Database::query($sql);
             }
 
             if (api_get_setting('search_enabled') == 'true') {
                 if ($exerciseId != 0) {
                     $this->search_engine_edit($exerciseId, true);
-                } else {
-                    /**
-                     * actually there is *not* an user interface for
-                     * creating questions without a relation with an exercise
-                     */
                 }
             }
         }
@@ -1162,9 +1154,7 @@ abstract class Question
             $sql = "DELETE FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id='".Database::escape_string($id)."'";
             Database::query($sql);
 
-            $sql = "DELETE FROM $TBL_REPONSES WHERE c_id = $course_id AND question_id='".Database::escape_string(
-                $id
-            )."'";
+            $sql = "DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($id)."'";
             Database::query($sql);
 
             // remove the category of this question in the question_rel_category table
@@ -1518,7 +1508,7 @@ abstract class Question
         }
 
         //@todo why we need this condition??
-        if (!isset($_GET['fromExercise'])) {
+        if ($this->setDefaultQuestionValues) {
             switch ($answerType) {
                 case 1:
                     $this->question = get_lang('DefaultUniqueQuestion');
@@ -1590,9 +1580,11 @@ abstract class Question
             $params['question_id'] = $this->id;
             $field_value->save_field_values($params);
 
-            // modify the exercise
-            $objExercise->addToList($this->id);
-            $objExercise->update_question_positions();
+            if ($objExercise) {
+                // modify the exercise
+                $objExercise->addToList($this->id);
+                $objExercise->update_question_positions();
+            }
         }
     }
 

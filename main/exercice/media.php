@@ -36,7 +36,7 @@ switch ($action) {
             // question
             $objQuestion->processCreation($form, null);
             // answers
-            $objQuestion->processAnswersCreation($form, null);
+            $objQuestion->processAnswersCreation($form);
         } else {
             $form->display();
         }
@@ -62,7 +62,7 @@ switch ($action) {
             // question
             $objQuestion->processCreation($form, null);
             // answers
-            $objQuestion->processAnswersCreation($form, null);
+            $objQuestion->processAnswersCreation($form);
         } else {
             $form->display();
         }

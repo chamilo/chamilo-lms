@@ -381,7 +381,7 @@ class CourseRecycler
                     $orphan_ids = implode(',', $orphan_ids);
                     $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
                     Database::query($sql);
-                    $sql = "DELETE FROM ".$table_qui_ans." WHERE c_id = ".$this->course_id." AND question_id IN(".$orphan_ids.")";
+                    $sql = "DELETE FROM ".$table_qui_ans." WHERE question_id IN(".$orphan_ids.")";
                     Database::query($sql);
                     $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND iid IN(".$orphan_ids.")";
                     Database::query($sql);

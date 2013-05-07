@@ -26,7 +26,7 @@ class MultipleAnswer extends Question {
 	/**
 	 * Constructor
 	 */
-	function MultipleAnswer() {
+	public function MultipleAnswer() {
 		parent::question();
 		$this ->type = MULTIPLE_ANSWER;
 		$this ->isContent = $this-> getIsContent();
@@ -37,7 +37,7 @@ class MultipleAnswer extends Question {
 	 * @param the formvalidator instance
 	 * @param the answers number to display
 	 */
-	function createAnswersForm ($form) {
+	public function createAnswersForm ($form) {
 
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;  // The previous default value was 2. See task #1759.
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -88,10 +88,10 @@ class MultipleAnswer extends Question {
 		for ($i = 1 ; $i <= $nb_answers ; ++$i) {
 			if (isset($answer) && is_object($answer)) {
                 $answer_id = $answer->getRealAnswerIdFromList($i);
-                $defaults['answer['.$i.']'] = $answer->answer[$answer_id];
-                $defaults['comment['.$i.']'] = $answer->comment[$answer_id];
-                $defaults['weighting['.$i.']'] = Text::float_format($answer->weighting[$answer_id], 1);
-                $defaults['correct['.$i.']'] = $answer->correct[$answer_id];
+                $defaults['answer['.$i.']'] = isset($answer->answer[$answer_id]) ? $answer->answer[$answer_id] : null;
+                $defaults['comment['.$i.']'] = isset($answer->comment[$answer_id]) ? $answer->comment[$answer_id] : null;
+                $defaults['weighting['.$i.']'] = isset($answer->weighting[$answer_id]) ? Text::float_format($answer->weighting[$answer_id], 1) : null;
+                $defaults['correct['.$i.']'] = isset($answer->correct[$answer_id]) ? $answer->correct[$answer_id] : null;
 			} else {
 				$defaults['answer[1]']  = get_lang('DefaultMultipleAnswer2');
 				$defaults['comment[1]'] = get_lang('DefaultMultipleComment2');
@@ -128,10 +128,10 @@ class MultipleAnswer extends Question {
 			$form->addElement('text', 'weighting['.$i.']',null, array('class' => "span1", 'value' => '0'));
 			$form -> addElement ('html', '</tr>');
 		}
-		$form -> addElement ('html', '</table>');
-		$form -> addElement ('html', '<br />');
+		$form->addElement ('html', '</table>');
+		$form->addElement ('html', '<br />');
 
-		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
+		$form->add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
 		$navigator_info = api_get_navigator();
 
 		if ($obj_ex->edit_exercise_in_lp == true) {
@@ -170,39 +170,39 @@ class MultipleAnswer extends Question {
 	 * @param the formvalidator instance
 	 * @param the answers number to display
 	 */
-	function processAnswersCreation($form) {
+	public function processAnswersCreation($form) {
 
 		$questionWeighting = $nbrGoodAnswers = 0;
 		$objAnswer  = new Answer($this->id);
 		$nb_answers = $form->getSubmitValue('nb_answers');
 
-		for($i=1 ; $i <= $nb_answers ; $i++) {
+		for ($i=1 ; $i <= $nb_answers ; $i++) {
         	$answer = trim($form -> getSubmitValue('answer['.$i.']'));
             $comment = trim($form -> getSubmitValue('comment['.$i.']'));
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
 
-			if($goodAnswer){
+			if ($goodAnswer) {
     			$weighting = abs($weighting);
 			} else {
 				$weighting = abs($weighting);
 				$weighting = -$weighting;
 			}
-    		if($weighting > 0) {
+    		if ($weighting > 0) {
                 $questionWeighting += $weighting;
             }
-        	$objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i);
+        	$objAnswer->createAnswer($answer, $goodAnswer, $comment, $weighting,$i);
         }
 
-    	// saves the answers into the data base
-        $objAnswer -> save();
+    	// Saves the answers into the data base.
+        $objAnswer->save();
 
-        // sets the total weighting of the question
+        // Sets the total weighting of the question.
         $this->updateWeighting($questionWeighting);
         $this->save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
+	public function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
 	    $header = parent::return_header($feedback_type, $counter, $score, $show_media);
 	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>

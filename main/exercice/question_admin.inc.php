@@ -33,10 +33,13 @@ if (is_object($objQuestion)) {
     if (isset($_GET['editQuestion'])) {
         $objQuestion->submitClass = "btn save";
         $objQuestion->submitText  = get_lang('ModifyQuestion');
-
     } else {
         $objQuestion->submitClass = "btn add";
         $objQuestion->submitText  = get_lang('AddQuestionToExercise');
+    }
+
+    if (isset($_GET['fromExercise'])) {
+        $objQuestion->setDefaultQuestionValues = true;
     }
 
     $types_information = Question::get_question_type_list();
@@ -69,7 +72,7 @@ if (is_object($objQuestion)) {
         $objQuestion->processCreation($form, $objExercise);
 
         // Answers
-        $objQuestion->processAnswersCreation($form, $nb_answers);
+        $objQuestion->processAnswersCreation($form);
 
         // TODO: maybe here is the better place to index this tool, including answers text
 

@@ -18,7 +18,7 @@ include('../inc/global.inc.php');
 // set vars
 $questionId    = intval($_GET['modifyAnswers']);
 $objQuestion   = Question::read($questionId);
-$answer_type   = $objQuestion->selectType(); //very important 
+$answer_type   = $objQuestion->selectType(); //very important
 $TBL_ANSWERS   = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $documentPath  = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $picturePath   = $documentPath.'/images';
@@ -36,7 +36,7 @@ $course_id = api_get_course_int_id();
 // Query db for answers
 if ($answer_type==HOT_SPOT_DELINEATION) {
     $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS
-	        WHERE c_id = $course_id AND question_id = '".Database::escape_string($questionId)."' AND hotspot_type = 'delineation'
+	        WHERE question_id = '".Database::escape_string($questionId)."' AND hotspot_type = 'delineation'
             ORDER BY iid";
 } else {
     $sql = "SELECT iid, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS
@@ -72,7 +72,7 @@ while ($hotspot = Database::fetch_assoc($result)) {
 	// No error
     if ($hotspot['hotspot_type'] == 'noerror') {
         $output .= "&hotspot_".$hotspot_id."_type=noerror";
-	}	
+	}
 
 	// This is a good answer, count + 1 for nmbr of clicks
     if ($hotspot['hotspot_type'] > 0) {

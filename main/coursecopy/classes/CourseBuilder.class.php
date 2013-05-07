@@ -499,7 +499,7 @@ class CourseBuilder
             }
 
 			$question = new QuizQuestion($obj->iid, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture, $obj->level, $obj->extra, $parent_info, $categories);
-			$sql = 'SELECT * FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = '.$obj->iid;
+			$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->iid;
 			$db_result2 = Database::query($sql);
 			while ($obj2 = Database::fetch_object($db_result2)) {
 				$question->add_answer($obj2->iid, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);

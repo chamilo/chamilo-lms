@@ -39,20 +39,36 @@ class QuestionManagerController
         $extraJS[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
         $app['extraJS'] = $extraJS;
 
+        // Setting exercise obj.
+
         $exercise = new \Exercise();
         $exercise->edit_exercise_in_lp = true;
 
+        // Setting question obj.
         /** @var  \Question $question */
         $question = \Question::read($id, null, $exercise);
-
         $question->submitClass = "btn save";
         $question->submitText  = get_lang('ModifyQuestion');
-
         $question->setDefaultValues = true;
-        $form = new \FormValidator('edit_question');
+
+        // Generating edit URL.
+        $url = $app['url_generator']->generate('admin_questions_edit', array('id' => $id));
+
+        // Creating a new form
+        $form = new \FormValidator('edit_question', 'post', $url);
         $question->createForm($form);
-        // answer form elements
         $question->createAnswersForm($form);
+
+        $submitQuestion = $app['request']->get('submitQuestion');
+
+        // If form was submitted.
+        if ($form->validate() && isset($submitQuestion)) {
+            // Save question.
+            $question->processCreation($form, $exercise);
+
+            // Save answers.
+            $question->processAnswersCreation($form);
+        }
 
         $app['template']->assign('form', $form->toHtml());
 

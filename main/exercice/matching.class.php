@@ -193,18 +193,17 @@ class Matching extends Question
 
         $form->addElement('html', '</table></div></div>');
         $group = array();
-        global $text, $class;
 
         if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
             // setting the save button here and not in the question class.php
-            $group[] = $form->createElement('submit', 'submitQuestion', $text, 'class="'.$class.'"');
+            $group[] = $form->createElement('submit', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
             $group[] = $form->createElement('submit', 'lessOptions', get_lang('DelElem'), 'class="minus"');
             $group[] = $form->createElement('submit', 'moreOptions', get_lang('AddElem'), 'class="plus"');
         } else {
             // setting the save button here and not in the question class.php
             $group[] = $form->createElement('style_submit_button', 'lessOptions', get_lang('DelElem'), 'class="minus"');
             $group[] = $form->createElement('style_submit_button', 'moreOptions', get_lang('AddElem'), ' class="plus"');
-            $group[] = $form->createElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
+            $group[] = $form->createElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
         }
 
         $form->addGroup($group);

@@ -136,9 +136,8 @@ class FillBlanks extends Question
 
 		$form -> addElement('html','<div id="blanks_weighting"></div>');
 
-		global $text, $class;
 		// setting the save button here and not in the question class.php
-		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+		$form->addElement('style_submit_button','submitQuestion',$this->submitText, 'class="'.$this->submitClass.'"');
 
 		if (!empty($this -> id)) {
 			$form -> setDefaults($defaults);

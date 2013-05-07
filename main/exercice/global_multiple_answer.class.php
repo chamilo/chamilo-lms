@@ -145,18 +145,17 @@ class GlobalMultipleAnswer extends Question
         $form->addRule('weighting[1]', get_lang('ThisFieldIsRequired'), 'required');
 
         $navigator_info = api_get_navigator();
-        global $text, $class;
 
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
             if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
-                $form->addElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
+                $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="' . $this->submitClass . '"');
             } else {
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
-                $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
+                $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="' . $this->submitClass . '"');
                 // setting the save button here and not in the question class.php
             }
         }

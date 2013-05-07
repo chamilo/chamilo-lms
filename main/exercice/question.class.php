@@ -41,6 +41,8 @@ abstract class Question
     public $editionMode = 'normal';
     public $exercise; // exercise obj
     public $setDefaultValues = false;
+    public $submitClass;
+    public $submitText;
 
     public static $questionTypes = array(
         UNIQUE_ANSWER                          => array('unique_answer.class.php', 'UniqueAnswer'),

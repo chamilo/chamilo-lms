@@ -40,8 +40,17 @@ class QuestionManagerController
         $app['extraJS'] = $extraJS;
 
         $exercise = new \Exercise();
+        $exercise->edit_exercise_in_lp = true;
+
+        $class = "btn save";
+        $text  = get_lang('ModifyQuestion');
+
         /** @var  \Question $question */
         $question = \Question::read($id, null, $exercise);
+
+        $question->submitClass = "btn save";
+        $question->submitText  = get_lang('ModifyQuestion');
+
         $question->setDefaultValues = true;
         $form = new \FormValidator('edit_question');
         $question->createForm($form);

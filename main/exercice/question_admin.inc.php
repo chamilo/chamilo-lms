@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *    This script allows to manage the statements of questions.
- *   It is included from the script admin.php
+ * This script allows to manage the statements of questions.
+ * It is included from the script admin.php
  * @package chamilo.exercise
  * @author Olivier Brouckaert
  * @author Julio Montoya
@@ -31,18 +31,19 @@ if (is_object($objQuestion)) {
     $form = new FormValidator('question_admin_form', 'post', $action);
 
     if (isset($_GET['editQuestion'])) {
-        $class = "btn save";
-        $text  = get_lang('ModifyQuestion');
+        $objQuestion->submitClass = "btn save";
+        $objQuestion->submitText  = get_lang('ModifyQuestion');
+
     } else {
-        $class = "btn add";
-        $text  = get_lang('AddQuestionToExercise');
+        $objQuestion->submitClass = "btn add";
+        $objQuestion->submitText  = get_lang('AddQuestionToExercise');
     }
 
     $types_information = Question::get_question_type_list();
     $form_title_extra  = get_lang($types_information[$type][1]);
 
     // form title
-    $form->addElement('header', $text.': '.$form_title_extra);
+    $form->addElement('header', $objQuestion->submitText.': '.$form_title_extra);
 
     if ($fastEdition) {
         $form->setAllowRichEditorInForm(false);

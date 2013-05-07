@@ -152,12 +152,9 @@ class Draggable extends Matching
             'class="btn minus"'
         );
 
-        global $text, $class;
-        $group[] = $form->createElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
+        $group[] = $form->createElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
         $form->addGroup($group);
-
         $form->addElement('html', '</table></div></div>');
-
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {

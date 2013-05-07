@@ -18,7 +18,7 @@ class ExtraFieldOption extends Model
     {
         $this->type = $type;
         switch ($this->type) {
-           case 'course':
+            case 'course':
                 $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_OPTIONS);
                 break;
             case 'user':
@@ -32,15 +32,19 @@ class ExtraFieldOption extends Model
                 break;
         }
     }
+
     /**
      * Gets the number of options already available in the table for this item type
      * @return int Number of options available
      * @assert () >= 0
      */
-    public function get_count() {
+    public function get_count()
+    {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
+
         return $row['count'];
     }
+
     /**
      * Gets the number of options available for this field
      * @param int Field ID
@@ -54,9 +58,16 @@ class ExtraFieldOption extends Model
         if (empty($field_id)) {
             return false;
         }
-        $row = Database::select('count(*) as count', $this->table, array('where' => array('field_id = ?' => $field_id)), 'first');
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            array('where' => array('field_id = ?' => $field_id)),
+            'first'
+        );
+
         return $row['count'];
     }
+
     /**
      * Returns a list of options for a specific field, separated by ";"
      * @param int Field ID
@@ -65,30 +76,37 @@ class ExtraFieldOption extends Model
      * @return string List of options separated by ;
      * @assert (-1, false, null) == ''
      */
-    public function get_field_options_to_string($field_id,  $add_id_in_array = false, $ordered_by = null) {
-        $options = self::get_field_options_by_field($field_id, $add_id_in_array, $ordered_by);
+    public function get_field_options_to_string($field_id, $add_id_in_array = false, $ordered_by = null)
+    {
+        $options     = self::get_field_options_by_field($field_id, $add_id_in_array, $ordered_by);
         $new_options = array();
         if (!empty($options)) {
             foreach ($options as $option) {
                 $new_options[] = $option['option_value'].':'.$option['option_display_text'];
             }
             $string = implode(';', $new_options);
+
             return $string;
         }
+
         return '';
     }
+
     /**
      * Delete all the options of a specific field
      * @param int Field ID
      * @result void
      * @assert (-1) === false
      */
-    public function delete_all_options_by_field_id($field_id) {
+    public function delete_all_options_by_field_id($field_id)
+    {
         $field_id = intval($field_id);
-        $sql = "DELETE FROM  {$this->table} WHERE field_id = $field_id";
-        $r = Database::query($sql);
+        $sql      = "DELETE FROM  {$this->table} WHERE field_id = $field_id";
+        $r        = Database::query($sql);
+
         return $r;
     }
+
     /**
      * Saves an option into the corresponding *_field_options table
      * @param array Parameters to be considered for the insertion
@@ -97,7 +115,8 @@ class ExtraFieldOption extends Model
      * @assert (array('field_id'=>0), false) === false
      * @assert (array('field_id'=>1), false) === true
      */
-    public function save($params, $show_query = false) {
+    public function save($params, $show_query = false)
+    {
         $field_id = intval($params['field_id']);
 
         if (empty($field_id)) {
@@ -106,47 +125,60 @@ class ExtraFieldOption extends Model
 
         $time = api_get_utc_datetime();
         if (!empty($params['field_options']) &&
-            in_array($params['field_type'], array(
-                ExtraField::FIELD_TYPE_RADIO,
-                ExtraField::FIELD_TYPE_SELECT,
-                ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
-                ExtraField::FIELD_TYPE_DOUBLE_SELECT))
-            ) {
+            in_array(
+                $params['field_type'],
+                array(
+                    ExtraField::FIELD_TYPE_RADIO,
+                    ExtraField::FIELD_TYPE_SELECT,
+                    ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
+                    ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                )
+            )
+        ) {
             if ($params['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                 //$params['field_options'] = France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
-                $options_parsed = ExtraField::extra_field_double_select_convert_string_to_array($params['field_options']);
+                $options_parsed = ExtraField::extra_field_double_select_convert_string_to_array(
+                    $params['field_options']
+                );
 
                 if (!empty($options_parsed)) {
                     foreach ($options_parsed as $key => $option) {
                         $sub_options = $option['options'];
 
                         $new_params = array(
-                            'field_id' => $field_id,
-                            'option_value' => 0,
+                            'field_id'            => $field_id,
+                            'option_value'        => 0,
                             'option_display_text' => $option['label'],
-                            'option_order' => 0,
-                            'tms' => $time,
+                            'option_order'        => 0,
+                            'tms'                 => $time,
                         );
                         //Looking if option already exists:
-                        $option_info = self::get_field_option_by_field_id_and_option_display_text($field_id, $option['label']);
+                        $option_info = self::get_field_option_by_field_id_and_option_display_text(
+                            $field_id,
+                            $option['label']
+                        );
 
                         if (empty($option_info)) {
                             $sub_id = parent::save($new_params, $show_query);
                         } else {
-                            $sub_id = $option_info['id'];
+                            $sub_id           = $option_info['id'];
                             $new_params['id'] = $sub_id;
                             parent::update($new_params, $show_query);
                         }
                         foreach ($sub_options as $sub_option) {
                             if (!empty($sub_option)) {
-                                $new_params = array(
-                                    'field_id' => $field_id,
-                                    'option_value' => $sub_id,
+                                $new_params  = array(
+                                    'field_id'            => $field_id,
+                                    'option_value'        => $sub_id,
                                     'option_display_text' => $sub_option,
-                                    'option_order' => 0,
-                                    'tms' => $time,
+                                    'option_order'        => 0,
+                                    'tms'                 => $time,
                                 );
-                                $option_info = self::get_field_option_by_field_id_and_option_display_text_and_option_value($field_id, $sub_option, $sub_id);
+                                $option_info = self::get_field_option_by_field_id_and_option_display_text_and_option_value(
+                                    $field_id,
+                                    $sub_option,
+                                    $sub_id
+                                );
                                 if (empty($option_info)) {
                                     parent::save($new_params, $show_query);
                                 } else {
@@ -168,19 +200,20 @@ class ExtraFieldOption extends Model
                     $option_info = self::get_field_option_by_field_and_option($field_id, $option);
 
                     if ($option_info == false) {
-                        $order = self::get_max_order($field_id);
+                        $order      = self::get_max_order($field_id);
                         $new_params = array(
-                            'field_id' => $field_id,
-                            'option_value' => $option,
+                            'field_id'            => $field_id,
+                            'option_value'        => $option,
                             'option_display_text' => $option,
-                            'option_order' => $order,
-                            'tms' => $time,
+                            'option_order'        => $order,
+                            'tms'                 => $time,
                         );
                         parent::save($new_params, $show_query);
                     }
                 }
             }
         }
+
         return true;
     }
 
@@ -193,14 +226,15 @@ class ExtraFieldOption extends Model
      * @assert (array('field_id'=>0),false) === false
      * @assert (array('field_id'=>0),false) === true
      */
-    public function save_one_item($params, $show_query = false, $insert_repeated = true) {
+    public function save_one_item($params, $show_query = false, $insert_repeated = true)
+    {
         $field_id = intval($params['field_id']);
         if (empty($field_id)) {
             return false;
         }
         $params['tms'] = api_get_utc_datetime();
         if (empty($params['option_order'])) {
-            $order = self::get_max_order($field_id);
+            $order                  = self::get_max_order($field_id);
             $params['option_order'] = $order;
         }
         if ($insert_repeated) {
@@ -212,6 +246,7 @@ class ExtraFieldOption extends Model
                 parent::save($params, $show_query);
             }
         }
+
         return true;
     }
 
@@ -222,15 +257,17 @@ class ExtraFieldOption extends Model
      * @return mixed The row on success or false on failure
      * @assert (0,'') === false
      */
-    public function get_field_option_by_field_and_option($field_id, $option_value) {
-        $field_id = intval($field_id);
+    public function get_field_option_by_field_and_option($field_id, $option_value)
+    {
+        $field_id     = intval($field_id);
         $option_value = Database::escape_string($option_value);
 
-        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_value = '".$option_value."'";
+        $sql    = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_value = '".$option_value."'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return Database::store_result($result, 'ASSOC');
         }
+
         return false;
     }
 
@@ -241,15 +278,17 @@ class ExtraFieldOption extends Model
      * @return mixed The row on success or false on failure
      * @assert (0, '') === false
      */
-    public function get_field_option_by_field_id_and_option_display_text($field_id, $option_display_text) {
-        $field_id = intval($field_id);
+    public function get_field_option_by_field_id_and_option_display_text($field_id, $option_display_text)
+    {
+        $field_id            = intval($field_id);
         $option_display_text = Database::escape_string($option_display_text);
 
-        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_display_text = '".$option_display_text."'";
+        $sql    = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_display_text = '".$option_display_text."'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return Database::fetch_array($result, 'ASSOC');
         }
+
         return false;
     }
 
@@ -261,16 +300,21 @@ class ExtraFieldOption extends Model
      * @return mixed The row on success or false on failure
      * @assert (0, '', '') === false
      */
-    public function get_field_option_by_field_id_and_option_display_text_and_option_value($field_id, $option_display_text, $option_value) {
-        $field_id = intval($field_id);
+    public function get_field_option_by_field_id_and_option_display_text_and_option_value(
+        $field_id,
+        $option_display_text,
+        $option_value
+    ) {
+        $field_id            = intval($field_id);
         $option_display_text = Database::escape_string($option_display_text);
-        $option_value = Database::escape_string($option_value);
+        $option_value        = Database::escape_string($option_value);
 
-        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_display_text = '".$option_display_text."' AND option_value = '$option_value'";
+        $sql    = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_display_text = '".$option_display_text."' AND option_value = '$option_value'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return Database::fetch_array($result, 'ASSOC');
         }
+
         return false;
     }
 
@@ -282,7 +326,8 @@ class ExtraFieldOption extends Model
      * @result mixed Row on success, false on failure
      * @assert (0, '') === false
      */
-    public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered_by = null) {
+    public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered_by = null)
+    {
         $field_id = intval($field_id);
 
         $sql = "SELECT * FROM {$this->table}
@@ -299,13 +344,16 @@ class ExtraFieldOption extends Model
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     $options[$row['id']] = $row;
                 }
+
                 return $options;
             } else {
                 return Database::store_result($result, 'ASSOC');
             }
         }
+
         return false;
     }
+
     /**
      * Get options for a specific field as array or in JSON format suited for the double-select format
      * @param int Field ID
@@ -313,14 +361,15 @@ class ExtraFieldOption extends Model
      * @param bool Return format (whether it should be formatted to JSON or not)
      * @return mixed Row/JSON on success
      */
-    public function get_second_select_field_options_by_field($field_id, $option_value_id, $to_json = false) {
-        $field_id = intval($field_id);
+    public function get_second_select_field_options_by_field($field_id, $option_value_id, $to_json = false)
+    {
+        $field_id        = intval($field_id);
         $option_value_id = intval($option_value_id);
-        $options = array();
-        $sql = "SELECT * FROM {$this->table}
+        $options         = array();
+        $sql             = "SELECT * FROM {$this->table}
                 WHERE field_id = $field_id AND option_value = $option_value_id
                 ORDER BY option_display_text";
-        $result = Database::query($sql);
+        $result          = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $options = Database::store_result($result, 'ASSOC');
         }
@@ -334,9 +383,11 @@ class ExtraFieldOption extends Model
                 }
                 $string = json_encode($array);
             }
+
             return $string;
 
         }
+
         return $options;
     }
 
@@ -347,11 +398,12 @@ class ExtraFieldOption extends Model
      * @return string HTML string of options
      * @assert (0, '') === null
      */
-    public function get_field_options_by_field_to_string($field_id, $ordered_by = null) {
-        $field = new ExtraField($this->type);
+    public function get_field_options_by_field_to_string($field_id, $ordered_by = null)
+    {
+        $field      = new ExtraField($this->type);
         $field_info = $field->get($field_id);
-        $options = self::get_field_options_by_field($field_id, false, $ordered_by);
-        $elements = array();
+        $options    = self::get_field_options_by_field($field_id, false, $ordered_by);
+        $elements   = array();
         if (!empty($options)) {
             switch ($field_info['field_type']) {
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
@@ -359,7 +411,7 @@ class ExtraFieldOption extends Model
                     break;
                 default:
                     foreach ($options as $option) {
-                        $elements[]= $option['option_value'];
+                        $elements[] = $option['option_value'];
                     }
                     $html = implode(';', $elements);
                     break;
@@ -367,31 +419,37 @@ class ExtraFieldOption extends Model
 
             return $html;
         }
+
         return null;
 
     }
+
     /**
      * Get the maximum order value for a specific field
      * @param int Field ID
      * @return int Current max ID + 1 (we start from 0)
      * @assert (0, '') === 1
      */
-    public function get_max_order($field_id) {
+    public function get_max_order($field_id)
+    {
         $field_id = intval($field_id);
-        $sql = "SELECT MAX(option_order) FROM {$this->table} WHERE field_id = $field_id";
-        $res = Database::query($sql);
-        $max = 1;
+        $sql      = "SELECT MAX(option_order) FROM {$this->table} WHERE field_id = $field_id";
+        $res      = Database::query($sql);
+        $max      = 1;
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
             $max = $row[0] + 1;
         }
+
         return $max;
     }
+
     /**
      * Update the option using the given params
      * @param array Parameters with the data to be saved
      */
-    public function update($params) {
+    public function update($params)
+    {
         parent::update($params);
     }
 
@@ -399,24 +457,33 @@ class ExtraFieldOption extends Model
      * Display a form with the options for the field_id given in REQUEST
      * @return void Prints output
      */
-    function display() {
+    function display()
+    {
         // action links
         echo '<div class="actions">';
-       	//echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'', ICON_SIZE_MEDIUM).'</a>';
+        //echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'', ICON_SIZE_MEDIUM).'</a>';
         $field_id = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : null;
-        echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.Display::return_icon('add_user_fields.png',get_lang('Add'),'', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_self(
+        ).'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.Display::return_icon(
+            'add_user_fields.png',
+            get_lang('Add'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).'</a>';
         echo '</div>';
         echo Display::grid_html('extra_field_options');
     }
+
     /**
      * Returns an HTML form for the current field
      * @param string URL to send the form to (action=...)
      * @param string Type of action to offer through the form (edit, usually)
      * @return string HTML form
      */
-    public function return_form($url, $action) {
+    public function return_form($url, $action)
+    {
         $form_name = $this->type.'_field';
-        $form = new FormValidator($form_name, 'post', $url);
+        $form      = new FormValidator($form_name, 'post', $url);
         // Settting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
@@ -440,9 +507,9 @@ class ExtraFieldOption extends Model
             // Setting the defaults
             $defaults = $this->get($id);
             $form->freeze('option_value');
-        	$form->addElement('button', 'submit', get_lang('Modify'), 'class="save"');
+            $form->addElement('button', 'submit', get_lang('Modify'), 'class="save"');
         } else {
-        	$form->addElement('button', 'submit', get_lang('Add'), 'class="save"');
+            $form->addElement('button', 'submit', get_lang('Add'), 'class="save"');
         }
 
         $form->setDefaults($defaults);
@@ -451,6 +518,7 @@ class ExtraFieldOption extends Model
         $form->addRule('option_display_text', get_lang('ThisFieldIsRequired'), 'required');
         //$form->addRule('field_variable', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('option_value', get_lang('ThisFieldIsRequired'), 'required');
+
         return $form;
     }
 }

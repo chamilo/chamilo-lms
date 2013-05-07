@@ -38,7 +38,7 @@ if (is_object($objQuestion)) {
         $objQuestion->submitText  = get_lang('AddQuestionToExercise');
     }
 
-    if (isset($_GET['fromExercise'])) {
+    if (!isset($_GET['fromExercise'])) {
         $objQuestion->setDefaultQuestionValues = true;
     }
 

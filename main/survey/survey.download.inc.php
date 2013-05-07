@@ -22,7 +22,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 	// Database table definitions
 	$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
 	$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-	$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);		
+	$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 	$table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
 	// Now we check if the invitationcode is valid
@@ -53,7 +53,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 		if ($_POST['language']) {
 			$survey_invitation['survey_id'] = $_POST['language'];
 		} else {
-			echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'">';
+			echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.Security::remove_XSS($_GET['course']).'&invitationcode='.Security::remove_XSS($_GET['invitationcode']).'">';
 			echo '  <select name="language">';
 			while ($row = Database::fetch_assoc($result)) {
 				echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';

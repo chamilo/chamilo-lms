@@ -223,7 +223,7 @@ if ($_GET['view']) {
     $last_row=Database::fetch_array($result);
 
     if ($_GET['view']<$last_row['id']) {
-       $message= '<center>'.get_lang('NoAreSeeingTheLastVersion').'<br /> '.get_lang("Version").' (<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($current_row['reflink'])).'&group_id='.$current_row['group_id'].'&session_id='.$current_row['session_id'].'&view='.api_htmlentities($_GET['view']).'" title="'.get_lang('CurrentVersion').'">'.$current_row['version'].'</a> / <a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&group_id='.$last_row['group_id'].'&session_id='.$last_row['session_id'].'" title="'.get_lang('LastVersion').'">'.$last_row['version'].'</a>) <br />'.get_lang("ConvertToLastVersion").': <a href="index.php?cidReq='.$_course['id'].'&action=restorepage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&group_id='.$last_row['group_id'].'&session_id='.$last_row['session_id'].'&view='.api_htmlentities($_GET['view']).'">'.get_lang("Restore").'</a></center>';
+       $message= '<center>'.get_lang('NoAreSeeingTheLastVersion').'<br /> '.get_lang("Version").' (<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($current_row['reflink'])).'&group_id='.$current_row['group_id'].'&session_id='.$current_row['session_id'].'&view='.Security::remove_XSS($_GET['view']).'" title="'.get_lang('CurrentVersion').'">'.$current_row['version'].'</a> / <a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&group_id='.$last_row['group_id'].'&session_id='.$last_row['session_id'].'" title="'.get_lang('LastVersion').'">'.$last_row['version'].'</a>) <br />'.get_lang("ConvertToLastVersion").': <a href="index.php?cidReq='.$_course['id'].'&action=restorepage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&group_id='.$last_row['group_id'].'&session_id='.$last_row['session_id'].'&view='.Security::remove_XSS($_GET['view']).'">'.get_lang("Restore").'</a></center>';
        Display::display_warning_message($message,false);
     }
 
@@ -1010,17 +1010,17 @@ if ($_GET['action']=='mactiveusers') {
                 $row[] = '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
                     Display::tag('span', api_htmlentities($userinfo['complete_name_login_as'])).
                     '</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($row['user_id']).
-                    '&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a>';
+                    '&session_id='.intval($_GET['session_id']).'&group_id='.intval($_GET['group_id']).'"></a>';
             }
             else {
                 $row[] = get_lang('Anonymous').' ('.$obj->user_ip.')';
             }
-            $row[] ='<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($obj->user_id).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.$obj->NUM_EDIT.'</a>';
+            $row[] ='<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($obj->user_id).'&session_id='.intval($_GET['session_id']).'&group_id='.intval($_GET['group_id']).'">'.$obj->NUM_EDIT.'</a>';
             $rows[] = $row;
         }
 
         $table = new SortableTableFromArrayConfig($rows,1,10,'MostActiveUsersA_table','','','DESC');
-        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+        $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($_GET['action']),'session_id'=>intval($_GET['session_id']),'group_id'=>intval($_GET['group_id'])));
         $table->set_header(0,get_lang('Author'), true);
         $table->set_header(1,get_lang('Contributions'), true,array ('style' => 'width:30px;'));
         $table->display();
@@ -1036,7 +1036,7 @@ if ($_GET['action']=='usercontrib') {
     echo '<div class="actions">'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
             Display::tag('span', api_htmlentities($userinfo['complete_name'])).
             '</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($row['user_id']).
-            '&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a></div>';
+            '&session_id='.intval($_GET['session_id']).'&group_id='.intval($_GET['group_id']).'"></a></div>';
 
     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
         $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND user_id="'.Database::escape_string($_GET['user_id']).'"';
@@ -1074,7 +1074,7 @@ if ($_GET['action']=='usercontrib') {
             $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
             $row[] =$ShowAssignment;
 
-            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&view='.$obj->id.'&session_id='.api_htmlentities(urlencode($_GET['$session_id'])).'&group_id='.api_htmlentities(urlencode($_GET['group_id'])).'">'.api_htmlentities($obj->title).'</a>';
+            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&view='.$obj->id.'&session_id='.Security::remove_XSS($_GET['$session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
             $row[] =Security::remove_XSS($obj->version);
             $row[] =Security::remove_XSS($obj->comment);
             $row[] =Security::remove_XSS($obj->progress).' %';
@@ -1131,7 +1131,7 @@ if ($_GET['action']=='mostchanged') {
 
             $row = array ();
             $row[] =$ShowAssignment;
-            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
+            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
             $row[] = $obj->MAX;
             $rows[] = $row;
         }
@@ -1173,7 +1173,7 @@ if ($_GET['action']=='mvisited') {
 
             $row = array ();
             $row[] =$ShowAssignment;
-            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
+            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
             $row[] = $obj->tsum;
             $rows[] = $row;
         }
@@ -1234,7 +1234,7 @@ if ($_GET['action']=='wanted') {
 
             $row = array ();
 			$wanted_show=Security::remove_XSS($wanted_show);
-            $row[] = '<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq=&action=addnew&title='.str_replace('_',' ',$wanted_show).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'" class="new_wiki_link">'.str_replace('_',' ',$wanted_show).'</a>';//meter un remove xss en lugar de htmlentities
+            $row[] = '<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq=&action=addnew&title='.str_replace('_',' ',$wanted_show).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'" class="new_wiki_link">'.str_replace('_',' ',$wanted_show).'</a>';
 
             $rows[] = $row;
         }
@@ -1309,8 +1309,7 @@ if ($_GET['action']=='orphaned') {
 		//show table
         $row = array ();
 			$row[] =$ShowAssignment;
-            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($orphaned_show)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($orphaned_title).'</a>';
-
+            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($orphaned_show)).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.api_htmlentities($orphaned_title).'</a>';
             $rows[] = $row;
         }
 
@@ -1362,11 +1361,8 @@ if ($_GET['action']=='mostlinked') {
 	$linked=array_unique($linked);//make a unique list. TODO:delete this line and count how many for each page
 	//show table
         foreach ($linked as $linked_show) {
-
             $row = array ();
-
-			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode(str_replace('_',' ',$linked_show))).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.str_replace('_',' ',$linked_show).'</a>';
-
+			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode(str_replace('_',' ',$linked_show))).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.str_replace('_',' ',$linked_show).'</a>';
             $rows[] = $row;
         }
 
@@ -1463,7 +1459,7 @@ if ($_GET['action']=='searchpages') {
 	} else {
 
 		// initiate the object
-		$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.api_htmlentities($_GET['cidReq']).'&action='.api_htmlentities($_GET['action']).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'&mode_table=yes1&search_term='.api_htmlentities($_GET['search_term']).'&search_content='.api_htmlentities($_GET['search_content']).'&all_vers='.api_htmlentities($_GET['all_vers']));
+		$form = new FormValidator('wiki_search','post', api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&action='.Security::remove_XSS($_GET['action']).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'&mode_table=yes1&search_term='.Security::remove_XSS($_GET['search_term']).'&search_content='.Security::remove_XSS($_GET['search_content']).'&all_vers='.Security::remove_XSS($_GET['all_vers']));
 
 		// settting the form elements
 
@@ -1517,7 +1513,7 @@ if ($_GET['action']=='links') {
         }
 
         echo '<div id="wikititle">';
-        echo get_lang('LinksPagesFrom').': '.$ShowAssignment.' <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($page)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($row['title']).'</a>';
+        echo get_lang('LinksPagesFrom').': '.$ShowAssignment.' <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.Security::remove_XSS($page).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($row['title']).'</a>';
         echo '</div>';
 
         //fix index to title Main page into linksto
@@ -1562,7 +1558,7 @@ if ($_GET['action']=='links') {
 
                 $row = array ();
                 $row[] =$ShowAssignment;
-                $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
+                $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.Security::remove_XSS($obj->reflink).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
                 if ($obj->user_id <>0) {
                     $row[] = '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
                     Display::tag('span', api_htmlentities($userinfo['complete_name_login_as'])).'</a>';
@@ -1675,7 +1671,7 @@ if ($_GET['action']=='edit') {
     }
 
     //Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher. And users in groups
-    if (($row['reflink']=='index' || $row['reflink']=='' || $row['assignment']==1) && (!api_is_allowed_to_edit(false,true) && intval($_GET['group_id'])==0)) {
+    if (($row['reflink']=='index' || $row['reflink']=='' || $row['assignment']==1) && (!api_is_allowed_to_edit(false,true) && $_GET['group_id'] == 0)) {
         Display::display_error_message(get_lang('OnlyEditPagesCourseManager'));
     } else {
         $PassEdit=false;
@@ -1683,7 +1679,7 @@ if ($_GET['action']=='edit') {
         //check if is a wiki group
         if ($_clean['group_id']!=0) {
             //Only teacher, platform admin and group members can edit a wiki group
-            if (api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'],intval($_GET['group_id']))) {
+            if (api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group($_user['user_id'], $_GET['group_id'])) {
                 $PassEdit=true;
             } else {
                   Display::display_normal_message(get_lang('OnlyEditPagesGroupMembers'));
@@ -1831,9 +1827,7 @@ if ($_GET['action']=='edit') {
                     exit;
                 }
                 //form
-                echo '<form name="form1" method="post" action="'.api_get_self().'?action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">';
-
-
+                echo '<form name="form1" method="post" action="'.api_get_self().'?action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
                 echo '<div id="wikititle">';
                 echo '<div style="width:70%;float:left;">'.$icon_assignment.str_repeat('&nbsp;',3).api_htmlentities($title).'</div>';
 
@@ -2056,14 +2050,14 @@ if ($_GET['action']=='history' or $_POST['HistoryDifferences']) {
             $sql='SELECT * FROM '.$tbl_wiki.'WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id DESC';
             $result=Database::query($sql);
 
-            $title		= $_GET['title'];
-            $group_id	= $_GET['group_id'];
+            $title		= Security::remove_XSS($_GET['title']);
+            $group_id	= intval($_GET['group_id']);
 
             echo '<div id="wikititle">';
-            echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.api_htmlentities($KeyTitle);
+            echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.Security::remove_XSS($KeyTitle);
             echo '</div>';
             echo '<div id="wikicontent">';
-            echo '<form id="differences" method="POST" action="index.php?cidReq='.$_course['id'].'&action=history&title='.api_htmlentities(urlencode($title)).'&session_id='.api_htmlentities($session_id).'&group_id='.api_htmlentities($group_id).'">';
+            echo '<form id="differences" method="POST" action="index.php?cidReq='.$_course['id'].'&action=history&title='.$title.'&session_id='.$session_id.'&group_id='.$group_id.'">';
 
             echo '<ul style="list-style-type: none;">';
             echo '<br/>';
@@ -2253,7 +2247,7 @@ if ($_GET['action']=='recentchanges') {
             $row = array ();
             $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());
             $row[] = $ShowAssignment.$icon_task;
-            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&amp;view='.$obj->id.'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
+            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&amp;view='.$obj->id.'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
             $row[] = $obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');
             if ($obj->user_id <> 0 ) {
                 $row[] = '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
@@ -2326,7 +2320,7 @@ if ($_GET['action']=='allpages') {
 
             $row = array ();
             $row[] =$ShowAssignment.$icon_task;
-            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
+            $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.Security::remove_XSS($obj->reflink).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
             if ($obj->user_id <>0) {
                 $row[] =  '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
                 Display::tag('span', api_htmlentities($userinfo['complete_name_login_as'])).
@@ -2338,10 +2332,10 @@ if ($_GET['action']=='allpages') {
             $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());
 
             if (api_is_allowed_to_edit(false,true)|| api_is_platform_admin()) {
-                $showdelete=' <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
+                $showdelete=' <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=delete&title='.Security::remove_XSS($obj->reflink).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
             }
             if (api_is_allowed_to_session_edit(false,true) ) {
-                $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=edit&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('edit.png', get_lang('EditPage'),'',ICON_SIZE_SMALL).'</a> <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=discuss&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('discuss.png', get_lang('Discuss'),'',ICON_SIZE_SMALL).'</a> <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('history.png', get_lang('History'),'',ICON_SIZE_SMALL).'</a> <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('what_link_here.png', get_lang('LinksPages'),'',ICON_SIZE_SMALL).'</a>'.$showdelete;
+                $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=edit&title='.Security::remove_XSS($obj->reflink).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Display::return_icon('edit.png', get_lang('EditPage'),'',ICON_SIZE_SMALL).'</a> <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=discuss&title='.Security::remove_XSS($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Display::return_icon('discuss.png', get_lang('Discuss'),'',ICON_SIZE_SMALL).'</a> <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Display::return_icon('history.png', get_lang('History'),'',ICON_SIZE_SMALL).'</a> <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.Security::remove_XSS($_GET['session_id']).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Display::return_icon('what_link_here.png', get_lang('LinksPages'),'',ICON_SIZE_SMALL).'</a>'.$showdelete;
             }
             $rows[] = $row;
         }

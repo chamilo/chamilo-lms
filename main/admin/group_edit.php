@@ -18,7 +18,7 @@ $interbreadcrumb[] = array('url' => 'group_list.php', 'name' => get_lang('GroupL
 
 $table_group = Database::get_main_table(TABLE_MAIN_GROUP);
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 textarea = "";
 num_characters_permited = 255;
 function text_longitud(){

@@ -5273,6 +5273,6 @@ i.size-32.icon-new-work {
 }
 
 
-#question_admin_form .media {
+#question_admin_form .media, #edit_question .media{
     display:none;
 }

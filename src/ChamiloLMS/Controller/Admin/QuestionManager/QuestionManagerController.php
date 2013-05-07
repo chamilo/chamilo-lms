@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-namespace ChamiloLMS\Controller;
+namespace ChamiloLMS\Controller\Admin\QuestionManager;
 
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
@@ -9,11 +9,11 @@ use Pagerfanta\Adapter\DoctrineCollectionAdapter;
 use Pagerfanta\Pagerfanta;
 
 /**
- * Class AdminController
+ * Class QuestionManagerController
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class AdminController
+class QuestionManagerController
 {
     /**
      * @param Application $app
@@ -23,9 +23,16 @@ class AdminController
 
     }
 
+    /**
+     *
+     * Edits a question
+     *
+     * @param Application $app
+     * @param int $id
+     * @return Response
+     */
     public function editQuestionAction(Application $app, $id)
     {
-
         $extraJS = array();
         //@todo improve this JS includes should be added using twig
         $extraJS[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
@@ -33,6 +40,7 @@ class AdminController
         $app['extraJS'] = $extraJS;
 
         $exercise = new \Exercise();
+        /** @var  \Question $question */
         $question = \Question::read($id, null, $exercise);
         $question->setDefaultValues = true;
         $form = new \FormValidator('edit_question');
@@ -42,23 +50,29 @@ class AdminController
 
         $app['template']->assign('form', $form->toHtml());
 
-        $response = $app['template']->render_template('admin/edit_question.tpl');
+        $response = $app['template']->render_template('admin/questionmanager/edit_question.tpl');
         return new Response($response, 200, array());
 
     }
 
+    /**
+     * Show the index page for the question manager
+     * @param Application $app
+     * @return Response
+     */
     public function questionManagerIndexAction(Application $app)
     {
-        $response = $app['template']->render_template('admin/questionmanager.tpl');
+        $response = $app['template']->render_template('admin/questionmanager/questionmanager.tpl');
         return new Response($response, 200, array());
     }
 
 
 
     /**
+     * Get question categories per id
      * @param Application $app
      * @param int $id
-     * @return mixed
+     * @return string
      */
     public function getCategoriesAction(Application $app, $id)
     {
@@ -91,7 +105,7 @@ class AdminController
      * Gets the question list per category
      * @param Application $app
      * @param $categoryId
-     * @return int
+     * @return Response
      */
     public function getQuestionsByCategoryAction(Application $app, $categoryId)
     {
@@ -177,13 +191,15 @@ class AdminController
         foreach ($questions as $question) {
 
         }
-        $response = $app['template']->render_template('admin/questions.tpl');
+        $response = $app['template']->render_template('admin/questionmanager/questions.tpl');
         return new Response($response, 200, array());
     }
 
     /**
-     *
+     * Index of the question manager
      * @param Application $app
+     * @return Response
+     *
      */
     public function questionsAction(Application $app)
     {
@@ -233,7 +249,7 @@ class AdminController
         $tree = $repo->buildTree($query->getArrayResult(), $options);
         $app['template']->assign('global_category_tree', $tree);
 
-        $response = $app['template']->render_template('admin/question_categories.tpl');
+        $response = $app['template']->render_template('admin/questionmanager/question_categories.tpl');
         return new Response($response, 200, array());
 
     }

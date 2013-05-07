@@ -458,8 +458,8 @@ $app['news.controller'] = $app->share(
     }
 );
 
-$app['admin.controller'] = $app->share(
+$app['question_manager.controller'] = $app->share(
     function () use ($app) {
-        return new ChamiloLMS\Controller\AdminController();
+        return new ChamiloLMS\Controller\Admin\QuestionManager\QuestionManagerController();
     }
 );

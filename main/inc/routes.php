@@ -478,26 +478,27 @@ $app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
     ->assert('type', '.+');
 
 /** Question manager - admin */
-$app->match('/admin/questions', 'admin.controller:questionsAction', 'GET|POST')
+
+$app->get('/admin/questionmanager/', 'question_manager.controller:questionManagerIndexAction')
+    ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_questionmanager');
+
+$app->match('/admin/questionmanager/questions', 'question_manager.controller:questionsAction', 'GET|POST')
     ->assert('type', '.+')
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions');
 
-$app->match('/admin/questions/edit/{id}', 'admin.controller:editQuestionAction', 'GET|POST')
+$app->match('/admin/questionmanager/questions/edit/{id}', 'question_manager.controller:editQuestionAction', 'GET|POST')
     ->assert('type', '.+')
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_edit');
 
-$app->get('/admin/questions/get-categories/{id}', 'admin.controller:getCategoriesAction')
+$app->get('/admin/questionmanager/questions/get-categories/{id}', 'question_manager.controller:getCategoriesAction')
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_get_categories');
 
-$app->get('/admin/questions/get-questions-by-category/{categoryId}', 'admin.controller:getQuestionsByCategoryAction')
+$app->get('/admin/questionmanager/questions/get-questions-by-category/{categoryId}', 'question_manager.controller:getQuestionsByCategoryAction')
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_get_questions_by_category');
-
-$app->get('/admin/questionmanager', 'admin.controller:questionManagerIndexAction')
-    ->before($adminAndQuestionManagerCondition)
-    ->bind('admin_questionmanager');
-
 

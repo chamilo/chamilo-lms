@@ -18,7 +18,7 @@
  */
 class Display
 {
-    /* The main template*/
+    /* The main template */
     static $global_template;
     static $preview_style = null;
 

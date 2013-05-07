@@ -596,17 +596,16 @@ div.admin_section h4 {
  *  CHAMILO CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION      *
  ***************************************************************/
 .sectiontitle {
-    background-color: #D2ECF5;
-    border: 1px solid #ABDAEA;
+    background-color: #EFEFEF;
+    border: 1px solid #CCCCCC;
+    color: #333333;
     font-weight: bold;
-    color: #666666;
     list-style-type: none;
     margin: 5px 5px 5px 0px;
     padding: 5px;
     font-size: 14px;
 }
 .sectioncomment {
-    color: #000000;
     margin: 5px 5px 5px 0px;
     padding: 5px;    
 }

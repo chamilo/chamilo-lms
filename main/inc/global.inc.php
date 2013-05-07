@@ -292,7 +292,10 @@ $app->error(
 
         if (isset($code)) {
             switch ($code) {
-                case 404:
+                case 401:
+                    $message = 'Unauthorized';
+                    break;
+                case 404: // not found
                     $message = 'The requested page could not be found.';
                     break;
                 default:

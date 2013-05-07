@@ -24,7 +24,6 @@ class QuestionManagerController
     }
 
     /**
-     *
      * Edits a question
      *
      * @param Application $app
@@ -40,7 +39,6 @@ class QuestionManagerController
         $app['extraJS'] = $extraJS;
 
         // Setting exercise obj.
-
         $exercise = new \Exercise();
         $exercise->edit_exercise_in_lp = true;
 
@@ -71,10 +69,9 @@ class QuestionManagerController
         }
 
         $app['template']->assign('form', $form->toHtml());
-
         $response = $app['template']->render_template('admin/questionmanager/edit_question.tpl');
-        return new Response($response, 200, array());
 
+        return new Response($response, 200, array());
     }
 
     /**
@@ -87,8 +84,6 @@ class QuestionManagerController
         $response = $app['template']->render_template('admin/questionmanager/questionmanager.tpl');
         return new Response($response, 200, array());
     }
-
-
 
     /**
      * Get question categories per id
@@ -109,7 +104,7 @@ class QuestionManagerController
             'childClose' => '</li>',
             'nodeDecorator' => function ($row) use ($app) {
                 $url = $app['url_generator']->generate('admin_questions_get_categories', array('id' => $row['iid']));
-                return \Display::url($row['title'], $url);
+                return \Display::url($row['title'], $url, array('id' => $row['iid']));
             }
             //'representationField' => 'slug',
             //'html' => true
@@ -151,7 +146,7 @@ class QuestionManagerController
             array(
                 'name' => 'iid',
                 'index' => 'iid',
-                'width' => '30',
+                'width' => '20',
                 'align' => 'left'
             ),
             array(
@@ -178,7 +173,7 @@ class QuestionManagerController
         );
         // Autowidth.
         $extraParams['autowidth'] = 'true';
-        // height auto.
+        // Height auto.
         $extraParams['height'] = 'auto';
         $token = null;
         $editUrl = $app['url_generator']->generate('admin_questions');
@@ -186,11 +181,10 @@ class QuestionManagerController
         /* '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.
             \Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'. */
         $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
-            return \'<a href="'.$editUrl.'/edit/\'+rowObject[0]+\'">'.\Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.'\';
+            return \'<a target="_blank" href="'.$editUrl.'/\'+rowObject[0]+\'/edit">'.\Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.'\';
         }';
 
         $js = \Display::grid_js('questions', $url, $columns, $columnModel, $extraParams, array(), $actionLinks, true);
-
 
         $app['template']->assign('grid', $grid);
         $app['template']->assign('js', $js);
@@ -210,9 +204,6 @@ class QuestionManagerController
         );*/
         //$app['template']->assign('pagination', $pagerfanta);
 
-        foreach ($questions as $question) {
-
-        }
         $response = $app['template']->render_template('admin/questionmanager/questions.tpl');
         return new Response($response, 200, array());
     }
@@ -241,22 +232,30 @@ class QuestionManagerController
             'childClose' => '</li>',
             'nodeDecorator' => function ($row) use ($app) {
                 $url = $app['url_generator']->generate('admin_questions_get_categories', array('id' => $row['iid']));
-                return \Display::url($row['title'], $url);
+                return \Display::url($row['title'], $url, array('id' => $row['iid']));
             }
             //'representationField' => 'slug',
             //'html' => true
         );
 
         // Getting all categories only first level lvl=1
-        $query = $app['orm.em']
-            ->createQueryBuilder()
+        /** @var \Doctrine\ORM\QueryBuilder $qb */
+        $qb = $app['orm.em']->createQueryBuilder()
             ->select('node')
             ->from('Entity\CQuizCategory', 'node')
             ->where('node.cId <> 0 AND node.lvl = 0')
-            ->orderBy('node.root, node.lft', 'ASC')
-            ->getQuery();
+            ->orderBy('node.root, node.lft', 'ASC');
 
+        $categoryId = $app['request']->get('categoryId');
+
+        if (isset($categoryId)) {
+            /*$qb->add('where', 'node.rgt = :categoryId');
+            $qb->setParameter('categoryId', $categoryId);*/
+        }
+
+        $query = $qb->getQuery();
         $tree = $repo->buildTree($query->getArrayResult(), $options);
+
         $app['template']->assign('category_tree', $tree);
 
         // Getting globals

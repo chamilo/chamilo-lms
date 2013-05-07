@@ -494,7 +494,7 @@ $app->match('/admin/questionmanager/questions', 'question_manager.controller:que
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions');
 
-$app->match('/admin/questionmanager/questions/edit/{id}', 'question_manager.controller:editQuestionAction', 'GET|POST')
+$app->match('/admin/questionmanager/questions/{id}/edit', 'question_manager.controller:editQuestionAction', 'GET|POST')
     ->assert('type', '.+')
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions_edit');

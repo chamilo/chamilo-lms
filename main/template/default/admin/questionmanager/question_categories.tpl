@@ -1,23 +1,33 @@
 {% extends app.template_style ~ "/layout/layout_2_col.tpl" %}
 {% block left_column %}
     <script>
+        function loadQuestions(id) {
+            var categoryUrl = '{{ app.url_generator.generate('admin_questions_get_categories', {id : ':s'}) }}';
+            categoryUrl = categoryUrl.replace(':s', id);
+            var questionContentUrl = '{{ app.url_generator.generate('admin_get_questions_by_category', {categoryId : ':s'}) }}';
+            questionContentUrl = questionContentUrl.replace(':s', id);
+            $('.questions').load(questionContentUrl);
+            var parent = $('.load_categories li #'+id).parent();
+            if (parent.find('span#'+id).length == 0) {
+                var span = document.createElement('span');
+                $(span).attr('id', id);
+                $(span).load(categoryUrl);
+                parent.append(span);
+            }
+            return false;
+        }
+
         $(function() {
+
+            {% if app.request.get('categoryId') %}
+                var categoryId = '{{ app.request.get('categoryId') }}';
+                loadQuestions(categoryId);
+            {% endif %}
+
             $('.load_categories li').on('click', 'a', function() {
-                //event.preventDefault();
                 var url = $(this).attr('href');
                 var id = url.replace(/[^\d\.]/g, '');
-
-                var questionContentUrl = '{{ app.url_generator.generate('admin_get_questions_by_category', {categoryId : ':s'}) }}';
-                questionContentUrl = questionContentUrl.replace(':s', id);
-                $('.questions').load(questionContentUrl);
-                var parent = $(this).parent();
-                if (parent.find('span#'+id).length == 0) {
-
-                    var span = document.createElement('span');
-                    $(span).attr('id', id);
-                    $(span).load(url);
-                    parent.append(span);
-                }
+                loadQuestions(id);
                 return false;
             });
         });
@@ -30,7 +40,6 @@
     </div>
 {% endblock %}
 {% block right_column %}
-
     <div class="questions">
     </div>
 {% endblock %}

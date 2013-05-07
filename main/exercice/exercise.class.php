@@ -1022,21 +1022,21 @@ class Exercise
 
         $this->save_categories_in_exercise($this->categories);
 
-        // updates the question position
+        // Updates the question position.
         $this->update_question_positions();
     }
 
     /* Updates question position */
 
-    function update_question_positions()
+    public function update_question_positions()
     {
         $quiz_question_table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         //Fixes #3483 when updating order
         $question_list = $this->selectQuestionList(true);
-        if (!empty($question_list)) {
+        if (!empty($question_list) && !empty($this->course_id) && !empty($this->id)) {
             foreach ($question_list as $position => $questionId) {
                 $sql = "UPDATE $quiz_question_table SET question_order ='".intval($position)."'".
-                    "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id = ".intval($this->id);
+                    "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id = ".$this->id;
                 Database::query($sql);
             }
         }
@@ -5075,7 +5075,8 @@ class Exercise
      * @param null $order
      * @return bool
      */
-    function get_categories_with_name_in_exercise($order = null) {
+    public function get_categories_with_name_in_exercise($order = null)
+    {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE exercise_id = {$this->id} AND qc.c_id = {$this->course_id} ";

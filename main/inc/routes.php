@@ -14,7 +14,7 @@ $userAccessConditions = function (Request $request) use ($app) {
 };
 
 /** Setting course session and group global values */
-$settingCourseConditions = function (Request $request) use ($app) {
+$settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
     $cidReq    = $request->get('cidReq');
     $sessionId = $request->get('id_session');
@@ -26,6 +26,10 @@ $settingCourseConditions = function (Request $request) use ($app) {
 
     $courseReset = false;
     if ((!empty($cidReq) && $tempCourseId != $cidReq) || empty($tempCourseId) || empty($tempCourseId) == -1) {
+        $courseReset = true;
+    }
+
+    if (isset($cidReset) && $cidReset == 1) {
         $courseReset = true;
     }
 
@@ -41,11 +45,11 @@ $settingCourseConditions = function (Request $request) use ($app) {
         $sessionReset = true;
     }
     /*
-    $app['monolog']->addDebug('Start');
-    $app['monolog']->addDebug($courseReset);
-    $app['monolog']->addDebug($cidReq);
-    $app['monolog']->addDebug($tempCourseId);
-    $app['monolog']->addDebug('End');
+        $app['monolog']->addDebug('Start');
+        $app['monolog']->addDebug($courseReset);
+        $app['monolog']->addDebug($cidReq);
+        $app['monolog']->addDebug($tempCourseId);
+        $app['monolog']->addDebug('End');
     */
 
     if ($courseReset) {
@@ -120,6 +124,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     //If I'm the admin platform i'm a teacher of the course
     $is_platformAdmin = api_is_platform_admin();
     $courseReset      = Session::read('courseReset');
+
 
     //$app['monolog']->addDebug($courseReset);
     //$app['monolog']->addDebug($courseId);

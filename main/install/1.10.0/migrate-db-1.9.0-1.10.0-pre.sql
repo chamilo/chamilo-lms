@@ -201,7 +201,7 @@ ALTER TABLE track_e_lastaccess ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_access ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_downloads ADD COLUMN c_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_links ADD COLUMN c_id int unsigned NOT NULL default 0;
-ALTER TABLE track_e_lastaccess ADD INDEX ( c_id, access_user_id ) ;
+ALTER TABLE track_e_lastaccess ADD INDEX (c_id, access_user_id);
 
 ALTER TABLE c_quiz ADD COLUMN autolaunch int DEFAULT 0;
 RENAME TABLE c_quiz_question_category TO c_quiz_category;
@@ -264,4 +264,4 @@ ALTER TABLE c_quiz_category MODIFY COLUMN parent_id int default null;
 ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned auto_increment;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.005' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.006' WHERE variable = 'chamilo_database_version';

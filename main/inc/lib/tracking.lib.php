@@ -453,7 +453,7 @@ class Tracking
                 $exercise_id = null;
                 if (Database::num_rows($result)) {
                     while ($row = Database::fetch_array($result)) {
-                        $exercise_list[] = $row['id'];
+                        $exercise_list[] = $row['iid'];
                     }
                 }
                 if (!empty($exercise_list)) {

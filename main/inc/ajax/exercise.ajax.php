@@ -4,6 +4,7 @@
  * Responses to AJAX calls
  */
 
+use ChamiloSession as Session;
 require_once '../../exercice/exercise.class.php';
 require_once '../../exercice/question.class.php';
 require_once '../../exercice/answer.class.php';
@@ -440,7 +441,7 @@ switch ($action) {
                     $transaction_data = array(
                       'item_id' => $exercise_test_id,
                       'data' => array(
-                        'question_order' => implode(',', $objExercise->selectQuestionList()),
+                        'question_order' => implode(',', Session::read('questionList')),
                       ),
                     );
                     $transaction = new ExerciseTestTransactionLog($transaction_data);

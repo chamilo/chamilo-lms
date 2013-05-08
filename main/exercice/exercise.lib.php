@@ -14,6 +14,8 @@
  * Code
  */
 
+use ChamiloSession as Session;
+
 /**
  * Shows a question
  *
@@ -2495,7 +2497,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
                 $transaction_data = array(
                   'item_id' => $exercise_test_id,
                   'data' => array(
-                    'question_order' => implode(',', $objExercise->selectQuestionList()),
+                    'question_order' => implode(',', Session::read('questionList')),
                   ),
                 );
                 $transaction = new ExerciseTestTransactionLog($transaction_data);

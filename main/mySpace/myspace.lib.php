@@ -453,7 +453,7 @@ class MySpace {
 				$last_login_date = $last_login_date_tmp;
 			} else if($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
 				// Find the max and assign it to first_login_date
-				if(strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
+				if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
 					$last_login_date = $last_login_date_tmp;
 				}
 			}
@@ -1225,37 +1225,37 @@ class MySpace {
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 		$course_data = array();
-		$courses_code = array_keys($courses);
+		$courseList = array_keys($courses);
 
-		foreach ($courses_code as &$code) {
+		foreach($courseList as &$code) {
 			$code = "'$code'";
 		}
 
 		// get all courses with limit
-		$sql = "SELECT course.code as col1, course.title as col2, id
+		$sql = "SELECT course.code, course.title, id
 				FROM $tbl_course course
-				WHERE course.code IN (".implode(',',$courses_code).")";
+				WHERE course.id IN (".implode(',',$courseList).")";
 
 		if (!in_array($direction, array('ASC','DESC'))) $direction = 'ASC';
 
 	    $column = intval($column);
 	    $from = intval($from);
 	    $number_of_items = intval($number_of_items);
-		$sql .= " ORDER BY col$column $direction ";
+		$sql .= " ORDER BY $column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
 
 		$res = Database::query($sql);
-		while ($row_course = Database::fetch_row($res)) {
-			$course_code = $row_course[0];
-            $courseId = $row_course[2];
+		while ($row_course = Database::fetch_array($res, 'ASSOC')) {
+			$courseCode = $row_course['code'];
+            $courseId = $row_course['id'];
 
-			$avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
+			$nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
 			// students directly subscribed to the course
 			if (empty($session_id)) {
 				$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.c_id='$courseId'";
 			} else {
-				$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu.course_code='$course_code' AND id_session = '$session_id' AND srcu.status<>2";
+				$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu.c_id= $courseId AND id_session = '$session_id' AND srcu.status<>2";
 			}
 			$rs = Database::query($sql);
 			$users = array();
@@ -1285,7 +1285,7 @@ class MySpace {
 				$avg_assignments_in_course = null;
 			}
 			$table_row = array();
-			$table_row[] = $row_course[1];
+			$table_row[] = $row_course['title'];
 			$table_row[] = $nb_students_in_course;
 			$table_row[] = $avg_time_spent_in_course;
 			$table_row[] = is_null($avg_progress_in_course) ? '' : $avg_progress_in_course.'%';
@@ -1295,11 +1295,11 @@ class MySpace {
 			$table_row[] = $avg_assignments_in_course;
 
 			//set the "from" value to know if I access the Reporting by the chamilo tab or the course link
-			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&from=myspace&id_session='.$session_id.'">
+			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$courseCode.'&from=myspace&id_session='.$session_id.'">
 			                 <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
 			                </center>';
 			$csv_content[] = array(
-				api_html_entity_decode($row_course[1], ENT_QUOTES, $charset),
+				api_html_entity_decode($row_course['title'], ENT_QUOTES, $charset),
 				$nb_students_in_course,
 				$avg_time_spent_in_course,
 				is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',

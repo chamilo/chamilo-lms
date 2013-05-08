@@ -398,7 +398,7 @@ if (!empty($student_id)) {
             $coach_info = UserManager::get_user_info_by_id($session_coach_id);
             $courseInfo['tutor_name'] = api_get_person_name($coach_info['firstname'], $coach_info['lastname']);
         }*/
-        $coachs_name  = $courseInfo['tutor_name'];
+        $coachs_name  = isset($courseInfo['tutor_name']) ? $courseInfo['tutor_name'] : null;
         $session_name = $session_info['name'];
     } // end
 
@@ -658,14 +658,10 @@ if (empty($_GET['details'])) {
 		echo '</table>';
 	}
 } else {
-	$csv_content[] = array ();
-    $csv_content[] = array (str_replace('&nbsp;', '', $table_title));
-
-    $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
-
-    // csv export headers
-    $csv_content[] = array ();
-    $csv_content[] = array (
+	$csv_content[] = array();
+    $csv_content[] = array(str_replace('&nbsp;', '', $table_title));
+    $csv_content[] = array();
+    $csv_content[] = array(
     	get_lang('Learnpath', ''),
     	get_lang('Time', ''),
     	get_lang('AverageScore', ''),
@@ -674,10 +670,11 @@ if (empty($_GET['details'])) {
     	get_lang('LastConnexion', '')
     );
 
+    $t_lp = Database :: get_course_table(TABLE_LP_MAIN);
     if (empty($session_id)) {
         $sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE session_id = 0 AND c_id = $courseId ORDER BY lp.display_order";
     } else {
-    	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = $courseId  ORDER BY lp.display_order";
+    	$sql_lp = " SELECT lp.name, lp.id FROM $t_lp lp WHERE c_id = $courseId ORDER BY lp.display_order";
     }
     $rs_lp = Database::query($sql_lp);
     $token = Security::get_token();
@@ -839,7 +836,7 @@ if (empty($_GET['details'])) {
 								(quiz.session_id = $session_id OR quiz.session_id = 0)
                           ORDER BY quiz.title ASC ";
 
-		$result_exercices = Database::query($sql_exercices);
+        $result_exercices = Database::query($sql_exercices);
 		$i = 0;
 		if (Database :: num_rows($result_exercices) > 0) {
 			while ($exercices = Database :: fetch_array($result_exercices)) {
@@ -876,7 +873,7 @@ if (empty($_GET['details'])) {
 				$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . '
 				                     WHERE  exe_exo_id      ="'.$exercise_id.'" AND
 				                            exe_user_id     ="'.$student_id.'" AND
-				                            c_id    ="'.$courseId.'" AND
+				                            c_id    = '.$courseId.' AND
                                             session_id      ="'.$session_id.'" AND
 				                            status          = "" AND
 				                            orig_lp_id      = 0 AND
@@ -887,24 +884,21 @@ if (empty($_GET['details'])) {
 					$id_last_attempt = Database :: result($result_last_attempt, 0, 0);
 					if ($count_attempts > 0) {
                         if (api_coach_can_edit_view_results($courseId, $session_id)) {
-                            echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$session_id.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
+                            echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$courseInfo['code'].'&session_id='.$session_id.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
                         } else {
                             echo Display::return_icon('quiz_na.png', get_lang('Exercise'));
                         }
                     }
 				}
 				echo '</td>';
-
 				echo '<td>';
-				$all_attempt_url = "../exercice/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$student_id&id_session=$session_id";
+				$all_attempt_url = "../exercice/exercise_report.php?exerciseId=$exercise_id&cidReq=".$courseInfo['code']."&filter_by_user=$student_id&id_session=$session_id";
 				echo Display::url(Display::return_icon('test_results.png', get_lang('AllAttempts'), array(), ICON_SIZE_SMALL), $all_attempt_url );
-
 				echo '</td></tr>';
 				$data_exercices[$i][] = $exercices['title'];
 				$data_exercices[$i][] = $score_percentage . '%';
 				$data_exercices[$i][] = $count_attempts;
 				$i++;
-
 			}
 		} else {
 			echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
@@ -914,7 +908,7 @@ if (empty($_GET['details'])) {
 
         //@when using sessions we do not show the survey list
         if (empty($session_id)) {
-            $survey_list = survey_manager::get_surveys($course_code, $session_id);
+            $survey_list = survey_manager::get_surveys($courseInfo['code'], $session_id);
 
             $survey_data = array();
             foreach($survey_list as $survey) {

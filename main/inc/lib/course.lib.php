@@ -1270,7 +1270,6 @@ class CourseManager
         return $users;
     }
 
-
     /**
      *    Return user info array of all users registered in the specified real or virtual course
      *    This only returns the users that are registered in this actual course, not linked courses.

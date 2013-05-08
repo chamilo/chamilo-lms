@@ -16,6 +16,9 @@ require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+
+$session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
+
 if ($export_csv) {
 	ob_start();
 }
@@ -122,7 +125,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 	}
 	if (api_is_drh()) {
 		$page_title = get_lang('YourStudents');
-		if (!isset($_GET['id_session'])) {
+		if (empty($session_id)) {
 
 			if (isset($_GET['user_id'])) {
 				$user_id = intval($_GET['user_id']);
@@ -153,7 +156,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			}
 		}
 	} else {
-		if (!isset($_GET['id_session'])) {
+		if (empty($session_id)) {
 			//Getting courses
 			$courses  = CourseManager::get_course_list_as_coach($coach_id, false);
 			if (isset($courses[0])) {
@@ -163,12 +166,12 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			$students = CourseManager::get_user_list_from_courses_as_coach($coach_id);
 
 		} else {
-			$students = Tracking :: get_student_followed_by_coach_in_a_session($_GET['id_session'], $coach_id);
+			$students = Tracking :: get_student_followed_by_coach_in_a_session($session_id, $coach_id);
 		}
 	}
 
 	$tracking_column 	= isset($_GET['tracking_column']) ? $_GET['tracking_column'] : ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
-	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : DESC;
+	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : 'DESC';
 
 	if (count($students) > 0) {
 		$table = new SortableTable('tracking_student', 'count_student_coached', null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
@@ -220,15 +223,15 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 
 		foreach ($students as $student_id) {
 			$student_data = UserManager :: get_user_info_by_id($student_id);
-			if (isset($_GET['id_session'])) {
-				$courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
-			}
 
-			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
+            if (!empty($session_id)) {
+                $courses = Tracking :: get_course_list_in_session_from_student($student_id, $session_id);
+            }
+            $avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
 			$nb_courses_student = 0;
 			foreach ($courses as $courseId) {
 				if (CourseManager :: is_user_subscribed_in_course($student_id, $courseId, true)) {
-					$avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
+					$avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $courseId, $session_id);
 					$my_average 		 = Tracking :: get_avg_student_score($student_id, $courseId);
 					if (is_numeric($my_average)) {
 						$avg_student_score += $my_average;
@@ -271,7 +274,7 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 			}
 
 			if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-				$row[] = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$_GET['id_session'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+				$row[] = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$session_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 			} else {
 				$row[] = '<a href="myStudents.php?student='.$student_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 			}

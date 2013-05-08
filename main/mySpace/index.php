@@ -494,7 +494,7 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 
         echo "<script>
             $(function() {
-                ".Display::grid_js('sessions', null, $columns, $column_model, $extra_params, $all_data, array())."
+                ".Display::grid_js('sessions', null, $columns, $column_model, $extra_params, $all_data)."
             });
             </script>";
 		$nb_sessions_past = $nb_sessions_current = 0;

@@ -272,5 +272,8 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_copy_paste', 'false', 'No');
 
+ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned auto_increment;
+
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.004' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.006' WHERE variable = 'chamilo_database_version';

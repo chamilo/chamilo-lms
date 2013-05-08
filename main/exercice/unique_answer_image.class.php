@@ -45,7 +45,7 @@ class UniqueAnswerImage extends UniqueAnswer
     function createAnswersForm($form)
     {
         // Getting the exercise list
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = $this->exercise;
 
         $editor_config = array('ToolbarSet' => 'UniqueAnswerImage', 'Width' => '100%', 'Height' => '125');
 
@@ -84,7 +84,7 @@ class UniqueAnswerImage extends UniqueAnswer
                     </th>
                 </tr>';
 
-        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
         $defaults = array();
         $correct  = 0;
@@ -264,19 +264,17 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $navigator_info = api_get_navigator();
 
-        global $text, $class;
-
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
             if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('submit', 'submitQuestion', $text, 'class="'.$class.'"');
+                $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
             } else {
                 //setting the save button here and not in the question class.php
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
+                $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
             }
         }
         $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');

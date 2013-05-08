@@ -30,9 +30,8 @@ $csv_content = array();
 $nameTools   		= get_lang('MySpace');
 
 $user_id 	 		= api_get_user_id();
-$is_coach 			= api_is_coach(isset($_GET['session_id'])?$_GET['session_id']:0); // This is used?
-
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+//$is_coach = api_is_coach($session_id); // This is used?
 
 $is_platform_admin 	= api_is_platform_admin();
 $is_drh 			= api_is_drh();
@@ -45,9 +44,6 @@ $title 				= null;
 // access control
 api_block_anonymous_users();
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$htmlHeadXtra[] = '<script>
-
-</script>';
 
 if (!$export_csv) {
 	Display :: display_header($nameTools);
@@ -109,7 +105,7 @@ function rsort_sessions($a, $b) {
 	}
 }
 
-/* * MAIN CODE  */
+/** MAIN CODE  */
 
 if ($is_session_admin) {
 	header('location:session.php');
@@ -150,7 +146,6 @@ if ($is_drh) {
 }
 
 echo '<div id="actions" class="actions">';
-
 echo '<span style="float:right">';
 
 if ($display == 'useroverview' || $display == 'sessionoverview' || $display == 'courseoverview') {
@@ -177,11 +172,12 @@ if (empty($session_id)) {
 	}
 }
 echo '</div>';
+$sessions = array();
 
 if (empty($session_id)) {
 
 	//Getting courses followed by a coach (No session courses)
-	$courses  = CourseManager::get_course_list_as_coach($user_id, false);
+	$courses = CourseManager::get_course_list_as_coach($user_id, false);
 
 	if (isset($courses[0])) {
 		$courses = $courses[0];
@@ -194,6 +190,7 @@ if (empty($session_id)) {
 	$sessions 	 	= SessionManager::get_sessions_coached_by_user($user_id);
 
 	//If is drh
+
 	if ($is_drh) {
 		$students = array_keys(UserManager::get_users_followed_by_drh($user_id, STUDENT));
 		$courses_of_the_platform = CourseManager :: get_courses_followed_by_drh($user_id);
@@ -281,20 +278,20 @@ if (empty($session_id)) {
         echo Display::page_subheader('<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif">&nbsp;'.get_lang('Overview'));
 
         echo '<div class="report_section">
-					<table class="table table-bordered">
-                        <tr>
-							<td>'.get_lang('FollowedUsers').'</td>
-							<td align="right">'.$nb_students.'</td>
-						</tr>
-                        <tr>
-							<td>'.get_lang('FollowedCourses').'</td>
-							<td align="right">'.$count_courses.'</td>
-						</tr>
-                        <tr>
-							<td>'.get_lang('FollowedSessions').'</td>
-							<td align="right">'.$count_sessions.'</td>
-						</tr>
-                        </table>';
+                <table class="table table-bordered">
+                <tr>
+                    <td>'.get_lang('FollowedUsers').'</td>
+                    <td align="right">'.$nb_students.'</td>
+                </tr>
+                <tr>
+                    <td>'.get_lang('FollowedCourses').'</td>
+                    <td align="right">'.$count_courses.'</td>
+                </tr>
+                <tr>
+                    <td>'.get_lang('FollowedSessions').'</td>
+                    <td align="right">'.$count_sessions.'</td>
+                </tr>
+                </table>';
         echo '</div>';
 
 		echo Display::page_subheader('<img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Students').' ('.$nb_students.')');
@@ -345,7 +342,7 @@ if (empty($session_id)) {
 							<td align="right">'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'</td>
 						</tr>
 					</table>
-					<a href="student.php">'.get_lang('SeeStudentList').'</a>
+					<a class="btn" href="student.php">'.get_lang('SeeStudentList').'</a>
 				 </div><br />';
 		}
 	} else {
@@ -357,6 +354,7 @@ if (empty($session_id)) {
 		$nb_posts = null;
 	}
 } else {
+    // Sessions.
 
     $visibility = api_get_session_visibility($session_id);
     if ($visibility == SESSION_INVISIBLE) {
@@ -390,9 +388,8 @@ if (empty($session_id)) {
     //Sessions for the user
 	$count_sessions = count($sessions);
 }
-
 if ($count_courses || $count_sessions) {
-	//If we are in course
+	// If we are in course.
 	if (empty($session_id)) {
 		if ($count_courses) {
 			$title = '<img src="'.api_get_path(WEB_IMG_PATH).'course.gif"> '.get_lang('Courses').' ('.$count_courses.') ';
@@ -438,7 +435,10 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 	}
 
 	// Display list of sessions
-	if ($count_sessions > 0 && !isset($_GET['session_id'])) {
+
+	if ($count_sessions > 0 && empty($session_id)) {
+        $title = Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_SMALL).' '.get_lang('Sessions').' ('.$count_sessions.')';
+        echo Display::page_subheader($title);
 
         $columns = array(
             get_lang('Title'),
@@ -448,14 +448,15 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
             get_lang('NbCoursesPerSession'),
             get_lang('Details')
         );
+
         //'formatter'=>'action_formatter',
         $column_model = array (
-                array('name'=>'name',                'index'=>'name',               'width'=>'120',  'align'=>'left', 'search' => 'true', 'searchoptions' => array()),
-                array('name'=>'display_start_date',  'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array(), 'sorttype' => 'date'),
-                array('name'=>'display_end_date',    'index'=>'display_end_date',   'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array(), 'sorttype' => 'date'),
-                array('name'=>'number_student_per_session',  'index'=>'number_student_per_session', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array(), 'sorttype' => 'numeric'),
-                array('name'=>'courses_per_session', 'index'=>'courses_per_session','width'=>'70',   'align'=>'left', 'search' => 'false', 'searchoptions' => array(), 'sorttype' => 'numeric'),
-                array('name'=>'details',        'index'=>'details', 'width'=>'80',  'align'=>'left', 'sortable'=>'false', 'search' => 'false'),
+            array('name'=>'name',                'index'=>'name',               'width'=>'120',  'align'=>'left', 'search' => 'true', 'searchoptions' => array()),
+            array('name'=>'display_start_date',  'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array(), 'sorttype' => 'date'),
+            array('name'=>'display_end_date',    'index'=>'display_end_date',   'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array(), 'sorttype' => 'date'),
+            array('name'=>'number_student_per_session',  'index'=>'number_student_per_session', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array(), 'sorttype' => 'numeric'),
+            array('name'=>'courses_per_session', 'index'=>'courses_per_session','width'=>'70',   'align'=>'left', 'search' => 'false', 'searchoptions' => array(), 'sorttype' => 'numeric'),
+            array('name'=>'details',        'index'=>'details', 'width'=>'80',  'align'=>'left', 'sortable'=>'false', 'search' => 'false'),
         );
 
         //Autowidth
@@ -465,16 +466,10 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
         $extra_params['height'] = 'auto';
         $extra_params['sortname'] = 'display_start_date';
         $extra_params['sortorder'] = 'desc';
-        //$extra_params['excel'] = 'excel';
-
-        $extra_params['rowList'] = array(10, 20 ,30);
-
         $all_data = array();
 
 		foreach ($sessions as $session) {
             $visibility = api_get_session_visibility($session['id']);
-
-
 			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
             $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
 			$row = array();
@@ -494,7 +489,7 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 
         echo "<script>
             $(function() {
-                ".Display::grid_js('sessions', null, $columns, $column_model, $extra_params, $all_data, array())."
+                ".Display::grid_js('sessions', null, $columns, $column_model, $extra_params, $all_data)."
             });
             </script>";
 		$nb_sessions_past = $nb_sessions_current = 0;

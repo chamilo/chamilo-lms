@@ -43,7 +43,7 @@ class MultipleAnswerTrueFalse extends Question
 
         $course_id = api_get_course_int_id();
 
-		$obj_ex = $_SESSION['objExercise'];
+		$obj_ex = $this->exercise;
 
         $renderer = & $form->defaultRenderer();
 
@@ -68,7 +68,7 @@ class MultipleAnswerTrueFalse extends Question
             $html .='<th>'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
-        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form -> addElement ('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
 		$correct = 0;
 		if (!empty($this -> id)) {
@@ -101,7 +101,7 @@ class MultipleAnswerTrueFalse extends Question
             $answer_number->freeze();
 
 			if (is_object($answer)) {
-				      
+
                 $answer_id = $answer->getRealAnswerIdFromList($i);
 
                 $defaults['answer['.$i.']'] = $answer->answer[$answer_id];
@@ -178,20 +178,19 @@ class MultipleAnswerTrueFalse extends Question
 
 		$navigator_info = api_get_navigator();
 
-		global $text, $class;
 		if ($obj_ex->edit_exercise_in_lp == true) {
 			//ie6 fix
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
-                $form->addElement('submit', 'submitQuestion',$text, 'class="'.$class.'"');
+                $form->addElement('submit', 'submitQuestion',$this->submitText, 'class="'.$this->submitClass.'"');
 			} else {
                 // setting the save button here and not in the question class.php
 
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
-                $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');
+                $form->addElement('style_submit_button', 'submitQuestion',$this->submitText, 'class="'.$this->submitClass.'"');
 			}
 		}
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');

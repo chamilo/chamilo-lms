@@ -77,10 +77,9 @@ if ($form->validate()) {
 
 	// check feedback_type from current exercise for type of question delineation
 	$exercise_id = intval($values['exercice']);
-	$sql = "SELECT feedback_type FROM $tbl_exercices WHERE c_id = $course_id AND id = '$exercise_id'";
-	$rs_feedback_type = Database::query($sql);
-	$row_feedback_type = Database::fetch_row($rs_feedback_type);
-	$feedback_type = $row_feedback_type[0];
+    $exercise = new Exercise();
+    $exercise->read($exercise_id);
+	$feedback_type = $exercise->feedback_type;
 
 	// if question type does not belong to self-evaluation (immediate feedback) it'll send an error
 	if (($answer_type == HOT_SPOT_DELINEATION && $feedback_type != 1) ||

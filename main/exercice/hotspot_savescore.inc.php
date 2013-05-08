@@ -17,7 +17,7 @@ include('../inc/lib/database.lib.php');
 $courseCode   = $_GET['coursecode'];
 $questionId   = $_GET['questionId'];
 $coordinates  = $_GET['coord'];
-$objExcercise = $_SESSION['objExercise'];
+$objExcercise = $this->exercise;
 $exerciseId   = $objExcercise->selectId();
 // Save clicking order
 $answerOrderId = count($_SESSION['exerciseResult'][$questionId]['ids'])+1;

@@ -48,7 +48,7 @@ class Answer
      * @author     Olivier Brouckaert
      * @param     integer    Question ID that answers belong to
      */
-    function Answer($questionId, $course_id = null)
+    public function Answer($questionId, $course_id = null)
     {
         $this->questionId          = intval($questionId);
         $this->answer              = array();
@@ -59,6 +59,7 @@ class Answer
         $this->hotspot_coordinates = array();
         $this->hotspot_type        = array();
         $this->destination         = array();
+
         // clears $new_* arrays
         $this->cancel();
 
@@ -92,7 +93,7 @@ class Answer
      *
      * @author - Olivier Brouckaert
      */
-    function cancel()
+    public function cancel()
     {
         $this->new_answer              = array();
         $this->new_correct             = array();
@@ -110,7 +111,7 @@ class Answer
      *
      * @author - Olivier Brouckaert
      */
-    function read()
+    public function read()
     {
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
@@ -120,7 +121,8 @@ class Answer
         */
         $sql = "SELECT iid, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination
                 FROM $TBL_ANSWER
-                WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
+                WHERE question_id ='".$questionId."'
+                ORDER BY position";
 
         $result = Database::query($sql);
         $counter = 1;
@@ -150,7 +152,7 @@ class Answer
      * @param    string    DESC or ASC
      * @author     Frederic Vauthier
      */
-    function readOrderedBy($field, $order = 'ASC')
+    public function readOrderedBy($field, $order = 'ASC')
     {
         $field = Database::escape_string($field);
         if (empty($field)) {
@@ -165,7 +167,7 @@ class Answer
         $TBL_QUIZ   = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $questionId = intval($this->questionId);
 
-        $sql = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND iid = $questionId";
+        $sql = "SELECT type FROM $TBL_QUIZ WHERE iid = $questionId";
         $result_question = Database::query($sql);
         $question_type   = Database::fetch_array($result_question);
 
@@ -215,7 +217,7 @@ class Answer
      * @author - Juan Carlos Ra�a
      * @return - integer - answer num
      */
-    function selectAutoId($id)
+    public function selectAutoId($id)
     {
         return $this->autoId[$id];
     }
@@ -226,7 +228,7 @@ class Answer
      * @author - Olivier Brouckaert
      * @return - integer - number of answers
      */
-    function selectNbrAnswers()
+    public function selectNbrAnswers()
     {
         return $this->nbrAnswers;
     }
@@ -237,7 +239,7 @@ class Answer
      * @author - Olivier Brouckaert
      * @return - integer - the question ID
      */
-    function selectQuestionId()
+    public function selectQuestionId()
     {
         return $this->questionId;
     }
@@ -267,13 +269,14 @@ class Answer
 
     /**
      * return array answer by id else return a bool
+     * @deprecated seems to be unused
      */
-    function selectAnswerByAutoId($auto_id)
+    public function selectAnswerByAutoId($auto_id)
     {
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         $auto_id = intval($auto_id);
-        $sql     = "SELECT id, answer FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+        $sql     = "SELECT id, answer FROM $TBL_ANSWER WHERE id_auto='$auto_id'";
         $rs      = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -306,7 +309,7 @@ class Answer
      * @author Yannick Warnier <ywarnier@beeznest.org>
      * @return array    List of answers where each answer is an array of (id, answer, comment, grade) and grade=weighting
      */
-    function getAnswersList($decode = false)
+    public function getAnswersList($decode = false)
     {
         $list = array();
         for ($i = 1; $i <= $this->nbrAnswers; $i++) {
@@ -346,7 +349,7 @@ class Answer
      * @author Yannick Warnier <ywarnier@beeznest.org>
      * @return array    List of grades where grade=weighting (?)
      */
-    function getGradesList()
+    public function getGradesList()
     {
         $list = array();
         for ($i = 0; $i < $this->nbrAnswers; $i++) {
@@ -362,7 +365,7 @@ class Answer
      * @author    Yannick Warnier <ywarnier@beeznest.org>
      * @return    integer    The type of the question this answer is bound to
      */
-    function getQuestionType()
+    public function getQuestionType()
     {
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $sql = "SELECT type FROM $TBL_QUESTIONS WHERE c_id = {$this->course_id} AND iid = '".$this->questionId."'";
@@ -381,12 +384,12 @@ class Answer
      * @param - integer $id - answer ID
      * @return - integer - 0 if bad answer, not 0 if good answer
      */
-    function isCorrect($id)
+    public function isCorrect($id)
     {
         return $this->correct[$id];
     }
 
-    function getAnswerIdFromList($answer_id) {
+    public function getAnswerIdFromList($answer_id) {
         $counter = 1;
         foreach ($this->answer as $my_answer_id => $item) {
             if ($answer_id == $my_answer_id) {
@@ -396,7 +399,7 @@ class Answer
         }
     }
 
-    function getRealAnswerIdFromList($answer_id) {
+    public function getRealAnswerIdFromList($answer_id) {
         $counter = 1;
         foreach ($this->answer as $my_answer_id => $item) {
             if ($answer_id == $counter) {
@@ -406,7 +409,7 @@ class Answer
         }
     }
 
-    function getCorrectAnswerPosition($correct_id) {
+    public function getCorrectAnswerPosition($correct_id) {
         $counter = 1;
         foreach ($this->correct as $my_correct_id => $item) {
             if ($correct_id == $my_correct_id) {
@@ -423,7 +426,7 @@ class Answer
      * @param - integer $id - answer ID
      * @return - string - answer comment
      */
-    function selectComment($id)
+    public function selectComment($id)
     {
         return $this->comment[$id];
     }
@@ -435,7 +438,7 @@ class Answer
      * @param - integer $id - answer ID
      * @return - integer - answer weighting
      */
-    function selectWeighting($id)
+    public function selectWeighting($id)
     {
         return $this->weighting[$id];
     }
@@ -447,7 +450,7 @@ class Answer
      * @param - integer $id - answer ID
      * @return - integer - answer position
      */
-    function selectPosition($id)
+    public function selectPosition($id)
     {
         return $this->position[$id];
     }
@@ -459,7 +462,7 @@ class Answer
      * @param    integer    Answer ID
      * @return    integer    Answer position
      */
-    function selectHotspotCoordinates($id)
+    public function selectHotspotCoordinates($id)
     {
         return isset($this->hotspot_coordinates[$id]) ? $this->hotspot_coordinates[$id] : null;
     }
@@ -471,7 +474,7 @@ class Answer
      * @param    integer        Answer ID
      * @return    integer        Answer position
      */
-    function selectHotspotType($id)
+    public function selectHotspotType($id)
     {
         return isset($this->hotspot_type[$id]) ? $this->hotspot_type[$id] : null;
     }
@@ -519,7 +522,7 @@ class Answer
      * @param    integer    Answer weighting
      * @param    integer    Answer position
      */
-    function updateAnswers($answer, $comment, $weighting, $position, $destination)
+    public function updateAnswers($answer, $comment, $weighting, $position, $destination)
     {
         $TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
@@ -530,8 +533,7 @@ class Answer
 				ponderation = '".Database::escape_string($weighting)."',
 				position = '".Database::escape_string($position)."',
 				destination = '".Database::escape_string($destination)."'
-				WHERE c_id = {$this->course_id} AND iid = '".Database::escape_string($position)."'
-				AND question_id = '".Database::escape_string($questionId)."'";
+				WHERE iid = '".Database::escape_string($position)."' AND question_id = '".Database::escape_string($questionId)."'";
         Database::query($sql);
     }
 
@@ -540,13 +542,11 @@ class Answer
      *
      * @author - Olivier Brouckaert
      */
-    function save()
+    public function save()
     {
         $table_quiz_answer = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = intval($this->questionId);
-
         $c_id = $this->course['real_id'];
-
         $answersAlreadyCreated = array_keys($this->answer);
 
         // @todo don't do this!
@@ -587,8 +587,10 @@ class Answer
                 Database::update($table_quiz_answer, $params, array('iid = ? '=> array($update)));
                 $latest_insert_id = $update;
             } else {
-                $sql = "INSERT INTO $table_quiz_answer (c_id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";
-                $sql.= "($c_id, '$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
+                // No need to add the c_id because the answers are unique per question
+                $sql = "INSERT INTO $table_quiz_answer (question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination) VALUES ";
+                $sql.= "('$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
+                error_log($sql);
                 Database::query($sql);
                 $latest_insert_id = Database::insert_id();
             }
@@ -598,14 +600,15 @@ class Answer
         // Delete unused answers
         if (!empty($latest_insert_id)) {
             $idsToDelete = implode("','", $real_correct_ids);
-            if (!empty($idsToDelete) && !empty($c_id) && !empty($questionId)) {
-                $sql = "DELETE FROM $table_quiz_answer WHERE c_id = $c_id AND question_id = $questionId AND iid NOT IN ('$idsToDelete')";
+            if (!empty($idsToDelete) && !empty($questionId)) {
+                //$sql = "DELETE FROM $table_quiz_answer WHERE c_id = $c_id AND question_id = $questionId AND iid NOT IN ('$idsToDelete')";
+                $sql = "DELETE FROM $table_quiz_answer WHERE question_id = $questionId AND iid NOT IN ('$idsToDelete')";
                 Database::query($sql);
             }
         }
 
         $question_info = Question::read($questionId);
-        
+
         if ($question_info->type == MATCHING) {
 
             //Fixing real answer id
@@ -630,6 +633,7 @@ class Answer
 
         $this->nbrAnswers  = $this->new_nbrAnswers;
         $this->destination = $this->new_destination;
+
         // clears $new_* arrays
         $this->cancel();
     }
@@ -641,7 +645,7 @@ class Answer
      * @param  int question id
      * @param  array destination course info (result of the function api_get_course_info() )
      */
-    function duplicate($newQuestionId, $course_info = null)
+    public function duplicate($newQuestionId, $course_info = null)
     {
         if (empty($course_info)) {
             $course_info = $this->course;
@@ -705,8 +709,8 @@ class Answer
                 $hotspot_coordinates = Database::escape_string($this->hotspot_coordinates[$i]);
                 $hotspot_type = Database::escape_string($this->hotspot_type[$i]);
                 $destination = Database::escape_string($this->destination[$i]);
-                $sql = "INSERT INTO $TBL_REPONSES (c_id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type ,destination) VALUES";
-                $sql.= "($c_id, '$newQuestionId','$answer','$correct','$comment', '$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
+                $sql = "INSERT INTO $TBL_REPONSES(question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type ,destination) VALUES";
+                $sql.= "('$newQuestionId','$answer','$correct','$comment', '$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination')";
                 Database::query($sql);
                 $new_id = Database::insert_id();
                 $new_ids[$answer_id] = $new_id;
@@ -726,7 +730,7 @@ class Answer
         }
     }
 
-    function getJs()
+    public function getJs()
     {
         //if ($this->questionId == 2)
         echo '<script>jsPlumb.ready(function() {

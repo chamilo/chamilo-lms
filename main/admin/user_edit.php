@@ -215,12 +215,8 @@ $group[] = $form->createElement(
 );
 $form->addGroup($group, 'password', null, '', false);
 
-// Status
-$status = array();
-$status[COURSEMANAGER] = get_lang('Teacher');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Drh');
-$status[SESSIONADMIN] = get_lang('SessionsAdmin');
+// Status.
+$status = api_get_user_roles();
 
 $form->addElement(
     'select',

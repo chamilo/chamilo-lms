@@ -154,7 +154,7 @@ if ($ajax_search) {
 		$sessionCourses[$course['code']] = $course ;
 	}
 } else {
-	$sql="SELECT code, title, visual_code, id_session
+	$sql="SELECT code, title, visual_code, id_session, course.id as real_id
 			FROM $tbl_course course
 			LEFT JOIN $tbl_session_rel_course session_rel_course
 				ON course.id = session_rel_course.c_id

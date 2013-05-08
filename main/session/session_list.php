@@ -69,10 +69,11 @@ $extra_params['height'] = '100%';
 $extra_params['rowList'] = array(20, 50, 100, 250, 500);
 
 $result = SessionManager::get_session_columns($list_type);
+
 $columns = $result['columns'];
 $column_model = $result['column_model'];
 
-$extra_params['postData'] =array (
+$extra_params['postData'] =array(
     'filters' => array(
         "groupOp" => "AND",
         "rules" => $result['rules'],
@@ -197,7 +198,6 @@ $(function() {
                 filters = jQuery.parseJSON(postdata.filters);
                 clean_cols(grid, added_cols);
                 added_cols = [];
-                //console.log(postdata);
                 $.each(filters, function(key, value){
                     //console.log('key: ' + key );
 
@@ -232,13 +232,12 @@ $(function() {
         prmSearch
     );
 
-    // create the searching dialog
+    // Create the searching dialog.
     grid.searchGrid(prmSearch);
 
-    //Fixes search table
+    // Fixes search table.
     var searchDialogAll = $("#fbox_"+grid[0].id);
     searchDialogAll.addClass("table");
-
     var searchDialog = $("#searchmodfbox_"+grid[0].id);
     searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
     searchDialog.css({position:"relative", "z-index":"auto", "float":"left"})
@@ -280,6 +279,7 @@ if ($list_type == 'complete') {
 }
 echo '</div>';
 
+/*
 $form = new FormValidator('search');
 
 $form->addElement('header', get_lang('Filter'));
@@ -301,7 +301,7 @@ $renderer->setElementTemplate('{label} {element}', 'end_date_end');
 
 $options = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
 $form->addElement('select', 'course', get_lang('Course'), $options);
-$form->addElement('button', 'submit', get_lang('Search'), array('id' => 'search_button'));
+$form->addElement('button', 'submit', get_lang('Search'), array('id' => 'search_button'));*/
 
 echo Display::grid_html('sessions');
 Display::display_footer();

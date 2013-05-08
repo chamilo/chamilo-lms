@@ -25,7 +25,7 @@ class GlobalMultipleAnswer extends Question
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = $this->exercise;
 
         /* Mise en variable de Affichage "Reponses" et son icone, "N�", "Vrai", "Reponse" */
         $html = '<table class="data_table">
@@ -47,7 +47,7 @@ class GlobalMultipleAnswer extends Question
         $html .='</tr>';
 
 
-        $form->addElement('label', get_lang('Answers') . '<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers') . '<br />'.Display::return_icon('fill_field.png'), $html);
 
         /* Initialiation variable */
         $defaults = array();
@@ -145,18 +145,17 @@ class GlobalMultipleAnswer extends Question
         $form->addRule('weighting[1]', get_lang('ThisFieldIsRequired'), 'required');
 
         $navigator_info = api_get_navigator();
-        global $text, $class;
 
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
             if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
-                $form->addElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
+                $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="' . $this->submitClass . '"');
             } else {
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
-                $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
+                $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="' . $this->submitClass . '"');
                 // setting the save button here and not in the question class.php
             }
         }

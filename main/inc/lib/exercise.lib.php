@@ -2339,6 +2339,9 @@ class ExerciseLib
         $media_list = array();
         $category_list = array();
 
+        $tempParentId = null;
+        $mediaCounter = 0;
+
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
             if ($debug) {
@@ -2435,13 +2438,33 @@ class ExerciseLib
                 if ($show_results) {
 
                     $show_media = false;
-                    if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $media_list)) {
+
+                    /*if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $media_list)) {
                         $show_media = true;
                         $media_list[] = $objQuestionTmp->parent_id;
+                    }*/
+
+
+                    $counterToShow = $counter;
+
+                    if ($objQuestionTmp->parent_id != 0) {
+
+                        if (!in_array($objQuestionTmp->parent_id, $media_list)) {
+                            $media_list[] = $objQuestionTmp->parent_id;
+                            $show_media = true;
+                        }
+                        if ($tempParentId == $objQuestionTmp->parent_id) {
+                            $mediaCounter++;
+                        } else {
+                            $mediaCounter = 0;
+                        }
+                        $counterToShow = chr(97 + $mediaCounter);
+                        $tempParentId = $objQuestionTmp->parent_id;
                     }
 
+
                     //Shows question title an description
-                    $question_content .= $objQuestionTmp->return_header(null, $counter, $score, $show_media);
+                    $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media);
 
                     // display question category, if any
                     $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
@@ -2698,5 +2721,20 @@ class ExerciseLib
 
         echo Display::div($exercise_actions, array('class'=>'form-actions'));
         echo '</div>';
+    }
+
+    /**
+     * Update attempt date
+     * @param int $exeId
+     * @param Datetime $last_attempt_date
+     */
+    function update_attempt_date($exeId, $last_attempt_date) {
+        $exercice_attemp_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $exeId = intval($exeId);
+        $last_attempt_date = Database::escape_string($last_attempt_date);
+        $sql = "UPDATE $exercice_attemp_table SET tms = '".api_get_utc_datetime()."'
+                WHERE exe_id = $exeId AND tms = '".$last_attempt_date."' ";
+        Database::query($sql);
+
     }
 }

@@ -113,7 +113,7 @@ if (empty($modifyExercise)) {
     $modifyExercise = isset($_GET['modifyExercise'])?$_GET['modifyExercise']:0;
 }
 
-//Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
+// Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
 
 delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_int_id(), api_get_session_id());
 
@@ -174,7 +174,7 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
     exit; //otherwise following clicks may become buggy
 }
 
-// intializes the Exercise object
+// Initializes the Exercise object.
 if (!is_object($objExercise)) {
     // construction of the Exercise object
     $objExercise = new Exercise();
@@ -187,7 +187,7 @@ if (!is_object($objExercise)) {
     Session::write('objExercise', $objExercise);
 }
 
-// doesn't select the exercise ID if we come from the question pool
+// Doesn't select the exercise ID if we come from the question pool
 if (!isset($fromExercise) or !$fromExercise) {
     // gets the right exercise ID, and if 0 creates a new exercise
     if (!$exerciseId = $objExercise->selectId()) {
@@ -197,14 +197,14 @@ if (!isset($fromExercise) or !$fromExercise) {
 
 $nbrQuestions = $objExercise->selectNbrQuestions();
 
-// intializes the Question object
+// Initializes the Question object
 if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
     if ($editQuestion || $newQuestion) {
 
         // reads question data
         if ($editQuestion) {
             // question not found
-            if (!$objQuestion = Question::read($editQuestion)) {
+            if (!$objQuestion = Question::read($editQuestion, null, $objExercise)) {
                 api_not_allowed();
             }
             // saves the object into the session
@@ -212,14 +212,14 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
         }
     }
 
-    // checks if the object exists
+    // Checks if the object exists.
     if (is_object($objQuestion)) {
         // gets the question ID
         $questionId = $objQuestion->selectId();
     }
 }
 
-// if cancelling an exercise
+// If cancelling an exercise.
 if (!empty($cancelExercise)) {
     // existing exercise
     if ($exerciseId) {
@@ -558,7 +558,7 @@ if ($newQuestion || $editQuestion) {
         $type = Security::remove_XSS($_REQUEST['answerType']);
     }
     echo '<input type="hidden" name="Type" value="'.$type.'" />';
-    //Create/Edit question
+    // Create/Edit question.
     require 'question_admin.inc.php';
 }
 

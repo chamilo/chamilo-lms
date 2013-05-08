@@ -1028,11 +1028,11 @@ class CourseManager
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND
                         course_rel_user.relation_type <> '.COURSE_RELATION_TYPE_RRHH;
-            if (!empty($course_code)) {
+            if (!empty($courseInfo)) {
                 $sql .= " AND course_rel_user.c_id = ".$courseId;
             } else {
                 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-                $sql .= " INNER JOIN  $course_table course ON course_rel_user.c_id = course.id";
+                $sql .= " INNER JOIN $course_table course ON course_rel_user.c_id = course.id";
             }
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
 
@@ -1269,7 +1269,6 @@ class CourseManager
         $users[$session_id_coach] = $user_info;
         return $users;
     }
-
 
     /**
      *    Return user info array of all users registered in the specified real or virtual course
@@ -4778,10 +4777,52 @@ class CourseManager
                     $message .= get_lang('Tutor').' '.$tutor_name."\n";
                     $message .= get_lang('Language').' '.$course_language;
 
-                    @api_mail($recipient_name, $recipient_email, $subject, $message, $siteName, $recipient_email);
+                    @api_mail_html($recipient_name, $recipient_email, $subject, $message, $siteName, $recipient_email);
                 }
             }
         }
         return $course_id;
     }
+
+
+    /**
+     * This function returns information about coachs from a course in session
+     * @param int       - optional, session id
+     * @param string    - optional, course code
+     * @return array    - array containing user_id, lastname, firstname, username
+     */
+    public static function get_coaches_from_course($session_id=0, $courseId = null) {
+
+        if (!empty($session_id)) {
+            $session_id = intval($session_id);
+        } else {
+            $session_id = api_get_session_id();
+        }
+
+        if (!empty($courseId)) {
+            $courseId = Database::escape_string($courseId);
+        } else {
+            $courseId = api_get_course_int_id();
+        }
+
+        $tbl_user                   = Database :: get_main_table(TABLE_MAIN_USER);
+        $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $coaches = array();
+
+        $sql = "SELECT u.user_id,u.lastname,u.firstname,u.username
+               FROM $tbl_user u,$tbl_session_course_user scu
+                WHERE u.user_id = scu.id_user AND scu.id_session = '$session_id' AND scu.c_id = '$courseId' AND scu.status = 2";
+        $rs = Database::query($sql);
+
+        if (Database::num_rows($rs) > 0) {
+            while ($row = Database::fetch_array($rs)) {
+                $coaches[] = $row;
+            }
+            return $coaches;
+        } else {
+            return false;
+        }
+    }
+
+
 } //end class CourseManager

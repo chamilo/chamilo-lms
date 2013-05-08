@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *    This script allows to manage the statements of questions.
- *   It is included from the script admin.php
+ * This script allows to manage the statements of questions.
+ * It is included from the script admin.php
  * @package chamilo.exercise
  * @author Olivier Brouckaert
  * @author Julio Montoya
@@ -15,32 +15,38 @@ $course_id = api_get_course_int_id();
 
 // INIT QUESTION
 if (isset($_GET['editQuestion'])) {
-    $objQuestion = Question::read($_GET['editQuestion']);
+    $objQuestion = Question::read($_GET['editQuestion'], null, $objExercise);
     $action      = api_get_self()."?".api_get_cidreq(
     )."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id."&exerciseId=$exerciseId";
 } else {
-    $objQuestion = Question :: getInstance($_REQUEST['answerType']);
+    $objQuestion = Question::getInstance($_REQUEST['answerType'], $objExercise);
     $action      = api_get_self()."?".api_get_cidreq(
     )."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion."&exerciseId=$exerciseId";
 }
+
+/** @var Question $objQuestion */
 
 if (is_object($objQuestion)) {
     //Form creation
     $form = new FormValidator('question_admin_form', 'post', $action);
 
     if (isset($_GET['editQuestion'])) {
-        $class = "btn save";
-        $text  = get_lang('ModifyQuestion');
+        $objQuestion->submitClass = "btn save";
+        $objQuestion->submitText  = get_lang('ModifyQuestion');
     } else {
-        $class = "btn add";
-        $text  = get_lang('AddQuestionToExercise');
+        $objQuestion->submitClass = "btn add";
+        $objQuestion->submitText  = get_lang('AddQuestionToExercise');
+    }
+
+    if (!isset($_GET['fromExercise'])) {
+        $objQuestion->setDefaultQuestionValues = true;
     }
 
     $types_information = Question::get_question_type_list();
     $form_title_extra  = get_lang($types_information[$type][1]);
 
     // form title
-    $form->addElement('header', $text.': '.$form_title_extra);
+    $form->addElement('header', $objQuestion->submitText.': '.$form_title_extra);
 
     if ($fastEdition) {
         $form->setAllowRichEditorInForm(false);
@@ -66,7 +72,7 @@ if (is_object($objQuestion)) {
         $objQuestion->processCreation($form, $objExercise);
 
         // Answers
-        $objQuestion->processAnswersCreation($form, $nb_answers);
+        $objQuestion->processAnswersCreation($form);
 
         // TODO: maybe here is the better place to index this tool, including answers text
 

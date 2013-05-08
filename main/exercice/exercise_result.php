@@ -119,7 +119,7 @@ if ($origin == 'learnpath') {
         <input type="hidden" name="learnpath_item_id" 		value="<?php echo $learnpath_item_id; ?>" />
         <input type="hidden" name="learnpath_item_view_id"  value="<?php echo $learnpath_item_view_id; ?>" />
         <?php
-    }
+}
 
 $i = $total_score = $total_weight = 0;
 
@@ -136,12 +136,12 @@ if ($objExercise->selectAttempts() > 0) {
     }
 }
 
-Display :: display_normal_message(get_lang('Saved').'<br />', false);
+Display::display_normal_message(get_lang('Saved').'<br />', false);
 
-//Display questions
+// Display questions.
 ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);
 
-//If is not valid
+// If is not valid.
 $session_control_key = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 if (isset($session_control_key) && !ExerciseLib::exercise_time_control_is_valid($objExercise->id, $learnpath_id, $learnpath_item_id)) {
     $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);

@@ -16,7 +16,8 @@ $language_file = array('admin', 'tracking', 'scorm', 'exercice');
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
-$course_info = api_get_course_info(api_get_course_id());
+$courseCode = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : null;
+$course_info = api_get_course_info($courseCode);
 
 if (!empty($course_info)) {
     //api_protect_course_script();
@@ -52,7 +53,7 @@ require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$session_id = intval($_REQUEST['id_session']);
+$session_id = isset($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : api_get_session_id();
 
 if ($export_csv) {
     if (!empty($session_id)) {
@@ -94,11 +95,9 @@ $js = "<script>
     </script>";
 
 $htmlHeadXtra[] = "<style type='text/css'>
-/*<![CDATA[*/
 .secLine {background-color : #E6E6E6;}
 .content {padding-left : 15px;padding-right : 15px; }
 .specialLink{color : #0000FF;}
-/*]]>*/
 /* Style for reporting array hide / unhide columns */
 .unhide_button {
     cursor : pointer;
@@ -140,10 +139,10 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 if (empty($session_id)) {
 	// Registered students in a course outside session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id());
+	$a_students = CourseManager :: get_student_list_from_course_code($course_info['real_id']);
 } else {
 	// Registered students in session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_int_id(), true, api_get_session_id());
+	$a_students = CourseManager :: get_student_list_from_course_code($course_info['real_id'], true, $session_id);
 }
 
 $nbStudents = count($a_students);
@@ -163,14 +162,11 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 /* MAIN CODE */
 
 echo '<div class="actions">';
-
 echo Display::url(Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), 32), '#');
 echo Display::url(Display::return_icon('group.png', get_lang('GroupReporting'), array(), 32), 'course_log_groups.php?'.api_get_cidreq());
 echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'course_log_tools.php?'.api_get_cidreq(true, false));
 echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32), 'course_log_resources.php?'.api_get_cidreq());
 echo Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq());
-
-
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 

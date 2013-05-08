@@ -209,7 +209,7 @@ $app['allowed'] = true;
 $app['template.show_header'] = true;
 $app['template.show_footer'] = true;
 $app['template.show_learnpath'] = false;
-$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
+$app['template.hide_global_chat'] = true;
 $app['template.load_plugins'] = true;
 
 // Default template style
@@ -292,7 +292,10 @@ $app->error(
 
         if (isset($code)) {
             switch ($code) {
-                case 404:
+                case 401:
+                    $message = 'Unauthorized';
+                    break;
+                case 404: // not found
                     $message = 'The requested page could not be found.';
                     break;
                 default:
@@ -355,6 +358,9 @@ $app['this_section'] = SECTION_GLOBAL;
 
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
+
+// reconfigure templat now we know the user
+$app['template.hide_global_chat'] = !api_is_global_chat_enabled();
 
 // Setting languages
 $app['api_get_languages'] = api_get_languages();
@@ -534,7 +540,7 @@ if (api_get_setting('login_is_email') == 'true') {
     $default_username_length = 100;
 }
 
-define('USERNAME_MAX_LENGTH', $default_username_length);
+@define('USERNAME_MAX_LENGTH', $default_username_length);
 
 /** Silex Middlewares: */
 
@@ -651,7 +657,7 @@ if (empty($default_quota)) {
     $default_quota = 100000000;
 }
 
-define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+@define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
 /** Setting the is_admin key */
 $app['is_admin'] = false;

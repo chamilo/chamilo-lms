@@ -18,7 +18,7 @@
  */
 class Display
 {
-    /* The main template*/
+    /* The main template */
     static $global_template;
     static $preview_style = null;
 
@@ -1104,7 +1104,6 @@ class Display
 
         $all_text = addslashes(get_lang('All'));
         $json .= '$("'.$obj->pager.' option[value='.$all_value.']").text("'.$all_text.'");';
-
         $json .= "\n";
 
         //Adding edit/delete icons
@@ -1802,11 +1801,13 @@ class Display
      * @param null $link
      * @return null|string
      */
-    static function progress_pagination_bar_with_categories($categories, $current, $conditions = array(), $link = null)
+    static function progress_pagination_bar_with_categories($categories, $mediaQuestions, $current, $conditions = array(), $link = null)
     {
         $counter = 0;
         $totalTemp = 0;
         $html = null;
+        //var_dump($categories);
+
         foreach ($categories as $category) {
             $list = $category['question_list'];
 

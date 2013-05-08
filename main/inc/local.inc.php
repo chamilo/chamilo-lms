@@ -546,7 +546,7 @@ if (!isset($_SESSION['login_as'])) {
         $courseId = api_get_course_int_id();
         $time = api_get_datetime();
 
-        if (isset($_user['user_id']) && !empty($_user['user_id'])) {
+        if (isset($_user['user_id']) && !empty($_user['user_id']) && !empty($courseId)) {
 
             //We select the last record for the current course in the course tracking table
             //But only if the login date is < than now + max_life_time

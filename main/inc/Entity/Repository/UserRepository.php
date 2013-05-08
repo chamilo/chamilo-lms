@@ -17,7 +17,6 @@ class UserRepository extends EntityRepository
                    ->select('u')
                    ->addOrderBy('u.username', 'DESC');
 
-
         return $qb;
     }
 

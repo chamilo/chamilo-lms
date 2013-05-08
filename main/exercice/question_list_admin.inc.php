@@ -124,15 +124,18 @@ $(function() {
 </script>
 <?php
 
-//we filter the type of questions we can add
-Question :: display_type_menu($objExercise);
+// Filters the type of questions we can add.
+Question::display_type_menu($objExercise);
 echo '<div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
-//deletes a session when using don't know question type (ugly fix)
+
+// Deletes a session when using don't know question type (ugly fix).
 unset($_SESSION['less_answer']);
 
-// If we are in a test
+echo Question::getMediaLabels();
+
+// If we are in a test.
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
 	echo "<p class='warning-message'>".get_lang("ChoiceQuestionType")."</p>";
@@ -152,6 +155,7 @@ if (!$inATest) {
         //Always getting list from DB
         $objExercise->setCategoriesGrouping(false);
         $questionList = $objExercise->selectQuestionList(true);
+
 
         // Style for columns
 

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *    File containing the UNIQUE_ANSWER class.
+ * File containing the UNIQUE_ANSWER class.
  * @package chamilo.exercise
  * @author Eric Marguin
  */
@@ -29,7 +29,7 @@ class UniqueAnswer extends Question
     /**
      * Constructor
      */
-    function UniqueAnswer()
+    public function UniqueAnswer()
     {
         //this is highly important
         parent::question();
@@ -42,10 +42,10 @@ class UniqueAnswer extends Question
      * @param the formvalidator instance
      * @param the answers number to display
      */
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         // Getting the exercise list
-        $obj_ex = $_SESSION['objExercise'];
+        $obj_ex = $this->exercise;
 
         $editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
@@ -91,7 +91,7 @@ class UniqueAnswer extends Question
                     </th>
                 </tr>';
 
-        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form->addElement('label', get_lang('Answers').'<br />'.Display::return_icon('fill_field.png'), $html);
 
         $defaults = array();
         $correct  = 0;
@@ -143,37 +143,43 @@ class UniqueAnswer extends Question
         for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addElement('html', '<tr>');
             if (isset($answer) && is_object($answer)) {
+
                 $answer_id = $answer->getRealAnswerIdFromList($i);
 
                 if ($answer->correct[$answer_id]) {
                     $correct = $i;
                 }
+
                 $defaults['answer['.$i.']']    = $answer->answer[$answer_id];
                 $defaults['comment['.$i.']']   = $answer->comment[$answer_id];
                 $defaults['weighting['.$i.']'] = Text::float_format($answer->weighting[$answer_id], 1);
 
-                $item_list = explode('@@', $answer->destination[$answer_id]);
+                if (!empty($answer->destination[$answer_id])) {
+                    $item_list = explode('@@', $answer->destination[$answer_id]);
+                    $try       = $item_list[0];
+                    $lp        = $item_list[1];
+                    $list_dest = $item_list[2];
+                    $url       = $item_list[3];
 
-                $try       = $item_list[0];
-                $lp        = $item_list[1];
-                $list_dest = $item_list[2];
-                $url       = $item_list[3];
+                    if ($try == 0) {
+                        $try_result = 0;
+                    } else {
+                        $try_result = 1;
+                    }
 
-                if ($try == 0) {
-                    $try_result = 0;
-                } else {
-                    $try_result = 1;
+                    if ($url == 0) {
+                        $url_result = '';
+                    } else {
+                        $url_result = $url;
+                    }
+
+                    $temp_scenario['url'.$i]         = $url_result;
+                    $temp_scenario['try'.$i]         = $try_result;
+                    $temp_scenario['lp'.$i]          = $lp;
+                    $temp_scenario['destination'.$i] = $list_dest;
                 }
-                if ($url == 0) {
-                    $url_result = '';
-                } else {
-                    $url_result = $url;
-                }
 
-                $temp_scenario['url'.$i]         = $url_result;
-                $temp_scenario['try'.$i]         = $try_result;
-                $temp_scenario['lp'.$i]          = $lp;
-                $temp_scenario['destination'.$i] = $list_dest;
+
             } else {
                 $defaults['answer[1]']    = get_lang('DefaultUniqueAnswer1');
                 $defaults['weighting[1]'] = 10;
@@ -273,19 +279,18 @@ class UniqueAnswer extends Question
 
         $navigator_info = api_get_navigator();
 
-        global $text, $class;
+        // ie6 fix.
 
-        //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
             if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('submit', 'submitQuestion', $text, 'class="'.$class.'"');
+                $form->addElement('submit', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
             } else {
                 //setting the save button here and not in the question class.php
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
                 $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
+                $form->addElement('style_submit_button', 'submitQuestion', $this->submitText, 'class="'.$this->submitClass.'"');
             }
         }
         $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
@@ -316,10 +321,10 @@ class UniqueAnswer extends Question
      * @param the formvalidator instance
      * @param the answers number to display
      */
-    function processAnswersCreation($form)
+    public function processAnswersCreation($form)
     {
-
         $questionWeighting = $nbrGoodAnswers = 0;
+
         $correct           = $form->getSubmitValue('correct');
         $objAnswer         = new Answer($this->id);
         $nb_answers        = $form->getSubmitValue('nb_answers');
@@ -396,7 +401,7 @@ class UniqueAnswer extends Question
         $this->save();
     }
 
-    function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
+    public function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false)
     {
         $header = parent::return_header($feedback_type, $counter, $score, $show_media);
         $header .= '<table class="'.$this->question_table_class.'">
@@ -427,7 +432,7 @@ class UniqueAnswer extends Question
      * @assert (1,null,'a','',1,1,null) === false
      * @assert (1,1,'','',1,1,null) === false
      */
-    function create_answer(
+    public function create_answer(
         $id = 1,
         $question_id,
         $answer_title,
@@ -448,19 +453,18 @@ class UniqueAnswer extends Question
         $score       = filter_var($score, FILTER_SANITIZE_NUMBER_FLOAT);
         $correct     = filter_var($correct, FILTER_SANITIZE_NUMBER_INT);
         // Get the max position
-        $sql      = "SELECT max(position) as max_position FROM $tbl_quiz_answer "
-            ." WHERE c_id = $course_id AND question_id = $question_id";
+        $sql      = "SELECT max(position) as max_position FROM $tbl_quiz_answer WHERE question_id = $question_id";
         $rs_max   = Database::query($sql);
         $row_max  = Database::fetch_object($rs_max);
         $position = $row_max->max_position + 1;
         // Insert a new answer
-        $sql = "INSERT INTO $tbl_quiz_answer (c_id, question_id,answer,correct,comment,ponderation,position,destination)"
-            ."VALUES ($course_id, $question_id,'".Database::escape_string($answer_title)."',"
+        $sql = "INSERT INTO $tbl_quiz_answer (question_id,answer,correct,comment,ponderation,position,destination)"
+            ."VALUES ($question_id, '".Database::escape_string($answer_title)."',"
             ."$correct,'".Database::escape_string($comment)."',$score,$position, "
             ." '0@@0@@0@@0')";
-        $rs  = Database::query($sql);
+        Database::query($sql);
         if ($correct) {
-            $sql = "UPDATE $tbl_quiz_question SET ponderation = (ponderation + $score) WHERE c_id = $course_id AND iid = ".$question_id;
+            $sql = "UPDATE $tbl_quiz_question SET ponderation = (ponderation + $score) WHERE iid = ".$question_id;
             $rs  = Database::query($sql);
 
             return $rs;

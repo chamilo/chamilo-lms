@@ -27,7 +27,7 @@ class Testcategory
      * @param string $in_description
      * @param int $parent_id
      * @param string $type
-     * @param null $course_id
+     * @param int $course_id
      */
     public function Testcategory($in_id = 0, $in_name = '', $in_description = "", $parent_id = 0, $type = 'simple', $course_id = null)
     {
@@ -67,7 +67,7 @@ class Testcategory
      * @assert () === false
 	 */
 
-    function getCategory($id) {
+    public function getCategory($id) {
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$in_id = Database::escape_string($id);
         $sql = "SELECT * FROM $t_cattable WHERE iid = $id ";
@@ -88,7 +88,7 @@ class Testcategory
      * Add Testcategory in the database if name doesn't already exists
      *
 	 */
-	function addCategoryInBDD()
+	public function addCategoryInBDD()
     {
         $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $v_name = Database::escape_string($this->name);
@@ -146,7 +146,7 @@ class Testcategory
     /**
      * Modify category name or description of category with id=in_id
      */
-    function modifyCategory()
+    public function modifyCategory()
     {
         // @todo inject the app in the claas
         global $app;
@@ -209,7 +209,7 @@ class Testcategory
      * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
      * jmontoya
      */
-    function removeCategory()
+    public function removeCategory()
     {
         global $app;
         $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
@@ -244,7 +244,7 @@ class Testcategory
      * @param int $course_id
      * @return bool
      */
-    function get_category_by_title($title , $course_id = 0) {
+    public function get_category_by_title($title , $course_id = 0) {
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $course_id = intval($course_id);
         $title = Database::escape_string($title);
@@ -266,7 +266,7 @@ class Testcategory
      * @return array
      * @assert() === false
      */
-    function get_categories_by_keyword($tag) {
+    public function get_categories_by_keyword($tag) {
         if (empty($tag)) {
             return false;
         }
@@ -311,8 +311,8 @@ class Testcategory
      * @todo I'm removing the $in_id parameter because it seems that you're using $this->id instead of $in_id after confirmation delete this
      * jmontoya
 	 */
-	//function getCategoryQuestionsNumber($in_id) {
-	function getCategoryQuestionsNumber()
+	//public function getCategoryQuestionsNumber($in_id) {
+	public function getCategoryQuestionsNumber()
     {
 		$t_reltable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$in_id = Database::escape_string($this->id);
@@ -325,7 +325,7 @@ class Testcategory
 		return 0;
 	}
 
-	function display($in_color="#E0EBF5") {
+	public function display($in_color="#E0EBF5") {
 		echo "<textarea style='background-color:$in_color; width:60%; height:100px;'>";
 		print_r($this);
 		echo "</textarea>";
@@ -731,7 +731,7 @@ class Testcategory
 	/**
      * Return an array of X elements of an array
 	 */
-    static function getNElementsFromArray($array, $random_number) {
+    public static function getNElementsFromArray($array, $random_number) {
         shuffle($array);
         if ($random_number < count($array)) {
             $array = array_slice($array, 0, $random_number);
@@ -743,7 +743,7 @@ class Testcategory
 		* Display signs [+] and/or (>0) after question title if question has options
 		* scoreAlwaysPositive and/or uncheckedMayScore
 		*/
-	function displayQuestionOption($in_objQuestion) {
+	public function displayQuestionOption($in_objQuestion) {
 		if ($in_objQuestion->type == MULTIPLE_ANSWER && $in_objQuestion->scoreAlwaysPositive) {
 			echo "<span style='font-size:75%'> (>0)</span>";
 		}
@@ -757,7 +757,7 @@ class Testcategory
 	 * value is the array of question id of this category
 	 * Sort question by Category
 	*/
-    static function sortCategoriesQuestionByName($array) {
+    public static function sortCategoriesQuestionByName($array) {
 		$tabResult = array();
         $category_array = array();
         // tab of category name
@@ -860,7 +860,7 @@ class Testcategory
      * @param string $type
      * @return null|string
      */
-    static function draw_category_label($category_list, $type = 'label') {
+    public static function draw_category_label($category_list, $type = 'label') {
         $new_category_list = array();
         foreach ($category_list as $category_name) {
             switch ($type) {
@@ -1000,7 +1000,7 @@ class Testcategory
      * @param string $order
      * @return bool
      */
-    function get_category_exercise_tree($exercise_id, $course_id, $order = null)
+    public function get_category_exercise_tree($exercise_id, $course_id, $order = null)
     {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
@@ -1029,7 +1029,7 @@ class Testcategory
      * @param $type
      * @return mixed
      */
-    function get_category_tree_by_type($type) {
+    public function get_category_tree_by_type($type) {
         $course_id = api_get_course_int_id();
         if ($type == 'global') {
             $course_condition = 'c_id = 0';
@@ -1056,7 +1056,7 @@ class Testcategory
      * @param $exercise_obj
      * @return string
      */
-    function return_category_form($exercise_obj) {
+    public function return_category_form($exercise_obj) {
 
         $categories = $this->getListOfCategoriesForTest($exercise_obj);
 

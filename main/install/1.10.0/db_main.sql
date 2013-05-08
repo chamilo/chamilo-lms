@@ -557,7 +557,7 @@ CREATE TABLE IF NOT EXISTS session_field (
 );
 
 DROP TABLE IF EXISTS session_field_options;
-CREATE TABLE IF NOT EXISTS session_field_options (
+CREATE TABLE IF NOT EXISTS session_field_options(
     id	int NOT NULL auto_increment,
     field_id int NOT NULL,
     option_value text,
@@ -1499,7 +1499,6 @@ CREATE TABLE IF NOT EXISTS user_field_values(
 
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
-
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'legal_accept','Legal',0,0);
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'already_logged_in','Already logged in',0,0);
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'update_type','Update script type',0,0);
@@ -1524,9 +1523,6 @@ INSERT INTO user_field_options (field_id, option_value, option_display_text, opt
 INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '1', 'AtOnce',1);
 INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '8', 'Daily',2);
 INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '0', 'No',3);
-
-
-
 
 DROP TABLE IF EXISTS gradebook_result_log;
 CREATE TABLE IF NOT EXISTS gradebook_result_log (
@@ -3163,6 +3159,7 @@ CREATE TABLE track_e_lastaccess (
   access_tool varchar(30) default NULL,
   access_session_id int unsigned default NULL,
   PRIMARY KEY  (access_id),
+  KEY access_c_id_user_id (c_id, access_user_id),
   KEY access_user_id (access_user_id),
   KEY access_cours_code (c_id),
   KEY access_session_id (access_session_id)
@@ -3332,7 +3329,7 @@ CREATE TABLE track_e_course_access (
   counter int NOT NULL,
   session_id int NOT NULL default 0,
   c_id int NOT NULL default 0,
-  PRIMARY KEY  (course_access_id)
+  PRIMARY KEY(course_access_id)
 );
 
 DROP TABLE IF EXISTS track_e_hotspot;
@@ -3462,6 +3459,7 @@ CREATE TABLE user_course_category (
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
 ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_id);
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
+
 -- Question extra fields
 DROP TABLE IF EXISTS question_field;
 CREATE TABLE IF NOT EXISTS question_field (
@@ -3505,4 +3503,4 @@ ALTER TABLE question_field_values ADD INDEX idx_question_field_values_question_i
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(field_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.004' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.006' WHERE variable = 'chamilo_database_version';

@@ -368,9 +368,6 @@ $current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 //Error message
 $error = '';
 
-//Table calls
-$exercice_attemp_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
 /*  Teacher takes an exam and want to see a preview, we delete the objExercise from the session in order to get the latest changes in the exercise */
 if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['preview'] == 1 ) {
     Session::erase('objExercise');
@@ -617,7 +614,7 @@ if ($time_control) {
 
 			// First we update the attempt to today
 			// How the expired time is changed into "track_e_exercices" table,then the last attempt for this student should be changed too,so
-            update_attempt_date($exercise_stat_info['exe_id'], $last_attempt_date);
+            ExerciseLib::update_attempt_date($exercise_stat_info['exe_id'], $last_attempt_date);
 
 	        //Sessions  that contain the expired time
 	        $_SESSION['expired_time'][$current_expired_time_key] 		= $clock_expired_time;
@@ -897,7 +894,7 @@ if ($objExercise->type == ONE_PER_PAGE) {
     }
 
     if (!empty($categoryList)) {
-        echo Display::progress_pagination_bar_with_categories($categoryList, $current_question, $conditions, $link);
+        echo Display::progress_pagination_bar_with_categories($categoryList, $media_questions, $current_question, $conditions, $link);
     } else {
         echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
     }

@@ -31,18 +31,20 @@ if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc';
 }
 
-if (!in_array($action, array(
-    'get_exercise_results',
-    'get_hotpotatoes_exercise_results',
-    'get_work_user_list',
-    'get_timelines',
-    'get_user_skill_ranking',
-    'get_usergroups_teacher',
-    'get_question_list',
-    'get_user_list_plugin_widescale'
+if (!in_array($action,
+    array(
+        'get_exercise_results',
+        'get_hotpotatoes_exercise_results',
+        'get_work_user_list',
+        'get_timelines',
+        'get_user_skill_ranking',
+        'get_usergroups_teacher',
+        'get_question_list',
+        'get_user_list_plugin_widescale'
+    )
 ))
-    ) {
-	api_protect_admin_script(true);
+{
+    api_protect_admin_script(true);
 }
 
 if ($action == 'get_user_list_plugin_widescale') {
@@ -72,7 +74,12 @@ $ops = array(
 );
 
 //@todo move this in the display_class or somewhere else
-
+/**
+ * @param $col
+ * @param $oper
+ * @param $val
+ * @return string
+ */
 function get_where_clause($col, $oper, $val) {
     global $ops;
     if (empty($col)) {
@@ -81,7 +88,7 @@ function get_where_clause($col, $oper, $val) {
     if ($oper == 'bw' || $oper == 'bn') {
         $val .= '%';
     }
-    if ($oper == 'ew' || $oper == 'en' ) {
+    if ($oper == 'ew' || $oper == 'en') {
         $val = '%'.$val;
     }
     if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
@@ -111,84 +118,52 @@ if ($_REQUEST['_search'] == 'true') {
     }
     $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
 
-    //for now
-    $extra_field = new ExtraField('session');
+    // for now
     if (!empty($filters)) {
 
-        //Getting double select if exists
-        $double_select = array();
-        foreach ($filters->rules as $rule) {
-            if (strpos($rule->field, '_second') === false) {
-
-            } else {
-                $my_field = str_replace('_second', '', $rule->field);
-                $double_select[$my_field] = $rule->data;
-            }
+        switch($action) {
+            case 'get_questions':
+                $type = 'question';
+                break;
+            case 'get_sessions':
+                $type = 'session';
+                break;
         }
 
-        $condition_array = array();
-
-        foreach ($filters->rules as $rule) {
-            if (strpos($rule->field, 'extra_') === false) {
-                //normal fields
-                $field = $rule->field;
-                if (!empty($rule->data)) {
-                    $condition_array[] = get_where_clause($field, $rule->op, $rule->data);
-                }
-            } else {
-                //Extra fields
-
-                //normal
-                if (strpos($rule->field, '_second') === false) {
-                    //No _second
-                    $original_field = str_replace('extra_', '', $rule->field);
-                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
-
-                    if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
-
-                        if (isset($double_select[$rule->field])) {
-                            $data = explode('#', $rule->data);
-                            $rule->data = $data[1].'::'.$double_select[$rule->field];
-                        } else {
-                            // only was sent 1 select
-                            $data = explode('#', $rule->data);
-                            $rule->data = $data[1];
-                        }
-                        if (!empty($rule->data)) {
-                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
-                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
-                        }
-                    } else {
-                        if (!empty($rule->data)) {
-                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
-                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
-                        }
-                    }
-                } else {
-                    $my_field = str_replace('_second', '', $rule->field);
-                    $original_field = str_replace('extra_', '', $my_field);
-                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
-                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
-                }
-            }
-        }
+        $extraField = new ExtraField($type);
+        $result = $extraField->getExtraFieldRules($filters);
+        $extra_fields = $result['extra_fields'];
+        $condition_array = $result['condition_array'];
 
         if (!empty($condition_array)) {
             $where_condition .= ' AND ( ';
             $where_condition .= implode($filters->groupOp, $condition_array);
-
             $where_condition .= ' ) ';
         }
     }
 }
+
 // get index row - i.e. user click to sort $sord = $_GET['sord'];
 // get the direction
-if (!$sidx) $sidx = 1;
+if (!$sidx) {
+    $sidx = 1;
+}
 
 //2. Selecting the count FIRST
 //@todo rework this
 
 switch ($action) {
+    case 'get_questions':
+        $categoryId = isset($_REQUEST['categoryId']) ? $_REQUEST['categoryId'] : null;
+        /** @var \Doctrine\ORM\EntityManager $em */
+        /*$em = $app['orm.em'];
+        $repo = $em->getRepository('Entity\CQuizQuestionRelCategory');
+        $count = $repo->getCountQuestionByCategory($categoryId);*/
+        if (isset($_REQUEST['categoryId'])) {
+            $categoryId = intval($_REQUEST['categoryId']);
+        }
+        $count = Question::getQuestions($categoryId, array('where'=> $where_condition, 'extra' => $extra_fields), true);
+        break;
     case 'get_user_list_plugin_widescale':
         $count = UserManager::get_user_data(null, null, null, null, true);
         break;
@@ -214,16 +189,16 @@ switch ($action) {
         $course_id = api_get_course_int_id();
         $count = Question::get_count_course_medias($course_id);
         break;
-	case 'get_user_skill_ranking':
-    	$skill = new Skill();
-	    $count = $skill->get_user_list_skill_ranking_count();
-	    break;
+    case 'get_user_skill_ranking':
+        $skill = new Skill();
+        $count = $skill->get_user_list_skill_ranking_count();
+        break;
     case 'get_work_user_list':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $count = get_count_work($work_id);
         break;
-	case 'get_exercise_results':
+    case 'get_exercise_results':
         $exercise_id = $_REQUEST['exerciseId'];
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = intval($_GET['filter_by_user']);
@@ -233,9 +208,9 @@ switch ($action) {
                 $where_condition .= " AND te.exe_user_id  = '$filter_user'";
             }
         }
-		$count = ExerciseLib::get_count_exam_results($exercise_id, $where_condition);
-		break;
-	case 'get_hotpotatoes_exercise_results':
+        $count = ExerciseLib::get_count_exam_results($exercise_id, $where_condition);
+        break;
+    case 'get_hotpotatoes_exercise_results':
         $hotpot_path = $_REQUEST['path'];
 		$count = ExerciseLib::get_count_exam_hotpotatoes_results($hotpot_path);
 		break;
@@ -295,7 +270,7 @@ switch ($action) {
         if ($type == 'registered') {
             $count = $obj->get_usergroup_by_course_with_data_count($course_id);
         } else {
-        $count      = $obj->get_count();
+            $count = $obj->get_count();
         }
         break;
     default:
@@ -314,8 +289,8 @@ if ($page > $total_pages) {
 }
 
 $start = $limit * $page - $limit;
-if ($start < 0 ) {
-	$start = 0;
+if ($start < 0) {
+    $start = 0;
 }
 
 //4. Deleting an element if the user wants to
@@ -323,12 +298,37 @@ if (isset($_REQUEST['oper']) && $_REQUEST['oper'] == 'del') {
     $obj->delete($_REQUEST['id']);
 }
 
-$is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(true) || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh();
 
 //5. Querying the DB for the elements
 $columns = array();
 
 switch ($action) {
+    case 'get_questions':
+        // @todo implement a class that manages jqgrid petitions
+        /** @var \Entity\Repository\CQuizQuestionRepository $repo */
+        /*$repo = $em->getRepository('Entity\CQuizQuestion');
+        var_dump($where_condition, $extra_fields);
+        $qb = $repo->getQuestionsByCategory($categoryId);
+        if (!empty($sidx) && strlen($sidx) > 1) {
+            $sidx = 'q.'.$sidx;
+            $sord = strtoupper($sord);
+            $qb->addOrderBy($sidx, $sord);
+        }
+        $qb->getFirstResult($start);
+        $qb->getMaxResults($limit);
+        $query = $qb->getQuery();
+        //echo $qb->getQuery()->getSQL();
+        $questions = $query->getResult();*/
+
+        /** @var \Entity\CQuizCategory $category */
+        /*$category = $repo->find($categoryId);
+        $questions = $category->getQuestions();*/
+        $columns = Question::getQuestionColumns();
+        $columns = $columns['simple_column_name'];
+        $result = Question::getQuestions($categoryId, array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));
+
+        break;
     case 'get_user_list_plugin_widescale':
         $columns = array('username', 'firstname', 'lastname', 'exam_password');
         $column_names = array(get_lang('Username'), get_lang('Firstname'), get_lang('Lastname'), get_lang('Password'));
@@ -377,8 +377,8 @@ switch ($action) {
                 $column_names[] = $extra['3'];
             }
         }
-    $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true);
-    break;
+        $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true);
+        break;
 	case 'get_user_skill_ranking':
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
 	    $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
@@ -688,7 +688,8 @@ $allowed_actions = array(
     'get_user_course_report_resumed',
     'get_group_reporting',
     'get_question_list',
-    'get_user_list_plugin_widescale'
+    'get_user_list_plugin_widescale',
+    'get_questions'
 );
 
 //5. Creating an obj to return a json

@@ -47,7 +47,7 @@ class ExtraFieldValue extends Model
             case 'question':
                 $this->table = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
-                $this->author_id = 'question_id';
+                $this->author_id = 'user_id';
                 break;
             default:
                 //unmanaged datatype, return false to let the caller know it
@@ -82,7 +82,6 @@ class ExtraFieldValue extends Model
         if (empty($params[$this->handler_id])) {
             return false;
         }
-
         //Parse params
         foreach ($params as $key => $value) {
             if (substr($key, 0, 6) == 'extra_') { //an extra field
@@ -128,7 +127,7 @@ class ExtraFieldValue extends Model
 
         if ($extra_field_info) {
             switch ($extra_field_info['field_type']) {
-                case ExtraField::FIELD_TYPE_TAG :
+                case ExtraField::FIELD_TYPE_TAG:
                     break;
                 case ExtraField::FIELD_TYPE_RADIO:
                 case ExtraField::FIELD_TYPE_SELECT:
@@ -167,6 +166,7 @@ class ExtraFieldValue extends Model
                 default:
                     break;
             }
+
             $field_values = self::get_values_by_handler_and_field_id($params[$this->handler_id], $params['field_id']);
             if ($field_values) {
                 self::delete_values_by_handler_and_field_id($params[$this->handler_id], $params['field_id']);
@@ -174,7 +174,6 @@ class ExtraFieldValue extends Model
             $params['field_value'] = $value_to_insert;
             $params['tms'] = api_get_utc_datetime();
             $params[$this->author_id] = api_get_user_id();
-
             return parent::save($params, $show_query);
         }
     }

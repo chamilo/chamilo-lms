@@ -1022,21 +1022,21 @@ class Exercise
 
         $this->save_categories_in_exercise($this->categories);
 
-        // updates the question position
+        // Updates the question position.
         $this->update_question_positions();
     }
 
     /* Updates question position */
 
-    function update_question_positions()
+    public function update_question_positions()
     {
         $quiz_question_table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         //Fixes #3483 when updating order
         $question_list = $this->selectQuestionList(true);
-        if (!empty($question_list)) {
+        if (!empty($question_list) && !empty($this->course_id) && !empty($this->id)) {
             foreach ($question_list as $position => $questionId) {
                 $sql = "UPDATE $quiz_question_table SET question_order ='".intval($position)."'".
-                    "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id = ".intval($this->id);
+                    "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id = ".$this->id;
                 Database::query($sql);
             }
         }
@@ -1155,7 +1155,7 @@ class Exercise
             '
 			<a href="javascript://" onclick=" return show_media()">
 				<span id="media_icon">
-					<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" /> '.addslashes(
+					'.Display::return_icon('looknfeel.png').' '.addslashes(
                 api_htmlentities(get_lang('ExerciseDescription'))
             ).'
 					</span>
@@ -1168,16 +1168,18 @@ class Exercise
             $editor_config = array_merge($editor_config, $type);
         }
 
+
         $form->addElement('html', '<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
         $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
         $form->addElement('html', '</div>');
 
-        $form->addElement(
-            'advanced_settings',
-            '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >
-                            <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(
-                api_htmlentities(get_lang('AdvancedParameters'))
-            ).'</div></span></a>'
+        $form->addElement('advanced_settings',
+            '<a href="javascript://" onclick=" return advanced_parameters()">
+                <span id="img_plus_and_minus">
+                <div style="vertical-align:top;" >
+                    '.Display::return_icon('div_show.gif').' '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'</div>
+                </span>
+            </a>'
         );
 
         // Random questions
@@ -2678,7 +2680,7 @@ class Exercise
         $user_answer = '';
 
         // Get answer list for matching
-        $sql_answer = 'SELECT iid, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = "'.$questionId.'" ';
+        $sql_answer = 'SELECT iid, answer FROM '.$table_ans.' WHERE question_id = "'.$questionId.'" ';
         $res_answer = Database::query($sql_answer);
 
         $answer_matching = array();
@@ -4373,7 +4375,7 @@ class Exercise
             $array[] = array('title' => get_lang("Duration"), 'content' => $duration);
         }
 
-        $html = Display::page_header(
+        $html = Display::page_subheader(
             Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result')
         );
         $html .= Display::description($array);
@@ -4591,6 +4593,7 @@ class Exercise
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 $objQuestionTmp = Question::read($questionId);
+
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
                 } else {
@@ -5072,7 +5075,8 @@ class Exercise
      * @param null $order
      * @return bool
      */
-    function get_categories_with_name_in_exercise($order = null) {
+    public function get_categories_with_name_in_exercise($order = null)
+    {
         $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         $table_category = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $sql = "SELECT * FROM $table qc INNER JOIN $table_category c ON (category_id = c.iid) WHERE exercise_id = {$this->id} AND qc.c_id = {$this->course_id} ";

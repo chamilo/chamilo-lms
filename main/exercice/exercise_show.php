@@ -62,7 +62,6 @@ if (empty($id)) {
 	api_not_allowed(true);
 }
 
-
 if (api_is_course_session_coach(api_get_user_id(), api_get_course_int_id(), api_get_session_id())) {
     if (!api_coach_can_edit_view_results(api_get_course_id(), api_get_session_id())) {
         api_not_allowed(true);
@@ -271,12 +270,14 @@ foreach ($questionList as $questionId) {
     $objQuestionTmp     = Question::read($questionId);
     $total_weighting += $objQuestionTmp->selectWeighting();
 }
+
 $counter = 1;
-
 $exercise_content = null;
-
 $media_list = array();
 $category_list = array();
+$tempParentId = null;
+$mediaCounter = 0;
+
 foreach ($questionList as $questionId) {
 
 	$choice = $exerciseResult[$questionId];
@@ -633,14 +634,28 @@ foreach ($questionList as $questionId) {
     $question_content = '<div class="question_row">';
 
     $show_media = false;
-    if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $media_list)) {
-        $show_media = true;
-        $media_list[] = $objQuestionTmp->parent_id;
+
+    $counterToShow = $counter;
+
+    if ($objQuestionTmp->parent_id != 0) {
+
+        if (!in_array($objQuestionTmp->parent_id, $media_list)) {
+            $media_list[] = $objQuestionTmp->parent_id;
+            $show_media = true;
+        }
+        if ($tempParentId == $objQuestionTmp->parent_id) {
+            $mediaCounter++;
+        } else {
+            $mediaCounter = 0;
+        }
+        $counterToShow = chr(97 + $mediaCounter);
+        $tempParentId = $objQuestionTmp->parent_id;
     }
 
  	if ($show_results) {
         //Shows question title an description
-	    $question_content .= $objQuestionTmp->return_header(null, $counter, $score, $show_media);
+
+	    $question_content .= $objQuestionTmp->return_header(null, $counterToShow, $score, $show_media, $mediaCounter);
 
         // display question category, if any
  	    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
@@ -678,8 +693,6 @@ if (!empty($category_list) && ($show_results || $show_only_total_score)) {
     );
     echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
 }
-
-
 
 echo $total_score_text;
 echo $exercise_content;

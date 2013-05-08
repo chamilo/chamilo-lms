@@ -14,7 +14,7 @@ $userAccessConditions = function (Request $request) use ($app) {
 };
 
 /** Setting course session and group global values */
-$settingCourseConditions = function (Request $request) use ($app) {
+$settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 
     $cidReq    = $request->get('cidReq');
     $sessionId = $request->get('id_session');
@@ -26,6 +26,10 @@ $settingCourseConditions = function (Request $request) use ($app) {
 
     $courseReset = false;
     if ((!empty($cidReq) && $tempCourseId != $cidReq) || empty($tempCourseId) || empty($tempCourseId) == -1) {
+        $courseReset = true;
+    }
+
+    if (isset($cidReset) && $cidReset == 1) {
         $courseReset = true;
     }
 
@@ -41,11 +45,11 @@ $settingCourseConditions = function (Request $request) use ($app) {
         $sessionReset = true;
     }
     /*
-    $app['monolog']->addDebug('Start');
-    $app['monolog']->addDebug($courseReset);
-    $app['monolog']->addDebug($cidReq);
-    $app['monolog']->addDebug($tempCourseId);
-    $app['monolog']->addDebug('End');
+        $app['monolog']->addDebug('Start');
+        $app['monolog']->addDebug($courseReset);
+        $app['monolog']->addDebug($cidReq);
+        $app['monolog']->addDebug($tempCourseId);
+        $app['monolog']->addDebug('End');
     */
 
     if ($courseReset) {
@@ -120,6 +124,7 @@ $userPermissionsInsideACourse = function (Request $request) use ($app) {
     //If I'm the admin platform i'm a teacher of the course
     $is_platformAdmin = api_is_platform_admin();
     $courseReset      = Session::read('courseReset');
+
 
     //$app['monolog']->addDebug($courseReset);
     //$app['monolog']->addDebug($courseId);
@@ -362,6 +367,14 @@ $cleanCourseSession = function (Request $request) use ($app) {
     Session::erase('_course');
 };
 
+$adminAndQuestionManagerCondition = function (Request $request) use ($app) {
+    if (!(api_is_platform_admin() || api_is_question_manager())) {
+        $app->abort(401);
+    }
+    return null;
+};
+
+
 /**
  * Deletes the exam_password user extra field *only* to students
  * @todo improve the login hook system
@@ -469,7 +482,28 @@ $app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile
 $app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
     ->assert('type', '.+');
 
-/** Admin  */
-$app->match('/admin/questions', 'admin.controller:questionsAction', 'GET|POST')
+/** Question manager - admin */
+
+$app->get('/admin/questionmanager/', 'question_manager.controller:questionManagerIndexAction')
     ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_questionmanager');
+
+$app->match('/admin/questionmanager/questions', 'question_manager.controller:questionsAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
     ->bind('admin_questions');
+
+$app->match('/admin/questionmanager/questions/{id}/edit', 'question_manager.controller:editQuestionAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_questions_edit');
+
+$app->get('/admin/questionmanager/questions/get-categories/{id}', 'question_manager.controller:getCategoriesAction')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_questions_get_categories');
+
+$app->get('/admin/questionmanager/questions/get-questions-by-category/{categoryId}', 'question_manager.controller:getQuestionsByCategoryAction')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_get_questions_by_category');
+

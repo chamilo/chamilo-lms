@@ -133,18 +133,14 @@ function mysort(a, b){
     return 0;
 }
 
-var value = 1;
-$("#advanced_parameters").on("click", function() {
-    $("#options").toggle(function() {
-        if (value == 1) {
-            $(".advanced_parameters").addClass("btn-hide");
-            value = 0;
-        } else {
-            $(".advanced_parameters").removeClass("btn-hide");
-            value = 1;
-        }
+$("form").on("click", '.advanced_parameters', function() {
+    var id = $(this).attr('id') + '_options';
+    var button = $(this);
+    $("#"+id).toggle(function() {
+        button.toggleClass('disabled');
     });
 });
+
 
 /** Makes row highlighting possible */
 $(document).ready( function() {

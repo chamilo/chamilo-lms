@@ -1104,7 +1104,6 @@ class Display
 
         $all_text = addslashes(get_lang('All'));
         $json .= '$("'.$obj->pager.' option[value='.$all_value.']").text("'.$all_text.'");';
-
         $json .= "\n";
 
         //Adding edit/delete icons

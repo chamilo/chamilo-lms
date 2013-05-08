@@ -106,9 +106,15 @@ class CQuizQuestion
      **/
     private $quizQuestionRelCategoryList;
 
+    /**
+     * @ORM\OneToMany(targetEntity="QuestionFieldValues", mappedBy="question")
+     */
+    private $extraFields;
+
     public function __construct()
     {
         $this->quizQuestionRelCategoryList = new ArrayCollection();
+        $this->extraFields = new ArrayCollection();
     }
 
     public function getCategories()

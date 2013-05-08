@@ -182,10 +182,9 @@ class SessionManager
      * @return mixed Integer for number of rows, or array of results
      * @assert (array(),true) !== false
      */
-    public static function get_sessions_admin($options = array(), $get_count = false) {
-        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        $tbl_session_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
+    public static function get_sessions_admin($options = array(), $get_count = false)
+    {
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
@@ -198,58 +197,14 @@ class SessionManager
             $where .=" AND s.id_coach = $user_id ";
         }
 
-        $inject_extra_fields = null;
-        $extra_fields = array();
-        $extra_fields_info = array();
-
-        //for now only sessions
         $extra_field = new ExtraField('session');
-        $double_fields = array();
-
-        $extra_field_option = new ExtraFieldOption('session');
-
-        $extra_present = false;
-
-        if (isset($options['extra'])) {
-            $extra_fields = $options['extra'];
-            if (!empty($extra_fields)) {
-                $extra_present = true;
-                $counter = 1;
-                foreach ($extra_fields as &$extra) {
-                    $extra_field_obj= new ExtraField('session');
-                    $extra_field_info = $extra_field_obj->get($extra['id']);
-                    $extra['extra_field_info'] = $extra_field_info;
-
-                    if (in_array($extra_field_info['field_type'], array(
-                        ExtraField::FIELD_TYPE_SELECT,
-                        ExtraField::FIELD_TYPE_SELECT,
-                        ExtraField::FIELD_TYPE_DOUBLE_SELECT
-                        ))
-                    ) {
-                        $inject_extra_fields .= " fvo$counter.option_display_text as {$extra['field']}, ";
-                    } else {
-                        $inject_extra_fields .= " fv$counter.field_value as {$extra['field']}, ";
-                    }
-
-                    if (isset($extra_fields_info[$extra['id']])) {
-                        $info = $extra_fields_info[$extra['id']];
-                    } else {
-                        $info = $extra_field->get($extra['id']);
-                        $extra_fields_info[$extra['id']] = $info;
-                    }
-                    if ($info['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
-                        $double_fields[$info['id']] = $info;
-                    }
-                    $counter++;
-                }
-            }
-        }
-
-        $options_by_double = array();
-        foreach ($double_fields as $double) {
-            $my_options = $extra_field_option->get_field_options_by_field($double['id'], true);
-            $options_by_double['extra_'.$double['field_variable']] = $my_options;
-        }
+        $conditions = $extra_field->parseConditions($options);
+        $inject_joins = $conditions['inject_joins'];
+        $where .= $conditions['where'];
+        $inject_where = $conditions['inject_where'];
+        $inject_extra_fields = $conditions['inject_extra_fields'];
+        $order = $conditions['order'];
+        $limit = $conditions['limit'];
 
         if ($get_count == true) {
             $select = " SELECT count(*) as total_rows";
@@ -266,70 +221,20 @@ class SessionManager
                     " s.id ";
         }
 
-        //filter can be all/any = and/or
-        $inject_joins = null;
-        $inject_where = null;
-        $field_value_to_join = array();
-
-        if (!empty($options['where'])) {
-            if (!empty($options['extra'])) {
-                //Removing double 1=1
-                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
-                //Always OR
-                $counter = 1;
-                foreach ($extra_fields as $extra_info) {
-                    $extra_field_info = $extra_info['extra_field_info'];
-
-                    $inject_joins .= " INNER JOIN $tbl_session_field_values fv$counter ON (s.id = fv$counter.session_id) ";
-
-                    //Add options
-                    if (in_array($extra_field_info['field_type'], array(
-                        ExtraField::FIELD_TYPE_SELECT,
-                        ExtraField::FIELD_TYPE_SELECT,
-                        ExtraField::FIELD_TYPE_DOUBLE_SELECT
-                        ))
-                    ) {
-                        $options['where'] = str_replace($extra_info['field'], 'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fvo'.$counter.'.option_value', $options['where']);
-                        $inject_joins .= " INNER JOIN $tbl_session_field_options fvo$counter ".
-                                     " ON (fv$counter.field_id = fvo$counter.field_id AND fv$counter.field_value = fvo$counter.option_value) ";
-                    } else {
-                        //text, textarea, etc
-                        $options['where'] = str_replace($extra_info['field'], 'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.field_value', $options['where']);
-                    }
-
-                    $field_value_to_join[] = " fv$counter.session_id ";
-                    $counter++;
-                }
-                if (!empty($field_value_to_join)) {
-                    //$inject_where .= " AND s.id = ".implode(' = ', $field_value_to_join);
-                }
-            }
-            $where .= ' AND '.$options['where'];
-        }
-
         $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";
 
         if (api_is_multiple_url_enabled()) {
             $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
-            //" LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
                 $query = "$select FROM $tbl_session s $inject_joins INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id) $where";
             }
         }
 
-        if (!empty($options['order'])) {
-            $query .= " ORDER BY ".$options['order'];
-        }
+        $query .= $order;
+        $query .= $limit;
 
-        if (!empty($options['limit'])) {
-            $query .= " LIMIT ".$options['limit'];
-        }
-
-        if ($get_count == false) {
-            //echo $query;exit;
-        }
         $result = Database::query($query);
 
         $formatted_sessions = array();
@@ -340,6 +245,7 @@ class SessionManager
                 return $sessions[0]['total_rows'];
             }
             foreach ($sessions as $session) {
+
                 $session_id = $session['id'];
 
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
@@ -365,8 +271,7 @@ class SessionManager
                         break;
                 }
 
-                //Cleaning double selects
-
+                // Cleaning double selects.
                 foreach ($session as $key => &$value) {
                     if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
                         $options = explode('::', $value);
@@ -666,7 +571,8 @@ class SessionManager
     /**
      *
      */
-    static function compare_arrays_to_merge($array1, $array2) {
+    static function compare_arrays_to_merge($array1, $array2)
+    {
         if (empty($array2)) {
             return $array1;
         }
@@ -2614,7 +2520,7 @@ class SessionManager
                 break;
         }
 
-        //Inject extra session fields
+        // Inject extra session fields
         $session_field = new SessionField();
         $rules = $session_field->getRules($columns, $column_model);
 
@@ -2634,7 +2540,8 @@ class SessionManager
         return $return_array;
     }
 
-    static function getSessionsByCategory($categoryId) {
+    static function getSessionsByCategory($categoryId)
+    {
         $categoryId = intval($categoryId);
         $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sql = "select * FROM $tableSession WHERE session_category_id = $categoryId";

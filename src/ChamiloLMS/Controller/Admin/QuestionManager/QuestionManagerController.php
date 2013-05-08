@@ -127,50 +127,38 @@ class QuestionManagerController
     public function getQuestionsByCategoryAction(Application $app, $categoryId)
     {
          // Getting CQuizCategory repo.
-        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        /** @var \Doctrine\ORM\EntityManager $em */
+        $em = $app['orm.em'];
+        $repo = $em->getRepository('Entity\CQuizCategory');
 
         /** @var \Entity\CQuizCategory $category */
         $category = $repo->find($categoryId);
-        $questions = $category->getQuestions();
+        //$questions = $category->getQuestions();
+
+        /*$questionFields = $em->getRepository('Entity\QuestionField')->findAll();
+        $rules = array();
+        foreach ($questionFields as $extraField) {
+            $extraField->getFieldVariable();
+            $rules[] = ;
+        }*/
+
+        $questionColumns = \Question::getQuestionColumns();
+        $columnModel = $questionColumns['column_model'];
+        $columns = $questionColumns['columns'];
+        $rules = $questionColumns['rules'];
 
         $grid = \Display::grid_html('questions');
 
         //jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_questions&categoryId='.$categoryId;
 
-        //The order is important you need to check the the $column variable in the model.ajax.php file
-        $columns = array('id', get_lang('Name'), get_lang('Description'), get_lang('Actions'));
-
-        // Column config.
-        $columnModel = array(
-            array(
-                'name' => 'iid',
-                'index' => 'iid',
-                'width' => '20',
-                'align' => 'left'
-            ),
-            array(
-                'name' => 'question',
-                'index' => 'question',
-                'width' => '200',
-                'align' => 'left'
-            ),
-            array(
-                'name'     => 'description',
-                'index'    => 'description',
-                'width'    => '100',
-                'align'    => 'left',
-                'sortable' => 'false'
-            ),
-            array(
-                'name'      => 'actions',
-                'index'     => 'actions',
-                'width'     => '30',
-                'align'     => 'left',
-                'formatter' => 'action_formatter',
-                'sortable'  => 'false'
+        $extraParams['postData'] =array(
+            'filters' => array(
+                "groupOp" => "AND",
+                "rules" => $rules
             )
         );
+
         // Autowidth.
         $extraParams['autowidth'] = 'true';
         // Height auto.
@@ -186,23 +174,9 @@ class QuestionManagerController
 
         $js = \Display::grid_js('questions', $url, $columns, $columnModel, $extraParams, array(), $actionLinks, true);
 
+        $app['template']->assign('category', $category);
         $app['template']->assign('grid', $grid);
         $app['template']->assign('js', $js);
-
-        //$adapter = new DoctrineCollectionAdapter($questions);
-
-        //$adapter    = new FixedAdapter($nbResults, array());
-        /*$pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(10); // 10 by default
-        $pagerfanta->setCurrentPage(1); // 1 by default
-        */
-        //$this->app['pagerfanta.view.router.name']   = 'userportal';
-        /*$this->app['pagerfanta.view.router.params'] = array(
-            'filter' => $filter,
-            'type'   => 'courses',
-            'page'   => $page
-        );*/
-        //$app['template']->assign('pagination', $pagerfanta);
 
         $response = $app['template']->render_template('admin/questionmanager/questions.tpl');
         return new Response($response, 200, array());
@@ -222,7 +196,29 @@ class QuestionManagerController
         $app['extraJS'] = $extraJS;
 
         // Getting CQuizCategory repo.
+        /** @var \Gedmo\Tree\Entity\Repository\NestedTreeRepository  $repo */
         $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+
+        $categoryId = $app['request']->get('categoryId');
+        $subtree = null;
+
+        if (isset($categoryId)) {
+            // Insert node.
+            /*
+            $options = array(
+                'decorate' => true,
+                'rootOpen' => '<ul class="nav nav-list">',
+                'rootClose' => '</ul>',
+                'childOpen' => '<li>',
+                'childClose' => '</li>'
+            );
+            $node = $repo->find($categoryId);
+
+            $qb = $repo->getChildrenQueryBuilder($node, true, 'title', 'ASC', true);
+            $query = $qb->getQuery();
+            $subtree = $repo->buildTree($query->getArrayResult(), $options);
+            var_dump($subtree);*/
+        }
 
         $options = array(
             'decorate' => true,
@@ -230,9 +226,13 @@ class QuestionManagerController
             'rootClose' => '</ul>',
             'childOpen' => '<li>',
             'childClose' => '</li>',
-            'nodeDecorator' => function ($row) use ($app) {
+            'nodeDecorator' => function ($row) use ($app, $categoryId, $subtree) {
                 $url = $app['url_generator']->generate('admin_questions_get_categories', array('id' => $row['iid']));
-                return \Display::url($row['title'], $url, array('id' => $row['iid']));
+                $url = \Display::url($row['title'], $url, array('id' => $row['iid']));
+                if ($row['iid'] == $categoryId) {
+                    $url .= $subtree;
+                }
+                return $url;
             }
             //'representationField' => 'slug',
             //'html' => true
@@ -246,15 +246,12 @@ class QuestionManagerController
             ->where('node.cId <> 0 AND node.lvl = 0')
             ->orderBy('node.root, node.lft', 'ASC');
 
-        $categoryId = $app['request']->get('categoryId');
 
-        if (isset($categoryId)) {
-            /*$qb->add('where', 'node.rgt = :categoryId');
-            $qb->setParameter('categoryId', $categoryId);*/
-        }
-
+        //$node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false
+        //$qb = $repo->getChildrenQueryBuilder(null, true, 'title', 'ASC', true);
         $query = $qb->getQuery();
         $tree = $repo->buildTree($query->getArrayResult(), $options);
+
 
         $app['template']->assign('category_tree', $tree);
 

@@ -1940,7 +1940,7 @@ abstract class Question
         return $html;
     }
 
-    static function question_type_no_review()
+    public static function question_type_no_review()
     {
         return array(
             HOT_SPOT,
@@ -1949,7 +1949,8 @@ abstract class Question
         );
     }
 
-    public static function getMediaLabels() {
+    public static function getMediaLabels()
+    {
 
         // Shows media questions
         $courseMedias = Question::prepare_course_media_select(api_get_course_int_id());
@@ -1964,5 +1965,106 @@ abstract class Question
         }
 
         return $labels;
+    }
+
+    public static function getQuestionColumns()
+    {
+        // The order is important you need to check the the $column variable in the model.ajax.php file
+        $columns = array('id', get_lang('Name'), get_lang('Description'));
+
+        // Column config.
+        $columnModel = array(
+            array(
+                'name' => 'iid',
+                'index' => 'iid',
+                'width' => '20',
+                'align' => 'left'
+            ),
+            array(
+                'name' => 'question',
+                'index' => 'question',
+                'width' => '200',
+                'align' => 'left'
+            ),
+            array(
+                'name'     => 'description',
+                'index'    => 'description',
+                'width'    => '100',
+                'align'    => 'left',
+                'sortable' => 'false'
+            )
+        );
+        $extraField = new \ExtraField('question');
+        $rules = $extraField->getRules($columns, $columnModel);
+
+        $columns[] = get_lang('Actions');
+
+         $columnModel[] = array(
+             'name'      => 'actions',
+             'index'     => 'actions',
+             'width'     => '30',
+             'align'     => 'left',
+             'formatter' => 'action_formatter',
+             'sortable'  => 'false'
+         );
+
+        foreach ($columnModel as $col_model) {
+            $simple_column_name[] = $col_model['name'];
+        }
+
+        $return_array =  array(
+            'columns' => $columns,
+            'column_model' => $columnModel,
+            'rules' => $rules,
+            'simple_column_name' => $simple_column_name
+        );
+
+        return $return_array;
+    }
+
+    /**
+     * Get all questions
+     * @param $options
+     * @return array
+     */
+    public static function getQuestions($categoryId, $options, $get_count = false)
+    {
+        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $where = 'WHERE 1 = 1 ';
+
+        $extra_field = new ExtraField('question');
+        $conditions = $extra_field->parseConditions($options);
+        $inject_joins = $conditions['inject_joins'];
+        $where .= $conditions['where'];
+        $inject_where = $conditions['inject_where'];
+        $inject_extra_fields = $conditions['inject_extra_fields'];
+        $order = $conditions['order'];
+        $limit = $conditions['limit'];
+
+        if ($get_count == true) {
+            $select = " SELECT count(*) as total_rows";
+        } else {
+            $select = " SELECT s.*, $inject_extra_fields 1";
+        }
+        $categoryCondition = null;
+        if (!empty($categoryId)) {
+            $categoryRelQuestionTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+            $categoryCondition = " INNER JOIN $categoryRelQuestionTable c ON (s.iid = c.question_id)";
+            $categoryId = intval($categoryId);
+            $where .= " AND category_id = $categoryId ";
+        }
+
+        $query = " $select FROM $questionTable s $inject_joins $categoryCondition $where $inject_where $order $limit";
+
+        $result = Database::query($query);
+        $questions = array();
+        if (Database::num_rows($result)) {
+            $questions = Database::store_result($result, 'ASSOC');
+            if ($get_count) {
+                return $questions[0]['total_rows'];
+            }
+        }
+        return $questions;
+
     }
 }

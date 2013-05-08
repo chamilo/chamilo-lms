@@ -18,13 +18,17 @@
         }
 
         $(function() {
-
             {% if app.request.get('categoryId') %}
                 var categoryId = '{{ app.request.get('categoryId') }}';
                 loadQuestions(categoryId);
             {% endif %}
 
             $('.load_categories li').on('click', 'a', function() {
+
+                $('.load_categories li').each(function() {
+                    $(this).removeClass('active');
+                });
+                $(this).parent().addClass('active');
                 var url = $(this).attr('href');
                 var id = url.replace(/[^\d\.]/g, '');
                 loadQuestions(id);
@@ -39,6 +43,7 @@
         {{ global_category_tree }}
     </div>
 {% endblock %}
+
 {% block right_column %}
     <div class="questions">
     </div>

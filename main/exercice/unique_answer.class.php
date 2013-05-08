@@ -143,37 +143,43 @@ class UniqueAnswer extends Question
         for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addElement('html', '<tr>');
             if (isset($answer) && is_object($answer)) {
+
                 $answer_id = $answer->getRealAnswerIdFromList($i);
 
                 if ($answer->correct[$answer_id]) {
                     $correct = $i;
                 }
+
                 $defaults['answer['.$i.']']    = $answer->answer[$answer_id];
                 $defaults['comment['.$i.']']   = $answer->comment[$answer_id];
                 $defaults['weighting['.$i.']'] = Text::float_format($answer->weighting[$answer_id], 1);
 
-                $item_list = explode('@@', $answer->destination[$answer_id]);
+                if (!empty($answer->destination[$answer_id])) {
+                    $item_list = explode('@@', $answer->destination[$answer_id]);
+                    $try       = $item_list[0];
+                    $lp        = $item_list[1];
+                    $list_dest = $item_list[2];
+                    $url       = $item_list[3];
 
-                $try       = $item_list[0];
-                $lp        = $item_list[1];
-                $list_dest = $item_list[2];
-                $url       = $item_list[3];
+                    if ($try == 0) {
+                        $try_result = 0;
+                    } else {
+                        $try_result = 1;
+                    }
 
-                if ($try == 0) {
-                    $try_result = 0;
-                } else {
-                    $try_result = 1;
+                    if ($url == 0) {
+                        $url_result = '';
+                    } else {
+                        $url_result = $url;
+                    }
+
+                    $temp_scenario['url'.$i]         = $url_result;
+                    $temp_scenario['try'.$i]         = $try_result;
+                    $temp_scenario['lp'.$i]          = $lp;
+                    $temp_scenario['destination'.$i] = $list_dest;
                 }
-                if ($url == 0) {
-                    $url_result = '';
-                } else {
-                    $url_result = $url;
-                }
 
-                $temp_scenario['url'.$i]         = $url_result;
-                $temp_scenario['try'.$i]         = $try_result;
-                $temp_scenario['lp'.$i]          = $lp;
-                $temp_scenario['destination'.$i] = $list_dest;
+
             } else {
                 $defaults['answer[1]']    = get_lang('DefaultUniqueAnswer1');
                 $defaults['weighting[1]'] = 10;

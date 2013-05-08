@@ -46,6 +46,7 @@ class ExtraField extends Model
                 //Used for the model
                 $this->table      = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
                 $this->handler_id = 'course_code';
+                $this->primaryKey = 'id';
                 break;
             case 'user':
                 $this->table_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -54,6 +55,7 @@ class ExtraField extends Model
                 //Used for the model
                 $this->table      = Database::get_main_table(TABLE_MAIN_USER_FIELD);
                 $this->handler_id = 'user_id';
+                $this->primaryKey = 'user_id';
                 break;
             case 'session':
                 $this->table_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
@@ -62,21 +64,24 @@ class ExtraField extends Model
                 //Used for the model
                 $this->table      = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
                 $this->handler_id = 'session_id';
+                $this->primaryKey = 'id';
                 break;
             case 'question':
-                $this->table_field_options  = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_OPTIONS);
-                $this->table_field_values   = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
+                $this->table_field_options = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_OPTIONS);
+                $this->table_field_values  = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
 
                 //Used for the model
-                $this->table = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
+                $this->table      = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
                 $this->handler_id = 'question_id';
+                $this->primaryKey = 'iid';
                 break;
         }
-        $this->pageUrl = 'extra_fields.php?type='.$this->type;
+        $this->pageUrl  = 'extra_fields.php?type='.$this->type;
         $this->pageName = get_lang(ucwords($this->type).'Fields'); // Example QuestionFields
     }
 
-    static function getValidExtraFieldTypes() {
+    static function getValidExtraFieldTypes()
+    {
         return array(
             'user',
             'course',
@@ -501,7 +506,7 @@ class ExtraField extends Model
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_details) {
                                 $options[$option_details['option_value']] = $option_details['option_display_text'];
-                                $group[] = $form->createElement(
+                                $group[]                                  = $form->createElement(
                                     'checkbox',
                                     'extra_'.$field_details['field_variable'],
                                     $option_details['option_value'],
@@ -548,7 +553,9 @@ class ExtraField extends Model
                         if (!empty($field_details['options'])) {
                             foreach ($field_details['options'] as $option_id => $option_details) {
                                 if ($get_lang_variables) {
-                                    $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
+                                    $options[$option_details['option_value']] = get_lang(
+                                        $option_details['option_display_text']
+                                    );
                                 } else {
                                     $options[$option_details['option_value']] = $option_details['option_display_text'];
                                 }
@@ -814,13 +821,13 @@ EOF;
     function setupBreadcrumb(&$breadcrumb, $action)
     {
         if ($action == 'add') {
-            $breadcrumb[]=array('url' => $this->pageUrl,'name' => $this->pageName);
-            $breadcrumb[]=array('url' => '#','name' => get_lang('Add'));
+            $breadcrumb[] = array('url' => $this->pageUrl, 'name' => $this->pageName);
+            $breadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
         } elseif ($action == 'edit') {
-            $breadcrumb[]=array('url' => $this->pageUrl,'name' => $this->pageName);
-            $breadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
+            $breadcrumb[] = array('url' => $this->pageUrl, 'name' => $this->pageName);
+            $breadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
         } else {
-            $breadcrumb[]=array('url' => '#','name' => $this->pageName);
+            $breadcrumb[] = array('url' => '#', 'name' => $this->pageName);
         }
     }
 
@@ -832,26 +839,90 @@ EOF;
     {
         // action links
         echo '<div class="actions">';
-        echo '<a href="../admin/index.php">' . Display::return_icon('back.png', get_lang('BackTo') . ' ' . get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM) . '</a>';
-        echo '<a href="' . api_get_self() . '?action=add&type='.$this->type.'">' . Display::return_icon('add_user_fields.png', get_lang('Add'), '', ICON_SIZE_MEDIUM) . '</a>';
+        echo '<a href="../admin/index.php">'.Display::return_icon(
+            'back.png',
+            get_lang('BackTo').' '.get_lang('PlatformAdmin'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).'</a>';
+        echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'">'.Display::return_icon(
+            'add_user_fields.png',
+            get_lang('Add'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).'</a>';
         echo '</div>';
         echo Display::grid_html($this->type.'_fields');
     }
 
-    public function getJqgridColumnNames() {
-        return array(get_lang('Name'), get_lang('FieldLabel'),  get_lang('Type'), get_lang('FieldChangeability'), get_lang('Visibility'), get_lang('Filter'), get_lang('FieldOrder'), get_lang('Actions'));
+    public function getJqgridColumnNames()
+    {
+        return array(
+            get_lang('Name'),
+            get_lang('FieldLabel'),
+            get_lang('Type'),
+            get_lang('FieldChangeability'),
+            get_lang('Visibility'),
+            get_lang('Filter'),
+            get_lang('FieldOrder'),
+            get_lang('Actions')
+        );
     }
 
-    public function getJqgridColumnModel() {
+    public function getJqgridColumnModel()
+    {
         return array(
-            array('name'=>'field_display_text', 'index'=>'field_display_text',      'width'=>'180',   'align'=>'left'),
-            array('name'=>'field_variable',     'index'=>'field_variable',          'width'=>'',  'align'=>'left','sortable'=>'true'),
-            array('name'=>'field_type',         'index'=>'field_type',              'width'=>'',  'align'=>'left','sortable'=>'true'),
-            array('name'=>'field_changeable',   'index'=>'field_changeable',        'width'=>'50',  'align'=>'left','sortable'=>'true'),
-            array('name'=>'field_visible',      'index'=>'field_visible',           'width'=>'40',  'align'=>'left','sortable'=>'true'),
-            array('name'=>'field_filter',       'index'=>'field_filter',            'width'=>'30',  'align'=>'left','sortable'=>'true'),
-            array('name'=>'field_order',        'index'=>'field_order',             'width'=>'40',  'align'=>'left','sortable'=>'true'),
-            array('name'=>'actions',            'index'=>'actions',                 'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
+            array('name' => 'field_display_text', 'index' => 'field_display_text', 'width' => '180', 'align' => 'left'),
+            array(
+                'name'     => 'field_variable',
+                'index'    => 'field_variable',
+                'width'    => '',
+                'align'    => 'left',
+                'sortable' => 'true'
+            ),
+            array(
+                'name'     => 'field_type',
+                'index'    => 'field_type',
+                'width'    => '',
+                'align'    => 'left',
+                'sortable' => 'true'
+            ),
+            array(
+                'name'     => 'field_changeable',
+                'index'    => 'field_changeable',
+                'width'    => '50',
+                'align'    => 'left',
+                'sortable' => 'true'
+            ),
+            array(
+                'name'     => 'field_visible',
+                'index'    => 'field_visible',
+                'width'    => '40',
+                'align'    => 'left',
+                'sortable' => 'true'
+            ),
+            array(
+                'name'     => 'field_filter',
+                'index'    => 'field_filter',
+                'width'    => '30',
+                'align'    => 'left',
+                'sortable' => 'true'
+            ),
+            array(
+                'name'     => 'field_order',
+                'index'    => 'field_order',
+                'width'    => '40',
+                'align'    => 'left',
+                'sortable' => 'true'
+            ),
+            array(
+                'name'      => 'actions',
+                'index'     => 'actions',
+                'width'     => '100',
+                'align'     => 'left',
+                'formatter' => 'action_formatter',
+                'sortable'  => 'false'
+            )
         );
 
     }
@@ -866,7 +937,7 @@ EOF;
         $form->addElement('hidden', 'id', $id);
 
         // Setting the form elements
-        $header = get_lang('Add');
+        $header   = get_lang('Add');
         $defaults = array();
 
         if ($action == 'edit') {
@@ -881,34 +952,57 @@ EOF;
         // Field type
         $types = self::get_field_types();
 
-        $form->addElement('select', 'field_type', get_lang('FieldType'), $types, array('id' => 'field_type', 'class' => 'chzn-select', 'data-placeholder' => get_lang('Select')));
+        $form->addElement(
+            'select',
+            'field_type',
+            get_lang('FieldType'),
+            $types,
+            array('id' => 'field_type', 'class' => 'chzn-select', 'data-placeholder' => get_lang('Select'))
+        );
         $form->addElement('label', get_lang('Example'), '<div id="example">-</div>');
 
         //$form->addElement('advanced_settings','<a class="btn btn-show" id="advanced_parameters" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
         //$form->addElement('html','<div id="options" style="display:none">');
 
         $form->addElement('text', 'field_variable', get_lang('FieldLabel'), array('class' => 'span5'));
-        $form->addElement('text', 'field_options', get_lang('FieldPossibleValues'), array('id' => 'field_options', 'class' => 'span6'));
+        $form->addElement(
+            'text',
+            'field_options',
+            get_lang('FieldPossibleValues'),
+            array('id' => 'field_options', 'class' => 'span6')
+        );
         if ($action == 'edit') {
-            if (in_array($defaults['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
-                $url = Display::url(get_lang('EditExtraFieldOptions'), 'extra_field_options.php?type='.$this->type.'&field_id=' . $id);
+            if (in_array(
+                $defaults['field_type'],
+                array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT)
+            )
+            ) {
+                $url = Display::url(
+                    get_lang('EditExtraFieldOptions'),
+                    'extra_field_options.php?type='.$this->type.'&field_id='.$id
+                );
                 $form->addElement('label', null, $url);
                 $form->freeze('field_options');
             }
         }
-        $form->addElement('text', 'field_default_value', get_lang('FieldDefaultValue'), array('id' => 'field_default_value', 'class' => 'span5'));
+        $form->addElement(
+            'text',
+            'field_default_value',
+            get_lang('FieldDefaultValue'),
+            array('id' => 'field_default_value', 'class' => 'span5')
+        );
 
-        $group = array();
+        $group   = array();
         $group[] = $form->createElement('radio', 'field_visible', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'field_visible', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('Visible'), '', false);
 
-        $group = array();
+        $group   = array();
         $group[] = $form->createElement('radio', 'field_changeable', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'field_changeable', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('FieldChangeability'), '', false);
 
-        $group = array();
+        $group   = array();
         $group[] = $form->createElement('radio', 'field_filter', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'field_filter', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('FieldFilter'), '', false);
@@ -923,9 +1017,9 @@ EOF;
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
             $form->addElement('button', 'submit', get_lang('Modify'), 'class="save"');
         } else {
-            $defaults['field_visible'] = 0;
+            $defaults['field_visible']    = 0;
             $defaults['field_changeable'] = 0;
-            $defaults['field_filter'] = 0;
+            $defaults['field_filter']     = 0;
             $form->addElement('button', 'submit', get_lang('Add'), 'class="save"');
         }
 
@@ -949,27 +1043,42 @@ EOF;
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
         return 'function action_formatter(cellvalue, options, rowObject) {
-     return \'<a href="?action=edit&type='.$this->type.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+     return \'<a href="?action=edit&type='.$this->type.'&id=\'+options.rowId+\'">'.Display::return_icon(
+            'edit.png',
+            get_lang('Edit'),
+            '',
+            ICON_SIZE_SMALL
+        ).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(
+            api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
+        )."\'".')) return false;"  href="?sec_token='.$token.'&type='.$this->type.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon(
+            'delete.png',
+            get_lang('Delete'),
+            '',
+            ICON_SIZE_SMALL
+        ).'</a>'.
             '\';
         }';
     }
 
     public function getRules(&$columns, &$column_model)
     {
-        $fields = $this->get_all(array('field_visible = ? AND field_filter = ?' => array(1, 1)), 'option_display_text');
+        $fields           = $this->get_all(
+            array('field_visible = ? AND field_filter = ?' => array(1, 1)),
+            'option_display_text'
+        );
         $extraFieldOption = new ExtraFieldOption($this->type);
 
         $rules = array();
         if (!empty($fields)) {
             foreach ($fields as $field) {
                 $search_options = array();
-                $type = 'text';
+                $type           = 'text';
                 if (in_array($field['field_type'], array(self::FIELD_TYPE_SELECT, self::FIELD_TYPE_DOUBLE_SELECT))) {
-                    $type = 'select';
+                    $type                   = 'select';
                     $search_options['sopt'] = array('eq', 'ne'); //equal not equal
                 } else {
-                    $search_options['sopt'] = array('cn', 'nc');//contains not contains
+                    $search_options['sopt'] = array('cn', 'nc'); //contains not contains
                 }
 
                 $search_options['searchhidden'] = 'true';
@@ -977,8 +1086,8 @@ EOF;
 
                 if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
                     //Add 2 selects
-                    $options = $extraFieldOption->get_field_options_by_field($field['id']);
-                    $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
+                    $options       = $extraFieldOption->get_field_options_by_field($field['id']);
+                    $options       = self::extra_field_double_select_convert_array_to_ordered_array($options);
                     $first_options = array();
 
                     if (!empty($options)) {
@@ -992,55 +1101,256 @@ EOF;
                         }
                     }
 
-                    $search_options['value']  = implode(';', $first_options);
+                    $search_options['value']    = implode(';', $first_options);
                     $search_options['dataInit'] = 'fill_second_select';
 
                     //First
                     $column_model[] = array(
-                        'name' => 'extra_'.$field['field_variable'],
-                        'index' => 'extra_'.$field['field_variable'],
-                        'width' => '100',
-                        'hidden' => 'true',
-                        'search' => 'true',
-                        'stype' => 'select',
+                        'name'          => 'extra_'.$field['field_variable'],
+                        'index'         => 'extra_'.$field['field_variable'],
+                        'width'         => '100',
+                        'hidden'        => 'true',
+                        'search'        => 'true',
+                        'stype'         => 'select',
                         'searchoptions' => $search_options
                     );
-                    $columns[] = $field['field_display_text'].' (1)';
-                    $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');
+                    $columns[]      = $field['field_display_text'].' (1)';
+                    $rules[]        = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');
 
                     //Second
-                    $search_options['value'] = $field['id'].':';
+                    $search_options['value']    = $field['id'].':';
                     $search_options['dataInit'] = 'register_second_select';
 
                     $column_model[] = array(
-                        'name' => 'extra_'.$field['field_variable'].'_second',
-                        'index' => 'extra_'.$field['field_variable'].'_second',
-                        'width' => '100',
-                        'hidden' => 'true',
-                        'search' => 'true',
-                        'stype' => 'select',
+                        'name'          => 'extra_'.$field['field_variable'].'_second',
+                        'index'         => 'extra_'.$field['field_variable'].'_second',
+                        'width'         => '100',
+                        'hidden'        => 'true',
+                        'search'        => 'true',
+                        'stype'         => 'select',
                         'searchoptions' => $search_options
                     );
-                    $columns[] = $field['field_display_text'].' (2)';
-                    $rules[] = array('field' => 'extra_'.$field['field_variable'].'_second', 'op' => 'cn');
+                    $columns[]      = $field['field_display_text'].' (2)';
+                    $rules[]        = array('field' => 'extra_'.$field['field_variable'].'_second', 'op' => 'cn');
                     continue;
                 } else {
-                    $search_options['value'] = $extraFieldOption->get_field_options_to_string($field['id'], false, 'option_display_text');
+                    $search_options['value'] = $extraFieldOption->get_field_options_to_string(
+                        $field['id'],
+                        false,
+                        'option_display_text'
+                    );
                 }
 
                 $column_model[] = array(
-                    'name' => 'extra_'.$field['field_variable'],
-                    'index' => 'extra_'.$field['field_variable'],
-                    'width' => '100',
-                    'hidden' => 'true',
-                    'search' => 'true',
-                    'stype' => $type,
+                    'name'          => 'extra_'.$field['field_variable'],
+                    'index'         => 'extra_'.$field['field_variable'],
+                    'width'         => '100',
+                    'hidden'        => 'true',
+                    'search'        => 'true',
+                    'stype'         => $type,
                     'searchoptions' => $search_options
                 );
-                $columns[] = $field['field_display_text'];
-                $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');
+                $columns[]      = $field['field_display_text'];
+                $rules[]        = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');
             }
         }
+
         return $rules;
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    function parseConditions($options)
+    {
+        $inject_extra_fields = null;
+        $extraFieldOption    = new ExtraFieldOption($this->type);
+        $double_fields       = array();
+
+        if (isset($options['extra'])) {
+            $extra_fields = $options['extra'];
+            if (!empty($extra_fields)) {
+                $counter = 1;
+                foreach ($extra_fields as &$extra) {
+                    $extra_field_obj           = new ExtraField($this->type);
+                    $extra_field_info          = $extra_field_obj->get($extra['id']);
+                    $extra['extra_field_info'] = $extra_field_info;
+
+                    if (in_array(
+                        $extra_field_info['field_type'],
+                        array(
+                            ExtraField::FIELD_TYPE_SELECT,
+                            ExtraField::FIELD_TYPE_SELECT,
+                            ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                        )
+                    )
+                    ) {
+                        $inject_extra_fields .= " fvo$counter.option_display_text as {$extra['field']}, ";
+                    } else {
+                        $inject_extra_fields .= " fv$counter.field_value as {$extra['field']}, ";
+                    }
+
+                    if (isset($extra_fields_info[$extra['id']])) {
+                        $info = $extra_fields_info[$extra['id']];
+                    } else {
+                        $info = $this->get($extra['id']);
+                        $extra_fields_info[$extra['id']] = $info;
+                    }
+                    if ($info['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+                        $double_fields[$info['id']] = $info;
+                    }
+                    $counter++;
+                }
+            }
+        }
+        $options_by_double = array();
+        foreach ($double_fields as $double) {
+            $my_options = $extraFieldOption->get_field_options_by_field(
+                $double['id'],
+                true
+            );
+            $options_by_double['extra_'.$double['field_variable']] = $my_options;
+        }
+
+        $field_value_to_join = array();
+
+        //filter can be all/any = and/or
+        $inject_joins = null;
+        $inject_where = null;
+        $where        = null;
+
+        if (!empty($options['where'])) {
+            if (!empty($options['extra'])) {
+                //Removing double 1=1
+                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
+                //Always OR
+                $counter = 1;
+                foreach ($extra_fields as $extra_info) {
+                    $extra_field_info = $extra_info['extra_field_info'];
+                    $inject_joins .= " INNER JOIN $this->table_field_values fv$counter ON (s.".$this->primaryKey." = fv$counter.".$this->handler_id.") ";
+
+                    //Add options
+                    if (in_array(
+                        $extra_field_info['field_type'],
+                        array(
+                            ExtraField::FIELD_TYPE_SELECT,
+                            ExtraField::FIELD_TYPE_SELECT,
+                            ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                        )
+                    )
+                    ) {
+                        $options['where'] = str_replace(
+                            $extra_info['field'],
+                            'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fvo'.$counter.'.option_value',
+                            $options['where']
+                        );
+                        $inject_joins .= " INNER JOIN $this->table_field_options fvo$counter ".
+                            " ON (fv$counter.field_id = fvo$counter.field_id AND fv$counter.field_value = fvo$counter.option_value) ";
+                    } else {
+                        //text, textarea, etc
+                        $options['where'] = str_replace(
+                            $extra_info['field'],
+                            'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.field_value',
+                            $options['where']
+                        );
+                    }
+
+                    $field_value_to_join[] = " fv$counter.$this->handler_id ";
+                    $counter++;
+                }
+                if (!empty($field_value_to_join)) {
+                    //$inject_where .= " AND s.id = ".implode(' = ', $field_value_to_join);
+                }
+            }
+            $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        return array(
+            'order'               => $order,
+            'limit'               => $limit,
+            'where'               => $where,
+            'inject_where'        => $inject_where,
+            'inject_joins'        => $inject_joins,
+            'field_value_to_join' => $field_value_to_join,
+            'inject_extra_fields' => $inject_extra_fields,
+        );
+    }
+
+    public function getExtraFieldRules($filters)
+    {
+        $extra_fields = array();
+
+        // Getting double select if exists
+        $double_select = array();
+        foreach ($filters->rules as $rule) {
+            if (strpos($rule->field, '_second') === false) {
+
+            } else {
+                $my_field = str_replace('_second', '', $rule->field);
+                $double_select[$my_field] = $rule->data;
+            }
+        }
+
+        $condition_array = array();
+
+        foreach ($filters->rules as $rule) {
+            if (strpos($rule->field, 'extra_') === false) {
+                //normal fields
+                $field = $rule->field;
+                if (!empty($rule->data)) {
+                    $condition_array[] = get_where_clause($field, $rule->op, $rule->data);
+                }
+            } else {
+                //Extra fields
+
+                //normal
+                if (strpos($rule->field, '_second') === false) {
+                    //No _second
+                    $original_field = str_replace('extra_', '', $rule->field);
+                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
+
+                    if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+
+                        if (isset($double_select[$rule->field])) {
+                            $data = explode('#', $rule->data);
+                            $rule->data = $data[1].'::'.$double_select[$rule->field];
+                        } else {
+                            // only was sent 1 select
+                            $data = explode('#', $rule->data);
+                            $rule->data = $data[1];
+                        }
+                        if (!empty($rule->data)) {
+                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
+                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                        }
+                    } else {
+                        if (!empty($rule->data)) {
+                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
+                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                        }
+                    }
+                } else {
+                    $my_field = str_replace('_second', '', $rule->field);
+                    $original_field = str_replace('extra_', '', $my_field);
+                    $field_option = $this->get_handler_field_info_by_field_variable($original_field);
+                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                }
+            }
+        }
+
+        return array(
+            'extra_fields' => $extra_fields,
+            'condition_array' => $condition_array
+        );
     }
 }

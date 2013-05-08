@@ -232,13 +232,12 @@ $(function() {
         prmSearch
     );
 
-    // create the searching dialog
+    // Create the searching dialog.
     grid.searchGrid(prmSearch);
 
-    //Fixes search table
+    // Fixes search table.
     var searchDialogAll = $("#fbox_"+grid[0].id);
     searchDialogAll.addClass("table");
-
     var searchDialog = $("#searchmodfbox_"+grid[0].id);
     searchDialog.addClass("ui-jqgrid ui-widget ui-widget-content ui-corner-all");
     searchDialog.css({position:"relative", "z-index":"auto", "float":"left"})

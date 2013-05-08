@@ -368,6 +368,7 @@ $current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 //Error message
 $error = '';
 
+
 /*  Teacher takes an exam and want to see a preview, we delete the objExercise from the session in order to get the latest changes in the exercise */
 if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['preview'] == 1 ) {
     Session::erase('objExercise');

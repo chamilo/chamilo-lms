@@ -384,9 +384,9 @@ class SessionManager
             $where.=" AND s.session_admin_id = $user_id ";
         }
 
-        $coach_name = " CONCAT (u.lastname , ' ', u.firstname) as coach_name ";
+        $coach_name = " CONCAT(u.lastname , ' ', u.firstname) as coach_name ";
         if (api_is_western_name_order()) {
-            $coach_name = " CONCAT (u.firstname, ' ', u.lastname) as coach_name ";
+            $coach_name = " CONCAT(u.firstname, ' ', u.lastname) as coach_name ";
         }
 
         $today = api_get_utc_datetime();

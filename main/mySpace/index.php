@@ -345,7 +345,7 @@ if (empty($session_id)) {
 							<td align="right">'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'</td>
 						</tr>
 					</table>
-					<a href="student.php">'.get_lang('SeeStudentList').'</a>
+					<a class="btn" href="student.php">'.get_lang('SeeStudentList').'</a>
 				 </div><br />';
 		}
 	} else {

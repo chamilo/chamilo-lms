@@ -429,6 +429,7 @@ class Template
             'jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.min.js',
             //'jquery-ui/jquery.ui.touch-punch.js',
             'thickbox.js',
+            'ckeditor/ckeditor.js',
             'bootstrap/bootstrap.js',
         );
 

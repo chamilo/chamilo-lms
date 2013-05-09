@@ -467,11 +467,7 @@ class Answer {
         $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		$questionId   = intval($this->questionId);
        
-		// removes old answers before inserting of new ones
-        //if (isset($_GET['editQuestion'])) {
-        $sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."'";
-        //Database::query($sql);
-        
+		       
 		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
 		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";

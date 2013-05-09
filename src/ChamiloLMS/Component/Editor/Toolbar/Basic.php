@@ -6,13 +6,15 @@ class Basic
 {
     public $config;
 
-    public function __construct($toolbar)
+    public function __construct($toolbar = null)
     {
-        if (class_exists(__NAMESPACE__."\\".$toolbar)) {
-            $class = __NAMESPACE__."\\".$toolbar;
-            $customToolbar = new $class;
-            $this->config = $customToolbar->getConfig();
+        if (!empty($toolbar)) {
+            if (class_exists(__NAMESPACE__."\\".$toolbar)) {
+                $class = __NAMESPACE__."\\".$toolbar;
+                $customToolbar = new $class;
+                $this->config = $customToolbar->getConfig();
 
+            }
         }
     }
 

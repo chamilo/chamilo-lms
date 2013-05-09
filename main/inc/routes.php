@@ -444,13 +444,14 @@ $app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POS
     ->before($userPermissionsInsideACourse); //allowing slash "/"
 
 /**  Course documents */
-$app->get('/courses/{courseCode}/document/', 'index.controller:getDocumentAction')
+$app->get('/data/courses/{courseCode}/document/{file}', 'index.controller:getDocumentAction')
+    ->assert('file', '.+')
     ->assert('type', '.+');
 
 /** Certificates */
 $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
 
-/**  Username */
+/** Username */
 $app->match('/user/{username}', 'user.controller:indexAction', 'GET');
 
 /** Who is online */
@@ -471,15 +472,17 @@ $app->get('/data/document_templates/{file}', 'index.controller:getDocumentTempla
     ->bind('data');
 
 /** Data default_platform_document files */
-$app->get('/data/default_platform_document/', 'index.controller:getDefaultPlatformDocumentAction')
-    ->assert('type', '.+');
-
-/** Group files */
-$app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile')
+$app->get('/data/default_platform_document/{file}', 'index.controller:getDefaultPlatformDocumentAction')
+    ->assert('file', '.+')
     ->assert('type', '.+');
 
 /** User files */
-$app->match('/data/upload/users/', 'index.controller:getUserFile', 'GET|POST')
+$app->match('/data/upload/users/{file}', 'index.controller:getUserFile', 'GET|POST')
+    ->assert('file', '.+');
+
+/** Group files */
+$app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile')
+    ->assert('file', '.+')
     ->assert('type', '.+');
 
 /** Question manager - admin */

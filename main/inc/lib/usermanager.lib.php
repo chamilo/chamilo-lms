@@ -1220,7 +1220,7 @@ class UserManager
             if ($type == 'system') {
                 $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
             } else {
-                $dir = $base.'upload/users/?file='.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
+                $dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
             }
 
             /* @todo check this validation

@@ -314,11 +314,10 @@ class IndexController extends CommonController
      * @param $courseCode
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
-    public function getDocumentAction(Application $app, $courseCode)
+    public function getDocumentAction(Application $app, $courseCode, $file)
     {
         try {
-            $filePath = $app['request']->get('file');
-            $file = $app['chamilo.filesystem']->getCourseDocument($courseCode, $filePath);
+            $file = $app['chamilo.filesystem']->getCourseDocument($courseCode, $file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
             return $app->abort(404, 'File not found');
@@ -330,10 +329,9 @@ class IndexController extends CommonController
      * @param Application $app
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
-    public function getDefaultPlatformDocumentAction(Application $app)
+    public function getDefaultPlatformDocumentAction(Application $app, $file)
     {
         try {
-            $file = $app['request']->get('file');
             $file = $app['chamilo.filesystem']->get('default_platform_document/'.$file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
@@ -362,10 +360,9 @@ class IndexController extends CommonController
      * @param $file
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
-    public function getUserFile(Application $app)
+    public function getUserFile(Application $app, $file)
     {
         try {
-            $file = $app['request']->get('file');
             $file = $app['chamilo.filesystem']->get('upload/users/'.$file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {

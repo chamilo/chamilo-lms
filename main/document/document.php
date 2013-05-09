@@ -53,7 +53,9 @@ if (isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nano
 }
 
 if (isset($_SESSION['temp_realpath_image']) && !empty($_SESSION['temp_realpath_image'])) {
-    unlink($_SESSION['temp_realpath_image']);
+    if (file_exists($_SESSION['temp_realpath_image'])) {
+        unlink($_SESSION['temp_realpath_image']);
+    }
 }
 
 //Removing sessions

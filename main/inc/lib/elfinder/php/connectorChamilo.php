@@ -143,13 +143,13 @@ if (!empty($courseInfo)) {
         'URL' => api_get_path(REL_COURSE_PATH).$courseInfo['path'].'/document',
         //'alias' => $courseInfo['code'].' documents',
         'accessControl' => 'access',
-        'attributes' => array(
+        /*'attributes' => array(
             'pattern' => '/^images$/',
             'read'   => false,
             'write'  => false,
             'locked' => true,
             //'hidden' => false
-        )
+        )*/
     );
 
     /*
@@ -197,8 +197,6 @@ if (!empty($courseInfo)) {
 } else {
     // Add another driver
 
-
-
    // Adding user personal files
 
     $dir = UserManager::get_user_picture_path_by_id($userId, 'system');
@@ -210,13 +208,13 @@ if (!empty($courseInfo)) {
         'startPath'  => '/',
         'URL' => $dirWeb['dir'].'my_files',
         'accessControl' => 'access',
-        'attributes' => array(
+        /*'attributes' => array(
             'pattern' => '/^images$/',
             'read'   => false,
             'write'  => false,
             'locked' => true,
             //'hidden' => false
-        )
+        )*/
     );
 }
 // run elFinder

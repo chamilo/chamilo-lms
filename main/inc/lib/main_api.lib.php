@@ -3878,40 +3878,6 @@ function api_get_permissions_for_new_files() {
 }
 
 /**
- * sys_get_temp_dir() was introduced as of PHP 5.2.1
- * For older PHP versions the following implementation is to be activated.
- * @link Based on http://www.phpit.net/article/creating-zip-tar-archives-dynamically-php/2/
- */
-if (!function_exists('sys_get_temp_dir')) {
-
-    function sys_get_temp_dir() {
-
-        // Try to get from environment variable.
-        if (!empty($_ENV['TMP'])) {
-            return realpath($_ENV['TMP']);
-        }
-        if (!empty($_ENV['TMPDIR'])) {
-            return realpath($_ENV['TMPDIR']);
-        }
-        if (!empty($_ENV['TEMP'])) {
-            return realpath($_ENV['TEMP']);
-        }
-
-        // Detect by creating a temporary file.
-        // Try to use system's temporary directory
-        // as random name shouldn't exist.
-        $temp_file = tempnam(md5(uniqid(rand(), true)), '');
-        if ($temp_file) {
-            $temp_dir = realpath(dirname($temp_file));
-            @unlink( $temp_file );
-            return $temp_dir;
-        }
-
-        return false;
-    }
-}
-
-/**
  * Deletes a file, or a folder and its contents
  *
  * @author      Aidan Lister <aidan@php.net>

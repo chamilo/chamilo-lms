@@ -466,8 +466,7 @@ class Answer {
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		$questionId   = intval($this->questionId);
-        $position   = intval($this->position);
-
+       
 		// removes old answers before inserting of new ones
         //if (isset($_GET['editQuestion'])) {
         $sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."'";

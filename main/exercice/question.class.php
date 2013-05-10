@@ -708,7 +708,7 @@ abstract class Question
             if ($result) {
                 $sql = "UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string(
                     $picture
-                )."' WHERE c_id = $course_id AND id='".intval($questionId)."'";
+                )."' WHERE c_id = $course_id AND iid='".intval($questionId)."'";
                 Database::query($sql);
 
                 $document_id = FileManager::add_document(
@@ -1968,7 +1968,6 @@ abstract class Question
         if (!empty($courseMedias)) {
             $labels .= get_lang('MediaQuestion').' ';
             foreach ($courseMedias as $mediaId => $media) {
-
                 $editLink  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.MEDIA_QUESTION.'&myid=1&editQuestion='.$mediaId.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
                 $deleteLink = '<a id="delete_'.$mediaId.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&deleteQuestion='.$mediaId.'" >'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
 

@@ -13,7 +13,6 @@ class Basic
                 $class = __NAMESPACE__."\\".$toolbar;
                 $customToolbar = new $class;
                 $this->config = $customToolbar->getConfig();
-
             }
         }
     }
@@ -63,7 +62,7 @@ class Basic
         $config['extraPlugins'] = 'oembed';
 
         if (isset($this->config)) {
-            $this->config = array_merge($this->config, $config);
+            $this->config = array_merge($config, $this->config);
         } else {
             $this->config = $config;
         }

@@ -380,7 +380,7 @@ class ExtraField extends Model
             }
             $id = parent::save($params, $show_query);
             if ($id) {
-                $session_field_option = new SessionFieldOption();
+                $session_field_option = new ExtraFieldOption($this->type);
                 $params['field_id']   = $id;
                 $session_field_option->save($params);
             }

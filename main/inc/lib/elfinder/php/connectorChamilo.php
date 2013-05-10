@@ -1,8 +1,8 @@
 <?php
 
-error_reporting(0); // Set E_ALL for debuging
-
 include_once dirname(__FILE__).'../../../../global.inc.php';
+
+error_reporting(0); // Set E_ALL for debuging
 
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinder.class.php';
@@ -58,6 +58,7 @@ function logger($cmd, $result, $args, $elfinder) {
             if (isset($result['added'])) {
                 foreach ($result['added'] as $file) {
                     $realPath = $elfinder->realpath($file['hash']);
+                    error_log($realPath);
                     if (!empty($realPath)) {
                         // Getting file info
                         $info = $elfinder->exec('file', array('target' => $file['hash']));
@@ -133,6 +134,25 @@ $opts = array(
 
 $courseInfo = api_get_course_info();
 
+$commonAttributes = array(
+    // hide php files
+    array(
+        'pattern' => '/\.php$/',
+        'read' => false,
+        'write' => false,
+        'hidden' => true,
+        'locked' => false
+    ),
+    // Hide _DELETED_ files
+    array(
+        'pattern' => '/_DELETED_/',
+        'read' => false,
+        'write' => false,
+        'hidden' => true,
+        'locked' => false
+    )
+);
+
 if (!empty($courseInfo)) {
 
     // Adding course driver
@@ -143,19 +163,21 @@ if (!empty($courseInfo)) {
         'URL' => api_get_path(REL_COURSE_PATH).$courseInfo['path'].'/document',
         //'alias' => $courseInfo['code'].' documents',
         'accessControl' => 'access',
-        /*'attributes' => array(
-            'pattern' => '/^images$/',
-            'read'   => false,
-            'write'  => false,
-            'locked' => true,
-            //'hidden' => false
-        )*/
+        'attributes' => array(
+            // Hide shared_folder
+            array(
+                'pattern' => '/shared_folder/',
+                'read' => false,
+                'write' => false,
+                'hidden' => true,
+                'locked' => false
+            ),
+        )
     );
-
-    /*
 
     // Adding course user file driver
     $userId = api_get_user_id();
+
     if (!empty($userId)) {
         $opts['roots'][] = array(
             'driver'     => 'LocalFileSystem',
@@ -163,14 +185,7 @@ if (!empty($courseInfo)) {
             'startPath'  => '/',
             //'alias' => $courseInfo['code'].' personal documents',
             'URL' => api_get_path(REL_COURSE_PATH).$courseInfo['path'].'/document/shared_folder/sf_user_'.$userId,
-            'accessControl' => 'access',
-            'attributes' => array(
-                'pattern' => '/^images$/',
-                'read'   => false,
-                'write'  => false,
-                'locked' => true,
-                //'hidden' => false
-            )
+            'accessControl' => 'access'
         );
 
         // Adding user personal files
@@ -184,16 +199,9 @@ if (!empty($courseInfo)) {
             'startPath'  => '/',
             //'alias' => 'Personal documents',
             'URL' => $dirWeb['dir'].'my_files',
-            'accessControl' => 'access',
-            'attributes' => array(
-                'pattern' => '/^images$/',
-                'read'   => false,
-                'write'  => false,
-                'locked' => true,
-                //'hidden' => false
-            )
+            'accessControl' => 'access'
         );
-    }*/
+    }
 } else {
     // Add another driver
 
@@ -207,16 +215,15 @@ if (!empty($courseInfo)) {
         'path'       => $dir['dir'].'my_files',
         'startPath'  => '/',
         'URL' => $dirWeb['dir'].'my_files',
-        'accessControl' => 'access',
-        /*'attributes' => array(
-            'pattern' => '/^images$/',
-            'read'   => false,
-            'write'  => false,
-            'locked' => true,
-            //'hidden' => false
-        )*/
+        'accessControl' => 'access'
     );
 }
+
+// Injecting common file filters
+foreach ($opts['roots'] as &$driver) {
+    $driver['attributes']  = array_merge($driver['attributes'], $commonAttributes);
+}
+
 // run elFinder
 $connector = new elFinderConnector(new elFinder($opts));
 $connector->run();

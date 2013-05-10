@@ -144,6 +144,7 @@ final class DriverManager
                 throw DBALException::invalidWrapperClass($params['wrapperClass']);
             }
         }
+
         return new $wrapperClass($params, $driver, $config, $eventManager);
     }
 

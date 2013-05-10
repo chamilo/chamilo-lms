@@ -116,6 +116,12 @@ class DoctrineOrmServiceProvider
 
                 $chain = $app['orm.mapping_driver_chain.locator']($name);
                 foreach ((array) $options['mappings'] as $entity) {
+                    if (!is_array($entity)) {
+                        throw new \InvalidArgumentException(
+                            "The 'orm.em.options' option 'mappings' should be an array of arrays."
+                        );
+                    }
+
                     if (!empty($entity['resources_namespace'])) {
                         $entity['path'] = $app['psr0_resource_locator']->findFirstDirectory($entity['resources_namespace']);
                     }

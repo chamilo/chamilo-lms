@@ -146,6 +146,18 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\Console\Command\HelpCommand', $command, '->get() returns the help command if --help is provided as the input');
     }
 
+    public function testSilentHelp()
+    {
+        $application = new Application();
+        $application->setAutoExit(false);
+        $application->setCatchExceptions(false);
+
+        $tester = new ApplicationTester($application);
+        $tester->run(array('-h' => true, '-q' => true), array('decorated' => false));
+
+        $this->assertEmpty($tester->getDisplay(true));
+    }
+
     /**
      * @expectedException        \InvalidArgumentException
      * @expectedExceptionMessage The command "foofoo" does not exist.
@@ -230,6 +242,16 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             array('a', 'Command "a" is ambiguous (afoobar, afoobar1 and 1 more).'),
             array('foo:b', 'Command "foo:b" is ambiguous (foo:bar, foo:bar1).')
         );
+    }
+
+    public function testFindCommandEqualNamespace()
+    {
+        $application = new Application();
+        $application->add(new \Foo3Command());
+        $application->add(new \Foo4Command());
+
+        $this->assertInstanceOf('Foo3Command', $application->find('foo3:bar'), '->find() returns the good command even if a namespace has same name');
+        $this->assertInstanceOf('Foo4Command', $application->find('foo3:bar:toh'), '->find() returns a command even if its namespace equals another command name');
     }
 
     /**
@@ -502,8 +524,26 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $tester->run(array('command' => 'list', '--verbose' => true));
         $this->assertSame(Output::VERBOSITY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if --verbose is passed');
 
+        $tester->run(array('command' => 'list', '--verbose' => 1));
+        $this->assertSame(Output::VERBOSITY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if --verbose=1 is passed');
+
+        $tester->run(array('command' => 'list', '--verbose' => 2));
+        $this->assertSame(Output::VERBOSITY_VERY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to very verbose if --verbose=2 is passed');
+
+        $tester->run(array('command' => 'list', '--verbose' => 3));
+        $this->assertSame(Output::VERBOSITY_DEBUG, $tester->getOutput()->getVerbosity(), '->run() sets the output to debug if --verbose=3 is passed');
+
+        $tester->run(array('command' => 'list', '--verbose' => 4));
+        $this->assertSame(Output::VERBOSITY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if unknown --verbose level is passed');
+
         $tester->run(array('command' => 'list', '-v' => true));
         $this->assertSame(Output::VERBOSITY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if -v is passed');
+
+        $tester->run(array('command' => 'list', '-vv' => true));
+        $this->assertSame(Output::VERBOSITY_VERY_VERBOSE, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if -v is passed');
+
+        $tester->run(array('command' => 'list', '-vvv' => true));
+        $this->assertSame(Output::VERBOSITY_DEBUG, $tester->getOutput()->getVerbosity(), '->run() sets the output to verbose if -v is passed');
 
         $application = new Application();
         $application->setAutoExit(false);

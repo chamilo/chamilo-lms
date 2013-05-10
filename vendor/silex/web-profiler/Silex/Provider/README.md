@@ -12,10 +12,10 @@ And enable it in your application:
 
     use Silex\Provider;
 
-    $app->register($p = new Provider\WebProfilerServiceProvider(), array(
+    $app->register(new Provider\WebProfilerServiceProvider(), array(
         'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+        'profiler.mount_prefix' => '/_profiler', // this is the default
     ));
-    $app->mount('/_profiler', $p);
 
 The provider depends on `ServiceControllerServiceProvider`,
 `TwigServiceProvider` and `UrlGeneratorServiceProvider`, so you also need to

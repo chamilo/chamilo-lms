@@ -25,7 +25,7 @@ If you want more flexibility, use Composer instead. Create a
 
     {
         "require": {
-            "silex/silex": "1.0.*@dev"
+            "silex/silex": "~1.0"
         }
     }
 
@@ -46,7 +46,9 @@ Upgrading
 ---------
 
 Upgrading Silex to the latest version is as easy as running the ``update``
-command::
+command:
+
+.. code-block:: bash
 
     $ php composer.phar update
 
@@ -79,13 +81,13 @@ Then, you have to configure your web server (read the :doc:`dedicated chapter
 
 .. tip::
 
-    If your application is hosted behind a reverse proxy and you want Silex to
-    trust the ``X-Forwarded-For*`` headers, you will need to run your
-    application like this::
+    If your application is hosted behind a reverse proxy at address $ip, and you
+    want Silex to trust the ``X-Forwarded-For*`` headers, you will need to run
+    your application like this::
 
         use Symfony\Component\HttpFoundation\Request;
 
-        Request::trustProxyData();
+        Request::setTrustedProxies(array($ip));
         $app->run();
 
 Routing
@@ -232,9 +234,9 @@ methods on your application: ``get``, ``post``, ``put``, ``delete``::
 
 .. tip::
 
-    Forms in most web browsers do not directly support the use of other HTTP 
-    methods. To use methods other than GET and POST you can utilize a special 
-    form field with a name of ``_method``. The form's ``method`` attribute must 
+    Forms in most web browsers do not directly support the use of other HTTP
+    methods. To use methods other than GET and POST you can utilize a special
+    form field with a name of ``_method``. The form's ``method`` attribute must
     be set to POST when using this field::
 
         <form action="/my/target/route/" method="post">

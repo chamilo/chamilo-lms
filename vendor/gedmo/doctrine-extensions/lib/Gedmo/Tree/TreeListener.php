@@ -79,7 +79,7 @@ class TreeListener extends MappedEventSubscriber
             }
             if (!isset($this->strategyInstances[$config['strategy']])) {
                 $strategyClass = $this->getNamespace().'\\Strategy\\'.$managerName.'\\'.ucfirst($config['strategy']);
-
+                
                 if (!class_exists($strategyClass)) {
                     throw new \Gedmo\Exception\InvalidArgumentException($managerName." TreeListener does not support tree type: {$config['strategy']}");
                 }

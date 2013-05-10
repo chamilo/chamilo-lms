@@ -16,7 +16,6 @@ use Doctrine\Common\Persistence\ObjectManager;
  *
  * @author Gediminas Morkevicius <gediminas.morkevicius@gmail.com>
  * @author Klein Florian <florian.klein@free.fr>
- * @link http://www.gediminasm.org
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class SluggableListener extends MappedEventSubscriber
@@ -212,7 +211,7 @@ class SluggableListener extends MappedEventSubscriber
                 $this->generateSlug($ea, $object);
                 foreach ($config['slugs'] as $slugField => $options) {
                     $slug = $meta->getReflectionProperty($slugField)->getValue($object);
-                    $this->persistedSlugs[$config['useObjectClass']][$slugField][] = $slug;
+                    $this->persistedSlugs[$ea->getRootObjectClass($meta)][$slugField][] = $slug;
                 }
             }
         }
@@ -224,7 +223,7 @@ class SluggableListener extends MappedEventSubscriber
                 $this->generateSlug($ea, $object);
                 foreach ($config['slugs'] as $slugField => $options) {
                     $slug = $meta->getReflectionProperty($slugField)->getValue($object);
-                    $this->persistedSlugs[$config['useObjectClass']][$slugField][] = $slug;
+                    $this->persistedSlugs[$ea->getRootObjectClass($meta)][$slugField][] = $slug;
                 }
             }
         }
@@ -380,7 +379,7 @@ class SluggableListener extends MappedEventSubscriber
                 // set the final slug
                 $meta->getReflectionProperty($slugField)->setValue($object, $slug);
                 $uow->propertyChanged($object, $slugField, $oldSlug, $slug);
-                
+
                 // recompute changeset
                 $ea->recomputeSingleObjectChangeSet($uow, $meta, $object);
             }
@@ -404,7 +403,7 @@ class SluggableListener extends MappedEventSubscriber
         // load similar slugs
         $result = array_merge(
             (array) $ea->getSimilarSlugs($object, $meta, $config, $preferedSlug),
-            (array) $this->getSimilarPersistedSlugs($config['useObjectClass'], $preferedSlug, $config['slug'])
+            (array) $this->getSimilarPersistedSlugs($ea->getRootObjectClass($meta), $preferedSlug, $config['slug'])
         );
         // leave only right slugs
         if (!$recursing) {

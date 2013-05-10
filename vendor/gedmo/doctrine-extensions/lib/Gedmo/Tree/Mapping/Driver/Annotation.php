@@ -11,7 +11,7 @@ use Gedmo\Mapping\Driver\AbstractAnnotationDriver,
  * behavioral extension. Used for extraction of extended
  * metadata from Annotations specificaly for Tree
  * extension.
- * @IgnoreAnnotation("link")
+ *
  * @author Gediminas Morkevicius <gediminas.morkevicius@gmail.com>
  * @author <rocco@roccosportal.com>
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)

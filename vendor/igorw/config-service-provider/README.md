@@ -1,7 +1,6 @@
 # ConfigServiceProvider
 
-A config ServiceProvider for [Silex](http://silex.sensiolabs.org) with support
-for php, json and yaml.
+A JSON/Yaml-based config ServiceProvider for [Silex](http://silex.sensiolabs.org).
 
 ## Usage
 
@@ -52,32 +51,13 @@ Now you can use the pattern in your configuration file.
         "xsl.path": "%data_path%/xsl"
     }
 
-You can also specify replacements inside the config file by using a key with
-`%foo%` notation:
-
-    {
-        "%root_path%": "../..",
-        "xsl.path": "%root_path%/xsl"
-    }
-
-### Using Yaml
+### Using Yaml instead of JSON
 
 To use Yaml instead of JSON, just pass a file that ends on `.yml`:
 
     $app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/services.yml"));
 
-Note, you will have to require the `~2.1` of the `symfony/yaml` package.
-
-### Using plain PHP
-
-If reading the config file on every request becomes a performance problem in
-production, you can use a plain PHP file instead, and it will get cached by
-APC.
-
-You'll have to rewrite your config to be a PHP file that returns the array of
-config data, and also make sure it ends with `.php`:
-
-    $app->register(new Igorw\Silex\ConfigServiceProvider(__DIR__."/../config/prod.php"));
+Note, you will have to require the `2.1.*` of the `symfony/yaml` package.
 
 ### Multiple config files
 

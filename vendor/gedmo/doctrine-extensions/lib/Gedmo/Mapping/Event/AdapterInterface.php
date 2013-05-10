@@ -10,7 +10,6 @@ use Doctrine\Common\EventArgs;
  * events
  *
  * @author Gediminas Morkevicius <gediminas.morkevicius@gmail.com>
- * @link http://www.gediminasm.org
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 interface AdapterInterface
@@ -45,6 +44,14 @@ interface AdapterInterface
      * @return string
      */
     function getManagerName();
+
+    /**
+     * Get the root object class, handles inheritance
+     *
+     * @param \Doctrine\Common\Persistence\Mapping\ClassMetadata
+     * @return string
+     */
+    function getRootObjectClass($meta);
 
     /**
      * Get used object manager

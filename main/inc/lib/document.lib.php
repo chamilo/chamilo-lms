@@ -1420,7 +1420,7 @@ class DocumentManager
      * @param int The document id
      * @return void()
      */
-    function attach_gradebook_certificate($course_id, $document_id)
+    public static function attach_gradebook_certificate($course_id, $document_id)
     {
         $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = api_get_session_id();
@@ -1538,6 +1538,7 @@ class DocumentManager
         $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id, $user_id);
 
         $date_certificate = $info_grade_certificate['created_at'];
+        $date_no_time = null;
         $date_long_certificate = '';
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);

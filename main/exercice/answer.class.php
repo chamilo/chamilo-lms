@@ -464,29 +464,45 @@ class Answer {
 	 */
 	function save() {
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+        $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		$questionId   = intval($this->questionId);
-
-		// removes old answers before inserting of new ones
-		$sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."'";
-		Database::query($sql);
-        
+       
+		       
 		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
+        $flag = 0;
 		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";
 		for ($i=1;$i <= $this->new_nbrAnswers; $i++) {
+           
 			$answer					= Database::escape_string($this->new_answer[$i]);
-			$correct				= Database::escape_string($this->new_correct[$i]);
+            $correct				= Database::escape_string($this->new_correct[$i]);
 			$comment				= Database::escape_string($this->new_comment[$i]);
 			$weighting				= Database::escape_string($this->new_weighting[$i]);
 			$position				= Database::escape_string($this->new_position[$i]);
 			$hotspot_coordinates	= Database::escape_string($this->new_hotspot_coordinates[$i]);
 			$hotspot_type			= Database::escape_string($this->new_hotspot_type[$i]);
 			$destination			= Database::escape_string($this->new_destination[$i]);
-
-			$sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
-		}
-		$sql = api_substr($sql,0,-1);        
+            if (!(isset($this->position[$i]))) {
+                $flag = 1;
+			    $sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
+            } else {
+                $this->updateAnswers($answer, $correct, $comment, $weighting, $position, $destination);
+            }
+        }
+		if ($flag == 1) {
+        $sql = api_substr($sql,0,-1);        
 		Database::query($sql);
+        }
+        if (count($this->position) > $this->new_nbrAnswers) {
+            $i = $this->new_nbrAnswers+1;
+            while ($this->position[$i]) {
+                $position = $this->position[$i];
+                $sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."' AND position ='$position'";
+                Database::query($sql);
+                $i++;
+            }
+            
+        }
 
 		// moves $new_* arrays
 		$this->answer=$this->new_answer;
@@ -500,9 +516,9 @@ class Answer {
 		$this->nbrAnswers=$this->new_nbrAnswers;
 		$this->destination=$this->new_destination;
 		// clears $new_* arrays
+        
 		$this->cancel();
 	}
-
 	/**
 	 * Duplicates answers by copying them into another question
 	 *

@@ -478,6 +478,10 @@ class DocumentManager
 
         $to_user_id = Database::escape_string($to_user_id);
 
+        if (empty($_course)) {
+            return false;
+        }
+
         if (!empty($to_user_id)) {
             $to_field = 'last.to_user_id';
             $to_value = $to_user_id;
@@ -514,7 +518,7 @@ class DocumentManager
                         last.lastedit_date,
                         last.visibility,
                         last.insert_user_id
-                FROM  ".$TABLE_ITEMPROPERTY."  AS last INNER JOIN ".$TABLE_DOCUMENT."  AS docs
+                FROM  ".$TABLE_ITEMPROPERTY." AS last INNER JOIN ".$TABLE_DOCUMENT."  AS docs
                     ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
                 WHERE
                     docs.path LIKE '".$path.$added_slash."%' AND

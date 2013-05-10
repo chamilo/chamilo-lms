@@ -1969,7 +1969,8 @@ class Exercise
     function get_last_exercise_order()
     {
         $table = Database::get_course_table(TABLE_QUIZ_ORDER);
-        $sql = "SELECT exercise_order FROM $table ORDER BY exercise_order DESC LIMIT 1";
+        $course_id = intval($this->course_id);
+        $sql = "SELECT exercise_order FROM $table WHERE c_id = $course_id ORDER BY exercise_order DESC LIMIT 1";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
@@ -1987,7 +1988,6 @@ class Exercise
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
-
             return $row['exercise_order'];
         }
 
@@ -5012,7 +5012,7 @@ class Exercise
             get_lang('YouWillBeRedirectedInXSeconds'),
             '<span id="counter_to_redirect" class="red_alert"></span>'
         ).'</div>';
-        $html .= '<div id="exercise_clock_warning" class="well count_down"></div>';
+        $html .= '<div class="row"><div class="span12"><div id="exercise_clock_warning" class="well count_down"></div></div></div>';
 
         return $html;
     }

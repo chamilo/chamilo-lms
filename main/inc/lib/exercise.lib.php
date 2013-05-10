@@ -2709,15 +2709,18 @@ class ExerciseLib
 
         echo Display::div(' ', array('class'=>'clear'));
 
+        $paginator = null;
         if ($objExercise->type == ONE_PER_PAGE) {
             if (empty($questions_in_media)) {
-                echo Display::paginationIndicator($realCurrentQuestion, count($realQuestionList));
+                $paginator = Display::paginationIndicator($realCurrentQuestion, count($realQuestionList));
             } else {
                 if ($last_question_in_media) {
-                    echo Display::paginationIndicator($realCurrentQuestion, count($realQuestionList));
+                    $paginator = Display::paginationIndicator($realCurrentQuestion, count($realQuestionList));
                 }
             }
         }
+
+        echo '<div class="row"><div class="pull-right">'.$paginator.'</div></div>';
 
         echo Display::div($exercise_actions, array('class'=>'form-actions'));
         echo '</div>';

@@ -893,15 +893,24 @@ if ($objExercise->type == ONE_PER_PAGE) {
         Session::write('categoryList', $categoryList);
     }
 
+    echo '<div class="row">';
+    echo '<div class="span2">';
+
+    $reviewAnswerLabel = null;
+    if ($objExercise->review_answers) {
+        $reviewAnswerLabel = Display::label(get_lang('ToReview'), 'warning').'<br />';
+    }
+    echo Display::label(get_lang('Answered'), 'success').'<br />'.Display::label(get_lang('Unanswered')).'<br />'.$reviewAnswerLabel.Display::label(get_lang('CurrentQuestion'), 'info');
+    echo '</div>';
+
+    echo '<div class="span10">';
     if (!empty($categoryList)) {
         echo Display::progress_pagination_bar_with_categories($categoryList, $media_questions, $current_question, $conditions, $link);
     } else {
         echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
     }
-
-    //echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
-    echo Display::label(get_lang('Answered'), 'success').' '.Display::label(get_lang('Unanswered')).' '.Display::label(get_lang('ToReview'), 'warning').' '.Display::label(get_lang('CurrentQuestion'), 'info');
-
+    echo '</div>';
+    echo '</div>';
 }
 
 $is_visible_return = $objExercise->is_visible($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);

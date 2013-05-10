@@ -1983,7 +1983,8 @@ abstract class Question
     public static function getQuestionColumns()
     {
         // The order is important you need to check the the $column variable in the model.ajax.php file
-        $columns = array('id', get_lang('Name'), get_lang('Description'));
+        //$columns = array('id', get_lang('Name'), get_lang('Description'));
+        $columns = array('id', get_lang('Name'));
 
         // Column config.
         $columnModel = array(
@@ -1999,13 +2000,13 @@ abstract class Question
                 'width' => '200',
                 'align' => 'left'
             ),
-            array(
+            /* array(
                 'name'     => 'description',
                 'index'    => 'description',
                 'width'    => '100',
                 'align'    => 'left',
                 'sortable' => 'false'
-            )
+            )*/
         );
         $extraField = new \ExtraField('question');
         $rules = $extraField->getRules($columns, $columnModel);
@@ -2081,7 +2082,7 @@ abstract class Question
         return $questions;
     }
 
-    static function getMediaLabel($title)
+    public static function getMediaLabel($title)
     {
         return Display::label($title, 'warning');
     }

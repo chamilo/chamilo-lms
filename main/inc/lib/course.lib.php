@@ -3970,7 +3970,7 @@ class CourseManager
         mkdir($cp . '/document/video', $perm);
         @copy($cpt, $cp . '/document/video/index.html');    */
 
-        //Creatind dropbox folder
+        // Creating dropbox folder
         mkdir($cp . '/dropbox', $perm);
         $cpt = $cp.'/dropbox/index.html';
         $fd = fopen($cpt, 'w');
@@ -4024,6 +4024,7 @@ class CourseManager
         fclose($fp);
 
         // Build index.php of the course.
+        /*
         $fd = fopen($cp . '/index.php', 'w');
 
         // str_replace() removes \r that cause squares to appear at the end of each line
@@ -4036,6 +4037,7 @@ class CourseManager
         ?>");
         fwrite($fd, $string);
         @chmod($cp . '/index.php',$perm_file);
+        */
         return 0;
     }
 

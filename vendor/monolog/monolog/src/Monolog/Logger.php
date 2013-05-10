@@ -330,6 +330,16 @@ class Logger implements LoggerInterface
     }
 
     /**
+     * Gets all supported logging levels.
+     * 
+     * @return array Assoc array with human-readable level names => level codes.
+     */
+    public static function getLevels()
+    {
+        return array_flip(static::$levels);
+    }
+
+    /**
      * Gets the name of the logging level.
      *
      * @param  integer $level
@@ -356,7 +366,7 @@ class Logger implements LoggerInterface
             'level' => $level,
         );
 
-        foreach ($this->handlers as $key => $handler) {
+        foreach ($this->handlers as $handler) {
             if ($handler->isHandling($record)) {
                 return true;
             }

@@ -7,8 +7,8 @@ require_once 'HTML/QuickForm/textarea.php';
 /**
  * A html editor field to use with QuickForm
  */
-class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea {
-
+class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
+{
     /**
      * Full page
      */
@@ -36,7 +36,8 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea {
      * @param   string  Attributes for the textarea
      * @param array $editor_config	Optional configuration settings for the online editor.
      */
-    function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $config = null) {
+    function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $config = null)
+    {
         // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
         global $fck_attribute;
 
@@ -46,7 +47,8 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea {
         $this->fullPage = false;
 
         $name = $this->getAttribute('name');
-        $this->fck_editor = new FCKeditor($name);
+        //$this->fck_editor = new FCKeditor($name);
+        $this->fck_editor = new ChamiloLMS\Component\Editor\Editor($name);
 
         $this->fck_editor->ToolbarSet = $fck_attribute['ToolbarSet'];
         $this->fck_editor->Width = !empty($fck_attribute['Width']) ? $fck_attribute['Width'] : '990';
@@ -88,7 +90,8 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea {
      * Return the HTML editor in HTML
      * @return string
      */
-    function toHtml() {
+    function toHtml()
+    {
         if ($this->getRichEditorStatus() == false) {
             //Fix rows and cols
             //$this->_attributes['rows'] = 20;

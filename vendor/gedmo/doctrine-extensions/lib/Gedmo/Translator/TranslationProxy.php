@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
  * Proxy class for Entity/Document translations.
  *
  * @author  Konstantin Kudryashov <ever.zet@gmail.com>
- * @link    http://www.gediminasm.org
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 class TranslationProxy
@@ -18,7 +17,7 @@ class TranslationProxy
     protected $properties = array();
     protected $class;
     /**
-     * @var Collection|Translation[]
+     * @var Collection|TranslationInterface[]
      */
     protected $coll;
 
@@ -161,7 +160,7 @@ class TranslationProxy
             }
         }
 
-        /** @var Translation $translation */
+        /** @var TranslationInterface $translation */
         $translation = new $this->class;
         $translation->setTranslatable($this->translatable);
         $translation->setProperty($property);

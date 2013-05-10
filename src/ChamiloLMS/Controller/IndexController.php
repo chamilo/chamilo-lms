@@ -36,6 +36,7 @@ class IndexController extends CommonController
     public function indexAction(Application $app)
     {
         $this->cidReset();
+
         /*
         var_dump($app['request']->getBaseUrl());
         var_dump($app['request']->getHttpHost());
@@ -95,7 +96,7 @@ class IndexController extends CommonController
             unset($_SESSION['term_and_condition']);
         }
 
-        // If we are not logged in and customapages activated
+        // If we are not logged in and custompages activated
         if (!api_get_user_id() && \CustomPages::enabled()) {
             $loggedOut = $request->get('loggedout');
             if ($loggedOut) {
@@ -143,7 +144,7 @@ class IndexController extends CommonController
         $app['template']->assign('announcements_block', $announcementsBlock);
 
         // Homepage
-        $app['template']->assign('home_page_block', $app['page_controller']->return_home_page());
+        $app['template']->assign('home_page_block', $app['page_controller']->returnHomePage());
 
         // Navigation links
         $navLinks = $app['template']->returnNavigationLinks();
@@ -239,7 +240,7 @@ class IndexController extends CommonController
             // Only display if the user isn't logged in
 
             $app['template']->assign('login_language_form', api_display_language_form(true));
-            $app['template']->assign('login_form', self::display_login_form($app));
+            $app['template']->assign('login_form', self::displayLoginForm($app));
 
             if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
                 $loginForm .= '<ul class="nav nav-list">';
@@ -260,7 +261,7 @@ class IndexController extends CommonController
      *
      * @return string
      */
-    public function display_login_form(Application $app)
+    public function displayLoginForm(Application $app)
     {
         /* {{ form_widget(form) }}
           $form = $app['form.factory']->createBuilder('form')
@@ -320,11 +321,10 @@ class IndexController extends CommonController
      * @param $courseCode
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
-    public function getDocumentAction(Application $app, $courseCode)
+    public function getDocumentAction(Application $app, $courseCode, $file)
     {
         try {
-            $filePath = $app['request']->get('file');
-            $file = $app['chamilo.filesystem']->getCourseDocument($courseCode, $filePath);
+            $file = $app['chamilo.filesystem']->getCourseDocument($courseCode, $file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
             return $app->abort(404, 'File not found');
@@ -336,10 +336,9 @@ class IndexController extends CommonController
      * @param Application $app
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
-    public function getDefaultPlatformDocumentAction(Application $app)
+    public function getDefaultPlatformDocumentAction(Application $app, $file)
     {
         try {
-            $file = $app['request']->get('file');
             $file = $app['chamilo.filesystem']->get('default_platform_document/'.$file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {
@@ -368,10 +367,9 @@ class IndexController extends CommonController
      * @param $file
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
-    public function getUserFile(Application $app)
+    public function getUserFile(Application $app, $file)
     {
         try {
-            $file = $app['request']->get('file');
             $file = $app['chamilo.filesystem']->get('upload/users/'.$file);
             return $app->sendFile($file->getPathname());
         } catch (\InvalidArgumentException $e) {

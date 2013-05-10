@@ -258,4 +258,28 @@ class DoctrineOrmServiceProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $app['orm.em_name_from_param_key']('my.bar'));
         $this->assertEquals('baz', $app['orm.em_name_from_param_key']('my.baz'));
     }
+
+    /**
+     * Test specifying an invalid mapping configuration (not an array of arrays)
+     *
+     * @expectedException        InvalidArgumentException
+     * @expectedExceptionMessage The 'orm.em.options' option 'mappings' should be an array of arrays.
+     */
+    public function testInvalidMappingAsOption()
+    {
+        $app = $this->createMockDefaultApp();
+
+        $doctrineOrmServiceProvider = new DoctrineOrmServiceProvider;
+        $doctrineOrmServiceProvider->register($app);
+
+        $app['orm.em.options'] = array(
+            'mappings' => array(
+                'type' => 'annotation',
+                'namespace' => 'Foo\Entities',
+                'path' => __DIR__.'/src/Foo/Entities',
+            ),
+        );
+
+        $app['orm.ems.config'];
+    }
 }

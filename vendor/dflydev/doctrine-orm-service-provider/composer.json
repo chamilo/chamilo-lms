@@ -22,7 +22,8 @@
     },
     "require-dev": {
         "cilex/cilex": "1.*@dev",
-        "silex/silex": "1.*@dev"
+        "silex/silex": "1.*@dev",
+        "cilex/console-service-provider": "@dev"
     },
     "suggest": {
         "dflydev/psr0-resource-locator-service-provider": "1.0.*@dev"

@@ -9,9 +9,8 @@
             "email": "fabien@symfony.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "silex/silex": "~1.0@dev",
+        "silex/silex": "~1.0",
         "symfony/web-profiler-bundle": "~2.2",
         "symfony/stopwatch": "~2.2"
     },

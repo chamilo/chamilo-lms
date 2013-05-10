@@ -478,6 +478,10 @@ class DocumentManager
 
         $to_user_id = Database::escape_string($to_user_id);
 
+        if (empty($_course)) {
+            return false;
+        }
+
         if (!empty($to_user_id)) {
             $to_field = 'last.to_user_id';
             $to_value = $to_user_id;
@@ -514,7 +518,7 @@ class DocumentManager
                         last.lastedit_date,
                         last.visibility,
                         last.insert_user_id
-                FROM  ".$TABLE_ITEMPROPERTY."  AS last INNER JOIN ".$TABLE_DOCUMENT."  AS docs
+                FROM  ".$TABLE_ITEMPROPERTY." AS last INNER JOIN ".$TABLE_DOCUMENT."  AS docs
                     ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
                 WHERE
                     docs.path LIKE '".$path.$added_slash."%' AND
@@ -1416,7 +1420,7 @@ class DocumentManager
      * @param int The document id
      * @return void()
      */
-    function attach_gradebook_certificate($course_id, $document_id)
+    public static function attach_gradebook_certificate($course_id, $document_id)
     {
         $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = api_get_session_id();
@@ -1534,6 +1538,7 @@ class DocumentManager
         $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id, $user_id);
 
         $date_certificate = $info_grade_certificate['created_at'];
+        $date_no_time = null;
         $date_long_certificate = '';
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);

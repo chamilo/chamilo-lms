@@ -29,8 +29,7 @@ class ListCommandTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application();
         $commandTester = new CommandTester($command = $application->get('list'));
-        $commandTester->execute(array('command' => $command->getName(), '--xml' => true));
-
+        $commandTester->execute(array('command' => $command->getName(), '--format' => 'xml'));
         $this->assertRegExp('/<command id="list" name="list">/', $commandTester->getDisplay(), '->execute() returns a list of available commands in XML if --xml is passed');
     }
 
@@ -45,6 +44,6 @@ list   Lists commands
 
 EOF;
 
-        $this->assertEquals(str_replace("\n", PHP_EOL, $output), $commandTester->getDisplay());
+        $this->assertEquals($output, $commandTester->getDisplay(true));
     }
 }

@@ -1,6 +1,6 @@
 # Pagerfanta
 
-[![Build Status](https://secure.travis-ci.org/whiteoctober/Pagerfanta.png)](http://travis-ci.org/whiteoctober/Pagerfanta)
+[![Build Status](https://travis-ci.org/whiteoctober/Pagerfanta.png?branch=master)](https://travis-ci.org/whiteoctober/Pagerfanta)
 
 Pagination for PHP 5.3
 
@@ -9,8 +9,8 @@ Pagination for PHP 5.3
 ```php
 <?php
 
-use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 
 $adapter = new ArrayAdapter($array);
 $pagerfanta = new Pagerfanta($adapter);
@@ -34,31 +34,32 @@ $pagerfanta->hasNextPage();
 $pagerfanta->getNextPage();
 ```
 
-The `->setMaxPerPage()` and `->setCurrentPage()` methods implement a fluent interface:
+The `->setMaxPerPage()` and `->setCurrentPage()` methods implement
+a fluent interface:
 
 ```php
 <?php
 
 $pagerfanta
     ->setMaxPerPage($maxPerPage)
-    ->setCurrentPage($currentPage)
-;
+    ->setCurrentPage($currentPage);
 ```
 
-The `->setMaxPerPage()` method throws an exception if the max per page is not valid:
+The `->setMaxPerPage()` method throws an exception if the max per page
+is not valid:
 
-  * `Pagerfanta\Exception\NotIntegerMaxPerPageException` (including integer in string)
+  * `Pagerfanta\Exception\NotIntegerMaxPerPageException`
   * `Pagerfanta\Exception\LessThan1MaxPerPageException`
 
-Both extends from `Pagerfanta\Exception\NotValidMaxPerPageException`.
+Both extend from `Pagerfanta\Exception\NotValidMaxPerPageException`.
 
 The `->setCurrentPage()` method throws an exception if the page is not valid:
 
-  * `Pagerfanta\Exception\NotIntegerCurrentPageException` (including integer in string)
+  * `Pagerfanta\Exception\NotIntegerCurrentPageException`
   * `Pagerfanta\Exception\LessThan1CurrentPageException`
   * `Pagerfanta\Exception\OutOfRangeCurrentPageException`
 
-All of them extends from `Pagerfanta\Exception\NotValidCurrentPageException`.
+All of them extend from `Pagerfanta\Exception\NotValidCurrentPageException`.
 
 `->setCurrentPage()` throws an out ot range exception depending on the
 max per page, so if you are going to modify the max per page, you should do it
@@ -66,9 +67,12 @@ before setting the current page.
 
 ## Adapters
 
-The adapter's concept is very simple. An adapter just returns the number of results and an slice for a offset and length. This way you can adapt a pagerfanta to paginate any kind results simply creating an adapter.
+The adapter's concept is very simple. An adapter just returns the number
+of results and an slice for a offset and length. This way you can adapt
+a pagerfanta to paginate any kind results simply by creating an adapter.
 
-An adapter must implement the `Pagerfanta\Adapter\AdapterInterface` interface, which has these two methods:
+An adapter must implement the `Pagerfanta\Adapter\AdapterInterface`
+interface, which has these two methods:
 
 ```php
 <?php
@@ -77,8 +81,6 @@ An adapter must implement the `Pagerfanta\Adapter\AdapterInterface` interface, w
  * Returns the number of results.
  *
  * @return integer The number of results.
- *
- * @api
  */
 function getNbResults();
 
@@ -89,13 +91,11 @@ function getNbResults();
  * @param integer $length The length.
  *
  * @return array|\Iterator|\IteratorAggregate The slice.
- *
- * @api
  */
 function getSlice($offset, $length);
 ```
 
-Pagerfanta comes with eight adapters:
+Pagerfanta comes with these adapters:
 
 ### ArrayAdapter
 
@@ -131,8 +131,52 @@ To paginate [Mandango](http://mandango.org) Queries.
 
 use Pagerfanta\Adapter\MandangoAdapter;
 
-$query = \Model\Article::getRepository()->createQuery();
+$query = $mandango->getRepository('Model\Article')->createQuery();
 $adapter = new MandangoAdapter($query);
+```
+
+### DoctrineDbalAdapter
+
+To paginate [DoctrineDbal](http://www.doctrine-project.org/projects/dbal.html)
+query builders.
+
+```php
+<?php
+
+use Pagerfanta\Adapter\DoctrineDbalAdapter;
+use Doctrine\DBAL\Query\QueryBuilder;
+
+$queryBuilder = new QueryBuilder($conn);
+$queryBuilder->select('p.*')->from('posts', 'p');
+
+$countQueryBuilderModifier = function ($queryBuilder) {
+    $queryBuilder->select('COUNT(DISTINCT p.id) AS total_results')
+          ->setMaxResults(1);
+};
+
+$adapter = new DoctrineDbalAdapter($queryBuilder, $countQueryModifier);
+```
+
+### DoctrineDbalSingleTableAdapter
+
+To simplify the pagination of single table
+[DoctrineDbal](http://www.doctrine-project.org/projects/dbal.html)
+query builders.
+
+This adapter only paginates single table query builders, without joins.
+
+```php
+<?php
+
+use Pagerfanta\Adapter\DoctrineDbalSingleTableAdapter;
+use Doctrine\DBAL\Query\QueryBuilder;
+
+$queryBuilder = new QueryBuilder($conn);
+$queryBuilder->select('p.*')->from('posts', 'p');
+
+$countField = 'p.id';
+
+$adapter = new DoctrineDbalSingleTableAdapter($queryBuilder, $countField);
 ```
 
 ### DoctrineORMAdapter
@@ -146,8 +190,7 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 
 $queryBuilder = $entityManager->createQueryBuilder()
     ->select('u')
-    ->from('Model\Article', 'u')
-;
+    ->from('Model\Article', 'u');
 $adapter = new DoctrineORMAdapter($queryBuilder);
 ```
 
@@ -166,7 +209,11 @@ $adapter = new DoctrineODMMongoDBAdapter($queryBuilder);
 
 ### DoctrineCollectionAdapter
 
-To paginate a `Doctrine\Common\Collection\Collections` interface you can use the `DoctrineCollectionAdapter`. It proxies to the count() and slice() methods on the Collections interface for pagination. This makes sense if you are using Doctrine ORMs Extra Lazy association features:
+To paginate a `Doctrine\Common\Collection\Collections` interface
+you can use the `DoctrineCollectionAdapter`. It proxies to the
+count() and slice() methods on the Collections interface for
+pagination. This makes sense if you are using Doctrine ORMs Extra
+Lazy association features:
 
 ```php
 <?php
@@ -180,7 +227,11 @@ $adapter = new DoctrineCollectionAdapter($user->getGroups());
 
 ### DoctrineSelectableAdapter
 
-To paginate a `Doctrine\Common\Collection\Selectable` interface you can use the `DoctrineSelectableAdapter`. It uses the matching() method on the Selectable interface for pagination. This is especially usefull when using the Doctrine Criteria object to filter a PersistentCollection:
+To paginate a `Doctrine\Common\Collection\Selectable` interface
+you can use the `DoctrineSelectableAdapter`. It uses the matching()
+method on the Selectable interface for pagination. This is
+especially usefull when using the Doctrine Criteria object to
+filter a PersistentCollection:
 
 ```php
 <?php
@@ -195,9 +246,11 @@ $criteria = Criteria::create()->andWhere(Criteria::expr()->in('id', array(1,2,3)
 $adapter = new DoctrineSelectableAdapter($comments, $criteria);
 ```
 
-Note that you should never use this adapter with a PersistentCollection which is not set to use the EXTRA_LAZY fetch mode.
+Note that you should never use this adapter with a
+PersistentCollection which is not set to use the EXTRA_LAZY fetch mode.
 
-*Be carefull when using the `count()` method, currently Doctrine2 needs to fetch all the records to count the number of elements.*
+*Be carefull when using the `count()` method, currently Doctrine2
+needs to fetch all the records to count the number of elements.*
 
 ### PropelAdapter
 
@@ -228,7 +281,9 @@ $adapter = new SolariumAdapter($solarium, $query);
 
 ### FixedAdapter
 
-Best used when you need to do a custom paging solution and don't want to implement a full adapter for a one-off use case.
+Best used when you need to do a custom paging solution and
+don't want to implement a full adapter for a one-off use case.
+
 It returns always the same data no matter what page you query:
 
 ```php
@@ -244,9 +299,12 @@ $adapter = new FixedAdapter($nbResults, $results);
 
 ## Views
 
-The views are to render pagerfantas, this way you can reuse your pagerfantas' html in several projects, share them and use another ones from another developers.
+Views are to render pagerfantas, this way you can reuse your
+pagerfantas' html in several projects, share them and use another
+ones from another developers.
 
-The views implement the `Pagerfanta\View\ViewInterface` interface, which has two methods:
+The views implement the `Pagerfanta\View\ViewInterface` interface,
+which has two methods:
 
 ```php
 <?php
@@ -260,8 +318,6 @@ The views implement the `Pagerfanta\View\ViewInterface` interface, which has two
  * @param PagerfantaInterface $pagerfanta     A pagerfanta.
  * @param mixed               $routeGenerator A callable to generate the routes.
  * @param array               $options        An array of options (optional).
- *
- * @api
  */
 function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = array());
 
@@ -269,8 +325,6 @@ function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options
  * Returns the canonical name.
  *
  * @return string The canonical name.
- *
- * @api
  */
 function getName();
 ```
@@ -285,7 +339,9 @@ $routeGenerator = function($page) {
 }
 ```
 
-Pagerfanta comes with three views, the default one, one for [Twitter Bootstrap](https://github.com/twitter/bootstrap) and an special optionable view.
+Pagerfanta comes with three views, the default one, one for
+[Twitter Bootstrap](https://github.com/twitter/bootstrap) and
+an special optionable view.
 
 ### DefaultView
 
@@ -297,9 +353,8 @@ This is the default view.
 use Pagerfanta\View\DefaultView;
 
 $view = new DefaultView();
-$html = $view->render($pagerfanta, $routeGenerator, array(
-    'proximity' => 3,
-));
+$options = array('proximity' => 3);
+$html = $view->render($pagerfanta, $routeGenerator, $options);
 ```
 
 Options (default):
@@ -310,6 +365,10 @@ Options (default):
   * css_disabled_class (disabled)
   * css_dots_class (dots)
   * css_current_class (current)
+  * dots_text (...)
+  * container_template (<nav>%pages%</nav>)
+  * page_template (<a href="%href%">%text%</a>)
+  * span_template (<span class="%class%">%text%</span>)
 
 ![Pagerfanta DefaultView](http://img813.imageshack.us/img813/601/pagerfanta.png)
 
@@ -374,7 +433,8 @@ COLORS:
 
 ### TwitterBootstrapView
 
-This view generates a pagination for [Twitter Bootstrap](https://github.com/twitter/bootstrap).
+This view generates a pagination for
+[Twitter Bootstrap](https://github.com/twitter/bootstrap).
 
 ```php
 <?php
@@ -382,9 +442,8 @@ This view generates a pagination for [Twitter Bootstrap](https://github.com/twit
 use Pagerfanta\View\TwitterBootstrapView;
 
 $view = new TwitterBootstrapView();
-$html = $view->render($pagerfanta, $routeGenerator, array(
-    'proximity' => 3,
-));
+$options = array('proximity' => 3);
+$html = $view->render($pagerfanta, $routeGenerator, $options);
 ```
 
 Options (default):

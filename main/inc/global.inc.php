@@ -103,12 +103,6 @@ if (isset($urlInfo['path'])) {
     $_configuration['url_append'] = '/'.basename($urlInfo['path']);
 }
 
-// Inclusion of internationalization libraries
-require_once $includePath.'/lib/internationalization.lib.php';
-
-// Functions for internal use behind this API
-require_once $includePath.'/lib/internationalization_internal.lib.php';
-
 // Do not over-use this variable. It is only for this scripts local use.
 $libPath = $includePath.'/lib/';
 
@@ -268,13 +262,13 @@ if (isset($app['configuration']['main_database'])) {
             $charset = 'UTF-8';
         }*/
         //Charset is UTF-8
-
+        /*
         if (api_is_utf8($charset)) {
             // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
             Database::query("SET NAMES 'utf8';");
         } else {
             Database::query("SET CHARACTER SET '".Database::to_db_encoding($charset)."';");
-        }
+        }*/
         Database::query("SET NAMES 'utf8';");
     }
 }
@@ -282,10 +276,6 @@ if (isset($app['configuration']['main_database'])) {
 // Manage Chamilo error messages
 $app->error(
     function (\Exception $e, $code) use ($app) {
-
-        if ($e instanceof PDOException) {
-        }
-
         if ($app['debug']) {
             //return;
         }
@@ -319,11 +309,6 @@ $app->error(
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
-// Initialization of the internationalization library.
-api_initialize_internationalization();
-// Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
-api_set_internationalization_default_encoding($charset);
-
 // Start session after the internationalization library has been initialized
 
 // @todo use silex session provider instead of a custom class
@@ -356,14 +341,32 @@ $app['plugins'] = $_plugins;
 // Section (tabs in the main chamilo menu)
 $app['this_section'] = SECTION_GLOBAL;
 
+// Inclusion of internationalization libraries
+require_once $libPath.'internationalization.lib.php';
+// Functions for internal use behind this API
+require_once $libPath.'internationalization_internal.lib.php';
+
+// Setting languages
+$app['api_get_languages'] = api_get_languages();
+
+// Checking if we have a valid language. If not we set it to the platform language.
+if ($alreadyInstalled) {
+    $app['language_interface'] = $language_interface = api_get_language_interface();
+} else {
+    $app['language_interface'] = $language_interface = 'english';
+}
+
+// Initialization of the internationalization library.
+api_initialize_internationalization();
+
+// Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
+api_set_internationalization_default_encoding($charset);
+
 // include the local (contextual) parameters of this course or section
 require $includePath.'/local.inc.php';
 
 // reconfigure templat now we know the user
 $app['template.hide_global_chat'] = !api_is_global_chat_enabled();
-
-// Setting languages
-$app['api_get_languages'] = api_get_languages();
 
 /**	Loading languages and sublanguages **/
 // @todo improve the language loading
@@ -373,13 +376,6 @@ $app['api_get_languages'] = api_get_languages();
 
 // Include all files (first english and then current interface language)
 $app['this_script'] = isset($this_script) ? $this_script : null;
-
-// Checking if we have a valid language. If not we set it to the platform language.
-if ($alreadyInstalled) {
-    $app['language_interface'] = $language_interface = api_get_language_interface();
-} else {
-    $app['language_interface'] = $language_interface = 'english';
-}
 
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.

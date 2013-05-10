@@ -1731,16 +1731,6 @@ class Display
         if (empty($counter)) {
             $counter = 1;
         }
-
-        //$pagination_size = '';
-        //$total = count($list);
-        /*if ($total > 25) {
-            $pagination_size = 'pagination-small';
-        }
-        if ($total > 50) {
-            $pagination_size = 'pagination-mini';
-        }
-        */
         $pagination_size = 'pagination-mini';
 
         //$html = '<div class="exercise_pagination pagination '.$pagination_size.' pagination-centered"><ul>';
@@ -1779,7 +1769,6 @@ class Display
                 //$class = "after";
             }
 
-
             if (empty($link)) {
                 $link_to_show = "#";
             } else {
@@ -1806,26 +1795,26 @@ class Display
         $counter = 0;
         $totalTemp = 0;
         $html = null;
-        //var_dump($categories);
+        if (!empty($categories)) {
+            foreach ($categories as $category) {
+                $list = $category['question_list'];
 
-        foreach ($categories as $category) {
-            $list = $category['question_list'];
+                if ($counter > 0) {
+                    $total = $totalTemp + 1;
+                } else {
+                    $total = 0;
+                }
+                $html .= '<div class="row">';
+                $html .= '<div class="span2">'.$category['name'].'</div>';
+                $html .= '<div class="span8">';
 
-            if ($counter > 0) {
-                $total = $totalTemp + 1;
-            } else {
-                $total = 0;
+                $html .= self::progress_pagination_bar($list, $current, $conditions, $link, $total);
+                $html .= '</div>';
+                $html .= '</div>';
+
+                $totalTemp = $totalTemp + count($list);
+                $counter++;
             }
-            $html .= '<div class="row">';
-            $html .= '<div class="span2">'.$category['name'].'</div>';
-            $html .= '<div class="span10">';
-
-            $html .= self::progress_pagination_bar($list, $current, $conditions, $link, $total);
-            $html .= '</div>';
-            $html .= '</div>';
-
-            $totalTemp = $totalTemp + count($list);
-            $counter++;
         }
 
         return $html;

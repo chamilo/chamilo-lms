@@ -55,6 +55,7 @@ class QuestionManagerController
         // Creating a new form
         $form = new \FormValidator('edit_question', 'post', $url);
         $question->createForm($form);
+        $form->freeze();
         $question->createAnswersForm($form);
 
         $submitQuestion = $app['request']->get('submitQuestion');
@@ -166,10 +167,8 @@ class QuestionManagerController
         $token = null;
         $editUrl = $app['url_generator']->generate('admin_questions');
 
-        /* '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.
-            \Display::return_icon('copy.png',get_lang('Copy'),'',ICON_SIZE_SMALL).'</a>'. */
         $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
-            return \'<a target="_blank" href="'.$editUrl.'/\'+rowObject[0]+\'/edit">'.\Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.'\';
+            return \'<a href="'.$editUrl.'/\'+rowObject[0]+\'/edit">'.\Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.'\';
         }';
 
         $js = \Display::grid_js('questions', $url, $columns, $columnModel, $extraParams, array(), $actionLinks, true);
@@ -203,6 +202,8 @@ class QuestionManagerController
         $subtree = null;
 
         if (isset($categoryId)) {
+            //$repo->getChildrenQueryBuilder();
+
             // Insert node.
             /*
             $options = array(

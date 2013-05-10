@@ -221,7 +221,11 @@ if (!empty($courseInfo)) {
 
 // Injecting common file filters
 foreach ($opts['roots'] as &$driver) {
-    $driver['attributes']  = array_merge($driver['attributes'], $commonAttributes);
+    if (isset($driver['attributes'])) {
+        $driver['attributes']  = array_merge($driver['attributes'], $commonAttributes);
+    } else {
+        $driver['attributes']  = $commonAttributes;
+    }
 }
 
 // run elFinder

@@ -392,7 +392,7 @@ class PageController
      * @return string The portal's homepage as an HTML string
      * @assert () != ''
      */
-    public function return_home_page()
+    public function returnHomePage()
     {
         // Including the page for the news
         $html          = null;

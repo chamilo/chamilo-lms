@@ -487,6 +487,8 @@ define ('SKILL_TYPE_BOTH',          'both');
  * api_get_path(SYS_TEMPLATE_PATH)              /var/www/chamilo/main/template/
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
+ *
+ * api_get_path(WEB_PUBLIC_PATH)                http://www.mychamilo.org/chamilo/web/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
  * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/courses/
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
@@ -1197,6 +1199,7 @@ function _api_format_user($user, $add_password = false) {
     if (isset($user['is_anonymous']) && $user['is_anonymous']) {
         return $user;
     }
+
     $firstname = $lastname = null;
 
     if (isset($user['firstname']) && isset($user['lastname'])) {
@@ -1208,7 +1211,7 @@ function _api_format_user($user, $add_password = false) {
     }
     $result['phone']= $user['phone'];
 
-    $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
+    $result['complete_name'] = api_get_person_name($firstname, $lastname);
 
     $result['complete_name_with_username'] = $result['complete_name'];
     if (!empty($user['username'])) {
@@ -3425,21 +3428,13 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
 
 function api_get_languages_combo($name = 'language', $chozen=true) {
     $ret = '';
-    $platformLanguage = api_get_setting('platformLanguage');
-
     // Retrieve a complete list of all the languages.
     $language_list = api_get_languages();
 
     if (count($language_list['name']) < 2) {
         return $ret;
     }
-
-    // The the current language of the user so that his/her language occurs as selected in the dropdown menu.
-    if (isset($_SESSION['user_language_choice'])) {
-        $default = $_SESSION['user_language_choice'];
-    } else {
-        $default = $platformLanguage;
-    }
+    $default = api_get_user_language();
 
     $languages  = $language_list['name'];
     $folder		= $language_list['folder'];
@@ -3472,13 +3467,12 @@ function api_display_language_form($hide_if_no_choice = false) {
         return; // Don't show any form
     }
 
-    $user_selected_language = api_get_user_language();
+    $user_selected_language = api_get_language_selected_in_login();
 
     $original_languages = $language_list['name'];
     $folder = $language_list['folder']; // This line is probably no longer needed.
-	$html = '
-    <script>
-    function jumpMenu(targ,selObj,restore){ // v3.0
+	$html = '<script>
+    function jumpMenu(targ, selObj, restore){ // v3.0
         eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
         if (restore) selObj.selectedIndex=0;
     }
@@ -3492,7 +3486,7 @@ function api_display_language_form($hide_if_no_choice = false) {
         } else {
             $option_end = '>';
         }
-        $html .=  '<option value="'.api_get_self().'?language='.$folder[$key].'"'.$option_end;
+        $html .=  '<option value="'.api_get_path(WEB_PUBLIC_PATH).'index?language='.$folder[$key].'"'.$option_end;
         $html .=  $value.'</option>';
     }
     $html .=  '</select>';
@@ -3515,7 +3509,7 @@ function api_get_languages() {
     }
 
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
+    $sql = "SELECT * FROM $tbl_language WHERE available = '1' ORDER BY original_name ASC";
 
     $result = Database::query($sql);
     $language_list = array();
@@ -3523,6 +3517,7 @@ function api_get_languages() {
         $language_list['name'][] = $row['original_name'];
         $language_list['folder'][] = $row['dokeos_folder'];
     }
+    $app['api_get_languages'] = $language_list;
     return $language_list;
 }
 
@@ -3551,34 +3546,38 @@ function api_get_language_id($language) {
  * @param string lang_type
  * @param return language of the requested type or false if the language is not available
  **/
-function api_get_language_from_type($lang_type){
-    global $_user;
-    $_course = api_get_course_info();
-    $toreturn = false;
+function api_get_language_from_type($lang_type)
+{
+    $language = false;
     switch ($lang_type) {
-        case 'platform_lang' :
-            $temp_lang = api_get_setting('platformLanguage');
-            if (!empty($temp_lang))
-                $toreturn = $temp_lang;
+        case 'platform_lang':
+            $platformLanguage = api_get_setting('platformLanguage');
+            if (!empty($platformLanguage)) {
+                $language = $platformLanguage;
+            }
             break;
-        case 'user_profil_lang' :
-            if (isset($_user['language']) && !empty($_user['language']) )
-                $toreturn = $_user['language'];
+        case 'user_profil_lang':
+            //$_user = api_get_user_info();
+            $_user = Session::read('_user');
+            if (isset($_user['language']) && !empty($_user['language']) ) {
+                $language = $_user['language'];
+            }
             break;
-        case 'user_selected_lang' :
-            if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice']) )
-                $toreturn = ($_SESSION['user_language_choice']);
+        case 'user_selected_lang':
+            $language = api_get_language_selected_in_login();
             break;
-        case 'course_lang' :
+        case 'course_lang':
+            $_course = api_get_course_info();
             if (isset($_course['language']) && !empty($_course['language']) )
-                $toreturn = $_course['language'];
+                $language = $_course['language'];
             break;
         default :
-            $toreturn = false;
-        break;
+            $language = false;
+            break;
     }
-    return $toreturn;
+    return $language;
 }
+
 
 function api_get_language_info($language_id) {
     $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
@@ -6737,21 +6736,47 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
     */
 }
 
+function api_set_login_language($lang) {
+    global $app;
+    $valid_languages = array();
+    if ($app['installed']) {
+        $valid_languages = api_get_languages();
+    }
+    if (isset($lang) && isset($valid_languages)) {
+        if (in_array($lang, $valid_languages['folder'])) {
+            $_SESSION['user_language_choice'] = $lang;
+        }
+    }
+}
+
+function api_get_language_selected_in_login() {
+    $language = api_get_setting('platformLanguage');
+    if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice'])) {
+        $language = $_SESSION['user_language_choice'];
+    }
+    return $language;
+}
+
 function api_get_user_language() {
     $user_language = null;
 
-    if (isset($_SESSION['user_language_choice']) && !empty($_SESSION['user_language_choice'])) {
-        $user_language = $_SESSION['user_language_choice'];
-    } elseif (!empty($_SESSION['_user']['language'])) {
-        $user_language = $_SESSION['_user']['language'];
+    if (!api_is_anonymous()) {
+        $userInfo = api_get_user_info();
+        if (isset($userInfo['language'])) {
+            $user_language = $userInfo['language'];
+        }
     }
 
-    if (isset($_GET['language']) && !empty($_GET['language'])) {
-        $user_language = $_GET['language'];
-    }
-
+    // When this is use?
+    /*
     if (isset($_POST['language_list']) && !empty($_POST['language_list'])) {
-        $user_language = str_replace('index.php?language=', '', $_POST['language_list']);
+        if (in_array($_GET['language'], $valid_languages)) {
+            $user_language = str_replace('index.php?language=', '', $_POST['language_list']);
+        }
+    }*/
+
+    if (isset($_REQUEST['language']) && !empty($_REQUEST['language'])) {
+        api_set_login_language($_REQUEST['language']);
     }
 
     // Last chance we get the platform language
@@ -6763,66 +6788,66 @@ function api_get_user_language() {
 
 function api_get_language_interface() {
     global $app;
-
     $valid_languages = array();
+
     if ($app['installed']) {
         $valid_languages = api_get_languages();
     }
 
     $user_language = api_get_user_language();
-    $_course = api_get_course_info();
+    $courseInfo = api_get_course_info();
     $language_interface = 'english';
+
+    $languageFromLogin = api_get_language_selected_in_login();
+
+    if (!empty($languageFromLogin)) {
+        $language_interface = $languageFromLogin;
+    }
 
     if (!empty($valid_languages)) {
 
-        if (!in_array($user_language, $valid_languages['folder'])) {
-            $user_language = api_get_setting('platformLanguage');
+        // User language or platform lang
+        $language_interface = $user_language;
+
+        // Course language
+        if (!empty($courseInfo) && isset($courseInfo['language'])) {
+            $language_interface = $courseInfo['language'];
         }
-        /* @todo fix the language priority feature */
+
+        // Lang priorities could be: course_lang, user_profil_lang, user_selected_lang , platform_lang
+
         $language_priority1 = api_get_setting('languagePriority1');
         $language_priority2 = api_get_setting('languagePriority2');
         $language_priority3 = api_get_setting('languagePriority3');
         $language_priority4 = api_get_setting('languagePriority4');
 
-        if (in_array(
-            $user_language,
-            $valid_languages['folder']
-        ) && (isset($_GET['language']) || isset($_POST['language_list']))
-        ) {
-            $user_selected_language = $user_language;
-            $_SESSION['user_language_choice'] = $user_selected_language;
-            $platformLanguage = $user_selected_language;
-        }
-
         if (!empty($language_priority4) && api_get_language_from_type($language_priority4) !== false) {
             $language_interface = api_get_language_from_type($language_priority4);
-        } else {
-            $language_interface = api_get_setting('platformLanguage');
+            error_log($language_interface);
         }
 
         if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
             $language_interface = api_get_language_from_type($language_priority3);
-        } else {
-            if (isset($_SESSION['user_language_choice'])) {
-                $language_interface = $_SESSION['user_language_choice'];
-            }
+            error_log($language_interface);
         }
 
         if (!empty($language_priority2) && api_get_language_from_type($language_priority2) !== false) {
             $language_interface = api_get_language_from_type($language_priority2);
-        } else {
-            if (isset($_user['language'])) {
-                $language_interface = $_user['language'];
-            }
+            error_log($language_interface);
         }
+
         if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false) {
             $language_interface = api_get_language_from_type($language_priority1);
-        } else {
-            if (isset($_course['language']) && !empty($_course['language'])) {
-                $language_interface = $_course['language'];
-            }
+            error_log($language_interface);
         }
+
+        // If user lang is not valid get the default platform lang
+        if (empty($language_interface) || !in_array($language_interface, $valid_languages['folder'])) {
+            $language_interface = api_get_setting('platformLanguage');
+        }
+        error_log($language_interface);
     }
+
     return $language_interface;
 }
 

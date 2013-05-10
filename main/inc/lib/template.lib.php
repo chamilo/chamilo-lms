@@ -762,19 +762,7 @@ class Template
         $navigation = $navigation['navigation'];
 
         // Displaying the tabs
-
-        $lang = null; //el for "Edit Language"
-        $user_language_choice = isset($_SESSION['user_language_choice']) ? $_SESSION['user_language_choice'] : null;
-
-        $user_info = $this->app['current_user'];
-
-        if (!empty($user_language_choice)) {
-            $lang = $user_language_choice;
-        } elseif (!empty($user_info['language'])) {
-            $lang = $user_info['language'];
-        } else {
-            $lang = api_get_setting('platformLanguage');
-        }
+        $lang = api_get_user_language();
 
         //Preparing home folder for multiple urls
 

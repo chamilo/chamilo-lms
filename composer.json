@@ -23,8 +23,7 @@
             "main/inc/lib",
             "main/install",
             "main/inc/lib/getid3",
-            "main/survey",
-            "vendor/jmontoyaa/phpqrcode"
+            "main/survey"
         ]
     },
     "repositories": [
@@ -62,8 +61,8 @@
         "franmomu/silex-pagerfanta-provider": "2.3.*@dev",
         "knplabs/knp-menu": "2.0.*@dev",
         "igorw/config-service-provider": "1.0.*@dev",
-        "mpdf/mpdf": "dev-master",
-        "ezyang/htmlpurifier": "dev-master",
+        "mpdf/mpdf": "v5.6.1",
+        "ezyang/htmlpurifier": "v4.5.0",
         "realityking/pchart": "dev-master",
         "imagine/imagine": "dev-develop",
         "grom/silex-service-provider": "dev-master",

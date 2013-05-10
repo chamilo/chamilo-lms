@@ -1127,40 +1127,50 @@ abstract class Question
 
         $id = $this->id;
 
+        if ($this->type == MEDIA_QUESTION) {
+            // Removing media for attached questions
+
+            $sql = "UPDATE $TBL_QUESTIONS SET parent_id = '' WHERE parent_id = $id";
+            Database::query($sql);
+
+            $sql = "DELETE FROM $TBL_QUESTIONS WHERE c_id = $course_id AND iid='".Database::escape_string($id)."'";
+            Database::query($sql);
+            return true;
+        }
+
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
+
             //update the question_order of each question to avoid inconsistencies
-            $sql = "SELECT exercice_id, question_order FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string(
-                $id
-            )."'";
+            $sql = "SELECT exercice_id, question_order FROM $TBL_EXERCICE_QUESTION
+                    WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."'";
             $res = Database::query($sql);
+
             if (Database::num_rows($res) > 0) {
                 while ($row = Database::fetch_array($res)) {
                     if (!empty($row['question_order'])) {
                         $sql = "UPDATE $TBL_EXERCICE_QUESTION
-                                SET question_order = question_order-1
-                                WHERE c_id = $course_id AND exercice_id='".Database::escape_string(
-                            $row['exercice_id']
-                        )."' AND question_order > ".$row['question_order'];
+                                SET question_order = question_order - 1
+                                WHERE c_id = $course_id AND
+                                exercice_id='".Database::escape_string($row['exercice_id'])."' AND
+                                question_order > ".$row['question_order'];
                         Database::query($sql);
                     }
                 }
             }
-            $sql = "DELETE FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string(
-                $id
-            )."'";
+
+            $sql = "DELETE FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."'";
             Database::query($sql);
 
-            $sql = "DELETE FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id='".Database::escape_string($id)."'";
+            $sql = "DELETE FROM $TBL_QUESTIONS WHERE c_id = $course_id AND iid='".Database::escape_string($id)."'";
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($id)."'";
             Database::query($sql);
 
             // remove the category of this question in the question_rel_category table
-            $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY WHERE c_id = $course_id AND question_id='".Database::escape_string(
-                $id
-            )."' AND c_id=".api_get_course_int_id();
+            $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
+                    WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."' AND c_id=".api_get_course_int_id();
             Database::query($sql);
 
             api_item_property_update($this->course, TOOL_QUIZ, $id, 'QuizQuestionDeleted', api_get_user_id());
@@ -1176,6 +1186,7 @@ abstract class Question
                 $this->search_engine_edit($deleteFromEx, false, true);
             }
             api_item_property_update($this->course, TOOL_QUIZ, $id, 'QuizQuestionDeleted', api_get_user_id());
+
         }
     }
 
@@ -1571,7 +1582,7 @@ abstract class Question
         $this->updateLevel($form->getSubmitValue('questionLevel'));
         $this->updateCategory($form->getSubmitValue('questionCategory'));
 
-        //Save normal question if NOT media
+        // Save normal question if NOT media
         if ($this->type != MEDIA_QUESTION) {
             $this->save($objExercise->id);
 
@@ -1951,15 +1962,18 @@ abstract class Question
 
     public static function getMediaLabels()
     {
-
         // Shows media questions
         $courseMedias = Question::prepare_course_media_select(api_get_course_int_id());
         $labels = null;
         if (!empty($courseMedias)) {
             $labels .= get_lang('MediaQuestion').' ';
             foreach ($courseMedias as $mediaId => $media) {
+
+                $editLink  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.MEDIA_QUESTION.'&myid=1&editQuestion='.$mediaId.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
+                $deleteLink = '<a id="delete_'.$mediaId.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&deleteQuestion='.$mediaId.'" >'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+
                 if (!empty($mediaId)) {
-                    $labels .= Display::label($media).' ';
+                    $labels .= self::getMediaLabel($media).''.$editLink.$deleteLink.' ';
                 }
             }
         }
@@ -2064,7 +2078,13 @@ abstract class Question
                 return $questions[0]['total_rows'];
             }
         }
-        return $questions;
 
+        return $questions;
     }
+
+    static function getMediaLabel($title)
+    {
+        return Display::label($title, 'warning');
+    }
+
 }

@@ -141,7 +141,6 @@ $aType = array(
 );
 
 $fastEdition = api_get_course_setting('allow_fast_exercise_edition') == 1 ? true : false;
-//$fastEdition = true;
 
 if ($fastEdition) {
     $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -329,7 +328,41 @@ function multiple_answer_true_false_onchange(variable) {
     }
     document.getElementById(weight_id).value = array_result[result];
 }
+$(function() {
+
+    $( "#dialog:ui-dialog" ).dialog( "destroy" );
+    $( "#dialog-confirm" ).dialog({
+        autoOpen: false,
+        show: "blind",
+        resizable: false,
+        height:150,
+        modal: false
+     });
+
+
+    $(".opener").click(function() {
+        var targetUrl = $(this).attr("href");
+        $( "#dialog-confirm" ).dialog({
+            modal: true,
+            buttons: {
+                "'.get_lang("Yes").'": function() {
+                    location.href = targetUrl;
+                    $( this ).dialog( "close" );
+                },
+                "'.get_lang("No").'": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+        $( "#dialog-confirm" ).dialog("open");
+        return false;
+    });
+});
+
+
 </script>';
+
+
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
@@ -561,6 +594,17 @@ if ($newQuestion || $editQuestion) {
     // Create/Edit question.
     require 'question_admin.inc.php';
 }
+/*
+$q = new \Entity\CQuizQuestion();
+$q->setQuestion('test');
+$q->setCId(1);
+$q->setPonderation(1);
+$q->setPosition(1);
+$q->setType(1);
+$q->setLevel(1);
+$q->setParentId(1);
+$app['orm.em']->persist($q);
+$app['orm.em']->flush();*/
 
 if (isset($_GET['hotspotadmin'])) {
     if (!is_object($objQuestion)) {
@@ -577,7 +621,6 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
     if ($objExercise->randomByCat == EXERCISE_CATEGORY_RANDOM_SHUFFLED || EXERCISE_CATEGORY_RANDOM_ORDERED) {
         Display::display_normal_message(get_lang('AllQuestionsMustHaveACategory'));
     }
-
     // Question list (drag n drop view)
     if ($fastEdition) {
         require 'question_list_pagination_admin.inc.php';

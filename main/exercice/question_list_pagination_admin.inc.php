@@ -104,8 +104,19 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
             ?>
         });
     </script>
+
+    <div id="dialog-confirm" title="<?php echo get_lang("ConfirmYourChoice"); ?>" style="display:none;">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0; display:none;">
+            </span>
+            <?php echo get_lang("AreYouSureToDelete"); ?>
+        </p>
+    </div>
+
 <?php
 
 Question :: display_type_menu($objExercise);
-echo '<div style="clear:both;"></div>';
+echo Question::getMediaLabels();
+
+echo '<br/><div style="clear:both;"></div>';
 echo Display::grid_html('question_list');

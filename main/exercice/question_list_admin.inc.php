@@ -45,34 +45,6 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 
 <script>
 $(function() {
-    $( "#dialog:ui-dialog" ).dialog( "destroy" );
-    $( "#dialog-confirm" ).dialog({
-            autoOpen: false,
-            show: "blind",
-            resizable: false,
-            height:150,
-            modal: false
-     });
-
-    $(".opener").click(function() {
-        var targetUrl = $(this).attr("href");
-        $( "#dialog-confirm" ).dialog({
-        	modal: true,
-            buttons: {
-                "<?php echo get_lang("Yes"); ?>": function() {
-                    location.href = targetUrl;
-                    $( this ).dialog( "close" );
-
-                },
-                "<?php echo get_lang("No"); ?>": function() {
-                    $( this ).dialog( "close" );
-                }
-            }
-        });
-        $( "#dialog-confirm" ).dialog("open");
-        return false;
-    });
-
     var stop = false;
     $( "#question_list h3" ).click(function( event ) {
         if ( stop ) {
@@ -108,7 +80,7 @@ $(function() {
     .sortable({
         cursor: "move", // works?
         update: function(event, ui) {
-            var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']);?>";
+            var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo $exerciseId;?>";
             $.post("<?php echo $ajax_url ?>", order, function(reponse){
                 $("#message").html(reponse);
             });
@@ -156,7 +128,6 @@ if (!$inATest) {
         $objExercise->setCategoriesGrouping(false);
         $questionList = $objExercise->selectQuestionList(true);
 
-
         // Style for columns
 
         $styleQuestion = "width:50%; float:left;";
@@ -198,7 +169,7 @@ if (!$inATest) {
                 $question_media = null;
                 if (!empty($objQuestionTmp->parent_id)) {
                     $objQuestionMedia = Question::read($objQuestionTmp->parent_id);
-                    $question_media  = ' '.Display::label($objQuestionMedia->question, 'success');
+                    $question_media  = ' '.Question::getMediaLabel($objQuestionMedia->question);
                 }
 
 				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM), array('style' => $styleType));
@@ -207,7 +178,7 @@ if (!$inATest) {
                 $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
 
 				if (empty($category_labels)) {
-					$category_labels = "-";
+					$category_labels = "";
 				}
 				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.$question_media.'</a>', array('style'=>$styleCat));
 

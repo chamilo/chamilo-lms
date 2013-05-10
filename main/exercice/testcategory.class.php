@@ -67,7 +67,8 @@ class Testcategory
      * @assert () === false
 	 */
 
-    public function getCategory($id) {
+    public function getCategory($id)
+    {
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$in_id = Database::escape_string($id);
         $sql = "SELECT * FROM $t_cattable WHERE iid = $id ";
@@ -134,11 +135,7 @@ class Testcategory
             } else {
                 return false;
             }
-            /*$sql = "INSERT INTO $t_cattable (c_id, title, description, parent_id) VALUES ('$course_id', '$v_name', '$v_description', '$parent_id')";
-            Database::query($sql);*/
-            //return Database::insert_id();
         } else {
-
             return false;
 		}
     }
@@ -228,14 +225,6 @@ class Testcategory
         $repo->removeFromTree($category);
         $app['orm.em']->clear(); // clear cached nodes
         return true;
-
-        /*$sql = "DELETE FROM $t_cattable WHERE iid = $v_id";
-        Database::query($sql);
-		if (Database::affected_rows() <= 0) {
-			return false;
-		} else {
-			return true;
-		}*/
     }
 
 
@@ -432,7 +421,7 @@ class Testcategory
 		if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
                 $cat = new Testcategory($row['iid']);
-                $result[] = $cat->parent_path;
+                $result[] = array('title' => $cat->parent_path);
             }
 		}
 
@@ -593,8 +582,11 @@ class Testcategory
         foreach ($categories as $cat_id) {
             $cat = new Testcategory($cat_id);
             if (!empty($cat->id)) {
-                $result[$cat->id] = $cat->name;
-		}
+                $result[$cat->id] = array(
+                    'title' => $cat->name,
+                    'parent_id' => $cat->parent_id
+                );
+		    }
         }
         return $result;
     }
@@ -840,16 +832,22 @@ class Testcategory
      * @param array $all_categories
      * @return null|string
      */
-    public static function return_category_labels($category_list, $all_categories) {
+    public static function return_category_labels($category_list, $all_categories)
+    {
         $category_list_to_render = array();
         foreach ($category_list as $category_id) {
             $category_name = null;
             if (!isset($all_categories[$category_id])) {
                 $category_name = get_lang('Untitled');
+                $parentId = null;
             } else {
-                $category_name = Text::cut($all_categories[$category_id], 15);
+                $parentId = $all_categories[$category_id]['parent_id'];
+                $category_name = Text::cut($all_categories[$category_id]['title'], 15);
             }
-            $category_list_to_render[] = $category_name;
+            $category_list_to_render[] = array(
+                'title' => $category_name,
+                'parent_id' => $parentId
+            );
         }
         $html = self::draw_category_label($category_list_to_render, 'label');
         return $html;
@@ -862,10 +860,18 @@ class Testcategory
      */
     public static function draw_category_label($category_list, $type = 'label') {
         $new_category_list = array();
-        foreach ($category_list as $category_name) {
+        foreach ($category_list as $category) {
+            $category_name = $category['title'];
+
             switch ($type) {
                 case 'label':
-                    $new_category_list[] = Display::label($category_name, 'info');
+                    // Global cat
+                    $parentId = isset($category['parent_id']) ? $category['parent_id'] : null;
+                    if (empty($parentId)) {
+                        $new_category_list[] = Display::label($category_name, 'info');
+                    } else {
+                        $new_category_list[] = Display::label($category_name, 'success');
+                    }
                     break;
                 case 'header':
                     $new_category_list[] = $category_name;

@@ -491,7 +491,7 @@ class Exercise
                     $question_media = null;
                     if (!empty($objQuestionTmp->parent_id)) {
                         $objQuestionMedia = Question::read($objQuestionTmp->parent_id);
-                        $question_media  = Display::label($objQuestionMedia->question, 'info');
+                        $question_media  = Question::getMediaLabel($objQuestionMedia->question);
                     }
 
                     $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media);

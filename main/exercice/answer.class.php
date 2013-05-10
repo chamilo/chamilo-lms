@@ -470,6 +470,7 @@ class Answer {
 		       
 		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
+        $flag = 0;
 		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";
 		for ($i=1;$i <= $this->new_nbrAnswers; $i++) {
            
@@ -494,7 +495,7 @@ class Answer {
         }
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers+1;
-            while($this->position[$i]) {
+            while ($this->position[$i]) {
                 $position = $this->position[$i];
                 $sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."' AND position ='$position'";
                 Database::query($sql);
@@ -515,10 +516,6 @@ class Answer {
 		$this->nbrAnswers=$this->new_nbrAnswers;
 		$this->destination=$this->new_destination;
 		// clears $new_* arrays
-        //} else {
-            /*for ($i=1;$i <= $this->new_nbrAnswers; $i++) {
-                $this->updateAnswers($this->new_answer[$i],$this->new_correct[$i],$this->new_comment[$i],$this->new_weighting[$i],$this->new_position[$i],$this->new_destination[$i]);
-            }*/
         
 		$this->cancel();
 	}

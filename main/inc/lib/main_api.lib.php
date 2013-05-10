@@ -6823,29 +6823,24 @@ function api_get_language_interface() {
 
         if (!empty($language_priority4) && api_get_language_from_type($language_priority4) !== false) {
             $language_interface = api_get_language_from_type($language_priority4);
-            error_log($language_interface);
         }
 
         if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
             $language_interface = api_get_language_from_type($language_priority3);
-            error_log($language_interface);
         }
 
         if (!empty($language_priority2) && api_get_language_from_type($language_priority2) !== false) {
             $language_interface = api_get_language_from_type($language_priority2);
-            error_log($language_interface);
         }
 
         if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false) {
             $language_interface = api_get_language_from_type($language_priority1);
-            error_log($language_interface);
         }
 
         // If user lang is not valid get the default platform lang
         if (empty($language_interface) || !in_array($language_interface, $valid_languages['folder'])) {
             $language_interface = api_get_setting('platformLanguage');
         }
-        error_log($language_interface);
     }
 
     return $language_interface;

@@ -302,7 +302,7 @@ class PageController
      * @assert () != ''
      * @version 1.1
      */
-    public function display_login_form()
+    public function displayLoginForm()
     {
         $form = new FormValidator('formLogin', 'POST', null, null, array('class' => 'form-vertical'));
         // 'placeholder'=>get_lang('UserName')

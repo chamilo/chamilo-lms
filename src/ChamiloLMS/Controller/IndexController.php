@@ -36,6 +36,7 @@ class IndexController extends CommonController
     public function indexAction(Application $app)
     {
         $this->cidReset();
+
         /*
         var_dump($app['request']->getBaseUrl());
         var_dump($app['request']->getHttpHost());
@@ -95,7 +96,7 @@ class IndexController extends CommonController
             unset($_SESSION['term_and_condition']);
         }
 
-        // If we are not logged in and customapages activated
+        // If we are not logged in and custompages activated
         if (!api_get_user_id() && \CustomPages::enabled()) {
             $loggedOut = $request->get('loggedout');
             if ($loggedOut) {
@@ -143,7 +144,7 @@ class IndexController extends CommonController
         $app['template']->assign('announcements_block', $announcementsBlock);
 
         // Homepage
-        $app['template']->assign('home_page_block', $app['page_controller']->return_home_page());
+        $app['template']->assign('home_page_block', $app['page_controller']->returnHomePage());
 
         // Navigation links
         $navLinks = $app['template']->returnNavigationLinks();
@@ -239,7 +240,7 @@ class IndexController extends CommonController
             // Only display if the user isn't logged in
 
             $app['template']->assign('login_language_form', api_display_language_form(true));
-            $app['template']->assign('login_form', self::display_login_form($app));
+            $app['template']->assign('login_form', self::displayLoginForm($app));
 
             if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
                 $loginForm .= '<ul class="nav nav-list">';
@@ -260,7 +261,7 @@ class IndexController extends CommonController
      *
      * @return string
      */
-    public function display_login_form(Application $app)
+    public function displayLoginForm(Application $app)
     {
         /* {{ form_widget(form) }}
           $form = $app['form.factory']->createBuilder('form')

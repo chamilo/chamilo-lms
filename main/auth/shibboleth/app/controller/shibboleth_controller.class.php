@@ -91,7 +91,7 @@ class ShibbolethController
             $message = get_lang('already_logged_in');
             Shibboleth::display()->message_page($message, $title);
         }
-        $html = PageController::display_login_form();
+        $html = PageController::displayLoginForm();
         Shibboleth::display()->page($html, $title);
     }
 

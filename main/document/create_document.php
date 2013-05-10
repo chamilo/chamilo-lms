@@ -160,6 +160,7 @@ require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 //I'm in the certification module?
 $is_certificate_mode = false;
+$_course = api_get_course_info();
 
 if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
     $is_certificate_mode = true;

@@ -652,6 +652,10 @@ class DocumentManager
 
         $to_group_id = intval($to_group_id);
 
+        if (empty($_course)) {
+            return false;
+        }
+
         if ($can_see_invisible) {
             //condition for the session
             $session_id = api_get_session_id();

@@ -45,10 +45,10 @@ class Basic
             array('name' => 'document',  'groups' =>array('mode', 'document', 'doctools')),
             array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
             array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
-            array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
+            //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
             '/',
             array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
-            array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
+            array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align')),
             array('name' => 'links'),
             array('name' => 'insert'),
             '/',
@@ -57,7 +57,10 @@ class Basic
             array('name' => 'tools'),
             array('name' => 'others')
         );
+
+        // file manager (elfinder)
         $config['filebrowserBrowseUrl'] = api_get_path(WEB_CODE_PATH).'inc/lib/elfinder/elfinder.html';
+        $config['extraPlugins'] = 'oembed';
 
         if (isset($this->config)) {
             $this->config = array_merge($this->config, $config);

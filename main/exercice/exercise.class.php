@@ -5012,7 +5012,7 @@ class Exercise
             get_lang('YouWillBeRedirectedInXSeconds'),
             '<span id="counter_to_redirect" class="red_alert"></span>'
         ).'</div>';
-        $html .= '<div class="row"><div class="span12"><div id="exercise_clock_warning" class="well count_down"></div></div></div>';
+        $html .= '<div class="row"><div class="pull-right"><div id="exercise_clock_warning" class="well count_down"></div></div></div>';
 
         return $html;
     }

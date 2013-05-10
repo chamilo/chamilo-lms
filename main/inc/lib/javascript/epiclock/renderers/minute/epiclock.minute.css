@@ -8,14 +8,15 @@
  */
 
  /* Near to 0 seconds should be red */
-.time_warning_one { 
-    background-color: #FB3A35; 
+.time_warning_one {
+    background-color: #FB3A35;
 }
 
 .time_warning_two {
-    background-color: #FFD700; 
+    background-color: #FFD700;
 }
 
 #exercise_clock_warning {
+    margin-top:20px;
     z-index: 10000;
 }

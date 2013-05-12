@@ -1,6 +1,8 @@
 <?php
 
-include_once dirname(__FILE__).'../../../../global.inc.php';
+require_once dirname(__FILE__).'../../../../global.inc.php';
+
+api_block_anonymous_users();
 
 error_reporting(0); // Set E_ALL for debuging
 
@@ -120,19 +122,11 @@ $opts = array(
     'bind' => array(
         'mkdir mkfile rename duplicate upload rm paste' => 'logger'
         //'mkdir mkfile rename duplicate upload rm paste' => 'chamilo'
-    ),
-    /*
-	'roots' => array(
-		array(
-			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'          => '../files/',         // path to files (REQUIRED)
-			'URL'           => dirname($_SERVER['PHP_SELF']) . '/../files/', // URL to files (REQUIRED)
-			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
-		)
-	)*/
+    )
 );
 
 $courseInfo = api_get_course_info();
+$userId = api_get_user_id();
 
 $commonAttributes = array(
     // hide php files
@@ -150,6 +144,26 @@ $commonAttributes = array(
         'write' => false,
         'hidden' => true,
         'locked' => false
+    )
+);
+/*
+
+var defaultCommands = [
+    'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
+    'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
+    'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
+    'resize', 'sort'
+];
+*/
+
+// for more options: https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
+$commonSettings = array(
+    'uploadOverwrite' => false, // Replace files on upload or give them new name
+    'uploadAllow' => array('image', 'audio', 'video', 'text/html'), # allow files
+    //'uploadDeny' => array('text/x-php'),
+    'uploadOrder' => array('allow'), // only executes allow
+    'disabled' => array (
+        'duplicate','rename', 'mkdir', 'mkfile', 'copy', 'cut', 'paste', 'edit', 'extract', 'archive', 'help', 'resize'
     )
 );
 
@@ -176,7 +190,6 @@ if (!empty($courseInfo)) {
     );
 
     // Adding course user file driver
-    $userId = api_get_user_id();
 
     if (!empty($userId)) {
         $opts['roots'][] = array(
@@ -203,9 +216,7 @@ if (!empty($courseInfo)) {
         );
     }
 } else {
-    // Add another driver
-
-   // Adding user personal files
+    // Adding user personal files
 
     $dir = UserManager::get_user_picture_path_by_id($userId, 'system');
     $dirWeb = UserManager::get_user_picture_path_by_id($userId, 'web');
@@ -219,8 +230,21 @@ if (!empty($courseInfo)) {
     );
 }
 
+// Add home portal
+if (api_is_platform_admin()) {
+    $home = api_get_path(SYS_DATA_PATH).'home';
+    $opts['roots'][] = array(
+        'driver'     => 'LocalFileSystem',
+        'path'       => $home,
+        'startPath'  => '/',
+        'URL' => api_get_path(WEB_DATA_PATH).'home',
+        'accessControl' => 'access'
+    );
+}
+
 // Injecting common file filters
 foreach ($opts['roots'] as &$driver) {
+    $driver = array_merge($driver, $commonSettings);
     if (isset($driver['attributes'])) {
         $driver['attributes']  = array_merge($driver['attributes'], $commonAttributes);
     } else {

@@ -58,7 +58,17 @@ class Basic
         );
 
         // file manager (elfinder)
+
+        // http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html
         $config['filebrowserBrowseUrl'] = api_get_path(WEB_CODE_PATH).'inc/lib/elfinder/elfinder.html';
+
+        /*filebrowserFlashBrowseUrl
+        filebrowserFlashUploadUrl
+        filebrowserImageBrowseLinkUrl
+        filebrowserImageBrowseUrl
+        filebrowserImageUploadUrl
+        filebrowserUploadUrl*/
+
         $config['extraPlugins'] = 'oembed';
 
         if (isset($this->config)) {

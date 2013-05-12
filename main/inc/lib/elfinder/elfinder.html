@@ -33,21 +33,9 @@
     $().ready(function() {
         var funcNum = getUrlParam('CKEditorFuncNum');
 
-       var defaultCommands = [
-        	'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
-        	'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
-        	'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
-        	'resize', 'sort'
-        ];
-
-        var chamiloCommands = [
-            'open', 'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
-            'download', 'upload'
-        ];
 
         var elf = $('#elfinder').elfinder({
             url : 'php/connectorChamilo.php',
-            commands : chamiloCommands,
             getFileCallback : function(file) {
                 window.opener.CKEDITOR.tools.callFunction(funcNum, file);
                 window.close();

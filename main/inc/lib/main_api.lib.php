@@ -1082,8 +1082,9 @@ function api_protect_admin_script($allow_sessions_admins = false) {
  *
  * @author Roan Embrechts
  */
-function api_block_anonymous_users($print_headers = true) {
-    global $_user;
+function api_block_anonymous_users($print_headers = true)
+{
+    $_user = Session::read('_user');
     if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
         api_not_allowed($print_headers);
         return false;
@@ -1221,7 +1222,8 @@ function _api_format_user($user, $add_password = false) {
     $result['complete_name_login_as']= $result['complete_name'];
 
     if (!empty($user['username'])) {
-        $result['complete_name_login_as'] = $result['complete_name'].' ('.sprintf(get_lang('LoginX'), $user['username']).')';
+        //$result['complete_name_login_as'] = $result['complete_name'].' ('.sprintf(get_lang('LoginX'), $user['username']).')';
+        $result['complete_name_login_as'] 	= $result['complete_name'].' ('.$user['username'].')';
     }
 
     $result['firstname'] 		= $firstname;
@@ -1730,10 +1732,11 @@ function api_check_password($password) {
  * @return bool     true if succesfully unregistered, false if not anonymous.
  */
 function api_clear_anonymous($db_check = false) {
-    global $_user;
+    $_user = Session::read('_user');
     if (api_is_anonymous($_user['user_id'], $db_check)) {
         unset($_user['user_id']);
         Session::erase('_uid');
+        Session::erase('_user');
         return true;
     }
     return false;
@@ -1810,7 +1813,7 @@ function api_set_failure($failure_type) {
  * @return bool     true if set user as anonymous, false if user was already logged in or anonymous id could not be found
  */
 function api_set_anonymous() {
-    global $_user;
+    $_user = Session::read('_user');
     if (!empty($_user['user_id'])) {
         return false;
     }
@@ -1821,8 +1824,7 @@ function api_set_anonymous() {
     Session::erase('_user');
     $_user['user_id'] = $user_id;
     $_user['is_anonymous'] = true;
-    Session::write('_user',$_user);
-    $GLOBALS['_user'] = $_user;
+    Session::write('_user', $_user);
     return true;
 }
 
@@ -2876,20 +2878,24 @@ function api_is_anonymous($user_id = null, $db_check = false) {
     if (!isset($user_id)) {
         $user_id = api_get_user_id();
     }
+
     if ($db_check) {
         $info = api_get_user_info($user_id);
-        if ($info['status'] == 6) {
+
+        if ($info['status'] == 6 || $user_id == 0 || empty($info)) {
             return true;
         }
     }
-    global $_user;
-    if (!isset($_user)) {
+
+    $_user = Session::read('_user');
+
+    if (!isset($_user) || $_user['user_id'] == 0) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
         // Occurs in agenda for admin links - YW
-        global $use_anonymous;
-        if (isset($use_anonymous) && $use_anonymous) {
+        /*global $use_anonymous;
+        if (isset($use_anonymous) && $use_anonymous) {*/
             api_set_anonymous();
-        }
+        //}
         return true;
     }
     return isset($_user['is_anonymous']) && $_user['is_anonymous'] === true;
@@ -6795,6 +6801,7 @@ function api_get_language_interface() {
     }
 
     $user_language = api_get_user_language();
+
     $courseInfo = api_get_course_info();
     $language_interface = 'english';
 

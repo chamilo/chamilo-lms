@@ -160,7 +160,7 @@ class IndexController extends CommonController
         }
 
         if (!empty($loginError)) {
-            $app['template']->assign('login_failed', $this->handle_login_failed($loginError));
+            $app['template']->assign('login_failed', $this->handleLoginFailed($loginError));
         }
 
         $response = $app['template']->render_layout('layout_2_col.tpl');
@@ -378,7 +378,7 @@ class IndexController extends CommonController
      *
      * @todo use twig template to prompt errors + move this into a helper
      */
-    function handle_login_failed($error)
+    private function handleLoginFailed($error)
     {
         $message = get_lang('InvalidId');
 

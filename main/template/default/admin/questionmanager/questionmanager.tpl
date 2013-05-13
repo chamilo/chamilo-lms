@@ -9,8 +9,8 @@
                         <a href="{{ app.url_generator.generate('admin_questions') }}">
                         {{ 'Questions' | get_lang }}</a>
                     </li>
-                    <li><a href="user_list.php">{{ 'Exercises' | get_lang }}</a></li>
-                    <li><a href="user_add.php">{{ 'Categories' | get_lang }}</a></li>
+                    <li><a href="user_list.php">{{ 'ExtraFields' | get_lang }}</a></li>
+                    <li><a href="{{ app.url_generator.generate('admin_category_new')}}">{{ 'AddACategory' | get_lang }}</a></li>
                 </ul>
 
             </div>

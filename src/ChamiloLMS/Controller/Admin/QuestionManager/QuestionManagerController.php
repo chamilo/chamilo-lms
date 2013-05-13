@@ -173,7 +173,8 @@ class QuestionManagerController
         }';
 
         $js = \Display::grid_js('questions', $url, $columns, $columnModel, $extraParams, array(), $actionLinks, true);
-
+        $count = $repo->childCount($category);
+        $app['template']->assign('category_children', $count);
         $app['template']->assign('category', $category);
         $app['template']->assign('grid', $grid);
         $app['template']->assign('js', $js);
@@ -262,7 +263,7 @@ class QuestionManagerController
             ->createQueryBuilder()
             ->select('node')
             ->from('Entity\CQuizCategory', 'node')
-            ->where('node.cId = 0')
+            ->where('node.cId = 0 AND node.lvl = 0')
             ->orderBy('node.root, node.lft', 'ASC')
             ->getQuery();
 
@@ -272,6 +273,94 @@ class QuestionManagerController
         $response = $app['template']->render_template('admin/questionmanager/question_categories.tpl');
         return new Response($response, 200, array());
 
+    }
+
+    /**
+    * New category
+    *
+    * @param Application $app
+    * @param int $id
+    * @return Response
+    */
+    public function newCategoryAction(Application $app)
+    {
+        $extraJS = array();
+        //@todo improve this JS includes should be added using twig
+        $extraJS[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+        $extraJS[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript"></script>';
+        $app['extraJS'] = $extraJS;
+
+        $url = $app['url_generator']->generate('admin_category_new');
+        $form = new \FormValidator('new', 'post', $url);
+
+        $objcat = new \Testcategory();
+        $objcat->getForm($form, 'new');
+        $message = null;
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $parent_id = isset($values['parent_id']) && isset($values['parent_id'][0]) ? $values['parent_id'][0] : null;
+            $objcat = new \Testcategory(0, $values['category_name'], $values['category_description'], $parent_id, 'global');
+            $categoryId = $objcat->addCategoryInBDD();
+            if ($categoryId) {
+                $message = \Display::return_message(get_lang('AddCategoryDone'), 'confirmation');
+                $url = $app['url_generator']->generate('admin_category_show', array('id' => $categoryId));
+                return $app->redirect($url);
+            } else {
+                $message = \Display::return_message(get_lang('AddCategoryNameAlreadyExists'), 'warning');
+            }
+        }
+        //$app['template']->assign('message', $message);
+
+        $app['template']->assign('form', $form->toHtml());
+        $response = $app['template']->render_template('admin/questionmanager/edit_category.tpl');
+
+        return new Response($response, 200, array());
+    }
+
+    /**
+     * @param Application $app
+     * @param int $id
+     */
+    public function deleteCategoryAction(Application $app, $id)
+    {
+        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        $category = $repo->find($id);
+        if (empty($category)) {
+            $app->abort(404);
+        }
+        $count = $repo->childCount($category);
+
+        if ($count == 0) {
+            $objcat = new \Testcategory($id);
+            $objcat->removeCategory();
+            $url = $app['url_generator']->generate('admin_questions');
+            return $app->redirect($url);
+        } else {
+            $app->abort(401);
+        }
+    }
+
+
+    /**
+     * Show category
+     *
+     * @param Application $app
+     * @param $id
+     * @return Response
+     */
+    public function showCategoryAction(Application $app, $id)
+    {
+        $objcat = new \Testcategory($id);
+
+        if (!empty($objcat->c_id)) {
+            $app->abort(401);
+        }
+
+        $app['template']->assign('category', $objcat);
+
+        $response = $app['template']->render_template('admin/questionmanager/show_category.tpl');
+
+        return new Response($response, 200, array());
     }
 
     /**
@@ -291,13 +380,13 @@ class QuestionManagerController
 
         $objcat = new \Testcategory($id);
 
-        if (!empty($objcat->c_id)) {
+        if (!empty($objcat->c_id) || empty($objcat->id)) {
             $app->abort(401);
         }
         $url = $app['url_generator']->generate('admin_category_edit', array('id' => $id));
         $form = new \FormValidator('edit', 'post', $url);
 
-        $objcat->editForm($form);
+        $objcat->getForm($form, 'edit');
         $message = null;
         if ($form->validate()) {
             $values = $form->getSubmitValues();
@@ -313,6 +402,5 @@ class QuestionManagerController
         $response = $app['template']->render_template('admin/questionmanager/edit_category.tpl');
 
         return new Response($response, 200, array());
-
     }
 }

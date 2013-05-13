@@ -118,7 +118,7 @@ function edit_category_form($in_action, $type = 'simple') {
         // initiate the object
         $form = new FormValidator('note', 'post', api_get_self().'?action='.$in_action.'&category_id='.$category_id."&type=".$type);
 
-        $objcat->editForm($form);
+        $objcat->getForm($form, 'edit');
 
         // The validation or display
         if ($form->validate()) {

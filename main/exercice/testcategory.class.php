@@ -218,7 +218,7 @@ class Testcategory
         //Only admins can delete global categories
         $courseId = $category->getCId();
         //Only admins can delete global categories
-        if (empty($courseId) && !api_is_platform_admin()) {
+        if (empty($courseId) && !api_is_platform_admin() || api_is_question_manager()) {
             return false;
         }
 
@@ -1146,14 +1146,24 @@ class Testcategory
                     $this->create_tree_array($array, $array[$i]['iid'], $depth, $tmp);
                 }
             }
-
         }
     }
 
-    public function editForm(& $form) {
+    public function getForm(& $form, $action = 'new') {
+
+        switch($action) {
+            case 'new':
+                $header = get_lang('AddACategory');
+                $submit = get_lang('AddTestCategory');
+                break;
+            case 'edit':
+                $header = get_lang('EditCategory');
+                $submit = get_lang('ModifyCategory');
+                break;
+        }
 
          // settting the form elements
-        $form->addElement('header', get_lang('EditCategory'));
+        $form->addElement('header', $header);
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
         $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
@@ -1168,7 +1178,7 @@ class Testcategory
         $form->addElement('html', $script);
 
         $form->addElement('select', 'parent_id', get_lang('Parent'), $category_parent_list, array('id' => 'parent_id'));
-        $form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyCategory'), 'class="add"');
+        $form->addElement('style_submit_button', 'SubmitNote', $submit, 'class="add"');
 
         // setting the defaults
         $defaults = array();

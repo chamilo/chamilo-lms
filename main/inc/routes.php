@@ -515,6 +515,20 @@ $app->match('/admin/questionmanager/categories/{id}/edit', 'question_manager.con
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_category_edit');
 
+$app->match('/admin/questionmanager/categories/{id}', 'question_manager.controller:showCategoryAction', 'GET')
+    ->assert('id', '\d+')
+    ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_category_show');
+
+$app->match('/admin/questionmanager/categories/new', 'question_manager.controller:newCategoryAction', 'GET|POST')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_category_new');
+
+$app->match('/admin/questionmanager/categories/{id}/delete', 'question_manager.controller:deleteCategoryAction', 'POST')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_category_delete');
+
 /** Editor */
 $app->match('/editor/filemanager', 'editor.controller:filemanagerAction', 'GET|POST')
     ->assert('type', '.+')

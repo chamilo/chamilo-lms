@@ -15,23 +15,21 @@
 {{ js_file_to_string }}
 {{ extra_headers }}
 <script>
-//<![CDATA[
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
 {% raw %}
 if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf('opera') == -1 )) {
     window.attachEvent( 'onunload', function() {
-            window['__flash__removeCallback'] = function ( instance, name ) {
-                try {
-                    if ( instance ) {
-                        instance[name] = null ;
-                    }
-                } catch ( flashEx ) {
+        window['__flash__removeCallback'] = function ( instance, name ) {
+            try {
+                if ( instance ) {
+                    instance[name] = null ;
                 }
-            } ;
+            } catch ( flashEx ) {
+            }
+        } ;
     });
 }
 {% endraw %}
-//]]>
 
 
 
@@ -230,7 +228,7 @@ $(function() {
         header: ".accordion-heading"
     });
 
-    //Global popup
+    // Global popup
     $('.ajax').on('click', function() {
         var url     = this.href;
         var dialog  = $("#dialog");
@@ -290,6 +288,14 @@ $(function() {
             },200);
         }
     );
+
+    // Tiny mce
+    /*tinymce.init({
+       plugins: "media,image,elfinder",
+       selector: "textarea"
+    });*/
+
+
     /*
     $(".td_actions").hide();
 

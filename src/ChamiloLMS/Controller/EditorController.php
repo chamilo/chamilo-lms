@@ -17,30 +17,32 @@ class EditorController
 {
     /**
      * @param Application $app
+     * @return Response
      */
     public function filemanagerAction(Application $app)
     {
-        //$response = $app['template']->render_layout('javascript/elfinder.tpl');
         $response = $app['template']->render_template('javascript/elfinder.tpl');
-
-        //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
         return new Response($response, 200, array());
     }
 
+    /**
+     * @param Application $app
+     */
     public function connectorAction(Application $app)
     {
         $chamiloConnector = new Connector();
         $opts = $chamiloConnector->getOperations();
 
-        error_reporting(0); // Set E_ALL for debuging
+        error_reporting(0);
 
         include_once api_get_path(LIBRARY_PATH).'elfinder/php/elFinderConnector.class.php';
         include_once api_get_path(LIBRARY_PATH).'elfinder/php/elFinder.class.php';
         include_once api_get_path(LIBRARY_PATH).'elfinder/php/elFinderVolumeDriver.class.php';
         include_once api_get_path(LIBRARY_PATH).'elfinder/php/elFinderVolumeLocalFileSystem.class.php';
 
-        // run elFinder
+        // Run elFinder
         $connector = new \elFinderConnector(new \elFinder($opts));
         $connector->run();
     }
+
 }

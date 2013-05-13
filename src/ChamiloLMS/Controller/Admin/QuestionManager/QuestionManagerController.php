@@ -383,6 +383,8 @@ class QuestionManagerController
             } else {
                 $message = \Display::return_message(get_lang('ModifyCategoryError'), 'warning');
             }
+            $url = $app['url_generator']->generate('admin_questions');
+            return $app->redirect($url);
         }
         $app['template']->assign('message', $message);
         $app['template']->assign('form', $form->toHtml());
@@ -407,7 +409,7 @@ class QuestionManagerController
         if ($count == 0) {
             $testCategory = new \Testcategory($id);
             $count = $testCategory->getCategoryQuestionsNumber();
-            if ($count == 0 ) {
+            if ($count == 0) {
                 $objcat = new \Testcategory($id);
                 $objcat->removeCategory();
                 $url = $app['url_generator']->generate('admin_questions');
@@ -440,6 +442,7 @@ class QuestionManagerController
 
         return new Response($response, 200, array());
     }
+
 
 
 }

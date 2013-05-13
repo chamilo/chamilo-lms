@@ -510,3 +510,12 @@ $app->get('/admin/questionmanager/questions/get-questions-by-category/{categoryI
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_get_questions_by_category');
 
+/** Editor */
+$app->match('/editor/filemanager', 'editor.controller:filemanagerAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->bind('filemanager');
+
+$app->match('/editor/connector', 'editor.controller:connectorAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->bind('editor_connector');
+

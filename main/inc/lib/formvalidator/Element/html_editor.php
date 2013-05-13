@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 require_once 'HTML/QuickForm/textarea.php';
@@ -21,11 +20,13 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      */
     public $richEditorStatus = true;
 
-    public function getRichEditorStatus() {
+    public function getRichEditorStatus()
+    {
         return $this->richEditorStatus;
     }
 
-    public function setRichEditorStatus($status) {
+    public function setRichEditorStatus($status)
+    {
         $this->richEditorStatus = (bool)$status;
     }
 
@@ -38,6 +39,10 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      */
     function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $config = null)
     {
+        if (empty($elementName)) {
+            return false;
+        }
+
         // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
         global $fck_attribute;
 
@@ -47,6 +52,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
         $this->fullPage = false;
 
         $name = $this->getAttribute('name');
+
         //$this->fck_editor = new FCKeditor($name);
         $this->fck_editor = new ChamiloLMS\Component\Editor\Editor($name);
 
@@ -118,14 +124,16 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      * Returns the htmlarea content in HTML
      * @return string
      */
-    function getFrozenHtml() {
+    function getFrozenHtml()
+    {
         return $this->getValue();
     }
 
     /**
      * Build this element using FCKeditor
      */
-    function build_FCKeditor() {
+    function build_FCKeditor()
+    {
         if (!FCKeditor :: IsCompatible()) {
             return parent::toHTML();
         }

@@ -434,8 +434,10 @@ class Template
             //'jquery-ui/jquery.ui.touch-punch.js',
             'thickbox.js',
             'ckeditor/ckeditor.js',
+            //'tinymce/tinymce.min.js',
             'bootstrap/bootstrap.js',
         );
+
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP

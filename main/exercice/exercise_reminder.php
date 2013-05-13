@@ -154,10 +154,7 @@ $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
 
 echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
-//echo ' ';
-//echo Display::label(get_lang('Categories'), 'info');
 echo '<hr>';
-
 echo '<div class="clear"></div><br />';
 
 $table = '<div class="row">';
@@ -175,6 +172,7 @@ $cols = 1;
 
 // Loop over all question to show results for each of them, one by one
 $currentCategory = null;
+
 foreach ($question_list as $questionId) {
 
     // creates a temporary Question object
@@ -210,7 +208,6 @@ foreach ($question_list as $questionId) {
         $question_title = Display::label($question_title, 'warning');
     }
 
-    //var_dump($objQuestionTmp->category_list);
     $rootCategories = null;
     global $app;
     $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');

@@ -510,7 +510,7 @@ if (isset($uidReset) && $uidReset) {   // session data refresh requested
     Session::write('is_platformAdmin', $is_platformAdmin);
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 } else { // continue with the previous values
-    $_user                    = $_SESSION['_user'];
+    $_user                    = isset($_SESSION['_user']) ? $_SESSION['_user'] : null;
     $is_platformAdmin         = isset($_SESSION['is_platformAdmin']) ? $_SESSION['is_platformAdmin'] : false;
     $is_allowedCreateCourse   = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }

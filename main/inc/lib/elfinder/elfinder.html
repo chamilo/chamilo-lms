@@ -7,7 +7,7 @@
 		<!-- jQuery and jQuery UI (REQUIRED) -->
 		<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css">
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-		<script type="text/javascript" src="http://localhost/chamilogits/main/inc/lib/javascript/jquery-ui/smoothness/jquery-ui-custom.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 
 		<!-- elFinder CSS (REQUIRED) -->
 		<link rel="stylesheet" type="text/css" media="screen" href="css/elfinder.min.css">
@@ -20,43 +20,14 @@
 		<script type="text/javascript" src="js/i18n/elfinder.ru.js"></script>
 
 		<!-- elFinder initialization (REQUIRED) -->
-
-
 		<script type="text/javascript" charset="utf-8">
-    // Helper function to get parameters from the query string.
-    function getUrlParam(paramName) {
-        var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i') ;
-        var match = window.location.search.match(reParam) ;
-        return (match && match.length > 1) ? match[1] : '' ;
-    }
-
-    $().ready(function() {
-        var funcNum = getUrlParam('CKEditorFuncNum');
-
-       var defaultCommands = [
-        	'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
-        	'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
-        	'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
-        	'resize', 'sort'
-        ];
-
-        var chamiloCommands = [
-            'open', 'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
-            'download', 'upload'
-        ];
-
-        var elf = $('#elfinder').elfinder({
-            url : 'php/connectorChamilo.php',
-            commands : chamiloCommands,
-            getFileCallback : function(file) {
-                window.opener.CKEDITOR.tools.callFunction(funcNum, file);
-                window.close();
-            },
-            resizable: false
-        }).elfinder('instance');
-    });
-</script>
-
+			$().ready(function() {
+				var elf = $('#elfinder').elfinder({
+					url : 'php/connector.php'  // connector URL (REQUIRED)
+					// lang: 'ru',             // language (OPTIONAL)
+				}).elfinder('instance');
+			});
+		</script>
 	</head>
 	<body>
 

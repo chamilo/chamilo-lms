@@ -2086,15 +2086,18 @@ class HTML_QuickForm extends HTML_Common
      * Returns the rich editor status
      * @return bool status
      */
-    public function getAllowRichEditorInForm() {
+    public function getAllowRichEditorInForm()
+    {
         return $this->allowRichEditorInForm;
     }
 
-    public function setAllowedRichEditorList($array) {
+    public function setAllowedRichEditorList($array)
+    {
         $this->allowedRichEditorList = $array;
     }
 
-    public function getAllowedRichEditorList() {
+    public function getAllowedRichEditorList()
+    {
         return $this->allowedRichEditorList;
     }
 

@@ -303,13 +303,13 @@ EOT;
      */
     function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
     {
-
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
         $html_type = STUDENT_HTML;
         if (!empty($_SESSION['status'])) {
             $html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;
         }
+
         if (is_array($config)) {
             if (isset($config['FullPage'])) {
                 $full_page = is_bool($config['FullPage']) ? $config['FullPage'] : ($config['FullPage'] === 'true');
@@ -319,6 +319,7 @@ EOT;
         } else {
             $config = array('FullPage' => (bool) $full_page);
         }
+
         if ($full_page) {
             $html_type = isset($_SESSION['status']) && $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;
             //First *filter* the HTML (markup, indenting, ...)
@@ -327,9 +328,11 @@ EOT;
             //First *filter* the HTML (markup, indenting, ...)
             //$this->applyFilter($name,'html_filter_teacher');
         }
+
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
+
         if ($full_page) {
             $el = $this->getElement($name);
             $el->fullPage = true;

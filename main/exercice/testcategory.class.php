@@ -16,11 +16,11 @@ class Testcategory
     public $course_id;
     public $c_id; // from db
 
-	/**
-	 * Constructor of the class Category
-	 * @author - Hubert Borderiou
-	 * If you give an in_id and no in_name, you get info concerning the category of id=in_id
-	 * otherwise, you've got an category objet avec your in_id, in_name, in_descr
+    /**
+     * Constructor of the class Category
+     * @author - Hubert Borderiou
+     * If you give an in_id and no in_name, you get info concerning the category of id=in_id
+     * otherwise, you've got an category objet avec your in_id, in_name, in_descr
      * @todo fix this function
      *
      * @param int $in_id
@@ -90,7 +90,7 @@ class Testcategory
     * Add Testcategory in the database if name doesn't already exists
     *
     */
-	public function addCategoryInBDD()
+    public function addCategoryInBDD()
     {
         $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $v_name = Database::escape_string($this->name);
@@ -185,20 +185,6 @@ class Testcategory
         } else {
             return false;
         }
-
-        /*
-        $sql = "UPDATE $t_cattable SET
-                    title = '$v_name',
-                    description = '$v_description',
-                    parent_id = '$parent_id'
-                WHERE iid = '$v_id'";
-        Database::query($sql);*/
-        /*
-		if (Database::affected_rows() <= 0) {
-			return false;
-        } else {
-			return true;
-		}*/
     }
 
 
@@ -256,7 +242,8 @@ class Testcategory
      * @return array
      * @assert() === false
      */
-    public function get_categories_by_keyword($tag) {
+    public function get_categories_by_keyword($tag)
+    {
         if (empty($tag)) {
             return false;
         }
@@ -646,7 +633,8 @@ class Testcategory
 	 * hubert.borderiou 07-04-2011
 	 * question witout categories are not counted
 	 */
-	public static function getNumberOfQuestionRandomByCategory($exercise_id, $in_nbrandom) {
+	public static function getNumberOfQuestionRandomByCategory($exercise_id, $in_nbrandom)
+    {
 		$nbquestionresult = 0;
 		$list_categories = Testcategory::getListOfCategoriesIDForTest($exercise_id);
 
@@ -673,7 +661,8 @@ class Testcategory
 	 * tabresult[0] = get_lang('NoCategory');
 	 *
 	 */
-	static function getCategoriesIdAndName($in_courseid = "") {
+	static function getCategoriesIdAndName($in_courseid = "")
+    {
 		if (empty($in_courseid) || $in_courseid=="") {
 			$in_courseid = api_get_course_int_id();
 		}
@@ -690,7 +679,8 @@ class Testcategory
      * $categories[1][30] = 10, array with category id = 1 and question_id = 10
      * A question has "n" categories
 	 */
-    static function getQuestionsByCat($exerciseId, $check_in_question_list = array()) {
+    static function getQuestionsByCat($exerciseId, $check_in_question_list = array())
+    {
         $categories = array();
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
@@ -928,7 +918,6 @@ class Testcategory
         $repo = $em->getRepository('Entity\CQuizCategory');
 
         $redefineCategoryList = array();
-
 
         if (!empty($category_list) && count($category_list) > 1) {
             $globalCategoryScore = array();

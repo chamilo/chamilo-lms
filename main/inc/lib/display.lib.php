@@ -1783,9 +1783,11 @@ class Display
     }
 
     /**
-     * @param $categories
-     * @param $list
-     * @param $current
+     * Shows a list of numbers that represents the question to answer in a exercise
+     *
+     * @param array $categories
+     * @param array $mediaQuestions
+     * @param int $current
      * @param array $conditions
      * @param null $link
      * @return null|string

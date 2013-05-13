@@ -60,7 +60,7 @@ class Basic
         // file manager (elfinder)
 
         // http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html
-        $config['filebrowserBrowseUrl'] = api_get_path(WEB_CODE_PATH).'inc/lib/elfinder/elfinder.html';
+        $config['filebrowserBrowseUrl'] = api_get_path(WEB_PUBLIC_PATH).'editor/filemanager';
 
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl

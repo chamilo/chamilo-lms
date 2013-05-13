@@ -224,6 +224,12 @@ if (isset($app['configuration']['main_database'])) {
                     "type" => "annotation",
                     "namespace" => "Entity",
                     "path" => api_get_path(INCLUDE_PATH).'Entity',
+                ),
+                array(
+                    'use_simple_annotation_reader' => false,
+                    "type" => "annotation",
+                    "namespace" => "Gedmo",
+                    "path" => api_get_path(SYS_PATH).'vendors/gedmo/doctrine-extensions/lib/Gedmo',
                 )
             ),
         ),
@@ -239,6 +245,9 @@ if (isset($app['configuration']['main_database'])) {
     $tree = new Gedmo\Mapping\Annotation\TreeRight(array());
     $tree = new Gedmo\Mapping\Annotation\TreeRoot(array());
     $tree = new Gedmo\Mapping\Annotation\TreeLevel(array());
+    $tree = new Gedmo\Mapping\Annotation\Versioned(array());
+    $tree = new Gedmo\Mapping\Annotation\Loggable(array());
+    $tree = new Gedmo\Loggable\Entity\LogEntry();
 
     // Setting Doctrine2 extensions
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
@@ -253,6 +262,9 @@ if (isset($app['configuration']['main_database'])) {
     $treeListener = new \Gedmo\Tree\TreeListener();
     //$treeListener->setAnnotationReader($cachedAnnotationReader);
     $app['db.event_manager']->addEventSubscriber($treeListener);
+
+    $loggableListener = new \Gedmo\Loggable\LoggableListener();
+    $app['db.event_manager']->addEventSubscriber($loggableListener);
 }
 
 // Setting Twig as a service provider
@@ -455,6 +467,12 @@ $app['user.controller'] = $app->share(
 $app['news.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\NewsController();
+    }
+);
+
+$app['editor.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\EditorController();
     }
 );
 

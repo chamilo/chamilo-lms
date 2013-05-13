@@ -1,4 +1,5 @@
 <?php
+
 namespace ChamiloLMS\Component\Editor;
 
 class Editor
@@ -80,14 +81,15 @@ class Editor
     {
         $Html = '<textarea id="'.$this->InstanceName.'" name="'.$this->InstanceName.'" class="ckeditor" >'.$this->Value.'</textarea>';
         $Html .= $this->ckeditorReplace();
+
         return $Html;
     }
 
     public function ckeditorReplace()
     {
-        $toolbar = new Toolbar\Basic($this->ToolbarSet);
-        $config  = $toolbar->getConfig();
-        $js = $this->to_js($config);
+        $toolbar  = new Toolbar\Basic($this->ToolbarSet);
+        $config   = $toolbar->getConfig();
+        $js       = $this->to_js($config);
         $settings = null;
 
         $Html = "<script>
@@ -167,19 +169,19 @@ class Editor
     private function to_js($var)
     {
         switch (gettype($var)) {
-            case 'boolean' :
+            case 'boolean':
                 return $var ? 'true' : 'false'; // Lowercase necessary!
-            case 'integer' :
-            case 'double' :
+            case 'integer':
+            case 'double':
                 return (string)$var;
-            case 'resource' :
-            case 'string' :
+            case 'resource':
+            case 'string':
                 return '"'.str_replace(
                     array("\r", "\n", "<", ">", "&"),
                     array('\r', '\n', '\x3c', '\x3e', '\x26'),
                     addslashes($var)
                 ).'"';
-            case 'array' :
+            case 'array':
                 // Arrays in JSON can't be associative. If the array is empty or if it
                 // has sequential whole number keys starting with 0, it's not associative
                 // so we can go ahead and convert it as an array.
@@ -197,7 +199,6 @@ class Editor
                 foreach ($var as $k => $v) {
                     $output[] = $this->to_js(strval($k)).': '.$this->to_js($v);
                 }
-
                 return '{ '.implode(', ', $output).' }';
             default:
                 return 'null';

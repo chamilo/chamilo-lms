@@ -14,6 +14,7 @@ class Testcategory
     public $category_array_tree;
     public $type;
     public $course_id;
+    public $c_id; // from db
 
 	/**
 	 * Constructor of the class Category
@@ -61,12 +62,11 @@ class Testcategory
 	}
 
     /**
-     * Return the Testcategory object with id=in_id
-     * @param int $id
-     * @return bool
-     * @assert () === false
-	 */
-
+    * Return the Testcategory object with id=in_id
+    * @param int $id
+    * @return bool
+    * @assert () === false
+    */
     public function getCategory($id)
     {
 		$t_cattable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
@@ -80,15 +80,16 @@ class Testcategory
             $this->title = $this->name = $row['title'];
 			$this->description = $row['description'];
             $this->parent_id = $row['parent_id'];
+            $this->c_id = $row['c_id'];
         } else {
             return false;
 		}
 	}
 
     /**
-     * Add Testcategory in the database if name doesn't already exists
-     *
-	 */
+    * Add Testcategory in the database if name doesn't already exists
+    *
+    */
 	public function addCategoryInBDD()
     {
         $t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
@@ -1147,5 +1148,37 @@ class Testcategory
             }
 
         }
+    }
+
+    public function editForm(& $form) {
+
+         // settting the form elements
+        $form->addElement('header', get_lang('EditCategory'));
+        $form->addElement('hidden', 'category_id');
+        $form->addElement('text', 'category_name', get_lang('CategoryName'), array('class' => 'span6'));
+        $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+        $category_parent_list = array();
+
+        $script = null;
+        if (!empty($this->parent_id)) {
+            $parent_cat = new Testcategory($this->parent_id);
+            $category_parent_list = array($parent_cat->id => $parent_cat->name);
+            $script .= '<script>$(function() { $("#parent_id").trigger("addItem",[{"title": "'.$parent_cat->name.'", "value": "'.$parent_cat->id.'"}]); });</script>';
+        }
+        $form->addElement('html', $script);
+
+        $form->addElement('select', 'parent_id', get_lang('Parent'), $category_parent_list, array('id' => 'parent_id'));
+        $form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyCategory'), 'class="add"');
+
+        // setting the defaults
+        $defaults = array();
+        $defaults["category_id"] = $this->id;
+        $defaults["category_name"] = $this->name;
+        $defaults["category_description"] = $this->description;
+        $defaults["parent_id"] = $this->parent_id;
+        $form->setDefaults($defaults);
+
+        // setting the rules
+        $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
     }
 }

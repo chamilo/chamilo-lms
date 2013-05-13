@@ -22,6 +22,7 @@ class EditorController
     public function filemanagerAction(Application $app)
     {
         $response = $app['template']->render_template('javascript/elfinder.tpl');
+
         return new Response($response, 200, array());
     }
 
@@ -44,5 +45,4 @@ class EditorController
         $connector = new \elFinderConnector(new \elFinder($opts));
         $connector->run();
     }
-
 }

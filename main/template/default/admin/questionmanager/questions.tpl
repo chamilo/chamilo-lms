@@ -121,8 +121,15 @@
 
 <div class="questions">
     {% if category %}
-        <h3>{{  category.title }}</h3>
+        <h3>{{  category.title }}
+        {% if category.cId == 0 %}
+            <a href="{{ app.url_generator.generate('admin_category_edit', {id : category.iid}) }}">
+                <img src="{{ "edit.png"|icon(22) }}">
+            </a>
+        {% endif %}
+        </h3>
     {% endif %}
+    <div class="clear"></div>
 
     {{ grid }}
 </div>

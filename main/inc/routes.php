@@ -510,6 +510,11 @@ $app->get('/admin/questionmanager/questions/get-questions-by-category/{categoryI
     ->before($adminAndQuestionManagerCondition)
     ->bind('admin_get_questions_by_category');
 
+$app->match('/admin/questionmanager/categories/{id}/edit', 'question_manager.controller:editCategoryAction', 'GET|POST')
+    ->assert('type', '.+')
+    ->before($adminAndQuestionManagerCondition)
+    ->bind('admin_category_edit');
+
 /** Editor */
 $app->match('/editor/filemanager', 'editor.controller:filemanagerAction', 'GET|POST')
     ->assert('type', '.+')

@@ -47,12 +47,17 @@ class CQuizCategory
     private $description;
 
     /**
+     *
+     * @ORM\Column(name="parent_id", type="integer")
+     */
+    private $parentId;
+
+    /**
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="CQuizCategory", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="SET NULL")
      */
     private $parent;
-
 
     /**
      * @Gedmo\TreeLeft
@@ -205,4 +210,27 @@ class CQuizCategory
     {
         return $this->description;
     }
+
+    /**
+    * Set cId
+    *
+    * @param integer $cId
+    * @return CQuizQuestionCategory
+    */
+   public function setParentId($id)
+   {
+       $this->parentId = $id;
+
+       return $this;
+   }
+
+   /**
+    * Get cId
+    *
+    * @return integer
+    */
+   public function getParentId()
+   {
+       return $this->parentId;
+   }
 }

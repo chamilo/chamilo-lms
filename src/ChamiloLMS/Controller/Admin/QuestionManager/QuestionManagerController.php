@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 namespace ChamiloLMS\Controller\Admin\QuestionManager;
 
 use Silex\Application;
@@ -229,7 +230,8 @@ class QuestionManagerController
             'childClose' => '</li>',
             'nodeDecorator' => function ($row) use ($app, $categoryId, $subtree) {
                 $url = $app['url_generator']->generate('admin_questions_get_categories', array('id' => $row['iid']));
-                $url = \Display::url($row['title'], $url, array('id' => $row['iid']));
+                $title = $row['title'];
+                $url = \Display::url($title, $url, array('id' => $row['iid']));
                 if ($row['iid'] == $categoryId) {
                     $url .= $subtree;
                 }
@@ -253,7 +255,6 @@ class QuestionManagerController
         $query = $qb->getQuery();
         $tree = $repo->buildTree($query->getArrayResult(), $options);
 
-
         $app['template']->assign('category_tree', $tree);
 
         // Getting globals
@@ -269,6 +270,48 @@ class QuestionManagerController
         $app['template']->assign('global_category_tree', $tree);
 
         $response = $app['template']->render_template('admin/questionmanager/question_categories.tpl');
+        return new Response($response, 200, array());
+
+    }
+
+    /**
+     * Edit category
+     *
+     * @param Application $app
+     * @param $id
+     * @return Response
+     */
+    public function editCategoryAction(Application $app, $id)
+    {
+        $extraJS = array();
+        //@todo improve this JS includes should be added using twig
+        $extraJS[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+        $extraJS[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript"></script>';
+        $app['extraJS'] = $extraJS;
+
+        $objcat = new \Testcategory($id);
+
+        if (!empty($objcat->c_id)) {
+            $app->abort(401);
+        }
+        $url = $app['url_generator']->generate('admin_category_edit', array('id' => $id));
+        $form = new \FormValidator('edit', 'post', $url);
+
+        $objcat->editForm($form);
+        $message = null;
+        if ($form->validate()) {
+            $values = $form->getSubmitValues();
+            $objcat = new \Testcategory($id, $values['category_name'], $values['category_description'], $values['parent_id'], 'global');
+            if ($objcat->modifyCategory()) {
+                $message = \Display::return_message(get_lang('MofidfyCategoryDone'), 'confirmation');
+            } else {
+                $message = \Display::return_message(get_lang('ModifyCategoryError'), 'warning');
+            }
+        }
+        $app['template']->assign('message', $message);
+        $app['template']->assign('form', $form->toHtml());
+        $response = $app['template']->render_template('admin/questionmanager/edit_category.tpl');
+
         return new Response($response, 200, array());
 
     }

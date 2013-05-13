@@ -1454,27 +1454,34 @@ abstract class Question
             $editor_config['UserStatus'] = 'student';
         }
 
-        $form->addElement(
-            'advanced_settings',
-            '<a href="javascript://" onclick=" return show_media()"><span id="media_icon">
-                '.Display::return_icon('looknfeel.png').'&nbsp;'.get_lang('EnrichQuestion').'</span></a>
-		'
-        );
+        if ($this->exercise->fastExerciseEdition == false) {
 
-        $form->addElement('html', '<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
+            $form->addElement(
+                'advanced_settings',
+                '<a href="javascript://" onclick=" return show_media()"><span id="media_icon">
+                    '.Display::return_icon('looknfeel.png').'&nbsp;'.get_lang('EnrichQuestion').'</span></a>
+            '
+            );
+            $form->addElement('html', '<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
+        }
+
         $form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
-        $form->addElement('html', '</div>');
+
+        if ($this->exercise->fastExerciseEdition == false) {
+            $form->addElement('html', '</div>');
+        }
+
 
         // hidden values
         $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
         $form->addElement('hidden', 'myid', $my_id);
 
         if ($this->type != MEDIA_QUESTION) {
-
-            // Advanced parameters
-            $form->addElement('advanced_settings', '<a class="btn btn-show advanced_parameters" id="advanced_params" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
-
-            $form->addElement('html', '<div id="advanced_params_options" style="display:none;">');
+            if ($this->exercise->fastExerciseEdition == false) {
+                // Advanced parameters
+                $form->addElement('advanced_settings', '<a class="btn btn-show advanced_parameters" id="advanced_params" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
+                $form->addElement('html', '<div id="advanced_params_options" style="display:none;">');
+            }
 
             $select_level = Question::get_default_levels();
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
@@ -1515,7 +1522,9 @@ abstract class Question
             $extraFields = new ExtraField('question');
             $extraFields->add_elements($form, $this->id);
 
-            $form->addElement('html', '</div>');
+            if ($this->exercise->fastExerciseEdition == false) {
+                $form->addElement('html', '</div>');
+            }
         }
 
         //@todo why we need this condition??

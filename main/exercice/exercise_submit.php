@@ -376,6 +376,7 @@ if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['previ
 // 1. Loading the $objExercise variable
 if (!isset($_SESSION['objExercise']) || $_SESSION['objExercise']->id != $_REQUEST['exerciseId']) {
     // Construction of Exercise
+    /** @var Exercise $objExercise */
     $objExercise = new Exercise();
     if ($debug) {error_log('1. Setting the $objExercise variable'); };
     unset($_SESSION['questionList']);
@@ -494,8 +495,8 @@ if ($objExercise->selectAttempts() > 0) {
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
 //Media questions
-$media_questions = $objExercise->get_media_list();
-$media_is_activated = $objExercise->media_is_activated($media_questions);
+$mediaQuestions = $objExercise->get_media_list();
+$media_is_activated = $objExercise->media_is_activated($mediaQuestions);
 
 //In LP's is enabled the "remember question" feature?
 
@@ -642,7 +643,7 @@ $exercise_title	= $objExercise->selectTitle();
 $exercise_sound = $objExercise->selectSound();
 
 if ($debug) error_log('8. Question list loaded '.print_r($questionList, 1));
-if ($debug) error_log('8.1. Media list loaded '.print_r($media_questions, 1));
+if ($debug) error_log('8.1. Media list loaded '.print_r($mediaQuestions, 1));
 
 $question_count = $objExercise->get_count_question_list();
 
@@ -887,6 +888,7 @@ if ($objExercise->type == ONE_PER_PAGE) {
     }
 
     $categoryList = Session::read('categoryList');
+    //$categoryList = null;
 
     if (empty($categoryList)) {
         $categoryList = Testcategory::getListOfCategoriesWithQuestionForTestObject($objExercise, $questionList);
@@ -905,7 +907,8 @@ if ($objExercise->type == ONE_PER_PAGE) {
 
     echo '<div class="span10">';
     if (!empty($categoryList)) {
-        echo Display::progress_pagination_bar_with_categories($categoryList, $media_questions, $current_question, $conditions, $link);
+        //var_dump($categoryList, $mediaQuestions);
+        echo Display::progress_pagination_bar_with_categories($categoryList, $mediaQuestions, $current_question, $conditions, $link);
     } else {
         echo Display::progress_pagination_bar($questionList, $current_question, $conditions, $link);
     }
@@ -1283,7 +1286,7 @@ if (!empty($error)) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
     }
 
-    ExerciseLib::render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions);
+    ExerciseLib::render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $mediaQuestions);
 
     echo '</form>';
 }

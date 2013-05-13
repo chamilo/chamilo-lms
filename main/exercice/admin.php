@@ -118,8 +118,8 @@ if (empty($modifyExercise)) {
 delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_int_id(), api_get_session_id());
 
 // get from session
-$objExercise = isset($_SESSION['objExercise'])?$_SESSION['objExercise']:0;
-$objQuestion = isset($_SESSION['objQuestion'])?$_SESSION['objQuestion']:0;
+$objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : 0;
+$objQuestion = isset($_SESSION['objQuestion']) ? $_SESSION['objQuestion'] : 0;
 $objAnswer = isset($_SESSION['objAnswer'])?$_SESSION['objAnswer']:0;
 
 // document path

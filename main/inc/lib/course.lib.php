@@ -2519,6 +2519,12 @@ class CourseManager
      * @todo use Twig
      */
     public static function course_item_html($params, $is_sub_content = false) {
+        global $app;
+        if ($app['full_width']) {
+            $rowDiv = '<div class="row-fluid">';
+        } else {
+            $rowDiv = '<div class="row">';
+        }
         $html = '';
         $class = "well course-box";
         if ($is_sub_content) {
@@ -2528,9 +2534,9 @@ class CourseManager
             $class .= " session-item";
         }
         $html .= '<div class="'.$class.'">';
-            $html .= '<div class="row">';
+            $html .= $rowDiv;
             $html .= '<div class="span7">';
-                $html .= ' <div class="row">';
+                $html .= $rowDiv;
                     $html .= '<div class="span1 course-box-thumbnail-box">';
                     if (!empty($params['link'])) {
                         $html .= '<a class="thumbnail" href="'.$params['link'].'">';

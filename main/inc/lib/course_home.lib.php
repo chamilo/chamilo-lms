@@ -576,6 +576,7 @@ class CourseHome {
      * @return void
      */
     public static function show_tools_category($all_tools_list, $rows = false) {
+        $rowDiv =  '<div class="row-fluid">';
         $theme = api_get_setting('homepage_view');
         if ($theme == 'vertical_activity') {
             //ordering by get_lang name
@@ -698,30 +699,32 @@ class CourseHome {
                 //$tool['link'] = htmlspecialchars($tool['link']) ;
                 //@todo this visio stuff should be removed
                 if (strpos($tool['name'],'visio_') !== false) {
-                    $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"],
-                                              'href'    => '"javascript: void(0);"',
-                                              'class'   => $class,
-                                              'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
-                                              'target'  =>  $tool['target']);
+                    $tool_link_params = array(
+                        'id'      => 'tooldesc_'.$tool["id"],
+                        'href'    => '"javascript: void(0);"',
+                        'class'   => $class,
+                        'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
+                        'target'  =>  $tool['target']);
                 } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
-                    $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"],
-                                              'class'   => $class,
-                                              'href'    => 'javascript: void(0);',
-                                              'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
-                                              'target'  =>  $tool['target']);
+                    $tool_link_params = array(
+                        'id'      => 'tooldesc_'.$tool["id"],
+                        'class'   => $class,
+                        'href'    => 'javascript: void(0);',
+                        'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
+                        'target'  =>  $tool['target']);
                 } else {
                     if (count(explode('type=classroom',$tool['link'])) == 2 || count(explode('type=conference', $tool['link'])) == 2) {
-                        $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"],
-                                                  'href'    => $tool['link'],
-                                                  'class'   => $class,
-                                                  'target'  =>  '_blank');
-
-
+                        $tool_link_params = array(
+                            'id'      => 'tooldesc_'.$tool["id"],
+                            'href'    => $tool['link'],
+                            'class'   => $class,
+                            'target'  =>  '_blank');
                     } else {
-                        $tool_link_params = array('id'      => 'tooldesc_'.$tool["id"],
-                                                  'href'    => $tool['link'],
-                                                  'class'   => $class,
-                                                  'target'  => $tool['target']);
+                        $tool_link_params = array(
+                            'id'      => 'tooldesc_'.$tool["id"],
+                            'href'    => $tool['link'],
+                            'class'   => $class,
+                            'target'  => $tool['target']);
                     }
                 }
 
@@ -761,12 +764,18 @@ class CourseHome {
         $i = 0;
 
         $html = '';
+        $counter = 0;
 
         if (!empty($items)) {
             foreach ($items as $item) {
                 switch ($theme) {
                     case 'activity_big':
                         $data = '';
+
+                        if ($counter == 0) {
+                            $html .=  $rowDiv;
+                        }
+
                         $html .=  '<div class="span4 course-tool">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
 
@@ -795,14 +804,33 @@ class CourseHome {
                         $html .= Display::div($data, array('class'=>'big_icon')); //box-image reflection
                         $html .= Display::div('<h4>'.$item['visibility'].$item['extra'].$item['link'].'</h4>', array('class'=>'content'));
                         $html .=  '</div>';
+
+                        if ($counter == 2) {
+                            $html .=  '</div>';
+                            $counter = -1;
+                        }
+                        $counter++;
+
                         break;
                     case 'activity':
-                        $html .=  '<div class="offset2 span4 course-tool">';
-                            $html .=  $item['extra'];
-                            $html .=  $item['visibility'];
-                            $html .=  $item['icon'];
-                            $html .=  $item['link'];
+
+                        if ($counter == 0) {
+                            $html .=  $rowDiv;
+                        }
+
+                        $html .=  '<div class="span6 course-tool">';
+                        $content =  $item['extra'];
+                        $content .=  $item['visibility'];
+                        $content .=  $item['icon'];
+                        $content .=  $item['link'];
+                        $html .= Display::div($content, array('class'=>'activity_content'));
                         $html .=  '</div>';
+
+                        if ($counter == 1) {
+                            $html .=  '</div>';
+                            $counter = -1;
+                        }
+                        $counter++;
                         break;
                     case 'vertical_activity':
                         if ($i == 0) {

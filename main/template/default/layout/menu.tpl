@@ -2,7 +2,11 @@
 
 <div class="navbar subnav">
     <div class="navbar-inner">
-        <div class="container">
+        {% if app.full_width == 1 %}
+            <div id="main" class="container-fluid">
+        {% else %}
+            <div id="main" class="container">
+        {% endif %}
             <a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>

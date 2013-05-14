@@ -217,14 +217,14 @@ $introduction_section .= '<div class="row"><div class="span12">';
 $introduction_section .=  $thematic_description_html;
 $introduction_section .=  '</div>';
 
-$introduction_section .=  '<div class="span12">';
+//$introduction_section .=  '<div class="span12">';
 if ($intro_dispDefault) {
 	$intro_content = $intro_content;
 	if (!empty($intro_content))	{
 		$introduction_section .=  $intro_content;
 	}
 }
-$introduction_section .=  '</div>';
+//$introduction_section .=  '</div>';
 
 if ($intro_dispCommand) {
 	if (empty($intro_content)) {

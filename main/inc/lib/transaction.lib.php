@@ -185,16 +185,16 @@ class TransactionLogController {
   }
 }
 
-class ExerciseTestTransactionLog extends TransactionLog {
-  public $action = 'exercise_test';
-  public $controller_class = 'ExerciseTestTransactionLogController';
+class ExerciseAttemptTransactionLog extends TransactionLog {
+  public $action = 'exercise_attempt';
+  public $controller_class = 'ExerciseAttemptTransactionLogController';
 }
 
-class ExerciseTestTransactionLogController extends TransactionLogController {
-  public $class = 'ExerciseTestTransactionLog';
-  public function load_exercise_test($exercise_id, $attempt_id, $branch_id = TransactionLog::BRANCH_LOCAL) {
-    $exercise_test_id = sprintf('%s:%s', $exercise_id, $attempt_id);
-    $transactions = $this->load(array('branch_id' => $branch_id, 'item_id' => $exercise_test_id));
+class ExerciseAttemptTransactionLogController extends TransactionLogController {
+  public $class = 'ExerciseAttemptTransactionLog';
+  public function load_exercise_attempt($exercise_id, $attempt_id, $branch_id = TransactionLog::BRANCH_LOCAL) {
+    $exercise_attempt_id = sprintf('%s:%s', $exercise_id, $attempt_id);
+    $transactions = $this->load(array('branch_id' => $branch_id, 'item_id' => $exercise_attempt_id));
     if (empty($transactions)) {
       return FALSE;
     }

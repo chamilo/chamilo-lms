@@ -244,7 +244,7 @@ ALTER TABLE c_quiz_category DROP PRIMARY KEY;
 ALTER TABLE c_quiz_category ADD COLUMN iid INT unsigned NOT NULL auto_increment PRIMARY KEY;
 
 -- Add new configuration setting to activate transaction logging.
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('log_transactions','exercise_test','checkbox','LogTransactions','false','LogTransactionsForExercises','LogTransactionsForExercisesComment',NULL,'LogTransactionsForExercisesText', 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1);
 
 -- Modify branch_transaction PK to use a simple field.
 ALTER TABLE branch_transaction DROP PRIMARY KEY, ADD PRIMARY KEY (id);
@@ -259,4 +259,4 @@ CREATE TABLE IF NOT EXISTS branch_transaction_data (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.002' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.003' WHERE variable = 'chamilo_database_version';

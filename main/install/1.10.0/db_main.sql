@@ -914,7 +914,7 @@ VALUES
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0),
 ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
 ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1),
-('log_transactions','exercise_test','checkbox','LogTransactions','false','LogTransactionsForExercises','LogTransactionsForExercisesComment',NULL,'LogTransactionsForExercisesText', 1);
+('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -3461,4 +3461,4 @@ ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_i
 ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.002' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.003' WHERE variable = 'chamilo_database_version';

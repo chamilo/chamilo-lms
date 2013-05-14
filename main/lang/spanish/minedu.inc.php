@@ -7,7 +7,7 @@ $ShowVirtualKeyboardComment = "Muestra un teclado virtual en el formulario de lo
 $DisableCopyPasteTitle = "Deshabilitar Copy-Paste";
 $DisableCopyPasteComment = "Deshabilita en menu contextual y las acciones de copiar-pegar en toda la plataforma";
 $LogTransactions = "Registrar Transacciones";
-$LogTransactionsForExercises = "Registrar transacciones de la herramienta de ejercicios.";
-$LogTransactionsForExercisesText = "Registrar ejercicios.";
-$LogTransactionsForExercisesComment = "Cuando está habilitado, se guardarán los resultados de los ejercicios como transacciones.";
+$LogTransactionsForExerciseAttempts = "Registrar transacciones de los intentos de la herramienta de ejercicios.";
+$LogTransactionsForExerciseAttemptsText = "Registrar intentos de ejercicios.";
+$LogTransactionsForExerciseAttemptsComment = "Cuando está habilitado, se guardarán los intentos de solución de los ejercicios como transacciones.";
 ?>

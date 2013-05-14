@@ -7,7 +7,7 @@ $ShowVirtualKeyboardComment = "Add a virtual keyboard for the login form";
 $DisableCopyPasteTitle = "Disable Copy-Paste";
 $DisableCopyPasteComment = "Disable context menu and copy and paste action in all platform";
 $LogTransactions = "Log Transactions";
-$LogTransactionsForExercises = "Log Transactions for Exercise tool.";
-$LogTransactionsForExercisesText = "Log Exercises.";
-$LogTransactionsForExercisesComment = "When enabled, exercise results will be saved as transactions. ";
+$LogTransactionsForExerciseAttempts = "Log Transactions for Exercise tool attempts.";
+$LogTransactionsForExerciseAttemptsText = "Log Exercise attempts.";
+$LogTransactionsForExerciseAttemptsComment = "When enabled, exercise attempts will be saved as transactions. ";
 ?>

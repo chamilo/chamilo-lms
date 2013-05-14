@@ -2489,18 +2489,18 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             update_event_exercise($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array());
             require_once api_get_path(LIBRARY_PATH).'transaction.lib.php';
             $log_transactions_settings = TransactionLog::getTransactionSettings();
-            if (isset($log_transactions_settings['exercise_test'])) {
-              $exercise_test_id = sprintf('%s:%s', $objExercise->selectId(), $exe_id);
-              $transaction_controller = new ExerciseTestTransactionLogController();
-              $transaction = $transaction_controller->load_exercise_test($objExercise->selectId(), $exe_id);
+            if (isset($log_transactions_settings['exercise_attempt'])) {
+              $exercise_attempt_id = sprintf('%s:%s', $objExercise->selectId(), $exe_id);
+              $transaction_controller = new ExerciseAttemptTransactionLogController();
+              $transaction = $transaction_controller->load_exercise_attempt($objExercise->selectId(), $exe_id);
               if (!$transaction) {
                 $transaction_data = array(
-                  'item_id' => $exercise_test_id,
+                  'item_id' => $exercise_attempt_id,
                   'data' => array(
                     'question_order' => implode(',', Session::read('questionList')),
                   ),
                 );
-                $transaction = new ExerciseTestTransactionLog($transaction_data);
+                $transaction = new ExerciseAttemptTransactionLog($transaction_data);
               }
               $transaction->save();
             }

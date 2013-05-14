@@ -350,7 +350,6 @@ class IndexManager {
 	 */
 	function return_courses_in_categories() {
         $result = '';
-		$ctok = $_SESSION['sec_token'];
 		$stok = Security::get_token();
 
 		// Initialization.
@@ -489,15 +488,17 @@ class IndexManager {
 				$courses_of_user = self::get_courses_of_user(api_get_user_id());
 			}
 
+
 			foreach ($course_list as $course) {
 				// $setting_show_also_closed_courses
+
 				if (!$setting_show_also_closed_courses) {
 					// If we do not show the closed courses
 					// we only show the courses that are open to the world (to everybody)
 					// and the courses that are open to the platform (if the current user is a registered user.
-					if( ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
+					if (($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
 						$courses_shown++;
-						$courses_list_string .= "<li>\n";
+						$courses_list_string .= "<li>";
 						$courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
                         $course_details = array();
 						if (api_get_setting('display_coursecode_in_courselist') == 'true') {
@@ -510,7 +511,7 @@ class IndexManager {
 							$course_details[] = $course['course_language'];
 						}
                         $courses_list_string .= implode(' - ', $course_details);
-						$courses_list_string .= "</li>\n";
+						$courses_list_string .= "</li>";
 					}
 				} else {
                     // We DO show the closed courses.
@@ -522,7 +523,7 @@ class IndexManager {
                     // 5. the user is the platform admin api_is_platform_admin().
                     //
                     $courses_shown++;
-					$courses_list_string .= "<li>\n";
+					$courses_list_string .= "<li>";
 					if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
                         || ($user_identified && key_exists($course['code'], $courses_of_user) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
@@ -556,12 +557,15 @@ class IndexManager {
 					// We display a subscription link if:
 	                // 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
 	                // 2.
-                    if ($user_identified && !key_exists($course['code'], $courses_of_user)) {
+                    if ($user_identified && !in_array($course['code'], $courses_of_user)) {
                         if ($course['subscribe'] == '1') {
-                        $courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS($_GET['category']).'" method="post">';
+                        /*$courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS($_GET['category']).'" method="post">';
                         $courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
                         $courses_list_string .= '<input type="hidden" name="subscribe" value="'.$course['code'].'" />';
-                            $courses_list_string .= '<input type="image" name="unsub" src="main/img/enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'</form>';
+                        $courses_list_string .= '<input type="image" name="unsub" src="main/img/enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'</form>';
+                            */
+                        $courses_list_string .= '<a class="btn btn-primary" href="main/auth/courses.php?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;category_code='.Security::remove_XSS($_GET['category']).'">'.get_lang('Subscribe').'</a><br />';
+
                         } else {
                             $courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');
                         }

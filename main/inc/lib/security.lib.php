@@ -190,6 +190,14 @@ class Security {
         return $token;
     }
 
+    public static function get_existing_token() {
+        if (isset($_SESSION['sec_token']) && !empty($_SESSION['sec_token'])) {
+            return $_SESSION['sec_token'];
+        } else {
+            return self::get_token();
+        }
+    }
+
     /**
      * Gets the user agent in the session to later check it with check_ua() to prevent
      * most cases of session hijacking.

@@ -3853,6 +3853,8 @@ class CourseManager {
     public static function process_hot_course_item($courses, $my_course_code_list = array()) {
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
 
+        $stok = Security::get_existing_token();
+
         foreach ($courses as &$my_course) {
             $course_info = api_get_course_info($my_course['course_code']);
             $my_course['extra_info'] = $course_info;
@@ -3862,7 +3864,6 @@ class CourseManager {
 
             //Course visibility
             if ($access_link && in_array('register', $access_link)) {
-                $stok = Security::get_token();
                 $my_course['extra_info']['register_button'] = Display::url(get_lang('Subscribe'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?action=subscribe&amp;sec_token='.$stok, array('class' => 'btn btn-primary'));
             }
 

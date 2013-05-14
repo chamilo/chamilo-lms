@@ -18,9 +18,25 @@ $(function() {
         <li><a href="#tabs-7">Aenean lacinia</a></li>
         <li><a href="#tabs-8">Aenean lacinia</a></li>
     </ul>
+
+         <div class="span3">
+            <ul class="nav nav-list bs-docs-sidenav affix-top">
+        {* for block_item in blocks *}
+               <li><a href="#tabs-{{loop.index}}">{{block_item.label}}</a></li>
+        {* endfor *}
+            </ul>
+        </div>
     -->
-    <div class="row">
+
     {% for block_item in blocks %}
+        {% if loop.index % 2 == 1%}
+            {% if app.full_width == 1 %}
+                <div class="row-fluid">
+            {% else %}
+                <div class="row">
+            {% endif %}
+        {% endif %}
+
         <div id="tabs-{{loop.index}}" class="span6">
             <div class="well_border">
                 <h4>{{block_item.icon}} {{block_item.label}}</h4>
@@ -29,20 +45,24 @@ $(function() {
                 </div>
                 {% if block_item.items is not null %}
                     <ul>
-    		    	{% for url in block_item.items %}
-    		    		<li><a href="{{url.url}}">{{ url.label }}</a></li>
-    				{% endfor %}
+                    {% for url in block_item.items %}
+                        <li><a href="{{url.url}}">{{ url.label }}</a></li>
+                    {% endfor %}
                     </ul>
                 {% endif %}
 
                 {% if block_item.extra is not null %}
                     <div>
-                    {{ block_item.extra }}
+                        {{ block_item.extra }}
                     </div>
                 {% endif %}
             </div>
         </div>
+        {% if loop.index % 2 == 0 %}
+            </div>
+        {% endif %}
     {% endfor %}
-    </div>
+
+
 </div>
 {% endblock %}

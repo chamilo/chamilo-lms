@@ -923,7 +923,8 @@ VALUES
 ('allow_teachers_to_create_sessions', NULL,'radio','Session','false','AllowTeachersToCreateSessionsTitle','AllowTeachersToCreateSessionsComment', NULL, NULL, 0),
 ('use_virtual_keyboard', NULL, 'radio', 'Platform', 'false','ShowVirtualKeyboardTitle','ShowVirtualKeyboardComment', NULL, NULL, 1),
 ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001','DatabaseVersion','', NULL, NULL, 0),
+('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -3058,6 +3059,8 @@ CREATE TABLE branch_sync(
   last_sync_type char(20) default 'full'
 );
 
+INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
+
 DROP TABLE IF EXISTS branch_sync_log;
 CREATE TABLE branch_sync_log(
   id bigint unsigned not null AUTO_INCREMENT PRIMARY KEY,
@@ -3078,7 +3081,7 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 
 DROP TABLE IF EXISTS branch_transaction;
 CREATE TABLE branch_transaction (
-    id bigint unsigned not null AUTO_INCREMENT,
+    id bigint unsigned not null PRIMARY KEY AUTO_INCREMENT,
     transaction_id bigint unsigned,
     branch_id int not null default 0,
     action char(20),
@@ -3088,8 +3091,12 @@ CREATE TABLE branch_transaction (
     info char(20),
     status_id tinyint not null default 0,
     time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-    time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-    PRIMARY KEY (id, transaction_id, branch_id)
+    time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
+);
+
+CREATE TABLE IF NOT EXISTS branch_transaction_data (
+    id bigint unsigned NOT NULL PRIMARY KEY,
+    data text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 );
 
 -- Stats database
@@ -3503,4 +3510,4 @@ ALTER TABLE question_field_values ADD INDEX idx_question_field_values_question_i
 ALTER TABLE question_field_values ADD INDEX idx_question_field_values_field_id(field_id);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.006' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.007' WHERE variable = 'chamilo_database_version';

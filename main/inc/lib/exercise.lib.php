@@ -14,6 +14,8 @@
  * Code
  */
 
+use ChamiloSession as Session;
+
 class ExerciseLib
 {
     /**
@@ -2509,7 +2511,24 @@ class ExerciseLib
             $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
             if (api_is_allowed_to_session_edit()) {
-                update_event_exercise($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array());
+              update_event_exercise($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array());
+              require_once api_get_path(LIBRARY_PATH).'transaction.lib.php';
+              $log_transactions_settings = TransactionLog::getTransactionSettings();
+              if (isset($log_transactions_settings['exercise_attempt'])) {
+                $exercise_attempt_id = sprintf('%s:%s', $objExercise->selectId(), $exe_id);
+                $transaction_controller = new ExerciseAttemptTransactionLogController();
+                $transaction = $transaction_controller->load_exercise_attempt($objExercise->selectId(), $exe_id);
+                if (!$transaction) {
+                  $transaction_data = array(
+                    'item_id' => $exercise_attempt_id,
+                    'data' => array(
+                      'question_order' => implode(',', Session::read('questionList')),
+                    ),
+                  );
+                  $transaction = new ExerciseAttemptTransactionLog($transaction_data);
+                }
+                $transaction->save();
+              }
             }
 
             // Send notification ..

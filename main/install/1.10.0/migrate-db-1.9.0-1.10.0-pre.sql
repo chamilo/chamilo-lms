@@ -274,6 +274,20 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('disable_co
 
 ALTER TABLE track_e_course_access MODIFY COLUMN course_access_id bigint unsigned auto_increment;
 
+-- Add new configuration setting to activate transaction logging.
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('log_transactions','exercise_attempt','checkbox','LogTransactions','false','LogTransactionsForExerciseAttempts','LogTransactionsForExerciseAttemptsComment',NULL,'LogTransactionsForExerciseAttemptsText', 1);
+
+-- Modify branch_transaction PK to use a simple field.
+ALTER TABLE branch_transaction DROP PRIMARY KEY, ADD PRIMARY KEY (id);
+
+-- Insert a row to identify local chamilo branch.
+INSERT INTO branch_sync (id, access_url_id, branch_name, branch_ip) VALUES (1, 1, 'Local', '127.0.0.1');
+
+-- Create a table for extra information.
+CREATE TABLE IF NOT EXISTS branch_transaction_data (
+    id bigint unsigned NOT NULL PRIMARY KEY,
+    data text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.006' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.007' WHERE variable = 'chamilo_database_version';

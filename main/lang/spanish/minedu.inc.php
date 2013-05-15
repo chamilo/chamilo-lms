@@ -10,3 +10,8 @@ $Answered = "Respondido";
 $Unanswered = "Sin responder";
 $ToReview = "Por revisar";
 $CurrentQuestion = "Cuestión actual";
+$LogTransactions = "Registrar Transacciones";
+$LogTransactionsForExerciseAttempts = "Registrar transacciones de los intentos de la herramienta de ejercicios.";
+$LogTransactionsForExerciseAttemptsText = "Registrar intentos de ejercicios.";
+$LogTransactionsForExerciseAttemptsComment = "Cuando está habilitado, se guardarán los intentos de solución de los ejercicios como transacciones.";
+?>

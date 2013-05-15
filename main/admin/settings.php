@@ -436,6 +436,8 @@ $action_images['templates'] = 'template.png';
 $action_images['plugins'] = 'plugins.png';
 $action_images['shibboleth'] = 'shibboleth.png';
 $action_images['facebook'] = 'facebook.png';
+// @todo Use a different image.
+$action_images['logtransactions'] = 'tuning.png';
 
 $action_array = array();
 $resultcategories = array();
@@ -460,6 +462,7 @@ $resultcategories[] = array('category' => 'LDAP');
 $resultcategories[] = array('category' => 'CAS');
 $resultcategories[] = array('category' => 'Shibboleth');
 $resultcategories[] = array('category' => 'Facebook');
+$resultcategories[] = array('category' => 'LogTransactions');
 
 
 foreach ($resultcategories as $row) {

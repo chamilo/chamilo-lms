@@ -1568,13 +1568,12 @@ class ExerciseLib
 
     /**
      * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
-     * @param   array   course data
-     * @param   int     session id
-     * @param		int			course c_id
+     * @param   int session id
+     * @param   int course c_id
      * @return  array   array with exercise data
      * modified by Hubert Borderiou
      */
-    public static function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id = 0)
+    public static function get_all_exercises_for_course_id($session_id = 0, $course_id = 0)
     {
         $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
         if ($session_id == -1) {

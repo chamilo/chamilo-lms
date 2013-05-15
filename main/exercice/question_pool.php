@@ -26,7 +26,7 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-$is_allowedToEdit=api_is_allowed_to_edit(null,true);
+$is_allowedToEdit = api_is_allowed_to_edit(null,true);
 
 $delete = isset($_GET['delete']) ? intval($_GET['delete']) : null;
 $recup = isset($_GET['recup']) ? intval($_GET['recup']) : null;
@@ -297,20 +297,20 @@ echo Display::form_row(get_lang("QuestionCategory"), $selectCourseCateogry);
 
 // Get exercice list for this course
 
-$exercise_list         = ExerciseLib::get_all_exercises_for_course_id($course_info, $session_id, $selected_course);
+$exercise_list         = ExerciseLib::get_all_exercises_for_course_id($session_id, $selected_course);
 //Exercise List
 $my_exercise_list = array();
 $my_exercise_list['0']  = get_lang('AllExercises');
 $my_exercise_list['-1'] = get_lang('OrphanQuestions');
 
 if (is_array($exercise_list)) {
-  foreach($exercise_list as $row) {
-		$my_exercise_list[$row['iid']] = "";
-    if ($row['iid'] ==  $fromExercise && $selected_course == api_get_course_int_id()) {
-    	$my_exercise_list[$row['iid']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";	// hub 13-10-2011
+    foreach($exercise_list as $row) {
+        $my_exercise_list[$row['iid']] = "";
+        if ($row['iid'] ==  $fromExercise && $selected_course == api_get_course_int_id()) {
+            $my_exercise_list[$row['iid']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";	// hub 13-10-2011
+        }
+        $my_exercise_list[$row['iid']] .= $row['title'];
     }
-    $my_exercise_list[$row['iid']] .= $row['title'];
-  }
 }
 
 if ($exercice_id_changed == 1) {

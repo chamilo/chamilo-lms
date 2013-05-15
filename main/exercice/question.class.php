@@ -851,7 +851,7 @@ abstract class Question
         } else {
             // Creates a new question
             $sql = "SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question
-				    WHERE 	question.id					= test_question.question_id AND
+				    WHERE 	question.iid					= test_question.question_id AND
 					        test_question.exercice_id	= '".Database::escape_string($exerciseId)."' AND
 							question.c_id 				= $c_id AND
 							test_question.c_id 			= $c_id ";
@@ -1989,6 +1989,10 @@ abstract class Question
         return $labels;
     }
 
+    /**
+     * Get question columns needed for the new question pool page
+     * @return array
+     */
     public static function getQuestionColumns()
     {
         // The order is important you need to check the the $column variable in the model.ajax.php file
@@ -2017,8 +2021,13 @@ abstract class Question
                 'sortable' => 'false'
             )*/
         );
+
         $extraField = new \ExtraField('question');
+
         $rules = $extraField->getRules($columns, $columnModel);
+
+        // Exercise rules
+        self::getRules($rules, $columns, $columnModel);
 
         $columns[] = get_lang('Actions');
 
@@ -2047,18 +2056,87 @@ abstract class Question
 
     /**
      * Get all questions
-     * @param $options
+     * @param array $options
      * @return array
      */
     public static function getQuestions($categoryId, $options, $get_count = false)
     {
         $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $where = 'WHERE 1 = 1 ';
+
+        $questionPoolFields = array(
+            'question_session_id' => array(
+                'innerjoin' => " INNER JOIN ".Database::get_course_table(TABLE_QUIZ_TEST_QUESTION)." as quiz_rel_question_session ON (quiz_rel_question_session.question_id = s.iid)
+                 INNER JOIN  ".Database::get_course_table(TABLE_QUIZ_TEST)." as quizsession ON (quizsession.iid = quiz_rel_question_session.exercice_id)
+                 INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." session ON (session.id = quizsession.session_id)",
+                'where' => 'session_id',
+                'inject_fields' => 'session.name as question_session_id, ',
+            ),
+            'question_category_id' => array(
+                'innerjoin' => " INNER JOIN ".Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY)." as quiz_rel_cat ON (quiz_rel_cat.question_id = s.iid)
+                                 INNER JOIN ".Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY)." as cat ON (cat.iid = quiz_rel_cat.category_id)
+                ",
+                'where' =>  'quiz_rel_cat.category_id',
+                'inject_fields' => 'cat.title as question_category_id, ',
+            ),
+            'question_exercise_id' => array(
+                'innerjoin' => " INNER JOIN ".Database::get_course_table(TABLE_QUIZ_TEST_QUESTION)." as quiz_rel_question ON (quiz_rel_question.question_id = s.iid)
+                                 INNER JOIN ".Database::get_course_table(TABLE_QUIZ_TEST)." as quizexercise ON (quizexercise.iid = quiz_rel_question.exercice_id)
+                ",
+                'where' =>  'quiz_rel_question.exercice_id',
+                'inject_fields' => 'quizexercise.title as question_exercise_id, ',
+            ),
+            'question_c_id' => array(
+                'where' => 's.c_id',
+                'innerjoin' => " INNER JOIN ".Database::get_main_table(TABLE_MAIN_COURSE)." as course ON (course.id = s.c_id) ",
+                'inject_fields' => 'course.title as question_c_id, '
+            ),
+            'question_question_type' => array(
+                'where' => 's.type ',
+                'inject_fields' => 's.type as question_question_type,'
+            ),
+            'question_difficulty' => array(
+                'where' => 's.level',
+                'inject_fields' => 's.level as question_difficulty, '
+            )
+        );
+
+        $inject_extra_fields = null;
+        $inject_joins = null;
+
+        $where = $options['where'];
+
+        $newQuestionPoolField = array();
+        foreach ($options['question'] as $question) {
+            if (isset($questionPoolFields[$question['field']])) {
+                $newQuestionPoolField[$question['field']] = $questionPoolFields[$question['field']];
+                if ($question['data'] == -1) {
+
+                }
+            }
+        }
+
+        $inject_question_fields = null;
+
+        $questionPoolFields = $newQuestionPoolField;
+        foreach ($questionPoolFields as $field => $option) {
+            $where = str_replace($field, $option['where'], $where);
+            if (isset($option['innerjoin']) && !empty($option['innerjoin'])) {
+                $inject_joins .= $option['innerjoin'];
+            }
+            if (isset($option['inject_fields']) && !empty($option['inject_fields'])) {
+                $inject_question_fields .= $option['inject_fields'];
+            }
+        }
+        //var_dump($inject_question_fields);
+
+        $options['where'] = $where;
 
         $extra_field = new ExtraField('question');
         $conditions = $extra_field->parseConditions($options);
-        $inject_joins = $conditions['inject_joins'];
-        $where .= $conditions['where'];
+
+        $inject_joins .= $conditions['inject_joins'];
+        $where = $conditions['where'];
+
         $inject_where = $conditions['inject_where'];
         $inject_extra_fields = $conditions['inject_extra_fields'];
         $order = $conditions['order'];
@@ -2067,9 +2145,11 @@ abstract class Question
         if ($get_count == true) {
             $select = " SELECT count(*) as total_rows";
         } else {
-            $select = " SELECT s.*, $inject_extra_fields 1";
+            $select = " SELECT s.*, $inject_extra_fields $inject_question_fields 1 ";
         }
+
         $categoryCondition = null;
+
         if (!empty($categoryId)) {
             $categoryRelQuestionTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
             $categoryCondition = " INNER JOIN $categoryRelQuestionTable c ON (s.iid = c.question_id)";
@@ -2077,7 +2157,8 @@ abstract class Question
             $where .= " AND category_id = $categoryId ";
         }
 
-        $query = " $select FROM $questionTable s $inject_joins $categoryCondition $where $inject_where $order $limit";
+        $query = " $select FROM $questionTable s $inject_joins $categoryCondition WHERE 1=1 $where $inject_where $order $limit";
+        //echo $query.'<br />';
 
         $result = Database::query($query);
         $questions = array();
@@ -2087,13 +2168,194 @@ abstract class Question
                 return $questions[0]['total_rows'];
             }
         }
-
         return $questions;
     }
 
     public static function getMediaLabel($title)
     {
         return Display::label($title, 'warning');
+    }
+
+    public static function getRules(&$rules, &$columns, &$column_model)
+    {
+        // sessions
+        // course
+        // categories
+        // exercises
+        // difficult
+        // type
+
+        // Session
+        $sessionList = SessionManager::get_sessions_by_general_coach(api_get_user_id());
+        $fields = array();
+        if (!empty($sessionList)) {
+            $new_options = array();
+            $new_options[] = "-1:".get_lang('All');
+            foreach ($sessionList as $session) {
+                $new_options[] = "{$session['id']}:{$session['name']}";
+            }
+            $string = implode(';', $new_options);
+            $fields[] = array(
+                'field_display_text' => get_lang('Session'),
+                'field_variable' => 'session_id',
+                'field_type' => ExtraField::FIELD_TYPE_SELECT,
+                'field_default_value' => null,
+                'field_options' => $string
+            );
+        }
+
+        // Courses
+
+        $courseList = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
+
+        if (!empty($courseList)) {
+            $new_options = array();
+            $new_options[] = "-1:".get_lang('All');
+            foreach ($courseList as $course) {
+                $new_options[] = "{$course['id']}:{$course['title']}";
+            }
+            $string = implode(';', $new_options);
+            $fields[] = array(
+                'field_display_text' => get_lang('Course'),
+                'field_variable' => 'c_id',
+                'field_type' => ExtraField::FIELD_TYPE_SELECT,
+                'field_default_value' => null,
+                'field_options' => $string
+            );
+        }
+
+        // Categories
+        $string = null;
+        if (!empty($courseList)) {
+
+            $new_options = array();
+            $new_options[] = "-1:".get_lang('All');
+
+            // Global categories
+
+            // @todo use tree view
+
+            $categories = Testcategory::getCategoriesIdAndName(0);
+            if (!empty($categories)) {
+                foreach ($categories as $id => $category) {
+                    if (!empty($id)) {
+                        $new_options[] = "$id:[Global] - ".$category;
+                    }
+                }
+            }
+
+            foreach ($courseList as $course) {
+                $categories = Testcategory::getCategoriesIdAndName($course['real_id']);
+                if (!empty($categories)) {
+                    foreach ($categories as $id => $category) {
+                        if (!empty($id)) {
+                            $new_options[] = "$id:".$course['title']." - ".$category;
+                        }
+                    }
+                }
+            }
+
+            $string = implode(';', $new_options);
+
+            $fields[] = array(
+                'field_display_text' => get_lang('Category'),
+                'field_variable' => 'category_id',
+                'field_type' => ExtraField::FIELD_TYPE_SELECT,
+                'field_default_value' => null,
+                'field_options' => $string
+            );
+        }
+
+        $course = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+
+        // Exercises
+        $exerciseList  = ExerciseLib::get_all_exercises_for_course_id($sessionId, $course);
+
+        if (!empty($exerciseList)) {
+            $new_options = array();
+            $new_options[] = "-1:".get_lang('All');
+            foreach ($exerciseList as $exercise) {
+                $new_options[] = "{$exercise['iid']}:{$exercise['title']}";
+            }
+            $string = implode(';', $new_options);
+            $fields[] = array(
+                'field_display_text' => get_lang('Exercise'),
+                'field_variable' => 'exercise_id',
+                'field_type' => ExtraField::FIELD_TYPE_SELECT,
+                'field_default_value' => null,
+                'field_options' => $string
+            );
+        }
+
+        // Question type
+        $questionList = Question::get_question_type_list();
+
+        if (!empty($questionList)) {
+            $new_options = array();
+            $new_options[] = "-1:".get_lang('All');
+            foreach ($questionList as $key => $question) {
+                $new_options[] = "{$key}:".get_lang($question['1']);
+            }
+            $string = implode(';', $new_options);
+            $fields[] = array(
+                'field_display_text' => get_lang('AnswerType'),
+                'field_variable' => 'question_type',
+                'field_type' => ExtraField::FIELD_TYPE_SELECT,
+                'field_default_value' => null,
+                'field_options' => $string
+            );
+        }
+
+        // Difficult
+        $levels = Question::get_default_levels();
+
+        if (!empty($levels)) {
+            $new_options = array();
+            $new_options[] = "-1:".get_lang('All');
+            foreach ($levels as $key => $level) {
+                $new_options[] ="{$key}:{$level}";
+            }
+            $string = implode(';', $new_options);
+            $fields[] = array(
+                'field_display_text' => get_lang('Difficulty'),
+                'field_variable' => 'difficulty',
+                'field_type' => ExtraField::FIELD_TYPE_SELECT,
+                'field_default_value' => null,
+                'field_options' => $string
+            );
+        }
+
+        if (!empty($fields)) {
+            foreach ($fields as $field) {
+                $search_options = array();
+                $type           = 'text';
+                if (in_array($field['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
+                    $type                   = 'select';
+                    $search_options['sopt'] = array('eq', 'ne'); //equal not equal
+                } else {
+                    $search_options['sopt'] = array('cn', 'nc'); //contains not contains
+                }
+
+                $search_options['searchhidden'] = 'true';
+                $search_options['defaultValue'] = isset($search_options['field_default_value']) ? $search_options['field_default_value'] : null;
+                $search_options['value'] = $field['field_options'];
+
+                $column_model[] = array(
+                    'name'          => 'question_'.$field['field_variable'],
+                    'index'         => 'question_'.$field['field_variable'],
+                    'width'         => '100',
+                    'hidden'        => 'true',
+                    'search'        => 'true',
+                    'stype'         => $type,
+                    'searchoptions' => $search_options
+                );
+                $columns[] = $field['field_display_text'];
+                $rules[] = array('field' => 'question_'.$field['field_variable'], 'op' => 'cn');
+            }
+        }
+
+        return $rules;
     }
 
 }

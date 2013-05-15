@@ -1162,7 +1162,7 @@ EOF;
      * @param array $options
      * @return array
      */
-    function parseConditions($options)
+    public function parseConditions($options)
     {
         $inject_extra_fields = null;
         $extraFieldOption    = new ExtraFieldOption($this->type);
@@ -1177,7 +1177,7 @@ EOF;
                     $extra_field_info          = $extra_field_obj->get($extra['id']);
                     $extra['extra_field_info'] = $extra_field_info;
 
-                    if (in_array(
+                    if (isset($extra_field_info['field_type']) && in_array(
                         $extra_field_info['field_type'],
                         array(
                             ExtraField::FIELD_TYPE_SELECT,
@@ -1197,7 +1197,7 @@ EOF;
                         $info = $this->get($extra['id']);
                         $extra_fields_info[$extra['id']] = $info;
                     }
-                    if ($info['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+                    if (isset($info['field_type']) && $info['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                         $double_fields[$info['id']] = $info;
                     }
                     $counter++;
@@ -1231,7 +1231,7 @@ EOF;
                     $inject_joins .= " INNER JOIN $this->table_field_values fv$counter ON (s.".$this->primaryKey." = fv$counter.".$this->handler_id.") ";
 
                     //Add options
-                    if (in_array(
+                    if (isset($extra_field_info['field_type']) && in_array(
                         $extra_field_info['field_type'],
                         array(
                             ExtraField::FIELD_TYPE_SELECT,
@@ -1286,7 +1286,7 @@ EOF;
         );
     }
 
-    public function getExtraFieldRules($filters)
+    public function getExtraFieldRules($filters, $stringToSearch = 'extra_')
     {
         $extra_fields = array();
 
@@ -1304,10 +1304,10 @@ EOF;
         $condition_array = array();
 
         foreach ($filters->rules as $rule) {
-            if (strpos($rule->field, 'extra_') === false) {
+            if (strpos($rule->field, $stringToSearch) === false) {
                 //normal fields
                 $field = $rule->field;
-                if (!empty($rule->data)) {
+                if (!empty($rule->data) && $rule->data != -1) {
                     $condition_array[] = get_where_clause($field, $rule->op, $rule->data);
                 }
             } else {
@@ -1316,7 +1316,7 @@ EOF;
                 //normal
                 if (strpos($rule->field, '_second') === false) {
                     //No _second
-                    $original_field = str_replace('extra_', '', $rule->field);
+                    $original_field = str_replace($stringToSearch, '', $rule->field);
                     $field_option = $this->get_handler_field_info_by_field_variable($original_field);
 
                     if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
@@ -1335,13 +1335,20 @@ EOF;
                         }
                     } else {
                         if (!empty($rule->data)) {
+                            if ($rule->data == -1) {
+                                continue;
+                            }
                             $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
-                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                            $extra_fields[] = array(
+                                'field' => $rule->field,
+                                'id' => $field_option['id'],
+                                'data' => $rule->data
+                            );
                         }
                     }
                 } else {
                     $my_field = str_replace('_second', '', $rule->field);
-                    $original_field = str_replace('extra_', '', $my_field);
+                    $original_field = str_replace($stringToSearch, '', $my_field);
                     $field_option = $this->get_handler_field_info_by_field_variable($original_field);
                     $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
                 }

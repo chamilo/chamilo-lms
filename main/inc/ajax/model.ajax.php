@@ -108,6 +108,7 @@ $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   
 $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 
 $extra_fields = array();
+$questionFields = array();
 
 if ($_REQUEST['_search'] == 'true') {
     $where_condition = ' 1 = 1 ';
@@ -120,7 +121,6 @@ if ($_REQUEST['_search'] == 'true') {
 
     // for now
     if (!empty($filters)) {
-
         switch($action) {
             case 'get_questions':
                 $type = 'question';
@@ -130,8 +130,11 @@ if ($_REQUEST['_search'] == 'true') {
                 break;
         }
 
+        // Extra field.
+
         $extraField = new ExtraField($type);
-        $result = $extraField->getExtraFieldRules($filters);
+        $result = $extraField->getExtraFieldRules($filters, 'extra_');
+
         $extra_fields = $result['extra_fields'];
         $condition_array = $result['condition_array'];
 
@@ -140,6 +143,20 @@ if ($_REQUEST['_search'] == 'true') {
             $where_condition .= implode($filters->groupOp, $condition_array);
             $where_condition .= ' ) ';
         }
+
+        // Question field
+
+        $resultQuestion = $extraField->getExtraFieldRules($filters, 'question_');
+        $questionFields = $resultQuestion['extra_fields'];
+
+        $condition_array = $resultQuestion['condition_array'];
+
+        if (!empty($condition_array)) {
+            $where_condition .= ' AND ( ';
+            $where_condition .= implode($filters->groupOp, $condition_array);
+            $where_condition .= ' ) ';
+        }
+
     }
 }
 
@@ -162,7 +179,7 @@ switch ($action) {
         if (isset($_REQUEST['categoryId'])) {
             $categoryId = intval($_REQUEST['categoryId']);
         }
-        $count = Question::getQuestions($categoryId, array('where'=> $where_condition, 'extra' => $extra_fields), true);
+        $count = Question::getQuestions($categoryId, array('where'=> $where_condition, 'extra' => $extra_fields, 'question' => $questionFields), true);
         break;
     case 'get_user_list_plugin_widescale':
         $count = UserManager::get_user_data(null, null, null, null, true);
@@ -326,7 +343,8 @@ switch ($action) {
         $questions = $category->getQuestions();*/
         $columns = Question::getQuestionColumns();
         $columns = $columns['simple_column_name'];
-        $result = Question::getQuestions($categoryId, array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));
+        //var_dump($columns);
+        $result = Question::getQuestions($categoryId, array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'question' => $questionFields, 'limit'=> "$start , $limit"));
 
         break;
     case 'get_user_list_plugin_widescale':

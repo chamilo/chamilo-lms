@@ -431,6 +431,12 @@ $app->get('/logout', 'index.controller:logoutAction')
     ->bind('logout')
     ->after($cleanCourseSession);
 
+/**  Login */
+$app->get('/login', 'index.controller:loginAction')
+    ->bind('login')
+    ->after($cleanCourseSession);
+
+
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
 $app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('id_session', '\d+')
@@ -538,3 +544,8 @@ $app->match('/editor/connector', 'editor.controller:connectorAction', 'GET|POST'
     ->assert('type', '.+')
     ->bind('editor_connector');
 
+/** Exercises */
+$app->match('/exercise/question-pool', 'exercise_manager.controller:questionPoolAction', 'POST')
+    ->before($settingCourseConditions)
+    ->before($userPermissionsInsideACourse)
+    ->bind('admin_category_delete');

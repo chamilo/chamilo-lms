@@ -485,3 +485,9 @@ $app['question_manager.controller'] = $app->share(
         return new ChamiloLMS\Controller\Admin\QuestionManager\QuestionManagerController();
     }
 );
+
+$app['exercise_manager.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\ExerciseController();
+    }
+);

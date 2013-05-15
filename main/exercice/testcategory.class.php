@@ -146,7 +146,7 @@ class Testcategory
      */
     public function modifyCategory()
     {
-        // @todo inject the app in the claas
+        // @todo inject the app in the class
         global $app;
         $category = $app['orm.em']->find('\Entity\CQuizCategory', $this->id);
         if (!$category) {
@@ -275,7 +275,6 @@ class Testcategory
         $where_condition .= $course_condition;
         $order_clause = " ORDER BY title";
         $sql .= $where_condition.$order_clause;
-
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return Database::store_result($result, 'ASSOC');
@@ -312,10 +311,8 @@ class Testcategory
 	If in_field=="" Return an array of all category objects in the database
 	Otherwise, return an array of all in_field value in the database (in_field = id or name or description)
 	 */
-	public static function getCategoryListInfo($in_field = "", $courseId = null) {
-		if (empty($courseId) || $courseId=="") {
-            $courseId = api_get_course_int_id();
-		}
+	public static function getCategoryListInfo($in_field = "", $courseId = null)
+    {
         $courseId = intval($courseId);
 		$t_cattable = Database :: get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
 		$in_field = Database::escape_string($in_field);
@@ -661,11 +658,8 @@ class Testcategory
 	 * tabresult[0] = get_lang('NoCategory');
 	 *
 	 */
-	static function getCategoriesIdAndName($in_courseid = "")
+	static function getCategoriesIdAndName($in_courseid = 0)
     {
-		if (empty($in_courseid) || $in_courseid=="") {
-			$in_courseid = api_get_course_int_id();
-		}
 	 	$tabcatobject = Testcategory::getCategoryListInfo("", $in_courseid);
 	 	$tabresult = array("0"=>get_lang('NoCategorySelected'));
 	 	for ($i=0; $i < count($tabcatobject); $i++) {
@@ -890,6 +884,7 @@ class Testcategory
      */
     public static function get_stats_table_by_attempt($exercise_id, $category_list = array())
     {
+        global $app;
         if (empty($category_list)) {
             return null;
         }
@@ -913,7 +908,6 @@ class Testcategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
-        global $app;
         $em = $app['orm.em'];
         $repo = $em->getRepository('Entity\CQuizCategory');
 

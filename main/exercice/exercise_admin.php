@@ -63,7 +63,7 @@ $htmlHeadXtra[] = '<script>
 
     $(function() {
         $("#category_id").fcbkcomplete({
-            json_url: "'.$url.'&a=search_category_parent",
+            json_url: "'.$url.'&a=search_category",
             maxitems: 20,
             addontab: false,
             input_min_size: 1,

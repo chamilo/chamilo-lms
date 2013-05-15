@@ -148,7 +148,6 @@ if ($_REQUEST['_search'] == 'true') {
 
         $resultQuestion = $extraField->getExtraFieldRules($filters, 'question_');
         $questionFields = $resultQuestion['extra_fields'];
-
         $condition_array = $resultQuestion['condition_array'];
 
         if (!empty($condition_array)) {
@@ -339,10 +338,15 @@ switch ($action) {
         /** @var \Entity\CQuizCategory $category */
         /*$category = $repo->find($categoryId);
         $questions = $category->getQuestions();*/
-        $columns = Question::getQuestionColumns();
+        $columns = Question::getQuestionColumns(api_get_course_id(), $questionFields);
         $columns = $columns['simple_column_name'];
-        //var_dump($columns);
-        $result = Question::getQuestions($categoryId, $exerciseId, $courseId, array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'question' => $questionFields, 'limit'=> "$start , $limit"));
+        $result = Question::getQuestions($categoryId, $exerciseId, $courseId, array(
+            'where'=> $where_condition,
+            'order'=>"$sidx $sord",
+            'extra' => $extra_fields,
+            'question' => $questionFields,
+            'limit'=> "$start , $limit")
+        );
 
         break;
     case 'get_user_list_plugin_widescale':

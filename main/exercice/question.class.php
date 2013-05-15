@@ -1997,7 +1997,7 @@ abstract class Question
      * @param int course code
      * @return array
      */
-    public static function getQuestionColumns($courseCode = null)
+    public static function getQuestionColumns($courseCode = null, $questionFields = array())
     {
         // The order is important you need to check the the $column variable in the model.ajax.php file
         //$columns = array('id', get_lang('Name'), get_lang('Description'));
@@ -2031,7 +2031,7 @@ abstract class Question
         $rules = $extraField->getRules($columns, $columnModel);
 
         // Exercise rules.
-        self::getRules($courseCode, $rules, $columns, $columnModel);
+        self::getRules($courseCode, $rules, $columns, $columnModel, $questionFields);
 
         $columns[] = get_lang('Actions');
 
@@ -2044,8 +2044,8 @@ abstract class Question
             'sortable'  => 'false'
         );
 
-        foreach ($columnModel as $col_model) {
-            $simple_column_name[] = $col_model['name'];
+        foreach ($columnModel as $col) {
+            $simple_column_name[] = $col['name'];
         }
 
         $return_array =  array(
@@ -2178,12 +2178,6 @@ abstract class Question
         $questions = array();
         if (Database::num_rows($result)) {
             $questions = Database::store_result($result, 'ASSOC');
-            foreach ($questions as &$question) {
-                if (empty($question['c_id'])) {
-                    /*var_dump($question);
-                    $question['actions'] = 'ddd';*/
-                }
-            }
             if ($get_count) {
                 return $questions[0]['total_rows'];
             }
@@ -2203,7 +2197,7 @@ abstract class Question
      * @param $column_model
      * @return array
      */
-    public static function getRules($courseCode, &$rules, &$columns, &$column_model)
+    public static function getRules($courseCode, &$rules, &$columns, &$column_model, $questionFields)
     {
         // sessions
         // course
@@ -2359,8 +2353,21 @@ abstract class Question
             );
         }
 
+        $questionFieldsKeys = array();
+        if (!empty($questionFields)) {
+            foreach ($questionFields as $question) {
+                $questionFieldsKeys[] = $question['field'];
+            }
+        }
+
         if (!empty($fields)) {
             foreach ($fields as $field) {
+                if (isset($questionFields) && !empty($questionFields)) {
+                    if (!in_array('question_'.$field['field_variable'], $questionFieldsKeys)) {
+                        continue;
+                    }
+                }
+
                 $search_options = array();
                 $type           = 'text';
                 if (in_array($field['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
@@ -2391,7 +2398,6 @@ abstract class Question
                 );
             }
         }
-
         return $rules;
     }
 }
